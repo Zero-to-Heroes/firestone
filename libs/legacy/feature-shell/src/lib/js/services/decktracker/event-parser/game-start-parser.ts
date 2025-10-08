@@ -3,7 +3,7 @@ import { DeckState, GameEventsEmitterService, GameState } from '@firestone/game-
 
 import { GameEvent, GameStateEvent } from '@firestone/game-state';
 import { ReviewIdService } from '../../review-id.service';
-import { EventParser } from './event-parser';
+import { EventParser } from './_event-parser';
 
 export class GameStartParser implements EventParser {
 	constructor(

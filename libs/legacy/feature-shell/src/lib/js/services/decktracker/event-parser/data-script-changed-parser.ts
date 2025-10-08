@@ -1,10 +1,9 @@
 import { CardIds, GameTag } from '@firestone-hs/reference-data';
-import { DeckState, GameState } from '@firestone/game-state';
+import { DeckState, GameEvent, GameState } from '@firestone/game-state';
 import { Mutable } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '@firestone/game-state';
+import { EventParser } from './_event-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
-import { EventParser } from './event-parser';
 import { addAdditionalAttribuesInHand } from './receive-card-in-hand-parser';
 
 export class DataScriptChangedParser implements EventParser {

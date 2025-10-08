@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { CardIds } from '@firestone-hs/reference-data';
-import { GameState } from '@firestone/game-state';
+import { GameEvent, GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '@firestone/game-state';
+import { EventParser } from '../_event-parser';
 import { DeckManipulationHelper } from '../deck-manipulation-helper';
-import { EventParser } from '../event-parser';
 import { TriggerOnAttackSecretsParser } from './trigger-on-attack-secrets-parser';
 import { TriggerOnCardPlaySecretsParser } from './trigger-on-card-play-secrets-parser';
 import { TriggerOnDamageSecretsParser } from './trigger-on-damage-secrets-parser';

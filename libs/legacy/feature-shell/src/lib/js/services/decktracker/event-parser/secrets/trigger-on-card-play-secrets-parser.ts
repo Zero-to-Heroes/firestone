@@ -1,9 +1,8 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { BoardSecret, DeckState, GameState } from '@firestone/game-state';
-import { GameEvent } from '@firestone/game-state';
+import { BoardSecret, DeckState, GameEvent, GameState } from '@firestone/game-state';
 import { COUNTERSPELLS } from '../../../hs-utils';
+import { EventParser } from '../_event-parser';
 import { DeckManipulationHelper } from '../deck-manipulation-helper';
-import { EventParser } from '../event-parser';
 
 export class TriggerOnCardPlaySecretsParser implements EventParser {
 	private secretsTriggeringOnCardPlayed = [CardIds.AzeriteVein_WW_422];

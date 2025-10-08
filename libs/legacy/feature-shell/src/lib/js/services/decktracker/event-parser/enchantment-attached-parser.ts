@@ -1,10 +1,9 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { DeckCard, GameState, toTagsObject } from '@firestone/game-state';
+import { DeckCard, GameEvent, GameState, toTagsObject } from '@firestone/game-state';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
-import { GameEvent } from '@firestone/game-state';
 import { getCardForGlobalEffect, globalEffectCards } from '../../hs-utils';
+import { EventParser } from './_event-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
-import { EventParser } from './event-parser';
 
 export class EnchantmentAttachedParser implements EventParser {
 	constructor(

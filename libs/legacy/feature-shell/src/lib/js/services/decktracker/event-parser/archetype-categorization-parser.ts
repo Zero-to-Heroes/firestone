@@ -1,6 +1,5 @@
-import { GameState } from '@firestone/game-state';
-import { GameEvent, GameStateEvent } from '@firestone/game-state';
-import { EventParser } from './event-parser';
+import { GameEvent, GameState, GameStateEvent } from '@firestone/game-state';
+import { EventParser } from './_event-parser';
 
 export class ArchetypeCategorizationEvent implements GameStateEvent {
 	public static EVENT_NAME = 'ARCHETYPE_CATEGORIZATION';

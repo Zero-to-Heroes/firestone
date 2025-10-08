@@ -1,7 +1,6 @@
 import { GameTag } from '@firestone-hs/reference-data';
-import { GameState } from '@firestone/game-state';
-import { GameEvent } from '@firestone/game-state';
-import { EventParser } from './event-parser';
+import { GameEvent, GameState } from '@firestone/game-state';
+import { EventParser } from './_event-parser';
 
 export class SpawnTimeCountChangedParser implements EventParser {
 	applies(gameEvent: GameEvent, state: GameState): boolean {

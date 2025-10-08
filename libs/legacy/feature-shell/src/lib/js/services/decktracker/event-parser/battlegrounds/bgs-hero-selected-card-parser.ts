@@ -12,12 +12,12 @@ import {
 	BgsPlayer,
 	BgsTavernUpgrade,
 	DeckCard,
+	GameEvent,
 	GameState,
 } from '@firestone/game-state';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
-import { GameEvent } from '@firestone/game-state';
+import { EventParser } from '../_event-parser';
 import { DeckManipulationHelper } from '../deck-manipulation-helper';
-import { EventParser } from '../event-parser';
 import { BgsNextOpponentParser } from './bgs-next-opponent-parser';
 
 export class BgsHeroSelectedCardParser implements EventParser {

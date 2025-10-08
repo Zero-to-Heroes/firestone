@@ -10,9 +10,9 @@ import {
 } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '../../localization-facade.service';
+import { EventParser } from './_event-parser';
 import { DREDGE_IN_OPPONENT_DECK_CARD_IDS } from './card-dredged-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
-import { EventParser } from './event-parser';
 
 export class CopiedFromEntityIdParser implements EventParser {
 	constructor(

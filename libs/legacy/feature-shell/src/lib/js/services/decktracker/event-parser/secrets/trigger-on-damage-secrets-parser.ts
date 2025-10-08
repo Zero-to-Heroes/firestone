@@ -1,8 +1,8 @@
 import { CardIds } from '@firestone-hs/reference-data';
 import { BoardSecret, DamageGameEvent, DeckState, GameEvent, GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { EventParser } from '../_event-parser';
 import { DeckManipulationHelper } from '../deck-manipulation-helper';
-import { EventParser } from '../event-parser';
 
 export class TriggerOnDamageSecretsParser implements EventParser {
 	private secretsTriggeringOnDamage = [

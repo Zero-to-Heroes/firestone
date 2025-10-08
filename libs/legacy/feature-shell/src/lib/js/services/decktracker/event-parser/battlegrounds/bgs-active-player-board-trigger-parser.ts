@@ -2,7 +2,7 @@ import { isBattlegrounds } from '@firestone-hs/reference-data';
 import { GameEvent, GameEventsEmitterService, GameState, GameStateEvent } from '@firestone/game-state';
 import { MemoryInspectionService } from '@firestone/memory';
 
-import { EventParser } from '../event-parser';
+import { EventParser } from '../_event-parser';
 
 export class BgsActivePlayerBoardTriggerParser implements EventParser {
 	constructor(private readonly memory: MemoryInspectionService) {}

@@ -1,7 +1,6 @@
-import { GameState } from '@firestone/game-state';
-import { GameEvent } from '@firestone/game-state';
+import { GameEvent, GameState } from '@firestone/game-state';
+import { EventParser } from './_event-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
-import { EventParser } from './event-parser';
 
 export class CardRemovedFromHistoryParser implements EventParser {
 	constructor(private readonly helper: DeckManipulationHelper) {}

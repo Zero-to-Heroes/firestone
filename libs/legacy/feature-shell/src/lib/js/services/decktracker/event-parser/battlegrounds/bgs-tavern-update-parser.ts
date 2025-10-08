@@ -1,9 +1,8 @@
 import { isBaconGhost, isBattlegrounds, normalizeHeroCardId } from '@firestone-hs/reference-data';
-import { GameEvent } from '@firestone/game-state';
-import { BgsTavernUpgrade, BgsTriple, GameState } from '@firestone/game-state';
+import { BgsTavernUpgrade, BgsTriple, GameEvent, GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvents } from '../../../game-events.service';
-import { EventParser } from '../event-parser';
+import { EventParser } from '../_event-parser';
 
 export class BgsTavernUpdateParser implements EventParser {
 	constructor(

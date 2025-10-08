@@ -2,7 +2,7 @@ import { GameState } from '@firestone/game-state';
 
 import { GameStateEvent } from '@firestone/app/common';
 import { ConstructedChangeTabEvent } from '../../event/constructed-change-tab-event';
-import { EventParser } from '../event-parser';
+import { EventParser } from '../_event-parser';
 
 export class ConstructedChangeTabParser implements EventParser {
 	applies(gameEvent: GameStateEvent, state: GameState): boolean {

@@ -100,7 +100,7 @@ import { EnchantmentDetachedParser } from '../event-parser/enchantment-detached-
 import { EndOfEchoInHandParser } from '../event-parser/end-of-echo-in-hand-parser';
 import { EntityChosenParser } from '../event-parser/entity-chosen-parser';
 import { EntityUpdateParser } from '../event-parser/entity-update-parser';
-import { EventParser } from '../event-parser/event-parser';
+import { EventParser } from '../event-parser/_event-parser';
 import { ExcavateTierParser } from '../event-parser/excavate-tier-parser';
 import { FatigueParser } from '../event-parser/fatigue-parser';
 import { FirstPlayerParser } from '../event-parser/first-player-parser';

@@ -1,9 +1,8 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { BoardSecret, DeckState, GameState } from '@firestone/game-state';
+import { BoardSecret, DeckState, GameEvent, GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '@firestone/game-state';
+import { EventParser } from '../_event-parser';
 import { DeckManipulationHelper } from '../deck-manipulation-helper';
-import { EventParser } from '../event-parser';
 
 export class TriggerOnNumCardPlaySecretsParser implements EventParser {
 	private secretsTriggeringOnAttack = [

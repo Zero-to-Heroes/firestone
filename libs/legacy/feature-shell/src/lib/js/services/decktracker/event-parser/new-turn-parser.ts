@@ -4,16 +4,16 @@ import {
 	BgsNextOpponentOverviewPanel,
 	BgsPanel,
 	DeckCard,
+	GameEvent,
 	GameState,
 	ShortCard,
 	TurnTiming,
 } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { ILocalizationService, OwUtilsService } from '@firestone/shared/framework/core';
-import { GameEvent } from '@firestone/game-state';
 import { isBattlegrounds } from '../../battlegrounds/bgs-utils';
 import { isMercenaries } from '../../mercenaries/mercenaries-utils';
-import { EventParser } from './event-parser';
+import { EventParser } from './_event-parser';
 
 export class NewTurnParser implements EventParser {
 	constructor(

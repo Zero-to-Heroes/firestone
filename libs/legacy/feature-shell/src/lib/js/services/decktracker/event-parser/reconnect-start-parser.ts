@@ -1,7 +1,6 @@
-import { GameState } from '@firestone/game-state';
-import { GameEvent } from '@firestone/game-state';
+import { GameEvent, GameState } from '@firestone/game-state';
 import { DeckstringOverrideEvent } from '../event/deckstring-override-event';
-import { EventParser } from './event-parser';
+import { EventParser } from './_event-parser';
 
 export class ReconnectStartParser implements EventParser {
 	applies(gameEvent: GameEvent, state: GameState): boolean {

@@ -1,9 +1,8 @@
 import { CardType } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState, GameState, getProcessedCard, toTagsObject } from '@firestone/game-state';
+import { DeckCard, DeckState, GameEvent, GameState, getProcessedCard, toTagsObject } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '@firestone/game-state';
+import { EventParser } from './_event-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
-import { EventParser } from './event-parser';
 
 // Needed to not show the shrine as part of the deck
 export class CardOnBoardAtGameStart implements EventParser {

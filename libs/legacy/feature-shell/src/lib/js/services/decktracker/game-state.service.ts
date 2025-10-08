@@ -22,7 +22,7 @@ import { OverwolfService, ProcessingQueue, waitForReady } from '@firestone/share
 import { TwitchAuthService } from '@firestone/twitch/common';
 
 import { BehaviorSubject, debounceTime, distinctUntilChanged, filter } from 'rxjs';
-import { EventParser } from './event-parser/event-parser';
+import { EventParser } from './event-parser/_event-parser';
 import { SecretsParserService } from './event-parser/secrets/secrets-parser.service';
 import { GameStateMetaInfoService } from './game-state-meta-info.service';
 import { GameStateParsersService } from './game-state/state-parsers.service';

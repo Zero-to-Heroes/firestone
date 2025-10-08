@@ -1,7 +1,6 @@
 import { isBattlegrounds } from '@firestone-hs/reference-data';
-import { GameEvent } from '@firestone/game-state';
-import { BgsPlayer, GameState } from '@firestone/game-state';
-import { EventParser } from '../event-parser';
+import { BgsPlayer, GameEvent, GameState } from '@firestone/game-state';
+import { EventParser } from '../_event-parser';
 
 export class BgsArmorChangedParser implements EventParser {
 	applies(gameEvent: GameEvent, state: GameState): boolean {

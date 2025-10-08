@@ -1,13 +1,20 @@
 import { CardClass, getWhizbangHeroesTemplateDeckId, isKnownTwistList } from '@firestone-hs/reference-data';
-import { DeckCard, DeckHandlerService, DeckState, GameState, HeroCard } from '@firestone/game-state';
+import {
+	DeckCard,
+	DeckHandlerService,
+	DeckParserService,
+	DeckState,
+	GameEvent,
+	GameState,
+	HeroCard,
+} from '@firestone/game-state';
 import { MemoryInspectionService } from '@firestone/memory';
-import { DeckParserService, GameEvent } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { AiDeckService } from '../ai-deck-service.service';
+import { EventParser } from './_event-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
-import { EventParser } from './event-parser';
 
 export class OpponentPlayerParser implements EventParser {
 	constructor(

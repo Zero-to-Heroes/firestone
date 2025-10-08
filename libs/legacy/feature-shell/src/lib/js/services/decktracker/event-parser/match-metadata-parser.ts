@@ -27,7 +27,7 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '../../localization-facade.service';
 import { isMercenaries } from '../../mercenaries/mercenaries-utils';
 import { ConstructedArchetypeServiceOrchestrator } from '../constructed-archetype-orchestrator.service';
-import { EventParser } from './event-parser';
+import { EventParser } from './_event-parser';
 
 export class MatchMetadataParser implements EventParser {
 	constructor(

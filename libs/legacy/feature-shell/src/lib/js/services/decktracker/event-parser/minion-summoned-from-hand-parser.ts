@@ -1,10 +1,9 @@
 import { GameTag } from '@firestone-hs/reference-data';
-import { DeckCard, GameState, getProcessedCard, toTagsObject } from '@firestone/game-state';
+import { DeckCard, GameEvent, GameState, getProcessedCard, toTagsObject } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '@firestone/game-state';
 import { LocalizationFacadeService } from '../../localization-facade.service';
+import { EventParser } from './_event-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
-import { EventParser } from './event-parser';
 
 export class MinionSummonedFromHandParser implements EventParser {
 	constructor(

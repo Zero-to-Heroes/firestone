@@ -1,8 +1,7 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { BoardSecret, DeckState, GameState } from '@firestone/game-state';
-import { GameEvent } from '@firestone/game-state';
+import { BoardSecret, DeckState, GameEvent, GameState } from '@firestone/game-state';
+import { EventParser } from '../_event-parser';
 import { DeckManipulationHelper } from '../deck-manipulation-helper';
-import { EventParser } from '../event-parser';
 
 export class TriggerOnHeroPowerSecretsParser implements EventParser {
 	private secretsTriggeringOnAttack = [CardIds.DartTrap];

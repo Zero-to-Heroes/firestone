@@ -1,10 +1,9 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { DeckCard, GameState, getProcessedCard } from '@firestone/game-state';
+import { DeckCard, GameEvent, GameState, getProcessedCard } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '@firestone/game-state';
 import { dontActuallyDestroyCardsInDeck, FAKE_JOUST_CARDS } from '../../hs-utils';
+import { EventParser } from './_event-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
-import { EventParser } from './event-parser';
 
 const DONT_REVEAL_REMOVED_CARDS = [CardIds.PirateAdmiralHooktusk_TakeTheirSuppliesToken];
 

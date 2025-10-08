@@ -1,8 +1,7 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { GameEvent } from '@firestone/game-state';
-import { DeckCard, DeckState, GameState } from '@firestone/game-state';
+import { DeckCard, DeckState, GameEvent, GameState } from '@firestone/game-state';
 import { DeckManipulationHelper } from '@services/decktracker/event-parser/deck-manipulation-helper';
-import { EventParser } from '../event-parser';
+import { EventParser } from '../_event-parser';
 
 export class SphereOfSapienceParser implements EventParser {
 	// We need both because of how the parser handles incomplete BLOCK logs

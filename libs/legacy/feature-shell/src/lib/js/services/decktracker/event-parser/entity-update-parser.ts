@@ -1,12 +1,11 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState, GameState, getProcessedCard } from '@firestone/game-state';
+import { DeckCard, DeckState, GameEvent, GameState, getProcessedCard } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { publicCardCreators, shouldKeepOriginalCost } from '@services/hs-utils';
-import { GameEvent } from '@firestone/game-state';
 import { LocalizationFacadeService } from '../../localization-facade.service';
+import { EventParser } from './_event-parser';
 import { WHIZBANG_DECK_CARD_IDS } from './card-revealed-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
-import { EventParser } from './event-parser';
 import { addAdditionalAttribuesInHand } from './receive-card-in-hand-parser';
 
 export class EntityUpdateParser implements EventParser {

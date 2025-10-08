@@ -1,7 +1,6 @@
 import { isBattlegrounds } from '@firestone-hs/reference-data';
-import { GameEvent } from '@firestone/game-state';
-import { BgsHeroSelectionOverviewPanel, BgsPanel, GameState } from '@firestone/game-state';
-import { EventParser } from '../event-parser';
+import { BgsHeroSelectionOverviewPanel, BgsPanel, GameEvent, GameState } from '@firestone/game-state';
+import { EventParser } from '../_event-parser';
 
 export class BgsHeroRerollParser implements EventParser {
 	applies(gameEvent: GameEvent, state: GameState): boolean {

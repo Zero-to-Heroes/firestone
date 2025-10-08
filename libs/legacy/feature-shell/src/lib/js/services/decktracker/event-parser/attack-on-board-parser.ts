@@ -1,6 +1,5 @@
-import { AttackOnBoard, GameState } from '@firestone/game-state';
-import { GameEvent } from '@firestone/game-state';
-import { EventParser } from './event-parser';
+import { AttackOnBoard, GameEvent, GameState } from '@firestone/game-state';
+import { EventParser } from './_event-parser';
 
 export class AttackOnBoardParser implements EventParser {
 	applies(gameEvent: GameEvent, state: GameState): boolean {

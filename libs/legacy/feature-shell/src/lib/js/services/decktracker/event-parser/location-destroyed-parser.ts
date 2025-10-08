@@ -1,7 +1,7 @@
 import { DeckCard, GameEvent, GameState, MinionsDiedEvent } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { EventParser } from './_event-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
-import { EventParser } from './event-parser';
 
 export class LocationDestroyedParser implements EventParser {
 	constructor(

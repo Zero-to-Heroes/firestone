@@ -1,8 +1,7 @@
 import { isBattlegrounds } from '@firestone-hs/reference-data';
-import { GameState, QuestReward } from '@firestone/game-state';
+import { GameEvent, GameState, QuestReward } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '@firestone/game-state';
-import { EventParser } from '../event-parser';
+import { EventParser } from '../_event-parser';
 
 export class BgsRewardGainedParser implements EventParser {
 	constructor(private readonly allCards: CardsFacadeService) {}

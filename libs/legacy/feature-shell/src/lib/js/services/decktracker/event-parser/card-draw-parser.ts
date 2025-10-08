@@ -1,7 +1,6 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { addGuessInfoToDrawnCard, DeckCard, GameState, toTagsObject } from '@firestone/game-state';
+import { addGuessInfoToDrawnCard, DeckCard, GameEvent, GameState, toTagsObject } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '@firestone/game-state';
 import {
 	forceHideInfoWhenDrawnInfluencers,
 	hiddenWhenDrawFromDeck,
@@ -12,8 +11,8 @@ import {
 } from '../../hs-utils';
 import { LocalizationFacadeService } from '../../localization-facade.service';
 import { tutors } from '../card-info/card-tutors';
+import { EventParser } from './_event-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
-import { EventParser } from './event-parser';
 
 const NOT_REAL_DRAW = [CardIds.SirFinleySeaGuide];
 

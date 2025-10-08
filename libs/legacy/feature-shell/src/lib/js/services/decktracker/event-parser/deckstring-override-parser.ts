@@ -1,7 +1,6 @@
-import { DeckCard, DeckHandlerService, DeckSideboard, DeckState, GameState } from '@firestone/game-state';
-import { GameEvent } from '@firestone/game-state';
+import { DeckCard, DeckHandlerService, DeckSideboard, DeckState, GameEvent, GameState } from '@firestone/game-state';
 import { DeckstringOverrideEvent } from '../event/deckstring-override-event';
-import { EventParser } from './event-parser';
+import { EventParser } from './_event-parser';
 
 export class DeckstringOverrideParser implements EventParser {
 	constructor(private readonly deckHandler: DeckHandlerService) {}

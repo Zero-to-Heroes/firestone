@@ -2,6 +2,7 @@ import { CardIds, GameTag, LIBRAM_IDS, Race, ReferenceCard, WATCH_POST_IDS } fro
 import {
 	DeckCard,
 	DeckState,
+	GameEvent,
 	GameState,
 	getProcessedCard,
 	ShortCard,
@@ -10,7 +11,6 @@ import {
 	toTagsObject,
 } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '@firestone/game-state';
 import {
 	battlecryGlobalEffectCards,
 	CARDS_IDS_THAT_REMEMBER_SPELLS_PLAYED,
@@ -21,9 +21,9 @@ import {
 } from '../../hs-utils';
 import { LocalizationFacadeService } from '../../localization-facade.service';
 import { revealCard } from '../game-state/card-reveal';
+import { EventParser } from './_event-parser';
 import { modifyDecksForSpecialCards } from './deck-contents-utils';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
-import { EventParser } from './event-parser';
 import { updateHandWithStonebrewInfo } from './special-cases/stonebrew/stonebrew';
 
 export class CardPlayedFromHandParser implements EventParser {

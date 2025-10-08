@@ -1,10 +1,9 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { DeckState, GameState } from '@firestone/game-state';
+import { DeckState, GameEvent, GameState } from '@firestone/game-state';
 import { reverseIfNeeded } from '@legacy-import/src/lib/js/services/decktracker/event-parser/card-dredged-parser';
-import { GameEvent } from '@firestone/game-state';
 import { forcedHiddenCardCreators } from '../../hs-utils';
+import { EventParser } from './_event-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
-import { EventParser } from './event-parser';
 
 export class CardCreatorChangedParser implements EventParser {
 	constructor(private readonly helper: DeckManipulationHelper) {}

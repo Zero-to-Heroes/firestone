@@ -1,7 +1,6 @@
-import { DeckState, GameState } from '@firestone/game-state';
+import { DeckState, GameEvent, GameState } from '@firestone/game-state';
 import { DeckManipulationHelper } from '@services/decktracker/event-parser/deck-manipulation-helper';
-import { GameEvent } from '@firestone/game-state';
-import { EventParser } from './event-parser';
+import { EventParser } from './_event-parser';
 
 export class WeaponDestroyedParser implements EventParser {
 	constructor(private readonly helper: DeckManipulationHelper) {}

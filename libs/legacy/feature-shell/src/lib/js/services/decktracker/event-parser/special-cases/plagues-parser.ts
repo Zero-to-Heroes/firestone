@@ -1,7 +1,7 @@
 import { CardIds } from '@firestone-hs/reference-data';
 import { GameState } from '@firestone/game-state';
 import { GameEvent } from '@firestone/game-state';
-import { EventParser } from '../event-parser';
+import { EventParser } from '../_event-parser';
 
 export const PLAGUES = [
 	CardIds.DistressedKvaldir_BloodPlagueToken,

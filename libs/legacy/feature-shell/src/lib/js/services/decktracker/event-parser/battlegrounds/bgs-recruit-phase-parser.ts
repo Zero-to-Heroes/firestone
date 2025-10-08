@@ -1,9 +1,8 @@
 import { isBattlegrounds } from '@firestone-hs/reference-data';
-import { GameEvent } from '@firestone/game-state';
-import { GameState } from '@firestone/game-state';
+import { GameEvent, GameState } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { ILocalizationService, OwUtilsService } from '@firestone/shared/framework/core';
-import { EventParser } from '../event-parser';
+import { EventParser } from '../_event-parser';
 
 export class BgsRecruitPhaseParser implements EventParser {
 	constructor(

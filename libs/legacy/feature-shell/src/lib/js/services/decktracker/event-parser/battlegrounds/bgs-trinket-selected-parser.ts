@@ -1,8 +1,7 @@
 import { isBattlegrounds, normalizeHeroCardId } from '@firestone-hs/reference-data';
-import { GameEvent } from '@firestone/game-state';
-import { GameState } from '@firestone/game-state';
+import { GameEvent, GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { EventParser } from '../event-parser';
+import { EventParser } from '../_event-parser';
 
 export class BgsTrinketSelectedParser implements EventParser {
 	constructor(private readonly allCards: CardsFacadeService) {}

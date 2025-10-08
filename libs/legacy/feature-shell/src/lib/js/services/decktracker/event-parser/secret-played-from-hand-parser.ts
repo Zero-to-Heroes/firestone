@@ -1,14 +1,21 @@
 import { CardIds, CardType, GameTag } from '@firestone-hs/reference-data';
-import { BoardSecret, DeckCard, DeckState, GameState, ShortCard, ShortCardWithTurn } from '@firestone/game-state';
+import {
+	BoardSecret,
+	DeckCard,
+	DeckState,
+	GameEvent,
+	GameState,
+	ShortCard,
+	ShortCardWithTurn,
+} from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '@firestone/game-state';
 import { COUNTERSPELLS } from '../../hs-utils';
 import { LocalizationFacadeService } from '../../localization-facade.service';
 import { SecretConfigService } from '../secret-config.service';
+import { EventParser } from './_event-parser';
 import { rememberCardsInHand } from './card-played-from-hand-parser';
 import { modifyDecksForSpecialCards } from './deck-contents-utils';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
-import { EventParser } from './event-parser';
 
 export class SecretPlayedFromHandParser implements EventParser {
 	constructor(

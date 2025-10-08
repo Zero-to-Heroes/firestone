@@ -1,5 +1,4 @@
 import { ALL_BG_RACES, isBattlegrounds, Race } from '@firestone-hs/reference-data';
-import { GameEvent } from '@firestone/game-state';
 import {
 	BattlegroundsState,
 	BgsBattleHistory,
@@ -7,11 +6,12 @@ import {
 	BgsPanel,
 	BgsPlayer,
 	BgsPostMatchStatsPanel,
+	GameEvent,
 	GameState,
 } from '@firestone/game-state';
 import { BattlegroundsInfo, MemoryBgGame, MemoryBgPlayer } from '@firestone/memory';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { EventParser } from '../event-parser';
+import { EventParser } from '../_event-parser';
 
 export class BgsGlobalInfoUpdateParser implements EventParser {
 	constructor(private readonly allCards: CardsFacadeService) {}

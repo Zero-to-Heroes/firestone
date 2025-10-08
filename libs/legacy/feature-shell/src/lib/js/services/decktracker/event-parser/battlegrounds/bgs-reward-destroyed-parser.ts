@@ -1,9 +1,8 @@
 import { isBattlegrounds } from '@firestone-hs/reference-data';
-import { DeckState, GameState } from '@firestone/game-state';
+import { DeckState, GameEvent, GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '@firestone/game-state';
 import { LocalizationFacadeService } from '../../../localization-facade.service';
-import { EventParser } from '../event-parser';
+import { EventParser } from '../_event-parser';
 
 export class BgsRewardDestroyedParser implements EventParser {
 	constructor(

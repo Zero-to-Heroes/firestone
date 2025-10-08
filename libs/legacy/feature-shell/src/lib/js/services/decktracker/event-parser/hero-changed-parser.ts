@@ -1,8 +1,7 @@
 import { CardClass } from '@firestone-hs/reference-data';
-import { GameState, getProcessedCard } from '@firestone/game-state';
+import { GameEvent, GameState, getProcessedCard } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '@firestone/game-state';
-import { EventParser } from './event-parser';
+import { EventParser } from './_event-parser';
 
 export class HeroChangedParser implements EventParser {
 	constructor(private readonly allCards: CardsFacadeService) {}

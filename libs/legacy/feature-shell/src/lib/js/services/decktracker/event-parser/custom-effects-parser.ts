@@ -2,16 +2,16 @@ import { CardClass, CardIds } from '@firestone-hs/reference-data';
 import {
 	addGuessInfoToCardInHand,
 	DeckCard,
+	GameEvent,
 	GameState,
 	getDynamicRelatedCardIds,
 	hasOverride,
 } from '@firestone/game-state';
 import { pickLast } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '@firestone/game-state';
+import { EventParser } from './_event-parser';
 import { handleSingleCardBuffInHand } from './card-buffed-in-hand-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
-import { EventParser } from './event-parser';
 
 const SUPPORTED_EFFECTS = [
 	{

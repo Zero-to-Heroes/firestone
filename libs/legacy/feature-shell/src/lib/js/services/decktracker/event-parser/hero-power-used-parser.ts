@@ -1,6 +1,6 @@
 import { DamageGameEvent, GameEvent, GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { EventParser } from './event-parser';
+import { EventParser } from './_event-parser';
 
 export class HeroPowerUsedParser implements EventParser {
 	constructor(private readonly allCards: CardsFacadeService) {}

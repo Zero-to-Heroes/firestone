@@ -1,8 +1,7 @@
 import { CardType } from '@firestone-hs/reference-data';
-import { GameState } from '@firestone/game-state';
+import { GameEvent, GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '@firestone/game-state';
-import { EventParser } from './event-parser';
+import { EventParser } from './_event-parser';
 
 export class AttackParser implements EventParser {
 	constructor(private readonly allCards: CardsFacadeService) {}

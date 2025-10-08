@@ -5,7 +5,7 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { checkIntegrity } from '@legacy-import/src/lib/js/models/battlegrounds/face-off-check';
 import { Events } from '../../../events.service';
 import { GameEvents } from '../../../game-events.service';
-import { EventParser } from '../event-parser';
+import { EventParser } from '../_event-parser';
 
 export class BgsBattleResultParser implements EventParser {
 	constructor(

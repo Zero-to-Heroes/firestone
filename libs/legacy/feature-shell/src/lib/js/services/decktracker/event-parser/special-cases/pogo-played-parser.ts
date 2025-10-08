@@ -1,7 +1,6 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { DeckState, GameState } from '@firestone/game-state';
-import { GameEvent } from '@firestone/game-state';
-import { EventParser } from '../event-parser';
+import { DeckState, GameEvent, GameState } from '@firestone/game-state';
+import { EventParser } from '../_event-parser';
 
 export class PogoPlayedParser implements EventParser {
 	private static POGO_CARD_IDS = [

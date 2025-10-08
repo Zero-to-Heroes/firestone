@@ -1,7 +1,6 @@
 import { isBattlegrounds } from '@firestone-hs/reference-data';
-import { GameEvent } from '@firestone/game-state';
-import { GameState } from '@firestone/game-state';
-import { EventParser } from '../event-parser';
+import { GameEvent, GameState } from '@firestone/game-state';
+import { EventParser } from '../_event-parser';
 
 export class BgsActivePlayerBoardProcessParser implements EventParser {
 	applies(gameEvent: GameEvent, state: GameState): boolean {

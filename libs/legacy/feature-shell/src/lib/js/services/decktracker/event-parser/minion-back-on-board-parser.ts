@@ -1,7 +1,6 @@
-import { DeckCard, DeckState, GameState } from '@firestone/game-state';
-import { GameEvent } from '@firestone/game-state';
+import { DeckCard, DeckState, GameEvent, GameState } from '@firestone/game-state';
+import { EventParser } from './_event-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
-import { EventParser } from './event-parser';
 
 export class MinionBackOnBoardParser implements EventParser {
 	constructor(private readonly helper: DeckManipulationHelper) {}

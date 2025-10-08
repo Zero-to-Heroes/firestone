@@ -1,11 +1,10 @@
 import { CardIds, GameTag } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState, GameState, getProcessedCard } from '@firestone/game-state';
+import { DeckCard, DeckState, GameEvent, GameState, getProcessedCard } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '@firestone/game-state';
 import { globalEffectQuestlines, globalEffectQuestlinesTriggers } from '../../hs-utils';
 import { LocalizationFacadeService } from '../../localization-facade.service';
+import { EventParser } from './_event-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
-import { EventParser } from './event-parser';
 
 export class QuestCreatedInGameParser implements EventParser {
 	constructor(

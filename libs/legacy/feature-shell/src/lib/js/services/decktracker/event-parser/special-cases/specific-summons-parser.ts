@@ -1,8 +1,7 @@
 import { CardIds, Race, ReferenceCard } from '@firestone-hs/reference-data';
-import { DeckState, GameState } from '@firestone/game-state';
+import { DeckState, GameEvent, GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '@firestone/game-state';
-import { EventParser } from '../event-parser';
+import { EventParser } from '../_event-parser';
 
 const PROCESSORS = [
 	{

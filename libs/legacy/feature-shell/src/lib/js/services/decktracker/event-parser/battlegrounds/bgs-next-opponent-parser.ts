@@ -1,14 +1,14 @@
 import { normalizeCardId } from '@components/battlegrounds/post-match/card-utils';
 import { defaultStartingHp, GameType, isBattlegrounds } from '@firestone-hs/reference-data';
-import { GameEvent } from '@firestone/game-state';
 import {
 	BgsFaceOffWithSimulation,
 	BgsNextOpponentOverviewPanel,
 	BgsOpponentOverview,
+	GameEvent,
 	GameState,
 } from '@firestone/game-state';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
-import { EventParser } from '../event-parser';
+import { EventParser } from '../_event-parser';
 
 export class BgsNextOpponentParser implements EventParser {
 	constructor(

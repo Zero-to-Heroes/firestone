@@ -1,9 +1,8 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { DeckCard, GameState, getProcessedCard } from '@firestone/game-state';
+import { DeckCard, GameEvent, GameState, getProcessedCard } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '@firestone/game-state';
+import { EventParser } from './_event-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
-import { EventParser } from './event-parser';
 
 const CARD_IS_NOT_DESTROYED = [CardIds.Ursol_EDR_259];
 export class CardRemovedFromHandParser implements EventParser {

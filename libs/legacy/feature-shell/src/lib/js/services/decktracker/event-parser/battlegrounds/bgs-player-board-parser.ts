@@ -27,7 +27,7 @@ import { LogsUploaderService, PreferencesService } from '@firestone/shared/commo
 import { CardsFacadeService, IAdsService } from '@firestone/shared/framework/core';
 import { isSupportedScenario } from '../../../battlegrounds/bgs-utils';
 import { GameEvents } from '../../../game-events.service';
-import { EventParser } from '../event-parser';
+import { EventParser } from '../_event-parser';
 
 export class BgsPlayerBoardParser implements EventParser {
 	constructor(

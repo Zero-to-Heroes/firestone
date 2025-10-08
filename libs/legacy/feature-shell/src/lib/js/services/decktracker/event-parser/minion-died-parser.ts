@@ -1,8 +1,8 @@
 import { CardIds, CardType, GameTag } from '@firestone-hs/reference-data';
 import { DeckCard, GameEvent, GameState, MinionsDiedEvent, ShortCard } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { EventParser } from './_event-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
-import { EventParser } from './event-parser';
 
 export class MinionDiedParser implements EventParser {
 	constructor(

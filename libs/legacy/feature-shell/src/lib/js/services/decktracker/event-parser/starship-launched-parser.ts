@@ -1,7 +1,6 @@
-import { GameState, toTagsObject } from '@firestone/game-state';
-import { GameEvent } from '@firestone/game-state';
+import { GameEvent, GameState, toTagsObject } from '@firestone/game-state';
+import { EventParser } from './_event-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
-import { EventParser } from './event-parser';
 
 export class StarshipLaunchedParser implements EventParser {
 	constructor(private readonly helper: DeckManipulationHelper) {}

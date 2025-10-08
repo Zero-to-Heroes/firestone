@@ -1,8 +1,7 @@
 import { isBattlegrounds, normalizeHeroCardId } from '@firestone-hs/reference-data';
-import { GameEvent } from '@firestone/game-state';
-import { BgsGame, GameState } from '@firestone/game-state';
+import { BgsGame, GameEvent, GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { EventParser } from '../event-parser';
+import { EventParser } from '../_event-parser';
 
 export class BgsBattleSimulationParser implements EventParser {
 	constructor(private readonly allCards: CardsFacadeService) {}

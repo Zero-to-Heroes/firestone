@@ -1,8 +1,7 @@
-import { GameState } from '@firestone/game-state';
+import { GameEvent, GameState } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { OwUtilsService } from '@firestone/shared/framework/core';
-import { GameEvent } from '@firestone/game-state';
-import { EventParser } from './event-parser';
+import { EventParser } from './_event-parser';
 
 export class GameEndParser implements EventParser {
 	constructor(

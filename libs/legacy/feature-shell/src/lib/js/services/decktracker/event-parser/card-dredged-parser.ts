@@ -1,11 +1,10 @@
 import { CardIds, Race, ReferenceCard } from '@firestone-hs/reference-data';
-import { DeckCard, GameState } from '@firestone/game-state';
+import { DeckCard, GameEvent, GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '@firestone/game-state';
 import { hasRace } from '../../hs-utils';
 import { LocalizationFacadeService } from '../../localization-facade.service';
+import { EventParser } from './_event-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
-import { EventParser } from './event-parser';
 
 export class CardDredgedParser implements EventParser {
 	constructor(

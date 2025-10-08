@@ -1,7 +1,7 @@
 import { CardIds } from '@firestone-hs/reference-data';
 import { BoardSecret, DeckState, GameEvent, GameState, MinionsDiedEvent } from '@firestone/game-state';
+import { EventParser } from '../_event-parser';
 import { DeckManipulationHelper } from '../deck-manipulation-helper';
-import { EventParser } from '../event-parser';
 
 export class TriggerOnFriendlyMinionDiedSecretsParser implements EventParser {
 	private secretsTriggeringOnFriendlyMinionDeath = [

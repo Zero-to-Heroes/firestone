@@ -1,5 +1,5 @@
 import { CardOption, ChoosingOptionsGameEvent, GameEvent, GameState } from '@firestone/game-state';
-import { EventParser } from './event-parser';
+import { EventParser } from './_event-parser';
 
 export class ChoosingOptionsParser implements EventParser {
 	applies(gameEvent: GameEvent, state: GameState): boolean {

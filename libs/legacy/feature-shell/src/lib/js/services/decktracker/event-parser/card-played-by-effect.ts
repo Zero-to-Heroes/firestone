@@ -1,7 +1,6 @@
 import { CardIds, CardType, GameTag } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState, GameState, toTagsObject } from '@firestone/game-state';
+import { DeckCard, DeckState, GameEvent, GameState, toTagsObject } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '@firestone/game-state';
 import {
 	COUNTERSPELLS,
 	battlecryGlobalEffectCards,
@@ -10,9 +9,9 @@ import {
 } from '../../hs-utils';
 import { LocalizationFacadeService } from '../../localization-facade.service';
 import { revealCard } from '../game-state/card-reveal';
+import { EventParser } from './_event-parser';
 import { modifyDecksForSpecialCards } from './deck-contents-utils';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
-import { EventParser } from './event-parser';
 
 export class CardPlayedByEffectParser implements EventParser {
 	constructor(

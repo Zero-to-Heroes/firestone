@@ -1,12 +1,11 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState, GameState, getProcessedCard, toTagsObject } from '@firestone/game-state';
+import { DeckCard, DeckState, GameEvent, GameState, getProcessedCard, toTagsObject } from '@firestone/game-state';
 import { Mutable } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '@firestone/game-state';
 import { LocalizationFacadeService } from '../../localization-facade.service';
+import { EventParser } from './_event-parser';
 import { reverseIfNeeded } from './card-dredged-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
-import { EventParser } from './event-parser';
 
 export const WHIZBANG_DECK_CARD_IDS = [
 	CardIds.SplendiferousWhizbang_SeptupletDeckToken_TOY_700t1,
