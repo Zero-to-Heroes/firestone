@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
+import { formatClass } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { ImageLocalizationOptions } from '@firestone/shared/framework/core';
 import { TranslateService } from '@ngx-translate/core';
 import { distinctUntilChanged, map } from 'rxjs/operators';
 import { CollectionCardType } from '../models/collection/collection-card-type.type';
-import { formatClass } from './hs-utils';
 import { sleep } from './utils';
 
 @Injectable()

@@ -15,10 +15,10 @@ import { PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameForUpload, XpForGameInfo } from '@firestone/stats/common';
 import { toFormatType, toGameType } from '@firestone/stats/data-access';
+import { HsGameMetaData } from '../../../../../../../game-state/src/lib/services/game-mode-data.service';
 import { isBattlegrounds } from '../battlegrounds/bgs-utils';
 import { BgsGlobalInfoUpdateParser } from '../decktracker/event-parser/battlegrounds/bgs-global-info-update-parser';
 import { Events } from '../events.service';
-import { HsGameMetaData } from '../game-mode-data.service';
 import {
 	MercenariesReferenceData,
 	MercenariesReferenceDataService,
@@ -135,9 +135,9 @@ export class EndGameUploaderService {
 				info.bgInfo?.Game?.AvailableRaces?.filter((r) => !!r).length === TOTAL_RACES_IN_GAME
 					? info.bgInfo?.Game?.AvailableRaces
 					: info.battlegroundsInfoAfterGameOver?.Game?.AvailableRaces?.filter((r) => !!r).length ===
-					  TOTAL_RACES_IN_GAME
-					? info.battlegroundsInfoAfterGameOver?.Game?.AvailableRaces
-					: this.gameState.gameState$$.value?.bgState?.currentGame?.availableRaces;
+						  TOTAL_RACES_IN_GAME
+						? info.battlegroundsInfoAfterGameOver?.Game?.AvailableRaces
+						: this.gameState.gameState$$.value?.bgState?.currentGame?.availableRaces;
 			const [availableRaces, bannedRaces] = BgsGlobalInfoUpdateParser.buildRaces(racesFromGame);
 			console.log('[manastorm-bridge]', currentReviewId, 'available races', availableRaces);
 			game.availableTribes = availableRaces;
@@ -153,10 +153,10 @@ export class EndGameUploaderService {
 			// Looks like we can assume the mapId is unique for a given player
 			game.runId = isMercenariesPvE(game.gameMode)
 				? info.mercsInfo?.Map?.PlayerTeamName +
-				  '-' +
-				  info.mercsInfo?.Map?.MapId +
-				  '-' +
-				  info.mercsInfo?.Map?.Seed
+					'-' +
+					info.mercsInfo?.Map?.MapId +
+					'-' +
+					info.mercsInfo?.Map?.Seed
 				: null;
 			// game.mercsBountyId = isMercenariesPvE(game.gameMode) ? info.mercsInfo?.Map?.BountyId : null;
 
@@ -164,8 +164,8 @@ export class EndGameUploaderService {
 				game.gameMode === 'mercenaries-pvp'
 					? info.mercsInfo?.PvpRating
 					: game.gameMode === 'mercenaries-pve' || game.gameMode === 'mercenaries-pve-coop'
-					? await this.getMercenariesBountyDifficulty(game.mercsBountyId)
-					: null;
+						? await this.getMercenariesBountyDifficulty(game.mercsBountyId)
+						: null;
 			game.forceOpponentName =
 				game.gameMode === 'mercenaries-pve' || game.gameMode === 'mercenaries-pve-coop'
 					? await this.buildOpponentName(info.mercsInfo)

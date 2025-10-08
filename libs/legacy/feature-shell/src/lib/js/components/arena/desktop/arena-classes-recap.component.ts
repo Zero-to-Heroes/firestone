@@ -13,7 +13,7 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { Observable, combineLatest } from 'rxjs';
 import { ArenaTimeFilterType } from '../../../models/arena/arena-time-filter.type';
-import { formatClass } from '../../../services/hs-utils';
+import { formatClass } from '@firestone/game-state';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { GameStatsProviderService } from '../../../services/stats/game/game-stats-provider.service';
 import { groupByFunction } from '../../../services/utils';
@@ -295,8 +295,8 @@ export class ArenaClassesRecapComponent extends AbstractSubscriptionComponent im
 				mode === 'all'
 					? true
 					: mode === 'arena-legacy'
-					? match.gameMode === 'arena' && match.steps[0].buildNumber < ARENA_REVAMP_BUILD_NUMBER
-					: match.gameMode === mode,
+						? match.gameMode === 'arena' && match.steps[0].buildNumber < ARENA_REVAMP_BUILD_NUMBER
+						: match.gameMode === mode,
 			);
 	}
 

@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { HsLogsWatcherService } from '@firestone/app/common';
 import { GameStatusService, LogUtilsService, PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService } from '@firestone/shared/framework/core';
+import { GameEvents } from '../../../../../../game-state/src/lib/services/game-events/game-events.service';
 import { Events } from '../services/events.service';
 import { CardsMonitorService } from './collection/cards-monitor.service';
-import { GameEvents } from './game-events.service';
 import { LogListenerService } from './log-listener.service';
 
 @Injectable()

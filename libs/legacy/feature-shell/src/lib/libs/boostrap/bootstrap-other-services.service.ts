@@ -11,6 +11,7 @@ import { MercenariesNavigationService } from '@firestone/mercenaries/common';
 import { ModsBootstrapService, ModsManagerService } from '@firestone/mods/common';
 import { GameStatusService } from '@firestone/shared/common/service';
 import { TwitchAuthService } from '@firestone/twitch/common';
+import { GameModeDataService } from '../../../../../../game-state/src/lib/services/game-mode-data.service';
 import { AchievementsNotificationService } from '../../js/services/achievement/achievements-notification.service';
 import { AchievementsStorageService as AchievementsDb } from '../../js/services/achievement/achievements-storage.service';
 import { FirestoneRemoteAchievementsLoaderService } from '../../js/services/achievement/data/firestone-remote-achievements-loader.service';
@@ -24,7 +25,6 @@ import { CardsHighlightService } from '../../js/services/decktracker/card-highli
 import { ConstructedConfigService } from '../../js/services/decktracker/constructed-config.service';
 import { DecksProviderService } from '../../js/services/decktracker/main/decks-provider.service';
 import { DevService } from '../../js/services/dev.service';
-import { GameModeDataService } from '../../js/services/game-mode-data.service';
 import { GlobalStatsNotifierService } from '../../js/services/global-stats/global-stats-notifier.service';
 import { HsClientConfigService } from '../../js/services/hs-client-config.service';
 import { LogRegisterService } from '../../js/services/log-register.service';

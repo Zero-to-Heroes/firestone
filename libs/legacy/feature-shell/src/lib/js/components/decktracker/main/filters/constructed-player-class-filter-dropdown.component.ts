@@ -1,10 +1,10 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { ConstructedNavigationService } from '@firestone/constructed/common';
+import { classes } from '@firestone/game-state';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { MultiselectOption } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
-import { classes } from '@legacy-import/src/lib/js/services/hs-utils';
 import { Observable, combineLatest } from 'rxjs';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 

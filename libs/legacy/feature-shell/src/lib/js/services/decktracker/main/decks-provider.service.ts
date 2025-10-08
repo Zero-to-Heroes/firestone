@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { DeckDefinition, DeckList, decode } from '@firestone-hs/deckstrings';
 import { GameFormat } from '@firestone-hs/reference-data';
 import { ConstructedPersonalDecksService, DeckSummary, DeckSummaryVersion } from '@firestone/constructed/common';
+import { classes } from '@firestone/game-state';
 import { PatchInfo, PatchesConfigService, PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject, arraysEqual } from '@firestone/shared/framework/common';
 import {
@@ -24,7 +25,6 @@ import { DeckRankFilterType } from '../../../models/mainwindow/decktracker/deck-
 import { DeckTimeFilterType } from '../../../models/mainwindow/decktracker/deck-time-filter.type';
 import { ConstructedDeckVersions } from '../../../models/mainwindow/decktracker/decktracker-state';
 import { MatchupStat } from '../../../models/mainwindow/stats/matchup-stat';
-import { classes } from '../../hs-utils';
 import { MainWindowStateFacadeService } from '../../mainwindow/store/main-window-state-facade.service';
 import { GameStatsProviderService } from '../../stats/game/game-stats-provider.service';
 import { groupByFunction, removeFromArray, sumOnArray } from '../../utils';

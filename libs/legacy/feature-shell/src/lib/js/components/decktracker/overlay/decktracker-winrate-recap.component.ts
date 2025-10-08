@@ -7,8 +7,7 @@ import {
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
-import { StatsRecap } from '@firestone/game-state';
-import { formatClass } from '../../../services/hs-utils';
+import { formatClass, StatsRecap } from '@firestone/game-state';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
@@ -60,7 +59,10 @@ export class DeckTrackerWinrateRecapComponent implements OnDestroy {
 		this.updateInfo();
 	}
 
-	constructor(private readonly cdr: ChangeDetectorRef, private readonly i18n: LocalizationFacadeService) {}
+	constructor(
+		private readonly cdr: ChangeDetectorRef,
+		private readonly i18n: LocalizationFacadeService,
+	) {}
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy(): void {
@@ -76,7 +78,7 @@ export class DeckTrackerWinrateRecapComponent implements OnDestroy {
 					year: 'numeric',
 					month: 'short',
 					day: '2-digit',
-			  }).format(this._stats.dateFrom)
+				}).format(this._stats.dateFrom)
 			: null;
 		if (this._type === 'deck') {
 			this.text = this.i18n.translateString('decktracker.stats.deck-winrate');

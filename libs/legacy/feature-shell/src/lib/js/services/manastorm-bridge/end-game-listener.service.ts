@@ -26,8 +26,8 @@ import {
 	tap,
 	withLatestFrom,
 } from 'rxjs/operators';
+import { HsGameMetaData } from '../../../../../../../game-state/src/lib/services/game-mode-data.service';
 import { isBattlegrounds } from '../battlegrounds/bgs-utils';
-import { HsGameMetaData } from '../game-mode-data.service';
 import { LotteryService } from '../lottery/lottery.service';
 import { MercenariesMemoryCacheService } from '../mercenaries/mercenaries-memory-cache.service';
 import { ReviewIdService } from '../review-id.service';

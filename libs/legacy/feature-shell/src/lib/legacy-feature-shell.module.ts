@@ -440,6 +440,7 @@ import { TavernBrawlService } from '@tavern-brawl/services/tavern-brawl.service'
 import { NgScrollbarModule } from 'ngx-scrollbar';
 
 import { AppViewModule } from '@firestone/app/view';
+import { GameEvents } from '../../../../game-state/src/lib/services/game-events/game-events.service';
 import { AdsComponent } from './js/components/ads/ads.component';
 import { BgsBattleSideComponent } from './js/components/battlegrounds/battles/bgs-battle-side.component';
 import { BgsBattleComponent } from './js/components/battlegrounds/battles/bgs-battle.component';
@@ -550,10 +551,8 @@ import { CollectionStorageService } from './js/services/collection/collection-st
 import { SetsManagerService } from './js/services/collection/sets-manager.service';
 import { SetsService } from './js/services/collection/sets-service.service';
 import { DebugService } from './js/services/debug.service';
-import { AiDeckService } from './js/services/decktracker/ai-deck-service.service';
 import { CardsHighlightFacadeService } from './js/services/decktracker/card-highlight/cards-highlight-facade.service';
 import { CardsHighlightService } from './js/services/decktracker/card-highlight/cards-highlight.service';
-import { ConstructedArchetypeServiceOrchestrator } from './js/services/decktracker/constructed-archetype-orchestrator.service';
 import { ConstructedConfigService } from './js/services/decktracker/constructed-config.service';
 import { DeckCardService } from './js/services/decktracker/deck-card.service';
 import { DynamicZoneHelperService } from './js/services/decktracker/dynamic-zone-helper.service';
@@ -568,8 +567,6 @@ import { SecretConfigService } from './js/services/decktracker/secret-config.ser
 import { ZoneOrderingService } from './js/services/decktracker/zone-ordering.service';
 import { DevService } from './js/services/dev.service';
 import { Events } from './js/services/events.service';
-import { GameEvents } from './js/services/game-events.service';
-import { GameModeDataService } from './js/services/game-mode-data.service';
 import { GlobalStatsNotifierService } from './js/services/global-stats/global-stats-notifier.service';
 import { GlobalStatsService } from './js/services/global-stats/global-stats.service';
 import { HotkeyService } from './js/services/hotkey.service';
@@ -1330,7 +1327,6 @@ try {
 
 		DevService,
 		GameEvents,
-		GameModeDataService,
 		LogListenerService,
 		CardsMonitorService,
 		LogRegisterService,
@@ -1354,7 +1350,6 @@ try {
 		DecktrackerStateLoaderService,
 		DecksProviderService,
 		ConstructedConfigService,
-		ConstructedArchetypeServiceOrchestrator,
 
 		EndGameListenerService,
 		EndGameUploaderService,
@@ -1376,7 +1371,6 @@ try {
 		MercenariesReferenceDataService,
 		MercenariesSynergiesHighlightService,
 
-		AiDeckService,
 		SecretConfigService,
 
 		GameStatsUpdaterService,

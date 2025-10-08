@@ -10,11 +10,11 @@ import { PreferencesService } from '@firestone/shared/common/service';
 import { ApiRunner, CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { sortByProperties } from '@services/utils';
+import { GameEvents } from '../../../../../../game-state/src/lib/services/game-events/game-events.service';
 import { CollectionCardType } from '../models/collection/collection-card-type.type';
 import { CardNotificationsService } from './collection/card-notifications.service';
 import { DeckManipulationHelper } from './decktracker/event-parser/deck-manipulation-helper';
 import { GameStateService } from './decktracker/game-state.service';
-import { GameEvents } from './game-events.service';
 
 const RETRIEVE_REVIEW_URL = 'https://itkmxena7k2kkmkgpevc6skcie0tlwmk.lambda-url.us-west-2.on.aws/';
 

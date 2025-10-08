@@ -1,12 +1,11 @@
 import { SPACE } from '@angular/cdk/keycodes';
 import { Injectable } from '@angular/core';
 import { BoosterType } from '@firestone-hs/reference-data';
-import { GameEventsEmitterService } from '@firestone/game-state';
+import { dustFor, GameEventsEmitterService } from '@firestone/game-state';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { InternalCardInfo } from '../../../js/models/collection/internal-card-info';
 import { CardNotificationsService } from '../../../js/services/collection/card-notifications.service';
 import { Events } from '../../../js/services/events.service';
-import { dustFor } from '../../../js/services/hs-utils';
 
 @Injectable()
 export class PackMonitor {

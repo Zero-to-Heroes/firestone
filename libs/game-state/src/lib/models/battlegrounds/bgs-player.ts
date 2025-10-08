@@ -68,7 +68,7 @@ export class BgsPlayer implements IBgsPlayer {
 				? 1
 				: this.tavernUpgradeHistory[this.tavernUpgradeHistory.length - 1].tavernTier;
 
-		return result;
+		return result ?? 0;
 	}
 
 	public getLastKnownBattleHistory(): BgsBattleHistory | null {
@@ -117,19 +117,19 @@ export class BgsPlayer implements IBgsPlayer {
 export interface QuestReward {
 	readonly cardId: string;
 	readonly completed: boolean;
-	readonly completedTurn: number;
+	readonly completedTurn: number | null;
 	readonly isHeroPower: boolean;
 }
 
 export const buildBgsEntities = (
 	logEntities: readonly PlayerBoardEntity[],
 	allCards: CardsFacadeService,
-): (BoardEntity | null)[] => {
+): BoardEntity[] => {
 	if (!logEntities?.length) {
 		return [];
 	}
 
-	return logEntities.map((entity) => buildBgsEntity(entity, allCards));
+	return logEntities.map((entity) => buildBgsEntity(entity, allCards)).filter((entity) => entity !== null);
 };
 
 export const buildBgsEntity = (logEntity: PlayerBoardEntity, allCards: CardsFacadeService): BoardEntity | null => {

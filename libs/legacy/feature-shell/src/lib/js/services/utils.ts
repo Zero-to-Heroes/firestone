@@ -191,6 +191,7 @@ export const mod = (n: number, m: number): number => {
 	return ((n % m) + m) % m;
 };
 
+/** @deprecated */
 // https://www.just-bi.nl/a-tale-of-a-javascript-memory-leak/
 export const freeRegexp = () => /\s*/g.exec('');
 

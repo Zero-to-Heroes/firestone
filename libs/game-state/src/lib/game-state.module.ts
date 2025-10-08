@@ -7,11 +7,16 @@ import { GameEventsPluginService } from './logs/game-events-plugin.service';
 import { BootstrapGameStateService } from './services/_bootstrap-game-state.service';
 import { BgsBestUserStatsService } from './services/battlegrounds/bgs-best-user-stats.service';
 import { DeckHandlerService } from './services/deck-handler.service';
+import { AiDeckService } from './services/deck/ai-deck-service.service';
+import { ConstructedArchetypeServiceOrchestrator } from './services/deck/constructed-archetype-orchestrator.service';
 import { DeckParserFacadeService } from './services/deck/deck-parser-facade.service';
 import { DeckParserService } from './services/deck/deck-parser.service';
 import { GameConnectionService } from './services/game-connection.service';
 import { GameEventsFacadeService } from './services/game-events-facade.service';
+import { DeckManipulationHelper } from './services/game-events/event-parser/deck-manipulation-helper';
 import { GameEventsEmitterService } from './services/game-events/game-events-emitter.service';
+import { GameEvents } from './services/game-events/game-events.service';
+import { GameModeDataService } from './services/game-mode-data.service';
 import { GameStateFacadeService } from './services/game-state-facade.service';
 import { GameUniqueIdService } from './services/game-unique-id.service';
 import { OverlayDisplayService } from './services/overlay-display.service';
@@ -37,6 +42,11 @@ const components = [];
 		RealTimeStatsParsersService,
 		RealTimeStatsService,
 		GameEventsPluginService,
+		ConstructedArchetypeServiceOrchestrator,
+		GameModeDataService,
+		AiDeckService,
+		DeckManipulationHelper,
+		GameEvents,
 	],
 	declarations: components,
 	exports: components,

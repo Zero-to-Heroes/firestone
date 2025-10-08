@@ -213,6 +213,9 @@ export const chunk = <T>(array: readonly T[], chunkSize: number): T[][] => {
 	return chunks;
 };
 
+// https://www.just-bi.nl/a-tale-of-a-javascript-memory-leak/
+export const freeRegexp = () => /\s*/g.exec('');
+
 export type NonFunctionPropertyNames<T> = {
 	[K in keyof T]: T[K] extends Function ? never : K;
 }[keyof T];
