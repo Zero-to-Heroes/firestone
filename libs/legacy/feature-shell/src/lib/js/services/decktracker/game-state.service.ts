@@ -17,12 +17,11 @@ import {
 	RealTimeStatsState,
 } from '@firestone/game-state';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { arraysEqual } from '@firestone/shared/framework/common';
+import { arraysEqual, chunk, sleep } from '@firestone/shared/framework/common';
 import { OverwolfService, ProcessingQueue, waitForReady } from '@firestone/shared/framework/core';
 import { TwitchAuthService } from '@firestone/twitch/common';
 
 import { BehaviorSubject, debounceTime, distinctUntilChanged, filter } from 'rxjs';
-import { chunk, sleep } from '../utils';
 import { EventParser } from './event-parser/event-parser';
 import { SecretsParserService } from './event-parser/secrets/secrets-parser.service';
 import { GameStateMetaInfoService } from './game-state-meta-info.service';

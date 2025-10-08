@@ -40,6 +40,7 @@ export const uuid = () => {
 	});
 };
 
+/** @deprecated */
 export const sleep = (ms) => {
 	return new Promise((resolve) => setTimeout(resolve, ms));
 };
@@ -219,6 +220,7 @@ export const getStandardDeviation = (array: readonly number[]): { mean: number; 
 	};
 };
 
+/** @deprecated */
 export const chunk = <T>(array: readonly T[], chunkSize: number): T[][] => {
 	const chunks: T[][] = [];
 	for (let i = 0; i < array.length; i += chunkSize) {

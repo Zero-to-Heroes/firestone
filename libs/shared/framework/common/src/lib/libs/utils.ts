@@ -205,6 +205,14 @@ export const getCurrentWeekStartMonday = (): string => {
 	return `${year}-${month}-${date}`;
 };
 
+export const chunk = <T>(array: readonly T[], chunkSize: number): T[][] => {
+	const chunks: T[][] = [];
+	for (let i = 0; i < array.length; i += chunkSize) {
+		chunks.push(array.slice(i, i + chunkSize));
+	}
+	return chunks;
+};
+
 export type NonFunctionPropertyNames<T> = {
 	[K in keyof T]: T[K] extends Function ? never : K;
 }[keyof T];
