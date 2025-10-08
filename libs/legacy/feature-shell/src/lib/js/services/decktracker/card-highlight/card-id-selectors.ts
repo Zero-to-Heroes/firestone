@@ -2778,6 +2778,8 @@ export const cardIdSelector = (
 		case CardIds.ServiceBell:
 			return and(side(inputSide), inDeck, not(neutral));
 		case CardIds.Shadehound:
+		case CardIds.Shadehound_ShadehoundToken:
+		case CardIds.Shadehound_CORE_MAW_009:
 			return and(side(inputSide), or(inDeck, inHand), beast);
 		case CardIds.ShadestoneSkulker_DEEP_012:
 			return and(side(inputSide), or(inDeck, inHand), weapon);
