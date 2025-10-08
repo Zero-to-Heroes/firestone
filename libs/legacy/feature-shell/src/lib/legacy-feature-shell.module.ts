@@ -548,7 +548,6 @@ import { SetsManagerService } from './js/services/collection/sets-manager.servic
 import { SetsService } from './js/services/collection/sets-service.service';
 import { DebugService } from './js/services/debug.service';
 import { AiDeckService } from './js/services/decktracker/ai-deck-service.service';
-import { AttackOnBoardService } from './js/services/decktracker/attack-on-board.service';
 import { CardsHighlightFacadeService } from './js/services/decktracker/card-highlight/cards-highlight-facade.service';
 import { CardsHighlightService } from './js/services/decktracker/card-highlight/cards-highlight.service';
 import { ConstructedArchetypeServiceOrchestrator } from './js/services/decktracker/constructed-archetype-orchestrator.service';
@@ -563,7 +562,6 @@ import { GameStateParsersService } from './js/services/decktracker/game-state/st
 import { StatePostProcessService } from './js/services/decktracker/game-state/state-post-process.service';
 import { DecksProviderService } from './js/services/decktracker/main/decks-provider.service';
 import { DecktrackerStateLoaderService } from './js/services/decktracker/main/decktracker-state-loader.service';
-import { OverlayDisplayService } from './js/services/decktracker/overlay-display.service';
 import { SecretConfigService } from './js/services/decktracker/secret-config.service';
 import { ZoneOrderingService } from './js/services/decktracker/zone-ordering.service';
 import { DevService } from './js/services/dev.service';
@@ -1364,7 +1362,6 @@ try {
 		GameStateParsersService,
 		StatePostProcessService,
 		DeckManipulationHelper,
-		AttackOnBoardService,
 
 		BgsPerfectGamesService,
 		BgsGlobalStatsService,
@@ -1387,7 +1384,6 @@ try {
 		GameStatsProviderService,
 		MatchStatsService,
 
-		OverlayDisplayService,
 		DeckCardService,
 		ReviewIdService,
 		GameStateService,

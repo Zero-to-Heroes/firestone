@@ -12,6 +12,7 @@ import { GameEventsFacadeService } from './services/game-events-facade.service';
 import { GameEventsEmitterService } from './services/game-events/game-events-emitter.service';
 import { GameStateFacadeService } from './services/game-state-facade.service';
 import { GameUniqueIdService } from './services/game-unique-id.service';
+import { OverlayDisplayService } from './services/overlay-display.service';
 
 const components = [];
 
@@ -27,6 +28,7 @@ const components = [];
 		DeckParserService,
 		DeckParserFacadeService,
 		GameEventsEmitterService,
+		OverlayDisplayService,
 	],
 	declarations: components,
 	exports: components,

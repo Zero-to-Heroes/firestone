@@ -40,7 +40,7 @@ export class OverlayDisplayService extends AbstractFacadeService<OverlayDisplayS
 		combineLatest([this.gameState.gameState$$, this.prefs.preferences$$, this.gameStatus.inGame$$])
 			.pipe(
 				debounceTime(200),
-				filter(([gameState, prefs, inGame]) => inGame),
+				filter(([gameState, prefs, inGame]) => !!inGame),
 				map(([gameState, prefs]) => ({
 					gameType: gameState?.metadata?.gameType,
 					hasPlayerDeck: true, // gameState?.playerDeck?.deckList?.length > 0,

@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { DiscordPresenceManagerService } from '@firestone/discord';
-import { GameStateFacadeService } from '@firestone/game-state';
+import { DeckParserService, GameStateFacadeService, OverlayDisplayService } from '@firestone/game-state';
 import { MercenariesNavigationService } from '@firestone/mercenaries/common';
 import { ModsBootstrapService, ModsManagerService } from '@firestone/mods/common';
-import { DeckParserService } from '@firestone/game-state';
 import { GameStatusService } from '@firestone/shared/common/service';
 import { TwitchAuthService } from '@firestone/twitch/common';
 import { AchievementsNotificationService } from '../../js/services/achievement/achievements-notification.service';
@@ -20,7 +19,6 @@ import { CollectionStorageService } from '../../js/services/collection/collectio
 import { CardsHighlightService } from '../../js/services/decktracker/card-highlight/cards-highlight.service';
 import { ConstructedConfigService } from '../../js/services/decktracker/constructed-config.service';
 import { DecksProviderService } from '../../js/services/decktracker/main/decks-provider.service';
-import { OverlayDisplayService } from '../../js/services/decktracker/overlay-display.service';
 import { DevService } from '../../js/services/dev.service';
 import { GameModeDataService } from '../../js/services/game-mode-data.service';
 import { GlobalStatsNotifierService } from '../../js/services/global-stats/global-stats-notifier.service';

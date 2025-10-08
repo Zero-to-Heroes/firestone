@@ -20,4 +20,5 @@ export * from './lib/services/game-events/game-events-emitter.service';
 export * from './lib/services/game-events/game-state-event';
 export * from './lib/services/game-state-facade.service';
 export * from './lib/services/game-unique-id.service';
+export * from './lib/services/overlay-display.service';
 export * from './lib/services/review-id.interface';

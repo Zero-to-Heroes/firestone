@@ -60,7 +60,6 @@ import { AdService } from '../../js/services/ad.service';
 import { BgsPerfectGamesService } from '../../js/services/battlegrounds/bgs-perfect-games.service';
 import { GameStateService } from '../../js/services/decktracker/game-state.service';
 import { DecksProviderService } from '../../js/services/decktracker/main/decks-provider.service';
-import { OverlayDisplayService } from '../../js/services/decktracker/overlay-display.service';
 import { LotteryWidgetControllerService } from '../../js/services/lottery/lottery-widget-controller.service';
 import { LotteryService } from '../../js/services/lottery/lottery.service';
 import { CollectionBootstrapService } from '../../js/services/mainwindow/store/collection-bootstrap.service';
@@ -153,8 +152,6 @@ export class BootstrapStoreServicesService {
 		private readonly init_TavernBrawlService: TavernBrawlService,
 		private readonly init_DeckParserFacadeService: DeckParserFacadeService,
 		private readonly init_AccountService: AccountService,
-		// Other dependencies
-		private readonly decktrackerDisplayEventBus: OverlayDisplayService,
 	) {}
 
 	public async bootstrapServices(): Promise<void> {

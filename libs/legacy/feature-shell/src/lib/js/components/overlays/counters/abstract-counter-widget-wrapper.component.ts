@@ -8,12 +8,17 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
-import { BattlegroundsState, CounterType, GameState, GameStateFacadeService } from '@firestone/game-state';
+import {
+	BattlegroundsState,
+	CounterType,
+	GameState,
+	GameStateFacadeService,
+	OverlayDisplayService,
+} from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { BooleanWithLimited, Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { AppInjector, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, distinctUntilChanged } from 'rxjs';
-import { OverlayDisplayService } from '../../../services/decktracker/overlay-display.service';
 import { AbstractWidgetWrapperComponent } from '../_widget-wrapper.component';
 
 export const templateBase = `

@@ -10,28 +10,27 @@ import {
 	GameState,
 	GameStateEvent,
 	HeroCard,
+	OverlayDisplayService,
 	PlayerGameState,
 	RealTimeStatsState,
 } from '@firestone/game-state';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { arraysEqual } from '@firestone/shared/framework/common';
-import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
+import { OverwolfService, ProcessingQueue, waitForReady } from '@firestone/shared/framework/core';
 import { TwitchAuthService } from '@firestone/twitch/common';
-import { hasTag } from '@services/decktracker/attack-on-board.service';
+
 import { BehaviorSubject, debounceTime, distinctUntilChanged, filter } from 'rxjs';
 import { MinionsDiedEvent } from '../../models/mainwindow/game-events/minions-died-event';
 import { BgsBestUserStatsService } from '../battlegrounds/bgs-best-user-stats.service';
 import { RealTimeStatsService } from '../battlegrounds/store/real-time-stats/real-time-stats.service';
 import { Events } from '../events.service';
 import { ManastormInfo } from '../manastorm-bridge/manastorm-info';
-import { ProcessingQueue } from '../processing-queue.service';
 import { chunk, sleep } from '../utils';
 import { EventParser } from './event-parser/event-parser';
 import { SecretsParserService } from './event-parser/secrets/secrets-parser.service';
 import { ConstructedAchievementsProgressionEvent } from './event/constructed-achievements-progression-event';
 import { GameStateMetaInfoService } from './game-state-meta-info.service';
 import { GameStateParsersService } from './game-state/state-parsers.service';
-import { OverlayDisplayService } from './overlay-display.service';
 
 @Injectable()
 export class GameStateService {
@@ -553,4 +552,12 @@ const mergeZonePositionChangedEvents = (events: readonly GameEvent[]): GameEvent
 		},
 	});
 	return merged;
+};
+
+const hasTag = (entity, tag: number, value = 1): boolean => {
+	if (!entity?.tags) {
+		return false;
+	}
+	const matches = entity.tags.some((t) => t.Name === tag && t.Value === value);
+	return matches;
 };
