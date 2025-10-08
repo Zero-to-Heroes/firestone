@@ -19,19 +19,19 @@
 						"output": "."
 					},
 					{
-						"input": "libs/mind-vision-edge",
+						"input": "libs/electron-edge-libs",
 						"glob": "**/*",
-						"output": "mind-vision-edge"
+						"output": "electron-edge-libs"
 					},
 					{
 						"input": "overwolf-plugins",
 						"glob": "**/*",
-						"output": "mind-vision-edge"
+						"output": "electron-edge-libs"
 					},
 					{
 						"input": "external-libs",
 						"glob": "**/*",
-						"output": "mind-vision-edge"
+						"output": "electron-edge-libs"
 					}
 				]
 			},

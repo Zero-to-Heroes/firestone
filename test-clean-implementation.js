@@ -3,7 +3,7 @@ console.log('🧪 Testing Clean MindVision Implementation...\n');
 
 async function testCleanImplementation() {
 	try {
-		const MindVisionEdge = require('./libs/mind-vision-edge/index');
+		const MindVisionEdge = require('./libs/electron-edge/mind-vision-edge');
 		const mindVision = new MindVisionEdge();
 
 		console.log('✅ Clean MindVision wrapper loaded successfully!');

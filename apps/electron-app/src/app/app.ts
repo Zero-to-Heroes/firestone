@@ -11,6 +11,7 @@ import { environment } from '../environments/environment';
 import { rendererAppName, rendererAppPort } from './constants';
 import { electronAppInjector } from './services/electron-app-injector';
 import { buildAppInjector } from './services/electron-app-injector-setup';
+import { GameEventsElectronService } from './services/game-events-electron.service';
 import { MindVisionElectronService } from './services/mind-vision-electron.service';
 import { OverlayService } from './services/overlay.service';
 
@@ -97,6 +98,10 @@ export default class App {
 		// Initialize MindVision service for memory reading
 		const mindVision = electronInjector.get(MindVisionElectronService);
 		const allCards = electronInjector.get(CardsFacadeStandaloneService);
+		const gameEvents = electronInjector.get(GameEventsElectronService);
+		gameEvents.init((gameEvent) => {
+			console.log('[GameEventsElectron] [app] received event', gameEvent);
+		});
 		console.log('[app] allCards', allCards);
 		allCards.init(new AllCardsService(), 'enUS');
 		const service = allCards.getService();

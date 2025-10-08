@@ -187,7 +187,7 @@ export class GameEvent implements GameStateEvent {
 	public static readonly MERCENARIES_ABILITY_UNQUEUED = 'MERCENARIES_ABILITY_UNQUEUED';
 	public static readonly MERCENARIES_HERO_REVIVED = 'MERCENARIES_HERO_REVIVED';
 
-	public static readonly ACHIEVEMENT_PROGRESS = 'ACHIEVEMENT_PROGRESS';
+	// public static readonly ACHIEVEMENT_PROGRESS = 'ACHIEVEMENT_PROGRESS';
 	public static readonly DECKSTRING_OVERRIDE = 'DECKSTRING_OVERRIDE';
 	public static readonly WHIZBANG_DECK_ID = 'WHIZBANG_DECK_ID';
 

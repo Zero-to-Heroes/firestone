@@ -28,7 +28,6 @@ import { ManastormInfo } from '../manastorm-bridge/manastorm-info';
 import { chunk, sleep } from '../utils';
 import { EventParser } from './event-parser/event-parser';
 import { SecretsParserService } from './event-parser/secrets/secrets-parser.service';
-import { ConstructedAchievementsProgressionEvent } from './event/constructed-achievements-progression-event';
 import { GameStateMetaInfoService } from './game-state-meta-info.service';
 import { GameStateParsersService } from './game-state/state-parsers.service';
 
@@ -166,11 +165,6 @@ export class GameStateService {
 		this.gameEvents.allEvents.subscribe((gameEvent: GameEvent) => {
 			this.processingQueue.enqueue(gameEvent);
 		});
-		this.events
-			.on(Events.ACHIEVEMENT_PROGRESSION)
-			.subscribe((event) =>
-				this.processingQueue.enqueue(new ConstructedAchievementsProgressionEvent(event.data[0])),
-			);
 		this.events.on(Events.REVIEW_FINALIZED).subscribe(async (event) => {
 			const info: ManastormInfo = event.data[0];
 			console.debug('[game-state] Replay created, received info', info.type);
