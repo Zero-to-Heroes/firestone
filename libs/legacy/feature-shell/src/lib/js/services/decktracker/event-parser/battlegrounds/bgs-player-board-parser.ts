@@ -1,4 +1,3 @@
-import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import {
 	defaultStartingHp,
 	GameTag,
@@ -10,13 +9,14 @@ import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
 import { BoardTrinket } from '@firestone-hs/simulate-bgs-battle/dist/bgs-player-entity';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
-import { GameEvent } from '@firestone/game-state';
 import { BgsBattleSimulationService, BgsIntermediateResultsSimGuardianService } from '@firestone/battlegrounds/core';
 import {
 	BgsBoard,
 	BgsPlayer,
 	BoardSecret,
 	buildBgsEntities,
+	buildEntities,
+	GameEvent,
 	GameState,
 	GameUniqueIdService,
 	PlayerBoard,
@@ -25,7 +25,6 @@ import {
 import { BgsEntity, MemoryBgsPlayerInfo, MemoryBgsTeamInfo, MemoryInspectionService } from '@firestone/memory';
 import { LogsUploaderService, PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { Map } from 'immutable';
 import { AdService } from '../../../ad.service';
 import { isSupportedScenario } from '../../../battlegrounds/bgs-utils';
 import { GameEvents } from '../../../game-events.service';
@@ -422,7 +421,7 @@ export class BgsPlayerBoardParser implements EventParser {
 		const newHistory: readonly BgsBoard[] = [
 			...(playerToUpdate.boardHistory || []),
 			BgsBoard.create({
-				board: BgsPlayerBoardParser.buildEntities(playerBoard.board),
+				board: buildEntities(playerBoard.board),
 				turn: currentState.currentTurnNumeric,
 			}),
 		];
@@ -648,22 +647,6 @@ export class BgsPlayerBoardParser implements EventParser {
 			scriptDataNum2: entity.Tags?.find((t) => t.Name === GameTag.TAG_SCRIPT_DATA_NUM_2)?.Value,
 			scriptDataNum6: entity.Tags?.find((t) => t.Name === GameTag.TAG_SCRIPT_DATA_NUM_6)?.Value,
 		};
-	}
-
-	public static buildEntities(logEntities: readonly any[]): readonly Entity[] {
-		return logEntities.map((entity) => BgsPlayerBoardParser.buildEntity(entity));
-	}
-
-	private static buildEntity(logEntity): Entity {
-		return {
-			cardID: logEntity.CardId as string,
-			id: logEntity.Entity as number,
-			tags: BgsPlayerBoardParser.buildTags(logEntity.Tags),
-		} as Entity;
-	}
-
-	private static buildTags(tags: { Name: number; Value: number }[]): Map<string, number> {
-		return Map(tags.map((tag) => [GameTag[tag.Name], tag.Value]));
 	}
 }
 

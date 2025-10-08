@@ -1,0 +1,36 @@
+import { RealTimeStatsState } from '../../../models/_barrel';
+import { MinionsDiedEvent } from '../../game-events/events/minions-died-event';
+import { GameEvent } from '../../game-events/game-event';
+import { EventParser } from './_event-parser';
+
+export class RTStatsMinionsKilledParser implements EventParser {
+	applies(gameEvent: GameEvent, currentState: RealTimeStatsState): boolean {
+		return gameEvent.type === GameEvent.MINIONS_DIED;
+	}
+
+	parse(
+		gameEvent: MinionsDiedEvent,
+		currentState: RealTimeStatsState,
+	): RealTimeStatsState | PromiseLike<RealTimeStatsState> {
+		const [, , localPlayer] = gameEvent.parse();
+
+		const deadEnemyMinions = gameEvent.additionalData.deadMinions.filter((deadMinion) => {
+			const isPlayer = deadMinion.ControllerId === localPlayer?.PlayerId;
+			return !isPlayer;
+		});
+
+		// For now we only count the minions killed by the player, so the minions
+		// whose controller is the opponent
+		if (!deadEnemyMinions?.length) {
+			return currentState;
+		}
+
+		return currentState.update({
+			totalEnemyMinionsKilled: currentState.totalEnemyMinionsKilled + deadEnemyMinions.length,
+		} as RealTimeStatsState);
+	}
+
+	name(): string {
+		return 'RTStatsMinionsKilledParser';
+	}
+}

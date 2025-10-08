@@ -533,12 +533,10 @@ import { FirestoneAchievementsChallengeService } from './js/services/achievement
 import { AdService } from './js/services/ad.service';
 import { HearthArenaAnalyticsService } from './js/services/analytics/heartharena-analytics.service';
 import { ArenaLastMatchService } from './js/services/arena/arena-last-match.service';
-import { BgsBestUserStatsService } from './js/services/battlegrounds/bgs-best-user-stats.service';
 import { BgsCustomSimulationService } from './js/services/battlegrounds/bgs-custom-simulation-service.service';
 import { BgsGlobalStatsService } from './js/services/battlegrounds/bgs-global-stats.service';
 import { BgsPerfectGamesService } from './js/services/battlegrounds/bgs-perfect-games.service';
 import { BgsRunStatsService } from './js/services/battlegrounds/bgs-run-stats.service';
-import { RealTimeStatsService } from './js/services/battlegrounds/store/real-time-stats/real-time-stats.service';
 import { CardsInitService } from './js/services/cards-init.service';
 import { CardNotificationsService } from './js/services/collection/card-notifications.service';
 import { CardsMonitorService } from './js/services/collection/cards-monitor.service';
@@ -1366,8 +1364,6 @@ try {
 		BgsPerfectGamesService,
 		BgsGlobalStatsService,
 		BgsRunStatsService,
-		BgsBestUserStatsService,
-		RealTimeStatsService,
 		BgsCustomSimulationService,
 		BgsOverlayHeroOverviewService,
 

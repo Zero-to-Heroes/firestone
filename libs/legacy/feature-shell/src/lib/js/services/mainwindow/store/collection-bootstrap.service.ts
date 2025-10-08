@@ -2,7 +2,12 @@ import { Injectable } from '@angular/core';
 import { CardPackResult, PackResult } from '@firestone-hs/user-packs';
 import { MemoryUpdatesService } from '@firestone/memory';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
-import { AbstractFacadeService, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
+import {
+	AbstractFacadeService,
+	AppInjector,
+	waitForReady,
+	WindowManagerService,
+} from '@firestone/shared/framework/core';
 import { BehaviorSubject, filter } from 'rxjs';
 import { CardHistory } from '../../../models/card-history';
 import { cardTypeToPremium } from '../../collection/cards-monitor.service';
@@ -32,6 +37,8 @@ export class CollectionBootstrapService extends AbstractFacadeService<Collection
 		this.cardHistory$$ = new SubscriberAwareBehaviorSubject<readonly CardHistory[] | null>([]);
 		this.memoryUpdates = AppInjector.get(MemoryUpdatesService);
 		this.collectionManager = AppInjector.get(CollectionManager);
+
+		await waitForReady(this.memoryUpdates, this.collectionManager);
 
 		this.memoryUpdates.memoryUpdates$$.subscribe(async (changes) => {
 			if (changes.CollectionInit && this.hasUpdatedPackStats) {

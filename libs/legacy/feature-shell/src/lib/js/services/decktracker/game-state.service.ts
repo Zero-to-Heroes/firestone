@@ -3,6 +3,7 @@ import { GameTag } from '@firestone-hs/reference-data';
 import { BgsInGameWindowNavigationService, BgsMatchMemoryInfoService } from '@firestone/battlegrounds/common';
 import { BgsBattleSimulationService } from '@firestone/battlegrounds/core';
 import {
+	BgsBestUserStatsService,
 	DeckCard,
 	DeckState,
 	GameEvent,
@@ -13,6 +14,7 @@ import {
 	MinionsDiedEvent,
 	OverlayDisplayService,
 	PlayerGameState,
+	RealTimeStatsService,
 	RealTimeStatsState,
 } from '@firestone/game-state';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
@@ -21,8 +23,6 @@ import { OverwolfService, ProcessingQueue, waitForReady } from '@firestone/share
 import { TwitchAuthService } from '@firestone/twitch/common';
 
 import { BehaviorSubject, debounceTime, distinctUntilChanged, filter } from 'rxjs';
-import { BgsBestUserStatsService } from '../battlegrounds/bgs-best-user-stats.service';
-import { RealTimeStatsService } from '../battlegrounds/store/real-time-stats/real-time-stats.service';
 import { Events } from '../events.service';
 import { ManastormInfo } from '../manastorm-bridge/manastorm-info';
 import { chunk, sleep } from '../utils';

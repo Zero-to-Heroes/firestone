@@ -1,6 +1,12 @@
 import { Injectable } from '@angular/core';
 import { DiscordPresenceManagerService } from '@firestone/discord';
-import { DeckParserService, GameStateFacadeService, OverlayDisplayService } from '@firestone/game-state';
+import {
+	BgsBestUserStatsService,
+	DeckParserService,
+	GameStateFacadeService,
+	OverlayDisplayService,
+	RealTimeStatsService,
+} from '@firestone/game-state';
 import { MercenariesNavigationService } from '@firestone/mercenaries/common';
 import { ModsBootstrapService, ModsManagerService } from '@firestone/mods/common';
 import { GameStatusService } from '@firestone/shared/common/service';
@@ -10,9 +16,7 @@ import { AchievementsStorageService as AchievementsDb } from '../../js/services/
 import { FirestoneRemoteAchievementsLoaderService } from '../../js/services/achievement/data/firestone-remote-achievements-loader.service';
 import { RawAchievementsLoaderService } from '../../js/services/achievement/data/raw-achievements-loader.service';
 import { HearthArenaAnalyticsService } from '../../js/services/analytics/heartharena-analytics.service';
-import { BgsBestUserStatsService } from '../../js/services/battlegrounds/bgs-best-user-stats.service';
 import { BgsPerfectGamesService } from '../../js/services/battlegrounds/bgs-perfect-games.service';
-import { RealTimeStatsService } from '../../js/services/battlegrounds/store/real-time-stats/real-time-stats.service';
 import { CardsMonitorService } from '../../js/services/collection/cards-monitor.service';
 import { CollectionManager } from '../../js/services/collection/collection-manager.service';
 import { CollectionStorageService } from '../../js/services/collection/collection-storage.service';
