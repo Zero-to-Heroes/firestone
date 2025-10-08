@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { BgsBoardHighlighterService, BgsInGameWindowNavigationService } from '@firestone/battlegrounds/common';
 import { BgsBattleSimulationService, BgsIntermediateResultsSimGuardianService } from '@firestone/battlegrounds/core';
 import {
@@ -10,8 +10,8 @@ import {
 } from '@firestone/game-state';
 import { MemoryInspectionService } from '@firestone/memory';
 import { BugReportService, LogsUploaderService, PreferencesService } from '@firestone/shared/common/service';
-import { CardsFacadeService, OwUtilsService } from '@firestone/shared/framework/core';
-import { AdService } from '../../ad.service';
+import { ADS_SERVICE_TOKEN, CardsFacadeService, IAdsService, OwUtilsService } from '@firestone/shared/framework/core';
+
 import { GameEvents } from '../../game-events.service';
 import { LocalizationFacadeService } from '../../localization-facade.service';
 import { ReviewIdService } from '../../review-id.service';
@@ -193,7 +193,7 @@ export class GameStateParsersService {
 		private readonly bugService: BugReportService,
 		private readonly logsUploader: LogsUploaderService,
 		private readonly simulation: BgsBattleSimulationService,
-		private readonly adService: AdService,
+		@Inject(ADS_SERVICE_TOKEN) private readonly adService: IAdsService,
 		private readonly gameIdService: GameUniqueIdService,
 		private readonly guardian: BgsIntermediateResultsSimGuardianService,
 		private readonly reviewIdService: ReviewIdService,

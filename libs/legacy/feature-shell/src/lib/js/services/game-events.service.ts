@@ -16,13 +16,12 @@ import {
 import { SceneService } from '@firestone/memory';
 import { GameStatusService, GlobalErrorService } from '@firestone/shared/common/service';
 import { sleep } from '@firestone/shared/framework/common';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, ProcessingQueue } from '@firestone/shared/framework/core';
 import Deque from 'double-ended-queue';
 import { filter, interval, take } from 'rxjs';
-import { Events } from './events.service';
+
 import { HsGameMetaData } from './game-mode-data.service';
 import { GameEventsPluginService } from './plugins/game-events-plugin.service';
-import { ProcessingQueue } from './processing-queue.service';
 import { chunk, freeRegexp } from './utils';
 
 @Injectable()
@@ -43,7 +42,7 @@ export class GameEvents {
 
 	constructor(
 		private readonly gameEventsPlugin: GameEventsPluginService,
-		private readonly events: Events,
+		// private readonly events: Events,
 		private readonly gameEventsEmitter: GameEventsEmitterService,
 		private readonly scene: SceneService,
 		private readonly gameStatus: GameStatusService,
@@ -54,8 +53,6 @@ export class GameEvents {
 		private readonly globalError: GlobalErrorService,
 	) {
 		this.init();
-		window['buildPlayerBoardGameEvent'] = (rawEvent: string) =>
-			this.buildBattlegroundsPlayerBoardEvent('BATTLEGROUNDS_PLAYER_BOARD', JSON.parse(rawEvent));
 	}
 
 	async init() {
@@ -79,15 +76,6 @@ export class GameEvents {
 						Object.assign(new GameEvent(), {
 							type: GameEvent.SCENE_CHANGED_MINDVISION,
 							additionalData: { scene: scene },
-						} as GameEvent),
-					);
-				});
-				this.events.on(Events.GLOBAL_STATS_UPDATED).subscribe(async (event) => {
-					// console.log('[game-events] broadcasting new GLOBAL_STATS_UPDATED event');
-					this.doEventDispatch(
-						Object.assign(new GameEvent(), {
-							type: GameEvent.GLOBAL_STATS_UPDATED,
-							additionalData: { stats: event.data[0] },
 						} as GameEvent),
 					);
 				});

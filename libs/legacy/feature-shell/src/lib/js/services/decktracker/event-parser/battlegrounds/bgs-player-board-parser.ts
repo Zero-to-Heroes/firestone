@@ -24,8 +24,7 @@ import {
 } from '@firestone/game-state';
 import { BgsEntity, MemoryBgsPlayerInfo, MemoryBgsTeamInfo, MemoryInspectionService } from '@firestone/memory';
 import { LogsUploaderService, PreferencesService } from '@firestone/shared/common/service';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { AdService } from '../../../ad.service';
+import { CardsFacadeService, IAdsService } from '@firestone/shared/framework/core';
 import { isSupportedScenario } from '../../../battlegrounds/bgs-utils';
 import { GameEvents } from '../../../game-events.service';
 import { EventParser } from '../event-parser';
@@ -37,7 +36,7 @@ export class BgsPlayerBoardParser implements EventParser {
 		private readonly simulation: BgsBattleSimulationService,
 		private readonly allCards: CardsFacadeService,
 		private readonly prefs: PreferencesService,
-		private readonly adService: AdService,
+		private readonly adService: IAdsService,
 		private readonly gameIdService: GameUniqueIdService,
 		private readonly guardian: BgsIntermediateResultsSimGuardianService,
 		private readonly gameEventsService: GameEvents,
