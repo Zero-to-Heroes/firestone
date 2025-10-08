@@ -1,7 +1,5 @@
-import { RealTimeStatsState } from '@firestone/game-state';
+import { DamageGameEvent, GameEvent, RealTimeStatsState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '@firestone/game-state';
-import { DamageGameEvent } from '../../../../../models/mainwindow/game-events/damage-game-event';
 import { EventParser } from './_event-parser';
 
 /** @deprecated */

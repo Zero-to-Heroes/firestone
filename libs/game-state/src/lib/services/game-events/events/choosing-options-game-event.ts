@@ -1,7 +1,7 @@
-import { GameEvent } from '@firestone/game-state';
+import { GameEvent } from '../game-event';
 
 export class ChoosingOptionsGameEvent extends GameEvent {
-	readonly additionalData: {
+	override readonly additionalData: {
 		readonly options: {
 			readonly EntityId: number;
 			readonly CardId: string;

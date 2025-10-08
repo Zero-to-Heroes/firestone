@@ -1,7 +1,7 @@
-import { GameEvent } from '@firestone/game-state';
+import { GameEvent } from '../game-event';
 
 export class DamageGameEvent extends GameEvent {
-	readonly additionalData: {
+	override readonly additionalData: {
 		sourceEntityId: number;
 		sourceCardId: string;
 		sourceControllerId: number;
@@ -11,7 +11,7 @@ export class DamageGameEvent extends GameEvent {
 		activePlayerId: number;
 	};
 
-	public findTarget(cardId: string): DamageGameEventTarget {
+	public findTarget(cardId: string): DamageGameEventTarget | null {
 		const result = Object.values(this.additionalData.targets).find((target) => target.TargetCardId === cardId);
 		if (!result) {
 			return null;

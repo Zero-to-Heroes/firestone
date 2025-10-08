@@ -1,6 +1,4 @@
-import { RealTimeStatsState } from '@firestone/game-state';
-import { GameEvent } from '@firestone/game-state';
-import { MinionsDiedEvent } from '../../../../../models/mainwindow/game-events/minions-died-event';
+import { GameEvent, MinionsDiedEvent, RealTimeStatsState } from '@firestone/game-state';
 import { EventParser } from './_event-parser';
 
 export class RTStatsMinionsKilledParser implements EventParser {

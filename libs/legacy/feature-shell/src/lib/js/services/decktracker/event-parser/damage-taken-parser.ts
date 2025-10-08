@@ -1,6 +1,4 @@
-import { GameState } from '@firestone/game-state';
-import { GameEvent } from '@firestone/game-state';
-import { DamageGameEvent } from '../../../models/mainwindow/game-events/damage-game-event';
+import { DamageGameEvent, GameEvent, GameState } from '@firestone/game-state';
 import { EventParser } from './event-parser';
 
 export class DamageTakenParser implements EventParser {

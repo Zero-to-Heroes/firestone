@@ -15,6 +15,7 @@ export * from './lib/services/deck/deck-parser-facade.service';
 export * from './lib/services/deck/deck-parser.service';
 export * from './lib/services/game-connection.service';
 export * from './lib/services/game-events-facade.service';
+export * from './lib/services/game-events/events/_barrel';
 export * from './lib/services/game-events/game-event';
 export * from './lib/services/game-events/game-events-emitter.service';
 export * from './lib/services/game-events/game-state-event';

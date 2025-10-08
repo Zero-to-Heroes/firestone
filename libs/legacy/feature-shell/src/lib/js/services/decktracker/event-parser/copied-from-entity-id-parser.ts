@@ -1,8 +1,14 @@
 import { CardIds, Zone } from '@firestone-hs/reference-data';
-import { BoardSecret, DeckCard, DeckState, GameState, SecretOption } from '@firestone/game-state';
+import {
+	BoardSecret,
+	CopiedFromEntityIdGameEvent,
+	DeckCard,
+	DeckState,
+	GameEvent,
+	GameState,
+	SecretOption,
+} from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '@firestone/game-state';
-import { CopiedFromEntityIdGameEvent } from '../../../models/mainwindow/game-events/copied-from-entity-id-game-event';
 import { LocalizationFacadeService } from '../../localization-facade.service';
 import { DREDGE_IN_OPPONENT_DECK_CARD_IDS } from './card-dredged-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';

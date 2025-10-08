@@ -4,6 +4,7 @@ import { ArenaInfoService } from '@firestone/arena/common';
 import {
 	GameEvent,
 	GameEventsEmitterService,
+	GameSettingsEvent,
 	GameStateFacadeService,
 	GameUniqueIdService,
 } from '@firestone/game-state';
@@ -25,7 +26,6 @@ import {
 	tap,
 	withLatestFrom,
 } from 'rxjs/operators';
-import { GameSettingsEvent } from '../../models/mainwindow/game-events/game-settings-event';
 import { isBattlegrounds } from '../battlegrounds/bgs-utils';
 import { HsGameMetaData } from '../game-mode-data.service';
 import { LotteryService } from '../lottery/lottery.service';

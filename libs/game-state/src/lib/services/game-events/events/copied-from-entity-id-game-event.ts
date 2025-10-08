@@ -1,8 +1,8 @@
 import { Zone } from '@firestone-hs/reference-data';
-import { GameEvent } from '@firestone/game-state';
+import { GameEvent } from '../game-event';
 
 export class CopiedFromEntityIdGameEvent extends GameEvent {
-	readonly additionalData: {
+	override readonly additionalData: {
 		copiedCardEntityId: number;
 		copiedCardControllerId: number;
 		copiedCardZone: Zone;

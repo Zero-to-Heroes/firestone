@@ -2,6 +2,7 @@
 import { CardIds, CardType, GameTag, SpellSchool } from '@firestone-hs/reference-data';
 import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { ChoosingOptionsGameEvent } from '../services/game-events/events/choosing-options-game-event';
 import { AttackOnBoard } from './attack-on-board';
 import { BoardSecret } from './board-secret';
 import { DeckCard } from './deck-card';
@@ -448,9 +449,7 @@ export interface CardOption {
 	readonly entityId: number;
 	readonly cardId: string;
 	readonly source: string;
-	readonly context: /*ChoosingOptionsGameEvent['additionalData']['context'];*/ {
-		readonly DataNum1: number;
-	};
+	readonly context: ChoosingOptionsGameEvent['additionalData']['context'];
 	readonly questDifficulty?: number;
 	readonly questReward?: {
 		readonly EntityId: number;

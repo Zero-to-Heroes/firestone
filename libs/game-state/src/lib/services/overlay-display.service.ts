@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { GameType } from '@firestone-hs/reference-data';
-import { GameStateFacadeService } from '@firestone/game-state';
 import { GameStatusService, Preferences, PreferencesService } from '@firestone/shared/common/service';
 import {
 	AbstractFacadeService,
@@ -10,6 +9,7 @@ import {
 } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
+import { GameStateFacadeService } from './game-state-facade.service';
 
 const eventName = 'traditional-overlay-display';
 

@@ -1,7 +1,5 @@
-import { DeckState, GameState } from '@firestone/game-state';
+import { DamageGameEvent, DeckState, GameEvent, GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '@firestone/game-state';
-import { DamageGameEvent } from '../../../models/mainwindow/game-events/damage-game-event';
 import { EventParser } from './event-parser';
 
 export class HeroPowerDamageParser implements EventParser {

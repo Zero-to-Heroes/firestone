@@ -1,10 +1,8 @@
 import { ComplexTurnInfo } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/complex-turn-info';
 import { ValueHeroInfo } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/value-hero-info';
 import { CardType, isBaconGhost } from '@firestone-hs/reference-data';
-import { RealTimeStatsState } from '@firestone/game-state';
+import { DamageGameEvent, GameEvent, RealTimeStatsState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '@firestone/game-state';
-import { DamageGameEvent } from '../../../../../models/mainwindow/game-events/damage-game-event';
 import { EventParser } from './_event-parser';
 
 export class RTStatsTotalDamageDealtByHeroesParser implements EventParser {

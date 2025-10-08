@@ -10,6 +10,7 @@ import {
 	GameState,
 	GameStateEvent,
 	HeroCard,
+	MinionsDiedEvent,
 	OverlayDisplayService,
 	PlayerGameState,
 	RealTimeStatsState,
@@ -20,7 +21,6 @@ import { OverwolfService, ProcessingQueue, waitForReady } from '@firestone/share
 import { TwitchAuthService } from '@firestone/twitch/common';
 
 import { BehaviorSubject, debounceTime, distinctUntilChanged, filter } from 'rxjs';
-import { MinionsDiedEvent } from '../../models/mainwindow/game-events/minions-died-event';
 import { BgsBestUserStatsService } from '../battlegrounds/bgs-best-user-stats.service';
 import { RealTimeStatsService } from '../battlegrounds/store/real-time-stats/real-time-stats.service';
 import { Events } from '../events.service';

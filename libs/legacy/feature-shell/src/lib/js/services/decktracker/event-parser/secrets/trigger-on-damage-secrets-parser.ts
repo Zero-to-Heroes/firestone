@@ -1,8 +1,6 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { BoardSecret, DeckState, GameState } from '@firestone/game-state';
+import { BoardSecret, DamageGameEvent, DeckState, GameEvent, GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '@firestone/game-state';
-import { DamageGameEvent } from '../../../../models/mainwindow/game-events/damage-game-event';
 import { DeckManipulationHelper } from '../deck-manipulation-helper';
 import { EventParser } from '../event-parser';
 

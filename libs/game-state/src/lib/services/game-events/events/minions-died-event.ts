@@ -1,7 +1,7 @@
-import { GameEvent } from '@firestone/game-state';
+import { GameEvent } from '../game-event';
 
 export class MinionsDiedEvent extends GameEvent {
-	readonly additionalData: {
+	override readonly additionalData: {
 		deadMinions: [
 			{
 				CardId: string;

@@ -1,7 +1,5 @@
-import { DeckCard, GameState } from '@firestone/game-state';
+import { DeckCard, GameEvent, GameState, MinionsDiedEvent } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameEvent } from '@firestone/game-state';
-import { MinionsDiedEvent } from '../../../models/mainwindow/game-events/minions-died-event';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
