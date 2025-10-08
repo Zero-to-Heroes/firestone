@@ -2,25 +2,40 @@ import { Injectable } from '@angular/core';
 import { GameType } from '@firestone-hs/reference-data';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { GameStatusService, Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { waitForReady } from '@firestone/shared/framework/core';
+import {
+	AbstractFacadeService,
+	AppInjector,
+	waitForReady,
+	WindowManagerService,
+} from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 
-@Injectable()
-export class OverlayDisplayService {
-	private decktrackerDisplayEventBus: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+const eventName = 'traditional-overlay-display';
 
-	constructor(
-		private readonly prefs: PreferencesService,
-		private readonly gameState: GameStateFacadeService,
-		private readonly gameStatus: GameStatusService,
-	) {
-		window['decktrackerDisplayEventBus'] = this.decktrackerDisplayEventBus;
-		this.init();
+@Injectable()
+export class OverlayDisplayService extends AbstractFacadeService<OverlayDisplayService> {
+	public decktrackerDisplayEventBus$$: BehaviorSubject<boolean>;
+
+	private prefs: PreferencesService;
+	private gameState: GameStateFacadeService;
+	private gameStatus: GameStatusService;
+
+	constructor(protected override readonly windowManager: WindowManagerService) {
+		super(windowManager, 'OverlayDisplayService', () => !!this.decktrackerDisplayEventBus$$);
 	}
 
-	private async init() {
-		await waitForReady(this.prefs, this.gameState);
+	protected override assignSubjects() {
+		this.decktrackerDisplayEventBus$$ = this.mainInstance.decktrackerDisplayEventBus$$;
+	}
+
+	protected async init() {
+		this.decktrackerDisplayEventBus$$ = new BehaviorSubject<boolean>(false);
+		this.prefs = AppInjector.get(PreferencesService);
+		this.gameState = AppInjector.get(GameStateFacadeService);
+		this.gameStatus = AppInjector.get(GameStatusService);
+
+		await waitForReady(this.prefs, this.gameState, this.gameStatus);
 
 		combineLatest([this.gameState.gameState$$, this.prefs.preferences$$, this.gameStatus.inGame$$])
 			.pipe(
@@ -46,7 +61,15 @@ export class OverlayDisplayService {
 				map((info) => this.shouldDisplay(info.gameType, info.hasPlayerDeck, info.prefs)),
 				distinctUntilChanged(),
 			)
-			.subscribe((shouldDisplay) => this.decktrackerDisplayEventBus.next(shouldDisplay));
+			.subscribe((shouldDisplay) => this.decktrackerDisplayEventBus$$.next(shouldDisplay));
+	}
+
+	protected override initElectronSubjects() {
+		this.setupElectronSubject(this.decktrackerDisplayEventBus$$, eventName);
+	}
+
+	protected override createElectronProxy(ipcRenderer: any) {
+		this.decktrackerDisplayEventBus$$ = new BehaviorSubject<boolean>(false);
 	}
 
 	private shouldDisplay(gameType: GameType, hasPlayerDeck: boolean, prefs: Preferences): boolean {

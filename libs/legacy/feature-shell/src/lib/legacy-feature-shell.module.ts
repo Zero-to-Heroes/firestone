@@ -1430,6 +1430,7 @@ try {
 
 		// For electron
 		ConstructedDecktrackerOocWidgetWrapperComponent,
+		DecktrackerPlayerWidgetWrapperComponent,
 	],
 })
 export class LegacyFeatureShellModule {

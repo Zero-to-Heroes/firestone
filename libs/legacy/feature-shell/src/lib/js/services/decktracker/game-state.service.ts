@@ -15,7 +15,7 @@ import {
 } from '@firestone/game-state';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { arraysEqual } from '@firestone/shared/framework/common';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { TwitchAuthService } from '@firestone/twitch/common';
 import { hasTag } from '@services/decktracker/attack-on-board.service';
 import { BehaviorSubject, debounceTime, distinctUntilChanged, filter } from 'rxjs';
@@ -76,8 +76,7 @@ export class GameStateService {
 		private readonly ow: OverwolfService,
 		private readonly secretsParser: SecretsParserService,
 		private readonly parserService: GameStateParsersService,
-		// Just to make sure decktrackerDisplayEventBus is defined
-		private readonly display: OverlayDisplayService,
+		private readonly overlayDisplay: OverlayDisplayService,
 		private readonly matchMemoryInfo: BgsMatchMemoryInfoService,
 		private readonly realTimeStats: RealTimeStatsService,
 		private readonly simulation: BgsBattleSimulationService,
@@ -96,7 +95,7 @@ export class GameStateService {
 			return;
 		}
 
-		await this.prefs.isReady();
+		await waitForReady(this.prefs, this.overlayDisplay);
 
 		this.eventParsers = this.parserService.buildEventParsers();
 		this.registerGameEvents();
@@ -149,7 +148,7 @@ export class GameStateService {
 			this.bgsNav.toggleWindow();
 		});
 
-		const decktrackerDisplayEventBus: BehaviorSubject<boolean> = this.ow.getMainWindow().decktrackerDisplayEventBus;
+		const decktrackerDisplayEventBus: BehaviorSubject<boolean> = this.overlayDisplay.decktrackerDisplayEventBus$$;
 		decktrackerDisplayEventBus.subscribe((event) => {
 			if (this.showDecktrackerFromGameMode === event) {
 				return;
