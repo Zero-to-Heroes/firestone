@@ -21,6 +21,7 @@ import App from '../app';
 
 export class MindVisionElectronService implements IMindVisionFacade {
 	private mindVision: any;
+
 	private initialized = false;
 	private initializationRetries = 0;
 	private maxRetries = 3;
@@ -48,18 +49,18 @@ export class MindVisionElectronService implements IMindVisionFacade {
 
 			// Try to load the Edge.js wrapper
 			const path = require('path');
-			const mindVisionPath = path.join(__dirname, 'mind-vision-edge');
+			const mindVisionPath = path.join(__dirname, 'electron-edge-libs');
 			console.log('[MindVisionElectron] Looking for module at:', mindVisionPath);
 
 			// Clear module cache to ensure we get the latest version
-			const indexPath = path.join(mindVisionPath, 'index.js');
+			const indexPath = path.join(mindVisionPath, 'mind-vision-edge.js');
 			if (eval('require').cache[indexPath]) {
 				console.log('[MindVisionElectron] Clearing cached module...');
 				delete eval('require').cache[indexPath];
 			}
 
 			// Use eval to bypass webpack's module resolution
-			const MindVisionEdge = eval('require')(mindVisionPath);
+			const MindVisionEdge = eval('require')(indexPath);
 			this.mindVision = new MindVisionEdge();
 
 			// Set up memory update callback before initialization

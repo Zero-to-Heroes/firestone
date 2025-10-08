@@ -41,6 +41,11 @@ declare const window: any;
 
 			<!-- TODO: Add the constructed decktracker widget -->
 			<constructed-decktracker-ooc-widget-wrapper></constructed-decktracker-ooc-widget-wrapper>
+			<decktracker-player-widget-wrapper
+				class="focusable"
+				style="pointer-events: none;"
+				tabindex="0"
+			></decktracker-player-widget-wrapper>
 		</div>
 	`,
 	styleUrls: ['./electron-overlay.component.scss'],

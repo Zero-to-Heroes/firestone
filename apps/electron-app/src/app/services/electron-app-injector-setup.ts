@@ -4,6 +4,7 @@ import {
 	DeckParserFacadeService,
 	DeckParserService,
 	GameEventsEmitterService,
+	OverlayDisplayService,
 } from '@firestone/game-state';
 import {
 	MemoryInspectionService,
@@ -21,6 +22,7 @@ import {
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
 import { ElectronAngularInjector } from './electron-angular-injector';
+import { GameEventsElectronService } from './game-events-electron.service';
 import { MindVisionElectronService } from './mind-vision-electron.service';
 
 export const buildAppInjector = () => {
@@ -96,6 +98,12 @@ export const buildAppInjector = () => {
 
 	const deckParserFacade = new DeckParserFacadeService(windowManager);
 	electronInjector.register(DeckParserFacadeService, deckParserFacade);
+
+	const overlayDisplay = new OverlayDisplayService(windowManager);
+	electronInjector.register(OverlayDisplayService, overlayDisplay);
+
+	const gameEvents = new GameEventsElectronService();
+	electronInjector.register(GameEventsElectronService, gameEvents);
 
 	return electronInjector;
 };
