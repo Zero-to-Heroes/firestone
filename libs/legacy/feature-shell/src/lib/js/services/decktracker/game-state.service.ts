@@ -3,7 +3,6 @@ import { GameTag } from '@firestone-hs/reference-data';
 import { BgsInGameWindowNavigationService, BgsMatchMemoryInfoService } from '@firestone/battlegrounds/common';
 import { BgsBattleSimulationService } from '@firestone/battlegrounds/core';
 import {
-	BgsBestUserStatsService,
 	DeckCard,
 	DeckState,
 	GameEvent,
@@ -23,8 +22,6 @@ import { OverwolfService, ProcessingQueue, waitForReady } from '@firestone/share
 import { TwitchAuthService } from '@firestone/twitch/common';
 
 import { BehaviorSubject, debounceTime, distinctUntilChanged, filter } from 'rxjs';
-import { Events } from '../events.service';
-import { ManastormInfo } from '../manastorm-bridge/manastorm-info';
 import { chunk, sleep } from '../utils';
 import { EventParser } from './event-parser/event-parser';
 import { SecretsParserService } from './event-parser/secrets/secrets-parser.service';
@@ -67,7 +64,6 @@ export class GameStateService {
 
 	constructor(
 		private readonly gameEvents: GameEventsEmitterService,
-		private readonly events: Events,
 		private readonly gameStateMetaInfos: GameStateMetaInfoService,
 		private readonly prefs: PreferencesService,
 		private readonly twitch: TwitchAuthService,
@@ -79,7 +75,6 @@ export class GameStateService {
 		private readonly realTimeStats: RealTimeStatsService,
 		private readonly simulation: BgsBattleSimulationService,
 		private readonly bgsNav: BgsInGameWindowNavigationService,
-		private readonly bgsUserStatsService: BgsBestUserStatsService,
 	) {
 		this.init();
 	}
@@ -165,27 +160,6 @@ export class GameStateService {
 		this.gameEvents.allEvents.subscribe((gameEvent: GameEvent) => {
 			this.processingQueue.enqueue(gameEvent);
 		});
-		this.events.on(Events.REVIEW_FINALIZED).subscribe(async (event) => {
-			const info: ManastormInfo = event.data[0];
-			console.debug('[game-state] Replay created, received info', info.type);
-			// FIXME: this could be an issue if the review_finalized event takes too long to fire, as the state
-			// could be already reset when it arrives
-			if (info && info.type === 'new-review' && this.state?.bgState?.currentGame) {
-				const currentGame = this.state.bgState.currentGame;
-				console.debug('[game-state] will trigger START_BGS_RUN_STATS', this.state);
-				const bestBgsUserStats = await this.bgsUserStatsService.bestStats$$.getValueWithInit();
-				this.events.broadcast(
-					Events.START_BGS_RUN_STATS,
-					info.reviewId,
-					currentGame,
-					bestBgsUserStats,
-					info.game,
-				);
-			}
-		});
-
-		// Reset the deck if it exists
-		// this.processingQueue.enqueue(Object.assign(new GameEvent(), { type: GameEvent.GAME_END } as GameEvent));
 	}
 
 	private async processQueue(eventQueue: readonly (GameEvent | GameStateEvent)[]) {

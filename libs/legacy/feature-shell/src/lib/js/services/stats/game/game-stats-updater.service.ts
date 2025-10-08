@@ -75,7 +75,7 @@ export class GameStatsUpdaterService {
 			playerCardId = playerInfoFromDeckstring?.playerCardId;
 		}
 
-		const quests = isBattlegrounds(replay.gameType) ? replay.bgsHeroQuests ?? [] : [];
+		const quests = isBattlegrounds(replay.gameType) ? (replay.bgsHeroQuests ?? []) : [];
 		const firstGame = GameStat.create({
 			additionalResult: game.additionalResult,
 			buildNumber: game.buildNumber,

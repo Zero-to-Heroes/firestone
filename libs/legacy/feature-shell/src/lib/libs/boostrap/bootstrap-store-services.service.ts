@@ -69,6 +69,7 @@ import { MercenariesSynergiesHighlightService } from '../../js/services/mercenar
 import { MercenariesStoreService } from '../../js/services/mercenaries/mercenaries-store.service';
 import { MercenariesOutOfCombatService } from '../../js/services/mercenaries/out-of-combat/mercenaries-out-of-combat.service';
 import { ProfileUploaderService } from '../../js/services/profile/profile-uploader.service';
+import { GameOverService } from '../../js/services/stats/game/game-over.service';
 import { GameStatsProviderService } from '../../js/services/stats/game/game-stats-provider.service';
 import { AppUiStoreService } from '../../js/services/ui-store/app-ui-store.service';
 import { MailsService } from '../mails/services/mails.service';
@@ -95,6 +96,7 @@ export class BootstrapStoreServicesService {
 		private readonly init_MainWindowStateFacadeService: MainWindowStateFacadeService,
 		private readonly prefs: PreferencesService,
 		private readonly gameState: GameStateService,
+		private readonly init_GameOverService: GameOverService,
 		private readonly gameNativeState: GameNativeStateStoreService,
 		private readonly mercenariesStore: MercenariesStoreService,
 		private readonly mercenariesOutOfCombatStore: MercenariesOutOfCombatService,
