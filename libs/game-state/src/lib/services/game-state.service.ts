@@ -24,6 +24,8 @@ import { RealTimeStatsService } from './real-time-stats/real-time-stats.service'
 @Injectable({ providedIn: 'root' })
 export class GameStateService {
 	public state: GameState = new GameState();
+	public deckEventBus = new BehaviorSubject<GameState | null>(null);
+
 	private eventParsers: { [eventKey: string]: readonly EventParser[] };
 
 	// Keep a single queue to avoid race conditions between the two queues (since they
@@ -37,7 +39,6 @@ export class GameStateService {
 	// We need to get through a queue to avoid race conditions when two events are close together,
 	// so that we're sure teh state is update sequentially
 	// private eventQueue: Queue<GameEvent> = new Queue<GameEvent>();
-	private deckEventBus = new BehaviorSubject<GameState | null>(null);
 	private deckUpdater: EventEmitter<GameEvent | GameStateEvent> = new EventEmitter<GameEvent | GameStateEvent>();
 	private eventEmitters: ((state: GameState) => void)[] = [];
 
@@ -72,7 +73,6 @@ export class GameStateService {
 	}
 
 	private async init() {
-		window['deckEventBus'] = this.deckEventBus;
 		window['deckUpdater'] = this.deckUpdater;
 		window['bgsHotkeyPressed'] = this.battlegroundsWindowsListener;
 		if (!this.ow) {

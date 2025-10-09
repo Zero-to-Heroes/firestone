@@ -102,6 +102,7 @@ export default class App {
 		gameEvents.init((gameEvent) => {
 			console.log('[GameEventsElectron] [app] received event', gameEvent);
 		});
+		// TODO: nx graph, and remove UI dependencies (probably some transitive stuff for game-state or battelgrounds-core?)
 		console.log('[app] allCards', allCards);
 		allCards.init(new AllCardsService(), 'enUS');
 		const service = allCards.getService();
