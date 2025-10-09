@@ -1,18 +1,16 @@
 import { CardClass, getWhizbangHeroesTemplateDeckId, isKnownTwistList } from '@firestone-hs/reference-data';
-import {
-	DeckCard,
-	DeckHandlerService,
-	DeckParserService,
-	DeckState,
-	GameEvent,
-	GameState,
-	HeroCard,
-} from '@firestone/game-state';
+
 import { MemoryInspectionService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { AiDeckService } from '../ai-deck-service.service';
+import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
+import { DeckCard } from '../../../models/deck-card';
+import { DeckState } from '../../../models/deck-state';
+import { GameState } from '../../../models/game-state';
+import { HeroCard } from '../../../models/hero-card';
+import { DeckHandlerService } from '../../deck-handler.service';
+import { AiDeckService } from '../../deck/ai-deck-service.service';
+import { DeckParserService } from '../../deck/deck-parser.service';
+import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 
@@ -23,7 +21,7 @@ export class OpponentPlayerParser implements EventParser {
 		private readonly helper: DeckManipulationHelper,
 		private readonly allCards: CardsFacadeService,
 		private readonly prefs: PreferencesService,
-		private readonly i18n: LocalizationFacadeService,
+		private readonly i18n: ILocalizationService,
 		private readonly memory: MemoryInspectionService,
 		private readonly deckParser: DeckParserService,
 	) {}
@@ -92,7 +90,7 @@ export class OpponentPlayerParser implements EventParser {
 
 		console.log('[opponent-player] got AI deckstring', opponentDeckString, currentState.metadata);
 		const board = await this.memory.getCurrentBoard();
-		const decklist = await this.handler.postProcessDeck(this.handler.buildDeckList(opponentDeckString), board);
+		const decklist = await this.handler.postProcessDeck(this.handler.buildDeckList(opponentDeckString), board!);
 
 		// And since this event usually arrives after the cards in hand were drawn, remove from the deck
 		// whatever we can

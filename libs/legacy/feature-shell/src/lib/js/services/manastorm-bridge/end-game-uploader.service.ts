@@ -2,7 +2,13 @@ import { Injectable } from '@angular/core';
 import { extractTotalTurns, parseHsReplayString } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { isArena, TOTAL_RACES_IN_GAME } from '@firestone-hs/reference-data';
 import { ReplayUploadMetadata } from '@firestone-hs/replay-metadata';
-import { BgsGame, GameStateFacadeService } from '@firestone/game-state';
+import {
+	BgsGame,
+	BgsGlobalInfoUpdateParser,
+	GameStateFacadeService,
+	HsGameMetaData,
+	isBattlegrounds,
+} from '@firestone/game-state';
 import {
 	ArenaInfo,
 	BattlegroundsInfo,
@@ -15,9 +21,6 @@ import { PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameForUpload, XpForGameInfo } from '@firestone/stats/common';
 import { toFormatType, toGameType } from '@firestone/stats/data-access';
-import { HsGameMetaData } from '../../../../../../../game-state/src/lib/services/game-mode-data.service';
-import { isBattlegrounds } from '../battlegrounds/bgs-utils';
-import { BgsGlobalInfoUpdateParser } from '../decktracker/event-parser/battlegrounds/bgs-global-info-update-parser';
 import { Events } from '../events.service';
 import {
 	MercenariesReferenceData,

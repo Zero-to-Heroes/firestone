@@ -5,16 +5,19 @@ import { BgsBattleSimulationService } from '@firestone/battlegrounds/core';
 import {
 	DeckCard,
 	DeckState,
+	EventParser,
 	GameEvent,
 	GameEventsEmitterService,
 	GameState,
 	GameStateEvent,
+	GameStateParsersService,
 	HeroCard,
 	MinionsDiedEvent,
 	OverlayDisplayService,
 	PlayerGameState,
 	RealTimeStatsService,
 	RealTimeStatsState,
+	SecretsParserService,
 } from '@firestone/game-state';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { arraysEqual, chunk, sleep } from '@firestone/shared/framework/common';
@@ -22,11 +25,7 @@ import { OverwolfService, ProcessingQueue, waitForReady } from '@firestone/share
 import { TwitchAuthService } from '@firestone/twitch/common';
 
 import { BehaviorSubject, debounceTime, distinctUntilChanged, filter } from 'rxjs';
-import { EventParser } from './event-parser/_event-parser';
-import { SecretsParserService } from './event-parser/secrets/secrets-parser.service';
 import { GameStateMetaInfoService } from './game-state-meta-info.service';
-import { GameStateParsersService } from './game-state/state-parsers.service';
-
 @Injectable()
 export class GameStateService {
 	public state: GameState = new GameState();

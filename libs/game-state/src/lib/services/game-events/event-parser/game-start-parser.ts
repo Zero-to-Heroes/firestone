@@ -1,8 +1,11 @@
 import { BgsInGameWindowNavigationService } from '@firestone/battlegrounds/common';
-import { DeckState, GameEventsEmitterService, GameState } from '@firestone/game-state';
 
-import { GameEvent, GameStateEvent } from '@firestone/game-state';
+import { DeckState } from '../../../models/deck-state';
+import { GameState } from '../../../models/game-state';
+import { GameStateEvent } from '../../game-state-events/game-state-event';
 import { ReviewIdService } from '../../review-id.service';
+import { GameEvent } from '../game-event';
+import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { EventParser } from './_event-parser';
 
 export class GameStartParser implements EventParser {

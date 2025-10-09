@@ -1,14 +1,17 @@
 import { CardIds, CardType, GameTag } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState, GameEvent, GameState, toTagsObject } from '@firestone/game-state';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+
+import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
+import { DeckCard, toTagsObject } from '../../../models/deck-card';
+import { DeckState } from '../../../models/deck-state';
+import { GameState } from '../../../models/game-state';
 import {
 	COUNTERSPELLS,
 	battlecryGlobalEffectCards,
 	deathrattleGlobalEffectCards,
 	globalEffectCards,
 } from '../../hs-utils';
-import { LocalizationFacadeService } from '../../localization-facade.service';
-import { revealCard } from '../game-state/card-reveal';
+import { revealCard } from '../card-reveal';
+import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 import { modifyDecksForSpecialCards } from './deck-contents-utils';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
@@ -17,7 +20,7 @@ export class CardPlayedByEffectParser implements EventParser {
 	constructor(
 		private readonly helper: DeckManipulationHelper,
 		private readonly allCards: CardsFacadeService,
-		private readonly i18n: LocalizationFacadeService,
+		private readonly i18n: ILocalizationService,
 	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
@@ -57,12 +60,13 @@ export class CardPlayedByEffectParser implements EventParser {
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const opponentDeck = !isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
-		const isCardCountered =
+		const isCardCountered: boolean = !!(
 			((additionalInfo?.secretWillTrigger?.reactingToEntityId &&
 				additionalInfo?.secretWillTrigger?.reactingToEntityId === entityId) ||
 				(additionalInfo?.secretWillTrigger?.reactingToCardId &&
 					additionalInfo?.secretWillTrigger?.reactingToCardId === cardId)) &&
-			COUNTERSPELLS.includes(additionalInfo?.secretWillTrigger?.cardId as CardIds);
+			COUNTERSPELLS.includes(additionalInfo?.secretWillTrigger?.cardId as CardIds)
+		);
 
 		// Only minions end up on the board
 		const isOnBoard =
@@ -117,8 +121,8 @@ export class CardPlayedByEffectParser implements EventParser {
 				deck.globalEffects,
 				cardWithZone?.update({
 					// So that if the card is sent back to hand, we can track multiple plays of it
-					entityId: null,
-				} as DeckCard),
+					entityId: undefined,
+				}),
 			);
 		}
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {

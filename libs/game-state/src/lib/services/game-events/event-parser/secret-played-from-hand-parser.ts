@@ -1,17 +1,12 @@
 import { CardIds, CardType, GameTag } from '@firestone-hs/reference-data';
-import {
-	BoardSecret,
-	DeckCard,
-	DeckState,
-	GameEvent,
-	GameState,
-	ShortCard,
-	ShortCardWithTurn,
-} from '@firestone/game-state';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
+import { BoardSecret } from '../../../models/board-secret';
+import { DeckCard } from '../../../models/deck-card';
+import { DeckState } from '../../../models/deck-state';
+import { GameState, ShortCard, ShortCardWithTurn } from '../../../models/game-state';
 import { COUNTERSPELLS } from '../../hs-utils';
-import { LocalizationFacadeService } from '../../localization-facade.service';
-import { SecretConfigService } from '../secret-config.service';
+import { SecretConfigService } from '../../secrets/secret-config.service';
+import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 import { rememberCardsInHand } from './card-played-from-hand-parser';
 import { modifyDecksForSpecialCards } from './deck-contents-utils';
@@ -22,7 +17,7 @@ export class SecretPlayedFromHandParser implements EventParser {
 		private readonly helper: DeckManipulationHelper,
 		private readonly secretConfig: SecretConfigService,
 		private readonly allCards: CardsFacadeService,
-		private readonly i18n: LocalizationFacadeService,
+		private readonly i18n: ILocalizationService,
 	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
@@ -53,21 +48,22 @@ export class SecretPlayedFromHandParser implements EventParser {
 		const secretClass: string = gameEvent.additionalData.playerClass;
 		const creatorCardId = gameEvent.additionalData ? gameEvent.additionalData.creatorCardId : null;
 
-		const isCardCountered =
+		const isCardCountered: boolean = !!(
 			((additionalInfo?.secretWillTrigger?.reactingToEntityId &&
 				additionalInfo?.secretWillTrigger?.reactingToEntityId === entityId) ||
 				(additionalInfo?.secretWillTrigger?.reactingToCardId &&
 					additionalInfo?.secretWillTrigger?.reactingToCardId === cardId)) &&
-			COUNTERSPELLS.includes(additionalInfo?.secretWillTrigger?.cardId as CardIds);
+			COUNTERSPELLS.includes(additionalInfo?.secretWillTrigger?.cardId as CardIds)
+		);
 
-		const cardWithZone = card.update({
+		const cardWithZone = card!.update({
 			zone: !isCardCountered ? 'SECRET' : 'SETASIDE',
 			countered: isCardCountered,
 			guessedInfo: {
-				...card.guessedInfo,
+				...card!.guessedInfo,
 			},
 			tags: {
-				...card.tags,
+				...card!.tags,
 				[GameTag.SECRET]: 1,
 				[GameTag.CARDTYPE]: CardType.SPELL,
 			},
@@ -88,7 +84,7 @@ export class SecretPlayedFromHandParser implements EventParser {
 				? // Since Yogg transforms the card
 					cardWithZone.update({
 						entityId: undefined,
-					} as DeckCard)
+					})
 				: cardWithZone,
 			this.allCards,
 		);
@@ -97,8 +93,8 @@ export class SecretPlayedFromHandParser implements EventParser {
 			currentState.metadata,
 			secretClass,
 			currentState,
-			creatorCardId || card.creatorCardId,
-			card.creatorEntityId,
+			creatorCardId || card!.creatorCardId,
+			card!.creatorEntityId,
 		);
 		const newPlayerDeck = deck
 			.update({

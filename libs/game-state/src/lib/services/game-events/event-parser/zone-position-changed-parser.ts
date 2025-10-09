@@ -1,6 +1,9 @@
 import { GameTag, Zone } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState, GameEvent, GameState } from '@firestone/game-state';
 import { Mutable } from '@firestone/shared/framework/common';
+import { DeckCard } from '../../../models/deck-card';
+import { DeckState } from '../../../models/deck-state';
+import { GameState } from '../../../models/game-state';
+import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 

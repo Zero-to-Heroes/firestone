@@ -1,5 +1,8 @@
-import { DeckCard, GameEvent, GameState, MinionsDiedEvent } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { DeckCard } from '../../../models/deck-card';
+import { GameState } from '../../../models/game-state';
+import { MinionsDiedEvent } from '../events/minions-died-event';
+import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 
@@ -18,10 +21,10 @@ export class LocationDestroyedParser implements EventParser {
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const card = this.helper.findCardInZone(deck.board, cardId, entityId);
-		const cardWithZone = card.update({
+		const cardWithZone = card!.update({
 			zone: 'SETASIDE',
-			entityId: -card.entityId,
-		} as DeckCard);
+			entityId: -card!.entityId,
+		});
 		const newBoard: readonly DeckCard[] = this.helper.removeSingleCardFromZone(deck.board, cardId, entityId)[0];
 		const newOther: readonly DeckCard[] = this.helper.addSingleCardToOtherZone(
 			deck.otherZone,

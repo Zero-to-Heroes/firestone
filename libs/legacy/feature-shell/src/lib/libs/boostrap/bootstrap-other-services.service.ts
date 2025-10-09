@@ -3,15 +3,16 @@ import { DiscordPresenceManagerService } from '@firestone/discord';
 import {
 	BgsBestUserStatsService,
 	DeckParserService,
+	GameModeDataService,
 	GameStateFacadeService,
 	OverlayDisplayService,
 	RealTimeStatsService,
+	ReviewIdService,
 } from '@firestone/game-state';
 import { MercenariesNavigationService } from '@firestone/mercenaries/common';
 import { ModsBootstrapService, ModsManagerService } from '@firestone/mods/common';
 import { GameStatusService } from '@firestone/shared/common/service';
 import { TwitchAuthService } from '@firestone/twitch/common';
-import { GameModeDataService } from '../../../../../../game-state/src/lib/services/game-mode-data.service';
 import { AchievementsNotificationService } from '../../js/services/achievement/achievements-notification.service';
 import { AchievementsStorageService as AchievementsDb } from '../../js/services/achievement/achievements-storage.service';
 import { FirestoneRemoteAchievementsLoaderService } from '../../js/services/achievement/data/firestone-remote-achievements-loader.service';
@@ -34,7 +35,6 @@ import { TwitchPresenceService } from '../../js/services/mainwindow/twitch-prese
 import { EndGameListenerService } from '../../js/services/manastorm-bridge/end-game-listener.service';
 import { QuestsService } from '../../js/services/quests.service';
 import { ReplaysNotificationService } from '../../js/services/replays/replays-notification.service';
-import { ReviewIdService } from '../../js/services/review-id.service';
 import { RewardMonitorService } from '../../js/services/rewards/rewards-monitor';
 import { GameStatsProviderService } from '../../js/services/stats/game/game-stats-provider.service';
 import { SystemTrayService } from '../../js/services/system-tray.service';

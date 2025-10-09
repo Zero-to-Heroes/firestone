@@ -1,5 +1,7 @@
-import { DeckHandlerService, GameEvent, GameState } from '@firestone/game-state';
-import { DeckstringOverrideEvent } from '../event/deckstring-override-event';
+import { GameState } from '../../../models/game-state';
+import { DeckHandlerService } from '../../deck-handler.service';
+import { DeckstringOverrideEvent } from '../../game-state-events/deckstring-override-event';
+import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 import { DeckstringOverrideParser } from './deckstring-override-parser';
 
@@ -10,16 +12,16 @@ export class ReconnectOverParser implements EventParser {
 		return !!state;
 	}
 
-	async parse(currentState: GameState, gameEvent: DeckstringOverrideEvent): Promise<GameState> {
+	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const stateAfterPlayerDeckUpdate = await new DeckstringOverrideParser(this.deckHandler).parse(
 			currentState,
-			new DeckstringOverrideEvent(currentState.playerDeck.name, currentState.playerDeck.deckstring, 'player'),
+			new DeckstringOverrideEvent(currentState.playerDeck.name!, currentState.playerDeck.deckstring!, 'player'),
 		);
 		const stateAfterOpponentDeckUpdate = await new DeckstringOverrideParser(this.deckHandler).parse(
 			stateAfterPlayerDeckUpdate,
 			new DeckstringOverrideEvent(
-				stateAfterPlayerDeckUpdate.opponentDeck.name,
-				stateAfterPlayerDeckUpdate.opponentDeck.deckstring,
+				stateAfterPlayerDeckUpdate.opponentDeck.name!,
+				stateAfterPlayerDeckUpdate.opponentDeck.deckstring!,
 				'opponent',
 			),
 		);

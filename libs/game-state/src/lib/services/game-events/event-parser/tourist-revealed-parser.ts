@@ -1,6 +1,9 @@
 import { CardClass } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState, GameEvent, GameState } from '@firestone/game-state';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
+import { DeckCard } from '../../../models/deck-card';
+import { DeckState } from '../../../models/deck-state';
+import { GameState } from '../../../models/game-state';
+import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 
@@ -23,7 +26,7 @@ export class TouristRevealedParser implements EventParser {
 
 		const refCard = this.allCards.getCard(cardId);
 		const card = DeckCard.create({
-			entityId: null,
+			entityId: undefined,
 			cardId: cardId,
 			cardName: this.i18n.translateString('decktracker.tourist', {
 				className: this.i18n.translateString(
@@ -32,8 +35,8 @@ export class TouristRevealedParser implements EventParser {
 			}),
 			refManaCost: refCard?.cost,
 			rarity: refCard?.rarity?.toLowerCase(),
-			zone: null,
-		} as DeckCard);
+			zone: undefined,
+		});
 
 		const newGlobalEffects = this.helper.addSingleCardToZone(deck.globalEffects, card);
 		const alreadyRevealedTourist = deck.getAllCardsInDeck().find((c) => c.cardId === cardId);
@@ -42,19 +45,19 @@ export class TouristRevealedParser implements EventParser {
 		let newHero = deck.hero;
 		if (!alreadyRevealedTourist) {
 			const cardInDeck = DeckCard.create({
-				entityId: null,
+				entityId: undefined,
 				cardId: cardId,
 				cardName: refCard.name,
 				refManaCost: refCard?.cost,
 				rarity: refCard?.rarity?.toLowerCase(),
-				zone: null,
-			} as DeckCard);
+				zone: undefined,
+			});
 			newDeck = this.helper.addSingleCardToZone(newDeck, cardInDeck);
 
-			const heroInitialClasses = newHero.initialClasses ?? newHero.classes ?? [];
+			const heroInitialClasses = newHero!.initialClasses ?? newHero!.classes ?? [];
 			const touristClass: CardClass = CardClass[gameEvent.additionalData.touristFor as string];
 			const initialClassesWithTourist = [...heroInitialClasses, touristClass];
-			newHero = newHero.update({
+			newHero = newHero!.update({
 				initialClasses: initialClassesWithTourist,
 			});
 		}

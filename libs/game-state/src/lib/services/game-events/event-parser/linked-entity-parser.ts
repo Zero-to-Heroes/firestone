@@ -1,7 +1,10 @@
 import { CardIds, Zone } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState, GameEvent, GameState } from '@firestone/game-state';
+
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { LocalizationFacadeService } from '../../localization-facade.service';
+import { DeckCard } from '../../../models/deck-card';
+import { DeckState } from '../../../models/deck-state';
+import { GameState } from '../../../models/game-state';
+import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 import { reverseIfNeeded } from './card-dredged-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
@@ -9,7 +12,6 @@ import { DeckManipulationHelper } from './deck-manipulation-helper';
 export class LinkedEntityParser implements EventParser {
 	constructor(
 		private readonly helper: DeckManipulationHelper,
-		private readonly i18n: LocalizationFacadeService,
 		private readonly allCards: CardsFacadeService,
 	) {}
 
@@ -42,7 +44,7 @@ export class LinkedEntityParser implements EventParser {
 				isPlayerForFind,
 				deckInWhichToFindTheCard,
 			);
-			if (newCard && reverseIfNeeded(false, newCard.lastAffectedByCardId)) {
+			if (newCard && reverseIfNeeded(false, newCard.lastAffectedByCardId!)) {
 				// revert = true;
 			} else {
 				// If we still don't find the card, revert to the initial values
@@ -133,7 +135,7 @@ export class LinkedEntityParser implements EventParser {
 				entityId: isPlayerForCardModification ? gameEvent.additionalData.linkedEntityId : null,
 				zone: undefined,
 				temporaryCard: undefined,
-			} as DeckCard);
+			});
 			console.debug('[linked-entity-parser] adding card', isPlayerForCardModification, updatedCard);
 			const intermediaryDeck = this.helper.removeSingleCardFromZone(
 				deckInWhichToModifyTheCard.deck,

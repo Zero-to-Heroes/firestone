@@ -1,8 +1,12 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState, GameEvent, GameState, getProcessedCard, toTagsObject } from '@firestone/game-state';
+
 import { Mutable } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { LocalizationFacadeService } from '../../localization-facade.service';
+import { DeckCard, toTagsObject } from '../../../models/deck-card';
+import { DeckState } from '../../../models/deck-state';
+import { GameState } from '../../../models/game-state';
+import { getProcessedCard } from '../../card-utils';
+import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 import { reverseIfNeeded } from './card-dredged-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
@@ -25,7 +29,6 @@ export class CardRevealedParser implements EventParser {
 	constructor(
 		private readonly helper: DeckManipulationHelper,
 		private readonly cards: CardsFacadeService,
-		private readonly i18n: LocalizationFacadeService,
 	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
@@ -44,7 +47,7 @@ export class CardRevealedParser implements EventParser {
 		const isPlayer = reverseIfNeeded(controllerId === localPlayer.PlayerId, gameEvent.additionalData.creatorCardId);
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const dbCard = getProcessedCard(cardId, entityId, deck, this.cards);
-		let positionFromBottom = undefined;
+		let positionFromBottom: number | undefined = undefined;
 		if (gameEvent.additionalData.revealedFromBlock === 'DREDGE') {
 			// Make sure there is no overlap with existing cards
 			// When we dredge we are at the very bottom, so we can increase the current index by any big number
@@ -104,13 +107,13 @@ export class CardRevealedParser implements EventParser {
 			!globalEffects?.some((c) => c.cardId === card.cardId)
 		) {
 			const globalEffectCard = DeckCard.create({
-				entityId: null,
+				entityId: undefined,
 				cardId: card.cardId,
 				cardName: dbCard.name,
 				refManaCost: dbCard?.cost,
 				rarity: dbCard?.rarity?.toLowerCase(),
-				zone: null,
-			} as DeckCard);
+				zone: undefined,
+			});
 			globalEffects = this.helper.addSingleCardToZone(globalEffects, globalEffectCard);
 		}
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {

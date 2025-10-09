@@ -1,7 +1,7 @@
 import { Rank } from '@firestone/memory';
 import { FullGameState } from '../../models/full-game-state';
 import { DeckInfo } from '../deck/deck-parser.service';
-import { GameStateEvent } from './game-state-event';
+import { GameStateEvent } from '../game-state-events/game-state-event';
 
 export class GameEvent implements GameStateEvent {
 	public static readonly SCENE_CHANGED_MINDVISION = 'SCENE_CHANGED_MINDVISION'; // Not strictly a game event, but needed for requirements procesing

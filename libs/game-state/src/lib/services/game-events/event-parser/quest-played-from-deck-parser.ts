@@ -1,6 +1,10 @@
 import { CardType, GameTag } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState, GameEvent, GameState } from '@firestone/game-state';
+
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { DeckCard } from '../../../models/deck-card';
+import { DeckState } from '../../../models/deck-state';
+import { GameState } from '../../../models/game-state';
+import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 
@@ -28,14 +32,14 @@ export class QuestPlayedFromDeckParser implements EventParser {
 			entityId,
 			deck.deckList.length === 0,
 		)[0];
-		const cardWithZone = card.update({
+		const cardWithZone = card!.update({
 			zone: 'SECRET',
 			putIntoPlay: true,
 			guessedInfo: {
-				...card.guessedInfo,
+				...card!.guessedInfo,
 			},
 			tags: {
-				...card.tags,
+				...card!.tags,
 				[GameTag.QUEST]: 1,
 				[GameTag.CARDTYPE]: CardType.SPELL,
 			},

@@ -1,8 +1,8 @@
 import { CardClass, CardIds, CardType, GameTag, LIBRAM_IDS, Race, ReferenceCard } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState } from '@firestone/game-state';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
+import { DeckCard } from '../../../models/deck-card';
+import { DeckState } from '../../../models/deck-state';
 import { hasRace } from '../../hs-utils';
-import { LocalizationFacadeService } from '../../localization-facade.service';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 
 export const modifyDecksForSpecialCards = (
@@ -13,7 +13,7 @@ export const modifyDecksForSpecialCards = (
 	opponentDeckState: DeckState,
 	allCards: CardsFacadeService,
 	helper: DeckManipulationHelper,
-	i18n: LocalizationFacadeService,
+	i18n: ILocalizationService,
 ): [DeckState, DeckState] => {
 	deckState = trackFizzle(deckState, cardId, entityId, helper);
 	if (!isCardCountered) {
@@ -118,7 +118,7 @@ export const modifyDeckForSpecialCardEffects = (
 	cardId: string,
 	deckState: DeckState,
 	allCards: CardsFacadeService,
-	i18n: LocalizationFacadeService,
+	i18n: ILocalizationService,
 ): DeckState => {
 	switch (cardId) {
 		case CardIds.VanndarStormpike_AV_223:
@@ -131,7 +131,7 @@ export const modifyDeckForSpecialCardEffects = (
 const handleCelestialAlignment = (
 	deckState: DeckState,
 	allCards: CardsFacadeService,
-	i18n: LocalizationFacadeService,
+	i18n: ILocalizationService,
 ): DeckState => {
 	const withDeck = updateCostInDeck(
 		(card, refCard) => true,
@@ -147,11 +147,7 @@ const handleCelestialAlignment = (
 	);
 };
 
-const handleEmbiggen = (
-	deckState: DeckState,
-	allCards: CardsFacadeService,
-	i18n: LocalizationFacadeService,
-): DeckState => {
+const handleEmbiggen = (deckState: DeckState, allCards: CardsFacadeService, i18n: ILocalizationService): DeckState => {
 	return updateCostInDeck(
 		(card, refCard) => refCard?.type === 'Minion' || card?.cardType === 'Minion',
 		(card) =>
@@ -166,10 +162,10 @@ const handleEmbiggen = (
 const handleRottenRodent = (
 	deckState: DeckState,
 	allCards: CardsFacadeService,
-	i18n: LocalizationFacadeService,
+	i18n: ILocalizationService,
 ): DeckState => {
 	return updateCostInDeck(
-		(card, refCard) => refCard?.mechanics?.includes(GameTag[GameTag.DEATHRATTLE]),
+		(card, refCard) => refCard?.mechanics?.includes(GameTag[GameTag.DEATHRATTLE]) ?? false,
 		(card) => Math.min(0, card.getEffectiveManaCost() - 1),
 		deckState,
 		allCards,
@@ -179,7 +175,7 @@ const handleRottenRodent = (
 const handleLibram = (
 	deckState: DeckState,
 	allCards: CardsFacadeService,
-	i18n: LocalizationFacadeService,
+	i18n: ILocalizationService,
 	costReduction: number,
 ): DeckState => {
 	return updateCostInDeck(
@@ -193,7 +189,7 @@ const handleLibram = (
 const handleIncantersFlow = (
 	deckState: DeckState,
 	allCards: CardsFacadeService,
-	i18n: LocalizationFacadeService,
+	i18n: ILocalizationService,
 ): DeckState => {
 	return updateCostInDeck(
 		(card, refCard) => refCard?.type === 'Spell' || card?.cardType === 'Spell',
@@ -206,7 +202,7 @@ const handleIncantersFlow = (
 const handleLorthemarTheron = (
 	deckState: DeckState,
 	allCards: CardsFacadeService,
-	i18n: LocalizationFacadeService,
+	i18n: ILocalizationService,
 ): DeckState => {
 	// Works when played, but future C'Thun events don't take the buff into account
 	return deckState.update({
@@ -218,7 +214,7 @@ const handleLorthemarTheron = (
 const handleVanndarStormpike = (
 	deckState: DeckState,
 	allCards: CardsFacadeService,
-	i18n: LocalizationFacadeService,
+	i18n: ILocalizationService,
 ): DeckState => {
 	return updateCostInDeck(
 		(card, refCard) => refCard?.type === 'Minion' || card?.cardType === 'Minion',
@@ -231,7 +227,7 @@ const handleVanndarStormpike = (
 const handleFrizzKindleroost = (
 	deckState: DeckState,
 	allCards: CardsFacadeService,
-	i18n: LocalizationFacadeService,
+	i18n: ILocalizationService,
 ): DeckState => {
 	return updateCostInDeck(
 		(card, refCard) => hasRace(refCard, Race.DRAGON),
@@ -244,7 +240,7 @@ const handleFrizzKindleroost = (
 const handleLunasPocketGalaxy = (
 	deckState: DeckState,
 	allCards: CardsFacadeService,
-	i18n: LocalizationFacadeService,
+	i18n: ILocalizationService,
 ): DeckState => {
 	return updateCostInDeck(
 		(card, refCard) => refCard?.type === 'Minion' || card?.cardType === 'Minion',
@@ -257,7 +253,7 @@ const handleLunasPocketGalaxy = (
 const handleScepterOfSummoning = (
 	deckState: DeckState,
 	allCards: CardsFacadeService,
-	i18n: LocalizationFacadeService,
+	i18n: ILocalizationService,
 ): DeckState => {
 	return updateCostInDeck(
 		(card, refCard) =>
@@ -271,7 +267,7 @@ const handleScepterOfSummoning = (
 const handleUpgradedPackMule = (
 	deckState: DeckState,
 	allCards: CardsFacadeService,
-	i18n: LocalizationFacadeService,
+	i18n: ILocalizationService,
 ): DeckState => {
 	return updateCostInDeck(
 		(card, refCard) => refCard?.type === 'Spell' || card?.cardType === 'Spell',
@@ -284,14 +280,14 @@ const handleUpgradedPackMule = (
 const handleWyrmrestPurifier = (
 	deckState: DeckState,
 	allCards: CardsFacadeService,
-	i18n: LocalizationFacadeService,
+	i18n: ILocalizationService,
 ): DeckState => {
 	return updateCardInDeck(
 		(card, refCard) => refCard?.playerClass === 'Neutral',
 		(card) =>
 			card.update({
 				cardId: undefined,
-				cardName: i18n.getUnknownCardName(CardClass[deckState.hero?.classes[0] ?? CardClass.NEUTRAL]),
+				cardName: i18n.getUnknownCardName(CardClass[deckState.hero?.classes[0] ?? CardClass.NEUTRAL])!,
 				creatorCardId: CardIds.WyrmrestPurifier,
 				rarity: undefined,
 				cardType: undefined,
@@ -299,7 +295,7 @@ const handleWyrmrestPurifier = (
 				actualManaCost: undefined,
 				relatedCardIds: undefined,
 				cardMatchCondition: (other: ReferenceCard) => other.cost === card.getEffectiveManaCost() + 3,
-			} as DeckCard),
+			}),
 		deckState,
 		allCards,
 		i18n,
@@ -309,21 +305,21 @@ const handleWyrmrestPurifier = (
 const handleCerathineFleetrunner = (
 	deckState: DeckState,
 	allCards: CardsFacadeService,
-	i18n: LocalizationFacadeService,
+	i18n: ILocalizationService,
 ): DeckState => {
 	return updateCardInDeck(
 		(card, refCard) => refCard?.type === 'Minion' || card?.cardType === 'Minion',
 		(card) =>
 			card.update({
 				cardId: undefined,
-				cardName: i18n.getUnknownMinionName(),
+				cardName: i18n.getUnknownMinionName()!,
 				creatorCardId: CardIds.CerathineFleetrunner,
 				actualManaCost: undefined,
 				rarity: 'unknown',
 				cardType: 'Minion',
 				relatedCardIds: undefined,
 				cardMatchCondition: (other: ReferenceCard) => !other.type || other.type === 'Minion',
-			} as DeckCard),
+			}),
 		deckState,
 		allCards,
 		i18n,
@@ -333,7 +329,7 @@ const handleCerathineFleetrunner = (
 const handleExploreUngoro = (
 	deckState: DeckState,
 	allCards: CardsFacadeService,
-	i18n: LocalizationFacadeService,
+	i18n: ILocalizationService,
 ): DeckState => {
 	const refCard = allCards.getCard(CardIds.ExploreUngoro_ChooseYourPathToken);
 	return updateCardInDeck(
@@ -347,7 +343,7 @@ const handleExploreUngoro = (
 				rarity: refCard.rarity,
 				cardType: refCard.type,
 				relatedCardIds: undefined,
-			} as DeckCard),
+			}),
 		deckState,
 		allCards,
 		i18n,
@@ -357,7 +353,7 @@ const handleExploreUngoro = (
 const handleDeckOfLunacy = (
 	deckState: DeckState,
 	allCards: CardsFacadeService,
-	i18n: LocalizationFacadeService,
+	i18n: ILocalizationService,
 ): DeckState => {
 	return updateCardInDeck(
 		(card, refCard) => refCard?.type === 'Spell' || card?.cardType === 'Spell',
@@ -372,7 +368,7 @@ const handleDeckOfLunacy = (
 				relatedCardIds: undefined,
 				cardMatchCondition: (other: ReferenceCard) =>
 					(!other.type || other.type === 'Spell') && other.cost === card.getEffectiveManaCost() + 3,
-			} as DeckCard),
+			}),
 		deckState,
 		allCards,
 		i18n,
@@ -382,7 +378,7 @@ const handleDeckOfLunacy = (
 const handleTheAzeriteMurloc = (
 	deckState: DeckState,
 	allCards: CardsFacadeService,
-	i18n: LocalizationFacadeService,
+	i18n: ILocalizationService,
 ): DeckState => {
 	return updateCardInDeck(
 		(card, refCard) =>
@@ -399,7 +395,7 @@ const handleTheAzeriteMurloc = (
 				relatedCardIds: undefined,
 				cardMatchCondition: (other: ReferenceCard) =>
 					(!other.type || other.type === 'Minion') && other.cost === card.getEffectiveManaCost() + 3,
-			} as DeckCard),
+			}),
 		deckState,
 		allCards,
 		i18n,
@@ -409,7 +405,7 @@ const handleTheAzeriteMurloc = (
 const handleFiresOfZinAzshari = (
 	deckState: DeckState,
 	allCards: CardsFacadeService,
-	i18n: LocalizationFacadeService,
+	i18n: ILocalizationService,
 ): DeckState => {
 	return updateCardInDeck(
 		(card, refCard) => true,
@@ -422,8 +418,8 @@ const handleFiresOfZinAzshari = (
 				rarity: 'unknown',
 				cardType: 'Minion',
 				relatedCardIds: undefined,
-				cardMatchCondition: (other: ReferenceCard) => other.cost >= 5,
-			} as DeckCard),
+				cardMatchCondition: (other: ReferenceCard) => (other.cost ?? 0) >= 5,
+			}),
 		deckState,
 		allCards,
 		i18n,
@@ -433,7 +429,7 @@ const handleFiresOfZinAzshari = (
 const handleLadyPrestor = (
 	deckState: DeckState,
 	allCards: CardsFacadeService,
-	i18n: LocalizationFacadeService,
+	i18n: ILocalizationService,
 ): DeckState => {
 	return updateCardInDeck(
 		(card, refCard) => refCard?.type === 'Minion',
@@ -453,7 +449,7 @@ const handleLadyPrestor = (
 							: other.cost === card.getEffectiveManaCost();
 					return result;
 				},
-			} as DeckCard),
+			}),
 		deckState,
 		allCards,
 		i18n,
@@ -463,7 +459,7 @@ const handleLadyPrestor = (
 const handleEnvoyOfTheGlade = (
 	deckState: DeckState,
 	allCards: CardsFacadeService,
-	i18n: LocalizationFacadeService,
+	i18n: ILocalizationService,
 ): DeckState => {
 	return updateCardInDeck(
 		(card, refCard) => refCard?.classes?.[0] === CardClass[CardClass.NEUTRAL],
@@ -486,7 +482,7 @@ const handleEnvoyOfTheGlade = (
 const handleArchVillainRafaam = (
 	deckState: DeckState,
 	allCards: CardsFacadeService,
-	i18n: LocalizationFacadeService,
+	i18n: ILocalizationService,
 ): DeckState => {
 	return updateCardInDeck(
 		(card, refCard) => true,
@@ -500,22 +496,18 @@ const handleArchVillainRafaam = (
 				rarity: 'legendary',
 				cardType: 'Minion',
 				relatedCardIds: undefined,
-			} as DeckCard),
+			}),
 		deckState,
 		allCards,
 		i18n,
 	);
 };
 
-const handleHemet = (
-	deckState: DeckState,
-	allCards: CardsFacadeService,
-	i18n: LocalizationFacadeService,
-): DeckState => {
+const handleHemet = (deckState: DeckState, allCards: CardsFacadeService, i18n: ILocalizationService): DeckState => {
 	return updateCardInDeck(
 		// We use the initial cost here, see
 		// https://www.reddit.com/r/hearthstone/comments/oo8cjr/if_a_cards_costs_are_reduced_during_a_game_does/h5wxgqr/?context=3
-		(card, refCard) => refCard?.cost <= 3,
+		(card, refCard) => (refCard?.cost ?? 0) <= 3,
 		(card) => null,
 		deckState,
 		allCards,
@@ -526,7 +518,7 @@ const handleHemet = (
 const handleOoopsAllSpells = (
 	deckState: DeckState,
 	allCards: CardsFacadeService,
-	i18n: LocalizationFacadeService,
+	i18n: ILocalizationService,
 ): DeckState => {
 	const stateWithoutSpells = updateCardInDeck(
 		(card, refCard) => refCard?.type === 'Minion',
@@ -546,7 +538,7 @@ const handleOoopsAllSpells = (
 const handleSkulkingGeist = (
 	deckState: DeckState,
 	allCards: CardsFacadeService,
-	i18n: LocalizationFacadeService,
+	i18n: ILocalizationService,
 ): DeckState => {
 	return updateCardInDeckAndHand(
 		// We use the initial cost here, see
@@ -562,7 +554,7 @@ const handleSkulkingGeist = (
 const handleSteamcleaner = (
 	deckState: DeckState,
 	allCards: CardsFacadeService,
-	i18n: LocalizationFacadeService,
+	i18n: ILocalizationService,
 ): DeckState => {
 	return updateCardInDeck(
 		(card, refCard) => !!card.creatorCardId,
@@ -576,14 +568,14 @@ const handleSteamcleaner = (
 const handleDeckOfChaos = (
 	deckState: DeckState,
 	allCards: CardsFacadeService,
-	i18n: LocalizationFacadeService,
+	i18n: ILocalizationService,
 ): DeckState => {
 	return updateCardInDeck(
 		(card, refCard) => refCard?.type === 'Minion' || card?.cardType === 'Minion',
 		(card, refCard) =>
 			card.update({
 				actualManaCost: refCard?.attack,
-			} as DeckCard),
+			}),
 		deckState,
 		allCards,
 		i18n,
@@ -593,7 +585,7 @@ const handleDeckOfChaos = (
 const handlePrinceLiam = (
 	deckState: DeckState,
 	allCards: CardsFacadeService,
-	i18n: LocalizationFacadeService,
+	i18n: ILocalizationService,
 ): DeckState => {
 	return updateCardInDeck(
 		(card, refCard) => card?.getEffectiveManaCost() === 1,
@@ -608,7 +600,7 @@ const handlePrinceLiam = (
 				actualManaCost: undefined,
 				relatedCardIds: undefined,
 				cardMatchCondition: (drawnCard: ReferenceCard) => drawnCard.rarity?.toLowerCase() === 'legendary',
-			} as DeckCard),
+			}),
 		deckState,
 		allCards,
 		i18n,
@@ -616,7 +608,7 @@ const handlePrinceLiam = (
 };
 
 const updateCostInDeck = (
-	cardSelector: (card: DeckCard, refCard: ReferenceCard) => boolean,
+	cardSelector: (card: DeckCard, refCard: ReferenceCard | null) => boolean,
 	costUpdator: (card: DeckCard) => number,
 	deckState: DeckState,
 	allCards: CardsFacadeService,
@@ -629,7 +621,7 @@ const updateCostInDeck = (
 		}
 		return card.update({
 			actualManaCost: costUpdator(card),
-		} as DeckCard);
+		});
 	});
 	return deckState.update({
 		deck: newDeck,
@@ -637,7 +629,7 @@ const updateCostInDeck = (
 };
 
 const updateCostInHand = (
-	cardSelector: (card: DeckCard, refCard: ReferenceCard) => boolean,
+	cardSelector: (card: DeckCard, refCard: ReferenceCard | null) => boolean,
 	costUpdator: (card: DeckCard) => number,
 	deckState: DeckState,
 	allCards: CardsFacadeService,
@@ -650,7 +642,7 @@ const updateCostInHand = (
 		}
 		return card.update({
 			actualManaCost: costUpdator(card),
-		} as DeckCard);
+		});
 	});
 	return deckState.update({
 		hand: newHand,
@@ -658,11 +650,11 @@ const updateCostInHand = (
 };
 
 const updateCardInDeck = (
-	cardSelector: (card: DeckCard, refCard: ReferenceCard) => boolean,
-	cardUpdater: (card: DeckCard, refCard: ReferenceCard) => DeckCard,
+	cardSelector: (card: DeckCard, refCard: ReferenceCard | null) => boolean,
+	cardUpdater: (card: DeckCard, refCard: ReferenceCard | null) => DeckCard | null,
 	deckState: DeckState,
 	allCards: CardsFacadeService,
-	i18n: LocalizationFacadeService,
+	i18n: ILocalizationService,
 ): DeckState => {
 	const currentDeck = deckState.deck;
 	const newDeck: readonly DeckCard[] = currentDeck
@@ -673,18 +665,18 @@ const updateCardInDeck = (
 			}
 			return cardUpdater(card, refCard);
 		})
-		.filter((card) => card);
+		.filter((card) => card) as readonly DeckCard[];
 	return deckState.update({
 		deck: newDeck,
 	} as DeckState);
 };
 
 const updateCardInDeckAndHand = (
-	cardSelector: (card: DeckCard, refCard: ReferenceCard) => boolean,
-	cardUpdater: (card: DeckCard, refCard: ReferenceCard) => DeckCard,
+	cardSelector: (card: DeckCard, refCard: ReferenceCard | null) => boolean,
+	cardUpdater: (card: DeckCard, refCard: ReferenceCard | null) => DeckCard | null,
 	deckState: DeckState,
 	allCards: CardsFacadeService,
-	i18n: LocalizationFacadeService,
+	i18n: ILocalizationService,
 ): DeckState => {
 	const newDeck: readonly DeckCard[] = deckState.deck
 		.map((card) => {
@@ -694,7 +686,7 @@ const updateCardInDeckAndHand = (
 			}
 			return cardUpdater(card, refCard);
 		})
-		.filter((card) => card);
+		.filter((card) => card) as readonly DeckCard[];
 	const newHand: readonly DeckCard[] = deckState.hand
 		.map((card) => {
 			const refCard = card.cardId ? allCards.getCard(card.cardId) : null;
@@ -703,7 +695,7 @@ const updateCardInDeckAndHand = (
 			}
 			return cardUpdater(card, refCard);
 		})
-		.filter((card) => card);
+		.filter((card) => card) as readonly DeckCard[];
 	return deckState.update({
 		deck: newDeck,
 		hand: newHand,

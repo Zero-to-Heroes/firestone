@@ -1,15 +1,16 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { DeckCard, GameEvent, GameState } from '@firestone/game-state';
+
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { DeckManipulationHelper } from '@legacy-import/src/lib/js/services/decktracker/event-parser/deck-manipulation-helper';
-import { LocalizationFacadeService } from '@legacy-import/src/lib/js/services/localization-facade.service';
+import { DeckCard } from '../../../models/deck-card';
+import { GameState } from '../../../models/game-state';
 import { deathrattleGlobalEffectCards } from '../../hs-utils';
+import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
+import { DeckManipulationHelper } from './deck-manipulation-helper';
 
 export class DeathrattleTriggeredParser implements EventParser {
 	constructor(
 		private readonly allCards: CardsFacadeService,
-		private readonly i18n: LocalizationFacadeService,
 		private readonly helper: DeckManipulationHelper,
 	) {}
 
@@ -26,13 +27,13 @@ export class DeathrattleTriggeredParser implements EventParser {
 		if (deathrattleGlobalEffectCards.includes(cardId as CardIds)) {
 			const refCard = this.allCards.getCard(cardId);
 			const card = DeckCard.create({
-				entityId: null,
+				entityId: undefined as unknown as number,
 				cardId: cardId,
 				cardName: refCard.name,
 				refManaCost: refCard?.cost,
 				rarity: refCard?.rarity?.toLowerCase(),
-				zone: null,
-			} as DeckCard);
+				zone: undefined,
+			});
 			newGlobalEffects = this.helper.addSingleCardToZone(deck.globalEffects, card);
 		}
 

@@ -367,6 +367,7 @@ import { AchievementsCommonModule, REMOTE_ACHIEVEMENTS_SERVICE_TOKEN } from '@fi
 import { AchievementsDataAccessModule } from '@firestone/achievements/data-access';
 import { AchievementsViewModule } from '@firestone/achievements/view';
 import { AppCommonModule, LocalizationLoaderWithCache } from '@firestone/app/common';
+import { AppViewModule } from '@firestone/app/view';
 import {
 	ARENA_DRAFT_MANAGER_SERVICE_TOKEN,
 	ArenaCommonModule,
@@ -399,6 +400,7 @@ import {
 	GameStateModule,
 	IGameEventsPlugin,
 	REVIEW_ID_SERVICE_TOKEN,
+	ReviewIdService,
 } from '@firestone/game-state';
 import { MainwindowCommonModule } from '@firestone/mainwindow/common';
 import { MemoryModule } from '@firestone/memory';
@@ -438,9 +440,6 @@ import { TavernBrawlStatComponent } from '@tavern-brawl/components/stat/tavern-b
 import { TavernBrawlDesktopComponent } from '@tavern-brawl/components/tavern-brawl-desktop.component';
 import { TavernBrawlService } from '@tavern-brawl/services/tavern-brawl.service';
 import { NgScrollbarModule } from 'ngx-scrollbar';
-
-import { AppViewModule } from '@firestone/app/view';
-import { GameEvents } from '../../../../game-state/src/lib/services/game-events/game-events.service';
 import { AdsComponent } from './js/components/ads/ads.component';
 import { BgsBattleSideComponent } from './js/components/battlegrounds/battles/bgs-battle-side.component';
 import { BgsBattleComponent } from './js/components/battlegrounds/battles/bgs-battle.component';
@@ -556,14 +555,10 @@ import { CardsHighlightService } from './js/services/decktracker/card-highlight/
 import { ConstructedConfigService } from './js/services/decktracker/constructed-config.service';
 import { DeckCardService } from './js/services/decktracker/deck-card.service';
 import { DynamicZoneHelperService } from './js/services/decktracker/dynamic-zone-helper.service';
-import { DeckManipulationHelper } from './js/services/decktracker/event-parser/deck-manipulation-helper';
-import { SecretsParserService } from './js/services/decktracker/event-parser/secrets/secrets-parser.service';
 import { GameStateMetaInfoService } from './js/services/decktracker/game-state-meta-info.service';
 import { GameStateService } from './js/services/decktracker/game-state.service';
-import { GameStateParsersService } from './js/services/decktracker/game-state/state-parsers.service';
 import { DecksProviderService } from './js/services/decktracker/main/decks-provider.service';
 import { DecktrackerStateLoaderService } from './js/services/decktracker/main/decktracker-state-loader.service';
-import { SecretConfigService } from './js/services/decktracker/secret-config.service';
 import { ZoneOrderingService } from './js/services/decktracker/zone-ordering.service';
 import { DevService } from './js/services/dev.service';
 import { Events } from './js/services/events.service';
@@ -601,7 +596,6 @@ import { InternalProfileInfoService } from './js/services/profile/internal/inter
 import { ProfileUploaderService } from './js/services/profile/profile-uploader.service';
 import { QuestsService } from './js/services/quests.service';
 import { ReplaysNotificationService } from './js/services/replays/replays-notification.service';
-import { ReviewIdService } from './js/services/review-id.service';
 import { RewardMonitorService } from './js/services/rewards/rewards-monitor';
 import { GameOverService } from './js/services/stats/game/game-over.service';
 import { GameStatsProviderService } from './js/services/stats/game/game-stats-provider.service';
@@ -1326,7 +1320,6 @@ try {
 		{ provide: AllCardsService, useExisting: CardsFacadeService },
 
 		DevService,
-		GameEvents,
 		LogListenerService,
 		CardsMonitorService,
 		LogRegisterService,
@@ -1355,9 +1348,6 @@ try {
 		EndGameUploaderService,
 		GameParserService,
 		ReplayUploadService,
-		SecretsParserService,
-		GameStateParsersService,
-		DeckManipulationHelper,
 
 		BgsPerfectGamesService,
 		BgsGlobalStatsService,
@@ -1370,8 +1360,6 @@ try {
 		MercenariesOutOfCombatService,
 		MercenariesReferenceDataService,
 		MercenariesSynergiesHighlightService,
-
-		SecretConfigService,
 
 		GameStatsUpdaterService,
 		GameOverService,

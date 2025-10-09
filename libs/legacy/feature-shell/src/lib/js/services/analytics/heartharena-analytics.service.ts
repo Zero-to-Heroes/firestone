@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { GameType } from '@firestone-hs/reference-data';
-import { GameEvent, GameEventsEmitterService } from '@firestone/game-state';
+import { GameEvent, GameEventsEmitterService, HsGameMetaData } from '@firestone/game-state';
 import { AnalyticsService, OverwolfService } from '@firestone/shared/framework/core';
-import { HsGameMetaData } from '../../../../../../../game-state/src/lib/services/game-mode-data.service';
 
 @Injectable()
 export class HearthArenaAnalyticsService {

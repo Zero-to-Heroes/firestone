@@ -1,8 +1,12 @@
 import { GameTag } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState, GameEvent, GameState, getProcessedCard, toTagsObject } from '@firestone/game-state';
+
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { LocalizationFacadeService } from '../../localization-facade.service';
-import { revealCard } from '../game-state/card-reveal';
+import { DeckCard, toTagsObject } from '../../../models/deck-card';
+import { DeckState } from '../../../models/deck-state';
+import { GameState } from '../../../models/game-state';
+import { getProcessedCard } from '../../card-utils';
+import { revealCard } from '../card-reveal';
+import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 
@@ -10,7 +14,6 @@ export class MinionSummonedParser implements EventParser {
 	constructor(
 		private readonly helper: DeckManipulationHelper,
 		private readonly cards: CardsFacadeService,
-		private readonly i18n: LocalizationFacadeService,
 	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
@@ -48,8 +51,8 @@ export class MinionSummonedParser implements EventParser {
 			board: newBoard,
 		} as DeckState);
 
-		const playerDeckAfterReveal = isPlayer ? newPlayerDeck : currentState.opponentDeck;
-		const opponentDeckAfterReveal = isPlayer ? currentState.opponentDeck : revealCard(newPlayerDeck, card);
+		// const playerDeckAfterReveal = isPlayer ? newPlayerDeck : currentState.opponentDeck;
+		// const opponentDeckAfterReveal = isPlayer ? currentState.opponentDeck : revealCard(newPlayerDeck, card);
 
 		// return currentState.update({
 		// 	playerDeck: playerDeckAfterReveal,

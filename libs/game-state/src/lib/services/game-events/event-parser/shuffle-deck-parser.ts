@@ -1,4 +1,6 @@
-import { DeckCard, GameEvent, GameState } from '@firestone/game-state';
+import { DeckCard } from '../../../models/deck-card';
+import { GameState } from '../../../models/game-state';
+import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 
 export class ShuffleDeckParser implements EventParser {

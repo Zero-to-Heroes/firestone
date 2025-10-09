@@ -4,9 +4,9 @@ import { PreferencesService } from '@firestone/shared/common/service';
 import { ILocalizationService, OwUtilsService } from '@firestone/shared/framework/core';
 import { BattlegroundsState, BgsHeroSelectionOverviewPanel, BgsPanel } from '../../../../models/_barrel';
 import { GameState } from '../../../../models/game-state';
+import { GameStateEvent } from '../../../game-state-events/game-state-event';
 import { GameEvent } from '../../game-event';
 import { GameEventsEmitterService } from '../../game-events-emitter.service';
-import { GameStateEvent } from '../../game-state-event';
 import { EventParser } from '../_event-parser';
 
 export class BgsHeroSelectionParser implements EventParser {

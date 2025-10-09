@@ -1,6 +1,7 @@
-import { DeckCard, GameEvent, GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { LocalizationFacadeService } from '../../localization-facade.service';
+import { DeckCard } from '../../../models/deck-card';
+import { GameState } from '../../../models/game-state';
+import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 
@@ -8,7 +9,6 @@ export class CreateCardInGraveyardParser implements EventParser {
 	constructor(
 		private readonly helper: DeckManipulationHelper,
 		private readonly allCards: CardsFacadeService,
-		private readonly i18n: LocalizationFacadeService,
 	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {

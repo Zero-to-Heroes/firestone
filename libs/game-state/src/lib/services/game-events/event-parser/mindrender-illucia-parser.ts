@@ -1,4 +1,6 @@
-import { DeckState, GameEvent, GameState } from '@firestone/game-state';
+import { DeckState } from '../../../models/deck-state';
+import { GameState } from '../../../models/game-state';
+import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 
 // The logs contain the info about the cards (hand + deck) that change controllers,

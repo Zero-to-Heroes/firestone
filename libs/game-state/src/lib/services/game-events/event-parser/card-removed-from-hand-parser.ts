@@ -1,6 +1,10 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { DeckCard, GameEvent, GameState, getProcessedCard } from '@firestone/game-state';
+
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { DeckCard } from '../../../models/deck-card';
+import { GameState } from '../../../models/game-state';
+import { getProcessedCard } from '../../card-utils';
+import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 
@@ -28,11 +32,11 @@ export class CardRemovedFromHandParser implements EventParser {
 		// See card-played-from-hand
 		const newDeck = deck.deck; // this.helper.updateDeckForAi(gameEvent, currentState, removedCard);
 
-		const refCard = getProcessedCard(card?.cardId, card?.entityId, deck, this.allCards);
-		const cardWithZone = card.update({
-			refManaCost: card.refManaCost ?? refCard?.cost,
+		const refCard = getProcessedCard(card!.cardId, card!.entityId, deck, this.allCards);
+		const cardWithZone = card!.update({
+			refManaCost: card!.refManaCost ?? refCard?.cost,
 			zone: 'SETASIDE',
-		} as DeckCard);
+		});
 
 		const newOtherZone: readonly DeckCard[] = this.helper.addSingleCardToOtherZone(
 			deck.otherZone,

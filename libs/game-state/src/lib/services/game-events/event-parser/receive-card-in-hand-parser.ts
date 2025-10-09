@@ -1,14 +1,9 @@
 import { CardIds, CardType, GameTag, hasCorrectTribe, Race } from '@firestone-hs/reference-data';
-import {
-	addGuessInfoToDrawnCard,
-	DeckCard,
-	DeckState,
-	GameEvent,
-	GameState,
-	getProcessedCard,
-	toTagsObject,
-} from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { DeckCard, toTagsObject } from '../../../models/deck-card';
+import { DeckState } from '../../../models/deck-state';
+import { GameState } from '../../../models/game-state';
+import { addGuessInfoToDrawnCard, getProcessedCard } from '../../card-utils';
 import {
 	cardsConsideredPublic,
 	forcedHiddenCardCreators,
@@ -16,7 +11,7 @@ import {
 	publicCardCreators,
 	specialCasePublicCardCreators,
 } from '../../hs-utils';
-import { LocalizationFacadeService } from '../../localization-facade.service';
+import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 
@@ -24,7 +19,6 @@ export class ReceiveCardInHandParser implements EventParser {
 	constructor(
 		private readonly helper: DeckManipulationHelper,
 		private readonly allCards: CardsFacadeService,
-		private readonly i18n: LocalizationFacadeService,
 	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
@@ -58,7 +52,7 @@ export class ReceiveCardInHandParser implements EventParser {
 
 		// Some buffs are deduced from the creator card information, instead of being explicitly set
 		// by the game
-		const lastInfluencedByCardId: CardIds = creatorCardId ?? gameEvent.additionalData?.lastInfluencedByCardId;
+		const lastInfluencedByCardId = creatorCardId ?? gameEvent.additionalData?.lastInfluencedByCardId;
 		const buffingEntityCardId = gameEvent.additionalData.buffingEntityCardId;
 		const buffCardId = gameEvent.additionalData.buffCardId;
 		const isSpecialCasePublicWhenOpponentDraws =
@@ -75,7 +69,7 @@ export class ReceiveCardInHandParser implements EventParser {
 			// cards added to the player's hand
 			// || (isPlayer && !hideInfoWhenPlayerPlaysIt.includes(lastInfluencedByCardId as CardIds))
 			(isCastWhenDrawn(cardId, this.allCards) ||
-				publicCardCreators.includes(lastInfluencedByCardId) ||
+				publicCardCreators.includes(lastInfluencedByCardId as CardIds) ||
 				specialCasePublicCardCreators.includes(cardId as CardIds));
 		const isCardInfoPublic =
 			isPlayer ||
@@ -113,7 +107,7 @@ export class ReceiveCardInHandParser implements EventParser {
 						cardId: undefined,
 						cardName: undefined,
 						lastAffectedByCardId: undefined,
-					} as DeckCard);
+					});
 
 		const newBoard = boardCard
 			? this.helper.removeSingleCardFromZone(deck.board, null, entityId, deck.deckList.length === 0)[0]
@@ -247,7 +241,7 @@ export class ReceiveCardInHandParser implements EventParser {
 							// while it is in the ENTITY_UPDATE event for the opponent
 							!!gameEvent.additionalData.dataNum1 && gameEvent.additionalData.dataNum1 !== -1
 								? gameEvent.additionalData.dataNum1
-								: cardWithAdditionalAttributes.mainAttributeChange + 1,
+								: (cardWithAdditionalAttributes.mainAttributeChange ?? 0) + 1,
 						)
 					: deck.abyssalCurseHighestValue,
 		} as DeckState);
@@ -337,14 +331,16 @@ const guessCardId = (
 	creatorCardId: string,
 	creatorEntityId: number,
 	allCards: CardsFacadeService,
-): string => {
+): string | undefined => {
 	// console.debug('[receive-card-in-hand] guessing cardId', cardId, deckState, gameEvent);
 	if (!!cardId?.length) {
 		return cardId;
 	}
 	switch (creatorCardId) {
 		case CardIds.Repackage_RepackagedBoxToken_TOY_879t:
-			const existingBox: DeckCard = deckState.otherZone.find((c) => Math.abs(c.entityId) === creatorEntityId);
+			const existingBox: DeckCard | undefined = deckState.otherZone.find(
+				(c) => Math.abs(c.entityId) === creatorEntityId,
+			);
 			const guessedCardId = existingBox?.relatedCardIds?.[0];
 			if (guessedCardId) {
 				// FIXME: didn't want to have to handle a full DeckState return for this
@@ -385,7 +381,7 @@ export const denormalizeCreatorCardId = (
 		case CardIds.HarpysTalonsToken_EDR_100t13:
 			const card = deck.findCard(creatorEntityId)?.card;
 			return card
-				? { creatorCardId: card.creatorCardId, creatorEntityId: card.creatorEntityId }
+				? { creatorCardId: card.creatorCardId!, creatorEntityId: card.creatorEntityId! }
 				: { creatorCardId, creatorEntityId };
 		default:
 			return { creatorCardId, creatorEntityId };

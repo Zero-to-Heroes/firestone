@@ -1,6 +1,7 @@
-import { GameEvent, GameState } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { OwUtilsService } from '@firestone/shared/framework/core';
+import { GameState } from '../../../models/game-state';
+import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 
 export class GameEndParser implements EventParser {
@@ -36,7 +37,7 @@ export class GameEndParser implements EventParser {
 					phase: 'recruit',
 				}),
 				duoPendingBoards: [],
-				playerTeams: null,
+				playerTeams: undefined,
 			}),
 		});
 	}

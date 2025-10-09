@@ -1,8 +1,12 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState, GameEvent, GameState, getProcessedCard } from '@firestone/game-state';
+
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { publicCardCreators, shouldKeepOriginalCost } from 'libs/game-state/src/lib/services/hs-utils';
-import { LocalizationFacadeService } from '../../localization-facade.service';
+import { DeckCard } from '../../../models/deck-card';
+import { DeckState } from '../../../models/deck-state';
+import { GameState } from '../../../models/game-state';
+import { getProcessedCard } from '../../card-utils';
+import { publicCardCreators, shouldKeepOriginalCost } from '../../hs-utils';
+import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 import { WHIZBANG_DECK_CARD_IDS } from './card-revealed-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
@@ -11,7 +15,6 @@ import { addAdditionalAttribuesInHand } from './receive-card-in-hand-parser';
 export class EntityUpdateParser implements EventParser {
 	constructor(
 		private readonly helper: DeckManipulationHelper,
-		private readonly i18n: LocalizationFacadeService,
 		private readonly allCards: CardsFacadeService,
 	) {}
 
@@ -56,10 +59,10 @@ export class EntityUpdateParser implements EventParser {
 			? addAdditionalAttribuesInHand(
 					cardInHand.update({
 						cardId: obfsucatedCardId,
-						cardName: this.allCards.getCard(obfsucatedCardId).name,
-						refManaCost: shouldKeepOriginalCost(obfsucatedCardId)
+						cardName: this.allCards.getCard(obfsucatedCardId!).name,
+						refManaCost: shouldKeepOriginalCost(obfsucatedCardId!)
 							? cardInHand.refManaCost
-							: this.allCards.getCard(obfsucatedCardId)?.cost,
+							: this.allCards.getCard(obfsucatedCardId!)?.cost,
 					} as DeckCard),
 					deck,
 					gameEvent.additionalData.dataNum1,
@@ -80,12 +83,12 @@ export class EntityUpdateParser implements EventParser {
 		const newCardInDeck = addAdditionalAttribuesInDeck(
 			cardInDeck?.cardId !== obfsucatedCardId
 				? cardInDeck?.update({
-						cardId: obfsucatedCardId,
-						cardName: this.allCards.getCard(obfsucatedCardId).name,
-						refManaCost: shouldKeepOriginalCost(obfsucatedCardId)
+						cardId: obfsucatedCardId!,
+						cardName: this.allCards.getCard(obfsucatedCardId!).name,
+						refManaCost: shouldKeepOriginalCost(obfsucatedCardId!)
 							? cardInDeck.refManaCost
-							: this.allCards.getCard(obfsucatedCardId)?.cost,
-					})
+							: this.allCards.getCard(obfsucatedCardId!)?.cost,
+					})!
 				: cardInDeck,
 			deck,
 			gameEvent,
@@ -96,10 +99,10 @@ export class EntityUpdateParser implements EventParser {
 			cardInOther && cardInOther.cardId !== obfsucatedCardId
 				? cardInOther.update({
 						cardId: obfsucatedCardId,
-						cardName: this.allCards.getCard(obfsucatedCardId).name,
-						refManaCost: shouldKeepOriginalCost(obfsucatedCardId)
+						cardName: this.allCards.getCard(obfsucatedCardId!).name,
+						refManaCost: shouldKeepOriginalCost(obfsucatedCardId!)
 							? cardInOther.refManaCost
-							: this.allCards.getCard(obfsucatedCardId)?.cost,
+							: this.allCards.getCard(obfsucatedCardId!)?.cost,
 					} as DeckCard)
 				: null;
 		// console.debug(
@@ -125,13 +128,13 @@ export class EntityUpdateParser implements EventParser {
 		if (WHIZBANG_DECK_CARD_IDS.includes(cardId as CardIds) && !globalEffects?.some((c) => c.cardId === cardId)) {
 			const dbCard = getProcessedCard(cardId, entityId, deck, this.allCards);
 			const globalEffectCard = DeckCard.create({
-				entityId: null,
+				entityId: undefined,
 				cardId: cardId,
 				cardName: dbCard.name,
 				refManaCost: dbCard.cost,
 				rarity: dbCard.rarity?.toLowerCase(),
-				zone: null,
-			} as DeckCard);
+				zone: undefined,
+			});
 			globalEffects = this.helper.addSingleCardToZone(globalEffects, globalEffectCard);
 		}
 

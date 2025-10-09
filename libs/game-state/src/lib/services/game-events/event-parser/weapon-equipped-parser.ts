@@ -1,6 +1,9 @@
-import { DeckCard, DeckState, GameEvent, GameState, getProcessedCard } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { LocalizationFacadeService } from '../../localization-facade.service';
+import { DeckCard } from '../../../models/deck-card';
+import { DeckState } from '../../../models/deck-state';
+import { GameState } from '../../../models/game-state';
+import { getProcessedCard } from '../../card-utils';
+import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 
@@ -8,7 +11,6 @@ export class WeaponEquippedParser implements EventParser {
 	constructor(
 		private readonly cards: CardsFacadeService,
 		private readonly helper: DeckManipulationHelper,
-		private readonly i18n: LocalizationFacadeService,
 	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {

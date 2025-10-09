@@ -1,7 +1,10 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { DeckCard, GameEvent, GameState, toTagsObject } from '@firestone/game-state';
+
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
+import { DeckCard, toTagsObject } from '../../../models/deck-card';
+import { GameState } from '../../../models/game-state';
 import { getCardForGlobalEffect, globalEffectCards } from '../../hs-utils';
+import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 
@@ -36,13 +39,13 @@ export class EnchantmentAttachedParser implements EventParser {
 			const globalEffectCardId = getCardForGlobalEffect(cardId as CardIds);
 			const refCard = this.allCards.getCard(globalEffectCardId);
 			const card = DeckCard.create({
-				entityId: null,
+				entityId: undefined,
 				cardId: globalEffectCardId,
 				cardName: refCard.name,
 				refManaCost: refCard?.cost,
 				rarity: refCard?.rarity?.toLowerCase(),
-				zone: null,
-			} as DeckCard);
+				zone: undefined,
+			});
 			newGlobalEffects = this.helper.addSingleCardToZone(deck.globalEffects, card);
 		}
 

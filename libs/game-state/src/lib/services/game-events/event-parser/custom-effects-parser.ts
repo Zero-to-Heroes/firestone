@@ -1,14 +1,11 @@
 import { CardClass, CardIds } from '@firestone-hs/reference-data';
-import {
-	addGuessInfoToCardInHand,
-	DeckCard,
-	GameEvent,
-	GameState,
-	getDynamicRelatedCardIds,
-	hasOverride,
-} from '@firestone/game-state';
 import { pickLast } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { DeckCard } from '../../../models/deck-card';
+import { GameState } from '../../../models/game-state';
+import { getDynamicRelatedCardIds, hasOverride } from '../../../related-cards/dynamic-pools';
+import { addGuessInfoToCardInHand } from '../../card-utils';
+import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 import { handleSingleCardBuffInHand } from './card-buffed-in-hand-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
@@ -93,7 +90,7 @@ export class CustomEffectsParser implements EventParser {
 				gameType: currentState.metadata.gameType,
 				currentClass: currentState.playerDeck.hero?.classes?.[0]
 					? CardClass[currentState.playerDeck.hero.classes[0]]
-					: null,
+					: (null as unknown as string),
 				deckState: deck,
 				gameState: currentState,
 				validArenaPool: [],

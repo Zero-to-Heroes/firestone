@@ -1,9 +1,12 @@
 import { CardIds, CardType, ReferenceCard, SpellSchool } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState, GameEvent, GameState } from '@firestone/game-state';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { reverseIfNeeded } from '@legacy-import/src/lib/js/services/decktracker/event-parser/card-dredged-parser';
-import { LocalizationFacadeService } from '../../localization-facade.service';
+
+import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
+import { DeckCard } from '../../../models/deck-card';
+import { DeckState } from '../../../models/deck-state';
+import { GameState } from '../../../models/game-state';
+import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
+import { reverseIfNeeded } from './card-dredged-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 
 const CREATE_ON_TOP = [CardIds.MerchSeller, CardIds.DemonicDeal_WORK_014, CardIds.SweetDreamsToken_EDR_100t8];
@@ -12,7 +15,7 @@ export class CreateCardInDeckParser implements EventParser {
 	constructor(
 		private readonly helper: DeckManipulationHelper,
 		private readonly allCards: CardsFacadeService,
-		private readonly i18n: LocalizationFacadeService,
+		private readonly i18n: ILocalizationService,
 	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
@@ -45,7 +48,7 @@ export class CreateCardInDeckParser implements EventParser {
 				(initialZilliax.relatedCardIds?.length ? initialZilliax.relatedCardIds : null) ??
 				deck.sideboards?.find((s) => s.keyCardId === CardIds.ZilliaxDeluxe3000_TOY_330)?.cards.map((c) => c) ??
 				[];
-			const cost = modules?.map((c) => this.allCards.getCard(c)?.cost).reduce((a, b) => a + b, 0);
+			const cost = modules?.map((c) => this.allCards.getCard(c)?.cost).reduce((a, b) => (a ?? 0) + (b ?? 0), 0);
 			const updatedCard = initialZilliax.update({
 				entityId: entityId,
 				actualManaCost: cost,
@@ -113,7 +116,7 @@ export class CreateCardInDeckParser implements EventParser {
 				// what they are
 				// Update: see ...
 				entityId: entityId,
-				cardName: this.buildCardName(cardData, gameEvent.additionalData.creatorCardId) ?? card?.cardName,
+				cardName: this.buildCardName(cardData!, gameEvent.additionalData.creatorCardId) ?? card?.cardName,
 				refManaCost: cardData?.cost,
 				actualManaCost:
 					this.buildKnownUpdatedManaCost(gameEvent.additionalData.creatorCardId) ?? cardData?.cost,
@@ -124,18 +127,18 @@ export class CreateCardInDeckParser implements EventParser {
 						gameEvent.additionalData.creatorCardId ??
 						gameEvent.additionalData.influencedByEntityId),
 				creatorEntityId: shouldHideCreator ? null : gameEvent.additionalData.creatorEntityId,
-				mainAttributeChange: buildAttributeChange(creatorEntity, newCardId),
+				mainAttributeChange: buildAttributeChange(creatorEntity!, newCardId),
 				positionFromBottom: positionFromBottom,
 				positionFromTop: positionFromTop,
 				createdByJoust: createdByJoust,
 				temporaryCard: false,
 				zone: undefined,
-			} as DeckCard)
+			})
 			.update({
 				relatedCardIds: this.buildRelatedCardIds(
 					newCardId,
 					deck,
-					card?.relatedCardIds,
+					card?.relatedCardIds!,
 					gameEvent.additionalData.creatorCardId,
 				),
 			});
@@ -164,7 +167,7 @@ export class CreateCardInDeckParser implements EventParser {
 		return GameEvent.CREATE_CARD_IN_DECK;
 	}
 
-	private buildKnownUpdatedManaCost(creatorCardId: string): number {
+	private buildKnownUpdatedManaCost(creatorCardId: string): number | null {
 		switch (creatorCardId) {
 			case CardIds.ElixirOfVigor:
 			case CardIds.TomeTampering:
@@ -197,12 +200,12 @@ export class CreateCardInDeckParser implements EventParser {
 		}
 	}
 
-	private buildCardName(card: ReferenceCard, creatorCardId: string): string {
+	private buildCardName(card: ReferenceCard, creatorCardId: string): string | null {
 		if (card) {
 			return card.name;
 		}
 		if (creatorCardId) {
-			return this.i18n.getCreatedByCardName(this.allCards.getCard(creatorCardId).name);
+			return this.i18n.getCreatedByCardName(this.allCards.getCard(creatorCardId).name)!;
 		}
 		return null;
 	}
@@ -225,7 +228,7 @@ export const buildKnownFields = (card: DeckCard, creatorCardId: string): Partial
 	}
 };
 
-export const buildPositionFromBottom = (deck: DeckState, creatorCardId: string): number => {
+export const buildPositionFromBottom = (deck: DeckState, creatorCardId: string): number | undefined => {
 	switch (creatorCardId) {
 		// TODO: radar detector
 		case CardIds.AmbassadorFaelin_TSC_067:
@@ -256,7 +259,7 @@ export const buildPositionFromTop = (
 	deck: DeckState,
 	creatorCardId: string,
 	lastInfluencedByCardId: string,
-): number => {
+): number | undefined => {
 	if (CREATE_ON_TOP.includes(creatorCardId as CardIds)) {
 		return DeckCard.deckIndexFromTop--;
 	}
@@ -267,7 +270,7 @@ export const buildPositionFromTop = (
 	return undefined;
 };
 
-const buildAttributeChange = (creatorCard: DeckCard, newCardId: string): number => {
+const buildAttributeChange = (creatorCard: DeckCard, newCardId: string): number | undefined => {
 	// if (!creatorCard) {
 	// 	return null;
 	// }
@@ -298,7 +301,7 @@ const buildAttributeChange = (creatorCard: DeckCard, newCardId: string): number 
 	if (isCorrectCardId(creatorCard, newCardId, CardIds.SunscaleRaptor)) {
 		return 1 + (creatorCard.mainAttributeChange ?? 0);
 	}
-	return null;
+	return undefined;
 };
 
 const isCorrectCardId = (creatorCard: DeckCard, newCardId: string, target: CardIds): boolean => {

@@ -1,6 +1,11 @@
 import { CardType } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState, GameEvent, GameState, getProcessedCard, toTagsObject } from '@firestone/game-state';
+
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { DeckCard, toTagsObject } from '../../../models/deck-card';
+import { DeckState } from '../../../models/deck-state';
+import { GameState } from '../../../models/game-state';
+import { getProcessedCard } from '../../card-utils';
+import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 
@@ -33,7 +38,7 @@ export class CardOnBoardAtGameStart implements EventParser {
 			return currentState;
 		}
 
-		let card = null;
+		let card: DeckCard | null = null;
 		let newDeck: readonly DeckCard[] = deck.deck;
 		let newHand = deck.hand;
 
@@ -70,14 +75,14 @@ export class CardOnBoardAtGameStart implements EventParser {
 		// console.debug('[card-on-board-at-game-start] updated deck and hand', newDeck, newHand);
 
 		// When reconnecting, we can also have the card info in hand
-		const cardWithZone = card?.update({
+		const cardWithZone = card!.update({
 			zone: 'PLAY',
 			creatorCardId: creatorCardId,
 			creatorEntityId: gameEvent.additionalData.creatorEntityId,
 			temporaryCard: false,
 			playTiming: GameState.playTiming++,
 			putIntoPlay: true,
-			tags: gameEvent.additionalData.tags ? toTagsObject(gameEvent.additionalData.tags) : card.tags,
+			tags: gameEvent.additionalData.tags ? toTagsObject(gameEvent.additionalData.tags) : card!.tags,
 		} as DeckCard);
 
 		const newBoard: readonly DeckCard[] = this.helper.addSingleCardToZone(deck.board, cardWithZone);

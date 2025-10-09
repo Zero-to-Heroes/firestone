@@ -1,7 +1,10 @@
-import { DeckHandlerService, DeckSideboard, DeckState, GameEvent, GameState } from '@firestone/game-state';
 import { MemoryInspectionService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { AiDeckService } from '../ai-deck-service.service';
+import { DeckSideboard } from '../../../models/deck-state';
+import { GameState } from '../../../models/game-state';
+import { DeckHandlerService } from '../../deck-handler.service';
+import { AiDeckService } from '../../deck/ai-deck-service.service';
+import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 
 export class DecklistUpdateParser implements EventParser {
@@ -47,14 +50,14 @@ export class DecklistUpdateParser implements EventParser {
 		}
 
 		const board = await this.memory.getCurrentBoard();
-		const sideboards: readonly DeckSideboard[] = this.handler.buildSideboards(newDeckstring);
-		const decklist = await this.handler.postProcessDeck(this.handler.buildDeckList(newDeckstring), board);
+		const sideboards: readonly DeckSideboard[] = this.handler.buildSideboards(newDeckstring)!;
+		const decklist = await this.handler.postProcessDeck(this.handler.buildDeckList(newDeckstring), board!);
 
 		const newPlayerDeck = currentState.opponentDeck.update({
 			deckList: shouldLoadDecklist ? decklist : currentState.opponentDeck.deckList,
 			sideboards: shouldLoadDecklist ? sideboards : currentState.opponentDeck.sideboards,
 			deck: decklist,
-		} as DeckState);
+		});
 
 		return currentState.update({
 			opponentDeck: newPlayerDeck,

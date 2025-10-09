@@ -1,7 +1,9 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { GameEvent, GameState } from '@firestone/game-state';
+
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { GameState } from '../../../models/game-state';
 import { getCardForGlobalEffect, globalEffectCards } from '../../hs-utils';
+import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 

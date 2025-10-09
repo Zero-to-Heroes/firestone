@@ -1,5 +1,8 @@
-import { GameType } from '@firestone-hs/reference-data';
+import { GameType, isMercenaries } from '@firestone-hs/reference-data';
 import { BgsBoardHighlighterService, BgsInGameWindowNavigationService } from '@firestone/battlegrounds/common';
+import { MemoryInspectionService } from '@firestone/memory';
+import { Preferences, PreferencesService } from '@firestone/shared/common/service';
+import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import {
 	BattlegroundsState,
 	BgsBattlesPanel,
@@ -11,22 +14,16 @@ import {
 	BgsPlayer,
 	BgsPostMatchStatsPanel,
 	DeckCard,
-	DeckHandlerService,
-	DeckInfo,
-	DeckParserService,
 	DeckSideboard,
 	DeckState,
-	GameEvent,
-	GameState,
 	HeroCard,
-	Metadata,
-} from '@firestone/game-state';
-import { MemoryInspectionService } from '@firestone/memory';
-import { Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+} from '../../../models/_barrel';
+import { GameState } from '../../../models/game-state';
+import { Metadata } from '../../../models/metadata';
+import { DeckHandlerService } from '../../deck-handler.service';
 import { ConstructedArchetypeServiceOrchestrator } from '../../deck/constructed-archetype-orchestrator.service';
-import { LocalizationFacadeService } from '../../localization-facade.service';
-import { isMercenaries } from '../../mercenaries/mercenaries-utils';
+import { DeckInfo, DeckParserService } from '../../deck/deck-parser.service';
+import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 
 export class MatchMetadataParser implements EventParser {
@@ -39,7 +36,7 @@ export class MatchMetadataParser implements EventParser {
 		private readonly constructedArchetypes: ConstructedArchetypeServiceOrchestrator,
 		private readonly nav: BgsInGameWindowNavigationService,
 		private readonly highlighter: BgsBoardHighlighterService,
-		private readonly i18n: LocalizationFacadeService,
+		private readonly i18n: ILocalizationService,
 	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
@@ -51,7 +48,7 @@ export class MatchMetadataParser implements EventParser {
 		// in the standard game state.
 		// Also, everything should be handled inside the MercenariesState anyway
 		if (isMercenaries(gameEvent.additionalData.metaData.GameType)) {
-			return null;
+			return currentState;
 		}
 
 		// All the meta data should already be in the existing state
@@ -112,14 +109,14 @@ export class MatchMetadataParser implements EventParser {
 
 		console.log('[match-metadata-parser] match metadata', format, deckstringToUse);
 		const board = await this.memory.getCurrentBoard();
-		const sideboards: readonly DeckSideboard[] = this.handler.buildSideboards(currentDeck?.deckstring);
+		const sideboards: readonly DeckSideboard[] = this.handler.buildSideboards(currentDeck?.deckstring!)!;
 		const deckList: readonly DeckCard[] = await this.handler.postProcessDeck(
-			this.buildDeck(currentDeck, sideboards),
-			board,
+			this.buildDeck(currentDeck!, sideboards),
+			board!,
 		);
 		const hero: HeroCard = this.buildHero(currentDeck);
 
-		this.constructedArchetypes.triggerArchetypeCategorization(currentDeck?.deckstring);
+		this.constructedArchetypes.triggerArchetypeCategorization(currentDeck?.deckstring!);
 
 		// We always assume that, not knowing the decklist, the player and opponent decks have the same size
 		const opponentDeck: readonly DeckCard[] = this.handler.buildEmptyDeckList(deckList.length);
@@ -192,7 +189,7 @@ export class MatchMetadataParser implements EventParser {
 const buildEmptyPanels = (
 	currentState: BattlegroundsState,
 	prefs: Preferences,
-	i18n: LocalizationFacadeService,
+	i18n: ILocalizationService,
 ): readonly BgsPanel[] => {
 	return [
 		buildBgsHeroSelectionOverview(i18n),
@@ -202,21 +199,21 @@ const buildEmptyPanels = (
 	];
 };
 
-const buildBgsHeroSelectionOverview = (i18n: LocalizationFacadeService): BgsHeroSelectionOverviewPanel => {
+const buildBgsHeroSelectionOverview = (i18n: ILocalizationService): BgsHeroSelectionOverviewPanel => {
 	return BgsHeroSelectionOverviewPanel.create({
 		name: i18n.translateString('battlegrounds.menu.hero-selection'),
 		heroOptions: [],
 	});
 };
 
-const buildBgsNextOpponentOverviewPanel = (i18n: LocalizationFacadeService): BgsNextOpponentOverviewPanel => {
+const buildBgsNextOpponentOverviewPanel = (i18n: ILocalizationService): BgsNextOpponentOverviewPanel => {
 	return BgsNextOpponentOverviewPanel.create({
 		name: i18n.translateString('battlegrounds.menu.opponent'),
-		opponentOverview: null,
+		opponentOverview: undefined,
 	} as BgsNextOpponentOverviewPanel);
 };
 
-const buildBgsBattlesPanel = (i18n: LocalizationFacadeService): BgsBattlesPanel => {
+const buildBgsBattlesPanel = (i18n: ILocalizationService): BgsBattlesPanel => {
 	return BgsBattlesPanel.create({
 		name: i18n.translateString('battlegrounds.menu.simulator'),
 		faceOffs: [] as readonly BgsFaceOffWithSimulation[],
@@ -226,16 +223,16 @@ const buildBgsBattlesPanel = (i18n: LocalizationFacadeService): BgsBattlesPanel 
 const buildPostMatchStatsPanel = (
 	currentState: BattlegroundsState,
 	prefs: Preferences,
-	i18n: LocalizationFacadeService,
+	i18n: ILocalizationService,
 ): BgsPostMatchStatsPanel => {
-	const player: BgsPlayer = currentState.currentGame?.getMainPlayer();
+	const player: BgsPlayer = currentState.currentGame?.getMainPlayer()!;
 	return BgsPostMatchStatsPanel.create({
 		name: i18n.translateString('battlegrounds.menu.live-stats'),
-		stats: null,
-		newBestUserStats: null,
+		stats: undefined,
+		newBestUserStats: undefined,
 		// globalStats: currentState.globalStats,
 		player: player,
 		tabs: ['hp-by-turn', 'winrate-per-turn', 'warband-total-stats-by-turn', 'warband-composition-by-turn'],
 		// isComputing: false,
-	} as BgsPostMatchStatsPanel);
+	});
 };

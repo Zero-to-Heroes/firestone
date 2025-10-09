@@ -1,4 +1,5 @@
-import { GameEvent, GameState } from '@firestone/game-state';
+import { GameState } from '../../../models/game-state';
+import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 
 export class MaxResourcesUpdatedParser implements EventParser {
@@ -15,10 +16,10 @@ export class MaxResourcesUpdatedParser implements EventParser {
 		const newMaxMana = gameEvent.additionalData.mana;
 		const newMaxHealth = gameEvent.additionalData.health;
 		const newMaxCoins = gameEvent.additionalData.coins;
-		const newHero = deck.hero.update({
-			maxMana: newMaxMana ? newMaxMana : deck.hero.maxMana,
-			maxHealth: newMaxHealth ? newMaxHealth : deck.hero.maxHealth,
-			maxCoins: newMaxCoins ? newMaxCoins : deck.hero.maxCoins,
+		const newHero = deck.hero!.update({
+			maxMana: newMaxMana ? newMaxMana : deck.hero!.maxMana,
+			maxHealth: newMaxHealth ? newMaxHealth : deck.hero!.maxHealth,
+			maxCoins: newMaxCoins ? newMaxCoins : deck.hero!.maxCoins,
 		});
 		const newDeck = deck.update({
 			hero: newHero,

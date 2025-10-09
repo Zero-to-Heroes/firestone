@@ -14,14 +14,17 @@ import { DeckParserService } from './services/deck/deck-parser.service';
 import { GameConnectionService } from './services/game-connection.service';
 import { GameEventsFacadeService } from './services/game-events-facade.service';
 import { DeckManipulationHelper } from './services/game-events/event-parser/deck-manipulation-helper';
+import { SecretsParserService } from './services/game-events/event-parser/secrets/secrets-parser.service';
 import { GameEventsEmitterService } from './services/game-events/game-events-emitter.service';
 import { GameEvents } from './services/game-events/game-events.service';
+import { GameStateParsersService } from './services/game-events/state-parsers.service';
 import { GameModeDataService } from './services/game-mode-data.service';
 import { GameStateFacadeService } from './services/game-state-facade.service';
 import { GameUniqueIdService } from './services/game-unique-id.service';
 import { OverlayDisplayService } from './services/overlay-display.service';
 import { RealTimeStatsParsersService } from './services/real-time-stats/real-time-stats-parsers.service';
 import { RealTimeStatsService } from './services/real-time-stats/real-time-stats.service';
+import { ReviewIdService } from './services/review-id.service';
 
 const components = [];
 
@@ -47,6 +50,9 @@ const components = [];
 		AiDeckService,
 		DeckManipulationHelper,
 		GameEvents,
+		ReviewIdService,
+		SecretsParserService,
+		GameStateParsersService,
 	],
 	declarations: components,
 	exports: components,

@@ -1,6 +1,8 @@
-import { DeckCard, DeckState, GameEvent, GameState } from '@firestone/game-state';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { LocalizationFacadeService } from '../../localization-facade.service';
+import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
+import { DeckCard } from '../../../models/deck-card';
+import { DeckState } from '../../../models/deck-state';
+import { GameState } from '../../../models/game-state';
+import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 import { modifyDecksForSpecialCards } from './deck-contents-utils';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
@@ -9,7 +11,7 @@ export class PassiveTriggeredParser implements EventParser {
 	constructor(
 		private readonly helper: DeckManipulationHelper,
 		private readonly allCards: CardsFacadeService,
-		private readonly i18n: LocalizationFacadeService,
+		private readonly i18n: ILocalizationService,
 	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {

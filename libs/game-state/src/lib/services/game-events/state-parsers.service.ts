@@ -1,13 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import { BgsBoardHighlighterService, BgsInGameWindowNavigationService } from '@firestone/battlegrounds/common';
 import { BgsBattleSimulationService, BgsIntermediateResultsSimGuardianService } from '@firestone/battlegrounds/core';
-import {
-	DeckHandlerService,
-	DeckParserService,
-	GameEvent,
-	GameEventsEmitterService,
-	GameUniqueIdService,
-} from '@firestone/game-state';
 import { MemoryInspectionService } from '@firestone/memory';
 import { BugReportService, LogsUploaderService, PreferencesService } from '@firestone/shared/common/service';
 import {
@@ -18,15 +11,16 @@ import {
 	OwUtilsService,
 } from '@firestone/shared/framework/core';
 
+import { DeckHandlerService } from '../deck-handler.service';
 import { AiDeckService } from '../deck/ai-deck-service.service';
 import { ConstructedArchetypeServiceOrchestrator } from '../deck/constructed-archetype-orchestrator.service';
+import { DeckParserService } from '../deck/deck-parser.service';
+import { GameUniqueIdService } from '../game-unique-id.service';
+import { ReviewIdService } from '../review-id.service';
 import { SecretConfigService } from '../secrets/secret-config.service';
 import { EventParser } from './event-parser/_event-parser';
 import { AnomalyRevealedParser } from './event-parser/anomaly-revealed-parser';
-import {
-	ArchetypeCategorizationEvent,
-	ArchetypeCategorizationParser,
-} from './event-parser/archetype-categorization-parser';
+import { ArchetypeCategorizationParser } from './event-parser/archetype-categorization-parser';
 import { ArmorChangedParser } from './event-parser/armor-changed-parser';
 import { AssignCardIdParser } from './event-parser/assign-card-ids-parser';
 import { AttackOnBoardParser } from './event-parser/attack-on-board-parser';
@@ -176,6 +170,9 @@ import { WeaponDestroyedParser } from './event-parser/weapon-destroyed-parser';
 import { WeaponEquippedParser } from './event-parser/weapon-equipped-parser';
 import { WhizbangDeckParser } from './event-parser/whizbang-deck-id-parser';
 import { ZonePositionChangedParser } from './event-parser/zone-position-changed-parser';
+import { GameEvent } from './game-event';
+import { GameEventsEmitterService } from './game-events-emitter.service';
+import { GameEvents } from './game-events.service';
 
 @Injectable()
 export class GameStateParsersService {
@@ -206,8 +203,8 @@ export class GameStateParsersService {
 
 	public buildEventParsers(): { [eventKey: string]: readonly EventParser[] } {
 		return {
-			[ArchetypeCategorizationEvent.EVENT_NAME]: [new ArchetypeCategorizationParser()],
-			[GameEvent.ANOMALY_REVEALED]: [new AnomalyRevealedParser(this.helper, this.allCards, this.i18n)],
+			[GameEvent.ARCHETYPE_CATEGORIZATION]: [new ArchetypeCategorizationParser()],
+			[GameEvent.ANOMALY_REVEALED]: [new AnomalyRevealedParser(this.helper, this.allCards)],
 			[GameEvent.ARMOR_CHANGED]: [new ArmorChangedParser(), new BgsArmorChangedParser()],
 			[GameEvent.ATTACKING_HERO]: [new AttackParser(this.allCards)],
 			[GameEvent.ATTACKING_MINION]: [new AttackParser(this.allCards)],
@@ -251,8 +248,8 @@ export class GameStateParsersService {
 					this.gameEventsService,
 				),
 			],
-			[GameEvent.BATTLEGROUNDS_QUEST_REWARD_DESTROYED]: [new BgsRewardDestroyedParser(this.allCards, this.i18n)],
-			[GameEvent.BATTLEGROUNDS_QUEST_REWARD_EQUIPPED]: [new BgsRewardEquippedParser(this.allCards, this.i18n)],
+			[GameEvent.BATTLEGROUNDS_QUEST_REWARD_DESTROYED]: [new BgsRewardDestroyedParser()],
+			[GameEvent.BATTLEGROUNDS_QUEST_REWARD_EQUIPPED]: [new BgsRewardEquippedParser(this.allCards)],
 			[GameEvent.BATTLEGROUNDS_REAL_TIME_STATS_UPDATE]: [new BgsRealTimeStatsUpdateParser(this.i18n)],
 			[GameEvent.BATTLEGROUNDS_RECRUIT_PHASE]: [new BgsRecruitPhaseParser(this.owUtils, this.prefs, this.i18n)],
 			[GameEvent.BATTLEGROUNDS_REWARD_GAINED]: [new BgsRewardGainedParser(this.allCards)],
@@ -266,13 +263,13 @@ export class GameStateParsersService {
 			[GameEvent.BEETLE_ARMY_CHANGED]: [new BgsBeetleArmyChangedParser()],
 			[GameEvent.BLOOD_GEM_BUFF_CHANGED]: [new BgsBloodGemBuffChangedParser()],
 			[GameEvent.BURNED_CARD]: [new BurnedCardParser(this.helper, this.allCards)],
-			[GameEvent.CARD_BACK_TO_DECK]: [new CardBackToDeckParser(this.helper, this.allCards, this.i18n)],
+			[GameEvent.CARD_BACK_TO_DECK]: [new CardBackToDeckParser(this.helper, this.allCards)],
 			[GameEvent.CARD_BUFFED_IN_HAND]: [new CardBuffedInHandParser(this.helper)],
-			[GameEvent.CARD_CHANGED_IN_HAND]: [new CardChangedInHandParser(this.helper, this.allCards, this.i18n)],
-			[GameEvent.CARD_CHANGED_ON_BOARD]: [new CardChangedOnBoardParser(this.helper, this.allCards, this.i18n)],
+			[GameEvent.CARD_CHANGED_IN_HAND]: [new CardChangedInHandParser(this.helper, this.allCards)],
+			[GameEvent.CARD_CHANGED_ON_BOARD]: [new CardChangedOnBoardParser(this.helper, this.allCards)],
 			[GameEvent.CARD_CREATOR_CHANGED]: [new CardCreatorChangedParser(this.helper)],
 			[GameEvent.CARD_DRAW_FROM_DECK]: [
-				new CardDrawParser(this.helper, this.allCards, this.i18n),
+				new CardDrawParser(this.helper, this.allCards),
 				new SphereOfSapienceParser(this.helper),
 			],
 			[GameEvent.CARD_DREDGED]: [new CardDredgedParser(this.helper, this.allCards, this.i18n)],
@@ -289,11 +286,11 @@ export class GameStateParsersService {
 			[GameEvent.CARD_REMOVED_FROM_DECK]: [new CardRemovedFromDeckParser(this.helper, this.allCards)],
 			[GameEvent.CARD_REMOVED_FROM_HAND]: [new CardRemovedFromHandParser(this.helper, this.allCards)],
 			[GameEvent.REMOVE_FROM_HISTORY]: [new CardRemovedFromHistoryParser(this.helper)],
-			[GameEvent.CARD_REVEALED]: [new CardRevealedParser(this.helper, this.allCards, this.i18n)],
-			[GameEvent.CARD_STOLEN]: [new CardStolenParser(this.helper, this.i18n, this.allCards)],
+			[GameEvent.CARD_REVEALED]: [new CardRevealedParser(this.helper, this.allCards)],
+			[GameEvent.CARD_STOLEN]: [new CardStolenParser(this.helper, this.allCards)],
 			[GameEvent.CARDS_SHUFFLED_INTO_DECK]: [new CardsShuffledIntoDeckParser()],
 			[GameEvent.CHOOSING_OPTIONS]: [new ChoosingOptionsParser()],
-			[GameEvent.COPIED_FROM_ENTITY_ID]: [new CopiedFromEntityIdParser(this.helper, this.i18n, this.allCards)],
+			[GameEvent.COPIED_FROM_ENTITY_ID]: [new CopiedFromEntityIdParser(this.helper, this.allCards)],
 			[GameEvent.CORPSES_CHANGED]: [new CorpsesParser()],
 			[GameEvent.CORPSES_SPENT_THIS_GAME_CHANGED]: [new CorpsesSpentThisGameParser()],
 			[GameEvent.COST_CHANGED]: [new CostChangedParser(this.helper, this.allCards)],
@@ -301,9 +298,7 @@ export class GameStateParsersService {
 				new CreateCardInDeckParser(this.helper, this.allCards, this.i18n),
 				new PlaguesParser(),
 			],
-			[GameEvent.CREATE_CARD_IN_GRAVEYARD]: [
-				new CreateCardInGraveyardParser(this.helper, this.allCards, this.i18n),
-			],
+			[GameEvent.CREATE_CARD_IN_GRAVEYARD]: [new CreateCardInGraveyardParser(this.helper, this.allCards)],
 			[GameEvent.CTHUN]: [new CthunParser()],
 			[GameEvent.DAMAGE]: [
 				new DamageTakenParser(),
@@ -311,7 +306,7 @@ export class GameStateParsersService {
 				new BgsDamageDealtParser(this.allCards),
 			],
 			[GameEvent.DATA_SCRIPT_CHANGED]: [new DataScriptChangedParser(this.helper, this.allCards)],
-			[GameEvent.DEATHRATTLE_TRIGGERED]: [new DeathrattleTriggeredParser(this.allCards, this.i18n, this.helper)],
+			[GameEvent.DEATHRATTLE_TRIGGERED]: [new DeathrattleTriggeredParser(this.allCards, this.helper)],
 			[GameEvent.DECKLIST_UPDATE]: [
 				new DecklistUpdateParser(this.aiDecks, this.deckHandler, this.prefs, this.memory),
 			],
@@ -324,7 +319,7 @@ export class GameStateParsersService {
 				new EntityChosenParser(this.helper, this.allCards),
 				new SphereOfSapienceParser(this.helper),
 			],
-			[GameEvent.ENTITY_UPDATE]: [new EntityUpdateParser(this.helper, this.i18n, this.allCards)],
+			[GameEvent.ENTITY_UPDATE]: [new EntityUpdateParser(this.helper, this.allCards)],
 			[GameEvent.EXCAVATE_TIER_CHANGED]: [new ExcavateTierParser()],
 			[GameEvent.FATIGUE_DAMAGE]: [new FatigueParser()],
 			[GameEvent.FIRST_PLAYER]: [new FirstPlayerParser()],
@@ -336,12 +331,12 @@ export class GameStateParsersService {
 			[GameEvent.GAME_SETTINGS]: [new GameSettingsParser()],
 			[GameEvent.HEALING]: [new AssignCardIdParser(this.helper)],
 			[GameEvent.HERO_CHANGED]: [new HeroChangedParser(this.allCards)],
-			[GameEvent.HERO_POWER_CHANGED]: [new HeroPowerChangedParser(this.allCards, this.i18n)],
+			[GameEvent.HERO_POWER_CHANGED]: [new HeroPowerChangedParser(this.allCards)],
 			[GameEvent.HERO_POWER_USED]: [new HeroPowerUsedParser(this.allCards)],
 			[GameEvent.HERO_REVEALED]: [new HeroRevealedParser(this.allCards)],
 			[GameEvent.IMMOLATE_CHANGED]: [new ImmolateChangedParser(this.helper, this.allCards)],
 			[GameEvent.JADE_GOLEM]: [new JadeGolemParser()],
-			[GameEvent.LINKED_ENTITY]: [new LinkedEntityParser(this.helper, this.i18n, this.allCards)],
+			[GameEvent.LINKED_ENTITY]: [new LinkedEntityParser(this.helper, this.allCards)],
 			[GameEvent.LOCAL_PLAYER]: [new LocalPlayerParser(this.allCards, this.deckParser, this.deckHandler)],
 			[GameEvent.LOCATION_USED]: [new LocationUsedParser(this.allCards)],
 			[GameEvent.LOCATION_DESTROYED]: [new LocationDestroyedParser(this.helper, this.allCards)],
@@ -365,11 +360,11 @@ export class GameStateParsersService {
 			[GameEvent.MINION_GO_DORMANT]: [new MinionGoDormantParser(this.helper)],
 			[GameEvent.MINION_ON_BOARD_ATTACK_UPDATED]: [new MinionOnBoardAttackUpdatedParser(this.helper)],
 			[GameEvent.MINION_SUMMONED_FROM_HAND]: [
-				new MinionSummonedFromHandParser(this.helper, this.allCards, this.i18n),
+				new MinionSummonedFromHandParser(this.helper, this.allCards),
 				new SpecificSummonsParser(this.allCards),
 			],
 			[GameEvent.MINION_SUMMONED]: [
-				new MinionSummonedParser(this.helper, this.allCards, this.i18n),
+				new MinionSummonedParser(this.helper, this.allCards),
 				new SpecificSummonsParser(this.allCards),
 			],
 			[GameEvent.MINIONS_DIED]: [new MinionDiedParser(this.helper, this.allCards)],
@@ -390,7 +385,7 @@ export class GameStateParsersService {
 			[GameEvent.PARENT_CARD_CHANGED]: [new ParentCardChangedParser(this.helper, this.allCards)],
 			[GameEvent.PASSIVE_BUFF]: [new PassiveTriggeredParser(this.helper, this.allCards, this.i18n)],
 			[GameEvent.QUEST_COMPLETED]: [new QuestCompletedParser(this.helper, this.allCards)],
-			[GameEvent.QUEST_CREATED_IN_GAME]: [new QuestCreatedInGameParser(this.helper, this.allCards, this.i18n)],
+			[GameEvent.QUEST_CREATED_IN_GAME]: [new QuestCreatedInGameParser(this.helper, this.allCards)],
 			[GameEvent.QUEST_DESTROYED]: [new QuestDestroyedParser(this.helper, this.allCards)],
 			[GameEvent.QUEST_PLAYED_FROM_DECK]: [
 				new QuestPlayedFromDeckParser(this.helper, this.allCards),
@@ -400,14 +395,14 @@ export class GameStateParsersService {
 				new QuestPlayedFromHandParser(this.helper, this.allCards),
 				new ListCardsPlayedFromInitialDeckParser(this.helper, this.allCards),
 			],
-			[GameEvent.RECEIVE_CARD_IN_HAND]: [new ReceiveCardInHandParser(this.helper, this.allCards, this.i18n)],
+			[GameEvent.RECEIVE_CARD_IN_HAND]: [new ReceiveCardInHandParser(this.helper, this.allCards)],
 			[GameEvent.RECONNECT_OVER]: [new ReconnectOverParser(this.deckHandler)],
 			[GameEvent.RECONNECT_START]: [new ReconnectStartParser()],
-			[GameEvent.RECRUIT_CARD]: [new CardRecruitedParser(this.helper, this.allCards, this.i18n)],
+			[GameEvent.RECRUIT_CARD]: [new CardRecruitedParser(this.helper, this.allCards)],
 			[GameEvent.RESOURCES_UPDATED]: [new ResourcesParser()],
 			[GameEvent.REVIEW_ID]: [new ReviewIdParser()],
 			[GameEvent.SECRET_CREATED_IN_GAME]: [
-				new SecretCreatedInGameParser(this.helper, this.secretsConfig, this.allCards, this.i18n),
+				new SecretCreatedInGameParser(this.helper, this.secretsConfig, this.allCards),
 			],
 			[GameEvent.SECRET_DESTROYED]: [new SecretDestroyedParser(this.helper)],
 			[GameEvent.SECRET_PLAYED_FROM_DECK]: [
@@ -446,7 +441,7 @@ export class GameStateParsersService {
 			[GameEvent.TURN_DURATION_UPDATED]: [new TurnDurationUpdatedParser()],
 			[GameEvent.TURN_START]: [new NewTurnParser(this.owUtils, this.prefs, this.i18n, this.nav)],
 			[GameEvent.WEAPON_DESTROYED]: [new WeaponDestroyedParser(this.helper)],
-			[GameEvent.WEAPON_EQUIPPED]: [new WeaponEquippedParser(this.allCards, this.helper, this.i18n)],
+			[GameEvent.WEAPON_EQUIPPED]: [new WeaponEquippedParser(this.allCards, this.helper)],
 			[GameEvent.WHEEL_OF_DEATH_COUNTER_UPDATED]: [new WheelOfDeathCounterUpdatedParser()],
 			[GameEvent.WHIZBANG_DECK_ID]: [new WhizbangDeckParser(this.deckParser, this.deckHandler)],
 			[GameEvent.ZONE_POSITION_CHANGED]: [new ZonePositionChangedParser(this.helper)],

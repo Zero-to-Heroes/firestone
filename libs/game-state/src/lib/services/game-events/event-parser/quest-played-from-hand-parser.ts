@@ -1,7 +1,11 @@
 import { CardIds, CardType, GameTag } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState, GameEvent, GameState, ShortCard, ShortCardWithTurn } from '@firestone/game-state';
+
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { COUNTERSPELLS } from 'libs/game-state/src/lib/services/hs-utils';
+import { DeckCard } from '../../../models/deck-card';
+import { DeckState } from '../../../models/deck-state';
+import { GameState, ShortCard, ShortCardWithTurn } from '../../../models/game-state';
+import { COUNTERSPELLS } from '../../hs-utils';
+import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 import { rememberCardsInHand } from './card-played-from-hand-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
@@ -38,21 +42,22 @@ export class QuestPlayedFromHandParser implements EventParser {
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const card = this.helper.findCardInZone(deck.hand, cardId, entityId);
 
-		const isCardCountered =
+		const isCardCountered: boolean = !!(
 			((additionalInfo?.secretWillTrigger?.reactingToEntityId &&
 				additionalInfo?.secretWillTrigger?.reactingToEntityId === entityId) ||
 				(additionalInfo?.secretWillTrigger?.reactingToCardId &&
 					additionalInfo?.secretWillTrigger?.reactingToCardId === cardId)) &&
-			COUNTERSPELLS.includes(additionalInfo?.secretWillTrigger?.cardId as CardIds);
+			COUNTERSPELLS.includes(additionalInfo?.secretWillTrigger?.cardId as CardIds)
+		);
 
-		const cardWithZone = card.update({
+		const cardWithZone = card!.update({
 			zone: 'SECRET',
 			countered: isCardCountered,
 			guessedInfo: {
-				...card.guessedInfo,
+				...card!.guessedInfo,
 			},
 			tags: {
-				...card.tags,
+				...card!.tags,
 				[GameTag.QUEST]: 1,
 				[GameTag.CARDTYPE]: CardType.SPELL,
 			},
@@ -73,7 +78,7 @@ export class QuestPlayedFromHandParser implements EventParser {
 				? // Since Yogg transforms the card
 					cardWithZone.update({
 						entityId: undefined,
-					} as DeckCard)
+					})
 				: cardWithZone,
 			this.allCards,
 		);

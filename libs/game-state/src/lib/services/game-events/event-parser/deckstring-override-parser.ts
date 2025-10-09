@@ -1,5 +1,9 @@
-import { DeckCard, DeckHandlerService, DeckSideboard, DeckState, GameEvent, GameState } from '@firestone/game-state';
-import { DeckstringOverrideEvent } from '../event/deckstring-override-event';
+import { Board } from '@firestone-hs/reference-data';
+import { DeckCard } from '../../../models/deck-card';
+import { DeckSideboard, DeckState } from '../../../models/deck-state';
+import { GameState } from '../../../models/game-state';
+import { DeckHandlerService } from '../../deck-handler.service';
+import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 
 export class DeckstringOverrideParser implements EventParser {
@@ -9,7 +13,7 @@ export class DeckstringOverrideParser implements EventParser {
 		return !!state;
 	}
 
-	async parse(currentState: GameState, gameEvent: DeckstringOverrideEvent): Promise<GameState> {
+	async parse(currentState: GameState, gameEvent: any /*DeckstringOverrideEvent*/): Promise<GameState> {
 		const deckName = gameEvent.deckName;
 		const deckstring = gameEvent.deckstring;
 		const playerOrOpponent = gameEvent.playerOrOpponent;
@@ -34,10 +38,10 @@ export class DeckstringOverrideParser implements EventParser {
 			.filter((card) => card.cardId)
 			.filter((card) => !card.creatorCardId);
 
-		const sideboards: readonly DeckSideboard[] = this.deckHandler.buildSideboards(deckstring);
+		const sideboards: readonly DeckSideboard[] = this.deckHandler.buildSideboards(deckstring)!;
 		const cardsFromDeckstring = await this.deckHandler.postProcessDeck(
 			this.deckHandler.buildDeckList(deckstring),
-			null,
+			null as unknown as Board,
 		);
 
 		// Now remove the from this list the cards that were moved out of the initial deck

@@ -1,7 +1,11 @@
-import { BoardSecret, DeckCard, DeckState, GameEvent, GameState, getProcessedCard } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { LocalizationFacadeService } from '../../localization-facade.service';
-import { SecretConfigService } from '../secret-config.service';
+import { BoardSecret } from '../../../models/board-secret';
+import { DeckCard } from '../../../models/deck-card';
+import { DeckState } from '../../../models/deck-state';
+import { GameState } from '../../../models/game-state';
+import { getProcessedCard } from '../../card-utils';
+import { SecretConfigService } from '../../secrets/secret-config.service';
+import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 
@@ -10,7 +14,6 @@ export class SecretCreatedInGameParser implements EventParser {
 		private readonly helper: DeckManipulationHelper,
 		private readonly secretConfig: SecretConfigService,
 		private readonly cards: CardsFacadeService,
-		private readonly i18n: LocalizationFacadeService,
 	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {

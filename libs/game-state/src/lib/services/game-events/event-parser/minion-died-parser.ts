@@ -1,6 +1,9 @@
 import { CardIds, CardType, GameTag } from '@firestone-hs/reference-data';
-import { DeckCard, GameEvent, GameState, MinionsDiedEvent, ShortCard } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { DeckCard } from '../../../models/deck-card';
+import { GameState, ShortCard } from '../../../models/game-state';
+import { MinionsDiedEvent } from '../events/minions-died-event';
+import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 
@@ -26,11 +29,11 @@ export class MinionDiedParser implements EventParser {
 			const deck = isPlayer ? result.playerDeck : result.opponentDeck;
 			const card = this.helper.findCardInZone(deck.board, cardId, entityId);
 			const refCard = this.allCards.getCard(cardId);
-			const cardWithZone = card.update({
+			const cardWithZone = card!.update({
 				zone: refCard.type?.toUpperCase() === CardType[CardType.MINION] ? 'GRAVEYARD' : 'SETASIDE',
 				// If we keep the same entityId, our safeguards prevent us from adding it twice to the other zone
 				// Why do we want to add it twice to the other zone again?
-				entityId: -card.entityId,
+				entityId: -card!.entityId,
 			} as DeckCard);
 
 			const newBoard: readonly DeckCard[] = this.helper.removeSingleCardFromZone(deck.board, cardId, entityId)[0];

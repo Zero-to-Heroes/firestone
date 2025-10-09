@@ -1,5 +1,6 @@
 import { GameTag } from '@firestone-hs/reference-data';
-import { GameEvent, GameState } from '@firestone/game-state';
+import { GameState } from '../../../models/game-state';
+import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 
 export class SpawnTimeCountChangedParser implements EventParser {
@@ -19,7 +20,7 @@ export class SpawnTimeCountChangedParser implements EventParser {
 			return currentState;
 		}
 
-		enchantment.tags[GameTag.SPAWN_TIME_COUNT] = newCount;
+		enchantment.tags![GameTag.SPAWN_TIME_COUNT] = newCount;
 		const newDeck = deck.update({
 			enchantments: [...deck.enchantments.filter((e) => e.entityId !== entityId), enchantment],
 		});

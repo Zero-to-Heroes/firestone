@@ -172,10 +172,10 @@ export class DeckState {
 	}
 
 	public updateSpellsPlayedThisMatch(
-		spell: DeckCard,
+		spell: DeckCard | null,
 		allCards: CardsFacadeService,
 		cardCost: number,
-		targetEntityId: number,
+		targetEntityId: number | null,
 	): DeckState {
 		if (!spell) {
 			return this;

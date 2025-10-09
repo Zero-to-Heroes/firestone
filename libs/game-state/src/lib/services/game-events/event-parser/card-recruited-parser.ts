@@ -1,7 +1,10 @@
 import { CardType, GameTag } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState, GameEvent, GameState, getProcessedCard } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { LocalizationFacadeService } from '../../localization-facade.service';
+import { DeckCard } from '../../../models/deck-card';
+import { DeckState } from '../../../models/deck-state';
+import { GameState } from '../../../models/game-state';
+import { getProcessedCard } from '../../card-utils';
+import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 
@@ -9,7 +12,6 @@ export class CardRecruitedParser implements EventParser {
 	constructor(
 		private readonly helper: DeckManipulationHelper,
 		private readonly cards: CardsFacadeService,
-		private readonly i18n: LocalizationFacadeService,
 	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
@@ -37,15 +39,15 @@ export class CardRecruitedParser implements EventParser {
 			entityId,
 			deck.deckList.length === 0,
 		)[0];
-		const cardWithZone = card.update({
+		const cardWithZone = card!.update({
 			cardId: cardId,
 			entityId: entityId,
 			cardName: dbCard.name,
-			refManaCost: card.refManaCost ?? dbCard.cost,
+			refManaCost: card!.refManaCost ?? dbCard.cost,
 			actualManaCost: costFromTags ?? dbCard.cost,
 			zone: 'PLAY',
 			temporaryCard: false,
-			rarity: card.rarity ?? dbCard.rarity?.toLowerCase(),
+			rarity: card!.rarity ?? dbCard.rarity?.toLowerCase(),
 			playTiming: GameState.playTiming++,
 		} as DeckCard);
 

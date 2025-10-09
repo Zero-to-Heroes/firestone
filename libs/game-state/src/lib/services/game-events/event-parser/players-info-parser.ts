@@ -1,4 +1,7 @@
-import { DeckState, GameEvent, GameState, HeroCard } from '@firestone/game-state';
+import { DeckState } from '../../../models/deck-state';
+import { GameState } from '../../../models/game-state';
+import { HeroCard } from '../../../models/hero-card';
+import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 
 export class PlayersInfoParser implements EventParser {

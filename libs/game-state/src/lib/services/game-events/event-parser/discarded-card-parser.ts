@@ -1,6 +1,11 @@
 import { GameTag } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState, GameEvent, GameState, getProcessedCard } from '@firestone/game-state';
+
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { DeckCard } from '../../../models/deck-card';
+import { DeckState } from '../../../models/deck-state';
+import { GameState } from '../../../models/game-state';
+import { getProcessedCard } from '../../card-utils';
+import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 
@@ -21,7 +26,7 @@ export class DiscardedCardParser implements EventParser {
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const card = this.helper.findCardInZone(deck.hand, cardId, entityId);
 
-		const [newHand, removedCard] = this.helper.removeSingleCardFromZone(deck.hand, card.cardId, entityId);
+		const [newHand, removedCard] = this.helper.removeSingleCardFromZone(deck.hand, card!.cardId, entityId);
 		// console.debug('[discarded-card] removedCard', removedCard);
 
 		// See card-played-from-hand
@@ -45,7 +50,7 @@ export class DiscardedCardParser implements EventParser {
 		let board = deck.board;
 		if (!!gameEvent.additionalData.originEntityId) {
 			const originCard = board.find((e) => e.entityId === gameEvent.additionalData.originEntityId);
-			const newOriginCard: DeckCard = !originCard
+			const newOriginCard: DeckCard | null = !originCard
 				? null
 				: originCard.update({
 						relatedCardIds: [cardId, ...(originCard.relatedCardIds ?? [])],
@@ -61,9 +66,9 @@ export class DiscardedCardParser implements EventParser {
 		// 	refCard.cost,
 		// 	removedCard?.tags?.[GameTag.COST],
 		// );
-		const cardWithZone = card.update({
+		const cardWithZone = card!.update({
 			zone: 'DISCARD',
-			refManaCost: card.refManaCost ?? refCard.cost ?? removedCard?.tags?.[GameTag.COST],
+			refManaCost: card!.refManaCost ?? refCard.cost ?? removedCard?.tags?.[GameTag.COST],
 		} as DeckCard);
 		const newOther: readonly DeckCard[] = this.helper.addSingleCardToOtherZone(
 			deck.otherZone,

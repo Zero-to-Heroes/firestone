@@ -1,5 +1,8 @@
-import { BoardSecret, DeckCard, GameEvent, GameState, ShortCardWithTurn } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { BoardSecret } from '../../../models/board-secret';
+import { DeckCard } from '../../../models/deck-card';
+import { GameState, ShortCardWithTurn } from '../../../models/game-state';
+import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 
@@ -21,7 +24,7 @@ export class SecretTriggeredParser implements EventParser {
 		const newSecrets: readonly BoardSecret[] = deck.secrets
 			.filter((secret) => secret.entityId !== entityId)
 			.map((secret) => this.helper.removeSecretOptionFromSecret(secret, cardId));
-		const secret = this.helper.findCardInZone(deck.otherZone, cardId, entityId);
+		const secret = this.helper.findCardInZone(deck.otherZone, cardId, entityId)!;
 		const newSecret = secret?.update({
 			zone: 'REMOVEDFROMGAME',
 			cardId: cardId,

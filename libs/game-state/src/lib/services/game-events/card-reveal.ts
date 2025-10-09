@@ -1,5 +1,6 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState } from '@firestone/game-state';
+import { DeckCard } from '../../models/deck-card';
+import { DeckState } from '../../models/deck-state';
 
 // TODO: also check the cardCopyLink, which looks like it does more or less the same thing
 export const revealCard = (deck: DeckState, card: DeckCard) => {

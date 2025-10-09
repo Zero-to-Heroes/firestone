@@ -1,6 +1,8 @@
-import { DeckState, GameEvent, GameState } from '@firestone/game-state';
-import { DeckManipulationHelper } from '@services/decktracker/event-parser/deck-manipulation-helper';
+import { DeckState } from '../../../models/deck-state';
+import { GameState } from '../../../models/game-state';
+import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
+import { DeckManipulationHelper } from './deck-manipulation-helper';
 
 export class WeaponDestroyedParser implements EventParser {
 	constructor(private readonly helper: DeckManipulationHelper) {}
@@ -14,7 +16,7 @@ export class WeaponDestroyedParser implements EventParser {
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		// Sometimes the "weapon_equipped" event is fired before the "weapon_destroyed" one
 		const updatedWeapon = deck.weapon?.update({
-			zone: null,
+			zone: undefined,
 			entityId: -deck.weapon.entityId,
 		});
 		let newOtherZone = !!updatedWeapon

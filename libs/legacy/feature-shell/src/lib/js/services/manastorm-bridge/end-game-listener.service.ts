@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { isMercenaries } from '@firestone-hs/reference-data';
+import { isBattlegrounds, isMercenaries } from '@firestone-hs/reference-data';
 import { ArenaInfoService } from '@firestone/arena/common';
 import {
 	GameEvent,
@@ -7,6 +7,8 @@ import {
 	GameSettingsEvent,
 	GameStateFacadeService,
 	GameUniqueIdService,
+	HsGameMetaData,
+	ReviewIdService,
 } from '@firestone/game-state';
 import { BattlegroundsInfo, MatchInfo, MemoryInspectionService, MemoryUpdatesService } from '@firestone/memory';
 import { GameStatusService } from '@firestone/shared/common/service';
@@ -26,11 +28,8 @@ import {
 	tap,
 	withLatestFrom,
 } from 'rxjs/operators';
-import { HsGameMetaData } from '../../../../../../../game-state/src/lib/services/game-mode-data.service';
-import { isBattlegrounds } from '../battlegrounds/bgs-utils';
 import { LotteryService } from '../lottery/lottery.service';
 import { MercenariesMemoryCacheService } from '../mercenaries/mercenaries-memory-cache.service';
-import { ReviewIdService } from '../review-id.service';
 import { RewardMonitorService } from '../rewards/rewards-monitor';
 import { EndGameUploaderService, UploadInfo } from './end-game-uploader.service';
 

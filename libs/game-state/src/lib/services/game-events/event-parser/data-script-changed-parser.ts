@@ -1,7 +1,10 @@
 import { CardIds, GameTag } from '@firestone-hs/reference-data';
-import { DeckState, GameEvent, GameState } from '@firestone/game-state';
+
 import { Mutable } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { DeckState } from '../../../models/deck-state';
+import { GameState } from '../../../models/game-state';
+import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { addAdditionalAttribuesInHand } from './receive-card-in-hand-parser';
@@ -55,7 +58,7 @@ export class DataScriptChangedParser implements EventParser {
 								// while it is in the ENTITY_UPDATE event for the opponent
 								!!update.DataNum1 && update.DataNum1 !== -1
 									? update.DataNum1
-									: cardWithAdditionalAttributes.mainAttributeChange + 1,
+									: cardWithAdditionalAttributes.mainAttributeChange! + 1,
 							)
 						: deck.abyssalCurseHighestValue;
 				continue;

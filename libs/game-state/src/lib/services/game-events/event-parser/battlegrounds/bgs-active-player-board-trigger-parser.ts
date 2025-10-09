@@ -3,8 +3,8 @@ import { MemoryInspectionService } from '@firestone/memory';
 import { GameState } from '../../../../models/game-state';
 import { GameEvent } from '../../game-event';
 
+import { GameStateEvent } from '../../../game-state-events/game-state-event';
 import { GameEventsEmitterService } from '../../game-events-emitter.service';
-import { GameStateEvent } from '../../game-state-event';
 import { EventParser } from '../_event-parser';
 
 export class BgsActivePlayerBoardTriggerParser implements EventParser {

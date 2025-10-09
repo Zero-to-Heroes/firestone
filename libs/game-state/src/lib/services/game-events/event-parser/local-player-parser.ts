@@ -1,8 +1,13 @@
 import { buildRegion } from '@firestone-hs/hs-replay-xml-parser';
 import { CardClass } from '@firestone-hs/reference-data';
-import { DeckHandlerService, DeckParserService, GameEvent, GameState, HeroCard } from '@firestone/game-state';
+
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { DeckstringOverrideEvent } from '../event/deckstring-override-event';
+import { GameState } from '../../../models/game-state';
+import { HeroCard } from '../../../models/hero-card';
+import { DeckHandlerService } from '../../deck-handler.service';
+import { DeckParserService } from '../../deck/deck-parser.service';
+import { DeckstringOverrideEvent } from '../../game-state-events/deckstring-override-event';
+import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 import { DeckstringOverrideParser } from './deckstring-override-parser';
 
@@ -34,7 +39,7 @@ export class LocalPlayerParser implements EventParser {
 			if (!!newString) {
 				newCurrentState = await new DeckstringOverrideParser(this.handler).parse(
 					currentState,
-					new DeckstringOverrideEvent(currentState.playerDeck.name, newString, 'player'),
+					new DeckstringOverrideEvent(currentState.playerDeck.name!, newString, 'player'),
 				);
 			}
 		}

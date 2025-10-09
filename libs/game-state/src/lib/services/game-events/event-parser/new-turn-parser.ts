@@ -1,18 +1,12 @@
+import { isBattlegrounds, isMercenaries } from '@firestone-hs/reference-data';
 import { BgsInGameWindowNavigationService } from '@firestone/battlegrounds/common';
-import {
-	BattlegroundsState,
-	BgsNextOpponentOverviewPanel,
-	BgsPanel,
-	DeckCard,
-	GameEvent,
-	GameState,
-	ShortCard,
-	TurnTiming,
-} from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { ILocalizationService, OwUtilsService } from '@firestone/shared/framework/core';
-import { isBattlegrounds } from '../../battlegrounds/bgs-utils';
-import { isMercenaries } from '../../mercenaries/mercenaries-utils';
+import { BattlegroundsState, BgsNextOpponentOverviewPanel, BgsPanel } from '../../../models/_barrel';
+import { DeckCard } from '../../../models/deck-card';
+import { TurnTiming } from '../../../models/deck-state';
+import { GameState, ShortCard } from '../../../models/game-state';
+import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 
 export class NewTurnParser implements EventParser {
@@ -190,30 +184,18 @@ export const buildTurnTimings = (
 			playerTurns = [...playerTurns.slice(0, -1), { ...lastPlayerTurn, endTimestamp: turnTimestamp }];
 		}
 		if (!isPlayerActive) {
-			opponentTurns = [
-				...opponentTurns,
-				{ turn: currentTurn, startTimestamp: turnTimestamp, endTimestamp: undefined },
-			];
+			opponentTurns = [...opponentTurns, { turn: currentTurn, startTimestamp: turnTimestamp, endTimestamp: 0 }];
 		} else {
-			playerTurns = [
-				...playerTurns,
-				{ turn: currentTurn, startTimestamp: turnTimestamp, endTimestamp: undefined },
-			];
+			playerTurns = [...playerTurns, { turn: currentTurn, startTimestamp: turnTimestamp, endTimestamp: 0 }];
 		}
 	} else {
 		if (lastOpponentTurn) {
 			opponentTurns = [...opponentTurns.slice(0, -1), { ...lastOpponentTurn, endTimestamp: turnTimestamp }];
 		}
 		if (!isPlayerActive) {
-			opponentTurns = [
-				...opponentTurns,
-				{ turn: currentTurn, startTimestamp: turnTimestamp, endTimestamp: undefined },
-			];
+			opponentTurns = [...opponentTurns, { turn: currentTurn, startTimestamp: turnTimestamp, endTimestamp: 0 }];
 		} else {
-			playerTurns = [
-				...playerTurns,
-				{ turn: currentTurn, startTimestamp: turnTimestamp, endTimestamp: undefined },
-			];
+			playerTurns = [...playerTurns, { turn: currentTurn, startTimestamp: turnTimestamp, endTimestamp: 0 }];
 		}
 	}
 	return [playerTurns, opponentTurns];

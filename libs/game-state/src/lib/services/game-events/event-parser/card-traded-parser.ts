@@ -1,8 +1,12 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState, GameEvent, GameState } from '@firestone/game-state';
+
 import { PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { DeckCard } from '../../../models/deck-card';
+import { DeckState } from '../../../models/deck-state';
+import { GameState } from '../../../models/game-state';
 import { CARDS_THAT_IMPROVE_WHEN_TRADED } from '../../hs-utils';
+import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 
@@ -33,15 +37,15 @@ export class CardTradedParser implements EventParser {
 
 		const newHand: readonly DeckCard[] = this.helper.removeSingleCardFromZone(
 			deck.hand,
-			card.cardId,
-			card.entityId,
+			card!.cardId,
+			card!.entityId,
 		)[0];
-		console.debug('[card-traded] new hand', newHand, card.cardId, card.entityId);
+		console.debug('[card-traded] new hand', newHand, card!.cardId, card!.entityId);
 		const previousDeck = deck.deck;
 		// When we have a deckstring / decklist, we show all the possible remaining options in the
 		// decklist. This means that when a filler card goes back, it's one of these initial cards
 		// that goes back, and so we don't add them once again
-		const isInInitialDeck = !!card?.inInitialDeck || !card.creatorCardId?.length;
+		const isInInitialDeck = !!card!.inInitialDeck || !card!.creatorCardId?.length;
 		const shouldKeepDeckAsIs = !!deck.deckstring && isInInitialDeck && !card?.cardId;
 		console.debug(
 			'[card-traded] shouldKeepDeckAsIs',
@@ -70,12 +74,12 @@ export class CardTradedParser implements EventParser {
 					positionFromBottom: undefined,
 					dredged: undefined,
 					zone: undefined,
-				} as DeckCard)
+				})
 			: card;
 
 		const newDeck: readonly DeckCard[] = shouldKeepDeckAsIs
 			? previousDeck
-			: this.helper.addSingleCardToZone(previousDeck, cardWithoutInfluence);
+			: this.helper.addSingleCardToZone(previousDeck, cardWithoutInfluence!);
 
 		const prefs = await this.prefs.getPreferences();
 		// Because we don't know where the card is inserted, we reset the positions
@@ -105,9 +109,9 @@ export class CardTradedParser implements EventParser {
 	}
 }
 
-const buildAttributeChange = (card: DeckCard): number => {
+const buildAttributeChange = (card: DeckCard): number | undefined => {
 	if (CARDS_THAT_IMPROVE_WHEN_TRADED.includes(card?.cardId as CardIds)) {
 		return 1 + (card.mainAttributeChange ?? 0);
 	}
-	return null;
+	return undefined;
 };

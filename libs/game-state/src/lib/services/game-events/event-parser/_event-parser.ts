@@ -1,8 +1,8 @@
 import { Preferences } from '@firestone/shared/common/service';
 import { GameState } from '../../../models/game-state';
+import { GameStateEvent } from '../../game-state-events/game-state-event';
 import { GameEvent } from '../game-event';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
-import { GameStateEvent } from '../game-state-event';
 
 export interface EventParser {
 	applies(gameEvent: GameEvent | GameStateEvent, state?: GameState, prefs?: Preferences): boolean;

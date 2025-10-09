@@ -1,15 +1,13 @@
 import { CardIds, Zone } from '@firestone-hs/reference-data';
-import {
-	BoardSecret,
-	CopiedFromEntityIdGameEvent,
-	DeckCard,
-	DeckState,
-	GameEvent,
-	GameState,
-	SecretOption,
-} from '@firestone/game-state';
+
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { LocalizationFacadeService } from '../../localization-facade.service';
+import { BoardSecret } from '../../../models/board-secret';
+import { DeckCard } from '../../../models/deck-card';
+import { DeckState } from '../../../models/deck-state';
+import { GameState } from '../../../models/game-state';
+import { SecretOption } from '../../../models/secret-option';
+import { CopiedFromEntityIdGameEvent } from '../events/copied-from-entity-id-game-event';
+import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 import { DREDGE_IN_OPPONENT_DECK_CARD_IDS } from './card-dredged-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
@@ -17,7 +15,6 @@ import { DeckManipulationHelper } from './deck-manipulation-helper';
 export class CopiedFromEntityIdParser implements EventParser {
 	constructor(
 		private readonly helper: DeckManipulationHelper,
-		private readonly i18n: LocalizationFacadeService,
 		private readonly allCards: CardsFacadeService,
 	) {}
 
@@ -38,10 +35,10 @@ export class CopiedFromEntityIdParser implements EventParser {
 		const isCopiedPlayer = copiedCardControllerId === localPlayer.PlayerId;
 		const copiedDeck = isCopiedPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
-		const newCopy: DeckCard = deck.findCard(entityId)?.card;
+		const newCopy: DeckCard | undefined = deck.findCard(entityId)?.card;
 		// The issue when using only the entityId is that we can't find the card in deck, as
 		// the entityId is not stored there
-		let copiedCard: DeckCard = copiedDeck.findCard(copiedCardEntityId)?.card;
+		let copiedCard: DeckCard | undefined = copiedDeck.findCard(copiedCardEntityId)?.card;
 		console.debug(
 			'[copied-from-entity] copiedCard',
 			isPlayer,
@@ -66,8 +63,8 @@ export class CopiedFromEntityIdParser implements EventParser {
 		}
 		// Avoid info leaks
 		if (copiedCard?.positionFromTop != null || copiedCard?.positionFromBottom != null) {
-			copiedCard = null;
-			copiedCardEntityId = null;
+			copiedCard = undefined;
+			copiedCardEntityId = undefined as unknown as number;
 		}
 
 		// Cards like Masked Reveler summon a copy of a card from the deck. Because we don't store the entityId of
@@ -114,9 +111,9 @@ export class CopiedFromEntityIdParser implements EventParser {
 		// We don't add the initial cards in the deck, so if no card is found, we create it
 		const updatedCopiedCard = (copiedCard ?? DeckCard.create({})).update({
 			cardId: obfuscatedCardId,
-			cardName: this.allCards.getCard(obfuscatedCardId).name,
+			cardName: this.allCards.getCard(obfuscatedCardId!).name,
 			refManaCost:
-				(isCopiedPlayer ? newCopy?.refManaCost : null) ?? this.allCards.getCard(obfuscatedCardId)?.cost,
+				(isCopiedPlayer ? newCopy?.refManaCost : null) ?? this.allCards.getCard(obfuscatedCardId!)?.cost,
 			// Always set the entityId to null when it's the opponent's deck to avoid info leaks
 			// UPDATE: we don't do it here, do that when the card is drawn, so that we still have the entityId
 			// to differentiate the cards (e.g. when discovering copies of the same card)

@@ -1,5 +1,8 @@
-import { DeckHandlerService, DeckParserService, GameEvent, GameState } from '@firestone/game-state';
-import { DeckstringOverrideEvent } from '../event/deckstring-override-event';
+import { GameState } from '../../../models/game-state';
+import { DeckHandlerService } from '../../deck-handler.service';
+import { DeckParserService } from '../../deck/deck-parser.service';
+import { DeckstringOverrideEvent } from '../../game-state-events/deckstring-override-event';
+import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 import { DeckstringOverrideParser } from './deckstring-override-parser';
 
@@ -35,7 +38,7 @@ export class WhizbangDeckParser implements EventParser {
 
 		const stateAfterPlayerDeckUpdate = await new DeckstringOverrideParser(this.deckHandler).parse(
 			currentState,
-			new DeckstringOverrideEvent(templateDeck.name, templateDeck.deckstring, isPlayer ? 'player' : 'opponent'),
+			new DeckstringOverrideEvent(templateDeck.name, templateDeck.deckstring!, isPlayer ? 'player' : 'opponent'),
 		);
 		return stateAfterPlayerDeckUpdate;
 	}

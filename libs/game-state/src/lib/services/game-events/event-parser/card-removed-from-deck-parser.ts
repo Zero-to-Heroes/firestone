@@ -35,8 +35,8 @@ export class CardRemovedFromDeckParser implements EventParser {
 		// 	removedByCardId,
 		// );
 		if (isPlayer && DONT_REVEAL_REMOVED_CARDS.includes(removedByCardId as CardIds)) {
-			cardId = null;
-			entityId = null;
+			cardId = undefined as unknown as string;
+			entityId = undefined as unknown as number;
 		}
 
 		const card = this.helper.findCardInZone(deck.deck, cardId, entityId, true);
@@ -52,21 +52,21 @@ export class CardRemovedFromDeckParser implements EventParser {
 				cost: gameEvent.additionalData.cost,
 			},
 		)[0];
-		const refCard = getProcessedCard(card?.cardId, card?.entityId, deck, this.allCards);
-		const cardWithZone = card.update({
+		const refCard = getProcessedCard(card!.cardId, card!.entityId, deck, this.allCards);
+		const cardWithZone = card!.update({
 			zone: 'SETASIDE',
-			refManaCost: card.refManaCost ?? refCard?.cost,
+			refManaCost: card!.refManaCost ?? refCard?.cost,
 			// FIXME: this is not always true, e.g. when Zilliax is shuffled in the deck some weird stuff happens
-			milled: card.createdByJoust || dontActuallyDestroyCardsInDeck.includes(removedByCardId) ? false : true,
+			milled: card!.createdByJoust || dontActuallyDestroyCardsInDeck.includes(removedByCardId) ? false : true,
 		} as DeckCard);
 		// console.debug('[card-removed]', 'cardWithZone', card?.cardId, cardWithZone, refCard);
 
 		// If the JOUST card isn't present in the deck yet, add it to the known cards
-		if (card.createdByJoust && !FAKE_JOUST_CARDS.includes(card.creatorCardId as CardIds)) {
+		if (card!.createdByJoust && !FAKE_JOUST_CARDS.includes(card!.creatorCardId as CardIds)) {
 			// console.debug('[card-removed] handling removal of JOUST card', card);
 			const isCardKnownInDeckYet =
-				!!card.cardId &&
-				newDeck.filter((c) => !c.temporaryCard && !c.createdByJoust).some((c) => c.cardId === card.cardId);
+				!!card!.cardId &&
+				newDeck.filter((c) => !c.temporaryCard && !c.createdByJoust).some((c) => c.cardId === card!.cardId);
 			// console.debug(
 			// 	'[card-removed] is card known in deck yet?',
 			// 	isCardKnownInDeckYet,

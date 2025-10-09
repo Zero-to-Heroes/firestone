@@ -1,4 +1,7 @@
-import { CardOption, ChoosingOptionsGameEvent, GameEvent, GameState } from '@firestone/game-state';
+import { CardOption } from '../../../models/deck-state';
+import { GameState } from '../../../models/game-state';
+import { ChoosingOptionsGameEvent } from '../events/choosing-options-game-event';
+import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 
 export class ChoosingOptionsParser implements EventParser {

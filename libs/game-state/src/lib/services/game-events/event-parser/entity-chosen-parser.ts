@@ -1,6 +1,9 @@
 import { CardIds, GameTag } from '@firestone-hs/reference-data';
-import { DeckCard, GameEvent, GameState } from '@firestone/game-state';
+
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { DeckCard } from '../../../models/deck-card';
+import { GameState } from '../../../models/game-state';
+import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 
@@ -78,7 +81,7 @@ export class EntityChosenParser implements EventParser {
 
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const otherOption = deck.currentOptions.find((o) => o.cardId !== CardIds.SphereOfSapience_ANewFateToken);
-		const candidateCards = deck.deck.filter((c) => c.cardId === otherOption.cardId);
+		const candidateCards = deck.deck.filter((c) => c.cardId === otherOption!.cardId);
 		console.debug('[sphere-of-sapience] candidateCards', candidateCards);
 		const card = candidateCards.find((c) => c.positionFromTop != null) || candidateCards[0];
 		console.debug('[sphere-of-sapience] card', card);
@@ -110,8 +113,8 @@ export class EntityChosenParser implements EventParser {
 			null,
 		);
 		// console.debug('pirateShipEntity', pirateShipEntity);
-		const updatedShip = pirateShipEntity.update({
-			relatedCardIds: [...pirateShipEntity.relatedCardIds, cardId],
+		const updatedShip = pirateShipEntity!.update({
+			relatedCardIds: [...pirateShipEntity!.relatedCardIds!, cardId],
 		});
 		// console.debug('updatedShip', updatedShip);
 		const updatedBoard = this.helper.empiricReplaceCardInZone(deck.board, updatedShip, false);

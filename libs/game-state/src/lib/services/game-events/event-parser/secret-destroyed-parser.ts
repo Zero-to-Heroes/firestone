@@ -1,4 +1,7 @@
-import { BoardSecret, DeckState, GameEvent, GameState } from '@firestone/game-state';
+import { BoardSecret } from '../../../models/board-secret';
+import { DeckState } from '../../../models/deck-state';
+import { GameState } from '../../../models/game-state';
+import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 

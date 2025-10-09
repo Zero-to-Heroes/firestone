@@ -1,8 +1,10 @@
 import { CardIds, Race, ReferenceCard } from '@firestone-hs/reference-data';
-import { DeckCard, GameEvent, GameState } from '@firestone/game-state';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+
+import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
+import { DeckCard } from '../../../models/deck-card';
+import { GameState } from '../../../models/game-state';
 import { hasRace } from '../../hs-utils';
-import { LocalizationFacadeService } from '../../localization-facade.service';
+import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 
@@ -10,7 +12,7 @@ export class CardDredgedParser implements EventParser {
 	constructor(
 		private readonly helper: DeckManipulationHelper,
 		private readonly allCards: CardsFacadeService,
-		private readonly i18n: LocalizationFacadeService,
+		private readonly i18n: ILocalizationService,
 	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
@@ -52,8 +54,8 @@ export class CardDredgedParser implements EventParser {
 			positionFromBottom: undefined,
 			dredged: true,
 			linkedEntityIds: deck.deck
-				.filter((c) => c.positionFromBottom)
-				.sort((a, b) => a.positionFromBottom - b.positionFromBottom)
+				.filter((c) => c.positionFromBottom != null)
+				.sort((a, b) => a.positionFromBottom! - b.positionFromBottom!)
 				.slice(0, 3)
 				.map((c) => c.entityId),
 		});
@@ -96,12 +98,12 @@ export class CardDredgedParser implements EventParser {
 		return card;
 	}
 
-	private buildCardName(card: ReferenceCard, creatorCardId: string): string {
+	private buildCardName(card: ReferenceCard | null, creatorCardId: string): string | null {
 		if (card) {
 			return card.name;
 		}
 		if (creatorCardId) {
-			return this.i18n.getCreatedByCardName(this.allCards.getCard(creatorCardId).name);
+			return this.i18n.getCreatedByCardName(this.allCards.getCard(creatorCardId).name)!;
 		}
 		return null;
 	}

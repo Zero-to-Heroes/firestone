@@ -1,5 +1,5 @@
-import { GameEvent, GameState } from '@firestone/game-state';
-import { DeckstringOverrideEvent } from '../event/deckstring-override-event';
+import { GameState } from '../../../models/game-state';
+import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 
 export class ReconnectStartParser implements EventParser {
@@ -7,7 +7,7 @@ export class ReconnectStartParser implements EventParser {
 		return !!state;
 	}
 
-	async parse(currentState: GameState, gameEvent: DeckstringOverrideEvent): Promise<GameState> {
+	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		// In Battlegrounds, when we reconnect, we might miss all the "minions removed" events
 		// Also, new events are emitted for all the minions that are still on board
 		// So we clean everything

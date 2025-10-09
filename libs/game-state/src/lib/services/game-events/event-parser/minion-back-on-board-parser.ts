@@ -1,4 +1,7 @@
-import { DeckCard, DeckState, GameEvent, GameState } from '@firestone/game-state';
+import { DeckCard } from '../../../models/deck-card';
+import { DeckState } from '../../../models/deck-state';
+import { GameState } from '../../../models/game-state';
+import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 
@@ -17,7 +20,7 @@ export class MinionBackOnBoardParser implements EventParser {
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const card = this.helper.findCardInZone(deck.otherZone, cardId, entityId);
 		//console.debug('[minion-back-on-board] found card', card, cardId, entityId, deck.otherZone, deck.board);
-		if (Math.abs(card?.entityId) !== Math.abs(entityId)) {
+		if (Math.abs(card?.entityId!) !== Math.abs(entityId)) {
 			return currentState;
 		}
 
@@ -27,7 +30,7 @@ export class MinionBackOnBoardParser implements EventParser {
 			entityId,
 		)[0];
 		//console.debug('[minion-back-on-board] new other zone', newOtherZone);
-		const cardWithZone = card.update({
+		const cardWithZone = card!.update({
 			zone: 'PLAY',
 			creatorCardId: creatorCardId,
 			creatorEntityId: gameEvent.additionalData.creatorEntityId,

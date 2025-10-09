@@ -1,4 +1,6 @@
-import { DamageGameEvent, GameEvent, GameState } from '@firestone/game-state';
+import { GameState } from '../../../models/game-state';
+import { DamageGameEvent } from '../events/damage-game-event';
+import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 
 export class DamageTakenParser implements EventParser {
@@ -9,7 +11,7 @@ export class DamageTakenParser implements EventParser {
 	async parse(currentState: GameState, gameEvent: DamageGameEvent): Promise<GameState> {
 		const localPlayerCardId = currentState.playerDeck.hero?.cardId;
 		const localPlayerId = gameEvent.localPlayer?.PlayerId;
-		const damageForLocalPlayer = gameEvent.findTarget(localPlayerCardId);
+		const damageForLocalPlayer = gameEvent.findTarget(localPlayerCardId!);
 		// We check that the cardID is indeed our cardId, in case of mirror matches for instance
 		const localPlayerDamage =
 			damageForLocalPlayer && damageForLocalPlayer.TargetControllerId === localPlayerId
@@ -19,7 +21,7 @@ export class DamageTakenParser implements EventParser {
 		// So that we also handle the case where the player has switched to another hero
 		const opponentPlayerCardId = currentState.opponentDeck.hero?.cardId;
 		const opponentPlayerId = gameEvent.opponentPlayer?.PlayerId;
-		const damageForOpponentPlayer = gameEvent.findTarget(opponentPlayerCardId);
+		const damageForOpponentPlayer = gameEvent.findTarget(opponentPlayerCardId!);
 		const opponentPlayerDamage =
 			damageForOpponentPlayer && damageForOpponentPlayer.TargetControllerId === opponentPlayerId
 				? damageForOpponentPlayer.Damage

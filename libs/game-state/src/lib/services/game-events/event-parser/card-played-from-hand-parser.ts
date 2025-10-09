@@ -1,26 +1,19 @@
 import { CardIds, GameTag, LIBRAM_IDS, Race, ReferenceCard, WATCH_POST_IDS } from '@firestone-hs/reference-data';
+import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
+import { DeckCard, toTagsObject } from '../../../models/deck-card';
+import { DeckState } from '../../../models/deck-state';
+import { GameState, ShortCard, ShortCardWithTurn } from '../../../models/game-state';
+import { getProcessedCard, storeInformationOnCardPlayed } from '../../card-utils';
 import {
-	DeckCard,
-	DeckState,
-	GameEvent,
-	GameState,
-	getProcessedCard,
-	ShortCard,
-	ShortCardWithTurn,
-	storeInformationOnCardPlayed,
-	toTagsObject,
-} from '@firestone/game-state';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
-import {
-	battlecryGlobalEffectCards,
 	CARDS_IDS_THAT_REMEMBER_SPELLS_PLAYED,
 	CARDS_THAT_REMEMBER_SPELLS_PLAYED,
 	COUNTERSPELLS,
+	battlecryGlobalEffectCards,
 	globalEffectCardsPlayed,
 	hasRace,
 } from '../../hs-utils';
-import { LocalizationFacadeService } from '../../localization-facade.service';
-import { revealCard } from '../game-state/card-reveal';
+import { revealCard } from '../card-reveal';
+import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 import { modifyDecksForSpecialCards } from './deck-contents-utils';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
@@ -30,7 +23,7 @@ export class CardPlayedFromHandParser implements EventParser {
 	constructor(
 		private readonly helper: DeckManipulationHelper,
 		private readonly allCards: CardsFacadeService,
-		private readonly i18n: LocalizationFacadeService,
+		private readonly i18n: ILocalizationService,
 	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
@@ -59,7 +52,7 @@ export class CardPlayedFromHandParser implements EventParser {
 		let opponentDeck = !isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
 		// It's important to not automatically populate the cardId here, as
-		let card = this.helper.findCardInZone(deck.hand, cardId, entityId, true, false);
+		let card: DeckCard | null | undefined = this.helper.findCardInZone(deck.hand, cardId, entityId, true, false);
 
 		// eslint-disable-next-line prefer-const
 		let [newHand, removedCard] = this.helper.removeSingleCardFromZone(
@@ -113,21 +106,22 @@ export class CardPlayedFromHandParser implements EventParser {
 			}
 		}
 
-		const isCardCountered =
+		const isCardCountered: boolean = !!(
 			((additionalInfo?.secretWillTrigger?.reactingToEntityId &&
 				additionalInfo?.secretWillTrigger?.reactingToEntityId === entityId) ||
 				(additionalInfo?.secretWillTrigger?.reactingToCardId &&
 					additionalInfo?.secretWillTrigger?.reactingToCardId === cardId)) &&
-			COUNTERSPELLS.includes(additionalInfo?.secretWillTrigger?.cardId as CardIds);
+			COUNTERSPELLS.includes(additionalInfo?.secretWillTrigger?.cardId as CardIds)
+		);
 
 		// When it's the opponent, sometimes we miss some info like related card ids
 		card = !!card?.cardId?.length ? card : removedCard;
 		// console.debug('[card-played] card 0', card);
-		card = !!card.entityId ? card : card.update({ entityId: entityId });
+		card = !!card!.entityId ? card : card!.update({ entityId: entityId });
 		// console.debug('[card-played] card 1', card);
-		const refCard = getProcessedCard(card?.cardId || cardId, card?.entityId ?? entityId, deck, this.allCards); // this.allCards.getCard(card?.cardId ?? cardId);
+		const refCard = getProcessedCard(card!.cardId || cardId, card?.entityId ?? entityId, deck, this.allCards); // this.allCards.getCard(card?.cardId ?? cardId);
 		// console.debug('[card-played] refCard', refCard, card, cardId);
-		card = !!card.cardId ? card : card.update({ cardId: cardId, cardName: refCard.name });
+		card = !!card!.cardId ? card : card!.update({ cardId: cardId, cardName: refCard.name });
 		// console.debug('[card-played] card 2', card, removedCard);
 		// Only minions end up on the board
 		const isOnBoard = !isCardCountered && refCard && (refCard.type === 'Minion' || refCard.type === 'Location');
@@ -147,7 +141,7 @@ export class CardPlayedFromHandParser implements EventParser {
 			DeckCard.create({
 				entityId: entityId,
 				refManaCost: refCard?.cost,
-				actualManaCost: costFromTags ?? card.actualManaCost,
+				actualManaCost: costFromTags ?? card!.actualManaCost,
 				zone: isOnBoard ? 'PLAY' : null,
 				cardId: cardId,
 				cardName: refCard.name,
@@ -171,7 +165,7 @@ export class CardPlayedFromHandParser implements EventParser {
 				? // Since Yogg transforms the card
 					cardWithInfo.update({
 						entityId: undefined,
-					} as DeckCard)
+					})
 				: cardWithInfo.update({
 						relatedCardIds:
 							// Reset the related card IDs once you play it, so that the info will be reset if you bounce it back to hand
@@ -196,7 +190,7 @@ export class CardPlayedFromHandParser implements EventParser {
 		);
 
 		const handAfterCardsRemembered = rememberCardsInHand(
-			card.cardId,
+			card!.cardId,
 			isCardCountered,
 			newHand,
 			this.helper,
@@ -338,13 +332,13 @@ export const rememberCardsInHand = (
 				const newSivaraCards = commanderSivaraCards
 					.map((c) => {
 						const config = CARDS_THAT_REMEMBER_SPELLS_PLAYED.find((conf) => c.cardId === conf.cardId);
-						if (config.mustHaveSpellSchool && !refCard.spellSchool?.length) {
+						if (config?.mustHaveSpellSchool && !refCard.spellSchool?.length) {
 							return null;
 						}
 						const newRelatedCardIds =
 							c.cardId === CardIds.CarressCabaretStar_VAC_449
-								? buildCarressCabaretStarRelatedCardIds(cardId, c.relatedCardIds, allCards)
-								: [...c.relatedCardIds, cardId].slice(0, config.numberOfCards);
+								? buildCarressCabaretStarRelatedCardIds(cardId, c.relatedCardIds!, allCards)
+								: [...c.relatedCardIds!, cardId].slice(0, config!.numberOfCards);
 						const result = c.update({
 							// Only keep the first N
 							relatedCardIds: newRelatedCardIds,
@@ -374,15 +368,15 @@ const buildCarressCabaretStarRelatedCardIds = (
 				.map((card) => card?.spellSchool)
 				.filter((school) => !!school),
 		),
-	];
+	] as readonly string[];
 	const newSpellSchool = allCards.getCard(newCardId).spellSchool;
-	if (existingSpellSchools.includes(newSpellSchool)) {
+	if (newSpellSchool && existingSpellSchools.includes(newSpellSchool)) {
 		return relatedCardIds;
 	}
 
-	const baseRelatedCardIds = allCards
-		.getCard(CardIds.CarressCabaretStar_VAC_449)
-		.relatedCardDbfIds.map((id) => allCards.getCard(id).id);
+	const baseRelatedCardIds =
+		allCards.getCard(CardIds.CarressCabaretStar_VAC_449).relatedCardDbfIds?.map((id) => allCards.getCard(id).id) ??
+		[];
 	const newRelatedCardIds = relatedCardIds.filter((id) => !baseRelatedCardIds.includes(id));
 	return [...newRelatedCardIds, newCardId, ...baseRelatedCardIds];
 };
@@ -430,7 +424,7 @@ const addGuessedInfo = (
 
 const updatePlayerDeckWithOtherSpecialCases = (
 	deck: DeckState,
-	playedCard: DeckCard,
+	playedCard: DeckCard | null,
 	allCards: CardsFacadeService,
 ): DeckState => {
 	if (!playedCard) {
@@ -463,14 +457,14 @@ const updateMistahVistah = (
 	const scenicVista = deck.otherZone.find(
 		(c) =>
 			c.cardId === CardIds.MistahVistah_ScenicVistaToken_VAC_519t3 &&
-			Math.abs(c.creatorEntityId) === Math.abs(mistahVistah.entityId) &&
+			Math.abs(+c.creatorEntityId!) === Math.abs(mistahVistah.entityId) &&
 			c.zone !== 'REMOVEDFROMGAME',
 	);
 	if (!scenicVista) {
 		return deck;
 	}
 
-	const relatedCardIds = [...mistahVistah.relatedCardIds];
+	const relatedCardIds = [...mistahVistah.relatedCardIds!];
 	if (!relatedCardIds.length) {
 		relatedCardIds.push(CardIds.MistahVistah_ScenicVistaToken_VAC_519t3);
 	}
@@ -550,7 +544,7 @@ export const updateGlobalEffects = (
 				newGlobalEffects,
 				card?.update({
 					// So that if the card is sent back to hand, we can track multiple plays of it
-					entityId: null,
+					entityId: undefined,
 				}),
 			);
 			// console.debug('added global effect', newGlobalEffects);

@@ -1,17 +1,14 @@
 import { Injectable } from '@angular/core';
-import { GameEventsEmitterService, IReviewIdService } from '@firestone/game-state';
 import { uuid } from '@firestone/shared/framework/common';
 import { BehaviorSubject } from 'rxjs';
-import { Events } from './events.service';
+import { GameEventsEmitterService } from './game-events/game-events-emitter.service';
+import { IReviewIdService } from './review-id.interface';
 
 @Injectable()
 export class ReviewIdService implements IReviewIdService {
-	public reviewId$$ = new BehaviorSubject<string>(null);
+	public reviewId$$ = new BehaviorSubject<string | null>(null);
 
-	constructor(
-		private readonly events: Events,
-		private readonly gameEvents: GameEventsEmitterService,
-	) {
+	constructor(private readonly gameEvents: GameEventsEmitterService) {
 		this.init();
 	}
 

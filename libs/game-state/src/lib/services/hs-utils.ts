@@ -721,7 +721,7 @@ const rankToLeague = (rank: number, i18n: ILocalizationService): string => {
 	return i18n.translateString('global.ranks.constructed.legend');
 };
 
-export const hasRace = (card: ReferenceCard, race: Race): boolean => {
+export const hasRace = (card: ReferenceCard | null, race: Race): boolean => {
 	return card?.races?.includes(Race[race]) || card?.races?.includes(Race[Race.ALL]) || false;
 };
 

@@ -1,13 +1,13 @@
-import { DeckCard, DeckState, GameEvent, GameState, getProcessedCard } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { LocalizationFacadeService } from '../../localization-facade.service';
+import { DeckCard } from '../../../models/deck-card';
+import { DeckState } from '../../../models/deck-state';
+import { GameState } from '../../../models/game-state';
+import { getProcessedCard } from '../../card-utils';
+import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 
 export class HeroPowerChangedParser implements EventParser {
-	constructor(
-		private readonly allCards: CardsFacadeService,
-		private readonly i18n: LocalizationFacadeService,
-	) {}
+	constructor(private readonly allCards: CardsFacadeService) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return !!state;
