@@ -207,7 +207,7 @@ export class PreferencesService extends AbstractFacadeService<PreferencesService
 		await this.savePreferences(newPrefs);
 	}
 
-	public async setTwitchAccessToken(pref: string) {
+	public async setTwitchAccessToken(pref: string | undefined) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, twitchAccessToken: pref };
 		await this.savePreferences(newPrefs, PreferencesService.TWITCH_CONNECTION_STATUS);

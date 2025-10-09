@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Injectable } from '@angular/core';
 import { BnetRegion, GameType, isBattlegrounds, isBattlegroundsDuo } from '@firestone-hs/reference-data';
-import { GameStateFacadeService, PlayerMatchMmr } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import {
@@ -11,6 +10,8 @@ import {
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
 import { auditTime, combineLatest, debounceTime, distinctUntilChanged, filter, map, switchMap } from 'rxjs';
+import { PlayerMatchMmr } from '../../models/_barrel';
+import { GameStateFacadeService } from '../game-state-facade.service';
 import { BgsMatchMemoryInfoService } from './bgs-match-memory-info.service';
 import { BattlegroundsOfficialLeaderboardService } from './bgs-official-leaderboards.service';
 

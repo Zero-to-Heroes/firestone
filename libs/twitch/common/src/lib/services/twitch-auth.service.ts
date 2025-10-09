@@ -3,7 +3,15 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { GameTag, SceneMode } from '@firestone-hs/reference-data';
-import { BattlegroundsState, BgsBoard, BgsPlayer, DeckCard, DeckState, GameState } from '@firestone/game-state';
+import {
+	BattlegroundsState,
+	BgsBoard,
+	BgsPlayer,
+	DeckCard,
+	DeckState,
+	GameState,
+	GameStateFacadeService,
+} from '@firestone/game-state';
 import { MatchInfo, SceneService } from '@firestone/memory';
 import {
 	BugReportService,
@@ -55,6 +63,7 @@ export class TwitchAuthService {
 		private readonly gameStatus: GameStatusService,
 		private readonly scene: SceneService,
 		private readonly bugReport: BugReportService,
+		private readonly gameStateFacade: GameStateFacadeService,
 	) {
 		this.init();
 		window['deflate'] = (input, options) => {
@@ -124,6 +133,8 @@ export class TwitchAuthService {
 					)
 					.subscribe((event) => this.sendEvent(event));
 			});
+
+		this.gameStateFacade.gameState$$.subscribe((event) => this.emitDeckEvent(event));
 	}
 
 	public async emitDeckEvent(event: GameState) {

@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Injectable } from '@angular/core';
 import { isBattlegrounds } from '@firestone-hs/reference-data';
-import { GameStateFacadeService } from '@firestone/game-state';
 import { BattlegroundsInfo, MemoryInspectionService } from '@firestone/memory';
 import { GameStatusService, PreferencesService } from '@firestone/shared/common/service';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, interval } from 'rxjs';
+import { GameStateFacadeService } from '../game-state-facade.service';
 import { BgsMatchPlayersMmrService } from './bgs-match-players-mmr.service';
 
 const INTERVAL = 3000;
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class BgsMatchMemoryInfoService {
 	public battlegroundsMemoryInfo$$ = new BehaviorSubject<BattlegroundsInfo | null>(null);
 

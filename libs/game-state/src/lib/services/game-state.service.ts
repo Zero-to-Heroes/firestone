@@ -1,32 +1,27 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { GameTag } from '@firestone-hs/reference-data';
-import { BgsInGameWindowNavigationService, BgsMatchMemoryInfoService } from '@firestone/battlegrounds/common';
-import { BgsBattleSimulationService } from '@firestone/battlegrounds/core';
-import {
-	DeckCard,
-	DeckState,
-	EventParser,
-	GameEvent,
-	GameEventsEmitterService,
-	GameState,
-	GameStateEvent,
-	GameStateParsersService,
-	HeroCard,
-	MinionsDiedEvent,
-	OverlayDisplayService,
-	PlayerGameState,
-	RealTimeStatsService,
-	RealTimeStatsState,
-	SecretsParserService,
-} from '@firestone/game-state';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { arraysEqual, chunk, sleep } from '@firestone/shared/framework/common';
+import { arraysEqual, chunk } from '@firestone/shared/framework/common';
 import { OverwolfService, ProcessingQueue, waitForReady } from '@firestone/shared/framework/core';
-import { TwitchAuthService } from '@firestone/twitch/common';
+// import { TwitchAuthService } from '@firestone/twitch/common';
 
+import { BgsBattleSimulationService } from '@firestone/battlegrounds/core';
 import { BehaviorSubject, debounceTime, distinctUntilChanged, filter } from 'rxjs';
+import { DeckCard, DeckState, HeroCard, PlayerGameState, RealTimeStatsState } from '../models/_barrel';
+import { GameState } from '../models/game-state';
+import { BgsMatchMemoryInfoService } from './battlegrounds/bgs-match-memory-info.service';
+import { EventParser } from './game-events/event-parser/_event-parser';
+import { SecretsParserService } from './game-events/event-parser/secrets/secrets-parser.service';
+import { MinionsDiedEvent } from './game-events/events/minions-died-event';
+import { GameEvent } from './game-events/game-event';
+import { GameEventsEmitterService } from './game-events/game-events-emitter.service';
+import { GameStateParsersService } from './game-events/state-parsers.service';
+import { GameStateEvent } from './game-state-events/game-state-event';
 import { GameStateMetaInfoService } from './game-state-meta-info.service';
-@Injectable()
+import { OverlayDisplayService } from './overlay-display.service';
+import { RealTimeStatsService } from './real-time-stats/real-time-stats.service';
+
+@Injectable({ providedIn: 'root' })
 export class GameStateService {
 	public state: GameState = new GameState();
 	private eventParsers: { [eventKey: string]: readonly EventParser[] };
@@ -46,7 +41,7 @@ export class GameStateService {
 	private deckUpdater: EventEmitter<GameEvent | GameStateEvent> = new EventEmitter<GameEvent | GameStateEvent>();
 	private eventEmitters: ((state: GameState) => void)[] = [];
 
-	private secretWillTrigger: {
+	private secretWillTrigger?: {
 		cardId: string;
 		reactingToCardId: string;
 		reactingToEntityId: number;
@@ -64,7 +59,7 @@ export class GameStateService {
 		private readonly gameEvents: GameEventsEmitterService,
 		private readonly gameStateMetaInfos: GameStateMetaInfoService,
 		private readonly prefs: PreferencesService,
-		private readonly twitch: TwitchAuthService,
+		// private readonly twitch: TwitchAuthService,
 		private readonly ow: OverwolfService,
 		private readonly secretsParser: SecretsParserService,
 		private readonly parserService: GameStateParsersService,
@@ -72,7 +67,6 @@ export class GameStateService {
 		private readonly matchMemoryInfo: BgsMatchMemoryInfoService,
 		private readonly realTimeStats: RealTimeStatsService,
 		private readonly simulation: BgsBattleSimulationService,
-		private readonly bgsNav: BgsInGameWindowNavigationService,
 	) {
 		this.init();
 	}
@@ -135,8 +129,10 @@ export class GameStateService {
 				},
 			});
 		});
+
+		// TODO: move this somewhere else
 		this.battlegroundsWindowsListener = this.ow.addHotKeyPressedListener('battlegrounds', async (hotkeyResult) => {
-			this.bgsNav.toggleWindow();
+			// this.bgsNav.toggleWindow();
 		});
 
 		const decktrackerDisplayEventBus: BehaviorSubject<boolean> = this.overlayDisplay.decktrackerDisplayEventBus$$;
@@ -147,7 +143,7 @@ export class GameStateService {
 			this.showDecktrackerFromGameMode = event;
 		});
 
-		if (process.env.NODE_ENV !== 'production') {
+		if (process.env['NODE_ENV'] !== 'production') {
 			window['gameState'] = () => {
 				return this.state;
 			};
@@ -168,7 +164,7 @@ export class GameStateService {
 		for (const subQueue of chunks) {
 			try {
 				const stateUpdateEvents = subQueue.filter((event) => event.type === GameEvent.GAME_STATE_UPDATE);
-				const stateUpdateEvent: GameEvent =
+				const stateUpdateEvent: GameEvent | null =
 					stateUpdateEvents.length > 0
 						? (stateUpdateEvents[stateUpdateEvents.length - 1] as GameEvent)
 						: null;
@@ -303,13 +299,13 @@ export class GameStateService {
 				if (parser?.sideEffects) {
 					// Don't block the main parser loop
 					setTimeout(() => {
-						parser.sideEffects(event, this.gameEvents);
+						parser.sideEffects!(event, this.gameEvents);
 					});
 				}
 				// if (!this.state) {
 				// 	console.error('[game-state] parser returned null state for non-match event', parser.event());
 				// }
-			} catch (e) {
+			} catch (e: any) {
 				console.error(
 					'[game-state] Exception while applying parser for non-match event',
 					parser.event(),
@@ -323,7 +319,7 @@ export class GameStateService {
 		return currentState;
 	}
 
-	public processedEvents = [];
+	public processedEvents: string[] = [];
 	private async processEvent(currentState: GameState, gameEvent: GameEvent, prefs: Preferences): Promise<GameState> {
 		const start = Date.now();
 		// console.debug('[game-state] processing event', gameEvent.type, gameEvent.cardId, gameEvent.entityId, gameEvent);
@@ -359,7 +355,7 @@ export class GameStateService {
 		}
 
 		currentState = await this.secretsParser.parseSecrets(currentState, gameEvent, {
-			secretWillTrigger: this.secretWillTrigger,
+			secretWillTrigger: this.secretWillTrigger!,
 			minionsWillDie: this.minionsWillDie,
 		});
 		const parsersForEvent = this.eventParsers[gameEvent.type] ?? [];
@@ -379,10 +375,10 @@ export class GameStateService {
 				if (parser?.sideEffects) {
 					// Don't block the main parser loop
 					setTimeout(() => {
-						parser.sideEffects(event, this.gameEvents);
+						parser.sideEffects!(gameEvent, this.gameEvents);
 					});
 				}
-			} catch (e) {
+			} catch (e: any) {
 				console.error('[game-state] Exception while applying parser', parser.event(), e.message, e.stack, e);
 			}
 		}
@@ -400,7 +396,7 @@ export class GameStateService {
 					this.secretWillTrigger.reactingToEntityId === gameEvent.entityId))
 		) {
 			console.log('[game-state] resetting secretWillTrigger', gameEvent.type, this.secretWillTrigger);
-			this.secretWillTrigger = null;
+			this.secretWillTrigger = undefined;
 		}
 		if (this.minionsWillDie?.length && gameEvent.type === GameEvent.MINIONS_DIED) {
 			const gEvent = gameEvent as MinionsDiedEvent;
@@ -439,10 +435,10 @@ export class GameStateService {
 		const maxMana = playerFromTracker.Hero.tags?.find((t) => t.Name == GameTag.RESOURCES)?.Value ?? 0;
 		const manaSpent = playerFromTracker.Hero.tags?.find((t) => t.Name == GameTag.RESOURCES_USED)?.Value ?? 0;
 		const manaLeft = maxMana == null || manaSpent == null ? null : maxMana - manaSpent;
-		const newHero: HeroCard =
+		const newHero: HeroCard | undefined =
 			manaLeft != deck.hero?.manaLeft
-				? deck.hero?.update({
-						manaLeft: maxMana == null || manaSpent == null ? null : maxMana - manaSpent,
+				? deck.hero!.update({
+						manaLeft: maxMana == null || manaSpent == null ? undefined : maxMana - manaSpent,
 					})
 				: deck.hero;
 
@@ -467,24 +463,24 @@ export class GameStateService {
 
 	private async buildEventEmitters() {
 		const result = [(event: GameState) => this.deckEventBus.next(event)];
-		const prefs = await this.prefs.getPreferences();
-		console.log('is logged in to Twitch?', !!prefs.twitchAccessToken);
-		if (prefs.twitchAccessToken) {
-			const isTokenValid = await this.twitch.validateToken(prefs.twitchAccessToken);
-			if (!isTokenValid) {
-				console.log('Twitch token is not valid, removing it');
-				this.prefs.setTwitchAccessToken(undefined);
-				await sleep(2000);
-				await this.twitch.sendExpiredTwitchTokenNotification();
-			} else {
-				result.push((event) => this.twitch.emitDeckEvent(event));
-			}
-		}
+		// const prefs = await this.prefs.getPreferences();
+		// console.log('is logged in to Twitch?', !!prefs.twitchAccessToken);
+		// if (prefs.twitchAccessToken) {
+		// 	const isTokenValid = await this.twitch.validateToken(prefs.twitchAccessToken);
+		// 	if (!isTokenValid) {
+		// 		console.log('Twitch token is not valid, removing it');
+		// 		this.prefs.setTwitchAccessToken(undefined);
+		// 		await sleep(2000);
+		// 		await this.twitch.sendExpiredTwitchTokenNotification();
+		// 	} else {
+		// 		result.push((event) => this.twitch.emitDeckEvent(event));
+		// 	}
+		// }
 		this.eventEmitters = result;
 	}
 }
 
-const mergeDataScriptChangedEvents = (events: readonly GameEvent[]): GameEvent => {
+const mergeDataScriptChangedEvents = (events: readonly GameEvent[]): GameEvent | null => {
 	if (events.length === 0) {
 		return null;
 	}
@@ -498,7 +494,7 @@ const mergeDataScriptChangedEvents = (events: readonly GameEvent[]): GameEvent =
 	return merged;
 };
 
-const mergeZonePositionChangedEvents = (events: readonly GameEvent[]): GameEvent => {
+const mergeZonePositionChangedEvents = (events: readonly GameEvent[]): GameEvent | null => {
 	if (events.length === 0) {
 		return null;
 	}
