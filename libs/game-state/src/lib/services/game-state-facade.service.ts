@@ -1,19 +1,16 @@
 import { Injectable } from '@angular/core';
-import { sleep } from '@firestone/shared/framework/common';
-import {
-	AbstractFacadeService,
-	AppInjector,
-	OverwolfService,
-	WindowManagerService,
-} from '@firestone/shared/framework/core';
+import { AbstractFacadeService, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
 import { GameState } from '../models/game-state';
+import { GameStateService } from './game-state.service';
+
+const eventName = 'game-state-facade';
 
 @Injectable()
 export class GameStateFacadeService extends AbstractFacadeService<GameStateFacadeService> {
 	public gameState$$: BehaviorSubject<GameState>;
 
-	private ow: OverwolfService;
+	private gameStateService: GameStateService;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'GameStateFacadeService', () => !!this.gameState$$);
@@ -25,15 +22,21 @@ export class GameStateFacadeService extends AbstractFacadeService<GameStateFacad
 
 	protected async init() {
 		this.gameState$$ = new BehaviorSubject<GameState>(new GameState());
-		this.ow = AppInjector.get(OverwolfService);
+		this.gameStateService = AppInjector.get(GameStateService);
 		console.log('[game-state-facade] ready');
 
-		while (!this.ow.getMainWindow()?.deckEventBus) {
-			await sleep(50);
-		}
-
-		this.ow.getMainWindow().deckEventBus.subscribe(async (event: GameState) => {
+		this.gameStateService.deckEventBus.subscribe(async (event: GameState | null) => {
 			this.gameState$$.next(event ?? new GameState());
 		});
+	}
+
+	protected override async initElectronSubjects() {
+		console.log('[game-state-facade] initElectronSubjects');
+		this.setupElectronSubject(this.gameState$$, eventName);
+	}
+
+	protected override async createElectronProxy(ipcRenderer: any) {
+		console.log('[game-state-facade] createElectronProxy');
+		this.gameState$$ = new BehaviorSubject<GameState>(new GameState());
 	}
 }

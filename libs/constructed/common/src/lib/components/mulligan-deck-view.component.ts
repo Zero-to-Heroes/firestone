@@ -15,8 +15,7 @@ import {
 import { GameFormatString } from '@firestone-hs/reference-data';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { SortCriteria, invertDirection } from '@firestone/shared/common/view';
-import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent, SortCriteria, invertDirection } from '@firestone/shared/framework/common';
 import {
 	ADS_SERVICE_TOKEN,
 	CardsFacadeService,

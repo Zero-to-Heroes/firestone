@@ -12,6 +12,7 @@ import {
 	GameEvents,
 	GameEventsEmitterService,
 	GameState,
+	GameStateService,
 } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
@@ -20,7 +21,6 @@ import { GameStat } from '@firestone/stats/data-access';
 import { sortByProperties } from '@services/utils';
 import { CollectionCardType } from '../models/collection/collection-card-type.type';
 import { CardNotificationsService } from './collection/card-notifications.service';
-import { GameStateService } from './decktracker/game-state.service';
 
 const RETRIEVE_REVIEW_URL = 'https://itkmxena7k2kkmkgpevc6skcie0tlwmk.lambda-url.us-west-2.on.aws/';
 

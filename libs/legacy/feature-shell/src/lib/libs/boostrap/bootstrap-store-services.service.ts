@@ -17,13 +17,11 @@ import {
 import {
 	BattlegroundsAnomaliesService,
 	BattlegroundsNavigationService,
-	BattlegroundsOfficialLeaderboardService,
 	BattlegroundsQuestsService,
 	BgsCommonBootstrapService,
 	BgsInGameHeroSelectionGuardianService,
 	BgsInGameQuestsGuardianService,
 	BgsInGameQuestsService,
-	BgsMatchPlayersMmrService,
 	BgsMetaHeroStatsDuoService,
 	BgsMetaHeroStatsService,
 	BgsPlayerHeroStatsService,
@@ -39,7 +37,13 @@ import {
 	ConstructedMulliganGuideService,
 	ConstructedPersonalDecksService,
 } from '@firestone/constructed/common';
-import { BootstrapGameStateService, DeckParserFacadeService } from '@firestone/game-state';
+import {
+	BattlegroundsOfficialLeaderboardService,
+	BgsMatchPlayersMmrService,
+	BootstrapGameStateService,
+	DeckParserFacadeService,
+	GameStateService,
+} from '@firestone/game-state';
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { BgsSceneService, CardChoicesService, CardMousedOverService } from '@firestone/memory';
 import { AccountService } from '@firestone/profile/common';
@@ -57,7 +61,6 @@ import { CardRulesService, OwUtilsService } from '@firestone/shared/framework/co
 import { AchievementsLiveProgressTrackingService } from '../../js/services/achievement/achievements-live-progress-tracking.service';
 import { AdService } from '../../js/services/ad.service';
 import { BgsPerfectGamesService } from '../../js/services/battlegrounds/bgs-perfect-games.service';
-import { GameStateService } from '../../js/services/decktracker/game-state.service';
 import { DecksProviderService } from '../../js/services/decktracker/main/decks-provider.service';
 import { LotteryWidgetControllerService } from '../../js/services/lottery/lottery-widget-controller.service';
 import { LotteryService } from '../../js/services/lottery/lottery.service';

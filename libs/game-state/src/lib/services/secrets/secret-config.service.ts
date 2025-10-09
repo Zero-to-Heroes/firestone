@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
 	brawlSets,
@@ -12,7 +11,7 @@ import {
 	SetId,
 	SpellSchool,
 } from '@firestone-hs/reference-data';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { ApiRunner, CardsFacadeService } from '@firestone/shared/framework/core';
 import { DeckCard } from '../../models/deck-card';
 import { GameState } from '../../models/game-state';
 import { Metadata } from '../../models/metadata';
@@ -41,7 +40,7 @@ export class SecretConfigService {
 	private stonebrewSecrets: readonly string[];
 
 	constructor(
-		private readonly http: HttpClient,
+		private readonly api: ApiRunner,
 		private readonly allCards: CardsFacadeService,
 	) {}
 
@@ -124,17 +123,8 @@ export class SecretConfigService {
 	}
 
 	private async getSecretsConfig(): Promise<readonly SecretsConfig[]> {
-		return new Promise<readonly SecretsConfig[]>((resolve) => {
-			this.http.get(`${SECRET_CONFIG_URL}`).subscribe(
-				(result: any) => {
-					resolve(result);
-				},
-				(error) => {
-					console.error('[secrets-config] could not retrieve secrets-config from CDN', error);
-					resolve([]);
-				},
-			);
-		});
+		const result = await this.api.callGetApi<readonly SecretsConfig[]>(SECRET_CONFIG_URL);
+		return result ?? [];
 	}
 
 	private canBeSpecificSecret(secretCardId: string, secretCard: DeckCard | undefined | null): boolean {

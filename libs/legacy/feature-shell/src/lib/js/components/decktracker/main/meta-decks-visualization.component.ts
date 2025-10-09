@@ -14,8 +14,14 @@ import { CardIds } from '@firestone-hs/reference-data';
 import { ExtendedDeckStats } from '@firestone/constructed/common';
 import { Card } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { SortCriteria, SortDirection, invertDirection } from '@firestone/shared/common/view';
-import { AbstractSubscriptionComponent, arraysEqual, groupByFunction2 } from '@firestone/shared/framework/common';
+import {
+	AbstractSubscriptionComponent,
+	SortCriteria,
+	SortDirection,
+	arraysEqual,
+	groupByFunction2,
+	invertDirection,
+} from '@firestone/shared/framework/common';
 import { CardsFacadeService, getDateAgo } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, shareReplay, startWith, takeUntil } from 'rxjs/operators';

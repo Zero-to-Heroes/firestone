@@ -12,7 +12,7 @@ import { GameStateFacadeService, OverlayDisplayService } from '@firestone/game-s
 import { SceneService } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import { Observable, combineLatest, distinctUntilChanged, takeUntil } from 'rxjs';
+import { Observable, combineLatest, distinctUntilChanged, takeUntil, tap } from 'rxjs';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
 @Component({
@@ -68,7 +68,15 @@ export class DecktrackerPlayerWidgetWrapperComponent
 	}
 
 	async ngAfterContentInit() {
+		console.log('decktracker-player-widget-wrapper ngAfterContentInit start');
+		await waitForReady(this.scene);
+		console.log('decktracker-player-widget-wrapper scene ready');
+		await waitForReady(this.overlayDisplay);
+		console.log('decktracker-player-widget-wrapper overlayDisplay ready');
+		await waitForReady(this.gameState);
+		console.log('decktracker-player-widget-wrapper gameState ready');
 		await waitForReady(this.scene, this.overlayDisplay, this.gameState);
+		console.log('decktracker-player-widget-wrapper ngAfterContentInit');
 
 		const displayFromGameMode$ = this.overlayDisplay.decktrackerDisplayEventBus$$;
 		this.showWidget$ = combineLatest([
@@ -96,6 +104,7 @@ export class DecktrackerPlayerWidgetWrapperComponent
 			),
 			displayFromGameMode$,
 		]).pipe(
+			tap((info) => console.log('decktracker-player-widget-wrapper show widget?', info)),
 			this.mapData(
 				([
 					currentScene,

@@ -2,13 +2,13 @@ import { Injectable } from '@angular/core';
 import { AbstractFacadeService, IAdsService, WindowManagerService } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
 
-@Injectable()
-export class ElectronAdService extends AbstractFacadeService<ElectronAdService> implements IAdsService {
+@Injectable({ providedIn: 'root' })
+export class StandaloneAdService extends AbstractFacadeService<StandaloneAdService> implements IAdsService {
 	public hasPremiumSub$$: BehaviorSubject<boolean>;
 	public enablePremiumFeatures$$: BehaviorSubject<boolean>;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
-		super(windowManager, 'ElectronAdService', () => true);
+		super(windowManager, 'StandaloneAdService', () => true);
 	}
 
 	protected override assignSubjects() {

@@ -12,9 +12,8 @@ import { SharedCommonViewModule } from '@firestone/shared/common/view';
 import { SharedFrameworkCommonModule } from '@firestone/shared/framework/common';
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { StatsCommonModule } from '@firestone/stats/common';
-import { InlineSVGModule } from 'ng-inline-svg-2';
-
 import { VirtualScrollerModule } from '@sebastientromp/ngx-virtual-scroller';
+import { InlineSVGModule } from 'ng-inline-svg-2';
 import { BattlegroundsMetaStatsCardInfoComponent } from './cards/battlegrounds-meta-stats-card-info.component';
 import { BattlegroundsMetaStatsCardTierComponent } from './cards/battlegrounds-meta-stats-card-tier.component';
 import { BattlegroundsMetaStatsCardsComponent } from './cards/battlegrounds-meta-stats-cards.component';
@@ -55,15 +54,12 @@ import { BgsInGameQuestsService } from './services/bgs-in-game-quests.service';
 import { BgsInGameTrinketsGuardianService } from './services/bgs-in-game-trinkets-guardian.service';
 import { BgsInGameTrinketsService } from './services/bgs-in-game-trinkets.service';
 import { BgsInGameWindowNavigationService } from './services/bgs-in-game-window-navigation.service';
-import { BgsMatchMemoryInfoService } from './services/bgs-match-memory-info.service';
-import { BgsMatchPlayersMmrService } from './services/bgs-match-players-mmr.service';
 import { BgsMetaCompositionStrategiesService } from './services/bgs-meta-composition-strategies.service';
 import { BgsMetaHeroStatsDuoService } from './services/bgs-meta-hero-stats-duo.service';
 import { BgsMetaHeroStatsService } from './services/bgs-meta-hero-stats.service';
 import { BgsMetaHeroStrategiesService } from './services/bgs-meta-hero-strategies.service';
 import { BgsMetaTrinketStrategiesService } from './services/bgs-meta-trinket-strategies.service';
 import { BattlegroundsNavigationService } from './services/bgs-navigation.service';
-import { BattlegroundsOfficialLeaderboardService } from './services/bgs-official-leaderboards.service';
 import { BgsPlayerHeroStatsService } from './services/bgs-player-hero-stats.service';
 import { BattlegroundsQuestsService } from './services/bgs-quests.service';
 import { BattlegroundsTrinketsService } from './services/bgs-trinkets.service';
@@ -131,9 +127,6 @@ const components = [
 		BgsInGameQuestsService,
 		BgsInGameQuestsGuardianService,
 		BgsInGameHeroSelectionGuardianService,
-		BgsMatchMemoryInfoService,
-		BattlegroundsOfficialLeaderboardService,
-		BgsMatchPlayersMmrService,
 		BgsPlayerHeroStatsService,
 		BgsMetaHeroStatsService,
 		BgsMetaHeroStatsDuoService,

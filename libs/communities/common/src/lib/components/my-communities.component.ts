@@ -2,8 +2,12 @@
 /* eslint-disable @angular-eslint/template/no-negated-async */
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { CommunityInfo } from '@firestone-hs/communities';
-import { SortCriteria, SortDirection, invertDirection } from '@firestone/shared/common/view';
-import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import {
+	AbstractSubscriptionComponent,
+	SortCriteria,
+	SortDirection,
+	invertDirection,
+} from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest, startWith, takeUntil } from 'rxjs';
 import { CommunityNavigationService } from '../services/community-navigation.service';

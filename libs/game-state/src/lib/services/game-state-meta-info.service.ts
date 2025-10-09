@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
-import { CardMetaInfo, DeckCard, DeckState } from '@firestone/game-state';
 import { arraysEqual, Mutable } from '@firestone/shared/framework/common';
+import { CardMetaInfo } from '../models/card-meta-info';
+import { DeckCard } from '../models/deck-card';
+import { DeckState } from '../models/deck-state';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class GameStateMetaInfoService {
 	public updateDeck(deckState: DeckState, currentTurn: number | 'mulligan'): DeckState {
 		const newBoard = this.cleanZone(deckState.board, true);

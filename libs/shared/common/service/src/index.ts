@@ -20,6 +20,7 @@ export * from './lib/services/preferences-storage.service';
 export * from './lib/services/preferences.service';
 export * from './lib/services/s3-file-upload.service';
 export * from './lib/services/scaling.service';
+export * from './lib/services/standalone-ad.service';
 export * from './lib/services/subscription/ow-legacy-premium.service';
 export * from './lib/services/subscription/subscription.service';
 export * from './lib/services/subscription/tebex-deeplink.service';

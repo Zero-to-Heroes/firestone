@@ -1,5 +1,10 @@
-import { PackInfo } from '@firestone/collection/view';
-import { MemoryInspectionService, MemoryUpdate, MemoryUpdatesService, SceneService } from '@firestone/memory';
+import {
+	MemoryInspectionService,
+	MemoryUpdate,
+	MemoryUpdatesService,
+	PackInfoForCollection as PackInfo,
+	SceneService,
+} from '@firestone/memory';
 import { GameStatusService } from '@firestone/shared/common/service';
 import { Events } from '../../events.service';
 import { CollectionStorageService } from '../collection-storage.service';

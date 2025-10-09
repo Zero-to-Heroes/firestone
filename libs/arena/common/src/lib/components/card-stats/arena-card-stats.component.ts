@@ -6,8 +6,12 @@ import {
 	ArenaCardTypeFilterType,
 	PreferencesService,
 } from '@firestone/shared/common/service';
-import { SortCriteria, SortDirection, invertDirection } from '@firestone/shared/common/view';
-import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import {
+	AbstractSubscriptionComponent,
+	SortCriteria,
+	SortDirection,
+	invertDirection,
+} from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService, getDateAgo, waitForReady } from '@firestone/shared/framework/core';
 import {
 	BehaviorSubject,

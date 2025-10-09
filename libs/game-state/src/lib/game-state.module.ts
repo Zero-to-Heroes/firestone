@@ -1,5 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { BattlegroundsCoreModule } from '@firestone/battlegrounds/core';
+import { BattlegroundsDataAccessModule } from '@firestone/battlegrounds/data-access';
 import { SharedFrameworkCommonModule } from '@firestone/shared/framework/common';
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { StatsDataAccessModule } from '@firestone/stats/data-access';
@@ -30,7 +32,14 @@ import { ReviewIdService } from './services/review-id.service';
 const components = [];
 
 @NgModule({
-	imports: [CommonModule, SharedFrameworkCoreModule, SharedFrameworkCommonModule, StatsDataAccessModule],
+	imports: [
+		CommonModule,
+		SharedFrameworkCoreModule,
+		SharedFrameworkCommonModule,
+		StatsDataAccessModule,
+		BattlegroundsCoreModule,
+		BattlegroundsDataAccessModule,
+	],
 	providers: [
 		BootstrapGameStateService,
 		GameStateFacadeService,

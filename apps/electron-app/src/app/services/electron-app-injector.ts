@@ -1,13 +1,18 @@
-import { Type } from '@angular/core';
+import { InjectionToken, Type } from '@angular/core';
+
+/**
+ * Token type that can be either a class Type or an InjectionToken
+ */
+export type Token<T> = Type<T> | InjectionToken<T>;
 
 /**
  * Simple dependency injection container for Electron environment
  * Allows manual registration and retrieval of service instances
+ * Supports both Type<T> and InjectionToken<T> tokens
  */
 export class ElectronAppInjector {
 	private static instance: ElectronAppInjector;
-	private services = new Map<string, any>();
-	private serviceTypes = new Map<Type<any>, string>();
+	private services = new Map<any, any>();
 
 	private constructor() {}
 
@@ -21,35 +26,29 @@ export class ElectronAppInjector {
 	/**
 	 * Register a service instance with the injector
 	 */
-	register<T>(serviceType: Type<T>, instance: T): void {
-		const key = this.getServiceKey(serviceType);
-		this.services.set(key, instance);
-		this.serviceTypes.set(serviceType, key);
-		console.log(`🔧 Registered service: ${serviceType.name}`);
+	register<T>(token: Token<T>, instance: T): void {
+		this.services.set(token, instance);
+		const tokenName = this.getTokenName(token);
+		console.log(`🔧 Registered service: ${tokenName}`);
 	}
 
 	/**
 	 * Retrieve a service instance from the injector
 	 */
-	get<T>(serviceType: Type<T>): T {
-		const key = this.serviceTypes.get(serviceType);
-		if (!key) {
-			throw new Error(`Service ${serviceType.name} not found. Make sure it's registered first.`);
+	get<T>(token: Token<T>): T {
+		if (!this.services.has(token)) {
+			const tokenName = this.getTokenName(token);
+			throw new Error(`Service ${tokenName} not found. Make sure it's registered first.`);
 		}
 
-		const instance = this.services.get(key);
-		if (!instance) {
-			throw new Error(`Service instance for ${serviceType.name} not found.`);
-		}
-
-		return instance;
+		return this.services.get(token);
 	}
 
 	/**
 	 * Check if a service is registered
 	 */
-	has<T>(serviceType: Type<T>): boolean {
-		return this.serviceTypes.has(serviceType);
+	has<T>(token: Token<T>): boolean {
+		return this.services.has(token);
 	}
 
 	/**
@@ -57,7 +56,6 @@ export class ElectronAppInjector {
 	 */
 	clear(): void {
 		this.services.clear();
-		this.serviceTypes.clear();
 		console.log('🧹 Cleared all registered services');
 	}
 
@@ -65,11 +63,17 @@ export class ElectronAppInjector {
 	 * Get all registered service names for debugging
 	 */
 	getRegisteredServices(): string[] {
-		return Array.from(this.serviceTypes.keys()).map((type) => type.name);
+		return Array.from(this.services.keys()).map((token) => this.getTokenName(token));
 	}
 
-	private getServiceKey<T>(serviceType: Type<T>): string {
-		return serviceType.name || serviceType.toString();
+	/**
+	 * Get a readable name for a token (Type or InjectionToken)
+	 */
+	private getTokenName<T>(token: Token<T>): string {
+		if (token instanceof InjectionToken) {
+			return token.toString();
+		}
+		return (token as Type<T>).name || token.toString();
 	}
 }
 

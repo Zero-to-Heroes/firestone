@@ -557,8 +557,6 @@ import { CardsHighlightService } from './js/services/decktracker/card-highlight/
 import { ConstructedConfigService } from './js/services/decktracker/constructed-config.service';
 import { DeckCardService } from './js/services/decktracker/deck-card.service';
 import { DynamicZoneHelperService } from './js/services/decktracker/dynamic-zone-helper.service';
-import { GameStateMetaInfoService } from './js/services/decktracker/game-state-meta-info.service';
-import { GameStateService } from './js/services/decktracker/game-state.service';
 import { DecksProviderService } from './js/services/decktracker/main/decks-provider.service';
 import { DecktrackerStateLoaderService } from './js/services/decktracker/main/decktracker-state-loader.service';
 import { ZoneOrderingService } from './js/services/decktracker/zone-ordering.service';
@@ -1378,10 +1376,8 @@ try {
 
 		DeckCardService,
 		ReviewIdService,
-		GameStateService,
 		DynamicZoneHelperService,
 		ZoneOrderingService,
-		GameStateMetaInfoService,
 
 		ArenaLastMatchService,
 

@@ -9,8 +9,13 @@ import {
 	Output,
 } from '@angular/core';
 import { BgsMetaHeroStatTier, BgsMetaHeroStatTierItem, buildTiers } from '@firestone/battlegrounds/data-access';
-import { SortCriteria, SortDirection, invertDirection } from '@firestone/shared/common/view';
-import { AbstractSubscriptionComponent, sortByProperties } from '@firestone/shared/framework/common';
+import {
+	AbstractSubscriptionComponent,
+	SortCriteria,
+	SortDirection,
+	invertDirection,
+	sortByProperties,
+} from '@firestone/shared/framework/common';
 import { ILocalizationService, getDateAgo } from '@firestone/shared/framework/core';
 import {
 	BehaviorSubject,

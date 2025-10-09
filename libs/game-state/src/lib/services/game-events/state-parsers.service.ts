@@ -4,6 +4,7 @@ import { MemoryInspectionService } from '@firestone/memory';
 import { BugReportService, LogsUploaderService, PreferencesService } from '@firestone/shared/common/service';
 import {
 	ADS_SERVICE_TOKEN,
+	AppInjector,
 	CardsFacadeService,
 	IAdsService,
 	ILocalizationService,
@@ -176,6 +177,8 @@ import { GameEvents } from './game-events.service';
 
 @Injectable()
 export class GameStateParsersService {
+	private gameEventsService: GameEvents;
+
 	constructor(
 		private readonly helper: DeckManipulationHelper,
 		private readonly allCards: CardsFacadeService,
@@ -188,7 +191,6 @@ export class GameStateParsersService {
 		private readonly deckParser: DeckParserService,
 		private readonly secretsConfig: SecretConfigService,
 		private readonly constructedArchetypes: ConstructedArchetypeServiceOrchestrator,
-		private readonly gameEventsService: GameEvents,
 		private readonly eventsEmitter: GameEventsEmitterService,
 		private readonly bugService: BugReportService,
 		private readonly logsUploader: LogsUploaderService,
@@ -202,6 +204,11 @@ export class GameStateParsersService {
 	) {}
 
 	public buildEventParsers(): { [eventKey: string]: readonly EventParser[] } {
+		// Lazy-load GameEvents to break circular dependency
+		if (!this.gameEventsService) {
+			this.gameEventsService = AppInjector.get(GameEvents);
+		}
+
 		const parsers: { [eventKey: string]: EventParser[] } = {
 			[GameEvent.ARCHETYPE_CATEGORIZATION]: [new ArchetypeCategorizationParser()],
 			[GameEvent.ANOMALY_REVEALED]: [new AnomalyRevealedParser(this.helper, this.allCards)],

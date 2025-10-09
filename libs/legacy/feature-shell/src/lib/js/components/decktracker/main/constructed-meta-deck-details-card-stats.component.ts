@@ -2,11 +2,13 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { Sideboard } from '@firestone-hs/deckstrings';
 import { ReferenceCard, getBaseCardId } from '@firestone-hs/reference-data';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { SortCriteria, SortDirection, invertDirection } from '@firestone/shared/common/view';
 import {
 	AbstractSubscriptionComponent,
+	SortCriteria,
+	SortDirection,
 	buildPercents,
 	groupByFunction,
+	invertDirection,
 	uuidShort,
 } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
@@ -188,7 +190,7 @@ export class ConstructedMetaDeckDetailsCardStatsComponent
 				showImpact
 					? this.i18n.translateString(
 							'app.decktracker.meta.details.cards.mulligan-winrate-impact-header-tooltip',
-					  )
+						)
 					: this.i18n.translateString('app.decktracker.meta.details.cards.mulligan-winrate-header-tooltip'),
 			),
 		);
@@ -204,7 +206,7 @@ export class ConstructedMetaDeckDetailsCardStatsComponent
 				showImpact
 					? this.i18n.translateString(
 							'app.decktracker.meta.details.cards.drawn-winrate-impact-header-tooltip',
-					  )
+						)
 					: this.i18n.translateString('app.decktracker.meta.details.cards.drawn-winrate-header-tooltip'),
 			),
 		);
@@ -263,7 +265,7 @@ export class ConstructedMetaDeckDetailsCardStatsComponent
 						const absoluteDrawnWinrate =
 							firstCopyData.drawn + firstCopyData.inHandAfterMulligan
 								? (firstCopyData.drawnThenWin + firstCopyData.inHandAfterMulliganThenWin) /
-								  (firstCopyData.drawn + firstCopyData.inHandAfterMulligan)
+									(firstCopyData.drawn + firstCopyData.inHandAfterMulligan)
 								: null;
 						const relativeDrawnWinrate = buildRelative(absoluteDrawnWinrate, deckWinrate);
 						const drawnWinrate = showRelativeInfo ? relativeDrawnWinrate : absoluteDrawnWinrate;
@@ -281,7 +283,7 @@ export class ConstructedMetaDeckDetailsCardStatsComponent
 									minimumIntegerDigits: 1,
 									minimumFractionDigits: 0,
 									maximumFractionDigits: 2,
-							  });
+								});
 						const secondCopyData = data[1];
 						const copy2 = (secondCopyData?.inStartingDeck ?? 0) / totalGames;
 						const copy2Str = copy2 > 0 ? buildPercents(copy2) : '-';
