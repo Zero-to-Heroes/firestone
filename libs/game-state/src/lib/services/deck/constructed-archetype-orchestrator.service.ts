@@ -14,10 +14,12 @@ export class ConstructedArchetypeServiceOrchestrator {
 		// TODO: check premium tier / uses left in free tier
 		const archetypeId = await this.service.getArchetypeForDeck(deckstring);
 		this.gameEventsEmitter.allEvents.next(
-			GameEvent.build(GameEvent.ARCHETYPE_CATEGORIZATION, {
+			Object.assign(new GameEvent(), {
 				type: GameEvent.ARCHETYPE_CATEGORIZATION,
-				archetypeId: archetypeId,
-			}),
+				additionalData: {
+					archetypeId: archetypeId,
+				},
+			} as GameEvent),
 		);
 	}
 }

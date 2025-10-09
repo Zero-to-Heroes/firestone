@@ -26,7 +26,9 @@ const createsSecretsFromThePast = [
 	CardIds.DiscoAtTheEndOfTime_EndOfTheDiscoEnchantment_WON_040e,
 ];
 
-@Injectable()
+@Injectable({
+	providedIn: 'root',
+})
 export class SecretConfigService {
 	private secretConfigs: readonly SecretsConfig[];
 
