@@ -1,5 +1,5 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { QuestReward } from '@firestone/game-state';
+import { QuestReward } from '../../models/quests';
 
 export const buildTiersToInclude = (
 	showTierSeven: boolean,

@@ -8,7 +8,7 @@ import { MultiselectOption } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent, groupByFunction, sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest, filter, from, switchMap, tap } from 'rxjs';
-import { buildArchetypeName } from '../services/constructed-archetype.service';
+import { buildArchetypeName } from '../../../../../game-state/src/lib/services/deck/constructed-archetype.service';
 import { ConstructedMetaDecksStateService } from '../services/constructed-meta-decks-state-builder.service';
 import { ConstructedNavigationService } from '../services/constructed-navigation.service';
 

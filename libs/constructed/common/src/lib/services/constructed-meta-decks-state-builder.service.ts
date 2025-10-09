@@ -20,7 +20,7 @@ import {
 } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter, map } from 'rxjs/operators';
-import { buildArchetypeName } from './constructed-archetype.service';
+import { buildArchetypeName } from '../../../../../game-state/src/lib/services/deck/constructed-archetype.service';
 import { ConstructedNavigationService } from './constructed-navigation.service';
 
 const CONSTRUCTED_META_DECKS_BASE_URL = 'https://static.zerotoheroes.com/api/constructed/stats/decks';

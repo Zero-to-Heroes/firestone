@@ -2,6 +2,7 @@ import { Entity, BgsPlayer as IBgsPlayer } from '@firestone-hs/hs-replay-xml-par
 import { CardIds, GameTag, getHeroPower, normalizeHeroCardId } from '@firestone-hs/reference-data';
 import { Entity as ReplayEntity } from '@firestone-hs/replay-parser';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
+import { QuestReward } from '@firestone/battlegrounds/core';
 import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BgsBattleHistory } from './in-game/bgs-battle-history';
@@ -112,13 +113,6 @@ export class BgsPlayer implements IBgsPlayer {
 	public getTrinkets(): readonly string[] {
 		return [this.lesserTrinket, this.greaterTrinket].filter((t) => !!t);
 	}
-}
-
-export interface QuestReward {
-	readonly cardId: string;
-	readonly completed: boolean;
-	readonly completedTurn: number | null;
-	readonly isHeroPower: boolean;
 }
 
 export const buildBgsEntities = (

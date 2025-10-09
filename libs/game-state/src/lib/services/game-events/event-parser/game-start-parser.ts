@@ -1,5 +1,3 @@
-import { BgsInGameWindowNavigationService } from '@firestone/battlegrounds/common';
-
 import { DeckState } from '../../../models/deck-state';
 import { GameState } from '../../../models/game-state';
 import { GameStateEvent } from '../../game-state-events/game-state-event';
@@ -9,10 +7,7 @@ import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { EventParser } from './_event-parser';
 
 export class GameStartParser implements EventParser {
-	constructor(
-		private readonly reviewIdService: ReviewIdService,
-		private readonly nav: BgsInGameWindowNavigationService,
-	) {}
+	constructor(private readonly reviewIdService: ReviewIdService) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return !state || !state.reconnectOngoing;
@@ -43,7 +38,6 @@ export class GameStartParser implements EventParser {
 			type: GameEvent.REVIEW_ID,
 			additionalData: { reviewId },
 		} as GameEvent);
-		this.nav.forcedStatus$$.next(null);
 	}
 
 	event(): string {

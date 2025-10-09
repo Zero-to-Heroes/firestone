@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { GameFormat, GameType } from '@firestone-hs/reference-data';
-import { ArenaInfoService } from '@firestone/arena/common';
 import { MemoryInspectionService } from '@firestone/memory';
 import { sleep } from '@firestone/shared/framework/common';
 import { filter } from 'rxjs/operators';
@@ -14,7 +13,6 @@ export class GameModeDataService {
 		private readonly gameEventsEmitter: GameEventsEmitterService,
 		private readonly memoryService: MemoryInspectionService,
 		private readonly deckParser: DeckParserService,
-		private readonly arenaInfo: ArenaInfoService,
 	) {
 		this.init();
 	}
@@ -41,7 +39,7 @@ export class GameModeDataService {
 			case GameType.GT_ARENA:
 			case GameType.GT_UNDERGROUND_ARENA:
 				this.triggerRankMatchInfoRetrieve();
-				this.arenaInfo.triggerArenaInfoRetrieve(spectating);
+				// this.arenaInfo.triggerArenaInfoRetrieve(spectating);
 				this.triggerPlayerDeckInfoRetrieve(spectating);
 				return;
 			case GameType.GT_MERCENARIES_PVP:

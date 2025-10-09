@@ -9,6 +9,7 @@ import { BgsBestUserStatsService } from './services/battlegrounds/bgs-best-user-
 import { DeckHandlerService } from './services/deck-handler.service';
 import { AiDeckService } from './services/deck/ai-deck-service.service';
 import { ConstructedArchetypeServiceOrchestrator } from './services/deck/constructed-archetype-orchestrator.service';
+import { ConstructedArchetypeService } from './services/deck/constructed-archetype.service';
 import { DeckParserFacadeService } from './services/deck/deck-parser-facade.service';
 import { DeckParserService } from './services/deck/deck-parser.service';
 import { GameConnectionService } from './services/game-connection.service';
@@ -45,6 +46,7 @@ const components = [];
 		RealTimeStatsParsersService,
 		RealTimeStatsService,
 		GameEventsPluginService,
+		ConstructedArchetypeService,
 		ConstructedArchetypeServiceOrchestrator,
 		GameModeDataService,
 		AiDeckService,

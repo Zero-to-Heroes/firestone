@@ -1,5 +1,4 @@
-import { normalizeCardId } from '@components/battlegrounds/post-match/card-utils';
-import { defaultStartingHp, GameType, isBattlegrounds } from '@firestone-hs/reference-data';
+import { defaultStartingHp, GameType, isBattlegrounds, normalizeHeroCardId } from '@firestone-hs/reference-data';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import {
 	BgsFaceOffWithSimulation,
@@ -57,7 +56,7 @@ export class BgsNextOpponentParser implements EventParser {
 		);
 
 		const mainPlayer = bgState.currentGame!.getMainPlayer();
-		const opponent = bgState.currentGame!.findPlayer(newNextOpponentPanel.opponentOverview?.playerId);
+		const opponent = bgState.currentGame!.findPlayer(newNextOpponentPanel.opponentOverview?.playerId!);
 		if (!mainPlayer) {
 			if (bgState.currentGame!.players.length !== 8) {
 				console.error(
@@ -96,7 +95,7 @@ export class BgsNextOpponentParser implements EventParser {
 			playerHpLeft: playerHpLeft,
 			playerTavern: mainPlayer?.getCurrentTavernTier(),
 			playerCardId: mainPlayer?.cardId,
-			opponentCardId: normalizeCardId(opponentCardId, this.allCards),
+			opponentCardId: normalizeHeroCardId(opponentCardId, this.allCards),
 			opponentPlayerId: opponentPlayerId,
 			opponentHpLeft: opponentHpLeft,
 			opponentTavern: opponent?.getCurrentTavernTier(),

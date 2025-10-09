@@ -1,5 +1,4 @@
 import { isBattlegrounds, isMercenaries } from '@firestone-hs/reference-data';
-import { BgsInGameWindowNavigationService } from '@firestone/battlegrounds/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { ILocalizationService, OwUtilsService } from '@firestone/shared/framework/core';
 import { BattlegroundsState, BgsNextOpponentOverviewPanel, BgsPanel } from '../../../models/_barrel';
@@ -14,7 +13,6 @@ export class NewTurnParser implements EventParser {
 		private readonly owUtils: OwUtilsService,
 		private readonly prefs: PreferencesService,
 		private readonly i18n: ILocalizationService,
-		private readonly nav: BgsInGameWindowNavigationService,
 	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
@@ -123,8 +121,8 @@ export class NewTurnParser implements EventParser {
 		});
 
 		if (isBattlegrounds(currentState.metadata.gameType)) {
-			const newPanelId = gameTurnNumber === 1 ? 'bgs-next-opponent-overview' : this.nav.currentPanelId$$.value;
-			this.nav.currentPanelId$$.next(newPanelId);
+			// const newPanelId = gameTurnNumber === 1 ? 'bgs-next-opponent-overview' : this.nav.currentPanelId$$.value;
+			// this.nav.currentPanelId$$.next(newPanelId);
 			const newNextOpponentPanel: BgsNextOpponentOverviewPanel = this.rebuildNextOpponentPanel(
 				currentState.bgState,
 				numericTurn,

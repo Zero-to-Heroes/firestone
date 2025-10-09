@@ -1,5 +1,4 @@
 import { GameType, isMercenaries } from '@firestone-hs/reference-data';
-import { BgsBoardHighlighterService, BgsInGameWindowNavigationService } from '@firestone/battlegrounds/common';
 import { MemoryInspectionService } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
@@ -34,8 +33,6 @@ export class MatchMetadataParser implements EventParser {
 		private readonly allCards: CardsFacadeService,
 		private readonly memory: MemoryInspectionService,
 		private readonly constructedArchetypes: ConstructedArchetypeServiceOrchestrator,
-		private readonly nav: BgsInGameWindowNavigationService,
-		private readonly highlighter: BgsBoardHighlighterService,
 		private readonly i18n: ILocalizationService,
 	) {}
 
@@ -70,9 +67,9 @@ export class MatchMetadataParser implements EventParser {
 
 		if (stateWithMetaData.isBattlegrounds()) {
 			console.debug('[match-metadata-parser] bgs game start', gameEvent, stateWithMetaData);
-			this.nav.currentPanelId$$.next('bgs-hero-selection-overview');
-			this.nav.forcedStatus$$.next(prefs.bgsShowHeroSelectionScreen ? 'open' : null);
-			this.highlighter.resetHighlights();
+			// this.nav.currentPanelId$$.next('bgs-hero-selection-overview');
+			// this.nav.forcedStatus$$.next(prefs.bgsShowHeroSelectionScreen ? 'open' : null);
+			// this.highlighter.resetHighlights();
 
 			const newState = stateWithMetaData.update({
 				bgState: stateWithMetaData.bgState.update({

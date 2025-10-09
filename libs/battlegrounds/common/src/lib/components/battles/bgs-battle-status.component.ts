@@ -11,6 +11,7 @@ import {
 } from '@angular/core';
 import { CardIds } from '@firestone-hs/reference-data';
 import { GameSample } from '@firestone-hs/simulate-bgs-battle/dist/simulation/spectator/game-sample';
+import { BgsBattleSimulationService, BgsIntermediateResultsSimGuardianService } from '@firestone/battlegrounds/core';
 import { BgsFaceOffWithSimulation } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
@@ -23,8 +24,6 @@ import {
 	waitForReady,
 } from '@firestone/shared/framework/core';
 import { combineLatest, debounceTime, Observable } from 'rxjs';
-import { BgsBattleSimulationService } from '../services/simulation/bgs-battle-simulation.service';
-import { BgsIntermediateResultsSimGuardianService } from '../services/simulation/bgs-intermediate-results-sim-guardian.service';
 
 @Component({
 	standalone: false,
@@ -144,7 +143,7 @@ import { BgsIntermediateResultsSimGuardianService } from '../services/simulation
 							active:
 								wonLethalChance &&
 								!!battleSimulationWonLethalChance &&
-								battleSimulationWonLethalChance > 0
+								battleSimulationWonLethalChance > 0,
 						}"
 					>
 						{{ wonLethalChance || '--' }}
@@ -161,7 +160,7 @@ import { BgsIntermediateResultsSimGuardianService } from '../services/simulation
 							active:
 								lostLethalChance &&
 								!!battleSimulationLostLethalChance &&
-								battleSimulationLostLethalChance > 0
+								battleSimulationLostLethalChance > 0,
 						}"
 					>
 						{{ lostLethalChance || '--' }}

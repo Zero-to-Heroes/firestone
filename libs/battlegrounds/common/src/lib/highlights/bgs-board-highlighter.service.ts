@@ -55,6 +55,17 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 			this.initPremiumHighlights();
 			this.initHighlights();
 		});
+
+		this.gameState.gameState$$
+			.pipe(
+				map((state) => state?.gameEnded),
+				distinctUntilChanged(),
+			)
+			.subscribe((gameEnded) => {
+				if (gameEnded) {
+					this.resetHighlights();
+				}
+			});
 	}
 
 	public toggleMinionsToHighlight(minionsToHighlight: readonly string[]) {

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { ConstructedArchetypeService } from '@firestone/constructed/common';
 import { GameEvent } from '../game-events/game-event';
 import { GameEventsEmitterService } from '../game-events/game-events-emitter.service';
+import { ConstructedArchetypeService } from './constructed-archetype.service';
 
 @Injectable()
 export class ConstructedArchetypeServiceOrchestrator {

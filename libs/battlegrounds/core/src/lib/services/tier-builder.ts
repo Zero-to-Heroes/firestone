@@ -1,7 +1,7 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { CardIds, CardRules, Race, ReferenceCard } from '@firestone-hs/reference-data';
-import { QuestReward } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { QuestReward } from '../models/quests';
 import { filterCardsToInclude } from './tiers-builder/cards-to-include';
 import { buildMechanicsTiers } from './tiers-builder/mechanics-tiers-builder';
 import { buildStandardTiers } from './tiers-builder/standard-tiers-builder';

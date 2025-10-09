@@ -20,10 +20,13 @@ import { BattlegroundsMetaStatsCardTierComponent } from './cards/battlegrounds-m
 import { BattlegroundsMetaStatsCardsComponent } from './cards/battlegrounds-meta-stats-cards.component';
 import { BattlegroundsCardsService } from './cards/bgs-cards.service';
 import { BgsLeaderboardsComponent } from './components/battlegrounds-leaderboards.component';
+import { BattleStatusPremiumComponent } from './components/battles/battle-status-premium.component';
 import { BgsBattleRecapPlayerComponent } from './components/battles/bgs-battle-recap-player.component';
 import { BgsBattleRecapComponent } from './components/battles/bgs-battle-recap.component';
+import { BgsBattleStatusComponent } from './components/battles/bgs-battle-status.component';
 import { BgsBoardComponent } from './components/bgs-board.component';
 import { BgsBuddiesComponent } from './components/bgs-buddies.component';
+import { BgsCardTooltipComponent } from './components/bgs-card-tooltip.component';
 import { BgsHeroStatsInfoPremiumComponent } from './components/bgs-hero-stats-info-premium.component';
 import { BgsOpponentOverviewBigComponent } from './components/bgs-opponent-overview-big.component';
 import { BgsPlayerCapsuleComponent } from './components/bgs-player-capsule.component';
@@ -92,6 +95,9 @@ const components = [
 	BattlegroundsMetaStatsCardTierComponent,
 	BattlegroundsMetaStatsCompsComponent,
 	BgsReconnectorComponent,
+	BattleStatusPremiumComponent,
+	BgsBattleStatusComponent,
+	BgsCardTooltipComponent,
 ];
 
 @NgModule({

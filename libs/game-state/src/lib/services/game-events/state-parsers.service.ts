@@ -1,5 +1,4 @@
 import { Inject, Injectable } from '@angular/core';
-import { BgsBoardHighlighterService, BgsInGameWindowNavigationService } from '@firestone/battlegrounds/common';
 import { BgsBattleSimulationService, BgsIntermediateResultsSimGuardianService } from '@firestone/battlegrounds/core';
 import { MemoryInspectionService } from '@firestone/memory';
 import { BugReportService, LogsUploaderService, PreferencesService } from '@firestone/shared/common/service';
@@ -197,8 +196,8 @@ export class GameStateParsersService {
 		private readonly gameIdService: GameUniqueIdService,
 		private readonly guardian: BgsIntermediateResultsSimGuardianService,
 		private readonly reviewIdService: ReviewIdService,
-		private readonly highlighter: BgsBoardHighlighterService,
-		private readonly nav: BgsInGameWindowNavigationService,
+		// private readonly highlighter: BgsBoardHighlighterService,
+		// private readonly nav: BgsInGameWindowNavigationService,
 	) {}
 
 	public buildEventParsers(): { [eventKey: string]: readonly EventParser[] } {
@@ -327,7 +326,7 @@ export class GameStateParsersService {
 			[GameEvent.GAME_END]: [new GameEndParser(this.prefs, this.owUtils)],
 			[GameEvent.GAME_RUNNING]: [new GameRunningParser(this.deckHandler)],
 			[GameEvent.GAME_STATE_UPDATE]: [new GameStateUpdateParser()],
-			[GameEvent.GAME_START]: [new GameStartParser(this.reviewIdService, this.nav)],
+			[GameEvent.GAME_START]: [new GameStartParser(this.reviewIdService)],
 			[GameEvent.GAME_SETTINGS]: [new GameSettingsParser()],
 			[GameEvent.HEALING]: [new AssignCardIdParser(this.helper)],
 			[GameEvent.HERO_CHANGED]: [new HeroChangedParser(this.allCards)],
@@ -350,8 +349,6 @@ export class GameStateParsersService {
 					this.allCards,
 					this.memory,
 					this.constructedArchetypes,
-					this.nav,
-					this.highlighter,
 					this.i18n,
 				),
 			],
@@ -439,7 +436,7 @@ export class GameStateParsersService {
 			[GameEvent.TOURIST_REVEALED]: [new TouristRevealedParser(this.helper, this.allCards, this.i18n)],
 			[GameEvent.TRADE_CARD]: [new CardTradedParser(this.helper, this.prefs, this.allCards)],
 			[GameEvent.TURN_DURATION_UPDATED]: [new TurnDurationUpdatedParser()],
-			[GameEvent.TURN_START]: [new NewTurnParser(this.owUtils, this.prefs, this.i18n, this.nav)],
+			[GameEvent.TURN_START]: [new NewTurnParser(this.owUtils, this.prefs, this.i18n)],
 			[GameEvent.WEAPON_DESTROYED]: [new WeaponDestroyedParser(this.helper)],
 			[GameEvent.WEAPON_EQUIPPED]: [new WeaponEquippedParser(this.allCards, this.helper)],
 			[GameEvent.WHEEL_OF_DEATH_COUNTER_UPDATED]: [new WheelOfDeathCounterUpdatedParser()],

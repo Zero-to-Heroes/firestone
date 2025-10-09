@@ -18,6 +18,7 @@ export * from './lib/services/card-utils';
 export * from './lib/services/cards/global/_registers';
 export * from './lib/services/deck-handler.service';
 export * from './lib/services/deck-utils';
+export * from './lib/services/deck/constructed-archetype.service';
 export * from './lib/services/deck/deck-parser-facade.service';
 export * from './lib/services/deck/deck-parser.service';
 export * from './lib/services/game-connection.service';
