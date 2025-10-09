@@ -1,12 +1,12 @@
 import { CardIds, GameTag } from '@firestone-hs/reference-data';
-import { GameState } from '@firestone/game-state';
 import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
+import { GameState } from '../../../models/game-state';
 import { GlobalHighlightCard } from './_registers';
 
 export const CarryOnSuitcase: GlobalHighlightCard = {
 	cardIds: [CardIds.CarryOnGrub_CarryOnSuitcaseToken_VAC_935t],
 	getRelatedCards: (entityId: number, side: HighlightSide, gameState: GameState, allCards: CardsFacadeService) => {
-		const deckState = side === 'player' ? gameState.fullGameState.Player : gameState.fullGameState.Opponent;
+		const deckState = side === 'player' ? gameState.fullGameState!.Player : gameState.fullGameState!.Opponent;
 		const entity = deckState.AllEntities.find((e) => e.entityId === entityId);
 		if (!entity) {
 			return [];
@@ -18,6 +18,6 @@ export const CarryOnSuitcase: GlobalHighlightCard = {
 			deckState.AllEntities.find((e) => e.entityId === linkedEntity1)?.cardId,
 			deckState.AllEntities.find((e) => e.entityId === linkedEntity2)?.cardId,
 		].filter((id) => id);
-		return cardIds;
+		return cardIds as readonly string[];
 	},
 };

@@ -10,8 +10,10 @@ import {
 	ScenarioId,
 	SpellSchool,
 } from '@firestone-hs/reference-data';
-import { GameState, Metadata } from '@firestone/game-state';
+
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { GameState } from '../../models/game-state';
+import { Metadata } from '../../models/metadata';
 import { cardsMapping, hasGetRelatedCards } from '../cards/global/_registers';
 import { ALL_HANDS } from '../game-events/event-parser/special-cases/stonebrew/stonebrew';
 

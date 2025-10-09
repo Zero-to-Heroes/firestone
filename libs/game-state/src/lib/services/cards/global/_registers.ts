@@ -1,5 +1,5 @@
-import { GameState } from '@firestone/game-state';
 import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
+import { GameState } from '../../../models/game-state';
 import { AllFelBreaksLoose } from './all-fel-breaks-loose';
 import { AnimateDead } from './animate-dead';
 import { ArchdruidOfThorns } from './archdruid-of-thorns';

@@ -1,12 +1,12 @@
 import { CardIds, GameTag } from '@firestone-hs/reference-data';
-import { GameState } from '@firestone/game-state';
 import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
+import { GameState } from '../../../models/game-state';
 import { GlobalHighlightCard } from './_registers';
 
 export const HungeringAncient: GlobalHighlightCard = {
 	cardIds: [CardIds.HungeringAncient_EDR_494],
 	getRelatedCards: (entityId: number, side: HighlightSide, gameState: GameState, allCards: CardsFacadeService) => {
-		const deckState = side === 'player' ? gameState.fullGameState.Player : gameState.fullGameState.Opponent;
+		const deckState = side === 'player' ? gameState.fullGameState!.Player : gameState.fullGameState!.Opponent;
 		const ancient = deckState.AllEntities.find((e) => e.entityId === entityId);
 		if (!ancient) {
 			return [];

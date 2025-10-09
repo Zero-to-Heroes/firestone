@@ -1,12 +1,13 @@
 import { CardIds, CardType, GameTag, Zone } from '@firestone-hs/reference-data';
-import { GameState } from '@firestone/game-state';
+
 import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
+import { GameState } from '../../../models/game-state';
 import { GlobalHighlightCard } from './_registers';
 
 export const WallowTheWretched: GlobalHighlightCard = {
 	cardIds: [CardIds.WallowTheWretched_EDR_487],
 	getRelatedCards: (entityId: number, side: HighlightSide, gameState: GameState, allCards: CardsFacadeService) => {
-		const deckState = side === 'player' ? gameState.fullGameState.Player : gameState.fullGameState.Opponent;
+		const deckState = side === 'player' ? gameState.fullGameState!.Player : gameState.fullGameState!.Opponent;
 		const darkGiftsDEBUG = deckState.AllEntities.filter(
 			(e) => e.tags?.find((t) => t.Name === GameTag.IS_NIGHTMARE_BONUS)?.Value === 1,
 		).filter((e) => {

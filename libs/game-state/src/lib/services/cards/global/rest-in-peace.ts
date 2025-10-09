@@ -1,6 +1,9 @@
 import { CardIds, ReferenceCard } from '@firestone-hs/reference-data';
-import { DeckState, GameState, getProcessedCard } from '@firestone/game-state';
+
 import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
+import { DeckState } from '../../../models/deck-state';
+import { GameState } from '../../../models/game-state';
+import { getProcessedCard } from '../../card-utils';
 import { GlobalHighlightCard } from './_registers';
 
 export const RestInPeace: GlobalHighlightCard = {
@@ -18,7 +21,7 @@ const getHighestCostMinions = (deckState: DeckState, allCards: CardsFacadeServic
 	const deadCards = deckState.minionsDeadThisMatch
 		.map((e) => getProcessedCard(e.cardId, e.entityId, deckState, allCards))
 		.filter((c) => c.cost != null);
-	const highestCost = deadCards.sort((a, b) => b.cost - a.cost).pop()?.cost;
+	const highestCost = deadCards.sort((a, b) => (b.cost ?? 0) - (a.cost ?? 0)).pop()?.cost;
 	if (highestCost == null) {
 		return [];
 	}

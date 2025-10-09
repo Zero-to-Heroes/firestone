@@ -10,9 +10,9 @@ import {
 } from '@firestone-hs/reference-data';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
-import { BattleInfoMessage } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { StatGameModeType } from '@firestone/stats/data-access';
+import { BattleInfoMessage } from '../../models/_barrel';
 
 /** @deprecated */
 export const normalizeHeroCardId = (heroCardId: string, allCards: CardsFacadeService): string => {

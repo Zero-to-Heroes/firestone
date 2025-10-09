@@ -1,6 +1,7 @@
 import { CardIds, CardType } from '@firestone-hs/reference-data';
-import { GameState, getCardId, getCardType } from '@firestone/game-state';
 import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
+import { GameState } from '../../../models/game-state';
+import { getCardId, getCardType } from '../../card-utils';
 import { GlobalHighlightCard } from './_registers';
 
 export const TidepoolPupil: GlobalHighlightCard = {
@@ -8,7 +9,7 @@ export const TidepoolPupil: GlobalHighlightCard = {
 	getRelatedCards: (entityId: number, side: HighlightSide, gameState: GameState, allCards: CardsFacadeService) => {
 		// For player, things are handled more accurately
 		if (side !== 'opponent') {
-			return null;
+			return [];
 		}
 
 		const deckState = gameState.opponentDeck;
@@ -26,6 +27,6 @@ export const TidepoolPupil: GlobalHighlightCard = {
 			.filter((c) => getCardType(c.cardId, c.entityId, deckState, allCards) === CardType.SPELL)
 			.sort((a, b) => a.turn - b.turn)
 			.slice(0, 3)
-			.map((c) => getCardId(c.cardId, c.entityId, deckState, allCards));
+			.map((c) => getCardId(c.cardId, c.entityId, deckState, allCards)) as readonly string[];
 	},
 };
