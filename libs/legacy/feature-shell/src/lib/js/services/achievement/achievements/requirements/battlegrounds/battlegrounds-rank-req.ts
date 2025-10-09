@@ -1,7 +1,6 @@
+import { GameEvent, isBattlegrounds } from '@firestone/game-state';
 import { BattlegroundsInfo, MemoryInspectionService } from '@firestone/memory';
-import { GameEvent } from '@firestone/game-state';
 import { RawRequirement } from '../../../../../models/achievement/raw-requirement';
-import { isBattlegrounds } from '../../../../battlegrounds/bgs-utils';
 import { Requirement } from '../_requirement';
 
 export class BattlegroundsRankReq implements Requirement {

@@ -9,7 +9,8 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { getTribeIcon } from '@firestone-hs/reference-data';
-import { BgsPlayer, QuestReward } from '@firestone/game-state';
+import { QuestReward } from '@firestone/battlegrounds/core';
+import { BgsPlayer } from '@firestone/game-state';
 import { CardMousedOverService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
@@ -232,7 +233,7 @@ export class BgsLeaderboardEmptyCardComponent
 		this.winStreak = this._previousPlayer.currentWinStreak ?? 0;
 		const tribe = this._previousPlayer.getLastKnownComposition()?.tribe;
 		// The game doesn't show any count when it's mixed minions
-		this.tribeCount = tribe === 'mixed' ? null : this._previousPlayer.getLastKnownComposition()?.count ?? 0;
+		this.tribeCount = tribe === 'mixed' ? null : (this._previousPlayer.getLastKnownComposition()?.count ?? 0);
 		this.tribeImage = getTribeIcon(tribe);
 		this.damage = this._previousPlayer.getLastKnownBattleHistory()?.damage ?? 0;
 		this.questRewards = this._bgsPlayer.player.questRewards;
@@ -248,7 +249,7 @@ export class BgsLeaderboardEmptyCardComponent
 			this._bgsPlayer?.player?.mmr != null
 				? this.i18n.translateString('battlegrounds.in-game.opponents.mmr', {
 						value: this._bgsPlayer.player.mmr.toLocaleString(this.i18n.formatCurrentLocale()),
-				  })
+					})
 				: null;
 
 		if (this.winStreak === 0 && this.damage > 0) {

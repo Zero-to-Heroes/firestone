@@ -1,6 +1,6 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { QuestReward } from '@firestone/game-state';
+import { QuestReward } from '@firestone/battlegrounds/core';
 import { ILocalizationService } from '@firestone/shared/framework/core';
 
 @Component({
@@ -55,9 +55,9 @@ export class BgsQuestRewardsComponent {
 						completionTurnTooltip: reward.completedTurn
 							? this.i18n.translateString('app.battlegrounds.in-game.opponents.reward-turn-tooltip', {
 									value: reward.completedTurn,
-							  })
+								})
 							: null,
-					} as Reward),
+					}) as Reward,
 			)
 			.reverse();
 	}

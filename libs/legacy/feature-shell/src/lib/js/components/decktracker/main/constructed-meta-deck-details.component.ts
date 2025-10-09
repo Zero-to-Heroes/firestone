@@ -3,7 +3,8 @@ import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscri
 import { ConstructedCardData, ConstructedMatchupInfo } from '@firestone-hs/constructed-deck-stats';
 import { Sideboard, decode } from '@firestone-hs/deckstrings';
 import { CardIds, getBaseCardId } from '@firestone-hs/reference-data';
-import { ConstructedMetaDecksStateService, buildArchetypeName, overrideDeckName } from '@firestone/constructed/common';
+import { ConstructedMetaDecksStateService, overrideDeckName } from '@firestone/constructed/common';
+import { buildArchetypeName } from '@firestone/game-state';
 import { Card } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
@@ -79,8 +80,8 @@ export class ConstructedMetaDeckDetailsComponent
 					playCoin === 'coin'
 						? stat.coinPlayInfo.find((s) => s.coinPlay === 'coin')
 						: playCoin === 'play'
-						? stat.coinPlayInfo.find((s) => s.coinPlay === 'play')
-						: stat;
+							? stat.coinPlayInfo.find((s) => s.coinPlay === 'play')
+							: stat;
 				const standardDeviation = Math.sqrt(
 					(statToUse.winrate * (1 - statToUse.winrate)) / statToUse.totalGames,
 				);
@@ -92,8 +93,8 @@ export class ConstructedMetaDeckDetailsComponent
 						playCoin === 'coin'
 							? matchup.coinPlayInfo.find((s) => s.coinPlay === 'coin')
 							: playCoin === 'play'
-							? matchup.coinPlayInfo.find((s) => s.coinPlay === 'play')
-							: matchup;
+								? matchup.coinPlayInfo.find((s) => s.coinPlay === 'play')
+								: matchup;
 					const result: ConstructedMatchupInfo = {
 						...matchup,
 						winrate: derivedStat?.winrate ?? matchup.winrate,

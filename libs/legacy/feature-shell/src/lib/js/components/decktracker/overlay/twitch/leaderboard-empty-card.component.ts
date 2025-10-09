@@ -2,7 +2,8 @@ import { ComponentType } from '@angular/cdk/portal';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { getTribeIcon } from '@firestone-hs/reference-data';
-import { BgsBoard, BgsPlayer, QuestReward } from '@firestone/game-state';
+import { QuestReward } from '@firestone/battlegrounds/core';
+import { BgsBoard, BgsPlayer } from '@firestone/game-state';
 import {
 	TwitchBgsBoard,
 	TwitchBgsHeroOverviewComponent,
@@ -134,7 +135,7 @@ export class LeaderboardEmptyCardComponent {
 			: (this._previousPlayer as TwitchBgsPlayer).lastKnownComposition;
 		const tribe = lastKnownComposition?.tribe;
 		// The game doesn't show any count when it's mixed minions
-		this.tribeCount = tribe === 'mixed' ? null : lastKnownComposition?.count ?? 0;
+		this.tribeCount = tribe === 'mixed' ? null : (lastKnownComposition?.count ?? 0);
 		this.tribeImage = getTribeIcon(tribe);
 		const lastKnownBattleHistory = (this._previousPlayer as BgsPlayer).getLastKnownBattleHistory
 			? (this._previousPlayer as BgsPlayer).getLastKnownBattleHistory()
@@ -177,7 +178,7 @@ export class LeaderboardEmptyCardComponent {
 							id: entity.id,
 							cardID: entity.cardID,
 							tags: fromJS(entity.tags),
-						} as Entity),
+						}) as Entity,
 				),
 			} as BgsBoard,
 		];

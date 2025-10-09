@@ -1,6 +1,6 @@
 import { isBattlegrounds } from '@firestone-hs/reference-data';
+import { QuestReward } from '@firestone/battlegrounds/core';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { QuestReward } from '../../../../models/_barrel';
 import { GameState } from '../../../../models/game-state';
 import { GameEvent } from '../../game-event';
 import { EventParser } from '../_event-parser';

@@ -1,4 +1,3 @@
-export * from '../../../game-state/src/lib/services/deck/constructed-archetype.service';
 export * from './lib/components/constructed-card-option-view.component';
 export * from './lib/components/constructed-mulligan-deck.component';
 export * from './lib/components/constructed-mulligan-hand.component';

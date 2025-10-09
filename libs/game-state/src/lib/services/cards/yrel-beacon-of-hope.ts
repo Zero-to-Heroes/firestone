@@ -6,7 +6,11 @@ import { DeckState } from '../../models/deck-state';
 import { Card, GeneratingCard } from './_card.type';
 
 export const YrelBeaconOfHope: Card & GeneratingCard = {
-	guessInfo: (deckState: DeckState, allCards: CardsFacadeService, creatorEntityId: number): GuessedInfo | null => {
+	guessInfo: (
+		deckState: DeckState,
+		allCards: CardsFacadeService,
+		creatorEntityId: number | null,
+	): GuessedInfo | null => {
 		return {
 			possibleCards: [CardIds.LibramOfJustice_BT_011, CardIds.LibramOfHope, CardIds.LibramOfWisdom_BT_025],
 		};

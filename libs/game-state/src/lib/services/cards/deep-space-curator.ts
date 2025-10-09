@@ -9,7 +9,7 @@ export const DeepSpaceCurator: Card & GeneratingCard = {
 	guessInfo: (
 		deckState: DeckState,
 		allCards: CardsFacadeService,
-		creatorEntityId: number,
+		creatorEntityId: number | null,
 		options?: {
 			positionInHand?: number;
 			tags?: readonly { Name: GameTag; Value: number }[];
@@ -19,7 +19,7 @@ export const DeepSpaceCurator: Card & GeneratingCard = {
 		return cost != null
 			? {
 					cost: cost,
-			  }
+				}
 			: null;
 	},
 };

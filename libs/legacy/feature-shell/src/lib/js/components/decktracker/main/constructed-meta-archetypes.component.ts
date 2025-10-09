@@ -1,6 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { ArchetypeStat } from '@firestone-hs/constructed-deck-stats';
-import { ConstructedMetaDecksStateService, buildArchetypeName } from '@firestone/constructed/common';
+import { ConstructedMetaDecksStateService } from '@firestone/constructed/common';
+import { buildArchetypeName } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { SortCriteria, SortDirection, invertDirection } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent, arraysEqual } from '@firestone/shared/framework/common';

@@ -6,7 +6,11 @@ import { DeckState } from '../../models/deck-state';
 import { Card, GeneratingCard } from './_card.type';
 
 export const DirdraRebelCaptain: Card & GeneratingCard = {
-	guessInfo: (deckState: DeckState, allCards: CardsFacadeService, creatorEntityId: number): GuessedInfo | null => {
+	guessInfo: (
+		deckState: DeckState,
+		allCards: CardsFacadeService,
+		creatorEntityId: number | null,
+	): GuessedInfo | null => {
 		const allCrewmates =
 			allCards
 				.getCard(CardIds.DirdraRebelCaptain_GDB_117)
@@ -20,7 +24,7 @@ export const DirdraRebelCaptain: Card & GeneratingCard = {
 		return !!possibleCards?.length
 			? {
 					possibleCards: possibleCards,
-			  }
+				}
 			: null;
 	},
 };

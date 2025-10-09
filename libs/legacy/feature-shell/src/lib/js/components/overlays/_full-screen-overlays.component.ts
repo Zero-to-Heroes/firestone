@@ -12,7 +12,13 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { GameType, SceneMode } from '@firestone-hs/reference-data';
-import { CounterInstance, equalCounterInstance, GameStateFacadeService, getAllCounters } from '@firestone/game-state';
+import {
+	CounterInstance,
+	equalCounterInstance,
+	GameStateFacadeService,
+	getAllCounters,
+	isBattlegroundsScene,
+} from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { CustomAppearanceService } from '@firestone/settings';
 import { PreferencesService, ScalingService } from '@firestone/shared/common/service';
@@ -25,7 +31,6 @@ import {
 	OverwolfService,
 	waitForReady,
 } from '@firestone/shared/framework/core';
-import { isBattlegroundsScene } from '@services/battlegrounds/bgs-utils';
 import { combineLatest, debounceTime, distinctUntilChanged, filter, Observable, takeUntil } from 'rxjs';
 import { CurrentAppType } from '../../models/mainwindow/current-app.type';
 import { DebugService } from '../../services/debug.service';

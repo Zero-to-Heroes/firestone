@@ -1894,6 +1894,7 @@ export class GameEvents {
 			return dateWithMillis.getTime();
 		}
 		freeRegexp();
+		return undefined;
 	}
 
 	private buildBattlegroundsPlayerBoardEvent(eventName: string, gameEvent: any) {

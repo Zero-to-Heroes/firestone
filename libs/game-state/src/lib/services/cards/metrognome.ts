@@ -6,7 +6,11 @@ import { DeckState } from '../../models/deck-state';
 import { Card, GeneratingCard } from './_card.type';
 
 export const Metrognome: Card & GeneratingCard = {
-	guessInfo: (deckState: DeckState, allCards: CardsFacadeService, creatorEntityId: number): GuessedInfo | null => {
+	guessInfo: (
+		deckState: DeckState,
+		allCards: CardsFacadeService,
+		creatorEntityId: number | null,
+	): GuessedInfo | null => {
 		const found = deckState.findCard(creatorEntityId);
 		if (!found) {
 			return null;
@@ -17,7 +21,7 @@ export const Metrognome: Card & GeneratingCard = {
 		return cost != null
 			? {
 					cost: cost,
-			  }
+				}
 			: null;
 	},
 };

@@ -3,11 +3,11 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { CardType, GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { BgsBoardHighlighterService, BgsTrinketStrategyTipsTooltipComponent } from '@firestone/battlegrounds/common';
 import { ExtendedReferenceCard, isBgsTrinket, MECHANICS_IN_GAME } from '@firestone/battlegrounds/core';
+import { isBgsSpell } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, distinctUntilChanged, filter, Observable } from 'rxjs';
-import { isBgsSpell } from '../../../services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { BgsMinionsGroup } from './bgs-minions-group';
 

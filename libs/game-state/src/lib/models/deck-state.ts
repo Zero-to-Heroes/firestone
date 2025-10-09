@@ -228,7 +228,12 @@ export class DeckState {
 		});
 	}
 
-	public findCard(entityId: number): { zone: 'hand' | 'deck' | 'board' | 'other'; card: DeckCard } | null {
+	public findCard(
+		entityId: number | null | undefined,
+	): { zone: 'hand' | 'deck' | 'board' | 'other'; card: DeckCard } | null {
+		if (entityId == null) {
+			return null;
+		}
 		const zones: { id: 'hand' | 'deck' | 'board' | 'other'; cards: readonly DeckCard[] }[] = [
 			{ id: 'hand', cards: this.hand },
 			{ id: 'deck', cards: this.deck },

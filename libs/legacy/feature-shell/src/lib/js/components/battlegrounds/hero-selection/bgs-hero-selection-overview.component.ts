@@ -1,5 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { isBattlegroundsDuo } from '@firestone-hs/reference-data';
+import { isBattlegroundsDuo, normalizeHeroCardId } from '@firestone-hs/reference-data';
 import { BgsPlayerHeroStatsService, DEFAULT_MMR_PERCENTILE } from '@firestone/battlegrounds/common';
 import { BgsHeroTier, BgsMetaHeroStatTierItem, buildTiers } from '@firestone/battlegrounds/data-access';
 import { BgsHeroSelectionOverviewPanel, Config, GameStateFacadeService, equalConfig } from '@firestone/game-state';
@@ -11,7 +11,7 @@ import { VisualAchievement } from '../../../models/visual-achievement';
 import { findCategory } from '../../../services/achievement/achievement-utils';
 import { AchievementsStateManagerService } from '../../../services/achievement/achievements-state-manager.service';
 import { AdService } from '../../../services/ad.service';
-import { getAchievementsForHero, normalizeHeroCardId } from '../../../services/battlegrounds/bgs-utils';
+import { getAchievementsForHero } from '../../../services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
@@ -92,7 +92,7 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionCompo
 					gameMode: isBattlegroundsDuo(gameState.metadata.gameType) ? 'battlegrounds-duo' : 'battlegrounds',
 					timeFilter: 'last-patch',
 					mmrFilter: prefs.bgsActiveUseMmrFilterInHeroSelection
-						? gameState?.bgState.currentGame?.mmrAtStart ?? 0
+						? (gameState?.bgState.currentGame?.mmrAtStart ?? 0)
 						: null,
 					rankFilter: DEFAULT_MMR_PERCENTILE,
 					tribesFilter: prefs.bgsActiveUseTribesFilterInHeroSelection

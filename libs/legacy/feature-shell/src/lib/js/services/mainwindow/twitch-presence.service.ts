@@ -1,14 +1,19 @@
 import { Injectable } from '@angular/core';
 import { CardClass, GameFormat, GameType, isArena } from '@firestone-hs/reference-data';
 import { ArenaInfoService } from '@firestone/arena/common';
-import { GameEvent, GameEventsEmitterService, GameStateFacadeService, Metadata } from '@firestone/game-state';
+import {
+	GameEvent,
+	GameEventsEmitterService,
+	GameStateFacadeService,
+	isBattlegrounds,
+	Metadata,
+} from '@firestone/game-state';
 import { ArenaInfo, MatchInfo, MemoryMercenariesInfo, Rank } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { ApiRunner, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { combineLatest } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, startWith } from 'rxjs/operators';
 import { BattleMercenary } from '../../models/mercenaries/mercenaries-battle-state';
-import { isBattlegrounds } from '../battlegrounds/bgs-utils';
 import { isMercenaries } from '../mercenaries/mercenaries-utils';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 import { arraysEqual, deepEqual } from '../utils';

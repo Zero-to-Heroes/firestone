@@ -33,11 +33,13 @@ export class AiDeckService {
 	}
 
 	private async getDeckNames(): Promise<readonly string[]> {
-		return this.api.callGetApi<readonly string[]>(`${AI_DECKSTRINGS_URL}/all_files.json`) ?? [];
+		const result = await this.api.callGetApi<readonly string[]>(`${AI_DECKSTRINGS_URL}/all_files.json`);
+		return result ?? [];
 	}
 
 	private async loadAiDecks(fileName: string): Promise<readonly AiDeck[]> {
-		return this.api.callGetApi<readonly AiDeck[]>(`${AI_DECKSTRINGS_URL}/${fileName}.json`) ?? [];
+		const result = await this.api.callGetApi<readonly AiDeck[]>(`${AI_DECKSTRINGS_URL}/${fileName}.json`);
+		return result ?? [];
 	}
 }
 

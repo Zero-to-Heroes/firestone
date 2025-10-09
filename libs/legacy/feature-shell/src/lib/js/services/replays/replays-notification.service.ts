@@ -11,8 +11,8 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 import { distinctUntilChanged, filter, map, skip, take } from 'rxjs';
 
 import { BgsInGameWindowNavigationService } from '@firestone/battlegrounds/common';
+import { isBattlegrounds } from '@firestone/game-state';
 import { GameStatsLoaderService } from '@firestone/stats/data-access';
-import { isBattlegrounds } from '../battlegrounds/bgs-utils';
 import { ShowReplayEvent } from '../mainwindow/store/events/replays/show-replay-event';
 import { RewardMonitorService } from '../rewards/rewards-monitor';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';

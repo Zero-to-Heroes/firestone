@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { isArena, SceneMode } from '@firestone-hs/reference-data';
+import { GameStateFacadeService } from '@firestone/game-state';
 import { ArenaInfo, MemoryInspectionService, SceneService } from '@firestone/memory';
 import { sleep } from '@firestone/shared/framework/common';
 import { BehaviorSubject, distinctUntilChanged, filter, map } from 'rxjs';
-import { GameStateFacadeService } from '../../../../../game-state/src';
 
 @Injectable()
 export class ArenaInfoService {
