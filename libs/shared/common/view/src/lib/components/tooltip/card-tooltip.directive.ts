@@ -70,7 +70,7 @@ export class CardTooltipDirective implements OnDestroy, AfterContentInit {
 					(cardId) =>
 						this.allCards
 							.getCard(cardId)
-							?.relatedCardDbfIds?.map((r) => this.allCards.getCardFromDbfId(r)?.id) ?? [],
+							.relatedCardDbfIds?.map((r) => this.allCards.getCardFromDbfId(r)?.id) ?? [],
 				);
 		}
 	}
