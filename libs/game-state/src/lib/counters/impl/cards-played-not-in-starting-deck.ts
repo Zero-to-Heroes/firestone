@@ -20,7 +20,6 @@ export class GiftsPlayedCounterDefinitionV2 extends CounterDefinitionV2<number> 
 				.map((c) => state.playerDeck.findCard(c.entityId)?.card)
 				.filter((c) => isCardCreated(c))
 				.map((c) => c!.cardId);
-			console.debug('[debug] cardsPlayed', state.playerDeck?.cardsPlayedThisMatch);
 			return cardsPlayed.length;
 		},
 		setting: {
