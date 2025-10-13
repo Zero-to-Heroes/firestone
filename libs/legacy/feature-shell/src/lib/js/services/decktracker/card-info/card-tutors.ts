@@ -290,4 +290,5 @@ export const tutors = [
 	CardIds.FlightOfTheFirehawk_TLC_222,
 	CardIds.CursedCatacombs_TLC_451,
 	CardIds.HolyEggbearer_DINO_411,
+	CardIds.Torga_TLC_102,
 ];
