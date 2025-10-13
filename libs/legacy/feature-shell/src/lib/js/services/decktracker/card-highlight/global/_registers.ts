@@ -12,6 +12,7 @@ import { CatrinaMuerte } from './catrina-muerte';
 import { CreatureOfTheSacredCave } from './creature-of-the-sacred-cave';
 import { EndbringerUmbra } from './endbringer-umbra';
 import { FerociousFelbat } from './ferocious-felbat';
+import { Frostmourne } from './frostmourne';
 import { GreySageParrot } from './grey-sage-parrot';
 import { GrotesqueRuneblade } from './grotesque-runeblade';
 import { HabeasCorpses } from './habeas-corpses';
@@ -70,6 +71,7 @@ const cards = [
 	JimRaynor,
 	Rewind,
 	CarryOnSuitcase,
+	Frostmourne,
 	WallowTheWretched,
 	Hadronox,
 	NzothGodOfTheDeep,
