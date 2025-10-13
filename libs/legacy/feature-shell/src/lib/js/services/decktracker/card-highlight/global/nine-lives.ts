@@ -8,7 +8,7 @@ export const NineLives: GlobalHighlightCard = {
 	getRelatedCards: (entityId: number, side: HighlightSide, gameState: GameState, allCards: CardsFacadeService) => {
 		const deckState = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
 		return (
-			deckState.minionsDeadThisTurn
+			deckState.minionsDeadThisMatch
 				.map((e) => getProcessedCard(e.cardId, e.entityId, deckState, allCards))
 				.filter((c) => hasMechanic(c, GameTag.DEATHRATTLE))
 				.map((e) => e.id)
