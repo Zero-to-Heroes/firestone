@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { CardIds } from '@firestone-hs/reference-data';
 import { ILocalizationService } from '@firestone/shared/framework/core';
+import { isCardCreated } from '../../models/deck-card';
 import { GameState } from '../../models/game-state';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
 import { CounterType } from '../_exports';
@@ -17,8 +18,9 @@ export class GiftsPlayedCounterDefinitionV2 extends CounterDefinitionV2<number> 
 		value: (state: GameState): number => {
 			const cardsPlayed = state.playerDeck?.cardsPlayedThisMatch
 				.map((c) => state.playerDeck.findCard(c.entityId)?.card)
-				.filter((c) => c?.creatorCardId != null || c?.creatorEntityId != null || c?.stolenFromOpponent)
+				.filter((c) => isCardCreated(c))
 				.map((c) => c!.cardId);
+			console.debug('[debug] cardsPlayed', state.playerDeck?.cardsPlayedThisMatch);
 			return cardsPlayed.length;
 		},
 		setting: {

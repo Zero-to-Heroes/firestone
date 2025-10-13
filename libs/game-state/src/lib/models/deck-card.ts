@@ -102,6 +102,19 @@ export class DeckCard {
 	}
 }
 
+export const isCardCreated = (card: DeckCard | undefined): boolean => {
+	if (!card) {
+		return false;
+	}
+
+	return (
+		card.creatorCardId != null ||
+		card.creatorEntityId != null ||
+		card.stolenFromOpponent ||
+		!!card.tags?.[GameTag.TRANSFORMED_FROM_CARD]
+	);
+};
+
 export interface StoredInformation {
 	// WARNING: not sure this is a good idea to not make the values read-only, but it makes it SO much
 	// easier to work with
