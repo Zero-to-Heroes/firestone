@@ -11,7 +11,7 @@ import {
 	Output,
 	ViewRef,
 } from '@angular/core';
-import { CardClass, CardIds, GameType, ReferenceCard } from '@firestone-hs/reference-data';
+import { CardClass, CardIds, GameTag, GameType, ReferenceCard } from '@firestone-hs/reference-data';
 import { CardMousedOverService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, uuidShort } from '@firestone/shared/framework/common';
@@ -525,7 +525,8 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		this.isDiscarded = !groupSameCardsTogether && card.zone === 'DISCARD';
 		this.isCountered = !groupSameCardsTogether && card.countered;
 		this.isGraveyard = !groupSameCardsTogether && card.zone === 'GRAVEYARD';
-		this.isTransformed = card.zone === 'TRANSFORMED_INTO_OTHER';
+		// TRANSFORMED_FROM_CARD for infuse
+		this.isTransformed = card.zone === 'TRANSFORMED_INTO_OTHER' || !!card.tags?.[GameTag.TRANSFORMED_FROM_CARD];
 		this.transformedInto = !!card.transformedInto
 			? VisualDeckCard.create({
 					cardId: card.transformedInto,
