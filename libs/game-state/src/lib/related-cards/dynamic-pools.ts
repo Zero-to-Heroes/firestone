@@ -438,6 +438,7 @@ const getDynamicFilters = (
 		// Random Weapons
 		case CardIds.WorgenRoadie_InstrumentCaseToken:
 			return (c) => hasCorrectType(c, CardType.WEAPON);
+
 		// Random X Mechanic
 		// Random Outcast
 		case CardIds.CalamitysGrasp:
@@ -448,6 +449,10 @@ const getDynamicFilters = (
 		// Random Overload
 		case CardIds.ShockHopper_YOG_524:
 			return (c) => hasMechanic(c, GameTag.OVERLOAD);
+
+		// Random Secret
+		case CardIds.RemixedDispenseOBot_MysteryDispenseOBotToken:
+			return (c) => hasMechanic(c, GameTag.SECRET) && hasCorrectClass(c, CardClass.MAGE);
 
 		// Random Taunt
 		case CardIds.Atlasaurus_DINO_431:
@@ -568,6 +573,7 @@ const getDynamicFilters = (
 		case CardIds.Darkrider_EDR_456:
 		case CardIds.DraconicLackey:
 		case CardIds.DraconicStudies:
+		case CardIds.DrakefireAmulet:
 		case CardIds.EmeraldExplorer_DRG_313:
 		case CardIds.FlightOfTheBronze:
 		case CardIds.NetherspiteHistorian:
@@ -640,6 +646,13 @@ const getDynamicFilters = (
 			return (c) =>
 				hasCorrectType(c, CardType.MINION) &&
 				hasCorrectTribe(c, Race.MECH) &&
+				canBeDiscoveredByClass(c, options.currentClass);
+
+		// Discover an Elemental
+		case CardIds.Whirlweaver:
+			return (c) =>
+				hasCorrectType(c, CardType.MINION) &&
+				hasCorrectTribe(c, Race.ELEMENTAL) &&
 				canBeDiscoveredByClass(c, options.currentClass);
 
 		// Discover a Demon
@@ -715,6 +728,7 @@ const getDynamicFilters = (
 		case CardIds.PocketDimension_GDB_133:
 		case CardIds.PrimordialGlyph_CORE_UNG_941:
 		case CardIds.Qonzu_EDR_517:
+		case CardIds.Renew_BT_252:
 		case CardIds.RunedOrb_BAR_541:
 		case CardIds.Spellcoiler:
 		case CardIds.StewardOfScrolls_SCH_245:
