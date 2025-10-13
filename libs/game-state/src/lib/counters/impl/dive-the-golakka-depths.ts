@@ -16,7 +16,6 @@ export class DiveTheGolakkaDepthsCounterDefinitionV2 extends CounterDefinitionV2
 			const quest = state?.playerDeck
 				?.getAllCardsInDeckWithoutOptions()
 				.find((c) => c.cardId === CardIds.DiveTheGolakkaDepths_TLC_426 && c.zone === 'SECRET');
-			console.debug('player diveTheGolakkaDepths', quest);
 			return quest?.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_1] || null;
 		},
 		setting: {
@@ -38,7 +37,6 @@ export class DiveTheGolakkaDepthsCounterDefinitionV2 extends CounterDefinitionV2
 			const quest = state?.opponentDeck
 				?.getAllCardsInDeckWithoutOptions()
 				.find((c) => c.cardId === CardIds.DiveTheGolakkaDepths_TLC_426 && c.zone === 'SECRET');
-			console.debug('opponent diveTheGolakkaDepths', quest);
 			return quest?.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_1] || null;
 		},
 		setting: {
@@ -51,7 +49,10 @@ export class DiveTheGolakkaDepthsCounterDefinitionV2 extends CounterDefinitionV2
 		},
 	};
 
-	constructor(private readonly i18n: ILocalizationService, private readonly allCards: CardsFacadeService) {
+	constructor(
+		private readonly i18n: ILocalizationService,
+		private readonly allCards: CardsFacadeService,
+	) {
 		super();
 	}
 
