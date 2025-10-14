@@ -1082,4 +1082,6 @@ export const giftCreators = [
 	TempCardIds.AeonWizard,
 	TempCardIds.FadingMemory,
 	TempCardIds.TimeSkipper,
+	TempCardIds.RoyalInformant,
+	TempCardIds.DejaVu,
 ];

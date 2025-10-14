@@ -3298,6 +3298,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.TheGardensGrace:
 			return and(side(inputSide), or(inDeck, inHand), spell, holy);
+		case TempCardIds.TheKingslayers:
+			return and(inDeck, legendary);
 		case CardIds.ThePurator:
 			return and(side(inputSide), inDeck, minion, not(tribeless));
 		case CardIds.Therazane_DEEP_036:

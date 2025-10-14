@@ -294,4 +294,5 @@ export const tutors = [
 	CardIds.Torga_TLC_102,
 	TempCardIds.Contingency,
 	TempCardIds.DiscipleOfTheDove,
+	TempCardIds.TheKingslayers,
 ];
