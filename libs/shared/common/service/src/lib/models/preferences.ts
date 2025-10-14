@@ -637,6 +637,12 @@ export class Preferences implements IPreferences {
 	readonly bgsYourStatsTypeFilter: 'hero' | 'trinket' = 'hero';
 	readonly bgsCompositionsListMode: BgsCompositionsListMode = 'exploring';
 
+	readonly bgsShowAnomalyFullOverlay: boolean = false;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly bgsAnomalyFullOverlayScale: number = 100;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly bgsAnomalyFullOverlayPosition: { left: number; top: number };
+
 	readonly mercenariesActiveModeFilter: MercenariesModeFilterType = 'pve';
 	readonly mercenariesActiveRoleFilter: MercenariesRoleFilterType = 'all';
 	readonly mercenariesActivePveDifficultyFilter: MercenariesPveDifficultyFilterType = 'all';

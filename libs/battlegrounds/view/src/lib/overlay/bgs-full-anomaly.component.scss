@@ -1,0 +1,12 @@
+:host {
+	display: flex;
+	font-family: Open Sans;
+	font-style: normal;
+	font-weight: normal;
+	color: var(--default-text-color);
+	font-size: 13px;
+}
+
+.scalable {
+	transform: scale(var(--bgs-full-anomaly-scale, 1));
+}

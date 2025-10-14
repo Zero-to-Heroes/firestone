@@ -100,6 +100,7 @@ import { DebugService } from '../../services/debug.service';
 			<current-session-widget-wrapper></current-session-widget-wrapper>
 			<bgs-hero-overview-widget-wrapper></bgs-hero-overview-widget-wrapper>
 			<bgs-action-count-widget-wrapper></bgs-action-count-widget-wrapper>
+			<bgs-full-anomaly-widget-wrapper></bgs-full-anomaly-widget-wrapper>
 
 			<!-- Mercs -->
 			<mercs-player-team-widget-wrapper></mercs-player-team-widget-wrapper>

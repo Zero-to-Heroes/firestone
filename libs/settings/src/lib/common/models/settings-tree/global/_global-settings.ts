@@ -5,6 +5,7 @@ import { battlegroundsReconnectorSettings } from '../battlegrounds/battlegrounds
 import { generalAppearanceSettings } from '../general/general-settings-appearance';
 import { generalLotterySettings } from './general-settings-lottery';
 import { generalQuestsSettings } from './general-settings-quests';
+import { globalStreamerSettings } from './global-settings-streamer';
 import { globalWidgetSettings } from './global-settings-widgets';
 
 export const globalSettings = (context: SettingContext): SettingNode => {
@@ -17,6 +18,7 @@ export const globalSettings = (context: SettingContext): SettingNode => {
 			generalLotterySettings(context),
 			globalWidgetSettings(context),
 			generalAppearanceSettings(context),
+			globalStreamerSettings(context),
 			context.services.account.region$$.value === BnetRegion.REGION_CN
 				? battlegroundsReconnectorSettings(context)
 				: null,
