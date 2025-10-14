@@ -402,7 +402,9 @@ export const fire = spellSchool(SpellSchool.FIRE);
 export const frost = spellSchool(SpellSchool.FROST);
 export const holy = spellSchool(SpellSchool.HOLY);
 export const nature = spellSchool(SpellSchool.NATURE);
-export const shadow = spellSchool(SpellSchool.SHADOW);
+// I don't have a good way of highlighting transforming cards correctly, and there are not many
+// of them, so maybe this is ok
+export const shadow = or(spellSchool(SpellSchool.SHADOW), cardIs(CardIds.SilvermoonBrochure_WORK_017));
 export const hasSpellSchool = (input: SelectorInput): boolean => {
 	return !!input.card?.spellSchool;
 };
