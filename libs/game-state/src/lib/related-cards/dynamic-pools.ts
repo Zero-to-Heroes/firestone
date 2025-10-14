@@ -35,7 +35,30 @@ const IMBUED_HERO_POWERS = [
 	CardIds.LunarwingMessenger_BlessingOfTheMoon_EDR_449p,
 ];
 
+const MAX_CARDS_TO_SHOW = 100;
+
 export const getDynamicRelatedCardIds = (
+	cardId: string,
+	entityId: number,
+	allCards: AllCardsService,
+	inputOptions: {
+		format: GameFormat;
+		gameType: GameType;
+		currentClass: string;
+		deckState: DeckState;
+		gameState: GameState;
+		validArenaPool: readonly string[];
+	},
+): readonly string[] | { override: true; cards: readonly string[] } => {
+	const result = getDynamicRelatedCardIdsInternal(cardId, entityId, allCards, inputOptions);
+	const resultCards: readonly string[] = result && 'cards' in result ? result.cards : (result as readonly string[]);
+	if (resultCards && resultCards.length > MAX_CARDS_TO_SHOW) {
+		return [];
+	}
+	return result;
+};
+
+const getDynamicRelatedCardIdsInternal = (
 	cardId: string,
 	entityId: number,
 	allCards: AllCardsService,
