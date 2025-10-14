@@ -125,13 +125,6 @@ export class ActionCountComponent extends AbstractSubscriptionComponent implemen
 				)
 					? 1
 					: 0;
-				console.debug(
-					'apm',
-					'upgradesThisTurn',
-					upgradesThisTurn,
-					mainPlayer.tavernUpgradeHistory,
-					state.currentTurn,
-				);
 				const heroPowersThisTurn =
 					liveStats.mainPlayerHeroPowersOverTurn.find((power) => power.turn === state.currentTurn)?.value ??
 					0;
@@ -203,7 +196,6 @@ export class ActionCountComponent extends AbstractSubscriptionComponent implemen
 
 				// Convert to actions per minute
 				const apm = (actionDiff / timeDiffSeconds) * 60;
-				console.debug('apm', apm, actionDiff, timeDiffSeconds, newestSample, oldestSample);
 				return Math.max(0, apm);
 			}),
 			takeUntil(this.destroyed$),
@@ -222,14 +214,6 @@ export class ActionCountComponent extends AbstractSubscriptionComponent implemen
 				}
 				const turnDurationInSeconds = (new Date().getTime() - turnStartTimestamp) / 1000;
 				const avgApm = (60 * actionsThisTurn) / turnDurationInSeconds;
-				console.debug(
-					'avgApm',
-					actionsThisTurn,
-					turnDurationInSeconds,
-					avgApm,
-					turnStartTimestamp,
-					state.bgState?.currentGame?.phase,
-				);
 				this.avgApm = avgApm;
 				if (!(this.cdr as ViewRef)?.destroyed) {
 					this.cdr.detectChanges();
