@@ -1,5 +1,6 @@
 import { CardClass, CardIds, CardType, GameTag, LIBRAM_IDS, Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState } from '@firestone/game-state';
+import { TempCardIds } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { hasRace } from '../../hs-utils';
 import { LocalizationFacadeService } from '../../localization-facade.service';
@@ -20,6 +21,8 @@ export const modifyDecksForSpecialCards = (
 		switch (cardId) {
 			case CardIds.RottenRodent:
 				return [handleRottenRodent(deckState, allCards, i18n), opponentDeckState];
+			case TempCardIds.AlternateReality:
+				return [handleAlternateReality(deckState, allCards, i18n), opponentDeckState];
 			case CardIds.CelestialAlignment:
 				return [handleCelestialAlignment(deckState, allCards, i18n), opponentDeckState];
 			case CardIds.Embiggen:
@@ -299,6 +302,30 @@ const handleWyrmrestPurifier = (
 				actualManaCost: undefined,
 				relatedCardIds: undefined,
 				cardMatchCondition: (other: ReferenceCard) => other.cost === card.getEffectiveManaCost() + 3,
+			} as DeckCard),
+		deckState,
+		allCards,
+		i18n,
+	);
+};
+
+const handleAlternateReality = (
+	deckState: DeckState,
+	allCards: CardsFacadeService,
+	i18n: LocalizationFacadeService,
+): DeckState => {
+	return updateCardInDeck(
+		(card, refCard) => true,
+		(card) =>
+			card.update({
+				cardId: undefined,
+				cardName: i18n.getUnknownCardName(CardClass[deckState.hero?.classes[0] ?? CardClass.NEUTRAL]),
+				creatorCardId: TempCardIds.AlternateReality,
+				rarity: undefined,
+				cardType: undefined,
+				refManaCost: undefined,
+				actualManaCost: undefined,
+				relatedCardIds: undefined,
 			} as DeckCard),
 		deckState,
 		allCards,

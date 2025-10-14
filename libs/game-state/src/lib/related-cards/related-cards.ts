@@ -1,5 +1,6 @@
 /* eslint-disable no-case-declarations */
 import { CardClass, CardIds } from '@firestone-hs/reference-data';
+import { TempCardIds } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DeckState } from '../models/deck-state';
 import { GameState } from '../models/game-state';
@@ -20,8 +21,9 @@ export const buildContextRelatedCardIds = (
 		case CardIds.ETCBandManager_ETC_080:
 		case CardIds.ZilliaxDeluxe3000_TOY_330:
 			return deckState.sideboards?.find((s) => s.keyCardId === cardId)?.cards ?? [];
-		case CardIds.StarlightWhelp:
 		case CardIds.HexLordMalacrass:
+		case CardIds.StarlightWhelp:
+		case TempCardIds.TheFinsBeyondTime:
 			return (
 				deckState.cardsInStartingHand
 					?.map((c) => c.cardId ?? deckState.findCard(c.entityId)?.card?.cardId)

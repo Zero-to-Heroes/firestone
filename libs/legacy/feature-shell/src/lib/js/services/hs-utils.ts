@@ -1,5 +1,6 @@
 import { BoosterType, CardClass, CardIds, GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';
+import { TempCardIds } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { CollectionCardType } from '../models/collection/collection-card-type.type';
 import { tutors } from './decktracker/card-info/card-tutors';
@@ -146,6 +147,7 @@ export const battlecryGlobalEffectCards = [
 	CardIds.PrinceKeleseth_CORE_ICC_851,
 	CardIds.PrinceKeleseth_ICC_851,
 	CardIds.RadiantLightspawn,
+	TempCardIds.RangerInitiateVareesa,
 	CardIds.RazaTheChained,
 	CardIds.RiseToTheOccasion_LightbornCarielToken,
 	CardIds.RottenRodent,
@@ -474,6 +476,7 @@ export const supportedAdditionalData = [
 	CardIds.Bottomfeeder,
 	CardIds.SirakessCultist_AbyssalCurseToken,
 	CardIds.StudentOfTheStars,
+	TempCardIds.HighKingsHammer,
 	...CARDS_THAT_IMPROVE_WHEN_TRADED,
 ];
 

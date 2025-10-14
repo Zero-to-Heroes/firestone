@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { GameTag } from '@firestone-hs/reference-data';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { ImageLocalizationOptions } from '@firestone/shared/framework/core';
 import { TranslateService } from '@ngx-translate/core';
@@ -100,6 +101,13 @@ export class LocalizationService {
 					playerClass: formatClass(playerClass, i18n),
 				})
 			: this.translateString('decktracker.unknown-card');
+	}
+
+	public getUnknownMechanicsName(gameTag: GameTag): string {
+		const mechanics = this.translateString(`global.mechanics.${GameTag[gameTag].toLowerCase()}`);
+		return this.translateString('decktracker.unknown-mechanics-card', {
+			gameTag: mechanics,
+		});
 	}
 
 	public getUnknownManaSpellName(manaCost: number): string {

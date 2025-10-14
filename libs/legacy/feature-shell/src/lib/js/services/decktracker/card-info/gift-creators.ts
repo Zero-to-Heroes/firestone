@@ -1,4 +1,5 @@
 import { CardIds } from '@firestone-hs/reference-data';
+import { TempCardIds } from '@firestone/shared/common/service';
 
 const COIN_IDS = [
 	CardIds.TheCoinCore,
@@ -1058,4 +1059,27 @@ export const giftCreators = [
 	CardIds.Tortotem_DINO_412,
 	CardIds.AvantGardening_EDR_488,
 	CardIds.PrimalSabretooth_TLC_247,
+	TempCardIds.BloodDraw_TIME,
+	TempCardIds.CryofrozenChampion,
+	TempCardIds.HighborneMentor,
+	TempCardIds.AlternateReality,
+	TempCardIds.KaldoreiCultivator,
+	TempCardIds.Waveshaping,
+	TempCardIds.RangerCaptainAlleria,
+	TempCardIds.KingMaluk,
+	TempCardIds.InfiniteBanana,
+	TempCardIds.TheFinsBeyondTime,
+	CardIds.SemiStablePortal_TIME_000,
+	TempCardIds.MendTheTimeline,
+	TempCardIds.NeonInnovation,
+	TempCardIds.IntertwinedFate,
+	TempCardIds.MuradinHighKing,
+	TempCardIds.FarseerWo,
+	TempCardIds.Divergence,
+	TempCardIds.Chromie_TIME,
+	TempCardIds.Circadiamancer,
+	TempCardIds.TimeMachine,
+	TempCardIds.AeonWizard,
+	TempCardIds.FadingMemory,
+	TempCardIds.TimeSkipper,
 ];

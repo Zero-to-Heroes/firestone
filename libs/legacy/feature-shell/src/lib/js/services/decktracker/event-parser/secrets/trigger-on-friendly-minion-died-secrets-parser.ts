@@ -1,5 +1,6 @@
 import { CardIds } from '@firestone-hs/reference-data';
 import { BoardSecret, DeckState, GameState } from '@firestone/game-state';
+import { TempCardIds } from '@firestone/shared/common/service';
 import { GameEvent } from '../../../../models/game-event';
 import { MinionsDiedEvent } from '../../../../models/mainwindow/game-events/minions-died-event';
 import { DeckManipulationHelper } from '../deck-manipulation-helper';
@@ -18,6 +19,7 @@ export class TriggerOnFriendlyMinionDiedSecretsParser implements EventParser {
 		CardIds.CheatDeath,
 		CardIds.EmergencyManeuvers,
 		CardIds.EmergencyManeuvers_ImprovedEmergencyManeuversToken,
+		TempCardIds.UntimelyDeath,
 	];
 
 	constructor(private readonly helper: DeckManipulationHelper) {}
@@ -56,6 +58,14 @@ export class TriggerOnFriendlyMinionDiedSecretsParser implements EventParser {
 			secretsWeCantRuleOut.push(CardIds.Avenge_CORE_FP1_020);
 		}
 		// TODO: Redemption will not trigger if deathrattles fill up the board
+
+		const turnAtWhichMinionDies = currentState.currentTurnNumeric;
+		const turnAtWhichMinionGotPlayed =
+			deckWithSecretToCheck.cardsPlayedThisMatch.find((card) => card.entityId === deadEnemyMinions[0].EntityId)
+				?.turn ?? 0;
+		if (turnAtWhichMinionDies !== +turnAtWhichMinionGotPlayed + 1) {
+			secretsWeCantRuleOut.push(TempCardIds.UntimelyDeath);
+		}
 
 		const optionsToFlagAsInvalid = this.secretsTriggeringOnFriendlyMinionDeath.filter(
 			(secret) => secretsWeCantRuleOut.indexOf(secret) === -1,

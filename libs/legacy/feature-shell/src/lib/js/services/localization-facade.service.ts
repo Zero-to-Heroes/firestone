@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { GameTag } from '@firestone-hs/reference-data';
 import { sleep } from '@firestone/shared/framework/common';
 import { ILocalizationService, ImageLocalizationOptions, OverwolfService } from '@firestone/shared/framework/core';
 import { TranslateService } from '@ngx-translate/core';
@@ -54,6 +55,10 @@ export class LocalizationFacadeService implements ILocalizationService {
 
 	public getUnknownCardName(playerClass: string = null): string {
 		return this.service.getUnknownCardName(this, playerClass);
+	}
+
+	public getUnknownMechanicsName(gameTag: GameTag): string {
+		return this.service.getUnknownMechanicsName(gameTag);
 	}
 
 	public getUnknownManaSpellName(manaCost: number): string {

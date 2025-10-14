@@ -9,6 +9,7 @@ import {
 	storeInformationOnCardPlayed,
 	toTagsObject,
 } from '@firestone/game-state';
+import { TempCardIds } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import {
@@ -527,7 +528,11 @@ export const updateGlobalEffects = (
 	if (!isCardCountered && globalEffectCardsPlayed.includes(card?.cardId as CardIds)) {
 		battlecriesMultiplier = 1;
 		const doubleBattlecries = deck.board.some((c) =>
-			[CardIds.BrannBronzebeard_CORE_LOE_077, CardIds.BrannBronzebeard_LOE_077].includes(c.cardId as CardIds),
+			[
+				CardIds.BrannBronzebeard_CORE_LOE_077,
+				CardIds.BrannBronzebeard_LOE_077,
+				TempCardIds.ChronoLordDeios,
+			].includes(c.cardId as CardIds),
 		);
 		if (battlecryGlobalEffectCards.includes(card?.cardId as CardIds) && doubleBattlecries) {
 			battlecriesMultiplier = 2;

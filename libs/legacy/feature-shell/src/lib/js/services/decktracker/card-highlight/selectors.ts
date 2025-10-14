@@ -1,5 +1,6 @@
 import { getSi7Locale } from '@components/game-counters/definitions/si7-counter';
 import {
+	sets as ALL_SETS,
 	CardClass,
 	CardIds,
 	CardType,
@@ -10,6 +11,7 @@ import {
 	Race,
 	RarityTYpe,
 	RELIC_IDS,
+	SetId,
 	SpellSchool,
 } from '@firestone-hs/reference-data';
 import { EXTENDED_STARSHIP_CARDS, getCost, getProcessedCard, isCardCreated } from '@firestone/game-state';
@@ -328,6 +330,7 @@ export const discover =
 export const givesDivineShield = hasMechanicStr('GIVES_DIVINE_SHIELD');
 export const divineShield = or(hasMechanic(GameTag.DIVINE_SHIELD), givesDivineShield);
 export const dredge = hasMechanic(GameTag.DREDGE);
+export const endOfTurn = hasMechanic(GameTag.END_OF_TURN);
 export const excavate = or(
 	hasMechanic(GameTag.EXCAVATE),
 	cardIs(CardIds.Arfus_DigUpUnholy_THD_100p, CardIds.Arfus_DigUpFrost_THD_100p2, CardIds.Arfus_DigUpBlood_THD_100p3),
@@ -601,6 +604,12 @@ export const darkGift = (input: SelectorInput): boolean => {
 	return discover(input) && input.card?.referencedTags?.includes(GameTag[GameTag.DARK_GIFT]);
 };
 
+export const fromLatestExpansion = (input: SelectorInput): boolean => {
+	const latestExpansion = ALL_SETS[0];
+	const validSets: readonly SetId[] = [latestExpansion.id, latestExpansion.miniSetFor].filter((s): s is SetId => !!s);
+	return validSets.some((s) => input.card?.set?.toLowerCase() === s.toLowerCase());
+};
+
 // TODO
 export const shufflesCardIntoDeck = (input: SelectorInput): boolean => {
 	return false;
@@ -608,3 +617,7 @@ export const shufflesCardIntoDeck = (input: SelectorInput): boolean => {
 export const selfDamageHero = (input: SelectorInput): boolean => {
 	return false;
 };
+export const drawCard = (input: SelectorInput): boolean => {
+	return false;
+};
+export const costHealth = hasMechanicStr('COSTS_HEALTH');

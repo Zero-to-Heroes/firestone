@@ -1,5 +1,6 @@
 import { CardIds, CardType, ReferenceCard, SpellSchool } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState, GameState } from '@firestone/game-state';
+import { TempCardIds } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { reverseIfNeeded } from '@legacy-import/src/lib/js/services/decktracker/event-parser/card-dredged-parser';
 import { GameEvent } from '../../../models/game-event';
@@ -300,10 +301,13 @@ const buildAttributeChange = (creatorCard: DeckCard, newCardId: string): number 
 	if (isCorrectCardId(creatorCard, newCardId, CardIds.SunscaleRaptor)) {
 		return 1 + (creatorCard.mainAttributeChange ?? 0);
 	}
+	if (isCorrectCardId(creatorCard, newCardId, TempCardIds.HighKingsHammer)) {
+		return 2 + (creatorCard.mainAttributeChange ?? 0);
+	}
 	return null;
 };
 
-const isCorrectCardId = (creatorCard: DeckCard, newCardId: string, target: CardIds): boolean => {
+const isCorrectCardId = (creatorCard: DeckCard, newCardId: string, target: CardIds | TempCardIds): boolean => {
 	return creatorCard?.cardId === target || newCardId === target;
 };
 

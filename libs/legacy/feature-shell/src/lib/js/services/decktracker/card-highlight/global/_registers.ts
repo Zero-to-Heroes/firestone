@@ -9,6 +9,7 @@ import { Bonecaller } from './bonecaller';
 import { BrilliantMacaw } from './brilliant-macaw';
 import { CarryOnSuitcase } from './carry-on-suitcase';
 import { CatrinaMuerte } from './catrina-muerte';
+import { Chromie } from './chromie';
 import { CreatureOfTheSacredCave } from './creature-of-the-sacred-cave';
 import { EndbringerUmbra } from './endbringer-umbra';
 import { FerociousFelbat } from './ferocious-felbat';
@@ -25,6 +26,7 @@ import { InfantryReanimator } from './infantry-reanimator';
 import { JimRaynor } from './jim-raynor';
 import { KragwaTheFrog } from './kragwa-the-frog';
 import { LadyDarkvein } from './lady-darkvein';
+import { MemoriamManifest } from './memoriam-manifest';
 import { Merithra } from './merithra';
 import { MonstrousParrot } from './monstrous-parrot';
 import { MurlocHolmes } from './murloc-holmes';
@@ -45,6 +47,7 @@ import { Rewind } from './rewind';
 import { StarlightWhelp } from './starlight-whelp';
 import { StranglethornHeart } from './stranglethorn-heart';
 import { SuccombToMadness } from './succomb-to-madness';
+import { TheFinsBeyondTime } from './the-fins-beyond-time';
 import { TidepoolPupil } from './tidepool-pupil';
 import { TramHeist } from './tram-heist';
 import { TwistedWebweaver } from './twisted-webweaver';
@@ -84,6 +87,7 @@ const cards = [
 	Merithra,
 	Ursoc,
 	NineLives,
+	MemoriamManifest,
 	InfantryReanimator,
 	GrotesqueRuneblade,
 	IchorOfUndeath,
@@ -109,7 +113,9 @@ const cards = [
 	HabeasCorpses,
 	HighCultistBasaleph,
 	StarlightWhelp,
+	TheFinsBeyondTime,
 	MurlocHolmes,
+	Chromie,
 ];
 
 export const cardsMapping: { [cardId: string]: Card } = {};
