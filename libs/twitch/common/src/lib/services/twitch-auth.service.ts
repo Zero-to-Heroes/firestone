@@ -2,7 +2,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
-import { GameTag, SceneMode } from '@firestone-hs/reference-data';
+import { CardIds, GameTag, getBuddy, SceneMode } from '@firestone-hs/reference-data';
 import { BattlegroundsState, BgsBoard, BgsPlayer, DeckCard, DeckState, GameState } from '@firestone/game-state';
 import { MatchInfo, SceneService } from '@firestone/memory';
 import {
@@ -147,11 +147,15 @@ export class TwitchAuthService {
 
 		let playerDeck = this.cleanDeck(state.playerDeck, state.isBattlegrounds(), state.isMercenaries());
 		const bgsPlayer = bgsState?.currentGame?.getMainPlayer();
+		const playerBuddy = bgsState?.currentGame?.hasBuddies
+			? getBuddy(bgsPlayer?.cardId as CardIds, this.allCards.getService())
+			: null;
 		playerDeck = {
 			...playerDeck,
 			weapon: {
 				...(playerDeck.weapon ?? {}),
-				cardId: playerDeck.weapon?.cardId ?? bgsPlayer?.greaterTrinket ?? bgsPlayer?.lesserTrinket,
+				cardId:
+					playerDeck.weapon?.cardId ?? bgsPlayer?.greaterTrinket ?? bgsPlayer?.lesserTrinket ?? playerBuddy,
 			} as DeckCard,
 		} as DeckState;
 
@@ -159,11 +163,18 @@ export class TwitchAuthService {
 			(player) => player.cardId === state.opponentDeck?.hero?.cardId,
 		);
 		let opponentDeck = this.cleanDeck(state.opponentDeck, state.isBattlegrounds(), state.isMercenaries());
+		const opponentBuddy = bgsState?.currentGame?.hasBuddies
+			? getBuddy(bgsOpponent?.cardId as CardIds, this.allCards.getService())
+			: null;
 		opponentDeck = {
 			...opponentDeck,
 			weapon: {
 				...(opponentDeck.weapon ?? {}),
-				cardId: opponentDeck.weapon?.cardId ?? bgsOpponent?.greaterTrinket ?? bgsOpponent?.lesserTrinket,
+				cardId:
+					opponentDeck.weapon?.cardId ??
+					bgsOpponent?.greaterTrinket ??
+					bgsOpponent?.lesserTrinket ??
+					opponentBuddy,
 			} as DeckCard,
 		} as DeckState;
 		const newDeckState = GameState.create({
