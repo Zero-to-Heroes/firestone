@@ -3,8 +3,8 @@ import { GameState, getProcessedCard } from '@firestone/game-state';
 import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
 import { GlobalHighlightCard } from './_registers';
 
-export const NZothTheCorruptor: GlobalHighlightCard = {
-	cardIds: [CardIds.NzothTheCorruptor],
+export const XyrellaTheDevout: GlobalHighlightCard = {
+	cardIds: [CardIds.XyrellaTheDevout],
 	getRelatedCards: (entityId: number, side: HighlightSide, gameState: GameState, allCards: CardsFacadeService) => {
 		const deckState = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
 		return deckState.minionsDeadThisMatch

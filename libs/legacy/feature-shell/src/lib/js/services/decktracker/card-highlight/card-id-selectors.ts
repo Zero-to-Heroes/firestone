@@ -3672,7 +3672,10 @@ export const cardIdSelector = (
 		case CardIds.Xyrella_BAR_735:
 			return and(side(inputSide), or(inHand, inDeck), restoreHealth);
 		case CardIds.XyrellaTheDevout:
-			return and(side(inputSide), inGraveyard, minion, deathrattle);
+			return highlightConditions(
+				and(side(inputSide), or(inHand, inDeck), minion, deathrattle),
+				and(side(inputSide), inGraveyard, minion, deathrattle),
+			);
 		case CardIds.YellingYodeler:
 			return and(side(inputSide), or(inDeck, inHand), minion, deathrattle);
 		case TempCardIds.Yesterloc:

@@ -56,6 +56,7 @@ import { UrsolsAura } from './ursols-aura';
 import { VanessaVanCleef } from './vanessa-van-cleef';
 import { WakenerOfSouls } from './wakener-of-souls';
 import { WallowTheWretched } from './wallow-the-wretched';
+import { XyrellaTheDevout } from './xyrella-the-devout';
 import { Zuljin } from './zul-jin';
 
 const cards = [
@@ -116,6 +117,7 @@ const cards = [
 	TheFinsBeyondTime,
 	MurlocHolmes,
 	Chromie,
+	XyrellaTheDevout,
 ];
 
 export const cardsMapping: { [cardId: string]: Card } = {};
