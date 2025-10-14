@@ -130,6 +130,7 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 		card: DeckCard,
 		gameState: GameState,
 	): void {
+		this.possibleCards = [];
 		// console.debug('[opponent-card-info-id] buildInfo', card);
 		// Keep the || to handle empty card id
 		// CreatorCardId first because this feels like the most relevant?
