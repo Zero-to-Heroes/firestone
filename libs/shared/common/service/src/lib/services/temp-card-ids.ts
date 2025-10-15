@@ -17,6 +17,7 @@ export declare const enum TempCardIds {
 	Dethrone = 'Dethrone',
 	Flashback = 'Flashback',
 	MemoriamManifest = 'MemoriamManifest',
+	AxeOfCenarius = 'AxeOfCenarius',
 	Liferender = 'Liferender',
 	TimeSkipper = 'TimeSkipper',
 	BloodDraw_TIME = 'BloodDraw_TIME',

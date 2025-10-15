@@ -296,4 +296,5 @@ export const tutors = [
 	TempCardIds.DiscipleOfTheDove,
 	TempCardIds.TheKingslayers,
 	TempCardIds.FastForward,
+	TempCardIds.AxeOfCenarius,
 ];
