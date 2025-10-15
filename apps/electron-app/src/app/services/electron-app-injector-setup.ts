@@ -1,10 +1,27 @@
-import { ElectronApiRunner, ElectronStorageService } from '@firestone/electron/common';
+import { BgsBattleSimulationMockExecutorService, BgsBattleSimulationService } from '@firestone/battlegrounds/core';
+import { ElectronAdsService, ElectronApiRunner, ElectronStorageService } from '@firestone/electron/common';
 import {
+	AiDeckService,
+	BgsMatchMemoryInfoService,
+	BgsMatchPlayersMmrService,
+	ConstructedArchetypeService,
+	ConstructedArchetypeServiceOrchestrator,
 	DeckHandlerService,
+	DeckManipulationHelper,
 	DeckParserFacadeService,
 	DeckParserService,
 	GameEventsEmitterService,
+	GameStateFacadeService,
+	GameStateMetaInfoService,
+	GameStateParsersService,
+	GameStateService,
+	GameUniqueIdService,
 	OverlayDisplayService,
+	RealTimeStatsParsersService,
+	RealTimeStatsService,
+	ReviewIdService,
+	SecretConfigService,
+	SecretsParserService,
 } from '@firestone/game-state';
 import {
 	MemoryInspectionService,
@@ -15,9 +32,12 @@ import {
 } from '@firestone/memory';
 import { GameStatusService, PreferencesService, PreferencesStorageService } from '@firestone/shared/common/service';
 import {
+	ADS_SERVICE_TOKEN,
 	ApiRunner,
 	CardsFacadeService,
 	CardsFacadeStandaloneService,
+	IAdsService,
+	LocalizationStandaloneService,
 	LocalStorageService,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
@@ -66,12 +86,12 @@ export const buildAppInjector = () => {
 	);
 	electronInjector.register(MindVisionStateMachineService, mindVisionStateMachine);
 
-	const mindVisionInspection = new MemoryInspectionService(
+	const memoryInspection = new MemoryInspectionService(
 		gameStatus,
 		mindVisionFacade as any as MindVisionFacadeService,
 		mindVisionStateMachine,
 	);
-	electronInjector.register(MemoryInspectionService, mindVisionInspection);
+	electronInjector.register(MemoryInspectionService, memoryInspection);
 
 	const scene = new SceneService(windowManager);
 	electronInjector.register(SceneService, scene);
@@ -85,7 +105,7 @@ export const buildAppInjector = () => {
 	const deckParser = new DeckParserService(
 		gameEventsEmitter,
 		memoryUpdates,
-		mindVisionInspection,
+		memoryInspection,
 		allCards as any as CardsFacadeService,
 		null, // FIXME: replace OW service with something else
 		deckHandler,
@@ -104,6 +124,115 @@ export const buildAppInjector = () => {
 
 	const gameEvents = new GameEventsElectronService();
 	electronInjector.register(GameEventsElectronService, gameEvents);
+
+	const gameStateMetaInfos = new GameStateMetaInfoService();
+	electronInjector.register(GameStateMetaInfoService, gameStateMetaInfos);
+
+	// TODO: translation service
+	const i18n = new LocalizationStandaloneService(allCards, null);
+	electronInjector.register(LocalizationStandaloneService, i18n);
+
+	const helper = new DeckManipulationHelper(allCards as any as CardsFacadeService, i18n);
+	electronInjector.register(DeckManipulationHelper, helper);
+
+	const secretsParser = new SecretsParserService(helper, allCards as any as CardsFacadeService);
+	electronInjector.register(SecretsParserService, secretsParser);
+
+	const aiDecks = new AiDeckService(api as any as ApiRunner);
+	electronInjector.register(AiDeckService, aiDecks);
+
+	const secretsConfig = new SecretConfigService(api as any as ApiRunner, allCards as any as CardsFacadeService);
+	electronInjector.register(SecretConfigService, secretsConfig);
+
+	const constructedArchetypes = new ConstructedArchetypeService(
+		api as any as ApiRunner,
+		allCards as any as CardsFacadeService,
+	);
+	electronInjector.register(ConstructedArchetypeService, constructedArchetypes);
+
+	const constructedArchetypesOthestrator = new ConstructedArchetypeServiceOrchestrator(
+		constructedArchetypes,
+		gameEventsEmitter,
+	);
+	electronInjector.register(ConstructedArchetypeServiceOrchestrator, constructedArchetypesOthestrator);
+
+	const ads: IAdsService = new ElectronAdsService();
+	electronInjector.register(ADS_SERVICE_TOKEN, ads);
+
+	// TODO: use a real battle sim service
+	const battleExecutor = new BgsBattleSimulationMockExecutorService();
+	const simulation = new BgsBattleSimulationService(
+		api as any as ApiRunner,
+		allCards as any as CardsFacadeService,
+		battleExecutor,
+		ads,
+		null,
+		preferences,
+		null,
+	);
+	electronInjector.register(BgsBattleSimulationService, simulation);
+
+	const gameId = new GameUniqueIdService(memoryInspection);
+	electronInjector.register(GameUniqueIdService, gameId);
+
+	const reviewId = new ReviewIdService(gameEventsEmitter);
+	electronInjector.register(ReviewIdService, reviewId);
+
+	const gameEventsParser = new GameStateParsersService(
+		helper,
+		allCards as any as CardsFacadeService,
+		i18n,
+		aiDecks,
+		deckHandler,
+		memoryInspection,
+		null, // OwUtils
+		preferences,
+		deckParser,
+		secretsConfig,
+		constructedArchetypesOthestrator,
+		gameEventsEmitter,
+		null, // BugReport
+		null, // LogUploader
+		simulation,
+		ads,
+		gameId,
+		null,
+		reviewId,
+	);
+
+	const bgsMatchPlayers = new BgsMatchPlayersMmrService(windowManager);
+	electronInjector.register(BgsMatchPlayersMmrService, bgsMatchPlayers);
+
+	const bgsMatchMemoryInfo = new BgsMatchMemoryInfoService(
+		memoryInspection,
+		gameStatus,
+		preferences,
+		bgsMatchPlayers,
+	);
+	electronInjector.register(BgsMatchMemoryInfoService, bgsMatchMemoryInfo);
+
+	const realTimeParsers = new RealTimeStatsParsersService(allCards as any as CardsFacadeService);
+	electronInjector.register(RealTimeStatsParsersService, realTimeParsers);
+
+	const realTimeStats = new RealTimeStatsService(gameEventsEmitter, scene, realTimeParsers);
+	electronInjector.register(RealTimeStatsService, realTimeStats);
+
+	const gameState = new GameStateService(
+		gameEventsEmitter,
+		gameStateMetaInfos,
+		preferences,
+		null,
+		secretsParser,
+		gameEventsParser,
+		overlayDisplay,
+		bgsMatchMemoryInfo,
+		realTimeStats,
+		simulation,
+	);
+	electronInjector.register(GameStateService, gameState);
+
+	const gameStateFacade = new GameStateFacadeService(windowManager);
+	electronInjector.register(GameStateFacadeService, gameStateFacade);
 
 	return electronInjector;
 };

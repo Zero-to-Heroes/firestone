@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { ElectronAdService } from '@firestone/electron/common';
 import { LegacyFeatureShellModule } from '@firestone/legacy/feature-shell';
 import {
 	ADS_SERVICE_TOKEN,
@@ -13,7 +14,6 @@ import { LocalizationFacadeService } from '@legacy-import/src/lib/js/services/lo
 import { AppComponent } from './app.component';
 import { appRoutes } from './app.routes';
 import { ElectronOverlayComponent } from './overlay/electron-overlay.component';
-import { ElectronAdService } from './services/electron-ad.service';
 
 @NgModule({
 	imports: [CommonModule, LegacyFeatureShellModule, RouterModule.forRoot(appRoutes)],
@@ -23,8 +23,6 @@ import { ElectronAdService } from './services/electron-ad.service';
 		{ provide: ILocalizationService, useExisting: LocalizationStandaloneService },
 		{ provide: LocalizationFacadeService, useExisting: LocalizationStandaloneService },
 		{ provide: ADS_SERVICE_TOKEN, useExisting: ElectronAdService },
-
-		ElectronAdService,
 	],
 	bootstrap: [AppComponent],
 })

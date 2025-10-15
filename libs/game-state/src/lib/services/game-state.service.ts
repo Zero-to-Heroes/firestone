@@ -1,4 +1,4 @@
-import { EventEmitter, Injectable } from '@angular/core';
+import { EventEmitter, Injectable, Optional } from '@angular/core';
 import { GameTag } from '@firestone-hs/reference-data';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { arraysEqual, chunk } from '@firestone/shared/framework/common';
@@ -61,7 +61,7 @@ export class GameStateService {
 		private readonly gameStateMetaInfos: GameStateMetaInfoService,
 		private readonly prefs: PreferencesService,
 		// private readonly twitch: TwitchAuthService,
-		private readonly ow: OverwolfService,
+		@Optional() private readonly ow: OverwolfService,
 		private readonly secretsParser: SecretsParserService,
 		private readonly parserService: GameStateParsersService,
 		private readonly overlayDisplay: OverlayDisplayService,
@@ -75,10 +75,6 @@ export class GameStateService {
 	private async init() {
 		window['deckUpdater'] = this.deckUpdater;
 		window['bgsHotkeyPressed'] = this.battlegroundsWindowsListener;
-		if (!this.ow) {
-			console.warn('[game-state] Could not find OW service');
-			return;
-		}
 
 		await waitForReady(this.prefs, this.overlayDisplay);
 
@@ -131,7 +127,7 @@ export class GameStateService {
 		});
 
 		// TODO: move this somewhere else
-		this.battlegroundsWindowsListener = this.ow.addHotKeyPressedListener('battlegrounds', async (hotkeyResult) => {
+		this.battlegroundsWindowsListener = this.ow?.addHotKeyPressedListener('battlegrounds', async (hotkeyResult) => {
 			// this.bgsNav.toggleWindow();
 		});
 

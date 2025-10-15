@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AbstractFacadeService, IAdsService, WindowManagerService } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class ElectronAdService extends AbstractFacadeService<ElectronAdService> implements IAdsService {
 	public hasPremiumSub$$: BehaviorSubject<boolean>;
 	public enablePremiumFeatures$$: BehaviorSubject<boolean>;

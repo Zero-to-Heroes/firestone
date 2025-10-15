@@ -88,14 +88,12 @@ class GameEventsEdge {
 		this.initialized = false;
 		this.gameEventCallback = null;
 		this.edgeFunctionCache.clear();
-
-		return result;
 	}
 
 	// Helper method to call plugin methods with proper error handling
 	async callPluginMethod(methodName, params = {}) {
 		console.debug('[GameEventsEdge] [debug] Calling plugin method:', methodName);
-		if (!this.initialized && methodName !== 'setMemoryUpdateCallback' && methodName !== 'setLogger') {
+		if (!this.initialized && methodName !== 'setGameEventCallback' && methodName !== 'setLogger') {
 			throw new Error('Plugin not initialized');
 		}
 
