@@ -1,6 +1,6 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { CardIds } from '@firestone-hs/reference-data';
+import { CardIds, GameFormat } from '@firestone-hs/reference-data';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { GameState } from '../../models/game-state';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
@@ -25,9 +25,25 @@ export class PiratesSummonedCounterDefinitionV2 extends CounterDefinitionV2<numb
 				i18n.translateString('settings.decktracker.your-deck.counters.pirates-summoned-tooltip'),
 		},
 	};
-	readonly opponent = undefined;
+	readonly opponent = {
+		pref: 'opponentPiratesSummonedCounter' as const,
+		display: (state: GameState): boolean => state.metadata?.formatType !== GameFormat.FT_STANDARD,
+		value: (state: GameState) => {
+			const result = state.opponentDeck.piratesSummoned ?? 0;
+			return result >= 3 ? result : null;
+		},
+		setting: {
+			label: (i18n: ILocalizationService): string =>
+				i18n.translateString('settings.decktracker.your-deck.counters.pirates-summoned-label'),
+			tooltip: (i18n: ILocalizationService): string =>
+				i18n.translateString('settings.decktracker.your-deck.counters.pirates-summoned-tooltip'),
+		},
+	};
 
-	constructor(private readonly i18n: ILocalizationService, private readonly allCards: CardsFacadeService) {
+	constructor(
+		private readonly i18n: ILocalizationService,
+		private readonly allCards: CardsFacadeService,
+	) {
 		super();
 	}
 
