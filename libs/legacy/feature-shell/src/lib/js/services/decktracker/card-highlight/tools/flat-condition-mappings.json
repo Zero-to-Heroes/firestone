@@ -16,43 +16,90 @@
     "AbyssalBassist",
     "AirGuitarist",
     "AxeBerserker",
-    "BargainBin_MIS_105",
     "BlackscaleBrute",
     "CorsairCache",
     "FogsailFreebooterCore",
+    "ForgeOfSouls_CORE_ICC_281",
+    "ForgeOfSouls_ICC_281",
     "ForgedInFlame",
     "GrimtotemBuzzkill",
     "GrommashsArmguardsTavernBrawl",
-    "GuitarSoloist",
+    "HenchClanThug",
+    "HenchClanThugCore",
+    "Hookfist3000",
+    "Hookfist3000_CORE_NX2_028",
     "InstrumentSmasher",
     "InstrumentTech",
+    "KeeneyeSpotter",
     "Khazgoroth",
     "Khazgoroth_TitanforgeToken",
     "LadyAshvane_Story_11_LadyAshvane",
     "LadyAshvane_TSC_943",
-    "LoadTheChamber_WW_409",
     "ManAtArms",
-    "Obsidiansmith",
     "PillageTheFallenTavernBrawl",
     "Plunder",
-    "RaidTheDocks",
-    "RaidingParty",
-    "RaidingParty_CORE_TRL_124",
+    "Pufferfist",
     "RatchetPrivateer",
     "RuneforgingCore",
     "Runeforging_LEG_RLK_715",
     "SelflessSidekick",
     "ShadestoneSkulker_DEEP_012",
     "SharpShipment_WORK_005",
+    "Shockspitter",
     "SmallTimeBuccaneer",
     "SmallTimeBuccaneer_WON_351",
+    "SockPuppetSlitherspear_MIS_710",
     "SouthseaDeckhandLegacy",
     "SouthseaDeckhandVanilla",
     "SouthseaDeckhand_CORE_CS2_146",
     "SpacePirate_GDB_333",
     "SwarthySwordshiner_VAC_701",
     "VulperaToxinblade",
-    "WeaponsAttendant_VAC_924",
+    "WeaponsExpert"
+  ],
+  "HAS_MECHANIC_EQUIPS_WEAPON": [
+    "AbyssalBassist",
+    "AirGuitarist",
+    "AxeBerserker",
+    "BlackscaleBrute",
+    "CorsairCache",
+    "FogsailFreebooterCore",
+    "ForgeOfSouls_CORE_ICC_281",
+    "ForgeOfSouls_ICC_281",
+    "ForgedInFlame",
+    "GrimtotemBuzzkill",
+    "GrommashsArmguardsTavernBrawl",
+    "HenchClanThug",
+    "HenchClanThugCore",
+    "Hookfist3000",
+    "Hookfist3000_CORE_NX2_028",
+    "InstrumentSmasher",
+    "InstrumentTech",
+    "KeeneyeSpotter",
+    "Khazgoroth",
+    "Khazgoroth_TitanforgeToken",
+    "LadyAshvane_Story_11_LadyAshvane",
+    "LadyAshvane_TSC_943",
+    "ManAtArms",
+    "PillageTheFallenTavernBrawl",
+    "Plunder",
+    "Pufferfist",
+    "RatchetPrivateer",
+    "RuneforgingCore",
+    "Runeforging_LEG_RLK_715",
+    "SelflessSidekick",
+    "ShadestoneSkulker_DEEP_012",
+    "SharpShipment_WORK_005",
+    "Shockspitter",
+    "SmallTimeBuccaneer",
+    "SmallTimeBuccaneer_WON_351",
+    "SockPuppetSlitherspear_MIS_710",
+    "SouthseaDeckhandLegacy",
+    "SouthseaDeckhandVanilla",
+    "SouthseaDeckhand_CORE_CS2_146",
+    "SpacePirate_GDB_333",
+    "SwarthySwordshiner_VAC_701",
+    "VulperaToxinblade",
     "WeaponsExpert"
   ],
   "DRAENEI": [
@@ -88,6 +135,7 @@
     "GluthSicleTavernBrawl",
     "GluthTavernBrawl_PVPDR_Sai_T1",
     "GraveDigging",
+    "HighCultistBasaleph",
     "InfantryReanimator",
     "Invincible",
     "LesserSpinelSpellstone_GreaterSpinelSpellstoneToken_TOY_825t2",
@@ -95,6 +143,7 @@
     "LesserSpinelSpellstone_TOY_825",
     "NecroticMortician",
     "NecroticMortician_CORE_RLK_116",
+    "NerubianFlyer",
     "NerubianVizier",
     "NoxiousInfiltrator",
     "PoisonBreath_CORE_EDR_002",
@@ -164,6 +213,8 @@
     "SelectiveBreederCore",
     "Serpentbloom",
     "Shadehound",
+    "Shadehound_CORE_MAW_009",
+    "Shadehound_ShadehoundToken",
     "ShandoWildclaw",
     "ShandoWildclaw_RileTheHerd",
     "ShandoWildclaw_Transfiguration",
@@ -438,7 +489,8 @@
     "WishOfTheNewMoon_EDR_460",
     "WrathspineEnchanter",
     "YoggSaronHopesEnd_OG_134",
-    "YoggSaronMasterOfFate"
+    "YoggSaronMasterOfFate",
+    "Zuljin"
   ],
   "MINION": [
     "AegwynnTheGuardianCore",
@@ -617,6 +669,7 @@
     "PantherMask_DINO_432",
     "PendantOfEarth_DEEP_026",
     "PileOnHeroic",
+    "PortalVanguard_TIME_003",
     "PowerChordSynchronize",
     "PowerSlider",
     "Prescience",
@@ -679,6 +732,7 @@
     "VitalitySurge",
     "WakenerOfSouls_GDB_468",
     "WebOfDeception_EDR_523",
+    "XyrellaTheDevout",
     "YoggInTheBox_TOY_372",
     "YouthfulBrewmaster",
     "YouthfulBrewmasterCore",
@@ -702,11 +756,11 @@
     "ConservatorNymph",
     "Cultivation"
   ],
-  "INFUSE": [
+  "HAS_MECHANIC_INFUSE": [
     "AfterlifeAttendant",
     "AfterlifeAttendant_CORE_MAW_031"
   ],
-  "MINION + RUSH": [
+  "HAS_MECHANIC_RUSH + MINION": [
     "AkaliTheRhino",
     "ClearTheWay",
     "DivingGryphon",
@@ -718,17 +772,17 @@
     "TownCrier_CORE_GIL_580",
     "TownCrier_GIL_580"
   ],
-  "CHARGE": [
+  "HAS_MECHANIC_CHARGE": [
     "AlakirTheWindsOfTime_WON_092h"
   ],
-  "DIVINE_SHIELD": [
+  "HAS_MECHANIC_GIVES_DIVINE_SHIELD": [
     "AlakirTheWindsOfTime_WON_092h",
     "Jitterbug",
     "PipsiPainthoof_TOY_812",
     "TorethTheUnbreaking_EDR_258",
     "VarianKingOfStormwind"
   ],
-  "TAUNT": [
+  "HAS_MECHANIC_TAUNT": [
     "AlakirTheWindsOfTime_WON_092h",
     "Hadronox_CORE_ICC_835",
     "Hadronox_ICC_835",
@@ -740,7 +794,7 @@
     "StolenGoods_WON_110",
     "VarianKingOfStormwind"
   ],
-  "WINDFURY": [
+  "HAS_MECHANIC_WINDFURY": [
     "AlakirTheWindsOfTime_WON_092h"
   ],
   "LIBRAM": [
@@ -750,7 +804,7 @@
     "InterstellarStarslicer_GDB_726",
     "InterstellarWayfarer_GDB_721"
   ],
-  "DISCOVER": [
+  "HAS_MECHANIC_DISCOVER": [
     "AlienEncounters_GDB_237",
     "OpenTheDoorwaysTavernBrawl",
     "OrbOfRevelationTavernBrawl",
@@ -794,7 +848,7 @@
     "Voidcaller",
     "VoidcallerCore"
   ],
-  "BATTLECRY + COST_MORE_2": [
+  "COST_MORE_2 + HAS_MECHANIC_BATTLECRY": [
     "AllTogetherNowTavernBrawl"
   ],
   "MINION + NOT_TRIBELESS": [
@@ -813,7 +867,7 @@
     "TortollanStoryteller_TLC_254",
     "TrustyCompanion_WW_027"
   ],
-  "OVERLOAD": [
+  "HAS_MECHANIC_OVERLOAD": [
     "AlteredChord",
     "DiscipleOfGolganneth",
     "Flowrider",
@@ -903,7 +957,7 @@
     "AmorphousSlime",
     "SinisterSoulcage_YOG_513"
   ],
-  "DEATHRATTLE + MINION": [
+  "HAS_MECHANIC_DEATHRATTLE + MINION": [
     "AmuletOfUndying",
     "ArchdruidOfThorns_EDR_491",
     "AwakenTheMakers",
@@ -941,10 +995,22 @@
     "TwilightsCall",
     "UnearthedRaptor",
     "VengefulSpirit_BAR_328",
-    "XyrellaTheDevout",
     "YellingYodeler"
   ],
-  "SECRET": [
+  "RESTORE_HEALTH": [
+    "Anchorite_GDB_441",
+    "AuchenaiPhantasm",
+    "AuchenaiSoulpriestLegacy",
+    "AuchenaiSoulpriestVanilla",
+    "BrittleboneDestroyer",
+    "ClericOfAnshe",
+    "CrystalStag",
+    "DeathMetalKnight",
+    "DeathMetalKnight_CORE_ETC_523",
+    "ShadowtouchedKvaldir_YOG_300",
+    "Xyrella_BAR_735"
+  ],
+  "HAS_MECHANIC_SECRET": [
     "AncientMysteries",
     "AnonymousInformant",
     "AnonymousInformant_CORE_REV_841",
@@ -966,7 +1032,8 @@
     "ScuttlebuttGhoul",
     "ScuttlebuttGhoul_CORE_REV_900",
     "SecretStudiesTavernBrawl",
-    "SpringTheTrap"
+    "SpringTheTrap",
+    "Zuljin_WarriorsOfAmani_THD_010p"
   ],
   "COST_LESS_4 + MINION": [
     "AnimateDead"
@@ -1082,22 +1149,10 @@
     "Groundskeeper",
     "HagathaTheFabled_TOY_504"
   ],
-  "RESTORE_HEALTH": [
-    "AuchenaiPhantasm",
-    "AuchenaiSoulpriestLegacy",
-    "AuchenaiSoulpriestVanilla",
-    "BrittleboneDestroyer",
-    "ClericOfAnshe",
-    "CrystalStag",
-    "DeathMetalKnight",
-    "DeathMetalKnight_CORE_ETC_523",
-    "ShadowtouchedKvaldir_YOG_300",
-    "Xyrella_BAR_735"
-  ],
-  "REBORN": [
+  "HAS_MECHANIC_REBORN": [
     "AuchenaiDeathSpeaker_GDB_469"
   ],
-  "BATTLECRY + MINION": [
+  "HAS_MECHANIC_BATTLECRY + MINION": [
     "AuctionhouseGavel",
     "BrannBronzebeard_BrannsSaddle_THD_042p",
     "FairyTaleForest_TOY_507",
@@ -1200,7 +1255,7 @@
     "SerpentWig_TSC_215",
     "SpitelashSiren"
   ],
-  "DEATHRATTLE": [
+  "HAS_MECHANIC_DEATHRATTLE": [
     "BaronRivendare_CORE_FP1_031",
     "BaronRivendare_FP1_031",
     "BarrensTrapper",
@@ -1223,7 +1278,8 @@
     "SummonerDarkmarrow_VAC_503",
     "TotemOfTheDead_LOOTA_845",
     "Vectus",
-    "WakenerOfSouls_GDB_468"
+    "WakenerOfSouls_GDB_468",
+    "XyrellaTheDevout"
   ],
   "GIVES_ARMOR": [
     "BarricadeBasher_DINO_400",
@@ -1231,7 +1287,7 @@
     "ShieldSlamLegacy",
     "ShieldSlamVanilla"
   ],
-  "OUTCAST": [
+  "HAS_MECHANIC_OUTCAST": [
     "BartendOBot_WW_408",
     "BladeOfQuickeningTavernBrawlToken",
     "DoubleJump_SCH_422",
@@ -1243,7 +1299,7 @@
     "VengefulWalloper",
     "WretchedExile"
   ],
-  "MINION + TAUNT": [
+  "HAS_MECHANIC_TAUNT + MINION": [
     "Battlepickaxe_WW_347",
     "Bolster",
     "BulkUp",
@@ -1257,7 +1313,7 @@
     "UnluckyPowderman_WW_367",
     "ValstannStaghelm_WON_345"
   ],
-  "BATTLECRY": [
+  "HAS_MECHANIC_BATTLECRY": [
     "BattleTotem_LOOTA_846",
     "BrannBronzebeard_CORE_LOE_077",
     "BrannBronzebeard_LOE_077",
@@ -1333,7 +1389,7 @@
     "Ursatron",
     "WreckemAndDeckem_TOY_603"
   ],
-  "DEATHRATTLE + MECH": [
+  "HAS_MECHANIC_DEATHRATTLE + MECH": [
     "BoomWrench_BoomWrenchToken_TOY_604t",
     "BoomWrench_TOY_604"
   ],
@@ -1342,19 +1398,21 @@
     "SorcerousSubstitute",
     "WoodlandWonders_TOY_804"
   ],
-  "QUICKDRAW": [
+  "HAS_MECHANIC_QUICKDRAW": [
     "BountyBoard_WW_003"
   ],
-  "TRADEABLE": [
+  "HAS_MECHANIC_TRADEABLE": [
     "BountyBoard_WW_003"
   ],
-  "LIFESTEAL": [
+  "HAS_MECHANIC_LIFESTEAL": [
     "BrittleboneDestroyer",
     "CountessAshmore"
   ],
-  "LOCATION_EXTENDED": [
+  "LOCATION": [
     "BusyPeon_WORK_041",
     "Consume_SC_020",
+    "DispossessedSoul",
+    "DispossessedSoul_CORE_REV_901",
     "ScrapbookingStudent_VAC_529",
     "SeasideGiant_VAC_439",
     "SpineCrawler_SC_023",
@@ -1469,7 +1527,7 @@
     "FelfireInTheHole",
     "JaceDarkweaver"
   ],
-  "RUSH": [
+  "HAS_MECHANIC_RUSH": [
     "CountessAshmore",
     "PipsiPainthoof_TOY_812",
     "PluckyPaintfin_TOY_517",
@@ -1498,10 +1556,10 @@
   "ATTACK_MORE_0 + MINION": [
     "Crystology"
   ],
-  "CORRUPT": [
+  "HAS_MECHANIC_CORRUPT": [
     "DarkInquisitorXanesh"
   ],
-  "CORRUPTED": [
+  "HAS_MECHANIC_CORRUPTED": [
     "DarkInquisitorXanesh",
     "YshaarjTheDefiler"
   ],
@@ -1509,7 +1567,7 @@
     "DarkTemplar_SC_752",
     "HighTemplar_SC_765"
   ],
-  "COST_LESS_6 + DEATHRATTLE + MINION": [
+  "COST_LESS_6 + HAS_MECHANIC_DEATHRATTLE + MINION": [
     "DeathSpeakerBlackthorn_BAR_329"
   ],
   "NATURE + SPELL": [
@@ -1539,10 +1597,6 @@
     "RingOfPhaseshiftingTavernBrawl",
     "RoyalGreatswordTavernBrawlToken"
   ],
-  "LOCATION": [
-    "DispossessedSoul",
-    "DispossessedSoul_CORE_REV_901"
-  ],
   "TOTEM": [
     "DraeneiTotemcarver_AT_047",
     "DraeneiTotemcarver_CORE_AT_047",
@@ -1554,7 +1608,7 @@
     "TotemicEvidence",
     "TotemicEvidence_CORE_MAW_003"
   ],
-  "COST_LESS_4 + DEATHRATTLE + MINION": [
+  "COST_LESS_4 + HAS_MECHANIC_DEATHRATTLE + MINION": [
     "DreadRaptor_TLC_432",
     "Razorboar"
   ],
@@ -1569,7 +1623,7 @@
     "TheCurator_CORE_KAR_061",
     "TheCurator_KAR_061"
   ],
-  "DREDGE": [
+  "HAS_MECHANIC_DREDGE": [
     "EdgeOfDredgeTavernBrawl"
   ],
   "SHADOW + SPELL": [
@@ -1618,7 +1672,7 @@
     "Lurker_SC_009",
     "NydusWorm_SC_015"
   ],
-  "DIVINE_SHIELD + MINION": [
+  "HAS_MECHANIC_GIVES_DIVINE_SHIELD + MINION": [
     "FancyPackaging_TOY_881",
     "Funkfin",
     "RighteousReservesTavernBrawl"
@@ -1635,10 +1689,10 @@
     "Scorchreaver_FIR_952",
     "WitherTheWeakTavernBrawl"
   ],
-  "COST_MORE_4 + DEATHRATTLE + MINION": [
+  "COST_MORE_4 + HAS_MECHANIC_DEATHRATTLE + MINION": [
     "FerociousFelbat_EDR_892"
   ],
-  "COMBO": [
+  "HAS_MECHANIC_COMBO": [
     "FieldContact",
     "FoxyFraud",
     "FoxyFraud_CORE_DMF_511",
@@ -1663,7 +1717,7 @@
   "COST_MORE_7": [
     "FlamesOfTheFirelord_FIR_923"
   ],
-  "IMP": [
+  "HAS_MECHANIC_IMP": [
     "FlusteredLibrarian",
     "FlusteredLibrarian_CORE_REV_242",
     "ImpKingRafaam_ImpKingRafaamToken",
@@ -1729,7 +1783,7 @@
   "COST_MORE_3": [
     "HemetJungleHunter"
   ],
-  "GIVES_HERO_ATTACK": [
+  "HAS_MECHANIC_GIVES_HERO_ATTACK": [
     "HenchClanThug",
     "HenchClanThugCore",
     "Hookfist3000",
@@ -1739,7 +1793,7 @@
     "Shockspitter",
     "SockPuppetSlitherspear_MIS_710"
   ],
-  "FORGE": [
+  "HAS_MECHANIC_FORGE": [
     "IgnisTheEternalFlame",
     "MeltedMaker"
   ],
@@ -1794,7 +1848,7 @@
   "COST_EQUAL_3": [
     "LinedancePartner_WW_433"
   ],
-  "COMBO + MINION": [
+  "HAS_MECHANIC_COMBO + MINION": [
     "LuckyComet_GDB_873"
   ],
   "NOT_MINION": [
@@ -1828,26 +1882,26 @@
   "COST_MORE_2": [
     "OrbOfRevelationTavernBrawl"
   ],
-  "FRENZY": [
+  "HAS_MECHANIC_FRENZY": [
     "OverlordSaurfang_BAR_334"
   ],
   "COST_MORE_1 + SPELL": [
     "PlaguebringerTavernBrawl"
   ],
-  "KINDRED": [
+  "HAS_MECHANIC_KINDRED": [
     "PrimalfinChallenger_TLC_251",
     "Torga_TLC_102"
   ],
-  "IMP + MINION": [
+  "HAS_MECHANIC_IMP + MINION": [
     "ImpendingCatastrophe"
   ],
-  "MINION + WHELP": [
+  "HAS_MECHANIC_WHELP + MINION": [
     "RaidBossOnyxia_ONY_004"
   ],
   "COST_MORE_0 + MINION": [
     "Rally"
   ],
-  "COST_LESS_5 + DEATHRATTLE + MINION": [
+  "COST_LESS_5 + HAS_MECHANIC_DEATHRATTLE + MINION": [
     "RazorfenBeastmaster"
   ],
   "RELIC": [
@@ -1895,7 +1949,7 @@
     "Si7Informant",
     "Si7Smuggler"
   ],
-  "COST_LESS_5 + DEATHRATTLE": [
+  "COST_LESS_5 + HAS_MECHANIC_DEATHRATTLE": [
     "SketchyInformation"
   ],
   "GENERATE_SLAGCLAW": [
@@ -1917,7 +1971,7 @@
     "SunsapperLynessa_VAC_507",
     "VioletTreasuregill_TLC_438"
   ],
-  "SECRET + SPELL": [
+  "HAS_MECHANIC_SECRET + SPELL": [
     "ApexisSmuggler",
     "ArcaneFlakmage",
     "BlackjackStunner",
@@ -1961,7 +2015,7 @@
   "BEAST + COST_LESS_4": [
     "TrialOfTheJormungars_WON_028"
   ],
-  "AURA": [
+  "HAS_MECHANIC_PALADIN_AURA": [
     "TrinketArtist_TOY_882"
   ],
   "ATTACK_LESS_5": [

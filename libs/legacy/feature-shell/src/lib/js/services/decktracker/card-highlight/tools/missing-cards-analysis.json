@@ -1,7 +1,7 @@
 {
-  "totalOriginal": 1576,
-  "totalProcessed": 1473,
-  "totalMissing": 101,
+  "totalOriginal": 1582,
+  "totalProcessed": 1482,
+  "totalMissing": 98,
   "missingCards": [
     "AbyssalDepths",
     "AstralVigilant_GDB_461",
@@ -58,7 +58,6 @@
     "GrotesqueRuneblade_EDR_812",
     "GuessTheWeight_Less",
     "GuessTheWeight_More",
-    "HighCultistBasaleph",
     "HolyEggbearer_DINO_411",
     "HydrationStation_VAC_948",
     "JoymancerJepetto_TOY_960",
@@ -101,9 +100,7 @@
     "UrsineMaul_EDR_253",
     "VanndarStormpike_AV_223",
     "VelenLeaderOfTheExiled_GDB_131",
-    "Zuljin",
-    "Zuljin_WarriorsOfAmani_THD_010p",
     "WildSpirits"
   ],
-  "analysisDate": "2025-09-30T15:50:38.260Z"
+  "analysisDate": "2025-10-15T14:37:22.308Z"
 }

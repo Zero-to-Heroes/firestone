@@ -266,9 +266,18 @@ function extractConditionsFromCleanedCode(code: string): string[] {
 		if (trimmed.startsWith('or(') && trimmed.endsWith(')')) {
 			orConditions.push(trimmed);
 		} else {
-			const condition = convertToConditionString(trimmed);
-			if (condition) {
-				regularConditions.push(condition);
+			// Check if this is a function that expands to multiple conditions
+			const analyzedConditions = analyzeSelectorFunction(trimmed);
+			if (analyzedConditions && analyzedConditions.length > 1) {
+				// This function expands to multiple OR conditions
+				for (const condition of analyzedConditions) {
+					orConditions.push(`or(${condition})`);
+				}
+			} else {
+				const condition = convertToConditionString(trimmed);
+				if (condition) {
+					regularConditions.push(condition);
+				}
 			}
 		}
 	}
@@ -315,7 +324,146 @@ function smartSplit(str: string, delimiter: string): string[] {
 	return parts;
 }
 
+// Function to analyze selector functions and extract their conditions
+function analyzeSelectorFunction(functionName: string, visitedFunctions: Set<string> = new Set()): string[] | null {
+	// Prevent infinite recursion
+	if (visitedFunctions.has(functionName)) {
+		return null;
+	}
+	visitedFunctions.add(functionName);
+
+	const selectorsFilePath = path.join(__dirname, '..', 'selectors.ts');
+	const content = fs.readFileSync(selectorsFilePath, 'utf8');
+
+	// Look for the function definition
+	const functionRegex = new RegExp(`export\\s+const\\s+${functionName}\\s*=\\s*([^;\\n]+)`, 's');
+	const match = content.match(functionRegex);
+
+	if (!match) {
+		return null;
+	}
+
+	const definition = match[1].trim();
+
+	// Parse different types of function definitions
+	if (definition.startsWith('or(')) {
+		// Handle or(condition1, condition2, ...)
+		const orContent = definition.slice(3, -1); // Remove 'or(' and ')'
+		const parts = smartSplit(orContent, ',');
+		const conditions: string[] = [];
+
+		for (const part of parts) {
+			const trimmed = part.trim();
+
+			// Check if this part is itself a function call that needs analysis
+			const nestedAnalysis = analyzeSelectorFunction(trimmed, visitedFunctions);
+			if (nestedAnalysis) {
+				// If the nested function returns multiple conditions, add them all
+				conditions.push(...nestedAnalysis);
+			} else {
+				// Handle direct hasMechanicStr calls
+				if (trimmed.includes('hasMechanicStr(')) {
+					const mechanicMatch = trimmed.match(/hasMechanicStr\(['"]([^'"]+)['"]\)/);
+					if (mechanicMatch) {
+						const mechanicName = mechanicMatch[1];
+						conditions.push(`HAS_MECHANIC_${mechanicName}`);
+					}
+				} else if (trimmed.includes('cardType(')) {
+					// Handle cardType(CardType.TYPE_NAME) calls
+					const typeMatch = trimmed.match(/cardType\(CardType\.([^)]+)\)/);
+					if (typeMatch) {
+						const typeName = typeMatch[1];
+						conditions.push(typeName.toUpperCase());
+					}
+				} else {
+					const condition = convertToConditionString(trimmed);
+					if (condition) {
+						conditions.push(condition);
+					}
+				}
+			}
+		}
+
+		return conditions.length > 0 ? conditions : null;
+	} else if (definition.startsWith('and(')) {
+		// Handle and(condition1, condition2, ...)
+		const andContent = definition.slice(4, -1); // Remove 'and(' and ')'
+		const parts = smartSplit(andContent, ',');
+		const conditions: string[] = [];
+
+		for (const part of parts) {
+			const trimmed = part.trim();
+
+			// Check if this part is itself a function call that needs analysis
+			const nestedAnalysis = analyzeSelectorFunction(trimmed, visitedFunctions);
+			if (nestedAnalysis) {
+				// If the nested function returns multiple conditions, add them all
+				conditions.push(...nestedAnalysis);
+			} else {
+				// Handle direct hasMechanicStr calls
+				if (trimmed.includes('hasMechanicStr(')) {
+					const mechanicMatch = trimmed.match(/hasMechanicStr\(['"]([^'"]+)['"]\)/);
+					if (mechanicMatch) {
+						const mechanicName = mechanicMatch[1];
+						conditions.push(`HAS_MECHANIC_${mechanicName}`);
+					}
+				} else if (trimmed.includes('cardType(')) {
+					// Handle cardType(CardType.TYPE_NAME) calls
+					const typeMatch = trimmed.match(/cardType\(CardType\.([^)]+)\)/);
+					if (typeMatch) {
+						const typeName = typeMatch[1];
+						conditions.push(typeName.toUpperCase());
+					}
+				} else {
+					const condition = convertToConditionString(trimmed);
+					if (condition) {
+						conditions.push(condition);
+					}
+				}
+			}
+		}
+
+		// For AND conditions, we need to combine them as a single compound condition
+		return conditions.length > 0 ? [conditions.sort().join(' + ')] : null;
+	} else if (definition.includes('hasMechanicStr(')) {
+		// Handle hasMechanicStr('MECHANIC_NAME')
+		const mechanicMatch = definition.match(/hasMechanicStr\(['"]([^'"]+)['"]\)/);
+		if (mechanicMatch) {
+			const mechanicName = mechanicMatch[1];
+			return [`HAS_MECHANIC_${mechanicName}`];
+		}
+	} else if (definition.includes('hasMechanic(')) {
+		// Handle hasMechanic(GameTag.MECHANIC_NAME)
+		const mechanicMatch = definition.match(/hasMechanic\(GameTag\.([^)]+)\)/);
+		if (mechanicMatch) {
+			const mechanicName = mechanicMatch[1];
+			return [`HAS_MECHANIC_${mechanicName}`];
+		}
+	} else if (definition.includes('cardType(')) {
+		// Handle cardType(CardType.TYPE_NAME)
+		const typeMatch = definition.match(/cardType\(CardType\.([^)]+)\)/);
+		if (typeMatch) {
+			const typeName = typeMatch[1];
+			return [typeName.toUpperCase()];
+		}
+	}
+
+	return null;
+}
+
 function convertToConditionString(part: string): string | null {
+	// First, try to analyze if this is a function we can inspect
+	const analyzedConditions = analyzeSelectorFunction(part);
+	if (analyzedConditions) {
+		// If it's an OR function (multiple conditions), this should be handled by the calling code
+		// For now, just return null so the calling code can handle it properly
+		if (analyzedConditions.length > 1) {
+			console.log(`📋 Function ${part} expands to multiple conditions: ${analyzedConditions.join(', ')}`);
+			return null; // Let the calling code handle multiple conditions
+		}
+		return analyzedConditions[0];
+	}
+
 	// Map function calls to condition strings
 	const mappings: { [key: string]: string } = {
 		minion: 'MINION',
@@ -431,7 +579,6 @@ function convertToConditionString(part: string): string | null {
 		restoreHealth: 'RESTORE_HEALTH',
 		dealsDamage: 'DEALS_DAMAGE',
 		givesArmor: 'GIVES_ARMOR',
-		givesHeroAttack: 'GIVES_HERO_ATTACK',
 		starshipExtended: 'STARSHIP_EXTENDED',
 		locationExtended: 'LOCATION_EXTENDED',
 		darkGift: 'DARK_GIFT',
@@ -539,9 +686,20 @@ function expandOrConditions(orConditions: string[]): string[] {
 			const orParts = smartSplit(content, ',');
 
 			for (const orPart of orParts) {
-				const condition = convertToConditionString(orPart.trim());
-				if (condition) {
-					results.push(condition);
+				const trimmed = orPart.trim();
+
+				// Check if this is already a processed condition (from function analysis)
+				if (
+					trimmed.toUpperCase() === trimmed &&
+					(trimmed.includes('_') || ['WEAPON', 'SPELL', 'MINION', 'LOCATION'].includes(trimmed))
+				) {
+					// This looks like an already processed condition
+					results.push(trimmed);
+				} else {
+					const condition = convertToConditionString(trimmed);
+					if (condition) {
+						results.push(condition);
+					}
 				}
 			}
 		}
@@ -633,22 +791,24 @@ function generateMinionFile(flatMappings: { [condition: string]: string[] }): st
 
 	// Generate conditions for minion-related mappings, ordered by specificity (most specific first)
 	const minionConditions = Object.entries(flatMappings)
-		.filter(
-			([condition]) =>
+		.filter(([condition]) => {
+			const matches =
 				condition.includes('MINION') ||
-				condition.includes('BEAST') ||
-				condition.includes('MECH') ||
-				condition.includes('DRAGON') ||
-				condition.includes('MURLOC') ||
-				condition.includes('PIRATE') ||
-				condition.includes('DEMON') ||
-				condition.includes('ELEMENTAL') ||
-				condition.includes('UNDEAD') ||
-				condition.includes('NAGA') ||
-				condition.includes('TOTEM') ||
+				(condition.includes('BEAST') && !condition.includes('HAS_MECHANIC')) ||
+				(condition.includes('MECH') && !condition.includes('HAS_MECHANIC')) ||
+				(condition.includes('DRAGON') && !condition.includes('HAS_MECHANIC')) ||
+				(condition.includes('MURLOC') && !condition.includes('HAS_MECHANIC')) ||
+				(condition.includes('PIRATE') && !condition.includes('HAS_MECHANIC')) ||
+				(condition.includes('DEMON') && !condition.includes('HAS_MECHANIC')) ||
+				(condition.includes('ELEMENTAL') && !condition.includes('HAS_MECHANIC')) ||
+				(condition.includes('UNDEAD') && !condition.includes('HAS_MECHANIC')) ||
+				(condition.includes('NAGA') && !condition.includes('HAS_MECHANIC')) ||
+				(condition.includes('TOTEM') && !condition.includes('HAS_MECHANIC')) ||
 				condition.includes('ATTACK') ||
-				condition.includes('NOT_TRIBELESS'),
-		)
+				condition.includes('NOT_TRIBELESS');
+
+			return matches;
+		})
 		.sort(([a], [b]) => {
 			// Sort by specificity: more conditions = more specific = should come first
 			const aConditionCount = a.split(' + ').length;
@@ -853,8 +1013,8 @@ function generateGeneralFile(flatMappings: { [condition: string]: string[] }): s
 
 	// Generate conditions for general mappings, ordered by specificity (most specific first)
 	const generalConditions = Object.entries(flatMappings)
-		.filter(
-			([condition]) =>
+		.filter(([condition]) => {
+			const matches =
 				condition.includes('WEAPON') ||
 				condition.includes('LOCATION') ||
 				condition.includes('COST_') ||
@@ -863,8 +1023,10 @@ function generateGeneralFile(flatMappings: { [condition: string]: string[] }): s
 				condition.includes('DEATHRATTLE') ||
 				condition.includes('BATTLECRY') ||
 				condition.includes('TAUNT') ||
-				condition.includes('RUSH'),
-		)
+				condition.includes('RUSH');
+
+			return matches;
+		})
 		.sort(([a], [b]) => {
 			// Sort by specificity: more conditions = more specific = should come first
 			const aConditionCount = a.split(' + ').length;
@@ -1046,6 +1208,9 @@ function buildReverseCondition(condition: string): string | null {
 				} else if (part.startsWith('ATTACK_MORE_')) {
 					const value = part.replace('ATTACK_MORE_', '');
 					conditions.push(`refCard.attack > ${value}`);
+				} else if (part.startsWith('HAS_MECHANIC_')) {
+					const mechanicName = part.replace('HAS_MECHANIC_', '');
+					conditions.push(`refCard.mechanics?.includes('${mechanicName}')`);
 				} else {
 					// Skip unknown conditions
 					return null;

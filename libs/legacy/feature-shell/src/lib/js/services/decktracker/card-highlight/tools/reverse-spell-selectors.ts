@@ -149,6 +149,37 @@ export const reverseSpellSelector = (
 		);
 	}
 
+	// HAS_MECHANIC_SECRET + SPELL (25 cards)
+	if (refCard.mechanics?.includes('SECRET') && refCard.type?.toUpperCase() === 'SPELL') {
+		matchingCardIds.push(
+			CardIds.ApexisSmuggler,
+			CardIds.ArcaneFlakmage,
+			CardIds.BlackjackStunner,
+			CardIds.CannonmasterSmythe_BAR_879,
+			CardIds.CloakedHuntress_CORE_KAR_006,
+			CardIds.CloakedHuntress_KAR_006,
+			CardIds.CommanderRhyssa,
+			CardIds.ContractConjurer,
+			CardIds.Halkias,
+			CardIds.InconspicuousRider,
+			CardIds.LesserEmeraldSpellstone,
+			CardIds.LesserEmeraldSpellstone_EmeraldSpellstoneToken,
+			CardIds.LesserEmeraldSpellstone_GreaterEmeraldSpellstoneToken,
+			CardIds.MedivhsValet,
+			CardIds.OrionMansionManager,
+			CardIds.PettingZoo,
+			CardIds.PhaseStalker,
+			CardIds.ProfessorPutricide_CORE_ICC_204,
+			CardIds.ProfessorPutricide_ICC_204,
+			CardIds.SaygeSeerOfDarkmoon,
+			CardIds.SecretkeeperLegacy,
+			CardIds.SecretkeeperVanilla,
+			CardIds.SparkjoyCheat,
+			CardIds.StarstrungBow,
+			CardIds.SwordOfTheFallen
+		);
+	}
+
 	// HOLY + SPELL (15 cards)
 	if (refCard.spellSchool?.toUpperCase() === 'HOLY' && refCard.type?.toUpperCase() === 'SPELL') {
 		matchingCardIds.push(
@@ -250,6 +281,35 @@ export const reverseSpellSelector = (
 		);
 	}
 
+	// HAS_MECHANIC_SECRET (23 cards)
+	if (refCard.mechanics?.includes('SECRET')) {
+		matchingCardIds.push(
+			CardIds.AncientMysteries,
+			CardIds.AnonymousInformant,
+			CardIds.AnonymousInformant_CORE_REV_841,
+			CardIds.Arcanologist,
+			CardIds.ArcanologistCore,
+			CardIds.ChattyBartender,
+			CardIds.CostumedSinger,
+			CardIds.DunBaldarBunker,
+			CardIds.EaglehornBowLegacy,
+			CardIds.EaglehornBowVanilla,
+			CardIds.GhastlyGravedigger,
+			CardIds.KabalCrystalRunner,
+			CardIds.KabalCrystalRunner_WON_308,
+			CardIds.MadScientist,
+			CardIds.MysteriousChallenger,
+			CardIds.MysteriousChallenger_WON_334,
+			CardIds.PrivateEye,
+			CardIds.Product9_MIS_914,
+			CardIds.ScuttlebuttGhoul,
+			CardIds.ScuttlebuttGhoul_CORE_REV_900,
+			CardIds.SecretStudiesTavernBrawl,
+			CardIds.SpringTheTrap,
+			CardIds.Zuljin_WarriorsOfAmani_THD_010p
+		);
+	}
+
 	// HOLY (8 cards)
 	if (refCard.spellSchool?.toUpperCase() === 'HOLY') {
 		matchingCardIds.push(
@@ -291,7 +351,7 @@ export const reverseSpellSelector = (
 		);
 	}
 
-	// SPELL (224 cards)
+	// SPELL (225 cards)
 	if (refCard.type?.toUpperCase() === 'SPELL') {
 		matchingCardIds.push(
 			CardIds.AdvancedTargetingMonocle,
@@ -517,7 +577,8 @@ export const reverseSpellSelector = (
 			CardIds.WishOfTheNewMoon_EDR_460,
 			CardIds.WrathspineEnchanter,
 			CardIds.YoggSaronHopesEnd_OG_134,
-			CardIds.YoggSaronMasterOfFate
+			CardIds.YoggSaronMasterOfFate,
+			CardIds.Zuljin
 		);
 	}
 
