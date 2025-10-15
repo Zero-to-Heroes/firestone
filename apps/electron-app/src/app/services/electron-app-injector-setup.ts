@@ -1,7 +1,8 @@
 import { BgsBattleSimulationMockExecutorService, BgsBattleSimulationService } from '@firestone/battlegrounds/core';
-import { ElectronAdsService, ElectronApiRunner, ElectronStorageService } from '@firestone/electron/common';
+import { ElectronAdService, ElectronApiRunner, ElectronStorageService } from '@firestone/electron/common';
 import {
 	AiDeckService,
+	BattlegroundsOfficialLeaderboardService,
 	BgsMatchMemoryInfoService,
 	BgsMatchPlayersMmrService,
 	ConstructedArchetypeService,
@@ -156,8 +157,11 @@ export const buildAppInjector = () => {
 	);
 	electronInjector.register(ConstructedArchetypeServiceOrchestrator, constructedArchetypesOthestrator);
 
-	const ads: IAdsService = new ElectronAdsService();
+	const ads: IAdsService = new ElectronAdService(windowManager);
 	electronInjector.register(ADS_SERVICE_TOKEN, ads);
+
+	const bgsOfficialLeaderboard = new BattlegroundsOfficialLeaderboardService(windowManager);
+	electronInjector.register(BattlegroundsOfficialLeaderboardService, bgsOfficialLeaderboard);
 
 	// TODO: use a real battle sim service
 	const battleExecutor = new BgsBattleSimulationMockExecutorService();

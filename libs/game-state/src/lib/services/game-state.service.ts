@@ -73,8 +73,10 @@ export class GameStateService {
 	}
 
 	private async init() {
-		window['deckUpdater'] = this.deckUpdater;
-		window['bgsHotkeyPressed'] = this.battlegroundsWindowsListener;
+		if (typeof window !== 'undefined') {
+			window['deckUpdater'] = this.deckUpdater;
+			window['bgsHotkeyPressed'] = this.battlegroundsWindowsListener;
+		}
 
 		await waitForReady(this.prefs, this.overlayDisplay);
 
