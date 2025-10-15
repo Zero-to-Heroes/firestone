@@ -1,5 +1,5 @@
 import { BgsBattleSimulationMockExecutorService, BgsBattleSimulationService } from '@firestone/battlegrounds/core';
-import { ElectronAdService, ElectronApiRunner, ElectronStorageService } from '@firestone/electron/common';
+import { ElectronApiRunner, ElectronStorageService } from '@firestone/electron/common';
 import {
 	AiDeckService,
 	BattlegroundsOfficialLeaderboardService,
@@ -11,7 +11,9 @@ import {
 	DeckManipulationHelper,
 	DeckParserFacadeService,
 	DeckParserService,
+	GameEvents,
 	GameEventsEmitterService,
+	GameEventsFacadeService,
 	GameStateFacadeService,
 	GameStateMetaInfoService,
 	GameStateParsersService,
@@ -31,7 +33,12 @@ import {
 	MindVisionStateMachineService,
 	SceneService,
 } from '@firestone/memory';
-import { GameStatusService, PreferencesService, PreferencesStorageService } from '@firestone/shared/common/service';
+import {
+	GameStatusService,
+	PreferencesService,
+	PreferencesStorageService,
+	StandaloneAdService,
+} from '@firestone/shared/common/service';
 import {
 	ADS_SERVICE_TOKEN,
 	ApiRunner,
@@ -123,8 +130,33 @@ export const buildAppInjector = () => {
 	const overlayDisplay = new OverlayDisplayService(windowManager);
 	electronInjector.register(OverlayDisplayService, overlayDisplay);
 
-	const gameEvents = new GameEventsElectronService();
-	electronInjector.register(GameEventsElectronService, gameEvents);
+	const gameEventsElectron = new GameEventsElectronService();
+	electronInjector.register(GameEventsElectronService, gameEventsElectron);
+
+	const gameStateFacade = new GameStateFacadeService(windowManager);
+	electronInjector.register(GameStateFacadeService, gameStateFacade);
+
+	const gameId = new GameUniqueIdService(memoryInspection);
+	electronInjector.register(GameUniqueIdService, gameId);
+
+	const reviewId = new ReviewIdService(gameEventsEmitter);
+	electronInjector.register(ReviewIdService, reviewId);
+
+	const gameEventsFacade = new GameEventsFacadeService();
+	electronInjector.register(GameEventsFacadeService, gameEventsFacade);
+
+	const gameEvents = new GameEvents(
+		gameEventsElectron,
+		gameEventsEmitter,
+		scene,
+		gameStatus,
+		allCards as any as CardsFacadeService,
+		gameStateFacade,
+		gameId,
+		gameEventsFacade,
+		null,
+	);
+	electronInjector.register(GameEvents, gameEvents);
 
 	const gameStateMetaInfos = new GameStateMetaInfoService();
 	electronInjector.register(GameStateMetaInfoService, gameStateMetaInfos);
@@ -157,7 +189,7 @@ export const buildAppInjector = () => {
 	);
 	electronInjector.register(ConstructedArchetypeServiceOrchestrator, constructedArchetypesOthestrator);
 
-	const ads: IAdsService = new ElectronAdService(windowManager);
+	const ads: IAdsService = new StandaloneAdService(windowManager);
 	electronInjector.register(ADS_SERVICE_TOKEN, ads);
 
 	const bgsOfficialLeaderboard = new BattlegroundsOfficialLeaderboardService(windowManager);
@@ -175,12 +207,6 @@ export const buildAppInjector = () => {
 		null,
 	);
 	electronInjector.register(BgsBattleSimulationService, simulation);
-
-	const gameId = new GameUniqueIdService(memoryInspection);
-	electronInjector.register(GameUniqueIdService, gameId);
-
-	const reviewId = new ReviewIdService(gameEventsEmitter);
-	electronInjector.register(ReviewIdService, reviewId);
 
 	const gameEventsParser = new GameStateParsersService(
 		helper,
@@ -234,9 +260,6 @@ export const buildAppInjector = () => {
 		simulation,
 	);
 	electronInjector.register(GameStateService, gameState);
-
-	const gameStateFacade = new GameStateFacadeService(windowManager);
-	electronInjector.register(GameStateFacadeService, gameStateFacade);
 
 	return electronInjector;
 };

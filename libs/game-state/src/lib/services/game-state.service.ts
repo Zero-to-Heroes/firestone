@@ -141,7 +141,7 @@ export class GameStateService {
 			this.showDecktrackerFromGameMode = event;
 		});
 
-		if (process.env['NODE_ENV'] !== 'production') {
+		if (process.env['NODE_ENV'] !== 'production' && typeof window !== 'undefined') {
 			window['gameState'] = () => {
 				return this.state;
 			};

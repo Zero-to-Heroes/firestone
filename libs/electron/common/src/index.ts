@@ -1,5 +1,4 @@
 export * from './lib/common';
-export * from './lib/electron-ads.service';
 export * from './lib/electron-api-runner.interface';
 export * from './lib/electron-api-runner.service';
 export * from './lib/electron-game-window.service';
