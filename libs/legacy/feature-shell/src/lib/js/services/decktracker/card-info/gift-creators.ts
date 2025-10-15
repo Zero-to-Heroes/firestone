@@ -1084,4 +1084,5 @@ export const giftCreators = [
 	TempCardIds.TimeSkipper,
 	TempCardIds.RoyalInformant,
 	TempCardIds.DejaVu,
+	TempCardIds.TimelessChest,
 ];

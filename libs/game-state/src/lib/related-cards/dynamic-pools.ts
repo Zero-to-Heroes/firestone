@@ -114,6 +114,17 @@ const getDynamicRelatedCardIdsInternal = (
 					hasCorrectTribe(c, Race.MECH) &&
 					c.classes?.includes(CardClass[CardClass.PALADIN]),
 			);
+		case TempCardIds.Flashback:
+			return filterCards(
+				allCards,
+				// So that we don't get cards from the arena-specific pool instead
+				{ ...options, format: GameFormat.FT_WILD, gameType: GameType.GT_RANKED },
+				cardId,
+				(c) =>
+					!isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
+					hasCorrectType(c, CardType.MINION) &&
+					hasCost(c, '==', 1),
+			);
 		case TempCardIds.AlternateReality:
 			return filterCards(
 				allCards,
@@ -1128,6 +1139,7 @@ const getDynamicFilters = (
 		case CardIds.ContainmentUnit:
 		case TempCardIds.KarazhanTheSanctum:
 		case TempCardIds.Circadiamancer:
+		case TempCardIds.Dethrone:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 8);
 		case CardIds.SunsetVolley_WW_427:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 10);
@@ -1486,6 +1498,8 @@ const doesSummonInPlay = (sourceCardId: string): boolean => {
 		case TempCardIds.PaltryFlutterwing:
 		case TempCardIds.DangerousVariant:
 		case TempCardIds.Stormrook:
+		case TempCardIds.Dethrone:
+		case TempCardIds.Flashback:
 			return true;
 
 		// Cards that summon specific minions directly
