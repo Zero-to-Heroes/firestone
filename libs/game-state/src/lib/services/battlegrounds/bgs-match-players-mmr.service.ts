@@ -17,7 +17,7 @@ import { BattlegroundsOfficialLeaderboardService } from './bgs-official-leaderbo
 
 const MIN_RATING = 0; // 6000
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class BgsMatchPlayersMmrService extends AbstractFacadeService<BgsMatchPlayersMmrService> {
 	public playersMatchMmr$$: SubscriberAwareBehaviorSubject<readonly PlayerMatchMmr[] | null>;
 

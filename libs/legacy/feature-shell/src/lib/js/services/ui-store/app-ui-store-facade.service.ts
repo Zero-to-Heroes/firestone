@@ -7,9 +7,8 @@ import { BehaviorSubject, Observable } from 'rxjs';
 
 import { ProfileBgHeroStat, ProfileClassProgress } from '@firestone-hs/api-user-profile';
 import { PackResult } from '@firestone-hs/user-packs';
-import { PackInfo } from '@firestone/collection/view';
 import { DeckSummary } from '@firestone/constructed/common';
-import { Card, CardBack } from '@firestone/memory';
+import { Card, CardBack, CollectionPackInfo as PackInfo } from '@firestone/memory';
 import { Preferences } from '@firestone/shared/common/service';
 import { AchievementHistory } from '../../models/achievement/achievement-history';
 import { CardHistory } from '../../models/card-history';

@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { BnetRegion, Board, SceneMode } from '@firestone-hs/reference-data';
-import { PackInfo } from '@firestone/collection/view';
 import { GameStatusService } from '@firestone/shared/common/service';
 import { HsAchievementCategory, HsAchievementsInfo } from '../external-models/achievements-info';
 import { ArenaInfo } from '../external-models/arena-info';
@@ -16,6 +15,7 @@ import { MemoryMercenariesCollectionInfo } from '../models/memory-mercenaries-co
 import { MemoryMercenariesInfo } from '../models/memory-mercenaries-info';
 import { MemoryPlayerProfileInfo } from '../models/memory-profile-info';
 import { MemoryUpdate } from '../models/memory-update';
+import { CollectionPackInfo } from '../models/pack-info';
 import { MemoryQuestsLog } from '../models/quests';
 import { RewardsTrackInfos } from '../models/rewards-track-info';
 import { MindVisionFacadeService } from './mind-vision/mind-vision-facade.service';
@@ -241,7 +241,7 @@ export class MemoryInspectionService {
 		return this.mindVision.callMindVision(() => this.getAchievementCategoriesOperation.call());
 	}
 
-	public async getBoostersInfo(): Promise<readonly PackInfo[] | null> {
+	public async getBoostersInfo(): Promise<readonly CollectionPackInfo[] | null> {
 		return this.mindVision.callMindVision(() => this.getBoostersInfoOperation.call());
 	}
 

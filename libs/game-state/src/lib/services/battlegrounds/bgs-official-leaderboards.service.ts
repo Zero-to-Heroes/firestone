@@ -15,7 +15,7 @@ import { distinctUntilChanged, interval, map } from 'rxjs';
 const OFFICIAL_LEADERBOARD_URL = 'https://static.zerotoheroes.com/api/bgs/leaderboards/global.gz.json';
 const OFFICIAL_LEADERBOARD_URL_DUOS = 'https://static.zerotoheroes.com/api/bgs/duo/leaderboards/global.gz.json';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class BattlegroundsOfficialLeaderboardService extends AbstractFacadeService<BattlegroundsOfficialLeaderboardService> {
 	public leaderboards$$: SubscriberAwareBehaviorSubject<OfficialLeaderboardResult | null>;
 

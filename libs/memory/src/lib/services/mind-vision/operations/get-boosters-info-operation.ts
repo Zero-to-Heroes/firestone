@@ -1,10 +1,10 @@
-import { PackInfo } from '@firestone/collection/view';
 import { GameStatusService } from '@firestone/shared/common/service';
 import { BoostersInfo } from '../../../models/boosters-info';
+import { CollectionPackInfo } from '../../../models/pack-info';
 import { MindVisionFacadeService } from '../mind-vision-facade.service';
 import { MindVisionOperationFacade } from '../mind-vision-operation-facade';
 
-export class GetBoostersInfoOperation extends MindVisionOperationFacade<readonly PackInfo[]> {
+export class GetBoostersInfoOperation extends MindVisionOperationFacade<readonly CollectionPackInfo[]> {
 	constructor(mindVision: MindVisionFacadeService, gameStatus: GameStatusService) {
 		super(
 			gameStatus,
@@ -18,8 +18,8 @@ export class GetBoostersInfoOperation extends MindVisionOperationFacade<readonly
 							packType: booster.BoosterId,
 							totalObtained: booster.EverGrantedCount,
 							unopened: booster.Count,
-						}) as PackInfo,
-				) as readonly PackInfo[];
+						}) as CollectionPackInfo,
+				) as readonly CollectionPackInfo[];
 			},
 		);
 	}

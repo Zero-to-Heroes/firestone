@@ -1,6 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { PrefsSelector, Store } from '@firestone/shared/framework/common';
-import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { MailState } from '@mails/mail-state';
 import { MailsService } from '@mails/services/mails.service';
@@ -10,10 +10,9 @@ import { distinctUntilChanged, filter, map, shareReplay } from 'rxjs/operators';
 
 import { ProfileBgHeroStat, ProfileClassProgress } from '@firestone-hs/api-user-profile';
 import { PackResult } from '@firestone-hs/user-packs';
-import { PackInfo } from '@firestone/collection/view';
 import { DeckSummary } from '@firestone/constructed/common';
-import { BattlegroundsState, GameState } from '@firestone/game-state';
-import { Card, CardBack } from '@firestone/memory';
+import { BattlegroundsState, GameState, GameStateFacadeService } from '@firestone/game-state';
+import { Card, CardBack, CollectionPackInfo as PackInfo } from '@firestone/memory';
 import { PatchesConfigService, Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { AchievementHistory } from '../../models/achievement/achievement-history';
 import { CardHistory } from '../../models/card-history';
@@ -55,7 +54,6 @@ export class AppUiStoreService extends Store<Preferences> {
 
 	private mainStore: BehaviorSubject<[MainWindowState, NavigationState]>;
 	private prefs: BehaviorSubject<Preferences>;
-	private deckStore: BehaviorSubject<GameState>;
 	private mercenariesStore: BehaviorSubject<MercenariesBattleState>;
 	private mercenariesOutOfCombatStore: BehaviorSubject<MercenariesOutOfCombatState>;
 	private mercenariesSynergiesStore: BehaviorSubject<HighlightSelector>;
@@ -94,6 +92,7 @@ export class AppUiStoreService extends Store<Preferences> {
 		private readonly collectionBootstrapService: CollectionBootstrapService,
 		private readonly setsManager: SetsManagerService,
 		private readonly achievementsStateManagerService: AchievementsStateManagerService,
+		private readonly gameStateFacade: GameStateFacadeService,
 	) {
 		super();
 		window['appStore'] = this;
@@ -108,10 +107,10 @@ export class AppUiStoreService extends Store<Preferences> {
 		await this.collectionManager.isReady();
 		await this.collectionBootstrapService.isReady();
 		await this.setsManager.isReady();
+		await waitForReady(this.gameStateFacade);
 
 		this.mainStore = this.ow.getMainWindow().mainWindowStoreMerged;
 		this.prefs = this.prefsService.preferences$$;
-		this.deckStore = this.ow.getMainWindow().deckEventBus;
 		this.mercenariesStore = this.ow.getMainWindow().mercenariesStore;
 		this.mercenariesOutOfCombatStore = this.ow.getMainWindow().mercenariesOutOfCombatStore;
 		this.mercenariesSynergiesStore = this.ow.getMainWindow().mercenariesSynergiesStore;
@@ -162,7 +161,7 @@ export class AppUiStoreService extends Store<Preferences> {
 	public listenDeckState$<S extends GameStateSelector<any>[]>(
 		...selectors: S
 	): Observable<{ [K in keyof S]: S[K] extends GameStateSelector<infer T> ? T : never }> {
-		return this.deckStore.pipe(
+		return this.gameStateFacade.gameState$$.pipe(
 			filter((gameState) => !!gameState),
 			map((gameState) => selectors.map((selector) => selector(gameState))),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),

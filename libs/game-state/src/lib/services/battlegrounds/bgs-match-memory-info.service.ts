@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { isBattlegrounds } from '@firestone-hs/reference-data';
 import { BattlegroundsInfo, MemoryInspectionService } from '@firestone/memory';
 import { GameStatusService, PreferencesService } from '@firestone/shared/common/service';
-import { waitForReady } from '@firestone/shared/framework/core';
+import { AppInjector, waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, interval } from 'rxjs';
 import { GameStateFacadeService } from '../game-state-facade.service';
 import { BgsMatchPlayersMmrService } from './bgs-match-players-mmr.service';
@@ -16,7 +16,6 @@ export class BgsMatchMemoryInfoService {
 
 	constructor(
 		private readonly memory: MemoryInspectionService,
-		private readonly gameState: GameStateFacadeService,
 		private readonly gameStatus: GameStatusService,
 		private readonly prefs: PreferencesService,
 		private readonly matchPlayers: BgsMatchPlayersMmrService,
@@ -30,8 +29,11 @@ export class BgsMatchMemoryInfoService {
 
 	private async startMemoryReading() {
 		console.log('[bgs-match-memory-info] getting ready to start memory reading');
-		await waitForReady(this.gameState, this.prefs, this.gameStatus);
+		await waitForReady(this.prefs, this.gameStatus);
 		console.log('[bgs-match-memory-info] starting memory reading');
+
+		const gameStateService = AppInjector.get(GameStateFacadeService);
+		await waitForReady(gameStateService);
 
 		let inProcess = false;
 		interval(INTERVAL).subscribe(async () => {
@@ -45,7 +47,7 @@ export class BgsMatchMemoryInfoService {
 					return;
 				}
 
-				const gameState = this.gameState.gameState$$.getValue();
+				const gameState = gameStateService.gameState$$.getValue();
 				if (
 					!gameState?.bgState?.currentGame ||
 					!gameState.gameStarted ||
