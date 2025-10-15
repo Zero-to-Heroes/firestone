@@ -1,6 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { CardClass } from '@firestone-hs/reference-data';
-import { SortCriteria, SortDirection, invertDirection } from '@firestone/shared/common/view';
+import { SortCriteria, SortDirection, invertDirection } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@legacy-import/src/lib/js/services/localization-facade.service';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
@@ -171,7 +171,7 @@ export class ProfileMatchStatsComponent extends AbstractSubscriptionStoreCompone
 											: (100 * gamesForMode.wins) / (gamesForMode.wins + gamesForMode.losses),
 								};
 								return classInfo;
-						  })
+							})
 						: [];
 				const bgClassProgress: readonly ClassInfo[] =
 					currentMode === 'battlegrounds'
@@ -186,7 +186,7 @@ export class ProfileMatchStatsComponent extends AbstractSubscriptionStoreCompone
 									winrate: info.gamesPlayed === 0 ? null : (100 * info.top4) / info.gamesPlayed,
 								};
 								return classInfo;
-						  })
+							})
 						: [];
 				return [...hsClassProgress, ...bgClassProgress].sort((a, b) =>
 					this.sortClassProgress(a, b, sortCriteria),

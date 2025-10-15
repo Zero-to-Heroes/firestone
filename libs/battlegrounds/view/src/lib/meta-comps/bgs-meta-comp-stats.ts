@@ -4,8 +4,7 @@ import { BgsCompStat } from '@firestone-hs/bgs-global-stats';
 import { BgsCompAdvice, BgsCompCardAdvice } from '@firestone-hs/content-craetor-input';
 import { Entity } from '@firestone-hs/replay-parser';
 import { BgsRankFilterType } from '@firestone/shared/common/service';
-import { SortCriteria } from '@firestone/shared/common/view';
-import { getStandardDeviation, sortByProperties } from '@firestone/shared/framework/common';
+import { getStandardDeviation, sortByProperties, SortCriteria } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import {
 	BgsCompTier,
