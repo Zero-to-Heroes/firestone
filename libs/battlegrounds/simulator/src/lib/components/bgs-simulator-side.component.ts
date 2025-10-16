@@ -170,6 +170,8 @@ export class BgsSimulatorSideComponent {
 	eternalLegion: number;
 	hauntedCarapaceAttackBonus: number;
 	hauntedCarapaceHealthBonus: number;
+	goldrinnAttackBonus: number;
+	goldrinnHealthBonus: number;
 	tavernSpellsCastThisGame: number;
 	piratesPlayedThisGame: number;
 	piratesSummonedThisGame: number;
@@ -274,9 +276,8 @@ export class BgsSimulatorSideComponent {
 		this.undeadArmy = this._player.player?.globalInfo?.UndeadAttackBonus ?? 0;
 		this.hauntedCarapaceAttackBonus = this._player.player?.globalInfo?.HauntedCarapaceAttackBonus ?? 0;
 		this.hauntedCarapaceHealthBonus = this._player.player?.globalInfo?.HauntedCarapaceHealthBonus ?? 0;
-		// this.bloodGemAttackBonus = this._player.player?.globalInfo?.BloodGemAttackBonus ?? 0;
-		// this.bloodGemHealthBonus = this._player.player?.globalInfo?.BloodGemHealthBonus ?? 0;
-		// this.frostlingBonus = this._player.player?.globalInfo?.FrostlingBonus ?? 0;
+		this.goldrinnAttackBonus = this._player.player?.globalInfo?.GoldrinnBuffAtk ?? 0;
+		this.goldrinnHealthBonus = this._player.player?.globalInfo?.GoldrinnBuffHealth ?? 0;
 		this.eternalLegion = this._player.player?.globalInfo?.EternalKnightsDeadThisGame ?? 0;
 		this.tavernSpellsCastThisGame = this._player.player?.globalInfo?.TavernSpellsCastThisGame ?? 0;
 		this.piratesPlayedThisGame = this._player.player?.globalInfo?.PiratesPlayedThisGame ?? 0;

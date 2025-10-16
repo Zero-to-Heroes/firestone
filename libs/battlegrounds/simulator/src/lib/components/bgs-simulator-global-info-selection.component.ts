@@ -57,6 +57,24 @@ import { CardsFacadeService, ILocalizationService } from '@firestone/shared/fram
 				>
 				</fs-numeric-input-with-arrows>
 				<fs-numeric-input-with-arrows
+					class="input goldrinn-attack"
+					[label]="'battlegrounds.sim.goldrinn-attack' | fsTranslate"
+					[helpTooltip]="'battlegrounds.sim.goldrinn-attack-tooltip' | fsTranslate"
+					[value]="goldrinnAttackBonus"
+					[minValue]="0"
+					(fsModelUpdate)="onGoldrinnAttackBonusChanged($event)"
+				>
+				</fs-numeric-input-with-arrows>
+				<fs-numeric-input-with-arrows
+					class="input goldrinn-health"
+					[label]="'battlegrounds.sim.goldrinn-health' | fsTranslate"
+					[helpTooltip]="'battlegrounds.sim.goldrinn-health-tooltip' | fsTranslate"
+					[value]="goldrinnHealthBonus"
+					[minValue]="0"
+					(fsModelUpdate)="onGoldrinnHealthBonusChanged($event)"
+				>
+				</fs-numeric-input-with-arrows>
+				<fs-numeric-input-with-arrows
 					class="input"
 					[label]="'battlegrounds.sim.frostling-bonus' | fsTranslate"
 					[helpTooltip]="'battlegrounds.sim.frostling-bonus-tooltip' | fsTranslate"
@@ -238,6 +256,8 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 		this.undeadAttackBonus = value?.UndeadAttackBonus ?? 0;
 		this.hauntedCarapaceAttackBonus = value?.HauntedCarapaceAttackBonus ?? 0;
 		this.hauntedCarapaceHealthBonus = value?.HauntedCarapaceHealthBonus ?? 0;
+		this.goldrinnAttackBonus = value?.GoldrinnBuffAtk ?? 0;
+		this.goldrinnHealthBonus = value?.GoldrinnBuffHealth ?? 0;
 		this.frostlingBonus = value?.FrostlingBonus ?? 0;
 		this.bloodGemAttackBonus = value?.BloodGemAttackBonus ?? 0;
 		this.bloodGemHealthBonus = value?.BloodGemHealthBonus ?? 0;
@@ -266,6 +286,8 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 	undeadAttackBonus: number;
 	hauntedCarapaceAttackBonus: number;
 	hauntedCarapaceHealthBonus: number;
+	goldrinnAttackBonus: number;
+	goldrinnHealthBonus: number;
 	frostlingBonus: number;
 	bloodGemAttackBonus: number;
 	bloodGemHealthBonus: number;
@@ -310,6 +332,14 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 
 	onHauntedCarapaceHealthBonusChanged(value: number) {
 		this.hauntedCarapaceHealthBonus = value;
+	}
+
+	onGoldrinnAttackBonusChanged(value: number) {
+		this.goldrinnAttackBonus = value;
+	}
+
+	onGoldrinnHealthBonusChanged(value: number) {
+		this.goldrinnHealthBonus = value;
 	}
 
 	onFrostlingBonusChanged(value: number) {
@@ -360,6 +390,8 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 			UndeadAttackBonus: this.undeadAttackBonus,
 			HauntedCarapaceAttackBonus: this.hauntedCarapaceAttackBonus,
 			HauntedCarapaceHealthBonus: this.hauntedCarapaceHealthBonus,
+			GoldrinnBuffAtk: this.goldrinnAttackBonus,
+			GoldrinnBuffHealth: this.goldrinnHealthBonus,
 			FrostlingBonus: this.frostlingBonus,
 			BloodGemAttackBonus: this.bloodGemAttackBonus,
 			BloodGemHealthBonus: this.bloodGemHealthBonus,
