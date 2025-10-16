@@ -1085,4 +1085,7 @@ export const giftCreators = [
 	TempCardIds.RoyalInformant,
 	TempCardIds.DejaVu,
 	TempCardIds.TimelessChest,
+	TempCardIds.Solitude,
+	TempCardIds.TheEternalHold,
+	TempCardIds.TimeLostGlaive,
 ];

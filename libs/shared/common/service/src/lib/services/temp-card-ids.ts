@@ -1,4 +1,9 @@
 export declare const enum TempCardIds {
+	HoundsOfFury = 'HoundsOfFury',
+	PerennialSerpent = 'PerennialSerpent',
+	TheEternalHold = 'TheEternalHold',
+	TimeLostGlaive = 'TimeLostGlaive',
+	LastingLegacy = 'LastingLegacy',
 	ChronoLordDeios = 'ChronoLordDeios',
 	PaltryFlutterwing = 'PaltryFlutterwing',
 	Bwonsamdi_TIME = 'Bwonsamdi_TIME',
@@ -9,6 +14,7 @@ export declare const enum TempCardIds {
 	HuskEternalReaper = 'HuskEternalReaper',
 	ForgottenMillennium = 'ForgottenMillennium',
 	DejaVu = 'DejaVu',
+	Solitude = 'Solitude',
 	Divergence = 'Divergence',
 	Yesterloc = 'Yesterloc',
 	Chronochiller = 'Chronochiller',

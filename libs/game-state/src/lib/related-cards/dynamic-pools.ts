@@ -114,6 +114,16 @@ const getDynamicRelatedCardIdsInternal = (
 					hasCorrectTribe(c, Race.MECH) &&
 					c.classes?.includes(CardClass[CardClass.PALADIN]),
 			);
+		case TempCardIds.TimeLostGlaive:
+			return filterCards(
+				allCards,
+				// So that we don't get cards from the arena-specific pool instead
+				{ ...options, format: GameFormat.FT_WILD, gameType: GameType.GT_RANKED },
+				cardId,
+				(c) =>
+					!isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
+					hasCorrectTribe(c, Race.DEMON),
+			);
 		case TempCardIds.Flashback:
 			return filterCards(
 				allCards,
@@ -642,6 +652,8 @@ const getDynamicFilters = (
 		case CardIds.BaneOfDoomVanilla:
 		case CardIds.BaneOfDoom_WON_323:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.DEMON);
+		case TempCardIds.TheEternalHold:
+			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.DEMON) && hasCost(c, '>=', 5);
 
 		// Random Dragons
 		case CardIds.TimeLostProtodrake:

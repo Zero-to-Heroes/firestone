@@ -39,6 +39,7 @@ import {
 	discarded,
 	discover,
 	divineShield,
+	dormant,
 	draenei,
 	dragon,
 	dredge,
@@ -1345,6 +1346,8 @@ export const cardIdSelector = (
 		case CardIds.Pelagos_REV_250:
 		case CardIds.Pelagos_REV_781:
 			return and(side(inputSide), or(inHand, inDeck), spell, canTargetFriendlyCharacter);
+		case TempCardIds.PerennialSerpent:
+			return and(side(inputSide), or(inHand, inDeck), minion, dormant);
 		case CardIds.FrizzKindleroost:
 			return and(side(inputSide), inDeck, dragon);
 		case CardIds.FrostburnMatriarch_FIR_901:
@@ -1671,6 +1674,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), murloc);
 		case CardIds.HotStreak:
 			return and(side(inputSide), or(inDeck, inHand), spell, fire);
+		case TempCardIds.HoundsOfFury:
+			return and(side(inputSide), inDeck, minion);
 		case TempCardIds.HourglassAttendant:
 			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.HozenRoughhouser_VAC_938:
@@ -1985,6 +1990,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), elemental);
 		case CardIds.LaserBarrage_GDB_845:
 			return and(side(inputSide), or(inHand, inDeck), starshipExtended);
+		case TempCardIds.LastingLegacy:
+			return and(side(inputSide), inDeck, minion);
 		case CardIds.LastStand:
 			return and(side(inputSide), inDeck, taunt);
 		case CardIds.LeadDancer:
@@ -3028,6 +3035,10 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), totem);
 		case CardIds.SpontaneousCombustion_GDB_456:
 			return and(side(inputSide), or(inDeck, inHand), elemental);
+		case CardIds.SolarFlare_GDB_305:
+			return and(side(inputSide), or(inDeck, inHand), elemental);
+		case TempCardIds.Solitude:
+			return and(side(inputSide), inDeck, minion);
 		case CardIds.SolarFlare_GDB_305:
 			return and(side(inputSide), or(inDeck, inHand), elemental);
 		case CardIds.SpotTheDifference_TOY_374:

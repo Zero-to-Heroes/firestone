@@ -329,6 +329,7 @@ export const discover =
 	hasMechanic(GameTag.DISCOVER) || (hasMechanic(GameTag.BATTLECRY) && hasReference(GameTag.DISCOVER));
 export const givesDivineShield = hasMechanicStr('GIVES_DIVINE_SHIELD');
 export const divineShield = or(hasMechanic(GameTag.DIVINE_SHIELD), givesDivineShield);
+export const dormant = or(hasMechanic(GameTag.DORMANT), hasReference(GameTag.DORMANT));
 export const dredge = hasMechanic(GameTag.DREDGE);
 export const endOfTurn = hasMechanic(GameTag.END_OF_TURN);
 export const excavate = or(
