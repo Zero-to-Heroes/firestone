@@ -1111,6 +1111,8 @@ const getDynamicFilters = (
 		case CardIds.ShimmerShot_DEEP_003:
 		case CardIds.ShriekingShroom:
 		case CardIds.TunnelTerror_TLC_469:
+		case CardIds.TwilightInfluence_EDR_463:
+		case CardIds.TwilightInfluence_ControllingVines_EDR_463b:
 		case TempCardIds.PaltryFlutterwing:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 2);
 		case CardIds.FacelessLackey:
@@ -1120,7 +1122,6 @@ const getDynamicFilters = (
 		case CardIds.LinedancePartner_WW_433:
 		case CardIds.SerpentshrinePortal_BT_100:
 		case CardIds.SilvermoonPortal_CORE_KAR_077:
-		case CardIds.TwilightInfluence_EDR_463:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 3);
 		case CardIds.CrystalBroker:
 			return (c) =>
