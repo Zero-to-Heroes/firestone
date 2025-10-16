@@ -58,6 +58,7 @@ import { WakenerOfSouls } from './wakener-of-souls';
 import { WallowTheWretched } from './wallow-the-wretched';
 import { XyrellaTheDevout } from './xyrella-the-devout';
 import { Zuljin } from './zul-jin';
+import { ChronoLordEpoch } from './chrono-lord-epoch';
 
 const cards = [
 	Archimonde,
@@ -81,6 +82,7 @@ const cards = [
 	NzothGodOfTheDeep,
 	ImpKingRafaam,
 	NZothTheCorruptor,
+	ChronoLordEpoch,
 	HungeringAncient,
 	EndbringerUmbra,
 	Zuljin,

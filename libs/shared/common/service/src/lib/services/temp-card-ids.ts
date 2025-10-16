@@ -18,6 +18,7 @@ export declare const enum TempCardIds {
 	Divergence = 'Divergence',
 	Yesterloc = 'Yesterloc',
 	Chronochiller = 'Chronochiller',
+	ChronoLordEpoch = 'ChronoLordEpoch',
 	TimelessChest = 'TimelessChest',
 	FastForward = 'FastForward',
 	Dethrone = 'Dethrone',
