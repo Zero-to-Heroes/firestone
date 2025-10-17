@@ -530,6 +530,7 @@ const getDynamicFilters = (
 
 		// Random Weapons
 		case CardIds.WorgenRoadie_InstrumentCaseToken:
+		case TempCardIds.StadiumAnnouncer:
 			return (c) => hasCorrectType(c, CardType.WEAPON);
 
 		// Random X Mechanic
@@ -1098,6 +1099,8 @@ const getDynamicFilters = (
 				hasCost(c, '>=', 5);
 
 		// Random X Cost Minion(s)
+		case TempCardIds.UndefeatedChampion:
+			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 1);
 		case CardIds.RayllaSandSculptor_VAC_424:
 		case CardIds.AegisOfLight_EDR_264:
 		case CardIds.BuildingBlockGolem_MIS_314:

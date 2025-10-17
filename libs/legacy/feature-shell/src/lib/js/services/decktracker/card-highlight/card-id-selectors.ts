@@ -1428,6 +1428,8 @@ export const cardIdSelector = (
 				and(side(inputSide), or(inDeck, inHand), holy, spell),
 				and(side(inputSide), or(inDeck, inHand), shadow, spell),
 			);
+		case TempCardIds.GladiatorialCombat:
+			return and(side(inputSide), inDeck, minion);
 		case CardIds.Glaivetar:
 			return and(side(inputSide), or(inHand, inDeck), outcast);
 		case CardIds.GlowflySwarm:
@@ -1612,6 +1614,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, minion, deathrattle);
 		case CardIds.HedraTheHeretic_TSC_658:
 			return and(side(inputSide), or(inHand, inDeck), spell);
+		case TempCardIds.HeirOfHereafter:
+			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.Hellion_SC_412:
 			return highlightConditions(
 				and(side(inputSide), or(inDeck, inHand), minion),
@@ -2443,6 +2447,11 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), spell);
 		case CardIds.PowerChordSynchronize:
 			return and(side(inputSide), or(inHand, inDeck), minion);
+		case TempCardIds.PrecursoryStrike:
+			return highlightConditions(
+				and(side(inputSide), or(inHand, inDeck), minion, effectiveCostMore(4)),
+				and(side(inputSide), inDeck, minion),
+			);
 		case CardIds.PredatoryInstincts:
 			return and(side(inputSide), inDeck, beast);
 		case CardIds.Predation:

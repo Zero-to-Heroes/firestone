@@ -297,4 +297,5 @@ export const tutors = [
 	TempCardIds.TheKingslayers,
 	TempCardIds.FastForward,
 	TempCardIds.AxeOfCenarius,
+	TempCardIds.PrecursoryStrike,
 ];
