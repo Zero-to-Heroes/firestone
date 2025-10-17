@@ -202,7 +202,7 @@ export class DecksProviderService extends AbstractFacadeService<DecksProviderSer
 		const filters: DeckFilters = {
 			...inputFilters,
 			gameFormat: ['tavern-brawl', 'casual'].includes(inputFilters.gameFormat as StatGameFormatTypeExtended)
-				? 'wild'
+				? 'all'
 				: inputFilters.gameFormat,
 			gameMode:
 				(inputFilters.gameFormat as StatGameFormatTypeExtended) === 'tavern-brawl'
@@ -212,7 +212,14 @@ export class DecksProviderService extends AbstractFacadeService<DecksProviderSer
 						: inputFilters.gameMode,
 		};
 
-		// console.debug('[decks-provider] building state', stats?.length, filters, patch, personalDecks?.length);
+		// console.debug(
+		// 	'[decks-provider] building state',
+		// 	stats?.length,
+		// 	filters,
+		// 	patch,
+		// 	personalDecks?.length,
+		// 	stats.filter((s) => s.gameMode === 'casual'),
+		// );
 		// TODO: move applying prefs to UI. We don't need to recompute all matchups for all decks whenever we finish one game
 		if (!stats || !stats?.length) {
 			return personalDecks;
