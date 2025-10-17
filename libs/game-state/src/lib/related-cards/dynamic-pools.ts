@@ -157,6 +157,26 @@ const getDynamicRelatedCardIdsInternal = (
 					hasSpellSchool(c, SpellSchool.NATURE) &&
 					canBeDiscoveredByClass(c, options.currentClass),
 			);
+		case TempCardIds.AlterTime:
+			return filterCards(
+				allCards,
+				{ ...options, format: GameFormat.FT_WILD, gameType: GameType.GT_RANKED },
+				cardId,
+				(c) =>
+					!isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
+					hasCorrectType(c, CardType.SPELL) &&
+					hasSpellSchool(c, SpellSchool.ARCANE) &&
+					canBeDiscoveredByClass(c, options.currentClass),
+			);
+		case TempCardIds.TimelooperToki:
+			return filterCards(
+				allCards,
+				{ ...options, format: GameFormat.FT_WILD, gameType: GameType.GT_RANKED },
+				cardId,
+				(c) =>
+					!isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
+					hasCorrectType(c, CardType.SPELL),
+			);
 		case TempCardIds.FadingMemory:
 			return filterCards(
 				allCards,

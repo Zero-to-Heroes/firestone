@@ -390,6 +390,13 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, beast);
 		case CardIds.AzsharanScavenger_SunkenScavengerToken:
 			return and(side(inputSide), murloc);
+		case TempCardIds.AzureQueenSindragosa:
+			return highlightConditions(
+				and(side(inputSide), or(inDeck, inHand), dragon),
+				and(side(inputSide), or(inDeck, inHand), arcane, spell),
+			);
+		case TempCardIds.AzureKingMalygos:
+			return and(side(inputSide), or(inDeck, inHand), arcane, spell);
 		case CardIds.BabaNaga:
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.BackstageBouncer:
@@ -2197,6 +2204,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, beast);
 		case CardIds.MimironTheMastermind:
 			return and(side(inputSide), or(inDeck, inHand), mech);
+		case TempCardIds.MirrorDimension:
+			return and(side(inputSide), or(inDeck, inHand), dragon);
 		case CardIds.MinecartCruiser_WW_326:
 			return and(side(inputSide), or(inHand, inDeck), elemental);
 		case CardIds.MistahVistah_VAC_519:

@@ -59,6 +59,7 @@ import { WallowTheWretched } from './wallow-the-wretched';
 import { XyrellaTheDevout } from './xyrella-the-devout';
 import { Zuljin } from './zul-jin';
 import { ChronoLordEpoch } from './chrono-lord-epoch';
+import { AzureOathstone } from './azure-oathstone';
 
 const cards = [
 	Archimonde,
@@ -70,6 +71,7 @@ const cards = [
 	OverlordSaurfang,
 	Ressucitate,
 	AllFelBreaksLoose,
+	AzureOathstone,
 	RaiseDead,
 	CreatureOfTheSacredCave,
 	CatrinaMuerte,

@@ -1088,4 +1088,6 @@ export const giftCreators = [
 	TempCardIds.Solitude,
 	TempCardIds.TheEternalHold,
 	TempCardIds.TimeLostGlaive,
+	TempCardIds.AlterTime,
+	TempCardIds.TimelooperToki,
 ];

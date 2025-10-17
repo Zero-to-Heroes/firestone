@@ -1,4 +1,10 @@
 export declare const enum TempCardIds {
+	MirrorDimension = 'MirrorDimension',
+	AzureOathstone = 'AzureOathstone',
+	TimelooperToki = 'TimelooperToki',
+	AlterTime = 'AlterTime',
+	AzureQueenSindragosa = 'AzureQueenSindragosa',
+	AzureKingMalygos = 'AzureKingMalygos',
 	HoundsOfFury = 'HoundsOfFury',
 	PerennialSerpent = 'PerennialSerpent',
 	TheEternalHold = 'TheEternalHold',
