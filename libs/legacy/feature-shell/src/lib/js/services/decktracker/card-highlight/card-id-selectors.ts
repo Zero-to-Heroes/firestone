@@ -3465,7 +3465,7 @@ export const cardIdSelector = (
 		case CardIds.TwinbowTerrorcoil:
 			return and(side(inputSide), or(inHand, inDeck), spell);
 		case CardIds.TwistedTether:
-			return and(side(inputSide), inHand, undead);
+			return and(side(inputSide), or(inHand, inDeck), undead);
 		case CardIds.UmpiresGrasp_TOY_641:
 			return and(side(inputSide), inDeck, demon);
 		case CardIds.UnchainedGladiator:
