@@ -2393,6 +2393,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.ParrotSanctuary_VAC_409:
 			return and(side(inputSide), or(inDeck, inHand), minion, battlecry);
+		case CardIds.PartScrapper_MIS_902:
+			return and(side(inputSide), or(inHand, inDeck), mech);
 		case CardIds.PartyAnimal:
 			return and(side(inputSide), or(inHand, inDeck), minion, not(tribeless));
 		case CardIds.PartyPortalTavernBrawl_PVPDR_SCH_Active08:
