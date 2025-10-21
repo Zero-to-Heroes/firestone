@@ -298,4 +298,5 @@ export const tutors = [
 	TempCardIds.FastForward,
 	TempCardIds.AxeOfCenarius,
 	TempCardIds.PrecursoryStrike,
+	TempCardIds.RafaamLadder,
 ];

@@ -115,6 +115,7 @@ import {
 	protoss,
 	quickdraw,
 	race,
+	rafaam,
 	reborn,
 	relic,
 	restoreHealth,
@@ -707,6 +708,21 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), dragon);
 		case CardIds.ChronoBoost_SC_750:
 			return and(side(inputSide), inDeck, protoss);
+		case TempCardIds.Chronogor:
+			return (input: SelectorInput): SelectorOutput => {
+				const sorted = input.deckState.deck
+					.filter((c) => allCards.getCard(c.cardId).type === 'Minion')
+					.sort((a, b) => b.getEffectiveManaCost() - a.getEffectiveManaCost());
+				const highestCostMinion = sorted[0];
+				const highestMinionCost = highestCostMinion?.getEffectiveManaCost() ?? 0;
+				const lowestCostMinion = sorted[sorted.length - 1];
+				const lowestMinionCost = lowestCostMinion?.getEffectiveManaCost() ?? 0;
+				return highlightConditions(
+					and(side(inputSide), inDeck, minion, effectiveCostEqual(highestMinionCost)),
+					and(side(inputSide), inDeck, minion, effectiveCostEqual(lowestMinionCost)),
+					and(side(inputSide), inDeck, minion),
+				)(input);
+			};
 		case TempCardIds.ChronoLordDeios:
 			return and(side(inputSide), or(inDeck, inHand), or(battlecry, deathrattle, endOfTurn));
 		case CardIds.Cindersword_FIR_922:
@@ -1228,6 +1244,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), spell);
 		case TempCardIds.FarseerWo:
 			return and(side(inputSide), or(inHand, inDeck), spell);
+		case TempCardIds.Fatebreaker:
+			return and(side(inputSide), inDeck, cardIs(TempCardIds.ShredOfTime as unknown as CardIds));
 		case CardIds.FateSplitter:
 			return (input: SelectorInput): SelectorOutput => {
 				const lastCardPlayed =
@@ -2748,6 +2766,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), effectiveCostEqual(4));
 		case CardIds.RoyalGreatswordTavernBrawlToken:
 			return and(side(inputSide), inDeck, minion, legendary);
+		case TempCardIds.RuinousVelocidrake:
+			return and(side(inputSide), inDeck, cardIs(TempCardIds.ShredOfTime as unknown as CardIds));
 		case CardIds.RuneDagger:
 			return and(side(inputSide), or(inHand, inDeck), spell, dealsDamage);
 		case CardIds.RuneforgingCore:
@@ -3367,6 +3387,18 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, mech);
 		case TempCardIds.TimelordNozdormu:
 			return and(side(inputSide), or(inHand, inDeck), fromLatestExpansion);
+		case TempCardIds.TimethiefRafaam:
+		case TempCardIds.TimethiefRafaam_GreenRafaam:
+		case TempCardIds.TimethiefRafaam_MurlocRafaam:
+		case TempCardIds.TimethiefRafaam_WarchiefRafaam:
+		case TempCardIds.TimethiefRafaam_CalamitousRafaam:
+		case TempCardIds.TimethiefRafaam_MindflayerRfaam:
+		case TempCardIds.TimethiefRafaam_GiantRafaam:
+		case TempCardIds.TimethiefRafaam_ArchmageRafaam:
+			return and(side(inputSide), or(inHand, inDeck), rafaam);
+		case TempCardIds.TimethiefRafaam_TinyRafaam:
+		case TempCardIds.TimethiefRafaam_ExplorerRafaam:
+			return and(side(inputSide), inDeck, rafaam);
 		case CardIds.Timewarden:
 			return and(side(inputSide), or(inDeck, inHand), dragon);
 		case CardIds.TimewinderZarimi_TOY_385:

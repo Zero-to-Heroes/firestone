@@ -565,6 +565,8 @@ const getDynamicFilters = (
 			return (c) => hasMechanic(c, GameTag.OVERLOAD);
 
 		// Random Secret
+		case TempCardIds.FacelessEnigma:
+			return (c) => hasMechanic(c, GameTag.SECRET);
 		case CardIds.RemixedDispenseOBot_MysteryDispenseOBotToken:
 			return (c) => hasMechanic(c, GameTag.SECRET) && hasCorrectClass(c, CardClass.MAGE);
 
@@ -1178,6 +1180,7 @@ const getDynamicFilters = (
 		case TempCardIds.Dethrone:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 8);
 		case CardIds.SunsetVolley_WW_427:
+		case TempCardIds.Anomalize:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 10);
 		case TempCardIds.Bwonsamdi_TIME:
 			return (c) =>
@@ -1536,6 +1539,7 @@ const doesSummonInPlay = (sourceCardId: string): boolean => {
 		case TempCardIds.Stormrook:
 		case TempCardIds.Dethrone:
 		case TempCardIds.Flashback:
+		case TempCardIds.Anomalize:
 			return true;
 
 		// Cards that summon specific minions directly

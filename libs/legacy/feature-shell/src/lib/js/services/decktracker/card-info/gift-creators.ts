@@ -1090,4 +1090,7 @@ export const giftCreators = [
 	TempCardIds.TimeLostGlaive,
 	TempCardIds.AlterTime,
 	TempCardIds.TimelooperToki,
+	TempCardIds.Chronogor,
+	TempCardIds.TimethiefRafaam_TinyRafaam,
+	TempCardIds.TimethiefRafaam_ExplorerRafaam,
 ];

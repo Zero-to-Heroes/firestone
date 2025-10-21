@@ -459,6 +459,7 @@ export const mech = race(Race.MECH);
 export const murloc = race(Race.MURLOC);
 export const naga = race(Race.NAGA);
 export const pirate = race(Race.PIRATE);
+export const rafaam = hasMechanicStr('RAFAAM'); // FIXME
 export const totem = race(Race.TOTEM);
 export const undead = race(Race.UNDEAD);
 export const whelp = hasMechanic(GameTag.WHELP);
