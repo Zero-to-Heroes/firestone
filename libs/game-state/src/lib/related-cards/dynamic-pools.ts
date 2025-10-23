@@ -103,7 +103,7 @@ const getDynamicRelatedCardIdsInternal = (
 					c.classes?.includes(CardClass[CardClass.PRIEST]) &&
 					c.rarity?.toUpperCase() === CardRarity[CardRarity.LEGENDARY],
 			);
-		case TempCardIds.NeonInnovation:
+		case CardIds.NeonInnovation_TIME_016:
 			return filterCards(
 				allCards,
 				// So that we don't get cards from the arena-specific pool instead
@@ -114,7 +114,7 @@ const getDynamicRelatedCardIdsInternal = (
 					hasCorrectTribe(c, Race.MECH) &&
 					c.classes?.includes(CardClass[CardClass.PALADIN]),
 			);
-		case TempCardIds.TimeLostGlaive:
+		case CardIds.TimeLostGlaive_TIME_444:
 			return filterCards(
 				allCards,
 				// So that we don't get cards from the arena-specific pool instead
@@ -124,7 +124,7 @@ const getDynamicRelatedCardIdsInternal = (
 					!isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
 					hasCorrectTribe(c, Race.DEMON),
 			);
-		case TempCardIds.Flashback:
+		case CardIds.Flashback_TIME_711:
 			return filterCards(
 				allCards,
 				// So that we don't get cards from the arena-specific pool instead
@@ -135,7 +135,7 @@ const getDynamicRelatedCardIdsInternal = (
 					hasCorrectType(c, CardType.MINION) &&
 					hasCost(c, '==', 1),
 			);
-		case TempCardIds.AlternateReality:
+		case CardIds.AlternateReality_TIME_707:
 			return filterCards(
 				allCards,
 				// So that we don't get cards from the arena-specific pool instead
@@ -145,7 +145,7 @@ const getDynamicRelatedCardIdsInternal = (
 					!isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
 					hasMechanic(c, GameTag.CHOOSE_ONE),
 			);
-		case TempCardIds.FarseerWo:
+		case CardIds.FarseerWo_TIME_013:
 			return filterCards(
 				allCards,
 				// So that we don't get cards from the arena-specific pool instead
@@ -157,7 +157,7 @@ const getDynamicRelatedCardIdsInternal = (
 					hasSpellSchool(c, SpellSchool.NATURE) &&
 					canBeDiscoveredByClass(c, options.currentClass),
 			);
-		case TempCardIds.AlterTime:
+		case CardIds.AlterTime_TIME_857:
 			return filterCards(
 				allCards,
 				{ ...options, format: GameFormat.FT_WILD, gameType: GameType.GT_RANKED },
@@ -168,7 +168,7 @@ const getDynamicRelatedCardIdsInternal = (
 					hasSpellSchool(c, SpellSchool.ARCANE) &&
 					canBeDiscoveredByClass(c, options.currentClass),
 			);
-		case TempCardIds.TimelooperToki:
+		case CardIds.TimelooperToki_TIME_861:
 			return filterCards(
 				allCards,
 				{ ...options, format: GameFormat.FT_WILD, gameType: GameType.GT_RANKED },
@@ -177,7 +177,7 @@ const getDynamicRelatedCardIdsInternal = (
 					!isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
 					hasCorrectType(c, CardType.SPELL),
 			);
-		case TempCardIds.FadingMemory:
+		case CardIds.FadingMemory_TIME_040:
 			return filterCards(
 				allCards,
 				// So that we don't get cards from the arena-specific pool instead
@@ -537,7 +537,7 @@ const getDynamicFilters = (
 		// Random Legendaries
 		case CardIds.ArchVillainRafaam_CORE_DAL_422:
 		case CardIds.ChalkArtist_TOY_388:
-		case TempCardIds.CryofrozenChampion:
+		case CardIds.CryofrozenChampion_TIME_613:
 		case CardIds.GoldenKobold:
 		case CardIds.MarinTheManager_GoldenKoboldToken_VAC_702t4:
 		case CardIds.TreasureSeekerElise_GoldenMonkeyToken:
@@ -550,7 +550,7 @@ const getDynamicFilters = (
 
 		// Random Weapons
 		case CardIds.WorgenRoadie_InstrumentCaseToken:
-		case TempCardIds.StadiumAnnouncer:
+		case CardIds.StadiumAnnouncer_TIME_034:
 			return (c) => hasCorrectType(c, CardType.WEAPON);
 
 		// Random X Mechanic
@@ -565,13 +565,13 @@ const getDynamicFilters = (
 			return (c) => hasMechanic(c, GameTag.OVERLOAD);
 
 		// Random Secret
-		case TempCardIds.FacelessEnigma:
+		case CardIds.FacelessEnigma_TIME_860:
 			return (c) => hasMechanic(c, GameTag.SECRET);
 		case CardIds.RemixedDispenseOBot_MysteryDispenseOBotToken:
 			return (c) => hasMechanic(c, GameTag.SECRET) && hasCorrectClass(c, CardClass.MAGE);
 
 		// Random Rewind
-		case TempCardIds.TimeMachine:
+		case CardIds.TimeMachine_TIME_035:
 			return (c) => hasMechanic(c, GameTag.REWIND);
 
 		// Random Taunt
@@ -654,7 +654,7 @@ const getDynamicFilters = (
 		case CardIds.WildernessPack_MIS_104:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.BEAST);
 		case CardIds.Ankylodon_DINO_422:
-		case TempCardIds.Wormhole_TIME:
+		case CardIds.Wormhole_TIME_602:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.BEAST) && hasCost(c, '==', 3);
 		case CardIds.TheFoodChain_ShokkJungleTyrantToken_TLC_830t:
 			return (c) =>
@@ -675,19 +675,19 @@ const getDynamicFilters = (
 		case CardIds.BaneOfDoomVanilla:
 		case CardIds.BaneOfDoom_WON_323:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.DEMON);
-		case TempCardIds.TheEternalHold:
+		case CardIds.TheEternalHold_TIME_446:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.DEMON) && hasCost(c, '>=', 5);
 
 		// Random Dragons
 		case CardIds.TimeLostProtodrake:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.DRAGON);
-		case TempCardIds.PastConflux:
-		case TempCardIds.PresentConflux:
-		case TempCardIds.FutureConflux:
+		case CardIds.PastConflux_TIME_436:
+		case CardIds.PastConflux_PresentConfluxToken_TIME_436t1:
+		case CardIds.PastConflux_FutureConfluxToken_TIME_436t2:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.DRAGON) && hasCost(c, '>=', 5);
 
 		// Random Undead
-		case TempCardIds.ForgottenMillennium:
+		case CardIds.ForgottenMillennium_TIME_615:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.UNDEAD);
 
 		// Random Minions (other)
@@ -717,7 +717,7 @@ const getDynamicFilters = (
 				canBeDiscoveredByClass(c, options.currentClass);
 
 		// Discover a Beast
-		case TempCardIds.KaldoreiCultivator:
+		case CardIds.KaldoreiCultivator_TIME_730:
 		case CardIds.PeacefulPiper:
 		case CardIds.PeacefulPiper_HappyHippie:
 		case CardIds.RaptorHerald_CORE_EDR_004:
@@ -843,7 +843,7 @@ const getDynamicFilters = (
 		// Discover a Spell Effects (or spell from class effects such as Peon / Magescribe)
 		case CardIds.AmphibiousElixir_WW_080:
 		case CardIds.Astrobiologist_GDB_874:
-		case TempCardIds.BloodDraw_TIME:
+		case CardIds.BloodDraw_TIME_612:
 		case CardIds.ChitteringTunneler:
 		case CardIds.EtherealLackey:
 		case CardIds.ExarchHataaru_GDB_136:
@@ -861,7 +861,7 @@ const getDynamicFilters = (
 		case CardIds.PocketDimension_GDB_133:
 		case CardIds.PrimordialGlyph_CORE_UNG_941:
 		case CardIds.Qonzu_EDR_517:
-		case TempCardIds.RangerCaptainAlleria:
+		case CardIds.RangerGeneralSylvanas_RangerCaptainAlleriaToken_TIME_609t1:
 		case CardIds.Renew_BT_252:
 		case CardIds.RunedOrb_BAR_541:
 		case CardIds.Spellcoiler:
@@ -886,8 +886,8 @@ const getDynamicFilters = (
 		case CardIds.KajamiteCreation:
 			return (c) =>
 				hasCorrectType(c, CardType.SPELL) && hasCost(c, '<=', 3) && fromAnotherClass(c, options.currentClass);
-		case TempCardIds.HighborneMentor:
-		case TempCardIds.HighbornePupil:
+		case CardIds.HighborneMentor_TIME_704:
+		case CardIds.HighborneMentor_HighbornePupilToken_TIME_704t:
 			return (c) =>
 				hasCorrectType(c, CardType.SPELL) &&
 				hasCost(c, '>=', 7) &&
@@ -945,7 +945,7 @@ const getDynamicFilters = (
 		case CardIds.BabblingBookcase_CORE_EDR_001:
 		case CardIds.WandThief_SCH_350:
 			return (c) => hasCorrectType(c, CardType.SPELL) && c.classes?.includes(CardClass[CardClass.MAGE]);
-		case TempCardIds.AeonWizard:
+		case CardIds.AeonWizard_TIME_002:
 			return (c) =>
 				hasCorrectType(c, CardType.SPELL) &&
 				hasCorrectClass(c, options.currentClass ? CardClass[options.currentClass.toUpperCase()] : undefined);
@@ -1121,7 +1121,7 @@ const getDynamicFilters = (
 				hasCost(c, '>=', 5);
 
 		// Random X Cost Minion(s)
-		case TempCardIds.UndefeatedChampion:
+		case CardIds.UndefeatedChampion_TIME_872:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 1);
 		case CardIds.RayllaSandSculptor_VAC_424:
 		case CardIds.AegisOfLight_EDR_264:
@@ -1138,7 +1138,7 @@ const getDynamicFilters = (
 		case CardIds.TunnelTerror_TLC_469:
 		case CardIds.TwilightInfluence_EDR_463:
 		case CardIds.TwilightInfluence_ControllingVines_EDR_463b:
-		case TempCardIds.PaltryFlutterwing:
+		case CardIds.PaltryFlutterwing_TIME_058:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 2);
 		case CardIds.FacelessLackey:
 		case CardIds.HarbingerOfTheBlighted_EDR_781:
@@ -1161,8 +1161,8 @@ const getDynamicFilters = (
 			return (c) => hasCorrectType(c, CardType.MINION) && (hasCost(c, '==', 2) || hasCost(c, '==', 4));
 		case CardIds.JandiceBarov_SCH_351:
 		case CardIds.WardOfEarth_EDR_060:
-		case TempCardIds.DangerousVariant:
-		case TempCardIds.Stormrook:
+		case CardIds.DangerousVariant_TIME_049:
+		case CardIds.Stormrook_TIME_217:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 5);
 		case CardIds.BigBadArchmage:
 		case CardIds.ChaosCreation_DEEP_031:
@@ -1172,17 +1172,17 @@ const getDynamicFilters = (
 		case CardIds.RitualOfTheNewMoon_RitualOfTheFullMoonToken_EDR_461t:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 6);
 		case CardIds.PlaguedProtodrake:
-		case TempCardIds.UnknownVoyager:
+		case CardIds.UnknownVoyager_TIME_055:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 7);
 		case CardIds.ContainmentUnit:
-		case TempCardIds.KarazhanTheSanctum:
-		case TempCardIds.Circadiamancer:
-		case TempCardIds.Dethrone:
+		case CardIds.MedivhTheHallowed_KarazhanTheSanctumToken_TIME_890t2:
+		case CardIds.Circadiamancer_TIME_102:
+		case CardIds.Dethrone_TIME_712:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 8);
 		case CardIds.SunsetVolley_WW_427:
-		case TempCardIds.Anomalize:
+		case CardIds.Anomalize_TIME_859:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 10);
-		case TempCardIds.Bwonsamdi_TIME:
+		case CardIds.TalanjiOfTheGraves_BwonsamdiToken_TIME_619t:
 			return (c) =>
 				hasCorrectType(c, CardType.MINION) && hasCost(c, '==', c.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_1] ?? 4);
 
@@ -1206,10 +1206,10 @@ const getDynamicFilters = (
 			return (c) => hasCorrectType(c, CardType.SPELL) && hasCorrectSpellSchool(c, SpellSchool.SHADOW);
 		case CardIds.RemixedDispenseOBot_ChillingDispenseOBotToken:
 			return (c) => hasCorrectType(c, CardType.SPELL) && hasCorrectSpellSchool(c, SpellSchool.FROST);
-		case TempCardIds.DruidOfRegrowth:
+		case CardIds.DruidOfRegrowth_TIME_033:
 			return (c) => hasCorrectType(c, CardType.SPELL) && hasCorrectSpellSchool(c, SpellSchool.NATURE);
 		case CardIds.TwilightMender_TLC_814:
-		case TempCardIds.MendTheTimeline:
+		case CardIds.MendTheTimeline_TIME_018:
 			return (c) =>
 				hasCorrectType(c, CardType.SPELL) &&
 				(hasCorrectSpellSchool(c, SpellSchool.SHADOW) || hasCorrectSpellSchool(c, SpellSchool.HOLY));
@@ -1519,9 +1519,9 @@ const hasFactionInDecklist = (decklist: readonly string[], faction: GameTag, all
 const doesSummonInPlay = (sourceCardId: string): boolean => {
 	switch (sourceCardId) {
 		// Portal cards that summon minions directly
-		case TempCardIds.PastConflux:
-		case TempCardIds.PresentConflux:
-		case TempCardIds.FutureConflux:
+		case CardIds.PastConflux_TIME_436:
+		case CardIds.PastConflux_PresentConfluxToken_TIME_436t1:
+		case CardIds.PastConflux_FutureConfluxToken_TIME_436t2:
 		case CardIds.FirelandsPortal:
 		case CardIds.FirelandsPortalCore:
 		case CardIds.MaelstromPortal_CORE_KAR_073:
@@ -1530,16 +1530,16 @@ const doesSummonInPlay = (sourceCardId: string): boolean => {
 		case CardIds.IronforgePortal_WON_337:
 		case CardIds.MoongladePortal_KAR_075:
 		case CardIds.SerpentshrinePortal_BT_100:
-		case TempCardIds.Bwonsamdi_TIME:
-		case TempCardIds.Wormhole_TIME:
-		case TempCardIds.KarazhanTheSanctum:
-		case TempCardIds.UnknownVoyager:
-		case TempCardIds.PaltryFlutterwing:
-		case TempCardIds.DangerousVariant:
-		case TempCardIds.Stormrook:
-		case TempCardIds.Dethrone:
-		case TempCardIds.Flashback:
-		case TempCardIds.Anomalize:
+		case CardIds.TalanjiOfTheGraves_BwonsamdiToken_TIME_619t:
+		case CardIds.Wormhole_TIME_602:
+		case CardIds.MedivhTheHallowed_KarazhanTheSanctumToken_TIME_890t2:
+		case CardIds.UnknownVoyager_TIME_055:
+		case CardIds.PaltryFlutterwing_TIME_058:
+		case CardIds.DangerousVariant_TIME_049:
+		case CardIds.Stormrook_TIME_217:
+		case CardIds.Dethrone_TIME_712:
+		case CardIds.Flashback_TIME_711:
+		case CardIds.Anomalize_TIME_859:
 			return true;
 
 		// Cards that summon specific minions directly

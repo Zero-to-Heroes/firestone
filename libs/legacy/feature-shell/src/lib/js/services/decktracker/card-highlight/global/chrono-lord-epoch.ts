@@ -5,7 +5,7 @@ import { GlobalHighlightCard } from './_registers';
 import { TempCardIds } from '@firestone/shared/common/service';
 
 export const ChronoLordEpoch: GlobalHighlightCard = {
-	cardIds: [TempCardIds.ChronoLordEpoch],
+	cardIds: [CardIds.ChronoLordEpoch_TIME_714],
 	getRelatedCards: (entityId: number, side: HighlightSide, gameState: GameState, allCards: CardsFacadeService) => {
 		const deckState = side === 'player' ? gameState.opponentDeck : gameState.playerDeck;
 		return deckState.cardsPlayedLastTurn

@@ -301,7 +301,7 @@ const buildAttributeChange = (creatorCard: DeckCard, newCardId: string): number 
 	if (isCorrectCardId(creatorCard, newCardId, CardIds.SunscaleRaptor)) {
 		return 1 + (creatorCard.mainAttributeChange ?? 0);
 	}
-	if (isCorrectCardId(creatorCard, newCardId, TempCardIds.HighKingsHammer)) {
+	if (isCorrectCardId(creatorCard, newCardId, CardIds.MuradinHighKing_HighKingsHammerToken_TIME_209t)) {
 		return 2 + (creatorCard.mainAttributeChange ?? 0);
 	}
 	return null;

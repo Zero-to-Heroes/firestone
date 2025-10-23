@@ -14,8 +14,8 @@ const CARD_SENDING_TO_BOTTOM = [
 	CardIds.PhasingPortal,
 	CardIds.ForgottenDepthsTavernBrawl,
 	CardIds.Drown,
-	TempCardIds.KaldoreiCultivator, // Not sure that this is how it will work
-	TempCardIds.Waveshaping, // Not sure that this is how it will work
+	CardIds.KaldoreiCultivator_TIME_730, // Not sure that this is how it will work
+	CardIds.Waveshaping_TIME_701, // Not sure that this is how it will work
 ];
 const CARD_SENDING_TO_TOP = [
 	CardIds.EnvoyOfProsperity_WORK_031,

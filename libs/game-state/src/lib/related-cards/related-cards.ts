@@ -23,7 +23,7 @@ export const buildContextRelatedCardIds = (
 			return deckState.sideboards?.find((s) => s.keyCardId === cardId)?.cards ?? [];
 		case CardIds.HexLordMalacrass:
 		case CardIds.StarlightWhelp:
-		case TempCardIds.TheFinsBeyondTime:
+		case CardIds.TheFinsBeyondTime_TIME_706:
 			return (
 				deckState.cardsInStartingHand
 					?.map((c) => c.cardId ?? deckState.findCard(c.entityId)?.card?.cardId)

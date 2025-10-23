@@ -68,7 +68,7 @@ export class SpecialCardPowerTriggeredParser implements EventParser {
 		switch (cardId) {
 			case CardIds.LorekeeperPolkelt:
 			case CardIds.OrderInTheCourt:
-			case TempCardIds.TimelessCausality:
+			case CardIds.TimelessCausality_TIME_061:
 				return deck.update({
 					deck: deck.deck.map((card) =>
 						card.update({

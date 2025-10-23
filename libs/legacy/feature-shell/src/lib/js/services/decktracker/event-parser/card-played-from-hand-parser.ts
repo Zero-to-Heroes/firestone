@@ -531,7 +531,7 @@ export const updateGlobalEffects = (
 			[
 				CardIds.BrannBronzebeard_CORE_LOE_077,
 				CardIds.BrannBronzebeard_LOE_077,
-				TempCardIds.ChronoLordDeios,
+				CardIds.ChronoLordDeios_TIME_064,
 			].includes(c.cardId as CardIds),
 		);
 		if (battlecryGlobalEffectCards.includes(card?.cardId as CardIds) && doubleBattlecries) {

@@ -1,11 +1,11 @@
-import { hasCorrectTribe, Race } from '@firestone-hs/reference-data';
+import { CardIds, hasCorrectTribe, Race } from '@firestone-hs/reference-data';
 import { GameState, getProcessedCard } from '@firestone/game-state';
 import { TempCardIds } from '@firestone/shared/common/service';
 import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
 import { GlobalHighlightCard } from './_registers';
 
 export const MemoriamManifest: GlobalHighlightCard = {
-	cardIds: [TempCardIds.MemoriamManifest],
+	cardIds: [CardIds.MemoriamManifest_TIME_616],
 	getRelatedCards: (entityId: number, side: HighlightSide, gameState: GameState, allCards: CardsFacadeService) => {
 		const deckState = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
 		const candidates = deckState.minionsDeadThisMatch

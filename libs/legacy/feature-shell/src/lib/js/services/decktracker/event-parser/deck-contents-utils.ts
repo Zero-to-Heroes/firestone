@@ -21,7 +21,7 @@ export const modifyDecksForSpecialCards = (
 		switch (cardId) {
 			case CardIds.RottenRodent:
 				return [handleRottenRodent(deckState, allCards, i18n), opponentDeckState];
-			case TempCardIds.AlternateReality:
+			case CardIds.AlternateReality_TIME_707:
 				return [handleAlternateReality(deckState, allCards, i18n), opponentDeckState];
 			case CardIds.CelestialAlignment:
 				return [handleCelestialAlignment(deckState, allCards, i18n), opponentDeckState];
@@ -320,7 +320,7 @@ const handleAlternateReality = (
 			card.update({
 				cardId: undefined,
 				cardName: i18n.getUnknownCardName(CardClass[deckState.hero?.classes[0] ?? CardClass.NEUTRAL]),
-				creatorCardId: TempCardIds.AlternateReality,
+				creatorCardId: CardIds.AlternateReality_TIME_707,
 				rarity: undefined,
 				cardType: undefined,
 				refManaCost: undefined,

@@ -19,7 +19,7 @@ export class TriggerOnFriendlyMinionDiedSecretsParser implements EventParser {
 		CardIds.CheatDeath,
 		CardIds.EmergencyManeuvers,
 		CardIds.EmergencyManeuvers_ImprovedEmergencyManeuversToken,
-		TempCardIds.UntimelyDeath,
+		CardIds.UntimelyDeath_TIME_620,
 	];
 
 	constructor(private readonly helper: DeckManipulationHelper) {}
@@ -64,7 +64,7 @@ export class TriggerOnFriendlyMinionDiedSecretsParser implements EventParser {
 			deckWithSecretToCheck.cardsPlayedThisMatch.find((card) => card.entityId === deadEnemyMinions[0].EntityId)
 				?.turn ?? 0;
 		if (turnAtWhichMinionDies !== +turnAtWhichMinionGotPlayed + 1) {
-			secretsWeCantRuleOut.push(TempCardIds.UntimelyDeath);
+			secretsWeCantRuleOut.push(CardIds.UntimelyDeath_TIME_620);
 		}
 
 		const optionsToFlagAsInvalid = this.secretsTriggeringOnFriendlyMinionDeath.filter(
