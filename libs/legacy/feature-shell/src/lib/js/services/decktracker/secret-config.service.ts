@@ -23,6 +23,8 @@ const createsSecretsFromThePast = [
 	CardIds.TearReality_TornEnchantment,
 	CardIds.DiscoAtTheEndOfTime_WON_040,
 	CardIds.DiscoAtTheEndOfTime_EndOfTheDiscoEnchantment_WON_040e,
+	CardIds.TimelooperToki_TIME_861,
+	CardIds.TimelooperToki_LoopingTimeEnchantment_TIME_861e1,
 ];
 
 @Injectable()

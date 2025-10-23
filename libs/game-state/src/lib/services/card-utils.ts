@@ -16,7 +16,7 @@ import { Mutable } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DeckCard, StoredInformation } from '../models/deck-card';
 import { DeckState } from '../models/deck-state';
-import { GeneratingCard, UpdatingCard } from './cards/_card.type';
+import { GeneratingCard } from './cards/_card.type';
 import { cardsInfoCache } from './cards/_mapping';
 
 export const getProcessedCard = (

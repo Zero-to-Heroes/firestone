@@ -1,11 +1,12 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import { GameTag } from '@firestone-hs/reference-data';
+import { CardIds, GameTag } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GuessedInfo } from '../../models/deck-card';
 import { DeckState } from '../../models/deck-state';
 import { Card, GeneratingCard } from './_card.type';
 
-export const Metrognome: Card & GeneratingCard = {
+export const Metrognome: GeneratingCard = {
+	cardIds: [CardIds.Metrognome],
 	guessInfo: (deckState: DeckState, allCards: CardsFacadeService, creatorEntityId: number): GuessedInfo | null => {
 		const found = deckState.findCard(creatorEntityId);
 		if (!found) {
@@ -17,7 +18,7 @@ export const Metrognome: Card & GeneratingCard = {
 		return cost != null
 			? {
 					cost: cost,
-			  }
+				}
 			: null;
 	},
 };

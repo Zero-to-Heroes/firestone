@@ -1,11 +1,12 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import { GameTag } from '@firestone-hs/reference-data';
+import { CardIds, GameTag } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GuessedInfo } from '../../models/deck-card';
 import { DeckState } from '../../models/deck-state';
 import { Card, GeneratingCard } from './_card.type';
 
-export const DeepSpaceCurator: Card & GeneratingCard = {
+export const DeepSpaceCurator: GeneratingCard = {
+	cardIds: [CardIds.DeepSpaceCurator_GDB_311],
 	guessInfo: (
 		deckState: DeckState,
 		allCards: CardsFacadeService,
@@ -19,7 +20,7 @@ export const DeepSpaceCurator: Card & GeneratingCard = {
 		return cost != null
 			? {
 					cost: cost,
-			  }
+				}
 			: null;
 	},
 };
