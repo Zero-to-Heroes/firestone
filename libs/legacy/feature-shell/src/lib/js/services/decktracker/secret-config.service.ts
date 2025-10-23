@@ -10,10 +10,11 @@ import {
 	ScenarioId,
 	SpellSchool,
 } from '@firestone-hs/reference-data';
-import { GameState, Metadata } from '@firestone/game-state';
+import { DeckCard, GameState, Metadata } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { cardsMapping, hasGetRelatedCards } from './card-highlight/global/_registers';
 import { ALL_HANDS } from './event-parser/special-cases/stonebrew/stonebrew';
+import { getCardInfoFilters } from './card-info-filters';
 
 const SECRET_CONFIG_URL = 'https://static.zerotoheroes.com/hearthstone/data/secrets_config.json';
 
@@ -39,6 +40,7 @@ export class SecretConfigService {
 		metadata: Metadata,
 		playerClass: string,
 		gameState: GameState,
+		card?: DeckCard,
 		creatorCardId?: string,
 		creatorEntityId?: number,
 	): Promise<readonly string[]> {
@@ -58,16 +60,18 @@ export class SecretConfigService {
 		const result = config.secrets
 			.filter((secret) => secret.playerClass === playerClass)
 			.filter((secret) => secret.isTavish === (creatorCardId === CardIds.BeaststalkerTavish))
+			.map((secret) => secret.cardId)
+			// From the past
 			.filter((secret) => {
 				if (!createsSecretsFromThePast.includes(creatorCardId as CardIds)) {
 					return true;
 				}
-				if (standardSecretCardIds.includes(secret.cardId)) {
+				if (standardSecretCardIds.includes(secret)) {
 					return false;
 				}
 				return true;
 			})
-			.map((secret) => secret.cardId)
+			.filter((secret) => this.canBeSpecificSecret(secret, card))
 			.filter((secret) => this.canBeCreatedBy(secret, creatorCardId))
 			.filter((secret) => this.canBeCreatedByDynamic(secret, creatorCardId, creatorEntityId, gameState));
 		return result;
@@ -106,6 +110,14 @@ export class SecretConfigService {
 				},
 			);
 		});
+	}
+
+	private canBeSpecificSecret(secretCardId: string, secretCard: DeckCard): boolean {
+		const filters = getCardInfoFilters(secretCard, this.allCards);
+		if (filters?.length) {
+			return filters.every((f) => f(this.allCards.getCard(secretCardId)));
+		}
+		return true;
 	}
 
 	private canBeCreatedBy(secretCardId: string, creatorCardId: string): boolean {

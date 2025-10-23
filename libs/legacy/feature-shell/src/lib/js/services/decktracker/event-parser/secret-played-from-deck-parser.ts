@@ -55,6 +55,7 @@ export class SecretPlayedFromDeckParser implements EventParser {
 			currentState.metadata,
 			secretClass,
 			currentState,
+			cardWithZone,
 			creatorCardId,
 			entityId,
 		);

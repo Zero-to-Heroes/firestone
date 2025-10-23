@@ -7,6 +7,7 @@ import { Metrognome } from './metrognome';
 import { NorthernNavigation } from './northern-navigation';
 import { YrelBeaconOfHope } from './yrel-beacon-of-hope';
 
+// Add info to cards that were generated
 export const cardsInfoCache: { [cardId: string]: GeneratingCard | UpdatingCard } = {
 	[CardIds.DirdraRebelCaptain_GDB_117]: DirdraRebelCaptain,
 	[CardIds.DeepSpaceCurator_GDB_311]: DeepSpaceCurator,

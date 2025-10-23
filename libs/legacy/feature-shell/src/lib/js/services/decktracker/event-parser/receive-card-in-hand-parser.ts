@@ -1,6 +1,6 @@
 import { CardIds, CardType, GameTag, hasCorrectTribe, Race } from '@firestone-hs/reference-data';
 import {
-	addGuessInfoToDrawnCard,
+	addGuessInfoToCard,
 	DeckCard,
 	DeckState,
 	GameState,
@@ -181,17 +181,10 @@ export class ReceiveCardInHandParser implements EventParser {
 						buffCardIds: [...(cardWithZone.buffCardIds || []), buffCardId] as readonly string[],
 					} as DeckCard)
 				: cardWithZone;
-		const cardWithGuessedInfo = addGuessInfoToDrawnCard(
-			otherCardWithBuffs,
-			creatorCardId,
-			null,
-			deck,
-			this.allCards,
-			{
-				positionInHand: gameEvent.additionalData.position,
-				tags: gameEvent.additionalData.tags,
-			},
-		);
+		const cardWithGuessedInfo = addGuessInfoToCard(otherCardWithBuffs, creatorCardId, null, deck, this.allCards, {
+			positionInHand: gameEvent.additionalData.position,
+			tags: gameEvent.additionalData.tags,
+		});
 		const cardWithAdditionalAttributes = addAdditionalAttribuesInHand(
 			cardWithGuessedInfo,
 			deck,

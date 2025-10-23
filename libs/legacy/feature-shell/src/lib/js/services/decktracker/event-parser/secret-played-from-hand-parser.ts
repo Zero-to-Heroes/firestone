@@ -90,6 +90,7 @@ export class SecretPlayedFromHandParser implements EventParser {
 			currentState.metadata,
 			secretClass,
 			currentState,
+			card,
 			creatorCardId || card.creatorCardId,
 			card.creatorEntityId,
 		);

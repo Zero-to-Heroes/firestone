@@ -151,7 +151,7 @@ export const storeInformationOnCardPlayed = (
 	}
 };
 
-export const addGuessInfoToDrawnCard = (
+export const addGuessInfoToCard = (
 	card: DeckCard,
 	creatorCardId: string,
 	creatorEntityId: number,
@@ -184,33 +184,6 @@ export const addGuessInfoToDrawnCard = (
 			const guessedInfo = (
 				cardsInfoCache[creatorCardId as keyof typeof cardsInfoCache] as GeneratingCard
 			)?.guessInfo?.(deckState, allCards, creatorEntityId, options);
-			return guessedInfo != null
-				? card.update({
-						guessedInfo: {
-							...card.guessedInfo,
-							...guessedInfo,
-						},
-					})
-				: card;
-	}
-};
-
-export const addGuessInfoToCardInHand = (
-	card: DeckCard,
-	creatorCardId: string,
-	creatorEntityId: number,
-	deckState: DeckState,
-	allCards: CardsFacadeService,
-	options?: {
-		positionInHand?: number;
-		tags?: readonly { Name: GameTag; Value: number }[];
-	},
-): DeckCard => {
-	switch (creatorCardId) {
-		default:
-			const guessedInfo = (
-				cardsInfoCache[creatorCardId as keyof typeof cardsInfoCache] as UpdatingCard
-			)?.updateGuessInfo(deckState, allCards, creatorEntityId, options);
 			return guessedInfo != null
 				? card.update({
 						guessedInfo: {

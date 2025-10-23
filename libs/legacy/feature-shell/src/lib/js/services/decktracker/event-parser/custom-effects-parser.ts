@@ -1,11 +1,5 @@
 import { CardClass, CardIds } from '@firestone-hs/reference-data';
-import {
-	addGuessInfoToCardInHand,
-	DeckCard,
-	GameState,
-	getDynamicRelatedCardIds,
-	hasOverride,
-} from '@firestone/game-state';
+import { addGuessInfoToCard, DeckCard, GameState, getDynamicRelatedCardIds, hasOverride } from '@firestone/game-state';
 import { pickLast } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
@@ -128,7 +122,7 @@ export class CustomEffectsParser implements EventParser {
 			return currentState;
 		}
 
-		const updatedCard = addGuessInfoToCardInHand(
+		const updatedCard = addGuessInfoToCard(
 			lastDrawnCardInHand,
 			CardIds.NorthernNavigation,
 			gameEvent.additionalData.parentEntityId,

@@ -1,5 +1,5 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { addGuessInfoToDrawnCard, DeckCard, GameState, toTagsObject } from '@firestone/game-state';
+import { addGuessInfoToCard, DeckCard, GameState, toTagsObject } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import {
@@ -194,7 +194,7 @@ export class CardDrawParser implements EventParser {
 			tags: gameEvent.additionalData.tags ? toTagsObject(gameEvent.additionalData.tags) : card.tags,
 		} as DeckCard);
 		console.debug('[card-draw] card with creator', cardWithCreator, isPlayer, isCardInfoPublic, card, refCard);
-		const cardWithGuessInfo = addGuessInfoToDrawnCard(
+		const cardWithGuessInfo = addGuessInfoToCard(
 			cardWithCreator,
 			drawnByCardId,
 			gameEvent.additionalData.drawnByEntityId,

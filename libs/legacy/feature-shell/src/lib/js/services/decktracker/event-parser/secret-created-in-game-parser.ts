@@ -1,4 +1,11 @@
-import { BoardSecret, DeckCard, DeckState, GameState, getProcessedCard } from '@firestone/game-state';
+import {
+	addGuessInfoToCard,
+	BoardSecret,
+	DeckCard,
+	DeckState,
+	GameState,
+	getProcessedCard,
+} from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { LocalizationFacadeService } from '../../localization-facade.service';
@@ -50,16 +57,25 @@ export class SecretCreatedInGameParser implements EventParser {
 			creatorEntityId: gameEvent.additionalData.creatorEntityId,
 			temporaryCard: false,
 		});
+
+		const cardWithGuessedInfo = addGuessInfoToCard(
+			card,
+			creatorCardId,
+			gameEvent.additionalData.creatorEntityId,
+			deck,
+			this.cards,
+		);
 		// console.debug('[secret-created] card to add', card);
 		const previousOtherZone = deck.otherZone;
 		const newOtherZone: readonly DeckCard[] = !existingCard
-			? this.helper.addSingleCardToOtherZone(deck.otherZone, card, this.cards)
-			: this.helper.replaceCardInZone(previousOtherZone, card);
+			? this.helper.addSingleCardToOtherZone(deck.otherZone, cardWithGuessedInfo, this.cards)
+			: this.helper.replaceCardInZone(previousOtherZone, cardWithGuessedInfo);
 		// console.debug('[secret-created] newOtherZone', newOtherZone);
 		const secretsConfig = await this.secretConfig.getValidSecrets(
 			currentState.metadata,
 			secretClass,
 			currentState,
+			cardWithGuessedInfo,
 			creatorCardId,
 			entityId,
 		);
