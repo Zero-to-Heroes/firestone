@@ -252,7 +252,7 @@ const getDynamicRelatedCardIdsInternal = (
 				allCards,
 				options,
 				cardId,
-				(c) => c?.cost === tagValue && c.races?.includes(Race[Race.BEAST]),
+				(c) => c?.cost === tagValue && hasCorrectTribe(c, Race.BEAST),
 			);
 		case CardIds.ScrappyScavenger_TLC_461:
 			const card = inputOptions.deckState.findCard(entityId)?.card;
