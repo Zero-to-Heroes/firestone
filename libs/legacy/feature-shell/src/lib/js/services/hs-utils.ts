@@ -147,7 +147,7 @@ export const battlecryGlobalEffectCards = [
 	CardIds.PrinceKeleseth_CORE_ICC_851,
 	CardIds.PrinceKeleseth_ICC_851,
 	CardIds.RadiantLightspawn,
-	TempCardIds.RangerInitiateVareesa,
+	CardIds.RangerGeneralSylvanas_RangerInitiateVereesaToken_TIME_609t2,
 	CardIds.RazaTheChained,
 	CardIds.RiseToTheOccasion_LightbornCarielToken,
 	CardIds.RottenRodent,
@@ -354,7 +354,7 @@ export const cardsRevealedWhenDrawn = [
 export const forcedHiddenCardCreators = [
 	CardIds.Bibliomite,
 	CardIds.Chameleos,
-	// TempCardIds.Shapeshifter,
+	// CardIds.Shapeshifter,
 	CardIds.Eureka,
 	CardIds.FromDeOtherSide,
 	// CardIds.CoilfangConstrictor,
@@ -383,7 +383,7 @@ export const forcedHiddenCardCreators = [
 // But only when the player plays it
 export const hideInfoWhenPlayerPlaysIt = [
 	CardIds.Chameleos,
-	// TempCardIds.Shapeshifter,
+	// CardIds.Shapeshifter,
 	CardIds.CoilfangConstrictor,
 	// Prevent the player from knowing too much about the opponent's hand when we play IT
 	// However, it has the side-effect of hiding the cards drawn by the opponent
@@ -478,7 +478,7 @@ export const supportedAdditionalData = [
 	CardIds.Bottomfeeder,
 	CardIds.SirakessCultist_AbyssalCurseToken,
 	CardIds.StudentOfTheStars,
-	TempCardIds.HighKingsHammer,
+	CardIds.MuradinHighKing_HighKingsHammerToken_TIME_209t,
 	...CARDS_THAT_IMPROVE_WHEN_TRADED,
 ];
 
