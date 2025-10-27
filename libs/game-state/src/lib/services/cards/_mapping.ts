@@ -1,28 +1,7 @@
-import { CardIds } from '@firestone-hs/reference-data';
-import { GeneratingCard } from './_card.type';
-import { DeepSpaceCurator } from './deep-space-curator';
-import { DirdraRebelCaptain } from './dirdra-rebel-captain';
-import { Kiljaeden } from './kiljaeden';
-import { Metrognome } from './metrognome';
-import { NorthernNavigation } from './northern-navigation';
-import { YrelBeaconOfHope } from './yrel-beacon-of-hope';
-import { ForgottenMillenium } from './forgotten-millenium';
-import { CryofrozenChampion } from './cryofrozen-champion';
-import { BloodDraw } from './blood-draw';
-import { TheEternalHold } from './the-eternal-hold';
+import * as Cards from './_barrel';
+import { Card, GeneratingCard } from './_card.type';
 
-const cards = [
-	DirdraRebelCaptain,
-	DeepSpaceCurator,
-	Metrognome,
-	Kiljaeden,
-	NorthernNavigation,
-	YrelBeaconOfHope,
-	ForgottenMillenium,
-	CryofrozenChampion,
-	BloodDraw,
-	TheEternalHold,
-];
+const cards: GeneratingCard[] = Object.values(Cards).filter((c) => c && typeof c === 'object' && 'cardIds' in c);
 
 export const cardsInfoCache: { [cardId: string]: GeneratingCard } = {};
 for (const card of cards) {

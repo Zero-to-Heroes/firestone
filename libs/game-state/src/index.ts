@@ -1,5 +1,6 @@
 export * from './lib/counters/_counter-definition-v2';
 export * from './lib/counters/_exports';
+export * from './lib/services/cards/_barrel';
 export * from './lib/counters/counter-wrapper.component';
 export * from './lib/counters/counters-positioner.component';
 export * from './lib/counters/generic-counter-v2.component';

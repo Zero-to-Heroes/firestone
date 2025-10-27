@@ -14,7 +14,7 @@ import {
 	ViewChild,
 	ViewRef,
 } from '@angular/core';
-import { SpellSchool } from '@firestone-hs/reference-data';
+import { CardRarity, CardType, Race, SpellSchool } from '@firestone-hs/reference-data';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, groupByFunction } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
@@ -504,10 +504,14 @@ export class CardTooltipComponent
 
 /** Same as GuessedInfo */
 export interface CardTooltipAdditionalInfo {
-	readonly cost?: number;
-	readonly attackBuff?: number;
-	readonly healthBuff?: number;
-	readonly spellSchools?: readonly SpellSchool[];
+	readonly cost?: number | null | { cost: number; comparison: '==' | '>=' | '<=' | '>' | '<' };
+	readonly cardType?: CardType | null;
+	readonly possibleCards?: readonly string[] | null;
+	readonly spellSchools?: readonly SpellSchool[] | null;
+	readonly races?: readonly Race[] | null;
+	readonly rarity?: CardRarity | null;
+	readonly attackBuff?: number | null;
+	readonly healthBuff?: number | null;
 }
 export const isGuessedInfoEmpty = (info: CardTooltipAdditionalInfo | null) => {
 	return info?.cost == null && info?.attackBuff == null && info?.healthBuff == null && !info?.spellSchools?.length;

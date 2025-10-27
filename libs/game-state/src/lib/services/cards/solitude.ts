@@ -5,8 +5,8 @@ import { GuessedInfo } from '../../models/deck-card';
 import { DeckState } from '../../models/deck-state';
 import { Card, GeneratingCard } from './_card.type';
 
-export const TheEternalHold: GeneratingCard = {
-	cardIds: [CardIds.TheEternalHold_TIME_446],
+export const Solitude: GeneratingCard = {
+	cardIds: [CardIds.Solitude_TIME_448],
 	guessInfo: (
 		deckState: DeckState,
 		allCards: CardsFacadeService,
@@ -17,8 +17,7 @@ export const TheEternalHold: GeneratingCard = {
 		},
 	): GuessedInfo | null => {
 		return {
-			races: [Race.DEMON],
-			cost: { cost: 5, comparison: '>=' },
+			cardType: CardType.MINION,
 		};
 	},
 };
