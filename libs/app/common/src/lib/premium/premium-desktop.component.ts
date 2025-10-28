@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, ViewRef } from '@angular/core';
-import { BnetRegion } from '@firestone-hs/reference-data';
+import { BnetRegion, CardSet } from '@firestone-hs/reference-data';
 import { AccountService } from '@firestone/profile/common';
 import {
 	CurrentPlan,
@@ -68,7 +68,10 @@ import { BehaviorSubject, Observable, combineLatest, filter, shareReplay, takeUn
 					中国大陆用户：如果您打算使用支付宝付款，请使用“旧版”订阅，因为此付款方式与新的 Tebex
 					系统兼容不佳。我们预计问题需要几个月才能解决。感谢您的理解。
 				</div>
-				<!-- <div class="discount-banner" *ngIf="(billingPeriodicity$ | async) === 'yearly'">
+				<div
+					class="discount-banner"
+					*ngIf="(possibleChineseUser$ | async) === false && (billingPeriodicity$ | async) === 'yearly'"
+				>
 					{{ discountBannerTextYearly }}
 					<pre
 						class="code"
@@ -77,8 +80,11 @@ import { BehaviorSubject, Observable, combineLatest, filter, shareReplay, takeUn
 					>
 						<div class="copy-icon" inlineSVG="assets/svg/copy.svg"></div><span>{{couponCode}}</span>
 					</pre>
-				</div> 
-				<div class="discount-banner" *ngIf="(billingPeriodicity$ | async) === 'six-month'">
+				</div>
+				<div
+					class="discount-banner"
+					*ngIf="(possibleChineseUser$ | async) === false && (billingPeriodicity$ | async) === 'six-month'"
+				>
 					{{ discountBannerTextSixMonths }}
 					<pre
 						class="code"
@@ -87,8 +93,7 @@ import { BehaviorSubject, Observable, combineLatest, filter, shareReplay, takeUn
 					>
 						<div class="copy-icon" inlineSVG="assets/svg/copy.svg"></div><span>{{couponCode}}</span>
 					</pre>
-				</div>				
-				-->
+				</div>
 
 				<div class="plans" [ngClass]="{ 'show-legacy': showLegacyPlan$ | async }">
 					<premium-package
@@ -160,14 +165,14 @@ export class PremiumDesktopComponent extends AbstractSubscriptionComponent imple
 
 	yearlySubtext: string;
 	sixMonthSubtext: string;
-	couponCode = '6B74-BY6Z-XZ2G';
-	discountBannerTextYearly = this.i18n.translateString('app.premium.billing.yearly-coupon-text', {
-		endDate: new Date('2025-09-01').toLocaleDateString(this.i18n.formatCurrentLocale()!),
-		reduction: '20%',
+	couponCode = '3YTF-2AUG-FWC6';
+	discountBannerTextYearly = this.i18n.translateString('app.premium.billing.yearly-coupon-text-2', {
+		reduction: '10%',
+		expansionName: this.i18n.translateString(`global.set.${CardSet[CardSet.ACROSS_THE_TIMEWAYS].toLowerCase()}`),
 	});
-	discountBannerTextSixMonths = this.i18n.translateString('app.premium.billing.six-months-coupon-text', {
-		endDate: new Date('2025-09-01').toLocaleDateString(this.i18n.formatCurrentLocale()!),
-		reduction: '20%',
+	discountBannerTextSixMonths = this.i18n.translateString('app.premium.billing.yearly-coupon-text-2', {
+		reduction: '10%',
+		expansionName: this.i18n.translateString(`global.set.${CardSet[CardSet.ACROSS_THE_TIMEWAYS].toLowerCase()}`),
 	});
 
 	private showConfirmationPopUp$$ = new BehaviorSubject<UnsubscribeModel | null>(null);
