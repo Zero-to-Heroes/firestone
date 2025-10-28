@@ -1,5 +1,5 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { TempCardIds } from '@firestone/shared/common/service';
+import { cardsInfoCache, GeneratingCard } from '@firestone/game-state';
 
 export const tutors = [
 	CardIds.AbyssalDepths,
@@ -300,3 +300,11 @@ export const tutors = [
 	CardIds.PrecursoryStrike_TIME_750,
 	CardIds.RafaamLadder_TIME_031,
 ];
+setTimeout(() => {
+	for (const cardId of Object.keys(cardsInfoCache)) {
+		const card = cardsInfoCache[cardId];
+		if ((card as GeneratingCard).publicTutor && !tutors.includes(cardId as CardIds)) {
+			tutors.push(cardId as CardIds);
+		}
+	}
+}, 500);

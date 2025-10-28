@@ -1,5 +1,5 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { TempCardIds } from '@firestone/shared/common/service';
+import { cardsInfoCache, GeneratingCard } from '@firestone/game-state';
 
 const COIN_IDS = [
 	CardIds.TheCoinCore,
@@ -1094,3 +1094,11 @@ export const giftCreators = [
 	CardIds.TimethiefRafaam_TinyRafaamToken_TIME_005t1,
 	CardIds.TimethiefRafaam_ExplorerRafaamToken_TIME_005t3,
 ];
+setTimeout(() => {
+	for (const cardId of Object.keys(cardsInfoCache)) {
+		const card = cardsInfoCache[cardId];
+		if ((card as GeneratingCard).publicCreator && !giftCreators.includes(cardId as CardIds)) {
+			giftCreators.push(cardId as CardIds);
+		}
+	}
+}, 500);

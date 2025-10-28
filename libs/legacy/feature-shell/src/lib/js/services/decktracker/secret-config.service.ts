@@ -13,8 +13,8 @@ import {
 import { DeckCard, GameState, Metadata } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { cardsMapping, hasGetRelatedCards } from './card-highlight/global/_registers';
-import { ALL_HANDS } from './event-parser/special-cases/stonebrew/stonebrew';
 import { getCardInfoFilters } from './card-info-filters';
+import { ALL_HANDS } from './event-parser/special-cases/stonebrew/stonebrew';
 
 const SECRET_CONFIG_URL = 'https://static.zerotoheroes.com/hearthstone/data/secrets_config.json';
 
@@ -25,6 +25,7 @@ const createsSecretsFromThePast = [
 	CardIds.DiscoAtTheEndOfTime_EndOfTheDiscoEnchantment_WON_040e,
 	CardIds.TimelooperToki_TIME_861,
 	CardIds.TimelooperToki_LoopingTimeEnchantment_TIME_861e1,
+	CardIds.AlterTime_TIME_857,
 ];
 
 @Injectable()

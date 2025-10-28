@@ -1,5 +1,5 @@
 import { CardIds, GameTag } from '@firestone-hs/reference-data';
-import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GuessedInfo } from '../../models/deck-card';
 import { DeckState } from '../../models/deck-state';
 
@@ -10,6 +10,8 @@ export interface Card {
 
 // When drawing a card
 export interface GeneratingCard extends Card {
+	publicCreator?: boolean;
+	publicTutor?: boolean;
 	guessInfo: (
 		deckState: DeckState,
 		allCards: CardsFacadeService,
