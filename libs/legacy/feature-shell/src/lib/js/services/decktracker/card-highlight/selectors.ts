@@ -441,9 +441,7 @@ export const createLocation = cardIs(
 );
 export const locationExtended = or(location, createLocation);
 export const givesHeroAttack = or(weapon, hasMechanicStr('GIVES_HERO_ATTACK'));
-export const givesArmor = (Input: SelectorInput): boolean => {
-	return false; // TODO: Implement this
-};
+export const givesArmor = hasMechanicStr('GIVES_ARMOR');
 
 export const race =
 	(race: Race) =>
