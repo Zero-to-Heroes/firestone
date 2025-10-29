@@ -7,6 +7,7 @@ import {
 	GameType,
 	Race,
 	ReferenceCard,
+	RELIC_IDS,
 	SpellSchool,
 } from '@firestone-hs/reference-data';
 import { ArenaRefService } from '@firestone/arena/common';
@@ -40,6 +41,7 @@ import {
 	or,
 	orWithHighlight,
 	raceIn,
+	relic,
 	restoreHealthToMinion,
 	riff,
 	side,
@@ -459,6 +461,10 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 		if (refCard.mechanics?.includes('BARREL_OF_SLUDGE')) {
 			selectors.push(and(side(inputSide), or(inDeck, inHand), barrelOfSludge));
 		}
+		if (RELIC_IDS.includes(cardId as CardIds)) {
+			selectors.push(and(side(inputSide), or(inDeck, inHand), relic));
+		}
+
 		// Specific highlights for draft
 		if (inputSide === 'single' || inputSide === 'arena-draft') {
 			// Reverse kindred
