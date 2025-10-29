@@ -1,6 +1,5 @@
 import { CardClass, CardIds, CardType, GameTag, Race, SpellSchool } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState, getCost, getProcessedCard } from '@firestone/game-state';
-import { TempCardIds } from '@firestone/shared/common/service';
 import { groupByFunction, pickLast, sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
 import { Selector, SelectorInput, SelectorOutput } from './cards-highlight-common.service';
@@ -2287,6 +2286,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), undead);
 		case CardIds.NetherBreath_DRG_205:
 			return and(side(inputSide), or(inDeck, inHand), dragon);
+		case CardIds.NightmareFuel_EDR_528:
+			return and(opposingSide(inputSide), inDeck, minion);
 		case CardIds.NightmareLordXavius_EDR_856:
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.NineLives:
