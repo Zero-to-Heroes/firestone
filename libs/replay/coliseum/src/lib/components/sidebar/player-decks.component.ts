@@ -10,6 +10,14 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 			<div class="section opponent-deck">
 				<div class="title">
 					Opponent Deck
+					<copy-deckstring
+						class="copy-deckstring-button"
+						*ngIf="opponentDecklist"
+						[deckstring]="opponentDecklist"
+						[copyText]="'Copy opponent deck code to clipboard'"
+						[showTooltip]="true"
+					>
+					</copy-deckstring>
 					<div
 						class="info"
 						inlineSVG="assets/svg/info.svg"
@@ -24,7 +32,17 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 				<div class="no-list" *ngIf="!opponentDecklist">We couldn't find the decklist for this player</div>
 			</div>
 			<div class="section player-deck">
-				<div class="title">Player Deck</div>
+				<div class="title">
+					Player Deck
+					<copy-deckstring
+						class="copy-deckstring-button"
+						*ngIf="decklist"
+						[deckstring]="decklist"
+						[copyText]="'Copy player deck code to clipboard'"
+						[showTooltip]="true"
+					>
+					</copy-deckstring>
+				</div>
 				<deck-list-basic class="deck-list" *ngIf="decklist" [deckstring]="decklist"></deck-list-basic>
 				<div class="no-list" *ngIf="!decklist">We couldn't find the decklist for this player</div>
 			</div>

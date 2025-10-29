@@ -60,7 +60,8 @@ export class CopyDesckstringComponent {
 
 	async copyDeckstring() {
 		if (!this.ow?.isOwEnabled()) {
-			console.log('no OW service present, not copying to clipboard');
+			console.log('no OW service present, copying with browser API');
+			this.copyDeckstringWithoutOverwolf();
 			return;
 		}
 		let copiedString = this.normalizedDeckstring;
@@ -81,6 +82,58 @@ export class CopyDesckstringComponent {
 			}
 		}, 2000);
 		this.analytics.trackEvent('copy-deckstring', { origin: this.origin });
+	}
+
+	private async copyDeckstringWithoutOverwolf() {
+		console.debug('navigator.userAgent', navigator.userAgent);
+
+		// Try modern clipboard API first
+		if (navigator.clipboard && navigator.clipboard.writeText) {
+			try {
+				await navigator.clipboard.writeText(this.normalizedDeckstring);
+				this.copyDone();
+				return;
+			} catch (err) {
+				console.warn('Modern clipboard API failed, falling back to execCommand', err);
+			}
+		}
+
+		// Fallback to legacy execCommand approach
+		let worked = false;
+		const listener = (e: ClipboardEvent) => {
+			const clipboardData = e.clipboardData;
+			if (clipboardData) {
+				clipboardData.setData('text/plain', this.normalizedDeckstring);
+				worked = true;
+				e.preventDefault();
+			}
+		};
+
+		document.addEventListener('copy', listener);
+		try {
+			document.execCommand('copy');
+		} finally {
+			document.removeEventListener('copy', listener);
+		}
+
+		if (worked) {
+			this.copyDone();
+		}
+	}
+
+	private copyDone() {
+		this.inputCopy = this.title || this.copyText;
+		this.copyText = this.i18n.translateString('decktracker.deck-name.copy-deckstring-confirmation');
+		console.debug('copied deckstring to clipboard', this._deckstring);
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+		setTimeout(() => {
+			this.copyText = this.title ? null : this.inputCopy;
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
+		}, 2000);
 	}
 }
 
