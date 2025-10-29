@@ -7,8 +7,8 @@ import {
 } from '@firestone/shared/common/service';
 import { sleep } from '@firestone/shared/framework/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { LocalizationService } from './localization.service';
 import { isPreReleaseBuild } from './hs-utils';
+import { LocalizationService } from './localization.service';
 
 @Injectable()
 export class HsClientConfigService {
@@ -101,11 +101,12 @@ Verbose=false
 				}
 				await sleep(100);
 			}
-			this.notifService.notifyError(
-				this.i18n.translateString('app.internal.client-config.title'),
-				this.i18n.translateString('app.internal.client-config.message'),
-				'client-config-changed',
-			);
+			// Don't show the error, as the config tends to change, maybe because OW itself is updating the config
+			// this.notifService.notifyError(
+			// 	this.i18n.translateString('app.internal.client-config.title'),
+			// 	this.i18n.translateString('app.internal.client-config.message'),
+			// 	'client-config-changed',
+			// );
 		} catch (e) {
 			console.error('[hs-client-config] could not write client config', e);
 		}
