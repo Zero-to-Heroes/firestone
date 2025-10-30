@@ -250,6 +250,8 @@ export const buildPositionFromBottom = (deck: DeckState, creatorCardId: string):
 		case CardIds.DisposalAssistant_WW_041:
 		case CardIds.SludgeOnWheels_WW_043:
 		case CardIds.Meadowstrider_EDR_978:
+		case CardIds.KaldoreiCultivator_TIME_730:
+		case CardIds.Waveshaping_TIME_701: // Not sure that this is how it will work
 			return DeckCard.deckIndexFromBottom++;
 	}
 	return undefined;

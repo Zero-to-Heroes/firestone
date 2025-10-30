@@ -1,6 +1,5 @@
 import { CardIds, ReferenceCard } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState, GameState, getProcessedCard } from '@firestone/game-state';
-import { TempCardIds } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { forcedHiddenCardCreators } from '../../hs-utils';
@@ -14,8 +13,6 @@ const CARD_SENDING_TO_BOTTOM = [
 	CardIds.PhasingPortal,
 	CardIds.ForgottenDepthsTavernBrawl,
 	CardIds.Drown,
-	CardIds.KaldoreiCultivator_TIME_730, // Not sure that this is how it will work
-	CardIds.Waveshaping_TIME_701, // Not sure that this is how it will work
 ];
 const CARD_SENDING_TO_TOP = [
 	CardIds.EnvoyOfProsperity_WORK_031,
