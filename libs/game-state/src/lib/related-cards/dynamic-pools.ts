@@ -3,6 +3,7 @@
 import {
 	AllCardsService,
 	arenaSets,
+	brawlSets,
 	CardClass,
 	CardIds,
 	CardRarity,
@@ -22,7 +23,6 @@ import {
 	SpellSchool,
 } from '@firestone-hs/reference-data';
 
-import { TempCardIds } from '@firestone/shared/common/service';
 import { DeckState } from '../models/deck-state';
 import { PlayerGameState } from '../models/full-game-state';
 import { GameState } from '../models/game-state';
@@ -44,6 +44,7 @@ export const getDynamicRelatedCardIds = (
 	inputOptions: {
 		format: GameFormat;
 		gameType: GameType;
+		scenarioId: number;
 		currentClass: string;
 		deckState: DeckState;
 		gameState: GameState;
@@ -65,6 +66,7 @@ const getDynamicRelatedCardIdsInternal = (
 	inputOptions: {
 		format: GameFormat;
 		gameType: GameType;
+		scenarioId: number;
 		currentClass: string;
 		deckState: DeckState;
 		gameState: GameState;
@@ -1286,6 +1288,7 @@ const filterCards = (
 	options: {
 		format: GameFormat;
 		gameType: GameType;
+		scenarioId: number;
 		initialDecklist: readonly string[];
 		validArenaPool: readonly string[];
 	},
@@ -1330,6 +1333,12 @@ const filterCards = (
 					gameType = GameType.GT_RANKED;
 					format = GameFormat.FT_WILD;
 				}
+			} else if (gameType === GameType.GT_TAVERNBRAWL) {
+				const setsForCurrentBrawl = brawlSets[options.scenarioId];
+				if (setsForCurrentBrawl.length > 0) {
+					return setsForCurrentBrawl.includes(c.set.toLowerCase() as SetId);
+				}
+				// Use the default pool otherwise
 			}
 			return !!c.set ? isValidSet(c.set.toLowerCase() as SetId, format, gameType) : false;
 		})

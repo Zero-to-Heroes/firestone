@@ -205,6 +205,7 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 			const dynamicPool = getDynamicRelatedCardIds(this.cardId, card?.entityId, this.allCards.getService(), {
 				format: metadata.formatType,
 				gameType: metadata.gameType,
+				scenarioId: metadata.scenarioId,
 				currentClass: !context?.hero?.classes?.[0] ? '' : CardClass[context?.hero?.classes?.[0]],
 				deckState: context,
 				gameState: this.context$$.value?.gameState,

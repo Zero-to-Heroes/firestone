@@ -85,6 +85,7 @@ export class CustomEffectsParser implements EventParser {
 			{
 				format: currentState.metadata.formatType,
 				gameType: currentState.metadata.gameType,
+				scenarioId: currentState.metadata.scenarioId,
 				currentClass: currentState.playerDeck.hero?.classes?.[0]
 					? CardClass[currentState.playerDeck.hero.classes[0]]
 					: null,

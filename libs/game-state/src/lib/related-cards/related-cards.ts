@@ -1,6 +1,5 @@
 /* eslint-disable no-case-declarations */
 import { CardClass, CardIds } from '@firestone-hs/reference-data';
-import { TempCardIds } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DeckState } from '../models/deck-state';
 import { GameState } from '../models/game-state';
@@ -33,6 +32,7 @@ export const buildContextRelatedCardIds = (
 			const dynamicCards = getDynamicRelatedCardIds(cardId, entityId, allCards.getService(), {
 				format: metaData.formatType,
 				gameType: metaData.gameType,
+				scenarioId: metaData.scenarioId,
 				currentClass: !deckState?.hero?.classes?.[0] ? '' : CardClass[deckState?.hero?.classes?.[0]],
 				deckState: deckState,
 				gameState: gameState,
