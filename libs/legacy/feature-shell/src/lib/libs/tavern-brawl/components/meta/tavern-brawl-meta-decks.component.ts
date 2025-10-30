@@ -19,6 +19,7 @@ import { ExtendedBrawlInfo } from '../overview/tavern-brawl-overview.component';
 			<div class="filters">
 				<constructed-player-class-filter-dropdown class="filter"></constructed-player-class-filter-dropdown>
 				<constructed-sample-size-filter-dropdown class="filter"></constructed-sample-size-filter-dropdown>
+				<constructed-dust-filter-dropdown class="filter"></constructed-dust-filter-dropdown>
 			</div>
 			<meta-decks-visualization
 				[metaDecks]="decks$ | async"

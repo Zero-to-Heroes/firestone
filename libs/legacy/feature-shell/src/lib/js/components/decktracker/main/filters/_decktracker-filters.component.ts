@@ -54,7 +54,10 @@ import { LocalizationFacadeService } from '../../../../services/localization-fac
 			<constructed-archetype-sample-size-filter-dropdown
 				class="filter"
 			></constructed-archetype-sample-size-filter-dropdown>
-			<constructed-dust-filter-dropdown class="filter"></constructed-dust-filter-dropdown>
+			<constructed-dust-filter-dropdown
+				class="filter"
+				*ngIf="showDustFilter$ | async"
+			></constructed-dust-filter-dropdown>
 			<constructed-play-coin-filter-dropdown class="filter"></constructed-play-coin-filter-dropdown>
 
 			<constructed-my-decks-search class="filter search"></constructed-my-decks-search>
@@ -103,6 +106,7 @@ export class DecktrackerFiltersComponent
 	showUseClassCardIcon$: Observable<boolean>;
 	showClassFilter$: Observable<boolean>;
 	showSampleSizeFilter$: Observable<boolean>;
+	showDustFilter$: Observable<boolean>;
 	showInfo$: Observable<boolean>;
 	helpTooltip: string;
 
@@ -180,7 +184,12 @@ export class DecktrackerFiltersComponent
 			filter((currentView) => !!currentView),
 			this.mapData((currentView) => ['constructed-meta-decks'].includes(currentView)),
 		);
-
+		this.showDustFilter$ = this.nav.currentView$$.pipe(
+			filter((currentView) => !!currentView),
+			this.mapData((currentView) =>
+				['constructed-meta-decks', 'constructed-meta-deck-details'].includes(currentView),
+			),
+		);
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}

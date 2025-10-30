@@ -1,5 +1,4 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { ConstructedNavigationService } from '@firestone/constructed/common';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { IOptionWithImage } from '@firestone/shared/common/view';
 import { waitForReady } from '@firestone/shared/framework/core';
@@ -37,13 +36,12 @@ export class ConstructedDustFilterDropdownComponent
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly prefs: PreferencesService,
-		private readonly nav: ConstructedNavigationService,
 	) {
 		super(store, cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.nav);
+		await waitForReady(this.prefs);
 
 		this.options = [
 			{
@@ -69,14 +67,13 @@ export class ConstructedDustFilterDropdownComponent
 		];
 		this.filter$ = combineLatest([
 			this.listenForBasicPref$((prefs) => prefs.constructedMetaDecksDustFilter ?? 'all'),
-			this.nav.currentView$$,
 		]).pipe(
-			this.mapData(([filter, currentView]) => {
+			this.mapData(([filter]) => {
 				console.debug('dust filter', filter, this.options);
 				return {
 					filter: '' + filter,
 					placeholder: this.options.find((option) => option.value === '' + filter)?.label,
-					visible: ['constructed-meta-decks', 'constructed-meta-deck-details'].includes(currentView),
+					visible: true,
 				};
 			}),
 		);
