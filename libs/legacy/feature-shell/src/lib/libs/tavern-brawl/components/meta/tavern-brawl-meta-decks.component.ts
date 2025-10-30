@@ -3,7 +3,7 @@ import { EnhancedDeckStat } from '@components/decktracker/main/meta-decks-visual
 import { ExtendedDeckStats } from '@firestone/constructed/common';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ILocalizationService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import { Observable } from 'rxjs';
+import { filter, Observable } from 'rxjs';
 import { TavernBrawlService } from '../../services/tavern-brawl.service';
 import { ExtendedBrawlInfo } from '../overview/tavern-brawl-overview.component';
 
@@ -49,6 +49,7 @@ export class TavernBrawlMetaDecksComponent extends AbstractSubscriptionComponent
 		await waitForReady(this.metaStats);
 
 		this.decks$ = this.metaStats.metaDecks$$.pipe(
+			filter((stats) => stats?.stats?.length > 0),
 			this.mapData((stats) => {
 				const result: ExtendedDeckStats = {
 					...stats,
