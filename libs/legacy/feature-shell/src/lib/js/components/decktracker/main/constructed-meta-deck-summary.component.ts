@@ -188,7 +188,7 @@ export const buildCardVariations = (
 	const groupedByCard = groupByFunction((cardId: string) => cardId)(cardIds);
 	return Object.keys(groupedByCard)
 		.map((cardId) => buildCardVariation(cardId, groupedByCard[cardId].length, sideboards, allCards))
-		.sort(sortByProperties((c) => [c.manaCost, c.cardName]));
+		.sort(sortByProperties((c) => [c.isLegendary ? 0 : 1, c.manaCost, c.cardName]));
 };
 
 export const buildCardVariation = (
