@@ -10,7 +10,7 @@ import { AbstractSubscriptionComponent } from '@firestone/shared/framework/commo
 import { waitForReady } from '@firestone/shared/framework/core';
 import { AdService } from '@legacy-import/src/lib/js/services/ad.service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { from, Observable } from 'rxjs';
+import { BehaviorSubject, from, Observable } from 'rxjs';
 
 @Component({
 	standalone: false,
@@ -20,8 +20,7 @@ import { from, Observable } from 'rxjs';
 		<div class="app-section tavern-brawl" *ngIf="{ category: category$ | async } as value">
 			<section class="main divider">
 				<div class="content main-content" *ngIf="{ value: menuDisplayType$ | async } as menuDisplayType">
-					<global-header *ngIf="menuDisplayType.value === 'breadcrumbs'"></global-header>
-					<ul class="menu-selection" *ngIf="menuDisplayType.value === 'menu'">
+					<ul class="menu-selection">
 						<li
 							*ngFor="let cat of categories$ | async"
 							[ngClass]="{ selected: cat === value.category }"
@@ -30,7 +29,8 @@ import { from, Observable } from 'rxjs';
 							<span>{{ getName(cat) }}</span>
 						</li>
 					</ul>
-					<tavern-brawl-meta *ngIf="value.category === 'meta'"></tavern-brawl-meta>
+					<tavern-brawl-overview *ngIf="value.category === 'overview'"></tavern-brawl-overview>
+					<tavern-brawl-meta-decks *ngIf="value.category === 'meta'"></tavern-brawl-meta-decks>
 				</div>
 			</section>
 			<section class="secondary" *ngIf="!(showAds$ | async) && false"></section>
@@ -44,6 +44,8 @@ export class TavernBrawlDesktopComponent extends AbstractSubscriptionComponent i
 	categories$: Observable<readonly TavernBrawlCategoryType[]>;
 	showAds$: Observable<boolean>;
 
+	private category$$ = new BehaviorSubject<TavernBrawlCategoryType>('overview');
+
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
@@ -56,8 +58,8 @@ export class TavernBrawlDesktopComponent extends AbstractSubscriptionComponent i
 		await waitForReady(this.ads);
 
 		this.menuDisplayType$ = from(['menu']);
-		this.category$ = from(['meta' as TavernBrawlCategoryType]);
-		this.categories$ = from([['meta' as TavernBrawlCategoryType]]);
+		this.category$ = this.category$$.pipe(this.mapData((category) => category));
+		this.categories$ = from([['overview', 'meta'] as readonly TavernBrawlCategoryType[]]);
 		this.showAds$ = this.ads.hasPremiumSub$$.pipe(this.mapData((info) => !info));
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -66,7 +68,7 @@ export class TavernBrawlDesktopComponent extends AbstractSubscriptionComponent i
 	}
 
 	selectCategory(categoryId: TavernBrawlCategoryType) {
-		// Do nothing, only one category
+		this.category$$.next(categoryId);
 	}
 
 	getName(categoryId: TavernBrawlCategoryType): string {
@@ -74,4 +76,4 @@ export class TavernBrawlDesktopComponent extends AbstractSubscriptionComponent i
 	}
 }
 
-export type TavernBrawlCategoryType = 'meta';
+export type TavernBrawlCategoryType = 'overview' | 'meta';

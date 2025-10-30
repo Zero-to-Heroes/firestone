@@ -1,5 +1,4 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { ConstructedNavigationService } from '@firestone/constructed/common';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { IOption } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
@@ -38,25 +37,23 @@ export class ConstructedSampleSizeFilterDropdownComponent
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly prefs: PreferencesService,
-		private readonly nav: ConstructedNavigationService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.nav, this.prefs);
+		await waitForReady(this.prefs);
 
 		this.filter$ = combineLatest([
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.constructedMetaDecksSampleSizeFilter)),
-			this.nav.currentView$$,
 		]).pipe(
-			filter(([filter, currentView]) => !!filter && !!currentView),
-			this.mapData(([filter, currentView]) => {
+			filter(([filter]) => !!filter),
+			this.mapData(([filter]) => {
 				return {
 					filter: '' + filter,
 					options: this.options,
 					placeholder: this.options.find((option) => +option.value === filter)?.label,
-					visible: ['constructed-meta-decks'].includes(currentView),
+					visible: true,
 				};
 			}),
 		);

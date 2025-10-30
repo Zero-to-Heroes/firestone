@@ -1,0 +1,26 @@
+:host {
+	height: 100%;
+	display: flex;
+	color: var(--default-text-color);
+	font-size: 13px;
+}
+
+.tavern-brawl-meta {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	flex-grow: 1;
+
+	::ng-deep meta-decks-visualization {
+		// No archetypes for brawl decks yet
+		.name {
+			display: none !important;
+		}
+	}
+}
+
+.filters {
+	display: flex;
+	gap: 10px;
+	flex-wrap: wrap;
+}

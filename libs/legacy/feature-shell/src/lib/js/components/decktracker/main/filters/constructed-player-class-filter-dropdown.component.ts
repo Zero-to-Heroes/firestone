@@ -1,10 +1,9 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { ConstructedNavigationService } from '@firestone/constructed/common';
+import { ALL_CLASSES } from '@firestone-hs/reference-data';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { MultiselectOption } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
-import { classes } from '@legacy-import/src/lib/js/services/hs-utils';
 import { Observable, combineLatest } from 'rxjs';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 
@@ -38,31 +37,27 @@ export class ConstructedPlayerClassFilterDropdownComponent
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly prefs: PreferencesService,
-		private readonly nav: ConstructedNavigationService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.nav, this.prefs);
+		await waitForReady(this.prefs);
 
-		this.options = classes
-			.map((playerClass) => {
-				return {
-					value: playerClass,
-					label: this.i18n.translateString(`global.class.${playerClass}`),
-					image: `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/classes/${playerClass}.png`,
-				};
-			})
-			.sort((a, b) => (a.label < b.label ? -1 : 1));
+		this.options = ALL_CLASSES.map((playerClass) => {
+			return {
+				value: playerClass,
+				label: this.i18n.translateString(`global.class.${playerClass}`),
+				image: `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/classes/${playerClass}.png`,
+			};
+		}).sort((a, b) => (a.label < b.label ? -1 : 1));
 		this.filter$ = combineLatest([
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.constructedMetaDecksPlayerClassFilter)),
-			this.nav.currentView$$,
 		]).pipe(
-			this.mapData(([filter, currentView]) => ({
-				selected: filter ?? classes,
+			this.mapData(([filter]) => ({
+				selected: filter ?? ALL_CLASSES,
 				placeholder: this.i18n.translateString(`global.class.all`),
-				visible: ['constructed-meta-decks', 'constructed-meta-archetypes'].includes(currentView),
+				visible: true,
 			})),
 		) as any;
 

@@ -42,9 +42,15 @@ import { LocalizationFacadeService } from '../../../../services/localization-fac
 			<constructed-format-filter-dropdown class="filter"></constructed-format-filter-dropdown>
 			<constructed-time-filter-dropdown class="filter"></constructed-time-filter-dropdown>
 			<constructed-rank-filter-dropdown class="filter"></constructed-rank-filter-dropdown>
-			<constructed-player-class-filter-dropdown class="filter"></constructed-player-class-filter-dropdown>
+			<constructed-player-class-filter-dropdown
+				class="filter"
+				*ngIf="showClassFilter$ | async"
+			></constructed-player-class-filter-dropdown>
 			<constructed-player-archetype-filter-dropdown class="filter"></constructed-player-archetype-filter-dropdown>
-			<constructed-sample-size-filter-dropdown class="filter"></constructed-sample-size-filter-dropdown>
+			<constructed-sample-size-filter-dropdown
+				class="filter"
+				*ngIf="showSampleSizeFilter$ | async"
+			></constructed-sample-size-filter-dropdown>
 			<constructed-archetype-sample-size-filter-dropdown
 				class="filter"
 			></constructed-archetype-sample-size-filter-dropdown>
@@ -95,6 +101,8 @@ export class DecktrackerFiltersComponent
 	showMetaDeckCardSearch$: Observable<boolean>;
 	showPersonalDeckCardSearch$: Observable<boolean>;
 	showUseClassCardIcon$: Observable<boolean>;
+	showClassFilter$: Observable<boolean>;
+	showSampleSizeFilter$: Observable<boolean>;
 	showInfo$: Observable<boolean>;
 	helpTooltip: string;
 
@@ -161,6 +169,16 @@ export class DecktrackerFiltersComponent
 		this.showUseClassCardIcon$ = this.nav.currentView$$.pipe(
 			filter((currentView) => !!currentView),
 			this.mapData((currentView) => ['decks'].includes(currentView)),
+		);
+		this.showClassFilter$ = this.nav.currentView$$.pipe(
+			filter((currentView) => !!currentView),
+			this.mapData((currentView) =>
+				['constructed-meta-decks', 'constructed-meta-archetypes'].includes(currentView),
+			),
+		);
+		this.showSampleSizeFilter$ = this.nav.currentView$$.pipe(
+			filter((currentView) => !!currentView),
+			this.mapData((currentView) => ['constructed-meta-decks'].includes(currentView)),
 		);
 
 		if (!(this.cdr as ViewRef).destroyed) {

@@ -428,7 +428,6 @@ import { PackStatComponent } from '@packs/components/pack-stat.component';
 import { CollectionPackStatsComponent } from '@packs/components/pack-stats.component';
 import { PackMonitor } from '@packs/services/pack-monitor.service';
 import { PackStatsService } from '@packs/services/pack-stats.service';
-import { TavernBrawlMetaComponent } from '@tavern-brawl/components/meta/tavern-brawl-meta.component';
 import { TavernBrawlStatComponent } from '@tavern-brawl/components/stat/tavern-brawl-stat.component';
 import { TavernBrawlDesktopComponent } from '@tavern-brawl/components/tavern-brawl-desktop.component';
 import { TavernBrawlService } from '@tavern-brawl/services/tavern-brawl.service';
@@ -624,6 +623,7 @@ import { AppStartupService } from './libs/boostrap/app-startup.service';
 import { BootstrapEssentialServicesService } from './libs/boostrap/bootstrap-essential-services.service';
 import { BootstrapOtherServicesService } from './libs/boostrap/bootstrap-other-services.service';
 import { BootstrapStoreServicesService } from './libs/boostrap/bootstrap-store-services.service';
+import { TavernBrawlMetaDecksComponent } from './libs/tavern-brawl/components/meta/tavern-brawl-meta-decks.component';
 import { TavernBrawlOverviewComponent } from './libs/tavern-brawl/components/overview/tavern-brawl-overview.component';
 
 console.log('environment is ' + process.env['NODE_ENV']);
@@ -1168,7 +1168,7 @@ try {
 		MailboxMessageComponent,
 
 		TavernBrawlDesktopComponent,
-		TavernBrawlMetaComponent,
+		TavernBrawlMetaDecksComponent,
 		TavernBrawlOverviewComponent,
 		TavernBrawlStatComponent,
 

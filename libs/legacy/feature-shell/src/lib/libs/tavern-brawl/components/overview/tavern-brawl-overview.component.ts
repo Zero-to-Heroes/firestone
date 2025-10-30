@@ -20,10 +20,10 @@ import { TavernBrawlService } from '../../services/tavern-brawl.service';
 
 @Component({
 	standalone: false,
-	selector: 'tavern-brawl-meta',
-	styleUrls: [`../../../../css/component/app-section.component.scss`, `./tavern-brawl-meta.component.scss`],
+	selector: 'tavern-brawl-overview',
+	styleUrls: [`../../../../css/component/app-section.component.scss`, `./tavern-brawl-overview.component.scss`],
 	template: `
-		<div class="tavern-brawl-meta">
+		<div class="tavern-brawl-overview">
 			<div class="brawl-info" *ngIf="brawlInfo$ | async as brawlInfo">
 				<div class="brawl-name">{{ brawlInfo.nameLabel }}</div>
 			</div>
@@ -34,7 +34,7 @@ import { TavernBrawlService } from '../../services/tavern-brawl.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TavernBrawlMetaComponent
+export class TavernBrawlOverviewComponent
 	extends AbstractSubscriptionStoreComponent
 	implements AfterContentInit, OnDestroy
 {
@@ -69,7 +69,7 @@ export class TavernBrawlMetaComponent
 							? new Date(stats.info.startDate).toLocaleString(this.i18n.formatCurrentLocale(), {
 									month: 'long',
 									day: 'numeric',
-							  })
+								})
 							: 'unknown date',
 					},
 				);
@@ -162,7 +162,7 @@ export class TavernBrawlMetaComponent
 			}
 			return true;
 		} catch (e) {
-			console.warn('[tavern-brawl-meta] error', e);
+			// console.warn('[tavern-brawl-meta] error', e);
 			return false;
 		}
 	}

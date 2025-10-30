@@ -5,15 +5,14 @@ import {
 	Component,
 	EventEmitter,
 	Input,
+	Output,
 } from '@angular/core';
 import { Sideboard } from '@firestone-hs/deckstrings';
 import { buildArchetypeName, overrideClassIcon, overrideDeckName } from '@firestone/constructed/common';
 import { AbstractSubscriptionComponent, groupByFunction, sortByProperties } from '@firestone/shared/framework/common';
-import { AnalyticsService, CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, filter } from 'rxjs';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
-import { ConstructedMetaDeckDetailsShowEvent } from '../../../services/mainwindow/store/processors/decktracker/constructed-meta-deck-show-details';
 import { MinimalCard } from '../overlay/deck-list-static.component';
 import { EnhancedDeckStat } from './meta-decks-visualization.component';
 
@@ -79,6 +78,8 @@ import { EnhancedDeckStat } from './meta-decks-visualization.component';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConstructedMetaDeckSummaryComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+	@Output() deckSelected = new EventEmitter<EnhancedDeckStat>();
+
 	showDetails$: Observable<boolean>;
 
 	classTooltip: string;
@@ -101,20 +102,15 @@ export class ConstructedMetaDeckSummaryComponent extends AbstractSubscriptionCom
 
 	private deck$$ = new BehaviorSubject<EnhancedDeckStat>(null);
 
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
-		private readonly ow: OverwolfService,
-		private readonly analytics: AnalyticsService,
 	) {
 		super(cdr);
 	}
 
 	ngAfterContentInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 		this.deck$$
 			.pipe(
 				filter((deck) => !!deck?.decklist?.length),
@@ -155,8 +151,8 @@ export class ConstructedMetaDeckSummaryComponent extends AbstractSubscriptionCom
 	}
 
 	viewDetails() {
-		this.analytics.trackEvent('meta-deck-view-details', { deckstring: this.deckstring });
-		this.stateUpdater.next(new ConstructedMetaDeckDetailsShowEvent(this.deckstring));
+		console.debug('viewing details', this.deck$$.value);
+		this.deckSelected.emit(this.deck$$.value);
 	}
 }
 

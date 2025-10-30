@@ -1,4 +1,13 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+	Input,
+	Output,
+	ViewRef,
+} from '@angular/core';
 import { DeckStat } from '@firestone-hs/constructed-deck-stats';
 import { Sideboard, decode } from '@firestone-hs/deckstrings';
 import { CardIds } from '@firestone-hs/reference-data';
@@ -103,6 +112,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 							role="listitem"
 							[deck]="deck"
 							[showStandardDeviation]="value.showStandardDeviation"
+							(deckSelected)="onDeckSelected($event)"
 						></constructed-meta-deck-summary>
 					</virtual-scroller>
 				</div>
@@ -112,6 +122,8 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MetaDecksVisualizationComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+	@Output() deckSelected = new EventEmitter<EnhancedDeckStat>();
+
 	decks$: Observable<DeckStat[]>;
 	collection$: Observable<readonly Card[]>;
 	sortCriteria$: Observable<SortCriteria<ColumnSortType>>;
@@ -205,7 +217,7 @@ export class MetaDecksVisualizationComponent extends AbstractSubscriptionCompone
 					{ conservativeEstimate, sampleSize, dust, playerClasses, archetypes },
 				]) => {
 					// let enhancedCounter = 0;
-					console.debug('filtering decks', dust);
+					// console.debug('filtering decks', dust, stats);
 					const enhanced = stats?.deckStats
 						.filter((stat) => stat.totalGames >= sampleSize)
 						.filter((stat) => !playerClasses?.length || playerClasses.includes(stat.playerClass))
@@ -220,7 +232,6 @@ export class MetaDecksVisualizationComponent extends AbstractSubscriptionCompone
 							return this.enhanceStat(stat, ownedCardIdsCache, collection, conservativeEstimate);
 						})
 						.filter((stat) => dust === 'all' || dust == null || stat.dustCost <= +dust);
-					// console.debug('enhanced', enhanced);
 					return enhanced?.sort((a, b) => this.sortDecks(a, b, sortCriteria));
 				},
 			),
@@ -298,6 +309,10 @@ export class MetaDecksVisualizationComponent extends AbstractSubscriptionCompone
 
 	trackByDeck(index: number, item: DeckStat | EnhancedDeckStat) {
 		return item.decklist;
+	}
+
+	onDeckSelected(deck: EnhancedDeckStat) {
+		this.deckSelected.emit(deck);
 	}
 
 	private enhanceStat(
