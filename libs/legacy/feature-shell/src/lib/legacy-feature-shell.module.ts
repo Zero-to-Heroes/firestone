@@ -625,6 +625,7 @@ import { BootstrapOtherServicesService } from './libs/boostrap/bootstrap-other-s
 import { BootstrapStoreServicesService } from './libs/boostrap/bootstrap-store-services.service';
 import { TavernBrawlMetaDecksComponent } from './libs/tavern-brawl/components/meta/tavern-brawl-meta-decks.component';
 import { TavernBrawlOverviewComponent } from './libs/tavern-brawl/components/overview/tavern-brawl-overview.component';
+import { TavernBrawlPersonalDecksComponent } from './libs/tavern-brawl/components/personal-decks/tavern-brawl-personal-decks.component';
 
 console.log('environment is ' + process.env['NODE_ENV']);
 
@@ -1171,6 +1172,7 @@ try {
 		TavernBrawlMetaDecksComponent,
 		TavernBrawlOverviewComponent,
 		TavernBrawlStatComponent,
+		TavernBrawlPersonalDecksComponent,
 
 		StatsDesktopComponent,
 		StatsXpGraphComponent,

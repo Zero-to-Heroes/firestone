@@ -16,6 +16,7 @@ import { CardsFacadeService, OverwolfService, waitForReady } from '@firestone/sh
 import { StatGameFormatType } from '@firestone/stats/data-access';
 import { BehaviorSubject, combineLatest, filter, Observable } from 'rxjs';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
+import { ChangeVisibleApplicationEvent } from '../../../services/mainwindow/store/events/change-visible-application-event';
 import { DecktrackerDeleteDeckEvent } from '../../../services/mainwindow/store/events/decktracker/decktracker-delete-deck-event';
 import { HideDeckSummaryEvent } from '../../../services/mainwindow/store/events/decktracker/hide-deck-summary-event';
 import { RestoreDeckSummaryEvent } from '../../../services/mainwindow/store/events/decktracker/restore-deck-summary-event';
@@ -137,7 +138,7 @@ export class DecktrackerDeckSummaryComponent
 				? parseFloat('' + value.winRatePercentage).toLocaleString(this.i18n.formatCurrentLocale(), {
 						minimumIntegerDigits: 1,
 						maximumFractionDigits: 2,
-				  })
+					})
 				: null;
 		this.lastUsed = value.lastUsedTimestamp ? this.buildLastUsedDate(value.lastUsedTimestamp) : 'N/A';
 
@@ -224,6 +225,7 @@ export class DecktrackerDeckSummaryComponent
 		if ((event.target as any)?.tagName === 'BUTTON') {
 			return;
 		}
+		this.stateUpdater.next(new ChangeVisibleApplicationEvent('decktracker'));
 		this.stateUpdater.next(new SelectDeckDetailsEvent(this._deck.deckstring));
 	}
 

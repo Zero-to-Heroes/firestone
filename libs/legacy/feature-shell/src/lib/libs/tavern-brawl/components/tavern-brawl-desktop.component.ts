@@ -31,6 +31,9 @@ import { BehaviorSubject, from, Observable } from 'rxjs';
 					</ul>
 					<tavern-brawl-overview *ngIf="value.category === 'overview'"></tavern-brawl-overview>
 					<tavern-brawl-meta-decks *ngIf="value.category === 'meta'"></tavern-brawl-meta-decks>
+					<tavern-brawl-personal-decks
+						*ngIf="value.category === 'personal-decks'"
+					></tavern-brawl-personal-decks>
 				</div>
 			</section>
 			<section class="secondary" *ngIf="!(showAds$ | async) && false"></section>
@@ -59,7 +62,7 @@ export class TavernBrawlDesktopComponent extends AbstractSubscriptionComponent i
 
 		this.menuDisplayType$ = from(['menu']);
 		this.category$ = this.category$$.pipe(this.mapData((category) => category));
-		this.categories$ = from([['overview', 'meta'] as readonly TavernBrawlCategoryType[]]);
+		this.categories$ = from([['overview', 'meta', 'personal-decks'] as readonly TavernBrawlCategoryType[]]);
 		this.showAds$ = this.ads.hasPremiumSub$$.pipe(this.mapData((info) => !info));
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -76,4 +79,4 @@ export class TavernBrawlDesktopComponent extends AbstractSubscriptionComponent i
 	}
 }
 
-export type TavernBrawlCategoryType = 'overview' | 'meta';
+export type TavernBrawlCategoryType = 'overview' | 'meta' | 'personal-decks';
