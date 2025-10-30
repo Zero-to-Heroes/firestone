@@ -90,6 +90,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 							(sortClick)="onSortClick($event)"
 						>
 						</sortable-table-label>
+						<div class="cell decklist"></div>
 						<div class="cell cards">
 							<span
 								[owTranslate]="'app.decktracker.meta.cards-header'"

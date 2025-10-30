@@ -31,6 +31,12 @@
 		width: 80px;
 	}
 
+	&.decklist {
+		margin-left: 10px;
+		width: 60px;
+		margin-right: -10px;
+	}
+
 	&.cards {
 		margin-left: 10px;
 		flex-grow: 1;

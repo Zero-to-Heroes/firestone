@@ -14,7 +14,7 @@ import {
 	template: `
 		<div
 			class="copy-deckstring"
-			(mousedown)="copyDeckstring()"
+			(mousedown)="copyDeckstring($event)"
 			[helpTooltip]="showTooltip ? copyText : null"
 			[bindTooltipToGameWindow]="showTooltip ? true : null"
 		>
@@ -33,13 +33,13 @@ export class CopyDesckstringComponent {
 
 	@Input() set deckstring(value: string) {
 		this._deckstring = value;
-		console.debug('set deckstring', value);
+		// console.debug('set deckstring', value);
 		if (!!value) {
 			try {
 				const deckDefinition = decode(value);
 				const updatedDeckDefinition = sanitizeDeckDefinition(deckDefinition, this.allCards);
 				this.normalizedDeckstring = encode(updatedDeckDefinition);
-				console.debug('deckDefinition', deckDefinition, updatedDeckDefinition, this.normalizedDeckstring);
+				// console.debug('deckDefinition', deckDefinition, updatedDeckDefinition, this.normalizedDeckstring);
 			} catch (e) {
 				console.error('could not decode deckstring', value, e);
 			}
@@ -58,7 +58,10 @@ export class CopyDesckstringComponent {
 		private readonly analytics: AnalyticsService,
 	) {}
 
-	async copyDeckstring() {
+	async copyDeckstring(event: MouseEvent) {
+		event.preventDefault();
+		event.stopPropagation();
+
 		if (!this.ow?.isOwEnabled()) {
 			console.log('no OW service present, copying with browser API');
 			this.copyDeckstringWithoutOverwolf();

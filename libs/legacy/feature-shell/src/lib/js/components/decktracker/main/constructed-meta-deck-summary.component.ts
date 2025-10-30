@@ -10,7 +10,7 @@ import {
 import { Sideboard } from '@firestone-hs/deckstrings';
 import { buildArchetypeName, overrideClassIcon, overrideDeckName } from '@firestone/constructed/common';
 import { AbstractSubscriptionComponent, groupByFunction, sortByProperties } from '@firestone/shared/framework/common';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, filter } from 'rxjs';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { MinimalCard } from '../overlay/deck-list-static.component';
@@ -24,7 +24,7 @@ import { EnhancedDeckStat } from './meta-decks-visualization.component';
 		`../../../../css/component/decktracker/main/constructed-meta-deck-summary.component.scss`,
 	],
 	template: `
-		<div class="constructed-meta-deck-summary" (click)="viewDetails()">
+		<div class="constructed-meta-deck-summary" (click)="viewDetails($event)">
 			<div class="player-class cell">
 				<img class="icon" [src]="classIcon" [helpTooltip]="classTooltip" />
 			</div>
@@ -48,6 +48,16 @@ import { EnhancedDeckStat } from './meta-decks-visualization.component';
 					{{ dustCost }}
 				</div>
 				<div class="dust-icon" inlineSVG="assets/svg/rewards/reward_dust.svg"></div>
+			</div>
+			<div class="decklist cell">
+				<copy-deckstring
+					class="decklist-button"
+					*ngIf="decklist"
+					[deckstring]="decklist"
+					[copyText]="'Copy deck code to clipboard'"
+					[showTooltip]="true"
+				>
+				</copy-deckstring>
 			</div>
 			<div class="cards cell">
 				<div class="removed-cards" *ngIf="removedCards?.length">
@@ -85,6 +95,7 @@ export class ConstructedMetaDeckSummaryComponent extends AbstractSubscriptionCom
 	classTooltip: string;
 	classIcon: string;
 	deckName: string;
+	decklist: string;
 	dustCost: number;
 	winrate: string;
 	totalGames: number;
@@ -106,6 +117,7 @@ export class ConstructedMetaDeckSummaryComponent extends AbstractSubscriptionCom
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly ow: OverwolfService,
 	) {
 		super(cdr);
 	}
@@ -123,6 +135,7 @@ export class ConstructedMetaDeckSummaryComponent extends AbstractSubscriptionCom
 				this.classTooltip = this.i18n.translateString(`global.class.${deck.heroCardClass}`);
 				this.deckName =
 					overrideDeckName(deck, this.allCards) ?? buildArchetypeName(deck.archetypeName, this.i18n);
+				this.decklist = deck.decklist;
 				this.winrate = this.buildPercents(deck.winrate);
 				this.totalGames = deck.totalGames;
 				this.removedCards = buildCardVariations(
@@ -150,7 +163,11 @@ export class ConstructedMetaDeckSummaryComponent extends AbstractSubscriptionCom
 		return item.cardId;
 	}
 
-	viewDetails() {
+	viewDetails(event: MouseEvent) {
+		// Don't trigger if we clicked on the decklist button
+		if ((event.target as HTMLElement).closest('.decklist-button')) {
+			return;
+		}
 		console.debug('viewing details', this.deck$$.value);
 		this.deckSelected.emit(this.deck$$.value);
 	}
