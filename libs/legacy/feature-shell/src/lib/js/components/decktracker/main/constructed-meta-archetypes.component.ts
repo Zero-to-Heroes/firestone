@@ -8,7 +8,7 @@ import { getDateAgo } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter, takeUntil } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { formatGamesCount } from './constructed-meta-decks.component';
+import { formatGamesCount } from './meta-decks-visualization.component';
 
 @Component({
 	standalone: false,

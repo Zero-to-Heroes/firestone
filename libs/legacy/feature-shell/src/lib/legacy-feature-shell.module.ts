@@ -435,6 +435,7 @@ import { TavernBrawlService } from '@tavern-brawl/services/tavern-brawl.service'
 import { NgScrollbarModule } from 'ngx-scrollbar';
 
 import { ConstructedPersonalDeckCardSearchComponent } from '@components/decktracker/main/filters/constructed-personal-deck-card-search.component';
+import { MetaDecksVisualizationComponent } from '@components/decktracker/main/meta-decks-visualization.component';
 import { ChoosingCardAdditionalInfoComponent } from '@components/overlays/card-choice/choosing-card-additional-info.component';
 import { AdsComponent } from './js/components/ads/ads.component';
 import { BgsBattleSideComponent } from './js/components/battlegrounds/battles/bgs-battle-side.component';
@@ -623,6 +624,7 @@ import { AppStartupService } from './libs/boostrap/app-startup.service';
 import { BootstrapEssentialServicesService } from './libs/boostrap/bootstrap-essential-services.service';
 import { BootstrapOtherServicesService } from './libs/boostrap/bootstrap-other-services.service';
 import { BootstrapStoreServicesService } from './libs/boostrap/bootstrap-store-services.service';
+import { TavernBrawlOverviewComponent } from './libs/tavern-brawl/components/overview/tavern-brawl-overview.component';
 
 console.log('environment is ' + process.env['NODE_ENV']);
 
@@ -1013,6 +1015,7 @@ try {
 		DecktrackerDeckSummaryComponent,
 		DecktrackerDeckDetailsComponent,
 		ConstructedMetaDecksComponent,
+		MetaDecksVisualizationComponent,
 		ConstructedMetaDeckSummaryComponent,
 		ConstructedMetaDeckDetailsComponent,
 		ConstructedMetaDeckDetailsViewComponent,
@@ -1166,6 +1169,7 @@ try {
 
 		TavernBrawlDesktopComponent,
 		TavernBrawlMetaComponent,
+		TavernBrawlOverviewComponent,
 		TavernBrawlStatComponent,
 
 		StatsDesktopComponent,

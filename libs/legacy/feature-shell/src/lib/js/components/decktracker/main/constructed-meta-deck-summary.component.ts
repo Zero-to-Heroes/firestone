@@ -15,7 +15,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { ConstructedMetaDeckDetailsShowEvent } from '../../../services/mainwindow/store/processors/decktracker/constructed-meta-deck-show-details';
 import { MinimalCard } from '../overlay/deck-list-static.component';
-import { EnhancedDeckStat } from './constructed-meta-decks.component';
+import { EnhancedDeckStat } from './meta-decks-visualization.component';
 
 @Component({
 	standalone: false,
