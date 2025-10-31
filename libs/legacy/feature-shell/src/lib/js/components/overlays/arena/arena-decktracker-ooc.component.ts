@@ -26,7 +26,7 @@ import {
 	ArenaDraftManagerService,
 } from '@firestone/arena/common';
 import { buildColor } from '@firestone/constructed/common';
-import { ArenaModeFilterType, PreferencesService } from '@firestone/shared/common/service';
+import { ArenaModeFilterType, PatchesConfigService, PreferencesService } from '@firestone/shared/common/service';
 import { invertDirection, SortCriteria } from '@firestone/shared/common/view';
 import {
 	AbstractSubscriptionComponent,
@@ -219,13 +219,14 @@ export class ArenaDecktrackerOocComponent extends AbstractSubscriptionComponent 
 		private readonly renderer: Renderer2,
 		private readonly cardStats: ArenaCardStatsService,
 		private readonly classStats: ArenaClassStatsService,
+		private readonly patches: PatchesConfigService,
 		private readonly i18n: ILocalizationService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.draftManager, this.prefs, this.cardStats, this.classStats);
+		await waitForReady(this.draftManager, this.prefs, this.cardStats, this.classStats, this.patches);
 
 		this.sortCriteria$ = this.sortCriteria$$.asObservable().pipe(this.mapData((sort) => sort));
 		this.colorManaCost$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.overlayShowRarityColors));
@@ -299,8 +300,15 @@ export class ArenaDecktrackerOocComponent extends AbstractSubscriptionComponent 
 			filter(([playerClass, classStats]) => !!playerClass && !!classStats),
 			this.mapData(([playerClass, classStats]) => classStats?.stats?.find((s) => s.playerClass === playerClass)),
 		);
-		const cardStats$ = combineLatest([currentClass$, currentMode$]).pipe(
-			switchMap(([playerClass, mode]) => this.cardStats.buildCardStats(playerClass, 'last-patch', mode)),
+		const timeFrame$ = this.patches.currentArenaMetaPatch$$.pipe(
+			filter((patch) => !!patch),
+			this.mapData((patch) => {
+				const isPatchTooRecent = new Date(patch.date).getTime() > Date.now() - 3 * 24 * 60 * 60 * 1000;
+				return isPatchTooRecent ? 'past-3' : 'last-patch';
+			}),
+		);
+		const cardStats$ = combineLatest([currentClass$, currentMode$, timeFrame$]).pipe(
+			switchMap(([playerClass, mode, timeFrame]) => this.cardStats.buildCardStats(playerClass, timeFrame, mode)),
 		);
 		const cardsWithStats$ = combineLatest([cardsList$, cardStats$, classStat$]).pipe(
 			filter(([cards, cardStats, classStat]) => !!cards?.length && !!cardStats?.stats?.length && !!classStat),
@@ -353,6 +361,7 @@ export class ArenaDecktrackerOocComponent extends AbstractSubscriptionComponent 
 			this.mapData(([cards, cardStats, classStat]) => {
 				const cardsWithStats: CardInfo[] = [];
 				const classWinrate = classStat.totalsWins / classStat.totalGames;
+
 				for (const card of cards) {
 					const refCard = this.allCards.getCard(card.CardId);
 					const cardWithStat = this.buildCardWithStats(refCard, cardStats, classWinrate);
