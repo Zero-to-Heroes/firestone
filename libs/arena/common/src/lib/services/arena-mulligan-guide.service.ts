@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Injectable } from '@angular/core';
 import { decode } from '@firestone-hs/deckstrings';
-import { CardClass, GameType, SceneMode, getBaseCardId, isArena, isCoin } from '@firestone-hs/reference-data';
+import { CardClass, SceneMode, getBaseCardId, isArena, isCoin } from '@firestone-hs/reference-data';
 import { MulliganCardAdvice, MulliganGuide } from '@firestone/constructed/common';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
@@ -173,8 +173,9 @@ export class ArenaMulliganGuideService extends AbstractFacadeService<ArenaMullig
 			shareReplay(1),
 		);
 		const gameMode$ = this.gameState.gameState$$.pipe(
-			map((gameState) =>
-				gameState?.metadata?.gameType === GameType.GT_UNDERGROUND_ARENA ? 'arena-underground' : 'arena',
+			map(
+				(gameState) => 'arena-underground',
+				// gameState?.metadata?.gameType === GameType.GT_UNDERGROUND_ARENA ? 'arena-underground' : 'arena',
 			),
 			distinctUntilChanged(),
 			shareReplay(1),

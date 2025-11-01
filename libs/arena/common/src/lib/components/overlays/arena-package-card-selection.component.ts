@@ -13,17 +13,15 @@ import { AbstractSubscriptionComponent } from '@firestone/shared/framework/commo
 import {
 	ADS_SERVICE_TOKEN,
 	CARDS_HIGHLIGHT_SERVICE_TOKEN,
-	CardsFacadeService,
 	IAdsService,
 	ICardsHighlightService,
-	ILocalizationService,
-	OverwolfService,
 	waitForReady,
 } from '@firestone/shared/framework/core';
-import { Observable, combineLatest, distinctUntilChanged, pairwise, takeUntil } from 'rxjs';
+import { Observable, combineLatest, distinctUntilChanged, filter, pairwise, takeUntil } from 'rxjs';
 import { ArenaCardStatsService } from '../../services/arena-card-stats.service';
 import { ArenaClassStatsService } from '../../services/arena-class-stats.service';
 import { ArenaDraftManagerService } from '../../services/arena-draft-manager.service';
+import { ArenaOverlayDraftStatsService } from '../../services/arena-overlay-draft-stats.service';
 import { ArenaCardOption } from './model';
 
 @Component({
@@ -50,14 +48,12 @@ export class ArenaPackageCardSelectionComponent extends AbstractSubscriptionComp
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
 		private readonly arenaCardStats: ArenaCardStatsService,
-		private readonly i18n: ILocalizationService,
-		private readonly allCards: CardsFacadeService,
-		private readonly ow: OverwolfService,
 		private readonly arenaClassStats: ArenaClassStatsService,
 		private readonly prefs: PreferencesService,
 		private readonly mouseOverService: CardMousedOverService,
-		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
+		private readonly arenaOverlayDraftStats: ArenaOverlayDraftStatsService,
 		private readonly draftManager: ArenaDraftManagerService,
+		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 		@Inject(CARDS_HIGHLIGHT_SERVICE_TOKEN) private readonly cardsHighlightService: ICardsHighlightService,
 	) {
 		super(cdr);
@@ -70,63 +66,13 @@ export class ArenaPackageCardSelectionComponent extends AbstractSubscriptionComp
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			this.mapData((deck) => deck?.DeckList?.length ?? 0),
 		);
-		// TODO: load the context of the current class
-		// So this means storing somewhere the current draft info (including the decklist)
-		// this.updateClassContext();
-		const currentHero$ = this.draftManager.currentDeck$$.pipe(this.mapData((deck) => deck?.HeroCardId));
-		const currentHeroWinrate$ = combineLatest([currentHero$, this.arenaClassStats.classStats$$]).pipe(
-			this.mapData(([currentHero, stats]) => {
-				const heroStats = stats?.stats.find(
-					(s) =>
-						s.playerClass?.toUpperCase() ===
-						this.allCards.getCard(currentHero!)?.playerClass?.toUpperCase(),
-				);
-				return !heroStats?.totalGames ? null : (heroStats?.totalsWins ?? 0) / heroStats.totalGames;
-			}),
-			distinctUntilChanged(),
-			takeUntil(this.destroyed$),
-		);
 		this.options$ = combineLatest([
 			this.draftManager.cardPackageOptions$$,
-			this.arenaCardStats.cardStats$$,
-			currentHeroWinrate$,
+			this.arenaOverlayDraftStats.optionDraftStats$$,
 		]).pipe(
-			this.mapData(
-				([options, stats, currentHeroWinrate]) =>
-					options?.map((option) => {
-						const stat = stats?.stats?.find(
-							(s) => this.allCards.getRootCardId(s.cardId) === this.allCards.getRootCardId(option),
-						);
-						const drawnWinrate = !stat?.matchStats?.stats?.drawn
-							? null
-							: stat.matchStats.stats.drawnThenWin / stat.matchStats.stats.drawn;
-						const pickRate = !stat?.draftStats?.pickRate ? null : stat.draftStats.pickRate;
-						const pickRateDelta = !stat?.draftStats?.pickRateImpact ? null : stat.draftStats.pickRateImpact;
-						const pickRateHighWins = !stat?.draftStats?.pickRateHighWins
-							? null
-							: stat.draftStats.pickRateHighWins;
-						const drawnImpact =
-							currentHeroWinrate == null || drawnWinrate == null
-								? null
-								: drawnWinrate - currentHeroWinrate;
-						const deckWinrate = !stat?.matchStats?.stats?.decksWithCard
-							? null
-							: stat.matchStats.stats.decksWithCardThenWin / stat.matchStats.stats.decksWithCard;
-						const deckImpact =
-							currentHeroWinrate == null || deckWinrate == null ? null : deckWinrate - currentHeroWinrate;
-						const result: ArenaCardOption = {
-							cardId: option,
-							drawnWinrate: drawnWinrate,
-							drawnImpact: drawnImpact,
-							deckWinrate: deckWinrate,
-							deckImpact: deckImpact,
-							pickRate: pickRate,
-							pickRateDelta: pickRateDelta,
-							pickRateHighWins: pickRateHighWins,
-							dataPoints: stat?.matchStats?.stats?.inStartingDeck ?? null,
-						};
-						return result;
-					}) ?? [],
+			filter(([packageCards, options]) => !!packageCards?.length && !!options?.length),
+			this.mapData(([packageCards, options]) =>
+				packageCards!.map((card) => options!.find((o) => o.isPackageCard && o.cardId === card)!),
 			),
 		);
 

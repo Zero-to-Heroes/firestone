@@ -7,37 +7,25 @@ import {
 	Inject,
 	ViewRef,
 } from '@angular/core';
-import { GameType } from '@firestone-hs/reference-data';
 import { CardMousedOverService } from '@firestone/memory';
 import { PatchesConfigService, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import {
 	ADS_SERVICE_TOKEN,
 	CARDS_HIGHLIGHT_SERVICE_TOKEN,
-	CardsFacadeService,
 	IAdsService,
 	ICardsHighlightService,
-	ILocalizationService,
 	OverwolfService,
 	waitForReady,
 } from '@firestone/shared/framework/core';
-import {
-	Observable,
-	combineLatest,
-	distinctUntilChanged,
-	filter,
-	pairwise,
-	shareReplay,
-	switchMap,
-	takeUntil,
-	tap,
-} from 'rxjs';
+import { Observable, combineLatest, distinctUntilChanged, pairwise, takeUntil } from 'rxjs';
 import { ArenaCardStatsService } from '../../services/arena-card-stats.service';
 import { ArenaClassStatsService } from '../../services/arena-class-stats.service';
 import {
 	ARENA_DRAFT_MANAGER_SERVICE_TOKEN,
 	IArenaDraftManagerService,
 } from '../../services/arena-draft-manager.interface';
+import { ArenaOverlayDraftStatsService } from '../../services/arena-overlay-draft-stats.service';
 import { ArenaCardOption } from './model';
 
 @Component({
@@ -68,14 +56,13 @@ export class ArenaCardSelectionComponent extends AbstractSubscriptionComponent i
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
-		private readonly i18n: ILocalizationService,
-		private readonly allCards: CardsFacadeService,
 		private readonly ow: OverwolfService,
 		private readonly prefs: PreferencesService,
 		private readonly arenaCardStats: ArenaCardStatsService,
 		private readonly arenaClassStats: ArenaClassStatsService,
 		private readonly mouseOverService: CardMousedOverService,
 		private readonly patches: PatchesConfigService,
+		private readonly arenaOverlayDraftStats: ArenaOverlayDraftStatsService,
 		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 		// Provided in the app
 		@Inject(ARENA_DRAFT_MANAGER_SERVICE_TOKEN) private readonly draftManager: IArenaDraftManagerService,
@@ -111,91 +98,10 @@ export class ArenaCardSelectionComponent extends AbstractSubscriptionComponent i
 					arenaShowCardSelectionOverlay && pickNumber >= 1 && !hasPremium && isHearthArenaRunning?.isRunning,
 			),
 		);
-		// TODO: load the context of the current class
-		const gameMode$ = this.draftManager.currentMode$$.pipe(
-			this.mapData((mode) => mode ?? GameType.GT_UNDERGROUND_ARENA),
+		this.options$ = this.arenaOverlayDraftStats.optionDraftStats$$.pipe(
+			this.mapData((options) => options?.filter((o) => !o.isPackageCard) ?? []),
 		);
-		// So this means storing somewhere the current draft info (including the decklist)
-		// this.updateClassContext();
-		const currentHero$ = this.draftManager.currentDeck$$.pipe(this.mapData((deck) => deck?.HeroCardId));
-		const timeFrame$ = this.patches.currentArenaMetaPatch$$.pipe(
-			filter((patch) => !!patch),
-			this.mapData((patch) => {
-				const isPatchTooRecent = new Date(patch.date).getTime() > Date.now() - 3 * 24 * 60 * 60 * 1000;
-				return isPatchTooRecent ? 'past-3' : 'last-patch';
-			}),
-		);
-		const classStats$ = combineLatest([gameMode$, timeFrame$]).pipe(
-			switchMap(([gameMode, timeFrame]) =>
-				this.arenaClassStats.buildClassStats(
-					timeFrame,
-					gameMode === GameType.GT_ARENA ? 'arena' : 'arena-underground',
-				),
-			),
-		);
-		const currentHeroWinrate$ = combineLatest([currentHero$, classStats$]).pipe(
-			this.mapData(([currentHero, stats]) => {
-				const heroStats = stats?.stats.find(
-					(s) =>
-						s.playerClass?.toUpperCase() ===
-						this.allCards.getCard(currentHero!)?.playerClass?.toUpperCase(),
-				);
-				return !heroStats?.totalGames ? null : (heroStats?.totalsWins ?? 0) / heroStats.totalGames;
-			}),
-			distinctUntilChanged(),
-			takeUntil(this.destroyed$),
-		);
-		const cardStats$ = combineLatest([currentHero$, gameMode$, timeFrame$]).pipe(
-			switchMap(([currentHero, gameMode, timeFrame]) =>
-				this.arenaCardStats.buildCardStats(
-					currentHero ? this.allCards.getCard(currentHero)?.playerClass?.toLowerCase() : 'global',
-					timeFrame,
-					gameMode === GameType.GT_ARENA ? 'arena' : 'arena-underground',
-				),
-			),
-		);
-		this.options$ = combineLatest([this.draftManager.cardOptions$$, cardStats$, currentHeroWinrate$]).pipe(
-			this.mapData(
-				([options, stats, currentHeroWinrate]) =>
-					options?.map((option) => {
-						const stat = stats?.stats?.find(
-							(s) => this.allCards.getRootCardId(s.cardId) === this.allCards.getRootCardId(option.CardId),
-						);
-						const drawnWinrate = !stat?.matchStats?.stats?.drawn
-							? null
-							: stat.matchStats.stats.drawnThenWin / stat.matchStats.stats.drawn;
-						const pickRate = !stat?.draftStats?.pickRate ? null : stat.draftStats.pickRate;
-						const pickRateDelta = !stat?.draftStats?.pickRateImpact ? null : stat.draftStats.pickRateImpact;
-						const pickRateHighWins = !stat?.draftStats?.pickRateHighWins
-							? null
-							: stat.draftStats.pickRateHighWins;
-						const drawnImpact =
-							currentHeroWinrate == null || drawnWinrate == null
-								? null
-								: drawnWinrate - currentHeroWinrate;
-						const deckWinrate = !stat?.matchStats?.stats?.decksWithCard
-							? null
-							: stat.matchStats.stats.decksWithCardThenWin / stat.matchStats.stats.decksWithCard;
-						const deckImpact =
-							currentHeroWinrate == null || deckWinrate == null ? null : deckWinrate - currentHeroWinrate;
-						const result: ArenaCardOption = {
-							cardId: option.CardId,
-							drawnWinrate: drawnWinrate,
-							drawnImpact: drawnImpact,
-							deckWinrate: deckWinrate,
-							deckImpact: deckImpact,
-							pickRate: pickRate,
-							pickRateDelta: pickRateDelta,
-							pickRateHighWins: pickRateHighWins,
-							dataPoints: stat?.matchStats?.stats?.inStartingDeck ?? null,
-						};
-						return result;
-					}) ?? [],
-			),
-			tap((options) => console.log('[arena-card-selection] options', options)),
-			shareReplay(1),
-			takeUntil(this.destroyed$),
-		);
+
 		this.showing$ = combineLatest([this.options$, this.showingSideBanner$]).pipe(
 			this.mapData(([options, showingSideBanner]) => !showingSideBanner && options.length > 0),
 		);

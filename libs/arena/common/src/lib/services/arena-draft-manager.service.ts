@@ -180,6 +180,10 @@ export class ArenaDraftManagerService
 				this.clientStateType$$.next(changes.ArenaClientState);
 			}
 			if (changes.ArenaPackageCardOptions != null) {
+				console.debug(
+					'[arena-draft-manager] received arena package card options',
+					changes.ArenaPackageCardOptions,
+				);
 				this.cardPackageOptions$$.next(changes.ArenaPackageCardOptions);
 			}
 			if (changes.ArenaSessionState != null) {

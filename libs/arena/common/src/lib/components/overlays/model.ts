@@ -5,6 +5,7 @@ export interface ArenaHeroOption {
 }
 export interface ArenaCardOption {
 	readonly cardId: string;
+	isPackageCard?: boolean;
 	readonly drawnWinrate: number | null | undefined;
 	readonly drawnImpact: number | null;
 	readonly deckWinrate: number | null | undefined;

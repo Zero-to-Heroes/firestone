@@ -20,10 +20,11 @@ import {
 import {
 	ARENA_DRAFT_CARD_HIGH_WINS_THRESHOLD,
 	ARENA_DRAFT_CARD_HIGH_WINS_THRESHOLD_FALLBACK,
+	ArenaCardOption,
 	ArenaCardStatsService,
 	ArenaClassStatsService,
-	ArenaCombinedCardStats,
 	ArenaDraftManagerService,
+	ArenaOverlayDraftStatsService,
 } from '@firestone/arena/common';
 import { buildColor } from '@firestone/constructed/common';
 import { ArenaModeFilterType, PatchesConfigService, PreferencesService } from '@firestone/shared/common/service';
@@ -170,7 +171,7 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 													*ngIf="showImpact$ | async"
 													[style.color]="cardInfo.impactColor"
 												>
-													{{ cardInfo.deckWinrateImpact | number: '1.2-2' }}
+													{{ 100 * cardInfo.deckWinrateImpact | number: '1.2-2' }}
 												</div>
 											</li>
 										</div>
@@ -221,6 +222,7 @@ export class ArenaDecktrackerOocComponent extends AbstractSubscriptionComponent 
 		private readonly classStats: ArenaClassStatsService,
 		private readonly patches: PatchesConfigService,
 		private readonly i18n: ILocalizationService,
+		private readonly arenaOverlayDraftStats: ArenaOverlayDraftStatsService,
 	) {
 		super(cdr);
 	}
@@ -291,7 +293,10 @@ export class ArenaDecktrackerOocComponent extends AbstractSubscriptionComponent 
 			this.mapData((deck) => this.allCards.getCard(deck?.HeroCardId).classes?.[0]?.toLowerCase() ?? null),
 		);
 		const currentMode$ = this.draftManager.currentMode$$.pipe(
-			this.mapData((mode) => (mode === GameType.GT_UNDERGROUND_ARENA ? 'arena-underground' : 'arena')),
+			this.mapData(
+				(mode) => 'arena-underground' as const,
+				// (mode === GameType.GT_UNDERGROUND_ARENA ? 'arena-underground' : 'arena')
+			),
 		);
 		const classStats$ = currentMode$.pipe(
 			switchMap((mode) => this.classStats.buildClassStats('last-patch', mode as ArenaModeFilterType)),
@@ -356,22 +361,26 @@ export class ArenaDecktrackerOocComponent extends AbstractSubscriptionComponent 
 			),
 		);
 
-		this.currentOptions$ = combineLatest([this.draftManager.cardOptions$$, cardStats$, classStat$]).pipe(
-			filter(([cards, cardStats, classStat]) => !!cards?.length && !!cardStats?.stats?.length && !!classStat),
-			this.mapData(([cards, cardStats, classStat]) => {
+		// For the current options we use the single source of truth
+		const optionDraftStats$ = this.arenaOverlayDraftStats.optionDraftStats$$.pipe(
+			this.mapData((options) => options ?? []),
+		);
+		this.currentOptions$ = combineLatest([this.draftManager.cardOptions$$, optionDraftStats$]).pipe(
+			filter(([cards, optionDraftStats]) => !!cards?.length && !!optionDraftStats?.length),
+			this.mapData(([cards, optionDraftStats]) => {
 				const cardsWithStats: CardInfo[] = [];
-				const classWinrate = classStat.totalsWins / classStat.totalGames;
 
 				for (const card of cards) {
 					const refCard = this.allCards.getCard(card.CardId);
-					const cardWithStat = this.buildCardWithStats(refCard, cardStats, classWinrate);
-					cardsWithStats.push(cardWithStat);
+					const optionDraftStat = optionDraftStats.find((option) => option.cardId === card.CardId);
+					const cardInfo = this.buildCardInfo(refCard, optionDraftStat);
+					cardsWithStats.push(cardInfo);
 					if (card.PackageCardIds?.length) {
 						for (const packageCardId of card.PackageCardIds) {
 							const packageCard = this.allCards.getCard(packageCardId);
-							const packageCardWithStat = this.buildCardWithStats(packageCard, cardStats, classWinrate);
-							packageCardWithStat.indented = true;
-							cardsWithStats.push(packageCardWithStat);
+							const packageCardStat = optionDraftStats.find((option) => option.cardId === packageCardId);
+							const packageCardInfo = this.buildCardInfo(packageCard, packageCardStat);
+							cardsWithStats.push(packageCardInfo);
 						}
 					}
 				}
@@ -458,32 +467,23 @@ export class ArenaDecktrackerOocComponent extends AbstractSubscriptionComponent 
 		return direction === 'asc' ? aData - bData : bData - aData;
 	}
 
-	private buildCardWithStats(
-		refCard: ReferenceCard,
-		cardStats: ArenaCombinedCardStats,
-		classWinrate: number,
-	): CardInfo {
+	private buildCardInfo(refCard: ReferenceCard, optionDraftStat: ArenaCardOption): CardInfo {
+		const pickrate = optionDraftStat?.pickRateHighWins ?? optionDraftStat?.pickRate ?? null;
+		const deckImpact = optionDraftStat?.deckImpact ?? 0;
 		const internalEntityId = uuidShort();
-		const deckCard = VisualDeckCard.create({
-			cardId: refCard.id,
-			cardName: refCard.name,
-			refManaCost: refCard.cost,
-			rarity: refCard.rarity,
-			totalQuantity: 1,
-			internalEntityId: internalEntityId,
-			internalEntityIds: [internalEntityId],
-		});
-		const stat = cardStats?.stats?.find(
-			(s) => this.allCards.getRootCardId(s.cardId) === this.allCards.getRootCardId(deckCard.cardId),
-		);
-		const decksWithCard = stat?.matchStats?.stats?.decksWithCard ?? 0;
-		const deckWinrate = !decksWithCard ? null : (stat.matchStats?.stats?.decksWithCardThenWin ?? 0) / decksWithCard;
-		const deckImpact = deckWinrate == null ? null : 100 * (deckWinrate - classWinrate);
-		const pickrate = stat?.draftStats?.pickRateHighWins ?? stat?.draftStats?.pickRate ?? null;
 		const cardInfo: CardInfo = {
-			card: deckCard,
-			deckWinrateImpact: deckImpact,
+			card: VisualDeckCard.create({
+				cardId: refCard.id,
+				cardName: refCard.name,
+				refManaCost: refCard.cost,
+				rarity: refCard.rarity,
+				totalQuantity: 1,
+				internalEntityId: internalEntityId,
+				internalEntityIds: [internalEntityId],
+			}),
+			deckWinrateImpact: optionDraftStat?.deckImpact,
 			pickrate: pickrate,
+			indented: optionDraftStat?.isPackageCard,
 			pickedColor: buildColor('hsl(112, 100%, 64%)', 'hsl(0, 100%, 64%)', pickrate ?? 0, 0.7, 0.3),
 			impactColor: buildColor('hsl(112, 100%, 64%)', 'hsl(0, 100%, 64%)', deckImpact ?? 0, 1, -1),
 		};
