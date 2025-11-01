@@ -576,6 +576,10 @@ const getDynamicFilters = (
 		case CardIds.TimeMachine_TIME_035:
 			return (c) => hasMechanic(c, GameTag.REWIND);
 
+		// Random Mini
+		case CardIds.Botface_TOY_906:
+			return (c) => hasMechanic(c, GameTag.MINI);
+
 		// Random Taunt
 		case CardIds.Atlasaurus_DINO_431:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasMechanic(c, GameTag.TAUNT) && hasCost(c, '>=', 5);
@@ -872,6 +876,7 @@ const getDynamicFilters = (
 		case CardIds.VenomousScorpid:
 		case CardIds.VoidScripture_YOG_507:
 		case CardIds.VulperaScoundrel:
+		case CardIds.VulperaScoundrelCore:
 			return (c) => hasCorrectType(c, CardType.SPELL) && canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.InstructorFireheart:
 			return (c) =>
