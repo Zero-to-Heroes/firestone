@@ -767,6 +767,7 @@ export const giftCreators = [
 	CardIds.Shadowcasting101TavernBrawl,
 	CardIds.ShadowCouncil_BT_306,
 	CardIds.ShadowflameStalker_FIR_924,
+	CardIds.ShadowflameSuffusion_FIR_939,
 	CardIds.ShadowjewelerHanar,
 	CardIds.ShadowjewelerHanarCore,
 	CardIds.ShadowVisions,
