@@ -19,8 +19,18 @@ export class SecretDestroyedParser implements EventParser {
 
 		const newSecrets: readonly BoardSecret[] = deck.secrets.filter((secret) => secret.entityId !== entityId);
 
+		let otherZone = deck.otherZone;
+		const card = otherZone.find((c) => c.entityId === entityId);
+		if (card) {
+			const newCard = card.update({
+				zone: 'REMOVEDFROMGAME',
+			});
+			otherZone = otherZone.map((c) => (c.entityId === entityId ? newCard : c));
+		}
+
 		const newPlayerDeck = deck.update({
 			secrets: newSecrets,
+			otherZone: otherZone,
 		} as DeckState);
 
 		return Object.assign(new GameState(), currentState, {
