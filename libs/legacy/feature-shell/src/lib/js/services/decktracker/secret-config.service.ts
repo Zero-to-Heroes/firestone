@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
+	brawlSets,
 	CardIds,
 	formatFormat,
 	GameFormat,
@@ -8,6 +9,7 @@ import {
 	GameType,
 	isArena,
 	ScenarioId,
+	SetId,
 	SpellSchool,
 } from '@firestone-hs/reference-data';
 import { DeckCard, GameState, Metadata } from '@firestone/game-state';
@@ -61,6 +63,16 @@ export class SecretConfigService {
 		const standardSecrets = this.secretConfigs.find((conf) => conf.mode === 'standard');
 		const standardSecretCardIds = standardSecrets.secrets.map((s) => s.cardId);
 		const result = config.secrets
+			.filter((secret) => {
+				if (metadata.gameType !== GameType.GT_TAVERNBRAWL) {
+					return true;
+				}
+				const brawlSet = brawlSets[metadata.scenarioId];
+				if (brawlSet.length === 0) {
+					return true;
+				}
+				return brawlSet.includes(this.allCards.getCard(secret.cardId).set?.toLowerCase() as SetId);
+			})
 			.filter((secret) => secret.playerClass === playerClass)
 			.filter((secret) => secret.isTavish === (creatorCardId === CardIds.BeaststalkerTavish))
 			.map((secret) => secret.cardId)
