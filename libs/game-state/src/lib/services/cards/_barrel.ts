@@ -9,6 +9,7 @@ export { DiscipleOfTheDove } from './disciple-of-the-dove';
 export { FadingMemory } from './fading-memory';
 export { FarseerWo } from './farseer-wo';
 export { ForgottenMillenium } from './forgotten-millenium';
+export { Jumpscare } from './jumpscare';
 export { KaldoreiCultivator } from './kaldorei-cultivator';
 export { Kiljaeden } from './kiljaeden';
 export { MendTheTimeline } from './mend-the-timeline';
