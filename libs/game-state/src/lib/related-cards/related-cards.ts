@@ -16,6 +16,13 @@ export const buildContextRelatedCardIds = (
 	gameState: GameState,
 	validArenaPool: readonly string[],
 ): readonly string[] => {
+	let heroClass: CardClass | undefined = deckState?.hero?.classes?.[0];
+	if (!heroClass) {
+		const heroCardId = deckState?.hero?.cardId;
+		if (heroCardId) {
+			heroClass = CardClass[allCards.getCard(heroCardId)?.playerClass.toUpperCase() as keyof typeof CardClass];
+		}
+	}
 	switch (cardId) {
 		case CardIds.ETCBandManager_ETC_080:
 		case CardIds.ZilliaxDeluxe3000_TOY_330:
@@ -33,7 +40,7 @@ export const buildContextRelatedCardIds = (
 				format: metaData.formatType,
 				gameType: metaData.gameType,
 				scenarioId: metaData.scenarioId,
-				currentClass: !deckState?.hero?.classes?.[0] ? '' : CardClass[deckState?.hero?.classes?.[0]],
+				currentClass: heroClass ? CardClass[heroClass] : '',
 				deckState: deckState,
 				gameState: gameState,
 				validArenaPool: validArenaPool,
