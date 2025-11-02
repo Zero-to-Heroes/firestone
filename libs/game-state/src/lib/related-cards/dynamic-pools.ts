@@ -650,6 +650,7 @@ const getDynamicFilters = (
 		case CardIds.UnderlightAnglingRod:
 		case CardIds.UnderlightAnglingRod_CORE_BT_018:
 		case CardIds.Grunty_SC_013:
+		case CardIds.UniteTheMurlocs_MegafinToken:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.MURLOC);
 
 		// Random Beasts
@@ -1407,7 +1408,6 @@ const hasThreeRunes = (card: ReferenceCard): boolean => {
 };
 
 const canBeDiscoveredByClass = (card: ReferenceCard, currentClass: string): boolean => {
-	// Missing some info from the context, so we avoid recomputing the list of cards because it is cached
 	if (!currentClass?.length) {
 		return true;
 	}
