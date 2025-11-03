@@ -130,6 +130,8 @@ export interface StoredInformation {
 export interface GuessedInfo {
 	readonly cost?: number | null | { cost: number; comparison: '==' | '>=' | '<=' | '>' | '<' };
 	readonly cardType?: CardType | null;
+	readonly attack?: number | null;
+	readonly health?: number | null;
 	readonly possibleCards?: readonly string[] | null;
 	readonly spellSchools?: readonly SpellSchool[] | null;
 	readonly races?: readonly Race[] | null;

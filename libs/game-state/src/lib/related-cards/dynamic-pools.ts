@@ -1420,7 +1420,10 @@ const canBeDiscoveredByClass = (card: ReferenceCard, currentClass: string): bool
 	return card.classes.includes(currentClass.toUpperCase()) || card.classes.includes(CardClass[CardClass.NEUTRAL]);
 };
 
-const fromAnotherClass = (card: ReferenceCard, currentClass: string): boolean => {
+export const fromAnotherClass = (card: ReferenceCard, currentClass: string | null | undefined): boolean => {
+	if (!currentClass) {
+		return false;
+	}
 	return (
 		!card?.classes?.includes(CardClass[CardClass.NEUTRAL]) && !card?.classes?.includes(currentClass?.toUpperCase())
 	);
