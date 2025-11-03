@@ -1,10 +1,19 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import { CardIds, CREWMATES, GameFormat, GameTag, GameType } from '@firestone-hs/reference-data';
+import {
+	CardIds,
+	CardType,
+	CREWMATES,
+	GameFormat,
+	GameTag,
+	GameType,
+	hasCorrectTribe,
+	Race,
+} from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DeckCard, GuessedInfo } from '../../models/deck-card';
 import { DeckState } from '../../models/deck-state';
 import { Metadata } from '../../models/metadata';
-import { randomDemons } from '../../related-cards/dynamic-pools';
+import { filterCards, hasCorrectType, hasCost } from '../../related-cards/dynamic-pools';
 import { GeneratingCard } from './_card.type';
 
 export const EmergencyMeeting: GeneratingCard = {
@@ -30,12 +39,17 @@ export const EmergencyMeeting: GeneratingCard = {
 				possibleCards: CREWMATES,
 			};
 		} else if (card.createdIndex === 2) {
-			possibleCards = randomDemons(EmergencyMeeting.cardIds[0], allCards.getService(), {
-				format: options?.metadata?.formatType ?? GameFormat.FT_STANDARD,
-				gameType: options?.metadata?.gameType ?? GameType.GT_RANKED,
-				scenarioId: options?.metadata?.scenarioId ?? 0,
-				validArenaPool: options?.validArenaPool ?? [],
-			});
+			possibleCards = filterCards(
+				allCards.getService(),
+				{
+					format: options?.metadata?.formatType ?? GameFormat.FT_STANDARD,
+					gameType: options?.metadata?.gameType ?? GameType.GT_RANKED,
+					scenarioId: options?.metadata?.scenarioId ?? 0,
+					validArenaPool: options?.validArenaPool ?? [],
+				},
+				EmergencyMeeting.cardIds[0],
+				(c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '<=', 3) && hasCorrectTribe(c, Race.DEMON),
+			);
 		}
 		return {
 			possibleCards: possibleCards,

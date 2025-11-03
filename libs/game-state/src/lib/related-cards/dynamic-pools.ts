@@ -1289,7 +1289,7 @@ const BAN_LIST = [
 
 let baseCards: readonly ReferenceCard[] = [];
 
-const filterCards = (
+export const filterCards = (
 	allCards: AllCardsService,
 	options: {
 		format: GameFormat;
@@ -1357,7 +1357,7 @@ const filterCards = (
 
 // TODO: Move these to the hs-reference-data repo so it's all in the same place.
 
-const hasCorrectType = (card: ReferenceCard, targetType: CardType): boolean => {
+export const hasCorrectType = (card: ReferenceCard, targetType: CardType): boolean => {
 	return card?.type?.toUpperCase() === CardType[targetType];
 };
 
@@ -1365,7 +1365,7 @@ const hasCorrectSpellSchool = (card: ReferenceCard, targetSpellSchool: SpellScho
 	return card?.spellSchool?.toUpperCase() === SpellSchool[targetSpellSchool];
 };
 
-const hasCorrectClass = (card: ReferenceCard, targetClass: CardClass | null): boolean => {
+export const hasCorrectClass = (card: ReferenceCard, targetClass: CardClass | null): boolean => {
 	if (!targetClass) {
 		return false;
 	}
@@ -1442,7 +1442,11 @@ export const hasOverride = (
 	return (result as { override: true; cards: readonly string[] })?.override;
 };
 
-const hasCost = (card: ReferenceCard, operator: '==' | '<=' | '>=' | '<' | '>' = '==', value: number): boolean => {
+export const hasCost = (
+	card: ReferenceCard,
+	operator: '==' | '<=' | '>=' | '<' | '>' = '==',
+	value: number,
+): boolean => {
 	const cost = card?.cost ?? 0;
 	switch (operator) {
 		case '==':
@@ -1619,23 +1623,4 @@ const doesSummonInPlay = (sourceCardId: string): boolean => {
 		default:
 			return false;
 	}
-};
-
-export const randomDemons = (
-	sourceCardId: string,
-	allCards: AllCardsService,
-	inputOptions: {
-		format: GameFormat;
-		gameType: GameType;
-		scenarioId: number;
-		initialDecklist?: readonly string[];
-		validArenaPool: readonly string[];
-	},
-): readonly string[] => {
-	return filterCards(
-		allCards,
-		inputOptions,
-		sourceCardId,
-		(c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '<=', 3) && hasCorrectTribe(c, Race.DEMON),
-	);
 };
