@@ -1993,6 +1993,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), spell);
 		case CardIds.KureTheLightBeyond_GDB_442:
 			return and(side(inputSide), or(inHand, inDeck), spell, holy);
+		case CardIds.LabPatron_TOY_651:
+			return and(side(inputSide), or(inHand, inDeck), givesArmor);
 		case CardIds.LadyAnacondra_WC_006:
 			return and(side(inputSide), spell, spellSchool(SpellSchool.NATURE));
 		case CardIds.LadyAshvane_TSC_943:
