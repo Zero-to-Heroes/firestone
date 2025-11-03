@@ -41,6 +41,7 @@ export class ReceiveCardInHandParser implements EventParser {
 
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
+		const opponentDeck = isPlayer ? currentState.opponentDeck : currentState.playerDeck;
 
 		const cardId = this.allCards.getCard(cardIdOrDbfId)?.id;
 		const { creatorCardId, creatorEntityId } = denormalizeCreatorCardId(
@@ -101,12 +102,14 @@ export class ReceiveCardInHandParser implements EventParser {
 		const boardCard = this.helper.findCardInZone(deck.board, null, entityId);
 		const otherCard = this.helper.findCardInZone(deck.otherZone, null, entityId);
 
+		const createdIndex = gameEvent.additionalData.createdIndex;
 		// If a C'Thun piece was set aside, we know its data when getting the card back to hand, so we want to hide it
 		const otherCardWithObfuscation =
 			isCardInfoPublic || !otherCard
 				? otherCard?.update({
 						creatorCardId: creatorCardId,
 						creatorEntityId: creatorEntityId,
+						createdIndex: createdIndex,
 					})
 				: otherCard.update({
 						creatorCardId: undefined,
@@ -114,6 +117,8 @@ export class ReceiveCardInHandParser implements EventParser {
 						cardId: undefined,
 						cardName: undefined,
 						lastAffectedByCardId: undefined,
+						lastAffectedByEntityId: undefined,
+						createdIndex: undefined,
 					} as DeckCard);
 
 		const newBoard = boardCard
@@ -125,7 +130,6 @@ export class ReceiveCardInHandParser implements EventParser {
 		// console.debug('[receive-card-in-hand] new board', newBoard, newOther);
 
 		const cardData = cardId ? this.allCards.getCard(cardId) : null;
-		const createdIndex = gameEvent.additionalData.createdIndex;
 		const cardWithDefault =
 			boardCard ||
 			otherCardWithObfuscation ||
@@ -139,6 +143,7 @@ export class ReceiveCardInHandParser implements EventParser {
 				creatorEntityId: creatorEntityId,
 				createdIndex: createdIndex,
 			} as DeckCard);
+		console.debug('[debug] cardWithDefault', cardWithDefault, boardCard, otherCardWithObfuscation);
 		// Because sometiomes we don't know the cardId when the card is revealed, but we can guess it when it is
 		// moved to hand (e.g. Suspicious Pirate)
 		// console.debug(
@@ -183,10 +188,18 @@ export class ReceiveCardInHandParser implements EventParser {
 						buffCardIds: [...(cardWithZone.buffCardIds || []), buffCardId] as readonly string[],
 					} as DeckCard)
 				: cardWithZone;
-		const cardWithGuessedInfo = addGuessInfoToCard(otherCardWithBuffs, creatorCardId, null, deck, this.allCards, {
-			positionInHand: gameEvent.additionalData.position,
-			tags: gameEvent.additionalData.tags,
-		});
+		const cardWithGuessedInfo = addGuessInfoToCard(
+			otherCardWithBuffs,
+			creatorCardId,
+			null,
+			deck,
+			opponentDeck,
+			this.allCards,
+			{
+				positionInHand: gameEvent.additionalData.position,
+				tags: gameEvent.additionalData.tags,
+			},
+		);
 		const cardWithAdditionalAttributes = addAdditionalAttribuesInHand(
 			cardWithGuessedInfo,
 			deck,

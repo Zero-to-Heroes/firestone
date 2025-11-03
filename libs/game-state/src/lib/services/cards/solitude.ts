@@ -1,14 +1,16 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import { CardIds, CardRarity, CardType, GameTag, Race } from '@firestone-hs/reference-data';
+import { CardIds, CardType, GameTag } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GuessedInfo } from '../../models/deck-card';
+import { DeckCard, GuessedInfo } from '../../models/deck-card';
 import { DeckState } from '../../models/deck-state';
-import { Card, GeneratingCard } from './_card.type';
+import { GeneratingCard } from './_card.type';
 
 export const Solitude: GeneratingCard = {
 	cardIds: [CardIds.Solitude_TIME_448],
 	guessInfo: (
+		card: DeckCard,
 		deckState: DeckState,
+		opponentDeckState: DeckState,
 		allCards: CardsFacadeService,
 		creatorEntityId: number,
 		options?: {

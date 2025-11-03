@@ -33,6 +33,7 @@ export class CardDrawParser implements EventParser {
 		console.debug('drawing from deck', cardId, gameEvent);
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		let deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
+		const opponentDeck = isPlayer ? currentState.opponentDeck : currentState.playerDeck;
 
 		let drawnByCardId: string = gameEvent.additionalData.drawnByCardId;
 
@@ -199,6 +200,7 @@ export class CardDrawParser implements EventParser {
 			drawnByCardId,
 			gameEvent.additionalData.drawnByEntityId,
 			deck,
+			opponentDeck,
 			this.allCards,
 		);
 		console.debug('[card-draw] cardWithGuessInfo', cardWithGuessInfo, gameEvent);

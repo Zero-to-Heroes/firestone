@@ -1,7 +1,7 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { CardIds, GameTag } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GuessedInfo } from '../../models/deck-card';
+import { DeckCard, GuessedInfo } from '../../models/deck-card';
 import { DeckState } from '../../models/deck-state';
 import { GeneratingCard } from './_card.type';
 
@@ -10,7 +10,9 @@ export const IdentityTheft: GeneratingCard = {
 	hasSequenceInfo: true,
 	publicCreator: true,
 	guessInfo: (
+		card: DeckCard,
 		deckState: DeckState,
+		opponentDeckState: DeckState,
 		allCards: CardsFacadeService,
 		creatorEntityId: number,
 		options?: {
@@ -18,6 +20,20 @@ export const IdentityTheft: GeneratingCard = {
 			tags?: readonly { Name: GameTag; Value: number }[];
 		},
 	): GuessedInfo | null => {
-		return null;
+		let possibleCards: readonly string[] = [];
+		if (card.createdIndex === 0) {
+			possibleCards = opponentDeckState.hand
+				.map((c) => c.cardId)
+				.filter((c) => !!c)
+				.filter((c, index, self) => self.indexOf(c) === index);
+		} else if (card.createdIndex === 1) {
+			possibleCards = opponentDeckState.deck
+				.map((c) => c.cardId)
+				.filter((c) => !!c)
+				.filter((c, index, self) => self.indexOf(c) === index);
+		}
+		return {
+			possibleCards: possibleCards,
+		};
 	},
 };

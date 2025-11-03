@@ -31,6 +31,7 @@ export class SecretCreatedInGameParser implements EventParser {
 
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
+		const opponentDeck = isPlayer ? currentState.opponentDeck : currentState.playerDeck;
 		const secretClass: string = gameEvent.additionalData.playerClass;
 
 		const dbCard = getProcessedCard(cardId, entityId, deck, this.cards);
@@ -63,6 +64,7 @@ export class SecretCreatedInGameParser implements EventParser {
 			creatorCardId,
 			gameEvent.additionalData.creatorEntityId,
 			deck,
+			opponentDeck,
 			this.cards,
 		);
 		// console.debug('[secret-created] card to add', card);
