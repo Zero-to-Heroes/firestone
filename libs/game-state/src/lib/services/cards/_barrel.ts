@@ -6,6 +6,7 @@ export { CryofrozenChampion } from './cryofrozen-champion';
 export { DeepSpaceCurator } from './deep-space-curator';
 export { DirdraRebelCaptain } from './dirdra-rebel-captain';
 export { DiscipleOfTheDove } from './disciple-of-the-dove';
+export { EmergencyMeeting } from './emergency-meeting';
 export { FadingMemory } from './fading-memory';
 export { FarseerWo } from './farseer-wo';
 export { ForgottenMillenium } from './forgotten-millenium';

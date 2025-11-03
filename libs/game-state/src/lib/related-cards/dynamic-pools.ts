@@ -1295,7 +1295,7 @@ const filterCards = (
 		format: GameFormat;
 		gameType: GameType;
 		scenarioId: number;
-		initialDecklist: readonly string[];
+		initialDecklist?: readonly string[];
 		validArenaPool: readonly string[];
 	},
 	sourceCardId: string,
@@ -1494,7 +1494,7 @@ const hasHealth = (card: ReferenceCard, operator: '==' | '<=' | '>=' | '<' | '>'
 
 const canIncludeStarcraftFaction = (
 	refCard: ReferenceCard,
-	initialDecklist: readonly string[],
+	initialDecklist: readonly string[] | undefined,
 	allCards: AllCardsService,
 ): boolean => {
 	if (!initialDecklist?.length) {
@@ -1619,4 +1619,23 @@ const doesSummonInPlay = (sourceCardId: string): boolean => {
 		default:
 			return false;
 	}
+};
+
+export const randomDemons = (
+	sourceCardId: string,
+	allCards: AllCardsService,
+	inputOptions: {
+		format: GameFormat;
+		gameType: GameType;
+		scenarioId: number;
+		initialDecklist?: readonly string[];
+		validArenaPool: readonly string[];
+	},
+): readonly string[] => {
+	return filterCards(
+		allCards,
+		inputOptions,
+		sourceCardId,
+		(c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '<=', 3) && hasCorrectTribe(c, Race.DEMON),
+	);
 };

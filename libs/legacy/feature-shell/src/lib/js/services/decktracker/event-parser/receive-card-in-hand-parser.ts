@@ -197,6 +197,7 @@ export class ReceiveCardInHandParser implements EventParser {
 			{
 				positionInHand: gameEvent.additionalData.position,
 				tags: gameEvent.additionalData.tags,
+				metadata: currentState.metadata,
 			},
 		);
 		const cardWithAdditionalAttributes = addAdditionalAttribuesInHand(
