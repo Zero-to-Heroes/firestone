@@ -1,6 +1,7 @@
 export { GeneratingCard } from './_card.type';
 export { AeonWizard } from './aeon-wizard';
 export { AlterTime } from './alter-time';
+export { ArcaneBrilliance } from './arcane-brilliance';
 export { BloodDraw } from './blood-draw';
 export { CryofrozenChampion } from './cryofrozen-champion';
 export { DeepSpaceCurator } from './deep-space-curator';
@@ -35,4 +36,5 @@ export { Synthesize } from './synthesize';
 export { TheEternalHold } from './the-eternal-hold';
 export { TimeLostGlaive } from './time-lost-glaive';
 export { TwilightMender } from './twilight-mender';
+export { WarCache } from './war-cache';
 export { YrelBeaconOfHope } from './yrel-beacon-of-hope';
