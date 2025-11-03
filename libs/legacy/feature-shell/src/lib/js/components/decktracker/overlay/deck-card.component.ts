@@ -437,6 +437,14 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 	onMouseEnter(event: MouseEvent) {
 		this.cardsHighlightService?.onMouseEnter(this.cardId, this._side, this.card$$.value);
 
+		if (this.card.guessedInfo?.possibleCards?.length) {
+			this.relatedCardIds = this.card.guessedInfo.possibleCards;
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
+			return this.relatedCardIds;
+		}
+
 		const globalHighlights = this.cardsHighlightService?.getGlobalRelatedCards(
 			this.entityId,
 			this.cardId,
