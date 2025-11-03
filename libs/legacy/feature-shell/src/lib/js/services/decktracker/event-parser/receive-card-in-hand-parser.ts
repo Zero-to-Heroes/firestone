@@ -143,7 +143,6 @@ export class ReceiveCardInHandParser implements EventParser {
 				creatorEntityId: creatorEntityId,
 				createdIndex: createdIndex,
 			} as DeckCard);
-		console.debug('[debug] cardWithDefault', cardWithDefault, boardCard, otherCardWithObfuscation);
 		// Because sometiomes we don't know the cardId when the card is revealed, but we can guess it when it is
 		// moved to hand (e.g. Suspicious Pirate)
 		// console.debug(
