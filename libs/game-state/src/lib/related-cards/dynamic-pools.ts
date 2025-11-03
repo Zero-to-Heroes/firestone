@@ -1410,7 +1410,7 @@ const hasThreeRunes = (card: ReferenceCard): boolean => {
 	);
 };
 
-const canBeDiscoveredByClass = (card: ReferenceCard, currentClass: string): boolean => {
+export const canBeDiscoveredByClass = (card: ReferenceCard, currentClass: string): boolean => {
 	if (!currentClass?.length) {
 		return true;
 	}

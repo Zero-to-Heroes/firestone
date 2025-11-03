@@ -1,4 +1,12 @@
-import { CardRarity, CardType, GameTag, Race, ReferenceCard, SpellSchool } from '@firestone-hs/reference-data';
+import {
+	CardClass,
+	CardRarity,
+	CardType,
+	GameTag,
+	Race,
+	ReferenceCard,
+	SpellSchool,
+} from '@firestone-hs/reference-data';
 import { NonFunctionProperties, uuidShort } from '@firestone/shared/framework/common';
 import { CardMetaInfo } from './card-meta-info';
 
@@ -132,12 +140,13 @@ export interface GuessedInfo {
 	readonly cardType?: CardType | null;
 	readonly attack?: number | null;
 	readonly health?: number | null;
+	readonly attackBuff?: number | null;
+	readonly healthBuff?: number | null;
 	readonly possibleCards?: readonly string[] | null;
 	readonly spellSchools?: readonly SpellSchool[] | null;
 	readonly races?: readonly Race[] | null;
 	readonly rarity?: CardRarity | null;
-	readonly attackBuff?: number | null;
-	readonly healthBuff?: number | null;
+	readonly cardClasses?: readonly CardClass[] | null;
 }
 
 export const toTagsObject = (inputTags: readonly { Name: number; Value: number }[]): { [Name in GameTag]?: number } => {
