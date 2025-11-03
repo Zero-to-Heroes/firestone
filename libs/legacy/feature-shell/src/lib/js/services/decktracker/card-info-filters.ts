@@ -9,11 +9,13 @@ export const getCardInfoFilters = (card: DeckCard, allCards: CardsFacadeService)
 	}
 
 	const refCard = allCards.getCard(card.cardId);
+
+	// Cost
 	const cost = card.actualManaCost ?? card.refManaCost ?? card.guessedInfo?.cost;
 	if (cost != null) {
 		result.push((c) => c.cost === cost);
 	}
-
+	// Spell school
 	const spellSchools: readonly SpellSchool[] = refCard.spellSchool
 		? ([SpellSchool[refCard.spellSchool]] as SpellSchool[])
 		: card.guessedInfo?.spellSchools;
