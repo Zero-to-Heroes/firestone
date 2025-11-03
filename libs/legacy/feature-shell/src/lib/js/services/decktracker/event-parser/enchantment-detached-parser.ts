@@ -7,7 +7,10 @@ import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
 export class EnchantmentDetachedParser implements EventParser {
-	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: CardsFacadeService) {}
+	constructor(
+		private readonly helper: DeckManipulationHelper,
+		private readonly allCards: CardsFacadeService,
+	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return !!state;
@@ -19,7 +22,7 @@ export class EnchantmentDetachedParser implements EventParser {
 
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
-		const playerEntityId = isPlayer ? localPlayer.Id : localPlayer.Id;
+		const playerEntityId = isPlayer ? localPlayer.Id : gameEvent.opponentPlayer.Id;
 		const isAttachedToHero =
 			attachedToEntityId === playerEntityId ||
 			attachedToEntityId === deck.hero?.entityId ||
