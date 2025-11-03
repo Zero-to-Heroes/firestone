@@ -147,6 +147,7 @@ export interface GuessedInfo {
 	readonly races?: readonly Race[] | null;
 	readonly rarity?: CardRarity | null;
 	readonly cardClasses?: readonly CardClass[] | null;
+	readonly mechanics?: readonly GameTag[] | null;
 }
 
 export const toTagsObject = (inputTags: readonly { Name: number; Value: number }[]): { [Name in GameTag]?: number } => {
