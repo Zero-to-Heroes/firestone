@@ -14,8 +14,13 @@ export class BgsBattlePositioningWorkerService extends BgsBattlePositioningExecu
 	private cpuCount: number;
 	private cancelled: boolean;
 	private workers: Worker[] = [];
+	private maxWorkers = 12;
+	private maxSimulationsPerChunk = 100;
 
-	constructor(private readonly allCards: CardsFacadeService, private readonly ow: OverwolfService) {
+	constructor(
+		private readonly allCards: CardsFacadeService,
+		private readonly ow: OverwolfService,
+	) {
 		super();
 		this.init();
 	}
@@ -50,6 +55,7 @@ export class BgsBattlePositioningWorkerService extends BgsBattlePositioningExecu
 	private async *findBestPositioningInternal(
 		battleInfo: BgsBattleInfo,
 	): AsyncIterator<[ProcessingStatus, PermutationResult]> {
+		const start = Date.now();
 		this.cancelled = false;
 		// Initialize the data
 		const initialBoard = battleInfo.playerBoard.board;
@@ -73,6 +79,8 @@ export class BgsBattlePositioningWorkerService extends BgsBattlePositioningExecu
 			return [ProcessingStatus.CANCELLED, null];
 		}
 
+		// this.maxSimulationsPerChunk = 1;
+		// this.maxWorkers = 1;
 		yield [ProcessingStatus.SECONDPASS, null];
 		// Do it again, with more sims
 		const sortedPermutations2: InternalPermutationResult[] = await this.prunePermutations(
@@ -109,6 +117,8 @@ export class BgsBattlePositioningWorkerService extends BgsBattlePositioningExecu
 			},
 			result: topPermutationsResults[0].result,
 		};
+		const end = Date.now();
+		console.debug('[bgs-battle-positioning-worker] time taken', end - start);
 		return [ProcessingStatus.DONE, result];
 	}
 
@@ -119,13 +129,17 @@ export class BgsBattlePositioningWorkerService extends BgsBattlePositioningExecu
 		maxDuration: number,
 		minResultsToKeep: number,
 	): Promise<InternalPermutationResult[]> {
-		// Split it in chunks to use multiple CPUs in parallel
-		const chunkSize = Math.ceil(permutations.length / this.cpuCount);
-		const chunks: Chunk[] = chunk(permutations, chunkSize);
+		// Split it in chunks based on maxSimulationsPerChunk
+		const chunks: Chunk[] = chunk(permutations, this.maxSimulationsPerChunk);
 
-		// Work on each permutation in its own worker
-		const chunkResults: InternalPermutationResult[][] = await Promise.all(
-			chunks.map((chunk) => this.buildRoughResults(battleInfo, chunk, numberOfSims, maxDuration)),
+		// Process chunks in batches, respecting max worker count
+		const maxConcurrentWorkers = Math.min(this.cpuCount, this.maxWorkers);
+		const chunkResults: InternalPermutationResult[][] = await this.processChunksInBatches(
+			battleInfo,
+			chunks,
+			numberOfSims,
+			maxDuration,
+			maxConcurrentWorkers,
 		);
 		const permutationResults: InternalPermutationResult[] = chunkResults.reduce((a, b) => a.concat(b), []);
 
@@ -159,6 +173,30 @@ export class BgsBattlePositioningWorkerService extends BgsBattlePositioningExecu
 		return result;
 	}
 
+	private async processChunksInBatches(
+		battleInfo: BgsBattleInfo,
+		chunks: Chunk[],
+		numberOfSims: number,
+		maxDuration: number,
+		maxConcurrentWorkers: number,
+	): Promise<InternalPermutationResult[][]> {
+		const results: InternalPermutationResult[][] = [];
+
+		for (let i = 0; i < chunks.length; i += maxConcurrentWorkers) {
+			if (this.cancelled) {
+				break;
+			}
+
+			const batch = chunks.slice(i, i + maxConcurrentWorkers);
+			const batchResults = await Promise.all(
+				batch.map((chunk) => this.buildRoughResults(battleInfo, chunk, numberOfSims, maxDuration)),
+			);
+			results.push(...batchResults);
+		}
+
+		return results;
+	}
+
 	private async buildRoughResults(
 		battleInfo: BgsBattleInfo,
 		chunk: Chunk,
@@ -171,6 +209,7 @@ export class BgsBattlePositioningWorkerService extends BgsBattlePositioningExecu
 			worker.onmessage = (ev: MessageEvent) => {
 				worker.terminate();
 				this.workers.splice(this.workers.indexOf(worker), 1);
+				// console.debug('[bgs-battle-positioning-worker] received messages from worker', ev.data);
 				resolve(JSON.parse(ev.data));
 			};
 			const battleMessages = chunk.map(
@@ -185,10 +224,13 @@ export class BgsBattlePositioningWorkerService extends BgsBattlePositioningExecu
 							...battleInfo.options,
 							numberOfSimulations: numberOfSims,
 							maxAcceptableDuration: maxDuration,
+							hideMaxSimulationDurationWarning: true,
 							skipInfoLogs: true,
+							includeOutcomeSamples: false,
 						},
-					} as BgsBattleInfo),
+					}) as BgsBattleInfo,
 			);
+			// console.debug('[bgs-battle-positioning-worker] sending messages to worker', battleMessages);
 			worker.postMessage({
 				battleMessages: battleMessages,
 				cards: this.allCards.getService(),

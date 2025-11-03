@@ -22,6 +22,7 @@ addEventListener('message', ({ data }) => {
 	// let i = 0;
 
 	for (const battleInfo of battleMessages) {
+		// console.debug('[bgs-battle-positioning-worker] simulating battle', battleInfo);
 		const battleIterator = simulateBattle(battleInfo, cards, cardsData);
 		// Iterate through all intermediate results to reach the final result
 		let result = battleIterator.next();
@@ -29,6 +30,7 @@ addEventListener('message', ({ data }) => {
 			result = battleIterator.next();
 		}
 		const permutationResult = result.value;
+		// console.debug('[bgs-battle-positioning-worker] permutation result', permutationResult);
 		if (!!permutationResult) {
 			permutationResults.push({
 				permutation: battleInfo.playerBoard.board,
@@ -40,6 +42,7 @@ addEventListener('message', ({ data }) => {
 		}
 	}
 
+	// console.debug('[bgs-battle-positioning-worker] permutation results', permutationResults);
 	postMessage(JSON.stringify(permutationResults));
 });
 
