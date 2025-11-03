@@ -12,6 +12,7 @@ export interface Card {
 export interface GeneratingCard extends Card {
 	publicCreator?: boolean;
 	publicTutor?: boolean;
+	hasSequenceInfo?: boolean;
 	guessInfo: (
 		deckState: DeckState,
 		allCards: CardsFacadeService,

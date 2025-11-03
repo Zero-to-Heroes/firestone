@@ -125,6 +125,7 @@ export class ReceiveCardInHandParser implements EventParser {
 		// console.debug('[receive-card-in-hand] new board', newBoard, newOther);
 
 		const cardData = cardId ? this.allCards.getCard(cardId) : null;
+		const createdIndex = gameEvent.additionalData.createdIndex;
 		const cardWithDefault =
 			boardCard ||
 			otherCardWithObfuscation ||
@@ -136,6 +137,7 @@ export class ReceiveCardInHandParser implements EventParser {
 				rarity: isCardInfoPublic && cardData && cardData.rarity ? cardData.rarity.toLowerCase() : null,
 				creatorCardId: creatorCardId,
 				creatorEntityId: creatorEntityId,
+				createdIndex: createdIndex,
 			} as DeckCard);
 		// Because sometiomes we don't know the cardId when the card is revealed, but we can guess it when it is
 		// moved to hand (e.g. Suspicious Pirate)

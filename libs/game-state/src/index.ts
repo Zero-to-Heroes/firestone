@@ -19,6 +19,7 @@ export * from './lib/services/_bootstrap-game-state.service';
 export * from './lib/services/card-utils';
 export * from './lib/services/cards/_barrel';
 export * from './lib/services/cards/_mapping';
+export * from './lib/services/creation-sequence-info';
 export * from './lib/services/deck-handler.service';
 export * from './lib/services/deck-utils';
 export * from './lib/services/game-connection.service';

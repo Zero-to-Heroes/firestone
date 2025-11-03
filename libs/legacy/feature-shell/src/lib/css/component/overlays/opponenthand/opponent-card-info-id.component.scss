@@ -48,6 +48,27 @@
 		max-width: 25px;
 		max-height: 25px;
 	}
+
+	.sequence-info {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 50%;
+		border: 2px solid #9fb6d7;
+		--icon-color: var(--color-1);
+		overflow: visible;
+		position: absolute;
+
+		width: 15px;
+		height: 15px;
+		top: 15px;
+		left: -3px;
+		font-size: 60%;
+		color: var(--color-1);
+		font-weight: bold;
+		font-family: 'Open Sans';
+		background: var(--color-7);
+	}
 }
 
 .card-image {

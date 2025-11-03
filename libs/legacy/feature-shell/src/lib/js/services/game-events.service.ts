@@ -611,6 +611,7 @@ export class GameEvents {
 					GameEvent.build(GameEvent.RECEIVE_CARD_IN_HAND, gameEvent, {
 						creatorCardId: gameEvent.Value.AdditionalProps?.CreatorCardId,
 						creatorEntityId: gameEvent.Value.AdditionalProps?.CreatorEntityId,
+						createdIndex: gameEvent.Value.AdditionalProps?.CreatedIndex,
 						isPremium: gameEvent.Value.AdditionalProps?.IsPremium,
 						buffingEntityCardId: gameEvent.Value.AdditionalProps.BuffingEntityCardId,
 						buffCardId: gameEvent.Value.AdditionalProps.BuffCardId,

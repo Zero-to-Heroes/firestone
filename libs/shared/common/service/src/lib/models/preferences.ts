@@ -211,6 +211,7 @@ export class Preferences implements IPreferences {
 	readonly dectrackerShowOpponentTurnDraw: boolean = true;
 	readonly dectrackerShowOpponentGuess: boolean = true;
 	readonly dectrackerShowOpponentBuffInHand: boolean = true;
+	readonly dectrackerShowOpponentSequenceInfo: boolean = true;
 	readonly overlayHighlightRelatedCards: boolean = true;
 	readonly overlayEnableDiscoverHelp: boolean = true;
 	readonly overlaySortHandByZoneOrder: boolean = true;

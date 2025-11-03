@@ -12,6 +12,7 @@ import { DeckCard, DeckState, GameState, Metadata } from '@firestone/game-state'
 				*ngIf="displayGuess || displayBuff"
 				[displayGuess]="displayGuess"
 				[displayBuff]="displayBuff"
+				[displaySequenceInfo]="displaySequenceInfo"
 				[card]="card"
 				[context]="context"
 			></opponent-card-info-id>
@@ -21,6 +22,7 @@ import { DeckCard, DeckState, GameState, Metadata } from '@firestone/game-state'
 export class OpponentCardInfoComponent {
 	@Input() displayGuess: boolean;
 	@Input() displayBuff: boolean;
+	@Input() displaySequenceInfo: boolean;
 	@Input() displayTurnNumber: boolean;
 	// Weuse vh instead of vw here, because the height of the playing area is not affected when
 	// you resize the window. The width on the other hand changes, because the border outside of

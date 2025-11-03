@@ -25,6 +25,7 @@ import { auditTime, Observable } from 'rxjs';
 				[displayTurnNumber]="displayTurnNumber$ | async"
 				[displayGuess]="displayGuess$ | async"
 				[displayBuff]="displayBuff$ | async"
+				[displaySequenceInfo]="displaySequenceInfo$ | async"
 			></opponent-card-infos>
 		</div>
 	`,
@@ -35,6 +36,7 @@ export class OpponentHandOverlayComponent extends AbstractSubscriptionComponent 
 	displayTurnNumber$: Observable<boolean>;
 	displayGuess$: Observable<boolean>;
 	displayBuff$: Observable<boolean>;
+	displaySequenceInfo$: Observable<boolean>;
 	context$: Observable<{
 		deck: DeckState;
 		gameState: GameState;
@@ -78,6 +80,9 @@ export class OpponentHandOverlayComponent extends AbstractSubscriptionComponent 
 		this.displayGuess$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.dectrackerShowOpponentGuess));
 		this.displayBuff$ = this.prefs.preferences$$.pipe(
 			this.mapData((prefs) => prefs.dectrackerShowOpponentBuffInHand),
+		);
+		this.displaySequenceInfo$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.dectrackerShowOpponentSequenceInfo),
 		);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {

@@ -144,6 +144,12 @@ export const decktrackerOpponentDeckSettings = (context: SettingContext): Settin
 						tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.buff-in-hand-tooltip'),
 					},
 					{
+						type: 'toggle',
+						field: 'dectrackerShowOpponentSequenceInfo',
+						label: context.i18n.translateString('settings.decktracker.opponent-deck.sequence-info-label'),
+						tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.sequence-info-tooltip'),
+					},
+					{
 						type: 'slider',
 						field: 'decktrackerOpponentHandScale',
 						label: context.i18n.translateString('settings.decktracker.mulligan.size'),

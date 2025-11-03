@@ -3,6 +3,7 @@ import { AfterContentInit, ChangeDetectorRef, Component, Input, ViewRef } from '
 import { CardClass, CardIds, GameType } from '@firestone-hs/reference-data';
 import { ArenaRefService } from '@firestone/arena/common';
 import {
+	cardsWithCreationSequenceInfo,
 	DeckCard,
 	DeckState,
 	GameState,
@@ -56,6 +57,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 				</svg>
 			</div>
 			<div *ngIf="createdBy" class="created-by" inlineSVG="assets/svg/gift_inside_circle.svg"></div>
+			<div *ngIf="sequenceInfo && displaySequenceInfo" class="sequence-info">{{ sequenceInfo }}</div>
 		</div>
 	`,
 })
@@ -69,9 +71,11 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 	guessedInfo: GuessedInfo;
 	possibleCards: string[] | null = [];
 	_card: DeckCard;
+	sequenceInfo: number | null = null;
 
 	@Input() displayGuess: boolean;
 	@Input() displayBuff: boolean;
+	@Input() displaySequenceInfo: boolean;
 
 	@Input() set context(value: {
 		deck: DeckState;
@@ -228,6 +232,16 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 					this.possibleCards.push(...result);
 				}
 			}
+		}
+
+		console.debug(
+			'[debug] sequenceInfo',
+			card,
+			cardsWithCreationSequenceInfo.includes(card.creatorCardId as CardIds),
+			cardsWithCreationSequenceInfo,
+		);
+		if (card.createdIndex != null && cardsWithCreationSequenceInfo.includes(card.creatorCardId as CardIds)) {
+			this.sequenceInfo = card.createdIndex + 1;
 		}
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

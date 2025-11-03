@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { DeckCard, DeckState, Metadata, GameState } from '@firestone/game-state';
+import { DeckCard, DeckState, GameState, Metadata } from '@firestone/game-state';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { Map } from 'immutable';
 
@@ -15,6 +15,7 @@ import { Map } from 'immutable';
 				[displayTurnNumber]="displayTurnNumber"
 				[displayGuess]="displayGuess"
 				[displayBuff]="displayBuff"
+				[displaySequenceInfo]="displaySequenceInfo"
 				[context]="context"
 				[leftVwOffset]="cardPositionLeft(i)"
 				[topVwOffset]="cardPositionTop(i)"
@@ -26,6 +27,7 @@ import { Map } from 'immutable';
 export class OpponentCardInfosComponent {
 	@Input() displayGuess: boolean;
 	@Input() displayBuff: boolean;
+	@Input() displaySequenceInfo: boolean;
 	@Input() displayTurnNumber: boolean;
 	@Input() context: { deck: DeckState; gameState: GameState; metadata: Metadata; currentTurn: number | 'mulligan' };
 	@Input() cards: readonly DeckCard[];

@@ -21,6 +21,10 @@ export class DeckCard {
 	readonly rarity: string;
 	readonly creatorCardId?: string;
 	readonly creatorEntityId?: number;
+	// When a card creates multiple cards of different types (like one Fire and one Fel spell), the
+	// createdIndex will be used to track the order of the cards in the creation sequence
+	// Showing or not that info will be governed by a card whitelist
+	readonly createdIndex?: number;
 	readonly lastAffectedByCardId?: string;
 	readonly lastAffectedByEntityId?: number;
 	readonly dormant?: boolean;
