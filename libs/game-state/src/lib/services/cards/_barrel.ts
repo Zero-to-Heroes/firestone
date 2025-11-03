@@ -10,6 +10,7 @@ export { DiscipleOfTheDove } from './disciple-of-the-dove';
 export { EmergencyMeeting } from './emergency-meeting';
 export { FadingMemory } from './fading-memory';
 export { FarseerWo } from './farseer-wo';
+export { FiddlefireImp } from './fiddlefire-imp';
 export { FoolsGold } from './fools-gold';
 export { ForgottenMillenium } from './forgotten-millenium';
 export { HuntersPack } from './hunters-pack';
