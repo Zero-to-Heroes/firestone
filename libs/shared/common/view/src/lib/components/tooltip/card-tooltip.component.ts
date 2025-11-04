@@ -28,6 +28,7 @@ import {
 	shareReplay,
 	takeUntil,
 } from 'rxjs';
+import { CardTooltipPositionType } from './card-tooltip-position.type';
 
 @Component({
 	standalone: false,
@@ -35,7 +36,7 @@ import {
 	styleUrls: [`./card-tooltip.component.scss`],
 	template: `
 		<div
-			class="container scalable"
+			class="container dynamic-pool-{{ dynamicPoolPosition }} scalable"
 			*ngIf="{
 				cards: cards$ | async,
 				relatedCards: relatedCards$ | async,
@@ -149,6 +150,7 @@ export class CardTooltipComponent
 		}
 	}
 	@Input() relatedCardIdsHeader: string;
+	@Input() dynamicPoolPosition: CardTooltipPositionType;
 	@Input() set relatedCardIds(value: readonly string[]) {
 		this.relatedCardIds$$.next(value ?? []);
 	}

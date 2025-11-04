@@ -8,6 +8,14 @@
 
 .container {
 	display: flex;
+
+	&.dynamic-pool-bottom {
+		flex-direction: column;
+
+		.card-tooltip {
+			min-height: 100px;
+		}
+	}
 }
 
 .scalable {

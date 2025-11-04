@@ -82,6 +82,8 @@ export class CardTooltipDirective implements OnDestroy, AfterContentInit {
 		}
 	}
 
+	@Input() cardTooltipDynamicPoolPosition: CardTooltipPositionType;
+
 	@Input('cardTooltipForceMouseOver') set forceMouseOver(value: boolean) {
 		this.forceMouseOver$$.next(value);
 	}
@@ -199,6 +201,7 @@ export class CardTooltipDirective implements OnDestroy, AfterContentInit {
 		this.tooltipRef.instance.relatedCardIds = relatedCards;
 		this.tooltipRef.instance.relatedCardIdsHeader = this.cardTooltipRelatedCardIdsHeader;
 		this.tooltipRef.instance.viewRef = this.tooltipRef;
+		this.tooltipRef.instance.dynamicPoolPosition = this.cardTooltipDynamicPoolPosition;
 
 		if (this.cardTooltipCard) {
 			this.tooltipRef.instance.displayBuffs = this.cardTooltipDisplayBuffs;

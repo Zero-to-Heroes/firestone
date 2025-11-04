@@ -32,6 +32,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 			cardTooltip
 			[cardTooltipCard]="_card"
 			cardTooltipPosition="bottom-right"
+			cardTooltipDynamicPoolPosition="auto"
 			[cardTooltipDisplayBuffs]="displayBuff"
 			[cardTooltipAdditionalInfo]="guessedInfo"
 			[cardTooltipRelatedCardIds]="possibleCards"
