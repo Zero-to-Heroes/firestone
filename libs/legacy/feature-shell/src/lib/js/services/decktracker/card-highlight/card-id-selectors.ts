@@ -709,17 +709,16 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, protoss);
 		case CardIds.Chronogor_TIME_032:
 			return (input: SelectorInput): SelectorOutput => {
-				const sorted = input.deckState.deck
-					.filter((c) => allCards.getCard(c.cardId).type === 'Minion')
-					.sort((a, b) => b.getEffectiveManaCost() - a.getEffectiveManaCost());
+				const sorted = [...input.deckState.deck].sort(
+					(a, b) => b.getEffectiveManaCost() - a.getEffectiveManaCost(),
+				);
 				const highestCostMinion = sorted[0];
 				const highestMinionCost = highestCostMinion?.getEffectiveManaCost() ?? 0;
 				const lowestCostMinion = sorted[sorted.length - 1];
 				const lowestMinionCost = lowestCostMinion?.getEffectiveManaCost() ?? 0;
 				return highlightConditions(
-					and(side(inputSide), inDeck, minion, effectiveCostEqual(highestMinionCost)),
-					and(side(inputSide), inDeck, minion, effectiveCostEqual(lowestMinionCost)),
-					and(side(inputSide), inDeck, minion),
+					and(side(inputSide), inDeck, effectiveCostEqual(highestMinionCost)),
+					and(side(inputSide), inDeck, effectiveCostEqual(lowestMinionCost)),
 				)(input);
 			};
 		case CardIds.ChronoLordDeios_TIME_064:
