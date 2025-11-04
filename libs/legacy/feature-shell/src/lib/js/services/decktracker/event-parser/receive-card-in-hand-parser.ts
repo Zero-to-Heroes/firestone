@@ -88,15 +88,14 @@ export class ReceiveCardInHandParser implements EventParser {
 			this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.ECHO]) ||
 			this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.NON_KEYWORD_ECHO]) ||
 			isSpecialCasePublicWhenOpponentDraws;
-		// console.debug(
-		// 	'[receive-card-in-hand] isCardInfoPublic',
-		// 	isCardInfoPublic,
-		// 	isPlayer,
-		// 	cardsRevealedWhenDrawn.includes(cardId as CardIds),
-		// 	cardId,
-		// 	publicCardCreators.includes(lastInfluencedByCardId),
-		// 	lastInfluencedByCardId,
-		// );
+		console.debug(
+			'[debug] [receive-card-in-hand] isCardInfoPublic',
+			isCardInfoPublic,
+			isPlayer,
+			cardId,
+			publicCardCreators.includes(lastInfluencedByCardId),
+			lastInfluencedByCardId,
+		);
 
 		// First try and see if this card doesn't come from the board or from the other zone (in case of discovers)
 		const boardCard = this.helper.findCardInZone(deck.board, null, entityId);
@@ -154,7 +153,7 @@ export class ReceiveCardInHandParser implements EventParser {
 		// );
 		const newCardId =
 			(isCardInfoPublic
-				? guessCardId(cardId, deck, creatorCardId, creatorEntityId, createdIndex, this.allCards)
+				? guessCardId(cardId, deck, opponentDeck, creatorCardId, creatorEntityId, createdIndex, this.allCards)
 				: null) ?? cardWithDefault.cardId;
 		const cardWithKnownInfo =
 			newCardId === cardWithDefault.cardId
@@ -350,6 +349,7 @@ export const addAdditionalAttribuesInHand = (
 const guessCardId = (
 	cardId: string,
 	deckState: DeckState,
+	opponentDeckState: DeckState,
 	creatorCardId: string,
 	creatorEntityId: number,
 	createdIndex: number,
@@ -394,6 +394,10 @@ const guessCardId = (
 				.map((c) => getProcessedCard(c.cardId, c.entityId, deckState, allCards))
 				.filter((c) => c.mechanics?.includes(GameTag[GameTag.DEATHRATTLE]))
 				.pop()?.id;
+		case CardIds.RoyalInformant_TIME_036:
+			return [...opponentDeckState.hand]
+				.sort((a, b) => a.tags?.[GameTag.ZONE_POSITION] - b.tags?.[GameTag.ZONE_POSITION])
+				.pop()?.cardId;
 	}
 	return cardId;
 };
