@@ -1,6 +1,5 @@
 import { BoosterType, CardClass, CardIds, GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';
-import { TempCardIds } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { CollectionCardType } from '../models/collection/collection-card-type.type';
 import { tutors } from './decktracker/card-info/card-tutors';
@@ -440,6 +439,8 @@ export const publicTutors = [
 	CardIds.SouthseaScoundrel_Story_11_SouthseaPuzzle, // the copy for the opponent is the original card, the copy for the player is created
 	CardIds.Mimicry_EDR_522,
 ];
+
+export const allowDirectFlaggingOfCardInOpponentHand = [CardIds.RoyalInformant_TIME_036];
 
 export const publicCardInfos = [...cardsConsideredPublic, ...publicCardGiftCreators, ...publicTutors];
 // Some cards both create in hand and in deck - we want to hide the information when drawn from the deck

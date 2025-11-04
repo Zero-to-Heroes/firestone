@@ -2,6 +2,7 @@ import { CardIds, Zone } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState, GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
+import { allowDirectFlaggingOfCardInOpponentHand } from '../../hs-utils';
 import { LocalizationFacadeService } from '../../localization-facade.service';
 import { reverseIfNeeded } from './card-dredged-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
@@ -88,7 +89,44 @@ export class LinkedEntityParser implements EventParser {
 		);
 		let newPlayerDeck: DeckState;
 		if (originalCard) {
-			if (isPlayerForCardModification || originalZone !== 'hand') {
+			console.debug(
+				'[debug] [linked-entity-parser] originalCard',
+				originalCard,
+				originalZone,
+				newCard,
+				isPlayerForCardModification,
+				allowDirectFlaggingOfCardInOpponentHand.includes(newCard.lastAffectedByCardId as CardIds),
+			);
+
+			// This looks pretty wonky...
+			if (
+				originalZone === 'hand' &&
+				!isPlayerForCardModification &&
+				allowDirectFlaggingOfCardInOpponentHand.includes(newCard.lastAffectedByCardId as CardIds)
+			) {
+				console.debug('[debug] [linked-entity-parser] updating card in hand', newCard, originalCard);
+				const updatedCard = originalCard.update({
+					cardId: newCard.cardId,
+					cardName: this.allCards.getCard(cardId).name,
+					// Because when cards are revealed when Dredged, we want to update the position for all the revealed cards,
+					// even ones who already had a position previously
+					positionFromBottom: newCard.positionFromBottom ?? originalCard.positionFromBottom,
+					// When the card is in the setaside zone, we don't want to override the temporaryCard, because it is very likely a temp card
+					temporaryCard: originalCard.zone === 'SETASIDE' ? originalCard.temporaryCard : undefined,
+				} as DeckCard);
+				newPlayerDeck = this.helper.updateCardInDeck(
+					deckInWhichToModifyTheCard,
+					updatedCard,
+					isPlayerForCardModification,
+					true,
+				);
+				newPlayerDeck = newPlayerDeck.update({
+					additionalKnownCardsInHand: deckInWhichToModifyTheCard.additionalKnownCardsInHand.filter(
+						(cardId) => cardId !== newCard.cardId,
+					),
+				});
+				console.debug('[debug] [linked-entity-parser] newPlayerDeck in hand', newPlayerDeck);
+			} else if (isPlayerForCardModification || originalZone !== 'hand') {
 				const updatedCard = originalCard.update({
 					cardId: newCard.cardId,
 					cardName: this.allCards.getCard(cardId).name,
