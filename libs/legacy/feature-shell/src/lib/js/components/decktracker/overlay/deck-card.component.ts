@@ -439,7 +439,6 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 
 		if (this.card$$.value.guessedInfo?.possibleCards?.length) {
 			this.relatedCardIds = this.card$$.value.guessedInfo.possibleCards;
-			console.debug('[debug] relatedCardIds', this.relatedCardIds, this.card$$.value);
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
