@@ -1301,7 +1301,10 @@ export const cardIdSelector = (
 		case CardIds.FireBreath_DINO_406:
 			return and(side(inputSide), or(inHand, inDeck), elemental);
 		case CardIds.Firegill_DINO_404:
-			return and(side(inputSide), or(inHand, inDeck), minion);
+			return highlightConditions(
+				and(side(inputSide), or(inHand, inDeck), minion, or(elemental, murloc)),
+				and(side(inputSide), or(inHand, inDeck), minion),
+			);
 		case CardIds.FirekeepersIdolTavernBrawl:
 			return and(side(inputSide), spell, fire);
 		case CardIds.FirePlumeHarbinger:
