@@ -951,7 +951,16 @@ function generateSpellFile(flatMappings: { [condition: string]: string[] }): str
 				// Get all cards that appear in more specific conditions
 				const cardsInSpecificConditions = new Set<string>();
 				for (const [otherCondition, otherCards] of spellConditions) {
-					if (otherCondition !== 'SPELL' && otherCondition.includes('SPELL')) {
+					if (otherCondition !== 'SPELL' && (
+						otherCondition.includes('SPELL') ||  // Compound conditions like "HOLY + SPELL"
+						otherCondition === 'HOLY' ||         // Separate spell school conditions
+						otherCondition === 'SHADOW' ||
+						otherCondition === 'FROST' ||
+						otherCondition === 'FIRE' ||
+						otherCondition === 'NATURE' ||
+						otherCondition === 'FEL' ||
+						otherCondition === 'ARCANE'
+					)) {
 						// This is a more specific spell condition
 						for (const cardId of otherCards) {
 							cardsInSpecificConditions.add(cardId);
