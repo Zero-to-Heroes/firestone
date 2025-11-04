@@ -235,12 +235,6 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 			}
 		}
 
-		console.debug(
-			'[debug] sequenceInfo',
-			card,
-			cardsWithCreationSequenceInfo.includes(card.creatorCardId as CardIds),
-			cardsWithCreationSequenceInfo,
-		);
 		if (card.createdIndex != null && cardsWithCreationSequenceInfo.includes(card.creatorCardId as CardIds)) {
 			this.sequenceInfo = card.createdIndex + 1;
 		}
