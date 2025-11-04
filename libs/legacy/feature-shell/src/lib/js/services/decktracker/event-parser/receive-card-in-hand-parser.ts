@@ -367,6 +367,12 @@ const guessCardId = (
 			return tentativeMiniCard.id;
 		}
 	}
+	if (createdIndex === 0 && allCards.getCard(creatorCardId).mechanics?.includes(GameTag[GameTag.GIGANTIFY])) {
+		const tentativeMiniCard = allCards.getCard(creatorCardId + 't');
+		if (tentativeMiniCard.mechanics?.includes(GameTag[GameTag.GIGANTIC])) {
+			return tentativeMiniCard.id;
+		}
+	}
 
 	switch (creatorCardId) {
 		case CardIds.Repackage_RepackagedBoxToken_TOY_879t:
