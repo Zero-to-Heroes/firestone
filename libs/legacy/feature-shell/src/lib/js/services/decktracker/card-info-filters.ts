@@ -11,7 +11,7 @@ export const getCardInfoFilters = (card: DeckCard, allCards: CardsFacadeService)
 	const refCard = allCards.getCard(card.cardId);
 
 	// Cost
-	const cost = card.actualManaCost ?? card.refManaCost ?? card.guessedInfo?.cost;
+	const cost = card.refManaCost ?? card.guessedInfo?.cost;
 	if (cost != null) {
 		result.push((c) => c.cost === cost);
 	}
