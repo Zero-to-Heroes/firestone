@@ -24,6 +24,7 @@ import { AdService } from '../../../services/ad.service';
 import { relatedCardIdsSelectorSort } from '../../../services/decktracker/card-highlight/card-id-selector-sort';
 import { Handler, SelectorOutput } from '../../../services/decktracker/card-highlight/cards-highlight-common.service';
 import { CARDS_TO_HIGHLIGHT_INSIDE_RELATED_CARDS_WITHOUT_DUPES } from '../../../services/decktracker/card-highlight/merged-highlights';
+import { cardTutors } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
@@ -598,14 +599,23 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 			cardName = card.cardName;
 		} else if (this._referenceCard?.name?.length) {
 			cardName = this._referenceCard.name;
-		} else if (!card.creatorCardIds?.length) {
-			cardName = this.i18n.getUnknownCardName();
-		} else {
+		} else if (!!card.creatorCardIds?.length) {
 			const creatorCardId = card.creatorCardIds[0];
 			const creatorName = this.cards.getCard(creatorCardId)?.name;
 			cardName = creatorName?.length
 				? this.i18n.getCreatedByCardName(creatorName)
 				: this.i18n.getUnknownCardName();
+		} else if (
+			!!card.lastAffectedByCardIds?.length &&
+			cardTutors.includes(card.lastAffectedByCardIds[0] as CardIds)
+		) {
+			const creatorCardId = card.lastAffectedByCardIds[0];
+			const creatorName = this.cards.getCard(creatorCardId)?.name;
+			cardName = creatorName?.length
+				? this.i18n.getLastAffectedByCardName(creatorName)
+				: this.i18n.getUnknownCardName();
+		} else {
+			cardName = this.i18n.getUnknownCardName();
 		}
 		return cardName + this.buildSuffix(card, showStatsChange);
 	}

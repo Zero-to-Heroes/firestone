@@ -72,6 +72,12 @@ export class LocalizationService {
 		});
 	}
 
+	public getLastAffectedByCardName(cardName: string): string {
+		return this.translateString('decktracker.drawn-by', {
+			value: cardName ?? 'unknown',
+		});
+	}
+
 	public getCardImage(cardId: string, options?: ImageLocalizationOptions): string {
 		if (!cardId) {
 			return null;

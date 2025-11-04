@@ -8,6 +8,7 @@ import {
 	Optional,
 	Output,
 } from '@angular/core';
+import { CardIds } from '@firestone-hs/reference-data';
 import { DeckState, getProcessedCard } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
@@ -16,6 +17,7 @@ import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { DeckZone, DeckZoneSection } from '../../../models/decktracker/view/deck-zone';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 import { SetCard } from '../../../models/set';
+import { cardTutors } from '../../../services/hs-utils';
 import { groupByFunction } from '../../../services/utils';
 
 @Component({
@@ -336,11 +338,16 @@ export class DeckZoneComponent extends AbstractSubscriptionComponent implements 
 		const keyWithHighlights = keyWithBonus + '-' + card.highlight;
 		const creatorsKeySuffix = card.stolenFromOpponent
 			? 'stolen'
-			: !card.creatorCardIds?.length
-				? ''
-				: !!cardIdForGrouping
+			: card.creatorCardIds?.length
+				? !!cardIdForGrouping
 					? 'creators'
-					: 'creators-' + (card.creatorCardIds || []).join('-');
+					: 'creators-' + (card.creatorCardIds || []).join('-')
+				: card.lastAffectedByCardIds?.filter((c) => cardTutors.includes(c as CardIds)).length
+					? !!cardIdForGrouping
+						? 'tutors'
+						: 'tutors-' +
+							card.lastAffectedByCardIds.filter((c) => cardTutors.includes(c as CardIds)).join('-')
+					: '';
 		const keyWithGift =
 			// Unknown cards are still displayed by their creator
 			!cardIdForGrouping || (!groupSameCardsTogether && showGiftsSeparately)
