@@ -35,7 +35,7 @@ const IMBUED_HERO_POWERS = [
 	CardIds.LunarwingMessenger_BlessingOfTheMoon_EDR_449p,
 ];
 
-const MAX_CARDS_TO_SHOW = 100;
+const MAX_CARDS_TO_SHOW = 1000;
 
 export const getDynamicRelatedCardIds = (
 	cardId: string,
