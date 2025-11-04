@@ -796,6 +796,7 @@ export class GameEvents {
 						isPremium: gameEvent.Value.AdditionalProps && gameEvent.Value.AdditionalProps.IsPremium,
 						creatorCardId: gameEvent.Value.AdditionalProps?.CreatorCardId,
 						creatorEntityId: gameEvent.Value.AdditionalProps?.CreatorEntityId,
+						createdIndex: gameEvent.Value.AdditionalProps?.CreatedIndex,
 						lastInfluencedByCardId: gameEvent.Value.AdditionalProps?.LastInfluencedByCardId,
 						dataTag1: gameEvent.Value.AdditionalProps?.DataTag1,
 						cost: gameEvent.Value.AdditionalProps?.Cost,

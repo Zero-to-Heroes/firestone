@@ -171,11 +171,13 @@ export class CardDrawParser implements EventParser {
 		// When the card should be known (created on top of deck) by we don't know the details (eg Merch Seller, or Dredge),
 		// we still want to surface the information we know
 		const creatorCardId = gameEvent.additionalData?.creatorCardId;
+		const createdIndex = gameEvent.additionalData.createdIndex;
 		const refCard = this.allCards.getCard(card?.cardId);
 		const cardWithCreator = card.update({
 			entityId: entityId,
 			creatorCardId: isCreatorPublic ? (creatorCardId ?? card.creatorCardId) : undefined,
 			creatorEntityId: isCreatorPublic ? gameEvent.additionalData.creatorEntityId : undefined,
+			createdIndex: isCreatorPublic ? createdIndex : undefined,
 			cardId: isCardInfoPublic ? card.cardId : undefined,
 			cardName: isCardInfoPublic ? (refCard.name ?? card?.cardName) : undefined,
 			lastAffectedByCardId: isCreatorPublic

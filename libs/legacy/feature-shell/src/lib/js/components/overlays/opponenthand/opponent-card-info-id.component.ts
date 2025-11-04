@@ -235,7 +235,11 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 			}
 		}
 
-		if (card.createdIndex != null && cardsWithCreationSequenceInfo.includes(card.creatorCardId as CardIds)) {
+		if (
+			card.createdIndex != null &&
+			(cardsWithCreationSequenceInfo.includes(card.creatorCardId as CardIds) ||
+				cardsWithCreationSequenceInfo.includes(card.lastAffectedByCardId as CardIds))
+		) {
 			this.sequenceInfo = card.createdIndex + 1;
 		}
 		if (!(this.cdr as ViewRef)?.destroyed) {

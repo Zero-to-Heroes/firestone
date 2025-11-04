@@ -5,6 +5,7 @@ export { AlterTime } from './alter-time';
 export { ArcaneBrilliance } from './arcane-brilliance';
 export { BarakKodobane } from './barak-kodobane';
 export { BloodDraw } from './blood-draw';
+export { Chronogor } from './chronogor';
 export { CountessAshmore } from './countess-ashmore';
 export { CryofrozenChampion } from './cryofrozen-champion';
 export { DeepSpaceCurator } from './deep-space-curator';
