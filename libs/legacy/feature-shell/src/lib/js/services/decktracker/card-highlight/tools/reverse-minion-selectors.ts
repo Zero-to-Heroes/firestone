@@ -162,6 +162,20 @@ export const reverseMinionSelector = (
 		);
 	}
 
+	// COST_MORE_6 + MINION (1 cards)
+	if (refCard.cost > 6 && refCard.type?.toUpperCase() === 'MINION') {
+		matchingCardIds.push(
+			CardIds.RotheartDryad_EDR_485
+		);
+	}
+
+	// COST_MORE_7 + MINION (1 cards)
+	if (refCard.cost > 7 && refCard.type?.toUpperCase() === 'MINION') {
+		matchingCardIds.push(
+			CardIds.Merithra_EDR_238
+		);
+	}
+
 	// DEMON + MINION (2 cards)
 	if (refCard.races?.map(r => r.toUpperCase()).includes('DEMON') && refCard.type?.toUpperCase() === 'MINION') {
 		matchingCardIds.push(
@@ -869,7 +883,7 @@ export const reverseMinionSelector = (
 		);
 	}
 
-	// MINION (259 cards)
+	// MINION (257 cards)
 	if (refCard.type?.toUpperCase() === 'MINION') {
 		matchingCardIds.push(
 			CardIds.AegwynnTheGuardianCore,
@@ -1033,7 +1047,6 @@ export const reverseMinionSelector = (
 			CardIds.MaximaBlastenheimer,
 			CardIds.MeatGrinder_RLK_120,
 			CardIds.Melomania,
-			CardIds.Merithra_EDR_238,
 			CardIds.MoatLurker,
 			CardIds.MonstrousMosquito_EDR_816,
 			CardIds.MoshPit,
@@ -1073,7 +1086,6 @@ export const reverseMinionSelector = (
 			CardIds.Resurrect_BRM_017,
 			CardIds.Resuscitate_TLC_818,
 			CardIds.RiskySkipper,
-			CardIds.RotheartDryad_EDR_485,
 			CardIds.RunningWild,
 			CardIds.RunningWild_RunningWild,
 			CardIds.SeafloorSavior_TSC_083,

@@ -196,12 +196,15 @@ export const reverseGeneralSelector = (
 		);
 	}
 
-	// COST_MORE_4 + SPELL (3 cards)
+	// COST_MORE_4 + SPELL (6 cards)
 	if (refCard.cost > 4 && refCard.type?.toUpperCase() === 'SPELL') {
 		matchingCardIds.push(
 			CardIds.AshleafPixie_FIR_961,
+			CardIds.BumblingBellhop_VAC_521,
+			CardIds.FaeTrickster_EDR_571,
 			CardIds.Groundskeeper,
-			CardIds.HagathaTheFabled_TOY_504
+			CardIds.HagathaTheFabled_TOY_504,
+			CardIds.WeaverOfTheCycle_EDR_472
 		);
 	}
 
@@ -216,6 +219,20 @@ export const reverseGeneralSelector = (
 	if (refCard.cost > 5 && refCard.type?.toUpperCase() === 'SPELL') {
 		matchingCardIds.push(
 			CardIds.GreySageParrot
+		);
+	}
+
+	// COST_MORE_6 + MINION (1 cards)
+	if (refCard.cost > 6 && refCard.type?.toUpperCase() === 'MINION') {
+		matchingCardIds.push(
+			CardIds.RotheartDryad_EDR_485
+		);
+	}
+
+	// COST_MORE_7 + MINION (1 cards)
+	if (refCard.cost > 7 && refCard.type?.toUpperCase() === 'MINION') {
+		matchingCardIds.push(
+			CardIds.Merithra_EDR_238
 		);
 	}
 
@@ -403,11 +420,12 @@ export const reverseGeneralSelector = (
 		);
 	}
 
-	// COST_MORE_4 (4 cards)
+	// COST_MORE_4 (5 cards)
 	if (refCard.cost > 4) {
 		matchingCardIds.push(
 			CardIds.InventorBoom_TOY_607,
 			CardIds.PrecursoryStrike_TIME_750,
+			CardIds.Prescience,
 			CardIds.StranglethornHeart,
 			CardIds.TimberTambourine
 		);

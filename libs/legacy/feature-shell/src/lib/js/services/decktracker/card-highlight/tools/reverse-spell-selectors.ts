@@ -87,12 +87,15 @@ export const reverseSpellSelector = (
 		);
 	}
 
-	// COST_MORE_4 + SPELL (3 cards)
+	// COST_MORE_4 + SPELL (6 cards)
 	if (refCard.cost > 4 && refCard.type?.toUpperCase() === 'SPELL') {
 		matchingCardIds.push(
 			CardIds.AshleafPixie_FIR_961,
+			CardIds.BumblingBellhop_VAC_521,
+			CardIds.FaeTrickster_EDR_571,
 			CardIds.Groundskeeper,
-			CardIds.HagathaTheFabled_TOY_504
+			CardIds.HagathaTheFabled_TOY_504,
+			CardIds.WeaverOfTheCycle_EDR_472
 		);
 	}
 
@@ -354,7 +357,7 @@ export const reverseSpellSelector = (
 		);
 	}
 
-	// SPELL (203 cards)
+	// SPELL (200 cards)
 	if (refCard.type?.toUpperCase() === 'SPELL') {
 		matchingCardIds.push(
 			CardIds.AdvancedTargetingMonocle,
@@ -378,7 +381,6 @@ export const reverseSpellSelector = (
 			CardIds.Bloodbloom,
 			CardIds.BookOfSpecters,
 			CardIds.BrollBearmantle_EDR_853,
-			CardIds.BumblingBellhop_VAC_521,
 			CardIds.CactusCutter_WW_327,
 			CardIds.CardGrader_TOY_054,
 			CardIds.ChiaDrake_ChiaDrakeToken_TOY_801t,
@@ -416,7 +418,6 @@ export const reverseSpellSelector = (
 			CardIds.EnergyShaper,
 			CardIds.EtherealOracle_GDB_310,
 			CardIds.ExarchHataaru_TheGalaxysLensToken_GDB_136t,
-			CardIds.FaeTrickster_EDR_571,
 			CardIds.FarseerNobundo_GDB_447,
 			CardIds.FarseerWo_TIME_013,
 			CardIds.FelscaleEvoker,
@@ -549,7 +550,6 @@ export const reverseSpellSelector = (
 			CardIds.ViciousSlitherspear_TSC_827,
 			CardIds.VoidFlayer,
 			CardIds.VolumeUp,
-			CardIds.WeaverOfTheCycle_EDR_472,
 			CardIds.Whirlweaver,
 			CardIds.WickedWitchdoctor,
 			CardIds.WickedWitchdoctor_WON_083,

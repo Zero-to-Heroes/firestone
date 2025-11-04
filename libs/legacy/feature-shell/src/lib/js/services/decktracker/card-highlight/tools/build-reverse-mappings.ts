@@ -632,6 +632,18 @@ function convertToConditionString(part: string): string | null {
 		const match = part.match(/effectiveCostEqual\((\d+)\)/);
 		if (match) return `COST_EQUAL_${match[1]}`;
 	}
+	if (part.includes('costMore(')) {
+		const match = part.match(/costMore\((\d+)\)/);
+		if (match) return `COST_MORE_${match[1]}`;
+	}
+	if (part.includes('costLess(')) {
+		const match = part.match(/costLess\((\d+)\)/);
+		if (match) return `COST_LESS_${match[1]}`;
+	}
+	if (part.includes('costEqual(')) {
+		const match = part.match(/costEqual\((\d+)\)/);
+		if (match) return `COST_EQUAL_${match[1]}`;
+	}
 
 	// Handle attack conditions
 	if (part.includes('attackGreaterThan(')) {
@@ -951,16 +963,17 @@ function generateSpellFile(flatMappings: { [condition: string]: string[] }): str
 				// Get all cards that appear in more specific conditions
 				const cardsInSpecificConditions = new Set<string>();
 				for (const [otherCondition, otherCards] of spellConditions) {
-					if (otherCondition !== 'SPELL' && (
-						otherCondition.includes('SPELL') ||  // Compound conditions like "HOLY + SPELL"
-						otherCondition === 'HOLY' ||         // Separate spell school conditions
-						otherCondition === 'SHADOW' ||
-						otherCondition === 'FROST' ||
-						otherCondition === 'FIRE' ||
-						otherCondition === 'NATURE' ||
-						otherCondition === 'FEL' ||
-						otherCondition === 'ARCANE'
-					)) {
+					if (
+						otherCondition !== 'SPELL' &&
+						(otherCondition.includes('SPELL') || // Compound conditions like "HOLY + SPELL"
+							otherCondition === 'HOLY' || // Separate spell school conditions
+							otherCondition === 'SHADOW' ||
+							otherCondition === 'FROST' ||
+							otherCondition === 'FIRE' ||
+							otherCondition === 'NATURE' ||
+							otherCondition === 'FEL' ||
+							otherCondition === 'ARCANE')
+					) {
 						// This is a more specific spell condition
 						for (const cardId of otherCards) {
 							cardsInSpecificConditions.add(cardId);

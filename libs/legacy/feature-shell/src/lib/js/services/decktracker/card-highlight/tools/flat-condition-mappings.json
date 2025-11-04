@@ -289,7 +289,6 @@
     "Bloodbloom",
     "BookOfSpecters",
     "BrollBearmantle_EDR_853",
-    "BumblingBellhop_VAC_521",
     "CactusCutter_WW_327",
     "CardGrader_TOY_054",
     "ChiaDrake_ChiaDrakeToken_TOY_801t",
@@ -328,7 +327,6 @@
     "EnergyShaper",
     "EtherealOracle_GDB_310",
     "ExarchHataaru_TheGalaxysLensToken_GDB_136t",
-    "FaeTrickster_EDR_571",
     "FarseerNobundo_GDB_447",
     "FarseerWo_TIME_013",
     "FelfireInTheHole",
@@ -481,7 +479,6 @@
     "ViciousSlitherspear_TSC_827",
     "VoidFlayer",
     "VolumeUp",
-    "WeaverOfTheCycle_EDR_472",
     "Whirlweaver",
     "WickedWitchdoctor",
     "WickedWitchdoctor_WON_083",
@@ -656,7 +653,6 @@
     "MaximaBlastenheimer",
     "MeatGrinder_RLK_120",
     "Melomania",
-    "Merithra_EDR_238",
     "MoatLurker",
     "MonstrousMosquito_EDR_816",
     "MoshPit",
@@ -696,7 +692,6 @@
     "Resurrect_BRM_017",
     "Resuscitate_TLC_818",
     "RiskySkipper",
-    "RotheartDryad_EDR_485",
     "RunningWild",
     "RunningWild_RunningWild",
     "SeafloorSavior_TSC_083",
@@ -1166,8 +1161,11 @@
   ],
   "COST_MORE_4 + SPELL": [
     "AshleafPixie_FIR_961",
+    "BumblingBellhop_VAC_521",
+    "FaeTrickster_EDR_571",
     "Groundskeeper",
-    "HagathaTheFabled_TOY_504"
+    "HagathaTheFabled_TOY_504",
+    "WeaverOfTheCycle_EDR_472"
   ],
   "RESTORE_HEALTH + SPELL": [
     "MedivhTheHallowed_AtieshTheGreatstaffToken_TIME_890t"
@@ -1859,6 +1857,7 @@
   "COST_MORE_4": [
     "InventorBoom_TOY_607",
     "PrecursoryStrike_TIME_750",
+    "Prescience",
     "StranglethornHeart",
     "TimberTambourine"
   ],
@@ -1905,6 +1904,9 @@
   ],
   "NOT_MINION": [
     "MarkOfScorn"
+  ],
+  "COST_MORE_7 + MINION": [
+    "Merithra_EDR_238"
   ],
   "MINION + NEUTRAL": [
     "MeekMasteryTavernBrawl",
@@ -1974,6 +1976,9 @@
   ],
   "MINION + NOT_RUSH": [
     "RocketBackpacksTavernBrawl"
+  ],
+  "COST_MORE_6 + MINION": [
+    "RotheartDryad_EDR_485"
   ],
   "COST_EQUAL_4": [
     "RowdyPartner_WW_906"
