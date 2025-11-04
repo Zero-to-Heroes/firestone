@@ -114,6 +114,7 @@ export class CardRevealedParser implements EventParser {
 			} as DeckCard);
 			globalEffects = this.helper.addSingleCardToZone(globalEffects, globalEffectCard);
 		}
+
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			otherZone: newOther,
 			globalEffects: globalEffects,

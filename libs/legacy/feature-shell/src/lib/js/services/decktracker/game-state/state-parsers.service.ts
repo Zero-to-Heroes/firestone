@@ -14,6 +14,7 @@ import { ReviewIdService } from '../../review-id.service';
 import { AiDeckService } from '../ai-deck-service.service';
 import { ConstructedArchetypeServiceOrchestrator } from '../constructed-archetype-orchestrator.service';
 import { DeckParserService } from '../deck-parser.service';
+import { ActionsChainParser } from '../event-parser/actions-chain-parser';
 import { AnomalyRevealedParser } from '../event-parser/anomaly-revealed-parser';
 import {
 	ArchetypeCategorizationEvent,
@@ -199,7 +200,7 @@ export class GameStateParsersService {
 	) {}
 
 	public buildEventParsers(): { [eventKey: string]: readonly EventParser[] } {
-		return {
+		const parsers: { [eventKey: string]: EventParser[] } = {
 			[ArchetypeCategorizationEvent.EVENT_NAME]: [new ArchetypeCategorizationParser()],
 			[GameEvent.ANOMALY_REVEALED]: [new AnomalyRevealedParser(this.helper, this.allCards, this.i18n)],
 			[GameEvent.ARMOR_CHANGED]: [new ArmorChangedParser(), new BgsArmorChangedParser()],
@@ -447,5 +448,14 @@ export class GameStateParsersService {
 			// [GameEvent.MINDRENDER_ILLUCIA_END]: [new  MindrenderIlluciaParser(),],
 			// [GameEvent.MINDRENDER_ILLUCIA_START]: [new  MindrenderIlluciaParser(),],
 		};
+
+		// For actions chaining
+		const chainsParser = new ActionsChainParser(this.helper, this.allCards, this.i18n);
+		parsers[GameEvent.GAME_START].push(chainsParser);
+		parsers[GameEvent.GAME_END].push(chainsParser);
+		parsers[GameEvent.ENTITY_CHOSEN].push(chainsParser);
+		parsers[GameEvent.SUB_SPELL_START].push(chainsParser);
+
+		return parsers;
 	}
 }
