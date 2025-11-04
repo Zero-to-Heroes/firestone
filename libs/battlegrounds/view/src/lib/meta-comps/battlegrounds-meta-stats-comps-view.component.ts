@@ -65,7 +65,7 @@ import { BgsMetaCompStatTier, BgsMetaCompStatTierItem, ColumnSortTypeComp } from
 							<div class="expert-name">Slyders</div>
 							<div class="expert-credentials">Multiple leaderboard #1 finishes</div>
 							<div class="expert-links">
-								<a class="link twitch-icon" href="https://www.twitch.tv/slyders_hs" target="_blank">
+								<a class="link twitch-icon" href="https://www.twitch.tv/slyders" target="_blank">
 									<svg>
 										<use xlink:href="assets/svg/sprite.svg#twitch" />
 									</svg>
