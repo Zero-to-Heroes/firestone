@@ -326,9 +326,13 @@ export class DeckState {
 			excludesDeckInLimited?: boolean;
 			onlyLimited?: boolean;
 			includesOtherZone?: boolean;
+			includeBoard?: boolean;
 		},
 	) {
 		let pool = [...this.hand, ...this.currentOptions].map((card) => card.cardId);
+		if (options?.includeBoard) {
+			pool = pool.concat(this.board.map((card) => card.cardId));
+		}
 		pool = pool.concat(this.deck.map((card) => card.cardId));
 		return pool
 			.concat(this.getCardsInSideboards())

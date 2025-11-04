@@ -16,6 +16,7 @@ export abstract class CounterDefinitionV2<T> {
 	public readonly type: 'hearthstone' | 'battlegrounds' = 'hearthstone';
 	public abstract readonly cards: readonly CardIds[];
 	protected showOnlyInDiscovers = false;
+	protected includeBoardForCards = false;
 	protected debug = false;
 	// Only show one instance of the counter at the same time. Useful for counters like
 	// Ceaseless expanse which tracks things game-wide, instead of per-player
@@ -102,7 +103,12 @@ export abstract class CounterDefinitionV2<T> {
 					);
 				return false;
 			}
-			if (!!this.cards?.length && !gameState.playerDeck?.hasRelevantCard(this.cards)) {
+			if (
+				!!this.cards?.length &&
+				!gameState.playerDeck?.hasRelevantCard(this.cards, {
+					includeBoard: this.includeBoardForCards,
+				})
+			) {
 				this.debug &&
 					console.debug(
 						'[debug] not visible from deck',
@@ -145,7 +151,11 @@ export abstract class CounterDefinitionV2<T> {
 				this.debug && console.debug('showing as always-on', this.id, side);
 				return true;
 			}
-			if (gameState.opponentDeck?.hasRelevantCard(this.cards)) {
+			if (
+				gameState.opponentDeck?.hasRelevantCard(this.cards, {
+					includeBoard: this.includeBoardForCards,
+				})
+			) {
 				this.debug &&
 					console.debug(
 						'hasRelevantCard',

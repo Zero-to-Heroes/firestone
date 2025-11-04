@@ -6,15 +6,24 @@ import { GameState } from '../../models/game-state';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
 import { CounterType } from '../_exports';
 
+const relevantCardIds = [CardIds.Ysondre_EDR_465];
 export class YsondreCounterDefinitionV2 extends CounterDefinitionV2<number> {
 	public override id: CounterType = 'ysondre';
 	public override image = CardIds.Ysondre_EDR_465;
 	public override type: 'hearthstone' | 'battlegrounds' = 'hearthstone';
-	public override cards: readonly CardIds[] = [CardIds.Ysondre_EDR_465];
+	public override cards: readonly CardIds[] = [];
 
 	readonly player = {
 		pref: 'playerYsondreCounter' as const,
-		display: (state: GameState): boolean => true,
+		display: (state: GameState): boolean => {
+			const value = this.player.value(state);
+			if (!!value) {
+				return true;
+			}
+			return state.playerDeck.hasRelevantCard(relevantCardIds, {
+				includeBoard: true,
+			});
+		},
 		value: (state: GameState) => {
 			return (
 				state.playerDeck.minionsDeadThisMatch.filter((entity) => entity.cardId === CardIds.Ysondre_EDR_465)
@@ -32,7 +41,10 @@ export class YsondreCounterDefinitionV2 extends CounterDefinitionV2<number> {
 	};
 	readonly opponent = undefined;
 
-	constructor(private readonly i18n: ILocalizationService, private readonly allCards: CardsFacadeService) {
+	constructor(
+		private readonly i18n: ILocalizationService,
+		private readonly allCards: CardsFacadeService,
+	) {
 		super();
 	}
 
