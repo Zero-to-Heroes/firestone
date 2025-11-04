@@ -1,6 +1,5 @@
 import { CardIds } from '@firestone-hs/reference-data';
 import { BoardSecret, DeckState, GameState } from '@firestone/game-state';
-import { TempCardIds } from '@firestone/shared/common/service';
 import { GameEvent } from '../../../../models/game-event';
 import { MinionsDiedEvent } from '../../../../models/mainwindow/game-events/minions-died-event';
 import { DeckManipulationHelper } from '../deck-manipulation-helper';
@@ -63,8 +62,18 @@ export class TriggerOnFriendlyMinionDiedSecretsParser implements EventParser {
 		const turnAtWhichMinionGotPlayed =
 			deckWithSecretToCheck.cardsPlayedThisMatch.find((card) => card.entityId === deadEnemyMinions[0].EntityId)
 				?.turn ?? 0;
-		if (turnAtWhichMinionDies !== +turnAtWhichMinionGotPlayed + 1) {
+		// console.debug(
+		// 	'turnAtWhichMinionDies',
+		// 	turnAtWhichMinionDies,
+		// 	turnAtWhichMinionGotPlayed,
+		// 	deckWithSecretToCheck.cardsPlayedThisMatch.find((card) => card.entityId === deadEnemyMinions[0].EntityId),
+		// 	gameEvent,
+		// );
+		// Next turn is actually the same turn for us
+		if (turnAtWhichMinionDies !== +turnAtWhichMinionGotPlayed) {
 			secretsWeCantRuleOut.push(CardIds.UntimelyDeath_TIME_620);
+		} else {
+			// console.debug('ruling out Untimely Death');
 		}
 
 		const optionsToFlagAsInvalid = this.secretsTriggeringOnFriendlyMinionDeath.filter(
