@@ -49,6 +49,7 @@ export { ShokkJungleTyrant } from './shokk-jungle-tyrant';
 export { Solitude } from './solitude';
 export { SpiritGuide } from './spirit-guide';
 export { SunkenScroll } from './sunken-scroll';
+export { SweetenedSnowflurry } from './sweetened-snowflurry';
 export { Swindle } from './swindle';
 export { Synthesize } from './synthesize';
 export { TheCurator } from './the-curator';

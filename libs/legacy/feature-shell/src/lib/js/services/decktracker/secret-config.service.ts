@@ -49,7 +49,9 @@ export class SecretConfigService {
 		creatorCardId?: string,
 		creatorEntityId?: number,
 	): Promise<readonly string[]> {
+		const debug = card?.entityId === 132;
 		const staticList = this.getStaticSecrets(creatorCardId, metadata, playerClass);
+		debug && console.debug('[debug] staticList', staticList);
 		if (staticList?.length) {
 			return staticList;
 		}
@@ -59,10 +61,14 @@ export class SecretConfigService {
 		}
 
 		const mode: string = this.getMode(metadata, creatorCardId);
+		debug && console.debug('[debug] mode', mode);
 		const config = this.secretConfigs.find((conf) => conf.mode === mode);
+		debug && console.debug('[debug] config', config);
 		const standardSecrets = this.secretConfigs.find((conf) => conf.mode === 'standard');
+		debug && console.debug('[debug] standardSecrets', standardSecrets);
 		const standardSecretCardIds = standardSecrets.secrets.map((s) => s.cardId);
-		const result = config.secrets
+		debug && console.debug('[debug] standardSecretCardIds', standardSecretCardIds);
+		const staticSecrets = config.secrets
 			.filter((secret) => {
 				if (metadata.gameType !== GameType.GT_TAVERNBRAWL) {
 					return true;
@@ -85,10 +91,21 @@ export class SecretConfigService {
 					return false;
 				}
 				return true;
-			})
+			});
+		debug && console.debug('[debug] staticSecrets', staticSecrets);
+		const result = staticSecrets
 			.filter((secret) => this.canBeSpecificSecret(secret, card))
 			.filter((secret) => this.canBeCreatedBy(secret, creatorCardId))
 			.filter((secret) => this.canBeCreatedByDynamic(secret, creatorCardId, creatorEntityId, gameState));
+		debug && console.debug('[debug] result', result);
+		debug &&
+			console.debug(
+				'[debug] result 2',
+				staticSecrets.filter((secret) => this.canBeSpecificSecret(secret, card)),
+				staticSecrets
+					.filter((secret) => this.canBeSpecificSecret(secret, card))
+					.filter((secret) => this.canBeCreatedBy(secret, creatorCardId)),
+			);
 		return result;
 	}
 
@@ -128,7 +145,9 @@ export class SecretConfigService {
 	}
 
 	private canBeSpecificSecret(secretCardId: string, secretCard: DeckCard): boolean {
+		const debug = secretCard?.entityId === 132;
 		const filters = getCardInfoFilters(secretCard, this.allCards);
+		debug && console.debug('[debug] filters', filters, secretCard);
 		if (filters?.length) {
 			return filters.every((f) => f(this.allCards.getCard(secretCardId)));
 		}
@@ -137,8 +156,8 @@ export class SecretConfigService {
 
 	private canBeCreatedBy(secretCardId: string, creatorCardId: string): boolean {
 		switch (creatorCardId) {
-			case CardIds.SweetenedSnowflurry_TOY_307:
-			case CardIds.SweetenedSnowflurry_SweetenedSnowflurryToken_TOY_307t:
+			// case CardIds.SweetenedSnowflurry_TOY_307:
+			// case CardIds.SweetenedSnowflurry_SweetenedSnowflurryToken_TOY_307t:
 			case CardIds.RemixedDispenseOBot_ChillingDispenseOBotToken:
 				return (
 					this.allCards.getCard(secretCardId).spellSchool?.includes(SpellSchool[SpellSchool.FROST]) ?? false
