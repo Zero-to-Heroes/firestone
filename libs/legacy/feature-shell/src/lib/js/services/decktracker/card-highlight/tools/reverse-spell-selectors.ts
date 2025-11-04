@@ -28,9 +28,10 @@ export const reverseSpellSelector = (
 		);
 	}
 
-	// ARCANE + SPELL (7 cards)
+	// ARCANE + SPELL (8 cards)
 	if (refCard.spellSchool?.toUpperCase() === 'ARCANE' && refCard.type?.toUpperCase() === 'SPELL') {
 		matchingCardIds.push(
+			CardIds.AzureQueenSindragosa_AzureKingMalygosToken_TIME_852t1,
 			CardIds.HalduronBrightwing,
 			CardIds.MagistersApprentice,
 			CardIds.SilvermoonFarstrider_RLK_826,
@@ -201,7 +202,7 @@ export const reverseSpellSelector = (
 		);
 	}
 
-	// NATURE + SPELL (9 cards)
+	// NATURE + SPELL (10 cards)
 	if (refCard.spellSchool?.toUpperCase() === 'NATURE' && refCard.type?.toUpperCase() === 'SPELL') {
 		matchingCardIds.push(
 			CardIds.DeviateDreadfang,
@@ -209,6 +210,7 @@ export const reverseSpellSelector = (
 			CardIds.HeraldOfNature,
 			CardIds.IronRootsTavernBrawl,
 			CardIds.MendingPoolsTavernBrawl,
+			CardIds.PrimordialOverseer_TIME_213,
 			CardIds.SpreadingSaplingsTavernBrawl,
 			CardIds.ToadOfTheWilds,
 			CardIds.TopiorTheShrubbagazzor,
@@ -233,12 +235,13 @@ export const reverseSpellSelector = (
 		);
 	}
 
-	// ARCANE (5 cards)
+	// ARCANE (6 cards)
 	if (refCard.spellSchool?.toUpperCase() === 'ARCANE') {
 		matchingCardIds.push(
 			CardIds.ArcaneFluxTavernBrawl,
 			CardIds.ArcaneQuiver_RLK_817,
 			CardIds.ArcaniteCrystalTavernBrawl,
+			CardIds.AzureQueenSindragosa_TIME_852,
 			CardIds.LadyNazjar_TID_709,
 			CardIds.SorcerersGambit
 		);
@@ -351,7 +354,7 @@ export const reverseSpellSelector = (
 		);
 	}
 
-	// SPELL (225 cards)
+	// SPELL (227 cards)
 	if (refCard.type?.toUpperCase() === 'SPELL') {
 		matchingCardIds.push(
 			CardIds.AdvancedTargetingMonocle,
@@ -367,6 +370,7 @@ export const reverseSpellSelector = (
 			CardIds.ArkoniteRevelation_GDB_852,
 			CardIds.ArrowSmith,
 			CardIds.AudioSplitter,
+			CardIds.AzureQueenSindragosa_TIME_852,
 			CardIds.BabaNaga,
 			CardIds.BalindaStonehearth,
 			CardIds.BarbaricSorceress,
@@ -417,6 +421,7 @@ export const reverseSpellSelector = (
 			CardIds.ExarchHataaru_TheGalaxysLensToken_GDB_136t,
 			CardIds.FaeTrickster_EDR_571,
 			CardIds.FarseerNobundo_GDB_447,
+			CardIds.FarseerWo_TIME_013,
 			CardIds.FelfireInTheHole,
 			CardIds.FelscaleEvoker,
 			CardIds.Fetch_TOY_352,

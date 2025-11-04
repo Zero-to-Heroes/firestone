@@ -403,10 +403,11 @@ export const reverseGeneralSelector = (
 		);
 	}
 
-	// COST_MORE_4 (3 cards)
+	// COST_MORE_4 (4 cards)
 	if (refCard.cost > 4) {
 		matchingCardIds.push(
 			CardIds.InventorBoom_TOY_607,
+			CardIds.PrecursoryStrike_TIME_750,
 			CardIds.StranglethornHeart,
 			CardIds.TimberTambourine
 		);
@@ -426,13 +427,14 @@ export const reverseGeneralSelector = (
 		);
 	}
 
-	// HAS_MECHANIC_BATTLECRY (11 cards)
+	// HAS_MECHANIC_BATTLECRY (12 cards)
 	if (refCard.mechanics?.includes('BATTLECRY')) {
 		matchingCardIds.push(
 			CardIds.BattleTotem_LOOTA_846,
 			CardIds.BrannBronzebeard_CORE_LOE_077,
 			CardIds.BrannBronzebeard_LOE_077,
 			CardIds.BrilliantMacaw,
+			CardIds.ChronoLordDeios_TIME_064,
 			CardIds.CorruptTheWaters,
 			CardIds.FieldContact,
 			CardIds.MurmuringElemental,
@@ -443,13 +445,14 @@ export const reverseGeneralSelector = (
 		);
 	}
 
-	// HAS_MECHANIC_DEATHRATTLE (24 cards)
+	// HAS_MECHANIC_DEATHRATTLE (25 cards)
 	if (refCard.mechanics?.includes('DEATHRATTLE')) {
 		matchingCardIds.push(
 			CardIds.BaronRivendare_CORE_FP1_031,
 			CardIds.BaronRivendare_FP1_031,
 			CardIds.BarrensTrapper,
 			CardIds.Boneshredder,
+			CardIds.ChronoLordDeios_TIME_064,
 			CardIds.CountessAshmore,
 			CardIds.DaUndatakah,
 			CardIds.EndbringerUmbra_TLC_106,
@@ -548,11 +551,12 @@ export const reverseGeneralSelector = (
 		);
 	}
 
-	// LEGENDARY (2 cards)
+	// LEGENDARY (3 cards)
 	if (refCard.rarity?.toUpperCase() === 'LEGENDARY') {
 		matchingCardIds.push(
 			CardIds.ArchVillainRafaam_BeholdMyStuff_THD_032p,
-			CardIds.BountyBoard_WW_003
+			CardIds.BountyBoard_WW_003,
+			CardIds.TheKingslayers
 		);
 	}
 

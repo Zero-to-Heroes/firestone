@@ -511,12 +511,13 @@ export const reverseMinionSelector = (
 		);
 	}
 
-	// DRAGON (74 cards)
+	// DRAGON (77 cards)
 	if (refCard.races?.map(r => r.toUpperCase()).includes('DRAGON')) {
 		matchingCardIds.push(
 			CardIds.AlexstraszasChampion,
 			CardIds.AmberWhelp,
 			CardIds.ArcaneBreath,
+			CardIds.AzureQueenSindragosa_TIME_852,
 			CardIds.BlackwingCorruptor,
 			CardIds.BlackwingCorruptor_WON_329,
 			CardIds.BreathOfDreams,
@@ -525,6 +526,7 @@ export const reverseMinionSelector = (
 			CardIds.CandleBreath,
 			CardIds.Chillmaw,
 			CardIds.Chillmaw_CORE_AT_123,
+			CardIds.ChronicleKeeper_TIME_062,
 			CardIds.Chronobreaker,
 			CardIds.ClericOfScales,
 			CardIds.CloudSerpent_TLC_888,
@@ -559,6 +561,7 @@ export const reverseMinionSelector = (
 			CardIds.Kazakusan_ONY_005,
 			CardIds.LightningBreath,
 			CardIds.MalygosAspectOfMagic,
+			CardIds.MirrorDimension_TIME_006,
 			CardIds.MoltenBreath,
 			CardIds.NaralexHeraldOfTheFlights_EDR_844,
 			CardIds.NetherBreath_DRG_205,
@@ -657,7 +660,7 @@ export const reverseMinionSelector = (
 		);
 	}
 
-	// MECH (31 cards)
+	// MECH (32 cards)
 	if (refCard.races?.map(r => r.toUpperCase()).includes('MECH')) {
 		matchingCardIds.push(
 			CardIds.Bubblebot_TSC_059,
@@ -676,6 +679,7 @@ export const reverseMinionSelector = (
 			CardIds.KangorsEndlessArmy,
 			CardIds.MechaShark_TSC_054,
 			CardIds.MimironTheMastermind,
+			CardIds.PartScrapper_MIS_902,
 			CardIds.PitStop,
 			CardIds.ProstheticHand_DEEP_015,
 			CardIds.RadarDetector_TSC_079,
@@ -865,7 +869,7 @@ export const reverseMinionSelector = (
 		);
 	}
 
-	// MINION (246 cards)
+	// MINION (259 cards)
 	if (refCard.type?.toUpperCase() === 'MINION') {
 		matchingCardIds.push(
 			CardIds.AegwynnTheGuardianCore,
@@ -931,12 +935,16 @@ export const reverseMinionSelector = (
 			CardIds.DigForTreasure_TOY_510,
 			CardIds.DimensionalRipper,
 			CardIds.DinnerPerformer,
+			CardIds.DiscipleOfTheDove_TIME_037,
 			CardIds.DisciplinarianGandling,
 			CardIds.DiscoMaul,
+			CardIds.Divergence_TIME_030,
+			CardIds.DivineAugur_TIME_429,
 			CardIds.DivineStar_GDB_460,
 			CardIds.DreamboundRaptor_EDR_849,
 			CardIds.DredgerStaff,
 			CardIds.DredgerStaff_CORE_REV_338,
+			CardIds.EbbAndFlow_TIME_702,
 			CardIds.EchoOfMedivh,
 			CardIds.EliseBadlandsSavior_WW_392,
 			CardIds.ElixirOfVigorTavernBrawl,
@@ -960,6 +968,7 @@ export const reverseMinionSelector = (
 			CardIds.FrontLines_TID_949,
 			CardIds.FungalFortunes,
 			CardIds.GatherYourParty,
+			CardIds.GladiatorialCombat_TIME_870,
 			CardIds.GreedyGainsTavernBrawl,
 			CardIds.GrimestreetOutfitter,
 			CardIds.GrimestreetOutfitterCore,
@@ -977,9 +986,12 @@ export const reverseMinionSelector = (
 			CardIds.HawkstriderRancher,
 			CardIds.HealingWave,
 			CardIds.HealingWave_WON_320,
+			CardIds.HeirOfHereafter_TIME_871,
 			CardIds.Hellion_HellbatToken_SC_412t,
 			CardIds.Hellion_SC_412,
 			CardIds.HopeOfQuelthalas,
+			CardIds.HoundsOfFury_TIME_443,
+			CardIds.HourglassAttendant_TIME_100,
 			CardIds.ImpKingRafaam_ImpKingRafaamToken,
 			CardIds.ImpKingRafaam_REV_789,
 			CardIds.ImpKingRafaam_REV_835,
@@ -997,6 +1009,7 @@ export const reverseMinionSelector = (
 			CardIds.KeeperOfFlame_FIR_928,
 			CardIds.KeepersStrength_YOG_509,
 			CardIds.LadyInWhite,
+			CardIds.LastingLegacy_TIME_449,
 			CardIds.LesserDiamondSpellstone,
 			CardIds.LesserDiamondSpellstone_CORE_LOOT_507,
 			CardIds.LesserDiamondSpellstone_DiamondSpellstoneToken,
@@ -1047,6 +1060,8 @@ export const reverseMinionSelector = (
 			CardIds.PortalVanguard_TIME_003,
 			CardIds.PowerChordSynchronize,
 			CardIds.PowerSlider,
+			CardIds.PowerWordBarrier_TIME_447,
+			CardIds.PrecursoryStrike_TIME_750,
 			CardIds.Prescience,
 			CardIds.ProvingGrounds,
 			CardIds.Psychopomp,
@@ -1077,6 +1092,7 @@ export const reverseMinionSelector = (
 			CardIds.SilvermoonPortal,
 			CardIds.SilvermoonPortal_WON_309,
 			CardIds.SmolderingStrength_FIR_914,
+			CardIds.Solitude_TIME_448,
 			CardIds.SoulrestCeremony_DINO_417,
 			CardIds.SowTheSeedsTavernBrawl,
 			CardIds.SpiritOfTheBadlands_MirageToken_WW_337t,
@@ -1108,6 +1124,7 @@ export const reverseMinionSelector = (
 			CardIds.WakenerOfSouls_GDB_468,
 			CardIds.WebOfDeception_EDR_523,
 			CardIds.XyrellaTheDevout,
+			CardIds.Yesterloc_TIME_428,
 			CardIds.YoggInTheBox_TOY_372,
 			CardIds.YouthfulBrewmaster,
 			CardIds.YouthfulBrewmasterCore,

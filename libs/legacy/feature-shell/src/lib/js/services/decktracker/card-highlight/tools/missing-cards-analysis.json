@@ -1,7 +1,7 @@
 {
-  "totalOriginal": 1582,
-  "totalProcessed": 1482,
-  "totalMissing": 98,
+  "totalOriginal": 1630,
+  "totalProcessed": 1523,
+  "totalMissing": 104,
   "missingCards": [
     "AbyssalDepths",
     "AstralVigilant_GDB_461",
@@ -13,6 +13,7 @@
     "ChattyMacaw_VAC_407",
     "Chogall_WON_105",
     "Chogall_OG_121",
+    "Chronogor_TIME_032",
     "CloningDevice",
     "ColdFeet",
     "ConnivingConman_VAC_333",
@@ -49,6 +50,7 @@
     "DefenseAttorneyNathanos",
     "Drekthar_AV_100",
     "Endgame_TOY_886",
+    "Fatebreaker_TIME_028",
     "FateSplitter",
     "FiremancerFlurgl",
     "TheGalacticProjectionOrb_TOY_378",
@@ -69,6 +71,7 @@
     "LadyLiadrin_CORE_BT_334",
     "MassResurrection_DAL_724",
     "Mixtape",
+    "NightmareFuel_EDR_528",
     "OnyxBishop",
     "OnyxBishop_WON_057",
     "Owlonius_TOY_807",
@@ -78,6 +81,7 @@
     "RestInPeace_VAC_457",
     "RevivePet",
     "RivendareWarrider",
+    "RuinousVelocidrake_TIME_029",
     "Sasquawk_VAC_415",
     "Shaladrassil_EDR_846",
     "SonyaWaterdancer_TOY_515",
@@ -96,11 +100,13 @@
     "TessGreymane_GIL_598",
     "TessGreymaneCore",
     "The8HandsFromBeyond_GDB_477",
+    "TheFinsBeyondTime_TIME_706",
+    "TimelordNozdormu_TIME_063",
     "TramHeist_WW_053",
     "UrsineMaul_EDR_253",
     "VanndarStormpike_AV_223",
     "VelenLeaderOfTheExiled_GDB_131",
     "WildSpirits"
   ],
-  "analysisDate": "2025-10-15T14:37:22.308Z"
+  "analysisDate": "2025-11-04T14:22:05.565Z"
 }

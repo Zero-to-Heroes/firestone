@@ -279,6 +279,7 @@
     "ArkoniteRevelation_GDB_852",
     "ArrowSmith",
     "AudioSplitter",
+    "AzureQueenSindragosa_TIME_852",
     "BabaNaga",
     "BalindaStonehearth",
     "BarbaricSorceress",
@@ -329,6 +330,7 @@
     "ExarchHataaru_TheGalaxysLensToken_GDB_136t",
     "FaeTrickster_EDR_571",
     "FarseerNobundo_GDB_447",
+    "FarseerWo_TIME_013",
     "FelfireInTheHole",
     "FelscaleEvoker",
     "Fetch_TOY_352",
@@ -556,12 +558,16 @@
     "DigForTreasure_TOY_510",
     "DimensionalRipper",
     "DinnerPerformer",
+    "DiscipleOfTheDove_TIME_037",
     "DisciplinarianGandling",
     "DiscoMaul",
+    "Divergence_TIME_030",
+    "DivineAugur_TIME_429",
     "DivineStar_GDB_460",
     "DreamboundRaptor_EDR_849",
     "DredgerStaff",
     "DredgerStaff_CORE_REV_338",
+    "EbbAndFlow_TIME_702",
     "EchoOfMedivh",
     "EliseBadlandsSavior_WW_392",
     "ElixirOfVigorTavernBrawl",
@@ -585,6 +591,7 @@
     "FrontLines_TID_949",
     "FungalFortunes",
     "GatherYourParty",
+    "GladiatorialCombat_TIME_870",
     "GreedyGainsTavernBrawl",
     "GrimestreetOutfitter",
     "GrimestreetOutfitterCore",
@@ -602,9 +609,12 @@
     "HawkstriderRancher",
     "HealingWave",
     "HealingWave_WON_320",
+    "HeirOfHereafter_TIME_871",
     "Hellion_HellbatToken_SC_412t",
     "Hellion_SC_412",
     "HopeOfQuelthalas",
+    "HoundsOfFury_TIME_443",
+    "HourglassAttendant_TIME_100",
     "ImpKingRafaam_ImpKingRafaamToken",
     "ImpKingRafaam_REV_789",
     "ImpKingRafaam_REV_835",
@@ -622,6 +632,7 @@
     "KeeperOfFlame_FIR_928",
     "KeepersStrength_YOG_509",
     "LadyInWhite",
+    "LastingLegacy_TIME_449",
     "LesserDiamondSpellstone",
     "LesserDiamondSpellstone_CORE_LOOT_507",
     "LesserDiamondSpellstone_DiamondSpellstoneToken",
@@ -672,6 +683,8 @@
     "PortalVanguard_TIME_003",
     "PowerChordSynchronize",
     "PowerSlider",
+    "PowerWordBarrier_TIME_447",
+    "PrecursoryStrike_TIME_750",
     "Prescience",
     "ProvingGrounds",
     "Psychopomp",
@@ -702,6 +715,7 @@
     "SilvermoonPortal",
     "SilvermoonPortal_WON_309",
     "SmolderingStrength_FIR_914",
+    "Solitude_TIME_448",
     "SoulrestCeremony_DINO_417",
     "SowTheSeedsTavernBrawl",
     "SpiritOfTheBadlands_MirageToken_WW_337t",
@@ -733,6 +747,7 @@
     "WakenerOfSouls_GDB_468",
     "WebOfDeception_EDR_523",
     "XyrellaTheDevout",
+    "Yesterloc_TIME_428",
     "YoggInTheBox_TOY_372",
     "YouthfulBrewmaster",
     "YouthfulBrewmasterCore",
@@ -881,6 +896,7 @@
     "AlexstraszasChampion",
     "AmberWhelp",
     "ArcaneBreath",
+    "AzureQueenSindragosa_TIME_852",
     "BlackwingCorruptor",
     "BlackwingCorruptor_WON_329",
     "BreathOfDreams",
@@ -889,6 +905,7 @@
     "CandleBreath",
     "Chillmaw",
     "Chillmaw_CORE_AT_123",
+    "ChronicleKeeper_TIME_062",
     "Chronobreaker",
     "ClericOfScales",
     "CloudSerpent_TLC_888",
@@ -923,6 +940,7 @@
     "Kazakusan_ONY_005",
     "LightningBreath",
     "MalygosAspectOfMagic",
+    "MirrorDimension_TIME_006",
     "MoltenBreath",
     "NaralexHeraldOfTheFlights_EDR_844",
     "NetherBreath_DRG_205",
@@ -1007,6 +1025,7 @@
     "CrystalStag",
     "DeathMetalKnight",
     "DeathMetalKnight_CORE_ETC_523",
+    "Liferender_TIME_614",
     "ShadowtouchedKvaldir_YOG_300",
     "Xyrella_BAR_735"
   ],
@@ -1109,6 +1128,7 @@
     "ArcaneFluxTavernBrawl",
     "ArcaneQuiver_RLK_817",
     "ArcaniteCrystalTavernBrawl",
+    "AzureQueenSindragosa_TIME_852",
     "LadyNazjar_TID_709",
     "SorcerersGambit"
   ],
@@ -1148,6 +1168,21 @@
     "AshleafPixie_FIR_961",
     "Groundskeeper",
     "HagathaTheFabled_TOY_504"
+  ],
+  "RESTORE_HEALTH + SPELL": [
+    "MedivhTheHallowed_AtieshTheGreatstaffToken_TIME_890t"
+  ],
+  "DEALS_DAMAGE + SPELL": [
+    "Bioluminescence",
+    "CelestialShot_YOG_082",
+    "ChiaDrake_SeedlingGrowth_TOY_801b",
+    "Lifeguard_VAC_919",
+    "MedivhTheHallowed_AtieshTheGreatstaffToken_TIME_890t",
+    "RobeOfTheApprenticeTavernBrawl",
+    "RobeOfTheMagi",
+    "RuneDagger",
+    "TalentedArcanist",
+    "UrchinSpines"
   ],
   "HAS_MECHANIC_REBORN": [
     "AuchenaiDeathSpeaker_GDB_469"
@@ -1203,6 +1238,16 @@
     "UnderbellyAngler",
     "UniteTheMurlocs",
     "Voidgill"
+  ],
+  "ARCANE + SPELL": [
+    "AzureQueenSindragosa_AzureKingMalygosToken_TIME_852t1",
+    "HalduronBrightwing",
+    "MagistersApprentice",
+    "SilvermoonFarstrider_RLK_826",
+    "Stargazing_WW_425",
+    "StarlightReactor_GDB_108",
+    "UnstableMagicTavernBrawl",
+    "Vexallus"
   ],
   "STARSHIP_EXTENDED": [
     "BadOmen_GDB_124",
@@ -1260,6 +1305,7 @@
     "BaronRivendare_FP1_031",
     "BarrensTrapper",
     "Boneshredder",
+    "ChronoLordDeios_TIME_064",
     "CountessAshmore",
     "DaUndatakah",
     "EndbringerUmbra_TLC_106",
@@ -1281,8 +1327,9 @@
     "WakenerOfSouls_GDB_468",
     "XyrellaTheDevout"
   ],
-  "GIVES_ARMOR": [
+  "HAS_MECHANIC_GIVES_ARMOR": [
     "BarricadeBasher_DINO_400",
+    "LabPatron_TOY_651",
     "ShieldSlamCore",
     "ShieldSlamLegacy",
     "ShieldSlamVanilla"
@@ -1318,6 +1365,7 @@
     "BrannBronzebeard_CORE_LOE_077",
     "BrannBronzebeard_LOE_077",
     "BrilliantMacaw",
+    "ChronoLordDeios_TIME_064",
     "CorruptTheWaters",
     "FieldContact",
     "MurmuringElemental",
@@ -1328,18 +1376,8 @@
   ],
   "LEGENDARY": [
     "ArchVillainRafaam_BeholdMyStuff_THD_032p",
-    "BountyBoard_WW_003"
-  ],
-  "DEALS_DAMAGE + SPELL": [
-    "Bioluminescence",
-    "CelestialShot_YOG_082",
-    "ChiaDrake_SeedlingGrowth_TOY_801b",
-    "Lifeguard_VAC_919",
-    "RobeOfTheApprenticeTavernBrawl",
-    "RobeOfTheMagi",
-    "RuneDagger",
-    "TalentedArcanist",
-    "UrchinSpines"
+    "BountyBoard_WW_003",
+    "TheKingslayers"
   ],
   "DEALS_DAMAGE + FROST": [
     "BitterColdTavernBrawl"
@@ -1373,6 +1411,7 @@
     "KangorsEndlessArmy",
     "MechaShark_TSC_054",
     "MimironTheMastermind",
+    "PartScrapper_MIS_902",
     "PitStop",
     "ProstheticHand_DEEP_015",
     "RadarDetector_TSC_079",
@@ -1483,6 +1522,9 @@
     "ChronoBoost_SC_750",
     "ConstructPylons_SC_755"
   ],
+  "HAS_MECHANIC_END_OF_TURN": [
+    "ChronoLordDeios_TIME_064"
+  ],
   "DARK_GIFT": [
     "Cindersword_FIR_922",
     "DragonTurtle_FIR_956",
@@ -1576,6 +1618,7 @@
     "HeraldOfNature",
     "IronRootsTavernBrawl",
     "MendingPoolsTavernBrawl",
+    "PrimordialOverseer_TIME_213",
     "SpreadingSaplingsTavernBrawl",
     "ToadOfTheWilds",
     "TopiorTheShrubbagazzor",
@@ -1659,6 +1702,7 @@
   "GENERATE_CORPSE": [
     "EternalLayover_WORK_028",
     "HollowDirehorn_DINO_416",
+    "HuskEternalReaper_TIME_618",
     "Paleomancy_TLC_434",
     "ReanimatedPterrordax_TLC_436"
   ],
@@ -1724,6 +1768,14 @@
     "ImpKingRafaam_REV_789",
     "ImpKingRafaam_REV_835"
   ],
+  "DEALS_DAMAGE + NATURE + SPELL": [
+    "FluxRevenant_TIME_214",
+    "NaturalForceTavernBrawl",
+    "Stormrook_TIME_217"
+  ],
+  "DORMANT + MINION": [
+    "PerennialSerpent_TIME_022"
+  ],
   "FROST": [
     "FrostweaveDungeoneer",
     "LadyNazjar_TID_709",
@@ -1738,6 +1790,11 @@
   "COST_EQUAL_1 + SPELL": [
     "Gazlowe",
     "TrinketTracker"
+  ],
+  "HAS_MECHANIC_PALADIN_AURA": [
+    "GelbinOfTomorrow_TIME_009",
+    "ManifestedTimeways_TIME_019",
+    "TrinketArtist_TOY_882"
   ],
   "FROST + SPELL": [
     "GlacialDownpourTavernBrawl",
@@ -1764,15 +1821,6 @@
   "BEAST + COST_LESS_6": [
     "GuardianAnimals",
     "PetCollector"
-  ],
-  "ARCANE + SPELL": [
-    "HalduronBrightwing",
-    "MagistersApprentice",
-    "SilvermoonFarstrider_RLK_826",
-    "Stargazing_WW_425",
-    "StarlightReactor_GDB_108",
-    "UnstableMagicTavernBrawl",
-    "Vexallus"
   ],
   "NOT_NATURE": [
     "HamuulRunetotem_EDR_845"
@@ -1810,6 +1858,7 @@
   ],
   "COST_MORE_4": [
     "InventorBoom_TOY_607",
+    "PrecursoryStrike_TIME_750",
     "StranglethornHeart",
     "TimberTambourine"
   ],
@@ -1842,6 +1891,9 @@
     "LibramOfJustice_BT_011",
     "LibramOfWisdom_BT_025"
   ],
+  "HAS_MECHANIC_COSTS_HEALTH": [
+    "Liferender_TIME_614"
+  ],
   "TERRAN": [
     "LiftOff_SC_410"
   ],
@@ -1860,9 +1912,6 @@
   ],
   "CAN_TARGET_FRIENDLY_MINION + SPELL": [
     "Myrmidon"
-  ],
-  "DEALS_DAMAGE + NATURE + SPELL": [
-    "NaturalForceTavernBrawl"
   ],
   "COST_EQUAL_1": [
     "NiriOfTheCrater_TLC_836",
@@ -2004,6 +2053,18 @@
   "COST_MORE_0 + SHADOW + SPELL": [
     "TamsinRoame_BAR_918"
   ],
+  "HAS_MECHANIC_RAFAAM": [
+    "TimethiefRafaam_ArchmageRafaamToken_TIME_005t9",
+    "TimethiefRafaam_CalamitousRafaamToken_TIME_005t6",
+    "TimethiefRafaam_ExplorerRafaamToken_TIME_005t3",
+    "TimethiefRafaam_GiantRafaamToken_TIME_005t7",
+    "TimethiefRafaam_GreenRafaamToken_TIME_005t2",
+    "TimethiefRafaam_MindflayerRfaamToken_TIME_005t5",
+    "TimethiefRafaam_MurlocRafaamToken_TIME_005t8",
+    "TimethiefRafaam_TIME_005",
+    "TimethiefRafaam_TinyRafaamToken_TIME_005t1",
+    "TimethiefRafaam_WarchiefRafaamToken_TIME_005t4"
+  ],
   "IS_PLAGUE": [
     "TombTraitor"
   ],
@@ -2014,9 +2075,6 @@
   ],
   "BEAST + COST_LESS_4": [
     "TrialOfTheJormungars_WON_028"
-  ],
-  "HAS_MECHANIC_PALADIN_AURA": [
-    "TrinketArtist_TOY_882"
   ],
   "ATTACK_LESS_5": [
     "Tyr"
