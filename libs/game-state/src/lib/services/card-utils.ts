@@ -165,6 +165,9 @@ export const addGuessInfoToCard = (
 		metadata?: Metadata;
 	},
 ): DeckCard => {
+	if (card.cardId) {
+		return card;
+	}
 	switch (creatorCardId) {
 		case CardIds.HarthStonebrew_CORE_GIFT_01:
 		case CardIds.HarthStonebrew_GIFT_01:
