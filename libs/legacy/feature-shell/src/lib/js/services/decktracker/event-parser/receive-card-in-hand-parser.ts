@@ -153,8 +153,9 @@ export class ReceiveCardInHandParser implements EventParser {
 		// 	otherCardWithObfuscation,
 		// );
 		const newCardId =
-			(isCardInfoPublic ? guessCardId(cardId, deck, creatorCardId, creatorEntityId, this.allCards) : null) ??
-			cardWithDefault.cardId;
+			(isCardInfoPublic
+				? guessCardId(cardId, deck, creatorCardId, creatorEntityId, createdIndex, this.allCards)
+				: null) ?? cardWithDefault.cardId;
 		const cardWithKnownInfo =
 			newCardId === cardWithDefault.cardId
 				? cardWithDefault
@@ -351,12 +352,22 @@ const guessCardId = (
 	deckState: DeckState,
 	creatorCardId: string,
 	creatorEntityId: number,
+	createdIndex: number,
 	allCards: CardsFacadeService,
 ): string => {
 	// console.debug('[receive-card-in-hand] guessing cardId', cardId, deckState, gameEvent);
 	if (!!cardId?.length) {
 		return cardId;
 	}
+
+	// Assuming the mini is always created first, which seems to be the case
+	if (createdIndex === 0 && allCards.getCard(creatorCardId).mechanics?.includes(GameTag[GameTag.MINIATURIZE])) {
+		const tentativeMiniCard = allCards.getCard(creatorCardId + 't');
+		if (tentativeMiniCard.mechanics?.includes(GameTag[GameTag.MINI])) {
+			return tentativeMiniCard.id;
+		}
+	}
+
 	switch (creatorCardId) {
 		case CardIds.Repackage_RepackagedBoxToken_TOY_879t:
 			const existingBox: DeckCard = deckState.otherZone.find((c) => Math.abs(c.entityId) === creatorEntityId);
