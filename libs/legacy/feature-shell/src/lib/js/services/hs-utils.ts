@@ -146,7 +146,6 @@ export const battlecryGlobalEffectCards = [
 	CardIds.PrinceKeleseth_CORE_ICC_851,
 	CardIds.PrinceKeleseth_ICC_851,
 	CardIds.RadiantLightspawn,
-	CardIds.RangerGeneralSylvanas_RangerInitiateVereesaToken_TIME_609t2,
 	CardIds.RazaTheChained,
 	CardIds.RiseToTheOccasion_LightbornCarielToken,
 	CardIds.RottenRodent,
@@ -279,6 +278,10 @@ export const globalEffectTriggers = [
 	{
 		effectPrefab: 'ReuseFX_Beast_BuffImpact_Paw_Super',
 		cardId: CardIds.FreeSpirit,
+	},
+	{
+		effectPrefab: 'TIME_609t2_Vereesa_DeckAE_Super',
+		cardId: CardIds.RangerGeneralSylvanas_RangerInitiateVereesaToken_TIME_609t2,
 	},
 ];
 
