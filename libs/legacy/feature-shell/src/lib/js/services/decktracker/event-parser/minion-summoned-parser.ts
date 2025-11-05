@@ -1,5 +1,5 @@
 import { GameTag } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState, GameState, getProcessedCard, toTagsObject } from '@firestone/game-state';
+import { DeckCard, GameState, getProcessedCard, toTagsObject } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { LocalizationFacadeService } from '../../localization-facade.service';
@@ -45,9 +45,16 @@ export class MinionSummonedParser implements EventParser {
 
 		const newBoard: readonly DeckCard[] = this.helper.addSingleCardToZone(deck.board, card);
 
-		const newPlayerDeck = Object.assign(new DeckState(), deck, {
+		// In Broxigar's demons' case, the card is first REVEALED, which creates in the other zone,
+		// then it's summoned, which puts it on board
+		let newOtherZone = deck.otherZone;
+		if (newOtherZone.some((e) => e.entityId === entityId)) {
+			newOtherZone = newOtherZone.filter((e) => e.entityId !== entityId);
+		}
+		const newPlayerDeck = deck.update({
 			board: newBoard,
-		} as DeckState);
+			otherZone: newOtherZone,
+		});
 
 		// const playerDeckAfterReveal = isPlayer ? newPlayerDeck : currentState.opponentDeck;
 		// const opponentDeckAfterReveal = isPlayer ? currentState.opponentDeck : revealCard(newPlayerDeck, card);
