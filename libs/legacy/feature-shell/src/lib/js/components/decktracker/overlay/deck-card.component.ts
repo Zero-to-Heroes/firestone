@@ -438,7 +438,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 	onMouseEnter(event: MouseEvent) {
 		this.cardsHighlightService?.onMouseEnter(this.cardId, this._side, this.card$$.value);
 
-		if (this.card$$.value.guessedInfo?.possibleCards?.length) {
+		if (!this.card$$.value.cardId && this.card$$.value.guessedInfo?.possibleCards?.length) {
 			this.relatedCardIds = this.card$$.value.guessedInfo.possibleCards;
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
