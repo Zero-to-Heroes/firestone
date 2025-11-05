@@ -237,6 +237,18 @@ export const isTakePlaceOnBoard = (card: ReferenceCard): boolean => {
 	);
 };
 
+export const timeRafaamFablePackage = [
+	CardIds.TimethiefRafaam_TIME_005,
+	CardIds.TimethiefRafaam_TinyRafaamToken_TIME_005t1,
+	CardIds.TimethiefRafaam_GreenRafaamToken_TIME_005t2,
+	CardIds.TimethiefRafaam_MurlocRafaamToken_TIME_005t8,
+	CardIds.TimethiefRafaam_ExplorerRafaamToken_TIME_005t3,
+	CardIds.TimethiefRafaam_WarchiefRafaamToken_TIME_005t4,
+	CardIds.TimethiefRafaam_CalamitousRafaamToken_TIME_005t6,
+	CardIds.TimethiefRafaam_MindflayerRfaamToken_TIME_005t5,
+	CardIds.TimethiefRafaam_GiantRafaamToken_TIME_005t7,
+	CardIds.TimethiefRafaam_ArchmageRafaamToken_TIME_005t9,
+];
 export const fablePackages = [
 	[
 		CardIds.TalanjiOfTheGraves_TIME_619,
@@ -283,16 +295,5 @@ export const fablePackages = [
 		CardIds.MuradinHighKing_AvatarFormToken_TIME_209t2,
 		CardIds.MuradinHighKing_HighKingsHammerToken_TIME_209t,
 	],
-	[
-		CardIds.TimethiefRafaam_TIME_005,
-		CardIds.TimethiefRafaam_TinyRafaamToken_TIME_005t1,
-		CardIds.TimethiefRafaam_GreenRafaamToken_TIME_005t2,
-		CardIds.TimethiefRafaam_MurlocRafaamToken_TIME_005t8,
-		CardIds.TimethiefRafaam_ExplorerRafaamToken_TIME_005t3,
-		CardIds.TimethiefRafaam_WarchiefRafaamToken_TIME_005t4,
-		CardIds.TimethiefRafaam_CalamitousRafaamToken_TIME_005t6,
-		CardIds.TimethiefRafaam_MindflayerRfaamToken_TIME_005t5,
-		CardIds.TimethiefRafaam_GiantRafaamToken_TIME_005t7,
-		CardIds.TimethiefRafaam_ArchmageRafaamToken_TIME_005t9,
-	],
+	timeRafaamFablePackage,
 ];

@@ -149,4 +149,38 @@
 			color: var(--color-common-2-dark);
 		}
 	}
+
+	.help-tooltip {
+		::ng-deep {
+			.time-rafaam {
+				display: flex;
+				flex-direction: column;
+
+				.header {
+					align-items: center;
+					justify-content: center;
+					display: flex;
+					margin-bottom: 5px;
+				}
+
+				.body {
+					display: flex;
+					flex-direction: column;
+
+					.rafaam {
+						display: flex;
+
+						&.played {
+							text-decoration: line-through;
+							opacity: 0.5;
+						}
+
+						&.not-played {
+							font-weight: bold;
+						}
+					}
+				}
+			}
+		}
+	}
 }

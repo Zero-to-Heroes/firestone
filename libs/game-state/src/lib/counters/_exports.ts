@@ -69,6 +69,7 @@ import { PogoCounterDefinitionV2 } from './impl/pogo';
 import { ProtossMinionReductionCounterDefinitionV2 } from './impl/protoss-minion-reduction';
 import { ProtossSpellsCounterDefinitionV2 } from './impl/protoss-spells';
 import { QueensguardCounterDefinitionV2 } from './impl/queensguard';
+import { RafaamTimeCounterDefinitionV2 } from './impl/rafaam-time';
 import { RelicCounterDefinitionV2 } from './impl/relic';
 import { RenferalTheMalignantCounterDefinitionV2 } from './impl/renferal-the-malignant';
 import { SeaShantyCounterDefinitionV2 } from './impl/sea-shanty';
@@ -162,6 +163,7 @@ export const getAllCounters: (
 	new RenferalTheMalignantCounterDefinitionV2(i18n, allCards),
 	new DiveTheGolakkaDepthsCounterDefinitionV2(i18n, allCards),
 	new ElizaGorebladeCounterDefinitionV2(i18n, allCards),
+	new RafaamTimeCounterDefinitionV2(i18n, allCards),
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n),
 	new BallerBuffCounterDefinitionV2(i18n),
@@ -186,6 +188,7 @@ export type CounterType =
 	| '_ceaselessExpanse'
 	| 'outcast'
 	| 'diveTheGolakkaDepths'
+	| 'rafaamTime'
 	| 'darkGifts'
 	| 'galakrond'
 	| 'elizaGoreblade'
