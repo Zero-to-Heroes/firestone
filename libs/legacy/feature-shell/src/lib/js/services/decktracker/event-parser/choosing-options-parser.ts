@@ -8,7 +8,7 @@ import {
 	hasCorrectTribe,
 	hasMechanic,
 } from '@firestone-hs/reference-data';
-import { CardOption, DeckState, GameState, getProcessedCard } from '@firestone/game-state';
+import { CardOption, DeckState, GameState, getProcessedCard, hasCorrectType } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { ChoosingOptionsGameEvent } from '../../../models/mainwindow/game-events/choosing-options-game-event';
@@ -74,9 +74,20 @@ const willBeActive = (
 		const tribes = refCard.races ?? [];
 		for (const tribe of tribes) {
 			if (
-				playerDeck.cardsPlayedLastTurn.filter((c) => hasCorrectTribe(allCards.getCard(c.cardId), Race[tribe]))
-					.length > 0
+				playerDeck.cardsPlayedLastTurn.filter(
+					(c) =>
+						hasCorrectType(allCards.getCard(c.cardId), CardType.MINION) &&
+						hasCorrectTribe(allCards.getCard(c.cardId), Race[tribe]),
+				).length > 0
 			) {
+				console.debug(
+					'[debug] kindred minion played last turn',
+					cardId,
+					entityId,
+					refCard,
+					playerDeck.cardsPlayedLastTurn,
+					playerDeck,
+				);
 				return true;
 			}
 		}
@@ -84,9 +95,20 @@ const willBeActive = (
 	if (refCard.type?.toUpperCase() === CardType[CardType.SPELL] && hasMechanic(refCard, GameTag.KINDRED)) {
 		const spellSchool = refCard.spellSchool;
 		if (
-			playerDeck.cardsPlayedLastTurn.filter((c) => allCards.getCard(c.cardId).spellSchool === spellSchool)
-				.length > 0
+			playerDeck.cardsPlayedLastTurn.filter(
+				(c) =>
+					hasCorrectType(allCards.getCard(c.cardId), CardType.SPELL) &&
+					allCards.getCard(c.cardId).spellSchool === spellSchool,
+			).length > 0
 		) {
+			console.debug(
+				'[debug] kindred spell played last turn',
+				cardId,
+				entityId,
+				refCard,
+				playerDeck.cardsPlayedLastTurn,
+				playerDeck,
+			);
 			return true;
 		}
 	}
