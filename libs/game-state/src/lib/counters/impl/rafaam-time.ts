@@ -17,7 +17,6 @@ export class RafaamTimeCounterDefinitionV2 extends CounterDefinitionV2<{
 	public override image = CardIds.TimethiefRafaam_TIME_005;
 	public override type: 'hearthstone' | 'battlegrounds' = 'hearthstone';
 	public override cards: readonly CardIds[] = [];
-	protected override debug = true;
 
 	readonly player = {
 		pref: 'playerRafaamTimeCounter' as const,
@@ -110,7 +109,6 @@ const buildValue = (
 	const rafaams = deck.cardsPlayedThisMatch.filter((c) => timeRafaamFablePackage.includes(c.cardId as CardIds));
 	const uniqueRafaams = new Set(rafaams.map((c) => c.cardId)).size;
 	const totalRafaams = rafaams.length;
-	console.debug('[debug] rafaam value', deck.isOpponent, rafaams, uniqueRafaams, totalRafaams, deck);
 	if (!uniqueRafaams && !totalRafaams) {
 		return null;
 	}
