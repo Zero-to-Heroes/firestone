@@ -299,6 +299,8 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 				...deckState.additionalKnownCardsInHand.map((c) =>
 					DeckCard.create({
 						cardId: c,
+						cardName: this.allCards.getCard(c)?.name,
+						refManaCost: this.allCards.getCard(c)?.cost,
 						entityId: null,
 					}),
 				),
