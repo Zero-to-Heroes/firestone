@@ -48,6 +48,10 @@ export const buildContextRelatedCardIds = (
 			if (hasOverride(dynamicCards)) {
 				return (dynamicCards as { cards: readonly string[] }).cards;
 			}
+			// When the pool is too big, show it last
+			if (dynamicCards?.length >= 16 && existingRelatedCardIds?.length < 16) {
+				return [...(existingRelatedCardIds ?? []), ...(dynamicCards ?? [])];
+			}
 			return [...(dynamicCards ?? []), ...(existingRelatedCardIds ?? [])];
 	}
 };
