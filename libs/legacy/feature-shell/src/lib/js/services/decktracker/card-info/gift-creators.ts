@@ -1094,6 +1094,7 @@ export const giftCreators = [
 	CardIds.Chronogor_TIME_032,
 	CardIds.TimethiefRafaam_TinyRafaamToken_TIME_005t1,
 	CardIds.TimethiefRafaam_ExplorerRafaamToken_TIME_005t3,
+	CardIds.SandArtElemental_TOY_513,
 ];
 setTimeout(() => {
 	for (const cardId of Object.keys(cardsInfoCache)) {
