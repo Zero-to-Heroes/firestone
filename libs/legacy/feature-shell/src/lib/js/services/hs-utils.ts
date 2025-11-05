@@ -415,6 +415,8 @@ export const forceHideInfoWhenDrawnInfluencers = [
 
 export const cardsConsideredPublic = [CardIds.LibramOfWisdom_BT_025, CardIds.LibramOfWisdom_Story_01_LibramofWisdom];
 
+export const creatorChangeMeansCardChanged = [CardIds.MarinTheManager_GoldenKoboldToken_VAC_702t4];
+
 // Only use it for cards that create cards in hand. If used for cards that create cards in deck,
 // this will lead to an info leak, as we use this array to decide whether a created card should
 // be considered "known", meaning we can safely show the info in the opponent's hand
