@@ -9,7 +9,6 @@ import {
 	storeInformationOnCardPlayed,
 	toTagsObject,
 } from '@firestone/game-state';
-import { TempCardIds } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import {
@@ -254,6 +253,7 @@ export class CardPlayedFromHandParser implements EventParser {
 			cardId: cardToAdd.cardId,
 			side: isPlayer ? 'player' : 'opponent',
 			turn: +currentState.currentTurn,
+			timestamp: new Date().getTime(),
 			effectiveCost: gameEvent.additionalData.cost,
 		};
 		const [playerDeckAfterSpecialCaseUpdate, opponentDeckAfterSpecialCaseUpdate] = modifyDecksForSpecialCards(

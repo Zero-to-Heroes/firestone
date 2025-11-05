@@ -22,7 +22,7 @@ export class GameStateMetaInfoService {
 					deck: newDeck,
 					hand: newHand,
 					otherZone: newOtherZone,
-			  })
+				})
 			: deckState;
 	}
 
@@ -66,6 +66,7 @@ export class GameStateMetaInfoService {
 		const newMeta = Object.assign(new CardMetaInfo(), card.metaInfo, {
 			turnAtWhichCardEnteredCurrentZone: card.metaInfo.turnAtWhichCardEnteredCurrentZone ?? currentTurn,
 			turnAtWhichCardEnteredHand: card.metaInfo.turnAtWhichCardEnteredHand ?? currentTurn,
+			timestampAtWhichCardEnteredHand: card.metaInfo.timestampAtWhichCardEnteredHand ?? new Date().getTime(),
 		} as CardMetaInfo);
 		if (
 			deckState.isOpponent &&
@@ -84,7 +85,7 @@ export class GameStateMetaInfoService {
 			? card.update({
 					metaInfo: newMeta,
 					positionFromBottom: newBottomPosition,
-			  })
+				})
 			: card;
 	}
 }

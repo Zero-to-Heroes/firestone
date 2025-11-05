@@ -122,6 +122,7 @@ export class SecretPlayedFromHandParser implements EventParser {
 			cardId: cardWithZone.cardId,
 			side: isPlayer ? 'player' : 'opponent',
 			turn: +currentState.currentTurn,
+			timestamp: new Date().getTime(),
 			effectiveCost: effectiveCost,
 		};
 

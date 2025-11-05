@@ -13,19 +13,20 @@ export const TidepoolPupil: GlobalHighlightCard = {
 
 		const deckState = gameState.opponentDeck;
 		const pupil = deckState.findCard(entityId);
-		let turnAtWhichEnteredHand = pupil?.card?.metaInfo?.turnAtWhichCardEnteredHand;
-		if (turnAtWhichEnteredHand === 'mulligan') {
-			turnAtWhichEnteredHand = 0;
-		}
-		if (turnAtWhichEnteredHand == null) {
+		// FIXME: possible bug: a card enter the hand before the pupil, but at the same turn
+		// this card will be flagged
+		let timestampAtWhichCardEnteredHand = pupil?.card?.metaInfo?.timestampAtWhichCardEnteredHand;
+		if (timestampAtWhichCardEnteredHand == null) {
 			return [];
 		}
 
-		return deckState.cardsPlayedThisMatch
-			.filter((c) => c.turn >= (turnAtWhichEnteredHand as number))
-			.filter((c) => getCardType(c.cardId, c.entityId, deckState, allCards) === CardType.SPELL)
-			.sort((a, b) => a.turn - b.turn)
-			.slice(0, 3)
-			.map((c) => getCardId(c.cardId, c.entityId, deckState, allCards));
+		return (
+			deckState.cardsPlayedThisMatch
+				.filter((c) => c.timestamp >= (timestampAtWhichCardEnteredHand as number))
+				.filter((c) => getCardType(c.cardId, c.entityId, deckState, allCards) === CardType.SPELL)
+				// .sort((a, b) => a.turn - b.turn) // Don't re-sort
+				.slice(0, 3)
+				.map((c) => getCardId(c.cardId, c.entityId, deckState, allCards))
+		);
 	},
 };

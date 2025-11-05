@@ -117,4 +117,5 @@ export interface ShortCard {
 }
 export interface ShortCardWithTurn extends ShortCard {
 	readonly turn: number;
+	readonly timestamp?: number;
 }

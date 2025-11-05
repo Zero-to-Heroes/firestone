@@ -17,7 +17,10 @@ import { LocalizationFacadeService } from '../../localization-facade.service';
 
 @Injectable()
 export class DeckManipulationHelper {
-	constructor(private readonly allCards: CardsFacadeService, private readonly i18n: LocalizationFacadeService) {}
+	constructor(
+		private readonly allCards: CardsFacadeService,
+		private readonly i18n: LocalizationFacadeService,
+	) {}
 
 	public removeSingleCardFromZone(
 		zone: readonly DeckCard[],
@@ -217,6 +220,7 @@ export class DeckManipulationHelper {
 		(card as Mutable<DeckCard>).metaInfo = {
 			turnAtWhichCardEnteredCurrentZone: undefined,
 			turnAtWhichCardEnteredHand: undefined,
+			timestampAtWhichCardEnteredHand: undefined,
 		};
 		// This doesn't work because of dredge - aftr CARD_REVEALED, the card is in the other zone,
 		// and we give it a posiotion from bottom from there
@@ -317,7 +321,7 @@ export class DeckManipulationHelper {
 						entityId: hideEntityId ? null : entityId,
 						cardId: cardId,
 						cardName: this.allCards.getCard(cardId).name,
-				  } as DeckCard),
+					} as DeckCard),
 		);
 	}
 
