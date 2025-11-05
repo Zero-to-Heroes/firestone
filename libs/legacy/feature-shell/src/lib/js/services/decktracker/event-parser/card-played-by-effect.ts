@@ -144,7 +144,7 @@ export class CardPlayedByEffectParser implements EventParser {
 		const playerDeckAfterReveal = isPlayer ? playerDeckAfterSpecialCaseUpdate : opponentDeckAfterSpecialCaseUpdate;
 		const opponentDeckAfterReveal = isPlayer
 			? opponentDeckAfterSpecialCaseUpdate
-			: revealCard(playerDeckAfterSpecialCaseUpdate, cardWithZone);
+			: revealCard(playerDeckAfterSpecialCaseUpdate, cardWithZone, this.allCards);
 
 		return currentState.update({
 			playerDeck: playerDeckAfterReveal,

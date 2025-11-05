@@ -59,7 +59,7 @@ export class MinionSummonedParser implements EventParser {
 
 		return Object.assign(new GameState(), currentState, {
 			playerDeck: isPlayer ? newPlayerDeck : currentState.playerDeck,
-			opponentDeck: isPlayer ? currentState.opponentDeck : revealCard(newPlayerDeck, card),
+			opponentDeck: isPlayer ? currentState.opponentDeck : revealCard(newPlayerDeck, card, this.cards),
 		});
 	}
 

@@ -299,7 +299,7 @@ export class CardPlayedFromHandParser implements EventParser {
 		const playerDeckAfterReveal = isPlayer ? finalPlayerDeck : opponentDeckAfterSpecialCaseUpdate;
 		const opponentDeckAfterReveal = isPlayer
 			? opponentDeckAfterSpecialCaseUpdate
-			: revealCard(finalPlayerDeck, cardWithZone);
+			: revealCard(finalPlayerDeck, cardWithZone, this.allCards);
 
 		return currentState.update({
 			playerDeck: playerDeckAfterReveal,

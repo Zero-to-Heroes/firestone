@@ -236,3 +236,63 @@ export const isTakePlaceOnBoard = (card: ReferenceCard): boolean => {
 		)
 	);
 };
+
+export const fablePackages = [
+	[
+		CardIds.TalanjiOfTheGraves_TIME_619,
+		CardIds.TalanjiOfTheGraves_WhatBefellZandalarToken_TIME_619t2,
+		CardIds.TalanjiOfTheGraves_BwonsamdiToken_TIME_619t,
+	],
+	[
+		CardIds.Broxigar_TIME_020,
+		CardIds.Broxigar_FirstPortalToArgusToken_TIME_020t2,
+		CardIds.Broxigar_AxeOfCenariusToken_TIME_020t1,
+	],
+	[
+		CardIds.LadyAzshara_TIME_211,
+		CardIds.TheWellOfEternity_TheWellOfEternityToken_TIME_211t1t,
+		CardIds.LadyAzshara_ZinAzshariToken_TIME_211t2,
+	],
+	[
+		CardIds.RangerGeneralSylvanas_TIME_609,
+		CardIds.RangerGeneralSylvanas_RangerCaptainAlleriaToken_TIME_609t1,
+		CardIds.RangerGeneralSylvanas_RangerInitiateVereesaToken_TIME_609t2,
+	],
+	[
+		CardIds.AzureQueenSindragosa_TIME_852,
+		CardIds.AzureQueenSindragosa_AzureKingMalygosToken_TIME_852t1,
+		CardIds.AzureQueenSindragosa_AzureOathstoneToken_TIME_852t3,
+	],
+	[
+		CardIds.GelbinOfTomorrow_TIME_009,
+		CardIds.GelbinOfTomorrow_GnomishAuraToken_TIME_009t1,
+		CardIds.GelbinOfTomorrow_MekkatorquesAuraToken_TIME_009t2,
+	],
+	[
+		CardIds.MedivhTheHallowed_TIME_890,
+		CardIds.MedivhTheHallowed_KarazhanTheSanctumToken_TIME_890t2,
+		CardIds.MedivhTheHallowed_AtieshTheGreatstaffToken_TIME_890t,
+	],
+	[
+		CardIds.GaronaHalforcen_TIME_875,
+		CardIds.GaronaHalforcen_KingLlaneToken_TIME_875t,
+		CardIds.GaronaHalforcen_TheKingslayersToken_TIME_875t1,
+	],
+	[
+		CardIds.MuradinHighKing_TIME_209,
+		CardIds.MuradinHighKing_AvatarFormToken_TIME_209t2,
+		CardIds.MuradinHighKing_HighKingsHammerToken_TIME_209t,
+	],
+	[
+		CardIds.TimethiefRafaam_TIME_005,
+		CardIds.TimethiefRafaam_TinyRafaamToken_TIME_005t1,
+		CardIds.TimethiefRafaam_GreenRafaamToken_TIME_005t2,
+		CardIds.TimethiefRafaam_MurlocRafaamToken_TIME_005t8,
+		CardIds.TimethiefRafaam_ExplorerRafaamToken_TIME_005t3,
+		CardIds.TimethiefRafaam_WarchiefRafaamToken_TIME_005t4,
+		CardIds.TimethiefRafaam_CalamitousRafaamToken_TIME_005t6,
+		CardIds.TimethiefRafaam_MindflayerRfaamToken_TIME_005t5,
+		CardIds.TimethiefRafaam_GiantRafaamToken_TIME_005t7,
+		CardIds.TimethiefRafaam_ArchmageRafaamToken_TIME_005t9,
+	],
+];

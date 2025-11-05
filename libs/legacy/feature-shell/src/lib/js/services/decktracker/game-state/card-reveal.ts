@@ -1,8 +1,15 @@
-import { CardIds, GameTag } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState, GameState } from '@firestone/game-state';
+import { CardIds, GameTag, hasMechanic } from '@firestone-hs/reference-data';
+import { DeckCard, DeckState, fablePackages, GameState } from '@firestone/game-state';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 
 // TODO: also check the cardCopyLink, which looks like it does more or less the same thing
-export const revealCard = (deck: DeckState, card: DeckCard) => {
+export const revealCard = (deck: DeckState, card: DeckCard, allCards: CardsFacadeService) => {
+	const deckStateFromCard = revealRelatedCards(deck, card, allCards);
+	const deckStateFromCreator = revealCardFromCreator(deckStateFromCard, card);
+	return deckStateFromCreator;
+};
+
+const revealCardFromCreator = (deck: DeckState, card: DeckCard) => {
 	// console.debug('[card-reveal]', card.cardName, card, deck);
 	const creatorEntityId = card.creatorEntityId || card.lastAffectedByEntityId;
 	const creatorCardId = card.creatorCardId || card.lastAffectedByCardId;
@@ -50,6 +57,46 @@ export const revealCard = (deck: DeckState, card: DeckCard) => {
 		default:
 			return deck;
 	}
+};
+
+const revealRelatedCards = (deck: DeckState, card: DeckCard, allCards: CardsFacadeService): DeckState => {
+	const refCard = allCards.getCard(card.cardId);
+	if (
+		hasMechanic(refCard, GameTag.FABLED) ||
+		hasMechanic(refCard, GameTag.FABLED_PLUS) ||
+		hasMechanic(refCard, GameTag.IS_FABLED_BUNDLE_CARD)
+	) {
+		const fablePackage = fablePackages.find((p) => p.includes(card.cardId as CardIds));
+		if (!fablePackage) {
+			return deck;
+		}
+
+		const otherFableCards = fablePackage.filter((c) => c !== card.cardId);
+		let newDeckContents = deck.deck;
+		for (const otherFableCard of otherFableCards) {
+			const otherRef = allCards.getCard(otherFableCard);
+			const card = DeckCard.create({
+				entityId: undefined,
+				cardId: otherFableCard,
+				cardName: otherRef.name,
+				refManaCost: otherRef?.cost,
+				rarity: otherRef?.rarity?.toLowerCase(),
+				zone: null,
+			});
+
+			if (!deck.deckList?.length && !deck.deckstring && !deck.deck.some((e) => e.cardId === otherFableCard)) {
+				const fillerCard = deck.deck.find(
+					(card) => !card.entityId && !card.cardId && !card.cardName && !card.creatorCardId,
+				);
+				newDeckContents = newDeckContents.filter((e) => e !== fillerCard);
+				newDeckContents = [...newDeckContents, card];
+			}
+		}
+		return deck.update({
+			deck: newDeckContents,
+		});
+	}
+	return deck;
 };
 
 export const revealCardInOpponentDeck = (
