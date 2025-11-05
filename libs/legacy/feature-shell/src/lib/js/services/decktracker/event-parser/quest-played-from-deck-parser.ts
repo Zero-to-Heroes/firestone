@@ -31,6 +31,9 @@ export class QuestPlayedFromDeckParser implements EventParser {
 		)[0];
 		const cardWithZone = card.update({
 			zone: 'SECRET',
+			refManaCost: card.refManaCost ?? this.allCards.getCard(cardId)?.cost,
+			cardName: card.cardName || this.allCards.getCard(cardId)?.name,
+			rarity: card.rarity ?? this.allCards.getCard(cardId)?.rarity?.toLowerCase(),
 			putIntoPlay: true,
 			guessedInfo: {
 				...card.guessedInfo,
