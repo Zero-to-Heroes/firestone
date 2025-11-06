@@ -1217,10 +1217,11 @@ const getDynamicFilters = (
 		case CardIds.DruidOfRegrowth_TIME_033:
 			return (c) => hasCorrectType(c, CardType.SPELL) && hasCorrectSpellSchool(c, SpellSchool.NATURE);
 		case CardIds.TwilightMender_TLC_814:
-		case CardIds.MendTheTimeline_TIME_018:
 			return (c) =>
 				hasCorrectType(c, CardType.SPELL) &&
 				(hasCorrectSpellSchool(c, SpellSchool.SHADOW) || hasCorrectSpellSchool(c, SpellSchool.HOLY));
+		case CardIds.MendTheTimeline_TIME_018:
+			return (c) => hasCorrectType(c, CardType.SPELL) && hasCorrectSpellSchool(c, SpellSchool.HOLY);
 
 		case CardIds.HologramOperator_GDB_723:
 		case CardIds.OrbitalSatellite_GDB_462:
