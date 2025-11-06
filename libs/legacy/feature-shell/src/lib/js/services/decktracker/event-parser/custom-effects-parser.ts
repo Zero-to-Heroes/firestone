@@ -1,4 +1,4 @@
-import { CardClass, CardIds } from '@firestone-hs/reference-data';
+import { CardClass, CardIds, GameTag } from '@firestone-hs/reference-data';
 import { addGuessInfoToCard, DeckCard, GameState, getDynamicRelatedCardIds, hasOverride } from '@firestone/game-state';
 import { pickLast } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
@@ -95,10 +95,18 @@ export class CustomEffectsParser implements EventParser {
 			},
 		);
 		const pool = hasOverride(dynamicPool) ? (dynamicPool as { cards: readonly string[] }).cards : dynamicPool;
+		const originalCardInHand = deck.hand.find((c) => c.entityId === entityId);
+		if (!originalCardInHand) {
+			return currentState;
+		}
+
 		const transformedCardInHand = DeckCard.create({
 			entityId: entityId,
 			creatorCardId: CardIds.BroodQueen_LarvaToken_SC_003t,
 			relatedCardIds: pool,
+			tags: {
+				[GameTag.ZONE_POSITION]: originalCardInHand.tags[GameTag.ZONE_POSITION],
+			},
 		});
 		const newHand = deck.hand.map((card) => (card.entityId === entityId ? transformedCardInHand : card));
 		return currentState.update({
