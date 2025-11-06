@@ -225,6 +225,9 @@ const globalEffectEnchantments = [
 	CardIds.UnleashTheColossus_GorishisFavorEnchantment_TLC_631e,
 	CardIds.AshalonRidgeGuardian_PerfectEvolutionEnchantment_TLC_229t14e,
 	CardIds.LohTheLivingLegend_LivingLegendEnchantment_TLC_257e1,
+	CardIds.TalanjiOfTheGraves_BoonOfPowerPlayerEnchEnchantment_TIME_619e,
+	CardIds.TalanjiOfTheGraves_BoonOfSpeedPlayerEnchEnchantment_TIME_619e3,
+	CardIds.TalanjiOfTheGraves_BoonOfLongevityPlayerEnchEnchantment_TIME_619e2,
 	// CardIds.CityChiefEsho_KinEnchantment_TLC_110e, // The enchantment is applied to each card, so we don't have a global thing
 ];
 
@@ -306,6 +309,12 @@ export const getCardForGlobalEffect = (cardId: CardIds): string => {
 			return CardIds.Kiljaeden_GDB_145;
 		case CardIds.UnleashTheColossus_GorishisFavorEnchantment_TLC_631e:
 			return CardIds.UnleashTheColossus_GorishiColossusToken_TLC_631t;
+		case CardIds.TalanjiOfTheGraves_BoonOfPowerPlayerEnchEnchantment_TIME_619e:
+			return CardIds.TalanjiOfTheGraves_BoonOfPowerToken_TIME_619t3;
+		case CardIds.TalanjiOfTheGraves_BoonOfSpeedPlayerEnchEnchantment_TIME_619e3:
+			return CardIds.TalanjiOfTheGraves_BoonOfSpeedToken_TIME_619t5;
+		case CardIds.TalanjiOfTheGraves_BoonOfLongevityPlayerEnchEnchantment_TIME_619e2:
+			return CardIds.TalanjiOfTheGraves_BoonOfLongevityToken_TIME_619t4;
 		default:
 			if (cardId.endsWith('e')) {
 				// This is a global effect enchantment, so we return the card id without the "e" at the end
