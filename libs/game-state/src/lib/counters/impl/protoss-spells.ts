@@ -8,7 +8,7 @@ import { CounterType } from '../_exports';
 export class ProtossSpellsCounterDefinitionV2 extends CounterDefinitionV2<number> {
 	public override id: CounterType = 'protossSpells';
 	public override image = CardIds.Colossus_SC_758;
-	public override cards: readonly CardIds[] = [CardIds.Colossus_SC_758];
+	public override cards: readonly CardIds[] = [CardIds.Colossus_SC_758, CardIds.Mothership_SC_762];
 
 	readonly player = {
 		pref: 'playerProtossSpellsCounter' as const,
@@ -44,7 +44,10 @@ export class ProtossSpellsCounterDefinitionV2 extends CounterDefinitionV2<number
 		},
 	};
 
-	constructor(private readonly i18n: ILocalizationService, private readonly allCards: CardsFacadeService) {
+	constructor(
+		private readonly i18n: ILocalizationService,
+		private readonly allCards: CardsFacadeService,
+	) {
 		super();
 	}
 
