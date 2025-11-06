@@ -34,7 +34,6 @@ export class ProtossMinionReductionCounterDefinitionV2 extends CounterDefinition
 					// * (e.creatorCardId === CardIds.Artanis_SC_754 ? 2 : 1),
 				)
 				.reduce((a, b) => a + b, 0);
-			console.debug('nextReductionCost', nextReductionCost, state.playerDeck.enchantments);
 			const showInfo =
 				nextReductionCost > 0 || gameReductionCost > 0 || state.playerDeck.hasRelevantCard(reductionCards);
 			return showInfo ? `${gameReductionCost} | ${nextReductionCost}` : null;
