@@ -1308,7 +1308,12 @@ export const filterCards = (
 			.filter((c) => c.collectible)
 			// https://hearthstone.wiki.gg/wiki/Special:RunQuery/WikiBanPool?pfRunQueryFormName=WikiBanPool&wpRunQuery=Run%2Bquery&WikiBanPool_form_only%5BoriginalPage%5D=Nebula&WikiBanPool_form_only%5Bid%5D=13&WikiBanPool_form_only%5BgameMode%5D=1
 			.filter((c) => !hasMechanic(c, GameTag.TITAN))
-			// .filter((c) => !hasMechanic(c, GameTag.FABLED))
+			.filter(
+				(c) =>
+					!hasMechanic(c, GameTag.FABLED) &&
+					!hasMechanic(c, GameTag.FABLED_PLUS) &&
+					!hasMechanic(c, GameTag.IS_FABLED_BUNDLE_CARD),
+			)
 			.filter((c) => !BAN_LIST.includes(c.id as CardIds))
 			// https://hearthstone.wiki.gg/wiki/Special:RunQuery/WikiBanPool?pfRunQueryFormName=WikiBanPool&wpRunQuery=Run%2Bquery&WikiBanPool_form_only%5BoriginalPage%5D=Nebula&WikiBanPool_form_only%5Bid%5D=6&WikiBanPool_form_only%5BgameMode%5D=1
 			.filter(
