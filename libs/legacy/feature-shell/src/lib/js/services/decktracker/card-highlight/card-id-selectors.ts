@@ -3363,7 +3363,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.TheGardensGrace:
 			return and(side(inputSide), or(inDeck, inHand), spell, holy);
-		case CardIds.TheKingslayers:
+		case CardIds.GaronaHalforcen_TheKingslayersToken_TIME_875t1:
 			return and(inDeck, legendary);
 		case CardIds.ThePurator:
 			return and(side(inputSide), inDeck, minion, not(tribeless));
