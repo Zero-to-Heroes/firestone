@@ -501,4 +501,5 @@ export interface DeckSideboard {
 export interface TurnDamage {
 	readonly turn: number;
 	readonly damage: readonly number[];
+	readonly hits: readonly number[];
 }

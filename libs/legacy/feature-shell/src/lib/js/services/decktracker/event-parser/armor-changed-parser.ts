@@ -24,12 +24,13 @@ export class ArmorChangedParser implements EventParser {
 			let playerDamageByTurn = deck.damageTakenOnYourTurns;
 			let playerDamageThisTurn = deck.damageTakenOnYourTurns.find((d) => d.turn === currentState.currentTurn);
 			if (!playerDamageThisTurn) {
-				playerDamageThisTurn = { turn: +currentState.currentTurn, damage: [] };
+				playerDamageThisTurn = { turn: +currentState.currentTurn, damage: [], hits: [] };
 				playerDamageByTurn = [...playerDamageByTurn, playerDamageThisTurn];
 			}
 			const newPlayerDamageThisTurn = {
 				...playerDamageThisTurn,
 				damage: [...playerDamageThisTurn.damage, Math.abs(armorChange)],
+				hits: [...playerDamageThisTurn.hits, 1],
 			};
 			playerDamageByTurn = playerDamageByTurn.map((d) =>
 				d.turn === newPlayerDamageThisTurn.turn ? newPlayerDamageThisTurn : d,

@@ -17,6 +17,10 @@ export class DamageTakenParser implements EventParser {
 			damageForLocalPlayer && damageForLocalPlayer.TargetControllerId === localPlayerId
 				? damageForLocalPlayer.Damage
 				: 0;
+		const localPlayerHits =
+			damageForLocalPlayer && damageForLocalPlayer.TargetControllerId === localPlayerId
+				? damageForLocalPlayer.Hits
+				: 0;
 
 		// So that we also handle the case where the player has switched to another hero
 		const opponentPlayerCardId = currentState.opponentDeck.hero?.cardId;
@@ -25,6 +29,10 @@ export class DamageTakenParser implements EventParser {
 		const opponentPlayerDamage =
 			damageForOpponentPlayer && damageForOpponentPlayer.TargetControllerId === opponentPlayerId
 				? damageForOpponentPlayer.Damage
+				: 0;
+		const opponentPlayerHits =
+			damageForOpponentPlayer && damageForOpponentPlayer.TargetControllerId === opponentPlayerId
+				? damageForOpponentPlayer.Hits
 				: 0;
 
 		if (damageForLocalPlayer?.IsPayingWithHealth || damageForOpponentPlayer?.IsPayingWithHealth) {
@@ -37,12 +45,13 @@ export class DamageTakenParser implements EventParser {
 				(d) => d.turn === currentState.currentTurn,
 			);
 			if (!playerDamageThisTurn) {
-				playerDamageThisTurn = { turn: +currentState.currentTurn, damage: [] };
+				playerDamageThisTurn = { turn: +currentState.currentTurn, damage: [], hits: [] };
 				playerDamageByTurn = [...playerDamageByTurn, playerDamageThisTurn];
 			}
 			const newPlayerDamageThisTurn = {
 				...playerDamageThisTurn,
 				damage: [...playerDamageThisTurn.damage, localPlayerDamage],
+				hits: [...playerDamageThisTurn.hits, localPlayerHits],
 			};
 			playerDamageByTurn = playerDamageByTurn.map((d) =>
 				d.turn === newPlayerDamageThisTurn.turn ? newPlayerDamageThisTurn : d,
@@ -59,12 +68,13 @@ export class DamageTakenParser implements EventParser {
 				(d) => d.turn === currentState.currentTurn,
 			);
 			if (!opponentDamageThisTurn) {
-				opponentDamageThisTurn = { turn: +currentState.currentTurn, damage: [] };
+				opponentDamageThisTurn = { turn: +currentState.currentTurn, damage: [], hits: [] };
 				opponentDamageByTurn = [...opponentDamageByTurn, opponentDamageThisTurn];
 			}
 			const newOpponentDamageThisTurn = {
 				...opponentDamageThisTurn,
 				damage: [...opponentDamageThisTurn.damage, opponentPlayerDamage],
+				hits: [...opponentDamageThisTurn.hits, opponentPlayerHits],
 			};
 			opponentDamageByTurn = opponentDamageByTurn.map((d) =>
 				d.turn === newOpponentDamageThisTurn.turn ? newOpponentDamageThisTurn : d,
