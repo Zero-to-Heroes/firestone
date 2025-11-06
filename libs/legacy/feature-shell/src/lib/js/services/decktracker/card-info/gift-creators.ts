@@ -113,7 +113,6 @@ export const giftCreators = [
 	CardIds.BagOfCoinsTavernBrawl,
 	CardIds.BananaBuffoon,
 	CardIds.BananaramaTavernBrawl,
-	CardIds.BargainBin_MIS_105,
 	CardIds.BaristaLynchen,
 	CardIds.BarrelOfMonkeys_BarrelOfMonkeysToken_ETC_207t,
 	CardIds.BarrelOfMonkeys,

@@ -299,6 +299,7 @@ export const tutors = [
 	CardIds.Broxigar_AxeOfCenariusToken_TIME_020t1,
 	CardIds.PrecursoryStrike_TIME_750,
 	CardIds.RafaamLadder_TIME_031,
+	CardIds.BargainBin_MIS_105,
 ];
 setTimeout(() => {
 	for (const cardId of Object.keys(cardsInfoCache)) {

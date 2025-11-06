@@ -164,6 +164,8 @@ export class CardDrawParser implements EventParser {
 			// creator field
 			// (!isTradable && publicCardCreators.includes(lastInfluencedByCardId));
 			// This field is only used to flag "created by", so we should be fine even with tradeable cards
+			// UPDATE 2025-11-06 Use publicCardInfos to avoid info leaks, where we draw a card that was created in deck
+			// and we don't want the info to surface
 			(publicCardInfos.includes(lastInfluencedByCardId) &&
 				!hiddenWhenDrawFromDeck.includes(lastInfluencedByCardId));
 		console.debug('found card in zone', card, deck, updatedCardId, entityId, isCardInfoPublic, isCreatorPublic);
@@ -177,7 +179,7 @@ export class CardDrawParser implements EventParser {
 			entityId: entityId,
 			creatorCardId: isCreatorPublic ? (creatorCardId ?? card.creatorCardId) : undefined,
 			creatorEntityId: isCreatorPublic ? gameEvent.additionalData.creatorEntityId : undefined,
-			createdIndex: isCreatorPublic ? createdIndex : undefined,
+			createdIndex: createdIndex,
 			cardId: isCardInfoPublic ? card.cardId : undefined,
 			cardName: isCardInfoPublic ? (refCard.name ?? card?.cardName) : undefined,
 			lastAffectedByCardId: isCreatorPublic

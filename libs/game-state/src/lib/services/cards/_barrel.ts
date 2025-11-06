@@ -4,6 +4,7 @@ export { AlakirTheWindsOfTime } from './alakir-the-winds-of-time';
 export { AlterTime } from './alter-time';
 export { ArcaneBrilliance } from './arcane-brilliance';
 export { BarakKodobane } from './barak-kodobane';
+export { BargainBin } from './bargain-bin';
 export { BloodDraw } from './blood-draw';
 export { Chronogor } from './chronogor';
 export { CountessAshmore } from './countess-ashmore';
