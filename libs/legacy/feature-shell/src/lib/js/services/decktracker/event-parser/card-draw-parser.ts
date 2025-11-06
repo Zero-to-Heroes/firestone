@@ -6,6 +6,7 @@ import {
 	forceHideInfoWhenDrawnInfluencers,
 	hiddenWhenDrawFromDeck,
 	isCastWhenDrawn,
+	isSummonedWhenDrawn,
 	publicCardInfos,
 	publicTutors,
 	supportedAdditionalData,
@@ -251,7 +252,12 @@ export class CardDrawParser implements EventParser {
 		}
 		// console.debug('newDeck', newDeck, isCardInfoPublic, previousDeck);
 		const previousHand = deck.hand;
-		const newHand: readonly DeckCard[] = this.helper.addSingleCardToZone(previousHand, cardWithGuessInfo);
+		// Summoned when Drawn cards behave a bit weirdly - in the case of Illusions for instance, the card is drawn,
+		// then a minion with another entityId is summoned, which means it never gets removed from hand
+		// So I will try to simply not add the card to hand in that case
+		const newHand: readonly DeckCard[] = isSummonedWhenDrawn(cardWithGuessInfo.cardId, this.allCards)
+			? previousHand
+			: this.helper.addSingleCardToZone(previousHand, cardWithGuessInfo);
 		// console.debug('[card-draw] added card to hand', newHand);
 		const newPlayerDeck = deck.update({
 			deck: newDeck,
