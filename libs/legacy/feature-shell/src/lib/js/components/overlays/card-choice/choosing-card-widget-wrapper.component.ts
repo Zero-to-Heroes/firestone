@@ -196,7 +196,7 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 		this.options$ = combineLatest([this.store.listenDeckState$((state) => state)]).pipe(
 			this.mapData(([[state]]) => {
 				const options = state.playerDeck?.currentOptions;
-				// console.debug('[choosing-card-widget] options', options);
+				console.debug('[choosing-card-widget] options', options);
 				return options?.map((o) => {
 					const refEntity = state.fullGameState?.Player?.AllEntities?.find((e) => e.entityId === o.entityId);
 					const isTallCard = refEntity?.tags.some(
@@ -208,6 +208,9 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 						isTallCard: isTallCard,
 						flag: this.buildFlag(o, state),
 						value: buildBasicCardChoiceValue(o, state, this.allCards, this.i18n),
+						bigCard:
+							this.allCards.getCard(o.source).referencedTags?.includes(GameTag[GameTag.DARK_GIFT]) ||
+							this.allCards.getCard(o.source).mechanics?.includes(GameTag[GameTag.DARK_GIFT]),
 						willBeActive: o.willBeActive,
 					};
 					return result;
@@ -264,6 +267,7 @@ export interface CardChoiceOption {
 	readonly isTallCard: boolean;
 	readonly flag?: CardOptionFlag;
 	readonly value?: string;
+	readonly bigCard?: boolean;
 	readonly willBeActive?: boolean;
 }
 export const equalCardChoiceOption = (

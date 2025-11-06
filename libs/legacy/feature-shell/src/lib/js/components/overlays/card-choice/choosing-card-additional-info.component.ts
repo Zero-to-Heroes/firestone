@@ -7,7 +7,7 @@ import { CardChoiceOption } from './choosing-card-widget-wrapper.component';
 	selector: 'choosing-card-additional-info',
 	styleUrls: ['./choosing-card-additional-info.component.scss'],
 	template: `
-		<div class="additional-info" *ngIf="willBeActive">
+		<div class="additional-info" [ngClass]="{ 'big-card': bigCard }" *ngIf="willBeActive">
 			<div
 				class="will-be-active"
 				*ngIf="willBeActive"
@@ -21,7 +21,9 @@ import { CardChoiceOption } from './choosing-card-widget-wrapper.component';
 export class ChoosingCardAdditionalInfoComponent {
 	@Input() set option(value: CardChoiceOption) {
 		this.willBeActive = value?.willBeActive;
+		this.bigCard = value?.bigCard;
 	}
 
 	willBeActive: boolean;
+	bigCard: boolean;
 }
