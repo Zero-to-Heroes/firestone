@@ -32,6 +32,7 @@ export class CardRemovedFromHandParser implements EventParser {
 		const refCard = getProcessedCard(card?.cardId, card?.entityId, deck, this.allCards);
 		const cardWithZone = card.update({
 			refManaCost: card.refManaCost ?? refCard?.cost,
+			milled: true, // Not sure this is the right flag to use, but it's not "burned" either
 			zone: 'SETASIDE',
 		} as DeckCard);
 
