@@ -7,7 +7,7 @@ import { giftCreators } from './decktracker/card-info/gift-creators';
 import { LocalizationFacadeService } from './localization-facade.service';
 
 // Used for cache purposes, only in dev
-export const CARDS_VERSION = '';
+export const CARDS_VERSION = '20251107';
 export const isPreReleaseBuild = false;
 
 /** @deprecated use ALL_CLASSES */
@@ -747,7 +747,8 @@ export const hasRace = (card: ReferenceCard, race: Race): boolean => {
 export const isCastWhenDrawn = (cardId: string, allCards: CardsFacadeService): boolean => {
 	return (
 		cardsRevealedWhenDrawn.includes(cardId as CardIds) ||
-		allCards.getCard(cardId)?.mechanics?.includes(GameTag[GameTag.CASTS_WHEN_DRAWN])
+		allCards.getCard(cardId)?.mechanics?.includes(GameTag[GameTag.CASTS_WHEN_DRAWN]) ||
+		allCards.getCard(cardId)?.mechanics?.includes(GameTag[GameTag.SUMMONED_WHEN_DRAWN])
 	);
 };
 
