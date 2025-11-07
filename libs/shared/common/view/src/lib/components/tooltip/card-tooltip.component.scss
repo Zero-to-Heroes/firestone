@@ -88,6 +88,18 @@
 			margin-bottom: -15px;
 			filter: drop-shadow(0px 0px 5px rgba(159, 182, 215, 0.5)) drop-shadow(0px 0px 5px rgba(159, 182, 215, 0.5));
 		}
+
+		&.big-pool {
+			color: var(--color-1);
+			font-size: 12px;
+			display: block;
+			width: 100%;
+			text-align: center;
+			padding-top: 15px;
+			padding-left: 10px;
+			padding-right: 10px;
+			padding-bottom: 15px;
+		}
 	}
 
 	&.wide .related-cards {
