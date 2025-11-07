@@ -10,6 +10,55 @@ import { OverwolfService } from '@firestone/shared/framework/core';
 import { isPreReleaseBuild } from './hs-utils';
 import { LocalizationService } from './localization.service';
 
+const targetConfigRaw = `
+	[Power]
+	FilePrinting=true
+	LogLevel=1
+	ConsolePrinting=false
+	ScreenPrinting=false
+	Verbose=true
+
+	[Achievements]
+	LogLevel=1
+	Verbose=true
+	ScreenPrinting=false
+	FilePrinting=true
+	ConsolePrinting=false
+
+	[Net]
+	LogLevel=1
+	ScreenPrinting=false
+	Verbose=false
+	ConsolePrinting=false
+	FilePrinting=true
+
+	[FullScreenFX]
+	LogLevel=1
+	FilePrinting=true
+	ConsolePrinting=false
+	ScreenPrinting=false
+	Verbose=true
+
+	[Decks]
+	LogLevel=1
+	FilePrinting=true
+	ConsolePrinting=false
+	ScreenPrinting=false
+	Verbose=false
+
+	[Arena]
+	LogLevel=1
+	FilePrinting=true
+	ConsolePrinting=false
+	ScreenPrinting=false
+
+	[LoadingScreen]
+	LogLevel=1
+	FilePrinting=true
+	ConsolePrinting=false
+	ScreenPrinting=false
+`;
+
 @Injectable()
 export class HsClientConfigService {
 	constructor(
@@ -23,7 +72,7 @@ export class HsClientConfigService {
 	}
 
 	private async init() {
-		this.writeConfig();
+		// this.writeConfig();
 		this.gameStatus.onGameStart(() => this.writeConfig());
 	}
 
@@ -43,71 +92,27 @@ export class HsClientConfigService {
 		const localAppData = OverwolfService.getLocalAppDataFolder();
 		const preReleasePrefix = isPreReleaseBuild ? '/hs_event_1' : '';
 		const targetPath = `${localAppData}/Blizzard/Hearthstone${preReleasePrefix}/log.config`;
-		const content = `
-[Power]
-FilePrinting=true
-MinLevel=Debug
-LogLevel=1
-ConsolePrinting=false
-ScreenPrinting=false
-Verbose=true
-
-[Achievements]
-LogLevel=1
-Verbose=true
-ScreenPrinting=false
-FilePrinting=true
-ConsolePrinting=false
-
-[Net]
-LogLevel=1
-ScreenPrinting=false
-Verbose=false
-ConsolePrinting=false
-FilePrinting=true
-
-[FullScreenFX]
-LogLevel=1
-FilePrinting=true
-ConsolePrinting=false
-ScreenPrinting=false
-Verbose=true
-
-[Decks]
-LogLevel=1
-FilePrinting=true
-ConsolePrinting=false
-ScreenPrinting=false
-Verbose=false
-
-[Arena]
-LogLevel=1
-FilePrinting=true
-ConsolePrinting=false
-ScreenPrinting=false
-
-[LoadingScreen]
-LogLevel=1
-FilePrinting=true
-ConsolePrinting=false
-ScreenPrinting=false
-		`;
 		try {
-			const existingConfig = await this.ow.readTextFile(targetPath);
-			console.log('[hs-client-config] [log] existing config?', existingConfig?.trim());
+			const existingConfigRaw = await this.ow.readTextFile(targetPath);
+			const existingConfig = parseConfig(existingConfigRaw);
+			console.log('[hs-client-config] [log] existing config?', existingConfig);
 
-			if (strip(content) === strip(existingConfig)) {
+			const targetConfig = parseConfig(targetConfigRaw);
+			const updatedConfig = updateConfig(existingConfig, targetConfig);
+			if (updatedConfig == null) {
+				console.debug('[hs-client-config] [log] config is already up to date', existingConfig, targetConfig);
 				return;
 			}
 
-			console.log('[hs-client-config] [log] config is different', strip(content), strip(existingConfig));
-			await this.ow.writeFileContents(targetPath, content);
+			console.log('[hs-client-config] [log] config is different', existingConfig, targetConfig);
+			const updatedConfigStr = serializeConfig(updatedConfig);
+			await this.ow.writeFileContents(targetPath, updatedConfigStr);
 			console.log('[hs-client-config] [log] wrote client config', targetPath);
 
-			const updatedConfig = await this.ow.readTextFile(targetPath);
-			if (strip(content) !== strip(updatedConfig)) {
-				console.error('[hs-client-config] [log] could not write client config', updatedConfig);
-			}
+			// const updatedConfig = await this.ow.readTextFile(targetPath);
+			// if (strip(content) !== strip(updatedConfig)) {
+			// 	console.error('[hs-client-config] [log] could not write client config', updatedConfig);
+			// }
 
 			await this.i18n.initReady();
 			while (true) {
@@ -176,3 +181,149 @@ const strip = (content: string): string => {
 
 	return content.replaceAll('\n', '').replaceAll('\r', '').replaceAll(' ', '').trim();
 };
+
+const parseConfig = (content: string): LogConfig => {
+	const blocks: LogConfigBlock[] = [];
+	const lines = content.split('\n');
+	let currentBlock: LogConfigBlock = null;
+	for (const lineRaw of lines) {
+		const line = lineRaw.trim();
+		if (!line?.length) {
+			continue;
+		}
+		if (line.startsWith('[')) {
+			const name = line.substring(1, line.indexOf(']'));
+			currentBlock = {
+				name,
+				LogLevel: '1',
+				FilePrinting: 'true',
+				ConsolePrinting: 'false',
+				ScreenPrinting: 'false',
+				Verbose: 'true',
+			};
+			blocks.push(currentBlock);
+		} else if (line.includes('=')) {
+			try {
+				const [key, value] = line.split('=');
+				const cleanKey = key.trim();
+				const cleanValue = value.replace(/[\r\n]+/g, '').trim();
+				currentBlock[cleanKey] = cleanValue;
+			} catch (e) {
+				console.warn('[hs-client-config] [log] could not parse line', line);
+			}
+		}
+	}
+	return { blocks };
+};
+
+const updateConfig = (existingConfig: LogConfig, targetConfig: LogConfig): LogConfig | null => {
+	let modified = false;
+	for (let i = 0; i < targetConfig.blocks.length; i++) {
+		const targetBlock = targetConfig.blocks[i];
+		const existingBlock = existingConfig.blocks.find((block) => block.name === targetBlock.name);
+		if (!existingBlock) {
+			console.log('[hs-client-config] [log] adding block', targetBlock.name);
+			const newBlock: LogConfigBlock = {
+				name: targetBlock.name,
+				LogLevel: targetBlock.LogLevel,
+				FilePrinting: targetBlock.FilePrinting,
+				ConsolePrinting: targetBlock.ConsolePrinting,
+				ScreenPrinting: targetBlock.ScreenPrinting,
+				Verbose: targetBlock.Verbose,
+			};
+			existingConfig.blocks.push(newBlock);
+			modified = true;
+			continue;
+		}
+		modified = modified || updateConfigBlock(existingBlock, targetBlock);
+	}
+	return modified ? existingConfig : null;
+};
+
+const updateConfigBlock = (existingBlock: LogConfigBlock, targetBlock: LogConfigBlock): boolean => {
+	if (existingBlock.LogLevel?.toLowerCase() !== targetBlock.LogLevel?.toLowerCase()) {
+		console.log(
+			'[hs-client-config] [log] updating block',
+			existingBlock.name,
+			'LogLevel',
+			existingBlock.LogLevel,
+			'->',
+			targetBlock.LogLevel,
+		);
+		existingBlock.LogLevel = targetBlock.LogLevel;
+		return true;
+	}
+	if (existingBlock.FilePrinting?.toLowerCase() !== targetBlock.FilePrinting?.toLowerCase()) {
+		console.log(
+			'[hs-client-config] [log] updating block',
+			existingBlock.name,
+			'FilePrinting',
+			existingBlock.FilePrinting,
+			'->',
+			targetBlock.FilePrinting,
+		);
+		existingBlock.FilePrinting = targetBlock.FilePrinting;
+		return true;
+	}
+	if (existingBlock.ConsolePrinting?.toLowerCase() !== targetBlock.ConsolePrinting?.toLowerCase()) {
+		console.log(
+			'[hs-client-config] [log] updating block',
+			existingBlock.name,
+			'ConsolePrinting',
+			existingBlock.ConsolePrinting,
+			'->',
+			targetBlock.ConsolePrinting,
+		);
+		existingBlock.ConsolePrinting = targetBlock.ConsolePrinting;
+		return true;
+	}
+	if (existingBlock.ScreenPrinting?.toLowerCase() !== targetBlock.ScreenPrinting?.toLowerCase()) {
+		console.log(
+			'[hs-client-config] [log] updating block',
+			existingBlock.name,
+			'ScreenPrinting',
+			existingBlock.ScreenPrinting,
+			'->',
+			targetBlock.ScreenPrinting,
+		);
+		existingBlock.ScreenPrinting = targetBlock.ScreenPrinting;
+		return true;
+	}
+	if (existingBlock.Verbose?.toLowerCase() !== targetBlock.Verbose?.toLowerCase()) {
+		console.log(
+			'[hs-client-config] [log] updating block',
+			existingBlock.name,
+			'Verbose',
+			existingBlock.Verbose,
+			'->',
+			targetBlock.Verbose,
+		);
+		existingBlock.Verbose = targetBlock.Verbose;
+		return true;
+	}
+	return false;
+};
+
+const serializeConfig = (config: LogConfig): string => {
+	return config.blocks
+		.map(
+			(block) =>
+				`[${block.name}]\n${Object.entries(block)
+					.filter(([key]) => key !== 'name')
+					.map(([key, value]) => `${key}=${value}`)
+					.join('\n')}`,
+		)
+		.join('\n\n');
+};
+
+interface LogConfig {
+	blocks: LogConfigBlock[];
+}
+interface LogConfigBlock {
+	name: string;
+	LogLevel: string;
+	FilePrinting: string;
+	ConsolePrinting: string;
+	ScreenPrinting: string;
+	Verbose: string;
+}
