@@ -43,37 +43,54 @@ export class HsClientConfigService {
 		const localAppData = OverwolfService.getLocalAppDataFolder();
 		const preReleasePrefix = isPreReleaseBuild ? '/hs_event_1' : '';
 		const targetPath = `${localAppData}/Blizzard/Hearthstone${preReleasePrefix}/log.config`;
-		const content = `[Power]
+		const content = `
+[Power]
 FilePrinting=true
 MinLevel=Debug
 LogLevel=1
 ConsolePrinting=false
 ScreenPrinting=false
 Verbose=true
+
 [Achievements]
 LogLevel=1
 Verbose=true
 ScreenPrinting=false
 FilePrinting=true
 ConsolePrinting=false
+
 [Net]
 LogLevel=1
 ScreenPrinting=false
 Verbose=false
 ConsolePrinting=false
 FilePrinting=true
+
 [FullScreenFX]
 LogLevel=1
 FilePrinting=true
 ConsolePrinting=false
 ScreenPrinting=false
 Verbose=true
+
 [Decks]
 LogLevel=1
 FilePrinting=true
 ConsolePrinting=false
 ScreenPrinting=false
 Verbose=false
+
+[Arena]
+LogLevel=1
+FilePrinting=true
+ConsolePrinting=false
+ScreenPrinting=false
+
+[LoadingScreen]
+LogLevel=1
+FilePrinting=true
+ConsolePrinting=false
+ScreenPrinting=false
 		`;
 		try {
 			const existingConfig = await this.ow.readTextFile(targetPath);
