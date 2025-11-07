@@ -11,6 +11,10 @@ export class FsTranslateDirective extends TranslateDirective {
 		super.translate = key ?? '';
 	}
 
+	@Input() set fsTranslateParams(params: any) {
+		super.translateParams = params ?? {};
+	}
+
 	constructor(element: ElementRef, _ref: ChangeDetectorRef, i18n: ILocalizationService) {
 		const translateService: TranslateService = i18n.getTranslateService();
 		super(translateService, element, _ref);
