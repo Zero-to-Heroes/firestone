@@ -252,10 +252,7 @@ const getDynamicRelatedCardIdsInternal = (
 			);
 		case CardIds.ScrappyScavenger_TLC_461:
 			const card = inputOptions.deckState.findCard(entityId)?.card;
-			if (!card) {
-				return [];
-			}
-			const hasBeenPlayed = card.storedInformation?.manaLeftWhenPlayed != null;
+			const hasBeenPlayed = card?.storedInformation?.manaLeftWhenPlayed != null;
 			const targetCost = hasBeenPlayed
 				? (card.storedInformation.manaLeftWhenPlayed ?? 0)
 				: Math.min(10, Math.max(0, (options.deckState.manaLeft ?? 0) - (allCards.getCard(cardId)?.cost ?? 0)));
