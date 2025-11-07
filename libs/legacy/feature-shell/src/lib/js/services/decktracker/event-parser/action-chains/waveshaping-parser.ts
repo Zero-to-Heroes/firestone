@@ -7,6 +7,10 @@ import { DeckManipulationHelper } from '../deck-manipulation-helper';
 export class WaveshapingParser implements ActionChainParser {
 	constructor(private readonly helper: DeckManipulationHelper) {}
 
+	appliesOnEvent(): GameEvent['type'] {
+		return GameEvent.ENTITY_CHOSEN;
+	}
+
 	public async parse(currentState: GameState, events: readonly GameEvent[]): Promise<GameState> {
 		const reversedEvents = [...events].reverse();
 		const entityChosenEvent = reversedEvents.shift();

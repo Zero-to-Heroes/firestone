@@ -26,10 +26,11 @@ export class ActionsChainParser implements EventParser {
 		private readonly cards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
 	) {
-		this.chainParser = {
-			[GameEvent.SUB_SPELL_START]: [new FuturisticForefatherParser()],
-			[GameEvent.ENTITY_CHOSEN]: [new WaveshapingParser(helper)],
-		};
+		const parsers = [new FuturisticForefatherParser(), new WaveshapingParser(helper)];
+		this.chainParser = {};
+		for (const parser of parsers) {
+			this.chainParser[parser.appliesOnEvent()] = [parser];
+		}
 	}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
