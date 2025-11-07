@@ -1268,7 +1268,10 @@ export const cardIdSelector = (
 		case CardIds.FelfireInTheHole:
 			return highlightConditions(and(side(inputSide), inDeck, spell, fel), and(side(inputSide), inDeck, spell));
 		case CardIds.FerociousFelbat_EDR_892:
-			return and(side(inputSide), or(inHand, inDeck), minion, deathrattle, effectiveCostMore(4));
+			return highlightConditions(
+				and(side(inputSide), or(inHand, inDeck), minion, deathrattle, effectiveCostMore(4)),
+				and(side(inputSide), inGraveyard, minion, deathrattle, effectiveCostMore(4)),
+			);
 		case CardIds.KaelthasSunstrider_FelFueled_THD_043p:
 			return and(side(inputSide), or(inDeck, inHand), notInInitialDeck);
 		case CardIds.Felgorger_SW_043:
