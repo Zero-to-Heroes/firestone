@@ -72,6 +72,10 @@ const revealRelatedCards = (deck: DeckState, card: DeckCard, allCards: CardsFaca
 		}
 
 		const otherFableCards = fablePackage.filter((c) => c !== card.cardId);
+		if (otherFableCards.some((c) => deck.hasRelevantCard([c], { includesOtherZone: true, includeBoard: true }))) {
+			return deck;
+		}
+
 		let newDeckContents = deck.deck;
 		for (const otherFableCard of otherFableCards) {
 			const otherRef = allCards.getCard(otherFableCard);
