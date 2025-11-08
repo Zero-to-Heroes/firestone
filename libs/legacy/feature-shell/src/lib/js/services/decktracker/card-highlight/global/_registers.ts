@@ -60,6 +60,7 @@ import { XyrellaTheDevout } from './xyrella-the-devout';
 import { Zuljin } from './zul-jin';
 import { ChronoLordEpoch } from './chrono-lord-epoch';
 import { AzureOathstone } from './azure-oathstone';
+import { DrStitchensew } from './dr-stitchensew';
 
 const cards = [
 	Archimonde,
@@ -122,6 +123,7 @@ const cards = [
 	MurlocHolmes,
 	Chromie,
 	XyrellaTheDevout,
+	DrStitchensew,
 ];
 
 export const cardsMapping: { [cardId: string]: Card } = {};
