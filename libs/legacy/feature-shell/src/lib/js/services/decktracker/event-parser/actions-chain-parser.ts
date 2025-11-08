@@ -26,7 +26,10 @@ export class ActionsChainParser implements EventParser {
 		private readonly cards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
 	) {
-		const parsers = [new FuturisticForefatherParser(), new WaveshapingParser(helper)];
+		const parsers = [
+			new FuturisticForefatherParser(),
+			// new WaveshapingParser(helper)
+		];
 		this.chainParser = {};
 		for (const parser of parsers) {
 			this.chainParser[parser.appliesOnEvent()] = [parser];
