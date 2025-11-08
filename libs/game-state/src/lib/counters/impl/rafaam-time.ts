@@ -86,7 +86,12 @@ export class RafaamTimeCounterDefinitionV2 extends CounterDefinitionV2<{
 			total: value?.totalRafaams,
 		});
 		let body = `<div class="body">`;
-		for (const rafaam of timeRafaamFablePackage) {
+		const sortedRafaams = timeRafaamFablePackage.sort((a, b) => {
+			const aCard = this.allCards.getCard(a);
+			const bCard = this.allCards.getCard(b);
+			return (aCard.cost ?? 0) - (bCard.cost ?? 0);
+		});
+		for (const rafaam of sortedRafaams) {
 			const card = this.allCards.getCard(rafaam);
 			const isPlayed = value?.playedRafaams.includes(rafaam);
 			const playedClass = isPlayed ? 'played' : 'not-played';
