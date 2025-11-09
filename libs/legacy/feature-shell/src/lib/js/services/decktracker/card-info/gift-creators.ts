@@ -36,7 +36,7 @@ const COIN_IDS = [
 	CardIds.TheCoin_VAC_COIN2,
 ];
 
-export const giftCreators = [
+const internalGiftCreators = [
 	// For some reason the coin is flagged as created by the coin...
 	...COIN_IDS,
 	// CardIds.EnergyShaper,
@@ -1095,11 +1095,10 @@ export const giftCreators = [
 	CardIds.TimethiefRafaam_ExplorerRafaamToken_TIME_005t3,
 	CardIds.SandArtElemental_TOY_513,
 ];
-setTimeout(() => {
-	for (const cardId of Object.keys(cardsInfoCache)) {
-		const card = cardsInfoCache[cardId];
-		if ((card as GeneratingCard).publicCreator && !giftCreators.includes(cardId as CardIds)) {
-			giftCreators.push(cardId as CardIds);
-		}
+for (const cardId of Object.keys(cardsInfoCache)) {
+	const card = cardsInfoCache[cardId];
+	if ((card as GeneratingCard).publicCreator && !internalGiftCreators.includes(cardId as CardIds)) {
+		internalGiftCreators.push(cardId as CardIds);
 	}
-}, 500);
+}
+export const giftCreators = internalGiftCreators;

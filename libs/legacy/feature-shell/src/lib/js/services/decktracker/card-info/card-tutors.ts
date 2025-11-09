@@ -1,7 +1,7 @@
 import { CardIds } from '@firestone-hs/reference-data';
 import { cardsInfoCache, GeneratingCard } from '@firestone/game-state';
 
-export const tutors = [
+const internalTutors = [
 	CardIds.AbyssalDepths,
 	CardIds.AkaliTheRhino,
 	CardIds.AlakirTheWindsOfTime_WON_092h,
@@ -301,11 +301,10 @@ export const tutors = [
 	CardIds.RafaamLadder_TIME_031,
 	CardIds.BargainBin_MIS_105,
 ];
-setTimeout(() => {
-	for (const cardId of Object.keys(cardsInfoCache)) {
-		const card = cardsInfoCache[cardId];
-		if ((card as GeneratingCard).publicTutor && !tutors.includes(cardId as CardIds)) {
-			tutors.push(cardId as CardIds);
-		}
+for (const cardId of Object.keys(cardsInfoCache)) {
+	const card = cardsInfoCache[cardId];
+	if ((card as GeneratingCard).publicTutor && !internalTutors.includes(cardId as CardIds)) {
+		internalTutors.push(cardId as CardIds);
 	}
-}, 500);
+}
+export const tutors = internalTutors;
