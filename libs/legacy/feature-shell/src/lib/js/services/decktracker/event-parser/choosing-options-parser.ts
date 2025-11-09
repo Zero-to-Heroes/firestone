@@ -80,14 +80,6 @@ const willBeActive = (
 						hasCorrectTribe(allCards.getCard(c.cardId), Race[tribe]),
 				).length > 0
 			) {
-				console.debug(
-					'[debug] kindred minion played last turn',
-					cardId,
-					entityId,
-					refCard,
-					playerDeck.cardsPlayedLastTurn,
-					playerDeck,
-				);
 				return true;
 			}
 		}
@@ -101,14 +93,6 @@ const willBeActive = (
 					allCards.getCard(c.cardId).spellSchool === spellSchool,
 			).length > 0
 		) {
-			console.debug(
-				'[debug] kindred spell played last turn',
-				cardId,
-				entityId,
-				refCard,
-				playerDeck.cardsPlayedLastTurn,
-				playerDeck,
-			);
 			return true;
 		}
 	}

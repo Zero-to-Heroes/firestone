@@ -41,12 +41,6 @@ export class ActionsChainParser implements EventParser {
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
-		console.debug(
-			'[debug] [actions-chain-parser] parsing',
-			gameEvent.type,
-			this.chainParser[gameEvent.type],
-			this.events,
-		);
 		if (gameEvent.type === GameEvent.GAME_START || gameEvent.type === GameEvent.GAME_END) {
 			this.events = [];
 			return currentState;
@@ -57,7 +51,6 @@ export class ActionsChainParser implements EventParser {
 		const chainParsers = this.chainParser[gameEvent.type] ?? [];
 		let newState = currentState;
 		for (const chainParser of chainParsers) {
-			console.debug('[debug] [actions-chain-parser] parsing chain parser', chainParser.constructor.name);
 			newState = await chainParser.parse(newState, this.events);
 		}
 		return newState;

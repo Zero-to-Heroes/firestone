@@ -89,7 +89,7 @@ export class ReceiveCardInHandParser implements EventParser {
 			this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.NON_KEYWORD_ECHO]) ||
 			isSpecialCasePublicWhenOpponentDraws;
 		console.debug(
-			'[debug] [receive-card-in-hand] isCardInfoPublic',
+			'[receive-card-in-hand] isCardInfoPublic',
 			isCardInfoPublic,
 			isPlayer,
 			cardId,

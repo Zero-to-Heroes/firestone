@@ -90,7 +90,7 @@ export class LinkedEntityParser implements EventParser {
 		let newPlayerDeck: DeckState;
 		if (originalCard) {
 			console.debug(
-				'[debug] [linked-entity-parser] originalCard',
+				'[linked-entity-parser] originalCard',
 				originalCard,
 				originalZone,
 				newCard,
@@ -104,7 +104,7 @@ export class LinkedEntityParser implements EventParser {
 				!isPlayerForCardModification &&
 				allowDirectFlaggingOfCardInOpponentHand.includes(newCard.lastAffectedByCardId as CardIds)
 			) {
-				console.debug('[debug] [linked-entity-parser] updating card in hand', newCard, originalCard);
+				console.debug('[linked-entity-parser] updating card in hand', newCard, originalCard);
 				const updatedCard = originalCard.update({
 					cardId: newCard.cardId,
 					cardName: this.allCards.getCard(cardId).name,
@@ -125,7 +125,7 @@ export class LinkedEntityParser implements EventParser {
 						(cardId) => cardId !== newCard.cardId,
 					),
 				});
-				console.debug('[debug] [linked-entity-parser] newPlayerDeck in hand', newPlayerDeck);
+				console.debug('[linked-entity-parser] newPlayerDeck in hand', newPlayerDeck);
 			} else if (isPlayerForCardModification || originalZone !== 'hand') {
 				const updatedCard = originalCard.update({
 					cardId: newCard.cardId,
