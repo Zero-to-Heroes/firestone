@@ -58,14 +58,18 @@ export class DamageTakenOnYourTurnCounterDefinitionV2 extends CounterDefinitionV
 			return null;
 		}
 		const totalDamageTakenOnYourTurns = value.flatMap((d) => d.damage).reduce((a, b) => a + b, 0);
-		const numberOfTimesDamageTakenOnYourTurns = value.flatMap((d) => d.hits).reduce((a, b) => a + b, 0);
+		const numberOfTimesDamageTakenOnYourTurns = value
+			.flatMap((d) => d.hits ?? [])
+			.reduce((a, b) => (a ?? 0) + (b ?? 0), 0);
 		return `${numberOfTimesDamageTakenOnYourTurns} | ${totalDamageTakenOnYourTurns}`;
 	}
 
 	protected override tooltip(side: 'player' | 'opponent', gameState: GameState): string {
 		const damageByTurn = side === 'player' ? this.player.value(gameState) : this.opponent.value(gameState);
 		const totalDamageTakenOnYourTurns = damageByTurn!.flatMap((d) => d.damage).reduce((a, b) => a + b, 0);
-		const numberOfTimesDamageTakenOnYourTurns = damageByTurn!.flatMap((d) => d.hits).reduce((a, b) => a + b, 0);
+		const numberOfTimesDamageTakenOnYourTurns = damageByTurn!
+			.flatMap((d) => d.hits ?? [])
+			.reduce((a, b) => (a ?? 0) + (b ?? 0), 0);
 		const tooltip = this.i18n.translateString(`counters.damage-taken-on-your-turn.${side}`, {
 			times: numberOfTimesDamageTakenOnYourTurns,
 			damage: totalDamageTakenOnYourTurns,
