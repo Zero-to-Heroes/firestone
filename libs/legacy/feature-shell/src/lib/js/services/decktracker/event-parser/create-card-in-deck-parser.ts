@@ -1,5 +1,5 @@
 import { CardIds, CardType, ReferenceCard, SpellSchool } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState, GameState } from '@firestone/game-state';
+import { addGuessInfoToCard, DeckCard, DeckState, GameState } from '@firestone/game-state';
 import { TempCardIds } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { reverseIfNeeded } from '@legacy-import/src/lib/js/services/decktracker/event-parser/card-dredged-parser';
@@ -34,6 +34,7 @@ export class CreateCardInDeckParser implements EventParser {
 		}
 
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
+		const opponentDeck = isPlayer ? currentState.opponentDeck : currentState.playerDeck;
 
 		// Because we have to infer a lot of info here, we have a separate process. Not sure that it's the best
 		// way though
@@ -142,21 +143,29 @@ export class CreateCardInDeckParser implements EventParser {
 					gameEvent.additionalData.creatorCardId,
 				),
 			});
-		card = card.update(buildKnownFields(card, gameEvent.additionalData.creatorCardId));
 
-		console.debug('[create-card-in-deck]', 'adding card', card, gameEvent);
+		const cardWithGuessInfo = addGuessInfoToCard(
+			card,
+			gameEvent.additionalData.creatorCardId,
+			gameEvent.additionalData.creatorEntityId,
+			deck,
+			opponentDeck,
+			this.allCards,
+		);
+
+		// console.debug('[create-card-in-deck]', 'adding card', card, gameEvent);
 
 		// The initial card might be found in the other zone, so we remove it before adding it back
 		const deckWithoutCard = this.helper.removeCardFromDeck(deck, entityId);
 		const previousDeck = deckWithoutCard.deck;
-		const newDeck: readonly DeckCard[] = this.helper.addSingleCardToZone(previousDeck, card);
+		const newDeck: readonly DeckCard[] = this.helper.addSingleCardToZone(previousDeck, cardWithGuessInfo);
 		const newPlayerDeck = deckWithoutCard.update({
 			deck: newDeck,
 		});
 		// console.debug('[create-card-in-deck]', 'newPlayerDeck', newPlayerDeck);
 
-		if (!card.cardId && !card.entityId) {
-			console.warn('Adding unidentified card in deck', card, gameEvent);
+		if (!cardWithGuessInfo.cardId && !cardWithGuessInfo.entityId) {
+			console.warn('Adding unidentified card in deck', cardWithGuessInfo, gameEvent);
 		}
 		return currentState.update({
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
@@ -210,23 +219,6 @@ export class CreateCardInDeckParser implements EventParser {
 		return null;
 	}
 }
-
-// Maybe merge that with what we do for card in hand
-export const buildKnownFields = (card: DeckCard, creatorCardId: string): Partial<DeckCard> => {
-	console.debug('[create-card-in-deck] adding known fields', card, creatorCardId);
-	switch (creatorCardId) {
-		case CardIds.Blasteroid_GDB_303:
-			return {
-				guessedInfo: {
-					...(card.guessedInfo ?? {}),
-					cardType: CardType.SPELL,
-					spellSchools: [SpellSchool.FIRE],
-				},
-			};
-		default:
-			return {};
-	}
-};
 
 export const buildPositionFromBottom = (deck: DeckState, creatorCardId: string): number => {
 	switch (creatorCardId) {

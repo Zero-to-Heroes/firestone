@@ -64,3 +64,5 @@ export { VarianKingOfStormwind } from './varian-king-of-stormwind';
 export { WarCache } from './war-cache';
 export { YrelBeaconOfHope } from './yrel-beacon-of-hope';
 export { InterstellarResearcher } from './interstellar-researcher';
+export { RazaTheResealed } from './raza-the-resealed';
+export { Blasteroid } from './blasteroid';
