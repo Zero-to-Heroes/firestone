@@ -1409,6 +1409,7 @@ const hasThreeRunes = (card: ReferenceCard): boolean => {
 
 export const canBeDiscoveredByClass = (card: ReferenceCard, currentClass: string): boolean => {
 	if (!currentClass?.length) {
+		console.log('canBeDiscoveredByClass: no current class');
 		return true;
 	}
 	if (!card.classes?.length) {
