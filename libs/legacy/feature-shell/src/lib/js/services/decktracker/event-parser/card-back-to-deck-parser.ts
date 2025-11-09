@@ -76,16 +76,29 @@ export class CardBackToDeckParser implements EventParser {
 		// When we have a deckstring / decklist, we show all the possible remaining options in the
 		// decklist. This means that when a filler card goes back, it's one of these initial cards
 		// that goes back, and so we don't add them once again
-		const shouldKeepDeckAsIs = deck.deckstring && (card?.inInitialDeck || !card?.creatorCardId) && !card?.cardId;
-		// console.debug(
-		// 	'[card-back-to-deck] shouldKeepDeckAsIs',
-		// 	shouldKeepDeckAsIs,
-		// 	card?.inInitialDeck,
-		// 	card?.cardId,
-		// 	deck,
-		// 	card,
-		// 	gameEvent,
-		// );
+		const shouldKeepDeckAsIsBecauseOfFillterCardGoingBack =
+			deck.deckstring && (card?.inInitialDeck || !card?.creatorCardId) && !card?.cardId;
+		// In this case, when the card was stolen we don't know what the card was, so adding it back
+		// shouldn't change anything to the deck
+		const shouldKeepDeckAsIsBecauseOfStolenCardGoingBack =
+			isPlayer &&
+			initialZone === 'HAND' &&
+			[CardIds.Doommaiden_DoomInterrogationEnchantment_GDB_129e].includes(
+				gameEvent.additionalData.influencedByCardId as CardIds,
+			);
+		const shouldKeepDeckAsIs =
+			shouldKeepDeckAsIsBecauseOfFillterCardGoingBack || shouldKeepDeckAsIsBecauseOfStolenCardGoingBack;
+		console.debug(
+			'[card-back-to-deck] shouldKeepDeckAsIs',
+			shouldKeepDeckAsIs,
+			shouldKeepDeckAsIsBecauseOfFillterCardGoingBack,
+			shouldKeepDeckAsIsBecauseOfStolenCardGoingBack,
+			initialZone,
+			gameEvent.additionalData.influencedByCardId,
+			[CardIds.Doommaiden_DoomInterrogationEnchantment_GDB_129e].includes(
+				gameEvent.additionalData.influencedByCardId as CardIds,
+			),
+		);
 
 		// When a card is sent back to deck (but NOT when it is traded - see card-traded parser), we reset
 		// the enchantments, cost reduction, etc.
