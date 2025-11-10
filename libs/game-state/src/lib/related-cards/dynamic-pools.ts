@@ -1513,6 +1513,16 @@ const canIncludeStarcraftFaction = (
 	) {
 		return true;
 	}
+
+	// https://x.com/RidiculousHat/status/1880304533978661025
+	if (
+		[CardIds.MissilePod_SC_409, CardIds.UltraCapacitor_SC_405, CardIds.YamatoCannon_SC_406].includes(
+			refCard.id as CardIds,
+		)
+	) {
+		return true;
+	}
+
 	const isZergOk = hasFaction(refCard, GameTag.ZERG) && hasFactionInDecklist(initialDecklist, GameTag.ZERG, allCards);
 	const isProtossOk =
 		hasFaction(refCard, GameTag.PROTOSS) && hasFactionInDecklist(initialDecklist, GameTag.PROTOSS, allCards);
