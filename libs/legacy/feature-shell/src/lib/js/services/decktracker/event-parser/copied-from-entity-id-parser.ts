@@ -8,6 +8,8 @@ import { DREDGE_IN_OPPONENT_DECK_CARD_IDS } from './card-dredged-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
+const COPY_KNOW_EXACT_CARD_IN_OPPONENT_HAND = [CardIds.AzalinaSoulthief, CardIds.MindrenderIllucia];
+
 export class CopiedFromEntityIdParser implements EventParser {
 	constructor(
 		private readonly helper: DeckManipulationHelper,
@@ -165,15 +167,37 @@ export class CopiedFromEntityIdParser implements EventParser {
 
 		let copiedDeckWithKnownCardsInHand = copiedDeckWithSecrets;
 		if (copiedCardZone === Zone.HAND && !isCopiedPlayer) {
-			// Be cautious in case of leaks
-			// Maybe we'll need to add a whitelist. FromDeOtherSide should be there
-			const cardIdToAdd = cardId;
-			copiedDeckWithKnownCardsInHand = copiedDeckWithSecrets.update({
-				additionalKnownCardsInHand: [
-					...copiedDeckWithSecrets.additionalKnownCardsInHand.filter((c) => c !== cardIdToAdd),
-					cardIdToAdd,
-				],
-			});
+			// In this case we know exactly what card is what
+			if (COPY_KNOW_EXACT_CARD_IN_OPPONENT_HAND.includes(newCopy.creatorCardId as CardIds)) {
+				// console.debug(
+				// 	'[copied-from-entity] know exact card in opponent hand',
+				// 	newCopy.creatorCardId,
+				// 	copiedDeckWithSecrets.hand,
+				// 	newCopy,
+				// );
+				const newHand = copiedDeckWithSecrets.hand.map((card) =>
+					card.entityId === copiedCard.entityId
+						? card.update({
+								cardId: cardId,
+								cardName: this.allCards.getCard(cardId).name,
+								refManaCost: this.allCards.getCard(cardId).cost,
+							})
+						: card,
+				);
+				copiedDeckWithKnownCardsInHand = copiedDeckWithSecrets.update({
+					hand: newHand,
+				});
+			} else {
+				// Be cautious in case of leaks
+				// Maybe we'll need to add a whitelist. FromDeOtherSide should be there
+				const cardIdToAdd = cardId;
+				copiedDeckWithKnownCardsInHand = copiedDeckWithSecrets.update({
+					additionalKnownCardsInHand: [
+						...copiedDeckWithSecrets.additionalKnownCardsInHand.filter((c) => c !== cardIdToAdd),
+						cardIdToAdd,
+					],
+				});
+			}
 		}
 
 		return Object.assign(new GameState(), currentState, {
