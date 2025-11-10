@@ -75,7 +75,11 @@ import { CardTooltipPositionType } from './card-tooltip-position.type';
 			>
 				<div class="related-cards-container" [ngClass]="{ wide: (value.relatedCards?.length ?? 0) > 6 }">
 					<div class="header" *ngIf="relatedCardIdsHeader">{{ relatedCardIdsHeader }}</div>
-					<div class="related-cards" #relatedCards *ngIf="value.relatedCards?.length <= MAX_CARDS_TO_SHOW">
+					<div
+						class="related-cards"
+						#relatedCards
+						*ngIf="(value.relatedCards?.length ?? 0) <= MAX_CARDS_TO_SHOW"
+					>
 						<div
 							*ngIf="hasScrollbar"
 							class="scrollbar-text"
@@ -87,7 +91,7 @@ import { CardTooltipPositionType } from './card-tooltip-position.type';
 					</div>
 					<div
 						class="related-cards big-pool"
-						*ngIf="value.relatedCards?.length > MAX_CARDS_TO_SHOW"
+						*ngIf="(value.relatedCards?.length ?? 0) > MAX_CARDS_TO_SHOW"
 						[fsTranslate]="'decktracker.card-tooltip-big-pool-text'"
 						[fsTranslateParams]="{ value: value.relatedCards?.length }"
 					></div>
