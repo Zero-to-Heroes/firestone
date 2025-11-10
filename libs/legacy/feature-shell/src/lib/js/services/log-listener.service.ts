@@ -1,6 +1,12 @@
 import { Inject, Injectable } from '@angular/core';
-import { GameStatusService, getLogsDir, LOG_FILE_BACKEND, LogUtilsService, PreferencesService } from '@firestone/shared/common/service';
 import type { LogFileBackend } from '@firestone/shared/common/service';
+import {
+	GameStatusService,
+	getLogsDir,
+	LOG_FILE_BACKEND,
+	LogUtilsService,
+	PreferencesService,
+} from '@firestone/shared/common/service';
 import { sleep } from '@firestone/shared/framework/common';
 import { ListenObject, waitForReady } from '@firestone/shared/framework/core';
 import { combineLatest, distinctUntilChanged, filter, Subject } from 'rxjs';

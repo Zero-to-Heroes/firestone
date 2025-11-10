@@ -159,10 +159,10 @@ class NodeLogFileWatcher {
 			const length = stats.size - this.position;
 			const handle = await fsPromises.open(this.filePath, 'r');
 			try {
-				const buffer = Buffer.alloc(length);
-				await handle.read(buffer, 0, length, this.position);
+				const chunk = new Uint8Array(length);
+				await handle.read(chunk, 0, length, this.position);
 				this.position = stats.size;
-				this.emitBuffer(buffer);
+				this.emitBuffer(Buffer.from(chunk));
 			} finally {
 				await handle.close();
 			}
