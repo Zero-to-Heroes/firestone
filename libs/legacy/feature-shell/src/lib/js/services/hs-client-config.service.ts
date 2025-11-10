@@ -1,8 +1,10 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { isPreReleaseBuild } from '@firestone/game-state';
 import {
 	GameStatusService,
 	getGameBaseDir,
+	LOG_FILE_BACKEND,
+	LogFileBackend,
 	OwNotificationsService,
 	PreferencesService,
 } from '@firestone/shared/common/service';
@@ -18,6 +20,7 @@ export class HsClientConfigService {
 		private readonly notifService: OwNotificationsService,
 		private readonly i18n: LocalizationService,
 		private readonly prefs: PreferencesService,
+		@Inject(LOG_FILE_BACKEND) private readonly backend: LogFileBackend,
 	) {
 		this.init();
 	}
@@ -29,7 +32,7 @@ export class HsClientConfigService {
 
 	private async writeConfig() {
 		const prefs = await this.prefs.getPreferences();
-		const gameInstallPath = await getGameBaseDir(this.ow, null, prefs);
+		const gameInstallPath = await getGameBaseDir(this.backend, null, prefs);
 		console.debug('[hs-client-config] game install path', gameInstallPath);
 		if (!gameInstallPath?.length) {
 			return;

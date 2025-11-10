@@ -1,7 +1,14 @@
-import { Injectable } from '@angular/core';
-import { GameStatusService, getLogsDir, LogUtilsService, PreferencesService } from '@firestone/shared/common/service';
+import { Inject, Injectable } from '@angular/core';
+import {
+	GameStatusService,
+	getLogsDir,
+	LOG_FILE_BACKEND,
+	LogFileBackend,
+	LogUtilsService,
+	PreferencesService,
+} from '@firestone/shared/common/service';
 import { sleep } from '@firestone/shared/framework/common';
-import { ListenObject, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
+import { ListenObject, waitForReady } from '@firestone/shared/framework/core';
 import { combineLatest, distinctUntilChanged, filter, Subject } from 'rxjs';
 import { Events } from './events.service';
 
@@ -18,7 +25,7 @@ export class LogListenerService {
 	private existingLineHandler: (input: string) => void;
 
 	constructor(
-		private readonly ow: OverwolfService,
+		@Inject(LOG_FILE_BACKEND) private readonly backend: LogFileBackend,
 		private readonly gameStatus: GameStatusService,
 		private readonly prefs: PreferencesService,
 		private readonly logUtils: LogUtilsService,
@@ -81,17 +88,17 @@ export class LogListenerService {
 	}
 
 	private async startLogRegister() {
-		const gameInfo = await this.ow.getRunningGameInfo();
+		const gameInfo = await this.backend.getRunningGameInfo();
 		const prefs = await this.prefs.getPreferences();
-		const logsDir = await getLogsDir(this.ow, gameInfo, prefs);
+		const logsDir = await getLogsDir(this.backend, gameInfo, prefs);
 		if (logsDir == null) {
 			return;
 		}
 
 		console.log('[log-listener] [' + this.logFile + '] Logs dir', logsDir);
-		this.logsLocation = `${logsDir}\\${this.logFile}`;
+		this.logsLocation = logsDir + '\\' + this.logFile;
 		console.log('[log-listener] [' + this.logFile + '] Logs location', this.logsLocation);
-		if (this.ow.gameRunning(gameInfo)) {
+		if (this.backend.isGameRunning(gameInfo)) {
 			console.log('[log-listener] [' + this.logFile + '] Game is running!', gameInfo.executionPath);
 			this.registerLogMonitor();
 		} else {
@@ -104,7 +111,7 @@ export class LogListenerService {
 			return;
 		}
 
-		this.ow.stopFileListener(this.logFile);
+		this.backend.stopFileListener(this.logFile);
 		this.monitoring = false;
 	}
 
@@ -125,9 +132,9 @@ export class LogListenerService {
 	}
 
 	private async listenOnFileCreation(logsLocation: string) {
-		const fileExists = await this.ow.fileExists(logsLocation);
+		const fileExists = await this.backend.fileExists(logsLocation);
 		if (!fileExists) {
-			await this.ow.writeFileContents(logsLocation, '');
+			await this.backend.writeFileContents(logsLocation, '');
 		}
 		this.listenOnFileUpdate(logsLocation);
 	}
@@ -152,7 +159,7 @@ export class LogListenerService {
 						fileIdentifier,
 						lineInfo.error,
 					);
-					this.ow.stopFileListener(fileIdentifier);
+					this.backend.stopFileListener(fileIdentifier);
 					this.callback('truncated');
 					this.listenOnFileCreation(logsLocation);
 					return;
@@ -163,10 +170,10 @@ export class LogListenerService {
 							this.logFile +
 							'] truncated log file - HS probably just overwrote the file. Restarting listening',
 					);
-					this.ow.stopFileListener(fileIdentifier);
+					this.backend.stopFileListener(fileIdentifier);
 					this.callback('truncated');
 					this.listenOnFileCreation(logsLocation);
-					// this.ow.listenOnFile(fileIdentifier, logsLocation, options, handler);
+					// this.backend.listenOnFile(fileIdentifier, logsLocation, options, handler);
 					return;
 				}
 				if (!hasFileBeenInitiallyRead) {
@@ -176,11 +183,11 @@ export class LogListenerService {
 				}
 			};
 
-			this.ow.listenOnFile(fileIdentifier, logsLocation, options, handler);
+			this.backend.listenOnFile(fileIdentifier, logsLocation, options, handler);
 			console.log('[log-listener] [' + this.logFile + '] listening on file update', logsLocation);
 
 			// Load the existing file in memory
-			const existingFileContents = await this.ow.readTextFile(logsLocation);
+			const existingFileContents = await this.backend.readTextFile(logsLocation);
 			const lines = existingFileContents?.split('\n') ?? [];
 			console.log('[log-listener] [' + this.logFile + '] catching up existing', lines?.length);
 			if (!!lines?.length && !!this.existingLineHandler) {

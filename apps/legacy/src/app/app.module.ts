@@ -3,7 +3,11 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BgsBattleSimulationExecutorService } from '@firestone/battlegrounds/core';
 import { BattlegroundsSimulatorModule, BgsBattlePositioningExecutorService } from '@firestone/battlegrounds/simulator';
 import { LegacyFeatureShellModule } from '@firestone/legacy/feature-shell';
-import { SharedCommonServiceModule } from '@firestone/shared/common/service';
+import {
+	LOG_FILE_BACKEND,
+	OverwolfLogFileBackendService,
+	SharedCommonServiceModule,
+} from '@firestone/shared/common/service';
 import { CardsFacadeService, SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { AppBoostrapperComponent } from './app-bootstrap.component';
 import { BgsBattlePositioningWorkerService } from './impl/bgs-battle-positioning-worker.service';
@@ -22,6 +26,10 @@ import { BgsBattleSimulationWorkerService } from './impl/bgs-battle-simulation-w
 		CardsFacadeService,
 		{ provide: BgsBattleSimulationExecutorService, useClass: BgsBattleSimulationWorkerService },
 		{ provide: BgsBattlePositioningExecutorService, useClass: BgsBattlePositioningWorkerService },
+		{
+			provide: LOG_FILE_BACKEND,
+			useClass: OverwolfLogFileBackendService,
+		},
 	],
 	bootstrap: [AppBoostrapperComponent],
 })
