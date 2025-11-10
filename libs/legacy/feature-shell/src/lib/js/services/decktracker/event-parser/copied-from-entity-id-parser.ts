@@ -169,7 +169,10 @@ export class CopiedFromEntityIdParser implements EventParser {
 			// Maybe we'll need to add a whitelist. FromDeOtherSide should be there
 			const cardIdToAdd = cardId;
 			copiedDeckWithKnownCardsInHand = copiedDeckWithSecrets.update({
-				additionalKnownCardsInHand: [...copiedDeckWithSecrets.additionalKnownCardsInHand, cardIdToAdd],
+				additionalKnownCardsInHand: [
+					...copiedDeckWithSecrets.additionalKnownCardsInHand.filter((c) => c !== cardIdToAdd),
+					cardIdToAdd,
+				],
 			});
 		}
 

@@ -154,7 +154,10 @@ export class LinkedEntityParser implements EventParser {
 			// When linking to a card in the opponent's hand, we need to be extra careful to limit info leaks
 			else {
 				newPlayerDeck = deckInWhichToModifyTheCard.update({
-					additionalKnownCardsInHand: [...deckInWhichToModifyTheCard.additionalKnownCardsInHand, cardId],
+					additionalKnownCardsInHand: [
+						...deckInWhichToModifyTheCard.additionalKnownCardsInHand.filter((c) => c !== cardId),
+						cardId,
+					],
 				});
 			}
 		} else {

@@ -27,7 +27,10 @@ export class FuturisticForefatherParser implements ActionChainParser {
 
 		let opponentDeck = currentState.opponentDeck;
 		opponentDeck = opponentDeck.update({
-			additionalKnownCardsInHand: [...opponentDeck.additionalKnownCardsInHand, entityChoseEvent.cardId],
+			additionalKnownCardsInHand: [
+				...opponentDeck.additionalKnownCardsInHand.filter((c) => c !== entityChoseEvent.cardId),
+				entityChoseEvent.cardId,
+			],
 		});
 		return currentState.update({
 			opponentDeck: opponentDeck,
