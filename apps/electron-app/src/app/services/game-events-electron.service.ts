@@ -36,21 +36,21 @@ export class GameEventsElectronService extends IGameEventsPlugin {
 			console.log('[GameEventsElectron]', log1, log2);
 		});
 		this.gameEventsPlugin.setGameEventCallback((updateData: any) => {
-			console.log('[GameEventsElectron] Game event received:', updateData);
-			if (updateData && updateData.memoryUpdate) {
-				console.debug('[GameEventsElectron] Game event received:', updateData.memoryUpdate);
+			// console.log('[GameEventsElectron] Game event received 0:', updateData);
+			if (updateData && updateData.gameEvent) {
+				console.debug('[GameEventsElectron] Game event received:', updateData.gameEvent);
 
 				// Handle both string and object formats
 				let parsedUpdate;
-				if (typeof updateData.memoryUpdate === 'string') {
+				if (typeof updateData.gameEvent === 'string') {
 					try {
-						parsedUpdate = JSON.parse(updateData.memoryUpdate);
+						parsedUpdate = JSON.parse(updateData.gameEvent);
 					} catch (e) {
 						console.warn('[GameEventsElectron] Failed to parse memory update:', e);
 						return;
 					}
 				} else {
-					parsedUpdate = updateData.memoryUpdate;
+					parsedUpdate = updateData.gameEvent;
 				}
 
 				onGameEventReceived(parsedUpdate);

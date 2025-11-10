@@ -1718,6 +1718,7 @@ export class GameEvents {
 	}
 
 	public receiveLogLine(data: string, postponed = false) {
+		console.log('[game-events] received log line', data);
 		// In case the game overrides the info during the process, we stop everything and start from scratch
 		if (data === 'truncated') {
 			console.log(

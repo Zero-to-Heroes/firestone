@@ -20,7 +20,7 @@ export interface LogListenOptions {
 
 export interface LogFileBackend {
 	getRunningGameInfo(): Promise<any>;
-	isGameRunning(gameInfo: any): boolean;
+	gameRunning(gameInfo: any): boolean;
 	listenOnFile(
 		identifier: string,
 		filePath: string,

@@ -403,7 +403,7 @@ export class GameStateService {
 			);
 		}
 
-		// console.debug(
+		// console.log(
 		// 	'[game-state] processed event',
 		// 	gameEvent.type,
 		// 	gameEvent.cardId,

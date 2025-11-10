@@ -1,13 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { isPreReleaseBuild } from '@firestone/game-state';
-import {
-	GameStatusService,
-	getGameBaseDir,
-	LOG_FILE_BACKEND,
-	LogFileBackend,
-	OwNotificationsService,
-	PreferencesService,
-} from '@firestone/shared/common/service';
+import { GameStatusService, getGameBaseDir, LOG_FILE_BACKEND, OwNotificationsService, PreferencesService } from '@firestone/shared/common/service';
+import type { LogFileBackend } from '@firestone/shared/common/service';
 import { sleep } from '@firestone/shared/framework/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { LocalizationService } from './localization.service';

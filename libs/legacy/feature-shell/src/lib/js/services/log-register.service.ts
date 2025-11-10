@@ -1,13 +1,8 @@
 import { Inject, Injectable } from '@angular/core';
 import { HsLogsWatcherService } from '@firestone/app/common';
 import { GameEvents } from '@firestone/game-state';
-import {
-	GameStatusService,
-	LOG_FILE_BACKEND,
-	LogFileBackend,
-	LogUtilsService,
-	PreferencesService,
-} from '@firestone/shared/common/service';
+import { GameStatusService, LOG_FILE_BACKEND, LogUtilsService, PreferencesService } from '@firestone/shared/common/service';
+import type { LogFileBackend } from '@firestone/shared/common/service';
 import { Events } from '../services/events.service';
 import { CardsMonitorService } from './collection/cards-monitor.service';
 import { LogListenerService } from './log-listener.service';

@@ -3,7 +3,8 @@ import { OverwolfService, waitForReady } from '@firestone/shared/framework/core'
 import { BehaviorSubject, distinctUntilChanged, interval, startWith, Subscription, take } from 'rxjs';
 import { Preferences } from '../models/preferences';
 import { GameStatusService } from './game-status.service';
-import { LOG_FILE_BACKEND, LogFileBackend } from './logs/log-file-backend';
+import { LOG_FILE_BACKEND } from './logs/log-file-backend';
+import type { LogFileBackend } from './logs/log-file-backend';
 import { PreferencesService } from './preferences.service';
 
 @Injectable()

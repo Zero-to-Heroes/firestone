@@ -1,12 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
-import {
-	GameStatusService,
-	getLogsDir,
-	LOG_FILE_BACKEND,
-	LogFileBackend,
-	LogUtilsService,
-	PreferencesService,
-} from '@firestone/shared/common/service';
+import { GameStatusService, getLogsDir, LOG_FILE_BACKEND, LogUtilsService, PreferencesService } from '@firestone/shared/common/service';
+import type { LogFileBackend } from '@firestone/shared/common/service';
 import { sleep } from '@firestone/shared/framework/common';
 import { ListenObject, waitForReady } from '@firestone/shared/framework/core';
 import { combineLatest, distinctUntilChanged, filter, Subject } from 'rxjs';
@@ -98,7 +92,7 @@ export class LogListenerService {
 		console.log('[log-listener] [' + this.logFile + '] Logs dir', logsDir);
 		this.logsLocation = logsDir + '\\' + this.logFile;
 		console.log('[log-listener] [' + this.logFile + '] Logs location', this.logsLocation);
-		if (this.backend.isGameRunning(gameInfo)) {
+		if (this.backend.gameRunning(gameInfo)) {
 			console.log('[log-listener] [' + this.logFile + '] Game is running!', gameInfo.executionPath);
 			this.registerLogMonitor();
 		} else {

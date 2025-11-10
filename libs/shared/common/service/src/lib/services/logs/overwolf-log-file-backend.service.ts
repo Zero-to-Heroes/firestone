@@ -10,7 +10,7 @@ export class OverwolfLogFileBackendService implements LogFileBackend {
 		return this.overwolfService.getRunningGameInfo();
 	}
 
-	isGameRunning(gameInfo: any): boolean {
+	gameRunning(gameInfo: any): boolean {
 		return this.overwolfService.gameRunning(gameInfo);
 	}
 

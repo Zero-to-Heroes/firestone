@@ -1,12 +1,12 @@
 import { ElectronGameWindowService } from '@firestone/electron/common';
-import {
+import type {
 	LogDirectoryEntry,
 	LogDirectoryResult,
 	LogFileBackend,
 	LogListenOptions,
 } from '@firestone/shared/common/service';
 import { HEARTHSTONE_GAME_ID, ListenObject } from '@firestone/shared/framework/core';
-import { constants as fsConstants, promises as fsPromises, FSWatcher, watch } from 'fs';
+import { Stats, constants as fsConstants, promises as fsPromises, unwatchFile, watchFile } from 'fs';
 import { dirname } from 'path';
 
 type WatchCallback = (lineInfo: ListenObject) => void;
@@ -19,7 +19,7 @@ export class ElectronLogFileBackendService implements LogFileBackend {
 		return gameWindowService.getCurrentGameInfo();
 	}
 
-	isGameRunning(gameInfo: any): boolean {
+	gameRunning(gameInfo: any): boolean {
 		if (!gameInfo?.isRunning) {
 			return false;
 		}
@@ -35,7 +35,7 @@ export class ElectronLogFileBackendService implements LogFileBackend {
 		this.stopFileListener(identifier);
 		const watcher = new NodeLogFileWatcher(filePath, options ?? {}, callback);
 		this.watchers.set(identifier, watcher);
-		watcher.start();
+		void watcher.start();
 	}
 
 	stopFileListener(identifier: string): void {
@@ -85,7 +85,6 @@ export class ElectronLogFileBackendService implements LogFileBackend {
 				path: directory,
 			};
 		} catch (e) {
-			// Directory may not exist yet; behave similarly to Overwolf returning an empty result
 			console.warn('[electron-log-backend] unable to list directory', directory, e);
 			return {
 				success: false,
@@ -96,15 +95,17 @@ export class ElectronLogFileBackendService implements LogFileBackend {
 	}
 
 	async getGameDbInfo(): Promise<any | null> {
-		// Not available outside of Overwolf; return null so callers rely on prefs / defaults
 		return null;
 	}
 }
 
 class NodeLogFileWatcher {
-	private watcher: FSWatcher | null = null;
 	private disposed = false;
 	private position = 0;
+	private watching = false;
+	private reading = false;
+	private pendingRead = false;
+	private forceTruncatePending = false;
 
 	constructor(
 		private readonly filePath: string,
@@ -115,22 +116,15 @@ class NodeLogFileWatcher {
 	async start(): Promise<void> {
 		await this.initializePosition();
 		await this.emitPendingContent();
-		this.watcher = watch(this.filePath, { persistent: true }, (eventType) => {
-			if (this.disposed) {
-				return;
-			}
-			if (eventType === 'rename') {
-				this.handlePotentialTruncate();
-				return;
-			}
-			this.emitPendingContent();
-		});
+		this.startWatching();
 	}
 
 	dispose(): void {
 		this.disposed = true;
-		this.watcher?.close();
-		this.watcher = null;
+		if (this.watching) {
+			unwatchFile(this.filePath, this.onFileStats);
+			this.watching = false;
+		}
 	}
 
 	private async initializePosition() {
@@ -143,37 +137,30 @@ class NodeLogFileWatcher {
 		}
 	}
 
-	private async handlePotentialTruncate() {
-		const exists = await this.fileExists();
-		if (!exists) {
-			this.emitEvent({
-				success: false,
-				error: 'File not found',
-				state: 'terminated',
-				content: '',
-				info: '',
-			});
+	private async emitPendingContent(forceTruncated = false) {
+		if (this.disposed) {
 			return;
 		}
-		await this.emitPendingContent(true);
-	}
-
-	private async emitPendingContent(forceTruncated = false) {
+		if (this.reading) {
+			this.pendingRead = true;
+			this.forceTruncatePending = this.forceTruncatePending || forceTruncated;
+			return;
+		}
+		this.reading = true;
 		try {
 			const stats = await fsPromises.stat(this.filePath);
 			if (forceTruncated || stats.size < this.position) {
-				this.position = stats.size;
+				this.position = 0;
 				this.emitEvent({ success: true, error: null, state: 'truncated', content: '', info: '' });
-				return;
 			}
-			if (stats.size === this.position) {
+			if (stats.size <= this.position) {
 				return;
 			}
 			const length = stats.size - this.position;
 			const handle = await fsPromises.open(this.filePath, 'r');
 			try {
 				const buffer = Buffer.alloc(length);
-				await handle.read(new Uint8Array(buffer.buffer), 0, length, this.position);
+				await handle.read(buffer, 0, length, this.position);
 				this.position = stats.size;
 				this.emitBuffer(buffer);
 			} finally {
@@ -188,6 +175,14 @@ class NodeLogFileWatcher {
 				content: '',
 				info: '',
 			});
+		} finally {
+			this.reading = false;
+			if (this.pendingRead && !this.disposed) {
+				const force = this.forceTruncatePending;
+				this.pendingRead = false;
+				this.forceTruncatePending = false;
+				this.emitPendingContent(force);
+			}
 		}
 	}
 
@@ -207,15 +202,6 @@ class NodeLogFileWatcher {
 		}
 	}
 
-	private async fileExists(): Promise<boolean> {
-		try {
-			await fsPromises.access(this.filePath, fsConstants.F_OK);
-			return true;
-		} catch {
-			return false;
-		}
-	}
-
 	private emitEvent(event: ListenObject) {
 		if (this.disposed) {
 			return;
@@ -225,5 +211,32 @@ class NodeLogFileWatcher {
 		} catch (e) {
 			console.error('[electron-log-backend] error while emitting event', e);
 		}
+	}
+
+	private readonly onFileStats = (curr: Stats, prev: Stats) => {
+		if (this.disposed) {
+			return;
+		}
+		const fileMissing = curr.mtimeMs === 0 && curr.size === 0;
+		if (fileMissing) {
+			this.emitEvent({
+				success: false,
+				error: 'File not found',
+				state: 'terminated',
+				content: '',
+				info: '',
+			});
+			return;
+		}
+		const truncated = curr.size < this.position || curr.ino !== prev.ino;
+		this.emitPendingContent(truncated);
+	};
+
+	private startWatching() {
+		if (this.watching) {
+			unwatchFile(this.filePath, this.onFileStats);
+		}
+		watchFile(this.filePath, { persistent: true, interval: 200 }, this.onFileStats);
+		this.watching = true;
 	}
 }
