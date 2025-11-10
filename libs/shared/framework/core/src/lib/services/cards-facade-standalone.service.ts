@@ -33,7 +33,7 @@ export class CardsFacadeStandaloneService {
 		const fileName = this.getFileName(locale);
 		console.log('initializing cards db with', fileName);
 		await this.service.initializeCardsDb(undefined, fileName);
-		console.log('cards initialized', this.service.getCards()[0]);
+		console.debug('cards initialized', this.service.getCards()[0]);
 	}
 
 	// We keep this synchronous because we ensure, in the game init pipeline, that loading cards

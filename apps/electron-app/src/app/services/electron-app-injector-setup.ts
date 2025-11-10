@@ -35,6 +35,8 @@ import {
 } from '@firestone/memory';
 import {
 	GameStatusService,
+	LOG_FILE_BACKEND,
+	LogUtilsService,
 	PreferencesService,
 	PreferencesStorageService,
 	StandaloneAdService,
@@ -49,7 +51,9 @@ import {
 	LocalStorageService,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
+import { LogListenerService } from '@services/log-listener.service';
 import { ElectronAngularInjector } from './electron-angular-injector';
+import { ElectronLogFileBackendService } from './electron-log-file-backend.service';
 import { GameEventsElectronService } from './game-events-electron.service';
 import { MindVisionElectronService } from './mind-vision-electron.service';
 
@@ -70,6 +74,15 @@ export const buildAppInjector = () => {
 
 	const preferences = new PreferencesService(windowManager);
 	electronInjector.register(PreferencesService, preferences);
+
+	const logFileBackend = new ElectronLogFileBackendService();
+	electronInjector.register(LOG_FILE_BACKEND, logFileBackend);
+
+	const logUtils = new LogUtilsService(logFileBackend, preferences, gameStatus);
+	electronInjector.register(LogUtilsService, logUtils);
+
+	const logListener = new LogListenerService(logFileBackend, gameStatus, preferences, logUtils);
+	electronInjector.register(LogListenerService, logListener);
 
 	const localStorage = new ElectronStorageService();
 	electronInjector.register(LocalStorageService, localStorage);

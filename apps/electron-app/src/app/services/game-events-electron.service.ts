@@ -32,7 +32,11 @@ export class GameEventsElectronService extends IGameEventsPlugin {
 		const GameEventsEdge = eval('require')(indexPath);
 		this.gameEventsPlugin = new GameEventsEdge();
 
+		this.gameEventsPlugin.setLogger((log1, log2) => {
+			console.log('[GameEventsElectron]', log1, log2);
+		});
 		this.gameEventsPlugin.setGameEventCallback((updateData: any) => {
+			console.log('[GameEventsElectron] Game event received:', updateData);
 			if (updateData && updateData.memoryUpdate) {
 				console.debug('[GameEventsElectron] Game event received:', updateData.memoryUpdate);
 
@@ -52,12 +56,13 @@ export class GameEventsElectronService extends IGameEventsPlugin {
 				onGameEventReceived(parsedUpdate);
 			}
 		});
-		this.gameEventsPlugin.setLogger((log1, log2) => {
-			console.log('[GameEventsElectron]', log1, log2);
-		});
 
 		console.log('[GameEventsElectron] Initializing plugin...');
 		const success = await this.gameEventsPlugin.initialize();
+
+		this.gameEventsPlugin.initRealtimeLogConversion((result) => {
+			console.log('[GameEventsElectron] real-time log processing ready to go', result);
+		});
 
 		if (success) {
 			this.initialized = true;
@@ -78,14 +83,17 @@ export class GameEventsElectronService extends IGameEventsPlugin {
 		plugin.askForGameStateUpdate();
 	}
 
-	public override async realtimeLogProcessing(lines: readonly string[], callback) {
+	public override async realtimeLogProcessing(lines: readonly string[]) {
 		const plugin = await this.get();
-		plugin.realtimeLogProcessing(lines, () => callback());
+		const start = Date.now();
+		console.log('[GameEventsElectron] processing chunk', lines.length, start);
+		await plugin.realtimeLogProcessing(Array.from(lines));
+		console.log('[GameEventsElectron] processed chunk', lines.length, Date.now() - start);
 	}
 
 	private async get() {
 		await this.waitForInit();
-		return this.gameEventsPlugin.get();
+		return this.gameEventsPlugin;
 	}
 
 	private waitForInit(): Promise<void> {

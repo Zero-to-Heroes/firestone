@@ -69,9 +69,11 @@ export class GameEventsPluginService extends IGameEventsPlugin {
 		plugin.askForGameStateUpdate();
 	}
 
-	public override async realtimeLogProcessing(lines: readonly string[], callback) {
+	public override async realtimeLogProcessing(lines: readonly string[]) {
 		const plugin = await this.get();
-		plugin.realtimeLogProcessing(lines, () => callback());
+		return new Promise<void>((resolve) => {
+			plugin.realtimeLogProcessing(lines, () => resolve());
+		});
 	}
 
 	private async get() {

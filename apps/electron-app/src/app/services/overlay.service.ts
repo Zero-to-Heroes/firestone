@@ -132,7 +132,7 @@ export class OverlayService extends EventEmitter {
 	private async createOverlayWindow(): Promise<void> {
 		// Get game window information from centralized service
 		const gameInfo = this.gameWindowService.getCurrentGameInfo();
-		console.log(`Creating overlay - Game info from service:`, gameInfo);
+		console.debug(`Creating overlay - Game info from service:`, gameInfo);
 
 		// Use game dimensions or fallback to defaults
 		let gameWidth = 1920;
@@ -149,8 +149,8 @@ export class OverlayService extends EventEmitter {
 		console.log(`Final overlay dimensions: ${gameWidth}x${gameHeight}`);
 
 		const preloadPath = join(__dirname, 'main.preload.js');
-		console.log('🔧 Preload script path:', preloadPath);
-		console.log('🔧 Current __dirname:', __dirname);
+		console.log('Preload script path:', preloadPath);
+		console.log('Current __dirname:', __dirname);
 
 		const options: OverlayWindowOptions = {
 			name: 'firestone-overlay-' + Math.floor(Math.random() * 1000),
@@ -170,7 +170,7 @@ export class OverlayService extends EventEmitter {
 			y: 0,
 		};
 
-		console.log('🔧 Overlay window options:', JSON.stringify(options, null, 2));
+		console.debug('Overlay window options:', JSON.stringify(options, null, 2));
 
 		this.overlayWindow = await this.overlayApi.createWindow(options);
 
@@ -204,14 +204,14 @@ export class OverlayService extends EventEmitter {
 					mode: 'detach', // Open in separate window
 					activate: true, // Bring to front
 				});
-				console.log('🔧 Overlay dev tools opened for debugging (detached window)');
+				console.log('Overlay dev tools opened for debugging (detached window)');
 			}
 
 			// Add keyboard shortcut to manually open dev tools
 			this.overlayWindow.window.webContents.on('before-input-event', (event, input) => {
 				if (input.key === 'F12' || (input.control && input.shift && input.key === 'I')) {
 					this.overlayWindow.window.webContents.toggleDevTools();
-					console.log('🔧 Dev tools toggled manually');
+					console.log('Dev tools toggled manually');
 				}
 			});
 

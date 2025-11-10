@@ -3,5 +3,5 @@ export abstract class IGameEventsPlugin {
 	public abstract init(onGameEventReceived: (gameEvent) => void);
 	public abstract isReady(): Promise<boolean>;
 	public abstract askForGameStateUpdate();
-	public abstract realtimeLogProcessing(lines: readonly string[], callback: () => void);
+	public abstract realtimeLogProcessing(lines: readonly string[]): Promise<void>;
 }

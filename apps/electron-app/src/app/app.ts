@@ -3,7 +3,9 @@ import '@angular/compiler';
 import { ElectronGameWindowService } from '@firestone/electron/common';
 // import '@overwolf/types';
 import { AllCardsService } from '@firestone-hs/reference-data';
+import { GameEvents } from '@firestone/game-state';
 import { CardsFacadeStandaloneService, setAppInjector } from '@firestone/shared/framework/core';
+import { LogListenerService } from '@services/log-listener.service';
 import { BrowserWindow, screen, shell } from 'electron';
 import { join } from 'path';
 import { format } from 'url';
@@ -98,10 +100,22 @@ export default class App {
 		// Initialize MindVision service for memory reading
 		const mindVision = electronInjector.get(MindVisionElectronService);
 		const allCards = electronInjector.get(CardsFacadeStandaloneService);
-		const gameEvents = electronInjector.get(GameEventsElectronService);
-		gameEvents.init((gameEvent) => {
+		const gameEventsPlugin = electronInjector.get(GameEventsElectronService);
+		const gameEvents = electronInjector.get(GameEvents);
+		const logListener = electronInjector.get(LogListenerService);
+		gameEventsPlugin.init((gameEvent) => {
 			console.log('[GameEventsElectron] [app] received event', gameEvent);
 		});
+		logListener
+			.configure(
+				'Power.log',
+				(data) => gameEvents.receiveLogLine(data),
+				(existingLine) => gameEvents.receiveExistingLogLine(existingLine),
+			)
+			.subscribe((status) => {
+				console.log('[log-register] status for Power.log', status);
+			})
+			.start();
 		// TODO: nx graph, and remove UI dependencies (probably some transitive stuff for game-state or battelgrounds-core?)
 		console.log('[app] allCards', allCards);
 		allCards.init(new AllCardsService(), 'enUS');
@@ -206,6 +220,8 @@ export default class App {
 	}
 
 	static main(app: Electron.App, browserWindow: typeof BrowserWindow) {
+		// Deactivate debug logs for electron app
+		console.debug = () => {};
 		// we pass the Electron.App object and the
 		// Electron.BrowserWindow into this function
 		// so this class has no dependencies. This

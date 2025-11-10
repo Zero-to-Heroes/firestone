@@ -80,7 +80,18 @@ class GameEventsEdge {
 	}
 
 	async initRealtimeLogConversion() {
-		return this.callPluginMethod('initRealtimeLogConversion');
+		return this.callPluginMethod('initRealtimeLogConversion', null);
+	}
+
+	async realtimeLogProcessing(logLines) {
+		console.log('[GameEventsEdge] processing chunk', logLines.length);
+		if (!Array.isArray(logLines)) {
+			throw new Error('[GameEventsEdge] realtimeLogProcessing expects an array of log lines');
+		}
+
+		return this.callPluginMethod('realtimeLogProcessing', {
+			logLines,
+		});
 	}
 
 	async tearDown() {

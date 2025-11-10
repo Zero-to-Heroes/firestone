@@ -140,10 +140,15 @@ export class GameEvents {
 
 	private async processQueue(eventQueue: readonly string[]): Promise<readonly string[]> {
 		if (eventQueue.some((data) => data.includes('CREATE_GAME'))) {
-			console.log('[game-events] preparing log lines that include game creation to feed to the plugin');
+			console.log(
+				'[game-events] preparing log lines that include game creation to feed to the plugin',
+				eventQueue.length,
+			);
 		}
 		await this.gameEventsPlugin.isReady();
+		console.log('[game-events] processing logs', eventQueue.length);
 		const hasProcessed = await this.processLogs(eventQueue);
+		console.log('[game-events] processed logs', eventQueue.length, hasProcessed);
 		return hasProcessed ? [] : eventQueue;
 	}
 
@@ -163,12 +168,9 @@ export class GameEvents {
 
 		for (const chunk of chunks) {
 			const start = Date.now();
-			// console.debug('[game-events] dispatching game events chunk', chunk.length);
-			await new Promise<void>((resolve) => {
-				this.gameEventsPlugin.realtimeLogProcessing(chunk, () => {
-					resolve();
-				});
-			});
+			console.log('[game-events] processing chunk', chunk.length);
+			await this.gameEventsPlugin.realtimeLogProcessing(chunk);
+			console.log('[game-events] processed chunk', chunk.length, Date.now() - start);
 		}
 
 		return true;
@@ -184,7 +186,7 @@ export class GameEvents {
 			return;
 		}
 
-		// console.debug('[game-events] dispatching game event', gameEvent.Type);
+		console.debug('[game-events] dispatching game event', gameEvent.Type);
 		if (gameEvent.Type !== 'GAME_STATE_UPDATE') {
 			this.lastProcessedTimestamp = Date.now();
 		} else {
@@ -197,7 +199,7 @@ export class GameEvents {
 		const start = Date.now();
 		switch (gameEvent.Type) {
 			case 'NEW_GAME':
-				console.log('[game-events]', gameEvent.Type + ' event', gameEvent);
+				console.log('[game-events]', gameEvent.Type + ' event');
 				// this.hasSentToS3 = false;
 				const event = Object.assign(new GameEvent(), {
 					type: GameEvent.GAME_START,
