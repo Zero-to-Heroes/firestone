@@ -8,7 +8,11 @@ import { DREDGE_IN_OPPONENT_DECK_CARD_IDS } from './card-dredged-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
-const COPY_KNOW_EXACT_CARD_IN_OPPONENT_HAND = [CardIds.AzalinaSoulthief, CardIds.MindrenderIllucia];
+const COPY_KNOW_EXACT_CARD_IN_OPPONENT_HAND = [
+	CardIds.AzalinaSoulthief,
+	CardIds.MindrenderIllucia,
+	CardIds.SketchArtist_TOY_916,
+];
 
 export class CopiedFromEntityIdParser implements EventParser {
 	constructor(
@@ -42,6 +46,7 @@ export class CopiedFromEntityIdParser implements EventParser {
 			'[copied-from-entity] copiedCard',
 			isPlayer,
 			copiedCard,
+			copiedCardZone,
 			newCopy,
 			copiedDeck,
 			copiedCardEntityId,
@@ -168,22 +173,24 @@ export class CopiedFromEntityIdParser implements EventParser {
 		let copiedDeckWithKnownCardsInHand = copiedDeckWithSecrets;
 		if (copiedCardZone === Zone.HAND && !isCopiedPlayer) {
 			// In this case we know exactly what card is what
-			if (COPY_KNOW_EXACT_CARD_IN_OPPONENT_HAND.includes(newCopy.creatorCardId as CardIds)) {
-				// console.debug(
-				// 	'[copied-from-entity] know exact card in opponent hand',
-				// 	newCopy.creatorCardId,
-				// 	copiedDeckWithSecrets.hand,
-				// 	newCopy,
-				// );
+			if (shouldFlagExactCardInOpponentHand(newCopy)) {
+				console.debug(
+					'[copied-from-entity] know exact card in opponent hand',
+					newCopy.creatorCardId,
+					copiedDeckWithSecrets.hand,
+					newCopy,
+					copiedCard,
+				);
 				const newHand = copiedDeckWithSecrets.hand.map((card) =>
 					card.entityId === copiedCard.entityId
 						? card.update({
-								cardId: cardId,
+								cardId: cardId || newCopy.cardId,
 								cardName: this.allCards.getCard(cardId).name,
 								refManaCost: this.allCards.getCard(cardId).cost,
 							})
 						: card,
 				);
+				console.debug('[copied-from-entity] newHand', newHand);
 				copiedDeckWithKnownCardsInHand = copiedDeckWithSecrets.update({
 					hand: newHand,
 				});
@@ -226,3 +233,7 @@ export class CopiedFromEntityIdParser implements EventParser {
 		return GameEvent.COPIED_FROM_ENTITY_ID;
 	}
 }
+
+const shouldFlagExactCardInOpponentHand = (card: DeckCard): boolean => {
+	return COPY_KNOW_EXACT_CARD_IN_OPPONENT_HAND.includes(card.creatorCardId as CardIds);
+};
