@@ -54,6 +54,7 @@ import { EnhancedDeckStat } from './meta-decks-visualization.component';
 					class="decklist-button"
 					*ngIf="decklist"
 					[deckstring]="decklist"
+					[deckName]="deckName"
 					[copyText]="'Copy deck code to clipboard'"
 					[showTooltip]="true"
 				>
