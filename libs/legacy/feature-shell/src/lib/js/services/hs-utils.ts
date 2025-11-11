@@ -239,7 +239,7 @@ export const globalEffectCards = [
 ];
 
 // Also whitelist in the parser
-export const globalEffectPowers = [CardIds.DewProcess, CardIds.CityChiefEsho_TLC_110];
+export const globalEffectPowers = [CardIds.DewProcess];
 export const globalEffectPowersAlsoOpponent = [CardIds.DewProcess];
 
 export const globalEffectTriggers = [
@@ -285,6 +285,10 @@ export const globalEffectTriggers = [
 	{
 		effectPrefab: 'TIME_609t2_Vereesa_DeckAE_Super',
 		cardId: CardIds.RangerGeneralSylvanas_RangerInitiateVereesaToken_TIME_609t2,
+	},
+	{
+		effectPrefab: 'TLCFX_CityChiefEsho_BuffAE_DeckBoardandHand_Super',
+		cardId: CardIds.CityChiefEsho_TLC_110,
 	},
 ];
 
