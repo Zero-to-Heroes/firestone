@@ -703,6 +703,11 @@ export const cardIdSelector = (
 			return tooltip(and(side(inputSide), discarded));
 		case CardIds.ChorusRiff:
 			return and(side(inputSide), inDeck, minion);
+		case CardIds.Chromie_TIME_103:
+			return (input: SelectorInput): SelectorOutput => {
+				const candidates = input.deckState.cardsPlayedThisMatch;
+				return and(side(inputSide), inDeck, cardIs(...candidates.map((c) => c.cardId as CardIds)))(input);
+			};
 		case CardIds.ChronicleKeeper_TIME_062:
 			return and(side(inputSide), or(inHand, inDeck), dragon);
 		case CardIds.ChronoBoost_SC_750:
@@ -3517,6 +3522,17 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), spell);
 		case CardIds.TwistedTether:
 			return and(side(inputSide), or(inHand, inDeck), undead);
+		case CardIds.TwistedWebweaver_EDR_540:
+			return (input: SelectorInput): SelectorOutput => {
+				const candidates = input.deckState.cardsPlayedThisMatch.filter(
+					(c) => allCards.getCard(c.cardId).type?.toUpperCase() === CardType[CardType.MINION],
+				);
+				return and(
+					side(inputSide),
+					or(inDeck, inHand),
+					cardIs(...candidates.map((c) => c.cardId as CardIds)),
+				)(input);
+			};
 		case CardIds.UmpiresGrasp_TOY_641:
 			return and(side(inputSide), inDeck, demon);
 		case CardIds.UnchainedGladiator:
