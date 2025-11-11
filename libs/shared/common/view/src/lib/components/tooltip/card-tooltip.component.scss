@@ -29,7 +29,8 @@
 .related-cards-wrapper {
 	// min-width: 450px;
 	display: flex;
-	flex-shrink: 0;
+	// flex-shrink: 0;
+	flex-shrink: 1; // So that it can shrink if the screen size is too small
 
 	&.left {
 		order: -1;
