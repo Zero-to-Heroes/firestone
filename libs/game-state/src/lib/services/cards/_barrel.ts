@@ -66,3 +66,4 @@ export { YrelBeaconOfHope } from './yrel-beacon-of-hope';
 export { InterstellarResearcher } from './interstellar-researcher';
 export { RazaTheResealed } from './raza-the-resealed';
 export { Blasteroid } from './blasteroid';
+export { DejaVu } from './deja-vu';
