@@ -109,6 +109,21 @@ export abstract class AbstractFacadeService<T extends AbstractFacadeService<T>> 
 					const transformedValue = this.transformValueForElectron(value);
 					obs.next(transformedValue);
 				});
+				try {
+					Promise.resolve(ipcRenderer.invoke(eventName))
+						.then((value: V) => {
+							const transformedValue = this.transformValueForElectron(value);
+							obs.next(transformedValue);
+						})
+						.catch((error) =>
+							console.error(
+								`[${this.constructor.name}] could not fetch initial value for ${eventName}`,
+								error,
+							),
+						);
+				} catch (error) {
+					console.error(`[${this.constructor.name}] error invoking ${eventName}`, error);
+				}
 			}
 		}
 	}

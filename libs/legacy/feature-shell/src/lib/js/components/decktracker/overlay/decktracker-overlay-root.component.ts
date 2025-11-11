@@ -15,12 +15,12 @@ import { DeckState, enrichDeck, GameState, GameStateFacadeService, StatsRecap } 
 import { AccountService } from '@firestone/profile/common';
 import { PatchesConfigService, Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { gameFormatToStatGameFormatType } from '@firestone/stats/data-access';
 import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
 import { combineLatest, debounceTime, distinctUntilChanged, filter, Observable, shareReplay, takeUntil } from 'rxjs';
 import { DecksProviderService } from '../../../services/decktracker/main/decks-provider.service';
 import { Events } from '../../../services/events.service';
-import { MainWindowStateFacadeService } from '../../../services/mainwindow/store/main-window-state-facade.service';
 import { GameStatsProviderService } from '../../../services/stats/game/game-stats-provider.service';
 
 @Component({
@@ -192,7 +192,6 @@ export class DeckTrackerOverlayRootComponent
 		private readonly gameState: GameStateFacadeService,
 		private readonly prefs: PreferencesService,
 		private readonly gameStats: GameStatsProviderService,
-		private readonly mainWindowState: MainWindowStateFacadeService,
 		private readonly decksProvider: DecksProviderService,
 		private readonly region: AccountService,
 	) {
@@ -201,14 +200,17 @@ export class DeckTrackerOverlayRootComponent
 	}
 
 	async ngAfterContentInit() {
-		await Promise.all([
-			this.patchesConfig.isReady(),
-			this.gameState.isReady(),
-			this.prefs.isReady(),
-			this.gameStats.isReady(),
-			this.mainWindowState.isReady(),
-			this.decksProvider.isReady(),
-		]);
+		await waitForReady(this.patchesConfig);
+		console.debug('[debug] [decktracker-overlay-root] patchesConfig ready');
+		await waitForReady(this.gameState);
+		console.debug('[debug][decktracker-overlay-root] gameState ready');
+		await waitForReady(this.prefs);
+		console.debug('[debug][decktracker-overlay-root] prefs ready');
+		await waitForReady(this.gameStats);
+		console.debug('[debug][decktracker-overlay-root] gameStats ready');
+		await waitForReady(this.decksProvider);
+		console.debug('[debug][decktracker-overlay-root] decksProvider ready');
+		await waitForReady(this.patchesConfig, this.gameState, this.prefs, this.gameStats, this.decksProvider);
 
 		this.showDeckWinrate$ = this.prefs.preferences$$.pipe(
 			this.mapData((preferences) => this.showDeckWinrateExtractor(preferences)),
@@ -272,12 +274,6 @@ export class DeckTrackerOverlayRootComponent
 					formatType: gameState?.metadata?.formatType,
 				})),
 			),
-			// this.mainWindowState.mainWindowState$$.pipe(
-			// 	this.mapData((main) => ({
-			// 		timeFilter: 'all-time',
-			// 		rankFilter: 'all',
-			// 	})),
-			// ),
 			this.patchesConfig.currentConstructedMetaPatch$$,
 			gamesForRegion$,
 			this.decksProvider.decks$$,

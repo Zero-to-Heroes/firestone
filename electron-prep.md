@@ -45,3 +45,4 @@ Notes:
 TODO now:
 
 - memory reading triggers multiple times for the same event?
+- svg icons (eg /Files/assets/svg/decktracker_widget_idle.svg in decktracker-widget-icon)
