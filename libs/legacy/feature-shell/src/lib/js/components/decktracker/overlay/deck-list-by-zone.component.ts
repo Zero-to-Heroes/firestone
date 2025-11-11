@@ -68,6 +68,10 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 		this.showGlobalEffectsZone$$.next(value);
 	}
 
+	@Input() set showCurrentEffectsZone(value: boolean) {
+		this.showCurrentEffectsZone$$.next(value);
+	}
+
 	@Input() set hideGeneratedCardsInOtherZone(value: boolean) {
 		this.hideGeneratedCardsInOtherZone$$.next(value);
 	}
@@ -117,6 +121,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 	_darkenUsedCards = true;
 
 	private showGlobalEffectsZone$$ = new BehaviorSubject<boolean>(false);
+	private showCurrentEffectsZone$$ = new BehaviorSubject<boolean>(false);
 	private hideGeneratedCardsInOtherZone$$ = new BehaviorSubject<boolean>(false);
 	private sortCardsByManaCostInOtherZone$$ = new BehaviorSubject<boolean>(false);
 	private showBottomCardsSeparately$$ = new BehaviorSubject<boolean>(true);
@@ -150,6 +155,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 		this.zones$ = combineLatest([
 			this.deckState$$,
 			this.showGlobalEffectsZone$$,
+			this.showCurrentEffectsZone$$,
 			this.hideGeneratedCardsInOtherZone$$,
 			this.sortCardsByManaCostInOtherZone$$,
 			this.showBottomCardsSeparately$$,
@@ -168,6 +174,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 				([
 					deckState,
 					showGlobalEffectsZone,
+					showCurrentEffectsZone,
 					hideGeneratedCardsInOtherZone,
 					sortCardsByManaCostInOtherZone,
 					showBottomCardsSeparately,
@@ -181,6 +188,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 				]) =>
 					this.buildZones(
 						showGlobalEffectsZone,
+						showCurrentEffectsZone,
 						hideGeneratedCardsInOtherZone,
 						sortCardsByManaCostInOtherZone,
 						showBottomCardsSeparately,
@@ -201,6 +209,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 
 	private buildZones(
 		showGlobalEffectsZone: boolean,
+		showCurrentEffectsZone: boolean,
 		hideGeneratedCardsInOtherZone: boolean,
 		sortCardsByManaCostInOtherZone: boolean,
 		showBottomCardsSeparately: boolean,
@@ -233,6 +242,37 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 					null,
 				),
 			);
+		}
+
+		if (showCurrentEffectsZone) {
+			const currentEffects = deckState.enchantments
+				.filter((e) => !deckState.globalEffects.some((g) => g.cardId === e.cardId))
+				.map((e) => {
+					const refCard = this.allCards.getCard(e.cardId);
+					const sourceCard = this.allCards.getCard(e.tags?.[GameTag.CREATOR_DBID]);
+					return DeckCard.create({
+						cardId: sourceCard.id, // To get the right image and tooltip
+						cardName: refCard.name,
+						entityId: e.entityId,
+						refManaCost: refCard.cost,
+						hideStats: true,
+					});
+				});
+			if (currentEffects.length > 0) {
+				zones.push(
+					this.buildZone(
+						currentEffects,
+						null,
+						{
+							groupSameCardsTogether: groupSameCardsTogether,
+						},
+						'current-effects',
+						this.i18n.translateString('decktracker.zones.current-effects'),
+						null,
+						null,
+					),
+				);
+			}
 		}
 
 		// Deck

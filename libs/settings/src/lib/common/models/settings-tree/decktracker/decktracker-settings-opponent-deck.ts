@@ -73,6 +73,13 @@ export const decktrackerOpponentDeckSettings = (context: SettingContext): Settin
 					},
 					{
 						type: 'toggle',
+						field: 'opponentOverlayShowCurrentEffects',
+						label: context.i18n.translateString('settings.decktracker.opponent-deck.current-effects-label'),
+						tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.current-effects-tooltip'),
+						disabledIf: (prefs: Preferences) => !prefs.opponentTracker || !prefs.opponentOverlayGroupByZone,
+					},
+					{
+						type: 'toggle',
 						field: 'opponentOverlaySortByManaInOtherZone',
 						label: context.i18n.translateString('settings.decktracker.opponent-deck.sort-by-mana-cost-label'),
 						tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.sort-by-mana-cost-tooltip'),

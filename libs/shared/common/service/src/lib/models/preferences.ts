@@ -291,6 +291,7 @@ export class Preferences implements IPreferences {
 	// readonly overlayHighlightCardsInHand: boolean = false; // Doesn't have a UI anymore?
 	readonly overlayCardsGoToBottom: boolean = false;
 	readonly overlayShowGlobalEffects: boolean = true;
+	readonly overlayShowCurrentEffects: boolean = true;
 	readonly overlayShowDiscoveryZone: boolean = true;
 	readonly overlayHideGeneratedCardsInOtherZone: boolean = false;
 	readonly overlaySortByManaInOtherZone: boolean = false;
@@ -309,6 +310,7 @@ export class Preferences implements IPreferences {
 	readonly opponentOverlayGroupByZone: boolean = true;
 	readonly opponentOverlayCardsGoToBottom: boolean = true;
 	readonly opponentOverlayShowGlobalEffects: boolean = true;
+	readonly opponentOverlayShowCurrentEffects: boolean = true;
 	readonly opponentOverlayHideGeneratedCardsInOtherZone: boolean = false;
 	readonly opponentOverlaySortByManaInOtherZone: boolean = false;
 	readonly opponentOverlayShowBottomCardsSeparately: boolean = true;

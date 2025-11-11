@@ -51,6 +51,13 @@ export const decktrackerYourDeckSettings = (context: SettingContext): SettingNod
 					},
 					{
 						type: 'toggle',
+						field: 'overlayShowCurrentEffects',
+						label: context.i18n.translateString('settings.decktracker.opponent-deck.current-effects-label'),
+						tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.current-effects-tooltip'),
+						disabledIf: (prefs: Preferences) => !prefs.overlayGroupByZone,
+					},
+					{
+						type: 'toggle',
 						field: 'overlayShowDiscoveryZone',
 						label: context.i18n.translateString('settings.decktracker.your-deck.discovery-zone-label'),
 						tooltip: context.i18n.translateString('settings.decktracker.your-deck.discovery-zone-tooltip'),

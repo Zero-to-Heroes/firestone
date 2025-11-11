@@ -11,7 +11,7 @@ import {
 	Output,
 	ViewRef,
 } from '@angular/core';
-import { CardClass, CardIds, GameTag, GameType, ReferenceCard } from '@firestone-hs/reference-data';
+import { CardClass, CardIds, CardType, GameTag, GameType, ReferenceCard } from '@firestone-hs/reference-data';
 import { CardMousedOverService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, uuidShort } from '@firestone/shared/framework/common';
@@ -513,7 +513,8 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		// We can't use the reference card cost, because of cards like Zilliax. So we need to make sure that the manaCost field
 		// is a strict reflection of the "raw" cost, and the actualManaCost is what gets updated after discounts
 		this.manaCost = showUpdatedCost ? card.getEffectiveManaCost() : card.refManaCost;
-		this.manaCostStr = this._referenceCard?.hideStats ? '' : this.manaCost == null ? '?' : `${this.manaCost}`;
+		this.manaCostStr =
+			this._referenceCard?.hideStats || card.hideStats ? '' : this.manaCost == null ? '?' : `${this.manaCost}`;
 		this.manaCostReduction = this.manaCost != null && this.manaCost < card.refManaCost;
 		this.cardName = this.buildCardName(card, showStatsChange);
 		this.isUnknownCard = !card.cardName?.length && !this.cardId;

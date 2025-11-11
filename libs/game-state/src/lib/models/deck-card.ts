@@ -35,6 +35,7 @@ export class DeckCard {
 	readonly createdIndex?: number;
 	readonly lastAffectedByCardId?: string;
 	readonly lastAffectedByEntityId?: number;
+	readonly hideStats?: boolean;
 	readonly dormant?: boolean;
 	// Put into play is different from "played", which is important in the case of cards like
 	// Tess / Contraband Stash

@@ -14,6 +14,7 @@ import { Preferences, PreferencesService } from '@firestone/shared/common/servic
 			[scaleExtractor]="scaleExtractor"
 			[cardsGoToBottomExtractor]="cardsGoToBottomExtractor"
 			[showGlobalEffectsExtractor]="showGlobalEffectsExtractor"
+			[showCurrentEffectsExtractor]="showCurrentEffectsExtractor"
 			[showDiscoveryExtractor]="showDiscoveryExtractor"
 			[darkenUsedCardsExtractor]="darkenUsedCardsExtractor"
 			[hideGeneratedCardsInOtherZoneExtractor]="hideGeneratedCardsInOtherZoneExtractor"
@@ -42,6 +43,7 @@ export class DeckTrackerOverlayOpponentComponent {
 	scaleExtractor = (prefs: Preferences) => prefs.opponentOverlayScale;
 	cardsGoToBottomExtractor = (prefs: Preferences) => prefs.opponentOverlayCardsGoToBottom;
 	showGlobalEffectsExtractor = (prefs: Preferences) => prefs.opponentOverlayShowGlobalEffects;
+	showCurrentEffectsExtractor = (prefs: Preferences) => prefs.opponentOverlayShowCurrentEffects;
 	showDiscoveryExtractor = (prefs: Preferences) => false;
 	darkenUsedCardsExtractor = (prefs: Preferences) => prefs.opponentOverlayDarkenUsedCards;
 	hideGeneratedCardsInOtherZoneExtractor = (prefs: Preferences) => prefs.opponentOverlayHideGeneratedCardsInOtherZone;
