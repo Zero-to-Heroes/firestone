@@ -84,7 +84,6 @@ class GameEventsEdge {
 	}
 
 	async realtimeLogProcessing(logLines) {
-		console.log('[GameEventsEdge] processing chunk', logLines.length);
 		if (!Array.isArray(logLines)) {
 			throw new Error('[GameEventsEdge] realtimeLogProcessing expects an array of log lines');
 		}
@@ -103,7 +102,7 @@ class GameEventsEdge {
 
 	// Helper method to call plugin methods with proper error handling
 	async callPluginMethod(methodName, params = {}) {
-		console.debug('[GameEventsEdge] [debug] Calling plugin method:', methodName);
+		// console.debug('[GameEventsEdge] [debug] Calling plugin method:', methodName);
 		if (!this.initialized && methodName !== 'setGameEventCallback' && methodName !== 'setLogger') {
 			throw new Error('Plugin not initialized');
 		}
@@ -111,13 +110,13 @@ class GameEventsEdge {
 		return new Promise((resolve, reject) => {
 			try {
 				// Get cached edge function for this method
-				console.debug('[GameEventsEdge] [debug] Getting edge function for:', methodName);
+				// console.debug('[GameEventsEdge] [debug] Getting edge function for:', methodName);
 				const edgeFunc = this.getEdgeFunction(methodName);
-				console.debug('[GameEventsEdge] [debug]', methodName, 'Got edge function:');
+				// console.debug('[GameEventsEdge] [debug]', methodName, 'Got edge function:');
 
 				// All methods now follow the same pattern: async Task<object> MethodName(dynamic input)
 				edgeFunc(params, (error, result) => {
-					console.debug('[GameEventsEdge] [debug]', methodName, 'Edge function result:', result);
+					// console.debug('[GameEventsEdge] [debug]', methodName, 'Edge function result:', result);
 					if (error) {
 						reject(error);
 					} else {

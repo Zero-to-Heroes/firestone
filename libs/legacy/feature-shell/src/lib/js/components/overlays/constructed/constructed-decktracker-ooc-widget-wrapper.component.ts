@@ -20,7 +20,7 @@ import {
 	OverwolfService,
 	waitForReady,
 } from '@firestone/shared/framework/core';
-import { Observable, combineLatest, shareReplay, takeUntil, tap } from 'rxjs';
+import { Observable, combineLatest, shareReplay, takeUntil } from 'rxjs';
 
 @Component({
 	standalone: false,
@@ -120,13 +120,11 @@ export class ConstructedDecktrackerOocWidgetWrapperComponent
 		);
 
 		const canShowWidget$ = combineLatest([this.scene.currentScene$$, this.deck.currentDeck$$]).pipe(
-			tap((info) => console.debug('[debug] constructed-decktracker-ooc-widget-wrapper canShowWidget$ 1', info)),
 			this.mapData(([currentScene, deck]) => {
 				const result =
 					[SceneMode.TOURNAMENT, SceneMode.FRIENDLY].includes(currentScene) && deck?.deckstring?.length > 0;
 				return result;
 			}),
-			tap((info) => console.debug('[debug] constructed-decktracker-ooc-widget-wrapper canShowWidget$ 2', info)),
 		);
 
 		this.showWidgetListOnly$ = combineLatest([
@@ -136,9 +134,6 @@ export class ConstructedDecktrackerOocWidgetWrapperComponent
 			canShowWidget$,
 			this.ads.enablePremiumFeatures$$,
 		]).pipe(
-			tap((info) =>
-				console.debug('[debug] constructed-decktracker-ooc-widget-wrapper showWidgetListOnly$ 1', info),
-			),
 			this.mapData(
 				([{ ooc, displayList }, canShowWidget, premium]) => canShowWidget && ooc && (displayList || !premium),
 			),
@@ -150,9 +145,6 @@ export class ConstructedDecktrackerOocWidgetWrapperComponent
 			canShowWidget$,
 			this.ads.enablePremiumFeatures$$,
 		]).pipe(
-			tap((info) =>
-				console.debug('[debug] constructed-decktracker-ooc-widget-wrapper showWidgetExtended$ 1', info),
-			),
 			this.mapData(([displayFromPrefs, canShowWidget, premium]) => canShowWidget && premium && displayFromPrefs),
 			shareReplay(1),
 			this.handleReposition(),

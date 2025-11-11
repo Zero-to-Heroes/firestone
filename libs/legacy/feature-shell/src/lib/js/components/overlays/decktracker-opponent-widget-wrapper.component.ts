@@ -7,13 +7,13 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { SceneMode } from '@firestone-hs/reference-data';
+import { isBattlegrounds, isMercenaries, SceneMode } from '@firestone-hs/reference-data';
 import { GameNativeStateStoreService } from '@firestone/app/common';
 import { OverlayDisplayService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import { Observable, combineLatest, distinctUntilChanged } from 'rxjs';
+import { combineLatest, distinctUntilChanged, Observable } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
@@ -92,8 +92,8 @@ export class DecktrackerOpponentWidgetWrapperComponent
 				(deckState) => deckState?.opponentTrackerClosedByUser,
 				(deckState) => deckState?.gameStarted,
 				(deckState) => deckState?.gameEnded,
-				(deckState) => deckState?.isBattlegrounds(),
-				(deckState) => deckState?.isMercenaries(),
+				(deckState) => isBattlegrounds(deckState?.metadata?.gameType),
+				(deckState) => isMercenaries(deckState?.metadata?.gameType),
 				(deckState) => deckState?.opponentDeck?.totalCardsInZones(),
 			),
 			displayFromGameMode$,

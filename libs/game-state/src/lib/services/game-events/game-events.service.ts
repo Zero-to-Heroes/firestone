@@ -168,9 +168,7 @@ export class GameEvents {
 
 		for (const chunk of chunks) {
 			const start = Date.now();
-			console.log('[game-events] processing chunk', chunk.length);
 			await this.gameEventsPlugin.realtimeLogProcessing(chunk);
-			console.log('[game-events] processed chunk', chunk.length, Date.now() - start);
 		}
 
 		return true;
@@ -1718,7 +1716,7 @@ export class GameEvents {
 	}
 
 	public receiveLogLine(data: string, postponed = false) {
-		console.log('[game-events] received log line', data);
+		// console.log('[game-events] received log line', data);
 		// In case the game overrides the info during the process, we stop everything and start from scratch
 		if (data === 'truncated') {
 			console.log(

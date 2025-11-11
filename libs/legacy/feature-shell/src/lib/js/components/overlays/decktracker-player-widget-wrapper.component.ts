@@ -7,12 +7,12 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { SceneMode } from '@firestone-hs/reference-data';
+import { isBattlegrounds, isMercenaries, SceneMode } from '@firestone-hs/reference-data';
 import { GameStateFacadeService, OverlayDisplayService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import { Observable, combineLatest, distinctUntilChanged, takeUntil, tap } from 'rxjs';
+import { combineLatest, distinctUntilChanged, Observable, takeUntil, tap } from 'rxjs';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
 @Component({
@@ -78,6 +78,13 @@ export class DecktrackerPlayerWidgetWrapperComponent
 		await waitForReady(this.scene, this.overlayDisplay, this.gameState);
 		console.log('decktracker-player-widget-wrapper ngAfterContentInit');
 
+		this.gameState.gameState$$
+			.pipe(
+				tap((state) => console.debug('[decktracker-player-widget-wrapper] game state', state)),
+				takeUntil(this.destroyed$),
+			)
+			.subscribe();
+
 		const displayFromGameMode$ = this.overlayDisplay.decktrackerDisplayEventBus$$;
 		this.showWidget$ = combineLatest([
 			this.scene.currentScene$$,
@@ -87,9 +94,9 @@ export class DecktrackerPlayerWidgetWrapperComponent
 					closedByUser: deckState?.playerTrackerClosedByUser,
 					gameStarted: deckState?.gameStarted,
 					gameEnded: deckState?.gameEnded,
-					isBgs: deckState?.isBattlegrounds(),
-					isMercs: deckState?.isMercenaries(),
-					totalCardsInZones: deckState?.playerDeck?.totalCardsInZones(),
+					isBgs: isBattlegrounds(deckState?.metadata?.gameType),
+					isMercs: isMercenaries(deckState?.metadata?.gameType),
+					totalCardsInZones: deckState?.playerDeck?.totalCardsInZones() ?? 0,
 				})),
 				distinctUntilChanged(
 					(a, b) =>

@@ -44,4 +44,4 @@ Notes:
 
 TODO now:
 
-- electron-app-injector-setup: importing legacy feature shell doesn't work, as we're also importing a ton of stuff that is browser-only. So we probably need to move the services into dedicated modules, at least gradually as we need them
+- memory reading triggers multiple times for the same event?

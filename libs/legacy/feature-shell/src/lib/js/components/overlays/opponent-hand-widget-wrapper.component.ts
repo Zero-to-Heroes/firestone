@@ -7,12 +7,12 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { SceneMode } from '@firestone-hs/reference-data';
+import { isBattlegrounds, isMercenaries, SceneMode } from '@firestone-hs/reference-data';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { GameInfoService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import { Observable, combineLatest, distinctUntilChanged } from 'rxjs';
+import { combineLatest, distinctUntilChanged, Observable } from 'rxjs';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
 @Component({
@@ -86,8 +86,8 @@ export class OpponentHandWidgetWrapperComponent extends AbstractWidgetWrapperCom
 			this.mapData((state) => ({
 				gameStarted: state.gameStarted,
 				gameEnded: state.gameEnded,
-				isBgs: state.isBattlegrounds(),
-				isMercs: state.isMercenaries(),
+				isBgs: isBattlegrounds(state?.metadata?.gameType),
+				isMercs: isMercenaries(state?.metadata?.gameType),
 			})),
 			distinctUntilChanged(
 				(a, b) =>

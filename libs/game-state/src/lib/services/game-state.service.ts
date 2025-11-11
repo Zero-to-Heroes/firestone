@@ -403,14 +403,14 @@ export class GameStateService {
 			);
 		}
 
-		// console.log(
-		// 	'[game-state] processed event',
-		// 	gameEvent.type,
-		// 	gameEvent.cardId,
-		// 	gameEvent.entityId,
-		// 	currentState,
-		// 	gameEvent,
-		// );
+		console.log(
+			'[game-state] processed event',
+			gameEvent.type,
+			gameEvent.cardId,
+			gameEvent.entityId,
+			currentState,
+			gameEvent,
+		);
 		this.processedEvents.push(gameEvent.type);
 		return currentState;
 	}

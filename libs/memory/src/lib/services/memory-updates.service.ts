@@ -22,7 +22,7 @@ export class MemoryUpdatesService extends AbstractFacadeService<MemoryUpdatesSer
 	}
 
 	newUpdate(changes: MemoryUpdate) {
-		console.debug('[memory-updates] new update', changes);
+		// console.debug('[memory-updates] new update', changes);
 		this.memoryUpdates$$.next(changes);
 	}
 

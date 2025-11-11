@@ -85,7 +85,7 @@ export abstract class AbstractFacadeService<T extends AbstractFacadeService<T>> 
 		console.warn(this.constructor.name, 'initElectronSubjects not implemented');
 	}
 
-	protected setupElectronSubject<T>(obs: BehaviorSubject<T>, eventName: string) {
+	protected setupElectronSubject<V>(obs: BehaviorSubject<V>, eventName: string) {
 		if (isMainProcess()) {
 			const { ipcMain } = eval('require')('electron');
 			if (typeof ipcMain !== 'undefined') {
@@ -97,7 +97,7 @@ export abstract class AbstractFacadeService<T extends AbstractFacadeService<T>> 
 					}
 				});
 				const originalNext = obs.next.bind(obs);
-				obs.next = (value: T) => {
+				obs.next = (value: V) => {
 					originalNext(value);
 					this.broadcastToRenderers(eventName, value);
 				};
@@ -105,11 +105,16 @@ export abstract class AbstractFacadeService<T extends AbstractFacadeService<T>> 
 		} else {
 			const { ipcRenderer } = (window as any).require('electron');
 			if (typeof ipcRenderer !== 'undefined') {
-				ipcRenderer.on(eventName, (_, value: T) => {
-					obs.next(value);
+				ipcRenderer.on(eventName, (_, value: V) => {
+					const transformedValue = this.transformValueForElectron(value);
+					obs.next(transformedValue);
 				});
 			}
 		}
+	}
+
+	protected transformValueForElectron(value: any): any {
+		return value;
 	}
 }
 

@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { AbstractFacadeService, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
+import { BattlegroundsState } from '../models/_barrel';
+import { DeckState } from '../models/deck-state';
 import { GameState } from '../models/game-state';
 import { GameStateService } from './game-state.service';
 
@@ -38,5 +40,15 @@ export class GameStateFacadeService extends AbstractFacadeService<GameStateFacad
 	protected override async createElectronProxy(ipcRenderer: any) {
 		console.log('[game-state-facade] createElectronProxy');
 		this.gameState$$ = new BehaviorSubject<GameState>(new GameState());
+	}
+
+	protected override transformValueForElectron(value: GameState): GameState {
+		const result = GameState.create({
+			...value,
+			playerDeck: DeckState.create(value.playerDeck),
+			opponentDeck: DeckState.create(value.opponentDeck),
+			bgState: value.bgState ? BattlegroundsState.create(value.bgState) : undefined,
+		});
+		return result;
 	}
 }

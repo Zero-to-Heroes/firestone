@@ -8,7 +8,7 @@ import {
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest } from 'rxjs';
-import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
 import { GameStateFacadeService } from './game-state-facade.service';
 
 const eventName = 'traditional-overlay-display';
@@ -60,6 +60,7 @@ export class OverlayDisplayService extends AbstractFacadeService<OverlayDisplayS
 				}),
 				map((info) => this.shouldDisplay(info.gameType, info.hasPlayerDeck, info.prefs)),
 				distinctUntilChanged(),
+				tap((info) => console.debug('[overlay-display] should display final value?', info)),
 			)
 			.subscribe((shouldDisplay) => this.decktrackerDisplayEventBus$$.next(shouldDisplay));
 	}
@@ -73,7 +74,7 @@ export class OverlayDisplayService extends AbstractFacadeService<OverlayDisplayS
 	}
 
 	private shouldDisplay(gameType: GameType, hasPlayerDeck: boolean, prefs: Preferences): boolean {
-		console.debug('[overlay-display] should display?', gameType, hasPlayerDeck, prefs);
+		console.debug('[overlay-display] should display?', gameType, hasPlayerDeck, prefs.decktrackerShowPractice);
 		if (!gameType || !hasPlayerDeck) {
 			return false;
 		}

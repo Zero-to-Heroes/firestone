@@ -100,7 +100,7 @@ export class ElectronOverlayComponent implements OnInit, OnDestroy {
 
 		// MemoryUpdatesService
 		const memoryUpdatesSubscription = this.memoryUpdateService.memoryUpdates$$.subscribe((memoryUpdates) => {
-			console.log('[ElectronOverlay] Memory updates changed:', memoryUpdates);
+			// console.log('[ElectronOverlay] Memory updates changed:', memoryUpdates);
 			this.memoryUpdates = JSON.stringify(memoryUpdates);
 		});
 		this.subscriptions.push(memoryUpdatesSubscription);

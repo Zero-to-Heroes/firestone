@@ -232,6 +232,7 @@ export class DeckTrackerOverlayRootComponent
 		this.deck$ = this.gameState.gameState$$.pipe(
 			this.mapData((gameState) => {
 				const deck = !gameState ? null : this.deckExtractor(gameState);
+				console.debug('[debug] deck', deck, gameState);
 				// Add some information so that we can have it even when global effects are hidden
 				const enrichedDeck = enrichDeck(deck);
 				return enrichedDeck;

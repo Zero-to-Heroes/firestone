@@ -66,7 +66,7 @@ export class MindVisionElectronService implements IMindVisionFacade {
 			// Set up memory update callback before initialization
 			this.mindVision.setMemoryUpdateCallback((updateData: any) => {
 				if (updateData && updateData.memoryUpdate) {
-					console.debug('[MindVisionElectron] Memory update received:', updateData.memoryUpdate);
+					// console.debug('[MindVisionElectron] Memory update received:', updateData.memoryUpdate);
 
 					// Handle both string and object formats
 					let parsedUpdate;

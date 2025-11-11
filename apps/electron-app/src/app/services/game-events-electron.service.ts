@@ -38,7 +38,7 @@ export class GameEventsElectronService extends IGameEventsPlugin {
 		this.gameEventsPlugin.setGameEventCallback((updateData: any) => {
 			// console.log('[GameEventsElectron] Game event received 0:', updateData);
 			if (updateData && updateData.gameEvent) {
-				console.debug('[GameEventsElectron] Game event received:', updateData.gameEvent);
+				// console.debug('[GameEventsElectron] Game event received:', updateData.gameEvent);
 
 				// Handle both string and object formats
 				let parsedUpdate;
@@ -86,9 +86,7 @@ export class GameEventsElectronService extends IGameEventsPlugin {
 	public override async realtimeLogProcessing(lines: readonly string[]) {
 		const plugin = await this.get();
 		const start = Date.now();
-		console.log('[GameEventsElectron] processing chunk', lines.length, start);
 		await plugin.realtimeLogProcessing(Array.from(lines));
-		console.log('[GameEventsElectron] processed chunk', lines.length, Date.now() - start);
 	}
 
 	private async get() {

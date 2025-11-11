@@ -7,7 +7,7 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { SceneMode } from '@firestone-hs/reference-data';
+import { isBattlegrounds, isMercenaries, SceneMode } from '@firestone-hs/reference-data';
 import {
 	BattlegroundsState,
 	CounterType,
@@ -18,7 +18,7 @@ import {
 import { SceneService } from '@firestone/memory';
 import { BooleanWithLimited, Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { AppInjector, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import { Observable, combineLatest, distinctUntilChanged } from 'rxjs';
+import { combineLatest, distinctUntilChanged, Observable } from 'rxjs';
 import { AbstractWidgetWrapperComponent } from '../_widget-wrapper.component';
 
 export const templateBase = `
@@ -97,8 +97,8 @@ export class AbstractCounterWidgetWrapperComponent extends AbstractWidgetWrapper
 			),
 			this.gameState.gameState$$.pipe(this.mapData((state) => state.gameStarted)),
 			this.gameState.gameState$$.pipe(this.mapData((state) => state.gameEnded)),
-			this.gameState.gameState$$.pipe(this.mapData((state) => state.isBattlegrounds())),
-			this.gameState.gameState$$.pipe(this.mapData((state) => state.isMercenaries())),
+			this.gameState.gameState$$.pipe(this.mapData((state) => isBattlegrounds(state?.metadata?.gameType))),
+			this.gameState.gameState$$.pipe(this.mapData((state) => isMercenaries(state?.metadata?.gameType))),
 			this.gameState.gameState$$.pipe(this.mapData((state) => state)),
 			displayFromGameMode$,
 		]).pipe(

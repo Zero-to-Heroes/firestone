@@ -59,10 +59,12 @@ export class GameState {
 		return Object.assign(new GameState(), this, value);
 	}
 
+	/** @deprecated DO NOT USE IN COMPONENTS (because of electron serialization) */
 	public isBattlegrounds(): boolean {
 		return isBattlegrounds(this.metadata.gameType);
 	}
 
+	/** @deprecated DO NOT USE IN COMPONENTS (because of electron serialization) */
 	public isMercenaries(): boolean {
 		return (
 			this.metadata.gameType === GameType.GT_MERCENARIES_AI_VS_AI ||
