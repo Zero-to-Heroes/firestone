@@ -337,6 +337,8 @@ export class MetaDecksVisualizationComponent extends AbstractSubscriptionCompone
 				quantity: cards.map((c) => c.quantity).reduce((a, b) => a + b, 0),
 				cardId: cards[0].card.id,
 			}))
+			// So that we filter out Fabled cards, or other kind of token cards that are in the main deck
+			.filter((c) => !!this.allCards.getCard(c.cardId)?.collectible)
 			.map((card) => {
 				let owned = ownedByCardId[card.cardId];
 				// owned = 0;
