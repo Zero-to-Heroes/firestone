@@ -93,6 +93,10 @@ class GameEventsEdge {
 		});
 	}
 
+	async askForGameStateUpdate() {
+		return this.callPluginMethod('askForGameStateUpdate', null);
+	}
+
 	async tearDown() {
 		// Clean up our state
 		this.initialized = false;

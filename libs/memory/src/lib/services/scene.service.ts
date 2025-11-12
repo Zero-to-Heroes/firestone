@@ -34,7 +34,7 @@ export class SceneService extends AbstractFacadeService<SceneService> {
 		console.log('[scene-service] ready');
 
 		this.memoryUpdates.memoryUpdates$$.subscribe((changes) => {
-			console.debug('[scene-service] memory updates', changes, changes.CurrentScene);
+			// console.debug('[scene-service] memory updates', changes, changes.CurrentScene);
 			const newScene = changes.CurrentScene;
 			this.updateScene(newScene);
 		});

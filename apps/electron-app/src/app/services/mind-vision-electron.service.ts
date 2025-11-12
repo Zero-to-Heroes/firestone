@@ -34,7 +34,8 @@ export class MindVisionElectronService implements IMindVisionFacade {
 
 	constructor(private readonly memoryUpdates: MemoryUpdatesService) {
 		// Delay initialization to allow overlay to be ready first
-		setTimeout(() => this.initializePluginInternal(), 2000);
+		// It will be initialized manually in mind-vision-state-init
+		// setTimeout(() => this.initializePluginInternal(), 2000);
 	}
 
 	public async initializePlugin(): Promise<void> {

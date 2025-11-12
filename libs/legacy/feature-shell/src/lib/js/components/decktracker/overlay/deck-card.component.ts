@@ -540,7 +540,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		this.manaCostStr = this._referenceCard?.hideStats ? '' : this.manaCost == null ? '?' : `${this.manaCost}`;
 		this.manaCostReduction = this.manaCost != null && this.manaCost < card.refManaCost;
 		this.cardName = this.buildCardName(card, showStatsChange);
-		console.debug('updateInfos', this.cardName, this.cardId, this.cards.getCard(this.cardId));
+		// console.debug('updateInfos', this.cardName, this.cardId, this.cards.getCard(this.cardId));
 		this.isUnknownCard = !card.cardName?.length && !this.cardId;
 
 		this.numberOfCopies = card.totalQuantity;

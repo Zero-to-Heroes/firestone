@@ -247,7 +247,7 @@ class MindVisionEdge {
 
 	// Helper method to call plugin methods with proper error handling
 	async callPluginMethod(methodName, params = {}) {
-		console.debug('[MindVisionEdge] [debug] Calling plugin method:', methodName);
+		// console.debug('[MindVisionEdge] [debug] Calling plugin method:', methodName);
 		if (!this.initialized && methodName !== 'setMemoryUpdateCallback' && methodName !== 'setLogger') {
 			throw new Error('Plugin not initialized');
 		}
@@ -255,13 +255,13 @@ class MindVisionEdge {
 		return new Promise((resolve, reject) => {
 			try {
 				// Get cached edge function for this method
-				console.debug('[MindVisionEdge] [debug] Getting edge function for:', methodName);
+				// console.debug('[MindVisionEdge] [debug] Getting edge function for:', methodName);
 				const edgeFunc = this.getEdgeFunction(methodName);
-				console.debug('[MindVisionEdge] [debug]', methodName, 'Got edge function:');
+				// console.debug('[MindVisionEdge] [debug]', methodName, 'Got edge function:');
 
 				// All methods now follow the same pattern: async Task<object> MethodName(dynamic input)
 				edgeFunc(params, (error, result) => {
-					console.debug('[MindVisionEdge] [debug]', methodName, 'Edge function result:', result);
+					// console.debug('[MindVisionEdge] [debug]', methodName, 'Edge function result:', result);
 					if (error) {
 						reject(error);
 					} else {

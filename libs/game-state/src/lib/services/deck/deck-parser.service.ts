@@ -86,19 +86,19 @@ export class DeckParserService {
 		usePreviousDeckIfSameScenarioId: boolean,
 		metadata: Metadata,
 	): Promise<DeckInfo | null> {
-		console.log(
+		console.debug(
 			'[deck-parser] retrieving current deck',
 			this.currentDeck,
 			usePreviousDeckIfSameScenarioId,
 			metadata,
 		);
 		if (this.spectating) {
-			console.log('[deck-parser] spectating, not returning any deck');
+			console.debug('[deck-parser] spectating, not returning any deck');
 			return null;
 		}
 
 		if (this.selectedDeckId < 0) {
-			console.log(
+			console.debug(
 				'[deck-parser] retrieving template deck',
 				this.selectedDeckId,
 				metadata.scenarioId,
@@ -112,14 +112,14 @@ export class DeckParserService {
 			);
 		}
 
-		console.log(
+		console.debug(
 			'[deck-parser] rebuilding deck',
 			this.selectedDeckId,
 			this.currentDeck?.scenarioId,
 			metadata.scenarioId,
 		);
 		const deckFromMemory = await this.memory.getActiveDeck(this.selectedDeckId, 1);
-		console.log(
+		console.debug(
 			'[deck-parser] active deck from memory',
 			this.selectedDeckId,
 			deckFromMemory,
@@ -127,7 +127,7 @@ export class DeckParserService {
 		);
 		const activeDeck = deckFromMemory;
 
-		console.log(
+		console.debug(
 			'[deck-parser] active deck',
 			activeDeck,
 			this.isDeckLogged(metadata.scenarioId),
@@ -140,7 +140,7 @@ export class DeckParserService {
 		const shouldUseCachedDeck =
 			metadata.gameType === GameType.GT_VS_AI && !SCENARIO_WITHOUT_RESTART.includes(metadata.scenarioId);
 		if (activeDeck && activeDeck.DeckList && activeDeck.DeckList.length > 0) {
-			console.log('[deck-parser] updating active deck', activeDeck, this.currentDeck);
+			console.debug('[deck-parser] updating active deck', activeDeck, this.currentDeck);
 			deckInfo = this.updateDeckFromMemory(activeDeck, metadata.scenarioId, metadata.gameType);
 		} else if (
 			shouldUseCachedDeck &&
@@ -148,7 +148,7 @@ export class DeckParserService {
 			// When selecting the deck in the deck selection screen, we don't have any sceanrio ID
 			(this.selectedDeckId || this.currentDeck.scenarioId === metadata.scenarioId)
 		) {
-			console.log('[deck-parser] returning cached deck', this.currentDeck, metadata, this.selectedDeckId);
+			console.debug('[deck-parser] returning cached deck', this.currentDeck, metadata, this.selectedDeckId);
 			return this.currentDeck;
 		} else if (this.isDeckLogged(metadata.scenarioId)) {
 			console.log('[deck-parser] trying to read previous deck from logs', metadata.scenarioId);
@@ -272,13 +272,13 @@ export class DeckParserService {
 					await this.getTemplateDeck(this.selectedDeckId, null, null, null);
 				} else {
 					const activeDeck = await this.memory.getActiveDeck(this.selectedDeckId, 2, true);
-					console.log(
+					console.debug(
 						'[deck-parser] getting active deck from memory after ID selection',
 						this.selectedDeckId,
 						activeDeck,
 					);
 					if (activeDeck && activeDeck.DeckList && activeDeck.DeckList.length > 0) {
-						console.log(
+						console.debug(
 							'[deck-parser] updating active deck after ID selection',
 							activeDeck,
 							this.currentDeck,
@@ -326,7 +326,7 @@ export class DeckParserService {
 		this.currentDeck = deck;
 		this.currentDeck$$.next(deck);
 		if (this.currentDeck) {
-			console.log('[deck-parser] set current deck', this.currentDeck, JSON.stringify(this.currentDeck));
+			console.debug('[deck-parser] set current deck', this.currentDeck, JSON.stringify(this.currentDeck));
 		}
 	}
 
@@ -343,8 +343,8 @@ export class DeckParserService {
 		}
 
 		const decklist: readonly number[] = normalizeWithDbfIds(deckFromMemory.DeckList, this.allCards);
-		console.log('[deck-parser] checking allCards', this.allCards?.getCards()?.length ?? 'null');
-		console.log('[deck-parser] normalized decklist with dbf ids', decklist, deckFromMemory.HeroCardId);
+		console.debug('[deck-parser] checking allCards', this.allCards?.getCards()?.length ?? 'null');
+		console.debug('[deck-parser] normalized decklist with dbf ids', decklist, deckFromMemory.HeroCardId);
 		const deckDefinition: DeckDefinition = {
 			format: deckFromMemory.FormatType || gameFormat || GameFormat.FT_WILD,
 			cards: explodeDecklist(decklist),
@@ -368,7 +368,7 @@ export class DeckParserService {
 						};
 					}),
 		};
-		console.log(
+		console.debug(
 			'[deck-parser] built deck definition',
 			deckFromMemory.HeroCardId,
 			deckFromMemory.HeroClass,
@@ -390,7 +390,7 @@ export class DeckParserService {
 			scenarioId: scenarioId,
 			gameType: gameType,
 		};
-		console.log('[deck-parser] built deck info', currentDeck);
+		console.debug('[deck-parser] built deck info', currentDeck);
 		return currentDeck;
 	}
 

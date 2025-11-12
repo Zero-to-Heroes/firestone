@@ -18,8 +18,14 @@
 				"inlineStyleLanguage": "scss",
 				"assets": [
 					{
+						"input": "libs/shared/assets/src/assets",
 						"glob": "**/*",
-						"input": "apps/electron-frontend/public"
+						"output": "./assets"
+					},
+					{
+						"glob": "**/*",
+						"input": "apps/electron-frontend/public",
+						"output": "./"
 					}
 				],
 				"styles": ["apps/electron-frontend/src/styles.scss"],
