@@ -65,8 +65,15 @@ export class CopiedFromEntityIdParser implements EventParser {
 				) ?? copiedDeck.deck.find((card) => card.cardId === copyCardId);
 			console.debug('[copied-from-entity] copiedCard not found', copiedCard, copyCardId, copiedDeck.deck);
 		}
+
 		// Avoid info leaks
-		if (copiedCard?.positionFromTop != null || copiedCard?.positionFromBottom != null) {
+		// 2025-11-13: If we already know the cardId and entityId, we don't need to hide it (eg we discover a card that has a Start of Combat effect)
+		// 2025-11-13: is this really true?
+		if (
+			!copiedCard?.entityId &&
+			!copiedCard?.cardId &&
+			(copiedCard?.positionFromTop != null || copiedCard?.positionFromBottom != null)
+		) {
 			copiedCard = null;
 			copiedCardEntityId = null;
 		}
@@ -150,6 +157,7 @@ export class CopiedFromEntityIdParser implements EventParser {
 		console.debug('[copied-from-entity] isCardMovedAroundInPlayerDeck', isCardMovedAroundInPlayerDeck);
 
 		const newCopiedDeck =
+			// Sometimes the card already exists in the deck (eg if it has a start of combat effect)
 			copiedCardZone === Zone.DECK && !isCardMovedAroundInPlayerDeck
 				? this.helper.empiricReplaceCardInZone(copiedDeck.deck, updatedCopiedCardWithPosition, true, {
 						cost: updatedCopiedCardWithPosition.refManaCost, // Not totally sure about ref vs actual
