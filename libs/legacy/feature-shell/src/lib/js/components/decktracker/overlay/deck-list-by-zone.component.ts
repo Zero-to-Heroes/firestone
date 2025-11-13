@@ -15,6 +15,7 @@ import { DeckZone, DeckZoneSection } from '../../../models/decktracker/view/deck
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 import { PLAGUES } from '../../../services/decktracker/event-parser/special-cases/plagues-parser';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
+import { CURRENT_FEFECTS_WHITELIST } from '../../../services/hs-utils';
 
 @Component({
 	standalone: false,
@@ -246,18 +247,22 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 
 		if (showCurrentEffectsZone) {
 			const currentEffects = deckState.enchantments
-				.filter((e) => !deckState.globalEffects.some((g) => g.cardId === e.cardId))
 				.map((e) => {
 					const refCard = this.allCards.getCard(e.cardId);
 					const sourceCard = this.allCards.getCard(e.tags?.[GameTag.CREATOR_DBID]);
+					// TODO: also remove counters
+					if (!CURRENT_FEFECTS_WHITELIST.includes(refCard.id as CardIds)) {
+						return null;
+					}
 					return DeckCard.create({
-						cardId: sourceCard.id, // To get the right image and tooltip
-						cardName: refCard.name,
+						cardId: sourceCard.id || refCard.id, // To get the right image and tooltip
+						cardName: sourceCard.name || refCard.name,
 						entityId: e.entityId,
-						refManaCost: refCard.cost,
+						refManaCost: null,
 						hideStats: true,
 					});
-				});
+				})
+				.filter((c) => !!c);
 			if (currentEffects.length > 0) {
 				zones.push(
 					this.buildZone(

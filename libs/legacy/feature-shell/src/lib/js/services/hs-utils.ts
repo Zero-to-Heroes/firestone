@@ -332,6 +332,14 @@ export const getCardForGlobalEffect = (cardId: CardIds): string => {
 	}
 };
 
+export const CURRENT_FEFECTS_WHITELIST = [
+	CardIds.SpacerockCollector_RockCollectionEnchantment_GDB_875e,
+	CardIds.SparklingPhial_SparklingEnchantment_TOY_800e1,
+	CardIds.Corpsicle_CorpsicleEnchantment_VAC_427e,
+	CardIds.SandboxScoundrel_OnSaleEnchantment_TOY_521e,
+	// CardIds.SandboxScoundrel_OnSaleReductionEnchantment_TOY_521e1
+];
+
 export const cardsRevealedWhenDrawn = [
 	CardIds.AncientShade_AncientCurseToken,
 	CardIds.BeneathTheGrounds_NerubianAmbushToken,
