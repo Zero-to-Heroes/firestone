@@ -7,6 +7,10 @@
 	pointer-events: none;
 }
 
+.indented {
+	margin-left: 15px;
+}
+
 preference-toggle ::ng-deep .preference-toggle .toggle .settings-p {
 	font-size: 1em;
 }

@@ -73,6 +73,10 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 		this.showCurrentEffectsZone$$.next(value);
 	}
 
+	@Input() set currentEffectUseEnchantmentName(value: boolean) {
+		this.currentEffectUseEnchantmentName$$.next(value);
+	}
+
 	@Input() set hideGeneratedCardsInOtherZone(value: boolean) {
 		this.hideGeneratedCardsInOtherZone$$.next(value);
 	}
@@ -123,6 +127,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 
 	private showGlobalEffectsZone$$ = new BehaviorSubject<boolean>(false);
 	private showCurrentEffectsZone$$ = new BehaviorSubject<boolean>(false);
+	private currentEffectUseEnchantmentName$$ = new BehaviorSubject<boolean>(false);
 	private hideGeneratedCardsInOtherZone$$ = new BehaviorSubject<boolean>(false);
 	private sortCardsByManaCostInOtherZone$$ = new BehaviorSubject<boolean>(false);
 	private showBottomCardsSeparately$$ = new BehaviorSubject<boolean>(true);
@@ -157,6 +162,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 			this.deckState$$,
 			this.showGlobalEffectsZone$$,
 			this.showCurrentEffectsZone$$,
+			this.currentEffectUseEnchantmentName$$,
 			this.hideGeneratedCardsInOtherZone$$,
 			this.sortCardsByManaCostInOtherZone$$,
 			this.showBottomCardsSeparately$$,
@@ -176,6 +182,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 					deckState,
 					showGlobalEffectsZone,
 					showCurrentEffectsZone,
+					currentEffectUseEnchantmentName,
 					hideGeneratedCardsInOtherZone,
 					sortCardsByManaCostInOtherZone,
 					showBottomCardsSeparately,
@@ -190,6 +197,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 					this.buildZones(
 						showGlobalEffectsZone,
 						showCurrentEffectsZone,
+						currentEffectUseEnchantmentName,
 						hideGeneratedCardsInOtherZone,
 						sortCardsByManaCostInOtherZone,
 						showBottomCardsSeparately,
@@ -211,6 +219,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 	private buildZones(
 		showGlobalEffectsZone: boolean,
 		showCurrentEffectsZone: boolean,
+		currentEffectUseEnchantmentName: boolean,
 		hideGeneratedCardsInOtherZone: boolean,
 		sortCardsByManaCostInOtherZone: boolean,
 		showBottomCardsSeparately: boolean,
@@ -254,9 +263,12 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 					if (!CURRENT_FEFECTS_WHITELIST.includes(refCard.id as CardIds)) {
 						return null;
 					}
+					const cardName = currentEffectUseEnchantmentName
+						? refCard.name || sourceCard.name
+						: sourceCard.name || refCard.name;
 					return DeckCard.create({
 						cardId: sourceCard.id || refCard.id, // To get the right image and tooltip
-						cardName: sourceCard.name || refCard.name,
+						cardName: cardName,
 						entityId: e.entityId,
 						refManaCost: null,
 						hideStats: true,

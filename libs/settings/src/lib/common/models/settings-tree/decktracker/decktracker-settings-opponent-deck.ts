@@ -80,6 +80,15 @@ export const decktrackerOpponentDeckSettings = (context: SettingContext): Settin
 					},
 					{
 						type: 'toggle',
+						field: 'overlayShowCurrentEffectsUseEnchantmentName',
+						label: context.i18n.translateString('settings.decktracker.opponent-deck.current-effects-use-enchantment-name-label'),
+						tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.current-effects-use-enchantment-name-tooltip'),
+						keywords: [context.i18n.translateString('settings.decktracker.opponent-deck.current-effects-label')],
+						indented: true,
+						disabledIf: (prefs: Preferences) => !prefs.overlayGroupByZone || !prefs.opponentOverlayShowCurrentEffects,
+					},
+					{
+						type: 'toggle',
 						field: 'opponentOverlaySortByManaInOtherZone',
 						label: context.i18n.translateString('settings.decktracker.opponent-deck.sort-by-mana-cost-label'),
 						tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.sort-by-mana-cost-tooltip'),

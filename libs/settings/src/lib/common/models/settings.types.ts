@@ -88,6 +88,7 @@ export interface Setting {
 	readonly keywords?: readonly string[] | null;
 	readonly advancedSetting?: boolean;
 	readonly premiumSetting?: boolean;
+	readonly indented?: boolean;
 
 	readonly toggleConfig?: ToggleConfig;
 	readonly dropdownConfig?: DropdownConfig;

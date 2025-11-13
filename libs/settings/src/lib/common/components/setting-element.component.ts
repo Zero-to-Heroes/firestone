@@ -21,7 +21,7 @@ import { Setting } from '../models/settings.types';
 		<ng-container [ngSwitch]="_setting.type">
 			<preference-toggle
 				*ngSwitchCase="'toggle'"
-				[ngClass]="{ disabled: disabled }"
+				[ngClass]="{ disabled: disabled, indented: _setting.indented }"
 				[field]="_setting.field"
 				[label]="_setting.label"
 				[tooltip]="_setting.tooltip"

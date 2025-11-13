@@ -58,6 +58,15 @@ export const decktrackerYourDeckSettings = (context: SettingContext): SettingNod
 					},
 					{
 						type: 'toggle',
+						field: 'overlayShowCurrentEffectsUseEnchantmentName',
+						label: context.i18n.translateString('settings.decktracker.opponent-deck.current-effects-use-enchantment-name-label'),
+						tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.current-effects-use-enchantment-name-tooltip'),
+						keywords: [context.i18n.translateString('settings.decktracker.opponent-deck.current-effects-label')],
+						indented: true,
+						disabledIf: (prefs: Preferences) => !prefs.overlayGroupByZone || !prefs.overlayShowCurrentEffects,
+					},
+					{
+						type: 'toggle',
 						field: 'overlayShowDiscoveryZone',
 						label: context.i18n.translateString('settings.decktracker.your-deck.discovery-zone-label'),
 						tooltip: context.i18n.translateString('settings.decktracker.your-deck.discovery-zone-tooltip'),

@@ -311,6 +311,7 @@ export class Preferences implements IPreferences {
 	readonly opponentOverlayCardsGoToBottom: boolean = true;
 	readonly opponentOverlayShowGlobalEffects: boolean = true;
 	readonly opponentOverlayShowCurrentEffects: boolean = true;
+	readonly overlayShowCurrentEffectsUseEnchantmentName: boolean = false;
 	readonly opponentOverlayHideGeneratedCardsInOtherZone: boolean = false;
 	readonly opponentOverlaySortByManaInOtherZone: boolean = false;
 	readonly opponentOverlayShowBottomCardsSeparately: boolean = true;

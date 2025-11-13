@@ -78,6 +78,7 @@ import { GameStatsProviderService } from '../../../services/stats/game/game-stat
 								[showUpdatedCost]="showUpdatedCost$ | async"
 								[showGlobalEffectsZone]="showGlobalEffectsZone$ | async"
 								[showCurrentEffectsZone]="showCurrentEffectsZone$ | async"
+								[currentEffectUseEnchantmentName]="currentEffectUseEnchantmentName$ | async"
 								[showDiscoveryZone]="showDiscoveryZone$ | async"
 								[showGiftsSeparately]="showGiftsSeparately$ | async"
 								[groupSameCardsTogether]="groupSameCardsTogether$ | async"
@@ -158,6 +159,7 @@ export class DeckTrackerOverlayRootComponent
 	cardsGoToBottom$: Observable<boolean>;
 	showGlobalEffectsZone$: Observable<boolean>;
 	showCurrentEffectsZone$: Observable<boolean>;
+	currentEffectUseEnchantmentName$: Observable<boolean>;
 	showDiscoveryZone$: Observable<boolean>;
 	showDeckWinrate$: Observable<boolean>;
 	showMatchupWinrate$: Observable<boolean>;
@@ -425,6 +427,9 @@ export class DeckTrackerOverlayRootComponent
 		);
 		this.showCurrentEffectsZone$ = this.prefs.preferences$$.pipe(
 			this.mapData((preferences) => this.showCurrentEffectsExtractor(preferences)),
+		);
+		this.currentEffectUseEnchantmentName$ = this.prefs.preferences$$.pipe(
+			this.mapData((preferences) => preferences.overlayShowCurrentEffectsUseEnchantmentName),
 		);
 		this.showDiscoveryZone$ = this.prefs.preferences$$.pipe(
 			this.mapData((preferences) => this.showDiscoveryExtractor(preferences)),
