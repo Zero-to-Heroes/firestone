@@ -263,13 +263,6 @@ const getDynamicRelatedCardIdsInternal = (
 				(c) => hasCost(c, '==', targetCost) && canBeDiscoveredByClass(c, options.currentClass),
 			);
 
-		case CardIds.Botface_TOY_906:
-			// TODO: Fix these minis not showing up properly (are minis tagged properly?)
-			// TODO: Confirm if Botface can generate Boom Wrench - if not, add minion tag
-			return filterCards(allCards, { ...options, format: GameFormat.FT_WILD }, cardId, (c) =>
-				c?.mechanics?.includes(GameTag[GameTag.MINI]),
-			);
-
 		case CardIds.EmergencyMeeting_GDB_119:
 			return [
 				...CREWMATES,
@@ -569,7 +562,7 @@ const getDynamicFilters = (
 
 		// Random Mini
 		case CardIds.Botface_TOY_906:
-			return (c) => hasMechanic(c, GameTag.MINI);
+			return (c) => hasMechanic(c, GameTag.MINIATURIZE);
 
 		// Random Taunt
 		case CardIds.Atlasaurus_DINO_431:
@@ -1296,6 +1289,7 @@ export const filterCards = (
 	if (baseCards.length === 0) {
 		baseCards = allCards
 			.getCards()
+			// 2025-11-13: why only collectible? This means we can't have minis in the pool for instance
 			.filter((c) => c.collectible)
 			// https://hearthstone.wiki.gg/wiki/Special:RunQuery/WikiBanPool?pfRunQueryFormName=WikiBanPool&wpRunQuery=Run%2Bquery&WikiBanPool_form_only%5BoriginalPage%5D=Nebula&WikiBanPool_form_only%5Bid%5D=13&WikiBanPool_form_only%5BgameMode%5D=1
 			.filter((c) => !hasMechanic(c, GameTag.TITAN))

@@ -11,6 +11,7 @@ export const Ressucitate: GlobalHighlightCard = {
 			deckState.minionsDeadThisMatch
 				.map((e) => getProcessedCard(e.cardId, e.entityId, deckState, allCards))
 				.filter((c) => c.cost >= 1 && c.cost <= 3)
+				.sort((a, b) => a.cost - b.cost)
 				.map((e) => e.id)
 				// distinct
 				.filter((value, index, self) => self.indexOf(value) === index)
