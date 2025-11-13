@@ -363,7 +363,11 @@ export class DeckZoneComponent extends AbstractSubscriptionComponent implements 
 			!groupSameCardsTogether && card.zone === 'GRAVEYARD' ? keyWithTop + '-graveyard' : keyWithTop;
 		const keyWithDiscard =
 			!groupSameCardsTogether && card.zone === 'DISCARD' ? keyWithGraveyard + '-discard' : keyWithGraveyard;
-		const keyWithCost = keyWithDiscard + (!groupSameCardsTogether ? '-' + card.getEffectiveManaCost() : '');
+		const keyWithMilled =
+			!groupSameCardsTogether && (card.milled || card.zone === 'BURNED')
+				? keyWithDiscard + '-milled'
+				: keyWithDiscard;
+		const keyWithCost = keyWithMilled + (!groupSameCardsTogether ? '-' + card.getEffectiveManaCost() : '');
 		const relatedCardIds = card.relatedCardIds?.join('#') ?? '';
 		const keyWithRelatedCards = keyWithCost + (!groupSameCardsTogether ? '-' + relatedCardIds : '');
 		if (!collection?.length) {
