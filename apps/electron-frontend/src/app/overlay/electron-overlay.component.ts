@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { AllCardsService, SceneMode } from '@firestone-hs/reference-data';
 import { MemoryUpdatesService, SceneService } from '@firestone/memory';
-import { GameStatusService } from '@firestone/shared/common/service';
+import { GameStatusService, ScalingService } from '@firestone/shared/common/service';
 import { CardsFacadeStandaloneService, ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
 import { Subscription } from 'rxjs';
 
@@ -69,6 +69,7 @@ export class ElectronOverlayComponent implements OnInit, OnDestroy {
 		private readonly memoryUpdateService: MemoryUpdatesService,
 		private readonly allCards: CardsFacadeStandaloneService,
 		private readonly i18n: ILocalizationService,
+		private readonly init_ScalingService: ScalingService,
 	) {}
 
 	async ngOnInit() {

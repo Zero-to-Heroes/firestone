@@ -49,6 +49,7 @@ import {
 	IAdsService,
 	LocalizationStandaloneService,
 	LocalStorageService,
+	OwUtilsService,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
 import { LogListenerService } from '@services/log-listener.service';
@@ -215,11 +216,14 @@ export const buildAppInjector = () => {
 		allCards as any as CardsFacadeService,
 		battleExecutor,
 		ads,
-		null,
+		null, // BugReportService
 		preferences,
-		null,
+		null, // BgsIntermediateResultsSimGuardianService
 	);
 	electronInjector.register(BgsBattleSimulationService, simulation);
+
+	const owUtils = new OwUtilsService(windowManager);
+	electronInjector.register(OwUtilsService, owUtils);
 
 	const gameEventsParser = new GameStateParsersService(
 		helper,
@@ -228,18 +232,18 @@ export const buildAppInjector = () => {
 		aiDecks,
 		deckHandler,
 		memoryInspection,
-		null, // OwUtils
+		owUtils,
 		preferences,
 		deckParser,
 		secretsConfig,
 		constructedArchetypesOthestrator,
 		gameEventsEmitter,
-		null, // BugReport
+		null, // BugReportService
 		null, // LogUploader
 		simulation,
 		ads,
 		gameId,
-		null,
+		null, // BgsIntermediateResultsSimGuardianService
 		reviewId,
 	);
 
@@ -264,7 +268,7 @@ export const buildAppInjector = () => {
 		gameEventsEmitter,
 		gameStateMetaInfos,
 		preferences,
-		null,
+		null, // OverwolfService
 		secretsParser,
 		gameEventsParser,
 		overlayDisplay,
