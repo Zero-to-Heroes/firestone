@@ -56,6 +56,7 @@ import { LogListenerService } from '@services/log-listener.service';
 import { ElectronAngularInjector } from './electron-angular-injector';
 import { ElectronLogFileBackendService } from './electron-log-file-backend.service';
 import { GameEventsElectronService } from './game-events-electron.service';
+import { LowLevelUtilsElectronService } from './low-level-utils-electron.service';
 import { MindVisionElectronService } from './mind-vision-electron.service';
 
 export const buildAppInjector = () => {
@@ -222,8 +223,8 @@ export const buildAppInjector = () => {
 	);
 	electronInjector.register(BgsBattleSimulationService, simulation);
 
-	const owUtils = new OwUtilsService(windowManager);
-	electronInjector.register(OwUtilsService, owUtils);
+	const owUtils = new LowLevelUtilsElectronService();
+	electronInjector.register(OwUtilsService, owUtils as any as OwUtilsService);
 
 	const gameEventsParser = new GameStateParsersService(
 		helper,
@@ -232,7 +233,7 @@ export const buildAppInjector = () => {
 		aiDecks,
 		deckHandler,
 		memoryInspection,
-		owUtils,
+		owUtils as any as OwUtilsService,
 		preferences,
 		deckParser,
 		secretsConfig,

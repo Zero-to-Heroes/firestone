@@ -12,34 +12,6 @@ declare const window: any;
 	standalone: false,
 	template: `
 		<div class="electron-overlay-container">
-			<!-- Game Status Test -->
-			<!-- <div class="debug-info">
-				<h2>🔥 Firestone Electron Overlay</h2>
-				<p>Angular renderer process running</p>
-
-				<div class="game-status-section">
-					<p><strong>In Game:</strong> {{ inGame !== null ? (inGame ? '✅' : '❌') : '⏳' }}</p>
-					<p><strong>Scene:</strong> {{ scene !== null ? scene : '⏳' }}</p>
-					<p><strong>Memory Updates:</strong> {{ memoryUpdates !== null ? memoryUpdates : '⏳' }}</p>
-				</div>
-
-				<div *ngIf="gameInfo" class="game-info-section">
-					<h3>🎮 Game Info Details</h3>
-					<p><strong>Game:</strong> {{ gameInfo.displayName }}</p>
-					<p><strong>Size:</strong> {{ gameInfo.width }}x{{ gameInfo.height }}</p>
-					<p><strong>Focused:</strong> {{ gameInfo.isInFocus ? '✅' : '❌' }}</p>
-					<p><strong>Running:</strong> {{ gameInfo.isRunning ? '✅' : '❌' }}</p>
-					<p><strong>Execution Path:</strong> {{ gameInfo.executionPath || 'N/A' }}</p>
-				</div>
-
-				<div *ngIf="!gameInfo && tested" class="error-section">
-					<h3>❌ No Game Info</h3>
-					<p><strong>ElectronAPI:</strong> {{ hasElectronAPI ? '✅' : '❌' }}</p>
-					<p><strong>getRunningGameInfo:</strong> {{ hasGameInfoMethod ? '✅' : '❌' }}</p>
-				</div>
-			</div> -->
-
-			<!-- TODO: Add the constructed decktracker widget -->
 			<constructed-decktracker-ooc-widget-wrapper></constructed-decktracker-ooc-widget-wrapper>
 			<decktracker-player-widget-wrapper
 				class="focusable"
@@ -115,6 +87,8 @@ export class ElectronOverlayComponent implements OnInit, OnDestroy {
 			this.scene = scene ? SceneMode[scene] : null;
 		});
 		this.subscriptions.push(sceneSubscription);
+
+		await this.init_ScalingService.initializeGlobalScale(true);
 
 		// Set up periodic updates
 		this.setupPeriodicUpdates();

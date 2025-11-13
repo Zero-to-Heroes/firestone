@@ -19,6 +19,7 @@ export class ScalingService {
 			await waitForReady(this.ads);
 		}
 
+		// await this.initializeGlobalScale();
 		this.cardTooltip();
 		this._multiScale('bgsBannedTribeScale', '--banned-tribes-scale');
 		this._multiScale('bgsSimulatorScale', '--bgs-simulator-scale');
@@ -41,6 +42,26 @@ export class ScalingService {
 		this._multiScale('secretsHelperScale', '--secrets-helper-scale');
 		this._multiScale('sessionWidgetScale', '--session-widget-scale');
 		this.lottery();
+	}
+
+	public async initializeGlobalScale(force = false) {
+		const prefs = await this.prefs.getPreferences();
+		if (!force && prefs.globalWidgetScale != new Preferences().globalWidgetScale) {
+			console.log('[scaling-service] global scale already initialized', prefs.globalWidgetScale);
+			return;
+		}
+
+		if (typeof window === 'undefined') {
+			console.log('[scaling-service] initializing global scale, but window is undefined');
+			return;
+		}
+
+		const height = window.innerHeight;
+		const globalScale = Math.max(80, Math.round((height / 1080) * 100));
+		console.log('[scaling-service] window height', height, 'global scale', globalScale, window);
+		await this.prefs.updatePrefs('globalWidgetScale', globalScale);
+		await this.prefs.updatePrefs('cardTooltipScale', globalScale);
+		console.log('[scaling-service] global scale updated');
 	}
 
 	private cardTooltip() {
