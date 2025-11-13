@@ -1369,7 +1369,7 @@ export const hasCorrectClass = (card: ReferenceCard, targetClass: CardClass | nu
 	return card?.classes?.includes(CardClass[targetClass]) ?? false;
 };
 
-const hasCorrectRarity = (card: ReferenceCard, targetRarity: CardRarity): boolean => {
+export const hasCorrectRarity = (card: ReferenceCard, targetRarity: CardRarity): boolean => {
 	return card?.rarity?.toUpperCase() === CardRarity[targetRarity];
 };
 

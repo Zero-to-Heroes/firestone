@@ -9,7 +9,10 @@ import { EventParser } from './event-parser';
 const DONT_REVEAL_REMOVED_CARDS = [CardIds.PirateAdmiralHooktusk_TakeTheirSuppliesToken];
 
 export class CardRemovedFromDeckParser implements EventParser {
-	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: CardsFacadeService) {}
+	constructor(
+		private readonly helper: DeckManipulationHelper,
+		private readonly allCards: CardsFacadeService,
+	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return !!state;
@@ -19,6 +22,7 @@ export class CardRemovedFromDeckParser implements EventParser {
 		// eslint-disable-next-line prefer-const
 		let [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 		const removedByCardId = gameEvent.additionalData.removedByCardId;
+		const removedByEntityId = gameEvent.additionalData.removedByEntityId;
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
@@ -56,7 +60,9 @@ export class CardRemovedFromDeckParser implements EventParser {
 			refManaCost: card.refManaCost ?? refCard?.cost,
 			// FIXME: this is not always true, e.g. when Zilliax is shuffled in the deck some weird stuff happens
 			milled: card.createdByJoust || dontActuallyDestroyCardsInDeck.includes(removedByCardId) ? false : true,
-		} as DeckCard);
+			lastAffectedByEntityId: removedByEntityId,
+			lastAffectedByCardId: removedByCardId,
+		});
 		// console.debug('[card-removed]', 'cardWithZone', card?.cardId, cardWithZone, refCard);
 
 		// If the JOUST card isn't present in the deck yet, add it to the known cards

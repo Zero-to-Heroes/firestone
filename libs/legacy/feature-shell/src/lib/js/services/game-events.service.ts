@@ -836,6 +836,7 @@ export class GameEvents {
 					GameEvent.build(GameEvent.CARD_REMOVED_FROM_DECK, gameEvent, {
 						cost: gameEvent.Value.AdditionalProps?.Cost,
 						removedByCardId: gameEvent.Value.AdditionalProps?.RemovedByCardId,
+						removedByEntityId: gameEvent.Value.AdditionalProps?.RemovedByEntityId,
 					}),
 				);
 				break;
