@@ -86,6 +86,7 @@ import { VolatileSkeletonCounterDefinitionV2 } from './impl/volatile-skeleton';
 import { WatchpostCounterDefinitionV2 } from './impl/watchpost';
 import { WheelOfDeathCounterDefinitionV2 } from './impl/wheel-of-death';
 import { YsondreCounterDefinitionV2 } from './impl/ysondre';
+import { DeepBlueCounterDefinitionV2 } from './impl/battlegrounds/deep-blue';
 
 export const getAllCounters: (
 	i18n: ILocalizationService,
@@ -180,6 +181,7 @@ export const getAllCounters: (
 	new ElementalPowersBuffCounterDefinitionV2(i18n),
 	new TavernSpellsBuffCounterDefinitionV2(i18n),
 	new ElementalTavernBuffCounterDefinitionV2(i18n),
+	new DeepBlueCounterDefinitionV2(i18n, allCards),
 ];
 
 // Use camelCase because it uses conventions to get the pref property names
@@ -276,4 +278,5 @@ export type CounterType =
 	| 'elementalPowersBuff'
 	| 'tavernSpellsBuff'
 	| 'elementalTavernBuff'
-	| 'bgsMajordomo';
+	| 'bgsMajordomo'
+	| 'bgsDeepBlue';
