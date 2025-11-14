@@ -30,10 +30,14 @@ export class DeepBlueCounterDefinitionV2 extends CounterDefinitionV2<{ atk: numb
 				.flatMap((e) => e.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_1] ?? 0)
 				.reduce((a, b) => a + b, 0);
 			const refEnchant = this.allCards.getCard(CardIds.DeepBlueCrooner_DeepBluesToken_BG26_502t);
-			return {
+			const result = {
 				atk: refEnchant?.tags?.[GameTag[GameTag.TAG_SCRIPT_DATA_NUM_1]] * numberOfPlayed,
 				health: refEnchant?.tags?.[GameTag[GameTag.TAG_SCRIPT_DATA_NUM_2]] * numberOfPlayed,
 			};
+			if (result.atk <= 0 && result.health <= 0) {
+				return null;
+			}
+			return result;
 			// return !bgState?.currentGame?.availableRaces?.includes(Race.NAGA) ? null : { atk: 0, health: 0 };
 		},
 		setting: {
