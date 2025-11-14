@@ -49,18 +49,19 @@ export class StartOfGameEffectParser implements EventParser {
 			newDeckContents = this.helper.addSingleCardToZone(newDeckContents, card);
 			// newDeckContents = this.helper.empiricReplaceCardInZone(deck.deck, card, true);
 		}
-		const deckAfterSpecialCaseUpdate: DeckState = modifyDeckForSpecialCardEffects(
-			cardId,
-			deck,
-			this.allCards,
-			this.i18n,
-		);
-		const newPlayerDeck: DeckState = deckAfterSpecialCaseUpdate.update({
+		const newDeckState: DeckState = deck.update({
 			globalEffects: newGlobalEffects,
 			deck: newDeckContents,
 		} as DeckState);
+		const deckAfterSpecialCaseUpdate: DeckState = modifyDeckForSpecialCardEffects(
+			cardId,
+			newDeckState,
+			this.allCards,
+			this.i18n,
+		);
+		console.debug('[debug] start of game effect parser', cardId, isPlayer, deckAfterSpecialCaseUpdate);
 		return currentState.update({
-			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
+			[isPlayer ? 'playerDeck' : 'opponentDeck']: deckAfterSpecialCaseUpdate,
 		} as any);
 	}
 

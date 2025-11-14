@@ -249,16 +249,16 @@ export const timeRafaamFablePackage = [
 	CardIds.TimethiefRafaam_GiantRafaamToken_TIME_005t7,
 	CardIds.TimethiefRafaam_ArchmageRafaamToken_TIME_005t9,
 ];
+export const broxigarFablePackage = [
+	CardIds.Broxigar_TIME_020,
+	CardIds.Broxigar_FirstPortalToArgusToken_TIME_020t2,
+	CardIds.Broxigar_AxeOfCenariusToken_TIME_020t1,
+];
 export const fablePackages = [
 	[
 		CardIds.TalanjiOfTheGraves_TIME_619,
 		CardIds.TalanjiOfTheGraves_WhatBefellZandalarToken_TIME_619t2,
 		CardIds.TalanjiOfTheGraves_BwonsamdiToken_TIME_619t,
-	],
-	[
-		CardIds.Broxigar_TIME_020,
-		CardIds.Broxigar_FirstPortalToArgusToken_TIME_020t2,
-		CardIds.Broxigar_AxeOfCenariusToken_TIME_020t1,
 	],
 	[
 		CardIds.LadyAzshara_TIME_211,
@@ -296,4 +296,5 @@ export const fablePackages = [
 		CardIds.MuradinHighKing_HighKingsHammerToken_TIME_209t,
 	],
 	timeRafaamFablePackage,
+	broxigarFablePackage,
 ];

@@ -1,5 +1,6 @@
 import { CardIds, GameTag, hasMechanic } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState, fablePackages, GameState } from '@firestone/game-state';
+import { broxigarFablePackage, DeckCard, DeckState, fablePackages, GameState } from '@firestone/game-state';
+import { arraysEqual } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 
 // TODO: also check the cardCopyLink, which looks like it does more or less the same thing
@@ -71,6 +72,11 @@ const revealRelatedCards = (deck: DeckState, card: DeckCard, allCards: CardsFaca
 			return deck;
 		}
 
+		// Will be revealed on game start
+		if (arraysEqual(fablePackage, broxigarFablePackage)) {
+			return deck;
+		}
+
 		const otherFableCards = fablePackage.filter((c) => c !== card.cardId);
 		if (otherFableCards.some((c) => deck.hasRelevantCard([c], { includesOtherZone: true, includeBoard: true }))) {
 			return deck;
@@ -89,7 +95,7 @@ const revealRelatedCards = (deck: DeckState, card: DeckCard, allCards: CardsFaca
 			});
 
 			if (!deck.deckList?.length && !deck.deckstring && !deck.deck.some((e) => e.cardId === otherFableCard)) {
-				const fillerCard = deck.deck.find(
+				const fillerCard = newDeckContents.find(
 					(card) => !card.entityId && !card.cardId && !card.cardName && !card.creatorCardId,
 				);
 				newDeckContents = newDeckContents.filter((e) => e !== fillerCard);

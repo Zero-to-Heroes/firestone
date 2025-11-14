@@ -1,5 +1,5 @@
 import { CardClass, CardIds, CardType, GameTag, LIBRAM_IDS, Race, ReferenceCard } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState } from '@firestone/game-state';
+import { broxigarFablePackage, DeckCard, DeckState } from '@firestone/game-state';
 import { TempCardIds } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { hasRace } from '../../hs-utils';
@@ -126,6 +126,8 @@ export const modifyDeckForSpecialCardEffects = (
 	switch (cardId) {
 		case CardIds.VanndarStormpike_AV_223:
 			return handleVanndarStormpike(deckState, allCards, i18n);
+		case CardIds.Broxigar_TIME_020:
+			return handleBroxigar(deckState, allCards, i18n);
 		default:
 			return deckState;
 	}
@@ -216,6 +218,47 @@ const handleLorthemarTheron = (
 		cthunAtk: 2 * deckState.cthunAtk,
 		cthunHealth: 2 * deckState.cthunHealth,
 	});
+};
+
+const handleBroxigar = (
+	deckState: DeckState,
+	allCards: CardsFacadeService,
+	i18n: LocalizationFacadeService,
+): DeckState => {
+	const otherFableCards = broxigarFablePackage.filter((c) => c !== CardIds.Broxigar_TIME_020);
+	console.debug('[debug] handleBroxigar', otherFableCards, deckState);
+	let newDeckContents = deckState.deck;
+	for (const otherFableCard of otherFableCards) {
+		const otherRef = allCards.getCard(otherFableCard);
+		const card = DeckCard.create({
+			entityId: undefined,
+			cardId: otherFableCard,
+			cardName: otherRef.name,
+			refManaCost: otherRef?.cost,
+			rarity: otherRef?.rarity?.toLowerCase(),
+			zone: null,
+		});
+
+		const shouldUpdate =
+			!deckState.deckList?.length &&
+			!deckState.deckstring &&
+			!deckState.deck.some((e) => e.cardId === otherFableCard);
+		console.debug('[debug] handleBroxigar 2', otherFableCard, shouldUpdate, card, deckState);
+		if (shouldUpdate) {
+			const fillerCard = newDeckContents.find(
+				(card) => !card.entityId && !card.cardId && !card.cardName && !card.creatorCardId,
+			);
+			console.debug('[debug] handleBroxigar 3 fillter', fillerCard);
+			newDeckContents = newDeckContents.filter((e) => e !== fillerCard);
+			newDeckContents = [...newDeckContents, card];
+			console.debug('[debug] handleBroxigar 3', newDeckContents);
+		}
+	}
+	const result = deckState.update({
+		deck: newDeckContents,
+	});
+	console.debug('[debug] handleBroxigar 4', result);
+	return result;
 };
 
 const handleVanndarStormpike = (
