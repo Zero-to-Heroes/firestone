@@ -14,7 +14,10 @@ const CARDS_THAT_PUT_ON_TOP = [
 ];
 
 export class EntityChosenParser implements EventParser {
-	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: CardsFacadeService) {}
+	constructor(
+		private readonly helper: DeckManipulationHelper,
+		private readonly allCards: CardsFacadeService,
+	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return !!state;
@@ -23,7 +26,9 @@ export class EntityChosenParser implements EventParser {
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 		const originCardId = gameEvent.additionalData?.context?.creatorCardId;
-		const isDiscover = !!this.allCards.getCard(originCardId)?.mechanics?.includes(GameTag[GameTag.DISCOVER]);
+		const isDiscover =
+			!!this.allCards.getCard(originCardId)?.mechanics?.includes(GameTag[GameTag.DISCOVER]) &&
+			![CardIds.KeepTimeline_TIME_000ta, CardIds.RewindTimeline_TIME_000tb].includes(cardId as CardIds);
 		// console.debug('[entity-chosen] isDiscover', isDiscover, originCardId, gameEvent);
 
 		let stateAfterDiscover = currentState;
