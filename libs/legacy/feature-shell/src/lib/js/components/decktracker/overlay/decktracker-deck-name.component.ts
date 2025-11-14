@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, Optional, ViewRef } from '@angular/core';
-import { CardClass } from '@firestone-hs/reference-data';
-import { DeckState } from '@firestone/game-state';
+import { CardClass, GameFormat } from '@firestone-hs/reference-data';
+import { DeckState, Metadata } from '@firestone/game-state';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
@@ -12,19 +12,15 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 	template: `
 		<div class="deck-name">
 			<span class="name" [helpTooltip]="deckName" [bindTooltipToGameWindow]="true">{{ deckName }}</span>
+			<import-deckstring *ngIf="missingInitialDeckstring" [side]="side" [tooltipPosition]="_tooltipPosition">
+			</import-deckstring>
 			<copy-deckstring
-				*ngIf="deckstring && !missingInitialDeckstring"
 				[deckstring]="deckstring"
+				[cardsList]="cardsList"
 				[copyText]="copyText"
 				[showTooltip]="true"
 			>
 			</copy-deckstring>
-			<import-deckstring
-				*ngIf="!deckstring || missingInitialDeckstring"
-				[side]="side"
-				[tooltipPosition]="_tooltipPosition"
-			>
-			</import-deckstring>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -36,9 +32,10 @@ export class DeckTrackerDeckNameComponent {
 	_tooltipPosition: CardTooltipPositionType;
 	missingInitialDeckstring: boolean;
 	side: 'player' | 'opponent';
+	cardsList: readonly string[];
 
-	private _hideOpponentName: boolean;
 	private _deck: DeckState;
+	private _hideOpponentName: boolean;
 
 	@Input() set tooltipPosition(value: CardTooltipPositionType) {
 		this._tooltipPosition = value;
@@ -54,8 +51,15 @@ export class DeckTrackerDeckNameComponent {
 		this.deckstring = this._deck.deckstring;
 		this.copyText = this.i18n.translateString('decktracker.deck-name.copy-deckstring-label');
 		this.side = this._deck.isOpponent ? 'opponent' : 'player';
+		console.debug('[debug] deck', this._deck);
 		if (this.missingInitialDeckstring === undefined) {
-			this.missingInitialDeckstring = this.deckstring == null;
+			this.missingInitialDeckstring = this._deck.deckstring == null;
+		}
+		if (this.missingInitialDeckstring) {
+			this.cardsList = this._deck
+				.getAllCardsFromStarterDeck()
+				.map((c) => c.cardId)
+				.filter((c) => c !== null);
 		}
 		this.updateDeckName();
 	}
@@ -64,6 +68,7 @@ export class DeckTrackerDeckNameComponent {
 		private readonly cdr: ChangeDetectorRef,
 		@Optional() private readonly ow: OverwolfService,
 		private i18n: LocalizationFacadeService,
+		private readonly allCards: CardsFacadeService,
 	) {}
 
 	async copyDeckstring() {
@@ -100,7 +105,7 @@ export class DeckTrackerDeckNameComponent {
 								this._deck.hero.classes?.[0] ?? CardClass.NEUTRAL
 							].toLowerCase()}`,
 						),
-				  })
+					})
 				: this.i18n.translateString('decktracker.deck-name.unnamed-deck'));
 	}
 }

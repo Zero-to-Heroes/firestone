@@ -1,12 +1,13 @@
-import { DeckDefinition, FormatType } from '@firestone-hs/deckstrings';
+import { DeckDefinition, DeckList, encode, FormatType } from '@firestone-hs/deckstrings';
 import { CardClass, CardIds, getDefaultHeroDbfIdForClass, normalizeDeckHeroDbfId } from '@firestone-hs/reference-data';
 import { DeckInfoFromMemory } from '@firestone/memory';
 import { groupByFunction } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DeckCard } from '../models/deck-card';
 import { DeckState } from '../models/deck-state';
+import { Metadata } from '../models/metadata';
 
-export const enrichDeck = (deckState: DeckState): DeckState => {
+export const enrichDeck = (deckState: DeckState, metadata: Metadata, allCards: CardsFacadeService): DeckState => {
 	const behemothUpgrades = deckState.globalEffects.filter((g) => g.cardId === CardIds.BolideBehemoth_GDB_434).length;
 	return deckState.update({
 		deck: updateAdditionalAttributes(deckState.deck, behemothUpgrades),
@@ -37,8 +38,8 @@ export const buildDeckDefinition = (
 		heroes: deckFromMemory.HeroCardId
 			? [normalizeDeckHeroDbfId(allCards.getCard(deckFromMemory.HeroCardId)?.dbfId ?? 7, allCards.getService())]
 			: deckFromMemory.HeroClass
-			? [getDefaultHeroDbfIdForClass(CardClass[deckFromMemory.HeroClass]) || 7]
-			: [7],
+				? [getDefaultHeroDbfIdForClass(CardClass[deckFromMemory.HeroClass]) || 7]
+				: [7],
 		sideboards: !deckFromMemory.Sideboards?.length
 			? undefined
 			: deckFromMemory.Sideboards.map((sideboard) => {
@@ -46,7 +47,7 @@ export const buildDeckDefinition = (
 						keyCardDbfId: allCards.getCard(sideboard.KeyCardId).dbfId,
 						cards: explodeDecklist(normalizeWithDbfIds(sideboard.Cards, allCards)),
 					};
-			  }),
+				}),
 	};
 	return deckDefinition;
 };

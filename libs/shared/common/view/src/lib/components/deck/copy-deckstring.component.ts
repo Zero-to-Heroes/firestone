@@ -1,5 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, Optional, ViewRef } from '@angular/core';
-import { DeckDefinition, decode, encode } from '@firestone-hs/deckstrings';
+import { DeckDefinition, DeckList, decode, encode, FormatType } from '@firestone-hs/deckstrings';
+import { GameFormat, getDefaultHeroDbfIdForClass } from '@firestone-hs/reference-data';
+import { groupByFunction2 } from '@firestone/shared/framework/common';
 import {
 	AnalyticsService,
 	CardsFacadeService,
@@ -30,6 +32,7 @@ export class CopyDesckstringComponent {
 	@Input() title: string;
 	@Input() origin: string;
 	@Input() deckName: string;
+	@Input() cardsList: readonly string[];
 
 	@Input() set deckstring(value: string) {
 		this._deckstring = value;
@@ -62,12 +65,17 @@ export class CopyDesckstringComponent {
 		event.preventDefault();
 		event.stopPropagation();
 
+		let deducedDeckstring = null;
+		if (!this.deckstring?.length && this.cardsList?.length) {
+			deducedDeckstring = buildCurrentDeckstring(this.cardsList, GameFormat.FT_STANDARD, this.allCards);
+		}
+
 		if (!this.ow?.isOwEnabled()) {
 			console.log('no OW service present, copying with browser API');
 			this.copyDeckstringWithoutOverwolf();
 			return;
 		}
-		let copiedString = this.normalizedDeckstring;
+		let copiedString = deducedDeckstring ?? this.normalizedDeckstring;
 		if (this.deckName) {
 			copiedString = '### ' + this.deckName + '\n' + copiedString;
 		}
@@ -153,5 +161,52 @@ export const sanitizeDeckDefinition = (
 	deckDefinition: DeckDefinition,
 	allCards: CardsFacadeService,
 ): DeckDefinition => {
+	return deckDefinition;
+};
+
+const buildCurrentDeckstring = (
+	cardsList: readonly string[],
+	gameFormat: GameFormat,
+	allCards: CardsFacadeService,
+): string | null => {
+	const deckDefinition = buildDeckDefinitionFromCardsList(cardsList, gameFormat, allCards);
+	if (!deckDefinition) {
+		return null;
+	}
+	const updatedDeckDefinition = sanitizeDeckDefinition(deckDefinition, allCards);
+	return encode(updatedDeckDefinition);
+};
+
+const buildDeckDefinitionFromCardsList = (
+	cardsList: readonly string[],
+	gameFormat: GameFormat,
+	allCards: CardsFacadeService,
+): DeckDefinition | null => {
+	cardsList = cardsList.filter((c) => !!c);
+	if (!cardsList.length) {
+		return null;
+	}
+	const groupedById = groupByFunction2(cardsList, (cardId: string) => cardId);
+	const cardPairs: DeckList = Object.values(groupedById).map((cards) => [
+		allCards.getCard(cards[0]).dbfId,
+		cards.length,
+	]);
+	const groupedByPlayerClass = groupByFunction2(cardsList, (cardId: string) => allCards.getCard(cardId).playerClass);
+	// Take the one with the most cards
+	const deducedPlayerClass = Object.keys(groupedByPlayerClass).sort(
+		(a, b) => groupedByPlayerClass[b].length - groupedByPlayerClass[a].length,
+	)[0];
+	console.debug(
+		'[debug] deducedPlayerClass',
+		deducedPlayerClass,
+		getDefaultHeroDbfIdForClass(deducedPlayerClass),
+		cardsList,
+		cardPairs,
+	);
+	const deckDefinition: DeckDefinition = {
+		cards: cardPairs,
+		heroes: [getDefaultHeroDbfIdForClass(deducedPlayerClass)],
+		format: gameFormat as FormatType,
+	};
 	return deckDefinition;
 };

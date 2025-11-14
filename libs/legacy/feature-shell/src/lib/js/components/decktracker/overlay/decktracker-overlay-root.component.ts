@@ -17,11 +17,21 @@ import { PatchesConfigService, Preferences, PreferencesService } from '@fireston
 import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
 import { gameFormatToStatGameFormatType } from '@firestone/stats/data-access';
 import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
-import { combineLatest, debounceTime, distinctUntilChanged, filter, Observable, shareReplay, takeUntil } from 'rxjs';
+import {
+	auditTime,
+	combineLatest,
+	debounceTime,
+	distinctUntilChanged,
+	filter,
+	Observable,
+	shareReplay,
+	takeUntil,
+} from 'rxjs';
 import { DecksProviderService } from '../../../services/decktracker/main/decks-provider.service';
 import { Events } from '../../../services/events.service';
 import { MainWindowStateFacadeService } from '../../../services/mainwindow/store/main-window-state-facade.service';
 import { GameStatsProviderService } from '../../../services/stats/game/game-stats-provider.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 
 @Component({
 	standalone: false,
@@ -191,7 +201,7 @@ export class DeckTrackerOverlayRootComponent
 		protected readonly cdr: ChangeDetectorRef,
 		private el: ElementRef,
 		private renderer: Renderer2,
-		private events: Events,
+		private readonly allCards: CardsFacadeService,
 		private readonly cardsHighlight: CardsHighlightFacadeService,
 		private readonly patchesConfig: PatchesConfigService,
 		private readonly gameState: GameStateFacadeService,
@@ -235,10 +245,11 @@ export class DeckTrackerOverlayRootComponent
 			takeUntil(this.destroyed$),
 		);
 		this.deck$ = this.gameState.gameState$$.pipe(
+			auditTime(500),
 			this.mapData((gameState) => {
 				const deck = !gameState ? null : this.deckExtractor(gameState);
 				// Add some information so that we can have it even when global effects are hidden
-				const enrichedDeck = enrichDeck(deck);
+				const enrichedDeck = enrichDeck(deck, gameState.metadata, this.allCards);
 				return enrichedDeck;
 			}),
 			shareReplay(1),
