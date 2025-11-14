@@ -366,6 +366,8 @@ export class GameStateService {
 				playerTrackerClosedByUser: false,
 				opponentTrackerClosedByUser: false,
 			});
+		} else if (gameEvent.type === GameEvent.GAME_END) {
+			this.savedDeckstrings = null;
 		} else if (gameEvent.type === GameEvent.SPECTATING) {
 			currentState = currentState?.update({
 				// We can't "unspectate" a game
