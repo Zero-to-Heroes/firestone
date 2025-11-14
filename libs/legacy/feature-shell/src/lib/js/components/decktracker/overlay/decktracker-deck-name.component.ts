@@ -51,7 +51,6 @@ export class DeckTrackerDeckNameComponent {
 		this.deckstring = this._deck.deckstring;
 		this.copyText = this.i18n.translateString('decktracker.deck-name.copy-deckstring-label');
 		this.side = this._deck.isOpponent ? 'opponent' : 'player';
-		console.debug('[debug] deck', this._deck);
 		if (this.missingInitialDeckstring === undefined) {
 			this.missingInitialDeckstring = this._deck.deckstring == null;
 		}

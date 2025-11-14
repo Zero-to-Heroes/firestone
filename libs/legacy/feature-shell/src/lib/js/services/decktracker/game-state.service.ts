@@ -397,7 +397,6 @@ export class GameStateService {
 				player: currentState.playerDeck.deckstring,
 				opponent: currentState.opponentDeck.deckstring,
 			};
-			console.debug('[debug] [game-state] saved deckstrings', this.savedDeckstrings);
 		} else if (gameEvent.type === GameEvent.REWIND_OVER) {
 			if (this.savedDeckstrings.opponent) {
 				this.deckUpdater.next(
@@ -407,7 +406,6 @@ export class GameStateService {
 						'opponent',
 					),
 				);
-				console.debug('[debug] [game-state] rewound opponent deckstrings');
 			}
 			this.savedDeckstrings = null;
 		}

@@ -196,13 +196,6 @@ const buildDeckDefinitionFromCardsList = (
 	const deducedPlayerClass = Object.keys(groupedByPlayerClass).sort(
 		(a, b) => groupedByPlayerClass[b].length - groupedByPlayerClass[a].length,
 	)[0];
-	console.debug(
-		'[debug] deducedPlayerClass',
-		deducedPlayerClass,
-		getDefaultHeroDbfIdForClass(deducedPlayerClass),
-		cardsList,
-		cardPairs,
-	);
 	const deckDefinition: DeckDefinition = {
 		cards: cardPairs,
 		heroes: [getDefaultHeroDbfIdForClass(deducedPlayerClass)],

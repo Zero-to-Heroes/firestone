@@ -22,20 +22,17 @@ export const RelicMiner: GeneratingCard = {
 		},
 	): GuessedInfo | null => {
 		const cardEaten = deckState.otherZone.find((c) => c.lastAffectedByEntityId === card.creatorEntityId);
-		console.debug('[debug] cardEaten', cardEaten, deckState, card);
 		if (!cardEaten) {
 			return null;
 		}
 
 		const refCard = allCards.getCard(cardEaten.cardId);
 		const refRarity: RarityTYpe = refCard.rarity;
-		console.debug('[debug] refRarity', refRarity, refCard);
 		if (!refRarity) {
 			return null;
 		}
 		const rarity: CardRarity = CardRarity[refRarity.toUpperCase() as string];
 		const possibleCards = filterCards(RelicMiner.cardIds[0], allCards, (c) => hasCorrectRarity(c, rarity), options);
-		console.debug('[debug] possibleCards', rarity, possibleCards);
 		return {
 			rarity: rarity,
 			possibleCards: possibleCards,
