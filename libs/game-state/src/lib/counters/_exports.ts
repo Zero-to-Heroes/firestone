@@ -87,6 +87,7 @@ import { WatchpostCounterDefinitionV2 } from './impl/watchpost';
 import { WheelOfDeathCounterDefinitionV2 } from './impl/wheel-of-death';
 import { YsondreCounterDefinitionV2 } from './impl/ysondre';
 import { DeepBlueCounterDefinitionV2 } from './impl/battlegrounds/deep-blue';
+import { SpellsPlayedCounterDefinitionV2 } from './impl/battlegrounds/spells-played';
 
 export const getAllCounters: (
 	i18n: ILocalizationService,
@@ -170,7 +171,7 @@ export const getAllCounters: (
 	new BallerBuffCounterDefinitionV2(i18n),
 	// new MagnetizedCounterDefinitionV2(i18n),
 	new FreeRefreshCounterDefinitionV2(i18n),
-	// new SpellsPlayedCounterDefinitionV2(i18n),
+	new SpellsPlayedCounterDefinitionV2(i18n),
 	new GoldNextTurnCounterDefinitionV2(i18n, allCards),
 	new BgsBloodGemCounterDefinitionV2(i18n, allCards),
 	new BgsSouthseaStrongarmCounterDefinitionV2(i18n, allCards),

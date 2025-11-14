@@ -21,9 +21,9 @@ export class SpellsPlayedCounterDefinitionV2 extends CounterDefinitionV2<number>
 		value: (state: GameState, bgState: BattlegroundsState | null | undefined) => {
 			return !bgState?.currentGame?.availableRaces?.includes(Race.NAGA)
 				? null
-				: state.fullGameState?.Player?.PlayerEntity?.tags?.find(
+				: (state.fullGameState?.Player?.PlayerEntity?.tags?.find(
 						(tag) => tag.Name === GameTag.NUM_SPELLS_PLAYED_THIS_GAME,
-				  )?.Value ?? null;
+					)?.Value ?? null);
 		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>
