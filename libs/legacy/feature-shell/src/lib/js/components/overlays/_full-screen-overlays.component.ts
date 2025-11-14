@@ -25,7 +25,7 @@ import {
 	waitForReady,
 } from '@firestone/shared/framework/core';
 import { isBattlegroundsScene } from '@services/battlegrounds/bgs-utils';
-import { combineLatest, debounceTime, distinctUntilChanged, filter, Observable, takeUntil } from 'rxjs';
+import { auditTime, combineLatest, debounceTime, distinctUntilChanged, filter, Observable, takeUntil } from 'rxjs';
 import { CurrentAppType } from '../../models/mainwindow/current-app.type';
 import { DebugService } from '../../services/debug.service';
 
@@ -219,7 +219,7 @@ export class FullScreenOverlaysComponent
 		);
 		const allCounters = getAllCounters(this.i18n, this.allCards).sort((a, b) => a.id.localeCompare(b.id));
 		this.playerCounters$ = combineLatest([this.gameState.gameState$$, this.prefs.preferences$$]).pipe(
-			debounceTime(500),
+			auditTime(500),
 			filter(([gameState, prefs]) => !!gameState && !!prefs),
 			this.mapData(([gameState, prefs]) => {
 				// TODO: find a way to not recompute the data everytime. For instance, have each counter register which properties it listens to,
@@ -236,7 +236,7 @@ export class FullScreenOverlaysComponent
 			takeUntil(this.destroyed$),
 		);
 		this.opponentCounters$ = combineLatest([this.gameState.gameState$$, this.prefs.preferences$$]).pipe(
-			debounceTime(500),
+			auditTime(500),
 			filter(([gameState, prefs]) => !!gameState && !!prefs),
 			this.mapData(([gameState, prefs]) => {
 				return allCounters
