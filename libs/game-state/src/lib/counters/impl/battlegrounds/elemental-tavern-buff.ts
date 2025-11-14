@@ -50,14 +50,6 @@ export class ElementalTavernBuffCounterDefinitionV2 extends CounterDefinitionV2<
 						.map((e) => e.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_2] ?? 0)
 						.reduce((a, b) => a + b, 0),
 			};
-			console.debug(
-				'[debug] [elemntal-tavern-buff] value',
-				value,
-				relevantEnchantsSingle,
-				relevantEnchantsMulti,
-				state.playerDeck.enchantments,
-				state,
-			);
 			if (value.atk === 0 && value.health === 0) {
 				return null;
 			}
