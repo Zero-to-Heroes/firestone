@@ -135,7 +135,7 @@ export class HsClientConfigService {
 	}
 
 	private async writeClientConfig(gameInstallPath: string) {
-		const targetPath = `${gameInstallPath}/client.config`;
+		const targetPath = gameInstallPath + 'client.config';
 		const content = `[Log]\nFileSizeLimit.Int=-1`;
 		try {
 			const existingConfig = await this.ow.readTextFile(targetPath);

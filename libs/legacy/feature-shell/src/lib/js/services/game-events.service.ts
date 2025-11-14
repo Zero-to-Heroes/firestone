@@ -230,6 +230,14 @@ export class GameEvents {
 				this.gameEventsEmitter.onGameStart.next(event);
 				this.doEventDispatch(event);
 				break;
+			case 'REWIND_STARTED':
+				console.log('[game-events]', gameEvent.Type + ' event', gameEvent);
+				this.doEventDispatch(GameEvent.build(GameEvent.REWIND_STARTED, gameEvent));
+				break;
+			case 'REWIND_OVER':
+				console.log('[game-events]', gameEvent.Type + ' event', gameEvent);
+				this.doEventDispatch(GameEvent.build(GameEvent.REWIND_OVER, gameEvent));
+				break;
 			case 'GAME_SETTINGS':
 				console.log('[game-events]', gameEvent.Type + ' event', gameEvent);
 				const gameSettingsEvent = Object.assign(new GameSettingsEvent(), {

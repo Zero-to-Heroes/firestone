@@ -4,6 +4,8 @@ import { DeckInfo } from '../services/decktracker/deck-parser.service';
 import { GameStateEvent } from './decktracker/game-state-event';
 
 export class GameEvent implements GameStateEvent {
+	public static readonly REWIND_STARTED = 'REWIND_STARTED';
+	public static readonly REWIND_OVER = 'REWIND_OVER';
 	public static readonly SCENE_CHANGED_MINDVISION = 'SCENE_CHANGED_MINDVISION'; // Not strictly a game event, but needed for requirements procesing
 	// public static readonly GAME_STATS_UPDATED = 'GAME_STATS_UPDATED'; // Not strictly a game event, but needed for req processing
 	public static readonly GLOBAL_STATS_UPDATED = 'GLOBAL_STATS_UPDATED'; // Not strictly a game event, but needed for req processing

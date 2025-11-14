@@ -25,6 +25,7 @@ import { ConstructedAchievementsProgressionEvent } from './event/constructed-ach
 import { GameStateMetaInfoService } from './game-state-meta-info.service';
 import { GameStateParsersService } from './game-state/state-parsers.service';
 import { OverlayDisplayService } from './overlay-display.service';
+import { DeckstringOverrideEvent } from './event/deckstring-override-event';
 
 @Injectable()
 export class GameStateService {
@@ -55,6 +56,10 @@ export class GameStateService {
 		entityId: number;
 		cardId: string;
 	}[] = [];
+	private savedDeckstrings = {
+		player: null,
+		opponent: null,
+	};
 
 	private showDecktrackerFromGameMode: boolean;
 
@@ -385,6 +390,24 @@ export class GameStateService {
 					cardId: minion.CardId,
 				})),
 			];
+		} else if (gameEvent.type === GameEvent.REWIND_STARTED) {
+			this.savedDeckstrings = {
+				player: currentState.playerDeck.deckstring,
+				opponent: currentState.opponentDeck.deckstring,
+			};
+			console.debug('[debug] [game-state] saved deckstrings', this.savedDeckstrings);
+		} else if (gameEvent.type === GameEvent.REWIND_OVER) {
+			if (this.savedDeckstrings.opponent) {
+				this.deckUpdater.next(
+					new DeckstringOverrideEvent(
+						this.state.opponentDeck.name,
+						this.savedDeckstrings.opponent,
+						'opponent',
+					),
+				);
+				console.debug('[debug] [game-state] rewound opponent deckstrings');
+			}
+			this.savedDeckstrings = null;
 		}
 
 		currentState = await this.secretsParser.parseSecrets(currentState, gameEvent, {
