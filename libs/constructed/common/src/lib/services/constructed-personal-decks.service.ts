@@ -8,6 +8,7 @@ import {
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
 import { DeckSummary } from '../models/deck-summary';
+import { GameStatsLoaderService } from '@firestone/stats/data-access';
 
 @Injectable()
 export class ConstructedPersonalDecksService extends AbstractFacadeService<ConstructedPersonalDecksService> {
@@ -15,6 +16,7 @@ export class ConstructedPersonalDecksService extends AbstractFacadeService<Const
 
 	private localStorage: LocalStorageService;
 	private prefs: PreferencesService;
+	private gameStats: GameStatsLoaderService;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'constructedPersonalDecks', () => !!this.decks$$);
@@ -28,6 +30,7 @@ export class ConstructedPersonalDecksService extends AbstractFacadeService<Const
 		this.decks$$ = new SubscriberAwareBehaviorSubject<readonly DeckSummary[] | null>(null);
 		this.localStorage = AppInjector.get(LocalStorageService);
 		this.prefs = AppInjector.get(PreferencesService);
+		this.gameStats = AppInjector.get(GameStatsLoaderService);
 
 		this.decks$$.onFirstSubscribe(async () => {
 			this.decks$$.subscribe(async (decks) => {
@@ -73,11 +76,19 @@ export class ConstructedPersonalDecksService extends AbstractFacadeService<Const
 		this.decks$$.next(newDecks);
 
 		for (const deck of allDecksToDelete) {
-			const deletedDeckDates: readonly number[] = currentPrefs.desktopDeckDeletes[deck] ?? [];
-			console.log('[deck-delete] deletedDeckDates', deck, deletedDeckDates);
-			const newDeleteDates: readonly number[] = [Date.now(), ...deletedDeckDates];
-			console.log('[deck-delete] newDeleteDates', newDeleteDates);
-			await this.prefs.setDeckDeleteDates(deck, newDeleteDates);
+			const deckStat = existingDecks.find((d) => d.deckstring === deck);
+			const totalGamesWithDeck = deckStat?.totalGames ?? 0;
+			// Only add a deletion date for decks that have games associated with them
+			if (totalGamesWithDeck == 0) {
+				await this.prefs.setDeckDeleteDates(deck, []);
+				continue;
+			} else {
+				const deletedDeckDates: readonly number[] = currentPrefs.desktopDeckDeletes[deck] ?? [];
+				console.log('[deck-delete] deletedDeckDates', deck, deletedDeckDates);
+				const newDeleteDates: readonly number[] = [Date.now(), ...deletedDeckDates];
+				console.log('[deck-delete] newDeleteDates', newDeleteDates);
+				await this.prefs.setDeckDeleteDates(deck, newDeleteDates);
+			}
 		}
 		// }
 
