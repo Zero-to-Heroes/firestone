@@ -289,6 +289,8 @@ const getDynamicRelatedCardIdsInternal = (
 								isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_WILD, options.gameType)
 							: false,
 					)
+					// From another class
+					.filter((c) => fromAnotherClass(c, options.currentClass))
 					.sort(
 						(a, b) =>
 							(a.cost ?? 0) - (b.cost ?? 0) ||
