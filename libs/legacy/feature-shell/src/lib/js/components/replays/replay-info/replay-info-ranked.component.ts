@@ -50,7 +50,9 @@ import { capitalizeEachWord } from '../../../services/utils';
 						[src]="opponentClassImage"
 						[helpTooltip]="opponentClassTooltip"
 					/>
-					<div class="player-name opponent" *ngIf="opponentName">{{ opponentName }}</div>
+					<div class="player-name opponent" *ngIf="opponentName" [helpTooltip]="opponentBattleTag">
+						{{ opponentName }}
+					</div>
 				</div>
 
 				<div class="group coin" *ngIf="displayCoin && playCoinIconSvg">
@@ -101,6 +103,7 @@ export class ReplayInfoRankedComponent extends AbstractSubscriptionComponent imp
 	opponentClassTooltip: string;
 
 	opponentName: string;
+	opponentBattleTag: string;
 	playCoinIconSvg: SafeHtml;
 	playCoinTooltip: SafeHtml;
 	gameTime: string;
@@ -172,6 +175,7 @@ export class ReplayInfoRankedComponent extends AbstractSubscriptionComponent imp
 		this.reviewId = this.replayInfo.reviewId;
 
 		this.opponentName = this.sanitizeName(this.replayInfo.opponentName);
+		this.opponentBattleTag = this.replayInfo.opponentName;
 		this.visualResult = this.replayInfo.result;
 		this.gameTime = this.i18n.translateString('global.duration.min-sec', {
 			...extractTime(this.replayInfo.gameDurationSeconds),

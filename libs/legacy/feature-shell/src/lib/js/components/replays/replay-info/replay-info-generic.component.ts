@@ -47,7 +47,9 @@ import { extractTime } from './replay-info-ranked.component';
 						[helpTooltip]="opponentClassTooltip"
 						*ngIf="opponentClassImage"
 					/>
-					<div class="player-name opponent" *ngIf="opponentName">{{ opponentName }}</div>
+					<div class="player-name opponent" *ngIf="opponentName" [helpTooltip]="opponentBattleTag">
+						{{ opponentName }}
+					</div>
 				</div>
 
 				<div class="group coin" *ngIf="displayCoin && playCoinIconSvg">
@@ -100,7 +102,7 @@ export class ReplayInfoGenericComponent
 	opponentClassImage: string;
 	opponentClassTooltip: string;
 	opponentName: string;
-
+	opponentBattleTag: string;
 	playCoinIconSvg: SafeHtml;
 	playCoinTooltip: SafeHtml;
 	reviewId: string;
@@ -169,6 +171,7 @@ export class ReplayInfoGenericComponent
 		this.reviewId = this.replayInfo.reviewId;
 
 		this.opponentName = this.sanitizeName(this.replayInfo.opponentName);
+		this.opponentBattleTag = this.replayInfo.opponentName;
 		this.visualResult = this.replayInfo.result;
 		this.gameTime = this.i18n.translateString('global.duration.min-sec', {
 			...extractTime(this.replayInfo.gameDurationSeconds),
@@ -198,7 +201,7 @@ export class ReplayInfoGenericComponent
 		const deckName = info.playerDeckName
 			? this.i18n.translateString('app.replays.replay-info.deck-name-tooltip', {
 					value: decodedTeamName,
-			  })
+				})
 			: '';
 		const tooltip = isPlayer ? `${name} ${deckName}` : `${name}`;
 		if (replaysShowClassIcon) {
