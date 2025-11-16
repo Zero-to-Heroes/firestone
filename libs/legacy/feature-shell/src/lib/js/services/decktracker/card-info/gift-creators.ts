@@ -962,6 +962,7 @@ const internalGiftCreators = [
 	CardIds.VileConcoctionTavernBrawl,
 	CardIds.VioletHaze,
 	CardIds.VioletSpellwing,
+	CardIds.VioletSpellwing_CORE_DRG_107,
 	CardIds.VoidScripture_YOG_507,
 	CardIds.VulperaScoundrel,
 	CardIds.VulperaScoundrelCore,
