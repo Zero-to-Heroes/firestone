@@ -17,7 +17,7 @@ import { AbstractSubscriptionComponent } from '@firestone/shared/framework/commo
 import { CollectionManager } from '@legacy-import/src/lib/js/services/collection/collection-manager.service';
 import { getPackDustValue } from '@legacy-import/src/lib/js/services/collection/collection-utils';
 import { CollectionBootstrapService } from '@legacy-import/src/lib/js/services/mainwindow/store/collection-bootstrap.service';
-import { Observable, combineLatest } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { LocalizationFacadeService } from '../../../js/services/localization-facade.service';
 import { sortByProperties, sumOnArray } from '../../../js/services/utils';
 
@@ -26,49 +26,76 @@ import { sortByProperties, sumOnArray } from '../../../js/services/utils';
 	selector: 'pack-stats',
 	styleUrls: [`./pack-stats.component.scss`],
 	template: `
-		<div class="pack-stats" scrollable>
-			<div class="header">
-				{{ 'app.collection.pack-stats.title' | owTranslate: { value: totalPacks$ | async } }}
-				<preference-toggle
-					class="show-buyable-packs"
-					[ngClass]="{ active: showOnlyBuyablePacks$ | async }"
-					field="collectionShowOnlyBuyablePacks"
-					[label]="'settings.collection.pack-stats-show-only-buyable-packs' | owTranslate"
-					[helpTooltip]="'settings.collection.pack-stats-show-only-buyable-packs-tooltip' | owTranslate"
-				></preference-toggle>
-			</div>
-			<div class="pack-groups">
-				<div class="pack-group" *ngFor="let group of packGroups$ | async">
-					<div class="group-name" *ngIf="!(showOnlyBuyablePacks$ | async)">{{ group.name }}</div>
-					<div class="packs-container">
-						<pack-stat
-							class="pack-stat"
-							*ngFor="let pack of group.packs; trackBy: trackByPackFn"
-							[attr.data-id]="pack.packType"
-							[pack]="pack"
-							[style.width.px]="cardWidth"
-							[style.height.px]="cardHeight"
+		<section class="section">
+			<ul class="menu-selection">
+				<li [ngClass]="{ selected: (currentTab$ | async) == 'stats' }" (mousedown)="selectTab('stats')">
+					<span [fsTranslate]="'app.collection.pack-stats.menu.stats'"></span>
+				</li>
+				<li
+					[ngClass]="{ selected: (currentTab$ | async) == 'pack-contents' }"
+					(mousedown)="selectTab('pack-contents')"
+				>
+					<span [fsTranslate]="'app.collection.pack-stats.menu.pack-contents'"></span>
+				</li>
+			</ul>
+			<div class="pack-stats" scrollable>
+				<ng-container *ngIf="(currentTab$ | async) == 'stats'">
+					<div class="header">
+						{{ 'app.collection.pack-stats.title' | owTranslate: { value: totalPacks$ | async } }}
+						<preference-toggle
+							class="show-buyable-packs"
+							[ngClass]="{ active: showOnlyBuyablePacks$ | async }"
+							field="collectionShowOnlyBuyablePacks"
+							[label]="'settings.collection.pack-stats-show-only-buyable-packs' | owTranslate"
+							[helpTooltip]="
+								'settings.collection.pack-stats-show-only-buyable-packs-tooltip' | owTranslate
+							"
+						></preference-toggle>
+					</div>
+					<div class="pack-groups">
+						<div class="pack-group" *ngFor="let group of packGroups$ | async">
+							<div class="group-name" *ngIf="!(showOnlyBuyablePacks$ | async)">{{ group.name }}</div>
+							<div class="packs-container">
+								<pack-stat
+									class="pack-stat"
+									*ngFor="let pack of group.packs; trackBy: trackByPackFn"
+									[attr.data-id]="pack.packType"
+									[pack]="pack"
+									[style.width.px]="cardWidth"
+									[style.height.px]="cardHeight"
+								>
+								</pack-stat>
+							</div>
+						</div>
+					</div>
+				</ng-container>
+				<ng-container *ngIf="(currentTab$ | async) == 'pack-contents'">
+					<ng-container *ngIf="{ bestPacks: bestPacks$ | async } as value">
+						<!-- <div
+							class="header best-packs-header"
+							*ngIf="value.bestPacks?.length"
+							[helpTooltip]="'app.collection.pack-stats.best-opened-packs-title-tooltip' | owTranslate"
+							[owTranslate]="'app.collection.pack-stats.best-opened-packs-title'"
+							[translateParams]="{ value: '' }"
+						></div> -->
+						<virtual-scroller
+							#scroll
+							*ngIf="value.bestPacks?.length"
+							[items]="value.bestPacks!"
+							[bufferAmount]="5"
+							role="list"
+							class="best-packs-container"
+							scrollable
 						>
-						</pack-stat>
-					</div>
-				</div>
+							<div class="best-pack" *ngFor="let pack of scroll.viewPortItems; trackBy: trackByPackFn">
+								<pack-history-item class="info" [historyItem]="pack"></pack-history-item>
+								<pack-display class="display" [pack]="pack"></pack-display>
+							</div>
+						</virtual-scroller>
+					</ng-container>
+				</ng-container>
 			</div>
-			<ng-container *ngIf="{ bestPacks: bestPacks$ | async } as value">
-				<div
-					class="header best-packs-header"
-					*ngIf="value.bestPacks?.length"
-					[helpTooltip]="'app.collection.pack-stats.best-opened-packs-title-tooltip' | owTranslate"
-					[owTranslate]="'app.collection.pack-stats.best-opened-packs-title'"
-					[translateParams]="{ value: value.bestPacks.length }"
-				></div>
-				<div class="best-packs-container" *ngIf="value.bestPacks?.length">
-					<div class="best-pack" *ngFor="let pack of value.bestPacks">
-						<pack-history-item class="info" [historyItem]="pack"></pack-history-item>
-						<pack-display class="display" [pack]="pack"></pack-display>
-					</div>
-				</div>
-			</ng-container>
-		</div>
+		</section>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -76,13 +103,16 @@ export class CollectionPackStatsComponent extends AbstractSubscriptionComponent 
 	readonly DEFAULT_CARD_WIDTH = 115;
 	readonly DEFAULT_CARD_HEIGHT = 155;
 
+	currentTab$: Observable<string>;
 	totalPacks$: Observable<number>;
 	showOnlyBuyablePacks$: Observable<boolean>;
 	packGroups$: Observable<readonly InternalPackGroup[]>;
-	bestPacks$: Observable<readonly PackResult[]>;
+	bestPacks$: Observable<PackResult[]>;
 
 	cardWidth = this.DEFAULT_CARD_WIDTH;
 	cardHeight = this.DEFAULT_CARD_HEIGHT;
+
+	private currentTab$$ = new BehaviorSubject<string>('stats');
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
@@ -229,13 +259,16 @@ export class CollectionPackStatsComponent extends AbstractSubscriptionComponent 
 			),
 		);
 		this.bestPacks$ = this.collectionBootstrapService.packStats$$.pipe(
-			this.mapData((packStats) =>
-				packStats
-					.filter((p) => !CATCH_UP_PACK_IDS.includes(p.boosterId))
-					.sort((a, b) => getPackDustValue(b) - getPackDustValue(a))
-					.slice(0, 5),
+			this.mapData(
+				(packStats) =>
+					packStats
+						.filter((p) => !CATCH_UP_PACK_IDS.includes(p.boosterId))
+						.sort((a, b) => getPackDustValue(b) - getPackDustValue(a)),
+				// .slice(0, 5),
 			),
 		);
+
+		this.currentTab$ = this.currentTab$$.pipe(this.mapData((tab) => tab));
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
@@ -244,6 +277,10 @@ export class CollectionPackStatsComponent extends AbstractSubscriptionComponent 
 
 	trackByPackFn(index: number, item: InternalPackInfo) {
 		return item.packType;
+	}
+
+	selectTab(tab: string) {
+		this.currentTab$$.next(tab);
 	}
 }
 
@@ -289,11 +326,11 @@ const buildPityTimer = (
 		type === 'epic'
 			? EPIC_PITY_TIMER
 			: // Guaranteed legendary in the first 10 packs
-			totalOpenedPacks < 10 &&
-			  !PACKS_WHITHOUT_GUARANTEED_LEGENDARY.includes(boosterId) &&
-			  !hasAlreadyOpenedLegendary
-			? 10
-			: LEGENDARY_PITY_TIMER;
+				totalOpenedPacks < 10 &&
+				  !PACKS_WHITHOUT_GUARANTEED_LEGENDARY.includes(boosterId) &&
+				  !hasAlreadyOpenedLegendary
+				? 10
+				: LEGENDARY_PITY_TIMER;
 	for (let i = 0; i < openedPacks.length; i++) {
 		if (pityTimerReset != null && new Date(openedPacks[i].creationDate).getTime() < pityTimerReset) {
 			break;

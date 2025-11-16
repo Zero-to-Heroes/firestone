@@ -1,5 +1,27 @@
 @use '../../../css/global/fonts' as *;
 
+.section {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+	min-height: 0;
+}
+
+.menu-selection {
+	flex-shrink: 0;
+	flex-grow: 0;
+	margin-bottom: 15px;
+
+	li {
+		margin-right: 25px;
+		padding-bottom: 7px;
+
+		span {
+			display: flex;
+		}
+	}
+}
+
 .pack-stats {
 	position: relative;
 	flex-grow: 1;
@@ -99,6 +121,7 @@
 	.best-packs-container {
 		flex-shrink: 0;
 		margin-top: 15px;
+		flex-grow: 1;
 
 		.best-pack {
 			display: flex;
