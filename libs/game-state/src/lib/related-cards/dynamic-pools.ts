@@ -16,6 +16,7 @@ import {
 	hasCorrectTribe,
 	hasMechanic,
 	hasSpellSchool,
+	isArena,
 	isValidSet,
 	Race,
 	ReferenceCard,
@@ -1272,6 +1273,8 @@ const BAN_LIST = [
 	CardIds.ZilliaxDeluxe3000_TOY_330,
 ];
 
+const BAN_LIST_ARENA = [CardIds.Kiljaeden_GDB_145];
+
 let baseCards: readonly ReferenceCard[] = [];
 
 export const filterCards = (
@@ -1319,6 +1322,7 @@ export const filterCards = (
 	let format = options.format;
 	const summonsInPlay = doesSummonInPlay(sourceCardId);
 	const baseCardsExtended = baseCards
+		.filter((c) => (isArena(options.gameType) ? !BAN_LIST_ARENA.includes(c.id as CardIds) : true))
 		.filter((c) => (summonsInPlay ? !hasMechanic(c, GameTag.COLOSSAL) : true))
 		.filter((c) => canIncludeStarcraftFaction(c, options.initialDecklist, allCards))
 		.filter((c) => {
