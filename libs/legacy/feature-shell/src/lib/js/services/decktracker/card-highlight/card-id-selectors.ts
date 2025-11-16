@@ -1460,7 +1460,12 @@ export const cardIdSelector = (
 		case CardIds.Gigantotem:
 			return and(side(inputSide), or(inDeck, inHand), totem);
 		case CardIds.GiftwrappedWhelp_TOY_386:
-			return and(side(inputSide), or(inDeck, inHand), dragon);
+			return and(
+				side(inputSide),
+				or(inDeck, inHand),
+				dragon,
+				not(entityIs({ entityId: card?.entityId, cardId: card?.cardId })),
+			);
 		case CardIds.GladesongSiren_TLC_819:
 			return highlightConditions(
 				and(side(inputSide), or(inDeck, inHand), holy, spell),
