@@ -39,7 +39,7 @@ const handleCardDiscovery = (
 		}
 
 		const choices = element.findall('.//Choice');
-		const chosenEntities = choices.map((e) => structure.entities[e.get('entity')!]);
+		const chosenEntities = choices.map((e) => structure.entities[e.get('entity')!]).filter((e) => !!e);
 		// console.debug('chosenEntities', chosenEntities);
 		const choiceSourceEntities = [...new Set(chosenEntities.map((e) => e.creatorEntityId))];
 		if (choiceSourceEntities.length !== 1) {
