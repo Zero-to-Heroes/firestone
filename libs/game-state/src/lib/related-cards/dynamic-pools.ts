@@ -35,6 +35,7 @@ const IMBUED_HERO_POWERS = [
 	CardIds.DreamboundDisciple_BlessingOfTheGolem_EDR_847p,
 	CardIds.LunarwingMessenger_BlessingOfTheMoon_EDR_449p,
 ];
+const USE_UNCOLLECTIBLE_CARDS = [CardIds.Botface_TOY_906];
 
 export const getDynamicRelatedCardIds = (
 	cardId: string,
@@ -565,7 +566,7 @@ const getDynamicFilters = (
 
 		// Random Mini
 		case CardIds.Botface_TOY_906:
-			return (c) => hasMechanic(c, GameTag.MINIATURIZE);
+			return (c) => hasMechanic(c, GameTag.MINI);
 
 		// Random Taunt
 		case CardIds.Atlasaurus_DINO_431:
@@ -1277,6 +1278,7 @@ const BAN_LIST = [
 
 const BAN_LIST_ARENA = [CardIds.Kiljaeden_GDB_145];
 
+let uncollectibleCards: readonly ReferenceCard[] = [];
 let baseCards: readonly ReferenceCard[] = [];
 
 export const filterCards = (
@@ -1291,38 +1293,10 @@ export const filterCards = (
 	sourceCardId: string,
 	...filters: ((ref: ReferenceCard) => boolean | undefined)[]
 ) => {
-	if (baseCards.length === 0) {
-		baseCards = allCards
-			.getCards()
-			// 2025-11-13: why only collectible? This means we can't have minis in the pool for instance
-			.filter((c) => c.collectible)
-			// https://hearthstone.wiki.gg/wiki/Special:RunQuery/WikiBanPool?pfRunQueryFormName=WikiBanPool&wpRunQuery=Run%2Bquery&WikiBanPool_form_only%5BoriginalPage%5D=Nebula&WikiBanPool_form_only%5Bid%5D=13&WikiBanPool_form_only%5BgameMode%5D=1
-			.filter((c) => !hasMechanic(c, GameTag.TITAN))
-			.filter(
-				(c) =>
-					!hasMechanic(c, GameTag.FABLED) &&
-					!hasMechanic(c, GameTag.FABLED_PLUS) &&
-					!hasMechanic(c, GameTag.IS_FABLED_BUNDLE_CARD),
-			)
-			.filter((c) => !BAN_LIST.includes(c.id as CardIds))
-			// https://hearthstone.wiki.gg/wiki/Special:RunQuery/WikiBanPool?pfRunQueryFormName=WikiBanPool&wpRunQuery=Run%2Bquery&WikiBanPool_form_only%5BoriginalPage%5D=Nebula&WikiBanPool_form_only%5Bid%5D=6&WikiBanPool_form_only%5BgameMode%5D=1
-			.filter(
-				(c) =>
-					!hasMechanic(c, GameTag.QUEST) &&
-					!hasMechanic(c, GameTag.QUESTLINE) &&
-					!hasMechanic(c, GameTag.QUESTLINE_PART),
-			)
-			.filter((c) => !hasThreeRunes(c))
-			.sort(
-				(a, b) =>
-					(a.cost ?? 0) - (b.cost ?? 0) ||
-					a.classes?.[0]?.localeCompare(b.classes?.[0] ?? '') ||
-					a.name.localeCompare(b.name),
-			);
-	}
 	let gameType = options.gameType;
 	let format = options.format;
 	const summonsInPlay = doesSummonInPlay(sourceCardId);
+	const baseCards = getBaseCards(sourceCardId, allCards);
 	const baseCardsExtended = baseCards
 		.filter((c) => (isArena(options.gameType) ? !BAN_LIST_ARENA.includes(c.id as CardIds) : true))
 		.filter((c) => (summonsInPlay ? !hasMechanic(c, GameTag.COLOSSAL) : true))
@@ -1350,6 +1324,40 @@ export const filterCards = (
 		})
 		.filter((c) => !sourceCardId || c.id !== sourceCardId);
 	return baseCardsExtended.filter((c) => filters.every((f) => f(c))).map((c) => c.id);
+};
+
+const getBaseCards = (sourceCardId: string, allCards: AllCardsService): readonly ReferenceCard[] => {
+	if (uncollectibleCards.length === 0) {
+		uncollectibleCards = allCards
+			.getCards()
+			// https://hearthstone.wiki.gg/wiki/Special:RunQuery/WikiBanPool?pfRunQueryFormName=WikiBanPool&wpRunQuery=Run%2Bquery&WikiBanPool_form_only%5BoriginalPage%5D=Nebula&WikiBanPool_form_only%5Bid%5D=13&WikiBanPool_form_only%5BgameMode%5D=1
+			.filter((c) => !hasMechanic(c, GameTag.TITAN))
+			.filter(
+				(c) =>
+					!hasMechanic(c, GameTag.FABLED) &&
+					!hasMechanic(c, GameTag.FABLED_PLUS) &&
+					!hasMechanic(c, GameTag.IS_FABLED_BUNDLE_CARD),
+			)
+			.filter((c) => !BAN_LIST.includes(c.id as CardIds))
+			// https://hearthstone.wiki.gg/wiki/Special:RunQuery/WikiBanPool?pfRunQueryFormName=WikiBanPool&wpRunQuery=Run%2Bquery&WikiBanPool_form_only%5BoriginalPage%5D=Nebula&WikiBanPool_form_only%5Bid%5D=6&WikiBanPool_form_only%5BgameMode%5D=1
+			.filter(
+				(c) =>
+					!hasMechanic(c, GameTag.QUEST) &&
+					!hasMechanic(c, GameTag.QUESTLINE) &&
+					!hasMechanic(c, GameTag.QUESTLINE_PART),
+			)
+			.filter((c) => !hasThreeRunes(c))
+			.sort(
+				(a, b) =>
+					(a.cost ?? 0) - (b.cost ?? 0) ||
+					a.classes?.[0]?.localeCompare(b.classes?.[0] ?? '') ||
+					a.name.localeCompare(b.name),
+			);
+	}
+	if (baseCards.length === 0) {
+		baseCards = uncollectibleCards.filter((c) => c.collectible);
+	}
+	return USE_UNCOLLECTIBLE_CARDS.includes(sourceCardId as CardIds) ? uncollectibleCards : baseCards;
 };
 
 // TODO: Move these to the hs-reference-data repo so it's all in the same place.
