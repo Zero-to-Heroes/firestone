@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { BgsMetaTrinketStrategiesService, BgsTrinketTipItem } from '@firestone/battlegrounds/services';
 import {
 	ExpertContributor,
 	ExpertContributorsService,
@@ -11,7 +12,6 @@ import { CardsFacadeService, ILocalizationService, waitForReady } from '@firesto
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { Strategy } from '../../models/strategies';
-import { BgsMetaTrinketStrategiesService, BgsTrinketTipItem } from '../../services/bgs-meta-trinket-strategies.service';
 
 @Component({
 	standalone: false,

@@ -1,6 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
-import { BgsPlayerHeroStatsService } from '@firestone/battlegrounds/common';
 import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
+import { BgsPlayerHeroStatsService } from '@firestone/battlegrounds/services';
 import {
 	BgsFaceOffWithSimulation,
 	BgsPostMatchStatsPanel,

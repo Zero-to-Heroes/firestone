@@ -10,7 +10,7 @@ import { GameStat, buildRankText } from '@firestone/stats/data-access';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { distinctUntilChanged, filter, map, skip, take } from 'rxjs';
 
-import { BgsInGameWindowNavigationService } from '@firestone/battlegrounds/common';
+import { BgsInGameWindowNavigationService } from '@firestone/battlegrounds/services';
 import { isBattlegrounds } from '@firestone/game-state';
 import { GameStatsLoaderService } from '@firestone/stats/data-access';
 import { ShowReplayEvent } from '../mainwindow/store/events/replays/show-replay-event';

@@ -9,6 +9,7 @@ import {
 	buildCardStats,
 	buildCardTiers,
 } from '@firestone/battlegrounds/data-access';
+import { BattlegroundsCardsService } from '@firestone/battlegrounds/services';
 import { BgsCardTierFilterType, BgsCardTypeFilterType, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, SortCriteria } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService, getDateAgo, waitForReady } from '@firestone/shared/framework/core';
@@ -23,7 +24,6 @@ import {
 	takeUntil,
 	tap,
 } from 'rxjs';
-import { BattlegroundsCardsService } from './bgs-cards.service';
 
 @Component({
 	standalone: false,

@@ -1,4 +1,4 @@
-import { CategoryId } from '@firestone/battlegrounds/common';
+import { CategoryId } from '@firestone/battlegrounds/services';
 
 export interface BattlegroundsCategory {
 	readonly id: CategoryId;

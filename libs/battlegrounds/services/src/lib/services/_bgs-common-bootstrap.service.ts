@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import { BattlegroundsCardsService } from '../cards/bgs-cards.service';
-import { BattlegroundsCompsService } from '../compositions/bgs-comps.service';
-import { BgsBoardHighlighterService } from '../highlights/bgs-board-highlighter.service';
-import { BgsReconnectorService } from '../reconnect/bgs-reconnector.service';
+import { BgsBoardHighlighterService } from './bgs-board-highlighter.service';
+import { BattlegroundsCardsService } from './bgs-cards.service';
+import { BattlegroundsCompsService } from './bgs-comps.service';
 import { BgsInGameTrinketsGuardianService } from './bgs-in-game-trinkets-guardian.service';
 import { BgsInGameTrinketsService } from './bgs-in-game-trinkets.service';
 import { BgsMetaCompositionStrategiesService } from './bgs-meta-composition-strategies.service';
 import { BgsMetaHeroStrategiesService } from './bgs-meta-hero-strategies.service';
 import { BgsMetaTrinketStrategiesService } from './bgs-meta-trinket-strategies.service';
+import { BgsReconnectorService } from './bgs-reconnector.service';
 import { BattlegroundsTrinketsService } from './bgs-trinkets.service';
 
 @Injectable()

@@ -28,6 +28,7 @@
 			"@firestone/battlegrounds/common": ["libs/battlegrounds/common/src/index.ts"],
 			"@firestone/battlegrounds/core": ["libs/battlegrounds/core/src/index.ts"],
 			"@firestone/battlegrounds/data-access": ["libs/battlegrounds/data-access/src/index.ts"],
+			"@firestone/battlegrounds/services": ["libs/battlegrounds/services/src/index.ts"],
 			"@firestone/battlegrounds/simulator": ["libs/battlegrounds/simulator/src/index.ts"],
 			"@firestone/battlegrounds/view": ["libs/battlegrounds/view/src/index.ts"],
 			"@firestone/collection/common": ["libs/collection/common/src/index.ts"],

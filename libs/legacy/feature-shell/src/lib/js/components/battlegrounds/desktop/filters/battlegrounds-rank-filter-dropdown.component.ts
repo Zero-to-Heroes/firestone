@@ -1,6 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { MmrPercentile } from '@firestone-hs/bgs-global-stats';
-import { BattlegroundsNavigationService, BgsMetaHeroStatsService } from '@firestone/battlegrounds/common';
+import { BattlegroundsNavigationService, BgsMetaHeroStatsService } from '@firestone/battlegrounds/services';
 import { RankFilterOption } from '@firestone/battlegrounds/view';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';

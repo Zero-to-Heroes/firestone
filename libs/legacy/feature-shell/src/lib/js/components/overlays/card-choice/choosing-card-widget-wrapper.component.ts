@@ -9,7 +9,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { CardClass, CardIds, GameTag, GameType, SceneMode } from '@firestone-hs/reference-data';
-import { BattlegroundsQuestsService } from '@firestone/battlegrounds/common';
+import { BattlegroundsQuestsService } from '@firestone/battlegrounds/services';
 import { CardOption, GameState, GameStateFacadeService } from '@firestone/game-state';
 import { CardChoicesService, SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';

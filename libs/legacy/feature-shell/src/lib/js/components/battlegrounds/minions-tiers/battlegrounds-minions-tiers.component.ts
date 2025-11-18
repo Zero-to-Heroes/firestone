@@ -9,7 +9,6 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { CardIds, GameTag, Race, getBuddy, getHeroPower, normalizeHeroCardId } from '@firestone-hs/reference-data';
-import { BgsBoardHighlighterService, BgsMetaCompositionStrategiesService } from '@firestone/battlegrounds/common';
 import {
 	ExtendedBgsCompAdvice,
 	MinionInfo,
@@ -21,6 +20,7 @@ import {
 	getActualTribes,
 	getAllCardsInGame,
 } from '@firestone/battlegrounds/core';
+import { BgsBoardHighlighterService, BgsMetaCompositionStrategiesService } from '@firestone/battlegrounds/services';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { ExpertContributorsService, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, arraysEqual } from '@firestone/shared/framework/common';

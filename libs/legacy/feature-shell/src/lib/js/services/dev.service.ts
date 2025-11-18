@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { BgsCompAdvice } from '@firestone-hs/content-craetor-input';
 import { decode, encode } from '@firestone-hs/deckstrings';
 import { SceneMode } from '@firestone-hs/reference-data';
-import { BgsMetaCompositionStrategiesService } from '@firestone/battlegrounds/common';
 import { CompositionDetectorService } from '@firestone/battlegrounds/core';
+import { BgsMetaCompositionStrategiesService } from '@firestone/battlegrounds/services';
 import {
 	DeckCard,
 	DeckHandlerService,

@@ -3,7 +3,7 @@ import {
 	BattlegroundsNavigationService,
 	BgsMetaCompositionStrategiesService,
 	CategoryId,
-} from '@firestone/battlegrounds/common';
+} from '@firestone/battlegrounds/services';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { MultiselectOption } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';

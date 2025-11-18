@@ -25,7 +25,7 @@ import {
 	BgsMetaHeroStatsDuoService,
 	BgsMetaHeroStatsService,
 	BgsPlayerHeroStatsService,
-} from '@firestone/battlegrounds/common';
+} from '@firestone/battlegrounds/services';
 import { BgsSimulatorControllerService } from '@firestone/battlegrounds/simulator';
 import { HearthpwnService, HsGuruService } from '@firestone/collection/common';
 import { CommunityBootstrapService } from '@firestone/communities/common';

@@ -8,7 +8,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
-import { BgsInGameHeroSelectionGuardianService } from '@firestone/battlegrounds/common';
+import { BgsInGameHeroSelectionGuardianService } from '@firestone/battlegrounds/services';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';

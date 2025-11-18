@@ -1,5 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { BattlegroundsAnomaliesService, BattlegroundsNavigationService } from '@firestone/battlegrounds/common';
+import { BattlegroundsAnomaliesService, BattlegroundsNavigationService } from '@firestone/battlegrounds/services';
 import { BG_USE_ANOMALIES, Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { IOption, IOptionWithImage } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent, sortByProperties } from '@firestone/shared/framework/common';

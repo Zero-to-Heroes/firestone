@@ -1,12 +1,12 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { ExtendedConfig } from '@components/battlegrounds/hero-selection/bgs-hero-selection-overview.component';
 import { ALL_BG_RACES, Race, getTribeName, isBattlegroundsDuo } from '@firestone-hs/reference-data';
+import { BgsHeroTier, BgsMetaHeroStatTierItem, buildTiers } from '@firestone/battlegrounds/data-access';
 import {
 	BgsMetaHeroStatsService,
 	BgsPlayerHeroStatsService,
 	DEFAULT_MMR_PERCENTILE,
-} from '@firestone/battlegrounds/common';
-import { BgsHeroTier, BgsMetaHeroStatTierItem, buildTiers } from '@firestone/battlegrounds/data-access';
+} from '@firestone/battlegrounds/services';
 import { getBgsRankFilterLabelFor, getBgsTimeFilterLabelFor } from '@firestone/battlegrounds/view';
 import { GameStateFacadeService, equalConfig } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
@@ -77,7 +77,7 @@ export class BattlegroundsTierListComponent extends AbstractSubscriptionComponen
 					gameMode: isBattlegroundsDuo(gameState.metadata.gameType) ? 'battlegrounds-duo' : 'battlegrounds',
 					timeFilter: 'last-patch',
 					mmrFilter: prefs.bgsActiveUseMmrFilterInHeroSelection
-						? gameState.bgState.currentGame?.mmrAtStart ?? 0
+						? (gameState.bgState.currentGame?.mmrAtStart ?? 0)
 						: null,
 					rankFilter: DEFAULT_MMR_PERCENTILE,
 					tribesFilter: prefs.bgsActiveUseTribesFilterInHeroSelection
@@ -129,7 +129,7 @@ export class BattlegroundsTierListComponent extends AbstractSubscriptionComponen
 						({
 							tier: tier.label,
 							heroes: tier.items,
-						} as HeroTier),
+						}) as HeroTier,
 				);
 
 				const title = this.i18n.translateString('battlegrounds.hero-selection.tier-list-title-tooltip', {

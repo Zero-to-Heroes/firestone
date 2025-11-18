@@ -1,5 +1,6 @@
 import { GameNativeStateStoreService } from '@firestone/app/common';
 import { ArenaDraftManagerService, ArenaMulliganGuideService } from '@firestone/arena/common';
+import { BgsBattleSimulationMockExecutorService, BgsBattleSimulationService } from '@firestone/battlegrounds/core';
 import {
 	BattlegroundsQuestsService,
 	BgsBoardHighlighterService,
@@ -8,8 +9,7 @@ import {
 	BgsInGameQuestsService,
 	BgsInGameTrinketsGuardianService,
 	BgsInGameTrinketsService,
-} from '@firestone/battlegrounds/common';
-import { BgsBattleSimulationMockExecutorService, BgsBattleSimulationService } from '@firestone/battlegrounds/core';
+} from '@firestone/battlegrounds/services';
 import { ConstructedMulliganGuideService } from '@firestone/constructed/common';
 import { ElectronApiRunner, ElectronStorageService } from '@firestone/electron/common';
 import {

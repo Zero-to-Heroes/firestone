@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { BgsInGameWindowNavigationService } from '@firestone/battlegrounds/common';
+import { BgsInGameWindowNavigationService } from '@firestone/battlegrounds/services';
 import { OverwolfService } from '@firestone/shared/framework/core';
 
 @Component({

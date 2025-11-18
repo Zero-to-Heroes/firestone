@@ -1,10 +1,10 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { BgsMetaTrinketStatTierItem, buildTrinketStats } from '@firestone/battlegrounds/data-access';
+import { BattlegroundsTrinketsService } from '@firestone/battlegrounds/services';
 import { BgsTrinketActiveTabType, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
-import { BattlegroundsTrinketsService } from '../../services/bgs-trinkets.service';
 
 @Component({
 	standalone: false,

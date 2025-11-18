@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { BgsFaceOff } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/bgs-face-off';
 import { normalizeHeroCardId } from '@firestone-hs/reference-data';
-import { BgsInGameWindowNavigationService } from '@firestone/battlegrounds/common';
+import { BgsInGameWindowNavigationService } from '@firestone/battlegrounds/services';
 import { BgsNextOpponentOverviewPanel, GameStateFacadeService } from '@firestone/game-state';
 import { AbstractSubscriptionComponent, groupByFunction } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
@@ -25,7 +25,7 @@ import { FaceOffHero, faceOfHeroesArrayEqual } from './bgs-hero-face-off.compone
 				*ngIf="{
 					nextOpponentCardId: nextOpponentCardId$ | async,
 					opponents: opponents$ | async,
-					faceOffs: faceOffsByOpponent$ | async
+					faceOffs: faceOffsByOpponent$ | async,
 				} as value"
 			>
 				<bgs-hero-face-off

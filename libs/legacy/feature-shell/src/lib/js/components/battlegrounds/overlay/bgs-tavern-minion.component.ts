@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { ShopMinion } from '@firestone/battlegrounds/common';
+import { ShopMinion } from '@firestone/battlegrounds/services';
 
 @Component({
 	standalone: false,

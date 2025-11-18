@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { GameTag, Race } from '@firestone-hs/reference-data';
-import { BgsBoardHighlighterService } from '@firestone/battlegrounds/common';
 import { Tier, TierGroup, TierViewType } from '@firestone/battlegrounds/core';
+import { BgsBoardHighlighterService } from '@firestone/battlegrounds/services';
 import { AbstractSubscriptionComponent, uuid } from '@firestone/shared/framework/common';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 
@@ -84,7 +84,10 @@ export class BattlegroundsMinionsListComponent extends AbstractSubscriptionCompo
 	private highlightedMechanics$$ = new BehaviorSubject<readonly GameTag[]>([]);
 	private tavernTierData$$ = new BehaviorSubject<GameTag | Race | null>(null);
 
-	constructor(protected readonly cdr: ChangeDetectorRef, private readonly highlighter: BgsBoardHighlighterService) {
+	constructor(
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly highlighter: BgsBoardHighlighterService,
+	) {
 		super(cdr);
 	}
 
