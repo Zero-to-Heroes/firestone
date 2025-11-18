@@ -54,6 +54,8 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 					this.cdr.detectChanges();
 				}
 			});
+		await sleep(500);
+		await this.onResize();
 	}
 
 	protected handleReposition(): UnaryFunction<Observable<boolean>, Observable<boolean>> {
@@ -71,7 +73,7 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 
 	private repositioning: boolean;
 	protected async reposition(cleanup: () => void = null): Promise<{ left: number; top: number }> {
-		this.debug && console.debug('repositioning', this.repositioning);
+		this.debug && console.debug('[debug] repositioning', this.repositioning);
 		if (this.repositioning) {
 			return;
 		}
@@ -79,11 +81,12 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 		const prefs = await this.prefs.getPreferences();
 		const gameInfo = await this.gameInfo.getRunningGameInfo();
 		if (!gameInfo) {
+			this.debug && console.debug('[debug] missing game info', gameInfo);
 			console.warn('missing game info', gameInfo);
 			this.repositioning = false;
 			return;
 		}
-		this.debug && console.debug('gameInfo', gameInfo);
+		this.debug && console.debug('[debug] gameInfo', gameInfo);
 		const gameWidth = gameInfo.width;
 		const gameHeight = gameInfo.height;
 		const dpi = gameInfo.logicalWidth / gameInfo.width;
@@ -97,7 +100,7 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 				top: this.defaultPositionTopProvider(gameWidth, gameHeight, dpi),
 			};
 		}
-		this.debug && console.debug('positionFromPrefs', positionFromPrefs, this.forceKeepInBounds);
+		this.debug && console.debug('[debug] positionFromPrefs', positionFromPrefs, this.forceKeepInBounds);
 		if (positionFromPrefs) {
 			this.renderer.setStyle(this.el.nativeElement, 'left', positionFromPrefs.left + 'px');
 			this.renderer.setStyle(this.el.nativeElement, 'top', positionFromPrefs.top + 'px');
@@ -138,7 +141,7 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 				Math.max(this.bounds.top, positionFromPrefs.top),
 			),
 		};
-		this.debug && console.debug('boundPositionFromPrefs', boundPositionFromPrefs);
+		this.debug && console.debug('[debug] boundPositionFromPrefs', boundPositionFromPrefs);
 
 		this.renderer.setStyle(this.el.nativeElement, 'left', boundPositionFromPrefs.left + 'px');
 		this.renderer.setStyle(this.el.nativeElement, 'top', boundPositionFromPrefs.top + 'px');

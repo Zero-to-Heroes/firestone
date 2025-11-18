@@ -12,12 +12,13 @@ declare const window: any;
 	standalone: false,
 	template: `
 		<div class="electron-overlay-container">
-			<constructed-decktracker-ooc-widget-wrapper></constructed-decktracker-ooc-widget-wrapper>
+			<full-screen-overlays></full-screen-overlays>
+			<!-- <constructed-decktracker-ooc-widget-wrapper></constructed-decktracker-ooc-widget-wrapper>
 			<decktracker-player-widget-wrapper
 				class="focusable"
 				style="pointer-events: none;"
 				tabindex="0"
-			></decktracker-player-widget-wrapper>
+			></decktracker-player-widget-wrapper> -->
 		</div>
 	`,
 	styleUrls: ['./electron-overlay.component.scss'],
