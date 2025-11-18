@@ -197,12 +197,12 @@ export class ArenaCardStatsService extends AbstractFacadeService<ArenaCardStatsS
 		return result;
 	}
 
-	public newSearchString(newText: string) {
+	public newSearchString(newText: string | null | undefined) {
 		this.mainInstance.newSearchStringInternal(newText);
 	}
 
-	private async newSearchStringInternal(newText: string) {
-		this.searchString$$.next(newText);
+	private async newSearchStringInternal(newText: string | null | undefined) {
+		this.searchString$$.next(newText ?? undefined);
 	}
 
 	private buildCombinedStats(

@@ -376,6 +376,7 @@ import {
 	ArenaCommonModule,
 	ArenaDraftManagerService,
 } from '@firestone/arena/common';
+import { ArenaViewModule } from '@firestone/arena/view';
 import { BattlegroundsCommonModule } from '@firestone/battlegrounds/common';
 import {
 	BattlegroundsCoreModule,
@@ -668,6 +669,7 @@ try {
 		AchievementsDataAccessModule,
 		AchievementsCommonModule,
 		ArenaCommonModule,
+		ArenaViewModule,
 		DiscordModule,
 		MemoryModule,
 		GameStateModule,

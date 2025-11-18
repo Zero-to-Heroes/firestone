@@ -1,23 +1,23 @@
 {
-	"name": "app/view",
+	"name": "@firestone/arena/view",
 	"$schema": "../../../node_modules/nx/schemas/project-schema.json",
 	"projectType": "library",
-	"sourceRoot": "libs/app/view/src",
+	"sourceRoot": "libs/arena/view/src",
 	"prefix": "lib",
 	"tags": [],
 	"targets": {
 		"build": {
-			"executor": "@nx/angular:package",
+			"executor": "@nx/angular:ng-packagr-lite",
 			"outputs": ["{workspaceRoot}/dist/{projectRoot}"],
 			"options": {
-				"project": "libs/app/view/ng-package.json"
+				"project": "libs/arena/view/ng-package.json"
 			},
 			"configurations": {
 				"production": {
-					"tsConfig": "libs/app/view/tsconfig.lib.prod.json"
+					"tsConfig": "libs/arena/view/tsconfig.lib.prod.json"
 				},
 				"development": {
-					"tsConfig": "libs/app/view/tsconfig.lib.json"
+					"tsConfig": "libs/arena/view/tsconfig.lib.json"
 				}
 			},
 			"defaultConfiguration": "production"
@@ -26,7 +26,7 @@
 			"executor": "@nx/jest:jest",
 			"outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
 			"options": {
-				"jestConfig": "libs/app/view/jest.config.ts"
+				"jestConfig": "libs/arena/view/jest.config.ts"
 			}
 		},
 		"lint": {

@@ -24,6 +24,7 @@
 			"@firestone/app/common": ["libs/app/common/src/index.ts"],
 			"@firestone/app/view": ["libs/app/view/src/index.ts"],
 			"@firestone/arena/common": ["libs/arena/common/src/index.ts"],
+			"@firestone/arena/view": ["libs/arena/view/src/index.ts"],
 			"@firestone/battlegrounds/common": ["libs/battlegrounds/common/src/index.ts"],
 			"@firestone/battlegrounds/core": ["libs/battlegrounds/core/src/index.ts"],
 			"@firestone/battlegrounds/data-access": ["libs/battlegrounds/data-access/src/index.ts"],
@@ -67,7 +68,6 @@
 			"@pipes/*": ["libs/legacy/feature-shell/src/lib/js/pipes/*"],
 			"@services/*": ["libs/legacy/feature-shell/src/lib/js/services/*"],
 			"@tavern-brawl/*": ["libs/legacy/feature-shell/src/lib/libs/tavern-brawl/*"],
-			"common": ["libs/electron/common/src/index.ts"],
 			"crypto": ["./node_modules/crypto-browserify"],
 			"stream": ["./node_modules/stream-browserify"],
 			"vm": ["./node_modules/vm-browserify"]

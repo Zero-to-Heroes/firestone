@@ -4,7 +4,7 @@ import { PatchesConfigService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { combineLatest, distinctUntilChanged, filter, map, shareReplay, switchMap } from 'rxjs';
-import { ArenaCardOption } from '../components/overlays/model';
+import { ArenaCardOption } from '../models/arena-card-options';
 import { ArenaCombinedCardStat } from '../models/arena-combined-card-stat';
 import { ArenaCardStatsService } from './arena-card-stats.service';
 import { ArenaClassStatsService } from './arena-class-stats.service';
