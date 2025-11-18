@@ -12,7 +12,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { getBaseCardId } from '@firestone-hs/reference-data';
-import { buildColor } from '@firestone/constructed/common';
+import { buildColor } from '@firestone/constructed/view';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { ARENA_MULLIGAN_DAILY_FREE_USES, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';

@@ -397,6 +397,7 @@ import {
 import { CollectionViewModule } from '@firestone/collection/view';
 import { CommunitiesCommonModule } from '@firestone/communities/common';
 import { ConstructedCommonModule } from '@firestone/constructed/common';
+import { ConstructedViewModule } from '@firestone/constructed/view';
 import { DiscordModule } from '@firestone/discord';
 import {
 	GameEventsPluginService,
@@ -673,6 +674,7 @@ try {
 		AppViewModule,
 		StatsCommonModule,
 		ConstructedCommonModule,
+		ConstructedViewModule,
 		CommunitiesCommonModule,
 		CollectionCommonModule,
 		MercenariesCommonModule,

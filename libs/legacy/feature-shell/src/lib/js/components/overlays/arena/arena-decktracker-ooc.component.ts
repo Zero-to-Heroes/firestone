@@ -26,7 +26,7 @@ import {
 	ArenaDraftManagerService,
 	ArenaOverlayDraftStatsService,
 } from '@firestone/arena/common';
-import { buildColor } from '@firestone/constructed/common';
+import { buildColor } from '@firestone/constructed/view';
 import { ArenaModeFilterType, PatchesConfigService, PreferencesService } from '@firestone/shared/common/service';
 import {
 	AbstractSubscriptionComponent,

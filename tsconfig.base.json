@@ -33,6 +33,7 @@
 			"@firestone/collection/view": ["libs/collection/view/src/index.ts"],
 			"@firestone/communities/common": ["libs/communities/common/src/index.ts"],
 			"@firestone/constructed/common": ["libs/constructed/common/src/index.ts"],
+			"@firestone/constructed/view": ["libs/constructed/view/src/index.ts"],
 			"@firestone/discord": ["libs/discord/src/index.ts"],
 			"@firestone/electron/common": ["libs/electron/common/src/index.ts"],
 			"@firestone/game-state": ["libs/game-state/src/index.ts"],
@@ -69,7 +70,6 @@
 			"common": ["libs/electron/common/src/index.ts"],
 			"crypto": ["./node_modules/crypto-browserify"],
 			"stream": ["./node_modules/stream-browserify"],
-			"view": ["libs/app/view/src/index.ts"],
 			"vm": ["./node_modules/vm-browserify"]
 		},
 		"strict": false,

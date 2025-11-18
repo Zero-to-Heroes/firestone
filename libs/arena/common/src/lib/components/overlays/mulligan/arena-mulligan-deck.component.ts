@@ -12,7 +12,8 @@ import {
 } from '@angular/core';
 import { CardClass, getBaseCardId } from '@firestone-hs/reference-data';
 import { GameNativeStateStoreService } from '@firestone/app/common';
-import { MulliganDeckData, buildColor } from '@firestone/constructed/common';
+import { MulliganDeckData } from '@firestone/constructed/common';
+import { buildColor } from '@firestone/constructed/view';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { PatchesConfigService, Preferences, PreferencesService, formatPatch } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';

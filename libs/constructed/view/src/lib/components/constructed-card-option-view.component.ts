@@ -1,7 +1,7 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ConstructedCardStat } from '@firestone/constructed/common';
 import { ILocalizationService } from '@firestone/shared/framework/core';
-import { ConstructedCardStat } from '../services/constructed-discover.service';
 
 @Component({
 	standalone: false,

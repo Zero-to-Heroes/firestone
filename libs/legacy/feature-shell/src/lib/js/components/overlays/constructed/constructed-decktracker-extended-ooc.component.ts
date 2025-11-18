@@ -16,8 +16,8 @@ import {
 	ConstructedMulliganGuideService,
 	MulliganDeckData,
 	MulliganDeckStats,
-	buildColor,
 } from '@firestone/constructed/common';
+import { buildColor } from '@firestone/constructed/view';
 import { DeckParserFacadeService, GameStateFacadeService } from '@firestone/game-state';
 import { PatchesConfigService, Preferences, PreferencesService, formatPatch } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';

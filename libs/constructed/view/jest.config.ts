@@ -1,8 +1,8 @@
 export default {
-	displayName: 'app-view',
+	displayName: 'view',
 	preset: '../../../jest.preset.js',
 	setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-	coverageDirectory: '../../../coverage/libs/app/view',
+	coverageDirectory: '../../../coverage/libs/constructed/view',
 	transform: {
 		'^.+\\.(ts|mjs|js|html)$': [
 			'jest-preset-angular',

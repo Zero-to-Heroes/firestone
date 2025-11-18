@@ -115,14 +115,14 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 		const bepInExConfigs: readonly BepInExConfig[] = await Promise.all(
 			configFiles.data?.map((f) =>
 				buildBepInExConfig(configFiles.path + '\\' + f.name, f.name.split('.cfg')[0], this.ow),
-			),
+			) as Promise<BepInExConfig>[],
 		);
 		console.debug('[mods-manager] bepInExConfigs', bepInExConfigs);
 
 		// Then we look into the plugins folder. This is only useful to remove configs that don't have a
 		// corresponding plugin
 		const pluginsFiles = await this.ow.listFilesInDirectory(`${installPath}\\${modsLocation}\\`);
-		const uniqueFiles = pluginsFiles.data?.filter((f) => f.type === 'file').map((f) => f.name);
+		const uniqueFiles = pluginsFiles.data?.filter((f) => f.type === 'file').map((f) => f.name) ?? [];
 		const validConfigs = bepInExConfigs.filter(
 			(c) =>
 				uniqueFiles.includes(c.AssemblyName + '.dll') || uniqueFiles.includes(c.AssemblyName + '.dll.disabled'),

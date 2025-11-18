@@ -12,6 +12,11 @@ import {
 } from '@angular/core';
 import { CardClass, GameFormat, formatFormatReverse, getBaseCardId } from '@firestone-hs/reference-data';
 import { GameNativeStateStoreService } from '@firestone/app/common';
+import {
+	ConstructedMulliganGuideGuardianService,
+	ConstructedMulliganGuideService,
+	MulliganDeckData,
+} from '@firestone/constructed/common';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { PatchesConfigService, Preferences, PreferencesService, formatPatch } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
@@ -33,10 +38,7 @@ import {
 	shareReplay,
 	takeUntil,
 } from 'rxjs';
-import { MulliganDeckData } from '../models/mulligan-advice';
-import { ConstructedMulliganGuideGuardianService } from '../services/constructed-mulligan-guide-guardian.service';
-import { ConstructedMulliganGuideService } from '../services/constructed-mulligan-guide.service';
-import { buildColor } from './mulligan-deck-view.component';
+import { buildColor } from './utils';
 
 @Component({
 	standalone: false,
@@ -176,7 +178,7 @@ export class ConstructedMulliganDeckComponent
 					? this.i18n.translateString(`app.decktracker.filters.rank-bracket.competitive-tooltip`)
 					: this.i18n.translateString(
 							`app.decktracker.filters.rank-bracket.${prefs.decktrackerMulliganRankBracket}`,
-					  ),
+						),
 			),
 			this.mapData(
 				(rankInfo) =>

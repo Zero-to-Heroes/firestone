@@ -12,6 +12,11 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { getBaseCardId } from '@firestone-hs/reference-data';
+import {
+	ConstructedMulliganGuideGuardianService,
+	ConstructedMulliganGuideService,
+	MulliganChartData,
+} from '@firestone/constructed/common';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { CONSTRUCTED_MULLIGAN_DAILY_FREE_USES, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
@@ -32,11 +37,8 @@ import {
 	shareReplay,
 	takeUntil,
 } from 'rxjs';
-import { MulliganChartData } from '../models/mulligan-advice';
-import { ConstructedMulliganGuideGuardianService } from '../services/constructed-mulligan-guide-guardian.service';
-import { ConstructedMulliganGuideService } from '../services/constructed-mulligan-guide.service';
-import { buildColor } from './mulligan-deck-view.component';
 import { InternalMulliganAdvice } from './mulligan-hand-view.component';
+import { buildColor } from './utils';
 
 @Component({
 	standalone: false,

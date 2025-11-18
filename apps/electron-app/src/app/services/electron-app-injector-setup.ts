@@ -47,7 +47,7 @@ import {
 	MindVisionStateMachineService,
 	SceneService,
 } from '@firestone/memory';
-import { CustomAppearanceService } from '@firestone/settings';
+// import { CustomAppearanceService } from '@firestone/settings';
 import {
 	GameStatusService,
 	LOG_FILE_BACKEND,
@@ -211,8 +211,8 @@ export const buildAppInjector = () => {
 	const patchesConfig = new PatchesConfigService(windowManager);
 	electronInjector.register(PatchesConfigService, patchesConfig);
 
-	const customAppearance = new CustomAppearanceService(windowManager);
-	electronInjector.register(CustomAppearanceService, customAppearance);
+	// const customAppearance = new CustomAppearanceService(windowManager);
+	// electronInjector.register(CustomAppearanceService, customAppearance);
 
 	const bgsBoardHighlighter = new BgsBoardHighlighterService(windowManager);
 	electronInjector.register(BgsBoardHighlighterService, bgsBoardHighlighter);
