@@ -40,6 +40,14 @@ export class BgsInGameTrinketsGuardianService extends AbstractFacadeService<BgsI
 		this.addDevMode();
 	}
 
+	protected override async initElectronSubjects() {
+		this.setupElectronSubject(this.freeUsesLeft$$, 'bgs-in-game-trinkets-guardian-free-uses-left');
+	}
+
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.freeUsesLeft$$ = new BehaviorSubject<number>(BGS_TRINKETS_DAILY_FREE_USES);
+	}
+
 	public acknowledgeStatsSeen() {
 		this.mainInstance.acknowledgeStatsSeenInternal();
 	}

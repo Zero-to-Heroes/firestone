@@ -108,6 +108,9 @@ export class OverwolfService {
 	}
 
 	public removeGameInfoUpdatedListener(listener: (message: any) => void): void {
+		if (!this.isOwEnabled()) {
+			return;
+		}
 		overwolf.games.onGameInfoUpdated.removeListener(listener);
 	}
 

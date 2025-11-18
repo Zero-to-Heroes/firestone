@@ -68,6 +68,20 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 			});
 	}
 
+	protected override async initElectronSubjects() {
+		this.setupElectronSubject(this.shopMinions$$, 'bgs-board-highlighter-shop-minions');
+		this.setupElectronSubject(this.highlightedTribes$$, 'bgs-board-highlighter-highlighted-tribes');
+		this.setupElectronSubject(this.highlightedMechanics$$, 'bgs-board-highlighter-highlighted-mechanics');
+		this.setupElectronSubject(this.highlightedMinions$$, 'bgs-board-highlighter-highlighted-minions');
+	}
+
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.shopMinions$$ = new SubscriberAwareBehaviorSubject<readonly ShopMinion[]>([]);
+		this.highlightedTribes$$ = new BehaviorSubject<readonly Race[]>([]);
+		this.highlightedMechanics$$ = new BehaviorSubject<readonly GameTag[]>([]);
+		this.highlightedMinions$$ = new BehaviorSubject<readonly string[]>([]);
+	}
+
 	public toggleMinionsToHighlight(minionsToHighlight: readonly string[]) {
 		this.mainInstance.toggleMinionsToHighlightInternal(minionsToHighlight);
 	}

@@ -200,16 +200,6 @@ export class DeckTrackerOverlayRootComponent
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.patchesConfig);
-		console.debug('[debug] [decktracker-overlay-root] patchesConfig ready');
-		await waitForReady(this.gameState);
-		console.debug('[debug][decktracker-overlay-root] gameState ready');
-		await waitForReady(this.prefs);
-		console.debug('[debug][decktracker-overlay-root] prefs ready');
-		await waitForReady(this.gameStats);
-		console.debug('[debug][decktracker-overlay-root] gameStats ready');
-		await waitForReady(this.decksProvider);
-		console.debug('[debug][decktracker-overlay-root] decksProvider ready');
 		await waitForReady(this.patchesConfig, this.gameState, this.prefs, this.gameStats, this.decksProvider);
 
 		this.showDeckWinrate$ = this.prefs.preferences$$.pipe(
@@ -234,7 +224,6 @@ export class DeckTrackerOverlayRootComponent
 		this.deck$ = this.gameState.gameState$$.pipe(
 			this.mapData((gameState) => {
 				const deck = !gameState ? null : this.deckExtractor(gameState);
-				console.debug('[debug] deck', deck, gameState);
 				// Add some information so that we can have it even when global effects are hidden
 				const enrichedDeck = enrichDeck(deck);
 				return enrichedDeck;

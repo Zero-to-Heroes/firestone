@@ -48,6 +48,14 @@ export class BattlegroundsQuestsService extends AbstractFacadeService<Battlegrou
 		});
 	}
 
+	protected override async initElectronSubjects() {
+		this.setupElectronSubject(this.questStats$$, 'bgs-quests-quest-stats');
+	}
+
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.questStats$$ = new SubscriberAwareBehaviorSubject<BgsQuestStats | null>(null);
+	}
+
 	public async loadQuests(
 		timeFilter: BgsActiveTimeFilterType,
 		rankFilter: BgsRankFilterType,

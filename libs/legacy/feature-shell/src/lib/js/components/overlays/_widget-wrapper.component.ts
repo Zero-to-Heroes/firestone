@@ -86,7 +86,7 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 			this.repositioning = false;
 			return;
 		}
-		this.debug && console.debug('[debug] gameInfo', gameInfo);
+		this.debug && console.debug('[debug] gameInfo', this.constructor.name, gameInfo);
 		const gameWidth = gameInfo.width;
 		const gameHeight = gameInfo.height;
 		const dpi = gameInfo.logicalWidth / gameInfo.width;
@@ -100,7 +100,13 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 				top: this.defaultPositionTopProvider(gameWidth, gameHeight, dpi),
 			};
 		}
-		this.debug && console.debug('[debug] positionFromPrefs', positionFromPrefs, this.forceKeepInBounds);
+		this.debug &&
+			console.debug(
+				'[debug] positionFromPrefs',
+				this.constructor.name,
+				positionFromPrefs,
+				this.forceKeepInBounds,
+			);
 		if (positionFromPrefs) {
 			this.renderer.setStyle(this.el.nativeElement, 'left', positionFromPrefs.left + 'px');
 			this.renderer.setStyle(this.el.nativeElement, 'top', positionFromPrefs.top + 'px');

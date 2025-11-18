@@ -1,4 +1,16 @@
+import { GameNativeStateStoreService } from '@firestone/app/common';
+import { ArenaDraftManagerService, ArenaMulliganGuideService } from '@firestone/arena/common';
+import {
+	BattlegroundsQuestsService,
+	BgsBoardHighlighterService,
+	BgsInGameHeroSelectionGuardianService,
+	BgsInGameQuestsGuardianService,
+	BgsInGameQuestsService,
+	BgsInGameTrinketsGuardianService,
+	BgsInGameTrinketsService,
+} from '@firestone/battlegrounds/common';
 import { BgsBattleSimulationMockExecutorService, BgsBattleSimulationService } from '@firestone/battlegrounds/core';
+import { ConstructedMulliganGuideService } from '@firestone/constructed/common';
 import { ElectronApiRunner, ElectronStorageService } from '@firestone/electron/common';
 import {
 	AiDeckService,
@@ -27,16 +39,20 @@ import {
 	SecretsParserService,
 } from '@firestone/game-state';
 import {
+	CardChoicesService,
+	CardMousedOverService,
 	MemoryInspectionService,
 	MemoryUpdatesService,
 	MindVisionFacadeService,
 	MindVisionStateMachineService,
 	SceneService,
 } from '@firestone/memory';
+import { CustomAppearanceService } from '@firestone/settings';
 import {
 	GameStatusService,
 	LOG_FILE_BACKEND,
 	LogUtilsService,
+	PatchesConfigService,
 	PreferencesService,
 	PreferencesStorageService,
 	StandaloneAdService,
@@ -192,6 +208,39 @@ export const buildAppInjector = () => {
 	const secretsConfig = new SecretConfigService(api as any as ApiRunner, allCards as any as CardsFacadeService);
 	electronInjector.register(SecretConfigService, secretsConfig);
 
+	const patchesConfig = new PatchesConfigService(windowManager);
+	electronInjector.register(PatchesConfigService, patchesConfig);
+
+	const customAppearance = new CustomAppearanceService(windowManager);
+	electronInjector.register(CustomAppearanceService, customAppearance);
+
+	const bgsBoardHighlighter = new BgsBoardHighlighterService(windowManager);
+	electronInjector.register(BgsBoardHighlighterService, bgsBoardHighlighter);
+
+	const bgsInGameHeroSelectionGuardian = new BgsInGameHeroSelectionGuardianService(windowManager);
+	electronInjector.register(BgsInGameHeroSelectionGuardianService, bgsInGameHeroSelectionGuardian);
+
+	const bgsInGameQuests = new BgsInGameQuestsService(windowManager);
+	electronInjector.register(BgsInGameQuestsService, bgsInGameQuests);
+
+	const bgsInGameQuestsGuardian = new BgsInGameQuestsGuardianService(windowManager);
+	electronInjector.register(BgsInGameQuestsGuardianService, bgsInGameQuestsGuardian);
+
+	const bgsInGameTrinkets = new BgsInGameTrinketsService(windowManager);
+	electronInjector.register(BgsInGameTrinketsService, bgsInGameTrinkets);
+
+	const bgsInGameTrinketsGuardian = new BgsInGameTrinketsGuardianService(windowManager);
+	electronInjector.register(BgsInGameTrinketsGuardianService, bgsInGameTrinketsGuardian);
+
+	const bgsQuests = new BattlegroundsQuestsService(windowManager);
+	electronInjector.register(BattlegroundsQuestsService, bgsQuests);
+
+	const cardChoices = new CardChoicesService(windowManager);
+	electronInjector.register(CardChoicesService, cardChoices);
+
+	const constructedMulliganGuide = new ConstructedMulliganGuideService(windowManager);
+	electronInjector.register(ConstructedMulliganGuideService, constructedMulliganGuide);
+
 	const constructedArchetypes = new ConstructedArchetypeService(
 		api as any as ApiRunner,
 		allCards as any as CardsFacadeService,
@@ -203,6 +252,18 @@ export const buildAppInjector = () => {
 		gameEventsEmitter,
 	);
 	electronInjector.register(ConstructedArchetypeServiceOrchestrator, constructedArchetypesOthestrator);
+
+	const arenaDraftManager = new ArenaDraftManagerService(windowManager);
+	electronInjector.register(ArenaDraftManagerService, arenaDraftManager);
+
+	const arenaMulliganGuide = new ArenaMulliganGuideService(windowManager);
+	electronInjector.register(ArenaMulliganGuideService, arenaMulliganGuide);
+
+	const gameNativeStateStore = new GameNativeStateStoreService(windowManager);
+	electronInjector.register(GameNativeStateStoreService, gameNativeStateStore);
+
+	const cardMousedOver = new CardMousedOverService(windowManager);
+	electronInjector.register(CardMousedOverService, cardMousedOver);
 
 	const ads: IAdsService = new StandaloneAdService(windowManager);
 	electronInjector.register(ADS_SERVICE_TOKEN, ads);

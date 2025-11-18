@@ -81,7 +81,7 @@ export class OverlayService extends EventEmitter {
 	 */
 	public async registerToHearthstone(): Promise<void> {
 		if (!this.overlayApi) {
-			console.log('⚠️ Cannot register to Hearthstone - overlay API not ready');
+			console.log('Cannot register to Hearthstone - overlay API not ready');
 			return;
 		}
 
@@ -91,7 +91,7 @@ export class OverlayService extends EventEmitter {
 		};
 
 		await this.overlayApi.registerGames(filter);
-		console.log('✅ Registered to monitor Hearthstone');
+		console.log('Registered to monitor Hearthstone');
 	}
 
 	/**
@@ -99,7 +99,7 @@ export class OverlayService extends EventEmitter {
 	 */
 	private async resizeOverlayToGame(): Promise<void> {
 		if (!this.overlayWindow) {
-			console.log('⚠️ No overlay window to resize');
+			console.log('No overlay window to resize');
 			return;
 		}
 
@@ -122,7 +122,7 @@ export class OverlayService extends EventEmitter {
 			this.overlayWindow.window.show(); // Make sure it's visible
 			// console.log(`Overlay resized to: ${gameWidth}x${gameHeight}`);
 		} catch (error) {
-			console.error('❌ Failed to resize overlay window:', error);
+			console.error('Failed to resize overlay window:', error);
 		}
 	}
 
@@ -179,7 +179,7 @@ export class OverlayService extends EventEmitter {
 			// TODO: In production, we should serve this from a local file server or build
 			const frontendUrl = 'http://localhost:4200/overlay';
 
-			console.log('🚀 Loading Angular overlay from:', frontendUrl);
+			console.log('Loading Angular overlay from:', frontendUrl);
 			await this.overlayWindow.window.loadURL(frontendUrl);
 
 			// Wait for DOM to be ready, then show and focus
@@ -215,10 +215,10 @@ export class OverlayService extends EventEmitter {
 				}
 			});
 
-			console.log('✨ Angular overlay window created successfully! Waiting for show/focus...');
+			console.log('Angular overlay window created successfully! Waiting for show/focus...');
 		} catch (error) {
-			console.error('❌ Error loading Angular overlay:', error);
-			console.error('❌ Make sure Angular frontend is running on http://localhost:4200');
+			console.error('Error loading Angular overlay:', error);
+			console.error('Make sure Angular frontend is running on http://localhost:4200');
 			// Don't create fallback window - just fail gracefully
 			throw error;
 		}
@@ -258,13 +258,13 @@ export class OverlayService extends EventEmitter {
 		// Prevent double events in case the package relaunches due to crash or update
 		this.overlayApi.removeAllListeners();
 
-		console.log('📡 Registering to overlay package events');
+		console.log('Registering to overlay package events');
 
 		this.overlayApi.on('game-launched', async (event, gameInfo) => {
-			console.log('🎮 Game launched:', gameInfo.name);
-			console.log('🔍 Game ID:', gameInfo.id, '(looking for 9898 for Hearthstone)');
-			// console.log('🔍 Process info:', JSON.stringify(gameInfo.processInfo, null, 2));
-			// console.log('🔍 Window info:', JSON.stringify(gameInfo, null, 2));
+			console.log('Game launched:', gameInfo.name);
+			console.log('Game ID:', gameInfo.id, '(looking for 9898 for Hearthstone)');
+			// console.log('Process info:', JSON.stringify(gameInfo.processInfo, null, 2));
+			// console.log('Window info:', JSON.stringify(gameInfo, null, 2));
 
 			// Check if this is Hearthstone (ID 9898)
 			if (Math.round(gameInfo.id / 10) === 9898) {
@@ -272,35 +272,56 @@ export class OverlayService extends EventEmitter {
 
 				// Check for elevation issues
 				if (gameInfo.processInfo.isElevated) {
-					console.error('❌ Cannot inject to elevated game - app is not elevated');
+					console.error('Cannot inject to elevated game - app is not elevated');
 					return;
 				}
 
 				// Try injecting FIRST, then create window in the injected event
-				console.log('🚀 Calling event.inject() BEFORE creating window...');
+				console.log('Calling event.inject() BEFORE creating window...');
 				try {
 					event.inject();
-					console.log('✅ event.inject() called successfully');
+					console.log('event.inject() called successfully');
 				} catch (error) {
-					console.error('❌ Error calling event.inject():', error);
+					console.error('Error calling event.inject():', error);
 				}
 			} else {
-				console.log(`ℹ️ Game ${gameInfo.name} (ID: ${gameInfo.id}) launched, but not Hearthstone`);
+				console.log(`Game ${gameInfo.name} (ID: ${gameInfo.id}) launched, but not Hearthstone`);
 			}
 		});
 
 		this.overlayApi.on('game-injection-error', (gameInfo, error) => {
-			console.error('❌ Game injection error:', error, gameInfo);
+			console.error('Game injection error:', error, gameInfo);
 		});
 
 		this.overlayApi.on('game-injected', async (gameInfo) => {
 			console.log('Game injected successfully!', gameInfo.name);
-			console.log('Waiting for game to get focus before creating overlay...');
+			// console.log('Waiting for game to get focus before creating overlay...');
+
+			// if (game.classId === 9898) {
+			// if (focus) {
+			// Game focused - create or resize overlay
+			if (!this.overlayWindow) {
+				console.log('Hearthstone focused! Creating overlay window...');
+				await this.createOverlayWindow();
+				console.log('Overlay window created when game got focus!');
+			}
+			// else {
+			// 	// console.log('Hearthstone focused! Resizing existing overlay...');
+			// 	await this.resizeOverlayToGame();
+			// 	// console.log('Overlay window resized to match current game size!');
+			// }
+			// } else {
+			// Game unfocused - hide overlay but keep it alive
+			// if (this.overlayWindow) {
+			// 	console.log('Hearthstone unfocused! Hiding overlay...');
+			// 	this.overlayWindow.window.hide();
+			// }
+			// }
+			// }
 		});
 
 		this.overlayApi.on('game-focus-changed', async (window, game, focus) => {
 			// console.log('🔍 Game focus changed:', game.name, focus ? 'focused' : 'unfocused');
-
 			if (game.classId === 9898) {
 				if (focus) {
 					// Game focused - create or resize overlay

@@ -38,6 +38,14 @@ export class BgsInGameQuestsGuardianService extends AbstractFacadeService<BgsInG
 		this.addDevMode();
 	}
 
+	protected override async initElectronSubjects() {
+		this.setupElectronSubject(this.freeUsesLeft$$, 'bgs-in-game-quests-guardian-free-uses-left');
+	}
+
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.freeUsesLeft$$ = new BehaviorSubject<number>(BGS_QUESTS_DAILY_FREE_USES);
+	}
+
 	public acknowledgeStatsSeen() {
 		this.mainInstance.acknowledgeStatsSeenInternal();
 	}

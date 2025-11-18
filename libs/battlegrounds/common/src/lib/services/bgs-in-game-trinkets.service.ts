@@ -170,6 +170,16 @@ export class BgsInGameTrinketsService extends AbstractFacadeService<BgsInGameTri
 			this.trinketStats$$.next(options as any);
 		});
 	}
+
+	protected override async initElectronSubjects() {
+		this.setupElectronSubject(this.showWidget$$, 'bgs-in-game-trinkets-show-widget');
+		this.setupElectronSubject(this.trinketStats$$, 'bgs-in-game-trinkets-trinket-stats');
+	}
+
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.showWidget$$ = new BehaviorSubject<boolean | null>(null);
+		this.trinketStats$$ = new BehaviorSubject<readonly BgsTrinketCardChoiceOption[] | null>(null);
+	}
 }
 
 const isBgTrinketDiscover = (option: CardOption, allCards: CardsFacadeService): boolean => {

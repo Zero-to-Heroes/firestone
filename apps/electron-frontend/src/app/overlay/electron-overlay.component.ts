@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewRef } from '@angular/core';
 import { AllCardsService, SceneMode } from '@firestone-hs/reference-data';
 import { MemoryUpdatesService, SceneService } from '@firestone/memory';
 import { GameStatusService, ScalingService } from '@firestone/shared/common/service';
@@ -12,7 +12,7 @@ declare const window: any;
 	standalone: false,
 	template: `
 		<div class="electron-overlay-container">
-			<full-screen-overlays></full-screen-overlays>
+			<full-screen-overlays *ngIf="ready"></full-screen-overlays>
 			<!-- <constructed-decktracker-ooc-widget-wrapper></constructed-decktracker-ooc-widget-wrapper>
 			<decktracker-player-widget-wrapper
 				class="focusable"
@@ -34,9 +34,12 @@ export class ElectronOverlayComponent implements OnInit, OnDestroy {
 	scene: string | null = null;
 	memoryUpdates: string | null = null;
 
+	ready = false;
+
 	private subscriptions: Subscription[] = [];
 
 	constructor(
+		private readonly cdr: ChangeDetectorRef,
 		private readonly gameStatusService: GameStatusService,
 		private readonly sceneService: SceneService,
 		private readonly memoryUpdateService: MemoryUpdatesService,
@@ -93,6 +96,11 @@ export class ElectronOverlayComponent implements OnInit, OnDestroy {
 
 		// Set up periodic updates
 		this.setupPeriodicUpdates();
+
+		this.ready = true;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	ngOnDestroy() {

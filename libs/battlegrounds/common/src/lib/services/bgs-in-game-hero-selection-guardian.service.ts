@@ -38,6 +38,14 @@ export class BgsInGameHeroSelectionGuardianService extends AbstractFacadeService
 		this.addDevMode();
 	}
 
+	protected override async initElectronSubjects() {
+		this.setupElectronSubject(this.freeUsesLeft$$, 'bgs-in-game-hero-selection-guardian-free-uses-left');
+	}
+
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.freeUsesLeft$$ = new BehaviorSubject<number>(BGS_HERO_SELECTION_DAILY_FREE_USES);
+	}
+
 	public acknowledgeStatsSeen() {
 		this.mainInstance.acknowledgeStatsSeenInternal();
 	}

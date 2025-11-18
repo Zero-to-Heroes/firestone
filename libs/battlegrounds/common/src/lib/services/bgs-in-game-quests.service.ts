@@ -185,6 +185,16 @@ export class BgsInGameQuestsService extends AbstractFacadeService<BgsInGameQuest
 			this.questStats$$.next(options as any);
 		});
 	}
+
+	protected override async initElectronSubjects() {
+		this.setupElectronSubject(this.showWidget$$, 'bgs-in-game-quests-show-widget');
+		this.setupElectronSubject(this.questStats$$, 'bgs-in-game-quests-quest-stats');
+	}
+
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.showWidget$$ = new BehaviorSubject<boolean | null>(null);
+		this.questStats$$ = new BehaviorSubject<readonly BgsQuestCardChoiceOption[] | null>(null);
+	}
 }
 
 const isBgQuestDiscover = (source: string): boolean => {

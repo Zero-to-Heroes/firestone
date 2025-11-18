@@ -31,4 +31,12 @@ export class GameNativeStateStoreService extends AbstractFacadeService<GameNativ
 				this.isFriendsListOpen$$.next(isFriendsListOpen);
 			});
 	}
+
+	protected override async initElectronSubjects() {
+		this.setupElectronSubject(this.isFriendsListOpen$$, 'game-native-state-store-is-friends-list-open');
+	}
+
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.isFriendsListOpen$$ = new BehaviorSubject<boolean>(false);
+	}
 }

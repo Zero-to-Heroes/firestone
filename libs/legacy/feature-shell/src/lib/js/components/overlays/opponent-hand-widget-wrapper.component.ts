@@ -39,8 +39,6 @@ export class OpponentHandWidgetWrapperComponent extends AbstractWidgetWrapperCom
 	protected positionExtractor = null;
 	protected getRect = () => this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect();
 
-	protected debug = true;
-
 	showWidget$: Observable<boolean>;
 	windowWidth: number;
 	windowHeight: number;
@@ -132,14 +130,12 @@ export class OpponentHandWidgetWrapperComponent extends AbstractWidgetWrapperCom
 
 	protected async doResize(): Promise<void> {
 		const gameInfo = await this.gameInfoService.getRunningGameInfo();
-		console.debug('[debug] opponent-hand-widget-wrapper doResize gameInfo', gameInfo);
 		if (!gameInfo) {
 			return;
 		}
 		const gameHeight = gameInfo.height;
 		this.windowWidth = gameHeight;
 		this.windowHeight = gameHeight * 0.1;
-		console.debug('[debug] opponent-hand-widget-wrapper doResize', this.windowWidth, this.windowHeight, gameInfo);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

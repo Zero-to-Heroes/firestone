@@ -10,6 +10,9 @@ import {
 import { filter } from 'rxjs';
 import { CustomAppearance, CustomStyleKey, FinalStyles, defaultStyleKeys } from '../models/custom-appearance';
 
+const colorsEventName = 'custom-appearance-colors';
+const finalStylesEventName = 'custom-appearance-final-styles';
+
 @Injectable()
 export class CustomAppearanceService extends AbstractFacadeService<CustomAppearanceService> {
 	public colors$$: SubscriberAwareBehaviorSubject<CustomAppearance | null>;
@@ -42,6 +45,7 @@ export class CustomAppearanceService extends AbstractFacadeService<CustomAppeara
 		});
 
 		const defaultStyles = await defaultStyleKeys();
+		console.debug('[debug] custom-appearance defaultStyles', defaultStyles);
 
 		this.internalSubject$$.onFirstSubscribe(() => {
 			const localColors =
@@ -88,6 +92,17 @@ export class CustomAppearanceService extends AbstractFacadeService<CustomAppeara
 				console.debug('[custom-appearance] setting style', key, styles[key]);
 			});
 		});
+	}
+
+	protected override async initElectronSubjects() {
+		console.log('[game-state-facade] initElectronSubjects');
+		this.setupElectronSubject(this.colors$$, colorsEventName);
+		this.setupElectronSubject(this.finalStyles$$, finalStylesEventName);
+	}
+
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.colors$$ = new SubscriberAwareBehaviorSubject<CustomAppearance | null>(null);
+		this.finalStyles$$ = new SubscriberAwareBehaviorSubject<FinalStyles | null>(null);
 	}
 
 	public resetAll() {

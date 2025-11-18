@@ -25,16 +25,7 @@ import {
 	waitForReady,
 } from '@firestone/shared/framework/core';
 import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
-import {
-	auditTime,
-	BehaviorSubject,
-	combineLatest,
-	distinctUntilChanged,
-	filter,
-	Observable,
-	takeUntil,
-	tap,
-} from 'rxjs';
+import { auditTime, BehaviorSubject, combineLatest, distinctUntilChanged, filter, Observable, takeUntil } from 'rxjs';
 import { DeckZone } from '../../../models/decktracker/view/deck-zone';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 import { relatedCardIdsSelectorSort } from '../../../services/decktracker/card-highlight/card-id-selector-sort';
@@ -202,7 +193,6 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 	}
 
 	@Input() set card(card: VisualDeckCard) {
-		console.debug('[deck-card] setting card', card);
 		this.card$$.next(card);
 	}
 
@@ -324,14 +314,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 	}
 
 	async ngAfterContentInit() {
-		console.debug('[deck-card] after content init', this.ads);
-		await waitForReady(this.cardMouseOverService);
-		await waitForReady(this.prefs);
-		console.debug('[deck-card] prefs ready');
-		await waitForReady(this.ads);
-		console.debug('[deck-card] ads ready');
 		await waitForReady(this.cardMouseOverService, this.ads, this.prefs);
-		console.debug('[deck-card] after content init 2');
 
 		this.forceMouseOver$ = this.forceMouseOver$$.pipe(this.mapData((value) => value));
 
@@ -354,7 +337,6 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 			this.groupSameCardsTogether$$,
 		])
 			.pipe(
-				tap(([card]) => console.debug('[deck-card] updateInfos', card)),
 				filter(([card]) => !!card),
 				auditTime(50),
 				takeUntil(this.destroyed$),

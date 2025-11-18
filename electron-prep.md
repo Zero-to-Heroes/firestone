@@ -44,6 +44,4 @@ Notes:
 
 TODO now:
 
-- Reasonable scaling for tracker (based on screen size, at least until we have prefs)
-- tracker's UI still broken
 - add other widgets

@@ -581,6 +581,14 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 		);
 	}
 
+	protected override async initElectronSubjects() {
+		this.setupElectronSubject(this.mulliganAdvice$$, 'constructed-mulligan-guide-mulligan-advice');
+	}
+
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.mulliganAdvice$$ = new BehaviorSubject<MulliganGuide | null>(null);
+	}
+
 	public getMulliganAdvice$(
 		deckstring: string,
 		options?: MulliganGuideOptions,

@@ -224,6 +224,7 @@ export class FullScreenOverlaysComponent
 				return 'decktracker';
 			}),
 		);
+
 		const allCounters = getAllCounters(this.i18n, this.allCards).sort((a, b) => a.id.localeCompare(b.id));
 		this.playerCounters$ = combineLatest([this.gameState.gameState$$, this.prefs.preferences$$]).pipe(
 			debounceTime(500),

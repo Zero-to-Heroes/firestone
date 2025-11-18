@@ -33,12 +33,10 @@ export class GameStateFacadeService extends AbstractFacadeService<GameStateFacad
 	}
 
 	protected override async initElectronSubjects() {
-		console.log('[game-state-facade] initElectronSubjects');
 		this.setupElectronSubject(this.gameState$$, eventName);
 	}
 
 	protected override async createElectronProxy(ipcRenderer: any) {
-		console.log('[game-state-facade] createElectronProxy');
 		this.gameState$$ = new BehaviorSubject<GameState>(new GameState());
 	}
 
