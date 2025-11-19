@@ -40,6 +40,14 @@ export class ConstructedMulliganGuideGuardianService extends AbstractFacadeServi
 		this.addDevMode();
 	}
 
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.setupElectronSubject(this.freeUsesLeft$$, 'constructed-mulligan-guide-guardian-free-uses-left');
+	}
+
+	protected override async initElectronSubjects() {
+		this.freeUsesLeft$$ = new BehaviorSubject<number>(CONSTRUCTED_MULLIGAN_DAILY_FREE_USES);
+	}
+
 	public acknowledgeMulliganAdviceSeen() {
 		this.mainInstance.acknowledgeMulliganAdviceSeenInternal();
 	}

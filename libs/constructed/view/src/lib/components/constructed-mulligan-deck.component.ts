@@ -109,7 +109,17 @@ export class ConstructedMulliganDeckComponent
 	}
 
 	async ngAfterContentInit() {
+		await waitForReady(this.gameState);
+		await waitForReady(this.ads);
+		console.debug('[debug] [constructed-mulligan-deck] waitForReady ads');
+		await waitForReady(this.guardian);
+		console.debug('[debug] [constructed-mulligan-deck] waitForReady guardian');
+		await waitForReady(this.prefs);
+		console.debug('[debug] [constructed-mulligan-deck] waitForReady prefs');
+		await waitForReady(this.patches);
+		console.debug('[debug] [constructed-mulligan-deck] waitForReady patches');
 		await waitForReady(this.gameState, this.ads, this.guardian, this.prefs, this.patches);
+		console.debug('[debug] [constructed-mulligan-deck] waitForReady done');
 
 		const showWidget$ = combineLatest([this.ads.hasPremiumSub$$, this.guardian.freeUsesLeft$$]).pipe(
 			debounceTime(200),

@@ -26,7 +26,7 @@ export class ReconnectOverParser implements EventParser {
 			),
 		);
 		const result = stateAfterOpponentDeckUpdate.update({
-			mulliganOver: true,
+			// mulliganOver: true,
 			reconnectOngoing: false,
 		} as GameState);
 		return result;

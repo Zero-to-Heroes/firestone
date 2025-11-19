@@ -26,7 +26,7 @@ import { ConstructedNavigationService } from './constructed-navigation.service';
 const CONSTRUCTED_META_DECKS_BASE_URL = 'https://static.zerotoheroes.com/api/constructed/stats/decks';
 // const CONSTRUCTED_META_DECK_DETAILS_URL = 'https://xcwdxyfpo2hfj2inn25rh5gd3y0rdwyw.lambda-url.us-west-2.on.aws';
 const CONSTRUCTED_META_DECK_DETAILS_URL =
-	'https://fs66gthwj9.execute-api.us-west-2.amazonaws.com/prod/constructed-meta-deck?format={format}&rank={rank}&timePeriod={timePeriod}&deckId={deckId}';
+	'https://fs66gthwj9.execute-api.us-west-2.amazonaws.com/prod/constructed-meta-deck?format={format}&rank={rank}&timePeriod={timePeriod}&deckId={deckId}?v=20251119';
 const CONSTRUCTED_META_ARCHETYPES_BASE_URL = 'https://static.zerotoheroes.com/api/constructed/stats/archetypes';
 
 @Injectable()

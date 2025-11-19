@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { DeckDefinition, decode, encode } from '@firestone-hs/deckstrings';
 import {
 	ARENAS,
@@ -14,7 +14,13 @@ import {
 	SOLO_SCENARIO_WITH_LOGGED_DECKLIST,
 } from '@firestone-hs/reference-data';
 import { DeckInfoFromMemory, MemoryInspectionService, MemoryUpdatesService, SceneService } from '@firestone/memory';
-import { GameStatusService, getLogsDir, PreferencesService } from '@firestone/shared/common/service';
+import {
+	GameStatusService,
+	getLogsDir,
+	LOG_FILE_BACKEND,
+	LogFileBackend,
+	PreferencesService,
+} from '@firestone/shared/common/service';
 import { ApiRunner, CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
 import { Metadata } from '../../models/metadata';
@@ -49,6 +55,7 @@ export class DeckParserService {
 		private readonly prefs: PreferencesService,
 		private readonly gameStatus: GameStatusService,
 		private readonly scene: SceneService,
+		@Inject(LOG_FILE_BACKEND) private readonly logsBackend: LogFileBackend,
 	) {
 		this.init();
 		if (typeof window !== 'undefined') {
@@ -436,6 +443,7 @@ export class DeckParserService {
 			!lines.some((line) => line.includes('Starting Arena Game With Deck'))
 		) {
 			console.log('[deck-parser] ignoring deck log lines because there is no "finding game with deck"');
+			console.log('[debug] [deck-parser] lines', lines);
 			return null;
 		}
 
@@ -472,15 +480,11 @@ export class DeckParserService {
 
 	private async readAllLogLines(): Promise<readonly string[]> {
 		const fileName = 'Decks.log';
-		if (!this.ow) {
-			console.error('missing OW service in deckparser');
-			return [];
-		}
-		const gameInfo = await this.ow.getRunningGameInfo();
+		const gameInfo = await this.logsBackend.getRunningGameInfo();
 		const prefs = await this.prefs.getPreferences();
-		const logsDir = await getLogsDir(this.ow, gameInfo, prefs);
+		const logsDir = await getLogsDir(this.logsBackend, gameInfo, prefs);
 		const logsLocation = `${logsDir}\\${fileName}`;
-		const logsContents = await this.ow.readTextFile(logsLocation);
+		const logsContents = await this.logsBackend.readTextFile(logsLocation);
 		if (!logsContents) {
 			return [];
 		}

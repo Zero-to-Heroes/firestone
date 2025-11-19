@@ -10,7 +10,11 @@ import {
 	BgsInGameTrinketsGuardianService,
 	BgsInGameTrinketsService,
 } from '@firestone/battlegrounds/services';
-import { ConstructedMulliganGuideService } from '@firestone/constructed/common';
+import {
+	ConstructedMetaDecksStateService,
+	ConstructedMulliganGuideGuardianService,
+	ConstructedMulliganGuideService,
+} from '@firestone/constructed/common';
 import { ElectronApiRunner, ElectronStorageService } from '@firestone/electron/common';
 import {
 	AiDeckService,
@@ -69,6 +73,7 @@ import {
 	OwUtilsService,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
+import { GameStatsLoaderService } from '@firestone/stats/data-access';
 import { ElectronAngularInjector } from './electron-angular-injector';
 import { ElectronLogFileBackendService } from './electron-log-file-backend.service';
 import { GameEventsElectronService } from './game-events-electron.service';
@@ -80,9 +85,10 @@ export const buildAppInjector = () => {
 
 	// Create and register services with the injector
 	// FIXME: this instantiate everything, while we might want to have lazy loading
-	const allCards = new CardsFacadeStandaloneService();
-	electronInjector.register(CardsFacadeStandaloneService, allCards);
-	electronInjector.register(CardsFacadeService, allCards as any as CardsFacadeService);
+	const allCardsRaw = new CardsFacadeStandaloneService();
+	const allCards: CardsFacadeService = allCardsRaw as any as CardsFacadeService;
+	electronInjector.register(CardsFacadeStandaloneService, allCardsRaw);
+	electronInjector.register(CardsFacadeService, allCards);
 
 	const windowManager = new WindowManagerService(null);
 	electronInjector.register(WindowManagerService, windowManager);
@@ -138,20 +144,21 @@ export const buildAppInjector = () => {
 	const gameEventsEmitter = new GameEventsEmitterService();
 	electronInjector.register(GameEventsEmitterService, gameEventsEmitter);
 
-	const deckHandler = new DeckHandlerService(allCards as any as CardsFacadeService);
+	const deckHandler = new DeckHandlerService(allCards);
 	electronInjector.register(DeckHandlerService, deckHandler);
 
 	const deckParser = new DeckParserService(
 		gameEventsEmitter,
 		memoryUpdates,
 		memoryInspection,
-		allCards as any as CardsFacadeService,
+		allCards,
 		null, // FIXME: replace OW service with something else
 		deckHandler,
 		api as any as ApiRunner,
 		preferences,
 		gameStatus,
 		scene,
+		logFileBackend,
 	);
 	electronInjector.register(DeckParserService, deckParser);
 
@@ -181,7 +188,7 @@ export const buildAppInjector = () => {
 		gameEventsEmitter,
 		scene,
 		gameStatus,
-		allCards as any as CardsFacadeService,
+		allCards,
 		gameStateFacade,
 		gameId,
 		gameEventsFacade,
@@ -193,19 +200,19 @@ export const buildAppInjector = () => {
 	electronInjector.register(GameStateMetaInfoService, gameStateMetaInfos);
 
 	// TODO: translation service
-	const i18n = new LocalizationStandaloneService(allCards, null);
+	const i18n = new LocalizationStandaloneService(allCardsRaw, null);
 	electronInjector.register(LocalizationStandaloneService, i18n);
 
-	const helper = new DeckManipulationHelper(allCards as any as CardsFacadeService, i18n);
+	const helper = new DeckManipulationHelper(allCards, i18n);
 	electronInjector.register(DeckManipulationHelper, helper);
 
-	const secretsParser = new SecretsParserService(helper, allCards as any as CardsFacadeService);
+	const secretsParser = new SecretsParserService(helper, allCards);
 	electronInjector.register(SecretsParserService, secretsParser);
 
 	const aiDecks = new AiDeckService(api as any as ApiRunner);
 	electronInjector.register(AiDeckService, aiDecks);
 
-	const secretsConfig = new SecretConfigService(api as any as ApiRunner, allCards as any as CardsFacadeService);
+	const secretsConfig = new SecretConfigService(api as any as ApiRunner, allCards);
 	electronInjector.register(SecretConfigService, secretsConfig);
 
 	const patchesConfig = new PatchesConfigService(windowManager);
@@ -238,14 +245,20 @@ export const buildAppInjector = () => {
 	const cardChoices = new CardChoicesService(windowManager);
 	electronInjector.register(CardChoicesService, cardChoices);
 
+	const constructedMetaDecksState = new ConstructedMetaDecksStateService(windowManager);
+	electronInjector.register(ConstructedMetaDecksStateService, constructedMetaDecksState);
+
+	const constructedArchetypeService = new ConstructedArchetypeService(api as any as ApiRunner, allCards);
+	electronInjector.register(ConstructedArchetypeService, constructedArchetypeService);
+
 	const constructedMulliganGuide = new ConstructedMulliganGuideService(windowManager);
 	electronInjector.register(ConstructedMulliganGuideService, constructedMulliganGuide);
 
-	const constructedArchetypes = new ConstructedArchetypeService(
-		api as any as ApiRunner,
-		allCards as any as CardsFacadeService,
-	);
+	const constructedArchetypes = new ConstructedArchetypeService(api as any as ApiRunner, allCards);
 	electronInjector.register(ConstructedArchetypeService, constructedArchetypes);
+
+	const gameStatsLoader = new GameStatsLoaderService(windowManager);
+	electronInjector.register(GameStatsLoaderService, gameStatsLoader);
 
 	const constructedArchetypesOthestrator = new ConstructedArchetypeServiceOrchestrator(
 		constructedArchetypes,
@@ -275,7 +288,7 @@ export const buildAppInjector = () => {
 	const battleExecutor = new BgsBattleSimulationMockExecutorService();
 	const simulation = new BgsBattleSimulationService(
 		api as any as ApiRunner,
-		allCards as any as CardsFacadeService,
+		allCards,
 		battleExecutor,
 		ads,
 		null, // BugReportService
@@ -289,7 +302,7 @@ export const buildAppInjector = () => {
 
 	const gameEventsParser = new GameStateParsersService(
 		helper,
-		allCards as any as CardsFacadeService,
+		allCards,
 		i18n,
 		aiDecks,
 		deckHandler,
@@ -320,7 +333,7 @@ export const buildAppInjector = () => {
 	);
 	electronInjector.register(BgsMatchMemoryInfoService, bgsMatchMemoryInfo);
 
-	const realTimeParsers = new RealTimeStatsParsersService(allCards as any as CardsFacadeService);
+	const realTimeParsers = new RealTimeStatsParsersService(allCards);
 	electronInjector.register(RealTimeStatsParsersService, realTimeParsers);
 
 	const realTimeStats = new RealTimeStatsService(gameEventsEmitter, scene, realTimeParsers);
@@ -339,6 +352,9 @@ export const buildAppInjector = () => {
 		simulation,
 	);
 	electronInjector.register(GameStateService, gameState);
+
+	const constructedMulliganGuardian = new ConstructedMulliganGuideGuardianService(windowManager);
+	electronInjector.register(ConstructedMulliganGuideGuardianService, constructedMulliganGuardian);
 
 	return electronInjector;
 };

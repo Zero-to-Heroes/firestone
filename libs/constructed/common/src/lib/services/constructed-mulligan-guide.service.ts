@@ -44,6 +44,7 @@ import {
 	map,
 	of,
 	shareReplay,
+	startWith,
 	switchMap,
 	tap,
 } from 'rxjs';
@@ -118,6 +119,12 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 				// );
 
 				if (!gameStarted || mulliganOver || !displayFromPrefs) {
+					console.debug(
+						'[mulligan-guide] constructed-mulligan-guide-service not showing widget 1',
+						gameStarted,
+						mulliganOver,
+						displayFromPrefs,
+					);
 					return false;
 				}
 
@@ -126,6 +133,10 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 						gameState.metadata.gameType,
 					)
 				) {
+					console.debug(
+						'[mulligan-guide] constructed-mulligan-guide-service not showing widget 2',
+						gameState.metadata.gameType,
+					);
 					return false;
 				}
 
@@ -133,21 +144,34 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 					gameState.metadata.gameType === GameType.GT_VS_AI &&
 					!PRACTICE_ALL.includes(gameState.metadata.scenarioId)
 				) {
+					console.debug(
+						'[mulligan-guide] constructed-mulligan-guide-service not showing widget 3',
+						gameState.metadata.gameType,
+					);
 					return false;
 				}
 
 				if (currentScene !== SceneMode.GAMEPLAY) {
+					console.debug(
+						'[mulligan-guide] constructed-mulligan-guide-service not showing widget 4',
+						currentScene,
+					);
 					return false;
 				}
 
 				if (gameEnded) {
+					console.debug(
+						'[mulligan-guide] constructed-mulligan-guide-service not showing widget 5',
+						gameEnded,
+					);
 					return false;
 				}
 
+				console.debug('[mulligan-guide] constructed-mulligan-guide-service showing widget');
 				return true;
 			}),
 			distinctUntilChanged(),
-			// tap((showWidget) => console.debug('[mulligan-guide] showWidget', showWidget)),
+			tap((showWidget) => console.debug('[mulligan-guide] showWidget', showWidget)),
 			shareReplay(1),
 		);
 
@@ -168,6 +192,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 		const formatOverride$ = this.prefs.preferences$$.pipe(
 			debounceTime(500),
 			map((prefs) => prefs.decktrackerMulliganFormatOverride),
+			startWith(null),
 			distinctUntilChanged(),
 		);
 		const format$ = showWidget$.pipe(
@@ -313,7 +338,6 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 					timeFrame,
 					playerRank,
 				);
-				console.debug('[mulligan-guide] archetype result', result);
 				return result;
 			}),
 			// filter((archetype) => !!archetype),
@@ -353,7 +377,6 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 			}),
 			// filter((archetype) => !!archetype),
 			// map(archetype => archetype as ArchetypeStat),
-			tap((deckDetails) => console.debug('[mulligan-guide] deck stat', deckDetails)),
 			// shareReplay(1),
 		);
 
@@ -369,7 +392,11 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 										gameState?.playerDeck.hand
 											?.map((c) => c.cardId)
 											.filter((c) => !isCoin(c, this.allCards)) ?? [];
-									console.debug('[mulligan-guide] cardsInHand', cardsInHand, gameState);
+									console.log(
+										'[mulligan-guide] cardsInHand 1',
+										cardsInHand,
+										gameState?.playerDeck.hand,
+									);
 									return cardsInHand.length > 0 ? cardsInHand : null;
 								}),
 								distinctUntilChanged((a, b) => arraysEqual(a, b)),
@@ -398,7 +425,6 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 									return cards;
 								}),
 								distinctUntilChanged((a, b) => arraysEqual(a, b)),
-								tap((deckCards) => console.debug('[mulligan-guide] deckCards', deckCards)),
 							)
 						: of(null), // Emit null or a default value when showWidget is false
 			),
@@ -406,7 +432,9 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 		);
 
 		const mulliganAdvice$ = combineLatest([cardsInHand$, deckCards$]).pipe(
+			// tap((info) => console.log('[mulligan-guide] mulliganAdvice 0', info)),
 			filter(([cardsInHand, deckCards]) => !!cardsInHand && !!deckCards),
+			// tap((info) => console.log('[mulligan-guide] mulliganAdvice 1', info)),
 			debounceTime(200),
 			switchMap(([cardsInHand, deckCards]) =>
 				combineLatest([
@@ -460,7 +488,6 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 					opponentClass,
 					deckstring,
 				}) => {
-					console.debug('[mulligan-guide] deck details result', deckDetails, format, playerRank);
 					const aStatToUse =
 						playCoin === 'coin'
 							? archetype?.coinPlayInfo.find((s) => s.coinPlay === 'coin')
@@ -573,12 +600,11 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 					return result;
 				},
 			),
-			tap((mulliganAdvice) => console.debug('[mulligan-guide] mulliganAdvice', mulliganAdvice)),
 			shareReplay(1),
 		);
-		combineLatest([showWidget$, mulliganAdvice$]).subscribe(([showWidget, advice]) =>
-			this.mulliganAdvice$$.next(showWidget ? advice : null),
-		);
+		combineLatest([showWidget$, mulliganAdvice$]).subscribe(([showWidget, advice]) => {
+			this.mulliganAdvice$$.next(showWidget ? advice : null);
+		});
 	}
 
 	protected override async initElectronSubjects() {
