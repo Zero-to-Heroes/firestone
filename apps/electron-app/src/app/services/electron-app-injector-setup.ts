@@ -1,4 +1,4 @@
-import { GameNativeStateStoreService } from '@firestone/app/common';
+import { GameNativeStateStoreService } from '@firestone/app/services';
 import { ArenaDraftManagerService, ArenaMulliganGuideService } from '@firestone/arena/common';
 import { BgsBattleSimulationMockExecutorService, BgsBattleSimulationService } from '@firestone/battlegrounds/core';
 import {

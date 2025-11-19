@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { AppCommonModule } from '@firestone/app/common';
+import { AppServicesModule } from '@firestone/app/services';
 import { ConstructedCommonModule } from '@firestone/constructed/common';
 import { GameStateModule } from '@firestone/game-state';
 import { MemoryModule } from '@firestone/memory';
@@ -45,6 +46,7 @@ const components = [
 		MemoryModule,
 		GameStateModule,
 		AppCommonModule,
+		AppServicesModule,
 	],
 	declarations: components,
 	exports: components,

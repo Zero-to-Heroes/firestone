@@ -10,7 +10,7 @@ import {
 	Output,
 	ViewRef,
 } from '@angular/core';
-import { CrossPromotionService } from '@firestone/app/common';
+import { CrossPromotionService } from '@firestone/app/services';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ADS_SERVICE_TOKEN, AnalyticsService, IAdsService, OverwolfService } from '@firestone/shared/framework/core';
 

@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { AppCommonModule } from '@firestone/app/common';
+import { AppServicesModule } from '@firestone/app/services';
 import { AppViewModule } from '@firestone/app/view';
 import { ArenaCommonModule } from '@firestone/arena/common';
 import { ConstructedCommonModule } from '@firestone/constructed/common';
@@ -97,6 +98,7 @@ const components = [
 		AppViewModule,
 		ProfileCommonModule,
 		AppCommonModule,
+		AppServicesModule,
 		ArenaCommonModule,
 	],
 	providers: [],

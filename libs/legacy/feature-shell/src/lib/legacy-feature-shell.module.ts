@@ -369,7 +369,8 @@ import { AllCardsService } from '@firestone-hs/replay-parser';
 import { AchievementsCommonModule, REMOTE_ACHIEVEMENTS_SERVICE_TOKEN } from '@firestone/achievements/common';
 import { AchievementsDataAccessModule } from '@firestone/achievements/data-access';
 import { AchievementsViewModule } from '@firestone/achievements/view';
-import { AppCommonModule, LocalizationLoaderWithCache } from '@firestone/app/common';
+import { AppCommonModule } from '@firestone/app/common';
+import { AppServicesModule, LocalizationLoaderWithCache } from '@firestone/app/services';
 import { AppViewModule } from '@firestone/app/view';
 import {
 	ARENA_DRAFT_MANAGER_SERVICE_TOKEN,
@@ -655,6 +656,7 @@ try {
 		// ColiseumComponentsModule,
 
 		AppCommonModule,
+		AppServicesModule,
 		SharedCommonViewModule,
 		SharedFrameworkCoreModule,
 		ReplayColiseumModule,

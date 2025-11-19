@@ -11,12 +11,12 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { isVersionBefore } from '@firestone/app/services';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { MarkdownService } from 'ngx-markdown';
 import { BehaviorSubject, debounceTime, distinctUntilChanged, firstValueFrom, Observable, Subscription } from 'rxjs';
 import { AppVersion } from '../model/app-version';
-import { isVersionBefore } from '../services/notifications-utils';
 
 const versions: readonly AppVersion[] = [
 	{ version: '16.2.1', date: '2025-11-04' },
