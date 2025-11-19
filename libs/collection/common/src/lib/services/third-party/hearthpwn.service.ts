@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 import { Card } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractFacadeService, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
-import { debounceTime, distinctUntilChanged, filter, map, take } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, map, take, timeout, catchError, throwError } from 'rxjs';
 import { COLLECTION_MANAGER_SERVICE_TOKEN, ICollectionManagerService } from '../collection-manager.interface';
 
 const PROFILE_UPLOAD_URL = `https://www.hearthpwn.com/client/upload`;
@@ -29,7 +29,6 @@ export class HearthpwnService extends AbstractFacadeService<HearthpwnService> {
 	}
 
 	protected async init() {
-		return;
 		console.debug('[hearthpwn] init');
 		this.collectionManager = AppInjector.get(COLLECTION_MANAGER_SERVICE_TOKEN);
 		this.http = AppInjector.get(HttpClient);
@@ -64,17 +63,31 @@ export class HearthpwnService extends AbstractFacadeService<HearthpwnService> {
 						const encoded = encodeDictionaryAsForm(payload);
 						console.debug('[hearthpwn] encoded data', encoded);
 
-						const uploadResult = await this.http
-							.post(PROFILE_UPLOAD_URL, encoded, {
-								headers: {
-									'Content-Type': 'application/x-www-form-urlencoded; charset=us-ascii',
-									'User-Agent': 'Innkeeper/1 Version',
-									origin: 'https://www.hearthpwn.com',
-								},
-								responseType: 'text',
-							})
-							.toPromise();
-						console.debug('[hearthpwn] upload result', uploadResult);
+						try {
+							const uploadResult = await this.http
+								.post(PROFILE_UPLOAD_URL, encoded, {
+									headers: {
+										'Content-Type': 'application/x-www-form-urlencoded; charset=us-ascii',
+										origin: 'https://www.hearthpwn.com',
+									},
+									responseType: 'text',
+								})
+								.pipe(
+									timeout(120000), // 120 seconds timeout for large uploads
+									catchError((error) => {
+										if (error.name === 'TimeoutError') {
+											console.error('[hearthpwn] Upload timeout after 120 seconds');
+										} else {
+											console.error('[hearthpwn] Upload error', error);
+										}
+										return throwError(() => error);
+									}),
+								)
+								.toPromise();
+							console.debug('[hearthpwn] upload result', uploadResult);
+						} catch (error) {
+							console.error('[hearthpwn] Failed to upload collection', error);
+						}
 					});
 			});
 	}
