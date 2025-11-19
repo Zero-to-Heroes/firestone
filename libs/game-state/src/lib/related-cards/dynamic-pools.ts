@@ -1117,14 +1117,14 @@ const getDynamicFilters = (
 				hasCost(c, '>=', 5);
 
 		// Random X Cost Minion(s)
-		case CardIds.UndefeatedChampion_TIME_872:
 		case CardIds.BuildingBlockGolem_MIS_314:
+		case CardIds.FirstContact_GDB_864:
+		case CardIds.UndefeatedChampion_TIME_872:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 1);
 		case CardIds.RayllaSandSculptor_VAC_424:
 		case CardIds.AegisOfLight_EDR_264:
 		case CardIds.DistressSignal_GDB_883:
 		case CardIds.DwarfPlanet_GDB_233:
-		case CardIds.FirstContact_GDB_864:
 		case CardIds.FirstDayOfSchool:
 		case CardIds.MaelstromPortal_CORE_KAR_073:
 		case CardIds.MazeGuide_CORE_REV_308:
