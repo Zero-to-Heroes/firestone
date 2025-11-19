@@ -8,7 +8,7 @@ import { SharedCommonServiceModule } from '@firestone/shared/common/service';
 import { SharedFrameworkCommonModule } from '@firestone/shared/framework/common';
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { StatsCommonModule } from '@firestone/stats/common';
-
+import { StatsServicesModule } from '@firestone/stats/services';
 import { ArenaCardStatsService } from './services/arena-card-stats.service';
 import { ArenaClassStatsService } from './services/arena-class-stats.service';
 import { ArenDeckDetailsService } from './services/arena-deck-details.service';
@@ -29,6 +29,7 @@ import { ArenaRunsService } from './services/arena-runs.service';
 
 		SharedFrameworkCoreModule,
 		StatsCommonModule,
+		StatsServicesModule,
 		ConstructedCommonModule,
 		SharedFrameworkCommonModule,
 		SharedCommonServiceModule,

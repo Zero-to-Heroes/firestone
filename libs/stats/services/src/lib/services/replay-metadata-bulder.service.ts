@@ -13,13 +13,13 @@ import {
 import { BgsBoardLight, EntityLight, ReplayUploadMetadata } from '@firestone-hs/replay-metadata';
 import { Input as BgsComputeRunStatsInput } from '@firestone-hs/user-bgs-post-match-stats';
 import { ADS_SERVICE_TOKEN, CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
-import { GameForUpload } from '../model/game-for-upload/game-for-upload';
 import { MatchAnalysisService } from './match-analysis.service';
 
 import { isMercenaries } from '@firestone-hs/reference-data';
 import { CompositionDetectorService } from '@firestone/battlegrounds/core';
 import { PatchesConfigService, PatchInfo } from '@firestone/shared/common/service';
 import { IAdsService } from '@firestone/shared/framework/core';
+import { GameForUpload } from '../models/game-for-upload/game-for-upload';
 
 @Injectable()
 export class ReplayMetadataBuilderService {
@@ -91,8 +91,8 @@ export class ReplayMetadataBuilderService {
 				normalizedDeckstring: !game.deckstring?.length
 					? null
 					: isMercenaries(game.gameMode)
-					? game.deckstring
-					: normalizeDeckstring(game.deckstring, this.allCards),
+						? game.deckstring
+						: normalizeDeckstring(game.deckstring, this.allCards),
 				deckName: game.deckName,
 				scenarioId: game.scenarioId,
 				buildNumber: game.buildNumber,
@@ -168,7 +168,7 @@ export class ReplayMetadataBuilderService {
 						...postMatchStats,
 						oldMmr: game.playerRank,
 						newMmr: game.newPlayerRank,
-				  };
+					};
 		const boardHistory: readonly BgsBoardLight[] = buildBoardHistory(postMatchStats.boardHistory);
 		const finalComp = postMatchStats?.boardHistory?.length
 			? postMatchStats.boardHistory[postMatchStats.boardHistory.length - 1]

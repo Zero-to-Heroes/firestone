@@ -7,8 +7,8 @@ import {
 	waitForReady,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
-import { IGameStatsProviderService } from '@firestone/stats/common';
 import { GameStat, GameStatsLoaderService } from '@firestone/stats/data-access';
+import { IGameStatsProviderService } from '@firestone/stats/services';
 import { combineLatest } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 

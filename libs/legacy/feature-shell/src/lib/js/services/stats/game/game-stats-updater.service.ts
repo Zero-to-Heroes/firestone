@@ -5,8 +5,8 @@ import {
 	parseHsReplayString,
 } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
-import { GameForUpload } from '@firestone/stats/common';
 import { extractPlayerInfoFromDeckstring, GameStat } from '@firestone/stats/data-access';
+import { GameForUpload } from '@firestone/stats/services';
 import { BehaviorSubject } from 'rxjs';
 
 import { ReplayUploadMetadata } from '@firestone-hs/replay-metadata';

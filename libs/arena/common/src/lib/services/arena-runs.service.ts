@@ -20,8 +20,8 @@ import {
 	WindowManagerService,
 	waitForReady,
 } from '@firestone/shared/framework/core';
-import { GAME_STATS_PROVIDER_SERVICE_TOKEN, IGameStatsProviderService } from '@firestone/stats/common';
 import { GameStat } from '@firestone/stats/data-access';
+import { GAME_STATS_PROVIDER_SERVICE_TOKEN, IGameStatsProviderService } from '@firestone/stats/services';
 import { Observable, combineLatest, debounceTime, distinctUntilChanged, filter, map } from 'rxjs';
 import { ARENA_REVAMP_BUILD_NUMBER, ARENA_REVAMP_RELEASE_DATE } from '../models/arena-category';
 import { ExtendedDraftDeckStats } from '../models/arena-draft';
@@ -190,9 +190,9 @@ export class ArenaRunsService extends AbstractFacadeService<ArenaRunsService> {
 						draftStat: stat,
 						totalCardsInDeck: !stat.initialDeckList
 							? 0
-							: decode(stat.initialDeckList)
+							: (decode(stat.initialDeckList)
 									.cards?.map((c) => c[1])
-									.reduce((a, b) => a + b, 0) ?? 0,
+									.reduce((a, b) => a + b, 0) ?? 0),
 					});
 				})
 				.filter((r) => r.creationTimestamp) ?? [];

@@ -5,7 +5,7 @@ import { MemoryUpdatesService } from '@firestone/memory';
 import { GameStatusService } from '@firestone/shared/common/service';
 import { sleep } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
-import { XpForGameInfo } from '@firestone/stats/common';
+import { XpForGameInfo } from '@firestone/stats/services';
 import { BehaviorSubject, filter, take } from 'rxjs';
 
 @Injectable()

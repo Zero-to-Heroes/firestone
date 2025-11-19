@@ -5,8 +5,8 @@ import {
 	OwNotificationsService,
 	PreferencesService,
 } from '@firestone/shared/common/service';
-import { XpForGameInfo } from '@firestone/stats/common';
 import { GameStat, buildRankText } from '@firestone/stats/data-access';
+import { XpForGameInfo } from '@firestone/stats/services';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { distinctUntilChanged, filter, map, skip, take } from 'rxjs';
 

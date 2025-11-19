@@ -13,8 +13,8 @@ import {
 	WindowManagerService,
 	waitForReady,
 } from '@firestone/shared/framework/core';
-import { GAME_STATS_PROVIDER_SERVICE_TOKEN, IGameStatsProviderService } from '@firestone/stats/common';
 import { toGameTypeEnum } from '@firestone/stats/data-access';
+import { GAME_STATS_PROVIDER_SERVICE_TOKEN, IGameStatsProviderService } from '@firestone/stats/services';
 import { combineLatest, distinctUntilChanged, map } from 'rxjs';
 import { BgsMetaHeroStatsDuoService } from './bgs-meta-hero-stats-duo.service';
 import { BgsMetaHeroStatsService } from './bgs-meta-hero-stats.service';

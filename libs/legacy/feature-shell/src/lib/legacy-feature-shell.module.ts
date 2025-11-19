@@ -425,8 +425,9 @@ import {
 	SharedFrameworkCoreModule,
 	setAppInjector,
 } from '@firestone/shared/framework/core';
-import { GAME_STATS_PROVIDER_SERVICE_TOKEN, StatsCommonModule } from '@firestone/stats/common';
+import { StatsCommonModule } from '@firestone/stats/common';
 import { StatsDataAccessModule } from '@firestone/stats/data-access';
+import { GAME_STATS_PROVIDER_SERVICE_TOKEN, StatsServicesModule } from '@firestone/stats/services';
 import { TwitchCommonModule } from '@firestone/twitch/common';
 import { MailboxDesktopComponent } from '@mails/components/mailbox-desktop.component';
 import { MailboxMessageComponent } from '@mails/components/mailbox-message/mailbox-message.component';
@@ -676,6 +677,7 @@ try {
 		GameStateModule,
 		AppViewModule,
 		StatsCommonModule,
+		StatsServicesModule,
 		ConstructedCommonModule,
 		ConstructedViewModule,
 		CommunitiesCommonModule,

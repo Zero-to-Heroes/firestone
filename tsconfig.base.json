@@ -58,6 +58,7 @@
 			"@firestone/shared/web-shell": ["libs/shared/web-shell/src/index.ts"],
 			"@firestone/stats/common": ["libs/stats/common/src/index.ts"],
 			"@firestone/stats/data-access": ["libs/stats/data-access/src/index.ts"],
+			"@firestone/stats/services": ["libs/stats/services/src/index.ts"],
 			"@firestone/twitch/common": ["libs/twitch/common/src/index.ts"],
 			"@firestone/website/battlegrounds": ["libs/website/battlegrounds/src/index.ts"],
 			"@firestone/website/core": ["libs/website/core/src/index.ts"],

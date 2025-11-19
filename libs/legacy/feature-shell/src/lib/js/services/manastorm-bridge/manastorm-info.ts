@@ -1,5 +1,5 @@
 import { ReplayUploadMetadata } from '@firestone-hs/replay-metadata';
-import { GameForUpload } from '@firestone/stats/common';
+import { GameForUpload } from '@firestone/stats/services';
 
 export interface ManastormInfo {
 	readonly type: 'new-review' | 'new-empty-review';

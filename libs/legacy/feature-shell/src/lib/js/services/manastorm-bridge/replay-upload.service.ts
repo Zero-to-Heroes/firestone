@@ -3,7 +3,7 @@ import { ReplayUploadMetadata } from '@firestone-hs/replay-metadata';
 import { BgsMetaCompositionStrategiesService } from '@firestone/battlegrounds/services';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { GameForUpload, ReplayMetadataBuilderService } from '@firestone/stats/common';
+import { GameForUpload, ReplayMetadataBuilderService } from '@firestone/stats/services';
 import * as S3 from 'aws-sdk/clients/s3';
 import * as AWS from 'aws-sdk/global';
 import * as JSZip from 'jszip';

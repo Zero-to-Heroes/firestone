@@ -12,6 +12,7 @@ import { SharedCommonViewModule } from '@firestone/shared/common/view';
 import { SharedFrameworkCommonModule } from '@firestone/shared/framework/common';
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { StatsCommonModule } from '@firestone/stats/common';
+import { StatsServicesModule } from '@firestone/stats/services';
 import { VirtualScrollerModule } from '@sebastientromp/ngx-virtual-scroller';
 import { InlineSVGModule } from 'ng-inline-svg-2';
 import { BattlegroundsMetaStatsCardInfoComponent } from './cards/battlegrounds-meta-stats-card-info.component';
@@ -97,6 +98,7 @@ const components = [
 		MemoryModule,
 		StatsCommonModule,
 		ProfileCommonModule,
+		StatsServicesModule,
 	],
 	providers: [],
 	declarations: components,

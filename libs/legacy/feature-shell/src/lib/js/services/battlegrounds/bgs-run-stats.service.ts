@@ -4,7 +4,7 @@ import { normalizeHeroCardId } from '@firestone-hs/reference-data';
 import { BgsBestStat, Input as BgsComputeRunStatsInput, buildNewStats } from '@firestone-hs/user-bgs-post-match-stats';
 import { BgsGame, BgsPostMatchStats, BgsPostMatchStatsForReview, RealTimeStatsState } from '@firestone/game-state';
 import { ApiRunner, CardsFacadeService, OverwolfService, UserService } from '@firestone/shared/framework/core';
-import { GameForUpload } from '@firestone/stats/common';
+import { GameForUpload } from '@firestone/stats/services';
 import { Events } from '../events.service';
 import { BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent } from '../mainwindow/store/events/battlegrounds/bgs-personal-stats-select-hero-details-with-remote-info-event';
 import { BgsPostMatchStatsComputedEvent } from '../mainwindow/store/events/battlegrounds/bgs-post-match-stats-computed-event';
@@ -158,8 +158,8 @@ export class BgsRunStatsService {
 			boardHistory: !!realTimeStatsState?.boardHistory?.length
 				? realTimeStatsState?.boardHistory
 				: input.mainPlayer?.boardHistory?.length
-				? input.mainPlayer?.boardHistory
-				: [],
+					? input.mainPlayer?.boardHistory
+					: [],
 			tripleTimings:
 				input.mainPlayer && realTimeStatsState?.triplesPerHero[mainPlayerId]
 					? new Array(realTimeStatsState.triplesPerHero[mainPlayerId])

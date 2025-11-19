@@ -5,7 +5,7 @@ import { getBaseCardId } from '@firestone-hs/reference-data';
 import { CardAnalysis, MatchAnalysis } from '@firestone-hs/replay-metadata';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { StatGameModeType } from '@firestone/stats/data-access';
-import { GameForUpload } from '../model/game-for-upload/game-for-upload';
+import { GameForUpload } from '../models/game-for-upload/game-for-upload';
 import { cardDiscovered } from './match-analysis/parsers/cards-discovered-parser';
 import { cardDrawn } from './match-analysis/parsers/cards-draw-parser';
 import { cardsInHand } from './match-analysis/parsers/cards-in-hand-parser';

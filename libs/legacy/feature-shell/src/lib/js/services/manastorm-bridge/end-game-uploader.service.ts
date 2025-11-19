@@ -19,8 +19,8 @@ import {
 } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameForUpload, XpForGameInfo } from '@firestone/stats/common';
 import { toFormatType, toGameType } from '@firestone/stats/data-access';
+import { GameForUpload, XpForGameInfo } from '@firestone/stats/services';
 import { Events } from '../events.service';
 import {
 	MercenariesReferenceData,
