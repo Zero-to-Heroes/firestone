@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { AppCommonModule } from '@firestone/app/common';
 import { ConstructedCommonModule } from '@firestone/constructed/common';
 import { GameStateModule } from '@firestone/game-state';
 import { MemoryModule } from '@firestone/memory';
@@ -9,8 +8,6 @@ import { SharedCommonServiceModule } from '@firestone/shared/common/service';
 import { SharedFrameworkCommonModule } from '@firestone/shared/framework/common';
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { StatsCommonModule } from '@firestone/stats/common';
-import { VirtualScrollerModule } from '@sebastientromp/ngx-virtual-scroller';
-import { InlineSVGModule } from 'ng-inline-svg-2';
 
 import { ArenaCardStatsService } from './services/arena-card-stats.service';
 import { ArenaClassStatsService } from './services/arena-class-stats.service';
@@ -30,9 +27,6 @@ import { ArenaRunsService } from './services/arena-runs.service';
 	imports: [
 		CommonModule,
 
-		InlineSVGModule,
-		VirtualScrollerModule,
-
 		SharedFrameworkCoreModule,
 		StatsCommonModule,
 		ConstructedCommonModule,
@@ -41,7 +35,6 @@ import { ArenaRunsService } from './services/arena-runs.service';
 		MemoryModule,
 		GameStateModule,
 		ProfileCommonModule,
-		AppCommonModule,
 	],
 	providers: [
 		ArenaClassStatsService,
