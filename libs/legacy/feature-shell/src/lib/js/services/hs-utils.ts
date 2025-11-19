@@ -5,6 +5,7 @@ import { CollectionCardType } from '../models/collection/collection-card-type.ty
 import { tutors } from './decktracker/card-info/card-tutors';
 import { giftCreators } from './decktracker/card-info/gift-creators';
 import { LocalizationFacadeService } from './localization-facade.service';
+import { bwonsamdiBoonsEnchantments } from '@firestone/game-state';
 
 // Used for cache purposes, only in dev
 export const CARDS_VERSION = '20251107';
@@ -225,9 +226,7 @@ const globalEffectEnchantments = [
 	CardIds.UnleashTheColossus_GorishisFavorEnchantment_TLC_631e,
 	CardIds.AshalonRidgeGuardian_PerfectEvolutionEnchantment_TLC_229t14e,
 	CardIds.LohTheLivingLegend_LivingLegendEnchantment_TLC_257e1,
-	CardIds.TalanjiOfTheGraves_BoonOfPowerPlayerEnchEnchantment_TIME_619e,
-	CardIds.TalanjiOfTheGraves_BoonOfSpeedPlayerEnchEnchantment_TIME_619e3,
-	CardIds.TalanjiOfTheGraves_BoonOfLongevityPlayerEnchEnchantment_TIME_619e2,
+	...bwonsamdiBoonsEnchantments,
 	// CardIds.CityChiefEsho_KinEnchantment_TLC_110e, // The enchantment is applied to each card, so we don't have a global thing
 ];
 

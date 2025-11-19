@@ -36,6 +36,11 @@ const IMBUED_HERO_POWERS = [
 	CardIds.LunarwingMessenger_BlessingOfTheMoon_EDR_449p,
 ];
 const USE_UNCOLLECTIBLE_CARDS = [CardIds.Botface_TOY_906];
+export const bwonsamdiBoonsEnchantments = [
+	CardIds.TalanjiOfTheGraves_BoonOfPowerPlayerEnchEnchantment_TIME_619e,
+	CardIds.TalanjiOfTheGraves_BoonOfSpeedPlayerEnchEnchantment_TIME_619e3,
+	CardIds.TalanjiOfTheGraves_BoonOfLongevityPlayerEnchEnchantment_TIME_619e2,
+];
 
 export const getDynamicRelatedCardIds = (
 	cardId: string,
@@ -1179,8 +1184,15 @@ const getDynamicFilters = (
 		case CardIds.Anomalize_TIME_859:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 10);
 		case CardIds.TalanjiOfTheGraves_BwonsamdiToken_TIME_619t:
-			return (c) =>
-				hasCorrectType(c, CardType.MINION) && hasCost(c, '==', c.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_1] ?? 4);
+			return (c) => {
+				// We need to hard-code the cost reduction of boons, because we don't have a global tag or enchantment for this
+				const boons = options?.deckState?.enchantments?.filter((e) =>
+					bwonsamdiBoonsEnchantments.includes(e.cardId as CardIds),
+				);
+				const boonsCount = boons?.length ?? 0;
+				const cost = 4 + 2 * boonsCount;
+				return hasCorrectType(c, CardType.MINION) && hasCost(c, '==', cost);
+			};
 
 		case CardIds.RelicOfKings_TLC_334:
 			return (c) =>
