@@ -337,6 +337,7 @@ export const CURRENT_FEFECTS_WHITELIST = [
 	CardIds.SparklingPhial_SparklingEnchantment_TOY_800e1,
 	CardIds.Corpsicle_CorpsicleEnchantment_VAC_427e,
 	CardIds.SandboxScoundrel_OnSaleEnchantment_TOY_521e,
+	CardIds.StrandedSpaceman_StrandedSpacemanFutureBuffEnchantment_GDB_861e,
 	// CardIds.SandboxScoundrel_OnSaleReductionEnchantment_TOY_521e1
 ];
 
