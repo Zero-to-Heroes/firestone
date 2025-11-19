@@ -620,7 +620,6 @@ const internalGiftCreators = [
 	CardIds.NetherspiteHistorian_CORE_KAR_062,
 	CardIds.NetherspiteHistorian,
 	CardIds.Netherwalker,
-	CardIds.NightmareFuel_EDR_528,
 	CardIds.NightshadeTea_NightshadeTeaToken_VAC_404t1,
 	CardIds.NightshadeTea_VAC_404,
 	CardIds.NineLives,
