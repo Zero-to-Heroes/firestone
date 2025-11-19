@@ -11,7 +11,15 @@ import {
 	SpellSchool,
 } from '@firestone-hs/reference-data';
 import { ArenaRefService } from '@firestone/arena/common';
-import { buildContextRelatedCardIds, DeckCard, DeckState, GameState, HeroCard, Metadata } from '@firestone/game-state';
+import {
+	buildContextRelatedCardIds,
+	DeckCard,
+	DeckState,
+	FullGameState,
+	GameState,
+	HeroCard,
+	Metadata,
+} from '@firestone/game-state';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { AppInjector, CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
@@ -88,7 +96,13 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 		delete this.handlers[_uniqueId];
 	}
 
-	async onMouseEnter(cardId: string, side: HighlightSide, card?: DeckCard, context?: 'discover') {
+	async onMouseEnter(
+		cardId: string,
+		entityId: number | null,
+		side: HighlightSide,
+		card?: DeckCard,
+		context?: 'discover',
+	) {
 		// Happens when using the deck-list component outside of a game
 		// console.debug('[cards-highlight] mouse enter', cardId, side, card, this.options);
 		if (!this.options?.skipGameState && !this.gameState) {
@@ -113,9 +127,11 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 		const cardsToHighlight = this.buildCardsToHighlight(
 			side,
 			cardId,
+			entityId,
 			card,
 			playerDeckProvider,
 			opponentDeckProvider,
+			this.gameState.fullGameState,
 			context,
 		);
 		// console.debug('[cards-highlight] cards to highlight', cardsToHighlight);
@@ -189,6 +205,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 
 	getHighlightedCards(
 		cardId: string,
+		entityId: number | null,
 		side: HighlightSide,
 		card?: DeckCard,
 	): readonly { cardId: string; playTiming: number; highlight: SelectorOutput }[] {
@@ -204,9 +221,11 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 		const cardsToHighlight = this.buildCardsToHighlight(
 			side,
 			cardId,
+			entityId,
 			card,
 			playerDeckProvider,
 			opponentDeckProvider,
+			this.gameState.fullGameState,
 		);
 		// console.debug('cardsToHighlight in getHighlightedCards', cardsToHighlight);
 		return cardsToHighlight.map((i) => ({
@@ -238,18 +257,21 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 	private buildCardsToHighlight(
 		side: HighlightSide,
 		cardId: string,
+		entityId: number | null,
 		card: DeckCard,
 		playerDeckProvider: () => DeckState,
 		opponentDeckProvider: () => DeckState,
+		fullGameState: FullGameState,
 		context?: 'discover',
 	): readonly SelectorInput[] {
 		let result: SelectorInput[] = [];
-		const selector: Selector = this.buildSelector(cardId, card, side, context);
+		const selector: Selector = this.buildSelector(cardId, entityId, card, side, context);
 		const selectorSort: SelectorSort = cardIdSelectorSort(cardId);
 
 		const allPlayerCards = this.getAllCards(
 			!!playerDeckProvider ? playerDeckProvider() : null,
 			side === 'single' || side === 'arena-draft' ? side : 'player',
+			fullGameState,
 		);
 		// console.debug('[cards-highlight] all player cards', card, cardId, side, selector, allPlayerCards);
 		for (const playerCard of allPlayerCards) {
@@ -265,6 +287,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 		const allOpponentCards = this.getAllCards(
 			!!opponentDeckProvider ? opponentDeckProvider() : null,
 			side === 'single' || side === 'arena-draft' ? side : 'opponent',
+			fullGameState,
 		);
 		// console.debug('[cards-highlight] all player cards', card, cardId, side, selector);
 		for (const oppCard of allOpponentCards) {
@@ -290,7 +313,11 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 		Object.values(this.handlers).forEach((handler) => handler.unhighlightCallback());
 	}
 
-	private getAllCards(deckState: DeckState, side: HighlightSide): readonly SelectorInput[] {
+	private getAllCards(
+		deckState: DeckState,
+		side: HighlightSide,
+		fullGameState: FullGameState,
+	): readonly SelectorInput[] {
 		if (!deckState) {
 			return [];
 		}
@@ -306,6 +333,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				deckCard: card,
 				deckState: deckState,
 				allCards: this.allCards,
+				fullGameState: fullGameState,
 			});
 		}
 		for (const card of [...deckState.hand]) {
@@ -319,6 +347,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				deckCard: card,
 				deckState: deckState,
 				allCards: this.allCards,
+				fullGameState: fullGameState,
 			});
 		}
 		for (const card of [...deckState.board]) {
@@ -332,6 +361,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				deckCard: card,
 				deckState: deckState,
 				allCards: this.allCards,
+				fullGameState: fullGameState,
 			});
 		}
 		for (const card of [...deckState.otherZone]) {
@@ -345,13 +375,20 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 				deckCard: card,
 				deckState: deckState,
 				allCards: this.allCards,
+				fullGameState: fullGameState,
 			});
 		}
 		return result;
 	}
 
-	private buildSelector(cardId: string, card: DeckCard, inputSide: HighlightSide, context?: 'discover'): Selector {
-		const cardIdSelector = this.buildCardIdSelector(cardId, card, inputSide, context);
+	private buildSelector(
+		cardId: string,
+		entityId: number | null,
+		card: DeckCard,
+		inputSide: HighlightSide,
+		context?: 'discover',
+	): Selector {
+		const cardIdSelector = this.buildCardIdSelector(cardId, entityId, card, inputSide, context);
 		const cardContextSelector = this.buildCardContextSelector(card);
 		return orWithHighlight(cardIdSelector, cardContextSelector);
 	}
@@ -364,6 +401,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 
 	private buildCardIdSelector(
 		cardId: string,
+		entityId: number | null,
 		card: DeckCard,
 		inputSide: HighlightSide,
 		context?: 'discover',
@@ -372,7 +410,7 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 		const selectors: Selector[] = [];
 
 		// Forward synergies - what does this card want?
-		const selector = cardIdSelector(cardId, card, inputSide, this.allCards);
+		const selector = cardIdSelector(cardId, entityId, card, inputSide, this.allCards);
 		// console.debug('cardIdSelector', selector);
 		if (!!selector) {
 			selectors.push(selector);
@@ -522,6 +560,7 @@ export interface SelectorInput {
 	deckState: DeckState;
 	deckCard: DeckCard;
 	allCards: CardsFacadeService;
+	fullGameState: FullGameState;
 	highlight?: SelectorOutput;
 	depth?: number;
 }

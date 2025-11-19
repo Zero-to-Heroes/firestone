@@ -7,15 +7,17 @@ export interface ICardsHighlightService {
 	forceHeroCardId(cardId: string);
 	register(_uniqueId: string, handler: any /*Handler*/, side: HighlightSide);
 	unregister(_uniqueId: string, side: HighlightSide);
-	onMouseEnter(cardId: string, side: HighlightSide, card?: any /*DeckCard*/);
+	onMouseEnter(cardId: string, entityId: number | null, side: HighlightSide, card?: any /*DeckCard*/);
 	getHighlightedCards(
 		cardId: string,
+		entityId: number | null,
 		side: HighlightSide,
 		card?: any /*DeckCard*/,
 	): readonly { cardId: string; playTiming: number }[];
 	onMouseLeave(cardId: string);
 	getCardsForTooltip(
 		cardId: string,
+		entityId: number | null,
 		side: HighlightSide,
 		card?: any /*DeckCard*/,
 	): readonly { cardId: string; playTiming: number }[];

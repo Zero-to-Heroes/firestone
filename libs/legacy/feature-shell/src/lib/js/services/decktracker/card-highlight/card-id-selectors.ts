@@ -152,6 +152,7 @@ import {
 
 export const cardIdSelector = (
 	cardId: string,
+	entityId: number | null,
 	card: DeckCard | undefined,
 	inputSide: HighlightSide,
 	allCards: CardsFacadeService,
@@ -2766,6 +2767,20 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), minion, not(tribeless));
 		case CardIds.RobeOfTheApprenticeTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), spell, dealsDamage);
+		case CardIds.Robocaller_WORK_006:
+			return (input: SelectorInput): SelectorOutput => {
+				const state = input.side === 'opponent' ? input.fullGameState?.Opponent : input.fullGameState?.Player;
+				const found = state?.AllEntities.find((e) => e.entityId === entityId);
+				return and(
+					side(inputSide),
+					inDeck,
+					or(
+						baseCostEqual(found?.tags?.find((t) => t.Name === GameTag.TAG_SCRIPT_DATA_NUM_1)?.Value),
+						baseCostEqual(found?.tags?.find((t) => t.Name === GameTag.TAG_SCRIPT_DATA_NUM_2)?.Value),
+						baseCostEqual(found?.tags?.find((t) => t.Name === GameTag.TAG_SCRIPT_DATA_NUM_3)?.Value),
+					),
+				)(input);
+			};
 		case CardIds.RobeOfTheMagi:
 			return and(side(inputSide), or(inDeck, inHand), spell, dealsDamage);
 		case CardIds.RobesOfShrinkingTavernBrawl:

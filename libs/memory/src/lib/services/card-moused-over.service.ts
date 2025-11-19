@@ -54,6 +54,7 @@ export class CardMousedOverService extends AbstractFacadeService<CardMousedOverS
 					if (mousedOverCard) {
 						this.cardsHighlightService.onMouseEnter(
 							mousedOverCard.CardId,
+							mousedOverCard.EntityId,
 							mousedOverCard.Side === Side.FRIENDLY
 								? 'player'
 								: mousedOverCard.Side === Side.OPPOSING

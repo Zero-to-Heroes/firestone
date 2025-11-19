@@ -126,7 +126,7 @@ export class ArenaCardSelectionComponent extends AbstractSubscriptionComponent i
 					// this.forceMouseOver$$.next(false);
 				}
 				if (mousedOverCard?.CardId) {
-					this.onMouseEnter(mousedOverCard?.CardId);
+					this.onMouseEnter(mousedOverCard?.CardId, mousedOverCard?.EntityId);
 				}
 			});
 
@@ -135,8 +135,8 @@ export class ArenaCardSelectionComponent extends AbstractSubscriptionComponent i
 		}
 	}
 
-	onMouseEnter(cardId: string) {
-		this.cardsHighlightService.onMouseEnter(cardId, 'arena-draft');
+	onMouseEnter(cardId: string, entityId: number) {
+		this.cardsHighlightService.onMouseEnter(cardId, entityId, 'arena-draft');
 	}
 
 	onMouseLeave(cardId: string) {

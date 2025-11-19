@@ -76,7 +76,7 @@ import { TwitchCardsHighlightFacadeService } from './twitch-cards-highlight-faca
 							*ngFor="let cardId of bottomBoardCards"
 							[cardId]="cardId"
 							[cardTooltipBgs]="isBgs"
-							(mouseenter)="onBottomCardMouseEnter(cardId)"
+							(mouseenter)="onBottomCardMouseEnter(cardId, null)"
 							(mouseleave)="onBottomCardMouseLeave(cardId)"
 						></empty-card>
 					</ul>
@@ -121,7 +121,7 @@ import { TwitchCardsHighlightFacadeService } from './twitch-cards-highlight-faca
 								[cardId]="bottomHeroPowerCard"
 								[cardTooltipPosition]="'right'"
 								[cardTooltipBgs]="isBgs"
-								(mouseenter)="onBottomCardMouseEnter(bottomHeroPowerCard)"
+								(mouseenter)="onBottomCardMouseEnter(bottomHeroPowerCard, null)"
 								(mouseleave)="onBottomCardMouseLeave(bottomHeroPowerCard)"
 							></empty-card>
 						</div>
@@ -135,7 +135,7 @@ import { TwitchCardsHighlightFacadeService } from './twitch-cards-highlight-faca
 							[cardId]="cardId"
 							[cardTooltipBgs]="isBgs"
 							[cardTooltipPosition]="'top'"
-							(mouseenter)="onBottomCardMouseEnter(cardId)"
+							(mouseenter)="onBottomCardMouseEnter(cardId, null)"
 							(mouseleave)="onBottomCardMouseLeave(cardId)"
 						>
 						</empty-card>
@@ -303,7 +303,7 @@ export class StateMouseOverComponent extends AbstractSubscriptionComponent imple
 				const mainPlayerBgsInfo = this.isBgs ? this.bgsPlayers.find((player) => player.isMainPlayer) : null;
 				const currentOpponentBgsInfo = this.isBgs
 					? // TODO: won't work with scenarios where multiple players are the same hero
-					  this.bgsPlayers.find((player) => player.cardId === gameState.opponentDeck?.hero?.cardId)
+						this.bgsPlayers.find((player) => player.cardId === gameState.opponentDeck?.hero?.cardId)
 					: null;
 				this.isBgs &&
 					console.debug(
@@ -380,8 +380,8 @@ export class StateMouseOverComponent extends AbstractSubscriptionComponent imple
 		}
 	}
 
-	onBottomCardMouseEnter(cardId: string) {
-		this.highlight?.onMouseEnter(cardId, 'player');
+	onBottomCardMouseEnter(cardId: string, entityId: number | null) {
+		this.highlight?.onMouseEnter(cardId, entityId, 'player');
 	}
 
 	onBottomCardMouseLeave(cardId: string) {

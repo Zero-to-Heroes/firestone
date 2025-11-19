@@ -45,24 +45,32 @@ export class CardsHighlightFacadeService implements ICardsHighlightService {
 		this.service.unregister(_uniqueId, side);
 	}
 
-	async onMouseEnter(cardId: string, side: HighlightSide, card?: DeckCard, context?: 'discover') {
-		this.service.onMouseEnter(cardId, side, card, context);
+	async onMouseEnter(
+		cardId: string,
+		entityId: number | null,
+		side: HighlightSide,
+		card?: DeckCard,
+		context?: 'discover',
+	) {
+		this.service.onMouseEnter(cardId, entityId, side, card, context);
 	}
 
 	getHighlightedCards(
 		cardId: string,
+		entityId: number | null,
 		side: HighlightSide,
 		card?: DeckCard,
 	): readonly { cardId: string; playTiming: number }[] {
-		return this.service.getHighlightedCards(cardId, side, card);
+		return this.service.getHighlightedCards(cardId, entityId, side, card);
 	}
 
 	getCardsForTooltip(
 		cardId: string,
+		entityId: number | null,
 		side: HighlightSide,
 		card?: DeckCard,
 	): readonly { cardId: string; playTiming: number }[] {
-		return this.service.getHighlightedCards(cardId, side, card).filter((c) => c.highlight === 'tooltip');
+		return this.service.getHighlightedCards(cardId, entityId, side, card).filter((c) => c.highlight === 'tooltip');
 	}
 
 	getGlobalRelatedCards(

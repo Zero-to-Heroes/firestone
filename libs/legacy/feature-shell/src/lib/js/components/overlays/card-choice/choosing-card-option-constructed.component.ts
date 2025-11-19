@@ -185,7 +185,7 @@ export class ChoosingCardOptionConstructedComponent
 		if (!this.shouldHighlight) {
 			return;
 		}
-		this.cardsHighlightService?.onMouseEnter(this._option?.cardId, this.side, null);
+		this.cardsHighlightService?.onMouseEnter(this._option?.cardId, this._option?.entityId, this.side, null);
 	}
 
 	onMouseLeave(event: MouseEvent) {

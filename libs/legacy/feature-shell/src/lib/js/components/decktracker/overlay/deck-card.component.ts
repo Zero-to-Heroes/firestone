@@ -436,7 +436,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 	}
 
 	onMouseEnter(event: MouseEvent) {
-		this.cardsHighlightService?.onMouseEnter(this.cardId, this._side, this.card$$.value);
+		this.cardsHighlightService?.onMouseEnter(this.cardId, this.entityId, this._side, this.card$$.value);
 
 		if (!this.card$$.value.cardId && this.card$$.value.guessedInfo?.possibleCards?.length) {
 			this.relatedCardIds = this.card$$.value.guessedInfo.possibleCards;
@@ -462,7 +462,12 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 			return globalHighlights;
 		}
 
-		const cardsToShow = this.cardsHighlightService?.getCardsForTooltip(this.cardId, this._side, this.card$$.value);
+		const cardsToShow = this.cardsHighlightService?.getCardsForTooltip(
+			this.cardId,
+			this.entityId,
+			this._side,
+			this.card$$.value,
+		);
 		// console.debug('cardsToShow', this.cardId, cardsToShow);
 		if (!cardsToShow?.length) {
 			return;

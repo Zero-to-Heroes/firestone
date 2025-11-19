@@ -32,7 +32,7 @@ import { distinctUntilChanged } from 'rxjs';
 				'color-mana-cost': true,
 				'color-class-cards': false,
 				'linked-card': linkedCardHighlight,
-				'old-style': !useNewCardTileStyle
+				'old-style': !useNewCardTileStyle,
 			}"
 			[cardTooltip]="_cardId"
 			[cardTooltipPosition]="'auto'"
@@ -81,7 +81,7 @@ export class CardTileComponent extends AbstractSubscriptionComponent implements 
 		this.cardClass = refCard.classes?.[0]?.toLowerCase() ?? null;
 		this.relatedCardIds = refCard.relatedCardDbfIds?.map((dbfId) => this.allCards.getCard(dbfId).id) ?? [];
 		this.cardImage = `https://static.zerotoheroes.com/hearthstone/cardart/tiles/${value}.png`;
-		this.manaCostStr = refCard.hideStats ? '' : refCard.cost?.toString() ?? '?';
+		this.manaCostStr = refCard.hideStats ? '' : (refCard.cost?.toString() ?? '?');
 		this.cardName = refCard.name;
 
 		this.registerHighlight();
@@ -138,7 +138,7 @@ export class CardTileComponent extends AbstractSubscriptionComponent implements 
 
 	onMouseEnter() {
 		// console.debug('mouse enter', this._cardId, this.cardsHighlightService);
-		this.cardsHighlightService?.onMouseEnter(this._cardId, 'single');
+		this.cardsHighlightService?.onMouseEnter(this._cardId, null, 'single');
 	}
 
 	onMouseLeave() {

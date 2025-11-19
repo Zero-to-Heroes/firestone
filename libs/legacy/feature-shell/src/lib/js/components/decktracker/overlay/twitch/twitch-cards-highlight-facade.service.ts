@@ -38,16 +38,17 @@ export class TwitchCardsHighlightFacadeService implements ICardsHighlightService
 		this.service.unregister(_uniqueId, side);
 	}
 
-	async onMouseEnter(cardId: string, side: HighlightSide, card?: DeckCard) {
-		this.service.onMouseEnter(cardId, side, card);
+	async onMouseEnter(cardId: string, entityId: number | null, side: HighlightSide, card?: DeckCard) {
+		this.service.onMouseEnter(cardId, entityId, side, card);
 	}
 
 	getHighlightedCards(
 		cardId: string,
+		entityId: number | null,
 		side: HighlightSide,
 		card?: DeckCard,
 	): readonly { cardId: string; playTiming: number }[] {
-		return this.service.getHighlightedCards(cardId, side, card);
+		return this.service.getHighlightedCards(cardId, entityId, side, card);
 	}
 
 	onMouseLeave(cardId: string) {
@@ -56,9 +57,10 @@ export class TwitchCardsHighlightFacadeService implements ICardsHighlightService
 
 	getCardsForTooltip(
 		cardId: string,
+		entityId: number | null,
 		side: HighlightSide,
 		card?: DeckCard,
 	): readonly { cardId: string; playTiming: number }[] {
-		return this.service.getHighlightedCards(cardId, side, card).filter((c) => c.highlight === 'tooltip');
+		return this.service.getHighlightedCards(cardId, entityId, side, card).filter((c) => c.highlight === 'tooltip');
 	}
 }

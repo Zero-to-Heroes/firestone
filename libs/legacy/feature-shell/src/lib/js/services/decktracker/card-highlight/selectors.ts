@@ -147,9 +147,9 @@ export const costMore =
 		input.deckCard?.refManaCost > cost;
 
 export const effectiveCostEqual =
-	(cost: number) =>
+	(cost: number | null) =>
 	(input: SelectorInput): boolean =>
-		getCost(input.deckCard, input.deckState, input.allCards) === cost;
+		cost == null ? false : getCost(input.deckCard, input.deckState, input.allCards) === cost;
 
 export const baseCostEqual =
 	(cost: number) =>
