@@ -1,9 +1,7 @@
 /* eslint-disable no-async-promise-executor */
-import { Injectable } from '@angular/core';
 
 declare let OverwolfPlugin: any;
 
-@Injectable()
 export class LowLevelUtilsElectronService {
 	public async flashWindow(windowName = 'Hearthstone'): Promise<void> {
 		console.warn('[low-level-utils-electron] flashWindow is not implemented');

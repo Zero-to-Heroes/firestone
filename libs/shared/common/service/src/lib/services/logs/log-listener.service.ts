@@ -1,16 +1,11 @@
 import { Inject, Injectable } from '@angular/core';
-import type { LogFileBackend } from '@firestone/shared/common/service';
-import {
-	GameStatusService,
-	getLogsDir,
-	LOG_FILE_BACKEND,
-	LogUtilsService,
-	PreferencesService,
-} from '@firestone/shared/common/service';
 import { sleep } from '@firestone/shared/framework/common';
 import { ListenObject, waitForReady } from '@firestone/shared/framework/core';
 import { combineLatest, distinctUntilChanged, filter, Subject } from 'rxjs';
-import { Events } from './events.service';
+import { GameStatusService } from '../game-status.service';
+import { getLogsDir, LogUtilsService } from '../log-utils.service';
+import { PreferencesService } from '../preferences.service';
+import { LOG_FILE_BACKEND, LogFileBackend } from './log-file-backend';
 
 @Injectable()
 export class LogListenerService {
@@ -127,7 +122,6 @@ export class LogListenerService {
 	}
 
 	private listenOnFile(logsLocation: string): void {
-		this.subject.next(Events.START_LOG_FILE_DETECTION);
 		this.listenOnFileCreation(logsLocation);
 	}
 

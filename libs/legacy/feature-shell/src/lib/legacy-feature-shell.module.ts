@@ -572,7 +572,6 @@ import { HsClientConfigService } from './js/services/hs-client-config.service';
 import { LazyDataInitService } from './js/services/lazy-data-init.service';
 import { LocalizationFacadeService } from './js/services/localization-facade.service';
 import { LocalizationService } from './js/services/localization.service';
-import { LogListenerService } from './js/services/log-listener.service';
 import { LogRegisterService } from './js/services/log-register.service';
 import { LotteryWidgetControllerService } from './js/services/lottery/lottery-widget-controller.service';
 import { LotteryService } from './js/services/lottery/lottery.service';
@@ -1334,7 +1333,6 @@ try {
 		{ provide: AllCardsService, useExisting: CardsFacadeService },
 
 		DevService,
-		LogListenerService,
 		CardsMonitorService,
 		LogRegisterService,
 		HsClientConfigService,

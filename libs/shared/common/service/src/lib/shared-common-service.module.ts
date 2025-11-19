@@ -10,8 +10,7 @@ import { ExpertContributorsService } from './services/expert-contributors.servic
 import { GameStatusService } from './services/game-status.service';
 import { LogUtilsService } from './services/log-utils.service';
 import { LogsUploaderService } from './services/logs-uploader.service';
-import { LOG_FILE_BACKEND } from './services/logs/log-file-backend';
-import { OverwolfLogFileBackendService } from './services/logs/overwolf-log-file-backend.service';
+import { LogListenerService } from './services/logs/log-listener.service';
 import { OwNotificationsService } from './services/notifications.service';
 import { PatchesConfigService } from './services/patches-config.service';
 import { SimpleIOService } from './services/plugins/simple-io.service';
@@ -45,6 +44,7 @@ const components = [AdvancedSettingDirective];
 		OwLegacyPremiumService,
 		PremiumDeeplinkService,
 		AppNavigationService,
+		LogListenerService,
 	],
 	declarations: components,
 	exports: components,

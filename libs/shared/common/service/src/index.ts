@@ -14,6 +14,7 @@ export * from './lib/services/global-error.service';
 export * from './lib/services/log-utils.service';
 export * from './lib/services/logs-uploader.service';
 export * from './lib/services/logs/log-file-backend';
+export * from './lib/services/logs/log-listener.service';
 export * from './lib/services/logs/overwolf-log-file-backend.service';
 export * from './lib/services/notifications.service';
 export * from './lib/services/patches-config.service';

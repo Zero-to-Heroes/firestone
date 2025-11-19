@@ -51,6 +51,7 @@ import {
 import {
 	GameStatusService,
 	LOG_FILE_BACKEND,
+	LogListenerService,
 	LogUtilsService,
 	PatchesConfigService,
 	PreferencesService,
@@ -68,7 +69,6 @@ import {
 	OwUtilsService,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
-import { LogListenerService } from '@services/log-listener.service';
 import { ElectronAngularInjector } from './electron-angular-injector';
 import { ElectronLogFileBackendService } from './electron-log-file-backend.service';
 import { GameEventsElectronService } from './game-events-electron.service';

@@ -5,12 +5,12 @@ import type { LogFileBackend } from '@firestone/shared/common/service';
 import {
 	GameStatusService,
 	LOG_FILE_BACKEND,
+	LogListenerService,
 	LogUtilsService,
 	PreferencesService,
 } from '@firestone/shared/common/service';
 import { Events } from '../services/events.service';
 import { CardsMonitorService } from './collection/cards-monitor.service';
-import { LogListenerService } from './log-listener.service';
 
 @Injectable()
 export class LogRegisterService {
