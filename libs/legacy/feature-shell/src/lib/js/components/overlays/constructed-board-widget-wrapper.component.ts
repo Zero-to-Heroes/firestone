@@ -8,12 +8,11 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { GameTag, isBattlegrounds, isMercenaries, SceneMode } from '@firestone-hs/reference-data';
-import { DeckCard, ShortCard } from '@firestone/game-state';
+import { DeckCard, GameStateFacadeService, ShortCard } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { combineLatest, Observable } from 'rxjs';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 import { BoardCardOverlay } from './board/board-card-overlay';
 
@@ -62,27 +61,29 @@ export class ConstructedBoardWidgetWrapperComponent extends AbstractWidgetWrappe
 		protected readonly el: ElementRef,
 		protected readonly prefs: PreferencesService,
 		protected readonly renderer: Renderer2,
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly scene: SceneService,
+		private readonly gameState: GameStateFacadeService,
 	) {
 		super(ow, el, prefs, renderer, cdr);
 	}
 
 	async ngAfterContentInit() {
-		await this.scene.isReady();
+		await waitForReady(this.scene, this.prefs);
 
 		this.showWidget$ = combineLatest([
 			this.scene.currentScene$$,
-			this.store.listen$(([main, nav, prefs]) => prefs.decktrackerShowMinionPlayOrderOnBoard),
-			this.store.listenDeckState$(
-				(deckState) => deckState?.gameStarted,
-				(deckState) => deckState?.gameEnded,
-				(deckState) => isBattlegrounds(deckState?.metadata?.gameType),
-				(deckState) => isMercenaries(deckState?.metadata?.gameType),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.decktrackerShowMinionPlayOrderOnBoard)),
+			this.gameState.gameState$$.pipe(
+				this.mapData((state) => ({
+					gameStarted: state.gameStarted,
+					gameEnded: state.gameEnded,
+					isBgs: isBattlegrounds(state?.metadata?.gameType),
+					isMercs: isMercenaries(state?.metadata?.gameType),
+				})),
 			),
 		]).pipe(
-			this.mapData(([currentScene, [displayFromPrefs], [gameStarted, gameEnded, isBgs, isMercs]]) => {
+			this.mapData(([currentScene, displayFromPrefs, { gameStarted, gameEnded, isBgs, isMercs }]) => {
 				if (!gameStarted || isBgs || isMercs || !displayFromPrefs) {
 					return false;
 				}
@@ -101,13 +102,15 @@ export class ConstructedBoardWidgetWrapperComponent extends AbstractWidgetWrappe
 			this.mapData((prefs) => Math.max(0.01, prefs.decktrackerMinionPlayOrderOpacity / 100)),
 		);
 
-		this.board$ = this.store
-			.listenDeckState$(
-				(state) => state.opponentDeck?.board,
-				(state) => state.playerDeck?.board,
+		this.board$ = this.gameState.gameState$$
+			.pipe(
+				this.mapData((state) => ({
+					opponentBoard: state.opponentDeck?.board,
+					playerBoard: state.playerDeck?.board,
+				})),
 			)
 			.pipe(
-				this.mapData(([opponentBoard, playerBoard]) => {
+				this.mapData(({ opponentBoard, playerBoard }) => {
 					const top = this.buildBoard(opponentBoard, 'opponent');
 					const bottom = this.buildBoard(playerBoard, 'player');
 					const allPlayIndices = [...top, ...bottom].map((c) => c.playOrder).sort((n1, n2) => n1 - n2);

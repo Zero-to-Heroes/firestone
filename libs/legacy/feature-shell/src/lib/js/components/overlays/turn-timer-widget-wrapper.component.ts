@@ -8,13 +8,12 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { GameType, SceneMode } from '@firestone-hs/reference-data';
+import { GameStateFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
-
 @Component({
 	standalone: false,
 	selector: 'turn-timer-widget-wrapper',
@@ -52,27 +51,29 @@ export class TurnTimerWidgetWrapperComponent extends AbstractWidgetWrapperCompon
 		protected readonly el: ElementRef,
 		protected readonly prefs: PreferencesService,
 		protected readonly renderer: Renderer2,
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly scene: SceneService,
+		private readonly gameState: GameStateFacadeService,
 	) {
 		super(ow, el, prefs, renderer, cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.scene, this.prefs);
+		await waitForReady(this.scene, this.prefs, this.gameState);
 
 		this.showWidget$ = combineLatest([
-			this.store.listenDeckState$(
-				(state) => state?.metadata?.gameType,
-				(state) => state?.gameStarted,
-				(state) => state?.gameEnded,
+			this.gameState.gameState$$.pipe(
+				this.mapData((state) => ({
+					gameType: state?.metadata?.gameType,
+					gameStarted: state?.gameStarted,
+					gameEnded: state?.gameEnded,
+				})),
 			),
 			this.scene.currentScene$$,
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.showTurnTimer)),
 		]).pipe(
 			this.mapData(
-				([[gameType, gameStarted, gameEnded], currentScene, pref]) =>
+				([{ gameType, gameStarted, gameEnded }, currentScene, pref]) =>
 					pref &&
 					gameStarted &&
 					!gameEnded &&

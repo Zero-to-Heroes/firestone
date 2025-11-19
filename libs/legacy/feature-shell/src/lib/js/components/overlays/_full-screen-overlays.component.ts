@@ -81,7 +81,7 @@ import { DebugService } from '../../services/debug.service';
 			<!-- Use different wrappers to make it easier to position each one differently -->
 			<hs-quests-widget-wrapper></hs-quests-widget-wrapper>
 			<bgs-quests-widget-wrapper></bgs-quests-widget-wrapper>
-			<mercs-quests-widget-wrapper></mercs-quests-widget-wrapper>
+			<!-- <mercs-quests-widget-wrapper></mercs-quests-widget-wrapper> -->
 
 			<!-- "Constructed" -->
 			<decktracker-player-widget-wrapper
@@ -109,10 +109,10 @@ import { DebugService } from '../../services/debug.service';
 			<bgs-full-anomaly-widget-wrapper></bgs-full-anomaly-widget-wrapper>
 
 			<!-- Mercs -->
-			<mercs-player-team-widget-wrapper></mercs-player-team-widget-wrapper>
+			<!-- <mercs-player-team-widget-wrapper></mercs-player-team-widget-wrapper>
 			<mercs-opponent-team-widget-wrapper></mercs-opponent-team-widget-wrapper>
 			<mercs-out-of-combat-player-team-widget-wrapper></mercs-out-of-combat-player-team-widget-wrapper>
-			<mercs-action-queue-widget-wrapper></mercs-action-queue-widget-wrapper>
+			<mercs-action-queue-widget-wrapper></mercs-action-queue-widget-wrapper> -->
 
 			<!-- Arena -->
 			<arena-decktracker-ooc-widget-wrapper></arena-decktracker-ooc-widget-wrapper>
@@ -152,9 +152,9 @@ import { DebugService } from '../../services/debug.service';
 			<player-max-resources-widget-wrapper></player-max-resources-widget-wrapper>
 			<opponent-max-resources-widget-wrapper></opponent-max-resources-widget-wrapper>
 
-			<lottery-widget-wrapper></lottery-widget-wrapper>
+			<!-- <lottery-widget-wrapper></lottery-widget-wrapper> -->
 
-			<notifications></notifications>
+			<!-- <notifications></notifications> -->
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -266,7 +266,7 @@ export class FullScreenOverlaysComponent
 
 	async ngAfterViewInit() {
 		console.debug('full screen ngAfterViewInit');
-		this.windowId = (await this.ow.getCurrentWindow()).id;
+		this.windowId = (await this.ow.getCurrentWindow())?.id;
 		this.gameInfoUpdatedListener = this.ow.addGameInfoUpdatedListener(async (res) => {
 			if (Math.floor(res?.gameInfo?.id / 10) === HEARTHSTONE_GAME_ID && res?.resolutionChanged) {
 				await this.changeWindowSize();
@@ -300,6 +300,10 @@ export class FullScreenOverlaysComponent
 		console.log('no-format', 'gameInfo', gameInfo);
 		const currentWindow = await this.ow.getCurrentWindow();
 		console.log('no-format', 'full screen current window', currentWindow);
+		if (!this.windowId) {
+			console.log('[full-screen-overlays] missing windowId');
+			return;
+		}
 		await this.ow.changeWindowSize(this.windowId, width, height);
 		console.log('full screen change window position');
 		await this.ow.changeWindowPosition(this.windowId, 0, 0);

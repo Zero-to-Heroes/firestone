@@ -102,7 +102,10 @@ export class OverwolfService {
 
 	public addGameInfoUpdatedListener(
 		callback: (message: overwolf.games.GameInfoUpdatedEvent) => void,
-	): (message: overwolf.games.GameInfoUpdatedEvent) => void {
+	): ((message: overwolf.games.GameInfoUpdatedEvent) => void) | null {
+		if (!this.isOwEnabled()) {
+			return null;
+		}
 		overwolf.games.onGameInfoUpdated.addListener(callback);
 		return callback;
 	}
