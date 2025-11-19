@@ -1385,7 +1385,7 @@ export const cardIdSelector = (
 		case CardIds.Pelagos_REV_781:
 			return and(side(inputSide), or(inHand, inDeck), spell, canTargetFriendlyCharacter);
 		case CardIds.PerennialSerpent_TIME_022:
-			return and(side(inputSide), or(inHand, inDeck), minion, dormant);
+			return and(side(inputSide), or(inHand, inDeck), dormant);
 		case CardIds.FrizzKindleroost:
 			return and(side(inputSide), inDeck, dragon);
 		case CardIds.FrostburnMatriarch_FIR_901:
