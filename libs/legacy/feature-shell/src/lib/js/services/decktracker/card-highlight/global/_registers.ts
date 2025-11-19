@@ -61,6 +61,7 @@ import { Zuljin } from './zul-jin';
 import { ChronoLordEpoch } from './chrono-lord-epoch';
 import { AzureOathstone } from './azure-oathstone';
 import { DrStitchensew } from './dr-stitchensew';
+import { MagisterDawngrasp } from './magister-dawngrasp';
 
 const cards = [
 	Archimonde,
@@ -124,6 +125,7 @@ const cards = [
 	Chromie,
 	XyrellaTheDevout,
 	DrStitchensew,
+	MagisterDawngrasp,
 ];
 
 export const cardsMapping: { [cardId: string]: Card } = {};
