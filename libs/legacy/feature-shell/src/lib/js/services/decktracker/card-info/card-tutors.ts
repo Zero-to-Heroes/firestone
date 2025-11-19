@@ -300,6 +300,7 @@ const internalTutors = [
 	CardIds.PrecursoryStrike_TIME_750,
 	CardIds.RafaamLadder_TIME_031,
 	CardIds.BargainBin_MIS_105,
+	CardIds.Platysaur_TLC_603,
 ];
 for (const cardId of Object.keys(cardsInfoCache)) {
 	const card = cardsInfoCache[cardId];
