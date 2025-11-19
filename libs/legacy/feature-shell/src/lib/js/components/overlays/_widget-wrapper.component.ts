@@ -1,5 +1,5 @@
 import { CdkDragEnd } from '@angular/cdk/drag-drop';
-import { ChangeDetectorRef, Directive, ElementRef, HostListener, Renderer2, ViewRef } from '@angular/core';
+import { ChangeDetectorRef, Directive, ElementRef, HostListener, OnInit, Renderer2, ViewRef } from '@angular/core';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { AppInjector, GameInfoService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
@@ -9,7 +9,7 @@ import { distinctUntilChanged, switchMap } from 'rxjs/operators';
 
 // https://stackoverflow.com/questions/62222979/angular-9-decorators-on-abstract-base-class
 @Directive()
-export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptionComponent {
+export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptionComponent implements OnInit {
 	protected abstract defaultPositionLeftProvider: (gameWidth: number, gameHeight: number, dpi: number) => number;
 	protected abstract defaultPositionTopProvider: (gameWidth: number, gameHeight: number, dpi: number) => number;
 	protected abstract positionUpdater: (left: number, top: number) => Promise<void>;
@@ -41,6 +41,10 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 	) {
 		super(cdr);
 		this.gameInfo = AppInjector.get(GameInfoService);
+		// this.init();
+	}
+
+	ngOnInit(): void {
 		this.init();
 	}
 
@@ -50,9 +54,11 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 			.pipe(this.mapData((prefs) => prefs.lockWidgetPositions))
 			.subscribe((lockWidgetPositions) => {
 				this.draggable = !lockWidgetPositions;
-				if (!(this.cdr as ViewRef).destroyed) {
-					this.cdr.detectChanges();
-				}
+				setTimeout(() => {
+					if (!(this.cdr as ViewRef).destroyed) {
+						this.cdr.detectChanges();
+					}
+				}, 0);
 			});
 		await sleep(500);
 		await this.onResize();

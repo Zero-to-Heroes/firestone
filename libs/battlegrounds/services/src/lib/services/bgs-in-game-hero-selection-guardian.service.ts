@@ -9,7 +9,7 @@ import {
 } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class BgsInGameHeroSelectionGuardianService extends AbstractFacadeService<BgsInGameHeroSelectionGuardianService> {
 	public freeUsesLeft$$: BehaviorSubject<number>;
 

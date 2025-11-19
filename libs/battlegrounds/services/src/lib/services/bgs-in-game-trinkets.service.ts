@@ -34,7 +34,7 @@ import {
 } from 'rxjs';
 import { BattlegroundsTrinketsService } from './bgs-trinkets.service';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class BgsInGameTrinketsService extends AbstractFacadeService<BgsInGameTrinketsService> {
 	public showWidget$$: BehaviorSubject<boolean | null>;
 	public trinketStats$$: BehaviorSubject<readonly BgsTrinketCardChoiceOption[] | null>;

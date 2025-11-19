@@ -34,7 +34,7 @@ import { BattlegroundsQuestsService } from './bgs-quests.service';
 
 export const IN_GAME_RANK_FILTER = 50;
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class BgsInGameQuestsService extends AbstractFacadeService<BgsInGameQuestsService> {
 	public showWidget$$: BehaviorSubject<boolean | null>;
 	public questStats$$: BehaviorSubject<readonly BgsQuestCardChoiceOption[] | null>;

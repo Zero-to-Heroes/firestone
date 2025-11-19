@@ -10,7 +10,7 @@ import { distinctUntilChanged, map } from 'rxjs';
 const BGS_QUESTS_URL =
 	'https://static.zerotoheroes.com/api/bgs/quest-stats/mmr-%percentile%/%timePeriod%/overview-from-hourly.gz.json';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class BattlegroundsQuestsService extends AbstractFacadeService<BattlegroundsQuestsService> {
 	public questStats$$: SubscriberAwareBehaviorSubject<BgsQuestStats | null>;
 

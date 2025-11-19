@@ -11,7 +11,7 @@ import { BehaviorSubject } from 'rxjs';
 
 export const BG_USE_TRINKETS = true;
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class BgsInGameTrinketsGuardianService extends AbstractFacadeService<BgsInGameTrinketsGuardianService> {
 	public freeUsesLeft$$: BehaviorSubject<number>;
 

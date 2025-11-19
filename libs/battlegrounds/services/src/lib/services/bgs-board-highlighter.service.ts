@@ -15,7 +15,7 @@ import {
 } from '@firestone/shared/framework/core';
 import { auditTime, BehaviorSubject, combineLatest, distinctUntilChanged, filter, map } from 'rxjs';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHighlighterService> {
 	public shopMinions$$: SubscriberAwareBehaviorSubject<readonly ShopMinion[]>;
 	public highlightedTribes$$: BehaviorSubject<readonly Race[]>;
