@@ -19,7 +19,10 @@ export const NightmareFuel: GeneratingCard = {
 			tags?: readonly { Name: GameTag; Value: number }[];
 		},
 	): GuessedInfo | null => {
-		const knownCardsInOpponentDeck = opponentDeckState.deck.map((c) => c.cardId).filter((c) => !!c);
+		const knownCardsInOpponentDeck = opponentDeckState.deck
+			.map((c) => c.cardId)
+			.filter((c) => !!c)
+			.filter((c) => allCards.getCard(c)?.type?.toUpperCase() === CardType[CardType.MINION]);
 		return {
 			possibleCards: knownCardsInOpponentDeck,
 		};
