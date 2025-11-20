@@ -7,6 +7,7 @@ import { LocalizationFacadeService } from '../../localization-facade.service';
 import { DREDGE_IN_OPPONENT_DECK_CARD_IDS } from './card-dredged-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
+import { CREATES_PUBLIC_COPY_FROM_DECK } from '../../hs-utils';
 
 const COPY_KNOW_EXACT_CARD_IN_OPPONENT_HAND = [
 	CardIds.AzalinaSoulthief,
@@ -89,8 +90,11 @@ export class CopiedFromEntityIdParser implements EventParser {
 		const shouldObfuscate =
 			// There seems to be info leaks in the logs when the opponent discovers a card in their deck
 			// e.g. when they play Fracking or From the Depths (Dredge effects)
+			!isCopiedPlayer &&
 			// When the player copies (via Disguised K'Thir for instance) we don't obfuscate the card, because we know it
-			!isCopiedPlayer && !isPlayer;
+			!isPlayer &&
+			// Cards that summon copies of card in the deck into play
+			!CREATES_PUBLIC_COPY_FROM_DECK.includes(newCopy?.creatorCardId as CardIds);
 		console.debug('[copied-from-entity] shouldObfuscate', shouldObfuscate, isPlayer, isCopiedPlayer, copiedCard);
 		// Otherwise cards revealed by Coilfang Constrictor are flagged in hand very precisely, while we shouldn't have this
 		// kind of granular information
