@@ -70,3 +70,4 @@ export { DejaVu } from './deja-vu';
 export { RelicMiner } from './relic-miner';
 export { UmpireGrasp } from './umpire-grasp';
 export { NightmareFuel } from './nightmare-fuel';
+export { ConfluxFuture } from './conflux-future';

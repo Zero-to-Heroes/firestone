@@ -9,22 +9,37 @@ export interface Card {
 }
 
 // When drawing a card
-export interface GeneratingCard extends Card {
+type GuessInfoFunction = (
+	card: DeckCard,
+	deckState: DeckState,
+	opponentDeckState: DeckState,
+	allCards: CardsFacadeService,
+	creatorEntityId: number,
+	options?: {
+		positionInHand?: number;
+		tags?: readonly { Name: GameTag; Value: number }[];
+	},
+) => GuessedInfo | null;
+
+type GuessCardIdFunction = (
+	cardId: string,
+	deckState: DeckState,
+	opponentDeckState: DeckState,
+	creatorCardId: string,
+	creatorEntityId: number,
+	createdIndex: number,
+	allCards: CardsFacadeService,
+) => string | null;
+
+export type GeneratingCard = Card & {
 	publicCreator?: boolean;
 	publicTutor?: boolean;
 	hasSequenceInfo?: boolean;
-	guessInfo: (
-		card: DeckCard,
-		deckState: DeckState,
-		opponentDeckState: DeckState,
-		allCards: CardsFacadeService,
-		creatorEntityId: number,
-		options?: {
-			positionInHand?: number;
-			tags?: readonly { Name: GameTag; Value: number }[];
-		},
-	) => GuessedInfo | null;
-}
+} & (
+		| { guessInfo: GuessInfoFunction; guessCardId?: GuessCardIdFunction }
+		| { guessInfo?: GuessInfoFunction; guessCardId: GuessCardIdFunction }
+		| { guessInfo: GuessInfoFunction; guessCardId: GuessCardIdFunction }
+	);
 // Wait until this is correctly refactored
 // export interface SelectorCard extends Card {
 // 	selector: (info: HighlightSide) => Selector;

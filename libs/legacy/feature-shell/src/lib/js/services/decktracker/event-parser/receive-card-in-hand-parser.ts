@@ -1,9 +1,11 @@
 import { CardIds, CardType, GameTag, hasCorrectTribe, Race } from '@firestone-hs/reference-data';
 import {
 	addGuessInfoToCard,
+	cardsInfoCache,
 	DeckCard,
 	DeckState,
 	GameState,
+	GeneratingCard,
 	getProcessedCard,
 	toTagsObject,
 } from '@firestone/game-state';
@@ -376,12 +378,14 @@ const guessCardId = (
 
 	switch (creatorCardId) {
 		case CardIds.Repackage_RepackagedBoxToken_TOY_879t:
-			const existingBox: DeckCard = deckState.otherZone.find((c) => Math.abs(c.entityId) === creatorEntityId);
-			const guessedCardId = existingBox?.relatedCardIds?.[0];
-			if (guessedCardId) {
-				// FIXME: didn't want to have to handle a full DeckState return for this
-				(existingBox as any).relatedCardIds = existingBox.relatedCardIds.slice(1);
-				return guessedCardId;
+			if (true) {
+				const existingBox: DeckCard = deckState.otherZone.find((c) => Math.abs(c.entityId) === creatorEntityId);
+				const guessedCardId = existingBox?.relatedCardIds?.[0];
+				if (guessedCardId) {
+					// FIXME: didn't want to have to handle a full DeckState return for this
+					(existingBox as any).relatedCardIds = existingBox.relatedCardIds.slice(1);
+					return guessedCardId;
+				}
 			}
 			break;
 		case CardIds.AstralVigilant_GDB_461:
@@ -398,6 +402,19 @@ const guessCardId = (
 			return [...opponentDeckState.hand]
 				.sort((a, b) => a.tags?.[GameTag.ZONE_POSITION] - b.tags?.[GameTag.ZONE_POSITION])
 				.pop()?.cardId;
+		default:
+			const guessedCardId = (
+				cardsInfoCache[creatorCardId as keyof typeof cardsInfoCache] as GeneratingCard
+			)?.guessCardId?.(
+				cardId,
+				deckState,
+				opponentDeckState,
+				creatorCardId,
+				creatorEntityId,
+				createdIndex,
+				allCards,
+			);
+			return guessedCardId ?? cardId;
 	}
 	return cardId;
 };
