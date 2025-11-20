@@ -26,6 +26,26 @@ export class ConstructedNavigationService extends AbstractFacadeService<Construc
 		this.selectedConstructedMetaDeck$$ = new BehaviorSubject<string | null>(null);
 		this.selectedConstructedMetaArchetype$$ = new BehaviorSubject<number | null>(null);
 	}
+
+	override async initElectronSubjects() {
+		this.setupElectronSubject(this.currentView$$, 'constructed-navigation-current-view');
+		this.setupElectronSubject(this.selectedDeckstring$$, 'constructed-navigation-selected-deckstring');
+		this.setupElectronSubject(
+			this.selectedConstructedMetaDeck$$,
+			'constructed-navigation-selected-constructed-meta-deck',
+		);
+		this.setupElectronSubject(
+			this.selectedConstructedMetaArchetype$$,
+			'constructed-navigation-selected-constructed-meta-archetype',
+		);
+	}
+
+	override async createElectronProxy(ipcRenderer: any) {
+		this.currentView$$ = new BehaviorSubject<DecktrackerViewType | null>('decks');
+		this.selectedDeckstring$$ = new BehaviorSubject<string | null>(null);
+		this.selectedConstructedMetaDeck$$ = new BehaviorSubject<string | null>(null);
+		this.selectedConstructedMetaArchetype$$ = new BehaviorSubject<number | null>(null);
+	}
 }
 
 export type DecktrackerViewType =

@@ -14,6 +14,7 @@ import {
 	ConstructedMetaDecksStateService,
 	ConstructedMulliganGuideGuardianService,
 	ConstructedMulliganGuideService,
+	ConstructedNavigationService,
 } from '@firestone/constructed/common';
 import { ElectronApiRunner, ElectronStorageService } from '@firestone/electron/common';
 import {
@@ -355,6 +356,9 @@ export const buildAppInjector = () => {
 
 	const constructedMulliganGuardian = new ConstructedMulliganGuideGuardianService(windowManager);
 	electronInjector.register(ConstructedMulliganGuideGuardianService, constructedMulliganGuardian);
+
+	const constructedNavigation = new ConstructedNavigationService(windowManager);
+	electronInjector.register(ConstructedNavigationService, constructedNavigation);
 
 	return electronInjector;
 };

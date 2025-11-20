@@ -203,6 +203,24 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 			});
 	}
 
+	override async initElectronSubjects() {
+		this.setupElectronSubject(this.constructedMetaDecks$$, 'constructed-meta-decks');
+		this.setupElectronSubject(this.currentConstructedMetaDeck$$, 'constructed-meta-deck');
+		this.setupElectronSubject(this.constructedMetaArchetypes$$, 'constructed-meta-archetypes');
+		this.setupElectronSubject(this.currentConstructedMetaArchetype$$, 'constructed-meta-archetype');
+		this.setupElectronSubject(this.allCardsInDeck$$, 'constructed-meta-all-cards-in-deck');
+		this.setupElectronSubject(this.cardSearch$$, 'constructed-meta-card-search');
+	}
+
+	override async createElectronProxy(ipcRenderer: any) {
+		this.constructedMetaDecks$$ = new SubscriberAwareBehaviorSubject<ExtendedDeckStats | null>(null);
+		this.currentConstructedMetaDeck$$ = new SubscriberAwareBehaviorSubject<DeckStat | null>(null);
+		this.constructedMetaArchetypes$$ = new SubscriberAwareBehaviorSubject<ArchetypeStats | null>(null);
+		this.currentConstructedMetaArchetype$$ = new SubscriberAwareBehaviorSubject<ArchetypeStat | null>(null);
+		this.allCardsInDeck$$ = new SubscriberAwareBehaviorSubject<readonly string[] | null>(null);
+		this.cardSearch$$ = new BehaviorSubject<readonly string[] | null>(null);
+	}
+
 	public newCardSearch(search: readonly string[]) {
 		this.mainInstance.newCardSearchInternal(search);
 	}

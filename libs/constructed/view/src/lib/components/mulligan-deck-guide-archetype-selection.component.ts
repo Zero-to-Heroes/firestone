@@ -3,7 +3,7 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { GameFormat } from '@firestone-hs/constructed-deck-stats';
 import { decode } from '@firestone-hs/deckstrings';
 import { GameFormatString } from '@firestone-hs/reference-data';
-import { ConstructedMetaDecksStateService, ConstructedNavigationService } from '@firestone/constructed/common';
+import { ConstructedMetaDecksStateService } from '@firestone/constructed/common';
 import { buildArchetypeName } from '@firestone/game-state';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { MultiselectOption } from '@firestone/shared/common/view';
@@ -56,14 +56,19 @@ export class MulliganDeckGuideArchetypeSelectionDropdownComponent
 		private readonly i18n: ILocalizationService,
 		private readonly prefs: PreferencesService,
 		private readonly constructedMetaStats: ConstructedMetaDecksStateService,
-		private readonly nav: ConstructedNavigationService,
 		private readonly allCards: CardsFacadeService, // private readonly mulligan: ConstructedMulliganGuideService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.constructedMetaStats, this.prefs, this.nav);
+		console.debug('[debug] mulligan-deck-guide-archetype-selection ngAfterContentInit');
+		await waitForReady(this.prefs);
+		console.debug('[debug] mulligan-deck-guide-archetype-selection prefs ready');
+		await waitForReady(this.constructedMetaStats);
+		console.debug('[debug] mulligan-deck-guide-archetype-selection constructedMetaStats ready');
+		await waitForReady(this.constructedMetaStats, this.prefs);
+		console.debug('[debug] mulligan-deck-guide-archetype-selection constructedMetaStats and nav ready');
 
 		const effectiveRank$ = this.prefs.preferences$$.pipe(
 			this.mapData((prefs) => prefs.decktrackerMulliganRankBracket),
@@ -128,8 +133,8 @@ export class MulliganDeckGuideArchetypeSelectionDropdownComponent
 				return [blankOption, ...options];
 			}),
 		);
-		this.filter$ = combineLatest([this.archetypeId$$, this.nav.currentView$$]).pipe(
-			this.mapData(([archetypeId, currentView]) => ({
+		this.filter$ = combineLatest([this.archetypeId$$]).pipe(
+			this.mapData(([archetypeId]) => ({
 				selected: !!archetypeId ? [archetypeId + ''] : [],
 				placeholder: 'No archetype found',
 			})),
