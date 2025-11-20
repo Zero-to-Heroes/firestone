@@ -8,6 +8,9 @@ export abstract class AbstractFacadeService<T extends AbstractFacadeService<T>> 
 
 	protected isElectronContext: boolean;
 
+	// Map to store registered main process methods (methodName -> handler)
+	private registeredMainProcessMethods: Map<string, (...args: any[]) => Promise<any> | any> = new Map();
+
 	constructor(
 		protected readonly windowManager: WindowManagerService,
 		private readonly serviceName: string,
@@ -167,6 +170,67 @@ export abstract class AbstractFacadeService<T extends AbstractFacadeService<T>> 
 
 	protected transformValueForElectron(value: any): any {
 		return value;
+	}
+
+	/**
+	 * Register a method that should run on the main process.
+	 * Call this in initElectronMainProcess() to register methods that need to run in the main process.
+	 * @param methodName The name of the method (used as IPC channel identifier)
+	 * @param handler The method implementation that will run in the main process
+	 */
+	protected registerMainProcessMethod(methodName: string, handler: (...args: any[]) => Promise<any> | any): void {
+		if (isMainProcess()) {
+			// In main process, register IPC handler
+			const { ipcMain } = eval('require')('electron');
+			if (typeof ipcMain !== 'undefined') {
+				const channel = `${this.serviceName}-${methodName}`;
+				// Remove existing handler if any (to avoid duplicate registration)
+				ipcMain.removeHandler(channel);
+				ipcMain.handle(channel, async (_, ...args: any[]) => {
+					try {
+						const result = await handler(...args);
+						return result;
+					} catch (error) {
+						console.error(`[${this.constructor.name}] Error in main process method ${methodName}:`, error);
+						throw error;
+					}
+				});
+				this.registeredMainProcessMethods.set(methodName, handler);
+			}
+		}
+	}
+
+	/**
+	 * Call a method on the main process. Works in both Electron and Overwolf/browser contexts.
+	 * In Electron renderer: uses IPC to call the method on the main process
+	 * In Overwolf/browser: delegates to mainInstance
+	 * @param methodName The name of the method to call
+	 * @param args Arguments to pass to the method
+	 * @returns Promise that resolves with the method's return value
+	 */
+	protected async callOnMainProcess<T>(methodName: string, ...args: any[]): Promise<T> {
+		if (this.isElectronContext && !isMainProcess()) {
+			// In Electron renderer process, use IPC
+			const { ipcRenderer } = (window as any).require('electron');
+			if (typeof ipcRenderer !== 'undefined') {
+				const channel = `${this.serviceName}-${methodName}`;
+				try {
+					return await ipcRenderer.invoke(channel, ...args);
+				} catch (error) {
+					console.error(`[${this.constructor.name}] Error calling main process method ${methodName}:`, error);
+					throw error;
+				}
+			}
+		}
+		// In Overwolf/browser context or Electron main process, delegate to mainInstance
+		const method = (this.mainInstance as any)[methodName];
+		if (typeof method !== 'function') {
+			throw new Error(
+				`[${this.constructor.name}] Method ${methodName} not found on mainInstance. ` +
+					`Make sure to register it using registerMainProcessMethod() in initElectronMainProcess().`,
+			);
+		}
+		return await method.apply(this.mainInstance, args);
 	}
 }
 

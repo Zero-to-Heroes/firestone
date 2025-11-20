@@ -221,8 +221,25 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 		this.cardSearch$$ = new BehaviorSubject<readonly string[] | null>(null);
 	}
 
+	protected override async initElectronMainProcess() {
+		this.registerMainProcessMethod('newCardSearchInternal', (search: readonly string[]) =>
+			this.newCardSearchInternal(search),
+		);
+		this.registerMainProcessMethod(
+			'loadNewDeckDetailsInternal',
+			(deckstring: string | undefined | null, format: GameFormat, time: TimePeriod, rank: RankBracket) =>
+				this.loadNewDeckDetailsInternal(deckstring, format, time, rank),
+		);
+		this.registerMainProcessMethod(
+			'loadNewArchetypesInternal',
+			(format: GameFormat, time: TimePeriod, rank: RankBracket) =>
+				this.loadNewArchetypesInternal(format, time, rank),
+		);
+	}
+
 	public newCardSearch(search: readonly string[]) {
-		this.mainInstance.newCardSearchInternal(search);
+		// Fire and forget - the method is synchronous but callOnMainProcess is async
+		void this.callOnMainProcess('newCardSearchInternal', search);
 	}
 
 	private newCardSearchInternal(search: readonly string[]) {
@@ -288,7 +305,7 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 		// if (12 % 2 === 60) {
 		// 	return null;
 		// }
-		return this.mainInstance.loadNewDeckDetailsInternal(deckstring, format, time, rank);
+		return this.callOnMainProcess<DeckStat | null>('loadNewDeckDetailsInternal', deckstring, format, time, rank);
 	}
 
 	private async loadNewDeckDetailsInternal(
@@ -379,7 +396,7 @@ export class ConstructedMetaDecksStateService extends AbstractFacadeService<Cons
 		time: TimePeriod,
 		rank: RankBracket,
 	): Promise<ArchetypeStats | null> {
-		return this.mainInstance.loadNewArchetypesInternal(format, time, rank);
+		return this.callOnMainProcess<ArchetypeStats | null>('loadNewArchetypesInternal', format, time, rank);
 	}
 
 	private async loadNewArchetypesInternal(
