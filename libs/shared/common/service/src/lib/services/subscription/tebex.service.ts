@@ -70,8 +70,12 @@ export class TebexService extends AbstractFacadeService<TebexService> {
 		this.ow.openUrlInDefaultBrowser(`https://checkout.tebex.io/payment-history/recurring-payments`);
 	}
 
+	protected override async initElectronMainProcess() {
+		this.registerMainProcessMethod('getSubscriptionStatusInternal', () => this.getSubscriptionStatusInternal());
+	}
+
 	public async getSubscriptionStatus(): Promise<CurrentPlan | null> {
-		return this.mainInstance.getSubscriptionStatusInternal();
+		return this.callOnMainProcess<CurrentPlan | null>('getSubscriptionStatusInternal');
 	}
 
 	private async getSubscriptionStatusInternal(): Promise<CurrentPlan | null> {

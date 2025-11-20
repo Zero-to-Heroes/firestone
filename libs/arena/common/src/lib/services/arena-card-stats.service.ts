@@ -89,12 +89,33 @@ export class ArenaCardStatsService extends AbstractFacadeService<ArenaCardStatsS
 
 	// public async getCardStats(timeFilter: ArenaTimeFilterType, classFilter: ArenaClassFilterType, modeFilter: ArenaModeFilterType): Promise<ArenaCombinedCardStats | null> {
 
+	protected override async initElectronMainProcess() {
+		this.registerMainProcessMethod(
+			'getStatsForInternal',
+			(cardId: string, playerClass: PlayerClass, modeFilter: ArenaModeFilterType) =>
+				this.getStatsForInternal(cardId, playerClass, modeFilter),
+		);
+		this.registerMainProcessMethod(
+			'buildCardStatsInternal',
+			(context: string, timePeriod: string, modeFilter: ArenaModeFilterType) =>
+				this.buildCardStatsInternal(context, timePeriod, modeFilter),
+		);
+		this.registerMainProcessMethod('newSearchStringInternal', (newText: string | null | undefined) =>
+			this.newSearchStringInternal(newText),
+		);
+	}
+
 	public async getStatsFor(
 		cardId: string,
 		playerClass: PlayerClass,
 		modeFilter: ArenaModeFilterType,
 	): Promise<ArenaCombinedCardStat | null> {
-		return this.mainInstance.getStatsForInternal(cardId, playerClass, modeFilter);
+		return this.callOnMainProcess<ArenaCombinedCardStat | null>(
+			'getStatsForInternal',
+			cardId,
+			playerClass,
+			modeFilter,
+		);
 	}
 
 	private async getStatsForInternal(
@@ -135,7 +156,12 @@ export class ArenaCardStatsService extends AbstractFacadeService<ArenaCardStatsS
 		timePeriod: string,
 		modeFilter: ArenaModeFilterType,
 	): Promise<ArenaCombinedCardStats | null> {
-		return this.mainInstance.buildCardStatsInternal(context?.toLowerCase(), timePeriod, modeFilter);
+		return this.callOnMainProcess<ArenaCombinedCardStats | null>(
+			'buildCardStatsInternal',
+			context?.toLowerCase(),
+			timePeriod,
+			modeFilter,
+		);
 	}
 
 	private async buildCardStatsInternal(
@@ -198,7 +224,7 @@ export class ArenaCardStatsService extends AbstractFacadeService<ArenaCardStatsS
 	}
 
 	public newSearchString(newText: string | null | undefined) {
-		this.mainInstance.newSearchStringInternal(newText);
+		void this.callOnMainProcess('newSearchStringInternal', newText);
 	}
 
 	private async newSearchStringInternal(newText: string | null | undefined) {

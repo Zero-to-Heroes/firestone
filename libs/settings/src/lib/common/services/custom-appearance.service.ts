@@ -105,8 +105,15 @@ export class CustomAppearanceService extends AbstractFacadeService<CustomAppeara
 		this.finalStyles$$ = new SubscriberAwareBehaviorSubject<FinalStyles | null>(null);
 	}
 
+	protected override async initElectronMainProcess() {
+		this.registerMainProcessMethod('resetAllInternal', () => this.resetAllInternal());
+		this.registerMainProcessMethod('setColorInternal', (key: CustomStyleKey, value: string) =>
+			this.setColorInternal(key, value),
+		);
+	}
+
 	public resetAll() {
-		this.mainInstance.resetAllInternal();
+		void this.callOnMainProcess('resetAllInternal');
 	}
 
 	private async resetAllInternal() {
@@ -115,7 +122,7 @@ export class CustomAppearanceService extends AbstractFacadeService<CustomAppeara
 	}
 
 	public setColor(key: CustomStyleKey, value: string) {
-		this.mainInstance.setColorInternal(key, value);
+		void this.callOnMainProcess('setColorInternal', key, value);
 	}
 
 	public setColorInternal(key: CustomStyleKey, value: string) {

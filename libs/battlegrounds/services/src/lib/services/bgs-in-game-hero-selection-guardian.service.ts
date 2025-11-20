@@ -46,8 +46,12 @@ export class BgsInGameHeroSelectionGuardianService extends AbstractFacadeService
 		this.freeUsesLeft$$ = new BehaviorSubject<number>(BGS_HERO_SELECTION_DAILY_FREE_USES);
 	}
 
+	protected override async initElectronMainProcess() {
+		this.registerMainProcessMethod('acknowledgeStatsSeenInternal', () => this.acknowledgeStatsSeenInternal());
+	}
+
 	public acknowledgeStatsSeen() {
-		this.mainInstance.acknowledgeStatsSeenInternal();
+		void this.callOnMainProcess('acknowledgeStatsSeenInternal');
 	}
 
 	private acknowledgeStatsSeenInternal() {

@@ -48,8 +48,14 @@ export class ConstructedMulliganGuideGuardianService extends AbstractFacadeServi
 		this.setupElectronSubject(this.freeUsesLeft$$, 'constructed-mulligan-guide-guardian-free-uses-left');
 	}
 
+	protected override async initElectronMainProcess() {
+		this.registerMainProcessMethod('acknowledgeMulliganAdviceSeenInternal', () =>
+			this.acknowledgeMulliganAdviceSeenInternal(),
+		);
+	}
+
 	public acknowledgeMulliganAdviceSeen() {
-		this.mainInstance.acknowledgeMulliganAdviceSeenInternal();
+		void this.callOnMainProcess('acknowledgeMulliganAdviceSeenInternal');
 	}
 
 	private acknowledgeMulliganAdviceSeenInternal() {

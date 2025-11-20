@@ -128,8 +128,13 @@ export class GameStatsLoaderService extends AbstractFacadeService<GameStatsLoade
 		}
 	}
 
+	protected override async initElectronMainProcess() {
+		this.registerMainProcessMethod('clearGamesInternal', () => this.clearGamesInternal());
+		this.registerMainProcessMethod('fullRefreshInternal', () => this.fullRefreshInternal());
+	}
+
 	public async clearGames() {
-		await this.mainInstance.clearGamesInternal();
+		await this.callOnMainProcess('clearGamesInternal');
 	}
 
 	private async clearGamesInternal() {
@@ -140,7 +145,7 @@ export class GameStatsLoaderService extends AbstractFacadeService<GameStatsLoade
 	}
 
 	public async fullRefresh() {
-		await this.mainInstance.fullRefreshInternal();
+		await this.callOnMainProcess('fullRefreshInternal');
 	}
 
 	private async fullRefreshInternal() {

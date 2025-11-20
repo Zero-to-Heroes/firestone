@@ -56,11 +56,19 @@ export class BattlegroundsQuestsService extends AbstractFacadeService<Battlegrou
 		this.questStats$$ = new SubscriberAwareBehaviorSubject<BgsQuestStats | null>(null);
 	}
 
+	protected override async initElectronMainProcess() {
+		this.registerMainProcessMethod(
+			'loadQuestsInternal',
+			(timeFilter: BgsActiveTimeFilterType, rankFilter: BgsRankFilterType) =>
+				this.loadQuestsInternal(timeFilter, rankFilter),
+		);
+	}
+
 	public async loadQuests(
 		timeFilter: BgsActiveTimeFilterType,
 		rankFilter: BgsRankFilterType,
 	): Promise<BgsQuestStats | null> {
-		return this.mainInstance.loadQuestsInternal(timeFilter, rankFilter);
+		return this.callOnMainProcess<BgsQuestStats | null>('loadQuestsInternal', timeFilter, rankFilter);
 	}
 
 	private async loadQuestsInternal(

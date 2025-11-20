@@ -129,8 +129,12 @@ export class BgsReconnectorService extends AbstractFacadeService<BgsReconnectorS
 			});
 	}
 
+	protected override async initElectronMainProcess() {
+		this.registerMainProcessMethod('reconnectInternal', () => this.reconnectInternal());
+	}
+
 	public async reconnect() {
-		return this.mainInstance.reconnectInternal();
+		return this.callOnMainProcess('reconnectInternal');
 	}
 	private async reconnectInternal() {
 		this.status$$.next('RECONNECTING');

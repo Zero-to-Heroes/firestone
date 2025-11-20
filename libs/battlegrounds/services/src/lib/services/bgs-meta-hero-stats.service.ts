@@ -106,8 +106,18 @@ export class BgsMetaHeroStatsService extends AbstractFacadeService<BgsMetaHeroSt
 		});
 	}
 
+	protected override async initElectronMainProcess() {
+		this.registerMainProcessMethod('getStatsInternal', (config: Config) => this.getStatsInternal(config));
+		this.registerMainProcessMethod('getMmrPercentilesInternal', (config: Config) =>
+			this.getMmrPercentilesInternal(config),
+		);
+		this.registerMainProcessMethod('getTiersInternal', (config: Config, inputStats?: BgsHeroStatsV2 | null) =>
+			this.getTiersInternal(config, inputStats),
+		);
+	}
+
 	public async getStats(config: Config): Promise<BgsHeroStatsV2 | null> {
-		return this.mainInstance.getStatsInternal(config);
+		return this.callOnMainProcess<BgsHeroStatsV2 | null>('getStatsInternal', config);
 	}
 
 	private async getStatsInternal(config: Config): Promise<BgsHeroStatsV2 | null> {
@@ -121,7 +131,7 @@ export class BgsMetaHeroStatsService extends AbstractFacadeService<BgsMetaHeroSt
 	}
 
 	public async getMmrPercentiles(config: Config): Promise<readonly MmrPercentile[] | null> {
-		return this.mainInstance.getMmrPercentilesInternal(config);
+		return this.callOnMainProcess<readonly MmrPercentile[] | null>('getMmrPercentilesInternal', config);
 	}
 
 	private async getMmrPercentilesInternal(config: Config): Promise<readonly MmrPercentile[] | null> {
@@ -133,7 +143,11 @@ export class BgsMetaHeroStatsService extends AbstractFacadeService<BgsMetaHeroSt
 		config: Config,
 		inputStats?: BgsHeroStatsV2 | null,
 	): Promise<readonly BgsMetaHeroStatTierItem[] | null> {
-		return this.mainInstance.getTiersInternal(config, inputStats);
+		return this.callOnMainProcess<readonly BgsMetaHeroStatTierItem[] | null>(
+			'getTiersInternal',
+			config,
+			inputStats,
+		);
 	}
 
 	private async getTiersInternal(

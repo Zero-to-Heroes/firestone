@@ -182,8 +182,14 @@ export class DecksProviderService extends AbstractFacadeService<DecksProviderSer
 			});
 	}
 
+	protected override async initElectronMainProcess() {
+		this.registerMainProcessMethod('newCardSearchInternal', (search: readonly string[]) =>
+			this.newCardSearchInternal(search),
+		);
+	}
+
 	public newCardSearch(search: readonly string[]) {
-		this.mainInstance.newCardSearchInternal(search);
+		void this.callOnMainProcess('newCardSearchInternal', search);
 	}
 
 	private newCardSearchInternal(search: readonly string[]) {

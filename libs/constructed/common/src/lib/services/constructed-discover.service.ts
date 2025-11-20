@@ -30,13 +30,27 @@ export class ConstructedDiscoverService extends AbstractFacadeService<Constructe
 		await waitForReady(this.constructedMetaStats);
 	}
 
+	protected override async initElectronMainProcess() {
+		this.registerMainProcessMethod(
+			'getStatsForInternal',
+			(deckstring: string, cardId: string, opponentClass: string, formatFilter: GameFormat) =>
+				this.getStatsForInternal(deckstring, cardId, opponentClass, formatFilter),
+		);
+	}
+
 	public async getStatsFor(
 		deckstring: string,
 		cardId: string,
 		opponentClass: string,
 		formatFilter: GameFormat,
 	): Promise<ConstructedCardStat | null> {
-		return this.mainInstance.getStatsForInternal(deckstring, cardId, opponentClass, formatFilter);
+		return this.callOnMainProcess<ConstructedCardStat | null>(
+			'getStatsForInternal',
+			deckstring,
+			cardId,
+			opponentClass,
+			formatFilter,
+		);
 	}
 
 	private async getStatsForInternal(

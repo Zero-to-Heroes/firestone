@@ -78,16 +78,22 @@ export class SubscriptionService extends AbstractFacadeService<SubscriptionServi
 		}, 60 * 1000);
 	}
 
+	protected override async initElectronMainProcess() {
+		this.registerMainProcessMethod('subscribeInternal', (planId: string) => this.subscribeInternal(planId));
+		this.registerMainProcessMethod('unsubscribeInternal', (planId: string) => this.unsubscribeInternal(planId));
+		this.registerMainProcessMethod('fetchCurrentPlanInternal', () => this.fetchCurrentPlanInternal());
+	}
+
 	public async subscribe(planId: string) {
-		return this.mainInstance.subscribeInternal(planId);
+		return this.callOnMainProcess('subscribeInternal', planId);
 	}
 
 	public async unsubscribe(planId: string) {
-		return this.mainInstance.unsubscribeInternal(planId);
+		return this.callOnMainProcess('unsubscribeInternal', planId);
 	}
 
 	public async fetchCurrentPlan(): Promise<CurrentPlan | null> {
-		return this.mainInstance.fetchCurrentPlanInternal();
+		return this.callOnMainProcess<CurrentPlan | null>('fetchCurrentPlanInternal');
 	}
 
 	private async subscribeInternal(planId: string) {

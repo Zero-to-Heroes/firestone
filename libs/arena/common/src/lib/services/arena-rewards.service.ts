@@ -77,8 +77,12 @@ export class ArenaRewardsService extends AbstractFacadeService<ArenaRewardsServi
 			});
 	}
 
+	protected override async initElectronMainProcess() {
+		this.registerMainProcessMethod('addRewardsInternal', (rewards: Input) => this.addRewardsInternal(rewards));
+	}
+
 	public async addRewards(rewards: Input) {
-		return this.mainInstance.addRewardsInternal(rewards);
+		return this.callOnMainProcess('addRewardsInternal', rewards);
 	}
 	private async addRewardsInternal(rewards: Input) {
 		const currentRewards = await this.arenaRewards$$.getValueWithInit();

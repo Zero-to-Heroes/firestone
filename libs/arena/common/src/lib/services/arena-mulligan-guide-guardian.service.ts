@@ -40,8 +40,14 @@ export class ArenaMulliganGuideGuardianService extends AbstractFacadeService<Are
 		this.addDevMode();
 	}
 
+	protected override async initElectronMainProcess() {
+		this.registerMainProcessMethod('acknowledgeMulliganAdviceSeenInternal', () =>
+			this.acknowledgeMulliganAdviceSeenInternal(),
+		);
+	}
+
 	public acknowledgeMulliganAdviceSeen() {
-		this.mainInstance.acknowledgeMulliganAdviceSeenInternal();
+		void this.callOnMainProcess('acknowledgeMulliganAdviceSeenInternal');
 	}
 
 	private acknowledgeMulliganAdviceSeenInternal() {

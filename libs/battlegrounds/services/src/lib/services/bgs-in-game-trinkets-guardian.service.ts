@@ -48,8 +48,12 @@ export class BgsInGameTrinketsGuardianService extends AbstractFacadeService<BgsI
 		this.freeUsesLeft$$ = new BehaviorSubject<number>(BGS_TRINKETS_DAILY_FREE_USES);
 	}
 
+	protected override async initElectronMainProcess() {
+		this.registerMainProcessMethod('acknowledgeStatsSeenInternal', () => this.acknowledgeStatsSeenInternal());
+	}
+
 	public acknowledgeStatsSeen() {
-		this.mainInstance.acknowledgeStatsSeenInternal();
+		void this.callOnMainProcess('acknowledgeStatsSeenInternal');
 	}
 
 	private acknowledgeStatsSeenInternal() {

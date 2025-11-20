@@ -106,8 +106,14 @@ export class ArenaHighWinsRunsService extends AbstractFacadeService<ArenaHighWin
 		return this.runs$$.pipe(map((runs) => runs?.runs?.find((run) => run.id === runId)));
 	}
 
+	protected override async initElectronMainProcess() {
+		this.registerMainProcessMethod('newCardSearchInternal', (selected: readonly string[]) =>
+			this.newCardSearchInternal(selected),
+		);
+	}
+
 	public newCardSearch(selected: readonly string[]): void {
-		this.mainInstance.newCardSearchInternal(selected);
+		void this.callOnMainProcess('newCardSearchInternal', selected);
 	}
 
 	private newCardSearchInternal(selected: readonly string[]): void {

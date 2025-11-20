@@ -46,8 +46,14 @@ export class ArenaDraftGuardianService extends AbstractFacadeService<ArenaDraftG
 		});
 	}
 
+	protected override async initElectronMainProcess() {
+		this.registerMainProcessMethod('acknowledgeRunUsedInternal', (runId: string) =>
+			this.acknowledgeRunUsedInternal(runId),
+		);
+	}
+
 	public acknowledgeRunUsed(runId: string) {
-		this.mainInstance.acknowledgeRunUsedInternal(runId);
+		void this.callOnMainProcess('acknowledgeRunUsedInternal', runId);
 	}
 
 	private acknowledgeRunUsedInternal(runId: string) {

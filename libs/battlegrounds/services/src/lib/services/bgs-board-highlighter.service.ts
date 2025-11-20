@@ -82,8 +82,22 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 		this.highlightedMinions$$ = new BehaviorSubject<readonly string[]>([]);
 	}
 
+	protected override async initElectronMainProcess() {
+		this.registerMainProcessMethod('toggleMinionsToHighlightInternal', (minionsToHighlight: readonly string[]) =>
+			this.toggleMinionsToHighlightInternal(minionsToHighlight),
+		);
+		this.registerMainProcessMethod(
+			'toggleMechanicsToHighlightInternal',
+			(mechanicsToHighlight: readonly GameTag[]) => this.toggleMechanicsToHighlightInternal(mechanicsToHighlight),
+		);
+		this.registerMainProcessMethod('toggleTribesToHighlightInternal', (tribes: readonly Race[]) =>
+			this.toggleTribesToHighlightInternal(tribes),
+		);
+		this.registerMainProcessMethod('resetHighlightsInternal', () => this.resetHighlightsInternal());
+	}
+
 	public toggleMinionsToHighlight(minionsToHighlight: readonly string[]) {
-		this.mainInstance.toggleMinionsToHighlightInternal(minionsToHighlight);
+		void this.callOnMainProcess('toggleMinionsToHighlightInternal', minionsToHighlight);
 	}
 	private toggleMinionsToHighlightInternal(minionsToHighlight: readonly string[]) {
 		let highlightedMinions: readonly string[] = this.highlightedMinions$$.value;
@@ -96,7 +110,7 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 	}
 
 	public toggleMechanicsToHighlight(mechanicsToHighlight: readonly GameTag[]) {
-		this.mainInstance.toggleMechanicsToHighlightInternal(mechanicsToHighlight);
+		void this.callOnMainProcess('toggleMechanicsToHighlightInternal', mechanicsToHighlight);
 	}
 	private toggleMechanicsToHighlightInternal(mechanicsToHighlight: readonly GameTag[]) {
 		let highlightedMechanics: readonly GameTag[] = this.highlightedMechanics$$.value;
@@ -109,7 +123,7 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 	}
 
 	public toggleTribesToHighlight(tribes: readonly Race[]) {
-		this.mainInstance.toggleTribesToHighlightInternal(tribes);
+		void this.callOnMainProcess('toggleTribesToHighlightInternal', tribes);
 	}
 	private toggleTribesToHighlightInternal(tribes: readonly Race[]) {
 		let highlightedTribes: readonly Race[] = this.highlightedTribes$$.value;
@@ -122,7 +136,7 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 	}
 
 	public resetHighlights() {
-		this.mainInstance.resetHighlightsInternal();
+		void this.callOnMainProcess('resetHighlightsInternal');
 	}
 	private resetHighlightsInternal() {
 		this.highlightedTribes$$.next([]);

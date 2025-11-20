@@ -26,11 +26,19 @@ export class BattlegroundsCompsService extends AbstractFacadeService<Battlegroun
 		await this.prefs.isReady();
 	}
 
+	protected override async initElectronMainProcess() {
+		this.registerMainProcessMethod(
+			'loadCompStatsInternal',
+			(timeFilter: BgsActiveTimeFilterType, rankFilter: BgsRankFilterType) =>
+				this.loadCompStatsInternal(timeFilter, rankFilter),
+		);
+	}
+
 	public async loadCompStats(
 		timeFilter: BgsActiveTimeFilterType,
 		rankFilter: BgsRankFilterType,
 	): Promise<BgsCompStats | null> {
-		return this.mainInstance.loadCompStatsInternal(timeFilter, rankFilter);
+		return this.callOnMainProcess<BgsCompStats | null>('loadCompStatsInternal', timeFilter, rankFilter);
 	}
 
 	private async loadCompStatsInternal(

@@ -47,8 +47,14 @@ export class BattlegroundsTrinketsService extends AbstractFacadeService<Battlegr
 		});
 	}
 
+	protected override async initElectronMainProcess() {
+		this.registerMainProcessMethod('loadTrinketsInternal', (timeFilter: BgsActiveTimeFilterType) =>
+			this.loadTrinketsInternal(timeFilter),
+		);
+	}
+
 	public async loadTrinkets(timeFilter: BgsActiveTimeFilterType): Promise<BgsTrinketStats | null> {
-		return this.mainInstance.loadTrinketsInternal(timeFilter);
+		return this.callOnMainProcess<BgsTrinketStats | null>('loadTrinketsInternal', timeFilter);
 	}
 
 	private async loadTrinketsInternal(timeFilter: BgsActiveTimeFilterType): Promise<BgsTrinketStats | null> {

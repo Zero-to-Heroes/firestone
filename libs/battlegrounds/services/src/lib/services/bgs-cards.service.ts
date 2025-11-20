@@ -27,11 +27,19 @@ export class BattlegroundsCardsService extends AbstractFacadeService<Battlegroun
 		await this.prefs.isReady();
 	}
 
+	protected override async initElectronMainProcess() {
+		this.registerMainProcessMethod(
+			'loadCardStatsInternal',
+			(timeFilter: BgsActiveTimeFilterType, rankFilter: BgsRankFilterType) =>
+				this.loadCardStatsInternal(timeFilter, rankFilter),
+		);
+	}
+
 	public async loadCardStats(
 		timeFilter: BgsActiveTimeFilterType,
 		rankFilter: BgsRankFilterType,
 	): Promise<BgsCardStats | null> {
-		return this.mainInstance.loadCardStatsInternal(timeFilter, rankFilter);
+		return this.callOnMainProcess<BgsCardStats | null>('loadCardStatsInternal', timeFilter, rankFilter);
 	}
 
 	private async loadCardStatsInternal(

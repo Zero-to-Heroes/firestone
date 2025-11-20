@@ -84,8 +84,31 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 		console.debug('[mods-manager] initialized');
 	}
 
+	protected override async initElectronMainProcess() {
+		this.registerMainProcessMethod('checkModsInternal', (installPath: string) =>
+			this.checkModsInternal(installPath),
+		);
+		this.registerMainProcessMethod('installedModsInternal', (installPath: string) =>
+			this.installedModsInternal(installPath),
+		);
+		this.registerMainProcessMethod('enableModsInternal', (installPath: string) =>
+			this.enableModsInternal(installPath),
+		);
+		this.registerMainProcessMethod('updateModInternal', (mod: ModData) => this.updateModInternal(mod));
+		this.registerMainProcessMethod('disableModsInternal', (installPath: string, keepData: boolean = true) =>
+			this.disableModsInternal(installPath, keepData),
+		);
+		this.registerMainProcessMethod('toggleModsInternal', (modNames: readonly string[]) =>
+			this.toggleModsInternal(modNames),
+		);
+		this.registerMainProcessMethod('deactivateModsInternal', (modNames: readonly string[]) =>
+			this.deactivateModsInternal(modNames),
+		);
+		this.registerMainProcessMethod('hasUpdatesInternal', (mod: ModData) => this.hasUpdatesInternal(mod));
+	}
+
 	public async checkMods(installPath: string): Promise<'wrong-path' | 'installed' | 'not-installed'> {
-		return this.mainInstance.checkModsInternal(installPath);
+		return this.callOnMainProcess<'wrong-path' | 'installed' | 'not-installed'>('checkModsInternal', installPath);
 	}
 	private async checkModsInternal(installPath: string): Promise<'wrong-path' | 'installed' | 'not-installed'> {
 		const files = await this.ow.listFilesInDirectory(installPath);
@@ -106,7 +129,7 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 	}
 
 	public async installedMods(installPath: string): Promise<readonly ModData[]> {
-		return this.mainInstance.installedModsInternal(installPath);
+		return this.callOnMainProcess<readonly ModData[]>('installedModsInternal', installPath);
 	}
 	private async installedModsInternal(installPath: string): Promise<readonly ModData[]> {
 		// First we look into the config files
@@ -148,7 +171,10 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 	public async enableMods(
 		installPath: string,
 	): Promise<'game-running' | 'wrong-path' | 'installed' | 'not-installed'> {
-		return this.mainInstance.enableModsInternal(installPath);
+		return this.callOnMainProcess<'game-running' | 'wrong-path' | 'installed' | 'not-installed'>(
+			'enableModsInternal',
+			installPath,
+		);
 	}
 	private async enableModsInternal(
 		installPath: string,
@@ -186,7 +212,7 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 	}
 
 	public async updateMod(mod: ModData): Promise<ModData | null> {
-		return this.mainInstance.updateModInternal(mod);
+		return this.callOnMainProcess<ModData | null>('updateModInternal', mod);
 	}
 	private async updateModInternal(mod: ModData): Promise<ModData | null> {
 		console.warn('[mods-manager] updating mod not implemented yet', mod);
@@ -214,7 +240,11 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 		installPath: string,
 		keepData: boolean = true,
 	): Promise<'game-running' | 'wrong-path' | 'installed' | 'not-installed'> {
-		return this.mainInstance.disableModsInternal(installPath, keepData);
+		return this.callOnMainProcess<'game-running' | 'wrong-path' | 'installed' | 'not-installed'>(
+			'disableModsInternal',
+			installPath,
+			keepData,
+		);
 	}
 	private async disableModsInternal(
 		installPath: string,
@@ -252,7 +282,7 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 	}
 
 	public async toggleMods(modNames: readonly string[]) {
-		return this.mainInstance.toggleModsInternal(modNames);
+		return this.callOnMainProcess('toggleModsInternal', modNames);
 	}
 	private async toggleModsInternal(modNames: readonly string[]) {
 		const inGame = await this.gameStatus.inGame();
@@ -283,7 +313,7 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 	}
 
 	public async deactivateMods(modNames: readonly string[]) {
-		return this.mainInstance.deactivateModsInternal(modNames);
+		return this.callOnMainProcess('deactivateModsInternal', modNames);
 	}
 	private async deactivateModsInternal(modNames: readonly string[]) {
 		console.warn('[mods-manager] deactivating mods not implemented yet', modNames);
@@ -297,7 +327,7 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 	}
 
 	public async hasUpdates(mod: ModData): Promise<string | null> {
-		return this.mainInstance.hasUpdatesInternal(mod);
+		return this.callOnMainProcess<string | null>('hasUpdatesInternal', mod);
 	}
 	private async hasUpdatesInternal(mod: ModData): Promise<string | null> {
 		const userRepo = mod.DownloadLink?.split('https://github.com/')[1];

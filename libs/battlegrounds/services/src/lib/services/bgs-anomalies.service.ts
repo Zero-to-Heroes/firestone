@@ -32,8 +32,12 @@ export class BattlegroundsAnomaliesService extends AbstractFacadeService<Battleg
 		await this.prefs.isReady();
 	}
 
+	protected override async initElectronMainProcess() {
+		this.registerMainProcessMethod('loadAllAnomaliesInternal', () => this.loadAllAnomaliesInternal());
+	}
+
 	public async loadAllAnomalies(): Promise<readonly string[] | null> {
-		return this.mainInstance.loadAllAnomaliesInternal();
+		return this.callOnMainProcess<readonly string[] | null>('loadAllAnomaliesInternal');
 	}
 
 	private async loadAllAnomaliesInternal(): Promise<readonly string[] | null> {

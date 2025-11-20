@@ -76,8 +76,15 @@ export class PreferencesService extends AbstractFacadeService<PreferencesService
 		this.preferences$$ = new BehaviorSubject<Preferences>(new Preferences());
 	}
 
+	protected override async initElectronMainProcess() {
+		this.registerMainProcessMethod(
+			'updatePrefsInternal',
+			<K extends keyof Preferences>(key: K, value: Preferences[K]) => this.updatePrefsInternal(key, value),
+		);
+	}
+
 	public async updatePrefs<K extends keyof Preferences>(key: K, value: Preferences[K]) {
-		this.mainInstance.updatePrefsInternal(key, value);
+		await this.callOnMainProcess('updatePrefsInternal', key, value);
 	}
 	private async updatePrefsInternal<K extends keyof Preferences>(key: K, value: Preferences[K]) {
 		console.debug('[preferences] updating prefs', key, value, this['uniqueId']);

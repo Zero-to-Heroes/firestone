@@ -98,6 +98,14 @@ export class BgsPlayerHeroStatsService extends AbstractFacadeService<BgsPlayerHe
 		});
 	}
 
+	protected override async initElectronMainProcess() {
+		this.registerMainProcessMethod(
+			'buildFinalStatsInternal',
+			(config: Config, mmrFilter?: number, useDebug = true) =>
+				this.buildFinalStatsInternal(config, mmrFilter, useDebug),
+		);
+	}
+
 	// Not super fan of moving everything to an "await" pattern
 	public async buildFinalStats(
 		config: Config,
@@ -111,7 +119,14 @@ export class BgsPlayerHeroStatsService extends AbstractFacadeService<BgsPlayerHe
 		  }
 		| undefined
 	> {
-		return this.mainInstance.buildFinalStatsInternal(config, mmrFilter, useDebug);
+		return this.callOnMainProcess<
+			| {
+					stats: readonly BgsMetaHeroStatTierItem[] | undefined;
+					mmrPercentile: MmrPercentile;
+					lastUpdatedDate: Date | null;
+			  }
+			| undefined
+		>('buildFinalStatsInternal', config, mmrFilter, useDebug);
 	}
 
 	private async buildFinalStatsInternal(
