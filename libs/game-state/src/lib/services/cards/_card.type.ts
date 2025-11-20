@@ -7,6 +7,17 @@ import { DeckState } from '../../models/deck-state';
 export interface Card {
 	cardIds: readonly CardIds[];
 }
+export type GeneratingCard = Card & {
+	publicCreator?: boolean;
+	publicTutor?: boolean;
+	hasSequenceInfo?: boolean;
+} & (
+		| { guessInfo: GuessInfoFunction; guessCardId?: GuessCardIdFunction }
+		| { guessInfo?: GuessInfoFunction; guessCardId: GuessCardIdFunction }
+		| { guessInfo: GuessInfoFunction; guessCardId: GuessCardIdFunction }
+	);
+// export type GameEventCard = Card & {
+// }
 
 // When drawing a card
 type GuessInfoFunction = (
@@ -20,7 +31,6 @@ type GuessInfoFunction = (
 		tags?: readonly { Name: GameTag; Value: number }[];
 	},
 ) => GuessedInfo | null;
-
 type GuessCardIdFunction = (
 	cardId: string,
 	deckState: DeckState,
@@ -30,17 +40,11 @@ type GuessCardIdFunction = (
 	createdIndex: number,
 	allCards: CardsFacadeService,
 ) => string | null;
-
-export type GeneratingCard = Card & {
-	publicCreator?: boolean;
-	publicTutor?: boolean;
-	hasSequenceInfo?: boolean;
-} & (
-		| { guessInfo: GuessInfoFunction; guessCardId?: GuessCardIdFunction }
-		| { guessInfo?: GuessInfoFunction; guessCardId: GuessCardIdFunction }
-		| { guessInfo: GuessInfoFunction; guessCardId: GuessCardIdFunction }
-	);
 // Wait until this is correctly refactored
 // export interface SelectorCard extends Card {
 // 	selector: (info: HighlightSide) => Selector;
+// }
+// export interface ActionChainParser {
+// 	appliesOnEvent(): GameEvent['type'];
+// 	parse(currentState: GameState, events: GameEvent[]): Promise<GameState>;
 // }

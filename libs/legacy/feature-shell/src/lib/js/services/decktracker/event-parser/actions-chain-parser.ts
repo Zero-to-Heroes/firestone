@@ -23,11 +23,7 @@ export class ActionsChainParser implements EventParser {
 	private events: GameEvent[] = [];
 	private chainParser: { [eventKey: string]: ActionChainParser[] };
 
-	constructor(
-		private readonly helper: DeckManipulationHelper,
-		private readonly cards: CardsFacadeService,
-		private readonly i18n: LocalizationFacadeService,
-	) {
+	constructor(helper: DeckManipulationHelper, cards: CardsFacadeService, i18n: LocalizationFacadeService) {
 		const parsers = [
 			new FuturisticForefatherParser(),
 			// new WaveshapingParser(helper)
