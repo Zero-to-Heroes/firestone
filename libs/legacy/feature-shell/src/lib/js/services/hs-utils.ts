@@ -331,14 +331,14 @@ export const getCardForGlobalEffect = (cardId: CardIds): string => {
 	}
 };
 
-export const CURRENT_FEFECTS_WHITELIST = [
+export const CURRENT_EFFECTS_WHITELIST = [
 	CardIds.SpacerockCollector_RockCollectionEnchantment_GDB_875e,
 	CardIds.SparklingPhial_SparklingEnchantment_TOY_800e1,
 	CardIds.Corpsicle_CorpsicleEnchantment_VAC_427e,
 	CardIds.SandboxScoundrel_OnSaleEnchantment_TOY_521e,
 	CardIds.StrandedSpaceman_StrandedSpacemanFutureBuffEnchantment_GDB_861e,
 	CardIds.ShieldBattery_KhalaiIngenuityEnchantment_SC_759e,
-	// CardIds.SandboxScoundrel_OnSaleReductionEnchantment_TOY_521e1
+	CardIds.StarlightWanderer_StarlightWandererFutureBuffEnchantment_GDB_720e,
 ];
 
 export const cardsRevealedWhenDrawn = [

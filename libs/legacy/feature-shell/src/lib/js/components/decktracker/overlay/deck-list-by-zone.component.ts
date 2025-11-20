@@ -15,7 +15,7 @@ import { DeckZone, DeckZoneSection } from '../../../models/decktracker/view/deck
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 import { PLAGUES } from '../../../services/decktracker/event-parser/special-cases/plagues-parser';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { CURRENT_FEFECTS_WHITELIST } from '../../../services/hs-utils';
+import { CURRENT_EFFECTS_WHITELIST } from '../../../services/hs-utils';
 
 @Component({
 	standalone: false,
@@ -260,7 +260,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 					const refCard = this.allCards.getCard(e.cardId);
 					const sourceCard = this.allCards.getCard(e.tags?.[GameTag.CREATOR_DBID]);
 					// TODO: also remove counters
-					if (!CURRENT_FEFECTS_WHITELIST.includes(refCard.id as CardIds)) {
+					if (!CURRENT_EFFECTS_WHITELIST.includes(refCard.id as CardIds)) {
 						return null;
 					}
 					const cardName = currentEffectUseEnchantmentName
