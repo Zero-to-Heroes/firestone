@@ -59,7 +59,6 @@ export class StartOfGameEffectParser implements EventParser {
 			this.allCards,
 			this.i18n,
 		);
-		console.debug('[debug] start of game effect parser', cardId, isPlayer, deckAfterSpecialCaseUpdate);
 		return currentState.update({
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: deckAfterSpecialCaseUpdate,
 		} as any);

@@ -226,7 +226,6 @@ const handleBroxigar = (
 	i18n: LocalizationFacadeService,
 ): DeckState => {
 	const otherFableCards = broxigarFablePackage.filter((c) => c !== CardIds.Broxigar_TIME_020);
-	console.debug('[debug] handleBroxigar', otherFableCards, deckState);
 	let newDeckContents = deckState.deck;
 	for (const otherFableCard of otherFableCards) {
 		const otherRef = allCards.getCard(otherFableCard);
@@ -243,21 +242,17 @@ const handleBroxigar = (
 			!deckState.deckList?.length &&
 			!deckState.deckstring &&
 			!deckState.deck.some((e) => e.cardId === otherFableCard);
-		console.debug('[debug] handleBroxigar 2', otherFableCard, shouldUpdate, card, deckState);
 		if (shouldUpdate) {
 			const fillerCard = newDeckContents.find(
 				(card) => !card.entityId && !card.cardId && !card.cardName && !card.creatorCardId,
 			);
-			console.debug('[debug] handleBroxigar 3 fillter', fillerCard);
 			newDeckContents = newDeckContents.filter((e) => e !== fillerCard);
 			newDeckContents = [...newDeckContents, card];
-			console.debug('[debug] handleBroxigar 3', newDeckContents);
 		}
 	}
 	const result = deckState.update({
 		deck: newDeckContents,
 	});
-	console.debug('[debug] handleBroxigar 4', result);
 	return result;
 };
 

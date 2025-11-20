@@ -19,15 +19,12 @@ export class BirdwatchingParser implements ActionChainParser {
 		const reversedEvents = [...events].reverse();
 		const attackUpdatedEvent = reversedEvents.shift();
 		const isPlayer = attackUpdatedEvent.controllerId === attackUpdatedEvent.localPlayer.PlayerId;
-		console.debug('[debug] Birdwatching', attackUpdatedEvent, isPlayer, reversedEvents);
 		// Only useful when the opponent handles this
 		if (isPlayer) {
-			console.debug('[debug] Birdwatching not applicable for player');
 			return currentState;
 		}
 
 		if (attackUpdatedEvent.additionalData.sourceCardId !== CardIds.Birdwatching_VAC_408) {
-			console.debug('[debug] Birdwatching not applicable for source card');
 			return currentState;
 		}
 
@@ -47,14 +44,6 @@ export class BirdwatchingParser implements ActionChainParser {
 		const newDeckState = deckState.update({
 			hand: newHand,
 		});
-		console.debug(
-			'[debug] Birdwatching new deck state',
-			newDeckState,
-			newHand,
-			updatedCardInHand,
-			drawnCardInHand,
-			refCard,
-		);
 		return currentState.update({
 			opponentDeck: newDeckState,
 		});
