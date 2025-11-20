@@ -902,12 +902,10 @@ export class GameEvents {
 			case 'MINION_ON_BOARD_ATTACK_UPDATED':
 				this.doEventDispatch(
 					GameEvent.build(GameEvent.MINION_ON_BOARD_ATTACK_UPDATED, gameEvent, {
-						initialAttack: gameEvent.Value.AdditionalProps
-							? gameEvent.Value.AdditionalProps.InitialAttack
-							: undefined,
-						newAttack: gameEvent.Value.AdditionalProps
-							? gameEvent.Value.AdditionalProps.NewAttack
-							: undefined,
+						initialAttack: gameEvent.Value.AdditionalProps?.InitialAttack,
+						newAttack: gameEvent.Value.AdditionalProps?.NewAttack,
+						sourceEntityId: gameEvent.Value.AdditionalProps?.SourceEntityId,
+						sourceCardId: gameEvent.Value.AdditionalProps?.SourceCardId,
 					}),
 				);
 				break;

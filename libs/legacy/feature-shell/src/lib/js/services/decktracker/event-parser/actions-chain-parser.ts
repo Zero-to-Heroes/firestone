@@ -7,6 +7,7 @@ import { FuturisticForefatherParser } from './action-chains/futuristic-forefathe
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 import { WaveshapingParser } from './action-chains/waveshaping-parser';
+import { BirdwatchingParser } from './action-chains/birdwatching';
 
 export class ActionsChainParser implements EventParser {
 	public static readonly REGISTERED_EVENT_TYPES = [
@@ -16,6 +17,7 @@ export class ActionsChainParser implements EventParser {
 		GameEvent.CHOOSING_OPTIONS,
 		GameEvent.ENTITY_CHOSEN,
 		GameEvent.LINKED_ENTITY,
+		GameEvent.MINION_ON_BOARD_ATTACK_UPDATED,
 	];
 
 	private events: GameEvent[] = [];
@@ -29,6 +31,7 @@ export class ActionsChainParser implements EventParser {
 		const parsers = [
 			new FuturisticForefatherParser(),
 			// new WaveshapingParser(helper)
+			new BirdwatchingParser(helper, cards),
 		];
 		this.chainParser = {};
 		for (const parser of parsers) {
