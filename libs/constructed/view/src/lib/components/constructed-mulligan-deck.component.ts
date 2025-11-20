@@ -109,17 +109,7 @@ export class ConstructedMulliganDeckComponent
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.gameState);
-		await waitForReady(this.ads);
-		console.debug('[debug] [constructed-mulligan-deck] waitForReady ads');
-		await waitForReady(this.guardian);
-		console.debug('[debug] [constructed-mulligan-deck] waitForReady guardian');
-		await waitForReady(this.prefs);
-		console.debug('[debug] [constructed-mulligan-deck] waitForReady prefs');
-		await waitForReady(this.patches);
-		console.debug('[debug] [constructed-mulligan-deck] waitForReady patches');
 		await waitForReady(this.gameState, this.ads, this.guardian, this.prefs, this.patches);
-		console.debug('[debug] [constructed-mulligan-deck] waitForReady done');
 
 		const showWidget$ = combineLatest([this.ads.hasPremiumSub$$, this.guardian.freeUsesLeft$$]).pipe(
 			debounceTime(200),
@@ -294,6 +284,7 @@ export class ConstructedMulliganDeckComponent
 	}
 
 	cycleRanks = async () => {
+		console.debug('[debug] [constructed-mulligan-deck] cycleRanks');
 		const prefs = await this.prefs.getPreferences();
 		const currentRank = prefs.decktrackerMulliganRankBracket;
 		// Build an array based on all the possible values of the decktrackerMulliganRankBracket type
@@ -310,6 +301,7 @@ export class ConstructedMulliganDeckComponent
 			decktrackerMulliganRankBracket: nextRank,
 		};
 		await this.prefs.savePreferences(newPrefs);
+		console.debug('[debug] [constructed-mulligan-deck] cycleRanks done', nextRank);
 	};
 
 	cycleOpponent = async () => {

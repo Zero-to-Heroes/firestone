@@ -1,5 +1,7 @@
 TODO:
 
+- be able to cycle through options in mulligan widget
+- remember prefs (widget positions, etc)
 - have all widgets functional
 - notifications (component and service, which relies on OW)
 - mercenaries widgets (move store to shared module, like game-state)
