@@ -585,11 +585,16 @@ const getDynamicFilters = (
 		// Discover X Mechanic
 		// Discover Deathrattle
 		case CardIds.CarrionStudies:
-		case CardIds.AssimilatingBlight_GDB_478:
 		case CardIds.AvantGardening_EDR_488:
 			return (c) =>
 				hasCorrectType(c, CardType.MINION) &&
 				hasMechanic(c, GameTag.DEATHRATTLE) &&
+				canBeDiscoveredByClass(c, options.currentClass);
+		case CardIds.AssimilatingBlight_GDB_478:
+			return (c) =>
+				hasCorrectType(c, CardType.MINION) &&
+				hasMechanic(c, GameTag.DEATHRATTLE) &&
+				hasCost(c, '==', 3) &&
 				canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.StoryOfUmbra_DINO_415:
 			return (c) =>
