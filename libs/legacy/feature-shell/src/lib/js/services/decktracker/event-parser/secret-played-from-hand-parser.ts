@@ -9,6 +9,7 @@ import { rememberCardsInHand } from './card-played-from-hand-parser';
 import { modifyDecksForSpecialCards } from './deck-contents-utils';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
+import { revealCard } from '../game-state/card-reveal';
 
 export class SecretPlayedFromHandParser implements EventParser {
 	constructor(
@@ -43,6 +44,7 @@ export class SecretPlayedFromHandParser implements EventParser {
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const card = this.helper.findCardInZone(deck.hand, cardId, entityId);
+		// console.debug('[secret-played-from-hand] card', entityId, cardId, card, deck.hand);
 		const secretClass: string = gameEvent.additionalData.playerClass;
 		const creatorCardId = gameEvent.additionalData ? gameEvent.additionalData.creatorCardId : null;
 
@@ -66,9 +68,10 @@ export class SecretPlayedFromHandParser implements EventParser {
 			},
 		});
 
-		const newHand: readonly DeckCard[] = this.helper.removeSingleCardFromZone(deck.hand, cardId, entityId)[0];
+		const knownCardId = cardWithZone.cardId || cardId;
+		const newHand: readonly DeckCard[] = this.helper.removeSingleCardFromZone(deck.hand, knownCardId, entityId)[0];
 		const handAfterCardsRemembered = rememberCardsInHand(
-			cardId,
+			knownCardId,
 			isCardCountered,
 			newHand,
 			this.helper,
@@ -86,6 +89,7 @@ export class SecretPlayedFromHandParser implements EventParser {
 			this.allCards,
 		);
 
+		// console.debug('getting valid secrets', card.cardName, card, creatorCardId, card.creatorCardId);
 		const secretsConfig = await this.secretConfig.getValidSecrets(
 			currentState.metadata,
 			secretClass,
@@ -102,7 +106,7 @@ export class SecretPlayedFromHandParser implements EventParser {
 					? deck.secrets
 					: ([
 							...deck.secrets,
-							BoardSecret.create(entityId, cardId, secretsConfig),
+							BoardSecret.create(entityId, knownCardId, secretsConfig),
 						] as readonly BoardSecret[]),
 				cardsPlayedThisTurn:
 					isCardCountered || gameEvent.type === GameEvent.SECRET_PUT_IN_PLAY
@@ -119,7 +123,7 @@ export class SecretPlayedFromHandParser implements EventParser {
 
 		const newCardPlayedThisMatch: ShortCardWithTurn = {
 			entityId: cardWithZone.entityId,
-			cardId: cardWithZone.cardId,
+			cardId: knownCardId,
 			side: isPlayer ? 'player' : 'opponent',
 			turn: +currentState.currentTurn,
 			timestamp: new Date().getTime(),
@@ -136,7 +140,7 @@ export class SecretPlayedFromHandParser implements EventParser {
 				});
 
 		const [playerDeckAfterSpecialCaseUpdate, opponentDeckAfterSpecialCaseUpdate] = modifyDecksForSpecialCards(
-			cardWithZone.cardId,
+			knownCardId,
 			cardWithZone.entityId,
 			isCardCountered,
 			deckAfterSpecialCaseUpdate,
@@ -145,9 +149,15 @@ export class SecretPlayedFromHandParser implements EventParser {
 			this.helper,
 			this.i18n,
 		);
+
+		const playerDeckAfterReveal = isPlayer ? playerDeckAfterSpecialCaseUpdate : opponentDeckAfterSpecialCaseUpdate;
+		const opponentDeckAfterReveal = isPlayer
+			? opponentDeckAfterSpecialCaseUpdate
+			: revealCard(playerDeckAfterSpecialCaseUpdate, cardWithZone, this.allCards);
+
 		return currentState.update({
-			[isPlayer ? 'playerDeck' : 'opponentDeck']: playerDeckAfterSpecialCaseUpdate,
-			[!isPlayer ? 'playerDeck' : 'opponentDeck']: opponentDeckAfterSpecialCaseUpdate,
+			playerDeck: playerDeckAfterReveal,
+			opponentDeck: opponentDeckAfterReveal,
 			cardsPlayedThisMatch: isCardCountered
 				? currentState.cardsPlayedThisMatch
 				: ([...currentState.cardsPlayedThisMatch, newCardPlayedThisMatch] as readonly ShortCard[]),

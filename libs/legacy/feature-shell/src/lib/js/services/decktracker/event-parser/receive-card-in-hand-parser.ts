@@ -278,15 +278,35 @@ export class ReceiveCardInHandParser implements EventParser {
 		switch (creatorCardId) {
 			case CardIds.ElementaryReaction:
 			case CardIds.LadyDeathwhisper_RLK_713:
+			case CardIds.RangariScout_GDB_841:
+				// const sortedHand = [...hand].sort(
+				// 	(a, b) => (a.tags?.[GameTag.ZONE_POSITION] ?? 0) - (b.tags?.[GameTag.ZONE_POSITION] ?? 0),
+				// );
+				// Assume it's already sorted, more or less - the last received card should be the last one, at least
+				// for the cases we are interested in (cards are drawn from the deck, not changed in hand)
 				const positionIndex = hand.map((c) => c.entityId).indexOf(entityId);
+				// console.debug(
+				// 	'positionIndex',
+				// 	entityId,
+				// 	positionIndex,
+				// 	sortedHand,
+				// 	sortedHand.map((c) => c.tags?.[GameTag.ZONE_POSITION]),
+				// 	sortedHand.map((c) => c.entityId),
+				// 	sortedHand.map((c) => {
+				// 		const newC = { ...c };
+				// 		return newC.tags;
+				// 	}),
+				// 	sortedHand.map((c) => JSON.stringify(c.tags)),
+				// );
 				// console.debug('positionIndex', positionIndex, hand, entityId, creatorCardId);
 				const card = hand[positionIndex];
 				const linkedCard = hand[positionIndex - 1];
+				// console.debug('linkedCard', linkedCard, card, hand, creatorCardId);
 				const newCard = card.update({
-					cardCopyLink: linkedCard?.entityId,
+					cardCopyLinks: [linkedCard?.entityId],
 				});
 				const newLinkedCard = linkedCard.update({
-					cardCopyLink: card?.entityId,
+					cardCopyLinks: [card?.entityId],
 				});
 				const afterNewCard1 = this.helper.replaceCardInZone(hand, newCard);
 				const afterNewCard2 = this.helper.replaceCardInZone(afterNewCard1, newLinkedCard);

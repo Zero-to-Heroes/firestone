@@ -396,7 +396,7 @@ export const processCardLinks = (
 	helper: DeckManipulationHelper,
 	allCards: CardsFacadeService,
 ): readonly DeckCard[] => {
-	const linkedCardInHand = hand.find((c) => c.cardCopyLink === card.entityId);
+	const linkedCardInHand = hand.find((c) => c.cardCopyLinks?.includes(card.entityId));
 	// console.debug('[card-played] processCardLinks', linkedCardInHand, card, hand);
 	if (!linkedCardInHand) {
 		return hand;

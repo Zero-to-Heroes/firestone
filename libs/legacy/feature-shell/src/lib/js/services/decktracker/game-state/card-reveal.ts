@@ -5,13 +5,13 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 
 // TODO: also check the cardCopyLink, which looks like it does more or less the same thing
 export const revealCard = (deck: DeckState, card: DeckCard, allCards: CardsFacadeService) => {
+	// console.debug('[card-reveal] revealCard', card.entityId, card.cardName, card, deck);
 	const deckStateFromCard = revealRelatedCards(deck, card, allCards);
 	const deckStateFromCreator = revealCardFromCreator(deckStateFromCard, card);
 	return deckStateFromCreator;
 };
 
 const revealCardFromCreator = (deck: DeckState, card: DeckCard) => {
-	// console.debug('[card-reveal]', card.cardName, card, deck);
 	const creatorEntityId = card.creatorEntityId || card.lastAffectedByEntityId;
 	const creatorCardId = card.creatorCardId || card.lastAffectedByCardId;
 	if (!creatorEntityId || !creatorCardId) {
@@ -39,7 +39,9 @@ const revealCardFromCreator = (deck: DeckState, card: DeckCard) => {
 		case CardIds.MeltedMaker:
 		case CardIds.MimicPod:
 		case CardIds.PristineCompass:
-		case CardIds.RangariScout_GDB_841:
+		// case CardIds.RangariScout_GDB_841:
+		// Issue with Rangari Scout: cards are linked by pairs, but a card revealed from a later pair should not cause cards
+		// from the earlier pair to be matched. So when
 		case CardIds.RitualOfLife_DINO_426:
 		case CardIds.RitualOfLife_LastingLifeEnchantment_DINO_426e:
 		case CardIds.SearingReflection_FIR_941:
@@ -62,6 +64,34 @@ const revealCardFromCreator = (deck: DeckState, card: DeckCard) => {
 
 const revealRelatedCards = (deck: DeckState, card: DeckCard, allCards: CardsFacadeService): DeckState => {
 	const refCard = allCards.getCard(card.cardId);
+
+	if (card.cardCopyLinks?.length) {
+		for (const linkedEntityId of card.cardCopyLinks) {
+			const linkedCard = deck.findCard(linkedEntityId);
+			if (linkedCard?.card) {
+				const newCard = linkedCard.card.update({
+					cardId: card.cardId,
+					cardName: card.cardName,
+					rarity: card.rarity,
+					refManaCost: card.refManaCost,
+					cardType: card.cardType,
+				});
+				const newHand =
+					linkedCard.zone === 'hand'
+						? deck.hand.map((c) => (c.entityId === linkedEntityId ? newCard : c))
+						: deck.hand;
+				const newDeck =
+					linkedCard.zone === 'deck'
+						? deck.deck.map((c) => (c.entityId === linkedEntityId ? newCard : c))
+						: deck.deck;
+				deck = deck.update({
+					hand: newHand,
+					deck: newDeck,
+				});
+			}
+		}
+	}
+
 	if (
 		hasMechanic(refCard, GameTag.FABLED) ||
 		hasMechanic(refCard, GameTag.FABLED_PLUS) ||
@@ -106,6 +136,7 @@ const revealRelatedCards = (deck: DeckState, card: DeckCard, allCards: CardsFaca
 			deck: newDeckContents,
 		});
 	}
+
 	return deck;
 };
 

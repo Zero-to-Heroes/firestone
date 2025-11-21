@@ -3,6 +3,7 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
+import { revealCard } from '../game-state/card-reveal';
 
 export class SecretTriggeredParser implements EventParser {
 	constructor(
@@ -38,14 +39,21 @@ export class SecretTriggeredParser implements EventParser {
 			side: isPlayer ? 'player' : 'opponent',
 			turn: +currentState.currentTurn,
 		};
+
 		const newPlayerDeck = deck.update({
 			secrets: newSecrets,
 			otherZone: newOther,
 			secretsTriggeredThisMatch: [...deck.secretsTriggeredThisMatch, secretShortCard],
 		});
 
+		const playerDeckAfterReveal = isPlayer ? newPlayerDeck : currentState.playerDeck;
+		const opponentDeckAfterReveal = isPlayer
+			? currentState.opponentDeck
+			: revealCard(newPlayerDeck, newSecret, this.allCards);
+
 		return Object.assign(new GameState(), currentState, {
-			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
+			playerDeck: playerDeckAfterReveal,
+			opponentDeck: opponentDeckAfterReveal,
 		});
 	}
 

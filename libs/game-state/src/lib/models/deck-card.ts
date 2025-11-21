@@ -78,7 +78,7 @@ export class DeckCard {
 	readonly creatorAdditionalInfo?: any;
 	// When an entity is "copied from" another entity, the game logs store the link only one way.
 	// This can be used to store the link in both ways, when we know about it
-	readonly cardCopyLink?: number;
+	readonly cardCopyLinks?: readonly number[];
 	readonly storedInformation?: StoredInformation | null;
 	readonly guessedInfo: GuessedInfo = {};
 	// readonly tags: readonly { Name: number; Value: number }[] = [];
