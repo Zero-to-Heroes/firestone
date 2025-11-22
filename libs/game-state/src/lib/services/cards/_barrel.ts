@@ -72,3 +72,4 @@ export { UmpireGrasp } from './umpire-grasp';
 export { NightmareFuel } from './nightmare-fuel';
 export { ConfluxFuture } from './conflux-future';
 export { IncriminatingPsychic } from './incriminating-psychic';
+export { TimelessCausality } from './timeless-causality';

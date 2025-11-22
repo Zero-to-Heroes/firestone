@@ -1,13 +1,19 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState, GameState } from '@firestone/game-state';
+import { cardsInfoCache, DeckCard, DeckState, GameState } from '@firestone/game-state';
 import { TempCardIds } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { globalEffectPowers, globalEffectPowersAlsoOpponent } from '../../hs-utils';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
+import { SpecialCaseParserCard } from 'libs/game-state/src/lib/services/cards/_card.type';
 
-const SPECIAL_CARD_POWERS = [CardIds.LorekeeperPolkelt, CardIds.OrderInTheCourt, ...globalEffectPowers];
+const SPECIAL_CARD_POWERS = [
+	CardIds.LorekeeperPolkelt,
+	CardIds.OrderInTheCourt,
+	CardIds.TimelessCausality_TIME_061,
+	...globalEffectPowers,
+];
 
 export class SpecialCardPowerTriggeredParser implements EventParser {
 	constructor(
@@ -68,7 +74,6 @@ export class SpecialCardPowerTriggeredParser implements EventParser {
 		switch (cardId) {
 			case CardIds.LorekeeperPolkelt:
 			case CardIds.OrderInTheCourt:
-			case CardIds.TimelessCausality_TIME_061:
 				return deck.update({
 					deck: deck.deck.map((card) =>
 						card.update({
@@ -78,6 +83,10 @@ export class SpecialCardPowerTriggeredParser implements EventParser {
 						}),
 					),
 				});
+			default:
+				return (
+					cardsInfoCache[cardId as keyof typeof cardsInfoCache] as SpecialCaseParserCard
+				)?.specialCaseParser?.(deck);
 		}
 		return deck;
 	}

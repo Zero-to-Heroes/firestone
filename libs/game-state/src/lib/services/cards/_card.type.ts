@@ -48,3 +48,6 @@ type GuessCardIdFunction = (
 // 	appliesOnEvent(): GameEvent['type'];
 // 	parse(currentState: GameState, events: GameEvent[]): Promise<GameState>;
 // }
+export interface SpecialCaseParserCard extends Card {
+	specialCaseParser: (deck: DeckState) => DeckState;
+}
