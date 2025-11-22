@@ -53,13 +53,29 @@ export class DeckstringOverrideParser implements EventParser {
 		// And add back the other cards
 		const finalDeckContents = [...newDeckContents, ...cardsNotInInitialDeck];
 
+		// Keep the position of cards
+		let cardsWithPositionsToAssign = initialDeck.deck.filter(
+			(card) => card.positionFromBottom != null || card.positionFromTop != null,
+		);
+		const cardsWithPositions = finalDeckContents.map((card) => {
+			const initialCard = cardsWithPositionsToAssign.find((c) => c.cardId === card.cardId);
+			if (initialCard != null) {
+				cardsWithPositionsToAssign = cardsWithPositionsToAssign.filter((c) => c !== initialCard);
+				return card.update({
+					positionFromBottom: initialCard.positionFromBottom,
+					positionFromTop: initialCard.positionFromTop,
+				});
+			}
+			return card;
+		});
+
 		const newDeck = Object.assign(new DeckState(), initialDeck, {
 			deckstring: deckstring,
 			name: deckName,
 			deckList: cardsFromDeckstring,
 			sideboards: sideboards,
-			deck: finalDeckContents as readonly DeckCard[],
-		} as DeckState);
+			deck: cardsWithPositions,
+		});
 		return Object.assign(new GameState(), currentState, {
 			[playerOrOpponent === 'opponent' ? 'opponentDeck' : 'playerDeck']: newDeck,
 		});
