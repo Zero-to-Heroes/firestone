@@ -57,6 +57,15 @@ import { CardsFacadeService, ILocalizationService } from '@firestone/shared/fram
 				>
 				</fs-numeric-input-with-arrows>
 				<fs-numeric-input-with-arrows
+					class="input deep-blues"
+					[label]="'battlegrounds.sim.deep-blues' | fsTranslate"
+					[helpTooltip]="'battlegrounds.sim.deep-blues-tooltip' | fsTranslate"
+					[value]="deepBluesPlayed"
+					[minValue]="0"
+					(fsModelUpdate)="onDeepBluesPlayedChanged($event)"
+				>
+				</fs-numeric-input-with-arrows>
+				<fs-numeric-input-with-arrows
 					class="input goldrinn-attack"
 					[label]="'battlegrounds.sim.goldrinn-attack' | fsTranslate"
 					[helpTooltip]="'battlegrounds.sim.goldrinn-attack-tooltip' | fsTranslate"
@@ -256,6 +265,7 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 		this.undeadAttackBonus = value?.UndeadAttackBonus ?? 0;
 		this.hauntedCarapaceAttackBonus = value?.HauntedCarapaceAttackBonus ?? 0;
 		this.hauntedCarapaceHealthBonus = value?.HauntedCarapaceHealthBonus ?? 0;
+		this.deepBluesPlayed = value?.DeepBluesPlayed ?? 0;
 		this.goldrinnAttackBonus = value?.GoldrinnBuffAtk ?? 0;
 		this.goldrinnHealthBonus = value?.GoldrinnBuffHealth ?? 0;
 		this.frostlingBonus = value?.FrostlingBonus ?? 0;
@@ -286,6 +296,7 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 	undeadAttackBonus: number;
 	hauntedCarapaceAttackBonus: number;
 	hauntedCarapaceHealthBonus: number;
+	deepBluesPlayed: number;
 	goldrinnAttackBonus: number;
 	goldrinnHealthBonus: number;
 	frostlingBonus: number;
@@ -332,6 +343,10 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 
 	onHauntedCarapaceHealthBonusChanged(value: number) {
 		this.hauntedCarapaceHealthBonus = value;
+	}
+
+	onDeepBluesPlayedChanged(value: number) {
+		this.deepBluesPlayed = value;
 	}
 
 	onGoldrinnAttackBonusChanged(value: number) {
@@ -390,6 +405,7 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 			UndeadAttackBonus: this.undeadAttackBonus,
 			HauntedCarapaceAttackBonus: this.hauntedCarapaceAttackBonus,
 			HauntedCarapaceHealthBonus: this.hauntedCarapaceHealthBonus,
+			DeepBluesPlayed: this.deepBluesPlayed,
 			GoldrinnBuffAtk: this.goldrinnAttackBonus,
 			GoldrinnBuffHealth: this.goldrinnHealthBonus,
 			FrostlingBonus: this.frostlingBonus,

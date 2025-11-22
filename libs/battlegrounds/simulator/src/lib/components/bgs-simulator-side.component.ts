@@ -170,6 +170,7 @@ export class BgsSimulatorSideComponent {
 	eternalLegion: number;
 	hauntedCarapaceAttackBonus: number;
 	hauntedCarapaceHealthBonus: number;
+	deepBluesPlayed: number;
 	goldrinnAttackBonus: number;
 	goldrinnHealthBonus: number;
 	tavernSpellsCastThisGame: number;
@@ -276,6 +277,7 @@ export class BgsSimulatorSideComponent {
 		this.undeadArmy = this._player.player?.globalInfo?.UndeadAttackBonus ?? 0;
 		this.hauntedCarapaceAttackBonus = this._player.player?.globalInfo?.HauntedCarapaceAttackBonus ?? 0;
 		this.hauntedCarapaceHealthBonus = this._player.player?.globalInfo?.HauntedCarapaceHealthBonus ?? 0;
+		this.deepBluesPlayed = this._player.player?.globalInfo?.DeepBluesPlayed ?? 0;
 		this.goldrinnAttackBonus = this._player.player?.globalInfo?.GoldrinnBuffAtk ?? 0;
 		this.goldrinnHealthBonus = this._player.player?.globalInfo?.GoldrinnBuffHealth ?? 0;
 		this.eternalLegion = this._player.player?.globalInfo?.EternalKnightsDeadThisGame ?? 0;
