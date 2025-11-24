@@ -4,6 +4,7 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DeckCard, GuessedInfo } from '../../models/deck-card';
 import { DeckState } from '../../models/deck-state';
 import { GeneratingCard } from './_card.type';
+import { AllCardsService } from '@firestone-hs/reference-data';
 
 export const ConfluxFuture: GeneratingCard = {
 	cardIds: [CardIds.PastConflux_FutureConfluxToken_TIME_436t2],
@@ -15,7 +16,7 @@ export const ConfluxFuture: GeneratingCard = {
 		creatorCardId: string,
 		creatorEntityId: number,
 		createdIndex: number,
-		allCards: CardsFacadeService,
+		allCards: AllCardsService,
 	): string | null => {
 		// We want to take the latest one, since it has just been created on board
 		return (

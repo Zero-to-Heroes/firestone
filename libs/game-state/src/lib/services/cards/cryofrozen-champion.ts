@@ -4,6 +4,7 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DeckCard, GuessedInfo } from '../../models/deck-card';
 import { DeckState } from '../../models/deck-state';
 import { GeneratingCard } from './_card.type';
+import { AllCardsService } from '@firestone-hs/reference-data';
 
 export const CryofrozenChampion: GeneratingCard = {
 	cardIds: [CardIds.CryofrozenChampion_TIME_613],
@@ -11,7 +12,7 @@ export const CryofrozenChampion: GeneratingCard = {
 		card: DeckCard,
 		deckState: DeckState,
 		opponentDeckState: DeckState,
-		allCards: CardsFacadeService,
+		allCards: AllCardsService,
 		creatorEntityId: number,
 		options?: {
 			positionInHand?: number;

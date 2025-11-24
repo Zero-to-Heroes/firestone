@@ -5,6 +5,7 @@ import { DeckCard, GuessedInfo } from '../../models/deck-card';
 import { DeckState } from '../../models/deck-state';
 import { Metadata } from '../../models/metadata';
 import { GeneratingCard } from './_card.type';
+import { AllCardsService } from '@firestone-hs/reference-data';
 
 export const BarakKodobane: GeneratingCard = {
 	cardIds: [CardIds.BarakKodobane_BAR_551, CardIds.BarakKodobane_CORE_BAR_551],
@@ -14,7 +15,7 @@ export const BarakKodobane: GeneratingCard = {
 		card: DeckCard,
 		deckState: DeckState,
 		opponentDeckState: DeckState,
-		allCards: CardsFacadeService,
+		allCards: AllCardsService,
 		creatorEntityId: number,
 		options?: {
 			positionInHand?: number;

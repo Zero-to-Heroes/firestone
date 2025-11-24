@@ -5,6 +5,7 @@ import { DeckCard, GuessedInfo } from '../../models/deck-card';
 import { DeckState } from '../../models/deck-state';
 import { Metadata } from '../../models/metadata';
 import { GeneratingCard } from './_card.type';
+import { AllCardsService } from '@firestone-hs/reference-data';
 
 export const RingmasterWhatley: GeneratingCard = {
 	cardIds: [CardIds.RingmasterWhatley],
@@ -14,7 +15,7 @@ export const RingmasterWhatley: GeneratingCard = {
 		card: DeckCard,
 		deckState: DeckState,
 		opponentDeckState: DeckState,
-		allCards: CardsFacadeService,
+		allCards: AllCardsService,
 		creatorEntityId: number,
 		options?: {
 			positionInHand?: number;

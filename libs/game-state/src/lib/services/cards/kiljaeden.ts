@@ -4,6 +4,7 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DeckCard, GuessedInfo } from '../../models/deck-card';
 import { DeckState } from '../../models/deck-state';
 import { GeneratingCard } from './_card.type';
+import { AllCardsService } from '@firestone-hs/reference-data';
 
 export const Kiljaeden: GeneratingCard = {
 	cardIds: [CardIds.Kiljaeden_KiljaedensPortalEnchantment_GDB_145e],
@@ -11,7 +12,7 @@ export const Kiljaeden: GeneratingCard = {
 		card: DeckCard,
 		deckState: DeckState,
 		opponentDeckState: DeckState,
-		allCards: CardsFacadeService,
+		allCards: AllCardsService,
 		creatorEntityId: number,
 		options?: {
 			positionInHand?: number;

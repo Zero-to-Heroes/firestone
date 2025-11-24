@@ -4,6 +4,7 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DeckCard, GuessedInfo } from '../../models/deck-card';
 import { DeckState } from '../../models/deck-state';
 import { GeneratingCard } from './_card.type';
+import { AllCardsService } from '@firestone-hs/reference-data';
 
 export const NeonInnovation: GeneratingCard = {
 	cardIds: [CardIds.NeonInnovation_TIME_016],
@@ -12,7 +13,7 @@ export const NeonInnovation: GeneratingCard = {
 		card: DeckCard,
 		deckState: DeckState,
 		opponentDeckState: DeckState,
-		allCards: CardsFacadeService,
+		allCards: AllCardsService,
 		creatorEntityId: number,
 		options?: {
 			positionInHand?: number;

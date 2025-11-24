@@ -15,6 +15,7 @@ import { DeckState } from '../../models/deck-state';
 import { Metadata } from '../../models/metadata';
 import { filterCards, hasCorrectType, hasCost } from '../../related-cards/dynamic-pools';
 import { GeneratingCard } from './_card.type';
+import { AllCardsService } from '@firestone-hs/reference-data';
 
 export const EmergencyMeeting: GeneratingCard = {
 	cardIds: [CardIds.EmergencyMeeting_GDB_119],
@@ -24,7 +25,7 @@ export const EmergencyMeeting: GeneratingCard = {
 		card: DeckCard,
 		deckState: DeckState,
 		opponentDeckState: DeckState,
-		allCards: CardsFacadeService,
+		allCards: AllCardsService,
 		creatorEntityId: number,
 		options?: {
 			positionInHand?: number;
@@ -40,7 +41,7 @@ export const EmergencyMeeting: GeneratingCard = {
 			};
 		} else if (card.createdIndex === 2) {
 			possibleCards = filterCards(
-				allCards.getService(),
+				allCards,
 				{
 					format: options?.metadata?.formatType ?? GameFormat.FT_STANDARD,
 					gameType: options?.metadata?.gameType ?? GameType.GT_RANKED,

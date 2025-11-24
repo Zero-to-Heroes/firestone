@@ -27,6 +27,8 @@ import {
 import { DeckState } from '../models/deck-state';
 import { PlayerGameState } from '../models/full-game-state';
 import { GameState } from '../models/game-state';
+import { cardsInfoCache } from '../services/cards/_mapping';
+import { StaticGeneratingCard } from '../services/cards/_card.type';
 
 const IMBUED_HERO_POWERS = [
 	CardIds.BlessingOfTheDragon_EDR_445p,
@@ -78,6 +80,18 @@ const getDynamicRelatedCardIdsInternal = (
 		...inputOptions,
 		initialDecklist: inputOptions.deckState?.deckList?.map((c) => c.cardId) ?? [],
 	};
+
+	const dynamicPoolImpl = cardsInfoCache[cardId] as StaticGeneratingCard;
+	const dynamicPool = dynamicPoolImpl?.dynamicPool?.({
+		cardId,
+		entityId,
+		allCards,
+		inputOptions: options,
+	});
+	if (dynamicPool) {
+		return dynamicPool;
+	}
+
 	switch (cardId) {
 		// Show static list of related card ids as possible options
 		case CardIds.DreamplannerZephrys_ExtravagantTourToken_WORK_027t2:

@@ -1,11 +1,11 @@
-import { GameFormat, GameTag, GameType, ReferenceCard } from '@firestone-hs/reference-data';
+import { AllCardsService, GameFormat, GameTag, GameType, ReferenceCard } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Metadata } from '../../models/metadata';
 import { filterCards as filterCardsOriginal } from '../../related-cards/dynamic-pools';
 
 export const filterCards = (
 	sourceCardId: string,
-	allCards: CardsFacadeService,
+	allCards: AllCardsService,
 	filter: (c: ReferenceCard) => boolean,
 	options?: {
 		positionInHand?: number;
@@ -15,7 +15,7 @@ export const filterCards = (
 	},
 ): readonly string[] => {
 	return filterCardsOriginal(
-		allCards.getService(),
+		allCards,
 		{
 			format: options?.metadata?.formatType ?? GameFormat.FT_STANDARD,
 			gameType: options?.metadata?.gameType ?? GameType.GT_RANKED,

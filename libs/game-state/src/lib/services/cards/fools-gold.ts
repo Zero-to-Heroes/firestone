@@ -6,6 +6,7 @@ import { DeckState } from '../../models/deck-state';
 import { Metadata } from '../../models/metadata';
 import { hasCorrectType } from '../../related-cards/dynamic-pools';
 import { GeneratingCard } from './_card.type';
+import { AllCardsService } from '@firestone-hs/reference-data';
 import { filterCards } from './utils';
 
 export const FoolsGold: GeneratingCard = {
@@ -16,7 +17,7 @@ export const FoolsGold: GeneratingCard = {
 		card: DeckCard,
 		deckState: DeckState,
 		opponentDeckState: DeckState,
-		allCards: CardsFacadeService,
+		allCards: AllCardsService,
 		creatorEntityId: number,
 		options?: {
 			positionInHand?: number;

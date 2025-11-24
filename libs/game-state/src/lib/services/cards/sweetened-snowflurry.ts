@@ -5,6 +5,7 @@ import { DeckCard, GuessedInfo } from '../../models/deck-card';
 import { DeckState } from '../../models/deck-state';
 import { Metadata } from '../../models/metadata';
 import { GeneratingCard } from './_card.type';
+import { AllCardsService } from '@firestone-hs/reference-data';
 
 export const SweetenedSnowflurry: GeneratingCard = {
 	cardIds: [CardIds.SweetenedSnowflurry_TOY_307, CardIds.SweetenedSnowflurry_SweetenedSnowflurryToken_TOY_307t],
@@ -13,7 +14,7 @@ export const SweetenedSnowflurry: GeneratingCard = {
 		card: DeckCard,
 		deckState: DeckState,
 		opponentDeckState: DeckState,
-		allCards: CardsFacadeService,
+		allCards: AllCardsService,
 		creatorEntityId: number,
 		options?: {
 			positionInHand?: number;

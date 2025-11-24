@@ -432,7 +432,7 @@ const guessCardId = (
 				creatorCardId,
 				creatorEntityId,
 				createdIndex,
-				allCards,
+				allCards.getService(),
 			);
 			return guessedCardId ?? cardId;
 	}
