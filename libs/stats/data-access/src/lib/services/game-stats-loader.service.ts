@@ -271,8 +271,8 @@ export class GameStatsLoaderService extends AbstractFacadeService<GameStatsLoade
 			for (const stat of newStats) {
 				try {
 					await this.indexedDb.table<GameStat, string>(MATCH_HISTORY).add(stat);
-				} catch (e) {
-					console.error('[game-stats-loader] error adding stats', e);
+				} catch (e: any) {
+					console.error('[game-stats-loader] error adding stats', e.name, e.message, e.cause, stat.reviewId);
 				}
 			}
 			// await this.indexedDb.table<GameStat, string>(MATCH_HISTORY).bulkAdd(newStats, { allKeys: true });
