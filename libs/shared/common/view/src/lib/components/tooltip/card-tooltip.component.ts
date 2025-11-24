@@ -42,6 +42,7 @@ import { CardTooltipPositionType } from './card-tooltip-position.type';
 				relatedCards: relatedCards$ | async,
 				relativePosition: relativePosition$ | async,
 				displayBuffs: displayBuffs$ | async,
+				maxRelatedCardsToShow: maxRelatedCardsToShow$ | async,
 			} as value"
 		>
 			<div
@@ -78,7 +79,7 @@ import { CardTooltipPositionType } from './card-tooltip-position.type';
 					<div
 						class="related-cards"
 						#relatedCards
-						*ngIf="(value.relatedCards?.length ?? 0) <= MAX_CARDS_TO_SHOW"
+						*ngIf="(value.relatedCards?.length ?? 0) <= value.maxRelatedCardsToShow"
 					>
 						<div
 							*ngIf="hasScrollbar"
@@ -91,7 +92,7 @@ import { CardTooltipPositionType } from './card-tooltip-position.type';
 					</div>
 					<div
 						class="related-cards big-pool"
-						*ngIf="(value.relatedCards?.length ?? 0) > MAX_CARDS_TO_SHOW"
+						*ngIf="(value.relatedCards?.length ?? 0) > value.maxRelatedCardsToShow"
 						[fsTranslate]="'decktracker.card-tooltip-big-pool-text'"
 						[fsTranslateParams]="{ value: value.relatedCards?.length }"
 					></div>
@@ -142,12 +143,11 @@ export class CardTooltipComponent
 	public viewRef: ComponentRef<CardTooltipComponent>;
 	@ViewChild('relatedCards') relatedCards: ElementRef;
 
-	MAX_CARDS_TO_SHOW = 100;
-
 	cards$: Observable<readonly InternalCard[]>;
 	relatedCards$: Observable<readonly InternalCard[]>;
 	relativePosition$: Observable<'left' | 'right'>;
 	displayBuffs$: Observable<boolean>;
+	maxRelatedCardsToShow$: Observable<number>;
 	additionalInfo$: Observable<CardTooltipAdditionalInfo | null | undefined>;
 
 	hasScrollbar: boolean;
@@ -350,6 +350,11 @@ export class CardTooltipComponent
 			map((prefs) => {
 				return prefs.collectionUseHighResImages || prefs.cardTooltipScale > 100;
 			}),
+			shareReplay(1),
+			takeUntil(this.destroyed$),
+		);
+		this.maxRelatedCardsToShow$ = this.prefs.preferences$$.pipe(
+			map((prefs) => prefs.cardTooltipNumberOfRelatedCards),
 			shareReplay(1),
 			takeUntil(this.destroyed$),
 		);

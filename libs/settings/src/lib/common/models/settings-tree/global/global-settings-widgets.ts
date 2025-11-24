@@ -48,6 +48,18 @@ export const globalWidgetSettings = (context: SettingContext): SettingNode => {
 						},
 					},
 					{
+						type: 'slider',
+						field: 'cardTooltipNumberOfRelatedCards',
+						label: context.i18n.translateString('settings.general.widgets.card-tooltip-number-of-related-cards'),
+						tooltip: context.i18n.translateString('settings.general.widgets.card-tooltip-number-of-related-cards-tooltip'),
+						sliderConfig: {
+							min: 5,
+							max: 1000,
+							snapSensitivity: 1,
+							showCurrentValue: true,
+						},
+					},
+					{
 						type: 'toggle',
 						field: 'useGroupedCounters',
 						label: context.i18n.translateString('settings.general.widgets.use-grouped-counters-label'),
