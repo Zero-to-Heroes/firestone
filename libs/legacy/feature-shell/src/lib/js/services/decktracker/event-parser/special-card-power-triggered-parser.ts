@@ -6,7 +6,7 @@ import { GameEvent } from '../../../models/game-event';
 import { globalEffectPowers, globalEffectPowersAlsoOpponent } from '../../hs-utils';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
-import { SpecialCaseParserCard } from 'libs/game-state/src/lib/services/cards/_card.type';
+import { SpecialCaseParserCard } from '@firestone/game-state';
 
 const SPECIAL_CARD_POWERS = [
 	CardIds.LorekeeperPolkelt,
