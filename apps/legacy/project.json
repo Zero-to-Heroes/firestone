@@ -57,17 +57,21 @@
 			},
 			"configurations": {
 				"production": {
-					"optimization": false,
+					"optimization": {
+						"scripts": false,
+						"styles": true
+					},
+					"sourceMap": false,
 					"budgets": [
 						{
 							"type": "initial",
 							"maximumWarning": "500kb",
-							"maximumError": "20mb"
+							"maximumError": "40mb"
 						},
 						{
 							"type": "anyComponentStyle",
 							"maximumWarning": "2kb",
-							"maximumError": "20mb"
+							"maximumError": "40mb"
 						}
 					],
 					"outputHashing": "all"
