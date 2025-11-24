@@ -7,6 +7,7 @@ import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
 const DONT_REVEAL_REMOVED_CARDS = [CardIds.PirateAdmiralHooktusk_TakeTheirSuppliesToken];
+const SILENTLY_REMOVES_FROM_DECK = [CardIds.GaronaHalforcen_KingLlaneToken_TIME_875t];
 
 export class CardRemovedFromDeckParser implements EventParser {
 	constructor(
@@ -54,6 +55,13 @@ export class CardRemovedFromDeckParser implements EventParser {
 				cost: gameEvent.additionalData.cost,
 			},
 		)[0];
+		if (SILENTLY_REMOVES_FROM_DECK.includes(removedByCardId as CardIds)) {
+			return currentState.update({
+				[isPlayer ? 'playerDeck' : 'opponentDeck']: deck.update({
+					deck: newDeck,
+				}),
+			});
+		}
 		const refCard = getProcessedCard(card?.cardId, card?.entityId, deck, this.allCards);
 		const cardWithZone = card.update({
 			zone: 'SETASIDE',
