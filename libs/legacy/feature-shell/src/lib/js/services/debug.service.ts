@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 export class DebugService {
 	constructor() {
 		// const debugMode = true;
+		console.log('NODE_ENV', process.env.NODE_ENV);
 		const debugMode = process.env.NODE_ENV === 'production';
 		console.log = this.override(console.log, debugMode);
 		console.warn = this.override(console.warn, debugMode);

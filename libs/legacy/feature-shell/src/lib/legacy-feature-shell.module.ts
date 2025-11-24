@@ -637,6 +637,7 @@ try {
 		overwolf.settings.getExtensionSettings((settingsResult) => {
 			// const sampleRate = settingsResult?.settings?.channel === 'beta' ? 1 : 0.1;
 			process.env['APP_CHANNEL'] = settingsResult?.settings?.channel;
+			console.log('APP_CHANNEL', process.env['APP_CHANNEL']);
 		});
 	});
 } catch (e) {
