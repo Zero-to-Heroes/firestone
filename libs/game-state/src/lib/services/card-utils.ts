@@ -189,7 +189,14 @@ export const addGuessInfoToCard = (
 		default:
 			const guessedInfo = (
 				cardsInfoCache[creatorCardId as keyof typeof cardsInfoCache] as GeneratingCard
-			)?.guessInfo?.(card, deckState, opponentDeckState, allCards.getService(), creatorEntityId, options);
+			)?.guessInfo?.({
+				card,
+				deckState,
+				opponentDeckState,
+				allCards: allCards.getService(),
+				creatorEntityId,
+				options,
+			});
 			return guessedInfo != null
 				? card.update({
 						guessedInfo: {

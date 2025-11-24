@@ -5,7 +5,7 @@ import { DeckCard, GuessedInfo } from '../../models/deck-card';
 import { DeckState } from '../../models/deck-state';
 import { Metadata } from '../../models/metadata';
 import { canBeDiscoveredByClass, hasCorrectType } from '../../related-cards/dynamic-pools';
-import { GeneratingCard } from './_card.type';
+import { GeneratingCard, GuessInfoInput } from './_card.type';
 import { AllCardsService } from '@firestone-hs/reference-data';
 import { filterCards } from './utils';
 
@@ -13,46 +13,34 @@ export const MismatchedFossils: GeneratingCard = {
 	cardIds: [CardIds.MismatchedFossils_DEEP_001],
 	hasSequenceInfo: true,
 	publicCreator: true,
-	guessInfo: (
-		card: DeckCard,
-		deckState: DeckState,
-		opponentDeckState: DeckState,
-		allCards: AllCardsService,
-		creatorEntityId: number,
-		options?: {
-			positionInHand?: number;
-			tags?: readonly { Name: GameTag; Value: number }[];
-			metadata?: Metadata;
-			validArenaPool?: readonly string[];
-		},
-	): GuessedInfo | null => {
-		const currentClass = deckState.hero?.classes?.[0] ? CardClass[deckState.hero?.classes?.[0]] : '';
-		if (card.createdIndex === 0) {
+	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
+		const currentClass = input.deckState.hero?.classes?.[0] ? CardClass[input.deckState.hero?.classes?.[0]] : '';
+		if (input.card.createdIndex === 0) {
 			return {
 				cardType: CardType.MINION,
 				races: [Race.BEAST],
 				possibleCards: filterCards(
 					MismatchedFossils.cardIds[0],
-					allCards,
+					input.allCards,
 					(c) =>
 						hasCorrectType(c, CardType.MINION) &&
 						hasCorrectTribe(c, Race.BEAST) &&
 						canBeDiscoveredByClass(c, currentClass),
-					options,
+					input.options,
 				),
 			};
-		} else if (card.createdIndex === 1) {
+		} else if (input.card.createdIndex === 1) {
 			return {
 				cardType: CardType.MINION,
 				races: [Race.UNDEAD],
 				possibleCards: filterCards(
 					MismatchedFossils.cardIds[0],
-					allCards,
+					input.allCards,
 					(c) =>
 						hasCorrectType(c, CardType.MINION) &&
 						hasCorrectTribe(c, Race.UNDEAD) &&
 						canBeDiscoveredByClass(c, currentClass),
-					options,
+					input.options,
 				),
 			};
 		}

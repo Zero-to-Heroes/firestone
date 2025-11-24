@@ -21,26 +21,6 @@ export type GeneratingCard = Card & {
 // }
 
 // When drawing a card
-type GuessInfoFunction = (
-	card: DeckCard,
-	deckState: DeckState,
-	opponentDeckState: DeckState,
-	allCards: AllCardsService,
-	creatorEntityId: number,
-	options?: {
-		positionInHand?: number;
-		tags?: readonly { Name: GameTag; Value: number }[];
-	},
-) => GuessedInfo | null;
-type GuessCardIdFunction = (
-	cardId: string,
-	deckState: DeckState,
-	opponentDeckState: DeckState,
-	creatorCardId: string,
-	creatorEntityId: number,
-	createdIndex: number,
-	allCards: AllCardsService,
-) => string | null;
 export interface GuessInfoInput {
 	card: DeckCard;
 	deckState: DeckState;
@@ -52,6 +32,16 @@ export interface GuessInfoInput {
 		tags?: readonly { Name: GameTag; Value: number }[];
 	};
 }
+type GuessInfoFunction = (input: GuessInfoInput) => GuessedInfo | null;
+type GuessCardIdFunction = (
+	cardId: string,
+	deckState: DeckState,
+	opponentDeckState: DeckState,
+	creatorCardId: string,
+	creatorEntityId: number,
+	createdIndex: number,
+	allCards: AllCardsService,
+) => string | null;
 // Wait until this is correctly refactored
 // export interface SelectorCard extends Card {
 // 	selector: (info: HighlightSide) => Selector;
