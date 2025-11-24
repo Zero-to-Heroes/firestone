@@ -62,20 +62,41 @@ export class DebugService {
 					if (!!arg?.includes && arg?.includes('ResizeObserver loop limit exceeded')) {
 						continue;
 					}
-					argsString +=
-						(
-							JSON.stringify(arguments[i], function (key, value) {
-								if (typeof value === 'object' && value !== null) {
-									if (cache.indexOf(value) !== -1) {
-										// Circular reference found, discard key
-										return;
-									}
-									// Store value in our collection
-									cache.push(value);
+
+					// Extract error details if it's an Error object
+					// This is critical because JSON.stringify on Error objects returns {} and loses the stack trace
+					let errorDetails = '';
+					if (arg instanceof Error) {
+						errorDetails =
+							`\n[ERROR OBJECT]\n` +
+							`Name: ${arg.name}\n` +
+							`Message: ${arg.message}\n` +
+							`Stack: ${arg.stack || 'No stack trace'}\n` +
+							`String: ${String(arg)}\n`;
+					}
+
+					const stringified =
+						JSON.stringify(arguments[i], function (key, value) {
+							// Preserve Error object properties that JSON.stringify normally omits
+							if (value instanceof Error) {
+								return {
+									name: value.name,
+									message: value.message,
+									stack: value.stack,
+									toString: String(value),
+								};
+							}
+							if (typeof value === 'object' && value !== null) {
+								if (cache.indexOf(value) !== -1) {
+									// Circular reference found, discard key
+									return;
 								}
-								return value;
-							}) || ''
-						).substring(0, 1000) + ' | ';
+								cache.push(value);
+							}
+							return value;
+						}) || '';
+
+					argsString += errorDetails + stringified.substring(0, 1000) + ' | ';
 					cache = null; // Enable garbage collection + " | "
 				}
 				oldWarnFunc.apply(console, ['(ERROR)', argsString]);
