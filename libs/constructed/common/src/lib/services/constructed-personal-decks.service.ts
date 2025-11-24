@@ -56,9 +56,11 @@ export class ConstructedPersonalDecksService extends AbstractFacadeService<Const
 	}
 
 	public async deleteDeck(deckstring: string) {
-		const existingDecks = (await this.decks$$.getValueWithInit()) || [];
-		const existingPersonalDeck = existingDecks.filter((d) => d.deckstring).find((d) => d.deckstring === deckstring);
-		console.debug('[deck-delete] existingPersonalDeck', existingPersonalDeck);
+		const existingPersonalDecks = (await this.decks$$.getValueWithInit()) || [];
+		const existingPersonalDeck = existingPersonalDecks
+			.filter((d) => d.deckstring)
+			.find((d) => d.deckstring === deckstring);
+		console.debug('[deck-delete] existingPersonalDeck', existingPersonalDeck, existingPersonalDecks);
 
 		// If the deck has only been created via the deckbuilder and has not been played yet,
 		// we simply remove it
@@ -67,17 +69,21 @@ export class ConstructedPersonalDecksService extends AbstractFacadeService<Const
 		const currentPrefs = await this.prefs.getPreferences();
 		const versionLinks: readonly ConstructedDeckVersions[] = currentPrefs.constructedDeckVersions;
 		const linkedDecks = versionLinks.filter((link) => link.versions.map((v) => v.deckstring).includes(deckstring));
-		const allDecksToDelete = [
+		const allDeckstringsToDelete = [
 			...(linkedDecks?.flatMap((link) => link.versions.map((v) => v.deckstring)) ?? []),
 			deckstring,
 		];
-		console.debug('[deck-delete] allDecksToDelete', allDecksToDelete, linkedDecks);
-		const newDecks = existingDecks.filter((d) => !allDecksToDelete.includes(d.deckstring));
+		console.debug('[deck-delete] allDecksToDelete', allDeckstringsToDelete, linkedDecks);
+		const newDecks = existingPersonalDecks.filter((d) => !allDeckstringsToDelete.includes(d.deckstring));
+		// Deleted the personal deck - not the one from the games
 		this.decks$$.next(newDecks);
 
-		for (const deck of allDecksToDelete) {
-			const deckStat = existingDecks.find((d) => d.deckstring === deck);
-			const totalGamesWithDeck = deckStat?.totalGames ?? 0;
+		const allGames = await this.gameStats.gameStats$$.getValueWithInit();
+
+		for (const deck of allDeckstringsToDelete) {
+			// const personalDeckStat = existingPersonalDecks.find((d) => d.deckstring === deck);
+			const gamesWithDeck = allGames?.stats?.filter((g) => g.playerDecklist === deck);
+			const totalGamesWithDeck = gamesWithDeck?.length ?? 0;
 			// Only add a deletion date for decks that have games associated with them
 			if (totalGamesWithDeck == 0) {
 				await this.prefs.setDeckDeleteDates(deck, []);

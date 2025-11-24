@@ -29,6 +29,7 @@ export class HearthpwnService extends AbstractFacadeService<HearthpwnService> {
 	}
 
 	protected async init() {
+		return;
 		console.debug('[hearthpwn] init');
 		this.collectionManager = AppInjector.get(COLLECTION_MANAGER_SERVICE_TOKEN);
 		this.http = AppInjector.get(HttpClient);
