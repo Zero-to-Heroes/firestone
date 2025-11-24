@@ -1095,6 +1095,7 @@ const internalGiftCreators = [
 	CardIds.TimethiefRafaam_ExplorerRafaamToken_TIME_005t3,
 	CardIds.SandArtElemental_TOY_513,
 	CardIds.TalanjiOfTheGraves_TIME_619,
+	CardIds.EverburningPhoenix_EverburningEnchantment_FIR_919e,
 ];
 for (const cardId of Object.keys(cardsInfoCache)) {
 	const card = cardsInfoCache[cardId];
