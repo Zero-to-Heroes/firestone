@@ -24,7 +24,7 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 })
 export class PackDisplayComponent {
 	@Input() set pack(value: PackResult) {
-		this.cards = value.cards;
+		this.cards = value.cards.filter((c) => !!c);
 	}
 
 	cards: readonly CardPackResult[];

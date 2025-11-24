@@ -143,7 +143,7 @@ const willBeActive = (
 		// Played 2 spells this turn
 		case CardIds.Wartbringer:
 			return (
-				playerDeck.cardsPlayedThisTurn.filter((c) => c.cardType?.toUpperCase() === CardType[CardType.SPELL])
+				playerDeck.cardsPlayedThisTurn.filter((c) => c?.cardType?.toUpperCase() === CardType[CardType.SPELL])
 					.length >= 2
 			);
 		// Cast a spell last turn
@@ -153,7 +153,7 @@ const willBeActive = (
 		case CardIds.ShatteredRumbler:
 		case CardIds.Aftershocks_DEEP_010:
 		case CardIds.Torrent:
-			return playerDeck.cardsPlayedLastTurn.some((c) => c.cardType?.toUpperCase() === CardType[CardType.SPELL]);
+			return playerDeck.cardsPlayedLastTurn.some((c) => c?.cardType?.toUpperCase() === CardType[CardType.SPELL]);
 		// Spells cast this game
 		case CardIds.MeddlesomeServant_YOG_518:
 			return (
