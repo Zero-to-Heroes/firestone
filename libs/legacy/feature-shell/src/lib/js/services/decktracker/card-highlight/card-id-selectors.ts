@@ -3267,6 +3267,11 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), weapon);
 		case CardIds.SwiftscaleTrickster:
 			return and(side(inputSide), or(inHand, inDeck), spell);
+		case CardIds.Swindle:
+			return highlightConditions(
+				and(side(inputSide), or(inHand, inDeck), spell),
+				and(side(inputSide), or(inHand, inDeck), minion),
+			);
 		case CardIds.SwinetuskShank:
 			return and(
 				side(inputSide),
