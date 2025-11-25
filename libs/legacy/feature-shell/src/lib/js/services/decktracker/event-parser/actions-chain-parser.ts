@@ -8,6 +8,7 @@ import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 import { WaveshapingParser } from './action-chains/waveshaping-parser';
 import { BirdwatchingParser } from './action-chains/birdwatching';
+import { DoommaidenParser } from './action-chains/doommaiden';
 
 export class ActionsChainParser implements EventParser {
 	public static readonly REGISTERED_EVENT_TYPES = [
@@ -18,6 +19,8 @@ export class ActionsChainParser implements EventParser {
 		GameEvent.ENTITY_CHOSEN,
 		GameEvent.LINKED_ENTITY,
 		GameEvent.MINION_ON_BOARD_ATTACK_UPDATED,
+		GameEvent.CARD_PLAYED,
+		GameEvent.CARD_STOLEN,
 	];
 
 	private events: GameEvent[] = [];
@@ -28,6 +31,7 @@ export class ActionsChainParser implements EventParser {
 			new FuturisticForefatherParser(),
 			// new WaveshapingParser(helper)
 			new BirdwatchingParser(helper, cards),
+			new DoommaidenParser(helper, cards),
 		];
 		this.chainParser = {};
 		for (const parser of parsers) {
@@ -42,6 +46,10 @@ export class ActionsChainParser implements EventParser {
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		if (gameEvent.type === GameEvent.GAME_START || gameEvent.type === GameEvent.GAME_END) {
 			this.events = [];
+			return currentState;
+		}
+
+		if (currentState.isBattlegrounds()) {
 			return currentState;
 		}
 
