@@ -515,8 +515,12 @@ const getDynamicFilters = (
 				hasMechanic(c, GameTag.SECRET) &&
 				c.classes?.includes(CardClass[CardClass.MAGE]);
 		case CardIds.SneedsOldShredder_CORE_GVG_114:
-		case CardIds.WishingWell_WW_415:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectRarity(c, CardRarity.LEGENDARY);
+		case CardIds.WishingWell_WW_415:
+			return (c) =>
+				hasCorrectType(c, CardType.MINION) &&
+				hasCorrectRarity(c, CardRarity.LEGENDARY) &&
+				fromAnotherClass(c, options.currentClass);
 		case CardIds.MerchantOfLegend_TLC_514:
 			return (c) =>
 				hasCorrectType(c, CardType.MINION) &&
