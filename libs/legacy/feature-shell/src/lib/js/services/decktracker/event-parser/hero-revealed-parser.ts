@@ -19,14 +19,13 @@ export class HeroRevealedParser implements EventParser {
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
 		const existingHero = deck.hero ?? HeroCard.create({});
+		const dbCard = this.allCards.getCard(cardId);
 		const newHero = existingHero.update({
 			cardId: cardId,
 			entityId: entityId,
 			maxHealth: health,
 			initialClasses: existingHero.initialClasses ?? existingHero.classes ?? [],
-			classes:
-				this.allCards.getCard(cardId)?.classes?.map((c) => CardClass[c]) ??
-				([CardClass.NEUTRAL] as readonly CardClass[]),
+			classes: dbCard.classes?.length > 1 ? existingHero.classes : dbCard.classes?.map((c) => CardClass[c]),
 		});
 		const newPlayerDeck = deck.update({
 			hero: newHero,

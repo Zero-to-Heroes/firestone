@@ -22,10 +22,11 @@ export class HeroChangedParser implements EventParser {
 			initialClasses: !!deck.hero.initialClasses?.length
 				? deck.hero.initialClasses
 				: !!deck.hero.classes?.length
-				? deck.hero.classes
-				: [],
-			classes: dbCard.classes?.map((c) => CardClass[c]),
+					? deck.hero.classes
+					: [],
+			classes: dbCard.classes?.length > 1 ? deck.hero.classes : dbCard.classes?.map((c) => CardClass[c]),
 		});
+		console.debug('[debug] changing hero from', deck.hero, 'to', newHero, dbCard.classes);
 
 		const newPlayerDeck = deck.update({
 			hero: newHero,
