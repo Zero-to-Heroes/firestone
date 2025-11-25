@@ -3763,6 +3763,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, beast);
 		case CardIds.WishOfTheNewMoon_EDR_460:
 			return and(side(inputSide), or(inDeck, inHand), spell);
+		case CardIds.WishUponAStar_TOY_877:
+			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.WitchingHour:
 			return and(side(inputSide), inGraveyard, beast);
 		case CardIds.WitherTheWeakTavernBrawl:
