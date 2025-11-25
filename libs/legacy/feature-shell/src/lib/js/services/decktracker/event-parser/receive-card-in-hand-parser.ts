@@ -383,13 +383,21 @@ const guessCardId = (
 	}
 
 	// Assuming the mini is always created first, which seems to be the case
-	if (createdIndex === 0 && allCards.getCard(creatorCardId).mechanics?.includes(GameTag[GameTag.MINIATURIZE])) {
+	if (
+		createdIndex === 0 &&
+		allCards.getCard(creatorCardId).mechanics?.includes(GameTag[GameTag.MINIATURIZE]) &&
+		!allCards.getCard(creatorCardId).mechanics?.includes(GameTag[GameTag.GIGANTIFY])
+	) {
 		const tentativeMiniCard = allCards.getCard(creatorCardId + 't');
 		if (tentativeMiniCard.mechanics?.includes(GameTag[GameTag.MINI])) {
 			return tentativeMiniCard.id;
 		}
 	}
-	if (createdIndex === 0 && allCards.getCard(creatorCardId).mechanics?.includes(GameTag[GameTag.GIGANTIFY])) {
+	if (
+		createdIndex === 0 &&
+		allCards.getCard(creatorCardId).mechanics?.includes(GameTag[GameTag.GIGANTIFY]) &&
+		!allCards.getCard(creatorCardId).mechanics?.includes(GameTag[GameTag.MINIATURIZE])
+	) {
 		const tentativeMiniCard = allCards.getCard(creatorCardId + 't');
 		if (tentativeMiniCard.mechanics?.includes(GameTag[GameTag.GIGANTIC])) {
 			return tentativeMiniCard.id;
