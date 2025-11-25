@@ -539,6 +539,7 @@ const internalGiftCreators = [
 	CardIds.LocuuuustsTavernBrawl,
 	CardIds.LokenJailerOfYoggSaron,
 	CardIds.LorewalkerCho,
+	CardIds.LorewalkerCho_CORE_EX1_100,
 	CardIds.LorewalkerChoLegacy,
 	CardIds.LostInThePark_FeralFriendsyToken, // Guff the Tough
 	CardIds.LotusAgents_WON_332,
