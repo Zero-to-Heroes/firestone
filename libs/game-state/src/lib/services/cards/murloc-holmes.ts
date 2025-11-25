@@ -14,7 +14,10 @@ export const MurlocHolmes: GeneratingCard = {
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
 		if (input.card.createdIndex === 0) {
 			return {
-				possibleCards: input.opponentDeckState.cardsInStartingHand?.map((c) => c.cardId) ?? [],
+				possibleCards:
+					input.opponentDeckState.cardsInStartingHand?.map(
+						(c) => c.cardId ?? input.opponentDeckState.findCard(c.entityId)?.card?.cardId,
+					) ?? [],
 			};
 		} else if (input.card.createdIndex === 1) {
 			return {
