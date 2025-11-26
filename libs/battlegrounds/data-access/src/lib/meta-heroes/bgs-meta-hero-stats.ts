@@ -95,7 +95,7 @@ export const buildTiers = (
 		return [];
 	}
 
-	const heroStats = [...stats].sort(sortByProperties((s) => [s.averagePosition]));
+	const heroStats = stats.filter((s) => !!s.baseCardId?.length).sort(sortByProperties((s) => [s.averagePosition]));
 	const { mean, standardDeviation } = getStandardDeviation(heroStats.map((stat) => stat.averagePosition));
 
 	return [
