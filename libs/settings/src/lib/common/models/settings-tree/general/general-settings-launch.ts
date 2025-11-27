@@ -38,6 +38,13 @@ export const generalLaunchSettings = (context: SettingContext): SettingNode => {
 					},
 					{
 						type: 'toggle',
+						field: 'closeToTray',
+						label: context.i18n.translateString('settings.general.launch.close-to-tray-label'),
+						tooltip: context.i18n.translateString('settings.general.launch.close-to-tray-tooltip'),
+						advancedSetting: true,
+					},
+					{
+						type: 'toggle',
 						field: 'dontShowNewVersionNotif',
 						label: context.i18n.translateString('settings.general.launch.hide-release-notes-label'),
 						tooltip: context.i18n.translateString('settings.general.launch.hide-release-notes-tooltip'),

@@ -187,8 +187,8 @@ export class OverwolfService {
 	}
 
 	public async getOpenWindows() {
-		return new Promise<any>((resolve) => {
-			overwolf.windows.getOpenWindows((res: any) => {
+		return new Promise<overwolf.Dictionary<Window>>((resolve) => {
+			overwolf.windows.getOpenWindows((res: overwolf.Dictionary<Window>) => {
 				resolve(res);
 			});
 		});

@@ -39,7 +39,10 @@ export class ControlCloseComponent implements AfterViewInit {
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private ow: OverwolfService, private prefs: PreferencesService) {}
+	constructor(
+		private ow: OverwolfService,
+		private prefs: PreferencesService,
+	) {}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
@@ -69,9 +72,12 @@ export class ControlCloseComponent implements AfterViewInit {
 		if (this.closeAll && !isRunning && !areBothMainAndBgWindowsOpen && this.windowId) {
 			console.log('[control-close] closing all app windows');
 			this.ow.hideWindow(this.windowId);
-			this.prefs.updateRemotePreferences();
-			const openWindows = await this.ow.getOpenWindows();
+			const prefs = await this.prefs.getPreferences();
+			let openWindows = await this.ow.getOpenWindows();
 			for (const [name] of Object.entries(openWindows)) {
+				if (prefs.closeToTray && name === OverwolfService.MAIN_WINDOW) {
+					continue;
+				}
 				this.ow.closeWindowFromName(name);
 			}
 		} else if (this.eventProvider) {

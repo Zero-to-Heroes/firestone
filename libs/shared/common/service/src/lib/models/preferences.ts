@@ -79,6 +79,7 @@ export class Preferences implements IPreferences {
 
 	readonly launchAppOnGameStart: boolean = true;
 	readonly showSessionRecapOnExit: boolean = true;
+	readonly closeToTray: boolean = false;
 	readonly shareGamesWithVS: boolean = true;
 	readonly setAllNotifications: boolean = true;
 	readonly notificationsPosition: CornerPosition = 'bottom-right';
