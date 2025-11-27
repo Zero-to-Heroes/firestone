@@ -31,7 +31,13 @@ export class ElectronAngularInjector implements Injector {
 
 	/**
 	 * Register a service with the underlying ElectronAppInjector
-	 * Supports both Type<T> and InjectionToken<T>
+	 * 
+	 * Supports:
+	 * - Concrete classes: `register(MyService, instance)`
+	 * - Abstract classes: `register(ILocalizationService, instance)`
+	 * - InjectionTokens: `register(MY_TOKEN, instance)`
+	 * 
+	 * Note: TypeScript interfaces must use InjectionToken, not the interface directly
 	 */
 	register<T>(token: Token<T>, instance: T): void {
 		electronAppInjector.register(token, instance);

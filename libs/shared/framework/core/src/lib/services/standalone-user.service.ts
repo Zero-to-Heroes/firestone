@@ -1,21 +1,19 @@
 import { Injectable } from '@angular/core';
-import { SubscriberAwareBehaviorSubject, sleep } from '@firestone/shared/framework/common';
+import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { combineLatest, debounceTime, distinctUntilChanged, filter } from 'rxjs';
 import { AbstractFacadeService, waitForReady } from './abstract-facade-service';
 import { ADS_SERVICE_TOKEN, IAdsService } from './ads-service.interface';
 import { ApiRunner } from './api-runner';
 import { AppInjector } from './app-injector';
-import { OverwolfService } from './overwolf.service';
 import { CurrentUser, IUserService } from './user.service.interface';
 import { WindowManagerService } from './window-manager.service';
 
 const USER_MAPPING_UPDATE_URL = 'https://gpiulkkg75uipxcgcbfr4ixkju0ntere.lambda-url.us-west-2.on.aws/';
 
 @Injectable()
-export class UserService extends AbstractFacadeService<UserService> implements IUserService {
+export class StandaloneUserService extends AbstractFacadeService<StandaloneUserService> implements IUserService {
 	public user$$: SubscriberAwareBehaviorSubject<CurrentUser | null>;
 
-	private ow: OverwolfService;
 	private api: ApiRunner;
 	private ads: IAdsService;
 
@@ -30,7 +28,6 @@ export class UserService extends AbstractFacadeService<UserService> implements I
 	protected async init() {
 		this.user$$ = new SubscriberAwareBehaviorSubject<CurrentUser | null>(null);
 		this.api = AppInjector.get(ApiRunner);
-		this.ow = AppInjector.get(OverwolfService);
 		this.ads = AppInjector.get(ADS_SERVICE_TOKEN);
 
 		await waitForReady(this.ads);
@@ -51,10 +48,10 @@ export class UserService extends AbstractFacadeService<UserService> implements I
 		const user = await this.retrieveUserInfo();
 		this.user$$.next(user);
 
-		this.ow.addLoginStateChangedListener(async () => {
-			const user = await this.retrieveUserInfo();
-			this.user$$.next(user);
-		});
+		// this.ow.addLoginStateChangedListener(async () => {
+		// 	const user = await this.retrieveUserInfo();
+		// 	this.user$$.next(user);
+		// });
 	}
 
 	public async getCurrentUser(): Promise<CurrentUser | null> {
@@ -62,30 +59,36 @@ export class UserService extends AbstractFacadeService<UserService> implements I
 	}
 
 	private async retrieveUserInfo() {
-		let user = await this.ow.getCurrentUser();
-		// console.log('[user-service] retrieved user info', user);
-		while (user?.username && !user.avatar) {
-			// console.log('[user-service] no avatar yet', user);
-			user = await this.ow.getCurrentUser();
-			await sleep(500);
-		}
-		return user;
+		console.warn('[user-service] sending back fake user info');
+		const result: CurrentUser = {
+			userId: '123',
+			username: 'test',
+			avatar: 'https://example.com/avatar.png',
+			channel: 'test',
+			machineId: '123',
+			partnerId: 123,
+			parameters: {},
+			installParams: {},
+			installerExtension: {},
+		};
+		return result;
 	}
 
 	private async sendCurrentUser(user: CurrentUser | null, isPremium: boolean) {
-		// Don't send anything in dev to allow for impersonation
-		if (process.env['NODE_ENV'] !== 'production') {
-			console.warn('[user-service] not sending user mapping in dev');
-			return;
-		}
+		return;
+		// // Don't send anything in dev to allow for impersonation
+		// if (process.env['NODE_ENV'] !== 'production') {
+		// 	console.warn('[user-service] not sending user mapping in dev');
+		// 	return;
+		// }
 
-		// console.log('[user-service] sending current user', user, isPremium);
-		if (!!user?.username) {
-			await this.api.callPostApi(USER_MAPPING_UPDATE_URL, {
-				userId: user.userId,
-				userName: user.username,
-				isPremium: isPremium,
-			});
-		}
+		// // console.log('[user-service] sending current user', user, isPremium);
+		// if (!!user?.username) {
+		// 	await this.api.callPostApi(USER_MAPPING_UPDATE_URL, {
+		// 		userId: user.userId,
+		// 		userName: user.username,
+		// 		isPremium: isPremium,
+		// 	});
+		// }
 	}
 }

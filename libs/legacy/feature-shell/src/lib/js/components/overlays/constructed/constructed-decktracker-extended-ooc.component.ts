@@ -155,7 +155,7 @@ export class ConstructedDecktrackerExtendedOocComponent
 		this.allDeckMulliganInfo$ = deckstring$.pipe(
 			tap((info) => console.debug('[mulligan] will get mulligan info', info)),
 			distinctUntilChanged(),
-			switchMap((deckstring) => this.mulligan.getMulliganAdvice$(deckstring, { useDeckFormat: true })),
+			switchMap((deckstring) => this.mulligan.getMulliganAdvice(deckstring, { useDeckFormat: true })),
 			tap((info) => console.debug('[mulligan] received mulligan info', info)),
 			filter((advice) => !!advice),
 			this.mapData((guide) => {

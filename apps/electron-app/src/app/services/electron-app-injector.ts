@@ -1,9 +1,23 @@
 import { InjectionToken, Type } from '@angular/core';
 
 /**
- * Token type that can be either a class Type or an InjectionToken
+ * Token type that can be either a class Type (including abstract classes), or an InjectionToken
+ *
+ * Note: TypeScript interfaces cannot be used as DI tokens at runtime.
+ * - For abstract classes (like ILocalizationService), use the class directly
+ * - For actual TypeScript interfaces, use InjectionToken<T>
+ *
+ * Example:
+ * ```typescript
+ * // Abstract class (works directly)
+ * electronInjector.register(ILocalizationService, instance);
+ *
+ * // Interface (must use InjectionToken)
+ * const MY_INTERFACE_TOKEN = new InjectionToken<IMyInterface>('IMyInterface');
+ * electronInjector.register(MY_INTERFACE_TOKEN, instance);
+ * ```
  */
-export type Token<T> = Type<T> | InjectionToken<T>;
+export type Token<T> = Type<T> | InjectionToken<T> | (abstract new (...args: any[]) => T);
 
 /**
  * Simple dependency injection container for Electron environment
@@ -25,6 +39,13 @@ export class ElectronAppInjector {
 
 	/**
 	 * Register a service instance with the injector
+	 *
+	 * Supports:
+	 * - Concrete classes: `register(MyService, instance)`
+	 * - Abstract classes: `register(ILocalizationService, instance)`
+	 * - InjectionTokens: `register(MY_TOKEN, instance)`
+	 *
+	 * Note: TypeScript interfaces must use InjectionToken, not the interface directly
 	 */
 	register<T>(token: Token<T>, instance: T): void {
 		this.services.set(token, instance);
@@ -67,13 +88,17 @@ export class ElectronAppInjector {
 	}
 
 	/**
-	 * Get a readable name for a token (Type or InjectionToken)
+	 * Get a readable name for a token (Type, abstract class, or InjectionToken)
 	 */
 	private getTokenName<T>(token: Token<T>): string {
 		if (token instanceof InjectionToken) {
 			return token.toString();
 		}
-		return (token as Type<T>).name || token.toString();
+		// Handle both concrete and abstract classes
+		if (typeof token === 'function') {
+			return (token as Function).name || token.toString();
+		}
+		return String(token);
 	}
 }
 

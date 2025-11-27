@@ -8,6 +8,7 @@ import {
 	ApiRunner,
 	AppInjector,
 	ARENA_DECK_STATS,
+	CurrentUser,
 	IndexedDbService,
 	UserService,
 	WindowManagerService,
@@ -74,7 +75,7 @@ export class ArenaDeckStatsService extends AbstractFacadeService<ArenaDeckStatsS
 	}
 
 	private async loadArenaDeckStats(
-		currentUser: overwolf.profile.GetCurrentUserResult | null,
+		currentUser: CurrentUser | null,
 		skipLocal = false,
 	): Promise<readonly ExtendedDraftDeckStats[] | null> {
 		if (!skipLocal) {

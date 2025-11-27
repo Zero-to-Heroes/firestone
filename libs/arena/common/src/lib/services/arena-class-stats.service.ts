@@ -50,10 +50,10 @@ export class ArenaClassStatsService extends AbstractFacadeService<ArenaClassStat
 					timeFilter === 'all-time'
 						? 'past-20'
 						: timeFilter === 'past-seven'
-							? 'past-7'
-							: timeFilter === 'past-three'
-								? 'past-3'
-								: timeFilter;
+						? 'past-7'
+						: timeFilter === 'past-three'
+						? 'past-3'
+						: timeFilter;
 				const result: ArenaClassStats | null = await this.buildClassStats(timePeriod, modeFilter);
 				console.debug('[arena-class-stats] loaded class stats', result);
 				this.classStats$$.next(result);
@@ -61,16 +61,8 @@ export class ArenaClassStatsService extends AbstractFacadeService<ArenaClassStat
 		});
 	}
 
-	protected override async initElectronMainProcess() {
-		this.registerMainProcessMethod(
-			'buildClassStatsInternal',
-			(timePeriod: string, modeFilter: ArenaModeFilterType) =>
-				this.buildClassStatsInternal(timePeriod, modeFilter),
-		);
-	}
-
 	public async buildClassStats(timePeriod: string, modeFilter: ArenaModeFilterType): Promise<ArenaClassStats | null> {
-		return this.callOnMainProcess<ArenaClassStats | null>('buildClassStatsInternal', timePeriod, modeFilter);
+		return this.mainInstance.buildClassStatsInternal(timePeriod, modeFilter);
 	}
 
 	private async buildClassStatsInternal(

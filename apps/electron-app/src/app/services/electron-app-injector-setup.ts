@@ -1,8 +1,9 @@
 import { GameNativeStateStoreService } from '@firestone/app/services';
-import { ArenaDraftManagerService, ArenaMulliganGuideService } from '@firestone/arena/common';
+import { ArenaCardStatsService, ArenaDraftManagerService, ArenaMulliganGuideService } from '@firestone/arena/common';
 import { BgsBattleSimulationMockExecutorService, BgsBattleSimulationService } from '@firestone/battlegrounds/core';
 import {
 	BattlegroundsQuestsService,
+	BattlegroundsTrinketsService,
 	BgsBoardHighlighterService,
 	BgsInGameHeroSelectionGuardianService,
 	BgsInGameQuestsGuardianService,
@@ -54,6 +55,7 @@ import {
 } from '@firestone/memory';
 // import { CustomAppearanceService } from '@firestone/settings';
 import {
+	DiskCacheService,
 	GameStatusService,
 	LOG_FILE_BACKEND,
 	LogListenerService,
@@ -69,13 +71,18 @@ import {
 	CardsFacadeService,
 	CardsFacadeStandaloneService,
 	IAdsService,
+	ILocalizationService,
 	LocalizationStandaloneService,
 	LocalStorageService,
 	OwUtilsService,
+	StandaloneUserService,
+	USER_SERVICE_TOKEN,
+	UserService,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
 import { GameStatsLoaderService } from '@firestone/stats/data-access';
 import { ElectronAngularInjector } from './electron-angular-injector';
+import { ElectronDiskCacheService } from './electron-disk-cache.service';
 import { ElectronLogFileBackendService } from './electron-log-file-backend.service';
 import { GameEventsElectronService } from './game-events-electron.service';
 import { LowLevelUtilsElectronService } from './low-level-utils-electron.service';
@@ -203,6 +210,7 @@ export const buildAppInjector = () => {
 	// TODO: translation service
 	const i18n = new LocalizationStandaloneService(allCardsRaw, null);
 	electronInjector.register(LocalizationStandaloneService, i18n);
+	electronInjector.register(ILocalizationService, i18n);
 
 	const helper = new DeckManipulationHelper(allCards, i18n);
 	electronInjector.register(DeckManipulationHelper, helper);
@@ -359,6 +367,25 @@ export const buildAppInjector = () => {
 
 	const constructedNavigation = new ConstructedNavigationService(windowManager);
 	electronInjector.register(ConstructedNavigationService, constructedNavigation);
+
+	const bgsTrinkets = new BattlegroundsTrinketsService(windowManager);
+	electronInjector.register(BattlegroundsTrinketsService, bgsTrinkets);
+
+	const bgsTrinketsGuardian = new BgsInGameTrinketsGuardianService(windowManager);
+	electronInjector.register(BgsInGameTrinketsGuardianService, bgsTrinketsGuardian);
+
+	const userService = new StandaloneUserService(windowManager);
+	electronInjector.register(StandaloneUserService, userService);
+	electronInjector.register(UserService, userService as any as UserService);
+	electronInjector.register(USER_SERVICE_TOKEN, userService);
+
+	const diskCache = new ElectronDiskCacheService(preferences);
+	electronInjector.register(DiskCacheService, diskCache as any as DiskCacheService);
+
+	const arenaCardStats = new ArenaCardStatsService(windowManager);
+	electronInjector.register(ArenaCardStatsService, arenaCardStats);
+
+	const cardsHighlight = new CardsHighlightService(windowManager);
 
 	return electronInjector;
 };

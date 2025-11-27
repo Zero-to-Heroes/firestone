@@ -17,8 +17,10 @@ import {
 	AppInjector,
 	CardsFacadeService,
 	IndexedDbService,
+	IUserService,
 	MATCH_HISTORY,
-	OverwolfService,
+	USER_SERVICE_TOKEN,
+	waitForReady,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
 import { distinctUntilChanged, filter } from 'rxjs';
@@ -34,12 +36,13 @@ export class GameStatsLoaderService extends AbstractFacadeService<GameStatsLoade
 	private patchInfo: PatchInfo;
 
 	private api: ApiRunner;
-	private ow: OverwolfService;
+	// private ow: OverwolfService;
 	private prefs: PreferencesService;
 	private allCards: CardsFacadeService;
 	private diskCache: DiskCacheService;
 	private patchesConfig: PatchesConfigService;
 	private indexedDb: IndexedDbService;
+	private user: IUserService;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'gameStatsLoader', () => !!this.gameStats$$);
@@ -52,14 +55,14 @@ export class GameStatsLoaderService extends AbstractFacadeService<GameStatsLoade
 	protected async init() {
 		this.gameStats$$ = new SubscriberAwareBehaviorSubject<GameStats>(null);
 		this.api = AppInjector.get(ApiRunner);
-		this.ow = AppInjector.get(OverwolfService);
 		this.prefs = AppInjector.get(PreferencesService);
 		this.allCards = AppInjector.get(CardsFacadeService);
 		this.diskCache = AppInjector.get(DiskCacheService);
 		this.patchesConfig = AppInjector.get(PatchesConfigService);
 		this.indexedDb = AppInjector.get(IndexedDbService);
+		this.user = AppInjector.get(USER_SERVICE_TOKEN);
 
-		await this.patchesConfig.isReady();
+		await waitForReady(this.patchesConfig, this.user);
 
 		this.gameStats$$.onFirstSubscribe(async () => {
 			console.debug('[game-stats-loader] first subscriber, loading stats');
@@ -155,7 +158,7 @@ export class GameStatsLoaderService extends AbstractFacadeService<GameStatsLoade
 	}
 
 	private async refreshGameStats(fullRetrieve: boolean) {
-		const user = await this.ow.getCurrentUser();
+		const user = await this.user.getCurrentUser();
 		const prefs = await this.prefs.getPreferences();
 		const input = {
 			userId: user.userId,

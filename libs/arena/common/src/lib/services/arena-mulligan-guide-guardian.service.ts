@@ -65,7 +65,7 @@ export class ArenaMulliganGuideGuardianService extends AbstractFacadeService<Are
 	}
 
 	private addDevMode() {
-		if (process.env['NODE_ENV'] === 'production') {
+		if (process.env['NODE_ENV'] === 'production' || typeof window === 'undefined') {
 			return;
 		}
 

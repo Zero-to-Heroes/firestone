@@ -11,6 +11,7 @@ import {
 	ApiRunner,
 	AppInjector,
 	ARENA_REWARDS,
+	CurrentUser,
 	IndexedDbService,
 	OverwolfService,
 	UserService,
@@ -96,9 +97,7 @@ export class ArenaRewardsService extends AbstractFacadeService<ArenaRewardsServi
 		await this.indexedDb.table<ArenaRewardInfo, string>(ARENA_REWARDS).bulkPut(newRewards);
 	}
 
-	private async loadArenaRewards(
-		currentUser: overwolf.profile.GetCurrentUserResult | null,
-	): Promise<readonly ArenaRewardInfo[] | null> {
+	private async loadArenaRewards(currentUser: CurrentUser | null): Promise<readonly ArenaRewardInfo[] | null> {
 		const localRewards = await this.indexedDb.table<ArenaRewardInfo, string>(ARENA_REWARDS).toArray();
 		if (!!localRewards?.length) {
 			console.log('[arena-rewards] returning rewards from indexedDb', localRewards.length);

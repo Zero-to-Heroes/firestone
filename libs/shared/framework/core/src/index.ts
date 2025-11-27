@@ -21,6 +21,8 @@ export * from './lib/services/local-storage';
 export * from './lib/services/overwolf.service';
 export * from './lib/services/ow-utils.service';
 export * from './lib/services/processing-queue.service';
+export * from './lib/services/standalone-user.service';
 export * from './lib/services/user.service';
+export * from './lib/services/user.service.interface';
 export * from './lib/services/window-manager.service';
 export * from './lib/shared-framework-core.module';

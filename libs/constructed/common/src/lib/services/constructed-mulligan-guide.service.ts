@@ -615,155 +615,73 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 		this.mulliganAdvice$$ = new BehaviorSubject<MulliganGuide | null>(null);
 	}
 
-	public getMulliganAdvice$(
-		deckstring: string,
-		options?: MulliganGuideOptions,
-	): Observable<MulliganGuideWithDeckStats | null> {
-		return this.mainInstance.getMulliganAdviceInternal$(deckstring, options);
+	protected override async initElectronMainProcess() {
+		this.registerMainProcessMethod(
+			'getMulliganAdviceInternal',
+			(deckstring: string, options?: MulliganGuideOptions) => this.getMulliganAdviceInternal(deckstring, options),
+		);
 	}
 
-	private getMulliganAdviceInternal$(
+	public getMulliganAdvice(
 		deckstring: string,
 		options?: MulliganGuideOptions,
-	): Observable<MulliganGuideWithDeckStats | null> {
+	): Promise<MulliganGuideWithDeckStats | null> {
+		return this.callOnMainProcess<MulliganGuideWithDeckStats | null>(
+			'getMulliganAdviceInternal',
+			deckstring,
+			options,
+		);
+	}
+
+	protected async getMulliganAdviceInternal(
+		deckstring: string,
+		options?: MulliganGuideOptions,
+	): Promise<MulliganGuideWithDeckStats | null> {
+		const prefs = await this.prefs.getPreferences();
 		const deckDefinition = decode(deckstring);
-		// TODO: use current format of the lobby screen
-		const formatOverride$ = this.prefs.preferences$$.pipe(
-			map((prefs) =>
-				options?.useDeckFormat
-					? (deckDefinition.format as GameFormatEnum)
-					: (prefs.decktrackerMulliganFormatOverride ?? GameFormatEnum.FT_STANDARD),
-			),
-			distinctUntilChanged(),
-		);
-		const playCoinOverride$ = this.prefs.preferences$$.pipe(
-			map((prefs) => prefs.decktrackerMulliganPlayCoinOoc),
-			distinctUntilChanged(),
-		);
-		const playerRank$: Observable<RankBracket> = this.prefs.preferences$$.pipe(
-			map((prefs) => prefs.decktrackerMulliganRankBracket),
-			distinctUntilChanged(),
-		);
-		const opponentClass$: Observable<'all' | string> = this.prefs.preferences$$.pipe(
-			map((prefs) => prefs.decktrackerOocMulliganOpponent),
-			distinctUntilChanged(),
-		);
-		const timeFrame$ = this.prefs.preferences$$.pipe(
-			map((prefs) => prefs.decktrackerMulliganTime),
-			distinctUntilChanged(),
-			shareReplay(1),
+		const format = options?.useDeckFormat
+			? (deckDefinition.format as GameFormatEnum)
+			: (prefs.decktrackerMulliganFormatOverride ?? GameFormatEnum.FT_STANDARD);
+		const playCoin = prefs.decktrackerMulliganPlayCoinOoc;
+		const playerRank = prefs.decktrackerMulliganRankBracket;
+		const opponentClass = prefs.decktrackerOocMulliganOpponent;
+		const timeFrame = prefs.decktrackerMulliganTime;
+		const patchInfo = await this.patches.currentConstructedMetaPatch$$.getValueWithInit();
+		const archetypeForDeck = await this.archetypeService.getArchetypeForDeck(deckstring);
+		const archetypeOverrides = prefs.constructedDeckArchetypeOverrides;
+		const archetypeId = (!!deckstring ? archetypeOverrides[deckstring] : null) ?? archetypeForDeck;
+		const archetype = await this.archetypes.loadNewArchetypeDetails(
+			archetypeId as number,
+			toFormatType(format as any) as GameFormat,
+			timeFrame,
+			playerRank,
 		);
 
-		const archetypeId$ = combineLatest([
-			this.prefs.preferences$$.pipe(
-				map((prefs) => prefs.constructedDeckArchetypeOverrides),
-				distinctUntilChanged(),
-			),
-			this.archetypeService.getArchetypeForDeck(deckstring),
-		]).pipe(
-			map(([overrides, archetypeId]) => (!!deckstring ? overrides[deckstring] : null) ?? archetypeId),
-			distinctUntilChanged(),
-		);
-		const archetype$: Observable<ArchetypeStat | null> = combineLatest([formatOverride$, timeFrame$]).pipe(
-			debounceTime(200),
-			switchMap(([format, timeFrame]) => combineLatest([archetypeId$, playerRank$, of(format), of(timeFrame)])),
-			map(([archetypeId, playerRank, format, timeFrame]) => ({
-				archetypeId: archetypeId,
-				format: format,
-				playerRank: playerRank,
-				timeFrame: timeFrame,
-			})),
-			filter((info) => !!info.format),
-			distinctUntilChanged(
-				(a, b) =>
-					a.archetypeId === b.archetypeId &&
-					a.format === b.format &&
-					a.playerRank === b.playerRank &&
-					a.timeFrame === b.timeFrame,
-			),
-			switchMap(({ archetypeId, format, playerRank, timeFrame }) => {
-				const result = this.archetypes.loadNewArchetypeDetails(
-					archetypeId as number,
-					toFormatType(format as any) as GameFormat,
-					timeFrame,
-					playerRank,
-				);
-				return result;
-			}),
-		);
-		const deckDetails$: Observable<DeckStat | null> = combineLatest([formatOverride$, timeFrame$]).pipe(
-			debounceTime(200),
-			switchMap(([format, timeFrame]) => combineLatest([playerRank$, of(format), of(timeFrame)])),
-			map(([playerRank, format, timeFrame]) => ({
-				format: format,
-				playerRank: playerRank,
-				timeFrame: timeFrame,
-			})),
-			filter((info) => !!info.format),
-			distinctUntilChanged(
-				(a, b) => a.format === b.format && a.playerRank === b.playerRank && a.timeFrame === b.timeFrame,
-			),
-			switchMap(({ format, playerRank, timeFrame }) => {
-				const result = this.archetypes.loadNewDeckDetails(
-					deckstring,
-					toFormatType(format as any) as GameFormat,
-					timeFrame,
-					playerRank,
-				);
-				return result;
-			}),
+		const deckDetails = await this.archetypes.loadNewDeckDetails(
+			deckstring,
+			toFormatType(format as any) as GameFormat,
+			timeFrame,
+			playerRank,
 		);
 		const deckCards = deckDefinition?.cards?.map((card) => card[0]).map((dbfId) => this.allCards.getCard(dbfId).id);
-		const playerDeckMatches$ = this.gameStats.gameStats$$.pipe(
-			map((gameStats) =>
-				gameStats?.stats.filter((s) => s.gameMode === 'ranked').filter((s) => s.playerDecklist === deckstring),
-			),
-			distinctUntilChanged((a, b) => a.length === b.length),
-		);
-		const patchInfo$ = this.patches.currentConstructedMetaPatch$$;
+		const allGames = await this.gameStats.gameStats$$.getValueWithInit();
+		const playerDeckMatches = allGames?.stats
+			.filter((s) => s.gameMode === 'ranked')
+			.filter((s) => s.playerDecklist === deckstring);
 
-		const mulliganAdvice$ = combineLatest([
-			archetype$,
-			deckDetails$,
-			formatOverride$,
-			playerRank$,
-			opponentClass$,
-			timeFrame$,
-			playCoinOverride$,
-			patchInfo$,
-			playerDeckMatches$,
-		]).pipe(
-			map(
-				([
-					archetype,
-					deckDetails,
-					format,
-					playerRank,
-					opponentClass,
-					timeFrame,
-					playCoin,
-					patchInfo,
-					playerDeckMatches,
-				]) => {
-					return this.getStatsFor(
-						deckstring,
-						deckCards,
-						opponentClass,
-						timeFrame,
-						playerRank,
-						format,
-						playCoin ?? 'all',
-						patchInfo,
-						archetype,
-						deckDetails,
-						playerDeckMatches,
-					);
-				},
-			),
-			tap((mulliganAdvice) => console.debug('[mulligan-guide] mulliganAdvice', mulliganAdvice)),
-			shareReplay(1),
+		return this.getStatsFor(
+			deckstring,
+			deckCards,
+			opponentClass,
+			timeFrame,
+			playerRank,
+			format,
+			playCoin ?? 'all',
+			patchInfo,
+			archetype,
+			deckDetails,
+			playerDeckMatches,
 		);
-		return mulliganAdvice$;
 	}
 
 	private getStatsFor(

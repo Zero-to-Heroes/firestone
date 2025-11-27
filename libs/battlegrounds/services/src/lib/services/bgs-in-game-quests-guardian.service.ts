@@ -69,7 +69,7 @@ export class BgsInGameQuestsGuardianService extends AbstractFacadeService<BgsInG
 	}
 
 	private addDevMode() {
-		if (process.env['NODE_ENV'] === 'production') {
+		if (process.env['NODE_ENV'] === 'production' || typeof window === 'undefined') {
 			return;
 		}
 
