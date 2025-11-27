@@ -26,6 +26,7 @@ import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-fa
 import { groupByFunction, sortByProperties } from '../../services/utils';
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 import { CollectionReferenceCard } from './collection-reference-card';
+import { groupByFunction2 } from '@firestone/shared/framework/common';
 
 @Component({
 	standalone: false,
@@ -143,7 +144,7 @@ export class HeroPortraitsComponent extends AbstractSubscriptionStoreComponent i
 		this.unlocked$ = relevantHeroes$.pipe(
 			this.mapData((heroes) => heroes.filter((item) => item.numberOwned > 0).length),
 		);
-		const filteredHeroPortraits$ = combineLatest([
+		this.shownHeroPortraits$ = combineLatest([
 			relevantHeroes$,
 			this.prefs.preferences$$.pipe(
 				this.mapData((prefs) => ({
@@ -152,17 +153,7 @@ export class HeroPortraitsComponent extends AbstractSubscriptionStoreComponent i
 				})),
 				distinctUntilChanged((a, b) => a.category === b.category && a.owned === b.owned),
 			),
-		]).pipe(this.mapData(([heroes, { category, owned }]) => heroes.filter(this.filterCardsOwned(owned))));
-		this.shownHeroPortraits$ = combineLatest([
-			filteredHeroPortraits$,
-			this.prefs.preferences$$.pipe(
-				this.mapData((prefs) => ({
-					category: prefs.collectionActivePortraitCategoryFilter,
-					owned: prefs.collectionActivePortraitOwnedFilter,
-				})),
-				distinctUntilChanged((a, b) => a.category === b.category && a.owned === b.owned),
-			),
-		]).pipe(this.mapData(([portraitCards, { category, owned }]) => this.groupPortraits(portraitCards, category)));
+		]).pipe(this.mapData(([heroes, { category, owned }]) => this.groupPortraits(heroes, category, owned)));
 		this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.collectionCardScale)).subscribe((value) => {
 			const cardScale = value / 100;
 			this.cardWidth = cardScale * this.DEFAULT_CARD_WIDTH;
@@ -193,16 +184,17 @@ export class HeroPortraitsComponent extends AbstractSubscriptionStoreComponent i
 	}
 
 	private groupPortraits(
-		portraitCards: CollectionReferenceCard[],
+		portraitCards: readonly CollectionReferenceCard[],
 		category: CollectionPortraitCategoryFilter,
+		ownedFilter: CollectionPortraitOwnedFilter,
 	): PortraitGroup[] {
 		const groupingFunction = this.buildGroupingFunction(category);
 		const sortingFunction = this.buildSortingFunction(category);
-		const groupedByClass = groupByFunction(groupingFunction)(portraitCards);
+		const groupedByClass = groupByFunction2<CollectionReferenceCard>(portraitCards, groupingFunction);
 		const result = Object.keys(groupedByClass)
 			.map((groupingKey) => ({
 				title: this.buildGroupTitle(category, groupedByClass[groupingKey][0]),
-				portraits: groupedByClass[groupingKey],
+				portraits: groupedByClass[groupingKey].filter(this.filterCardsOwned(ownedFilter)),
 			}))
 			.sort(sortingFunction);
 		return result;
