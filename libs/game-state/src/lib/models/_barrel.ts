@@ -11,3 +11,4 @@ export * from './hero-card';
 export * from './metadata';
 export * from './secret-option';
 export * from './stats-recap';
+export * from './visual-deck-card';

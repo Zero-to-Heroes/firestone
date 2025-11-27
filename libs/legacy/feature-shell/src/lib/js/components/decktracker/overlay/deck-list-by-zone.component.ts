@@ -7,12 +7,11 @@ import {
 	OnDestroy,
 } from '@angular/core';
 import { CardIds, GameTag } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState, getProcessedCard, PLAGUES } from '@firestone/game-state';
+import { DeckCard, DeckState, getProcessedCard, PLAGUES, VisualDeckCard } from '@firestone/game-state';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, debounceTime, filter, Observable, startWith, takeUntil } from 'rxjs';
 import { DeckZone, DeckZoneSection } from '../../../models/decktracker/view/deck-zone';
-import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({

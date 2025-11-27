@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { Sideboard, decode } from '@firestone-hs/deckstrings';
 import { CardIds, GameType } from '@firestone-hs/reference-data';
-import { Metadata } from '@firestone/game-state';
+import { Metadata, VisualDeckCard } from '@firestone/game-state';
 import { Card } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import {
@@ -20,7 +20,6 @@ import {
 	uuidShort,
 } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
-import { VisualDeckCard } from '@models/decktracker/visual-deck-card';
 import {
 	BehaviorSubject,
 	Observable,

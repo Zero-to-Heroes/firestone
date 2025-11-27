@@ -27,6 +27,7 @@ import {
 	ArenaOverlayDraftStatsService,
 } from '@firestone/arena/common';
 import { buildColor } from '@firestone/constructed/view';
+import { VisualDeckCard } from '@firestone/game-state';
 import { ArenaModeFilterType, PatchesConfigService, PreferencesService } from '@firestone/shared/common/service';
 import {
 	AbstractSubscriptionComponent,
@@ -49,7 +50,6 @@ import {
 	takeUntil,
 	tap,
 } from 'rxjs';
-import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 
 @Component({
 	standalone: false,

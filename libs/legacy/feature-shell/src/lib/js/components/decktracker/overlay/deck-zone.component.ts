@@ -9,13 +9,12 @@ import {
 	Output,
 } from '@angular/core';
 import { CardIds } from '@firestone-hs/reference-data';
-import { cardTutors, DeckState, getProcessedCard } from '@firestone/game-state';
+import { cardTutors, DeckState, getProcessedCard, VisualDeckCard } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { DeckZone, DeckZoneSection } from '../../../models/decktracker/view/deck-zone';
-import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 import { SetCard } from '../../../models/set';
 import { groupByFunction } from '../../../services/utils';
 

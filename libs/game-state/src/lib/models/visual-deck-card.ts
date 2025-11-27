@@ -1,6 +1,6 @@
 import { CardClass } from '@firestone-hs/reference-data';
-import { DeckCard } from '@firestone/game-state';
 import { NonFunctionProperties } from '@firestone/shared/framework/common';
+import { DeckCard } from './deck-card';
 
 export class VisualDeckCard extends DeckCard {
 	readonly highlight: 'dim' | 'normal' | 'in-hand';
@@ -15,14 +15,13 @@ export class VisualDeckCard extends DeckCard {
 		super();
 	}
 
-	public static create(base: Partial<NonFunctionProperties<VisualDeckCard>> = {} as VisualDeckCard): VisualDeckCard {
-		// if (base.cardId && !base.cardName) {
-		// 	console.warn('creating deck card without name', base, new Error().stack);
-		// }
+	public static override create(
+		base: Partial<NonFunctionProperties<VisualDeckCard>> = {} as VisualDeckCard,
+	): VisualDeckCard {
 		return Object.assign(new VisualDeckCard(), base);
 	}
 
-	public update(base: Partial<NonFunctionProperties<VisualDeckCard>>): VisualDeckCard {
+	public override update(base: Partial<NonFunctionProperties<VisualDeckCard>>): VisualDeckCard {
 		return Object.assign(new VisualDeckCard(), this, base);
 	}
 }

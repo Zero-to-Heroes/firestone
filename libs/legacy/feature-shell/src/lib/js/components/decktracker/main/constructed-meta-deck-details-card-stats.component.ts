@@ -1,6 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { Sideboard } from '@firestone-hs/deckstrings';
 import { ReferenceCard, getBaseCardId } from '@firestone-hs/reference-data';
+import { VisualDeckCard } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import {
 	AbstractSubscriptionComponent,
@@ -13,7 +14,6 @@ import {
 } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
-import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { ExtendedConstructedCardData } from './constructed-meta-deck-details-view.component';
 
