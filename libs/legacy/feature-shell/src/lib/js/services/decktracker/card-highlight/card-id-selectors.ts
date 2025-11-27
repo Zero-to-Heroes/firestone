@@ -715,16 +715,35 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, protoss);
 		case CardIds.Chronogor_TIME_032:
 			return (input: SelectorInput): SelectorOutput => {
-				const sorted = [...input.deckState.deck].sort(
-					(a, b) => b.getEffectiveManaCost() - a.getEffectiveManaCost(),
-				);
+				const sorted = [...input.deckState.deck]
+					.filter((e) => e.cardId !== CardIds.Chronogor_TIME_032)
+					.sort((a, b) => b.getEffectiveManaCost() - a.getEffectiveManaCost());
+
 				const highestCostMinion = sorted[0];
 				const highestMinionCost = highestCostMinion?.getEffectiveManaCost() ?? 0;
+				const highestCostFilters = [effectiveCostEqual(highestMinionCost)];
+				const highestCostMinions = sorted.filter((e) => e.getEffectiveManaCost() === highestMinionCost);
+				if (highestCostMinions.length === 1) {
+					const newSorted = sorted.filter((e) => e.getEffectiveManaCost() !== highestMinionCost);
+					const secondHighestCostMinion = newSorted[0];
+					const secondHighestMinionCost = secondHighestCostMinion?.getEffectiveManaCost() ?? 0;
+					highestCostFilters.push(effectiveCostEqual(secondHighestMinionCost));
+				}
+
 				const lowestCostMinion = sorted[sorted.length - 1];
 				const lowestMinionCost = lowestCostMinion?.getEffectiveManaCost() ?? 0;
+				const lowestCostFilters = [effectiveCostEqual(lowestMinionCost)];
+				const lowestCostMinions = sorted.filter((e) => e.getEffectiveManaCost() === lowestMinionCost);
+				if (lowestCostMinions.length === 1) {
+					const newSorted = sorted.filter((e) => e.getEffectiveManaCost() !== lowestMinionCost);
+					const secondLowestCostMinion = newSorted[0];
+					const secondLowestMinionCost = secondLowestCostMinion?.getEffectiveManaCost() ?? 0;
+					lowestCostFilters.push(effectiveCostEqual(secondLowestMinionCost));
+				}
+
 				return highlightConditions(
-					and(side(inputSide), inDeck, effectiveCostEqual(highestMinionCost)),
-					and(side(inputSide), inDeck, effectiveCostEqual(lowestMinionCost)),
+					and(side(inputSide), inDeck, or(...lowestCostFilters)),
+					and(side(inputSide), inDeck, or(...highestCostFilters)),
 				)(input);
 			};
 		case CardIds.ChronoLordDeios_TIME_064:
