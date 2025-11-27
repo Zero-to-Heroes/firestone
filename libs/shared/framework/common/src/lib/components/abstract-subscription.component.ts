@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, HostListener, Injectable, OnDestroy, ViewRef } from '@angular/core';
+import { ChangeDetectorRef, HostListener, Injectable, OnDestroy, Optional, ViewRef } from '@angular/core';
 import { Observable, Subject, UnaryFunction, pipe } from 'rxjs';
 import { auditTime, distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
 import { arraysEqual } from '../libs/utils';
@@ -7,7 +7,7 @@ import { arraysEqual } from '../libs/utils';
 export abstract class AbstractSubscriptionComponent implements OnDestroy {
 	protected destroyed$ = new Subject<void>();
 
-	constructor(protected readonly cdr: ChangeDetectorRef) {}
+	constructor(@Optional() protected readonly cdr?: ChangeDetectorRef) {}
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
@@ -27,7 +27,7 @@ export abstract class AbstractSubscriptionComponent implements OnDestroy {
 			tap((filter) =>
 				setTimeout(() => {
 					if (!(this.cdr as ViewRef)?.destroyed) {
-						this.cdr.detectChanges();
+						this.cdr!.detectChanges();
 					}
 				}, 0),
 			),

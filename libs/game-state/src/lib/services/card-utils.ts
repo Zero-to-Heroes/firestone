@@ -67,7 +67,7 @@ export const getProcessedCard = (
 	return refCard;
 };
 
-export const getCost = (card: DeckCard, deckState: DeckState, allCards: CardsFacadeService): number | null => {
+export const getCost = (card: DeckCard, deckState: DeckState, allCards: CardsFacadeService): number => {
 	const refCard = getProcessedCard(card.cardId, card.entityId, deckState, allCards);
 	const isStarship = refCard.mechanics?.includes(GameTag[GameTag.STARSHIP]);
 	if (isStarship) {
@@ -78,7 +78,7 @@ export const getCost = (card: DeckCard, deckState: DeckState, allCards: CardsFac
 		const cost = pieces.reduce((a, b) => a + (b.cost ?? 0), 0);
 		return cost;
 	}
-	return card?.getEffectiveManaCost?.() ?? card?.actualManaCost ?? card?.refManaCost ?? refCard.cost;
+	return card?.getEffectiveManaCost?.() ?? card?.actualManaCost ?? card?.refManaCost ?? refCard.cost ?? 0;
 };
 
 export const getCardType = (

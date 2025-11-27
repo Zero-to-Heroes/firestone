@@ -5,7 +5,7 @@ import { AbstractFacadeService, ApiRunner, AppInjector, WindowManagerService } f
 const META_HERO_STRATEGIES_URL =
 	'https://static.zerotoheroes.com/hearthstone/data/battlegrounds-strategies/bgs-hero-strategies.gz.json';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class BgsMetaHeroStrategiesService extends AbstractFacadeService<BgsMetaHeroStrategiesService> {
 	public strategies$$: SubscriberAwareBehaviorSubject<BgsHeroStrategies | null>;
 

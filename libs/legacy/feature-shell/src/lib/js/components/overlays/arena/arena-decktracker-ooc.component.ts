@@ -27,7 +27,7 @@ import {
 	ArenaOverlayDraftStatsService,
 } from '@firestone/arena/common';
 import { buildColor } from '@firestone/constructed/view';
-import { VisualDeckCard } from '@firestone/game-state';
+import { CardsHighlightFacadeService, VisualDeckCard } from '@firestone/game-state';
 import { ArenaModeFilterType, PatchesConfigService, PreferencesService } from '@firestone/shared/common/service';
 import {
 	AbstractSubscriptionComponent,
@@ -38,7 +38,6 @@ import {
 	uuidShort,
 } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
-import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
 import {
 	BehaviorSubject,
 	combineLatest,

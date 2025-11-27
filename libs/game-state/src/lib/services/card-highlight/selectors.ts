@@ -1,4 +1,3 @@
-import { getSi7Locale } from '@components/game-counters/definitions/si7-counter';
 import {
 	sets as ALL_SETS,
 	CardClass,
@@ -7,15 +6,17 @@ import {
 	DkruneTypes,
 	GameTag,
 	LIBRAM_IDS,
-	Locale,
 	Race,
 	RarityTYpe,
 	RELIC_IDS,
 	SetId,
 	SpellSchool,
 } from '@firestone-hs/reference-data';
-import { EXTENDED_STARSHIP_CARDS, getCost, getProcessedCard, isCardCreated, PLAGUES } from '@firestone/game-state';
 import { HighlightSide } from '@firestone/shared/framework/core';
+import { EXTENDED_STARSHIP_CARDS } from '../../counters/impl/next-starship-launch';
+import { isCardCreated } from '../../models/deck-card';
+import { getCost, getProcessedCard } from '../card-utils';
+import { PLAGUES } from '../game-events/event-parser/special-cases/plagues-parser';
 import { Selector, SelectorInput } from './cards-highlight-common.service';
 
 export const CONCOCTION_GENERATORS = [
@@ -34,7 +35,7 @@ export const or = (...filters: Selector[]): Selector => {
 	return (input: SelectorInput) => filters.filter((f) => !!f).some((filter) => filter(input));
 };
 
-export const orWithHighlight = (...filters: Selector[]): Selector => {
+export const orWithHighlight = (...filters: (Selector | null)[]): Selector | null => {
 	return (input: SelectorInput) => {
 		let shouldHighlight = false;
 		for (const filter of filters.filter((f) => !!f)) {
@@ -132,7 +133,7 @@ export const effectiveCostLess =
 		getCost(input.deckCard, input.deckState, input.allCards) < cost;
 
 export const effectiveCostLessThanRemainingMana = (input: SelectorInput): boolean =>
-	getCost(input.deckCard, input.deckState, input.allCards) < input.deckState.hero.manaLeft;
+	getCost(input.deckCard, input.deckState, input.allCards) < (input.deckState.hero?.manaLeft ?? 0);
 
 export const effectiveCostMore =
 	(cost: number) =>
@@ -158,7 +159,7 @@ export const baseCostEqual =
 export const baseCostLessThan =
 	(cost: number) =>
 	(input: SelectorInput): boolean =>
-		input.card?.cost < cost;
+		(input.card?.cost ?? 0) < cost;
 
 export const inInitialDeck = (input: SelectorInput): boolean => !isCardCreated(input.deckCard);
 export const notInInitialDeck = (input: SelectorInput): boolean => isCardCreated(input.deckCard);
@@ -171,7 +172,7 @@ export const inStartingHand = (input: SelectorInput): boolean =>
 export const excludeEntityId =
 	(entityId: number) =>
 	(input: SelectorInput): boolean =>
-		input?.entityId && input?.entityId != entityId;
+		input?.entityId != null && input.entityId != entityId;
 
 export const lastAffectedByCardId =
 	(cardId: CardIds) =>
@@ -180,7 +181,9 @@ export const lastAffectedByCardId =
 		const affectedEntityIds = [input.deckCard.lastAffectedByEntityId].filter((id) => !!id);
 		const entityToCardIds = affectedEntityIds
 			.map((entityId) =>
-				input.deckState.getAllCardsInDeck().find((c) => c.entityId === entityId || c.entityId === -entityId),
+				input.deckState
+					.getAllCardsInDeck()
+					.find((c) => c.entityId === entityId || c.entityId === -(entityId ?? 0)),
 			)
 			.map((c) => c?.cardId)
 			.filter((id) => !!id);
@@ -188,7 +191,8 @@ export const lastAffectedByCardId =
 		return allCardIds.includes(cardId);
 	};
 
-export const healthBiggerThanAttack = (input: SelectorInput): boolean => input.card.health > input.card.attack;
+export const healthBiggerThanAttack = (input: SelectorInput): boolean =>
+	(input.card?.health ?? 0) > (input.card?.attack ?? 0);
 
 export const attackGreaterThan =
 	(attack: number) =>
@@ -235,13 +239,13 @@ export const cardIs =
 
 // Fix issues where there are multiple entities with the same entityId, because the card got transformed
 export const entityIs =
-	(...entities: readonly { entityId: number; cardId: string }[]) =>
+	(...entities: readonly { entityId: number | undefined | null; cardId: string | undefined | null }[]) =>
 	(input: SelectorInput): boolean =>
 		!!entities?.filter((e) => e?.entityId != null)?.length &&
 		input.entityId != null &&
 		!!entities
 			.filter((e) => e?.entityId != null)
-			.find((e) => Math.abs(e.entityId) === Math.abs(input.entityId) && e.cardId === input.cardId);
+			.find((e) => Math.abs(e.entityId ?? -1) === Math.abs(input.entityId ?? 0) && e.cardId === input.cardId);
 
 export const spellPlayedThisMatch = (input: SelectorInput): boolean =>
 	input.deckState?.spellsPlayedThisMatch.some(
@@ -309,7 +313,7 @@ const hasReference =
 	(mechanic: GameTag) =>
 	(input: SelectorInput): boolean => {
 		const refCard = getProcessedCard(input.cardId, input.entityId, input.deckState, input.allCards);
-		return refCard?.referencedTags?.includes(GameTag[mechanic]);
+		return refCard?.referencedTags?.includes(GameTag[mechanic]) ?? false;
 	};
 export const aura = hasMechanic(GameTag.PALADIN_AURA);
 export const barrelOfSludge = hasMechanicStr('BARREL_OF_SLUDGE');
@@ -373,15 +377,16 @@ export const taunt = hasMechanic(GameTag.TAUNT);
 export const tradeable = hasMechanic(GameTag.TRADEABLE);
 export const windfury = hasMechanic(GameTag.WINDFURY);
 
-export const isSi7 = (input: SelectorInput): boolean =>
-	Object.values(Locale)
-		.filter((loc) => loc === null || isNaN(Number(loc)))
-		.filter((loc) => loc !== Locale[Locale.UNKNOWN])
-		.some((locale: string) => input.card?.name?.includes(getSi7Locale(locale)));
+// TODO: use tag instead of runtime check
+export const isSi7 = (input: SelectorInput): boolean => false;
+// Object.values(Locale)
+// 	.filter((loc) => loc === null || isNaN(Number(loc)))
+// 	.filter((loc) => loc !== Locale[Locale.UNKNOWN])
+// 	.some((locale: string) => input.card?.name?.includes(getSi7Locale(locale)));
 
 export const summonsTreant = (input: SelectorInput): boolean =>
-	input.card?.relatedCardDbfIds?.some((c) => input.allCards.getCard(c)?.isTreant);
-export const isTreant = (input: SelectorInput): boolean => input.card?.isTreant;
+	input.card?.relatedCardDbfIds?.some((c) => input.allCards.getCard(c)?.isTreant) ?? false;
+export const isTreant = (input: SelectorInput): boolean => input.card?.isTreant ?? false;
 
 export const relic = cardIs(...RELIC_IDS);
 
@@ -395,7 +400,8 @@ export const spellSchool =
 		spellSchool == null
 			? false
 			: input.card?.spellSchool === SpellSchool[spellSchool] ||
-				input.deckCard?.guessedInfo?.spellSchools?.includes(spellSchool);
+				input.deckCard?.guessedInfo?.spellSchools?.includes(spellSchool) ||
+				false;
 export const arcane = spellSchool(SpellSchool.ARCANE);
 export const fel = spellSchool(SpellSchool.FEL);
 export const fire = spellSchool(SpellSchool.FIRE);
@@ -418,7 +424,7 @@ export const canTargetFriendlyCharacter = (input: SelectorInput): boolean => {
 };
 
 export const spellSchoolPlayedThisMatch = (input: SelectorInput): boolean =>
-	input.deckState?.uniqueSpellSchools?.includes(input.card?.spellSchool);
+	input.deckState?.uniqueSpellSchools?.includes(input.card?.spellSchool ?? '') ?? false;
 
 export const passive = hasMechanic(GameTag.DUNGEON_PASSIVE_BUFF);
 export const cardType =
@@ -445,7 +451,9 @@ export const givesArmor = hasMechanicStr('GIVES_ARMOR');
 export const race =
 	(race: Race) =>
 	(input: SelectorInput): boolean =>
-		race == null ? false : input.card?.races?.includes(Race[race]) || input.card?.races?.includes(Race[Race.ALL]);
+		race == null
+			? false
+			: input.card?.races?.includes(Race[race]) || input.card?.races?.includes(Race[Race.ALL]) || false;
 export const beast = race(Race.BEAST);
 export const demon = race(Race.DEMON);
 export const dragon = race(Race.DRAGON);
@@ -467,19 +475,21 @@ export const raceIn =
 	(input: SelectorInput): boolean => {
 		return !races?.length
 			? false
-			: input.card?.races?.includes(Race[Race.ALL]) || input.card?.races?.some((r) => races.includes(Race[r]));
+			: input.card?.races?.includes(Race[Race.ALL]) ||
+					input.card?.races?.some((r) => races.includes(Race[r])) ||
+					false;
 	};
 
 export const classGroup =
 	(classGroup: GameTag.PROTOSS | GameTag.ZERG | GameTag.TERRAN) =>
 	(input: SelectorInput): boolean =>
-		input.card?.mechanics?.includes(GameTag[classGroup]);
+		input.card?.mechanics?.includes(GameTag[classGroup]) ?? false;
 export const protoss = classGroup(GameTag.PROTOSS);
 export const terran = classGroup(GameTag.TERRAN);
 export const zerg = classGroup(GameTag.ZERG);
 
 export const hasTribeNotPlayedThisMatch = (input: SelectorInput): boolean => {
-	if (!input.card.races?.length) {
+	if (!input.card?.races?.length) {
 		return false;
 	}
 	if (input.card.races.includes(Race[Race.ALL])) {
@@ -497,7 +507,7 @@ export const hasRune =
 	(input: SelectorInput): boolean => {
 		return (
 			Object.keys(input.card?.additionalCosts ?? {}).includes(DkruneTypes[rune]) &&
-			input.card.additionalCosts[DkruneTypes[rune]]
+			input.card!.additionalCosts![DkruneTypes[rune]]
 		);
 	};
 export const unholyRune = hasRune(DkruneTypes.UNHOLYRUNE);
@@ -507,18 +517,18 @@ export const frostRune = hasRune(DkruneTypes.FROSTRUNE);
 export const cardClass =
 	(cardClass: CardClass) =>
 	(input: SelectorInput): boolean =>
-		input.card?.classes?.includes(CardClass[cardClass]);
+		input.card?.classes?.includes(CardClass[cardClass]) ?? false;
 export const neutral = cardClass(CardClass.NEUTRAL);
 export const dream = cardClass(CardClass.DREAM);
 export const paladin = cardClass(CardClass.PALADIN);
 export const rogue = cardClass(CardClass.ROGUE);
 
 const createsCardFromAnotherClass = (input: SelectorInput): boolean => {
-	return input.card?.mechanics?.includes('CREATES_FROM_ANOTHER_CLASS');
+	return input.card?.mechanics?.includes('CREATES_FROM_ANOTHER_CLASS') ?? false;
 };
 export const currentClass = (input: SelectorInput): boolean =>
 	!!input.deckState?.hero?.classes?.length &&
-	input.card?.classes?.some((cardClass) => input.deckState.hero.classes.includes(CardClass[cardClass]));
+	!!input.card?.classes?.some((cardClass) => input.deckState.hero!.classes!.includes(CardClass[cardClass]));
 // export const fromAnotherClassStrict = (input: SelectorInput): boolean =>
 // 	!input.card?.classes?.includes(CardClass[CardClass.NEUTRAL]) &&
 // 	!input.card?.classes?.includes(CardClass[CardClass.DREAM]) &&
@@ -536,14 +546,14 @@ export const rarity =
 export const legendary = rarity('Legendary');
 
 export const spellDamage = (input: SelectorInput): boolean => {
-	return input.card?.mechanics?.includes(GameTag[GameTag.SPELLPOWER]);
+	return input.card?.mechanics?.includes(GameTag[GameTag.SPELLPOWER]) ?? false;
 };
 export const damage = (input: SelectorInput): boolean => {
-	return input.card?.mechanics?.includes(GameTag[GameTag.DEAL_DAMAGE]);
+	return input.card?.mechanics?.includes(GameTag[GameTag.DEAL_DAMAGE]) ?? false;
 };
 export const restoreHealth = (input: SelectorInput): boolean => {
 	return (
-		input.card?.mechanics?.includes('RESTORE_HEALTH') &&
+		!!input.card?.mechanics?.includes('RESTORE_HEALTH') &&
 		!cardIs(
 			CardIds.OverzealousHealer_GDB_454,
 			CardIds.ZombieChow,
@@ -555,10 +565,10 @@ export const restoreHealth = (input: SelectorInput): boolean => {
 // TODO: ignore effects that target the hero specifically
 export const restoreHealthToMinion = and(restoreHealth, not(cardIs(CardIds.WatcherOfTheSun)));
 export const spendCorpse = (input: SelectorInput): boolean => {
-	return input.card?.mechanics?.includes(GameTag[GameTag.SPEND_CORPSE]);
+	return input.card?.mechanics?.includes(GameTag[GameTag.SPEND_CORPSE]) ?? false;
 };
 export const generateCorpse = (input: SelectorInput): boolean => {
-	return input.card?.mechanics?.includes(GameTag[GameTag.GENERATE_CORPSE]);
+	return input.card?.mechanics?.includes(GameTag[GameTag.GENERATE_CORPSE]) ?? false;
 };
 export const generateSlagclaw = cardIs(
 	CardIds.Slagclaw_TLC_482,
@@ -571,7 +581,7 @@ export const generatesTemporaryCard = and(
 	not(cardIs(CardIds.EscapeTheUnderfel_TLC_446, CardIds.Spelunker_TLC_450)),
 );
 export const starshipPiece = (input: SelectorInput): boolean => {
-	return input.card?.mechanics?.includes(GameTag[GameTag.STARSHIP_PIECE]);
+	return input.card?.mechanics?.includes(GameTag[GameTag.STARSHIP_PIECE]) ?? false;
 };
 export const buildingStarship = cardIs(
 	CardIds.ExarchOthaar_GDB_856,
@@ -602,7 +612,7 @@ export const isStarshipPieceFor =
 	};
 
 export const darkGift = (input: SelectorInput): boolean => {
-	return discover(input) && input.card?.referencedTags?.includes(GameTag[GameTag.DARK_GIFT]);
+	return discover(input) && !!input.card?.referencedTags?.includes(GameTag[GameTag.DARK_GIFT]);
 };
 
 export const fromLatestExpansion = (input: SelectorInput): boolean => {

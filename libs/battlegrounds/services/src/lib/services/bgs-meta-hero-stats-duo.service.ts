@@ -19,7 +19,7 @@ import {
 import { distinctUntilChanged, map, shareReplay } from 'rxjs';
 import { DEFAULT_MMR_PERCENTILE } from './bgs-player-hero-stats.service';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class BgsMetaHeroStatsDuoService extends AbstractFacadeService<BgsMetaHeroStatsDuoService> {
 	public metaHeroStats$$: SubscriberAwareBehaviorSubject<BgsHeroStatsV2 | null>;
 	public tiers$$: SubscriberAwareBehaviorSubject<readonly BgsMetaHeroStatTierItem[] | null>;

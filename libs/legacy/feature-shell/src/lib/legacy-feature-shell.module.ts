@@ -385,6 +385,7 @@ import {
 	BgsBattleSimulationMockExecutorService,
 } from '@firestone/battlegrounds/core';
 import { BattlegroundsDataAccessModule } from '@firestone/battlegrounds/data-access';
+import { BattlegroundsServicesModule } from '@firestone/battlegrounds/services';
 import {
 	BattlegroundsSimulatorModule,
 	BgsBattlePositioningExecutorService,
@@ -402,6 +403,7 @@ import { ConstructedCommonModule } from '@firestone/constructed/common';
 import { ConstructedViewModule } from '@firestone/constructed/view';
 import { DiscordModule } from '@firestone/discord';
 import {
+	CardsHighlightFacadeService,
 	GameEventsPluginService,
 	GameStateModule,
 	IGameEventsPlugin,
@@ -423,6 +425,8 @@ import {
 	ILocalizationService,
 	PLAUSIBLE_DOMAIN,
 	SharedFrameworkCoreModule,
+	USER_SERVICE_TOKEN,
+	UserService,
 	setAppInjector,
 } from '@firestone/shared/framework/core';
 import { StatsCommonModule } from '@firestone/stats/common';
@@ -556,8 +560,6 @@ import { CollectionStorageService } from './js/services/collection/collection-st
 import { SetsManagerService } from './js/services/collection/sets-manager.service';
 import { SetsService } from './js/services/collection/sets-service.service';
 import { DebugService } from './js/services/debug.service';
-import { CardsHighlightFacadeService } from './js/services/decktracker/card-highlight/cards-highlight-facade.service';
-import { CardsHighlightService } from './js/services/decktracker/card-highlight/cards-highlight.service';
 import { ConstructedConfigService } from './js/services/decktracker/constructed-config.service';
 import { DeckCardService } from './js/services/decktracker/deck-card.service';
 import { DynamicZoneHelperService } from './js/services/decktracker/dynamic-zone-helper.service';
@@ -688,6 +690,7 @@ try {
 		TwitchCommonModule,
 		ModsCommonModule,
 		ProfileCommonModule,
+		BattlegroundsServicesModule,
 
 		NgxChartsModule,
 		// NgChartsModule,
@@ -1279,6 +1282,7 @@ try {
 		{ provide: REMOTE_ACHIEVEMENTS_SERVICE_TOKEN, useExisting: FirestoneRemoteAchievementsLoaderService },
 		{ provide: GAME_STATS_PROVIDER_SERVICE_TOKEN, useExisting: GameStatsProviderService },
 		{ provide: REVIEW_ID_SERVICE_TOKEN, useExisting: ReviewIdService },
+		{ provide: USER_SERVICE_TOKEN, useExisting: UserService },
 		{ provide: PLAUSIBLE_DOMAIN, useValue: 'firestoneapp.gg-app' },
 
 		SetsService,
@@ -1298,8 +1302,6 @@ try {
 		SetsManagerService,
 		CollectionStorageService,
 		HotkeyService,
-		CardsHighlightService,
-		CardsHighlightFacadeService,
 
 		AppBootstrapService,
 		BootstrapEssentialServicesService,

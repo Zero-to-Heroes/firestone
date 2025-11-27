@@ -8,7 +8,7 @@ import { AbstractFacadeService, ApiRunner, AppInjector, WindowManagerService } f
 const BGS_CARDS_URL =
 	'https://static.zerotoheroes.com/api/bgs/card-stats/mmr-%mmrPercentile%/%timePeriod%/overview-from-hourly.gz.json';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class BattlegroundsCardsService extends AbstractFacadeService<BattlegroundsCardsService> {
 	private prefs: PreferencesService;
 	private api: ApiRunner;

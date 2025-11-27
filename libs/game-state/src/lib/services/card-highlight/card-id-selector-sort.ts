@@ -17,9 +17,9 @@ export const cardIdSelectorSort = (cardId: string): SelectorSort | null => {
 				);
 				const result = starships.flatMap((starship) => [
 					starship,
-					...starship.deckCard.storedInformation?.cards
+					...(starship.deckCard.storedInformation?.cards
 						?.map((c) => original.find((o) => o.deckCard.entityId === c.entityId))
-						.filter((c) => !!c),
+						.filter((c) => !!c) ?? []),
 				]);
 				return result;
 			};

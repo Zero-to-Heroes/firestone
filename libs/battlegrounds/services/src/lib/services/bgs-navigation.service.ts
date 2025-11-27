@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AbstractFacadeService, WindowManagerService } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class BattlegroundsNavigationService extends AbstractFacadeService<BattlegroundsNavigationService> {
 	public selectedCategoryId$$: BehaviorSubject<CategoryId | string | null>;
 	public heroSearchString$$: BehaviorSubject<string | null>;

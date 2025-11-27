@@ -13,6 +13,7 @@ import {
 } from '@angular/core';
 import { GameType, SceneMode } from '@firestone-hs/reference-data';
 import {
+	CardsHighlightFacadeService,
 	CounterInstance,
 	equalCounterInstance,
 	GameStateFacadeService,
@@ -187,6 +188,7 @@ export class FullScreenOverlaysComponent
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: ILocalizationService,
 		private readonly init_ScalingService: ScalingService,
+		private readonly init_cardsHighlight: CardsHighlightFacadeService,
 	) {
 		super(cdr);
 	}

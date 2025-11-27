@@ -22,7 +22,7 @@ import { filterBgsMatchStats } from './hero-stats-helper';
 
 export const DEFAULT_MMR_PERCENTILE = 25;
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class BgsPlayerHeroStatsService extends AbstractFacadeService<BgsPlayerHeroStatsService> {
 	public tiersWithPlayerData$$: SubscriberAwareBehaviorSubject<readonly BgsMetaHeroStatTierItem[] | null | undefined>;
 

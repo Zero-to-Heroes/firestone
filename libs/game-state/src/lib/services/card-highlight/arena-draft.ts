@@ -1,12 +1,18 @@
-import { DeckCard } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { DeckCard } from '../../models/deck-card';
 import { cardIdSelectorForArenaDraft } from './card-id-selectors-for-arena-draft';
 import { Selector } from './cards-highlight-common.service';
 import { reverseCardIdSelector } from './tools/reverse-card-id-selectors';
 
-export const getSelectorsForArenaDraft = (cardId: string, card: DeckCard, allCards: CardsFacadeService): Selector[] => {
+export const getSelectorsForArenaDraft = (
+	cardId: string,
+	card: DeckCard | undefined,
+	allCards: CardsFacadeService,
+): Selector[] => {
 	const selectors: Selector[] = [];
-
+	if (!card) {
+		return [];
+	}
 	// Specific standard highlights for arena draft
 	const selector = cardIdSelectorForArenaDraft(cardId, card, allCards);
 	if (!!selector) {

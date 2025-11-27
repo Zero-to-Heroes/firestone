@@ -4,19 +4,19 @@
  * MAIN ENTRY POINT FOR REVERSE SYNERGIES
  */
 
-import { DeckCard } from '@firestone/game-state';
 import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
+import { DeckCard } from '../../../models/deck-card';
 import { Selector } from '../cards-highlight-common.service';
+import { reverseGeneralSelector } from './reverse-general-selectors';
 import { reverseMinionSelector } from './reverse-minion-selectors';
 import { reverseSpellSelector } from './reverse-spell-selectors';
-import { reverseGeneralSelector } from './reverse-general-selectors';
 
 export const reverseCardIdSelector = (
 	cardId: string,
 	card: DeckCard | undefined,
 	inputSide: HighlightSide,
 	allCards: CardsFacadeService,
-): Selector => {
+): Selector | null => {
 	const refCard = allCards.getCard(cardId);
 	if (!refCard) return null;
 

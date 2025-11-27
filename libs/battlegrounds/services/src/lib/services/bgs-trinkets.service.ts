@@ -10,7 +10,7 @@ import { map } from 'rxjs';
 const BGS_TRINKETS_URL =
 	'https://static.zerotoheroes.com/api/bgs/trinket-stats/%timePeriod%/overview-from-hourly.gz.json';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class BattlegroundsTrinketsService extends AbstractFacadeService<BattlegroundsTrinketsService> {
 	public trinketStats$$: SubscriberAwareBehaviorSubject<BgsTrinketStats | null>;
 

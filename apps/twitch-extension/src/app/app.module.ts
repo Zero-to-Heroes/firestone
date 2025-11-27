@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsHighlightFacadeService } from '@firestone/game-state';
 import { LegacyFeatureShellModule } from '@firestone/legacy/feature-shell';
 import { Store } from '@firestone/shared/framework/common';
 import {
@@ -9,7 +10,6 @@ import {
 	ILocalizationService,
 	LocalizationStandaloneService,
 } from '@firestone/shared/framework/core';
-import { CardsHighlightFacadeService } from '@legacy-import/src/lib/js/services/decktracker/card-highlight/cards-highlight-facade.service';
 import { LocalizationFacadeService } from '@legacy-import/src/lib/js/services/localization-facade.service';
 import { AppUiStoreFacadeService } from '@legacy-import/src/lib/js/services/ui-store/app-ui-store-facade.service';
 

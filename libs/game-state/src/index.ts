@@ -17,6 +17,7 @@ export * from './lib/services/battlegrounds/bgs-match-players-mmr.service';
 export * from './lib/services/battlegrounds/bgs-official-leaderboards.service';
 export * from './lib/services/battlegrounds/bgs-utils';
 export * from './lib/services/battlegrounds/face-off-check';
+export * from './lib/services/card-highlight/_barrel';
 export * from './lib/services/card-utils';
 export * from './lib/services/cards/_barrel';
 export * from './lib/services/cards/_mapping';

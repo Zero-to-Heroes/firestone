@@ -10,7 +10,7 @@ import { BgsMetaTrinketStrategiesService } from './bgs-meta-trinket-strategies.s
 import { BgsReconnectorService } from './bgs-reconnector.service';
 import { BattlegroundsTrinketsService } from './bgs-trinkets.service';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class BgsCommonBootstrapService {
 	constructor(
 		private readonly init_BattlegroundsTrinketsService: BattlegroundsTrinketsService,

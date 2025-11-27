@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { Sideboard, decode } from '@firestone-hs/deckstrings';
 import { CardIds, GameType } from '@firestone-hs/reference-data';
-import { Metadata, VisualDeckCard } from '@firestone/game-state';
+import { CardsHighlightFacadeService, Metadata, VisualDeckCard } from '@firestone/game-state';
 import { Card } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import {
@@ -33,7 +33,6 @@ import {
 } from 'rxjs';
 import { SetCard } from '../../../models/set';
 import { getOwnedForDeckBuilding } from '../../../services/collection/collection-utils';
-import { CardsHighlightFacadeService } from '../../../services/decktracker/card-highlight/cards-highlight-facade.service';
 
 @Component({
 	standalone: false,

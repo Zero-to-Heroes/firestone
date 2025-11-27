@@ -786,7 +786,7 @@ function generateMinionFile(flatMappings: { [condition: string]: string[] }): st
 	lines.push(' */');
 	lines.push('');
 	lines.push("import { CardIds } from '@firestone-hs/reference-data';");
-	lines.push("import { DeckCard } from '@firestone/game-state';");
+	lines.push("import { DeckCard } from '../../../models/deck-card';");
 	lines.push("import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';");
 	lines.push("import { Selector } from '../cards-highlight-common.service';");
 	lines.push("import { and, or, side, inDeck, inHand, cardIs } from '../selectors';");
@@ -900,7 +900,7 @@ function generateSpellFile(flatMappings: { [condition: string]: string[] }): str
 	lines.push(' */');
 	lines.push('');
 	lines.push("import { CardIds } from '@firestone-hs/reference-data';");
-	lines.push("import { DeckCard } from '@firestone/game-state';");
+	lines.push("import { DeckCard } from '../../../models/deck-card';");
 	lines.push("import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';");
 	lines.push("import { Selector } from '../cards-highlight-common.service';");
 	lines.push("import { and, or, side, inDeck, inHand, cardIs } from '../selectors';");
@@ -1018,7 +1018,7 @@ function generateGeneralFile(flatMappings: { [condition: string]: string[] }): s
 	lines.push(' */');
 	lines.push('');
 	lines.push("import { CardIds } from '@firestone-hs/reference-data';");
-	lines.push("import { DeckCard } from '@firestone/game-state';");
+	lines.push("import { DeckCard } from '../../../models/deck-card';");
 	lines.push("import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';");
 	lines.push("import { Selector } from '../cards-highlight-common.service';");
 	lines.push("import { and, or, side, inDeck, inHand, cardIs } from '../selectors';");
@@ -1101,7 +1101,7 @@ function generateMainFile(): string {
 	lines.push(' * MAIN ENTRY POINT FOR REVERSE SYNERGIES');
 	lines.push(' */');
 	lines.push('');
-	lines.push("import { DeckCard } from '@firestone/game-state';");
+	lines.push("import { DeckCard } from '../../../models/deck-card';");
 	lines.push("import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';");
 	lines.push("import { Selector } from '../cards-highlight-common.service';");
 	lines.push("import { reverseMinionSelector } from './reverse-minion-selectors';");

@@ -5,7 +5,7 @@ import { AbstractFacadeService, ApiRunner, AppInjector, WindowManagerService } f
 const META_TRINKET_STRATEGIES_URL =
 	'https://static.zerotoheroes.com/hearthstone/data/battlegrounds-strategies/bgs-trinket-strategies.gz.json';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class BgsMetaTrinketStrategiesService extends AbstractFacadeService<BgsMetaTrinketStrategiesService> {
 	public strategies$$: SubscriberAwareBehaviorSubject<readonly BgsTrinketTip[] | null>;
 

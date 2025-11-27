@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { ArenaRefService } from '@firestone/arena/common';
 import { DiscordPresenceManagerService } from '@firestone/discord';
 import {
 	BgsBestUserStatsService,
@@ -22,7 +23,6 @@ import { BgsPerfectGamesService } from '../../js/services/battlegrounds/bgs-perf
 import { CardsMonitorService } from '../../js/services/collection/cards-monitor.service';
 import { CollectionManager } from '../../js/services/collection/collection-manager.service';
 import { CollectionStorageService } from '../../js/services/collection/collection-storage.service';
-import { CardsHighlightService } from '../../js/services/decktracker/card-highlight/cards-highlight.service';
 import { ConstructedConfigService } from '../../js/services/decktracker/constructed-config.service';
 import { DecksProviderService } from '../../js/services/decktracker/main/decks-provider.service';
 import { DevService } from '../../js/services/dev.service';
@@ -71,7 +71,6 @@ export class BootstrapOtherServicesService {
 		private readonly init_HsClientConfig: HsClientConfigService,
 		private readonly init_RewardMonitorService: RewardMonitorService,
 		private readonly init_BgsRealTimeStatsService: RealTimeStatsService,
-		private readonly init_CardsHighlightService: CardsHighlightService,
 		private readonly ini_DecksProviderService: DecksProviderService,
 		private readonly init_gameStatus: GameStatusService,
 		private readonly init_quests: QuestsService,
@@ -86,6 +85,7 @@ export class BootstrapOtherServicesService {
 		private readonly init_DiscordPresenceManagerService: DiscordPresenceManagerService,
 		private readonly init_GameStateFacadeService: GameStateFacadeService,
 		private readonly init_MercenariesNavigationService: MercenariesNavigationService,
+		private readonly init_ArenaRefService: ArenaRefService,
 		// TODO: might not be the best place
 		private readonly modsBootstrap: ModsBootstrapService,
 		private readonly modsManager: ModsManagerService,

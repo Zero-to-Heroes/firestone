@@ -8,7 +8,7 @@ const META_COMPOSITION_STRATEGIES_URL =
 // const META_COMPOSITION_STRATEGIES_URL =
 // 	'https://s3.us-west-2.amazonaws.com/static.zerotoheroes.com/hearthstone/data/battlegrounds-strategies/bgs-comps-strategies.gz.json';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class BgsMetaCompositionStrategiesService extends AbstractFacadeService<BgsMetaCompositionStrategiesService> {
 	public strategies$$: SubscriberAwareBehaviorSubject<readonly BgsCompAdvice[] | null>;
 

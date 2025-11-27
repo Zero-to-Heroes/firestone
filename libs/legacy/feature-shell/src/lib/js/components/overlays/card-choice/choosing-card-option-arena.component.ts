@@ -12,6 +12,7 @@ import {
 } from '@angular/core';
 import { CardIds, ReferenceCard } from '@firestone-hs/reference-data';
 import { ArenaCardStatsService, ArenaClassStatsService, ArenaDiscoversGuardianService } from '@firestone/arena/common';
+import { CardsHighlightFacadeService } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, uuidShort } from '@firestone/shared/framework/common';
 import { ADS_SERVICE_TOKEN, CardsFacadeService, IAdsService, waitForReady } from '@firestone/shared/framework/core';
@@ -27,7 +28,6 @@ import {
 	switchMap,
 	takeUntil,
 } from 'rxjs';
-import { CardsHighlightFacadeService } from '../../../services/decktracker/card-highlight/cards-highlight-facade.service';
 import { CardChoiceOption, NO_HIGHLIGHT_CARD_IDS } from './choosing-card-widget-wrapper.component';
 
 @Component({

@@ -1,7 +1,10 @@
 import { CardClass, CardIds, CardType, GameTag, Race, SpellSchool } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState, getCost, getProcessedCard } from '@firestone/game-state';
 import { groupByFunction, pickLast, sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
+import { DeckCard } from '../../models/deck-card';
+import { DeckState } from '../../models/deck-state';
+import { ShortCard } from '../../models/game-state';
+import { getCost, getProcessedCard } from '../card-utils';
 import { Selector, SelectorInput, SelectorOutput } from './cards-highlight-common.service';
 import {
 	and,
@@ -155,7 +158,7 @@ export const cardIdSelector = (
 	card: DeckCard | undefined,
 	inputSide: HighlightSide,
 	allCards: CardsFacadeService,
-): Selector => {
+): Selector | null => {
 	switch (cardId) {
 		case CardIds.AbsorbentParasite:
 			return and(side(inputSide), or(inDeck, inHand), minion, or(mech, beast));
@@ -792,8 +795,8 @@ export const cardIdSelector = (
 				const cardsPlayedFromAnotherClass = input.deckState.cardsPlayedThisMatch.filter(
 					(c) =>
 						!!allCards.getCard(c.cardId).classes?.length &&
-						!allCards.getCard(c.cardId).classes.includes(CardClass[CardClass.NEUTRAL]) &&
-						!allCards.getCard(c.cardId).classes.includes(CardClass[currentClassInfo]),
+						!allCards.getCard(c.cardId).classes!.includes(CardClass[CardClass.NEUTRAL]) &&
+						!allCards.getCard(c.cardId).classes!.includes(CardClass[currentClassInfo!]),
 				);
 				const lastCardPlayed = cardsPlayedFromAnotherClass.length
 					? cardsPlayedFromAnotherClass[cardsPlayedFromAnotherClass.length - 1]
@@ -1404,7 +1407,7 @@ export const cardIdSelector = (
 			return (input: SelectorInput): SelectorOutput => {
 				const spellsPlayed = input.deckState?.spellsPlayedThisMatch;
 				if (!spellsPlayed) {
-					return null;
+					return false;
 				}
 
 				const groupedByCost = groupByFunction((c: DeckCard) => c.refManaCost)(spellsPlayed);
@@ -1511,7 +1514,7 @@ export const cardIdSelector = (
 		case CardIds.Grillmaster_VAC_917:
 			return (input: SelectorInput): SelectorOutput => {
 				if (!input.deckState.deck?.length) {
-					return null;
+					return false;
 				}
 
 				const highestCost = Math.max(...input.deckState.deck.map((c) => c?.getEffectiveManaCost() ?? 0));
@@ -1551,7 +1554,7 @@ export const cardIdSelector = (
 		case CardIds.GuessTheWeight_Less:
 			return (input: SelectorInput): boolean => {
 				if (!input.deckState.hand.length) {
-					return null;
+					return false;
 				}
 				const lastDrawnCard = input.deckState.hand[input.deckState.hand.length - 1];
 				return (
@@ -1563,7 +1566,7 @@ export const cardIdSelector = (
 		case CardIds.GuessTheWeight_More:
 			return (input: SelectorInput): boolean => {
 				if (!input.deckState.hand.length) {
-					return null;
+					return false;
 				}
 				const lastDrawnCard = input.deckState.hand[input.deckState.hand.length - 1];
 				return (
@@ -1729,10 +1732,10 @@ export const cardIdSelector = (
 					.filter((c) => getProcessedCard(c.cardId, c.entityId, input.deckState, allCards).cost != null)
 					.sort(
 						sortByProperties((c) => [
-							-getProcessedCard(c.cardId, c.entityId, input.deckState, allCards).cost,
+							-(getProcessedCard(c.cardId, c.entityId, input.deckState, allCards).cost ?? 0),
 						]),
 					);
-				let finalCandidates = [];
+				let finalCandidates: ShortCard[] = [];
 				if (!!candidates?.length) {
 					// First remove duplicate cardIds
 					const withoutDuplicates = candidates.filter(
@@ -1741,9 +1744,14 @@ export const cardIdSelector = (
 					const targets = withoutDuplicates.slice(0, 3);
 					const lowestCostTarget = targets[targets.length - 1];
 					const lowestCostDeckCard = input.deckState.findCard(lowestCostTarget.entityId)?.card;
+					if (!lowestCostDeckCard) {
+						return false;
+					}
 					const lowestCost = getCost(lowestCostDeckCard, input.deckState, allCards);
 					finalCandidates = candidates.filter(
-						(c) => getProcessedCard(c.cardId, c.entityId, input.deckState, allCards).cost >= lowestCost,
+						(c) =>
+							(getProcessedCard(c.cardId, c.entityId, input.deckState, allCards).cost ?? 0) >=
+							(lowestCost ?? 0),
 					);
 				}
 				return highlightConditions(
@@ -1967,7 +1975,7 @@ export const cardIdSelector = (
 		case CardIds.KoboldMiner_TheAzeriteRatToken_WW_001t26:
 			return (input: SelectorInput): SelectorOutput => {
 				if (!input.deckState.minionsDeadThisMatch?.length) {
-					return null;
+					return false;
 				}
 
 				const highestCost = Math.max(
@@ -1977,7 +1985,7 @@ export const cardIdSelector = (
 					(c) => allCards.getCard(c.cardId).cost === highestCost,
 				);
 				if (!candidates.length) {
-					return null;
+					return false;
 				}
 
 				return highlightConditions(
@@ -2680,7 +2688,7 @@ export const cardIdSelector = (
 			return (input: SelectorInput): SelectorOutput => {
 				const highestDeadMinionCost = Math.max(
 					...input.deckState.minionsDeadThisMatch.map(
-						(c) => c.effectiveCost ?? allCards.getCard(c.cardId).cost,
+						(c) => c.effectiveCost ?? allCards.getCard(c.cardId).cost ?? 0,
 					),
 				);
 				const targets = input.deckState.minionsDeadThisMatch
@@ -2901,7 +2909,7 @@ export const cardIdSelector = (
 		case CardIds.ShadyDealer:
 			return and(side(inputSide), or(inHand, inDeck), pirate);
 		case CardIds.Shaladrassil_EDR_846:
-			return and(side(inputSide), or(inHand, inDeck), costMore(card?.getEffectiveManaCost()));
+			return !card ? null : and(side(inputSide), or(inHand, inDeck), costMore(card.getEffectiveManaCost()));
 		case CardIds.ShaleSpider_DEEP_034:
 			return and(side(inputSide), or(inHand, inDeck), elemental);
 		case CardIds.ShallowGrave:
