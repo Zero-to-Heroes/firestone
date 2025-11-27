@@ -241,7 +241,7 @@ export const globalEffectCards = [
 export const globalEffectPowers = [CardIds.DewProcess];
 export const globalEffectPowersAlsoOpponent = [CardIds.DewProcess];
 
-export const globalEffectTriggers = [
+export const globalEffectTriggers: { effectPrefab: string; cardId: string; forceUseParentInfo?: boolean }[] = [
 	{
 		// There are actually several effects that are triggered (one for hand, deck and board)
 		// We use only the deck one, as it's the one that is most likely to always be there
@@ -261,17 +261,6 @@ export const globalEffectTriggers = [
 	{
 		effectPrefab: 'ReuseFX_Holy_BuffImpact_Heal_Small_Super',
 		cardId: CardIds.HopeOfQuelthalas,
-	},
-	// The logs here attribute the source and target to the current hero, not the card being played
-	{
-		effectPrefab: 'SCFX_Artanis_Protoss_CostReduction_BuffImpact_Super',
-		cardId: CardIds.PhotonCannon_SC_753,
-		forceUseParentInfo: true,
-	},
-	{
-		effectPrefab: 'SCFX_Artanis_Protoss_CostReduction_BuffImpact_Super',
-		cardId: CardIds.Artanis_SC_754,
-		forceUseParentInfo: true,
 	},
 	{
 		effectPrefab: 'ReuseFX_Beast_Impact_FangBite_Gold_Super',
