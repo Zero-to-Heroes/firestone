@@ -56,7 +56,7 @@ export class CustomEffectsParser implements EventParser {
 			case CardIds.RunedMithrilRod:
 				return this.handleRunedMithrilRod(currentState, gameEvent);
 			case CardIds.EldritchBeing_GDB_116:
-				return this.shuffleHand(currentState, gameEvent);
+				return this.handleEldritchBeing(currentState, gameEvent);
 			case CardIds.NorthernNavigation:
 				return this.handleNortherNavigation(currentState, gameEvent);
 			case CardIds.BroodQueen_LarvaToken_SC_003t:
@@ -147,7 +147,7 @@ export class CustomEffectsParser implements EventParser {
 		});
 	}
 
-	private shuffleHand(currentState: GameState, gameEvent: GameEvent): GameState {
+	private handleEldritchBeing(currentState: GameState, gameEvent: GameEvent): GameState {
 		const [, controllerId, localPlayer, entityId] = gameEvent.parse();
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		if (isPlayer) {
@@ -155,6 +155,10 @@ export class CustomEffectsParser implements EventParser {
 		}
 
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
+		const knownCardsInHand = [
+			...deck.additionalKnownCardsInHand,
+			...deck.hand.map((c) => c.cardId).filter((c) => !!c),
+		].filter((c, index, self) => self.indexOf(c) === index);
 		const newHand = deck.hand.map((card) =>
 			DeckCard.create({
 				entityId: card.entityId,
@@ -164,6 +168,7 @@ export class CustomEffectsParser implements EventParser {
 		return currentState.update({
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: deck.update({
 				hand: newHand,
+				additionalKnownCardsInHand: knownCardsInHand,
 			}),
 		});
 	}
