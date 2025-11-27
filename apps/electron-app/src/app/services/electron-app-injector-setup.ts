@@ -23,6 +23,8 @@ import {
 	BattlegroundsOfficialLeaderboardService,
 	BgsMatchMemoryInfoService,
 	BgsMatchPlayersMmrService,
+	CardsHighlightFacadeService,
+	CardsHighlightService,
 	ConstructedArchetypeService,
 	ConstructedArchetypeServiceOrchestrator,
 	DeckHandlerService,
@@ -385,7 +387,11 @@ export const buildAppInjector = () => {
 	const arenaCardStats = new ArenaCardStatsService(windowManager);
 	electronInjector.register(ArenaCardStatsService, arenaCardStats);
 
-	const cardsHighlight = new CardsHighlightService(windowManager);
+	const cardsHighlight = new CardsHighlightService(allCards, preferences, gameStateFacade, cardMousedOver);
+	electronInjector.register(CardsHighlightService, cardsHighlight);
+
+	const cardsHighlightFacade = new CardsHighlightFacadeService(cardsHighlight);
+	electronInjector.register(CardsHighlightFacadeService, cardsHighlightFacade);
 
 	return electronInjector;
 };
