@@ -1,4 +1,4 @@
-import { DeckCard } from '@firestone/game-state';
+import { DeckCard } from './deck-card';
 
 export class DynamicZone {
 	readonly id: string;

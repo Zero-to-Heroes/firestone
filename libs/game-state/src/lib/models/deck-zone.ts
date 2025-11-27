@@ -1,4 +1,4 @@
-import { VisualDeckCard } from '@firestone/game-state';
+import { VisualDeckCard } from './visual-deck-card';
 
 export interface DeckZone {
 	readonly id: 'deck' | 'hand' | 'other' | string;

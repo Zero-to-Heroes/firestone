@@ -16,6 +16,7 @@ import {
 	cardsMapping,
 	DeckCard,
 	DeckState,
+	DeckZone,
 	GameState,
 	hasGetRelatedCards,
 	HeroCard,
@@ -25,7 +26,6 @@ import {
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { AppInjector, CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
-import { DeckZone } from '../../../models/decktracker/view/deck-zone';
 import { getSelectorsForArenaDraft } from './arena-draft';
 import { cardIdSelectorSort } from './card-id-selector-sort';
 import { cardIdSelector } from './card-id-selectors';

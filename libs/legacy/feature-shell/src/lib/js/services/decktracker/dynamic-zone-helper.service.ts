@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { DeckState } from '@firestone/game-state';
+import { DeckState, DynamicZone } from '@firestone/game-state';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { DynamicZone } from '../../models/decktracker/view/dynamic-zone';
 
 @Injectable()
 export class DynamicZoneHelperService {

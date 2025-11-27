@@ -9,12 +9,19 @@ import {
 } from '@angular/core';
 import { InternalDeckZoneSection } from '@components/decktracker/overlay/deck-list-by-zone.component';
 import { CardIds } from '@firestone-hs/reference-data';
-import { DeckCard, DeckState, PLAGUES, VisualDeckCard, shouldKeepOriginalCost } from '@firestone/game-state';
+import {
+	DeckCard,
+	DeckState,
+	DeckZone,
+	DeckZoneSection,
+	PLAGUES,
+	VisualDeckCard,
+	shouldKeepOriginalCost,
+} from '@firestone/game-state';
 import { AbstractSubscriptionComponent, sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
-import { DeckZone, DeckZoneSection } from '../../../models/decktracker/view/deck-zone';
 import { SetCard } from '../../../models/set';
 
 @Component({

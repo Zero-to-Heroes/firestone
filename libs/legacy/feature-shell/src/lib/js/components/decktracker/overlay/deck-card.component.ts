@@ -13,7 +13,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { CardClass, CardIds, GameTag, GameType, ReferenceCard } from '@firestone-hs/reference-data';
-import { cardTutors, VisualDeckCard } from '@firestone/game-state';
+import { cardTutors, DeckZone, VisualDeckCard } from '@firestone/game-state';
 import { CardMousedOverService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, uuidShort } from '@firestone/shared/framework/common';
@@ -26,7 +26,6 @@ import {
 } from '@firestone/shared/framework/core';
 import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
 import { auditTime, BehaviorSubject, combineLatest, distinctUntilChanged, filter, Observable, takeUntil } from 'rxjs';
-import { DeckZone } from '../../../models/decktracker/view/deck-zone';
 import { relatedCardIdsSelectorSort } from '../../../services/decktracker/card-highlight/card-id-selector-sort';
 import { Handler, SelectorOutput } from '../../../services/decktracker/card-highlight/cards-highlight-common.service';
 import { CARDS_TO_HIGHLIGHT_INSIDE_RELATED_CARDS_WITHOUT_DUPES } from '../../../services/decktracker/card-highlight/merged-highlights';
