@@ -12,7 +12,8 @@ import {
 	AppInjector,
 	ARENA_REWARDS,
 	CurrentUser,
-	IndexedDbService,
+	DATABASE_SERVICE_TOKEN,
+	IDatabaseService,
 	OverwolfService,
 	UserService,
 	WindowManagerService,
@@ -33,7 +34,7 @@ export class ArenaRewardsService extends AbstractFacadeService<ArenaRewardsServi
 	private arenaInfoService: ArenaInfoService;
 	private ow: OverwolfService;
 	private diskCache: DiskCacheService;
-	private indexedDb: IndexedDbService;
+	private indexedDb: IDatabaseService;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'ArenaRewardsService', () => !!this.arenaRewards$$);
@@ -49,7 +50,7 @@ export class ArenaRewardsService extends AbstractFacadeService<ArenaRewardsServi
 		this.userService = AppInjector.get(UserService);
 		this.memoryUpdates = AppInjector.get(MemoryUpdatesService);
 		this.arenaInfoService = AppInjector.get(ArenaInfoService);
-		this.indexedDb = AppInjector.get(IndexedDbService);
+		this.indexedDb = AppInjector.get(DATABASE_SERVICE_TOKEN);
 		this.ow = AppInjector.get(OverwolfService);
 		this.diskCache = AppInjector.get(DiskCacheService);
 

@@ -72,7 +72,9 @@ import {
 	ApiRunner,
 	CardsFacadeService,
 	CardsFacadeStandaloneService,
+	DATABASE_SERVICE_TOKEN,
 	IAdsService,
+	IDatabaseService,
 	ILocalizationService,
 	LocalizationStandaloneService,
 	LocalStorageService,
@@ -89,6 +91,7 @@ import { ElectronLogFileBackendService } from './electron-log-file-backend.servi
 import { GameEventsElectronService } from './game-events-electron.service';
 import { LowLevelUtilsElectronService } from './low-level-utils-electron.service';
 import { MindVisionElectronService } from './mind-vision-electron.service';
+import { SqliteDatabaseService } from './sqlite-database.service';
 
 export const buildAppInjector = () => {
 	const electronInjector = new ElectronAngularInjector();
@@ -120,6 +123,9 @@ export const buildAppInjector = () => {
 
 	const localStorage = new ElectronStorageService();
 	electronInjector.register(LocalStorageService, localStorage);
+
+	const sqliteDb = new SqliteDatabaseService();
+	electronInjector.register(DATABASE_SERVICE_TOKEN, sqliteDb as IDatabaseService);
 
 	const api = new ElectronApiRunner();
 	electronInjector.register(ApiRunner, api as any as ApiRunner);

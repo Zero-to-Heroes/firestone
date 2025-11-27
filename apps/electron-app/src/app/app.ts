@@ -5,7 +5,7 @@ import { ElectronGameWindowService } from '@firestone/electron/common';
 import { AllCardsService } from '@firestone-hs/reference-data';
 import { GameEvents } from '@firestone/game-state';
 import { LogListenerService } from '@firestone/shared/common/service';
-import { CardsFacadeStandaloneService, setAppInjector } from '@firestone/shared/framework/core';
+import { CardsFacadeStandaloneService, DATABASE_SERVICE_TOKEN, setAppInjector } from '@firestone/shared/framework/core';
 import { BrowserWindow, screen, shell } from 'electron';
 import { join } from 'path';
 import { format } from 'url';
@@ -122,6 +122,9 @@ export default class App {
 		console.log('[app] service', service);
 		await service.initializeCardsDb(undefined, 'enUS');
 		console.log('[app] allCards initialized', allCards.getCards()?.length ?? 'null');
+
+		const db = electronInjector.get(DATABASE_SERVICE_TOKEN);
+		await db.init();
 
 		// Keep the old game detection for logging purposes
 		// App.gameDetection.on('game-launched', (gameInfo) => {

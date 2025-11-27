@@ -16,7 +16,8 @@ import {
 	ApiRunner,
 	AppInjector,
 	CardsFacadeService,
-	IndexedDbService,
+	DATABASE_SERVICE_TOKEN,
+	IDatabaseService,
 	IUserService,
 	MATCH_HISTORY,
 	USER_SERVICE_TOKEN,
@@ -41,7 +42,7 @@ export class GameStatsLoaderService extends AbstractFacadeService<GameStatsLoade
 	private allCards: CardsFacadeService;
 	private diskCache: DiskCacheService;
 	private patchesConfig: PatchesConfigService;
-	private indexedDb: IndexedDbService;
+	private indexedDb: IDatabaseService;
 	private user: IUserService;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
@@ -59,7 +60,7 @@ export class GameStatsLoaderService extends AbstractFacadeService<GameStatsLoade
 		this.allCards = AppInjector.get(CardsFacadeService);
 		this.diskCache = AppInjector.get(DiskCacheService);
 		this.patchesConfig = AppInjector.get(PatchesConfigService);
-		this.indexedDb = AppInjector.get(IndexedDbService);
+		this.indexedDb = AppInjector.get(DATABASE_SERVICE_TOKEN);
 		this.user = AppInjector.get(USER_SERVICE_TOKEN);
 
 		await waitForReady(this.patchesConfig, this.user);

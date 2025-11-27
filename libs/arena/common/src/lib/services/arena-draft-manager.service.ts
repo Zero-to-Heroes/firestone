@@ -30,7 +30,8 @@ import {
 	AppInjector,
 	ARENA_CURRENT_DECK_PICKS,
 	CardsFacadeService,
-	IndexedDbService,
+	DATABASE_SERVICE_TOKEN,
+	IDatabaseService,
 	waitForReady,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
@@ -85,7 +86,7 @@ export class ArenaDraftManagerService
 	private arenaCardStats: ArenaCardStatsService;
 	private arenaClassStats: ArenaClassStatsService;
 	private arenaDeckStats: ArenaDeckStatsService;
-	private indexedDb: IndexedDbService;
+	private indexedDb: IDatabaseService;
 	private account: AccountService;
 
 	private internalSubscriber$$: SubscriberAwareBehaviorSubject<boolean>;
@@ -145,7 +146,7 @@ export class ArenaDraftManagerService
 		this.arenaCardStats = AppInjector.get(ArenaCardStatsService);
 		this.arenaClassStats = AppInjector.get(ArenaClassStatsService);
 		this.arenaDeckStats = AppInjector.get(ArenaDeckStatsService);
-		this.indexedDb = AppInjector.get(IndexedDbService);
+		this.indexedDb = AppInjector.get(DATABASE_SERVICE_TOKEN);
 		this.account = AppInjector.get(AccountService);
 		this.internalSubscriber$$ = new SubscriberAwareBehaviorSubject<boolean>(true);
 
