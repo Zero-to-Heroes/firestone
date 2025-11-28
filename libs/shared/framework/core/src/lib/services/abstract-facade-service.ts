@@ -63,7 +63,7 @@ export abstract class AbstractFacadeService<T extends AbstractFacadeService<T>> 
 		console.warn(this.constructor.name, 'createElectronProxy not implemented');
 	}
 	protected async initElectronMainProcess() {
-		console.warn(this.constructor.name, 'initElectronMainProcess not implemented');
+		// console.warn(this.constructor.name, 'initElectronMainProcess not implemented');
 	}
 
 	protected abstract assignSubjects(): void;

@@ -52,6 +52,14 @@ export class ArenaDeckStatsService extends AbstractFacadeService<ArenaDeckStatsS
 		});
 	}
 
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.deckStats$$ = new SubscriberAwareBehaviorSubject<readonly ExtendedDraftDeckStats[] | null>(null);
+	}
+
+	protected override async initElectronSubjects() {
+		this.setupElectronSubject(this.deckStats$$, 'ArenaDeckStatsService-deckStats');
+	}
+
 	public async newDeckStat(stat: ExtendedDraftDeckStats, isFinalDeck: boolean) {
 		const user = await this.user.getCurrentUser();
 		const region = this.account.region$$.getValue();

@@ -20,10 +20,6 @@ export class AccountService extends AbstractFacadeService<AccountService> {
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'AccountService', () => !!this.region$$);
-		window['getRegion'] = async () => {
-			const result = await this.memory.getRegion();
-			console.log(result);
-		};
 	}
 
 	protected override assignSubjects() {
@@ -54,6 +50,14 @@ export class AccountService extends AbstractFacadeService<AccountService> {
 			console.log('[account-service] clearing region');
 			this.region$$.next(null);
 		});
+	}
+
+	protected override async initElectronSubjects() {
+		this.setupElectronSubject(this.region$$, 'account-region');
+	}
+
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.region$$ = new BehaviorSubject<BnetRegion | null>(null);
 	}
 
 	public async getRegion(): Promise<BnetRegion | null> {

@@ -46,7 +46,7 @@ export class GameStatsLoaderService extends AbstractFacadeService<GameStatsLoade
 	private user: IUserService;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
-		super(windowManager, 'gameStatsLoader', () => !!this.gameStats$$);
+		super(windowManager, 'GameStatsLoaderService', () => !!this.gameStats$$);
 	}
 
 	protected override assignSubjects() {
@@ -84,6 +84,14 @@ export class GameStatsLoaderService extends AbstractFacadeService<GameStatsLoade
 			const lastPatch = config.patches[config.patches.length - 1];
 			this.patchInfo = lastPatch;
 		});
+	}
+
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.gameStats$$ = new SubscriberAwareBehaviorSubject<GameStats>(null);
+	}
+
+	protected override async initElectronSubjects() {
+		this.setupElectronSubject(this.gameStats$$, 'GameStatsLoaderService-gameStats');
 	}
 
 	public async addGame(game: GameStat) {
@@ -140,7 +148,6 @@ export class GameStatsLoaderService extends AbstractFacadeService<GameStatsLoade
 	public async clearGames() {
 		await this.callOnMainProcess('clearGamesInternal');
 	}
-
 	private async clearGamesInternal() {
 		console.log('[game-stats-loader] clearing games');
 		await this.saveLocalStats([]);
@@ -151,7 +158,6 @@ export class GameStatsLoaderService extends AbstractFacadeService<GameStatsLoade
 	public async fullRefresh() {
 		await this.callOnMainProcess('fullRefreshInternal');
 	}
-
 	private async fullRefreshInternal() {
 		console.log('[game-stats-loader] triggering full refresh');
 		const stats = await this.refreshGameStats(true);

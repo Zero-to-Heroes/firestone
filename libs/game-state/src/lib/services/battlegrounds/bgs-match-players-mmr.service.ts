@@ -137,6 +137,14 @@ export class BgsMatchPlayersMmrService extends AbstractFacadeService<BgsMatchPla
 				});
 		});
 	}
+
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.playersMatchMmr$$ = new SubscriberAwareBehaviorSubject<readonly PlayerMatchMmr[] | null>(null);
+	}
+
+	protected override async initElectronSubjects() {
+		this.setupElectronSubject(this.playersMatchMmr$$, 'BgsMatchPlayersMmrService-playersMatchMmr');
+	}
 }
 
 const toRegion = (region: BnetRegion | null | undefined): 'EU' | 'US' | 'AP' => {

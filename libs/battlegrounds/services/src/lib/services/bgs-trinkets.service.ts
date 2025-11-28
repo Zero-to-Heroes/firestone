@@ -47,6 +47,14 @@ export class BattlegroundsTrinketsService extends AbstractFacadeService<Battlegr
 		});
 	}
 
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.trinketStats$$ = new SubscriberAwareBehaviorSubject<BgsTrinketStats | null>(null);
+	}
+
+	protected override async initElectronSubjects() {
+		this.setupElectronSubject(this.trinketStats$$, 'BattlegroundsTrinketsService-trinketStats');
+	}
+
 	protected override async initElectronMainProcess() {
 		this.registerMainProcessMethod('loadTrinketsInternal', (timeFilter: BgsActiveTimeFilterType) =>
 			this.loadTrinketsInternal(timeFilter),

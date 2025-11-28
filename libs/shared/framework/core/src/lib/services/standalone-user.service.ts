@@ -54,6 +54,14 @@ export class StandaloneUserService extends AbstractFacadeService<StandaloneUserS
 		// });
 	}
 
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.user$$ = new SubscriberAwareBehaviorSubject<CurrentUser | null>(null);
+	}
+
+	protected override async initElectronSubjects() {
+		this.setupElectronSubject(this.user$$, 'StandaloneUserService-user');
+	}
+
 	public async getCurrentUser(): Promise<CurrentUser | null> {
 		return await this.user$$.getValueWithInit();
 	}

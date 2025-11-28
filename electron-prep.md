@@ -9,4 +9,4 @@ TODO:
 - basically everything linked to the old store - remove it completely
 - resize window
 - all the rest (user login, prefs, settings, main windows, etc)
-- indexeddb service
+- indexeddb service (in settings-root.component)

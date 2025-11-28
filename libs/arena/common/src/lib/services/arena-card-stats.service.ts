@@ -87,7 +87,15 @@ export class ArenaCardStatsService extends AbstractFacadeService<ArenaCardStatsS
 		});
 	}
 
-	// public async getCardStats(timeFilter: ArenaTimeFilterType, classFilter: ArenaClassFilterType, modeFilter: ArenaModeFilterType): Promise<ArenaCombinedCardStats | null> {
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.cardStats$$ = new SubscriberAwareBehaviorSubject<ArenaCombinedCardStats | null | undefined>(null);
+		this.searchString$$ = new BehaviorSubject<string | undefined>(undefined);
+	}
+
+	protected override async initElectronSubjects() {
+		this.setupElectronSubject(this.cardStats$$, 'ArenaCardStatsService-cardStats');
+		this.setupElectronSubject(this.searchString$$, 'ArenaCardStatsService-searchString');
+	}
 
 	protected override async initElectronMainProcess() {
 		this.registerMainProcessMethod(

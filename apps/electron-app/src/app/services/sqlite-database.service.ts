@@ -1,11 +1,11 @@
-import { app } from 'electron';
-import { join } from 'path';
 import {
 	IDatabaseCollection,
 	IDatabaseService,
 	IDatabaseTable,
 	IDatabaseWhereClause,
 } from '@firestone/shared/framework/core';
+import { app } from 'electron';
+import { join } from 'path';
 
 // Note: This requires 'better-sqlite3' package to be installed
 // Run: npm install better-sqlite3
@@ -47,9 +47,9 @@ export class SqliteDatabaseService implements IDatabaseService {
 			await this.createTables();
 
 			this.isInitialized = true;
-			console.log(`🗃️ SqliteDatabaseService initialized with database at: ${dbPath}`);
+			console.log(`SqliteDatabaseService initialized with database at: ${dbPath}`);
 		} catch (error) {
-			console.error('❌ Failed to initialize SqliteDatabaseService:', error);
+			console.error('Failed to initialize SqliteDatabaseService:', error);
 			throw error;
 		}
 	}
@@ -93,10 +93,7 @@ export class SqliteDatabaseService implements IDatabaseService {
 				reviewId TEXT PRIMARY KEY,
 				data TEXT
 			);
-		`);
-
-		// Version 2 tables
-		this.db.exec(`
+			
 			CREATE TABLE IF NOT EXISTS arenaDeckStats2 (
 				runId TEXT PRIMARY KEY,
 				data TEXT
@@ -128,9 +125,7 @@ export class SqliteDatabaseService implements IDatabaseService {
 		try {
 			// Get all table names
 			const tables = this.db
-				.prepare(
-					"SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'",
-				)
+				.prepare("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'")
 				.all()
 				.map((row: any) => row.name);
 
@@ -141,9 +136,9 @@ export class SqliteDatabaseService implements IDatabaseService {
 
 			// Recreate tables
 			await this.createTables();
-			console.log(`🗃️ SqliteDatabaseService cleared and reinitialized`);
+			console.log(`SqliteDatabaseService cleared and reinitialized`);
 		} catch (error) {
-			console.error('❌ Failed to clear SqliteDatabaseService:', error);
+			console.error('Failed to clear SqliteDatabaseService:', error);
 			throw error;
 		}
 	}
@@ -160,7 +155,10 @@ export class SqliteDatabaseService implements IDatabaseService {
  * SQLite implementation of IDatabaseTable
  */
 class SqliteTableWrapper<T, K = string> implements IDatabaseTable<T, K> {
-	constructor(private db: any, private tableName: string) {}
+	constructor(
+		private db: any,
+		private tableName: string,
+	) {}
 
 	async toArray(): Promise<readonly T[]> {
 		const rows = this.db.prepare(`SELECT data FROM ${this.tableName}`).all();
@@ -170,7 +168,7 @@ class SqliteTableWrapper<T, K = string> implements IDatabaseTable<T, K> {
 	async add(record: T): Promise<K> {
 		const data = JSON.stringify(record);
 		const key = (record as any).id || (record as any).reviewId || (record as any).runId;
-		
+
 		if (key) {
 			this.db.prepare(`INSERT INTO ${this.tableName} (data) VALUES (?)`).run(data);
 			return key as K;
@@ -184,7 +182,7 @@ class SqliteTableWrapper<T, K = string> implements IDatabaseTable<T, K> {
 	async put(record: T): Promise<K> {
 		const data = JSON.stringify(record);
 		const key = (record as any).id || (record as any).reviewId || (record as any).runId;
-		
+
 		if (key) {
 			// Use INSERT OR REPLACE for put semantics
 			this.db.prepare(`INSERT OR REPLACE INTO ${this.tableName} (data) VALUES (?)`).run(data);
@@ -237,7 +235,10 @@ class SqliteTableWrapper<T, K = string> implements IDatabaseTable<T, K> {
  * SQLite implementation of IDatabaseCollection
  */
 class SqliteCollectionWrapper<T, K = string> implements IDatabaseCollection<T, K> {
-	constructor(private db: any, private tableName: string) {}
+	constructor(
+		private db: any,
+		private tableName: string,
+	) {}
 
 	async primaryKeys(): Promise<readonly K[]> {
 		// For SQLite, we need to extract primary keys from the data
@@ -257,7 +258,11 @@ class SqliteWhereClauseWrapper<T, K = string> implements IDatabaseWhereClause<T,
 	private conditions: Array<{ field: string; value: any }> = [];
 	private andFilters: Array<(record: T) => boolean> = [];
 
-	constructor(private db: any, private tableName: string, private indexName: string) {}
+	constructor(
+		private db: any,
+		private tableName: string,
+		private indexName: string,
+	) {}
 
 	equals(value: any): IDatabaseWhereClause<T, K> {
 		this.conditions.push({ field: this.indexName, value });
@@ -303,4 +308,3 @@ class SqliteWhereClauseWrapper<T, K = string> implements IDatabaseWhereClause<T,
 		return rows.map((row: any) => JSON.parse(row.data));
 	}
 }
-

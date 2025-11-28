@@ -1,5 +1,11 @@
 import { GameNativeStateStoreService } from '@firestone/app/services';
-import { ArenaCardStatsService, ArenaDraftManagerService, ArenaMulliganGuideService } from '@firestone/arena/common';
+import {
+	ArenaCardStatsService,
+	ArenaClassStatsService,
+	ArenaDeckStatsService,
+	ArenaDraftManagerService,
+	ArenaMulliganGuideService,
+} from '@firestone/arena/common';
 import { BgsBattleSimulationMockExecutorService, BgsBattleSimulationService } from '@firestone/battlegrounds/core';
 import {
 	BattlegroundsQuestsService,
@@ -85,6 +91,7 @@ import {
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
 import { GameStatsLoaderService } from '@firestone/stats/data-access';
+import { AccountService } from '../../../../../libs/profile/common/src/lib/services/account.service';
 import { ElectronAngularInjector } from './electron-angular-injector';
 import { ElectronDiskCacheService } from './electron-disk-cache.service';
 import { ElectronLogFileBackendService } from './electron-log-file-backend.service';
@@ -379,9 +386,6 @@ export const buildAppInjector = () => {
 	const bgsTrinkets = new BattlegroundsTrinketsService(windowManager);
 	electronInjector.register(BattlegroundsTrinketsService, bgsTrinkets);
 
-	const bgsTrinketsGuardian = new BgsInGameTrinketsGuardianService(windowManager);
-	electronInjector.register(BgsInGameTrinketsGuardianService, bgsTrinketsGuardian);
-
 	const userService = new StandaloneUserService(windowManager);
 	electronInjector.register(StandaloneUserService, userService);
 	electronInjector.register(UserService, userService as any as UserService);
@@ -398,6 +402,15 @@ export const buildAppInjector = () => {
 
 	const cardsHighlightFacade = new CardsHighlightFacadeService(cardsHighlight);
 	electronInjector.register(CardsHighlightFacadeService, cardsHighlightFacade);
+
+	const arenaClassStats = new ArenaClassStatsService(windowManager);
+	electronInjector.register(ArenaClassStatsService, arenaClassStats);
+
+	const arenaDeckStats = new ArenaDeckStatsService(windowManager);
+	electronInjector.register(ArenaDeckStatsService, arenaDeckStats);
+
+	const accountService = new AccountService(windowManager);
+	electronInjector.register(AccountService, accountService);
 
 	return electronInjector;
 };

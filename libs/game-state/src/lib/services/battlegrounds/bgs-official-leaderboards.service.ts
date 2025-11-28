@@ -57,6 +57,14 @@ export class BattlegroundsOfficialLeaderboardService extends AbstractFacadeServi
 		});
 	}
 
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.leaderboards$$ = new SubscriberAwareBehaviorSubject<OfficialLeaderboardResult | null>(null);
+	}
+
+	protected override async initElectronSubjects() {
+		this.setupElectronSubject(this.leaderboards$$, 'BattlegroundsOfficialLeaderboardService-leaderboards');
+	}
+
 	protected override async initElectronMainProcess() {
 		this.registerMainProcessMethod('loadLeaderboardsInternal', (gameMode: 'battlegrounds' | 'battlegrounds-duo') =>
 			this.loadLeaderboardsInternal(gameMode),
