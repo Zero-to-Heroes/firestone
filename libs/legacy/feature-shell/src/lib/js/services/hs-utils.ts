@@ -227,6 +227,7 @@ const globalEffectEnchantments = [
 	CardIds.AshalonRidgeGuardian_PerfectEvolutionEnchantment_TLC_229t14e,
 	CardIds.LohTheLivingLegend_LivingLegendEnchantment_TLC_257e1,
 	...bwonsamdiBoonsEnchantments,
+	CardIds.AvianaElunesChosen_FullMoonEnchantment_EDR_895e,
 	// CardIds.CityChiefEsho_KinEnchantment_TLC_110e, // The enchantment is applied to each card, so we don't have a global thing
 ];
 
@@ -278,6 +279,10 @@ export const globalEffectTriggers: { effectPrefab: string; cardId: string; force
 		effectPrefab: 'TLCFX_CityChiefEsho_BuffAE_DeckBoardandHand_Super',
 		cardId: CardIds.CityChiefEsho_TLC_110,
 	},
+	// {
+	// 	effectPrefab: 'EDRFX_AvianaElunesChosen_StartOfTurnComplete',
+	// 	cardId: CardIds.AvianaElunesChosen_MoonCycleEnchantmentToken_EDR_895t,
+	// },
 ];
 
 export const globalEffectTriggersEffects = globalEffectTriggers.map((effect) => effect.effectPrefab);
