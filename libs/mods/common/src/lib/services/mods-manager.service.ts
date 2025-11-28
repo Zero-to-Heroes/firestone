@@ -143,7 +143,7 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 		const bepInExConfigs: readonly BepInExConfig[] = await Promise.all(
 			configFiles.data?.map((f) =>
 				buildBepInExConfig(configFiles.path + '\\' + f.name, f.name.split('.cfg')[0], this.ow),
-			),
+			) ?? [],
 		);
 		console.debug('[mods-manager] bepInExConfigs', bepInExConfigs);
 
