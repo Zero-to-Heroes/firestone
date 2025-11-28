@@ -1,5 +1,5 @@
 import { CardIds, CardType, ReferenceCard, SpellSchool } from '@firestone-hs/reference-data';
-import { addGuessInfoToCard, DeckCard, DeckState, GameState } from '@firestone/game-state';
+import { addGuessInfoToCard, DeckCard, DeckState, GameState, getProcessedCard } from '@firestone/game-state';
 import { TempCardIds } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { reverseIfNeeded } from '@legacy-import/src/lib/js/services/decktracker/event-parser/card-dredged-parser';
@@ -69,7 +69,7 @@ export class CreateCardInDeckParser implements EventParser {
 			});
 		}
 
-		const cardData = cardId?.length ? this.allCards.getCard(cardId) : null;
+		const cardData = cardId?.length ? getProcessedCard(cardId, entityId, deck, this.allCards) : null;
 		const positionFromBottom = buildPositionFromBottom(
 			deck,
 			gameEvent.additionalData.creatorCardId ?? gameEvent.additionalData.influencedByCardId,
