@@ -7,6 +7,7 @@ import { BoardSecret } from './board-secret';
 import { DeckCard } from './deck-card';
 import { ShortCard, ShortCardWithTurn } from './game-state';
 import { HeroCard } from './hero-card';
+import { NumericTurnInfo } from './_barrel';
 
 export const POGO_CARD_IDS = [
 	CardIds.PogoHopper_BOT_283,
@@ -140,6 +141,7 @@ export class DeckState {
 	readonly cardsPlayedThisTurn: readonly DeckCard[] = [];
 	readonly cardsCounteredThisTurn: number = 0;
 	readonly cardDrawnThisGame: number = 0;
+	readonly cardsDrawnByTurn: readonly NumericTurnInfo[] = [];
 	readonly discoversThisGame: number = 0;
 	readonly lastDeathrattleTriggered?: string;
 	readonly manaUsedThisTurn: number = 0;

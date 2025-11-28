@@ -89,6 +89,7 @@ import { YsondreCounterDefinitionV2 } from './impl/ysondre';
 import { DeepBlueCounterDefinitionV2 } from './impl/battlegrounds/deep-blue';
 import { SpellsPlayedCounterDefinitionV2 } from './impl/battlegrounds/spells-played';
 import { UndeadArmyCounterDefinitionV2 } from './impl/battlegrounds/undead-army';
+import { CardsDrawnThisTurnCounterDefinitionV2 } from './impl/cards-drawn-this-turn';
 
 export const getAllCounters: (
 	i18n: ILocalizationService,
@@ -167,6 +168,7 @@ export const getAllCounters: (
 	new DiveTheGolakkaDepthsCounterDefinitionV2(i18n, allCards),
 	new ElizaGorebladeCounterDefinitionV2(i18n, allCards),
 	new RafaamTimeCounterDefinitionV2(i18n, allCards),
+	new CardsDrawnThisTurnCounterDefinitionV2(i18n),
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n),
 	new BallerBuffCounterDefinitionV2(i18n),
@@ -191,6 +193,7 @@ export const getAllCounters: (
 export type CounterType =
 	| '__fatigue'
 	| '_ceaselessExpanse'
+	| 'cardsDrawnThisTurn'
 	| 'outcast'
 	| 'diveTheGolakkaDepths'
 	| 'rafaamTime'

@@ -259,9 +259,22 @@ export class CardDrawParser implements EventParser {
 			? previousHand
 			: this.helper.addSingleCardToZone(previousHand, cardWithGuessInfo);
 		// console.debug('[card-draw] added card to hand', newHand);
+		let cardsDrawnByTurn = [...deck.cardsDrawnByTurn];
+		let cardsDrawnThisTurn = deck.cardsDrawnByTurn.find((t) => t.turn === currentState.currentTurn);
+		if (cardsDrawnThisTurn) {
+			cardsDrawnByTurn = cardsDrawnByTurn.map((t) =>
+				t.turn === currentState.currentTurn ? { ...t, value: t.value + 1 } : t,
+			);
+		} else {
+			cardsDrawnByTurn.push({
+				turn: currentState.currentTurn as number,
+				value: 1,
+			});
+		}
 		const newPlayerDeck = deck.update({
 			deck: newDeck,
 			hand: newHand,
+			cardsDrawnByTurn: cardsDrawnByTurn,
 			cardDrawnThisGame:
 				currentState.currentTurn === 'mulligan' || currentState.currentTurn === 0
 					? 0
