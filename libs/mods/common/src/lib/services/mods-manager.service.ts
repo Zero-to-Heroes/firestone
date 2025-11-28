@@ -12,7 +12,13 @@ import {
 } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
 import { distinctUntilChanged, map } from 'rxjs/operators';
-import { BepInExConfig, buildBepInExConfig, updateModeVersionInBepInExConfig } from './bepin-config';
+import {
+	BepInExConfig,
+	buildBepInExConfig,
+	createInitialConfigFile,
+	updateModeVersionInBepInExConfig,
+} from './bepin-config';
+import { Mutable, sortByProperties } from '@firestone/shared/framework/common';
 
 const BEPINEX_ZIP_INSTALL = 'https://static.zerotoheroes.com/mods/BepInEx_win_x86_5.4.23.3.zip';
 // const MODS_MANAGER_PLUGIN_URL =
@@ -24,6 +30,7 @@ const BEPINEX_ZIP_INSTALL = 'https://static.zerotoheroes.com/mods/BepInEx_win_x8
 const DOORSTOP_CONFIG_URL = 'https://static.zerotoheroes.com/mods/doorstop_config.ini';
 const UNSTRIPPED_LIBS_BASE_URL = 'https://static.zerotoheroes.com/mods/unstripped_corlibs';
 const UNSTRIPPED_LIBS = ['mscorlib.dll', 'Mono.Security.dll', 'System.Core.dll', 'System.dll', 'UniTask.dll'];
+const MODS_CONFIG_URL = 'https://static.zerotoheroes.com/mods/mods-config.json?v=2';
 
 const modsLocation = 'BepInEx\\plugins';
 export const configLocation = 'BepInEx\\config';
@@ -61,6 +68,9 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 
 		await waitForReady(this.prefs, this.gameStatus);
 
+		const modsConfig = await this.api.callGetApi<{ trustedMods: readonly ModData[] }>(MODS_CONFIG_URL);
+		console.debug('[mods-manager] modsConfig', modsConfig);
+
 		// this.gameStatus.inGame$$.pipe(distinctUntilChanged()).subscribe(async (inGame) => {
 		// 	const prefs = await this.prefs.getPreferences();
 		// 	const enabled = prefs.modsEnabled;
@@ -79,7 +89,25 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 			)
 			.subscribe(async (installPath) => {
 				const installedMods = await this.installedMods(installPath);
-				this.modsData$$.next(installedMods);
+				const allMods = [...(modsConfig?.trustedMods ?? [])];
+				for (const mod of installedMods) {
+					console.debug('[debug] considering', mod);
+					const existing: Mutable<ModData> | undefined = allMods.find(
+						(m) => m.AssemblyName === mod.AssemblyName,
+					);
+					if (!existing) {
+						allMods.push(mod);
+					} else {
+						existing.Version = mod.Version;
+						existing.Registered = mod.Registered;
+						existing.updateAvailableVersion = mod.updateAvailableVersion;
+						existing.DownloadLink = mod.DownloadLink;
+						existing.Name = mod.Name;
+						existing.alreadyInstalled = true;
+					}
+				}
+				const finalMods = allMods.sort(sortByProperties((m) => [m.Registered, m.Name]));
+				this.modsData$$.next(finalMods);
 			});
 		console.debug('[mods-manager] initialized');
 	}
@@ -137,8 +165,10 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 				Name: c.Name,
 				Registered: !isDisabled,
 				Version: c.Version,
+				lastTrustedVersion: c.Version,
 				DownloadLink: c.DownloadLink,
 				updateAvailableVersion: null,
+				alreadyInstalled: true,
 			};
 			return result;
 		});
@@ -189,21 +219,46 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 		return this.mainInstance.updateModInternal(mod);
 	}
 	private async updateModInternal(mod: ModData): Promise<ModData | null> {
-		console.warn('[mods-manager] updating mod not implemented yet', mod);
 		const prefs = await this.prefs.getPreferences();
 		const installPath = prefs.gameInstallPath;
 		console.debug('[mods-manager] updating mod', mod, installPath);
+		if (!mod.DownloadLink) {
+			console.error('[mods-manager] Mod has no download link', mod);
+			return null;
+		}
 
 		const target = mod.Registered ? `${mod.AssemblyName}.dll` : `${mod.AssemblyName}.dll.disabled`;
 
-		const updated = await this.io.downloadFileTo(mod.DownloadLink ?? '', `${installPath}\\${modsLocation}`, target);
+		const apiLink = mod.DownloadLink.replace('https://github.com/', 'https://api.github.com/repos/');
+		console.debug('[mods-manager] apiLink', apiLink);
+		const latestRelease = await this.api.callGetApi<{ tag_name: string }>(`${apiLink}/releases/latest`);
+		if (!latestRelease) {
+			console.warn('[mods-manager] Could not get latest release', mod.DownloadLink);
+			return null;
+		}
+		const latestVersion = latestRelease.tag_name;
+		console.debug('[mods-manager] latest version', latestVersion, latestRelease);
+		const dllDownloadLink = `${mod.DownloadLink}/releases/latest/download/${mod.AssemblyName}.dll`;
+		const updated = await this.io.downloadFileTo(dllDownloadLink, `${installPath}\\${modsLocation}`, target);
 		console.debug('[mods-manager] mod updated', updated);
 		if (!updated) {
 			return null;
 		}
 
-		const newMod: ModData = { ...mod, Version: mod.updateAvailableVersion!, updateAvailableVersion: null };
-		await updateModeVersionInBepInExConfig(newMod, installPath, this.ow);
+		const wasAlreadyInstalled = mod.alreadyInstalled;
+		const newMod: ModData = {
+			...mod,
+			Version: mod.updateAvailableVersion ?? latestVersion,
+			updateAvailableVersion: null,
+			alreadyInstalled: true,
+		};
+		if (wasAlreadyInstalled) {
+			console.debug('[mods-manager] updating config file', newMod, installPath);
+			await updateModeVersionInBepInExConfig(newMod, installPath, this.ow);
+		} else {
+			console.debug('[mods-manager] creating config file', newMod, installPath);
+			await createInitialConfigFile(newMod, installPath, this.ow);
+		}
 		const newMods = this.modsData$$.getValue().map((m) => (m.AssemblyName === mod.AssemblyName ? newMod : m));
 		this.modsData$$.next(newMods);
 
@@ -251,10 +306,10 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 		return 'not-installed';
 	}
 
-	public async toggleMods(modNames: readonly string[]) {
-		return this.mainInstance.toggleModsInternal(modNames);
+	public async toggleMods(mods: readonly ModData[]) {
+		return this.mainInstance.toggleModsInternal(mods);
 	}
-	private async toggleModsInternal(modNames: readonly string[]) {
+	private async toggleModsInternal(mods: readonly ModData[]) {
 		const inGame = await this.gameStatus.inGame();
 		if (inGame) {
 			console.warn('Cannot toggle mods while in game');
@@ -264,16 +319,26 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 		const prefs = await this.prefs.getPreferences();
 		const installPath = prefs.gameInstallPath;
 		// Rename the DLL from .dll to .dll.disabled
-		for (const modName of modNames) {
-			let renamed = await this.io.renameFile(
-				`${installPath}\\${modsLocation}\\${modName}.dll`,
-				`${modName}.dll.disabled`,
-			);
-			if (!renamed) {
-				renamed = await this.io.renameFile(
-					`${installPath}\\${modsLocation}\\${modName}.dll.disabled`,
-					`${modName}.dll`,
+		for (const mod of mods) {
+			console.debug('[mods-manager] toggling mod', mod);
+			// Mod was disabled
+			if (mod.alreadyInstalled) {
+				const modName = mod.Name;
+				let renamed = await this.io.renameFile(
+					`${installPath}\\${modsLocation}\\${modName}.dll`,
+					`${modName}.dll.disabled`,
 				);
+				if (!renamed) {
+					renamed = await this.io.renameFile(
+						`${installPath}\\${modsLocation}\\${modName}.dll.disabled`,
+						`${modName}.dll`,
+					);
+				}
+			}
+			// We need to download the mod
+			else {
+				console.debug('[mods-manager] downloading mod', mod);
+				await this.updateModInternal({ ...mod, Registered: true });
 			}
 		}
 
@@ -461,4 +526,6 @@ export interface ModData {
 	readonly Version: string;
 	readonly DownloadLink: string | null;
 	readonly updateAvailableVersion: string | null;
+	readonly alreadyInstalled: boolean;
+	readonly lastTrustedVersion: string | null;
 }

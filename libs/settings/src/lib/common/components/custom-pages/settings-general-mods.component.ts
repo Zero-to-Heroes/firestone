@@ -113,7 +113,7 @@ import { Observable, filter } from 'rxjs';
 							<fs-toggle-view
 								class="toggle-button"
 								[value]="mod.Registered"
-								[toggleFunction]="toggleMod(mod.AssemblyName)"
+								[toggleFunction]="toggleMod(mod)"
 							></fs-toggle-view>
 						</div>
 					</div>
@@ -252,9 +252,9 @@ export class SettingsGeneralModsComponent extends AbstractSubscriptionComponent 
 	// 	}
 	// }
 
-	toggleMod(modName) {
+	toggleMod(mod: ModData) {
 		return async (_: boolean) => {
-			this.modsManager.toggleMods([modName]);
+			this.modsManager.toggleMods([mod]);
 		};
 	}
 

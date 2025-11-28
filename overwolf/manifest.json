@@ -307,6 +307,8 @@
 				"https://www.googletagmanager.com",
 				"https://www.hearthpwn.com",
 				"https://*.hsguru.com",
+				"https://github.com",
+				"https://*.github.com",
 				"https://*.pastebin.com"
 			]
 		},

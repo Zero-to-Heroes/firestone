@@ -31,6 +31,7 @@ export const buildBepInExConfig = async (
 export const updateModeVersionInBepInExConfig = async (mod: ModData, installPath: string, ow: OverwolfService) => {
 	const configFile = `${installPath}\\${configLocation}\\${mod.AssemblyName}.cfg`;
 	const config = await ow.readTextFile(configFile);
+	console.debug('[mods] config file', config, mod, installPath);
 
 	// Replace only the Version line, preserving all other content and formatting
 	const newConfig = config
@@ -44,6 +45,32 @@ export const updateModeVersionInBepInExConfig = async (mod: ModData, installPath
 		})
 		.join('\n');
 
+	await ow.writeFileContents(configFile, newConfig);
+};
+
+export const createInitialConfigFile = async (mod: ModData, installPath: string, ow: OverwolfService) => {
+	const configFile = `${installPath}\\${configLocation}\\${mod.AssemblyName}.cfg`;
+	const existingConfig = await ow.readTextFile(configFile);
+	console.debug('[mods] existing config file', existingConfig, mod, installPath);
+	if (existingConfig?.length) {
+		return;
+	}
+
+	const newConfig = `
+[General]
+
+# Setting type: String
+Name = ${mod.Name}
+
+# Setting type: String
+Guid = ${mod.AssemblyName}
+
+# Setting type: String
+Version = ${mod.Version}
+
+# Setting type: String
+DownloadLink = ${mod.DownloadLink}
+`;
 	await ow.writeFileContents(configFile, newConfig);
 };
 
