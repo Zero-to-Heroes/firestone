@@ -131,8 +131,6 @@ import { interval, Observable, Subscription } from 'rxjs';
 					<p [innerHTML]="hearthpwn.whatNext"></p>
 				</div>
 				<div class="connect">
-					{{ value.hearthpwnLoginUrl }}
-					{{ value.hearthpwnLoggedIn }}
 					<div class="logged-out" *ngIf="value.hearthpwnLoginUrl && !value.hearthpwnLoggedIn">
 						<button (mousedown)="hearthpwnConnect(value.hearthpwnLoginUrl)">
 							<span [fsTranslate]="'settings.general.third-party.ooc.connect-button-text'"></span>
@@ -148,7 +146,7 @@ import { interval, Observable, Subscription } from 'rxjs';
 				<preference-toggle
 					*ngIf="value.hearthpwnLoginUrl && value.hearthpwnLoggedIn"
 					class="collection-sync-notif"
-					field="hearthpwnShowNotifOnSync"
+					field="hearthpwnSync"
 					[label]="hearthpwn.toggleLabel"
 				></preference-toggle>
 			</section> -->
@@ -268,10 +266,15 @@ export class SettingsGeneralThirdPartyComponent
 		this.ow.openUrlInDefaultBrowser(`https://www.hearthpwn.com/set-auth/${loginToken}`);
 		this.hearthpwnSub = interval(5000).subscribe(async () => {
 			const url = `https://www.hearthpwn.com/get-auth-info/${loginToken}`;
-			const apiResult = await this.api.callGetApi(url);
+			const apiResult: { userToken: string; userID: number } | null = await this.api.callGetApi<{
+				userToken: string;
+				userID: number;
+			} | null>(url);
 			console.debug('[hearthpwn] api result', apiResult);
 			if (apiResult) {
 				this.hearthpwnSub.unsubscribe();
+				await this.prefs.updatePrefs('hearthpwnAuthToken', apiResult.userToken);
+				await this.prefs.updatePrefs('hearthpwnUserId', apiResult.userID);
 			}
 		});
 	}

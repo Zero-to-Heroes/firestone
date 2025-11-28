@@ -40,7 +40,7 @@ export class HearthpwnService extends AbstractFacadeService<HearthpwnService> {
 
 		this.prefs.preferences$$
 			.pipe(
-				map((prefs) => true || prefs.hearthpwnSync),
+				map((prefs) => prefs.hearthpwnSync),
 				filter((sync) => sync),
 				distinctUntilChanged(),
 				take(1),
@@ -103,8 +103,8 @@ export class HearthpwnService extends AbstractFacadeService<HearthpwnService> {
 
 	private async transformCollection(memoryCollection: readonly Card[]): Promise<UploadData> {
 		const prefs = await this.prefs.getPreferences();
-		const userId = prefs.hearthpwnUserId ?? 100569059;
-		const authToken = prefs.hearthpwnAuthToken ?? '2AF39CB9-8CF1-4962-91F0-F400BA8CE0C5';
+		const userId = prefs.hearthpwnUserId;
+		const authToken = prefs.hearthpwnAuthToken;
 		const profile: UploadUser = {
 			AuthToken: authToken,
 			UserId: userId,
