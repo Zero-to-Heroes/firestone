@@ -11,8 +11,8 @@ import { filterCards } from './utils';
 
 export const Blasteroid: GeneratingCard = {
 	cardIds: [CardIds.Blasteroid_GDB_303],
-	hasSequenceInfo: true,
-	publicCreator: true,
+	hasSequenceInfo: false,
+	publicCreator: false,
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
 		return {
 			cardType: CardType.SPELL,
