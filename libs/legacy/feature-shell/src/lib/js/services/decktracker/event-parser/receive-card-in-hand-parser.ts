@@ -382,28 +382,6 @@ const guessCardId = (
 		return cardId;
 	}
 
-	// Assuming the mini is always created first, which seems to be the case
-	if (
-		createdIndex === 0 &&
-		allCards.getCard(creatorCardId).mechanics?.includes(GameTag[GameTag.MINIATURIZE]) &&
-		!allCards.getCard(creatorCardId).mechanics?.includes(GameTag[GameTag.GIGANTIFY])
-	) {
-		const tentativeMiniCard = allCards.getCard(creatorCardId + 't');
-		if (tentativeMiniCard.mechanics?.includes(GameTag[GameTag.MINI])) {
-			return tentativeMiniCard.id;
-		}
-	}
-	if (
-		createdIndex === 0 &&
-		allCards.getCard(creatorCardId).mechanics?.includes(GameTag[GameTag.GIGANTIFY]) &&
-		!allCards.getCard(creatorCardId).mechanics?.includes(GameTag[GameTag.MINIATURIZE])
-	) {
-		const tentativeMiniCard = allCards.getCard(creatorCardId + 't');
-		if (tentativeMiniCard.mechanics?.includes(GameTag[GameTag.GIGANTIC])) {
-			return tentativeMiniCard.id;
-		}
-	}
-
 	switch (creatorCardId) {
 		case CardIds.Repackage_RepackagedBoxToken_TOY_879t:
 			if (true) {
@@ -442,7 +420,32 @@ const guessCardId = (
 				createdIndex,
 				allCards.getService(),
 			);
-			return guessedCardId ?? cardId;
+			if (guessedCardId) {
+				return guessedCardId;
+			}
+			break;
+	}
+
+	// Assuming the mini is always created first, which seems to be the case
+	if (
+		createdIndex === 0 &&
+		allCards.getCard(creatorCardId).mechanics?.includes(GameTag[GameTag.MINIATURIZE]) &&
+		cardCreationMechanics(creatorCardId, allCards).length === 1
+	) {
+		const tentativeMiniCard = allCards.getCard(creatorCardId + 't');
+		if (tentativeMiniCard.mechanics?.includes(GameTag[GameTag.MINI])) {
+			return tentativeMiniCard.id;
+		}
+	}
+	if (
+		createdIndex === 0 &&
+		allCards.getCard(creatorCardId).mechanics?.includes(GameTag[GameTag.GIGANTIFY]) &&
+		cardCreationMechanics(creatorCardId, allCards).length === 1
+	) {
+		const tentativeMiniCard = allCards.getCard(creatorCardId + 't');
+		if (tentativeMiniCard.mechanics?.includes(GameTag[GameTag.GIGANTIC])) {
+			return tentativeMiniCard.id;
+		}
 	}
 	return cardId;
 };
@@ -471,4 +474,12 @@ export const denormalizeCreatorCardId = (
 		default:
 			return { creatorCardId, creatorEntityId };
 	}
+};
+
+const cardCreationMechanics = (creatorCardId: string, allCards: CardsFacadeService): readonly GameTag[] => {
+	const mechanics = [GameTag.MINIATURIZE, GameTag.GIGANTIFY, GameTag.DISCOVER];
+	return allCards
+		.getCard(creatorCardId)
+		.mechanics?.filter((m) => mechanics.includes(GameTag[m]))
+		.map((m) => GameTag[m]);
 };

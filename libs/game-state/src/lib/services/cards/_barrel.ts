@@ -74,3 +74,4 @@ export { ConfluxFuture } from './conflux-future';
 export { IncriminatingPsychic } from './incriminating-psychic';
 export { TimelessCausality } from './timeless-causality';
 export { ReplicatorInator } from './replicator-inator';
+export { ToysnatchingGeist } from './toysnatching-geist';
