@@ -20,19 +20,16 @@ export class DoommaidenParser implements ActionChainParser {
 		const cardPlayedEvent = reversedEvents.shift();
 		const isPlayer = cardPlayedEvent.controllerId === cardPlayedEvent.localPlayer.PlayerId;
 		// Only useful when the opponent handles this
-		console.debug('[debug] considering for doommaiden', cardPlayedEvent, reversedEvents);
 		if (isPlayer) {
 			return currentState;
 		}
 
 		const cardStolen = reversedEvents.find((e) => e.type === GameEvent.CARD_STOLEN);
-		console.debug('[debug] cardStolen', cardStolen);
 		if (
 			!cardStolen ||
 			cardStolen.entityId !== cardPlayedEvent.entityId ||
 			cardStolen.additionalData.zone !== Zone.DECK
 		) {
-			console.debug('[debug] not applying doommaiden', cardStolen, cardPlayedEvent);
 			return currentState;
 		}
 
@@ -42,7 +39,6 @@ export class DoommaidenParser implements ActionChainParser {
 			cardStolen.cardId,
 			null, // We shouldn't know which one got removed
 		);
-		console.debug('[debug] removedCard', removedCard, newDeck, currentState.playerDeck);
 		const newDeckState = currentState.playerDeck.update({
 			deck: newDeck,
 		});

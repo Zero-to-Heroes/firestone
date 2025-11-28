@@ -91,7 +91,6 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 				const installedMods = await this.installedMods(installPath);
 				const allMods = [...(modsConfig?.trustedMods ?? [])];
 				for (const mod of installedMods) {
-					console.debug('[debug] considering', mod);
 					const existing: Mutable<ModData> | undefined = allMods.find(
 						(m) => m.AssemblyName === mod.AssemblyName,
 					);
