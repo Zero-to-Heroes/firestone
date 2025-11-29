@@ -30,49 +30,51 @@ export class CardTradedParser implements EventParser {
 			isPlayer ? cardId : null,
 			entityId,
 		);
-		console.debug('[card-traded] card in hand', card, cardId, entityId, deck.hand);
+		// console.debug('[card-traded] card in hand', card, cardId, entityId, deck.hand);
 
 		const newHand: readonly DeckCard[] = this.helper.removeSingleCardFromZone(
 			deck.hand,
 			card.cardId,
 			card.entityId,
 		)[0];
-		console.debug('[card-traded] new hand', newHand, card.cardId, card.entityId);
+		// console.debug('[card-traded] new hand', newHand, card.cardId, card.entityId);
 		const previousDeck = deck.deck;
 		// When we have a deckstring / decklist, we show all the possible remaining options in the
 		// decklist. This means that when a filler card goes back, it's one of these initial cards
 		// that goes back, and so we don't add them once again
 		const isInInitialDeck = !!card?.inInitialDeck || !card.creatorCardId?.length;
 		const shouldKeepDeckAsIs = !!deck.deckstring && isInInitialDeck && !card?.cardId;
-		console.debug(
-			'[card-traded] shouldKeepDeckAsIs',
-			shouldKeepDeckAsIs,
-			deck.deckstring,
-			isInInitialDeck,
-			card?.inInitialDeck,
-			card?.creatorCardId,
-			card?.cardId,
-			card?.entityId,
-		);
+		// console.debug(
+		// 	'[card-traded] shouldKeepDeckAsIs',
+		// 	shouldKeepDeckAsIs,
+		// 	deck.deckstring,
+		// 	isInInitialDeck,
+		// 	card?.inInitialDeck,
+		// 	card?.creatorCardId,
+		// 	card?.cardId,
+		// 	card?.entityId,
+		// );
 
 		// This is to avoid the scenario where a card is drawn by a public influence (eg Thistle Tea) and
 		// put back in the deck, then drawn again. If we don't reset the lastInfluencedBy, we
 		// could possibly have an info leak
-		const cardWithoutInfluence = card
-			? card.update({
-					entityId: card.entityId,
-					cardId: card.cardId ?? cardId,
-					refManaCost: card.refManaCost ?? this.allCards.getCard(card.cardId ?? cardId)?.cost,
-					cardName: card.cardName ?? this.allCards.getCard(card.cardId ?? cardId)?.name,
-					rarity: card.rarity ?? this.allCards.getCard(card.cardId ?? cardId)?.rarity,
-					lastAffectedByCardId: undefined,
-					mainAttributeChange: buildAttributeChange(card),
-					positionFromTop: undefined,
-					positionFromBottom: undefined,
-					dredged: undefined,
-					zone: undefined,
-				} as DeckCard)
-			: card;
+		const card2 = card?.update({
+			entityId: card.entityId,
+			cardId: card.cardId ?? cardId,
+			refManaCost: card.refManaCost ?? this.allCards.getCard(card.cardId ?? cardId)?.cost,
+			cardName: card.cardName ?? this.allCards.getCard(card.cardId ?? cardId)?.name,
+			rarity: card.rarity ?? this.allCards.getCard(card.cardId ?? cardId)?.rarity,
+			lastAffectedByCardId: undefined,
+			positionFromTop: undefined,
+			positionFromBottom: undefined,
+			dredged: undefined,
+			zone: undefined,
+		} as DeckCard);
+		// console.debug('[card-traded] card2', card2);
+		// We need to have the cardId properly set
+		const cardWithoutInfluence = card2?.update({
+			mainAttributeChange: buildAttributeChange(card2),
+		});
 
 		const newDeck: readonly DeckCard[] = shouldKeepDeckAsIs
 			? previousDeck
@@ -107,6 +109,7 @@ export class CardTradedParser implements EventParser {
 }
 
 const buildAttributeChange = (card: DeckCard): number => {
+	// console.debug('building attribute change', card?.cardId, card?.mainAttributeChange, card);
 	if (CARDS_THAT_IMPROVE_WHEN_TRADED.includes(card?.cardId as CardIds)) {
 		return 1 + (card.mainAttributeChange ?? 0);
 	}
