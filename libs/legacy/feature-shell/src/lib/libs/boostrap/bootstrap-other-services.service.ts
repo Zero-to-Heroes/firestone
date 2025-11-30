@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { QuestsService } from '@firestone/app/services';
 import { ArenaRefService } from '@firestone/arena/common';
 import { DiscordPresenceManagerService } from '@firestone/discord';
 import {
@@ -33,7 +34,6 @@ import { LiveStreamsService } from '../../js/services/mainwindow/live-streams.se
 import { OutOfCardsService } from '../../js/services/mainwindow/out-of-cards.service';
 import { TwitchPresenceService } from '../../js/services/mainwindow/twitch-presence.service';
 import { EndGameListenerService } from '../../js/services/manastorm-bridge/end-game-listener.service';
-import { QuestsService } from '../../js/services/quests.service';
 import { ReplaysNotificationService } from '../../js/services/replays/replays-notification.service';
 import { RewardMonitorService } from '../../js/services/rewards/rewards-monitor';
 import { GameStatsProviderService } from '../../js/services/stats/game/game-stats-provider.service';
