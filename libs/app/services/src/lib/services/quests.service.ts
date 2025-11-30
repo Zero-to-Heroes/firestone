@@ -105,6 +105,7 @@ export class QuestsService extends AbstractFacadeService<QuestsService> {
 
 	protected override async initElectronSubjects() {
 		this.setupElectronSubject(this.referenceQuests$$, 'QuestsService-referenceQuests');
+		this.setupElectronSubject(this.activeQuests$$, 'QuestsService-activeQuests');
 	}
 
 	protected override async createElectronProxy(ipcRenderer: any) {

@@ -1,4 +1,4 @@
-import { GameNativeStateStoreService } from '@firestone/app/services';
+import { GameNativeStateStoreService, QuestsService } from '@firestone/app/services';
 import {
 	ArenaCardStatsService,
 	ArenaClassStatsService,
@@ -411,6 +411,9 @@ export const buildAppInjector = () => {
 
 	const accountService = new AccountService(windowManager);
 	electronInjector.register(AccountService, accountService);
+
+	const questService = new QuestsService(windowManager);
+	electronInjector.register(QuestsService, questService);
 
 	return electronInjector;
 };

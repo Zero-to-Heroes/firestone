@@ -80,10 +80,17 @@ export class QuestsWidgetViewComponent extends AbstractSubscriptionComponent imp
 	}
 
 	async ngAfterContentInit() {
+		console.debug('QuestsWidgetViewComponent ngAfterContentInit');
+		await waitForReady(this.questsService);
+		console.debug('QuestsWidgetViewComponent questsService ready');
+		await waitForReady(this.prefs);
+		console.debug('QuestsWidgetViewComponent prefs ready');
 		await waitForReady(this.prefs, this.questsService);
+		console.debug('QuestsWidgetViewComponent ready');
 
 		this.quests$ = combineLatest([this.questsService.referenceQuests$$, this.questsService.activeQuests$$]).pipe(
 			this.mapData(([referenceQuests, activeQuests]) => {
+				console.debug('QuestsWidgetViewComponent quests', referenceQuests, activeQuests);
 				return activeQuests?.Quests?.filter((q) => [QuestStatus.NEW, QuestStatus.ACTIVE].includes(q.Status))
 					.map((quest) => {
 						const refQuest = referenceQuests?.quests?.find((q) => q.id === quest.Id);
