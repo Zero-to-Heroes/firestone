@@ -458,6 +458,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), battlecry);
 		case CardIds.BeanstalkBrute_EDR_230:
 			return and(side(inputSide), inDeck, minion);
+		case CardIds.BeastmasterLeoroxx:
+			return and(side(inputSide), or(inHand, inDeck), beast);
 		case CardIds.BeckoningBicornTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), pirate);
 		case CardIds.ArchVillainRafaam_BeholdMyStuff_THD_032p:
@@ -2917,6 +2919,7 @@ export const cardIdSelector = (
 		case CardIds.SecretStudiesTavernBrawl:
 			return and(side(inputSide), inDeck, secret);
 		case CardIds.SelectiveBreederCore:
+		case CardIds.SelectiveBreeder_LEG_CS3_015:
 			return and(side(inputSide), inDeck, beast);
 		case CardIds.SelflessSidekick:
 			return and(side(inputSide), inDeck, weapon);
@@ -3547,6 +3550,9 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, minion, effectiveCostEqual(1));
 		case CardIds.Turbulus_WORK_013:
 			return and(side(inputSide), or(inDeck, inHand), minion, battlecry);
+		case CardIds.TundraRhinoLegacy:
+		case CardIds.TundraRhinoVanilla:
+			return and(side(inputSide), or(inDeck, inHand), beast);
 		case CardIds.Tyr:
 			return tooltip(
 				and(side(inputSide), inGraveyard, currentClass, minion, attackGreaterThan(1), attackLessThan(5)),
@@ -3646,6 +3652,8 @@ export const cardIdSelector = (
 				and(side(inputSide), inDeck, taunt),
 				and(side(inputSide), inDeck, divineShield),
 			);
+		case CardIds.VardenDawngrasp_BAR_748:
+			return and(side(inputSide), or(inHand, inDeck), freeze);
 		case CardIds.VarianWrynn_AT_072:
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.VaultBreaker_TLC_483:
