@@ -318,7 +318,9 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 										: this.getManaCost(refCard),
 									actualManaCost: this.getManaCost(refCard),
 									// Don't show a gift icon when the card is in the deck
-									creatorCardIds: [],
+									// 2025-12-01: why????
+									// creatorCardIds: [],
+									creatorCardIds: [refCard.creatorCardId].filter((id) => !!id),
 									highlight: displayMode,
 									internalEntityIds: matchingCards.map((c) => c.internalEntityId),
 									mainAttributeChange: statsModifier,
@@ -423,7 +425,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 										// Always show the base cost in this display mode
 										refManaCost: this.getManaCost(refCard),
 										actualManaCost: this.getManaCost(refCard),
-										creatorCardIds: [],
+										creatorCardIds: [refCard.creatorCardId].filter((id) => !!id),
 										highlight: null,
 										internalEntityIds: matchingCards.map((c) => c.internalEntityId),
 										mainAttributeChange: statsModifier,
