@@ -5,9 +5,11 @@ import { SortCriteria } from '@firestone/shared/common/view';
 import { getStandardDeviation, sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { BgsCardTier, BgsMetaCardStatTier, BgsMetaCardStatTierItem } from './meta-card.model';
+import { hasCorrectTribe, Race } from '@firestone-hs/reference-data';
 
 export const buildCardStats = (
 	stats: readonly BgsCardStat[],
+	tribesFilter: readonly Race[],
 	minTurn: number,
 	exactTurn: number | null,
 	allCards: CardsFacadeService,
@@ -16,7 +18,11 @@ export const buildCardStats = (
 	const mainStats = stats
 		.filter((s) => {
 			const ref = allCards.getCard(s.cardId);
-			return ref.isBaconPool;
+			return (
+				ref.isBaconPool &&
+				(!tribesFilter?.length ||
+					tribesFilter.some((r) => ref.races?.includes(Race[r]) || (r === Race.BLANK && !ref.races?.length)))
+			);
 		})
 		.map((s) => {
 			const relevantStats = s.turnStats.filter((stat) =>

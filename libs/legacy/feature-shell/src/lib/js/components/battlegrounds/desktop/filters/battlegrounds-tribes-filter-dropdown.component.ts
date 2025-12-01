@@ -25,7 +25,7 @@ import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/even
 	template: `
 		<battlegrounds-tribes-filter-dropdown-view
 			class="battlegrounds-tribes-filter-dropdown"
-			[allTribes]="allTribes"
+			[allTribes]="allTribes$ | async"
 			[currentFilter]="currentFilter$ | async"
 			[visible]="visible$ | async"
 			[validationErrorTooltip]="validationErrorTooltip"
@@ -38,7 +38,7 @@ export class BattlegroundsTribesFilterDropdownComponent
 	extends AbstractSubscriptionComponent
 	implements AfterContentInit, AfterViewInit
 {
-	allTribes = ALL_BG_RACES;
+	allTribes$: Observable<readonly Race[]>;
 	currentFilter$: Observable<readonly Race[]>;
 	visible$: Observable<boolean>;
 
@@ -59,6 +59,11 @@ export class BattlegroundsTribesFilterDropdownComponent
 	async ngAfterContentInit() {
 		await waitForReady(this.nav, this.prefs);
 
+		this.allTribes$ = this.nav.selectedCategoryId$$.pipe(
+			this.mapData((categoryId) =>
+				categoryId === 'bgs-category-meta-cards' ? [Race.BLANK, ...ALL_BG_RACES] : ALL_BG_RACES,
+			),
+		);
 		this.currentFilter$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsActiveTribesFilter));
 		this.visible$ = combineLatest([this.nav.selectedCategoryId$$, this.nav.currentView$$]).pipe(
 			filter(([categoryId, currentView]) => !!categoryId && !!currentView),
@@ -72,6 +77,7 @@ export class BattlegroundsTribesFilterDropdownComponent
 						'bgs-category-personal-hero-details',
 						'bgs-category-personal-rating',
 						'bgs-category-perfect-games',
+						'bgs-category-meta-cards',
 					].includes(categoryId),
 			),
 		);

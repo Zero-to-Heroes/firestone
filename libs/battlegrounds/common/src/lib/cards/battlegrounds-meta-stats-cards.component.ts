@@ -188,11 +188,12 @@ export class BattlegroundsMetaStatsCardsComponent extends AbstractSubscriptionCo
 			baseStats$,
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsActiveCardsTiers)),
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsActiveCardsTurn)),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsActiveTribesFilter)),
 		]).pipe(
-			this.mapData(([stats, cardTiers, turnNumber]) => {
+			this.mapData(([stats, cardTiers, turnNumber, tribesFilter]) => {
 				console.debug('[debug] stats', stats, cardTiers, turnNumber);
 				const minTurn = buildMinTurn(cardTiers);
-				return buildCardStats(stats?.cardStats ?? [], minTurn, turnNumber, this.allCards);
+				return buildCardStats(stats?.cardStats ?? [], tribesFilter, minTurn, turnNumber, this.allCards);
 			}),
 			shareReplay(1),
 			takeUntil(this.destroyed$),
@@ -208,7 +209,6 @@ export class BattlegroundsMetaStatsCardsComponent extends AbstractSubscriptionCo
 			),
 			this.sortCriteria$$,
 		]).pipe(
-			tap((info) => console.debug('[debug]received info for cards', info)),
 			filter(([stats, { cardType, cardTiers, searchString }, sortCriteria]) => !!stats?.length),
 			this.mapData(([stats, { cardType, cardTiers, searchString }, sortCriteria]) => {
 				const impactHidden = stats.every((stat) => stat.impact == null);
@@ -228,7 +228,6 @@ export class BattlegroundsMetaStatsCardsComponent extends AbstractSubscriptionCo
 								(impactHidden || (stat.averagePlacement != null && stat.impact != null)),
 						) ?? [];
 				const tiers = buildCardTiers(filtered, sortCriteria, this.i18n, this.allCards);
-				console.debug('[debug] tiers', tiers);
 				const result = !!searchString?.length
 					? tiers
 							.map((t) => {

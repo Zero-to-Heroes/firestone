@@ -59,7 +59,10 @@ export class BattlegroundsTribesFilterDropdownViewComponent
 	private currentFilter$$ = new BehaviorSubject<readonly Race[]>([]);
 	private visible$$ = new BehaviorSubject<boolean>(null);
 
-	constructor(protected override readonly cdr: ChangeDetectorRef, private readonly i18n: ILocalizationService) {
+	constructor(
+		protected override readonly cdr: ChangeDetectorRef,
+		private readonly i18n: ILocalizationService,
+	) {
 		super(cdr);
 	}
 
@@ -74,7 +77,7 @@ export class BattlegroundsTribesFilterDropdownViewComponent
 								value: '' + tribe,
 								label: getTribeName(tribe, this.i18n),
 								image: getTribeIcon(tribe),
-							} as MultiselectOption),
+							}) as MultiselectOption,
 					)
 					.sort((a, b) => (a.label < b.label ? -1 : 1));
 				// console.debug('options', result);

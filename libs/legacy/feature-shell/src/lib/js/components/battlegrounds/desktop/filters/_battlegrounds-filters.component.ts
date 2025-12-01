@@ -26,12 +26,12 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 			<battlegrounds-trinket-type-filter-dropdown class="filter"></battlegrounds-trinket-type-filter-dropdown>
 			<battlegrounds-card-type-filter-dropdown class="filter"></battlegrounds-card-type-filter-dropdown>
 			<battlegrounds-card-tier-filter-dropdown class="filter"></battlegrounds-card-tier-filter-dropdown>
-			<battlegrounds-card-turn-filter-dropdown class="filter"></battlegrounds-card-turn-filter-dropdown>
 			<battlegrounds-hero-filter-dropdown class="hero-filter"></battlegrounds-hero-filter-dropdown>
+			<battlegrounds-tribes-filter-dropdown class="tribes-filter"></battlegrounds-tribes-filter-dropdown>
+			<battlegrounds-card-turn-filter-dropdown class="filter"></battlegrounds-card-turn-filter-dropdown>
 			<battlegrounds-rank-filter-dropdown class="rank-filter"></battlegrounds-rank-filter-dropdown>
 			<battlegrounds-anomalies-filter-dropdown class="anomalies-filter"></battlegrounds-anomalies-filter-dropdown>
 			<battlegrounds-comps-filter-dropdown class="comps-filter"></battlegrounds-comps-filter-dropdown>
-			<battlegrounds-tribes-filter-dropdown class="tribes-filter"></battlegrounds-tribes-filter-dropdown>
 			<battlegrounds-rank-group-dropdown class="rank-group"></battlegrounds-rank-group-dropdown>
 			<battlegrounds-hero-sort-dropdown class="hero-sort"></battlegrounds-hero-sort-dropdown>
 
