@@ -383,6 +383,7 @@ export const isSi7 = (input: SelectorInput): boolean =>
 export const summonsTreant = (input: SelectorInput): boolean =>
 	input.card?.relatedCardDbfIds?.some((c) => input.allCards.getCard(c)?.isTreant);
 export const isTreant = (input: SelectorInput): boolean => input.card?.isTreant;
+export const treant = or(summonsTreant, isTreant);
 
 export const relic = cardIs(...RELIC_IDS);
 

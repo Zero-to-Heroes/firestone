@@ -141,6 +141,7 @@ import {
 	tooltip,
 	totem,
 	tradeable,
+	treant,
 	tribeless,
 	undead,
 	unholyRune,
@@ -191,7 +192,7 @@ export const cardIdSelector = (
 		case CardIds.AegwynnTheGuardian_LEG_CS3_001:
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.Aeroponics:
-			return and(side(inputSide), or(inHand, inDeck), or(summonsTreant, isTreant));
+			return and(side(inputSide), or(inHand, inDeck), treant);
 		case CardIds.AfterlifeAttendant:
 		case CardIds.AfterlifeAttendant_CORE_MAW_031:
 			return and(side(inputSide), or(inDeck, inHand), infuse);
@@ -263,7 +264,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, secret);
 		case CardIds.AncientOfGrowth:
 		case CardIds.AncientOfGrowth_AncientGrowth:
-			return and(side(inputSide), or(inDeck, inHand), or(isTreant, summonsTreant));
+			return and(side(inputSide), or(inDeck, inHand), treant);
 		case CardIds.AnimaExtractor:
 		case CardIds.AnimaExtractor_CORE_REV_332:
 			return and(side(inputSide), or(inDeck, inHand), minion);
@@ -834,7 +835,7 @@ export const cardIdSelector = (
 				)(input);
 			};
 		case CardIds.ConservatorNymph:
-			return and(side(inputSide), or(inDeck, inHand), or(summonsTreant, isTreant));
+			return and(side(inputSide), or(inDeck, inHand), treant);
 		case CardIds.ConstructPylons_SC_755:
 			return and(side(inputSide), or(inDeck, inHand), protoss);
 		case CardIds.Consume_SC_020:
@@ -938,7 +939,7 @@ export const cardIdSelector = (
 				cardIs(CardIds.Cthun_WON_135, CardIds.Cthun_OG_279, CardIds.Cthun_OG_280),
 			);
 		case CardIds.Cultivation:
-			return and(side(inputSide), or(inDeck, inHand), or(summonsTreant, isTreant));
+			return and(side(inputSide), or(inDeck, inHand), treant);
 		case CardIds.CupOMuscle_VAC_338:
 		case CardIds.CupOMuscle_CupOMuscleToken_VAC_338t:
 		case CardIds.CupOMuscle_CupOMuscleToken_VAC_338t2:
@@ -2329,6 +2330,9 @@ export const cardIdSelector = (
 			return and(opposingSide(inputSide), inDeck, minion);
 		case CardIds.NightmareLordXavius_EDR_856:
 			return and(side(inputSide), inDeck, minion);
+		case CardIds.NightshadeBud:
+		case CardIds.NightshadeBud_CORE_REV_311:
+			return highlightConditions(and(side(inputSide), inDeck, minion), and(side(inputSide), inDeck, spell));
 		case CardIds.NineLives:
 			return and(side(inputSide), or(inHand, inDeck, inGraveyard), minion, deathrattle);
 		case CardIds.NiriOfTheCrater_TLC_836:
@@ -2397,7 +2401,7 @@ export const cardIdSelector = (
 		case CardIds.OverflowSurger_WW_424:
 			return and(side(inputSide), or(inDeck, inHand), elemental);
 		case CardIds.OvergrownBeanstalk_MIS_301:
-			return and(side(inputSide), or(inDeck, inHand), summonsTreant);
+			return and(side(inputSide), or(inDeck, inHand), treant);
 		case CardIds.OvergrownHorror_EDR_654:
 			return and(side(inputSide), or(inDeck, inHand), darkGift);
 		case CardIds.Overheat_FIR_906:
@@ -2644,7 +2648,7 @@ export const cardIdSelector = (
 		case CardIds.RatchetPrivateer:
 			return and(side(inputSide), or(inDeck, inHand), weapon);
 		case CardIds.ForestWardenOmu_RapidGrowth_THD_007p:
-			return and(side(inputSide), or(inDeck, inHand), summonsTreant);
+			return and(side(inputSide), or(inDeck, inHand), treant);
 		case CardIds.Ravage_SC_004hp:
 			return and(side(inputSide), or(inHand, inDeck), minion, zerg);
 		case CardIds.RavenousFelhunter_EDR_891:
@@ -3579,6 +3583,9 @@ export const cardIdSelector = (
 					cardIs(...candidates.map((c) => c.cardId as CardIds)),
 				)(input);
 			};
+		case CardIds.UmbralOwl:
+		case CardIds.UmbralOwl_CORE_DMF_060:
+			return and(side(inputSide), or(inHand, inDeck), spell);
 		case CardIds.UmpiresGrasp_TOY_641:
 			return and(side(inputSide), inDeck, demon);
 		case CardIds.UnchainedGladiator:
@@ -3838,6 +3845,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), cardsPlayedThisMatch, corrupted);
 		case CardIds.YshaarjRageUnbound:
 			return and(side(inputSide), inDeck, minion);
+		case CardIds.YsielWindsinger:
+			return and(side(inputSide), or(inHand, inDeck), spell);
 
 		// Unsorted
 		case CardIds.BlackjackStunner:
