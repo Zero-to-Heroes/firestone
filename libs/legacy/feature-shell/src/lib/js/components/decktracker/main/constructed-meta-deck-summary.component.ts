@@ -55,7 +55,7 @@ import { EnhancedDeckStat } from './meta-decks-visualization.component';
 					*ngIf="decklist"
 					[deckstring]="decklist"
 					[deckName]="deckName"
-					[copyText]="'Copy deck code to clipboard'"
+					[copyText]="defaultCopyText"
 					[showTooltip]="true"
 				>
 				</copy-deckstring>
@@ -111,6 +111,8 @@ export class ConstructedMetaDeckSummaryComponent extends AbstractSubscriptionCom
 	}
 
 	@Input() showStandardDeviation: boolean;
+
+	defaultCopyText = this.i18n.translateString('app.duels.deckbuilder.export-deckcode-tooltip');
 
 	private deck$$ = new BehaviorSubject<EnhancedDeckStat>(null);
 
