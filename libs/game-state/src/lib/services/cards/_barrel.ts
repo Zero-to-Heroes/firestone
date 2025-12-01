@@ -75,3 +75,5 @@ export { IncriminatingPsychic } from './incriminating-psychic';
 export { TimelessCausality } from './timeless-causality';
 export { ReplicatorInator } from './replicator-inator';
 export { ToysnatchingGeist } from './toysnatching-geist';
+export { AmuletOfTracking } from './amulet-of-tracking';
+export { AmuletOfTrackingPhony } from './amulet-of-tracking-phony';
