@@ -631,7 +631,7 @@ export class Preferences implements IPreferences {
 	readonly bgsActiveCardsSearch: string | null = null;
 	readonly bgsActiveCardsTiers: readonly BgsCardTierFilterType[] = [1];
 	readonly bgsActiveCompsFilter: readonly string[] = [];
-	readonly bgsActiveCardsTurn: number | null = 1;
+	readonly bgsActiveCardsTurn: number | null = null;
 	readonly bgsSelectedTab3: BgsStatsFilterId = 'hp-by-turn';
 	readonly bgsNumberOfDisplayedTabs: number = 1;
 	readonly bgsActiveSimulatorMinionTribeFilter: 'all' | 'blank' | string = 'all';

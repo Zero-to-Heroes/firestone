@@ -21,7 +21,16 @@ import { CardsFacadeService, ILocalizationService } from '@firestone/shared/fram
 				</div>
 			</div>
 			<!-- <div class="cell average-placement">{{ averagePlacement }}</div> -->
-			<div class="cell impact" [ngClass]="{ positive: impactValue < 0 }">{{ impact }}</div>
+			<div class="cell impact" [ngClass]="{ positive: impactValue < 0 }" *ngIf="impactValue != null">
+				{{ impact }}
+			</div>
+			<div
+				class="cell impact"
+				*ngIf="impactValue == null"
+				[helpTooltip]="'app.battlegrounds.tier-list.impact-hidden-tooltip' | fsTranslate"
+			>
+				{{ '--' }}
+			</div>
 			<!-- <div class="cell average-placement-high-mmr">{{ averagePlacementHighMmr }}</div>
 			<div class="cell pick-rate">{{ pickRate }}</div>
 			<div class="cell pick-rate-high-mmr">{{ pickRateHighMmr }}</div> -->
@@ -59,16 +68,19 @@ export class BattlegroundsMetaStatsCardInfoComponent {
 	pickRate: string;
 	pickRateHighMmr: string;
 
-	constructor(private readonly allCards: CardsFacadeService, private readonly i18n: ILocalizationService) {}
+	constructor(
+		private readonly allCards: CardsFacadeService,
+		private readonly i18n: ILocalizationService,
+	) {}
 
 	buildValue(value: number): string {
 		return value == null
 			? '-'
 			: value === 0
-			? '0'
-			: value.toLocaleString(this.i18n.formatCurrentLocale() ?? 'enUS', {
-					minimumFractionDigits: 2,
-					maximumFractionDigits: 2,
-			  });
+				? '0'
+				: value.toLocaleString(this.i18n.formatCurrentLocale() ?? 'enUS', {
+						minimumFractionDigits: 2,
+						maximumFractionDigits: 2,
+					});
 	}
 }

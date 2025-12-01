@@ -36,11 +36,12 @@ export const buildCardStats = (
 				cardId: s.cardId,
 				name: allCards.getCard(s.cardId).name,
 				dataPoints: dataPoints,
-				averagePlacement: averagePlacement,
-				impact: impact,
+				averagePlacement: exactTurn == null ? null : averagePlacement,
+				impact: exactTurn == null ? null : impact,
 			};
 			return result;
 		});
+	console.debug('[debug] mainStats', mainStats);
 	// .filter((s) => s.dataPoints > 100);
 	return mainStats;
 };
@@ -49,10 +50,15 @@ export const buildCardTiers = (
 	stats: readonly BgsMetaCardStatTierItem[],
 	sort: SortCriteria<ColumnSortTypeCard>,
 	i18n: ILocalizationService,
+	allCards: CardsFacadeService,
 	localize = true,
 ): readonly BgsMetaCardStatTier[] => {
 	if (!stats?.length) {
 		return [];
+	}
+
+	if (sort.criteria === 'card-details') {
+		return buildCardsGroupedByTavernTier(stats, sort, allCards, i18n);
 	}
 
 	const cardStats = [...stats].sort(sortByProperties((stat) => [getSortProperty(stat, sort)]));
@@ -114,6 +120,26 @@ const getSortProperty = (stat: BgsMetaCardStatTierItem, sort: SortCriteria<Colum
 	}
 };
 
+const buildCardsGroupedByTavernTier = (
+	stats: readonly BgsMetaCardStatTierItem[],
+	sort: SortCriteria<ColumnSortTypeCard>,
+	allCards: CardsFacadeService,
+	i18n: ILocalizationService,
+): readonly BgsMetaCardStatTier[] => {
+	// Tiers go from 1 to 7
+	const tiers = Array.from({ length: 7 }, (_, index) => index + 1);
+	return tiers.map((tier) => {
+		return {
+			id: tier as any,
+			label: i18n.translateString('app.battlegrounds.tier-list.tier', { value: tier.toString() }),
+			tooltip: i18n.translateString('app.duels.stats.tier-tooltip', { value: tier.toString() }),
+			items: stats
+				.filter((s) => allCards.getCard(s.cardId).techLevel === tier)
+				.sort(sortByProperties((stat) => [stat.name])),
+		};
+	});
+};
+
 export const filterCardItems = (
 	stats: readonly BgsMetaCardStatTierItem[],
 	sort: SortCriteria<ColumnSortTypeCard>,
@@ -131,7 +157,7 @@ export const filterCardItems = (
 };
 
 export type ColumnSortTypeCard =
-	| 'name'
+	| 'card-details'
 	| 'impact'
 	| 'average-position'
 	| 'average-position-high-mmr'

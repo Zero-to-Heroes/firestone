@@ -65,7 +65,14 @@ import { BattlegroundsCardsService } from './bgs-cards.service';
 				</div>
 
 				<div class="header" *ngIf="sortCriteria$ | async as sort">
-					<div class="cell image"></div>
+					<sortable-table-label
+						class="cell image"
+						[name]="'app.battlegrounds.tier-list.header-card-details' | fsTranslate"
+						[sort]="sort"
+						[criteria]="'card-details'"
+						(sortClick)="onSortClick($event)"
+					>
+					</sortable-table-label>
 					<div class="cell name" [fsTranslate]="'app.battlegrounds.tier-list.header-card-details'"></div>
 					<sortable-table-label
 						class="cell impact"
@@ -77,13 +84,13 @@ import { BattlegroundsCardsService } from './bgs-cards.service';
 					>
 					</sortable-table-label>
 					<!-- <sortable-table-label
-					class="cell average-placement"
-					[name]="'app.battlegrounds.tier-list.header-average-position' | fsTranslate"
-					[sort]="sort"
-					[criteria]="'average-position'"
-					(sortClick)="onSortClick($event)"
-				>
-				</sortable-table-label> -->
+						class="cell average-placement"
+						[name]="'app.battlegrounds.tier-list.header-average-position' | fsTranslate"
+						[sort]="sort"
+						[criteria]="'average-position'"
+						(sortClick)="onSortClick($event)"
+					>
+					</sortable-table-label> -->
 				</div>
 				<div class="cards-list" role="list" scrollable>
 					<ng-container *ngIf="sortCriteria$ | async as sort">
@@ -91,7 +98,8 @@ import { BattlegroundsCardsService } from './bgs-cards.service';
 							*ngIf="
 								sort.criteria === 'average-position' ||
 								sort.criteria === 'average-position-high-mmr' ||
-								sort.criteria === 'impact'
+								sort.criteria === 'impact' ||
+								sort.criteria === 'card-details'
 							"
 						>
 							<battlegrounds-meta-stats-card-tier
@@ -138,7 +146,7 @@ export class BattlegroundsMetaStatsCardsComponent extends AbstractSubscriptionCo
 	headerCollapsed = true;
 
 	private sortCriteria$$ = new BehaviorSubject<SortCriteria<ColumnSortTypeCard>>({
-		criteria: 'impact',
+		criteria: 'card-details',
 		direction: 'asc',
 	});
 	private loading$$ = new BehaviorSubject<boolean>(true);
@@ -182,6 +190,7 @@ export class BattlegroundsMetaStatsCardsComponent extends AbstractSubscriptionCo
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsActiveCardsTurn)),
 		]).pipe(
 			this.mapData(([stats, cardTiers, turnNumber]) => {
+				console.debug('[debug] stats', stats, cardTiers, turnNumber);
 				const minTurn = buildMinTurn(cardTiers);
 				return buildCardStats(stats?.cardStats ?? [], minTurn, turnNumber, this.allCards);
 			}),
@@ -199,9 +208,10 @@ export class BattlegroundsMetaStatsCardsComponent extends AbstractSubscriptionCo
 			),
 			this.sortCriteria$$,
 		]).pipe(
-			tap((info) => console.debug('received info for cards', info)),
+			tap((info) => console.debug('[debug]received info for cards', info)),
 			filter(([stats, { cardType, cardTiers, searchString }, sortCriteria]) => !!stats?.length),
 			this.mapData(([stats, { cardType, cardTiers, searchString }, sortCriteria]) => {
+				const impactHidden = stats.every((stat) => stat.impact == null);
 				const filtered =
 					stats
 						.filter(
@@ -213,10 +223,12 @@ export class BattlegroundsMetaStatsCardsComponent extends AbstractSubscriptionCo
 						)
 						.filter((stat) => this.isCorrectType(stat, cardType))
 						.filter(
-							(stat) => stat.dataPoints > 50 && stat.averagePlacement != null && stat.impact != null,
+							(stat) =>
+								stat.dataPoints > 50 &&
+								(impactHidden || (stat.averagePlacement != null && stat.impact != null)),
 						) ?? [];
-				console.debug('filtered', filtered);
-				const tiers = buildCardTiers(filtered, sortCriteria, this.i18n);
+				const tiers = buildCardTiers(filtered, sortCriteria, this.i18n, this.allCards);
+				console.debug('[debug] tiers', tiers);
 				const result = !!searchString?.length
 					? tiers
 							.map((t) => {
@@ -281,6 +293,7 @@ export class BattlegroundsMetaStatsCardsComponent extends AbstractSubscriptionCo
 	onSortClick(rawCriteria: string) {
 		const criteria: ColumnSortTypeCard = rawCriteria as ColumnSortTypeCard;
 		// No point in sorting by the "worse hero" first, at least until I've got asks for it
+		// Same for tavern tiers, always sort from lowest to highest
 		if (criteria === this.sortCriteria$$.value?.criteria) {
 			return;
 		}

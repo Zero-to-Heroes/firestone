@@ -48,10 +48,11 @@ export class BattlegroundsCardTurnFilterDropdownComponent
 		await waitForReady(this.nav, this.prefs);
 
 		this.options = [
-			// {
-			// 	value: null,
-			// 	label: `All turns`,
-			// },
+			{
+				value: null,
+				label: `All turns`,
+				tooltip: 'When this is selected, card impact is hidden',
+			} as IOption,
 			...Array(10)
 				.fill(0)
 				.map((_, i) => i + 1)
@@ -71,6 +72,7 @@ export class BattlegroundsCardTurnFilterDropdownComponent
 				placeholder: this.options.find(
 					(option) => (option.value === null && filter == null) || +option.value === filter,
 				)?.label,
+
 				visible: ['bgs-category-meta-cards'].includes(selectedCategoryId),
 			})),
 		);
