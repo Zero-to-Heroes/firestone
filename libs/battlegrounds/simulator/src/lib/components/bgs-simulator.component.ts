@@ -598,6 +598,13 @@ export class BgsSimulatorComponent extends AbstractSubscriptionComponent impleme
 			},
 		};
 		console.log('no-format', '[bgs-simulation-desktop] battle simulation request prepared', battleInfo);
+		this.controller.setInitialBattle(
+			BgsFaceOffWithSimulation.create({
+				battleInfoStatus: 'done',
+				battleResult: undefined,
+				battleInfo: battleInfo,
+			}),
+		);
 		const it = this.positioningService.findBestPositioning(battleInfo);
 		// eslint-disable-next-line no-constant-condition
 		while (true) {
@@ -618,6 +625,7 @@ export class BgsSimulatorComponent extends AbstractSubscriptionComponent impleme
 						battleInfo: result.battleInfo,
 						battleResult: result.result,
 					}),
+					false,
 				);
 				this.processingReposition = false;
 				this.repositionButtonTextKey = 'battlegrounds.sim.reposition-button';
