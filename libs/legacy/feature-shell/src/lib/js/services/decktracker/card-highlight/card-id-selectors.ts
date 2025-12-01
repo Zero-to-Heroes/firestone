@@ -633,6 +633,8 @@ export const cardIdSelector = (
 			};
 		case CardIds.CapturedFlag:
 			return and(side(inputSide), or(inDeck, inHand), minion);
+		case CardIds.CardboardGolem_TOY_809:
+			return and(side(inputSide), or(inDeck, inHand), aura);
 		case CardIds.CardGrader_TOY_054:
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.CariaFelsoul:
@@ -2513,6 +2515,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.PossessedAnimancer_DINO_131:
 			return and(side(inputSide), inDeck, beast);
+		case CardIds.PotionOfIllusion:
+			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.PotionOfSparkingTavernBrawl:
 			return and(side(inputSide), minion, rush);
 		case CardIds.PowerSlider:
@@ -3129,6 +3133,8 @@ export const cardIdSelector = (
 				and(side(inputSide), inDeck, spell, shadow),
 				and(side(inputSide), inDeck, spell, holy),
 			);
+		case CardIds.SpiritsingerUmbra:
+			return and(side(inputSide), or(inHand, inDeck), minion, deathrattle);
 		case CardIds.SplishSplashWhelp_WW_819:
 			return and(side(inputSide), or(inHand, inDeck), dragon);
 		case CardIds.SpitefulSummoner:
