@@ -43,7 +43,6 @@ import { Observable, shareReplay, switchMap, takeUntil } from 'rxjs';
 export class BattlegroundsMetaStatsHeroesComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	stats$: Observable<readonly BgsMetaHeroStatTierItem[]>;
 	searchString$: Observable<string>;
-	heroSort$: Observable<BgsHeroSortFilterType>;
 	totalGames$: Observable<number>;
 	lastUpdate$: Observable<Date>;
 
@@ -76,7 +75,6 @@ export class BattlegroundsMetaStatsHeroesComponent extends AbstractSubscriptionC
 				return stats?.map((s) => ({ ...s, maxTribeImpact })) ?? [];
 			}),
 		);
-		// this.heroSort$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsActiveHeroSortFilter));
 		this.searchString$ = this.nav.heroSearchString$$;
 		const statsProvider$ = this.prefs.preferences$$.pipe(
 			switchMap((prefs) => {

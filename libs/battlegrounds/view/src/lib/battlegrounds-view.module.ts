@@ -38,10 +38,16 @@ import { BgsFullAnomalyWidgetWrapperComponent } from './overlay/bgs-full-anomaly
 import { FullAnomalyComponent } from './overlay/bgs-full-anomaly.component';
 import { BattlegroundsDesktopYourStatsComponent } from './personal-stats/battlegrounds-desktop-your-stats.component';
 import { BattlegroundsPersonalStatsInfoComponent } from './personal-stats/battlegrounds-personal-stats-info.component';
+import { BattlegroundsMetaStatsCardsViewComponent } from './meta-cards/battlegrounds-meta-stats-cards-view.component';
+import { BattlegroundsMetaStatsCardTierComponent } from './meta-cards/battlegrounds-meta-stats-card-tier.component';
+import { BattlegroundsMetaStatsCardInfoComponent } from './meta-cards/battlegrounds-meta-stats-card-info.component';
 
 const components = [
 	BattlegroundsMetaStatsHeroesViewComponent,
 	BattlegroundsMetaStatsHeroTierComponent,
+	BattlegroundsMetaStatsCardsViewComponent,
+	BattlegroundsMetaStatsCardTierComponent,
+	BattlegroundsMetaStatsCardInfoComponent,
 	BattlegroundsMetaStatsHeroInfoComponent,
 	BattlegroundsMetaStatsQuestsViewComponent,
 	BattlegroundsMetaStatsQuestTierComponent,

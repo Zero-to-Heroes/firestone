@@ -119,7 +119,6 @@ export class WebShellComponent implements OnInit, OnDestroy {
 						id: 'bg-cards',
 						label: this.i18n.translateString('app.battlegrounds.menu.cards'),
 						route: '/battlegrounds/cards',
-						disabled: true,
 					},
 				],
 			},

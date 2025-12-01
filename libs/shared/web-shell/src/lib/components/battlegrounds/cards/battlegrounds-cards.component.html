@@ -1,10 +1,28 @@
-<div class="section-container">
-	<div class="coming-soon-card">
-		<div class="icon" inlineSVG="assets/svg/ftue/battlegrounds.svg"></div>
-		<h2>{{ 'app.battlegrounds.menu.cards' | fsTranslate }}</h2>
-		<p class="coming-soon-text">{{ 'app.collection.sets.coming-soon' | fsTranslate }}</p>
-		<p class="description">
-			{{ 'website.battlegrounds.cards.description' | fsTranslate }}
-		</p>
-	</div>
-</div>
+<!--
+	WARNING: All filter components below have been updated to handle URL parameter synchronization.
+	The search functionality is also synchronized with URL parameters via the parent component.
+	If you add a new filter component here, make sure it extends BaseFilterWithUrlComponent
+	and implements URL parameter handling. See existing filter components for examples.
+-->
+<web-battlegrounds-filters>
+	<web-battlegrounds-rank-filter-dropdown></web-battlegrounds-rank-filter-dropdown>
+	<web-battlegrounds-time-filter-dropdown></web-battlegrounds-time-filter-dropdown>
+	<web-battlegrounds-tribes-filter-dropdown></web-battlegrounds-tribes-filter-dropdown>
+</web-battlegrounds-filters>
+
+<battlegrounds-meta-stats-heroes-view
+	*ngIf="{
+		stats: stats$ | async,
+		searchString: searchString$ | async,
+		totalGames: totalGames$ | async,
+		lastUpdate: lastUpdate$ | async,
+	} as data"
+	class="hero-stats-container"
+	[stats]="data.stats || []"
+	[searchString]="data.searchString || ''"
+	[totalGames]="data.totalGames || 0"
+	[lastUpdate]="data.lastUpdate || defaultDate"
+	[positionTooltipHidden]="true"
+	(heroStatClick)="onHeroStatsClick($event)"
+	(searchStringChange)="onSearchStringChange($event)"
+></battlegrounds-meta-stats-heroes-view>

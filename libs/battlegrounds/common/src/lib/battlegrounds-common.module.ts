@@ -15,8 +15,6 @@ import { StatsCommonModule } from '@firestone/stats/common';
 import { InlineSVGModule } from 'ng-inline-svg-2';
 
 import { VirtualScrollerModule } from '@sebastientromp/ngx-virtual-scroller';
-import { BattlegroundsMetaStatsCardInfoComponent } from './cards/battlegrounds-meta-stats-card-info.component';
-import { BattlegroundsMetaStatsCardTierComponent } from './cards/battlegrounds-meta-stats-card-tier.component';
 import { BattlegroundsMetaStatsCardsComponent } from './cards/battlegrounds-meta-stats-cards.component';
 import { BattlegroundsCardsService } from './cards/bgs-cards.service';
 import { BgsLeaderboardsComponent } from './components/battlegrounds-leaderboards.component';
@@ -88,8 +86,6 @@ const components = [
 	BgsBattleRecapComponent,
 	BattlegroundsCompositionsViewSelectDropdownComponent,
 	BattlegroundsMetaStatsCardsComponent,
-	BattlegroundsMetaStatsCardInfoComponent,
-	BattlegroundsMetaStatsCardTierComponent,
 	BattlegroundsMetaStatsCompsComponent,
 	BgsReconnectorComponent,
 ];

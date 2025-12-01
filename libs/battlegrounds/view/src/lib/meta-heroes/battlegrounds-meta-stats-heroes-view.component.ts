@@ -186,13 +186,6 @@ export class BattlegroundsMetaStatsHeroesViewComponent
 
 				switch (sortCriteria.criteria) {
 					// Make sure we keep the items without data at the end
-					// return this.buildMonoTier(
-					// 	[...stats].sort(
-					// 		sortByProperties((s) => [
-					// 			s.playerAveragePosition ?? 9 * (sortCriteria.direction === 'asc' ? 1 : -1),
-					// 		]),
-					// 	),
-					// );
 					case 'pick-rate':
 						// Make sure we keep the items without data at the end
 						return this.buildMonoTier(
