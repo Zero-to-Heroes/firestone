@@ -12,7 +12,7 @@ import { Observable } from 'rxjs';
 @Component({
 	standalone: true,
 	selector: 'web-battlegrounds-card-search',
-	styleUrls: [],
+	styleUrls: ['./search.component.scss'],
 	template: `
 		<fs-text-input
 			class="search"

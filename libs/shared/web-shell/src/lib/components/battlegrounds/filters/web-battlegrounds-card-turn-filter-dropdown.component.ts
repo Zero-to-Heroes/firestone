@@ -33,6 +33,15 @@ export class WebBattlegroundsCardTurnFilterDropdownComponent
 	protected filterConfig: FilterUrlConfig<number | null, Preferences> = {
 		paramName: 'turns',
 		preferencePath: 'bgsActiveCardsTurn',
+		parseUrlParam: (value: string | string[]): number | null => {
+			// Handle both string and string[] (Angular Router can return either)
+			const strValue = Array.isArray(value) ? value[0] : value;
+			if (!strValue || strValue.trim() === '') {
+				return null;
+			}
+			const parsed = parseInt(strValue, 10);
+			return isNaN(parsed) ? null : parsed;
+		},
 	};
 
 	constructor(

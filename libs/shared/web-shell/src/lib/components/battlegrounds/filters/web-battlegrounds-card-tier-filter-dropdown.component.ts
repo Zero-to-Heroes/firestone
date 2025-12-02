@@ -10,7 +10,11 @@ import {
 	Preferences,
 	PreferencesService,
 } from '@firestone/shared/common/service';
-import { BaseFilterWithUrlComponent, FilterUrlConfig } from '@firestone/shared/framework/common';
+import {
+	BaseFilterWithUrlComponent,
+	FilterUrlConfig,
+	parseNumericArrayUrlParam,
+} from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { MultiselectOption } from '@firestone/shared/common/view';
 import { filter, Observable } from 'rxjs';
@@ -39,6 +43,9 @@ export class WebBattlegroundsCardTierFilterDropdownComponent
 	protected filterConfig: FilterUrlConfig<readonly BgsCardTierFilterType[] | null, Preferences> = {
 		paramName: 'tavernTiers',
 		preferencePath: 'bgsActiveCardsTiers',
+		parseUrlParam: (value: string | string[]): readonly BgsCardTierFilterType[] | null => {
+			return parseNumericArrayUrlParam<BgsCardTierFilterType>(value, 1, undefined, null);
+		},
 	};
 
 	constructor(

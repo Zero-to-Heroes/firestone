@@ -1,0 +1,18 @@
+:host {
+	display: flex;
+	height: 32px;
+}
+
+.search {
+	display: flex;
+
+	::ng-deep {
+		.text-input {
+			flex-grow: 1;
+
+			.search-label {
+				height: 100%;
+			}
+		}
+	}
+}

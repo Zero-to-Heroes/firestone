@@ -36,6 +36,17 @@ export class WebBattlegroundsRankFilterDropdownComponent
 		paramName: 'rank',
 		preferencePath: 'bgsActiveRankFilter',
 		// Note: validValues not specified since rank values are dynamic based on MMR percentiles
+		parseUrlParam: (value: string | string[]): BgsRankFilterType => {
+			// Handle both string and string[] (Angular Router can return either)
+			const strValue = Array.isArray(value) ? value[0] : value;
+			const parsed = parseInt(strValue, 10);
+			// Validate it's a valid BgsRankFilterType (100 | 50 | 25 | 10 | 1)
+			if ([100, 50, 25, 10, 1].includes(parsed)) {
+				return parsed as BgsRankFilterType;
+			}
+			// Return default or throw? For now, return 100 as default
+			return 100;
+		},
 	};
 
 	constructor(
