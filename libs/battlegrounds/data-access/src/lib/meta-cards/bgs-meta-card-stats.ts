@@ -5,7 +5,7 @@ import { SortCriteria } from '@firestone/shared/common/view';
 import { getStandardDeviation, sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { BgsCardTier, BgsMetaCardStatTier, BgsMetaCardStatTierItem } from './meta-card.model';
-import { hasCorrectTribe, Race } from '@firestone-hs/reference-data';
+import { ALL_BG_RACES, hasCorrectTribe, Race } from '@firestone-hs/reference-data';
 
 export const buildCardStats = (
 	stats: readonly BgsCardStat[],
@@ -55,6 +55,7 @@ export const buildCardStats = (
 export const buildCardTiers = (
 	stats: readonly BgsMetaCardStatTierItem[],
 	sort: SortCriteria<ColumnSortTypeCard>,
+	tribesFilter: readonly Race[],
 	i18n: ILocalizationService,
 	allCards: CardsFacadeService,
 	localize = true,
@@ -64,7 +65,9 @@ export const buildCardTiers = (
 	}
 
 	if (sort.criteria === 'card-details') {
-		return buildCardsGroupedByTavernTier(stats, sort, allCards, i18n).filter((tier) => tier.items?.length);
+		return buildCardsGroupedByTavernTier(stats, sort, tribesFilter, allCards, i18n).filter((tier) =>
+			tier.sections.some((s) => s.items.length > 0),
+		);
 	}
 
 	const cardStats = [...stats].sort(sortByProperties((stat) => [getSortProperty(stat, sort)]));
@@ -75,39 +78,74 @@ export const buildCardTiers = (
 			id: 'S' as BgsCardTier,
 			label: localize ? i18n.translateString('app.battlegrounds.tier-list.tier', { value: 'S' }) : 'S',
 			tooltip: i18n.translateString('app.duels.stats.tier-s-tooltip'),
-			items: filterCardItems(cardStats, sort, -9999999, mean - 3 * standardDeviation),
+			sections: [
+				{
+					label: null,
+					items: filterCardItems(cardStats, sort, -9999999, mean - 3 * standardDeviation),
+				},
+			],
 		},
 		{
 			id: 'A' as BgsCardTier,
 			label: localize ? i18n.translateString('app.battlegrounds.tier-list.tier', { value: 'A' }) : 'A',
 			tooltip: i18n.translateString('app.duels.stats.tier-a-tooltip'),
-			items: filterCardItems(cardStats, sort, mean - 3 * standardDeviation, mean - 1.5 * standardDeviation),
+			sections: [
+				{
+					label: null,
+					items: filterCardItems(
+						cardStats,
+						sort,
+						mean - 3 * standardDeviation,
+						mean - 1.5 * standardDeviation,
+					),
+				},
+			],
 		},
 		{
 			id: 'B' as BgsCardTier,
 			label: localize ? i18n.translateString('app.battlegrounds.tier-list.tier', { value: 'B' }) : 'B',
 			tooltip: i18n.translateString('app.duels.stats.tier-b-tooltip'),
-			items: filterCardItems(cardStats, sort, mean - 1.5 * standardDeviation, mean),
+			sections: [
+				{
+					label: null,
+					items: filterCardItems(cardStats, sort, mean - 1.5 * standardDeviation, mean),
+				},
+			],
 		},
 		{
 			id: 'C' as BgsCardTier,
 			label: localize ? i18n.translateString('app.battlegrounds.tier-list.tier', { value: 'C' }) : 'C',
 			tooltip: i18n.translateString('app.duels.stats.tier-c-tooltip'),
-			items: filterCardItems(cardStats, sort, mean, mean + standardDeviation),
+			sections: [
+				{
+					label: null,
+					items: filterCardItems(cardStats, sort, mean, mean + standardDeviation),
+				},
+			],
 		},
 		{
 			id: 'D' as BgsCardTier,
 			label: localize ? i18n.translateString('app.battlegrounds.tier-list.tier', { value: 'D' }) : 'D',
 			tooltip: i18n.translateString('app.duels.stats.tier-d-tooltip'),
-			items: filterCardItems(cardStats, sort, mean + standardDeviation, mean + 2 * standardDeviation),
+			sections: [
+				{
+					label: null,
+					items: filterCardItems(cardStats, sort, mean + standardDeviation, mean + 2 * standardDeviation),
+				},
+			],
 		},
 		{
 			id: 'E' as BgsCardTier,
 			label: localize ? i18n.translateString('app.battlegrounds.tier-list.tier', { value: 'E' }) : 'E',
 			tooltip: i18n.translateString('app.duels.stats.tier-e-tooltip'),
-			items: filterCardItems(cardStats, sort, mean + 2 * standardDeviation, null),
+			sections: [
+				{
+					label: null,
+					items: filterCardItems(cardStats, sort, mean + 2 * standardDeviation, null),
+				},
+			],
 		},
-	].filter((tier) => tier.items?.length);
+	].filter((tier) => tier.sections.some((s) => s.items.length > 0));
 };
 
 const getSortProperty = (stat: BgsMetaCardStatTierItem, sort: SortCriteria<ColumnSortTypeCard>): number => {
@@ -129,19 +167,35 @@ const getSortProperty = (stat: BgsMetaCardStatTierItem, sort: SortCriteria<Colum
 const buildCardsGroupedByTavernTier = (
 	stats: readonly BgsMetaCardStatTierItem[],
 	sort: SortCriteria<ColumnSortTypeCard>,
+	tribesFilter: readonly Race[],
 	allCards: CardsFacadeService,
 	i18n: ILocalizationService,
 ): readonly BgsMetaCardStatTier[] => {
 	// Tiers go from 1 to 7
 	const tiers = Array.from({ length: 7 }, (_, index) => index + 1);
 	return tiers.map((tier) => {
+		const cardsForTier = stats
+			.filter((s) => allCards.getCard(s.cardId).techLevel === tier)
+			.sort(sortByProperties((stat) => [stat.name]));
+		const sections = (tribesFilter.length ? tribesFilter : [...ALL_BG_RACES, Race.BLANK])
+			.map((race) => {
+				return {
+					label: i18n.translateString(`global.tribe.${Race[race].toLowerCase()}`),
+					items: cardsForTier.filter(
+						(s) =>
+							allCards.getCard(s.cardId).races?.includes(Race[race]) ||
+							(race === Race.ALL && !!allCards.getCard(s.cardId).races?.length) ||
+							(race === Race.BLANK && !allCards.getCard(s.cardId).races?.length),
+					),
+				};
+			})
+			.filter((s) => s.items.length > 0)
+			.sort((a, b) => a.label.localeCompare(b.label));
 		return {
 			id: tier as any,
-			label: i18n.translateString('app.battlegrounds.tier-list.tier', { value: tier.toString() }),
+			label: i18n.translateString('app.battlegrounds.tier-list.tavern-tier', { value: tier.toString() }),
 			tooltip: i18n.translateString('app.duels.stats.tier-tooltip', { value: tier.toString() }),
-			items: stats
-				.filter((s) => allCards.getCard(s.cardId).techLevel === tier)
-				.sort(sortByProperties((stat) => [stat.name])),
+			sections: sections,
 		};
 	});
 };

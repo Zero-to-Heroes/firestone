@@ -85,6 +85,9 @@
 	.cards-list {
 		overflow: scroll;
 		min-height: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
 
 		.item-info {
 			margin-bottom: 5px;

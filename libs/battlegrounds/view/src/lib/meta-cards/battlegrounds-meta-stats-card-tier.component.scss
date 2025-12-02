@@ -1,11 +1,10 @@
-.tier {
+.tier-section {
 	padding-bottom: 5px;
 	display: flex;
 	flex-direction: column;
-	margin-bottom: 15px;
 
 	.header {
-		margin-bottom: 10px;
+		margin-bottom: 3px;
 		width: fit-content;
 
 		&.s {
@@ -33,7 +32,8 @@
 		}
 	}
 
-	.items {
+	.items,
+	.section {
 		display: flex;
 		flex-direction: column;
 
@@ -42,5 +42,14 @@
 			margin-bottom: 2px;
 			font-size: 16px;
 		}
+	}
+	.items {
+		gap: 10px;
+		background: rgba(255, 255, 255, 0.08);
+		padding: 10px;
+	}
+	.section-items {
+		display: flex;
+		flex-direction: column;
 	}
 }

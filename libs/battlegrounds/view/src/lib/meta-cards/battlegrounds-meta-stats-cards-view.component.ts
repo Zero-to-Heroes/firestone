@@ -191,12 +191,13 @@ export class BattlegroundsMetaStatsCardsViewComponent
 					cardType: prefs.bgsActiveCardsCardType,
 					searchString: prefs.bgsActiveCardsSearch,
 					cardTiers: prefs.bgsActiveCardsTiers,
+					tribesFilter: prefs.bgsActiveTribesFilter,
 				})),
 			),
 			this.sortCriteria$$,
 		]).pipe(
 			filter(([stats, { cardType, cardTiers, searchString }, sortCriteria]) => !!stats?.length),
-			this.mapData(([stats, { cardType, cardTiers, searchString }, sortCriteria]) => {
+			this.mapData(([stats, { cardType, cardTiers, searchString, tribesFilter }, sortCriteria]) => {
 				const impactHidden = stats.every((stat) => stat.impact == null);
 				const filtered =
 					stats
@@ -213,19 +214,33 @@ export class BattlegroundsMetaStatsCardsViewComponent
 								stat.dataPoints > 50 &&
 								(impactHidden || (stat.averagePlacement != null && stat.impact != null)),
 						) ?? [];
-				const tiers = buildCardTiers(filtered, sortCriteria, this.i18n, this.allCards);
+				const tiers = buildCardTiers(filtered, sortCriteria, tribesFilter, this.i18n, this.allCards);
+				console.debug('[debug] tiers', impactHidden, tiers);
+				const showSectionHeader = tiers.some((t) => t.sections.length > 1);
+				console.debug(
+					'[debug] showSectionHeader',
+					showSectionHeader,
+					tiers.filter((t) => t.sections.length > 1),
+				);
+				const tiersWithShowSectionHeader = tiers.map((t) => ({
+					...t,
+					showSectionHeader: showSectionHeader,
+				}));
 				const result = !!searchString?.length
-					? tiers
-							.map((t) => {
-								return {
-									...t,
-									items: t.items.filter((i) =>
-										i.name.toLowerCase().includes(searchString.toLowerCase()),
-									),
-								};
-							})
-							.filter((t) => t.items.length > 0)
-					: tiers;
+					? tiersWithShowSectionHeader
+							.map((t) => ({
+								...t,
+								sections: t.sections
+									.map((s) => ({
+										...s,
+										items: s.items.filter((i) =>
+											i.name.toLowerCase().includes(searchString.toLowerCase()),
+										),
+									}))
+									.filter((s) => s.items.length > 0),
+							}))
+							.filter((t) => t.sections.some((s) => s.items.length > 0))
+					: tiersWithShowSectionHeader;
 				return result;
 			}),
 			tap(() => this.loading$$.next(false)),

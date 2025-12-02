@@ -2,7 +2,12 @@ export interface BgsMetaCardStatTier {
 	readonly id: BgsCardTier;
 	readonly label: string;
 	readonly tooltip: string;
-	readonly items: readonly BgsMetaCardStatTierItem[];
+	readonly showSectionHeader?: boolean;
+	readonly sections: readonly {
+		readonly label: string | null;
+		readonly items: readonly BgsMetaCardStatTierItem[];
+	}[];
+	// readonly items: readonly BgsMetaCardStatTierItem[];
 }
 
 export interface BgsMetaCardStatTierItem {
