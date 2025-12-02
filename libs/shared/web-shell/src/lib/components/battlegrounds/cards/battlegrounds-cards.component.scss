@@ -11,3 +11,9 @@ battlegrounds-meta-stats-cards-view {
 	flex-grow: 1;
 	display: flex;
 }
+
+@media (max-width: 1600px) {
+	web-battlegrounds-filters {
+		margin-top: 30px;
+	}
+}
