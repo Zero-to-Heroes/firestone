@@ -189,6 +189,8 @@ export class BgsBattleSideComponent {
 	hauntedCarapaceAttackBonus: number;
 	hauntedCarapaceHealthBonus: number;
 	deepBluesPlayed: number;
+	volumizerAttackBuff: number;
+	volumizerHealthBuff: number;
 	goldrinnAttackBonus: number;
 	goldrinnHealthBonus: number;
 	eternalLegion: number;
@@ -316,6 +318,8 @@ export class BgsBattleSideComponent {
 		this.hauntedCarapaceAttackBonus = this._player.player?.globalInfo?.HauntedCarapaceAttackBonus ?? 0;
 		this.hauntedCarapaceHealthBonus = this._player.player?.globalInfo?.HauntedCarapaceHealthBonus ?? 0;
 		this.deepBluesPlayed = this._player.player?.globalInfo?.DeepBluesPlayed ?? 0;
+		this.volumizerAttackBuff = this._player.player?.globalInfo?.VolumizerAttackBuff ?? 0;
+		this.volumizerHealthBuff = this._player.player?.globalInfo?.VolumizerHealthBuff ?? 0;
 		this.goldrinnAttackBonus = this._player.player?.globalInfo?.GoldrinnBuffAtk ?? 0;
 		this.goldrinnHealthBonus = this._player.player?.globalInfo?.GoldrinnBuffHealth ?? 0;
 		// this.bloodGemAttackBonus = this._player.player?.globalInfo?.BloodGemAttackBonus ?? 0;

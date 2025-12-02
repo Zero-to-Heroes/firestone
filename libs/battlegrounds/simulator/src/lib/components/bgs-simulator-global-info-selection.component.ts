@@ -66,6 +66,24 @@ import { CardsFacadeService, ILocalizationService } from '@firestone/shared/fram
 				>
 				</fs-numeric-input-with-arrows>
 				<fs-numeric-input-with-arrows
+					class="input volumizer-attack"
+					[label]="'battlegrounds.sim.volumizer-attack' | fsTranslate"
+					[helpTooltip]="'battlegrounds.sim.volumizer-attack-tooltip' | fsTranslate"
+					[value]="volumizerAttackBuff"
+					[minValue]="0"
+					(fsModelUpdate)="onVolumizerAttackBuffChanged($event)"
+				>
+				</fs-numeric-input-with-arrows>
+				<fs-numeric-input-with-arrows
+					class="input volumizer-health"
+					[label]="'battlegrounds.sim.volumizer-health' | fsTranslate"
+					[helpTooltip]="'battlegrounds.sim.volumizer-health-tooltip' | fsTranslate"
+					[value]="volumizerHealthBuff"
+					[minValue]="0"
+					(fsModelUpdate)="onVolumizerHealthBuffChanged($event)"
+				>
+				</fs-numeric-input-with-arrows>
+				<fs-numeric-input-with-arrows
 					class="input goldrinn-attack"
 					[label]="'battlegrounds.sim.goldrinn-attack' | fsTranslate"
 					[helpTooltip]="'battlegrounds.sim.goldrinn-attack-tooltip' | fsTranslate"
@@ -266,6 +284,8 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 		this.hauntedCarapaceAttackBonus = value?.HauntedCarapaceAttackBonus ?? 0;
 		this.hauntedCarapaceHealthBonus = value?.HauntedCarapaceHealthBonus ?? 0;
 		this.deepBluesPlayed = value?.DeepBluesPlayed ?? 0;
+		this.volumizerAttackBuff = value?.VolumizerAttackBuff ?? 0;
+		this.volumizerHealthBuff = value?.VolumizerHealthBuff ?? 0;
 		this.goldrinnAttackBonus = value?.GoldrinnBuffAtk ?? 0;
 		this.goldrinnHealthBonus = value?.GoldrinnBuffHealth ?? 0;
 		this.frostlingBonus = value?.FrostlingBonus ?? 0;
@@ -297,6 +317,8 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 	hauntedCarapaceAttackBonus: number;
 	hauntedCarapaceHealthBonus: number;
 	deepBluesPlayed: number;
+	volumizerAttackBuff: number;
+	volumizerHealthBuff: number;
 	goldrinnAttackBonus: number;
 	goldrinnHealthBonus: number;
 	frostlingBonus: number;
@@ -347,6 +369,14 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 
 	onDeepBluesPlayedChanged(value: number) {
 		this.deepBluesPlayed = value;
+	}
+
+	onVolumizerAttackBuffChanged(value: number) {
+		this.volumizerAttackBuff = value;
+	}
+
+	onVolumizerHealthBuffChanged(value: number) {
+		this.volumizerHealthBuff = value;
 	}
 
 	onGoldrinnAttackBonusChanged(value: number) {
@@ -406,6 +436,8 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 			HauntedCarapaceAttackBonus: this.hauntedCarapaceAttackBonus,
 			HauntedCarapaceHealthBonus: this.hauntedCarapaceHealthBonus,
 			DeepBluesPlayed: this.deepBluesPlayed,
+			VolumizerAttackBuff: this.volumizerAttackBuff,
+			VolumizerHealthBuff: this.volumizerHealthBuff,
 			GoldrinnBuffAtk: this.goldrinnAttackBonus,
 			GoldrinnBuffHealth: this.goldrinnHealthBonus,
 			FrostlingBonus: this.frostlingBonus,
