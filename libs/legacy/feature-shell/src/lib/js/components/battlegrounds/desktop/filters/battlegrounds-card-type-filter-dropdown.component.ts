@@ -14,15 +14,12 @@ import { arraysEqual } from '../../../../services/utils';
 	selector: 'battlegrounds-card-type-filter-dropdown',
 	styleUrls: [],
 	template: `
-		<filter-dropdown
-			*ngIf="filter$ | async as value"
-			class="battlegrounds-card-type-filter-dropdown"
-			[options]="options"
-			[filter]="value.filter"
-			[placeholder]="value.placeholder"
-			[visible]="value.visible"
-			(onOptionSelected)="onSelected($event)"
-		></filter-dropdown>
+		<battlegrounds-card-type-filter-dropdown-view
+			class="battlegrounds-card-turn-filter-dropdown"
+			[currentFilter]="currentFilter$ | async"
+			[visible]="visible$ | async"
+			(valueSelected)="onSelected($event)"
+		></battlegrounds-card-type-filter-dropdown-view>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -30,9 +27,8 @@ export class BattlegroundsCardTypeFilterDropdownComponent
 	extends AbstractSubscriptionComponent
 	implements AfterContentInit
 {
-	options: IOption[];
-
-	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
+	currentFilter$: Observable<BgsCardTypeFilterType>;
+	visible$: Observable<boolean>;
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
@@ -46,27 +42,10 @@ export class BattlegroundsCardTypeFilterDropdownComponent
 	async ngAfterContentInit() {
 		await waitForReady(this.nav, this.prefs);
 
-		this.options = [
-			{
-				value: 'minion',
-				label: this.i18n.translateString('app.battlegrounds.filters.card-type.minion'),
-			} as IOption,
-			{
-				value: 'spell',
-				label: this.i18n.translateString('app.battlegrounds.filters.card-type.spell'),
-			} as IOption,
-		];
-		this.filter$ = combineLatest([
-			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsActiveCardsCardType)),
-			this.nav.selectedCategoryId$$,
-		]).pipe(
-			filter(([filter, selectedCategoryId]) => !!filter && !!selectedCategoryId),
-			distinctUntilChanged((a, b) => arraysEqual(a, b)),
-			this.mapData(([filter, selectedCategoryId]) => ({
-				filter: filter,
-				placeholder: this.options.find((option) => option.value === filter)?.label,
-				visible: selectedCategoryId === 'bgs-category-meta-cards',
-			})),
+		this.currentFilter$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsActiveCardsCardType));
+		this.visible$ = this.nav.selectedCategoryId$$.pipe(
+			filter((selectedCategoryId) => !!selectedCategoryId),
+			this.mapData((selectedCategoryId) => ['bgs-category-meta-cards'].includes(selectedCategoryId)),
 		);
 
 		if (!(this.cdr as ViewRef).destroyed) {

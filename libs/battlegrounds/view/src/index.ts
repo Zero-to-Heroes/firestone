@@ -5,6 +5,8 @@ export * from './lib/filters/battlegrounds-anomalies-filter-dropdown-view.compon
 export * from './lib/filters/battlegrounds-rank-filter-dropdown-view.component';
 export * from './lib/filters/battlegrounds-time-filter-dropdown-view.component';
 export * from './lib/filters/battlegrounds-tribes-filter-dropdown-view.component';
+export * from './lib/filters/battlegrounds-card-turn-filter-dropdown-view.component';
+export * from './lib/filters/battlegrounds-card-tier-filter-dropdown-view.component';
 export * from './lib/meta-comps/battlegrounds-composition-details-modal.component';
 export * from './lib/meta-comps/battlegrounds-meta-stats-comps-info.component';
 export * from './lib/meta-comps/battlegrounds-meta-stats-comps-tier.component';

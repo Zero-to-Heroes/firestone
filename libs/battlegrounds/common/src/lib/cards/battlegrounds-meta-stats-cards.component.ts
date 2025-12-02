@@ -96,7 +96,7 @@ export class BattlegroundsMetaStatsCardsComponent extends AbstractSubscriptionCo
 	}
 }
 
-const buildMinTurn = (cardTier: readonly BgsCardTierFilterType[] | undefined): number => {
+export const buildMinTurn = (cardTier: readonly BgsCardTierFilterType[] | undefined): number => {
 	if (!cardTier?.length) {
 		return 1;
 	}

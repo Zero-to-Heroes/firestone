@@ -12,15 +12,12 @@ import { LocalizationFacadeService } from '../../../../services/localization-fac
 	selector: 'battlegrounds-card-tier-filter-dropdown',
 	styleUrls: ['./battlegrounds-card-tier-filter-dropdown.component.scss'],
 	template: `
-		<filter-dropdown-multiselect
-			*ngIf="filter$ | async as value"
-			class="filter-dropdown"
-			[options]="options"
-			[selected]="value.selected"
-			[placeholder]="value.placeholder"
+		<battlegrounds-card-tier-filter-dropdown-view
+			class="battlegrounds-card-tier-filter-dropdown"
+			[currentFilter]="currentFilter$ | async"
 			[visible]="visible$ | async"
-			(optionSelected)="onSelected($event)"
-		></filter-dropdown-multiselect>
+			(valueSelected)="onSelected($event)"
+		></battlegrounds-card-tier-filter-dropdown-view>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -29,12 +26,10 @@ export class BattlegroundsCardTierFilterDropdownComponent
 	implements AfterContentInit
 {
 	visible$: Observable<boolean>;
-	options: MultiselectOption[];
-	filter$: Observable<{ selected: readonly string[]; placeholder: string }>;
+	currentFilter$: Observable<readonly BgsCardTierFilterType[] | null>;
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
-		private readonly i18n: LocalizationFacadeService,
 		private readonly prefs: PreferencesService,
 		private readonly nav: BattlegroundsNavigationService,
 	) {
@@ -44,18 +39,7 @@ export class BattlegroundsCardTierFilterDropdownComponent
 	async ngAfterContentInit() {
 		await waitForReady(this.nav, this.prefs);
 
-		this.options = [1, 2, 3, 4, 5, 6, 7].map((tier) => ({
-			value: '' + tier,
-			label: this.i18n.translateString('app.battlegrounds.filters.tier.tier', { value: tier }),
-			image: `https://static.zerotoheroes.com/hearthstone/asset/coliseum/images/battlegrounds/tavern_banner_${tier}.png`,
-		}));
-		this.filter$ = this.prefs.preferences$$.pipe(
-			tap((prefs) => console.debug('[bgs-card-tier-filter] prefs', prefs)),
-			this.mapData((prefs) => ({
-				selected: prefs.bgsActiveCardsTiers?.map((a) => '' + a) ?? [],
-				placeholder: this.i18n.translateString(`app.battlegrounds.filters.tier.all-tiers`),
-			})),
-		);
+		this.currentFilter$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsActiveCardsTiers));
 		this.visible$ = this.nav.selectedCategoryId$$.pipe(
 			this.mapData((selectedCategoryId) => selectedCategoryId === 'bgs-category-meta-cards'),
 		);
@@ -65,11 +49,11 @@ export class BattlegroundsCardTierFilterDropdownComponent
 		}
 	}
 
-	async onSelected(selected: readonly string[]) {
+	async onSelected(selected: readonly BgsCardTierFilterType[]) {
 		const prefs = await this.prefs.getPreferences();
 		const newPrefs: Preferences = {
 			...prefs,
-			bgsActiveCardsTiers: selected.map((tier) => parseInt(tier) as BgsCardTierFilterType),
+			bgsActiveCardsTiers: selected,
 		};
 		await this.prefs.savePreferences(newPrefs);
 	}

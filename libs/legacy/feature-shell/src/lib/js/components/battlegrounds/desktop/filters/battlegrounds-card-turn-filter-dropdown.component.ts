@@ -7,22 +7,19 @@ import { OverwolfService, waitForReady } from '@firestone/shared/framework/core'
 import { Observable, combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
-import { arraysEqual } from '../../../../services/utils';
+import { CardTurnFilterOption } from '@firestone/battlegrounds/view';
 
 @Component({
 	standalone: false,
 	selector: 'battlegrounds-card-turn-filter-dropdown',
 	styleUrls: [],
 	template: `
-		<filter-dropdown
-			*ngIf="filter$ | async as value"
+		<battlegrounds-card-turn-filter-dropdown-view
 			class="battlegrounds-card-turn-filter-dropdown"
-			[options]="options"
-			[filter]="value.filter"
-			[placeholder]="value.placeholder"
-			[visible]="value.visible"
-			(onOptionSelected)="onSelected($event)"
-		></filter-dropdown>
+			[currentFilter]="currentFilter$ | async"
+			[visible]="visible$ | async"
+			(valueSelected)="onSelected($event)"
+		></battlegrounds-card-turn-filter-dropdown-view>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -30,14 +27,11 @@ export class BattlegroundsCardTurnFilterDropdownComponent
 	extends AbstractSubscriptionComponent
 	implements AfterContentInit
 {
-	options: IOption[];
-
-	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
+	currentFilter$: Observable<number>;
+	visible$: Observable<boolean>;
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
-		private readonly ow: OverwolfService,
-		private readonly i18n: LocalizationFacadeService,
 		private readonly prefs: PreferencesService,
 		private readonly nav: BattlegroundsNavigationService,
 	) {
@@ -47,34 +41,10 @@ export class BattlegroundsCardTurnFilterDropdownComponent
 	async ngAfterContentInit() {
 		await waitForReady(this.nav, this.prefs);
 
-		this.options = [
-			{
-				value: null,
-				label: `All turns`,
-				tooltip: 'When this is selected, card impact is hidden',
-			} as IOption,
-			...Array(10)
-				.fill(0)
-				.map((_, i) => i + 1)
-				.map((turn) => ({
-					value: turn.toString(),
-					label: `Turn ${turn}`,
-				})),
-		];
-		this.filter$ = combineLatest([
-			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsActiveCardsTurn)),
-			this.nav.selectedCategoryId$$,
-		]).pipe(
-			filter(([filter, selectedCategoryId]) => !!selectedCategoryId),
-			distinctUntilChanged((a, b) => arraysEqual(a, b)),
-			this.mapData(([filter, selectedCategoryId]) => ({
-				filter: filter == null ? null : filter.toString(),
-				placeholder: this.options.find(
-					(option) => (option.value === null && filter == null) || +option.value === filter,
-				)?.label,
-
-				visible: ['bgs-category-meta-cards'].includes(selectedCategoryId),
-			})),
+		this.currentFilter$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsActiveCardsTurn));
+		this.visible$ = this.nav.selectedCategoryId$$.pipe(
+			filter((selectedCategoryId) => !!selectedCategoryId),
+			this.mapData((selectedCategoryId) => ['bgs-category-meta-cards'].includes(selectedCategoryId)),
 		);
 
 		if (!(this.cdr as ViewRef).destroyed) {
@@ -82,7 +52,7 @@ export class BattlegroundsCardTurnFilterDropdownComponent
 		}
 	}
 
-	async onSelected(option: IOption) {
+	async onSelected(option: CardTurnFilterOption) {
 		this.prefs.updatePrefs('bgsActiveCardsTurn', option.value == null ? null : +option.value);
 	}
 }

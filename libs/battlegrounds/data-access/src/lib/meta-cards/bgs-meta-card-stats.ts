@@ -64,7 +64,7 @@ export const buildCardTiers = (
 	}
 
 	if (sort.criteria === 'card-details') {
-		return buildCardsGroupedByTavernTier(stats, sort, allCards, i18n);
+		return buildCardsGroupedByTavernTier(stats, sort, allCards, i18n).filter((tier) => tier.items?.length);
 	}
 
 	const cardStats = [...stats].sort(sortByProperties((stat) => [getSortProperty(stat, sort)]));

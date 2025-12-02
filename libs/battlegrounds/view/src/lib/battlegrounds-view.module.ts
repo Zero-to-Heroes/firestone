@@ -41,6 +41,9 @@ import { BattlegroundsPersonalStatsInfoComponent } from './personal-stats/battle
 import { BattlegroundsMetaStatsCardsViewComponent } from './meta-cards/battlegrounds-meta-stats-cards-view.component';
 import { BattlegroundsMetaStatsCardTierComponent } from './meta-cards/battlegrounds-meta-stats-card-tier.component';
 import { BattlegroundsMetaStatsCardInfoComponent } from './meta-cards/battlegrounds-meta-stats-card-info.component';
+import { BattlegroundsCardTurnFilterDropdownViewComponent } from './filters/battlegrounds-card-turn-filter-dropdown-view.component';
+import { BattlegroundsCardTierFilterDropdownViewComponent } from './filters/battlegrounds-card-tier-filter-dropdown-view.component';
+import { BattlegroundsCardTypeFilterDropdownViewComponent } from './filters/battlegrounds-card-type-filter-dropdown-view.component';
 
 const components = [
 	BattlegroundsMetaStatsHeroesViewComponent,
@@ -80,6 +83,9 @@ const components = [
 	BattlegroundsTimeFilterDropdownViewComponent,
 	BattlegroundsTribesFilterDropdownViewComponent,
 	BattlegroundsAnomaliesFilterDropdownViewComponent,
+	BattlegroundsCardTurnFilterDropdownViewComponent,
+	BattlegroundsCardTierFilterDropdownViewComponent,
+	BattlegroundsCardTypeFilterDropdownViewComponent,
 ];
 
 @NgModule({

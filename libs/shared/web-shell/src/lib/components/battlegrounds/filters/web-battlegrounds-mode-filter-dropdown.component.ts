@@ -34,7 +34,7 @@ export class WebBattlegroundsModeFilterDropdownComponent
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
 
 	protected filterConfig: FilterUrlConfig<'battlegrounds' | 'battlegrounds-duo', Preferences> = {
-		paramName: 'bgsActiveGameMode',
+		paramName: 'gameMode',
 		preferencePath: 'bgsActiveGameMode',
 		validValues: ['battlegrounds', 'battlegrounds-duo'],
 	};

@@ -70,7 +70,7 @@ import {
 				<div class="header" *ngIf="sortCriteria$ | async as sort">
 					<sortable-table-label
 						class="cell image"
-						[name]="'app.battlegrounds.tier-list.header-card-details' | fsTranslate"
+						[name]="'app.battlegrounds.tier-list.header-card-image' | fsTranslate"
 						[sort]="sort"
 						[criteria]="'card-details'"
 						(sortClick)="onSortClick($event)"

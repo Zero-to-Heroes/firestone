@@ -3,7 +3,7 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { ActivatedRoute, Router } from '@angular/router';
 import { MmrPercentile } from '@firestone-hs/bgs-global-stats';
 import { BgsMetaHeroStatsService } from '@firestone/battlegrounds/common';
-import { BattlegroundsViewModule, RankFilterOption } from '@firestone/battlegrounds/view';
+import { BattlegroundsViewModule, CardTurnFilterOption, RankFilterOption } from '@firestone/battlegrounds/view';
 import { BgsRankFilterType, Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { BaseFilterWithUrlComponent, FilterUrlConfig } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
@@ -11,31 +11,28 @@ import { filter, Observable } from 'rxjs';
 
 @Component({
 	standalone: true,
-	selector: 'web-battlegrounds-rank-filter-dropdown',
+	selector: 'web-battlegrounds-card-turn-filter-dropdown',
 	styleUrls: [],
 	template: `
-		<battlegrounds-rank-filter-dropdown-view
+		<battlegrounds-card-turn-filter-dropdown-view
 			class="battlegrounds-rank-filter-dropdown"
-			[mmrPercentiles]="mmrPercentiles$ | async"
 			[currentFilter]="currentFilter$ | async"
 			[visible]="true"
 			(valueSelected)="onSelected($event)"
-		></battlegrounds-rank-filter-dropdown-view>
+		></battlegrounds-card-turn-filter-dropdown-view>
 	`,
 	imports: [CommonModule, BattlegroundsViewModule],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class WebBattlegroundsRankFilterDropdownComponent
-	extends BaseFilterWithUrlComponent<BgsRankFilterType, Preferences>
+export class WebBattlegroundsCardTurnFilterDropdownComponent
+	extends BaseFilterWithUrlComponent<number | null, Preferences>
 	implements AfterContentInit
 {
-	mmrPercentiles$: Observable<readonly MmrPercentile[]>;
-	currentFilter$: Observable<number>;
+	currentFilter$: Observable<number | null>;
 
-	protected filterConfig: FilterUrlConfig<BgsRankFilterType, Preferences> = {
-		paramName: 'rank',
-		preferencePath: 'bgsActiveRankFilter',
-		// Note: validValues not specified since rank values are dynamic based on MMR percentiles
+	protected filterConfig: FilterUrlConfig<number | null, Preferences> = {
+		paramName: 'turns',
+		preferencePath: 'bgsActiveCardsTurn',
 	};
 
 	constructor(
@@ -43,28 +40,22 @@ export class WebBattlegroundsRankFilterDropdownComponent
 		protected override readonly route: ActivatedRoute,
 		protected override readonly router: Router,
 		protected override readonly prefs: PreferencesService,
-		private readonly metaHeroStats: BgsMetaHeroStatsService,
 	) {
 		super(cdr, prefs, route, router, new Preferences());
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.metaHeroStats, this.prefs);
+		await waitForReady(this.prefs);
 
 		// Initialize URL synchronization
 		this.initializeUrlSync();
 
-		this.mmrPercentiles$ = this.metaHeroStats.metaHeroStats$$.pipe(
-			this.mapData((stats) => stats?.mmrPercentiles),
-			filter((percentiles) => !!percentiles?.length),
-			this.mapData((percentiles) => percentiles),
-		);
-		this.currentFilter$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsActiveRankFilter));
+		this.currentFilter$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsActiveCardsTurn));
 
 		this.cdr.detectChanges();
 	}
 
-	onSelected(option: RankFilterOption) {
-		this.prefs.updatePrefs('bgsActiveRankFilter', +option.value as BgsRankFilterType);
+	onSelected(option: CardTurnFilterOption) {
+		this.prefs.updatePrefs('bgsActiveCardsTurn', option.value == null ? null : +option.value);
 	}
 }

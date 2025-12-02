@@ -32,7 +32,7 @@ export class WebBattlegroundsTimeFilterDropdownComponent
 	currentFilter$: Observable<BgsActiveTimeFilterType>;
 
 	protected filterConfig: FilterUrlConfig<BgsActiveTimeFilterType, Preferences> = {
-		paramName: 'bgsActiveTimeFilter',
+		paramName: 'time',
 		preferencePath: 'bgsActiveTimeFilter',
 		validValues: ['all-time', 'past-seven', 'past-three', 'last-patch'],
 	};
