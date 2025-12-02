@@ -7,11 +7,10 @@ import {
 	Input,
 	Output,
 } from '@angular/core';
-import { Race, getTribeIcon, getTribeName } from '@firestone-hs/reference-data';
+import { BgsCardTierFilterType } from '@firestone/shared/common/service';
 import { MultiselectOption } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent, arraysEqual } from '@firestone/shared/framework/common';
 import { ILocalizationService } from '@firestone/shared/framework/core';
-import { BgsCardTierFilterType } from 'libs/shared/common/service/src/lib/models/preferences';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
 

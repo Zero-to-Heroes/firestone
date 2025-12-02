@@ -53,12 +53,7 @@ export class BattlegroundsCardTypeFilterDropdownComponent
 		}
 	}
 
-	async onSelected(option: IOption) {
-		const prefs = await this.prefs.getPreferences();
-		const newPrefs: Preferences = {
-			...prefs,
-			bgsActiveCardsCardType: option.value as BgsCardTypeFilterType,
-		};
-		await this.prefs.savePreferences(newPrefs);
+	async onSelected(value: BgsCardTypeFilterType) {
+		this.prefs.updatePrefs('bgsActiveCardsCardType', value);
 	}
 }
