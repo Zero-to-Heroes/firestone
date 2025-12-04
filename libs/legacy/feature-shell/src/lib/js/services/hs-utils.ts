@@ -1,11 +1,11 @@
 import { BoosterType, CardClass, CardIds, GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';
+import { bwonsamdiBoonsEnchantments } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { CollectionCardType } from '../models/collection/collection-card-type.type';
 import { tutors } from './decktracker/card-info/card-tutors';
 import { giftCreators } from './decktracker/card-info/gift-creators';
 import { LocalizationFacadeService } from './localization-facade.service';
-import { bwonsamdiBoonsEnchantments } from '@firestone/game-state';
 
 // Used for cache purposes, only in dev
 export const CARDS_VERSION = '';
@@ -382,6 +382,7 @@ export const CURRENT_EFFECTS_WHITELIST = [
 	CardIds.EtherealContract_ProposedContractTavernBrawlEnchantment,
 	CardIds.Evocation_EvocationEnchantment,
 	CardIds.ExarchMaladaar_NecromanticPowerEnchantment_GDB_470e,
+	CardIds.ExpeditionSergeant_ExpeditionSergeantFutureBuffEnchantment_GDB_229e,
 	CardIds.FelfireBonfire_AmpleOfferingEnchantment_VAC_952e,
 	CardIds.FierceOutsider_IntrovertedEnchantment,
 	CardIds.FlameWaves_FlameWavesTavernBrawlEnchantment,
