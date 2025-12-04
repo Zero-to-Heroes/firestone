@@ -1,5 +1,8 @@
 {
 	"eslint.validate": ["json"],
-	"typescript.preferences.importModuleSpecifier": "shortest",
-	"nxConsole.generateAiAgentRules": true
+	"typescript.preferences.importModuleSpecifier": "relative",
+	"nxConsole.generateAiAgentRules": true,
+	"editor.codeActionsOnSave": {
+		"source.organizeImports": "explicit"
+	}
 }
