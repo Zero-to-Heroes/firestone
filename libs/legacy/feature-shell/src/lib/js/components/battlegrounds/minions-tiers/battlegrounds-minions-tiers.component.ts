@@ -11,6 +11,8 @@ import {
 import { CardIds, GameTag, Race, getBuddy, getHeroPower, normalizeHeroCardId } from '@firestone-hs/reference-data';
 import { BgsBoardHighlighterService, BgsMetaCompositionStrategiesService } from '@firestone/battlegrounds/common';
 import {
+	BuildTierGameState,
+	BuildTierOptions,
 	ExtendedBgsCompAdvice,
 	MinionInfo,
 	Tier,
@@ -140,6 +142,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 				showBuddies: prefs.bgsShowBuddies,
 				showTrinkets: prefs.bgsShowTrinkets,
 				showSpellsAtBottom: prefs.bgsMinionListShowSpellsAtBottom,
+				showTimewarped: prefs.bgsShowTimewarped,
 				bgsGroupMinionsIntoTheirTribeGroup: prefs.bgsGroupMinionsIntoTheirTribeGroup,
 				bgsIncludeTrinketsInTribeGroups: prefs.bgsIncludeTrinketsInTribeGroups,
 			})),
@@ -152,7 +155,8 @@ export class BattlegroundsMinionsTiersOverlayComponent
 					a.showTierSeven === b.showTierSeven &&
 					a.showBuddies === b.showBuddies &&
 					a.showTrinkets === b.showTrinkets &&
-					a.showSpellsAtBottom === b.showSpellsAtBottom,
+					a.showSpellsAtBottom === b.showSpellsAtBottom &&
+					a.showTimewarped === b.showTimewarped,
 			),
 			shareReplay(1),
 			takeUntil(this.destroyed$),
@@ -173,6 +177,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 				anomalies: state.bgState.currentGame?.anomalies,
 				hasPrizes: state.bgState.currentGame?.hasPrizes,
 				hasTrinkets: state.bgState.currentGame?.hasTrinkets,
+				hasTimewarped: state.bgState.currentGame?.hasTimewarped,
 			})),
 			distinctUntilChanged(
 				(a, b) =>
@@ -180,6 +185,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 					a.hasSpells === b.hasSpells &&
 					a.hasPrizes === b.hasPrizes &&
 					a.hasTrinkets === b.hasTrinkets &&
+					a.hasTimewarped === b.hasTimewarped &&
 					arraysEqual(a.races, b.races) &&
 					arraysEqual(a.anomalies, b.anomalies),
 			),
@@ -227,9 +233,11 @@ export class BattlegroundsMinionsTiersOverlayComponent
 					hasBuddies,
 					hasSpells,
 					showSpellsAtBottom,
+					showTimewarped,
 					anomalies,
 					hasPrizes,
 					hasTrinkets,
+					hasTimewarped,
 					showTrinkets,
 					playerCardId,
 					allPlayersCardIds,
@@ -247,34 +255,45 @@ export class BattlegroundsMinionsTiersOverlayComponent
 					const ownBuddy = !!ownBuddyId ? this.allCards.getCard(ownBuddyId) : null;
 					const cardsInGame = getAllCardsInGame(
 						races,
-						hasSpells,
-						hasPrizes,
-						hasTrinkets,
+						{
+							hasTimewarped: hasTimewarped,
+							hasSpells: hasSpells,
+							hasTrinkets: hasTrinkets,
+							hasDarkmoonPrizes: hasPrizes,
+						},
 						gameMode,
 						playerCardId,
 						this.allCards,
 						cardRules,
 					);
 					const cardsToIncludes = !!ownBuddy ? [...cardsInGame, ownBuddy] : cardsInGame;
+					const buildTierOptions: BuildTierOptions = {
+						groupMinionsIntoTheirTribeGroup: bgsGroupMinionsIntoTheirTribeGroup,
+						includeTrinketsInTribeGroups: bgsIncludeTrinketsInTribeGroups,
+						showMechanicsTiers: showMechanicsTiers,
+						showTribeTiers: showTribeTiers,
+						showTierSeven: showTierSeven,
+						showTrinkets: showTrinkets,
+						showSpellsAtBottom: showSpellsAtBottom,
+						showTimewarped: showTimewarped,
+					};
+					const buildTierGameState: BuildTierGameState = {
+						playerCardId: playerCardId,
+						heroPowerCardId: heroPowerCardId,
+						availableTribes: races,
+						anomalies: anomalies,
+						allPlayerCardIds: allPlayerCardIds,
+						playerTrinkets: playerTrinkets,
+						questRewards: questRewards,
+						hasBuddies: hasBuddies,
+						hasSpells: hasSpells,
+						hasTimewarped: hasTimewarped,
+						hasTrinkets: hasTrinkets,
+					};
 					const result = buildTiers(
 						cardsToIncludes,
-						bgsGroupMinionsIntoTheirTribeGroup,
-						bgsIncludeTrinketsInTribeGroups,
-						showMechanicsTiers,
-						showTribeTiers,
-						showTierSeven,
-						showTrinkets,
-						races,
-						anomalies,
-						normalizedPlayerCardId,
-						heroPowerCardId,
-						allPlayerCardIds,
-						willShowBuddies,
-						hasSpells,
-						showSpellsAtBottom,
-						hasTrinkets,
-						playerTrinkets,
-						questRewards,
+						buildTierOptions,
+						buildTierGameState,
 						cardRules,
 						this.i18n,
 						this.allCards,

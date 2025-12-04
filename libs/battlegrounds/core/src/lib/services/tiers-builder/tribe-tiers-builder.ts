@@ -11,7 +11,7 @@ import {
 	SpellSchool,
 } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { isBgsSpell, isBgsTrinket } from '../card-utils';
+import { isBgsSpell, isBgsTimewarped, isBgsTrinket } from '../card-utils';
 import { ExtendedReferenceCard, Tier, TierGroup } from '../tiers.model';
 import { getActualTribes } from '../tribe-utils';
 import { TierBuilderConfig } from './tiers-config.model';
@@ -320,12 +320,34 @@ const buildTribeTierGroups = (
 	i18n: { translateString: (toTranslate: string, params?: any) => string },
 	config?: TierBuilderConfig,
 ): readonly TierGroup[] => {
-	return tiersToInclude
+	const baseGroups = tiersToInclude
 		.map((techLevel) => {
 			const group: TierGroup = buildTribeTierGroup(cards, techLevel, i18n, config);
 			return group;
 		})
 		.sort((a, b) => (!!a.tribe ? -1 : 0) - (!!b.tribe ? -1 : 0) || a.label.localeCompare(b.label));
+	const timewarpedGroups = config?.timewarped ? buildTimewarpedGroups(cards, i18n, config) : [];
+	return [...baseGroups, ...timewarpedGroups];
+};
+
+const buildTimewarpedGroups = (
+	cards: readonly ExtendedReferenceCard[],
+	i18n: { translateString: (toTranslate: string, params?: any) => string },
+	config?: TierBuilderConfig,
+): readonly TierGroup[] => {
+	const minorTimewarpCards = cards.filter((card) => card.techLevel === 3 && isBgsTimewarped(card));
+	const minorTimewarpGroup: TierGroup = {
+		label: i18n.translateString(`app.battlegrounds.tier-list.minor-timewarped-tier`),
+		cards: minorTimewarpCards,
+		tribe: null,
+	};
+	const majorTimewarpCards = cards.filter((card) => card.techLevel === 5 && isBgsTimewarped(card));
+	const majorTimewarpGroup: TierGroup = {
+		label: i18n.translateString(`app.battlegrounds.tier-list.major-timewarped-tier`),
+		cards: majorTimewarpCards,
+		tribe: null,
+	};
+	return [minorTimewarpGroup, majorTimewarpGroup];
 };
 
 const buildTribeTierGroup = (
@@ -335,7 +357,7 @@ const buildTribeTierGroup = (
 	config?: TierBuilderConfig,
 ): TierGroup => {
 	const cardForGroup = cards
-		.filter((card) => card.techLevel === techLevel)
+		.filter((card) => card.techLevel === techLevel && !isBgsTimewarped(card))
 		.sort((a, b) => a.name.localeCompare(b.name));
 	const result: TierGroup = {
 		label: i18n.translateString(`app.battlegrounds.tier-list.tier`, { value: techLevel }),

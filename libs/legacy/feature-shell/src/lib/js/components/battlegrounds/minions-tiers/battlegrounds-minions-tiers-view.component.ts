@@ -109,7 +109,7 @@ export class BattlegroundsMinionsTiersViewOverlayComponent
 			return;
 		}
 
-		this.tierLevels = value.filter((t) => t.type === 'standard');
+		this.tierLevels = value.filter((t) => t.type === 'standard' || t.type === 'timewarped');
 		this.mechanicalTiers = value.filter((t) => t.type === 'mechanics');
 		this.tribeTiers = value.filter((t) => t.type === 'tribe');
 		this.allTiers$$.next([...this.tierLevels, ...this.mechanicalTiers, ...this.tribeTiers]);

@@ -44,7 +44,7 @@ import { TwitchLocalizationManagerService } from './twitch-localization-manager.
 			*ngIf="baseInitDone$ | async"
 			[ngClass]="{
 				'battlegrounds-theme': currentDisplayMode === 'battlegrounds',
-				'decktracker-theme': currentDisplayMode === 'decktracker'
+				'decktracker-theme': currentDisplayMode === 'decktracker',
 			}"
 		>
 			<ng-container *ngIf="inGameplay">
@@ -87,6 +87,7 @@ import { TwitchLocalizationManagerService } from './twitch-localization-manager.
 					[hasBuddies]="bgsState.config?.hasBuddies"
 					[hasSpells]="bgsState.config?.hasSpells"
 					[hasTrinkets]="bgsState.config?.hasTrinkets"
+					[hasTimewarped]="bgsState.config?.hasTimewarped"
 					[anomalies]="bgsState.config?.anomalies"
 					[playerCardId]="getMainPlayerCardId(bgsState)"
 					[playerTrinkets]="getMainPlayerTrinkets(bgsState)"
@@ -95,6 +96,7 @@ import { TwitchLocalizationManagerService } from './twitch-localization-manager.
 					[showTierSeven]="showTierSeven$ | async"
 					[showBuddies]="showBuddies$ | async"
 					[showTrinkets]="showTrinkets$ | async"
+					[showTimewarped]="showTimewarped$ | async"
 					[groupMinionsIntoTheirTribeGroup]="groupMinionsIntoTheirTribeGroup$ | async"
 					[includeTrinketsInTribeGroups]="true"
 					[gameMode]="gameMode$ | async"
@@ -119,6 +121,7 @@ export class DeckTrackerOverlayContainerComponent
 	showTierSeven$: Observable<boolean>;
 	showBuddies$: Observable<boolean>;
 	showTrinkets$: Observable<boolean>;
+	showTimewarped$: Observable<boolean>;
 	showOpponentTracker$: Observable<boolean>;
 	groupMinionsIntoTheirTribeGroup$: Observable<boolean>;
 	gameMode$: Observable<GameType>;
@@ -188,6 +191,9 @@ export class DeckTrackerOverlayContainerComponent
 		this.showBuddies$ = from(this.prefs.prefs.asObservable()).pipe(this.mapData((prefs) => prefs?.bgsShowBuddies));
 		this.showTrinkets$ = from(this.prefs.prefs.asObservable()).pipe(
 			this.mapData((prefs) => prefs?.bgsShowTrinkets),
+		);
+		this.showTimewarped$ = from(this.prefs.prefs.asObservable()).pipe(
+			this.mapData((prefs) => prefs?.bgsShowTimewarped),
 		);
 		this.showOpponentTracker$ = from(this.prefs.prefs.asObservable()).pipe(
 			this.mapData((prefs) => prefs?.decktrackerShowOpponentTracker),
@@ -299,8 +305,8 @@ export class DeckTrackerOverlayContainerComponent
 		this.currentDisplayMode = !!this.bgsState?.inGame
 			? 'battlegrounds'
 			: this.showDecktracker
-			? 'decktracker'
-			: this.currentDisplayMode;
+				? 'decktracker'
+				: this.currentDisplayMode;
 		this.gameMode$$.next(this.gameState?.metadata?.gameType);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
@@ -342,7 +348,7 @@ export class DeckTrackerOverlayContainerComponent
 		return DeckCard.create({
 			...card,
 			cardName: card.cardName ?? refCard.name,
-			refManaCost: refCard.hideStats ? null : card.refManaCost ?? refCard.cost,
+			refManaCost: refCard.hideStats ? null : (card.refManaCost ?? refCard.cost),
 			rarity: card.rarity ?? refCard.rarity,
 			cardType: card.cardType ?? refCard.type,
 		});

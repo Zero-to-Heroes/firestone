@@ -23,5 +23,6 @@ export class TwitchPreferences {
 	readonly bgsShowTierSeven: boolean = false;
 	readonly bgsShowBuddies: boolean = false;
 	readonly bgsShowTrinkets: boolean = false;
+	readonly bgsShowTimewarped: boolean = true;
 	readonly bgsGroupMinionsIntoTheirTribeGroup: boolean = false;
 }

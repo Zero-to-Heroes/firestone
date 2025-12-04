@@ -19,6 +19,7 @@ export interface TwitchBgsStateConfig {
 	readonly hasPrizes: boolean;
 	readonly hasSpells: boolean;
 	readonly hasTrinkets: boolean;
+	readonly hasTimewarped: boolean;
 	readonly anomalies: readonly string[];
 }
 

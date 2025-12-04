@@ -16,6 +16,7 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { ExtendedReferenceCard, TavernTierType, Tier, TierGroup } from '../tiers.model';
 import { TierBuilderConfig } from './tiers-config.model';
 import { getTrinketNameKey } from './utils';
+import { isBgsTimewarped } from '../card-utils';
 
 export const MECHANICS_IN_GAME = [
 	{ mechanic: GameTag.BATTLECRY, tierId: 'B' },
@@ -97,11 +98,31 @@ const buildGroups = (
 	const tierGroups = tiersToInclude.map((techLevel) => buildTierGroup(cardsForMechanics, techLevel, i18n, config));
 	const spellGroup = config?.spells ? buildSpellGroup(cardsForMechanics, i18n) : null;
 	const trinketGroup = config?.trinkets ? buildTrinketGroup(cardsForMechanics, i18n) : null;
+	const timewarpedGroups = config?.timewarped ? buildTimewarpedGroups(cardsForMechanics, i18n) : [];
 
 	const groups: readonly (TierGroup | null)[] = config?.showSpellsAtBottom
-		? [...tierGroups, spellGroup, trinketGroup]
-		: [spellGroup, trinketGroup, ...tierGroups];
+		? [...tierGroups, spellGroup, trinketGroup, ...timewarpedGroups]
+		: [spellGroup, trinketGroup, ...tierGroups, ...timewarpedGroups];
 	return groups.filter((g) => !!g?.cards?.length) as readonly TierGroup[];
+};
+
+const buildTimewarpedGroups = (
+	cardsForMechanics: readonly ReferenceCard[],
+	i18n: { translateString: (toTranslate: string, params?: any) => string },
+): readonly TierGroup[] => {
+	const minorTimewarpCards = cardsForMechanics.filter((card) => card.techLevel === 3 && isBgsTimewarped(card));
+	const minorTimewarpGroup: TierGroup = {
+		label: i18n.translateString(`app.battlegrounds.tier-list.minor-timewarped-tier`),
+		cards: minorTimewarpCards,
+		tribe: null,
+	};
+	const majorTimewarpCards = cardsForMechanics.filter((card) => card.techLevel === 5 && isBgsTimewarped(card));
+	const majorTimewarpGroup: TierGroup = {
+		label: i18n.translateString(`app.battlegrounds.tier-list.major-timewarped-tier`),
+		cards: majorTimewarpCards,
+		tribe: null,
+	};
+	return [minorTimewarpGroup, majorTimewarpGroup];
 };
 
 const buildTrinketGroup = (
@@ -148,6 +169,7 @@ const buildTierGroup = (
 ): TierGroup => {
 	{
 		const cards = cardsForMechanics
+			.filter((card) => !isBgsTimewarped(card))
 			// .filter((card) => card.type?.toUpperCase() === CardType[CardType.MINION])
 			.filter((card) => card.techLevel === techLevel);
 		const result: TierGroup = {

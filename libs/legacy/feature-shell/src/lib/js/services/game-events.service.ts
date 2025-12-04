@@ -251,6 +251,7 @@ export class GameEvents {
 						battlegroundsAnomalies:
 							gameEvent.Value?.BattlegroundsAnomalies?.map((dbfId) => this.allCards.getCard(dbfId)?.id) ??
 							([] as readonly string[]),
+						battlegroundsTimewarped: gameEvent.Value?.BattlegroundsTimewarped,
 					},
 				} as GameEvent);
 				// Not a big fan of this: I'd rather have the gameUniqueId service listen to the event, but

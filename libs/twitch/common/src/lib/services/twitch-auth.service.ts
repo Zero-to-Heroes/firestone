@@ -216,6 +216,7 @@ export class TwitchAuthService {
 						hasQuests: bgsState.currentGame?.hasQuests,
 						hasSpells: bgsState.currentGame?.hasSpells,
 						hasTrinkets: bgsState.currentGame?.hasTrinkets,
+						hasTimewarped: bgsState.currentGame?.hasTimewarped,
 						anomalies: bgsState.currentGame?.anomalies,
 					},
 				} as TwitchBgsState)

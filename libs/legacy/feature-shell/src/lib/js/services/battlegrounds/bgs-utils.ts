@@ -1,6 +1,7 @@
 import {
 	CardIds,
 	CardType,
+	GameTag,
 	GameType,
 	Race,
 	ReferenceCard,
@@ -49,6 +50,7 @@ const normalizeHeroCardIdAfterSkin = (heroCardId: string, allCards: CardsFacadeS
 	return heroCardId;
 };
 
+/** @deprecated */
 export const isBgsSpell = (card: ReferenceCard): boolean => {
 	return card.type?.toUpperCase() === CardType[CardType.BATTLEGROUND_SPELL];
 };
@@ -378,12 +380,7 @@ const isSupportedScenarioForPlayer = (
 	reason?: BattleInfoMessage;
 } => {
 	try {
-		if (hasScallywag(boardInfo) && (hasBaron(boardInfo) || hasKhadgar(boardInfo))) {
-			return {
-				isSupported: false,
-				reason: 'scallywag',
-			};
-		} else if (hasStictchedEntity(boardInfo)) {
+		if (hasStictchedEntity(boardInfo)) {
 			return {
 				isSupported: false,
 				reason: 'stitched',
@@ -442,20 +439,6 @@ const hasScallywag = (boardInfo: BgsBoardInfo) => {
 // 		hasMinionOnBoard(boardInfo, CardIds.RylakMetalhead_BG26_801_G)
 // 	);
 // };
-
-const hasBaron = (boardInfo: BgsBoardInfo) => {
-	return (
-		hasMinionOnBoard(boardInfo, CardIds.BaronRivendare_TB_BaconUps_055) ||
-		hasMinionOnBoard(boardInfo, CardIds.BaronRivendare_BG_FP1_031)
-	);
-};
-
-const hasStreetMagician = (boardInfo: BgsBoardInfo) => {
-	return (
-		hasMinionOnBoard(boardInfo, CardIds.StreetMagician_TB_BaconShop_HERO_21_Buddy) ||
-		hasMinionOnBoard(boardInfo, CardIds.StreetMagician_TB_BaconShop_HERO_21_Buddy_G)
-	);
-};
 
 const hasKhadgar = (boardInfo: BgsBoardInfo) => {
 	return (

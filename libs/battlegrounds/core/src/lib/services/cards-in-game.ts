@@ -16,9 +16,12 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 
 export const getAllCardsInGame = (
 	availableTribes: readonly Race[],
-	hasSpells: boolean,
-	hasDarkmoonPrizes: boolean,
-	hasTrinkets: boolean,
+	gameSettings: {
+		hasTimewarped: boolean;
+		hasSpells: boolean;
+		hasTrinkets: boolean;
+		hasDarkmoonPrizes: boolean;
+	},
 	gameMode: GameType,
 	playerCardId: string,
 	allCards: CardsFacadeService,
@@ -26,17 +29,26 @@ export const getAllCardsInGame = (
 ): readonly ReferenceCard[] => {
 	const result = allCards
 		.getCards()
-		.filter((card) => card.isBaconPool)
+		.filter(
+			(card) =>
+				card.isBaconPool ||
+				(gameSettings.hasTimewarped && card.mechanics?.includes(GameTag[GameTag.BACON_TIMEWARPED])),
+		)
 		.filter((card) => card.set !== 'Vanilla')
 		.filter((card) => !card.spellSchool?.includes(SpellSchool[SpellSchool.UPGRADE]))
-		.filter((card) => card.type?.toUpperCase() !== CardType[CardType.BATTLEGROUND_TRINKET] || hasTrinkets)
+		.filter(
+			(card) => card.type?.toUpperCase() !== CardType[CardType.BATTLEGROUND_TRINKET] || gameSettings.hasTrinkets,
+		)
 		.filter((card) =>
 			isBattlegroundsDuo(gameMode)
 				? !card.mechanics?.includes(GameTag[GameTag.BG_SOLO_EXCLUSIVE])
 				: !card.mechanics?.includes(GameTag[GameTag.BG_DUO_EXCLUSIVE]),
 		)
 		.filter((card) => !card.mechanics?.includes(GameTag[GameTag.BACON_BUDDY]))
-		.filter((card) => hasDarkmoonPrizes || !card.mechanics?.includes(GameTag[GameTag.IS_DARKMOON_PRIZE]))
+		.filter((card) => gameSettings.hasTimewarped || !card.mechanics?.includes(GameTag[GameTag.BACON_TIMEWARPED]))
+		.filter(
+			(card) => gameSettings.hasDarkmoonPrizes || !card.mechanics?.includes(GameTag[GameTag.IS_DARKMOON_PRIZE]),
+		)
 		// .filter((card) => !NON_BUYABLE_MINION_IDS.includes(card.id as CardIds))
 		.filter((card) => {
 			const isValid = isValidCardForTribes(card.id, availableTribes, allCards, cardRules);

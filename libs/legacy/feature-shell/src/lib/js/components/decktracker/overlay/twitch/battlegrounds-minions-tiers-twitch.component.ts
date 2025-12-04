@@ -12,6 +12,8 @@ import {
 } from '@angular/core';
 import { CardIds, GameType, Race, getBuddy, getHeroPower, normalizeHeroCardId } from '@firestone-hs/reference-data';
 import {
+	BuildTierGameState,
+	BuildTierOptions,
 	MinionInfo,
 	Tier,
 	buildTiers,
@@ -81,6 +83,9 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 	@Input() set hasTrinkets(value: boolean) {
 		this.hasTrinkets$$.next(value);
 	}
+	@Input() set hasTimewarped(value: boolean) {
+		this.hasTimewarped$$.next(value);
+	}
 	@Input() set anomalies(value: readonly string[]) {
 		this.anomalies$$.next(value ?? []);
 	}
@@ -104,6 +109,9 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 	}
 	@Input() set showTrinkets(value: boolean) {
 		this.showTrinkets$$.next(value);
+	}
+	@Input() set showTimewarped(value: boolean) {
+		this.showTimewarped$$.next(value);
 	}
 	@Input() set groupMinionsIntoTheirTribeGroup(value: boolean) {
 		this.groupMinionsIntoTheirTribeGroup$$.next(value);
@@ -131,6 +139,7 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 	private hasSpells$$ = new BehaviorSubject<boolean>(false);
 	private hasPrizes$$ = new BehaviorSubject<boolean>(false);
 	private hasTrinkets$$ = new BehaviorSubject<boolean>(false);
+	private hasTimewarped$$ = new BehaviorSubject<boolean>(false);
 	private anomalies$$ = new BehaviorSubject<readonly string[]>([]);
 	private playerCardId$$ = new BehaviorSubject<string>(null);
 	private allPlayerCardIds$$ = new BehaviorSubject<readonly string[]>([]);
@@ -141,6 +150,7 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 	private showTierSeven$$ = new BehaviorSubject<boolean>(false);
 	private showBuddies$$ = new BehaviorSubject<boolean>(false);
 	private showTrinkets$$ = new BehaviorSubject<boolean>(false);
+	private showTimewarped$$ = new BehaviorSubject<boolean>(false);
 	private groupMinionsIntoTheirTribeGroup$$ = new BehaviorSubject<boolean>(false);
 	private includeTrinketsInTribeGroups$$ = new BehaviorSubject<boolean>(true);
 	private gameMode$$ = new BehaviorSubject<GameType>(GameType.GT_BATTLEGROUNDS);
@@ -170,6 +180,7 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 			this.anomalies$$,
 			this.hasPrizes$$,
 			this.hasTrinkets$$,
+			this.hasTimewarped$$,
 			this.playerCardId$$,
 			this.allPlayerCardIds$$,
 			this.showMechanicsTiers$$,
@@ -177,6 +188,7 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 			this.showTierSeven$$,
 			this.showBuddies$$,
 			this.showTrinkets$$,
+			this.showTimewarped$$,
 			this.groupMinionsIntoTheirTribeGroup$$,
 			this.includeTrinketsInTribeGroups$$,
 			this.gameMode$$,
@@ -191,6 +203,7 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 					anomalies,
 					hasPrizes,
 					hasTrinkets,
+					hasTimewarped,
 					playerCardId,
 					allPlayersCardIds,
 					showMechanicsTiers,
@@ -198,6 +211,7 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 					showTierSeven,
 					showBuddies,
 					showTrinkets,
+					showTimewarped,
 					bgsGroupMinionsIntoTheirTribeGroup,
 					bgsIncludeTrinketsInTribeGroups,
 					gameMode,
@@ -214,9 +228,7 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 					const ownBuddy = !!ownBuddyId ? this.allCards.getCard(ownBuddyId) : null;
 					const cardsInGame = getAllCardsInGame(
 						races,
-						hasSpells,
-						hasPrizes,
-						hasTrinkets,
+						{ hasTimewarped, hasSpells, hasTrinkets, hasDarkmoonPrizes: hasPrizes },
 						gameMode,
 						playerCardId,
 						this.allCards,
@@ -224,25 +236,33 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 					);
 					console.debug('card rules', cardRules);
 					const cardsToIncludes = !!ownBuddy ? [...cardsInGame, ownBuddy] : cardsInGame;
+					const buildTierOptions: BuildTierOptions = {
+						groupMinionsIntoTheirTribeGroup: bgsGroupMinionsIntoTheirTribeGroup,
+						includeTrinketsInTribeGroups: bgsIncludeTrinketsInTribeGroups,
+						showMechanicsTiers: showMechanicsTiers,
+						showTribeTiers: showTribeTiers,
+						showTierSeven: showTierSeven,
+						showTrinkets: showTrinkets,
+						showSpellsAtBottom: true,
+						showTimewarped: showTimewarped,
+					};
+					const buildTierGameState: BuildTierGameState = {
+						playerCardId: playerCardId,
+						heroPowerCardId: heroPowerCardId,
+						availableTribes: races,
+						anomalies: anomalies,
+						allPlayerCardIds: allPlayerCardIds,
+						playerTrinkets: playerTrinkets,
+						questRewards: questRewards,
+						hasBuddies: hasBuddies,
+						hasSpells: hasSpells,
+						hasTimewarped: hasTimewarped,
+						hasTrinkets: hasTrinkets,
+					};
 					const result = buildTiers(
 						cardsToIncludes,
-						bgsGroupMinionsIntoTheirTribeGroup,
-						bgsIncludeTrinketsInTribeGroups,
-						showMechanicsTiers,
-						showTribeTiers,
-						showTierSeven,
-						showTrinkets,
-						races,
-						anomalies,
-						normalizedPlayerCardId,
-						heroPowerCardId,
-						allPlayerCardIds,
-						willShowBuddies,
-						hasSpells,
-						true,
-						hasTrinkets,
-						playerTrinkets,
-						questRewards,
+						buildTierOptions,
+						buildTierGameState,
 						cardRules,
 						this.i18n,
 						this.allCards,

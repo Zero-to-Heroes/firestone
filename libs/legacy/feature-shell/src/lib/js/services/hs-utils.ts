@@ -8,7 +8,7 @@ import { LocalizationFacadeService } from './localization-facade.service';
 import { bwonsamdiBoonsEnchantments } from '@firestone/game-state';
 
 // Used for cache purposes, only in dev
-export const CARDS_VERSION = '20251107';
+export const CARDS_VERSION = '';
 export const isPreReleaseBuild = false;
 
 /** @deprecated use ALL_CLASSES */

@@ -8,5 +8,6 @@ export class GameSettingsEvent extends GameEvent {
 		battlegroundsBuddies: boolean;
 		battlegroundsTrinkets: boolean;
 		battlegroundsAnomalies: readonly string[];
+		battlegroundsTimewarped: boolean;
 	};
 }

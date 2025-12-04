@@ -2,12 +2,17 @@ import { ComponentType } from '@angular/cdk/portal';
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { CardType, GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { BgsBoardHighlighterService, BgsTrinketStrategyTipsTooltipComponent } from '@firestone/battlegrounds/common';
-import { ExtendedReferenceCard, isBgsTrinket, MECHANICS_IN_GAME } from '@firestone/battlegrounds/core';
+import {
+	ExtendedReferenceCard,
+	isBgsSpell,
+	isBgsTimewarped,
+	isBgsTrinket,
+	MECHANICS_IN_GAME,
+} from '@firestone/battlegrounds/core';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, distinctUntilChanged, filter, Observable } from 'rxjs';
-import { isBgsSpell } from '../../../services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { BgsMinionsGroup } from './bgs-minions-group';
 
@@ -59,6 +64,13 @@ import { BgsMinionsGroup } from './bgs-minions-group';
 						src="https://static.zerotoheroes.com/hearthstone/asset/coliseum/images/battlegrounds/coin_mana.png"
 					/>
 					<div class="cost">{{ minion.goldCost }}</div>
+				</div>
+				<div class="chronum-cost" *ngIf="minion.chronumCost != null">
+					<img
+						class="icon"
+						src="https://static.zerotoheroes.com/hearthstone/asset/coliseum/images/battlegrounds/timewarped_chronum.png"
+					/>
+					<div class="cost">{{ minion.chronumCost }}</div>
 				</div>
 				<span class="name-text" [helpTooltip]="minion.bannedReason ?? minion.trinketLockedReason">
 					{{ minion.name }}
@@ -225,7 +237,11 @@ export class BattlegroundsMinionItemComponent extends AbstractSubscriptionCompon
 						highlighted: highlightedMinions.includes(card.id),
 						banned: card.banned,
 						bannedReason: card.bannedReason,
-						goldCost: isBgsSpell(card) || isBgsTrinket(card) ? (card.cost ?? 0) : null,
+						goldCost:
+							!isBgsTimewarped(card) && (isBgsSpell(card) || isBgsTrinket(card))
+								? (card.cost ?? 0)
+								: null,
+						chronumCost: isBgsTimewarped(card) ? (card.cost ?? 0) : null,
 						techLevel: card.techLevel,
 
 						trinketLocked: card.trinketLocked,
@@ -309,6 +325,7 @@ export interface Minion {
 	readonly bannedReason?: string;
 	readonly techLevel?: number;
 	readonly goldCost: number;
+	readonly chronumCost: number;
 
 	readonly highlighted: boolean;
 	readonly hightMinionTooltip?: string;

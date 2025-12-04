@@ -1,5 +1,5 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import { CardIds, CardRules, Race, ReferenceCard } from '@firestone-hs/reference-data';
+import { CardIds, CardRules, GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { QuestReward } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { filterCardsToInclude } from './tiers-builder/cards-to-include';
@@ -12,76 +12,85 @@ import { ExtendedReferenceCard, Tier } from './tiers.model';
 
 export const buildTiers = (
 	cardsInGame: readonly ReferenceCard[],
-	groupMinionsIntoTheirTribeGroup: boolean,
-	includeTrinketsInTribeGroups: boolean,
-	showMechanicsTiers: boolean,
-	showTribeTiers: boolean,
-	showTierSeven: boolean,
-	showTrinketsInput: boolean,
-	availableTribes: readonly Race[],
-	anomalies: readonly string[],
-	playerCardId: string,
-	heroPowerCardId: string,
-	allPlayerCardIds: readonly string[],
-	hasBuddies: boolean,
-	hasSpells: boolean,
-	showSpellsAtBottom: boolean,
-	hasTrinkets: boolean,
-	playerTrinkets: readonly string[],
-	questRewards: readonly QuestReward[],
+	options: BuildTierOptions,
+	gameState: BuildTierGameState,
 	cardRules: CardRules,
 	i18n: { translateString: (toTranslate: string, params?: any) => string },
 	allCards: CardsFacadeService,
 ): readonly Tier[] => {
+	console.debug(
+		'[debug] buildTiers',
+		cardsInGame.filter((c) => c.mechanics?.includes(GameTag[GameTag.BACON_TIMEWARPED])),
+		options,
+		gameState,
+		cardRules,
+		i18n,
+		allCards,
+	);
 	if (!cardsInGame?.length) {
 		return [];
 	}
 
 	// Input sanitation
-	anomalies = anomalies ?? [];
-	availableTribes = availableTribes ?? [];
-	allPlayerCardIds = allPlayerCardIds ?? [];
+	const anomalies = gameState.anomalies ?? [];
+	const availableTribes = gameState.availableTribes ?? [];
+	const allPlayerCardIds = gameState.allPlayerCardIds ?? [];
 
 	// Display config
 	const showAllBuddyCards =
-		hasBuddies ||
+		gameState.hasBuddies ||
 		anomalies.includes(CardIds.BringInTheBuddies_BG27_Anomaly_810) ||
-		heroPowerCardId === CardIds.ETCBandManager_SignANewArtist;
+		gameState.heroPowerCardId === CardIds.ETCBandManager_SignANewArtist;
 	const showBuddiesTier =
 		showAllBuddyCards ||
-		(hasBuddies && [CardIds.BobsBurgles, CardIds.ScabbsCutterbutter_ISpy].includes(heroPowerCardId as CardIds));
+		(gameState.hasBuddies &&
+			[CardIds.BobsBurgles, CardIds.ScabbsCutterbutter_ISpy].includes(gameState.heroPowerCardId as CardIds));
 
-	const tiersToInclude = buildTiersToInclude(showTierSeven, anomalies, heroPowerCardId, playerTrinkets, questRewards);
+	const tiersToInclude = buildTiersToInclude(
+		options.showTierSeven,
+		anomalies,
+		gameState.heroPowerCardId,
+		gameState.playerTrinkets,
+		gameState.questRewards,
+	);
 	const cardsToInclude: readonly ExtendedReferenceCard[] = filterCardsToInclude(
 		cardsInGame,
 		tiersToInclude,
 		anomalies,
-		playerCardId,
+		gameState.playerCardId,
 		cardRules,
 		allCards,
 		i18n,
 	);
+	console.debug(
+		'[debug] cardsToInclude',
+		cardsToInclude.filter((c) => c.mechanics?.includes(GameTag[GameTag.BACON_TIMEWARPED])),
+	);
 
 	const showTrinkets =
-		(showTrinketsInput && hasTrinkets) ||
-		[CardIds.MarinTheManager_FantasticTreasure_BG30_HERO_304p].includes(heroPowerCardId as CardIds) ||
+		(options.showTrinkets && gameState.hasTrinkets) ||
+		[CardIds.MarinTheManager_FantasticTreasure_BG30_HERO_304p].includes(gameState.heroPowerCardId as CardIds) ||
 		anomalies?.includes(CardIds.MarinsTreasureBox_BG31_Anomaly_106);
 
+	const showSpells = gameState.hasSpells;
+	const showTimewarped = gameState.hasTimewarped && options.showTimewarped;
+
 	const config: TierBuilderConfig = {
-		spells: hasSpells,
+		spells: showSpells,
 		trinkets: showTrinkets,
-		playerTrinkets: playerTrinkets,
+		timewarped: showTimewarped,
+		playerTrinkets: gameState.playerTrinkets,
 		anomalies: anomalies,
-		groupMinionsIntoTheirTribeGroup: groupMinionsIntoTheirTribeGroup,
-		includeTrinketsInTribeGroups: includeTrinketsInTribeGroups,
-		showSpellsAtBottom: showSpellsAtBottom,
+		groupMinionsIntoTheirTribeGroup: options.groupMinionsIntoTheirTribeGroup,
+		includeTrinketsInTribeGroups: options.includeTrinketsInTribeGroups,
+		showSpellsAtBottom: options.showSpellsAtBottom,
 		showAllBuddyCards: showAllBuddyCards,
 		showBuddiesTier: showBuddiesTier,
-		showProtossMinions: heroPowerCardId === CardIds.Artanis_WarpGate_BG31_HERO_802p,
-		showZergMinions: heroPowerCardId === CardIds.KerriganQueenOfBlades_SpawningPool_BG31_HERO_811p,
+		showProtossMinions: gameState.heroPowerCardId === CardIds.Artanis_WarpGate_BG31_HERO_802p,
+		showZergMinions: gameState.heroPowerCardId === CardIds.KerriganQueenOfBlades_SpawningPool_BG31_HERO_811p,
 		showBattlecruiserUpgrades:
-			heroPowerCardId === CardIds.JimRaynor_LiftOff_BG31_HERO_801p ||
-			playerTrinkets?.includes(CardIds.BattlecruiserPortrait_BG32_MagicItem_806),
+			gameState.heroPowerCardId === CardIds.JimRaynor_LiftOff_BG31_HERO_801p ||
+			gameState.playerTrinkets?.includes(CardIds.BattlecruiserPortrait_BG32_MagicItem_806),
 	};
 	const standardTiers: readonly Tier[] = buildStandardTiers(
 		cardsToInclude,
@@ -90,20 +99,44 @@ export const buildTiers = (
 		i18n,
 		config,
 	);
-	const mechanicsTiers: readonly Tier[] = showMechanicsTiers
+	const mechanicsTiers: readonly Tier[] = options.showMechanicsTiers
 		? buildMechanicsTiers(
 				cardsToInclude,
 				tiersToInclude,
 				availableTribes,
-				heroPowerCardId,
+				gameState.heroPowerCardId,
 				allPlayerCardIds,
 				allCards,
 				i18n,
 				config,
 			)
 		: [];
-	const tribeTiers: readonly Tier[] = showTribeTiers
+	const tribeTiers: readonly Tier[] = options.showTribeTiers
 		? buildTribeTiers(cardsToInclude, tiersToInclude, availableTribes, cardRules, i18n, allCards, config)
 		: [];
 	return [...standardTiers, ...mechanicsTiers, ...tribeTiers];
 };
+
+export interface BuildTierOptions {
+	groupMinionsIntoTheirTribeGroup: boolean;
+	includeTrinketsInTribeGroups: boolean;
+	showMechanicsTiers: boolean;
+	showTribeTiers: boolean;
+	showTimewarped: boolean;
+	showTierSeven: boolean;
+	showTrinkets: boolean;
+	showSpellsAtBottom: boolean;
+}
+export interface BuildTierGameState {
+	playerCardId: string;
+	heroPowerCardId: string;
+	availableTribes: readonly Race[];
+	anomalies: readonly string[];
+	allPlayerCardIds: readonly string[];
+	playerTrinkets: readonly string[];
+	questRewards: readonly QuestReward[];
+	hasBuddies: boolean;
+	hasSpells: boolean;
+	hasTimewarped: boolean;
+	hasTrinkets: boolean;
+}

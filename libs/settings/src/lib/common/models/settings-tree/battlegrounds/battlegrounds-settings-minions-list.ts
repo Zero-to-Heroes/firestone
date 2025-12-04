@@ -99,6 +99,13 @@ export const battlegroundsMinionsListSettings = (context: SettingContext): Setti
 					},
 					{
 						type: 'toggle',
+						field: 'bgsShowTimewarped',
+						label: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-show-timewarped-label'),
+						tooltip: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-show-timewarped-tooltip'),
+						disabledIf: (prefs: Preferences) => !prefs.bgsFullToggle || !prefs.bgsEnableMinionListOverlay,
+					},
+					{
+						type: 'toggle',
 						field: 'bgsIncludeTrinketsInTribeGroups',
 						label: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-include-trinkets-in-tribes-label'),
 						tooltip: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-include-trinkets-in-tribes-tooltip'),

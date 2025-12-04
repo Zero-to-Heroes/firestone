@@ -37,4 +37,4 @@ export type TavernTierType =
 	| 'spells'
 	| 'trinkets'
 	| string;
-export type TierViewType = 'standard' | 'mechanics' | 'tribe' | 'compositions';
+export type TierViewType = 'standard' | 'mechanics' | 'tribe' | 'compositions' | 'timewarped';

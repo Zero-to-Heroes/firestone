@@ -64,6 +64,7 @@ export class BattlegroundsMinionsListComponent extends AbstractSubscriptionCompo
 		this.tierName = value.tierName;
 		this.type = value.type;
 		this.tavernTierData$$.next(value.tavernTierData ?? null);
+		console.debug('[debug] tier', value);
 	}
 
 	@Input() set highlightedTribes(value: readonly Race[]) {
@@ -84,7 +85,10 @@ export class BattlegroundsMinionsListComponent extends AbstractSubscriptionCompo
 	private highlightedMechanics$$ = new BehaviorSubject<readonly GameTag[]>([]);
 	private tavernTierData$$ = new BehaviorSubject<GameTag | Race | null>(null);
 
-	constructor(protected readonly cdr: ChangeDetectorRef, private readonly highlighter: BgsBoardHighlighterService) {
+	constructor(
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly highlighter: BgsBoardHighlighterService,
+	) {
 		super(cdr);
 	}
 

@@ -187,6 +187,16 @@ import { DropdownOption } from '../../../settings/dropdown.component';
 						></checkbox>
 						<checkbox
 							class="item indented"
+							[label]="'settings.battlegrounds.overlay.minions-list-show-timewarped-label' | owTranslate"
+							[labelTooltip]="
+								'settings.battlegrounds.overlay.minions-list-show-timewarped-tooltip' | owTranslate
+							"
+							[disabled]="!prefs.showMinionsList"
+							[value]="prefs.bgsShowTimewarped"
+							(valueChanged)="onShowTimewarpedChanged(prefs, $event)"
+						></checkbox>
+						<checkbox
+							class="item indented"
 							[label]="
 								'settings.battlegrounds.overlay.minions-list-group-minions-into-tribes-label'
 									| owTranslate
@@ -458,6 +468,12 @@ export class TwitchConfigWidgetComponent extends AbstractSubscriptionTwitchCompo
 	onShowTrinketsChanged(prefs: TwitchPreferences, value: boolean) {
 		const newPrefs: TwitchPreferences = { ...prefs, bgsShowTrinkets: value };
 		console.log('changing bgsShowTrinkets pref', newPrefs);
+		this.prefs.savePrefs(newPrefs);
+	}
+
+	onShowTimewarpedChanged(prefs: TwitchPreferences, value: boolean) {
+		const newPrefs: TwitchPreferences = { ...prefs, bgsShowTimewarped: value };
+		console.log('changing bgsShowTimewarped pref', newPrefs);
 		this.prefs.savePrefs(newPrefs);
 	}
 

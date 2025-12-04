@@ -18,6 +18,7 @@ export class GameSettingsParser implements EventParser {
 					hasSpells: gameEvent.additionalData.battlegroundsSpells,
 					anomalies: gameEvent.additionalData.battlegroundsAnomalies,
 					hasTrinkets: gameEvent.additionalData.battlegroundsTrinkets,
+					hasTimewarped: gameEvent.additionalData.battlegroundsTimewarped,
 				}),
 			}),
 		});
