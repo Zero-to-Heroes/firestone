@@ -64,6 +64,7 @@ export interface StaticGeneratingCardInput {
 		scenarioId: number;
 		currentClass: string;
 		deckState: DeckState;
+		opponentDeckState: DeckState;
 		gameState: GameState;
 		validArenaPool: readonly string[];
 	};

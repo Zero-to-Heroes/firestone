@@ -213,6 +213,7 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 				scenarioId: metadata.scenarioId,
 				currentClass: !context?.hero?.classes?.[0] ? '' : CardClass[context?.hero?.classes?.[0]],
 				deckState: context,
+				opponentDeckState: context.isOpponent ? context : this.context$$.value?.gameState?.opponentDeck,
 				gameState: this.context$$.value?.gameState,
 				validArenaPool: validArenaPool,
 			});

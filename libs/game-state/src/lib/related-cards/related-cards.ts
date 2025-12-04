@@ -42,6 +42,7 @@ export const buildContextRelatedCardIds = (
 				scenarioId: metaData.scenarioId,
 				currentClass: heroClass ? CardClass[heroClass] : '',
 				deckState: deckState,
+				opponentDeckState: deckState.isOpponent ? deckState : gameState.opponentDeck,
 				gameState: gameState,
 				validArenaPool: validArenaPool,
 			});

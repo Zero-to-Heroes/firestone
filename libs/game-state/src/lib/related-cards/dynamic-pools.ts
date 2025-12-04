@@ -54,6 +54,7 @@ export const getDynamicRelatedCardIds = (
 		scenarioId: number;
 		currentClass: string;
 		deckState: DeckState;
+		opponentDeckState: DeckState;
 		gameState: GameState;
 		validArenaPool: readonly string[];
 	},
@@ -72,6 +73,7 @@ const getDynamicRelatedCardIdsInternal = (
 		scenarioId: number;
 		currentClass: string;
 		deckState: DeckState;
+		opponentDeckState: DeckState;
 		gameState: GameState;
 		validArenaPool: readonly string[];
 	},

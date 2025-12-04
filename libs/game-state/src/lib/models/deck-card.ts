@@ -113,6 +113,19 @@ export class DeckCard {
 	public getEffectiveManaCost(): number {
 		return this.actualManaCost ?? this.refManaCost ?? null;
 	}
+
+	public getCardType(): CardType | null {
+		if (this.cardType) {
+			return CardType[this.cardType.toUpperCase()];
+		}
+		if (this.tags?.[GameTag.CARDTYPE]) {
+			return this.tags[GameTag.CARDTYPE];
+		}
+		if (this.guessedInfo?.cardType) {
+			return this.guessedInfo.cardType;
+		}
+		return null;
+	}
 }
 
 export const isCardCreated = (card: DeckCard | undefined): boolean => {
