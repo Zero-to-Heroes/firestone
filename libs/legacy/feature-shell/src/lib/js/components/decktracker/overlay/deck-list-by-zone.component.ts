@@ -14,8 +14,8 @@ import { BehaviorSubject, Observable, combineLatest, debounceTime, filter, start
 import { DeckZone, DeckZoneSection } from '../../../models/decktracker/view/deck-zone';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 import { PLAGUES } from '../../../services/decktracker/event-parser/special-cases/plagues-parser';
-import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { CURRENT_EFFECTS_WHITELIST } from '../../../services/hs-utils';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
 	standalone: false,
@@ -105,6 +105,10 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 		this.showBoardCardsInSeparateZone$$.next(value);
 	}
 
+	@Input() set showHeroPowerInBoardZone(value: boolean) {
+		this.showHeroPowerInBoardZone$$.next(value);
+	}
+
 	@Input() set showDiscoveryZone(value: boolean) {
 		this.showDiscoveryZone$$.next(value);
 	}
@@ -134,6 +138,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 	private showTopCardsSeparately$$ = new BehaviorSubject<boolean>(true);
 	private showGeneratedCardsInSeparateZone$$ = new BehaviorSubject<boolean>(false);
 	private showBoardCardsInSeparateZone$$ = new BehaviorSubject<boolean>(false);
+	private showHeroPowerInBoardZone$$ = new BehaviorSubject<boolean>(false);
 	private showDiscoveryZone$$ = new BehaviorSubject<boolean>(true);
 	private showPlaguesOnTop$$ = new BehaviorSubject<boolean>(true);
 	private sortHandByZoneOrder$$ = new BehaviorSubject<boolean>(false);
@@ -169,6 +174,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 			this.showTopCardsSeparately$$,
 			this.showGeneratedCardsInSeparateZone$$,
 			this.showBoardCardsInSeparateZone$$,
+			this.showHeroPowerInBoardZone$$,
 			this.showPlaguesOnTop$$,
 			this.groupSameCardsTogether$$,
 			this.sortHandByZoneOrder$$,
@@ -189,6 +195,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 					showTopCardsSeparately,
 					showGeneratedCardsInSeparateZone,
 					showBoardCardsInSeparateZone,
+					showHeroPowerInBoardZone,
 					showPlaguesOnTop,
 					groupSameCardsTogether,
 					sortHandByZoneOrder,
@@ -204,6 +211,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 						showTopCardsSeparately,
 						showGeneratedCardsInSeparateZone,
 						showBoardCardsInSeparateZone,
+						showHeroPowerInBoardZone,
 						showPlaguesOnTop,
 						showDiscoveryZone,
 						groupSameCardsTogether,
@@ -226,6 +234,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 		showTopCardsSeparately: boolean,
 		showGeneratedCardsInSeparateZone: boolean,
 		showBoardCardsInSeparateZone: boolean,
+		showHeroPowerInBoardZone: boolean,
 		showPlaguesOnTop: boolean,
 		showDiscoveryZone: boolean,
 		groupSameCardsTogether: boolean,
@@ -391,6 +400,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 				...deckState.board,
 				...deckState.otherZone.filter((c) => c.zone === 'SECRET'),
 				deckState.weapon,
+				showHeroPowerInBoardZone ? deckState.heroPower : null,
 			].filter((c) => !!c);
 			zones.push(
 				this.buildZone(

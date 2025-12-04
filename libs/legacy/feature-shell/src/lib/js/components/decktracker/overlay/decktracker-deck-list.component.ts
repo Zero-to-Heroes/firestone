@@ -53,6 +53,7 @@ import { SetCard } from '../../../models/set';
 					[showGeneratedCardsInSeparateZone]="showGeneratedCardsInSeparateZone"
 					[showPlaguesOnTop]="showPlaguesOnTop"
 					[showBoardCardsInSeparateZone]="showBoardCardsInSeparateZone"
+					[showHeroPowerInBoardZone]="showHeroPowerInBoardZone"
 					[showStatsChange]="showStatsChange"
 					[hideGeneratedCardsInOtherZone]="hideGeneratedCardsInOtherZone"
 					[sortCardsByManaCostInOtherZone]="sortCardsByManaCostInOtherZone"
@@ -112,6 +113,7 @@ export class DeckTrackerDeckListComponent extends AbstractSubscriptionComponent 
 	@Input() showGeneratedCardsInSeparateZone: boolean;
 	@Input() showPlaguesOnTop: boolean;
 	@Input() showBoardCardsInSeparateZone: boolean;
+	@Input() showHeroPowerInBoardZone: boolean;
 	@Input() showStatsChange: boolean;
 	@Input() showUnknownCards: boolean;
 	@Input() cardsGoToBottom: boolean;

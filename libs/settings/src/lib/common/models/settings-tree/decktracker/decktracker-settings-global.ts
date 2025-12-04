@@ -1,3 +1,4 @@
+import { Preferences } from '@firestone/shared/common/service';
 import { SettingContext, SettingNode } from '../../settings.types';
 
 export const decktrackerGlobalSettings = (context: SettingContext): SettingNode => {
@@ -82,6 +83,14 @@ export const decktrackerGlobalSettings = (context: SettingContext): SettingNode 
 						field: 'overlayShowBoardCardsSeparateZone',
 						label: context.i18n.translateString('settings.decktracker.global.show-board-in-separate-zone'),
 						tooltip: context.i18n.translateString('settings.decktracker.global.show-board-in-separate-zone-tooltip'),
+					},
+					{
+						type: 'toggle',
+						field: 'overlayShowHeroPowerInBoardZone',
+						label: context.i18n.translateString('settings.decktracker.global.show-hero-power-in-board-zone'),
+						tooltip: context.i18n.translateString('settings.decktracker.global.show-hero-power-in-board-zone-tooltip'),
+						indented: true,
+						disabledIf: (prefs: Preferences) => !prefs.overlayShowBoardCardsSeparateZone,
 					},
 					{
 						type: 'toggle',

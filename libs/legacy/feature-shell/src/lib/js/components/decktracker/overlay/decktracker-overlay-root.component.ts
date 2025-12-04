@@ -15,6 +15,7 @@ import { DeckState, enrichDeck, GameState, GameStateFacadeService, StatsRecap } 
 import { AccountService } from '@firestone/profile/common';
 import { PatchesConfigService, Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { gameFormatToStatGameFormatType } from '@firestone/stats/data-access';
 import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
 import {
@@ -28,10 +29,8 @@ import {
 	takeUntil,
 } from 'rxjs';
 import { DecksProviderService } from '../../../services/decktracker/main/decks-provider.service';
-import { Events } from '../../../services/events.service';
 import { MainWindowStateFacadeService } from '../../../services/mainwindow/store/main-window-state-facade.service';
 import { GameStatsProviderService } from '../../../services/stats/game/game-stats-provider.service';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
 
 @Component({
 	standalone: false,
@@ -95,6 +94,7 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 								[showGeneratedCardsInSeparateZone]="showGeneratedCardsInSeparateZone$ | async"
 								[showPlaguesOnTop]="showPlaguesOnTop$ | async"
 								[showBoardCardsInSeparateZone]="showBoardCardsInSeparateZone$ | async"
+								[showHeroPowerInBoardZone]="showHeroPowerInBoardZone$ | async"
 								[showStatsChange]="showStatsChange$ | async"
 								[cardsGoToBottom]="cardsGoToBottom$ | async"
 								[darkenUsedCards]="darkenUsedCards$ | async"
@@ -164,6 +164,7 @@ export class DeckTrackerOverlayRootComponent
 	groupSameCardsTogether$: Observable<boolean>;
 	showGeneratedCardsInSeparateZone$: Observable<boolean>;
 	showBoardCardsInSeparateZone$: Observable<boolean>;
+	showHeroPowerInBoardZone$: Observable<boolean>;
 	showPlaguesOnTop$: Observable<boolean>;
 	showStatsChange$: Observable<boolean>;
 	cardsGoToBottom$: Observable<boolean>;
@@ -426,6 +427,9 @@ export class DeckTrackerOverlayRootComponent
 		);
 		this.showBoardCardsInSeparateZone$ = this.prefs.preferences$$.pipe(
 			this.mapData((preferences) => preferences.overlayShowBoardCardsSeparateZone),
+		);
+		this.showHeroPowerInBoardZone$ = this.prefs.preferences$$.pipe(
+			this.mapData((preferences) => preferences.overlayShowHeroPowerInBoardZone),
 		);
 		this.showStatsChange$ = this.prefs.preferences$$.pipe(
 			this.mapData((preferences) => preferences.overlayShowStatsChange),
