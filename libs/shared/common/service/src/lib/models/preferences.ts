@@ -776,7 +776,7 @@ export class Preferences implements IPreferences {
 export type CollectionSetStatsTypeFilterType = 'cards-stats' | 'cards-history';
 export type BooleanWithLimited = boolean | 'limited';
 export type BgsCompositionsListMode = 'exploring' | 'browsing';
-export type BgsCardTypeFilterType = 'minion' | 'spell';
+export type BgsCardTypeFilterType = 'minion' | 'spell' | 'timewarped';
 export type BgsCardTierFilterType = 1 | 2 | 3 | 4 | 5 | 6 | 7;
 export type ArenaSessionWidgetTimeFrame = 'current-season' | 'all-time';
 export type ArenaModeFilterType = 'arena' | 'arena-underground' | 'arena-legacy' | 'all';

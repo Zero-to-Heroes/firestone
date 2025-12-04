@@ -2,6 +2,7 @@
 /* eslint-disable @angular-eslint/template/no-negated-async */
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { CardType } from '@firestone-hs/reference-data';
+import { isBgsTimewarped } from '@firestone/battlegrounds/core';
 import {
 	BgsMetaCardStatTier,
 	BgsMetaCardStatTierItem,
@@ -308,9 +309,17 @@ export class BattlegroundsMetaStatsCardsViewComponent
 	private isCorrectType(stat: BgsMetaCardStatTierItem, cardType: BgsCardTypeFilterType): boolean {
 		switch (cardType) {
 			case 'minion':
-				return this.allCards.getCard(stat.cardId).type?.toUpperCase() === CardType[CardType.MINION];
+				return (
+					this.allCards.getCard(stat.cardId).type?.toUpperCase() === CardType[CardType.MINION] &&
+					!isBgsTimewarped(this.allCards.getCard(stat.cardId))
+				);
 			case 'spell':
-				return this.allCards.getCard(stat.cardId).type?.toUpperCase() === CardType[CardType.BATTLEGROUND_SPELL];
+				return (
+					this.allCards.getCard(stat.cardId).type?.toUpperCase() === CardType[CardType.BATTLEGROUND_SPELL] &&
+					!isBgsTimewarped(this.allCards.getCard(stat.cardId))
+				);
+			case 'timewarped':
+				return isBgsTimewarped(this.allCards.getCard(stat.cardId));
 			default:
 				return false;
 		}

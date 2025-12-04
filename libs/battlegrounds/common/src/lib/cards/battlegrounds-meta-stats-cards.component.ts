@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @angular-eslint/template/no-negated-async */
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { CardType } from '@firestone-hs/reference-data';
+import { CardType, GameTag } from '@firestone-hs/reference-data';
 import {
 	BgsMetaCardStatTier,
 	BgsMetaCardStatTierItem,
@@ -78,6 +78,14 @@ export class BattlegroundsMetaStatsCardsComponent extends AbstractSubscriptionCo
 				const minTurn = buildMinTurn(cardTiers);
 				return buildCardStats(stats?.cardStats ?? [], tribesFilter, minTurn, turnNumber, this.allCards);
 			}),
+			tap((stats) =>
+				console.debug(
+					'[debug] stats 2',
+					stats.filter((s) =>
+						this.allCards.getCard(s.cardId).mechanics?.includes(GameTag[GameTag.BACON_TIMEWARPED]),
+					),
+				),
+			),
 			shareReplay(1),
 			takeUntil(this.destroyed$),
 		);

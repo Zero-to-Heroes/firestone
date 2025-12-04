@@ -10,3 +10,4 @@ export * from './lib/meta-quests/bgs-meta-quest-stats';
 export * from './lib/meta-quests/meta-quests.model';
 export * from './lib/meta-trinkets/bgs-meta-trinket-stats';
 export * from './lib/meta-trinkets/meta-trinket.model';
+export * from './lib/card-utils';

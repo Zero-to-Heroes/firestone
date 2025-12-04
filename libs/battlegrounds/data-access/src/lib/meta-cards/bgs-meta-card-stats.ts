@@ -6,6 +6,7 @@ import { getStandardDeviation, sortByProperties } from '@firestone/shared/framew
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { BgsCardTier, BgsMetaCardStatTier, BgsMetaCardStatTierItem } from './meta-card.model';
 import { ALL_BG_RACES, hasCorrectTribe, Race } from '@firestone-hs/reference-data';
+import { isBgsTimewarped } from '../card-utils';
 
 export const buildCardStats = (
 	stats: readonly BgsCardStat[],
@@ -19,7 +20,7 @@ export const buildCardStats = (
 		.filter((s) => {
 			const ref = allCards.getCard(s.cardId);
 			return (
-				ref.isBaconPool &&
+				(ref.isBaconPool || isBgsTimewarped(ref)) &&
 				(!tribesFilter?.length ||
 					tribesFilter.some((r) => ref.races?.includes(Race[r]) || (r === Race.BLANK && !ref.races?.length)))
 			);

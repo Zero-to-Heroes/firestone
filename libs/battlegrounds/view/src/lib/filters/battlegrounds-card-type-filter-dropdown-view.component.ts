@@ -68,6 +68,10 @@ export class BattlegroundsCardTypeFilterDropdownViewComponent
 				value: 'spell',
 				label: this.i18n.translateString('app.battlegrounds.filters.card-type.spell'),
 			} as IOption,
+			{
+				value: 'timewarped',
+				label: this.i18n.translateString('app.battlegrounds.filters.card-type.timewarped'),
+			} as IOption,
 		];
 		this.filter$ = combineLatest([this.currentFilter$$, this.visible$$]).pipe(
 			filter(([currentFilter, visible]) => !!currentFilter),
