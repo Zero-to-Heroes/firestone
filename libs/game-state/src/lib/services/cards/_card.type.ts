@@ -51,6 +51,7 @@ type GuessCardIdFunction = (
 // 	parse(currentState: GameState, events: GameEvent[]): Promise<GameState>;
 // }
 export interface StaticGeneratingCard extends Card {
+	publicCreator?: boolean;
 	dynamicPool: (input: StaticGeneratingCardInput) => readonly string[];
 }
 export interface StaticGeneratingCardInput {
