@@ -56,7 +56,7 @@ import {
 					</div>
 				</div>
 				<div class="secondary-hero-info">
-					<div class="buddy">
+					<div class="buddy" *ngIf="buddyImgUrl">
 						<img
 							[src]="buddyImgUrl"
 							[cardTooltip]="buddyCardId"
@@ -163,8 +163,10 @@ export class BattlegroundsMetaStatsHeroInfoComponent {
 		const goldenBuddyCardId = this.allCards.getCard(
 			this.allCards.getCard(buddyCardId).battlegroundsPremiumDbfId,
 		).id;
-		this.buddyCardId = [goldenBuddyCardId, buddyCardId].join(',');
-		this.buddyImgUrl = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${buddyCardId}.jpg`;
+		this.buddyCardId = [goldenBuddyCardId, buddyCardId].filter((c) => !!c).join(',');
+		this.buddyImgUrl = buddyCardId
+			? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${buddyCardId}.jpg`
+			: null;
 
 		const showPlayerData = !value.tribesFilter?.length || value.tribesFilter.length === ALL_BG_RACES.length;
 		// && value.anomaliesFilter?.length === 0;
