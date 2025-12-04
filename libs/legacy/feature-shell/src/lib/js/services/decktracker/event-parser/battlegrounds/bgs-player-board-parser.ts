@@ -646,6 +646,7 @@ export class BgsPlayerBoardParser implements EventParser {
 					TagScriptDataNum1: e.Tags?.find((t) => t.Name === GameTag.TAG_SCRIPT_DATA_NUM_1)?.Value,
 					TagScriptDataNum2: e.Tags?.find((t) => t.Name === GameTag.TAG_SCRIPT_DATA_NUM_2)?.Value,
 				})) ?? [],
+			DynamicInfo: entity.DynamicInfo,
 		};
 	}
 

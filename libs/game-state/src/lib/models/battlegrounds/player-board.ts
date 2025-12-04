@@ -48,4 +48,5 @@ export interface PlayerBoardEntity {
 		TagScriptDataNum1: number;
 		TagScriptDataNum2: number;
 	}[];
+	readonly DynamicInfo: readonly any[];
 }

@@ -16,6 +16,7 @@ export interface BgsEntity {
 	readonly CardId: string;
 	readonly Tags: readonly EntityTag[];
 	readonly Enchantments: readonly BgsEntity[];
+	readonly DynamicInfo: readonly any[];
 }
 
 export interface EntityTag {

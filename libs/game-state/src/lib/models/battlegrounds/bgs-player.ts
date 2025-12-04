@@ -183,6 +183,7 @@ export const buildBgsEntity = (logEntity: PlayerBoardEntity, allCards: CardsFaca
 		// Custom tags
 		tags: customTags,
 		additionalCards: buildAdditionalCards(logEntity.CardId, logEntity.Tags, allCards),
+		dynamicInfo: logEntity.DynamicInfo,
 	};
 };
 
