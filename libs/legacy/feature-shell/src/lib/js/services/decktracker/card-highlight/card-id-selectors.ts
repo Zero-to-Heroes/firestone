@@ -314,6 +314,9 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, secret);
 		case CardIds.ArchdruidOfThorns_EDR_491:
 			return and(side(inputSide), or(inHand, inDeck), deathrattle, minion);
+		case CardIds.AcherusVeteran_ICC_092:
+		case CardIds.AcherusVeteran_CORE_ICC_092:
+			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.Archimonde_GDB_128:
 			return and(side(inputSide), or(inDeck, inHand, inGraveyard), demon, notInInitialDeck);
 		case CardIds.ArchmageAntonidas:
@@ -1351,6 +1354,9 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), effectiveCostMore(7));
 		case CardIds.FlamesOfTheKirinTorTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), spell, fire);
+		case CardIds.Flamewaker:
+		case CardIds.Flamewaker_TUTR_BRM_002:
+			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.FlameWavesTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), spell, fire);
 		case CardIds.FlashSale_TOY_716:
@@ -1510,6 +1516,9 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.GlacialDownpourTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), spell, frost);
+		case CardIds.GoblinBlastmage:
+		case CardIds.GoblinBlastmage_WON_035:
+			return and(side(inputSide), or(inDeck, inHand), mech);
 		case CardIds.GoboglideTech:
 			return and(side(inputSide), or(inDeck, inHand), mech);
 		case CardIds.Goldrinn_EDR_480:
@@ -1532,6 +1541,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, murloc);
 		case CardIds.GraniteForgeborn:
 			return and(side(inputSide), or(inDeck, inHand), elemental);
+		case CardIds.GrandArchivist:
+			return tooltip(and(side(inputSide), inDeck, spell));
 		case CardIds.GrandMagisterRommath:
 			return tooltip(and(side(inputSide), cardsPlayedThisMatch, spell, notInInitialDeck));
 		case CardIds.GrandMagusAntonidas:
