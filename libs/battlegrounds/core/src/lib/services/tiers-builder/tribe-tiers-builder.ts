@@ -199,8 +199,8 @@ const getScTierIcon = (type: 'Protoss' | 'Zerg' | 'Battlecruiser'): string => {
 	}
 };
 
-const buildSingleTribeTier = (
-	targetTribe: Race,
+export const buildSingleTribeTier = (
+	targetTribe: Race | null,
 	cardsToInclude: readonly ExtendedReferenceCard[],
 	tiersToInclude: readonly number[],
 	cardRules: CardRules,
@@ -209,6 +209,9 @@ const buildSingleTribeTier = (
 ): Tier => {
 	const debug = targetTribe === Race.BLANK;
 	const cardsForTribe = cardsToInclude.filter((card) => {
+		if (targetTribe === null) {
+			return true;
+		}
 		const cardTribes: readonly Race[] = getActualTribes(
 			card,
 			config?.groupMinionsIntoTheirTribeGroup ?? false,
@@ -253,14 +256,14 @@ const buildSingleTribeTier = (
 	const groups: readonly (TierGroup | null)[] = config?.showSpellsAtBottom
 		? [...tribeGroups, spellGroup, trinketGroup]
 		: [spellGroup, trinketGroup, ...tribeGroups];
-	const tribeName = getTribeName(targetTribe, i18n);
+	const tribeName = targetTribe == null ? undefined : getTribeName(targetTribe, i18n);
 	const result: Tier = {
 		type: 'tribe',
-		tavernTier: Race[targetTribe].toLowerCase(),
-		tavernTierIcon: getTribeIcon(targetTribe),
+		tavernTier: targetTribe == null ? 'single' : Race[targetTribe].toLowerCase(),
+		tavernTierIcon: targetTribe == null ? null : getTribeIcon(targetTribe),
 		tavernTierData: targetTribe,
 		tierName: tribeName,
-		tooltip: getTribeTooltipForTribeName(tribeName, i18n),
+		tooltip: tribeName == null ? '' : getTribeTooltipForTribeName(tribeName, i18n),
 		groups: groups.filter((g) => !!g?.cards?.length) as readonly TierGroup[],
 	};
 	return result;

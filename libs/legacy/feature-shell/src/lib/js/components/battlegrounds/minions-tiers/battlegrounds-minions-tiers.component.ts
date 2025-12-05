@@ -145,6 +145,9 @@ export class BattlegroundsMinionsTiersOverlayComponent
 				showTimewarped: prefs.bgsShowTimewarped,
 				bgsGroupMinionsIntoTheirTribeGroup: prefs.bgsGroupMinionsIntoTheirTribeGroup,
 				bgsIncludeTrinketsInTribeGroups: prefs.bgsIncludeTrinketsInTribeGroups,
+				showAllMechanics: prefs.bgsShowAllMechanics,
+				showSingleTier: prefs.bgsShowSingleTier,
+				singleTierGroup: prefs.bgsSingleTierGroup,
 			})),
 			distinctUntilChanged(
 				(a, b) =>
@@ -156,7 +159,10 @@ export class BattlegroundsMinionsTiersOverlayComponent
 					a.showBuddies === b.showBuddies &&
 					a.showTrinkets === b.showTrinkets &&
 					a.showSpellsAtBottom === b.showSpellsAtBottom &&
-					a.showTimewarped === b.showTimewarped,
+					a.showTimewarped === b.showTimewarped &&
+					a.showAllMechanics === b.showAllMechanics &&
+					a.showSingleTier === b.showSingleTier &&
+					a.singleTierGroup === b.singleTierGroup,
 			),
 			shareReplay(1),
 			takeUntil(this.destroyed$),
@@ -238,6 +244,9 @@ export class BattlegroundsMinionsTiersOverlayComponent
 					hasPrizes,
 					hasTrinkets,
 					hasTimewarped,
+					showAllMechanics,
+					showSingleTier,
+					singleTierGroup,
 					showTrinkets,
 					playerCardId,
 					allPlayersCardIds,
@@ -268,6 +277,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 					);
 					const cardsToIncludes = !!ownBuddy ? [...cardsInGame, ownBuddy] : cardsInGame;
 					const buildTierOptions: BuildTierOptions = {
+						showAllMechanics: showAllMechanics,
 						groupMinionsIntoTheirTribeGroup: bgsGroupMinionsIntoTheirTribeGroup,
 						includeTrinketsInTribeGroups: bgsIncludeTrinketsInTribeGroups,
 						showMechanicsTiers: showMechanicsTiers,
@@ -276,6 +286,8 @@ export class BattlegroundsMinionsTiersOverlayComponent
 						showTrinkets: showTrinkets,
 						showSpellsAtBottom: showSpellsAtBottom,
 						showTimewarped: showTimewarped,
+						showSingleTier: showSingleTier,
+						singleTierGroup: singleTierGroup,
 					};
 					const buildTierGameState: BuildTierGameState = {
 						playerCardId: playerCardId,

@@ -3,6 +3,7 @@
 import {
 	BUDDIES_TRIBE_REQUIREMENTS,
 	CardIds,
+	CardRules,
 	CardType,
 	CustomTags,
 	GameTag,
@@ -13,21 +14,27 @@ import {
 	SpellSchool,
 } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { ExtendedReferenceCard, TavernTierType, Tier, TierGroup } from '../tiers.model';
-import { TierBuilderConfig } from './tiers-config.model';
-import { getTrinketNameKey } from './utils';
 import { isBgsTimewarped } from '../card-utils';
+import { ExtendedReferenceCard, TavernTierType, Tier, TierGroup } from '../tiers.model';
+import { buildTierForTavernTier } from './standard-tiers-builder';
+import { TierBuilderConfig } from './tiers-config.model';
+import { buildSingleTribeTier } from './tribe-tiers-builder';
+import { getTrinketNameKey } from './utils';
 
-export const MECHANICS_IN_GAME = [
+const MAIN_MECHANICS_IN_GAME = [
 	{ mechanic: GameTag.BATTLECRY, tierId: 'B' },
 	{ mechanic: GameTag.DEATHRATTLE, tierId: 'D' },
+	{ mechanic: GameTag.END_OF_TURN, tierId: 'E' },
+	{ mechanic: GameTag.BACON_RALLY, tierId: 'Ra' },
+];
+
+export const MECHANICS_IN_GAME: readonly { mechanic: GameTag; tierId: string; canBeHighlighted?: boolean }[] = [
+	...MAIN_MECHANICS_IN_GAME,
 	{ mechanic: GameTag.DIVINE_SHIELD, tierId: 'DS' },
 	{ mechanic: GameTag.TAUNT, tierId: 'T' },
-	{ mechanic: GameTag.END_OF_TURN, tierId: 'E' },
 	{ mechanic: GameTag.REBORN, tierId: 'Re' },
 	{ mechanic: GameTag.CHOOSE_ONE, tierId: 'C' },
 	{ mechanic: GameTag.MODULAR, tierId: 'M' },
-	{ mechanic: GameTag.BACON_RALLY, tierId: 'Ra' },
 	{ mechanic: GameTag.BACON_BUFFS_TAVERN_SPELL, tierId: 'TS' },
 	{ mechanic: GameTag.BG_SPELL, tierId: 'S' },
 	{
@@ -44,11 +51,12 @@ export const buildMechanicsTiers = (
 	heroPowerCardId: string,
 	allPlayerCardIds: readonly string[],
 	allCards: CardsFacadeService,
+	cardRules: CardRules,
 	i18n: { translateString: (toTranslate: string, params?: any) => string },
 	config?: TierBuilderConfig,
 ): readonly Tier[] => {
 	const allBuddies = buildBuddies(availableTribes, heroPowerCardId, allPlayerCardIds, allCards, config);
-	let mechanicsInGame = [...MECHANICS_IN_GAME];
+	let mechanicsInGame = config?.showAllMechanics ? [...MECHANICS_IN_GAME] : MAIN_MECHANICS_IN_GAME;
 	if (!config?.spells) {
 		mechanicsInGame = mechanicsInGame.filter((mechanic) => mechanic.mechanic !== GameTag.BG_SPELL);
 	}
@@ -58,7 +66,35 @@ export const buildMechanicsTiers = (
 	const result: Tier[] = mechanicsInGame.map((mechanics) =>
 		buildTier(mechanics.tierId, mechanics.mechanic, cardsToInclude, allBuddies, tiersToInclude, i18n, config),
 	);
+	if (config?.showSingleTier) {
+		const singleTier = buildSingleTier(cardsToInclude, tiersToInclude, availableTribes, cardRules, i18n, config);
+		result.push(singleTier);
+	}
+	console.debug('[debug] result', result, config);
 	return result.filter((t) => t?.groups?.length);
+};
+
+const buildSingleTier = (
+	cardsToInclude: readonly ExtendedReferenceCard[],
+	tiersToInclude: readonly number[],
+	availableTribes: readonly Race[],
+	cardRules: CardRules,
+	i18n: { translateString: (toTranslate: string, params?: any) => string },
+	config?: TierBuilderConfig,
+): Tier => {
+	const tier =
+		config?.singleTierGroup === 'tier'
+			? buildSingleTribeTier(null, cardsToInclude, tiersToInclude, cardRules, i18n, config)
+			: buildTierForTavernTier(cardsToInclude, 0, availableTribes, i18n, config);
+	const result: Tier = {
+		...tier,
+		tavernTier: 'single',
+		type: 'mechanics',
+		tavernTierIcon: `assets/svg/search.svg`,
+		tooltip: 'Searchable tier with all the cards in the lobby',
+		showSearchBar: true,
+	};
+	return result;
 };
 
 const buildTier = (

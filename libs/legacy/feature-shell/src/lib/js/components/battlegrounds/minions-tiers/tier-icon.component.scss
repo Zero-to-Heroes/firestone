@@ -14,8 +14,13 @@
 		font-weight: 700;
 		font-size: 20px;
 		color: white;
-		text-shadow: -1px -1px 0 var(--color-7), 0px -1px 0 var(--color-7), 1px -1px 0 var(--color-7),
-			-1px 1px 0 var(--color-7), 0px 1px 0 var(--color-7), 1px 1px 0 var(--color-7);
+		text-shadow:
+			-1px -1px 0 var(--color-7),
+			0px -1px 0 var(--color-7),
+			1px -1px 0 var(--color-7),
+			-1px 1px 0 var(--color-7),
+			0px 1px 0 var(--color-7),
+			1px 1px 0 var(--color-7);
 		z-index: 2;
 		font-size: 0.95em;
 	}
@@ -24,6 +29,11 @@
 		position: relative;
 		top: 5px;
 		width: 36px;
+	}
+
+	.icon-svg {
+		position: relative;
+		color: var(--color-1);
 	}
 
 	&.tribe,
@@ -35,9 +45,14 @@
 		margin: 2px;
 		position: relative;
 		top: 2px;
+		display: flex;
 
 		.icon {
 			transform: scale(1.5);
+		}
+
+		.icon-svg {
+			top: 2px;
 		}
 
 		&.selected {

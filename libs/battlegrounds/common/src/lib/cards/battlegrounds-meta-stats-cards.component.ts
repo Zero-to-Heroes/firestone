@@ -1,29 +1,11 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @angular-eslint/template/no-negated-async */
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { CardType, GameTag } from '@firestone-hs/reference-data';
-import {
-	BgsMetaCardStatTier,
-	BgsMetaCardStatTierItem,
-	ColumnSortTypeCard,
-	buildCardStats,
-	buildCardTiers,
-} from '@firestone/battlegrounds/data-access';
-import { BgsCardTierFilterType, BgsCardTypeFilterType, PreferencesService } from '@firestone/shared/common/service';
-import { SortCriteria } from '@firestone/shared/common/view';
+import { BgsMetaCardStatTierItem, buildCardStats } from '@firestone/battlegrounds/data-access';
+import { BgsCardTierFilterType, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { CardsFacadeService, ILocalizationService, getDateAgo, waitForReady } from '@firestone/shared/framework/core';
-import {
-	BehaviorSubject,
-	Observable,
-	combineLatest,
-	distinctUntilChanged,
-	filter,
-	shareReplay,
-	switchMap,
-	takeUntil,
-	tap,
-} from 'rxjs';
+import { CardsFacadeService, ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
+import { Observable, combineLatest, distinctUntilChanged, filter, shareReplay, switchMap, takeUntil } from 'rxjs';
 import { BattlegroundsCardsService } from './bgs-cards.service';
 
 @Component({
@@ -74,18 +56,9 @@ export class BattlegroundsMetaStatsCardsComponent extends AbstractSubscriptionCo
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsActiveTribesFilter)),
 		]).pipe(
 			this.mapData(([stats, cardTiers, turnNumber, tribesFilter]) => {
-				console.debug('[debug] stats', stats, cardTiers, turnNumber);
 				const minTurn = buildMinTurn(cardTiers);
 				return buildCardStats(stats?.cardStats ?? [], tribesFilter, minTurn, turnNumber, this.allCards);
 			}),
-			tap((stats) =>
-				console.debug(
-					'[debug] stats 2',
-					stats.filter((s) =>
-						this.allCards.getCard(s.cardId).mechanics?.includes(GameTag[GameTag.BACON_TIMEWARPED]),
-					),
-				),
-			),
 			shareReplay(1),
 			takeUntil(this.destroyed$),
 		);

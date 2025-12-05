@@ -1,12 +1,12 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 
 import { BgsCardStat } from '@firestone-hs/bgs-global-stats';
+import { ALL_BG_RACES, Race } from '@firestone-hs/reference-data';
 import { SortCriteria } from '@firestone/shared/common/view';
 import { getStandardDeviation, sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
-import { BgsCardTier, BgsMetaCardStatTier, BgsMetaCardStatTierItem } from './meta-card.model';
-import { ALL_BG_RACES, hasCorrectTribe, Race } from '@firestone-hs/reference-data';
 import { isBgsTimewarped } from '../card-utils';
+import { BgsCardTier, BgsMetaCardStatTier, BgsMetaCardStatTierItem } from './meta-card.model';
 
 export const buildCardStats = (
 	stats: readonly BgsCardStat[],
@@ -48,7 +48,6 @@ export const buildCardStats = (
 			};
 			return result;
 		});
-	console.debug('[debug] mainStats', mainStats);
 	// .filter((s) => s.dataPoints > 100);
 	return mainStats;
 };

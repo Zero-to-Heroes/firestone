@@ -15,6 +15,7 @@ export interface Tier {
 	readonly tavernTierIcon: string | null;
 	readonly tooltip: string;
 	readonly groups: readonly TierGroup[];
+	readonly showSearchBar?: boolean;
 }
 
 export interface TierGroup {

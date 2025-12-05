@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
 	AfterContentInit,
 	ChangeDetectionStrategy,
@@ -6,26 +7,22 @@ import {
 	Optional,
 	ViewRef,
 } from '@angular/core';
-import { CardsFacadeService, SharedFrameworkCoreModule, waitForReady } from '@firestone/shared/framework/core';
-import { InlineSVGModule } from 'ng-inline-svg-2';
+import { ActivatedRoute, Router } from '@angular/router';
+import { BattlegroundsCardsService, buildMinTurn } from '@firestone/battlegrounds/common';
+import { BgsMetaCardStatTierItem, buildCardStats } from '@firestone/battlegrounds/data-access';
+import { BattlegroundsViewModule } from '@firestone/battlegrounds/view';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
+import { combineLatest, distinctUntilChanged, filter, Observable, shareReplay, switchMap, takeUntil } from 'rxjs';
 import { WebBattlegroundsFiltersComponent } from '../filters/_web-battlegrounds-filters.component';
+import { WebBattlegroundsCardSearchComponent } from '../filters/search/web-battlegrounds-card-search.component';
+import { WebBattlegroundsCardTierFilterDropdownComponent } from '../filters/web-battlegrounds-card-tier-filter-dropdown.component';
+import { WebBattlegroundsCardTurnFilterDropdownComponent } from '../filters/web-battlegrounds-card-turn-filter-dropdown.component';
+import { WebBattlegroundsCardTypeFilterDropdownComponent } from '../filters/web-battlegrounds-card-type-filter-dropdown.component';
 import { WebBattlegroundsRankFilterDropdownComponent } from '../filters/web-battlegrounds-rank-filter-dropdown.component';
 import { WebBattlegroundsTimeFilterDropdownComponent } from '../filters/web-battlegrounds-time-filter-dropdown.component';
-import { BattlegroundsViewModule } from '@firestone/battlegrounds/view';
-import { CommonModule } from '@angular/common';
-import { WebBattlegroundsModeFilterDropdownComponent } from '../filters/web-battlegrounds-mode-filter-dropdown.component';
 import { WebBattlegroundsTribesFilterDropdownComponent } from '../filters/web-battlegrounds-tribes-filter-dropdown.component';
-import { combineLatest, distinctUntilChanged, filter, shareReplay, takeUntil, switchMap, Observable } from 'rxjs';
-import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { BgsMetaCardStatTierItem, buildCardStats } from '@firestone/battlegrounds/data-access';
-import { ActivatedRoute } from '@angular/router';
-import { Router } from '@angular/router';
-import { PreferencesService } from '@firestone/shared/common/service';
-import { BattlegroundsCardsService, buildMinTurn } from '@firestone/battlegrounds/common';
-import { WebBattlegroundsCardTurnFilterDropdownComponent } from '../filters/web-battlegrounds-card-turn-filter-dropdown.component';
-import { WebBattlegroundsCardTierFilterDropdownComponent } from '../filters/web-battlegrounds-card-tier-filter-dropdown.component';
-import { WebBattlegroundsCardTypeFilterDropdownComponent } from '../filters/web-battlegrounds-card-type-filter-dropdown.component';
-import { WebBattlegroundsCardSearchComponent } from '../filters/search/web-battlegrounds-card-search.component';
 
 @Component({
 	standalone: true,
@@ -86,7 +83,6 @@ export class BattlegroundsCardsComponent extends AbstractSubscriptionComponent i
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsActiveTribesFilter)),
 		]).pipe(
 			this.mapData(([stats, cardTiers, turnNumber, tribesFilter]) => {
-				console.debug('[debug] stats', stats, cardTiers, turnNumber, tribesFilter);
 				const minTurn = buildMinTurn(cardTiers);
 				return buildCardStats(stats?.cardStats ?? [], tribesFilter, minTurn, turnNumber, this.allCards);
 			}),

@@ -7,12 +7,11 @@ import {
 	Input,
 	Output,
 } from '@angular/core';
-import { MmrPercentile } from '@firestone-hs/bgs-global-stats';
 import { IOption } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent, arraysEqual } from '@firestone/shared/framework/common';
 import { ILocalizationService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { distinctUntilChanged, filter, tap } from 'rxjs/operators';
+import { distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
 	standalone: false,
@@ -74,7 +73,6 @@ export class BattlegroundsCardTurnFilterDropdownViewComponent
 				})),
 		];
 		this.filter$ = combineLatest([this.currentFilter$$, this.visible$$]).pipe(
-			tap(([currentFilter, visible]) => console.debug('[debug] currentFilter', currentFilter, visible)),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			this.mapData(([currentFilter, visible]) => ({
 				filter: currentFilter == null ? null : currentFilter.toString(),

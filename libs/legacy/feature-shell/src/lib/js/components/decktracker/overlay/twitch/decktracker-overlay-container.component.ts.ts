@@ -97,6 +97,9 @@ import { TwitchLocalizationManagerService } from './twitch-localization-manager.
 					[showBuddies]="showBuddies$ | async"
 					[showTrinkets]="showTrinkets$ | async"
 					[showTimewarped]="showTimewarped$ | async"
+					[showAllMechanics]="showAllMechanics$ | async"
+					[showSingleTier]="showSingleTier$ | async"
+					[singleTierGroup]="singleTierGroup$ | async"
 					[groupMinionsIntoTheirTribeGroup]="groupMinionsIntoTheirTribeGroup$ | async"
 					[includeTrinketsInTribeGroups]="true"
 					[gameMode]="gameMode$ | async"
@@ -122,6 +125,9 @@ export class DeckTrackerOverlayContainerComponent
 	showBuddies$: Observable<boolean>;
 	showTrinkets$: Observable<boolean>;
 	showTimewarped$: Observable<boolean>;
+	showAllMechanics$: Observable<boolean>;
+	showSingleTier$: Observable<boolean>;
+	singleTierGroup$: Observable<'tier' | 'tribe'>;
 	showOpponentTracker$: Observable<boolean>;
 	groupMinionsIntoTheirTribeGroup$: Observable<boolean>;
 	gameMode$: Observable<GameType>;
@@ -194,6 +200,15 @@ export class DeckTrackerOverlayContainerComponent
 		);
 		this.showTimewarped$ = from(this.prefs.prefs.asObservable()).pipe(
 			this.mapData((prefs) => prefs?.bgsShowTimewarped),
+		);
+		this.showAllMechanics$ = from(this.prefs.prefs.asObservable()).pipe(
+			this.mapData((prefs) => prefs?.bgsShowAllMechanics),
+		);
+		this.showSingleTier$ = from(this.prefs.prefs.asObservable()).pipe(
+			this.mapData((prefs) => prefs?.bgsShowSingleTier),
+		);
+		this.singleTierGroup$ = from(this.prefs.prefs.asObservable()).pipe(
+			this.mapData((prefs) => prefs?.bgsSingleTierGroup),
 		);
 		this.showOpponentTracker$ = from(this.prefs.prefs.asObservable()).pipe(
 			this.mapData((prefs) => prefs?.decktrackerShowOpponentTracker),

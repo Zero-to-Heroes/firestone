@@ -597,6 +597,9 @@ export class Preferences implements IPreferences {
 	readonly bgsShowBuddies: boolean = false;
 	readonly bgsShowTrinkets: boolean = true;
 	readonly bgsShowTimewarped: boolean = true;
+	readonly bgsShowAllMechanics: boolean = false;
+	readonly bgsShowSingleTier: boolean = true;
+	readonly bgsSingleTierGroup: 'tier' | 'tribe' = 'tier';
 	readonly bgsGroupMinionsIntoTheirTribeGroup: boolean = false;
 	readonly bgsIncludeTrinketsInTribeGroups: boolean = true;
 	readonly bgsMinionListShowGoldenCard: boolean = true;

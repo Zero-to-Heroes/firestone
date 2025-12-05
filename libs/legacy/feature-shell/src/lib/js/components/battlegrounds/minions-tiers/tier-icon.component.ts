@@ -11,7 +11,16 @@ import { Tier } from '@firestone/battlegrounds/core';
 			[ngClass]="{ selected: selected }"
 			[helpTooltip]="tier.tooltip"
 		>
-			<img class="icon" *ngIf="tier.tavernTierIcon" [src]="tier.tavernTierIcon" />
+			<img
+				class="icon"
+				*ngIf="!!tier.tavernTierIcon && !tier.tavernTierIcon.includes('.svg')"
+				[src]="tier.tavernTierIcon"
+			/>
+			<div
+				class="icon icon-svg"
+				*ngIf="!!tier.tavernTierIcon && tier.tavernTierIcon.includes('.svg')"
+				[inlineSVG]="tier.tavernTierIcon"
+			></div>
 			<div class="number" *ngIf="!tier.tavernTierIcon">{{ tier.tavernTier }}</div>
 		</div>
 	`,

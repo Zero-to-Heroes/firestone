@@ -1,4 +1,5 @@
 export interface TierBuilderConfig {
+	readonly showAllMechanics?: boolean;
 	readonly groupMinionsIntoTheirTribeGroup?: boolean;
 	readonly includeTrinketsInTribeGroups?: boolean;
 	readonly spells?: boolean;
@@ -8,6 +9,8 @@ export interface TierBuilderConfig {
 	readonly anomalies?: readonly string[];
 	readonly showBuddiesTier?: boolean;
 	readonly showAllBuddyCards?: boolean;
+	readonly showSingleTier?: boolean;
+	readonly singleTierGroup?: 'tier' | 'tribe';
 	readonly playerTrinkets: readonly string[];
 	readonly showProtossMinions: boolean;
 	readonly showZergMinions: boolean;

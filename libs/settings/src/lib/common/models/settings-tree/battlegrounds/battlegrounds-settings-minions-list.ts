@@ -106,6 +106,20 @@ export const battlegroundsMinionsListSettings = (context: SettingContext): Setti
 					},
 					{
 						type: 'toggle',
+						field: 'bgsShowSingleTier',
+						label: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-show-single-tier-label'),
+						tooltip: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-show-single-tier-tooltip'),
+						disabledIf: (prefs: Preferences) => !prefs.bgsFullToggle || !prefs.bgsEnableMinionListOverlay,
+					},
+					{
+						type: 'toggle',
+						field: 'bgsShowAllMechanics',
+						label: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-show-all-mechanics-label'),
+						tooltip: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-show-all-mechanics-tooltip'),
+						disabledIf: (prefs: Preferences) => !prefs.bgsFullToggle || !prefs.bgsEnableMinionListOverlay,
+					},
+					{
+						type: 'toggle',
 						field: 'bgsIncludeTrinketsInTribeGroups',
 						label: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-include-trinkets-in-tribes-label'),
 						tooltip: context.i18n.translateString('settings.battlegrounds.overlay.minions-list-include-trinkets-in-tribes-tooltip'),

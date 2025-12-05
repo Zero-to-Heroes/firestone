@@ -21,6 +21,47 @@
 	max-height: calc(80vh / var(--scale, 1));
 }
 
+.search-bar {
+	display: flex;
+	height: 30px;
+	flex-shrink: 0;
+
+	.search-input {
+		display: flex;
+
+		::ng-deep {
+			.search-label {
+				height: 100%;
+			}
+		}
+	}
+
+	.grouping-toggle {
+		flex-grow: 1;
+		display: flex;
+		padding: 2px 4px;
+		gap: 4px;
+
+		.toggle {
+			color: var(--color-1);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			padding: 5px 10px;
+			background: var(--color-4);
+			opacity: 0.6;
+
+			&.enabled {
+				opacity: 0.9;
+			}
+
+			&:hover {
+				opacity: 1;
+			}
+		}
+	}
+}
+
 .group-header {
 	background: var(--color-9);
 	color: var(--color-1);

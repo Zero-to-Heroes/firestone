@@ -1,5 +1,5 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import { CardIds, CardRules, GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
+import { CardIds, CardRules, Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { QuestReward } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { filterCardsToInclude } from './tiers-builder/cards-to-include';
@@ -18,15 +18,6 @@ export const buildTiers = (
 	i18n: { translateString: (toTranslate: string, params?: any) => string },
 	allCards: CardsFacadeService,
 ): readonly Tier[] => {
-	console.debug(
-		'[debug] buildTiers',
-		cardsInGame.filter((c) => c.mechanics?.includes(GameTag[GameTag.BACON_TIMEWARPED])),
-		options,
-		gameState,
-		cardRules,
-		i18n,
-		allCards,
-	);
 	if (!cardsInGame?.length) {
 		return [];
 	}
@@ -62,10 +53,6 @@ export const buildTiers = (
 		allCards,
 		i18n,
 	);
-	console.debug(
-		'[debug] cardsToInclude',
-		cardsToInclude.filter((c) => c.mechanics?.includes(GameTag[GameTag.BACON_TIMEWARPED])),
-	);
 
 	const showTrinkets =
 		(options.showTrinkets && gameState.hasTrinkets) ||
@@ -76,6 +63,7 @@ export const buildTiers = (
 	const showTimewarped = gameState.hasTimewarped && options.showTimewarped;
 
 	const config: TierBuilderConfig = {
+		showAllMechanics: options.showAllMechanics,
 		spells: showSpells,
 		trinkets: showTrinkets,
 		timewarped: showTimewarped,
@@ -91,11 +79,14 @@ export const buildTiers = (
 		showBattlecruiserUpgrades:
 			gameState.heroPowerCardId === CardIds.JimRaynor_LiftOff_BG31_HERO_801p ||
 			gameState.playerTrinkets?.includes(CardIds.BattlecruiserPortrait_BG32_MagicItem_806),
+		showSingleTier: options.showSingleTier,
+		singleTierGroup: options.singleTierGroup,
 	};
 	const standardTiers: readonly Tier[] = buildStandardTiers(
 		cardsToInclude,
 		tiersToInclude,
 		availableTribes,
+		cardRules,
 		i18n,
 		config,
 	);
@@ -107,6 +98,7 @@ export const buildTiers = (
 				gameState.heroPowerCardId,
 				allPlayerCardIds,
 				allCards,
+				cardRules,
 				i18n,
 				config,
 			)
@@ -118,6 +110,7 @@ export const buildTiers = (
 };
 
 export interface BuildTierOptions {
+	showAllMechanics: boolean;
 	groupMinionsIntoTheirTribeGroup: boolean;
 	includeTrinketsInTribeGroups: boolean;
 	showMechanicsTiers: boolean;
@@ -126,6 +119,8 @@ export interface BuildTierOptions {
 	showTierSeven: boolean;
 	showTrinkets: boolean;
 	showSpellsAtBottom: boolean;
+	showSingleTier: boolean;
+	singleTierGroup: 'tier' | 'tribe';
 }
 export interface BuildTierGameState {
 	playerCardId: string;

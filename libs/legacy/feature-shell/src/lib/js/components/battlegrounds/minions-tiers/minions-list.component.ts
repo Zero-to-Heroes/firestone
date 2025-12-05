@@ -1,8 +1,10 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
-import { GameTag, Race } from '@firestone-hs/reference-data';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { BgsBoardHighlighterService } from '@firestone/battlegrounds/common';
 import { Tier, TierGroup, TierViewType } from '@firestone/battlegrounds/core';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, uuid } from '@firestone/shared/framework/common';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 
 @Component({
@@ -22,9 +24,33 @@ import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 					[helpTooltipPosition]="'left'"
 				></div>
 			</div>
+			<div class="search-bar" *ngIf="showSearchBar">
+				<fs-text-input
+					class="search-input"
+					[placeholder]="'Search name or text'"
+					[value]="''"
+					(fsModelUpdate)="onSearchStringChange($event)"
+				></fs-text-input>
+				<div class="grouping-toggle">
+					<div
+						class="toggle"
+						[ngClass]="{ enabled: (groupBy$ | async) === 'tribe' }"
+						(click)="toggleGroupingByTribe()"
+					>
+						<div class="text">Tribes</div>
+					</div>
+					<div
+						class="toggle"
+						[ngClass]="{ enabled: (groupBy$ | async) === 'tier' }"
+						(click)="toggleGroupingByTier()"
+					>
+						<div class="text">Tiers</div>
+					</div>
+				</div>
+			</div>
 			<bgs-minions-group
 				class="minion-group"
-				*ngFor="let group of groups; trackBy: trackByGroup"
+				*ngFor="let group of groups$ | async; trackBy: trackByGroup"
 				[group]="group"
 				[showTribesHighlight]="showTribesHighlight"
 				[showGoldenCards]="showGoldenCards"
@@ -50,9 +76,11 @@ export class BattlegroundsMinionsListComponent extends AbstractSubscriptionCompo
 	highlighted$: Observable<boolean>;
 	highlightedTribes$: Observable<readonly Race[]>;
 	highlightedMechanics$: Observable<readonly GameTag[]>;
+	groups$: Observable<readonly TierGroup[]>;
+	groupBy$: Observable<'tribe' | 'tier'>;
 
-	groups: readonly TierGroup[];
 	tierName: string | undefined;
+	showSearchBar: boolean;
 
 	uuid = uuid();
 
@@ -60,10 +88,11 @@ export class BattlegroundsMinionsListComponent extends AbstractSubscriptionCompo
 		if (!value) {
 			return;
 		}
-		this.groups = value?.groups ?? [];
+		this.groups$$.next(value?.groups ?? []);
 		this.tierName = value.tierName;
 		this.type = value.type;
 		this.tavernTierData$$.next(value.tavernTierData ?? null);
+		this.showSearchBar = value.showSearchBar ?? false;
 		console.debug('[debug] tier', value);
 	}
 
@@ -81,6 +110,8 @@ export class BattlegroundsMinionsListComponent extends AbstractSubscriptionCompo
 
 	private type: TierViewType;
 
+	private groups$$ = new BehaviorSubject<readonly TierGroup[]>([]);
+	private searchString$$ = new BehaviorSubject<string | null>(null);
 	private highlightedTribes$$ = new BehaviorSubject<readonly Race[]>([]);
 	private highlightedMechanics$$ = new BehaviorSubject<readonly GameTag[]>([]);
 	private tavernTierData$$ = new BehaviorSubject<GameTag | Race | null>(null);
@@ -88,11 +119,14 @@ export class BattlegroundsMinionsListComponent extends AbstractSubscriptionCompo
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly highlighter: BgsBoardHighlighterService,
+		private readonly prefs: PreferencesService,
 	) {
 		super(cdr);
 	}
 
-	ngAfterContentInit(): void {
+	async ngAfterContentInit() {
+		await waitForReady(this.prefs);
+		this.groupBy$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsSingleTierGroup));
 		this.highlightedTribes$ = this.highlightedTribes$$.asObservable();
 		this.highlightedMechanics$ = this.highlightedMechanics$$.asObservable();
 		this.highlighted$ = combineLatest([
@@ -107,6 +141,17 @@ export class BattlegroundsMinionsListComponent extends AbstractSubscriptionCompo
 				);
 			}),
 		);
+		this.groups$ = combineLatest([this.groups$$, this.searchString$$]).pipe(
+			this.mapData(([groups, searchString]) => {
+				return !searchString?.length
+					? groups
+					: groups.map((g) => this.filterGroup(g, searchString)).filter((g: TierGroup) => g.cards.length > 0);
+			}),
+		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	resetHighlights() {
@@ -130,5 +175,30 @@ export class BattlegroundsMinionsListComponent extends AbstractSubscriptionCompo
 				this.highlighter.toggleMechanicsToHighlight([this.tavernTierData$$.value as GameTag]);
 				break;
 		}
+	}
+
+	toggleGroupingByTribe() {
+		this.prefs.updatePrefs('bgsSingleTierGroup', 'tribe');
+	}
+	toggleGroupingByTier() {
+		this.prefs.updatePrefs('bgsSingleTierGroup', 'tier');
+	}
+
+	onSearchStringChange(searchString: string) {
+		this.searchString$$.next(searchString);
+	}
+
+	private filterGroup(group: TierGroup, searchString: string): TierGroup {
+		return {
+			...group,
+			cards: group.cards.filter((c) => this.filterCard(c, searchString)),
+		};
+	}
+
+	private filterCard(card: ReferenceCard, searchString: string): boolean {
+		return (
+			card.name.toLowerCase().includes(searchString.toLowerCase()) ||
+			card.text.toLowerCase().includes(searchString.toLowerCase())
+		);
 	}
 }

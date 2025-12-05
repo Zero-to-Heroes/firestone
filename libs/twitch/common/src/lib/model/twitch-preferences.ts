@@ -24,5 +24,8 @@ export class TwitchPreferences {
 	readonly bgsShowBuddies: boolean = false;
 	readonly bgsShowTrinkets: boolean = false;
 	readonly bgsShowTimewarped: boolean = true;
+	readonly bgsShowAllMechanics: boolean = false;
+	readonly bgsShowSingleTier: boolean = true;
+	readonly bgsSingleTierGroup: 'tier' | 'tribe' = 'tier';
 	readonly bgsGroupMinionsIntoTheirTribeGroup: boolean = false;
 }

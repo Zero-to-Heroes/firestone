@@ -7,7 +7,6 @@ import {
 	BgsMetaCardStatTier,
 	BgsMetaCardStatTierItem,
 	ColumnSortTypeCard,
-	buildCardStats,
 	buildCardTiers,
 } from '@firestone/battlegrounds/data-access';
 import { BgsCardTierFilterType, BgsCardTypeFilterType, PreferencesService } from '@firestone/shared/common/service';
@@ -22,7 +21,6 @@ import {
 	filter,
 	map,
 	shareReplay,
-	switchMap,
 	takeUntil,
 	tap,
 } from 'rxjs';
@@ -216,13 +214,7 @@ export class BattlegroundsMetaStatsCardsViewComponent
 								(impactHidden || (stat.averagePlacement != null && stat.impact != null)),
 						) ?? [];
 				const tiers = buildCardTiers(filtered, sortCriteria, tribesFilter, this.i18n, this.allCards);
-				console.debug('[debug] tiers', impactHidden, tiers);
 				const showSectionHeader = tiers.some((t) => t.sections.length > 1);
-				console.debug(
-					'[debug] showSectionHeader',
-					showSectionHeader,
-					tiers.filter((t) => t.sections.length > 1),
-				);
 				const tiersWithShowSectionHeader = tiers.map((t) => ({
 					...t,
 					showSectionHeader: showSectionHeader,

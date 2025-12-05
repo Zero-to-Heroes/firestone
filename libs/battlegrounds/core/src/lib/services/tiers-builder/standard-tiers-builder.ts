@@ -1,19 +1,20 @@
-import { CardType, Race } from '@firestone-hs/reference-data';
+import { CardRules, CardType, Race } from '@firestone-hs/reference-data';
+import { isBgsTimewarped } from '../card-utils';
 import { ExtendedReferenceCard, Tier, TierGroup } from '../tiers.model';
 import { compareTribes, getActualTribes } from '../tribe-utils';
 import { TierBuilderConfig } from './tiers-config.model';
-import { isBgsTimewarped } from '../card-utils';
 
 export const buildStandardTiers = (
 	cardsToInclude: readonly ExtendedReferenceCard[],
 	tiersToInclude: readonly number[],
 	availableTribes: readonly Race[],
+	cardRules: CardRules,
 	i18n: { translateString: (toTranslate: string, params?: any) => string },
 	config?: TierBuilderConfig,
 ): readonly Tier[] => {
 	const result: Tier[] = tiersToInclude.map((techLevel) => {
 		const cardsForTier = cardsToInclude.filter((card) => card.techLevel === techLevel && !isBgsTimewarped(card));
-		const tier = buildTier(cardsForTier, techLevel, availableTribes, i18n, config);
+		const tier = buildTierForTavernTier(cardsForTier, techLevel, availableTribes, i18n, config);
 		return tier;
 	});
 	if (config?.timewarped) {
@@ -35,7 +36,7 @@ const buildTimewarpedTier = (
 	i18n: { translateString: (toTranslate: string, params?: any) => string },
 	config?: TierBuilderConfig,
 ): Tier => {
-	const tier = buildTier(cardsForTier, tierNumber, availableTribes, i18n, config);
+	const tier = buildTierForTavernTier(cardsForTier, tierNumber, availableTribes, i18n, config);
 	const result: Tier = {
 		...tier,
 		tavernTier: 'timewarped-' + tierNumber,
@@ -45,7 +46,7 @@ const buildTimewarpedTier = (
 	return result;
 };
 
-const buildTier = (
+export const buildTierForTavernTier = (
 	cardsForTier: readonly ExtendedReferenceCard[],
 	tier: number,
 	availableTribes: readonly Race[],

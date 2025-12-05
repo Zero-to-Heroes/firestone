@@ -113,6 +113,15 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 	@Input() set showTimewarped(value: boolean) {
 		this.showTimewarped$$.next(value);
 	}
+	@Input() set showAllMechanics(value: boolean) {
+		this.showAllMechanics$$.next(value);
+	}
+	@Input() set showSingleTier(value: boolean) {
+		this.showSingleTier$$.next(value);
+	}
+	@Input() set singleTierGroup(value: 'tier' | 'tribe') {
+		this.singleTierGroup$$.next(value);
+	}
 	@Input() set groupMinionsIntoTheirTribeGroup(value: boolean) {
 		this.groupMinionsIntoTheirTribeGroup$$.next(value);
 	}
@@ -151,6 +160,9 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 	private showBuddies$$ = new BehaviorSubject<boolean>(false);
 	private showTrinkets$$ = new BehaviorSubject<boolean>(false);
 	private showTimewarped$$ = new BehaviorSubject<boolean>(false);
+	private showAllMechanics$$ = new BehaviorSubject<boolean>(false);
+	private showSingleTier$$ = new BehaviorSubject<boolean>(false);
+	private singleTierGroup$$ = new BehaviorSubject<'tier' | 'tribe'>('tier');
 	private groupMinionsIntoTheirTribeGroup$$ = new BehaviorSubject<boolean>(false);
 	private includeTrinketsInTribeGroups$$ = new BehaviorSubject<boolean>(true);
 	private gameMode$$ = new BehaviorSubject<GameType>(GameType.GT_BATTLEGROUNDS);
@@ -189,6 +201,9 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 			this.showBuddies$$,
 			this.showTrinkets$$,
 			this.showTimewarped$$,
+			this.showAllMechanics$$,
+			this.showSingleTier$$,
+			this.singleTierGroup$$,
 			this.groupMinionsIntoTheirTribeGroup$$,
 			this.includeTrinketsInTribeGroups$$,
 			this.gameMode$$,
@@ -212,6 +227,9 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 					showBuddies,
 					showTrinkets,
 					showTimewarped,
+					showAllMechanics,
+					showSingleTier,
+					singleTierGroup,
 					bgsGroupMinionsIntoTheirTribeGroup,
 					bgsIncludeTrinketsInTribeGroups,
 					gameMode,
@@ -237,6 +255,7 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 					console.debug('card rules', cardRules);
 					const cardsToIncludes = !!ownBuddy ? [...cardsInGame, ownBuddy] : cardsInGame;
 					const buildTierOptions: BuildTierOptions = {
+						showAllMechanics: showAllMechanics,
 						groupMinionsIntoTheirTribeGroup: bgsGroupMinionsIntoTheirTribeGroup,
 						includeTrinketsInTribeGroups: bgsIncludeTrinketsInTribeGroups,
 						showMechanicsTiers: showMechanicsTiers,
@@ -245,6 +264,8 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 						showTrinkets: showTrinkets,
 						showSpellsAtBottom: true,
 						showTimewarped: showTimewarped,
+						showSingleTier: showSingleTier,
+						singleTierGroup: singleTierGroup,
 					};
 					const buildTierGameState: BuildTierGameState = {
 						playerCardId: playerCardId,
