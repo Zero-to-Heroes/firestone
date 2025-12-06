@@ -514,7 +514,7 @@ export const CURRENT_EFFECTS_WHITELIST = [
 	CardIds.Tyrande_PullOfTheMoonEnchantment_EDR_464e2,
 	CardIds.UnlimitedPotential_PotentialUnboundEnchantment,
 	CardIds.UnstableMagic_UnstableMagicEnchantment_THD_043hpe,
-	CardIds.WarpGate_WarpConduitEnchantment_SC_751e,
+	// CardIds.WarpGate_WarpConduitEnchantment_SC_751e,
 	CardIds.WaterTap_WaterTapEnchantment_Story_11_WaterTape,
 	CardIds.WaterTap_WaterTapEnchantment_Story_11_WaterTapee,
 	CardIds.WildernessPack_KnockOffPackEnchantment_MIS_104e,
