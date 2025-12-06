@@ -1177,6 +1177,10 @@ export const cardIdSelector = (
 		case CardIds.ElvenMinstrel:
 		case CardIds.ElvenMinstrelCore:
 			return and(side(inputSide), inDeck, minion);
+		case CardIds.EmeraldHiveQueen:
+			return and(side(inputSide), or(inHand, inDeck), minion);
+		case CardIds.EmberrootDestroyer_FIR_955:
+			return and(side(inputSide), or(inHand, inDeck), selfDamageHero);
 		case CardIds.EmberrootDestroyer_FIR_955:
 			return and(side(inputSide), or(inHand, inDeck), selfDamageHero);
 		case CardIds.Embiggen:
@@ -3721,6 +3725,9 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, minion, deathrattle);
 		case CardIds.VengefulWalloper:
 			return and(side(inputSide), or(inHand, inDeck), outcast);
+		case CardIds.VentureCoMercenaryLegacy:
+		case CardIds.VentureCoMercenaryVanilla:
+			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.Vexallus:
 			return and(side(inputSide), or(inDeck, inHand), spell, arcane);
 		case CardIds.ViciousBloodworm_RLK_711:
