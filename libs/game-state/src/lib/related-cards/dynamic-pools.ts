@@ -282,6 +282,14 @@ const getDynamicRelatedCardIdsInternal = (
 				cardId,
 				(c) => hasCost(c, '==', targetCost) && canBeDiscoveredByClass(c, options.currentClass),
 			);
+		case CardIds.Astromancer:
+			return filterCards(
+				allCards,
+				options,
+				cardId,
+				(c) =>
+					hasCost(c, '==', Math.min(10, options.deckState.hand.length)) && hasCorrectType(c, CardType.MINION),
+			);
 
 		case CardIds.EmergencyMeeting_GDB_119:
 			return [
