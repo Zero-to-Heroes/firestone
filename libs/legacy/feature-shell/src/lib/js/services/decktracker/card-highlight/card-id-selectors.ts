@@ -85,7 +85,6 @@ import {
 	infuse,
 	isPlague,
 	isSi7,
-	isTreant,
 	kindred,
 	lastAffectedByCardId,
 	legendary,
@@ -134,7 +133,6 @@ import {
 	spellSchoolPlayedThisMatch,
 	spendCorpse,
 	starshipExtended,
-	summonsTreant,
 	taunt,
 	templar,
 	terran,
@@ -1851,6 +1849,11 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), demon);
 		case CardIds.Infestor_SC_002:
 			return and(side(inputSide), or(inHand, inDeck), minion, zerg);
+		case CardIds.InkmasterSolia:
+			return highlightConditions(
+				and(side(inputSide), or(inHand, inDeck), spell),
+				and(side(inputSide), inDeck, hasMultipleCopies),
+			);
 		case CardIds.IniStormcoil_TSC_649:
 			return and(side(inputSide), or(inDeck, inHand), mech);
 		case CardIds.CoralKeeper:
