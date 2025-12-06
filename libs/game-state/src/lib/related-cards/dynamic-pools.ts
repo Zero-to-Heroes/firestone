@@ -27,8 +27,8 @@ import {
 import { DeckState } from '../models/deck-state';
 import { PlayerGameState } from '../models/full-game-state';
 import { GameState } from '../models/game-state';
-import { cardsInfoCache } from '../services/cards/_mapping';
 import { StaticGeneratingCard } from '../services/cards/_card.type';
+import { cardsInfoCache } from '../services/cards/_mapping';
 
 const IMBUED_HERO_POWERS = [
 	CardIds.BlessingOfTheDragon_EDR_445p,
@@ -1452,7 +1452,7 @@ const hasThreeRunes = (card: ReferenceCard): boolean => {
 	);
 };
 
-export const canBeDiscoveredByClass = (card: ReferenceCard, currentClass: string): boolean => {
+export const canBeDiscoveredByClass = (card: ReferenceCard, currentClass: string | undefined): boolean => {
 	if (!currentClass?.length) {
 		console.log('canBeDiscoveredByClass: no current class');
 		return true;

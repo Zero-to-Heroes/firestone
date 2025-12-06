@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { CardIds, CardType, GameTag, SpellSchool } from '@firestone-hs/reference-data';
+import { CardClass, CardIds, CardType, GameTag, SpellSchool } from '@firestone-hs/reference-data';
 import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { NumericTurnInfo } from './_barrel';
 import { AttackOnBoard } from './attack-on-board';
 import { BoardSecret } from './board-secret';
 import { DeckCard } from './deck-card';
 import { ShortCard, ShortCardWithTurn } from './game-state';
 import { HeroCard } from './hero-card';
-import { NumericTurnInfo } from './_barrel';
 
 export const POGO_CARD_IDS = [
 	CardIds.PogoHopper_BOT_283,
@@ -170,6 +170,10 @@ export class DeckState {
 
 	public update(value: Partial<NonFunctionProperties<DeckState>>): DeckState {
 		return Object.assign(new DeckState(), this, value);
+	}
+
+	public getCurrentClass(): string | undefined {
+		return this.hero?.classes?.[0] ? CardClass[this.hero?.classes?.[0]] : undefined;
 	}
 
 	public updateSpellsPlayedThisMatch(
