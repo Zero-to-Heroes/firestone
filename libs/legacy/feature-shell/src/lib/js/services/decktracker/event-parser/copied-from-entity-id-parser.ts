@@ -1,13 +1,13 @@
 import { CardIds, Zone } from '@firestone-hs/reference-data';
-import { BoardSecret, DeckCard, DeckState, GameState, SecretOption } from '@firestone/game-state';
+import { BoardSecret, DeckCard, DeckState, GameState, getProcessedCard, SecretOption } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { CopiedFromEntityIdGameEvent } from '../../../models/mainwindow/game-events/copied-from-entity-id-game-event';
+import { CREATES_PUBLIC_COPY_FROM_DECK } from '../../hs-utils';
 import { LocalizationFacadeService } from '../../localization-facade.service';
 import { DREDGE_IN_OPPONENT_DECK_CARD_IDS } from './card-dredged-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
-import { CREATES_PUBLIC_COPY_FROM_DECK } from '../../hs-utils';
 
 const COPY_KNOW_EXACT_CARD_IN_OPPONENT_HAND = [
 	CardIds.AzalinaSoulthief,
@@ -128,7 +128,8 @@ export class CopiedFromEntityIdParser implements EventParser {
 			cardId: obfuscatedCardId,
 			cardName: this.allCards.getCard(obfuscatedCardId).name,
 			refManaCost:
-				(isCopiedPlayer ? newCopy?.refManaCost : null) ?? this.allCards.getCard(obfuscatedCardId)?.cost,
+				(isCopiedPlayer ? newCopy?.refManaCost : null) ??
+				getProcessedCard(obfuscatedCardId, copiedCardEntityId, copiedDeck, this.allCards)?.cost,
 			// Always set the entityId to null when it's the opponent's deck to avoid info leaks
 			// UPDATE: we don't do it here, do that when the card is drawn, so that we still have the entityId
 			// to differentiate the cards (e.g. when discovering copies of the same card)
