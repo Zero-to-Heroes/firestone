@@ -8,21 +8,28 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { GameTag, SceneMode } from '@firestone-hs/reference-data';
-import { DeckCard, ShortCard } from '@firestone/game-state';
+import { DeckCard, GameStateFacadeService, ShortCard } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { OverwolfService } from '@firestone/shared/framework/core';
-import { Observable, combineLatest } from 'rxjs';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
+import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
+import { Observable, combineLatest, distinctUntilChanged, shareReplay, takeUntil } from 'rxjs';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 import { BoardCardOverlay } from './board/board-card-overlay';
 
 @Component({
 	standalone: false,
 	selector: 'constructed-board-widget-wrapper',
-	styleUrls: ['../../../css/component/overlays/constructed-board-widget-wrapper.component.scss'],
+	styleUrls: ['./constructed-board-widget-wrapper.component.scss'],
 	template: `
 		<ng-container *ngIf="{ board: board$ | async } as value">
+			<div class="top-weapon" *ngIf="showWidget$ | async">
+				<minion-on-board-overlay
+					*ngIf="value.board.topWeapon"
+					[playOrder]="value.board.topWeapon.playOrder"
+					[attr.data-entity-id]="value.board.topWeapon.entityId"
+					[attr.data-card-id]="value.board.topWeapon.cardId"
+				></minion-on-board-overlay>
+			</div>
 			<div class="board-container" *ngIf="showWidget$ | async" [style.opacity]="opacity$ | async">
 				<ul class="board top">
 					<minion-on-board-overlay
@@ -38,6 +45,14 @@ import { BoardCardOverlay } from './board/board-card-overlay';
 						[attr.data-card-id]="card.cardId"
 					></minion-on-board-overlay>
 				</ul>
+			</div>
+			<div class="bottom-weapon" *ngIf="showWidget$ | async">
+				<minion-on-board-overlay
+					*ngIf="value.board.bottomWeapon"
+					[playOrder]="value.board.bottomWeapon.playOrder"
+					[attr.data-entity-id]="value.board.bottomWeapon.entityId"
+					[attr.data-card-id]="value.board.bottomWeapon.cardId"
+				></minion-on-board-overlay>
 			</div>
 		</ng-container>
 	`,
@@ -62,28 +77,37 @@ export class ConstructedBoardWidgetWrapperComponent extends AbstractWidgetWrappe
 		protected readonly el: ElementRef,
 		protected readonly prefs: PreferencesService,
 		protected readonly renderer: Renderer2,
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly scene: SceneService,
+		private readonly gameState: GameStateFacadeService,
 	) {
 		super(ow, el, prefs, renderer, cdr);
 	}
 
 	async ngAfterContentInit() {
-		await this.scene.isReady();
+		await waitForReady(this.scene, this.prefs, this.gameState);
 
 		this.showWidget$ = combineLatest([
 			this.scene.currentScene$$,
-			this.store.listen$(([main, nav, prefs]) => prefs.decktrackerShowMinionPlayOrderOnBoard),
-			this.store.listenDeckState$(
-				(deckState) => deckState?.gameStarted,
-				(deckState) => deckState?.gameEnded,
-				(deckState) => deckState?.isBattlegrounds(),
-				(deckState) => deckState?.isMercenaries(),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.decktrackerShowMinionPlayOrderOnBoard)),
+			this.gameState.gameState$$.pipe(
+				this.mapData((state) => ({
+					gameStarted: state.gameStarted,
+					gameEnded: state.gameEnded,
+					isBgs: state.isBattlegrounds(),
+					isMercs: state.isMercenaries(),
+				})),
+				distinctUntilChanged(
+					(a, b) =>
+						a.gameStarted === b.gameStarted &&
+						a.gameEnded === b.gameEnded &&
+						a.isBgs === b.isBgs &&
+						a.isMercs === b.isMercs,
+				),
 			),
 		]).pipe(
-			this.mapData(([currentScene, [displayFromPrefs], [gameStarted, gameEnded, isBgs, isMercs]]) => {
-				if (!gameStarted || isBgs || isMercs || !displayFromPrefs) {
+			this.mapData(([currentScene, displayFromPrefs, { gameStarted, gameEnded, isBgs, isMercs }]) => {
+				if (!gameStarted || gameEnded || isBgs || isMercs || !displayFromPrefs) {
 					return false;
 				}
 
@@ -96,27 +120,69 @@ export class ConstructedBoardWidgetWrapperComponent extends AbstractWidgetWrappe
 				return !gameEnded;
 			}),
 			this.handleReposition(),
+			shareReplay(1),
+			takeUntil(this.destroyed$),
 		);
 		this.opacity$ = this.prefs.preferences$$.pipe(
 			this.mapData((prefs) => Math.max(0.01, prefs.decktrackerMinionPlayOrderOpacity / 100)),
 		);
 
-		this.board$ = this.store
-			.listenDeckState$(
-				(state) => state.opponentDeck?.board,
-				(state) => state.playerDeck?.board,
-			)
-			.pipe(
-				this.mapData(([opponentBoard, playerBoard]) => {
-					const top = this.buildBoard(opponentBoard, 'opponent');
-					const bottom = this.buildBoard(playerBoard, 'player');
-					const allPlayIndices = [...top, ...bottom].map((c) => c.playOrder).sort((n1, n2) => n1 - n2);
-					return {
-						top: top.map((c) => ({ ...c, playOrder: 1 + allPlayIndices.indexOf(c.playOrder) })),
-						bottom: bottom.map((c) => ({ ...c, playOrder: 1 + allPlayIndices.indexOf(c.playOrder) })),
-					} as BoardOverlay;
-				}),
-			);
+		this.board$ = combineLatest([
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.decktrackerShowWeaponPlayOrderOnBoard)),
+			this.gameState.gameState$$,
+		]).pipe(
+			this.mapData(([showWeapons, state]) => ({
+				showWeapons,
+				opponentWeapon: state.opponentDeck?.weapon,
+				opponentBoard: state.opponentDeck?.board,
+				playerBoard: state.playerDeck?.board,
+				playerWeapon: state.playerDeck?.weapon,
+			})),
+			distinctUntilChanged(
+				(a, b) =>
+					a.showWeapons === b.showWeapons &&
+					a.opponentBoard === b.opponentBoard &&
+					a.playerBoard === b.playerBoard &&
+					a.opponentWeapon === b.opponentWeapon &&
+					a.playerWeapon === b.playerWeapon,
+			),
+			this.mapData(({ showWeapons, opponentBoard, playerBoard, opponentWeapon, playerWeapon }) => {
+				const topWeapon =
+					!showWeapons || !opponentWeapon
+						? null
+						: {
+								cardId: opponentWeapon?.cardId,
+								entityId: opponentWeapon?.entityId,
+								playOrder: opponentWeapon?.playTiming,
+								side: 'opponent',
+							};
+				const top = this.buildBoard(opponentBoard, 'opponent');
+				const bottom = this.buildBoard(playerBoard, 'player');
+				const bottomWeapon =
+					!showWeapons || !playerWeapon
+						? null
+						: {
+								cardId: playerWeapon?.cardId,
+								entityId: playerWeapon?.entityId,
+								playOrder: playerWeapon?.playTiming,
+								side: 'player',
+							};
+				const allPlayIndices = [...top, ...bottom, topWeapon, bottomWeapon]
+					.filter((c) => c !== null)
+					.map((c) => c.playOrder)
+					.sort((n1, n2) => n1 - n2);
+				return {
+					topWeapon: topWeapon
+						? { ...topWeapon, playOrder: 1 + allPlayIndices.indexOf(topWeapon?.playOrder) }
+						: null,
+					top: top.map((c) => ({ ...c, playOrder: 1 + allPlayIndices.indexOf(c.playOrder) })),
+					bottomWeapon: bottomWeapon
+						? { ...bottomWeapon, playOrder: 1 + allPlayIndices.indexOf(bottomWeapon?.playOrder) }
+						: null,
+					bottom: bottom.map((c) => ({ ...c, playOrder: 1 + allPlayIndices.indexOf(c.playOrder) })),
+				} as BoardOverlay;
+			}),
+		);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
@@ -140,6 +206,8 @@ export class ConstructedBoardWidgetWrapperComponent extends AbstractWidgetWrappe
 }
 
 interface BoardOverlay {
+	readonly topWeapon: BoardCardOverlay | null;
 	readonly top: readonly BoardCardOverlay[];
+	readonly bottomWeapon: BoardCardOverlay | null;
 	readonly bottom: readonly BoardCardOverlay[];
 }

@@ -47,6 +47,14 @@ export const decktrackerOverlaysSettings = (context: SettingContext): SettingNod
 						tooltip: context.i18n.translateString('settings.decktracker.global.minions-play-order-tooltip'),
 					},
 					{
+						type: 'toggle',
+						field: 'decktrackerShowWeaponPlayOrderOnBoard',
+						label: context.i18n.translateString('settings.decktracker.global.weapons-play-order'),
+						tooltip: context.i18n.translateString('settings.decktracker.global.weapons-play-order-tooltip'),
+						disabledIf: (prefs: Preferences) => !prefs.decktrackerShowMinionPlayOrderOnBoard,
+						indented: true,
+					},
+					{
 						type: 'slider',
 						field: 'decktrackerMinionPlayOrderOpacity',
 						label: context.i18n.translateString('settings.decktracker.turn-timer.opacity-title'),

@@ -209,6 +209,7 @@ export class Preferences implements IPreferences {
 	readonly decktrackerPosition: { left: number; top: number };
 
 	readonly decktrackerShowMinionPlayOrderOnBoard: boolean = true;
+	readonly decktrackerShowWeaponPlayOrderOnBoard: boolean = false;
 	readonly decktrackerMinionPlayOrderOpacity: number = 100;
 	readonly dectrackerShowOpponentTurnDraw: boolean = true;
 	readonly dectrackerShowOpponentGuess: boolean = true;

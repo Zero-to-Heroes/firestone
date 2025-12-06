@@ -1,5 +1,22 @@
 :host {
 	z-index: -1;
+	pointer-events: none;
+}
+
+.top-weapon {
+	position: absolute;
+	height: 3vh;
+	width: 10vh;
+	top: 14vh;
+	left: 49vh;
+}
+
+.bottom-weapon {
+	position: absolute;
+	height: 3vh;
+	width: 10vh;
+	top: 69vh;
+	left: 47vh;
 }
 
 .board-container {
