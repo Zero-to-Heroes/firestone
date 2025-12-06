@@ -30,9 +30,29 @@ export class RenferalTheMalignantCounterDefinitionV2 extends CounterDefinitionV2
 				}),
 		},
 	};
-	readonly opponent = undefined;
+	readonly opponent = {
+		pref: 'opponentRenferalTheMalignantCounter' as const,
+		display: (state: GameState): boolean => true,
+		value: (state: GameState) => {
+			return (
+				state.opponentDeck.cardsPlayedThisMatch.filter((c) => c.cardId === CardIds.RenferalTheMalignant_EDR_526)
+					.length ?? 0
+			);
+		},
+		setting: {
+			label: (i18n: ILocalizationService): string =>
+				this.allCards.getCard(CardIds.RenferalTheMalignant_EDR_526).name,
+			tooltip: (i18n: ILocalizationService): string =>
+				i18n.translateString('settings.decktracker.your-deck.counters.card-name-played-tooltip', {
+					cardName: this.allCards.getCard(CardIds.RenferalTheMalignant_EDR_526).name,
+				}),
+		},
+	};
 
-	constructor(private readonly i18n: ILocalizationService, private readonly allCards: CardsFacadeService) {
+	constructor(
+		private readonly i18n: ILocalizationService,
+		private readonly allCards: CardsFacadeService,
+	) {
 		super();
 	}
 
