@@ -10,7 +10,7 @@ export class HeroPowerUseCounterDefinitionV2 extends CounterDefinitionV2<number>
 	public override id: CounterType = 'heroPowerUse';
 	public override image = CardIds.GlowrootLure_EDR_477;
 	public override type: 'hearthstone' | 'battlegrounds' = 'hearthstone';
-	public override cards: readonly CardIds[] = [CardIds.GlowrootLure_EDR_477];
+	public override cards: readonly CardIds[] = [CardIds.GlowrootLure_EDR_477, CardIds.FrostGiant];
 
 	readonly player = {
 		pref: 'playerHeroPowerUsedCounter' as const,
@@ -27,7 +27,10 @@ export class HeroPowerUseCounterDefinitionV2 extends CounterDefinitionV2<number>
 	};
 	readonly opponent = undefined;
 
-	constructor(private readonly i18n: ILocalizationService, private readonly allCards: CardsFacadeService) {
+	constructor(
+		private readonly i18n: ILocalizationService,
+		private readonly allCards: CardsFacadeService,
+	) {
 		super();
 	}
 
