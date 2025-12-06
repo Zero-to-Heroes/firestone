@@ -337,6 +337,7 @@ export const CURRENT_EFFECTS_WHITELIST = [
 	CardIds.ArcaneKnowledge_ArcaneKnowledgePlayerEnchDntEnchantment_BG31_HERO_006pe,
 	CardIds.ArchdruidNaralex_DreamingEnchantment,
 	CardIds.ArchimondePlayerEnchantDntEnchantment_BG31_873pe,
+	CardIds.Askara_AskaraFutureBuffEnchantment_GDB_455e,
 	CardIds.Astrobiologist_AstrobiologistEnchantment_GDB_874e,
 	CardIds.AthleticStudies_AthleticStudiesEnchantment,
 	CardIds.BlessingOfAeons_WiseBeyondYearsEnchantment,
