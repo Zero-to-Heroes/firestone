@@ -6,7 +6,7 @@ import {
 	Input,
 	OnDestroy,
 } from '@angular/core';
-import { CardIds, GameTag } from '@firestone-hs/reference-data';
+import { CardIds, CardType, GameTag } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState, getProcessedCard } from '@firestone/game-state';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
@@ -396,6 +396,23 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 
 		// Board
 		if (showBoardCardsInSeparateZone) {
+			const getZonePosition = (card: VisualDeckCard) => {
+				if (card.getCardType(this.allCards) === CardType.HERO_POWER) {
+					return -2;
+				}
+				if (card.getCardType(this.allCards) === CardType.WEAPON) {
+					return -1;
+				}
+				const position = card.tags?.[GameTag.ZONE_POSITION] ?? 0;
+				console.debug(
+					'[deck-list-by-zone] getZonePosition',
+					card.cardName,
+					position,
+					card.getCardType(this.allCards),
+					card,
+				);
+				return position;
+			};
 			const boardZone = [
 				...deckState.board,
 				...deckState.otherZone.filter((c) => c.zone === 'SECRET'),
@@ -408,14 +425,11 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 					null,
 					{
 						groupSameCardsTogether: groupSameCardsTogether,
+						sortByZoneOrder: sortHandByZoneOrder,
 					},
 					'board',
 					this.i18n.translateString('decktracker.zones.board'),
-					sortCardsByManaCostInOtherZone
-						? (a, b) =>
-								getProcessedCard(a.cardId, a.entityId, deckState, this.allCards).cost -
-								getProcessedCard(b.cardId, b.entityId, deckState, this.allCards).cost
-						: (a, b) => this.sortByIcon(a, b),
+					(a: VisualDeckCard, b: VisualDeckCard) => getZonePosition(a) - getZonePosition(b),
 					null,
 				),
 			);

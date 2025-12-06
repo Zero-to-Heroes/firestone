@@ -8,6 +8,7 @@ import {
 	SpellSchool,
 } from '@firestone-hs/reference-data';
 import { NonFunctionProperties, uuidShort } from '@firestone/shared/framework/common';
+import { CardsFacadeService } from '../../../../shared/framework/core/src';
 import { CardMetaInfo } from './card-meta-info';
 
 export class DeckCard {
@@ -114,7 +115,7 @@ export class DeckCard {
 		return this.actualManaCost ?? this.refManaCost ?? null;
 	}
 
-	public getCardType(): CardType | null {
+	public getCardType(allCards?: CardsFacadeService): CardType | null {
 		if (this.cardType) {
 			return CardType[this.cardType.toUpperCase()];
 		}
@@ -123,6 +124,12 @@ export class DeckCard {
 		}
 		if (this.guessedInfo?.cardType) {
 			return this.guessedInfo.cardType;
+		}
+		if (allCards) {
+			const refCard = allCards.getCard(this.cardId);
+			if (refCard?.type) {
+				return CardType[refCard.type.toUpperCase()];
+			}
 		}
 		return null;
 	}
