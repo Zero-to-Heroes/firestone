@@ -96,9 +96,6 @@ const getDynamicRelatedCardIdsInternal = (
 
 	switch (cardId) {
 		// Show static list of related card ids as possible options
-		case CardIds.DreamplannerZephrys_ExtravagantTourToken_WORK_027t2:
-		case CardIds.DreamplannerZephrys_HecticTourToken_WORK_027t3:
-		case CardIds.DreamplannerZephrys_ModestTourToken_WORK_027t1:
 		case CardIds.HopefulDryad_EDR_001:
 		case CardIds.CostumeMerchant_DINO_427:
 			return allCards.getCard(cardId).relatedCardDbfIds?.map((dbfId) => allCards.getCard(dbfId).id) ?? [];

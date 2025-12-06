@@ -88,3 +88,4 @@ export { WarCache } from './war-cache';
 export { WelcomeHome } from './welcome-home';
 export { YoggInTheBox } from './yogg-in-the-box';
 export { YrelBeaconOfHope } from './yrel-beacon-of-hope';
+export { ZephrysOptions as ZeprysOptions } from './zephrys-options';
