@@ -12,14 +12,18 @@ import { BgsMagmalocCounterDefinitionV2 } from './impl/battlegrounds/bgs-magmalo
 import { BgsMajordomoCounterDefinitionV2 } from './impl/battlegrounds/bgs-majordomo';
 import { BgsSouthseaStrongarmCounterDefinitionV2 } from './impl/battlegrounds/bgs-southsea-strongarm';
 import { BgsTuskarrRaiderCounterDefinitionV2 } from './impl/battlegrounds/bgs-tuskarr-raider';
+import { DeepBlueCounterDefinitionV2 } from './impl/battlegrounds/deep-blue';
 import { ElementalPowersBuffCounterDefinitionV2 } from './impl/battlegrounds/elemental-powers-buff';
 import { ElementalTavernBuffCounterDefinitionV2 } from './impl/battlegrounds/elemental-tavern-buff';
 import { FreeRefreshCounterDefinitionV2 } from './impl/battlegrounds/free-refresh';
 import { GoldNextTurnCounterDefinitionV2 } from './impl/battlegrounds/gold-next-turn';
+import { SpellsPlayedCounterDefinitionV2 } from './impl/battlegrounds/spells-played';
 import { TavernSpellsBuffCounterDefinitionV2 } from './impl/battlegrounds/tavern-spells-buff';
+import { UndeadArmyCounterDefinitionV2 } from './impl/battlegrounds/undead-army';
 import { BolnerHammerbeakCounterDefinitionV2 } from './impl/bolner-hammerbeak';
 import { BonelordFrostwhisperCounterDefinitionV2 } from './impl/bonelord-frostwhisper';
 import { CardsDrawnCounterDefinitionV2 } from './impl/cards-drawn';
+import { CardsDrawnThisTurnCounterDefinitionV2 } from './impl/cards-drawn-this-turn';
 import { CardsPlayedFromAnotherClassCounterDefinitionV2 } from './impl/cards-played-from-another-class';
 import { GiftsPlayedCounterDefinitionV2 } from './impl/cards-played-not-in-starting-deck';
 import { CardsPlayedThisTurnCounterDefinitionV2 } from './impl/cards-played-this-turn';
@@ -35,6 +39,7 @@ import { DamageTakenOnYourTurnCounterDefinitionV2 } from './impl/damage-taken-on
 import { DarkGiftsCounterDefinitionV2 } from './impl/dark-gifts';
 import { DiscoversCounterDefinitionV2 } from './impl/discovers';
 import { DiveTheGolakkaDepthsCounterDefinitionV2 } from './impl/dive-the-golakka-depths';
+import { DragoncallerAlannaCounterDefinitionV2 } from './impl/dragoncaller-alanna';
 import { DragonsInHandCounterDefinitionV2 } from './impl/dragons-in-hand';
 import { DragonsPlayedCounterDefinitionV2 } from './impl/dragons-played';
 import { DragonsSummonedCounterDefinitionV2 } from './impl/dragons-summoned';
@@ -86,10 +91,6 @@ import { VolatileSkeletonCounterDefinitionV2 } from './impl/volatile-skeleton';
 import { WatchpostCounterDefinitionV2 } from './impl/watchpost';
 import { WheelOfDeathCounterDefinitionV2 } from './impl/wheel-of-death';
 import { YsondreCounterDefinitionV2 } from './impl/ysondre';
-import { DeepBlueCounterDefinitionV2 } from './impl/battlegrounds/deep-blue';
-import { SpellsPlayedCounterDefinitionV2 } from './impl/battlegrounds/spells-played';
-import { UndeadArmyCounterDefinitionV2 } from './impl/battlegrounds/undead-army';
-import { CardsDrawnThisTurnCounterDefinitionV2 } from './impl/cards-drawn-this-turn';
 
 export const getAllCounters: (
 	i18n: ILocalizationService,
@@ -169,6 +170,7 @@ export const getAllCounters: (
 	new ElizaGorebladeCounterDefinitionV2(i18n, allCards),
 	new RafaamTimeCounterDefinitionV2(i18n, allCards),
 	new CardsDrawnThisTurnCounterDefinitionV2(i18n),
+	new DragoncallerAlannaCounterDefinitionV2(i18n),
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n),
 	new BallerBuffCounterDefinitionV2(i18n),
@@ -195,6 +197,7 @@ export type CounterType =
 	| '_ceaselessExpanse'
 	| 'cardsDrawnThisTurn'
 	| 'outcast'
+	| 'dragoncallerAlanna'
 	| 'diveTheGolakkaDepths'
 	| 'rafaamTime'
 	| 'darkGifts'

@@ -432,6 +432,7 @@ export class Preferences implements IPreferences {
 	readonly playerAvianaElunesChosenCounter: boolean = true;
 	readonly opponentAvianaElunesChosenCounter: boolean = true;
 	readonly playerSpellsOnFriendlyCharactersCounter: boolean = true;
+	readonly playerDragoncallerAlannaCounter: boolean = true;
 	readonly playerElementalStreakCounter: BooleanWithLimited = true;
 	readonly opponentElementalStreakCounter: BooleanWithLimited = false;
 	readonly playerExcavateCounter: BooleanWithLimited = true;
