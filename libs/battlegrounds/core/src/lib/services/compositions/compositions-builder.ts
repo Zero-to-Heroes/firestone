@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { BgsCompAdvice } from '@firestone-hs/content-craetor-input';
 import { CardType, Race, ReferenceCard } from '@firestone-hs/reference-data';
+import { isBgsTimewarped } from '@firestone/battlegrounds/data-access';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
-import { isBgsTimewarped } from '../../../../../data-access/src';
 import { ExtendedBgsCompAdvice } from './model';
 
 export const buildCompositions = (
