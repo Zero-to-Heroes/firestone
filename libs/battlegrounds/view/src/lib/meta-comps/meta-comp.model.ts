@@ -22,6 +22,8 @@ export interface BgsMetaCompStatTierItem {
 	readonly expertDifficulty?: 'Easy' | 'Medium' | 'Hard';
 	readonly coreCards: readonly BgsMetaCompCard[];
 	readonly addonCards: readonly BgsMetaCompCard[];
+	readonly recommendedCards: readonly BgsMetaCompCard[];
+	readonly cycleCards: readonly BgsMetaCompCard[];
 }
 
 export interface BgsMetaCompCard {

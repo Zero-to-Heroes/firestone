@@ -116,8 +116,8 @@ import { BehaviorSubject, combineLatest, Observable, startWith } from 'rxjs';
 						class="minion"
 						*ngFor="let minion of addonCards; trackBy: trackByFn"
 						[ngClass]="{
-							controlled: minionsOnBoardAndHand?.includes(minion.id),
-							inShop: minionsInShop?.includes(minion.id),
+							controlled: isIncluded(minionsOnBoardAndHand, minion.id),
+							inShop: isIncluded(minionsInShop, minion.id),
 						}"
 						[minion]="minion"
 						[showGoldenCards]="showGoldenCards"
@@ -165,6 +165,38 @@ import { BehaviorSubject, combineLatest, Observable, startWith } from 'rxjs';
 						[leftPadding]="20"
 					></bgs-minion-item>
 				</div>
+				<div class="cards recommended" *ngIf="!value.collapsed && recommendedCards?.length">
+					<div class="header">
+						<div
+							class="header-text"
+							[fsTranslate]="'battlegrounds.in-game.minions-list.compositions.recommended-cards-header'"
+							[helpTooltip]="
+								'battlegrounds.in-game.minions-list.compositions.recommended-cards-header-tooltip'
+									| fsTranslate
+							"
+						></div>
+					</div>
+					<bgs-minion-item
+						class="minion"
+						*ngFor="let minion of recommendedCards; trackBy: trackByFn"
+						[ngClass]="{
+							controlled: isIncluded(minionsOnBoardAndHand, minion.id),
+							inShop: isIncluded(minionsInShop, minion.id),
+						}"
+						[minion]="minion"
+						[showGoldenCards]="showGoldenCards"
+						[showTrinketTips]="showTrinketTips"
+						[highlightedMinions]="value.highlightedMinions"
+						[highlightedTribes]="highlightedTribes"
+						[highlightedMechanics]="highlightedMechanics"
+						[showTribesHighlight]="showTribesHighlight"
+						[showTavernTierIcon]="true"
+						[hideMechanicsHighlight]="true"
+						[fadeHigherTierCards]="fadeHigherTierCards"
+						[tavernTier]="tavernTier"
+						[leftPadding]="20"
+					></bgs-minion-item>
+				</div>
 				<div
 					class="cards trinket"
 					*ngIf="(!value.collapsed || value.displayMode === 'exploring') && trinkets?.length"
@@ -208,6 +240,7 @@ export class BgsMinionsListCompositionComponent extends AbstractSubscriptionComp
 	powerLevel: string;
 	headerImages: readonly string[] = [];
 	coreCards: readonly ExtendedReferenceCard[];
+	recommendedCards: readonly ExtendedReferenceCard[];
 	addonCards: readonly ExtendedReferenceCard[];
 	cycleCards: readonly ExtendedReferenceCard[];
 	trinkets: readonly ExtendedReferenceCard[];
@@ -225,6 +258,15 @@ export class BgsMinionsListCompositionComponent extends AbstractSubscriptionComp
 		this.tips = value.tips;
 		this.coreCards = value.cards
 			.filter((c) => c.status === 'CORE')
+			.map((c) => {
+				const ref: ReferenceCard = this.allCards.getCard(c.cardId);
+				const result: ExtendedReferenceCard = {
+					...ref,
+				};
+				return result;
+			});
+		this.recommendedCards = value.cards
+			.filter((c) => c.status === 'RECOMMENDED')
 			.map((c) => {
 				const ref: ReferenceCard = this.allCards.getCard(c.cardId);
 				const result: ExtendedReferenceCard = {
@@ -269,7 +311,11 @@ export class BgsMinionsListCompositionComponent extends AbstractSubscriptionComp
 				return result;
 			});
 		this.headerImages = [`https://static.zerotoheroes.com/hearthstone/cardart/256x/${value.minionIcon}.jpg`];
-		this.compCards$$.next([...(this.coreCards ?? []), ...(this.addonCards ?? [])]);
+		this.compCards$$.next([
+			...(this.coreCards ?? []),
+			...(this.addonCards ?? []),
+			...(this.recommendedCards ?? []),
+		]);
 		this.author = this.i18n.translateString('battlegrounds.in-game.minions-list.compositions.advice.author', {
 			author: value.tips?.[0]?.author ?? '',
 		});
@@ -347,12 +393,13 @@ export class BgsMinionsListCompositionComponent extends AbstractSubscriptionComp
 	highlightComp(event: MouseEvent) {
 		event.preventDefault();
 		event.stopPropagation();
-		if (!this.coreCards?.length || !this.addonCards?.length) {
+		if (!this.coreCards?.length || !this.addonCards?.length || !this.recommendedCards?.length) {
 			return;
 		}
 		this.highlighter.toggleMinionsToHighlight([
 			...this.coreCards.map((c) => c.id),
 			...this.addonCards.map((c) => c.id),
+			...this.recommendedCards.map((c) => c.id),
 		]);
 	}
 

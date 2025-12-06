@@ -2,20 +2,24 @@
 import { BgsCompAdvice } from '@firestone-hs/content-craetor-input';
 import { CardType, Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
+import { isBgsTimewarped } from '../../../../../data-access/src';
 import { ExtendedBgsCompAdvice } from './model';
 
 export const buildCompositions = (
 	availableTribes: readonly Race[],
 	compositions: readonly BgsCompAdvice[],
-	useTrinkets: boolean,
+	options: {
+		trinkets: boolean;
+		timewarped: boolean;
+	},
 	allCards: CardsFacadeService,
 	i18n: ILocalizationService,
 ): readonly ExtendedBgsCompAdvice[] => {
 	const result =
 		compositions
 			?.map((s) => enhanceComp(s, allCards))
-			.filter((s) => isAvailable(s, availableTribes, useTrinkets, allCards))
-			.map((s) => trimComp(s, availableTribes, useTrinkets, allCards))
+			.filter((s) => isAvailable(s, availableTribes, options, allCards))
+			.map((s) => trimComp(s, availableTribes, options, allCards))
 			.sort((a, b) => {
 				const powerLevelCompare = comparePowerLevel(a.powerLevel, b.powerLevel);
 				if (powerLevelCompare !== 0) {
@@ -34,7 +38,15 @@ export const buildCompositions = (
 					(a.name ?? '').localeCompare(b.name ?? '')
 				);
 			}) ?? [];
-	console.debug('[compositions-builder] compositions built', result, compositions);
+	console.debug(
+		'[compositions-builder] compositions built',
+		result,
+		compositions,
+		compositions?.map((s) => enhanceComp(s, allCards)),
+		compositions
+			?.map((s) => enhanceComp(s, allCards))
+			.filter((s) => isAvailable(s, availableTribes, options, allCards)),
+	);
 	return result;
 };
 
@@ -77,12 +89,15 @@ const enhanceComp = (comp: BgsCompAdvice, allCards: CardsFacadeService): Extende
 const trimComp = (
 	comp: ExtendedBgsCompAdvice,
 	availableTribes: readonly Race[],
-	useTrinkets: boolean,
+	options: {
+		trinkets: boolean;
+		timewarped: boolean;
+	},
 	allCards: CardsFacadeService,
 ): ExtendedBgsCompAdvice => {
 	const result: ExtendedBgsCompAdvice = {
 		...comp,
-		cards: comp.cards.filter((c) => isCardAvailable(allCards.getCard(c.cardId), availableTribes, useTrinkets)),
+		cards: comp.cards.filter((c) => isCardAvailable(allCards.getCard(c.cardId), availableTribes, options)),
 	};
 	return result;
 };
@@ -90,23 +105,35 @@ const trimComp = (
 const isAvailable = (
 	comp: BgsCompAdvice,
 	availableTribes: readonly Race[],
-	useTrinkets: boolean,
+	options: {
+		trinkets: boolean;
+		timewarped: boolean;
+	},
 	allCards: CardsFacadeService,
 ): boolean => {
 	if (!!comp.forcedTribes?.length) {
 		return comp.forcedTribes.every((t) => availableTribes.includes(t));
 	}
-	return comp.cards
+	const available = comp.cards
 		.filter((c) => c.status === 'CORE')
 		.map((c) => allCards.getCard(c.cardId))
-		.every((c) => isCardAvailable(c, availableTribes, useTrinkets));
+		.every((c) => isCardAvailable(c, availableTribes, options));
+	return available;
 };
 
-const isCardAvailable = (card: ReferenceCard, availableTribes: readonly Race[], useTrinkets: boolean): boolean => {
-	if (!card.isBaconPool) {
+const isCardAvailable = (
+	card: ReferenceCard,
+	availableTribes: readonly Race[],
+	options: {
+		trinkets: boolean;
+		timewarped: boolean;
+	},
+): boolean => {
+	const isTimewarped = isBgsTimewarped(card) && options.timewarped;
+	if (!card.isBaconPool && !isTimewarped) {
 		return false;
 	}
-	if (card.type?.toUpperCase() === CardType[CardType.BATTLEGROUND_TRINKET] && !useTrinkets) {
+	if (card.type?.toUpperCase() === CardType[CardType.BATTLEGROUND_TRINKET] && !options.trinkets) {
 		return false;
 	}
 

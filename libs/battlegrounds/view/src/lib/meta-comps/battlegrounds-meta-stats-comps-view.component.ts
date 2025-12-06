@@ -122,11 +122,27 @@ import { BgsMetaCompStatTier, BgsMetaCompStatTierItem, ColumnSortTypeComp } from
 					<div
 						class="cell cards core"
 						[fsTranslate]="'app.battlegrounds.compositions.columns.core-cards'"
+						[helpTooltip]="
+							'app.battlegrounds.in-game.minions-list.compositions.core-cards-header-tooltip'
+								| fsTranslate
+						"
 					></div>
 					<div
 						class="cell cards addon"
 						[fsTranslate]="'app.battlegrounds.compositions.columns.addon-cards'"
+						[helpTooltip]="
+							'app.battlegrounds.in-game.minions-list.compositions.addon-cards-header-tooltip'
+								| fsTranslate
+						"
 					></div>
+					<!-- <div
+						class="cell cards recommended"
+						[fsTranslate]="'app.battlegrounds.compositions.columns.recommended-cards'"
+						[helpTooltip]="
+							'app.battlegrounds.in-game.minions-list.compositions.recommended-cards-header-tooltip'
+								| fsTranslate
+						"
+					></div> -->
 				</div>
 				<div class="comps-list" role="list" scrollable>
 					<ng-container *ngIf="sortCriteria$ | async as sort">

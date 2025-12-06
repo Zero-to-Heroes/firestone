@@ -34,6 +34,7 @@ import { BattlegroundsCompsService } from './bgs-comps.service';
 	],
 	template: `
 		<battlegrounds-meta-stats-comps-view
+			class="view"
 			[stats]="stats$ | async"
 			[loading]="loading$ | async"
 			[lastUpdate]="lastUpdate$ | async"

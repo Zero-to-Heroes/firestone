@@ -388,11 +388,21 @@ export class BattlegroundsMinionsTiersOverlayComponent
 				distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			),
 			this.gameState.gameState$$.pipe(this.mapData((state) => state.bgState.currentGame?.hasTrinkets)),
+			this.gameState.gameState$$.pipe(this.mapData((state) => state.bgState.currentGame?.hasTimewarped)),
 			this.strategies.strategies$$,
 		]).pipe(
-			this.mapData(([showFromPrefs, availableTribes, hasTrinkets, strategies]) =>
+			this.mapData(([showFromPrefs, availableTribes, hasTrinkets, hasTimewarped, strategies]) =>
 				showFromPrefs
-					? buildCompositions(availableTribes, strategies, hasTrinkets, this.allCards, this.i18n)
+					? buildCompositions(
+							availableTribes,
+							strategies,
+							{
+								trinkets: hasTrinkets,
+								timewarped: hasTimewarped,
+							},
+							this.allCards,
+							this.i18n,
+						)
 					: [],
 			),
 		);

@@ -127,6 +127,35 @@ import { BgsMetaCompCard, BgsMetaCompStatTierItem } from './meta-comp.model';
 								</div>
 							</div>
 						</div>
+
+						<div class="cards-group" *ngIf="cycleCards?.length">
+							<h3 [fsTranslate]="'app.battlegrounds.compositions.columns.cycle-cards'"></h3>
+							<div class="cards-container">
+								<div class="card-item" *ngFor="let card of cycleCards">
+									<card-on-board
+										class="card"
+										[entity]="card.entity"
+										[cardTooltip]="card.cardId"
+										[cardTooltipBgs]="true"
+									>
+									</card-on-board>
+								</div>
+							</div>
+						</div>
+
+						<div class="cards-group" *ngIf="recommendedCards?.length">
+							<h3 [fsTranslate]="'app.battlegrounds.compositions.columns.recommended-cards'"></h3>
+							<div class="cards-container">
+								<div class="card-item" *ngFor="let card of recommendedCards">
+									<card-on-board
+										class="card"
+										[entity]="card.entity"
+										[cardTooltip]="card.cardId"
+										[cardTooltipBgs]="true"
+									></card-on-board>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -151,6 +180,8 @@ export class BattlegroundsCompositionDetailsModalComponent {
 		this.averagePlacement = this.buildValue(value.averagePlacement);
 		this.coreCards = value.coreCards;
 		this.addonCards = value.addonCards;
+		this.recommendedCards = value.recommendedCards;
+		this.cycleCards = value.cycleCards;
 		this.coreCardArts =
 			value.coreCards
 				?.slice(0, 3)
@@ -164,6 +195,8 @@ export class BattlegroundsCompositionDetailsModalComponent {
 	expertDifficulty: string | null;
 	coreCards: readonly BgsMetaCompCard[];
 	addonCards: readonly BgsMetaCompCard[];
+	recommendedCards: readonly BgsMetaCompCard[];
+	cycleCards: readonly BgsMetaCompCard[];
 	averagePlacement: string;
 	coreCardArts: string[];
 
