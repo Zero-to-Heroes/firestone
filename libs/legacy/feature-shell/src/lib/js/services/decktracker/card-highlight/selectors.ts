@@ -421,14 +421,16 @@ export const canTargetFriendlyMinion = (input: SelectorInput): boolean => {
 	
 	// Check for common patterns indicating targeting friendly minions
 	const targetingPatterns = [
-		/give\s+a\s+(friendly\s+)?minion/i,
-		/choose\s+a\s+(friendly\s+)?minion/i,
-		/on\s+a\s+(friendly\s+)?minion/i,
-		/target\s+(friendly\s+)?minion/i,
+		/give\s+a\s+friendly\s+minion/i,
+		/choose\s+a\s+friendly\s+minion/i,
+		/on\s+a\s+friendly\s+minion/i,
+		/target\s+friendly\s+minion/i,
 		/buff\s+a\s+minion/i,
 		/restore.*to\s+a\s+minion/i,
 		/heal\s+a\s+minion/i,
-		/deal.*damage\s+to\s+a\s+minion/i, // Can target friendly
+		// Phrases that can target any minion (including friendly)
+		/give\s+a\s+minion(?!\s+to\s+(your|an)\s+opponent)/i,
+		/choose\s+a\s+minion(?!\s+to)/i,
 	];
 	
 	// Exclude patterns that indicate only enemy targeting
@@ -471,10 +473,10 @@ export const canTargetFriendlyCharacter = (input: SelectorInput): boolean => {
 	
 	// Check for patterns indicating targeting any friendly character (minion or hero)
 	const targetingPatterns = [
-		/give\s+a\s+(friendly\s+)?character/i,
-		/choose\s+a\s+(friendly\s+)?character/i,
-		/on\s+a\s+(friendly\s+)?character/i,
-		/target\s+(friendly\s+)?character/i,
+		/give\s+a\s+friendly\s+character/i,
+		/choose\s+a\s+friendly\s+character/i,
+		/on\s+a\s+friendly\s+character/i,
+		/target\s+friendly\s+character/i,
 		/restore.*to\s+a\s+character/i,
 		/heal\s+a\s+character/i,
 		/friendly\s+character/i,
