@@ -30,6 +30,7 @@ export { FoolsGold } from './fools-gold';
 export { ForgottenMillenium } from './forgotten-millenium';
 export { Grillmaster } from './grillmaster';
 export { GuitarSoloist } from './guitar-soloist';
+export { HemetFoamMarksman } from './hemet-foam-marksman';
 export { HuntersPack } from './hunters-pack';
 export { Hybridization } from './hybridization';
 export { IdentityTheft } from './identity-theft';
