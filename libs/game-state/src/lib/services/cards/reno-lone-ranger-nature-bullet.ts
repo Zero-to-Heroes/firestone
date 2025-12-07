@@ -5,7 +5,7 @@ import { canBeDiscoveredByClass } from '../../related-cards/dynamic-pools';
 import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
 
-// TODO: Verify card mechanics - assuming this discovers a Druid spell based on the "Nature Bullet" name
+// Reno Lone Ranger hero power - Nature Bullet: Discovers a Druid spell
 export const RenoLoneRangerNatureBullet: GeneratingCard & StaticGeneratingCard = {
 	cardIds: [CardIds.RenoLoneRanger_NatureBullet_WW_0700p5],
 	publicCreator: true,
