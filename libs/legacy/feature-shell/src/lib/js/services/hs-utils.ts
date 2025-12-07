@@ -240,8 +240,8 @@ export const globalEffectCards = [
 ];
 
 // Also whitelist in the parser
-export const globalEffectPowers = [CardIds.DewProcess];
-export const globalEffectPowersAlsoOpponent = [CardIds.DewProcess];
+export const globalEffectPowers = [CardIds.DewProcess, CardIds.DewProcess_CORE_MAW_024];
+export const globalEffectPowersAlsoOpponent = [CardIds.DewProcess, CardIds.DewProcess_CORE_MAW_024];
 
 export const globalEffectTriggers: { effectPrefab: string; cardId: string; forceUseParentInfo?: boolean }[] = [
 	{
