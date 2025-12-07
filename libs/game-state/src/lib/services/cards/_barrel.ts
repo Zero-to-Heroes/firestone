@@ -61,6 +61,7 @@ export { RazaTheResealed } from './raza-the-resealed';
 export { Reforestation } from './reforestation';
 export { RelicMiner } from './relic-miner';
 export { ReplicatorInator } from './replicator-inator';
+export { ResortValet } from './resort-valet';
 export { RingmasterWhatley } from './ringmaster-whatley';
 export { ScaleReplica } from './scale-replica';
 export { SemiStablePortal } from './semi-stable-portal';
