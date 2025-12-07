@@ -1534,6 +1534,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), elemental);
 		case CardIds.GrandMagisterRommath:
 			return tooltip(and(side(inputSide), cardsPlayedThisMatch, spell, notInInitialDeck));
+		case CardIds.GrandMagusAntonidas:
+			return and(side(inputSide), or(inHand, inDeck), spell, fire);
 		case CardIds.GraveDefiler:
 			return and(side(inputSide), inDeck, spell, fel);
 		case CardIds.GraveDigging:

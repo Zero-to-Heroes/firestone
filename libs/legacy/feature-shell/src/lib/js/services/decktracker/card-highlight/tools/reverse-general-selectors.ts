@@ -57,13 +57,6 @@ export const reverseGeneralSelector = (
 		);
 	}
 
-	// COST_MORE_4 + HAS_MECHANIC_DEATHRATTLE + MINION (1 cards)
-	if (refCard.cost > 4 && refCard.mechanics?.includes('DEATHRATTLE') && refCard.type?.toUpperCase() === 'MINION') {
-		matchingCardIds.push(
-			CardIds.FerociousFelbat_EDR_892
-		);
-	}
-
 	// BEAST + COST_LESS_4 (1 cards)
 	if (refCard.races?.map(r => r.toUpperCase()).includes('BEAST') && refCard.cost < 4) {
 		matchingCardIds.push(
@@ -264,7 +257,7 @@ export const reverseGeneralSelector = (
 		);
 	}
 
-	// HAS_MECHANIC_DEATHRATTLE + MINION (38 cards)
+	// HAS_MECHANIC_DEATHRATTLE + MINION (39 cards)
 	if (refCard.mechanics?.includes('DEATHRATTLE') && refCard.type?.toUpperCase() === 'MINION') {
 		matchingCardIds.push(
 			CardIds.AmuletOfUndying,
@@ -294,6 +287,7 @@ export const reverseGeneralSelector = (
 			CardIds.RavenousFelhunter_EDR_891,
 			CardIds.ScourgeIllusionist,
 			CardIds.Shattershambler,
+			CardIds.SpiritsingerUmbra,
 			CardIds.TamsinsPhylactery,
 			CardIds.TerrorscaleStalker,
 			CardIds.TerrorscaleStalker_CORE_UNG_800,
@@ -420,9 +414,10 @@ export const reverseGeneralSelector = (
 		);
 	}
 
-	// COST_MORE_4 (5 cards)
+	// COST_MORE_4 (6 cards)
 	if (refCard.cost > 4) {
 		matchingCardIds.push(
+			CardIds.FerociousFelbat_EDR_892,
 			CardIds.InventorBoom_TOY_607,
 			CardIds.PrecursoryStrike_TIME_750,
 			CardIds.Prescience,
@@ -463,7 +458,7 @@ export const reverseGeneralSelector = (
 		);
 	}
 
-	// HAS_MECHANIC_DEATHRATTLE (25 cards)
+	// HAS_MECHANIC_DEATHRATTLE (26 cards)
 	if (refCard.mechanics?.includes('DEATHRATTLE')) {
 		matchingCardIds.push(
 			CardIds.BaronRivendare_CORE_FP1_031,
@@ -474,6 +469,7 @@ export const reverseGeneralSelector = (
 			CardIds.CountessAshmore,
 			CardIds.DaUndatakah,
 			CardIds.EndbringerUmbra_TLC_106,
+			CardIds.FerociousFelbat_EDR_892,
 			CardIds.GuidingFigure_GDB_106,
 			CardIds.MaskedReveler,
 			CardIds.NecriumBlade,
@@ -494,7 +490,7 @@ export const reverseGeneralSelector = (
 		);
 	}
 
-	// HAS_MECHANIC_EQUIPS_WEAPON (43 cards)
+	// HAS_MECHANIC_EQUIPS_WEAPON (44 cards)
 	if (refCard.mechanics?.includes('EQUIPS_WEAPON')) {
 		matchingCardIds.push(
 			CardIds.AbyssalBassist,
@@ -520,6 +516,7 @@ export const reverseGeneralSelector = (
 			CardIds.LadyAshvane_Story_11_LadyAshvane,
 			CardIds.LadyAshvane_TSC_943,
 			CardIds.ManAtArms,
+			CardIds.MicDrop,
 			CardIds.PillageTheFallenTavernBrawl,
 			CardIds.Plunder,
 			CardIds.Pufferfist,
@@ -574,7 +571,7 @@ export const reverseGeneralSelector = (
 		matchingCardIds.push(
 			CardIds.ArchVillainRafaam_BeholdMyStuff_THD_032p,
 			CardIds.BountyBoard_WW_003,
-			CardIds.TheKingslayers
+			CardIds.GaronaHalforcen_TheKingslayersToken_TIME_875t1
 		);
 	}
 
@@ -603,7 +600,7 @@ export const reverseGeneralSelector = (
 		);
 	}
 
-	// WEAPON (43 cards)
+	// WEAPON (44 cards)
 	if (refCard.type?.toUpperCase() === 'WEAPON') {
 		matchingCardIds.push(
 			CardIds.AbyssalBassist,
@@ -629,6 +626,7 @@ export const reverseGeneralSelector = (
 			CardIds.LadyAshvane_Story_11_LadyAshvane,
 			CardIds.LadyAshvane_TSC_943,
 			CardIds.ManAtArms,
+			CardIds.MicDrop,
 			CardIds.PillageTheFallenTavernBrawl,
 			CardIds.Plunder,
 			CardIds.Pufferfist,

@@ -122,12 +122,13 @@ export const reverseSpellSelector = (
 		);
 	}
 
-	// FIRE + SPELL (11 cards)
+	// FIRE + SPELL (12 cards)
 	if (refCard.spellSchool?.toUpperCase() === 'FIRE' && refCard.type?.toUpperCase() === 'SPELL') {
 		matchingCardIds.push(
 			CardIds.FirekeepersIdolTavernBrawl,
 			CardIds.FlameWavesTavernBrawl,
 			CardIds.FlamesOfTheKirinTorTavernBrawl,
+			CardIds.GrandMagusAntonidas,
 			CardIds.HotStreak,
 			CardIds.InfernoHerald_FIR_913,
 			CardIds.LivingFlame_FIR_929,
@@ -357,7 +358,7 @@ export const reverseSpellSelector = (
 		);
 	}
 
-	// SPELL (200 cards)
+	// SPELL (206 cards)
 	if (refCard.type?.toUpperCase() === 'SPELL') {
 		matchingCardIds.push(
 			CardIds.AdvancedTargetingMonocle,
@@ -478,6 +479,8 @@ export const reverseSpellSelector = (
 			CardIds.MistahVistah_VAC_519,
 			CardIds.MurkwaterScribe,
 			CardIds.NagaGiant,
+			CardIds.NightshadeBud,
+			CardIds.NightshadeBud_CORE_REV_311,
 			CardIds.NiriOfTheCrater_TLC_836,
 			CardIds.NostalgicInitiate_NostalgicInitiateToken_TOY_340t1,
 			CardIds.NostalgicInitiate_TOY_340,
@@ -531,6 +534,7 @@ export const reverseSpellSelector = (
 			CardIds.SunstridersCrownTavernBrawl,
 			CardIds.Surfalopod_VAC_443,
 			CardIds.SwiftscaleTrickster,
+			CardIds.Swindle,
 			CardIds.TangledWrath,
 			CardIds.TheFistOfRaDen,
 			CardIds.TheStoneOfJordanTavernBrawlToken,
@@ -543,6 +547,8 @@ export const reverseSpellSelector = (
 			CardIds.TrolleyProblem_WW_436,
 			CardIds.TwinbowTerrorcoil,
 			CardIds.Tyrande_EDR_464,
+			CardIds.UmbralOwl,
+			CardIds.UmbralOwl_CORE_DMF_060,
 			CardIds.UnderTheSea_VAC_431,
 			CardIds.UngoroBrochure_DalaranBrochureToken_WORK_050t,
 			CardIds.Ursol_EDR_259,
@@ -559,6 +565,7 @@ export const reverseSpellSelector = (
 			CardIds.WishOfTheNewMoon_EDR_460,
 			CardIds.YoggSaronHopesEnd_OG_134,
 			CardIds.YoggSaronMasterOfFate,
+			CardIds.YsielWindsinger,
 			CardIds.Zuljin
 		);
 	}

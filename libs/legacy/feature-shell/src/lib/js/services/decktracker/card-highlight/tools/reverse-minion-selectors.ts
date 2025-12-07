@@ -50,13 +50,6 @@ export const reverseMinionSelector = (
 		);
 	}
 
-	// COST_MORE_4 + HAS_MECHANIC_DEATHRATTLE + MINION (1 cards)
-	if (refCard.cost > 4 && refCard.mechanics?.includes('DEATHRATTLE') && refCard.type?.toUpperCase() === 'MINION') {
-		matchingCardIds.push(
-			CardIds.FerociousFelbat_EDR_892
-		);
-	}
-
 	// ATTACK_MORE_0 + MINION (1 cards)
 	if (refCard.attack > 0 && refCard.type?.toUpperCase() === 'MINION') {
 		matchingCardIds.push(
@@ -221,7 +214,7 @@ export const reverseMinionSelector = (
 		);
 	}
 
-	// HAS_MECHANIC_DEATHRATTLE + MINION (38 cards)
+	// HAS_MECHANIC_DEATHRATTLE + MINION (39 cards)
 	if (refCard.mechanics?.includes('DEATHRATTLE') && refCard.type?.toUpperCase() === 'MINION') {
 		matchingCardIds.push(
 			CardIds.AmuletOfUndying,
@@ -251,6 +244,7 @@ export const reverseMinionSelector = (
 			CardIds.RavenousFelhunter_EDR_891,
 			CardIds.ScourgeIllusionist,
 			CardIds.Shattershambler,
+			CardIds.SpiritsingerUmbra,
 			CardIds.TamsinsPhylactery,
 			CardIds.TerrorscaleStalker,
 			CardIds.TerrorscaleStalker_CORE_UNG_800,
@@ -411,12 +405,13 @@ export const reverseMinionSelector = (
 		);
 	}
 
-	// BEAST (73 cards)
+	// BEAST (77 cards)
 	if (refCard.races?.map(r => r.toUpperCase()).includes('BEAST')) {
 		matchingCardIds.push(
 			CardIds.AddledGrizzly,
 			CardIds.AddledGrizzly_WON_009,
 			CardIds.AzsharanSaber_SunkenSaberToken,
+			CardIds.BeastmasterLeoroxx,
 			CardIds.BigDreams,
 			CardIds.BunnyStomper_WW_435,
 			CardIds.ButchTavernBrawl,
@@ -466,6 +461,7 @@ export const reverseMinionSelector = (
 			CardIds.ScavengersIngenuity,
 			CardIds.ScrapShot,
 			CardIds.SelectiveBreederCore,
+			CardIds.SelectiveBreeder_LEG_CS3_015,
 			CardIds.Serpentbloom,
 			CardIds.Shadehound,
 			CardIds.Shadehound_CORE_MAW_009,
@@ -482,6 +478,8 @@ export const reverseMinionSelector = (
 			CardIds.TheFoodChain_TLC_830,
 			CardIds.ThornmantleMusician,
 			CardIds.Thunderbringer_WW_440,
+			CardIds.TundraRhinoLegacy,
+			CardIds.TundraRhinoVanilla,
 			CardIds.VirmenSensei_CFM_816,
 			CardIds.VirmenSensei_WON_300,
 			CardIds.WarsongWrangler,
@@ -883,7 +881,7 @@ export const reverseMinionSelector = (
 		);
 	}
 
-	// MINION (257 cards)
+	// MINION (264 cards)
 	if (refCard.type?.toUpperCase() === 'MINION') {
 		matchingCardIds.push(
 			CardIds.AegwynnTheGuardianCore,
@@ -972,6 +970,7 @@ export const reverseMinionSelector = (
 			CardIds.Eureka,
 			CardIds.EvolutionChamber_SC_021,
 			CardIds.FeldoreiWarband,
+			CardIds.FerociousFelbat_EDR_892,
 			CardIds.Fetch_TOY_352,
 			CardIds.Firegill_DINO_404,
 			CardIds.FlashSale_TOY_716,
@@ -1054,6 +1053,8 @@ export const reverseMinionSelector = (
 			CardIds.MuscleOTron_YOG_525,
 			CardIds.MutatingInjection_NAX11_04,
 			CardIds.NightmareLordXavius_EDR_856,
+			CardIds.NightshadeBud,
+			CardIds.NightshadeBud_CORE_REV_311,
 			CardIds.NiriOfTheCrater_TLC_836,
 			CardIds.NzothGodOfTheDeep,
 			CardIds.Obsidiansmith,
@@ -1071,6 +1072,7 @@ export const reverseMinionSelector = (
 			CardIds.PendantOfEarth_DEEP_026,
 			CardIds.PileOnHeroic,
 			CardIds.PortalVanguard_TIME_003,
+			CardIds.PotionOfIllusion,
 			CardIds.PowerChordSynchronize,
 			CardIds.PowerSlider,
 			CardIds.PowerWordBarrier_TIME_447,
@@ -1080,6 +1082,7 @@ export const reverseMinionSelector = (
 			CardIds.Psychopomp,
 			CardIds.PuppetmasterDorian_MIS_026,
 			CardIds.RaiseDead_SCH_514,
+			CardIds.RangerGeneralSylvanas_RangerInitiateVereesaToken_TIME_609t2,
 			CardIds.Reforestation_EDR_843,
 			CardIds.Reforestation_Fertilize_EDR_843b,
 			CardIds.Reforestation_ReforestationToken_EDR_843t1,
@@ -1116,6 +1119,7 @@ export const reverseMinionSelector = (
 			CardIds.StrengthInNumbers,
 			CardIds.SuperchargeTavernBrawl,
 			CardIds.SurvivalOfTheFittest,
+			CardIds.Swindle,
 			CardIds.Switcheroo,
 			CardIds.TenGallonHat_WW_811,
 			CardIds.TheBoomReaver,
@@ -1135,6 +1139,7 @@ export const reverseMinionSelector = (
 			CardIds.VitalitySurge,
 			CardIds.WakenerOfSouls_GDB_468,
 			CardIds.WebOfDeception_EDR_523,
+			CardIds.WishUponAStar_TOY_877,
 			CardIds.XyrellaTheDevout,
 			CardIds.Yesterloc_TIME_428,
 			CardIds.YoggInTheBox_TOY_372,
