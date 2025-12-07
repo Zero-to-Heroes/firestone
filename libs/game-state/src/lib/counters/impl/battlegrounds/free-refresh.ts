@@ -15,12 +15,13 @@ export class FreeRefreshCounterDefinitionV2 extends CounterDefinitionV2<number> 
 		pref: 'playerBgsFreeRefreshCounter' as const,
 		display: (state: GameState, bgState: BattlegroundsState | null | undefined): boolean => true,
 		value: (state: GameState, bgState: BattlegroundsState | null | undefined) => {
-			return (
-				state.playerDeck.enchantments
-					?.filter((e) => e.cardId === CardIds.RefreshingAnomaly_RefreshCosts0Enchantment)
-					.map((e) => e.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_2] ?? 0)
-					.reduce((a, b) => a + b, 0) || null
-			);
+			return state.fullGameState?.Player.PlayerEntity.enchantments
+				.find(
+					(e) =>
+						e.cardId ===
+						CardIds.Bacon_free_refresh_player_enchDntEnchantment_Bacon_Free_Refresh_Player_Ench,
+				)
+				?.tags?.find((t) => t.Name === GameTag.BACON_FREE_REFRESH_COUNT)?.Value;
 		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>
