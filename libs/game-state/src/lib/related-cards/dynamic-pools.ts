@@ -540,6 +540,8 @@ const getDynamicFilters = (
 		case CardIds.ShimmeringTempest:
 		case CardIds.AstromancerSolarian_SolarianPrimeToken:
 			return (c) => hasCorrectType(c, CardType.SPELL) && c.classes?.includes(CardClass[CardClass.MAGE]);
+		case CardIds.SethekkVeilweaver:
+			return (c) => hasCorrectType(c, CardType.SPELL) && c.classes?.includes(CardClass[CardClass.PRIEST]);
 		case CardIds.LightforgedCrusader:
 			return (c) => c.classes?.includes(CardClass[CardClass.PALADIN]);
 		case CardIds.AnnounceDarkness_VAC_941:
