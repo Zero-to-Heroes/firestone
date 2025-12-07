@@ -518,6 +518,9 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.Bolster:
 			return and(side(inputSide), or(inDeck, inHand), minion, taunt);
+		case CardIds.BolvarFireblood_ICC_858:
+		case CardIds.BolvarFireblood_CORE_ICC_858:
+			return and(side(inputSide), or(inDeck, inHand), minion, divineShield);
 		case CardIds.Bonecaller:
 			return highlightConditions(
 				and(side(inputSide), or(inDeck, inHand), undead),
