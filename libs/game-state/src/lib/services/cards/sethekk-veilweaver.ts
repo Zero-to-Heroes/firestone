@@ -1,6 +1,6 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import { AllCardsService, CardClass, CardIds, CardType } from '@firestone-hs/reference-data';
-import { GeneratingCard, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
+import { CardClass, CardIds } from '@firestone-hs/reference-data';
+import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
 import { hasCorrectClass } from '../../related-cards/dynamic-pools';
 
@@ -16,10 +16,10 @@ export const SethekkVeilweaver: GeneratingCard & StaticGeneratingCard = {
 			input.inputOptions,
 		);
 	},
-	guessInfo: () => {
+	guessInfo: (input: GuessInfoInput) => {
 		return {
 			cardType: null as any, // Can be any type
-			classes: [CardClass.PRIEST],
+			cardClasses: [CardClass.PRIEST],
 		};
 	},
 };
