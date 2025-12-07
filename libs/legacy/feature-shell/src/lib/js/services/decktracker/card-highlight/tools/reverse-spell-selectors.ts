@@ -358,7 +358,7 @@ export const reverseSpellSelector = (
 		);
 	}
 
-	// SPELL (206 cards)
+	// SPELL (210 cards)
 	if (refCard.type?.toUpperCase() === 'SPELL') {
 		matchingCardIds.push(
 			CardIds.AdvancedTargetingMonocle,
@@ -423,6 +423,8 @@ export const reverseSpellSelector = (
 			CardIds.FarseerWo_TIME_013,
 			CardIds.FelscaleEvoker,
 			CardIds.Fetch_TOY_352,
+			CardIds.Flamewaker,
+			CardIds.Flamewaker_TUTR_BRM_002,
 			CardIds.Flowrider,
 			CardIds.GlacialAdvance_RLK_512,
 			CardIds.GlowflySwarm,
@@ -442,6 +444,7 @@ export const reverseSpellSelector = (
 			CardIds.IdolsOfEluneTavernBrawl,
 			CardIds.Illuminate,
 			CardIds.IncantersFlow,
+			CardIds.InkmasterSolia,
 			CardIds.JotunTheEternal,
 			CardIds.JungleJammer,
 			CardIds.KhadgarsScryingOrb,
@@ -517,6 +520,7 @@ export const reverseSpellSelector = (
 			CardIds.RuleModifier_SpreadOfCorruptionToken_TTN_002t45,
 			CardIds.SaroniteShambler_YOG_521,
 			CardIds.ScrollSavvy,
+			CardIds.SethekkVeilweaver,
 			CardIds.ShadowOfDemise,
 			CardIds.ShadowVisions,
 			CardIds.ShatariCloakfield_GDB_103,

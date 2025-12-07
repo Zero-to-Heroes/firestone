@@ -1,10 +1,11 @@
 {
-  "totalOriginal": 1651,
-  "totalProcessed": 1541,
-  "totalMissing": 107,
+  "totalOriginal": 1666,
+  "totalProcessed": 1551,
+  "totalMissing": 111,
   "missingCards": [
     "AbyssalDepths",
     "AstralVigilant_GDB_461",
+    "MedivhTheHallowed_AtieshTheGreatstaffToken_TIME_890t",
     "BaritoneImp",
     "BonecrusherTavernBrawlToken",
     "CallToAdventure",
@@ -56,6 +57,7 @@
     "FiremancerFlurgl",
     "TheGalacticProjectionOrb_TOY_378",
     "GhoulishAlchemist",
+    "GrandArchivist",
     "GrandMagisterRommath",
     "Grillmaster_VAC_917",
     "GrotesqueRuneblade_EDR_812",
@@ -64,6 +66,7 @@
     "HolyEggbearer_DINO_411",
     "HydrationStation_VAC_948",
     "JoymancerJepetto_TOY_960",
+    "MedivhTheHallowed_KarazhanTheSanctumToken_TIME_890t2",
     "KelthuzadTheInevitable_REV_514",
     "KelthuzadTheInevitable_REV_786",
     "KingpinPud_WW_421",
@@ -71,6 +74,7 @@
     "LadyLiadrin",
     "LadyLiadrin_CORE_BT_334",
     "MassResurrection_DAL_724",
+    "MedivhTheHallowed_TIME_890",
     "Mixtape",
     "NightmareFuel_EDR_528",
     "OnyxBishop",
@@ -111,5 +115,5 @@
     "VelenLeaderOfTheExiled_GDB_131",
     "WildSpirits"
   ],
-  "analysisDate": "2025-12-07T07:36:47.264Z"
+  "analysisDate": "2025-12-07T18:14:27.833Z"
 }

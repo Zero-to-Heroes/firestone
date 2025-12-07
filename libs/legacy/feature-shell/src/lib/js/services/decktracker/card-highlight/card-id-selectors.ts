@@ -365,7 +365,7 @@ export const cardIdSelector = (
 		case CardIds.AuchenaiPhantasm:
 			return and(side(inputSide), or(inDeck, inHand), restoreHealth);
 		case CardIds.MedivhTheHallowed_AtieshTheGreatstaffToken_TIME_890t:
-			return and(side(inputSide), or(inDeck, inHand), spell, or(restoreHealth, dealsDamage));
+			return and(side(inputSide), or(inDeck, inHand, inPlay), cardIs(CardIds.MedivhTheHallowed_TIME_890));
 		case CardIds.AuchenaiDeathSpeaker_GDB_469:
 			return highlightConditions(
 				and(side(inputSide), or(inDeck, inHand), minion, reborn),
@@ -1964,6 +1964,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), demon, inGraveyard, minion);
 		case CardIds.KaraTheDarkStar_GDB_127:
 			return and(side(inputSide), or(inHand, inDeck), spell, shadow);
+		case CardIds.MedivhTheHallowed_KarazhanTheSanctumToken_TIME_890t2:
+			return and(side(inputSide), or(inDeck, inHand, inPlay), cardIs(CardIds.MedivhTheHallowed_AtieshTheGreatstaffToken_TIME_890t));
 		case CardIds.KathrenaWinterwisp:
 			return and(side(inputSide), inDeck, beast);
 		case CardIds.Kazakusan_ONY_005:
@@ -2267,6 +2269,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), mech);
 		case CardIds.MeddlesomeServant_YOG_518:
 			return and(side(inputSide), or(inDeck, inHand), spell);
+		case CardIds.MedivhTheHallowed_TIME_890:
+			return and(side(inputSide), or(inDeck, inHand, inPlay), cardIs(CardIds.MedivhTheHallowed_KarazhanTheSanctumToken_TIME_890t2));
 		case CardIds.MeekMasteryTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), minion, neutral);
 		case CardIds.Melomania:
