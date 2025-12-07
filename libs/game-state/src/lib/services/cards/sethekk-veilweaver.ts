@@ -16,8 +16,9 @@ export const SethekkVeilweaver: GeneratingCard & StaticGeneratingCard = {
 		);
 	},
 	guessInfo: (input: GuessInfoInput) => {
+		// Sethekk Veilweaver can generate any type of Priest card
 		return {
-			cardType: null as any, // Can be any type
+			cardType: undefined, // Unknown card type - can be any
 			cardClasses: [CardClass.PRIEST],
 		};
 	},

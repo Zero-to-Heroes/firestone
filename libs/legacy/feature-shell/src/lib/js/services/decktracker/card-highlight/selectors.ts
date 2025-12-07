@@ -428,18 +428,20 @@ export const canTargetFriendlyMinion = (input: SelectorInput): boolean => {
 		/buff\s+a\s+minion/i,
 		/restore.*to\s+a\s+minion/i,
 		/heal\s+a\s+minion/i,
-		// Phrases that can target any minion (including friendly)
-		/give\s+a\s+minion(?!\s+to\s+(your|an)\s+opponent)/i,
-		/choose\s+a\s+minion(?!\s+to)/i,
+		// Phrases that typically target any minion (including friendly)
+		// These are checked after enemy-only patterns are excluded
+		/give\s+a\s+minion/i,
+		/choose\s+a\s+minion/i,
 	];
 	
 	// Exclude patterns that indicate only enemy targeting
 	const enemyOnlyPatterns = [
 		/enemy\s+minion/i,
-		/deal.*damage.*enemy/i,
+		/deal.*damage.*to.*enemy/i,
 		/destroy\s+an?\s+enemy/i,
 		/silence\s+an?\s+enemy/i,
 		/transform\s+an?\s+enemy/i,
+		/minion.*to.*opponent/i,
 	];
 	
 	// If it explicitly says enemy only, it can't target friendly minions
