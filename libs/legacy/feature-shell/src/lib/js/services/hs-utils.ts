@@ -186,6 +186,8 @@ export const startOfGameGlobalEffectCards = [
 	CardIds.DarkbishopBenedictusCore,
 	CardIds.ChogallTwilightChieftain_YOG_530,
 	CardIds.HamuulRunetotem_EDR_845,
+	CardIds.PrinceRenathal,
+	CardIds.PrinceRenathal_CORE_REV_018,
 ];
 
 export const globalEffectCardsPlayed = [
