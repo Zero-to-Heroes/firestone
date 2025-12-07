@@ -1,9 +1,8 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import { CardIds, CardType, Race } from '@firestone-hs/reference-data';
-import { hasCorrectTribe } from '@firestone-hs/reference-data';
+import { CardIds, CardType, hasCorrectTribe, Race } from '@firestone-hs/reference-data';
+import { canBeDiscoveredByClass, hasCorrectType } from '../../related-cards/dynamic-pools';
 import { StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
-import { hasCorrectType, canBeDiscoveredByClass } from '../../related-cards/dynamic-pools';
 
 export const EarthenMight: StaticGeneratingCard = {
 	cardIds: [CardIds.EarthenMight],
