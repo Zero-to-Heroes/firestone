@@ -8,7 +8,7 @@ import {
 	SpellSchool,
 } from '@firestone-hs/reference-data';
 import { NonFunctionProperties, uuidShort } from '@firestone/shared/framework/common';
-import { CardsFacadeService } from '../../../../shared/framework/core/src';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { CardMetaInfo } from './card-meta-info';
 
 export class DeckCard {
