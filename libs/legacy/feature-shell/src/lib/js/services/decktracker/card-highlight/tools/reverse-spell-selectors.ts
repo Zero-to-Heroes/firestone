@@ -358,7 +358,7 @@ export const reverseSpellSelector = (
 		);
 	}
 
-	// SPELL (210 cards)
+	// SPELL (211 cards)
 	if (refCard.type?.toUpperCase() === 'SPELL') {
 		matchingCardIds.push(
 			CardIds.AdvancedTargetingMonocle,
@@ -479,6 +479,7 @@ export const reverseSpellSelector = (
 			CardIds.Marshspawn_BT_115,
 			CardIds.Marshspawn_CORE_BT_115,
 			CardIds.MeddlesomeServant_YOG_518,
+			CardIds.MedivhTheHallowed_AtieshTheGreatstaffToken_TIME_890t,
 			CardIds.MistahVistah_VAC_519,
 			CardIds.MurkwaterScribe,
 			CardIds.NagaGiant,
