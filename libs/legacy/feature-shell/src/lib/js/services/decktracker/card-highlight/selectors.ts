@@ -415,6 +415,9 @@ export const hasSpellSchool = (input: SelectorInput): boolean => {
 export const canTargetFriendlyMinion = (input: SelectorInput): boolean => {
 	return true;
 };
+export const canTargetMinion = (input: SelectorInput): boolean => {
+	return true;
+};
 export const canTargetFriendlyCharacter = (input: SelectorInput): boolean => {
 	return true;
 };
