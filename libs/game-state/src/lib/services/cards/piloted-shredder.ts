@@ -1,6 +1,6 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { CardIds, CardType } from '@firestone-hs/reference-data';
-import { hasCost } from '../../related-cards/dynamic-pools';
+import { hasCost, hasCorrectType } from '../../related-cards/dynamic-pools';
 import { StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
 
@@ -10,7 +10,7 @@ export const PilotedShredder: StaticGeneratingCard = {
 		return filterCards(
 			PilotedShredder.cardIds[0],
 			input.allCards,
-			(c) => c.type?.toUpperCase() === CardType[CardType.MINION] && hasCost(c, '==', 2),
+			(c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 2),
 			input.inputOptions,
 		);
 	},
