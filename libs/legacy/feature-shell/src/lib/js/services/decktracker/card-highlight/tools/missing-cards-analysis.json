@@ -1,11 +1,10 @@
 {
   "totalOriginal": 1666,
-  "totalProcessed": 1551,
-  "totalMissing": 111,
+  "totalProcessed": 1552,
+  "totalMissing": 110,
   "missingCards": [
     "AbyssalDepths",
     "AstralVigilant_GDB_461",
-    "MedivhTheHallowed_AtieshTheGreatstaffToken_TIME_890t",
     "BaritoneImp",
     "BonecrusherTavernBrawlToken",
     "CallToAdventure",
@@ -115,5 +114,5 @@
     "VelenLeaderOfTheExiled_GDB_131",
     "WildSpirits"
   ],
-  "analysisDate": "2025-12-07T18:14:27.833Z"
+  "analysisDate": "2025-12-07T21:42:00.914Z"
 }

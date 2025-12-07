@@ -365,7 +365,10 @@ export const cardIdSelector = (
 		case CardIds.AuchenaiPhantasm:
 			return and(side(inputSide), or(inDeck, inHand), restoreHealth);
 		case CardIds.MedivhTheHallowed_AtieshTheGreatstaffToken_TIME_890t:
-			return and(side(inputSide), or(inDeck, inHand, inPlay), cardIs(CardIds.MedivhTheHallowed_TIME_890));
+			return highlightConditions(
+				and(side(inputSide), or(inDeck, inHand, inPlay), cardIs(CardIds.MedivhTheHallowed_TIME_890)),
+				and(side(inputSide), or(inDeck, inHand), spell, or(restoreHealth, dealsDamage)),
+			);
 		case CardIds.AuchenaiDeathSpeaker_GDB_469:
 			return highlightConditions(
 				and(side(inputSide), or(inDeck, inHand), minion, reborn),
