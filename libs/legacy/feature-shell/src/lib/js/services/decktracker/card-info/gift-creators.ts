@@ -1097,6 +1097,7 @@ const internalGiftCreators = [
 	CardIds.SandArtElemental_TOY_513,
 	CardIds.TalanjiOfTheGraves_TIME_619,
 	CardIds.EverburningPhoenix_EverburningEnchantment_FIR_919e,
+	CardIds.PatchworkPals_TOY_353,
 ];
 for (const cardId of Object.keys(cardsInfoCache)) {
 	const card = cardsInfoCache[cardId];
