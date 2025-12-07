@@ -46,6 +46,7 @@ export { Reforestation } from './reforestation';
 export { RingmasterWhatley } from './ringmaster-whatley';
 export { ScaleReplica } from './scale-replica';
 export { SemiStablePortal } from './semi-stable-portal';
+export { SethekkVeilweaver } from './sethekk-veilweaver';
 export { ShellGame } from './shell-game';
 export { ShokkJungleTyrant } from './shokk-jungle-tyrant';
 export { Solitude } from './solitude';

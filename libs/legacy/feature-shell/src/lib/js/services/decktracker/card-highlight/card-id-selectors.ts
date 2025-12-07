@@ -2931,6 +2931,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), beast);
 		case CardIds.SerpentWig_TSC_215:
 			return and(side(inputSide), or(inHand, inDeck), naga);
+		case CardIds.SethekkVeilweaver:
+			return and(side(inputSide), or(inDeck, inHand), spell, canTargetFriendlyMinion);
 		case CardIds.ServiceBell:
 			return and(side(inputSide), inDeck, not(neutral));
 		case CardIds.Shadehound:

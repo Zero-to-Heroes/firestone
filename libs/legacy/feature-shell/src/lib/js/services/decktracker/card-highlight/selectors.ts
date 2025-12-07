@@ -411,12 +411,88 @@ export const hasSpellSchool = (input: SelectorInput): boolean => {
 	return !!input.card?.spellSchool;
 };
 
-// TODO: Implement this
+// Check if a spell can target friendly minions based on card text
 export const canTargetFriendlyMinion = (input: SelectorInput): boolean => {
-	return true;
+	if (!input.card || input.card.type?.toLowerCase() !== 'spell') {
+		return false;
+	}
+	
+	const text = (input.card.text || '').toLowerCase();
+	
+	// Check for common patterns indicating targeting friendly minions
+	const targetingPatterns = [
+		/give\s+a\s+(friendly\s+)?minion/i,
+		/choose\s+a\s+(friendly\s+)?minion/i,
+		/on\s+a\s+(friendly\s+)?minion/i,
+		/target\s+(friendly\s+)?minion/i,
+		/buff\s+a\s+minion/i,
+		/restore.*to\s+a\s+minion/i,
+		/heal\s+a\s+minion/i,
+		/deal.*damage\s+to\s+a\s+minion/i, // Can target friendly
+	];
+	
+	// Exclude patterns that indicate only enemy targeting
+	const enemyOnlyPatterns = [
+		/enemy\s+minion/i,
+		/deal.*damage.*enemy/i,
+		/destroy\s+an?\s+enemy/i,
+		/silence\s+an?\s+enemy/i,
+		/transform\s+an?\s+enemy/i,
+	];
+	
+	// If it explicitly says enemy only, it can't target friendly minions
+	for (const pattern of enemyOnlyPatterns) {
+		if (pattern.test(text)) {
+			return false;
+		}
+	}
+	
+	// Check if it matches any targeting pattern
+	for (const pattern of targetingPatterns) {
+		if (pattern.test(text)) {
+			return true;
+		}
+	}
+	
+	// If text contains "friendly" it's likely targeting friendly minions
+	if (text.includes('friendly') && text.includes('minion')) {
+		return true;
+	}
+	
+	return false;
 };
+
 export const canTargetFriendlyCharacter = (input: SelectorInput): boolean => {
-	return true;
+	if (!input.card || input.card.type?.toLowerCase() !== 'spell') {
+		return false;
+	}
+	
+	const text = (input.card.text || '').toLowerCase();
+	
+	// Check for patterns indicating targeting any friendly character (minion or hero)
+	const targetingPatterns = [
+		/give\s+a\s+(friendly\s+)?character/i,
+		/choose\s+a\s+(friendly\s+)?character/i,
+		/on\s+a\s+(friendly\s+)?character/i,
+		/target\s+(friendly\s+)?character/i,
+		/restore.*to\s+a\s+character/i,
+		/heal\s+a\s+character/i,
+		/friendly\s+character/i,
+	];
+	
+	// Also return true if it can target friendly minions
+	if (canTargetFriendlyMinion(input)) {
+		return true;
+	}
+	
+	// Check if it matches any character targeting pattern
+	for (const pattern of targetingPatterns) {
+		if (pattern.test(text)) {
+			return true;
+		}
+	}
+	
+	return false;
 };
 
 export const spellSchoolPlayedThisMatch = (input: SelectorInput): boolean =>

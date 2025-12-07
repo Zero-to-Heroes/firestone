@@ -36,6 +36,7 @@
     "LadyAshvane_Story_11_LadyAshvane",
     "LadyAshvane_TSC_943",
     "ManAtArms",
+    "MicDrop",
     "PillageTheFallenTavernBrawl",
     "Plunder",
     "Pufferfist",
@@ -81,6 +82,7 @@
     "LadyAshvane_Story_11_LadyAshvane",
     "LadyAshvane_TSC_943",
     "ManAtArms",
+    "MicDrop",
     "PillageTheFallenTavernBrawl",
     "Plunder",
     "Pufferfist",
@@ -162,6 +164,7 @@
     "AddledGrizzly",
     "AddledGrizzly_WON_009",
     "AzsharanSaber_SunkenSaberToken",
+    "BeastmasterLeoroxx",
     "BigDreams",
     "BunnyStomper_WW_435",
     "ButchTavernBrawl",
@@ -211,6 +214,7 @@
     "ScavengersIngenuity",
     "ScrapShot",
     "SelectiveBreederCore",
+    "SelectiveBreeder_LEG_CS3_015",
     "Serpentbloom",
     "Shadehound",
     "Shadehound_CORE_MAW_009",
@@ -227,6 +231,8 @@
     "TheFoodChain_TLC_830",
     "ThornmantleMusician",
     "Thunderbringer_WW_440",
+    "TundraRhinoLegacy",
+    "TundraRhinoVanilla",
     "VirmenSensei_CFM_816",
     "VirmenSensei_WON_300",
     "WarsongWrangler",
@@ -394,6 +400,8 @@
     "MistahVistah_VAC_519",
     "MurkwaterScribe",
     "NagaGiant",
+    "NightshadeBud",
+    "NightshadeBud_CORE_REV_311",
     "NiriOfTheCrater_TLC_836",
     "NorthernNavigation",
     "NostalgicInitiate_NostalgicInitiateToken_TOY_340t1",
@@ -460,6 +468,7 @@
     "SunstridersCrownTavernBrawl",
     "Surfalopod_VAC_443",
     "SwiftscaleTrickster",
+    "Swindle",
     "TangledWrath",
     "TheFistOfRaDen",
     "TheStoneOfJordanTavernBrawlToken",
@@ -472,6 +481,8 @@
     "TrolleyProblem_WW_436",
     "TwinbowTerrorcoil",
     "Tyrande_EDR_464",
+    "UmbralOwl",
+    "UmbralOwl_CORE_DMF_060",
     "UnderTheSea_VAC_431",
     "UngoroBrochure_DalaranBrochureToken_WORK_050t",
     "Ursol_EDR_259",
@@ -489,6 +500,7 @@
     "WrathspineEnchanter",
     "YoggSaronHopesEnd_OG_134",
     "YoggSaronMasterOfFate",
+    "YsielWindsinger",
     "Zuljin"
   ],
   "MINION": [
@@ -578,6 +590,7 @@
     "Eureka",
     "EvolutionChamber_SC_021",
     "FeldoreiWarband",
+    "FerociousFelbat_EDR_892",
     "Fetch_TOY_352",
     "Firegill_DINO_404",
     "FlashSale_TOY_716",
@@ -660,6 +673,8 @@
     "MuscleOTron_YOG_525",
     "MutatingInjection_NAX11_04",
     "NightmareLordXavius_EDR_856",
+    "NightshadeBud",
+    "NightshadeBud_CORE_REV_311",
     "NiriOfTheCrater_TLC_836",
     "NzothGodOfTheDeep",
     "Obsidiansmith",
@@ -677,6 +692,7 @@
     "PendantOfEarth_DEEP_026",
     "PileOnHeroic",
     "PortalVanguard_TIME_003",
+    "PotionOfIllusion",
     "PowerChordSynchronize",
     "PowerSlider",
     "PowerWordBarrier_TIME_447",
@@ -686,6 +702,7 @@
     "Psychopomp",
     "PuppetmasterDorian_MIS_026",
     "RaiseDead_SCH_514",
+    "RangerGeneralSylvanas_RangerInitiateVereesaToken_TIME_609t2",
     "Reforestation_EDR_843",
     "Reforestation_Fertilize_EDR_843b",
     "Reforestation_ReforestationToken_EDR_843t1",
@@ -722,6 +739,7 @@
     "StrengthInNumbers",
     "SuperchargeTavernBrawl",
     "SurvivalOfTheFittest",
+    "Swindle",
     "Switcheroo",
     "TenGallonHat_WW_811",
     "TheBoomReaver",
@@ -741,6 +759,7 @@
     "VitalitySurge",
     "WakenerOfSouls_GDB_468",
     "WebOfDeception_EDR_523",
+    "WishUponAStar_TOY_877",
     "XyrellaTheDevout",
     "Yesterloc_TIME_428",
     "YoggInTheBox_TOY_372",
@@ -764,7 +783,9 @@
     "AncientOfGrowth",
     "AncientOfGrowth_AncientGrowth",
     "ConservatorNymph",
-    "Cultivation"
+    "Cultivation",
+    "ForestWardenOmu_RapidGrowth_THD_007p",
+    "OvergrownBeanstalk_MIS_301"
   ],
   "HAS_MECHANIC_INFUSE": [
     "AfterlifeAttendant",
@@ -998,6 +1019,7 @@
     "RavenousFelhunter_EDR_891",
     "ScourgeIllusionist",
     "Shattershambler",
+    "SpiritsingerUmbra",
     "TamsinsPhylactery",
     "TerrorscaleStalker",
     "TerrorscaleStalker_CORE_UNG_800",
@@ -1149,7 +1171,8 @@
   "FREEZE": [
     "ArcticArmorTavernBrawl",
     "RingOfBlackIceTavernBrawl",
-    "SlipperySlope_VAC_513"
+    "SlipperySlope_VAC_513",
+    "VardenDawngrasp_BAR_748"
   ],
   "MINION + PROTOSS": [
     "Artanis_SC_754",
@@ -1307,6 +1330,7 @@
     "CountessAshmore",
     "DaUndatakah",
     "EndbringerUmbra_TLC_106",
+    "FerociousFelbat_EDR_892",
     "GuidingFigure_GDB_106",
     "MaskedReveler",
     "NecriumBlade",
@@ -1375,7 +1399,7 @@
   "LEGENDARY": [
     "ArchVillainRafaam_BeholdMyStuff_THD_032p",
     "BountyBoard_WW_003",
-    "TheKingslayers"
+    "GaronaHalforcen_TheKingslayersToken_TIME_875t1"
   ],
   "DEALS_DAMAGE + FROST": [
     "BitterColdTavernBrawl"
@@ -1468,6 +1492,12 @@
     "Foamrender_MIS_101",
     "ReanimateTheTerror_TLC_433",
     "StitchedGiantCore_RLK_744"
+  ],
+  "HAS_MECHANIC_PALADIN_AURA": [
+    "CardboardGolem_TOY_809",
+    "GelbinOfTomorrow_TIME_009",
+    "ManifestedTimeways_TIME_019",
+    "TrinketArtist_TOY_882"
   ],
   "COST_MORE_4 + MINION": [
     "CaricatureArtist_TOY_391"
@@ -1731,8 +1761,13 @@
     "Scorchreaver_FIR_952",
     "WitherTheWeakTavernBrawl"
   ],
-  "COST_MORE_4 + HAS_MECHANIC_DEATHRATTLE + MINION": [
-    "FerociousFelbat_EDR_892"
+  "COST_MORE_4": [
+    "FerociousFelbat_EDR_892",
+    "InventorBoom_TOY_607",
+    "PrecursoryStrike_TIME_750",
+    "Prescience",
+    "StranglethornHeart",
+    "TimberTambourine"
   ],
   "HAS_MECHANIC_COMBO": [
     "FieldContact",
@@ -1771,7 +1806,7 @@
     "NaturalForceTavernBrawl",
     "Stormrook_TIME_217"
   ],
-  "DORMANT + MINION": [
+  "DORMANT": [
     "PerennialSerpent_TIME_022"
   ],
   "FROST": [
@@ -1788,11 +1823,6 @@
   "COST_EQUAL_1 + SPELL": [
     "Gazlowe",
     "TrinketTracker"
-  ],
-  "HAS_MECHANIC_PALADIN_AURA": [
-    "GelbinOfTomorrow_TIME_009",
-    "ManifestedTimeways_TIME_019",
-    "TrinketArtist_TOY_882"
   ],
   "FROST + SPELL": [
     "GlacialDownpourTavernBrawl",
@@ -1854,13 +1884,6 @@
     "Sif",
     "WisdomOfNorgannon"
   ],
-  "COST_MORE_4": [
-    "InventorBoom_TOY_607",
-    "PrecursoryStrike_TIME_750",
-    "Prescience",
-    "StranglethornHeart",
-    "TimberTambourine"
-  ],
   "CHOOSE_ONE + SPELL": [
     "JerryRigCarpenter"
   ],
@@ -1913,7 +1936,8 @@
     "MulchMadnessTavernBrawl"
   ],
   "CAN_TARGET_FRIENDLY_MINION + SPELL": [
-    "Myrmidon"
+    "Myrmidon",
+    "SethekkVeilweaver"
   ],
   "COST_EQUAL_1": [
     "NiriOfTheCrater_TLC_836",
