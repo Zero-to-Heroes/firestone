@@ -1663,6 +1663,8 @@ export const cardIdSelector = (
 				and(side(inputSide), or(inHand, inDeck), minion, taunt),
 				and(side(inputSide), inGraveyard, minion, taunt),
 			);
+		case CardIds.HammTheHungry_VAC_340:
+			return and(opposingSide(inputSide), inDeck, minion);
 		case CardIds.HamuulRunetotem_EDR_845:
 			return highlightConditions(
 				and(side(inputSide), inDeck, spell, not(nature)),
