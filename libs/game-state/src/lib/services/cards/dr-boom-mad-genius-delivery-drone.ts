@@ -5,14 +5,13 @@ import { hasCorrectTribe } from '../../related-cards/dynamic-pools';
 import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
 
-// TODO: Verify card mechanics - BOT_238p4 mechanics need to be confirmed
-// Assuming this discovers/generates Mechs based on Boomsday theme
-export const Bot238p4: GeneratingCard & StaticGeneratingCard = {
-	cardIds: [CardIds.Bot238p4],
+// Dr. Boom Mad Genius hero power - Delivery Drone: Discovers a Mech
+export const DrBoomMadGeniusDeliveryDrone: GeneratingCard & StaticGeneratingCard = {
+	cardIds: [CardIds.DrBoomMadGenius_DeliveryDrone],
 	publicCreator: true,
 	dynamicPool: (input: StaticGeneratingCardInput) => {
 		return filterCards(
-			Bot238p4.cardIds[0],
+			DrBoomMadGeniusDeliveryDrone.cardIds[0],
 			input.allCards,
 			(c) => c.type?.toUpperCase() === CardType[CardType.MINION] && hasCorrectTribe(c, Race.MECH),
 			input.inputOptions,
@@ -23,7 +22,7 @@ export const Bot238p4: GeneratingCard & StaticGeneratingCard = {
 			cardType: CardType.MINION,
 			races: [Race.MECH],
 			possibleCards: filterCards(
-				Bot238p4.cardIds[0],
+				DrBoomMadGeniusDeliveryDrone.cardIds[0],
 				input.allCards,
 				(c) => c.type?.toUpperCase() === CardType[CardType.MINION] && hasCorrectTribe(c, Race.MECH),
 				input.options,
