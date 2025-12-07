@@ -2953,6 +2953,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), naga);
 		case CardIds.ServiceBell:
 			return and(side(inputSide), inDeck, not(neutral));
+		case CardIds.SethekkVeilweaver:
+			return and(side(inputSide), or(inDeck, inHand), spell, canTargetFriendlyMinion);
 		case CardIds.Shadehound:
 		case CardIds.Shadehound_ShadehoundToken:
 		case CardIds.Shadehound_CORE_MAW_009:
