@@ -1,9 +1,8 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import { CardIds, CardType, GameTag } from '@firestone-hs/reference-data';
-import { hasMechanic } from '@firestone-hs/reference-data';
+import { CardIds, CardType, GameTag, hasMechanic } from '@firestone-hs/reference-data';
+import { canBeDiscoveredByClass, hasCorrectType } from '../../related-cards/dynamic-pools';
 import { StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
-import { hasCorrectType, canBeDiscoveredByClass } from '../../related-cards/dynamic-pools';
 
 export const ShallowGravedigger: StaticGeneratingCard = {
 	cardIds: [CardIds.ShallowGravedigger_ICC_702, CardIds.ShallowGravedigger_CORE_ICC_702],
