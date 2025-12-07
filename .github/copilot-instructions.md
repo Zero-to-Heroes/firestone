@@ -1,5 +1,9 @@
 ## When Tickets are assigned to you
 
+General guidelines:
+
+- When cards are mentioned, always check the reference at https://github.com/Zero-to-Heroes/hs-reference-data/blob/master/src/cards_short.json and recap their text in the PR
+
 ### Card highlight requests
 
 - First check the requested cards at https://github.com/Zero-to-Heroes/hs-reference-data/blob/master/src/cards_short.json and decides whether the request makes sense based on what the card does
