@@ -1,6 +1,6 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { CardIds, CardType, hasCorrectTribe, Race } from '@firestone-hs/reference-data';
-import { canBeDiscoveredByClass, hasCorrectType } from '../../related-cards/dynamic-pools';
+import { hasCorrectType } from '../../related-cards/dynamic-pools';
 import { StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
 
@@ -10,10 +10,7 @@ export const EarthenMight: StaticGeneratingCard = {
 		return filterCards(
 			EarthenMight.cardIds[0],
 			input.allCards,
-			(c) =>
-				hasCorrectType(c, CardType.MINION) &&
-				hasCorrectTribe(c, Race.ELEMENTAL) &&
-				canBeDiscoveredByClass(c, input.inputOptions.currentClass),
+			(c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.ELEMENTAL),
 			input.inputOptions,
 		);
 	},
