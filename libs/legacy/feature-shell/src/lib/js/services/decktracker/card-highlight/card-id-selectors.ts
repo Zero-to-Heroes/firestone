@@ -2606,6 +2606,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.PrivateEye:
 			return and(side(inputSide), inDeck, secret);
+		case CardIds.PrismaticJewelKit_DEEP_048:
+			return and(side(inputSide), or(inDeck, inHand), minion, divineShield);
 		case CardIds.Product9_MIS_914:
 			return highlightConditions(
 				tooltip(and(side(inputSide), secretsTriggeredThisMatch)),
