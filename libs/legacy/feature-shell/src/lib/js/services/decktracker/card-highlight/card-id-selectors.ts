@@ -3862,6 +3862,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inGraveyard, beast);
 		case CardIds.WitherTheWeakTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), spell, fel);
+		case CardIds.Woecleaver:
+			return and(side(inputSide), inDeck, minion);
 		case CardIds.WoodlandWonders_TOY_804:
 			return and(side(inputSide), or(inDeck, inHand), spellDamage);
 		case CardIds.WorkshopJanitor_TOY_891:
