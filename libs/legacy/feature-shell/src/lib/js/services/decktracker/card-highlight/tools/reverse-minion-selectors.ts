@@ -259,9 +259,11 @@ export const reverseMinionSelector = (
 		);
 	}
 
-	// HAS_MECHANIC_GIVES_DIVINE_SHIELD + MINION (3 cards)
+	// HAS_MECHANIC_GIVES_DIVINE_SHIELD + MINION (5 cards)
 	if (refCard.mechanics?.includes('GIVES_DIVINE_SHIELD') && refCard.type?.toUpperCase() === 'MINION') {
 		matchingCardIds.push(
+			CardIds.BolvarFireblood_CORE_ICC_858,
+			CardIds.BolvarFireblood_ICC_858,
 			CardIds.FancyPackaging_TOY_881,
 			CardIds.Funkfin,
 			CardIds.RighteousReservesTavernBrawl
@@ -523,7 +525,7 @@ export const reverseMinionSelector = (
 		);
 	}
 
-	// DRAGON (77 cards)
+	// DRAGON (78 cards)
 	if (refCard.races?.map(r => r.toUpperCase()).includes('DRAGON')) {
 		matchingCardIds.push(
 			CardIds.AlexstraszasChampion,
@@ -545,6 +547,7 @@ export const reverseMinionSelector = (
 			CardIds.ClutchOfCorruption_EDR_454,
 			CardIds.CorrosiveBreath,
 			CardIds.CrazedNetherwing,
+			CardIds.CrowdRoaster_TRL_569,
 			CardIds.DaringDrake,
 			CardIds.Darkrider_EDR_456,
 			CardIds.DesertNestmatron_WW_826,

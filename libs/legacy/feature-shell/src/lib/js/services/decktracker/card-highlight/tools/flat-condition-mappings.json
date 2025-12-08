@@ -938,6 +938,7 @@
     "ClutchOfCorruption_EDR_454",
     "CorrosiveBreath",
     "CrazedNetherwing",
+    "CrowdRoaster_TRL_569",
     "DaringDrake",
     "Darkrider_EDR_456",
     "DesertNestmatron_WW_826",
@@ -1422,6 +1423,13 @@
   "MINION + PALADIN": [
     "BloodCrusader"
   ],
+  "HAS_MECHANIC_GIVES_DIVINE_SHIELD + MINION": [
+    "BolvarFireblood_CORE_ICC_858",
+    "BolvarFireblood_ICC_858",
+    "FancyPackaging_TOY_881",
+    "Funkfin",
+    "RighteousReservesTavernBrawl"
+  ],
   "MECH": [
     "Bubblebot_TSC_059",
     "ClickClocker",
@@ -1751,11 +1759,6 @@
     "Hydralisk_SC_008",
     "Lurker_SC_009",
     "NydusWorm_SC_015"
-  ],
-  "HAS_MECHANIC_GIVES_DIVINE_SHIELD + MINION": [
-    "FancyPackaging_TOY_881",
-    "Funkfin",
-    "RighteousReservesTavernBrawl"
   ],
   "FEL + SPELL": [
     "FelfireBlaze_FIR_904",
