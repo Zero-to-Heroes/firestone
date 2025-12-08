@@ -2898,7 +2898,7 @@ export const cardIdSelector = (
 				and(
 					side(inputSide),
 					inDeck,
-					cardIs(CardIds.TwilightTimehopper_ShredOfTimeToken_TIME_025t),
+					cardIs(CardIds.TwilightTimehopper_ShredOfTimeToken_TIME_025t as unknown as CardIds),
 				),
 				and(
 					side(inputSide),
