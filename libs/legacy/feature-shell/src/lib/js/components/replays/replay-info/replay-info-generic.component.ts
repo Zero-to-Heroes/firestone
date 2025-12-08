@@ -12,7 +12,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ReferenceCard } from '@firestone-hs/reference-data';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { capitalizeFirstLetter } from '@firestone/shared/framework/common';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { GameStat, StatGameModeType } from '@firestone/stats/data-access';
 import { Subscription } from 'rxjs';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
@@ -47,7 +47,13 @@ import { extractTime } from './replay-info-ranked.component';
 						[helpTooltip]="opponentClassTooltip"
 						*ngIf="opponentClassImage"
 					/>
-					<div class="player-name opponent" *ngIf="opponentName" [helpTooltip]="opponentBattleTag">
+					<div
+						class="player-name opponent with-battle-tag"
+						*ngIf="opponentName"
+						[helpTooltip]="opponentBattleTagTooltip"
+						[stayOpenOnClick]="true"
+						(click)="copyBattleTag($event)"
+					>
 						{{ opponentName }}
 					</div>
 				</div>
@@ -103,6 +109,7 @@ export class ReplayInfoGenericComponent
 	opponentClassTooltip: string;
 	opponentName: string;
 	opponentBattleTag: string;
+	opponentBattleTagTooltip: string;
 	playCoinIconSvg: SafeHtml;
 	playCoinTooltip: SafeHtml;
 	reviewId: string;
@@ -110,6 +117,7 @@ export class ReplayInfoGenericComponent
 	replayDate: string;
 
 	private sub$$: Subscription;
+	private battleTagTooltipTimeout: any;
 
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,
@@ -118,6 +126,7 @@ export class ReplayInfoGenericComponent
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly prefs: PreferencesService,
+		private readonly ow: OverwolfService,
 	) {
 		super(store, cdr);
 	}
@@ -141,6 +150,9 @@ export class ReplayInfoGenericComponent
 	ngOnDestroy() {
 		super.ngOnDestroy();
 		this.sub$$?.unsubscribe();
+		if (this.battleTagTooltipTimeout) {
+			clearTimeout(this.battleTagTooltipTimeout);
+		}
 	}
 
 	showReplay = () => {
@@ -149,6 +161,37 @@ export class ReplayInfoGenericComponent
 
 	capitalize(input: string): string {
 		return capitalizeEachWord(input);
+	}
+
+	copyBattleTag(event: MouseEvent) {
+		event.preventDefault();
+		event.stopPropagation();
+
+		if (!this.opponentBattleTag) {
+			return;
+		}
+
+		// Clear any existing timeout
+		if (this.battleTagTooltipTimeout) {
+			clearTimeout(this.battleTagTooltipTimeout);
+		}
+
+		// Copy to clipboard
+		this.ow.placeOnClipboard(this.opponentBattleTag);
+
+		// Update tooltip to show "copied"
+		this.opponentBattleTagTooltip = this.i18n.translateString('app.replays.replay-info.battle-tag-copied');
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+
+		// Revert to original tooltip after 3 seconds
+		this.battleTagTooltipTimeout = setTimeout(() => {
+			this.updateBattleTagTooltip();
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
+		}, 3000);
 	}
 
 	private updateInfo() {
@@ -172,6 +215,7 @@ export class ReplayInfoGenericComponent
 
 		this.opponentName = this.sanitizeName(this.replayInfo.opponentName);
 		this.opponentBattleTag = this.replayInfo.opponentName;
+		this.updateBattleTagTooltip();
 		this.visualResult = this.replayInfo.result;
 		this.gameTime = this.i18n.translateString('global.duration.min-sec', {
 			...extractTime(this.replayInfo.gameDurationSeconds),
@@ -234,5 +278,14 @@ export class ReplayInfoGenericComponent
 			return name;
 		}
 		return name.split('#')[0];
+	}
+
+	private updateBattleTagTooltip() {
+		if (!this.opponentBattleTag) {
+			this.opponentBattleTagTooltip = null;
+			return;
+		}
+		const clickToCopyText = this.i18n.translateString('app.replays.replay-info.click-to-copy') || 'Click to copy';
+		this.opponentBattleTagTooltip = `${this.opponentBattleTag} - ${clickToCopyText}`;
 	}
 }

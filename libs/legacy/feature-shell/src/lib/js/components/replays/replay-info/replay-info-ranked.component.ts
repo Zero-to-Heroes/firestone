@@ -50,7 +50,13 @@ import { capitalizeEachWord } from '../../../services/utils';
 						[src]="opponentClassImage"
 						[helpTooltip]="opponentClassTooltip"
 					/>
-					<div class="player-name opponent" *ngIf="opponentName" [helpTooltip]="opponentBattleTag">
+					<div
+						class="player-name opponent with-battle-tag"
+						*ngIf="opponentName"
+						[helpTooltip]="opponentBattleTagTooltip"
+						[stayOpenOnClick]="true"
+						(click)="copyBattleTag($event)"
+					>
 						{{ opponentName }}
 					</div>
 				</div>
@@ -104,6 +110,7 @@ export class ReplayInfoRankedComponent extends AbstractSubscriptionComponent imp
 
 	opponentName: string;
 	opponentBattleTag: string;
+	opponentBattleTagTooltip: string;
 	playCoinIconSvg: SafeHtml;
 	playCoinTooltip: SafeHtml;
 	gameTime: string;
@@ -113,6 +120,7 @@ export class ReplayInfoRankedComponent extends AbstractSubscriptionComponent imp
 	private bgsPerfectGame: boolean;
 	private sub$$: Subscription;
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+	private battleTagTooltipTimeout: any;
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
@@ -145,6 +153,9 @@ export class ReplayInfoRankedComponent extends AbstractSubscriptionComponent imp
 	ngOnDestroy() {
 		super.ngOnDestroy();
 		this.sub$$.unsubscribe();
+		if (this.battleTagTooltipTimeout) {
+			clearTimeout(this.battleTagTooltipTimeout);
+		}
 	}
 
 	showReplay = () => {
@@ -153,6 +164,37 @@ export class ReplayInfoRankedComponent extends AbstractSubscriptionComponent imp
 
 	capitalize(input: string): string {
 		return capitalizeEachWord(input);
+	}
+
+	copyBattleTag(event: MouseEvent) {
+		event.preventDefault();
+		event.stopPropagation();
+
+		if (!this.opponentBattleTag) {
+			return;
+		}
+
+		// Clear any existing timeout
+		if (this.battleTagTooltipTimeout) {
+			clearTimeout(this.battleTagTooltipTimeout);
+		}
+
+		// Copy to clipboard
+		this.ow.placeOnClipboard(this.opponentBattleTag);
+
+		// Update tooltip to show "copied"
+		this.opponentBattleTagTooltip = this.i18n.translateString('app.replays.replay-info.battle-tag-copied');
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+
+		// Revert to original tooltip after 3 seconds
+		this.battleTagTooltipTimeout = setTimeout(() => {
+			this.updateBattleTagTooltip();
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
+		}, 3000);
 	}
 
 	private updateInfo() {
@@ -176,6 +218,7 @@ export class ReplayInfoRankedComponent extends AbstractSubscriptionComponent imp
 
 		this.opponentName = this.sanitizeName(this.replayInfo.opponentName);
 		this.opponentBattleTag = this.replayInfo.opponentName;
+		this.updateBattleTagTooltip();
 		this.visualResult = this.replayInfo.result;
 		this.gameTime = this.i18n.translateString('global.duration.min-sec', {
 			...extractTime(this.replayInfo.gameDurationSeconds),
@@ -237,6 +280,15 @@ export class ReplayInfoRankedComponent extends AbstractSubscriptionComponent imp
 			return name;
 		}
 		return name.split('#')[0];
+	}
+
+	private updateBattleTagTooltip() {
+		if (!this.opponentBattleTag) {
+			this.opponentBattleTagTooltip = null;
+			return;
+		}
+		const clickToCopyText = this.i18n.translateString('app.replays.replay-info.click-to-copy') || 'Click to copy';
+		this.opponentBattleTagTooltip = `${this.opponentBattleTag} - ${clickToCopyText}`;
 	}
 }
 

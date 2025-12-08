@@ -107,7 +107,7 @@
 	}
 
 	&.time {
-		font-size: 13px; 
+		font-size: 13px;
 		min-width: 70px;
 		max-width: 80px;
 		padding: 0;
@@ -152,6 +152,14 @@
 	&.player {
 		text-align: right;
 		margin-right: 5px;
+	}
+
+	&.with-battle-tag {
+		opacity: 0.7;
+
+		&:hover {
+			opacity: 1;
+		}
 	}
 }
 
