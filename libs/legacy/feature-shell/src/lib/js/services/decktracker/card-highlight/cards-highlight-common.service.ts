@@ -48,6 +48,7 @@ import {
 	not,
 	or,
 	orWithHighlight,
+	protossDiscount,
 	raceIn,
 	relic,
 	restoreHealthToMinion,
@@ -501,6 +502,12 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 		}
 		if (RELIC_IDS.includes(cardId as CardIds)) {
 			selectors.push(and(side(inputSide), or(inDeck, inHand), relic));
+		}
+		if (
+			refCard.type?.toUpperCase() === CardType[CardType.MINION] &&
+			refCard.mechanics?.includes(GameTag[GameTag.PROTOSS])
+		) {
+			selectors.push(and(side(inputSide), or(inDeck, inHand), protossDiscount));
 		}
 
 		// Specific highlights for draft
