@@ -27,6 +27,7 @@ export const EarthenMight: GeneratingCard & StaticGeneratingCard = {
 		);
 		return {
 			cardType: CardType.MINION,
+			races: [Race.ELEMENTAL],
 			possibleCards: possibleCards,
 		};
 	},
