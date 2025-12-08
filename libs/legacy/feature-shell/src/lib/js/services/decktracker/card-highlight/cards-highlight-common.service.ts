@@ -505,7 +505,8 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 		}
 		if (
 			refCard.type?.toUpperCase() === CardType[CardType.MINION] &&
-			refCard.mechanics?.includes(GameTag[GameTag.PROTOSS])
+			(refCard.mechanics?.includes(GameTag[GameTag.PROTOSS]) ||
+				refCard.referencedTags?.includes(GameTag[GameTag.PROTOSS]))
 		) {
 			selectors.push(and(side(inputSide), or(inDeck, inHand), protossDiscount));
 		}
