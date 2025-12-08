@@ -409,6 +409,22 @@ const getDynamicFilters = (
 						),
 					),
 				);
+		case CardIds.LunarwingMessenger_BlessingOfTheMoon_EDR_449p:
+			return (c) => {
+				const imbueLevel = getPlayerTag(
+					getPlayerOrOpponentFromFullGameState(options.deckState, options.gameState),
+					GameTag.IMBUES_THIS_GAME,
+				);
+				// The hero power costs 2 mana, so available mana is manaLeft
+				// With imbue, the pool expands by the imbue level
+				const manaCap = Math.min(10, Math.max(0, (options.deckState.manaLeft ?? 0)) + imbueLevel);
+				return (
+					(hasCorrectType(c, CardType.MINION) || hasCorrectType(c, CardType.SPELL)) &&
+					hasCorrectClass(c, CardClass.PRIEST) &&
+					hasCost(c, '<=', manaCap) &&
+					canBeDiscoveredByClass(c, options.currentClass)
+				);
+			};
 		case CardIds.ShiftySophomore:
 			return (c) => hasMechanic(c, GameTag.COMBO);
 
