@@ -80,6 +80,7 @@ export { TimelessCausality } from './timeless-causality';
 export { Torga } from './torga';
 export { ToysnatchingGeist } from './toysnatching-geist';
 export { TrinketArtist } from './trinket-artist';
+export { TrustFall } from './trust-fall';
 export { TwilightMender } from './twilight-mender';
 export { UmpireGrasp } from './umpire-grasp';
 export { UndercityHuckster } from './undercity-huckster';
