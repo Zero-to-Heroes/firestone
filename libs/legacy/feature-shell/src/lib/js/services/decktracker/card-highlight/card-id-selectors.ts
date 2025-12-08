@@ -909,6 +909,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), restoreHealth);
 		case CardIds.CrystalWelder_GDB_130:
 			return and(side(inputSide), or(inDeck, inHand), starshipExtended);
+		case CardIds.CrowdRoaster_TRL_569:
+			return and(side(inputSide), or(inDeck, inHand), dragon);
 		case CardIds.CrushclawEnforcer:
 			return highlightConditions(
 				and(side(inputSide), inDeck, naga),
