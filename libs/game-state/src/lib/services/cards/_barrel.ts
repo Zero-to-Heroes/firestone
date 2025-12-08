@@ -43,6 +43,7 @@ export { Kiljaeden } from './kiljaeden';
 export { MendTheTimeline } from './mend-the-timeline';
 export { Metrognome } from './metrognome';
 export { MismatchedFossils } from './mismatched-fossils';
+export { MountainMap } from './mountain-map';
 export { MurlocHolmes } from './murloc-holmes';
 export { MuseumCurator } from './museum-curator';
 export { NaturalTalent } from './natural-talent';
