@@ -7,7 +7,6 @@ import { filterCards } from './utils';
 
 export const Rhokdelar: GeneratingCard = {
 	cardIds: [CardIds.Rhokdelar],
-	hasSequenceInfo: true,
 	publicCreator: true,
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
 		return {
