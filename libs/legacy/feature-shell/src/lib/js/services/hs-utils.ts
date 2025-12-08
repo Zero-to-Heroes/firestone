@@ -329,6 +329,7 @@ export const getCardForGlobalEffect = (cardId: CardIds): string => {
 };
 
 export const CURRENT_EFFECTS_WHITELIST = [
+	CardIds.AceWayfinder_AceWayfinderFutureBuffEnchantment_GDB_450e,
 	CardIds.AegwynnTheGuardian_GuardiansLegacyPlayerCoreEnchantment,
 	CardIds.Agamaggan_CorruptedThornsEnchantment_EDR_489e1,
 	CardIds.Agamaggan_CorruptedThornsEnchantment_EDR_489e2,
