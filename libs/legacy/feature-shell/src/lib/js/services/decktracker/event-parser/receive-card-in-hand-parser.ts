@@ -169,6 +169,8 @@ export class ReceiveCardInHandParser implements EventParser {
 		const cardWithZone = cardWithKnownInfo.update({
 			zone: 'HAND',
 			tags: gameEvent.additionalData.tags ? toTagsObject(gameEvent.additionalData.tags) : cardWithKnownInfo.tags,
+			// So that cards don't keep info from their previous zones, or when they were previously in hand
+			metaInfo: undefined,
 		});
 		// console.debug(
 		// 	'[receive-card-in-hand] cardWithDefault',
