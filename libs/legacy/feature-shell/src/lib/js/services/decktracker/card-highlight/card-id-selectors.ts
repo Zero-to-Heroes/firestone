@@ -3159,6 +3159,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.SpiritOfTheMountain_TLC_229:
 			return and(side(inputSide), or(inHand, inDeck), minion, not(tribeless));
+		case CardIds.SpiritOfTheRhino:
+			return and(side(inputSide), or(inDeck, inHand), minion, rush);
 		case CardIds.SpiritPeddler_WORK_015:
 			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.SpiritGuide:
