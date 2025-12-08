@@ -429,7 +429,6 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 	doHighlight(highlight: SelectorOutput) {
 		this.linkedCardHighlight = highlight === true ? true : highlight === false ? false : 'linked-card-' + highlight;
 		// console.debug('highlight', this.cardName, this.cardId, highlight, this.linkedCardHighlight);
-		
 		// Show card type label for multi-condition highlights (e.g., Reforestation, Nightshade Bud)
 		if (this.linkedCardHighlight === 'linked-card-1' || this.linkedCardHighlight === 'linked-card-2') {
 			const cardType = this._referenceCard?.type;
@@ -445,7 +444,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		} else {
 			this.showCardTypeLabel = false;
 		}
-		
+
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
