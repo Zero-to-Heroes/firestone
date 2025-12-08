@@ -6,7 +6,7 @@ import { GeneratingCard, GuessInfoInput } from './_card.type';
 import { filterCards } from './utils';
 
 export const Rhokdelar: GeneratingCard = {
-	cardIds: ['LOOT_085'],
+	cardIds: [CardIds.Rhokdelar],
 	hasSequenceInfo: true,
 	publicCreator: true,
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
