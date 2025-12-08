@@ -91,8 +91,8 @@ export class ReplayMetadataBuilderService {
 				normalizedDeckstring: !game.deckstring?.length
 					? null
 					: isMercenaries(game.gameMode)
-					? game.deckstring
-					: normalizeDeckstring(game.deckstring, this.allCards),
+						? game.deckstring
+						: normalizeDeckstring(game.deckstring, this.allCards),
 				deckName: game.deckName,
 				scenarioId: game.scenarioId,
 				buildNumber: game.buildNumber,
@@ -168,7 +168,7 @@ export class ReplayMetadataBuilderService {
 						...postMatchStats,
 						oldMmr: game.playerRank,
 						newMmr: game.newPlayerRank,
-				  };
+					};
 		const boardHistory: readonly BgsBoardLight[] = buildBoardHistory(postMatchStats.boardHistory);
 		const finalComp = postMatchStats?.boardHistory?.length
 			? postMatchStats.boardHistory[postMatchStats.boardHistory.length - 1]
@@ -200,6 +200,7 @@ export class ReplayMetadataBuilderService {
 			hasQuests: game.replay.hasBgsQuests,
 			hasAnomalies: game.replay.hasBgsAnomalies,
 			hasTrinkets: game.replay.hasBgsTrinkets,
+			hasTimewarped: game.replay.hasBgsTimewarped,
 			heroesOffered: postMatchStats.heroesOffered,
 			bannedTribes: game.bannedTribes,
 			availableTribes: game.availableTribes,
