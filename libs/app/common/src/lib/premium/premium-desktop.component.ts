@@ -65,8 +65,19 @@ import { BehaviorSubject, Observable, combineLatest, filter, shareReplay, takeUn
 					</div>
 				</div>
 				<div class="alipay-in-china" *ngIf="possibleChineseUser$ | async">
-					中国大陆用户：如果您打算使用支付宝付款，请使用“旧版”订阅，因为此付款方式与新的 Tebex
-					系统兼容不佳。我们预计问题需要几个月才能解决。感谢您的理解。
+					致中国大陆用户：支付宝终于恢复正常使用啦！您现在可以使用全新的 Tebex 订阅系统订阅 Firestone Premium
+					服务。
+					为庆祝此次更新，我们限时推出所有订阅套餐八折优惠！请在结账时使用下方优惠码即可享受订阅折扣！（仅限首期订阅，可随时取消）。
+				</div>
+				<div class="discount-banner">
+					{{ discountBannerTextYearly }}
+					<pre
+						class="code"
+						[helpTooltip]="'app.premium.billing.click-to-copy-code' | fsTranslate"
+						(click)="copyCode()"
+					>
+						<div class="copy-icon" inlineSVG="assets/svg/copy.svg"></div><span>{{couponCode}}</span>
+					</pre>
 				</div>
 				<!-- <div
 					class="discount-banner"
@@ -165,10 +176,10 @@ export class PremiumDesktopComponent extends AbstractSubscriptionComponent imple
 
 	yearlySubtext: string;
 	sixMonthSubtext: string;
-	couponCode = '3YTF-2AUG-FWC6';
-	discountBannerTextYearly = this.i18n.translateString('app.premium.billing.yearly-coupon-text-2', {
-		reduction: '10%',
-		expansionName: this.i18n.translateString(`global.set.${CardSet[CardSet.ACROSS_THE_TIMEWAYS].toLowerCase()}`),
+	couponCode = 'CRB7-KVVR-96Q9';
+	discountBannerTextYearly = this.i18n.translateString('app.premium.billing.yearly-coupon-text', {
+		reduction: '20%',
+		endDate: new Date('2026-01-02').toLocaleDateString(this.i18n.formatCurrentLocale()!),
 	});
 	discountBannerTextSixMonths = this.i18n.translateString('app.premium.billing.yearly-coupon-text-2', {
 		reduction: '10%',
@@ -201,6 +212,7 @@ export class PremiumDesktopComponent extends AbstractSubscriptionComponent imple
 		this.billingPeriodicity$ = this.billingPeriodicity$$.asObservable();
 		this.possibleChineseUser$ = this.account.region$$.pipe(
 			this.mapData((region) => region === BnetRegion.REGION_CN || this.i18n.locale?.includes('zh')),
+			tap((possible) => console.log('possible chinese user', possible)),
 		);
 		this.tebex.packages$$
 			.pipe(
