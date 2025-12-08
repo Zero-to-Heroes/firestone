@@ -3522,6 +3522,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), dragon);
 		case CardIds.TinyfinsCaravan:
 			return and(side(inputSide), inDeck, murloc);
+		case CardIds.TipTheScales:
+			return and(side(inputSide), inDeck, murloc);
 		case CardIds.TinyWorldbreaker_YOG_527:
 			return and(side(inputSide), or(inDeck, inHand), mech);
 		case CardIds.TogwagglesScheme:
