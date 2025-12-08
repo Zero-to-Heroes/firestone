@@ -50,8 +50,11 @@ export class NextStarshipLaunchCounterDefinitionV2 extends CounterDefinitionV2<n
 
 	readonly opponent = undefined;
 
-	constructor(private readonly i18n: ILocalizationService, private readonly allCards: CardsFacadeService) {
-		super();
+	constructor(
+		private readonly i18n: ILocalizationService,
+		protected override readonly allCards: CardsFacadeService,
+	) {
+		super(allCards);
 	}
 
 	protected override tooltip(side: 'player' | 'opponent', gameState: GameState): string {

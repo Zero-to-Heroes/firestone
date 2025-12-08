@@ -75,9 +75,9 @@ export class DarkGiftsCounterDefinitionV2 extends CounterDefinitionV2<readonly s
 
 	constructor(
 		private readonly i18n: ILocalizationService,
-		private readonly allCards: CardsFacadeService,
+		protected override readonly allCards: CardsFacadeService,
 	) {
-		super();
+		super(allCards);
 	}
 
 	protected override formatValue(value: readonly string[] | null | undefined): string {

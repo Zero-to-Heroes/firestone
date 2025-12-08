@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { CardIds } from '@firestone-hs/reference-data';
-import { ILocalizationService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { isCardCreated } from '../../models/deck-card';
 import { GameState } from '../../models/game-state';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
@@ -30,8 +30,11 @@ export class GiftsPlayedCounterDefinitionV2 extends CounterDefinitionV2<number> 
 		},
 	};
 
-	constructor(private readonly i18n: ILocalizationService) {
-		super();
+	constructor(
+		private readonly i18n: ILocalizationService,
+		protected override readonly allCards: CardsFacadeService,
+	) {
+		super(allCards);
 	}
 
 	protected override tooltip(side: 'player' | 'opponent', gameState: GameState): string {

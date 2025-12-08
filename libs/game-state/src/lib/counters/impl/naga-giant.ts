@@ -33,8 +33,11 @@ export class NagaGiantCounterDefinitionV2 extends CounterDefinitionV2<{
 	};
 	readonly opponent = undefined;
 
-	constructor(private readonly i18n: ILocalizationService, private readonly allCards: CardsFacadeService) {
-		super();
+	constructor(
+		private readonly i18n: ILocalizationService,
+		protected override readonly allCards: CardsFacadeService,
+	) {
+		super(allCards);
 	}
 
 	protected override formatValue(

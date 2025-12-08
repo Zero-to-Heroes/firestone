@@ -48,8 +48,11 @@ export class CthunCounterDefinitionV2 extends CounterDefinitionV2<{ atk: number;
 		},
 	};
 
-	constructor(private readonly i18n: ILocalizationService, private readonly allCards: CardsFacadeService) {
-		super();
+	constructor(
+		private readonly i18n: ILocalizationService,
+		protected override readonly allCards: CardsFacadeService,
+	) {
+		super(allCards);
 	}
 
 	protected override formatValue(

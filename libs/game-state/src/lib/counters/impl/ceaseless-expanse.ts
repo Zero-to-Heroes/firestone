@@ -3,7 +3,6 @@ import { CardsFacadeService, ILocalizationService } from '@firestone/shared/fram
 import { GameState } from '../../models/game-state';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
 import { CounterType } from '../_exports';
-import { areCardsValidInCurrentGame } from '../utils';
 
 export class CeaselessExpanseCounterDefinitionV2 extends CounterDefinitionV2<number> {
 	public override id: CounterType = '_ceaselessExpanse';
@@ -25,7 +24,7 @@ export class CeaselessExpanseCounterDefinitionV2 extends CounterDefinitionV2<num
 
 	readonly opponent = {
 		pref: 'opponentCeaselessExpanseCounter' as const,
-		display: (state: GameState): boolean => areCardsValidInCurrentGame(this.cards, state.metadata, this.allCards),
+		display: (state: GameState): boolean => true,
 		value: (state: GameState): number => this.getValue(state),
 		setting: {
 			label: (i18n: ILocalizationService): string =>
@@ -37,9 +36,9 @@ export class CeaselessExpanseCounterDefinitionV2 extends CounterDefinitionV2<num
 
 	constructor(
 		private readonly i18n: ILocalizationService,
-		private readonly allCards: CardsFacadeService,
+		protected override readonly allCards: CardsFacadeService,
 	) {
-		super();
+		super(allCards);
 	}
 
 	protected override tooltip(

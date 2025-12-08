@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { CardIds, GameTag } from '@firestone-hs/reference-data';
-import { ILocalizationService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { GameState } from '../../models/game-state';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
 import { CounterType } from '../_exports';
@@ -45,8 +45,11 @@ export class AvianaElunesChoseCounterDefinitionV2 extends CounterDefinitionV2<nu
 		},
 	};
 
-	constructor(private readonly i18n: ILocalizationService) {
-		super();
+	constructor(
+		private readonly i18n: ILocalizationService,
+		protected override readonly allCards: CardsFacadeService,
+	) {
+		super(allCards);
 	}
 
 	protected override formatValue(value: number | null | undefined): null | undefined | number | string {

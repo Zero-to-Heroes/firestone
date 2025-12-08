@@ -44,8 +44,11 @@ export class HeroPowerDamageCounterDefinitionV2 extends CounterDefinitionV2<numb
 		},
 	};
 
-	constructor(private readonly i18n: ILocalizationService, private readonly allCards: CardsFacadeService) {
-		super();
+	constructor(
+		private readonly i18n: ILocalizationService,
+		protected override readonly allCards: CardsFacadeService,
+	) {
+		super(allCards);
 	}
 
 	protected override tooltip(side: 'player' | 'opponent', gameState: GameState): string {

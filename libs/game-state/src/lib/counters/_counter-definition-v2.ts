@@ -5,6 +5,7 @@ import { CardsFacadeService, ILocalizationService } from '@firestone/shared/fram
 import { BattlegroundsState } from '../models/_barrel';
 import { GameState } from '../models/game-state';
 import { CounterType } from './_exports';
+import { areCardsValidInCurrentGame } from './utils';
 
 export abstract class CounterDefinitionV2<T> {
 	public abstract readonly id: CounterType;
@@ -21,6 +22,8 @@ export abstract class CounterDefinitionV2<T> {
 	// Only show one instance of the counter at the same time. Useful for counters like
 	// Ceaseless expanse which tracks things game-wide, instead of per-player
 	protected singleton = false;
+
+	constructor(protected readonly allCards: CardsFacadeService) {}
 
 	public abstract readonly player?: PlayerImplementation<T>;
 	public abstract readonly opponent?: PlayerImplementation<T>;
@@ -164,6 +167,9 @@ export abstract class CounterDefinitionV2<T> {
 						gameState.opponentDeck?.hasRelevantCard(this.cards),
 					);
 				return true;
+			}
+			if (!!this.cards?.length && !areCardsValidInCurrentGame(this.cards, gameState.metadata, this.allCards)) {
+				return false;
 			}
 			if (!this.opponent.display(gameState, bgState)) {
 				this.debug && console.debug('no display', this.id, side, this.opponent.display(gameState, bgState));

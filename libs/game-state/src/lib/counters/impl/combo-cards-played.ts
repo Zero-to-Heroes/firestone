@@ -30,8 +30,11 @@ export class ComboCardsPlayedCounterDefinitionV2 extends CounterDefinitionV2<num
 
 	readonly opponent = undefined;
 
-	constructor(private readonly i18n: ILocalizationService, private readonly allCards: CardsFacadeService) {
-		super();
+	constructor(
+		private readonly i18n: ILocalizationService,
+		protected override readonly allCards: CardsFacadeService,
+	) {
+		super(allCards);
 	}
 
 	protected override tooltip(side: 'player' | 'opponent', gameState: GameState): string {

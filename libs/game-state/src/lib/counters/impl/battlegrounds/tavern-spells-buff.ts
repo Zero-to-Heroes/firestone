@@ -40,8 +40,11 @@ export class TavernSpellsBuffCounterDefinitionV2 extends CounterDefinitionV2<{ a
 	};
 	readonly opponent = undefined;
 
-	constructor(private readonly i18n: ILocalizationService) {
-		super();
+	constructor(
+		private readonly i18n: ILocalizationService,
+		protected override readonly allCards: CardsFacadeService,
+	) {
+		super(allCards);
 	}
 
 	protected override formatValue(

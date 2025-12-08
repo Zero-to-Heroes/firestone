@@ -52,9 +52,9 @@ export class CardsShuffledIntoDeckCounterDefinitionV2 extends CounterDefinitionV
 
 	constructor(
 		private readonly i18n: ILocalizationService,
-		private readonly allCards: CardsFacadeService,
+		protected override readonly allCards: CardsFacadeService,
 	) {
-		super();
+		super(allCards);
 	}
 
 	protected override tooltip(side: 'player' | 'opponent', gameState: GameState): string {

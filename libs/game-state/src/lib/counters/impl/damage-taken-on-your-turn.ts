@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { CardClass, CardIds } from '@firestone-hs/reference-data';
-import { ILocalizationService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { TurnDamage } from '../../models/deck-state';
 import { GameState } from '../../models/game-state';
 import { initialHeroClassIs } from '../../models/hero-card';
@@ -47,8 +47,11 @@ export class DamageTakenOnYourTurnCounterDefinitionV2 extends CounterDefinitionV
 		},
 	};
 
-	constructor(private readonly i18n: ILocalizationService) {
-		super();
+	constructor(
+		private readonly i18n: ILocalizationService,
+		protected override readonly allCards: CardsFacadeService,
+	) {
+		super(allCards);
 	}
 
 	protected override formatValue(

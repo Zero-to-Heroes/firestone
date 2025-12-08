@@ -55,9 +55,9 @@ export class ElizaGorebladeCounterDefinitionV2 extends CounterDefinitionV2<numbe
 
 	constructor(
 		private readonly i18n: ILocalizationService,
-		private readonly allCards: CardsFacadeService,
+		protected override readonly allCards: CardsFacadeService,
 	) {
-		super();
+		super(allCards);
 	}
 
 	protected override tooltip(side: 'player' | 'opponent', gameState: GameState): string {

@@ -1,5 +1,5 @@
 import { arenaSets, CardIds, GameFormat, isArena, SetId, standardSets, wildSets } from '@firestone-hs/reference-data';
-import { CardsFacadeService } from '../../../../shared/framework/core/src/lib/services/cards-facade.service';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Metadata } from '../models/metadata';
 
 export const getValidSetsInCurrentGame = (metadata: Metadata): readonly SetId[] => {

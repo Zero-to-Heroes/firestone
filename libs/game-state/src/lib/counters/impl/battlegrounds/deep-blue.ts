@@ -51,9 +51,9 @@ export class DeepBlueCounterDefinitionV2 extends CounterDefinitionV2<{ atk: numb
 
 	constructor(
 		private readonly i18n: ILocalizationService,
-		private readonly allCards: CardsFacadeService,
+		protected override readonly allCards: CardsFacadeService,
 	) {
-		super();
+		super(allCards);
 	}
 
 	protected override formatValue(

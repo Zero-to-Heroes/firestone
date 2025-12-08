@@ -35,9 +35,9 @@ export class MenagerieCounterDefinitionV2 extends CounterDefinitionV2<readonly S
 
 	constructor(
 		private readonly i18n: ILocalizationService,
-		private readonly allCards: CardsFacadeService,
+		protected override readonly allCards: CardsFacadeService,
 	) {
-		super();
+		super(allCards);
 	}
 
 	protected override formatValue(value: readonly ShortCard[] | null | undefined): null | undefined | number | string {

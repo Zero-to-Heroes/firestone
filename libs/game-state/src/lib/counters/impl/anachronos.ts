@@ -80,9 +80,9 @@ export class AnachronosCounterDefinitionV2 extends CounterDefinitionV2<{
 
 	constructor(
 		private readonly i18n: ILocalizationService,
-		private readonly allCards: CardsFacadeService,
+		protected override readonly allCards: CardsFacadeService,
 	) {
-		super();
+		super(allCards);
 	}
 
 	protected override formatValue(

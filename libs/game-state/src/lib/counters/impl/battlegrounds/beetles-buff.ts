@@ -27,8 +27,11 @@ export class BeetlesBuffCounterDefinitionV2 extends CounterDefinitionV2<string> 
 	};
 	readonly opponent = undefined;
 
-	constructor(private readonly i18n: ILocalizationService) {
-		super();
+	constructor(
+		private readonly i18n: ILocalizationService,
+		protected override readonly allCards: CardsFacadeService,
+	) {
+		super(allCards);
 	}
 
 	protected override tooltip(

@@ -38,8 +38,11 @@ export class CardsDrawnThisTurnCounterDefinitionV2 extends CounterDefinitionV2<n
 		},
 	};
 
-	constructor(private readonly i18n: ILocalizationService) {
-		super();
+	constructor(
+		private readonly i18n: ILocalizationService,
+		protected override readonly allCards: CardsFacadeService,
+	) {
+		super(allCards);
 	}
 
 	protected override tooltip(side: 'player' | 'opponent', gameState: GameState): string {

@@ -46,9 +46,9 @@ export class ProtossSpellsCounterDefinitionV2 extends CounterDefinitionV2<number
 
 	constructor(
 		private readonly i18n: ILocalizationService,
-		private readonly allCards: CardsFacadeService,
+		protected override readonly allCards: CardsFacadeService,
 	) {
-		super();
+		super(allCards);
 	}
 
 	protected override formatValue(value: number): string {
