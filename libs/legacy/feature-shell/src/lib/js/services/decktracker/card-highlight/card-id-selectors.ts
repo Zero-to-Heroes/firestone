@@ -3004,7 +3004,7 @@ export const cardIdSelector = (
 				and(
 					side(inputSide),
 					or(inHand, inDeck),
-					cardIs(CardIds.PhotonCannon_SC_753, CardIds.WarpGate_SC_751),
+					cardIs(CardIds.PhotonCannon_SC_753, CardIds.Sentry_SC_764, CardIds.WarpGate_SC_751),
 				),
 			);
 		case CardIds.SesselieOfTheFaeCourt_REV_319:
