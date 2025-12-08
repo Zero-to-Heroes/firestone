@@ -159,7 +159,11 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 				<span>{{ cardName }}</span>
 			</div>
 			<div class="dim-overlay" *ngIf="highlight === 'dim'"></div>
-			<div class="linked-card-overlay"></div>
+			<div class="linked-card-overlay">
+				<div class="card-type-label" *ngIf="showCardTypeLabel">
+					<span>{{ cardTypeLabel }}</span>
+				</div>
+			</div>
 			<div class="mouse-over" [style.right.px]="mouseOverRight"></div>
 		</div>
 		<deck-card
@@ -278,6 +282,8 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 	isStolen: boolean;
 	manaCostReduction: boolean;
 	mouseOverRight = 0;
+	showCardTypeLabel: boolean;
+	cardTypeLabel: string;
 	_showUnknownCards = true;
 	isUnknownCard: boolean;
 	_side: HighlightSide;
@@ -423,6 +429,23 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 	doHighlight(highlight: SelectorOutput) {
 		this.linkedCardHighlight = highlight === true ? true : highlight === false ? false : 'linked-card-' + highlight;
 		// console.debug('highlight', this.cardName, this.cardId, highlight, this.linkedCardHighlight);
+		
+		// Show card type label for multi-condition highlights (e.g., Reforestation, Nightshade Bud)
+		if (this.linkedCardHighlight === 'linked-card-1' || this.linkedCardHighlight === 'linked-card-2') {
+			const cardType = this._referenceCard?.type;
+			if (cardType === CardType.MINION) {
+				this.cardTypeLabel = 'Minion';
+				this.showCardTypeLabel = true;
+			} else if (cardType === CardType.SPELL) {
+				this.cardTypeLabel = 'Spell';
+				this.showCardTypeLabel = true;
+			} else {
+				this.showCardTypeLabel = false;
+			}
+		} else {
+			this.showCardTypeLabel = false;
+		}
+		
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -430,6 +453,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 
 	doUnhighlight() {
 		this.linkedCardHighlight = false;
+		this.showCardTypeLabel = false;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

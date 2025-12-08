@@ -30,6 +30,21 @@
 		z-index: 1;
 		background: rgba(255, 185, 72, 0.4);
 		background: var(--card-highlight-color-1);
+		
+		.card-type-label {
+			position: absolute;
+			top: 2px;
+			right: 4px;
+			padding: 1px 4px;
+			background: rgba(0, 0, 0, 0.7);
+			border-radius: 3px;
+			font-size: 9px;
+			font-weight: bold;
+			color: #fff;
+			text-transform: uppercase;
+			line-height: 1.2;
+			pointer-events: none;
+		}
 	}
 
 	&.linked-card {
