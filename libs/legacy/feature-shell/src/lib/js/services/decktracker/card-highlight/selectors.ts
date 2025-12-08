@@ -361,6 +361,13 @@ export const libramDiscount = cardIs(
 	CardIds.InterstellarStarslicer_GDB_726,
 	CardIds.InterstellarWayfarer_GDB_721,
 );
+export const protossDiscount = cardIs(
+	CardIds.Artanis_SC_754,
+	CardIds.ConstructPylons_SC_755,
+	CardIds.PhotonCannon_SC_753,
+	CardIds.Sentry_SC_764,
+	CardIds.WarpGate_SC_751,
+);
 export const lifesteal = hasMechanic(GameTag.LIFESTEAL);
 export const magnetic = hasMechanic(GameTag.MODULAR);
 export const outcast = hasMechanic(GameTag.OUTCAST);
