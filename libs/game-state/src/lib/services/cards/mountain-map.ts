@@ -16,7 +16,9 @@ export const MountainMap: StaticGeneratingCard = {
 			.filter((c) => c?.type === 'Minion');
 
 		// Extract all tribes that have been played
+		// extractUniqueTribes returns Race[] enum values
 		const playedTribes = extractUniqueTribes(playedMinions);
+		// Convert to a Set of string tribe names for comparison with card.races
 		const playedTribesSet = new Set(playedTribes.map((tribe) => Race[tribe]));
 
 		// Filter for minions that have at least one tribe not yet played
@@ -35,7 +37,8 @@ export const MountainMap: StaticGeneratingCard = {
 				}
 
 				// Check if this minion has at least one unplayed tribe
-				// "ALL" tribe minions should be included if ANY tribe hasn't been played
+				// "ALL" tribe minions (Amalgam) count as all tribes, so include them
+				// if any tribe hasn't been played yet
 				if (c.races.includes('ALL')) {
 					return canBeDiscoveredByClass(c, input.inputOptions.currentClass);
 				}
