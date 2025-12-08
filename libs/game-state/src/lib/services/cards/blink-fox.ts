@@ -6,7 +6,7 @@ import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingC
 import { filterCards } from './utils';
 
 export const BlinkFox: GeneratingCard & StaticGeneratingCard = {
-	cardIds: [CardIds.BlinkFox_GIL_827],
+	cardIds: [CardIds.BlinkFox],
 	publicCreator: true,
 	dynamicPool: (input: StaticGeneratingCardInput) => {
 		const opponentClass =

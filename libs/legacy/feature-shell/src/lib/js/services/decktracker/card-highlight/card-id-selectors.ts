@@ -909,7 +909,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), restoreHealth);
 		case CardIds.CrystalWelder_GDB_130:
 			return and(side(inputSide), or(inDeck, inHand), starshipExtended);
-		case CardIds.CrowdRoaster_TRL_569:
+		case CardIds.CrowdRoaster:
 			return and(side(inputSide), or(inDeck, inHand), dragon);
 		case CardIds.CrushclawEnforcer:
 			return highlightConditions(
@@ -1972,7 +1972,11 @@ export const cardIdSelector = (
 		case CardIds.KaraTheDarkStar_GDB_127:
 			return and(side(inputSide), or(inHand, inDeck), spell, shadow);
 		case CardIds.MedivhTheHallowed_KarazhanTheSanctumToken_TIME_890t2:
-			return and(side(inputSide), or(inDeck, inHand, inPlay), cardIs(CardIds.MedivhTheHallowed_AtieshTheGreatstaffToken_TIME_890t));
+			return and(
+				side(inputSide),
+				or(inDeck, inHand, inPlay),
+				cardIs(CardIds.MedivhTheHallowed_AtieshTheGreatstaffToken_TIME_890t),
+			);
 		case CardIds.KathrenaWinterwisp:
 			return and(side(inputSide), inDeck, beast);
 		case CardIds.Kazakusan_ONY_005:
@@ -2277,7 +2281,11 @@ export const cardIdSelector = (
 		case CardIds.MeddlesomeServant_YOG_518:
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.MedivhTheHallowed_TIME_890:
-			return and(side(inputSide), or(inDeck, inHand, inPlay), cardIs(CardIds.MedivhTheHallowed_KarazhanTheSanctumToken_TIME_890t2));
+			return and(
+				side(inputSide),
+				or(inDeck, inHand, inPlay),
+				cardIs(CardIds.MedivhTheHallowed_KarazhanTheSanctumToken_TIME_890t2),
+			);
 		case CardIds.MeekMasteryTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), minion, neutral);
 		case CardIds.Melomania:
@@ -3315,7 +3323,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), deathrattle);
 		case CardIds.SunfuryChampion:
 			return and(side(inputSide), or(inDeck, inHand), spell, fire);
-		case CardIds.SunreaverWarmage_DAL_539:
+		case CardIds.SunreaverWarmage:
 			return and(side(inputSide), or(inDeck, inHand), spell, costMore(4));
 		case CardIds.SunsapperLynessa_VAC_507:
 			return and(side(inputSide), or(inDeck, inHand), spell, effectiveCostLess(3));
@@ -3531,7 +3539,6 @@ export const cardIdSelector = (
 		case CardIds.TinyfinsCaravan:
 			return and(side(inputSide), inDeck, murloc);
 		case CardIds.TipTheScales:
-		case CardIds.TipTheScales_ULD_716:
 			return and(side(inputSide), inDeck, murloc);
 		case CardIds.TinyWorldbreaker_YOG_527:
 			return and(side(inputSide), or(inDeck, inHand), mech);
