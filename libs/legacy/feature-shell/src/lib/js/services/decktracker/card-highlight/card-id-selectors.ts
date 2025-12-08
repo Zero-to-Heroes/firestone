@@ -3309,6 +3309,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), deathrattle);
 		case CardIds.SunfuryChampion:
 			return and(side(inputSide), or(inDeck, inHand), spell, fire);
+		case CardIds.SunreaverWarmage_DAL_539:
+			return and(side(inputSide), or(inDeck, inHand), spell, costMore(4));
 		case CardIds.SunsapperLynessa_VAC_507:
 			return and(side(inputSide), or(inDeck, inHand), spell, effectiveCostLess(3));
 		case CardIds.SunstridersCrownTavernBrawl:
