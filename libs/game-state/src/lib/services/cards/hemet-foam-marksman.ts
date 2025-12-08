@@ -9,12 +9,21 @@ import {
 	hasCorrectTribe,
 	isValidSet,
 	Race,
+	ReferenceCard,
 	SetId,
 } from '@firestone-hs/reference-data';
 import { filterCards, hasCorrectRarity, hasCorrectType } from '../../related-cards/dynamic-pools';
 import { DeckCard, GuessedInfo } from '../../models/deck-card';
 import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
-import { filterCards as filterCardsUtils } from './utils';
+
+const isLegendaryBeastFromThePast = (c: ReferenceCard): boolean => {
+	return (
+		!isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
+		hasCorrectType(c, CardType.MINION) &&
+		hasCorrectTribe(c, Race.BEAST) &&
+		hasCorrectRarity(c, CardRarity.LEGENDARY)
+	);
+};
 
 export const HemetFoamMarksman: GeneratingCard & StaticGeneratingCard = {
 	cardIds: [CardIds.HemetFoamMarksman_TOY_355],
@@ -26,11 +35,7 @@ export const HemetFoamMarksman: GeneratingCard & StaticGeneratingCard = {
 			// So that we don't get cards from the arena-specific pool instead
 			{ ...input.inputOptions, format: GameFormat.FT_WILD, gameType: GameType.GT_RANKED },
 			HemetFoamMarksman.cardIds[0],
-			(c) =>
-				!isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
-				hasCorrectType(c, CardType.MINION) &&
-				hasCorrectTribe(c, Race.BEAST) &&
-				hasCorrectRarity(c, CardRarity.LEGENDARY),
+			isLegendaryBeastFromThePast,
 		);
 	},
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
@@ -47,11 +52,7 @@ export const HemetFoamMarksman: GeneratingCard & StaticGeneratingCard = {
 					validArenaPool: input.options?.validArenaPool ?? [],
 				},
 				HemetFoamMarksman.cardIds[0],
-				(c) =>
-					!isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
-					hasCorrectType(c, CardType.MINION) &&
-					hasCorrectTribe(c, Race.BEAST) &&
-					hasCorrectRarity(c, CardRarity.LEGENDARY),
+				isLegendaryBeastFromThePast,
 			),
 		};
 	},
