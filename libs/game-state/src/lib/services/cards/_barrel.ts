@@ -68,6 +68,7 @@ export { RelicMiner } from './relic-miner';
 export { ReplicatorInator } from './replicator-inator';
 export { RenoLoneRangerNatureBullet } from './reno-lone-ranger-nature-bullet';
 export { ResortValet } from './resort-valet';
+export { Rhokdelar } from './rhokdelar';
 export { RingmasterWhatley } from './ringmaster-whatley';
 export { Rotface } from './rotface';
 export { ScaleReplica } from './scale-replica';
