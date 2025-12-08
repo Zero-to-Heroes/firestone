@@ -48,8 +48,8 @@ export const HemetFoamMarksman: GeneratingCard & StaticGeneratingCard = {
 				{
 					format: GameFormat.FT_WILD,
 					gameType: GameType.GT_RANKED,
-					scenarioId: input.options?.metadata?.scenarioId ?? 0,
-					validArenaPool: input.options?.validArenaPool ?? [],
+					scenarioId: 0,
+					validArenaPool: [],
 				},
 				HemetFoamMarksman.cardIds[0],
 				isLegendaryBeastFromThePast,
