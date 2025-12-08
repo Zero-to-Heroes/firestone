@@ -111,6 +111,7 @@ import {
 	paladin,
 	pirate,
 	protoss,
+	protossDiscount,
 	quickdraw,
 	race,
 	rafaam,
@@ -658,6 +659,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), hasSpellSchool);
 		case CardIds.CarrionStudies:
 			return and(side(inputSide), inDeck, minion, deathrattle);
+		case CardIds.Carrier_SC_756:
+			return and(side(inputSide), or(inDeck, inHand), protossDiscount);
 		case CardIds.CastleKennels_REV_362:
 		case CardIds.CastleKennels_REV_790:
 			return and(side(inputSide), inDeck, beast);
@@ -812,7 +815,10 @@ export const cardIdSelector = (
 		case CardIds.CollectorsIreTavernBrawlToken:
 			return and(side(inputSide), inDeck, minion, or(dragon, pirate, mech));
 		case CardIds.Colossus_SC_758:
-			return and(side(inputSide), or(inHand, inDeck), protoss, spell);
+			return highlightConditions(
+				and(side(inputSide), or(inHand, inDeck), protoss, spell),
+				and(side(inputSide), or(inDeck, inHand), protossDiscount),
+			);
 		case CardIds.CommanderSivara_TSC_087:
 			return and(side(inputSide), or(inHand, inDeck), spell);
 		case CardIds.ConchsCall:
@@ -979,7 +985,10 @@ export const cardIdSelector = (
 		case CardIds.Darkrider_EDR_456:
 			return and(side(inputSide), or(inDeck, inHand), dragon);
 		case CardIds.DarkTemplar_SC_752:
-			return and(side(inputSide), or(inHand, inDeck), templar);
+			return highlightConditions(
+				and(side(inputSide), or(inHand, inDeck), templar),
+				and(side(inputSide), or(inDeck, inHand), protossDiscount),
+			);
 		case CardIds.DaUndatakah:
 			return highlightConditions(
 				and(side(inputSide), or(inHand, inDeck), minion, deathrattle),
@@ -1747,7 +1756,10 @@ export const cardIdSelector = (
 		case CardIds.HighCultistHerenn_TLC_810:
 			return and(side(inputSide), inDeck, deathrattle, minion);
 		case CardIds.HighTemplar_SC_765:
-			return and(side(inputSide), or(inHand, inDeck), templar);
+			return highlightConditions(
+				and(side(inputSide), or(inHand, inDeck), templar),
+				and(side(inputSide), or(inDeck, inHand), protossDiscount),
+			);
 		case CardIds.HiHoSilverwing_WW_344:
 			return and(side(inputSide), or(inDeck, inHand), spell, holy);
 		case CardIds.HoldTheLineTavernBrawl:
@@ -1850,6 +1862,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.ImprisonedScrapImp:
 			return and(side(inputSide), or(inDeck, inHand), minion);
+		case CardIds.Immortal_SC_763:
+			return and(side(inputSide), or(inDeck, inHand), protossDiscount);
 		case CardIds.IncantersFlow:
 			return and(side(inputSide), inDeck, spell);
 		case CardIds.InfantryReanimator:
@@ -2325,6 +2339,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.MoshPit:
 			return and(side(inputSide), or(inHand, inDeck), minion);
+		case CardIds.Mothership_SC_762:
+			return and(side(inputSide), or(inDeck, inHand), protossDiscount);
 		case CardIds.Muckmorpher:
 			return and(side(inputSide), inDeck, minion, not(cardIs(CardIds.Muckmorpher)));
 		case CardIds.MulchMadnessTavernBrawl:
@@ -2960,7 +2976,10 @@ export const cardIdSelector = (
 		case CardIds.SenseDemonsVanilla_VAN_EX1_317:
 			return and(side(inputSide), inDeck, demon);
 		case CardIds.Sentry_SC_764:
-			return and(side(inputSide), or(inDeck, inHand), minion, protoss);
+			return highlightConditions(
+				and(side(inputSide), or(inDeck, inHand), minion, protoss),
+				and(side(inputSide), or(inDeck, inHand), protossDiscount),
+			);
 		case CardIds.SesselieOfTheFaeCourt_REV_319:
 		case CardIds.SesselieOfTheFaeCourt_REV_782:
 			return and(side(inputSide), inDeck, minion);
@@ -3781,6 +3800,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), demon);
 		case CardIds.VoidFlayer:
 			return and(side(inputSide), or(inDeck, inHand), spell);
+		case CardIds.VoidRay_SC_783:
+			return and(side(inputSide), or(inDeck, inHand), protossDiscount);
 		case CardIds.VolcanicThrasher_TLC_223:
 			return and(side(inputSide), inDeck, fire, spell);
 		case CardIds.VolumeUp:
