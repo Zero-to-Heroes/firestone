@@ -24,6 +24,7 @@ export const TrustFall: GeneratingCard & StaticGeneratingCard = {
 		const currentClass = input.deckState.getCurrentClass();
 		return {
 			cardType: CardType.MINION,
+			cost: { cost: 5, comparison: '<=' },
 			possibleCards: filterCards(
 				TrustFall.cardIds[0],
 				input.allCards,
