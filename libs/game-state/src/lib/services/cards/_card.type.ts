@@ -1,5 +1,4 @@
-import { GameType, CardIds, GameTag, AllCardsService, GameFormat } from '@firestone-hs/reference-data';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { AllCardsService, CardIds, GameFormat, GameTag, GameType } from '@firestone-hs/reference-data';
 import { DeckCard, GuessedInfo } from '../../models/deck-card';
 import { DeckState } from '../../models/deck-state';
 import { GameState } from '../../models/game-state';
@@ -25,6 +24,7 @@ export interface GuessInfoInput {
 	card: DeckCard;
 	deckState: DeckState;
 	opponentDeckState: DeckState;
+	gameState: GameState;
 	allCards: AllCardsService;
 	creatorEntityId: number;
 	options?: {

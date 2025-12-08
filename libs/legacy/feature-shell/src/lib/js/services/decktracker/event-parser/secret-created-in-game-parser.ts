@@ -65,6 +65,7 @@ export class SecretCreatedInGameParser implements EventParser {
 			gameEvent.additionalData.creatorEntityId,
 			deck,
 			opponentDeck,
+			currentState,
 			this.cards,
 		);
 		// console.debug('[secret-created] card to add', card);

@@ -16,6 +16,7 @@ import { Mutable } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DeckCard, StoredInformation } from '../models/deck-card';
 import { DeckState } from '../models/deck-state';
+import { GameState } from '../models/game-state';
 import { Metadata } from '../models/metadata';
 import { GeneratingCard } from './cards/_card.type';
 import { cardsInfoCache } from './cards/_mapping';
@@ -158,6 +159,7 @@ export const addGuessInfoToCard = (
 	creatorEntityId: number,
 	deckState: DeckState,
 	opponentDeckState: DeckState,
+	gameState: GameState,
 	allCards: CardsFacadeService,
 	options?: {
 		positionInHand?: number;
@@ -193,6 +195,7 @@ export const addGuessInfoToCard = (
 				card,
 				deckState,
 				opponentDeckState,
+				gameState: gameState,
 				allCards: allCards.getService(),
 				creatorEntityId,
 				options,

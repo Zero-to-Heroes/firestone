@@ -9,6 +9,7 @@ export { BarakKodobane } from './barak-kodobane';
 export { BargainBin } from './bargain-bin';
 export { BlastWave } from './blast-wave';
 export { Blasteroid } from './blasteroid';
+export { BlessingOfTheMoon } from './blessing-of-the-moon';
 export { BlinkFox } from './blink-fox';
 export { BloodDraw } from './blood-draw';
 export { Chronogor } from './chronogor';

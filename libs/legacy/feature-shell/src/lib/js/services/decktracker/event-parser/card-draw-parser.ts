@@ -216,6 +216,7 @@ export class CardDrawParser implements EventParser {
 			gameEvent.additionalData.drawnByEntityId,
 			deck,
 			opponentDeck,
+			currentState,
 			this.allCards,
 		);
 		// console.debug('[card-draw] cardWithGuessInfo', cardWithGuessInfo, gameEvent);

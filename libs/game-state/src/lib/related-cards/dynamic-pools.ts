@@ -1429,7 +1429,7 @@ export const hasCorrectRarity = (card: ReferenceCard, targetRarity: CardRarity):
 	return card?.rarity?.toUpperCase() === CardRarity[targetRarity];
 };
 
-const getPlayerTag = (
+export const getPlayerTag = (
 	playerGameState: PlayerGameState | undefined,
 	gameTag: GameTag,
 	defaultValue: number = 0,
@@ -1483,7 +1483,7 @@ export const fromAnotherClass = (card: ReferenceCard, currentClass: string | nul
 	);
 };
 
-const getPlayerOrOpponentFromFullGameState = (
+export const getPlayerOrOpponentFromFullGameState = (
 	deckState: DeckState,
 	gameState: GameState | null,
 ): PlayerGameState | undefined => {

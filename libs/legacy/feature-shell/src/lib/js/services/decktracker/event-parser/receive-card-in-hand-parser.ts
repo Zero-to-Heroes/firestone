@@ -197,6 +197,7 @@ export class ReceiveCardInHandParser implements EventParser {
 			null,
 			deck,
 			opponentDeck,
+			currentState,
 			this.allCards,
 			{
 				positionInHand: gameEvent.additionalData.position,

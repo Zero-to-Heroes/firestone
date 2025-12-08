@@ -138,6 +138,7 @@ export class CustomEffectsParser implements EventParser {
 			gameEvent.additionalData.parentEntityId,
 			isPlayer ? currentState.playerDeck : currentState.opponentDeck,
 			isPlayer ? currentState.opponentDeck : currentState.playerDeck,
+			currentState,
 			this.allCards,
 		);
 		const newHand = deck.hand.map((card) => (card.entityId === lastDrawnCardInHand.entityId ? updatedCard : card));

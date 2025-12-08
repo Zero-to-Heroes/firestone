@@ -7,13 +7,6 @@ export const WallowTheWretched: GlobalHighlightCard = {
 	cardIds: [CardIds.WallowTheWretched_EDR_487],
 	getRelatedCards: (entityId: number, side: HighlightSide, gameState: GameState, allCards: CardsFacadeService) => {
 		const deckState = side === 'player' ? gameState.fullGameState.Player : gameState.fullGameState.Opponent;
-		const darkGiftsDEBUG = deckState.AllEntities.filter(
-			(e) => e.tags?.find((t) => t.Name === GameTag.IS_NIGHTMARE_BONUS)?.Value === 1,
-		).filter((e) => {
-			const zone = e.tags.find((t) => t.Name === GameTag.ZONE)?.Value;
-			return zone !== Zone.SETASIDE && zone !== Zone.REMOVEDFROMGAME;
-		});
-		console.debug('darkGiftsDEBUG', darkGiftsDEBUG);
 		const darkGifts = deckState.AllEntities.filter(
 			(e) => e.tags?.find((t) => t.Name === GameTag.IS_NIGHTMARE_BONUS)?.Value === 1,
 		)

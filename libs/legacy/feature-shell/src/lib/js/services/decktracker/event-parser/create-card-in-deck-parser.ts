@@ -1,4 +1,4 @@
-import { CardIds, CardType, ReferenceCard, SpellSchool } from '@firestone-hs/reference-data';
+import { CardIds, ReferenceCard } from '@firestone-hs/reference-data';
 import { addGuessInfoToCard, DeckCard, DeckState, GameState, getProcessedCard } from '@firestone/game-state';
 import { TempCardIds } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
@@ -150,6 +150,7 @@ export class CreateCardInDeckParser implements EventParser {
 			gameEvent.additionalData.creatorEntityId,
 			deck,
 			opponentDeck,
+			currentState,
 			this.allCards,
 		);
 
