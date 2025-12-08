@@ -302,6 +302,7 @@ const internalTutors = [
 	CardIds.BargainBin_MIS_105,
 	CardIds.Platysaur_TLC_603,
 	CardIds.Cosmonaut_GDB_443,
+	CardIds.TalanjiOfTheGraves_TIME_619,
 ];
 for (const cardId of Object.keys(cardsInfoCache)) {
 	const card = cardsInfoCache[cardId];

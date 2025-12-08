@@ -1363,7 +1363,7 @@ export const filterCards = (
 				}
 			} else if (gameType === GameType.GT_TAVERNBRAWL) {
 				const setsForCurrentBrawl = brawlSets[options.scenarioId];
-				if (setsForCurrentBrawl.length > 0) {
+				if (setsForCurrentBrawl?.length > 0) {
 					return setsForCurrentBrawl.includes(c.set.toLowerCase() as SetId);
 				}
 				// Use the default pool otherwise
