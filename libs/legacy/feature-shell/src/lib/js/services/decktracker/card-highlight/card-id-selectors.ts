@@ -2019,7 +2019,7 @@ export const cardIdSelector = (
 		case CardIds.KingOfBeasts_WON_162:
 			return and(side(inputSide), or(inDeck, inHand), beast);
 		case CardIds.KingPhaoris:
-			return and(side(inputSide), inHand, spell);
+			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.KingpinPud_WW_421:
 			return and(
 				side(inputSide),
