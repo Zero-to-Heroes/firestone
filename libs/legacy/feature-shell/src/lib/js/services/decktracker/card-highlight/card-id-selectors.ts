@@ -1286,10 +1286,21 @@ export const cardIdSelector = (
 		case CardIds.FarseerWo_TIME_013:
 			return and(side(inputSide), or(inHand, inDeck), spell);
 		case CardIds.Fatebreaker_TIME_028:
-			return and(
-				side(inputSide),
-				inDeck,
-				cardIs(CardIds.TwilightTimehopper_ShredOfTimeToken_TIME_025t as unknown as CardIds),
+			return highlightConditions(
+				and(
+					side(inputSide),
+					inDeck,
+					cardIs(CardIds.TwilightTimehopper_ShredOfTimeToken_TIME_025t as unknown as CardIds),
+				),
+				and(
+					side(inputSide),
+					or(inDeck, inHand),
+					cardIs(
+						CardIds.TachyonBarrage_TIME_027,
+						CardIds.TwilightTimehopper_TIME_025,
+						CardIds.EntropicContinuity_TIME_026,
+					),
+				),
 			);
 		case CardIds.FateSplitter:
 			return (input: SelectorInput): SelectorOutput => {
@@ -2883,7 +2894,22 @@ export const cardIdSelector = (
 		case CardIds.RoyalGreatswordTavernBrawlToken:
 			return and(side(inputSide), inDeck, minion, legendary);
 		case CardIds.RuinousVelocidrake_TIME_029:
-			return and(side(inputSide), inDeck, cardIs(CardIds.TwilightTimehopper_ShredOfTimeToken_TIME_025t));
+			return highlightConditions(
+				and(
+					side(inputSide),
+					inDeck,
+					cardIs(CardIds.TwilightTimehopper_ShredOfTimeToken_TIME_025t as unknown as CardIds),
+				),
+				and(
+					side(inputSide),
+					or(inDeck, inHand),
+					cardIs(
+						CardIds.TachyonBarrage_TIME_027,
+						CardIds.TwilightTimehopper_TIME_025,
+						CardIds.EntropicContinuity_TIME_026,
+					),
+				),
+			);
 		case CardIds.RuneDagger:
 			return and(side(inputSide), or(inHand, inDeck), spell, dealsDamage);
 		case CardIds.RuneforgingCore:
