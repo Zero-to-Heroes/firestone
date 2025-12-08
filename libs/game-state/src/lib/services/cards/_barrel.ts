@@ -76,6 +76,7 @@ export { SemiStablePortal } from './semi-stable-portal';
 export { ShallowGravedigger } from './shallow-gravedigger';
 export { ShellGame } from './shell-game';
 export { ShokkJungleTyrant } from './shokk-jungle-tyrant';
+export { SkyMotherAviana } from './sky-mother-aviana';
 export { SneedsOldShredder } from './sneeds-old-shredder';
 export { Solitude } from './solitude';
 export { SpiritGuide } from './spirit-guide';
