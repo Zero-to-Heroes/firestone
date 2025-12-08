@@ -118,7 +118,14 @@ export class CardBackToDeckParser implements EventParser {
 		// put back in the deck, then drawn again. If we don't reset the lastInfluencedBy, we
 		// could possibly have an info leak
 		const cardWithoutInfluence = cardWithInfoReset?.update({
-			entityId: cardWithInfoReset.entityId,
+			// Since we can't identify the card, we don't "waste" an entityId
+			// 2025-12-08: for instance, with Fabled cards, a card can be revealed and added to deck with a card id
+			// If the opponent draws this card, then put if back (in mulligan for instance), we will have the actual card with the entityId
+			// (but without card id) and the card id without entityId. So we will have two cards that map to the same
+			// info, which will create issues when removing a card from the deck (since at that point we will have both entityId and cardId,
+			// which can then match multiple cards)
+			entityId:
+				!!cardWithInfoReset.entityId && !!cardWithInfoReset.cardId ? cardWithInfoReset.entityId : undefined,
 			lastAffectedByCardId: undefined,
 			positionFromTop: undefined,
 			positionFromBottom: undefined,
