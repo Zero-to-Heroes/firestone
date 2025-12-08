@@ -1256,8 +1256,12 @@ const getDynamicFilters = (
 			return (c) => hasCorrectType(c, CardType.SPELL) && hasCorrectSpellSchool(c, SpellSchool.HOLY);
 
 		case CardIds.HologramOperator_GDB_723:
-		case CardIds.OrbitalSatellite_GDB_462:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.DRAENEI);
+		case CardIds.OrbitalSatellite_GDB_462:
+			return (c) =>
+				hasCorrectType(c, CardType.MINION) &&
+				hasCorrectTribe(c, Race.DRAENEI) &&
+				canBeDiscoveredByClass(c, options.currentClass);
 
 		case CardIds.AbductionRay_GDB_123:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.DEMON);

@@ -259,9 +259,11 @@ export const reverseMinionSelector = (
 		);
 	}
 
-	// HAS_MECHANIC_GIVES_DIVINE_SHIELD + MINION (3 cards)
+	// HAS_MECHANIC_GIVES_DIVINE_SHIELD + MINION (5 cards)
 	if (refCard.mechanics?.includes('GIVES_DIVINE_SHIELD') && refCard.type?.toUpperCase() === 'MINION') {
 		matchingCardIds.push(
+			CardIds.BolvarFireblood_CORE_ICC_858,
+			CardIds.BolvarFireblood_ICC_858,
 			CardIds.FancyPackaging_TOY_881,
 			CardIds.Funkfin,
 			CardIds.RighteousReservesTavernBrawl
@@ -523,7 +525,7 @@ export const reverseMinionSelector = (
 		);
 	}
 
-	// DRAGON (77 cards)
+	// DRAGON (78 cards)
 	if (refCard.races?.map(r => r.toUpperCase()).includes('DRAGON')) {
 		matchingCardIds.push(
 			CardIds.AlexstraszasChampion,
@@ -545,6 +547,7 @@ export const reverseMinionSelector = (
 			CardIds.ClutchOfCorruption_EDR_454,
 			CardIds.CorrosiveBreath,
 			CardIds.CrazedNetherwing,
+			CardIds.CrowdRoaster_TRL_569,
 			CardIds.DaringDrake,
 			CardIds.Darkrider_EDR_456,
 			CardIds.DesertNestmatron_WW_826,
@@ -672,7 +675,7 @@ export const reverseMinionSelector = (
 		);
 	}
 
-	// MECH (32 cards)
+	// MECH (34 cards)
 	if (refCard.races?.map(r => r.toUpperCase()).includes('MECH')) {
 		matchingCardIds.push(
 			CardIds.Bubblebot_TSC_059,
@@ -684,6 +687,8 @@ export const reverseMinionSelector = (
 			CardIds.DynOMaticCore,
 			CardIds.FrequencyOscillator,
 			CardIds.GaiaTheTechtonic_TSC_029,
+			CardIds.GoblinBlastmage,
+			CardIds.GoblinBlastmage_WON_035,
 			CardIds.GoboglideTech,
 			CardIds.IniStormcoil_TSC_649,
 			CardIds.InventorBoom_TOY_607,
@@ -881,9 +886,11 @@ export const reverseMinionSelector = (
 		);
 	}
 
-	// MINION (264 cards)
+	// MINION (269 cards)
 	if (refCard.type?.toUpperCase() === 'MINION') {
 		matchingCardIds.push(
+			CardIds.AcherusVeteran_CORE_ICC_092,
+			CardIds.AcherusVeteran_ICC_092,
 			CardIds.AegwynnTheGuardianCore,
 			CardIds.AegwynnTheGuardian_LEG_CS3_001,
 			CardIds.AlakirTheWindsOfTime_WON_092h,
@@ -963,6 +970,7 @@ export const reverseMinionSelector = (
 			CardIds.ElvenMinstrel,
 			CardIds.ElvenMinstrelCore,
 			CardIds.Embiggen,
+			CardIds.EmeraldHiveQueen,
 			CardIds.EndbringerUmbra_TLC_106,
 			CardIds.Ensmallen_TOY_805,
 			CardIds.EternalServitude_CORE_ICC_213,
@@ -1135,6 +1143,8 @@ export const reverseMinionSelector = (
 			CardIds.UnlockedPotential,
 			CardIds.VarianWrynn_AT_072,
 			CardIds.Vectus,
+			CardIds.VentureCoMercenaryLegacy,
+			CardIds.VentureCoMercenaryVanilla,
 			CardIds.ViciousBloodworm_RLK_711,
 			CardIds.VitalitySurge,
 			CardIds.WakenerOfSouls_GDB_468,

@@ -186,6 +186,8 @@ export const startOfGameGlobalEffectCards = [
 	CardIds.DarkbishopBenedictusCore,
 	CardIds.ChogallTwilightChieftain_YOG_530,
 	CardIds.HamuulRunetotem_EDR_845,
+	CardIds.PrinceRenathal,
+	CardIds.PrinceRenathal_CORE_REV_018,
 ];
 
 export const globalEffectCardsPlayed = [
@@ -240,8 +242,8 @@ export const globalEffectCards = [
 ];
 
 // Also whitelist in the parser
-export const globalEffectPowers = [CardIds.DewProcess];
-export const globalEffectPowersAlsoOpponent = [CardIds.DewProcess];
+export const globalEffectPowers = [CardIds.DewProcess, CardIds.DewProcess_CORE_MAW_024];
+export const globalEffectPowersAlsoOpponent = [CardIds.DewProcess, CardIds.DewProcess_CORE_MAW_024];
 
 export const globalEffectTriggers: { effectPrefab: string; cardId: string; forceUseParentInfo?: boolean }[] = [
 	{

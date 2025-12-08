@@ -338,6 +338,8 @@
     "FelfireInTheHole",
     "FelscaleEvoker",
     "Fetch_TOY_352",
+    "Flamewaker",
+    "Flamewaker_TUTR_BRM_002",
     "Flowrider",
     "FrostweaveDungeoneer",
     "GlacialAdvance_RLK_512",
@@ -360,6 +362,7 @@
     "IdolsOfEluneTavernBrawl",
     "Illuminate",
     "IncantersFlow",
+    "InkmasterSolia",
     "JaceDarkweaver",
     "JotunTheEternal",
     "JungleJammer",
@@ -397,6 +400,7 @@
     "Marshspawn_BT_115",
     "Marshspawn_CORE_BT_115",
     "MeddlesomeServant_YOG_518",
+    "MedivhTheHallowed_AtieshTheGreatstaffToken_TIME_890t",
     "MistahVistah_VAC_519",
     "MurkwaterScribe",
     "NagaGiant",
@@ -447,6 +451,7 @@
     "SaroniteShambler_YOG_521",
     "Saruun_GDB_304",
     "ScrollSavvy",
+    "SethekkVeilweaver",
     "ShadowOfDemise",
     "ShadowVisions",
     "ShatariCloakfield_GDB_103",
@@ -504,6 +509,8 @@
     "Zuljin"
   ],
   "MINION": [
+    "AcherusVeteran_CORE_ICC_092",
+    "AcherusVeteran_ICC_092",
     "AegwynnTheGuardianCore",
     "AegwynnTheGuardian_LEG_CS3_001",
     "AlakirTheWindsOfTime_WON_092h",
@@ -583,6 +590,7 @@
     "ElvenMinstrel",
     "ElvenMinstrelCore",
     "Embiggen",
+    "EmeraldHiveQueen",
     "EndbringerUmbra_TLC_106",
     "Ensmallen_TOY_805",
     "EternalServitude_CORE_ICC_213",
@@ -755,6 +763,8 @@
     "UnlockedPotential",
     "VarianWrynn_AT_072",
     "Vectus",
+    "VentureCoMercenaryLegacy",
+    "VentureCoMercenaryVanilla",
     "ViciousBloodworm_RLK_711",
     "VitalitySurge",
     "WakenerOfSouls_GDB_468",
@@ -928,6 +938,7 @@
     "ClutchOfCorruption_EDR_454",
     "CorrosiveBreath",
     "CrazedNetherwing",
+    "CrowdRoaster_TRL_569",
     "DaringDrake",
     "Darkrider_EDR_456",
     "DesertNestmatron_WW_826",
@@ -1190,21 +1201,6 @@
     "HagathaTheFabled_TOY_504",
     "WeaverOfTheCycle_EDR_472"
   ],
-  "RESTORE_HEALTH + SPELL": [
-    "MedivhTheHallowed_AtieshTheGreatstaffToken_TIME_890t"
-  ],
-  "DEALS_DAMAGE + SPELL": [
-    "Bioluminescence",
-    "CelestialShot_YOG_082",
-    "ChiaDrake_SeedlingGrowth_TOY_801b",
-    "Lifeguard_VAC_919",
-    "MedivhTheHallowed_AtieshTheGreatstaffToken_TIME_890t",
-    "RobeOfTheApprenticeTavernBrawl",
-    "RobeOfTheMagi",
-    "RuneDagger",
-    "TalentedArcanist",
-    "UrchinSpines"
-  ],
   "HAS_MECHANIC_REBORN": [
     "AuchenaiDeathSpeaker_GDB_469"
   ],
@@ -1401,6 +1397,17 @@
     "BountyBoard_WW_003",
     "GaronaHalforcen_TheKingslayersToken_TIME_875t1"
   ],
+  "DEALS_DAMAGE + SPELL": [
+    "Bioluminescence",
+    "CelestialShot_YOG_082",
+    "ChiaDrake_SeedlingGrowth_TOY_801b",
+    "Lifeguard_VAC_919",
+    "RobeOfTheApprenticeTavernBrawl",
+    "RobeOfTheMagi",
+    "RuneDagger",
+    "TalentedArcanist",
+    "UrchinSpines"
+  ],
   "DEALS_DAMAGE + FROST": [
     "BitterColdTavernBrawl"
   ],
@@ -1416,6 +1423,13 @@
   "MINION + PALADIN": [
     "BloodCrusader"
   ],
+  "HAS_MECHANIC_GIVES_DIVINE_SHIELD + MINION": [
+    "BolvarFireblood_CORE_ICC_858",
+    "BolvarFireblood_ICC_858",
+    "FancyPackaging_TOY_881",
+    "Funkfin",
+    "RighteousReservesTavernBrawl"
+  ],
   "MECH": [
     "Bubblebot_TSC_059",
     "ClickClocker",
@@ -1426,6 +1440,8 @@
     "DynOMaticCore",
     "FrequencyOscillator",
     "GaiaTheTechtonic_TSC_029",
+    "GoblinBlastmage",
+    "GoblinBlastmage_WON_035",
     "GoboglideTech",
     "IniStormcoil_TSC_649",
     "InventorBoom_TOY_607",
@@ -1744,11 +1760,6 @@
     "Lurker_SC_009",
     "NydusWorm_SC_015"
   ],
-  "HAS_MECHANIC_GIVES_DIVINE_SHIELD + MINION": [
-    "FancyPackaging_TOY_881",
-    "Funkfin",
-    "RighteousReservesTavernBrawl"
-  ],
   "FEL + SPELL": [
     "FelfireBlaze_FIR_904",
     "Felgorger_SW_043",
@@ -1874,6 +1885,18 @@
     "IgnisTheEternalFlame",
     "MeltedMaker"
   ],
+  "HAS_MULTIPLE_COPIES": [
+    "DinotamerBrann_ULD_156",
+    "EliseTheEnlightened",
+    "EliseTheTrailblazer",
+    "InkmasterSolia",
+    "Kazakus_CFM_621",
+    "MurozondThiefOfTime_WON_066",
+    "RenoJackson_CORE_LOE_011",
+    "RenoJackson_LOE_011",
+    "RenoTheRelicologist",
+    "ZephrysTheGreat_ULD_003"
+  ],
   "HAS_SPELL_SCHOOL + SPELL": [
     "CoralKeeper",
     "DiscoveryOfMagic",
@@ -1983,17 +2006,6 @@
     "RelicVault_CORE_REV_942",
     "RelicVault_REV_797",
     "RelicVault_REV_942"
-  ],
-  "HAS_MULTIPLE_COPIES": [
-    "DinotamerBrann_ULD_156",
-    "EliseTheEnlightened",
-    "EliseTheTrailblazer",
-    "Kazakus_CFM_621",
-    "MurozondThiefOfTime_WON_066",
-    "RenoJackson_CORE_LOE_011",
-    "RenoJackson_LOE_011",
-    "RenoTheRelicologist",
-    "ZephrysTheGreat_ULD_003"
   ],
   "COST_LESS_4": [
     "Resuscitate_TLC_818"
