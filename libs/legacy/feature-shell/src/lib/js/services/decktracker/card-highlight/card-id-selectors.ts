@@ -3523,6 +3523,7 @@ export const cardIdSelector = (
 		case CardIds.TinyfinsCaravan:
 			return and(side(inputSide), inDeck, murloc);
 		case CardIds.TipTheScales:
+		case CardIds.TipTheScales_ULD_716:
 			return and(side(inputSide), inDeck, murloc);
 		case CardIds.TinyWorldbreaker_YOG_527:
 			return and(side(inputSide), or(inDeck, inHand), mech);
