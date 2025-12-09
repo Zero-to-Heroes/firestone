@@ -227,18 +227,40 @@ export function analyzeTooltipTribes(allPlayedCards: readonly ReferenceCard[]): 
 			const forcedTribes = new Set(singleTribeMinions.filter((tribe) => tribe !== 'all'));
 			let hasAnyRemainingFlexibility = false;
 
-			// Add tribes that are forced because multi-tribe minions have only one viable option
+			// Iteratively resolve forced assignments (cascading constraints)
+			// Continue until no more tribes can be forced
+			let madeProgress = true;
+			while (madeProgress) {
+				madeProgress = false;
+
+				// Add tribes that are forced because multi-tribe minions have only one viable option
+				for (const card of allPlayedCards) {
+					if (card.races!.length <= 1) continue;
+					if (card.races!.includes('ALL')) continue; // Skip ALL multi-tribe minions for constraint analysis
+
+					const cardTribes = card.races!.map((r) => r.toLowerCase());
+					const availableOptions = cardTribes.filter((tribe) => !forcedTribes.has(tribe));
+
+					// If this multi-tribe minion has only one viable option, that tribe is forced
+					if (availableOptions.length === 1) {
+						const tribeToForce = availableOptions[0];
+						if (!forcedTribes.has(tribeToForce)) {
+							forcedTribes.add(tribeToForce);
+							madeProgress = true;
+						}
+					}
+				}
+			}
+
+			// Now check which multi-tribe minions still have flexibility
 			for (const card of allPlayedCards) {
 				if (card.races!.length <= 1) continue;
-				if (card.races!.includes('ALL')) continue; // Skip ALL multi-tribe minions for constraint analysis
+				if (card.races!.includes('ALL')) continue;
 
 				const cardTribes = card.races!.map((r) => r.toLowerCase());
-				const availableOptions = cardTribes.filter((tribe) => !securedBySingles.has(tribe));
+				const availableOptions = cardTribes.filter((tribe) => !forcedTribes.has(tribe));
 
-				// If this multi-tribe minion has only one viable option, that tribe is forced
-				if (availableOptions.length === 1) {
-					forcedTribes.add(availableOptions[0]);
-				} else if (availableOptions.length > 1) {
+				if (availableOptions.length > 1) {
 					// This multi-tribe minion still has multiple viable options
 					hasAnyRemainingFlexibility = true;
 				}

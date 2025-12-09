@@ -134,6 +134,17 @@ const tooltipTestCases: TooltipTestCase[] = [
 			'There is no need to return double tribes here, as there are nothing we can play (from the already played tribes or double tribes) that would increase the number of tribes',
 	},
 	{
+		name: 'complex multi-tribes 2',
+		minions: [
+			createMinionWithTribes(['ELEMENTAL'], 'Elemental1'),
+			createMinionWithTribes(['MURLOC', 'PIRATE'], 'MurlocPirate1'),
+			createMinionWithTribes(['ELEMENTAL', 'MURLOC'], 'ElementalMurloc1'),
+		],
+		expectedSecuredTribes: ['Elemental', 'Murloc', 'Pirate'],
+		expectedFlexibleOptions: [],
+		description: 'All the double tribes resolve themselves',
+	},
+	{
 		name: 'Partial redundancy test',
 		minions: [
 			createMinionWithTribes(['MURLOC'], 'Murloc1'),
