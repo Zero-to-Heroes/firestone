@@ -31,7 +31,6 @@ export const DiscoveryOfMagic: StaticGeneratingCard = {
 				// Check if this spell has a spell school not yet played
 				// For spells with multiple spell schools, include if ANY school hasn't been played
 				const hasUnplayedSpellSchool = !playedSpellSchoolsSet.has(c.spellSchool);
-				
 				// Must be discoverable (can be from any class according to card text)
 				return hasUnplayedSpellSchool && canBeDiscoveredByClass(c, input.inputOptions.currentClass);
 			},
