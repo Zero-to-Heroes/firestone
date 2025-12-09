@@ -112,28 +112,11 @@ const revealRelatedCards = (deck: DeckState, card: DeckCard, allCards: CardsFaca
 			return deck;
 		}
 
-		let newDeckContents = deck.deck;
-		for (const otherFableCard of otherFableCards) {
-			const otherRef = allCards.getCard(otherFableCard);
-			const card = DeckCard.create({
-				entityId: undefined,
-				cardId: otherFableCard,
-				cardName: otherRef.name,
-				refManaCost: otherRef?.cost,
-				rarity: otherRef?.rarity?.toLowerCase(),
-				zone: null,
-			});
-
-			if (!deck.deckList?.length && !deck.deckstring && !deck.deck.some((e) => e.cardId === otherFableCard)) {
-				const fillerCard = newDeckContents.find(
-					(card) => !card.entityId && !card.cardId && !card.cardName && !card.creatorCardId,
-				);
-				newDeckContents = newDeckContents.filter((e) => e !== fillerCard);
-				newDeckContents = [...newDeckContents, card];
-			}
-		}
+		const additionalKnownCardsInDeck = [...(deck.additionalKnownCardsInDeck || []), ...otherFableCards].filter(
+			(c, index, self) => self.indexOf(c) === index,
+		);
 		return deck.update({
-			deck: newDeckContents,
+			additionalKnownCardsInDeck: additionalKnownCardsInDeck,
 		});
 	}
 

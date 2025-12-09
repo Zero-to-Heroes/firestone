@@ -304,6 +304,9 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 		// Deck
 		const deckSections: InternalDeckZoneSection[] = [];
 		let cardsInDeckZone = deckState.deck;
+		// if (deckState.additionalKnownCardsInDeck.length > 0) {
+		// 	cardsInDeckZone = updateWithAdditionalKnownCards(cardsInDeckZone, deckState.additionalKnownCardsInDeck, this.allCards);
+		// }
 		if (showTopCardsSeparately && deckState.deck.filter((c) => c.positionFromTop != undefined).length) {
 			deckSections.push({
 				header: this.i18n.translateString('decktracker.zones.top-of-deck'),
@@ -352,25 +355,11 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 		// Hand
 		let cardsForHand = deckState.hand;
 		if (deckState.additionalKnownCardsInHand.length > 0) {
-			// Remove "placeholder" cards from the hand
-			let newHand = deckState.hand;
-			for (let i = 0; i < deckState.additionalKnownCardsInHand.length; i++) {
-				const placeholder = newHand.find((c) => !c.cardId && !c.creatorCardId);
-				if (placeholder) {
-					newHand = newHand.filter((c) => c !== placeholder);
-				}
-			}
-			cardsForHand = [
-				...newHand,
-				...deckState.additionalKnownCardsInHand.map((c) =>
-					DeckCard.create({
-						cardId: c,
-						cardName: this.allCards.getCard(c)?.name,
-						refManaCost: this.allCards.getCard(c)?.cost,
-						entityId: null,
-					}),
-				),
-			];
+			cardsForHand = updateWithAdditionalKnownCards(
+				cardsForHand,
+				deckState.additionalKnownCardsInHand,
+				this.allCards,
+			);
 		}
 
 		const handSortingFunction = sortHandByZoneOrder
@@ -639,3 +628,30 @@ export interface InternalDeckZoneSection {
 	sortingFunction: (a: VisualDeckCard, b: VisualDeckCard) => number;
 	order?: number;
 }
+
+const updateWithAdditionalKnownCards = (
+	cards: readonly DeckCard[],
+	additionalKnownCards: readonly string[],
+	allCards: CardsFacadeService,
+): readonly DeckCard[] => {
+	// Remove "placeholder" cards
+	let newCards = cards;
+	for (let i = 0; i < additionalKnownCards.length; i++) {
+		const placeholder = newCards.find((c) => !c.cardId && !c.creatorCardId);
+		if (placeholder) {
+			newCards = newCards.filter((c) => c !== placeholder);
+		}
+	}
+	newCards = [
+		...newCards,
+		...additionalKnownCards.map((c) =>
+			DeckCard.create({
+				cardId: c,
+				cardName: allCards.getCard(c)?.name,
+				refManaCost: allCards.getCard(c)?.cost,
+				entityId: null,
+			}),
+		),
+	];
+	return newCards;
+};
