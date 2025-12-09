@@ -1191,6 +1191,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), selfDamageHero);
 		case CardIds.EmberrootDestroyer_FIR_955:
 			return and(side(inputSide), or(inHand, inDeck), selfDamageHero);
+		case CardIds.EmberscaleDrake:
+			return and(side(inputSide), or(inDeck, inHand), dragon);
 		case CardIds.Embiggen:
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.EmbraceOfNature:
