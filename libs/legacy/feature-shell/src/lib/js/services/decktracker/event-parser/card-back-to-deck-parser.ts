@@ -124,8 +124,9 @@ export class CardBackToDeckParser implements EventParser {
 			// (but without card id) and the card id without entityId. So we will have two cards that map to the same
 			// info, which will create issues when removing a card from the deck (since at that point we will have both entityId and cardId,
 			// which can then match multiple cards)
-			entityId:
-				!!cardWithInfoReset.entityId && !!cardWithInfoReset.cardId ? cardWithInfoReset.entityId : undefined,
+			// HOWEVER, it might be better to handle "known guessed cards in hand" like we do with the hand
+			// entityId:
+			// 	!!cardWithInfoReset.entityId && !!cardWithInfoReset.cardId ? cardWithInfoReset.entityId : undefined,
 			lastAffectedByCardId: undefined,
 			positionFromTop: undefined,
 			positionFromBottom: undefined,

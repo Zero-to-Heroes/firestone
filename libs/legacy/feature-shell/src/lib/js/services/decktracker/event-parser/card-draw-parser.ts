@@ -31,7 +31,7 @@ export class CardDrawParser implements EventParser {
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
-		// console.debug('drawing from deck', cardId, gameEvent);
+		console.debug('[card-draw] drawing from deck', cardId, gameEvent);
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		let deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const opponentDeck = isPlayer ? currentState.opponentDeck : currentState.playerDeck;
@@ -52,14 +52,16 @@ export class CardDrawParser implements EventParser {
 			});
 		}
 
-		const cardsWithMatchingCardId = deck.deck
-			.filter((e) => e.cardId === cardId)
-			.filter((e) =>
-				!!gameEvent.additionalData.dataTag1 && supportedAdditionalData.includes(e.cardId as CardIds)
-					? e.mainAttributeChange - 1 === gameEvent.additionalData.dataTag1
-					: true,
-			);
-		// console.debug('cards with matching card id', cardsWithMatchingCardId);
+		const cardsWithMatchingCardId = !!cardId?.length
+			? deck.deck
+					.filter((e) => e.cardId === cardId)
+					.filter((e) =>
+						!!gameEvent.additionalData.dataTag1 && supportedAdditionalData.includes(e.cardId as CardIds)
+							? e.mainAttributeChange - 1 === gameEvent.additionalData.dataTag1
+							: true,
+					)
+			: [];
+		console.debug('[card-draw] cards with matching card id', cardsWithMatchingCardId);
 		// So that we don't remove the "card from bottom" when the user doesn't know about it, e.g.
 		// if a tutor effect draws the entity ID that is at the bottom and we aren't supposed to know
 		// about it. This could change (via a whitelist?) if there are cards that start drawing from
@@ -71,22 +73,25 @@ export class CardDrawParser implements EventParser {
 			(!cardId ||
 				cardsWithMatchingCardId.length === 1 ||
 				cardsWithMatchingCardId.every((e) => e.positionFromBottom == null && e.positionFromTop == null));
-		const useTopOfDeckToIdentifyCard = !isPlayer && deck.deck.some((c) => c.positionFromTop != null);
+		const isTutoring = tutors.includes(drawnByCardId as CardIds);
+
+		const useTopOfDeckToIdentifyCard = !isTutoring && !isPlayer && deck.deck.some((c) => c.positionFromTop != null);
 		const cardDrawnFromBottom = [CardIds.SirFinleySeaGuide, CardIds.Fracking_WW_092].includes(
 			drawnByCardId as CardIds,
 		);
 		const useBottomOfDeckToIdentifyCard =
 			!isPlayer &&
+			!isTutoring &&
 			cardDrawnFromBottom &&
 			deck.deck.some((c) => c.positionFromBottom != null && c.lastAffectedByCardId !== drawnByCardId);
-		// console.debug(
-		// 	'useTopOfDeckToIdentifyCard',
-		// 	useTopOfDeckToIdentifyCard,
-		// 	useBottomOfDeckToIdentifyCard,
-		// 	isPlayer,
-		// 	deck.deck.filter((c) => c.positionFromTop != null),
-		// 	deck,
-		// );
+		console.debug(
+			'[card-draw] useTopOfDeckToIdentifyCard',
+			useTopOfDeckToIdentifyCard,
+			useBottomOfDeckToIdentifyCard,
+			isPlayer,
+			deck.deck.filter((c) => c.positionFromTop != null),
+			deck,
+		);
 		// When drawing "normally", we first try to avoid picking cards that are from the bottom of the deck,
 		// if any
 		const deckToDrawnFromTop = deck.deck.some((c) => c.positionFromBottom == null)
@@ -101,15 +106,15 @@ export class CardDrawParser implements EventParser {
 						.filter((c) => c.lastAffectedByCardId !== drawnByCardId)
 						.sort((c) => c.positionFromBottom)[0]
 				: this.helper.findCardInZone(deckToDrawnFromTop, cardId, shouldUseEntityId ? entityId : null, true);
-		// console.debug(
-		// 	'[card-draw] found card in zone',
-		// 	card,
-		// 	deck,
-		// 	cardId,
-		// 	entityId,
-		// 	useTopOfDeckToIdentifyCard,
-		// 	useBottomOfDeckToIdentifyCard,
-		// );
+		console.debug(
+			'[card-draw] found card in zone 0',
+			card,
+			deck,
+			cardId,
+			entityId,
+			useTopOfDeckToIdentifyCard,
+			useBottomOfDeckToIdentifyCard,
+		);
 		if (
 			(!card?.entityId || !card?.cardId) &&
 			deck.enchantments.some(
@@ -121,14 +126,14 @@ export class CardDrawParser implements EventParser {
 		}
 		const updatedCardId = useTopOfDeckToIdentifyCard ? card.cardId : cardId;
 
-		// console.debug(
-		// 	'drawing card',
-		// 	isPlayer,
-		// 	card,
-		// 	deck,
-		// 	deck.deck.some((c) => c.positionFromTop),
-		// 	[...deck.deck].filter((c) => c.positionFromTop != null).sort((c) => c.positionFromTop),
-		// );
+		console.debug(
+			'[card-draw] drawing card',
+			isPlayer,
+			card,
+			deck,
+			deck.deck.some((c) => c.positionFromTop),
+			[...deck.deck].filter((c) => c.positionFromTop != null).sort((c) => c.positionFromTop),
+		);
 
 		// This is more and more spaghetti. TODO: clean this up, my future self!
 		// This has been introduced because some cards leak info in the logs (tradeable cards traded back to deck)
@@ -169,17 +174,17 @@ export class CardDrawParser implements EventParser {
 			// and we don't want the info to surface
 			(publicCardInfos.includes(lastInfluencedByCardId) &&
 				!hiddenWhenDrawFromDeck.includes(lastInfluencedByCardId));
-		// console.debug(
-		// 	'found card in zone',
-		// 	card,
-		// 	deck,
-		// 	updatedCardId,
-		// 	entityId,
-		// 	isCardInfoPublic,
-		// 	isCreatorPublic,
-		// 	isCastWhenDrawn(updatedCardId, this.allCards),
-		// 	this.allCards.getCard(updatedCardId),
-		// );
+		console.debug(
+			'[card-draw] found card in zone',
+			card,
+			deck,
+			updatedCardId,
+			entityId,
+			isCardInfoPublic,
+			isCreatorPublic,
+			isCastWhenDrawn(updatedCardId, this.allCards),
+			this.allCards.getCard(updatedCardId),
+		);
 
 		// When the card should be known (created on top of deck) by we don't know the details (eg Merch Seller, or Dredge),
 		// we still want to surface the information we know
@@ -225,7 +230,10 @@ export class CardDrawParser implements EventParser {
 		// We didn't use the top of deck to identify the card, but we still need to remove the card at the top of the deck
 		// This happens when the top card is not identified, eg when the opponent plays Disarming Elemental
 		const drawFromTop = !useTopOfDeckToIdentifyCard && previousDeck.filter((c) => c.positionFromTop != null);
+		console.debug('[card-draw] drawFromTop', drawFromTop, previousDeck, useTopOfDeckToIdentifyCard);
 		// eslint-disable-next-line prefer-const
+		// const removeFillerCard = !useTopOfDeckToIdentifyCard;
+		// console.debug('[card-draw] removeFillerCard', removeFillerCard, useTopOfDeckToIdentifyCard);
 		let [newDeck, removedCard] = isCardInfoPublic
 			? this.helper.removeSingleCardFromZone(
 					previousDeck,
@@ -236,22 +244,23 @@ export class CardDrawParser implements EventParser {
 					{
 						cost: gameEvent.additionalData.cost,
 					},
+					useTopOfDeckToIdentifyCard,
 				)
 			: this.helper.removeSingleCardFromZone(previousDeck, null, -1, deck.deckList.length === 0, true);
-		// console.debug('newDeck 0', newDeck, isCardInfoPublic, previousDeck, removedCard);
+		console.debug('[card-draw] newDeck 0', newDeck, isCardInfoPublic, previousDeck, removedCard);
 
 		// It can happen that the previous step still removed something (like a filler or created by card)
 		if (drawFromTop && !removedCard) {
 			const topCard = newDeck.filter((c) => c.positionFromTop != null).sort((c) => c.positionFromTop)[0];
 			const isTopCardUnknown = !topCard?.cardId?.length;
-			// console.debug('removing top card from deck?', isTopCardUnknown, topCard, newDeck);
+			console.debug('[card-draw] removing top card from deck?', isTopCardUnknown, topCard, newDeck);
 			if (!!topCard && isTopCardUnknown) {
-				// console.debug('removing top card from deck', topCard, newDeck);
+				console.debug('[card-draw] removing top card from deck', topCard, newDeck);
 				newDeck = newDeck.filter((c) => c.positionFromTop !== topCard.positionFromTop);
-				// console.debug('after removing top card from deck', topCard, newDeck);
+				console.debug('[card-draw] after removing top card from deck', topCard, newDeck);
 			}
 		}
-		// console.debug('newDeck', newDeck, isCardInfoPublic, previousDeck);
+		console.debug('[card-draw] newDeck', newDeck, isCardInfoPublic, previousDeck);
 		const previousHand = deck.hand;
 		// Summoned when Drawn cards behave a bit weirdly - in the case of Illusions for instance, the card is drawn,
 		// then a minion with another entityId is summoned, which means it never gets removed from hand
