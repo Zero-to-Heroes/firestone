@@ -1,5 +1,6 @@
-import { CardIds } from '@firestone-hs/reference-data';
+import { CardIds, ReferenceCard } from '@firestone-hs/reference-data';
 import { DeckState, GameState } from '@firestone/game-state';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { reverseIfNeeded } from '@legacy-import/src/lib/js/services/decktracker/event-parser/card-dredged-parser';
 import { GameEvent } from '../../../models/game-event';
 import { creatorChangeMeansCardChanged, forcedHiddenCardCreators } from '../../hs-utils';
@@ -7,7 +8,10 @@ import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
 export class CardCreatorChangedParser implements EventParser {
-	constructor(private readonly helper: DeckManipulationHelper) {}
+	constructor(
+		private readonly helper: DeckManipulationHelper,
+		private readonly allCards: CardsFacadeService,
+	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return !!state;
@@ -32,27 +36,40 @@ export class CardCreatorChangedParser implements EventParser {
 		const isCardInfoPublic = isPlayer || isSpecialCasePublic;
 		const isCardChanged =
 			!isPlayer && creatorChangeMeansCardChanged.includes(gameEvent.additionalData.creatorCardId as CardIds);
-		const newCardInHand = cardInHand
-			? cardInHand.update({
-					cardId: isCardChanged ? null : cardInHand.cardId,
-					cardName: isCardChanged ? null : cardInHand.cardName,
-					refManaCost: isCardChanged ? null : cardInHand.refManaCost,
-					rarity: isCardChanged ? null : cardInHand.rarity,
-					actualManaCost: isCardChanged ? null : cardInHand.actualManaCost,
-					cardType: isCardChanged ? null : cardInHand.cardType,
-					inInitialDeck: isCardChanged ? false : cardInHand.inInitialDeck,
-					forged: isCardChanged ? null : cardInHand.forged,
-					relatedCardIds: isCardChanged ? null : cardInHand.relatedCardIds,
+		const newRefCard = getNewRefCard(gameEvent.additionalData.creatorCardId, this.allCards);
 
-					// To avoid info leaks from Mask of Mimicry
-					creatorCardId: isCardInfoPublic ? gameEvent.additionalData.creatorCardId : cardInHand.creatorCardId,
-					creatorEntityId: isCardInfoPublic
-						? gameEvent.additionalData.creatorEntityId
-						: cardInHand.creatorEntityId,
-					lastAffectedByCardId: null,
-					guessedInfo: isCardInfoPublic ? cardInHand.guessedInfo : {},
-				})
-			: null;
+		const newCardInHand = cardInHand
+			?.update({
+				cardId: isCardChanged ? null : cardInHand.cardId,
+				cardName: isCardChanged ? null : cardInHand.cardName,
+				refManaCost: isCardChanged ? null : cardInHand.refManaCost,
+				rarity: isCardChanged ? null : cardInHand.rarity,
+				actualManaCost: isCardChanged ? null : cardInHand.actualManaCost,
+				cardType: isCardChanged ? null : cardInHand.cardType,
+				inInitialDeck: isCardChanged ? false : cardInHand.inInitialDeck,
+				forged: isCardChanged ? null : cardInHand.forged,
+				relatedCardIds: isCardChanged ? null : cardInHand.relatedCardIds,
+
+				// To avoid info leaks from Mask of Mimicry
+				creatorCardId: isCardInfoPublic ? gameEvent.additionalData.creatorCardId : cardInHand.creatorCardId,
+				creatorEntityId: isCardInfoPublic
+					? gameEvent.additionalData.creatorEntityId
+					: cardInHand.creatorEntityId,
+				lastAffectedByCardId: null,
+				guessedInfo: isCardInfoPublic ? cardInHand.guessedInfo : {},
+			})
+			?.update(
+				!newRefCard
+					? null
+					: {
+							cardId: newRefCard.id,
+							cardName: newRefCard.name,
+							refManaCost: newRefCard.cost,
+							rarity: newRefCard.rarity,
+							cardType: newRefCard.type,
+						},
+			);
+
 		const newCardInDeck = cardInDeck
 			? cardInDeck.update({
 					creatorCardId: gameEvent.additionalData.creatorCardId,
@@ -79,3 +96,12 @@ export class CardCreatorChangedParser implements EventParser {
 		return GameEvent.CARD_CREATOR_CHANGED;
 	}
 }
+
+const getNewRefCard = (creatorCardId: string, allCards: CardsFacadeService): ReferenceCard | null => {
+	switch (creatorCardId) {
+		case CardIds.Shenanigans:
+			return allCards.getCard(CardIds.KingMukla_BananasLegacyToken);
+		default:
+			return null;
+	}
+};

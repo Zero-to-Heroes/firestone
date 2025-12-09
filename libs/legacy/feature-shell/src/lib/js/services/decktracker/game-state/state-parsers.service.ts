@@ -265,7 +265,7 @@ export class GameStateParsersService {
 			[GameEvent.CARD_BUFFED_IN_HAND]: [new CardBuffedInHandParser(this.helper)],
 			[GameEvent.CARD_CHANGED_IN_HAND]: [new CardChangedInHandParser(this.helper, this.allCards, this.i18n)],
 			[GameEvent.CARD_CHANGED_ON_BOARD]: [new CardChangedOnBoardParser(this.helper, this.allCards, this.i18n)],
-			[GameEvent.CARD_CREATOR_CHANGED]: [new CardCreatorChangedParser(this.helper)],
+			[GameEvent.CARD_CREATOR_CHANGED]: [new CardCreatorChangedParser(this.helper, this.allCards)],
 			[GameEvent.CARD_DRAW_FROM_DECK]: [
 				new CardDrawParser(this.helper, this.allCards, this.i18n),
 				new SphereOfSapienceParser(this.helper),

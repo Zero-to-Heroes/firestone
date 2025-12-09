@@ -103,7 +103,10 @@ export class DeckCard {
 		// Protected to force call to static factory
 	}
 
-	public update(newCard: Partial<NonFunctionProperties<DeckCard>>): DeckCard {
+	public update(newCard: Partial<NonFunctionProperties<DeckCard>> | null): DeckCard {
+		if (!newCard) {
+			return this;
+		}
 		return Object.assign(new DeckCard(), this, newCard);
 	}
 
