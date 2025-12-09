@@ -9,7 +9,20 @@ import { Config } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
-import { BehaviorSubject, combineLatest, map, Observable, shareReplay, switchMap, take, takeUntil, tap } from 'rxjs';
+import {
+	BehaviorSubject,
+	combineLatest,
+	EMPTY,
+	filter,
+	from,
+	map,
+	Observable,
+	shareReplay,
+	switchMap,
+	take,
+	takeUntil,
+	tap,
+} from 'rxjs';
 import { WebBattlegroundsFiltersComponent } from '../filters/_web-battlegrounds-filters.component';
 import { WebBattlegroundsModeFilterDropdownComponent } from '../filters/web-battlegrounds-mode-filter-dropdown.component';
 import { WebBattlegroundsRankFilterDropdownComponent } from '../filters/web-battlegrounds-rank-filter-dropdown.component';
@@ -80,19 +93,48 @@ export class BattlegroundsHeroesComponent extends AbstractSubscriptionComponent 
 			}),
 		);
 		const statsProvider$: Observable<BgsHeroStatsV2> = config$.pipe(
-			switchMap((config) =>
-				config.gameMode === 'battlegrounds-duo'
-					? this.metaHeroStats.loadMetaHeroStatsDuo(
-							config.timeFilter,
-							config.anomaliesFilter,
-							config.rankFilter,
-						)
-					: this.metaHeroStats.loadMetaHeroStats(
-							config.timeFilter,
-							config.anomaliesFilter,
-							config.rankFilter,
-						),
-			),
+			switchMap((config) => {
+				if (!this.metaHeroStats) {
+					console.warn('[battlegrounds-heroes] metaHeroStats service is undefined');
+					return EMPTY;
+				}
+
+				const promise =
+					config.gameMode === 'battlegrounds-duo'
+						? this.metaHeroStats.loadMetaHeroStatsDuo(
+								config.timeFilter,
+								config.anomaliesFilter,
+								config.rankFilter,
+							)
+						: this.metaHeroStats.loadMetaHeroStats(
+								config.timeFilter,
+								config.anomaliesFilter,
+								config.rankFilter,
+							);
+
+				if (!promise) {
+					console.warn(
+						'[battlegrounds-heroes] loadMetaHeroStats returned undefined',
+						config.gameMode,
+						config.timeFilter,
+						config.anomaliesFilter,
+						config.rankFilter,
+					);
+					return EMPTY;
+				}
+
+				return from(promise).pipe(
+					tap((stats) => {
+						if (!stats) {
+							console.warn(
+								'[battlegrounds-heroes] loadMetaHeroStats promise resolved to undefined',
+								config.gameMode,
+							);
+						}
+					}),
+					filter((stats): stats is BgsHeroStatsV2 => !!stats),
+				);
+			}),
 			tap((stats) =>
 				console.debug(
 					'[meta-stats] received stats',

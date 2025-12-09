@@ -35,12 +35,14 @@ import {
 import { GameStat, GameStatsLoaderService, toFormatType } from '@firestone/stats/data-access';
 import {
 	BehaviorSubject,
+	EMPTY,
 	Observable,
 	auditTime,
 	combineLatest,
 	debounceTime,
 	distinctUntilChanged,
 	filter,
+	from,
 	map,
 	of,
 	shareReplay,
@@ -308,14 +310,42 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 					a.timeFrame === b.timeFrame,
 			),
 			switchMap(({ archetypeId, format, playerRank, timeFrame }) => {
+				if (!this.archetypes) {
+					console.warn('[mulligan-guide] archetypes service is undefined');
+					return EMPTY;
+				}
+
 				const result = this.archetypes.loadNewArchetypeDetails(
 					archetypeId as number,
 					toFormatType(format as any) as GameFormat,
 					timeFrame,
 					playerRank,
 				);
+
+				if (!result) {
+					console.warn(
+						'[mulligan-guide] loadNewArchetypeDetails returned undefined',
+						archetypeId,
+						format,
+						timeFrame,
+						playerRank,
+					);
+					return EMPTY;
+				}
+
 				console.debug('[mulligan-guide] archetype result', result);
-				return result;
+				return from(result).pipe(
+					tap((archetype) => {
+						if (archetype === undefined) {
+							console.warn(
+								'[mulligan-guide] loadNewArchetypeDetails promise resolved to undefined',
+								archetypeId,
+								format,
+							);
+						}
+					}),
+					map((archetype) => archetype ?? null),
+				);
 			}),
 			// filter((archetype) => !!archetype),
 			// map(archetype => archetype as ArchetypeStat),
@@ -344,13 +374,41 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 					a.timeFrame === b.timeFrame,
 			),
 			switchMap(({ deckString, format, playerRank, timeFrame }) => {
+				if (!this.archetypes) {
+					console.warn('[mulligan-guide] archetypes service is undefined');
+					return EMPTY;
+				}
+
 				const result = this.archetypes.loadNewDeckDetails(
 					deckString,
 					toFormatType(format as any) as GameFormat,
 					timeFrame,
 					playerRank,
 				);
-				return result;
+
+				if (!result) {
+					console.warn(
+						'[mulligan-guide] loadNewDeckDetails returned undefined',
+						deckString,
+						format,
+						timeFrame,
+						playerRank,
+					);
+					return EMPTY;
+				}
+
+				return from(result).pipe(
+					tap((deckDetails) => {
+						if (deckDetails === undefined) {
+							console.warn(
+								'[mulligan-guide] loadNewDeckDetails promise resolved to undefined',
+								deckString,
+								format,
+							);
+						}
+					}),
+					map((deckDetails) => deckDetails ?? null),
+				);
 			}),
 			// filter((archetype) => !!archetype),
 			// map(archetype => archetype as ArchetypeStat),
@@ -649,13 +707,41 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 					a.timeFrame === b.timeFrame,
 			),
 			switchMap(({ archetypeId, format, playerRank, timeFrame }) => {
+				if (!this.archetypes) {
+					console.warn('[mulligan-guide] archetypes service is undefined');
+					return EMPTY;
+				}
+
 				const result = this.archetypes.loadNewArchetypeDetails(
 					archetypeId as number,
 					toFormatType(format as any) as GameFormat,
 					timeFrame,
 					playerRank,
 				);
-				return result;
+
+				if (!result) {
+					console.warn(
+						'[mulligan-guide] loadNewArchetypeDetails returned undefined',
+						archetypeId,
+						format,
+						timeFrame,
+						playerRank,
+					);
+					return EMPTY;
+				}
+
+				return from(result).pipe(
+					tap((archetype) => {
+						if (archetype === undefined) {
+							console.warn(
+								'[mulligan-guide] loadNewArchetypeDetails promise resolved to undefined',
+								archetypeId,
+								format,
+							);
+						}
+					}),
+					map((archetype) => archetype ?? null),
+				);
 			}),
 		);
 		const deckDetails$: Observable<DeckStat | null> = combineLatest([formatOverride$, timeFrame$]).pipe(
@@ -671,13 +757,41 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 				(a, b) => a.format === b.format && a.playerRank === b.playerRank && a.timeFrame === b.timeFrame,
 			),
 			switchMap(({ format, playerRank, timeFrame }) => {
+				if (!this.archetypes) {
+					console.warn('[mulligan-guide] archetypes service is undefined');
+					return EMPTY;
+				}
+
 				const result = this.archetypes.loadNewDeckDetails(
 					deckstring,
 					toFormatType(format as any) as GameFormat,
 					timeFrame,
 					playerRank,
 				);
-				return result;
+
+				if (!result) {
+					console.warn(
+						'[mulligan-guide] loadNewDeckDetails returned undefined',
+						deckstring,
+						format,
+						timeFrame,
+						playerRank,
+					);
+					return EMPTY;
+				}
+
+				return from(result).pipe(
+					tap((deckDetails) => {
+						if (!deckDetails) {
+							console.warn(
+								'[mulligan-guide] loadNewDeckDetails promise resolved to undefined',
+								deckstring,
+								format,
+							);
+						}
+					}),
+					filter((deckDetails): deckDetails is DeckStat => !!deckDetails),
+				);
 			}),
 		);
 		const deckCards = deckDefinition?.cards?.map((card) => card[0]).map((dbfId) => this.allCards.getCard(dbfId).id);
