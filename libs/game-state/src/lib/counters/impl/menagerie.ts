@@ -14,7 +14,8 @@ export class MenagerieCounterDefinitionV2 extends CounterDefinitionV2<readonly S
 	public override cards: readonly CardIds[] = [
 		CardIds.TheOneAmalgamBand,
 		CardIds.PowerSlider,
-		// CardIds.SpiritOfTheMountain_TLC_229, // Info is present when mousing over the quest
+		// Info is present when mousing over the quest but info is harder to read
+		CardIds.SpiritOfTheMountain_TLC_229,
 		CardIds.MountainMap_TLC_464,
 	];
 
