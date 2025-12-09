@@ -393,13 +393,6 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 					return -1;
 				}
 				const position = card.tags?.[GameTag.ZONE_POSITION] ?? 0;
-				console.debug(
-					'[deck-list-by-zone] getZonePosition',
-					card.cardName,
-					position,
-					card.getCardType(this.allCards),
-					card,
-				);
 				return position;
 			};
 			const boardZone = [
