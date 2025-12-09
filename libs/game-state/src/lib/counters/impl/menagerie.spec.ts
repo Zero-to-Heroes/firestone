@@ -36,6 +36,16 @@ const testCases: TestCase[] = [
 		description: 'Single tribes are forced, dual minion is redundant',
 	},
 	{
+		name: 'ELEMENTAL + MURLOC + MURLOC/PIRATE should return 3 tribes',
+		minions: [
+			createMinionWithTribes(['ELEMENTAL'], 'SingleElemental'),
+			createMinionWithTribes(['MURLOC'], 'SingleMurloc'),
+			createMinionWithTribes(['MURLOC', 'PIRATE'], 'DualMinion'),
+		],
+		expected: 3,
+		description: 'Single tribes are forced, dual minion is redundant',
+	},
+	{
 		name: 'BEAST + MURLOC/PIRATE + MURLOC/UNDEAD + TOTEM should return 4 tribes',
 		minions: [
 			createMinionWithTribes(['BEAST'], 'Beast'),

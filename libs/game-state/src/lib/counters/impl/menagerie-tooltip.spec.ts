@@ -36,6 +36,17 @@ const tooltipTestCases: TooltipTestCase[] = [
 		description: 'All single tribes should be secured, no flexible options',
 	},
 	{
+		name: 'ELEMENTAL + MURLOC + MURLOC/PIRATE should return 3 tribes',
+		minions: [
+			createMinionWithTribes(['ELEMENTAL'], 'SingleElemental'),
+			createMinionWithTribes(['MURLOC'], 'SingleMurloc'),
+			createMinionWithTribes(['MURLOC', 'PIRATE'], 'DualMinion'),
+		],
+		expectedSecuredTribes: ['Elemental', 'Murloc', 'Pirate'],
+		expectedFlexibleOptions: [],
+		description: 'Single tribes are forced, dual minion is redundant',
+	},
+	{
 		name: 'Multi-tribe with unused potential',
 		minions: [
 			createMinionWithTribes(['BEAST'], 'Beast1'),
@@ -44,6 +55,18 @@ const tooltipTestCases: TooltipTestCase[] = [
 		expectedSecuredTribes: ['Beast'],
 		expectedFlexibleOptions: ['Murloc/Pirate'],
 		description: 'Algorithm secures Beast, Murloc/Pirate still shows as flexible for strategic planning',
+	},
+	{
+		name: 'Multi-tribe with ALL',
+		minions: [
+			createMinionWithTribes(['ALL'], 'All1'),
+			createMinionWithTribes(['MECH'], 'Mech1'),
+			createMinionWithTribes(['DRAGON'], 'Dragon1'),
+			createMinionWithTribes(['MURLOC', 'PIRATE'], 'MurlocPirate1'),
+		],
+		expectedSecuredTribes: ['All', 'Mech', 'Dragon'],
+		expectedFlexibleOptions: ['Murloc/Pirate'],
+		description: 'ALL does not make other tribes redundant',
 	},
 	{
 		name: 'Multi-tribe becomes redundant',

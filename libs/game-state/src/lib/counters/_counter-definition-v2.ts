@@ -16,6 +16,7 @@ export abstract class CounterDefinitionV2<T> {
 	public readonly imageIcon: string | undefined = undefined;
 	public readonly type: 'hearthstone' | 'battlegrounds' = 'hearthstone';
 	public abstract readonly cards: readonly CardIds[];
+	protected readonly cardsOnBoard: readonly CardIds[] = [];
 	protected showOnlyInDiscovers = false;
 	protected includeBoardForCards = false;
 	protected debug = false;
@@ -90,6 +91,27 @@ export abstract class CounterDefinitionV2<T> {
 				return false;
 			}
 			if (prefs[this.player.pref] === 'always-on') {
+				return true;
+			}
+			const boardCardIds = [
+				...gameState.playerDeck?.board.map((card) => card.cardId as CardIds),
+				gameState.playerDeck?.weapon?.cardId as CardIds,
+				gameState.playerDeck?.heroPower?.cardId as CardIds,
+				...gameState.playerDeck?.otherZone
+					.filter((e) => e.zone === 'SECRET')
+					.map((card) => card.cardId as CardIds),
+			];
+			this.debug &&
+				console.debug(
+					'[debug2] cards on board',
+					this.id,
+					side,
+					this.cardsOnBoard,
+					gameState.playerDeck?.board,
+					gameState.playerDeck?.secrets,
+					boardCardIds,
+				);
+			if (this.cardsOnBoard.length > 0 && boardCardIds.some((cardId) => this.cardsOnBoard.includes(cardId))) {
 				return true;
 			}
 			if (

@@ -14,9 +14,11 @@ export class MenagerieCounterDefinitionV2 extends CounterDefinitionV2<readonly S
 	public override cards: readonly CardIds[] = [
 		CardIds.TheOneAmalgamBand,
 		CardIds.PowerSlider,
+		CardIds.MountainMap_TLC_464,
+	];
+	public override cardsOnBoard: readonly CardIds[] = [
 		// Info is present when mousing over the quest but info is harder to read
 		CardIds.SpiritOfTheMountain_TLC_229,
-		CardIds.MountainMap_TLC_464,
 	];
 
 	readonly player = {
@@ -166,7 +168,8 @@ export function analyzeTooltipTribes(allPlayedCards: readonly ReferenceCard[]): 
 		.filter((tribe, index, self) => self.indexOf(tribe) === index);
 
 	// Determine which multi-tribe minions have true strategic flexibility
-	const securedBySingles = new Set(singleTribeMinions);
+	// Note: ALL should not be treated as a constraint - it's a wildcard that doesn't force assignments
+	const securedBySingles = new Set(singleTribeMinions.filter((tribe) => tribe !== 'all'));
 	const allSecuredSet = new Set(allSecuredTribes);
 
 	const flexibleMultiTribes: string[] = [];
@@ -220,7 +223,8 @@ export function analyzeTooltipTribes(allPlayedCards: readonly ReferenceCard[]): 
 
 		if (hasSingleTribes) {
 			// We have single-tribe constraints - analyze forced assignments
-			const forcedTribes = new Set(singleTribeMinions);
+			// ALL is a wildcard and doesn't force assignments, so exclude it from constraint analysis
+			const forcedTribes = new Set(singleTribeMinions.filter((tribe) => tribe !== 'all'));
 			let hasAnyRemainingFlexibility = false;
 
 			// Add tribes that are forced because multi-tribe minions have only one viable option
@@ -244,9 +248,13 @@ export function analyzeTooltipTribes(allPlayedCards: readonly ReferenceCard[]): 
 			const multiTribeCount = allPlayedCards.filter(
 				(c) => c.races!.length > 1 && !c.races!.includes('ALL'),
 			).length;
+			const hasAllTribe = singleTribeMinions.includes('all');
+			// ALL is a wildcard and doesn't force constraints, so don't suppress flexibility when ALL is present
 			const shouldSuppressFlexibility =
 				!hasAnyRemainingFlexibility ||
-				(actualAchieved >= theoreticalMax && (singleTribeMinions.length > 1 || multiTribeCount >= 5));
+				(!hasAllTribe &&
+					actualAchieved >= theoreticalMax &&
+					(singleTribeMinions.length > 1 || multiTribeCount >= 5));
 
 			if (shouldSuppressFlexibility) {
 				// All multi-tribe assignments are forced - show all algorithm tribes as secured
@@ -255,6 +263,10 @@ export function analyzeTooltipTribes(allPlayedCards: readonly ReferenceCard[]): 
 			} else {
 				// Some multi-tribes still have multiple options - show flexibility
 				finalSecuredTribes = Array.from(forcedTribes);
+				// Add ALL back if it exists (it's secured but doesn't force constraints)
+				if (singleTribeMinions.includes('all')) {
+					finalSecuredTribes.push('all');
+				}
 				finalFlexibleOptions = flexibleMultiTribes;
 			}
 		} else {
