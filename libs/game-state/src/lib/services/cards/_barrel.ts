@@ -103,6 +103,7 @@ export { UndercityHuckster } from './undercity-huckster';
 export { VarianKingOfStormwind } from './varian-king-of-stormwind';
 export { WarCache } from './war-cache';
 export { WelcomeHome } from './welcome-home';
+export { WindowShopper } from './window-shopper';
 export { YoggInTheBox } from './yogg-in-the-box';
 export { YrelBeaconOfHope } from './yrel-beacon-of-hope';
 export { ZephrysOptions } from './zephrys-options';

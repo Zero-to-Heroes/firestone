@@ -1,4 +1,4 @@
-import { CardIds, CardType, GameTag, hasCorrectTribe, Race } from '@firestone-hs/reference-data';
+import { CardIds, CardType, GameTag, hasCorrectTribe, Race, ReferenceCard } from '@firestone-hs/reference-data';
 import {
 	addGuessInfoToCard,
 	cardsInfoCache,
@@ -435,8 +435,15 @@ const guessCardId = (
 		allCards.getCard(creatorCardId).mechanics?.includes(GameTag[GameTag.MINIATURIZE]) &&
 		cardCreationMechanics(creatorCardId, allCards).length === 1
 	) {
-		const tentativeMiniCard = allCards.getCard(creatorCardId + 't');
-		if (tentativeMiniCard.mechanics?.includes(GameTag[GameTag.MINI])) {
+		let tentativeMiniCard: ReferenceCard | null = null;
+		if (allCards.getCard(creatorCardId).relatedCardDbfIds?.length === 1) {
+			tentativeMiniCard = allCards.getCard(allCards.getCard(creatorCardId).relatedCardDbfIds[0]);
+		}
+		if (tentativeMiniCard?.mechanics?.includes(GameTag[GameTag.MINI])) {
+			return tentativeMiniCard.id;
+		}
+		tentativeMiniCard = allCards.getCard(creatorCardId + 't');
+		if (tentativeMiniCard?.mechanics?.includes(GameTag[GameTag.MINI])) {
 			return tentativeMiniCard.id;
 		}
 	}
@@ -445,9 +452,16 @@ const guessCardId = (
 		allCards.getCard(creatorCardId).mechanics?.includes(GameTag[GameTag.GIGANTIFY]) &&
 		cardCreationMechanics(creatorCardId, allCards).length === 1
 	) {
-		const tentativeMiniCard = allCards.getCard(creatorCardId + 't');
-		if (tentativeMiniCard.mechanics?.includes(GameTag[GameTag.GIGANTIC])) {
-			return tentativeMiniCard.id;
+		let tentativeGiganticCard: ReferenceCard | null = null;
+		if (allCards.getCard(creatorCardId).relatedCardDbfIds?.length === 1) {
+			tentativeGiganticCard = allCards.getCard(allCards.getCard(creatorCardId).relatedCardDbfIds[0]);
+		}
+		if (tentativeGiganticCard?.mechanics?.includes(GameTag[GameTag.GIGANTIC])) {
+			return tentativeGiganticCard.id;
+		}
+		tentativeGiganticCard = allCards.getCard(creatorCardId + 't');
+		if (tentativeGiganticCard?.mechanics?.includes(GameTag[GameTag.GIGANTIC])) {
+			return tentativeGiganticCard.id;
 		}
 	}
 	return cardId;

@@ -1100,6 +1100,7 @@ const internalGiftCreators = [
 	CardIds.PatchworkPals_TOY_353,
 	CardIds.LightOfTheNewMoon_LightOfTheFullMoonToken_FIR_918t,
 	CardIds.VolleyMaul_VAC_921,
+	CardIds.NostalgicGnome_TOY_312,
 ];
 for (const cardId of Object.keys(cardsInfoCache)) {
 	const card = cardsInfoCache[cardId];
