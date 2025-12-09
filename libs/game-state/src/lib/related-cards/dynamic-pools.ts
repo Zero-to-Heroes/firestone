@@ -1329,15 +1329,17 @@ const BAN_LIST_ARENA = [CardIds.Kiljaeden_GDB_145];
 let uncollectibleCards: readonly ReferenceCard[] = [];
 let baseCards: readonly ReferenceCard[] = [];
 
+export interface FilterCardsOptions {
+	format: GameFormat;
+	gameType: GameType;
+	scenarioId: number;
+	initialDecklist?: readonly string[];
+	validArenaPool: readonly string[];
+}
+
 export const filterCards = (
 	allCards: AllCardsService,
-	options: {
-		format: GameFormat;
-		gameType: GameType;
-		scenarioId: number;
-		initialDecklist?: readonly string[];
-		validArenaPool: readonly string[];
-	},
+	options: FilterCardsOptions,
 	sourceCardId: string,
 	...filters: ((ref: ReferenceCard) => boolean | undefined)[]
 ) => {
@@ -1350,6 +1352,8 @@ export const filterCards = (
 		.filter((c) => (summonsInPlay ? !hasMechanic(c, GameTag.COLOSSAL) : true))
 		.filter((c) => canIncludeStarcraftFaction(c, options.initialDecklist, allCards))
 		.filter((c) => {
+			const debug = false;
+			debug && console.debug('[debug] filterCards', c.id, c.set, gameType, format, arenaSets, c);
 			if (gameType === GameType.GT_ARENA || gameType === GameType.GT_UNDERGROUND_ARENA) {
 				// If we have some valid arena sets, we use them
 				if (!arenaSets?.length) {
@@ -1368,6 +1372,18 @@ export const filterCards = (
 				}
 				// Use the default pool otherwise
 			}
+			debug &&
+				console.debug(
+					'[debug] filterCards',
+					c.id,
+					c.set,
+					gameType,
+					GameType[gameType],
+					format,
+					GameFormat[format],
+					isValidSet(c.set.toLowerCase() as SetId, format, gameType),
+					arenaSets?.includes(c.set as SetId),
+				);
 			return !!c.set ? isValidSet(c.set.toLowerCase() as SetId, format, gameType) : false;
 		})
 		.filter((c) => !sourceCardId || c.id !== sourceCardId);
