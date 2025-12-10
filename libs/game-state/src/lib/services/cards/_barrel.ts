@@ -2,6 +2,7 @@ export { GeneratingCard } from './_card.type';
 export { AeonWizard } from './aeon-wizard';
 export { AlakirTheWindsOfTime } from './alakir-the-winds-of-time';
 export { AlterTime } from './alter-time';
+export { Amirdrassil } from './amirdrassil';
 export { AmuletOfTracking } from './amulet-of-tracking';
 export { AmuletOfTrackingPhony } from './amulet-of-tracking-phony';
 export { ArcaneBrilliance } from './arcane-brilliance';
