@@ -478,6 +478,7 @@ export const CURRENT_EFFECTS_WHITELIST = [
 	CardIds.PrestorsPyromancer_BurningHotEnchantment_SW_112e,
 	CardIds.PrestorsPyromancer_BurningHotEnchantment_SW_112e2,
 	CardIds.PrideSeeker_GrownUpEnchantment,
+	CardIds.PrimalfinChallenger_ChallengersEnchantment_TLC_251e,
 	CardIds.PrimordialStudies_RunicStudiesEnchantment,
 	CardIds.PrimordialStudies_RunicStudiesEnchantment,
 	CardIds.PrimordialTerrarium_TerrariumEnchantment_BG30_MagicItem_979e,
