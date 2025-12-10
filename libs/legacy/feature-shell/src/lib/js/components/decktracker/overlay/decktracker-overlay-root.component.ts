@@ -475,6 +475,18 @@ export class DeckTrackerOverlayRootComponent
 			this.cdr?.detectChanges();
 		});
 
+		this.prefs.preferences$$
+			.pipe(
+				this.mapData((prefs) => this.overlayWidthExtractor(prefs)),
+				takeUntil(this.destroyed$),
+			)
+			.subscribe((width) => {
+				this.overlayWidthInPx = width;
+				if (!(this.cdr as ViewRef)?.destroyed) {
+					this.cdr.detectChanges();
+				}
+			});
+
 		combineLatest([
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.globalWidgetScale ?? 100)),
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => this.scaleExtractor(prefs) ?? 100)),
