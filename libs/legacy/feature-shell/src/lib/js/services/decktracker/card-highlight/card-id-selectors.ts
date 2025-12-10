@@ -1411,6 +1411,8 @@ export const cardIdSelector = (
 		case CardIds.FoodFight_VAC_533:
 		case CardIds.FoodFight_EntréeToken_VAC_533t:
 			return and(side(inputSide), inDeck, minion);
+		case CardIds.ForlornStalker:
+			return and(side(inputSide), or(inHand, inDeck), minion, deathrattle);
 		case CardIds.ForebodingFlame_GDB_121:
 			return and(side(inputSide), or(inDeck, inHand), demon, notInInitialDeck);
 		case CardIds.ForsakenLieutenant_AV_601:
