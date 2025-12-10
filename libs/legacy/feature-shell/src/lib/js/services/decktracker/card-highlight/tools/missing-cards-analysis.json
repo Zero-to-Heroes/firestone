@@ -1,6 +1,6 @@
 {
-  "totalOriginal": 1670,
-  "totalProcessed": 1555,
+  "totalOriginal": 1681,
+  "totalProcessed": 1566,
   "totalMissing": 111,
   "missingCards": [
     "AbyssalDepths",
@@ -115,5 +115,5 @@
     "VelenLeaderOfTheExiled_GDB_131",
     "WildSpirits"
   ],
-  "analysisDate": "2025-12-08T07:16:42.298Z"
+  "analysisDate": "2025-12-10T17:26:38.898Z"
 }
