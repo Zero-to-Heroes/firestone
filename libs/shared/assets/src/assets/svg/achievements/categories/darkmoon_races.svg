@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" x="0px" y="0px" viewBox="-11.50 -21.75 80.0 80.0" style="padding: 15px; opacity: 0.6;" xml:space="preserve" width="128" height="128">
-<style type="text/css">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" x="0px" y="0px" viewBox="0 0 80.0 80.0" style="padding: 15px; opacity: 0.6;" xml:space="preserve" width="128" height="128">
+<g transform="translate(11.50, 21.75)"><style type="text/css">
 	.st0{display:none;}
 	.st1{display:inline;}
 </style>
@@ -31,4 +31,4 @@
 	</g>
 	<path fill="var(--icon-color, currentcolor)" d="M16.9,11.9" />
 </g>
-</svg>
+</g></svg>
