@@ -189,7 +189,7 @@ export const reverseGeneralSelector = (
 		);
 	}
 
-	// COST_MORE_4 + SPELL (6 cards)
+	// COST_MORE_4 + SPELL (7 cards)
 	if (refCard.cost > 4 && refCard.type?.toUpperCase() === 'SPELL') {
 		matchingCardIds.push(
 			CardIds.AshleafPixie_FIR_961,
@@ -197,6 +197,7 @@ export const reverseGeneralSelector = (
 			CardIds.FaeTrickster_EDR_571,
 			CardIds.Groundskeeper,
 			CardIds.HagathaTheFabled_TOY_504,
+			CardIds.SunreaverWarmage,
 			CardIds.WeaverOfTheCycle_EDR_472
 		);
 	}
@@ -302,7 +303,7 @@ export const reverseGeneralSelector = (
 		);
 	}
 
-	// HAS_MECHANIC_RUSH + MINION (10 cards)
+	// HAS_MECHANIC_RUSH + MINION (11 cards)
 	if (refCard.mechanics?.includes('RUSH') && refCard.type?.toUpperCase() === 'MINION') {
 		matchingCardIds.push(
 			CardIds.AkaliTheRhino,
@@ -311,6 +312,7 @@ export const reverseGeneralSelector = (
 			CardIds.PotionOfSparkingTavernBrawl,
 			CardIds.RushTheStage,
 			CardIds.SpecialDeliveryTavernBrawl,
+			CardIds.SpiritOfTheRhino,
 			CardIds.StageDive,
 			CardIds.StageDive_StageDive,
 			CardIds.TownCrier_CORE_GIL_580,

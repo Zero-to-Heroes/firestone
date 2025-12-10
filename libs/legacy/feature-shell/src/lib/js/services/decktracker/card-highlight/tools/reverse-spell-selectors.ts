@@ -87,7 +87,7 @@ export const reverseSpellSelector = (
 		);
 	}
 
-	// COST_MORE_4 + SPELL (6 cards)
+	// COST_MORE_4 + SPELL (7 cards)
 	if (refCard.cost > 4 && refCard.type?.toUpperCase() === 'SPELL') {
 		matchingCardIds.push(
 			CardIds.AshleafPixie_FIR_961,
@@ -95,6 +95,7 @@ export const reverseSpellSelector = (
 			CardIds.FaeTrickster_EDR_571,
 			CardIds.Groundskeeper,
 			CardIds.HagathaTheFabled_TOY_504,
+			CardIds.SunreaverWarmage,
 			CardIds.WeaverOfTheCycle_EDR_472
 		);
 	}
@@ -358,7 +359,7 @@ export const reverseSpellSelector = (
 		);
 	}
 
-	// SPELL (211 cards)
+	// SPELL (212 cards)
 	if (refCard.type?.toUpperCase() === 'SPELL') {
 		matchingCardIds.push(
 			CardIds.AdvancedTargetingMonocle,
@@ -451,6 +452,7 @@ export const reverseSpellSelector = (
 			CardIds.Kindle_DALA_911,
 			CardIds.Kindle_ULDA_911,
 			CardIds.KingKrush_KingsDecree_THD_012p,
+			CardIds.KingPhaoris,
 			CardIds.KingTide_VAC_524,
 			CardIds.KnightOfAnointment,
 			CardIds.KolkarPackRunner,
