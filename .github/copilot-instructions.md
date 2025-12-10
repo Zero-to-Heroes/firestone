@@ -4,6 +4,7 @@ General guidelines:
 
 - When cards are mentioned, always check the reference at https://github.com/Zero-to-Heroes/hs-reference-data/blob/master/src/cards_short.json and recap their text in the PR
 - Do not touch files that are flagged as automatically generated (there is a comment in the header)
+- card ids are at https://github.com/Zero-to-Heroes/hs-reference-data/blob/master/src/card-ids.ts
 
 ### Card highlight requests
 
