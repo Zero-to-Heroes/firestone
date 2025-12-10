@@ -1543,8 +1543,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.GlacialDownpourTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), spell, frost);
-		case CardIds.GlacialMysteries:
-		case CardIds.GlacialMysteriesCore:
+		case CardIds.GlacialMysteries_ICC_086:
+		case CardIds.GlacialMysteries_CORE_ICC_086:
 			return and(side(inputSide), inDeck, secret);
 		case CardIds.GoblinBlastmage:
 		case CardIds.GoblinBlastmage_WON_035:
