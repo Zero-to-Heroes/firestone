@@ -113,6 +113,12 @@ const willBeActive = (
 					hasCorrectTribe(allCards.getCard(c.cardId), Race.UNDEAD),
 				).length > 0
 			);
+		// Launched a starship
+		case CardIds.SiegeTank_SC_413:
+		case CardIds.Hellion_SC_412:
+		case CardIds.Thor_SC_414:
+			return !!playerDeck.starshipsLaunched?.length;
+
 		// Played an Elemental last turn
 		case CardIds.AnimatedAvalanche:
 		case CardIds.Arcanosaur:
