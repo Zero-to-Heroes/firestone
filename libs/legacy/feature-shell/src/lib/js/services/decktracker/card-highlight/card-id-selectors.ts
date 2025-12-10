@@ -3325,10 +3325,7 @@ export const cardIdSelector = (
 		case CardIds.Stormrook_TIME_217:
 			return and(side(inputSide), or(inDeck, inHand), spell, nature, dealsDamage);
 		case CardIds.StoryOfBarnabus_TLC_231:
-			return highlightConditions(
-				and(side(inputSide), or(inDeck, inHand), minion, attackGreaterThan(4)),
-				and(side(inputSide), or(inDeck, inHand), minion),
-			);
+			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.StoryOfTheWaygate_TLC_364:
 			return and(side(inputSide), or(inDeck, inHand), notInInitialDeck);
 		case CardIds.StrandedSpaceman_GDB_861:

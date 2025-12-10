@@ -57,12 +57,11 @@ export const reverseMinionSelector = (
 		);
 	}
 
-	// ATTACK_MORE_4 + MINION (3 cards)
+	// ATTACK_MORE_4 + MINION (2 cards)
 	if (refCard.attack > 4 && refCard.type?.toUpperCase() === 'MINION') {
 		matchingCardIds.push(
 			CardIds.ClimbingHook_VAC_932,
-			CardIds.GiantAnaconda,
-			CardIds.StoryOfBarnabus_TLC_231
+			CardIds.GiantAnaconda
 		);
 	}
 
