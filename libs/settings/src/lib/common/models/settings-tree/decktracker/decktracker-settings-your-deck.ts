@@ -140,6 +140,18 @@ export const decktrackerYourDeckSettings = (context: SettingContext): SettingNod
 					},
 					{
 						type: 'slider',
+						field: 'overlayWidthInPx',
+						label: context.i18n.translateString('settings.decktracker.opponent-deck.width-title'),
+						tooltip: null,
+						sliderConfig: {
+							min: 180,
+							max: 350,
+							snapSensitivity: 5,
+							showCurrentValue: true,
+						},
+					},
+					{
+						type: 'slider',
 						field: 'overlayOpacityInPercent',
 						label: context.i18n.translateString('settings.decktracker.opponent-deck.opacity-title'),
 						tooltip: null,
