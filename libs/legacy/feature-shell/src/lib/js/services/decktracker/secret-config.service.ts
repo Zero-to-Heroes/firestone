@@ -174,7 +174,12 @@ export class SecretConfigService {
 		if (hasGetRelatedCards(cardImpl)) {
 			const result = cardImpl.getRelatedCards(creatorEntityId, 'opponent', gameState, this.allCards);
 			if (result?.length) {
-				return result.includes(secretCardId);
+				if (Array.isArray(result) && typeof result[0] === 'string') {
+					return result.includes(secretCardId);
+				} else {
+					const resultWithEntityIds = result as readonly { cardId: string; entityId: number }[];
+					return resultWithEntityIds.some((c) => c.cardId === secretCardId);
+				}
 			}
 		}
 		return true;

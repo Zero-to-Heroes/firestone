@@ -231,7 +231,12 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 				const result = cardImpl.getRelatedCards(card?.creatorEntityId, 'opponent', gameState, this.allCards);
 				// console.debug('[opponent-card-info-id] result', result);
 				if (result != null) {
-					this.possibleCards.push(...result);
+					if (Array.isArray(result) && typeof result[0] === 'string') {
+						this.possibleCards.push(...result);
+					} else {
+						const resultWithEntityIds = result as readonly { cardId: string; entityId: number }[];
+						this.possibleCards.push(...resultWithEntityIds.map((c) => c.cardId));
+					}
 				}
 			}
 		}

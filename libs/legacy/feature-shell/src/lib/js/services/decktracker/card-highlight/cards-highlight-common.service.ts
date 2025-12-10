@@ -166,7 +166,38 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			if (hasGetRelatedCards(cardImpl)) {
 				const result = cardImpl.getRelatedCards(entityId, side, gameState, this.allCards);
 				if (result != null) {
-					return result;
+					// If it's a string[], return it directly
+					if (Array.isArray(result) && typeof result[0] === 'string') {
+						return result;
+					}
+
+					// If it's a {cardId: string; entityId: number}[], do some stuff
+					const resultWithEntityIds = result as readonly { cardId: string; entityId: number }[];
+					const extendedResult: readonly string[] = resultWithEntityIds.flatMap((c) => {
+						const isStarship = this.allCards
+							.getCard(c.cardId)
+							?.mechanics?.includes(GameTag[GameTag.STARSHIP]);
+						if (isStarship) {
+							const deckState = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
+							const deckCard = deckState.findCard(c.entityId);
+							if (!deckCard) {
+								return c.cardId;
+							}
+							return [
+								c.cardId,
+								...(deckCard.card?.storedInformation?.cards
+									?.map((c) => c.cardId)
+									.filter(
+										(c) =>
+											![CardIds.AbortLaunch_GDB_906, CardIds.LaunchStarship_GDB_905].includes(
+												c as CardIds,
+											),
+									) ?? []),
+							].filter((c) => !!c);
+						}
+						return c.cardId;
+					});
+					return extendedResult;
 				}
 			}
 		}

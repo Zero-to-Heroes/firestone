@@ -5,12 +5,15 @@ import { AnimateDead } from './animate-dead';
 import { ArchdruidOfThorns } from './archdruid-of-thorns';
 import { Archimonde } from './archimonde';
 import { AsvedonTheGrandshield } from './asvedon-the-grandshield';
+import { AzureOathstone } from './azure-oathstone';
 import { Bonecaller } from './bonecaller';
 import { BrilliantMacaw } from './brilliant-macaw';
 import { CarryOnSuitcase } from './carry-on-suitcase';
 import { CatrinaMuerte } from './catrina-muerte';
 import { Chromie } from './chromie';
+import { ChronoLordEpoch } from './chrono-lord-epoch';
 import { CreatureOfTheSacredCave } from './creature-of-the-sacred-cave';
+import { DrStitchensew } from './dr-stitchensew';
 import { EndbringerUmbra } from './endbringer-umbra';
 import { FerociousFelbat } from './ferocious-felbat';
 import { Frostmourne } from './frostmourne';
@@ -23,9 +26,11 @@ import { HungeringAncient } from './hungering-ancient';
 import { IchorOfUndeath } from './ichor-of-undeath';
 import { ImpKingRafaam } from './imp-king-rafaam';
 import { InfantryReanimator } from './infantry-reanimator';
+import { InventorBoom } from './inventor-boom';
 import { JimRaynor } from './jim-raynor';
 import { KragwaTheFrog } from './kragwa-the-frog';
 import { LadyDarkvein } from './lady-darkvein';
+import { MagisterDawngrasp } from './magister-dawngrasp';
 import { MemoriamManifest } from './memoriam-manifest';
 import { Merithra } from './merithra';
 import { MonstrousParrot } from './monstrous-parrot';
@@ -58,10 +63,6 @@ import { WakenerOfSouls } from './wakener-of-souls';
 import { WallowTheWretched } from './wallow-the-wretched';
 import { XyrellaTheDevout } from './xyrella-the-devout';
 import { Zuljin } from './zul-jin';
-import { ChronoLordEpoch } from './chrono-lord-epoch';
-import { AzureOathstone } from './azure-oathstone';
-import { DrStitchensew } from './dr-stitchensew';
-import { MagisterDawngrasp } from './magister-dawngrasp';
 
 const cards = [
 	Archimonde,
@@ -126,6 +127,7 @@ const cards = [
 	XyrellaTheDevout,
 	DrStitchensew,
 	MagisterDawngrasp,
+	InventorBoom,
 ];
 
 export const cardsMapping: { [cardId: string]: Card } = {};
@@ -146,7 +148,7 @@ export interface GlobalHighlightCard extends Card {
 		side: HighlightSide,
 		gameState: GameState,
 		allCards: CardsFacadeService,
-	) => readonly string[] | null;
+	) => readonly string[] | readonly { cardId: string; entityId: number }[] | null;
 }
 export const hasGetRelatedCards = (card: Card): card is GlobalHighlightCard =>
 	(card as GlobalHighlightCard)?.getRelatedCards !== undefined;
