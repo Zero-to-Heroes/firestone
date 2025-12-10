@@ -370,6 +370,7 @@
     "Kindle_DALA_911",
     "Kindle_ULDA_911",
     "KingKrush_KingsDecree_THD_012p",
+    "KingPhaoris",
     "KingTide_VAC_524",
     "KnightOfAnointment",
     "KolkarPackRunner",
@@ -643,6 +644,7 @@
     "InvigoratingSermon",
     "IxlidFungalLord",
     "JepettoJoybuzz",
+    "JungleGiants_BarnabusTheStomperToken",
     "KabalTalonpriest",
     "Kazakus_IchorOfUndeathToken_CFM_621t37",
     "Kazakus_IchorOfUndeathToken_CFM_621t38",
@@ -770,6 +772,7 @@
     "WakenerOfSouls_GDB_468",
     "WebOfDeception_EDR_523",
     "WishUponAStar_TOY_877",
+    "Woecleaver",
     "XyrellaTheDevout",
     "Yesterloc_TIME_428",
     "YoggInTheBox_TOY_372",
@@ -808,6 +811,7 @@
     "PotionOfSparkingTavernBrawl",
     "RushTheStage",
     "SpecialDeliveryTavernBrawl",
+    "SpiritOfTheRhino",
     "StageDive",
     "StageDive_StageDive",
     "TownCrier_CORE_GIL_580",
@@ -938,7 +942,7 @@
     "ClutchOfCorruption_EDR_454",
     "CorrosiveBreath",
     "CrazedNetherwing",
-    "CrowdRoaster_TRL_569",
+    "CrowdRoaster",
     "DaringDrake",
     "Darkrider_EDR_456",
     "DesertNestmatron_WW_826",
@@ -956,6 +960,7 @@
     "DrakonidOperative",
     "DrakonidOperativeCore",
     "Duskbreaker_LOOT_410",
+    "EmberscaleDrake",
     "FiretreeWitchdoctor",
     "FlyOffTheShelves_TOY_714",
     "FrizzKindleroost",
@@ -1016,6 +1021,7 @@
     "DevoutBlessingsTavernBrawlToken",
     "ExpeditedBurialTavernBrawl",
     "FelfireBonfire_VAC_952",
+    "ForlornStalker",
     "ForsakenLieutenant_AV_601",
     "HedgeMaze_REV_333",
     "HedgeMaze_REV_792",
@@ -1069,6 +1075,8 @@
     "EaglehornBowLegacy",
     "EaglehornBowVanilla",
     "GhastlyGravedigger",
+    "GlacialMysteries",
+    "GlacialMysteriesCore",
     "KabalCrystalRunner",
     "KabalCrystalRunner_WON_308",
     "MadScientist",
@@ -1199,6 +1207,7 @@
     "FaeTrickster_EDR_571",
     "Groundskeeper",
     "HagathaTheFabled_TOY_504",
+    "SunreaverWarmage",
     "WeaverOfTheCycle_EDR_472"
   ],
   "HAS_MECHANIC_REBORN": [
@@ -1251,6 +1260,7 @@
     "SouthCoastChieftain",
     "TidelostBurrower",
     "TinyfinsCaravan",
+    "TipTheScales",
     "Toxfin_DAL_077",
     "UnderbellyAngler",
     "UniteTheMurlocs",
@@ -1428,6 +1438,7 @@
     "BolvarFireblood_ICC_858",
     "FancyPackaging_TOY_881",
     "Funkfin",
+    "PrismaticJewelKit",
     "RighteousReservesTavernBrawl"
   ],
   "MECH": [
@@ -1444,7 +1455,6 @@
     "GoblinBlastmage_WON_035",
     "GoboglideTech",
     "IniStormcoil_TSC_649",
-    "InventorBoom_TOY_607",
     "InventorsAura",
     "KangorsEndlessArmy",
     "MechaShark_TSC_054",
@@ -1774,7 +1784,6 @@
   ],
   "COST_MORE_4": [
     "FerociousFelbat_EDR_892",
-    "InventorBoom_TOY_607",
     "PrecursoryStrike_TIME_750",
     "Prescience",
     "StranglethornHeart",
@@ -1907,6 +1916,9 @@
     "RazzleDazzler_VAC_301",
     "Sif",
     "WisdomOfNorgannon"
+  ],
+  "COST_MORE_4 + MECH": [
+    "InventorBoom_TOY_607"
   ],
   "CHOOSE_ONE + SPELL": [
     "JerryRigCarpenter"

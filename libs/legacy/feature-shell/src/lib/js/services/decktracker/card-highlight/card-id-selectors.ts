@@ -1968,6 +1968,8 @@ export const cardIdSelector = (
 			);
 		case CardIds.JungleGym_TOY_359:
 			return and(side(inputSide), or(inHand, inDeck), beast);
+		case CardIds.JungleGiants_BarnabusTheStomperToken:
+			return and(side(inputSide), inDeck, minion);
 		case CardIds.JungleJammer:
 			return and(side(inputSide), or(inHand, inDeck), spell);
 		case CardIds.K90tron:

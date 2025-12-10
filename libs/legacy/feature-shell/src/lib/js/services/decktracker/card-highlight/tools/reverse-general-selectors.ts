@@ -182,6 +182,13 @@ export const reverseGeneralSelector = (
 		);
 	}
 
+	// COST_MORE_4 + MECH (1 cards)
+	if (refCard.cost > 4 && refCard.races?.map(r => r.toUpperCase()).includes('MECH')) {
+		matchingCardIds.push(
+			CardIds.InventorBoom_TOY_607
+		);
+	}
+
 	// COST_MORE_4 + MINION (1 cards)
 	if (refCard.cost > 4 && refCard.type?.toUpperCase() === 'MINION') {
 		matchingCardIds.push(
@@ -189,7 +196,7 @@ export const reverseGeneralSelector = (
 		);
 	}
 
-	// COST_MORE_4 + SPELL (6 cards)
+	// COST_MORE_4 + SPELL (7 cards)
 	if (refCard.cost > 4 && refCard.type?.toUpperCase() === 'SPELL') {
 		matchingCardIds.push(
 			CardIds.AshleafPixie_FIR_961,
@@ -197,6 +204,7 @@ export const reverseGeneralSelector = (
 			CardIds.FaeTrickster_EDR_571,
 			CardIds.Groundskeeper,
 			CardIds.HagathaTheFabled_TOY_504,
+			CardIds.SunreaverWarmage,
 			CardIds.WeaverOfTheCycle_EDR_472
 		);
 	}
@@ -257,7 +265,7 @@ export const reverseGeneralSelector = (
 		);
 	}
 
-	// HAS_MECHANIC_DEATHRATTLE + MINION (39 cards)
+	// HAS_MECHANIC_DEATHRATTLE + MINION (40 cards)
 	if (refCard.mechanics?.includes('DEATHRATTLE') && refCard.type?.toUpperCase() === 'MINION') {
 		matchingCardIds.push(
 			CardIds.AmuletOfUndying,
@@ -273,6 +281,7 @@ export const reverseGeneralSelector = (
 			CardIds.DevoutBlessingsTavernBrawlToken,
 			CardIds.ExpeditedBurialTavernBrawl,
 			CardIds.FelfireBonfire_VAC_952,
+			CardIds.ForlornStalker,
 			CardIds.ForsakenLieutenant_AV_601,
 			CardIds.HedgeMaze_REV_333,
 			CardIds.HedgeMaze_REV_792,
@@ -302,7 +311,7 @@ export const reverseGeneralSelector = (
 		);
 	}
 
-	// HAS_MECHANIC_RUSH + MINION (10 cards)
+	// HAS_MECHANIC_RUSH + MINION (11 cards)
 	if (refCard.mechanics?.includes('RUSH') && refCard.type?.toUpperCase() === 'MINION') {
 		matchingCardIds.push(
 			CardIds.AkaliTheRhino,
@@ -311,6 +320,7 @@ export const reverseGeneralSelector = (
 			CardIds.PotionOfSparkingTavernBrawl,
 			CardIds.RushTheStage,
 			CardIds.SpecialDeliveryTavernBrawl,
+			CardIds.SpiritOfTheRhino,
 			CardIds.StageDive,
 			CardIds.StageDive_StageDive,
 			CardIds.TownCrier_CORE_GIL_580,
@@ -414,11 +424,10 @@ export const reverseGeneralSelector = (
 		);
 	}
 
-	// COST_MORE_4 (6 cards)
+	// COST_MORE_4 (5 cards)
 	if (refCard.cost > 4) {
 		matchingCardIds.push(
 			CardIds.FerociousFelbat_EDR_892,
-			CardIds.InventorBoom_TOY_607,
 			CardIds.PrecursoryStrike_TIME_750,
 			CardIds.Prescience,
 			CardIds.StranglethornHeart,
