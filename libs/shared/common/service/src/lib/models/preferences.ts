@@ -522,6 +522,7 @@ export class Preferences implements IPreferences {
 	readonly playerBgsMajordomoCounter: boolean = true;
 	readonly playerBgsDeepBlueCounter: boolean = true;
 	readonly playerBgsUndeadArmyCounter: boolean = true;
+	readonly playerBgsVolumizerBuffCounter: boolean = true;
 
 	readonly replaysLoadPeriod: 'all-time' | 'past-100' | 'last-patch' | 'season-start' | 'past-7' = 'past-100';
 	readonly replaysShowNotification: boolean = false;

@@ -20,6 +20,7 @@ import { GoldNextTurnCounterDefinitionV2 } from './impl/battlegrounds/gold-next-
 import { SpellsPlayedCounterDefinitionV2 } from './impl/battlegrounds/spells-played';
 import { TavernSpellsBuffCounterDefinitionV2 } from './impl/battlegrounds/tavern-spells-buff';
 import { UndeadArmyCounterDefinitionV2 } from './impl/battlegrounds/undead-army';
+import { VolumizerBuffCounterDefinitionV2 } from './impl/battlegrounds/volumizer-buff';
 import { BolnerHammerbeakCounterDefinitionV2 } from './impl/bolner-hammerbeak';
 import { BonelordFrostwhisperCounterDefinitionV2 } from './impl/bonelord-frostwhisper';
 import { CardsDrawnCounterDefinitionV2 } from './impl/cards-drawn';
@@ -189,6 +190,7 @@ export const getAllCounters: (
 	new ElementalTavernBuffCounterDefinitionV2(i18n, allCards),
 	new DeepBlueCounterDefinitionV2(i18n, allCards),
 	new UndeadArmyCounterDefinitionV2(i18n, allCards),
+	new VolumizerBuffCounterDefinitionV2(i18n, allCards),
 ];
 
 // Use camelCase because it uses conventions to get the pref property names
@@ -289,4 +291,5 @@ export type CounterType =
 	| 'elementalTavernBuff'
 	| 'bgsMajordomo'
 	| 'bgsDeepBlue'
-	| 'bgsUndeadArmy';
+	| 'bgsUndeadArmy'
+	| 'bgsVolumizerBuff';
