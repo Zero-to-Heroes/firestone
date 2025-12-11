@@ -72,3 +72,16 @@ export interface StaticGeneratingCardInput {
 export interface SpecialCaseParserCard extends Card {
 	specialCaseParser: (deck: DeckState) => DeckState;
 }
+
+export interface WillBeActiveCard extends Card {
+	willBeActive: (input: WillBeActiveInput) => boolean;
+}
+export const hasWillBeActive = (card: Card): card is WillBeActiveCard =>
+	(card as WillBeActiveCard)?.willBeActive !== undefined;
+export interface WillBeActiveInput {
+	cardId: string;
+	entityId: number;
+	playerDeck: DeckState;
+	currentTurn: number;
+	allCards: AllCardsService;
+}

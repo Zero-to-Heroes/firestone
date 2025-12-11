@@ -3,12 +3,20 @@ import {
 	CardIds,
 	CardType,
 	GameTag,
-	Race,
-	SpellSchool,
 	hasCorrectTribe,
 	hasMechanic,
+	Race,
+	SpellSchool,
 } from '@firestone-hs/reference-data';
-import { CardOption, DeckState, GameState, getProcessedCard, hasCorrectType } from '@firestone/game-state';
+import {
+	CardOption,
+	cardsInfoCache,
+	DeckState,
+	GameState,
+	getProcessedCard,
+	hasCorrectType,
+	hasWillBeActive,
+} from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { ChoosingOptionsGameEvent } from '../../../models/mainwindow/game-events/choosing-options-game-event';
@@ -67,6 +75,17 @@ const willBeActive = (
 ): boolean => {
 	if (!playerDeck?.isActivePlayer) {
 		return false;
+	}
+
+	const cardImpl = cardsInfoCache[cardId];
+	if (hasWillBeActive(cardImpl)) {
+		return cardImpl.willBeActive({
+			cardId: cardId,
+			entityId: entityId,
+			playerDeck: playerDeck,
+			currentTurn: currentTurn,
+			allCards: allCards.getService(),
+		});
 	}
 
 	const refCard = getProcessedCard(cardId, entityId, playerDeck, allCards);
