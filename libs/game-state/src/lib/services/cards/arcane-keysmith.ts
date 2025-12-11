@@ -27,7 +27,7 @@ export const ArcaneKeysmith: GeneratingCard & StaticGeneratingCard = {
 		};
 	},
 	dynamicPool: (input: StaticGeneratingCardInput) => {
-		const currentClass = input.inputOptions.currentClass;
+		const currentClass = input.inputOptions.deckState.getCurrentClass();
 		return filterCards(
 			ArcaneKeysmith.cardIds[0],
 			input.allCards,
