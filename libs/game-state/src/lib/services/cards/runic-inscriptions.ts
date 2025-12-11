@@ -27,10 +27,11 @@ export const RunicInscriptions: GeneratingCard & StaticGeneratingCard = {
 	dynamicPool: (input: StaticGeneratingCardInput) => {
 		// Runic Inscriptions discovers a spell
 		// The spell pool should be all discoverable spells from the current class
+		const currentClass = input.inputOptions.deckState.getCurrentClass();
 		return filterCards(
 			input.cardId,
 			input.allCards,
-			(c) => hasCorrectType(c, CardType.SPELL) && canBeDiscoveredByClass(c, input.inputOptions.currentClass),
+			(c) => hasCorrectType(c, CardType.SPELL) && canBeDiscoveredByClass(c, currentClass),
 			input.inputOptions,
 		);
 	},
