@@ -27,7 +27,7 @@ import {
 import { DeckState } from '../models/deck-state';
 import { PlayerGameState } from '../models/full-game-state';
 import { GameState } from '../models/game-state';
-import { StaticGeneratingCard } from '../services/cards/_card.type';
+import { hasDynamicPool } from '../services/cards/_card.type';
 import { cardsInfoCache } from '../services/cards/_mapping';
 
 const IMBUED_HERO_POWERS = [
@@ -83,15 +83,14 @@ const getDynamicRelatedCardIdsInternal = (
 		initialDecklist: inputOptions.deckState?.deckList?.map((c) => c.cardId) ?? [],
 	};
 
-	const dynamicPoolImpl = cardsInfoCache[cardId] as StaticGeneratingCard;
-	const dynamicPool = dynamicPoolImpl?.dynamicPool?.({
-		cardId,
-		entityId,
-		allCards,
-		inputOptions: options,
-	});
-	if (dynamicPool) {
-		return dynamicPool;
+	const dynamicPoolImpl = cardsInfoCache[cardId];
+	if (hasDynamicPool(dynamicPoolImpl)) {
+		return dynamicPoolImpl.dynamicPool({
+			cardId,
+			entityId,
+			allCards,
+			inputOptions: options,
+		});
 	}
 
 	switch (cardId) {

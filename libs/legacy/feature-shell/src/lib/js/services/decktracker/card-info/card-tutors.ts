@@ -1,5 +1,5 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { cardsInfoCache, GeneratingCard } from '@firestone/game-state';
+import { cardsInfoCache, hasGeneratingCard } from '@firestone/game-state';
 
 const internalTutors = [
 	CardIds.AbyssalDepths,
@@ -306,7 +306,7 @@ const internalTutors = [
 ];
 for (const cardId of Object.keys(cardsInfoCache)) {
 	const card = cardsInfoCache[cardId];
-	if ((card as GeneratingCard).publicTutor && !internalTutors.includes(cardId as CardIds)) {
+	if (hasGeneratingCard(card) && card.publicTutor && !internalTutors.includes(cardId as CardIds)) {
 		internalTutors.push(cardId as CardIds);
 	}
 }

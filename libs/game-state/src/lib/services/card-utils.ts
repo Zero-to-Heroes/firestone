@@ -18,7 +18,7 @@ import { DeckCard, StoredInformation } from '../models/deck-card';
 import { DeckState } from '../models/deck-state';
 import { GameState } from '../models/game-state';
 import { Metadata } from '../models/metadata';
-import { GeneratingCard } from './cards/_card.type';
+import { hasGeneratingCard } from './cards/_card.type';
 import { cardsInfoCache } from './cards/_mapping';
 
 export const getProcessedCard = (
@@ -189,25 +189,27 @@ export const addGuessInfoToCard = (
 		// 		},
 		// 	});
 		default:
-			const guessedInfo = (
-				cardsInfoCache[creatorCardId as keyof typeof cardsInfoCache] as GeneratingCard
-			)?.guessInfo?.({
-				card,
-				deckState,
-				opponentDeckState,
-				gameState: gameState,
-				allCards: allCards.getService(),
-				creatorEntityId,
-				options,
-			});
-			return guessedInfo != null
-				? card.update({
-						guessedInfo: {
-							...card.guessedInfo,
-							...guessedInfo,
-						},
-					})
-				: card;
+			const cardImpl = cardsInfoCache[creatorCardId];
+			if (hasGeneratingCard(cardImpl)) {
+				const guessedInfo = cardImpl.guessInfo?.({
+					card,
+					deckState,
+					opponentDeckState,
+					gameState: gameState,
+					allCards: allCards.getService(),
+					creatorEntityId,
+					options,
+				});
+				return guessedInfo != null
+					? card.update({
+							guessedInfo: {
+								...card.guessedInfo,
+								...guessedInfo,
+							},
+						})
+					: card;
+			}
+			return card;
 	}
 };
 

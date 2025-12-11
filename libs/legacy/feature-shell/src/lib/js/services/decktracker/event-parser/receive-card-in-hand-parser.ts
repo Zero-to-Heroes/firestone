@@ -5,8 +5,8 @@ import {
 	DeckCard,
 	DeckState,
 	GameState,
-	GeneratingCard,
 	getProcessedCard,
+	hasGeneratingCard,
 	toTagsObject,
 } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
@@ -412,19 +412,20 @@ const guessCardId = (
 				.sort((a, b) => a.tags?.[GameTag.ZONE_POSITION] - b.tags?.[GameTag.ZONE_POSITION])
 				.pop()?.cardId;
 		default:
-			const guessedCardId = (
-				cardsInfoCache[creatorCardId as keyof typeof cardsInfoCache] as GeneratingCard
-			)?.guessCardId?.(
-				cardId,
-				deckState,
-				opponentDeckState,
-				creatorCardId,
-				creatorEntityId,
-				createdIndex,
-				allCards.getService(),
-			);
-			if (guessedCardId) {
-				return guessedCardId;
+			const cardImpl = cardsInfoCache[creatorCardId];
+			if (hasGeneratingCard(cardImpl)) {
+				const guessedCardId = cardImpl.guessCardId?.(
+					cardId,
+					deckState,
+					opponentDeckState,
+					creatorCardId,
+					creatorEntityId,
+					createdIndex,
+					allCards.getService(),
+				);
+				if (guessedCardId) {
+					return guessedCardId;
+				}
 			}
 			break;
 	}

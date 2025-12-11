@@ -1,12 +1,10 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { cardsInfoCache, DeckCard, DeckState, GameState } from '@firestone/game-state';
-import { TempCardIds } from '@firestone/shared/common/service';
+import { cardsInfoCache, DeckCard, DeckState, GameState, hasSpecialCaseParser } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { globalEffectPowers, globalEffectPowersAlsoOpponent } from '../../hs-utils';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
-import { SpecialCaseParserCard } from '@firestone/game-state';
 
 const SPECIAL_CARD_POWERS = [
 	CardIds.LorekeeperPolkelt,
@@ -84,9 +82,10 @@ export class SpecialCardPowerTriggeredParser implements EventParser {
 					),
 				});
 			default:
-				return (
-					cardsInfoCache[cardId as keyof typeof cardsInfoCache] as SpecialCaseParserCard
-				)?.specialCaseParser?.(deck);
+				const cardImpl = cardsInfoCache[cardId];
+				if (hasSpecialCaseParser(cardImpl)) {
+					return cardImpl.specialCaseParser(deck);
+				}
 		}
 		return deck;
 	}

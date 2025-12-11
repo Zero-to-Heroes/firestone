@@ -1,5 +1,5 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { cardsInfoCache, GeneratingCard } from '@firestone/game-state';
+import { cardsInfoCache, hasGeneratingCard } from '@firestone/game-state';
 
 const COIN_IDS = [
 	CardIds.TheCoinCore,
@@ -1104,7 +1104,7 @@ const internalGiftCreators = [
 ];
 for (const cardId of Object.keys(cardsInfoCache)) {
 	const card = cardsInfoCache[cardId];
-	if ((card as GeneratingCard).publicCreator && !internalGiftCreators.includes(cardId as CardIds)) {
+	if (hasGeneratingCard(card) && card.publicCreator && !internalGiftCreators.includes(cardId as CardIds)) {
 		internalGiftCreators.push(cardId as CardIds);
 	}
 }

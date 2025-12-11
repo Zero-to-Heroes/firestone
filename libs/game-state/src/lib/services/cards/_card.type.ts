@@ -16,6 +16,8 @@ export type GeneratingCard = Card & {
 		| { guessInfo?: GuessInfoFunction; guessCardId: GuessCardIdFunction }
 		| { guessInfo: GuessInfoFunction; guessCardId: GuessCardIdFunction }
 	);
+export const hasGeneratingCard = (card: Card): card is GeneratingCard =>
+	(card as GeneratingCard)?.guessInfo !== undefined || (card as GeneratingCard)?.guessCardId !== undefined;
 // export type GameEventCard = Card & {
 // }
 
@@ -54,6 +56,8 @@ export interface StaticGeneratingCard extends Card {
 	publicCreator?: boolean;
 	dynamicPool: (input: StaticGeneratingCardInput) => readonly string[];
 }
+export const hasDynamicPool = (card: Card): card is StaticGeneratingCard =>
+	(card as StaticGeneratingCard)?.dynamicPool !== undefined;
 export interface StaticGeneratingCardInput {
 	cardId: string;
 	entityId: number;
@@ -69,9 +73,12 @@ export interface StaticGeneratingCardInput {
 		validArenaPool: readonly string[];
 	};
 }
+
 export interface SpecialCaseParserCard extends Card {
 	specialCaseParser: (deck: DeckState) => DeckState;
 }
+export const hasSpecialCaseParser = (card: Card): card is SpecialCaseParserCard =>
+	(card as SpecialCaseParserCard)?.specialCaseParser !== undefined;
 
 export interface WillBeActiveCard extends Card {
 	willBeActive: (input: WillBeActiveInput) => boolean;
