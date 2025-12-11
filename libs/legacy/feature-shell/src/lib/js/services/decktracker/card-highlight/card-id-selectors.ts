@@ -2828,6 +2828,12 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.Rimetongue:
 			return and(side(inputSide), or(inDeck, inHand), frost, spell);
+		case CardIds.RingmastersBaton:
+			return highlightConditions(
+				and(side(inputSide), inHand, dragon),
+				and(side(inputSide), inHand, mech),
+				and(side(inputSide), inHand, pirate),
+			);
 		case CardIds.RingmasterWhatley:
 			return highlightConditions(
 				and(side(inputSide), inDeck, dragon),
