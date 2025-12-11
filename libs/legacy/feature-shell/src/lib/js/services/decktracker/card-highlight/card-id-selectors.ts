@@ -533,6 +533,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), undead);
 		case CardIds.BonecrusherTavernBrawlToken:
 			return tooltip(and(side(inputSide), inGraveyard, minion, deathrattle));
+		case CardIds.BonfireElemental:
+			return and(side(inputSide), or(inHand, inDeck), elemental);
 		case CardIds.Boneshredder:
 			return highlightConditions(
 				tooltip(and(side(inputSide), inGraveyard, minion, deathrattle)),
