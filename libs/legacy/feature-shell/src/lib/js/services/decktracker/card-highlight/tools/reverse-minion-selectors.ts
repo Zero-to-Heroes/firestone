@@ -535,7 +535,7 @@ export const reverseMinionSelector = (
 		);
 	}
 
-	// DRAGON (79 cards)
+	// DRAGON (80 cards)
 	if (refCard.races?.map(r => r.toUpperCase()).includes('DRAGON')) {
 		matchingCardIds.push(
 			CardIds.AlexstraszasChampion,
@@ -598,6 +598,7 @@ export const reverseMinionSelector = (
 			CardIds.RedscaleDragontamer,
 			CardIds.RedscaleDragontamer_CORE_DMF_194,
 			CardIds.RingmasterWhatley,
+			CardIds.RingmastersBaton,
 			CardIds.SandBreath_DRG_233,
 			CardIds.ScaleReplica_TOY_387,
 			CardIds.Scalerider,
@@ -686,7 +687,7 @@ export const reverseMinionSelector = (
 		);
 	}
 
-	// MECH (33 cards)
+	// MECH (34 cards)
 	if (refCard.races?.map(r => r.toUpperCase()).includes('MECH')) {
 		matchingCardIds.push(
 			CardIds.Bubblebot_TSC_059,
@@ -711,6 +712,7 @@ export const reverseMinionSelector = (
 			CardIds.ProstheticHand_DEEP_015,
 			CardIds.RadarDetector_TSC_079,
 			CardIds.RingmasterWhatley,
+			CardIds.RingmastersBaton,
 			CardIds.SeafloorGateway_TSC_055,
 			CardIds.SeascoutOperator_TSC_646,
 			CardIds.SecurityAutomaton_TSC_928,
@@ -800,7 +802,7 @@ export const reverseMinionSelector = (
 		);
 	}
 
-	// PIRATE (30 cards)
+	// PIRATE (31 cards)
 	if (refCard.races?.map(r => r.toUpperCase()).includes('PIRATE')) {
 		matchingCardIds.push(
 			CardIds.AdrenalineFiend_VAC_927,
@@ -822,6 +824,7 @@ export const reverseMinionSelector = (
 			CardIds.RaidingParty,
 			CardIds.RaidingParty_CORE_TRL_124,
 			CardIds.RingmasterWhatley,
+			CardIds.RingmastersBaton,
 			CardIds.SailboatCaptain_VAC_937,
 			CardIds.ShadyDealer,
 			CardIds.SharkPuncher_WON_138,
