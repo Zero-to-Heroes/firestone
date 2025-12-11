@@ -17,7 +17,7 @@ export class CardOnBoardOverlaysComponent {
 	overlays: string[][];
 
 	@Input() set entity(value: Entity) {
-		// console.debug('[card-on-board-overlays] setting entity', value.id, value.tags.toJS(), value);
+		console.debug('[card-on-board-overlays] setting entity', value.id, value.tags.toJS(), value);
 		this.overlays = [];
 		if (!value) {
 			return;
@@ -40,6 +40,9 @@ export class CardOnBoardOverlaysComponent {
 		if (value.getTag(GameTag.STEALTH) === 1) {
 			this.pushOverlay('minion_stealth');
 		}
+		if (value.getTag(GameTag.DORMANT) === 1) {
+			this.pushOverlay('minion_stealth');
+		}
 		if (
 			value.getTag(GameTag.CANT_BE_TARGETED_BY_SPELLS) === 1 &&
 			value.getTag(GameTag.CANT_BE_TARGETED_BY_HERO_POWERS) === 1
@@ -57,7 +60,7 @@ export class CardOnBoardOverlaysComponent {
 	private pushOverlay(image: string) {
 		this.overlays.push([
 			image,
-			`https://static.zerotoheroes.com/hearthstone/asset/coliseum/images/overlays/${image}.png?v=2`,
+			`https://static.zerotoheroes.com/hearthstone/asset/coliseum/images/overlays/${image}.png`,
 		]);
 	}
 }

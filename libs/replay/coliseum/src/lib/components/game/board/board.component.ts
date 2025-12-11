@@ -32,7 +32,6 @@ export class BoardComponent {
 	@Input() isRecruitPhase: boolean;
 
 	@Input() set entities(entities: readonly Entity[]) {
-		// console.debug('[board] setting new entities', entities);
 		this._entities = entities;
 	}
 

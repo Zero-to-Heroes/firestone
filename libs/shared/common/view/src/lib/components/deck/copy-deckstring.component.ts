@@ -65,7 +65,7 @@ export class CopyDesckstringComponent {
 		event.preventDefault();
 		event.stopPropagation();
 
-		let deducedDeckstring = null;
+		let deducedDeckstring: string | null = null;
 		if (!this.deckstring?.length && this.cardsList?.length) {
 			deducedDeckstring = buildCurrentDeckstring(this.cardsList, GameFormat.FT_STANDARD, this.allCards);
 		}

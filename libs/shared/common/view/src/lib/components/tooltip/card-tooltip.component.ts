@@ -79,7 +79,7 @@ import { CardTooltipPositionType } from './card-tooltip-position.type';
 					<div
 						class="related-cards"
 						#relatedCards
-						*ngIf="(value.relatedCards?.length ?? 0) <= value.maxRelatedCardsToShow"
+						*ngIf="(value?.relatedCards?.length ?? 0) <= (value?.maxRelatedCardsToShow ?? 0)"
 					>
 						<div
 							*ngIf="hasScrollbar"
@@ -92,7 +92,7 @@ import { CardTooltipPositionType } from './card-tooltip-position.type';
 					</div>
 					<div
 						class="related-cards big-pool"
-						*ngIf="(value.relatedCards?.length ?? 0) > value.maxRelatedCardsToShow"
+						*ngIf="(value?.relatedCards?.length ?? 0) > (value?.maxRelatedCardsToShow ?? 0)"
 						[fsTranslate]="'decktracker.card-tooltip-big-pool-text'"
 						[fsTranslateParams]="{ value: value.relatedCards?.length }"
 					></div>

@@ -94,8 +94,6 @@ export class CardOnBoardComponent {
 	@Input() isRecruitPhase: boolean;
 
 	@Input() set entity(entity: Entity) {
-		// console.debug('[card-on-board] setting entity', entity.id, entity, entity.tags.toJS());
-
 		this._entity = entity;
 
 		this.cardId = entity.cardID;
@@ -119,13 +117,12 @@ export class CardOnBoardComponent {
 
 		this.shownDamage = entity.damageForThisAction;
 
-		this.hideStats = entity.getTag(GameTag.HIDE_STATS) === 1;
+		this.hideStats = entity.getTag(GameTag.HIDE_STATS) === 1 || entity.getTag(GameTag.DORMANT) === 1;
 		this.sleeping =
 			entity.getTag(GameTag.EXHAUSTED) === 1 &&
 			entity.getTag(GameTag.JUST_PLAYED) === 1 &&
 			entity.getTag(GameTag.CHARGE) !== 1;
 		this.tavernTier = entity.getTag(GameTag.TECH_LEVEL);
-		// console.debug('tavern tier', entity.id, this.tavernTier, entity.tags.toJS());
 	}
 
 	@Input() set option(value: boolean) {
