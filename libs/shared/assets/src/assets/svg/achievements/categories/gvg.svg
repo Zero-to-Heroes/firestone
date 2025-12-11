@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE svg  PUBLIC '-//W3C//DTD SVG 1.1//EN'  'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>
-<svg enable-background="new 0 0 128 128" version="1.1" viewBox="0 0 128 128" style="padding: 15px; opacity: 0.6;" xml:space="preserve"
+<svg enable-background="new 0 0 128 128" version="1.1" viewBox="0 0 128 128" xml:space="preserve"
 	xmlns="http://www.w3.org/2000/svg">
 	<path d="m39.618 29.759l-2.832-9.175c-0.833-2.32-0.525-2.973 1.795-3.805l15.052-5.402c2.32-0.833 2.973-0.525 3.805 1.795l3.617 8.884" fill="var(--icon-color, currentcolor)"/>
 	<path d="m22.515 61.246l-8.939-3.506c-2.333-0.795-2.651-1.443-1.856-3.776l5.161-15.136c0.795-2.333 1.443-2.651 3.776-1.856l9.201 2.711" fill="var(--icon-color, currentcolor)"/>

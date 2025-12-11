@@ -29,8 +29,14 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 				</i>
 			</div>
 			<span class="text set-name" [helpTooltip]="displayName">{{ displayName }}</span>
-			<i class="logo"*ngIf="categoryIcon" [inlineSVG]="categoryIcon"> </i>
-			<img class="logo"*ngIf="categoryImage" [src]="categoryImage" />
+			<i
+				class="logo"
+				*ngIf="categoryIcon"
+				[inlineSVG]="categoryIcon"
+				[fallbackSVG]="'assets/svg/achievements/categories/general.svg'"
+			>
+			</i>
+			<img class="logo" *ngIf="categoryImage" [src]="categoryImage" />
 			<progress-bar [current]="achieved" [total]="totalAchievements"></progress-bar>
 		</div>
 	`,
