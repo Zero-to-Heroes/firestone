@@ -3871,6 +3871,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), spell, costMore(4));
 		case CardIds.WebOfDeception_EDR_523:
 			return and(side(inputSide), or(inDeck, inHand), minion);
+		case CardIds.WelcomeHome_TIME_EVENT_997:
+			return and(side(inputSide), or(inDeck, inHand), effectiveCostEqual(3));
 		case CardIds.Whirlweaver:
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.Wither:
