@@ -27,6 +27,13 @@ export const CONCOCTION_GENERATORS = [
 	CardIds.ContagionConcoctionTavernBrawl,
 ];
 
+export const CREWMATE_GENERATORS = [
+	CardIds.Headhunt_GDB_473,
+	CardIds.EmergencyMeeting_GDB_119,
+	CardIds.VoroneiRecruiter_GDB_471,
+	CardIds.DirdraRebelCaptain_GDB_117,
+];
+
 export const and = (...filters: Selector[]): Selector => {
 	return (input: SelectorInput) => filters.every((filter) => filter(input));
 };
