@@ -456,6 +456,7 @@ export const CURRENT_EFFECTS_WHITELIST = [
 	CardIds.MimironTheMastermind_CooledDownEnchantment_TTN_920e2,
 	CardIds.MimironTheMastermind_CooledDownEnchantment_TTN_920e3,
 	CardIds.MurkwaterScribe_MurkyEnchantment,
+	CardIds.MurlocRafaam_MrgleermMrgloslgyEnchantment_TIME_005t8e,
 	CardIds.MurozondUnbounded_MurozondEndOfTimeEnchantment_TIME_024e2,
 	CardIds.NatureStudies_NatureStudiesEnchantment,
 	CardIds.NatureStudies_NatureStudiesEnchantment,
