@@ -11,6 +11,7 @@ import {
 import {
 	CardOption,
 	cardsInfoCache,
+	DeckCard,
 	DeckState,
 	GameState,
 	getProcessedCard,
@@ -33,6 +34,24 @@ export class ChoosingOptionsParser implements EventParser {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
+
+		// For the game, these are options
+		// For the player, it looks like a shop
+		if (cardId === CardIds.TimewarpedTavernSystemEnchantmentToken_BG34_BlackMarket) {
+			const opponentDeck = currentState.opponentDeck.update({
+				board: gameEvent.additionalData.options.map((o) => {
+					const boardEntity: DeckCard = DeckCard.create({
+						cardId: o.CardId,
+						entityId: o.EntityId,
+						cardName: o.CardId,
+					});
+					return boardEntity;
+				}),
+			});
+			return currentState.update({
+				opponentDeck: opponentDeck,
+			});
+		}
 
 		const newDeck = deck.update({
 			currentOptions: gameEvent.additionalData.options.map((o) => {

@@ -1215,6 +1215,12 @@ export class GameEvents {
 					}),
 				);
 				break;
+			case 'TIMEWARPED_TAVERN_STARTED':
+				this.doEventDispatch(GameEvent.build(GameEvent.TIMEWARPED_TAVERN_STARTED, gameEvent));
+				break;
+			case 'TIMEWARPED_TAVERN_ENDED':
+				this.doEventDispatch(GameEvent.build(GameEvent.TIMEWARPED_TAVERN_ENDED, gameEvent));
+				break;
 			case 'BATTLEGROUNDS_TRIPLE':
 				this.doEventDispatch(
 					Object.assign(new GameEvent(), {

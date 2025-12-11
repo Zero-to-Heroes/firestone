@@ -63,7 +63,9 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 	private toggleMinionsToHighlightInternal(minionsToHighlight: readonly string[]) {
 		let highlightedMinions: readonly string[] = this.highlightedMinions$$.value;
 		if (minionsToHighlight.some((toHighlight) => !highlightedMinions.includes(toHighlight))) {
-			highlightedMinions = [...highlightedMinions, ...minionsToHighlight];
+			highlightedMinions = [...highlightedMinions, ...minionsToHighlight].filter(
+				(minion, index, self) => self.indexOf(minion) === index,
+			);
 		} else {
 			highlightedMinions = highlightedMinions.filter((minion) => !minionsToHighlight.includes(minion));
 		}

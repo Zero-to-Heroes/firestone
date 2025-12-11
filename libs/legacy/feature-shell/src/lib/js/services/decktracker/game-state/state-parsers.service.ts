@@ -164,6 +164,7 @@ import { SphereOfSapienceParser } from '../event-parser/special-cases/sphere-of-
 import { WheelOfDeathCounterUpdatedParser } from '../event-parser/special-cases/wheel-of-death-counter-updated-parser';
 import { StarshipLaunchedParser } from '../event-parser/starship-launched-parser';
 import { StartOfGameEffectParser } from '../event-parser/start-of-game-effect-parser';
+import { TimewarpTavernEndedParser } from '../event-parser/timewarp-tavern-ended-parser';
 import { TouristRevealedParser } from '../event-parser/tourist-revealed-parser';
 import { TurnDurationUpdatedParser } from '../event-parser/turn-duration-updated-parser';
 import { WeaponDestroyedParser } from '../event-parser/weapon-destroyed-parser';
@@ -434,6 +435,7 @@ export class GameStateParsersService {
 				new CthunRevealedParser(this.helper, this.allCards, this.i18n),
 				new GlobalMinionEffectParser(this.helper, this.allCards, this.i18n),
 			],
+			[GameEvent.TIMEWARPED_TAVERN_ENDED]: [new TimewarpTavernEndedParser()],
 			[GameEvent.TOTAL_ATTACK_ON_BOARD]: [new AttackOnBoardParser()],
 			[GameEvent.TOTAL_MAGNETIZE_CHANGED]: [new BgsTotalMagnetizedChangedParser()],
 			[GameEvent.TOURIST_REVEALED]: [new TouristRevealedParser(this.helper, this.allCards, this.i18n)],
