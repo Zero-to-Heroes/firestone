@@ -34,6 +34,7 @@ import {
 	barrelOfSludge,
 	cardIs,
 	CONCOCTION_GENERATORS,
+	CREWMATE_GENERATORS,
 	damage,
 	excavate,
 	givesAbyssalCurse,
@@ -563,6 +564,10 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 
 		if (CONCOCTION_GENERATORS.includes(cardId as CardIds)) {
 			selectors.push(and(side(inputSide), or(inHand, inDeck), cardIs(...CONCOCTION_GENERATORS)));
+		}
+
+		if (CREWMATE_GENERATORS.includes(cardId as CardIds)) {
+			selectors.push(and(side(inputSide), or(inHand, inDeck), cardIs(...CREWMATE_GENERATORS)));
 		}
 
 		if (selectors.filter((s) => !!s).length) {
