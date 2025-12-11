@@ -80,6 +80,7 @@ export { ResortValet } from './resort-valet';
 export { Rhokdelar } from './rhokdelar';
 export { RingmasterWhatley } from './ringmaster-whatley';
 export { Rotface } from './rotface';
+export { RunicInscriptions } from './runic-inscriptions';
 export { ScaleReplica } from './scale-replica';
 export { SemiStablePortal } from './semi-stable-portal';
 export { ShallowGravedigger } from './shallow-gravedigger';
