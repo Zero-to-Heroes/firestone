@@ -6,7 +6,7 @@ import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingC
 import { filterCards } from './utils';
 
 export const Blingtron3000: GeneratingCard & StaticGeneratingCard = {
-	cardIds: [CardIds.Blingtron3000_GVG_119],
+	cardIds: [CardIds.Blingtron3000],
 	publicCreator: true,
 	dynamicPool: (input: StaticGeneratingCardInput) => {
 		return filterCards(

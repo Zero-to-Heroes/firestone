@@ -6,14 +6,15 @@ import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingC
 import { filterCards } from './utils';
 
 export const ArcaneKeysmith: GeneratingCard & StaticGeneratingCard = {
-	cardIds: [CardIds.ArcaneKeysmith_GIL_116],
+	cardIds: [CardIds.ArcaneKeysmith],
 	publicCreator: true,
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
-		const currentClass = input.deckState.getCurrentClass();
+		const currentClassStr = input.deckState.getCurrentClass();
+		const currentClass = currentClassStr ? CardClass[currentClassStr] : null;
 		return {
 			cardType: CardType.SPELL,
 			mechanics: [GameTag.SECRET],
-			cardClasses: currentClass ? [CardClass[currentClass]] : undefined,
+			cardClasses: currentClass ? [currentClass] : undefined,
 			possibleCards: filterCards(
 				ArcaneKeysmith.cardIds[0],
 				input.allCards,
@@ -27,7 +28,8 @@ export const ArcaneKeysmith: GeneratingCard & StaticGeneratingCard = {
 		};
 	},
 	dynamicPool: (input: StaticGeneratingCardInput) => {
-		const currentClass = input.inputOptions.deckState.getCurrentClass();
+		const currentClassStr = input.inputOptions.deckState.getCurrentClass();
+		const currentClass = currentClassStr ? CardClass[currentClassStr] : null;
 		return filterCards(
 			ArcaneKeysmith.cardIds[0],
 			input.allCards,

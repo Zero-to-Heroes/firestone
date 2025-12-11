@@ -1480,7 +1480,9 @@ const hasThreeRunes = (card: ReferenceCard): boolean => {
 
 export const canBeDiscoveredByClass = (card: ReferenceCard, currentClass: string | undefined): boolean => {
 	if (!currentClass?.length) {
-		console.log('canBeDiscoveredByClass: no current class');
+		// Can happen when we're not in a game
+		// console.log('canBeDiscoveredByClass: no current class');
+		// console.debug(new Error().stack);
 		return true;
 	}
 	if (!card.classes?.length) {
