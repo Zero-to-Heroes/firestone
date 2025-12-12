@@ -100,6 +100,7 @@ export { TheCurator } from './the-curator';
 export { TheEternalHold } from './the-eternal-hold';
 export { TimeLostGlaive } from './time-lost-glaive';
 export { TimelessCausality } from './timeless-causality';
+export { TinyRafaam } from './tiny-rafaam';
 export { TokiTimeTinker } from './toki-time-tinker';
 export { Torga } from './torga';
 export { ToysnatchingGeist } from './toysnatching-geist';
