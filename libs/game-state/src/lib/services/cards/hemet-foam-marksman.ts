@@ -1,6 +1,5 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import {
-	AllCardsService,
 	CardIds,
 	CardRarity,
 	CardType,
@@ -12,8 +11,8 @@ import {
 	ReferenceCard,
 	SetId,
 } from '@firestone-hs/reference-data';
+import { GuessedInfo } from '../../models/deck-card';
 import { filterCards, hasCorrectRarity, hasCorrectType } from '../../related-cards/dynamic-pools';
-import { DeckCard, GuessedInfo } from '../../models/deck-card';
 import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 
 const isLegendaryBeastFromThePast = (c: ReferenceCard): boolean => {
@@ -46,6 +45,7 @@ export const HemetFoamMarksman: GeneratingCard & StaticGeneratingCard = {
 			possibleCards: filterCards(
 				input.allCards,
 				{
+					currentClass: input.deckState.getCurrentClass(),
 					format: GameFormat.FT_WILD,
 					gameType: GameType.GT_RANKED,
 					scenarioId: 0,

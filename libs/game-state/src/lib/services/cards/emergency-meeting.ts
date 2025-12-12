@@ -4,18 +4,14 @@ import {
 	CardType,
 	CREWMATES,
 	GameFormat,
-	GameTag,
 	GameType,
 	hasCorrectTribe,
 	Race,
 } from '@firestone-hs/reference-data';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { DeckCard, GuessedInfo } from '../../models/deck-card';
-import { DeckState } from '../../models/deck-state';
+import { GuessedInfo } from '../../models/deck-card';
 import { Metadata } from '../../models/metadata';
 import { filterCards, hasCorrectType, hasCost } from '../../related-cards/dynamic-pools';
 import { GeneratingCard, GuessInfoInput } from './_card.type';
-import { AllCardsService } from '@firestone-hs/reference-data';
 
 export const EmergencyMeeting: GeneratingCard = {
 	cardIds: [CardIds.EmergencyMeeting_GDB_119],
@@ -32,6 +28,7 @@ export const EmergencyMeeting: GeneratingCard = {
 			possibleCards = filterCards(
 				input.allCards,
 				{
+					currentClass: input.deckState.getCurrentClass(),
 					format: options?.metadata?.formatType ?? GameFormat.FT_STANDARD,
 					gameType: options?.metadata?.gameType ?? GameType.GT_RANKED,
 					scenarioId: options?.metadata?.scenarioId ?? 0,

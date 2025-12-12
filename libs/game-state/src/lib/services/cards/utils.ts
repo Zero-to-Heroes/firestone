@@ -23,6 +23,7 @@ export const filterCards = (
 		gameType: optionsAsStaticGeneratingCardInput?.gameType ?? metadata?.gameType ?? GameType.GT_RANKED,
 		scenarioId: optionsAsStaticGeneratingCardInput?.scenarioId ?? metadata?.scenarioId ?? 0,
 		validArenaPool: optionsAsStaticGeneratingCardInput?.validArenaPool ?? metadata?.validArenaPool ?? [],
+		currentClass: optionsAsStaticGeneratingCardInput?.currentClass ?? metadata?.currentClass ?? undefined,
 	};
 	return filterCardsOriginal(allCards, inputOptions, sourceCardId, (c) => filter(c));
 };

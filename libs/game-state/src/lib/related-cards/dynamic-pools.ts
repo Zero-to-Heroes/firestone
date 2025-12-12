@@ -1334,6 +1334,7 @@ export interface FilterCardsOptions {
 	scenarioId: number;
 	initialDecklist?: readonly string[];
 	validArenaPool: readonly string[];
+	currentClass: string | undefined;
 }
 
 export const filterCards = (
@@ -1349,7 +1350,7 @@ export const filterCards = (
 	const baseCardsExtended = baseCards
 		.filter((c) => (isArena(options.gameType) ? !BAN_LIST_ARENA.includes(c.id as CardIds) : true))
 		.filter((c) => (summonsInPlay ? !hasMechanic(c, GameTag.COLOSSAL) : true))
-		.filter((c) => canIncludeStarcraftFaction(c, options.initialDecklist, allCards))
+		.filter((c) => canIncludeStarcraftFaction(c, options.initialDecklist, options.currentClass, allCards))
 		.filter((c) => {
 			const debug = false;
 			debug && console.debug('[debug] filterCards', c.id, c.set, gameType, format, arenaSets, c);
@@ -1573,11 +1574,12 @@ const hasHealth = (card: ReferenceCard, operator: '==' | '<=' | '>=' | '<' | '>'
 const canIncludeStarcraftFaction = (
 	refCard: ReferenceCard,
 	initialDecklist: readonly string[] | undefined,
+	currentClass: string | undefined,
 	allCards: AllCardsService,
 ): boolean => {
-	if (!initialDecklist?.length) {
-		return true;
-	}
+	// if (!initialDecklist?.length) {
+	// 	return true;
+	// }
 
 	if (
 		!refCard.mechanics?.includes(GameTag[GameTag.ZERG]) &&
@@ -1596,11 +1598,15 @@ const canIncludeStarcraftFaction = (
 		return true;
 	}
 
-	const isZergOk = hasFaction(refCard, GameTag.ZERG) && hasFactionInDecklist(initialDecklist, GameTag.ZERG, allCards);
+	const isZergOk =
+		hasFaction(refCard, GameTag.ZERG) &&
+		hasFactionInDecklist(initialDecklist, currentClass, GameTag.ZERG, allCards);
 	const isProtossOk =
-		hasFaction(refCard, GameTag.PROTOSS) && hasFactionInDecklist(initialDecklist, GameTag.PROTOSS, allCards);
+		hasFaction(refCard, GameTag.PROTOSS) &&
+		hasFactionInDecklist(initialDecklist, currentClass, GameTag.PROTOSS, allCards);
 	const isTerranOk =
-		hasFaction(refCard, GameTag.TERRAN) && hasFactionInDecklist(initialDecklist, GameTag.TERRAN, allCards);
+		hasFaction(refCard, GameTag.TERRAN) &&
+		hasFactionInDecklist(initialDecklist, currentClass, GameTag.TERRAN, allCards);
 	return isZergOk || isProtossOk || isTerranOk;
 };
 
@@ -1608,7 +1614,31 @@ const hasFaction = (card: ReferenceCard, faction: GameTag): boolean => {
 	return card.mechanics?.includes(GameTag[faction]);
 };
 
-const hasFactionInDecklist = (decklist: readonly string[], faction: GameTag, allCards: AllCardsService): boolean => {
+const hasFactionInDecklist = (
+	decklist: readonly string[] | undefined,
+	currentClass: string | undefined,
+	faction: GameTag,
+	allCards: AllCardsService,
+): boolean => {
+	if (!decklist?.length) {
+		if (!currentClass?.length) {
+			return false;
+		}
+		if (faction === GameTag.ZERG) {
+			return [CardClass.DEATHKNIGHT, CardClass.DEMONHUNTER, CardClass.HUNTER, CardClass.WARLOCK].includes(
+				CardClass[currentClass.toUpperCase()],
+			);
+		} else if (faction === GameTag.PROTOSS) {
+			return [CardClass.DRUID, CardClass.MAGE, CardClass.PRIEST, CardClass.ROGUE].includes(
+				CardClass[currentClass.toUpperCase()],
+			);
+		} else if (faction === GameTag.TERRAN) {
+			return [CardClass.WARRIOR, CardClass.PALADIN, CardClass.SHAMAN].includes(
+				CardClass[currentClass.toUpperCase()],
+			);
+		}
+		return false;
+	}
 	for (const cardId of decklist) {
 		const refCard = allCards.getCard(cardId);
 		if (!refCard) {
