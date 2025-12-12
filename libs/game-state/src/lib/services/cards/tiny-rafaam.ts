@@ -8,7 +8,9 @@ export const TinyRafaam: GeneratingCard = {
 	cardIds: [CardIds.TimethiefRafaam_TinyRafaamToken_TIME_005t1],
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
 		return {
-			possibleCards: timeRafaamFablePackage,
+			possibleCards: timeRafaamFablePackage.filter(
+				(cardId) => cardId !== CardIds.TimethiefRafaam_TinyRafaamToken_TIME_005t1,
+			),
 		};
 	},
 };
