@@ -750,7 +750,7 @@ export const cardIdSelector = (
 				const lowestCostMinions = sorted.filter((e) => e.getEffectiveManaCost() === lowestMinionCost);
 				if (lowestCostMinions.length === 1) {
 					const newSorted = sorted.filter((e) => e.getEffectiveManaCost() !== lowestMinionCost);
-					const secondLowestCostMinion = newSorted[0];
+					const secondLowestCostMinion = newSorted[newSorted.length - 1];
 					const secondLowestMinionCost = secondLowestCostMinion?.getEffectiveManaCost() ?? 0;
 					lowestCostFilters.push(effectiveCostEqual(secondLowestMinionCost));
 				}
