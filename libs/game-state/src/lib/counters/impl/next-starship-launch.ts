@@ -15,15 +15,17 @@ export const EXTENDED_STARSHIP_CARDS = [
 	CardIds.WaywardProbe_SC_500,
 ];
 
+const STARSHIP_COST_REDUCTION_CARDS = [
+	CardIds.SalvageTheBunker_SC_404,
+	CardIds.Scv_SC_401,
+	CardIds.LockOn_SC_407,
+	CardIds.ConcussiveShells_SC_411,
+];
+
 export class NextStarshipLaunchCounterDefinitionV2 extends CounterDefinitionV2<number> {
 	public override id: CounterType = 'nextStarshipLaunch';
 	public override image = (gameState: GameState) => getStarshipForHero(gameState.playerDeck?.hero);
-	public override cards: readonly CardIds[] = [
-		CardIds.SalvageTheBunker_SC_404,
-		CardIds.Scv_SC_401,
-		CardIds.LockOn_SC_407,
-		CardIds.ConcussiveShells_SC_411,
-	];
+	public override cards: readonly CardIds[] = [];
 
 	readonly player = {
 		pref: 'playerProtossSpellsCounter' as const,
