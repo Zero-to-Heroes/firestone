@@ -9,7 +9,7 @@ export const TinyRafaam: GeneratingCard = {
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
 		return {
 			possibleCards: timeRafaamFablePackage.filter(
-				(cardId) => cardId !== CardIds.TimethiefRafaam_TinyRafaamToken_TIME_005t1,
+				(cardId) => cardId !== TinyRafaam.cardIds[0],
 			),
 		};
 	},
