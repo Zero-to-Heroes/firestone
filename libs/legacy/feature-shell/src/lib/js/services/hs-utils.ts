@@ -231,6 +231,7 @@ const globalEffectEnchantments = [
 	CardIds.LohTheLivingLegend_LivingLegendEnchantment_TLC_257e1,
 	...bwonsamdiBoonsEnchantments,
 	CardIds.AvianaElunesChosen_FullMoonEnchantment_EDR_895e,
+	CardIds.Kiljaeden_KiljaedensPortalEnchantment_GDB_145e,
 	// CardIds.CityChiefEsho_KinEnchantment_TLC_110e, // The enchantment is applied to each card, so we don't have a global thing
 ];
 
