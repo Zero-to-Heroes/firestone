@@ -1,6 +1,5 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { CardIds, GameTag, hasMechanic } from '@firestone-hs/reference-data';
-import { GuessedInfo } from '../../models/deck-card';
 import { StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 
 export const AmuletOfUndying: StaticGeneratingCard = {
