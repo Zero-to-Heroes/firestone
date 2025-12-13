@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { isVersionBefore } from '@firestone/app/common';
 import { GameStatusService, Preferences, PreferencesService } from '@firestone/shared/common/service';
+import { Mutable, sortByProperties } from '@firestone/shared/framework/common';
 import {
 	AbstractFacadeService,
 	ApiRunner,
@@ -18,7 +19,6 @@ import {
 	createInitialConfigFile,
 	updateModeVersionInBepInExConfig,
 } from './bepin-config';
-import { Mutable, sortByProperties } from '@firestone/shared/framework/common';
 
 const BEPINEX_ZIP_INSTALL = 'https://static.zerotoheroes.com/mods/BepInEx_win_x86_5.4.23.3.zip';
 // const MODS_MANAGER_PLUGIN_URL =
@@ -89,7 +89,15 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 			)
 			.subscribe(async (installPath) => {
 				const installedMods = await this.installedMods(installPath);
+				console.log(
+					'[mods-manager] installedMods',
+					installedMods?.map((m) => m.AssemblyName),
+				);
 				const allMods = [...(modsConfig?.trustedMods ?? [])];
+				console.log(
+					'[mods-manager] allMods',
+					allMods?.map((m) => m.AssemblyName),
+				);
 				for (const mod of installedMods) {
 					const existing: Mutable<ModData> | undefined = allMods.find(
 						(m) => m.AssemblyName === mod.AssemblyName,
@@ -106,6 +114,10 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 					}
 				}
 				const finalMods = allMods.sort(sortByProperties((m) => [m.Registered, m.Name]));
+				console.log(
+					'[mods-manager] finalMods',
+					finalMods?.map((m) => m.AssemblyName),
+				);
 				this.modsData$$.next(finalMods);
 			});
 		console.debug('[mods-manager] initialized');
@@ -258,7 +270,12 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 			console.debug('[mods-manager] creating config file', newMod, installPath);
 			await createInitialConfigFile(newMod, installPath, this.ow);
 		}
+		console.log('[mods-manager] updating mod', newMod);
 		const newMods = this.modsData$$.getValue().map((m) => (m.AssemblyName === mod.AssemblyName ? newMod : m));
+		console.log(
+			'[mods-manager] newMods',
+			newMods?.map((m) => m.AssemblyName),
+		);
 		this.modsData$$.next(newMods);
 
 		return null;
@@ -301,6 +318,7 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 		await this.io.deleteFileOrFolder(`${installPath}\\Mods`);
 		await this.io.deleteFileOrFolder(`${installPath}\\UserData`);
 
+		console.log('[mods-manager] disabling mods');
 		this.modsData$$.next([]);
 		return 'not-installed';
 	}
@@ -343,6 +361,10 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 
 		// Refresh the mods
 		const installedMods = await this.installedMods(installPath);
+		console.log(
+			'[mods-manager] installedMods',
+			installedMods?.map((m) => m.AssemblyName),
+		);
 		this.modsData$$.next(installedMods);
 	}
 
@@ -385,6 +407,10 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 				const newMods = this.modsData$$
 					.getValue()
 					.map((m) => (m.AssemblyName === mod.AssemblyName ? newMod : m));
+				console.log(
+					'[mods-manager] newMods after update check',
+					newMods?.map((m) => m.AssemblyName),
+				);
 				this.modsData$$.next(newMods);
 			}
 

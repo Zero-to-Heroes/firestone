@@ -176,6 +176,10 @@ export class SettingsGeneralModsComponent extends AbstractSubscriptionComponent 
 				this.mapData((modsData) => modsData),
 			)
 			.subscribe(async (modsData) => {
+				console.log(
+					'[mods] modsData',
+					modsData?.map((m) => m.AssemblyName),
+				);
 				this.installedMods = modsData.filter((mod) => !!mod);
 				if (!(this.cdr as ViewRef)?.destroyed) {
 					this.cdr.detectChanges();
