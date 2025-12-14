@@ -3339,6 +3339,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), beast);
 		case CardIds.Stormrook_TIME_217:
 			return and(side(inputSide), or(inDeck, inHand), spell, nature, dealsDamage);
+		case CardIds.StormTheGates_TLC_EVENT_400:
+			return and(side(inputSide), or(inDeck, inHand), or(beast, undead));
 		case CardIds.StoryOfBarnabus_TLC_231:
 			return highlightConditions(
 				and(side(inputSide), or(inDeck, inHand), minion, attackGreaterThan(4)),
