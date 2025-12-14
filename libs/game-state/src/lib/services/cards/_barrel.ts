@@ -53,6 +53,7 @@ export { JuicyPsychmelon } from './juicy-psychmelon';
 export { Jumpscare } from './jumpscare';
 export { KaldoreiCultivator } from './kaldorei-cultivator';
 export { Kiljaeden } from './kiljaeden';
+export { MagicTrick } from './magic-trick';
 export { Malkorok } from './malkorok';
 export { MendTheTimeline } from './mend-the-timeline';
 export { Metrognome } from './metrognome';
