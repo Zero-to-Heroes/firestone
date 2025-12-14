@@ -19,7 +19,7 @@ export const MagicTrick: GeneratingCard & StaticGeneratingCard = {
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
 		return {
 			cardType: CardType.SPELL,
-			maxCost: 3,
+			cost: { cost: 3, comparison: '<=' },
 			possibleCards: filterCards(
 				MagicTrick.cardIds[0],
 				input.allCards,
