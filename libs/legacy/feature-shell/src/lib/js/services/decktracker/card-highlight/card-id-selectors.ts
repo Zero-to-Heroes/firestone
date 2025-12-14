@@ -3333,6 +3333,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), elemental);
 		case CardIds.StorageScuffle_TLC_365:
 			return and(side(inputSide), or(inDeck, inHand), discover);
+		case CardIds.StormTheGates_TLC_EVENT_400:
+			return and(side(inputSide), or(inDeck, inHand), or(beast, undead));
 		case CardIds.Stormhammer:
 			return and(side(inputSide), or(inDeck, inHand), dragon);
 		case CardIds.StormpikeBattleRam:
