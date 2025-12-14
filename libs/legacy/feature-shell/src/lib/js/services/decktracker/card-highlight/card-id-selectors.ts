@@ -1717,7 +1717,7 @@ export const cardIdSelector = (
 		case CardIds.HarrowingOx_WW_356:
 			return and(side(inputSide), or(inDeck, inHand, inOther), excavate);
 		case CardIds.HatcheryHelper_TLC_233:
-			return and(side(inputSide), or(inDeck, inHand), minion, attackLessThan(3));
+			return and(side(inputSide), or(inDeck, inHand, inOther), minion, attackLessThan(3));
 		case CardIds.HatchingCeremony_DINO_405:
 			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.HawkstriderRancher:
