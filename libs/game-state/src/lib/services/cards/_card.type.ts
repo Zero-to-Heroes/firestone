@@ -1,6 +1,7 @@
 import { AllCardsService, CardIds, GameFormat, GameTag, GameType } from '@firestone-hs/reference-data';
 import { DeckCard, GuessedInfo } from '../../models/deck-card';
 import { DeckState } from '../../models/deck-state';
+import { GameEvent } from '../../models/game-event';
 import { GameState } from '../../models/game-state';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -91,4 +92,14 @@ export interface WillBeActiveInput {
 	playerDeck: DeckState;
 	currentTurn: number;
 	allCards: AllCardsService;
+}
+
+export interface ChainParsingCard extends Card {
+	chainParser: (allCards: AllCardsService) => ActionChainParser;
+}
+export const hasChainParsingCard = (card: Card): card is ChainParsingCard =>
+	(card as ChainParsingCard)?.chainParser !== undefined;
+export interface ActionChainParser {
+	appliesOnEvent(): GameEvent['type'];
+	parse(currentState: GameState, events: GameEvent[]): Promise<GameState>;
 }

@@ -1,26 +1,29 @@
-import { GameState } from '@firestone/game-state';
+import { cardsInfoCache, GameState, hasChainParsingCard } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { LocalizationFacadeService } from '../../localization-facade.service';
 import { ActionChainParser } from './action-chains/_action-chain-parser';
+import { BirdwatchingParser } from './action-chains/birdwatching';
+import { DoommaidenParser } from './action-chains/doommaiden';
 import { FuturisticForefatherParser } from './action-chains/futuristic-forefather-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
-import { WaveshapingParser } from './action-chains/waveshaping-parser';
-import { BirdwatchingParser } from './action-chains/birdwatching';
-import { DoommaidenParser } from './action-chains/doommaiden';
 
 export class ActionsChainParser implements EventParser {
 	public static readonly REGISTERED_EVENT_TYPES = [
-		GameEvent.SUB_SPELL_START,
-		GameEvent.GAME_START,
-		GameEvent.GAME_END,
+		GameEvent.CARD_CHANGED_IN_HAND,
+		GameEvent.CARD_PLAYED,
+		GameEvent.CARD_REMOVED_FROM_BOARD,
+		GameEvent.CARD_REMOVED_FROM_DECK,
+		GameEvent.CARD_STOLEN,
 		GameEvent.CHOOSING_OPTIONS,
 		GameEvent.ENTITY_CHOSEN,
+		GameEvent.GAME_END,
+		GameEvent.GAME_START,
 		GameEvent.LINKED_ENTITY,
 		GameEvent.MINION_ON_BOARD_ATTACK_UPDATED,
-		GameEvent.CARD_PLAYED,
-		GameEvent.CARD_STOLEN,
+		GameEvent.SUB_SPELL_END,
+		GameEvent.SUB_SPELL_START,
 	];
 
 	private events: GameEvent[] = [];
@@ -33,10 +36,21 @@ export class ActionsChainParser implements EventParser {
 			new BirdwatchingParser(helper, cards),
 			new DoommaidenParser(helper, cards),
 		];
+
+		for (const cardId of Object.keys(cardsInfoCache)) {
+			const cardImpl = cardsInfoCache[cardId];
+			if (hasChainParsingCard(cardImpl)) {
+				console.debug('[debug] cardImpl', cardImpl);
+				parsers.push(cardImpl.chainParser(cards.getService()));
+				console.debug('[debug] parsers', parsers);
+			}
+		}
 		this.chainParser = {};
 		for (const parser of parsers) {
-			this.chainParser[parser.appliesOnEvent()] = [parser];
+			const eventType = parser.appliesOnEvent();
+			this.chainParser[eventType] = [...(this.chainParser[eventType] ?? []), parser];
 		}
+		console.debug('[debug] chainParsers', this.chainParser);
 	}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
