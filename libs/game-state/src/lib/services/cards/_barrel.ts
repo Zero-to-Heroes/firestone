@@ -108,6 +108,7 @@ export { TinyRafaam } from './tiny-rafaam';
 export { TokiTimeTinker } from './toki-time-tinker';
 export { Torga } from './torga';
 export { ToysnatchingGeist } from './toysnatching-geist';
+export { TrickySatyr } from './tricky-satyr';
 export { TrinketArtist } from './trinket-artist';
 export { TrustFall } from './trust-fall';
 export { TwilightMender } from './twilight-mender';
