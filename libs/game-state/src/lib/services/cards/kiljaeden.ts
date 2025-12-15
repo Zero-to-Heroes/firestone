@@ -1,11 +1,12 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import { AllCardsService, CardIds, CardType, GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
-import { hasCorrectTribe, hasCorrectType } from '../../related-cards/dynamic-pools';
+import { CardIds, CardType, GameTag, hasCorrectTribe, Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { GuessedInfo } from '../../models/deck-card';
+import { hasCorrectType } from '../../related-cards/dynamic-pools';
 import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
 
-const isDemonMinion = (c: ReferenceCard): boolean => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.DEMON);
+const isDemonMinion = (c: ReferenceCard): boolean =>
+	hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.DEMON);
 
 export const Kiljaeden: GeneratingCard & StaticGeneratingCard = {
 	cardIds: [CardIds.Kiljaeden_KiljaedensPortalEnchantment_GDB_145e],
@@ -23,7 +24,7 @@ export const Kiljaeden: GeneratingCard & StaticGeneratingCard = {
 					attackBuff: statsBuff,
 					healthBuff: statsBuff,
 					cardType: CardType.MINION,
-					cardTribes: [Race.DEMON],
+					races: [Race.DEMON],
 					possibleCards: filterCards(Kiljaeden.cardIds[0], input.allCards, isDemonMinion, input.options),
 				}
 			: null;
