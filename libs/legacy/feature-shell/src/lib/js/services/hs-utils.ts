@@ -729,6 +729,7 @@ export const dontActuallyDestroyCardsInDeck = [
 	CardIds.Overplanner_VAC_444,
 	CardIds.AdaptiveAmalgam_VAC_958,
 	CardIds.Kiljaeden_GDB_145,
+	CardIds.Broxigar_TIME_020,
 ];
 
 export const supportedAdditionalData = [
