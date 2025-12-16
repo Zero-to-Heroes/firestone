@@ -20,14 +20,12 @@ class LadyAzsharaParser implements ActionChainParser {
 	public async parse(currentState: GameState, events: readonly GameEvent[]): Promise<GameState> {
 		const reversedEvents = [...events].reverse();
 		const lastEvent = reversedEvents.shift();
-		console.debug('[debug] lastEvent', lastEvent);
 		if (lastEvent?.additionalData?.sourceCardId !== CardIds.LadyAzshara_TIME_211) {
 			return currentState;
 		}
 
 		// The other card is in hand
 		const maybeCardChangedInHandEvent = reversedEvents.find((e) => e.type === 'CARD_CHANGED_IN_HAND');
-		console.debug('[debug] maybeCardChangedInHandEvent', maybeCardChangedInHandEvent);
 		if (maybeCardChangedInHandEvent?.additionalData?.lastAffectedByCardId === CardIds.LadyAzshara_TIME_211) {
 			// Do nothing, as the card was already changed in hand
 			return currentState;
@@ -35,12 +33,9 @@ class LadyAzsharaParser implements ActionChainParser {
 
 		// The other card is in the deck
 		const maybeCardRemovedFromDeckEvent = reversedEvents.find((e) => e.type === 'CARD_REMOVED_FROM_DECK');
-		console.debug('[debug] maybeCardRemovedFromDeckEvent', maybeCardRemovedFromDeckEvent);
 		if (maybeCardRemovedFromDeckEvent?.additionalData?.removedByCardId === CardIds.LadyAzshara_TIME_211) {
 			const cardId = maybeCardRemovedFromDeckEvent.cardId;
 			const entityId = maybeCardRemovedFromDeckEvent.entityId;
-			console.debug('[debug] cardId', cardId);
-			console.debug('[debug] entityId', entityId);
 			if (
 				![
 					CardIds.LadyAzshara_TheWellOfEternityToken_TIME_211t1,
@@ -57,26 +52,20 @@ class LadyAzsharaParser implements ActionChainParser {
 				cardId === CardIds.LadyAzshara_TheWellOfEternityToken_TIME_211t1
 					? CardIds.LadyAzshara_ZinAzshariToken_TIME_211t2
 					: CardIds.LadyAzshara_TheWellOfEternityToken_TIME_211t1;
-			console.debug('[debug] cardIdToEmpower', cardIdToEmpower);
 			const empoweredCardId =
 				cardIdToEmpower === CardIds.LadyAzshara_TheWellOfEternityToken_TIME_211t1
 					? CardIds.TheWellOfEternity_TheWellOfEternityToken_TIME_211t1t
 					: CardIds.ZinAzshari_ZinAzshariToken_TIME_211t2t;
 			const refCard = this.allCards.getCard(empoweredCardId);
-			console.debug('[debug] refCard', refCard);
 
 			const newDeck = replaceInZone(deck.deck, entityId, cardIdToEmpower, refCard);
 			const newHand = replaceInZone(deck.hand, entityId, cardIdToEmpower, refCard);
 			const newBoard = replaceInZone(deck.board, entityId, cardIdToEmpower, refCard);
-			console.debug('[debug] newDeck', newDeck !== deck.deck, newDeck);
-			console.debug('[debug] newHand', newHand !== deck.hand, newHand);
-			console.debug('[debug] newBoard', newBoard !== deck.board, newBoard);
 			const newPlayerDeck = deck.update({
 				deck: newDeck,
 				hand: newHand,
 				board: newBoard,
 			});
-			console.debug('[debug] newPlayerDeck', newPlayerDeck);
 			return currentState.update({
 				[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
 			});

@@ -93,7 +93,6 @@ export class BattlegroundsMinionsListComponent extends AbstractSubscriptionCompo
 		this.type = value.type;
 		this.tavernTierData$$.next(value.tavernTierData ?? null);
 		this.showSearchBar = value.showSearchBar ?? false;
-		console.debug('[debug] tier', value);
 	}
 
 	@Input() set highlightedTribes(value: readonly Race[]) {

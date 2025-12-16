@@ -40,9 +40,7 @@ export class ActionsChainParser implements EventParser {
 		for (const cardId of Object.keys(cardsInfoCache)) {
 			const cardImpl = cardsInfoCache[cardId];
 			if (hasChainParsingCard(cardImpl)) {
-				console.debug('[debug] cardImpl', cardImpl);
 				parsers.push(cardImpl.chainParser(cards.getService()));
-				console.debug('[debug] parsers', parsers);
 			}
 		}
 		this.chainParser = {};
@@ -50,7 +48,6 @@ export class ActionsChainParser implements EventParser {
 			const eventType = parser.appliesOnEvent();
 			this.chainParser[eventType] = [...(this.chainParser[eventType] ?? []), parser];
 		}
-		console.debug('[debug] chainParsers', this.chainParser);
 	}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {

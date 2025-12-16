@@ -272,32 +272,11 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 					let sourceCard = e.cardId?.endsWith('e')
 						? this.allCards.getCard(e.cardId.slice(0, -1))
 						: this.allCards.getCard(e.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_1]);
-					// console.debug(
-					// 	'[debug] sourceCard',
-					// 	e.cardId,
-					// 	'->',
-					// 	sourceCard?.id,
-					// 	e.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_1],
-					// 	sourceCard,
-					// 	refCard,
-					// 	e,
-					// );
 					if (!sourceCard?.id) {
 						sourceCard = this.allCards.getCard(e.tags?.[GameTag.CREATOR_DBID]);
-						// console.debug(
-						// 	'[debug] sourceCard 2',
-						// 	e.cardId,
-						// 	'->',
-						// 	sourceCard?.id,
-						// 	e.tags?.[GameTag.CREATOR_DBID],
-						// 	sourceCard,
-						// 	refCard,
-						// 	e,
-						// );
 					}
 
 					if (!CURRENT_EFFECTS_WHITELIST.includes(refCard.id as CardIds)) {
-						// console.debug('[debug] not in whitelist', refCard.id);
 						return null;
 					}
 					const cardName = currentEffectUseEnchantmentName

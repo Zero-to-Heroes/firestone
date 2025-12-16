@@ -70,7 +70,6 @@ export const buildMechanicsTiers = (
 		const singleTier = buildSingleTier(cardsToInclude, tiersToInclude, availableTribes, cardRules, i18n, config);
 		result.push(singleTier);
 	}
-	console.debug('[debug] result', result, config);
 	return result.filter((t) => t?.groups?.length);
 };
 

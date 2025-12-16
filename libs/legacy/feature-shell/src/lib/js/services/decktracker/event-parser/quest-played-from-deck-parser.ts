@@ -29,19 +29,6 @@ export class QuestPlayedFromDeckParser implements EventParser {
 			entityId,
 			deck.deckList.length === 0,
 		);
-		console.debug(
-			'[debug] quest played from deck',
-			cardId,
-			entityId,
-			removedCard,
-			newDeck.filter((c) => c.cardId === cardId),
-			newDeck.filter((c) => c.entityId === entityId),
-			previousDeck.filter((c) => c.cardId === cardId),
-			previousDeck.filter((c) => c.entityId === entityId),
-			card,
-			gameEvent,
-			currentState,
-		);
 
 		const cardWithZone = card.update({
 			zone: 'SECRET',

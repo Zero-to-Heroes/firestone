@@ -1353,7 +1353,6 @@ export const filterCards = (
 		.filter((c) => canIncludeStarcraftFaction(c, options.initialDecklist, options.currentClass, allCards))
 		.filter((c) => {
 			const debug = false;
-			debug && console.debug('[debug] filterCards', c.id, c.set, gameType, format, arenaSets, c);
 			if (gameType === GameType.GT_ARENA || gameType === GameType.GT_UNDERGROUND_ARENA) {
 				// If we have some valid arena sets, we use them
 				if (!arenaSets?.length) {
@@ -1372,18 +1371,6 @@ export const filterCards = (
 				}
 				// Use the default pool otherwise
 			}
-			debug &&
-				console.debug(
-					'[debug] filterCards',
-					c.id,
-					c.set,
-					gameType,
-					GameType[gameType],
-					format,
-					GameFormat[format],
-					isValidSet(c.set.toLowerCase() as SetId, format, gameType),
-					arenaSets?.includes(c.set as SetId),
-				);
 			return !!c.set ? isValidSet(c.set.toLowerCase() as SetId, format, gameType) : false;
 		})
 		.filter((c) => !sourceCardId || c.id !== sourceCardId);
