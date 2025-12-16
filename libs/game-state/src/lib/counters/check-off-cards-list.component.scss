@@ -1,0 +1,58 @@
+:host {
+	position: relative;
+	left: 10px;
+	display: flex;
+	min-height: 1px;
+}
+
+.check-off-cards-list {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 10px;
+	padding: 10px;
+	background-color: var(--color-7);
+	border-radius: 10px;
+	width: 252px;
+	// box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+
+	.title {
+		font-size: 1.2em;
+		color: var(--default-title-color);
+		text-align: center;
+	}
+
+	.text {
+		color: var(--color-1);
+		font-size: 0.8em;
+		text-align: center;
+	}
+}
+
+.deck-list {
+	list-style: none;
+	overflow: hidden;
+	max-height: 100%;
+	width: 100%;
+	position: relative;
+}
+
+.card-container {
+	&.checked {
+		opacity: 0.3;
+	}
+}
+
+.card {
+	margin-bottom: 1px;
+	display: flex;
+
+	::ng-deep .deck-card {
+		width: 100%;
+	}
+}
+
+.sideboard {
+	list-style: none;
+	padding-left: 15px;
+}

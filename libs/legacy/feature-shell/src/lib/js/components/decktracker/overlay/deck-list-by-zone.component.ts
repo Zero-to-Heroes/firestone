@@ -264,7 +264,6 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 		}
 
 		if (showCurrentEffectsZone) {
-			console.debug('[debug] deckState.enchantments', deckState.enchantments);
 			const currentEffects = deckState.enchantments
 				.map((e) => {
 					const refCard = this.allCards.getCard(e.cardId);

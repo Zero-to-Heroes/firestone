@@ -1,5 +1,6 @@
 export * from './lib/counters/_counter-definition-v2';
 export * from './lib/counters/_exports';
+export * from './lib/counters/check-off-cards-list.component';
 export * from './lib/counters/counter-wrapper.component';
 export * from './lib/counters/counters-positioner.component';
 export * from './lib/counters/generic-counter-v2.component';
@@ -18,8 +19,8 @@ export * from './lib/related-cards/related-cards';
 export * from './lib/services/_bootstrap-game-state.service';
 export * from './lib/services/card-utils';
 export * from './lib/services/cards/_barrel';
-export * from './lib/services/cards/_mapping';
 export * from './lib/services/cards/_card.type';
+export * from './lib/services/cards/_mapping';
 export * from './lib/services/creation-sequence-info';
 export * from './lib/services/deck-handler.service';
 export * from './lib/services/deck-utils';

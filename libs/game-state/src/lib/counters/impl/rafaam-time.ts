@@ -2,11 +2,13 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { CardIds } from '@firestone-hs/reference-data';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
+import { BattlegroundsState } from '../../models/_barrel';
 import { DeckState } from '../../models/deck-state';
 import { GameState } from '../../models/game-state';
 import { timeRafaamFablePackage } from '../../services/card-utils';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
 import { CounterType } from '../_exports';
+import { CheckOffCard, CheckOffCardsListComponent, CheckOffCardsListConfig } from '../check-off-cards-list.component';
 
 export class RafaamTimeCounterDefinitionV2 extends CounterDefinitionV2<{
 	uniqueRafaams: number;
@@ -17,6 +19,8 @@ export class RafaamTimeCounterDefinitionV2 extends CounterDefinitionV2<{
 	public override image = CardIds.TimethiefRafaam_TIME_005;
 	public override type: 'hearthstone' | 'battlegrounds' = 'hearthstone';
 	public override cards: readonly CardIds[] = [];
+
+	protected override advancedTooltipType = CheckOffCardsListComponent;
 
 	readonly player = {
 		pref: 'playerRafaamTimeCounter' as const,
@@ -79,32 +83,38 @@ export class RafaamTimeCounterDefinitionV2 extends CounterDefinitionV2<{
 		return `${value.uniqueRafaams} | ${value.totalRafaams}`;
 	}
 
-	protected override tooltip(side: 'player' | 'opponent', gameState: GameState): string {
-		const value = this[side]?.value(gameState);
-		const header = this.i18n.translateString(`counters.rafaam-time.${side}`, {
-			unique: value?.uniqueRafaams,
-			total: value?.totalRafaams,
-		});
-		let body = `<div class="body">`;
+	protected override advancedTooltipInput(
+		side: 'player' | 'opponent',
+		gameState: GameState,
+		bgState: BattlegroundsState,
+		value: { uniqueRafaams: number; totalRafaams: number; playedRafaams: readonly CardIds[] } | null | undefined,
+	): any {
 		const sortedRafaams = timeRafaamFablePackage.sort((a, b) => {
 			const aCard = this.allCards.getCard(a);
 			const bCard = this.allCards.getCard(b);
 			return (aCard.cost ?? 0) - (bCard.cost ?? 0);
 		});
-		for (const rafaam of sortedRafaams) {
-			const card = this.allCards.getCard(rafaam);
-			const isPlayed = value?.playedRafaams.includes(rafaam);
-			const playedClass = isPlayed ? 'played' : 'not-played';
-			const emoji = isPlayed ? '✅' : '❌';
-			body += `<div class="rafaam ${playedClass}">${emoji} ${card.name}</div>`;
-		}
-		body += `</div>`;
-		return `
-		<div class="time-rafaam">
-			<div class="header">${header}</div>
-			${body}
-		</div>
-		`;
+		const config: CheckOffCardsListConfig = {
+			title: this.i18n.translateString('counters.rafaam-time.title'),
+			text: this.i18n.translateString(`counters.rafaam-time.${side}`, {
+				unique: value?.uniqueRafaams,
+				total: value?.totalRafaams,
+			}),
+			cards:
+				sortedRafaams?.map((c) => {
+					const checkOffCard: CheckOffCard = {
+						cardId: c,
+						checked: value?.playedRafaams.includes(c) ?? false,
+						quantity: 1,
+					};
+					return checkOffCard;
+				}) ?? [],
+		};
+		return config;
+	}
+
+	protected override tooltip(side: 'player' | 'opponent', gameState: GameState): string | null {
+		return null;
 	}
 }
 

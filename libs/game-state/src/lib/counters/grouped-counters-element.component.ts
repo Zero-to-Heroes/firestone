@@ -1,3 +1,4 @@
+import { ComponentType } from '@angular/cdk/overlay';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CounterInstance } from './_counter-definition-v2';
 
@@ -11,6 +12,10 @@ import { CounterInstance } from './_counter-definition-v2';
 			[helpTooltip]="tooltip"
 			cardTooltip
 			[cardTooltipRelatedCardIds]="cardTooltip"
+			componentTooltip
+			[componentType]="advancedTooltipType"
+			[componentInput]="advancedTooltipInput"
+			[componentTooltipPosition]="'left'"
 		>
 			<div class="icon">
 				<img [src]="icon" />
@@ -23,16 +28,22 @@ import { CounterInstance } from './_counter-definition-v2';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GroupedCountersElementComponent {
-	@Input() set counter(value: CounterInstance<any>) {
-		this.icon = value.image;
-		this.tooltip = value.tooltip;
-		this.value = value.value ?? '-';
-		this.cardTooltip = value.cardTooltip;
-	}
-	@Input() side: 'player' | 'opponent';
+	advancedTooltipType: ComponentType<any> | undefined;
+	advancedTooltipInput: any | undefined;
 
 	icon: string;
 	tooltip: string | null;
 	value: string | number;
 	cardTooltip: readonly string[] | undefined;
+
+	@Input() set counter(value: CounterInstance<any>) {
+		this.icon = value.image;
+		this.tooltip = value.tooltip;
+		this.value = value.value ?? '-';
+		this.cardTooltip = value.cardTooltip;
+
+		this.advancedTooltipType = value.advancedTooltipType;
+		this.advancedTooltipInput = value.advancedTooltipInput;
+	}
+	@Input() side: 'player' | 'opponent';
 }

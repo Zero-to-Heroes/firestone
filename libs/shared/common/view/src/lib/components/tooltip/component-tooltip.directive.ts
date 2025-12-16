@@ -20,10 +20,10 @@ import { Subscription } from 'rxjs';
 // See https://blog.angularindepth.com/building-tooltips-for-angular-3cdaac16d138
 export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 	private _componentInput: any;
-	private _componentType: ComponentType<any>;
+	private _componentType: ComponentType<any> | undefined;
 	private viewInit = false;
 
-	@Input() set componentType(value: ComponentType<any>) {
+	@Input() set componentType(value: ComponentType<any> | undefined) {
 		this._componentType = value;
 		if (value && value !== this._componentType) {
 			this.updatePositionStrategy();
@@ -101,7 +101,7 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 	}
 
 	private updatePositionStrategy() {
-		if (!this.viewInit) {
+		if (!this.viewInit || !this._componentInput) {
 			return;
 		}
 		this.destroyOverlay();
@@ -153,7 +153,7 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 			return;
 		}
 
-		if (!this._componentInput) {
+		if (!this._componentInput || !this._componentType) {
 			return;
 		}
 		// Typically the case when mousing over the tooltip
@@ -201,7 +201,6 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 
 	@HostListener('mouseleave', ['$event'])
 	onMouseLeave(event: MouseEvent | null, willBeDestroyed = false) {
-		// return;
 		if (event?.shiftKey) {
 			return;
 		}

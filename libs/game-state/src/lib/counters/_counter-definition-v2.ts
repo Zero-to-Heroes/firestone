@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { ComponentType } from '@angular/cdk/overlay';
 import { CardIds, isBattlegrounds } from '@firestone-hs/reference-data';
 import { Preferences } from '@firestone/shared/common/service';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
@@ -20,6 +21,7 @@ export abstract class CounterDefinitionV2<T> {
 	protected showOnlyInDiscovers = false;
 	protected includeBoardForCards = false;
 	protected debug = false;
+	protected advancedTooltipType?: ComponentType<any>;
 	// Only show one instance of the counter at the same time. Useful for counters like
 	// Ceaseless expanse which tracks things game-wide, instead of per-player
 	protected singleton = false;
@@ -43,6 +45,15 @@ export abstract class CounterDefinitionV2<T> {
 		bgState: BattlegroundsState,
 		value: T | null | undefined,
 	): readonly string[] | undefined {
+		return undefined;
+	}
+
+	protected advancedTooltipInput(
+		side: 'player' | 'opponent',
+		gameState: GameState,
+		bgState: BattlegroundsState,
+		rawValue: T | null | undefined,
+	): any {
 		return undefined;
 	}
 
@@ -237,6 +248,8 @@ export abstract class CounterDefinitionV2<T> {
 			tooltip: this.tooltip(side, gameState, allCards, bgState, countersUseExpandedView),
 			value: this.valueImg ? null : this.formatValue(rawValue),
 			cardTooltip: this.cardTooltip(side, gameState, bgState, rawValue),
+			advancedTooltipType: this.advancedTooltipType,
+			advancedTooltipInput: this.advancedTooltipInput(side, gameState, bgState, rawValue),
 		};
 		this.debug && console.debug('[debug] emitting counter', this.id, side, result);
 		if (sideObj) {
@@ -256,7 +269,10 @@ export interface CounterInstance<T> {
 	readonly value: string | number | undefined | null;
 	readonly valueImg?: string;
 	readonly cardTooltip?: readonly string[];
+	readonly advancedTooltipType?: ComponentType<any>;
+	readonly advancedTooltipInput?: any;
 }
+
 export const equalCounterInstance = (
 	a: CounterInstance<any> | null | undefined,
 	b: CounterInstance<any> | null | undefined,
@@ -283,6 +299,9 @@ export const equalCounterInstance = (
 		return false;
 	}
 	if (a.tooltip !== b.tooltip) {
+		return false;
+	}
+	if (a.advancedTooltipInput !== b.advancedTooltipInput) {
 		return false;
 	}
 	return true;

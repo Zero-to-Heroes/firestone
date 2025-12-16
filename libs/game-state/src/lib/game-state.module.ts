@@ -6,6 +6,7 @@ import { SharedFrameworkCommonModule } from '@firestone/shared/framework/common'
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { StatsDataAccessModule } from '@firestone/stats/data-access';
 import { InlineSVGModule } from 'ng-inline-svg-2';
+import { CheckOffCardsListComponent } from './counters/check-off-cards-list.component';
 import { CounterWrapperComponent } from './counters/counter-wrapper.component';
 import { CountersPositionerComponent } from './counters/counters-positioner.component';
 import { GenericCountersV2Component } from './counters/generic-counter-v2.component';
@@ -28,6 +29,7 @@ const components = [
 	GroupedCountersComponent,
 	GroupedCountersSideComponent,
 	GroupedCountersElementComponent,
+	CheckOffCardsListComponent,
 ];
 
 @NgModule({

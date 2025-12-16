@@ -1,3 +1,4 @@
+import { ComponentType } from '@angular/cdk/overlay';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CounterInstance } from './_counter-definition-v2';
 
@@ -11,6 +12,10 @@ import { CounterInstance } from './_counter-definition-v2';
 			[helpTooltip]="helpTooltipText"
 			cardTooltip
 			[cardTooltipRelatedCardIds]="cardTooltip"
+			componentTooltip
+			[componentType]="advancedTooltipType"
+			[componentInput]="advancedTooltipInput"
+			[componentTooltipPosition]="'left'"
 		>
 			<img class="image" [src]="image" />
 			<div class="frame"></div>
@@ -26,6 +31,9 @@ import { CounterInstance } from './_counter-definition-v2';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GenericCountersV2Component {
+	advancedTooltipType: ComponentType<any> | undefined;
+	advancedTooltipInput: any | undefined;
+
 	value: number | string | undefined | null;
 	valueImg: string | undefined;
 	cardTooltip: readonly string[] | undefined;
@@ -42,5 +50,8 @@ export class GenericCountersV2Component {
 		this.valueImg = value.valueImg;
 		this.cardTooltip = value.cardTooltip;
 		this.theme = value.type === 'battlegrounds' ? 'battlegrounds-theme' : 'decktracker-theme';
+
+		this.advancedTooltipType = value.advancedTooltipType;
+		this.advancedTooltipInput = value.advancedTooltipInput;
 	}
 }
