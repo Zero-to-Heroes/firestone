@@ -416,17 +416,23 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 		if (showBoardCardsInSeparateZone) {
 			const getZonePosition = (card: VisualDeckCard) => {
 				if (card.getCardType(this.allCards) === CardType.HERO_POWER) {
-					return -2;
+					return -30;
 				}
 				if (card.getCardType(this.allCards) === CardType.WEAPON) {
-					return -1;
+					return -20;
 				}
 				const position = card.tags?.[GameTag.ZONE_POSITION] ?? 0;
+				// So that they appear in the order they entered the battlefield
+				if (card.zone === 'SECRET') {
+					return -10 - position;
+				}
 				return position;
 			};
+			const showSecretsInBoardZone = true;
+			const secrets = showSecretsInBoardZone ? [...deckState.otherZone.filter((c) => c.zone === 'SECRET')] : [];
 			const boardZone = [
 				...deckState.board,
-				...deckState.otherZone.filter((c) => c.zone === 'SECRET'),
+				...secrets,
 				deckState.weapon,
 				showHeroPowerInBoardZone ? deckState.heroPower : null,
 			].filter((c) => !!c);
