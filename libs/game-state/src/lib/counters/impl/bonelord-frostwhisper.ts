@@ -1,6 +1,6 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { CardIds, RELIC_IDS } from '@firestone-hs/reference-data';
+import { CardIds } from '@firestone-hs/reference-data';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { GameState } from '../../models/game-state';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
@@ -10,12 +10,7 @@ export class BonelordFrostwhisperCounterDefinitionV2 extends CounterDefinitionV2
 	public override id: CounterType = 'bonelordFrostwhisper';
 	public override image = CardIds.BonelordFrostwhisper;
 	public override type: 'hearthstone' | 'battlegrounds' = 'hearthstone';
-	public override cards: readonly CardIds[] = [
-		CardIds.ArtificerXymox_REV_787,
-		CardIds.ArtificerXymox_REV_937,
-		CardIds.ArtificerXymox_ArtificerXymoxToken,
-		...RELIC_IDS,
-	];
+	public override cards: readonly CardIds[] = [];
 
 	readonly player = {
 		pref: 'playerBonelordFrostwhisperCounter' as const,
