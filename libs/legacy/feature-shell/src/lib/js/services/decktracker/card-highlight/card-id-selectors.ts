@@ -386,6 +386,9 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.AwakenTheMakers:
 			return and(side(inputSide), or(inDeck, inHand), minion, deathrattle);
+		case CardIds.AwakenTheFlame_THD_029hp:
+		case CardIds.AwakenTheFlame:
+			return and(side(inputSide), or(inDeck, inHand), imbue);
 		case CardIds.AxeBerserker:
 			return and(side(inputSide), inDeck, weapon);
 		case CardIds.AzeriteGiant_WW_025:
@@ -470,6 +473,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), legendary);
 		case CardIds.BenevolentBanker_WW_384:
 			return and(inDeck, spell);
+		case CardIds.HagathaTheWitch_BewitchHeroic:
+			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.BigDreams:
 			return and(side(inputSide), or(inDeck, inHand), beast);
 		case CardIds.Bioluminescence:
@@ -498,6 +503,8 @@ export const cardIdSelector = (
 				and(side(inputSide), or(inHand, inDeck), fire),
 				and(side(inputSide), or(inHand, inDeck), elemental),
 			);
+		case CardIds.BlessingOfTheWolf_EDR_850p:
+			return and(side(inputSide), or(inDeck, inHand), beast);
 		case CardIds.BlindeyeSharpshooter_WW_402:
 			return highlightConditions(
 				and(side(inputSide), or(inDeck, inHand), naga),
@@ -875,6 +882,7 @@ export const cardIdSelector = (
 		case CardIds.CorruptedFelstoneTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), fel);
 		case CardIds.CorruptTheWaters:
+		case CardIds.CorruptTheWaters_HeartOfVirnaal:
 			return and(side(inputSide), or(inDeck, inHand), battlecry);
 		case CardIds.CorsairCache:
 			return and(side(inputSide), inDeck, weapon);
@@ -1060,6 +1068,8 @@ export const cardIdSelector = (
 			);
 		case CardIds.Dinositter_TLC_822:
 			return and(side(inputSide), or(inHand, inDeck), beast);
+		case CardIds.Dinomancy_DinomancyToken:
+			return and(side(inputSide), or(inDeck, inHand, inPlay), beast);
 		case CardIds.DirgeOfDespair:
 			return and(side(inputSide), inDeck, demon, minion);
 		case CardIds.DiscipleOfEonar:
