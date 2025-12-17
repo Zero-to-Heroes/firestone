@@ -6,7 +6,8 @@ import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulat
 import { GameSample } from '@firestone-hs/simulate-bgs-battle/dist/simulation/spectator/game-sample';
 import { BugReportService, Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { sleep } from '@firestone/shared/framework/common';
-import { ADS_SERVICE_TOKEN, ApiRunner, CardsFacadeService, IAdsService } from '@firestone/shared/framework/core';
+import { ADS_SERVICE_TOKEN, ApiRunner, CardsFacadeService } from '@firestone/shared/framework/core';
+import type { IAdsService } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
 import { BgsBattleSimulationExecutorService } from './bgs-battle-simulation-executor.service';
 import { BgsIntermediateResultsSimGuardianService } from './bgs-intermediate-results-sim-guardian.service';

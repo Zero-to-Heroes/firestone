@@ -18,7 +18,7 @@ import { MatchAnalysisService } from './match-analysis.service';
 import { isMercenaries } from '@firestone-hs/reference-data';
 import { CompositionDetectorService } from '@firestone/battlegrounds/core';
 import { PatchesConfigService, PatchInfo } from '@firestone/shared/common/service';
-import { IAdsService } from '@firestone/shared/framework/core';
+import type { IAdsService } from '@firestone/shared/framework/core';
 import { GameForUpload } from '../models/game-for-upload/game-for-upload';
 
 @Injectable()

@@ -1,5 +1,6 @@
 import { Inject, Injectable, Optional } from '@angular/core';
-import { ADS_SERVICE_TOKEN, IAdsService, waitForReady } from '@firestone/shared/framework/core';
+import { ADS_SERVICE_TOKEN, waitForReady } from '@firestone/shared/framework/core';
+import type { IAdsService } from '@firestone/shared/framework/core';
 import { combineLatest, distinctUntilChanged, map } from 'rxjs';
 import { Preferences } from '../models/preferences';
 import { PreferencesService } from './preferences.service';

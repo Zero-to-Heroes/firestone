@@ -6,10 +6,10 @@ import {
 	ADS_SERVICE_TOKEN,
 	AppInjector,
 	CardsFacadeService,
-	IAdsService,
 	ILocalizationService,
 	OwUtilsService,
 } from '@firestone/shared/framework/core';
+import type { IAdsService } from '@firestone/shared/framework/core';
 
 import { DeckHandlerService } from '../deck-handler.service';
 import { AiDeckService } from '../deck/ai-deck-service.service';

@@ -1,4 +1,4 @@
-import { InjectFlags, InjectionToken, InjectOptions, Injector, ProviderToken } from '@angular/core';
+import { InjectFlags, InjectionToken, InjectOptions, Injector, ProviderToken, Type } from '@angular/core';
 import { electronAppInjector, Token } from './electron-app-injector';
 
 /**
@@ -41,5 +41,15 @@ export class ElectronAngularInjector implements Injector {
 	 */
 	register<T>(token: Token<T>, instance: T): void {
 		electronAppInjector.register(token, instance);
+	}
+
+	/**
+	 * Automatically instantiate a class with constructor injection
+	 * Delegates to the underlying ElectronAppInjector.instantiate method
+	 * 
+	 * @see ElectronAppInjector.instantiate for details
+	 */
+	instantiate<T>(type: Type<T>): T {
+		return electronAppInjector.instantiate(type);
 	}
 }

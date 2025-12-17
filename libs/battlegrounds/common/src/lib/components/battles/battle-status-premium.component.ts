@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
-import { ADS_SERVICE_TOKEN, AnalyticsService, IAdsService, OverwolfService } from '@firestone/shared/framework/core';
+import { ADS_SERVICE_TOKEN, AnalyticsService, OverwolfService } from '@firestone/shared/framework/core';
+import type { IAdsService } from '@firestone/shared/framework/core';
 
 @Component({
 	standalone: false,
