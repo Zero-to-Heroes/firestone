@@ -3509,6 +3509,8 @@ export const cardIdSelector = (
 					.map((c) => c.cardId as CardIds);
 				return and(side(inputSide), inDeck, cardIs(...candidates))(input);
 			};
+		case CardIds.TheAmazingReno_DRGA_001:
+			return and(side(inputSide), or(inHand, inDeck), spell);
 		case CardIds.TheBoomReaver:
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.TheBoomship:
