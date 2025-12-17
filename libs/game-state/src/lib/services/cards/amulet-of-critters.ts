@@ -6,7 +6,6 @@ import { filterCards } from './utils';
 
 export const AmuletOfCritters: StaticGeneratingCard = {
 	cardIds: [CardIds.AmuletOfCritters_AmuletOfCrittersToken_VAC_959t06t],
-	publicCreator: true,
 	dynamicPool: (input: StaticGeneratingCardInput) => {
 		const possibleCards = filterCards(
 			AmuletOfCritters.cardIds[0],
