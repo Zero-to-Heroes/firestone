@@ -1,3 +1,4 @@
+import { isBattlegrounds } from '@firestone-hs/reference-data';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { GameState } from '../../../models/game-state';
 import { hasChainParsingCard } from '../../cards/_card.type';
@@ -61,7 +62,7 @@ export class ActionsChainParser implements EventParser {
 			return currentState;
 		}
 
-		if (currentState.isBattlegrounds()) {
+		if (isBattlegrounds(currentState.metadata.gameType)) {
 			return currentState;
 		}
 

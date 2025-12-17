@@ -1,4 +1,4 @@
-import { CardIds } from '@firestone-hs/reference-data';
+import { CardIds, isBattlegrounds } from '@firestone-hs/reference-data';
 import { DeckState } from '../../../../models/deck-state';
 import { GameState } from '../../../../models/game-state';
 import { GameEvent } from '../../game-event';
@@ -19,7 +19,7 @@ export class PogoPlayedParser implements EventParser {
 		const [, controllerId, localPlayer] = gameEvent.parse();
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		// Don't show the opponent's pogo counter in battlegrounds
-		if (!isPlayer && currentState.isBattlegrounds()) {
+		if (!isPlayer && isBattlegrounds(currentState.metadata.gameType)) {
 			return currentState;
 		}
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;

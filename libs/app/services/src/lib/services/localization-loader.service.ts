@@ -1,8 +1,7 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { DiskCacheService } from '@firestone/shared/common/service';
 import { translationFileVersion } from '@firestone/shared/framework/common';
-import { AppInjector } from '@firestone/shared/framework/core';
+import { ApiRunner, AppInjector } from '@firestone/shared/framework/core';
 import { TranslateLoader, TranslateService } from '@ngx-translate/core';
 import { from, Observable, of, switchMap, tap } from 'rxjs';
 
@@ -10,7 +9,10 @@ import { from, Observable, of, switchMap, tap } from 'rxjs';
 export class LocalizationLoaderWithCache implements TranslateLoader {
 	private lastTranslationTimestamp = 0;
 
-	constructor(private readonly cache: DiskCacheService, private readonly http: HttpClient) {}
+	constructor(
+		private readonly cache: DiskCacheService,
+		private readonly api: ApiRunner,
+	) {}
 
 	public getTranslation(lang: string): Observable<any> {
 		const url = `https://static.firestoneapp.com/data/i18n/${lang}.json?v=${translationFileVersion}`;
@@ -36,18 +38,14 @@ export class LocalizationLoaderWithCache implements TranslateLoader {
 	}
 
 	private fetchAndCacheTranslation(url: string, lang: string, emit = false): Observable<any> {
-		return this.http.get(url).pipe(
+		return from(this.api.get(url)).pipe(
 			tap(async (response) => {
-				console.debug('[bootstrap] [localization-loader] got remote translation', lang, response);
+				console.log('[bootstrap] [localization-loader] got remote translation', lang, response);
 				await this.cache.storeItem(`localization-${lang}.json`, response);
 				if (emit && (Date.now() - this.lastTranslationTimestamp) / 1000 > 60) {
 					// Reload the translations
 					const service = AppInjector.get(TranslateService);
-					console.debug(
-						'[bootstrap] [localization-loader] reloading translations',
-						lang,
-						service.currentLang,
-					);
+					console.log('[bootstrap] [localization-loader] reloading translations', lang, service.currentLang);
 					service.reloadLang(lang);
 				}
 				this.lastTranslationTimestamp = Date.now();

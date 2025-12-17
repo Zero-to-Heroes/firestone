@@ -2,7 +2,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
-import { CardIds, GameTag, getBuddy, SceneMode } from '@firestone-hs/reference-data';
+import { CardIds, GameTag, getBuddy, isBattlegrounds, SceneMode } from '@firestone-hs/reference-data';
 import {
 	BattlegroundsState,
 	BgsBoard,
@@ -156,7 +156,11 @@ export class TwitchAuthService {
 			return null;
 		}
 
-		let playerDeck = this.cleanDeck(state.playerDeck, state.isBattlegrounds(), state.isMercenaries());
+		let playerDeck = this.cleanDeck(
+			state.playerDeck,
+			isBattlegrounds(state.metadata.gameType),
+			state.isMercenaries(),
+		);
 		const bgsPlayer = bgsState?.currentGame?.getMainPlayer();
 		const playerBuddy = bgsState?.currentGame?.hasBuddies
 			? getBuddy(bgsPlayer?.cardId as CardIds, this.allCards.getService())
@@ -173,7 +177,11 @@ export class TwitchAuthService {
 		const bgsOpponent = bgsState?.currentGame?.players?.find(
 			(player) => player.cardId === state.opponentDeck?.hero?.cardId,
 		);
-		let opponentDeck = this.cleanDeck(state.opponentDeck, state.isBattlegrounds(), state.isMercenaries());
+		let opponentDeck = this.cleanDeck(
+			state.opponentDeck,
+			isBattlegrounds(state.metadata.gameType),
+			state.isMercenaries(),
+		);
 		const opponentBuddy = bgsState?.currentGame?.hasBuddies
 			? getBuddy(bgsOpponent?.cardId as CardIds, this.allCards.getService())
 			: null;

@@ -1,3 +1,4 @@
+import { isBattlegrounds } from '@firestone-hs/reference-data';
 import { GameState } from '../../../models/game-state';
 import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
@@ -11,7 +12,7 @@ export class ReconnectStartParser implements EventParser {
 		// In Battlegrounds, when we reconnect, we might miss all the "minions removed" events
 		// Also, new events are emitted for all the minions that are still on board
 		// So we clean everything
-		const newOpponentState = currentState.isBattlegrounds()
+		const newOpponentState = isBattlegrounds(currentState.metadata.gameType)
 			? currentState.opponentDeck.update({
 					board: [],
 				})

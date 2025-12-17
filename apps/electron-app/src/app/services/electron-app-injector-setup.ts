@@ -1,4 +1,4 @@
-import { GameNativeStateStoreService, QuestsService } from '@firestone/app/services';
+import { GameNativeStateStoreService, LocalizationLoaderWithCache, QuestsService } from '@firestone/app/services';
 import {
 	ArenaCardStatsService,
 	ArenaClassStatsService,
@@ -91,6 +91,13 @@ import {
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
 import { GameStatsLoaderService } from '@firestone/stats/data-access';
+import {
+	FakeMissingTranslationHandler,
+	TranslateDefaultParser,
+	TranslateFakeCompiler,
+	TranslateService,
+	TranslateStore,
+} from '@ngx-translate/core';
 import { AccountService } from '../../../../../libs/profile/common/src/lib/services/account.service';
 import { ElectronAngularInjector } from './electron-angular-injector';
 import { ElectronDiskCacheService } from './electron-disk-cache.service';
@@ -222,8 +229,35 @@ export const buildAppInjector = () => {
 	const gameStateMetaInfos = new GameStateMetaInfoService();
 	electronInjector.register(GameStateMetaInfoService, gameStateMetaInfos);
 
-	// TODO: translation service
-	const i18n = new LocalizationStandaloneService(allCardsRaw, null);
+	const diskCache = new ElectronDiskCacheService(preferences);
+	electronInjector.register(DiskCacheService, diskCache as any as DiskCacheService);
+
+	// Translation service
+	const translateLoader = new LocalizationLoaderWithCache(
+		diskCache as any as DiskCacheService,
+		api as any as ApiRunner,
+	);
+	// Create TranslateService dependencies
+	const translateStore = new TranslateStore();
+	const translateParser = new TranslateDefaultParser();
+	const translateCompiler = new TranslateFakeCompiler();
+	const missingTranslationHandler = new FakeMissingTranslationHandler();
+	// Create TranslateService instance
+	const translate = new TranslateService(
+		translateStore,
+		translateLoader,
+		translateCompiler,
+		translateParser,
+		missingTranslationHandler,
+		true, // useDefaultLang
+		false, // isolate
+		false, // extend
+		'enUS', // defaultLanguage
+	);
+	// Initialize the service
+	translate.setDefaultLang('enUS');
+
+	const i18n = new LocalizationStandaloneService(allCardsRaw, translate);
 	electronInjector.register(LocalizationStandaloneService, i18n);
 	electronInjector.register(ILocalizationService, i18n);
 
@@ -390,9 +424,6 @@ export const buildAppInjector = () => {
 	electronInjector.register(StandaloneUserService, userService);
 	electronInjector.register(UserService, userService as any as UserService);
 	electronInjector.register(USER_SERVICE_TOKEN, userService);
-
-	const diskCache = new ElectronDiskCacheService(preferences);
-	electronInjector.register(DiskCacheService, diskCache as any as DiskCacheService);
 
 	const arenaCardStats = new ArenaCardStatsService(windowManager);
 	electronInjector.register(ArenaCardStatsService, arenaCardStats);

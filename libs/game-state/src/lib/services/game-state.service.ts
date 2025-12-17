@@ -434,7 +434,13 @@ export class GameStateService {
 		// 	currentState,
 		// 	gameEvent,
 		// );
-		console.log('[game-state] processed event', gameEvent.type, gameEvent.cardId, gameEvent.entityId);
+		console.log(
+			'[game-state] processed event',
+			gameEvent.type,
+			gameEvent.cardId,
+			gameEvent.entityId,
+			currentState.metadata,
+		);
 		this.processedEvents.push(gameEvent.type);
 		return currentState;
 	}

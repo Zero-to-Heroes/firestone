@@ -1,4 +1,4 @@
-import { BnetRegion, CardIds, GameType, SpellSchool, isBattlegrounds } from '@firestone-hs/reference-data';
+import { BnetRegion, CardIds, GameType, SpellSchool } from '@firestone-hs/reference-data';
 import { MatchInfo } from '@firestone/memory';
 import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
@@ -57,11 +57,6 @@ export class GameState {
 
 	public update(value: Partial<NonFunctionProperties<GameState>>): GameState {
 		return Object.assign(new GameState(), this, value);
-	}
-
-	/** @deprecated DO NOT USE IN COMPONENTS (because of electron serialization) */
-	public isBattlegrounds(): boolean {
-		return isBattlegrounds(this.metadata.gameType);
 	}
 
 	/** @deprecated DO NOT USE IN COMPONENTS (because of electron serialization) */

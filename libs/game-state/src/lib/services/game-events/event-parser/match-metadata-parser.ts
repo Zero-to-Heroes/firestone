@@ -1,4 +1,4 @@
-import { GameType, isMercenaries } from '@firestone-hs/reference-data';
+import { GameType, isBattlegrounds, isMercenaries } from '@firestone-hs/reference-data';
 import { MemoryInspectionService } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
@@ -41,15 +41,18 @@ export class MatchMetadataParser implements EventParser {
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
+		console.log('[match-metadata-parser] parse');
 		// Because Mercs is too weird, we don't want to have to take into account all the edge cases
 		// in the standard game state.
 		// Also, everything should be handled inside the MercenariesState anyway
 		if (isMercenaries(gameEvent.additionalData.metaData.GameType)) {
+			console.log('[match-metadata-parser] mercs');
 			return currentState;
 		}
 
 		// All the meta data should already be in the existing state
 		if (currentState.reconnectOngoing) {
+			console.log('[match-metadata-parser] reconnect ongoing');
 			return currentState;
 		}
 
@@ -59,17 +62,26 @@ export class MatchMetadataParser implements EventParser {
 			formatType: format,
 			scenarioId: gameEvent.additionalData.metaData.ScenarioID as number,
 		} as Metadata;
+		console.log('[match-metadata-parser] metaData', metaData);
 		const stateWithMetaData = currentState.update({
 			metadata: metaData,
 		} as GameState);
 
 		const prefs = await this.prefs.getPreferences();
 
-		if (stateWithMetaData.isBattlegrounds()) {
-			console.debug('[match-metadata-parser] bgs game start', gameEvent, stateWithMetaData);
+		if (isBattlegrounds(stateWithMetaData.metadata.gameType)) {
+			console.log('[match-metadata-parser] bgs game start', stateWithMetaData.bgState.update);
 			// this.nav.currentPanelId$$.next('bgs-hero-selection-overview');
 			// this.nav.forcedStatus$$.next(prefs.bgsShowHeroSelectionScreen ? 'open' : null);
 			// this.highlighter.resetHighlights();
+			try {
+				const translationText = this.i18n.translateString('battlegrounds.menu.hero-selection');
+				console.log('[match-metadata-parser] translationText', translationText);
+				const panels = buildEmptyPanels(currentState.bgState, prefs, this.i18n);
+				console.log('[match-metadata-parser] panels');
+			} catch (e) {
+				console.error('[match-metadata-parser] error building panels', e);
+			}
 
 			const newState = stateWithMetaData.update({
 				bgState: stateWithMetaData.bgState.update({
@@ -79,9 +91,11 @@ export class MatchMetadataParser implements EventParser {
 					panels: buildEmptyPanels(currentState.bgState, prefs, this.i18n),
 				}),
 			});
+			console.log('[match-metadata-parser] newState', newState.metadata);
 
 			return newState;
 		} else if (stateWithMetaData.isMercenaries()) {
+			console.log('[match-metadata-parser] mercs 2');
 			return stateWithMetaData;
 		}
 
