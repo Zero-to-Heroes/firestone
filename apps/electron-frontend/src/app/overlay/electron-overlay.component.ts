@@ -1,8 +1,14 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewRef } from '@angular/core';
 import { AllCardsService, SceneMode } from '@firestone-hs/reference-data';
 import { MemoryUpdatesService, SceneService } from '@firestone/memory';
-import { GameStatusService, ScalingService } from '@firestone/shared/common/service';
-import { CardsFacadeStandaloneService, ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
+import { GameStatusService, PreferencesService, ScalingService } from '@firestone/shared/common/service';
+import {
+	CardsFacadeStandaloneService,
+	ILocalizationService,
+	LocalizationStandaloneService,
+	waitForReady,
+} from '@firestone/shared/framework/core';
+import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 
 declare const window: any;
@@ -46,6 +52,10 @@ export class ElectronOverlayComponent implements OnInit, OnDestroy {
 		private readonly allCards: CardsFacadeStandaloneService,
 		private readonly i18n: ILocalizationService,
 		private readonly init_ScalingService: ScalingService,
+		private readonly prefs: PreferencesService,
+		private readonly translate: TranslateService,
+		private readonly localizationService: LocalizationStandaloneService,
+		// private readonly injector: Injector,
 	) {}
 
 	async ngOnInit() {
@@ -57,9 +67,9 @@ export class ElectronOverlayComponent implements OnInit, OnDestroy {
 		await this.allCards.init(service, 'enUS');
 		console.log('[ElectronOverlay] Cards initialized...');
 
-		console.log('[ElectronOverlay] Initializing localization...');
-		await this.i18n.setLocale('enUS');
-		console.log('[ElectronOverlay] Localization initialized...');
+		console.log('[i18n] [ElectronOverlay] Initializing localization...');
+		await this.initLocalization();
+		console.log('[i18n] [ElectronOverlay] Localization initialized...');
 
 		await waitForReady(this.gameStatusService, this.memoryUpdateService);
 
@@ -156,5 +166,26 @@ export class ElectronOverlayComponent implements OnInit, OnDestroy {
 				}
 			}, 5000);
 		}
+	}
+
+	private async initLocalization() {
+		// console.debug('[bootstrap] setting default language');
+		// this language will be used as a fallback when a translation isn't found in the current language
+		// this.translate.setDefaultLang('enUS');
+		// Load the locales first, otherwise some windows will be displayed with missing text
+		let prefs = await this.prefs.getPreferences();
+		console.log('[i18n] setting language', prefs.locale);
+
+		return new Promise<void>((resolve) => {
+			console.log('[i18n] preparing to set language', prefs.locale);
+			this.translate.use(prefs.locale).subscribe(async (info) => {
+				console.log('[i18n] language set', prefs.locale);
+				// await this.localizationService.start(this.translate);
+				await this.localizationService.setLocale(prefs.locale);
+				console.log('[i18n] localization service ready');
+
+				resolve();
+			});
+		});
 	}
 }

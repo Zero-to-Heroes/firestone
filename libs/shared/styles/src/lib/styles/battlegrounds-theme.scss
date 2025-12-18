@@ -65,12 +65,12 @@
 	--card-highlight-color-4: rgba(127, 72, 255, 0.4);
 
 	--bgs-simulation-widget-background-image:
-		radial-gradient(30vw at 50% 50%, ${bgsBackgroundColorStart} 0%, ${bgsBackgroundColorEnd} 100%),
+		radial-gradient(30vw at 50% 50%, rgba(94, 11, 70, 0.7) 0%, rgba(30, 1, 22, 1) 100%),
 		url('https://static.zerotoheroes.com/hearthstone/asset/firestone/images/backgrounds/battlegrounds.jpg');
 	--bgs-session-widget-background-image:
-		radial-gradient(30vw at 50% 50%, ${bgsBackgroundColorStart} 0%, ${bgsBackgroundColorEnd} 100%),
+		radial-gradient(30vw at 50% 50%, rgba(94, 11, 70, 0.7) 0%, rgba(30, 1, 22, 1) 100%),
 		url('https://static.zerotoheroes.com/hearthstone/asset/firestone/images/backgrounds/battlegrounds.jpg');
 	--bgs-minions-list-widget-background-image:
-		radial-gradient(50% 50% at 50% 50%, ${bgsBackgroundColorStart} 0%, ${bgsBackgroundColorEnd} 100%),
+		radial-gradient(50% 50% at 50% 50%, rgba(94, 11, 70, 0.7) 0%, rgba(30, 1, 22, 1) 100%),
 		url('https://static.zerotoheroes.com/hearthstone/asset/firestone/images/backgrounds/bg_tier_list.png');
 }

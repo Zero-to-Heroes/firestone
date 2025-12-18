@@ -62,6 +62,7 @@ import {
 	SceneService,
 } from '@firestone/memory';
 // import { CustomAppearanceService } from '@firestone/settings';
+import { AccountService } from '@firestone/profile/common';
 import {
 	DiskCacheService,
 	GameStatusService,
@@ -98,7 +99,6 @@ import {
 	TranslateService,
 	TranslateStore,
 } from '@ngx-translate/core';
-import { AccountService } from '../../../../../libs/profile/common/src/lib/services/account.service';
 import { ElectronAngularInjector } from './electron-angular-injector';
 import { ElectronDiskCacheService } from './electron-disk-cache.service';
 import { ElectronLogFileBackendService } from './electron-log-file-backend.service';
@@ -445,6 +445,10 @@ export const buildAppInjector = () => {
 
 	const questService = new QuestsService(windowManager);
 	electronInjector.register(QuestsService, questService);
+
+	// Need to clean up the settings module first (split components / services)
+	// const customAppearance = new CustomAppearanceService(windowManager);
+	// electronInjector.register(CustomAppearanceService, customAppearance);
 
 	return electronInjector;
 };

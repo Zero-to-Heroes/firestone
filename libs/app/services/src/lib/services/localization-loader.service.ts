@@ -3,7 +3,7 @@ import { DiskCacheService } from '@firestone/shared/common/service';
 import { translationFileVersion } from '@firestone/shared/framework/common';
 import { ApiRunner, AppInjector } from '@firestone/shared/framework/core';
 import { TranslateLoader, TranslateService } from '@ngx-translate/core';
-import { from, Observable, of, switchMap, tap } from 'rxjs';
+import { from, map, Observable, of, switchMap, tap } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class LocalizationLoaderWithCache implements TranslateLoader {
@@ -39,13 +39,18 @@ export class LocalizationLoaderWithCache implements TranslateLoader {
 
 	private fetchAndCacheTranslation(url: string, lang: string, emit = false): Observable<any> {
 		return from(this.api.get(url)).pipe(
+			map((response) => (response ? JSON.parse(response) : null)),
 			tap(async (response) => {
-				console.log('[bootstrap] [localization-loader] got remote translation', lang, response);
+				console.debug('[bootstrap] [localization-loader] got remote translation', lang, response);
 				await this.cache.storeItem(`localization-${lang}.json`, response);
 				if (emit && (Date.now() - this.lastTranslationTimestamp) / 1000 > 60) {
 					// Reload the translations
 					const service = AppInjector.get(TranslateService);
-					console.log('[bootstrap] [localization-loader] reloading translations', lang, service.currentLang);
+					console.debug(
+						'[bootstrap] [localization-loader] reloading translations',
+						lang,
+						service.currentLang,
+					);
 					service.reloadLang(lang);
 				}
 				this.lastTranslationTimestamp = Date.now();

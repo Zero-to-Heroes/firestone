@@ -1,5 +1,6 @@
 TODO:
 
+- i18n
 - BG overlay
 - restart game without restarting app should work
 - notifications (component and service, which relies on OW)
