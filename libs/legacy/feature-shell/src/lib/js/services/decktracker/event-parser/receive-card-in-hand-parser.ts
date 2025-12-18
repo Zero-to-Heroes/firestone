@@ -155,7 +155,16 @@ export class ReceiveCardInHandParser implements EventParser {
 		// );
 		const newCardId =
 			(isCardInfoPublic
-				? guessCardId(cardId, deck, opponentDeck, creatorCardId, creatorEntityId, createdIndex, this.allCards)
+				? guessCardId(
+						cardId,
+						deck,
+						opponentDeck,
+						currentState,
+						creatorCardId,
+						creatorEntityId,
+						createdIndex,
+						this.allCards,
+					)
 				: null) ?? cardWithDefault.cardId;
 		const cardWithKnownInfo =
 			newCardId === cardWithDefault.cardId
@@ -375,6 +384,7 @@ const guessCardId = (
 	cardId: string,
 	deckState: DeckState,
 	opponentDeckState: DeckState,
+	gameState: GameState,
 	creatorCardId: string,
 	creatorEntityId: number,
 	createdIndex: number,
@@ -414,15 +424,16 @@ const guessCardId = (
 		default:
 			const cardImpl = cardsInfoCache[creatorCardId];
 			if (hasGeneratingCard(cardImpl)) {
-				const guessedCardId = cardImpl.guessCardId?.(
-					cardId,
-					deckState,
-					opponentDeckState,
-					creatorCardId,
-					creatorEntityId,
-					createdIndex,
-					allCards.getService(),
-				);
+				const guessedCardId = cardImpl.guessCardId?.({
+					cardId: cardId,
+					deckState: deckState,
+					opponentDeckState: opponentDeckState,
+					gameState: gameState,
+					creatorCardId: creatorCardId,
+					creatorEntityId: creatorEntityId,
+					createdIndex: createdIndex,
+					allCards: allCards.getService(),
+				});
 				if (guessedCardId) {
 					return guessedCardId;
 				}

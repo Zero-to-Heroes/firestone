@@ -22,7 +22,6 @@ import { GrotesqueRuneblade } from './grotesque-runeblade';
 import { HabeasCorpses } from './habeas-corpses';
 import { Hadronox } from './hadronox';
 import { HighCultistBasaleph } from './high-cultist-basaleph';
-import { HungeringAncient } from './hungering-ancient';
 import { IchorOfUndeath } from './ichor-of-undeath';
 import { ImpKingRafaam } from './imp-king-rafaam';
 import { InfantryReanimator } from './infantry-reanimator';
@@ -88,7 +87,6 @@ const cards = [
 	ImpKingRafaam,
 	NZothTheCorruptor,
 	ChronoLordEpoch,
-	HungeringAncient,
 	EndbringerUmbra,
 	Zuljin,
 	PetParrot,

@@ -45,6 +45,7 @@ export { Grillmaster } from './grillmaster';
 export { GuitarSoloist } from './guitar-soloist';
 export { HagathaTheWitchBewitchHeroic } from './hagatha-the-witch-bewitch';
 export { HemetFoamMarksman } from './hemet-foam-marksman';
+export { HungeringAncient } from './hungering-ancient';
 export { HuntersPack } from './hunters-pack';
 export { Hybridization } from './hybridization';
 export { IdentityTheft } from './identity-theft';

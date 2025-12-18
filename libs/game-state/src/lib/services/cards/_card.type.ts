@@ -35,16 +35,19 @@ export interface GuessInfoInput {
 		tags?: readonly { Name: GameTag; Value: number }[];
 	};
 }
+export interface GuessCardIdInput {
+	cardId: string;
+	deckState: DeckState;
+	opponentDeckState: DeckState;
+	gameState: GameState;
+	creatorCardId: string;
+	creatorEntityId: number;
+	createdIndex: number;
+	allCards: AllCardsService;
+}
 type GuessInfoFunction = (input: GuessInfoInput) => GuessedInfo | null;
-type GuessCardIdFunction = (
-	cardId: string,
-	deckState: DeckState,
-	opponentDeckState: DeckState,
-	creatorCardId: string,
-	creatorEntityId: number,
-	createdIndex: number,
-	allCards: AllCardsService,
-) => string | null;
+type GuessCardIdFunction = (input: GuessCardIdInput) => string | null;
+
 // Wait until this is correctly refactored
 // export interface SelectorCard extends Card {
 // 	selector: (info: HighlightSide) => Selector;

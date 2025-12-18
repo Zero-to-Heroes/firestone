@@ -1,37 +1,18 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import {
-	CardClass,
-	CardIds,
-	CardType,
-	GameTag,
-	hasCorrectTribe,
-	Race,
-	SpellSchool,
-} from '@firestone-hs/reference-data';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { DeckCard, GuessedInfo } from '../../models/deck-card';
-import { DeckState } from '../../models/deck-state';
-import { GeneratingCard, GuessInfoInput } from './_card.type';
-import { AllCardsService } from '@firestone-hs/reference-data';
-import { filterCards } from './utils';
+import { CardClass, CardIds, CardType, hasCorrectTribe, Race } from '@firestone-hs/reference-data';
+import { GuessedInfo } from '../../models/deck-card';
 import { canBeDiscoveredByClass, hasCorrectType } from '../../related-cards/dynamic-pools';
+import { GeneratingCard, GuessCardIdInput, GuessInfoInput } from './_card.type';
+import { filterCards } from './utils';
 
 export const ToysnatchingGeist: GeneratingCard = {
 	cardIds: [CardIds.ToysnatchingGeist_MIS_006],
 	publicCreator: true,
-	guessCardId: (
-		cardId: string,
-		deckState: DeckState,
-		opponentDeckState: DeckState,
-		creatorCardId: string,
-		creatorEntityId: number,
-		createdIndex: number,
-		allCards: AllCardsService,
-	): string | null => {
-		if (createdIndex === 1) {
+	guessCardId: (input: GuessCardIdInput): string | null => {
+		if (input.createdIndex === 1) {
 			return CardIds.ToysnatchingGeist_ToysnatchingGeistToken_MIS_006t;
 		}
-		return cardId;
+		return input.cardId;
 	},
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
 		const currentClass = input.deckState.hero?.classes?.[0] ? CardClass[input.deckState.hero?.classes?.[0]] : '';
