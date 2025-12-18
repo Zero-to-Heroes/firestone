@@ -37,6 +37,7 @@ export class ScalingService {
 		this._multiScale('countersScale', '--counters-scale-player');
 		this._multiScale('countersScaleOpponent', '--counters-scale-opponent');
 		this._multiScale('groupedCountersScale', '--grouped-counters-scale');
+		this._multiScale('countersWidgetsScale', '--counters-widgets-scale');
 		this._multiScale('decktrackerOpponentHandScale', '--decktracker-opponent-hand-scale');
 		this._multiScale('secretsHelperScale', '--secrets-helper-scale');
 		this._multiScale('sessionWidgetScale', '--session-widget-scale');

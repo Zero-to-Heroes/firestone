@@ -6,7 +6,7 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 	selector: 'check-off-cards-list',
 	styleUrls: [`./check-off-cards-list.component.scss`],
 	template: `
-		<div class="check-off-cards-list" *ngIf="cards?.length">
+		<div class="check-off-cards-list scalable" *ngIf="cards?.length">
 			<div class="title" *ngIf="title">{{ title }}</div>
 			<div class="text" *ngIf="text">{{ text }}</div>
 			<ul class="deck-list">

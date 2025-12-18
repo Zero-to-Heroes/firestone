@@ -1,6 +1,5 @@
 :host {
 	position: relative;
-	left: 10px;
 	display: flex;
 	min-height: 1px;
 }
@@ -29,6 +28,12 @@
 	}
 }
 
+.scalable {
+	transform-origin: top right;
+	position: relative;
+	transform: scale(var(--counters-widgets-scale, 1));
+}
+
 .deck-list {
 	list-style: none;
 	overflow: hidden;
@@ -46,6 +51,7 @@
 .card {
 	margin-bottom: 1px;
 	display: flex;
+	padding-left: 0;
 
 	::ng-deep .deck-card {
 		width: 100%;

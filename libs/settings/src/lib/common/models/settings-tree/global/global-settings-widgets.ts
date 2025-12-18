@@ -78,6 +78,18 @@ export const globalWidgetSettings = (context: SettingContext): SettingNode => {
 						},
 					},
 					{
+						type: 'slider',
+						field: 'countersWidgetsScale',
+						label: context.i18n.translateString('settings.general.widgets.counters-widgets-size'),
+						tooltip: context.i18n.translateString('settings.general.widgets.counters-widgets-size-tooltip'),
+						sliderConfig: {
+							min: 30,
+							max: 200,
+							snapSensitivity: 5,
+							knobs: sizeKnobs(context),
+						},
+					},
+					{
 						type: 'toggle',
 						field: 'lockWidgetPositions',
 						label: context.i18n.translateString('settings.general.widgets.lock-widgets-label'),

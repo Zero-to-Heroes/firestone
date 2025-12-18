@@ -66,6 +66,7 @@ export class Preferences implements IPreferences {
 	readonly useNewCardTileStyle: boolean = true;
 	readonly useGroupedCounters: boolean = true;
 	readonly groupedCountersScale: number = 100;
+	readonly countersWidgetsScale: number = 100;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly groupedCountersPosition: { left: number; top: number };
 
