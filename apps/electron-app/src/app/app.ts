@@ -133,9 +133,6 @@ export default class App {
 		// TODO: nx graph, and remove UI dependencies (probably some transitive stuff for game-state or battelgrounds-core?)
 		console.log('[app] allCards', allCards);
 		allCards.init(new AllCardsService(), 'enUS');
-		const service = allCards.getService();
-		console.log('[app] service', service);
-		await service.initializeCardsDb(undefined, 'enUS');
 		console.log('[app] allCards initialized', allCards.getCards()?.length ?? 'null');
 
 		const db = electronInjector.get(DATABASE_SERVICE_TOKEN);
