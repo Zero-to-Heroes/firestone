@@ -17,6 +17,7 @@ import { ElementalPowersBuffCounterDefinitionV2 } from './impl/battlegrounds/ele
 import { ElementalTavernBuffCounterDefinitionV2 } from './impl/battlegrounds/elemental-tavern-buff';
 import { FreeRefreshCounterDefinitionV2 } from './impl/battlegrounds/free-refresh';
 import { GoldNextTurnCounterDefinitionV2 } from './impl/battlegrounds/gold-next-turn';
+import { RightmostBuffCounterDefinitionV2 } from './impl/battlegrounds/rightmost-buff';
 import { SpellsPlayedCounterDefinitionV2 } from './impl/battlegrounds/spells-played';
 import { TavernSpellsBuffCounterDefinitionV2 } from './impl/battlegrounds/tavern-spells-buff';
 import { UndeadArmyCounterDefinitionV2 } from './impl/battlegrounds/undead-army';
@@ -191,6 +192,7 @@ export const getAllCounters: (
 	new DeepBlueCounterDefinitionV2(i18n, allCards),
 	new UndeadArmyCounterDefinitionV2(i18n, allCards),
 	new VolumizerBuffCounterDefinitionV2(i18n, allCards),
+	new RightmostBuffCounterDefinitionV2(i18n, allCards),
 ];
 
 // Use camelCase because it uses conventions to get the pref property names
@@ -292,4 +294,5 @@ export type CounterType =
 	| 'bgsMajordomo'
 	| 'bgsDeepBlue'
 	| 'bgsUndeadArmy'
-	| 'bgsVolumizerBuff';
+	| 'bgsVolumizerBuff'
+	| 'bgsRightmostBuff';
