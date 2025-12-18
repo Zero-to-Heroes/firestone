@@ -350,6 +350,7 @@ const internalGiftCreators = [
 	CardIds.FlameGeyser,
 	CardIds.FlameGeyserCore,
 	CardIds.FleshBehemoth_RLK_830,
+	CardIds.FlickeringLightbot_MIS_918,
 	CardIds.FlightOfTheBronze,
 	CardIds.FlintFirearm_FlintFirearmEnchantment_WW_379e,
 	CardIds.FlintFirearm_WW_379,
