@@ -42,6 +42,10 @@ export class UndeadArmyCounterDefinitionV2 extends CounterDefinitionV2<number> {
 		super(allCards);
 	}
 
+	protected override formatValue(value: number | null | undefined): null | undefined | number | string {
+		return value ? `+${value}` : null;
+	}
+
 	protected override tooltip(
 		side: 'player' | 'opponent',
 		gameState: GameState,
