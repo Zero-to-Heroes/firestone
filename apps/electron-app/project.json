@@ -4,9 +4,21 @@
 	"sourceRoot": "apps/electron-app/src",
 	"projectType": "application",
 	"targets": {
+		"build-worker": {
+			"executor": "nx:run-commands",
+			"outputs": ["{workspaceRoot}/dist/apps/electron-app/bgs-battle-sim-worker.thread.js"],
+			"options": {
+				"commands": [
+					"tsc --project apps/electron-app/tsconfig.worker.json",
+					"node apps/electron-app/move-worker-file.js"
+				],
+				"parallel": false
+			}
+		},
 		"build": {
 			"executor": "nx-electron:build",
 			"outputs": ["{options.outputPath}"],
+			"dependsOn": ["build-worker"],
 			"options": {
 				"outputPath": "dist/apps/electron-app",
 				"main": "apps/electron-app/src/main.ts",

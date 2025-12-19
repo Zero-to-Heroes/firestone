@@ -6,7 +6,7 @@ import {
 	ArenaDraftManagerService,
 	ArenaMulliganGuideService,
 } from '@firestone/arena/common';
-import { BgsBattleSimulationMockExecutorService, BgsBattleSimulationService } from '@firestone/battlegrounds/core';
+import { BgsBattleSimulationService } from '@firestone/battlegrounds/core';
 import {
 	BattlegroundsQuestsService,
 	BattlegroundsTrinketsService,
@@ -62,6 +62,7 @@ import {
 	MindVisionStateMachineService,
 	SceneService,
 } from '@firestone/memory';
+import { BgsBattleSimulationWorkerService } from './bgs-battle-simulation-worker.service';
 // import { CustomAppearanceService } from '@firestone/settings';
 import { AccountService } from '@firestone/profile/common';
 import {
@@ -344,8 +345,7 @@ export const buildAppInjector = () => {
 	const bgsOfficialLeaderboard = new BattlegroundsOfficialLeaderboardService(windowManager);
 	electronInjector.register(BattlegroundsOfficialLeaderboardService, bgsOfficialLeaderboard);
 
-	// TODO: use a real battle sim service
-	const battleExecutor = new BgsBattleSimulationMockExecutorService();
+	const battleExecutor = new BgsBattleSimulationWorkerService(allCards);
 	const simulation = new BgsBattleSimulationService(
 		api as any as ApiRunner,
 		allCards,

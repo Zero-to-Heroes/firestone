@@ -94,6 +94,7 @@ export class BgsLeaderboardWidgetWrapperComponent extends AbstractWidgetWrapperC
 						state.gameEnded,
 						state.metadata?.gameType,
 						state.bgState.currentGame?.players?.length,
+						state,
 					),
 				),
 				this.mapData(

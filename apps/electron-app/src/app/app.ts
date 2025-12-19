@@ -65,8 +65,8 @@ export default class App {
 
 		// Override console.debug to add timestamp (instead of disabling it)
 		console.debug = (...args: any[]) => {
-			const timestamp = getTimestamp();
-			originalDebug(`[${timestamp}]`, ...args);
+			// const timestamp = getTimestamp();
+			// originalDebug(`[${timestamp}]`, ...args);
 		};
 
 		// we pass the Electron.App object and the

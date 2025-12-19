@@ -184,8 +184,9 @@ export class GameEvents {
 			return;
 		}
 
-		console.debug('[game-events] dispatching game event', gameEvent.Type);
+		console.log('[game-events] dispatching game event', gameEvent?.Type);
 		if (gameEvent.Type !== 'GAME_STATE_UPDATE') {
+			// console.debug('[game-events] received event', gameEvent.Type);
 			this.lastProcessedTimestamp = Date.now();
 		} else {
 			// console.debug('[game-events] received GAME_STATE_UPDATE', gameEvent);
