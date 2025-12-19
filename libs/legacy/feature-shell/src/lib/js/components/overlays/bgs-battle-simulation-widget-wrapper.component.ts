@@ -12,7 +12,7 @@ import { GameStateFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import { auditTime, combineLatest, Observable } from 'rxjs';
+import { auditTime, combineLatest, Observable, tap } from 'rxjs';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
 @Component({
@@ -69,11 +69,20 @@ export class BgsBattleSimulationWidgetWrapperComponent
 			),
 			this.gameState.gameState$$.pipe(
 				auditTime(1000),
+				tap((state) =>
+					console.log(
+						'[debug] [bgs-battle-simulation-widget-wrapper] state',
+						state.gameStarted,
+						state.gameEnded,
+						state.metadata?.gameType,
+					),
+				),
 				this.mapData(
 					(state) => state.gameStarted && !state.gameEnded && isBattlegrounds(state.metadata?.gameType),
 				),
 			),
 		]).pipe(
+			tap((data) => console.log('[debug] [bgs-battle-simulation-widget-wrapper] showWidget', data)),
 			this.mapData(([currentScene, displayFromPrefs, inGame]) => {
 				return inGame && displayFromPrefs && currentScene === SceneMode.GAMEPLAY;
 			}),
