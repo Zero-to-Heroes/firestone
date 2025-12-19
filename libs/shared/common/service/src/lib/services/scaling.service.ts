@@ -20,6 +20,7 @@ export class ScalingService {
 		}
 
 		this.cardTooltip();
+		this.helpTooltip();
 		this._multiScale('bgsBannedTribeScale', '--banned-tribes-scale');
 		this._multiScale('bgsSimulatorScale', '--bgs-simulator-scale');
 		this._multiScale('bgsMinionsListScale', '--bgs-minions-list-scale');
@@ -53,6 +54,18 @@ export class ScalingService {
 			.subscribe(async (scale) => {
 				const newScale = (scale ?? 100) / 100;
 				document.documentElement.style.setProperty('--card-tooltip-scale', '' + newScale);
+			});
+	}
+
+	private helpTooltip() {
+		this.prefs.preferences$$
+			.pipe(
+				map((prefs) => prefs.globalWidgetScale ?? 100),
+				distinctUntilChanged(),
+			)
+			.subscribe(async (scale) => {
+				const newScale = scale / 100;
+				document.documentElement.style.setProperty('--help-tooltip-scale', '' + newScale);
 			});
 	}
 
