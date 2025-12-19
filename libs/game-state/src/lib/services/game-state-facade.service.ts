@@ -41,11 +41,12 @@ export class GameStateFacadeService extends AbstractFacadeService<GameStateFacad
 	}
 
 	protected override transformValueForElectron(value: GameState): GameState {
+		const bgState: BattlegroundsState | undefined = BattlegroundsState.createForElectron(value.bgState);
 		const result = GameState.create({
 			...value,
 			playerDeck: DeckState.create(value.playerDeck),
 			opponentDeck: DeckState.create(value.opponentDeck),
-			bgState: value.bgState ? BattlegroundsState.create(value.bgState) : undefined,
+			bgState: bgState,
 		});
 		return result;
 	}

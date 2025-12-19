@@ -38,6 +38,7 @@ import {
 	shareReplay,
 	startWith,
 	takeUntil,
+	tap,
 } from 'rxjs';
 import { DebugService } from '../../../services/debug.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
@@ -113,6 +114,12 @@ export class BattlegroundsMinionsTiersOverlayComponent
 	}
 
 	async ngAfterContentInit() {
+		await waitForReady(this.prefs);
+		await waitForReady(this.gameState);
+		await waitForReady(this.cardRules);
+		await waitForReady(this.strategies);
+		await waitForReady(this.highlighter);
+
 		await waitForReady(this.prefs, this.gameState, this.cardRules, this.strategies, this.highlighter);
 		const cardRules = await this.cardRules.rules$$.getValueWithInit();
 
@@ -123,6 +130,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 				greater: gameState.bgState.currentGame?.getMainPlayer()?.greaterTrinket,
 			})),
 			distinctUntilChanged((a, b) => a.lesser === b.lesser && a.greater === b.greater),
+			tap((data) => console.debug('[debug] [bgs-minions-tiers] playerTrinkets$', data)),
 			shareReplay(1),
 			takeUntil(this.destroyed$),
 		);
@@ -130,6 +138,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 			auditTime(1000),
 			this.mapData((gameState) => gameState.bgState.currentGame?.getMainPlayer()?.questRewards),
 			distinctUntilChanged(),
+			tap((data) => console.debug('[debug] [bgs-minions-tiers] questRewards$', data)),
 			shareReplay(1),
 			takeUntil(this.destroyed$),
 		);
@@ -164,6 +173,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 					a.showSingleTier === b.showSingleTier &&
 					a.singleTierGroup === b.singleTierGroup,
 			),
+			tap((data) => console.debug('[debug] [bgs-minions-tiers] prefs$', data)),
 			shareReplay(1),
 			takeUntil(this.destroyed$),
 		);
@@ -171,6 +181,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 			auditTime(1000),
 			this.mapData((state) => state?.metadata?.gameType),
 			distinctUntilChanged(),
+			tap((data) => console.debug('[debug] [bgs-minions-tiers] gameMode$', data)),
 			shareReplay(1),
 			takeUntil(this.destroyed$),
 		);
@@ -207,6 +218,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 			distinctUntilChanged(
 				(a, b) => a.playerCardId === b.playerCardId && arraysEqual(a.allPlayersCardIds, b.allPlayersCardIds),
 			),
+			tap((data) => console.debug('[debug] [bgs-minions-tiers] playerCardIds$', data)),
 			shareReplay(1),
 			takeUntil(this.destroyed$),
 		);
@@ -226,6 +238,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 				playerTrinkets: [playerTrinkets?.lesser, playerTrinkets?.greater].filter((trinket) => !!trinket),
 				questRewards: questRewards,
 			})),
+			tap((data) => console.debug('[debug] [bgs-minions-tiers] staticTiers 0', data)),
 			this.mapData(
 				({
 					showMechanicsTiers,
@@ -313,6 +326,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 					return result;
 				},
 			),
+			tap((data) => console.debug('[debug] [bgs-minions-tiers] staticTiers 1', data)),
 		);
 
 		const phase$ = this.gameState.gameState$$.pipe(
@@ -367,6 +381,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 				this.mapData((state) => state.bgState.currentGame?.getMainPlayer()?.getCurrentTavernTier()),
 			),
 		]).pipe(
+			tap((data) => console.debug('[debug] [bgs-minions-tiers] enhanceTiers', data)),
 			this.mapData(([tiers, rawPlayerCardId, boardComposition, tavernLevel]) => {
 				const playerCardId = normalizeHeroCardId(rawPlayerCardId, this.allCards);
 				const result = enhanceTiers(

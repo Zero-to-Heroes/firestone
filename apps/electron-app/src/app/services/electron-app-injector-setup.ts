@@ -16,6 +16,7 @@ import {
 	BgsInGameQuestsService,
 	BgsInGameTrinketsGuardianService,
 	BgsInGameTrinketsService,
+	BgsMetaCompositionStrategiesService,
 } from '@firestone/battlegrounds/services';
 import {
 	ConstructedMetaDecksStateService,
@@ -77,6 +78,7 @@ import {
 import {
 	ADS_SERVICE_TOKEN,
 	ApiRunner,
+	CardRulesService,
 	CardsFacadeService,
 	CardsFacadeStandaloneService,
 	DATABASE_SERVICE_TOKEN,
@@ -445,6 +447,12 @@ export const buildAppInjector = () => {
 
 	const questService = new QuestsService(windowManager);
 	electronInjector.register(QuestsService, questService);
+
+	const cardRules = new CardRulesService(windowManager);
+	electronInjector.register(CardRulesService, cardRules);
+
+	const bgsMetaCompositionStrategies = new BgsMetaCompositionStrategiesService(windowManager);
+	electronInjector.register(BgsMetaCompositionStrategiesService, bgsMetaCompositionStrategies);
 
 	// Need to clean up the settings module first (split components / services)
 	// const customAppearance = new CustomAppearanceService(windowManager);

@@ -32,4 +32,12 @@ export class CardRulesService extends AbstractFacadeService<CardRulesService> {
 			this.rules$$.next(result);
 		});
 	}
+
+	protected override initElectronSubjects(): void {
+		this.setupElectronSubject(this.rules$$, 'card-rules');
+	}
+
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.rules$$ = new SubscriberAwareBehaviorSubject<CardRules | null>(null);
+	}
 }

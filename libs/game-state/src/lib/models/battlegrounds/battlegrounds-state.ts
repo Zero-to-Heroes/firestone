@@ -26,6 +26,23 @@ export class BattlegroundsState {
 		return Object.assign(new BattlegroundsState(), base);
 	}
 
+	public static createForElectron(
+		base: Partial<NonFunctionProperties<BattlegroundsState>>,
+	): BattlegroundsState | undefined {
+		if (!base) {
+			return undefined;
+		}
+
+		let currentGame: BgsGame | undefined = undefined;
+		if (base.currentGame) {
+			currentGame = BgsGame.create(base.currentGame);
+		}
+		return Object.assign(new BattlegroundsState(), {
+			...base,
+			currentGame: currentGame,
+		});
+	}
+
 	public update(base: Partial<NonFunctionProperties<BattlegroundsState>>): BattlegroundsState {
 		return Object.assign(new BattlegroundsState(), this, base);
 	}

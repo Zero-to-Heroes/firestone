@@ -39,4 +39,12 @@ export class BgsMetaCompositionStrategiesService extends AbstractFacadeService<B
 			console.debug('[bgs-meta-comp-strategies] loaded strategies', result);
 		});
 	}
+
+	protected override initElectronSubjects(): void {
+		this.setupElectronSubject(this.strategies$$, 'bgs-meta-composition-strategies');
+	}
+
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.strategies$$ = new SubscriberAwareBehaviorSubject<readonly BgsCompAdvice[] | null>(null);
+	}
 }
