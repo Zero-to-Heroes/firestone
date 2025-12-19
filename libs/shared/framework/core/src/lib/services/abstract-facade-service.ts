@@ -75,8 +75,41 @@ export abstract class AbstractFacadeService<T extends AbstractFacadeService<T>> 
 			// Use eval to prevent bundler from trying to include electron in frontend builds
 			const { BrowserWindow } = eval('require')('electron');
 			BrowserWindow.getAllWindows().forEach((window: any) => {
-				if (!window.isDestroyed()) {
+				const windowInfo = {
+					id: window.id,
+					title: window.getTitle?.() || 'unknown',
+					url: window.webContents?.getURL?.() || 'unknown',
+				};
+
+				if (window.isDestroyed()) {
+					console.warn(
+						`[app] Window is destroyed (should never happen): ID=${windowInfo.id}, Title=${windowInfo.title}, URL=${windowInfo.url}`,
+					);
+					return;
+				}
+
+				if (!window.webContents) {
+					console.warn(
+						`[app] Window has no webContents (should never happen): ID=${windowInfo.id}, Title=${windowInfo.title}`,
+					);
+					return;
+				}
+
+				if (window.webContents.isDestroyed()) {
+					console.warn(
+						`[app] Window webContents is destroyed (should never happen): ID=${windowInfo.id}, Title=${windowInfo.title}, URL=${windowInfo.url}`,
+					);
+					return;
+				}
+
+				try {
 					window.webContents.send(channel, data);
+				} catch (error) {
+					// Render frame might be disposed even if window/webContents aren't destroyed
+					console.debug(
+						`[app] Error sending to renderer: ID=${windowInfo.id}, Title=${windowInfo.title}, URL=${windowInfo.url}`,
+						error,
+					);
 				}
 			});
 		} catch (error) {

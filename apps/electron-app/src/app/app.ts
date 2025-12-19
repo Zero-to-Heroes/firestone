@@ -26,13 +26,49 @@ export default class App {
 	static gameWindow: ElectronGameWindowService;
 
 	public static main(app: Electron.App, browserWindow: typeof BrowserWindow) {
-		console.debug = () => {};
-		console.warn = (messages, ...optionalParams) => {
-			console.log('[debug] [app] console.warn', messages, optionalParams);
+		// Store original console methods
+		const originalLog = console.log.bind(console);
+		const originalWarn = console.warn.bind(console);
+		const originalError = console.error.bind(console);
+		const originalDebug = console.debug.bind(console);
+
+		// Helper function to format timestamp
+		const getTimestamp = () => {
+			const now = new Date();
+			const year = now.getFullYear();
+			const month = String(now.getMonth() + 1).padStart(2, '0');
+			const day = String(now.getDate()).padStart(2, '0');
+			const hours = String(now.getHours()).padStart(2, '0');
+			const minutes = String(now.getMinutes()).padStart(2, '0');
+			const seconds = String(now.getSeconds()).padStart(2, '0');
+			const milliseconds = String(now.getMilliseconds()).padStart(3, '0');
+			return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}.${milliseconds}`;
 		};
-		console.error = (messages, ...optionalParams) => {
-			console.log('[debug] [app] console.error', messages, optionalParams);
+
+		// Override console.log to add timestamp
+		console.log = (...args: any[]) => {
+			const timestamp = getTimestamp();
+			originalLog(`[${timestamp}]`, ...args);
 		};
+
+		// Override console.warn to add timestamp
+		console.warn = (...args: any[]) => {
+			const timestamp = getTimestamp();
+			originalWarn(`[${timestamp}]`, ...args);
+		};
+
+		// Override console.error to add timestamp
+		console.error = (...args: any[]) => {
+			const timestamp = getTimestamp();
+			originalError(`[${timestamp}]`, ...args);
+		};
+
+		// Override console.debug to add timestamp (instead of disabling it)
+		console.debug = (...args: any[]) => {
+			const timestamp = getTimestamp();
+			originalDebug(`[${timestamp}]`, ...args);
+		};
+
 		// we pass the Electron.App object and the
 		// Electron.BrowserWindow into this function
 		// so this class has no dependencies. This
