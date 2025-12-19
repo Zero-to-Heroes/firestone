@@ -455,7 +455,9 @@ export class TwitchAuthService {
 		return {
 			id: entity.id,
 			cardID: entity.cardID,
-			tags: entity.tags.filter((value, key) => this.isSerializableTag(key)).toJS() as { [key: string]: number },
+			tags: Object.fromEntries(Object.entries(entity.tags).filter(([key]) => this.isSerializableTag(key))) as {
+				[key: string]: number;
+			},
 		};
 	}
 

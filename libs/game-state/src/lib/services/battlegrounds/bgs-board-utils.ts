@@ -1,6 +1,5 @@
 import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { GameTag } from '@firestone-hs/reference-data';
-import { Map } from 'immutable';
 
 export const buildEntities = (logEntities: readonly any[]): readonly Entity[] => {
 	return logEntities.map((entity) => buildEntity(entity));
@@ -14,6 +13,12 @@ export const buildEntity = (logEntity): Entity => {
 	} as Entity;
 };
 
-export const buildTags = (tags: { Name: number; Value: number }[]): Map<string, number> => {
-	return Map(tags.map((tag) => [GameTag[tag.Name], tag.Value]));
+export const buildTags = (tags: { Name: number; Value: number }[]): { [tagName: string]: number } => {
+	return tags.reduce(
+		(acc, tag) => {
+			acc[GameTag[tag.Name]] = tag.Value;
+			return acc;
+		},
+		{} as { [tagName: string]: number },
+	);
 };

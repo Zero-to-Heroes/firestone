@@ -496,7 +496,7 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionComponent
 				cardId: normalizeHeroCardId(game.playerCardId, this.allCards),
 				tooltip: this.allCards.getCard(game.playerCardId).name,
 				// boardEntities: bgsBoard?.board,
-				boardEntities: bgsBoard?.board.map((value) => Entity.fromJS(value as any)),
+				boardEntities: bgsBoard?.board.map((value) => Entity.create(value as Entity)),
 			} as BgsDetail;
 			return result;
 		});

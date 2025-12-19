@@ -1,6 +1,5 @@
 import { ComponentType } from '@angular/cdk/portal';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { getTribeIcon } from '@firestone-hs/reference-data';
 import { QuestReward } from '@firestone/battlegrounds/core';
 import { BgsBoard, BgsPlayer } from '@firestone/game-state';
@@ -11,7 +10,6 @@ import {
 	TwitchBgsStateConfig,
 	TwitchOpponentOverviewInput,
 } from '@firestone/twitch/common';
-import { fromJS } from 'immutable';
 
 @Component({
 	standalone: false,
@@ -172,14 +170,7 @@ export class LeaderboardEmptyCardComponent {
 		return [
 			{
 				turn: lastBoard.turn,
-				board: lastBoard.board.map(
-					(entity) =>
-						({
-							id: entity.id,
-							cardID: entity.cardID,
-							tags: fromJS(entity.tags),
-						}) as Entity,
-				),
+				board: lastBoard.board,
 			} as BgsBoard,
 		];
 	}

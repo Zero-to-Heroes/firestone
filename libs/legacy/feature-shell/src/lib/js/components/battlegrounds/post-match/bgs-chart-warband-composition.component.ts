@@ -351,7 +351,7 @@ export class BgsChartWarbandCompositionComponent {
 				?.board?.map((entity) =>
 					entity.tags?.merge
 						? ParserEntity.create(entity as ParserEntity)
-						: ParserEntity.fromJS(entity as any),
+						: ParserEntity.create(entity as any),
 				)
 				?.filter((entity) => hasRace(entity.cardID, tribe)) || []
 		);

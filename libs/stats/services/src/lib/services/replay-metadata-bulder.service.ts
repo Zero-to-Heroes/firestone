@@ -10,7 +10,7 @@ import {
 	parseBattlegroundsGame,
 	parseGame,
 } from '@firestone-hs/hs-replay-xml-parser';
-import { BgsBoardLight, EntityLight, ReplayUploadMetadata } from '@firestone-hs/replay-metadata';
+import { BgsBoardLight, ReplayUploadMetadata } from '@firestone-hs/replay-metadata';
 import { Input as BgsComputeRunStatsInput } from '@firestone-hs/user-bgs-post-match-stats';
 import { ADS_SERVICE_TOKEN, CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { MatchAnalysisService } from './match-analysis.service';
@@ -221,24 +221,7 @@ export class ReplayMetadataBuilderService {
 }
 
 const buildBoardHistory = (boardHistory: readonly BgsBoard[]): readonly BgsBoardLight[] => {
-	return boardHistory?.map((board) => {
-		const result: BgsBoardLight = {
-			turn: board.turn,
-			board: board.board.map((entity) => {
-				const tags: { [tagName: string]: number } = {};
-				for (const tag of entity.tags) {
-					tags[tag[0]] = tag[1];
-				}
-				const entityLight: EntityLight = {
-					cardID: entity.cardID,
-					id: entity.id,
-					tags: tags,
-				};
-				return entityLight;
-			}),
-		};
-		return result;
-	});
+	return boardHistory;
 };
 
 const buildWarbandStats = (bgParsedInfo: BgsPostMatchStats): ReplayUploadMetadata['bgs']['warbandStats'] | null => {

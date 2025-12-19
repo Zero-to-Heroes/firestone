@@ -4,7 +4,7 @@ import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 
 export const buildEntityFromBoardEntity = (minion: BoardEntity, allCards: CardsFacadeService): Entity => {
-	return Entity.fromJS({
+	return Entity.create({
 		id: minion.entityId,
 		cardID: minion.cardId,
 		damageForThisAction: 0,

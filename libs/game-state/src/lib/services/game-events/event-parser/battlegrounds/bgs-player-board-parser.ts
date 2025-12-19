@@ -563,7 +563,7 @@ export class BgsPlayerBoardParser implements EventParser {
 		const hand: BoardEntity[] = buildBgsEntities(playerBoard.hand, this.allCards);
 		let tavernTier = playerBoard.hero.Tags?.find((tag) => tag.Name === GameTag.PLAYER_TECH_LEVEL)?.Value;
 		if (!tavernTier) {
-			console.warn('[bgs-simulation] no tavern tier', event);
+			console.warn('[bgs-simulation] no tavern tier');
 			tavernTier = 1;
 		}
 

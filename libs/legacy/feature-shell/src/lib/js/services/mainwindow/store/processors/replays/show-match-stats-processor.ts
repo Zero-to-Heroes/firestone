@@ -49,9 +49,9 @@ export class ShowMatchStatsProcessor implements Processor {
 					(history) =>
 						({
 							turn: history.turn,
-							board: history.board.map((value) => Entity.fromJS(value as any)),
-						} as BgsBoard),
-			  )
+							board: history.board.map((value) => Entity.create(value as Entity)),
+						}) as BgsBoard,
+				)
 			: [];
 
 		const matchDetail = Object.assign(new MatchDetail(), {
@@ -69,7 +69,7 @@ export class ShowMatchStatsProcessor implements Processor {
 							highestWinStreak: matchStats?.highestWinStreak,
 							initialHealth: defaultStartingHp(GameType.GT_BATTLEGROUNDS, playerCardId, this.allCards),
 							// questRewards: matchStats.qu TODO: implement this
-					  } as BgsPlayer)
+						} as BgsPlayer)
 					: null,
 				tabs: [
 					'hp-by-turn',

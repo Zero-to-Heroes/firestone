@@ -10,7 +10,7 @@ export class BgsHeroRerollParser implements EventParser {
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
-		console.debug('[bgs-hero-reroll] handling event', event);
+		console.debug('[bgs-hero-reroll] handling event', gameEvent);
 		const entityId = gameEvent.entityId;
 		const cardId = gameEvent.cardId;
 		const heroSelectionPanel = currentState.bgState.panels.find(

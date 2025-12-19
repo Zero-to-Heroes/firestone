@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AbstractFacadeService, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
-import { BehaviorSubject } from 'rxjs';
+import { auditTime, BehaviorSubject } from 'rxjs';
 import { BattlegroundsState } from '../models/_barrel';
 import { DeckState } from '../models/deck-state';
 import { GameState } from '../models/game-state';
@@ -27,7 +27,7 @@ export class GameStateFacadeService extends AbstractFacadeService<GameStateFacad
 		this.gameStateService = AppInjector.get(GameStateService);
 		console.log('[game-state-facade] ready');
 
-		this.gameStateService.deckEventBus.subscribe(async (event: GameState | null) => {
+		this.gameStateService.deckEventBus.pipe(auditTime(500)).subscribe(async (event: GameState | null) => {
 			this.gameState$$.next(event ?? new GameState());
 		});
 	}

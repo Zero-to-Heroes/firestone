@@ -39,7 +39,7 @@ export class SecretRevealedComponent {
 				this.splashImage = `https://static.zerotoheroes.com/hearthstone/asset/coliseum/images/secrets/secret_splash_${classString}.png`;
 				this.bannerImage = `https://static.zerotoheroes.com/hearthstone/asset/coliseum/images/secrets/secret_banner_${classString}.png`;
 			} else {
-				console.error('[secret-revealed] Could not assign player class', value, value.tags.toJS());
+				console.error('[secret-revealed] Could not assign player class', value, value.tags);
 			}
 		}
 	}

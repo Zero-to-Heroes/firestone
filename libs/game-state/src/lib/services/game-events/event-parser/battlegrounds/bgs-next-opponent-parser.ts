@@ -52,7 +52,7 @@ export class BgsNextOpponentParser implements EventParser {
 			opponentPlayerId,
 			newNextOpponentPanel.opponentOverview?.playerId,
 			newNextOpponentPanel,
-			event,
+			gameEvent,
 		);
 
 		const mainPlayer = bgState.currentGame!.getMainPlayer();
@@ -100,7 +100,7 @@ export class BgsNextOpponentParser implements EventParser {
 			opponentHpLeft: opponentHpLeft,
 			opponentTavern: opponent?.getCurrentTavernTier(),
 		});
-		console.debug('[bgs-next-opponent] created face-off', faceOff, event);
+		console.debug('[bgs-next-opponent] created face-off', faceOff, gameEvent);
 		if (faceOff.playerCardId === 'TB_BaconShop_HERO_PH') {
 			console.error(
 				'[bgs-next-opponent] created a face-off with an invalid player card',
@@ -117,6 +117,15 @@ export class BgsNextOpponentParser implements EventParser {
 			}),
 		});
 		console.debug('[bgs-next-opponent] updated face offs', faceOff, result);
+		console.log(
+			'[debug] [bgs-next-opponent] next opponent in next opponent parser',
+			result.currentGame!.players.map((p) => ({
+				main: p.isMainPlayer,
+				cardId: p.cardId,
+				id: p.playerId,
+			})),
+		);
+
 		return currentState.update({
 			bgState: result,
 		});

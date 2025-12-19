@@ -1,5 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { Entity, EntityAsJS, EntityDefinition } from '@firestone-hs/replay-parser';
+import { Entity, EntityDefinition } from '@firestone-hs/replay-parser';
 import { BgsPostMatchStatsForReview, MinionStat } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
@@ -131,7 +131,7 @@ export class BgsLastWarbandsComponent extends AbstractSubscriptionStoreComponent
 		const boardEntities = bgsBoard.board.map((boardEntity) =>
 			boardEntity instanceof Entity || boardEntity.tags instanceof Map
 				? Entity.create(new Entity(), boardEntity as EntityDefinition)
-				: Entity.fromJS(boardEntity as unknown as EntityAsJS),
+				: Entity.create(boardEntity as unknown as Entity),
 		) as readonly Entity[];
 		const review = gameStats.find((matchStat) => matchStat.reviewId === postMatch.reviewId);
 		const title =
@@ -139,7 +139,7 @@ export class BgsLastWarbandsComponent extends AbstractSubscriptionStoreComponent
 				? this.i18n.translateString(
 						'app.battlegrounds.personal-stats.hero-details.last-warbands.finished-position',
 						{ value: this.getFinishPlace(parseInt(review.additionalResult)) },
-				  )
+					)
 				: this.i18n.translateString('app.battlegrounds.personal-stats.hero-details.last-warbands.last-board');
 		const normalizedIds = [
 			...new Set(boardEntities.map((entity) => normalizeCardId(entity.cardID, this.allCards))),
@@ -150,7 +150,7 @@ export class BgsLastWarbandsComponent extends AbstractSubscriptionStoreComponent
 					cardId: cardId,
 					damageDealt: this.extractDamage(cardId, postMatch?.stats?.totalMinionsDamageDealt),
 					damageTaken: this.extractDamage(cardId, postMatch?.stats?.totalMinionsDamageTaken),
-				} as MinionStat),
+				}) as MinionStat,
 		);
 		const result = {
 			entities: boardEntities,

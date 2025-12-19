@@ -401,6 +401,7 @@ export class GameStateService {
 				}
 			} catch (e: any) {
 				console.error('[game-state] Exception while applying parser', parser.event(), e.message, e.stack, e);
+				console.log('[game-state] Exception while applying parser', parser.event(), e.message, e.stack, e);
 			}
 		}
 
@@ -439,7 +440,7 @@ export class GameStateService {
 			gameEvent.type,
 			gameEvent.cardId,
 			gameEvent.entityId,
-			currentState.metadata,
+			currentState.bgState?.currentGame?.players?.length,
 		);
 		this.processedEvents.push(gameEvent.type);
 		return currentState;

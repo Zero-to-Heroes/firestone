@@ -47,6 +47,13 @@ export class BgsPlayer implements IBgsPlayer {
 		return Object.assign(new BgsPlayer(), base);
 	}
 
+	public static createForElectron(base: Partial<NonFunctionProperties<BgsPlayer>>): BgsPlayer | undefined {
+		if (!base) {
+			return undefined;
+		}
+		return Object.assign(new BgsPlayer(), base);
+	}
+
 	public update(base: Partial<NonFunctionProperties<BgsPlayer>>) {
 		return Object.assign(new BgsPlayer(), this, base);
 	}
@@ -96,14 +103,15 @@ export class BgsPlayer implements IBgsPlayer {
 		if (boardState.length === 0) {
 			return [];
 		}
-		return boardState.map((e) =>
-			ReplayEntity.create({
+		return boardState.map((e) => {
+			console.debug('[debug] [bgs-player] create for electron', e);
+			return ReplayEntity.create({
 				cardID: e.cardID,
 				damageForThisAction: e.damageForThisAction,
 				id: e.id,
 				tags: e.tags,
-			} as ReplayEntity),
-		);
+			} as ReplayEntity);
+		});
 	}
 
 	public getLastBoardStateTurn(): number | undefined {

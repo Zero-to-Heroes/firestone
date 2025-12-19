@@ -19,11 +19,11 @@ export class BgsBattleSimulationParser implements EventParser {
 		const intermediateResult = gameEvent.additionalData.info.intermediateResult;
 
 		if (!opponentHeroCardId || !normalizeHeroCardId(opponentHeroCardId, this.allCards)) {
-			console.error('[bgs-simulation] missing opponentCardId', event);
+			console.error('[bgs-simulation] missing opponentCardId', gameEvent);
 		}
 
 		const faceOffToUpdate = currentState.bgState.currentGame!.faceOffs.find((f) => f.id === battleId);
-		// console.debug('[bgs-simulation] faceOffToUpdate', faceOffToUpdate, currentState.currentGame.faceOffs, event);
+		// console.debug('[bgs-simulation] faceOffToUpdate', faceOffToUpdate, currentState.currentGame.faceOffs, gameEvent);
 		if (!faceOffToUpdate) {
 			console.error(
 				'[bgs-simulation] could not find face-off',

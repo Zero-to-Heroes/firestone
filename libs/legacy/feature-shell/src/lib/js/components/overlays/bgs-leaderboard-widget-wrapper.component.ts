@@ -13,7 +13,7 @@ import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
-import { auditTime, filter, map } from 'rxjs/operators';
+import { auditTime, filter, map, tap } from 'rxjs/operators';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
@@ -29,7 +29,7 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 				currentTurn: currentTurn$ | async,
 				lastOpponentPlayerId: lastOpponentPlayerId$ | async,
 				showLastOpponentIcon: showLastOpponentIcon$ | async,
-				buddiesEnabled: buddiesEnabled$ | async
+				buddiesEnabled: buddiesEnabled$ | async,
 			} as value"
 		>
 			<div class="bgs-leaderboard" *ngIf="showWidget$ | async">
@@ -87,6 +87,15 @@ export class BgsLeaderboardWidgetWrapperComponent extends AbstractWidgetWrapperC
 			this.scene.currentScene$$,
 			this.state.gameState$$.pipe(
 				auditTime(1000),
+				tap((state) =>
+					console.debug(
+						'[debug] [bgs-leaderboard-widget-wrapper] state',
+						state.gameStarted,
+						state.gameEnded,
+						state.metadata?.gameType,
+						state.bgState.currentGame?.players?.length,
+					),
+				),
 				this.mapData(
 					(state) =>
 						state.gameStarted &&
@@ -95,9 +104,11 @@ export class BgsLeaderboardWidgetWrapperComponent extends AbstractWidgetWrapperC
 						(GameType.GT_BATTLEGROUNDS_FRIENDLY === state.metadata.gameType ||
 							state.bgState.currentGame?.players?.length === 8),
 				),
+				tap((state) => console.debug('[debug] [bgs-leaderboard-widget-wrapper] state 1', state)),
 			),
 		]).pipe(
 			this.mapData(([currentScene, displayFromState]) => displayFromState && currentScene === SceneMode.GAMEPLAY),
+			tap((data) => console.debug('[debug] [bgs-leaderboard-widget-wrapper] state 2', data)),
 			this.handleReposition(),
 		);
 		this.buddiesEnabled$ = this.state.gameState$$.pipe(

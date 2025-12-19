@@ -35,7 +35,7 @@ export class BattlegroundsState {
 
 		let currentGame: BgsGame | undefined = undefined;
 		if (base.currentGame) {
-			currentGame = BgsGame.create(base.currentGame);
+			currentGame = BgsGame.createForElectron(base.currentGame);
 		}
 		return Object.assign(new BattlegroundsState(), {
 			...base,

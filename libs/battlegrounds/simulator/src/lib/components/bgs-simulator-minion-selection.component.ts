@@ -12,7 +12,7 @@ import {
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { CardIds, CardType, GameTag, getEffectiveTribes, ReferenceCard } from '@firestone-hs/reference-data';
-import { Entity, EntityAsJS } from '@firestone-hs/replay-parser';
+import { Entity } from '@firestone-hs/replay-parser';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, sortByProperties } from '@firestone/shared/framework/common';
@@ -543,14 +543,14 @@ export class BgsSimulatorMinionSelectionComponent
 	private updateCard() {
 		this.card = !this.cardId?.length
 			? null
-			: Entity.fromJS({
+			: Entity.create({
 					cardID: this.cardId,
 					tags: {
 						[GameTag[GameTag.ATK]]: this.attack ?? 0,
 						[GameTag[GameTag.HEALTH]]: this.health ?? 0,
 						[GameTag[GameTag.PREMIUM]]: this.premium ? 1 : 0,
 					},
-				} as EntityAsJS);
+				} as Entity);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

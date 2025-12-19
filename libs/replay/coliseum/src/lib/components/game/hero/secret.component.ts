@@ -44,7 +44,7 @@ export class SecretComponent {
 					isSidequest,
 				);
 			} else {
-				console.error('[secret] Could not assign player class', value, value.tags.toJS());
+				console.error('[secret] Could not assign player class', value, value.tags);
 			}
 		}
 	}

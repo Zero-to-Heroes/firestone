@@ -31,7 +31,7 @@ export class BgsRewardGainedParser implements EventParser {
 		if (!reward) {
 			console.warn(
 				'[bgs-reward] missing reward, it could be a case of a reward gained directly',
-				event,
+				gameEvent,
 				playerToUpdate.questRewards,
 				playerToUpdate,
 			);

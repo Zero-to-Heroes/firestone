@@ -27,6 +27,12 @@ export default class App {
 
 	public static main(app: Electron.App, browserWindow: typeof BrowserWindow) {
 		console.debug = () => {};
+		console.warn = (messages, ...optionalParams) => {
+			console.log('[debug] [app] console.warn', messages, optionalParams);
+		};
+		console.error = (messages, ...optionalParams) => {
+			console.log('[debug] [app] console.error', messages, optionalParams);
+		};
 		// we pass the Electron.App object and the
 		// Electron.BrowserWindow into this function
 		// so this class has no dependencies. This
