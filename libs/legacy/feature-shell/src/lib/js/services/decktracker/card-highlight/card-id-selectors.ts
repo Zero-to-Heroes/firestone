@@ -684,6 +684,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), chooseOne);
 		case CardIds.ChainedGuardian:
 			return and(side(inputSide), or(inHand, inDeck), generatesPlague);
+		case CardIds.ChalkArtist_TOY_388:
+			return and(side(inputSide), inDeck, minion);
 		case CardIds.ChampionOfStorms:
 			return and(side(inputSide), or(inHand, inDeck), nature);
 		case CardIds.CharredChameleon_FIR_908:
