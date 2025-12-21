@@ -199,7 +199,9 @@ export class CardDrawParser implements EventParser {
 			cardId: isCardInfoPublic ? card.cardId : undefined,
 			cardName: isCardInfoPublic ? (refCard.name ?? card?.cardName) : undefined,
 			lastAffectedByCardId: isCreatorPublic
-				? (lastInfluencedByCardId ?? card.lastAffectedByCardId ?? drawnByCardId)
+				? // Use drawnByCardId first to remove info leak when drawing a card that was created by a public tutor
+					// (eg draw a card with a public tutor that was created by Queen Carnassa)
+					(drawnByCardId ?? lastInfluencedByCardId ?? card.lastAffectedByCardId)
 				: isDrawnByCardIdPublic
 					? drawnByCardId
 					: undefined,
