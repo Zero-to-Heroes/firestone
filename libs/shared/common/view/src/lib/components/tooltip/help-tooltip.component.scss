@@ -1,5 +1,7 @@
 :host {
 	display: block;
+	transform: scale(var(--help-tooltip-scale, 1));
+	transform-origin: top center;
 
 	.help-tooltip {
 		text-align: center;
