@@ -469,6 +469,7 @@ export const CURRENT_EFFECTS_WHITELIST = [
 	CardIds.OminousSeer_ForetoldEnchantment_BG31_330e,
 	CardIds.ParrotSanctuary_ParrotingEnchantment_VAC_409e,
 	CardIds.PartnerInCrime_AlibiEnchantment,
+	CardIds.PileOfBones_PileOfBonesEnchantment_WW_324e,
 	CardIds.PlanetaryNavigator_PlanetaryNavigatorFutureBuffEnchantment_GDB_444e,
 	CardIds.PocketSand_SandInYourEyesEnchantment_WW_403e,
 	CardIds.PocketSand_SandyEnchantment_WW_403e1,
