@@ -27,6 +27,7 @@ import {
 	map,
 	shareReplay,
 	takeUntil,
+	tap,
 } from 'rxjs';
 import { CardTooltipPositionType } from './card-tooltip-position.type';
 
@@ -224,7 +225,7 @@ export class CardTooltipComponent
 	private buffs$$ = new BehaviorSubject<readonly { bufferCardId: string; buffCardId: string; count: number }[]>([]);
 	private additionalInfo$$ = new BehaviorSubject<CardTooltipAdditionalInfo | null>(null);
 
-	private keepInBound$$ = new BehaviorSubject<number | null>(null);
+	private keepInBound$$ = new BehaviorSubject<number | null>(1);
 	private resizeObserver: ResizeObserver;
 
 	private timeout;
@@ -325,7 +326,7 @@ export class CardTooltipComponent
 		this.keepInBound$$
 			.pipe(
 				filter((trigger) => !!trigger),
-				// tap((info) => console.debug('keep in bound', info)),
+				tap((info) => console.debug('[debug] keep in bound', info)),
 				this.mapData(
 					(info) => {
 						const widgetRect = this.getRect();
@@ -468,14 +469,15 @@ export class CardTooltipComponent
 	}
 
 	private async keepInBounds(top: number, left: number, height: number, width: number) {
-		// console.debug('keeping in bounds', top, left, height, width);
 		const gameInfo = await this.ow?.getRunningGameInfo();
-		if (!gameInfo) {
+		const currentWindow = await this.ow?.getCurrentWindow();
+		const gameWidth = gameInfo?.width ?? currentWindow?.logicalBounds?.width;
+		const gameHeight = gameInfo?.height ?? currentWindow?.logicalBounds?.height;
+		if (!gameWidth || !gameHeight) {
+			console.warn('missing game info', gameInfo, currentWindow);
 			return;
 		}
 
-		const gameWidth = gameInfo.width;
-		const gameHeight = gameInfo.height;
 		const currentTopOffset = parseInt(this.el.nativeElement.style.top?.replace('px', '')) || 0;
 		const currentLeftOffset = parseInt(this.el.nativeElement.style.left?.replace('px', '')) || 0;
 		const newTopOffset = top < 0 ? -top : top + height > gameHeight ? gameHeight - top - height : 0;
@@ -500,7 +502,6 @@ export class CardTooltipComponent
 
 		const element = this.relatedCards?.nativeElement;
 		this.hasScrollbar = !!element && element.scrollHeight > element.clientHeight;
-		// console.debug('has scrollbar', this.hasScrollbar, element, this.relatedCards);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
@@ -511,7 +512,6 @@ export class CardTooltipComponent
 
 	private forceLifecycleHooks() {
 		setTimeout(() => {
-			// console.debug('testing lifecycle hooks', this.lifecycleHookDone);
 			if (this.lifecycleHookDone) {
 				return;
 			}
