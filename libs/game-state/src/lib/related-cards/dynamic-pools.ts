@@ -713,9 +713,14 @@ const getDynamicFilters = (
 		case CardIds.TimeLostProtodrake:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.DRAGON);
 		case CardIds.PastConflux_TIME_436:
+			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.DRAGON) && hasCost(c, '>=', 5);
 		case CardIds.PastConflux_PresentConfluxToken_TIME_436t1:
 		case CardIds.PastConflux_FutureConfluxToken_TIME_436t2:
-			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.DRAGON) && hasCost(c, '>=', 5);
+			return (c) =>
+				hasCorrectType(c, CardType.MINION) &&
+				hasCorrectTribe(c, Race.DRAGON) &&
+				hasCost(c, '>=', 5) &&
+				canBeDiscoveredByClass(c, options.currentClass);
 
 		// Random Undead
 		case CardIds.ForgottenMillennium_TIME_615:
