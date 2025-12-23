@@ -49,7 +49,12 @@ export class CardRemovedFromHandParser implements EventParser {
 		const isDestroyed = !CARD_IS_NOT_DESTROYED.includes(gameEvent.additionalData.removedByCardId as CardIds);
 		const newPlayerDeck = deck.update({
 			hand: newHand,
-			additionalKnownCardsInHand: deck.additionalKnownCardsInHand.filter((c) => c !== cardId),
+			additionalKnownCardsInHand: deck.additionalKnownCardsInHand.filter(
+				(c, i) => c !== cardId || deck.additionalKnownCardsInHand.indexOf(c) !== i,
+			),
+			additionalKnownCardsInDeck: deck.additionalKnownCardsInDeck.filter(
+				(c, i) => c !== cardId || deck.additionalKnownCardsInDeck.indexOf(c) !== i,
+			),
 			otherZone: newOtherZone,
 			deck: newDeck,
 			destroyedCardsInDeck: isDestroyed

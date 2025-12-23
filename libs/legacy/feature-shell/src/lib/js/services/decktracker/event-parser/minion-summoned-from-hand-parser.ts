@@ -82,7 +82,12 @@ export class MinionSummonedFromHandParser implements EventParser {
 			: this.helper.addSingleCardToOtherZone(deck.otherZone, cardWithZone, this.allCards);
 		const newPlayerDeck = deck.update({
 			hand: newHand,
-			additionalKnownCardsInHand: deck.additionalKnownCardsInHand.filter((c) => c !== cardId),
+			additionalKnownCardsInHand: deck.additionalKnownCardsInHand.filter(
+				(c, i) => c !== cardId || deck.additionalKnownCardsInHand.indexOf(c) !== i,
+			),
+			additionalKnownCardsInDeck: deck.additionalKnownCardsInDeck.filter(
+				(c, i) => c !== cardId || deck.additionalKnownCardsInDeck.indexOf(c) !== i,
+			),
 			board: newBoard,
 			deck: newDeck,
 			otherZone: newOtherZone,

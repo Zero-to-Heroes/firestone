@@ -45,7 +45,7 @@ export class CardRemovedFromDeckParser implements EventParser {
 		const card = this.helper.findCardInZone(deck.deck, cardId, entityId, true);
 		// console.debug('[card-removed] found card', card, cardId, entityId, deck.deck);
 		const previousDeck = deck.deck;
-		let newDeck: readonly DeckCard[] = this.helper.removeSingleCardFromZone(
+		let [newDeck, removedCard] = this.helper.removeSingleCardFromZone(
 			previousDeck,
 			cardId,
 			entityId,
@@ -54,11 +54,18 @@ export class CardRemovedFromDeckParser implements EventParser {
 			{
 				cost: gameEvent.additionalData.cost,
 			},
-		)[0];
+		);
+		let additionalKnownCardsInDeck = deck.additionalKnownCardsInDeck;
+		if (!removedCard?.cardId) {
+			additionalKnownCardsInDeck = additionalKnownCardsInDeck.filter(
+				(c, i) => c !== cardId || deck.additionalKnownCardsInDeck.indexOf(c) !== i,
+			);
+		}
 		if (SILENTLY_REMOVES_FROM_DECK.includes(removedByCardId as CardIds)) {
 			return currentState.update({
 				[isPlayer ? 'playerDeck' : 'opponentDeck']: deck.update({
 					deck: newDeck,
+					additionalKnownCardsInDeck: additionalKnownCardsInDeck,
 				}),
 			});
 		}
@@ -108,6 +115,7 @@ export class CardRemovedFromDeckParser implements EventParser {
 			destroyedCardsInDeck: cardWithZone.milled
 				? [...deck.destroyedCardsInDeck, { cardId, entityId }]
 				: deck.destroyedCardsInDeck,
+			additionalKnownCardsInDeck: additionalKnownCardsInDeck,
 		});
 		// console.debug('[card-removed]', 'newPlayerDeck', newPlayerDeck);
 		return Object.assign(new GameState(), currentState, {

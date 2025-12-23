@@ -32,12 +32,18 @@ export class CardRecruitedParser implements EventParser {
 		}
 
 		const costFromTags = gameEvent.additionalData.tags?.find((t) => t.Name === GameTag.COST)?.Value;
-		const newDeck: readonly DeckCard[] = this.helper.removeSingleCardFromZone(
+		const [newDeck, removedCard] = this.helper.removeSingleCardFromZone(
 			deck.deck,
 			cardId,
 			entityId,
 			deck.deckList.length === 0,
-		)[0];
+		);
+		let additionalKnownCardsInDeck = deck.additionalKnownCardsInDeck;
+		if (!removedCard?.cardId) {
+			additionalKnownCardsInDeck = additionalKnownCardsInDeck.filter(
+				(c, i) => c !== cardId || deck.additionalKnownCardsInDeck.indexOf(c) !== i,
+			);
+		}
 		const cardWithZone = card.update({
 			cardId: cardId,
 			entityId: entityId,
@@ -54,6 +60,7 @@ export class CardRecruitedParser implements EventParser {
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			deck: newDeck,
 			board: newBoard,
+			additionalKnownCardsInDeck: additionalKnownCardsInDeck,
 		} as DeckState);
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,

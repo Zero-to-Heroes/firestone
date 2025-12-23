@@ -122,7 +122,14 @@ export class LinkedEntityParser implements EventParser {
 				);
 				newPlayerDeck = newPlayerDeck.update({
 					additionalKnownCardsInHand: deckInWhichToModifyTheCard.additionalKnownCardsInHand.filter(
-						(cardId) => cardId !== newCard.cardId,
+						(c, i) =>
+							c !== newCard.cardId ||
+							deckInWhichToModifyTheCard.additionalKnownCardsInHand.indexOf(c) !== i,
+					),
+					additionalKnownCardsInDeck: deckInWhichToModifyTheCard.additionalKnownCardsInDeck.filter(
+						(c, i) =>
+							c !== newCard.cardId ||
+							deckInWhichToModifyTheCard.additionalKnownCardsInDeck.indexOf(c) !== i,
 					),
 				});
 				console.debug('[linked-entity-parser] newPlayerDeck in hand', newPlayerDeck);
@@ -155,9 +162,16 @@ export class LinkedEntityParser implements EventParser {
 			else {
 				newPlayerDeck = deckInWhichToModifyTheCard.update({
 					additionalKnownCardsInHand: [
-						...deckInWhichToModifyTheCard.additionalKnownCardsInHand.filter((c) => c !== cardId),
+						...deckInWhichToModifyTheCard.additionalKnownCardsInHand.filter(
+							(c, i) =>
+								c !== cardId || deckInWhichToModifyTheCard.additionalKnownCardsInHand.indexOf(c) !== i,
+						),
 						cardId,
 					],
+					additionalKnownCardsInDeck: deckInWhichToModifyTheCard.additionalKnownCardsInDeck.filter(
+						(c, i) =>
+							c !== cardId || deckInWhichToModifyTheCard.additionalKnownCardsInDeck.indexOf(c) !== i,
+					),
 				});
 			}
 		} else {

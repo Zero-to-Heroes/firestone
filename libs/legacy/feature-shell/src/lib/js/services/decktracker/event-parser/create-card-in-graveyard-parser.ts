@@ -39,11 +39,14 @@ export class CreateCardInGraveyardParser implements EventParser {
 		if (!!existingCard && existingZone === 'board') {
 			board = this.helper.removeSingleCardFromZone(board ?? [], existingCard.cardId, existingCard.entityId)[0];
 		}
+
 		let hand = deck.hand;
 		let additionalKnownCardsInHand = deck.additionalKnownCardsInHand;
 		if (!!existingCard && existingZone === 'hand') {
 			hand = this.helper.removeSingleCardFromZone(hand ?? [], existingCard.cardId, existingCard.entityId)[0];
-			additionalKnownCardsInHand = additionalKnownCardsInHand.filter((c) => c !== existingCard.cardId);
+			additionalKnownCardsInHand = additionalKnownCardsInHand.filter(
+				(c, i) => c !== existingCard.cardId || deck.additionalKnownCardsInHand.indexOf(c) !== i,
+			);
 		}
 
 		const cardWithDefault = DeckCard.create({

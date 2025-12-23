@@ -27,12 +27,18 @@ export class SecretPlayedFromDeckParser implements EventParser {
 
 		const card = this.helper.findCardInZone(deck.deck, cardId, entityId);
 		const previousDeck = deck.deck;
-		const newDeck: readonly DeckCard[] = this.helper.removeSingleCardFromZone(
+		const [newDeck, removedCard] = this.helper.removeSingleCardFromZone(
 			previousDeck,
 			cardId,
 			entityId,
 			deck.deckList.length === 0,
-		)[0];
+		);
+		let additionalKnownCardsInDeck = deck.additionalKnownCardsInDeck;
+		if (!removedCard?.cardId) {
+			additionalKnownCardsInDeck = additionalKnownCardsInDeck.filter(
+				(c, i) => c !== cardId || deck.additionalKnownCardsInDeck.indexOf(c) !== i,
+			);
+		}
 		const cardWithZone = card.update({
 			zone: 'SECRET',
 			creatorCardId: creatorCardId ?? card.creatorCardId,
@@ -63,6 +69,7 @@ export class SecretPlayedFromDeckParser implements EventParser {
 			deck: newDeck,
 			otherZone: newOtherZone,
 			secrets: [...deck.secrets, BoardSecret.create(entityId, cardId, secretsConfig)] as readonly BoardSecret[],
+			additionalKnownCardsInDeck: additionalKnownCardsInDeck,
 		} as DeckState);
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,

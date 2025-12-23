@@ -311,9 +311,13 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 		// Deck
 		const deckSections: InternalDeckZoneSection[] = [];
 		let cardsInDeckZone = deckState.deck;
-		// if (deckState.additionalKnownCardsInDeck.length > 0) {
-		// 	cardsInDeckZone = updateWithAdditionalKnownCards(cardsInDeckZone, deckState.additionalKnownCardsInDeck, this.allCards);
-		// }
+		if (deckState.additionalKnownCardsInDeck.length > 0) {
+			cardsInDeckZone = updateWithAdditionalKnownCards(
+				cardsInDeckZone,
+				deckState.additionalKnownCardsInDeck,
+				this.allCards,
+			);
+		}
 		if (showTopCardsSeparately && deckState.deck.filter((c) => c.positionFromTop != undefined).length) {
 			deckSections.push({
 				header: this.i18n.translateString('decktracker.zones.top-of-deck'),

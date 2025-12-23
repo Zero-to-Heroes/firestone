@@ -81,7 +81,12 @@ export class QuestPlayedFromHandParser implements EventParser {
 		const newPlayerDeck = deck
 			.update({
 				hand: handAfterCardsRemembered,
-				additionalKnownCardsInHand: deck.additionalKnownCardsInHand.filter((c) => c !== cardId),
+				additionalKnownCardsInHand: deck.additionalKnownCardsInHand.filter(
+					(c, i) => c !== cardId || deck.additionalKnownCardsInHand.indexOf(c) !== i,
+				),
+				additionalKnownCardsInDeck: deck.additionalKnownCardsInDeck.filter(
+					(c, i) => c !== cardId || deck.additionalKnownCardsInDeck.indexOf(c) !== i,
+				),
 				otherZone: newOtherZone,
 				cardsPlayedThisTurn: isCardCountered
 					? deck.cardsPlayedThisTurn

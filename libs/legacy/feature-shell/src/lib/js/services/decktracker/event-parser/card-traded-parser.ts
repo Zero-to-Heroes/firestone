@@ -96,7 +96,9 @@ export class CardTradedParser implements EventParser {
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			deck: deckWithResetPositions,
 			hand: newHand,
-			additionalKnownCardsInHand: deck.additionalKnownCardsInHand.filter((c) => c !== cardId),
+			additionalKnownCardsInHand: deck.additionalKnownCardsInHand.filter(
+				(c, i) => c !== cardId || deck.additionalKnownCardsInHand.indexOf(c) !== i,
+			),
 		});
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,

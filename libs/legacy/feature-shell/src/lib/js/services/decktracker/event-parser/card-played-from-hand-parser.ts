@@ -76,6 +76,12 @@ export class CardPlayedFromHandParser implements EventParser {
 		// This happens when we create a card in the deck, then leave it there when the opponent draws it
 		// (to avoid info leaks). When they play it we won't find it in the "hand" zone, so we try
 		// and see if it is somewhere in the deck
+		let additionalKnownCardsInDeck = deck.additionalKnownCardsInDeck;
+		if (!removedCard?.cardId) {
+			additionalKnownCardsInDeck = additionalKnownCardsInDeck.filter(
+				(c, i) => c !== cardId || deck.additionalKnownCardsInDeck.indexOf(c) !== i,
+			);
+		}
 		if (!removedCard?.cardId && cardId && !gameEvent.additionalData.transientCard) {
 			// Technically this should also be done in "card-played-by-effect", but the use case is pretty marginal,
 			// and not worth the added complexity for now
@@ -218,7 +224,10 @@ export class CardPlayedFromHandParser implements EventParser {
 		const newPlayerDeck1 = deck
 			.update({
 				hand: hardAfterGuessedInfo,
-				additionalKnownCardsInHand: deck.additionalKnownCardsInHand.filter((c) => c !== cardId),
+				additionalKnownCardsInHand: deck.additionalKnownCardsInHand.filter(
+					(c, i) => c !== cardId || deck.additionalKnownCardsInHand.indexOf(c) !== i,
+				),
+				additionalKnownCardsInDeck: additionalKnownCardsInDeck,
 				board: newBoard,
 				deck: newDeck,
 				otherZone: newOtherZone,
@@ -291,7 +300,14 @@ export class CardPlayedFromHandParser implements EventParser {
 						]
 					: playerDeckAfterSpecialCaseUpdate.anachronos,
 			additionalKnownCardsInHand: playerDeckAfterSpecialCaseUpdate.additionalKnownCardsInHand.filter(
-				(c) => c !== cardToAdd.cardId,
+				(c, i) =>
+					c !== cardToAdd.cardId ||
+					playerDeckAfterSpecialCaseUpdate.additionalKnownCardsInHand.indexOf(c) !== i,
+			),
+			additionalKnownCardsInDeck: playerDeckAfterSpecialCaseUpdate.additionalKnownCardsInDeck.filter(
+				(c, i) =>
+					c !== cardToAdd.cardId ||
+					playerDeckAfterSpecialCaseUpdate.additionalKnownCardsInDeck.indexOf(c) !== i,
 			),
 		});
 		// console.debug('deckAfterSpecialCaseUpdate', deckAfterSpecialCaseUpdate);

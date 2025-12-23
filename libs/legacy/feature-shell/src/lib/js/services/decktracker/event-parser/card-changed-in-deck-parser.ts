@@ -33,8 +33,15 @@ export class CardChangedInDeckParser implements EventParser {
 			true,
 		);
 		if (!theCard) {
-			// console.warn('could not find card in deck', cardId, entityId);
-			return currentState;
+			const additionalKnownCardsInDeck = deck.additionalKnownCardsInDeck.filter(
+				(c, i) => c !== cardId || deck.additionalKnownCardsInDeck.indexOf(c) !== i,
+			);
+			const newPlayerDeck = deck.update({
+				additionalKnownCardsInDeck: additionalKnownCardsInDeck,
+			});
+			return Object.assign(new GameState(), currentState, {
+				[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
+			});
 		}
 
 		//console.debug('newDeck, theCard', newDeck, theCard);

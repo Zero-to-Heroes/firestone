@@ -1,9 +1,9 @@
-import { CardIds, Zone } from '@firestone-hs/reference-data';
-import { DeckCard, GameState } from '@firestone/game-state';
-import { GameEvent } from '@legacy-import/src/lib/js/models/game-event';
-import { ActionChainParser } from './_action-chain-parser';
-import { DeckManipulationHelper } from '../deck-manipulation-helper';
+import { Zone } from '@firestone-hs/reference-data';
+import { GameState } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { GameEvent } from '@legacy-import/src/lib/js/models/game-event';
+import { DeckManipulationHelper } from '../deck-manipulation-helper';
+import { ActionChainParser } from './_action-chain-parser';
 
 export class DoommaidenParser implements ActionChainParser {
 	constructor(
@@ -39,8 +39,16 @@ export class DoommaidenParser implements ActionChainParser {
 			cardStolen.cardId,
 			null, // We shouldn't know which one got removed
 		);
+		let additionalKnownCardsInDeck = currentState.playerDeck.additionalKnownCardsInDeck;
+		if (!removedCard?.cardId) {
+			additionalKnownCardsInDeck = additionalKnownCardsInDeck.filter(
+				(c, i) =>
+					c !== cardStolen.cardId || currentState.playerDeck.additionalKnownCardsInDeck.indexOf(c) !== i,
+			);
+		}
 		const newDeckState = currentState.playerDeck.update({
 			deck: newDeck,
+			additionalKnownCardsInDeck: additionalKnownCardsInDeck,
 		});
 		return currentState.update({
 			playerDeck: newDeckState,

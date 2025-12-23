@@ -73,7 +73,12 @@ export class DiscardedCardParser implements EventParser {
 		);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			hand: newHand,
-			additionalKnownCardsInHand: deck.additionalKnownCardsInHand.filter((c) => c !== cardId),
+			additionalKnownCardsInHand: deck.additionalKnownCardsInHand.filter(
+				(c, i) => c !== cardId || deck.additionalKnownCardsInHand.indexOf(c) !== i,
+			),
+			additionalKnownCardsInDeck: deck.additionalKnownCardsInDeck.filter(
+				(c, i) => c !== cardId || deck.additionalKnownCardsInDeck.indexOf(c) !== i,
+			),
 			otherZone: newOther,
 			deck: newDeck,
 			board: board,

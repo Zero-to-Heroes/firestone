@@ -5,7 +5,10 @@ import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
 export class BurnedCardParser implements EventParser {
-	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: CardsFacadeService) {}
+	constructor(
+		private readonly helper: DeckManipulationHelper,
+		private readonly allCards: CardsFacadeService,
+	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return !!state;
@@ -38,10 +41,14 @@ export class BurnedCardParser implements EventParser {
 			cardWithZone,
 			this.allCards,
 		);
+		const additionalKnownCardsInDeck = deck.additionalKnownCardsInDeck.filter(
+			(c, i) => c !== cardId || deck.additionalKnownCardsInDeck.indexOf(c) !== i,
+		);
 		const newPlayerDeck = deck.update({
 			deck: newDeck,
 			otherZone: newOtherZone,
 			burnedCards: [...deck.burnedCards, { cardId, entityId }],
+			additionalKnownCardsInDeck: additionalKnownCardsInDeck,
 		});
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,

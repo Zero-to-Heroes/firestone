@@ -262,6 +262,12 @@ export class CardDrawParser implements EventParser {
 				console.debug('[card-draw] after removing top card from deck', topCard, newDeck);
 			}
 		}
+		let additionalKnownCardsInDeck = deck.additionalKnownCardsInDeck;
+		if (!removedCard) {
+			additionalKnownCardsInDeck = additionalKnownCardsInDeck.filter(
+				(c, i) => c !== cardWithGuessInfo.cardId || deck.additionalKnownCardsInDeck.indexOf(c) !== i,
+			);
+		}
 		console.debug('[card-draw] newDeck', newDeck, isCardInfoPublic, previousDeck);
 		const previousHand = deck.hand;
 		// Summoned when Drawn cards behave a bit weirdly - in the case of Illusions for instance, the card is drawn,
@@ -293,6 +299,7 @@ export class CardDrawParser implements EventParser {
 					: NOT_REAL_DRAW?.includes(drawnByCardId as CardIds)
 						? deck.cardDrawnThisGame
 						: deck.cardDrawnThisGame + 1,
+			additionalKnownCardsInDeck: additionalKnownCardsInDeck,
 		});
 		// console.debug('new player deck', newPlayerDeck);
 		return Object.assign(new GameState(), currentState, {
