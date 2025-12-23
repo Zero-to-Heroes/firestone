@@ -13,7 +13,7 @@ import {
 } from '@angular/core';
 import { CardClass, CardIds, CardType, GameTag, GameType, ReferenceCard } from '@firestone-hs/reference-data';
 import { CardMousedOverService } from '@firestone/memory';
-import { PreferencesService } from '@firestone/shared/common/service';
+import { FlavorTextService, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, uuidShort } from '@firestone/shared/framework/common';
 import { CardsFacadeService, HighlightSide, waitForReady } from '@firestone/shared/framework/core';
 import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
@@ -303,6 +303,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		private readonly prefs: PreferencesService,
 		@Optional() private readonly cardsHighlightService: CardsHighlightFacadeService,
 		@Optional() private readonly i18n: LocalizationFacadeService,
+		@Optional() private readonly flavorTextService: FlavorTextService,
 	) {
 		super(cdr);
 	}
@@ -438,6 +439,9 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 	onMouseEnter(event: MouseEvent) {
 		this.cardsHighlightService?.onMouseEnter(this.cardId, this.entityId, this._side, this.card$$.value);
 
+		// Show flavor text if enabled
+		this.showFlavorText();
+
 		if (!this.card$$.value.cardId && this.card$$.value.guessedInfo?.possibleCards?.length) {
 			this.relatedCardIds = this.card$$.value.guessedInfo.possibleCards;
 			if (!(this.cdr as ViewRef)?.destroyed) {
@@ -492,6 +496,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 
 	onMouseLeave(event: MouseEvent) {
 		this.cardsHighlightService?.onMouseLeave(this.cardId);
+		this.hideFlavorText();
 	}
 
 	onCardClicked(event: MouseEvent) {
@@ -503,6 +508,37 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
+	}
+
+	private async showFlavorText() {
+		if (!this.flavorTextService || !this.cardId || !this._referenceCard) {
+			return;
+		}
+		const prefs = await this.prefs.getPreferences();
+		if (!prefs.overlayShowFlavorTextOnHover) {
+			return;
+		}
+		const flavorText = this._referenceCard.flavor;
+		if (flavorText?.length) {
+			this.flavorTextService.showFlavorText(
+				this.cardId,
+				this.cardName,
+				this.transformFlavorText(flavorText),
+			);
+		}
+	}
+
+	private hideFlavorText() {
+		this.flavorTextService?.hideFlavorText();
+	}
+
+	private transformFlavorText(flavor: string): string {
+		return flavor
+			.replace(/\n/g, ' ')
+			.replace(/<i>/g, '')
+			.replace(/<\/i>/g, '')
+			.replace(/<br>/g, ' ')
+			.replace(/[x]/g, '');
 	}
 
 	private async updateInfos(
