@@ -13,8 +13,9 @@ import {
 } from '@angular/core';
 import { CardClass, CardIds, CardType, GameTag, GameType, ReferenceCard } from '@firestone-hs/reference-data';
 import { CardMousedOverService } from '@firestone/memory';
-import { OwNotificationsService, PreferencesService } from '@firestone/shared/common/service';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, uuidShort } from '@firestone/shared/framework/common';
+import { CardFlavorTextService } from '../../../services/decktracker/card-flavor-text.service';
 import { CardsFacadeService, HighlightSide, waitForReady } from '@firestone/shared/framework/core';
 import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
 import { auditTime, BehaviorSubject, combineLatest, distinctUntilChanged, filter, Observable, takeUntil } from 'rxjs';
@@ -289,7 +290,6 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 	private _uniqueId: string;
 	private _zone: DeckZone;
 	private _flavorTextTimeout: number | null = null;
-	private _currentFlavorNotificationId: string | null = null;
 
 	private showUpdatedCost$$ = new BehaviorSubject<boolean>(false);
 	private showStatsChange$$ = new BehaviorSubject<boolean>(false);
@@ -305,7 +305,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		private readonly prefs: PreferencesService,
 		@Optional() private readonly cardsHighlightService: CardsHighlightFacadeService,
 		@Optional() private readonly i18n: LocalizationFacadeService,
-		@Optional() private readonly notificationService: OwNotificationsService,
+		@Optional() private readonly flavorTextService: CardFlavorTextService,
 	) {
 		super(cdr);
 	}
@@ -668,7 +668,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 	}
 
 	private async showFlavorText() {
-		if (!this.notificationService || !this.cardId || !this._referenceCard) {
+		if (!this.flavorTextService || !this.cardId || !this._referenceCard) {
 			return;
 		}
 
@@ -687,31 +687,14 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 			clearTimeout(this._flavorTextTimeout);
 		}
 
-		// Store the notification ID
-		const notificationId = `flavor-text-${this.entityId || this.cardId}`;
-		this._currentFlavorNotificationId = notificationId;
-
 		// Add a slight delay before showing flavor text to avoid flickering
 		// Using window.setTimeout for explicit browser environment typing
 		this._flavorTextTimeout = window.setTimeout(() => {
 			const sanitizedFlavor = this.transformFlavor(flavorText);
-			// Escape HTML to prevent XSS
-			const escapedCardName = this.escapeHtml(this.cardName);
-			const escapedFlavor = this.escapeHtml(sanitizedFlavor);
-			// Show the notification with a long timeout, we'll manually hide it on mouse leave
-			this.notificationService.emitNewNotification({
-				notificationId: notificationId,
-				content: `
-					<div class="general-message-container general-theme flavor-text-notification" data-notification-id="${notificationId}">
-						<div class="message">
-							<div class="title">
-								<span>${escapedCardName}</span>
-							</div>
-							<p class="text flavor-text">${escapedFlavor}</p>
-						</div>
-					</div>`,
-				timeout: 5000,
-				clickToClose: false,
+			this.flavorTextService.showFlavorText({
+				cardId: this.cardId,
+				cardName: this.cardName,
+				flavorText: sanitizedFlavor,
 			});
 		}, 300);
 	}
@@ -722,12 +705,12 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 			clearTimeout(this._flavorTextTimeout);
 			this._flavorTextTimeout = null;
 		}
-		// Clear the notification ID reference
-		this._currentFlavorNotificationId = null;
+		// Hide the flavor text widget
+		this.flavorTextService?.hideFlavorText();
 	}
 
 	private transformFlavor(flavor: string): string {
-		// Transform flavor text for display in notification:
+		// Transform flavor text for display:
 		// 1. Convert newlines to spaces for compact display
 		// 2. Remove italic tags (HTML styling handled by CSS)
 		// 3. Remove [x] markers that appear in some flavor texts
@@ -739,14 +722,5 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 			.replace(/\s+/g, ' ') // Collapse multiple spaces
 			.trim();
 		return result;
-	}
-
-	private escapeHtml(text: string): string {
-		if (!text) {
-			return '';
-		}
-		const div = document.createElement('div');
-		div.textContent = text;
-		return div.innerHTML;
 	}
 }
