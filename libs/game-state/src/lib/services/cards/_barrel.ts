@@ -57,6 +57,7 @@ export { Jumpscare } from './jumpscare';
 export { KaldoreiCultivator } from './kaldorei-cultivator';
 export { Kiljaeden } from './kiljaeden';
 export { LadyAzshara } from './lady-azshara';
+export { MadameLazul } from './madame-lazul';
 export { MagicTrick } from './magic-trick';
 export { Malkorok } from './malkorok';
 export { MendTheTimeline } from './mend-the-timeline';
