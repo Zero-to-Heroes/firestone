@@ -692,6 +692,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		this._currentFlavorNotificationId = notificationId;
 
 		// Add a slight delay before showing flavor text to avoid flickering
+		// Using window.setTimeout for explicit browser environment typing
 		this._flavorTextTimeout = window.setTimeout(() => {
 			const sanitizedFlavor = this.transformFlavor(flavorText);
 			// Escape HTML to prevent XSS
