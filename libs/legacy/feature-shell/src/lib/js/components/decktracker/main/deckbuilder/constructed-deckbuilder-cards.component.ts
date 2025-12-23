@@ -80,6 +80,13 @@ export const DEFAULT_CARD_HEIGHT = 221;
 							[copyText]="'app.duels.deckbuilder.export-deckcode-button' | owTranslate"
 						>
 						</copy-deckstring>
+						<export-deck-to-picture
+							class="export-deck-picture"
+							*ngIf="exportValue.valid"
+							selector=".deck-list"
+							[origin]="'deckbuilder'"
+						>
+						</export-deck-to-picture>
 						<ng-container *ngIf="value.deckstring">
 							<button
 								class="save-deckcode"
