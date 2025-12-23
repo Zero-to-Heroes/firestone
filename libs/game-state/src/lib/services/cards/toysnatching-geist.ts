@@ -8,11 +8,12 @@ import { filterCards } from './utils';
 export const ToysnatchingGeist: GeneratingCard = {
 	cardIds: [CardIds.ToysnatchingGeist_MIS_006],
 	publicCreator: true,
+	hasSequenceInfo: true,
 	guessCardId: (input: GuessCardIdInput): string | null => {
 		if (input.createdIndex === 1) {
 			return CardIds.ToysnatchingGeist_ToysnatchingGeistToken_MIS_006t;
 		}
-		return input.cardId;
+		return null;
 	},
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
 		const currentClass = input.deckState.hero?.classes?.[0] ? CardClass[input.deckState.hero?.classes?.[0]] : '';
