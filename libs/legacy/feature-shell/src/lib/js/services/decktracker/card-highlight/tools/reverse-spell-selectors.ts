@@ -8,7 +8,7 @@ import { CardIds } from '@firestone-hs/reference-data';
 import { DeckCard } from '@firestone/game-state';
 import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
 import { Selector } from '../cards-highlight-common.service';
-import { and, cardIs, inDeck, inHand, or, side } from '../selectors';
+import { and, or, side, inDeck, inHand, cardIs } from '../selectors';
 
 export const reverseSpellSelector = (
 	cardId: string,
@@ -22,12 +22,10 @@ export const reverseSpellSelector = (
 	const matchingCardIds: CardIds[] = [];
 
 	// COST_MORE_0 + SHADOW + SPELL (1 cards)
-	if (
-		refCard.cost > 0 &&
-		refCard.spellSchool?.toUpperCase() === 'SHADOW' &&
-		refCard.type?.toUpperCase() === 'SPELL'
-	) {
-		matchingCardIds.push(CardIds.TamsinRoame_BAR_918);
+	if (refCard.cost > 0 && refCard.spellSchool?.toUpperCase() === 'SHADOW' && refCard.type?.toUpperCase() === 'SPELL') {
+		matchingCardIds.push(
+			CardIds.TamsinRoame_BAR_918
+		);
 	}
 
 	// ARCANE + SPELL (8 cards)
@@ -40,38 +38,53 @@ export const reverseSpellSelector = (
 			CardIds.Stargazing_WW_425,
 			CardIds.StarlightReactor_GDB_108,
 			CardIds.UnstableMagicTavernBrawl,
-			CardIds.Vexallus,
+			CardIds.Vexallus
 		);
 	}
 
 	// COST_EQUAL_1 + SPELL (2 cards)
 	if (refCard.cost === 1 && refCard.type?.toUpperCase() === 'SPELL') {
-		matchingCardIds.push(CardIds.Gazlowe, CardIds.TrinketTracker);
+		matchingCardIds.push(
+			CardIds.Gazlowe,
+			CardIds.TrinketTracker
+		);
 	}
 
 	// COST_EQUAL_2 + SPELL (2 cards)
 	if (refCard.cost === 2 && refCard.type?.toUpperCase() === 'SPELL') {
-		matchingCardIds.push(CardIds.BarakKodobane_BAR_551, CardIds.BarakKodobane_CORE_BAR_551);
+		matchingCardIds.push(
+			CardIds.BarakKodobane_BAR_551,
+			CardIds.BarakKodobane_CORE_BAR_551
+		);
 	}
 
 	// COST_EQUAL_8 + SPELL (1 cards)
 	if (refCard.cost === 8 && refCard.type?.toUpperCase() === 'SPELL') {
-		matchingCardIds.push(CardIds.ArcaneBrilliance);
+		matchingCardIds.push(
+			CardIds.ArcaneBrilliance
+		);
 	}
 
 	// COST_LESS_3 + SPELL (2 cards)
 	if (refCard.cost < 3 && refCard.type?.toUpperCase() === 'SPELL') {
-		matchingCardIds.push(CardIds.SunsapperLynessa_VAC_507, CardIds.VioletTreasuregill_TLC_438);
+		matchingCardIds.push(
+			CardIds.SunsapperLynessa_VAC_507,
+			CardIds.VioletTreasuregill_TLC_438
+		);
 	}
 
 	// COST_LESS_4 + SPELL (1 cards)
 	if (refCard.cost < 4 && refCard.type?.toUpperCase() === 'SPELL') {
-		matchingCardIds.push(CardIds.StonehearthVindicator);
+		matchingCardIds.push(
+			CardIds.StonehearthVindicator
+		);
 	}
 
 	// COST_MORE_1 + SPELL (1 cards)
 	if (refCard.cost > 1 && refCard.type?.toUpperCase() === 'SPELL') {
-		matchingCardIds.push(CardIds.PlaguebringerTavernBrawl);
+		matchingCardIds.push(
+			CardIds.PlaguebringerTavernBrawl
+		);
 	}
 
 	// COST_MORE_4 + SPELL (7 cards)
@@ -83,13 +96,15 @@ export const reverseSpellSelector = (
 			CardIds.Groundskeeper,
 			CardIds.HagathaTheFabled_TOY_504,
 			CardIds.SunreaverWarmage,
-			CardIds.WeaverOfTheCycle_EDR_472,
+			CardIds.WeaverOfTheCycle_EDR_472
 		);
 	}
 
 	// COST_MORE_5 + SPELL (1 cards)
 	if (refCard.cost > 5 && refCard.type?.toUpperCase() === 'SPELL') {
-		matchingCardIds.push(CardIds.GreySageParrot);
+		matchingCardIds.push(
+			CardIds.GreySageParrot
+		);
 	}
 
 	// FEL + SPELL (10 cards)
@@ -104,7 +119,7 @@ export const reverseSpellSelector = (
 			CardIds.ImpCredibleTrousersTavernBrawl,
 			CardIds.PopgarThePutrid_WW_091,
 			CardIds.Scorchreaver_FIR_952,
-			CardIds.WitherTheWeakTavernBrawl,
+			CardIds.WitherTheWeakTavernBrawl
 		);
 	}
 
@@ -122,7 +137,7 @@ export const reverseSpellSelector = (
 			CardIds.ScorchingWinds_FIR_910,
 			CardIds.SunfuryChampion,
 			CardIds.Thoribelore,
-			CardIds.VolcanicThrasher_TLC_223,
+			CardIds.VolcanicThrasher_TLC_223
 		);
 	}
 
@@ -136,7 +151,7 @@ export const reverseSpellSelector = (
 			CardIds.LadyDeathwhisper_RLK_713,
 			CardIds.RambunctiousStuffy_TOY_821,
 			CardIds.Rimetongue,
-			CardIds.WatercolorArtist_TOY_376,
+			CardIds.WatercolorArtist_TOY_376
 		);
 	}
 
@@ -167,7 +182,7 @@ export const reverseSpellSelector = (
 			CardIds.SecretkeeperVanilla,
 			CardIds.SparkjoyCheat,
 			CardIds.StarstrungBow,
-			CardIds.SwordOfTheFallen,
+			CardIds.SwordOfTheFallen
 		);
 	}
 
@@ -188,7 +203,7 @@ export const reverseSpellSelector = (
 			CardIds.ShimmeringSunfish,
 			CardIds.StarlightGroove,
 			CardIds.TheGardensGrace,
-			CardIds.VeteranWarmedic,
+			CardIds.VeteranWarmedic
 		);
 	}
 
@@ -204,7 +219,7 @@ export const reverseSpellSelector = (
 			CardIds.SpreadingSaplingsTavernBrawl,
 			CardIds.ToadOfTheWilds,
 			CardIds.TopiorTheShrubbagazzor,
-			CardIds.WidowbloomSeedsman,
+			CardIds.WidowbloomSeedsman
 		);
 	}
 
@@ -221,7 +236,7 @@ export const reverseSpellSelector = (
 			CardIds.ShadowclothNeedle,
 			CardIds.SketchArtist_TOY_916,
 			CardIds.StaffOfPainTavernBrawl,
-			CardIds.TwilightDeceptor,
+			CardIds.TwilightDeceptor
 		);
 	}
 
@@ -233,13 +248,17 @@ export const reverseSpellSelector = (
 			CardIds.ArcaniteCrystalTavernBrawl,
 			CardIds.AzureQueenSindragosa_TIME_852,
 			CardIds.LadyNazjar_TID_709,
-			CardIds.SorcerersGambit,
+			CardIds.SorcerersGambit
 		);
 	}
 
 	// FEL (3 cards)
 	if (refCard.spellSchool?.toUpperCase() === 'FEL') {
-		matchingCardIds.push(CardIds.CorruptedFelstoneTavernBrawl, CardIds.FelfireInTheHole, CardIds.JaceDarkweaver);
+		matchingCardIds.push(
+			CardIds.CorruptedFelstoneTavernBrawl,
+			CardIds.FelfireInTheHole,
+			CardIds.JaceDarkweaver
+		);
 	}
 
 	// FIRE (7 cards)
@@ -251,7 +270,7 @@ export const reverseSpellSelector = (
 			CardIds.Saruun_GDB_304,
 			CardIds.SorcerersGambit,
 			CardIds.SteamGuardian,
-			CardIds.WrathspineEnchanter,
+			CardIds.WrathspineEnchanter
 		);
 	}
 
@@ -266,7 +285,7 @@ export const reverseSpellSelector = (
 			CardIds.OverseerFrigidara_LEG_RLK_224,
 			CardIds.RadianceOfAzshara_TSC_635,
 			CardIds.SorcerersGambit,
-			CardIds.WrathspineEnchanter,
+			CardIds.WrathspineEnchanter
 		);
 	}
 
@@ -284,8 +303,8 @@ export const reverseSpellSelector = (
 			CardIds.EaglehornBowLegacy,
 			CardIds.EaglehornBowVanilla,
 			CardIds.GhastlyGravedigger,
-			CardIds.GlacialMysteries_ICC_086,
 			CardIds.GlacialMysteries_CORE_ICC_086,
+			CardIds.GlacialMysteries_ICC_086,
 			CardIds.KabalCrystalRunner,
 			CardIds.KabalCrystalRunner_WON_308,
 			CardIds.MadScientist,
@@ -297,7 +316,7 @@ export const reverseSpellSelector = (
 			CardIds.ScuttlebuttGhoul_CORE_REV_900,
 			CardIds.SecretStudiesTavernBrawl,
 			CardIds.SpringTheTrap,
-			CardIds.Zuljin_WarriorsOfAmani_THD_010p,
+			CardIds.Zuljin_WarriorsOfAmani_THD_010p
 		);
 	}
 
@@ -311,7 +330,7 @@ export const reverseSpellSelector = (
 			CardIds.LightmawNetherdrake,
 			CardIds.ReachEquilibrium_TLC_817,
 			CardIds.SpiritGuide,
-			CardIds.SpiritGuide_CORE_AV_328,
+			CardIds.SpiritGuide_CORE_AV_328
 		);
 	}
 
@@ -324,7 +343,7 @@ export const reverseSpellSelector = (
 			CardIds.Overheat_FIR_906,
 			CardIds.PrimalDungeoneer,
 			CardIds.RadianceOfAzshara_TSC_635,
-			CardIds.WrathspineEnchanter,
+			CardIds.WrathspineEnchanter
 		);
 	}
 
@@ -338,7 +357,7 @@ export const reverseSpellSelector = (
 			CardIds.LightmawNetherdrake,
 			CardIds.ReachEquilibrium_TLC_817,
 			CardIds.SpiritGuide,
-			CardIds.SpiritGuide_CORE_AV_328,
+			CardIds.SpiritGuide_CORE_AV_328
 		);
 	}
 
@@ -556,7 +575,7 @@ export const reverseSpellSelector = (
 			CardIds.YoggSaronHopesEnd_OG_134,
 			CardIds.YoggSaronMasterOfFate,
 			CardIds.YsielWindsinger,
-			CardIds.Zuljin,
+			CardIds.Zuljin
 		);
 	}
 

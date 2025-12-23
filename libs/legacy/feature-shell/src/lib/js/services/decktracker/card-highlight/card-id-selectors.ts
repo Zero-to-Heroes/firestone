@@ -1884,6 +1884,8 @@ export const cardIdSelector = (
 				and(side(inputSide), inGraveyard, minion),
 				and(side(inputSide), or(inHand, inDeck), minion),
 			);
+		case CardIds.IdolOfYshaarj:
+			return and(side(inputSide), inDeck, minion);
 		case CardIds.IdolsOfEluneTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.IngeniousArtificer_GDB_135:
