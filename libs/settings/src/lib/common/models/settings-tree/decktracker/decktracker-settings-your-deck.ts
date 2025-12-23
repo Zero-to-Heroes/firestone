@@ -111,6 +111,12 @@ export const decktrackerYourDeckSettings = (context: SettingContext): SettingNod
 					},
 					{
 						type: 'toggle',
+						field: 'decktrackerShowCardFlavorText',
+						label: context.i18n.translateString('settings.decktracker.your-deck.show-card-flavor-text-label'),
+						tooltip: context.i18n.translateString('settings.decktracker.your-deck.show-card-flavor-text-tooltip'),
+					},
+					{
+						type: 'toggle',
 						field: 'decktrackerNoDeckMode',
 						label: context.i18n.translateString('settings.decktracker.your-deck.ignore-decklist-label'),
 						tooltip: context.i18n.translateString('settings.decktracker.your-deck.ignore-decklist-tooltip'),

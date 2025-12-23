@@ -13,7 +13,7 @@ import {
 } from '@angular/core';
 import { CardClass, CardIds, CardType, GameTag, GameType, ReferenceCard } from '@firestone-hs/reference-data';
 import { CardMousedOverService } from '@firestone/memory';
-import { PreferencesService } from '@firestone/shared/common/service';
+import { OwNotificationsService, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, uuidShort } from '@firestone/shared/framework/common';
 import { CardsFacadeService, HighlightSide, waitForReady } from '@firestone/shared/framework/core';
 import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
@@ -288,6 +288,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 	private _referenceCard: ReferenceCard;
 	private _uniqueId: string;
 	private _zone: DeckZone;
+	private _flavorTextTimeout: any;
 
 	private showUpdatedCost$$ = new BehaviorSubject<boolean>(false);
 	private showStatsChange$$ = new BehaviorSubject<boolean>(false);
@@ -303,6 +304,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		private readonly prefs: PreferencesService,
 		@Optional() private readonly cardsHighlightService: CardsHighlightFacadeService,
 		@Optional() private readonly i18n: LocalizationFacadeService,
+		@Optional() private readonly notificationService: OwNotificationsService,
 	) {
 		super(cdr);
 	}
@@ -435,8 +437,11 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		}
 	}
 
-	onMouseEnter(event: MouseEvent) {
+	async onMouseEnter(event: MouseEvent) {
 		this.cardsHighlightService?.onMouseEnter(this.cardId, this.entityId, this._side, this.card$$.value);
+
+		// Show flavor text if enabled
+		await this.showFlavorText();
 
 		if (!this.card$$.value.cardId && this.card$$.value.guessedInfo?.possibleCards?.length) {
 			this.relatedCardIds = this.card$$.value.guessedInfo.possibleCards;
@@ -492,6 +497,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 
 	onMouseLeave(event: MouseEvent) {
 		this.cardsHighlightService?.onMouseLeave(this.cardId);
+		this.hideFlavorText();
 	}
 
 	onCardClicked(event: MouseEvent) {
@@ -657,6 +663,65 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 			this.giftTooltip = this.i18n.translateString('decktracker.gift-created-by-single-card', {
 				value: this.creatorCardIds.map((cardId) => this.cards.getCard(cardId).name).join(', '),
 			});
+		}
+	}
+
+	private async showFlavorText() {
+		if (!this.notificationService || !this.cardId || !this._referenceCard) {
+			return;
+		}
+
+		const prefs = await this.prefs.getPreferences();
+		if (!prefs.decktrackerShowCardFlavorText) {
+			return;
+		}
+
+		const flavorText = this._referenceCard.flavor;
+		if (!flavorText?.length) {
+			return;
+		}
+
+		// Clear any existing timeout
+		if (this._flavorTextTimeout) {
+			clearTimeout(this._flavorTextTimeout);
+		}
+
+		// Add a slight delay before showing flavor text to avoid flickering
+		this._flavorTextTimeout = setTimeout(() => {
+			const sanitizedFlavor = this.transformFlavor(flavorText);
+			this.notificationService.emitNewNotification({
+				notificationId: `flavor-text-${this.cardId}`,
+				content: `
+					<div class="general-message-container general-theme flavor-text-notification">
+						<div class="message">
+							<div class="title">
+								<span>${this.cardName}</span>
+							</div>
+							<p class="text flavor-text">${sanitizedFlavor}</p>
+						</div>
+					</div>`,
+				timeout: 999999999,
+				clickToClose: false,
+			});
+		}, 200);
+	}
+
+	private hideFlavorText() {
+		// Clear the timeout if it hasn't fired yet
+		if (this._flavorTextTimeout) {
+			clearTimeout(this._flavorTextTimeout);
+			this._flavorTextTimeout = null;
+		}
+	}
+
+	private transformFlavor(flavor: string): string {
+		const result = flavor
+			.replace(/\n/g, '<br>')
+			.replace(/<i>/g, '')
+			.replace(/<\/i>/g, '')
+			.replace(/<br>/g, ' ')
+			.replace(/[x]/g, '');
+		return result;
 		}
 	}
 }
