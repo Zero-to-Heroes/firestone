@@ -288,7 +288,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 	private _referenceCard: ReferenceCard;
 	private _uniqueId: string;
 	private _zone: DeckZone;
-	private _flavorTextTimeout: any;
+	private _flavorTextTimeout: number | null = null;
 	private _currentFlavorNotificationId: string | null = null;
 
 	private showUpdatedCost$$ = new BehaviorSubject<boolean>(false);
@@ -692,8 +692,11 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		this._currentFlavorNotificationId = notificationId;
 
 		// Add a slight delay before showing flavor text to avoid flickering
-		this._flavorTextTimeout = setTimeout(() => {
+		this._flavorTextTimeout = window.setTimeout(() => {
 			const sanitizedFlavor = this.transformFlavor(flavorText);
+			// Escape HTML to prevent XSS
+			const escapedCardName = this.escapeHtml(this.cardName);
+			const escapedFlavor = this.escapeHtml(sanitizedFlavor);
 			// Show the notification with a long timeout, we'll manually hide it on mouse leave
 			this.notificationService.emitNewNotification({
 				notificationId: notificationId,
@@ -701,9 +704,9 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 					<div class="general-message-container general-theme flavor-text-notification" data-notification-id="${notificationId}">
 						<div class="message">
 							<div class="title">
-								<span>${this.cardName}</span>
+								<span>${escapedCardName}</span>
 							</div>
-							<p class="text flavor-text">${sanitizedFlavor}</p>
+							<p class="text flavor-text">${escapedFlavor}</p>
 						</div>
 					</div>`,
 				timeout: 5000,
@@ -718,7 +721,6 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 			clearTimeout(this._flavorTextTimeout);
 			this._flavorTextTimeout = null;
 		}
-		
 		// Clear the notification ID reference
 		this._currentFlavorNotificationId = null;
 	}
@@ -736,5 +738,14 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 			.replace(/\s+/g, ' ') // Collapse multiple spaces
 			.trim();
 		return result;
+	}
+
+	private escapeHtml(text: string): string {
+		if (!text) {
+			return '';
+		}
+		const div = document.createElement('div');
+		div.textContent = text;
+		return div.innerHTML;
 	}
 }
