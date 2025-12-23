@@ -1103,6 +1103,7 @@ const internalGiftCreators = [
 	CardIds.VolleyMaul_VAC_921,
 	CardIds.NostalgicGnome_TOY_312,
 	CardIds.NostalgicClown_TOY_341,
+	CardIds.SnuggleTeddy_MIS_300,
 ];
 for (const cardId of Object.keys(cardsInfoCache)) {
 	const card = cardsInfoCache[cardId];
