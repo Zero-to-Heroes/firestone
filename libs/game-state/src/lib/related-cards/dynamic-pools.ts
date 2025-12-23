@@ -1064,6 +1064,7 @@ const getDynamicFilters = (
 		case CardIds.ToysnatchingGeist_ToysnatchingGeistToken_MIS_006t:
 		case CardIds.RiteOfAtrocity_EDR_811:
 		case CardIds.Paleomancy_TLC_434:
+		case CardIds.PulsingPumpkins_TOY_829hp:
 			return (c) => hasCorrectTribe(c, Race.UNDEAD) && canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.SweetenedSnowflurry_TOY_307:
 		case CardIds.SweetenedSnowflurry_SweetenedSnowflurryToken_TOY_307t:
