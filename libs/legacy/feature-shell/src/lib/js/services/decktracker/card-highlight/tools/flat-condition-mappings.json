@@ -155,6 +155,7 @@
     "SicklyGrimewalker_YOG_512",
     "SkeletalSidekickCore_RLK_958",
     "SoulburnerVaria_YOG_520",
+    "StormTheGates_TLC_EVENT_400",
     "TwistedTether",
     "UndyingAllies",
     "UnlivingChampion",
@@ -166,6 +167,7 @@
     "AzsharanSaber_SunkenSaberToken",
     "BeastmasterLeoroxx",
     "BigDreams",
+    "BlessingOfTheWolf_EDR_850p",
     "BunnyStomper_WW_435",
     "ButchTavernBrawl",
     "CallPet_GVG_017",
@@ -173,6 +175,7 @@
     "CastleKennels_REV_790",
     "CattleRustler_WW_351",
     "CowerInFear_TLC_823",
+    "Dinomancy_DinomancyToken",
     "Dinositter_TLC_822",
     "ExoticHoundmaster_EDR_226",
     "FaithfulCompanions",
@@ -223,6 +226,7 @@
     "ShandoWildclaw_RileTheHerd",
     "ShandoWildclaw_Transfiguration",
     "StarvingTavernBrawl",
+    "StormTheGates_TLC_EVENT_400",
     "StormpikeBattleRam",
     "StranglethornHeart",
     "SupremeDinomancy_TLC_828",
@@ -556,6 +560,7 @@
     "CarnivorousCubicle_WORK_042",
     "CatrinaMuerte",
     "CatrinaMuerteCore",
+    "ChalkArtist_TOY_388",
     "CharredChameleon_FIR_908",
     "ChemicalSpill_TOY_602",
     "ChorusRiff",
@@ -621,6 +626,7 @@
     "HabeasCorpses",
     "Hadronox_CORE_ICC_835",
     "Hadronox_ICC_835",
+    "HagathaTheWitch_BewitchHeroic",
     "HagathasEmbrace",
     "HagathasEmbraceTavernBrawl",
     "HarmonicMetal",
@@ -635,6 +641,7 @@
     "HopeOfQuelthalas",
     "HoundsOfFury_TIME_443",
     "HourglassAttendant_TIME_100",
+    "IdolOfYshaarj",
     "ImpKingRafaam_ImpKingRafaamToken",
     "ImpKingRafaam_REV_789",
     "ImpKingRafaam_REV_835",
@@ -1077,8 +1084,8 @@
     "EaglehornBowLegacy",
     "EaglehornBowVanilla",
     "GhastlyGravedigger",
-    "GlacialMysteries",
-    "GlacialMysteriesCore",
+    "GlacialMysteries_CORE_ICC_086",
+    "GlacialMysteries_ICC_086",
     "KabalCrystalRunner",
     "KabalCrystalRunner_WON_308",
     "MadScientist",
@@ -1102,6 +1109,7 @@
     "AzeriteGiant_WW_025",
     "Blazecaller",
     "BlazingAccretion_GDB_302",
+    "BonfireElemental",
     "BralmaSearstone_TLC_228",
     "CloudSerpent_TLC_888",
     "DangBlastedElemental_WW_397",
@@ -1223,6 +1231,14 @@
     "ParrotSanctuary_VAC_409",
     "Snapdragon",
     "Turbulus_WORK_013"
+  ],
+  "IMBUE": [
+    "AwakenTheFlame",
+    "AwakenTheFlame_THD_029hp",
+    "DreamboundDisciple_EDR_847",
+    "MalorneTheWaywatcher_EDR_888",
+    "PetalPicker_FIR_921",
+    "ResplendentDreamweaver_EDR_860"
   ],
   "MURLOC": [
     "AzsharanScavenger_SunkenScavengerToken",
@@ -1397,6 +1413,7 @@
     "BrilliantMacaw",
     "ChronoLordDeios_TIME_064",
     "CorruptTheWaters",
+    "CorruptTheWaters_HeartOfVirnaal",
     "FieldContact",
     "MurmuringElemental",
     "RallyTheTroopsTavernBrawl",
@@ -1506,6 +1523,7 @@
     "ScrapbookingStudent_VAC_529",
     "SeasideGiant_VAC_439",
     "SpineCrawler_SC_023",
+    "WelcomeHome_TIME_EVENT_997",
     "WorkshopJanitor_TOY_891",
     "Xb931Housekeeper_VAC_956"
   ],
@@ -1614,9 +1632,12 @@
   ],
   "FROM_ANOTHER_CLASS": [
     "Concierge_VAC_463",
+    "ContrabandStash",
     "DoubleAgent",
     "SeaShill_VAC_332",
     "SnatchAndGrab_VAC_700",
+    "TessGreymaneCore",
+    "TessGreymane_GIL_598",
     "TreasureHunterEudora_VAC_464",
     "VelarokWindblade_WW_364",
     "Vendetta"
@@ -1711,12 +1732,6 @@
   "COST_LESS_4 + HAS_MECHANIC_DEATHRATTLE + MINION": [
     "DreadRaptor_TLC_432",
     "Razorboar"
-  ],
-  "IMBUE": [
-    "DreamboundDisciple_EDR_847",
-    "MalorneTheWaywatcher_EDR_888",
-    "PetalPicker_FIR_921",
-    "ResplendentDreamweaver_EDR_860"
   ],
   "MINION + MURLOC": [
     "DrocomurchanicasTavernBrawlToken",

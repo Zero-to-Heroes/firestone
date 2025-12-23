@@ -449,7 +449,7 @@ export const reverseGeneralSelector = (
 		);
 	}
 
-	// HAS_MECHANIC_BATTLECRY (12 cards)
+	// HAS_MECHANIC_BATTLECRY (13 cards)
 	if (refCard.mechanics?.includes('BATTLECRY')) {
 		matchingCardIds.push(
 			CardIds.BattleTotem_LOOTA_846,
@@ -458,6 +458,7 @@ export const reverseGeneralSelector = (
 			CardIds.BrilliantMacaw,
 			CardIds.ChronoLordDeios_TIME_064,
 			CardIds.CorruptTheWaters,
+			CardIds.CorruptTheWaters_HeartOfVirnaal,
 			CardIds.FieldContact,
 			CardIds.MurmuringElemental,
 			CardIds.RallyTheTroopsTavernBrawl,
@@ -584,7 +585,7 @@ export const reverseGeneralSelector = (
 		);
 	}
 
-	// LOCATION (9 cards)
+	// LOCATION (10 cards)
 	if (refCard.type?.toUpperCase() === 'LOCATION') {
 		matchingCardIds.push(
 			CardIds.BusyPeon_WORK_041,
@@ -594,6 +595,7 @@ export const reverseGeneralSelector = (
 			CardIds.ScrapbookingStudent_VAC_529,
 			CardIds.SeasideGiant_VAC_439,
 			CardIds.SpineCrawler_SC_023,
+			CardIds.WelcomeHome_TIME_EVENT_997,
 			CardIds.WorkshopJanitor_TOY_891,
 			CardIds.Xb931Housekeeper_VAC_956
 		);

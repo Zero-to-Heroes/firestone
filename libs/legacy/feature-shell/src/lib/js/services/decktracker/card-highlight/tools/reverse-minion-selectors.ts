@@ -417,7 +417,7 @@ export const reverseMinionSelector = (
 		);
 	}
 
-	// BEAST (77 cards)
+	// BEAST (80 cards)
 	if (refCard.races?.map(r => r.toUpperCase()).includes('BEAST')) {
 		matchingCardIds.push(
 			CardIds.AddledGrizzly,
@@ -425,6 +425,7 @@ export const reverseMinionSelector = (
 			CardIds.AzsharanSaber_SunkenSaberToken,
 			CardIds.BeastmasterLeoroxx,
 			CardIds.BigDreams,
+			CardIds.BlessingOfTheWolf_EDR_850p,
 			CardIds.BunnyStomper_WW_435,
 			CardIds.ButchTavernBrawl,
 			CardIds.CallPet_GVG_017,
@@ -432,6 +433,7 @@ export const reverseMinionSelector = (
 			CardIds.CastleKennels_REV_790,
 			CardIds.CattleRustler_WW_351,
 			CardIds.CowerInFear_TLC_823,
+			CardIds.Dinomancy_DinomancyToken,
 			CardIds.Dinositter_TLC_822,
 			CardIds.ExoticHoundmaster_EDR_226,
 			CardIds.FaithfulCompanions,
@@ -482,6 +484,7 @@ export const reverseMinionSelector = (
 			CardIds.ShandoWildclaw_RileTheHerd,
 			CardIds.ShandoWildclaw_Transfiguration,
 			CardIds.StarvingTavernBrawl,
+			CardIds.StormTheGates_TLC_EVENT_400,
 			CardIds.StormpikeBattleRam,
 			CardIds.StranglethornHeart,
 			CardIds.SupremeDinomancy_TLC_828,
@@ -621,7 +624,7 @@ export const reverseMinionSelector = (
 		);
 	}
 
-	// ELEMENTAL (46 cards)
+	// ELEMENTAL (47 cards)
 	if (refCard.races?.map(r => r.toUpperCase()).includes('ELEMENTAL')) {
 		matchingCardIds.push(
 			CardIds.AnimatedAvalanche,
@@ -630,6 +633,7 @@ export const reverseMinionSelector = (
 			CardIds.AzeriteGiant_WW_025,
 			CardIds.Blazecaller,
 			CardIds.BlazingAccretion_GDB_302,
+			CardIds.BonfireElemental,
 			CardIds.BralmaSearstone_TLC_228,
 			CardIds.CloudSerpent_TLC_888,
 			CardIds.DangBlastedElemental_WW_397,
@@ -854,7 +858,7 @@ export const reverseMinionSelector = (
 		);
 	}
 
-	// UNDEAD (40 cards)
+	// UNDEAD (41 cards)
 	if (refCard.races?.map(r => r.toUpperCase()).includes('UNDEAD')) {
 		matchingCardIds.push(
 			CardIds.AcolyteOfDeath,
@@ -893,6 +897,7 @@ export const reverseMinionSelector = (
 			CardIds.SicklyGrimewalker_YOG_512,
 			CardIds.SkeletalSidekickCore_RLK_958,
 			CardIds.SoulburnerVaria_YOG_520,
+			CardIds.StormTheGates_TLC_EVENT_400,
 			CardIds.TwistedTether,
 			CardIds.UndyingAllies,
 			CardIds.UnlivingChampion,
@@ -900,7 +905,7 @@ export const reverseMinionSelector = (
 		);
 	}
 
-	// MINION (271 cards)
+	// MINION (274 cards)
 	if (refCard.type?.toUpperCase() === 'MINION') {
 		matchingCardIds.push(
 			CardIds.AcherusVeteran_CORE_ICC_092,
@@ -948,6 +953,7 @@ export const reverseMinionSelector = (
 			CardIds.CarnivorousCubicle_WORK_042,
 			CardIds.CatrinaMuerte,
 			CardIds.CatrinaMuerteCore,
+			CardIds.ChalkArtist_TOY_388,
 			CardIds.CharredChameleon_FIR_908,
 			CardIds.ChemicalSpill_TOY_602,
 			CardIds.ChorusRiff,
@@ -1013,6 +1019,7 @@ export const reverseMinionSelector = (
 			CardIds.HabeasCorpses,
 			CardIds.Hadronox_CORE_ICC_835,
 			CardIds.Hadronox_ICC_835,
+			CardIds.HagathaTheWitch_BewitchHeroic,
 			CardIds.HagathasEmbrace,
 			CardIds.HagathasEmbraceTavernBrawl,
 			CardIds.HarmonicMetal,
@@ -1027,6 +1034,7 @@ export const reverseMinionSelector = (
 			CardIds.HopeOfQuelthalas,
 			CardIds.HoundsOfFury_TIME_443,
 			CardIds.HourglassAttendant_TIME_100,
+			CardIds.IdolOfYshaarj,
 			CardIds.ImpKingRafaam_ImpKingRafaamToken,
 			CardIds.ImpKingRafaam_REV_789,
 			CardIds.ImpKingRafaam_REV_835,
