@@ -724,12 +724,17 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 	}
 
 	private transformFlavor(flavor: string): string {
+		// Transform flavor text for display in notification:
+		// 1. Convert newlines to spaces for compact display
+		// 2. Remove italic tags (HTML styling handled by CSS)
+		// 3. Remove [x] markers that appear in some flavor texts
 		const result = flavor
-			.replace(/\n/g, '<br>')
+			.replace(/\n/g, ' ')
 			.replace(/<i>/g, '')
 			.replace(/<\/i>/g, '')
-			.replace(/<br>/g, ' ')
-			.replace(/[x]/g, '');
+			.replace(/\[x\]/g, '')
+			.replace(/\s+/g, ' ') // Collapse multiple spaces
+			.trim();
 		return result;
 	}
 }
