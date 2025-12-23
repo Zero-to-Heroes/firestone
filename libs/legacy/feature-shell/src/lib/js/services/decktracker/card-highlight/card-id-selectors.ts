@@ -587,6 +587,17 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.BroodKeeper_EDR_457:
 			return and(side(inputSide), or(inDeck, inHand), dragon);
+		case CardIds.Broxigar_AxeOfCenariusToken_TIME_020t1:
+			return and(
+				side(inputSide),
+				inDeck,
+				cardIs(
+					CardIds.Broxigar_FirstPortalToArgusToken_TIME_020t2,
+					CardIds.Broxigar_SecondPortalToArgusToken_TIME_020t3,
+					CardIds.Broxigar_ThirdPortalToArgusToken_TIME_020t4,
+					CardIds.Broxigar_FinalPortalToArgusToken_TIME_020t5,
+				),
+			);
 		case CardIds.Bubblebot_TSC_059:
 			return and(side(inputSide), or(inDeck, inHand), mech);
 		case CardIds.BulkUp:
