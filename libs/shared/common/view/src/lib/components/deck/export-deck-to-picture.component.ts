@@ -33,6 +33,7 @@ export class ExportDeckToPictureComponent {
 
 	private screenshotText$$ = new BehaviorSubject<string>(null);
 	private screenshotTooltip$$ = new BehaviorSubject<string>('Copy deck list as image to clipboard');
+	private isScreenshotInProgress = false;
 
 	constructor(
 		private readonly cdr: ChangeDetectorRef,
@@ -45,6 +46,11 @@ export class ExportDeckToPictureComponent {
 	}
 
 	async takeScreenshot() {
+		// Prevent concurrent screenshot operations
+		if (this.isScreenshotInProgress) {
+			return;
+		}
+
 		if (!this.selector) {
 			console.error('[export-deck-to-picture] No selector provided');
 			return;
@@ -56,6 +62,7 @@ export class ExportDeckToPictureComponent {
 			return;
 		}
 
+		this.isScreenshotInProgress = true;
 		this.screenshotText$$.next('Taking high-res screenshot...');
 		this.screenshotTooltip$$.next('It can take a few seconds, thanks for waiting :)');
 		this.analytics.trackEvent('screenshot', { origin: this.origin });
@@ -89,6 +96,7 @@ export class ExportDeckToPictureComponent {
 				await sleep(3000);
 				this.screenshotText$$.next(null);
 				this.screenshotTooltip$$.next('Copy deck list as image to clipboard');
+				this.isScreenshotInProgress = false;
 			})
 			.catch((error) => {
 				console.error('[export-deck-to-picture] Error taking screenshot:', error);
@@ -98,6 +106,7 @@ export class ExportDeckToPictureComponent {
 				setTimeout(() => {
 					this.screenshotText$$.next(null);
 					this.screenshotTooltip$$.next('Copy deck list as image to clipboard');
+					this.isScreenshotInProgress = false;
 					if (!(this.cdr as ViewRef)?.destroyed) {
 						this.cdr.detectChanges();
 					}
@@ -106,7 +115,12 @@ export class ExportDeckToPictureComponent {
 	}
 
 	private async copyImageToClipboard(dataUrl: string): Promise<void> {
-		if (this.ow?.isOwEnabled()) {
+		// Validate dataUrl format
+		if (!dataUrl || !dataUrl.startsWith('data:image/')) {
+			throw new Error('Invalid data URL format');
+		}
+
+		if (this.ow.isOwEnabled()) {
 			// Use OwUtils for Overwolf environment
 			await this.owUtils.copyImageDataUrlToClipboard(dataUrl);
 		} else {
