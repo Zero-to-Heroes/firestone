@@ -85,6 +85,13 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 					>
 					</copy-deckstring>
 
+					<export-deck-to-picture
+						class="export-deck-picture"
+						selector=".deck-list"
+						[origin]="'deck-details'"
+					>
+					</export-deck-to-picture>
+
 					<deck-list-static
 						class="deck-list"
 						[deckstring]="value.selectedDeck?.deckstring"
