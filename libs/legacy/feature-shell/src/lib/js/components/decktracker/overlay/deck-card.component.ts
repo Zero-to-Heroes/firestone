@@ -289,6 +289,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 	private _uniqueId: string;
 	private _zone: DeckZone;
 	private _flavorTextTimeout: any;
+	private _currentFlavorNotificationId: string | null = null;
 
 	private showUpdatedCost$$ = new BehaviorSubject<boolean>(false);
 	private showStatsChange$$ = new BehaviorSubject<boolean>(false);
@@ -686,13 +687,18 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 			clearTimeout(this._flavorTextTimeout);
 		}
 
+		// Store the notification ID
+		const notificationId = `flavor-text-${this.entityId || this.cardId}`;
+		this._currentFlavorNotificationId = notificationId;
+
 		// Add a slight delay before showing flavor text to avoid flickering
 		this._flavorTextTimeout = setTimeout(() => {
 			const sanitizedFlavor = this.transformFlavor(flavorText);
+			// Show the notification with a long timeout, we'll manually hide it on mouse leave
 			this.notificationService.emitNewNotification({
-				notificationId: `flavor-text-${this.cardId}`,
+				notificationId: notificationId,
 				content: `
-					<div class="general-message-container general-theme flavor-text-notification">
+					<div class="general-message-container general-theme flavor-text-notification" data-notification-id="${notificationId}">
 						<div class="message">
 							<div class="title">
 								<span>${this.cardName}</span>
@@ -700,10 +706,10 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 							<p class="text flavor-text">${sanitizedFlavor}</p>
 						</div>
 					</div>`,
-				timeout: 999999999,
+				timeout: 5000,
 				clickToClose: false,
 			});
-		}, 200);
+		}, 300);
 	}
 
 	private hideFlavorText() {
@@ -712,6 +718,9 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 			clearTimeout(this._flavorTextTimeout);
 			this._flavorTextTimeout = null;
 		}
+		
+		// Clear the notification ID reference
+		this._currentFlavorNotificationId = null;
 	}
 
 	private transformFlavor(flavor: string): string {
@@ -722,6 +731,5 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 			.replace(/<br>/g, ' ')
 			.replace(/[x]/g, '');
 		return result;
-		}
 	}
 }
