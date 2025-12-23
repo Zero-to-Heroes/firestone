@@ -75,6 +75,7 @@ export interface StaticGeneratingCardInput {
 		opponentDeckState: DeckState;
 		gameState: GameState;
 		validArenaPool: readonly string[];
+		initialDecklist: readonly string[];
 	};
 }
 
