@@ -533,7 +533,13 @@ export interface CardTooltipAdditionalInfo {
 	readonly healthBuff?: number | null;
 }
 export const isGuessedInfoEmpty = (info: CardTooltipAdditionalInfo | null) => {
-	return info?.cost == null && info?.attackBuff == null && info?.healthBuff == null && !info?.spellSchools?.length;
+	return (
+		info?.cost == null &&
+		info?.attackBuff == null &&
+		info?.healthBuff == null &&
+		!info?.spellSchools?.length &&
+		!info?.possibleCards?.length
+	);
 };
 
 interface InternalCard {

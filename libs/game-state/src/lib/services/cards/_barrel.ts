@@ -41,6 +41,7 @@ export { Fetch } from './fetch';
 export { FiddlefireImp } from './fiddlefire-imp';
 export { FoolsGold } from './fools-gold';
 export { ForgottenMillenium } from './forgotten-millenium';
+export { GorgonzormuDeliciousCheese } from './gorgonzormu-delicious-cheese';
 export { Grillmaster } from './grillmaster';
 export { GuitarSoloist } from './guitar-soloist';
 export { HagathaTheWitchBewitchHeroic } from './hagatha-the-witch-bewitch';

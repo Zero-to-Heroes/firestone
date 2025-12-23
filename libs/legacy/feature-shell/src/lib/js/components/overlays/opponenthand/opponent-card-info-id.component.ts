@@ -163,14 +163,9 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 			// We probably don't need to update the other fields, as they are not displayed
 			cardName: this.cardId === card.cardId ? card.cardName : this.allCards.getCard(this.cardId).name,
 		} as DeckCard);
-		const enhancedGuessInfo = enhanceGuessedInfo(card.guessedInfo, {
-			card: card,
-			createdBy: this.createdBy ? this.cardId : null,
-			currentTurn: currentTurn,
-		});
-		this.guessedInfo = isGuessedInfoEmpty(enhancedGuessInfo) ? null : enhancedGuessInfo;
-		if (enhancedGuessInfo?.possibleCards) {
-			this.possibleCards = [...(enhancedGuessInfo.possibleCards ?? [])];
+		this.guessedInfo = isGuessedInfoEmpty(card.guessedInfo) ? null : card.guessedInfo;
+		if (this.guessedInfo?.possibleCards) {
+			this.possibleCards = [...(this.guessedInfo!.possibleCards ?? [])];
 		} else if (this.forged) {
 			// Build the list of possible card classes based on the card classes in the deck that were part of the initial deck
 			// and the hero classes
@@ -304,20 +299,3 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 		return creatorCardId;
 	}
 }
-
-const enhanceGuessedInfo = (
-	guessedInfo: GuessedInfo,
-	input: { card: DeckCard; createdBy: string; currentTurn: number },
-): GuessedInfo => {
-	switch (input.card.cardId) {
-		case CardIds.Gorgonzormu_DeliciousCheeseToken_VAC_955t:
-			const createdAtTurn = input.card.metaInfo?.turnAtWhichCardEnteredHand as number;
-			const turnsInHand = input.currentTurn - createdAtTurn;
-			const cheeseCost = Math.min(10, 1 + turnsInHand);
-			return {
-				...(guessedInfo ?? {}),
-				cost: cheeseCost,
-			};
-	}
-	return guessedInfo;
-};
