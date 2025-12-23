@@ -357,6 +357,8 @@ import { OpponentMaxResourcesWidgetWrapperComponent } from '@components/overlays
 import { PlayerMaxResourcesWidgetWrapperComponent } from '@components/overlays/resources/player-max-resources-widget-wrapper.component';
 import { BgsHeroTipsWidgetWrapperComponent } from '@components/overlays/tips/bgs-hero-tips-widget-wrapper.component';
 import { BgsHeroTipsComponent } from '@components/overlays/tips/bgs-hero-tips.component';
+import { FlavorTextComponent } from './js/components/overlays/flavor-text/flavor-text.component';
+import { FlavorTextWidgetWrapperComponent } from './js/components/overlays/flavor-text/flavor-text-widget-wrapper.component';
 import { ChoosingBgsTrinketWidgetWrapperComponent } from '@components/overlays/trinket/choosing-bgs-trinket-widget-wrapper.component';
 import { ChoosingCardBgsTrinketOptionComponent } from '@components/overlays/trinket/choosing-card-bgs-trinket-option.component';
 import { ProfileMatchStatsClassInfoComponent } from '@components/stats/desktop/match-stats/profile-match-stats-class-info.component';
@@ -1236,6 +1238,8 @@ try {
 		BgsBattleSimulationWidgetWrapperComponent,
 		BgsBannedTribesWidgetWrapperComponent,
 		BgsHeroTipsWidgetWrapperComponent,
+		FlavorTextComponent,
+		FlavorTextWidgetWrapperComponent,
 		BgsWindowButtonWidgetWrapperComponent,
 		BgsHeroSelectionWidgetWrapperComponent,
 		BgsLeaderboardWidgetWrapperComponent,

@@ -280,6 +280,7 @@ export class Preferences implements IPreferences {
 	readonly overlayShowTooltipsOnHover: boolean = true;
 	readonly overlayShowRarityColors: boolean = true;
 	readonly overlayShowRelatedCards: boolean = true;
+	readonly overlayShowFlavorTextOnHover: boolean = false;
 	readonly overlayShowTransformedInto: boolean = true;
 	readonly overlayShowGiftedCardsInSeparateLine: boolean = false;
 	readonly overlayGroupSameCardsTogether: boolean = false;

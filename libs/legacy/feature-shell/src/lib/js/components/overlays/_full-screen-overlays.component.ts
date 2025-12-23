@@ -148,6 +148,8 @@ import { DebugService } from '../../services/debug.service';
 
 			<lottery-widget-wrapper></lottery-widget-wrapper>
 
+			<flavor-text-widget-wrapper></flavor-text-widget-wrapper>
+
 			<notifications></notifications>
 		</div>
 	`,
