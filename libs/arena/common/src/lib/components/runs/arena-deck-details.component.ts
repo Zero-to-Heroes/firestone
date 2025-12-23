@@ -12,14 +12,22 @@ import { ArenaNavigationService } from '../../services/arena-navigation.service'
 	selector: 'arena-deck-details',
 	styleUrls: [`./arena-deck-details.component.scss`],
 	template: `
-		<div class="arena-deck-details">
+			<div class="arena-deck-details">
 			<div class="deck-list-container" *ngIf="decklist$ | async as decklist">
-				<copy-deckstring
-					class="copy-deckcode"
-					[deckstring]="decklist"
-					[copyText]="'app.duels.deckbuilder.export-deckcode-button' | fsTranslate"
-				>
-				</copy-deckstring>
+				<div class="deck-buttons">
+					<copy-deckstring
+						class="copy-deckcode"
+						[deckstring]="decklist"
+						[copyText]="'app.duels.deckbuilder.export-deckcode-button' | fsTranslate"
+					>
+					</copy-deckstring>
+					<export-deck-image
+						class="export-deck-image"
+						[captureElementSelector]="'.deck-list-container .deck-list'"
+						[origin]="'arena-deck-details'"
+					>
+					</export-deck-image>
+				</div>
 				<deck-list-basic class="deck-list" [deckstring]="decklist"></deck-list-basic>
 			</div>
 			<div class="details">
