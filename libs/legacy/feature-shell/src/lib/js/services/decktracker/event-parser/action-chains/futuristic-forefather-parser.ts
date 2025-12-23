@@ -9,14 +9,12 @@ export class FuturisticForefatherParser implements ActionChainParser {
 	}
 
 	public async parse(currentState: GameState, events: GameEvent[]): Promise<GameState> {
-		const subSpellStartEvent = events[events.length - 1];
-		if (events[events.length - 2]?.type !== GameEvent.ENTITY_CHOSEN) {
-			return currentState;
-		}
-
-		const entityChoseEvent = events[events.length - 2];
+		const reversedEvents = [...events].reverse();
+		const subSpellStartEvent = reversedEvents.shift();
+		const entityChoseEvent = reversedEvents.find((e) => e.type === GameEvent.ENTITY_CHOSEN);
 		if (
-			entityChoseEvent.additionalData.context.creatorEntityId !== subSpellStartEvent.additionalData.parentEntityId
+			entityChoseEvent?.additionalData?.context?.creatorEntityId !==
+			subSpellStartEvent.additionalData.parentEntityId
 		) {
 			return currentState;
 		}
@@ -25,11 +23,19 @@ export class FuturisticForefatherParser implements ActionChainParser {
 			return currentState;
 		}
 
+		const choosingOptionsEvent = reversedEvents.find((e) => e.type === GameEvent.CHOOSING_OPTIONS);
+		const otherCards = choosingOptionsEvent?.additionalData?.options
+			?.filter((o) => o.EntityId !== entityChoseEvent.entityId)
+			.map((c) => c.CardId);
 		let opponentDeck = currentState.opponentDeck;
 		opponentDeck = opponentDeck.update({
 			additionalKnownCardsInHand: [
 				...opponentDeck.additionalKnownCardsInHand.filter((c) => c !== entityChoseEvent.cardId),
 				entityChoseEvent.cardId,
+			],
+			additionalKnownCardsInDeck: [
+				...opponentDeck.additionalKnownCardsInDeck.filter((c) => !otherCards.includes(c)),
+				...otherCards,
 			],
 		});
 		return currentState.update({
