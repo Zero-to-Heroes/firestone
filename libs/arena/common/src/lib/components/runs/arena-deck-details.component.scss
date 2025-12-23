@@ -19,11 +19,27 @@
 		min-height: 1px;
 		flex-shrink: 0;
 
-		.copy-deckcode {
-			width: 100%;
+		.deck-buttons {
+			display: flex;
+			flex-direction: row;
+			gap: 15px;
 			margin-bottom: 10px;
+			justify-content: center;
+		}
+
+		.copy-deckcode {
 			align-items: center;
 			justify-content: center;
+		}
+
+		.export-deck-image {
+			::ng-deep .export-deck-image {
+				--icon-color: var(--color-5);
+
+				&:hover {
+					--icon-color: var(--color-1);
+				}
+			}
 		}
 
 		.deck-list {
