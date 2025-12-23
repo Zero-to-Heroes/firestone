@@ -337,10 +337,11 @@ export class DeckState {
 		},
 	) {
 		let pool = [...this.hand, ...this.currentOptions].map((card) => card.cardId);
+		pool.concat(this.additionalKnownCardsInHand);
 		if (options?.includeBoard) {
 			pool = pool.concat(this.board.map((card) => card.cardId));
 		}
-		pool = pool.concat(this.deck.map((card) => card.cardId));
+		pool = pool.concat(this.deck.map((card) => card.cardId)).concat(this.additionalKnownCardsInDeck);
 		return pool
 			.concat(this.getCardsInSideboards())
 			.filter((cardId: string) => !!cardId)
