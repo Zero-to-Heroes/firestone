@@ -55,7 +55,7 @@ const report = async (
 			faceOff.battleInfo,
 			faceOff.battleResult,
 		);
-		if (!!allCards.getCards().length) {
+		if (!!allCards.getCards().length && !game.bgState.hasFaceOffError) {
 			bugService.submitAutomatedReport({
 				type: 'bg-sim',
 				info: JSON.stringify({

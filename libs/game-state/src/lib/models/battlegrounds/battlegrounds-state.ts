@@ -19,6 +19,7 @@ export class BattlegroundsState {
 	// On the other hand, it changes frequently, maybe as often as the state itself, so I'm not sure
 	readonly postMatchStats: BgsPostMatchStats;
 
+	readonly hasFaceOffError: boolean;
 	readonly duoPendingBoards: { playerBoard: PlayerBoard; opponentBoard: PlayerBoard }[] = [];
 	readonly playerTeams: MemoryBgsTeamInfo;
 

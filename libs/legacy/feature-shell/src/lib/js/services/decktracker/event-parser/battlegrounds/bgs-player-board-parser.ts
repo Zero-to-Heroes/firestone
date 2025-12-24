@@ -345,7 +345,11 @@ export class BgsPlayerBoardParser implements EventParser {
 				lastFaceOff,
 			);
 			console.debug(currentState, gameEvent);
-			return currentState;
+			return currentState.update({
+				bgState: currentState.bgState.update({
+					hasFaceOffError: true,
+				}),
+			});
 		}
 
 		const prefs = await this.prefs.getPreferences();
