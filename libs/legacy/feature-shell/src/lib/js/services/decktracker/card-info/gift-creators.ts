@@ -250,6 +250,8 @@ const internalGiftCreators = [
 	CardIds.DetailedNotes_GDB_844,
 	CardIds.DetectiveMurlocHolmes,
 	CardIds.DetectiveMurlocHolmesTavernBrawl,
+	CardIds.DevourMind_CORE_ICC_207,
+	CardIds.DevourMind_ICC_207,
 	CardIds.DevouringSwarm,
 	CardIds.DevoutBlessingsTavernBrawlToken,
 	CardIds.DigForTreasure_TOY_510,
