@@ -2078,7 +2078,7 @@ export const cardIdSelector = (
 				and(side(inputSide), or(inDeck, inHand), spell),
 				and(side(inputSide), or(inDeck, inHand), beast),
 			);
-		case 'AT_065': // King's Defender
+		case 'AT_065': // King's Defender - CardIds constant not available in @firestone-hs/reference-data
 			return and(side(inputSide), or(inDeck, inHand), minion, taunt);
 		case CardIds.KingTide_VAC_524:
 			return and(or(inDeck, inHand), spell);
