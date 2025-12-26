@@ -2078,6 +2078,8 @@ export const cardIdSelector = (
 				and(side(inputSide), or(inDeck, inHand), spell),
 				and(side(inputSide), or(inDeck, inHand), beast),
 			);
+		case 'AT_065': // King's Defender
+			return and(side(inputSide), or(inDeck, inHand), minion, taunt);
 		case CardIds.KingTide_VAC_524:
 			return and(or(inDeck, inHand), spell);
 		case CardIds.KnightOfAnointment:
