@@ -3,6 +3,7 @@ export { AeonWizard } from './aeon-wizard';
 export { AlakirTheWindsOfTime } from './alakir-the-winds-of-time';
 export { AlterTime } from './alter-time';
 export { Amirdrassil } from './amirdrassil';
+export { AmberWarden } from './amber-warden';
 export { AmuletOfCritters } from './amulet-of-critters';
 export { AmuletOfCrittersPhony } from './amulet-of-critters-phony';
 export { AmuletOfTracking } from './amulet-of-tracking';
