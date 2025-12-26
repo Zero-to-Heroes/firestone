@@ -4,7 +4,7 @@ import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/c
 import { GlobalHighlightCard } from './_registers';
 
 export const JimRaynor: GlobalHighlightCard = {
-	cardIds: [CardIds.JimRaynor_SC_400, CardIds.Thor_ThorExplosivePayloadToken_SC_414t],
+	cardIds: [CardIds.JimRaynor_SC_400, CardIds.Thor_SC_414, CardIds.Thor_ThorExplosivePayloadToken_SC_414t],
 	getRelatedCards: (entityId: number, side: HighlightSide, gameState: GameState, allCards: CardsFacadeService) => {
 		if (side === 'single' || side === 'arena-draft') {
 			return [];
