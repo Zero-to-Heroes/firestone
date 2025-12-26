@@ -1825,6 +1825,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), pirate);
 		case CardIds.Hullbreaker:
 			return and(side(inputSide), inDeck, spell);
+		case CardIds.HungeringAncient_EDR_494:
+			return and(side(inputSide), inDeck, minion);
 		case CardIds.HuskEternalReaper_TIME_618:
 			return and(side(inputSide), or(inHand, inDeck), generateCorpse);
 		case CardIds.Hybridization_TLC_236:
