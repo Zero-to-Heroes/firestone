@@ -1,6 +1,6 @@
-import { CardIds, CardType, GameTag, Zone } from '@firestone-hs/reference-data';
+import { CardClass, CardIds, CardType, GameTag, Zone } from '@firestone-hs/reference-data';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
-import { BattlegroundsState } from '../../models/_barrel';
+import { BattlegroundsState, hasOrHadHeroClass } from '../../models/_barrel';
 import { GameState } from '../../models/game-state';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
 import { CounterType } from '../_exports';
@@ -38,7 +38,7 @@ export class DarkGiftsCounterDefinitionV2 extends CounterDefinitionV2<readonly s
 
 	readonly opponent = {
 		pref: 'opponentDarkGiftsCounter' as const,
-		display: (state: GameState): boolean => true,
+		display: (state: GameState): boolean => hasOrHadHeroClass(state.opponentDeck?.hero, [CardClass.WARLOCK]),
 		value: (state: GameState): readonly string[] | null => {
 			const candidates =
 				state.fullGameState?.Opponent?.AllEntities?.filter(
