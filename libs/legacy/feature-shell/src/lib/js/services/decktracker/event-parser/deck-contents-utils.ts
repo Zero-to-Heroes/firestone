@@ -1,6 +1,5 @@
 import { CardClass, CardIds, CardType, GameTag, LIBRAM_IDS, Race, ReferenceCard } from '@firestone-hs/reference-data';
-import { broxigarFablePackage, DeckCard, DeckState } from '@firestone/game-state';
-import { TempCardIds } from '@firestone/shared/common/service';
+import { broxigarFablePackage, DeckCard, DeckState, kingLlaneFablePackage } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { hasRace } from '../../hs-utils';
 import { LocalizationFacadeService } from '../../localization-facade.service';
@@ -128,6 +127,8 @@ export const modifyDeckForSpecialCardEffects = (
 			return handleVanndarStormpike(deckState, allCards, i18n);
 		case CardIds.Broxigar_TIME_020:
 			return handleBroxigar(deckState, allCards, i18n);
+		case CardIds.GaronaHalforcen_KingLlaneToken_TIME_875t:
+			return handleKingLlane(deckState, allCards, i18n);
 		default:
 			return deckState;
 	}
@@ -218,6 +219,18 @@ const handleLorthemarTheron = (
 		cthunAtk: 2 * deckState.cthunAtk,
 		cthunHealth: 2 * deckState.cthunHealth,
 	});
+};
+
+const handleKingLlane = (
+	deckState: DeckState,
+	allCards: CardsFacadeService,
+	i18n: LocalizationFacadeService,
+): DeckState => {
+	const otherFableCards = kingLlaneFablePackage.filter((c) => c !== CardIds.GaronaHalforcen_KingLlaneToken_TIME_875t);
+	const result = deckState.update({
+		additionalKnownCardsInDeck: [...(deckState.additionalKnownCardsInDeck || []), ...otherFableCards],
+	});
+	return result;
 };
 
 const handleBroxigar = (

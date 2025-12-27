@@ -1,5 +1,12 @@
 import { CardIds, GameTag, hasMechanic } from '@firestone-hs/reference-data';
-import { broxigarFablePackage, DeckCard, DeckState, fablePackages, GameState } from '@firestone/game-state';
+import {
+	broxigarFablePackage,
+	DeckCard,
+	DeckState,
+	fablePackages,
+	GameState,
+	kingLlaneFablePackage,
+} from '@firestone/game-state';
 import { arraysEqual } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 
@@ -103,7 +110,7 @@ const revealRelatedCards = (deck: DeckState, card: DeckCard, allCards: CardsFaca
 		}
 
 		// Will be revealed on game start
-		if (arraysEqual(fablePackage, broxigarFablePackage)) {
+		if (arraysEqual(fablePackage, broxigarFablePackage) || arraysEqual(fablePackage, kingLlaneFablePackage)) {
 			return deck;
 		}
 

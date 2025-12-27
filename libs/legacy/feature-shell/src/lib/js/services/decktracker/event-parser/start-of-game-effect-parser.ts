@@ -22,12 +22,21 @@ export class StartOfGameEffectParser implements EventParser {
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 
-		if (cardId === CardIds.GaronaHalforcen_KingLlaneToken_TIME_875t) {
-			return currentState;
-		}
-
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
+
+		if (cardId === CardIds.GaronaHalforcen_KingLlaneToken_TIME_875t) {
+			const deckAfterSpecialCaseUpdate: DeckState = modifyDeckForSpecialCardEffects(
+				cardId,
+				deck,
+				this.allCards,
+				this.i18n,
+			);
+			return currentState.update({
+				[isPlayer ? 'playerDeck' : 'opponentDeck']: deckAfterSpecialCaseUpdate,
+			} as any);
+			return currentState;
+		}
 
 		const refCard = this.allCards.getCard(cardId);
 		const card = DeckCard.create({
