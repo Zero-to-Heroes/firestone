@@ -22,7 +22,6 @@ const CARD_SENDING_TO_TOP = [
 	// take the lazy approach and use the base card
 	CardIds.DarkGiftToken_EDR_102t,
 	CardIds.SweetDreamsToken_EDR_100t8,
-	CardIds.EyesInTheSky_TLC_521,
 ];
 
 export class CardBackToDeckParser implements EventParser {

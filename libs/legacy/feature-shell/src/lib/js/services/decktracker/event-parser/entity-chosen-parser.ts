@@ -5,12 +5,13 @@ import { GameEvent } from '../../../models/game-event';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
+const CARDS_THAT_WORK_ON_OPPONENT_DECK = [CardIds.EyesInTheSky_TLC_521, CardIds.FindTheImposter_SpyOMaticToken];
 const CARDS_THAT_PUT_ON_TOP = [
 	CardIds.SightlessWatcher,
 	CardIds.SightlessWatcherLegacy,
-	CardIds.FindTheImposter_SpyOMaticToken,
 	CardIds.DraconicHerald,
 	CardIds.TimewayWanderer,
+	...CARDS_THAT_WORK_ON_OPPONENT_DECK,
 ];
 
 export class EntityChosenParser implements EventParser {
@@ -57,7 +58,8 @@ export class EntityChosenParser implements EventParser {
 	private handleEvent(currentState: GameState, gameEvent: GameEvent): GameState {
 		const originCreatorCardId = gameEvent.additionalData?.context?.creatorCardId;
 		if (CARDS_THAT_PUT_ON_TOP.includes(originCreatorCardId)) {
-			return this.handleCardOnTop(currentState, gameEvent);
+			const result = this.handleCardOnTop(currentState, gameEvent);
+			return result;
 		} else if (originCreatorCardId === CardIds.NellieTheGreatThresher) {
 			// console.debug('handling nellie pirate crew');
 			return this.handleNelliePirateCrew(currentState, gameEvent);
@@ -82,18 +84,13 @@ export class EntityChosenParser implements EventParser {
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const otherOption = deck.currentOptions.find((o) => o.cardId !== CardIds.SphereOfSapience_ANewFateToken);
 		const candidateCards = deck.deck.filter((c) => c.cardId === otherOption.cardId);
-		console.debug('[sphere-of-sapience] candidateCards', candidateCards);
 		const card = candidateCards.find((c) => c.positionFromTop != null) || candidateCards[0];
-		console.debug('[sphere-of-sapience] card', card);
 		const newDeck = deck.deck.filter((c) => c !== card);
-		console.debug('[sphere-of-sapience] newDeck', newDeck);
 		const newCard = card.update({
 			positionFromTop: undefined,
 			positionFromBottom: DeckCard.deckIndexFromBottom++,
 		});
-		console.debug('[sphere-of-sapience] newCard', newCard);
 		const finalDeck = this.helper.addSingleCardToZone(newDeck, newCard);
-		console.debug('[sphere-of-sapience] finalDeck', finalDeck);
 		return currentState.update({
 			playerDeck: deck.update({
 				deck: finalDeck,
@@ -130,20 +127,15 @@ export class EntityChosenParser implements EventParser {
 
 	private handleCardOnTop(currentState: GameState, gameEvent: GameEvent): GameState {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
-		const isPlayer =
-			gameEvent.additionalData?.context?.creatorCardId === CardIds.FindTheImposter_SpyOMaticToken
-				? controllerId !== localPlayer.PlayerId
-				: controllerId === localPlayer.PlayerId;
+		const isPlayer = CARDS_THAT_WORK_ON_OPPONENT_DECK.includes(
+			gameEvent.additionalData?.context?.creatorCardId as CardIds,
+		)
+			? controllerId !== localPlayer.PlayerId
+			: controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
 		const cardInDeck = this.helper.findCardInZone(deck.deck, cardId, gameEvent.additionalData?.originalEntityId);
 		if (!cardInDeck) {
-			// console.debug(
-			// 	'[entity-chosen] card not found in deck',
-			// 	cardId,
-			// 	gameEvent.additionalData?.originalEntityId,
-			// 	deck.deck,
-			// );
 			return currentState;
 		}
 
@@ -162,9 +154,10 @@ export class EntityChosenParser implements EventParser {
 			deck: newDeck,
 		});
 
-		return currentState.update({
+		const result = currentState.update({
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
 		});
+		return result;
 	}
 
 	event(): string {
