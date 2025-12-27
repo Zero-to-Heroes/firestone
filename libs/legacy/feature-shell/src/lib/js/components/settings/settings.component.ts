@@ -1,4 +1,5 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, HostListener, OnDestroy } from '@angular/core';
+import { ScalingService } from '@firestone/shared/common/service';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { Subscription } from 'rxjs';
 import { DebugService } from '../../services/debug.service';
@@ -23,7 +24,11 @@ export class SettingsComponent implements AfterViewInit, OnDestroy {
 
 	private settingsSubscription: Subscription;
 
-	constructor(private debugService: DebugService, private ow: OverwolfService) {}
+	constructor(
+		private debugService: DebugService,
+		private ow: OverwolfService,
+		private readonly init_ScalingService: ScalingService,
+	) {}
 
 	async ngAfterViewInit() {
 		this.thisWindowId = (await this.ow.getCurrentWindow()).id;

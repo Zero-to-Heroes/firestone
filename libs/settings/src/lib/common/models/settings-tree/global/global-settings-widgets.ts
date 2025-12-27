@@ -14,6 +14,18 @@ export const globalWidgetSettings = (context: SettingContext): SettingNode => {
 				settings: [
 					{
 						type: 'slider',
+						field: 'helpTooltipScale',
+						label: context.i18n.translateString('settings.general.widgets.help-tooltip-size'),
+						tooltip: null,
+						sliderConfig: {
+							min: 30,
+							max: 200,
+							snapSensitivity: 5,
+							knobs: sizeKnobs(context),
+						},
+					},
+					{
+						type: 'slider',
 						field: 'globalWidgetScale',
 						label: context.i18n.translateString('settings.general.widgets.size'),
 						tooltip: context.i18n.translateString('settings.general.widgets.size-tooltip'),
