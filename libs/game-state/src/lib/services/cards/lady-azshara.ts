@@ -39,7 +39,9 @@ class LadyAzsharaParser implements ActionChainParser {
 			if (
 				![
 					CardIds.LadyAzshara_TheWellOfEternityToken_TIME_211t1,
+					CardIds.TheWellOfEternity_TheWellOfEternityToken_TIME_211t1t,
 					CardIds.LadyAzshara_ZinAzshariToken_TIME_211t2,
+					CardIds.ZinAzshari_ZinAzshariToken_TIME_211t2t,
 				].includes(cardId as CardIds)
 			) {
 				return currentState;
@@ -61,10 +63,22 @@ class LadyAzsharaParser implements ActionChainParser {
 			const newDeck = replaceInZone(deck.deck, entityId, cardIdToEmpower, refCard);
 			const newHand = replaceInZone(deck.hand, entityId, cardIdToEmpower, refCard);
 			const newBoard = replaceInZone(deck.board, entityId, cardIdToEmpower, refCard);
+			const newAdditionalKnownCardsInDeck = replaceInList(
+				deck.additionalKnownCardsInDeck,
+				cardIdToEmpower,
+				refCard,
+			);
+			const newAdditionalKnownCardsInHand = replaceInList(
+				deck.additionalKnownCardsInHand,
+				cardIdToEmpower,
+				refCard,
+			);
 			const newPlayerDeck = deck.update({
 				deck: newDeck,
 				hand: newHand,
 				board: newBoard,
+				additionalKnownCardsInDeck: newAdditionalKnownCardsInDeck,
+				additionalKnownCardsInHand: newAdditionalKnownCardsInHand,
 			});
 			return currentState.update({
 				[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
@@ -76,6 +90,10 @@ class LadyAzsharaParser implements ActionChainParser {
 		return currentState;
 	}
 }
+
+const replaceInList = (list: readonly string[], cardId: string, refCard: ReferenceCard): readonly string[] => {
+	return list.map((c) => (c === cardId ? refCard.id : c));
+};
 
 const replaceInZone = (
 	zone: readonly DeckCard[],

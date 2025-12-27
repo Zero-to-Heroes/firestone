@@ -279,7 +279,7 @@ export const fablePackages = [
 	],
 	[
 		CardIds.LadyAzshara_TIME_211,
-		CardIds.TheWellOfEternity_TheWellOfEternityToken_TIME_211t1t,
+		CardIds.LadyAzshara_TheWellOfEternityToken_TIME_211t1,
 		CardIds.LadyAzshara_ZinAzshariToken_TIME_211t2,
 	],
 	[
