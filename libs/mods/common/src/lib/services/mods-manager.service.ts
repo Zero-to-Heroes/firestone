@@ -48,6 +48,8 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 	private ow: OverwolfService;
 	private io: OwUtilsService;
 
+	private modsConfig: { trustedMods: readonly ModData[] } | null = null;
+
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'ModsManagerService', () => !!this.modsData$$);
 	}
@@ -68,8 +70,8 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 
 		await waitForReady(this.prefs, this.gameStatus);
 
-		const modsConfig = await this.api.callGetApi<{ trustedMods: readonly ModData[] }>(MODS_CONFIG_URL);
-		console.debug('[mods-manager] modsConfig', modsConfig);
+		this.modsConfig = await this.api.callGetApi<{ trustedMods: readonly ModData[] }>(MODS_CONFIG_URL);
+		console.debug('[mods-manager] modsConfig', this.modsConfig);
 
 		// this.gameStatus.inGame$$.pipe(distinctUntilChanged()).subscribe(async (inGame) => {
 		// 	const prefs = await this.prefs.getPreferences();
@@ -88,37 +90,8 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 				distinctUntilChanged(),
 			)
 			.subscribe(async (installPath) => {
-				const installedMods = await this.installedMods(installPath);
-				console.log(
-					'[mods-manager] installedMods',
-					installedMods?.map((m) => m.AssemblyName),
-				);
-				const allMods = [...(modsConfig?.trustedMods ?? [])];
-				console.log(
-					'[mods-manager] allMods',
-					allMods?.map((m) => m.AssemblyName),
-				);
-				for (const mod of installedMods) {
-					const existing: Mutable<ModData> | undefined = allMods.find(
-						(m) => m.AssemblyName === mod.AssemblyName,
-					);
-					if (!existing) {
-						allMods.push(mod);
-					} else {
-						existing.Version = mod.Version;
-						existing.Registered = mod.Registered;
-						existing.updateAvailableVersion = mod.updateAvailableVersion;
-						existing.DownloadLink = mod.DownloadLink;
-						existing.Name = mod.Name;
-						existing.alreadyInstalled = true;
-					}
-				}
-				const finalMods = allMods.sort(sortByProperties((m) => [m.Registered, m.Name]));
-				console.log(
-					'[mods-manager] finalMods',
-					finalMods?.map((m) => m.AssemblyName),
-				);
-				this.modsData$$.next(finalMods);
+				const refreshedMods = await this.refreshModsInternal(installPath);
+				this.modsData$$.next(refreshedMods);
 			});
 		console.debug('[mods-manager] initialized');
 	}
@@ -157,11 +130,14 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 			) ?? [],
 		);
 		console.debug('[mods-manager] bepInExConfigs', bepInExConfigs);
+		// console.log('[mods-manager] bepInExConfigs', bepInExConfigs.length);
 
 		// Then we look into the plugins folder. This is only useful to remove configs that don't have a
 		// corresponding plugin
 		const pluginsFiles = await this.ow.listFilesInDirectory(`${installPath}\\${modsLocation}\\`);
+		console.debug('[mods-manager] pluginsFiles', pluginsFiles, installPath);
 		const uniqueFiles = pluginsFiles.data?.filter((f) => f.type === 'file').map((f) => f.name);
+		console.debug('[mods-manager] uniqueFiles', uniqueFiles);
 		const validConfigs = bepInExConfigs.filter(
 			(c) =>
 				uniqueFiles.includes(c.AssemblyName + '.dll') || uniqueFiles.includes(c.AssemblyName + '.dll.disabled'),
@@ -184,6 +160,38 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 			return result;
 		});
 		return pluginConfigs;
+	}
+
+	private async refreshModsInternal(installPath: string): Promise<readonly ModData[]> {
+		const installedMods = await this.installedMods(installPath);
+		console.log(
+			'[mods-manager] installedMods 0',
+			installedMods?.map((m) => m.AssemblyName),
+		);
+		const allMods = [...(this.modsConfig?.trustedMods ?? [])];
+		console.log(
+			'[mods-manager] allMods',
+			allMods?.map((m) => m.AssemblyName),
+		);
+		for (const mod of installedMods) {
+			const existing: Mutable<ModData> | undefined = allMods.find((m) => m.AssemblyName === mod.AssemblyName);
+			if (!existing) {
+				allMods.push(mod);
+			} else {
+				existing.Version = mod.Version;
+				existing.Registered = mod.Registered;
+				existing.updateAvailableVersion = mod.updateAvailableVersion;
+				existing.DownloadLink = mod.DownloadLink;
+				existing.Name = mod.Name;
+				existing.alreadyInstalled = true;
+			}
+		}
+		const finalMods = allMods.sort(sortByProperties((m) => [m.Name]));
+		console.log(
+			'[mods-manager] finalMods',
+			finalMods?.map((m) => m.AssemblyName),
+		);
+		return finalMods;
 	}
 
 	public async enableMods(
@@ -360,11 +368,7 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 		}
 
 		// Refresh the mods
-		const installedMods = await this.installedMods(installPath);
-		console.log(
-			'[mods-manager] installedMods',
-			installedMods?.map((m) => m.AssemblyName),
-		);
+		const installedMods = await this.refreshModsInternal(installPath);
 		this.modsData$$.next(installedMods);
 	}
 
