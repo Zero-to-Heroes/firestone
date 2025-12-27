@@ -239,32 +239,8 @@ const handleBroxigar = (
 	i18n: LocalizationFacadeService,
 ): DeckState => {
 	const otherFableCards = broxigarFablePackage.filter((c) => c !== CardIds.Broxigar_TIME_020);
-	let newDeckContents = deckState.deck;
-	for (const otherFableCard of otherFableCards) {
-		const otherRef = allCards.getCard(otherFableCard);
-		const card = DeckCard.create({
-			entityId: undefined,
-			cardId: otherFableCard,
-			cardName: otherRef.name,
-			refManaCost: otherRef?.cost,
-			rarity: otherRef?.rarity?.toLowerCase(),
-			zone: null,
-		});
-
-		const shouldUpdate =
-			!deckState.deckList?.length &&
-			!deckState.deckstring &&
-			!deckState.deck.some((e) => e.cardId === otherFableCard);
-		if (shouldUpdate) {
-			const fillerCard = newDeckContents.find(
-				(card) => !card.entityId && !card.cardId && !card.cardName && !card.creatorCardId,
-			);
-			newDeckContents = newDeckContents.filter((e) => e !== fillerCard);
-			newDeckContents = [...newDeckContents, card];
-		}
-	}
 	const result = deckState.update({
-		deck: newDeckContents,
+		additionalKnownCardsInDeck: [...(deckState.additionalKnownCardsInDeck || []), ...otherFableCards],
 	});
 	return result;
 };
