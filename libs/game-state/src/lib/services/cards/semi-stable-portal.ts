@@ -1,17 +1,30 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import { CardIds, CardType, GameTag } from '@firestone-hs/reference-data';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { DeckCard, GuessedInfo } from '../../models/deck-card';
-import { DeckState } from '../../models/deck-state';
-import { GeneratingCard, GuessInfoInput } from './_card.type';
-import { AllCardsService } from '@firestone-hs/reference-data';
+import { CardIds, CardType } from '@firestone-hs/reference-data';
+import { GuessedInfo } from '../../models/deck-card';
+import { hasCorrectType, hasCost } from '../../related-cards/dynamic-pools';
+import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
+import { filterCards } from './utils';
 
-export const SemiStablePortal: GeneratingCard = {
+export const SemiStablePortal: GeneratingCard & StaticGeneratingCard = {
 	cardIds: [CardIds.SemiStablePortal_TIME_000],
 	publicCreator: true,
+	dynamicPool: (input: StaticGeneratingCardInput) => {
+		return filterCards(
+			SemiStablePortal.cardIds[0],
+			input.allCards,
+			(c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 2),
+			input.inputOptions,
+		);
+	},
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
 		return {
 			cardType: CardType.MINION,
+			possibleCards: filterCards(
+				SemiStablePortal.cardIds[0],
+				input.allCards,
+				(c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 2),
+				input.options,
+			),
 		};
 	},
 };
