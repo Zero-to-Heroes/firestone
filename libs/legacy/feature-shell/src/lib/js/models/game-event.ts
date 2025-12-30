@@ -144,6 +144,7 @@ export class GameEvent implements GameStateEvent {
 	public static readonly COPIED_FROM_ENTITY_ID = 'COPIED_FROM_ENTITY_ID';
 	public static readonly CHOOSING_OPTIONS = 'CHOOSING_OPTIONS';
 	public static readonly SPECIAL_CARD_POWER_TRIGGERED = 'SPECIAL_CARD_POWER_TRIGGERED';
+	public static readonly SPECIAL_TARGET = 'SPECIAL_TARGET';
 	public static readonly WHEEL_OF_DEATH_COUNTER_UPDATED = 'WHEEL_OF_DEATH_COUNTER_UPDATED';
 
 	public static readonly SPECTATING = 'SPECTATING';

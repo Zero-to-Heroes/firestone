@@ -15,6 +15,7 @@ export class ActionsChainParser implements EventParser {
 		GameEvent.CARD_PLAYED,
 		GameEvent.CARD_REMOVED_FROM_BOARD,
 		GameEvent.CARD_REMOVED_FROM_DECK,
+		GameEvent.SPECIAL_TARGET,
 		GameEvent.CARD_STOLEN,
 		GameEvent.CHOOSING_OPTIONS,
 		GameEvent.ENTITY_CHOSEN,

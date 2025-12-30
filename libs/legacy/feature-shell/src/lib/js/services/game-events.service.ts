@@ -1733,6 +1733,14 @@ export class GameEvents {
 					}),
 				);
 				break;
+			case 'SPECIAL_TARGET':
+				this.doEventDispatch(
+					GameEvent.build(GameEvent.SPECIAL_TARGET, gameEvent, {
+						targetCardId: gameEvent.Value.AdditionalProps.TargetCardId,
+						targetEntityId: gameEvent.Value.AdditionalProps.TargetEntityId,
+					}),
+				);
+				break;
 			case 'WHEEL_OF_DEATH_COUNTER_UPDATED':
 				this.doEventDispatch(
 					GameEvent.build(GameEvent.WHEEL_OF_DEATH_COUNTER_UPDATED, gameEvent, {
