@@ -1,7 +1,7 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { CardIds, CardType } from '@firestone-hs/reference-data';
 import { GuessedInfo } from '../../models/deck-card';
-import { canBeDiscoveredByClass } from '../../related-cards/dynamic-pools';
+import { canBeDiscoveredByClass, hasCorrectType } from '../../related-cards/dynamic-pools';
 import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
 
@@ -20,7 +20,7 @@ export const RazzleDazzler: GeneratingCard & StaticGeneratingCard = {
 			input.allCards,
 			(c) => {
 				// Must be a spell
-				if (c.type?.toUpperCase() !== CardType[CardType.SPELL]) {
+				if (!hasCorrectType(c, CardType.SPELL)) {
 					return false;
 				}
 
@@ -49,7 +49,7 @@ export const RazzleDazzler: GeneratingCard & StaticGeneratingCard = {
 				input.allCards,
 				(c) => {
 					// Must be a spell
-					if (c.type?.toUpperCase() !== CardType[CardType.SPELL]) {
+					if (!hasCorrectType(c, CardType.SPELL)) {
 						return false;
 					}
 
