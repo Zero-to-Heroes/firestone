@@ -704,7 +704,7 @@ export const cardIdSelector = (
 		case CardIds.ChattyBartender:
 			return and(side(inputSide), inDeck, secret);
 		case CardIds.ChattyMacaw_VAC_407:
-			return and(side(inputSide), or(inDeck, inHand, inOther), spell);
+			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.ChemicalSpill_TOY_602:
 			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.ChiaDrake_TOY_801:
