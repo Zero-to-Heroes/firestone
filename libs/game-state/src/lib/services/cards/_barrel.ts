@@ -122,6 +122,7 @@ export { TrustFall } from './trust-fall';
 export { TwilightMender } from './twilight-mender';
 export { UmpireGrasp } from './umpire-grasp';
 export { UndercityHuckster } from './undercity-huckster';
+export { UnstablePortal } from './unstable-portal';
 export { VarianKingOfStormwind } from './varian-king-of-stormwind';
 export { WarCache } from './war-cache';
 export { WelcomeHome } from './welcome-home';
