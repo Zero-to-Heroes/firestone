@@ -5,26 +5,26 @@ import { hasCorrectType } from '../../related-cards/dynamic-pools';
 import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
 
-// Semi-Stable Portal (TIME_000)
-// "<b>Rewind</b> Add a random minion to your hand. It costs (3) less."
-export const SemiStablePortal: GeneratingCard & StaticGeneratingCard = {
-	cardIds: [CardIds.SemiStablePortal_TIME_000],
+// The Sunwell (RLK_590)
+// "Fill your hand with random spells. Costs (1) less for each other card in your hand."
+export const TheSunwell: GeneratingCard & StaticGeneratingCard = {
+	cardIds: [CardIds.TheSunwell],
 	publicCreator: true,
 	dynamicPool: (input: StaticGeneratingCardInput) => {
 		return filterCards(
-			SemiStablePortal.cardIds[0],
+			TheSunwell.cardIds[0],
 			input.allCards,
-			(c) => hasCorrectType(c, CardType.MINION),
+			(c) => hasCorrectType(c, CardType.SPELL),
 			input.inputOptions,
 		);
 	},
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
 		return {
-			cardType: CardType.MINION,
+			cardType: CardType.SPELL,
 			possibleCards: filterCards(
-				SemiStablePortal.cardIds[0],
+				TheSunwell.cardIds[0],
 				input.allCards,
-				(c) => hasCorrectType(c, CardType.MINION),
+				(c) => hasCorrectType(c, CardType.SPELL),
 				input.options,
 			),
 		};
