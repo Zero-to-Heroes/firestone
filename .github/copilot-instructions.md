@@ -2,9 +2,10 @@
 
 General guidelines:
 
-- When cards are mentioned, always check the reference at https://github.com/Zero-to-Heroes/hs-reference-data/blob/master/src/cards_short.json and recap their text in the PR
+- When cards are mentioned, always check the reference at https://github.com/Zero-to-Heroes/hs-reference-data/blob/master/src/cards_short.json
+- Recap their text / effects at the top of the file that implements the card. This will help you make sure you're implementing the card correctly, and will help the reviewer understand what you're doing
 - Do not touch files that are flagged as automatically generated (there is a comment in the header)
-- card ids are at https://github.com/Zero-to-Heroes/hs-reference-data/blob/master/src/card-ids.ts
+- Card IDs are at https://github.com/Zero-to-Heroes/hs-reference-data/blob/master/src/card-ids.ts
 
 ### Card highlight requests
 
