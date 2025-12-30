@@ -7,5 +7,6 @@ export interface BgsMinionsGroup {
 	readonly minions: readonly ExtendedReferenceCard[];
 	readonly highlightedMinions: readonly string[];
 	readonly highlightedTribes: readonly Race[];
+	readonly highlightedTiers: readonly number[];
 	readonly highlightedMechanics: readonly GameTag[];
 }

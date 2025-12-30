@@ -61,6 +61,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 				[showTribesHighlight]="showTribesHighlight$ | async"
 				[highlightedMinions]="highlightedMinions$ | async"
 				[highlightedTribes]="highlightedTribes$ | async"
+				[highlightedTiers]="highlightedTiers$ | async"
 				[highlightedMechanics]="highlightedMechanics$ | async"
 				[enableMouseOver]="enableMouseOver$ | async"
 				[showGoldenCards]="showGoldenCards$ | async"
@@ -81,6 +82,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 	tiers$: Observable<readonly Tier[]>;
 	compositions$: Observable<readonly ExtendedBgsCompAdvice[]>;
 	highlightedTribes$: Observable<readonly Race[]>;
+	highlightedTiers$: Observable<readonly number[]>;
 	highlightedMechanics$: Observable<readonly GameTag[]>;
 	highlightedMinions$: Observable<readonly string[]>;
 	currentTurn$: Observable<number>;
@@ -329,7 +331,6 @@ export class BattlegroundsMinionsTiersOverlayComponent
 			),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			shareReplay(1),
-			// tap((ownedCards) => console.debug('[bgs] owned cards', ownedCards)),
 			takeUntil(this.destroyed$),
 		);
 		const boardComposition$: Observable<readonly MinionInfo[]> = combineLatest([
@@ -408,6 +409,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 		);
 
 		this.highlightedTribes$ = this.highlighter.highlightedTribes$$.pipe(this.mapData((info) => info));
+		this.highlightedTiers$ = this.highlighter.highlightedTiers$$.pipe(this.mapData((info) => info));
 		this.highlightedMechanics$ = this.highlighter.highlightedMechanics$$.pipe(this.mapData((info) => info));
 		this.highlightedMinions$ = this.highlighter.highlightedMinions$$.pipe(this.mapData((info) => info));
 		this.currentTurn$ = this.gameState.gameState$$.pipe(this.mapData((main) => main.currentTurnNumeric));

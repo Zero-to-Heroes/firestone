@@ -92,6 +92,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 								[selected]="isDisplayed(currentTier) || isLocked(currentTier)"
 								(mouseover)="onTavernMouseOver(currentTier)"
 								(click)="onTavernClick(currentTier)"
+								(contextmenu)="onTavernRightClick(currentTier)"
 							></tier-icon>
 						</ul>
 						<ul class="tiers tribe">
@@ -149,7 +150,6 @@ export class BattlegroundsMinionsListTiersHeader2Component
 		// so that we don't change the display if the user wants to keep the focus on another
 		// tier (eg tier 5 or 6 to see their endgame options)
 		if (this.lockedTier && this.lockedTier.tavernTier && this.lockedTier.tavernTier === this.currentTavernTier) {
-			// console.debug('will set locked tier', this.lockedTier, this.currentTavernTier);
 			this.setDisplayedTier(null);
 			this.setLockedTier(this.getAllTiers().find((t) => t.tavernTier === value));
 		}
@@ -190,7 +190,6 @@ export class BattlegroundsMinionsListTiersHeader2Component
 		const unselecting = this.selectedCategory$$.getValue() === category;
 		this.setLockedTier(undefined);
 		this.setDisplayedTier(undefined);
-		// console.debug('selecting', category, this.selectedCategory$$.getValue(), unselecting);
 		this.selectedCategory$$.next(category);
 		if (selectItem && !unselecting) {
 			this.analytics.trackEvent('bgs-minions-list', { category: category });
@@ -232,7 +231,6 @@ export class BattlegroundsMinionsListTiersHeader2Component
 	}
 
 	onTavernRightClick(tavernTier: Tier) {
-		console.debug('right click', tavernTier);
 		if (!tavernTier?.tavernTierData) {
 			return;
 		}
@@ -243,6 +241,9 @@ export class BattlegroundsMinionsListTiersHeader2Component
 				break;
 			case 'mechanics':
 				this.highlighter.toggleMechanicsToHighlight([tavernTier.tavernTierData as GameTag]);
+				break;
+			case 'standard':
+				this.highlighter.toggleTiersToHighlight([tavernTier.tavernTierData as number]);
 				break;
 		}
 	}
@@ -285,13 +286,11 @@ export class BattlegroundsMinionsListTiersHeader2Component
 	}
 
 	private setLockedTier(tavernTier: Tier) {
-		// console.debug('setLockedTier', tavernTier, new Error().stack);
 		this.lockedTier = tavernTier;
 		this.lockedTierChange.next(tavernTier);
 	}
 
 	private setDisplayedTier(tavernTier: Tier) {
-		// console.debug('setDisplayedTier', tavernTier, new Error().stack);
 		this.displayedTier = tavernTier;
 		this.displayedTierChange.next(tavernTier);
 	}

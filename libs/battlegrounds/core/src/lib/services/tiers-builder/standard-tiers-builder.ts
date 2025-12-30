@@ -58,12 +58,14 @@ export const buildTierForTavernTier = (
 	const groups: readonly (TierGroup | null)[] = config?.showSpellsAtBottom
 		? [...tribeGroups, spellGroup]
 		: [spellGroup, ...tribeGroups];
+	const tierName = i18n.translateString(`app.battlegrounds.tier-list.tier`, { value: tier });
 	const result: Tier = {
 		type: 'standard',
 		tavernTier: tier,
-		// tavernTierIcon: null,
+		tierName: tierName,
+		tavernTierData: tier,
 		tavernTierIcon: `https://static.zerotoheroes.com/hearthstone/asset/coliseum/images/battlegrounds/tavern_banner_${tier}.png`,
-		tooltip: i18n.translateString(`app.battlegrounds.tier-list.tier`, { value: tier }),
+		tooltip: i18n.translateString(`battlegrounds.in-game.minions-list.tier-category-tooltip`, { value: tier }),
 		groups: groups.filter((g) => !!g?.cards?.length) as readonly TierGroup[],
 	};
 	return result;
@@ -80,6 +82,7 @@ const buildSpellGroup = (
 		label: i18n.translateString(`global.tribe.spell`),
 		cards: cardForGroup,
 		tribe: null,
+		tier: null,
 	};
 	return result;
 };
@@ -130,6 +133,7 @@ const buildTribeGroup = (
 		),
 		cards: cardForGroup,
 		tribe: targetTribe ?? Race.BLANK,
+		tier: null,
 	};
 	return result;
 };

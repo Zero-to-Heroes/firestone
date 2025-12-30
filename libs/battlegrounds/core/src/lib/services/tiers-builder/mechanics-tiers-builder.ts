@@ -150,12 +150,14 @@ const buildTimewarpedGroups = (
 		label: i18n.translateString(`app.battlegrounds.tier-list.minor-timewarped-tier`),
 		cards: minorTimewarpCards,
 		tribe: null,
+		tier: null,
 	};
 	const majorTimewarpCards = cardsForMechanics.filter((card) => card.techLevel === 5 && isBgsTimewarped(card));
 	const majorTimewarpGroup: TierGroup = {
 		label: i18n.translateString(`app.battlegrounds.tier-list.major-timewarped-tier`),
 		cards: majorTimewarpCards,
 		tribe: null,
+		tier: null,
 	};
 	return [minorTimewarpGroup, majorTimewarpGroup];
 };
@@ -177,6 +179,7 @@ const buildTrinketGroup = (
 		label: i18n.translateString(`battlegrounds.in-game.opponents.trinkets-title`),
 		cards: cardForGroup,
 		tribe: null,
+		tier: null,
 	};
 	return result;
 };
@@ -192,6 +195,7 @@ const buildSpellGroup = (
 		label: i18n.translateString(`global.tribe.spell`),
 		cards: cardForGroup,
 		tribe: null,
+		tier: null,
 	};
 	return result;
 };
@@ -211,6 +215,7 @@ const buildTierGroup = (
 			label: i18n.translateString(`app.battlegrounds.tier-list.tier`, { value: techLevel }),
 			cards: cards,
 			tribe: null,
+			tier: techLevel,
 		};
 		return result;
 	}

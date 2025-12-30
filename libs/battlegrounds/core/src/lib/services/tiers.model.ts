@@ -21,6 +21,7 @@ export interface Tier {
 export interface TierGroup {
 	readonly label: string;
 	readonly tribe: Race | null;
+	readonly tier: number | null;
 	readonly cards: readonly ExtendedReferenceCard[];
 }
 

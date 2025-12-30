@@ -120,6 +120,9 @@ export class BattlegroundsMinionItemComponent extends AbstractSubscriptionCompon
 	@Input() set highlightedTribes(value: readonly Race[]) {
 		this.highlightedTribes$$.next(value ?? []);
 	}
+	@Input() set highlightedTiers(value: readonly number[]) {
+		this.highlightedTiers$$.next(value ?? []);
+	}
 	@Input() set highlightedMechanics(value: readonly GameTag[]) {
 		this.highlightedMechanics$$.next(value ?? []);
 	}
@@ -143,6 +146,7 @@ export class BattlegroundsMinionItemComponent extends AbstractSubscriptionCompon
 	private showTrinketTips$$ = new BehaviorSubject<boolean>(true);
 	private highlightedMinions$$ = new BehaviorSubject<readonly string[]>([]);
 	private highlightedTribes$$ = new BehaviorSubject<readonly Race[]>([]);
+	private highlightedTiers$$ = new BehaviorSubject<readonly number[]>([]);
 	private highlightedMechanics$$ = new BehaviorSubject<readonly GameTag[]>([]);
 	private fadeHigherTierCards$$ = new BehaviorSubject<boolean>(false);
 	private tavernTier$$ = new BehaviorSubject<number | null>(null);
@@ -178,12 +182,20 @@ export class BattlegroundsMinionItemComponent extends AbstractSubscriptionCompon
 			this.showGoldenCards$$,
 			this.highlightedMinions$$,
 			this.highlightedTribes$$,
+			this.highlightedTiers$$,
 			this.highlightedMechanics$$,
 			this.fadeHigherTierCards$$,
 			this.tavernTier$$,
 		]).pipe(
 			filter(
-				([minion, showGoldenCards, highlightedMinions, highlightedTribes, highlightedMechanics]) => !!minion,
+				([
+					minion,
+					showGoldenCards,
+					highlightedMinions,
+					highlightedTribes,
+					highlightedTiers,
+					highlightedMechanics,
+				]) => !!minion,
 			),
 			this.mapData(
 				([
@@ -191,17 +203,11 @@ export class BattlegroundsMinionItemComponent extends AbstractSubscriptionCompon
 					showGoldenCards,
 					highlightedMinions,
 					highlightedTribes,
+					highlightedTiers,
 					highlightedMechanics,
 					fadeHigherTierCards,
 					tavernTier,
 				]) => {
-					// console.debug(
-					// 	'[bgs-minion-item] building minion',
-					// 	card,
-					// 	highlightedMinions,
-					// 	highlightedTribes,
-					// 	highlightedMechanics,
-					// );
 					const mechanicsHighlights: readonly MinionHighlight[] = MECHANICS_IN_GAME.filter(
 						(m) => m.canBeHighlighted !== false,
 					).map((m) => {

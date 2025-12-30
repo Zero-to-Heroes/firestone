@@ -32,6 +32,7 @@ import { Observable } from 'rxjs';
 				[showTribesHighlight]="showTribesHighlight"
 				[highlightedMinions]="highlightedMinions"
 				[highlightedTribes]="highlightedTribes"
+				[highlightedTiers]="highlightedTiers"
 				[highlightedMechanics]="highlightedMechanics"
 				[showGoldenCards]="showGoldenCards"
 				[showTrinketTips]="showTrinketTips"
@@ -51,6 +52,7 @@ export class BgsCompositionsListComponent extends AbstractSubscriptionComponent 
 
 	@Input() compositions: readonly ExtendedBgsCompAdvice[];
 	@Input() highlightedTribes: readonly Race[];
+	@Input() highlightedTiers: readonly number[];
 	@Input() highlightedMechanics: readonly GameTag[];
 	@Input() highlightedMinions: readonly string[];
 	@Input() showTribesHighlight: boolean;
@@ -60,7 +62,10 @@ export class BgsCompositionsListComponent extends AbstractSubscriptionComponent 
 	@Input() minionsInShop: readonly string[];
 	@Input() tavernTier: number;
 
-	constructor(protected override readonly cdr: ChangeDetectorRef, private readonly prefs: PreferencesService) {
+	constructor(
+		protected override readonly cdr: ChangeDetectorRef,
+		private readonly prefs: PreferencesService,
+	) {
 		super(cdr);
 	}
 

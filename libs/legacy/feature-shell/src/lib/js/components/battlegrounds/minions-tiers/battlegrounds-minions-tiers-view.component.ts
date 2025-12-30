@@ -54,6 +54,7 @@ import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 									[showTribesHighlight]="showTribesHighlight"
 									[highlightedMinions]="highlightedMinions"
 									[highlightedTribes]="highlightedTribes"
+									[highlightedTiers]="highlightedTiers"
 									[highlightedMechanics]="highlightedMechanics"
 									[showGoldenCards]="showGoldenCards"
 									[showTrinketTips]="showTrinketTips"
@@ -97,6 +98,7 @@ export class BattlegroundsMinionsTiersViewOverlayComponent
 	@Input() showTrinketTips: boolean;
 
 	@Input() highlightedTribes: readonly Race[];
+	@Input() highlightedTiers: readonly number[];
 	@Input() highlightedMechanics: readonly GameTag[];
 	@Input() highlightedMinions: readonly string[];
 	@Input() minionsOnBoardAndHand: readonly string[];

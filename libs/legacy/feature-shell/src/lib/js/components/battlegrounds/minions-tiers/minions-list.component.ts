@@ -57,6 +57,7 @@ import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 				[showTrinketTips]="showTrinketTips"
 				[highlightedMinions]="highlightedMinions"
 				[highlightedTribes]="highlightedTribes$ | async"
+				[highlightedTiers]="highlightedTiers$ | async"
 				[highlightedMechanics]="highlightedMechanics$ | async"
 			></bgs-minions-group>
 
@@ -75,6 +76,7 @@ import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 export class BattlegroundsMinionsListComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	highlighted$: Observable<boolean>;
 	highlightedTribes$: Observable<readonly Race[]>;
+	highlightedTiers$: Observable<readonly number[]>;
 	highlightedMechanics$: Observable<readonly GameTag[]>;
 	groups$: Observable<readonly TierGroup[]>;
 	groupBy$: Observable<'tribe' | 'tier'>;
@@ -98,6 +100,9 @@ export class BattlegroundsMinionsListComponent extends AbstractSubscriptionCompo
 	@Input() set highlightedTribes(value: readonly Race[]) {
 		this.highlightedTribes$$.next(value);
 	}
+	@Input() set highlightedTiers(value: readonly number[]) {
+		this.highlightedTiers$$.next(value);
+	}
 	@Input() set highlightedMechanics(value: readonly GameTag[]) {
 		this.highlightedMechanics$$.next(value);
 	}
@@ -112,8 +117,9 @@ export class BattlegroundsMinionsListComponent extends AbstractSubscriptionCompo
 	private groups$$ = new BehaviorSubject<readonly TierGroup[]>([]);
 	private searchString$$ = new BehaviorSubject<string | null>(null);
 	private highlightedTribes$$ = new BehaviorSubject<readonly Race[]>([]);
+	private highlightedTiers$$ = new BehaviorSubject<readonly number[]>([]);
 	private highlightedMechanics$$ = new BehaviorSubject<readonly GameTag[]>([]);
-	private tavernTierData$$ = new BehaviorSubject<GameTag | Race | null>(null);
+	private tavernTierData$$ = new BehaviorSubject<GameTag | Race | number | null>(null);
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
@@ -127,16 +133,19 @@ export class BattlegroundsMinionsListComponent extends AbstractSubscriptionCompo
 		await waitForReady(this.prefs);
 		this.groupBy$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsSingleTierGroup));
 		this.highlightedTribes$ = this.highlightedTribes$$.asObservable();
+		this.highlightedTiers$ = this.highlightedTiers$$.asObservable();
 		this.highlightedMechanics$ = this.highlightedMechanics$$.asObservable();
 		this.highlighted$ = combineLatest([
 			this.highlightedTribes$,
+			this.highlightedTiers$,
 			this.highlightedMechanics$,
 			this.tavernTierData$$,
 		]).pipe(
-			this.mapData(([highlightedTribes, highlightedMechanics, tavernTierData]) => {
+			this.mapData(([highlightedTribes, highlightedTiers, highlightedMechanics, tavernTierData]) => {
 				return (
 					highlightedTribes?.includes(tavernTierData as Race) ||
-					highlightedMechanics?.includes(tavernTierData as GameTag)
+					highlightedMechanics?.includes(tavernTierData as GameTag) ||
+					highlightedTiers?.includes(tavernTierData as number)
 				);
 			}),
 		);
@@ -172,6 +181,9 @@ export class BattlegroundsMinionsListComponent extends AbstractSubscriptionCompo
 				break;
 			case 'mechanics':
 				this.highlighter.toggleMechanicsToHighlight([this.tavernTierData$$.value as GameTag]);
+				break;
+			case 'standard':
+				this.highlighter.toggleTiersToHighlight([this.tavernTierData$$.value as number]);
 				break;
 		}
 	}

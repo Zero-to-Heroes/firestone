@@ -93,6 +93,7 @@ import { BehaviorSubject, combineLatest, Observable, startWith } from 'rxjs';
 						[showTrinketTips]="showTrinketTips"
 						[highlightedMinions]="value.highlightedMinions"
 						[highlightedTribes]="highlightedTribes"
+						[highlightedTiers]="highlightedTiers"
 						[highlightedMechanics]="highlightedMechanics"
 						[showTribesHighlight]="showTribesHighlight"
 						[showTavernTierIcon]="true"
@@ -124,6 +125,7 @@ import { BehaviorSubject, combineLatest, Observable, startWith } from 'rxjs';
 						[showTrinketTips]="showTrinketTips"
 						[highlightedMinions]="value.highlightedMinions"
 						[highlightedTribes]="highlightedTribes"
+						[highlightedTiers]="highlightedTiers"
 						[highlightedMechanics]="highlightedMechanics"
 						[showTribesHighlight]="showTribesHighlight"
 						[showTavernTierIcon]="true"
@@ -158,6 +160,7 @@ import { BehaviorSubject, combineLatest, Observable, startWith } from 'rxjs';
 						[showTrinketTips]="showTrinketTips"
 						[highlightedMinions]="value.highlightedMinions"
 						[highlightedTribes]="highlightedTribes"
+						[highlightedTiers]="highlightedTiers"
 						[highlightedMechanics]="highlightedMechanics"
 						[fadeHigherTierCards]="fadeHigherTierCards"
 						[showTribesHighlight]="showTribesHighlight"
@@ -188,6 +191,7 @@ import { BehaviorSubject, combineLatest, Observable, startWith } from 'rxjs';
 						[showTrinketTips]="showTrinketTips"
 						[highlightedMinions]="value.highlightedMinions"
 						[highlightedTribes]="highlightedTribes"
+						[highlightedTiers]="highlightedTiers"
 						[highlightedMechanics]="highlightedMechanics"
 						[showTribesHighlight]="showTribesHighlight"
 						[showTavernTierIcon]="true"
@@ -218,6 +222,7 @@ import { BehaviorSubject, combineLatest, Observable, startWith } from 'rxjs';
 						[showTrinketTips]="showTrinketTips"
 						[highlightedMinions]="value.highlightedMinions"
 						[highlightedTribes]="highlightedTribes"
+						[highlightedTiers]="highlightedTiers"
 						[highlightedMechanics]="highlightedMechanics"
 						[fadeHigherTierCards]="fadeHigherTierCards"
 						[showTribesHighlight]="showTribesHighlight"
@@ -251,7 +256,6 @@ export class BgsMinionsListCompositionComponent extends AbstractSubscriptionComp
 	difficultyClass: string;
 
 	@Input() set composition(value: ExtendedBgsCompAdvice) {
-		console.debug('[bgs-minions-list-composition] setting composition', value);
 		this.compId$$.next(value.compId);
 		this.name = value.name;
 		this.powerLevel = value.powerLevel;
@@ -336,6 +340,7 @@ export class BgsMinionsListCompositionComponent extends AbstractSubscriptionComp
 	}
 
 	@Input() highlightedTribes: readonly Race[];
+	@Input() highlightedTiers: readonly number[];
 	@Input() showGoldenCards: boolean;
 	@Input() showTrinketTips: boolean;
 	@Input() highlightedMechanics: readonly GameTag[];

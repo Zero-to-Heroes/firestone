@@ -16,10 +16,10 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 				<div class="header-text">{{ title }}</div>
 				<div
 					class="highlight-button"
-					*ngIf="tribe && showTribesHighlight"
+					*ngIf="(tribe && showTribesHighlight) || (tier && showTribesHighlight)"
 					[ngClass]="{ highlighted: highlighted$ | async }"
 					inlineSVG="assets/svg/pinned.svg"
-					(click)="highlightTribe(tribe)"
+					(click)="highlightGroup()"
 					[helpTooltip]="highlightTribeTooltip"
 					[helpTooltipPosition]="'left'"
 				></div>
@@ -34,6 +34,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 					[showTrinketTips]="showTrinketTips"
 					[highlightedMinions]="highlightedMinions"
 					[highlightedTribes]="highlightedTribes$ | async"
+					[highlightedTiers]="highlightedTiers$ | async"
 					[highlightedMechanics]="highlightedMechanics"
 					[showTribesHighlight]="showTribesHighlight"
 				></bgs-minion-item>
@@ -45,14 +46,17 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 export class BattlegroundsMinionsGroupComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	highlighted$: Observable<boolean>;
 	highlightedTribes$: Observable<readonly Race[]>;
+	highlightedTiers$: Observable<readonly number[]>;
 
 	minions: readonly ExtendedReferenceCard[];
 	tribe: Race;
+	tier: number;
 	title: string;
 	highlightTribeTooltip: string;
 
 	@Input() set group(value: TierGroup) {
 		this.tribe = value.tribe;
+		this.tier = value.tier;
 		this.title = value.label;
 		this.minions = value.cards;
 		this.highlightTribeTooltip = this.i18n.translateString('battlegrounds.in-game.minions-list.highlight-tribe', {
@@ -63,6 +67,9 @@ export class BattlegroundsMinionsGroupComponent extends AbstractSubscriptionComp
 	@Input() set highlightedTribes(value: readonly Race[]) {
 		this.highlightedTribes$$.next(value ?? []);
 	}
+	@Input() set highlightedTiers(value: readonly number[]) {
+		this.highlightedTiers$$.next(value ?? []);
+	}
 
 	@Input() showGoldenCards: boolean;
 	@Input() showTrinketTips: boolean;
@@ -72,6 +79,7 @@ export class BattlegroundsMinionsGroupComponent extends AbstractSubscriptionComp
 
 	private group$$ = new BehaviorSubject<TierGroup | null>(null);
 	private highlightedTribes$$ = new BehaviorSubject<readonly Race[]>([]);
+	private highlightedTiers$$ = new BehaviorSubject<readonly number[]>([]);
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
@@ -83,13 +91,21 @@ export class BattlegroundsMinionsGroupComponent extends AbstractSubscriptionComp
 
 	ngAfterContentInit(): void {
 		this.highlightedTribes$ = this.highlightedTribes$$.pipe(this.mapData((value) => value));
-		this.highlighted$ = combineLatest([this.group$$, this.highlightedTribes$$]).pipe(
-			this.mapData(([group, highlightedTribes]) => highlightedTribes.includes(group.tribe)),
+		this.highlightedTiers$ = this.highlightedTiers$$.pipe(this.mapData((value) => value));
+		this.highlighted$ = combineLatest([this.group$$, this.highlightedTribes$$, this.highlightedTiers$$]).pipe(
+			this.mapData(
+				([group, highlightedTribes, highlightedTiers]) =>
+					highlightedTribes.includes(group.tribe) || highlightedTiers.includes(group.tier ?? 0),
+			),
 		);
 	}
 
-	highlightTribe(tribe: Race) {
-		this.highlighter.toggleTribesToHighlight([tribe]);
+	highlightGroup() {
+		if (this.tribe) {
+			this.highlighter.toggleTribesToHighlight([this.tribe]);
+		} else if (this.tier) {
+			this.highlighter.toggleTiersToHighlight([this.tier]);
+		}
 	}
 
 	trackByFn(index: number, minion: ReferenceCard) {

@@ -19,6 +19,7 @@ import { auditTime, BehaviorSubject, combineLatest, distinctUntilChanged, filter
 export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHighlighterService> {
 	public shopMinions$$: SubscriberAwareBehaviorSubject<readonly ShopMinion[]>;
 	public highlightedTribes$$: BehaviorSubject<readonly Race[]>;
+	public highlightedTiers$$: BehaviorSubject<readonly number[]>;
 	public highlightedMechanics$$: BehaviorSubject<readonly GameTag[]>;
 	public highlightedMinions$$: BehaviorSubject<readonly string[]>;
 
@@ -34,6 +35,7 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 	protected override assignSubjects() {
 		this.shopMinions$$ = this.mainInstance.shopMinions$$;
 		this.highlightedTribes$$ = this.mainInstance.highlightedTribes$$;
+		this.highlightedTiers$$ = this.mainInstance.highlightedTiers$$;
 		this.highlightedMechanics$$ = this.mainInstance.highlightedMechanics$$;
 		this.highlightedMinions$$ = this.mainInstance.highlightedMinions$$;
 	}
@@ -41,6 +43,7 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 	protected async init() {
 		this.shopMinions$$ = new SubscriberAwareBehaviorSubject<readonly ShopMinion[]>([]);
 		this.highlightedTribes$$ = new BehaviorSubject<readonly Race[]>([]);
+		this.highlightedTiers$$ = new BehaviorSubject<readonly number[]>([]);
 		this.highlightedMechanics$$ = new BehaviorSubject<readonly GameTag[]>([]);
 		this.highlightedMinions$$ = new BehaviorSubject<readonly string[]>([]);
 
@@ -98,11 +101,25 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 		this.highlightedTribes$$.next(highlightedTribes);
 	}
 
+	public toggleTiersToHighlight(tiers: readonly number[]) {
+		this.mainInstance.toggleTiersToHighlightInternal(tiers);
+	}
+	private toggleTiersToHighlightInternal(tiers: readonly number[]) {
+		let highlightedTiers: readonly number[] = this.highlightedTiers$$.value;
+		if (tiers.some((toHighlight) => !highlightedTiers.includes(toHighlight))) {
+			highlightedTiers = [...highlightedTiers, ...tiers];
+		} else {
+			highlightedTiers = highlightedTiers.filter((tier) => !tiers.includes(tier));
+		}
+		this.highlightedTiers$$.next(highlightedTiers);
+	}
+
 	public resetHighlights() {
 		this.mainInstance.resetHighlightsInternal();
 	}
 	private resetHighlightsInternal() {
 		this.highlightedTribes$$.next([]);
+		this.highlightedTiers$$.next([]);
 		this.highlightedMechanics$$.next([]);
 		this.highlightedMinions$$.next([]);
 	}
@@ -127,6 +144,7 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 				distinctUntilChanged((a, b) => a?.phase === b?.phase && arraysEqual(a?.anomalies, b?.anomalies)),
 			),
 			this.highlightedTribes$$,
+			this.highlightedTiers$$,
 			this.highlightedMinions$$,
 			this.highlightedMechanics$$,
 			this.gameState.gameState$$.pipe(
@@ -148,6 +166,7 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 					showTribesHighlight,
 					{ phase },
 					highlightedTribes,
+					highlightedTiers,
 					highlightedMinions,
 					highlightedMechanics,
 					opponentBoard,
@@ -159,6 +178,7 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 					showTribesHighlight,
 					{ phase, anomalies },
 					highlightedTribes,
+					highlightedTiers,
 					highlightedMinions,
 					highlightedMechanics,
 					opponentBoard,
@@ -169,12 +189,14 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 					}
 					highlightedTribes = showTribesHighlight ? highlightedTribes : [];
 					highlightedMinions = showTribesHighlight ? highlightedMinions : [];
+					highlightedTiers = showTribesHighlight ? highlightedTiers : [];
 					const shopMinions: readonly ShopMinion[] = opponentBoard!.map((minion) => ({
 						entityId: minion.entityId,
 						cardId: minion.cardId,
 						highlighted: this.isHighlighted(
 							minion,
 							highlightedTribes ?? [],
+							highlightedTiers ?? [],
 							highlightedMinions ?? [],
 							highlightedMechanics ?? [],
 							anomalies ?? [],
@@ -193,6 +215,7 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 	private isHighlighted(
 		minion: { cardId: string; entityId: number },
 		highlightedTribes: readonly Race[],
+		highlightedTiers: readonly number[],
 		highlightedMinions: readonly string[],
 		highlightedMechanics: readonly GameTag[],
 		anomalies: readonly string[],
@@ -206,6 +229,7 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 		return this.isCardHighlighted(
 			card,
 			highlightedTribes,
+			highlightedTiers,
 			highlightedMinions,
 			highlightedMechanics,
 			anomalies,
@@ -216,6 +240,7 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 	private isCardHighlighted(
 		card: ReferenceCard,
 		highlightedTribes: readonly Race[],
+		highlightedTiers: readonly number[],
 		highlightedMinions: readonly string[],
 		highlightedMechanics: readonly GameTag[],
 		anomalies: readonly string[],
@@ -236,6 +261,11 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 			tribes.some((tribe) => highlightedTribes.includes(tribe)) ||
 			(highlightedTribes.length > 0 && tribes.some((tribe) => tribe === Race.ALL));
 		if (highlightedFromTribe) {
+			return true;
+		}
+
+		const highlightedFromTier = highlightedTiers.includes(card.techLevel ?? 0);
+		if (highlightedFromTier) {
 			return true;
 		}
 
