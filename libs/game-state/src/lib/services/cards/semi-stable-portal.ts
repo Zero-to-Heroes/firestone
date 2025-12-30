@@ -1,11 +1,12 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { CardIds, CardType } from '@firestone-hs/reference-data';
 import { GuessedInfo } from '../../models/deck-card';
-import { hasCorrectType, hasCost } from '../../related-cards/dynamic-pools';
+import { hasCorrectType } from '../../related-cards/dynamic-pools';
 import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
 
-// Semi-Stable Portal - 2 Mana: Summon a random 2-Cost minion.
+// Semi-Stable Portal (TIME_000)
+// "<b>Rewind</b> Add a random minion to your hand. It costs (3) less."
 export const SemiStablePortal: GeneratingCard & StaticGeneratingCard = {
 	cardIds: [CardIds.SemiStablePortal_TIME_000],
 	publicCreator: true,
@@ -13,7 +14,7 @@ export const SemiStablePortal: GeneratingCard & StaticGeneratingCard = {
 		return filterCards(
 			SemiStablePortal.cardIds[0],
 			input.allCards,
-			(c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 2),
+			(c) => hasCorrectType(c, CardType.MINION),
 			input.inputOptions,
 		);
 	},
@@ -23,7 +24,7 @@ export const SemiStablePortal: GeneratingCard & StaticGeneratingCard = {
 			possibleCards: filterCards(
 				SemiStablePortal.cardIds[0],
 				input.allCards,
-				(c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 2),
+				(c) => hasCorrectType(c, CardType.MINION),
 				input.options,
 			),
 		};
