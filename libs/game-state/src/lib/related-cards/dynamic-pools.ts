@@ -335,7 +335,7 @@ const getDynamicRelatedCardIdsInternal = (
 	let result: string[] = Array.isArray(filters)
 		? filterCards(allCards, options, cardId, ...filters)
 		: filterCards(allCards, options, cardId, filters);
-	if (result.length === 0) {
+	if (result.length === 0 && !shouldStrictlyFollowDiscoverRules(cardId)) {
 		// If the pool is empty, remove "canBeDiscoveredByClass" requirement
 		const newOptions = {
 			...options,
@@ -1315,6 +1315,15 @@ const getDynamicFilters = (
 		default:
 			return undefined;
 	}
+};
+
+// Cards that use strict Discover mechanics and should not fallback to showing cards from all classes
+const STRICT_DISCOVER_CARDS = [
+	CardIds.OddMap_TLC_824, // Discover an odd-Attack Beast (Hunter only)
+];
+
+const shouldStrictlyFollowDiscoverRules = (cardId: string): boolean => {
+	return STRICT_DISCOVER_CARDS.includes(cardId as CardIds);
 };
 
 const BAN_LIST = [
