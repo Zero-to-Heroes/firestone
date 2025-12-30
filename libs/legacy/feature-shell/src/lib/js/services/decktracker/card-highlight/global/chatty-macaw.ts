@@ -7,9 +7,7 @@ export const ChattyMacaw: GlobalHighlightCard = {
 	cardIds: [CardIds.ChattyMacaw_VAC_407],
 	getRelatedCards: (entityId: number, side: HighlightSide, gameState: GameState, allCards: CardsFacadeService) => {
 		const deckState = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
-		const lastSpellOnEnemy = deckState.spellsPlayedOnEnemyEntities?.length
-			? deckState.spellsPlayedOnEnemyEntities[deckState.spellsPlayedOnEnemyEntities.length - 1]
-			: null;
+		const lastSpellOnEnemy = deckState.spellsPlayedOnEnemyEntities?.at(-1) ?? null;
 		return lastSpellOnEnemy ? [{ cardId: lastSpellOnEnemy.cardId, entityId: lastSpellOnEnemy.entityId }] : null;
 	},
 };
