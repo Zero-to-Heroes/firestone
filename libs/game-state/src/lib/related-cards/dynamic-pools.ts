@@ -1317,9 +1317,10 @@ const getDynamicFilters = (
 	}
 };
 
-// Cards that use strict Discover mechanics and should not fallback to showing cards from all classes
+// Cards that must maintain class restrictions (Hunter + Neutral) even when the initial pool is empty.
+// These cards use the standard Discover mechanic and should not fallback to showing cards from all classes.
 const STRICT_DISCOVER_CARDS = [
-	CardIds.OddMap_TLC_824, // Discover an odd-Attack Beast (Hunter only)
+	CardIds.OddMap_TLC_824, // Discover an odd-Attack Beast
 ];
 
 const shouldStrictlyFollowDiscoverRules = (cardId: string): boolean => {
