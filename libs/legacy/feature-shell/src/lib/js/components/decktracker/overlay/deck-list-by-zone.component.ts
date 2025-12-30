@@ -644,6 +644,13 @@ const updateWithAdditionalKnownCards = (
 	additionalKnownCards: readonly string[],
 	allCards: CardsFacadeService,
 ): readonly DeckCard[] => {
+	// Only include cards that are not in the deck yet
+	const previous = additionalKnownCards.length;
+	additionalKnownCards = additionalKnownCards.filter((c) => !cards.some((card) => card.cardId === c));
+	if (previous !== additionalKnownCards.length) {
+		console.debug('updateWithAdditionalKnownCards', previous, additionalKnownCards.length);
+	}
+
 	// Remove "placeholder" cards
 	let newCards = cards;
 	for (let i = 0; i < additionalKnownCards.length; i++) {
