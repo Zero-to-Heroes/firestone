@@ -559,6 +559,7 @@ export const CURRENT_EFFECTS_WHITELIST = [
 	CardIds.ThePrimus_ChillOfDeathEnchantment,
 	CardIds.TheSoularium_FleetingSoulEnchantment,
 	CardIds.ThornmantleMusician_ThornmantlesMuseEnchantment_ETC_831e,
+	CardIds.TimelooperToki_LoopingTimeEnchantment_TIME_861e1,
 	CardIds.TogwagglesDice_TogwagglesDicePlayerEnchantment,
 	CardIds.ToTheFront_FrontlinedEnchantment,
 	CardIds.TwinbowTerrorcoil_TwinnedEnchantment,

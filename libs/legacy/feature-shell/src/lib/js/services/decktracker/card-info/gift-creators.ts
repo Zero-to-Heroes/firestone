@@ -1108,6 +1108,7 @@ const internalGiftCreators = [
 	CardIds.SnuggleTeddy_MIS_300,
 	CardIds.Thunderquake_TIME_215,
 	CardIds.FinalPortalToArgus_FleeingTerrorguardToken_TIME_020t5t,
+	CardIds.TimelooperToki_LoopingTimeEnchantment_TIME_861e1,
 ];
 for (const cardId of Object.keys(cardsInfoCache)) {
 	const card = cardsInfoCache[cardId];
