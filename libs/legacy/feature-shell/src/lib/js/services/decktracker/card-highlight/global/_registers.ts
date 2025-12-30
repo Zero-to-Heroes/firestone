@@ -10,6 +10,7 @@ import { Bonecaller } from './bonecaller';
 import { BrilliantMacaw } from './brilliant-macaw';
 import { CarryOnSuitcase } from './carry-on-suitcase';
 import { CatrinaMuerte } from './catrina-muerte';
+import { ChattyMacaw } from './chatty-macaw';
 import { Chromie } from './chromie';
 import { ChronoLordEpoch } from './chrono-lord-epoch';
 import { CreatureOfTheSacredCave } from './creature-of-the-sacred-cave';
@@ -77,6 +78,7 @@ const cards = [
 	RaiseDead,
 	CreatureOfTheSacredCave,
 	CatrinaMuerte,
+	ChattyMacaw,
 	JimRaynor,
 	Rewind,
 	CarryOnSuitcase,
