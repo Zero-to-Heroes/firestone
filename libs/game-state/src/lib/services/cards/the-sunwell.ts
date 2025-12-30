@@ -1,20 +1,20 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import { CardClass, CardIds, CardRarity, CardType } from '@firestone-hs/reference-data';
+import { CardClass, CardIds, CardType } from '@firestone-hs/reference-data';
 import { GuessedInfo } from '../../models/deck-card';
-import { canBeDiscoveredByClass, hasCorrectClass, hasCorrectRarity, hasCorrectType } from '../../related-cards/dynamic-pools';
+import { canBeDiscoveredByClass, hasCorrectClass, hasCorrectType } from '../../related-cards/dynamic-pools';
 import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
 
+// The Sunwell - Location: Add 3 random Paladin spells to your hand.
 export const TheSunwell: GeneratingCard & StaticGeneratingCard = {
-	cardIds: [CardIds.TheSunwell],
+	cardIds: [CardIds.TheSunwell_RLK_590],
 	publicCreator: true,
 	dynamicPool: (input: StaticGeneratingCardInput) => {
 		return filterCards(
 			TheSunwell.cardIds[0],
 			input.allCards,
 			(c) =>
-				hasCorrectType(c, CardType.MINION) &&
-				hasCorrectRarity(c, CardRarity.LEGENDARY) &&
+				hasCorrectType(c, CardType.SPELL) &&
 				hasCorrectClass(c, CardClass.PALADIN) &&
 				canBeDiscoveredByClass(c, input.inputOptions.currentClass),
 			input.inputOptions,
@@ -22,15 +22,13 @@ export const TheSunwell: GeneratingCard & StaticGeneratingCard = {
 	},
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
 		return {
-			cardType: CardType.MINION,
-			rarity: CardRarity.LEGENDARY,
+			cardType: CardType.SPELL,
 			cardClass: CardClass.PALADIN,
 			possibleCards: filterCards(
 				TheSunwell.cardIds[0],
 				input.allCards,
 				(c) =>
-					hasCorrectType(c, CardType.MINION) &&
-					hasCorrectRarity(c, CardRarity.LEGENDARY) &&
+					hasCorrectType(c, CardType.SPELL) &&
 					hasCorrectClass(c, CardClass.PALADIN) &&
 					canBeDiscoveredByClass(c, input.deckState.getCurrentClass()),
 				input.options,

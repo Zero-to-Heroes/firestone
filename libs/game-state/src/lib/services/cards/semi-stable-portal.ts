@@ -5,6 +5,7 @@ import { hasCorrectType, hasCost } from '../../related-cards/dynamic-pools';
 import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
 
+// Semi-Stable Portal - 2 Mana: Summon a random 2-Cost minion.
 export const SemiStablePortal: GeneratingCard & StaticGeneratingCard = {
 	cardIds: [CardIds.SemiStablePortal_TIME_000],
 	publicCreator: true,
