@@ -22,10 +22,10 @@ import { chunk, sleep } from '../utils';
 import { EventParser } from './event-parser/event-parser';
 import { SecretsParserService } from './event-parser/secrets/secrets-parser.service';
 import { ConstructedAchievementsProgressionEvent } from './event/constructed-achievements-progression-event';
+import { DeckstringOverrideEvent } from './event/deckstring-override-event';
 import { GameStateMetaInfoService } from './game-state-meta-info.service';
 import { GameStateParsersService } from './game-state/state-parsers.service';
 import { OverlayDisplayService } from './overlay-display.service';
-import { DeckstringOverrideEvent } from './event/deckstring-override-event';
 
 @Injectable()
 export class GameStateService {
@@ -36,7 +36,7 @@ export class GameStateService {
 	// modify the same state)
 	private processingQueue = new ProcessingQueue<GameEvent | GameStateEvent>(
 		(eventQueue) => this.processQueue(eventQueue),
-		50,
+		250,
 		'game-state',
 	);
 

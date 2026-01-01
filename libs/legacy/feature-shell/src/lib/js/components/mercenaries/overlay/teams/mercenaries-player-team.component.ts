@@ -31,7 +31,10 @@ export class MercenariesPlayerTeamComponent extends AbstractSubscriptionStoreCom
 	team$: Observable<MercenariesBattleTeam>;
 	showTurnCounter$: Observable<boolean>;
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+	constructor(
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+	) {
 		super(store, cdr);
 	}
 
@@ -39,7 +42,7 @@ export class MercenariesPlayerTeamComponent extends AbstractSubscriptionStoreCom
 		this.team$ = this.store
 			.listenMercenaries$(([battleState, prefs]) => battleState)
 			.pipe(
-				debounceTime(50),
+				debounceTime(250),
 				filter(([battleState]) => !!battleState),
 				this.mapData(([battleState]) =>
 					battleState.playerTeam.update({

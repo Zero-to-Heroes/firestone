@@ -29,7 +29,10 @@ export class MercenariesOpponentTeamComponent extends AbstractSubscriptionStoreC
 
 	team$: Observable<MercenariesBattleTeam>;
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+	constructor(
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+	) {
 		super(store, cdr);
 	}
 
@@ -37,7 +40,7 @@ export class MercenariesOpponentTeamComponent extends AbstractSubscriptionStoreC
 		this.team$ = this.store
 			.listenMercenaries$(([battleState, prefs]) => battleState)
 			.pipe(
-				debounceTime(50),
+				debounceTime(250),
 				filter(([battleState]) => !!battleState),
 				map(([battleState]) => battleState.opponentTeam),
 				this.mapData((team) =>

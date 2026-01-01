@@ -242,7 +242,7 @@ export class MainWindowStoreService {
 
 	private processingQueue = new ProcessingQueue<MainWindowStoreEvent>(
 		(eventQueue) => this.processQueue(eventQueue),
-		50,
+		250,
 		'main-window-store',
 	);
 

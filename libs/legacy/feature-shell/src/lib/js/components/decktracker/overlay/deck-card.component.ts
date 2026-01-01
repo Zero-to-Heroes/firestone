@@ -11,7 +11,7 @@ import {
 	Output,
 	ViewRef,
 } from '@angular/core';
-import { CardClass, CardIds, CardType, GameTag, GameType, ReferenceCard } from '@firestone-hs/reference-data';
+import { CardClass, CardIds, GameTag, GameType, ReferenceCard } from '@firestone-hs/reference-data';
 import { CardMousedOverService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, uuidShort } from '@firestone/shared/framework/common';
@@ -332,7 +332,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		])
 			.pipe(
 				filter(([card]) => !!card),
-				auditTime(50),
+				auditTime(250),
 				takeUntil(this.destroyed$),
 			)
 			.subscribe(([card, showUpdatedCost, showStatsChange, groupSameCardsTogether]) => {

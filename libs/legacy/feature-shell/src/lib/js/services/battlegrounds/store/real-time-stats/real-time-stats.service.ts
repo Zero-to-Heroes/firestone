@@ -15,7 +15,7 @@ export class RealTimeStatsService {
 	private state: RealTimeStatsState = new RealTimeStatsState();
 	private processingQueue = new ProcessingQueue<GameEvent>(
 		(eventQueue) => this.processQueue(eventQueue),
-		50,
+		1000,
 		'bgs-real-time-stats-queue',
 	);
 	private eventParsers: { [eventKey: string]: readonly EventParser[] };
