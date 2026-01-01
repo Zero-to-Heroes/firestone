@@ -147,11 +147,16 @@ export class PresenceManagerService {
 		const mode = this.i18n.translateString(`global.game-mode.${formatGameType(metaData.gameType)}`)!;
 		const rank = !!matchInfo ? this.buildRankText(matchInfo, metaData) : '';
 		// const [wins, losses] = additionalResult?.includes('-') ? additionalResult.split('-') : [null, null];
-		const hero = this.allCards.getCard(playerHero ?? '')?.name ?? 'Unknown hero';
+		const heroCard = this.allCards.getCard(playerHero ?? '');
+		const hero = heroCard?.name ?? 'Unknown hero';
+		const playerClass = heroCard?.playerClass
+			? this.i18n.translateString(`global.class.${heroCard.playerClass.toLowerCase()}`)
+			: 'Unknown class';
 		const result = matchText
 			?.replace('{rank}', rank ?? '')
 			.replace('{mode}', mode)
-			.replace('{hero}', hero);
+			.replace('{hero}', hero)
+			.replace('{class}', playerClass);
 		// console.debug('[presence] returning result', result, mode, rank, hero);
 		return result;
 		// .replace('{wins}', wins ?? '')
