@@ -25,13 +25,11 @@ export abstract class AbstractSubscriptionTwitchComponent implements OnDestroy {
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			map(extractor),
 			distinctUntilChanged(equality ?? ((a, b) => arraysEqual(a, b))),
-			tap((filter) =>
-				setTimeout(() => {
-					if (!(this.cdr as ViewRef)?.destroyed) {
-						this.cdr?.detectChanges();
-					}
-				}, 0),
-			),
+			tap(() => {
+				if (!(this.cdr as ViewRef)?.destroyed) {
+					this.cdr?.markForCheck();
+				}
+			}),
 			takeUntil(this.destroyed$),
 		);
 	}
