@@ -64,12 +64,12 @@ import { BehaviorSubject, Observable, combineLatest, filter, shareReplay, takeUn
 						</div>
 					</div>
 				</div>
-				<div class="alipay-in-china" *ngIf="possibleChineseUser$ | async">
+				<!-- <div class="alipay-in-china" *ngIf="possibleChineseUser$ | async">
 					致中国大陆用户：支付宝终于恢复正常使用啦！您现在可以使用全新的 Tebex 订阅系统订阅 Firestone Premium
 					服务。
 					为庆祝此次更新，我们限时推出所有订阅套餐八折优惠！请在结账时使用下方优惠码即可享受订阅折扣！（仅限首期订阅，可随时取消）。
-				</div>
-				<div class="discount-banner">
+				</div> -->
+				<!-- <div class="discount-banner">
 					{{ discountBannerTextYearly }}
 					<pre
 						class="code"
@@ -78,7 +78,7 @@ import { BehaviorSubject, Observable, combineLatest, filter, shareReplay, takeUn
 					>
 						<div class="copy-icon" inlineSVG="assets/svg/copy.svg"></div><span>{{couponCode}}</span>
 					</pre>
-				</div>
+				</div> -->
 				<!-- <div
 					class="discount-banner"
 					*ngIf="(possibleChineseUser$ | async) === false && (billingPeriodicity$ | async) === 'yearly'"
