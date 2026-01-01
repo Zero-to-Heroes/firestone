@@ -72,6 +72,12 @@ import { Observable, take, takeUntil } from 'rxjs';
 							>
 								&#123;hero&#125;
 							</li>
+							<li
+								class="token"
+								[helpTooltip]="'settings.general.discord.in-game-details.tokens.class' | fsTranslate"
+							>
+								&#123;class&#125;
+							</li>
 						</ul>
 						<div class="details-text details-text-2" [innerHTML]="text2"></div>
 					</div>
