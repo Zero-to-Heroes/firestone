@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { GameStatusService, PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { combineLatest, distinctUntilChanged, filter, map, take } from 'rxjs';
@@ -21,11 +21,7 @@ export class FirestoneAchievementsChallengeService {
 	public challengeModules: readonly Challenge[] = [];
 
 	private spectating: boolean;
-	private processingQueue = new ProcessingQueue<InternalEvent>(
-		(eventQueue) => this.processQueue(eventQueue),
-		1000,
-		'achievement-monitor',
-	);
+	private processingQueue: ProcessingQueue<InternalEvent>;
 
 	constructor(
 		private readonly gameEvents: GameEventsEmitterService,
@@ -37,7 +33,15 @@ export class FirestoneAchievementsChallengeService {
 		private readonly challengeBuilder: ChallengeBuilderService,
 		private readonly gameStatus: GameStatusService,
 		private readonly ow: OverwolfService,
+		private readonly ngZone: NgZone,
 	) {
+		this.processingQueue = new ProcessingQueue<InternalEvent>(
+			(eventQueue) => this.processQueue(eventQueue),
+			1000,
+			'achievement-monitor',
+			undefined,
+			this.ngZone,
+		);
 		this.init();
 	}
 

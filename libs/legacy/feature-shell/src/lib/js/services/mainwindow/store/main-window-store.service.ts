@@ -1,4 +1,4 @@
-import { EventEmitter, Injectable } from '@angular/core';
+import { EventEmitter, Injectable, NgZone } from '@angular/core';
 import { AchievementsNavigationService } from '@firestone/achievements/common';
 import { AchievementsRefLoaderService } from '@firestone/achievements/data-access';
 import { ArenaNavigationService } from '@firestone/arena/common';
@@ -240,11 +240,7 @@ export class MainWindowStoreService {
 	private mergedEmitter = new BehaviorSubject<[MainWindowState, NavigationState]>([this.state, this.navigationState]);
 	private processors: Map<string, Processor>;
 
-	private processingQueue = new ProcessingQueue<MainWindowStoreEvent>(
-		(eventQueue) => this.processQueue(eventQueue),
-		250,
-		'main-window-store',
-	);
+	private processingQueue: ProcessingQueue<MainWindowStoreEvent>;
 
 	constructor(
 		private readonly cards: CardsFacadeService,
@@ -280,7 +276,15 @@ export class MainWindowStoreService {
 		private readonly achievementsNavigation: AchievementsNavigationService,
 		private readonly simulationController: BgsSimulatorControllerService,
 		private readonly appNavigation: AppNavigationService,
+		private readonly ngZone: NgZone,
 	) {
+		this.processingQueue = new ProcessingQueue<MainWindowStoreEvent>(
+			(eventQueue) => this.processQueue(eventQueue),
+			250,
+			'main-window-store',
+			undefined,
+			this.ngZone,
+		);
 		window['mainWindowStoreMerged'] = this.mergedEmitter;
 		window['mainWindowStoreUpdater'] = this.stateUpdater;
 		this.serviceInit();

@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { NgZone } from '@angular/core';
 import Deque from 'double-ended-queue';
 
 /** @deprecated */
@@ -13,6 +14,7 @@ export class ProcessingQueue<T> {
 		private readonly processFrequency: number, // Frequency in milliseconds
 		private readonly queueName?: string,
 		queueSize?: number,
+		private readonly ngZone?: NgZone,
 	) {
 		if (queueSize) {
 			this.eventQueue = new Deque<T>(2000);
@@ -51,12 +53,21 @@ export class ProcessingQueue<T> {
 			return;
 		}
 
-		// Start an interval to process the queue at the specified frequency
-		this.processingTimer = setInterval(async () => {
-			if (!this.isProcessing) {
-				await this.processQueue();
-			}
-		}, this.processFrequency);
+		const startInterval = () => {
+			// Start an interval to process the queue at the specified frequency
+			this.processingTimer = setInterval(async () => {
+				if (!this.isProcessing) {
+					await this.processQueue();
+				}
+			}, this.processFrequency);
+		};
+
+		// Run outside Angular zone if NgZone is provided to avoid triggering change detection
+		if (this.ngZone) {
+			this.ngZone.runOutsideAngular(startInterval);
+		} else {
+			startInterval();
+		}
 	}
 
 	private stopProcessingInterval() {

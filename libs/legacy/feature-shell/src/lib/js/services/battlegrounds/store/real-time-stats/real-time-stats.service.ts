@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { RealTimeStatsState } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
@@ -13,11 +13,7 @@ import { RealTimeStatsParsersService } from './real-time-stats-parsers.service';
 @Injectable()
 export class RealTimeStatsService {
 	private state: RealTimeStatsState = new RealTimeStatsState();
-	private processingQueue = new ProcessingQueue<GameEvent>(
-		(eventQueue) => this.processQueue(eventQueue),
-		1000,
-		'bgs-real-time-stats-queue',
-	);
+	private processingQueue: ProcessingQueue<GameEvent>;
 	private eventParsers: { [eventKey: string]: readonly EventParser[] };
 	private supportedEventTypes: readonly string[];
 	private listeners: ((state: RealTimeStatsState) => void)[] = [];
@@ -26,7 +22,15 @@ export class RealTimeStatsService {
 		private readonly gameEvents: GameEventsEmitterService,
 		private readonly scene: SceneService,
 		private readonly parsers: RealTimeStatsParsersService,
+		private readonly ngZone: NgZone,
 	) {
+		this.processingQueue = new ProcessingQueue<GameEvent>(
+			(eventQueue) => this.processQueue(eventQueue),
+			1000,
+			'bgs-real-time-stats-queue',
+			undefined,
+			this.ngZone,
+		);
 		// Not sure how we can improve this
 		// If I wait until I know we're in a BG game, then I miss the first few events
 		this.initListeners();

@@ -1,11 +1,8 @@
+import { NgZone } from '@angular/core';
 import { OverwolfService, ProcessingQueue } from '@firestone/shared/framework/core';
 
 export class MindVisionOperationFacade<T> {
-	private processingQueue = new ProcessingQueue<InternalCall<T>>(
-		(eventQueue) => this.processQueue(eventQueue),
-		1000,
-		this.serviceName,
-	);
+	private processingQueue: ProcessingQueue<InternalCall<T>>;
 
 	constructor(
 		private ow: OverwolfService,
@@ -16,7 +13,16 @@ export class MindVisionOperationFacade<T> {
 		private numberOfRetries = 3,
 		private delay = 3000,
 		private resetMindvisionIfEmpty: ((info: any, retriesLeft?: number) => boolean) | null = null,
-	) {}
+		private ngZone?: NgZone,
+	) {
+		this.processingQueue = new ProcessingQueue<InternalCall<T>>(
+			(eventQueue) => this.processQueue(eventQueue),
+			1000,
+			this.serviceName,
+			undefined,
+			this.ngZone,
+		);
+	}
 
 	private async processQueue(eventQueue: readonly InternalCall<T>[]): Promise<readonly InternalCall<T>[]> {
 		// Since it's a queue of functions that build promises, we can't simply await the result

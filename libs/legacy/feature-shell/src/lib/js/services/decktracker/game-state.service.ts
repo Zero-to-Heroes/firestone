@@ -1,4 +1,4 @@
-import { EventEmitter, Injectable } from '@angular/core';
+import { EventEmitter, Injectable, NgZone } from '@angular/core';
 import { GameTag } from '@firestone-hs/reference-data';
 import { BgsInGameWindowNavigationService, BgsMatchMemoryInfoService } from '@firestone/battlegrounds/common';
 import { BgsBattleSimulationService } from '@firestone/battlegrounds/core';
@@ -34,11 +34,7 @@ export class GameStateService {
 
 	// Keep a single queue to avoid race conditions between the two queues (since they
 	// modify the same state)
-	private processingQueue = new ProcessingQueue<GameEvent | GameStateEvent>(
-		(eventQueue) => this.processQueue(eventQueue),
-		250,
-		'game-state',
-	);
+	private processingQueue: ProcessingQueue<GameEvent | GameStateEvent>;
 
 	// We need to get through a queue to avoid race conditions when two events are close together,
 	// so that we're sure teh state is update sequentially
@@ -81,7 +77,15 @@ export class GameStateService {
 		private readonly simulation: BgsBattleSimulationService,
 		private readonly bgsNav: BgsInGameWindowNavigationService,
 		private readonly bgsUserStatsService: BgsBestUserStatsService,
+		private readonly ngZone: NgZone,
 	) {
+		this.processingQueue = new ProcessingQueue<GameEvent | GameStateEvent>(
+			(eventQueue) => this.processQueue(eventQueue),
+			250,
+			'game-state',
+			undefined,
+			this.ngZone,
+		);
 		this.init();
 	}
 

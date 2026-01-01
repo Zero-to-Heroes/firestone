@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { GameEventsFacadeService, GameStateFacadeService, GameUniqueIdService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
@@ -24,12 +24,7 @@ import { chunk, freeRegexp } from './utils';
 export class GameEvents {
 	private plugin;
 
-	private processingQueue = new ProcessingQueue<string>(
-		(eventQueue) => this.processQueue(eventQueue),
-		500,
-		'game-events',
-		100_000,
-	);
+	private processingQueue: ProcessingQueue<string>;
 
 	private lastProcessedTimestamp: number;
 	private lastGameStateUpdateTimestamp: number;
@@ -47,7 +42,15 @@ export class GameEvents {
 		private readonly gameUniqueId: GameUniqueIdService,
 		private readonly eventsFacade: GameEventsFacadeService,
 		private readonly globalError: GlobalErrorService,
+		private readonly ngZone: NgZone,
 	) {
+		this.processingQueue = new ProcessingQueue<string>(
+			(eventQueue) => this.processQueue(eventQueue),
+			500,
+			'game-events',
+			100_000,
+			this.ngZone,
+		);
 		this.init();
 		window['buildPlayerBoardGameEvent'] = (rawEvent: string) =>
 			this.buildBattlegroundsPlayerBoardEvent('BATTLEGROUNDS_PLAYER_BOARD', JSON.parse(rawEvent));
