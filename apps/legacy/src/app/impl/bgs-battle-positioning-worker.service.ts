@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
 import {
 	BgsBattlePositioningExecutorService,
@@ -20,6 +20,7 @@ export class BgsBattlePositioningWorkerService extends BgsBattlePositioningExecu
 	constructor(
 		private readonly allCards: CardsFacadeService,
 		private readonly ow: OverwolfService,
+		private readonly ngZone: NgZone,
 	) {
 		super();
 		this.init();
@@ -204,36 +205,52 @@ export class BgsBattlePositioningWorkerService extends BgsBattlePositioningExecu
 		maxDuration: number,
 	): Promise<InternalPermutationResult[]> {
 		return new Promise<InternalPermutationResult[]>((resolve) => {
-			const worker = new Worker(new URL('./bgs-battle-positioning-worker.worker', import.meta.url));
-			this.workers.push(worker);
-			worker.onmessage = (ev: MessageEvent) => {
-				worker.terminate();
-				this.workers.splice(this.workers.indexOf(worker), 1);
-				// console.debug('[bgs-battle-positioning-worker] received messages from worker', ev.data);
-				resolve(JSON.parse(ev.data));
-			};
-			const battleMessages = chunk.map(
-				(permutation) =>
-					({
-						...battleInfo,
-						playerBoard: {
-							...battleInfo.playerBoard,
-							board: permutation,
-						},
-						options: {
-							...battleInfo.options,
-							numberOfSimulations: numberOfSims,
-							maxAcceptableDuration: maxDuration,
-							hideMaxSimulationDurationWarning: true,
-							skipInfoLogs: true,
-							includeOutcomeSamples: false,
-						},
-					}) as BgsBattleInfo,
-			);
-			// console.debug('[bgs-battle-positioning-worker] sending messages to worker', battleMessages);
-			worker.postMessage({
-				battleMessages: battleMessages,
-				cards: this.allCards.getService(),
+			// Run worker operations outside Angular's zone to prevent
+			// Zone.js patching and unnecessary change detection triggers
+			this.ngZone.runOutsideAngular(() => {
+				const worker = new Worker(new URL('./bgs-battle-positioning-worker.worker', import.meta.url));
+				this.workers.push(worker);
+
+				worker.onmessage = (ev: MessageEvent) => {
+					worker.terminate();
+					this.workers.splice(this.workers.indexOf(worker), 1);
+					// Parse JSON outside the zone - this is expensive!
+					const results = JSON.parse(ev.data);
+					// Resolve the promise - no need for zone re-entry here
+					// because the async iterator handles UI updates at yield points
+					resolve(results);
+				};
+
+				worker.onerror = (error) => {
+					console.error('[bgs-positioning] Worker error:', error);
+					worker.terminate();
+					this.workers.splice(this.workers.indexOf(worker), 1);
+					resolve([]);
+				};
+
+				const battleMessages = chunk.map(
+					(permutation) =>
+						({
+							...battleInfo,
+							playerBoard: {
+								...battleInfo.playerBoard,
+								board: permutation,
+							},
+							options: {
+								...battleInfo.options,
+								numberOfSimulations: numberOfSims,
+								maxAcceptableDuration: maxDuration,
+								hideMaxSimulationDurationWarning: true,
+								skipInfoLogs: true,
+								includeOutcomeSamples: false,
+							},
+						}) as BgsBattleInfo,
+				);
+
+				worker.postMessage({
+					battleMessages: battleMessages,
+					cards: this.allCards.getService(),
+				});
 			});
 		});
 	}

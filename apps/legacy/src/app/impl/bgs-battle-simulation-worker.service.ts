@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
 import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
 import { BgsBattleSimulationExecutorService } from '@firestone/battlegrounds/core';
@@ -7,7 +7,15 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 
 @Injectable()
 export class BgsBattleSimulationWorkerService extends BgsBattleSimulationExecutorService {
-	constructor(private readonly cards: CardsFacadeService, private readonly bugService: BugReportService) {
+	// Throttle intermediate results to avoid excessive UI updates
+	private lastIntermediateUpdate = 0;
+	private readonly INTERMEDIATE_UPDATE_THROTTLE_MS = 100; // Max 10 updates/second
+
+	constructor(
+		private readonly cards: CardsFacadeService,
+		private readonly bugService: BugReportService,
+		private readonly ngZone: NgZone,
+	) {
 		super();
 	}
 
@@ -84,39 +92,84 @@ export class BgsBattleSimulationWorkerService extends BgsBattleSimulationExecuto
 		includeOutcomeSamples: boolean,
 		onResultReceived: (result: SimulationResult | null) => void,
 	): void {
-		const worker = new Worker(new URL('./bgs-battle-sim-worker.worker', import.meta.url));
-		worker.onmessage = (ev: MessageEvent) => {
-			if (!ev?.data) {
-				if (!!this.cards.getCards().length) {
-					console.debug('[bgs-simulation] Simulation crashed, cards loaded:', this.cards.getCards().length);
-					this.bugService.submitAutomatedReport({
-						type: 'bg-sim-crash',
-						info: JSON.stringify({
-							message: '[bgs-simulation] Simulation crashed',
-							battleInfo: battleInfo,
-						}),
-					});
+		// Run worker creation and message handling OUTSIDE Angular's zone
+		// This prevents Zone.js from patching the worker and triggering change detection
+		this.ngZone.runOutsideAngular(() => {
+			const worker = new Worker(new URL('./bgs-battle-sim-worker.worker', import.meta.url));
+
+			worker.onmessage = (ev: MessageEvent) => {
+				// All heavy processing happens outside the zone
+				if (!ev?.data) {
+					this.handleWorkerError(worker, battleInfo, onResultReceived);
+					return;
 				}
+
+				// Parse JSON outside the zone - this is expensive!
+				const result: SimulationResult = JSON.parse(ev.data);
+				const isFinalResult = !!result.outcomeSamples;
+
+				if (isFinalResult) {
+					worker.terminate();
+				}
+
+				// Throttle intermediate results to reduce UI updates
+				if (!isFinalResult) {
+					const now = Date.now();
+					if (now - this.lastIntermediateUpdate < this.INTERMEDIATE_UPDATE_THROTTLE_MS) {
+						return; // Skip this intermediate update
+					}
+					this.lastIntermediateUpdate = now;
+				}
+
+				// Only re-enter Angular zone to deliver the result
+				// This is the ONLY point where change detection should be triggered
+				this.ngZone.run(() => {
+					onResultReceived(result);
+				});
+			};
+
+			worker.onerror = (error) => {
+				console.error('[bgs-simulation] Worker error:', error);
 				worker.terminate();
-				onResultReceived(null);
-				return;
-			}
-			const result: SimulationResult = JSON.parse(ev.data);
-			if (!!result.outcomeSamples) {
-				worker.terminate();
-			}
-			onResultReceived(result);
-		};
-		worker.postMessage({
-			battleMessage: {
-				...battleInfo,
-				options: {
-					...battleInfo.options,
-					numberOfSimulations: numberOfSims,
-					includeOutcomeSamples: includeOutcomeSamples,
-				},
-			} as BgsBattleInfo,
-			cards: this.cards.getService(),
+				this.ngZone.run(() => {
+					onResultReceived(null);
+				});
+			};
+
+			// postMessage also runs outside zone
+			worker.postMessage({
+				battleMessage: {
+					...battleInfo,
+					options: {
+						...battleInfo.options,
+						numberOfSimulations: numberOfSims,
+						includeOutcomeSamples: includeOutcomeSamples,
+					},
+				} as BgsBattleInfo,
+				cards: this.cards.getService(),
+			});
+		});
+	}
+
+	private handleWorkerError(
+		worker: Worker,
+		battleInfo: BgsBattleInfo,
+		onResultReceived: (result: SimulationResult | null) => void,
+	): void {
+		if (!!this.cards.getCards().length) {
+			console.debug('[bgs-simulation] Simulation crashed, cards loaded:', this.cards.getCards().length);
+			this.bugService.submitAutomatedReport({
+				type: 'bg-sim-crash',
+				info: JSON.stringify({
+					message: '[bgs-simulation] Simulation crashed',
+					battleInfo: battleInfo,
+				}),
+			});
+		}
+		worker.terminate();
+		// Re-enter zone for the callback
+		this.ngZone.run(() => {
+			onResultReceived(null);
 		});
 	}
 }

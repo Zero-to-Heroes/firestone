@@ -5,7 +5,6 @@ import { BgsBattleOptions } from '@firestone-hs/simulate-bgs-battle/dist/bgs-bat
 import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
 import { GameSample } from '@firestone-hs/simulate-bgs-battle/dist/simulation/spectator/game-sample';
 import { BugReportService, Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { sleep } from '@firestone/shared/framework/common';
 import { ADS_SERVICE_TOKEN, ApiRunner, CardsFacadeService, IAdsService } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
 import { BgsBattleSimulationExecutorService } from './bgs-battle-simulation-executor.service';
@@ -91,29 +90,33 @@ export class BgsBattleSimulationService {
 				battleInfoInput,
 				prefs,
 				includeOutcomeSamples,
-				async (result: SimulationResult | null) => {
-					// console.debug('[bgs-simulation] partial battle simulation result', result);
-					await sleep(0);
-					const resultForLog = !!result ? { ...result } : null;
-					if (!!resultForLog) {
-						delete resultForLog.outcomeSamples;
+				(result: SimulationResult | null) => {
+					// Callback is already throttled in the worker service
+					if (!result) {
+						return;
 					}
-					if (!!result) {
-						// console.debug('[bgs-simulation] partial battle simulation result', resultForLog);
-						if (result.outcomeSamples) {
-							console.log('[bgs-simulation] battle simulation result', resultForLog);
-						}
+
+					const isIntermediate = !result.outcomeSamples;
+					if (!isIntermediate) {
+						const resultForLog = { ...result };
+						delete resultForLog.outcomeSamples;
+						console.log('[bgs-simulation] battle simulation result', resultForLog);
+					}
+
+					// Use requestAnimationFrame for smoother UI updates
+					// This batches the update with the next paint cycle
+					requestAnimationFrame(() => {
 						this.battleInfo$$.next({
 							battleId: battleId,
 							result: result,
-							intermediateResult: !result.outcomeSamples,
+							intermediateResult: isIntermediate,
 							heroCardId: normalizeHeroCardId(
 								battleInfoInput.opponentBoard.player.cardId ??
 									CardIds.Kelthuzad_TB_BaconShop_HERO_KelThuzad,
 								this.cards,
 							),
 						});
-					}
+					});
 				},
 			);
 		} else {
