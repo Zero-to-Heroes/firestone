@@ -120,7 +120,7 @@ export class SettingsDiscordComponent extends AbstractSubscriptionComponent impl
 	}
 
 	ngAfterContentInit() {
-		this.discordDisabled$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.discordRichPresence));
+		this.discordDisabled$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => !prefs.discordRichPresence));
 		this.discordRpcDisableCustomInGameText$ = this.prefs.preferences$$.pipe(
 			this.mapData((prefs) => prefs.discordRpcEnableCustomInGameText),
 		);
