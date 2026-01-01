@@ -79,12 +79,12 @@ export class DeckTrackerDeckNameComponent {
 		this.copyText = this.i18n.translateString('decktracker.deck-name.copy-deckstring-confirmation');
 		console.log('copied deckstring to clipboard', this.deckstring);
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 		setTimeout(() => {
 			this.copyText = this.i18n.translateString('decktracker.deck-name.copy-deckstring-label');
 			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
+				this.cdr.markForCheck();
 			}
 		}, 2000);
 	}

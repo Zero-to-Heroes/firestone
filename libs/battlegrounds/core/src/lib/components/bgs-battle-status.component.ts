@@ -258,7 +258,7 @@ export class BgsBattleStatusComponent extends AbstractSubscriptionComponent impl
 		);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -383,7 +383,7 @@ export class BgsBattleStatusComponent extends AbstractSubscriptionComponent impl
 		}
 		this.processingSimulationSample = true;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 
 		const id = this.ow?.isOwEnabled()
@@ -399,7 +399,7 @@ export class BgsBattleStatusComponent extends AbstractSubscriptionComponent impl
 		}
 		this.processingSimulationSample = false;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

@@ -123,7 +123,7 @@ export class BgsLeaderboardsComponent extends AbstractSubscriptionComponent impl
 		);
 
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

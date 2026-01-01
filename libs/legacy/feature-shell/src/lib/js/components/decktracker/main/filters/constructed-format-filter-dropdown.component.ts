@@ -82,7 +82,7 @@ export class ConstructedFormatFilterDropdownComponent
 		);
 
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

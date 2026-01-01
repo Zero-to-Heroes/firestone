@@ -126,14 +126,14 @@ export class BgsSimulationOverlayStandaloneComponent
 	startDragging() {
 		this.dragStart.next();
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
 	async stopDragging() {
 		this.dragEnd.next();
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 }

@@ -65,7 +65,7 @@ export class ArenaCardSearchComponent implements AfterViewInit, OnDestroy {
 			if (searchParam && typeof searchParam === 'string') {
 				this.initialSearchValue = searchParam;
 				this.cardsService.newSearchString(searchParam);
-				this.cdr.detectChanges();
+				this.cdr.markForCheck();
 			}
 		});
 	}

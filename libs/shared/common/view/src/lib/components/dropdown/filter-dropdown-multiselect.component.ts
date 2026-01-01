@@ -116,7 +116,7 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 	@Input() set visible(value: boolean) {
 		this._visible = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -245,7 +245,7 @@ export class FilterDropdownMultiselectComponent extends AbstractSubscriptionComp
 	toggle() {
 		this.showing = !this.showing;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 		// setTimeout
 		// if (this.showing && this.allowSearch) {

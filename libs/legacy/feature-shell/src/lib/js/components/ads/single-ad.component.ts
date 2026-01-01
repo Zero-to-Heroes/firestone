@@ -73,7 +73,7 @@ export class SingleAdComponent extends AbstractSubscriptionComponent implements 
 		if (this.showBazaarTrackerAd) {
 			// this.bazaarTrackerAdActive = !this.bazaarTrackerAdActive;
 			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
+				this.cdr.markForCheck();
 			}
 		}
 	}
@@ -146,13 +146,13 @@ export class SingleAdComponent extends AbstractSubscriptionComponent implements 
 
 				console.log(`[ads-${this.adId}] init OwAd`);
 				if (!(this.cdr as ViewRef)?.destroyed) {
-					this.cdr.detectChanges();
+					this.cdr.markForCheck();
 				}
 				this.adInit = false;
 				return;
 			}
 			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
+				this.cdr.markForCheck();
 			}
 		} catch (e) {
 			console.warn(`[ads-${this.adId}] exception while initializing ads, retrying`, e);

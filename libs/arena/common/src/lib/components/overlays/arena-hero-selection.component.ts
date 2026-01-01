@@ -76,7 +76,7 @@ export class ArenaHeroSelectionComponent extends AbstractSubscriptionComponent i
 		this.showing$ = this.options$.pipe(this.mapData((options) => options.length > 0));
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 }

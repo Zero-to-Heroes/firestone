@@ -56,7 +56,7 @@ export class AppBoostrapperComponent implements AfterContentInit, OnDestroy {
 			tap(() =>
 				setTimeout(() => {
 					if (!(this.cdr as ViewRef)?.destroyed) {
-						this.cdr.detectChanges();
+						this.cdr.markForCheck();
 					}
 				}, 0),
 			),

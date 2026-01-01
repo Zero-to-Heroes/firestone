@@ -72,7 +72,7 @@ export class WebBattlegroundsRankFilterDropdownComponent
 		);
 		this.currentFilter$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsActiveRankFilter));
 
-		this.cdr.detectChanges();
+		this.cdr.markForCheck();
 	}
 
 	onSelected(option: RankFilterOption) {

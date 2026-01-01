@@ -108,7 +108,7 @@ export class RedditShareInfoComponent implements AfterViewInit, OnDestroy {
 		if (!flairs?.length) {
 			this.flairs = null;
 			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
+				this.cdr.markForCheck();
 			}
 			this.onValidChange.next(this.title && this.title.length > 0 && this.subreddit && this.subreddit.length > 0);
 			return;
@@ -121,7 +121,7 @@ export class RedditShareInfoComponent implements AfterViewInit, OnDestroy {
 		this.flair = this.flairs[0].value;
 		this.placeholder = this.flairs[0].label;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 
 		this.onValidChange.next(

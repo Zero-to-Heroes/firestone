@@ -99,12 +99,12 @@ export class MercenariesActionsQueueComponent
 					this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
 				}
 				if (!(this.cdr as ViewRef)?.destroyed) {
-					this.cdr.detectChanges();
+					this.cdr.markForCheck();
 				}
 			});
 
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

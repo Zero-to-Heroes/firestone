@@ -123,7 +123,7 @@ export class OpponentHandWidgetWrapperComponent extends AbstractWidgetWrapperCom
 		);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -136,7 +136,7 @@ export class OpponentHandWidgetWrapperComponent extends AbstractWidgetWrapperCom
 		this.windowWidth = gameHeight;
 		this.windowHeight = gameHeight * 0.1;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 }

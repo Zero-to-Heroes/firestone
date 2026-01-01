@@ -152,7 +152,7 @@ export class BgsHeroSelectionOverlayInfoComponent extends AbstractSubscriptionCo
 		});
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -181,7 +181,7 @@ export class BgsHeroSelectionOverlayInfoComponent extends AbstractSubscriptionCo
 		);
 
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

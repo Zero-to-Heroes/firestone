@@ -61,7 +61,7 @@ export class WebBattlegroundsCardTurnFilterDropdownComponent
 
 		this.currentFilter$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsActiveCardsTurn));
 
-		this.cdr.detectChanges();
+		this.cdr.markForCheck();
 	}
 
 	onSelected(option: CardTurnFilterOption) {

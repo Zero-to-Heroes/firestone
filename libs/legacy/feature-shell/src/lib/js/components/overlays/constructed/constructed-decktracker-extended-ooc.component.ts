@@ -293,7 +293,7 @@ export class ConstructedDecktrackerExtendedOocComponent
 		);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -301,7 +301,7 @@ export class ConstructedDecktrackerExtendedOocComponent
 		await this.prefs.isReady();
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

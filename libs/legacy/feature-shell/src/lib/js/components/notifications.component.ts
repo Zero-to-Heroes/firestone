@@ -138,12 +138,12 @@ export class NotificationsComponent implements AfterViewInit {
 					// this.notificationService.globalOptions,
 				);
 				if (!(this.cdr as ViewRef)?.destroyed) {
-					this.cdr.detectChanges();
+					this.cdr.markForCheck();
 				}
 			});
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -253,7 +253,7 @@ export class NotificationsComponent implements AfterViewInit {
 		}
 		notification.classList.add('fade-out');
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 		const toast = activeNotif.toast;
 		setTimeout(() => {

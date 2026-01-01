@@ -48,6 +48,6 @@ export class ArenaClassesComponent extends AbstractSubscriptionComponent impleme
 			)
 			.subscribe();
 
-		this.cdr.detectChanges();
+		this.cdr.markForCheck();
 	}
 }

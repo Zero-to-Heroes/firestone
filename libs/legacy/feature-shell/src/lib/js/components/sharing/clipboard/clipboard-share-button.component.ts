@@ -57,12 +57,12 @@ export class ClipboardShareButtonComponent extends SocialShareButtonComponent {
 		this.events.broadcast(Events.SHOW_SCREEN_CAPTURE_EFFECT);
 		this.tooltip = this.i18n.translateString('app.share.clipboard.confirmation');
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 		setTimeout(() => {
 			this.tooltip = this.i18n.translateString('app.share.clipboard.tooltip');
 			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
+				this.cdr.markForCheck();
 			}
 		}, 2000);
 	}

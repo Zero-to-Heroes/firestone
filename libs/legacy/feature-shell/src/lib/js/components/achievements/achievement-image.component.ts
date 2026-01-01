@@ -83,7 +83,7 @@ export class AchievementImageComponent {
 	imageLoadedHandler() {
 		this.showPlaceholder = false;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 }

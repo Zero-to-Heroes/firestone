@@ -63,7 +63,7 @@ export class ArenaCardClassFilterDropdownComponent extends AbstractSubscriptionC
 		);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

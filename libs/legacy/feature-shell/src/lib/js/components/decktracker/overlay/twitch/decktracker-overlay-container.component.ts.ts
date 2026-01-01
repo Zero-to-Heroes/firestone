@@ -249,7 +249,7 @@ export class DeckTrackerOverlayContainerComponent
 				this.magnifierIconOnTop = config?.magnifierIconOnTop;
 				this.invertTrackedPosition = config?.invertTrackedPosition;
 				if (!(this.cdr as ViewRef)?.destroyed) {
-					this.cdr.detectChanges();
+					this.cdr.markForCheck();
 				}
 			}
 		});
@@ -273,7 +273,7 @@ export class DeckTrackerOverlayContainerComponent
 		await this.addDebugGameState();
 		console.log('init done', process.env.NODE_ENV, this.twitch.configuration);
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -324,7 +324,7 @@ export class DeckTrackerOverlayContainerComponent
 				: this.currentDisplayMode;
 		this.gameMode$$.next(this.gameState?.metadata?.gameType);
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -385,7 +385,7 @@ export class DeckTrackerOverlayContainerComponent
 		this.inGameplay = true;
 		console.log('loaded fake state', this.currentDisplayMode, this.showDecktracker, this.gameState, this.bgsState);
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 }

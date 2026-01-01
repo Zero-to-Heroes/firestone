@@ -132,7 +132,7 @@ export class CounterWrapperComponent extends AbstractWidgetWrapperComponent impl
 		// });
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

@@ -70,14 +70,14 @@ export class GroupedCountersComponent extends AbstractSubscriptionComponent impl
 		);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
 	toggleMinimize() {
 		this.isMinimized = !this.isMinimized;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 }

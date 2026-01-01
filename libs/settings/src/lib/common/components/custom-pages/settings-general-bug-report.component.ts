@@ -80,7 +80,7 @@ export class SettingsGeneralBugReportComponent implements AfterViewInit {
 	onBodyChange(newBody: string) {
 		this.body = newBody;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -91,12 +91,12 @@ export class SettingsGeneralBugReportComponent implements AfterViewInit {
 		this.buttonDisabled = true;
 		this.status = this.i18n.translateString('settings.general.bug-report.status-uploading-logs');
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 		try {
 			this.status = this.i18n.translateString('settings.general.bug-report.status-sending-feedback');
 			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
+				this.cdr.markForCheck();
 			}
 
 			await this.bugService.submitReport({
@@ -114,7 +114,7 @@ export class SettingsGeneralBugReportComponent implements AfterViewInit {
 			this.body = null;
 			// this.email = null;
 			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
+				this.cdr.markForCheck();
 			}
 		} catch (e) {
 			console.error('Could not upload all relevant log files', e);
@@ -139,7 +139,7 @@ export class SettingsGeneralBugReportComponent implements AfterViewInit {
 		const prefs = await this.prefs.getPreferences();
 		this.email = prefs.contactEmail;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 }

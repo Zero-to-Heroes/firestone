@@ -271,7 +271,7 @@ export class MenuSelectionComponent
 			.pipe(this.mapData(([showFtue]) => (showFtue ? -1 : 0)));
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

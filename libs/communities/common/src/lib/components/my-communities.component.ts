@@ -109,7 +109,7 @@ export class MyCommunitiesComponent extends AbstractSubscriptionComponent implem
 		this.personalCommunities.refreshJoinedCommunities();
 
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

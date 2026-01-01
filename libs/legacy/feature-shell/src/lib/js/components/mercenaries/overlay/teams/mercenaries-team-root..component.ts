@@ -93,7 +93,7 @@ export class MercenariesTeamRootComponent
 	@Input() set team(value: MercenariesBattleTeam) {
 		this._team = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -147,7 +147,7 @@ export class MercenariesTeamRootComponent
 					this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
 				}
 				if (!(this.cdr as ViewRef)?.destroyed) {
-					this.cdr.detectChanges();
+					this.cdr.markForCheck();
 				}
 			});
 		this.showTurnCounter$ = this.showTurnCounter$$.asObservable().pipe(this.mapData((info) => info));
@@ -177,7 +177,7 @@ export class MercenariesTeamRootComponent
 
 		// Because we await
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -285,13 +285,13 @@ export class MercsTasksListComponent extends AbstractSubscriptionStoreComponent 
 				this.taskTeamDeckstrings = infos;
 				this.tasksListUpdated.next();
 				if (!(this.cdr as ViewRef)?.destroyed) {
-					this.cdr.detectChanges();
+					this.cdr.markForCheck();
 				}
 			});
 
 		// Because we await
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -304,13 +304,13 @@ export class MercsTasksListComponent extends AbstractSubscriptionStoreComponent 
 		this.ow.placeOnClipboard(info.deckstring);
 		this.buttonLabel = this.i18n.translateString('mercenaries.team-widget.create-team-button-ok-label');
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 		setTimeout(() => {
 			this.buttonLabel = null;
 			this.isCopied = false;
 			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
+				this.cdr.markForCheck();
 			}
 		}, 3000);
 	}

@@ -55,14 +55,14 @@ export class TwitterShareModalComponent implements AfterViewInit {
 	@Input() set socialUserInfo(value: TwitterUserInfo) {
 		this._socialUserInfo = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
 	@Input() set base64Image(value: string) {
 		this.imagePath = this.sanitizer.bypassSecurityTrustResourceUrl(`data:image/jpg;base64,${value}`);
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -76,7 +76,7 @@ export class TwitterShareModalComponent implements AfterViewInit {
 		this.ow.addTwitterLoginStateChangedListener(async (info) => {
 			this._socialUserInfo = await this.ow.getTwitterUserInfo();
 			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
+				this.cdr.markForCheck();
 			}
 		});
 	}
@@ -84,19 +84,19 @@ export class TwitterShareModalComponent implements AfterViewInit {
 	async handleValid(isValid: boolean) {
 		this.dataValid = isValid;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
 	async handleShare() {
 		this.sharing = true;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 		await this.ow.twitterShare(this.fileLocation, this.shareInfo.textValue);
 		this.sharing = false;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

@@ -55,7 +55,7 @@ export class VersionComponent implements AfterViewInit {
 		// this.cdr.detach();
 		this.version = await this.ow.getAppVersion('lnknbakkpommmjjdnelmfbjjdbocfpnpbkijjnob');
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 		setInterval(() => this.checkForUpdates(), 5 * 60 * 1000);
 		this.checkForUpdates();
@@ -65,7 +65,7 @@ export class VersionComponent implements AfterViewInit {
 		const isUpdate = await this.ow.checkForExtensionUpdate();
 		this.updateStatus = isUpdate ? 'update-available' : null;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -79,7 +79,7 @@ export class VersionComponent implements AfterViewInit {
 		this.updateStatus = updateDone ? 'restart-needed' : 'update-error';
 		this.isUpdating = false;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

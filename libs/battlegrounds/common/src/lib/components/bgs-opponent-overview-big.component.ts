@@ -106,7 +106,7 @@ export class BgsOpponentOverviewBigComponent {
 		this.buddies = value.buddyTurns;
 		this.tavernUpgrades = value.tavernUpgradeHistory;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

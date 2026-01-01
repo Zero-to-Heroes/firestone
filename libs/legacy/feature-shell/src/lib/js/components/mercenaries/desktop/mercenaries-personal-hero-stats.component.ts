@@ -204,7 +204,7 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 
 		// Because we await
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -566,28 +566,28 @@ export class SortableLabelComponent {
 	@Input() set name(value: string) {
 		this._name = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
 	@Input() set criteria(value: MercenariesPersonalHeroesSortCriteriaType) {
 		this._criteria = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
 	@Input() set sort(value: MercenariesPersonalHeroesSortCriteria) {
 		this._sort = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
 	@Input() set isSortable(value: boolean) {
 		this._isSortable = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

@@ -57,7 +57,7 @@ export class CheckboxComponent {
 		this.value = !this.value;
 		this.valueChanged.next(this.value);
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 }

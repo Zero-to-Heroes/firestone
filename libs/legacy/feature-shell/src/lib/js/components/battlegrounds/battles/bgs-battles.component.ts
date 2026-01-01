@@ -84,7 +84,7 @@ export class BgsBattlesComponent extends AbstractSubscriptionComponent implement
 		);
 		this.showAds$ = this.ads.hasPremiumSub$$.pipe(this.mapData((showAds) => !showAds));
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

@@ -142,7 +142,7 @@ export class ReplayInfoGenericComponent
 			});
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -182,14 +182,14 @@ export class ReplayInfoGenericComponent
 		// Update tooltip to show "copied"
 		this.opponentBattleTagTooltip = this.i18n.translateString('app.replays.replay-info.battle-tag-copied');
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 
 		// Revert to original tooltip after 3 seconds
 		this.battleTagTooltipTimeout = setTimeout(() => {
 			this.updateBattleTagTooltip();
 			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
+				this.cdr.markForCheck();
 			}
 		}, 3000);
 	}

@@ -108,7 +108,7 @@ export class CommunitiesDesktopComponent extends AbstractSubscriptionComponent i
 		this.isLoggedIn$ = this.user.user$$.pipe(this.mapData((user) => !!user?.username));
 
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

@@ -290,7 +290,7 @@ export class BattlegroundsMetaStatsCompsViewComponent
 		);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -390,7 +390,7 @@ export class BattlegroundsMetaStatsCompsViewComponent
 		this.overlayRef.detach();
 		this.updateUrlOnModalClose();
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 }

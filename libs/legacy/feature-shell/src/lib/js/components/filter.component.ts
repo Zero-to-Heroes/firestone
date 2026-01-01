@@ -69,7 +69,7 @@ export class FilterComponent implements AfterViewInit {
 		});
 		setTimeout(() => {
 			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
+				this.cdr.markForCheck();
 			}
 		});
 	}
@@ -87,7 +87,7 @@ export class FilterComponent implements AfterViewInit {
 
 	refresh() {
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 }

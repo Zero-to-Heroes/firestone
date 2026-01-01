@@ -141,7 +141,7 @@ export class BgsPostMatchStatsComponent extends AbstractSubscriptionComponent im
 		this.questRewards = value.player.questRewards;
 		this.allTabs$$.next(value.tabs);
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -186,7 +186,7 @@ export class BgsPostMatchStatsComponent extends AbstractSubscriptionComponent im
 		);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -210,7 +210,7 @@ export class BgsPostMatchStatsComponent extends AbstractSubscriptionComponent im
 				} as MinionStat),
 		);
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

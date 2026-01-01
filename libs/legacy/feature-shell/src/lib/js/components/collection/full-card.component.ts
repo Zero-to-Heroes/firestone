@@ -243,7 +243,7 @@ export class FullCardComponent extends AbstractSubscriptionComponent implements 
 					this.availableQualities.push('SIGNATURE');
 				}
 				if (!(this.cdr as ViewRef)?.destroyed) {
-					this.cdr.detectChanges();
+					this.cdr.markForCheck();
 				}
 			});
 		this.qualityText$ = this.currentQualityToDisplay$$.pipe(
@@ -257,7 +257,7 @@ export class FullCardComponent extends AbstractSubscriptionComponent implements 
 		);
 
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

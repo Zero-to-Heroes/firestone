@@ -483,7 +483,7 @@ export class DeckTrackerOverlayRootComponent
 			.subscribe((width) => {
 				this.overlayWidthInPx = width;
 				if (!(this.cdr as ViewRef)?.destroyed) {
-					this.cdr.detectChanges();
+					this.cdr.markForCheck();
 				}
 			});
 
@@ -506,7 +506,7 @@ export class DeckTrackerOverlayRootComponent
 			});
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -524,7 +524,7 @@ export class DeckTrackerOverlayRootComponent
 		// Avoid artifacts when minimizing
 		this.showTooltips = this.active && this.showTooltipsFromPrefs;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 }

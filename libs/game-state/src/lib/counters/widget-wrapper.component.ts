@@ -48,7 +48,7 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 			.subscribe((lockWidgetPositions) => {
 				this.draggable = !lockWidgetPositions;
 				if (!(this.cdr as ViewRef).destroyed) {
-					this.cdr.detectChanges();
+					this.cdr.markForCheck();
 				}
 			});
 	}

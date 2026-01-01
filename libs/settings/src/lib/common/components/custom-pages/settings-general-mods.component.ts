@@ -182,7 +182,7 @@ export class SettingsGeneralModsComponent extends AbstractSubscriptionComponent 
 				);
 				this.installedMods = modsData.filter((mod) => !!mod);
 				if (!(this.cdr as ViewRef)?.destroyed) {
-					this.cdr.detectChanges();
+					this.cdr.markForCheck();
 				}
 			});
 		this.modsInstallStatus$ = this.modsManager.currentModsStatus$$
@@ -195,7 +195,7 @@ export class SettingsGeneralModsComponent extends AbstractSubscriptionComponent 
 			await this.checkMods();
 		}
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -211,7 +211,7 @@ export class SettingsGeneralModsComponent extends AbstractSubscriptionComponent 
 			console.debug('installedMods', this.installedMods);
 		}
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -222,7 +222,7 @@ export class SettingsGeneralModsComponent extends AbstractSubscriptionComponent 
 		if (status === 'game-running') {
 			this.showGameRunningError = true;
 			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
+				this.cdr.markForCheck();
 			}
 			return;
 		}
@@ -232,7 +232,7 @@ export class SettingsGeneralModsComponent extends AbstractSubscriptionComponent 
 		this.installedMods = await this.modsManager.installedMods(this.gameLocation);
 		console.debug('installedMods 2', this.installedMods);
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -246,13 +246,13 @@ export class SettingsGeneralModsComponent extends AbstractSubscriptionComponent 
 	// 	if (status === 'game-running') {
 	// 		this.showGameRunningError = true;
 	// 		if (!(this.cdr as ViewRef)?.destroyed) {
-	// 			this.cdr.detectChanges();
+	// 			this.cdr.markForCheck();
 	// 		}
 	// 		return;
 	// 	}
 	// 	this.areModsInstalled = status === 'installed';
 	// 	if (!(this.cdr as ViewRef)?.destroyed) {
-	// 		this.cdr.detectChanges();
+	// 		this.cdr.markForCheck();
 	// 	}
 	// }
 
@@ -273,7 +273,7 @@ export class SettingsGeneralModsComponent extends AbstractSubscriptionComponent 
 		if (status === 'game-running') {
 			this.showGameRunningError = true;
 			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
+				this.cdr.markForCheck();
 			}
 			return;
 		}
@@ -282,7 +282,7 @@ export class SettingsGeneralModsComponent extends AbstractSubscriptionComponent 
 		const newPrefs: Preferences = { ...prefs, modsEnabled: this.areModsInstalled };
 		await this.prefs.savePreferences(newPrefs);
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -291,7 +291,7 @@ export class SettingsGeneralModsComponent extends AbstractSubscriptionComponent 
 		this.checkForUpdatesButtonDisabled = true;
 		this.checkForUpdatesLabel = this.i18n.translateString('settings.general.mods.checking-for-updates');
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 
 		const modsWithDownloadLinks = this.installedMods.filter((m) => !!m.DownloadLink);
@@ -301,7 +301,7 @@ export class SettingsGeneralModsComponent extends AbstractSubscriptionComponent 
 				modName: mod.Name,
 			});
 			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
+				this.cdr.markForCheck();
 			}
 			const newAvailableVersion = await this.modsManager.hasUpdates(mod);
 			console.debug('newAvailableVersion', newAvailableVersion);
@@ -310,7 +310,7 @@ export class SettingsGeneralModsComponent extends AbstractSubscriptionComponent 
 		this.checkForUpdatesButtonDisabled = false;
 		this.checkForUpdatesLabel = this.i18n.translateString('settings.general.mods.check-for-updates');
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

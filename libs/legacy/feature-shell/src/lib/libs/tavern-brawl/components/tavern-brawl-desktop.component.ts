@@ -66,7 +66,7 @@ export class TavernBrawlDesktopComponent extends AbstractSubscriptionComponent i
 		this.showAds$ = this.ads.hasPremiumSub$$.pipe(this.mapData((info) => !info));
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

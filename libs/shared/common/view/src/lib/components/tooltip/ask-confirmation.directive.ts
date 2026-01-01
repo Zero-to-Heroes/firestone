@@ -114,9 +114,6 @@ export class AskConfirmationDirective implements OnDestroy {
 		this.overlayRef.backdropClick().subscribe(() => {
 			this.cancel();
 		});
-		// if (!(this.cdr as ViewRef)?.destroyed) {
-		// 	this.cdr.detectChanges();
-		// }
 	}
 
 	@HostListener('window:beforeunload')

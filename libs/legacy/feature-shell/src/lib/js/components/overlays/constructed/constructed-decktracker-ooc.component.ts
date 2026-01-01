@@ -156,7 +156,7 @@ export class ConstructedDecktrackerOocComponent extends AbstractSubscriptionComp
 		this.cardsHighlight.initForSingle();
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 }

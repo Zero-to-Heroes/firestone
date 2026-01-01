@@ -210,7 +210,7 @@ export class DecktrackerDecksComponent extends AbstractSubscriptionComponent imp
 		);
 
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

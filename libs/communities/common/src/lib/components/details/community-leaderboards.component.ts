@@ -139,7 +139,7 @@ export class CommunityLeaderboardsComponent extends AbstractSubscriptionComponen
 		this.showRunsCompleted$ = selectedTab$.pipe(this.mapData((selectedTab) => selectedTab === 'arena'));
 
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

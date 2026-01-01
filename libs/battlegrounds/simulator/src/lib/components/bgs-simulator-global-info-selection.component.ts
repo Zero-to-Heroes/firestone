@@ -308,7 +308,7 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 		this.goldSpentThisGame = value?.GoldSpentThisGame ?? 0;
 		this.friendlyMinionsDeadLastCombat = value?.FriendlyMinionsDeadLastCombat ?? 0;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

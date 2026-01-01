@@ -51,14 +51,14 @@ export class RedditShareModalComponent implements AfterViewInit {
 	@Input() set socialUserInfo(value: RedditUserInfo) {
 		this._socialUserInfo = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
 	@Input() set base64Image(value: string) {
 		this.imagePath = this.sanitizer.bypassSecurityTrustResourceUrl(`data:image/jpg;base64,${value}`);
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -77,7 +77,7 @@ export class RedditShareModalComponent implements AfterViewInit {
 		this.ow.addRedditLoginStateChangedListener(async (info) => {
 			this._socialUserInfo = await this.ow.getRedditUserInfo();
 			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
+				this.cdr.markForCheck();
 			}
 		});
 	}
@@ -85,14 +85,14 @@ export class RedditShareModalComponent implements AfterViewInit {
 	async handleValid(isValid: boolean) {
 		this.dataValid = isValid;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
 	async handleShare() {
 		this.sharing = true;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 		const result = await this.ow.redditShare(
 			this.fileLocation,
@@ -102,7 +102,7 @@ export class RedditShareModalComponent implements AfterViewInit {
 		);
 		this.sharing = false;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

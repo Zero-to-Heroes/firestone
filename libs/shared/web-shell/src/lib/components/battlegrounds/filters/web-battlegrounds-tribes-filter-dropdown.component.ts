@@ -81,7 +81,7 @@ export class WebBattlegroundsTribesFilterDropdownComponent
 
 		this.currentFilter$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsActiveTribesFilter));
 
-		this.cdr.detectChanges();
+		this.cdr.markForCheck();
 	}
 
 	onSelected(tribes: readonly Race[]) {

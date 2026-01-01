@@ -212,7 +212,7 @@ export class BgsSimulatorComponent extends AbstractSubscriptionComponent impleme
 		this.sub$$ = this.overlayRef.backdropClick().subscribe(() => {
 			this.overlayRef.detach();
 			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
+				this.cdr.markForCheck();
 			}
 		});
 
@@ -241,7 +241,7 @@ export class BgsSimulatorComponent extends AbstractSubscriptionComponent impleme
 		this.initControllerRequests();
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -470,7 +470,7 @@ export class BgsSimulatorComponent extends AbstractSubscriptionComponent impleme
 	async exportBoards() {
 		this.exportConfirmationText = this.i18n.translateString('battlegrounds.sim.exporting');
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 		const sim: BgsFaceOffWithSimulation = {
 			...this.controller.faceOff$$.value,
@@ -483,12 +483,12 @@ export class BgsSimulatorComponent extends AbstractSubscriptionComponent impleme
 		this.ow.placeOnClipboard(btoa(`simBoard${shortCode}`));
 		this.exportConfirmationText = this.i18n.translateString('battlegrounds.sim.export-confirmation');
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 		setTimeout(() => {
 			this.exportConfirmationText = this.i18n.translateString('battlegrounds.sim.exporting');
 			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
+				this.cdr.markForCheck();
 			}
 		}, this.exportConfirmationTimeout);
 	}
@@ -507,7 +507,7 @@ export class BgsSimulatorComponent extends AbstractSubscriptionComponent impleme
 		this.simulateButtonLabel = this.i18n.translateString('battlegrounds.sim.simulating-button');
 		this.simulateButtonDisabled = true;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 
 		const prefs = await this.prefs.getPreferences();
@@ -544,7 +544,7 @@ export class BgsSimulatorComponent extends AbstractSubscriptionComponent impleme
 			}
 		});
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -553,7 +553,7 @@ export class BgsSimulatorComponent extends AbstractSubscriptionComponent impleme
 		this.repositionButtonTextKey = `battlegrounds.sim.reposition-button-cancelling`;
 		this.repositionButtonTooltipKey = `battlegrounds.sim.reposition-button-tooltip-cancelling`;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 		this.positioningService.cancel();
 		this.processingReposition = false;
@@ -579,7 +579,7 @@ export class BgsSimulatorComponent extends AbstractSubscriptionComponent impleme
 			}),
 		);
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 
 		const prefs = await this.prefs.getPreferences();
@@ -639,7 +639,7 @@ export class BgsSimulatorComponent extends AbstractSubscriptionComponent impleme
 				status
 			].toLowerCase()}`;
 			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
+				this.cdr.markForCheck();
 			}
 		}
 	}
@@ -657,7 +657,7 @@ export class BgsSimulatorComponent extends AbstractSubscriptionComponent impleme
 		modalRef.instance.closeHandler = () => {
 			this.overlayRef.detach();
 			// if (!(this.cdr as ViewRef)?.destroyed) {
-			// 	this.cdr.detectChanges();
+			// 	this.cdr.markForCheck();
 			// }
 		};
 		this.positionStrategy.apply();

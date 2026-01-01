@@ -162,25 +162,25 @@ export class WindowWrapperComponent extends AbstractSubscriptionStoreComponent i
 			if (message.window_state_ex === 'maximized') {
 				this.maximized = true;
 				if (!(this.cdr as ViewRef)?.destroyed) {
-					this.cdr.detectChanges();
+					this.cdr.markForCheck();
 				}
 			} else {
 				this.maximized = false;
 				if (!(this.cdr as ViewRef)?.destroyed) {
-					this.cdr.detectChanges();
+					this.cdr.markForCheck();
 				}
 			}
 		});
 		this.events.on(Events.SHOW_SCREEN_CAPTURE_EFFECT).subscribe((event) => {
 			this.screenCaptureOn = true;
 			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
+				this.cdr.markForCheck();
 			}
 
 			setTimeout(() => {
 				this.screenCaptureOn = false;
 				if (!(this.cdr as ViewRef)?.destroyed) {
-					this.cdr.detectChanges();
+					this.cdr.markForCheck();
 				}
 			}, 200);
 		});

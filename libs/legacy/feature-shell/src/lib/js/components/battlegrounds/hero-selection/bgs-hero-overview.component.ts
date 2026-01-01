@@ -105,7 +105,7 @@ export class BgsHeroOverviewComponent {
 			},
 		);
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -141,7 +141,7 @@ export class BgsHeroOverviewComponent {
 			console.warn('could not find any achievements to display', value?.length, value);
 		}
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

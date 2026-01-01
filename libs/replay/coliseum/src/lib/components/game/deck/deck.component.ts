@@ -59,7 +59,7 @@ export class DeckComponent implements AfterViewInit {
 			const textEl = this.elRef.nativeElement.querySelector('.count');
 			textEl.style.fontSize = fontSize + 'px';
 			if (!(this.cdr as ViewRef).destroyed) {
-				this.cdr.detectChanges();
+				this.cdr.markForCheck();
 			}
 		} catch (e) {
 			console.error('[deck] Exception in resizeText', e);

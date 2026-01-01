@@ -61,7 +61,7 @@ export abstract class AbstractSubscriptionTwitchResizableComponent extends Abstr
 			this.doResize(scale);
 			this.postResize();
 			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
+				this.cdr.markForCheck();
 			}
 		} catch (e) {
 			console.warn('Caught exception while trying to resize overlay', e);

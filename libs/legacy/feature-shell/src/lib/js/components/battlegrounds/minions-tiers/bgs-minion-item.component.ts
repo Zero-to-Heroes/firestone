@@ -173,7 +173,7 @@ export class BattlegroundsMinionItemComponent extends AbstractSubscriptionCompon
 			.subscribe((useNewCardTileStyle) => {
 				this.useNewCardTileStyle = useNewCardTileStyle;
 				if (!(this.cdr as ViewRef)?.destroyed) {
-					this.cdr.detectChanges();
+					this.cdr.markForCheck();
 				}
 			});
 
@@ -272,7 +272,7 @@ export class BattlegroundsMinionItemComponent extends AbstractSubscriptionCompon
 		);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -292,7 +292,7 @@ export class BattlegroundsMinionItemComponent extends AbstractSubscriptionCompon
 	onCardImageError() {
 		this.cardImageError = true;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

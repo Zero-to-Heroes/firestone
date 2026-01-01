@@ -80,7 +80,7 @@ export class CommunityOverviewComponent extends AbstractSubscriptionComponent im
 			.subscribe((id) => (this.communityId = id));
 
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

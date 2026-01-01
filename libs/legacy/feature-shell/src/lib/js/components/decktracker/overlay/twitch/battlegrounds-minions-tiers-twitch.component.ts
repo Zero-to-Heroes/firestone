@@ -341,7 +341,7 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 		);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -351,13 +351,13 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 
 	startDragging() {
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
 	async stopDragging() {
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 }

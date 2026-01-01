@@ -73,7 +73,7 @@ export class TheCoinsComponent extends AbstractSubscriptionComponent implements 
 			this.cardWidth = cardScale * this.DEFAULT_CARD_WIDTH;
 			this.cardHeight = cardScale * this.DEFAULT_CARD_HEIGHT;
 			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
+				this.cdr.markForCheck();
 			}
 		});
 		const coins$ = this.collectionManager.coins$$.pipe(this.mapData((coins) => this.buildCoins(coins ?? [])));
@@ -84,7 +84,7 @@ export class TheCoinsComponent extends AbstractSubscriptionComponent implements 
 		);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

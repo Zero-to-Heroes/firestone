@@ -58,7 +58,7 @@ export class GameReplayComponent {
 		this._replayXml = replayXml;
 		this.reviewId = reviewId;
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

@@ -197,7 +197,7 @@ export class ConstructedDeckbuilderCardsComponent
 			this.cardWidth = cardScale * DEFAULT_CARD_WIDTH;
 			this.cardHeight = cardScale * DEFAULT_CARD_HEIGHT;
 			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
+				this.cdr.markForCheck();
 			}
 		});
 		this.currentDeckCards$ = this.currentDeckCards$$.asObservable().pipe(
@@ -453,7 +453,7 @@ export class ConstructedDeckbuilderCardsComponent
 		`;
 
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -530,12 +530,12 @@ export class ConstructedDeckbuilderCardsComponent
 		this.store.send(new ConstructedDeckbuilderSaveDeckEvent(deckstring, this.deckName));
 		this.saveDeckcodeButtonLabel = this.i18n.translateString('app.duels.deckbuilder.deck-saved-info');
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 		setTimeout(() => {
 			this.saveDeckcodeButtonLabel = this.i18n.translateString('app.duels.deckbuilder.save-deck-button');
 			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
+				this.cdr.markForCheck();
 			}
 		}, 2000);
 	}

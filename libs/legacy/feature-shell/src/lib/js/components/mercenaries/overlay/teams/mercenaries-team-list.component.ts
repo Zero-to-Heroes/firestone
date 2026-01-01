@@ -116,7 +116,7 @@ export class MercenariesTeamListComponent
 			.subscribe((scale) => this.refreshScroll());
 
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -145,7 +145,7 @@ export class MercenariesTeamListComponent
 			const containerHeight = ps.getBoundingClientRect().height;
 			this.isScroll = contentHeight > containerHeight;
 			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
+				this.cdr.markForCheck();
 			}
 		}, 500);
 	}

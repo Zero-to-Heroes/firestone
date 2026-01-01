@@ -129,7 +129,7 @@ export class QuestsWidgetViewComponent extends AbstractSubscriptionComponent imp
 		this.showBottom$ = this.showBottom$$.asObservable().pipe(this.mapData((info) => info));
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

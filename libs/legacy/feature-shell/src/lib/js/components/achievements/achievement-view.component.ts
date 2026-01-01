@@ -117,7 +117,7 @@ export class AchievementViewComponent extends AbstractSubscriptionStoreComponent
 		this.liveTrackingDisabled$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => !prefs.showLottery));
 
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

@@ -94,7 +94,7 @@ export class BgsMinionsTiersWidgetWrapperComponent extends AbstractWidgetWrapper
 			});
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 }

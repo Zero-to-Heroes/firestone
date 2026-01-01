@@ -52,7 +52,7 @@ export class CardTextComponent {
 		const originalCard = this.cards.getCard(cardId);
 		if (!originalCard.text) {
 			if (!(this.cdr as ViewRef).destroyed) {
-				this.cdr.detectChanges();
+				this.cdr.markForCheck();
 			}
 			return;
 		}
@@ -97,7 +97,7 @@ export class CardTextComponent {
 		this.premium = this._entity.getTag(GameTag.PREMIUM) === 1;
 
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -116,7 +116,7 @@ export class CardTextComponent {
 		const fontSize = Math.min(14, textSizeRatio * element.clientWidth);
 		element.style.fontSize = `${fontSize}px`;
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

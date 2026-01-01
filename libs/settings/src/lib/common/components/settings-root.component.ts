@@ -130,7 +130,7 @@ export class SettingsRootComponent extends AbstractSubscriptionComponent impleme
 				this.controller.setRootNode(filteredSettings);
 				this.controller.selectedNodeId$$.next(newSelectedNode?.id ?? null);
 				if (!(this.cdr as ViewRef).destroyed) {
-					this.cdr.detectChanges();
+					this.cdr.markForCheck();
 				}
 			},
 		);
@@ -140,7 +140,7 @@ export class SettingsRootComponent extends AbstractSubscriptionComponent impleme
 		}
 
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

@@ -251,7 +251,7 @@ export class PremiumDesktopComponent extends AbstractSubscriptionComponent imple
 					value: Math.floor(sixMonthReduction),
 				});
 				if (!(this.cdr as ViewRef)?.destroyed) {
-					this.cdr.detectChanges();
+					this.cdr.markForCheck();
 				}
 			});
 		this.plans$ = combineLatest([
@@ -299,7 +299,7 @@ export class PremiumDesktopComponent extends AbstractSubscriptionComponent imple
 		});
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

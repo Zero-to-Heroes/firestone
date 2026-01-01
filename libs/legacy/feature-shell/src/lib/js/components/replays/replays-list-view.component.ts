@@ -68,7 +68,7 @@ export class ReplaysListViewComponent {
 	onScrolling(scrolling: number | boolean) {
 		this.scrollDebounceTime = scrolling ? 1000 : 10;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

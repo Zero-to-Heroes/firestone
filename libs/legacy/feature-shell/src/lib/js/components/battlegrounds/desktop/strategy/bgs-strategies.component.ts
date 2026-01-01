@@ -25,7 +25,7 @@ export class BgsStrategiesComponent extends AbstractSubscriptionComponent implem
 		this.heroId$ = this.nav.selectedCategoryId$$.pipe(this.mapData((categoryId) => currentBgHeroId(categoryId)));
 
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 }

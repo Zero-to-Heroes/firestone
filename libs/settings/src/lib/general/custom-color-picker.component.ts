@@ -56,12 +56,12 @@ export class CustomColorPickerComponent extends AbstractSubscriptionComponent im
 			.subscribe((color) => {
 				this.color = color;
 				if (!(this.cdr as ViewRef).destroyed) {
-					this.cdr.detectChanges();
+					this.cdr.markForCheck();
 				}
 			});
 
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

@@ -65,7 +65,7 @@ export class PlayerNameComponent {
 			const textEl = this.elRef.nativeElement.querySelector('.text');
 			textEl.style.fontSize = fontSize + 'px';
 			if (!(this.cdr as ViewRef).destroyed) {
-				this.cdr.detectChanges();
+				this.cdr.markForCheck();
 			}
 		} catch (e) {
 			console.error('[player-name] Exception in resizeText', e);

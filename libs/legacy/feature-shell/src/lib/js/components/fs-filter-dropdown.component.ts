@@ -90,7 +90,7 @@ export class FsFilterDropdownComponent {
 				: this.placeholder;
 		this.placeholder = placeholder ?? this.placeholder;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 }

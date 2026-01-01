@@ -41,7 +41,7 @@ export class SettingsGeneralAppearanceComponent extends AbstractSubscriptionComp
 		await waitForReady(this.appearance);
 
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

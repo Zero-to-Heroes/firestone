@@ -99,7 +99,7 @@ export class MercsOutOfCombatPlayerTeamWidgetWrapperComponent
 		);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -111,7 +111,7 @@ export class MercsOutOfCombatPlayerTeamWidgetWrapperComponent
 
 		this.tooltipPosition = newPosition.left < 400 ? 'right' : 'left';
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 		return newPosition;
 	}

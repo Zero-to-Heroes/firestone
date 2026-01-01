@@ -200,7 +200,7 @@ export class BgsSimulatorSideComponent {
 		event.stopPropagation();
 		this.forceTooltipHidden = true;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -214,7 +214,7 @@ export class BgsSimulatorSideComponent {
 		this.controller.updateBoard(this.side, this.entities);
 		this.forceTooltipHidden = false;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -295,7 +295,7 @@ export class BgsSimulatorSideComponent {
 
 		this.teammateShownInfo = this.toBgsPlayer(this._teammate);
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

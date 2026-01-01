@@ -130,7 +130,7 @@ export class TwitchBgsHeroOverviewComponent extends AbstractSubscriptionTwitchRe
 		}
 		super.listenForResize();
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

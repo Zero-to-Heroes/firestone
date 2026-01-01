@@ -279,7 +279,7 @@ export class NewVersionNotificationComponent
 
 		this.updateInfo();
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -293,7 +293,7 @@ export class NewVersionNotificationComponent
 		this.showNewVersion = false;
 		this.notificationDisplayed.next(this.showNewVersion);
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -301,7 +301,7 @@ export class NewVersionNotificationComponent
 		this.dontShowAgain = !this.dontShowAgain;
 		this.prefs.setDontShowNewVersionNotif(this.dontShowAgain);
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -312,7 +312,7 @@ export class NewVersionNotificationComponent
 		}
 		this.selectedVersion = version;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -352,7 +352,7 @@ export class NewVersionNotificationComponent
 		this.notificationDisplayed.next(this.showNewVersion);
 		console.debug('updateInfo', this.showNewVersion);
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

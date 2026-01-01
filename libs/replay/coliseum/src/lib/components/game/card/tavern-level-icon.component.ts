@@ -20,7 +20,7 @@ export class TavernLevelIconComponent {
 			: 'https://static.zerotoheroes.com/hearthstone/asset/coliseum/images/battlegrounds/tavern_banner_0.png';
 
 		// if (!(this.cdr as ViewRef)?.destroyed) {
-		// 	this.cdr.detectChanges();
+		// 	this.cdr.markForCheck();
 		// }
 	}
 

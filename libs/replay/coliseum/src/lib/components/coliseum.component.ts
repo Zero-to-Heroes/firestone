@@ -200,7 +200,7 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 
 		this.status = 'Parsing replay file';
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 
 		const gameObs = await this.gameParser.parse(replayXml);
@@ -209,7 +209,7 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 			([game, status, complete]: [Game, string, boolean]) => {
 				this.status = status || this.status;
 				if (!(this.cdr as ViewRef).destroyed) {
-					this.cdr.detectChanges();
+					this.cdr.markForCheck();
 				}
 				if (game) {
 					// Since the user can already navigate before the game is fully loaded, we want
@@ -232,7 +232,7 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 						this.populateInfo(complete);
 					}
 					if (!(this.cdr as ViewRef).destroyed) {
-						this.cdr.detectChanges();
+						this.cdr.markForCheck();
 					}
 
 					if (complete) {
@@ -250,7 +250,7 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 							this.showPreloader = true;
 						}
 						if (!(this.cdr as ViewRef).destroyed) {
-							this.cdr.detectChanges();
+							this.cdr.markForCheck();
 						}
 					}, 1500);
 				} else {
@@ -258,7 +258,7 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 					this.showPreloader = true;
 					this.status = 'error';
 					if (!(this.cdr as ViewRef).destroyed) {
-						this.cdr.detectChanges();
+						this.cdr.markForCheck();
 					}
 				}
 			},
@@ -266,7 +266,7 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 				console.error('Could not parse replay', error);
 				this.status = 'error';
 				if (!(this.cdr as ViewRef).destroyed) {
-					this.cdr.detectChanges();
+					this.cdr.markForCheck();
 				}
 			},
 		);
@@ -275,7 +275,7 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 	private async parseBgsSimulation(bgsSimulation: GameSample) {
 		this.status = 'Parsing bgsSimulationString simulation';
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 		const game = await this.bgsSimulationParser.parse(bgsSimulation);
 		console.debug('parsed bgs simulation', game);
@@ -293,7 +293,7 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 		this.showPreloader = false;
 		this.status = null;
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -301,7 +301,7 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 	// 	// console.debug('updating status', newStatus);
 	// 	this.status = newStatus;
 	// 	if (!(this.cdr as ViewRef).destroyed) {
-	// 		this.cdr.detectChanges();
+	// 		this.cdr.markForCheck();
 	// 	}
 	// }
 
@@ -336,7 +336,7 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 	onShowHiddenCards(event) {
 		this.showHiddenCards = event;
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -366,7 +366,7 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 		// So that the value is always what the user actually selected, and there are no weird jumps
 		this.currentTime = targetTimestamp;
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -444,7 +444,7 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 				const deckstring = encode(deckDefinition);
 				this.opponentDecklist = deckstring;
 				if (!(this.cdr as ViewRef).destroyed) {
-					this.cdr.detectChanges();
+					this.cdr.markForCheck();
 				}
 			}
 		}
@@ -527,7 +527,7 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 		}
 		this.populateInfo();
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -558,7 +558,7 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 		}
 		this.populateInfo();
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -588,7 +588,7 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 			return;
 		}
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -617,7 +617,7 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 		}
 
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -648,7 +648,7 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 			return;
 		}
 		// if (!(this.cdr as ViewRef).destroyed) {
-		// 	this.cdr.detectChanges();
+		// 	this.cdr.markForCheck();
 		// }
 	}
 
@@ -675,7 +675,7 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 			return;
 		}
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

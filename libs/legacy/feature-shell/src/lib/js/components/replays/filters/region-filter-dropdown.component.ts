@@ -100,7 +100,7 @@ export class RegionFilterDropdownComponent
 
 		// Because we await
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

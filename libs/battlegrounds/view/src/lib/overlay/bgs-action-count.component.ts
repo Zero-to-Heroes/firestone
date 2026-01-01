@@ -216,7 +216,7 @@ export class ActionCountComponent extends AbstractSubscriptionComponent implemen
 				const avgApm = (60 * actionsThisTurn) / turnDurationInSeconds;
 				this.avgApm = avgApm;
 				if (!(this.cdr as ViewRef)?.destroyed) {
-					this.cdr.detectChanges();
+					this.cdr.markForCheck();
 				}
 			});
 
@@ -224,12 +224,12 @@ export class ActionCountComponent extends AbstractSubscriptionComponent implemen
 		turnStartTimestamp$.pipe(takeUntil(this.destroyed$)).subscribe((turnStartTimestamp) => {
 			this.maxApm = 0;
 			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
+				this.cdr.markForCheck();
 			}
 		});
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

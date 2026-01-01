@@ -269,7 +269,7 @@ export class ConstructedMulliganDeckComponent
 			.subscribe(this.opponentActualClass$$);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -277,7 +277,7 @@ export class ConstructedMulliganDeckComponent
 		await this.prefs.isReady();
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

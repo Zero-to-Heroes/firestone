@@ -21,42 +21,42 @@ export class EmptyCardComponent {
 	@Input() set leftOffset(value: number) {
 		this._leftOFfset = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
 	@Input() set topOffset(value: number) {
 		this._topOffset = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
 	@Input() set transform(value: string) {
 		this._transform = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
 	@Input() set cardTooltipBgs(value: boolean) {
 		this._cardTooltipBgs = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
 	@Input() set cardTooltipPosition(value: string) {
 		this._cardTooltipPosition = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
 	@Input() set cardId(value: string) {
 		this._cardId = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

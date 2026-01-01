@@ -105,7 +105,7 @@ export class BgsSimulatorHeroSelectionComponent
 		}
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -160,12 +160,12 @@ export class BgsSimulatorHeroSelectionComponent
 			.subscribe((heroes) => {
 				this.allHeroes = [];
 				if (!(this.cdr as ViewRef)?.destroyed) {
-					this.cdr.detectChanges();
+					this.cdr.markForCheck();
 				}
 				setTimeout(() => {
 					this.allHeroes = heroes;
 					if (!(this.cdr as ViewRef)?.destroyed) {
-						this.cdr.detectChanges();
+						this.cdr.markForCheck();
 					}
 				});
 			});
@@ -176,7 +176,7 @@ export class BgsSimulatorHeroSelectionComponent
 			});
 		// To bind the async pipes
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -203,7 +203,7 @@ export class BgsSimulatorHeroSelectionComponent
 		this.heroName = hero.name;
 		this.heroPowerText = hero.heroPower.text;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

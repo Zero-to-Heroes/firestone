@@ -271,7 +271,7 @@ export class CollectionPackStatsComponent extends AbstractSubscriptionComponent 
 		this.currentTab$ = this.currentTab$$.pipe(this.mapData((tab) => tab));
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

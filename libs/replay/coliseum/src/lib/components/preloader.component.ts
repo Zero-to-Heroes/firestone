@@ -44,7 +44,7 @@ export class PreloaderComponent implements OnInit, AfterViewInit, OnDestroy {
 			if (this.interval) {
 				clearInterval(this.interval);
 			}
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		} else if (wasInError) {
 			this.startQuoteCarousel();
 		}
@@ -87,7 +87,7 @@ export class PreloaderComponent implements OnInit, AfterViewInit, OnDestroy {
 			const card = this.cardsWithQuotes[Math.floor(Math.random() * this.cardsWithQuotes.length)];
 			this.quote = card.flavor;
 			this.cardName = card.name;
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		} catch (e) {
 			console.error('[preloader] could not load quote', e);
 		}

@@ -174,14 +174,14 @@ export class ReplaysListComponent extends AbstractSubscriptionComponent implemen
 		);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
 	onScrolling(scrolling: boolean) {
 		this.scrollDebounceTime = scrolling ? 1000 : 0;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

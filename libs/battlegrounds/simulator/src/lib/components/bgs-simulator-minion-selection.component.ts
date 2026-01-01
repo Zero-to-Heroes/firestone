@@ -287,12 +287,12 @@ export class BgsSimulatorMinionSelectionComponent
 			.subscribe((minions) => {
 				this.allMinions = [];
 				if (!(this.cdr as ViewRef)?.destroyed) {
-					this.cdr.detectChanges();
+					this.cdr.markForCheck();
 				}
 				setTimeout(() => {
 					this.allMinions = minions;
 					if (!(this.cdr as ViewRef)?.destroyed) {
-						this.cdr.detectChanges();
+						this.cdr.markForCheck();
 					}
 				});
 			});
@@ -301,13 +301,13 @@ export class BgsSimulatorMinionSelectionComponent
 			.subscribe((data) => {
 				this.searchString.next(data);
 				if (!(this.cdr as ViewRef)?.destroyed) {
-					this.cdr.detectChanges();
+					this.cdr.markForCheck();
 				}
 			});
 
 		// To bind the async pipes
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -355,63 +355,63 @@ export class BgsSimulatorMinionSelectionComponent
 	onDivineShieldChanged(value: boolean) {
 		this.divineShield = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
 	onWindfuryChanged(value: boolean) {
 		this.windfury = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
 	onStealthChanged(value: boolean) {
 		this.stealth = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
 	onSummonMechsChanged(value: boolean) {
 		this.summonMechs = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
 	onSummonPlantsChanged(value: boolean) {
 		this.summonPlants = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
 	onVenomousChanged(value: boolean) {
 		this.venomous = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
 	onPoisonousChanged(value: boolean) {
 		this.poisonous = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
 	onRebornChanged(value: boolean) {
 		this.reborn = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
 	onTauntChanged(value: boolean) {
 		this.taunt = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -508,7 +508,7 @@ export class BgsSimulatorMinionSelectionComponent
 	private async updateValues() {
 		if (!this._entity) {
 			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
+				this.cdr.markForCheck();
 			}
 			return;
 		}
@@ -552,7 +552,7 @@ export class BgsSimulatorMinionSelectionComponent
 					},
 				} as EntityAsJS);
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 }

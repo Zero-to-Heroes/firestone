@@ -79,7 +79,7 @@ export class BgsBoardWidgetWrapperComponent extends AbstractWidgetWrapperCompone
 		);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

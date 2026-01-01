@@ -52,7 +52,7 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionComponent
 		this.cardSearch$ = this.constructedMetaStats.cardSearch$$.pipe(this.mapData((cardSearch) => cardSearch));
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

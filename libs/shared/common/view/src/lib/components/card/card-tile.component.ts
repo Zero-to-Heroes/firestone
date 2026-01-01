@@ -124,7 +124,7 @@ export class CardTileComponent extends AbstractSubscriptionComponent implements 
 			.subscribe((useNewCardTileStyle) => {
 				this.useNewCardTileStyle = useNewCardTileStyle;
 				if (!(this.cdr as ViewRef)?.destroyed) {
-					this.cdr.detectChanges();
+					this.cdr.markForCheck();
 				}
 			});
 	}
@@ -149,14 +149,14 @@ export class CardTileComponent extends AbstractSubscriptionComponent implements 
 		this.linkedCardHighlight = highlight === true ? true : highlight === false ? false : 'linked-card-' + highlight;
 		// console.debug('highlighting', this._cardId);
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
 	doUnhighlight() {
 		this.linkedCardHighlight = false;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

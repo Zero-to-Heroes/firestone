@@ -104,7 +104,7 @@ export class BgsSimulatorTrinketSelectionComponent
 		}
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -195,7 +195,7 @@ export class BgsSimulatorTrinketSelectionComponent
 			});
 		// To bind the async pipes
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -223,7 +223,7 @@ export class BgsSimulatorTrinketSelectionComponent
 			scriptDataNum6: this.trinketSlot$$.value,
 		};
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

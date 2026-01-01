@@ -54,13 +54,13 @@ export class RedditShareButtonComponent extends SocialShareButtonComponent {
 		modalRef.instance.closeHandler = () => this.overlayRef.detach();
 		modalRef.instance.fileLocation = screenshotLocation;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 
 		const userInfo = await this.ow.getRedditUserInfo();
 		modalRef.instance.socialUserInfo = userInfo;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 
 		this.positionStrategy.apply();

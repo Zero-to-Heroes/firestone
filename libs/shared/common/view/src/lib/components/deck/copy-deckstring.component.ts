@@ -84,12 +84,12 @@ export class CopyDesckstringComponent {
 		this.copyText = this.i18n.translateString('decktracker.deck-name.copy-deckstring-confirmation');
 		console.log('copied deckstring to clipboard', copiedString, this._deckstring);
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 		setTimeout(() => {
 			this.copyText = this.title ? null : this.inputCopy;
 			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
+				this.cdr.markForCheck();
 			}
 		}, 2000);
 		this.analytics.trackEvent('copy-deckstring', { origin: this.origin });
@@ -137,12 +137,12 @@ export class CopyDesckstringComponent {
 		this.copyText = this.i18n.translateString('decktracker.deck-name.copy-deckstring-confirmation');
 		console.debug('copied deckstring to clipboard', this._deckstring);
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 		setTimeout(() => {
 			this.copyText = this.title ? null : this.inputCopy;
 			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
+				this.cdr.markForCheck();
 			}
 		}, 2000);
 	}

@@ -55,7 +55,7 @@ export class WebBattlegroundsTimeFilterDropdownComponent
 		this.timePeriods = ['all-time', 'past-seven', 'past-three', 'last-patch'];
 		this.currentFilter$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsActiveTimeFilter));
 
-		this.cdr.detectChanges();
+		this.cdr.markForCheck();
 	}
 
 	onSelected(option: TimeFilterOption) {

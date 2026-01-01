@@ -100,7 +100,7 @@ export class CommunitiesJoinComponent extends AbstractSubscriptionComponent impl
 		this.overlayRef.backdropClick().subscribe(() => this.overlayRef.detach());
 
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -114,7 +114,7 @@ export class CommunitiesJoinComponent extends AbstractSubscriptionComponent impl
 			this.nav.changeCategory('my-communities');
 		};
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 
 		this.positionStrategy.apply();

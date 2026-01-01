@@ -59,14 +59,14 @@ export class ControlMaximizeComponent implements AfterViewInit, OnDestroy {
 		this.stateChangedListener = this.ow.addStateChangedListener(windowName, (message) => {
 			this.maximized = message.window_state_ex === 'maximized';
 			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
+				this.cdr.markForCheck();
 			}
 		});
 
 		// Set the "maximized" status if the window is effectively maximized (esp. when restoring a window)
 		this.maximized = currentWindow.stateEx === 'maximized';
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 
 		if (this.doubleClickListenerParentClass) {
@@ -101,7 +101,7 @@ export class ControlMaximizeComponent implements AfterViewInit, OnDestroy {
 			await this.ow.restoreWindow(this.windowId);
 			this.maximized = false;
 			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
+				this.cdr.markForCheck();
 			}
 		} else {
 			// const window = await this.ow.getCurrentWindow();
@@ -111,7 +111,7 @@ export class ControlMaximizeComponent implements AfterViewInit, OnDestroy {
 			await this.ow.maximizeWindow(this.windowId);
 			this.maximized = true;
 			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
+				this.cdr.markForCheck();
 			}
 		}
 	}

@@ -55,7 +55,7 @@ export class BgsOverlayHeroOverviewComponent extends AbstractSubscriptionCompone
 		this.buddiesEnabled = value.config?.hasBuddies;
 		this.questsEnabled = value.config?.hasQuests;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -101,7 +101,7 @@ export class BgsOverlayHeroOverviewComponent extends AbstractSubscriptionCompone
 		});
 
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

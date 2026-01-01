@@ -105,7 +105,7 @@ export class DeckTrackerOverlayStandaloneComponent
 			.subscribe(([gameState, side]) => {
 				this.playerDeck = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
 				if (!(this.cdr as ViewRef)?.destroyed) {
-					this.cdr.detectChanges();
+					this.cdr.markForCheck();
 				}
 			});
 		this.side$ = this.side$$.asObservable();
@@ -136,7 +136,7 @@ export class DeckTrackerOverlayStandaloneComponent
 		this.tooltipPosition = 'none';
 		this.dragging = true;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -144,7 +144,7 @@ export class DeckTrackerOverlayStandaloneComponent
 		this.dragging = false;
 		await this.updateTooltipPosition();
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 		this.keepOverlayInBounds();
 	}
@@ -159,7 +159,7 @@ export class DeckTrackerOverlayStandaloneComponent
 		}
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 }

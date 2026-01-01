@@ -71,7 +71,7 @@ export class SecretsHelperListComponent extends AbstractSubscriptionComponent im
 			});
 
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -139,7 +139,7 @@ export class SecretsHelperListComponent extends AbstractSubscriptionComponent im
 			const containerHeight = ps.getBoundingClientRect().height;
 			this.isScroll = contentHeight > containerHeight;
 			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
+				this.cdr.markForCheck();
 			}
 		}, 1000);
 	}

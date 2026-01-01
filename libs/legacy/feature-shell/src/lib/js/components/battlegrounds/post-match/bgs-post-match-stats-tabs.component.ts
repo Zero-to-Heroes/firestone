@@ -110,7 +110,7 @@ export class BgsPostMatchStatsTabsComponent extends AbstractSubscriptionComponen
 			})
 			.reverse();
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -135,7 +135,7 @@ export class BgsPostMatchStatsTabsComponent extends AbstractSubscriptionComponen
 		);
 
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

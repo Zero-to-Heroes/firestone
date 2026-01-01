@@ -62,7 +62,7 @@ export class MenuSelectionBgsComponent extends AbstractSubscriptionComponent imp
 		this.matchOver$ = this.gameState.gameState$$.pipe(this.mapData((gameState) => gameState.gameEnded));
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

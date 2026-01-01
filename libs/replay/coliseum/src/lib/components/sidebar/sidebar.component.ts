@@ -57,7 +57,7 @@ export class SidebarComponent {
 	selectMenu(menu: 'decks' | 'events') {
 		this.selectedMenu = menu;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 }

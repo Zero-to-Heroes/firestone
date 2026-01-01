@@ -85,7 +85,7 @@ export class CardsComponent extends AbstractSubscriptionStoreComponent implement
 			this.cardWidth = cardScale * DEFAULT_CARD_WIDTH;
 			this.cardHeight = cardScale * DEFAULT_CARD_HEIGHT;
 			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
+				this.cdr.markForCheck();
 			}
 		});
 
@@ -115,7 +115,7 @@ export class CardsComponent extends AbstractSubscriptionStoreComponent implement
 		);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

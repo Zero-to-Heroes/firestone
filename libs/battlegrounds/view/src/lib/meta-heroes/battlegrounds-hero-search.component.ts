@@ -43,7 +43,7 @@ export class BattlegroundsHeroSearchComponent
 		// Update the form control when the input changes
 		if (this.searchForm && this.searchForm.value !== value) {
 			this.searchForm.setValue(value || '', { emitEvent: false });
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 	get searchString(): string {

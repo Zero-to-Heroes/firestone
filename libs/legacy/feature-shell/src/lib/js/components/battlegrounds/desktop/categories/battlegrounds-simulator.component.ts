@@ -46,7 +46,7 @@ export class BattlegroundsSimulatorComponent extends AbstractSubscriptionCompone
 		this.faceOff$ = this.controller.faceOff$$.pipe(this.mapData((faceOff) => faceOff));
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

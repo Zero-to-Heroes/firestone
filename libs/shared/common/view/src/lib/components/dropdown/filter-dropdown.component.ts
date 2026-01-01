@@ -67,7 +67,7 @@ export class FilterDropdownComponent implements AfterViewInit {
 		this._filter = value;
 		// Don't know why this is required, but it is.
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -92,7 +92,7 @@ export class FilterDropdownComponent implements AfterViewInit {
 
 	refresh() {
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -121,7 +121,7 @@ export class FilterDropdownComponent implements AfterViewInit {
 			caretEl.classList.add('caret');
 		});
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

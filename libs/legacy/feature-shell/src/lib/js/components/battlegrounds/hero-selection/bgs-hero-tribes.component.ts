@@ -38,7 +38,7 @@ export class BgsHeroTribesComponent {
 		// 	.map((stat) => ({ tribe: this.getTribe(stat.tribe), percent: stat.percent.toFixed(1) }))
 		// 	.slice(0, 5);
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

@@ -86,7 +86,7 @@ export class PreferenceSliderComponent extends AbstractSubscriptionComponent imp
 					this.value = model;
 					this.updateValueElements();
 					if (!(this.cdr as ViewRef)?.destroyed) {
-						this.cdr.detectChanges();
+						this.cdr.markForCheck();
 					}
 				}),
 				debounceTime(20),
@@ -144,7 +144,7 @@ export class PreferenceSliderComponent extends AbstractSubscriptionComponent imp
 					this.updateValueElements();
 					this.prefs.setValue(this.field, this.value);
 					if (!(this.cdr as ViewRef)?.destroyed) {
-						this.cdr.detectChanges();
+						this.cdr.markForCheck();
 					}
 				}
 			}
@@ -156,7 +156,7 @@ export class PreferenceSliderComponent extends AbstractSubscriptionComponent imp
 		this.value = prefs[this.field];
 		this.updateValueElements();
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

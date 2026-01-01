@@ -129,14 +129,14 @@ export class BgsSimulatorHeroPowerSelectionComponent
 			: null;
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
 	@Input() set heroPowerData(value: number) {
 		this.heroPowerInfo = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -203,12 +203,12 @@ export class BgsSimulatorHeroPowerSelectionComponent
 			.subscribe((heroes) => {
 				this.allHeroes = [];
 				if (!(this.cdr as ViewRef)?.destroyed) {
-					this.cdr.detectChanges();
+					this.cdr.markForCheck();
 				}
 				setTimeout(() => {
 					this.allHeroes = heroes;
 					if (!(this.cdr as ViewRef)?.destroyed) {
-						this.cdr.detectChanges();
+						this.cdr.markForCheck();
 					}
 				});
 			});
@@ -219,7 +219,7 @@ export class BgsSimulatorHeroPowerSelectionComponent
 			});
 		// To bind the async pipes
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -258,14 +258,14 @@ export class BgsSimulatorHeroPowerSelectionComponent
 			? this.i18n.translateString('battlegrounds.sim.hero-power-info-tavish')
 			: null;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
 	onHeroPowerInfoChanged(value: number) {
 		this.heroPowerInfo = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -279,7 +279,7 @@ export class BgsSimulatorHeroPowerSelectionComponent
 		}
 		this.heroPowerInfo--;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

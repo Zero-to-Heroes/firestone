@@ -116,12 +116,12 @@ export class SettingElementComponent extends AbstractSubscriptionComponent imple
 			.subscribe((disabled) => {
 				this.disabled = disabled;
 				if (!(this.cdr as ViewRef).destroyed) {
-					this.cdr.detectChanges();
+					this.cdr.markForCheck();
 				}
 			});
 
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 }

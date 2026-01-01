@@ -50,7 +50,7 @@ export class ColiseumAppComponent implements AfterContentInit, AfterViewInit {
 		this.ready$$.next(true);
 
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -111,7 +111,7 @@ export class ColiseumAppComponent implements AfterContentInit, AfterViewInit {
 		}
 
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

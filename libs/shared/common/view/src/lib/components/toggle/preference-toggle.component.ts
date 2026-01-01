@@ -94,7 +94,7 @@ export class PreferenceToggleComponent extends AbstractSubscriptionComponent imp
 			});
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -116,7 +116,7 @@ export class PreferenceToggleComponent extends AbstractSubscriptionComponent imp
 			this.toggleFunction(!this.value);
 		}
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -136,7 +136,7 @@ export class PreferenceToggleComponent extends AbstractSubscriptionComponent imp
 			this.callbackOnLoad(this.value);
 		}
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 }

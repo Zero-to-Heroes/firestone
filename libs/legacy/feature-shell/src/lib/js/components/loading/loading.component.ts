@@ -113,7 +113,7 @@ export class LoadingComponent implements AfterViewInit, OnDestroy {
 					this.title = this.i18n.translateString('loading.ready');
 					this.loading = false;
 					if (!(this.cdr as ViewRef)?.destroyed) {
-						this.cdr.detectChanges();
+						this.cdr.markForCheck();
 					}
 				}
 			});
@@ -121,7 +121,7 @@ export class LoadingComponent implements AfterViewInit, OnDestroy {
 		this.thisWindowId = (await this.ow.getCurrentWindow()).id;
 		this.positionWindow();
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

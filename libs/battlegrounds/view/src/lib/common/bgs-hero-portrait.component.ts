@@ -82,7 +82,7 @@ export class BgsHeroPortraitComponent extends AbstractSubscriptionComponent impl
 	@Input() set heroCardId(value: string) {
 		this.heroIcon = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value}.jpg`;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -90,7 +90,7 @@ export class BgsHeroPortraitComponent extends AbstractSubscriptionComponent impl
 		this._questRewardCardId = value;
 		this.questRewardIcon = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value}.jpg`;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -103,7 +103,7 @@ export class BgsHeroPortraitComponent extends AbstractSubscriptionComponent impl
 		}
 		this._icon = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -113,7 +113,7 @@ export class BgsHeroPortraitComponent extends AbstractSubscriptionComponent impl
 		}
 		this._health = Math.max(value, 0);
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -123,7 +123,7 @@ export class BgsHeroPortraitComponent extends AbstractSubscriptionComponent impl
 		}
 		this._maxHealth = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

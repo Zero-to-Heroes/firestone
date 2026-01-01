@@ -42,7 +42,7 @@ export class DeckTrackerTwitchTitleBarComponent {
 	@Input() set deckState(value: DeckState) {
 		this.deckstring = value?.deckstring;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -57,7 +57,7 @@ export class DeckTrackerTwitchTitleBarComponent {
 		if (this.shouldShowDeckstring) {
 			this.shouldShowDeckstring = false;
 			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
+				this.cdr.markForCheck();
 			}
 			return;
 		}
@@ -97,7 +97,7 @@ export class DeckTrackerTwitchTitleBarComponent {
 				this.copyText = 'Manual copy';
 				this.shouldShowDeckstring = true;
 				if (!(this.cdr as ViewRef)?.destroyed) {
-					this.cdr.detectChanges();
+					this.cdr.markForCheck();
 				}
 			}
 		} else {
@@ -108,7 +108,7 @@ export class DeckTrackerTwitchTitleBarComponent {
 			this.copied = false;
 			this.copyText = null;
 			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
+				this.cdr.markForCheck();
 			}
 		}, 3000);
 	}
@@ -123,7 +123,7 @@ export class DeckTrackerTwitchTitleBarComponent {
 		}
 		this.copyText = 'Copy';
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -133,7 +133,7 @@ export class DeckTrackerTwitchTitleBarComponent {
 		}
 		this.copyText = null;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -149,7 +149,7 @@ export class DeckTrackerTwitchTitleBarComponent {
 		this.copied = true;
 		console.log('copied deckstring to clipboard', this.deckstring);
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 }

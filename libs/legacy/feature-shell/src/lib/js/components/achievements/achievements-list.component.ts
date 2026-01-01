@@ -140,7 +140,7 @@ export class AchievementsListComponent extends AbstractSubscriptionStoreComponen
 			.pipe(this.mapData(([pinnedAchievementIds]) => pinnedAchievementIds));
 
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

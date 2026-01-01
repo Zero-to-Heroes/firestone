@@ -197,42 +197,42 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 	@Input() set colorManaCost(value: boolean) {
 		this._colorManaCost = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
 	@Input() set showRelatedCards(value: boolean) {
 		this._showRelatedCards = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
 	@Input() set showTransformedInto(value: boolean) {
 		this._showTransformedInto = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
 	@Input() set colorClassCards(value: boolean) {
 		this._colorClassCards = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
 	@Input() set showUnknownCards(value: boolean) {
 		this._showUnknownCards = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
 	@Input() set zone(zone: DeckZone) {
 		this._zone = zone;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -240,7 +240,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		this._side = value;
 		this.registerHighlight();
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -320,7 +320,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 			.subscribe((useNewCardTileStyle) => {
 				this.useNewCardTileStyle = useNewCardTileStyle;
 				if (!(this.cdr as ViewRef)?.destroyed) {
-					this.cdr.detectChanges();
+					this.cdr.markForCheck();
 				}
 			});
 
@@ -386,7 +386,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		});
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -424,14 +424,14 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		this.linkedCardHighlight = highlight === true ? true : highlight === false ? false : 'linked-card-' + highlight;
 		// console.debug('highlight', this.cardName, this.cardId, highlight, this.linkedCardHighlight);
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
 	doUnhighlight() {
 		this.linkedCardHighlight = false;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -441,7 +441,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		if (!this.card$$.value.cardId && this.card$$.value.guessedInfo?.possibleCards?.length) {
 			this.relatedCardIds = this.card$$.value.guessedInfo.possibleCards;
 			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
+				this.cdr.markForCheck();
 			}
 			return this.relatedCardIds;
 		}
@@ -457,7 +457,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 			const sort = relatedCardIdsSelectorSort(this.cardId, this.cards);
 			this.relatedCardIds = sort == null ? globalHighlights : [...globalHighlights].sort(sort);
 			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
+				this.cdr.markForCheck();
 			}
 			return globalHighlights;
 		}
@@ -486,7 +486,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 			this.relatedCardIds = [...new Set(this.relatedCardIds)];
 		}
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -501,7 +501,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 	onCardImageError() {
 		this.cardImageError = true;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -595,7 +595,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		}
 		this.mouseOverRight = Math.min(100, this.mouseOverRight);
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

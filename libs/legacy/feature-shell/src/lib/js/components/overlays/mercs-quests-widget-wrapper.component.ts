@@ -92,7 +92,7 @@ export class MercsQuestsWidgetWrapperComponent extends AbstractWidgetWrapperComp
 		);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 }

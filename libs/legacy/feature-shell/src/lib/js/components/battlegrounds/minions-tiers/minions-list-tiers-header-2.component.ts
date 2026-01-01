@@ -226,7 +226,7 @@ export class BattlegroundsMinionsListTiersHeader2Component
 			this.setLockedTier(tavernTier);
 		}
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -255,7 +255,7 @@ export class BattlegroundsMinionsListTiersHeader2Component
 
 		this.setDisplayedTier(tavernTier);
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -265,7 +265,7 @@ export class BattlegroundsMinionsListTiersHeader2Component
 		}
 		this.setDisplayedTier(undefined);
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

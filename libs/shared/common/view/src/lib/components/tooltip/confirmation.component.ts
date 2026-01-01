@@ -98,7 +98,7 @@ export class ConfirmationComponent extends AbstractSubscriptionComponent impleme
 		this.showOk$ = this.showOk$$.asObservable().pipe(this.mapData((info) => info));
 		// Because we can't rely on the lifecycle methods
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

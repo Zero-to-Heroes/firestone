@@ -100,7 +100,7 @@ export class WebArenaTimeFilterDropdownComponent
 			}),
 		);
 
-		this.cdr.detectChanges();
+		this.cdr.markForCheck();
 	}
 
 	async onSelected(option: IOption) {

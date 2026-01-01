@@ -208,7 +208,7 @@ export class DeckTrackerDeckListComponent extends AbstractSubscriptionComponent 
 		);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -233,7 +233,7 @@ export class DeckTrackerDeckListComponent extends AbstractSubscriptionComponent 
 			const containerHeight = ps.getBoundingClientRect().height;
 			this.isScroll = contentHeight > containerHeight;
 			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
+				this.cdr.markForCheck();
 			}
 		}, 1000);
 	}

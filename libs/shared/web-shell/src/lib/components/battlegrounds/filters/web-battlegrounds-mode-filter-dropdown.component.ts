@@ -74,7 +74,7 @@ export class WebBattlegroundsModeFilterDropdownComponent
 			})),
 		);
 
-		this.cdr.detectChanges();
+		this.cdr.markForCheck();
 	}
 
 	async onSelected(option: IOption) {

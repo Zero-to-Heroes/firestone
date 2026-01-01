@@ -135,7 +135,7 @@ export class FilterDropdownCombinedComponent
 	@Input() set visible(value: boolean) {
 		this._visible = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -277,7 +277,7 @@ export class FilterDropdownCombinedComponent
 	toggle() {
 		this.showing = !this.showing;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 		// setTimeout
 		// if (this.showing && this.allowSearch) {

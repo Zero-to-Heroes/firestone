@@ -70,7 +70,7 @@ export class TavernBrawlPersonalDecksComponent extends AbstractSubscriptionCompo
 		this.decks$ = deckSource$;
 
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

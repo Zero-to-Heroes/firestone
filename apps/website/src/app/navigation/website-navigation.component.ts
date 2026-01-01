@@ -57,7 +57,7 @@ export class WebsiteNavigationComponent extends AbstractSubscriptionComponent im
 			console.debug('[nav] selected module', this.selectedModule, event);
 			this.analytics.trackPageView(this.selectedModule);
 			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
+				this.cdr.markForCheck();
 			}
 		});
 		// this.router.events.pipe().subscribe((event) => {
@@ -217,7 +217,7 @@ export class WebsiteNavigationNodeComponent extends AbstractSubscriptionComponen
 				this.isSelected = selected;
 				// console.debug('[nav] selected', node.id, this.isSelected, selected, selectedModule, node);
 				if (!(this.cdr as ViewRef)?.destroyed) {
-					this.cdr.detectChanges();
+					this.cdr.markForCheck();
 				}
 			});
 	}

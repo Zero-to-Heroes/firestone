@@ -58,7 +58,7 @@ export class WebBattlegroundsCardTypeFilterDropdownComponent
 
 		this.currentFilter$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsActiveCardsCardType));
 
-		this.cdr.detectChanges();
+		this.cdr.markForCheck();
 	}
 
 	onSelected(value: BgsCardTypeFilterType) {

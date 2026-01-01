@@ -75,7 +75,7 @@ export class WebArenaModeFilterDropdownComponent
 			}),
 		);
 
-		this.cdr.detectChanges();
+		this.cdr.markForCheck();
 	}
 
 	async onSelected(option: IOption) {

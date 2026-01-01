@@ -65,7 +65,7 @@ export class WebBattlegroundsCardTierFilterDropdownComponent
 
 		this.currentFilter$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsActiveCardsTiers));
 
-		this.cdr.detectChanges();
+		this.cdr.markForCheck();
 	}
 
 	onSelected(option: readonly BgsCardTierFilterType[]) {

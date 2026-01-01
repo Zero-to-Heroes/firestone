@@ -158,13 +158,13 @@ export class HeroPortraitsComponent extends AbstractSubscriptionStoreComponent i
 			const cardScale = value / 100;
 			this.cardWidth = cardScale * this.DEFAULT_CARD_WIDTH;
 			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
+				this.cdr.markForCheck();
 			}
 		});
 
 		// Because we await
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -175,7 +175,7 @@ export class HeroPortraitsComponent extends AbstractSubscriptionStoreComponent i
 	onScrolling(scrolling: boolean) {
 		this.scrollDebounceTime = scrolling ? 1000 : 0;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

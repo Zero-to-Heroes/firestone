@@ -190,7 +190,7 @@ export class MainWindowComponent
 		});
 
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -223,7 +223,7 @@ export class MainWindowComponent
 		this.hotkeyPressedHandler = this.ow.getMainWindow().mainWindowHotkeyPressed;
 		// Only needed for the hotkey
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

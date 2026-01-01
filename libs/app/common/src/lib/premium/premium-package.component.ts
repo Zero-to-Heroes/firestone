@@ -235,7 +235,7 @@ export class PremiumPackageComponent extends AbstractSubscriptionComponent imple
 		this.loggedIn$ = this.user.user$$.pipe(this.mapData((user) => !!user?.username));
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -254,7 +254,7 @@ export class PremiumPackageComponent extends AbstractSubscriptionComponent imple
 		});
 		console.debug('set style', this.el.nativeElement);
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -275,7 +275,7 @@ export class PremiumPackageComponent extends AbstractSubscriptionComponent imple
 	onSubOverrideChanged(value: boolean) {
 		this.subOverride = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

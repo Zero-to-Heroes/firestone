@@ -417,14 +417,14 @@ export class ControlsComponent implements OnInit, OnDestroy {
 	togglePlayPause() {
 		this.isPlaying = !this.isPlaying;
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
 	changeSpeed(newSpeed: number) {
 		this.currentSpeed = newSpeed;
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -447,7 +447,7 @@ export class ControlsComponent implements OnInit, OnDestroy {
 		}
 		this.currentSpeed *= 2;
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -457,7 +457,7 @@ export class ControlsComponent implements OnInit, OnDestroy {
 		}
 		this.currentSpeed /= 2;
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 }

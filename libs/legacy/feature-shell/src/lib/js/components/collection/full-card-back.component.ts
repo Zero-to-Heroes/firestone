@@ -44,7 +44,7 @@ export class FullCardBackComponent extends AbstractSubscriptionStoreComponent im
 			animatedImage: null,
 		};
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

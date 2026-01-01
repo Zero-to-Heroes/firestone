@@ -79,7 +79,7 @@ export class CountersPositionerComponent extends AbstractSubscriptionComponent i
 		if (this.children.length > 0) {
 			this.ready = true;
 			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
+				this.cdr.markForCheck();
 			}
 		}
 	}

@@ -83,7 +83,7 @@ export class BgsPlayerCapsuleComponent {
 		this.tavernUpgrades = value.tavernUpgradeHistory;
 		this.mmr = value.mmr;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

@@ -273,7 +273,7 @@ export class BattlegroundsMetaStatsCardsViewComponent
 		);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -294,7 +294,7 @@ export class BattlegroundsMetaStatsCardsViewComponent
 	toggleHeader() {
 		this.headerCollapsed = !this.headerCollapsed;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

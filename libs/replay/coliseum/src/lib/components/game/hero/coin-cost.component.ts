@@ -68,7 +68,7 @@ export class CoinCostComponent implements AfterViewInit {
 			this.costClass = 'higher-cost';
 		}
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -93,7 +93,7 @@ export class CoinCostComponent implements AfterViewInit {
 				textEl.style.fontSize = fontSize + 'px';
 				previousWidth = newWidth;
 				if (!(this.cdr as ViewRef).destroyed) {
-					this.cdr.detectChanges();
+					this.cdr.markForCheck();
 				}
 				await sleep(10);
 			}

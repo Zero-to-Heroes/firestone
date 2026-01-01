@@ -130,13 +130,13 @@ export class GameComponent implements AfterViewInit {
 		this.events.on(Events.SHOW_QUEST_TOOLTIP).subscribe((data) => {
 			this._quest = data.data[0];
 			if (!(this.cdr as ViewRef).destroyed) {
-				this.cdr.detectChanges();
+				this.cdr.markForCheck();
 			}
 		});
 		this.events.on(Events.HIDE_QUEST_TOOLTIP).subscribe((data) => {
 			this._quest = undefined;
 			if (!(this.cdr as ViewRef).destroyed) {
-				this.cdr.detectChanges();
+				this.cdr.markForCheck();
 			}
 		});
 	}
@@ -193,7 +193,7 @@ export class GameComponent implements AfterViewInit {
 		this.isOverlay = event.isOverlay;
 		this.isDarkOverlay = event.isDarkOverlay;
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

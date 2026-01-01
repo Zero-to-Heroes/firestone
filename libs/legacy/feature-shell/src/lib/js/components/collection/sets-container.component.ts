@@ -24,7 +24,7 @@ export class SetsContainerComponent {
 	@Input() set sets(sets: readonly Set[]) {
 		this._sets = sets;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

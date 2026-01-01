@@ -104,7 +104,7 @@ export class AutocompleteSearchWithListComponent<T>
 			.subscribe((result) => {
 				this.showSearchResults = !!result?.length;
 				if (!(this.cdr as ViewRef)?.destroyed) {
-					this.cdr.detectChanges();
+					this.cdr.markForCheck();
 				}
 			});
 		this.searchForm.valueChanges
@@ -127,7 +127,7 @@ export class AutocompleteSearchWithListComponent<T>
 			this.searchSubmitted.next(searchString);
 			this.showSearchResults = false;
 			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
+				this.cdr.markForCheck();
 			}
 		}
 	}
@@ -136,7 +136,7 @@ export class AutocompleteSearchWithListComponent<T>
 		// setTimeout(() => {
 		// 	this.showSearchResults = false;
 		// 	if (!(this.cdr as ViewRef)?.destroyed) {
-		// 		this.cdr.detectChanges();
+		// 		this.cdr.markForCheck();
 		// 	}
 		// }, 500);
 	}

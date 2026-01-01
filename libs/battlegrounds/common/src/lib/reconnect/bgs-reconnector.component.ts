@@ -67,7 +67,7 @@ export class BgsReconnectorComponent extends AbstractSubscriptionComponent imple
 				this.autoReconnect = prefs.autoReconnect;
 				this.waitAfterBoards = prefs.waitAfterBoards;
 				if (!(this.cdr as ViewRef).destroyed) {
-					this.cdr.detectChanges();
+					this.cdr.markForCheck();
 				}
 			});
 		this.gameState.gameState$$
@@ -78,7 +78,7 @@ export class BgsReconnectorComponent extends AbstractSubscriptionComponent imple
 			.subscribe((reconnecting) => {
 				this.reconnecting = reconnecting ?? false;
 				if (!(this.cdr as ViewRef).destroyed) {
-					this.cdr.detectChanges();
+					this.cdr.markForCheck();
 				}
 			});
 		this.gameState.gameState$$
@@ -89,12 +89,12 @@ export class BgsReconnectorComponent extends AbstractSubscriptionComponent imple
 			.subscribe((inBattlegrounds) => {
 				this.inBattlegrounds = inBattlegrounds;
 				if (!(this.cdr as ViewRef).destroyed) {
-					this.cdr.detectChanges();
+					this.cdr.markForCheck();
 				}
 			});
 
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -112,14 +112,14 @@ export class BgsReconnectorComponent extends AbstractSubscriptionComponent imple
 	onAutoReconnectChanged(value: boolean) {
 		this.prefs.updatePrefs('bgsReconnectorAutoReconnect', value);
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
 	onWaitAfterBoardsChanged(value: boolean) {
 		this.prefs.updatePrefs('bgsReconnectorAutoReconnectWaitAfterBoards', value);
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -128,11 +128,11 @@ export class BgsReconnectorComponent extends AbstractSubscriptionComponent imple
 		setTimeout(() => {
 			this.errorMessage = undefined;
 			if (!(this.cdr as ViewRef).destroyed) {
-				this.cdr.detectChanges();
+				this.cdr.markForCheck();
 			}
 		}, 5000);
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 }

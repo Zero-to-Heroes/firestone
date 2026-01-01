@@ -169,7 +169,7 @@ export class BattlegroundsHeroesComponent extends AbstractSubscriptionComponent 
 			takeUntil(this.destroyed$),
 		);
 
-		this.cdr.detectChanges();
+		this.cdr.markForCheck();
 	}
 
 	onHeroStatsClick(heroCardId: string) {

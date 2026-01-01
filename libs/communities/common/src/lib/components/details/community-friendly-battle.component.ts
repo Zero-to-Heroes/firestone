@@ -48,7 +48,7 @@ export class CommunityFriendlyBattleComponent extends AbstractSubscriptionCompon
 
 	async ngAfterContentInit() {
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 }

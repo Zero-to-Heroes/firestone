@@ -54,7 +54,7 @@ export class HotkeyComponent implements AfterViewInit, OnDestroy {
 			this.hotkeyHtml = this.splitHotkey();
 		}
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

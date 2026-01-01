@@ -95,7 +95,7 @@ export class BgsSimulatorQuestRewardSelectionComponent
 			this.heroPowerText = null;
 		}
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -149,12 +149,12 @@ export class BgsSimulatorQuestRewardSelectionComponent
 			.subscribe((heroes) => {
 				this.allHeroes = [];
 				if (!(this.cdr as ViewRef)?.destroyed) {
-					this.cdr.detectChanges();
+					this.cdr.markForCheck();
 				}
 				setTimeout(() => {
 					this.allHeroes = heroes;
 					if (!(this.cdr as ViewRef)?.destroyed) {
-						this.cdr.detectChanges();
+						this.cdr.markForCheck();
 					}
 				});
 			});
@@ -165,7 +165,7 @@ export class BgsSimulatorQuestRewardSelectionComponent
 			});
 		// To bind the async pipes
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -192,7 +192,7 @@ export class BgsSimulatorQuestRewardSelectionComponent
 		this.heroName = hero.name;
 		this.heroPowerText = hero.text;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

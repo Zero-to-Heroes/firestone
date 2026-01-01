@@ -79,7 +79,7 @@ export class GlobalHeaderComponent extends AbstractSubscriptionComponent impleme
 		// this.nextArrow$ = this.nav.nextArrowEnabled$$.pipe(this.mapData((nextArrowEnabled) => nextArrowEnabled));
 
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

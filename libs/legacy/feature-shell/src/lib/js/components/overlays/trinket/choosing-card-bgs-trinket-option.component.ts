@@ -181,7 +181,7 @@ export class ChoosingCardBgsTrinketOptionComponent extends AbstractSubscriptionC
 		});
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -208,7 +208,7 @@ export class ChoosingCardBgsTrinketOptionComponent extends AbstractSubscriptionC
 		);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 }

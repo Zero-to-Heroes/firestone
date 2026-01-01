@@ -92,7 +92,7 @@ export class SetsComponent extends AbstractSubscriptionComponent implements Afte
 		);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

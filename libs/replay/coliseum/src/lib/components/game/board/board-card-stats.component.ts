@@ -95,7 +95,7 @@ export class BoardCardStatsComponent {
 		this.updateAttackClass(originalCard);
 		this.updateHealthClass(originalCard);
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -129,7 +129,7 @@ export class BoardCardStatsComponent {
 			const textEl = this.elRef.nativeElement.querySelector('.card-stats');
 			textEl.style.fontSize = fontSize + 'px';
 			if (!(this.cdr as ViewRef).destroyed) {
-				this.cdr.detectChanges();
+				this.cdr.markForCheck();
 			}
 		} catch (e) {
 			console.error('[board-card-stats] Exception in resizeText', e);

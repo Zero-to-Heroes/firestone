@@ -45,7 +45,7 @@ export class AchievementCategoryComponent {
 			// Without the timeout I get a "detectChanges is not a function" error?
 			setTimeout(() => {
 				if (!(this.cdr as ViewRef)?.destroyed) {
-					this.cdr.detectChanges();
+					this.cdr.markForCheck();
 				}
 			});
 		}

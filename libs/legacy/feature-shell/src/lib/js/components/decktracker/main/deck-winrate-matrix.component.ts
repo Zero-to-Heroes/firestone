@@ -142,7 +142,7 @@ export class DeckWinrateMatrixComponent implements AfterViewInit {
 			this.confirmationShown = true;
 			this.resetText = this.i18n.translateString('app.decktracker.matchup-info.reset-are-you-sure');
 			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
+				this.cdr.markForCheck();
 			}
 			return;
 		}
@@ -164,7 +164,7 @@ export class DeckWinrateMatrixComponent implements AfterViewInit {
 		this.pieChartData = this.buildPieChartData();
 		this.pieChartOptions = this.buildPieChartOptions();
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

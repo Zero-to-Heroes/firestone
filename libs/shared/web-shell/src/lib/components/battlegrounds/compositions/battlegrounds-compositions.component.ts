@@ -107,7 +107,7 @@ export class BattlegroundsCompositionsComponent extends AbstractSubscriptionComp
 				}
 			});
 
-		this.cdr.detectChanges();
+		this.cdr.markForCheck();
 	}
 
 	private handleCompositionSlug(compSlug: string) {

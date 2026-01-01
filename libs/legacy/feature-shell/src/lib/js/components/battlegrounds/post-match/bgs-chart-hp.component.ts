@@ -349,7 +349,7 @@ export class BgsChartHpComponent {
 		this.chartWidth = rect.width;
 		this.chartHeight = rect.height;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 		setTimeout(() => this.doResize(), 200);
 	}
@@ -428,7 +428,7 @@ export class BgsChartHpComponent {
 			labels: this.buildChartLabels(hpOverTurn),
 		};
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

@@ -150,7 +150,7 @@ export class ArenaRunComponent extends AbstractSubscriptionComponent implements 
 			});
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -163,7 +163,7 @@ export class ArenaRunComponent extends AbstractSubscriptionComponent implements 
 	toggleShowMore() {
 		this._isExpanded = !this._isExpanded;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -253,7 +253,7 @@ export class ArenaRunComponent extends AbstractSubscriptionComponent implements 
 			this.cardsInDeck = null;
 		}
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

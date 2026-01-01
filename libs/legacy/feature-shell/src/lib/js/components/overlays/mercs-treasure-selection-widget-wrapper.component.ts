@@ -68,7 +68,7 @@ export class MercsTreasureSelectionWidgetWrapperComponent
 		);
 
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -81,7 +81,7 @@ export class MercsTreasureSelectionWidgetWrapperComponent
 		this.windowWidth = gameHeight * 1.2;
 		this.windowHeight = gameHeight * 0.4;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 }

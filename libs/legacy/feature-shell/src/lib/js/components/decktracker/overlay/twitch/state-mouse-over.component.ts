@@ -201,7 +201,7 @@ export class StateMouseOverComponent extends AbstractSubscriptionComponent imple
 	@Input() set overlayLeftOffset(value: number) {
 		this.horizontalOffset = value ?? 0;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -361,7 +361,7 @@ export class StateMouseOverComponent extends AbstractSubscriptionComponent imple
 
 				// console.log('isBgs', this.isBgs, this._bgsState, this.bgsPlayers);
 				if (!(this.cdr as ViewRef)?.destroyed) {
-					this.cdr.detectChanges();
+					this.cdr.markForCheck();
 				}
 			});
 	}
@@ -376,7 +376,7 @@ export class StateMouseOverComponent extends AbstractSubscriptionComponent imple
 	toggleLiveInfo(value: boolean) {
 		this.showLiveInfo.next(value);
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

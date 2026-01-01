@@ -66,7 +66,7 @@ export class TargetZoneComponent implements AfterViewInit {
 	onResize(event) {
 		this.computeParentDimensions();
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 		setTimeout(() => this.drawTargetLines());
 	}
@@ -89,7 +89,7 @@ export class TargetZoneComponent implements AfterViewInit {
 		this.left = this.el.nativeElement.getBoundingClientRect().left;
 		this.top = this.el.nativeElement.getBoundingClientRect().top;
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -113,7 +113,7 @@ export class TargetZoneComponent implements AfterViewInit {
 			`);
 			// console.debug('built svg', this.svg);
 			if (!(this.cdr as ViewRef).destroyed) {
-				this.cdr.detectChanges();
+				this.cdr.markForCheck();
 			}
 		} catch (e) {
 			console.error('[target-zone] Exception in drawTargetLines', e);

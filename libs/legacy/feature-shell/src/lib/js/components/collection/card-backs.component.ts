@@ -85,7 +85,7 @@ export class CardBacksComponent extends AbstractSubscriptionComponent implements
 			const cardScale = value / 100;
 			this.cardWidth = cardScale * this.DEFAULT_CARD_WIDTH;
 			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
+				this.cdr.markForCheck();
 			}
 		});
 		const cardBacks$ = this.collectionManager.cardBacks$$.pipe(this.mapData((cardBacks) => cardBacks));
@@ -105,7 +105,7 @@ export class CardBacksComponent extends AbstractSubscriptionComponent implements
 		);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

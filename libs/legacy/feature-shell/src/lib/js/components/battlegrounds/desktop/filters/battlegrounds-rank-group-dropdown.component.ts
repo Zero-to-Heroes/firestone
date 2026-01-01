@@ -69,7 +69,7 @@ export class BattlegroundsRankGroupDropdownComponent extends AbstractSubscriptio
 		);
 
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

@@ -224,7 +224,7 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 		this.hasTallCard$ = this.options$.pipe(this.mapData((options) => options.some((o) => o.isTallCard)));
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

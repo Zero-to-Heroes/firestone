@@ -219,7 +219,7 @@ export class BgsBattleSideComponent {
 		event.stopPropagation();
 		this.forceTooltipHidden = true;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -233,7 +233,7 @@ export class BgsBattleSideComponent {
 		this.entitiesUpdated.next(this.entities);
 		this.forceTooltipHidden = false;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -336,7 +336,7 @@ export class BgsBattleSideComponent {
 
 		this.teammateShownInfo = this.toBgsPlayer(this._teammate);
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

@@ -244,7 +244,7 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 			this.sequenceInfo = card.createdIndex + 1;
 		}
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

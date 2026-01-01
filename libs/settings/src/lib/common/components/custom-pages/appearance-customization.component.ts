@@ -58,7 +58,7 @@ export class AppearanceCustomizationPageComponent extends AbstractSubscriptionCo
 		await waitForReady(this.appearance);
 
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

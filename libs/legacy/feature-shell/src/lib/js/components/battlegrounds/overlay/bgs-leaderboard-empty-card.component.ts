@@ -174,7 +174,7 @@ export class BgsLeaderboardEmptyCardComponent
 		);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -256,7 +256,7 @@ export class BgsLeaderboardEmptyCardComponent
 		}
 		// console.debug('set trinkets', this.lesserTrinket, this.greaterTrinket, this._previousPlayer);
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

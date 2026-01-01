@@ -74,7 +74,7 @@ export class HeroPowerCostComponent implements AfterViewInit {
 			this.costClass = 'higher-cost';
 		}
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -89,7 +89,7 @@ export class HeroPowerCostComponent implements AfterViewInit {
 			const textEl = this.elRef.nativeElement.querySelector('.cost');
 			textEl.style.fontSize = fontSize + 'px';
 			if (!(this.cdr as ViewRef).destroyed) {
-				this.cdr.detectChanges();
+				this.cdr.markForCheck();
 			}
 		} catch (e) {
 			console.error('[hero-power-cost] Exception in resizeText', e);

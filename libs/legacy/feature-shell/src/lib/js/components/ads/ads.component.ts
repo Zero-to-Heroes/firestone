@@ -79,7 +79,7 @@ export class AdsComponent extends AbstractSubscriptionComponent implements OnDes
 		// console.debug('[cross-promotion] bazaar installed', isBazaarInstalled, isBazaarTrackerInstalled);
 		// this.showBazaarTrackerAd = isBazaarInstalled && !isBazaarTrackerInstalled;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

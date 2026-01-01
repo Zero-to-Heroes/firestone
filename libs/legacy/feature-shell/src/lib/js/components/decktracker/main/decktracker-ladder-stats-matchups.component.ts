@@ -155,7 +155,7 @@ export class DecktrackerLadderStatsMatchupsComponent extends AbstractSubscriptio
 		);
 
 		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

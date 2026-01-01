@@ -29,7 +29,7 @@ export class BgsStrategyCurveComponent {
 	@Input() set config(value: LocalizedBgsHeroCurve) {
 		this.curve = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 

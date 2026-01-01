@@ -170,7 +170,7 @@ export class BgsChartWarbandCompositionComponent {
 			setTimeout(() => {
 				this._dirty = true;
 				if (!(this.cdr as ViewRef)?.destroyed) {
-					this.cdr.detectChanges();
+					this.cdr.markForCheck();
 				}
 				setTimeout(() => {
 					this.doResize();
@@ -243,7 +243,7 @@ export class BgsChartWarbandCompositionComponent {
 			this.loaded = this.dimensions?.length > 0 && this.chartData?.length > 0;
 
 			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
+				this.cdr.markForCheck();
 			}
 		});
 	}
@@ -261,7 +261,7 @@ export class BgsChartWarbandCompositionComponent {
 			this.chartData = [];
 			this.loaded = false;
 			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
+				this.cdr.markForCheck();
 			}
 			return;
 		}
@@ -270,7 +270,7 @@ export class BgsChartWarbandCompositionComponent {
 			this.chartData = this.buildChartData(this._stats);
 			this.loaded = this.dimensions?.length > 0 && this.chartData?.length > 0;
 			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
+				this.cdr.markForCheck();
 			}
 		}, 200);
 	}

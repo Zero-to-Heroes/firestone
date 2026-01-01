@@ -179,7 +179,7 @@ export class CardComponent extends AbstractSubscriptionStoreComponent implements
 
 		// this.imageLoaded.next(this._card.id);
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -194,7 +194,7 @@ export class CardComponent extends AbstractSubscriptionStoreComponent implements
 		});
 		this.secondaryClass = this._highRes ? 'high-res' : '';
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 }
