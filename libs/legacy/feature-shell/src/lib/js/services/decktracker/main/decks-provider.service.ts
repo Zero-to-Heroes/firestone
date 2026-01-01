@@ -322,12 +322,7 @@ export class DecksProviderService extends AbstractFacadeService<DecksProviderSer
 		const totalGames = sumOnArray(versions, (deck) => deck.totalGames);
 		const totalWins = sumOnArray(versions, (deck) => deck.totalWins);
 		const matchupStats = this.buildMatchupStats(replays);
-		let decodedDeckName: string = null;
-		try {
-			decodedDeckName = decodeURIComponent(lastReplay.playerDeckName);
-		} catch (e) {
-			console.error('Could not decode deck name', lastReplay.playerDeckName, e);
-		}
+		const decodedDeckName = this.safeDecodeDeckName(lastReplay.playerDeckName);
 		const allVersions = this.buildVersions(versions);
 		return {
 			class: lastReplay.playerClass,
@@ -540,12 +535,7 @@ export class DecksProviderService extends AbstractFacadeService<DecksProviderSer
 				? stats.filter((stat) => stat.creationTimestamp)[0]?.creationTimestamp
 				: undefined;
 		const matchupStats: readonly MatchupStat[] = this.buildMatchupStats(validStats);
-		let decodedDeckName: string = null;
-		try {
-			decodedDeckName = decodeURIComponent(deckName);
-		} catch (e) {
-			console.error('Could not decode deck name', deckName, e);
-		}
+		const decodedDeckName = this.safeDecodeDeckName(deckName);
 		const result = {
 			class: deckClass,
 			deckName: decodedDeckName,
@@ -687,6 +677,20 @@ export class DecksProviderService extends AbstractFacadeService<DecksProviderSer
 				return !!pair ? pair[1] : 0;
 			}),
 		);
+	}
+
+	private safeDecodeDeckName(deckName: string | undefined): string | null {
+		if (!deckName) {
+			return null;
+		}
+		try {
+			// Try to decode - if it fails, the string is likely already decoded
+			return decodeURIComponent(deckName);
+		} catch (e) {
+			// String is not URI-encoded, return as-is
+			console.warn('Could not decode deck name', deckName, e);
+			return deckName;
+		}
 	}
 }
 
