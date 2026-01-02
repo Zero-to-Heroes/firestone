@@ -26,6 +26,8 @@ export const KthirRitualist: GeneratingCard & StaticGeneratingCard = {
 			input.options,
 		);
 		return {
+			cardType: CardType.MINION,
+			cost: 4,
 			possibleCards,
 		};
 	},
