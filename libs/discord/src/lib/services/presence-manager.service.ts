@@ -102,7 +102,7 @@ export class PresenceManagerService {
 					enabled: true,
 					inGame: inGame ?? false,
 					text: inGame
-						? this.buildCustomText(
+						? (this.buildCustomText(
 								enableCustomInGameText,
 								enableCustomInMatchText,
 								gameText,
@@ -110,7 +110,7 @@ export class PresenceManagerService {
 								metaData,
 								matchInfo,
 								playerHero,
-						  ) ?? IN_GAME_TEXT_PLACEHOLDER
+							) ?? IN_GAME_TEXT_PLACEHOLDER)
 						: null,
 				}),
 			),
@@ -146,6 +146,7 @@ export class PresenceManagerService {
 
 		const mode = this.i18n.translateString(`global.game-mode.${formatGameType(metaData.gameType)}`)!;
 		const rank = !!matchInfo ? this.buildRankText(matchInfo, metaData) : '';
+		console.debug('[presence] rank', rank, matchInfo, metaData);
 		// const [wins, losses] = additionalResult?.includes('-') ? additionalResult.split('-') : [null, null];
 		const heroCard = this.allCards.getCard(playerHero ?? '');
 		const hero = heroCard?.name ?? 'Unknown hero';
@@ -157,7 +158,7 @@ export class PresenceManagerService {
 			.replace('{mode}', mode)
 			.replace('{hero}', hero)
 			.replace('{class}', playerClass);
-		// console.debug('[presence] returning result', result, mode, rank, hero);
+		console.debug('[presence] returning result', result, mode, rank, hero, matchText);
 		return result;
 		// .replace('{wins}', wins ?? '')
 		// .replace('{losses}', losses ?? '');
@@ -213,8 +214,14 @@ export class PresenceManagerService {
 		if (rank.leagueId === 0) {
 			return this.i18n.translateString('settings.general.discord.in-game-text.legend', { rank: rank.legendRank });
 		} else {
-			return this.i18n.translateString('settings.general.discord.in-game-text.rank', {
-				league: this.i18n.translateString(`global.ranks.constructed.${this.rankToLeague(rank.leagueId)}`),
+			console.debug(
+				'[presence] building ranked string',
+				rank.rankValue,
+				rank.leagueId,
+				this.rankToLeague(rank.leagueId),
+			);
+			return this.i18n.translateString('settings.general.discord.in-game-text.league', {
+				league: this.rankToLeague(rank.leagueId),
 				rank: rank.rankValue,
 			});
 		}

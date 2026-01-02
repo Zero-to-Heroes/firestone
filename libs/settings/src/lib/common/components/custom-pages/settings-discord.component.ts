@@ -78,6 +78,12 @@ import { Observable, take, takeUntil } from 'rxjs';
 							>
 								&#123;class&#125;
 							</li>
+							<li
+								class="token"
+								[helpTooltip]="'settings.general.discord.in-game-details.tokens.rank' | fsTranslate"
+							>
+								&#123;rank&#125;
+							</li>
 						</ul>
 						<div class="details-text details-text-2" [innerHTML]="text2"></div>
 					</div>
@@ -122,10 +128,10 @@ export class SettingsDiscordComponent extends AbstractSubscriptionComponent impl
 	ngAfterContentInit() {
 		this.discordDisabled$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => !prefs.discordRichPresence));
 		this.discordRpcDisableCustomInGameText$ = this.prefs.preferences$$.pipe(
-			this.mapData((prefs) => prefs.discordRpcEnableCustomInGameText),
+			this.mapData((prefs) => !prefs.discordRpcEnableCustomInGameText),
 		);
 		this.discordRpcDisableCustomInMatchText$ = this.prefs.preferences$$.pipe(
-			this.mapData((prefs) => prefs.discordRpcEnableCustomInMatchText),
+			this.mapData((prefs) => !prefs.discordRpcEnableCustomInMatchText),
 		);
 		this.customInput$ = this.prefs.preferences$$.pipe(
 			this.mapData((prefs) => prefs.discordRpcCustomInGameText),
