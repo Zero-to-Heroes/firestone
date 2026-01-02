@@ -107,26 +107,22 @@ export class PresenceManagerService {
 					matchInfo,
 					playerHero,
 					deckName,
-				]) => {
-					// Only show presence when actually in a match (metadata exists), not just when game is running
-					const inMatch = inGame && metaData?.gameType != null;
-					return {
-						enabled: true,
-						inGame: inMatch,
-						text: inMatch
-							? (this.buildCustomText(
-									enableCustomInGameText,
-									enableCustomInMatchText,
-									gameText,
-									matchText,
-									metaData,
-									matchInfo,
-									playerHero,
-									deckName,
-								) ?? IN_GAME_TEXT_PLACEHOLDER)
-							: null,
-					};
-				},
+				]) => ({
+					enabled: true,
+					inGame: inGame ?? false,
+					text: inGame
+						? (this.buildCustomText(
+								enableCustomInGameText,
+								enableCustomInMatchText,
+								gameText,
+								matchText,
+								metaData,
+								matchInfo,
+								playerHero,
+								deckName,
+							) ?? IN_GAME_TEXT_PLACEHOLDER)
+						: null,
+				}),
 			),
 		);
 	}
