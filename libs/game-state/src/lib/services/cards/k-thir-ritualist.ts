@@ -26,7 +26,7 @@ export const KthirRitualist: GeneratingCard & StaticGeneratingCard = {
 			input.options,
 		);
 		return {
-			possibleCards: possibleCards,
+			possibleCards,
 		};
 	},
 };
