@@ -1,7 +1,7 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Injectable } from '@angular/core';
-import { formatGameType, GameFormat, GameType } from '@firestone-hs/reference-data';
+import { formatFormat, formatGameType, GameFormat, GameType } from '@firestone-hs/reference-data';
 import { GameStateFacadeService, Metadata } from '@firestone/game-state';
 import { MatchInfo, PlayerInfo, Rank } from '@firestone/memory';
 import { GameStatusService, PreferencesService } from '@firestone/shared/common/service';
@@ -144,7 +144,11 @@ export class PresenceManagerService {
 			return gameText;
 		}
 
-		const mode = this.i18n.translateString(`global.game-mode.${formatGameType(metaData.gameType)}`)!;
+		let mode = this.i18n.translateString(`global.game-mode.${formatGameType(metaData.gameType)}`)!;
+		if (metaData.gameType === GameType.GT_RANKED) {
+			const format = this.i18n.translateString(`global.format.${formatFormat(metaData.formatType)}`)!;
+			mode = `${format}`;
+		}
 		const rank = !!matchInfo ? this.buildRankText(matchInfo, metaData) : '';
 		console.debug('[presence] rank', rank, matchInfo, metaData);
 		// const [wins, losses] = additionalResult?.includes('-') ? additionalResult.split('-') : [null, null];
