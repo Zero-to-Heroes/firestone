@@ -24,17 +24,19 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 	private viewInit = false;
 
 	@Input() set componentType(value: ComponentType<any> | undefined) {
-		this._componentType = value;
-		if (value && value !== this._componentType) {
-			this.updatePositionStrategy();
+		if (value === this._componentType) {
+			return;
 		}
+		this._componentType = value;
+		this.updatePositionStrategy();
 	}
 
 	@Input() set componentInput(value: any) {
-		this._componentInput = value;
-		if (value && value !== this._componentInput) {
-			this.updatePositionStrategy();
+		if (value === this._componentInput) {
+			return;
 		}
+		this._componentInput = value;
+		this.updatePositionStrategy();
 	}
 
 	@Input() componentTooltipBackdropClass: string;
