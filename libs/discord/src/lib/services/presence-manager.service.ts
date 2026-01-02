@@ -6,7 +6,17 @@ import { GameStateFacadeService, Metadata } from '@firestone/game-state';
 import { MatchInfo, PlayerInfo, Rank } from '@firestone/memory';
 import { GameStatusService, PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
-import { auditTime, BehaviorSubject, combineLatest, distinctUntilChanged, map, of, shareReplay, switchMap } from 'rxjs';
+import {
+	auditTime,
+	BehaviorSubject,
+	combineLatest,
+	distinctUntilChanged,
+	map,
+	of,
+	shareReplay,
+	switchMap,
+	tap,
+} from 'rxjs';
 import { IN_GAME_TEXT_PLACEHOLDER } from './discord-presence-manager.service';
 
 @Injectable()
@@ -49,7 +59,7 @@ export class PresenceManagerService {
 	private buildPresence() {
 		const metaData$ = this.gameState.gameState$$.pipe(
 			auditTime(500),
-			map((gameState) => gameState.metadata),
+			map((gameState) => (gameState.gameEnded ? undefined : gameState.metadata)),
 			distinctUntilChanged(),
 			// tap((metadata) => console.debug('[presence] new metadata', metadata)),
 			shareReplay(1),
@@ -90,7 +100,7 @@ export class PresenceManagerService {
 			matchInfo$,
 			playerHero$,
 		]).pipe(
-			// tap((data) => console.debug('[presence] new data', data)),
+			tap((data) => console.debug('[presence] new data', data)),
 			map(
 				([
 					inGame,
