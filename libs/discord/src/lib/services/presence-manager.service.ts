@@ -78,6 +78,13 @@ export class PresenceManagerService {
 			// tap((hero) => console.debug('[presence] new hero', hero)),
 			shareReplay(1),
 		);
+		const deckName$ = this.gameState.gameState$$.pipe(
+			auditTime(500),
+			map((gameState) => gameState.playerDeck?.name),
+			distinctUntilChanged(),
+			// tap((deckName) => console.debug('[presence] new deckName', deckName)),
+			shareReplay(1),
+		);
 		return combineLatest([
 			this.gameStatus.inGame$$,
 			//TODO: premium status. Wait until we migrate to tebex, so that we can use the refactored services?
@@ -99,6 +106,7 @@ export class PresenceManagerService {
 			metaData$,
 			matchInfo$,
 			playerHero$,
+			deckName$,
 		]).pipe(
 			tap((data) => console.debug('[presence] new data', data)),
 			map(
@@ -108,6 +116,7 @@ export class PresenceManagerService {
 					metaData,
 					matchInfo,
 					playerHero,
+					deckName,
 				]) => ({
 					enabled: true,
 					inGame: inGame ?? false,
@@ -120,6 +129,7 @@ export class PresenceManagerService {
 								metaData,
 								matchInfo,
 								playerHero,
+								deckName,
 							) ?? IN_GAME_TEXT_PLACEHOLDER)
 						: null,
 				}),
@@ -135,6 +145,7 @@ export class PresenceManagerService {
 		metaData: Metadata | undefined,
 		matchInfo: MatchInfo | undefined,
 		playerHero: string | undefined,
+		deckName: string | undefined,
 		// additionalResult: string | undefined,
 	): string | null | undefined {
 		// console.debug(
@@ -171,8 +182,9 @@ export class PresenceManagerService {
 			?.replace('{rank}', rank ?? '')
 			.replace('{mode}', mode)
 			.replace('{hero}', hero)
-			.replace('{class}', playerClass);
-		console.debug('[presence] returning result', result, mode, rank, hero, matchText);
+			.replace('{class}', playerClass)
+			.replace('{deckname}', deckName ?? '');
+		console.debug('[presence] returning result', result, mode, rank, hero, deckName, matchText);
 		return result;
 		// .replace('{wins}', wins ?? '')
 		// .replace('{losses}', losses ?? '');
@@ -241,16 +253,17 @@ export class PresenceManagerService {
 		}
 	}
 
-	private rankToLeague(rank: number): string | null {
-		if (rank < 10) {
+	private rankToLeague(leagueId: number): string | null {
+		// leagueId mapping: 5=Bronze, 4=Silver, 3=Gold, 2=Platinum, 1=Diamond, 0=Legend
+		if (leagueId === 5) {
 			return this.i18n.translateString('global.ranks.constructed.bronze');
-		} else if (rank < 20) {
+		} else if (leagueId === 4) {
 			return this.i18n.translateString('global.ranks.constructed.silver');
-		} else if (rank < 30) {
+		} else if (leagueId === 3) {
 			return this.i18n.translateString('global.ranks.constructed.gold');
-		} else if (rank < 40) {
+		} else if (leagueId === 2) {
 			return this.i18n.translateString('global.ranks.constructed.platinum');
-		} else if (rank < 50) {
+		} else if (leagueId === 1) {
 			return this.i18n.translateString('global.ranks.constructed.diamond');
 		}
 		return this.i18n.translateString('global.ranks.constructed.legend');

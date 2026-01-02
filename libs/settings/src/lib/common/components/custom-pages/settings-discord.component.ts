@@ -84,6 +84,12 @@ import { Observable, take, takeUntil } from 'rxjs';
 							>
 								&#123;rank&#125;
 							</li>
+							<li
+								class="token"
+								[helpTooltip]="'settings.general.discord.in-game-details.tokens.deckname' | fsTranslate"
+							>
+								&#123;deckname&#125;
+							</li>
 						</ul>
 						<div class="details-text details-text-2" [innerHTML]="text2"></div>
 					</div>
