@@ -58,6 +58,7 @@ export { IntertwinedFate } from './intertwined-fate';
 export { JuicyPsychmelon } from './juicy-psychmelon';
 export { Jumpscare } from './jumpscare';
 export { KaldoreiCultivator } from './kaldorei-cultivator';
+export { KthirRitualist } from './k-thir-ritualist';
 export { Kiljaeden } from './kiljaeden';
 export { LadyAzshara } from './lady-azshara';
 export { MadameLazul } from './madame-lazul';
