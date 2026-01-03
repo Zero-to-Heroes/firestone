@@ -12,7 +12,7 @@ export const ShakuTheCollector: GeneratingCard & StaticGeneratingCard = {
 	publicCreator: true,
 	dynamicPool: (input: StaticGeneratingCardInput) => {
 		const opponentClassStr = input.inputOptions.opponentDeckState.getCurrentClass();
-		const opponentClass = opponentClassStr ? (CardClass[opponentClassStr as keyof typeof CardClass] ?? null) : null;
+		const opponentClass = opponentClassStr ? CardClass[opponentClassStr] : null;
 		return filterCards(
 			ShakuTheCollector.cardIds[0],
 			input.allCards,
@@ -22,7 +22,7 @@ export const ShakuTheCollector: GeneratingCard & StaticGeneratingCard = {
 	},
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
 		const opponentClassStr = input.opponentDeckState?.getCurrentClass();
-		const opponentClass = opponentClassStr ? (CardClass[opponentClassStr as keyof typeof CardClass] ?? null) : null;
+		const opponentClass = opponentClassStr ? CardClass[opponentClassStr] : null;
 		const possibleCards = filterCards(
 			ShakuTheCollector.cardIds[0],
 			input.allCards,
