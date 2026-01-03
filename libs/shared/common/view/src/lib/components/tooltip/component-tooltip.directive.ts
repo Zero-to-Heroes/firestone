@@ -231,10 +231,10 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 	}
 
 	private destroyOverlay(): void {
-		// Clean up tooltip reference
-		// this.tooltipRef = null;
+		// Clean up tooltip portal
+		this.tooltipPortal = null;
 
-		// Clean up overlay
+		// Clean up overlay (this also destroys the attached component)
 		if (this.overlayRef) {
 			try {
 				if (this.overlayRef.hasAttached()) {

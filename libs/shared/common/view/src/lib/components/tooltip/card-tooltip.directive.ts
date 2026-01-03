@@ -281,8 +281,18 @@ export class CardTooltipDirective implements OnDestroy, AfterContentInit {
 	}
 
 	private destroyOverlay(): void {
-		// Clean up tooltip reference
-		this.tooltipRef = null;
+		// Clean up tooltip component reference - must destroy before detaching
+		if (this.tooltipRef) {
+			try {
+				this.tooltipRef.destroy();
+			} catch (error) {
+				// Component might already be destroyed
+			}
+			this.tooltipRef = null;
+		}
+
+		// Clean up tooltip portal
+		this.tooltipPortal = null;
 
 		// Clean up overlay
 		if (this.overlayRef) {
