@@ -11,6 +11,7 @@ export { AmuletOfTrackingPhony } from './amulet-of-tracking-phony';
 export { AmuletOfUndying } from './amulet-of-undying';
 export { ArcaneBrilliance } from './arcane-brilliance';
 export { ArcaneKeysmith } from './arcane-keysmith';
+export { Ashamane } from './ashamane';
 export { BarakKodobane } from './barak-kodobane';
 export { BargainBin } from './bargain-bin';
 export { BlastWave } from './blast-wave';
