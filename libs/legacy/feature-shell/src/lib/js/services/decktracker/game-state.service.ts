@@ -361,7 +361,7 @@ export class GameStateService {
 		return currentState;
 	}
 
-	public processedEvents = [];
+	// public processedEvents = [];
 	private async processEvent(currentState: GameState, gameEvent: GameEvent, prefs: Preferences): Promise<GameState> {
 		const start = Date.now();
 		// console.debug('[game-state] processing event', gameEvent.type, gameEvent.cardId, gameEvent.entityId, gameEvent);
@@ -370,8 +370,10 @@ export class GameStateService {
 				playerTrackerClosedByUser: false,
 				opponentTrackerClosedByUser: false,
 			});
+			this.minionsWillDie = [];
 		} else if (gameEvent.type === GameEvent.GAME_END) {
 			this.savedDeckstrings = null;
+			this.minionsWillDie = [];
 		} else if (gameEvent.type === GameEvent.SPECTATING) {
 			currentState = currentState?.update({
 				// We can't "unspectate" a game
@@ -473,7 +475,7 @@ export class GameStateService {
 			currentState,
 			gameEvent,
 		);
-		this.processedEvents.push(gameEvent.type);
+		// this.processedEvents.push(gameEvent.type);
 		return currentState;
 	}
 

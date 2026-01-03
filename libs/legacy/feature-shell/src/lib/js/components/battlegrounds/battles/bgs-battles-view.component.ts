@@ -1,4 +1,12 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	HostListener,
+	Input,
+	OnDestroy,
+} from '@angular/core';
 import { BattleResultHistory } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { BgsFaceOffWithSimulation } from '@firestone/game-state';
 import { sleep } from '@firestone/shared/framework/common';
@@ -64,7 +72,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 // TODO: remove store and use stateUpdater instead
-export class BgsBattlesViewComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class BgsBattlesViewComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit, OnDestroy {
 	screenshotText$: Observable<string>;
 	screenshotTooltip$: Observable<string>;
 
@@ -96,6 +104,13 @@ export class BgsBattlesViewComponent extends AbstractSubscriptionStoreComponent 
 	ngAfterContentInit(): void {
 		this.screenshotText$ = this.screenshotText$$.asObservable();
 		this.screenshotTooltip$ = this.screenshotTooltip$$.asObservable();
+	}
+
+	@HostListener('window:beforeunload')
+	override ngOnDestroy(): void {
+		super.ngOnDestroy();
+		this.screenshotText$$.complete();
+		this.screenshotTooltip$$.complete();
 	}
 
 	selectBattle(faceOff: BgsFaceOffWithSimulation) {
@@ -149,6 +164,12 @@ export class BgsBattlesViewComponent extends AbstractSubscriptionStoreComponent 
 				this.screenshotTooltip$$.next('You can now paste it to your favorite social network');
 				await sleep(3000);
 				this.screenshotText$$.next(null);
+				this.screenshotTooltip$$.next('Copy the list of battles to your clipboard');
+			})
+			.catch((error) => {
+				console.error('[bgs-battles-view] Screenshot failed:', error);
+				clearTimeout(messageTimeout);
+				this.screenshotText$$.next('Screenshot failed');
 				this.screenshotTooltip$$.next('Copy the list of battles to your clipboard');
 			});
 	}
