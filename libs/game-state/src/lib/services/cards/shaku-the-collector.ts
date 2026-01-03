@@ -11,10 +11,7 @@ export const ShakuTheCollector: GeneratingCard & StaticGeneratingCard = {
 	cardIds: [CardIds.ShakuTheCollector_CORE_CFM_781, CardIds.ShakuTheCollector],
 	publicCreator: true,
 	dynamicPool: (input: StaticGeneratingCardInput) => {
-		const opponentClass =
-			input.inputOptions.opponentDeckState.hero?.initialClasses?.[0] ??
-			input.inputOptions.opponentDeckState.hero?.classes?.[0] ??
-			null;
+		const opponentClass = input.inputOptions.opponentDeckState.hero?.classes?.[0] ?? null;
 		return filterCards(
 			ShakuTheCollector.cardIds[0],
 			input.allCards,
@@ -23,8 +20,7 @@ export const ShakuTheCollector: GeneratingCard & StaticGeneratingCard = {
 		);
 	},
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
-		const opponentClass =
-			input.opponentDeckState?.hero?.initialClasses?.[0] ?? input.opponentDeckState?.hero?.classes?.[0] ?? null;
+		const opponentClass = input.opponentDeckState?.hero?.classes?.[0] ?? null;
 		const possibleCards = filterCards(
 			ShakuTheCollector.cardIds[0],
 			input.allCards,
