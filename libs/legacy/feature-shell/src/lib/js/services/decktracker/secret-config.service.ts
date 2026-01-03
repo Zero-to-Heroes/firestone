@@ -28,6 +28,17 @@ const createsSecretsFromThePast = [
 	CardIds.TimelooperToki_LoopingTimeEnchantment_TIME_861e1,
 	CardIds.AlterTime_TIME_857,
 ];
+const tavishSecrets = [
+	CardIds.BeaststalkerTavish_ImprovedExplosiveTrapToken,
+	CardIds.BeaststalkerTavish_ImprovedFreezingTrapToken,
+	CardIds.BeaststalkerTavish_ImprovedSnakeTrapToken,
+	CardIds.BeaststalkerTavish_ImprovedPackTacticsToken,
+	CardIds.BeaststalkerTavish_ImprovedOpenTheCagesToken,
+	CardIds.BeaststalkerTavish_ImprovedIceTrapToken,
+	CardIds.EmergencyManeuvers_ImprovedEmergencyManeuversToken,
+	CardIds.MotionDenied_ImprovedMotionDeniedToken,
+	CardIds.Zombeeees_ImprovedZombeeeesToken,
+];
 
 @Injectable()
 export class SecretConfigService {
@@ -74,7 +85,6 @@ export class SecretConfigService {
 				return brawlSet.includes(this.allCards.getCard(secret.cardId).set?.toLowerCase() as SetId);
 			})
 			.filter((secret) => secret.playerClass === playerClass)
-			.filter((secret) => secret.isTavish === (creatorCardId === CardIds.BeaststalkerTavish))
 			.map((secret) => secret.cardId)
 			// From the past
 			.filter((secret) => {
@@ -104,6 +114,8 @@ export class SecretConfigService {
 
 	private getStaticSecrets(creatorCardId: string, metadata: Metadata, playerClass: string): readonly string[] {
 		switch (creatorCardId) {
+			case CardIds.BeaststalkerTavish:
+				return tavishSecrets;
 			case CardIds.PuzzlemasterKhadgar_MagicWisdomballToken_TOY_373t:
 				return [CardIds.CounterspellCore, CardIds.IceBarrierCore];
 			case CardIds.HarthStonebrew_CORE_GIFT_01:
@@ -232,5 +244,4 @@ interface SecretsConfig {
 interface SecretConfig {
 	readonly cardId: string;
 	readonly playerClass: string;
-	readonly isTavish: boolean;
 }
