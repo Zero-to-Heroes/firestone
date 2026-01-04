@@ -98,6 +98,7 @@ export { RunicInscriptions } from './runic-inscriptions';
 export { ScaleReplica } from './scale-replica';
 export { SemiStablePortal } from './semi-stable-portal';
 export { ShallowGravedigger } from './shallow-gravedigger';
+export { ShakuTheCollector } from './shaku-the-collector';
 export { ShellGame } from './shell-game';
 export { ShokkJungleTyrant } from './shokk-jungle-tyrant';
 export { SirenSong } from './siren-song';
