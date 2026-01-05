@@ -49,7 +49,7 @@
 		"c6": "=============== Electron (serve frontend first, then start:ow-electron) =================",
 		"nxe:serve:frontend": "nx serve electron-frontend",
 		"restart:ow-electron": "nx build electron-app && ow-electron dist/apps/electron-app --owepm-packages-url=https://electronapi-qa.overwolf.com/packages",
-		"restart:ow-electron:no-color": "cross-env NO_COLOR=1 FORCE_COLOR=0 nx build electron-app && cross-env NO_COLOR=1 FORCE_COLOR=0 ow-electron dist/apps/electron-app --owepm-packages-url=https://electronapi-qa.overwolf.com/packages",
+		"restart:ow-electron:no-color": "cross-env NO_COLOR=1 FORCE_COLOR=0 nx build electron-app && cross-env NO_COLOR=1 FORCE_COLOR=0 ow-electron dist/apps/electron-app --owepm-dev-packages-folder=C:\\Users\\Daedin\\Downloads\\ow",
 		"debug:ow-electron": "nx build electron-app && ow-electron --inspect-brk=5858 dist/apps/electron-app --owepm-packages-url=https://electronapi-qa.overwolf.com/packages",
 		"redebug:ow-electron": "nx build electron-app && ow-electron --inspect-brk=5858 dist/apps/electron-app --owepm-packages-url=https://electronapi-qa.overwolf.com/packages",
 		"nxe:build:frontend": "nx build electron-frontend",

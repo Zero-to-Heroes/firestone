@@ -69,8 +69,8 @@ export class GameStatusService extends AbstractFacadeService<GameStatusService> 
 	}
 
 	protected override async initElectronMainProcess() {
-		// In main process, use eval require with relative path to prevent bundler issues
-		const { ElectronGameWindowService } = eval('require')('../../libs/electron/common/src/index.js');
+		// In main process, access from global (exposed by electron-app)
+		const ElectronGameWindowService = (global as any).ElectronGameWindowService;
 		const gameWindowService = ElectronGameWindowService.getInstance();
 		gameWindowService.onGameInfoChanged((gameInfo: any) => {
 			if (gameInfo?.isRunning && Math.floor((gameInfo?.id ?? 0) / 10) === HEARTHSTONE_GAME_ID) {
@@ -84,8 +84,8 @@ export class GameStatusService extends AbstractFacadeService<GameStatusService> 
 
 	private async getElectronGameInfo(): Promise<any> {
 		if (isMainProcess()) {
-			// In main process, use eval require with relative path to prevent bundler issues
-			const { ElectronGameWindowService } = eval('require')('../../libs/electron/common/src/index.js');
+			// In main process, access from global (exposed by electron-app)
+			const ElectronGameWindowService = (global as any).ElectronGameWindowService;
 			const gameWindowService = ElectronGameWindowService.getInstance();
 			return gameWindowService.getCurrentGameInfo();
 		} else {
@@ -124,8 +124,8 @@ export class GameStatusService extends AbstractFacadeService<GameStatusService> 
 	// Here we are always in the main process
 	private async getElectronInGame(): Promise<boolean> {
 		if (isMainProcess()) {
-			// In main process, use eval require with relative path to prevent bundler issues
-			const { ElectronGameWindowService } = eval('require')('../../libs/electron/common/src/index.js');
+			// In main process, access from global (exposed by electron-app)
+			const ElectronGameWindowService = (global as any).ElectronGameWindowService;
 			const gameWindowService = ElectronGameWindowService.getInstance();
 			const gameInfo = gameWindowService.getCurrentGameInfo();
 			return this.isHearthstoneRunning(gameInfo);

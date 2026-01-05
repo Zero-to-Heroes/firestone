@@ -1,6 +1,8 @@
 // Import Angular compiler FIRST to enable JIT compilation fallback for decorated services
 import '@angular/compiler';
 import { ElectronGameWindowService } from '@firestone/electron/common';
+// Expose to global for services that need runtime access without bundler issues
+(global as any).ElectronGameWindowService = ElectronGameWindowService;
 // import '@overwolf/types';
 import { AllCardsService } from '@firestone-hs/reference-data';
 import { GameEvents } from '@firestone/game-state';
