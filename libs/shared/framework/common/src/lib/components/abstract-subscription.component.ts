@@ -18,7 +18,7 @@ export abstract class AbstractSubscriptionComponent implements OnDestroy {
 	protected mapData<T, R>(
 		extractor: (arg: T) => R,
 		equality: ((a: R, b: R) => boolean) | null = null,
-		debounceTimeMs = 500,
+		debounceTimeMs = 200,
 	): UnaryFunction<Observable<T>, Observable<R>> {
 		return pipe(
 			auditTime(debounceTimeMs),

@@ -8,10 +8,12 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
+import { GameStateFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { OverwolfService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
+import { arraysEqual } from '@firestone/shared/framework/common';
+import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
+import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, tap } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
@@ -62,39 +64,41 @@ export class DecktrackerPlayerWidgetWrapperComponent
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly scene: SceneService,
+		private readonly gameState: GameStateFacadeService,
 	) {
 		super(ow, el, prefs, renderer, cdr);
 	}
 
 	async ngAfterContentInit() {
-		await this.scene.isReady();
+		await waitForReady(this.prefs, this.scene);
 
 		const displayFromGameModeSubject: BehaviorSubject<boolean> = this.ow.getMainWindow().decktrackerDisplayEventBus;
 		const displayFromGameMode$ = displayFromGameModeSubject.asObservable();
 		this.showWidget$ = combineLatest([
 			this.scene.currentScene$$,
-			this.store.listen$(
-				([main, nav, pref]) => true,
-				([main, nav, pref]) => pref.decktrackerCloseOnGameEnd,
-			),
-			this.store.listenDeckState$(
-				(deckState) => deckState?.playerTrackerClosedByUser,
-				(deckState) => deckState?.gameStarted,
-				(deckState) => deckState?.gameEnded,
-				(deckState) => deckState?.isBattlegrounds(),
-				(deckState) => deckState?.isMercenaries(),
-				(deckState) => deckState?.playerDeck?.totalCardsInZones(),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.decktrackerCloseOnGameEnd)),
+			this.gameState.gameState$$.pipe(
+				this.mapData((state) => ({
+					closedByUser: state.playerTrackerClosedByUser,
+					gameStarted: state.gameStarted,
+					gameEnded: state.gameEnded,
+					isBgs: state.isBattlegrounds(),
+					isMercs: state.isMercenaries(),
+					totalCardsInZones: state.playerDeck?.totalCardsInZones(),
+				})),
+				distinctUntilChanged((a, b) => arraysEqual(Object.values(a), Object.values(b))),
 			),
 			displayFromGameMode$,
 		]).pipe(
+			tap((info) => console.debug('[debug] info for player widget', info)),
 			this.mapData(
 				([
 					currentScene,
-					[displayFromPrefs, decktrackerCloseOnGameEnd],
-					[closedByUser, gameStarted, gameEnded, isBgs, isMercs, totalCardsInZones],
+					decktrackerCloseOnGameEnd,
+					{ closedByUser, gameStarted, gameEnded, isBgs, isMercs, totalCardsInZones },
 					displayFromGameMode,
 				]) => {
-					if (closedByUser || !gameStarted || isBgs || isMercs || !displayFromGameMode || !displayFromPrefs) {
+					if (closedByUser || !gameStarted || isBgs || isMercs || !displayFromGameMode) {
 						return false;
 					}
 
