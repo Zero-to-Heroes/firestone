@@ -74,6 +74,7 @@ export class SecretConfigService {
 		const standardSecrets = this.secretConfigs.find((conf) => conf.mode === 'standard');
 		const standardSecretCardIds = standardSecrets.secrets.map((s) => s.cardId);
 		const staticSecrets = config.secrets
+			.filter((secret) => !secret.isTavish)
 			.filter((secret) => {
 				if (metadata.gameType !== GameType.GT_TAVERNBRAWL) {
 					return true;
@@ -244,4 +245,5 @@ interface SecretsConfig {
 interface SecretConfig {
 	readonly cardId: string;
 	readonly playerClass: string;
+	readonly isTavish: boolean;
 }
