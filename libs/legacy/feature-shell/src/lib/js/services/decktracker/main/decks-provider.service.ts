@@ -688,7 +688,7 @@ export class DecksProviderService extends AbstractFacadeService<DecksProviderSer
 			return decodeURIComponent(deckName);
 		} catch (e) {
 			// String is not URI-encoded, return as-is
-			console.warn('Could not decode deck name', deckName, e);
+			console.warn('Could not decode deck name', deckName);
 			return deckName;
 		}
 	}

@@ -35,7 +35,6 @@ import {
 import { GameStat, GameStatsLoaderService, toFormatType } from '@firestone/stats/data-access';
 import {
 	BehaviorSubject,
-	EMPTY,
 	Observable,
 	auditTime,
 	combineLatest,
@@ -312,7 +311,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 			switchMap(({ archetypeId, format, playerRank, timeFrame }) => {
 				if (!this.archetypes) {
 					console.warn('[mulligan-guide] archetypes service is undefined');
-					return EMPTY;
+					return of(null);
 				}
 
 				const result = this.archetypes.loadNewArchetypeDetails(
@@ -330,7 +329,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 						timeFrame,
 						playerRank,
 					);
-					return EMPTY;
+					return of(null);
 				}
 
 				console.debug('[mulligan-guide] archetype result', result);
@@ -376,7 +375,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 			switchMap(({ deckString, format, playerRank, timeFrame }) => {
 				if (!this.archetypes) {
 					console.warn('[mulligan-guide] archetypes service is undefined');
-					return EMPTY;
+					return of(null);
 				}
 
 				const result = this.archetypes.loadNewDeckDetails(
@@ -394,7 +393,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 						timeFrame,
 						playerRank,
 					);
-					return EMPTY;
+					return of(null);
 				}
 
 				return from(result).pipe(
@@ -640,6 +639,8 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 		);
 	}
 
+	// WARNING: if refactoring this, we need to expose prefs in input, as we want to be able to change
+	// the filters and get updated stats
 	public getMulliganAdvice$(
 		deckstring: string,
 		options?: MulliganGuideOptions,
@@ -709,7 +710,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 			switchMap(({ archetypeId, format, playerRank, timeFrame }) => {
 				if (!this.archetypes) {
 					console.warn('[mulligan-guide] archetypes service is undefined');
-					return EMPTY;
+					return of(null);
 				}
 
 				const result = this.archetypes.loadNewArchetypeDetails(
@@ -727,7 +728,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 						timeFrame,
 						playerRank,
 					);
-					return EMPTY;
+					return of(null);
 				}
 
 				return from(result).pipe(
@@ -759,7 +760,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 			switchMap(({ format, playerRank, timeFrame }) => {
 				if (!this.archetypes) {
 					console.warn('[mulligan-guide] archetypes service is undefined');
-					return EMPTY;
+					return of(null);
 				}
 
 				const result = this.archetypes.loadNewDeckDetails(
@@ -777,7 +778,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 						timeFrame,
 						playerRank,
 					);
-					return EMPTY;
+					return of(null);
 				}
 
 				return from(result).pipe(
@@ -790,7 +791,8 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 							);
 						}
 					}),
-					filter((deckDetails): deckDetails is DeckStat => !!deckDetails),
+					map((deckDetails) => deckDetails ?? null),
+					// filter((deckDetails): deckDetails is DeckStat => !!deckDetails),
 				);
 			}),
 		);

@@ -151,7 +151,10 @@ export class ConstructedDecktrackerExtendedOocComponent
 	async ngAfterContentInit() {
 		await waitForReady(this.gameState, this.ads, this.guardian, this.prefs, this.patches, this.deck, this.mulligan);
 
-		const deckstring$ = this.deck.currentDeck$$.pipe(this.mapData((deck) => deck?.deckstring));
+		const deckstring$ = this.deck.currentDeck$$.pipe(
+			tap((deck) => console.debug('[mulligan] new deck', deck)),
+			this.mapData((deck) => deck?.deckstring),
+		);
 
 		this.allDeckMulliganInfo$ = deckstring$.pipe(
 			tap((info) => console.debug('[mulligan] will get mulligan info', info)),
@@ -207,7 +210,7 @@ export class ConstructedDecktrackerExtendedOocComponent
 					? this.i18n.translateString(`app.decktracker.filters.rank-bracket.competitive-tooltip`)
 					: this.i18n.translateString(
 							`app.decktracker.filters.rank-bracket.${prefs.decktrackerMulliganRankBracket}`,
-					  ),
+						),
 			),
 			this.mapData(
 				(rankInfo) =>
