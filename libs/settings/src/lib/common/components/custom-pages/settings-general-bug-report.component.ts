@@ -108,7 +108,7 @@ export class SettingsGeneralBugReportComponent implements AfterViewInit {
 
 			this.status = this.i18n.translateString('settings.general.bug-report.status-done', {
 				discordLink: `<a href="https://discord.gg/vKeB3gnKTy" target="_blank">Discord</a>`,
-				twitterLink: `<a href="https://twitter.com/ZerotoHeroes_HS" target="_blank">Twitter</a>`,
+				twitterLink: `<a href="https://twitter.com/Firestone_HS" target="_blank">X</a>`,
 			});
 			this.buttonDisabled = false;
 			this.body = null;

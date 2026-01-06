@@ -38,7 +38,7 @@ export class PreloaderComponent implements OnInit, AfterViewInit, OnDestroy {
 		this._status = value;
 		if (value === 'error') {
 			this.quote =
-				'An error occured while parsing the replay. Please contact the support on <a href="https://twitter.com/ZerotoHeroes_HS" target="_blank">Twitter</a> or <a href="https://discord.gg/vKeB3gnKTy" target="_blank">Discord</a>';
+				'An error occured while parsing the replay. Please contact the support on <a href="https://twitter.com/Firestone_HS" target="_blank">X</a> or <a href="https://discord.gg/vKeB3gnKTy" target="_blank">Discord</a>';
 			this.cardName = 'Alarm-o-Bot';
 			this.svg = null;
 			if (this.interval) {

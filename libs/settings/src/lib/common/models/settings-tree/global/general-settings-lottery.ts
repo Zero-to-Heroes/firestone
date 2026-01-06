@@ -93,7 +93,7 @@ export const generalLotterySettings = (context: SettingContext): SettingNode => 
 
 const lotteryText1 = (i18n: ILocalizationService): string => {
 	return i18n.translateString('settings.general.premium.lottery-block-text1', {
-		twitterLink: `<a href="https://twitter.com/ZerotoHeroes_HS" target="_blank">${i18n.translateString('global.social.twitter')}</a>`,
+		twitterLink: `<a href="https://twitter.com/Firestone_HS" target="_blank">${i18n.translateString('global.social.twitter')}</a>`,
 		discordLink: `<a href="https://discord.gg/vKeB3gnKTy" target="_blank">${i18n.translateString('global.social.discord')}</a>`,
 	});
 };
