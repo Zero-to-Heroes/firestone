@@ -217,6 +217,7 @@ import {
 	HsQuestsListWidgetComponent,
 	QuestsWidgetViewComponent,
 } from './js/components/overlays/quests/quests-widget-view.component';
+import { CardFlavorTextWidgetWrapperComponent } from './js/components/overlays/card-flavor-text-widget-wrapper.component';
 import { SecretsHelperWidgetWrapperComponent } from './js/components/overlays/secrets-helper-widget-wrapper.component';
 import { CurrentSessionBgsBoardTooltipComponent } from './js/components/overlays/session/current-session-bgs-board-tooltip.component';
 import { CurrentSessionWidgetComponent } from './js/components/overlays/session/current-session-widget.component';
@@ -550,6 +551,7 @@ import { SetsService } from './js/services/collection/sets-service.service';
 import { DebugService } from './js/services/debug.service';
 import { AiDeckService } from './js/services/decktracker/ai-deck-service.service';
 import { AttackOnBoardService } from './js/services/decktracker/attack-on-board.service';
+import { CardFlavorTextService } from './js/services/decktracker/card-flavor-text.service';
 import { CardsHighlightFacadeService } from './js/services/decktracker/card-highlight/cards-highlight-facade.service';
 import { CardsHighlightService } from './js/services/decktracker/card-highlight/cards-highlight.service';
 import { ConstructedArchetypeServiceOrchestrator } from './js/services/decktracker/constructed-archetype-orchestrator.service';
@@ -1186,6 +1188,7 @@ try {
 		DecktrackerPlayerWidgetWrapperComponent,
 		DecktrackerOpponentWidgetWrapperComponent,
 		SecretsHelperWidgetWrapperComponent,
+		CardFlavorTextWidgetWrapperComponent,
 		OpponentHandWidgetWrapperComponent,
 		ConstructedBoardWidgetWrapperComponent,
 		PlayerHeroPowerWidgetWrapperComponent,
@@ -1306,6 +1309,7 @@ try {
 		HotkeyService,
 		CardsHighlightService,
 		CardsHighlightFacadeService,
+		CardFlavorTextService,
 
 		AppBootstrapService,
 		BootstrapEssentialServicesService,

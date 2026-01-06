@@ -15,6 +15,7 @@ import { CardClass, CardIds, GameTag, GameType, ReferenceCard } from '@firestone
 import { CardMousedOverService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, uuidShort } from '@firestone/shared/framework/common';
+import { CardFlavorTextService } from '../../../services/decktracker/card-flavor-text.service';
 import { CardsFacadeService, HighlightSide, waitForReady } from '@firestone/shared/framework/core';
 import { CardsHighlightFacadeService } from '@services/decktracker/card-highlight/cards-highlight-facade.service';
 import { auditTime, BehaviorSubject, combineLatest, distinctUntilChanged, filter, Observable, takeUntil } from 'rxjs';
@@ -288,6 +289,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 	private _referenceCard: ReferenceCard;
 	private _uniqueId: string;
 	private _zone: DeckZone;
+	private _flavorTextTimeout: number | null = null;
 
 	private showUpdatedCost$$ = new BehaviorSubject<boolean>(false);
 	private showStatsChange$$ = new BehaviorSubject<boolean>(false);
@@ -303,6 +305,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		private readonly prefs: PreferencesService,
 		@Optional() private readonly cardsHighlightService: CardsHighlightFacadeService,
 		@Optional() private readonly i18n: LocalizationFacadeService,
+		@Optional() private readonly flavorTextService: CardFlavorTextService,
 	) {
 		super(cdr);
 	}
@@ -435,8 +438,11 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		}
 	}
 
-	onMouseEnter(event: MouseEvent) {
+	async onMouseEnter(event: MouseEvent) {
 		this.cardsHighlightService?.onMouseEnter(this.cardId, this.entityId, this._side, this.card$$.value);
+
+		// Show flavor text if enabled
+		await this.showFlavorText();
 
 		if (!this.card$$.value.cardId && this.card$$.value.guessedInfo?.possibleCards?.length) {
 			this.relatedCardIds = this.card$$.value.guessedInfo.possibleCards;
@@ -492,6 +498,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 
 	onMouseLeave(event: MouseEvent) {
 		this.cardsHighlightService?.onMouseLeave(this.cardId);
+		this.hideFlavorText();
 	}
 
 	onCardClicked(event: MouseEvent) {
@@ -658,5 +665,62 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 				value: this.creatorCardIds.map((cardId) => this.cards.getCard(cardId).name).join(', '),
 			});
 		}
+	}
+
+	private async showFlavorText() {
+		if (!this.flavorTextService || !this.cardId || !this._referenceCard) {
+			return;
+		}
+
+		const prefs = await this.prefs.getPreferences();
+		if (!prefs.decktrackerShowCardFlavorText) {
+			return;
+		}
+
+		const flavorText = this._referenceCard.flavor;
+		if (!flavorText?.length) {
+			return;
+		}
+
+		// Clear any existing timeout
+		if (this._flavorTextTimeout) {
+			clearTimeout(this._flavorTextTimeout);
+		}
+
+		// Add a slight delay before showing flavor text to avoid flickering
+		// Using window.setTimeout for explicit browser environment typing
+		this._flavorTextTimeout = window.setTimeout(() => {
+			const sanitizedFlavor = this.transformFlavor(flavorText);
+			this.flavorTextService.showFlavorText({
+				cardId: this.cardId,
+				cardName: this.cardName,
+				flavorText: sanitizedFlavor,
+			});
+		}, 300);
+	}
+
+	private hideFlavorText() {
+		// Clear the timeout if it hasn't fired yet
+		if (this._flavorTextTimeout) {
+			clearTimeout(this._flavorTextTimeout);
+			this._flavorTextTimeout = null;
+		}
+		// Hide the flavor text widget
+		this.flavorTextService?.hideFlavorText();
+	}
+
+	private transformFlavor(flavor: string): string {
+		// Transform flavor text for display:
+		// 1. Convert newlines to spaces for compact display
+		// 2. Remove italic tags (HTML styling handled by CSS)
+		// 3. Remove [x] markers that appear in some flavor texts
+		const result = flavor
+			.replace(/\n/g, ' ')
+			.replace(/<i>/g, '')
+			.replace(/<\/i>/g, '')
+			.replace(/\[x\]/g, '')
+			.replace(/\s+/g, ' ') // Collapse multiple spaces
+			.trim();
+		return result;
 	}
 }

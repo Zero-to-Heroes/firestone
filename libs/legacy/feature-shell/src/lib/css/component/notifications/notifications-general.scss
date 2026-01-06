@@ -13,6 +13,31 @@
 	box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.9);
 	padding: 15px;
 
+	&.flavor-text-notification {
+		width: 400px;
+		max-width: 400px;
+		background-color: rgba(30, 20, 10, 0.95);
+		padding: 20px;
+
+		.message {
+			width: 100%;
+
+			.title {
+				color: #ffb948;
+				font-size: 18px;
+				margin-bottom: 8px;
+			}
+
+			.flavor-text {
+				font-style: italic;
+				color: #d9c3ab;
+				line-height: 1.4;
+				white-space: normal;
+				word-wrap: break-word;
+			}
+		}
+	}
+
 	.firestone-icon {
 		height: 50px;
 		width: 45px;
