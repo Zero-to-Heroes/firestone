@@ -1,0 +1,39 @@
+@use '../../../global/fonts' as *;
+
+:host {
+	display: block;
+}
+
+.flavor-text-container {
+	display: flex;
+	flex-direction: column;
+	background: linear-gradient(135deg, rgba(30, 20, 15, 0.95), rgba(45, 30, 20, 0.95));
+	border: 1px solid #8b6914;
+	border-radius: 8px;
+	width: 320px;
+	max-width: 320px;
+	padding: 12px 15px;
+	box-shadow:
+		0 4px 12px rgba(0, 0, 0, 0.8),
+		inset 0 1px 0 rgba(255, 215, 0, 0.1);
+
+	.card-name {
+		font-family: 'Belwe', serif;
+		font-size: 16px;
+		font-weight: bold;
+		color: #ffb948;
+		margin-bottom: 8px;
+		text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+		border-bottom: 1px solid rgba(139, 105, 20, 0.5);
+		padding-bottom: 8px;
+	}
+
+	.flavor-text {
+		font-family: 'Open Sans', sans-serif;
+		font-size: 13px;
+		font-style: italic;
+		color: #d9c3ab;
+		line-height: 1.5;
+		text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+	}
+}

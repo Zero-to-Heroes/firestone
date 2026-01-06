@@ -1,0 +1,23 @@
+:host {
+	position: absolute;
+	bottom: 20px;
+	right: 20px;
+	z-index: 9999;
+	pointer-events: none;
+}
+
+.widget {
+	pointer-events: auto;
+	animation: fadeIn 0.2s ease-in-out;
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
