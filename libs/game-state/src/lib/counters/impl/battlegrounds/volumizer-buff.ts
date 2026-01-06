@@ -18,11 +18,11 @@ export class VolumizerBuffCounterDefinitionV2 extends CounterDefinitionV2<{ atk:
 		value: (state: GameState, bgState: BattlegroundsState | null | undefined) => {
 			const value = {
 				atk:
-					state.fullGameState?.Player.PlayerEntity.tags.find(
+					state.fullGameState?.Player?.PlayerEntity.tags?.find(
 						(t) => t.Name === GameTag.BACON_VOLUMIZER_ATTACK_BUFF,
 					)?.Value ?? 0,
 				health:
-					state.fullGameState?.Player.PlayerEntity.tags.find(
+					state.fullGameState?.Player?.PlayerEntity.tags?.find(
 						(t) => t.Name === GameTag.BACON_VOLUMIZER_HEALTH_BUFF,
 					)?.Value ?? 0,
 			};
