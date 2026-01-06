@@ -443,7 +443,6 @@ export class DeckParserService {
 			!lines.some((line) => line.includes('Starting Arena Game With Deck'))
 		) {
 			console.log('[deck-parser] ignoring deck log lines because there is no "finding game with deck"');
-			console.log('[debug] [deck-parser] lines', lines);
 			return null;
 		}
 

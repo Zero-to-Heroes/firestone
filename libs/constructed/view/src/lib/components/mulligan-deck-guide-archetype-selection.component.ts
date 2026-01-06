@@ -62,13 +62,7 @@ export class MulliganDeckGuideArchetypeSelectionDropdownComponent
 	}
 
 	async ngAfterContentInit() {
-		console.debug('[debug] mulligan-deck-guide-archetype-selection ngAfterContentInit');
-		await waitForReady(this.prefs);
-		console.debug('[debug] mulligan-deck-guide-archetype-selection prefs ready');
-		await waitForReady(this.constructedMetaStats);
-		console.debug('[debug] mulligan-deck-guide-archetype-selection constructedMetaStats ready');
 		await waitForReady(this.constructedMetaStats, this.prefs);
-		console.debug('[debug] mulligan-deck-guide-archetype-selection constructedMetaStats and nav ready');
 
 		const effectiveRank$ = this.prefs.preferences$$.pipe(
 			this.mapData((prefs) => prefs.decktrackerMulliganRankBracket),

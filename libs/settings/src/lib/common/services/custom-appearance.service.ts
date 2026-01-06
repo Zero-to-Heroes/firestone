@@ -45,7 +45,7 @@ export class CustomAppearanceService extends AbstractFacadeService<CustomAppeara
 		});
 
 		const defaultStyles = await defaultStyleKeys();
-		console.debug('[debug] custom-appearance defaultStyles', defaultStyles);
+		console.debug('[debug] custm-appearance defaultStyles', defaultStyles);
 
 		this.internalSubject$$.onFirstSubscribe(() => {
 			const localColors =

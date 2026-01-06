@@ -284,7 +284,6 @@ export class ConstructedMulliganDeckComponent
 	}
 
 	cycleRanks = async () => {
-		console.debug('[debug] [constructed-mulligan-deck] cycleRanks');
 		const prefs = await this.prefs.getPreferences();
 		const currentRank = prefs.decktrackerMulliganRankBracket;
 		// Build an array based on all the possible values of the decktrackerMulliganRankBracket type
@@ -301,7 +300,6 @@ export class ConstructedMulliganDeckComponent
 			decktrackerMulliganRankBracket: nextRank,
 		};
 		await this.prefs.savePreferences(newPrefs);
-		console.debug('[debug] [constructed-mulligan-deck] cycleRanks done', nextRank);
 	};
 
 	cycleOpponent = async () => {

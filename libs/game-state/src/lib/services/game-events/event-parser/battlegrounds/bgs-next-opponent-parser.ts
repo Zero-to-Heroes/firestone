@@ -117,14 +117,6 @@ export class BgsNextOpponentParser implements EventParser {
 			}),
 		});
 		console.debug('[bgs-next-opponent] updated face offs', faceOff, result);
-		console.log(
-			'[debug] [bgs-next-opponent] next opponent in next opponent parser',
-			result.currentGame!.players.map((p) => ({
-				main: p.isMainPlayer,
-				cardId: p.cardId,
-				id: p.playerId,
-			})),
-		);
 
 		return currentState.update({
 			bgState: result,

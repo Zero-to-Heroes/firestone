@@ -115,14 +115,6 @@ export class BgsHeroSelectedCardParser implements EventParser {
 						: [],
 				} as BgsPlayer);
 		console.debug('[bgs-hero-selected] new player', newPlayer, currentState.reconnectOngoing);
-		console.log(
-			'[debug] [bgs-hero-selected] before adding hero selected',
-			currentState.bgState.currentGame!.players.map((p) => ({
-				main: p.isMainPlayer,
-				cardId: p.cardId,
-				id: p.playerId,
-			})),
-		);
 		const newGame = currentState.bgState.currentGame!.update({
 			players: [
 				...currentState.bgState.currentGame!.players.filter((player) => !player.isMainPlayer),
@@ -142,21 +134,11 @@ export class BgsHeroSelectedCardParser implements EventParser {
 				) as readonly BgsPanel[],
 			}),
 		});
-		console.log(
-			'[debug] [bgs-hero-selected] after adding hero selected',
-			updatedState.bgState.currentGame!.players.map((p) => ({
-				main: p.isMainPlayer,
-				cardId: p.cardId,
-				id: p.playerId,
-			})),
-		);
 		// Happens typically when reconnecting, but also if we choose our hero late, and the
 		// opponent has already been decided
 		if (!!gameEvent.additionalData?.nextOpponentPlayerId) {
-			console.log('[debug] [bgs-hero-selected] next opponent event', gameEvent.additionalData.nextOpponentCardId);
 			const lastFaceOff =
 				updatedState.bgState.currentGame?.faceOffs?.[updatedState.bgState.currentGame?.faceOffs.length - 1];
-			console.log('[debug] [bgs-hero-selected] last face off', lastFaceOff);
 
 			// We're either facing a new opponent, or we're facing the same opponent, but the previous battle is
 			// already over
@@ -165,14 +147,6 @@ export class BgsHeroSelectedCardParser implements EventParser {
 				lastFaceOff?.battleInfo
 			) {
 				console.debug('[bgs-hero-selected] next opponent in hero selected parser', gameEvent);
-				console.log(
-					'[debug] [bgs-hero-selected] next opponent in hero selected parser',
-					updatedState.bgState.currentGame!.players.map((p) => ({
-						main: p.isMainPlayer,
-						cardId: p.cardId,
-						id: p.playerId,
-					})),
-				);
 				return new BgsNextOpponentParser(this.allCards, this.i18n).parse(
 					updatedState,
 					Object.assign(new GameEvent(), {
@@ -184,14 +158,6 @@ export class BgsHeroSelectedCardParser implements EventParser {
 				);
 			}
 		}
-		console.log(
-			'[debug] [bgs-hero-selected] before returning',
-			updatedState.bgState.currentGame!.players.map((p) => ({
-				main: p.isMainPlayer,
-				cardId: p.cardId,
-				id: p.playerId,
-			})),
-		);
 		return updatedState;
 	}
 

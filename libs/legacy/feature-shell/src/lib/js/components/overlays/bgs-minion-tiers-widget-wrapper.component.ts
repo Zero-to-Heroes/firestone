@@ -12,7 +12,7 @@ import { GameStateFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import { auditTime, combineLatest, Observable, tap } from 'rxjs';
+import { auditTime, combineLatest, Observable } from 'rxjs';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
 @Component({
@@ -72,7 +72,6 @@ export class BgsMinionsTiersWidgetWrapperComponent extends AbstractWidgetWrapper
 			),
 			this.gameState.gameState$$.pipe(
 				auditTime(1000),
-				tap((state) => console.log('[debug] [bgs-minion-tiers-widget-wrapper] state', state)),
 				this.mapData(
 					(state) =>
 						state.gameStarted &&

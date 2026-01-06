@@ -105,7 +105,6 @@ export class BattlegroundsMinionsTiersViewOverlayComponent
 	@Input() useNewTiersHeaderStyle = true;
 
 	@Input() set tiers(value: readonly Tier[]) {
-		console.debug('[debug] [bgs-minions-tiers-view] tiers', value);
 		if (!value) {
 			return;
 		}

@@ -104,7 +104,6 @@ export class BgsPlayer implements IBgsPlayer {
 			return [];
 		}
 		return boardState.map((e) => {
-			console.debug('[debug] [bgs-player] create for electron', e);
 			return ReplayEntity.create({
 				cardID: e.cardID,
 				damageForThisAction: e.damageForThisAction,
