@@ -17,6 +17,7 @@ import { electronAppInjector } from './services/electron-app-injector';
 import { buildAppInjector } from './services/electron-app-injector-setup';
 import { MindVisionElectronService } from './services/mind-vision-electron.service';
 import { OverlayService } from './services/overlay.service';
+import { destroySystemTray, initSystemTray } from './services/system-tray';
 
 export default class App {
 	// Keep a global reference of the window object, if you don't, the window will
@@ -78,10 +79,12 @@ export default class App {
 
 		App.BrowserWindow = browserWindow;
 		App.application = app;
+		app.disableHardwareAcceleration();
 
 		App.application.on('window-all-closed', App.onWindowAllClosed); // Quit when all windows are closed.
 		App.application.on('ready', App.onReady); // App is ready to load data
 		App.application.on('activate', App.onActivate); // App is activated
+		App.application.on('will-quit', App.onWillQuit); // Clean up before quitting
 	}
 
 	public static isDevelopmentMode() {
@@ -92,6 +95,8 @@ export default class App {
 	}
 
 	private static async onWindowAllClosed() {
+		destroySystemTray();
+
 		if (App.overlay) {
 			await App.overlay.destroyOverlay();
 		}
@@ -99,6 +104,10 @@ export default class App {
 		if (process.platform !== 'darwin') {
 			App.application.quit();
 		}
+	}
+
+	private static onWillQuit() {
+		destroySystemTray();
 	}
 
 	private static onClose() {
@@ -130,6 +139,7 @@ export default class App {
 
 		// Initialize game detection
 		App.initGameDetection();
+		initSystemTray();
 	}
 
 	private static async initGameDetection() {
