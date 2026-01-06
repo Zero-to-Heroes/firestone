@@ -1,4 +1,4 @@
-import { CardIds, CardType, GameTag } from '@firestone-hs/reference-data';
+import { CardIds, CardType } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState, GameState, toTagsObject } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
@@ -42,12 +42,15 @@ export class CardPlayedByEffectParser implements EventParser {
 	): Promise<GameState> {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 		const creatorCardId = gameEvent.additionalData.creatorCardId;
+		console.debug('[debug] processing card played by effect', cardId, entityId, gameEvent, currentState);
 
 		// Hack to avoid showing the the "choose one" options, which sometimes cause a "card-play-by-effect" event
 		// to be triggered
-		if (this.allCards.getCard(creatorCardId)?.mechanics?.includes(GameTag[GameTag.CHOOSE_ONE])) {
-			return currentState;
-		}
+		// 2026-01-06: let's see when this happens again, as it doesn't seem to be a good solution - what if the effect of
+		// a CHOOSE_ONE card is to play a card?
+		// if (this.allCards.getCard(creatorCardId)?.mechanics?.includes(GameTag[GameTag.CHOOSE_ONE])) {
+		// 	return currentState;
+		// }
 		const refCard = this.allCards.getCard(cardId);
 		// Weapons trigger a WEAPON_EQUIPPED event
 		if (refCard.type?.toUpperCase() === CardType[CardType.WEAPON]) {
@@ -74,11 +77,12 @@ export class CardPlayedByEffectParser implements EventParser {
 			(refCard.type === 'Minion' || refCard.type === 'Location');
 		// Some of these cards can come from hand, when the event is triggered by "casts when drawn" effects
 		const cardFromHand = deck.hand.find((card) => card.entityId === entityId);
-		// console.debug('card from hand', cardFromHand, deck.hand, cardId, entityId, gameEvent, currentState);
+		console.debug('[debug]card from hand', cardId, entityId, cardFromHand, deck.hand, gameEvent, currentState);
 		let newHand = deck.hand;
 		let additionalKnownCardsInHand = deck.additionalKnownCardsInHand;
 		if (!!cardFromHand) {
 			newHand = this.helper.removeSingleCardFromZone(deck.hand, cardFromHand.cardId, cardFromHand.entityId)?.[0];
+			console.debug('[debug]newHand', cardId, entityId, newHand, cardFromHand, deck.hand);
 			// Remove only the first occurrence
 			additionalKnownCardsInHand = additionalKnownCardsInHand.filter(
 				(c, i) => c !== cardFromHand.cardId || additionalKnownCardsInHand.indexOf(c) !== i,
