@@ -4,6 +4,7 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { publicCardCreators, shouldKeepOriginalCost } from '@services/hs-utils';
 import { GameEvent } from '../../../models/game-event';
 import { LocalizationFacadeService } from '../../localization-facade.service';
+import { revealCard } from '../game-state/card-reveal';
 import { WHIZBANG_DECK_CARD_IDS } from './card-revealed-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
@@ -67,7 +68,7 @@ export class EntityUpdateParser implements EventParser {
 					gameEvent.additionalData.dataNum2,
 					gameEvent,
 					this.allCards,
-			  )
+				)
 			: null;
 		// console.debug(
 		// 	'[entity-update] newCardInHand',
@@ -86,7 +87,7 @@ export class EntityUpdateParser implements EventParser {
 						refManaCost: shouldKeepOriginalCost(obfsucatedCardId)
 							? cardInDeck.refManaCost
 							: this.allCards.getCard(obfsucatedCardId)?.cost,
-				  })
+					})
 				: cardInDeck,
 			deck,
 			gameEvent,
@@ -101,7 +102,7 @@ export class EntityUpdateParser implements EventParser {
 						refManaCost: shouldKeepOriginalCost(obfsucatedCardId)
 							? cardInOther.refManaCost
 							: this.allCards.getCard(obfsucatedCardId)?.cost,
-				  } as DeckCard)
+					} as DeckCard)
 				: null;
 		// console.debug(
 		// 	'[entity-update] newCardInOther',
@@ -146,10 +147,14 @@ export class EntityUpdateParser implements EventParser {
 					: deck.abyssalCurseHighestValue,
 			globalEffects: globalEffects,
 		});
+		let playerDeckWithLinks = newPlayerDeck;
+		if (!!obfsucatedCardId && !!newCardInHand) {
+			playerDeckWithLinks = revealCard(playerDeckWithLinks, newCardInHand, this.allCards);
+		}
 		// console.debug('[entity-update] newPlayerDeck', newPlayerDeck);
 
 		const result = currentState.update({
-			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
+			[isPlayer ? 'playerDeck' : 'opponentDeck']: playerDeckWithLinks,
 		});
 		// console.debug('[entity-update] result', result);
 
@@ -174,7 +179,7 @@ export const addAdditionalAttribuesInDeck = (
 				mainAttributeChange:
 					!!gameEvent.additionalData.dataNum1 && gameEvent.additionalData.dataNum1 !== -1
 						? // dataNum1 is the base value, while we start our count at 0
-						  gameEvent.additionalData.dataNum1 - 1
+							gameEvent.additionalData.dataNum1 - 1
 						: card.mainAttributeChange,
 			});
 	}
