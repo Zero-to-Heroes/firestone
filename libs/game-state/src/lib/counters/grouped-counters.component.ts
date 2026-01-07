@@ -22,7 +22,7 @@ import { CounterInstance } from './_counter-definition-v2';
 	template: `
 		<div class="grouped-counters scalable" [ngClass]="{ battlegrounds: isBattlegrounds$ | async }">
 			<div class="header" [ngClass]="{ minimized: isMinimized }">
-				<div class="title">Counters</div>
+				<div class="title" [fsTranslate]="'counters.grouped.title'"></div>
 				<div class="minimize-container" (click)="toggleMinimize()">
 					<div class="minimize" [inlineSVG]="'assets/svg/caret.svg'"></div>
 				</div>

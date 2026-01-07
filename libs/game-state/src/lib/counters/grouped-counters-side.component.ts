@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ILocalizationService } from '@firestone/shared/framework/core';
 import { CounterInstance } from './_counter-definition-v2';
 
 @Component({
@@ -26,6 +27,8 @@ export class GroupedCountersSideComponent {
 	@Input() counters: readonly CounterInstance<any>[];
 	@Input() side: 'player' | 'opponent';
 
-	playerHeader = 'Player';
-	opponentHeader = 'Opponent';
+	playerHeader = this.i18n.translateString('counters.grouped.player');
+	opponentHeader = this.i18n.translateString('counters.grouped.opponent');
+
+	constructor(private readonly i18n: ILocalizationService) {}
 }
