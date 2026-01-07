@@ -84,9 +84,11 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 	}
 
 	public async init(options?: SelectorOptions) {
+		console.log('[cards-highlight-common] init', options, new Error().stack);
 		this.options = options;
 	}
 	public forceHeroCardId(cardId: string) {
+		console.log('[cards-highlight-common] forceHeroCardId', cardId, new Error().stack);
 		this.options = { ...this.options, heroCardId: cardId };
 	}
 
