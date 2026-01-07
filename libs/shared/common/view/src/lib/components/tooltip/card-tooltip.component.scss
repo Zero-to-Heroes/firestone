@@ -21,7 +21,8 @@
 .scalable {
 	transform-origin: top right;
 	position: relative;
-	transform: scale(var(--card-tooltip-scale, 1));
+	// transform: scale(var(--card-tooltip-scale, 1));
+	zoom: var(--card-tooltip-scale, 1);
 }
 
 // Because automatic tooltip positioning doesn't always work very well and sometimes

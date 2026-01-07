@@ -76,7 +76,9 @@ import { CardTooltipPositionType } from './card-tooltip-position.type';
 				}"
 			>
 				<div class="related-cards-container" [ngClass]="{ wide: (value.relatedCards?.length ?? 0) > 6 }">
-					<div class="header" *ngIf="relatedCardIdsHeader">{{ relatedCardIdsHeader }}</div>
+					<div class="header" *ngIf="relatedCardIdsHeader">
+						{{ relatedCardIdsHeader }}
+					</div>
 					<div
 						class="related-cards"
 						#relatedCards
