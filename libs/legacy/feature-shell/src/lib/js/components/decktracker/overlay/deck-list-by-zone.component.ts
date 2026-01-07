@@ -10,7 +10,7 @@ import { CardIds, CardType, GameTag } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState, getProcessedCard } from '@firestone/game-state';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, combineLatest, debounceTime, filter, startWith, takeUntil } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, filter, startWith, takeUntil } from 'rxjs';
 import { DeckZone, DeckZoneSection } from '../../../models/decktracker/view/deck-zone';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 import { PLAGUES } from '../../../services/decktracker/event-parser/special-cases/plagues-parser';
@@ -181,7 +181,6 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 			this.showDiscoveryZone$$,
 		]).pipe(
 			filter(([deckState, _]) => !!deckState),
-			debounceTime(200),
 			startWith([]),
 			this.mapData(
 				([
@@ -219,7 +218,6 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 						deckState,
 					),
 			),
-			// tap((zones) => console.debug('[deck-list-by-zone] zones', zones)),
 			takeUntil(this.destroyed$),
 		);
 	}
