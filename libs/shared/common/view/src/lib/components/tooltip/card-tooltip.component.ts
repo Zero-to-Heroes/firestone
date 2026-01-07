@@ -27,6 +27,7 @@ import {
 	map,
 	shareReplay,
 	takeUntil,
+	tap,
 } from 'rxjs';
 import { CardTooltipPositionType } from './card-tooltip-position.type';
 
@@ -68,71 +69,72 @@ import { CardTooltipPositionType } from './card-tooltip-position.type';
 				</div>
 			</div>
 			<div
-				class="related-cards-wrapper"
-				*ngIf="value.relatedCards?.length"
+				class="additional-info-container"
 				[ngClass]="{
 					left: value.relativePosition === 'left',
 					hidden: !value.relativePosition,
 				}"
 			>
-				<div class="related-cards-container" [ngClass]="{ wide: (value.relatedCards?.length ?? 0) > 6 }">
-					<div class="header" *ngIf="relatedCardIdsHeader">
-						{{ relatedCardIdsHeader }}
-					</div>
-					<div
-						class="related-cards"
-						#relatedCards
-						*ngIf="(value?.relatedCards?.length ?? 0) <= (value?.maxRelatedCardsToShow ?? 0)"
-						scrollable
-					>
+				<div class="additional-info" *ngIf="additionalInfo$ | async as info">
+					<div class="header" [fsTranslate]="'decktracker.guessed-info.header'"></div>
+					<div class="info">
+						<div class="info-item cost" *ngIf="info.cost !== null && info.cost !== undefined">
+							<div class="label" [fsTranslate]="'decktracker.guessed-info.cost'"></div>
+							<div class="value">{{ info.cost }}</div>
+						</div>
 						<div
-							*ngIf="hasScrollbar"
-							class="scrollbar-text"
-							[fsTranslate]="'decktracker.card-tooltip-scroll-text'"
-						></div>
-						<div class="related-card " *ngFor="let card of value.relatedCards">
-							<img *ngIf="card.image" [src]="card.image" class="tooltip-image" />
+							class="info-item attack-buff"
+							*ngIf="info.attackBuff !== null && info.attackBuff !== undefined"
+						>
+							<div class="label" [fsTranslate]="'decktracker.guessed-info.attack-buff'"></div>
+							<div class="value">{{ info.attackBuff }}</div>
+						</div>
+						<div
+							class="info-item health-buff"
+							*ngIf="info.healthBuff !== null && info.healthBuff !== undefined"
+						>
+							<div class="label" [fsTranslate]="'decktracker.guessed-info.health-buff'"></div>
+							<div class="value">{{ info.healthBuff }}</div>
+						</div>
+						<div
+							class="info-item spell-schools"
+							*ngIf="
+								info.spellSchools !== null &&
+								info.spellSchools !== undefined &&
+								info.spellSchools.length > 0
+							"
+						>
+							<div class="label" [fsTranslate]="'decktracker.guessed-info.spell-schools'"></div>
+							<div class="value">{{ formatSpellSchools(info.spellSchools) }}</div>
 						</div>
 					</div>
-					<div
-						class="related-cards big-pool"
-						*ngIf="(value?.relatedCards?.length ?? 0) > (value?.maxRelatedCardsToShow ?? 0)"
-						[fsTranslate]="'decktracker.card-tooltip-big-pool-text'"
-						[fsTranslateParams]="{ value: value.relatedCards?.length }"
-					></div>
 				</div>
-			</div>
-			<div class="additional-info" *ngIf="additionalInfo$ | async as info">
-				<div class="header" [fsTranslate]="'decktracker.guessed-info.header'"></div>
-				<div class="info">
-					<div class="info-item cost" *ngIf="info.cost !== null && info.cost !== undefined">
-						<div class="label" [fsTranslate]="'decktracker.guessed-info.cost'"></div>
-						<div class="value">{{ info.cost }}</div>
-					</div>
-					<div
-						class="info-item attack-buff"
-						*ngIf="info.attackBuff !== null && info.attackBuff !== undefined"
-					>
-						<div class="label" [fsTranslate]="'decktracker.guessed-info.attack-buff'"></div>
-						<div class="value">{{ info.attackBuff }}</div>
-					</div>
-					<div
-						class="info-item health-buff"
-						*ngIf="info.healthBuff !== null && info.healthBuff !== undefined"
-					>
-						<div class="label" [fsTranslate]="'decktracker.guessed-info.health-buff'"></div>
-						<div class="value">{{ info.healthBuff }}</div>
-					</div>
-					<div
-						class="info-item spell-schools"
-						*ngIf="
-							info.spellSchools !== null &&
-							info.spellSchools !== undefined &&
-							info.spellSchools.length > 0
-						"
-					>
-						<div class="label" [fsTranslate]="'decktracker.guessed-info.spell-schools'"></div>
-						<div class="value">{{ formatSpellSchools(info.spellSchools) }}</div>
+				<div class="related-cards-wrapper" *ngIf="value.relatedCards?.length">
+					<div class="related-cards-container" [ngClass]="{ wide: (value.relatedCards?.length ?? 0) > 6 }">
+						<div class="header" *ngIf="relatedCardIdsHeader">
+							{{ relatedCardIdsHeader }}
+						</div>
+						<div
+							class="related-cards"
+							#relatedCards
+							*ngIf="(value?.relatedCards?.length ?? 0) <= (value?.maxRelatedCardsToShow ?? 0)"
+							scrollable
+						>
+							<div
+								*ngIf="hasScrollbar"
+								class="scrollbar-text"
+								[fsTranslate]="'decktracker.card-tooltip-scroll-text'"
+							></div>
+							<div class="related-card " *ngFor="let card of value.relatedCards">
+								<img *ngIf="card.image" [src]="card.image" class="tooltip-image" />
+							</div>
+						</div>
+						<div
+							class="related-cards big-pool"
+							*ngIf="(value?.relatedCards?.length ?? 0) > (value?.maxRelatedCardsToShow ?? 0)"
+							[fsTranslate]="'decktracker.card-tooltip-big-pool-text'"
+							[fsTranslateParams]="{ value: value.relatedCards?.length }"
+						></div>
 					</div>
 				</div>
 			</div>
@@ -443,6 +445,7 @@ export class CardTooltipComponent
 		);
 		this.additionalInfo$ = this.additionalInfo$$.pipe(
 			filter((info) => !!info),
+			tap((info) => console.debug('[debug] additionalInfo$', info)),
 			this.mapData((info) => (isGuessedInfoEmpty(info) ? null : info)),
 		);
 
@@ -527,13 +530,7 @@ export interface CardTooltipAdditionalInfo {
 	readonly healthBuff?: number | null;
 }
 export const isGuessedInfoEmpty = (info: CardTooltipAdditionalInfo | null) => {
-	return (
-		info?.cost == null &&
-		info?.attackBuff == null &&
-		info?.healthBuff == null &&
-		!info?.spellSchools?.length &&
-		!info?.possibleCards?.length
-	);
+	return info?.cost == null && info?.attackBuff == null && info?.healthBuff == null && !info?.spellSchools?.length;
 };
 
 interface InternalCard {

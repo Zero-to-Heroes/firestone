@@ -25,6 +25,25 @@
 	zoom: var(--card-tooltip-scale, 1);
 }
 
+.additional-info-container {
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+	flex-shrink: 1; // So that it can shrink if the screen size is too small
+
+	&.left {
+		order: -1;
+
+		.related-cards-wrapper {
+			justify-content: flex-end;
+		}
+	}
+
+	&.hidden {
+		opacity: 0;
+	}
+}
+
 // Because automatic tooltip positioning doesn't always work very well and sometimes
 // results in the tooltip container being squeeze very thin
 .related-cards-wrapper {
@@ -32,15 +51,6 @@
 	display: flex;
 	// flex-shrink: 0;
 	flex-shrink: 1; // So that it can shrink if the screen size is too small
-
-	&.left {
-		order: -1;
-		justify-content: flex-end;
-	}
-
-	&.hidden {
-		opacity: 0;
-	}
 }
 
 .related-cards-container {
@@ -224,10 +234,10 @@
 
 .additional-info {
 	position: relative;
-	top: 45px; // Try to align with the top of card
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	margin-top: 45px; // Try to align with the top of card
 
 	// background-image: radial-gradient(462.5px at 50% 50%, rgba(48, 35, 128, 0.7) 0%, rgba(24, 24, 43, 0.7) 100%),
 	// 	url('https://static.zerotoheroes.com/hearthstone/asset/firestone/images/backgrounds/decktracker_bg.png');

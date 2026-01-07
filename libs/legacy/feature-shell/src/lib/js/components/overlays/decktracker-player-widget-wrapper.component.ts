@@ -13,7 +13,7 @@ import { SceneService } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { arraysEqual } from '@firestone/shared/framework/common';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, tap } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
@@ -90,7 +90,6 @@ export class DecktrackerPlayerWidgetWrapperComponent
 			),
 			displayFromGameMode$,
 		]).pipe(
-			tap((info) => console.debug('[debug] info for player widget', info)),
 			this.mapData(
 				([
 					currentScene,

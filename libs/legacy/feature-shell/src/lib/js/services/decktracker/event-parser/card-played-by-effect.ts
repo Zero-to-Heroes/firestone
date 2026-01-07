@@ -42,7 +42,6 @@ export class CardPlayedByEffectParser implements EventParser {
 	): Promise<GameState> {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 		const creatorCardId = gameEvent.additionalData.creatorCardId;
-		console.debug('[debug] processing card played by effect', cardId, entityId, gameEvent, currentState);
 
 		// Hack to avoid showing the the "choose one" options, which sometimes cause a "card-play-by-effect" event
 		// to be triggered
@@ -77,12 +76,10 @@ export class CardPlayedByEffectParser implements EventParser {
 			(refCard.type === 'Minion' || refCard.type === 'Location');
 		// Some of these cards can come from hand, when the event is triggered by "casts when drawn" effects
 		const cardFromHand = deck.hand.find((card) => card.entityId === entityId);
-		console.debug('[debug]card from hand', cardId, entityId, cardFromHand, deck.hand, gameEvent, currentState);
 		let newHand = deck.hand;
 		let additionalKnownCardsInHand = deck.additionalKnownCardsInHand;
 		if (!!cardFromHand) {
 			newHand = this.helper.removeSingleCardFromZone(deck.hand, cardFromHand.cardId, cardFromHand.entityId)?.[0];
-			console.debug('[debug]newHand', cardId, entityId, newHand, cardFromHand, deck.hand);
 			// Remove only the first occurrence
 			additionalKnownCardsInHand = additionalKnownCardsInHand.filter(
 				(c, i) => c !== cardFromHand.cardId || additionalKnownCardsInHand.indexOf(c) !== i,
