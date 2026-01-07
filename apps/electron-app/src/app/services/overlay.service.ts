@@ -229,6 +229,7 @@ export class OverlayService extends EventEmitter {
 	 */
 	private startOverlayWhenPackageReady(): void {
 		app.overwolf.packages.on('ready', (e, packageName, version) => {
+			console.log('Overlay package ready:', packageName, version);
 			if (packageName !== 'overlay') {
 				return;
 			}

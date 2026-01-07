@@ -1,3 +1,4 @@
+import { AppInjector, StandaloneUserService } from '@firestone/shared/framework/core';
 import { app, Menu, nativeImage, Tray } from 'electron';
 import { join } from 'path';
 
@@ -21,33 +22,48 @@ export const initSystemTray = async () => {
 	tray = new Tray(icon);
 	tray.setToolTip('Firestone');
 
-	const contextMenu = Menu.buildFromTemplate([
-		{
-			label: 'Log in',
-			click: () => {
-				console.log('[SystemTray] Log in clicked');
-				// TODO: Implement login functionality
-			},
-		},
-		{ type: 'separator' },
-		{
-			label: 'Restart app',
-			click: () => {
-				console.log('[SystemTray] Restarting app...');
-				app.relaunch();
-				app.exit(0);
-			},
-		},
-		{
-			label: 'Exit',
-			click: () => {
-				console.log('[SystemTray] Exiting app...');
-				app.quit();
-			},
-		},
-	]);
+	const userService = AppInjector.get(StandaloneUserService);
 
-	tray.setContextMenu(contextMenu);
+	userService.user$$.subscribe((currentUser) => {
+		console.log('[SystemTray] User changed:', currentUser);
+		const isLoggedIn = !!currentUser?.username;
+
+		const contextMenu = Menu.buildFromTemplate([
+			isLoggedIn
+				? {
+						label: `Log out (${currentUser.username})`,
+						click: () => {
+							console.log('[SystemTray] Log out clicked');
+							userService.logout();
+						},
+					}
+				: {
+						label: 'Log in',
+						click: () => {
+							console.log('[SystemTray] Log in clicked');
+							userService.login();
+						},
+					},
+			{ type: 'separator' },
+			{
+				label: 'Restart app',
+				click: () => {
+					console.log('[SystemTray] Restarting app...');
+					app.relaunch();
+					app.exit(0);
+				},
+			},
+			{
+				label: 'Exit',
+				click: () => {
+					console.log('[SystemTray] Exiting app...');
+					app.quit();
+				},
+			},
+		]);
+
+		tray.setContextMenu(contextMenu);
+	});
 
 	// Optional: clicking tray icon could show/focus main window
 	tray.on('click', () => {

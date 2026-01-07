@@ -79,7 +79,7 @@ export default class App {
 
 		App.BrowserWindow = browserWindow;
 		App.application = app;
-		app.disableHardwareAcceleration();
+		// app.disableHardwareAcceleration();
 
 		App.application.on('window-all-closed', App.onWindowAllClosed); // Quit when all windows are closed.
 		App.application.on('ready', App.onReady); // App is ready to load data
