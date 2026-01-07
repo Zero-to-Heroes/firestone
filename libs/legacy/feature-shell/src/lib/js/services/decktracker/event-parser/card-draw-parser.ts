@@ -263,7 +263,7 @@ export class CardDrawParser implements EventParser {
 			}
 		}
 		let additionalKnownCardsInDeck = deck.additionalKnownCardsInDeck;
-		if (!removedCard) {
+		if (!removedCard?.cardId) {
 			additionalKnownCardsInDeck = additionalKnownCardsInDeck.filter(
 				(c, i) => c !== cardWithGuessInfo.cardId || deck.additionalKnownCardsInDeck.indexOf(c) !== i,
 			);
