@@ -15,7 +15,8 @@ export class ScrollableDirective {
 		const scrollableEl = this.elementRef.nativeElement;
 		if (scrollableEl) {
 			const rect = scrollableEl.getBoundingClientRect();
-			if (event.offsetX >= rect.width - scrollbarWidth) {
+			const clickX = event.offsetX - rect.left;
+			if (clickX >= rect.width - scrollbarWidth) {
 				event.stopPropagation();
 				this.scrolling.next(true);
 				return;

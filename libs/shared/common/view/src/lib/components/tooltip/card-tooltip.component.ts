@@ -27,7 +27,6 @@ import {
 	map,
 	shareReplay,
 	takeUntil,
-	tap,
 } from 'rxjs';
 import { CardTooltipPositionType } from './card-tooltip-position.type';
 
@@ -45,6 +44,7 @@ import { CardTooltipPositionType } from './card-tooltip-position.type';
 				displayBuffs: displayBuffs$ | async,
 				maxRelatedCardsToShow: maxRelatedCardsToShow$ | async,
 			} as value"
+			(click)="onMouseDown($event)"
 		>
 			<div
 				*ngFor="let card of value.cards; trackBy: trackByFn"
@@ -81,6 +81,7 @@ import { CardTooltipPositionType } from './card-tooltip-position.type';
 						class="related-cards"
 						#relatedCards
 						*ngIf="(value?.relatedCards?.length ?? 0) <= (value?.maxRelatedCardsToShow ?? 0)"
+						scrollable
 					>
 						<div
 							*ngIf="hasScrollbar"
@@ -248,34 +249,26 @@ export class CardTooltipComponent
 		// FIXME: For some reason, lifecycle methods are not called systematically. I've noticed this
 		// in the _clickthrough overlay
 		this.forceLifecycleHooks();
-		this.keydownListener = this.renderer.listen('document', 'keydown', (event: KeyboardEvent) => {
-			this.onKeyDown(event);
-		});
+		// this.keydownListener = this.renderer.listen('document', 'keydown', (event: KeyboardEvent) => {
+		// 	this.onKeyDown(event);
+		// });
 		this.clickListener = this.renderer.listen('window', 'click', (event: MouseEvent) => {
 			this.onMouseDown(event);
 		});
 	}
 
 	// @HostListener('document:keydown', ['$event'])
-	onKeyDown(event: KeyboardEvent) {
-		console.debug('handling keydown', event.key);
-		if (event.key === 'q') {
-			this.viewRef?.destroy();
-		}
-	}
+	// onKeyDown(event: KeyboardEvent) {
+	// 	console.debug('handling keydown', event.key);
+	// 	if (event.key === 'q') {
+	// 		this.viewRef?.destroy();
+	// 	}
+	// }
 
 	// @HostListener('window:click', ['$event'])
 	onMouseDown(event: MouseEvent) {
-		// If the click happens outside of the tooltip, we close it
-		if (this.isShowing && !this.el.nativeElement.contains(event.target)) {
-			// console.debug(
-			// 	'closing from click',
-			// 	event,
-			// 	this.viewRef,
-			// 	this.el.nativeElement,
-			// 	event.target,
-			// 	this.el.nativeElement.contains(event.target),
-			// );
+		console.debug('[card-tooltip] onMouseDown', event, this.isShowing);
+		if (this.isShowing) {
 			this.viewRef.destroy();
 		}
 	}
@@ -326,7 +319,6 @@ export class CardTooltipComponent
 		this.keepInBound$$
 			.pipe(
 				filter((trigger) => !!trigger),
-				tap((info) => console.debug('[debug] keep in bound', info)),
 				this.mapData(
 					(info) => {
 						const widgetRect = this.getRect();
