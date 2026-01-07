@@ -1,15 +1,17 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-// Jar Dealer: 3 Mana 1/4 Warlock minion
-// Battlecry: Summon a random 1-Cost minion.
-// The minion is summoned directly, so it draws from the pool of 1-cost minions
+// Jar Dealer (ULD_282): 1 Mana 1/1 Neutral minion
+// "[x]<b>Deathrattle:</b> Add a random 1-Cost minion to your hand."
+// The minion is added to hand, so it needs guessInfo for hand tracking
 
 import { CardIds, CardType } from '@firestone-hs/reference-data';
+import { GuessedInfo } from '../../models/deck-card';
 import { hasCost, hasCorrectType } from '../../related-cards/dynamic-pools';
-import { StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
+import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
 
-export const JarDealer: StaticGeneratingCard = {
+export const JarDealer: GeneratingCard & StaticGeneratingCard = {
 	cardIds: [CardIds.JarDealer],
+	publicCreator: true,
 	dynamicPool: (input: StaticGeneratingCardInput) => {
 		return filterCards(
 			JarDealer.cardIds[0],
@@ -17,5 +19,17 @@ export const JarDealer: StaticGeneratingCard = {
 			(c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 1),
 			input.inputOptions,
 		);
+	},
+	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
+		const possibleCards = filterCards(
+			JarDealer.cardIds[0],
+			input.allCards,
+			(c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 1),
+			input.options,
+		);
+		return {
+			cardType: CardType.MINION,
+			possibleCards: possibleCards,
+		};
 	},
 };
