@@ -1,5 +1,6 @@
 import { CardIds } from '@firestone-hs/reference-data';
 import { BoardSecret, DeckState, GameState } from '@firestone/game-state';
+import { TempCardIds } from '@firestone/shared/common/service';
 import { GameEvent } from '../../../../models/game-event';
 import { DeckManipulationHelper } from '../deck-manipulation-helper';
 import { EventParser } from '../event-parser';
@@ -10,6 +11,7 @@ export class TriggerOnTurnEndSecretsParser implements EventParser {
 		CardIds.PlagiarizeCore,
 		CardIds.Plagiarize,
 		CardIds.HiddenMeaning,
+		TempCardIds.FlamesOfInfinity,
 	];
 
 	constructor(private readonly helper: DeckManipulationHelper) {}
@@ -54,6 +56,12 @@ export class TriggerOnTurnEndSecretsParser implements EventParser {
 		const areResourcesFullyUsed = playerWhoseCardsPlayedToCheck.manaLeft === 0;
 		if (!areResourcesFullyUsed) {
 			secretsWeCantRuleOut.push(CardIds.HiddenMeaning);
+		}
+
+		const hasOpponentMinionsOnBoard =
+			playerWhoseCardsPlayedToCheck.board.filter((entity) => !entity.dormant).length > 0;
+		if (hasOpponentMinionsOnBoard) {
+			secretsWeCantRuleOut.push(TempCardIds.FlamesOfInfinity);
 		}
 
 		const optionsToFlagAsInvalid = this.secretsTriggeringOnTurnEnd.filter(

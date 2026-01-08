@@ -1,5 +1,6 @@
 import { CardIds } from '@firestone-hs/reference-data';
 import { cardsInfoCache, hasGeneratingCard } from '@firestone/game-state';
+import { TempCardIds } from '@firestone/shared/common/service';
 
 const COIN_IDS = [
 	CardIds.TheCoinCore,
@@ -1110,6 +1111,7 @@ const internalGiftCreators = [
 	CardIds.FinalPortalToArgus_FleeingTerrorguardToken_TIME_020t5t,
 	CardIds.TimelooperToki_LoopingTimeEnchantment_TIME_861e1,
 	CardIds.LieInWait_TLC_513,
+	TempCardIds.EternalFireboltEnchantment,
 ];
 for (const cardId of Object.keys(cardsInfoCache)) {
 	const card = cardsInfoCache[cardId];

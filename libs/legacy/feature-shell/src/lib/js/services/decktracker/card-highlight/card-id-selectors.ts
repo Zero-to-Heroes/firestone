@@ -1,5 +1,6 @@
 import { CardClass, CardIds, CardType, GameTag, Race, SpellSchool } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState, getCost, getProcessedCard } from '@firestone/game-state';
+import { TempCardIds } from '@firestone/shared/common/service';
 import { groupByFunction, pickLast, sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
 import { Selector, SelectorInput, SelectorOutput } from './cards-highlight-common.service';
@@ -118,6 +119,7 @@ import {
 	relic,
 	restoreHealth,
 	restoreHealthToMinion,
+	rewind,
 	rush,
 	secret,
 	secretsTriggeredThisMatch,
@@ -1442,6 +1444,8 @@ export const cardIdSelector = (
 		case CardIds.FoxyFraud:
 		case CardIds.FoxyFraud_CORE_DMF_511:
 			return and(side(inputSide), or(inHand, inDeck), combo);
+		case TempCardIds.FragmentOfNothing:
+			return and(side(inputSide), or(inHand, inDeck), spell);
 		case CardIds.FreeAdmission:
 			return highlightConditions(
 				and(side(inputSide), or(inDeck, inHand), demon),
@@ -1732,6 +1736,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.HawkstriderRancher:
 			return and(side(inputSide), or(inDeck, inHand), minion);
+		case TempCardIds.HaywireHornswog:
+			return and(side(inputSide), or(inDeck, inHand), overload);
 		case CardIds.HealingWave:
 		case CardIds.HealingWave_WON_320:
 			return and(side(inputSide), inDeck, minion);
@@ -2361,6 +2367,8 @@ export const cardIdSelector = (
 			return tooltip(and(opposingSide(inputSide), cardsPlayedThisMatch));
 		case CardIds.MoatLurker:
 			return and(side(inputSide), or(inHand, inDeck), minion);
+		case TempCardIds.Morchie:
+			return and(side(inputSide), or(inHand, inDeck), rewind);
 		case CardIds.MonstrousMosquito_EDR_816:
 			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.MoshPit:
