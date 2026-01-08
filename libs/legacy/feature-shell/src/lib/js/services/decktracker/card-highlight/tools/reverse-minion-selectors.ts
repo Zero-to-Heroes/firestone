@@ -394,6 +394,25 @@ export const reverseMinionSelector = (
 		);
 	}
 
+	// MINION + PROTOSS (6 cards)
+	if (refCard.type?.toUpperCase() === 'MINION' && refCard.mechanics?.includes('PROTOSS')) {
+		matchingCardIds.push(
+			CardIds.Artanis_SC_754,
+			CardIds.Blink_SC_761,
+			CardIds.Hallucination_SC_757,
+			CardIds.PhotonCannon_SC_753,
+			CardIds.Sentry_SC_764,
+			CardIds.WarpGate_SC_751
+		);
+	}
+
+	// MINION + TERRAN (1 cards)
+	if (refCard.type?.toUpperCase() === 'MINION' && refCard.mechanics?.includes('TERRAN')) {
+		matchingCardIds.push(
+			CardIds.JimRaynor_Stimpack_SC_400p
+		);
+	}
+
 	// MINION + TOTEM (3 cards)
 	if (refCard.type?.toUpperCase() === 'MINION' && refCard.races?.map(r => r.toUpperCase()).includes('TOTEM')) {
 		matchingCardIds.push(
@@ -408,6 +427,27 @@ export const reverseMinionSelector = (
 		matchingCardIds.push(
 			CardIds.AmorphousSlime,
 			CardIds.SinisterSoulcage_YOG_513
+		);
+	}
+
+	// MINION + ZERG (7 cards)
+	if (refCard.type?.toUpperCase() === 'MINION' && refCard.mechanics?.includes('ZERG')) {
+		matchingCardIds.push(
+			CardIds.BanelingBarrage_SC_001,
+			CardIds.CreepTumor_SC_011,
+			CardIds.Infestor_SC_002,
+			CardIds.Ravage_SC_004hp,
+			CardIds.Roach_SC_012,
+			CardIds.SpawningPool_SC_000,
+			CardIds.Viper_SC_018
+		);
+	}
+
+	// PROTOSS + SPELL (2 cards)
+	if (refCard.mechanics?.includes('PROTOSS') && refCard.type?.toUpperCase() === 'SPELL') {
+		matchingCardIds.push(
+			CardIds.Colossus_SC_758,
+			CardIds.ShieldBattery_SC_759
 		);
 	}
 
@@ -844,6 +884,21 @@ export const reverseMinionSelector = (
 		);
 	}
 
+	// PROTOSS (2 cards)
+	if (refCard.mechanics?.includes('PROTOSS')) {
+		matchingCardIds.push(
+			CardIds.ChronoBoost_SC_750,
+			CardIds.ConstructPylons_SC_755
+		);
+	}
+
+	// TERRAN (1 cards)
+	if (refCard.mechanics?.includes('TERRAN')) {
+		matchingCardIds.push(
+			CardIds.LiftOff_SC_410
+		);
+	}
+
 	// TOTEM (9 cards)
 	if (refCard.races?.map(r => r.toUpperCase()).includes('TOTEM')) {
 		matchingCardIds.push(
@@ -903,6 +958,16 @@ export const reverseMinionSelector = (
 			CardIds.UndyingAllies,
 			CardIds.UnlivingChampion,
 			CardIds.Wither
+		);
+	}
+
+	// ZERG (4 cards)
+	if (refCard.mechanics?.includes('ZERG')) {
+		matchingCardIds.push(
+			CardIds.EvolutionChamber_SC_021,
+			CardIds.Hydralisk_SC_008,
+			CardIds.Lurker_SC_009,
+			CardIds.NydusWorm_SC_015
 		);
 	}
 

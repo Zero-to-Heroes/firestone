@@ -223,6 +223,14 @@ export const reverseSpellSelector = (
 		);
 	}
 
+	// PROTOSS + SPELL (2 cards)
+	if (refCard.mechanics?.includes('PROTOSS') && refCard.type?.toUpperCase() === 'SPELL') {
+		matchingCardIds.push(
+			CardIds.Colossus_SC_758,
+			CardIds.ShieldBattery_SC_759
+		);
+	}
+
 	// SHADOW + SPELL (11 cards)
 	if (refCard.spellSchool?.toUpperCase() === 'SHADOW' && refCard.type?.toUpperCase() === 'SPELL') {
 		matchingCardIds.push(
