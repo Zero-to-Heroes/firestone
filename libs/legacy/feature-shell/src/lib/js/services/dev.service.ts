@@ -53,7 +53,7 @@ export class DevService {
 
 		window['fakeGame'] = async (fileName: string, isBg = false, allowReconnects = false) => {
 			const events = [];
-			this.gameState.processedEvents = [];
+			// this.gameState.processedEvents = [];
 			const sub = this.events.allEvents.subscribe((event) => events.push(event.type));
 			// To trigger real-time stats
 			if (isBg) {
@@ -62,14 +62,18 @@ export class DevService {
 			this.scene.currentScene$$.next(SceneMode.GAMEPLAY);
 			// Do it everytime to reset its memory
 			await this.gameEvents['initPlugin']();
-			const logsLocation = `E:\\Source\\zerotoheroes\\firestone\\test-tools\\${fileName ?? 'game.log'}`;
+			const logsLocation = `D:\\sources\\firestone\\firestone\\test-tools\\${fileName ?? 'game.log'}`;
 			const logContents = await this.ow.readTextFile(logsLocation);
 			console.log('logContents', logContents, fileName);
 			const logLines = logContents.split('\n');
 			console.log('logLines', logLines?.length);
 			await sleep(2000);
 			let currentIndex = 0;
-			for (const line of logLines) {
+			for (let line of logLines) {
+				if (!allowReconnects && line.includes('tag=GAME_SEED')) {
+					line = line.replace(/value=\d+/, `value=${Math.floor(Math.random() * 1000000)}`);
+					console.log('replaced game seed', line);
+				}
 				this.gameEvents.receiveLogLine(line);
 
 				currentIndex++;
@@ -83,7 +87,7 @@ export class DevService {
 			console.log('time spent in event dispatch: ', this.gameEvents.totalTime);
 		};
 		window['processedEvents'] = () => {
-			console.log('processedEvents', this.gameState.processedEvents.join(','));
+			// console.log('processedEvents', this.gameState.processedEvents.join(','));
 		};
 		window['startDeckCycle'] = async (logName, repeats, deckString) => {
 			console.debug('starting new deck cycle', logName, repeats, deckString);

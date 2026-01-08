@@ -471,7 +471,9 @@ export class GameStateService {
 			'[game-state] processed event',
 			gameEvent.type,
 			gameEvent.cardId,
-			gameEvent.entityId,
+			`entityId:${gameEvent.entityId}`,
+			currentState.opponentDeck.hand.map((e) => e.cardId),
+			currentState.opponentDeck.hand.map((e) => e.entityId),
 			currentState,
 			gameEvent,
 		);
