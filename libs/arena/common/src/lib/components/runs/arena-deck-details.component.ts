@@ -20,6 +20,12 @@ import { ArenaNavigationService } from '../../services/arena-navigation.service'
 					[copyText]="'app.duels.deckbuilder.export-deckcode-button' | fsTranslate"
 				>
 				</copy-deckstring>
+				<export-deck-to-picture
+					class="export-deck-picture"
+					selector=".deck-list"
+					[origin]="'arena-deck-details'"
+				>
+				</export-deck-to-picture>
 				<deck-list-basic class="deck-list" [deckstring]="decklist"></deck-list-basic>
 			</div>
 			<div class="details">
