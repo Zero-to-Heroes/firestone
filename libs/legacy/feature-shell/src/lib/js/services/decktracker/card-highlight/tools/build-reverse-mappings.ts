@@ -816,6 +816,9 @@ function generateMinionFile(flatMappings: { [condition: string]: string[] }): st
 				(condition.includes('UNDEAD') && !condition.includes('HAS_MECHANIC')) ||
 				(condition.includes('NAGA') && !condition.includes('HAS_MECHANIC')) ||
 				(condition.includes('TOTEM') && !condition.includes('HAS_MECHANIC')) ||
+				condition.includes('PROTOSS') ||
+				condition.includes('ZERG') ||
+				condition.includes('TERRAN') ||
 				condition.includes('ATTACK') ||
 				condition.includes('NOT_TRIBELESS');
 
@@ -1217,6 +1220,19 @@ function buildReverseCondition(condition: string): string | null {
 			case 'NEUTRAL':
 				conditions.push("refCard.classes?.includes('NEUTRAL')");
 				break;
+			case 'PROTOSS':
+				conditions.push("refCard.mechanics?.includes('PROTOSS')");
+				break;
+			case 'ZERG':
+				conditions.push("refCard.mechanics?.includes('ZERG')");
+				break;
+			case 'TERRAN':
+				conditions.push("refCard.mechanics?.includes('TERRAN')");
+				break;
+			case 'TEMPLAR':
+				// Templar is a specific card check, not a mechanic - skip for reverse selectors
+				// as it's not a property that can be checked on any card
+				return null;
 			default:
 				if (part.startsWith('COST_MORE_')) {
 					const value = part.replace('COST_MORE_', '');
