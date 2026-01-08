@@ -328,7 +328,7 @@ export const reverseGeneralSelector = (
 		);
 	}
 
-	// HAS_MECHANIC_TAUNT + MINION (12 cards)
+	// HAS_MECHANIC_TAUNT + MINION (13 cards)
 	if (refCard.mechanics?.includes('TAUNT') && refCard.type?.toUpperCase() === 'MINION') {
 		matchingCardIds.push(
 			CardIds.Battlepickaxe_WW_347,
@@ -338,6 +338,7 @@ export const reverseGeneralSelector = (
 			CardIds.EnduranceTrainingTavernBrawl,
 			CardIds.FirePlumesHeart,
 			CardIds.IntoTheFray,
+			CardIds.KingsDefender,
 			CardIds.QualityAssurance_TOY_605,
 			CardIds.RazormaneBattleguard,
 			CardIds.TortollanTraveler_VAC_518,

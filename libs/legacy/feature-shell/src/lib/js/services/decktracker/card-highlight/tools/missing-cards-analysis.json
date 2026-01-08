@@ -1,7 +1,7 @@
 {
-  "totalOriginal": 1694,
-  "totalProcessed": 1581,
-  "totalMissing": 109,
+  "totalOriginal": 1696,
+  "totalProcessed": 1584,
+  "totalMissing": 108,
   "missingCards": [
     "AbyssalDepths",
     "AstralVigilant_GDB_461",
@@ -11,7 +11,6 @@
     "CallToAdventure",
     "CagematchCustodian",
     "CaptureColdtoothMine",
-    "ChattyMacaw_VAC_407",
     "Chogall_WON_105",
     "Chogall_OG_121",
     "Chromie_TIME_103",
@@ -113,5 +112,5 @@
     "VelenLeaderOfTheExiled_GDB_131",
     "WildSpirits"
   ],
-  "analysisDate": "2025-12-23T09:11:05.162Z"
+  "analysisDate": "2026-01-08T08:31:04.588Z"
 }

@@ -303,7 +303,7 @@ export const reverseMinionSelector = (
 		);
 	}
 
-	// HAS_MECHANIC_TAUNT + MINION (12 cards)
+	// HAS_MECHANIC_TAUNT + MINION (13 cards)
 	if (refCard.mechanics?.includes('TAUNT') && refCard.type?.toUpperCase() === 'MINION') {
 		matchingCardIds.push(
 			CardIds.Battlepickaxe_WW_347,
@@ -313,6 +313,7 @@ export const reverseMinionSelector = (
 			CardIds.EnduranceTrainingTavernBrawl,
 			CardIds.FirePlumesHeart,
 			CardIds.IntoTheFray,
+			CardIds.KingsDefender,
 			CardIds.QualityAssurance_TOY_605,
 			CardIds.RazormaneBattleguard,
 			CardIds.TortollanTraveler_VAC_518,
@@ -905,7 +906,7 @@ export const reverseMinionSelector = (
 		);
 	}
 
-	// MINION (274 cards)
+	// MINION (275 cards)
 	if (refCard.type?.toUpperCase() === 'MINION') {
 		matchingCardIds.push(
 			CardIds.AcherusVeteran_CORE_ICC_092,
@@ -1034,6 +1035,7 @@ export const reverseMinionSelector = (
 			CardIds.HopeOfQuelthalas,
 			CardIds.HoundsOfFury_TIME_443,
 			CardIds.HourglassAttendant_TIME_100,
+			CardIds.HungeringAncient_EDR_494,
 			CardIds.IdolOfYshaarj,
 			CardIds.ImpKingRafaam_ImpKingRafaamToken,
 			CardIds.ImpKingRafaam_REV_789,

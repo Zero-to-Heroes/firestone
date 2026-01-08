@@ -361,7 +361,7 @@ export const reverseSpellSelector = (
 		);
 	}
 
-	// SPELL (212 cards)
+	// SPELL (213 cards)
 	if (refCard.type?.toUpperCase() === 'SPELL') {
 		matchingCardIds.push(
 			CardIds.AdvancedTargetingMonocle,
@@ -387,6 +387,7 @@ export const reverseSpellSelector = (
 			CardIds.BrollBearmantle_EDR_853,
 			CardIds.CactusCutter_WW_327,
 			CardIds.CardGrader_TOY_054,
+			CardIds.ChattyMacaw_VAC_407,
 			CardIds.ChiaDrake_ChiaDrakeToken_TOY_801t,
 			CardIds.ChiaDrake_Cultivate_TOY_801a,
 			CardIds.ChiaDrake_TOY_801,
