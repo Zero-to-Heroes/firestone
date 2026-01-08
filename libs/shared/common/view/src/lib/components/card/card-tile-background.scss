@@ -111,6 +111,8 @@
 		transform: translateX(0);
 	}
 	to {
-		transform: translateX(calc(-100% + 130px - 20px));
+		// Move text left so the end is visible
+		// Container width is 130px, padding is 10px, so visible area is ~120px
+		transform: translateX(calc(120px - 100%));
 	}
 }
