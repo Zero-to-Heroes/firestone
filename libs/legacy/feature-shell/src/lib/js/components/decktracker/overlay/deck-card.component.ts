@@ -533,24 +533,27 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 	}
 
 	private scheduleTextScroll() {
+		// Check overflow first - skip timeout entirely if text fits
+		const overflowAmount = this.getTextOverflowAmount();
+		if (overflowAmount <= 0) {
+			return;
+		}
+
 		// Clear any existing timeout
 		if (this.scrollTimeout !== null) {
 			window.clearTimeout(this.scrollTimeout);
 		}
 
-		// Schedule the text scroll check after a delay
+		// Schedule the text scroll after a delay (only for truncated text)
 		this.scrollTimeout = window.setTimeout(() => {
 			this.scrollTimeout = null;
-			const overflowAmount = this.getTextOverflowAmount();
-			if (overflowAmount > 0) {
-				// Set dynamic animation duration based on overflow amount for better readability
-				// Base: 0.3s for up to 50px overflow, then scale linearly (approximately 6ms per pixel)
-				const animationDuration = Math.max(0.3, overflowAmount * 0.006);
-				this.cardNameSpan?.nativeElement?.style?.setProperty('--scroll-duration', `${animationDuration}s`);
-				this.scrollText = true;
-				if (!(this.cdr as ViewRef)?.destroyed) {
-					this.cdr.markForCheck();
-				}
+			// Set dynamic animation duration based on overflow amount for better readability
+			// Base: 0.3s for up to 50px overflow, then scale linearly (approximately 6ms per pixel)
+			const animationDuration = Math.max(0.3, overflowAmount * 0.006);
+			this.cardNameSpan?.nativeElement?.style?.setProperty('--scroll-duration', `${animationDuration}s`);
+			this.scrollText = true;
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.markForCheck();
 			}
 		}, DeckCardComponent.TEXT_SCROLL_DELAY_MS);
 	}
