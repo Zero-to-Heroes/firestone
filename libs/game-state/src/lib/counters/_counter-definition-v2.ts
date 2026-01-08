@@ -102,6 +102,7 @@ export abstract class CounterDefinitionV2<T> {
 				return false;
 			}
 			if (prefs[this.player.pref] === 'always-on') {
+				this.player.cachedValue = this.player.value(gameState, bgState);
 				return true;
 			}
 			const boardCardIds = [
@@ -123,6 +124,7 @@ export abstract class CounterDefinitionV2<T> {
 					boardCardIds,
 				);
 			if (this.cardsOnBoard.length > 0 && boardCardIds.some((cardId) => this.cardsOnBoard.includes(cardId))) {
+				this.player.cachedValue = this.player.value(gameState, bgState);
 				return true;
 			}
 			if (
@@ -185,6 +187,7 @@ export abstract class CounterDefinitionV2<T> {
 			}
 			if (prefs[this.opponent.pref] === 'always-on') {
 				this.debug && console.debug('showing as always-on', this.id, side);
+				this.opponent.cachedValue = this.opponent.value(gameState, bgState);
 				return true;
 			}
 			if (
@@ -199,6 +202,7 @@ export abstract class CounterDefinitionV2<T> {
 						side,
 						gameState.opponentDeck?.hasRelevantCard(this.cards),
 					);
+				this.opponent.cachedValue = this.opponent.value(gameState, bgState);
 				return true;
 			}
 			if (!!this.cards?.length && !areCardsValidInCurrentGame(this.cards, gameState.metadata, this.allCards)) {
