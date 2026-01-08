@@ -7,6 +7,8 @@ General guidelines:
 - Do not touch files that are flagged as automatically generated (there is a comment in the header)
 - Card IDs are at https://github.com/Zero-to-Heroes/hs-reference-data/blob/master/src/card-ids.ts
 
+Once you're done, before assigning the PR to me for review, please mention @cursoragent for it to do a first review.
+
 ### Card highlight requests
 
 - First check the requested cards at https://github.com/Zero-to-Heroes/hs-reference-data/blob/master/src/cards_short.json and decides whether the request makes sense based on what the card does
