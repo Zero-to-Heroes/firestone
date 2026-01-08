@@ -2460,6 +2460,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), naga);
 		case CardIds.Obsidiansmith:
 			return highlightConditions(and(side(inputSide), inDeck, minion), and(side(inputSide), inDeck, weapon));
+		case CardIds.OffensivePlayTavernBrawl:
+			return and(side(inputSide), or(inDeck, inHand), minion, legendary);
 		case CardIds.OldMilitiaHornTavernBrawl:
 		case CardIds.OldMilitiaHorn_MilitiaHornTavernBrawl:
 		case CardIds.OldMilitiaHorn_VeteransMilitiaHornTavernBrawl:
