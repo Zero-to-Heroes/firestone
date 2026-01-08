@@ -290,7 +290,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 	scrollText = false;
 
 	private _referenceCard: ReferenceCard;
-	private scrollTimeout: number | null = null;
+	private scrollTimeout: ReturnType<typeof setTimeout> | null = null;
 	private _uniqueId: string;
 	private _zone: DeckZone;
 
@@ -502,7 +502,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		this.cardsHighlightService?.onMouseLeave(this.cardId);
 		
 		// Clear the scroll timeout and reset scroll state
-		if (this.scrollTimeout != null) {
+		if (this.scrollTimeout !== null) {
 			window.clearTimeout(this.scrollTimeout);
 			this.scrollTimeout = null;
 		}
@@ -525,7 +525,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 
 	private scheduleTextScroll() {
 		// Clear any existing timeout
-		if (this.scrollTimeout != null) {
+		if (this.scrollTimeout !== null) {
 			window.clearTimeout(this.scrollTimeout);
 		}
 

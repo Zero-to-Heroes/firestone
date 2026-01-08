@@ -76,6 +76,8 @@
 	// Add variables for outline color and size
 	--card-name-outline: #181818;
 	--card-name-outline-size: 1px;
+	--card-name-container-width: 130px;
+	--card-name-padding: 10px;
 
 	span {
 		font-family: Open Sans;
@@ -112,7 +114,7 @@
 	}
 	to {
 		// Move text left so the end is visible
-		// Container width is 130px, padding is 10px, so visible area is ~120px
-		transform: translateX(calc(120px - 100%));
+		// Calculate visible area: container width minus padding
+		transform: translateX(calc(var(--card-name-container-width) - var(--card-name-padding) - 100%));
 	}
 }
