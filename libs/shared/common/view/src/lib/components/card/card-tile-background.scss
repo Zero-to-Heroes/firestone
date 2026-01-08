@@ -76,6 +76,8 @@
 	// Add variables for outline color and size
 	--card-name-outline: #181818;
 	--card-name-outline-size: 1px;
+	--card-name-container-width: 130px;
+	--card-name-padding: 10px;
 
 	span {
 		font-family: Open Sans;
@@ -96,5 +98,25 @@
 			calc(var(--card-name-outline-size) * -1) calc(var(--card-name-outline-size)) 0 var(--card-name-outline),
 			0 calc(var(--card-name-outline-size)) 0 var(--card-name-outline),
 			calc(var(--card-name-outline-size)) calc(var(--card-name-outline-size)) 0 var(--card-name-outline);
+	}
+
+	&.scroll-text {
+		span {
+			display: inline-block;
+			// Duration is set dynamically via --scroll-duration CSS variable based on overflow amount
+			// Falls back to 0.3s if not set (e.g., for short overflow)
+			animation: scroll-to-end var(--scroll-duration, 0.3s) ease-out forwards;
+		}
+	}
+}
+
+@keyframes scroll-to-end {
+	from {
+		transform: translateX(0);
+	}
+	to {
+		// Move text left so the end is visible
+		// Calculate visible area: container width minus padding
+		transform: translateX(calc(var(--card-name-container-width) - var(--card-name-padding) - 100%));
 	}
 }

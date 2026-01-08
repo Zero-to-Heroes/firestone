@@ -3,12 +3,14 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
+	ElementRef,
 	EventEmitter,
 	HostListener,
 	Input,
 	OnDestroy,
 	Optional,
 	Output,
+	ViewChild,
 	ViewRef,
 } from '@angular/core';
 import { CardClass, CardIds, GameTag, GameType, ReferenceCard } from '@firestone-hs/reference-data';
@@ -155,8 +157,8 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 				<span>{{ manaCostStr }}</span>
 			</div>
 			<div class="missing-overlay" *ngIf="_isMissing"></div>
-			<div class="card-name">
-				<span>{{ cardName }}</span>
+			<div class="card-name" [ngClass]="{ 'scroll-text': scrollText }">
+				<span #cardNameSpan>{{ cardName }}</span>
 			</div>
 			<div class="dim-overlay" *ngIf="highlight === 'dim'"></div>
 			<div class="linked-card-overlay"></div>
@@ -177,6 +179,8 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 	forceMouseOver$: Observable<boolean>;
 
 	@Output() cardClicked: EventEmitter<VisualDeckCard> = new EventEmitter<VisualDeckCard>();
+	// Using ElementRef<HTMLSpanElement> for better type safety when accessing DOM properties
+	@ViewChild('cardNameSpan', { static: false }) cardNameSpan: ElementRef<HTMLSpanElement>;
 
 	@Input() set showUpdatedCost(value: boolean) {
 		this.showUpdatedCost$$.next(value);
@@ -284,8 +288,13 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 
 	useNewCardTileStyle = false;
 	cardImageError = false;
+	scrollText = false;
 
 	private _referenceCard: ReferenceCard;
+	// Using number type for browser setTimeout return value (ReturnType<typeof setTimeout> returns NodeJS.Timeout)
+	private scrollTimeout: number | null = null;
+	// Delay before text starts scrolling on hover (prevents flicker on quick mouseovers)
+	private static readonly TEXT_SCROLL_DELAY_MS = 500;
 	private _uniqueId: string;
 	private _zone: DeckZone;
 
@@ -418,6 +427,11 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		// console.debug('unregistering highlight', card?.cardName, this.el.nativeElement);
 		this.cardsHighlightService?.onMouseLeave(this.cardId);
 		this.cardsHighlightService?.unregister(this._uniqueId, this._side);
+		// Clean up scroll timeout to prevent memory leaks
+		if (this.scrollTimeout !== null) {
+			window.clearTimeout(this.scrollTimeout);
+			this.scrollTimeout = null;
+		}
 	}
 
 	doHighlight(highlight: SelectorOutput) {
@@ -437,6 +451,9 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 
 	onMouseEnter(event: MouseEvent) {
 		this.cardsHighlightService?.onMouseEnter(this.cardId, this.entityId, this._side, this.card$$.value);
+
+		// Check if text is truncated and schedule scroll after delay
+		this.scheduleTextScroll();
 
 		if (!this.card$$.value.cardId && this.card$$.value.guessedInfo?.possibleCards?.length) {
 			this.relatedCardIds = this.card$$.value.guessedInfo.possibleCards;
@@ -492,6 +509,16 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 
 	onMouseLeave(event: MouseEvent) {
 		this.cardsHighlightService?.onMouseLeave(this.cardId);
+
+		// Clear the scroll timeout and reset scroll state
+		if (this.scrollTimeout !== null) {
+			window.clearTimeout(this.scrollTimeout);
+			this.scrollTimeout = null;
+		}
+		this.scrollText = false;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.markForCheck();
+		}
 	}
 
 	onCardClicked(event: MouseEvent) {
@@ -503,6 +530,48 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.markForCheck();
 		}
+	}
+
+	private scheduleTextScroll() {
+		// Check overflow first - skip timeout entirely if text fits
+		const overflowAmount = this.getTextOverflowAmount();
+		if (overflowAmount <= 0) {
+			return;
+		}
+
+		// Clear any existing timeout
+		if (this.scrollTimeout !== null) {
+			window.clearTimeout(this.scrollTimeout);
+		}
+
+		// Schedule the text scroll after a delay (only for truncated text)
+		this.scrollTimeout = window.setTimeout(() => {
+			this.scrollTimeout = null;
+			// Set dynamic animation duration based on overflow amount for better readability
+			// Base: 0.3s for up to 50px overflow, then scale linearly (approximately 6ms per pixel)
+			const animationDuration = Math.max(0.3, overflowAmount * 0.006);
+			this.cardNameSpan?.nativeElement?.style?.setProperty('--scroll-duration', `${animationDuration}s`);
+			this.scrollText = true;
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.markForCheck();
+			}
+		}, DeckCardComponent.TEXT_SCROLL_DELAY_MS);
+	}
+
+	// Returns the amount of pixels the text overflows, or 0 if not truncated
+	private getTextOverflowAmount(): number {
+		if (!this.cardNameSpan?.nativeElement) {
+			return 0;
+		}
+		const span = this.cardNameSpan.nativeElement;
+		const container = span.parentElement;
+		if (!container) {
+			return 0;
+		}
+		// The span expands to fit text naturally; overflow is clipped by parent container
+		// Compare span's natural width against container's available width
+		const overflow = span.scrollWidth - container.clientWidth;
+		return overflow > 0 ? overflow : 0;
 	}
 
 	private async updateInfos(
