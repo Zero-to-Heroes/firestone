@@ -97,4 +97,20 @@
 			0 calc(var(--card-name-outline-size)) 0 var(--card-name-outline),
 			calc(var(--card-name-outline-size)) calc(var(--card-name-outline-size)) 0 var(--card-name-outline);
 	}
+
+	&.scroll-text {
+		span {
+			display: inline-block;
+			animation: scroll-to-end 0.3s ease-out forwards;
+		}
+	}
+}
+
+@keyframes scroll-to-end {
+	from {
+		transform: translateX(0);
+	}
+	to {
+		transform: translateX(calc(-100% + 130px - 20px));
+	}
 }

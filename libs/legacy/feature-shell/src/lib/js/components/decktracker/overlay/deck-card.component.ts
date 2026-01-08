@@ -3,12 +3,14 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
+	ElementRef,
 	EventEmitter,
 	HostListener,
 	Input,
 	OnDestroy,
 	Optional,
 	Output,
+	ViewChild,
 	ViewRef,
 } from '@angular/core';
 import { CardClass, CardIds, GameTag, GameType, ReferenceCard } from '@firestone-hs/reference-data';
@@ -155,8 +157,8 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 				<span>{{ manaCostStr }}</span>
 			</div>
 			<div class="missing-overlay" *ngIf="_isMissing"></div>
-			<div class="card-name">
-				<span>{{ cardName }}</span>
+			<div class="card-name" [ngClass]="{ 'scroll-text': scrollText }">
+				<span #cardNameSpan>{{ cardName }}</span>
 			</div>
 			<div class="dim-overlay" *ngIf="highlight === 'dim'"></div>
 			<div class="linked-card-overlay"></div>
@@ -177,6 +179,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 	forceMouseOver$: Observable<boolean>;
 
 	@Output() cardClicked: EventEmitter<VisualDeckCard> = new EventEmitter<VisualDeckCard>();
+	@ViewChild('cardNameSpan', { static: false }) cardNameSpan: ElementRef;
 
 	@Input() set showUpdatedCost(value: boolean) {
 		this.showUpdatedCost$$.next(value);
@@ -284,8 +287,10 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 
 	useNewCardTileStyle = false;
 	cardImageError = false;
+	scrollText = false;
 
 	private _referenceCard: ReferenceCard;
+	private scrollTimeout: number | null = null;
 	private _uniqueId: string;
 	private _zone: DeckZone;
 
@@ -438,6 +443,9 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 	onMouseEnter(event: MouseEvent) {
 		this.cardsHighlightService?.onMouseEnter(this.cardId, this.entityId, this._side, this.card$$.value);
 
+		// Check if text is truncated and schedule scroll after delay
+		this.scheduleTextScroll();
+
 		if (!this.card$$.value.cardId && this.card$$.value.guessedInfo?.possibleCards?.length) {
 			this.relatedCardIds = this.card$$.value.guessedInfo.possibleCards;
 			if (!(this.cdr as ViewRef)?.destroyed) {
@@ -492,6 +500,16 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 
 	onMouseLeave(event: MouseEvent) {
 		this.cardsHighlightService?.onMouseLeave(this.cardId);
+		
+		// Clear the scroll timeout and reset scroll state
+		if (this.scrollTimeout != null) {
+			window.clearTimeout(this.scrollTimeout);
+			this.scrollTimeout = null;
+		}
+		this.scrollText = false;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.markForCheck();
+		}
 	}
 
 	onCardClicked(event: MouseEvent) {
@@ -503,6 +521,32 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.markForCheck();
 		}
+	}
+
+	private scheduleTextScroll() {
+		// Clear any existing timeout
+		if (this.scrollTimeout != null) {
+			window.clearTimeout(this.scrollTimeout);
+		}
+
+		// Schedule the text scroll check after a delay
+		this.scrollTimeout = window.setTimeout(() => {
+			this.scrollTimeout = null;
+			if (this.isTextTruncated()) {
+				this.scrollText = true;
+				if (!(this.cdr as ViewRef)?.destroyed) {
+					this.cdr.markForCheck();
+				}
+			}
+		}, 500); // 500ms delay before scrolling
+	}
+
+	private isTextTruncated(): boolean {
+		if (!this.cardNameSpan?.nativeElement) {
+			return false;
+		}
+		const element = this.cardNameSpan.nativeElement;
+		return element.scrollWidth > element.clientWidth;
 	}
 
 	private async updateInfos(
