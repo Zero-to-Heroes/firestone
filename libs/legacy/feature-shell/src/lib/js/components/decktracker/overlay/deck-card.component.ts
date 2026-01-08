@@ -179,7 +179,8 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 	forceMouseOver$: Observable<boolean>;
 
 	@Output() cardClicked: EventEmitter<VisualDeckCard> = new EventEmitter<VisualDeckCard>();
-	@ViewChild('cardNameSpan', { static: false }) cardNameSpan: ElementRef;
+	// Using ElementRef<HTMLSpanElement> for better type safety when accessing DOM properties
+	@ViewChild('cardNameSpan', { static: false }) cardNameSpan: ElementRef<HTMLSpanElement>;
 
 	@Input() set showUpdatedCost(value: boolean) {
 		this.showUpdatedCost$$.next(value);
@@ -290,7 +291,10 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 	scrollText = false;
 
 	private _referenceCard: ReferenceCard;
-	private scrollTimeout: ReturnType<typeof setTimeout> | null = null;
+	// Using number type for browser setTimeout return value (ReturnType<typeof setTimeout> returns NodeJS.Timeout)
+	private scrollTimeout: number | null = null;
+	// Delay before text starts scrolling on hover (prevents flicker on quick mouseovers)
+	private static readonly TEXT_SCROLL_DELAY_MS = 500;
 	private _uniqueId: string;
 	private _zone: DeckZone;
 
@@ -423,6 +427,11 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		// console.debug('unregistering highlight', card?.cardName, this.el.nativeElement);
 		this.cardsHighlightService?.onMouseLeave(this.cardId);
 		this.cardsHighlightService?.unregister(this._uniqueId, this._side);
+		// Clean up scroll timeout to prevent memory leaks
+		if (this.scrollTimeout !== null) {
+			window.clearTimeout(this.scrollTimeout);
+			this.scrollTimeout = null;
+		}
 	}
 
 	doHighlight(highlight: SelectorOutput) {
@@ -532,21 +541,28 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		// Schedule the text scroll check after a delay
 		this.scrollTimeout = window.setTimeout(() => {
 			this.scrollTimeout = null;
-			if (this.isTextTruncated()) {
+			const overflowAmount = this.getTextOverflowAmount();
+			if (overflowAmount > 0) {
+				// Set dynamic animation duration based on overflow amount for better readability
+				// Base: 0.3s for up to 50px overflow, then scale linearly (approximately 6ms per pixel)
+				const animationDuration = Math.max(0.3, overflowAmount * 0.006);
+				this.cardNameSpan?.nativeElement?.style?.setProperty('--scroll-duration', `${animationDuration}s`);
 				this.scrollText = true;
 				if (!(this.cdr as ViewRef)?.destroyed) {
 					this.cdr.markForCheck();
 				}
 			}
-		}, 500); // 500ms delay before scrolling
+		}, DeckCardComponent.TEXT_SCROLL_DELAY_MS);
 	}
 
-	private isTextTruncated(): boolean {
+	// Returns the amount of pixels the text overflows, or 0 if not truncated
+	private getTextOverflowAmount(): number {
 		if (!this.cardNameSpan?.nativeElement) {
-			return false;
+			return 0;
 		}
 		const element = this.cardNameSpan.nativeElement;
-		return element.scrollWidth > element.clientWidth;
+		const overflow = element.scrollWidth - element.clientWidth;
+		return overflow > 0 ? overflow : 0;
 	}
 
 	private async updateInfos(
