@@ -57,6 +57,7 @@ export { IncriminatingPsychic } from './incriminating-psychic';
 export { InterstellarResearcher } from './interstellar-researcher';
 export { IntertwinedFate } from './intertwined-fate';
 export { JuicyPsychmelon } from './juicy-psychmelon';
+export { JarDealer } from './jar-dealer';
 export { Jumpscare } from './jumpscare';
 export { KaldoreiCultivator } from './kaldorei-cultivator';
 export { KthirRitualist } from './k-thir-ritualist';
