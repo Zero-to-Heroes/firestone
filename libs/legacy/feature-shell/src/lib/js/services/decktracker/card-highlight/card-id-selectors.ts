@@ -1063,6 +1063,8 @@ export const cardIdSelector = (
 			);
 		case CardIds.DimensionalRipper:
 			return and(side(inputSide), inDeck, minion);
+		case TempCardIds.DimensionalWeaponsmith:
+			return and(side(inputSide), or(inHand, inDeck), or(minion, weapon));
 		case CardIds.DinnerPerformer:
 			return highlightConditions(
 				and(side(inputSide), inDeck, minion, effectiveCostLessThanRemainingMana),
