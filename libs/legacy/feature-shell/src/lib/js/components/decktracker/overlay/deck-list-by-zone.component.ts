@@ -646,7 +646,7 @@ const updateWithAdditionalKnownCards = (
 	const previous = additionalKnownCards.length;
 	additionalKnownCards = additionalKnownCards.filter((c) => !cards.some((card) => card.cardId === c));
 	if (previous !== additionalKnownCards.length) {
-		console.debug('updateWithAdditionalKnownCards', previous, additionalKnownCards.length);
+		// console.debug('updateWithAdditionalKnownCards', previous, additionalKnownCards.length);
 	}
 
 	// Remove "placeholder" cards
