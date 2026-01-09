@@ -93,6 +93,9 @@ export class CopiedFromEntityIdParser implements EventParser {
 			!isCopiedPlayer &&
 			// When the player copies (via Disguised K'Thir for instance) we don't obfuscate the card, because we know it
 			!isPlayer &&
+			// 2025-01-09: this doesn't work. If the opponent discovers a copy of a card in their deck, and the card is already known,
+			// this wlil create an additional copy. So we add a check that it doesn't have a known cardId at least
+			!copiedCard?.cardId &&
 			// Cards that summon copies of card in the deck into play
 			!CREATES_PUBLIC_COPY_FROM_DECK.includes(newCopy?.creatorCardId as CardIds);
 		console.debug('[copied-from-entity] shouldObfuscate', shouldObfuscate, isPlayer, isCopiedPlayer, copiedCard);
