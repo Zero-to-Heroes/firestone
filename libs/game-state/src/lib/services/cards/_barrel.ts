@@ -22,6 +22,7 @@ export { Blingtron3000 } from './blingtron-3000';
 export { BlinkFox } from './blink-fox';
 export { BloodDraw } from './blood-draw';
 export { BrutishEndmaw } from './brutish-endmaw';
+export { BygoneEchoes } from './bygone-echoes';
 export { Chronogor } from './chronogor';
 export { ConfluxFuture } from './conflux-future';
 export { CountessAshmore } from './countess-ashmore';

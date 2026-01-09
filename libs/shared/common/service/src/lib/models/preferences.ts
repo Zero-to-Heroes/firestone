@@ -377,6 +377,7 @@ export class Preferences implements IPreferences {
 	readonly playerEarthenGolemCounter: BooleanWithLimited = true;
 	readonly opponentEarthenGolemCounter: BooleanWithLimited = true;
 	readonly playerTreantCounter: BooleanWithLimited = true;
+	readonly playerTreantDeadCounter: boolean = true;
 	readonly playerDragonsSummonedCounter: BooleanWithLimited = true;
 	readonly playerDragonsPlayedCounter: boolean = true;
 	readonly playerDragonsInHandCounter: boolean = true;
@@ -411,6 +412,7 @@ export class Preferences implements IPreferences {
 	readonly playerBolnerCounter: BooleanWithLimited = true;
 	readonly playerDeadMinionsThisGameCounter: BooleanWithLimited = true;
 	readonly opponentDeadMinionsThisGameCounter: boolean = false;
+	readonly playerDeadMinionsThisTurnCounter: boolean = true;
 	readonly playerFriendlyDeadMinionsThisGameCounter2: boolean = true;
 	readonly opponentFriendlyDeadMinionsThisGameCounter: boolean = false;
 	readonly playerDamageTakenOnYourTurnCounter: boolean = true;

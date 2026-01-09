@@ -67,6 +67,7 @@ import { LightrayCounterDefinitionV2 } from './impl/lightray';
 import { LocationsUsedCounterDefinitionV2 } from './impl/locations-used';
 import { MenagerieCounterDefinitionV2 } from './impl/menagerie';
 import { MinionsDeadThisGameCounterDefinitionV2 } from './impl/minions-dead-this-game';
+import { MinionsDeadThisTurnCounterDefinitionV2 } from './impl/minions-dead-this-turn';
 import { MulticasterCounterDefinitionV2 } from './impl/multicaster';
 import { NagaGiantCounterDefinitionV2 } from './impl/naga-giant';
 import { NextStarshipLaunchCounterDefinitionV2 } from './impl/next-starship-launch';
@@ -88,6 +89,7 @@ import { StarshipsLaunchedCounterDefinitionV2 } from './impl/starships-launched'
 import { TableFlipCounterDefinitionV2 } from './impl/table-flip';
 import { ThirstyDrifterCounterDefinitionV2 } from './impl/thirsty-drifter';
 import { TreantCounterDefinitionV2 } from './impl/treant';
+import { TreantDeadCounterDefinitionV2 } from './impl/treant-dead';
 import { TyrandeCounterDefinitionV2 } from './impl/tyrande';
 import { VolatileSkeletonCounterDefinitionV2 } from './impl/volatile-skeleton';
 import { WatchpostCounterDefinitionV2 } from './impl/watchpost';
@@ -173,6 +175,8 @@ export const getAllCounters: (
 	new RafaamTimeCounterDefinitionV2(i18n, allCards),
 	new CardsDrawnThisTurnCounterDefinitionV2(i18n, allCards),
 	new DragoncallerAlannaCounterDefinitionV2(i18n, allCards),
+	new TreantDeadCounterDefinitionV2(i18n, allCards),
+	new MinionsDeadThisTurnCounterDefinitionV2(i18n, allCards),
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n, allCards),
 	new BallerBuffCounterDefinitionV2(i18n, allCards),
@@ -231,6 +235,7 @@ export type CounterType =
 	| 'earthenGolem'
 	| 'comboCardsPlayed'
 	| 'treant'
+	| 'treantDead'
 	| 'dragonsSummoned'
 	| 'dragonsPlayed'
 	| 'piratesSummoned'
@@ -247,6 +252,7 @@ export type CounterType =
 	| 'monstrousParrot'
 	| 'friendlyDeadMinionsThisGame'
 	| 'deadMinionsThisGame'
+	| 'deadMinionsThisTurn'
 	| 'damageTakenOnYourTurn'
 	| 'seaShanty'
 	| 'locationsUsed'

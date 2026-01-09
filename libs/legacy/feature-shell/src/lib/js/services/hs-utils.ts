@@ -1,6 +1,7 @@
 import { BoosterType, CardClass, CardIds, GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';
 import { bwonsamdiBoonsEnchantments } from '@firestone/game-state';
+import { TempCardIds } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { CollectionCardType } from '../models/collection/collection-card-type.type';
 import { tutors } from './decktracker/card-info/card-tutors';
@@ -574,6 +575,7 @@ export const CURRENT_EFFECTS_WHITELIST = [
 	CardIds.WildernessPack_KnockOffPackEnchantment_MIS_104e,
 	CardIds.WorkForHagatha_WorkForHagathaTavernBrawlEnchantment,
 	CardIds.YshaarjTheDefiler_TrueCorruptionEnchantment,
+	TempCardIds.Chronikar_Enchantment,
 ];
 
 export const cardsRevealedWhenDrawn = [

@@ -311,3 +311,7 @@ export const fablePackages = [
 	timeRafaamFablePackage,
 	broxigarFablePackage,
 ];
+
+export const isTreant = (cardId: string, allCards: CardsFacadeService): boolean => {
+	return allCards.getCard(cardId)?.isTreant ?? false;
+};

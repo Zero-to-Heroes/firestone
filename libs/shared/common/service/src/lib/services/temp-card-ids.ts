@@ -11,4 +11,8 @@ export declare const enum TempCardIds {
 	Morchie = 'Morchie',
 	BlessingOfTheBronze = 'BlessingOfTheBronze',
 	WingsOfEternity = 'WingsOfEternity',
+	SplinteredReality = 'SplinteredReality',
+	Chronikar_Enchantment = 'Chronikar_Enchantment',
+	RemnantOfRage = 'RemnantOfRage',
+	BygoneEchoes = 'BygoneEchoes',
 }

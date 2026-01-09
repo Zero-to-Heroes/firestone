@@ -3256,6 +3256,8 @@ export const cardIdSelector = (
 			);
 		case CardIds.SpiritsingerUmbra:
 			return and(side(inputSide), or(inHand, inDeck), minion, deathrattle);
+		case TempCardIds.SplinteredReality:
+			return and(side(inputSide), or(inHand, inDeck), treant);
 		case CardIds.SplishSplashWhelp_WW_819:
 			return and(side(inputSide), or(inHand, inDeck), dragon);
 		case CardIds.SpitefulSummoner:
