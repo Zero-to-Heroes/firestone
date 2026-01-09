@@ -26,7 +26,7 @@ const filterNode = (node: SettingNode, searchString: string): SettingNode | null
 					.filter((s) => !!s) as (Section | SectionReference)[],
 				children: (node.children?.map((child) => filterNode(child, searchString)).filter((c) => !!c) ??
 					[]) as SettingNode[],
-		  };
+			};
 
 	if (!result?.sections?.length && !result.children?.length && !titleMatches) {
 		return null;
@@ -54,7 +54,9 @@ const filterSection = (section: Section | SectionReference, searchString: string
 const settingMatches = (setting: Setting | SettingButton, searchString: string): boolean => {
 	return (
 		setting.label?.toLocaleLowerCase().includes(searchString.toLocaleLowerCase()) ||
-		setting.keywords?.some((keyword) => keyword.toLocaleLowerCase().includes(searchString.toLocaleLowerCase())) ||
+		setting.keywords
+			?.filter((k) => !!k)
+			?.some((keyword) => keyword.toLocaleLowerCase().includes(searchString.toLocaleLowerCase())) ||
 		false
 	);
 };
