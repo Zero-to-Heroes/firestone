@@ -204,6 +204,18 @@ const tooltipTestCases: TooltipTestCase[] = [
 		expectedFlexibleOptions: [],
 		description: 'All multi-tribes are forced',
 	},
+	{
+		name: 'Production bug 1',
+		minions: [
+			createMinionWithTribes(['ELEMENTAL', 'MURLOC'], 'ElementalMurloc1'),
+			createMinionWithTribes(['MURLOC', 'PIRATE'], 'MurlocPirate1'),
+			createMinionWithTribes(['ELEMENTAL'], 'Elemental1'),
+			createMinionWithTribes(['MECH', 'TOTEM'], 'MechTotem1'),
+		],
+		expectedSecuredTribes: ['Elemental', 'Murloc', 'Pirate'],
+		expectedFlexibleOptions: ['Mech/Totem'],
+		description: 'Mech/Totem is flexible, others are forced',
+	},
 ];
 
 // Run the tooltip tests

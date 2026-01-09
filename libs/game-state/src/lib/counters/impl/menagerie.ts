@@ -289,7 +289,23 @@ export function analyzeTooltipTribes(allPlayedCards: readonly ReferenceCard[]): 
 				if (singleTribeMinions.includes('all')) {
 					finalSecuredTribes.push('all');
 				}
-				finalFlexibleOptions = flexibleMultiTribes;
+				// Recompute flexible options based on cascading constraints
+				// Only include multi-tribe minions that still have multiple viable options after cascading
+				finalFlexibleOptions = [];
+				for (const card of allPlayedCards) {
+					if (card.races!.length <= 1) continue;
+					if (card.races!.includes('ALL')) continue;
+
+					const cardTribes = card.races!.map((r) => r.toLowerCase());
+					const availableOptions = cardTribes.filter((tribe) => !forcedTribes.has(tribe));
+
+					if (availableOptions.length > 1) {
+						const combo = cardTribes.join('/');
+						if (!finalFlexibleOptions.includes(combo)) {
+							finalFlexibleOptions.push(combo);
+						}
+					}
+				}
 			}
 		} else {
 			// No single-tribe constraints - check if we achieve theoretical maximum
