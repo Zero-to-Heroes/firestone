@@ -263,7 +263,7 @@ export class SettingsGeneralThirdPartyComponent
 	}
 
 	async hearthpwnConnect(loginToken: string) {
-		this.ow.openUrlInDefaultBrowser(`https://www.hearthpwn.com/set-auth/${loginToken}`);
+		this.ow.openUrlInDefaultBrowser(`https://www.hearthpwn.com/set-auth/${loginToken}?provider=Firestone`);
 		this.hearthpwnSub = interval(5000).subscribe(async () => {
 			const url = `https://www.hearthpwn.com/get-auth-info/${loginToken}`;
 			const apiResult: { userToken: string; userID: number } | null = await this.api.callGetApi<{
