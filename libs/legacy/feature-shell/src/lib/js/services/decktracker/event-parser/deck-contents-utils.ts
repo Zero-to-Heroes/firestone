@@ -227,6 +227,9 @@ const handleKingLlane = (
 	i18n: LocalizationFacadeService,
 ): DeckState => {
 	const otherFableCards = kingLlaneFablePackage.filter((c) => c !== CardIds.GaronaHalforcen_KingLlaneToken_TIME_875t);
+	if (otherFableCards.some((c) => deckState.hasRelevantCard([c], { includesOtherZone: true, includeBoard: true }))) {
+		return deckState;
+	}
 	const result = deckState.update({
 		additionalKnownCardsInDeck: [...(deckState.additionalKnownCardsInDeck || []), ...otherFableCards],
 	});
@@ -239,6 +242,9 @@ const handleBroxigar = (
 	i18n: LocalizationFacadeService,
 ): DeckState => {
 	const otherFableCards = broxigarFablePackage.filter((c) => c !== CardIds.Broxigar_TIME_020);
+	if (otherFableCards.some((c) => deckState.hasRelevantCard([c], { includesOtherZone: true, includeBoard: true }))) {
+		return deckState;
+	}
 	const result = deckState.update({
 		additionalKnownCardsInDeck: [...(deckState.additionalKnownCardsInDeck || []), ...otherFableCards],
 	});
