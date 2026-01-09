@@ -505,6 +505,8 @@ export const cardIdSelector = (
 				and(side(inputSide), or(inHand, inDeck), fire),
 				and(side(inputSide), or(inHand, inDeck), elemental),
 			);
+		case TempCardIds.BlessingOfTheInfinite:
+			return and(side(inputSide), or(inDeck, inHand), undead);
 		case CardIds.BlessingOfTheWolf_EDR_850p:
 			return and(side(inputSide), or(inDeck, inHand), beast);
 		case CardIds.BlindeyeSharpshooter_WW_402:
@@ -1372,6 +1374,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), or(battlecry, combo));
 		case CardIds.FierceOutsider:
 			return and(side(inputSide), or(inHand, inDeck), outcast);
+		case TempCardIds.Finality:
+			return and(side(inputSide), inDeck, undead);
 		case CardIds.FinjaTheFlyingStar:
 		case CardIds.FinjaTheFlyingStar_CORE_CFM_344:
 			return and(side(inputSide), inDeck, murloc);
@@ -2642,6 +2646,8 @@ export const cardIdSelector = (
 				and(side(inputSide), inDeck, minion, costMore(4)),
 				and(side(inputSide), inDeck, minion),
 			);
+		case TempCardIds.PrescientSlitherdrake:
+			return and(side(inputSide), or(inHand, inDeck), dragon);
 		case CardIds.PressurePoints_GDB_881:
 			return and(side(inputSide), or(inHand, inDeck), combo);
 		case CardIds.PriestessValishj:
@@ -3915,6 +3921,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.Wither:
 			return and(side(inputSide), or(inDeck, inHand), undead);
+		case TempCardIds.WickedBlightspawn:
+			return and(side(inputSide), or(inDeck, inHand), weapon);
 		case CardIds.WickedWitchdoctor:
 		case CardIds.WickedWitchdoctor_WON_083:
 			return and(side(inputSide), or(inDeck, inHand), spell);

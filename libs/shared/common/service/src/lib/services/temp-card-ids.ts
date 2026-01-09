@@ -1,4 +1,5 @@
 export declare const enum TempCardIds {
+	Finality = 'Finality',
 	BrutishEndmaw = 'BrutishEndmaw',
 	TrienniumRex = 'TrienniumRex',
 	DimensionalWeaponsmith = 'DimensionalWeaponsmith',
@@ -15,4 +16,7 @@ export declare const enum TempCardIds {
 	Chronikar_Enchantment = 'Chronikar_Enchantment',
 	RemnantOfRage = 'RemnantOfRage',
 	BygoneEchoes = 'BygoneEchoes',
+	WickedBlightspawn = 'WickedBlightspawn',
+	BlessingOfTheInfinite = 'BlessingOfTheInfinite',
+	PrescientSlitherdrake = 'PrescientSlitherdrake',
 }
