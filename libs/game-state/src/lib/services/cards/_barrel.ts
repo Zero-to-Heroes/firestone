@@ -140,6 +140,7 @@ export { WarCache } from './war-cache';
 export { WelcomeHome } from './welcome-home';
 export { WhatDoesThisDo } from './what-does-this-do';
 export { WindowShopper } from './window-shopper';
+export { WitchsApprentice } from './witchs-apprentice';
 export { WingsOfEternity } from './wings-of-eternity';
 export { YoggInTheBox } from './yogg-in-the-box';
 export { YrelBeaconOfHope } from './yrel-beacon-of-hope';
