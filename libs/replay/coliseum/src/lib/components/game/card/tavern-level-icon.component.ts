@@ -24,7 +24,5 @@ export class TavernLevelIconComponent {
 		// }
 	}
 
-	constructor(private readonly cdr: ChangeDetectorRef) {
-		// cdr.detach();
-	}
+	constructor(private readonly cdr: ChangeDetectorRef) {}
 }

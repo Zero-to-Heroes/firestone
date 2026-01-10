@@ -49,10 +49,12 @@ export class VersionComponent implements AfterViewInit {
 
 	private isUpdating = false;
 
-	constructor(private cdr: ChangeDetectorRef, private ow: OverwolfService) {}
+	constructor(
+		private cdr: ChangeDetectorRef,
+		private ow: OverwolfService,
+	) {}
 
 	async ngAfterViewInit() {
-		// this.cdr.detach();
 		this.version = await this.ow.getAppVersion('lnknbakkpommmjjdnelmfbjjdbocfpnpbkijjnob');
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.markForCheck();

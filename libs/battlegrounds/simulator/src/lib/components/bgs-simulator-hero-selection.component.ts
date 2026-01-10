@@ -126,7 +126,6 @@ export class BgsSimulatorHeroSelectionComponent
 		private readonly i18n: ILocalizationService,
 	) {
 		super(cdr);
-		this.cdr.detach();
 	}
 
 	ngAfterContentInit(): void {

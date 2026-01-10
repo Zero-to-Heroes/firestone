@@ -347,9 +347,7 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 		private readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: ILocalizationService,
-	) {
-		this.cdr.detach();
-	}
+	) {}
 
 	onEternalKnightsDeadThisGameChanged(value: number) {
 		this.eternalKnightsDeadThisGame = value;

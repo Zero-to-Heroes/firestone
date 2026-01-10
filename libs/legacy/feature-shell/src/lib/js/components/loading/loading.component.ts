@@ -98,7 +98,6 @@ export class LoadingComponent implements AfterViewInit, OnDestroy {
 	) {}
 
 	async ngAfterViewInit() {
-		// this.cdr.detach();
 		await this.i18n.init();
 		console.debug('[loading] i18n initialized', this.i18n.getTranslateService(), this.i18n);
 		if (!this.allCards.getCards()?.length) {

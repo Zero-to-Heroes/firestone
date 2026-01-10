@@ -226,7 +226,6 @@ export class BgsSimulatorMinionSelectionComponent
 		private readonly prefs: PreferencesService,
 	) {
 		super(cdr);
-		this.cdr.detach();
 	}
 
 	async ngAfterContentInit() {
