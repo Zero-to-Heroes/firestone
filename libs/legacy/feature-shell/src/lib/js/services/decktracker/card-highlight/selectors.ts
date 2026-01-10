@@ -459,7 +459,16 @@ export const createLocation = cardIs(
 	CardIds.CruiseCaptainLora_VAC_506,
 );
 export const locationExtended = or(location, createLocation);
-export const givesHeroAttack = or(weapon, hasMechanicStr('GIVES_HERO_ATTACK'));
+
+// Cards that give hero attack through auras but don't have the GIVES_HERO_ATTACK mechanic tag
+// Spirit of the Team (TOY_028): "Your hero has +2 Attack on your turn"
+// Inara Stormcrash (DMF_708): "On your turn, your hero has +2 Attack and Windfury"
+const givesHeroAttackViaAura = (input: SelectorInput): boolean => {
+	const cardId = input.card?.id;
+	return cardId === 'TOY_028' || cardId === 'DMF_708';
+};
+
+export const givesHeroAttack = or(weapon, hasMechanicStr('GIVES_HERO_ATTACK'), givesHeroAttackViaAura);
 export const givesArmor = hasMechanicStr('GIVES_ARMOR');
 
 export const race =
