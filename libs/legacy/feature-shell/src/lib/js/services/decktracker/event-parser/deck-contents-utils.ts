@@ -625,7 +625,8 @@ const handleSteamcleaner = (
 	i18n: LocalizationFacadeService,
 ): DeckState => {
 	return updateCardInDeck(
-		(card, refCard) => !!card.creatorCardId,
+		// If the card has an entityId, it will get a CARD_REMOVED_FROM_DECK event
+		(card, refCard) => !!card.creatorCardId && !card.entityId,
 		(card) => null,
 		deckState,
 		allCards,
@@ -731,7 +732,8 @@ const updateCardInDeck = (
 			if (!cardSelector(card, refCard)) {
 				return card;
 			}
-			return cardUpdater(card, refCard);
+			const result = cardUpdater(card, refCard);
+			return result;
 		})
 		.filter((card) => card);
 	return deckState.update({
