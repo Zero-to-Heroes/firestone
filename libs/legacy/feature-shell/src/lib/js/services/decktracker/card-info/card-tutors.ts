@@ -305,6 +305,7 @@ const internalTutors = [
 	CardIds.Cosmonaut_GDB_443,
 	CardIds.TalanjiOfTheGraves_TIME_619,
 	CardIds.WayOfTheShell_TLC_513hp,
+	CardIds.PortalVanguard_TIME_003,
 	TempCardIds.Finality,
 ];
 for (const cardId of Object.keys(cardsInfoCache)) {
