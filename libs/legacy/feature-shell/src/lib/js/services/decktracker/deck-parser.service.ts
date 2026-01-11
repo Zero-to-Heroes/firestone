@@ -37,6 +37,8 @@ export class DeckParserService {
 
 	private deckTemplates: readonly DeckTemplate[];
 
+	public forcedDeckstring: string | undefined;
+
 	constructor(
 		private readonly gameEvents: GameEventsEmitterService,
 		private readonly memoryUpdates: MemoryUpdatesService,
@@ -80,6 +82,17 @@ export class DeckParserService {
 	}
 
 	public async retrieveCurrentDeck(usePreviousDeckIfSameScenarioId: boolean, metadata: Metadata): Promise<DeckInfo> {
+		if (this.forcedDeckstring) {
+			const deck = decode(this.forcedDeckstring);
+			console.warn('[deck-parser] forced deckstring', this.forcedDeckstring);
+			return {
+				deckstring: this.forcedDeckstring,
+				name: 'Forced Deck',
+				scenarioId: metadata.scenarioId,
+				gameType: metadata.gameType,
+				deck: deck,
+			} as DeckInfo;
+		}
 		console.log(
 			'[deck-parser] retrieving current deck',
 			this.currentDeck,
@@ -217,7 +230,7 @@ export class DeckParserService {
 						({
 							...template,
 							DeckList: template.DeckList.map((dbfId) => +dbfId),
-						} as DeckTemplate),
+						}) as DeckTemplate,
 				);
 		}
 		return this.deckTemplates ?? [];
@@ -345,8 +358,8 @@ export class DeckParserService {
 			heroes: deckFromMemory.HeroCardId
 				? [normalizeDeckHeroDbfId(this.allCards.getCard(deckFromMemory.HeroCardId)?.dbfId ?? 7, this.allCards)]
 				: deckFromMemory.HeroClass
-				? [getDefaultHeroDbfIdForClass(CardClass[deckFromMemory.HeroClass]) || 7]
-				: [7],
+					? [getDefaultHeroDbfIdForClass(CardClass[deckFromMemory.HeroClass]) || 7]
+					: [7],
 			sideboards: !deckFromMemory.Sideboards?.length
 				? null
 				: deckFromMemory.Sideboards.map((sideboard) => {
@@ -354,7 +367,7 @@ export class DeckParserService {
 							keyCardDbfId: this.allCards.getCard(sideboard.KeyCardId).dbfId,
 							cards: explodeDecklist(normalizeWithDbfIds(sideboard.Cards, this.allCards)),
 						};
-				  }),
+					}),
 		};
 		console.log(
 			'[deck-parser] built deck definition',

@@ -12,6 +12,7 @@ import { GameStat } from '@firestone/stats/data-access';
 import { sortByProperties } from '@services/utils';
 import { CollectionCardType } from '../models/collection/collection-card-type.type';
 import { CardNotificationsService } from './collection/card-notifications.service';
+import { DeckParserService } from './decktracker/deck-parser.service';
 import { DeckManipulationHelper } from './decktracker/event-parser/deck-manipulation-helper';
 import { GameStateService } from './decktracker/game-state.service';
 import { GameEventsEmitterService } from './game-events-emitter.service';
@@ -35,6 +36,7 @@ export class DevService {
 		private readonly api: ApiRunner,
 		private readonly compositionDetector: CompositionDetectorService,
 		private readonly strategies: BgsMetaCompositionStrategiesService,
+		private readonly deckParser: DeckParserService,
 	) {
 		if (process.env.NODE_ENV === 'production') {
 			return;
@@ -51,13 +53,20 @@ export class DevService {
 			this.cardNotification.createNewCardToast(cardId, isSecondCopy, type);
 		};
 
-		window['fakeGame'] = async (fileName: string, isBg = false, allowReconnects = false) => {
+		window['fakeGame'] = async (
+			fileName: string,
+			options?: { isBg?: boolean; allowReconnects?: boolean; deckstring?: string },
+		) => {
+			const { isBg = false, allowReconnects = false, deckstring = null } = options || {};
 			const events = [];
 			// this.gameState.processedEvents = [];
 			const sub = this.events.allEvents.subscribe((event) => events.push(event.type));
 			// To trigger real-time stats
 			if (isBg) {
 				this.scene.currentScene$$.next(SceneMode.BACON);
+			}
+			if (!!deckstring) {
+				this.deckParser.forcedDeckstring = deckstring;
 			}
 			this.scene.currentScene$$.next(SceneMode.GAMEPLAY);
 			// Do it everytime to reset its memory
