@@ -11,23 +11,24 @@ export const TemporalAnomaly: GeneratingCard & StaticGeneratingCard = {
 	cardIds: [CardIds.TemporalAnomaly],
 	publicCreator: true,
 	dynamicPool: (input: StaticGeneratingCardInput) => {
+		const currentClassStr = input.inputOptions?.currentClass;
+		const currentClass = currentClassStr ? CardClass[currentClassStr] : null;
 		return filterCards(
 			TemporalAnomaly.cardIds[0],
 			input.allCards,
-			(c) =>
-				hasCorrectType(c, CardType.SPELL) &&
-				hasCorrectClass(c, input.inputOptions?.currentClass ? CardClass[input.inputOptions.currentClass] : null),
+			(c) => hasCorrectType(c, CardType.SPELL) && hasCorrectClass(c, currentClass),
 			input.inputOptions,
 		);
 	},
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
-		const currentClass = input.deckState.hero?.classes?.[0];
+		const currentClassStr = input.deckState.hero?.classes?.[0];
+		const currentClass = currentClassStr ? CardClass[currentClassStr] : null;
 		return {
 			cardType: CardType.SPELL,
 			possibleCards: filterCards(
 				TemporalAnomaly.cardIds[0],
 				input.allCards,
-				(c) => hasCorrectType(c, CardType.SPELL) && hasCorrectClass(c, currentClass ? CardClass[currentClass] : null),
+				(c) => hasCorrectType(c, CardType.SPELL) && hasCorrectClass(c, currentClass),
 				input.options,
 			),
 		};
