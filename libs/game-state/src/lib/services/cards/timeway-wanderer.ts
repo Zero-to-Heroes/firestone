@@ -10,7 +10,6 @@ import { filterCards } from './utils';
 export const TimewayWanderer: GeneratingCard & StaticGeneratingCard = {
 	cardIds: [CardIds.TimewayWanderer],
 	publicCreator: true,
-	publicTutor: true,
 	dynamicPool: (input: StaticGeneratingCardInput) => {
 		return filterCards(
 			TimewayWanderer.cardIds[0],

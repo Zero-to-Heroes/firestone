@@ -21,7 +21,7 @@ export const CavernDreamer: GeneratingCard & StaticGeneratingCard = {
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
 		return {
 			cardType: CardType.SPELL,
-			cost: 2,
+			cost: { cost: 2, comparison: '<=' },
 			possibleCards: filterCards(
 				CavernDreamer.cardIds[0],
 				input.allCards,
