@@ -7,7 +7,7 @@ import { filterCards } from './utils';
 
 // Consider the Past (TOT_341)
 // "Add 3 random spells from the past to your hand."
-// Interprets "from the past" as Wild/Hall of Fame sets, similar to historical/past themes
+// Interprets "from the past" as Hall of Fame sets
 export const ConsiderThePast: GeneratingCard & StaticGeneratingCard = {
 	cardIds: [CardIds.ConsiderThePast],
 	publicCreator: true,
@@ -15,7 +15,7 @@ export const ConsiderThePast: GeneratingCard & StaticGeneratingCard = {
 		return filterCards(
 			ConsiderThePast.cardIds[0],
 			input.allCards,
-			(c) => hasCorrectType(c, CardType.SPELL) && (c.set === 'HOF' || c.set === 'Hall_of_fame' || !c.collectible),
+			(c) => hasCorrectType(c, CardType.SPELL) && (c.set === 'HOF' || c.set === 'Hall_of_fame'),
 			input.inputOptions,
 		);
 	},
@@ -25,7 +25,7 @@ export const ConsiderThePast: GeneratingCard & StaticGeneratingCard = {
 			possibleCards: filterCards(
 				ConsiderThePast.cardIds[0],
 				input.allCards,
-				(c) => hasCorrectType(c, CardType.SPELL) && (c.set === 'HOF' || c.set === 'Hall_of_fame' || !c.collectible),
+				(c) => hasCorrectType(c, CardType.SPELL) && (c.set === 'HOF' || c.set === 'Hall_of_fame'),
 				input.options,
 			),
 		};
