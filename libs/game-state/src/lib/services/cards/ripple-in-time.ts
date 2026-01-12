@@ -1,7 +1,7 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { CardIds, CardType } from '@firestone-hs/reference-data';
 import { GuessedInfo } from '../../models/deck-card';
-import { hasCorrectType } from '../../related-cards/dynamic-pools';
+import { canBeDiscoveredByClass, hasCorrectType } from '../../related-cards/dynamic-pools';
 import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
 
@@ -14,18 +14,17 @@ export const RippleInTime: GeneratingCard & StaticGeneratingCard = {
 		return filterCards(
 			RippleInTime.cardIds[0],
 			input.allCards,
-			(c) => hasCorrectType(c, CardType.MINION),
+			(c) => hasCorrectType(c, CardType.MINION) && canBeDiscoveredByClass(c, input.inputOptions.deckState.getCurrentClass()),
 			input.inputOptions,
 		);
 	},
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
 		return {
 			cardType: CardType.MINION,
-			canBeDiscoveredBy: RippleInTime.cardIds[0],
 			possibleCards: filterCards(
 				RippleInTime.cardIds[0],
 				input.allCards,
-				(c) => hasCorrectType(c, CardType.MINION),
+				(c) => hasCorrectType(c, CardType.MINION) && canBeDiscoveredByClass(c, input.deckState.getCurrentClass()),
 				input.options,
 			),
 		};

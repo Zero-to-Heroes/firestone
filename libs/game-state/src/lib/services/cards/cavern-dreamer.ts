@@ -1,7 +1,7 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { CardIds, CardType } from '@firestone-hs/reference-data';
 import { GuessedInfo } from '../../models/deck-card';
-import { hasCorrectType } from '../../related-cards/dynamic-pools';
+import { hasCost, hasCorrectType } from '../../related-cards/dynamic-pools';
 import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
 
@@ -14,17 +14,18 @@ export const CavernDreamer: GeneratingCard & StaticGeneratingCard = {
 		return filterCards(
 			CavernDreamer.cardIds[0],
 			input.allCards,
-			(c) => hasCorrectType(c, CardType.SPELL) && c.cost != null && c.cost <= 2,
+			(c) => hasCorrectType(c, CardType.SPELL) && hasCost(c, '<=', 2),
 			input.inputOptions,
 		);
 	},
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
 		return {
 			cardType: CardType.SPELL,
+			cost: 2,
 			possibleCards: filterCards(
 				CavernDreamer.cardIds[0],
 				input.allCards,
-				(c) => hasCorrectType(c, CardType.SPELL) && c.cost != null && c.cost <= 2,
+				(c) => hasCorrectType(c, CardType.SPELL) && hasCost(c, '<=', 2),
 				input.options,
 			),
 		};

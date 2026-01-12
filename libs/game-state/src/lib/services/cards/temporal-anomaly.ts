@@ -11,7 +11,7 @@ export const TemporalAnomaly: GeneratingCard & StaticGeneratingCard = {
 	cardIds: [CardIds.TemporalAnomaly],
 	publicCreator: true,
 	dynamicPool: (input: StaticGeneratingCardInput) => {
-		const currentClassStr = input.inputOptions?.currentClass;
+		const currentClassStr = input.inputOptions.deckState.getCurrentClass();
 		const currentClass = currentClassStr ? CardClass[currentClassStr] : null;
 		return filterCards(
 			TemporalAnomaly.cardIds[0],
@@ -21,7 +21,7 @@ export const TemporalAnomaly: GeneratingCard & StaticGeneratingCard = {
 		);
 	},
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
-		const currentClassStr = input.deckState.hero?.classes?.[0];
+		const currentClassStr = input.deckState.getCurrentClass();
 		const currentClass = currentClassStr ? CardClass[currentClassStr] : null;
 		return {
 			cardType: CardType.SPELL,
