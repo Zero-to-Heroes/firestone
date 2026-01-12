@@ -3604,8 +3604,12 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), effectiveCostMore(4));
 		case CardIds.TimelineAccelerator_WON_139:
 			return and(side(inputSide), inDeck, mech);
+		case CardIds.TimelineWitness:
+			return and(side(inputSide), inDeck);
 		case CardIds.TimelordNozdormu_TIME_063:
 			return and(side(inputSide), or(inHand, inDeck), fromLatestExpansion);
+		case CardIds.TimewayWanderer:
+			return and(side(inputSide), inDeck, spell);
 		case CardIds.TimethiefRafaam_TIME_005:
 		case CardIds.TimethiefRafaam_GreenRafaamToken_TIME_005t2:
 		case CardIds.TimethiefRafaam_MurlocRafaamToken_TIME_005t8:
@@ -4056,6 +4060,8 @@ export const cardIdSelector = (
 		case CardIds.LightningBreath:
 		case CardIds.CandleBreath:
 			return and(side(inputSide), or(inHand, inDeck), dragon);
+		case CardIds.DraconicHerald:
+			return and(side(inputSide), inDeck, minion);
 		case CardIds.GrimscaleOracleLegacy:
 		case CardIds.GrimscaleOracleVanilla:
 		case CardIds.GrimscaleChum:
