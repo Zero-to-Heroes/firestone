@@ -37,6 +37,7 @@ export class TouristRevealedParser implements EventParser {
 		} as DeckCard);
 
 		const newGlobalEffects = this.helper.addSingleCardToZone(deck.globalEffects, card);
+		console.debug('newGlobalEffects', newGlobalEffects, cardId, card, deck.globalEffects);
 		const alreadyRevealedTourist = deck.getAllCardsInDeck().find((c) => c.cardId === cardId);
 
 		let newDeck = deck.deck;

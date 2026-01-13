@@ -8,6 +8,7 @@ export interface DeckZone {
 	readonly numberOfCards: number;
 	readonly showWarning?: boolean;
 	readonly groupSameCardsTogether?: boolean;
+	readonly groupByName?: boolean;
 	readonly sortByZoneOrder?: boolean;
 }
 

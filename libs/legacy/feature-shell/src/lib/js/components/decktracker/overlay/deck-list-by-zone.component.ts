@@ -34,6 +34,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 					[showUpdatedCost]="showUpdatedCost"
 					[showGiftsSeparately]="showGiftsSeparately"
 					[groupSameCardsTogether]="zone.groupSameCardsTogether"
+					[groupByName]="zone.groupByName"
 					[sortByZoneOrder]="zone.sortByZoneOrder"
 					[showStatsChange]="showStatsChange"
 					[showTopCardsSeparately]="showTopCardsSeparately$ | async"
@@ -251,7 +252,8 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 					deckState.globalEffects,
 					null,
 					{
-						groupSameCardsTogether: groupSameCardsTogether,
+						groupSameCardsTogether: true,
+						groupByName: true,
 					},
 					'global-effects',
 					this.i18n.translateString('decktracker.zones.global-effects'),
@@ -548,6 +550,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 		zones: readonly InternalDeckZoneSection[],
 		options: {
 			groupSameCardsTogether?: boolean;
+			groupByName?: boolean;
 			sortByZoneOrder?: boolean;
 		},
 		id: string,
@@ -597,6 +600,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 			numberOfCards: numberOfCards != null ? numberOfCards : sections.flatMap((section) => section.cards).length,
 			sections: sections,
 			groupSameCardsTogether: options.groupSameCardsTogether,
+			groupByName: options.groupByName,
 			sortByZoneOrder: options.sortByZoneOrder,
 		};
 	}
