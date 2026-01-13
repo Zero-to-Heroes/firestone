@@ -78,17 +78,18 @@ export class CardPlayedByEffectParser implements EventParser {
 		const cardFromHand = deck.hand.find((card) => card.entityId === entityId);
 		let newHand = deck.hand;
 		let additionalKnownCardsInHand = deck.additionalKnownCardsInHand;
+		let additionalKnownCardsInDeck = deck.additionalKnownCardsInDeck;
 		if (!!cardFromHand) {
 			newHand = this.helper.removeSingleCardFromZone(deck.hand, cardFromHand.cardId, cardFromHand.entityId)?.[0];
 			// Remove only the first occurrence
 			additionalKnownCardsInHand = additionalKnownCardsInHand.filter(
 				(c, i) => c !== cardFromHand.cardId || additionalKnownCardsInHand.indexOf(c) !== i,
 			);
+
+			additionalKnownCardsInDeck = additionalKnownCardsInDeck.filter(
+				(c, i) => c !== cardFromHand.cardId || additionalKnownCardsInDeck.indexOf(c) !== i,
+			);
 		}
-		let additionalKnownCardsInDeck = deck.additionalKnownCardsInDeck;
-		additionalKnownCardsInDeck = additionalKnownCardsInDeck.filter(
-			(c, i) => c !== cardFromHand.cardId || additionalKnownCardsInDeck.indexOf(c) !== i,
-		);
 		const cardWithZone = DeckCard.create({
 			entityId: entityId,
 			cardId: cardId,
