@@ -306,6 +306,7 @@ const internalTutors = [
 	CardIds.TalanjiOfTheGraves_TIME_619,
 	CardIds.WayOfTheShell_TLC_513hp,
 	CardIds.PortalVanguard_TIME_003,
+	CardIds.TimelineWitness,
 	TempCardIds.Finality,
 ];
 for (const cardId of Object.keys(cardsInfoCache)) {
