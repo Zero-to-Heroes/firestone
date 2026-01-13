@@ -110,6 +110,7 @@ export { ScaleReplica } from './scale-replica';
 export { SemiStablePortal } from './semi-stable-portal';
 export { ShakuTheCollector } from './shaku-the-collector';
 export { ShallowGravedigger } from './shallow-gravedigger';
+export { Shimmerfly } from './shimmerfly';
 export { ShellGame } from './shell-game';
 export { ShokkJungleTyrant } from './shokk-jungle-tyrant';
 export { SirenSong } from './siren-song';
