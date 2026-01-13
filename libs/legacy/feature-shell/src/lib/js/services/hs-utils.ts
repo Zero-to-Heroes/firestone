@@ -233,7 +233,6 @@ const globalEffectEnchantments = [
 	CardIds.AvianaElunesChosen_FullMoonEnchantment_EDR_895e,
 	CardIds.Kiljaeden_KiljaedensPortalEnchantment_GDB_145e,
 	CardIds.LieInWait_MasterDuskReshufflePlayerEnchantEnchantment_TLC_513e2,
-	CardIds.Turbulus_TurbulenceEnchantment_WORK_013e,
 	// CardIds.CityChiefEsho_KinEnchantment_TLC_110e, // The enchantment is applied to each card, so we don't have a global thing
 ];
 
@@ -284,6 +283,10 @@ export const globalEffectTriggers: { effectPrefab: string; cardId: string; force
 	{
 		effectPrefab: 'TLCFX_CityChiefEsho_BuffAE_DeckBoardandHand_Super',
 		cardId: CardIds.CityChiefEsho_TLC_110,
+	},
+	{
+		effectPrefab: 'ReuseFX_Nature_DeckAndHandAE_WithBuffImpact_Super',
+		cardId: CardIds.Turbulus_WORK_013,
 	},
 	// {
 	// 	effectPrefab: 'EDRFX_AvianaElunesChosen_StartOfTurnComplete',
