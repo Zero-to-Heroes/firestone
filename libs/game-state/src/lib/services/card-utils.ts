@@ -307,6 +307,11 @@ export const fablePackages = [
 		CardIds.MuradinHighKing_AvatarFormToken_TIME_209t2,
 		CardIds.MuradinHighKing_HighKingsHammerToken_TIME_209t,
 	],
+	[
+		CardIds.LogoshBloodFighter_TIME_850,
+		CardIds.LogoshBloodFighter_BrollBloodFighterToken_TIME_850t,
+		CardIds.LogoshBloodFighter_ValeeraBloodFighterToken_TIME_850t1,
+	],
 	kingLlaneFablePackage,
 	timeRafaamFablePackage,
 	broxigarFablePackage,
