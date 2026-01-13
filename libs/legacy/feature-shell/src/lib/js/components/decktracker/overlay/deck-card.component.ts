@@ -533,29 +533,33 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 	}
 
 	private scheduleTextScroll() {
-		// Check overflow first - skip timeout entirely if text fits
-		const overflowAmount = this.getTextOverflowAmount();
-		if (overflowAmount <= 0) {
-			return;
-		}
-
 		// Clear any existing timeout
 		if (this.scrollTimeout !== null) {
 			window.clearTimeout(this.scrollTimeout);
 		}
 
-		// Schedule the text scroll after a delay (only for truncated text)
-		this.scrollTimeout = window.setTimeout(() => {
-			this.scrollTimeout = null;
-			// Set dynamic animation duration based on overflow amount for better readability
-			// Base: 0.3s for up to 50px overflow, then scale linearly (approximately 6ms per pixel)
-			const animationDuration = Math.max(0.3, overflowAmount * 0.006);
-			this.cardNameSpan?.nativeElement?.style?.setProperty('--scroll-duration', `${animationDuration}s`);
-			this.scrollText = true;
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.markForCheck();
+		// Defer overflow check to next frame to ensure DOM layout is complete
+		// This fixes issues where measurements are taken before browser finishes layout
+		window.requestAnimationFrame(() => {
+			// Check overflow after layout is stable
+			const overflowAmount = this.getTextOverflowAmount();
+			if (overflowAmount <= 0) {
+				return;
 			}
-		}, DeckCardComponent.TEXT_SCROLL_DELAY_MS);
+
+			// Schedule the text scroll after a delay (only for truncated text)
+			this.scrollTimeout = window.setTimeout(() => {
+				this.scrollTimeout = null;
+				// Set dynamic animation duration based on overflow amount for better readability
+				// Base: 0.3s for up to 50px overflow, then scale linearly (approximately 6ms per pixel)
+				const animationDuration = Math.max(0.3, overflowAmount * 0.006);
+				this.cardNameSpan?.nativeElement?.style?.setProperty('--scroll-duration', `${animationDuration}s`);
+				this.scrollText = true;
+				if (!(this.cdr as ViewRef)?.destroyed) {
+					this.cdr.markForCheck();
+				}
+			}, DeckCardComponent.TEXT_SCROLL_DELAY_MS);
+		});
 	}
 
 	// Returns the amount of pixels the text overflows, or 0 if not truncated
