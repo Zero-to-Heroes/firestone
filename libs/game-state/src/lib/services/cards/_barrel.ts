@@ -25,6 +25,7 @@ export { BrutishEndmaw } from './brutish-endmaw';
 export { BygoneEchoes } from './bygone-echoes';
 export { CavernDreamer } from './cavern-dreamer';
 export { Chronogor } from './chronogor';
+export { ClashOfTheColossals } from './clash-of-the-colossals';
 export { ConfluxFuture } from './conflux-future';
 export { ConsiderThePast } from './consider-the-past';
 export { CountessAshmore } from './countess-ashmore';
