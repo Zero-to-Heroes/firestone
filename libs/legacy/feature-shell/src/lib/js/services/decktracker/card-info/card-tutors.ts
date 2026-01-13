@@ -12,12 +12,12 @@ const internalTutors = [
 	CardIds.Ancharrr,
 	CardIds.AncientMysteries,
 	CardIds.AquaticForm_TSC_654,
+	// The Right Tool - Discover a card from your deck.
+	CardIds.ArannaStarseeker_TheRightTool,
 	CardIds.ArcaneFletcher,
 	CardIds.Arcanologist,
 	CardIds.ArcanologistCore,
 	CardIds.ArkoniteRevelation_GDB_852,
-	// The Right Tool - Discover a card from your deck.
-	CardIds.ArannaStarseeker_TheRightTool,
 	CardIds.AxeBerserker,
 	CardIds.BalindaStonehearth,
 	CardIds.Banjosaur,
@@ -46,10 +46,10 @@ const internalTutors = [
 	CardIds.CaptainsParrotLegacy,
 	CardIds.CaptainsParrotVanilla,
 	CardIds.CaptureColdtoothMine_MoreResources,
-	// Card Grader - Battlecry: If you've cast a spell while holding this, Discover a card from your deck.
-	CardIds.CardGrader_TOY_054,
 	CardIds.CaptureColdtoothMine_MoreSupplies,
 	CardIds.CaptureColdtoothMine,
+	// Card Grader - Battlecry: If you've cast a spell while holding this, Discover a card from your deck.
+	CardIds.CardGrader_TOY_054,
 	CardIds.CaricatureArtist_TOY_391,
 	CardIds.CattleRustler_WW_351,
 	CardIds.CavernShinyfinder,
@@ -291,13 +291,13 @@ const internalTutors = [
 	CardIds.TortollanTraveler_VAC_518,
 	CardIds.TownCrier_CORE_GIL_580,
 	CardIds.TownCrier_GIL_580,
+	CardIds.Tracking_GDB_846hp,
 	// Tracking (Book of Mercenaries) - Discover a card from your deck.
 	CardIds.Tracking,
 	// Tracking (Core) - Discover a card from your deck.
 	CardIds.TrackingCore,
 	// Tracking (Legacy) - Discover a card from your deck.
 	CardIds.TrackingLegacy,
-	CardIds.Tracking_GDB_846hp,
 	CardIds.TramOperator,
 	CardIds.TrenchSurveyor_Story_11_TrenchSurveyorPuzzle,
 	CardIds.TrenchSurveyor_TSC_642,
