@@ -54,6 +54,43 @@ function extractCardConditions(): ConditionMapping[] {
 	let skippedNoConditions = 0;
 	let processedFallthroughs = 0;
 
+	// Helper function to extract individual conditions from highlightConditions arguments
+	function extractIndividualHighlightConditions(content: string): string[] {
+		// Split by and( at the start of arguments, but respect nesting
+		const conditions: string[] = [];
+		let depth = 0;
+		let current = '';
+		let i = 0;
+
+		while (i < content.length) {
+			const char = content[i];
+			
+			if (char === '(') {
+				depth++;
+				current += char;
+			} else if (char === ')') {
+				depth--;
+				current += char;
+			} else if (char === ',' && depth === 0) {
+				// Top-level comma, this separates conditions
+				if (current.trim()) {
+					conditions.push(current.trim());
+				}
+				current = '';
+			} else {
+				current += char;
+			}
+			i++;
+		}
+
+		// Don't forget the last condition
+		if (current.trim()) {
+			conditions.push(current.trim());
+		}
+
+		return conditions;
+	}
+
 	// Process cases and handle fallthroughs
 	for (let i = 0; i < cases.length; i++) {
 		const caseMatch = cases[i];
@@ -88,13 +125,50 @@ function extractCardConditions(): ConditionMapping[] {
 				const arrayMatch = selectorCode.match(/highlightConditions:\s*\[([\s\S]*?)\]/);
 				if (arrayMatch) {
 					const conditionsContent = arrayMatch[1];
-					cleanedSelectorCode = `or(${conditionsContent})`;
+					// Process each condition in the highlightConditions array separately
+					// Split by and( to find each condition
+					const individualConditions = extractIndividualHighlightConditions(conditionsContent);
+					const allExpandedConditions: string[] = [];
+					for (const individualCondition of individualConditions) {
+						const expanded = expandSelectorConditions(individualCondition);
+						allExpandedConditions.push(...expanded);
+					}
+					// Apply conditions to all card IDs in this case block
+					for (const cardIdMatch of cardIdMatches) {
+						const cardIdSuffix = cardIdMatch.match(/case\s+CardIds\.([^:]+):/)?.[1];
+						if (cardIdSuffix && allExpandedConditions.length > 0) {
+							mappings.push({
+								cardId: cardIdSuffix,
+								conditions: allExpandedConditions,
+							});
+						}
+					}
+					// Skip the normal processing since we handled it here
+					continue;
 				} else {
 					// Try function call syntax: highlightConditions(arg1, arg2, ...)
 					const functionMatch = selectorCode.match(/highlightConditions\(([\s\S]*)\)/);
 					if (functionMatch) {
 						const conditionsContent = functionMatch[1];
-						cleanedSelectorCode = `or(${conditionsContent})`;
+						// Process each condition in the highlightConditions separately
+						const individualConditions = extractIndividualHighlightConditions(conditionsContent);
+						const allExpandedConditions: string[] = [];
+						for (const individualCondition of individualConditions) {
+							const expanded = expandSelectorConditions(individualCondition);
+							allExpandedConditions.push(...expanded);
+						}
+						// Apply conditions to all card IDs in this case block
+						for (const cardIdMatch of cardIdMatches) {
+							const cardIdSuffix = cardIdMatch.match(/case\s+CardIds\.([^:]+):/)?.[1];
+							if (cardIdSuffix && allExpandedConditions.length > 0) {
+								mappings.push({
+									cardId: cardIdSuffix,
+									conditions: allExpandedConditions,
+								});
+							}
+						}
+						// Skip the normal processing since we handled it here
+						continue;
 					}
 				}
 			}
@@ -263,6 +337,7 @@ function extractConditionsFromCleanedCode(code: string): string[] {
 
 	for (const part of parts) {
 		const trimmed = part.trim();
+		
 		if (trimmed.startsWith('or(') && trimmed.endsWith(')')) {
 			orConditions.push(trimmed);
 		} else {
@@ -707,6 +782,10 @@ function expandOrConditions(orConditions: string[]): string[] {
 				) {
 					// This looks like an already processed condition
 					results.push(trimmed);
+				} else if (trimmed.startsWith('or(') && trimmed.endsWith(')')) {
+					// Handle nested or() by recursively expanding it
+					const nestedResults = expandOrConditions([trimmed]);
+					results.push(...nestedResults);
 				} else {
 					const condition = convertToConditionString(trimmed);
 					if (condition) {
