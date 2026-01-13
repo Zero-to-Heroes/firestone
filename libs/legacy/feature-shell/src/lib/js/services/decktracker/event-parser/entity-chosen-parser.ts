@@ -9,7 +9,7 @@ const CARDS_THAT_WORK_ON_OPPONENT_DECK = [CardIds.EyesInTheSky_TLC_521, CardIds.
 const CARDS_THAT_PUT_ON_TOP = [
 	CardIds.SightlessWatcher,
 	CardIds.SightlessWatcherLegacy,
-	CardIds.DraconicHerald,
+	// CardIds.DraconicHerald,
 	CardIds.TimewayWanderer,
 	...CARDS_THAT_WORK_ON_OPPONENT_DECK,
 ];
