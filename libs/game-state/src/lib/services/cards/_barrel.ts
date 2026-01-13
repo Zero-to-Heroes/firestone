@@ -19,7 +19,6 @@ export { Blasteroid } from './blasteroid';
 export { BlessingOfTheBronze } from './blessing-of-the-bronze';
 export { BlessingOfTheMoon } from './blessing-of-the-moon';
 export { Blingtron3000 } from './blingtron-3000';
-export { BronzeBroodmother } from './bronze-broodmother';
 export { BlinkFox } from './blink-fox';
 export { BloodDraw } from './blood-draw';
 export { BrutishEndmaw } from './brutish-endmaw';
