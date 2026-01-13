@@ -7,7 +7,8 @@ export const WindowShopper: GeneratingCard = {
 	publicCreator: true,
 	hasSequenceInfo: true,
 	guessCardId: (input: GuessCardIdInput): string | null => {
-		if (input.createdIndex === 1) {
+		// When replaying a game, the index is 1, but 0 otherwise
+		if (input.createdIndex === 0) {
 			return CardIds.WindowShopper_WindowShopperToken_TOY_652t;
 		}
 		return null;
