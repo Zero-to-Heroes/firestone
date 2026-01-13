@@ -179,7 +179,7 @@ const internalTutors = [
 	CardIds.NecriumApothecary,
 	// Nightshade Bud - Choose One - Discover a minion from your deck to summon; or a spell to cast.
 	CardIds.NightshadeBud,
-	// Nightshade Bud - Choose One - Discover a minion from your deck to summon; or a spell to cast.
+	// Nightshade Bud (Core) - Choose One - Discover a minion from your deck to summon; or a spell to cast.
 	CardIds.NightshadeBud_CORE_REV_311,
 	CardIds.NorthernNavigation,
 	CardIds.NorthwatchCommander,
@@ -238,7 +238,7 @@ const internalTutors = [
 	CardIds.SenseDemonsVanilla_VAN_EX1_317,
 	// Service Bell - Discover a Class card from your deck and draw all copies of it.
 	CardIds.ServiceBell,
-	// Service Bell - Discover a Class card from your deck and draw all copies of it.
+	// Service Bell (Core) - Discover a Class card from your deck and draw all copies of it.
 	CardIds.ServiceBell_CORE_REV_948,
 	CardIds.SesselieOfTheFaeCourt_REV_319,
 	CardIds.SharpEyedSeeker,
@@ -291,11 +291,11 @@ const internalTutors = [
 	CardIds.TortollanTraveler_VAC_518,
 	CardIds.TownCrier_CORE_GIL_580,
 	CardIds.TownCrier_GIL_580,
-	// Tracking - Discover a card from your deck.
+	// Tracking (Book of Mercenaries) - Discover a card from your deck.
 	CardIds.Tracking,
-	// Tracking - Discover a card from your deck.
+	// Tracking (Core) - Discover a card from your deck.
 	CardIds.TrackingCore,
-	// Tracking - Discover a card from your deck.
+	// Tracking (Legacy) - Discover a card from your deck.
 	CardIds.TrackingLegacy,
 	CardIds.Tracking_GDB_846hp,
 	CardIds.TramOperator,
