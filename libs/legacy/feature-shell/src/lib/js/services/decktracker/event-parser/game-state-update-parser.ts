@@ -10,6 +10,12 @@ export class GameStateUpdateParser implements EventParser {
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		return currentState.update({
 			fullGameState: gameEvent.gameState,
+			playerDeck: currentState.playerDeck.update({
+				fullGameState: gameEvent.gameState?.Player,
+			}),
+			opponentDeck: currentState.opponentDeck.update({
+				fullGameState: gameEvent.gameState?.Opponent,
+			}),
 		});
 	}
 

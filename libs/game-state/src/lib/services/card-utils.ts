@@ -65,6 +65,23 @@ export const getProcessedCard = (
 		return updatedRefCard;
 	}
 
+	const isEliseLocation =
+		refCard.id?.startsWith(CardIds.EliseTheNavigator_TLC_100) && refCard.id !== CardIds.EliseTheNavigator_TLC_100;
+	if (isEliseLocation) {
+		const fullGameState = deckState.fullGameState;
+		if (fullGameState) {
+			const cardInState = fullGameState.AllEntities.find((c) => c.entityId === entityId);
+			if (cardInState) {
+				const updatedRefCard: Mutable<ReferenceCard> = { ...refCard };
+				const newMechanics = [...(updatedRefCard.mechanics ?? [])];
+				if (cardInState.tags?.some((t) => t.Name === GameTag.DEATHRATTLE && t.Value === 1)) {
+					newMechanics.push(GameTag[GameTag.DEATHRATTLE]);
+				}
+				updatedRefCard.mechanics = newMechanics;
+				return updatedRefCard;
+			}
+		}
+	}
 	return refCard;
 };
 

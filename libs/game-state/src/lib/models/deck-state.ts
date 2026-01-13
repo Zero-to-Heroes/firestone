@@ -2,7 +2,7 @@
 import { CardClass, CardIds, CardType, GameTag, SpellSchool } from '@firestone-hs/reference-data';
 import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { NumericTurnInfo } from './_barrel';
+import { NumericTurnInfo, PlayerGameState } from './_barrel';
 import { AttackOnBoard } from './attack-on-board';
 import { BoardSecret } from './board-secret';
 import { DeckCard } from './deck-card';
@@ -164,6 +164,7 @@ export class DeckState {
 	readonly burnedCards: readonly { entityId: number; cardId: string }[] = [];
 	readonly destroyedCardsInDeck: readonly { entityId: number; cardId: string }[] = [];
 	readonly starshipsLaunched: readonly number[] = [];
+	readonly fullGameState?: PlayerGameState;
 
 	public static create(value: Partial<NonFunctionProperties<DeckState>>): DeckState {
 		return Object.assign(new DeckState(), value);
