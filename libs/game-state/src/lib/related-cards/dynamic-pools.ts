@@ -1352,10 +1352,11 @@ export const filterCards = (
 	let gameType = options.gameType;
 	let format = options.format;
 	const summonsInPlay = doesSummonInPlay(sourceCardId);
+	const wantsColossal = wantsColossalMinions(sourceCardId);
 	const baseCards = getBaseCards(sourceCardId, allCards);
 	const baseCardsExtended = baseCards
 		.filter((c) => (isArena(options.gameType) ? !BAN_LIST_ARENA.includes(c.id as CardIds) : true))
-		.filter((c) => (summonsInPlay ? !hasMechanic(c, GameTag.COLOSSAL) : true))
+		.filter((c) => (summonsInPlay && !wantsColossal ? !hasMechanic(c, GameTag.COLOSSAL) : true))
 		.filter((c) => canIncludeStarcraftFaction(c, options.initialDecklist, options.currentClass, allCards))
 		.filter((c) => {
 			const debug = false;
@@ -1727,6 +1728,15 @@ const doesSummonInPlay = (sourceCardId: string): boolean => {
 		case CardIds.TravelSecurity_WORK_010: // Summons 8-cost minions
 			return true;
 
+		default:
+			return false;
+	}
+};
+
+const wantsColossalMinions = (sourceCardId: string): boolean => {
+	switch (sourceCardId) {
+		case CardIds.ClashOfTheColossals:
+			return true;
 		default:
 			return false;
 	}
