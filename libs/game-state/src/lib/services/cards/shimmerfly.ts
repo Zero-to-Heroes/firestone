@@ -4,12 +4,20 @@
 import { CardClass, CardIds, CardType } from '@firestone-hs/reference-data';
 import { GuessedInfo } from '../../models/deck-card';
 import { hasCorrectClass, hasCorrectType } from '../../related-cards/dynamic-pools';
-import { GeneratingCard, GuessInfoInput } from './_card.type';
+import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
 
-export const Shimmerfly: GeneratingCard = {
+export const Shimmerfly: GeneratingCard & StaticGeneratingCard = {
 	cardIds: [CardIds.Shimmerfly],
 	publicCreator: true,
+	dynamicPool: (input: StaticGeneratingCardInput) => {
+		return filterCards(
+			Shimmerfly.cardIds[0],
+			input.allCards,
+			(c) => hasCorrectType(c, CardType.SPELL) && hasCorrectClass(c, CardClass.HUNTER),
+			input.inputOptions,
+		);
+	},
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
 		return {
 			cardType: CardType.SPELL,
