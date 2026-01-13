@@ -50,6 +50,13 @@ export const reverseMinionSelector = (
 		);
 	}
 
+	// COST_MORE_4 + HAS_MECHANIC_DEATHRATTLE + MINION (1 cards)
+	if (refCard.cost > 4 && refCard.mechanics?.includes('DEATHRATTLE') && refCard.type?.toUpperCase() === 'MINION') {
+		matchingCardIds.push(
+			CardIds.FerociousFelbat_EDR_892
+		);
+	}
+
 	// ATTACK_MORE_0 + MINION (1 cards)
 	if (refCard.attack > 0 && refCard.type?.toUpperCase() === 'MINION') {
 		matchingCardIds.push(
@@ -57,11 +64,12 @@ export const reverseMinionSelector = (
 		);
 	}
 
-	// ATTACK_MORE_4 + MINION (2 cards)
+	// ATTACK_MORE_4 + MINION (3 cards)
 	if (refCard.attack > 4 && refCard.type?.toUpperCase() === 'MINION') {
 		matchingCardIds.push(
 			CardIds.ClimbingHook_VAC_932,
-			CardIds.GiantAnaconda
+			CardIds.GiantAnaconda,
+			CardIds.StoryOfBarnabus_TLC_231
 		);
 	}
 
@@ -80,6 +88,13 @@ export const reverseMinionSelector = (
 		);
 	}
 
+	// BEAST + COST_MORE_4 (1 cards)
+	if (refCard.races?.map(r => r.toUpperCase()).includes('BEAST') && refCard.cost > 4) {
+		matchingCardIds.push(
+			CardIds.StranglethornHeart
+		);
+	}
+
 	// BEAST + MINION (4 cards)
 	if (refCard.races?.map(r => r.toUpperCase()).includes('BEAST') && refCard.type?.toUpperCase() === 'MINION') {
 		matchingCardIds.push(
@@ -90,12 +105,13 @@ export const reverseMinionSelector = (
 		);
 	}
 
-	// COST_EQUAL_1 + MINION (4 cards)
+	// COST_EQUAL_1 + MINION (5 cards)
 	if (refCard.cost === 1 && refCard.type?.toUpperCase() === 'MINION') {
 		matchingCardIds.push(
 			CardIds.ApothecarysCaravan,
 			CardIds.BoogieDown,
 			CardIds.K90tron,
+			CardIds.NiriOfTheCrater_TLC_836,
 			CardIds.TrustyFishingRod_VAC_960
 		);
 	}
@@ -117,10 +133,11 @@ export const reverseMinionSelector = (
 		);
 	}
 
-	// COST_LESS_4 + MINION (1 cards)
+	// COST_LESS_4 + MINION (2 cards)
 	if (refCard.cost < 4 && refCard.type?.toUpperCase() === 'MINION') {
 		matchingCardIds.push(
-			CardIds.AnimateDead
+			CardIds.AnimateDead,
+			CardIds.Resuscitate_TLC_818
 		);
 	}
 
@@ -148,10 +165,12 @@ export const reverseMinionSelector = (
 		);
 	}
 
-	// COST_MORE_4 + MINION (1 cards)
+	// COST_MORE_4 + MINION (3 cards)
 	if (refCard.cost > 4 && refCard.type?.toUpperCase() === 'MINION') {
 		matchingCardIds.push(
-			CardIds.CaricatureArtist_TOY_391
+			CardIds.CaricatureArtist_TOY_391,
+			CardIds.PrecursoryStrike_TIME_750,
+			CardIds.Prescience
 		);
 	}
 
@@ -201,6 +220,13 @@ export const reverseMinionSelector = (
 		);
 	}
 
+	// ELEMENTAL + MINION (1 cards)
+	if (refCard.races?.map(r => r.toUpperCase()).includes('ELEMENTAL') && refCard.type?.toUpperCase() === 'MINION') {
+		matchingCardIds.push(
+			CardIds.Firegill_DINO_404
+		);
+	}
+
 	// HAS_MECHANIC_BATTLECRY + MINION (7 cards)
 	if (refCard.mechanics?.includes('BATTLECRY') && refCard.type?.toUpperCase() === 'MINION') {
 		matchingCardIds.push(
@@ -214,6 +240,13 @@ export const reverseMinionSelector = (
 		);
 	}
 
+	// HAS_MECHANIC_CHARGE + MINION (1 cards)
+	if (refCard.mechanics?.includes('CHARGE') && refCard.type?.toUpperCase() === 'MINION') {
+		matchingCardIds.push(
+			CardIds.AlakirTheWindsOfTime_WON_092h
+		);
+	}
+
 	// HAS_MECHANIC_COMBO + MINION (1 cards)
 	if (refCard.mechanics?.includes('COMBO') && refCard.type?.toUpperCase() === 'MINION') {
 		matchingCardIds.push(
@@ -221,28 +254,33 @@ export const reverseMinionSelector = (
 		);
 	}
 
-	// HAS_MECHANIC_DEATHRATTLE + MINION (40 cards)
+	// HAS_MECHANIC_DEATHRATTLE + MINION (48 cards)
 	if (refCard.mechanics?.includes('DEATHRATTLE') && refCard.type?.toUpperCase() === 'MINION') {
 		matchingCardIds.push(
 			CardIds.AmuletOfUndying,
 			CardIds.ArchdruidOfThorns_EDR_491,
 			CardIds.AwakenTheMakers,
+			CardIds.Boneshredder,
 			CardIds.BrittleboneBuccaneer_VAC_436,
 			CardIds.CarrionStudies,
+			CardIds.DaUndatakah,
 			CardIds.DeadRinger,
 			CardIds.DeathBlossomWhomper,
 			CardIds.DeathGrowl,
 			CardIds.DeathlyDeathTavernBrawl,
 			CardIds.DeathstriderTavernBrawl,
 			CardIds.DevoutBlessingsTavernBrawlToken,
+			CardIds.EndbringerUmbra_TLC_106,
 			CardIds.ExpeditedBurialTavernBrawl,
 			CardIds.FelfireBonfire_VAC_952,
 			CardIds.ForlornStalker,
 			CardIds.ForsakenLieutenant_AV_601,
+			CardIds.GuidingFigure_GDB_106,
 			CardIds.HedgeMaze_REV_333,
 			CardIds.HedgeMaze_REV_792,
 			CardIds.HighCultistHerenn_TLC_810,
 			CardIds.JewelOfNzoth,
+			CardIds.MaskedReveler,
 			CardIds.MummyMagic,
 			CardIds.NecriumApothecary,
 			CardIds.NineLives,
@@ -262,27 +300,47 @@ export const reverseMinionSelector = (
 			CardIds.Tuskpiercer_CORE_BAR_330,
 			CardIds.TwilightsCall,
 			CardIds.UnearthedRaptor,
+			CardIds.Vectus,
 			CardIds.VengefulSpirit_BAR_328,
+			CardIds.WakenerOfSouls_GDB_468,
+			CardIds.XyrellaTheDevout,
 			CardIds.YellingYodeler
 		);
 	}
 
-	// HAS_MECHANIC_GIVES_DIVINE_SHIELD + MINION (6 cards)
+	// HAS_MECHANIC_FRENZY + MINION (1 cards)
+	if (refCard.mechanics?.includes('FRENZY') && refCard.type?.toUpperCase() === 'MINION') {
+		matchingCardIds.push(
+			CardIds.OverlordSaurfang_BAR_334
+		);
+	}
+
+	// HAS_MECHANIC_GIVES_DIVINE_SHIELD + MINION (8 cards)
 	if (refCard.mechanics?.includes('GIVES_DIVINE_SHIELD') && refCard.type?.toUpperCase() === 'MINION') {
 		matchingCardIds.push(
+			CardIds.AlakirTheWindsOfTime_WON_092h,
 			CardIds.BolvarFireblood_CORE_ICC_858,
 			CardIds.BolvarFireblood_ICC_858,
 			CardIds.FancyPackaging_TOY_881,
 			CardIds.Funkfin,
 			CardIds.PrismaticJewelKit,
-			CardIds.RighteousReservesTavernBrawl
+			CardIds.RighteousReservesTavernBrawl,
+			CardIds.TrinketArtist_TOY_882
 		);
 	}
 
-	// HAS_MECHANIC_IMP + MINION (1 cards)
+	// HAS_MECHANIC_IMP + MINION (2 cards)
 	if (refCard.mechanics?.includes('IMP') && refCard.type?.toUpperCase() === 'MINION') {
 		matchingCardIds.push(
+			CardIds.ImpKingRafaam_ImpKingRafaamToken,
 			CardIds.ImpendingCatastrophe
+		);
+	}
+
+	// HAS_MECHANIC_REBORN + MINION (1 cards)
+	if (refCard.mechanics?.includes('REBORN') && refCard.type?.toUpperCase() === 'MINION') {
+		matchingCardIds.push(
+			CardIds.AuchenaiDeathSpeaker_GDB_469
 		);
 	}
 
@@ -303,17 +361,20 @@ export const reverseMinionSelector = (
 		);
 	}
 
-	// HAS_MECHANIC_TAUNT + MINION (13 cards)
+	// HAS_MECHANIC_TAUNT + MINION (16 cards)
 	if (refCard.mechanics?.includes('TAUNT') && refCard.type?.toUpperCase() === 'MINION') {
 		matchingCardIds.push(
+			CardIds.AlakirTheWindsOfTime_WON_092h,
 			CardIds.Battlepickaxe_WW_347,
 			CardIds.Bolster,
 			CardIds.BulkUp,
 			CardIds.DetonationJuggernaut_WW_329,
 			CardIds.EnduranceTrainingTavernBrawl,
 			CardIds.FirePlumesHeart,
+			CardIds.Hadronox_ICC_835,
 			CardIds.IntoTheFray,
 			CardIds.KingsDefender,
+			CardIds.MarkOfTheSpikeshell,
 			CardIds.QualityAssurance_TOY_605,
 			CardIds.RazormaneBattleguard,
 			CardIds.TortollanTraveler_VAC_518,
@@ -329,11 +390,19 @@ export const reverseMinionSelector = (
 		);
 	}
 
-	// LEGENDARY + MINION (4 cards)
+	// HAS_MECHANIC_WINDFURY + MINION (1 cards)
+	if (refCard.mechanics?.includes('WINDFURY') && refCard.type?.toUpperCase() === 'MINION') {
+		matchingCardIds.push(
+			CardIds.AlakirTheWindsOfTime_WON_092h
+		);
+	}
+
+	// LEGENDARY + MINION (5 cards)
 	if (refCard.rarity?.toUpperCase() === 'LEGENDARY' && refCard.type?.toUpperCase() === 'MINION') {
 		matchingCardIds.push(
 			CardIds.DisksOfLegendTavernBrawl,
 			CardIds.InspiringPresenceTavernBrawl,
+			CardIds.OffensivePlayTavernBrawl,
 			CardIds.RingOfPhaseshiftingTavernBrawl,
 			CardIds.RoyalGreatswordTavernBrawlToken
 		);
@@ -350,10 +419,18 @@ export const reverseMinionSelector = (
 		);
 	}
 
-	// MINION + MURLOC (3 cards)
+	// MINION + MINION (1 cards)
+	if (refCard.type?.toUpperCase() === 'MINION' && refCard.type?.toUpperCase() === 'MINION') {
+		matchingCardIds.push(
+			CardIds.DigForTreasure_TOY_510
+		);
+	}
+
+	// MINION + MURLOC (4 cards)
 	if (refCard.type?.toUpperCase() === 'MINION' && refCard.races?.map(r => r.toUpperCase()).includes('MURLOC')) {
 		matchingCardIds.push(
 			CardIds.DrocomurchanicasTavernBrawlToken,
+			CardIds.Firegill_DINO_404,
 			CardIds.TheCurator_CORE_KAR_061,
 			CardIds.TheCurator_KAR_061
 		);
@@ -367,7 +444,7 @@ export const reverseMinionSelector = (
 		);
 	}
 
-	// MINION + NOT_TRIBELESS (14 cards)
+	// MINION + NOT_TRIBELESS (17 cards)
 	if (refCard.type?.toUpperCase() === 'MINION' && refCard.races && refCard.races.length > 0) {
 		matchingCardIds.push(
 			CardIds.AllYouCanEat_VAC_528,
@@ -377,10 +454,13 @@ export const reverseMinionSelector = (
 			CardIds.MenagerieJug_WON_142,
 			CardIds.MenagerieMug_CORE_WON_141,
 			CardIds.MenagerieMug_WON_141,
+			CardIds.NzothGodOfTheDeep,
 			CardIds.PartyAnimal,
+			CardIds.PowerSlider,
 			CardIds.RoaringApplause,
 			CardIds.RockMasterVoone_ETC_121,
 			CardIds.SpiritOfTheMountain_TLC_229,
+			CardIds.TheOneAmalgamBand,
 			CardIds.ThePurator,
 			CardIds.TortollanStoryteller_TLC_254,
 			CardIds.TrustyCompanion_WW_027
@@ -422,20 +502,23 @@ export const reverseMinionSelector = (
 		);
 	}
 
-	// MINION + UNDEAD (2 cards)
+	// MINION + UNDEAD (3 cards)
 	if (refCard.type?.toUpperCase() === 'MINION' && refCard.races?.map(r => r.toUpperCase()).includes('UNDEAD')) {
 		matchingCardIds.push(
 			CardIds.AmorphousSlime,
+			CardIds.CatrinaMuerte,
 			CardIds.SinisterSoulcage_YOG_513
 		);
 	}
 
-	// MINION + ZERG (7 cards)
+	// MINION + ZERG (9 cards)
 	if (refCard.type?.toUpperCase() === 'MINION' && refCard.mechanics?.includes('ZERG')) {
 		matchingCardIds.push(
 			CardIds.BanelingBarrage_SC_001,
 			CardIds.CreepTumor_SC_011,
+			CardIds.EvolutionChamber_SC_021,
 			CardIds.Infestor_SC_002,
+			CardIds.Lurker_SC_009,
 			CardIds.Ravage_SC_004hp,
 			CardIds.Roach_SC_012,
 			CardIds.SpawningPool_SC_000,
@@ -451,14 +534,7 @@ export const reverseMinionSelector = (
 		);
 	}
 
-	// ATTACK_MORE_4 (1 cards)
-	if (refCard.attack > 4) {
-		matchingCardIds.push(
-			CardIds.StoryOfBarnabus_TLC_231
-		);
-	}
-
-	// BEAST (80 cards)
+	// BEAST (79 cards)
 	if (refCard.races?.map(r => r.toUpperCase()).includes('BEAST')) {
 		matchingCardIds.push(
 			CardIds.AddledGrizzly,
@@ -527,7 +603,6 @@ export const reverseMinionSelector = (
 			CardIds.StarvingTavernBrawl,
 			CardIds.StormTheGates_TLC_EVENT_400,
 			CardIds.StormpikeBattleRam,
-			CardIds.StranglethornHeart,
 			CardIds.SupremeDinomancy_TLC_828,
 			CardIds.TavishStormpike_BAR_038,
 			CardIds.TendingDragonkin_FIR_960,
@@ -579,7 +654,7 @@ export const reverseMinionSelector = (
 		);
 	}
 
-	// DRAGON (80 cards)
+	// DRAGON (81 cards)
 	if (refCard.races?.map(r => r.toUpperCase()).includes('DRAGON')) {
 		matchingCardIds.push(
 			CardIds.AlexstraszasChampion,
@@ -590,6 +665,7 @@ export const reverseMinionSelector = (
 			CardIds.BlackwingCorruptor_WON_329,
 			CardIds.BreathOfDreams,
 			CardIds.BreathOfTheInfinite,
+			CardIds.BronzeBroodmother,
 			CardIds.BroodKeeper_EDR_457,
 			CardIds.CandleBreath,
 			CardIds.Chillmaw,
@@ -838,15 +914,6 @@ export const reverseMinionSelector = (
 		);
 	}
 
-	// NOT_TRIBELESS (3 cards)
-	if (refCard.races && refCard.races.length > 0) {
-		matchingCardIds.push(
-			CardIds.NzothGodOfTheDeep,
-			CardIds.PowerSlider,
-			CardIds.TheOneAmalgamBand
-		);
-	}
-
 	// PIRATE (31 cards)
 	if (refCard.races?.map(r => r.toUpperCase()).includes('PIRATE')) {
 		matchingCardIds.push(
@@ -961,24 +1028,21 @@ export const reverseMinionSelector = (
 		);
 	}
 
-	// ZERG (4 cards)
+	// ZERG (2 cards)
 	if (refCard.mechanics?.includes('ZERG')) {
 		matchingCardIds.push(
-			CardIds.EvolutionChamber_SC_021,
 			CardIds.Hydralisk_SC_008,
-			CardIds.Lurker_SC_009,
 			CardIds.NydusWorm_SC_015
 		);
 	}
 
-	// MINION (275 cards)
+	// MINION (248 cards)
 	if (refCard.type?.toUpperCase() === 'MINION') {
 		matchingCardIds.push(
 			CardIds.AcherusVeteran_CORE_ICC_092,
 			CardIds.AcherusVeteran_ICC_092,
 			CardIds.AegwynnTheGuardianCore,
 			CardIds.AegwynnTheGuardian_LEG_CS3_001,
-			CardIds.AlakirTheWindsOfTime_WON_092h,
 			CardIds.AlarmedSecuritybot_YOG_510,
 			CardIds.AllianceBannerman,
 			CardIds.AlwaysABiggerJormungar,
@@ -994,7 +1058,6 @@ export const reverseMinionSelector = (
 			CardIds.ApexisBlast,
 			CardIds.Assembly,
 			CardIds.Assembly_Assembly,
-			CardIds.AuchenaiDeathSpeaker_GDB_469,
 			CardIds.Aviana,
 			CardIds.Aviana_WON_012,
 			CardIds.AzsharanGardens_SunkenGardensToken,
@@ -1010,14 +1073,12 @@ export const reverseMinionSelector = (
 			CardIds.BloodOfGhuun,
 			CardIds.BobTheBartender_BG31_BOB,
 			CardIds.BobTheBartender_FindATripleToken_BG31_BOBt4,
-			CardIds.Boneshredder,
 			CardIds.Breakdance,
 			CardIds.BronzeSignetTavernBrawl,
 			CardIds.BusyBot_WORK_002,
 			CardIds.CapturedFlag,
 			CardIds.CarnivorousCube,
 			CardIds.CarnivorousCubicle_WORK_042,
-			CardIds.CatrinaMuerte,
 			CardIds.CatrinaMuerteCore,
 			CardIds.ChalkArtist_TOY_388,
 			CardIds.CharredChameleon_FIR_908,
@@ -1033,11 +1094,9 @@ export const reverseMinionSelector = (
 			CardIds.CupOMuscle_CupOMuscleToken_VAC_338t,
 			CardIds.CupOMuscle_CupOMuscleToken_VAC_338t2,
 			CardIds.CupOMuscle_VAC_338,
-			CardIds.DaUndatakah,
 			CardIds.DealWithADevil,
 			CardIds.DeckOfChaos,
 			CardIds.DevilsaurMask_DINO_403,
-			CardIds.DigForTreasure_TOY_510,
 			CardIds.DimensionalRipper,
 			CardIds.DinnerPerformer,
 			CardIds.DiscipleOfTheDove_TIME_037,
@@ -1046,6 +1105,7 @@ export const reverseMinionSelector = (
 			CardIds.Divergence_TIME_030,
 			CardIds.DivineAugur_TIME_429,
 			CardIds.DivineStar_GDB_460,
+			CardIds.DraconicHerald,
 			CardIds.DreamboundRaptor_EDR_849,
 			CardIds.DredgerStaff,
 			CardIds.DredgerStaff_CORE_REV_338,
@@ -1057,16 +1117,12 @@ export const reverseMinionSelector = (
 			CardIds.ElvenMinstrelCore,
 			CardIds.Embiggen,
 			CardIds.EmeraldHiveQueen,
-			CardIds.EndbringerUmbra_TLC_106,
 			CardIds.Ensmallen_TOY_805,
 			CardIds.EternalServitude_CORE_ICC_213,
 			CardIds.EternalServitude_ICC_213,
 			CardIds.Eureka,
-			CardIds.EvolutionChamber_SC_021,
 			CardIds.FeldoreiWarband,
-			CardIds.FerociousFelbat_EDR_892,
 			CardIds.Fetch_TOY_352,
-			CardIds.Firegill_DINO_404,
 			CardIds.FlashSale_TOY_716,
 			CardIds.FoodFight_EntréeToken_VAC_533t,
 			CardIds.FoodFight_VAC_533,
@@ -1080,11 +1136,9 @@ export const reverseMinionSelector = (
 			CardIds.GrimestreetOutfitter,
 			CardIds.GrimestreetOutfitterCore,
 			CardIds.GrimyGadgeteer,
-			CardIds.GuidingFigure_GDB_106,
 			CardIds.GuitarSoloist,
 			CardIds.HabeasCorpses,
 			CardIds.Hadronox_CORE_ICC_835,
-			CardIds.Hadronox_ICC_835,
 			CardIds.HagathaTheWitch_BewitchHeroic,
 			CardIds.HagathasEmbrace,
 			CardIds.HagathasEmbraceTavernBrawl,
@@ -1102,7 +1156,6 @@ export const reverseMinionSelector = (
 			CardIds.HourglassAttendant_TIME_100,
 			CardIds.HungeringAncient_EDR_494,
 			CardIds.IdolOfYshaarj,
-			CardIds.ImpKingRafaam_ImpKingRafaamToken,
 			CardIds.ImpKingRafaam_REV_789,
 			CardIds.ImpKingRafaam_REV_835,
 			CardIds.ImployeeOfTheMonth_WORK_009,
@@ -1112,6 +1165,7 @@ export const reverseMinionSelector = (
 			CardIds.InvigoratingSermon,
 			CardIds.IxlidFungalLord,
 			CardIds.JepettoJoybuzz,
+			CardIds.JoymancerJepetto_TOY_960,
 			CardIds.JungleGiants_BarnabusTheStomperToken,
 			CardIds.KabalTalonpriest,
 			CardIds.Kazakus_IchorOfUndeathToken_CFM_621t37,
@@ -1133,11 +1187,8 @@ export const reverseMinionSelector = (
 			CardIds.LokenJailerOfYoggSaron,
 			CardIds.LongneckEgg_DINO_130,
 			CardIds.LorthemarTheron_RLK_593,
-			CardIds.Lurker_SC_009,
 			CardIds.Malfunction_MIS_107,
 			CardIds.ManufacturingError_TOY_371,
-			CardIds.MarkOfTheSpikeshell,
-			CardIds.MaskedReveler,
 			CardIds.MasterJouster,
 			CardIds.MastersCall,
 			CardIds.MastersCall_CORE_TRL_339,
@@ -1153,8 +1204,6 @@ export const reverseMinionSelector = (
 			CardIds.NightmareLordXavius_EDR_856,
 			CardIds.NightshadeBud,
 			CardIds.NightshadeBud_CORE_REV_311,
-			CardIds.NiriOfTheCrater_TLC_836,
-			CardIds.NzothGodOfTheDeep,
 			CardIds.Obsidiansmith,
 			CardIds.OldMilitiaHornTavernBrawl,
 			CardIds.OldMilitiaHorn_MilitiaHornTavernBrawl,
@@ -1163,7 +1212,6 @@ export const reverseMinionSelector = (
 			CardIds.OrbitalMoon_GDB_475,
 			CardIds.OutfitTailor,
 			CardIds.Overheat_FIR_906,
-			CardIds.OverlordSaurfang_BAR_334,
 			CardIds.OverlordsWhip,
 			CardIds.PaintersVirtue_TOY_810,
 			CardIds.PantherMask_DINO_432,
@@ -1172,10 +1220,7 @@ export const reverseMinionSelector = (
 			CardIds.PortalVanguard_TIME_003,
 			CardIds.PotionOfIllusion,
 			CardIds.PowerChordSynchronize,
-			CardIds.PowerSlider,
 			CardIds.PowerWordBarrier_TIME_447,
-			CardIds.PrecursoryStrike_TIME_750,
-			CardIds.Prescience,
 			CardIds.ProvingGrounds,
 			CardIds.Psychopomp,
 			CardIds.PuppetmasterDorian_MIS_026,
@@ -1185,7 +1230,6 @@ export const reverseMinionSelector = (
 			CardIds.Reforestation_Fertilize_EDR_843b,
 			CardIds.Reforestation_ReforestationToken_EDR_843t1,
 			CardIds.Resurrect_BRM_017,
-			CardIds.Resuscitate_TLC_818,
 			CardIds.RiskySkipper,
 			CardIds.RunningWild,
 			CardIds.RunningWild_RunningWild,
@@ -1213,7 +1257,6 @@ export const reverseMinionSelector = (
 			CardIds.SpiritPeddler_WORK_015,
 			CardIds.SpotTheDifference_TOY_374,
 			CardIds.SrExcavatorTavernBrawl,
-			CardIds.StoryOfBarnabus_TLC_231,
 			CardIds.StrengthInNumbers,
 			CardIds.SuperchargeTavernBrawl,
 			CardIds.SurvivalOfTheFittest,
@@ -1224,24 +1267,19 @@ export const reverseMinionSelector = (
 			CardIds.TheBoomship,
 			CardIds.TheDarkPortal_BT_302,
 			CardIds.TheLichKing_ArmyOfTheFrozenThroneToken,
-			CardIds.TheOneAmalgamBand,
 			CardIds.TogwagglesScheme,
 			CardIds.TravelmasterDungar_WORK_043,
 			CardIds.TyrsTears,
-			CardIds.TyrsTears_TyrsTearsToken,
 			CardIds.UngoroBrochure_WORK_050,
 			CardIds.UnlockedPotential,
 			CardIds.VarianWrynn_AT_072,
-			CardIds.Vectus,
 			CardIds.VentureCoMercenaryLegacy,
 			CardIds.VentureCoMercenaryVanilla,
 			CardIds.ViciousBloodworm_RLK_711,
 			CardIds.VitalitySurge,
-			CardIds.WakenerOfSouls_GDB_468,
 			CardIds.WebOfDeception_EDR_523,
 			CardIds.WishUponAStar_TOY_877,
 			CardIds.Woecleaver,
-			CardIds.XyrellaTheDevout,
 			CardIds.Yesterloc_TIME_428,
 			CardIds.YoggInTheBox_TOY_372,
 			CardIds.YouthfulBrewmaster,

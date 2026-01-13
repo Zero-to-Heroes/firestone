@@ -28,13 +28,16 @@ export const reverseSpellSelector = (
 		);
 	}
 
-	// ARCANE + SPELL (8 cards)
+	// ARCANE + SPELL (11 cards)
 	if (refCard.spellSchool?.toUpperCase() === 'ARCANE' && refCard.type?.toUpperCase() === 'SPELL') {
 		matchingCardIds.push(
 			CardIds.AzureQueenSindragosa_AzureKingMalygosToken_TIME_852t1,
+			CardIds.AzureQueenSindragosa_TIME_852,
 			CardIds.HalduronBrightwing,
+			CardIds.LadyNazjar_TID_709,
 			CardIds.MagistersApprentice,
 			CardIds.SilvermoonFarstrider_RLK_826,
+			CardIds.SorcerersGambit,
 			CardIds.Stargazing_WW_425,
 			CardIds.StarlightReactor_GDB_108,
 			CardIds.UnstableMagicTavernBrawl,
@@ -42,10 +45,11 @@ export const reverseSpellSelector = (
 		);
 	}
 
-	// COST_EQUAL_1 + SPELL (2 cards)
+	// COST_EQUAL_1 + SPELL (3 cards)
 	if (refCard.cost === 1 && refCard.type?.toUpperCase() === 'SPELL') {
 		matchingCardIds.push(
 			CardIds.Gazlowe,
+			CardIds.NiriOfTheCrater_TLC_836,
 			CardIds.TrinketTracker
 		);
 	}
@@ -107,23 +111,26 @@ export const reverseSpellSelector = (
 		);
 	}
 
-	// FEL + SPELL (10 cards)
+	// FEL + SPELL (13 cards)
 	if (refCard.spellSchool?.toUpperCase() === 'FEL' && refCard.type?.toUpperCase() === 'SPELL') {
 		matchingCardIds.push(
 			CardIds.FelfireBlaze_FIR_904,
+			CardIds.FelfireInTheHole,
 			CardIds.Felgorger_SW_043,
 			CardIds.FossilFanatic,
 			CardIds.GraveDefiler,
 			CardIds.HeraldOfChaos,
 			CardIds.IllidanStormrage_FelInside_THD_004p,
 			CardIds.ImpCredibleTrousersTavernBrawl,
+			CardIds.JaceDarkweaver,
+			CardIds.LoadTheChamber_WW_409,
 			CardIds.PopgarThePutrid_WW_091,
 			CardIds.Scorchreaver_FIR_952,
 			CardIds.WitherTheWeakTavernBrawl
 		);
 	}
 
-	// FIRE + SPELL (12 cards)
+	// FIRE + SPELL (17 cards)
 	if (refCard.spellSchool?.toUpperCase() === 'FIRE' && refCard.type?.toUpperCase() === 'SPELL') {
 		matchingCardIds.push(
 			CardIds.FirekeepersIdolTavernBrawl,
@@ -132,26 +139,38 @@ export const reverseSpellSelector = (
 			CardIds.GrandMagusAntonidas,
 			CardIds.HotStreak,
 			CardIds.InfernoHerald_FIR_913,
+			CardIds.LadyNazjar_TID_709,
 			CardIds.LivingFlame_FIR_929,
 			CardIds.MechanizedMagma_TLC_224,
+			CardIds.RadianceOfAzshara_TSC_635,
 			CardIds.ScorchingWinds_FIR_910,
+			CardIds.SorcerersGambit,
+			CardIds.SteamGuardian,
 			CardIds.SunfuryChampion,
 			CardIds.Thoribelore,
-			CardIds.VolcanicThrasher_TLC_223
+			CardIds.VolcanicThrasher_TLC_223,
+			CardIds.WrathspineEnchanter
 		);
 	}
 
-	// FROST + SPELL (8 cards)
+	// FROST + SPELL (15 cards)
 	if (refCard.spellSchool?.toUpperCase() === 'FROST' && refCard.type?.toUpperCase() === 'SPELL') {
 		matchingCardIds.push(
+			CardIds.FrostweaveDungeoneer,
 			CardIds.GlacialDownpourTavernBrawl,
 			CardIds.HarbingerOfWinterCore_RLK_511,
 			CardIds.HeraldOfLokholar,
 			CardIds.IceRevenant,
 			CardIds.LadyDeathwhisper_RLK_713,
+			CardIds.LadyNazjar_TID_709,
+			CardIds.NorthernNavigation,
+			CardIds.OverseerFrigidaraCore_RLK_Prologue_RLK_224,
+			CardIds.RadianceOfAzshara_TSC_635,
 			CardIds.RambunctiousStuffy_TOY_821,
 			CardIds.Rimetongue,
-			CardIds.WatercolorArtist_TOY_376
+			CardIds.SorcerersGambit,
+			CardIds.WatercolorArtist_TOY_376,
+			CardIds.WrathspineEnchanter
 		);
 	}
 
@@ -186,12 +205,14 @@ export const reverseSpellSelector = (
 		);
 	}
 
-	// HOLY + SPELL (15 cards)
+	// HOLY + SPELL (20 cards)
 	if (refCard.spellSchool?.toUpperCase() === 'HOLY' && refCard.type?.toUpperCase() === 'SPELL') {
 		matchingCardIds.push(
 			CardIds.CarielRoame_BAR_902,
+			CardIds.DevoutDungeoneer,
 			CardIds.FlickeringLightbot_FlickeringLightbotToken_MIS_918t,
 			CardIds.FlickeringLightbot_MIS_918,
+			CardIds.GladesongSiren_TLC_819,
 			CardIds.GuardianLightTavernBrawl,
 			CardIds.HeraldOfLight,
 			CardIds.HiHoSilverwing_WW_344,
@@ -199,27 +220,35 @@ export const reverseSpellSelector = (
 			CardIds.HolyGlowsticks_MIS_709,
 			CardIds.InvigoratingLightTavernBrawl,
 			CardIds.KureTheLightBeyond_GDB_442,
+			CardIds.LightmawNetherdrake,
 			CardIds.ReachEquilibrium_CleanseTheShadowToken_TLC_817t,
+			CardIds.ReachEquilibrium_TLC_817,
 			CardIds.ShimmeringSunfish,
+			CardIds.SpiritGuide_CORE_AV_328,
 			CardIds.StarlightGroove,
 			CardIds.TheGardensGrace,
 			CardIds.VeteranWarmedic
 		);
 	}
 
-	// NATURE + SPELL (10 cards)
+	// NATURE + SPELL (15 cards)
 	if (refCard.spellSchool?.toUpperCase() === 'NATURE' && refCard.type?.toUpperCase() === 'SPELL') {
 		matchingCardIds.push(
 			CardIds.DeviateDreadfang,
 			CardIds.GroveShaper_EDR_271,
+			CardIds.HamuulRunetotem_EDR_845,
 			CardIds.HeraldOfNature,
 			CardIds.IronRootsTavernBrawl,
 			CardIds.MendingPoolsTavernBrawl,
+			CardIds.Overheat_FIR_906,
+			CardIds.PrimalDungeoneer,
 			CardIds.PrimordialOverseer_TIME_213,
+			CardIds.RadianceOfAzshara_TSC_635,
 			CardIds.SpreadingSaplingsTavernBrawl,
 			CardIds.ToadOfTheWilds,
 			CardIds.TopiorTheShrubbagazzor,
-			CardIds.WidowbloomSeedsman
+			CardIds.WidowbloomSeedsman,
+			CardIds.WrathspineEnchanter
 		);
 	}
 
@@ -231,69 +260,55 @@ export const reverseSpellSelector = (
 		);
 	}
 
-	// SHADOW + SPELL (11 cards)
+	// SHADOW + SPELL (15 cards)
 	if (refCard.spellSchool?.toUpperCase() === 'SHADOW' && refCard.type?.toUpperCase() === 'SPELL') {
 		matchingCardIds.push(
 			CardIds.EerieStoneTavernBrawl,
+			CardIds.GladesongSiren_TLC_819,
 			CardIds.HeraldOfShadows,
 			CardIds.KaraTheDarkStar_GDB_127,
 			CardIds.LadyDarkvein,
 			CardIds.LadyDarkvein_CORE_REV_373,
+			CardIds.LightmawNetherdrake,
 			CardIds.ReachEquilibrium_CorruptTheLightToken_TLC_817t2,
+			CardIds.ReachEquilibrium_TLC_817,
 			CardIds.Shadowborn,
 			CardIds.ShadowclothNeedle,
 			CardIds.SketchArtist_TOY_916,
+			CardIds.SpiritGuide_CORE_AV_328,
 			CardIds.StaffOfPainTavernBrawl,
 			CardIds.TwilightDeceptor
 		);
 	}
 
-	// ARCANE (6 cards)
+	// ARCANE (3 cards)
 	if (refCard.spellSchool?.toUpperCase() === 'ARCANE') {
 		matchingCardIds.push(
 			CardIds.ArcaneFluxTavernBrawl,
 			CardIds.ArcaneQuiver_RLK_817,
-			CardIds.ArcaniteCrystalTavernBrawl,
-			CardIds.AzureQueenSindragosa_TIME_852,
-			CardIds.LadyNazjar_TID_709,
-			CardIds.SorcerersGambit
+			CardIds.ArcaniteCrystalTavernBrawl
 		);
 	}
 
-	// FEL (3 cards)
+	// FEL (1 cards)
 	if (refCard.spellSchool?.toUpperCase() === 'FEL') {
 		matchingCardIds.push(
-			CardIds.CorruptedFelstoneTavernBrawl,
-			CardIds.FelfireInTheHole,
-			CardIds.JaceDarkweaver
+			CardIds.CorruptedFelstoneTavernBrawl
 		);
 	}
 
-	// FIRE (7 cards)
+	// FIRE (1 cards)
 	if (refCard.spellSchool?.toUpperCase() === 'FIRE') {
 		matchingCardIds.push(
-			CardIds.BlazingAccretion_GDB_302,
-			CardIds.LadyNazjar_TID_709,
-			CardIds.RadianceOfAzshara_TSC_635,
-			CardIds.Saruun_GDB_304,
-			CardIds.SorcerersGambit,
-			CardIds.SteamGuardian,
-			CardIds.WrathspineEnchanter
+			CardIds.BlazingAccretion_GDB_302
 		);
 	}
 
-	// FROST (9 cards)
+	// FROST (2 cards)
 	if (refCard.spellSchool?.toUpperCase() === 'FROST') {
 		matchingCardIds.push(
-			CardIds.FrostweaveDungeoneer,
-			CardIds.LadyNazjar_TID_709,
-			CardIds.NorthernNavigation,
 			CardIds.OverseerFrigidaraCore_RLK_224,
-			CardIds.OverseerFrigidaraCore_RLK_Prologue_RLK_224,
-			CardIds.OverseerFrigidara_LEG_RLK_224,
-			CardIds.RadianceOfAzshara_TSC_635,
-			CardIds.SorcerersGambit,
-			CardIds.WrathspineEnchanter
+			CardIds.OverseerFrigidara_LEG_RLK_224
 		);
 	}
 
@@ -328,48 +343,34 @@ export const reverseSpellSelector = (
 		);
 	}
 
-	// HOLY (8 cards)
+	// HOLY (3 cards)
 	if (refCard.spellSchool?.toUpperCase() === 'HOLY') {
 		matchingCardIds.push(
 			CardIds.CreatureOfTheSacredCave_TLC_430,
-			CardIds.DevoutDungeoneer,
 			CardIds.DivineIlluminationTavernBrawl,
-			CardIds.GladesongSiren_TLC_819,
-			CardIds.LightmawNetherdrake,
-			CardIds.ReachEquilibrium_TLC_817,
-			CardIds.SpiritGuide,
-			CardIds.SpiritGuide_CORE_AV_328
+			CardIds.SpiritGuide
 		);
 	}
 
-	// NATURE (7 cards)
+	// NATURE (2 cards)
 	if (refCard.spellSchool?.toUpperCase() === 'NATURE') {
 		matchingCardIds.push(
 			CardIds.ChampionOfStorms,
-			CardIds.CrashOfThunder,
-			CardIds.HamuulRunetotem_EDR_845,
-			CardIds.Overheat_FIR_906,
-			CardIds.PrimalDungeoneer,
-			CardIds.RadianceOfAzshara_TSC_635,
-			CardIds.WrathspineEnchanter
+			CardIds.CrashOfThunder
 		);
 	}
 
-	// SHADOW (8 cards)
+	// SHADOW (4 cards)
 	if (refCard.spellSchool?.toUpperCase() === 'SHADOW') {
 		matchingCardIds.push(
 			CardIds.CrystalsmithCultist,
 			CardIds.Darkbomb,
 			CardIds.Darkbomb_WON_095,
-			CardIds.GladesongSiren_TLC_819,
-			CardIds.LightmawNetherdrake,
-			CardIds.ReachEquilibrium_TLC_817,
-			CardIds.SpiritGuide,
-			CardIds.SpiritGuide_CORE_AV_328
+			CardIds.SpiritGuide
 		);
 	}
 
-	// SPELL (213 cards)
+	// SPELL (209 cards)
 	if (refCard.type?.toUpperCase() === 'SPELL') {
 		matchingCardIds.push(
 			CardIds.AdvancedTargetingMonocle,
@@ -396,7 +397,6 @@ export const reverseSpellSelector = (
 			CardIds.CactusCutter_WW_327,
 			CardIds.CardGrader_TOY_054,
 			CardIds.ChattyMacaw_VAC_407,
-			CardIds.ChiaDrake_ChiaDrakeToken_TOY_801t,
 			CardIds.ChiaDrake_Cultivate_TOY_801a,
 			CardIds.ChiaDrake_TOY_801,
 			CardIds.ClearancePromoter_TOY_390,
@@ -425,11 +425,9 @@ export const reverseSpellSelector = (
 			CardIds.DoubleTime,
 			CardIds.DozingKelpkeeper,
 			CardIds.DragonsFury,
-			CardIds.DragonscaleArmaments_EDR_251,
 			CardIds.DryscaleDeputy_WW_383,
 			CardIds.ElementalAllies,
 			CardIds.EnergyShaper,
-			CardIds.EtherealOracle_GDB_310,
 			CardIds.ExarchHataaru_TheGalaxysLensToken_GDB_136t,
 			CardIds.FarseerNobundo_GDB_447,
 			CardIds.FarseerWo_TIME_013,
@@ -492,13 +490,11 @@ export const reverseSpellSelector = (
 			CardIds.Marshspawn_BT_115,
 			CardIds.Marshspawn_CORE_BT_115,
 			CardIds.MeddlesomeServant_YOG_518,
-			CardIds.MedivhTheHallowed_AtieshTheGreatstaffToken_TIME_890t,
 			CardIds.MistahVistah_VAC_519,
 			CardIds.MurkwaterScribe,
 			CardIds.NagaGiant,
 			CardIds.NightshadeBud,
 			CardIds.NightshadeBud_CORE_REV_311,
-			CardIds.NiriOfTheCrater_TLC_836,
 			CardIds.NostalgicInitiate_NostalgicInitiateToken_TOY_340t1,
 			CardIds.NostalgicInitiate_TOY_340,
 			CardIds.OopsAllSpellsTavernBrawl,
@@ -560,6 +556,7 @@ export const reverseSpellSelector = (
 			CardIds.ThriveInTheShadowsCore,
 			CardIds.TidePools_VAC_522,
 			CardIds.TidepoolPupil_VAC_304,
+			CardIds.TimewayWanderer,
 			CardIds.TortollanPilgrim,
 			CardIds.Triangulate_GDB_451,
 			CardIds.TrolleyProblem_WW_436,

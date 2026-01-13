@@ -57,6 +57,13 @@ export const reverseGeneralSelector = (
 		);
 	}
 
+	// COST_MORE_4 + HAS_MECHANIC_DEATHRATTLE + MINION (1 cards)
+	if (refCard.cost > 4 && refCard.mechanics?.includes('DEATHRATTLE') && refCard.type?.toUpperCase() === 'MINION') {
+		matchingCardIds.push(
+			CardIds.FerociousFelbat_EDR_892
+		);
+	}
+
 	// BEAST + COST_LESS_4 (1 cards)
 	if (refCard.races?.map(r => r.toUpperCase()).includes('BEAST') && refCard.cost < 4) {
 		matchingCardIds.push(
@@ -72,20 +79,29 @@ export const reverseGeneralSelector = (
 		);
 	}
 
-	// COST_EQUAL_1 + MINION (4 cards)
+	// BEAST + COST_MORE_4 (1 cards)
+	if (refCard.races?.map(r => r.toUpperCase()).includes('BEAST') && refCard.cost > 4) {
+		matchingCardIds.push(
+			CardIds.StranglethornHeart
+		);
+	}
+
+	// COST_EQUAL_1 + MINION (5 cards)
 	if (refCard.cost === 1 && refCard.type?.toUpperCase() === 'MINION') {
 		matchingCardIds.push(
 			CardIds.ApothecarysCaravan,
 			CardIds.BoogieDown,
 			CardIds.K90tron,
+			CardIds.NiriOfTheCrater_TLC_836,
 			CardIds.TrustyFishingRod_VAC_960
 		);
 	}
 
-	// COST_EQUAL_1 + SPELL (2 cards)
+	// COST_EQUAL_1 + SPELL (3 cards)
 	if (refCard.cost === 1 && refCard.type?.toUpperCase() === 'SPELL') {
 		matchingCardIds.push(
 			CardIds.Gazlowe,
+			CardIds.NiriOfTheCrater_TLC_836,
 			CardIds.TrinketTracker
 		);
 	}
@@ -130,10 +146,11 @@ export const reverseGeneralSelector = (
 		);
 	}
 
-	// COST_LESS_4 + MINION (1 cards)
+	// COST_LESS_4 + MINION (2 cards)
 	if (refCard.cost < 4 && refCard.type?.toUpperCase() === 'MINION') {
 		matchingCardIds.push(
-			CardIds.AnimateDead
+			CardIds.AnimateDead,
+			CardIds.Resuscitate_TLC_818
 		);
 	}
 
@@ -189,10 +206,12 @@ export const reverseGeneralSelector = (
 		);
 	}
 
-	// COST_MORE_4 + MINION (1 cards)
+	// COST_MORE_4 + MINION (3 cards)
 	if (refCard.cost > 4 && refCard.type?.toUpperCase() === 'MINION') {
 		matchingCardIds.push(
-			CardIds.CaricatureArtist_TOY_391
+			CardIds.CaricatureArtist_TOY_391,
+			CardIds.PrecursoryStrike_TIME_750,
+			CardIds.Prescience
 		);
 	}
 
@@ -265,28 +284,33 @@ export const reverseGeneralSelector = (
 		);
 	}
 
-	// HAS_MECHANIC_DEATHRATTLE + MINION (40 cards)
+	// HAS_MECHANIC_DEATHRATTLE + MINION (48 cards)
 	if (refCard.mechanics?.includes('DEATHRATTLE') && refCard.type?.toUpperCase() === 'MINION') {
 		matchingCardIds.push(
 			CardIds.AmuletOfUndying,
 			CardIds.ArchdruidOfThorns_EDR_491,
 			CardIds.AwakenTheMakers,
+			CardIds.Boneshredder,
 			CardIds.BrittleboneBuccaneer_VAC_436,
 			CardIds.CarrionStudies,
+			CardIds.DaUndatakah,
 			CardIds.DeadRinger,
 			CardIds.DeathBlossomWhomper,
 			CardIds.DeathGrowl,
 			CardIds.DeathlyDeathTavernBrawl,
 			CardIds.DeathstriderTavernBrawl,
 			CardIds.DevoutBlessingsTavernBrawlToken,
+			CardIds.EndbringerUmbra_TLC_106,
 			CardIds.ExpeditedBurialTavernBrawl,
 			CardIds.FelfireBonfire_VAC_952,
 			CardIds.ForlornStalker,
 			CardIds.ForsakenLieutenant_AV_601,
+			CardIds.GuidingFigure_GDB_106,
 			CardIds.HedgeMaze_REV_333,
 			CardIds.HedgeMaze_REV_792,
 			CardIds.HighCultistHerenn_TLC_810,
 			CardIds.JewelOfNzoth,
+			CardIds.MaskedReveler,
 			CardIds.MummyMagic,
 			CardIds.NecriumApothecary,
 			CardIds.NineLives,
@@ -306,7 +330,10 @@ export const reverseGeneralSelector = (
 			CardIds.Tuskpiercer_CORE_BAR_330,
 			CardIds.TwilightsCall,
 			CardIds.UnearthedRaptor,
+			CardIds.Vectus,
 			CardIds.VengefulSpirit_BAR_328,
+			CardIds.WakenerOfSouls_GDB_468,
+			CardIds.XyrellaTheDevout,
 			CardIds.YellingYodeler
 		);
 	}
@@ -328,17 +355,20 @@ export const reverseGeneralSelector = (
 		);
 	}
 
-	// HAS_MECHANIC_TAUNT + MINION (13 cards)
+	// HAS_MECHANIC_TAUNT + MINION (16 cards)
 	if (refCard.mechanics?.includes('TAUNT') && refCard.type?.toUpperCase() === 'MINION') {
 		matchingCardIds.push(
+			CardIds.AlakirTheWindsOfTime_WON_092h,
 			CardIds.Battlepickaxe_WW_347,
 			CardIds.Bolster,
 			CardIds.BulkUp,
 			CardIds.DetonationJuggernaut_WW_329,
 			CardIds.EnduranceTrainingTavernBrawl,
 			CardIds.FirePlumesHeart,
+			CardIds.Hadronox_ICC_835,
 			CardIds.IntoTheFray,
 			CardIds.KingsDefender,
+			CardIds.MarkOfTheSpikeshell,
 			CardIds.QualityAssurance_TOY_605,
 			CardIds.RazormaneBattleguard,
 			CardIds.TortollanTraveler_VAC_518,
@@ -347,11 +377,12 @@ export const reverseGeneralSelector = (
 		);
 	}
 
-	// LEGENDARY + MINION (4 cards)
+	// LEGENDARY + MINION (5 cards)
 	if (refCard.rarity?.toUpperCase() === 'LEGENDARY' && refCard.type?.toUpperCase() === 'MINION') {
 		matchingCardIds.push(
 			CardIds.DisksOfLegendTavernBrawl,
 			CardIds.InspiringPresenceTavernBrawl,
+			CardIds.OffensivePlayTavernBrawl,
 			CardIds.RingOfPhaseshiftingTavernBrawl,
 			CardIds.RoyalGreatswordTavernBrawlToken
 		);
@@ -365,10 +396,9 @@ export const reverseGeneralSelector = (
 		);
 	}
 
-	// COST_EQUAL_1 (5 cards)
+	// COST_EQUAL_1 (4 cards)
 	if (refCard.cost === 1) {
 		matchingCardIds.push(
-			CardIds.NiriOfTheCrater_TLC_836,
 			CardIds.PipThePotent_WW_394,
 			CardIds.PrinceLiam,
 			CardIds.RollingStone,
@@ -404,13 +434,6 @@ export const reverseGeneralSelector = (
 		);
 	}
 
-	// COST_LESS_4 (1 cards)
-	if (refCard.cost < 4) {
-		matchingCardIds.push(
-			CardIds.Resuscitate_TLC_818
-		);
-	}
-
 	// COST_MORE_2 (1 cards)
 	if (refCard.cost > 2) {
 		matchingCardIds.push(
@@ -425,13 +448,9 @@ export const reverseGeneralSelector = (
 		);
 	}
 
-	// COST_MORE_4 (5 cards)
+	// COST_MORE_4 (1 cards)
 	if (refCard.cost > 4) {
 		matchingCardIds.push(
-			CardIds.FerociousFelbat_EDR_892,
-			CardIds.PrecursoryStrike_TIME_750,
-			CardIds.Prescience,
-			CardIds.StranglethornHeart,
 			CardIds.TimberTambourine
 		);
 	}
@@ -469,20 +488,14 @@ export const reverseGeneralSelector = (
 		);
 	}
 
-	// HAS_MECHANIC_DEATHRATTLE (26 cards)
+	// HAS_MECHANIC_DEATHRATTLE (17 cards)
 	if (refCard.mechanics?.includes('DEATHRATTLE')) {
 		matchingCardIds.push(
 			CardIds.BaronRivendare_CORE_FP1_031,
 			CardIds.BaronRivendare_FP1_031,
 			CardIds.BarrensTrapper,
-			CardIds.Boneshredder,
 			CardIds.ChronoLordDeios_TIME_064,
 			CardIds.CountessAshmore,
-			CardIds.DaUndatakah,
-			CardIds.EndbringerUmbra_TLC_106,
-			CardIds.FerociousFelbat_EDR_892,
-			CardIds.GuidingFigure_GDB_106,
-			CardIds.MaskedReveler,
 			CardIds.NecriumBlade,
 			CardIds.NecriumVial,
 			CardIds.PlayDead_CORE_ICC_052,
@@ -494,19 +507,17 @@ export const reverseGeneralSelector = (
 			CardIds.ShallowGrave,
 			CardIds.Smokescreen,
 			CardIds.SummonerDarkmarrow_VAC_503,
-			CardIds.TotemOfTheDead_LOOTA_845,
-			CardIds.Vectus,
-			CardIds.WakenerOfSouls_GDB_468,
-			CardIds.XyrellaTheDevout
+			CardIds.TotemOfTheDead_LOOTA_845
 		);
 	}
 
-	// HAS_MECHANIC_EQUIPS_WEAPON (44 cards)
+	// HAS_MECHANIC_EQUIPS_WEAPON (51 cards)
 	if (refCard.mechanics?.includes('EQUIPS_WEAPON')) {
 		matchingCardIds.push(
 			CardIds.AbyssalBassist,
 			CardIds.AirGuitarist,
 			CardIds.AxeBerserker,
+			CardIds.BargainBin_MIS_105,
 			CardIds.BlackscaleBrute,
 			CardIds.CorsairCache,
 			CardIds.FogsailFreebooterCore,
@@ -515,6 +526,7 @@ export const reverseGeneralSelector = (
 			CardIds.ForgedInFlame,
 			CardIds.GrimtotemBuzzkill,
 			CardIds.GrommashsArmguardsTavernBrawl,
+			CardIds.GuitarSoloist,
 			CardIds.HenchClanThug,
 			CardIds.HenchClanThugCore,
 			CardIds.Hookfist3000,
@@ -526,11 +538,15 @@ export const reverseGeneralSelector = (
 			CardIds.Khazgoroth_TitanforgeToken,
 			CardIds.LadyAshvane_Story_11_LadyAshvane,
 			CardIds.LadyAshvane_TSC_943,
+			CardIds.LoadTheChamber_WW_409,
 			CardIds.ManAtArms,
 			CardIds.MicDrop,
+			CardIds.Obsidiansmith,
 			CardIds.PillageTheFallenTavernBrawl,
 			CardIds.Plunder,
 			CardIds.Pufferfist,
+			CardIds.RaidTheDocks,
+			CardIds.RaidingParty_CORE_TRL_124,
 			CardIds.RatchetPrivateer,
 			CardIds.RuneforgingCore,
 			CardIds.Runeforging_LEG_RLK_715,
@@ -547,6 +563,7 @@ export const reverseGeneralSelector = (
 			CardIds.SpacePirate_GDB_333,
 			CardIds.SwarthySwordshiner_VAC_701,
 			CardIds.VulperaToxinblade,
+			CardIds.WeaponsAttendant_VAC_924,
 			CardIds.WeaponsExpert
 		);
 	}
@@ -561,15 +578,12 @@ export const reverseGeneralSelector = (
 		);
 	}
 
-	// HAS_MECHANIC_TAUNT (10 cards)
+	// HAS_MECHANIC_TAUNT (7 cards)
 	if (refCard.mechanics?.includes('TAUNT')) {
 		matchingCardIds.push(
-			CardIds.AlakirTheWindsOfTime_WON_092h,
 			CardIds.Hadronox_CORE_ICC_835,
-			CardIds.Hadronox_ICC_835,
 			CardIds.HoldTheLineTavernBrawl,
 			CardIds.LastStand,
-			CardIds.MarkOfTheSpikeshell,
 			CardIds.PipsiPainthoof_TOY_812,
 			CardIds.StolenGoods,
 			CardIds.StolenGoods_WON_110,
@@ -612,12 +626,13 @@ export const reverseGeneralSelector = (
 		);
 	}
 
-	// WEAPON (44 cards)
+	// WEAPON (51 cards)
 	if (refCard.type?.toUpperCase() === 'WEAPON') {
 		matchingCardIds.push(
 			CardIds.AbyssalBassist,
 			CardIds.AirGuitarist,
 			CardIds.AxeBerserker,
+			CardIds.BargainBin_MIS_105,
 			CardIds.BlackscaleBrute,
 			CardIds.CorsairCache,
 			CardIds.FogsailFreebooterCore,
@@ -626,6 +641,7 @@ export const reverseGeneralSelector = (
 			CardIds.ForgedInFlame,
 			CardIds.GrimtotemBuzzkill,
 			CardIds.GrommashsArmguardsTavernBrawl,
+			CardIds.GuitarSoloist,
 			CardIds.HenchClanThug,
 			CardIds.HenchClanThugCore,
 			CardIds.Hookfist3000,
@@ -637,11 +653,15 @@ export const reverseGeneralSelector = (
 			CardIds.Khazgoroth_TitanforgeToken,
 			CardIds.LadyAshvane_Story_11_LadyAshvane,
 			CardIds.LadyAshvane_TSC_943,
+			CardIds.LoadTheChamber_WW_409,
 			CardIds.ManAtArms,
 			CardIds.MicDrop,
+			CardIds.Obsidiansmith,
 			CardIds.PillageTheFallenTavernBrawl,
 			CardIds.Plunder,
 			CardIds.Pufferfist,
+			CardIds.RaidTheDocks,
+			CardIds.RaidingParty_CORE_TRL_124,
 			CardIds.RatchetPrivateer,
 			CardIds.RuneforgingCore,
 			CardIds.Runeforging_LEG_RLK_715,
@@ -658,6 +678,7 @@ export const reverseGeneralSelector = (
 			CardIds.SpacePirate_GDB_333,
 			CardIds.SwarthySwordshiner_VAC_701,
 			CardIds.VulperaToxinblade,
+			CardIds.WeaponsAttendant_VAC_924,
 			CardIds.WeaponsExpert
 		);
 	}
