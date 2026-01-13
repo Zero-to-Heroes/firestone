@@ -589,9 +589,27 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		if (!container) {
 			return 0;
 		}
-		// The span expands to fit text naturally; overflow is clipped by parent container
-		// Compare span's natural width against container's available width
-		const overflow = span.scrollWidth - container.clientWidth;
+
+		// The span is a flex item inside a flex container (.card-name has display: flex).
+		// As a flex item, the span's scrollWidth may be constrained to the container width,
+		// not reflecting the true text width. Temporarily set display: inline-block to
+		// measure the actual text width, then restore the original display.
+		const originalDisplay = span.style.display;
+		span.style.display = 'inline-block';
+
+		// Measure the true text width now that it's inline-block
+		const textWidth = span.scrollWidth;
+
+		// Restore original display immediately to minimize layout thrashing
+		span.style.display = originalDisplay;
+
+		// Get the container's padding to calculate actual available space for text
+		const containerStyle = window.getComputedStyle(container);
+		const paddingLeft = parseFloat(containerStyle.paddingLeft) || 0;
+		const paddingRight = parseFloat(containerStyle.paddingRight) || 0;
+		const availableWidth = container.clientWidth - paddingLeft - paddingRight;
+
+		const overflow = textWidth - availableWidth;
 		return overflow > 0 ? overflow : 0;
 	}
 
