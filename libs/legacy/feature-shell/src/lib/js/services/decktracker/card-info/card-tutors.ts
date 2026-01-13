@@ -307,6 +307,7 @@ const internalTutors = [
 	CardIds.WayOfTheShell_TLC_513hp,
 	CardIds.PortalVanguard_TIME_003,
 	CardIds.TimelineWitness,
+	CardIds.NightmareLordXavius_EDR_856,
 	TempCardIds.Finality,
 ];
 for (const cardId of Object.keys(cardsInfoCache)) {
