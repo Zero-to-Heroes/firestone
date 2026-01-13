@@ -590,20 +590,9 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 			return 0;
 		}
 
-		// The span is a flex item inside a flex container (.card-name has display: flex).
-		// As a flex item, the span's scrollWidth may be constrained to the container width,
-		// not reflecting the true text width. Temporarily set display: inline-block to
-		// measure the actual text width, then restore the original display.
-		const originalDisplay = span.style.display;
-		span.style.display = 'inline-block';
-
-		// Measure the true text width now that it's inline-block
+		// The span has display: inline-block in CSS, so scrollWidth accurately reflects
+		// the actual text width. Compare against container's available space (minus padding).
 		const textWidth = span.scrollWidth;
-
-		// Restore original display immediately to minimize layout thrashing
-		span.style.display = originalDisplay;
-
-		// Get the container's padding to calculate actual available space for text
 		const containerStyle = window.getComputedStyle(container);
 		const paddingLeft = parseFloat(containerStyle.paddingLeft) || 0;
 		const paddingRight = parseFloat(containerStyle.paddingRight) || 0;
