@@ -1113,6 +1113,7 @@ const internalGiftCreators = [
 	CardIds.LieInWait_TLC_513,
 	CardIds.OffensivePlayTavernBrawl,
 	CardIds.DrawOffensivePlayTavernBrawlEnchantment,
+	CardIds.BobTheBartender_FindATripleToken_BG31_BOBt4,
 	TempCardIds.EternalFireboltEnchantment,
 ];
 for (const cardId of Object.keys(cardsInfoCache)) {
