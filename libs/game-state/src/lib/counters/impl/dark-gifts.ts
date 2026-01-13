@@ -30,7 +30,7 @@ export class DarkGiftsCounterDefinitionV2 extends CounterDefinitionV2<readonly s
 			label: (i18n: ILocalizationService): string =>
 				i18n.translateString('settings.decktracker.your-deck.counters.dark-gifts-label'),
 			tooltip: (i18n: ILocalizationService, allCards: CardsFacadeService): string =>
-				i18n.translateString('settings.decktracker.your-deck.counters.dark-gift-tooltip', {
+				i18n.translateString('settings.decktracker.your-deck.counters.dark-gifts-tooltip', {
 					cardName: allCards.getCard(CardIds.WallowTheWretched_EDR_487).name,
 				}),
 		},
@@ -67,7 +67,7 @@ export class DarkGiftsCounterDefinitionV2 extends CounterDefinitionV2<readonly s
 			label: (i18n: ILocalizationService): string =>
 				i18n.translateString('settings.decktracker.your-deck.counters.dark-gifts-label'),
 			tooltip: (i18n: ILocalizationService, allCards: CardsFacadeService): string =>
-				i18n.translateString('settings.decktracker.your-deck.counters.dark-gift-tooltip', {
+				i18n.translateString('settings.decktracker.your-deck.counters.dark-gifts-tooltip', {
 					cardName: allCards.getCard(CardIds.WallowTheWretched_EDR_487).name,
 				}),
 		},
