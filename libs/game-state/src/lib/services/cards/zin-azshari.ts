@@ -8,7 +8,7 @@
 // These cards summon a copy of a friendly minion currently on the board.
 // The dynamic pool should show all friendly minions on the player's board.
 
-import { CardIds } from '@firestone-hs/reference-data';
+import { CardIds, CardType } from '@firestone-hs/reference-data';
 import { StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 
 export const ZinAzshari: StaticGeneratingCard = {
@@ -16,6 +16,9 @@ export const ZinAzshari: StaticGeneratingCard = {
 	publicCreator: true,
 	dynamicPool: (input: StaticGeneratingCardInput) => {
 		// Return the card IDs of all friendly minions currently on the board
-		return input.inputOptions.deckState.board.map((minion) => minion.cardId);
+		// Filter to only include minions (board can contain other card types)
+		return input.inputOptions.deckState.board
+			.filter((card) => card.cardType === CardType[CardType.MINION])
+			.map((minion) => minion.cardId);
 	},
 };
