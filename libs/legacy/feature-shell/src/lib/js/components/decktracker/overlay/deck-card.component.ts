@@ -293,8 +293,6 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 	private _referenceCard: ReferenceCard;
 	// Using number type for browser setTimeout return value (ReturnType<typeof setTimeout> returns NodeJS.Timeout)
 	private scrollTimeout: number | null = null;
-	// Store requestAnimationFrame ID so it can be cancelled if needed
-	private rafId: number | null = null;
 	// Delay before text starts scrolling on hover (prevents flicker on quick mouseovers)
 	private static readonly TEXT_SCROLL_DELAY_MS = 500;
 	private _uniqueId: string;
@@ -429,11 +427,6 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		// console.debug('unregistering highlight', card?.cardName, this.el.nativeElement);
 		this.cardsHighlightService?.onMouseLeave(this.cardId);
 		this.cardsHighlightService?.unregister(this._uniqueId, this._side);
-		// Clean up animation frame to prevent memory leaks
-		if (this.rafId !== null) {
-			window.cancelAnimationFrame(this.rafId);
-			this.rafId = null;
-		}
 		// Clean up scroll timeout to prevent memory leaks
 		if (this.scrollTimeout !== null) {
 			window.clearTimeout(this.scrollTimeout);
@@ -517,11 +510,6 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 	onMouseLeave(event: MouseEvent) {
 		this.cardsHighlightService?.onMouseLeave(this.cardId);
 
-		// Clear any pending animation frame
-		if (this.rafId !== null) {
-			window.cancelAnimationFrame(this.rafId);
-			this.rafId = null;
-		}
 		// Clear the scroll timeout and reset scroll state
 		if (this.scrollTimeout !== null) {
 			window.clearTimeout(this.scrollTimeout);
@@ -549,34 +537,25 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		if (this.scrollTimeout !== null) {
 			window.clearTimeout(this.scrollTimeout);
 		}
-		// Clear any pending animation frame
-		if (this.rafId !== null) {
-			window.cancelAnimationFrame(this.rafId);
+
+		// Check if text overflows - skip if it fits
+		const overflowAmount = this.getTextOverflowAmount();
+		if (overflowAmount <= 0) {
+			return;
 		}
 
-		// Defer overflow check to next frame to ensure DOM layout is complete
-		// This fixes issues where measurements are taken before browser finishes layout
-		this.rafId = window.requestAnimationFrame(() => {
-			this.rafId = null;
-			// Check overflow after layout is stable
-			const overflowAmount = this.getTextOverflowAmount();
-			if (overflowAmount <= 0) {
-				return;
+		// Schedule the text scroll after a delay (only for truncated text)
+		this.scrollTimeout = window.setTimeout(() => {
+			this.scrollTimeout = null;
+			// Set dynamic animation duration based on overflow amount for better readability
+			// Base: 0.3s for up to 50px overflow, then scale linearly (approximately 6ms per pixel)
+			const animationDuration = Math.max(0.3, overflowAmount * 0.006);
+			this.cardNameSpan?.nativeElement?.style?.setProperty('--scroll-duration', `${animationDuration}s`);
+			this.scrollText = true;
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.markForCheck();
 			}
-
-			// Schedule the text scroll after a delay (only for truncated text)
-			this.scrollTimeout = window.setTimeout(() => {
-				this.scrollTimeout = null;
-				// Set dynamic animation duration based on overflow amount for better readability
-				// Base: 0.3s for up to 50px overflow, then scale linearly (approximately 6ms per pixel)
-				const animationDuration = Math.max(0.3, overflowAmount * 0.006);
-				this.cardNameSpan?.nativeElement?.style?.setProperty('--scroll-duration', `${animationDuration}s`);
-				this.scrollText = true;
-				if (!(this.cdr as ViewRef)?.destroyed) {
-					this.cdr.markForCheck();
-				}
-			}, DeckCardComponent.TEXT_SCROLL_DELAY_MS);
-		});
+		}, DeckCardComponent.TEXT_SCROLL_DELAY_MS);
 	}
 
 	// Returns the amount of pixels the text overflows, or 0 if not truncated
