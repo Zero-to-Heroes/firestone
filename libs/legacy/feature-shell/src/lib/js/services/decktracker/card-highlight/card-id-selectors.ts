@@ -4063,7 +4063,7 @@ export const cardIdSelector = (
 		case CardIds.CandleBreath:
 			return and(side(inputSide), or(inHand, inDeck), dragon);
 		case CardIds.DraconicHerald:
-			return and(side(inputSide), inDeck, minion);
+			return and(side(inputSide), or(inDeck, inHand), dragon);
 		case CardIds.GrimscaleOracleLegacy:
 		case CardIds.GrimscaleOracleVanilla:
 		case CardIds.GrimscaleChum:
