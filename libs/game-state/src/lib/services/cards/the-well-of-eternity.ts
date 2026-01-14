@@ -1,4 +1,3 @@
-/* eslint-disable no-mixed-spaces-and-tabs */
 // TIME_211t1: The Well of Eternity
 // "Fill your hand with random Temporary spells."
 // 
