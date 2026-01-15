@@ -10,10 +10,11 @@ export const MechagnomeGuide: GeneratingCard & StaticGeneratingCard = {
 	cardIds: [CardIds.MechagnomeGuide, CardIds.MechagnomeGuide_MechagnomeGuideToken],
 	publicCreator: true,
 	dynamicPool: (input: StaticGeneratingCardInput) => {
+		const currentClass = input.inputOptions.deckState.getCurrentClass();
 		return filterCards(
 			MechagnomeGuide.cardIds[0],
 			input.allCards,
-			(c) => hasCorrectType(c, CardType.SPELL) && canBeDiscoveredByClass(c, input.inputOptions.currentClass),
+			(c) => hasCorrectType(c, CardType.SPELL) && canBeDiscoveredByClass(c, currentClass),
 			input.inputOptions,
 		);
 	},
