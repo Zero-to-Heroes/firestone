@@ -75,6 +75,7 @@ export { MadameLazul } from './madame-lazul';
 export { MagicTrick } from './magic-trick';
 export { Malkorok } from './malkorok';
 export { MendTheTimeline } from './mend-the-timeline';
+export { MechagnomeGuide } from './mechagnome-guide';
 export { Metrognome } from './metrognome';
 export { MismatchedFossils } from './mismatched-fossils';
 export { Morchie } from './morchie';
