@@ -9,7 +9,7 @@ export const ChromieBronzeEmissary: StaticGeneratingCard = {
 	publicCreator: true,
 	dynamicPool: (input: StaticGeneratingCardInput) => {
 		// Get all unique cards played this match by the player
-		const playedCardIds = input.inputOptions.deckState.cardsPlayedThisMatch?.map((c) => c.cardId).filter((c) => !!c) ?? [];
+		const playedCardIds = input.inputOptions.deckState.cardsPlayedThisMatch.map((c) => c.cardId).filter((c) => !!c);
 		return [...new Set(playedCardIds)];
 	},
 };
