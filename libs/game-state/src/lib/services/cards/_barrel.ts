@@ -157,4 +157,3 @@ export { WitchsApprentice } from './witchs-apprentice';
 export { YoggInTheBox } from './yogg-in-the-box';
 export { YrelBeaconOfHope } from './yrel-beacon-of-hope';
 export { ZephrysOptions } from './zephrys-options';
-export { ZinAzshari } from './zin-azshari';
