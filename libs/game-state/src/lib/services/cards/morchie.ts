@@ -1,12 +1,11 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { CardIds, GameTag, hasMechanic } from '@firestone-hs/reference-data';
-import { TempCardIds } from '@firestone/shared/common/service';
 import { GuessedInfo } from '../../models/deck-card';
 import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
 
 export const Morchie: GeneratingCard & StaticGeneratingCard = {
-	cardIds: [TempCardIds.Morchie as unknown as CardIds],
+	cardIds: [CardIds.Morchie_END_036],
 	publicCreator: true,
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
 		const possibleCards = filterCards(
