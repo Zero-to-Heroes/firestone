@@ -80,7 +80,7 @@ export class SecretConfigService {
 					return true;
 				}
 				const brawlSet = brawlSets[metadata.scenarioId];
-				if (brawlSet.length === 0) {
+				if (!brawlSet?.length) {
 					return true;
 				}
 				return brawlSet.includes(this.allCards.getCard(secret.cardId).set?.toLowerCase() as SetId);
