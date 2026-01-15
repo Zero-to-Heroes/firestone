@@ -6,6 +6,11 @@ import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingC
 
 // Reminisce (TOT_343)
 // "Get copies of the last two cards your opponent played."
+
+/**
+ * Sorts cards by recency, with the most recently played cards first.
+ * Sorts by turn (descending) first, then by timestamp (descending) for ties.
+ */
 const sortCardsByRecency = (cards: readonly ShortCardWithTurn[]): ShortCardWithTurn[] => {
 	return [...cards].sort((a, b) => {
 		if (b.turn !== a.turn) {
