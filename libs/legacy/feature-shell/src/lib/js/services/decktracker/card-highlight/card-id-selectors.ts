@@ -2887,6 +2887,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), minion, legendary);
 		case CardIds.RingOfRefreshmentTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), spell);
+		case CardIds.RippleInTime:
+			return and(side(inputSide), inDeck, minion);
 		case CardIds.RiskySkipper:
 			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.RitualOfTheNewMoon_EDR_461:

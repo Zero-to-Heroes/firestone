@@ -1,12 +1,12 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import { CardIds, CardType } from '@firestone-hs/reference-data';
+import { CardIds, CardType, hasCorrectTribe, Race } from '@firestone-hs/reference-data';
 import { GuessedInfo } from '../../models/deck-card';
 import { canBeDiscoveredByClass, hasCorrectType } from '../../related-cards/dynamic-pools';
 import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
 
 // Draconic Herald (TOT_316)
-// "<b>Battlecry:</b> <b>Discover</b> a minion. Give it +3/+3 then put it on top of your deck."
+// "<b>Battlecry:</b> <b>Discover</b> a Dragon. If you're holding a Dragon, summon it."
 export const DraconicHerald: GeneratingCard & StaticGeneratingCard = {
 	cardIds: [CardIds.DraconicHerald],
 	publicCreator: true,
@@ -14,7 +14,10 @@ export const DraconicHerald: GeneratingCard & StaticGeneratingCard = {
 		return filterCards(
 			DraconicHerald.cardIds[0],
 			input.allCards,
-			(c) => hasCorrectType(c, CardType.MINION) && canBeDiscoveredByClass(c, input.inputOptions.deckState.getCurrentClass()),
+			(c) =>
+				hasCorrectType(c, CardType.MINION) &&
+				hasCorrectTribe(c, Race.DRAGON) &&
+				canBeDiscoveredByClass(c, input.inputOptions.deckState.getCurrentClass()),
 			input.inputOptions,
 		);
 	},
@@ -24,7 +27,10 @@ export const DraconicHerald: GeneratingCard & StaticGeneratingCard = {
 			possibleCards: filterCards(
 				DraconicHerald.cardIds[0],
 				input.allCards,
-				(c) => hasCorrectType(c, CardType.MINION) && canBeDiscoveredByClass(c, input.deckState.getCurrentClass()),
+				(c) =>
+					hasCorrectType(c, CardType.MINION) &&
+					hasCorrectTribe(c, Race.DRAGON) &&
+					canBeDiscoveredByClass(c, input.deckState.getCurrentClass()),
 				input.options,
 			),
 		};
