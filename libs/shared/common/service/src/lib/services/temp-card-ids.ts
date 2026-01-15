@@ -15,7 +15,6 @@ export declare const enum TempCardIds {
 	SplinteredReality = 'SplinteredReality',
 	Chronikar_Enchantment = 'Chronikar_Enchantment',
 	RemnantOfRage = 'RemnantOfRage',
-	BygoneEchoes = 'BygoneEchoes',
 	WickedBlightspawn = 'WickedBlightspawn',
 	BlessingOfTheInfinite = 'BlessingOfTheInfinite',
 	PrescientSlitherdrake = 'PrescientSlitherdrake',
