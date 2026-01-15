@@ -129,6 +129,7 @@ export { TemporalAnomaly } from './temporal-anomaly';
 export { TheCurator } from './the-curator';
 export { TheEternalHold } from './the-eternal-hold';
 export { TheSunwell } from './the-sunwell';
+export { TheWellOfEternity } from './the-well-of-eternity';
 export { Thoughtsteal } from './thoughtsteal';
 export { TimeLostGlaive } from './time-lost-glaive';
 export { TimelessCausality } from './timeless-causality';
