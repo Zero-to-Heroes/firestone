@@ -2,7 +2,7 @@
 // Mechagnome Guide - Battlecry: Discover a spell. Forge: It costs (3) less.
 import { CardIds, CardType } from '@firestone-hs/reference-data';
 import { GuessedInfo } from '../../models/deck-card';
-import { hasCorrectType } from '../../related-cards/dynamic-pools';
+import { canBeDiscoveredByClass, hasCorrectType } from '../../related-cards/dynamic-pools';
 import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
 
@@ -13,17 +13,18 @@ export const MechagnomeGuide: GeneratingCard & StaticGeneratingCard = {
 		return filterCards(
 			MechagnomeGuide.cardIds[0],
 			input.allCards,
-			(c) => hasCorrectType(c, CardType.SPELL),
+			(c) => hasCorrectType(c, CardType.SPELL) && canBeDiscoveredByClass(c, input.inputOptions.currentClass),
 			input.inputOptions,
 		);
 	},
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
+		const currentClass = input.deckState.getCurrentClass();
 		return {
 			cardType: CardType.SPELL,
 			possibleCards: filterCards(
 				MechagnomeGuide.cardIds[0],
 				input.allCards,
-				(c) => hasCorrectType(c, CardType.SPELL),
+				(c) => hasCorrectType(c, CardType.SPELL) && canBeDiscoveredByClass(c, currentClass),
 				input.options,
 			),
 		};
