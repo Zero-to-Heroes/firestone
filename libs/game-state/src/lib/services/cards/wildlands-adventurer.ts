@@ -1,11 +1,11 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import { CardIds } from '@firestone-hs/reference-data';
+import { CardIds, SetId } from '@firestone-hs/reference-data';
 import { GuessedInfo } from '../../models/deck-card';
 import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
 
 // Wildlands Adventurer (TOT_056)
-// "<b>Battlecry:</b> Add a random card from the Taverns_of_time to your hand."
+// "<b>Rewind</b> <b>Battlecry:</b> Get a random card from The Taverns of Time."
 export const WildlandsAdventurer: GeneratingCard & StaticGeneratingCard = {
 	cardIds: [CardIds.WildlandsAdventurer],
 	publicCreator: true,
