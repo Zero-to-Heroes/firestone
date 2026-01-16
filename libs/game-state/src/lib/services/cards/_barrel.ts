@@ -26,6 +26,8 @@ export { BygoneEchoes } from './bygone-echoes';
 export { CavernDreamer } from './cavern-dreamer';
 export { Chronogor } from './chronogor';
 export { ChromieBronzeEmissary } from './chromie-bronze-emissary';
+export { ChromieEscapeFromDurnholde } from './chromie-escape-from-durnholde';
+export { ChromieOpeningTheDarkPortal } from './chromie-opening-the-dark-portal';
 export { ClashOfTheColossals } from './clash-of-the-colossals';
 export { ConfluxFuture } from './conflux-future';
 export { ConsiderThePast } from './consider-the-past';
