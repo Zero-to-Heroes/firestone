@@ -611,6 +611,7 @@ export const cardsRevealedWhenDrawn = [
 	CardIds.Undermine_ImprovisedExplosiveTavernBrawlToken,
 	CardIds.Waxadred_WaxadredsCandleToken,
 	CardIds.YseraUnleashed_DreamPortalToken,
+	CardIds.TemporalAnomaly,
 ];
 
 // These are used to prevent info leaks in hand because we might know too much information
