@@ -1,6 +1,8 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-// Chromie's Epoch: Opening the Dark Portal
-// Discovers a minion from a predefined pool of related cards.
+// Chromie's Epoch: Opening the Dark Portal (TOT_030t1)
+// Card text: "Casts When Drawn. Add two random Legendary minions to your hand."
+// This token is shuffled into deck by Chromie, Bronze Emissary.
+// The dynamic pool contains the related cards that can be discovered.
 import { CardIds } from '@firestone-hs/reference-data';
 import { GuessedInfo } from '../../models/deck-card';
 import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';

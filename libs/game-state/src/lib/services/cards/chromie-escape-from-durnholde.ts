@@ -1,6 +1,8 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-// Chromie's Epoch: Escape from Durnholde
-// Discovers a minion from a predefined pool of related cards.
+// Chromie's Epoch: Escape from Durnholde (TOT_030t3)
+// Card text: "Casts When Drawn. Add two random spells to your hand."
+// This token is shuffled into deck by Chromie, Bronze Emissary.
+// The dynamic pool contains the related cards that can be discovered.
 import { CardIds } from '@firestone-hs/reference-data';
 import { GuessedInfo } from '../../models/deck-card';
 import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';

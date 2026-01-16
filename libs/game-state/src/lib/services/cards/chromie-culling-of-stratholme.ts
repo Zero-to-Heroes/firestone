@@ -1,6 +1,8 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-// Chromie's Epoch: Culling of Stratholme
-// Discovers a minion from a predefined pool of related cards.
+// Chromie's Epoch: Culling of Stratholme (TOT_030t4)
+// Card text: "Casts When Drawn. Deal 2 damage to all enemies."
+// This token is shuffled into deck by Chromie, Bronze Emissary.
+// The dynamic pool contains the related cards that can be discovered.
 import { CardIds } from '@firestone-hs/reference-data';
 import { GuessedInfo } from '../../models/deck-card';
 import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
