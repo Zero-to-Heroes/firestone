@@ -1,7 +1,7 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { CardIds, CardType, GameTag, hasMechanic } from '@firestone-hs/reference-data';
 import { TempCardIds } from '@firestone/shared/common/service';
-import { hasCorrectType } from '../../..';
+import { hasCorrectType } from '../../related-cards/dynamic-pools';
 import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
 
