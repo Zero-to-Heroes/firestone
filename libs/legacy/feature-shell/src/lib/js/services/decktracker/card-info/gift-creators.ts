@@ -1,6 +1,5 @@
 import { CardIds } from '@firestone-hs/reference-data';
 import { cardsInfoCache, hasGeneratingCard } from '@firestone/game-state';
-import { TempCardIds } from '@firestone/shared/common/service';
 
 const COIN_IDS = [
 	CardIds.TheCoinCore,
@@ -1120,7 +1119,7 @@ const internalGiftCreators = [
 	CardIds.DrawOffensivePlayTavernBrawlEnchantment,
 	CardIds.BobTheBartender_FindATripleToken_BG31_BOBt4,
 	CardIds.DissolvingOoze_TLC_252,
-	TempCardIds.EternalFireboltEnchantment,
+	CardIds.EternalFirebolt_EternalFireboltEnchantment_END_025e,
 ];
 for (const cardId of Object.keys(cardsInfoCache)) {
 	const card = cardsInfoCache[cardId];

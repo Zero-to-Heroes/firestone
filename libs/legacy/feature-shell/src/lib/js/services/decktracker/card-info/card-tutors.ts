@@ -1,6 +1,5 @@
 import { CardIds } from '@firestone-hs/reference-data';
 import { cardsInfoCache, hasGeneratingCard } from '@firestone/game-state';
-import { TempCardIds } from '@firestone/shared/common/service';
 
 const internalTutors = [
 	CardIds.AbyssalDepths,
@@ -354,7 +353,7 @@ const internalTutors = [
 	CardIds.PortalVanguard_TIME_003,
 	CardIds.TimelineWitness,
 	CardIds.NightmareLordXavius_EDR_856,
-	TempCardIds.Finality,
+	CardIds.Finality_END_003,
 ];
 for (const cardId of Object.keys(cardsInfoCache)) {
 	const card = cardsInfoCache[cardId];

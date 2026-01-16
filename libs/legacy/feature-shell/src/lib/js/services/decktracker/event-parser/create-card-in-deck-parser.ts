@@ -1,6 +1,5 @@
 import { CardIds, ReferenceCard } from '@firestone-hs/reference-data';
 import { addGuessInfoToCard, DeckCard, DeckState, GameState, getProcessedCard } from '@firestone/game-state';
-import { TempCardIds } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { reverseIfNeeded } from '@legacy-import/src/lib/js/services/decktracker/event-parser/card-dredged-parser';
 import { GameEvent } from '../../../models/game-event';
@@ -302,7 +301,7 @@ const buildAttributeChange = (creatorCard: DeckCard, newCardId: string): number 
 	return null;
 };
 
-const isCorrectCardId = (creatorCard: DeckCard, newCardId: string, target: CardIds | TempCardIds): boolean => {
+const isCorrectCardId = (creatorCard: DeckCard, newCardId: string, target: CardIds): boolean => {
 	return creatorCard?.cardId === target || newCardId === target;
 };
 

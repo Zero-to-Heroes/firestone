@@ -6,7 +6,7 @@ import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingC
 import { filterCards } from './utils';
 
 export const TrienniumRex: StaticGeneratingCard & GeneratingCard = {
-	cardIds: [TempCardIds.TrienniumRex as unknown as CardIds],
+	cardIds: [CardIds.TrienniumRex_END_015],
 	publicCreator: true,
 	dynamicPool: (input: StaticGeneratingCardInput) => {
 		const possibleCards = filterCards(

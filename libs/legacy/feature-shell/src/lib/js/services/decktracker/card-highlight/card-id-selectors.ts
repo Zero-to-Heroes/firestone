@@ -1,6 +1,5 @@
 import { CardClass, CardIds, CardType, GameTag, Race, SpellSchool } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState, getCost, getProcessedCard } from '@firestone/game-state';
-import { TempCardIds } from '@firestone/shared/common/service';
 import { groupByFunction, pickLast, sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
 import { Selector, SelectorInput, SelectorOutput } from './cards-highlight-common.service';
@@ -505,7 +504,7 @@ export const cardIdSelector = (
 				and(side(inputSide), or(inHand, inDeck), fire),
 				and(side(inputSide), or(inHand, inDeck), elemental),
 			);
-		case TempCardIds.BlessingOfTheInfinite:
+		case CardIds.Finality_BlessingOfTheInfinite_END_003p:
 			return and(side(inputSide), or(inDeck, inHand), undead);
 		case CardIds.BlessingOfTheWolf_EDR_850p:
 			return and(side(inputSide), or(inDeck, inHand), beast);
@@ -1067,7 +1066,7 @@ export const cardIdSelector = (
 			);
 		case CardIds.DimensionalRipper:
 			return and(side(inputSide), inDeck, minion);
-		case TempCardIds.DimensionalWeaponsmith:
+		case CardIds.DimensionalWeaponsmith_END_021:
 			return and(side(inputSide), or(inHand, inDeck), or(minion, weapon));
 		case CardIds.DinnerPerformer:
 			return highlightConditions(
@@ -1376,7 +1375,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), or(battlecry, combo));
 		case CardIds.FierceOutsider:
 			return and(side(inputSide), or(inHand, inDeck), outcast);
-		case TempCardIds.Finality:
+		case CardIds.Finality_END_003:
 			return and(side(inputSide), inDeck, undead);
 		case CardIds.FinjaTheFlyingStar:
 		case CardIds.FinjaTheFlyingStar_CORE_CFM_344:
@@ -1452,7 +1451,7 @@ export const cardIdSelector = (
 		case CardIds.FoxyFraud:
 		case CardIds.FoxyFraud_CORE_DMF_511:
 			return and(side(inputSide), or(inHand, inDeck), combo);
-		case TempCardIds.FragmentOfNothing:
+		case CardIds.FragmentOfNothing_END_026:
 			return and(side(inputSide), or(inHand, inDeck), spell);
 		case CardIds.FreeAdmission:
 			return highlightConditions(
@@ -1744,7 +1743,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.HawkstriderRancher:
 			return and(side(inputSide), or(inDeck, inHand), minion);
-		case TempCardIds.HaywireHornswog:
+		case CardIds.HaywireHornswog_END_030:
 			return and(side(inputSide), or(inDeck, inHand), overload);
 		case CardIds.HealingWave:
 		case CardIds.HealingWave_WON_320:
@@ -2375,7 +2374,7 @@ export const cardIdSelector = (
 			return tooltip(and(opposingSide(inputSide), cardsPlayedThisMatch));
 		case CardIds.MoatLurker:
 			return and(side(inputSide), or(inHand, inDeck), minion);
-		case TempCardIds.Morchie:
+		case CardIds.Morchie_END_036:
 			return and(side(inputSide), or(inHand, inDeck), rewind);
 		case CardIds.MonstrousMosquito_EDR_816:
 			return and(side(inputSide), or(inHand, inDeck), minion);
@@ -2648,7 +2647,7 @@ export const cardIdSelector = (
 				and(side(inputSide), inDeck, minion, costMore(4)),
 				and(side(inputSide), inDeck, minion),
 			);
-		case TempCardIds.PrescientSlitherdrake:
+		case CardIds.PrescientSlitherdrake_END_033:
 			return and(side(inputSide), or(inHand, inDeck), dragon);
 		case CardIds.PressurePoints_GDB_881:
 			return and(side(inputSide), or(inHand, inDeck), combo);
@@ -3266,7 +3265,7 @@ export const cardIdSelector = (
 			);
 		case CardIds.SpiritsingerUmbra:
 			return and(side(inputSide), or(inHand, inDeck), minion, deathrattle);
-		case TempCardIds.SplinteredReality:
+		case CardIds.SplinteredReality_END_009:
 			return and(side(inputSide), or(inHand, inDeck), treant);
 		case CardIds.SplishSplashWhelp_WW_819:
 			return and(side(inputSide), or(inHand, inDeck), dragon);
@@ -3929,7 +3928,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.Wither:
 			return and(side(inputSide), or(inDeck, inHand), undead);
-		case TempCardIds.WickedBlightspawn:
+		case CardIds.WickedBlightspawn_END_002:
 			return and(side(inputSide), or(inDeck, inHand), weapon);
 		case CardIds.WickedWitchdoctor:
 		case CardIds.WickedWitchdoctor_WON_083:

@@ -1,5 +1,4 @@
 import { GameState } from '@firestone/game-state';
-import { TempCardIds } from '@firestone/shared/common/service';
 import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
 import { GlobalHighlightCard } from './_registers';
 import { CardIds } from '@firestone-hs/reference-data';

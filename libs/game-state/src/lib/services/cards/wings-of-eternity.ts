@@ -9,7 +9,6 @@ import {
 	Race,
 	SetId,
 } from '@firestone-hs/reference-data';
-import { TempCardIds } from '@firestone/shared/common/service';
 import { canBeDiscoveredByClass, GuessedInfo, hasCorrectType } from '../../..';
 import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
@@ -19,7 +18,7 @@ import { filterCards } from './utils';
 // "from the past" = usable in Wild but not in Standard
 // The Dark Gift is applied dynamically by the game during the Discover process
 export const WingsOfEternity: GeneratingCard & StaticGeneratingCard = {
-	cardIds: [TempCardIds.WingsOfEternity as unknown as CardIds],
+	cardIds: [CardIds.WingsOfEternity_END_027],
 	publicCreator: true,
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
 		return {
