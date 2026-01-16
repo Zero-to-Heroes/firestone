@@ -110,6 +110,7 @@ export { Rhokdelar } from './rhokdelar';
 export { RingmasterWhatley } from './ringmaster-whatley';
 export { RippleInTime } from './ripple-in-time';
 export { Rotface } from './rotface';
+export { RunicAdornment } from './runic-adornment';
 export { RunicInscriptions } from './runic-inscriptions';
 export { ScaleReplica } from './scale-replica';
 export { SemiStablePortal } from './semi-stable-portal';
