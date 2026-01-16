@@ -75,6 +75,7 @@ export { LadyAzshara } from './lady-azshara';
 export { MadameLazul } from './madame-lazul';
 export { MagicTrick } from './magic-trick';
 export { Malkorok } from './malkorok';
+export { MechagnomeGuide } from './mechagnome-guide';
 export { MendTheTimeline } from './mend-the-timeline';
 export { Metrognome } from './metrognome';
 export { MismatchedFossils } from './mismatched-fossils';
