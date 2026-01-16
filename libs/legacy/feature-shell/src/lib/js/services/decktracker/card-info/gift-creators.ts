@@ -1119,6 +1119,8 @@ const internalGiftCreators = [
 	CardIds.DrawOffensivePlayTavernBrawlEnchantment,
 	CardIds.BobTheBartender_FindATripleToken_BG31_BOBt4,
 	CardIds.DissolvingOoze_TLC_252,
+	CardIds.VictoriousVrykul,
+	CardIds.ThiefOfFutures,
 	CardIds.EternalFirebolt_EternalFireboltEnchantment_END_025e,
 ];
 for (const cardId of Object.keys(cardsInfoCache)) {
