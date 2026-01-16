@@ -925,10 +925,17 @@ const getDynamicFilters = (
 				hasCorrectType(c, CardType.SPELL) && hasCost(c, '<=', 3) && fromAnotherClass(c, options.currentClass);
 		case CardIds.HighborneMentor_TIME_704:
 		case CardIds.HighborneMentor_HighbornePupilToken_TIME_704t:
-			return (c) =>
-				hasCorrectType(c, CardType.SPELL) &&
-				hasCost(c, '>=', 7) &&
-				canBeDiscoveredByClass(c, options.currentClass);
+			return filterCards(
+				allCards,
+				// So that we don't get cards from the arena-specific pool instead
+				{ ...options, format: GameFormat.FT_WILD, gameType: GameType.GT_RANKED },
+				cardId,
+				(c) =>
+					!isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
+					hasCorrectType(c, CardType.SPELL) &&
+					hasCost(c, '>=', 7) &&
+					canBeDiscoveredByClass(c, options.currentClass),
+			);
 
 		// Discover X Spell School Spell(s)
 		case CardIds.LightningReflexes:
