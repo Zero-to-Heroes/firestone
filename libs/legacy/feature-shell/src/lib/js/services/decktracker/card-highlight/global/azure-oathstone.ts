@@ -2,7 +2,6 @@ import { CardIds, hasCorrectTribe, Race } from '@firestone-hs/reference-data';
 import { GameState, getProcessedCard } from '@firestone/game-state';
 import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
 import { GlobalHighlightCard } from './_registers';
-import { TempCardIds } from '@firestone/shared/common/service';
 
 export const AzureOathstone: GlobalHighlightCard = {
 	cardIds: [CardIds.AzureQueenSindragosa_AzureOathstoneToken_TIME_852t3],

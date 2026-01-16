@@ -1,3 +1,4 @@
+import { BnetRegion } from '@firestone-hs/reference-data';
 import { SettingContext, SettingNode } from '../settings.types';
 import { achievementsSettings } from './achievements/_achievements-settings';
 import { arenaSettings } from './arena/_arena-settings';
@@ -33,7 +34,8 @@ export const settingsDefinition = (context: SettingContext): SettingNode => {
 			achievementsSettings(context),
 			integrationsSettings(context),
 			troubleshootingSettings(context),
-			modsSettings(context),
+			// Mods are now banned by NetEase in China
+			context.services.account.region$$.value !== BnetRegion.REGION_CN ? modsSettings(context) : null,
 		].filter((c) => !!c) as SettingNode[],
 	};
 };

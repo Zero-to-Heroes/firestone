@@ -1,12 +1,11 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { CardIds, CardType } from '@firestone-hs/reference-data';
-import { TempCardIds } from '@firestone/shared/common/service';
 import { hasCorrectType, hasCost } from '../../..';
 import { StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
 
 export const EternalToil: StaticGeneratingCard = {
-	cardIds: [TempCardIds.EternalToil as unknown as CardIds],
+	cardIds: [CardIds.EternalToil_END_020],
 	publicCreator: true,
 	dynamicPool: (input: StaticGeneratingCardInput) => {
 		const possibleCards = filterCards(

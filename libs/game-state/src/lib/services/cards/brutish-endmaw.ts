@@ -1,12 +1,11 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { CardIds, CardType } from '@firestone-hs/reference-data';
-import { TempCardIds } from '@firestone/shared/common/service';
 import { canBeDiscoveredByClass, hasCorrectType, hasCost } from '../../..';
 import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
 
 export const BrutishEndmaw: StaticGeneratingCard & GeneratingCard = {
-	cardIds: [TempCardIds.BrutishEndmaw as unknown as CardIds],
+	cardIds: [CardIds.BrutishEndmaw_END_013],
 	publicCreator: true,
 	dynamicPool: (input: StaticGeneratingCardInput) => {
 		const possibleCards = filterCards(

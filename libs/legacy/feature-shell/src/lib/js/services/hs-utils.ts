@@ -1,7 +1,6 @@
 import { BoosterType, CardClass, CardIds, GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';
 import { bwonsamdiBoonsEnchantments } from '@firestone/game-state';
-import { TempCardIds } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { CollectionCardType } from '../models/collection/collection-card-type.type';
 import { tutors } from './decktracker/card-info/card-tutors';
@@ -578,7 +577,7 @@ export const CURRENT_EFFECTS_WHITELIST = [
 	CardIds.WildernessPack_KnockOffPackEnchantment_MIS_104e,
 	CardIds.WorkForHagatha_WorkForHagathaTavernBrawlEnchantment,
 	CardIds.YshaarjTheDefiler_TrueCorruptionEnchantment,
-	TempCardIds.Chronikar_Enchantment,
+	CardIds.Chronikar_EonFragmentsEnchantment_END_006e,
 ];
 
 export const cardsRevealedWhenDrawn = [
@@ -611,6 +610,7 @@ export const cardsRevealedWhenDrawn = [
 	CardIds.Undermine_ImprovisedExplosiveTavernBrawlToken,
 	CardIds.Waxadred_WaxadredsCandleToken,
 	CardIds.YseraUnleashed_DreamPortalToken,
+	CardIds.TemporalAnomaly,
 ];
 
 // These are used to prevent info leaks in hand because we might know too much information

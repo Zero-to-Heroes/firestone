@@ -1,13 +1,12 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { CardIds, CardType, hasSpellSchool, SpellSchool } from '@firestone-hs/reference-data';
-import { TempCardIds } from '@firestone/shared/common/service';
 import { GuessedInfo } from '../../models/deck-card';
 import { hasCorrectType } from '../../related-cards/dynamic-pools';
 import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
 
 export const VoodooTotem: GeneratingCard & StaticGeneratingCard = {
-	cardIds: [TempCardIds.VoodooTotem as unknown as CardIds],
+	cardIds: [CardIds.VoodooTotem_END_029],
 	publicCreator: true,
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
 		const possibleCards = filterCards(

@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { CardIds } from '@firestone-hs/reference-data';
-import { TempCardIds } from '@firestone/shared/common/service';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { GameState } from '../../models/game-state';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
@@ -8,9 +7,9 @@ import { CounterType } from '../_exports';
 
 export class MinionsDeadThisTurnCounterDefinitionV2 extends CounterDefinitionV2<number> {
 	public override id: CounterType = 'deadMinionsThisTurn';
-	public override image = TempCardIds.RemnantOfRage;
+	public override image = CardIds.RemnantOfRage_END_004;
 	public override cards: readonly CardIds[] = [
-		TempCardIds.RemnantOfRage as unknown as CardIds,
+		CardIds.RemnantOfRage_END_004,
 		CardIds.VolcanicDrake_BRM_025,
 		CardIds.VolcanicLumberer,
 		CardIds.SolemnVigil,
