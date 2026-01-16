@@ -14,6 +14,10 @@ import { canBeDiscoveredByClass, GuessedInfo, hasCorrectType } from '../../..';
 import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
 
+// Wings of Eternity (END_027)
+// "Discover a Dragon from the past with a Dark Gift."
+// "from the past" = usable in Wild but not in Standard
+// The Dark Gift is applied dynamically by the game during the Discover process
 export const WingsOfEternity: GeneratingCard & StaticGeneratingCard = {
 	cardIds: [TempCardIds.WingsOfEternity as unknown as CardIds],
 	publicCreator: true,
@@ -26,10 +30,11 @@ export const WingsOfEternity: GeneratingCard & StaticGeneratingCard = {
 				input.allCards,
 				(c) =>
 					!isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
+					isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_WILD, GameType.GT_RANKED) &&
 					hasCorrectTribe(c, Race.DRAGON) &&
 					hasCorrectType(c, CardType.MINION) &&
 					canBeDiscoveredByClass(c, input.deckState.getCurrentClass()),
-				{ ...input.options, format: GameFormat.FT_STANDARD, gameType: GameType.GT_RANKED },
+				{ ...input.options, format: GameFormat.FT_WILD, gameType: GameType.GT_RANKED },
 			),
 		};
 	},
@@ -40,6 +45,7 @@ export const WingsOfEternity: GeneratingCard & StaticGeneratingCard = {
 			(c) =>
 				// "from the past" = usable in Wild but not in Standard
 				!isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
+				isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_WILD, GameType.GT_RANKED) &&
 				hasCorrectTribe(c, Race.DRAGON) &&
 				hasCorrectType(c, CardType.MINION) &&
 				canBeDiscoveredByClass(c, input.inputOptions.deckState.getCurrentClass()),

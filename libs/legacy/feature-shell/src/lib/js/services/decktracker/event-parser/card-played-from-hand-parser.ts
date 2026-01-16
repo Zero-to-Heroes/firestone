@@ -275,6 +275,23 @@ export class CardPlayedFromHandParser implements EventParser {
 			this.helper,
 			this.i18n,
 		);
+		const newAnachronos =
+			cardId === CardIds.Anachronos || cardId === CardIds.Anachronos_CORE_RLK_919
+				? [
+						...playerDeckAfterSpecialCaseUpdate.anachronos,
+						{
+							entityId: entityId,
+							cardId: cardId,
+							turn: currentState.gameTagTurnNumber,
+							playerEntities: currentState.playerDeck.board
+								?.map((e) => e.entityId)
+								.filter((e) => e !== entityId),
+							opponentEntities: currentState.opponentDeck.board
+								?.map((e) => e.entityId)
+								.filter((e) => e !== entityId),
+						},
+					]
+				: playerDeckAfterSpecialCaseUpdate.anachronos;
 		const finalPlayerDeck = playerDeckAfterSpecialCaseUpdate.update({
 			cardsPlayedThisMatch: isCardCountered
 				? playerDeckAfterSpecialCaseUpdate.cardsPlayedThisMatch
@@ -282,23 +299,7 @@ export class CardPlayedFromHandParser implements EventParser {
 						...playerDeckAfterSpecialCaseUpdate.cardsPlayedThisMatch,
 						newCardPlayedThisMatch,
 					] as readonly ShortCardWithTurn[]),
-			anachronos:
-				cardId === CardIds.Anachronos || cardId === CardIds.Anachronos_CORE_RLK_919
-					? [
-							...playerDeckAfterSpecialCaseUpdate.anachronos,
-							{
-								entityId: entityId,
-								cardId: cardId,
-								turn: currentState.gameTagTurnNumber,
-								playerEntities: playerDeckAfterSpecialCaseUpdate.board
-									?.map((e) => e.entityId)
-									.filter((e) => e !== entityId),
-								opponentEntities: opponentDeckAfterSpecialCaseUpdate.board
-									?.map((e) => e.entityId)
-									.filter((e) => e !== entityId),
-							},
-						]
-					: playerDeckAfterSpecialCaseUpdate.anachronos,
+			anachronos: newAnachronos,
 			additionalKnownCardsInHand: playerDeckAfterSpecialCaseUpdate.additionalKnownCardsInHand.filter(
 				(c, i) =>
 					c !== cardToAdd.cardId ||
