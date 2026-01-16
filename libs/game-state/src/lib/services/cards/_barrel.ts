@@ -25,8 +25,6 @@ export { BrutishEndmaw } from './brutish-endmaw';
 export { BygoneEchoes } from './bygone-echoes';
 export { CavernDreamer } from './cavern-dreamer';
 export { Chronogor } from './chronogor';
-export { ChromieBattleForMountHyjal } from './chromie-battle-for-mount-hyjal';
-export { ChromieCullingOfStratholme } from './chromie-culling-of-stratholme';
 export { ChromieEscapeFromDurnholde } from './chromie-escape-from-durnholde';
 export { ChromieOpeningTheDarkPortal } from './chromie-opening-the-dark-portal';
 export { ClashOfTheColossals } from './clash-of-the-colossals';
