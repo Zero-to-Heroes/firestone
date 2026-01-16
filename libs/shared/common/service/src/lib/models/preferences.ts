@@ -456,6 +456,7 @@ export class Preferences implements IPreferences {
 	readonly playerCardsShuffledIntoDeckCounter: BooleanWithLimited = true;
 	readonly opponentCardsShuffledIntoDeckCounter_: BooleanWithLimited = false; // Will default it to true once it's relevant
 	readonly playerOverdraftCounter: BooleanWithLimited = true;
+	readonly playerOverloadThisGameCounter: boolean = true;
 	readonly playerNagaGiantCounter: BooleanWithLimited = true;
 	readonly playerGardensGraceCounter: BooleanWithLimited = true;
 	readonly playerAnachronosCounter: BooleanWithLimited = true;
