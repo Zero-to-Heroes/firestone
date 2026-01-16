@@ -11,7 +11,7 @@ export const ThiefOfFutures: GeneratingCard = {
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
 		const possibleCards = input.opponentDeckState.deck.map((c) => c.cardId).filter((c) => !!c);
 		return {
-			possibleCards: possibleCards,
+			possibleCards,
 		};
 	},
 };
