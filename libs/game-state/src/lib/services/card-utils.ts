@@ -67,7 +67,8 @@ export const getProcessedCard = (
 
 	const isEliseLocation =
 		refCard.id?.startsWith(CardIds.EliseTheNavigator_TLC_100) && refCard.id !== CardIds.EliseTheNavigator_TLC_100;
-	if (isEliseLocation) {
+	const isIgnisWeapon = refCard.id?.startsWith('TTN_060');
+	if (isEliseLocation || isIgnisWeapon) {
 		const fullGameState = deckState.fullGameState;
 		if (fullGameState) {
 			const cardInState = fullGameState.AllEntities.find((c) => c.entityId === entityId);

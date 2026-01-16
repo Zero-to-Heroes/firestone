@@ -2886,6 +2886,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), minion, legendary);
 		case CardIds.RingOfRefreshmentTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), spell);
+		case CardIds.RippleInTime:
+			return and(side(inputSide), inDeck, minion);
 		case CardIds.RiskySkipper:
 			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.RitualOfTheNewMoon_EDR_461:
@@ -4062,7 +4064,7 @@ export const cardIdSelector = (
 		case CardIds.CandleBreath:
 			return and(side(inputSide), or(inHand, inDeck), dragon);
 		case CardIds.DraconicHerald:
-			return and(side(inputSide), inDeck, minion);
+			return and(side(inputSide), or(inDeck, inHand), dragon);
 		case CardIds.GrimscaleOracleLegacy:
 		case CardIds.GrimscaleOracleVanilla:
 		case CardIds.GrimscaleChum:
