@@ -575,6 +575,8 @@ export const updateGlobalEffects = (
 				card?.update({
 					// So that if the card is sent back to hand, we can track multiple plays of it
 					entityId: null,
+					// Always use the ref cost
+					actualManaCost: null,
 				}),
 			);
 			// console.debug('added global effect', newGlobalEffects);
