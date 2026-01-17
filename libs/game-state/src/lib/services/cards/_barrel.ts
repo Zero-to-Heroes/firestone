@@ -108,6 +108,7 @@ export { ReplicatorInator } from './replicator-inator';
 export { ResortValet } from './resort-valet';
 export { Rhokdelar } from './rhokdelar';
 export { RingmasterWhatley } from './ringmaster-whatley';
+export { RiftWarden } from './rift-warden';
 export { RippleInTime } from './ripple-in-time';
 export { Rotface } from './rotface';
 export { RunicInscriptions } from './runic-inscriptions';
