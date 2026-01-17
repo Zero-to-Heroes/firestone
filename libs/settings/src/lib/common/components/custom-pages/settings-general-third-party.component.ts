@@ -6,7 +6,7 @@ import {
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
-import { PreferencesService } from '@firestone/shared/common/service';
+import { HEARTHPWN_SYNC, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import {
 	ApiRunner,
@@ -122,7 +122,7 @@ import { interval, Observable, Subscription } from 'rxjs';
 				></preference-toggle>
 			</section>
 
-			<!-- <section class="hearthpwn">
+			<section class="hearthpwn" *ngIf="hearthpwnSync">
 				<h2><img [src]="" class="icon" />{{ hearthpwn.title }}</h2>
 				<div class="pitch">
 					<p [innerHTML]="hearthpwn.pitch"></p>
@@ -149,7 +149,7 @@ import { interval, Observable, Subscription } from 'rxjs';
 					field="hearthpwnSync"
 					[label]="hearthpwn.toggleLabel"
 				></preference-toggle>
-			</section> -->
+			</section>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -161,6 +161,7 @@ export class SettingsGeneralThirdPartyComponent
 	oocLoggedIn$: Observable<boolean>;
 	oocLoginUrl = `https://outof.games/oauth/authorize/?client_id=oqEn7ONIAOmugFTjFQGe1lFSujGxf3erhNDDTvkC&response_type=code&scope=hearthcollection&redirect_uri=https://www.firestoneapp.com/oog-login.html`;
 
+	hearthpwnSync = HEARTHPWN_SYNC;
 	hearthpwnLoggedIn$: Observable<boolean>;
 	hearthpwnLoginUrl$: Observable<string>;
 
@@ -262,6 +263,11 @@ export class SettingsGeneralThirdPartyComponent
 		await this.ow.bringToFront('OutOfCardsAuthWindow');
 	}
 
+	oocDisconnect() {
+		console.log('disconnecting out of cards');
+		this.prefs.udpateOutOfCardsToken(null);
+	}
+
 	async hearthpwnConnect(loginToken: string) {
 		this.ow.openUrlInDefaultBrowser(`https://www.hearthpwn.com/set-auth/${loginToken}?provider=Firestone`);
 		this.hearthpwnSub = interval(5000).subscribe(async () => {
@@ -279,13 +285,11 @@ export class SettingsGeneralThirdPartyComponent
 		});
 	}
 
-	oocDisconnect() {
-		console.log('disconnecting out of cards');
-		this.prefs.udpateOutOfCardsToken(null);
-	}
-
-	hearthpwnDisconnect() {
-		console.warn('[hearthpwn] disconnecting hearthpwn, NOT IMPLEMENTED YET');
+	async hearthpwnDisconnect() {
+		this.hearthpwnSub?.unsubscribe();
+		await this.prefs.updatePrefs('hearthpwnAuthToken', undefined);
+		await this.prefs.updatePrefs('hearthpwnUserId', undefined);
+		await this.prefs.updatePrefs('hearthpwnSync', false);
 	}
 
 	override ngOnDestroy(): void {

@@ -4,14 +4,27 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Card } from '@firestone/memory';
-import { PreferencesService } from '@firestone/shared/common/service';
+import { HEARTHPWN_SYNC, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractFacadeService, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
-import { debounceTime, distinctUntilChanged, filter, map, take, timeout, catchError, throwError } from 'rxjs';
+import {
+	catchError,
+	concat,
+	debounceTime,
+	distinctUntilChanged,
+	EMPTY,
+	firstValueFrom,
+	map,
+	skip,
+	switchMap,
+	take,
+	tap,
+	throwError,
+	timeout,
+} from 'rxjs';
 import { COLLECTION_MANAGER_SERVICE_TOKEN, ICollectionManagerService } from '../collection-manager.interface';
 
 const PROFILE_UPLOAD_URL = `https://www.hearthpwn.com/client/upload`;
 
-// TODO: how to get a user's Hearthpwn userId and authToken?
 @Injectable()
 export class HearthpwnService extends AbstractFacadeService<HearthpwnService> {
 	private collectionManager: ICollectionManagerService;
@@ -29,7 +42,9 @@ export class HearthpwnService extends AbstractFacadeService<HearthpwnService> {
 	}
 
 	protected async init() {
-		return;
+		if (!HEARTHPWN_SYNC) {
+			return;
+		}
 		console.debug('[hearthpwn] init');
 		this.collectionManager = AppInjector.get(COLLECTION_MANAGER_SERVICE_TOKEN);
 		this.http = AppInjector.get(HttpClient);
@@ -41,56 +56,61 @@ export class HearthpwnService extends AbstractFacadeService<HearthpwnService> {
 		this.prefs.preferences$$
 			.pipe(
 				map((prefs) => prefs.hearthpwnSync),
-				filter((sync) => sync),
 				distinctUntilChanged(),
-				take(1),
+				tap((shouldSync) => console.log('[hearthpwn] should sync', shouldSync)),
+				switchMap((shouldSync) =>
+					shouldSync
+						? concat(
+								this.collectionManager.collection$$.pipe(take(1)), // Sync immediately on enable
+								this.collectionManager.collection$$.pipe(skip(1), debounceTime(10000)), // Debounce subsequent changes
+							)
+						: EMPTY,
+				),
 			)
-			.subscribe((activeSub) => {
-				console.debug('[hearthpwn] activating hearthpwn sync');
-				this.collectionManager.collection$$
-					.pipe(debounceTime(10000), distinctUntilChanged())
-					.subscribe(async (collection) => {
-						console.debug('[hearthpwn] will sync collection', collection);
-						const uploadData: UploadData = await this.transformCollection(collection);
-						console.debug('[hearthpwn] uploadData', uploadData, JSON.stringify(uploadData.User));
-						const encryptedUser = await this.encrypt(JSON.stringify(uploadData.User));
-						const encryptedData = await this.encrypt(JSON.stringify(uploadData.Game));
-						console.debug('[hearthpwn] encrypted', encryptedUser);
-						const payload = {
-							user: encryptedUser!,
-							data: encryptedData!,
-						};
-						console.debug('[hearthpwn] upload data', payload);
-						const encoded = encodeDictionaryAsForm(payload);
-						console.debug('[hearthpwn] encoded data', encoded);
+			.subscribe((collection) => this.syncCollection(collection));
+	}
 
-						try {
-							const uploadResult = await this.http
-								.post(PROFILE_UPLOAD_URL, encoded, {
-									headers: {
-										'Content-Type': 'application/x-www-form-urlencoded; charset=us-ascii',
-										origin: 'https://www.hearthpwn.com',
-									},
-									responseType: 'text',
-								})
-								.pipe(
-									timeout(120000), // 120 seconds timeout for large uploads
-									catchError((error) => {
-										if (error.name === 'TimeoutError') {
-											console.error('[hearthpwn] Upload timeout after 120 seconds');
-										} else {
-											console.error('[hearthpwn] Upload error', error);
-										}
-										return throwError(() => error);
-									}),
-								)
-								.toPromise();
-							console.debug('[hearthpwn] upload result', uploadResult);
-						} catch (error) {
-							console.error('[hearthpwn] Failed to upload collection', error);
-						}
-					});
-			});
+	private async syncCollection(collection: readonly Card[]): Promise<void> {
+		console.debug('[hearthpwn] will sync collection', collection);
+		const uploadData: UploadData = await this.transformCollection(collection);
+		console.debug('[hearthpwn] uploadData', uploadData, JSON.stringify(uploadData.User));
+		const encryptedUser = await this.encrypt(JSON.stringify(uploadData.User));
+		const encryptedData = await this.encrypt(JSON.stringify(uploadData.Game));
+		console.debug('[hearthpwn] encrypted', encryptedUser);
+		const payload = {
+			user: encryptedUser!,
+			data: encryptedData!,
+		};
+		console.debug('[hearthpwn] upload data', payload);
+		const encoded = encodeDictionaryAsForm(payload);
+		console.debug('[hearthpwn] encoded data', encoded);
+
+		try {
+			const uploadResult = await firstValueFrom(
+				this.http
+					.post(PROFILE_UPLOAD_URL, encoded, {
+						headers: {
+							'Content-Type': 'application/x-www-form-urlencoded; charset=us-ascii',
+							origin: 'https://www.hearthpwn.com',
+						},
+						responseType: 'text',
+					})
+					.pipe(
+						timeout(120000),
+						catchError((error) => {
+							if (error.name === 'TimeoutError') {
+								console.error('[hearthpwn] Upload timeout after 120 seconds');
+							} else {
+								console.error('[hearthpwn] Upload error', error);
+							}
+							return throwError(() => error);
+						}),
+					),
+			);
+			console.debug('[hearthpwn] upload result', uploadResult);
+		} catch (error) {
+			console.error('[hearthpwn] Failed to upload collection', error);
+		}
 	}
 
 	private async encrypt(data: string): Promise<string | null> {
@@ -106,8 +126,8 @@ export class HearthpwnService extends AbstractFacadeService<HearthpwnService> {
 		const userId = prefs.hearthpwnUserId;
 		const authToken = prefs.hearthpwnAuthToken;
 		const profile: UploadUser = {
-			AuthToken: authToken,
-			UserId: userId,
+			AuthToken: authToken!,
+			UserId: userId!,
 			Preferences: {},
 		};
 		const cards = memoryCollection
