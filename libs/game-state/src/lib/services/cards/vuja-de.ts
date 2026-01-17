@@ -20,18 +20,18 @@ export const VujaDe: GeneratingCard & StaticGeneratingCard = {
 	dynamicPool: (input: StaticGeneratingCardInput) => {
 		// Get spells played this match
 		const spellsPlayed = input.inputOptions.deckState.spellsPlayedThisMatch
-			.map((c) => c.cardId)
-			.filter((c) => !!c);
+			?.map((c) => c.cardId)
+			.filter((c) => !!c) ?? [];
 		const uniqueSpells = [...new Set(spellsPlayed)];
 
 		// Get minions played this match
 		const minionsPlayed = input.inputOptions.deckState.cardsPlayedThisMatch
-			.map((c) => c.cardId)
+			?.map((c) => c.cardId)
 			.filter((c) => !!c)
 			.filter((cardId) => {
 				const card = input.allCards.getCard(cardId);
 				return card?.type?.toUpperCase() === CardType[CardType.MINION];
-			});
+			}) ?? [];
 		const uniqueMinions = [...new Set(minionsPlayed)];
 
 		// Check if Combo is active (cards have been played this turn)
