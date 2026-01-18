@@ -36,42 +36,32 @@ export const VujaDe: GeneratingCard & StaticGeneratingCard = {
 				})
 				.filter((c, index, self) => self.indexOf(c) === index) ?? [];
 
-		// Check if Combo is active (cards have been played this turn)
-		const comboActive = (input.inputOptions.deckState.cardsPlayedThisTurn?.length ?? 0) > 0;
-
-		// Return pool based on whether Combo is active
-		if (comboActive) {
-			return [...uniqueSpells, ...uniqueMinions];
-		}
-		return uniqueSpells;
+		// Always show both spells and minions in the dynamic pool
+		return [...uniqueSpells, ...uniqueMinions];
 	},
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
-		// Get spells played this match
-		const uniqueSpells =
-			input.deckState.spellsPlayedThisMatch
-				?.map((c) => c.cardId)
-				.filter((c) => !!c)
-				.filter((c, index, self) => self.indexOf(c) === index) ?? [];
-
-		// Get minions played this match
-		const uniqueMinions =
-			input.deckState.cardsPlayedThisMatch
-				?.map((c) => c.cardId)
-				.filter((c) => !!c)
-				.filter((cardId) => {
-					const card = input.allCards.getCard(cardId);
-					return card?.type?.toUpperCase() === CardType[CardType.MINION];
-				})
-				.filter((c, index, self) => self.indexOf(c) === index) ?? [];
-
 		// createdIndex 0 = the spell discovered (always available)
 		// createdIndex 1 = the minion discovered (only if Combo was active)
 		if (input.card.createdIndex === 0) {
+			const uniqueSpells =
+				input.deckState.spellsPlayedThisMatch
+					?.map((c) => c.cardId)
+					.filter((c) => !!c)
+					.filter((c, index, self) => self.indexOf(c) === index) ?? [];
 			return {
 				cardType: CardType.SPELL,
 				possibleCards: uniqueSpells,
 			};
 		} else if (input.card.createdIndex === 1) {
+			const uniqueMinions =
+				input.deckState.cardsPlayedThisMatch
+					?.map((c) => c.cardId)
+					.filter((c) => !!c)
+					.filter((cardId) => {
+						const card = input.allCards.getCard(cardId);
+						return card?.type?.toUpperCase() === CardType[CardType.MINION];
+					})
+					.filter((c, index, self) => self.indexOf(c) === index) ?? [];
 			return {
 				cardType: CardType.MINION,
 				possibleCards: uniqueMinions,
