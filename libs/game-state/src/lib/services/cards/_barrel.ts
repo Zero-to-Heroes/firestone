@@ -125,6 +125,7 @@ export { RiftWarden } from './rift-warden';
 export { RingmasterWhatley } from './ringmaster-whatley';
 export { RippleInTime } from './ripple-in-time';
 export { Rotface } from './rotface';
+export { RunefueledGolem } from './runefueled-golem';
 export { RunicAdornment } from './runic-adornment';
 export { RunicInscriptions } from './runic-inscriptions';
 export { ScaleReplica } from './scale-replica';
