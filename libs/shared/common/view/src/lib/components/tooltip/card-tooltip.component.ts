@@ -80,7 +80,7 @@ import { CardTooltipPositionType } from './card-tooltip-position.type';
 					<div class="info">
 						<div class="info-item cost" *ngIf="info.cost !== null && info.cost !== undefined">
 							<div class="label" [fsTranslate]="'decktracker.guessed-info.cost'"></div>
-							<div class="value">{{ info.cost }}</div>
+							<div class="value">{{ formatCost(info.cost) }}</div>
 						</div>
 						<div
 							class="info-item attack-buff"
@@ -463,6 +463,13 @@ export class CardTooltipComponent
 		return schools
 			.map((school) => this.i18n.translateString(`global.spellschool.${SpellSchool[school].toLowerCase()}`))
 			.join(', ');
+	}
+
+	formatCost(cost: number | { cost: number; comparison: '==' | '>=' | '<=' | '>' | '<' }): string {
+		if (typeof cost === 'number') {
+			return cost.toString();
+		}
+		return `${cost.comparison} ${cost.cost}`;
 	}
 
 	private async keepInBounds(top: number, left: number, height: number, width: number) {
