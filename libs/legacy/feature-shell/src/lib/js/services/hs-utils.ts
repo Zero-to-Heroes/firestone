@@ -176,6 +176,7 @@ export const deathrattleGlobalEffectCards = [
 	CardIds.Therazane_DEEP_036,
 	CardIds.UnluckyPowderman_WW_367,
 	CardIds.Seismopod_DINO_421,
+	CardIds.InfiniteWolf,
 ];
 
 export const startOfGameGlobalEffectCards = [
@@ -334,6 +335,7 @@ export const getCardForGlobalEffect = (cardId: CardIds): string => {
 };
 
 export const CURRENT_EFFECTS_WHITELIST = [
+	CardIds.StasisElemental_StasisEnchantment,
 	CardIds.AceWayfinder_AceWayfinderFutureBuffEnchantment_GDB_450e,
 	CardIds.AegwynnTheGuardian_GuardiansLegacyPlayerCoreEnchantment,
 	CardIds.Agamaggan_CorruptedThornsEnchantment_EDR_489e1,

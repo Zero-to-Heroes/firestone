@@ -429,6 +429,9 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 		if (cardType === 'legendary') {
 			return this.allCards.getCard(cardId)?.rarity === 'Legendary';
 		}
+		if (cardType === 'taverns_of_time') {
+			return this.allCards.getCard(cardId)?.set?.toLowerCase() === 'taverns_of_time';
+		}
 		if (cardType === 'treasure') {
 			return false;
 		}

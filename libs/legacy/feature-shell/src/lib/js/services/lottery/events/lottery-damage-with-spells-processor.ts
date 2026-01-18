@@ -30,6 +30,7 @@ export class LotteryDamageWithSpellsProcessor implements LotteryProcessor {
 		}
 
 		const damageDealt = Object.values(event.additionalData.targets)
+			.filter((target) => target.Damage > 0 && target.Damage < 10000) // For infinite damage
 			.map((target) => target.Damage)
 			.reduce((sum, current) => sum + current, 0);
 		// console.debug('[lottery] damage with spells damage dealt', damageDealt, currentState.damageWithSpells);

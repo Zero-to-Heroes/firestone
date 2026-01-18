@@ -2039,6 +2039,9 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), givesHeroAttack);
 		case CardIds.KeeperOfFlame_FIR_928:
 			return and(side(inputSide), or(inDeck, inHand), minion);
+		// Keeper Stalladris - After you cast a Choose One spell, add copies of both choices to your hand.
+		case CardIds.KeeperStalladris:
+			return and(side(inputSide), or(inDeck, inHand), spell, chooseOne);
 		case CardIds.KeepersStrength_YOG_509:
 			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.KelthuzadTheInevitable_REV_514:
@@ -3189,6 +3192,9 @@ export const cardIdSelector = (
 		case CardIds.SmallTimeBuccaneer:
 		case CardIds.SmallTimeBuccaneer_WON_351:
 			return and(side(inputSide), or(inHand, inDeck), weapon);
+		case CardIds.SmugglersCrate:
+		case CardIds.SmugglersCrate_WON_347:
+			return and(side(inputSide), or(inHand, inDeck), beast);
 		case CardIds.Smokescreen:
 			return and(side(inputSide), inDeck, deathrattle);
 		case CardIds.SmolderingStrength_FIR_914:

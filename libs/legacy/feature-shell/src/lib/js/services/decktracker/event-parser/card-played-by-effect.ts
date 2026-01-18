@@ -128,6 +128,8 @@ export class CardPlayedByEffectParser implements EventParser {
 				cardWithZone?.update({
 					// So that if the card is sent back to hand, we can track multiple plays of it
 					entityId: null,
+					// Use the ref mana cost
+					actualManaCost: null,
 				} as DeckCard),
 			);
 		}
