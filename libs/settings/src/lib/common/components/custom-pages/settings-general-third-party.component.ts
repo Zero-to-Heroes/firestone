@@ -123,7 +123,7 @@ import { interval, Observable, Subscription } from 'rxjs';
 			</section>
 
 			<section class="hearthpwn" *ngIf="hearthpwnSync">
-				<h2><img [src]="" class="icon" />{{ hearthpwn.title }}</h2>
+				<h2><img [src]="hearthpwn.icon" class="icon" />{{ hearthpwn.title }}</h2>
 				<div class="pitch">
 					<p [innerHTML]="hearthpwn.pitch"></p>
 				</div>

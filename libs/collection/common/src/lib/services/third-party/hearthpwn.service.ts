@@ -62,7 +62,16 @@ export class HearthpwnService extends AbstractFacadeService<HearthpwnService> {
 					shouldSync
 						? concat(
 								this.collectionManager.collection$$.pipe(take(1)), // Sync immediately on enable
-								this.collectionManager.collection$$.pipe(skip(1), debounceTime(10000)), // Debounce subsequent changes
+								this.collectionManager.collection$$.pipe(
+									skip(1),
+									debounceTime(10000),
+									distinctUntilChanged(
+										(a, b) =>
+											a?.length === b?.length &&
+											a.map((c) => cardCount(c)).reduce((a, b) => a + b, 0) ===
+												b.map((c) => cardCount(c)).reduce((a, b) => a + b, 0),
+									),
+								), // Debounce subsequent changes
 							)
 						: EMPTY,
 				),
@@ -288,3 +297,6 @@ class StringCipherBridge {
 		});
 	}
 }
+
+const cardCount = (card: Card) =>
+	(card.count ?? 0) + (card.premiumCount ?? 0) + (card.diamondCount ?? 0) + (card.signatureCount ?? 0);
