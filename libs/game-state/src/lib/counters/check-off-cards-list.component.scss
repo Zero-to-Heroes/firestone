@@ -31,7 +31,8 @@
 .scalable {
 	transform-origin: top right;
 	position: relative;
-	transform: scale(var(--counters-widgets-scale, 1));
+	transform: scale(var(--card-tooltip-scale, 1));
+	// zoom: var(--card-tooltip-scale, 1);
 }
 
 .deck-list {

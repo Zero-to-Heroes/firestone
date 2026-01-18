@@ -1,0 +1,72 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
+/**
+ * Vuja De (TOT_108)
+ * Text: "Discover a copy of a spell you played this game. Combo: And a minion."
+ * 
+ * Base effect: Discover a spell from spells you've played this game (1 card)
+ * Combo effect: Also discover a minion from minions you've played this game (2 cards total)
+ * 
+ * Since this is a Discover card, it uses guessInfo for the pool.
+ * The dynamicPool is used for showing what cards can potentially be generated on the board/in hand.
+ */
+import { CardIds, CardType } from '@firestone-hs/reference-data';
+import { GuessedInfo } from '../../models/deck-card';
+import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
+
+export const VujaDe: GeneratingCard & StaticGeneratingCard = {
+	cardIds: [CardIds.DéjàVu],
+	hasSequenceInfo: true,
+	publicCreator: true,
+	dynamicPool: (input: StaticGeneratingCardInput) => {
+		// Get spells played this match
+		const uniqueSpells =
+			input.inputOptions.deckState.spellsPlayedThisMatch
+				?.map((c) => c.cardId)
+				.filter((c) => !!c)
+				.filter((c, index, self) => self.indexOf(c) === index) ?? [];
+
+		// Get minions played this match
+		const uniqueMinions =
+			input.inputOptions.deckState.cardsPlayedThisMatch
+				?.map((c) => c.cardId)
+				.filter((c) => !!c)
+				.filter((cardId) => {
+					const card = input.allCards.getCard(cardId);
+					return card?.type?.toUpperCase() === CardType[CardType.MINION];
+				})
+				.filter((c, index, self) => self.indexOf(c) === index) ?? [];
+
+		// Always show both spells and minions in the dynamic pool
+		return [...uniqueSpells, ...uniqueMinions];
+	},
+	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
+		// createdIndex 0 = the spell discovered (always available)
+		// createdIndex 1 = the minion discovered (only if Combo was active)
+		if (input.card.createdIndex === 0) {
+			const uniqueSpells =
+				input.deckState.spellsPlayedThisMatch
+					?.map((c) => c.cardId)
+					.filter((c) => !!c)
+					.filter((c, index, self) => self.indexOf(c) === index) ?? [];
+			return {
+				cardType: CardType.SPELL,
+				possibleCards: uniqueSpells,
+			};
+		} else if (input.card.createdIndex === 1) {
+			const uniqueMinions =
+				input.deckState.cardsPlayedThisMatch
+					?.map((c) => c.cardId)
+					.filter((c) => !!c)
+					.filter((cardId) => {
+						const card = input.allCards.getCard(cardId);
+						return card?.type?.toUpperCase() === CardType[CardType.MINION];
+					})
+					.filter((c, index, self) => self.indexOf(c) === index) ?? [];
+			return {
+				cardType: CardType.MINION,
+				possibleCards: uniqueMinions,
+			};
+		}
+		return null;
+	},
+};
