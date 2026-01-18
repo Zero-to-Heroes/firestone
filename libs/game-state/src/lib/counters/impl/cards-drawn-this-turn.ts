@@ -34,7 +34,7 @@ export class CardsDrawnThisTurnCounterDefinitionV2 extends CounterDefinitionV2<n
 			label: (i18n: ILocalizationService): string =>
 				i18n.translateString('settings.decktracker.your-deck.counters.cards-drawn-this-turn-label'),
 			tooltip: (i18n: ILocalizationService, allCards: CardsFacadeService): string =>
-				i18n.translateString('settings.decktracker.opponent-deck.counters.cards-drawn-this-turn-tooltip'),
+				i18n.translateString('settings.decktracker.your-deck.counters.cards-drawn-this-turn-tooltip'),
 		},
 	};
 

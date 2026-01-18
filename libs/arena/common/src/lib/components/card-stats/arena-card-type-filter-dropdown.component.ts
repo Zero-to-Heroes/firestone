@@ -44,7 +44,7 @@ export class ArenaCardTypeFilterDropdownComponent
 	protected filterConfig: FilterUrlConfig<ArenaCardTypeFilterType, Preferences> = {
 		paramName: 'arenaActiveCardTypeFilter',
 		preferencePath: 'arenaActiveCardTypeFilter',
-		validValues: ['all', 'legendary', 'other'],
+		validValues: ['all', 'legendary', 'taverns_of_time', 'other'],
 	};
 
 	constructor(
@@ -68,7 +68,7 @@ export class ArenaCardTypeFilterDropdownComponent
 		]).pipe(
 			filter(([filter]) => !!filter),
 			this.mapData(([filter]) => {
-				const options = ['all', 'legendary', 'treasure', 'other'].map(
+				const options = ['all', 'legendary', 'taverns_of_time', 'other'].map(
 					(option) =>
 						({
 							value: option,

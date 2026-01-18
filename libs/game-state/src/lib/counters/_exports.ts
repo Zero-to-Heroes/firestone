@@ -72,6 +72,7 @@ import { MulticasterCounterDefinitionV2 } from './impl/multicaster';
 import { NagaGiantCounterDefinitionV2 } from './impl/naga-giant';
 import { NextStarshipLaunchCounterDefinitionV2 } from './impl/next-starship-launch';
 import { OverdraftCounterDefinitionV2 } from './impl/overdraft';
+import { OverloadThisGameCounterDefinitionV2 } from './impl/overload-this-game';
 import { PiratesSummonedCounterDefinitionV2 } from './impl/pirates-summoned';
 import { PogoCounterDefinitionV2 } from './impl/pogo';
 import { ProtossMinionReductionCounterDefinitionV2 } from './impl/protoss-minion-reduction';
@@ -177,6 +178,7 @@ export const getAllCounters: (
 	new DragoncallerAlannaCounterDefinitionV2(i18n, allCards),
 	new TreantDeadCounterDefinitionV2(i18n, allCards),
 	new MinionsDeadThisTurnCounterDefinitionV2(i18n, allCards),
+	new OverloadThisGameCounterDefinitionV2(i18n, allCards),
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n, allCards),
 	new BallerBuffCounterDefinitionV2(i18n, allCards),
@@ -214,6 +216,7 @@ export type CounterType =
 	| 'renferalTheMalignant'
 	| 'cardsShuffledIntoDeck'
 	| 'ysondre'
+	| 'overloadThisGame'
 	| 'dragonsInHand'
 	| 'imbue'
 	| 'tableFlip'

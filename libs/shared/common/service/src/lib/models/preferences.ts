@@ -456,6 +456,7 @@ export class Preferences implements IPreferences {
 	readonly playerCardsShuffledIntoDeckCounter: BooleanWithLimited = true;
 	readonly opponentCardsShuffledIntoDeckCounter_: BooleanWithLimited = false; // Will default it to true once it's relevant
 	readonly playerOverdraftCounter: BooleanWithLimited = true;
+	readonly playerOverloadThisGameCounter: boolean = true;
 	readonly playerNagaGiantCounter: BooleanWithLimited = true;
 	readonly playerGardensGraceCounter: BooleanWithLimited = true;
 	readonly playerAnachronosCounter: BooleanWithLimited = true;
@@ -766,9 +767,9 @@ export class Preferences implements IPreferences {
 	readonly outOfCardsShowNotifOnSync: boolean = false;
 	readonly hearthpwnSync: boolean = false;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly hearthpwnUserId: number;
+	readonly hearthpwnUserId: number | undefined;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly hearthpwnAuthToken: string;
+	readonly hearthpwnAuthToken: string | undefined;
 	readonly hsGuruCollectionSync: boolean = false;
 
 	readonly d0nkeySync: boolean = true;

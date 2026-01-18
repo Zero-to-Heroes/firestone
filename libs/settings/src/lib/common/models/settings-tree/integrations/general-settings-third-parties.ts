@@ -9,6 +9,7 @@ export const generalThirdPartiesSettings = (context: SettingContext): SettingNod
 		sections: [
 			{
 				id: 'general-third-parties',
+				keywords: ['hearthpwn', 'd0nkey', 'hsguru', 'out of cards', 'out of games', 'vicious syndicate'],
 				componentType: 'SettingsGeneralThirdPartyComponent',
 			},
 		],

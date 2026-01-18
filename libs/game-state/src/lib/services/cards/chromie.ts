@@ -3,9 +3,9 @@ import { CardIds } from '@firestone-hs/reference-data';
 import { GuessedInfo } from '../../models/deck-card';
 import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 
-// Chromie, Bronze Emissary (TIME_103)
+// Chromie (TIME_103)
 // "Discover a copy of a card you played this game."
-export const ChromieBronzeEmissary: GeneratingCard & StaticGeneratingCard = {
+export const Chromie: GeneratingCard & StaticGeneratingCard = {
 	cardIds: [CardIds.Chromie_TIME_103],
 	publicCreator: true,
 	dynamicPool: (input: StaticGeneratingCardInput) => {
@@ -15,8 +15,7 @@ export const ChromieBronzeEmissary: GeneratingCard & StaticGeneratingCard = {
 	},
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
 		// Get all unique cards played this match by the player
-		const playedCardIds =
-			input.deckState.cardsPlayedThisMatch?.map((c) => c.cardId).filter((c) => !!c) ?? [];
+		const playedCardIds = input.deckState.cardsPlayedThisMatch?.map((c) => c.cardId).filter((c) => !!c) ?? [];
 		return {
 			possibleCards: [...new Set(playedCardIds)],
 		};
