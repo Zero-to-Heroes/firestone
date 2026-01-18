@@ -84,6 +84,7 @@ export { KaldoreiCultivator } from './kaldorei-cultivator';
 export { KabalCourier } from './kabal-courier';
 export { Kiljaeden } from './kiljaeden';
 export { LadyAzshara } from './lady-azshara';
+export { LockAndLoad } from './lock-and-load';
 export { LotusAgents } from './lotus-agents';
 export { MadameLazul } from './madame-lazul';
 export { Magicfin } from './magicfin';
