@@ -60,6 +60,7 @@ export { FlameBehemoth } from './flame-behemoth';
 export { FoolsGold } from './fools-gold';
 export { ForgottenMillenium } from './forgotten-millenium';
 export { GorgonzormuDeliciousCheese } from './gorgonzormu-delicious-cheese';
+export { GravelsnoutKnight } from './gravelsnout-knight';
 export { Grillmaster } from './grillmaster';
 export { GrimestreetInformant } from './grimestreet-informant';
 export { GuitarSoloist } from './guitar-soloist';
