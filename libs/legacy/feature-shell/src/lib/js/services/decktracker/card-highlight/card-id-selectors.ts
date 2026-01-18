@@ -3189,6 +3189,9 @@ export const cardIdSelector = (
 		case CardIds.SmallTimeBuccaneer:
 		case CardIds.SmallTimeBuccaneer_WON_351:
 			return and(side(inputSide), or(inHand, inDeck), weapon);
+		case CardIds.SmugglersCrate:
+		case CardIds.SmugglersCrate_WON_347:
+			return and(side(inputSide), or(inHand, inDeck), beast);
 		case CardIds.Smokescreen:
 			return and(side(inputSide), inDeck, deathrattle);
 		case CardIds.SmolderingStrength_FIR_914:
