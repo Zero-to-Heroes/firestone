@@ -6,11 +6,12 @@
  * Generates random Hunter cards (any type) when spells are cast this turn.
  */
 import { CardClass, CardIds } from '@firestone-hs/reference-data';
+import { GuessedInfo } from '../../models/deck-card';
 import { hasCorrectClass } from '../../related-cards/dynamic-pools';
-import { StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
+import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
 
-export const LockAndLoad: StaticGeneratingCard = {
+export const LockAndLoad: GeneratingCard & StaticGeneratingCard = {
 	cardIds: [CardIds.LockAndLoad_AT_061, CardIds.LockAndLoad_CORE_AT_061, CardIds.LockAndLoad_WON_023],
 	publicCreator: true,
 	dynamicPool: (input: StaticGeneratingCardInput) => {
@@ -20,5 +21,16 @@ export const LockAndLoad: StaticGeneratingCard = {
 			(c) => hasCorrectClass(c, CardClass.HUNTER),
 			input.inputOptions,
 		);
+	},
+	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
+		return {
+			cardClasses: [CardClass.HUNTER],
+			possibleCards: filterCards(
+				LockAndLoad.cardIds[0],
+				input.allCards,
+				(c) => hasCorrectClass(c, CardClass.HUNTER),
+				input.options,
+			),
+		};
 	},
 };
