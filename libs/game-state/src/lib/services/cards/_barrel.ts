@@ -31,6 +31,7 @@ export { ChromieOpeningTheDarkPortal } from './chromie-opening-the-dark-portal';
 export { ClashOfTheColossals } from './clash-of-the-colossals';
 export { ConfluxFuture } from './conflux-future';
 export { ConsiderThePast } from './consider-the-past';
+export { ConvokeTheSpirits } from './convoke-the-spirits';
 export { CountessAshmore } from './countess-ashmore';
 export { CryofrozenChampion } from './cryofrozen-champion';
 export { DaUndatakah } from './da-undatakah';
