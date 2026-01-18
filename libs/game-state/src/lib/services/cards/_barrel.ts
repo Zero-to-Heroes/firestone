@@ -12,6 +12,7 @@ export { AmuletOfUndying } from './amulet-of-undying';
 export { ArcaneBrilliance } from './arcane-brilliance';
 export { ArcaneKeysmith } from './arcane-keysmith';
 export { Ashamane } from './ashamane';
+export { AssemblyLine } from './assembly-line';
 export { BarakKodobane } from './barak-kodobane';
 export { BargainBin } from './bargain-bin';
 export { BattleVicar } from './battle-vicar';
