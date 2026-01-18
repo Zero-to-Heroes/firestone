@@ -154,6 +154,7 @@ export { UndercityHuckster } from './undercity-huckster';
 export { UnstablePortal } from './unstable-portal';
 export { VarianKingOfStormwind } from './varian-king-of-stormwind';
 export { VoodooTotem } from './voodoo-totem';
+export { VujaDe } from './vuja-de';
 export { WarCache } from './war-cache';
 export { WelcomeHome } from './welcome-home';
 export { WhatDoesThisDo } from './what-does-this-do';
