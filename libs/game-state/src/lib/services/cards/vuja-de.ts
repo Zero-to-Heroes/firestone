@@ -19,20 +19,22 @@ export const VujaDe: GeneratingCard & StaticGeneratingCard = {
 	publicCreator: true,
 	dynamicPool: (input: StaticGeneratingCardInput) => {
 		// Get spells played this match
-		const spellsPlayed = input.inputOptions.deckState.spellsPlayedThisMatch
-			?.map((c) => c.cardId)
-			.filter((c) => !!c) ?? [];
-		const uniqueSpells = [...new Set(spellsPlayed)];
+		const uniqueSpells =
+			input.inputOptions.deckState.spellsPlayedThisMatch
+				?.map((c) => c.cardId)
+				.filter((c) => !!c)
+				.filter((c, index, self) => self.indexOf(c) === index) ?? [];
 
 		// Get minions played this match
-		const minionsPlayed = input.inputOptions.deckState.cardsPlayedThisMatch
-			?.map((c) => c.cardId)
-			.filter((c) => !!c)
-			.filter((cardId) => {
-				const card = input.allCards.getCard(cardId);
-				return card?.type?.toUpperCase() === CardType[CardType.MINION];
-			}) ?? [];
-		const uniqueMinions = [...new Set(minionsPlayed)];
+		const uniqueMinions =
+			input.inputOptions.deckState.cardsPlayedThisMatch
+				?.map((c) => c.cardId)
+				.filter((c) => !!c)
+				.filter((cardId) => {
+					const card = input.allCards.getCard(cardId);
+					return card?.type?.toUpperCase() === CardType[CardType.MINION];
+				})
+				.filter((c, index, self) => self.indexOf(c) === index) ?? [];
 
 		// Check if Combo is active (cards have been played this turn)
 		const comboActive = (input.inputOptions.deckState.cardsPlayedThisTurn?.length ?? 0) > 0;
@@ -45,20 +47,22 @@ export const VujaDe: GeneratingCard & StaticGeneratingCard = {
 	},
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
 		// Get spells played this match
-		const spellsPlayed = input.deckState.spellsPlayedThisMatch
-			?.map((c) => c.cardId)
-			.filter((c) => !!c) ?? [];
-		const uniqueSpells = [...new Set(spellsPlayed)];
+		const uniqueSpells =
+			input.deckState.spellsPlayedThisMatch
+				?.map((c) => c.cardId)
+				.filter((c) => !!c)
+				.filter((c, index, self) => self.indexOf(c) === index) ?? [];
 
 		// Get minions played this match
-		const minionsPlayed = input.deckState.cardsPlayedThisMatch
-			?.map((c) => c.cardId)
-			.filter((c) => !!c)
-			.filter((cardId) => {
-				const card = input.allCards.getCard(cardId);
-				return card?.type?.toUpperCase() === CardType[CardType.MINION];
-			}) ?? [];
-		const uniqueMinions = [...new Set(minionsPlayed)];
+		const uniqueMinions =
+			input.deckState.cardsPlayedThisMatch
+				?.map((c) => c.cardId)
+				.filter((c) => !!c)
+				.filter((cardId) => {
+					const card = input.allCards.getCard(cardId);
+					return card?.type?.toUpperCase() === CardType[CardType.MINION];
+				})
+				.filter((c, index, self) => self.indexOf(c) === index) ?? [];
 
 		// createdIndex 0 = the spell discovered (always available)
 		// createdIndex 1 = the minion discovered (only if Combo was active)
