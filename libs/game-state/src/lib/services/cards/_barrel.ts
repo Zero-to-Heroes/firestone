@@ -14,6 +14,7 @@ export { ArcaneKeysmith } from './arcane-keysmith';
 export { Ashamane } from './ashamane';
 export { BarakKodobane } from './barak-kodobane';
 export { BargainBin } from './bargain-bin';
+export { BattleVicar } from './battle-vicar';
 export { BlastWave } from './blast-wave';
 export { Blasteroid } from './blasteroid';
 export { BlessingOfTheBronze } from './blessing-of-the-bronze';
