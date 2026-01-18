@@ -723,7 +723,6 @@ const getDynamicFilters = (
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.DEMON) && hasCost(c, '>=', 5);
 
 		// Random Dragons
-		case CardIds.RuniTimeExplorer_ValdrakkenToken_WON_053t5:
 		case CardIds.TimeLostProtodrake:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.DRAGON);
 		case CardIds.PastConflux_TIME_436:
@@ -1190,7 +1189,6 @@ const getDynamicFilters = (
 		case CardIds.HiddenMeaning:
 		case CardIds.KureTheLightBeyond_GDB_442:
 		case CardIds.LinedancePartner_WW_433:
-		case CardIds.RuniTimeExplorer_WindRiderRoostToken_WON_053t2:
 		case CardIds.SerpentshrinePortal_BT_100:
 		case CardIds.SilvermoonPortal_CORE_KAR_077:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 3);
@@ -1702,7 +1700,6 @@ const doesSummonInPlay = (sourceCardId: string): boolean => {
 		case CardIds.HiddenMeaning:
 		case CardIds.KureTheLightBeyond_GDB_442:
 		case CardIds.LinedancePartner_WW_433:
-		case CardIds.RuniTimeExplorer_WindRiderRoostToken_WON_053t2:
 		case CardIds.TwilightInfluence_EDR_463:
 		case CardIds.ThreshridersBlessing_TLC_477:
 		case CardIds.GravedawnVoidbulb_TLC_815:

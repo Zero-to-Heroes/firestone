@@ -125,6 +125,8 @@ export { RippleInTime } from './ripple-in-time';
 export { Rotface } from './rotface';
 export { RunicAdornment } from './runic-adornment';
 export { RunicInscriptions } from './runic-inscriptions';
+export { RuniValdrakken } from './runi-valdrakken';
+export { RuniWindRiderRoost } from './runi-wind-rider-roost';
 export { ScaleReplica } from './scale-replica';
 export { SemiStablePortal } from './semi-stable-portal';
 export { ShakuTheCollector } from './shaku-the-collector';
