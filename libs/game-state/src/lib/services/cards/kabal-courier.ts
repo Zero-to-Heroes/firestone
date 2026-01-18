@@ -12,7 +12,7 @@ import { filterCards } from './utils';
 
 const KABAL_CLASSES = [CardClass.MAGE, CardClass.PRIEST, CardClass.WARLOCK];
 
-const isKabalCard = (classes: string[] | undefined): boolean => {
+const isKabalCard = (classes: readonly string[] | undefined): boolean => {
 	if (!classes) {
 		return false;
 	}

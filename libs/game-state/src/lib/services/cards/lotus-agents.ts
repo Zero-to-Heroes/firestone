@@ -12,7 +12,7 @@ import { filterCards } from './utils';
 
 const LOTUS_CLASSES = [CardClass.DRUID, CardClass.ROGUE, CardClass.SHAMAN];
 
-const isLotusCard = (classes: string[] | undefined): boolean => {
+const isLotusCard = (classes: readonly string[] | undefined): boolean => {
 	if (!classes) {
 		return false;
 	}

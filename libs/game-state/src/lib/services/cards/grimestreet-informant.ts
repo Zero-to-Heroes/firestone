@@ -12,7 +12,7 @@ import { filterCards } from './utils';
 
 const GRIMESTREET_CLASSES = [CardClass.HUNTER, CardClass.PALADIN, CardClass.WARRIOR];
 
-const isGrimestreetCard = (classes: string[] | undefined): boolean => {
+const isGrimestreetCard = (classes: readonly string[] | undefined): boolean => {
 	if (!classes) {
 		return false;
 	}
