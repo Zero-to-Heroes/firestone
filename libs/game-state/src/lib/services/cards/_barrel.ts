@@ -181,6 +181,7 @@ export { WildlandsAdventurer } from './wildlands-adventurer';
 export { WindowShopper } from './window-shopper';
 export { WingsOfEternity } from './wings-of-eternity';
 export { WitchsApprentice } from './witchs-apprentice';
+export { WitchsCauldron } from './witchs-cauldron';
 export { WorthyExpedition } from './worthy-expedition';
 export { YoggInTheBox } from './yogg-in-the-box';
 export { YrelBeaconOfHope } from './yrel-beacon-of-hope';
