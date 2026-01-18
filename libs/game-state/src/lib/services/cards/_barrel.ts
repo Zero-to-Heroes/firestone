@@ -53,6 +53,7 @@ export { FadingMemory } from './fading-memory';
 export { FarseerWo } from './farseer-wo';
 export { Fetch } from './fetch';
 export { FiddlefireImp } from './fiddlefire-imp';
+export { FlameBehemoth } from './flame-behemoth';
 export { FoolsGold } from './fools-gold';
 export { ForgottenMillenium } from './forgotten-millenium';
 export { GorgonzormuDeliciousCheese } from './gorgonzormu-delicious-cheese';
