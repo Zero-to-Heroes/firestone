@@ -216,6 +216,7 @@ const internalGiftCreators = [
 	CardIds.Copycat_DED_514,
 	CardIds.Corpsicle_CorpsicleEnchantment_VAC_427e,
 	CardIds.Corpsicle_VAC_427,
+	CardIds.EternalFirebolt_EternalFireboltEnchantment_END_025e,
 	CardIds.CorsairCache,
 	CardIds.Cosmonaut_GDB_443,
 	CardIds.CreationProtocol_CreationProtocolToken,

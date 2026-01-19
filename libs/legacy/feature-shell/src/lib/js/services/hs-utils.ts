@@ -386,6 +386,7 @@ export const CURRENT_EFFECTS_WHITELIST = [
 	CardIds.CookinEnchantment_BAR_552e_bom_puzzle,
 	CardIds.Copycat_CopycatEnchantment,
 	CardIds.Corpsicle_CorpsicleEnchantment_VAC_427e,
+	CardIds.EternalFirebolt_EternalFireboltEnchantment_END_025e,
 	CardIds.CowerInFear_CowerInFearPlayerEnchantEnchantment_TLC_823e1,
 	CardIds.CraterGator_CraterGatorPlayerEnchantEnchantment_TLC_250e,
 	CardIds.CultNeophyte_SpoiledEnchantment,
