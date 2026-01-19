@@ -738,7 +738,7 @@ export const CARDS_THAT_IMPROVE_WHEN_TRADED = [
 	CardIds.WindUpSapling_TOY_802,
 ];
 
-export const CREATES_PUBLIC_COPY_FROM_DECK = [CardIds.CraneGame_TOY_884];
+export const CREATES_PUBLIC_COPY_FROM_DECK = [CardIds.CraneGame_TOY_884, CardIds.TrialOfTheJormungars_WON_028];
 
 // These cards are added to the deck only for the Joust, but are not part of the initial deck
 export const FAKE_JOUST_CARDS = [CardIds.ProGamer_RoshamboEnchantment_MIS_916e];
