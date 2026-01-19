@@ -10,7 +10,7 @@ import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingC
 import { filterCards } from './utils';
 
 export const BoneDrake: GeneratingCard & StaticGeneratingCard = {
-	cardIds: [CardIds.BoneDrake_ICC_027],
+	cardIds: [CardIds.BoneDrake_ICC_027, CardIds.BoneDrake_CORE_ICC_027],
 	publicCreator: true,
 	dynamicPool: (input: StaticGeneratingCardInput) => {
 		return filterCards(
