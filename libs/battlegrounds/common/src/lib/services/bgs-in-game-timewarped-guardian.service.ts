@@ -36,7 +36,7 @@ export class BgsInGameTimewarpedGuardianService extends AbstractFacadeService<Bg
 			LocalStorageService.LOCAL_STORAGE_BGS_IN_GAME_TIMEWARPED_STATS_SEEN,
 		);
 		const today = new Date().toISOString().substring(0, 10);
-		const todaysCount = freeUseCount?.day === today ? freeUseCount.gameIds?.length : 0;
+		const todaysCount = freeUseCount?.day === today ? freeUseCount.gameIds?.length ?? 0 : 0;
 		console.log('[bgs-timewarped-guardian] use count in init', today, todaysCount);
 		this.freeUsesLeft$$.next(Math.max(0, BGS_TIMEWARPED_DAILY_FREE_USES - todaysCount));
 
@@ -58,7 +58,7 @@ export class BgsInGameTimewarpedGuardianService extends AbstractFacadeService<Bg
 			LocalStorageService.LOCAL_STORAGE_BGS_IN_GAME_TIMEWARPED_STATS_SEEN,
 		);
 		const today = new Date().toISOString().substring(0, 10);
-		const gamesUsedToday = freeUseCount?.day === today ? freeUseCount.gameIds : [];
+		const gamesUsedToday = freeUseCount?.day === today ? freeUseCount.gameIds ?? [] : [];
 		const currentGameId: string | null = this.reviewIdService.reviewId$$.value;
 		if (!currentGameId) {
 			return;
