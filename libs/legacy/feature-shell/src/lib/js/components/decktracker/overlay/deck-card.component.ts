@@ -533,15 +533,15 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 	}
 
 	private scheduleTextScroll() {
-		// Check overflow first - skip timeout entirely if text fits
-		const overflowAmount = this.getTextOverflowAmount();
-		if (overflowAmount <= 0) {
-			return;
-		}
-
 		// Clear any existing timeout
 		if (this.scrollTimeout !== null) {
 			window.clearTimeout(this.scrollTimeout);
+		}
+
+		// Check if text overflows - skip if it fits
+		const overflowAmount = this.getTextOverflowAmount();
+		if (overflowAmount <= 0) {
+			return;
 		}
 
 		// Schedule the text scroll after a delay (only for truncated text)
@@ -568,9 +568,16 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		if (!container) {
 			return 0;
 		}
-		// The span expands to fit text naturally; overflow is clipped by parent container
-		// Compare span's natural width against container's available width
-		const overflow = span.scrollWidth - container.clientWidth;
+
+		// The span has display: inline-block in CSS, so scrollWidth accurately reflects
+		// the actual text width. Compare against container's available space (minus padding).
+		const textWidth = span.scrollWidth;
+		const containerStyle = window.getComputedStyle(container);
+		const paddingLeft = parseFloat(containerStyle.paddingLeft) || 0;
+		const paddingRight = parseFloat(containerStyle.paddingRight) || 0;
+		const availableWidth = container.clientWidth - paddingLeft - paddingRight;
+
+		const overflow = textWidth - availableWidth;
 		return overflow > 0 ? overflow : 0;
 	}
 
