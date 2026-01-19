@@ -6,7 +6,7 @@ import {
 	Input,
 	OnDestroy,
 } from '@angular/core';
-import { CardIds, CardType, GameTag } from '@firestone-hs/reference-data';
+import { CardIds, CardType, GameTag, ReferenceCard } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState, getProcessedCard } from '@firestone/game-state';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
@@ -14,7 +14,7 @@ import { BehaviorSubject, Observable, combineLatest, filter, startWith, takeUnti
 import { DeckZone, DeckZoneSection } from '../../../models/decktracker/view/deck-zone';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 import { PLAGUES } from '../../../services/decktracker/event-parser/special-cases/plagues-parser';
-import { CURRENT_EFFECTS_WHITELIST } from '../../../services/hs-utils';
+import { CURRENT_EFFECTS_WHITELIST, getCardForCurrentEffect } from '../../../services/hs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
@@ -267,18 +267,26 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 			const currentEffects = deckState.enchantments
 				.map((e) => {
 					const refCard = this.allCards.getCard(e.cardId);
+					if (!CURRENT_EFFECTS_WHITELIST.includes(refCard.id as CardIds)) {
+						return null;
+					}
+
 					// When an enchantment is created by another card (eg Velen replaying past enchantment), the origin
 					// seems to stored in that tag
-					let sourceCard = e.cardId?.endsWith('e')
-						? this.allCards.getCard(e.cardId.slice(0, -1))
-						: this.allCards.getCard(e.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_1]);
+					const forcedSourceCardId = getCardForCurrentEffect(e.cardId);
+					let sourceCard: ReferenceCard | undefined;
+					if (forcedSourceCardId) {
+						sourceCard = this.allCards.getCard(forcedSourceCardId);
+					}
+					if (!sourceCard) {
+						sourceCard = e.cardId?.endsWith('e')
+							? this.allCards.getCard(e.cardId.slice(0, -1))
+							: this.allCards.getCard(e.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_1]);
+					}
 					if (!sourceCard?.id) {
 						sourceCard = this.allCards.getCard(e.tags?.[GameTag.CREATOR_DBID]);
 					}
 
-					if (!CURRENT_EFFECTS_WHITELIST.includes(refCard.id as CardIds)) {
-						return null;
-					}
 					const cardName = currentEffectUseEnchantmentName
 						? refCard.name || sourceCard.name
 						: sourceCard.name || refCard.name;
@@ -375,7 +383,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 
 		const handSortingFunction = sortHandByZoneOrder
 			? (a: VisualDeckCard, b: VisualDeckCard) =>
-					(a.tags?.[GameTag.ZONE_POSITION] ?? 0) - (b.tags?.[GameTag.ZONE_POSITION] ?? 0)
+				(a.tags?.[GameTag.ZONE_POSITION] ?? 0) - (b.tags?.[GameTag.ZONE_POSITION] ?? 0)
 			: null;
 		zones.push(
 			this.buildZone(
@@ -494,8 +502,8 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 				this.i18n.translateString('decktracker.zones.other'),
 				sortCardsByManaCostInOtherZone
 					? (a, b) =>
-							getProcessedCard(a.cardId, a.entityId, deckState, this.allCards).cost -
-							getProcessedCard(b.cardId, b.entityId, deckState, this.allCards).cost
+						getProcessedCard(a.cardId, a.entityId, deckState, this.allCards).cost -
+						getProcessedCard(b.cardId, b.entityId, deckState, this.allCards).cost
 					: (a, b) => this.sortByIcon(a, b),
 				null,
 				// We want to keep the info in the deck state (that there are cards in the SETASIDE zone) but
@@ -533,8 +541,8 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 					this.i18n.translateString('decktracker.zones.other-generated'),
 					sortCardsByManaCostInOtherZone
 						? (a, b) =>
-								getProcessedCard(a.cardId, a.entityId, deckState, this.allCards).cost -
-								getProcessedCard(b.cardId, b.entityId, deckState, this.allCards).cost
+							getProcessedCard(a.cardId, a.entityId, deckState, this.allCards).cost -
+							getProcessedCard(b.cardId, b.entityId, deckState, this.allCards).cost
 						: (a, b) => this.sortByIcon(a, b),
 					null,
 					(a: VisualDeckCard) => (!a.temporaryCard || a.zone !== 'SETASIDE') && !a.createdByJoust,

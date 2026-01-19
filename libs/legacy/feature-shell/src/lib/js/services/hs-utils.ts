@@ -309,6 +309,15 @@ export const globalEffectQuestlines = [
 
 export const globalEffectQuestlinesTriggers = globalEffectQuestlines.map((effect) => effect.questStepCreated);
 
+export const getCardForCurrentEffect = (cardId: CardIds | string | null | undefined): string => {
+	switch (cardId) {
+		case CardIds.DistressedKvaldir_FrostFeverEnchantment_TTN_450e:
+			return CardIds.DistressedKvaldir_FrostPlagueToken;
+		default:
+			return null;
+	}
+};
+
 export const getCardForGlobalEffect = (cardId: CardIds): string => {
 	switch (cardId) {
 		case CardIds.Kiljaeden_KiljaedensPortalEnchantment_GDB_145e:
