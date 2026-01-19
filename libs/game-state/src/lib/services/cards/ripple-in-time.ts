@@ -7,7 +7,7 @@ import { GeneratingCard, GuessInfoInput } from './_card.type';
 // "<b>Discover</b> a minion from your deck. It has <b>Echo</b>."
 export const RippleInTime: GeneratingCard = {
 	cardIds: [CardIds.RippleInTime],
-	publicCreator: true,
+	publicTutor: true,
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
 		// Discovers from deck, so the info is partial (we don't know what's in the deck)
 		return {
