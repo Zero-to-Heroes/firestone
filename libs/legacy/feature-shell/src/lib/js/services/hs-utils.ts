@@ -335,6 +335,7 @@ export const getCardForGlobalEffect = (cardId: CardIds): string => {
 };
 
 export const CURRENT_EFFECTS_WHITELIST = [
+	CardIds.Xenedar_LightOfTheXenedarEnchantment_WON_053t3e,
 	CardIds.StasisElemental_StasisEnchantment,
 	CardIds.AceWayfinder_AceWayfinderFutureBuffEnchantment_GDB_450e,
 	CardIds.AegwynnTheGuardian_GuardiansLegacyPlayerCoreEnchantment,
