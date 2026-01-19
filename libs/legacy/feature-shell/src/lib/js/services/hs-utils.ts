@@ -589,6 +589,7 @@ export const CURRENT_EFFECTS_WHITELIST = [
 
 export const cardsRevealedWhenDrawn = [
 	CardIds.AncientShade_AncientCurseToken,
+	CardIds.BronzeBroodmother,
 	CardIds.BeneathTheGrounds_NerubianAmbushToken,
 	CardIds.Chromie_BattleForMountHyjalToken,
 	CardIds.Chromie_CullingOfStratholmeToken,
