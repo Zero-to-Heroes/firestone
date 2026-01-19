@@ -90,10 +90,10 @@ export class ChoosingCardBgsTimewarpedOptionComponent extends AbstractSubscripti
 
 	@Input() set freeUsesLeft(value: number) {
 		this._freeUsesLeft = value;
-		this.freeUsesText = this.i18n.translateString('battlegrounds.in-game.quests.free-uses-text', {
+		this.freeUsesText = this.i18n.translateString('battlegrounds.in-game.timewarped.free-uses-text', {
 			value: value,
 		});
-		this.freeUsesTooltip = this.i18n.translateString('battlegrounds.in-game.quests.free-uses-tooltip', {
+		this.freeUsesTooltip = this.i18n.translateString('battlegrounds.in-game.timewarped.free-uses-tooltip', {
 			max: BGS_TIMEWARPED_DAILY_FREE_USES,
 			left: value,
 		});

@@ -88,7 +88,7 @@ export class BgsInGameTimewarpedService extends AbstractFacadeService<BgsInGameT
 				if (!displayFromPrefs) {
 					return false;
 				}
-				// We explicitely don't check for null, so that if the memory updates are broken
+				// We explicitly don't check for null, so that if the memory updates are broken
 				// we still somehow show the info
 				if (currentScene !== SceneMode.GAMEPLAY) {
 					return false;
