@@ -160,6 +160,7 @@ export { Thoughtsteal } from './thoughtsteal';
 export { TimeLostGlaive } from './time-lost-glaive';
 export { TimelessCausality } from './timeless-causality';
 export { TimewayWanderer } from './timeway-wanderer';
+export { TitanforgedTraps } from './titanforged-traps';
 export { TinyRafaam } from './tiny-rafaam';
 export { TokiTimeTinker } from './toki-time-tinker';
 export { Torga } from './torga';
