@@ -148,7 +148,7 @@ export class HearthpwnService extends AbstractFacadeService<HearthpwnService> {
 				},
 				{
 					Name: c.id,
-					Count: c.premiumCount ?? 0,
+					Count: (c.premiumCount ?? 0) + (c.diamondCount ?? 0) + (c.signatureCount ?? 0),
 					IsPremium: true,
 				},
 			])
