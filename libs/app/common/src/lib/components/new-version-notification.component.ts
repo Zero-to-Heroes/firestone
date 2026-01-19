@@ -19,6 +19,8 @@ import { AppVersion } from '../model/app-version';
 import { isVersionBefore } from '../services/notifications-utils';
 
 const versions: readonly AppVersion[] = [
+	{ version: '16.10.0', date: '2026-01-19' },
+	{ version: '16.9.0', date: '2026-01-13' },
 	{ version: '16.9.0', date: '2026-01-13' },
 	{ version: '16.8.6', date: '2026-01-06' },
 	{ version: '16.7.3', date: '2025-12-22', force: true },
@@ -221,8 +223,7 @@ const versions: readonly AppVersion[] = [
 })
 export class NewVersionNotificationComponent
 	extends AbstractSubscriptionComponent
-	implements AfterContentInit, OnDestroy
-{
+	implements AfterContentInit, OnDestroy {
 	versions$: Observable<readonly AppVersion[]>;
 	searchString$: Observable<string | null>;
 
