@@ -32,9 +32,6 @@ import {
 } from 'rxjs';
 import { BattlegroundsCardsService } from '../cards/bgs-cards.service';
 
-// The turn when the timewarped shop appears (turn 1 in HS = turn 1 on our side)
-const TIMEWARPED_TURN = 1;
-
 @Injectable()
 export class BgsInGameTimewarpedService extends AbstractFacadeService<BgsInGameTimewarpedService> {
 	public showWidget$$: BehaviorSubject<boolean | null>;
@@ -131,8 +128,13 @@ export class BgsInGameTimewarpedService extends AbstractFacadeService<BgsInGameT
 		const shopCards$ = this.gameState.gameState$$.pipe(
 			filter((state) => state != null),
 			auditTime(500),
-			map((state) => state!.opponentDeck.board.map((entity) => entity.cardId)),
-			distinctUntilChanged((a, b) => arraysEqual(a, b)),
+			map((state) => ({
+				cardIds: state!.opponentDeck.board.map((entity) => entity.cardId),
+				currentTurn: state?.bgState?.currentGame?.liveStats?.currentTurn ?? 1,
+			})),
+			distinctUntilChanged(
+				(a, b) => arraysEqual(a.cardIds, b.cardIds) && a.currentTurn === b.currentTurn,
+			),
 		);
 
 		const options$ = combineLatest([
@@ -145,14 +147,16 @@ export class BgsInGameTimewarpedService extends AbstractFacadeService<BgsInGameT
 		]).pipe(
 			debounceTime(500),
 			filter(([shopCards, showFromPrefs, cardStats]) => {
-				return !!cardStats && !!shopCards?.length;
+				return !!cardStats && !!shopCards?.cardIds?.length;
 			}),
 			map(([shopCards, showFromPrefs, cardStats]) => {
 				if (!showFromPrefs) {
 					return [];
 				}
-				return shopCards
-					.map((cardId) => buildBgsTimewarpedCardChoiceValue(cardId, cardStats!, this.allCards))
+				return shopCards.cardIds
+					.map((cardId) =>
+						buildBgsTimewarpedCardChoiceValue(cardId, shopCards.currentTurn, cardStats!, this.allCards),
+					)
 					.filter((option) => option !== null) as readonly BgsTimewarpedCardChoiceOption[];
 			}),
 			distinctUntilChanged(
@@ -170,6 +174,7 @@ export class BgsInGameTimewarpedService extends AbstractFacadeService<BgsInGameT
 
 const buildBgsTimewarpedCardChoiceValue = (
 	cardId: string,
+	currentTurn: number,
 	cardStats: BgsCardStats,
 	allCards: CardsFacadeService,
 ): BgsTimewarpedCardChoiceOption | null => {
@@ -178,8 +183,8 @@ const buildBgsTimewarpedCardChoiceValue = (
 		return null;
 	}
 
-	// Use turn 1 stats for timewarped shop
-	const turnStat = cardStat.turnStats?.find((s) => s.turn === TIMEWARPED_TURN);
+	// Use the current turn's stats for the timewarped shop
+	const turnStat = cardStat.turnStats?.find((s) => s.turn === currentTurn);
 	if (!turnStat) {
 		return null;
 	}
