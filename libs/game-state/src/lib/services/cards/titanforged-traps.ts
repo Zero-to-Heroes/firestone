@@ -1,4 +1,3 @@
-/* eslint-disable no-mixed-spaces-and-tabs */
 // Titanforged Traps (TTN_302)
 // Hunter Spell - Discover a Secret to cast.
 import { CardClass, CardIds, CardType, GameTag, hasMechanic } from '@firestone-hs/reference-data';
