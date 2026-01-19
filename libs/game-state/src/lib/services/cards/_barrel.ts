@@ -24,6 +24,7 @@ export { Blingtron3000 } from './blingtron-3000';
 export { BlinkFox } from './blink-fox';
 export { BlackMorassImposter } from './black-morass-imposter';
 export { BloodDraw } from './blood-draw';
+export { BoneDrake } from './bone-drake';
 export { BrutishEndmaw } from './brutish-endmaw';
 export { BygoneEchoes } from './bygone-echoes';
 export { CavernDreamer } from './cavern-dreamer';
