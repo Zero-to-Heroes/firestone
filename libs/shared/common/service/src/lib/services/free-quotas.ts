@@ -7,3 +7,5 @@ export const BGS_HERO_SELECTION_DAILY_FREE_USES = 2;
 export const BGS_QUESTS_DAILY_FREE_USES = 2;
 // Because it's used twice per game
 export const BGS_TRINKETS_DAILY_FREE_USES = 4;
+// Timewarped shop happens once per game on turn 1
+export const BGS_TIMEWARPED_DAILY_FREE_USES = 2;

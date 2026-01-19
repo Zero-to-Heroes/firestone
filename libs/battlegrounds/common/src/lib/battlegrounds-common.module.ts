@@ -49,6 +49,8 @@ import { BgsInGameQuestsGuardianService } from './services/bgs-in-game-quests-gu
 import { BgsInGameQuestsService } from './services/bgs-in-game-quests.service';
 import { BgsInGameTrinketsGuardianService } from './services/bgs-in-game-trinkets-guardian.service';
 import { BgsInGameTrinketsService } from './services/bgs-in-game-trinkets.service';
+import { BgsInGameTimewarpedGuardianService } from './services/bgs-in-game-timewarped-guardian.service';
+import { BgsInGameTimewarpedService } from './services/bgs-in-game-timewarped.service';
 import { BgsInGameWindowNavigationService } from './services/bgs-in-game-window-navigation.service';
 import { BgsMatchMemoryInfoService } from './services/bgs-match-memory-info.service';
 import { BgsMatchPlayersMmrService } from './services/bgs-match-players-mmr.service';
@@ -117,6 +119,8 @@ const components = [
 		BattlegroundsTrinketsService,
 		BgsInGameTrinketsGuardianService,
 		BgsInGameTrinketsService,
+		BgsInGameTimewarpedGuardianService,
+		BgsInGameTimewarpedService,
 		BattlegroundsQuestsService,
 		BgsInGameQuestsService,
 		BgsInGameQuestsGuardianService,

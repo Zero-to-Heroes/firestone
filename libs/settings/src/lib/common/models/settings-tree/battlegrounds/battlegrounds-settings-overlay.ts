@@ -60,6 +60,13 @@ export const battlegroundsOverlaySettings = (context: SettingContext): SettingNo
 					},
 					{
 						type: 'toggle',
+						field: 'bgsShowTimewarpedStatsOverlay',
+						label: context.i18n.translateString('settings.battlegrounds.general.show-timewarped-stats-label'),
+						tooltip: context.i18n.translateString('settings.battlegrounds.general.show-timewarped-stats-tooltip'),
+						disabledIf: (prefs: Preferences) => !prefs.bgsFullToggle,
+					},
+					{
+						type: 'toggle',
 						field: 'bgsShowQuestStatsOverlay',
 						label: context.i18n.translateString('settings.battlegrounds.general.show-quest-stats-label'),
 						tooltip: context.i18n.translateString('settings.battlegrounds.general.show-quest-stats-tooltip'),

@@ -29,6 +29,7 @@ export class BgsGame {
 	readonly hasSpells: boolean;
 	readonly hasTrinkets: boolean;
 	readonly hasTimewarped: boolean;
+	readonly inTimewarpedTavern: boolean;
 	readonly anomalies: readonly string[];
 
 	readonly lastOpponentCardId: string;

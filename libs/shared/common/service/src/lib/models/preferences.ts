@@ -558,6 +558,7 @@ export class Preferences implements IPreferences {
 	readonly bgsUseBannedTribeColors = false;
 	readonly bgsShowQuestStatsOverlay = true;
 	readonly bgsShowTrinketStatsOverlay = true;
+	readonly bgsShowTimewarpedStatsOverlay = true;
 	readonly bgsTribesOverlaySingleRow = false;
 	readonly bgsForceShowPostMatchStats2 = false;
 	readonly bgsUseNewTiersHeaderStyle = true;

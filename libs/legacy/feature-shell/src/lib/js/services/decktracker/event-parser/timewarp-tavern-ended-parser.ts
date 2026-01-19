@@ -15,6 +15,11 @@ export class TimewarpTavernEndedParser implements EventParser {
 		});
 		return currentState.update({
 			opponentDeck: opponentDeck,
+			bgState: currentState.bgState.update({
+				currentGame: currentState.bgState.currentGame?.update({
+					inTimewarpedTavern: false,
+				}),
+			}),
 		});
 	}
 
