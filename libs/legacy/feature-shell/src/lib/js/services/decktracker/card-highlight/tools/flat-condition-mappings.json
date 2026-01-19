@@ -63,7 +63,8 @@
     "SwarthySwordshiner_VAC_701",
     "VulperaToxinblade",
     "WeaponsAttendant_VAC_924",
-    "WeaponsExpert"
+    "WeaponsExpert",
+    "WickedBlightspawn_END_002"
   ],
   "HAS_MECHANIC_EQUIPS_WEAPON": [
     "AbyssalBassist",
@@ -116,7 +117,8 @@
     "SwarthySwordshiner_VAC_701",
     "VulperaToxinblade",
     "WeaponsAttendant_VAC_924",
-    "WeaponsExpert"
+    "WeaponsExpert",
+    "WickedBlightspawn_END_002"
   ],
   "DRAENEI": [
     "AceWayfinder_GDB_450",
@@ -146,6 +148,8 @@
     "DeadAir",
     "DrakkariEmbalmer_RLK_119",
     "ElderNadox",
+    "Finality_BlessingOfTheInfinite_END_003p",
+    "Finality_END_003",
     "FleshBehemoth_RLK_830",
     "FleshBehemoth_RLK_Prologue_RLK_830",
     "GluthSicleTavernBrawl",
@@ -239,6 +243,8 @@
     "ShandoWildclaw",
     "ShandoWildclaw_RileTheHerd",
     "ShandoWildclaw_Transfiguration",
+    "SmugglersCrate",
+    "SmugglersCrate_WON_347",
     "StarvingTavernBrawl",
     "StormTheGates_TLC_EVENT_400",
     "StormpikeBattleRam",
@@ -359,6 +365,7 @@
     "Flamewaker",
     "Flamewaker_TUTR_BRM_002",
     "Flowrider",
+    "FragmentOfNothing_END_026",
     "FrostweaveDungeoneer",
     "GlacialAdvance_RLK_512",
     "GlowflySwarm",
@@ -575,6 +582,7 @@
     "DeckOfChaos",
     "DevilsaurMask_DINO_403",
     "DimensionalRipper",
+    "DimensionalWeaponsmith_END_021",
     "DinnerPerformer",
     "DiscipleOfTheDove_TIME_037",
     "DisciplinarianGandling",
@@ -582,7 +590,6 @@
     "Divergence_TIME_030",
     "DivineAugur_TIME_429",
     "DivineStar_GDB_460",
-    "DraconicHerald",
     "DreamboundRaptor_EDR_849",
     "DredgerStaff",
     "DredgerStaff_CORE_REV_338",
@@ -714,6 +721,7 @@
     "Reforestation_Fertilize_EDR_843b",
     "Reforestation_ReforestationToken_EDR_843t1",
     "Resurrect_BRM_017",
+    "RippleInTime",
     "RiskySkipper",
     "RunningWild",
     "RunningWild_RunningWild",
@@ -780,7 +788,8 @@
     "ConservatorNymph",
     "Cultivation",
     "ForestWardenOmu_RapidGrowth_THD_007p",
-    "OvergrownBeanstalk_MIS_301"
+    "OvergrownBeanstalk_MIS_301",
+    "SplinteredReality_END_009"
   ],
   "IS_TREANT": [
     "Aeroponics",
@@ -789,7 +798,8 @@
     "ConservatorNymph",
     "Cultivation",
     "ForestWardenOmu_RapidGrowth_THD_007p",
-    "OvergrownBeanstalk_MIS_301"
+    "OvergrownBeanstalk_MIS_301",
+    "SplinteredReality_END_009"
   ],
   "HAS_MECHANIC_INFUSE": [
     "AfterlifeAttendant",
@@ -920,6 +930,7 @@
     "DiscipleOfGolganneth",
     "Flowrider",
     "GolgannethTheThunderer",
+    "HaywireHornswog_END_030",
     "InvestmentOpportunity",
     "Inzah",
     "JazzBass",
@@ -951,6 +962,7 @@
     "Darkrider_EDR_456",
     "DesertNestmatron_WW_826",
     "DraconicDreamTavernBrawl",
+    "DraconicHerald",
     "DragonAffinityTavernBrawl",
     "DragonBreeder",
     "DragonConsort",
@@ -984,6 +996,7 @@
     "NetherspiteHistorian_CORE_KAR_062",
     "OnyxianWarder",
     "PetalPeddler_EDR_889",
+    "PrescientSlitherdrake_END_033",
     "RedscaleDragontamer",
     "RedscaleDragontamer_CORE_DMF_194",
     "RingmasterWhatley",
@@ -1933,7 +1946,8 @@
     "InventorBoom_TOY_607"
   ],
   "CHOOSE_ONE + SPELL": [
-    "JerryRigCarpenter"
+    "JerryRigCarpenter",
+    "KeeperStalladris"
   ],
   "HAS_MECHANIC_GIVES_DIVINE_SHIELD": [
     "Jitterbug",
@@ -1988,6 +2002,9 @@
   "MINION + NEUTRAL": [
     "MeekMasteryTavernBrawl",
     "MulchMadnessTavernBrawl"
+  ],
+  "HAS_MECHANIC_REWIND": [
+    "Morchie_END_036"
   ],
   "CAN_TARGET_FRIENDLY_MINION + SPELL": [
     "Myrmidon"

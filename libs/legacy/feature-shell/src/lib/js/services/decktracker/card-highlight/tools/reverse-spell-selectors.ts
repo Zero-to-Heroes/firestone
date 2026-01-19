@@ -370,7 +370,7 @@ export const reverseSpellSelector = (
 		);
 	}
 
-	// SPELL (209 cards)
+	// SPELL (210 cards)
 	if (refCard.type?.toUpperCase() === 'SPELL') {
 		matchingCardIds.push(
 			CardIds.AdvancedTargetingMonocle,
@@ -436,6 +436,7 @@ export const reverseSpellSelector = (
 			CardIds.Flamewaker,
 			CardIds.Flamewaker_TUTR_BRM_002,
 			CardIds.Flowrider,
+			CardIds.FragmentOfNothing_END_026,
 			CardIds.GlacialAdvance_RLK_512,
 			CardIds.GlowflySwarm,
 			CardIds.GolgannethTheThunderer,

@@ -534,7 +534,7 @@ export const reverseMinionSelector = (
 		);
 	}
 
-	// BEAST (79 cards)
+	// BEAST (81 cards)
 	if (refCard.races?.map(r => r.toUpperCase()).includes('BEAST')) {
 		matchingCardIds.push(
 			CardIds.AddledGrizzly,
@@ -600,6 +600,8 @@ export const reverseMinionSelector = (
 			CardIds.ShandoWildclaw,
 			CardIds.ShandoWildclaw_RileTheHerd,
 			CardIds.ShandoWildclaw_Transfiguration,
+			CardIds.SmugglersCrate,
+			CardIds.SmugglersCrate_WON_347,
 			CardIds.StarvingTavernBrawl,
 			CardIds.StormTheGates_TLC_EVENT_400,
 			CardIds.StormpikeBattleRam,
@@ -654,7 +656,7 @@ export const reverseMinionSelector = (
 		);
 	}
 
-	// DRAGON (81 cards)
+	// DRAGON (83 cards)
 	if (refCard.races?.map(r => r.toUpperCase()).includes('DRAGON')) {
 		matchingCardIds.push(
 			CardIds.AlexstraszasChampion,
@@ -682,6 +684,7 @@ export const reverseMinionSelector = (
 			CardIds.Darkrider_EDR_456,
 			CardIds.DesertNestmatron_WW_826,
 			CardIds.DraconicDreamTavernBrawl,
+			CardIds.DraconicHerald,
 			CardIds.DragonAffinityTavernBrawl,
 			CardIds.DragonBreeder,
 			CardIds.DragonConsort,
@@ -715,6 +718,7 @@ export const reverseMinionSelector = (
 			CardIds.NetherspiteHistorian_CORE_KAR_062,
 			CardIds.OnyxianWarder,
 			CardIds.PetalPeddler_EDR_889,
+			CardIds.PrescientSlitherdrake_END_033,
 			CardIds.RedscaleDragontamer,
 			CardIds.RedscaleDragontamer_CORE_DMF_194,
 			CardIds.RingmasterWhatley,
@@ -981,7 +985,7 @@ export const reverseMinionSelector = (
 		);
 	}
 
-	// UNDEAD (41 cards)
+	// UNDEAD (43 cards)
 	if (refCard.races?.map(r => r.toUpperCase()).includes('UNDEAD')) {
 		matchingCardIds.push(
 			CardIds.AcolyteOfDeath,
@@ -997,6 +1001,8 @@ export const reverseMinionSelector = (
 			CardIds.DeadAir,
 			CardIds.DrakkariEmbalmer_RLK_119,
 			CardIds.ElderNadox,
+			CardIds.Finality_BlessingOfTheInfinite_END_003p,
+			CardIds.Finality_END_003,
 			CardIds.FleshBehemoth_RLK_830,
 			CardIds.FleshBehemoth_RLK_Prologue_RLK_830,
 			CardIds.GluthSicleTavernBrawl,
@@ -1036,7 +1042,7 @@ export const reverseMinionSelector = (
 		);
 	}
 
-	// MINION (248 cards)
+	// MINION (249 cards)
 	if (refCard.type?.toUpperCase() === 'MINION') {
 		matchingCardIds.push(
 			CardIds.AcherusVeteran_CORE_ICC_092,
@@ -1098,6 +1104,7 @@ export const reverseMinionSelector = (
 			CardIds.DeckOfChaos,
 			CardIds.DevilsaurMask_DINO_403,
 			CardIds.DimensionalRipper,
+			CardIds.DimensionalWeaponsmith_END_021,
 			CardIds.DinnerPerformer,
 			CardIds.DiscipleOfTheDove_TIME_037,
 			CardIds.DisciplinarianGandling,
@@ -1105,7 +1112,6 @@ export const reverseMinionSelector = (
 			CardIds.Divergence_TIME_030,
 			CardIds.DivineAugur_TIME_429,
 			CardIds.DivineStar_GDB_460,
-			CardIds.DraconicHerald,
 			CardIds.DreamboundRaptor_EDR_849,
 			CardIds.DredgerStaff,
 			CardIds.DredgerStaff_CORE_REV_338,
@@ -1230,6 +1236,7 @@ export const reverseMinionSelector = (
 			CardIds.Reforestation_Fertilize_EDR_843b,
 			CardIds.Reforestation_ReforestationToken_EDR_843t1,
 			CardIds.Resurrect_BRM_017,
+			CardIds.RippleInTime,
 			CardIds.RiskySkipper,
 			CardIds.RunningWild,
 			CardIds.RunningWild_RunningWild,

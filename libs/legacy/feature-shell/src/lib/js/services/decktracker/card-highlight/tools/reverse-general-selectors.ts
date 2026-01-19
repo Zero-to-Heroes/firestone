@@ -511,7 +511,7 @@ export const reverseGeneralSelector = (
 		);
 	}
 
-	// HAS_MECHANIC_EQUIPS_WEAPON (51 cards)
+	// HAS_MECHANIC_EQUIPS_WEAPON (52 cards)
 	if (refCard.mechanics?.includes('EQUIPS_WEAPON')) {
 		matchingCardIds.push(
 			CardIds.AbyssalBassist,
@@ -564,7 +564,8 @@ export const reverseGeneralSelector = (
 			CardIds.SwarthySwordshiner_VAC_701,
 			CardIds.VulperaToxinblade,
 			CardIds.WeaponsAttendant_VAC_924,
-			CardIds.WeaponsExpert
+			CardIds.WeaponsExpert,
+			CardIds.WickedBlightspawn_END_002
 		);
 	}
 
@@ -626,7 +627,7 @@ export const reverseGeneralSelector = (
 		);
 	}
 
-	// WEAPON (51 cards)
+	// WEAPON (52 cards)
 	if (refCard.type?.toUpperCase() === 'WEAPON') {
 		matchingCardIds.push(
 			CardIds.AbyssalBassist,
@@ -679,7 +680,8 @@ export const reverseGeneralSelector = (
 			CardIds.SwarthySwordshiner_VAC_701,
 			CardIds.VulperaToxinblade,
 			CardIds.WeaponsAttendant_VAC_924,
-			CardIds.WeaponsExpert
+			CardIds.WeaponsExpert,
+			CardIds.WickedBlightspawn_END_002
 		);
 	}
 
