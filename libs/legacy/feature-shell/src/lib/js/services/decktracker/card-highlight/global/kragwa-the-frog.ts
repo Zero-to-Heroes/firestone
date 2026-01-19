@@ -7,17 +7,25 @@ export const KragwaTheFrog: GlobalHighlightCard = {
 	cardIds: [CardIds.KragwaTheFrog_CORE_TRL_345, CardIds.KragwaTheFrog_TRL_345],
 	getRelatedCards: (entityId: number, side: HighlightSide, gameState: GameState, allCards: CardsFacadeService) => {
 		const deckState = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
-		const sideKey: 'player' | 'opponent' = side === 'opponent' ? 'opponent' : 'player';
-		const historySpells =
-			gameState.cardsPlayedThisMatch
-				?.filter((card) => card.side === sideKey && card.turn === gameState.currentTurnNumeric - 1)
-				.map((e) => getProcessedCard(e.cardId, e.entityId, deckState, allCards))
-				.filter((c) => c.type?.toUpperCase() === CardType[CardType.SPELL])
-				.map((e) => e.id) ?? [];
+		const historySide: 'player' | 'opponent' = side === 'opponent' ? 'opponent' : 'player';
+		const historyCards =
+			gameState.cardsPlayedThisMatch?.filter(
+				(card) => card.side === historySide && card.turn === gameState.currentTurnNumeric - 1,
+			) ?? [];
+		const historySpells = historyCards
+			.map((card) => getProcessedCard(card.cardId, card.entityId, deckState, allCards))
+			.filter((card) => card.type?.toUpperCase() === CardType[CardType.SPELL])
+			.map((card) => card.id);
 		const lastTurnSpells = deckState.cardsPlayedLastTurn
-			.map((e) => getProcessedCard(e.cardId, e.entityId, deckState, allCards))
-			.filter((c) => c.type?.toUpperCase() === CardType[CardType.SPELL])
-			.map((e) => e.id);
-		return [...new Set([...historySpells, ...lastTurnSpells])];
+			.map((card) => getProcessedCard(card.cardId, card.entityId, deckState, allCards))
+			.filter((card) => card.type?.toUpperCase() === CardType[CardType.SPELL])
+			.map((card) => card.id);
+		const combinedSpells: string[] = [];
+		for (const spell of [...historySpells, ...lastTurnSpells]) {
+			if (!combinedSpells.includes(spell)) {
+				combinedSpells.push(spell);
+			}
+		}
+		return combinedSpells;
 	},
 };
