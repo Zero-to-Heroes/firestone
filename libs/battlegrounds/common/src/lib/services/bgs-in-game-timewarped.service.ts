@@ -130,7 +130,7 @@ export class BgsInGameTimewarpedService extends AbstractFacadeService<BgsInGameT
 			auditTime(500),
 			map((state) => ({
 				cardIds: state!.opponentDeck.board.map((entity) => entity.cardId),
-				currentTurn: state?.bgState?.currentGame?.liveStats?.currentTurn ?? 1,
+				currentTurn: state?.currentTurn ?? 1,
 			})),
 			distinctUntilChanged(
 				(a, b) => arraysEqual(a.cardIds, b.cardIds) && a.currentTurn === b.currentTurn,
