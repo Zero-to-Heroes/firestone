@@ -3,21 +3,20 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Card } from '@firestone/memory';
+import { SceneMode } from '@firestone-hs/reference-data';
+import { Card, SceneService } from '@firestone/memory';
 import { HEARTHPWN_SYNC, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractFacadeService, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
 import {
 	catchError,
-	concat,
+	combineLatest,
 	debounceTime,
 	distinctUntilChanged,
-	EMPTY,
+	filter,
 	firstValueFrom,
 	map,
-	skip,
+	pairwise,
 	switchMap,
-	take,
-	tap,
 	throwError,
 	timeout,
 } from 'rxjs';
@@ -30,6 +29,7 @@ export class HearthpwnService extends AbstractFacadeService<HearthpwnService> {
 	private collectionManager: ICollectionManagerService;
 	private http: HttpClient;
 	private prefs: PreferencesService;
+	private scene: SceneService;
 
 	private cipherBridge: StringCipherBridge;
 
@@ -49,31 +49,48 @@ export class HearthpwnService extends AbstractFacadeService<HearthpwnService> {
 		this.collectionManager = AppInjector.get(COLLECTION_MANAGER_SERVICE_TOKEN);
 		this.http = AppInjector.get(HttpClient);
 		this.prefs = AppInjector.get(PreferencesService);
+		this.scene = AppInjector.get(SceneService);
 		this.cipherBridge = new StringCipherBridge();
 		this.cipherBridge.initialize();
 		console.debug('[hearthpwn] init done');
 
+		// Sync immediately when the pref is activated for the first time
 		this.prefs.preferences$$
 			.pipe(
 				map((prefs) => prefs.hearthpwnSync),
-				distinctUntilChanged(),
-				tap((shouldSync) => console.log('[hearthpwn] should sync', shouldSync)),
-				switchMap((shouldSync) =>
-					shouldSync
-						? concat(
-								this.collectionManager.collection$$.pipe(take(1)), // Sync immediately on enable
-								this.collectionManager.collection$$.pipe(
-									skip(1),
-									debounceTime(10000),
-									distinctUntilChanged(
-										(a, b) =>
-											a?.length === b?.length &&
-											a.map((c) => cardCount(c)).reduce((a, b) => a + b, 0) ===
-												b.map((c) => cardCount(c)).reduce((a, b) => a + b, 0),
-									),
-								), // Debounce subsequent changes
-							)
-						: EMPTY,
+				pairwise(),
+			)
+			.subscribe(async ([previous, current]) => {
+				if (!previous && current) {
+					console.debug('[hearthpwn] pref activated for the first time, forcing sync');
+					const collection = await this.collectionManager.collection$$.getValueWithInit();
+					if (collection?.length > 0) {
+						this.syncCollection(collection);
+					}
+				}
+			});
+
+		// Sync on collection changes only when on COLLECTIONMANAGER scene
+		combineLatest([
+			this.prefs.preferences$$.pipe(map((prefs) => prefs.hearthpwnSync)),
+			this.scene.currentScene$$,
+		])
+			.pipe(
+				filter(([shouldSync, scene]) => shouldSync && scene === SceneMode.COLLECTIONMANAGER),
+				switchMap(() =>
+					this.collectionManager.collection$$.pipe(
+						debounceTime(10000),
+					),
+				),
+				distinctUntilChanged(
+					(a, b) => {
+						console.debug('[hearthpwn] comparing collections',
+							a?.length, b?.length,
+							a?.map((c) => cardCount(c)).reduce((a, b) => a + b, 0), b?.map((c) => cardCount(c)).reduce((a, b) => a + b, 0));
+						return a?.length === b?.length &&
+							a.map((c) => cardCount(c)).reduce((a, b) => a + b, 0) ===
+							b.map((c) => cardCount(c)).reduce((a, b) => a + b, 0)
+					},
 				),
 			)
 			.subscribe((collection) => this.syncCollection(collection));
@@ -212,9 +229,9 @@ interface UploadCard {
 	readonly IsPremium: boolean;
 }
 
-interface UploadProfile {}
-interface UploadRank {}
-interface UploadDeck {}
+interface UploadProfile { }
+interface UploadRank { }
+interface UploadDeck { }
 
 declare let OverwolfPlugin: any;
 
