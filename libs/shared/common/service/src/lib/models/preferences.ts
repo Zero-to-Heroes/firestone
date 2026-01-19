@@ -770,6 +770,7 @@ export class Preferences implements IPreferences {
 	readonly hearthpwnUserId: number | undefined;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly hearthpwnAuthToken: string | undefined;
+	readonly hearthpwnLastSyncedCollectionSize: number = 0;
 	readonly hsGuruCollectionSync: boolean = false;
 
 	readonly d0nkeySync: boolean = true;

@@ -97,7 +97,17 @@ export class HearthpwnService extends AbstractFacadeService<HearthpwnService> {
 	}
 
 	private async syncCollection(collection: readonly Card[]): Promise<void> {
-		console.debug('[hearthpwn] will sync collection', collection);
+		// Check if collection size has changed since last sync
+		const currentSize = collection.map((c) => cardCount(c)).reduce((a, b) => a + b, 0);
+		const prefs = await this.prefs.getPreferences();
+		const lastSyncedSize = prefs.hearthpwnLastSyncedCollectionSize ?? 0;
+
+		if (currentSize === lastSyncedSize) {
+			console.debug('[hearthpwn] collection size unchanged, skipping sync', currentSize);
+			return;
+		}
+
+		console.debug('[hearthpwn] will sync collection', collection, 'size changed from', lastSyncedSize, 'to', currentSize);
 		const uploadData: UploadData = await this.transformCollection(collection);
 		console.debug('[hearthpwn] uploadData', uploadData, JSON.stringify(uploadData.User));
 		const encryptedUser = await this.encrypt(JSON.stringify(uploadData.User));
@@ -134,6 +144,9 @@ export class HearthpwnService extends AbstractFacadeService<HearthpwnService> {
 					),
 			);
 			console.debug('[hearthpwn] upload result', uploadResult);
+			// Update the stored collection size after successful sync
+			await this.prefs.updatePrefs('hearthpwnLastSyncedCollectionSize', currentSize);
+			console.debug('[hearthpwn] updated last synced collection size to', currentSize);
 		} catch (error) {
 			console.error('[hearthpwn] Failed to upload collection', error);
 		}
