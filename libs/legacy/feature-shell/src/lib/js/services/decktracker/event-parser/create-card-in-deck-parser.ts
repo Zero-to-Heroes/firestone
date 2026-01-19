@@ -7,14 +7,14 @@ import { LocalizationFacadeService } from '../../localization-facade.service';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
-const CREATE_ON_TOP = [CardIds.MerchSeller, CardIds.DemonicDeal_WORK_014, CardIds.SweetDreamsToken_EDR_100t8];
+const CREATE_ON_TOP = [CardIds.MerchSeller, CardIds.DemonicDeal_WORK_014, CardIds.SweetDreamsToken_EDR_100t8, CardIds.TimewayWanderer];
 
 export class CreateCardInDeckParser implements EventParser {
 	constructor(
 		private readonly helper: DeckManipulationHelper,
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
-	) {}
+	) { }
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return !!state;
@@ -86,7 +86,7 @@ export class CreateCardInDeckParser implements EventParser {
 				: null;
 		const creatorEntity = creatorEntityId
 			? // Because sometimes the entityId is reversed in the Other zone
-				(deck.findCard(creatorEntityId)?.card ?? deck.findCard(-creatorEntityId)?.card)
+			(deck.findCard(creatorEntityId)?.card ?? deck.findCard(-creatorEntityId)?.card)
 			: null;
 		const shouldHideCreator =
 			// In this case, the card is removed from the deck then put back, so we're actually putting back the original
@@ -119,7 +119,10 @@ export class CreateCardInDeckParser implements EventParser {
 				cardName: this.buildCardName(cardData, gameEvent.additionalData.creatorCardId) ?? card?.cardName,
 				refManaCost: cardData?.cost,
 				actualManaCost:
-					this.buildKnownUpdatedManaCost(gameEvent.additionalData.creatorCardId) ?? cardData?.cost,
+					this.buildKnownUpdatedManaCost(gameEvent.additionalData.creatorCardId)
+					// If we discover a card, modify its cost and put it back in the deck, we want the updated mana cost
+					?? card?.actualManaCost
+					?? cardData?.cost,
 				rarity: cardData?.rarity?.toLowerCase(),
 				creatorCardId: shouldHideCreator
 					? null

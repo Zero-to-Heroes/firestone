@@ -9,8 +9,7 @@ const CARDS_THAT_WORK_ON_OPPONENT_DECK = [CardIds.EyesInTheSky_TLC_521, CardIds.
 const CARDS_THAT_PUT_ON_TOP = [
 	CardIds.SightlessWatcher,
 	CardIds.SightlessWatcherLegacy,
-	// CardIds.DraconicHerald,
-	CardIds.TimewayWanderer,
+	// CardIds.TimewayWanderer, // In CREATE_CARD_IN_DECK
 	...CARDS_THAT_WORK_ON_OPPONENT_DECK,
 ];
 
@@ -18,7 +17,7 @@ export class EntityChosenParser implements EventParser {
 	constructor(
 		private readonly helper: DeckManipulationHelper,
 		private readonly allCards: CardsFacadeService,
-	) {}
+	) { }
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return !!state;
