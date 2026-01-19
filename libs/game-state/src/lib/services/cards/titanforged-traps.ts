@@ -9,15 +9,16 @@ export const TitanforgedTraps: StaticGeneratingCard = {
 	cardIds: [CardIds.TitanforgedTraps],
 	publicCreator: true,
 	dynamicPool: (input: StaticGeneratingCardInput) => {
-		const currentClass = input.inputOptions.deckState.getCurrentClass();
+		const currentClassStr = input.inputOptions.deckState.getCurrentClass();
+		const currentClass = currentClassStr ? CardClass[currentClassStr] : null;
 		return filterCards(
 			TitanforgedTraps.cardIds[0],
 			input.allCards,
 			(c) =>
 				hasCorrectType(c, CardType.SPELL) &&
 				hasMechanic(c, GameTag.SECRET) &&
-				hasCorrectClass(c, CardClass.HUNTER) &&
-				canBeDiscoveredByClass(c, currentClass),
+				hasCorrectClass(c, currentClass) &&
+				canBeDiscoveredByClass(c, currentClassStr),
 			input.inputOptions,
 		);
 	},
