@@ -321,6 +321,8 @@ export const getCardForGlobalEffect = (cardId: CardIds): string => {
 			return CardIds.TalanjiOfTheGraves_BoonOfSpeedToken_TIME_619t5;
 		case CardIds.TalanjiOfTheGraves_BoonOfLongevityPlayerEnchEnchantment_TIME_619e2:
 			return CardIds.TalanjiOfTheGraves_BoonOfLongevityToken_TIME_619t4;
+		case CardIds.LieInWait_MasterDuskReshufflePlayerEnchantEnchantment_TLC_513e2:
+			return CardIds.LieInWait_MasterDuskToken_TLC_513t;
 		default:
 			if (cardId.endsWith('e')) {
 				// This is a global effect enchantment, so we return the card id without the "e" at the end
