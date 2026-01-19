@@ -74,7 +74,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 					<div class="card-image-overlay"></div>
 				</div>
 				<div
-					class="icon-symbol"
+					class="icon-symbol overlay-icon"
 					*ngIf="isBurned"
 					[helpTooltip]="'decktracker.card-burned' | owTranslate"
 					[bindTooltipToGameWindow]="true"
@@ -84,7 +84,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 					</div>
 				</div>
 				<div
-					class="icon-symbol transformed"
+					class="icon-symbol overlay-icon transformed"
 					*ngIf="isTransformed"
 					[helpTooltip]="'decktracker.card-transformed' | owTranslate"
 				>
@@ -93,7 +93,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 					</div>
 				</div>
 				<div
-					class="gift-symbol"
+					class="gift-symbol overlay-icon"
 					*ngIf="creatorCardIds && creatorCardIds.length > 0"
 					[helpTooltip]="giftTooltip"
 				>
@@ -101,13 +101,13 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 						<div class="svg-container" inlineSVG="assets/svg/card_gift.svg"></div>
 					</div>
 				</div>
-				<div class="stolen-symbol" *ngIf="isStolen" [helpTooltip]="'decktracker.stolen-tooltip' | fsTranslate">
+				<div class="stolen-symbol overlay-icon" *ngIf="isStolen" [helpTooltip]="'decktracker.stolen-tooltip' | fsTranslate">
 					<div class="inner-border">
 						<div class="svg-container" inlineSVG="assets/svg/card_stolen.svg"></div>
 					</div>
 				</div>
 				<div
-					class="icon-symbol dredged"
+					class="icon-symbol overlay-icon dredged"
 					*ngIf="isDredged"
 					[helpTooltip]="'decktracker.card-dredged-tooltip' | owTranslate"
 				>
@@ -115,13 +115,13 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 						<div class="icon svg-container" inlineSVG="assets/svg/dredged.svg"></div>
 					</div>
 				</div>
-				<div class="legendary-symbol" *ngIf="rarity === 'legendary'">
+				<div class="legendary-symbol overlay-icon" *ngIf="rarity === 'legendary'">
 					<div class="inner-border">
 						<div class="svg-container" inlineSVG="assets/svg/card_legendary.svg"></div>
 					</div>
 				</div>
 				<div
-					class="icon-symbol discard"
+					class="icon-symbol overlay-icon discard"
 					*ngIf="isDiscarded"
 					[helpTooltip]="'decktracker.card-discarded' | owTranslate"
 				>
@@ -130,7 +130,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 					</div>
 				</div>
 				<div
-					class="icon-symbol countered"
+					class="icon-symbol overlay-icon countered"
 					*ngIf="isCountered"
 					[helpTooltip]="'decktracker.card-countered' | owTranslate"
 				>
@@ -139,7 +139,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 					</div>
 				</div>
 				<div
-					class="icon-symbol graveyard"
+					class="icon-symbol overlay-icon graveyard"
 					*ngIf="isGraveyard"
 					[helpTooltip]="'decktracker.card-in-graveyard' | owTranslate"
 				>
@@ -147,7 +147,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 						<div class="svg-container" inlineSVG="assets/svg/card_graveyard.svg"></div>
 					</div>
 				</div>
-				<div class="number-of-copies" *ngIf="numberOfCopies > 1">
+				<div class="number-of-copies overlay-icon" *ngIf="numberOfCopies > 1">
 					<div class="inner-border">
 						<span>{{ numberOfCopies }}</span>
 					</div>
@@ -575,10 +575,36 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		const containerStyle = window.getComputedStyle(container);
 		const paddingLeft = parseFloat(containerStyle.paddingLeft) || 0;
 		const paddingRight = parseFloat(containerStyle.paddingRight) || 0;
-		const availableWidth = container.clientWidth - paddingLeft - paddingRight;
+
+		// Calculate the total width of overlay icons that are positioned on top of the card name
+		// These icons are in the .card-info sibling element and visually reduce the available text area
+		const overlayIconsWidth = this.getOverlayIconsWidth(container);
+
+		const availableWidth = container.clientWidth - paddingLeft - paddingRight - overlayIconsWidth;
 
 		const overflow = textWidth - availableWidth;
 		return overflow > 0 ? overflow : 0;
+	}
+
+	// Returns the total width of visible overlay icons
+	private getOverlayIconsWidth(cardNameContainer: Element): number {
+		// Navigate to the parent .deck-card element and find .card-info
+		const deckCard = cardNameContainer.parentElement;
+		if (!deckCard) {
+			return 0;
+		}
+		const cardInfo = deckCard.querySelector('.card-info');
+		if (!cardInfo) {
+			return 0;
+		}
+
+		// Query all visible overlay-icon elements
+		const overlayIcons = cardInfo.querySelectorAll('.overlay-icon');
+		let totalWidth = 0;
+		for (const icon of Array.from(overlayIcons)) {
+			totalWidth += (icon as HTMLElement).offsetWidth;
+		}
+		return totalWidth;
 	}
 
 	private async updateInfos(
@@ -597,7 +623,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		this.manaCostStr =
 			this._referenceCard?.hideStats || card.hideStats ? '' : this.manaCost == null ? '?' : `${this.manaCost}`;
 		this.manaCostReduction = this.manaCost != null && this.manaCost < card.refManaCost;
-		this.cardName = this.buildCardName(card, showStatsChange);
+		this.cardName = this.buildCardName(card, showStatsChange) + '(Burns in 5)';
 		this.isUnknownCard = !card.cardName?.length && !this.cardId;
 
 		this.numberOfCopies = card.totalQuantity;
@@ -620,12 +646,12 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		this.isTransformed = card.zone === 'TRANSFORMED_INTO_OTHER' || !!card.tags?.[GameTag.TRANSFORMED_FROM_CARD];
 		this.transformedInto = !!card.transformedInto
 			? VisualDeckCard.create({
-					cardId: card.transformedInto,
-					entityId: card.entityId,
-					refManaCost: this.cards.getCard(card.transformedInto)?.cost,
-					cardName: this.cards.getCard(card.transformedInto)?.name,
-					rarity: this.cards.getCard(card.transformedInto)?.rarity?.toLowerCase(),
-				})
+				cardId: card.transformedInto,
+				entityId: card.entityId,
+				refManaCost: this.cards.getCard(card.transformedInto)?.cost,
+				cardName: this.cards.getCard(card.transformedInto)?.name,
+				rarity: this.cards.getCard(card.transformedInto)?.rarity?.toLowerCase(),
+			})
 			: null;
 		this._isMissing = card.isMissing;
 		this.isStolen = card.stolenFromOpponent;
