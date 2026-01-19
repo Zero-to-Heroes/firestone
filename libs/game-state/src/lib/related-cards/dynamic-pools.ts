@@ -325,7 +325,7 @@ const getDynamicRelatedCardIdsInternal = (
 					.filter((c) =>
 						!!c.set
 							? !isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, options.gameType) &&
-								isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_WILD, options.gameType)
+							isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_WILD, options.gameType)
 							: false,
 					)
 					// From another class
@@ -1364,6 +1364,8 @@ export const filterCards = (
 		.filter((c) => (isArena(options.gameType) ? !BAN_LIST_ARENA.includes(c.id as CardIds) : true))
 		.filter((c) => (summonsInPlay && !wantsColossal ? !hasMechanic(c, GameTag.COLOSSAL) : true))
 		.filter((c) => canIncludeStarcraftFaction(c, options.initialDecklist, options.currentClass, allCards))
+		.filter((c) => canIncludeCthun(c, options.initialDecklist, options.currentClass, allCards))
+		.filter((c) => canIncludeGalakrond(c, options.initialDecklist, options.currentClass, allCards))
 		.filter((c) => {
 			const debug = false;
 			if (gameType === GameType.GT_ARENA || gameType === GameType.GT_UNDERGROUND_ARENA) {
@@ -1570,6 +1572,48 @@ const hasHealth = (card: ReferenceCard, operator: '==' | '<=' | '>=' | '<' | '>'
 			return health > value;
 	}
 };
+
+const canIncludeCthun = (refCard: ReferenceCard, initialDecklist: readonly string[] | undefined, currentClass: string | undefined, allCards: AllCardsService): boolean => {
+	if (!refCard.mechanics?.includes('CTHUN')) {
+		return true;
+	}
+
+	if (!initialDecklist?.length) {
+		return false;
+	}
+
+	for (const cardId of initialDecklist) {
+		const refCard = allCards.getCard(cardId);
+		if (!refCard) {
+			return true;
+		}
+		if (refCard.mechanics?.includes('CTHUN')) {
+			return true;
+		}
+	}
+	return false;
+}
+
+const canIncludeGalakrond = (refCard: ReferenceCard, initialDecklist: readonly string[] | undefined, currentClass: string | undefined, allCards: AllCardsService): boolean => {
+	if (!refCard.mechanics?.includes('GALAKROND')) {
+		return true;
+	}
+
+	if (!initialDecklist?.length) {
+		return false;
+	}
+
+	for (const cardId of initialDecklist) {
+		const refCard = allCards.getCard(cardId);
+		if (!refCard) {
+			return true;
+		}
+		if (refCard.mechanics?.includes('GALAKROND')) {
+			return true;
+		}
+	}
+	return false;
+}
 
 const canIncludeStarcraftFaction = (
 	refCard: ReferenceCard,
