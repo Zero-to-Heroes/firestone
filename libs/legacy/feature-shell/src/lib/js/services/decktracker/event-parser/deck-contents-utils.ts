@@ -352,7 +352,7 @@ const handleAlternateReality = (
 		(card) =>
 			card.update({
 				cardId: undefined,
-				cardName: i18n.getUnknownCardName(CardClass[deckState.hero?.classes[0] ?? CardClass.NEUTRAL]),
+				cardName: i18n.getUnknownCardName(),
 				creatorCardId: CardIds.AlternateReality_TIME_707,
 				rarity: undefined,
 				cardType: undefined,
