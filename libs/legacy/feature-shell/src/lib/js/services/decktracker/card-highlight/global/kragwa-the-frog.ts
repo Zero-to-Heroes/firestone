@@ -20,12 +20,7 @@ export const KragwaTheFrog: GlobalHighlightCard = {
 			.map((card) => getProcessedCard(card.cardId, card.entityId, deckState, allCards))
 			.filter((card) => card.type?.toUpperCase() === CardType[CardType.SPELL])
 			.map((card) => card.id);
-		const combinedSpells: string[] = [];
-		for (const spell of [...historySpells, ...lastTurnSpells]) {
-			if (!combinedSpells.includes(spell)) {
-				combinedSpells.push(spell);
-			}
-		}
-		return combinedSpells;
+		const combinedSpells = [...historySpells, ...lastTurnSpells];
+		return Array.from(new Set(combinedSpells));
 	},
 };
