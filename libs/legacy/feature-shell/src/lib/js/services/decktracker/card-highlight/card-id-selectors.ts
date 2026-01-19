@@ -2430,6 +2430,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), undead);
 		case CardIds.NetherBreath_DRG_205:
 			return and(side(inputSide), or(inDeck, inHand), dragon);
+		case CardIds.NightbaneTemplar:
+			return and(side(inputSide), or(inDeck, inHand), dragon);
 		case CardIds.NightmareFuel_EDR_528:
 			return and(opposingSide(inputSide), inDeck, minion);
 		case CardIds.NightmareLordXavius_EDR_856:
