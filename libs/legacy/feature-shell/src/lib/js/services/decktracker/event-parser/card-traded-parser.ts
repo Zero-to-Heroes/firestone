@@ -4,6 +4,7 @@ import { PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '../../../models/game-event';
 import { CARDS_THAT_IMPROVE_WHEN_TRADED } from '../../hs-utils';
+import { revealCard } from '../game-state/card-reveal';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
@@ -12,7 +13,7 @@ export class CardTradedParser implements EventParser {
 		private readonly helper: DeckManipulationHelper,
 		private readonly prefs: PreferencesService,
 		private readonly allCards: CardsFacadeService,
-	) {}
+	) { }
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return !!state;
@@ -84,13 +85,13 @@ export class CardTradedParser implements EventParser {
 		// Because we don't know where the card is inserted, we reset the positions
 		const deckWithResetPositions: readonly DeckCard[] = prefs.overlayResetDeckPositionAfterTrade2
 			? newDeck.map((card) =>
-					card.update({
-						...card,
-						positionFromBottom: undefined,
-						positionFromTop: undefined,
-						dredged: undefined,
-					}),
-				)
+				card.update({
+					...card,
+					positionFromBottom: undefined,
+					positionFromTop: undefined,
+					dredged: undefined,
+				}),
+			)
 			: newDeck;
 
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
@@ -100,8 +101,17 @@ export class CardTradedParser implements EventParser {
 				(c, i) => c !== cardId || deck.additionalKnownCardsInHand.indexOf(c) !== i,
 			),
 		});
+
+
+		const playerDeckAfterReveal = isPlayer ? newPlayerDeck : currentState.opponentDeck;
+		const opponentDeckAfterReveal = isPlayer
+			? currentState.opponentDeck
+			: revealCard(newPlayerDeck, cardWithoutInfluence, this.allCards);
+
 		return Object.assign(new GameState(), currentState, {
-			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
+			// [isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
+			playerDeck: playerDeckAfterReveal,
+			opponentDeck: opponentDeckAfterReveal,
 		});
 	}
 
