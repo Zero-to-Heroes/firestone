@@ -20,35 +20,35 @@ export class ElementalTavernBuffCounterDefinitionV2 extends CounterDefinitionV2<
 			const relevantEnchantsSingle = state.playerDeck.enchantments?.filter((e) =>
 				[
 					CardIds.NomiStickerPlayerEnchantDntEnchantment_BG30_MagicItem_544pe, // ok
-					CardIds.ShopBuffPlayerEnchantDntEnchantment_BG_ShopBuff, // ok
+					CardIds.ElementalShopBuffPlayerEnchantmentDntEnchantment_BG_ShopBuff_Elemental, // ok
 				].includes(e.cardId as CardIds),
 			);
-			const relevantEnchantsMulti = state.playerDeck.enchantments?.filter((e) =>
-				[
-					CardIds.DuneDwellerPlayerEnchantDntEnchantment_BG31_815pe, // ok
-					CardIds.DazzlingLightspawnPlayerEnchantEnchantment,
-					CardIds.NomiPlayerEnchantEnchantment,
-					CardIds.DancingBarnstormerPlayerEnchantDntEnchantment,
-					CardIds.LivingAzerite_LivingAzeritePlayerEnchantDntEnchantment_BG28_707e,
-					CardIds.BlazingGreasefirePlayerEnchantDntEnchantment_BG32_843pe, // ok
-					CardIds.AlignTheElementsPlayerEnchDntEnchantment_BG32_814pe, // ok
-				].includes(e.cardId as CardIds),
-			);
+			// const relevantEnchantsMulti = state.playerDeck.enchantments?.filter((e) =>
+			// 	[
+			// 		CardIds.DuneDwellerPlayerEnchantDntEnchantment_BG31_815pe, // ok
+			// 		CardIds.DazzlingLightspawnPlayerEnchantEnchantment,
+			// 		CardIds.NomiPlayerEnchantEnchantment,
+			// 		CardIds.DancingBarnstormerPlayerEnchantDntEnchantment,
+			// 		CardIds.LivingAzerite_LivingAzeritePlayerEnchantDntEnchantment_BG28_707e,
+			// 		CardIds.BlazingGreasefirePlayerEnchantDntEnchantment_BG32_843pe, // ok
+			// 		CardIds.AlignTheElementsPlayerEnchDntEnchantment_BG32_814pe, // ok
+			// 	].includes(e.cardId as CardIds),
+			// );
 			const value = {
 				atk:
 					relevantEnchantsSingle
 						.map((e) => e.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_1] ?? 0)
-						.reduce((a, b) => a + b, 0) +
-					relevantEnchantsMulti
-						.map((e) => e.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_1] ?? 0)
 						.reduce((a, b) => a + b, 0),
+				// relevantEnchantsMulti
+				// 	.map((e) => e.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_1] ?? 0)
+				// 	.reduce((a, b) => a + b, 0),
 				health:
 					relevantEnchantsSingle
 						.map((e) => e.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_1] ?? 0)
-						.reduce((a, b) => a + b, 0) +
-					relevantEnchantsMulti
-						.map((e) => e.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_2] ?? 0)
 						.reduce((a, b) => a + b, 0),
+				// relevantEnchantsMulti
+				// 	.map((e) => e.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_2] ?? 0)
+				// 	.reduce((a, b) => a + b, 0),
 			};
 			if (value.atk === 0 && value.health === 0) {
 				return null;
