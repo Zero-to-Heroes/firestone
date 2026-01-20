@@ -1,4 +1,3 @@
-/* eslint-disable no-mixed-spaces-and-tabs */
 // A Light in the Darkness (OG_311 / WON_333): 2 Mana Paladin spell
 // "<b>Discover</b> a Paladin minion. Give it +2/+2."
 // The card is discovered, so it needs guessInfo for the Paladin minion pool.
