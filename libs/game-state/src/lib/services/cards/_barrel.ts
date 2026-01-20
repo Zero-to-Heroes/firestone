@@ -144,6 +144,7 @@ export { Skyfin } from './skyfin';
 export { SkyMotherAviana } from './sky-mother-aviana';
 export { SneedsOldShredder } from './sneeds-old-shredder';
 export { Solitude } from './solitude';
+export { SootSpewer } from './soot-spewer';
 export { Spellslinger } from './spellslinger';
 export { SpiritGuide } from './spirit-guide';
 export { SunkenScroll } from './sunken-scroll';

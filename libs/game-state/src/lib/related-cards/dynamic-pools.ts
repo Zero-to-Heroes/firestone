@@ -1252,8 +1252,6 @@ const getDynamicFilters = (
 		case CardIds.WhisperingStone_TLC_467:
 			return (c) => hasCorrectType(c, CardType.SPELL) && hasCorrectSpellSchool(c, SpellSchool.FEL);
 		case CardIds.Pyrotechnician:
-		case CardIds.SootSpewer:
-		case CardIds.SootSpewer_WON_033:
 			return (c) => hasCorrectType(c, CardType.SPELL) && hasCorrectSpellSchool(c, SpellSchool.FIRE);
 		case CardIds.UmbralGeist:
 			return (c) => hasCorrectType(c, CardType.SPELL) && hasCorrectSpellSchool(c, SpellSchool.SHADOW);
