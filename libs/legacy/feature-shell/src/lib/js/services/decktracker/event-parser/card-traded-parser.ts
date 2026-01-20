@@ -103,7 +103,7 @@ export class CardTradedParser implements EventParser {
 		});
 
 
-		const playerDeckAfterReveal = isPlayer ? newPlayerDeck : currentState.opponentDeck;
+		const playerDeckAfterReveal = isPlayer ? newPlayerDeck : currentState.playerDeck;
 		const opponentDeckAfterReveal = isPlayer
 			? currentState.opponentDeck
 			: revealCard(newPlayerDeck, cardWithoutInfluence, this.allCards);
