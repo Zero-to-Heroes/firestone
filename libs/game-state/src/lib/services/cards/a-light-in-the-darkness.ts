@@ -9,6 +9,9 @@ import { hasCorrectClass, hasCorrectType } from '../../related-cards/dynamic-poo
 import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
 
+const isPaladinMinion = (card: Parameters<typeof hasCorrectType>[0]) =>
+	hasCorrectType(card, CardType.MINION) && hasCorrectClass(card, CardClass.PALADIN);
+
 export const ALightInTheDarkness: GeneratingCard & StaticGeneratingCard = {
 	cardIds: [CardIds.ALightInTheDarkness, CardIds.ALightInTheDarkness_WON_333],
 	publicCreator: true,
@@ -16,7 +19,7 @@ export const ALightInTheDarkness: GeneratingCard & StaticGeneratingCard = {
 		return filterCards(
 			ALightInTheDarkness.cardIds[0],
 			input.allCards,
-			(c) => hasCorrectType(c, CardType.MINION) && hasCorrectClass(c, CardClass.PALADIN),
+			(card) => isPaladinMinion(card),
 			input.inputOptions,
 		);
 	},
@@ -24,7 +27,7 @@ export const ALightInTheDarkness: GeneratingCard & StaticGeneratingCard = {
 		const possibleCards = filterCards(
 			ALightInTheDarkness.cardIds[0],
 			input.allCards,
-			(c) => hasCorrectType(c, CardType.MINION) && hasCorrectClass(c, CardClass.PALADIN),
+			(card) => isPaladinMinion(card),
 			input.options,
 		);
 		return {
