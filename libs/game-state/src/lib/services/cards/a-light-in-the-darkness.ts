@@ -32,7 +32,7 @@ export const ALightInTheDarkness: GeneratingCard & StaticGeneratingCard = {
 		return {
 			cardType: CardType.MINION,
 			cardClasses: [CardClass.PALADIN],
-			possibleCards: possibleCards,
+			possibleCards,
 		};
 	},
 };
