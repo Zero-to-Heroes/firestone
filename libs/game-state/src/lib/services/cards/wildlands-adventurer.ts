@@ -1,8 +1,23 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import { CardIds, SetId } from '@firestone-hs/reference-data';
+import { AllCardsService, CardIds, CardType } from '@firestone-hs/reference-data';
 import { GuessedInfo } from '../../models/deck-card';
 import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
-import { filterCards } from './utils';
+
+// Build Taverns of Time pool directly from card data to bypass format validity filtering.
+// This includes all collectible cards from the set (excluding enchantments).
+const buildTavernsOfTimePool = (allCards: AllCardsService): readonly string[] => {
+	return allCards
+		.getCards()
+		.filter(
+			(c) =>
+				c.set?.toLowerCase() === 'taverns_of_time' &&
+				c.collectible &&
+				c.type?.toUpperCase() !== CardType[CardType.ENCHANTMENT] &&
+				!!c.id,
+		)
+		.sort((a, b) => (a.cost ?? 0) - (b.cost ?? 0) || a.name.localeCompare(b.name))
+		.map((c) => c.id) as readonly string[];
+};
 
 // Wildlands Adventurer (TOT_056)
 // "<b>Rewind</b> <b>Battlecry:</b> Get a random card from The Taverns of Time."
@@ -10,21 +25,11 @@ export const WildlandsAdventurer: GeneratingCard & StaticGeneratingCard = {
 	cardIds: [CardIds.WildlandsAdventurer],
 	publicCreator: true,
 	dynamicPool: (input: StaticGeneratingCardInput) => {
-		return filterCards(
-			WildlandsAdventurer.cardIds[0],
-			input.allCards,
-			(c) => c.set?.toLowerCase() === 'taverns_of_time',
-			input.inputOptions,
-		);
+		return buildTavernsOfTimePool(input.allCards);
 	},
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
 		return {
-			possibleCards: filterCards(
-				WildlandsAdventurer.cardIds[0],
-				input.allCards,
-				(c) => c.set?.toLowerCase() === 'taverns_of_time',
-				input.options,
-			),
+			possibleCards: buildTavernsOfTimePool(input.allCards),
 		};
 	},
 };
