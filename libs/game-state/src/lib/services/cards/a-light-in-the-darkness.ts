@@ -2,13 +2,13 @@
 // "<b>Discover</b> a Paladin minion. Give it +2/+2."
 // The card is discovered, so it needs guessInfo for the Paladin minion pool.
 
-import { CardClass, CardIds, CardType } from '@firestone-hs/reference-data';
+import { CardClass, CardIds, CardType, ReferenceCard } from '@firestone-hs/reference-data';
 import { GuessedInfo } from '../../models/deck-card';
 import { hasCorrectClass, hasCorrectType } from '../../related-cards/dynamic-pools';
 import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
 
-const isPaladinMinion = (card: Parameters<typeof hasCorrectType>[0]) =>
+const isPaladinMinion = (card: ReferenceCard) =>
 	hasCorrectType(card, CardType.MINION) && hasCorrectClass(card, CardClass.PALADIN);
 
 export const ALightInTheDarkness: GeneratingCard & StaticGeneratingCard = {
