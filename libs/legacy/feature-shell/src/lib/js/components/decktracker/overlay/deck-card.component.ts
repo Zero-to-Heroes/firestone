@@ -3,15 +3,17 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
+	ElementRef,
 	EventEmitter,
 	HostListener,
 	Input,
 	OnDestroy,
 	Optional,
 	Output,
+	ViewChild,
 	ViewRef,
 } from '@angular/core';
-import { CardClass, CardIds, CardType, GameTag, GameType, ReferenceCard } from '@firestone-hs/reference-data';
+import { CardClass, CardIds, GameTag, GameType, ReferenceCard } from '@firestone-hs/reference-data';
 import { CardMousedOverService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, uuidShort } from '@firestone/shared/framework/common';
@@ -73,7 +75,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 					<div class="card-image-overlay"></div>
 				</div>
 				<div
-					class="icon-symbol"
+					class="icon-symbol overlay-icon"
 					*ngIf="isBurned"
 					[helpTooltip]="'decktracker.card-burned' | owTranslate"
 					[bindTooltipToGameWindow]="true"
@@ -83,7 +85,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 					</div>
 				</div>
 				<div
-					class="icon-symbol transformed"
+					class="icon-symbol overlay-icon transformed"
 					*ngIf="isTransformed"
 					[helpTooltip]="'decktracker.card-transformed' | owTranslate"
 				>
@@ -92,7 +94,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 					</div>
 				</div>
 				<div
-					class="gift-symbol"
+					class="gift-symbol overlay-icon"
 					*ngIf="creatorCardIds && creatorCardIds.length > 0"
 					[helpTooltip]="giftTooltip"
 				>
@@ -100,13 +102,13 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 						<div class="svg-container" inlineSVG="assets/svg/card_gift.svg"></div>
 					</div>
 				</div>
-				<div class="stolen-symbol" *ngIf="isStolen" [helpTooltip]="'decktracker.stolen-tooltip' | fsTranslate">
+				<div class="stolen-symbol overlay-icon" *ngIf="isStolen" [helpTooltip]="'decktracker.stolen-tooltip' | fsTranslate">
 					<div class="inner-border">
 						<div class="svg-container" inlineSVG="assets/svg/card_stolen.svg"></div>
 					</div>
 				</div>
 				<div
-					class="icon-symbol dredged"
+					class="icon-symbol overlay-icon dredged"
 					*ngIf="isDredged"
 					[helpTooltip]="'decktracker.card-dredged-tooltip' | owTranslate"
 				>
@@ -114,13 +116,13 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 						<div class="icon svg-container" inlineSVG="assets/svg/dredged.svg"></div>
 					</div>
 				</div>
-				<div class="legendary-symbol" *ngIf="rarity === 'legendary'">
+				<div class="legendary-symbol overlay-icon" *ngIf="rarity === 'legendary'">
 					<div class="inner-border">
 						<div class="svg-container" inlineSVG="assets/svg/card_legendary.svg"></div>
 					</div>
 				</div>
 				<div
-					class="icon-symbol discard"
+					class="icon-symbol overlay-icon discard"
 					*ngIf="isDiscarded"
 					[helpTooltip]="'decktracker.card-discarded' | owTranslate"
 				>
@@ -129,7 +131,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 					</div>
 				</div>
 				<div
-					class="icon-symbol countered"
+					class="icon-symbol overlay-icon countered"
 					*ngIf="isCountered"
 					[helpTooltip]="'decktracker.card-countered' | owTranslate"
 				>
@@ -138,7 +140,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 					</div>
 				</div>
 				<div
-					class="icon-symbol graveyard"
+					class="icon-symbol overlay-icon graveyard"
 					*ngIf="isGraveyard"
 					[helpTooltip]="'decktracker.card-in-graveyard' | owTranslate"
 				>
@@ -146,7 +148,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 						<div class="svg-container" inlineSVG="assets/svg/card_graveyard.svg"></div>
 					</div>
 				</div>
-				<div class="number-of-copies" *ngIf="numberOfCopies > 1">
+				<div class="number-of-copies overlay-icon" *ngIf="numberOfCopies > 1">
 					<div class="inner-border">
 						<span>{{ numberOfCopies }}</span>
 					</div>
@@ -156,8 +158,8 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 				<span>{{ manaCostStr }}</span>
 			</div>
 			<div class="missing-overlay" *ngIf="_isMissing"></div>
-			<div class="card-name">
-				<span>{{ cardName }}</span>
+			<div class="card-name" [ngClass]="{ 'scroll-text': scrollText }">
+				<span #cardNameSpan>{{ cardName }}</span>
 			</div>
 			<div class="dim-overlay" *ngIf="highlight === 'dim'"></div>
 			<div class="linked-card-overlay"></div>
@@ -178,6 +180,8 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 	forceMouseOver$: Observable<boolean>;
 
 	@Output() cardClicked: EventEmitter<VisualDeckCard> = new EventEmitter<VisualDeckCard>();
+	// Using ElementRef<HTMLSpanElement> for better type safety when accessing DOM properties
+	@ViewChild('cardNameSpan', { static: false }) cardNameSpan: ElementRef<HTMLSpanElement>;
 
 	@Input() set showUpdatedCost(value: boolean) {
 		this.showUpdatedCost$$.next(value);
@@ -198,42 +202,42 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 	@Input() set colorManaCost(value: boolean) {
 		this._colorManaCost = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
 	@Input() set showRelatedCards(value: boolean) {
 		this._showRelatedCards = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
 	@Input() set showTransformedInto(value: boolean) {
 		this._showTransformedInto = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
 	@Input() set colorClassCards(value: boolean) {
 		this._colorClassCards = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
 	@Input() set showUnknownCards(value: boolean) {
 		this._showUnknownCards = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
 	@Input() set zone(zone: DeckZone) {
 		this._zone = zone;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -241,7 +245,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		this._side = value;
 		this.registerHighlight();
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -285,8 +289,13 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 
 	useNewCardTileStyle = false;
 	cardImageError = false;
+	scrollText = false;
 
 	private _referenceCard: ReferenceCard;
+	// Using number type for browser setTimeout return value (ReturnType<typeof setTimeout> returns NodeJS.Timeout)
+	private scrollTimeout: number | null = null;
+	// Delay before text starts scrolling on hover (prevents flicker on quick mouseovers)
+	private static readonly TEXT_SCROLL_DELAY_MS = 500;
 	private _uniqueId: string;
 	private _zone: DeckZone;
 	private _flavorTextTimeout: number | null = null;
@@ -323,7 +332,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 			.subscribe((useNewCardTileStyle) => {
 				this.useNewCardTileStyle = useNewCardTileStyle;
 				if (!(this.cdr as ViewRef)?.destroyed) {
-					this.cdr.detectChanges();
+					this.cdr.markForCheck();
 				}
 			});
 
@@ -335,7 +344,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		])
 			.pipe(
 				filter(([card]) => !!card),
-				auditTime(50),
+				auditTime(250),
 				takeUntil(this.destroyed$),
 			)
 			.subscribe(([card, showUpdatedCost, showStatsChange, groupSameCardsTogether]) => {
@@ -389,7 +398,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		});
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
@@ -421,25 +430,38 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		// console.debug('unregistering highlight', card?.cardName, this.el.nativeElement);
 		this.cardsHighlightService?.onMouseLeave(this.cardId);
 		this.cardsHighlightService?.unregister(this._uniqueId, this._side);
+		// Clean up scroll timeout to prevent memory leaks
+		if (this.scrollTimeout !== null) {
+			window.clearTimeout(this.scrollTimeout);
+			this.scrollTimeout = null;
+		}
+		// Clean up flavor text timeout
+		if (this._flavorTextTimeout !== null) {
+			window.clearTimeout(this._flavorTextTimeout);
+			this._flavorTextTimeout = null;
+		}
 	}
 
 	doHighlight(highlight: SelectorOutput) {
 		this.linkedCardHighlight = highlight === true ? true : highlight === false ? false : 'linked-card-' + highlight;
 		// console.debug('highlight', this.cardName, this.cardId, highlight, this.linkedCardHighlight);
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
 	doUnhighlight() {
 		this.linkedCardHighlight = false;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
 	async onMouseEnter(event: MouseEvent) {
 		this.cardsHighlightService?.onMouseEnter(this.cardId, this.entityId, this._side, this.card$$.value);
+
+		// Check if text is truncated and schedule scroll after delay
+		this.scheduleTextScroll();
 
 		// Show flavor text if enabled
 		await this.showFlavorText();
@@ -447,7 +469,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		if (!this.card$$.value.cardId && this.card$$.value.guessedInfo?.possibleCards?.length) {
 			this.relatedCardIds = this.card$$.value.guessedInfo.possibleCards;
 			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
+				this.cdr.markForCheck();
 			}
 			return this.relatedCardIds;
 		}
@@ -463,7 +485,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 			const sort = relatedCardIdsSelectorSort(this.cardId, this.cards);
 			this.relatedCardIds = sort == null ? globalHighlights : [...globalHighlights].sort(sort);
 			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
+				this.cdr.markForCheck();
 			}
 			return globalHighlights;
 		}
@@ -492,13 +514,26 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 			this.relatedCardIds = [...new Set(this.relatedCardIds)];
 		}
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
 	onMouseLeave(event: MouseEvent) {
 		this.cardsHighlightService?.onMouseLeave(this.cardId);
+
+		// Clear the scroll timeout and reset scroll state
+		if (this.scrollTimeout !== null) {
+			window.clearTimeout(this.scrollTimeout);
+			this.scrollTimeout = null;
+		}
+		this.scrollText = false;
+
+		// Hide flavor text
 		this.hideFlavorText();
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.markForCheck();
+		}
 	}
 
 	onCardClicked(event: MouseEvent) {
@@ -508,8 +543,83 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 	onCardImageError() {
 		this.cardImageError = true;
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
+	}
+
+	private scheduleTextScroll() {
+		// Clear any existing timeout
+		if (this.scrollTimeout !== null) {
+			window.clearTimeout(this.scrollTimeout);
+		}
+
+		// Check if text overflows - skip if it fits
+		const overflowAmount = this.getTextOverflowAmount();
+		if (overflowAmount <= 0) {
+			return;
+		}
+
+		// Schedule the text scroll after a delay (only for truncated text)
+		this.scrollTimeout = window.setTimeout(() => {
+			this.scrollTimeout = null;
+			// Set dynamic animation duration based on overflow amount for better readability
+			// Base: 0.3s for up to 50px overflow, then scale linearly (approximately 6ms per pixel)
+			const animationDuration = Math.max(0.3, overflowAmount * 0.006);
+			this.cardNameSpan?.nativeElement?.style?.setProperty('--scroll-duration', `${animationDuration}s`);
+			this.scrollText = true;
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.markForCheck();
+			}
+		}, DeckCardComponent.TEXT_SCROLL_DELAY_MS);
+	}
+
+	// Returns the amount of pixels the text overflows, or 0 if not truncated
+	private getTextOverflowAmount(): number {
+		if (!this.cardNameSpan?.nativeElement) {
+			return 0;
+		}
+		const span = this.cardNameSpan.nativeElement;
+		const container = span.parentElement;
+		if (!container) {
+			return 0;
+		}
+
+		// The span has display: inline-block in CSS, so scrollWidth accurately reflects
+		// the actual text width. Compare against container's available space (minus padding).
+		const textWidth = span.scrollWidth;
+		const containerStyle = window.getComputedStyle(container);
+		const paddingLeft = parseFloat(containerStyle.paddingLeft) || 0;
+		const paddingRight = parseFloat(containerStyle.paddingRight) || 0;
+
+		// Calculate the total width of overlay icons that are positioned on top of the card name
+		// These icons are in the .card-info sibling element and visually reduce the available text area
+		const overlayIconsWidth = this.getOverlayIconsWidth(container);
+
+		const availableWidth = container.clientWidth - paddingLeft - paddingRight - overlayIconsWidth;
+
+		const overflow = textWidth - availableWidth;
+		return overflow > 0 ? overflow : 0;
+	}
+
+	// Returns the total width of visible overlay icons
+	private getOverlayIconsWidth(cardNameContainer: Element): number {
+		// Navigate to the parent .deck-card element and find .card-info
+		const deckCard = cardNameContainer.parentElement;
+		if (!deckCard) {
+			return 0;
+		}
+		const cardInfo = deckCard.querySelector('.card-info');
+		if (!cardInfo) {
+			return 0;
+		}
+
+		// Query all visible overlay-icon elements
+		const overlayIcons = cardInfo.querySelectorAll('.overlay-icon');
+		let totalWidth = 0;
+		for (const icon of Array.from(overlayIcons)) {
+			totalWidth += (icon as HTMLElement).offsetWidth;
+		}
+		return totalWidth;
 	}
 
 	private async updateInfos(
@@ -602,7 +712,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		}
 		this.mouseOverRight = Math.min(100, this.mouseOverRight);
 		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+			this.cdr.markForCheck();
 		}
 	}
 
