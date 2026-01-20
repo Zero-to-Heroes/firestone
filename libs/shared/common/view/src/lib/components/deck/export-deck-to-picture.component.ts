@@ -24,15 +24,15 @@ import { BehaviorSubject, Observable } from 'rxjs';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ExportDeckToPictureComponent {
-	screenshotText$: Observable<string>;
-	screenshotTooltip$: Observable<string>;
+	screenshotText$: Observable<string | null>;
+	screenshotTooltip$: Observable<string | null>;
 
 	@Input() selector: string; // CSS selector for the element to capture
 	@Input() buttonText: string | null = null; // Optional button text
 	@Input() origin: string = 'deck-list'; // Analytics origin
 
-	private screenshotText$$ = new BehaviorSubject<string>(null);
-	private screenshotTooltip$$ = new BehaviorSubject<string>('Copy deck list as image to clipboard');
+	private screenshotText$$ = new BehaviorSubject<string | null>(null);
+	private screenshotTooltip$$ = new BehaviorSubject<string | null>('Copy deck list as image to clipboard');
 	private isScreenshotInProgress = false;
 
 	constructor(
@@ -56,7 +56,7 @@ export class ExportDeckToPictureComponent {
 			return;
 		}
 
-		const captureElement: HTMLElement = document.querySelector(this.selector);
+		const captureElement = document.querySelector<HTMLElement>(this.selector);
 		if (!captureElement) {
 			console.error('[export-deck-to-picture] Could not find element with selector:', this.selector);
 			return;
