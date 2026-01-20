@@ -1,5 +1,6 @@
 export { GeneratingCard } from './_card.type';
 export { AeonWizard } from './aeon-wizard';
+export { ALightInTheDarkness } from './a-light-in-the-darkness';
 export { AlakirTheWindsOfTime } from './alakir-the-winds-of-time';
 export { AlterTime } from './alter-time';
 export { AmberWarden } from './amber-warden';
