@@ -1,5 +1,5 @@
 import { EventEmitter, Injectable, NgZone } from '@angular/core';
-import { GameTag } from '@firestone-hs/reference-data';
+import { CardIds, GameTag } from '@firestone-hs/reference-data';
 import { BgsInGameWindowNavigationService, BgsMatchMemoryInfoService } from '@firestone/battlegrounds/common';
 import { BgsBattleSimulationService } from '@firestone/battlegrounds/core';
 import { DeckCard, DeckState, GameState, HeroCard, PlayerGameState, RealTimeStatsState } from '@firestone/game-state';
@@ -472,8 +472,9 @@ export class GameStateService {
 			gameEvent.type,
 			gameEvent.cardId,
 			`entityId:${gameEvent.entityId}`,
-			currentState.opponentDeck.hand.map((e) => e.cardId),
-			currentState.opponentDeck.hand.map((e) => e.entityId),
+			(gameEvent as MinionsDiedEvent)?.additionalData?.deadMinions?.map((m) => `entityId:${m.EntityId}`),
+			currentState.playerDeck.deck.filter((e) => e.cardId === CardIds.RewindTimeline_TIME_000tb),
+			currentState.playerDeck.otherZone.filter((e) => e.cardId === CardIds.RewindTimeline_TIME_000tb),
 			currentState,
 			gameEvent,
 		);

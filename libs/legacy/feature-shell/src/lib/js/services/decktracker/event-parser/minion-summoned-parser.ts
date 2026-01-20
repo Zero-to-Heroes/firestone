@@ -12,7 +12,7 @@ export class MinionSummonedParser implements EventParser {
 		private readonly helper: DeckManipulationHelper,
 		private readonly cards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
-	) {}
+	) { }
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return !!state;
@@ -56,7 +56,7 @@ export class MinionSummonedParser implements EventParser {
 			otherZone: newOtherZone,
 		});
 
-		// const playerDeckAfterReveal = isPlayer ? newPlayerDeck : currentState.opponentDeck;
+		// const playerDeckAfterReveal = isPlayer ? newPlayerDeck : currentState.playerDeck;
 		// const opponentDeckAfterReveal = isPlayer ? currentState.opponentDeck : revealCard(newPlayerDeck, card);
 
 		// return currentState.update({
