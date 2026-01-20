@@ -3,15 +3,19 @@ import { AllCardsService, CardIds, CardType } from '@firestone-hs/reference-data
 import { GuessedInfo } from '../../models/deck-card';
 import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 
+// Build Taverns of Time pool directly from card data to bypass format validity filtering.
+// This includes all collectible cards from the set (excluding enchantments).
 const buildTavernsOfTimePool = (allCards: AllCardsService): readonly string[] => {
 	return allCards
 		.getCards()
 		.filter(
 			(c) =>
 				c.set?.toLowerCase() === 'taverns_of_time' &&
+				c.collectible &&
 				c.type?.toUpperCase() !== CardType[CardType.ENCHANTMENT] &&
 				!!c.id,
 		)
+		.sort((a, b) => (a.cost ?? 0) - (b.cost ?? 0) || a.name.localeCompare(b.name))
 		.map((c) => c.id) as readonly string[];
 };
 
