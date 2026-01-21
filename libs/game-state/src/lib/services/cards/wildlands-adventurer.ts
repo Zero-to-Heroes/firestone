@@ -11,7 +11,6 @@ const buildTavernsOfTimePool = (allCards: AllCardsService): readonly string[] =>
 		.filter(
 			(c) =>
 				c.set?.toLowerCase() === 'taverns_of_time' &&
-				c.collectible &&
 				c.type?.toUpperCase() !== CardType[CardType.ENCHANTMENT] &&
 				!!c.id,
 		)

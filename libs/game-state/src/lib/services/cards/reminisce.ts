@@ -1,8 +1,7 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { CardIds } from '@firestone-hs/reference-data';
-import { GuessedInfo } from '../../models/deck-card';
 import { ShortCardWithTurn } from '../../models/game-state';
-import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
+import { GeneratingCard, GuessCardIdInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 
 // Reminisce (TOT_343)
 // "Get copies of the last two cards your opponent played."
@@ -28,28 +27,26 @@ export const Reminisce: GeneratingCard & StaticGeneratingCard = {
 	dynamicPool: (input: StaticGeneratingCardInput) => {
 		const cardsPlayed = input.inputOptions.opponentDeckState.cardsPlayedThisMatch ?? [];
 		const sortedCards = sortCardsByRecency(cardsPlayed);
-		
+
 		// Get the last two cards played
 		const lastTwoCards = sortedCards
 			.slice(0, 2)
 			.map((c) => c.cardId)
 			.filter((c) => !!c);
-		
+
 		return lastTwoCards;
 	},
-	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
+	guessCardId: (input: GuessCardIdInput): string | null => {
 		const cardsPlayed = input.opponentDeckState.cardsPlayedThisMatch ?? [];
 		const sortedCards = sortCardsByRecency(cardsPlayed);
-		
+
 		// Use createdIndex to identify which card is which
 		// createdIndex 0 = last card played, createdIndex 1 = second-to-last card
-		const targetCard = sortedCards[input.card.createdIndex ?? 0];
+		const targetCard = sortedCards[input.createdIndex];
 		if (!targetCard?.cardId) {
 			return null;
 		}
-		
-		return {
-			possibleCards: [targetCard.cardId],
-		};
+
+		return targetCard.cardId;
 	},
 };
