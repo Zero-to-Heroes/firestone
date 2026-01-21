@@ -36,6 +36,8 @@ export * from './lib/services/bgs-in-game-compositions.service';
 export * from './lib/services/bgs-in-game-hero-selection-guardian.service';
 export * from './lib/services/bgs-in-game-quests-guardian.service';
 export * from './lib/services/bgs-in-game-quests.service';
+export * from './lib/services/bgs-in-game-timewarped-guardian.service';
+export * from './lib/services/bgs-in-game-timewarped.service';
 export * from './lib/services/bgs-in-game-trinkets-guardian.service';
 export * from './lib/services/bgs-in-game-trinkets.service';
 export * from './lib/services/bgs-in-game-window-navigation.service';

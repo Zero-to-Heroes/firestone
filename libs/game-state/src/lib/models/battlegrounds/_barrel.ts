@@ -29,4 +29,5 @@ export * from './quests-in-game';
 export * from './real-time-stats';
 export * from './stats/bgs-hero-stat';
 export * from './stats/stats-config';
+export * from './timewarped-in-game';
 export * from './trinkets-in-game';

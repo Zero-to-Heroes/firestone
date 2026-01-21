@@ -3,6 +3,8 @@ import { BattlegroundsCardsService } from '../cards/bgs-cards.service';
 import { BattlegroundsCompsService } from '../compositions/bgs-comps.service';
 import { BgsBoardHighlighterService } from '../highlights/bgs-board-highlighter.service';
 import { BgsReconnectorService } from '../reconnect/bgs-reconnector.service';
+import { BgsInGameTimewarpedGuardianService } from './bgs-in-game-timewarped-guardian.service';
+import { BgsInGameTimewarpedService } from './bgs-in-game-timewarped.service';
 import { BgsInGameTrinketsGuardianService } from './bgs-in-game-trinkets-guardian.service';
 import { BgsInGameTrinketsService } from './bgs-in-game-trinkets.service';
 import { BgsMetaCompositionStrategiesService } from './bgs-meta-composition-strategies.service';
@@ -18,6 +20,8 @@ export class BgsCommonBootstrapService {
 		private readonly init_BattlegroundsCompsService: BattlegroundsCompsService,
 		private readonly init_BgsInGameTrinketsGuardianService: BgsInGameTrinketsGuardianService,
 		private readonly init_BgsInGameTrinketsService: BgsInGameTrinketsService,
+		private readonly init_BgsInGameTimewarpedGuardianService: BgsInGameTimewarpedGuardianService,
+		private readonly init_BgsInGameTimewarpedService: BgsInGameTimewarpedService,
 		private readonly init_BgsMetaHeroStrategiesService: BgsMetaHeroStrategiesService,
 		private readonly init_BgsMetaTrinketStrategiesService: BgsMetaTrinketStrategiesService,
 		private readonly init_BgsMetaCompositionStrategiesService: BgsMetaCompositionStrategiesService,

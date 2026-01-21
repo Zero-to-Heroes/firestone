@@ -359,6 +359,8 @@ import { BgsHeroTipsWidgetWrapperComponent } from '@components/overlays/tips/bgs
 import { BgsHeroTipsComponent } from '@components/overlays/tips/bgs-hero-tips.component';
 import { ChoosingBgsTrinketWidgetWrapperComponent } from '@components/overlays/trinket/choosing-bgs-trinket-widget-wrapper.component';
 import { ChoosingCardBgsTrinketOptionComponent } from '@components/overlays/trinket/choosing-card-bgs-trinket-option.component';
+import { ChoosingBgsTimewarpedWidgetWrapperComponent } from '@components/overlays/timewarped/choosing-bgs-timewarped-widget-wrapper.component';
+import { ChoosingCardBgsTimewarpedOptionComponent } from '@components/overlays/timewarped/choosing-card-bgs-timewarped-option.component';
 import { ProfileMatchStatsClassInfoComponent } from '@components/stats/desktop/match-stats/profile-match-stats-class-info.component';
 import { ProfileMatchStatsModeOverviewComponent } from '@components/stats/desktop/match-stats/profile-match-stats-mode-overview.component';
 import { ProfileMatchStatsComponent } from '@components/stats/desktop/match-stats/profile-match-stats.component';
@@ -1211,6 +1213,8 @@ try {
 		ChoosingCardBgsQuestOptionComponent,
 		ChoosingBgsTrinketWidgetWrapperComponent,
 		ChoosingCardBgsTrinketOptionComponent,
+		ChoosingBgsTimewarpedWidgetWrapperComponent,
+		ChoosingCardBgsTimewarpedOptionComponent,
 
 		ArenaHeroSelectionWidgetWrapperComponent,
 		ArenaCardSelectionWidgetWrapperComponent,

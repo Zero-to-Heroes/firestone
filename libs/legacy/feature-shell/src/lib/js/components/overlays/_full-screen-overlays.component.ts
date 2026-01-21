@@ -57,6 +57,7 @@ import { DebugService } from '../../services/debug.service';
 					<bgs-hero-selection-widget-wrapper></bgs-hero-selection-widget-wrapper>
 					<choosing-bgs-quest-widget-wrapper></choosing-bgs-quest-widget-wrapper>
 					<choosing-bgs-trinket-widget-wrapper></choosing-bgs-trinket-widget-wrapper>
+					<choosing-bgs-timewarped-widget-wrapper></choosing-bgs-timewarped-widget-wrapper>
 
 					<constructed-board-widget-wrapper></constructed-board-widget-wrapper>
 					<constructed-mulligan-hand-widget-wrapper></constructed-mulligan-hand-widget-wrapper>
