@@ -6,11 +6,13 @@ import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
 const CARD_IS_NOT_DESTROYED = [CardIds.Ursol_EDR_259];
+const CARD_IS_NOT_ACTUALLY_MILLED = [CardIds.TheFinsBeyondTime_TIME_706];
+
 export class CardRemovedFromHandParser implements EventParser {
 	constructor(
 		private readonly helper: DeckManipulationHelper,
 		private readonly allCards: CardsFacadeService,
-	) {}
+	) { }
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return !!state;
@@ -30,11 +32,12 @@ export class CardRemovedFromHandParser implements EventParser {
 		const newDeck = deck.deck; // this.helper.updateDeckForAi(gameEvent, currentState, removedCard);
 
 		const refCard = getProcessedCard(card?.cardId, card?.entityId, deck, this.allCards);
+		const isMilled = !CARD_IS_NOT_ACTUALLY_MILLED.includes(gameEvent.additionalData.removedByCardId as CardIds);
 		const cardWithZone = card.update({
 			refManaCost: card.refManaCost ?? refCard?.cost,
 			// Not sure this is the right flag to use, but it's not "burned" either, but we want to have something to
 			// indicate that the card was not played
-			milled: true,
+			milled: isMilled,
 			zone: 'SETASIDE',
 		} as DeckCard);
 
