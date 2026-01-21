@@ -79,6 +79,7 @@ export { IncriminatingPsychic } from './incriminating-psychic';
 export { InfiniteAmalgam } from './infinite-amalgam';
 export { InterstellarResearcher } from './interstellar-researcher';
 export { IntertwinedFate } from './intertwined-fate';
+export { IvoryKnight } from './ivory-knight';
 export { JarDealer } from './jar-dealer';
 export { JuicyPsychmelon } from './juicy-psychmelon';
 export { Jumpscare } from './jumpscare';
