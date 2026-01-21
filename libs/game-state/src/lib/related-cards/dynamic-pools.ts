@@ -1413,6 +1413,8 @@ const getBaseCards = (sourceCardId: string, allCards: AllCardsService): readonly
 					!hasMechanic(c, GameTag.QUESTLINE_PART),
 			)
 			.filter((c) => !hasThreeRunes(c))
+			// Event Set cards are not draftable in arena (outside of buckets) and are not generatable
+			.filter((c) => c.set?.toLowerCase() !== 'wild_event')
 			.sort(
 				(a, b) =>
 					(a.cost ?? 0) - (b.cost ?? 0) ||
