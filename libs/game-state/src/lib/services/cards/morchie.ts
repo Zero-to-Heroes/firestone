@@ -1,5 +1,7 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import { CardIds, GameTag, hasMechanic } from '@firestone-hs/reference-data';
+// Morchie: "Your Rewinds keep BOTH potential outcomes. Battlecry: Discover a Rewind card from any class."
+// "from any class" means only class cards should be included, excluding neutrals
+import { CardClass, CardIds, GameTag, hasMechanic } from '@firestone-hs/reference-data';
 import { GuessedInfo } from '../../models/deck-card';
 import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
@@ -11,7 +13,7 @@ export const Morchie: GeneratingCard & StaticGeneratingCard = {
 		const possibleCards = filterCards(
 			Morchie.cardIds[0],
 			input.allCards,
-			(c) => hasMechanic(c, GameTag.REWIND),
+			(c) => hasMechanic(c, GameTag.REWIND) && !c.classes?.includes(CardClass[CardClass.NEUTRAL]),
 			input.options,
 		);
 		return {
@@ -23,7 +25,7 @@ export const Morchie: GeneratingCard & StaticGeneratingCard = {
 		return filterCards(
 			Morchie.cardIds[0],
 			input.allCards,
-			(c) => hasMechanic(c, GameTag.REWIND),
+			(c) => hasMechanic(c, GameTag.REWIND) && !c.classes?.includes(CardClass[CardClass.NEUTRAL]),
 			input.inputOptions,
 		);
 	},
