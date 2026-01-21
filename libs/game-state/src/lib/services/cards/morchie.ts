@@ -1,6 +1,6 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 // Morchie: "Your Rewinds keep BOTH potential outcomes. Battlecry: Discover a Rewind card from any class."
-// "from any class" means only class cards should be included, excluding neutrals
+// "from any class" means only class cards should be included, excluding neutrals.
 import { CardClass, CardIds, GameTag, hasMechanic } from '@firestone-hs/reference-data';
 import { GuessedInfo } from '../../models/deck-card';
 import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
