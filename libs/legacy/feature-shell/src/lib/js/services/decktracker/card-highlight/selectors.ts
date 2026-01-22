@@ -357,8 +357,8 @@ export const imbue = and(
 		),
 	),
 );
-// Jade Golem generators (e.g., Jade Idol: "Choose One - Summon a Jade Golem; or Shuffle 3 copies into your deck.",
-// Jade Blossom: "Summon a Jade Golem. Gain an empty Mana Crystal.")
+/* Jade Golem generators (e.g., Jade Idol: "Choose One - Summon a Jade Golem; or Shuffle 3 copies into your deck.",
+ * Jade Blossom: "Summon a Jade Golem. Gain an empty Mana Crystal.") */
 export const jadeGolem = or(hasReference(GameTag.JADE_GOLEM), hasMechanic(GameTag.JADE_GOLEM));
 export const givesAbyssalCurse = hasMechanic(GameTag.GIVES_ABYSSAL_CURSE);
 export const infuse = hasMechanic(GameTag.INFUSE);
