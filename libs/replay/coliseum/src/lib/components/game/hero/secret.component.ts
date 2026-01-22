@@ -20,7 +20,7 @@ export class SecretComponent {
 	image: string | undefined;
 	markImage = 'https://static.zerotoheroes.com/hearthstone/asset/coliseum/images/secrets/secret_question_mark.png';
 
-	constructor(private cards: AllCardsService) {}
+	constructor(private cards: AllCardsService) { }
 
 	@Input() set entity(value: Entity) {
 		// console.debug('[secret] setting new entity', value, value.tags.toJS());
@@ -44,7 +44,7 @@ export class SecretComponent {
 					isSidequest,
 				);
 			} else {
-				console.error('[secret] Could not assign player class', value, value.tags.toJS());
+				console.error('[secret] Could not assign player class', value, value.tags);
 			}
 		}
 	}

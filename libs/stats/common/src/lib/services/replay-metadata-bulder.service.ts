@@ -30,7 +30,7 @@ export class ReplayMetadataBuilderService {
 		private readonly patches: PatchesConfigService,
 		private readonly compsDetector: CompositionDetectorService,
 		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
-	) {}
+	) { }
 
 	public async buildMetadata(
 		game: GameForUpload,
@@ -56,12 +56,11 @@ export class ReplayMetadataBuilderService {
 		const version = await this.ow.getAppVersion('lnknbakkpommmjjdnelmfbjjdbocfpnpbkijjnob');
 		const isPremium = this.ads.hasPremiumSub$$.getValue();
 		const newSuffix = !userName?.length ? 'anonymous' : isPremium ? 'premium' : 'logged-in';
-		const replayKey = `hearthstone/replay-${newSuffix}/${today.getUTCFullYear()}/${
-			today.getUTCMonth() + 1
-		}/${today.getUTCDate()}/${game.reviewId}.xml.zip`;
+		const replayKey = `hearthstone/replay-${newSuffix}/${today.getUTCFullYear()}/${today.getUTCMonth() + 1
+			}/${today.getUTCDate()}/${game.reviewId}.xml.zip`;
 		const matchAnalysis = this.matchAnalysisService.buildMatchStats(game);
 
-		const parser = new CardsPlayedByTurnParser();
+		const parser = new CardsPlayedByTurnParser(this.allCards.getService());
 		parseGame(replay, [parser]);
 		const playerPlayedCardsByTurn = parser.cardsPlayedByTurn[game.replay.mainPlayerId];
 		const playerCastCardsByTurn = parser.cardsCastByTurn[game.replay.mainPlayerId];
@@ -104,8 +103,8 @@ export class ReplayMetadataBuilderService {
 				gameFormat: game.gameFormat,
 				additionalResult:
 					game.gameMode === 'battlegrounds' ||
-					game.gameMode === 'battlegrounds-friendly' ||
-					game.gameMode === 'battlegrounds-duo'
+						game.gameMode === 'battlegrounds-friendly' ||
+						game.gameMode === 'battlegrounds-duo'
 						? replay.additionalResult
 						: game.additionalResult,
 				runId: game.runId,
@@ -165,10 +164,10 @@ export class ReplayMetadataBuilderService {
 			postMatchStats == null
 				? null
 				: {
-						...postMatchStats,
-						oldMmr: game.playerRank,
-						newMmr: game.newPlayerRank,
-					};
+					...postMatchStats,
+					oldMmr: game.playerRank,
+					newMmr: game.newPlayerRank,
+				};
 		const boardHistory: readonly BgsBoardLight[] = buildBoardHistory(postMatchStats.boardHistory);
 		const finalComp = postMatchStats?.boardHistory?.length
 			? postMatchStats.boardHistory[postMatchStats.boardHistory.length - 1]
@@ -225,14 +224,10 @@ const buildBoardHistory = (boardHistory: readonly BgsBoard[]): readonly BgsBoard
 		const result: BgsBoardLight = {
 			turn: board.turn,
 			board: board.board.map((entity) => {
-				const tags: { [tagName: string]: number } = {};
-				for (const tag of entity.tags) {
-					tags[tag[0]] = tag[1];
-				}
 				const entityLight: EntityLight = {
 					cardID: entity.cardID,
 					id: entity.id,
-					tags: tags,
+					tags: entity.tags,
 				};
 				return entityLight;
 			}),

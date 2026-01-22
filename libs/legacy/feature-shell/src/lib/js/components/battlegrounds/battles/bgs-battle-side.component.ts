@@ -16,7 +16,6 @@ import { BgsCardTooltipComponent, buildEntityFromBoardEntity } from '@firestone/
 import { BgsBoard, BgsPlayer } from '@firestone/game-state';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { Map } from 'immutable';
 
 @Component({
 	standalone: false,
@@ -209,7 +208,7 @@ export class BgsBattleSideComponent {
 	constructor(
 		private readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
-	) {}
+	) { }
 
 	trackByFn(index, item: Entity) {
 		return item.id;
@@ -370,7 +369,7 @@ export class BgsBattleSideComponent {
 
 	private buildEntity(boardEntity: BoardEntity): Entity {
 		const refCard = this.allCards.getCard(boardEntity.cardId);
-		const tags: Map<string, number> = Map({
+		const tags: { [key: string]: number } = {
 			[GameTag[GameTag.CARDTYPE]]: CardType.MINION,
 			[GameTag[GameTag.ZONE]]: Zone.PLAY,
 			[GameTag[GameTag.ATK]]: boardEntity.attack,
@@ -386,7 +385,7 @@ export class BgsBattleSideComponent {
 			[GameTag[GameTag.STEALTH]]: boardEntity.stealth ? 1 : 0,
 			[GameTag[GameTag.PREMIUM]]: this.allCards.getCard(boardEntity.cardId).premium ? 1 : 0,
 			[GameTag[GameTag.TECH_LEVEL]]: this.allCards.getCard(boardEntity.cardId).techLevel,
-		});
+		};
 		return Entity.create({
 			id: boardEntity.entityId,
 			cardID: boardEntity.cardId,

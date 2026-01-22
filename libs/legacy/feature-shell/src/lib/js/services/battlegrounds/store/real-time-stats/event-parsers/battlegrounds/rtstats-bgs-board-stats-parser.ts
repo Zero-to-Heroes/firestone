@@ -47,7 +47,7 @@ export class RTStatsBgsBoardStatsParser implements EventParser {
 		return entities
 			.map(
 				(entity) =>
-					(entity.tags.get(GameTag[GameTag.ATK]) || 0) + (entity.tags.get(GameTag[GameTag.HEALTH]) || 0),
+					(entity.tags[GameTag[GameTag.ATK]] || 0) + (entity.tags[GameTag[GameTag.HEALTH]] || 0),
 			)
 			.reduce((a, b) => a + b, 0);
 	}

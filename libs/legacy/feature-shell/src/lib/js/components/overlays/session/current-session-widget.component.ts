@@ -257,16 +257,16 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionComponent
 			this.mapData(({ currentSessionStartDate, gameType }) =>
 				currentSessionStartDate
 					? this.i18n.translateString('session.summary.total-games-tooltip', {
-							gameMode: this.i18n.translateString(`global.game-mode.${gameType}`),
-							value: currentSessionStartDate.toLocaleDateString(this.i18n.formatCurrentLocale(), {
-								month: 'short',
-								day: '2-digit',
-								year: 'numeric',
-							}),
-						})
-					: this.i18n.translateString('session.summary.total-games-tooltip-all-time', {
-							gameMode: this.i18n.translateString(`global.game-mode.${gameType}`),
+						gameMode: this.i18n.translateString(`global.game-mode.${gameType}`),
+						value: currentSessionStartDate.toLocaleDateString(this.i18n.formatCurrentLocale(), {
+							month: 'short',
+							day: '2-digit',
+							year: 'numeric',
 						}),
+					})
+					: this.i18n.translateString('session.summary.total-games-tooltip-all-time', {
+						gameMode: this.i18n.translateString(`global.game-mode.${gameType}`),
+					}),
 			),
 		);
 
@@ -497,7 +497,7 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionComponent
 				cardId: normalizeHeroCardId(game.playerCardId, this.allCards),
 				tooltip: this.allCards.getCard(game.playerCardId).name,
 				// boardEntities: bgsBoard?.board,
-				boardEntities: bgsBoard?.board.map((value) => Entity.fromJS(value as any)),
+				boardEntities: bgsBoard?.board.map((value) => Entity.create(value as Entity)),
 			} as BgsDetail;
 			return result;
 		});

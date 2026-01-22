@@ -121,7 +121,7 @@ export class GameComponent implements AfterViewInit {
 			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 			const entity = this._entities.get(entityId)!;
 			const refCard = this.cards.getCard(entity.cardID);
-			const tags = entity.tags.toJS();
+			const tags = entity.tags
 			console.debug('entity', entity.cardID, refCard.name, tags, entity, refCard);
 		};
 	}

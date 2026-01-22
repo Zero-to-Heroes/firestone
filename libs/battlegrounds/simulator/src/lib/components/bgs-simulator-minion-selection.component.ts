@@ -12,7 +12,7 @@ import {
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { CardIds, CardType, GameTag, getEffectiveTribes, ReferenceCard } from '@firestone-hs/reference-data';
-import { Entity, EntityAsJS } from '@firestone-hs/replay-parser';
+import { Entity } from '@firestone-hs/replay-parser';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, sortByProperties } from '@firestone/shared/framework/common';
@@ -179,8 +179,7 @@ const SPECIAL_STATUS_TOKENS = [CardIds.AvatarOfNzoth_FishOfNzothToken, CardIds.M
 })
 export class BgsSimulatorMinionSelectionComponent
 	extends AbstractSubscriptionComponent
-	implements AfterContentInit, OnDestroy
-{
+	implements AfterContentInit, OnDestroy {
 	@Input() closeHandler: () => void;
 	@Input() applyHandler: (newEntity: BoardEntity) => void;
 	@Input() entityId: number;
@@ -333,7 +332,7 @@ export class BgsSimulatorMinionSelectionComponent
 			this.cardId = this.ref.battlegroundsNormalDbfId
 				? this.ref.id
 				: // Default when the card doesn't have a golden version
-					(this.allCards.getCard(this.ref.battlegroundsPremiumDbfId!).id ?? this.cardId);
+				(this.allCards.getCard(this.ref.battlegroundsPremiumDbfId!).id ?? this.cardId);
 		} else {
 			this.cardId = this.ref.battlegroundsPremiumDbfId
 				? this.ref.id
@@ -484,8 +483,8 @@ export class BgsSimulatorMinionSelectionComponent
 				this.summonPlants ? { cardId: CardIds.LivingSpores_LivingSporesEnchantment } : null,
 				...(this.sneeds > 0
 					? [...Array(this.sneeds).keys()].map((i) => ({
-							cardId: CardIds.SneedsReplicator_ReplicateEnchantment,
-						}))
+						cardId: CardIds.SneedsReplicator_ReplicateEnchantment,
+					}))
 					: []),
 				...(this._entity?.enchantments ?? []).filter((e) =>
 					this.summonMechs
@@ -542,14 +541,14 @@ export class BgsSimulatorMinionSelectionComponent
 	private updateCard() {
 		this.card = !this.cardId?.length
 			? null
-			: Entity.fromJS({
-					cardID: this.cardId,
-					tags: {
-						[GameTag[GameTag.ATK]]: this.attack ?? 0,
-						[GameTag[GameTag.HEALTH]]: this.health ?? 0,
-						[GameTag[GameTag.PREMIUM]]: this.premium ? 1 : 0,
-					},
-				} as EntityAsJS);
+			: Entity.create({
+				cardID: this.cardId,
+				tags: {
+					[GameTag[GameTag.ATK]]: this.attack ?? 0,
+					[GameTag[GameTag.HEALTH]]: this.health ?? 0,
+					[GameTag[GameTag.PREMIUM]]: this.premium ? 1 : 0,
+				},
+			} as Entity);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.markForCheck();
 		}
