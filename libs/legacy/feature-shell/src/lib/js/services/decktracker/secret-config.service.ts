@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
 	brawlSets,
+	CardClass,
 	CardIds,
 	formatFormat,
 	GameFormat,
@@ -11,7 +12,7 @@ import {
 	SetId,
 	SpellSchool,
 } from '@firestone-hs/reference-data';
-import { DeckCard, GameState, Metadata } from '@firestone/game-state';
+import { DeckCard, GameState, getDynamicRelatedCardIds, hasOverride, Metadata } from '@firestone/game-state';
 import { ApiRunner, CardsFacadeService } from '@firestone/shared/framework/core';
 import { cardsMapping, hasGetRelatedCards } from './card-highlight/global/_registers';
 import { getCardInfoFilters } from './card-info-filters';
@@ -100,7 +101,9 @@ export class SecretConfigService {
 		const result = staticSecrets
 			.filter((secret) => this.canBeSpecificSecret(secret, card))
 			.filter((secret) => this.canBeCreatedBy(secret, creatorCardId))
-			.filter((secret) => this.canBeCreatedByDynamic(secret, creatorCardId, creatorEntityId, gameState));
+			.filter((secret) =>
+				this.canBeCreatedByDynamic(secret, creatorCardId, creatorEntityId, gameState, metadata, playerClass),
+			);
 		return result;
 	}
 
@@ -167,11 +170,16 @@ export class SecretConfigService {
 		}
 	}
 
+	// Runi, Time Explorer - The Nighthold (WON_053t4)
+	// Text: "Cast three random Paladin Secrets"
+	// This method uses getDynamicRelatedCardIds to filter secrets by game format
 	private canBeCreatedByDynamic(
 		secretCardId: string,
 		creatorCardId: string,
 		creatorEntityId: number,
 		gameState: GameState,
+		metadata: Metadata,
+		playerClass: string,
 	): boolean {
 		const cardImpl = cardsMapping[creatorCardId];
 		if (hasGetRelatedCards(cardImpl)) {
@@ -185,7 +193,43 @@ export class SecretConfigService {
 				}
 			}
 		}
+
+		// Fallback to getDynamicRelatedCardIds for cards with dynamic pools
+		if (creatorCardId) {
+			const heroClass = this.getHeroClass(gameState, playerClass);
+			const dynamicCards = getDynamicRelatedCardIds(
+				creatorCardId,
+				creatorEntityId,
+				this.allCards.getService(),
+				{
+					format: metadata.formatType,
+					gameType: metadata.gameType,
+					scenarioId: metadata.scenarioId,
+					currentClass: heroClass,
+					deckState: gameState.opponentDeck,
+					opponentDeckState: gameState.playerDeck,
+					gameState: gameState,
+					validArenaPool: [],
+				},
+			);
+			const pool = hasOverride(dynamicCards)
+				? (dynamicCards as { cards: readonly string[] }).cards
+				: dynamicCards;
+			// If the dynamic pool returned results, use them to filter
+			if (pool?.length) {
+				return pool.includes(secretCardId);
+			}
+		}
+
 		return true;
+	}
+
+	private getHeroClass(gameState: GameState, playerClass: string): string {
+		const heroClass = gameState.opponentDeck?.hero?.classes?.[0];
+		if (heroClass) {
+			return CardClass[heroClass];
+		}
+		return playerClass ?? '';
 	}
 
 	private getMode(metadata: Metadata, creatorCardId: string): string {
