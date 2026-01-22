@@ -212,9 +212,7 @@ export class SecretConfigService {
 					validArenaPool: [],
 				},
 			);
-			const pool = hasOverride(dynamicCards)
-				? (dynamicCards as { cards: readonly string[] }).cards
-				: dynamicCards;
+			const pool = hasOverride(dynamicCards) ? dynamicCards.cards : dynamicCards;
 			// If the dynamic pool returned results, use them to filter
 			if (pool?.length) {
 				return pool.includes(secretCardId);
