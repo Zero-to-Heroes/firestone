@@ -875,6 +875,7 @@ const getDynamicFilters = (
 		case CardIds.TheFiresOfZinAzshari:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '>=', 5);
 		case CardIds.SunkenSweeper:
+		case CardIds.AzsharanSweeper_SunkenSweeperToken:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.MECH);
 		case CardIds.SubmergedSpacerock:
 			return (c) =>
