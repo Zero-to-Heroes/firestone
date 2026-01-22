@@ -4,6 +4,7 @@ import { GameEvent } from '../../../../models/game-event';
 import { DeckManipulationHelper } from '../deck-manipulation-helper';
 import { EventParser } from '../event-parser';
 
+// Flames of Infinity — Secret: When your enemy's turn ends, deal INFINITE damage to their highest Health minion.
 export class TriggerOnTurnEndSecretsParser implements EventParser {
 	private secretsTriggeringOnTurnEnd = [
 		CardIds.RiggedFaireGame,
@@ -59,7 +60,7 @@ export class TriggerOnTurnEndSecretsParser implements EventParser {
 
 		const hasOpponentMinionsOnBoard =
 			playerWhoseCardsPlayedToCheck.board.filter((entity) => !entity.dormant).length > 0;
-		if (hasOpponentMinionsOnBoard) {
+		if (!hasOpponentMinionsOnBoard) {
 			secretsWeCantRuleOut.push(CardIds.FlamesOfInfinity_END_024);
 		}
 
