@@ -1190,7 +1190,6 @@ const getDynamicFilters = (
 		case CardIds.KureTheLightBeyond_GDB_442:
 		case CardIds.LinedancePartner_WW_433:
 		case CardIds.SerpentshrinePortal_BT_100:
-		case CardIds.SilvermoonPortal_CORE_KAR_077:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 3);
 		case CardIds.CrystalBroker:
 			return (c) =>
