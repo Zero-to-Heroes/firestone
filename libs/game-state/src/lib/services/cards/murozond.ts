@@ -4,15 +4,19 @@ import { hasCorrectType } from '../../related-cards/dynamic-pools';
 import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 
 // Build Fabled minion pool directly from card data to bypass the standard filter
-// which excludes Fabled cards from the general pool
+// which excludes Fabled cards from the general pool.
+// Includes both collectible Fabled/Fabled+ minions and their bundled cards (tokens).
 const buildFabledMinionPool = (allCards: AllCardsService): readonly string[] => {
 	return allCards
 		.getCards()
 		.filter(
 			(c) =>
-				c.collectible &&
-				hasCorrectType(c, CardType.MINION) &&
-				(hasMechanic(c, GameTag.FABLED) || hasMechanic(c, GameTag.FABLED_PLUS)),
+				// Collectible Fabled/Fabled+ minions
+				(c.collectible &&
+					hasCorrectType(c, CardType.MINION) &&
+					(hasMechanic(c, GameTag.FABLED) || hasMechanic(c, GameTag.FABLED_PLUS))) ||
+				// Bundled cards (tokens) that come with Fabled minions
+				hasMechanic(c, GameTag.IS_FABLED_BUNDLE_CARD),
 		)
 		.sort((a, b) => (a.cost ?? 0) - (b.cost ?? 0) || a.name.localeCompare(b.name))
 		.map((c) => c.id) as readonly string[];
