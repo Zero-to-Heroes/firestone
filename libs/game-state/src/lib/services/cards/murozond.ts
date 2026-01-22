@@ -3,10 +3,10 @@ import { GuessedInfo } from '../../models/deck-card';
 import { hasCorrectType } from '../../related-cards/dynamic-pools';
 import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 
-// Build Fabled minion pool directly from card data to bypass the standard filter
-// which excludes Fabled cards from the general pool.
-// Includes both collectible Fabled/Fabled+ minions and their bundled cards (tokens).
-const buildFabledMinionPool = (allCards: AllCardsService): readonly string[] => {
+// Builds the complete pool of cards that Murozond can give, including:
+// - Collectible Fabled/Fabled+ minions
+// - Their bundled cards (tokens that can be spells, weapons, minions, etc.)
+const buildFabledPackagePool = (allCards: AllCardsService): readonly string[] => {
 	return allCards
 		.getCards()
 		.filter(
@@ -28,12 +28,13 @@ export const Murozond: GeneratingCard & StaticGeneratingCard = {
 	cardIds: [CardIds.Murozond_TOT_332],
 	publicCreator: true,
 	dynamicPool: (input: StaticGeneratingCardInput) => {
-		return buildFabledMinionPool(input.allCards);
+		return buildFabledPackagePool(input.allCards);
 	},
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
 		return {
-			cardType: CardType.MINION,
-			possibleCards: buildFabledMinionPool(input.allCards),
+			// No cardType specified since Murozond can generate different types:
+			// the Fabled minion itself + bundled cards (which can be spells, weapons, etc.)
+			possibleCards: buildFabledPackagePool(input.allCards),
 		};
 	},
 };
