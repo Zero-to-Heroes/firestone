@@ -28,6 +28,7 @@ export const SunkenSweeper: GeneratingCard & StaticGeneratingCard = {
 		);
 		return {
 			cardType: CardType.MINION,
+			races: [Race.MECH],
 			possibleCards: possibleCards,
 		};
 	},
