@@ -11,8 +11,7 @@ export const Burgle: GeneratingCard & StaticGeneratingCard = {
 	cardIds: [CardIds.Burgle_AT_033, CardIds.Burgle_WON_071],
 	publicCreator: true,
 	dynamicPool: (input: StaticGeneratingCardInput) => {
-		const opponentClassStr =
-			input.inputOptions.opponentDeckState.getCurrentClass() ?? input.inputOptions.deckState.getCurrentClass();
+		const opponentClassStr = input.inputOptions.opponentDeckState.getCurrentClass();
 		const opponentClass = opponentClassStr ? CardClass[opponentClassStr] : null;
 		return filterCards(
 			Burgle.cardIds[0],
@@ -22,7 +21,7 @@ export const Burgle: GeneratingCard & StaticGeneratingCard = {
 		);
 	},
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
-		const opponentClassStr = input.opponentDeckState?.getCurrentClass() ?? input.deckState.getCurrentClass();
+		const opponentClassStr = input.opponentDeckState?.getCurrentClass();
 		const opponentClass = opponentClassStr ? CardClass[opponentClassStr] : null;
 		const possibleCards = filterCards(
 			Burgle.cardIds[0],
