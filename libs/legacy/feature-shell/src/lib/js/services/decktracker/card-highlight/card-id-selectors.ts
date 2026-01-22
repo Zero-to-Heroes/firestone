@@ -2127,7 +2127,7 @@ export const cardIdSelector = (
 		case CardIds.KureTheLightBeyond_GDB_442:
 			return and(side(inputSide), or(inHand, inDeck), spell, holy);
 		case CardIds.LabConstructor:
-			return and(side(inputSide), or(inHand, inDeck), minion, mech);
+			return and(side(inputSide), or(inHand, inDeck), mech);
 		case CardIds.LabPatron_TOY_651:
 			return and(side(inputSide), or(inHand, inDeck), givesArmor);
 		case CardIds.LadyAnacondra_WC_006:
