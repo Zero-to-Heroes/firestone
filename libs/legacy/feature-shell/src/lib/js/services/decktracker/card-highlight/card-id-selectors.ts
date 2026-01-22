@@ -3,6 +3,7 @@ import { DeckCard, DeckState, getCost, getProcessedCard } from '@firestone/game-
 import { groupByFunction, pickLast, sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
 import { Selector, SelectorInput, SelectorOutput } from './cards-highlight-common.service';
+// Lab Constructor: At the end of your turn, summon a copy of this. Forge: Gain Magnetic.
 import {
 	and,
 	arcane,
@@ -2125,6 +2126,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), spell);
 		case CardIds.KureTheLightBeyond_GDB_442:
 			return and(side(inputSide), or(inHand, inDeck), spell, holy);
+		case CardIds.LabConstructor:
+			return and(side(inputSide), or(inHand, inDeck), minion, mech);
 		case CardIds.LabPatron_TOY_651:
 			return and(side(inputSide), or(inHand, inDeck), givesArmor);
 		case CardIds.LadyAnacondra_WC_006:
