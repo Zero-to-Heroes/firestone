@@ -20,6 +20,7 @@ export { BattleVicar } from './battle-vicar';
 export { BlastWave } from './blast-wave';
 export { Blasteroid } from './blasteroid';
 export { BlessingOfTheBronze } from './blessing-of-the-bronze';
+export { Burgle } from './burgle';
 export { BlessingOfTheMoon } from './blessing-of-the-moon';
 export { Blingtron3000 } from './blingtron-3000';
 export { BlinkFox } from './blink-fox';
