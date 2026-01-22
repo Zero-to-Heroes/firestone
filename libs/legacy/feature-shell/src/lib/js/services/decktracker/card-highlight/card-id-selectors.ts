@@ -3,7 +3,7 @@ import { DeckCard, DeckState, getCost, getProcessedCard } from '@firestone/game-
 import { groupByFunction, pickLast, sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
 import { Selector, SelectorInput, SelectorOutput } from './cards-highlight-common.service';
-// Lab Constructor: At the end of your turn, summon a copy of this. Forge: Gain Magnetic.
+// Lab Constructor: At the end of your turn, summon a copy of this. Forge: Gain Magnetic (highlight mechs).
 import {
 	and,
 	arcane,
