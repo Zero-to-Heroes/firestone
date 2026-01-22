@@ -1,3 +1,5 @@
+// Lab Constructor (TTN_730): At the end of your turn, summon a copy of this. Forge: Gain Magnetic.
+
 import { CardClass, CardIds, CardType, GameTag, Race, SpellSchool } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState, getCost, getProcessedCard } from '@firestone/game-state';
 import { groupByFunction, pickLast, sortByProperties } from '@firestone/shared/framework/common';
@@ -149,8 +151,6 @@ import {
 	windfury,
 	zerg,
 } from './selectors';
-
-// Lab Constructor (TTN_730): At the end of your turn, summon a copy of this. Forge: Gain Magnetic.
 
 export const cardIdSelector = (
 	cardId: string,
