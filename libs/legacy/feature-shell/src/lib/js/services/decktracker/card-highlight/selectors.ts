@@ -19,6 +19,8 @@ import { HighlightSide } from '@firestone/shared/framework/core';
 import { PLAGUES } from '../event-parser/special-cases/plagues-parser';
 import { Selector, SelectorInput } from './cards-highlight-common.service';
 
+// Jade Golem generators (e.g., Jade Idol: "Choose One - Summon a Jade Golem; or Shuffle 3 copies into your deck.",
+// Jade Blossom: "Summon a Jade Golem. Gain an empty Mana Crystal.")
 export const CONCOCTION_GENERATORS = [
 	CardIds.PotionBelt,
 	CardIds.Concoctor,
@@ -358,6 +360,7 @@ export const imbue = and(
 		),
 	),
 );
+export const jadeGolem = or(hasReference(GameTag.JADE_GOLEM), hasMechanic(GameTag.JADE_GOLEM));
 export const givesAbyssalCurse = hasMechanic(GameTag.GIVES_ABYSSAL_CURSE);
 export const infuse = hasMechanic(GameTag.INFUSE);
 export const kindred = hasMechanic(GameTag.KINDRED);
