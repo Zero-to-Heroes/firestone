@@ -14,7 +14,48 @@ export class CorpsesCounterDefinitionV2 extends CounterDefinitionV2<number> {
 	public override type: 'hearthstone' | 'battlegrounds' = 'hearthstone';
 	public override cards: readonly CardIds[] = [];
 
-	readonly player = undefined;
+	readonly player = {
+		pref: 'playerCorpsesCounter' as const,
+		display: (state: GameState): boolean => {
+			// When the player is a DK or Tourist DK, the corpse counter is shown by default in the game
+			if (initialHeroClassIs(state.playerDeck.hero, [CardClass.DEATHKNIGHT])) {
+				this.debug && console.debug(this.type, 'player is a DK');
+				return false;
+			}
+
+			// When the player has a corpse-spending card on board, the counter appears by default
+			if (
+				state.playerDeck.board.some((c) =>
+					this.allCards.getCard(c.cardId).mechanics?.includes(GameTag[GameTag.SPEND_CORPSE]),
+				)
+			) {
+				this.debug &&
+					console.debug(
+						this.type,
+						'player has a corpse-spending card on board',
+						state.playerDeck.board.filter((c) =>
+							this.allCards.getCard(c.cardId).mechanics?.includes(GameTag[GameTag.SPEND_CORPSE]),
+						),
+					);
+				return false;
+			}
+
+			const hasRelevantCards = state.playerDeck
+				.getAllPotentialFutureCards()
+				.some((c) => this.allCards.getCard(c.cardId).mechanics?.includes(GameTag[GameTag.SPEND_CORPSE]));
+
+			return hasRelevantCards;
+		},
+		value: (state: GameState) => {
+			return (state.playerDeck.corpsesGainedThisGame ?? 0) - (state.playerDeck.corpsesSpent ?? 0);
+		},
+		setting: {
+			label: (i18n: ILocalizationService): string =>
+				i18n.translateString('settings.decktracker.your-deck.counters.corpses-label'),
+			tooltip: (i18n: ILocalizationService): string =>
+				i18n.translateString('settings.decktracker.your-deck.counters.corpses-tooltip'),
+		},
+	};
 	readonly opponent = {
 		pref: 'opponentCorpsesCounter' as const,
 		display: (state: GameState): boolean => {
