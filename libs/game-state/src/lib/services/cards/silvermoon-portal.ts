@@ -1,4 +1,3 @@
-/* eslint-disable no-mixed-spaces-and-tabs */
 // Silvermoon Portal (KAR_077, CORE_KAR_077, WON_309)
 // 3-Cost Paladin Spell
 // Give a minion +2/+2. Summon a random 2-Cost minion.
