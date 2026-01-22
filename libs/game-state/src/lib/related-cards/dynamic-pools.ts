@@ -1704,6 +1704,8 @@ const doesSummonInPlay = (sourceCardId: string): boolean => {
 		case CardIds.FirelandsPortalCore:
 		case CardIds.MaelstromPortal_CORE_KAR_073:
 		case CardIds.SilvermoonPortal_CORE_KAR_077:
+		case CardIds.SilvermoonPortal:
+		case CardIds.SilvermoonPortal_WON_309:
 		case CardIds.IronforgePortal:
 		case CardIds.IronforgePortal_WON_337:
 		case CardIds.MoongladePortal_KAR_075:
