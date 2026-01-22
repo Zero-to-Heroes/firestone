@@ -141,6 +141,7 @@ export { SemiStablePortal } from './semi-stable-portal';
 export { ShakuTheCollector } from './shaku-the-collector';
 export { ShallowGravedigger } from './shallow-gravedigger';
 export { ShellGame } from './shell-game';
+export { SilvermoonPortal } from './silvermoon-portal';
 export { Shimmerfly } from './shimmerfly';
 export { ShokkJungleTyrant } from './shokk-jungle-tyrant';
 export { SirenSong } from './siren-song';
