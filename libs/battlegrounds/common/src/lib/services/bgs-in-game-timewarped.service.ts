@@ -2,6 +2,7 @@
 import { Injectable } from '@angular/core';
 import { BgsCardStats } from '@firestone-hs/bgs-global-stats';
 import { SceneMode, isBattlegrounds } from '@firestone-hs/reference-data';
+import { BgsMetaCardStatTier, buildCardStats, buildCardTiers, isBgsTimewarped } from '@firestone/battlegrounds/data-access';
 import {
 	BgsTimewarpedCardChoiceOption,
 	GameStateFacadeService,
@@ -14,6 +15,7 @@ import {
 	AbstractFacadeService,
 	AppInjector,
 	CardsFacadeService,
+	ILocalizationService,
 	WindowManagerService,
 	waitForReady,
 } from '@firestone/shared/framework/core';
@@ -32,6 +34,8 @@ import {
 } from 'rxjs';
 import { BattlegroundsCardsService } from '../cards/bgs-cards.service';
 
+export const TIMEWARPED_MMR_PERCENTILE = 25;
+
 @Injectable()
 export class BgsInGameTimewarpedService extends AbstractFacadeService<BgsInGameTimewarpedService> {
 	public showWidget$$: BehaviorSubject<boolean | null>;
@@ -42,6 +46,7 @@ export class BgsInGameTimewarpedService extends AbstractFacadeService<BgsInGameT
 	private gameState: GameStateFacadeService;
 	private cardsService: BattlegroundsCardsService;
 	private allCards: CardsFacadeService;
+	private i18n: ILocalizationService;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'BgsInGameTimewarpedService', () => !!this.showWidget$$);
@@ -60,6 +65,7 @@ export class BgsInGameTimewarpedService extends AbstractFacadeService<BgsInGameT
 		this.gameState = AppInjector.get(GameStateFacadeService);
 		this.cardsService = AppInjector.get(BattlegroundsCardsService);
 		this.allCards = AppInjector.get(CardsFacadeService);
+		this.i18n = AppInjector.get(ILocalizationService);
 
 		await waitForReady(this.scene, this.prefs, this.gameState);
 
@@ -100,7 +106,6 @@ export class BgsInGameTimewarpedService extends AbstractFacadeService<BgsInGameT
 			}),
 			distinctUntilChanged(),
 			shareReplay(1),
-			tap((show) => console.debug('[bgs-timewarped] setting showWidget', show)),
 		);
 		showWidget$.subscribe((show) => {
 			this.showWidget$$.next(show);
@@ -118,9 +123,8 @@ export class BgsInGameTimewarpedService extends AbstractFacadeService<BgsInGameT
 			filter((hasTimewarped) => !!hasTimewarped),
 			distinctUntilChanged(),
 			switchMap(() => {
-				return this.cardsService.loadCardStats('last-patch', 25);
+				return this.cardsService.loadCardStats('last-patch', TIMEWARPED_MMR_PERCENTILE);
 			}),
-			map((cardStats) => cardStats ?? null),
 			shareReplay(1),
 			tap((cardStats) => console.debug('[bgs-timewarped] loaded cardStats', cardStats)),
 		) as Observable<BgsCardStats | null>;
@@ -149,16 +153,25 @@ export class BgsInGameTimewarpedService extends AbstractFacadeService<BgsInGameT
 			filter(([shopCards, showFromPrefs, cardStats]) => {
 				return !!cardStats && !!shopCards?.cardIds?.length;
 			}),
-			map(([shopCards, showFromPrefs, cardStats]) => {
+			map(([shopCards, showFromPrefs, cardStatsInput]) => {
+				console.debug('[bgs-timewarped] checking options', shopCards, showFromPrefs, cardStatsInput);
 				if (!showFromPrefs) {
 					return [];
 				}
+				const currentTurn = shopCards.currentTurn as number;
+				const timewarpedStats = cardStatsInput?.cardStats?.filter(s => isBgsTimewarped(this.allCards.getCard(s.cardId))).filter(s => s.totalPlayed > 0) ?? []
+				const cardStats = timewarpedStats.filter(s => this.allCards.getCard(s.cardId).techLevel === (currentTurn === 6 ? 3 : 5));
+				const tierItems = buildCardStats(cardStats, [], 0, currentTurn, this.allCards)
+				console.debug('[bgs-timewarped] tierItems', tierItems, currentTurn);
+				const tiers = buildCardTiers(tierItems, { criteria: 'impact', direction: 'asc' }, [], this.i18n, this.allCards);
+				console.debug('[bgs-timewarped] tiers', tiers);
 				return shopCards.cardIds
 					.map((cardId) =>
-						buildBgsTimewarpedCardChoiceValue(cardId, shopCards.currentTurn, cardStats!, this.allCards),
+						buildBgsTimewarpedCardChoiceValue(cardId, shopCards.currentTurn as number, tiers, this.allCards),
 					)
 					.filter((option) => option !== null) as readonly BgsTimewarpedCardChoiceOption[];
 			}),
+			tap((options) => console.debug('[bgs-timewarped] options', options)),
 			distinctUntilChanged(
 				(a, b) =>
 					a?.length === b?.length &&
@@ -175,25 +188,20 @@ export class BgsInGameTimewarpedService extends AbstractFacadeService<BgsInGameT
 const buildBgsTimewarpedCardChoiceValue = (
 	cardId: string,
 	currentTurn: number,
-	cardStats: BgsCardStats,
+	tiers: readonly BgsMetaCardStatTier[],
 	allCards: CardsFacadeService,
 ): BgsTimewarpedCardChoiceOption | null => {
-	const cardStat = cardStats?.cardStats?.find((s) => s.cardId === cardId);
-	if (!cardStat) {
-		return null;
-	}
+	const tier = tiers.find((t) => t.sections.some((s) => s.items.some((i) => i.cardId === cardId)));
+	const tierItem = tier?.sections.find((s) => s.items.some((i) => i.cardId === cardId))?.items.find((i) => i.cardId === cardId);
+	// const mmrStat = cardStats?.placementAtMmr?.find((s) => s.mmr === TIMEWARPED_MMR_PERCENTILE);
 
 	// Use the current turn's stats for the timewarped shop
-	const turnStat = cardStat.turnStats?.find((s) => s.turn === currentTurn);
-	if (!turnStat) {
-		return null;
-	}
-
-	const impact = turnStat.averagePlacement - turnStat.averagePlacementOther;
+	const impact = tierItem?.impact ?? null;
 	return {
+		tier: tier?.id,
 		cardId: cardId,
-		dataPoints: turnStat.totalPlayed,
-		averagePlacement: turnStat.averagePlacement,
+		dataPoints: tierItem?.dataPoints ?? 0,
+		averagePlacement: tierItem?.averagePlacement ?? null,
 		impact: impact,
 	};
 };

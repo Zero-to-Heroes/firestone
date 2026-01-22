@@ -33,7 +33,7 @@ import { AbstractWidgetWrapperComponent } from '../_widget-wrapper.component';
 	template: `
 		<div class="container" *ngIf="showWidget$ | async">
 			<div
-				class="choosing-card-container items-{{ value.options?.length }}"
+				class="choosing-card-container"
 				*ngIf="{ options: options$ | async } as value"
 			>
 				<ng-container *ngIf="(showPremiumBanner$ | async) === false">
@@ -51,8 +51,7 @@ import { AbstractWidgetWrapperComponent } from '../_widget-wrapper.component';
 })
 export class ChoosingBgsTimewarpedWidgetWrapperComponent
 	extends AbstractWidgetWrapperComponent
-	implements AfterContentInit, OnDestroy
-{
+	implements AfterContentInit, OnDestroy {
 	protected defaultPositionLeftProvider = null;
 	protected defaultPositionTopProvider = null;
 	protected positionUpdater = null;

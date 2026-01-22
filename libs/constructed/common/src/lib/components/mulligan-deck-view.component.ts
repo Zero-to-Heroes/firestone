@@ -261,11 +261,14 @@ type ColumnSortType = 'card' | 'keep-rate' | 'impact';
 export const buildColor = (
 	goodColor: string,
 	badColor: string,
-	value: number,
+	value: number | null,
 	maxGood: number,
 	minBad: number,
 	debug?,
 ): string => {
+	if (value == null) {
+		return badColor;
+	}
 	const percentage = Math.max(0, Math.min(1, (value - minBad) / (maxGood - minBad)));
 	const color = interpolateColors(badColor, goodColor, percentage, debug);
 	return color;
