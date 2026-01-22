@@ -150,6 +150,8 @@ import {
 	zerg,
 } from './selectors';
 
+// Lab Constructor (TTN_730): At the end of your turn, summon a copy of this. Forge: Gain Magnetic.
+
 export const cardIdSelector = (
 	cardId: string,
 	entityId: number | null,
@@ -2125,6 +2127,9 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), spell);
 		case CardIds.KureTheLightBeyond_GDB_442:
 			return and(side(inputSide), or(inHand, inDeck), spell, holy);
+		case CardIds.LabConstructor:
+		case CardIds.LabConstructor_LabConstructorToken:
+			return and(side(inputSide), or(inHand, inDeck), mech);
 		case CardIds.LabPatron_TOY_651:
 			return and(side(inputSide), or(inHand, inDeck), givesArmor);
 		case CardIds.LadyAnacondra_WC_006:
