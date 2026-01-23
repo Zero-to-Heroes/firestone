@@ -5,6 +5,7 @@ import { BattlegroundsCardsComponent } from './components/battlegrounds/cards/ba
 import { BattlegroundsCompositionsComponent } from './components/battlegrounds/compositions/battlegrounds-compositions.component';
 import { BattlegroundsHeroesComponent } from './components/battlegrounds/heroes/battlegrounds-heroes.component';
 import { ConstructedComponent } from './components/constructed/constructed.component';
+import { PartnerRedirectComponent } from './components/partners/partner-redirect.component';
 
 export const routes: Routes = [
 	{ path: '', redirectTo: '/battlegrounds', pathMatch: 'full' },
@@ -17,6 +18,7 @@ export const routes: Routes = [
 	{ path: 'arena/classes', component: ArenaClassesComponent },
 	{ path: 'arena/cards', component: ArenaCardsComponent },
 	{ path: 'constructed', component: ConstructedComponent },
+	{ path: 'partners/:partnerSlug', component: PartnerRedirectComponent },
 	// Wildcard route - must be last
 	{ path: '**', redirectTo: '/battlegrounds', pathMatch: 'full' },
 ];
