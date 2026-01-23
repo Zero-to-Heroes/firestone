@@ -20,7 +20,7 @@ export const TheNighthold: GlobalHighlightCard = {
 			.filter(
 				(c) =>
 					c.type?.toUpperCase() === CardType[CardType.SPELL] &&
-					c.mechanics?.includes(GameTag[GameTag.SECRET]) &&
+					hasMechanic(c, GameTag.SECRET) &&
 					c.playerClass === CardClass[CardClass.PALADIN],
 			)
 			.map((c) => c.id);
