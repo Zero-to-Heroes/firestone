@@ -2,7 +2,7 @@
 // The Nighthold: Cast a random secret from your class
 // According to game behavior, it casts from the full pool of all Paladin secrets,
 // not constrained by the current game mode (e.g., arena rotation)
-import { CardClass, CardIds, CardType, GameTag, hasMechanic } from '@firestone-hs/reference-data';
+import { CardClass, CardIds, CardType, GameFormat, GameTag, GameType, hasMechanic } from '@firestone-hs/reference-data';
 import { hasCorrectClass, hasCorrectType } from '../../related-cards/dynamic-pools';
 import { StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
@@ -11,6 +11,7 @@ export const TheNighthold: StaticGeneratingCard = {
 	cardIds: [CardIds.RuniTimeExplorer_TheNightholdToken_WON_053t4],
 	publicCreator: true,
 	dynamicPool: (input: StaticGeneratingCardInput) => {
+		// Use Wild format to get all Paladin secrets, not constrained by game mode
 		return filterCards(
 			TheNighthold.cardIds[0],
 			input.allCards,
@@ -18,7 +19,7 @@ export const TheNighthold: StaticGeneratingCard = {
 				hasCorrectType(c, CardType.SPELL) &&
 				hasMechanic(c, GameTag.SECRET) &&
 				hasCorrectClass(c, CardClass.PALADIN),
-			input.inputOptions,
+			{ ...input.inputOptions, format: GameFormat.FT_WILD, gameType: GameType.GT_RANKED },
 		);
 	},
 };
