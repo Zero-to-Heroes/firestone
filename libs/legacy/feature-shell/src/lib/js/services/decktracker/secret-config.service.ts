@@ -49,7 +49,7 @@ export class SecretConfigService {
 	constructor(
 		private readonly api: ApiRunner,
 		private readonly allCards: CardsFacadeService,
-	) {}
+	) { }
 
 	public async getValidSecrets(
 		metadata: Metadata,
@@ -64,6 +64,7 @@ export class SecretConfigService {
 		if (staticList?.length) {
 			return staticList;
 		}
+
 
 		if (!this.secretConfigs || this.secretConfigs.length === 0) {
 			await this.init();
@@ -97,7 +98,20 @@ export class SecretConfigService {
 				}
 				return true;
 			});
-		const result = staticSecrets
+
+		let staticSecretsFromCreator = null;
+		const creator = gameState.opponentDeck.findCard(creatorEntityId)?.card;
+		if (creator?.guessedInfo?.possibleCards?.length) {
+			staticSecretsFromCreator = creator.guessedInfo.possibleCards
+				.filter(c => this.allCards.getCard(c).mechanics?.includes(GameTag[GameTag.SECRET]))
+			// If we have a secret and the list is empty, something went wrong
+			if (!staticSecretsFromCreator.length) {
+				console.warn('[secret-config] no secrets found for creator', creator);
+			}
+		}
+
+		const baseForSecrets = staticSecretsFromCreator?.length ? staticSecretsFromCreator : staticSecrets;
+		const result = baseForSecrets
 			.filter((secret) => this.canBeSpecificSecret(secret, card))
 			.filter((secret) => this.canBeCreatedBy(secret, creatorCardId))
 			.filter((secret) => this.canBeCreatedByDynamic(secret, creatorCardId, creatorEntityId, gameState));
