@@ -65,6 +65,11 @@ export class SecretConfigService {
 			return staticList;
 		}
 
+		// Check if the card has a pre-computed list of possible cards (e.g., from guessInfo)
+		if (card?.guessedInfo?.possibleCards?.length) {
+			return card.guessedInfo.possibleCards;
+		}
+
 		if (!this.secretConfigs || this.secretConfigs.length === 0) {
 			await this.init();
 		}
