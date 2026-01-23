@@ -8,7 +8,7 @@ import { giftCreators } from './decktracker/card-info/gift-creators';
 import { LocalizationFacadeService } from './localization-facade.service';
 
 // Used for cache purposes, only in dev
-export const CARDS_VERSION = '20260122';
+export const CARDS_VERSION = '';
 export const isPreReleaseBuild = false;
 
 /** @deprecated use ALL_CLASSES */
