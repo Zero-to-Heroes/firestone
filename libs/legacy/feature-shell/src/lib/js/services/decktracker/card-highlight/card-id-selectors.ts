@@ -2127,6 +2127,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), spell);
 		case CardIds.KureTheLightBeyond_GDB_442:
 			return and(side(inputSide), or(inHand, inDeck), spell, holy);
+
+		// Lab Constructor: At the end of your turn, summon a copy of this. Forge: Gain Magnetic (highlight mechs).
 		case CardIds.LabConstructor:
 		case CardIds.LabConstructor_LabConstructorToken:
 			return and(side(inputSide), or(inHand, inDeck), mech);
