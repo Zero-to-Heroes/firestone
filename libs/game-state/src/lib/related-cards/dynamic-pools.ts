@@ -874,8 +874,6 @@ const getDynamicFilters = (
 				hasCorrectType(c, CardType.SPELL) && hasCost(c, '>=', 5) && fromAnotherClass(c, options.currentClass);
 		case CardIds.TheFiresOfZinAzshari:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '>=', 5);
-		case CardIds.SunkenSweeper:
-			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.MECH);
 		case CardIds.SubmergedSpacerock:
 			return (c) =>
 				hasCorrectType(c, CardType.SPELL) &&
