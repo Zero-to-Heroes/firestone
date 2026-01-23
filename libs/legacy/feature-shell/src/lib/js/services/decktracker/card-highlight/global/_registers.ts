@@ -53,6 +53,7 @@ import { StarlightWhelp } from './starlight-whelp';
 import { StranglethornHeart } from './stranglethorn-heart';
 import { SuccombToMadness } from './succomb-to-madness';
 import { TheFinsBeyondTime } from './the-fins-beyond-time';
+import { TheNighthold } from './the-nighthold';
 import { TidepoolPupil } from './tidepool-pupil';
 import { TramHeist } from './tram-heist';
 import { TwistedWebweaver } from './twisted-webweaver';
@@ -122,6 +123,7 @@ const cards = [
 	HighCultistBasaleph,
 	StarlightWhelp,
 	TheFinsBeyondTime,
+	TheNighthold,
 	MurlocHolmes,
 	Chromie,
 	XyrellaTheDevout,
