@@ -1121,7 +1121,6 @@ const internalGiftCreators = [
 	CardIds.BobTheBartender_FindATripleToken_BG31_BOBt4,
 	CardIds.DissolvingOoze_TLC_252,
 	CardIds.VictoriousVrykul,
-	CardIds.ThiefOfFutures,
 	CardIds.ConsiderThePast_ConsiderThePastEnchantment_TOT_341e,
 	CardIds.EternalFirebolt_EternalFireboltEnchantment_END_025e,
 ];

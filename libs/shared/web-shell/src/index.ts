@@ -6,6 +6,8 @@ export * from './lib/components/battlegrounds/cards/battlegrounds-cards.componen
 export * from './lib/components/battlegrounds/compositions/battlegrounds-compositions.component';
 export * from './lib/components/battlegrounds/heroes/battlegrounds-heroes.component';
 export * from './lib/components/constructed/constructed.component';
+export * from './lib/components/partners/partner-redirect.component';
+export * from './lib/components/partners/partner-links';
 
 // Common Components
 export * from './lib/components/common/download-button/download-button.component';

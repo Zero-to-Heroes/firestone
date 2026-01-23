@@ -28,7 +28,7 @@ export class ReceiveCardInHandParser implements EventParser {
 		private readonly helper: DeckManipulationHelper,
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
-	) {}
+	) { }
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return !!state;
@@ -62,7 +62,9 @@ export class ReceiveCardInHandParser implements EventParser {
 
 		// Some buffs are deduced from the creator card information, instead of being explicitly set
 		// by the game
-		const lastInfluencedByCardId: CardIds = creatorCardId ?? gameEvent.additionalData?.lastInfluencedByCardId;
+		// UPDATE 2026-01-23: we want to first pick the lastInfluencedByCardId from the event, because this is used by cards
+		// like Rangari Scout to build card links, and it might be different from the creatorCardId
+		const lastInfluencedByCardId: CardIds = gameEvent.additionalData?.lastInfluencedByCardId ?? creatorCardId;
 		const buffingEntityCardId = gameEvent.additionalData.buffingEntityCardId;
 		const buffCardId = gameEvent.additionalData.buffCardId;
 		const isSpecialCasePublicWhenOpponentDraws =
@@ -108,19 +110,19 @@ export class ReceiveCardInHandParser implements EventParser {
 		const otherCardWithObfuscation =
 			isCardInfoPublic || !otherCard
 				? otherCard?.update({
-						creatorCardId: creatorCardId,
-						creatorEntityId: creatorEntityId,
-						createdIndex: createdIndex,
-					})
+					creatorCardId: creatorCardId,
+					creatorEntityId: creatorEntityId,
+					createdIndex: createdIndex,
+				})
 				: otherCard.update({
-						creatorCardId: undefined,
-						creatorEntityId: undefined,
-						cardId: undefined,
-						cardName: undefined,
-						lastAffectedByCardId: undefined,
-						lastAffectedByEntityId: undefined,
-						createdIndex: undefined,
-					} as DeckCard);
+					creatorCardId: undefined,
+					creatorEntityId: undefined,
+					cardId: undefined,
+					cardName: undefined,
+					lastAffectedByCardId: undefined,
+					lastAffectedByEntityId: undefined,
+					createdIndex: undefined,
+				} as DeckCard);
 
 		const newBoard = boardCard
 			? this.helper.removeSingleCardFromZone(deck.board, null, entityId, deck.deckList.length === 0)[0]
@@ -156,25 +158,25 @@ export class ReceiveCardInHandParser implements EventParser {
 		const newCardId =
 			(isCardInfoPublic
 				? guessCardId(
-						cardId,
-						deck,
-						opponentDeck,
-						currentState,
-						creatorCardId,
-						creatorEntityId,
-						createdIndex,
-						this.allCards,
-					)
+					cardId,
+					deck,
+					opponentDeck,
+					currentState,
+					creatorCardId,
+					creatorEntityId,
+					createdIndex,
+					this.allCards,
+				)
 				: null) ?? cardWithDefault.cardId;
 		const cardWithKnownInfo =
 			newCardId === cardWithDefault.cardId
 				? cardWithDefault
 				: cardWithDefault.update({
-						cardId: newCardId,
-						cardName: this.allCards.getCard(newCardId).name,
-						refManaCost: this.allCards.getCard(newCardId).cost,
-						rarity: this.allCards.getCard(newCardId).rarity?.toLowerCase(),
-					});
+					cardId: newCardId,
+					cardName: this.allCards.getCard(newCardId).name,
+					refManaCost: this.allCards.getCard(newCardId).cost,
+					rarity: this.allCards.getCard(newCardId).rarity?.toLowerCase(),
+				});
 		const cardWithZone = cardWithKnownInfo.update({
 			zone: 'HAND',
 			tags: gameEvent.additionalData.tags ? toTagsObject(gameEvent.additionalData.tags) : cardWithKnownInfo.tags,
@@ -193,12 +195,12 @@ export class ReceiveCardInHandParser implements EventParser {
 		const otherCardWithBuffs =
 			buffingEntityCardId != null || buffCardId != null
 				? cardWithZone.update({
-						buffingEntityCardIds: [
-							...(cardWithDefault.buffingEntityCardIds || []),
-							buffingEntityCardId,
-						] as readonly string[],
-						buffCardIds: [...(cardWithZone.buffCardIds || []), buffCardId] as readonly string[],
-					} as DeckCard)
+					buffingEntityCardIds: [
+						...(cardWithDefault.buffingEntityCardIds || []),
+						buffingEntityCardId,
+					] as readonly string[],
+					buffCardIds: [...(cardWithZone.buffCardIds || []), buffCardId] as readonly string[],
+				} as DeckCard)
 				: cardWithZone;
 		const cardWithGuessedInfo = addGuessInfoToCard(
 			otherCardWithBuffs,
@@ -254,7 +256,7 @@ export class ReceiveCardInHandParser implements EventParser {
 		const handAfterCardInference: readonly DeckCard[] = this.addCardLinks(
 			handAfterReposition,
 			entityId,
-			creatorCardId,
+			lastInfluencedByCardId,
 		);
 		// console.debug('[receive-card-in-hand] new hand', handAfterCardInference);
 
@@ -265,13 +267,13 @@ export class ReceiveCardInHandParser implements EventParser {
 			abyssalCurseHighestValue:
 				cardWithAdditionalAttributes.cardId === CardIds.SirakessCultist_AbyssalCurseToken
 					? Math.max(
-							deck.abyssalCurseHighestValue ?? 0,
-							// When you are the active player, it's possible that the info comes from the FULL_ENTITY node itself,
-							// while it is in the ENTITY_UPDATE event for the opponent
-							!!gameEvent.additionalData.dataNum1 && gameEvent.additionalData.dataNum1 !== -1
-								? gameEvent.additionalData.dataNum1
-								: cardWithAdditionalAttributes.mainAttributeChange + 1,
-						)
+						deck.abyssalCurseHighestValue ?? 0,
+						// When you are the active player, it's possible that the info comes from the FULL_ENTITY node itself,
+						// while it is in the ENTITY_UPDATE event for the opponent
+						!!gameEvent.additionalData.dataNum1 && gameEvent.additionalData.dataNum1 !== -1
+							? gameEvent.additionalData.dataNum1
+							: cardWithAdditionalAttributes.mainAttributeChange + 1,
+					)
 					: deck.abyssalCurseHighestValue,
 		} as DeckState);
 
@@ -286,8 +288,8 @@ export class ReceiveCardInHandParser implements EventParser {
 		});
 	}
 
-	private addCardLinks(hand: readonly DeckCard[], entityId: number, creatorCardId: string): readonly DeckCard[] {
-		switch (creatorCardId) {
+	private addCardLinks(hand: readonly DeckCard[], entityId: number, lastInfluencedByCardId: string): readonly DeckCard[] {
+		switch (lastInfluencedByCardId) {
 			case CardIds.ElementaryReaction:
 			case CardIds.LadyDeathwhisper_RLK_713:
 			case CardIds.RangariScout_GDB_841:
@@ -356,7 +358,7 @@ export const addAdditionalAttribuesInHand = (
 				mainAttributeChange:
 					!!dataNum1 && dataNum1 !== -1
 						? // dataNum1 is the base value, while we start our count at 0
-							dataNum1 - 1
+						dataNum1 - 1
 						: highestAttribute + 1,
 			});
 		case CardIds.SchoolTeacher_NagalingToken:
@@ -373,8 +375,8 @@ export const addAdditionalAttribuesInHand = (
 		case CardIds.TheRyecleaver_MinionSandwichToken_VAC_525t2:
 			return gameEvent.additionalData?.referencedCardIds?.length
 				? card.update({
-						relatedCardIds: gameEvent.additionalData.referencedCardIds,
-					})
+					relatedCardIds: gameEvent.additionalData.referencedCardIds,
+				})
 				: card;
 	}
 	return card;

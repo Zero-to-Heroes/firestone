@@ -419,16 +419,16 @@ export class GameEvents {
 						gameEvent,
 						gameEvent.Value.AdditionalProps
 							? {
-									targetEntityId: gameEvent.Value.AdditionalProps.TargetEntityId,
-									targetCardId: gameEvent.Value.AdditionalProps.TargetCardId,
-									creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
-									transientCard: gameEvent.Value.AdditionalProps.TransientCard,
-									immune: gameEvent.Value.AdditionalProps.Immune,
-									dormant: gameEvent.Value.AdditionalProps.Dormant,
-									cost: gameEvent.Value.AdditionalProps.Cost,
-									magnetized: gameEvent.Value.AdditionalProps.Magnetized,
-									tags: gameEvent.Value.AdditionalProps.Tags,
-								}
+								targetEntityId: gameEvent.Value.AdditionalProps.TargetEntityId,
+								targetCardId: gameEvent.Value.AdditionalProps.TargetCardId,
+								creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
+								transientCard: gameEvent.Value.AdditionalProps.TransientCard,
+								immune: gameEvent.Value.AdditionalProps.Immune,
+								dormant: gameEvent.Value.AdditionalProps.Dormant,
+								cost: gameEvent.Value.AdditionalProps.Cost,
+								magnetized: gameEvent.Value.AdditionalProps.Magnetized,
+								tags: gameEvent.Value.AdditionalProps.Tags,
+							}
 							: {},
 					),
 				);
@@ -448,9 +448,9 @@ export class GameEvents {
 			case 'MINION_SUMMONED_FROM_HAND':
 				const summonFromHandAdditionProps = gameEvent.Value.AdditionalProps
 					? {
-							creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
-							tags: gameEvent.Value.AdditionalProps.Tags,
-						}
+						creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
+						tags: gameEvent.Value.AdditionalProps.Tags,
+					}
 					: null;
 				this.doEventDispatch(
 					GameEvent.build(GameEvent.MINION_SUMMONED_FROM_HAND, gameEvent, summonFromHandAdditionProps),
@@ -612,9 +612,9 @@ export class GameEvents {
 			case 'CARD_CHANGED_ON_BOARD':
 				const summonAdditionProps2 = gameEvent.Value.AdditionalProps
 					? {
-							creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
-							lastAffectedByCardId: gameEvent.Value.AdditionalProps.LastAffectedByCardId,
-						}
+						creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
+						lastAffectedByCardId: gameEvent.Value.AdditionalProps.LastAffectedByCardId,
+					}
 					: null;
 				this.doEventDispatch(GameEvent.build(GameEvent.CARD_CHANGED_ON_BOARD, gameEvent, summonAdditionProps2));
 				break;
@@ -624,6 +624,7 @@ export class GameEvents {
 						creatorCardId: gameEvent.Value.AdditionalProps?.CreatorCardId,
 						creatorEntityId: gameEvent.Value.AdditionalProps?.CreatorEntityId,
 						createdIndex: gameEvent.Value.AdditionalProps?.CreatedIndex,
+						lastInfluencedByCardId: gameEvent.Value.AdditionalProps?.LastInfluencedByCardId,
 						isPremium: gameEvent.Value.AdditionalProps?.IsPremium,
 						buffingEntityCardId: gameEvent.Value.AdditionalProps.BuffingEntityCardId,
 						buffCardId: gameEvent.Value.AdditionalProps.BuffCardId,
@@ -728,9 +729,9 @@ export class GameEvents {
 						gameEvent,
 						gameEvent.Value.AdditionalProps
 							? {
-									reactingToCardId: gameEvent.Value.AdditionalProps.InReactionToCardId,
-									reactingToEntityId: gameEvent.Value.AdditionalProps.InReactionToEntityId,
-								}
+								reactingToCardId: gameEvent.Value.AdditionalProps.InReactionToCardId,
+								reactingToEntityId: gameEvent.Value.AdditionalProps.InReactionToEntityId,
+							}
 							: null,
 					),
 				);
@@ -742,9 +743,9 @@ export class GameEvents {
 						gameEvent,
 						gameEvent.Value.AdditionalProps
 							? {
-									reactingToCardId: gameEvent.Value.AdditionalProps.InReactionToCardId,
-									reactingToEntityId: gameEvent.Value.AdditionalProps.InReactionToEntityId,
-								}
+								reactingToCardId: gameEvent.Value.AdditionalProps.InReactionToCardId,
+								reactingToEntityId: gameEvent.Value.AdditionalProps.InReactionToEntityId,
+							}
 							: null,
 					),
 				);
@@ -759,14 +760,14 @@ export class GameEvents {
 						gameEvent,
 						gameEvent.Value.AdditionalProps
 							? {
-									// Reuse the same props name as the ATTACKING events to make it easier to share code
-									attackerCardId: gameEvent.Value.AdditionalProps.ProposedAttackerCardId,
-									attackerEntityId: gameEvent.Value.AdditionalProps.ProposedAttackerEntityId,
-									attackerControllerId: gameEvent.Value.AdditionalProps.ProposedAttackerControllerId,
-									defenderCardId: gameEvent.Value.AdditionalProps.ProposedDefenderCardId,
-									defenderEntityId: gameEvent.Value.AdditionalProps.ProposedDefenderEntityId,
-									defenderControllerId: gameEvent.Value.AdditionalProps.ProposedDefenderControllerId,
-								}
+								// Reuse the same props name as the ATTACKING events to make it easier to share code
+								attackerCardId: gameEvent.Value.AdditionalProps.ProposedAttackerCardId,
+								attackerEntityId: gameEvent.Value.AdditionalProps.ProposedAttackerEntityId,
+								attackerControllerId: gameEvent.Value.AdditionalProps.ProposedAttackerControllerId,
+								defenderCardId: gameEvent.Value.AdditionalProps.ProposedDefenderCardId,
+								defenderEntityId: gameEvent.Value.AdditionalProps.ProposedDefenderEntityId,
+								defenderControllerId: gameEvent.Value.AdditionalProps.ProposedDefenderControllerId,
+							}
 							: null,
 					),
 				);
@@ -877,10 +878,10 @@ export class GameEvents {
 			case 'CARD_ON_BOARD_AT_GAME_START':
 				const additionalProps = gameEvent.Value.AdditionalProps
 					? {
-							health: gameEvent.Value.AdditionalProps.Health,
-							creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
-							tags: gameEvent.Value.AdditionalProps.Tags,
-						}
+						health: gameEvent.Value.AdditionalProps.Health,
+						creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
+						tags: gameEvent.Value.AdditionalProps.Tags,
+					}
 					: null;
 				this.doEventDispatch(
 					GameEvent.build(GameEvent.CARD_ON_BOARD_AT_GAME_START, gameEvent, additionalProps),
@@ -1616,10 +1617,10 @@ export class GameEvents {
 			case 'MINION_SUMMONED':
 				const summonAdditionProps = gameEvent.Value.AdditionalProps
 					? {
-							creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
-							creatorEntityId: gameEvent.Value.AdditionalProps.CreatorEntityId,
-							tags: gameEvent.Value.AdditionalProps.Tags,
-						}
+						creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
+						creatorEntityId: gameEvent.Value.AdditionalProps.CreatorEntityId,
+						tags: gameEvent.Value.AdditionalProps.Tags,
+					}
 					: null;
 				this.doEventDispatch(GameEvent.build(GameEvent.MINION_SUMMONED, gameEvent, summonAdditionProps));
 				break;

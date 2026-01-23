@@ -49,7 +49,7 @@ export class SecretConfigService {
 	constructor(
 		private readonly api: ApiRunner,
 		private readonly allCards: CardsFacadeService,
-	) {}
+	) { }
 
 	public async getValidSecrets(
 		metadata: Metadata,
@@ -63,11 +63,6 @@ export class SecretConfigService {
 		const staticList = this.getStaticSecrets(creatorCardId, metadata, playerClass);
 		if (staticList?.length) {
 			return staticList;
-		}
-
-		// Check if the card has a pre-computed list of possible cards (e.g., from guessInfo)
-		if (card?.guessedInfo?.possibleCards?.length) {
-			return card.guessedInfo.possibleCards;
 		}
 
 		if (!this.secretConfigs || this.secretConfigs.length === 0) {
@@ -102,7 +97,19 @@ export class SecretConfigService {
 				}
 				return true;
 			});
-		const result = staticSecrets
+
+		let staticSecretsFromCreator = null;
+		if (card?.guessedInfo?.possibleCards?.length) {
+			staticSecretsFromCreator = card.guessedInfo.possibleCards
+				.filter(c => this.allCards.getCard(c).mechanics?.includes(GameTag[GameTag.SECRET]))
+			// If we have a secret and the list is empty, something went wrong
+			if (!staticSecretsFromCreator.length) {
+				console.warn('[secret-config] no secrets found for creator', card);
+			}
+		}
+
+		const baseForSecrets = staticSecretsFromCreator?.length ? staticSecretsFromCreator : staticSecrets;
+		const result = baseForSecrets
 			.filter((secret) => this.canBeSpecificSecret(secret, card))
 			.filter((secret) => this.canBeCreatedBy(secret, creatorCardId))
 			.filter((secret) => this.canBeCreatedByDynamic(secret, creatorCardId, creatorEntityId, gameState));
