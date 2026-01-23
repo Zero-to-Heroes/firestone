@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { getReferenceTribeCardId, getTribeIcon, getTribeName } from '@firestone-hs/reference-data';
-import { Entity, EntityAsJS, EntityDefinition } from '@firestone-hs/replay-parser';
+import { Entity, EntityDefinition } from '@firestone-hs/replay-parser';
 import { MinionStat } from '@firestone/game-state';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
@@ -297,7 +297,7 @@ export const buildFinalWarband = (replayInfo: GameStat, allCards: CardsFacadeSer
 		const boardEntities = bgsBoard.board.map((boardEntity) =>
 			boardEntity instanceof Entity || boardEntity.tags instanceof Map
 				? Entity.create(new Entity(), boardEntity as EntityDefinition)
-				: Entity.fromJS(boardEntity as unknown as EntityAsJS),
+				: Entity.create(boardEntity as Entity),
 		) as readonly Entity[];
 		const normalizedIds = [...new Set(boardEntities.map((entity) => normalizeCardId(entity.cardID, allCards)))];
 		const minionStats = normalizedIds.map(

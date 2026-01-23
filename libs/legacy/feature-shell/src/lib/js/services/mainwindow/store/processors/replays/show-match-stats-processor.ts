@@ -23,7 +23,7 @@ export class ShowMatchStatsProcessor implements Processor {
 		private readonly gameStats: GameStatsLoaderService,
 		private readonly perfectGames: BgsPerfectGamesService,
 		private readonly mainNav: MainWindowNavigationService,
-	) {}
+	) { }
 
 	public async process(
 		event: ShowMatchStatsEvent,
@@ -46,12 +46,12 @@ export class ShowMatchStatsProcessor implements Processor {
 		const playerCardId = selectedInfo.playerCardId;
 		const mappedBoardInfo = matchStats
 			? matchStats.boardHistory.map(
-					(history) =>
-						({
-							turn: history.turn,
-							board: history.board.map((value) => Entity.fromJS(value as any)),
-						} as BgsBoard),
-			  )
+				(history) =>
+				({
+					turn: history.turn,
+					board: history.board.map((value) => Entity.create(value as Entity)),
+				} as BgsBoard),
+			)
 			: [];
 
 		const matchDetail = Object.assign(new MatchDetail(), {
@@ -62,14 +62,14 @@ export class ShowMatchStatsProcessor implements Processor {
 				// globalStats: currentState.battlegrounds.globalStats,
 				player: matchStats
 					? BgsPlayer.create({
-							cardId: playerCardId,
-							displayedCardId: playerCardId,
-							tavernUpgradeHistory: matchStats?.tavernTimings || [],
-							boardHistory: mappedBoardInfo as readonly BgsBoard[],
-							highestWinStreak: matchStats?.highestWinStreak,
-							initialHealth: defaultStartingHp(GameType.GT_BATTLEGROUNDS, playerCardId, this.allCards),
-							// questRewards: matchStats.qu TODO: implement this
-					  } as BgsPlayer)
+						cardId: playerCardId,
+						displayedCardId: playerCardId,
+						tavernUpgradeHistory: matchStats?.tavernTimings || [],
+						boardHistory: mappedBoardInfo as readonly BgsBoard[],
+						highestWinStreak: matchStats?.highestWinStreak,
+						initialHealth: defaultStartingHp(GameType.GT_BATTLEGROUNDS, playerCardId, this.allCards),
+						// questRewards: matchStats.qu TODO: implement this
+					} as BgsPlayer)
 					: null,
 				tabs: [
 					'hp-by-turn',

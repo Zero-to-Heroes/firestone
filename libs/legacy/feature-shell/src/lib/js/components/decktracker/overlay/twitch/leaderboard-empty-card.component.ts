@@ -10,7 +10,6 @@ import {
 	TwitchBgsStateConfig,
 	TwitchOpponentOverviewInput,
 } from '@firestone/twitch/common';
-import { fromJS } from 'immutable';
 
 @Component({
 	standalone: false,
@@ -173,11 +172,11 @@ export class LeaderboardEmptyCardComponent {
 				turn: lastBoard.turn,
 				board: lastBoard.board.map(
 					(entity) =>
-						({
-							id: entity.id,
-							cardID: entity.cardID,
-							tags: fromJS(entity.tags),
-						} as Entity),
+					({
+						id: entity.id,
+						cardID: entity.cardID,
+						tags: entity.tags,
+					} as Entity),
 				),
 			} as BgsBoard,
 		];

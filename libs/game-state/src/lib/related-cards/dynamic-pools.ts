@@ -874,8 +874,6 @@ const getDynamicFilters = (
 				hasCorrectType(c, CardType.SPELL) && hasCost(c, '>=', 5) && fromAnotherClass(c, options.currentClass);
 		case CardIds.TheFiresOfZinAzshari:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '>=', 5);
-		case CardIds.SunkenSweeper:
-			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.MECH);
 		case CardIds.SubmergedSpacerock:
 			return (c) =>
 				hasCorrectType(c, CardType.SPELL) &&
@@ -1190,7 +1188,6 @@ const getDynamicFilters = (
 		case CardIds.KureTheLightBeyond_GDB_442:
 		case CardIds.LinedancePartner_WW_433:
 		case CardIds.SerpentshrinePortal_BT_100:
-		case CardIds.SilvermoonPortal_CORE_KAR_077:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 3);
 		case CardIds.CrystalBroker:
 			return (c) =>
@@ -1705,6 +1702,8 @@ const doesSummonInPlay = (sourceCardId: string): boolean => {
 		case CardIds.FirelandsPortalCore:
 		case CardIds.MaelstromPortal_CORE_KAR_073:
 		case CardIds.SilvermoonPortal_CORE_KAR_077:
+		case CardIds.SilvermoonPortal:
+		case CardIds.SilvermoonPortal_WON_309:
 		case CardIds.IronforgePortal:
 		case CardIds.IronforgePortal_WON_337:
 		case CardIds.MoongladePortal_KAR_075:

@@ -194,32 +194,32 @@ export class TwitchAuthService {
 		const latestBattle = bgsState?.currentGame?.lastNonEmptyFaceOff();
 		const newBgsState: TwitchBgsState | null = !!bgsState
 			? ({
-					leaderboard: this.buildLeaderboard(bgsState),
-					currentBattle: {
-						battleInfo:
-							latestBattle?.battleResult && latestBattle?.battleInfoStatus !== 'ongoing'
-								? { ...latestBattle?.battleResult, outcomeSamples: undefined }
-								: null,
-						status:
-							latestBattle?.battleInfoStatus === 'ongoing'
-								? 'waiting-for-result'
-								: latestBattle?.battleInfoStatus,
-					},
-					currentTurn: state.currentTurnNumeric,
-					inGame: state.gameStarted && !state.gameEnded && !!state.bgState.currentGame,
-					gameEnded: state.gameEnded,
-					availableRaces: bgsState.currentGame?.availableRaces,
-					phase: bgsState.currentGame?.phase,
-					config: {
-						hasBuddies: bgsState.currentGame?.hasBuddies,
-						hasPrizes: bgsState.currentGame?.hasPrizes,
-						hasQuests: bgsState.currentGame?.hasQuests,
-						hasSpells: bgsState.currentGame?.hasSpells,
-						hasTrinkets: bgsState.currentGame?.hasTrinkets,
-						hasTimewarped: bgsState.currentGame?.hasTimewarped,
-						anomalies: bgsState.currentGame?.anomalies,
-					},
-				} as TwitchBgsState)
+				leaderboard: this.buildLeaderboard(bgsState),
+				currentBattle: {
+					battleInfo:
+						latestBattle?.battleResult && latestBattle?.battleInfoStatus !== 'ongoing'
+							? { ...latestBattle?.battleResult, outcomeSamples: undefined }
+							: null,
+					status:
+						latestBattle?.battleInfoStatus === 'ongoing'
+							? 'waiting-for-result'
+							: latestBattle?.battleInfoStatus,
+				},
+				currentTurn: state.currentTurnNumeric,
+				inGame: state.gameStarted && !state.gameEnded && !!state.bgState.currentGame,
+				gameEnded: state.gameEnded,
+				availableRaces: bgsState.currentGame?.availableRaces,
+				phase: bgsState.currentGame?.phase,
+				config: {
+					hasBuddies: bgsState.currentGame?.hasBuddies,
+					hasPrizes: bgsState.currentGame?.hasPrizes,
+					hasQuests: bgsState.currentGame?.hasQuests,
+					hasSpells: bgsState.currentGame?.hasSpells,
+					hasTrinkets: bgsState.currentGame?.hasTrinkets,
+					hasTimewarped: bgsState.currentGame?.hasTimewarped,
+					anomalies: bgsState.currentGame?.anomalies,
+				},
+			} as TwitchBgsState)
 			: null;
 
 		const result: TwitchEvent = {
@@ -436,7 +436,7 @@ export class TwitchAuthService {
 		return {
 			id: entity.id,
 			cardID: entity.cardID,
-			tags: entity.tags.filter((value, key) => this.isSerializableTag(key)).toJS() as { [key: string]: number },
+			tags: Object.fromEntries(Object.entries(entity.tags).filter(([key]) => this.isSerializableTag(key))),
 		};
 	}
 

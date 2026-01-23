@@ -26,7 +26,6 @@ import { BgsEntity, MemoryBgsPlayerInfo, MemoryBgsTeamInfo, MemoryInspectionServ
 import { LogsUploaderService, PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '@legacy-import/src/lib/js/models/game-event';
-import { Map } from 'immutable';
 import { AdService } from '../../../ad.service';
 import { isSupportedScenario } from '../../../battlegrounds/bgs-utils';
 import { GameEvents } from '../../../game-events.service';
@@ -43,7 +42,7 @@ export class BgsPlayerBoardParser implements EventParser {
 		private readonly gameIdService: GameUniqueIdService,
 		private readonly guardian: BgsIntermediateResultsSimGuardianService,
 		private readonly gameEventsService: GameEvents,
-	) {}
+	) { }
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return !!state && isBattlegrounds(state.metadata?.gameType);
@@ -672,12 +671,8 @@ export class BgsPlayerBoardParser implements EventParser {
 		return {
 			cardID: logEntity.CardId as string,
 			id: logEntity.Entity as number,
-			tags: BgsPlayerBoardParser.buildTags(logEntity.Tags),
+			tags: logEntity.Tags.map((tag) => [GameTag[tag.Name], tag.Value]),
 		} as Entity;
-	}
-
-	private static buildTags(tags: { Name: number; Value: number }[]): Map<string, number> {
-		return Map(tags.map((tag) => [GameTag[tag.Name], tag.Value]));
 	}
 }
 

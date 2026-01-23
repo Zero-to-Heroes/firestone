@@ -70,9 +70,12 @@ export const buildCardTiers = (
 		);
 	}
 
+	console.debug('[bgs-timewarped] buildCardTiers stats', stats, sort);
 	const cardStats = [...stats].sort(sortByProperties((stat) => [getSortProperty(stat, sort)]));
+	// const cardStats = cardStatsRaw.filter((stat) => !isNaN(getSortProperty(stat, sort)));
+	// console.debug('[bgs-timewarped] buildCardTiers cardStats', cardStats, cardStatsRaw.filter((stat) => isNaN(getSortProperty(stat, sort))));
 	const { mean, standardDeviation } = getStandardDeviation(cardStats.map((stat) => getSortProperty(stat, sort)));
-	console.debug('mean', mean, standardDeviation, mean - 1.5 * standardDeviation);
+	console.debug('[bgs-timewarped] buildCardTiers mean', mean, standardDeviation, mean - 1.5 * standardDeviation, cardStats.map((stat) => getSortProperty(stat, sort)));
 	return [
 		{
 			id: 'S' as BgsCardTier,

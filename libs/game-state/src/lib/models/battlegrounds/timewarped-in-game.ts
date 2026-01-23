@@ -1,8 +1,11 @@
+import { BgsCardTier } from '@firestone/battlegrounds/data-access';
+
 export interface BgsTimewarpedCardChoiceOption {
 	readonly cardId: string;
+	readonly tier: BgsCardTier | undefined;
 	readonly dataPoints: number;
-	readonly averagePlacement: number;
-	readonly impact: number;
+	readonly averagePlacement: number | null;
+	readonly impact: number | null;
 }
 
 export const equalBgsTimewarpedCardChoiceOption = (

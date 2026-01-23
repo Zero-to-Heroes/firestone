@@ -21,7 +21,7 @@ export class SecretRevealedComponent {
 	splashImage: string;
 	bannerImage: string;
 
-	constructor(private cards: AllCardsService) {}
+	constructor(private cards: AllCardsService) { }
 
 	@Input() set entity(value: Entity) {
 		// console.debug('[secret-revealed] setting new entity', value);
@@ -39,7 +39,7 @@ export class SecretRevealedComponent {
 				this.splashImage = `https://static.zerotoheroes.com/hearthstone/asset/coliseum/images/secrets/secret_splash_${classString}.png`;
 				this.bannerImage = `https://static.zerotoheroes.com/hearthstone/asset/coliseum/images/secrets/secret_banner_${classString}.png`;
 			} else {
-				console.error('[secret-revealed] Could not assign player class', value, value.tags.toJS());
+				console.error('[secret-revealed] Could not assign player class', value, value.tags);
 			}
 		}
 	}

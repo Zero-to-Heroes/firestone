@@ -1,3 +1,5 @@
+// Lab Constructor (TTN_730): At the end of your turn, summon a copy of this. Forge: Gain Magnetic.
+
 import { CardClass, CardIds, CardType, GameTag, Race, SpellSchool } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState, getCost, getProcessedCard } from '@firestone/game-state';
 import { groupByFunction, pickLast, sortByProperties } from '@firestone/shared/framework/common';
@@ -2125,8 +2127,10 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), spell);
 		case CardIds.KureTheLightBeyond_GDB_442:
 			return and(side(inputSide), or(inHand, inDeck), spell, holy);
+
 		// Lab Constructor: At the end of your turn, summon a copy of this. Forge: Gain Magnetic (highlight mechs).
 		case CardIds.LabConstructor:
+		case CardIds.LabConstructor_LabConstructorToken:
 			return and(side(inputSide), or(inHand, inDeck), mech);
 		case CardIds.LabPatron_TOY_651:
 			return and(side(inputSide), or(inHand, inDeck), givesArmor);

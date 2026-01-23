@@ -43,6 +43,7 @@ import {
 	inDeck,
 	inHand,
 	isStarshipPieceFor,
+	jadeGolem,
 	kindred,
 	mech,
 	minion,
@@ -489,6 +490,12 @@ export abstract class CardsHighlightCommonService extends AbstractSubscriptionCo
 			refCard.referencedTags?.includes(GameTag[GameTag.EXCAVATE])
 		) {
 			selectors.push(and(side(inputSide), or(inDeck, inHand), excavate));
+		}
+		if (
+			refCard.mechanics?.includes(GameTag[GameTag.JADE_GOLEM]) ||
+			refCard.referencedTags?.includes(GameTag[GameTag.JADE_GOLEM])
+		) {
+			selectors.push(and(side(inputSide), or(inDeck, inHand), jadeGolem));
 		}
 		if (
 			refCard.mechanics?.includes(GameTag[GameTag.RIFF]) ||
