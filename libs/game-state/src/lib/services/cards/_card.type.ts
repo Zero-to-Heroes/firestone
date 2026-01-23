@@ -3,6 +3,7 @@ import { DeckCard, GuessedInfo } from '../../models/deck-card';
 import { DeckState } from '../../models/deck-state';
 import { GameEvent } from '../../models/game-event';
 import { GameState } from '../../models/game-state';
+import { Metadata } from '../../models/metadata';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface Card {
@@ -33,6 +34,7 @@ export interface GuessInfoInput {
 	options?: {
 		positionInHand?: number;
 		tags?: readonly { Name: GameTag; Value: number }[];
+		metadata?: Metadata;
 	};
 }
 export interface GuessCardIdInput {

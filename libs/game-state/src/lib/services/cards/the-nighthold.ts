@@ -24,7 +24,7 @@ export const TheNighthold: GeneratingCard & StaticGeneratingCard = {
 					hasMechanic(c, GameTag.SECRET) &&
 					hasCorrectClass(c, CardClass.PALADIN),
 				// Use Wild format to get all Paladin secrets, not constrained by game mode
-				{ ...input.options, metadata: { ...input.options?.metadata, formatType: GameFormat.FT_WILD, gameType: GameType.GT_RANKED } },
+				{ ...input.options, metadata: { formatType: GameFormat.FT_WILD, gameType: GameType.GT_RANKED, scenarioId: input.options?.metadata?.scenarioId ?? 0 } },
 			),
 		};
 	},
