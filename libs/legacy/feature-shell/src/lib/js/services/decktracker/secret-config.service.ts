@@ -100,13 +100,12 @@ export class SecretConfigService {
 			});
 
 		let staticSecretsFromCreator = null;
-		const creator = gameState.opponentDeck.findCard(creatorEntityId)?.card;
-		if (creator?.guessedInfo?.possibleCards?.length) {
-			staticSecretsFromCreator = creator.guessedInfo.possibleCards
+		if (card?.guessedInfo?.possibleCards?.length) {
+			staticSecretsFromCreator = card.guessedInfo.possibleCards
 				.filter(c => this.allCards.getCard(c).mechanics?.includes(GameTag[GameTag.SECRET]))
 			// If we have a secret and the list is empty, something went wrong
 			if (!staticSecretsFromCreator.length) {
-				console.warn('[secret-config] no secrets found for creator', creator);
+				console.warn('[secret-config] no secrets found for creator', card);
 			}
 		}
 
