@@ -1,8 +1,14 @@
-/* eslint-disable no-mixed-spaces-and-tabs */
 // Champions of Azeroth (WON_113)
 // "Choose Alliance or Horde. Get 2 of their <b>Legendary</b> Champions and reduce their Costs by (2)."
-import { CardIds } from '@firestone-hs/reference-data';
+import { AllCardsService, CardIds } from '@firestone-hs/reference-data';
 import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
+
+const relatedChampionIds = (allCards: AllCardsService, cardId: string): readonly string[] => {
+	return allCards
+		.getCard(cardId)
+		.relatedCardDbfIds?.map((dbfId) => allCards.getCard(dbfId)?.id)
+		.filter((id): id is string => !!id) ?? [];
+};
 
 export const ChampionsOfAzeroth: GeneratingCard & StaticGeneratingCard = {
 	cardIds: [
@@ -12,16 +18,11 @@ export const ChampionsOfAzeroth: GeneratingCard & StaticGeneratingCard = {
 	],
 	publicCreator: true,
 	dynamicPool: (input: StaticGeneratingCardInput) => {
-		return (
-			input.allCards.getCard(input.cardId).relatedCardDbfIds?.map((dbfId) => input.allCards.getCard(dbfId).id) ??
-			[]
-		);
+		return relatedChampionIds(input.allCards, input.cardId);
 	},
 	guessInfo: (input: GuessInfoInput) => {
 		return {
-			possibleCards:
-				input.allCards.getCard(input.card.cardId).relatedCardDbfIds?.map((dbfId) => input.allCards.getCard(dbfId).id) ??
-				[],
+			possibleCards: relatedChampionIds(input.allCards, input.card.cardId),
 		};
 	},
 };
