@@ -164,6 +164,7 @@ export { SunkenSweeper } from './sunken-sweeper';
 export { TemporalAnomaly } from './temporal-anomaly';
 export { TheCurator } from './the-curator';
 export { TheEternalHold } from './the-eternal-hold';
+export { TheNighthold } from './the-nighthold';
 export { TheSunwell } from './the-sunwell';
 export { TheWellOfEternity } from './the-well-of-eternity';
 export { TidestoneOfGolganneth } from './tidestone-of-golganneth';

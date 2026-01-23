@@ -65,7 +65,6 @@ export class SecretConfigService {
 			return staticList;
 		}
 
-
 		if (!this.secretConfigs || this.secretConfigs.length === 0) {
 			await this.init();
 		}
