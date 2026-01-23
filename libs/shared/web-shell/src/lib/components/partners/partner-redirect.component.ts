@@ -58,7 +58,7 @@ export class PartnerRedirectComponent implements OnInit {
 		if (targetUrl && isTrustedUrl(targetUrl)) {
 			// Only redirect in browser environment
 			if (isPlatformBrowser(this.platformId)) {
-				window.location.href = targetUrl;
+				window.location.assign(targetUrl);
 			}
 		} else {
 			// Partner not found or untrusted URL, redirect to home
