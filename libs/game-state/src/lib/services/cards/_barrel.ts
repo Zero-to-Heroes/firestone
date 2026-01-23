@@ -31,6 +31,7 @@ export { Brightwing } from './brightwing';
 export { BrutishEndmaw } from './brutish-endmaw';
 export { BygoneEchoes } from './bygone-echoes';
 export { CavernDreamer } from './cavern-dreamer';
+export { ChampionsOfAzeroth } from './champions-of-azeroth';
 export { ChromieBronzeEmissary } from './chromie-bronze-emissary';
 export { Chromie } from './chromie';
 export { ChromieEscapeFromDurnholde } from './chromie-escape-from-durnholde';
