@@ -216,6 +216,7 @@ export class GameEvent implements GameStateEvent {
 	readonly gameState: FullGameState = {} as FullGameState;
 
 	readonly additionalData: any;
+	readonly debug?: any;
 
 	public static build(type: string, gameEvent: any, additionalProps?: any): GameEvent {
 		return Object.assign(new GameEvent(), {
@@ -227,6 +228,7 @@ export class GameEvent implements GameStateEvent {
 			entityId: parseInt(gameEvent.Value?.EntityId || 0),
 			gameState: gameEvent.Value?.GameState,
 			additionalData: additionalProps,
+			debug: gameEvent.Debug,
 		} as GameEvent);
 	}
 
