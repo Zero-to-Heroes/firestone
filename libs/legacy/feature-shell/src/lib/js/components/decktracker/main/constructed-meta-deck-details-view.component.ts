@@ -61,6 +61,12 @@ import { ConstructedMatchupDetails } from './constructed-meta-deck-details-match
 								[title]="'app.decktracker.meta.deck.copy-deckstring-button' | owTranslate"
 								[origin]="'constructed-meta-decks'"
 							></copy-deckstring>
+							<export-deck-image
+								*ngIf="deckstring"
+								class="button export-deck-image"
+								[captureElementSelector]="'.constructed-meta-deck-details-cards'"
+								[origin]="'constructed-meta-decks'"
+							></export-deck-image>
 							<div class="button view-online" (click)="viewOnline()" *ngIf="deckstring">
 								<div class="icon">
 									<svg class="svg-icon-fill">

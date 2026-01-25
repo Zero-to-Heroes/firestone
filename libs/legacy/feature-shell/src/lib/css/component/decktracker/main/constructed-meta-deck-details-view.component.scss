@@ -109,6 +109,15 @@
 				}
 			}
 
+			.export-deck-image {
+				::ng-deep .export-deck-image {
+					.message {
+						margin: 0;
+						color: currentColor;
+					}
+				}
+			}
+
 			.view-online {
 				.icon {
 					aspect-ratio: 16/9;

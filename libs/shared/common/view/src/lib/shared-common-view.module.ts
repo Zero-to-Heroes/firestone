@@ -15,6 +15,7 @@ import { BasicBarChart2Component } from './components/charts/basic-bar-chart-2.c
 import { StatCellComponent } from './components/charts/stat-cell.component';
 import { CopyDesckstringComponent } from './components/deck/copy-deckstring.component';
 import { DeckListBasicComponent } from './components/deck/deck-list-basic.component';
+import { ExportDeckImageComponent } from './components/deck/export-deck-image.component';
 import { FilterDropdownCombinedComponent } from './components/dropdown/filter-dropdown-combined.component';
 import { FilterDropdownMultiselectComponent } from './components/dropdown/filter-dropdown-multiselect.component';
 import { FilterDropdownComponent } from './components/dropdown/filter-dropdown.component';
@@ -55,6 +56,7 @@ const components = [
 	CardTileComponent,
 	CopyDesckstringComponent,
 	DeckListBasicComponent,
+	ExportDeckImageComponent,
 	ConfirmationComponent,
 
 	FilterDropdownComponent,

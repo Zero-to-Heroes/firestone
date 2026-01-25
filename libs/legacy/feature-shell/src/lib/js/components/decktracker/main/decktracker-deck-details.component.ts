@@ -78,12 +78,20 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 					</div>
 				</div>
 				<div class="deck-list-container">
-					<copy-deckstring
-						class="copy-deckcode"
-						[deckstring]="value.selectedDeck?.deckstring"
-						[copyText]="'app.decktracker.deck-details.copy-deck-code-button' | owTranslate"
-					>
-					</copy-deckstring>
+					<div class="deck-buttons">
+						<copy-deckstring
+							class="copy-deckcode"
+							[deckstring]="value.selectedDeck?.deckstring"
+							[copyText]="'app.decktracker.deck-details.copy-deck-code-button' | owTranslate"
+						>
+						</copy-deckstring>
+						<export-deck-image
+							class="export-deck-image"
+							[captureElementSelector]="'.deck-list-container .deck-list'"
+							[origin]="'decktracker-deck-details'"
+						>
+						</export-deck-image>
+					</div>
 
 					<deck-list-static
 						class="deck-list"

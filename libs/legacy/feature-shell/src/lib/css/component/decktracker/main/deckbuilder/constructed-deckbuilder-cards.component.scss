@@ -64,6 +64,18 @@
 				font-size: 14px;
 			}
 
+			.export-deck-image {
+				margin-left: 10px;
+
+				::ng-deep .export-deck-image {
+					--icon-color: var(--color-5);
+
+					&:hover {
+						--icon-color: var(--color-1);
+					}
+				}
+			}
+
 			.save-deckcode {
 				border: 1px solid var(--color-1);
 				padding: 5px 10px;
