@@ -25,6 +25,12 @@ import { ConstructedDeckDetails } from './constructed-meta-deck-details-view.com
 					></span>
 					<span class="details">{{ archetypeCoreCardsHeaderDetails }}</span>
 				</div>
+				<export-deck-to-picture
+					class="export-deck-picture"
+					selector=".container.core .cards"
+					[origin]="'meta-archetype-details'"
+				>
+				</export-deck-to-picture>
 				<deck-list-static class="cards" [cards]="archetypeCoreCards" [collection]="value.collection">
 				</deck-list-static>
 			</div>

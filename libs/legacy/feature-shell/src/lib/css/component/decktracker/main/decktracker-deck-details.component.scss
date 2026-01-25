@@ -173,6 +173,23 @@
 			}
 		}
 
+		.export-deck-picture {
+			margin-bottom: 10px;
+			justify-content: flex-start;
+
+			::ng-deep .export-deck-to-picture {
+				.screenshot-button {
+					.icon {
+						fill: var(--color-5);
+					}
+
+					&:hover .icon {
+						fill: var(--color-1);
+					}
+				}
+			}
+		}
+
 		.deck-list {
 			flex-grow: 1;
 		}
