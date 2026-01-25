@@ -1,1 +1,0 @@
-This project will be removed soon

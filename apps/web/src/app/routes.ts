@@ -1,15 +1,21 @@
 import { Routes } from '@angular/router';
-import {
-	ArenaCardsComponent,
-	ArenaClassesComponent,
-	AuthCallbackComponent,
-	BattlegroundsCardsComponent,
-	BattlegroundsCompositionsComponent,
-	BattlegroundsHeroesComponent,
-	ConstructedComponent,
-	LoginComponent,
-	WebShellComponent,
-} from '@firestone/shared/web-shell';
+import { AuthCallbackComponent, LoginComponent, routes as sharedRoutes, WebShellComponent } from '@firestone/shared/web-shell';
+
+// Transform shared routes for use as children (convert absolute redirects to relative)
+const transformRoutesForChildren = (routes: Routes): Routes => {
+	return routes
+		.filter((route) => route.path !== '' && route.path !== '**') // Exclude root redirect and wildcard (handled separately)
+		.map((route) => {
+			if (route.redirectTo && typeof route.redirectTo === 'string' && route.redirectTo.startsWith('/')) {
+				// Convert absolute redirect to relative for children context
+				return {
+					...route,
+					redirectTo: route.redirectTo.substring(1),
+				};
+			}
+			return route;
+		});
+};
 
 export const routes: Routes = [
 	// Main app with shell (header/nav)
@@ -17,20 +23,12 @@ export const routes: Routes = [
 		path: '',
 		component: WebShellComponent,
 		children: [
-			{ path: '', redirectTo: 'battlegrounds', pathMatch: 'full' },
+			{ path: '', redirectTo: 'battlegrounds/heroes', pathMatch: 'full' },
 			{ path: 'login', component: LoginComponent },
 			{ path: 'auth-callback', component: AuthCallbackComponent },
-			{ path: 'battlegrounds', redirectTo: 'battlegrounds/heroes', pathMatch: 'full' },
-			{ path: 'battlegrounds/heroes', component: BattlegroundsHeroesComponent },
-			{ path: 'battlegrounds/comps', component: BattlegroundsCompositionsComponent },
-			{ path: 'battlegrounds/comps/:compSlug', component: BattlegroundsCompositionsComponent },
-			{ path: 'battlegrounds/cards', component: BattlegroundsCardsComponent },
-			{ path: 'arena', redirectTo: 'arena/classes', pathMatch: 'full' },
-			{ path: 'arena/classes', component: ArenaClassesComponent },
-			{ path: 'arena/cards', component: ArenaCardsComponent },
-			{ path: 'constructed', component: ConstructedComponent },
+			...transformRoutesForChildren(sharedRoutes),
 			// Wildcard route - must be last
-			{ path: '**', redirectTo: 'battlegrounds', pathMatch: 'full' },
+			{ path: '**', redirectTo: 'battlegrounds/heroes', pathMatch: 'full' },
 		],
 	},
 ];

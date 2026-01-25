@@ -6,6 +6,7 @@ TODO:
 Ready for constructed overlay
 ==============
 
+- Add "open logs folder" button in system tray
 - Auto Updater
 - settings
 - on first startup, the overlay isn't correctly sized

@@ -1,4 +1,5 @@
 export * from './lib/web-shell/web-shell.component';
+export * from './lib/routes';
 
 // Page Components
 export * from './lib/components/arena/classes/arena-classes.component';
