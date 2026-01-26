@@ -3216,6 +3216,9 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, deathrattle);
 		case CardIds.SmolderingStrength_FIR_914:
 			return and(side(inputSide), or(inDeck, inHand), minion);
+		// Smolderthorn Lancer (TRL_326): Battlecry: If you're holding a Dragon, destroy a damaged enemy minion.
+		case CardIds.SmolderthornLancer:
+			return and(side(inputSide), or(inDeck, inHand), dragon);
 		case CardIds.Snapdragon:
 			return and(side(inputSide), inDeck, minion, battlecry);
 		case CardIds.SnatchAndGrab_VAC_700:
