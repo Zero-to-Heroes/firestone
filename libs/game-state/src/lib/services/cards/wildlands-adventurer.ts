@@ -12,7 +12,8 @@ const buildTavernsOfTimePool = (allCards: AllCardsService): readonly string[] =>
 			(c) =>
 				c.set?.toLowerCase() === 'taverns_of_time' &&
 				c.type?.toUpperCase() !== CardType[CardType.ENCHANTMENT] &&
-				!!c.id,
+				!!c.id &&
+				!/t\d*$/.test(c.id)
 		)
 		.sort((a, b) => (a.cost ?? 0) - (b.cost ?? 0) || a.name.localeCompare(b.name))
 		.map((c) => c.id) as readonly string[];
