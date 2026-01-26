@@ -2461,6 +2461,10 @@ export const cardIdSelector = (
 				and(side(inputSide), or(inHand, inDeck), minion, effectiveCostEqual(1)),
 				and(side(inputSide), or(inHand, inDeck), spell, effectiveCostEqual(1)),
 			);
+		// Nordrassil Druid (CORE_CS3_012 / CS3_012): Battlecry: The next spell you cast this turn costs (3) less.
+		case CardIds.NordrassilDruid:
+		case CardIds.NordrassilDruidLegacy:
+			return and(side(inputSide), or(inHand, inDeck), spell);
 		case CardIds.NorthernNavigation:
 			return highlightConditions(
 				and(side(inputSide), or(inHand, inDeck), spell, frost),
