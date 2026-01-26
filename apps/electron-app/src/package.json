@@ -1,7 +1,7 @@
 {
 	"name": "firestone-desktop",
 	"productName": "Firestone Desktop",
-	"version": "0.0.1",
+	"version": "0.0.3",
 	"description": "Firestone Desktop - Hearthstone companion app",
 	"main": "main.js",
 	"author": {

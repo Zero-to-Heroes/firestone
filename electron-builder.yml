@@ -67,5 +67,35 @@ electronLanguages:
 # Post-pack optimization hook (removes non-Windows binaries)
 afterPack: "./build-tools/electron-afterpack.js"
 
-# Don't publish
-publish: null
+# Auto-update configuration
+# electron-updater will automatically check for updates from the configured provider
+# Uncomment and configure one of the options below based on your update server:
+
+# Option 1: Generic HTTP/HTTPS server (using existing S3 static website)
+# This works with your existing www.firestoneapp.com S3 bucket
+publish:
+  provider: generic
+  url: https://www.firestoneapp.com/updates
+
+# Option 2: GitHub Releases
+# publish:
+#   provider: github
+#   owner: your-username
+#   repo: your-repo-name
+
+# Option 3: Amazon S3 (using existing bucket)
+# Using your existing www.firestoneapp.com bucket with /updates path
+# publish:
+#   provider: s3
+#   bucket: www.firestoneapp.com
+#   region: us-west-2
+#   path: /updates
+#   # Optional: Use CloudFront URL for faster downloads
+#   # channel: latest
+
+# Option 4: DigitalOcean Spaces
+# publish:
+#   provider: spaces
+#   name: your-space-name
+#   region: nyc3
+#   path: /updates

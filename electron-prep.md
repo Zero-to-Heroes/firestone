@@ -1,13 +1,15 @@
 TODO:
 
 - build for prod and publish
+- Font used in overlay is not correct?
+- Secrets helper is blank
 
 =============
 Ready for constructed overlay
 ==============
 
-- Add "open logs folder" button in system tray
 - Auto Updater
+- Add "open logs folder" button in system tray
 - settings
 - on first startup, the overlay isn't correctly sized
 - validate that logged in user is premium / get their premium status

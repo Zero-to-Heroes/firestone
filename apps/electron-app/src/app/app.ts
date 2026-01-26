@@ -139,7 +139,7 @@ export default class App {
 				.sort((a, b) => b.mtime - a.mtime); // Sort by modification time, newest first
 
 			// Keep only the last 10 files, delete the rest
-			if (files.length > 20) {
+			if (files.length > 10) {
 				for (let i = 10; i < files.length; i++) {
 					unlinkSync(files[i].path);
 				}
@@ -211,6 +211,7 @@ export default class App {
 		console.log(`Node version: ${process.versions.node}`);
 		console.log(`Platform: ${process.platform} ${process.arch}`);
 		console.log(`Is packaged: ${electronApp.isPackaged}`);
+		console.log(`Is development mode: ${App.isDevelopmentMode()}`);
 		console.log('='.repeat(80));
 
 		// we pass the Electron.App object and the
@@ -366,10 +367,19 @@ export default class App {
 	}
 
 	public static isDevelopmentMode() {
-		const isEnvironmentSet: boolean = 'ELECTRON_IS_DEV' in process.env;
-		const getFromEnvironment: boolean = parseInt(process.env.ELECTRON_IS_DEV, 10) === 1;
+		// If app is packaged (installed via installer), it's definitely production
+		if (electronApp.isPackaged) {
+			return false;
+		}
 
-		return isEnvironmentSet ? getFromEnvironment : !environment.production;
+		// Check environment variable if set
+		const isEnvironmentSet: boolean = 'ELECTRON_IS_DEV' in process.env;
+		if (isEnvironmentSet) {
+			return parseInt(process.env.ELECTRON_IS_DEV, 10) === 1;
+		}
+
+		// Fall back to environment.production flag
+		return !environment.production;
 	}
 
 	private static async onWindowAllClosed() {
