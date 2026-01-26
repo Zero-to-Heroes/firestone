@@ -1,4 +1,4 @@
-// Lab Constructor (TTN_730): At the end of your turn, summon a copy of this. Forge: Gain Magnetic.
+// Smolderthorn Lancer (TRL_326): Battlecry: If you're holding a Dragon, destroy a damaged enemy minion.
 
 import { CardClass, CardIds, CardType, GameTag, Race, SpellSchool } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState, getCost, getProcessedCard } from '@firestone/game-state';
@@ -3208,6 +3208,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, deathrattle);
 		case CardIds.SmolderingStrength_FIR_914:
 			return and(side(inputSide), or(inDeck, inHand), minion);
+		case CardIds.SmolderthornLancer:
+			return and(side(inputSide), or(inDeck, inHand), dragon);
 		case CardIds.Snapdragon:
 			return and(side(inputSide), inDeck, minion, battlecry);
 		case CardIds.SnatchAndGrab_VAC_700:
