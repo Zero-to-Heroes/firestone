@@ -1,4 +1,5 @@
 // Lab Constructor (TTN_730): At the end of your turn, summon a copy of this. Forge: Gain Magnetic.
+// Nordrassil Druid (CORE_CS3_012): Battlecry: The next spell you cast this turn costs (3) less.
 
 import { CardClass, CardIds, CardType, GameTag, Race, SpellSchool } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState, getCost, getProcessedCard } from '@firestone/game-state';
@@ -2446,6 +2447,9 @@ export const cardIdSelector = (
 		case CardIds.NightshadeBud:
 		case CardIds.NightshadeBud_CORE_REV_311:
 			return highlightConditions(and(side(inputSide), inDeck, minion), and(side(inputSide), inDeck, spell));
+		case CardIds.NordrassilDruid:
+		case CardIds.NordrassilDruidLegacy:
+			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.NineLives:
 			return and(side(inputSide), or(inHand, inDeck, inGraveyard), minion, deathrattle);
 		case CardIds.NiriOfTheCrater_TLC_836:
