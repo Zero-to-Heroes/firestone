@@ -2382,6 +2382,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, beast);
 		case CardIds.MicDrop:
 			return and(side(inputSide), or(inDeck, inHand), weapon);
+		case CardIds.MimironsHead:
 		case CardIds.MimironTheMastermind:
 			return and(side(inputSide), or(inDeck, inHand), mech);
 		case CardIds.MirrorDimension_TIME_006:
