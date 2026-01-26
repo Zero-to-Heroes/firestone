@@ -1,4 +1,5 @@
 // Lab Constructor (TTN_730): At the end of your turn, summon a copy of this. Forge: Gain Magnetic.
+// Mimiron's Head (GVG_111): At the start of your turn, if you have at least 3 Mechs, destroy them all and form V-07-TR-0N.
 
 import { CardClass, CardIds, CardType, GameTag, Race, SpellSchool } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState, getCost, getProcessedCard } from '@firestone/game-state';
@@ -2372,6 +2373,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, beast);
 		case CardIds.MicDrop:
 			return and(side(inputSide), or(inDeck, inHand), weapon);
+		case CardIds.MimironsHead:
 		case CardIds.MimironTheMastermind:
 			return and(side(inputSide), or(inDeck, inHand), mech);
 		case CardIds.MirrorDimension_TIME_006:
