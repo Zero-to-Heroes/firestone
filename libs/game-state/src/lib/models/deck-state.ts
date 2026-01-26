@@ -54,6 +54,7 @@ export class DeckState {
 	readonly heroPower: DeckCard | null;
 	readonly weapon: DeckCard | null;
 	readonly deckList: readonly DeckCard[] = [];
+	readonly deckListManuallyImported?: boolean;
 	readonly archetypeId: number | null;
 	readonly cardsInStartingHand: readonly DeckCard[] = [];
 	readonly unknownRealCardsInDeck: boolean;
