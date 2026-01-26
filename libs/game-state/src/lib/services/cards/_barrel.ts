@@ -189,6 +189,7 @@ export { TrienniumRex } from './triennium-rex';
 export { TrinketArtist } from './trinket-artist';
 export { TrustFall } from './trust-fall';
 export { TwilightMender } from './twilight-mender';
+export { UluuTheEverdrifter } from './uluu-the-everdrifter';
 export { UmpireGrasp } from './umpire-grasp';
 export { UnderbellyAngler } from './underbelly-angler';
 export { UndercityHuckster } from './undercity-huckster';
