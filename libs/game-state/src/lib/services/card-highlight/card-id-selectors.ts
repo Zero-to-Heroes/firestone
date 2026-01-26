@@ -3017,6 +3017,9 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), dragon);
 		case CardIds.Scaleworm:
 			return and(side(inputSide), or(inHand, inDeck), dragon);
+		// Scargil (DAL_726): "Your Murlocs cost (1)."
+		case CardIds.Scargil:
+			return and(side(inputSide), or(inHand, inDeck), murloc);
 		case CardIds.ScuttlebuttGhoul:
 		case CardIds.ScuttlebuttGhoul_CORE_REV_900:
 			return and(side(inputSide), or(inHand, inDeck), secret);
