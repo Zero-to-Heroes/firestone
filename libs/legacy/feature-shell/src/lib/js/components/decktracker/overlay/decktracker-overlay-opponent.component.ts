@@ -58,8 +58,7 @@ export class DeckTrackerOverlayOpponentComponent {
 	// trackerPositionExtractor = (prefs: Preferences) => prefs.opponentOverlayPosition;
 	showDeckWinrateExtractor = (prefs: Preferences) => false;
 	showMatchupWinrateExtractor = (prefs: Preferences) => false;
-	showDecklistExtractor = (inMulligan: boolean, deckListManuallyImported: boolean) =>
-		!inMulligan || deckListManuallyImported;
+	showDecklistExtractor = (inMulligan: boolean, hasDeckList: boolean) => !inMulligan || hasDeckList;
 	// Because whitespace for the tooltips
 	// defaultTrackerPositionLeftProvider = (gameWidth: number, windowWidth: number) => -windowWidth / 2 + 250;
 	// defaultTrackerPositionTopProvider = (gameHeight: number, windowHeight: number) => 50;

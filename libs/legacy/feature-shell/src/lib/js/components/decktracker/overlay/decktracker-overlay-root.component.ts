@@ -137,7 +137,7 @@ export class DeckTrackerOverlayRootComponent
 	@Input() showTopCardsSeparatelyExtractor: (prefs: Preferences) => boolean;
 	@Input() scaleExtractor: (prefs: Preferences) => number;
 	@Input() deckExtractor: (state: GameState) => DeckState;
-	@Input() showDecklistExtractor: (inMulligan: boolean, deckListManuallyImported: boolean) => boolean;
+	@Input() showDecklistExtractor: (inMulligan: boolean, hasDeckList: boolean) => boolean;
 	@Input() showDeckWinrateExtractor: (prefs: Preferences) => boolean;
 	@Input() showMatchupWinrateExtractor: (prefs: Preferences) => boolean;
 	@Input() showDkRunesExtractor: (prefs: Preferences) => boolean;
@@ -244,7 +244,7 @@ export class DeckTrackerOverlayRootComponent
 					!!gameState &&
 					this.showDecklistExtractor(
 						gameState.currentTurn === 'mulligan',
-						!!this.deckExtractor(gameState)?.deckListManuallyImported,
+						(this.deckExtractor(gameState)?.deckList?.length ?? 0) > 0,
 					),
 			),
 			shareReplay(1),

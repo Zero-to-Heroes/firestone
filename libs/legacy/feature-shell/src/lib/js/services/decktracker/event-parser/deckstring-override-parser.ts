@@ -75,7 +75,6 @@ export class DeckstringOverrideParser implements EventParser {
 			deckList: cardsFromDeckstring,
 			sideboards: sideboards,
 			deck: cardsWithPositions,
-			deckListManuallyImported: true,
 		});
 		return Object.assign(new GameState(), currentState, {
 			[playerOrOpponent === 'opponent' ? 'opponentDeck' : 'playerDeck']: newDeck,
