@@ -40,6 +40,6 @@ export class LotteryCardPlayedProcessor implements LotteryProcessor {
 	}
 
 	private cardsPlayedForRace(cardRaces: readonly string[], race: Race, field: number): number {
-		return cardRaces?.includes(Race[race]) ? field + 1 : field;
+		return cardRaces?.includes(Race[race]) || cardRaces?.includes(Race[Race.ALL]) ? field + 1 : field;
 	}
 }
