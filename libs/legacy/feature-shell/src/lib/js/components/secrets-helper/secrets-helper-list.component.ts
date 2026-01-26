@@ -103,19 +103,19 @@ export class SecretsHelperListComponent extends AbstractSubscriptionComponent im
 			.filter((options) => options && options.length > 0)
 			.map((options, index) => {
 				const validOption = options.some((option) => option.isValidOption);
-				const refOption = options[0].update({
+				return {
+					cardId: options[0].cardId,
 					isValidOption: validOption,
-				} as SecretOption);
-				return refOption;
+				};
 			})
-			.map((refOption) => {
-				const dbCard = this.allCards.getCard(refOption.cardId);
+			.map(({ cardId, isValidOption }) => {
+				const dbCard = this.allCards.getCard(cardId);
 				return VisualDeckCard.create({
-					cardId: refOption.cardId,
+					cardId: cardId,
 					cardName: this.allCards.getCard(dbCard.id).name,
 					refManaCost: dbCard.cost,
 					rarity: dbCard.rarity ? dbCard.rarity.toLowerCase() : 'free',
-					highlight: refOption.isValidOption ? 'normal' : 'dim',
+					highlight: isValidOption ? 'normal' : 'dim',
 					classes: dbCard.classes?.map((c) => CardClass[c]) ?? [],
 					internalEntityIds: [uuidShort()],
 				});
