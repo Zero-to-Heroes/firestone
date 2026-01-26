@@ -4127,6 +4127,8 @@ export const cardIdSelector = (
 		case CardIds.SiltfinSpiritwalker:
 		case CardIds.UnderbellyAngler:
 			return and(side(inputSide), or(inHand, inDeck), murloc);
+		case CardIds.MurlocTastyfin:
+			return and(side(inputSide), inDeck, murloc);
 		case CardIds.ShiverTheirTimbers:
 		case CardIds.ToyBoat_TOY_505:
 		case CardIds.Skybarge:
