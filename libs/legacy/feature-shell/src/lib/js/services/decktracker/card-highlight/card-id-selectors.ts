@@ -1,3 +1,4 @@
+// Murloc Tastyfin (TRL_520): Deathrattle: Draw 2 Murlocs from your deck.
 // Lab Constructor (TTN_730): At the end of your turn, summon a copy of this. Forge: Gain Magnetic.
 
 import { CardClass, CardIds, CardType, GameTag, Race, SpellSchool } from '@firestone-hs/reference-data';
@@ -4086,6 +4087,7 @@ export const cardIdSelector = (
 		case CardIds.MurlocTidecallerCore:
 		case CardIds.MurlocTidecallerVanilla:
 		case CardIds.MurlocTidecallerLegacy:
+		case CardIds.MurlocTastyfin:
 		case CardIds.Toxfin_DAL_077:
 		case CardIds.UniteTheMurlocs:
 		case CardIds.LushwaterMurcenary:
