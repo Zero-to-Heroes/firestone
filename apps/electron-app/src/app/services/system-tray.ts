@@ -1,6 +1,6 @@
 import { StandaloneUserService } from '@firestone/electron/common';
 import { AppInjector, waitForReady } from '@firestone/shared/framework/core';
-import { app, Menu, nativeImage, Tray } from 'electron';
+import { app, Menu, nativeImage, shell, Tray } from 'electron';
 import { join } from 'path';
 import App from '../app';
 
@@ -41,20 +41,30 @@ export const initSystemTray = async () => {
 		const contextMenu = Menu.buildFromTemplate([
 			isLoggedIn
 				? {
-						label: `Log out (${currentUser.username})`,
-						click: () => {
-							console.log('[SystemTray] Log out clicked');
-							userService.logout();
-						},
-					}
-				: {
-						label: 'Log in',
-						click: () => {
-							console.log('[SystemTray] Log in clicked');
-							userService.login();
-						},
+					label: `Log out (${currentUser.username})`,
+					click: () => {
+						console.log('[SystemTray] Log out clicked');
+						userService.logout();
 					},
+				}
+				: {
+					label: 'Log in',
+					click: () => {
+						console.log('[SystemTray] Log in clicked');
+						userService.login();
+					},
+				},
 			{ type: 'separator' },
+			{
+				label: 'Open log folder',
+				click: () => {
+					console.log('[SystemTray] Opening log folder...');
+					const logsDir = join(app.getPath('userData'), 'logs');
+					shell.openPath(logsDir).catch((err) => {
+						console.error('[SystemTray] Failed to open log folder:', err);
+					});
+				},
+			},
 			{
 				label: 'Restart app',
 				click: () => {
