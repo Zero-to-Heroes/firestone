@@ -89,24 +89,24 @@ export class BgsInGameTimewarpedService extends AbstractFacadeService<BgsInGameT
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			map(([currentScene, displayFromPrefs, inTimewarpedTavern, gameType]) => {
 				if (!displayFromPrefs) {
-					console.debug('[bgs-timewarped] not displaying from prefs', displayFromPrefs);
+					// console.debug('[bgs-timewarped] not displaying from prefs', displayFromPrefs);
 					return false;
 				}
 				// We explicitly don't check for null, so that if the memory updates are broken
 				// we still somehow show the info
 				if (currentScene !== SceneMode.GAMEPLAY) {
-					console.debug('[bgs-timewarped] not in gameplay', currentScene);
+					// console.debug('[bgs-timewarped] not in gameplay', currentScene);
 					return false;
 				}
 				if (!inTimewarpedTavern) {
-					console.debug('[bgs-timewarped] not in timewarped tavern', inTimewarpedTavern);
+					// console.debug('[bgs-timewarped] not in timewarped tavern', inTimewarpedTavern);
 					return false;
 				}
 				if (!gameType || !isBattlegrounds(gameType)) {
-					console.debug('[bgs-timewarped] not in battlegrounds', gameType);
+					// console.debug('[bgs-timewarped] not in battlegrounds', gameType);
 					return false;
 				}
-				console.debug('[bgs-timewarped] displaying', displayFromPrefs, currentScene, inTimewarpedTavern, gameType);
+				// console.debug('[bgs-timewarped] displaying', displayFromPrefs, currentScene, inTimewarpedTavern, gameType);
 				return true;
 			}),
 			distinctUntilChanged(),

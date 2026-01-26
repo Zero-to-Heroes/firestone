@@ -59,17 +59,7 @@ export class BgsReconnectorWidgetWrapperComponent extends AbstractWidgetWrapperC
 	}
 
 	async ngAfterContentInit() {
-		console.log('[bgs-reconnector] ngAfterContentInit');
-		await waitForReady(this.scene);
-		console.log('[bgs-reconnector] scene ready');
-		await waitForReady(this.account);
-		console.log('[bgs-reconnector] account ready');
-		await waitForReady(this.prefs);
-		console.log('[bgs-reconnector] prefs ready');
-		await waitForReady(this.gameState);
-		console.log('[bgs-reconnector] gameState ready');
 		await waitForReady(this.scene, this.account, this.prefs, this.gameState);
-		console.log('[bgs-reconnector] ready');
 
 		this.showWidget$ = combineLatest([
 			this.scene.currentScene$$,
@@ -78,7 +68,7 @@ export class BgsReconnectorWidgetWrapperComponent extends AbstractWidgetWrapperC
 			this.gameState.gameState$$.pipe(this.mapData((state) => !!state?.gameStarted && !state?.gameEnded)),
 		]).pipe(
 			this.mapData(([currentScene, region, displayFromPrefs, inGame]) => {
-				console.log(
+				console.debug(
 					'[bgs-reconnector] should show widget?',
 					region,
 					region === BnetRegion.REGION_CN,
