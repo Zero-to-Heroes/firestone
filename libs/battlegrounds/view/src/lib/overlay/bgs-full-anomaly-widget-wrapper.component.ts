@@ -74,7 +74,6 @@ export class BgsFullAnomalyWidgetWrapperComponent extends AbstractWidgetWrapperC
 			),
 		]).pipe(
 			this.mapData(([currentScene, displayFromPrefs, inGame]) => {
-				console.log('[bgs-full-anomaly] should show widget?', inGame, displayFromPrefs, currentScene);
 				return inGame && displayFromPrefs && currentScene === SceneMode.GAMEPLAY;
 			}),
 			this.handleReposition(),

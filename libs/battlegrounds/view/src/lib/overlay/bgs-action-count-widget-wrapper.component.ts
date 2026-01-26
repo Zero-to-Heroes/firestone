@@ -76,7 +76,6 @@ export class BgsActionCountWidgetWrapperComponent extends AbstractWidgetWrapperC
 			),
 		]).pipe(
 			this.mapData(([currentScene, displayFromPrefs, inGame]) => {
-				console.log('[bgs-action-count] should show widget?', inGame, displayFromPrefs, currentScene);
 				return inGame && displayFromPrefs && currentScene === SceneMode.GAMEPLAY;
 			}),
 			this.handleReposition(),

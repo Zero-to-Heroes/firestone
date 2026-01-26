@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, Optional, ViewRef } from '@angular/core';
-import { CardClass, GameFormat } from '@firestone-hs/reference-data';
-import { DeckState, Metadata } from '@firestone/game-state';
+import { CardClass } from '@firestone-hs/reference-data';
+import { DeckState } from '@firestone/game-state';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
@@ -48,6 +48,10 @@ export class DeckTrackerDeckNameComponent {
 
 	@Input() set deck(value: DeckState) {
 		this._deck = value;
+		if (!this._deck) {
+			console.warn('decktracker-deck-name: no deck provided');
+			return;
+		}
 		this.deckstring = this._deck.deckstring;
 		this.copyText = this.i18n.translateString('decktracker.deck-name.copy-deckstring-label');
 		this.side = this._deck.isOpponent ? 'opponent' : 'player';
@@ -68,7 +72,7 @@ export class DeckTrackerDeckNameComponent {
 		@Optional() private readonly ow: OverwolfService,
 		private i18n: LocalizationFacadeService,
 		private readonly allCards: CardsFacadeService,
-	) {}
+	) { }
 
 	async copyDeckstring() {
 		if (!this.ow?.isOwEnabled()) {
@@ -98,13 +102,13 @@ export class DeckTrackerDeckNameComponent {
 			this._deck.name ||
 			(this._deck.hero && !this._hideOpponentName
 				? this.i18n.translateString(`decktracker.deck-name.player-name`, {
-						playerName: this._deck.hero.playerName || this._deck.hero.name,
-						playerClass: this.i18n.translateString(
-							`global.class.${CardClass[
-								this._deck.hero.classes?.[0] ?? CardClass.NEUTRAL
-							].toLowerCase()}`,
-						),
-					})
+					playerName: this._deck.hero.playerName || this._deck.hero.name,
+					playerClass: this.i18n.translateString(
+						`global.class.${CardClass[
+							this._deck.hero.classes?.[0] ?? CardClass.NEUTRAL
+						].toLowerCase()}`,
+					),
+				})
 				: this.i18n.translateString('decktracker.deck-name.unnamed-deck'));
 	}
 }

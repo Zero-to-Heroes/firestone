@@ -12,7 +12,7 @@ import { GameStateFacadeService, OverlayDisplayService } from '@firestone/game-s
 import { SceneService } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import { combineLatest, distinctUntilChanged, Observable, takeUntil, tap } from 'rxjs';
+import { combineLatest, distinctUntilChanged, Observable, takeUntil } from 'rxjs';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
 @Component({
@@ -38,8 +38,7 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 })
 export class DecktrackerPlayerWidgetWrapperComponent
 	extends AbstractWidgetWrapperComponent
-	implements AfterContentInit
-{
+	implements AfterContentInit {
 	protected defaultPositionLeftProvider = (gameWidth: number, gameHeight: number) => gameWidth - 250;
 	protected defaultPositionTopProvider = (gameWidth: number, gameHeight: number) => 10;
 	protected positionUpdater = (left: number, top: number) => this.prefs.updateTrackerPosition(left, top);
@@ -72,7 +71,6 @@ export class DecktrackerPlayerWidgetWrapperComponent
 
 		this.gameState.gameState$$
 			.pipe(
-				tap((state) => console.debug('[decktracker-player-widget-wrapper] game state', state)),
 				takeUntil(this.destroyed$),
 			)
 			.subscribe();
@@ -103,7 +101,6 @@ export class DecktrackerPlayerWidgetWrapperComponent
 			),
 			displayFromGameMode$,
 		]).pipe(
-			tap((info) => console.log('decktracker-player-widget-wrapper show widget?', info)),
 			this.mapData(
 				([
 					currentScene,

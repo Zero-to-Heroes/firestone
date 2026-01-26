@@ -438,8 +438,8 @@ export class GameStateService {
 			gameEvent.cardId,
 			`entityId:${gameEvent.entityId}`,
 			(gameEvent as MinionsDiedEvent)?.additionalData?.deadMinions?.map((m) => `entityId:${m.EntityId}`),
-			currentState,
-			gameEvent,
+			// currentState,
+			// gameEvent,
 		);
 		return currentState;
 	}

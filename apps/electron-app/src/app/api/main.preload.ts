@@ -97,7 +97,7 @@ console.log('[Preload] Context isolation enabled:', process.contextIsolated);
 const electronAPI = {
 	getAppVersion: () => ipcRenderer.invoke('get-app-version'),
 	getRunningGameInfo: () => {
-		console.log('[Preload] getRunningGameInfo called');
+		// console.log('[Preload] getRunningGameInfo called');
 		return ipcRenderer.invoke('get-running-game-info');
 	},
 	platform: process.platform,

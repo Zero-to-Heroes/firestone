@@ -9,6 +9,7 @@ import {
 import { app as electronApp } from 'electron';
 import EventEmitter from 'events';
 import { join } from 'path';
+import App from '../app';
 
 const app = electronApp as overwolf.OverwolfApp;
 
@@ -228,9 +229,27 @@ export class OverlayService extends EventEmitter {
 				console.log('Loading Angular overlay from dev server:', frontendUrl);
 			}
 
+			// Set up dev tools opening BEFORE loading URL (in case page loads quickly)
+			if (App.isDevelopmentMode()) {
+				console.log('🔧 Setting up dev tools for overlay window (dev mode)');
+
+				// Also try on did-finish-load as a fallback
+				this.overlayWindow.window.webContents.once('did-finish-load', () => {
+					// Only open if not already open
+					if (!this.overlayWindow.window.webContents.isDevToolsOpened()) {
+						console.log('🔧 Page finished loading - opening dev tools');
+						this.overlayWindow.window.webContents.openDevTools({
+							mode: 'detach',
+							activate: true,
+						});
+						console.log('✅ Overlay dev tools opened (detached window)');
+					}
+				});
+			}
+
 			await this.overlayWindow.window.loadURL(frontendUrl);
 
-			// Wait for DOM to be ready, then show and focus
+			// Wait for DOM to be ready, then show and focus, and open dev tools
 			this.overlayWindow.window.webContents.once('dom-ready', () => {
 				console.log('Angular DOM ready, showing overlay...');
 				this.overlayWindow.window.show();
@@ -240,14 +259,16 @@ export class OverlayService extends EventEmitter {
 					this.overlayWindow.window.setAlwaysOnTop(false); // Reset to normal after a moment
 				}, 100);
 				console.log('Overlay window shown and focused after Angular DOM ready');
-			});
-			// Always open dev tools for debugging (can be removed later if needed)
-			this.overlayWindow.window.webContents.once('did-finish-load', () => {
-				this.overlayWindow.window.webContents.openDevTools({
-					mode: 'detach', // Open in separate window
-					activate: true, // Bring to front
-				});
-				console.log('Overlay dev tools opened for debugging (detached window)');
+
+				// Open dev tools in development mode
+				if (App.isDevelopmentMode()) {
+					console.log('🔧 DOM ready - opening dev tools');
+					this.overlayWindow.window.webContents.openDevTools({
+						mode: 'detach', // Open in separate window
+						activate: true, // Bring to front
+					});
+					console.log('✅ Overlay dev tools opened (detached window)');
+				}
 			});
 
 			// Add keyboard shortcut to manually open dev tools

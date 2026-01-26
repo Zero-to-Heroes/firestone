@@ -80,11 +80,11 @@ export abstract class CardsHighlightCommonService {
 	}
 
 	public async init(options?: SelectorOptions) {
-		console.log('[cards-highlight-common] init', options, new Error().stack);
+		// console.log('[cards-highlight-common] init', options, new Error().stack);
 		this.options = options;
 	}
 	public forceHeroCardId(cardId: string) {
-		console.log('[cards-highlight-common] forceHeroCardId', cardId, new Error().stack);
+		// console.log('[cards-highlight-common] forceHeroCardId', cardId, new Error().stack);
 		this.options = { ...this.options, heroCardId: cardId };
 	}
 
@@ -272,8 +272,8 @@ export abstract class CardsHighlightCommonService {
 				return !!h.deckCardProvider()
 					? h.deckCardProvider()
 					: DeckCard.create({
-							cardId: h.referenceCardProvider()?.id,
-						});
+						cardId: h.referenceCardProvider()?.id,
+					});
 			}),
 			hero: {
 				cardId: heroCardId,

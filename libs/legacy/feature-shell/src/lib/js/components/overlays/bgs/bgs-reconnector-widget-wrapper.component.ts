@@ -68,14 +68,14 @@ export class BgsReconnectorWidgetWrapperComponent extends AbstractWidgetWrapperC
 			this.gameState.gameState$$.pipe(this.mapData((state) => !!state?.gameStarted && !state?.gameEnded)),
 		]).pipe(
 			this.mapData(([currentScene, region, displayFromPrefs, inGame]) => {
-				console.debug(
-					'[bgs-reconnector] should show widget?',
-					region,
-					region === BnetRegion.REGION_CN,
-					inGame,
-					displayFromPrefs,
-					currentScene,
-				);
+				// console.debug(
+				// 	'[bgs-reconnector] should show widget?',
+				// 	region,
+				// 	region === BnetRegion.REGION_CN,
+				// 	inGame,
+				// 	displayFromPrefs,
+				// 	currentScene,
+				// );
 				return (
 					region === BnetRegion.REGION_CN && inGame && displayFromPrefs && currentScene === SceneMode.GAMEPLAY
 				);
