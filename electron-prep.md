@@ -2,7 +2,6 @@ TODO:
 
 - build for prod and publish
 - Font used in overlay is not correct?
-- Secrets helper is blank
 
 =============
 Ready for constructed overlay
