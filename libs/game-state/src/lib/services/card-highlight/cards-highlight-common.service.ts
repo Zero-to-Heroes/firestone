@@ -305,19 +305,21 @@ export abstract class CardsHighlightCommonService {
 
 		const selectorSort: SelectorSort | null = cardIdSelectorSort(cardId);
 
-		const allPlayerCards = this.getAllCards(
-			!!playerDeckProvider ? playerDeckProvider() : null,
-			side === 'single' || side === 'arena-draft' ? side : 'player',
-			fullGameState,
-		);
-		// console.debug('[cards-highlight] all player cards', card, cardId, side, selector, allPlayerCards);
-		for (const playerCard of allPlayerCards) {
-			const selectorOutput = selector(playerCard);
-			// console.debug('\t', 'considering', playerCard.card?.name, playerCard, card, selectorOutput);
-			playerCard.highlight = selectorOutput;
-			if (selectorOutput) {
-				// console.debug('\t', 'highlighting', playerCard.card?.name, selectorOutput, playerCard, card);
-				result.push(playerCard);
+		if (side !== 'opponent') {
+			const allPlayerCards = this.getAllCards(
+				!!playerDeckProvider ? playerDeckProvider() : null,
+				side === 'single' || side === 'arena-draft' ? side : 'player',
+				fullGameState,
+			);
+			// console.debug('[cards-highlight] all player cards', card, cardId, side, selector, allPlayerCards);
+			for (const playerCard of allPlayerCards) {
+				const selectorOutput = selector(playerCard);
+				// console.debug('\t', 'considering', playerCard.card?.name, playerCard, card, selectorOutput);
+				playerCard.highlight = selectorOutput;
+				if (selectorOutput) {
+					// console.debug('\t', 'highlighting', playerCard.card?.name, selectorOutput, playerCard, card);
+					result.push(playerCard);
+				}
 			}
 		}
 
