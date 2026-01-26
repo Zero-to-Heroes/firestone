@@ -58,7 +58,7 @@ export class DeckTrackerOverlayPlayerComponent {
 	sortHandByZoneExtractor = (prefs: Preferences) => prefs.overlaySortHandByZoneOrder;
 	// We know our deck, so don't hide the info
 	showTotalCardsInZoneExtractor = (computedValue) => true;
-	showDecklistExtractor = (inMulligan) => true;
+	showDecklistExtractor = (inMulligan: boolean, hasDeckList: boolean) => true;
 
 	constructor(private prefs: PreferencesService) {}
 }
