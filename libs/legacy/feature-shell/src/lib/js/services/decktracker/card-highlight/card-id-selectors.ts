@@ -1,4 +1,5 @@
 // Lab Constructor (TTN_730): At the end of your turn, summon a copy of this. Forge: Gain Magnetic.
+// Scargil (DAL_726): Your Murlocs cost (1).
 
 import { CardClass, CardIds, CardType, GameTag, Race, SpellSchool } from '@firestone-hs/reference-data';
 import { DeckCard, DeckState, getCost, getProcessedCard } from '@firestone/game-state';
@@ -4083,6 +4084,7 @@ export const cardIdSelector = (
 		case CardIds.GrimscaleOracleLegacy:
 		case CardIds.GrimscaleOracleVanilla:
 		case CardIds.GrimscaleChum:
+		case CardIds.Scargil:
 		case CardIds.MurlocTidecallerCore:
 		case CardIds.MurlocTidecallerVanilla:
 		case CardIds.MurlocTidecallerLegacy:
