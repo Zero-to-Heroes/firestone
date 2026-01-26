@@ -1021,6 +1021,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), spell);
 		case CardIds.DeathGrowl:
 			return and(side(inputSide), or(inDeck, inHand), minion, deathrattle);
+		case CardIds.Deathlord:
+			return and(opposingSide(inputSide), inDeck, minion);
 		case CardIds.DeathlyDeathTavernBrawl:
 			return and(side(inputSide), minion, deathrattle);
 		case CardIds.DeathMetalKnight:
