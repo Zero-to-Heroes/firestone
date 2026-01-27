@@ -79,8 +79,8 @@ export class TurnTimerWidgetComponent extends AbstractSubscriptionComponent impl
 				isNaN(+state?.currentTurn)
 					? this.i18n.translateString('turn-timer.mulligan')
 					: this.i18n.translateString('turn-timer.current-turn', {
-							value: state?.currentTurn,
-					  }),
+						value: state?.currentTurn,
+					}),
 			),
 		);
 		this.totalMatchLength$ = combineLatest([
@@ -181,7 +181,7 @@ export class TurnTimerWidgetComponent extends AbstractSubscriptionComponent impl
 	private buildPlayer(playerName: string, turnDuration: number, turnTimings: readonly TurnTiming[]): TurnTimerPlayer {
 		const totalPlayedDurationInMillis = sumOnArray(
 			turnTimings,
-			(turn) => (turn.endTimestamp ?? Date.now()) - turn.startTimestamp,
+			(turn) => (turn.endTimestamp || Date.now()) - turn.startTimestamp,
 		);
 		const currentTurnTiming = turnTimings.find((turn) => !turn.endTimestamp);
 		const currentTurnDurationInMillis = !!currentTurnTiming ? Date.now() - currentTurnTiming.startTimestamp : null;
@@ -191,6 +191,7 @@ export class TurnTimerWidgetComponent extends AbstractSubscriptionComponent impl
 			totalPlayedDurationInMillis: totalPlayedDurationInMillis,
 			turnDuration: turnDuration,
 		};
+		console.debug('[turn-timer-widget] built player', result, playerName, turnDuration, turnTimings, Date.now());
 		return result;
 	}
 }
