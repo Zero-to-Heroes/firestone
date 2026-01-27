@@ -24,8 +24,8 @@ import {
 import { Mutable, NonFunctionProperties, sleep } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
 import { deflate, inflate } from 'pako';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { delay, distinctUntilChanged, filter, map, sampleTime, take } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
+import { delay, distinctUntilChanged, filter, map, sampleTime, switchMap, take, tap } from 'rxjs/operators';
 import { TwitchEvent } from '../model/ebs-event';
 import { TwitchBgsBoard, TwitchBgsBoardEntity, TwitchBgsPlayer, TwitchBgsState } from '../model/twitch-bgs-state';
 
@@ -34,7 +34,8 @@ const REDIRECT_URI = 'https://www.firestoneapp.com/twitch-login.html';
 const SCOPES = 'channel_read';
 export const TWITCH_LOGIN_URL = `https://id.twitch.tv/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=token&scope=${SCOPES}`;
 
-const EBS_URL = 'https://twitch-ebs.firestoneapp.com/deck/event';
+// const EBS_URL = 'https://twitch-ebs.firestoneapp.com/deck/event';
+const EBS_URL = 'https://ebs.firestoneapp.com/deck/event';
 // const EBS_URL = 'https://localhost:8081/deck/event';
 
 const TWITCH_VALIDATE_URL = 'https://id.twitch.tv/oauth2/validate';
@@ -48,8 +49,7 @@ export class TwitchAuthService {
 	private deckEvents = new BehaviorSubject<GameState | null>(null);
 	private twitchAccessToken$: Observable<string | undefined>;
 	private streamerPrefs$: Observable<Partial<Preferences>>;
-
-	private twitchDelay = 0;
+	private twitchDelay$: Observable<number>;
 
 	private hasLoggedInfoOnce = false;
 	private hasLoggedExpiredTokenInfoOnce = false;
@@ -82,12 +82,10 @@ export class TwitchAuthService {
 			this.saveAccessToken(twitchInfo.access_token);
 		});
 
-		this.prefs.preferences$$
-			.pipe(
-				map((prefs) => prefs.twitchDelay),
-				distinctUntilChanged(),
-			)
-			.subscribe((delay) => (this.twitchDelay = delay));
+		this.twitchDelay$ = this.prefs.preferences$$.pipe(
+			map((prefs) => prefs.twitchDelay),
+			distinctUntilChanged(),
+		);
 		this.twitchAccessToken$ = this.prefs.preferences$$.pipe(
 			map((prefs) => prefs.twitchAccessToken),
 			distinctUntilChanged(),
@@ -116,22 +114,29 @@ export class TwitchAuthService {
 					this.deckEvents,
 					this.twitchAccessToken$,
 					this.streamerPrefs$,
+					this.twitchDelay$,
 				])
 					.pipe(
 						sampleTime(2000),
 						distinctUntilChanged(),
-						map(([currentScene, deckEvent, twitchAccessToken, streamerPrefs]) =>
-							this.buildEvent(
+						map(([currentScene, deckEvent, twitchAccessToken, streamerPrefs, twitchDelay]) =>
+						({
+							event: this.buildEvent(
 								currentScene,
 								deckEvent,
 								deckEvent?.bgState ?? null,
 								twitchAccessToken,
 								streamerPrefs,
 							),
+							delayMs: twitchDelay,
+						}),
 						),
-						delay(this.twitchDelay),
+						switchMap(({ event, delayMs }) => {
+							return event ? of(event).pipe(delay(delayMs)) : of(null);
+						}),
+						tap((event) => console.log('[twitch-auth] built event', event)),
 					)
-					.subscribe((event) => this.sendEvent(event));
+					.subscribe((event: TwitchEvent | null) => this.sendEvent(event));
 			});
 
 		this.gameStateFacade.gameState$$.subscribe((event) => this.emitDeckEvent(event));
@@ -343,6 +348,7 @@ export class TwitchAuthService {
 	}
 
 	private async sendEvent(newEvent: TwitchEvent | null) {
+		console.debug('[twitch-auth] sending event', newEvent);
 		const prefs = await this.prefs.getPreferences();
 		if (!newEvent) {
 			return;
