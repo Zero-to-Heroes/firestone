@@ -1332,7 +1332,7 @@ const BAN_LIST = [
 	CardIds.ZilliaxDeluxe3000_TOY_330,
 ];
 
-const BAN_LIST_ARENA = [CardIds.Kiljaeden_GDB_145];
+const BAN_LIST_ARENA = [CardIds.Kiljaeden_GDB_145, CardIds.TheGreatDracorex_DINO_401];
 
 let uncollectibleCards: readonly ReferenceCard[] = [];
 let baseCards: readonly ReferenceCard[] = [];

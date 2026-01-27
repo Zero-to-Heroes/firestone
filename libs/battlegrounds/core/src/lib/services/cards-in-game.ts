@@ -29,11 +29,7 @@ export const getAllCardsInGame = (
 ): readonly ReferenceCard[] => {
 	const result = allCards
 		.getCards()
-		.filter(
-			(card) =>
-				card.isBaconPool ||
-				(gameSettings.hasTimewarped && card.mechanics?.includes(GameTag[GameTag.BACON_TIMEWARPED])),
-		)
+		.filter((card) => card.isBaconPool)
 		.filter((card) => card.set !== 'Vanilla')
 		.filter((card) => !card.spellSchool?.includes(SpellSchool[SpellSchool.UPGRADE]))
 		.filter(

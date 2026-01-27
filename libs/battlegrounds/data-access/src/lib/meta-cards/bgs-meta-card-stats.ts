@@ -4,7 +4,6 @@ import { BgsCardStat } from '@firestone-hs/bgs-global-stats';
 import { ALL_BG_RACES, Race } from '@firestone-hs/reference-data';
 import { getStandardDeviation, sortByProperties, SortCriteria } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
-import { isBgsTimewarped } from '../card-utils';
 import { BgsCardTier, BgsMetaCardStatTier, BgsMetaCardStatTierItem } from './meta-card.model';
 
 export const buildCardStats = (
@@ -19,7 +18,7 @@ export const buildCardStats = (
 		.filter((s) => {
 			const ref = allCards.getCard(s.cardId);
 			return (
-				(ref.isBaconPool || isBgsTimewarped(ref)) &&
+				ref.isBaconPool &&
 				(!tribesFilter?.length ||
 					tribesFilter.some((r) => ref.races?.includes(Race[r]) || (r === Race.BLANK && !ref.races?.length)))
 			);
