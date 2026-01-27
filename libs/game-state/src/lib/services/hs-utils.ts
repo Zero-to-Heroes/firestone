@@ -310,7 +310,7 @@ export const globalEffectQuestlines = [
 
 export const globalEffectQuestlinesTriggers = globalEffectQuestlines.map((effect) => effect.questStepCreated);
 
-export const getCardForCurrentEffect = (cardId: CardIds | string | null | undefined): string|null => {
+export const getCardForCurrentEffect = (cardId: CardIds | string | null | undefined): string | null => {
 	switch (cardId) {
 		case CardIds.DistressedKvaldir_FrostFeverEnchantment_TTN_450e:
 			return CardIds.DistressedKvaldir_FrostPlagueToken;
@@ -347,6 +347,7 @@ export const getCardForGlobalEffect = (cardId: CardIds): string => {
 };
 
 export const CURRENT_EFFECTS_WHITELIST = [
+	CardIds.RagingFelscreamer_FelscreamEnchantment_BT_416e,
 	CardIds.SlowMotion_SlowedDownEnchantment_TIME_716e3,
 	CardIds.Xenedar_LightOfTheXenedarEnchantment_WON_053t3e,
 	CardIds.StasisElemental_StasisEnchantment,
