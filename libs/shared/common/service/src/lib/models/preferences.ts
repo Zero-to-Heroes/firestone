@@ -471,6 +471,8 @@ export class Preferences implements IPreferences {
 	readonly opponentTableFlipCounter: BooleanWithLimited = false;
 	readonly playerRafaamTimeCounter: boolean = true;
 	readonly opponentRafaamTimeCounter: boolean = true;
+	readonly playerWindrunnerSistersCounter: boolean = true;
+	readonly opponentWindrunnerSistersCounter: boolean = true;
 
 	readonly showPlayerMaxResourcesWidget: boolean = true;
 	readonly playerMaxResourcesWidgetPosition: { left: number; top: number };

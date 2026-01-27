@@ -220,11 +220,11 @@ export const addGuessInfoToCard = (
 				});
 				return guessedInfo != null
 					? card.update({
-							guessedInfo: {
-								...card.guessedInfo,
-								...guessedInfo,
-							},
-						})
+						guessedInfo: {
+							...card.guessedInfo,
+							...guessedInfo,
+						},
+					})
 					: card;
 			}
 			return card;
@@ -289,6 +289,11 @@ export const kingLlaneFablePackage = [
 	CardIds.GaronaHalforcen_KingLlaneToken_TIME_875t,
 	CardIds.GaronaHalforcen_TheKingslayersToken_TIME_875t1,
 ];
+export const windrunnerSistersFablePackage = [
+	CardIds.RangerGeneralSylvanas_TIME_609,
+	CardIds.RangerGeneralSylvanas_RangerCaptainAlleriaToken_TIME_609t1,
+	CardIds.RangerGeneralSylvanas_RangerInitiateVereesaToken_TIME_609t2,
+];
 export const fablePackages = [
 	[
 		CardIds.TalanjiOfTheGraves_TIME_619,
@@ -299,11 +304,6 @@ export const fablePackages = [
 		CardIds.LadyAzshara_TIME_211,
 		CardIds.LadyAzshara_TheWellOfEternityToken_TIME_211t1,
 		CardIds.LadyAzshara_ZinAzshariToken_TIME_211t2,
-	],
-	[
-		CardIds.RangerGeneralSylvanas_TIME_609,
-		CardIds.RangerGeneralSylvanas_RangerCaptainAlleriaToken_TIME_609t1,
-		CardIds.RangerGeneralSylvanas_RangerInitiateVereesaToken_TIME_609t2,
 	],
 	[
 		CardIds.AzureQueenSindragosa_TIME_852,
@@ -333,6 +333,7 @@ export const fablePackages = [
 	kingLlaneFablePackage,
 	timeRafaamFablePackage,
 	broxigarFablePackage,
+	windrunnerSistersFablePackage,
 ];
 
 export const isTreant = (cardId: string, allCards: CardsFacadeService): boolean => {

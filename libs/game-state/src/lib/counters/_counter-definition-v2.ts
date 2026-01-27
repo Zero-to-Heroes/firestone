@@ -16,6 +16,7 @@ export abstract class CounterDefinitionV2<T> {
 	public readonly imageIcon: string | undefined = undefined;
 	public readonly type: 'hearthstone' | 'battlegrounds' = 'hearthstone';
 	public abstract readonly cards: readonly CardIds[];
+	public readonly keywords: readonly string[] | null = null;
 	protected readonly cardsOnBoard: readonly CardIds[] = [];
 	protected showOnlyInDiscovers = false;
 	protected includeBoardForCards = false;
@@ -25,7 +26,7 @@ export abstract class CounterDefinitionV2<T> {
 	// Ceaseless expanse which tracks things game-wide, instead of per-player
 	protected singleton = false;
 
-	constructor(protected readonly allCards: CardsFacadeService) {}
+	constructor(protected readonly allCards: CardsFacadeService) { }
 
 	public abstract readonly player?: PlayerImplementation<T>;
 	public abstract readonly opponent?: PlayerImplementation<T>;

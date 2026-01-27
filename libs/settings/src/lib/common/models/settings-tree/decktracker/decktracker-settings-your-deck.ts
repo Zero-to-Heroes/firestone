@@ -287,12 +287,16 @@ const rawCounters = (context: SettingContext): CounterSetting[] => [
 		.filter((counter) => counter.type === 'hearthstone')
 		.filter((counter) => counter.player?.pref)
 		.map((counter) => {
+			const keywords = [
+				...(counter.cards?.map((cardId) => context.allCards.getCard(cardId)?.name) ?? []),
+				...(counter.keywords ?? []),
+			]
 			const result: CounterSetting = {
 				id: counter.id,
 				field: counter.player!.pref,
 				label: counter.player!.setting.label(context.i18n),
 				tooltip: counter.player!.setting.tooltip(context.i18n, context.allCards),
-				keywords: counter.cards?.map((cardId) => context.allCards.getCard(cardId)?.name) ?? null,
+				keywords: keywords?.length ? keywords : null,
 			};
 			return result;
 		}),

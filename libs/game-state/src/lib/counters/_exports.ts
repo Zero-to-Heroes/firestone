@@ -96,6 +96,7 @@ import { TyrandeCounterDefinitionV2 } from './impl/tyrande';
 import { VolatileSkeletonCounterDefinitionV2 } from './impl/volatile-skeleton';
 import { WatchpostCounterDefinitionV2 } from './impl/watchpost';
 import { WheelOfDeathCounterDefinitionV2 } from './impl/wheel-of-death';
+import { WindrunnerSistersCounterDefinitionV2 } from './impl/windrunner-sisters';
 import { YsondreCounterDefinitionV2 } from './impl/ysondre';
 
 export const getAllCounters: (
@@ -175,6 +176,7 @@ export const getAllCounters: (
 	new DiveTheGolakkaDepthsCounterDefinitionV2(i18n, allCards),
 	new ElizaGorebladeCounterDefinitionV2(i18n, allCards),
 	new RafaamTimeCounterDefinitionV2(i18n, allCards),
+	new WindrunnerSistersCounterDefinitionV2(i18n, allCards),
 	new CardsDrawnThisTurnCounterDefinitionV2(i18n, allCards),
 	new DragoncallerAlannaCounterDefinitionV2(i18n, allCards),
 	new TreantDeadCounterDefinitionV2(i18n, allCards),
@@ -212,6 +214,7 @@ export type CounterType =
 	| 'dragoncallerAlanna'
 	| 'diveTheGolakkaDepths'
 	| 'rafaamTime'
+	| 'windrunnerSisters'
 	| 'darkGifts'
 	| 'galakrond'
 	| 'elizaGoreblade'
