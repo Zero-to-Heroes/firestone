@@ -10,7 +10,6 @@ import {
 	Output,
 	ViewRef,
 } from '@angular/core';
-import { CrossPromotionService } from '@firestone/app/services';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ADS_SERVICE_TOKEN, AnalyticsService, IAdsService, OverwolfService } from '@firestone/shared/framework/core';
 
@@ -67,17 +66,12 @@ export class AdsComponent extends AbstractSubscriptionComponent implements OnDes
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
 		private readonly analytics: AnalyticsService,
-		private readonly crossPromotion: CrossPromotionService,
 		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		// const isBazaarInstalled = await this.crossPromotion.isBazaarInstalled();
-		// const isBazaarTrackerInstalled = await this.crossPromotion.isBazaarTrackerInstalled();
-		// console.debug('[cross-promotion] bazaar installed', isBazaarInstalled, isBazaarTrackerInstalled);
-		// this.showBazaarTrackerAd = isBazaarInstalled && !isBazaarTrackerInstalled;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.markForCheck();
 		}
