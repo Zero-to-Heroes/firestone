@@ -8,6 +8,7 @@ import {
 	battlecryGlobalEffectCards,
 	deathrattleGlobalEffectCards,
 	globalEffectCards,
+	startOfGameGlobalEffectCards,
 } from '../../hs-utils';
 import { revealCard } from '../card-reveal';
 import { GameEvent } from '../game-event';
@@ -20,7 +21,7 @@ export class CardPlayedByEffectParser implements EventParser {
 		private readonly helper: DeckManipulationHelper,
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: ILocalizationService,
-	) {}
+	) { }
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return !!state;
@@ -123,6 +124,7 @@ export class CardPlayedByEffectParser implements EventParser {
 			globalEffectCards.includes(cardId as CardIds) &&
 			// Battlecries don't trigger in this case
 			!battlecryGlobalEffectCards.includes(cardId as CardIds) &&
+			!startOfGameGlobalEffectCards.includes(cardId as CardIds) &&
 			!deathrattleGlobalEffectCards.includes(cardId as CardIds)
 		) {
 			newGlobalEffects = this.helper.addSingleCardToZone(
