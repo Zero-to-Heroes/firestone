@@ -191,7 +191,6 @@ export class TurnTimerWidgetComponent extends AbstractSubscriptionComponent impl
 			totalPlayedDurationInMillis: totalPlayedDurationInMillis,
 			turnDuration: turnDuration,
 		};
-		console.debug('[turn-timer-widget] built player', result, playerName, turnDuration, turnTimings, Date.now());
 		return result;
 	}
 }
