@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
-import { BgsPanelId } from '@firestone/game-state';
+import { isBattlegrounds } from '@firestone-hs/reference-data';
+import { BgsPanelId, GameStateFacadeService } from '@firestone/game-state';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import {
 	AbstractFacadeService,
-	AppInjector,
-	OverwolfService,
-	WindowManagerService,
+	AppInjector, IWindowHandlerService, WINDOW_HANDLER_SERVICE_TOKEN, WindowManagerService
 } from '@firestone/shared/framework/core';
-import { BehaviorSubject, distinctUntilChanged } from 'rxjs';
+import { auditTime, BehaviorSubject, distinctUntilChanged, filter, map } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class BgsInGameWindowNavigationService extends AbstractFacadeService<BgsInGameWindowNavigationService> {
@@ -15,7 +14,8 @@ export class BgsInGameWindowNavigationService extends AbstractFacadeService<BgsI
 	public forcedStatus$$: BehaviorSubject<'open' | 'closed' | null>;
 
 	private prefs: PreferencesService;
-	private ow: OverwolfService;
+	private windowHandler: IWindowHandlerService;
+	private gameState: GameStateFacadeService;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'BgsInGameWindowNavigationService', () => !!this.currentPanelId$$);
@@ -34,7 +34,8 @@ export class BgsInGameWindowNavigationService extends AbstractFacadeService<BgsI
 		this.currentPanelId$$ = new BehaviorSubject<BgsPanelId>('bgs-hero-selection-overview');
 		this.forcedStatus$$ = new BehaviorSubject<'open' | 'closed' | null>(null);
 		this.prefs = AppInjector.get(PreferencesService);
-		this.ow = AppInjector.get(OverwolfService);
+		this.windowHandler = AppInjector.get(WINDOW_HANDLER_SERVICE_TOKEN);
+		this.gameState = AppInjector.get(GameStateFacadeService);
 
 		this.forcedStatus$$.pipe(distinctUntilChanged()).subscribe(async (forcedStatus) => {
 			if (forcedStatus === null) {
@@ -43,32 +44,29 @@ export class BgsInGameWindowNavigationService extends AbstractFacadeService<BgsI
 
 			const prefs: Preferences = await this.prefs.getPreferences();
 			const bgsActive = prefs.bgsEnableApp && prefs.bgsFullToggle;
-			const windowId = prefs.bgsUseOverlay
-				? OverwolfService.BATTLEGROUNDS_WINDOW_OVERLAY
-				: OverwolfService.BATTLEGROUNDS_WINDOW;
-
-			const battlegroundsWindow = await this.ow.getWindowState(windowId);
 			if (!bgsActive) {
 				return;
 			}
 
-			// Minimize is only triggered by a user action, so if they minimize it we don't touch it
-			if (battlegroundsWindow.window_state_ex === 'minimized') {
+			this.windowHandler.toggleBattlegroundsWindow(prefs.bgsUseOverlay, {
+				forced: forcedStatus,
+				canBringUpFromMinimized: false,
+			});
+		});
+
+		this.gameState.gameState$$.pipe(
+			auditTime(1000),
+			filter(gameState => isBattlegrounds(gameState?.metadata.gameType)),
+			map(gameState => gameState.gameStarted && !gameState.gameEnded),
+			distinctUntilChanged()
+		).subscribe(async (maybeShowHeroSelectionScreen) => {
+			const prefs = await this.prefs.getPreferences();
+			if (!maybeShowHeroSelectionScreen) {
 				return;
 			}
 
-			if (forcedStatus === 'open') {
-				await this.ow.obtainDeclaredWindow(windowId);
-				if (
-					battlegroundsWindow.window_state_ex !== 'maximized' &&
-					battlegroundsWindow.stateEx !== 'maximized'
-				) {
-					await this.ow.restoreWindow(windowId);
-					await this.ow.bringToFront(windowId);
-				}
-			} else if (forcedStatus === 'closed') {
-				await this.ow.closeWindow(windowId);
-			}
+			this.currentPanelId$$.next('bgs-hero-selection-overview');
+			this.forcedStatus$$.next(prefs.bgsShowHeroSelectionScreen ? 'open' : null);
 		});
 	}
 }

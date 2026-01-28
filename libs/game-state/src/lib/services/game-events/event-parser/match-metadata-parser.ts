@@ -34,7 +34,7 @@ export class MatchMetadataParser implements EventParser {
 		private readonly memory: MemoryInspectionService,
 		private readonly constructedArchetypes: ConstructedArchetypeServiceOrchestrator,
 		private readonly i18n: ILocalizationService,
-	) {}
+	) { }
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return !!state;
@@ -71,9 +71,6 @@ export class MatchMetadataParser implements EventParser {
 
 		if (isBattlegrounds(stateWithMetaData.metadata.gameType)) {
 			console.log('[match-metadata-parser] bgs game start', stateWithMetaData.bgState.update);
-			// this.nav.currentPanelId$$.next('bgs-hero-selection-overview');
-			// this.nav.forcedStatus$$.next(prefs.bgsShowHeroSelectionScreen ? 'open' : null);
-			// this.highlighter.resetHighlights();
 			try {
 				const translationText = this.i18n.translateString('battlegrounds.menu.hero-selection');
 				console.log('[match-metadata-parser] translationText', translationText);

@@ -54,8 +54,6 @@ export class GameStateService {
 
 	private showDecktrackerFromGameMode: boolean;
 
-	private battlegroundsWindowsListener: EventEmitter<boolean> = new EventEmitter<boolean>();
-
 	constructor(
 		private readonly gameEvents: GameEventsEmitterService,
 		private readonly gameStateMetaInfos: GameStateMetaInfoService,
@@ -83,7 +81,6 @@ export class GameStateService {
 	private async init() {
 		if (typeof window !== 'undefined') {
 			window['deckUpdater'] = this.deckUpdater;
-			window['bgsHotkeyPressed'] = this.battlegroundsWindowsListener;
 		}
 
 		await waitForReady(this.prefs, this.overlayDisplay);
@@ -136,10 +133,6 @@ export class GameStateService {
 			});
 		});
 
-		// TODO: move this somewhere else
-		this.battlegroundsWindowsListener = this.ow?.addHotKeyPressedListener('battlegrounds', async (hotkeyResult) => {
-			// this.bgsNav.toggleWindow();
-		});
 
 		const decktrackerDisplayEventBus: BehaviorSubject<boolean> = this.overlayDisplay.decktrackerDisplayEventBus$$;
 		decktrackerDisplayEventBus.subscribe((event) => {
@@ -438,8 +431,8 @@ export class GameStateService {
 			gameEvent.cardId,
 			`entityId:${gameEvent.entityId}`,
 			(gameEvent as MinionsDiedEvent)?.additionalData?.deadMinions?.map((m) => `entityId:${m.EntityId}`),
-			// currentState,
-			// gameEvent,
+			currentState,
+			gameEvent,
 		);
 		return currentState;
 	}

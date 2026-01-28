@@ -3,15 +3,14 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
-	EventEmitter,
 	HostListener,
-	ViewEncapsulation,
+	ViewEncapsulation
 } from '@angular/core';
+import { BgsInGameWindowNavigationService } from '@firestone/battlegrounds/services';
 import { PreferencesService, ScalingService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { GameInfoService, OverwolfService } from '@firestone/shared/framework/core';
 import { DebugService } from '../../services/debug.service';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Component({
 	standalone: false,
@@ -54,22 +53,21 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsComponent extends AbstractSubscriptionStoreComponent implements AfterViewInit {
+export class BattlegroundsComponent extends AbstractSubscriptionComponent implements AfterViewInit {
 	windowId: string;
 
-	private hotkeyPressedHandler: EventEmitter<boolean>;
 	private hotkey;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly debug: DebugService,
 		private readonly prefs: PreferencesService,
 		private readonly ow: OverwolfService,
 		private readonly gameInfo: GameInfoService,
 		private readonly init_ScalingService: ScalingService,
+		private readonly nav: BgsInGameWindowNavigationService
 	) {
-		super(store, cdr);
+		super(cdr);
 		this.init();
 	}
 
@@ -80,7 +78,6 @@ export class BattlegroundsComponent extends AbstractSubscriptionStoreComponent i
 
 	async ngAfterViewInit() {
 		this.windowId = (await this.ow.getCurrentWindow()).id;
-		this.hotkeyPressedHandler = this.ow.getMainWindow().bgsHotkeyPressed;
 		this.hotkey = await this.ow.getHotKey('battlegrounds');
 		this.positionWindowOnSecondScreen();
 	}
@@ -106,7 +103,7 @@ export class BattlegroundsComponent extends AbstractSubscriptionStoreComponent i
 				return;
 			}
 
-			this.hotkeyPressedHandler.next(true);
+			this.nav.toggleWindow();
 		}
 	}
 

@@ -358,12 +358,12 @@ import { ChoosingCardBgsQuestOptionComponent } from '@components/overlays/quests
 import { MaxResourcesWidgetComponent } from '@components/overlays/resources/max-resources-widget.component';
 import { OpponentMaxResourcesWidgetWrapperComponent } from '@components/overlays/resources/opponent-max-resources-widget-wrapper.component';
 import { PlayerMaxResourcesWidgetWrapperComponent } from '@components/overlays/resources/player-max-resources-widget-wrapper.component';
+import { ChoosingBgsTimewarpedWidgetWrapperComponent } from '@components/overlays/timewarped/choosing-bgs-timewarped-widget-wrapper.component';
+import { ChoosingCardBgsTimewarpedOptionComponent } from '@components/overlays/timewarped/choosing-card-bgs-timewarped-option.component';
 import { BgsHeroTipsWidgetWrapperComponent } from '@components/overlays/tips/bgs-hero-tips-widget-wrapper.component';
 import { BgsHeroTipsComponent } from '@components/overlays/tips/bgs-hero-tips.component';
 import { ChoosingBgsTrinketWidgetWrapperComponent } from '@components/overlays/trinket/choosing-bgs-trinket-widget-wrapper.component';
 import { ChoosingCardBgsTrinketOptionComponent } from '@components/overlays/trinket/choosing-card-bgs-trinket-option.component';
-import { ChoosingBgsTimewarpedWidgetWrapperComponent } from '@components/overlays/timewarped/choosing-bgs-timewarped-widget-wrapper.component';
-import { ChoosingCardBgsTimewarpedOptionComponent } from '@components/overlays/timewarped/choosing-card-bgs-timewarped-option.component';
 import { ProfileMatchStatsClassInfoComponent } from '@components/stats/desktop/match-stats/profile-match-stats-class-info.component';
 import { ProfileMatchStatsModeOverviewComponent } from '@components/stats/desktop/match-stats/profile-match-stats-mode-overview.component';
 import { ProfileMatchStatsComponent } from '@components/stats/desktop/match-stats/profile-match-stats.component';
@@ -371,8 +371,8 @@ import { AllCardsService } from '@firestone-hs/replay-parser';
 import { AchievementsCommonModule, REMOTE_ACHIEVEMENTS_SERVICE_TOKEN } from '@firestone/achievements/common';
 import { AchievementsDataAccessModule } from '@firestone/achievements/data-access';
 import { AchievementsViewModule } from '@firestone/achievements/view';
-import { AppCommonModule } from '@firestone/app/common';
-import { LocalizationLoaderWithCache } from '@firestone/app/common';
+import { AppCommonModule, LocalizationLoaderWithCache } from '@firestone/app/common';
+import { OwHotkeyHandlerService, OwWindowHandlerService } from '@firestone/app/ow-native';
 import { AppViewModule } from '@firestone/app/view';
 import {
 	ARENA_DRAFT_MANAGER_SERVICE_TOKEN,
@@ -424,13 +424,11 @@ import { CdkOverlayContainer, Store } from '@firestone/shared/framework/common';
 import {
 	ADS_SERVICE_TOKEN,
 	CARDS_HIGHLIGHT_SERVICE_TOKEN,
-	CardsFacadeService,
-	ILocalizationService,
+	CardsFacadeService, HOTKEY_HANDLER_SERVICE_TOKEN, ILocalizationService,
 	PLAUSIBLE_DOMAIN,
 	SharedFrameworkCoreModule,
 	USER_SERVICE_TOKEN,
-	UserService,
-	setAppInjector,
+	UserService, WINDOW_HANDLER_SERVICE_TOKEN, setAppInjector
 } from '@firestone/shared/framework/core';
 import { StatsCommonModule } from '@firestone/stats/common';
 import { StatsDataAccessModule } from '@firestone/stats/data-access';
@@ -1271,6 +1269,8 @@ try {
 		{ provide: CARDS_HIGHLIGHT_SERVICE_TOKEN, useExisting: CardsHighlightFacadeService },
 		{ provide: ARENA_DRAFT_MANAGER_SERVICE_TOKEN, useExisting: ArenaDraftManagerService },
 		{ provide: ADS_SERVICE_TOKEN, useExisting: AdService },
+		{ provide: WINDOW_HANDLER_SERVICE_TOKEN, useExisting: OwWindowHandlerService },
+		{ provide: HOTKEY_HANDLER_SERVICE_TOKEN, useExisting: OwHotkeyHandlerService },
 		{ provide: COLLECTION_MANAGER_SERVICE_TOKEN, useExisting: CollectionManager },
 		{ provide: COLLECTION_PACK_SERVICE_TOKEN, useExisting: PackStatsService },
 		{ provide: REMOTE_ACHIEVEMENTS_SERVICE_TOKEN, useExisting: FirestoneRemoteAchievementsLoaderService },
