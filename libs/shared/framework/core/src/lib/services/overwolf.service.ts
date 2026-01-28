@@ -317,6 +317,7 @@ export class OverwolfService {
 		return new Promise<overwolf.windows.WindowIdResult | null>((resolve) => {
 			try {
 				overwolf.windows.restore(windowId, async (result) => {
+					console.debug('restored window', windowId, result);
 					resolve(result);
 				});
 			} catch (e) {
@@ -345,6 +346,7 @@ export class OverwolfService {
 			// https://overwolf.github.io/docs/api/overwolf-windows#setdesktoponlywindowid-shouldbedesktoponly-callback
 			try {
 				overwolf.windows.bringToFront(windowId, grabFocus, (result) => {
+					console.debug('brought to front', windowId, result);
 					resolve(result);
 				});
 			} catch (e) {

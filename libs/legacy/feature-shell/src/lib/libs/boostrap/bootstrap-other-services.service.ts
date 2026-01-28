@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { QuestsService } from '@firestone/app/common';
+import { EndGameListenerService, QuestsService, RewardMonitorService } from '@firestone/app/common';
+import { OwHotkeyHandlerService } from '@firestone/app/ow-native';
 import { ArenaRefService } from '@firestone/arena/common';
 import { DiscordPresenceManagerService } from '@firestone/discord';
 import {
@@ -33,9 +34,7 @@ import { LogRegisterService } from '../../js/services/log-register.service';
 import { LiveStreamsService } from '../../js/services/mainwindow/live-streams.service';
 import { OutOfCardsService } from '../../js/services/mainwindow/out-of-cards.service';
 import { TwitchPresenceService } from '../../js/services/mainwindow/twitch-presence.service';
-import { EndGameListenerService } from '@firestone/app/common';
 import { ReplaysNotificationService } from '../../js/services/replays/replays-notification.service';
-import { RewardMonitorService } from '@firestone/app/common';
 import { GameStatsProviderService } from '../../js/services/stats/game/game-stats-provider.service';
 import { SystemTrayService } from '../../js/services/system-tray.service';
 import { MailsService } from '../mails/services/mails.service';
@@ -89,7 +88,8 @@ export class BootstrapOtherServicesService {
 		// TODO: might not be the best place
 		private readonly modsBootstrap: ModsBootstrapService,
 		private readonly modsManager: ModsManagerService,
-	) {}
+		private readonly init_OwHotkeyHandlerService: OwHotkeyHandlerService,
+	) { }
 
 	public async bootstrapServices(): Promise<void> {
 		this.modsBootstrap.init();

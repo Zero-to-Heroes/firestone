@@ -11,7 +11,7 @@ import {
  * Overwolf implementation of global hotkey handling. Listens to hotkeys
  * via Overwolf and depends on the window handler for context when needed.
  */
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class OwHotkeyHandlerService implements IHotkeyHandlerService {
 	constructor(
 		private readonly ow: OverwolfService,

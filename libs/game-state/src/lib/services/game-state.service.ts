@@ -425,15 +425,15 @@ export class GameStateService {
 			);
 		}
 
-		console.debug(
-			'[game-state] processed event',
-			gameEvent.type,
-			gameEvent.cardId,
-			`entityId:${gameEvent.entityId}`,
-			(gameEvent as MinionsDiedEvent)?.additionalData?.deadMinions?.map((m) => `entityId:${m.EntityId}`),
-			currentState,
-			gameEvent,
-		);
+		// console.debug(
+		// 	'[game-state] processed event',
+		// 	gameEvent.type,
+		// 	gameEvent.cardId,
+		// 	`entityId:${gameEvent.entityId}`,
+		// 	(gameEvent as MinionsDiedEvent)?.additionalData?.deadMinions?.map((m) => `entityId:${m.EntityId}`),
+		// 	currentState,
+		// 	gameEvent,
+		// );
 		return currentState;
 	}
 
