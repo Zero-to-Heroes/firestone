@@ -2,21 +2,21 @@ import { CardIds, CardType } from '@firestone-hs/reference-data';
 import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
 import { GameState } from '../../../models/game-state';
 import { getCardId, getCardType } from '../../card-utils';
-import { GlobalHighlightCard } from './_registers';
+import { GlobalHighlightCard, GlobalHighlightCardOptions } from './_registers';
 
 export const TidepoolPupil: GlobalHighlightCard = {
 	cardIds: [CardIds.TidepoolPupil_VAC_304],
-	getRelatedCards: (entityId: number, side: HighlightSide, gameState: GameState, allCards: CardsFacadeService) => {
+	getRelatedCards: (entityId: number, side: HighlightSide, gameState: GameState, allCards: CardsFacadeService, options: GlobalHighlightCardOptions | undefined) => {
 		// For player, things are handled more accurately
 		if (side !== 'opponent') {
 			return [];
 		}
 
 		const deckState = gameState.opponentDeck;
-		const pupil = deckState.findCard(entityId);
+		const pupil = options?.sourceCard ?? deckState.findCard(entityId)?.card;
 		// FIXME: possible bug: a card enter the hand before the pupil, but at the same turn
 		// this card will be flagged
-		let timestampAtWhichCardEnteredHand = pupil?.card?.metaInfo?.timestampAtWhichCardEnteredHand;
+		let timestampAtWhichCardEnteredHand = pupil?.metaInfo?.timestampAtWhichCardEnteredHand;
 		if (timestampAtWhichCardEnteredHand == null) {
 			return [];
 		}

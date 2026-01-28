@@ -175,8 +175,13 @@ export class ReceiveCardInHandParser implements EventParser {
 			zone: 'HAND',
 			tags: gameEvent.additionalData.tags ? toTagsObject(gameEvent.additionalData.tags) : cardWithKnownInfo.tags,
 			// So that cards don't keep info from their previous zones, or when they were previously in hand
-			metaInfo: undefined,
+			// metaInfo: {
+			// 	turnAtWhichCardEnteredCurrentZone: currentState.currentTurnNumeric,
+			// 	turnAtWhichCardEnteredHand: currentState.currentTurnNumeric,
+			// 	timestampAtWhichCardEnteredHand: new Date().getTime(),
+			// },
 		});
+		cardWithZone.entityId == 139 && console.debug('[debug] received card in hand', cardWithZone);
 		// console.debug(
 		// 	'[receive-card-in-hand] cardWithDefault',
 		// 	cardWithKnownInfo,

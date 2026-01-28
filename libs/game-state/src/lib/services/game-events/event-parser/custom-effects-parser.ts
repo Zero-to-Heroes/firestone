@@ -38,7 +38,7 @@ export class CustomEffectsParser implements EventParser {
 	constructor(
 		private readonly helper: DeckManipulationHelper,
 		private readonly allCards: CardsFacadeService,
-	) {}
+	) { }
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return !!state;
@@ -168,6 +168,11 @@ export class CustomEffectsParser implements EventParser {
 			DeckCard.create({
 				entityId: card.entityId,
 				zone: 'HAND',
+				// metaInfo: {
+				// 	turnAtWhichCardEnteredCurrentZone: currentState.currentTurnNumeric,
+				// 	turnAtWhichCardEnteredHand: currentState.currentTurnNumeric,
+				// 	timestampAtWhichCardEnteredHand: new Date().getTime(),
+				// },
 			}),
 		);
 		return currentState.update({

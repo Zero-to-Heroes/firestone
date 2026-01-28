@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable no-case-declarations */
 import {
+	AllCardsService,
 	CardClass,
 	CardIds,
 	CardType,
@@ -25,7 +26,7 @@ export const getProcessedCard = (
 	cardId: string | undefined | null,
 	entityId: number | undefined | null,
 	deckState: DeckState,
-	allCards: CardsFacadeService,
+	allCards: CardsFacadeService | AllCardsService,
 	debug = false,
 ): ReferenceCard => {
 	const refCard = allCards.getCard(cardId!);
@@ -104,7 +105,7 @@ export const getCardType = (
 	cardId: string,
 	entityId: number,
 	deckState: DeckState,
-	allCards: CardsFacadeService,
+	allCards: CardsFacadeService | AllCardsService,
 ): CardType | null => {
 	const refCard = getProcessedCard(cardId, entityId, deckState, allCards);
 	if (refCard?.type) {
@@ -131,7 +132,7 @@ export const getCardId = (
 	cardId: string,
 	entityId: number,
 	deckState: DeckState,
-	allCards: CardsFacadeService,
+	allCards: CardsFacadeService | AllCardsService,
 ): string | null => {
 	const refCard = getProcessedCard(cardId, entityId, deckState, allCards);
 	if (refCard?.id) {

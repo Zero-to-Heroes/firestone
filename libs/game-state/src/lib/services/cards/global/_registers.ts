@@ -1,4 +1,5 @@
 import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
+import { DeckCard } from '../../../models/deck-card';
 import { GameState } from '../../../models/game-state';
 import { Card } from '../_card.type';
 import { AllFelBreaksLoose } from './all-fel-breaks-loose';
@@ -145,7 +146,11 @@ export interface GlobalHighlightCard extends Card {
 		side: HighlightSide,
 		gameState: GameState,
 		allCards: CardsFacadeService,
+		options?: GlobalHighlightCardOptions,
 	) => readonly string[] | readonly { cardId: string; entityId: number }[] | null;
 }
 export const hasGetRelatedCards = (card: Card): card is GlobalHighlightCard =>
 	(card as GlobalHighlightCard)?.getRelatedCards !== undefined;
+export interface GlobalHighlightCardOptions {
+	sourceCard?: DeckCard
+}
