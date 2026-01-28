@@ -19,7 +19,7 @@ export abstract class CounterDefinitionV2<T> {
 	public readonly keywords: readonly string[] | null = null;
 	protected readonly cardsOnBoard: readonly CardIds[] = [];
 	protected showOnlyInDiscovers = false;
-	protected includeBoardForCards = false;
+	protected includeBoardForCards = true;
 	protected debug = false;
 	protected advancedTooltipType?: string;
 	// Only show one instance of the counter at the same time. Useful for counters like
