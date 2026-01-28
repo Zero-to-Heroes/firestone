@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AchievementsNavigationService } from '@firestone/achievements/common';
-import { GameNativeStateStoreService } from '@firestone/app/services';
+import { GameNativeStateStoreService } from '@firestone/app/common';
 import {
 	ArenDeckDetailsService,
 	ArenaCardStatsService,

@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { BgsInGameWindowNavigationService } from '@firestone/battlegrounds/services';
-import { OverwolfService } from '@firestone/shared/framework/core';
 
 @Component({
 	standalone: false,
@@ -31,9 +30,8 @@ export class BattlegroundsOverlayButtonComponent {
 
 	constructor(
 		private cdr: ChangeDetectorRef,
-		private ow: OverwolfService,
 		private readonly nav: BgsInGameWindowNavigationService,
-	) {}
+	) { }
 
 	private mouseDownStart: number;
 

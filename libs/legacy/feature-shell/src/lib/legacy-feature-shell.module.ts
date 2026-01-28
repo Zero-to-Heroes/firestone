@@ -372,7 +372,7 @@ import { AchievementsCommonModule, REMOTE_ACHIEVEMENTS_SERVICE_TOKEN } from '@fi
 import { AchievementsDataAccessModule } from '@firestone/achievements/data-access';
 import { AchievementsViewModule } from '@firestone/achievements/view';
 import { AppCommonModule } from '@firestone/app/common';
-import { AppServicesModule, LocalizationLoaderWithCache } from '@firestone/app/services';
+import { LocalizationLoaderWithCache } from '@firestone/app/common';
 import { AppViewModule } from '@firestone/app/view';
 import {
 	ARENA_DRAFT_MANAGER_SERVICE_TOKEN,
@@ -651,7 +651,6 @@ try {
 		// ColiseumComponentsModule,
 
 		AppCommonModule,
-		AppServicesModule,
 		SharedCommonViewModule,
 		SharedFrameworkCoreModule,
 		ReplayColiseumModule,

@@ -9,7 +9,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { QuestStatus, RewardTrackType } from '@firestone-hs/reference-data';
-import { QuestsService } from '@firestone/app/services';
+import { QuestsService } from '@firestone/app/common';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';

@@ -11,7 +11,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { isVersionBefore } from '@firestone/app/services';
+import { isVersionBefore } from '@firestone/app/common';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { MarkdownService } from 'ngx-markdown';

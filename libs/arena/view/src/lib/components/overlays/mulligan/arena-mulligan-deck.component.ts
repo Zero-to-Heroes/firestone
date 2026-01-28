@@ -11,7 +11,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { CardClass, getBaseCardId } from '@firestone-hs/reference-data';
-import { GameNativeStateStoreService } from '@firestone/app/services';
+import { GameNativeStateStoreService } from '@firestone/app/common';
 import { ArenaMulliganGuideGuardianService, ArenaMulliganGuideService } from '@firestone/arena/common';
 import { MulliganDeckData } from '@firestone/constructed/common';
 import { buildColor } from '@firestone/constructed/view';

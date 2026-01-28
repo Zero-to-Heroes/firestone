@@ -11,7 +11,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { CardClass, GameFormat, formatFormatReverse, getBaseCardId } from '@firestone-hs/reference-data';
-import { GameNativeStateStoreService } from '@firestone/app/services';
+import { GameNativeStateStoreService } from '@firestone/app/common';
 import {
 	ConstructedMulliganGuideGuardianService,
 	ConstructedMulliganGuideService,

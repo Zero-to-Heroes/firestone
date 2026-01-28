@@ -4,7 +4,7 @@ import { AbstractFacadeService, AppInjector, WindowManagerService } from '@fires
 import { BehaviorSubject } from 'rxjs';
 import { distinctUntilChanged, map } from 'rxjs/operators';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class GameNativeStateStoreService extends AbstractFacadeService<GameNativeStateStoreService> {
 	public isFriendsListOpen$$: BehaviorSubject<boolean>;
 

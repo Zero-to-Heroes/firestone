@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { isVersionBefore } from '@firestone/app/services';
+import { isVersionBefore } from '@firestone/app/common';
 import { GameStatusService, Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { Mutable, sortByProperties } from '@firestone/shared/framework/common';
 import {

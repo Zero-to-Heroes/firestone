@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RewardTrackType } from '@firestone-hs/reference-data';
-import { QuestsService } from '@firestone/app/services';
+import { QuestsService } from '@firestone/app/common';
 import { Preferences } from '@firestone/shared/common/service';
 
 @Component({

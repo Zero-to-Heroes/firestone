@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { HsLogsWatcherService } from '@firestone/app/services';
+import { HsLogsWatcherService } from '@firestone/app/common';
 import { GameEvents } from '@firestone/game-state';
 import type { LogFileBackend } from '@firestone/shared/common/service';
 import {

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { QuestsService } from '@firestone/app/services';
+import { QuestsService } from '@firestone/app/common';
 import { ArenaRefService } from '@firestone/arena/common';
 import { DiscordPresenceManagerService } from '@firestone/discord';
 import {

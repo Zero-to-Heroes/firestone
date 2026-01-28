@@ -6,7 +6,7 @@ import {
 	ReplayUploadService,
 	RewardMonitorService,
 } from '@firestone/app/common';
-import { GameNativeStateStoreService, LocalizationLoaderWithCache, QuestsService } from '@firestone/app/services';
+import { GameNativeStateStoreService, LocalizationLoaderWithCache, QuestsService } from '@firestone/app/common';
 import {
 	ArenaCardStatsService,
 	ArenaClassStatsService,

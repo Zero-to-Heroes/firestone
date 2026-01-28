@@ -8,7 +8,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { isBattlegrounds } from '@firestone-hs/reference-data';
-import { GameNativeStateStoreService } from '@firestone/app/services';
+import { GameNativeStateStoreService } from '@firestone/app/common';
 import { GameStateFacadeService, isBattlegroundsScene } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
