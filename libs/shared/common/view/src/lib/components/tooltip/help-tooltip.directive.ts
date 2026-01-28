@@ -50,7 +50,7 @@ export class HelpTooltipDirective implements OnDestroy, AfterViewInit {
 	@Input('helpTooltipOnlyShowOnClick') onlyShowOnClick = false;
 	@Input('helpTooltipClickTimeout') clickTimeout = 2000;
 
-	private tooltipPortal: ComponentPortal<any>;
+	private tooltipPortal: ComponentPortal<any> | null;
 	private overlayRef: OverlayRef | null;
 	private positionStrategy: PositionStrategy | null;
 	private tooltipRef: ComponentRef<HelpTooltipComponent> | null;
@@ -63,7 +63,7 @@ export class HelpTooltipDirective implements OnDestroy, AfterViewInit {
 		private readonly cdr: ChangeDetectorRef,
 		@Optional() private readonly ow: OverwolfService,
 		private readonly renderer: Renderer2,
-	) {}
+	) { }
 
 	ngAfterViewInit(): void {
 		if (this.helpTooltipVisibleBeforeHover) {
@@ -77,60 +77,60 @@ export class HelpTooltipDirective implements OnDestroy, AfterViewInit {
 		const positionArrays: ConnectedPosition[] =
 			this.position === 'bottom'
 				? [
-						{
-							originX: 'center',
-							originY: 'bottom',
-							overlayX: 'center',
-							overlayY: 'top',
-						},
-						{
-							originX: 'start',
-							originY: 'top',
-							overlayX: 'start',
-							overlayY: 'bottom',
-						},
-						{
-							originX: 'start',
-							originY: 'bottom',
-							overlayX: 'start',
-							overlayY: 'top',
-						},
-					]
+					{
+						originX: 'center',
+						originY: 'bottom',
+						overlayX: 'center',
+						overlayY: 'top',
+					},
+					{
+						originX: 'start',
+						originY: 'top',
+						overlayX: 'start',
+						overlayY: 'bottom',
+					},
+					{
+						originX: 'start',
+						originY: 'bottom',
+						overlayX: 'start',
+						overlayY: 'top',
+					},
+				]
 				: this.position === 'right'
 					? [
-							{
-								originX: 'end',
-								originY: 'center',
-								overlayX: 'start',
-								overlayY: 'center',
-							},
-						]
+						{
+							originX: 'end',
+							originY: 'center',
+							overlayX: 'start',
+							overlayY: 'center',
+						},
+					]
 					: this.position === 'top'
 						? [
-								{
-									originX: 'center',
-									originY: 'top',
-									overlayX: 'center',
-									overlayY: 'bottom',
-								},
-							]
+							{
+								originX: 'center',
+								originY: 'top',
+								overlayX: 'center',
+								overlayY: 'bottom',
+							},
+						]
 						: this.position === 'bottom-left'
 							? [
-									{
-										originX: 'end',
-										originY: 'bottom',
-										overlayX: 'end',
-										overlayY: 'top',
-									},
-								]
+								{
+									originX: 'end',
+									originY: 'bottom',
+									overlayX: 'end',
+									overlayY: 'top',
+								},
+							]
 							: [
-									{
-										originX: 'start',
-										originY: 'center',
-										overlayX: 'end',
-										overlayY: 'center',
-									},
-								];
+								{
+									originX: 'start',
+									originY: 'center',
+									overlayX: 'end',
+									overlayY: 'center',
+								},
+							];
 
 		this.positionStrategy = this.overlayPositionBuilder
 			// Create position attached to the elementRef

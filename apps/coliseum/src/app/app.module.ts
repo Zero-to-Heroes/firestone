@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ReplayColiseumModule } from '@firestone/replay/coliseum';
 import { CdkOverlayContainer } from '@firestone/shared/framework/common';
 import {
@@ -33,6 +33,7 @@ const httpLoaderFactory: (http: HttpClient) => TranslateHttpLoader = (http: Http
 	imports: [
 		CommonModule,
 		BrowserModule,
+		HttpClientModule,
 
 		TranslateModule.forRoot({
 			defaultLanguage: 'enUS',
