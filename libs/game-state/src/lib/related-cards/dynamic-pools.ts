@@ -1385,7 +1385,7 @@ export const filterCards = (
 			}
 			return !!c.set ? isValidSet(c.set.toLowerCase() as SetId, format, gameType) : false;
 		})
-		.filter((c) => !sourceCardId || c.id !== sourceCardId);
+		.filter((c) => !sourceCardId || (c.id !== sourceCardId && allCards.getRootCardId(c.id) !== allCards.getRootCardId(sourceCardId)));
 	return baseCardsExtended.filter((c) => filters.every((f) => f(c))).map((c) => c.id);
 };
 

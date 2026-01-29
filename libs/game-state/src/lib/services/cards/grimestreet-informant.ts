@@ -6,7 +6,6 @@
  */
 import { CardClass, CardIds } from '@firestone-hs/reference-data';
 import { GuessedInfo } from '../../models/deck-card';
-import { canBeDiscoveredByClass } from '../../related-cards/dynamic-pools';
 import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
 
@@ -26,7 +25,7 @@ export const GrimestreetInformant: GeneratingCard & StaticGeneratingCard = {
 		return filterCards(
 			GrimestreetInformant.cardIds[0],
 			input.allCards,
-			(c) => isGrimestreetCard(c.classes) && canBeDiscoveredByClass(c, input.inputOptions.currentClass),
+			(c) => isGrimestreetCard(c.classes),
 			input.inputOptions,
 		);
 	},
@@ -34,7 +33,7 @@ export const GrimestreetInformant: GeneratingCard & StaticGeneratingCard = {
 		const possibleCards = filterCards(
 			GrimestreetInformant.cardIds[0],
 			input.allCards,
-			(c) => isGrimestreetCard(c.classes) && canBeDiscoveredByClass(c, input.deckState.getCurrentClass()),
+			(c) => isGrimestreetCard(c.classes),
 			input.options,
 		);
 		return {
