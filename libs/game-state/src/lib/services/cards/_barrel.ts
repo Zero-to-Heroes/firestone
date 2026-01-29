@@ -58,6 +58,7 @@ export { DurnholdeImposter } from './durnholde-imposter';
 export { EarthenMight } from './earthen-might';
 export { EliseTheNavigator } from './elise-the-navigator';
 export { EmergencyMeeting } from './emergency-meeting';
+export { EndtimeMurozond } from './endtime-murozond';
 export { EudorasTreasureHunt } from './eudoras-treasure-hunt';
 export { EternalToil } from './eternal-toil';
 export { EtherealConjurer } from './ethereal-conjurer';
