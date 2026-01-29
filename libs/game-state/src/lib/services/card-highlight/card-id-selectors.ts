@@ -3759,6 +3759,12 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, spell, shadow);
 		case CardIds.TwilightGuardian:
 			return and(side(inputSide), or(inDeck, inHand), dragon);
+		// Twilight Mender: Deathrattle: Get a random Holy and Shadow spell.
+		case CardIds.TwilightMender_TLC_814:
+			return highlightConditions(
+				and(side(inputSide), or(inDeck, inHand), holy, spell),
+				and(side(inputSide), or(inDeck, inHand), shadow, spell),
+			);
 		case CardIds.TwilightsCall:
 			return and(side(inputSide), inGraveyard, minion, deathrattle);
 		case CardIds.TwinbowTerrorcoil:
