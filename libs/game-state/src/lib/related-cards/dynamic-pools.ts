@@ -338,7 +338,7 @@ const getDynamicRelatedCardIdsInternal = (
 					.filter((c) =>
 						!!c.set
 							? !isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, options.gameType) &&
-							isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_WILD, options.gameType)
+								isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_WILD, options.gameType)
 							: false,
 					)
 					// From another class
@@ -1407,7 +1407,11 @@ export const filterCards = (
 			}
 			return !!c.set ? isValidSet(c.set.toLowerCase() as SetId, format, gameType) : false;
 		})
-		.filter((c) => !sourceCardId || (c.id !== sourceCardId && allCards.getRootCardId(c.id) !== allCards.getRootCardId(sourceCardId)));
+		.filter(
+			(c) =>
+				!sourceCardId ||
+				(c.id !== sourceCardId && allCards.getRootCardId(c.id) !== allCards.getRootCardId(sourceCardId)),
+		);
 	return baseCardsExtended.filter((c) => filters.every((f) => f(c))).map((c) => c.id);
 };
 
@@ -1592,7 +1596,12 @@ const hasHealth = (card: ReferenceCard, operator: '==' | '<=' | '>=' | '<' | '>'
 	}
 };
 
-const canIncludeCthun = (refCard: ReferenceCard, initialDecklist: readonly string[] | undefined, currentClass: string | undefined, allCards: AllCardsService): boolean => {
+const canIncludeCthun = (
+	refCard: ReferenceCard,
+	initialDecklist: readonly string[] | undefined,
+	currentClass: string | undefined,
+	allCards: AllCardsService,
+): boolean => {
 	if (!refCard.mechanics?.includes('CTHUN')) {
 		return true;
 	}
@@ -1611,9 +1620,14 @@ const canIncludeCthun = (refCard: ReferenceCard, initialDecklist: readonly strin
 		}
 	}
 	return false;
-}
+};
 
-const canIncludeGalakrond = (refCard: ReferenceCard, initialDecklist: readonly string[] | undefined, currentClass: string | undefined, allCards: AllCardsService): boolean => {
+const canIncludeGalakrond = (
+	refCard: ReferenceCard,
+	initialDecklist: readonly string[] | undefined,
+	currentClass: string | undefined,
+	allCards: AllCardsService,
+): boolean => {
 	if (!refCard.mechanics?.includes('GALAKROND')) {
 		return true;
 	}
@@ -1632,7 +1646,7 @@ const canIncludeGalakrond = (refCard: ReferenceCard, initialDecklist: readonly s
 		}
 	}
 	return false;
-}
+};
 
 const canIncludeStarcraftFaction = (
 	refCard: ReferenceCard,
