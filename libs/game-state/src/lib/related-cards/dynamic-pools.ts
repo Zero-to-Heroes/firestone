@@ -10,6 +10,9 @@ import {
 	CardType,
 	CREWMATES,
 	DkruneTypes,
+	EXCAVATE_TREASURE_1_IDS,
+	EXCAVATE_TREASURE_2_IDS,
+	EXCAVATE_TREASURE_3_IDS,
 	GameFormat,
 	GameTag,
 	GameType,
@@ -91,6 +94,18 @@ const getDynamicRelatedCardIdsInternal = (
 			allCards,
 			inputOptions: options,
 		});
+	}
+
+	// Handle excavate cards - show the pool of treasures they can create
+	const refCard = allCards.getCard(cardId);
+	if (hasMechanic(refCard, GameTag.EXCAVATE)) {
+		const excavateTreasures = getExcavateTreasuresPool(
+			inputOptions.deckState,
+			inputOptions.deckState?.hero?.classes ?? [],
+		);
+		if (excavateTreasures.length > 0) {
+			return excavateTreasures;
+		}
 	}
 
 	switch (cardId) {
@@ -1788,5 +1803,56 @@ const wantsColossalMinions = (sourceCardId: string): boolean => {
 			return true;
 		default:
 			return false;
+	}
+};
+
+// Helper functions for excavate pool
+const getExcavateTreasuresPool = (
+	deckState: DeckState | undefined,
+	playerClasses: readonly CardClass[],
+): readonly string[] => {
+	if (!deckState) {
+		return [];
+	}
+
+	const maxTier = deckState.maxExcavateTier + 1;
+	// The next tier the player will excavate to (1-indexed)
+	const nextTier = (deckState.currentExcavateTier % maxTier) + 1;
+	return buildExcavateTreasures(nextTier, playerClasses);
+};
+
+const buildExcavateTreasures = (tier: number, playerClasses: readonly CardClass[]): readonly string[] => {
+	switch (tier) {
+		case 1:
+			return [...EXCAVATE_TREASURE_1_IDS];
+		case 2:
+			return [...EXCAVATE_TREASURE_2_IDS];
+		case 3:
+			return [...EXCAVATE_TREASURE_3_IDS];
+		case 4:
+			return playerClasses.map((playerClass) => getTier4ExcavateTreasure(playerClass)).filter((id) => !!id);
+		default:
+			return [];
+	}
+};
+
+const getTier4ExcavateTreasure = (playerClass: CardClass): string | undefined => {
+	switch (playerClass) {
+		case CardClass.DEATHKNIGHT:
+			return CardIds.KoboldMiner_TheAzeriteRatToken_WW_001t26;
+		case CardClass.MAGE:
+			return CardIds.KoboldMiner_TheAzeriteHawkToken_WW_001t24;
+		case CardClass.ROGUE:
+			return CardIds.KoboldMiner_TheAzeriteScorpionToken_WW_001t23;
+		case CardClass.WARLOCK:
+			return CardIds.KoboldMiner_TheAzeriteSnakeToken_WW_001t25;
+		case CardClass.WARRIOR:
+			return CardIds.KoboldMiner_TheAzeriteOxToken_WW_001t27;
+		case CardClass.SHAMAN:
+			return CardIds.TheAzeriteMurlocToken_DEEP_999t5;
+		case CardClass.PALADIN:
+			return CardIds.TheAzeriteDragonToken_DEEP_999t4;
+		default:
+			return undefined;
 	}
 };
