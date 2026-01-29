@@ -1,13 +1,13 @@
 =============
 Alpha: Ready for constructed overlay
 ==============
-- build for prod and publish
-- Font used in overlay is not correct?
+
 - on first startup, the overlay isn't correctly sized (sometimes)
 
 ===============
 Beta
 ===============
+
 - settings
 - validate that logged in user is premium / get their premium status
 - BG overlay
@@ -25,6 +25,7 @@ Beta
 ====================
 Final release
 ===================
+
 - load user-defined language in electron-setup, instead of the default one
 - injector: make instantiation lazy
 - other account providers (Google, Battle.net, WeChat)
