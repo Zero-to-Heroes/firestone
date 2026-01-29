@@ -6,7 +6,7 @@ import { StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
 
 export const TitanforgedTraps: StaticGeneratingCard = {
-	cardIds: [CardIds.TitanforgedTraps],
+	cardIds: [CardIds.TitanforgedTraps, CardIds.TitanforgedTraps_TitanforgedTrapsToken],
 	publicCreator: true,
 	dynamicPool: (input: StaticGeneratingCardInput) => {
 		const currentClass = input.inputOptions.deckState.getCurrentClass();
