@@ -8,13 +8,11 @@ import { AllCardsService } from '@firestone-hs/reference-data';
 import { GameEvents } from '@firestone/game-state';
 import { DiskCacheService, LogListenerService } from '@firestone/shared/common/service';
 import { CardsFacadeStandaloneService, DATABASE_SERVICE_TOKEN, setAppInjector } from '@firestone/shared/framework/core';
-import { BrowserWindow, app as electronApp, ipcMain, screen, shell } from 'electron';
+import { BrowserWindow, app as electronApp, ipcMain, shell } from 'electron';
 import { appendFileSync, existsSync, mkdirSync, readdirSync, statSync, unlinkSync } from 'fs';
 import { appendFile } from 'fs/promises';
 import { join } from 'path';
-import { format } from 'url';
 import { environment } from '../environments/environment';
-import { rendererAppName, rendererAppPort } from './constants';
 import { electronAppInjector } from './services/electron-app-injector';
 import { buildAppInjector } from './services/electron-app-injector-setup';
 import { ElectronDiskCacheService } from './services/electron-disk-cache.service';
@@ -33,11 +31,7 @@ export interface AuthCallbackData {
 }
 
 export default class App {
-	// Keep a global reference of the window object, if you don't, the window will
-	// be closed automatically when the JavaScript object is garbage collected.
-	static mainWindow: Electron.BrowserWindow;
 	static application: Electron.App;
-	static BrowserWindow;
 	static overlay: OverlayService;
 	static gameWindow: ElectronGameWindowService;
 	static flushRendererLogs: (() => Promise<void>) | null = null;
@@ -130,11 +124,11 @@ export default class App {
 		// Clean up old log files (keep only the last 10 files)
 		try {
 			const files = readdirSync(logsDir)
-				.filter(file => (file.startsWith('main-') || file.startsWith('renderer-')) && file.endsWith('.log'))
-				.map(file => ({
+				.filter((file) => (file.startsWith('main-') || file.startsWith('renderer-')) && file.endsWith('.log'))
+				.map((file) => ({
 					name: file,
 					path: join(logsDir, file),
-					mtime: statSync(join(logsDir, file)).mtimeMs
+					mtime: statSync(join(logsDir, file)).mtimeMs,
 				}))
 				.sort((a, b) => b.mtime - a.mtime); // Sort by modification time, newest first
 
@@ -151,9 +145,9 @@ export default class App {
 		// Helper function to write to log file
 		const writeToLogFile = (level: string, ...args: any[]) => {
 			try {
-				const message = args.map(arg =>
-					typeof arg === 'object' ? JSON.stringify(arg, null, 2) : String(arg)
-				).join(' ');
+				const message = args
+					.map((arg) => (typeof arg === 'object' ? JSON.stringify(arg, null, 2) : String(arg)))
+					.join(' ');
 				appendFileSync(logFilePath, `${message}\n`);
 			} catch (e) {
 				// Ignore file write errors
@@ -219,7 +213,7 @@ export default class App {
 		// so this class has no dependencies. This
 		// makes the code easier to write tests for
 
-		App.BrowserWindow = browserWindow;
+		// App.BrowserWindow = browserWindow;
 		App.application = app;
 		// app.disableHardwareAcceleration();
 
@@ -256,14 +250,6 @@ export default class App {
 			const deepLinkUrl = commandLine.find((arg) => arg.startsWith('firestone://'));
 			if (deepLinkUrl) {
 				App.handleAuthDeepLink(deepLinkUrl);
-			}
-
-			// Focus the main window if it exists
-			if (App.mainWindow) {
-				if (App.mainWindow.isMinimized()) {
-					App.mainWindow.restore();
-				}
-				App.mainWindow.focus();
 			}
 		});
 
@@ -326,9 +312,9 @@ export default class App {
 		ipcMain.on('renderer-log-batch', async (event, logs: Array<{ level: string; args: any[] }>) => {
 			try {
 				for (const { level, args } of logs) {
-					const message = args.map(arg =>
-						typeof arg === 'object' ? JSON.stringify(arg, null, 2) : String(arg)
-					).join(' ');
+					const message = args
+						.map((arg) => (typeof arg === 'object' ? JSON.stringify(arg, null, 2) : String(arg)))
+						.join(' ');
 					const timestamp = getTimestamp();
 					const logMessage = `[${timestamp}] [${level.toUpperCase()}] [RENDERER] ${message}\n`;
 
@@ -408,18 +394,11 @@ export default class App {
 	}
 
 	private static onClose() {
-		// Dereference the window object, usually you would store windows
-		// in an array if your app supports multi windows, this is the time
-		// when you should delete the corresponding element.
-		App.mainWindow = null;
+		// Nothing yet
 	}
 
 	private static onRedirect(event: any, url: string) {
-		if (url !== App.mainWindow.webContents.getURL()) {
-			// this is a normal external redirect, open it in a new browser window
-			event.preventDefault();
-			shell.openExternal(url);
-		}
+		// Nothing yet
 	}
 
 	private static async onReady() {
@@ -514,77 +493,5 @@ export default class App {
 		// if (App.mainWindow === null) {
 		// 	App.onReady();
 		// }
-	}
-
-	private static initMainWindow() {
-		const workAreaSize = screen.getPrimaryDisplay().workAreaSize;
-		const width = Math.min(1280, workAreaSize.width || 1280);
-		const height = Math.min(720, workAreaSize.height || 720);
-
-		// Create the browser window.
-		App.mainWindow = new BrowserWindow({
-			width: width,
-			height: height,
-			show: false,
-			webPreferences: {
-				contextIsolation: true,
-				backgroundThrottling: false,
-				preload: join(__dirname, 'main.preload.js'),
-			},
-		});
-		App.mainWindow.setMenu(null);
-		App.mainWindow.center();
-
-		// if main window is ready to show, close the splash window and show the main window
-		App.mainWindow.once('ready-to-show', () => {
-			// Don't show main window for overlay-only mode
-			// App.mainWindow.show();
-			console.log('🚫 Main window ready but not showing (overlay-only mode)');
-		});
-
-		// Don't open dev tools for main window in overlay-only mode
-		if (App.isDevelopmentMode()) {
-			// App.mainWindow.webContents.openDevTools(); // Disabled for overlay-only mode
-
-			// Enable main process debugging
-			console.log('🔧 Main process debugging enabled. Check terminal for main process logs.');
-			console.log('🔧 To debug main process with Chrome DevTools, run: npm run debug:main');
-		}
-
-		// Add keyboard shortcut for dev tools
-		App.mainWindow.webContents.on('before-input-event', (event, input) => {
-			if (input.key === 'F12' || (input.control && input.shift && input.key === 'I')) {
-				App.mainWindow.webContents.toggleDevTools();
-			}
-		});
-
-		// handle all external redirects in a new browser window
-		// App.mainWindow.webContents.on('will-navigate', App.onRedirect);
-		// App.mainWindow.webContents.on('new-window', (event, url, frameName, disposition, options) => {
-		//     App.onRedirect(event, url);
-		// });
-
-		// Emitted when the window is closed.
-		App.mainWindow.on('closed', () => {
-			// Dereference the window object, usually you would store windows
-			// in an array if your app supports multi windows, this is the time
-			// when you should delete the corresponding element.
-			App.mainWindow = null;
-		});
-	}
-
-	private static loadMainWindow() {
-		// load the index.html of the app.
-		if (!App.application.isPackaged) {
-			App.mainWindow.loadURL(`http://localhost:${rendererAppPort}`);
-		} else {
-			App.mainWindow.loadURL(
-				format({
-					pathname: join(__dirname, '..', rendererAppName, 'index.html'),
-					protocol: 'file:',
-					slashes: true,
-				}),
-			);
-		}
 	}
 }

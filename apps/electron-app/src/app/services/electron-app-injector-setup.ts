@@ -105,6 +105,7 @@ import {
 	USER_SERVICE_TOKEN,
 	UserService,
 	WindowManagerService,
+	WINDOW_HANDLER_SERVICE_TOKEN,
 } from '@firestone/shared/framework/core';
 import { GameStatsLoaderService } from '@firestone/stats/data-access';
 import { MatchAnalysisService, ReplayMetadataBuilderService } from '@firestone/stats/services';
@@ -119,6 +120,7 @@ import { ElectronAngularInjector } from './electron-angular-injector';
 import { ElectronAppVersionService } from './electron-app-version.service';
 import { ElectronDiskCacheService } from './electron-disk-cache.service';
 import { ElectronLogFileBackendService } from './electron-log-file-backend.service';
+import { ElectronWindowHandlerService } from './electron-window-handler.service';
 import { GameEventsElectronService } from './game-events-electron.service';
 import { LowLevelUtilsElectronService } from './low-level-utils-electron.service';
 import { MindVisionElectronService } from './mind-vision-electron.service';
@@ -136,6 +138,10 @@ export const buildAppInjector = () => {
 
 	const windowManager = new WindowManagerService(null);
 	electronInjector.register(WindowManagerService, windowManager);
+
+	const electronWindowHandler = new ElectronWindowHandlerService();
+	electronInjector.register(WINDOW_HANDLER_SERVICE_TOKEN, electronWindowHandler);
+	electronInjector.register(ElectronWindowHandlerService, electronWindowHandler);
 
 	const gameStatus = new GameStatusService(windowManager);
 	electronInjector.register(GameStatusService, gameStatus);

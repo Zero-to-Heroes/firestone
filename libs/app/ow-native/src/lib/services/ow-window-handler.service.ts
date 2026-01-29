@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { IBattlegroundsWindowOptions, IWindowHandlerService, OverwolfService } from '@firestone/shared/framework/core';
 
 /**
@@ -7,7 +8,18 @@ import { IBattlegroundsWindowOptions, IWindowHandlerService, OverwolfService } f
  */
 @Injectable({ providedIn: 'root' })
 export class OwWindowHandlerService implements IWindowHandlerService {
-	constructor(private readonly ow: OverwolfService) { }
+	constructor(
+		private readonly ow: OverwolfService,
+		private readonly prefs: PreferencesService
+	) {}
+
+	public async openSettingsWindow() {
+		const prefs = await this.prefs.getPreferences();
+		const windowName = this.ow.getSettingsWindowName(prefs);
+		const settingsWindow = await this.ow.obtainDeclaredWindow(windowName);
+		await this.ow.restoreWindow(settingsWindow.id);
+		this.ow.bringToFront(settingsWindow.id);
+	}
 
 	public async toggleBattlegroundsWindow(useOverlay: boolean, options?: IBattlegroundsWindowOptions) {
 		console.debug('[ow-window-handler] toggleBattlegroundsWindow', useOverlay, options);
