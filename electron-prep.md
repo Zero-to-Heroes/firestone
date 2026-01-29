@@ -2,8 +2,6 @@
 Alpha: Ready for constructed overlay
 ==============
 
-- on first startup, the overlay isn't correctly sized (sometimes)
-
 ===============
 Beta
 ===============

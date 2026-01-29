@@ -158,6 +158,7 @@ export class ConstructedDecktrackerOocWidgetWrapperComponent
 			.subscribe(([globalScale, scale]) => {
 				const newScale = (globalScale / 100) * (scale / 100);
 				this.el.nativeElement.style.setProperty('--decktracker-scale', newScale);
+				console.debug('setting decktracker-max-height', newScale, globalScale, scale);
 				this.el.nativeElement.style.setProperty('--decktracker-max-height', '90vh');
 				const element = this.el.nativeElement.querySelector('.scalable');
 				if (!!element) {

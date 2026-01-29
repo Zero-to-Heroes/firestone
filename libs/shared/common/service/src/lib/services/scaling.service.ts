@@ -1,12 +1,24 @@
 import { Inject, Injectable, Optional } from '@angular/core';
-import { ADS_SERVICE_TOKEN, waitForReady } from '@firestone/shared/framework/core';
 import type { IAdsService } from '@firestone/shared/framework/core';
-import { combineLatest, distinctUntilChanged, map } from 'rxjs';
+import { ADS_SERVICE_TOKEN, waitForReady } from '@firestone/shared/framework/core';
+import { combineLatest, debounceTime, distinctUntilChanged, fromEvent, map, merge, of } from 'rxjs';
 import { Preferences } from '../models/preferences';
 import { PreferencesService } from './preferences.service';
 
 @Injectable({ providedIn: 'root' })
 export class ScalingService {
+	/**
+	 * Emits the current window innerHeight when it changes (e.g. on resize or when Electron applies final size).
+	 * Emits immediately on subscribe with the current height, then on every distinct change.
+	 */
+	public readonly innerHeight$ =
+		typeof window === 'undefined'
+			? of(1080)
+			: merge(of(window.innerHeight), fromEvent(window, 'resize').pipe(map(() => window.innerHeight))).pipe(
+					distinctUntilChanged(),
+					debounceTime(50),
+				);
+
 	constructor(
 		private readonly prefs: PreferencesService,
 		@Optional() @Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
@@ -47,24 +59,27 @@ export class ScalingService {
 		this.lottery();
 	}
 
-	public async initializeGlobalScale(force = false) {
+	public subscribeToWindowHeight(force = false) {
+		if (typeof window === 'undefined') return;
+		this.innerHeight$.subscribe((height) => this.applyGlobalScaleFromHeight(height, force));
+	}
+
+	private async applyGlobalScaleFromHeight(height: number, force = false) {
+		if (typeof window === 'undefined') {
+			console.log('[scaling-service] initializing global scale, but window is undefined');
+			return;
+		}
+
 		const prefs = await this.prefs.getPreferences();
 		if (!force && prefs.globalWidgetScale != new Preferences().globalWidgetScale) {
 			console.log('[scaling-service] global scale already initialized', prefs.globalWidgetScale);
 			return;
 		}
 
-		if (typeof window === 'undefined') {
-			console.log('[scaling-service] initializing global scale, but window is undefined');
-			return;
-		}
-
-		const height = window.innerHeight;
 		const globalScale = Math.max(80, Math.round((height / 1080) * 100));
-		console.log('[scaling-service] window height', height, 'global scale', globalScale, window);
+		console.log('[scaling-service] window height', height, 'global scale', globalScale);
 		await this.prefs.updatePrefs('globalWidgetScale', globalScale);
 		await this.prefs.updatePrefs('cardTooltipScale', globalScale);
-		console.log('[scaling-service] global scale updated');
 	}
 
 	private cardTooltip() {

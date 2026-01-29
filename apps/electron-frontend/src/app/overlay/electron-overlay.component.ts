@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewRef } from '@angular/core';
-import { AllCardsService, SceneMode } from '@firestone-hs/reference-data';
+import { AllCardsService } from '@firestone-hs/reference-data';
 import { MemoryUpdatesService, SceneService } from '@firestone/memory';
 import { GameStatusService, PreferencesService, ScalingService } from '@firestone/shared/common/service';
 import {
@@ -19,27 +19,12 @@ declare const window: any;
 	template: `
 		<div class="electron-overlay-container">
 			<full-screen-overlays *ngIf="ready"></full-screen-overlays>
-			<!-- <constructed-decktracker-ooc-widget-wrapper></constructed-decktracker-ooc-widget-wrapper>
-			<decktracker-player-widget-wrapper
-				class="focusable"
-				style="pointer-events: none;"
-				tabindex="0"
-			></decktracker-player-widget-wrapper> -->
 		</div>
 	`,
 	styleUrls: ['./electron-overlay.component.scss'],
 	changeDetection: ChangeDetectionStrategy.Default,
 })
 export class ElectronOverlayComponent implements OnInit, OnDestroy {
-	gameInfo: any = null;
-	tested = false;
-	hasElectronAPI = false;
-	hasGameInfoMethod = false;
-
-	inGame: boolean | null = null;
-	scene: string | null = null;
-	memoryUpdates: string | null = null;
-
 	ready = false;
 
 	private subscriptions: Subscription[] = [];
@@ -73,39 +58,7 @@ export class ElectronOverlayComponent implements OnInit, OnDestroy {
 
 		await waitForReady(this.gameStatusService, this.memoryUpdateService);
 
-		// Test legacy ElectronAPI for comparison
-		await this.testLegacyElectronAPI();
-
-		// GameStatusService
-		this.inGame = await this.gameStatusService.inGame();
-		console.log('[ElectronOverlay] Initial game status:', this.inGame);
-		const subscription = this.gameStatusService.inGame$$.subscribe((inGame) => {
-			console.log('[ElectronOverlay] Game status changed:', inGame);
-			this.inGame = inGame;
-		});
-		this.subscriptions.push(subscription);
-
-		// MemoryUpdatesService
-		const memoryUpdatesSubscription = this.memoryUpdateService.memoryUpdates$$.subscribe((memoryUpdates) => {
-			// console.log('[ElectronOverlay] Memory updates changed:', memoryUpdates);
-			this.memoryUpdates = JSON.stringify(memoryUpdates);
-		});
-		this.subscriptions.push(memoryUpdatesSubscription);
-
-		// SceneService
-		const sceneEnum = this.sceneService.currentScene$$.getValue();
-		this.scene = sceneEnum ? SceneMode[sceneEnum] : null;
-		console.log('[ElectronOverlay] Initial scene:', this.scene);
-		const sceneSubscription = this.sceneService.currentScene$$.subscribe((scene) => {
-			console.log('[ElectronOverlay] Scene changed:', scene);
-			this.scene = scene ? SceneMode[scene] : null;
-		});
-		this.subscriptions.push(sceneSubscription);
-
-		await this.init_ScalingService.initializeGlobalScale(true);
-
-		// Set up periodic updates
-		this.setupPeriodicUpdates();
+		this.init_ScalingService.subscribeToWindowHeight(true);
 
 		this.ready = true;
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -115,57 +68,6 @@ export class ElectronOverlayComponent implements OnInit, OnDestroy {
 
 	ngOnDestroy() {
 		this.subscriptions.forEach((sub) => sub.unsubscribe());
-	}
-
-	private async testLegacyElectronAPI() {
-		console.log('[ElectronOverlay] Testing legacy ElectronAPI...');
-		console.log('[ElectronOverlay] window.electronAPI:', window.electronAPI);
-		console.log('[ElectronOverlay] window.require:', window.require);
-
-		this.hasElectronAPI = !!window.electronAPI;
-		this.hasGameInfoMethod = !!window.electronAPI?.getRunningGameInfo;
-
-		// Try electronAPI first
-		if (this.hasGameInfoMethod) {
-			try {
-				this.gameInfo = await window.electronAPI.getRunningGameInfo();
-				console.log('[ElectronOverlay] Legacy ElectronAPI result:', this.gameInfo);
-			} catch (error) {
-				console.error('[ElectronOverlay] Legacy ElectronAPI error:', error);
-			}
-		}
-		// Fallback to direct IPC if nodeIntegration is enabled
-		else if (window.require) {
-			try {
-				console.log('[ElectronOverlay] Trying direct IPC access...');
-				const { ipcRenderer } = window.require('electron');
-				this.gameInfo = await ipcRenderer.invoke('get-running-game-info');
-				console.log('[ElectronOverlay] Direct IPC result:', this.gameInfo);
-				this.hasGameInfoMethod = true; // Mark as working
-			} catch (error) {
-				console.error('[ElectronOverlay] Direct IPC error:', error);
-			}
-		}
-
-		this.tested = true;
-	}
-
-	private setupPeriodicUpdates() {
-		// Refresh legacy API every 5 seconds for comparison
-		if (this.hasGameInfoMethod || window.require) {
-			setInterval(async () => {
-				try {
-					if (window.electronAPI?.getRunningGameInfo) {
-						this.gameInfo = await window.electronAPI.getRunningGameInfo();
-					} else if (window.require) {
-						const { ipcRenderer } = window.require('electron');
-						this.gameInfo = await ipcRenderer.invoke('get-running-game-info');
-					}
-				} catch (error) {
-					console.error('[ElectronOverlay] Refresh error:', error);
-				}
-			}, 5000);
-		}
 	}
 
 	private async initLocalization() {
