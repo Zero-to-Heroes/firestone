@@ -4,6 +4,8 @@ import { DeckCard, toTagsObject } from '../../../models/deck-card';
 import { DeckState } from '../../../models/deck-state';
 import { GameState, ShortCard, ShortCardWithTurn } from '../../../models/game-state';
 import { getProcessedCard, storeInformationOnCardPlayed } from '../../card-utils';
+import { hasOnCardPlayedWhileInHand } from '../../cards/_card.type';
+import { cardsInfoCache } from '../../cards/_mapping';
 import {
 	CARDS_IDS_THAT_REMEMBER_SPELLS_PLAYED,
 	CARDS_THAT_REMEMBER_SPELLS_PLAYED,
@@ -200,7 +202,7 @@ export class CardPlayedFromHandParser implements EventParser {
 		const handAfterCardsRemembered = rememberCardsInHand(
 			card!.cardId,
 			isCardCountered,
-			newHand,
+			deck.update({ hand: newHand }),
 			this.helper,
 			this.allCards,
 		);
@@ -337,15 +339,30 @@ export class CardPlayedFromHandParser implements EventParser {
 export const rememberCardsInHand = (
 	cardId: string,
 	isCardCountered: boolean,
-	hand: readonly DeckCard[],
+	deckState: DeckState,
 	helper: DeckManipulationHelper,
 	allCards: CardsFacadeService,
 ): readonly DeckCard[] => {
-	let handAfterCardsRemembered = hand;
+	let newDeckState = deckState;
 	if (!isCardCountered) {
+		for (const card of newDeckState.hand) {
+			const cardImpl = cardsInfoCache[card.cardId];
+			if (hasOnCardPlayedWhileInHand(cardImpl)) {
+				newDeckState = cardImpl.onCardPlayedWhileInHand({
+					card: card,
+					cardIdPlayed: cardId,
+					entityIdPlayed: null,
+					deckState: newDeckState,
+					opponentDeckState: null,
+					allCards: allCards.getService(),
+				});
+			}
+		}
+
 		const refCard = allCards.getCard(cardId);
 		if (refCard?.type === 'Spell') {
-			const commanderSivaraCards = hand.filter((c) =>
+			let handAfterCardsRemembered = newDeckState.hand;
+			const commanderSivaraCards = handAfterCardsRemembered.filter((c) =>
 				CARDS_IDS_THAT_REMEMBER_SPELLS_PLAYED.includes(c.cardId as CardIds),
 			);
 			if (!!commanderSivaraCards.length) {
@@ -370,10 +387,10 @@ export const rememberCardsInHand = (
 					handAfterCardsRemembered = helper.replaceCardInZone(handAfterCardsRemembered, newCard);
 				}
 			}
+			return handAfterCardsRemembered;
 		}
 	}
-
-	return handAfterCardsRemembered;
+	return newDeckState.hand;
 };
 
 const buildCarressCabaretStarRelatedCardIds = (

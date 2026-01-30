@@ -57,10 +57,6 @@ export interface SelectorCard extends Card {
 }
 export const hasSelector = (card: Card): card is SelectorCard => (card as SelectorCard)?.selector !== undefined;
 
-// export interface ActionChainParser {
-// 	appliesOnEvent(): GameEvent['type'];
-// 	parse(currentState: GameState, events: GameEvent[]): Promise<GameState>;
-// }
 export interface StaticGeneratingCard extends Card {
 	publicCreator?: boolean;
 	dynamicPool: (input: StaticGeneratingCardInput) => readonly string[];
@@ -111,4 +107,18 @@ export const hasChainParsingCard = (card: Card): card is ChainParsingCard =>
 export interface ActionChainParser {
 	appliesOnEvent(): GameEvent['type'];
 	parse(currentState: GameState, events: GameEvent[]): Promise<GameState>;
+}
+
+export interface OnCardPlayedWhileInHandCard extends Card {
+	onCardPlayedWhileInHand: (input: OnCardPlayedWhileInHandInput) => DeckState;
+}
+export const hasOnCardPlayedWhileInHand = (card: Card): card is OnCardPlayedWhileInHandCard =>
+	(card as OnCardPlayedWhileInHandCard)?.onCardPlayedWhileInHand !== undefined;
+export interface OnCardPlayedWhileInHandInput {
+	card: DeckCard;
+	cardIdPlayed: string;
+	entityIdPlayed: number | null;
+	deckState: DeckState;
+	opponentDeckState: DeckState | null;
+	allCards: AllCardsService;
 }

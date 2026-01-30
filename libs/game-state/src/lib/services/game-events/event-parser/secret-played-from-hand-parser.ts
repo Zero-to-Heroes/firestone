@@ -76,7 +76,7 @@ export class SecretPlayedFromHandParser implements EventParser {
 		const handAfterCardsRemembered = rememberCardsInHand(
 			knownCardId,
 			isCardCountered,
-			newHand,
+			deck.update({ hand: newHand }),
 			this.helper,
 			this.allCards,
 		);

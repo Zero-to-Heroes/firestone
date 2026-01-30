@@ -848,11 +848,6 @@ export const CARDS_THAT_REMEMBER_SPELLS_PLAYED = [
 		numberOfCards: 3,
 	},
 	{
-		cardId: CardIds.TidepoolPupil_VAC_304,
-		mustHaveSpellSchool: false,
-		numberOfCards: 3,
-	},
-	{
 		cardId: CardIds.HedraTheHeretic_TSC_658,
 		mustHaveSpellSchool: false,
 		numberOfCards: 9999,

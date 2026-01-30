@@ -67,7 +67,7 @@ export class QuestPlayedFromHandParser implements EventParser {
 		const handAfterCardsRemembered = rememberCardsInHand(
 			cardId,
 			isCardCountered,
-			newHand,
+			deck.update({ hand: newHand }),
 			this.helper,
 			this.allCards,
 		);
