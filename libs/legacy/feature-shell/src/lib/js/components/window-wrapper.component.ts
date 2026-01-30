@@ -10,13 +10,11 @@ import {
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
-import { GameStatusService } from '@firestone/shared/common/service';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { Events, PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Subscription, combineLatest } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
-import { Events } from '@firestone/shared/common/service';
-import { AppUiStoreFacadeService } from '../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from './abstract-subscription-store.component';
 
 @Component({
 	standalone: false,
@@ -64,7 +62,7 @@ import { AbstractSubscriptionStoreComponent } from './abstract-subscription-stor
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	encapsulation: ViewEncapsulation.None,
 })
-export class WindowWrapperComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit, OnDestroy {
+export class WindowWrapperComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
 	@Input() allowResize = false;
 	@Input() avoidGameOverlap = false;
 
@@ -89,26 +87,27 @@ export class WindowWrapperComponent extends AbstractSubscriptionStoreComponent i
 	// private sub2$$: Subscription;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
 		private readonly events: Events,
-		private readonly gameStatus: GameStatusService,
+		private readonly prefs: PreferencesService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
+		await waitForReady(this.prefs);
+
 		const currentWindow = await this.ow.getCurrentWindow();
 		this.windowId.next(currentWindow.id);
 		console.log('windowId', this.windowId.value);
 
 		this.sub$$ = combineLatest([
 			this.windowId.asObservable(),
-			this.store.listen$(([main, nav, prefs]) => prefs.globalZoomLevel),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.globalZoomLevel)),
 		])
 			.pipe(
-				map(([windowId, [zoom]]) => ({
+				map(([windowId, zoom]) => ({
 					windowId,
 					zoom,
 				})),
