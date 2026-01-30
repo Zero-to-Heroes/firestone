@@ -1962,6 +1962,9 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), mech, effectiveCostMore(4));
 		case CardIds.InventorsAura:
 			return and(side(inputSide), or(inDeck, inHand), mech);
+		// Invent-O-Matic: Whenever you Magnetize a minion, give it +1/+1.
+		case CardIds.InventOMatic:
+			return and(side(inputSide), or(inDeck, inHand), magnetic);
 		case CardIds.InvestmentOpportunity:
 			return and(side(inputSide), inDeck, overload);
 		case CardIds.InvigoratingLightTavernBrawl:
