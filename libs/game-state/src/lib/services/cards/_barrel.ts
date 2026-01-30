@@ -103,6 +103,7 @@ export { MadameLazul } from './madame-lazul';
 export { MagicTrick } from './magic-trick';
 export { Magicfin } from './magicfin';
 export { Malkorok } from './malkorok';
+export { MalorneTheWaywatcher } from './malorne-the-waywatcher';
 export { MechagnomeGuide } from './mechagnome-guide';
 export { MendTheTimeline } from './mend-the-timeline';
 export { Metrognome } from './metrognome';
