@@ -21,6 +21,7 @@ import { HeroCard } from '../../models/hero-card';
 import { Metadata } from '../../models/metadata';
 import { VisualDeckCard } from '../../models/visual-deck-card';
 import { buildContextRelatedCardIds } from '../../related-cards/related-cards';
+import { hasSelector } from '../cards/_card.type';
 import { cardsMapping, hasGetRelatedCards } from '../cards/global/_registers';
 import { getSelectorsForArenaDraft } from './arena-draft';
 import { cardIdSelectorSort } from './card-id-selector-sort';
@@ -272,8 +273,8 @@ export abstract class CardsHighlightCommonService {
 				return !!h.deckCardProvider()
 					? h.deckCardProvider()
 					: DeckCard.create({
-						cardId: h.referenceCardProvider()?.id,
-					});
+							cardId: h.referenceCardProvider()?.id,
+						});
 			}),
 			hero: {
 				cardId: heroCardId,
@@ -447,11 +448,16 @@ export abstract class CardsHighlightCommonService {
 		// Mechanic-specific highlights
 		const selectors: Selector[] = [];
 
-		// Forward synergies - what does this card want?
-		const selector = cardIdSelector(cardId, entityId, card, inputSide, this.allCards);
-		// console.debug('cardIdSelector', selector);
-		if (!!selector) {
-			selectors.push(selector);
+		const cardImpl = cardsMapping[cardId];
+		if (hasSelector(cardImpl)) {
+			selectors.push(cardImpl.selector(inputSide));
+		} else {
+			// Forward synergies - what does this card want?
+			const selector = cardIdSelector(cardId, entityId, card, inputSide, this.allCards);
+			// console.debug('cardIdSelector', selector);
+			if (!!selector) {
+				selectors.push(selector);
+			}
 		}
 
 		const refCard = this.allCards.getCard(cardId);

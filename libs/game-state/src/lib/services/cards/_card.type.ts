@@ -1,8 +1,10 @@
 import { AllCardsService, CardIds, GameFormat, GameTag, GameType } from '@firestone-hs/reference-data';
+import { HighlightSide } from '@firestone/shared/framework/core';
 import { DeckCard, GuessedInfo } from '../../models/deck-card';
 import { DeckState } from '../../models/deck-state';
 import { GameState } from '../../models/game-state';
 import { Metadata } from '../../models/metadata';
+import { Selector } from '../card-highlight/cards-highlight-common.service';
 import { GameEvent } from '../game-events/game-event';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -50,10 +52,11 @@ export interface GuessCardIdInput {
 type GuessInfoFunction = (input: GuessInfoInput) => GuessedInfo | null;
 type GuessCardIdFunction = (input: GuessCardIdInput) => string | null;
 
-// Wait until this is correctly refactored
-// export interface SelectorCard extends Card {
-// 	selector: (info: HighlightSide) => Selector;
-// }
+export interface SelectorCard extends Card {
+	selector: (info: HighlightSide) => Selector;
+}
+export const hasSelector = (card: Card): card is SelectorCard => (card as SelectorCard)?.selector !== undefined;
+
 // export interface ActionChainParser {
 // 	appliesOnEvent(): GameEvent['type'];
 // 	parse(currentState: GameState, events: GameEvent[]): Promise<GameState>;
