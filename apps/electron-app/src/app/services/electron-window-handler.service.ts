@@ -2,7 +2,6 @@ import { ElectronGameWindowService } from '@firestone/electron/common';
 import { IBattlegroundsWindowOptions, IWindowHandlerService } from '@firestone/shared/framework/core';
 import { OverlayBrowserWindow, OverlayWindowOptions } from '@overwolf/ow-electron-packages-types';
 import { app, BrowserWindow } from 'electron';
-import { existsSync } from 'fs';
 import { join } from 'path';
 import App from '../app';
 import { rendererAppPort } from '../constants';
@@ -134,6 +133,7 @@ export class ElectronWindowHandlerService implements IWindowHandlerService {
 		const x = Math.max(0, Math.floor(gameWidth / 2 - SETTINGS_WIDTH / 2));
 		const y = Math.max(0, Math.floor(gameHeight / 2 - SETTINGS_HEIGHT / 2));
 
+		const preloadPath = join(__dirname, 'main.preload.js');
 		const options: OverlayWindowOptions = {
 			name: 'firestone-settings-' + Math.floor(Math.random() * 1000),
 			width: SETTINGS_WIDTH,
@@ -146,7 +146,7 @@ export class ElectronWindowHandlerService implements IWindowHandlerService {
 			webPreferences: {
 				contextIsolation: true,
 				backgroundThrottling: false,
-				preload: this.getPreloadPath(),
+				preload: preloadPath,
 			},
 		};
 
@@ -195,24 +195,5 @@ export class ElectronWindowHandlerService implements IWindowHandlerService {
 		}
 		// Hash is required: electron-frontend uses HashLocationStrategy, so path must be in the hash
 		return `http://localhost:${rendererAppPort}/#/settings`;
-	}
-
-	/**
-	 * Path to the preload script. Uses app.getAppPath() in packaged app to avoid brittle __dirname.
-	 */
-	private getPreloadPath(): string {
-		if (app.isPackaged) {
-			return join(app.getAppPath(), 'main.preload.js');
-		}
-		// Build outputs main.preload.js next to main.js (dist/apps/electron-app/); __dirname is that dir when bundled
-		const preloadPath = join(__dirname, 'main.preload.js');
-		if (!existsSync(preloadPath)) {
-			console.error(
-				'[ElectronWindowHandler] Preload script not found at:',
-				preloadPath,
-				'(Settings window logs will not be captured)',
-			);
-		}
-		return preloadPath;
 	}
 }
