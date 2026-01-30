@@ -3066,6 +3066,9 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.SeascoutOperator_TSC_646:
 			return and(side(inputSide), or(inHand, inDeck), mech);
+		// Searing Reflection (FIR_941): Draw a minion. Summon an 8/8 copy of it with Divine Shield.
+		case CardIds.SearingReflection_FIR_941:
+			return and(side(inputSide), inDeck, minion);
 		case CardIds.SecurityAutomaton_TSC_928:
 			return and(side(inputSide), or(inDeck, inHand), mech);
 		case CardIds.SenseDemonsLegacy_EX1_317:
