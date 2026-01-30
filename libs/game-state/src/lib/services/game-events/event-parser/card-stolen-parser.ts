@@ -11,7 +11,7 @@ export class CardStolenParser implements EventParser {
 	constructor(
 		private readonly helper: DeckManipulationHelper,
 		private readonly allCards: CardsFacadeService,
-	) {}
+	) { }
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return !!state;
@@ -84,46 +84,51 @@ export class CardStolenParser implements EventParser {
 		const stealingHand =
 			zone === Zone.HAND
 				? this.helper.addSingleCardToZone(
-						stealingToDeck.hand,
-						cardInHand!.update({
-							cardId: cardInHand!.cardId || cardId,
-							cardName:
-								this.allCards.getCard(cardInHand!.cardId).name ?? this.allCards.getCard(cardId).name,
-							stolenFromOpponent: !cardInHand!.stolenFromOpponent,
-							positionFromBottom: undefined,
-							positionFromTop: undefined,
-							zone: 'HAND',
-						}),
-					)
+					stealingToDeck.hand,
+					cardInHand!.update({
+						cardId: cardInHand!.cardId || cardId,
+						cardName:
+							this.allCards.getCard(cardInHand!.cardId).name ?? this.allCards.getCard(cardId).name,
+						stolenFromOpponent: !cardInHand!.stolenFromOpponent,
+						positionFromBottom: undefined,
+						positionFromTop: undefined,
+						zone: 'HAND',
+						// metaInfo: {
+						// 	turnAtWhichCardEnteredCurrentZone: currentState.currentTurnNumeric,
+						// 	turnAtWhichCardEnteredHand: currentState.currentTurnNumeric,
+						// 	timestampAtWhichCardEnteredHand: new Date().getTime(),
+						// },
+					}),
+				)
 				: stealingToDeck.hand;
 
 		const stealingBoard =
 			zone === Zone.PLAY
 				? this.helper.addSingleCardToZone(
-						stealingToDeck.board,
-						cardInBoard!.update({
-							cardId: cardInBoard!.cardId || cardId,
-							cardName:
-								this.allCards.getCard(cardInBoard!.cardId).name ?? this.allCards.getCard(cardId).name,
-							stolenFromOpponent: !cardInBoard!.stolenFromOpponent,
-							positionFromBottom: undefined,
-							positionFromTop: undefined,
-						}),
-					)
+					stealingToDeck.board,
+					cardInBoard!.update({
+						cardId: cardInBoard!.cardId || cardId,
+						cardName:
+							this.allCards.getCard(cardInBoard!.cardId).name ?? this.allCards.getCard(cardId).name,
+						stolenFromOpponent: !cardInBoard!.stolenFromOpponent,
+						positionFromBottom: undefined,
+						positionFromTop: undefined,
+					}),
+				)
 				: stealingToDeck.board;
 		const stealingDeck =
 			zone === Zone.DECK
 				? this.helper.addSingleCardToZone(
-						stealingToDeck.deck,
-						cardInDeck!.update({
-							cardId: cardInDeck!.cardId || cardId,
-							cardName:
-								this.allCards.getCard(cardInDeck!.cardId).name ?? this.allCards.getCard(cardId).name,
-							stolenFromOpponent: !cardInDeck!.stolenFromOpponent,
-							positionFromBottom: undefined,
-							positionFromTop: undefined,
-						}),
-					)
+					stealingToDeck.deck,
+					cardInDeck!.update({
+						cardId: cardInDeck!.cardId || cardId,
+						cardName:
+							this.allCards.getCard(cardInDeck!.cardId).name ?? this.allCards.getCard(cardId).name,
+						stolenFromOpponent: !cardInDeck!.stolenFromOpponent,
+						positionFromBottom: undefined,
+						positionFromTop: undefined,
+					}),
+				)
 				: stealingToDeck.deck;
 
 		const stealingSecrets = secret ? [...stealingToDeck.secrets, secret] : stealingToDeck.secrets;

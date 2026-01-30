@@ -23,7 +23,7 @@ export class CardDrawParser implements EventParser {
 	constructor(
 		private readonly helper: DeckManipulationHelper,
 		private readonly allCards: CardsFacadeService,
-	) {}
+	) { }
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return !!state;
@@ -54,12 +54,12 @@ export class CardDrawParser implements EventParser {
 
 		const cardsWithMatchingCardId = !!cardId?.length
 			? deck.deck
-					.filter((e) => e.cardId === cardId)
-					.filter((e) =>
-						!!gameEvent.additionalData.dataTag1 && supportedAdditionalData.includes(e.cardId as CardIds)
-							? e.mainAttributeChange! - 1 === gameEvent.additionalData.dataTag1
-							: true,
-					)
+				.filter((e) => e.cardId === cardId)
+				.filter((e) =>
+					!!gameEvent.additionalData.dataTag1 && supportedAdditionalData.includes(e.cardId as CardIds)
+						? e.mainAttributeChange! - 1 === gameEvent.additionalData.dataTag1
+						: true,
+				)
 			: [];
 		console.debug('[card-draw] cards with matching card id', cardsWithMatchingCardId);
 		// So that we don't remove the "card from bottom" when the user doesn't know about it, e.g.
@@ -101,10 +101,10 @@ export class CardDrawParser implements EventParser {
 			? deck.deck.filter((c) => c.positionFromTop != null).sort((c) => c.positionFromTop!)[0]
 			: useBottomOfDeckToIdentifyCard
 				? deck.deck
-						.filter((c) => c.positionFromBottom != null)
-						// Because Finley puts the cards at the bottom before drawing
-						.filter((c) => c.lastAffectedByCardId !== drawnByCardId)
-						.sort((c) => c.positionFromBottom!)[0]
+					.filter((c) => c.positionFromBottom != null)
+					// Because Finley puts the cards at the bottom before drawing
+					.filter((c) => c.lastAffectedByCardId !== drawnByCardId)
+					.sort((c) => c.positionFromBottom!)[0]
 				: this.helper.findCardInZone(deckToDrawnFromTop, cardId, shouldUseEntityId ? entityId : null, true);
 		console.debug(
 			'[card-draw] found card in zone 0',
@@ -199,8 +199,8 @@ export class CardDrawParser implements EventParser {
 			cardName: isCardInfoPublic ? (refCard.name ?? card?.cardName) : undefined,
 			lastAffectedByCardId: isCreatorPublic
 				? // Use drawnByCardId first to remove info leak when drawing a card that was created by a public tutor
-					// (eg draw a card with a public tutor that was created by Queen Carnassa)
-					(drawnByCardId ?? lastInfluencedByCardId ?? card!.lastAffectedByCardId)
+				// (eg draw a card with a public tutor that was created by Queen Carnassa)
+				(drawnByCardId ?? lastInfluencedByCardId ?? card!.lastAffectedByCardId)
 				: isDrawnByCardIdPublic
 					? drawnByCardId
 					: undefined,
@@ -214,6 +214,11 @@ export class CardDrawParser implements EventParser {
 			rarity: isCardInfoPublic ? (card!.rarity ?? card!.rarity) : null,
 			zone: 'HAND',
 			tags: gameEvent.additionalData.tags ? toTagsObject(gameEvent.additionalData.tags) : card!.tags,
+			// metaInfo: {
+			// 	turnAtWhichCardEnteredCurrentZone: currentState.currentTurnNumeric,
+			// 	turnAtWhichCardEnteredHand: currentState.currentTurnNumeric,
+			// 	timestampAtWhichCardEnteredHand: new Date().getTime(),
+			// },
 		} as DeckCard);
 		// console.debug('[card-draw] card with creator', cardWithCreator, isPlayer, isCardInfoPublic, card, refCard);
 		const cardWithGuessInfo = addGuessInfoToCard(
@@ -237,16 +242,16 @@ export class CardDrawParser implements EventParser {
 		// console.debug('[card-draw] removeFillerCard', removeFillerCard, useTopOfDeckToIdentifyCard);
 		let [newDeck, removedCard] = isCardInfoPublic
 			? this.helper.removeSingleCardFromZone(
-					previousDeck,
-					updatedCardId,
-					entityId,
-					deck.deckList.length === 0,
-					true,
-					{
-						cost: gameEvent.additionalData.cost,
-					},
-					useTopOfDeckToIdentifyCard,
-				)
+				previousDeck,
+				updatedCardId,
+				entityId,
+				deck.deckList.length === 0,
+				true,
+				{
+					cost: gameEvent.additionalData.cost,
+				},
+				useTopOfDeckToIdentifyCard,
+			)
 			: this.helper.removeSingleCardFromZone(previousDeck, null, -1, deck.deckList.length === 0, true);
 		console.debug('[card-draw] newDeck 0', newDeck, isCardInfoPublic, previousDeck, removedCard);
 

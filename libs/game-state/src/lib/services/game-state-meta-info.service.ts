@@ -20,11 +20,11 @@ export class GameStateMetaInfoService {
 
 		return hasChanged
 			? deckState.update({
-					board: newBoard,
-					deck: newDeck,
-					hand: newHand,
-					otherZone: newOtherZone,
-				})
+				board: newBoard,
+				deck: newDeck,
+				hand: newHand,
+				otherZone: newOtherZone,
+			})
 			: deckState;
 	}
 
@@ -85,9 +85,9 @@ export class GameStateMetaInfoService {
 			newBottomPosition !== card.positionFromBottom;
 		return hasChanged
 			? card.update({
-					metaInfo: newMeta,
-					positionFromBottom: newBottomPosition,
-				})
+				metaInfo: newMeta,
+				positionFromBottom: newBottomPosition,
+			})
 			: card;
 	}
 }

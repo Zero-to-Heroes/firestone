@@ -29,6 +29,7 @@ import { PlayerGameState } from '../models/full-game-state';
 import { GameState } from '../models/game-state';
 import { hasDynamicPool } from '../services/cards/_card.type';
 import { cardsInfoCache } from '../services/cards/_mapping';
+import { buildExcavateTreasures } from './excavate-treasures';
 
 const IMBUED_HERO_POWERS = [
 	CardIds.BlessingOfTheDragon_EDR_445p,
@@ -91,6 +92,18 @@ const getDynamicRelatedCardIdsInternal = (
 			allCards,
 			inputOptions: options,
 		});
+	}
+
+	// Handle excavate cards - show the pool of treasures they can create
+	const refCard = allCards.getCard(cardId);
+	if (hasMechanic(refCard, GameTag.EXCAVATE)) {
+		const excavateTreasures = getExcavateTreasuresPool(
+			inputOptions.deckState,
+			inputOptions.deckState?.hero?.classes ?? [],
+		);
+		if (excavateTreasures.length > 0) {
+			return excavateTreasures;
+		}
 	}
 
 	switch (cardId) {
@@ -1332,7 +1345,16 @@ const BAN_LIST = [
 	CardIds.ZilliaxDeluxe3000_TOY_330,
 ];
 
-const BAN_LIST_ARENA = [CardIds.Kiljaeden_GDB_145, CardIds.TheGreatDracorex_DINO_401];
+const BAN_LIST_ARENA = [
+	CardIds.Kiljaeden_GDB_145,
+	CardIds.TheGreatDracorex_DINO_401,
+	CardIds.Shaladrassil_EDR_846,
+	CardIds.FyrakkTheBlazing_FIR_959,
+	CardIds.Tortolla_EDR_471,
+	CardIds.Razidir_TLC_463,
+	CardIds.StormTheGates_TLC_EVENT_400,
+	CardIds.WelcomeHome_TIME_EVENT_997,
+];
 
 let uncollectibleCards: readonly ReferenceCard[] = [];
 let baseCards: readonly ReferenceCard[] = [];
@@ -1385,7 +1407,7 @@ export const filterCards = (
 			}
 			return !!c.set ? isValidSet(c.set.toLowerCase() as SetId, format, gameType) : false;
 		})
-		.filter((c) => !sourceCardId || c.id !== sourceCardId);
+		.filter((c) => !sourceCardId || (c.id !== sourceCardId && allCards.getRootCardId(c.id) !== allCards.getRootCardId(sourceCardId)));
 	return baseCardsExtended.filter((c) => filters.every((f) => f(c))).map((c) => c.id);
 };
 
@@ -1789,4 +1811,19 @@ const wantsColossalMinions = (sourceCardId: string): boolean => {
 		default:
 			return false;
 	}
+};
+
+// Helper function for excavate pool
+const getExcavateTreasuresPool = (
+	deckState: DeckState | undefined,
+	playerClasses: readonly CardClass[],
+): readonly string[] => {
+	if (!deckState) {
+		return [];
+	}
+
+	const maxTier = deckState.maxExcavateTier + 1;
+	// The next tier the player will excavate to (1-indexed)
+	const nextTier = (deckState.currentExcavateTier % maxTier) + 1;
+	return buildExcavateTreasures(nextTier, playerClasses);
 };

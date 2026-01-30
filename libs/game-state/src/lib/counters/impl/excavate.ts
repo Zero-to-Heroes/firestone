@@ -1,15 +1,9 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import {
-	CardClass,
-	CardIds,
-	EXCAVATE_TREASURE_1_IDS,
-	EXCAVATE_TREASURE_2_IDS,
-	EXCAVATE_TREASURE_3_IDS,
-	GameTag,
-} from '@firestone-hs/reference-data';
+import { CardClass, CardIds, GameTag } from '@firestone-hs/reference-data';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { GameState } from '../../models/game-state';
+import { buildExcavateTreasures } from '../../related-cards/excavate-treasures';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
 import { CounterType } from '../_exports';
 
@@ -113,39 +107,3 @@ export class ExcavateCounterDefinitionV2 extends CounterDefinitionV2<{
 		});
 	}
 }
-
-const buildExcavateTreasures = (tier: number, playerClasses: readonly CardClass[]): readonly string[] => {
-	switch (tier) {
-		case 1:
-			return EXCAVATE_TREASURE_1_IDS;
-		case 2:
-			return EXCAVATE_TREASURE_2_IDS;
-		case 3:
-			return EXCAVATE_TREASURE_3_IDS;
-		case 4:
-			return playerClasses.map((playerClass) => getTier4ExcavateTreasure(playerClass)!);
-		default:
-			return [];
-	}
-};
-
-const getTier4ExcavateTreasure = (playerClass: CardClass): string | undefined => {
-	switch (playerClass) {
-		case CardClass.DEATHKNIGHT:
-			return CardIds.KoboldMiner_TheAzeriteRatToken_WW_001t26;
-		case CardClass.MAGE:
-			return CardIds.KoboldMiner_TheAzeriteHawkToken_WW_001t24;
-		case CardClass.ROGUE:
-			return CardIds.KoboldMiner_TheAzeriteScorpionToken_WW_001t23;
-		case CardClass.WARLOCK:
-			return CardIds.KoboldMiner_TheAzeriteSnakeToken_WW_001t25;
-		case CardClass.WARRIOR:
-			return CardIds.KoboldMiner_TheAzeriteOxToken_WW_001t27;
-		case CardClass.SHAMAN:
-			return CardIds.TheAzeriteMurlocToken_DEEP_999t5;
-		case CardClass.PALADIN:
-			return CardIds.TheAzeriteDragonToken_DEEP_999t4;
-		default:
-			return undefined;
-	}
-};

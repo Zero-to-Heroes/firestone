@@ -6,7 +6,6 @@
  */
 import { CardClass, CardIds } from '@firestone-hs/reference-data';
 import { GuessedInfo } from '../../models/deck-card';
-import { canBeDiscoveredByClass } from '../../related-cards/dynamic-pools';
 import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
 
@@ -26,7 +25,7 @@ export const LotusAgents: GeneratingCard & StaticGeneratingCard = {
 		return filterCards(
 			LotusAgents.cardIds[0],
 			input.allCards,
-			(c) => isLotusCard(c.classes) && canBeDiscoveredByClass(c, input.inputOptions.currentClass),
+			(c) => isLotusCard(c.classes),
 			input.inputOptions,
 		);
 	},
@@ -34,7 +33,7 @@ export const LotusAgents: GeneratingCard & StaticGeneratingCard = {
 		const possibleCards = filterCards(
 			LotusAgents.cardIds[0],
 			input.allCards,
-			(c) => isLotusCard(c.classes) && canBeDiscoveredByClass(c, input.deckState.getCurrentClass()),
+			(c) => isLotusCard(c.classes),
 			input.options,
 		);
 		return {

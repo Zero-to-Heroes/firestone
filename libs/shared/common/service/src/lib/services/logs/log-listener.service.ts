@@ -17,19 +17,19 @@ export class LogListenerService {
 	private monitoring: boolean;
 	// private fileInitiallyPresent: boolean;
 	private logsLocation: string;
-	private existingLineHandler: (input: string) => void;
+	private existingLineHandler: ((input: string) => void) | null;
 
 	constructor(
 		@Inject(LOG_FILE_BACKEND) private readonly backend: LogFileBackend,
 		private readonly gameStatus: GameStatusService,
 		private readonly prefs: PreferencesService,
 		private readonly logUtils: LogUtilsService,
-	) {}
+	) { }
 
 	public configure(
 		logFile: string,
 		newLineHandler: (input: string) => void,
-		existingLineHandler: (input: string) => void = null,
+		existingLineHandler: ((input: string) => void) | null = null,
 	): LogListenerService {
 		this.logFile = logFile;
 		console.log('[log-listener] [' + this.logFile + '] initializing', this.logFile);
@@ -58,7 +58,7 @@ export class LogListenerService {
 		// Issue: these are two different events, and we can have races between them
 		combineLatest([this.gameStatus.inGame$$, this.logUtils.logsDirRoot$$])
 			.pipe(
-				filter(([inGame, dir]) => inGame && !!dir),
+				filter(([inGame, dir]) => !!inGame && !!dir),
 				distinctUntilChanged(
 					([inGame, dir], [prevInGame, prevDir]) => inGame === prevInGame && dir === prevDir,
 				),
@@ -161,8 +161,8 @@ export class LogListenerService {
 				if (lineInfo.state === 'truncated') {
 					console.log(
 						'[log-listener] [' +
-							this.logFile +
-							'] truncated log file - HS probably just overwrote the file. Restarting listening',
+						this.logFile +
+						'] truncated log file - HS probably just overwrote the file. Restarting listening',
 					);
 					this.backend.stopFileListener(fileIdentifier);
 					this.callback('truncated');

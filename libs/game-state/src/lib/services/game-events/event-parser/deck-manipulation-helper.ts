@@ -15,7 +15,7 @@ export class DeckManipulationHelper {
 	constructor(
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: ILocalizationService,
-	) {}
+	) { }
 
 	public removeSingleCardFromZone(
 		zone: readonly DeckCard[],
@@ -331,10 +331,10 @@ export class DeckManipulationHelper {
 			card.entityId !== entityId
 				? card
 				: card.update(newCard).update({
-						entityId: hideEntityId ? null : entityId,
-						cardId: cardId,
-						cardName: this.allCards.getCard(cardId).name,
-					} as DeckCard),
+					entityId: hideEntityId ? null : entityId,
+					cardId: cardId,
+					cardName: this.allCards.getCard(cardId).name,
+				} as DeckCard),
 		);
 	}
 

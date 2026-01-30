@@ -425,15 +425,25 @@ export class GameStateService {
 			);
 		}
 
-		// console.debug(
-		// 	'[game-state] processed event',
-		// 	gameEvent.type,
-		// 	gameEvent.cardId,
-		// 	`entityId:${gameEvent.entityId}`,
-		// 	(gameEvent as MinionsDiedEvent)?.additionalData?.deadMinions?.map((m) => `entityId:${m.EntityId}`),
-		// 	currentState,
-		// 	gameEvent,
-		// );
+		if (![
+			GameEvent.TOTAL_ATTACK_ON_BOARD,
+			GameEvent.ZONE_POSITION_CHANGED,
+			GameEvent.RESOURCES_UPDATED,
+			GameEvent.NUM_CARDS_DRAW_THIS_TURN,
+			GameEvent.GAME_STATE_UPDATE,
+			GameEvent.SUB_SPELL_START,
+			GameEvent.SUB_SPELL_END,
+		].includes(gameEvent.type)) {
+			console.debug(
+				'[game-state] processed event',
+				gameEvent.type,
+				gameEvent.cardId,
+				`entityId:${gameEvent.entityId}`,
+				(gameEvent as MinionsDiedEvent)?.additionalData?.deadMinions?.map((m) => `entityId:${m.EntityId}`),
+				currentState,
+				gameEvent,
+			);
+		}
 		return currentState;
 	}
 
