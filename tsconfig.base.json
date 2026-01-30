@@ -39,6 +39,7 @@
 			"@firestone/constructed/view": ["libs/constructed/view/src/index.ts"],
 			"@firestone/discord": ["libs/discord/src/index.ts"],
 			"@firestone/electron/common": ["libs/electron/common/src/index.ts"],
+			"@firestone/electron/view": ["libs/electron/view/src/index.ts"],
 			"@firestone/game-state": ["libs/game-state/src/index.ts"],
 			"@firestone/legacy/feature-shell": ["libs/legacy/feature-shell/src/index.ts"],
 			"@firestone/lottery/common": ["libs/lottery/common/src/index.ts"],

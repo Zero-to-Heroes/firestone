@@ -1,0 +1,36 @@
+{
+	"name": "firestone/electron/view",
+	"$schema": "../../../node_modules/nx/schemas/project-schema.json",
+	"sourceRoot": "libs/electron/view/src",
+	"prefix": "firestone",
+	"projectType": "library",
+	"tags": [],
+	"targets": {
+		"build": {
+			"executor": "@nx/angular:ng-packagr-lite",
+			"outputs": ["{workspaceRoot}/dist/{projectRoot}"],
+			"options": {
+				"project": "libs/electron/view/ng-package.json"
+			},
+			"configurations": {
+				"production": {
+					"tsConfig": "libs/electron/view/tsconfig.lib.prod.json"
+				},
+				"development": {
+					"tsConfig": "libs/electron/view/tsconfig.lib.json"
+				}
+			},
+			"defaultConfiguration": "production"
+		},
+		"test": {
+			"executor": "@nx/jest:jest",
+			"outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+			"options": {
+				"jestConfig": "libs/electron/view/jest.config.ts"
+			}
+		},
+		"lint": {
+			"executor": "@nx/eslint:lint"
+		}
+	}
+}

@@ -1,0 +1,168 @@
+body,
+html {
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+}
+
+body {
+	background-color: transparent;
+	border: 0;
+	margin: 0;
+	padding: 0;
+	// overflow: hidden;
+}
+
+.top {
+	position: relative;
+	height: 100%;
+	// overflow: hidden;
+
+	&.maximized {
+		.resize {
+			display: none;
+		}
+	}
+}
+
+.root {
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+	// overflow: hidden;
+	// For an obscure reason, the drop-shadow makes the ads not clickable
+	// A solution could be to include the ads in the parent, outside of the div
+	// that has the drop-shadow. Will do that if we feel the shadown is really
+	// missing
+	// filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.75));
+}
+
+.app-container {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	// overflow: hidden;
+	// background-size: 100%;
+	background-size: cover;
+	// background-repeat: round;
+	background-image: var(--window-background-image);
+	outline: 1px solid var(--window-outline-color);
+	z-index: 1;
+
+	.cdk-overlay-backdrop {
+		background: transparent;
+		transition: opacity 0.25s ease-in-out, background 0.25s ease-in-out;
+		opacity: 0;
+
+		&.cdk-overlay-backdrop-showing {
+			background: var(--confirmation-backdrop-color);
+			opacity: 0.6;
+
+			// Not sure exactly why this was needed, but at least now it's limited to social shares
+			&.social-share-backdrop {
+				pointer-events: all !important;
+			}
+		}
+
+		&.card-tooltip-backdrop {
+			opacity: 0.8;
+			// pointer-events: none !important;
+		}
+	}
+}
+
+.background-backup {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-image: var(--window-background-image-backup);
+}
+
+.resize {
+	position: fixed;
+	z-index: 1000;
+	opacity: 0.5;
+
+	&.top {
+		top: 0;
+		cursor: n-resize;
+	}
+
+	&.bottom {
+		bottom: 0;
+		cursor: s-resize;
+	}
+
+	&.left {
+		left: 0;
+		cursor: e-resize;
+	}
+
+	&.right {
+		right: 0;
+		cursor: w-resize;
+		z-index: 1;
+	}
+
+	&.horizontal {
+		left: 0;
+		right: 0;
+		height: 4px;
+		// background-color: yellow;
+	}
+
+	&.vertical {
+		top: 0;
+		bottom: 0;
+		width: 4px;
+		// background-color: red;
+	}
+
+	&.corner {
+		width: 4px;
+		height: 4px;
+		// background-color: green;
+	}
+
+	&.top-left {
+		top: 0;
+		left: 0;
+		cursor: nw-resize;
+	}
+
+	&.top-right {
+		top: 0;
+		right: 0;
+		cursor: ne-resize;
+	}
+
+	&.bottom-left {
+		bottom: 0;
+		left: 0;
+		cursor: sw-resize;
+	}
+
+	&.bottom-right {
+		bottom: 0;
+		right: 0;
+		cursor: se-resize;
+	}
+}
+
+.screen-capture-effect {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	display: flex;
+	background: white;
+	opacity: 1;
+	z-index: 1;
+}
