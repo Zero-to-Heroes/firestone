@@ -1,5 +1,5 @@
 {
-	"name": "@firestone/settings",
+	"name": "@firestone/settings/view",
 	"version": "0.0.1",
 	"peerDependencies": {
 		"@angular/common": "^15.0.0",

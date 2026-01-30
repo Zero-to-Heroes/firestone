@@ -417,7 +417,7 @@ import { MemoryModule } from '@firestone/memory';
 import { MercenariesCommonModule, MercenariesMemoryCacheService } from '@firestone/mercenaries/common';
 import { ModsCommonModule } from '@firestone/mods/common';
 import { ReplayColiseumModule } from '@firestone/replay/coliseum';
-import { SettingsModule } from '@firestone/settings';
+import { SettingsViewModule } from '@firestone/settings/view';
 import { Events } from '@firestone/shared/common/service';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
 import { CdkOverlayContainer, Store } from '@firestone/shared/framework/common';
@@ -679,7 +679,7 @@ try {
 		CollectionCommonModule,
 		MercenariesCommonModule,
 		MainwindowCommonModule,
-		SettingsModule,
+		SettingsViewModule,
 		TwitchCommonModule,
 		ModsCommonModule,
 		ProfileCommonModule,

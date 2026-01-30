@@ -44,10 +44,11 @@ import {
 	DeckParserFacadeService,
 	GameStateService,
 } from '@firestone/game-state';
+import { LotteryService, LotteryWidgetControllerService } from '@firestone/lottery/common';
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { BgsSceneService, CardChoicesService, CardMousedOverService } from '@firestone/memory';
 import { AccountService } from '@firestone/profile/common';
-import { BootstrapSettingsService, SettingsControllerService } from '@firestone/settings';
+import { BootstrapSettingsService, SettingsControllerService } from '@firestone/settings/view';
 import {
 	AppNavigationService,
 	ExpertContributorsService,
@@ -62,7 +63,6 @@ import { AchievementsLiveProgressTrackingService } from '../../js/services/achie
 import { AdService } from '../../js/services/ad.service';
 import { BgsPerfectGamesService } from '../../js/services/battlegrounds/bgs-perfect-games.service';
 import { DecksProviderService } from '../../js/services/decktracker/main/decks-provider.service';
-import { LotteryService, LotteryWidgetControllerService } from '@firestone/lottery/common';
 import { CollectionBootstrapService } from '../../js/services/mainwindow/store/collection-bootstrap.service';
 import { MainWindowStateFacadeService } from '../../js/services/mainwindow/store/main-window-state-facade.service';
 import { MainWindowStoreService } from '../../js/services/mainwindow/store/main-window-store.service';

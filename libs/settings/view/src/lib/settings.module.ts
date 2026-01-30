@@ -74,4 +74,4 @@ const components = [
 	declarations: components,
 	exports: components,
 })
-export class SettingsModule {}
+export class SettingsViewModule {}

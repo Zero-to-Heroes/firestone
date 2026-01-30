@@ -21,7 +21,7 @@ import {
 	isBattlegroundsScene,
 } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
-import { CustomAppearanceService } from '@firestone/settings';
+import { CustomAppearanceService } from '@firestone/settings/view';
 import { PreferencesService, ScalingService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import {

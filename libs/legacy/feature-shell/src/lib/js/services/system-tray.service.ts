@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
-import { SettingsControllerService } from '@firestone/settings';
+import { SettingsControllerService } from '@firestone/settings/view';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { sleep } from '@firestone/shared/framework/common';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
