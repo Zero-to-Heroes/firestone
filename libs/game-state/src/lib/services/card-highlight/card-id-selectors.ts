@@ -2220,6 +2220,11 @@ export const cardIdSelector = (
 				and(side(inputSide), or(inHand, inDeck), holy, spell),
 				and(side(inputSide), or(inHand, inDeck), shadow, spell),
 			);
+		// Lightforged Crusader: "Battlecry: If your deck has no Neutral cards, add 5 random Paladin cards to your hand."
+		case CardIds.LightforgedCrusader:
+		// Lightforged Zealot: "Battlecry: If your deck has no Neutral cards, equip a 4/2 Truesilver Champion."
+		case CardIds.LightforgedZealot:
+			return and(side(inputSide), inDeck, neutral);
 		case CardIds.Lightray:
 			return and(side(inputSide), or(inHand, inDeck), paladin);
 		case CardIds.Lightspeed_GDB_457:
@@ -3578,6 +3583,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.TheBoomship:
 			return and(side(inputSide), or(inHand, inDeck), minion);
+		// The Countess: "Battlecry: If your deck has no Neutral cards, add 3 Legendary Invitations to your hand."
 		case CardIds.TheCountess:
 			return and(side(inputSide), inDeck, neutral);
 		case CardIds.TheCurator_KAR_061:
@@ -3607,8 +3613,9 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), spell, holy);
 		case CardIds.GaronaHalforcen_TheKingslayersToken_TIME_875t1:
 			return and(inDeck, legendary);
+		// The Purator: "Battlecry: If your deck has no Neutral cards, draw a minion of each minion type."
 		case CardIds.ThePurator:
-			return and(side(inputSide), inDeck, minion, not(tribeless));
+			return and(side(inputSide), inDeck, neutral);
 		case CardIds.Therazane_DEEP_036:
 			return and(side(inputSide), or(inHand, inDeck), elemental);
 		case CardIds.TheStoneOfJordanTavernBrawlToken:
