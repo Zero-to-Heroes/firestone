@@ -27,7 +27,7 @@ import {
 } from '@firestone/game-state';
 import { CardMousedOverService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { AbstractSubscriptionComponent, uuidShort } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent, arraysEqual, uuidShort } from '@firestone/shared/framework/common';
 import {
 	ADS_SERVICE_TOKEN,
 	CardsFacadeService,
@@ -650,7 +650,9 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		this.isDredged = card.dredged && !card.zone;
 		// For now don't recompute the info dynamically (with the logic from onMouseEnter). If I start getting feedback
 		// that this is an issue, I'll revisit
-		this.relatedCardIds = this.relatedCardIds ?? card.relatedCardIds;
+		this.relatedCardIds = arraysEqual(this.relatedCardIds, card.relatedCardIds)
+			? this.relatedCardIds
+			: card.relatedCardIds;
 
 		this.isBurned = !groupSameCardsTogether && (card.zone === 'BURNED' || card.milled);
 		this.isDiscarded = !groupSameCardsTogether && card.zone === 'DISCARD';
