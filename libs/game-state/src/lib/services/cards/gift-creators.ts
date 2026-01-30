@@ -325,6 +325,7 @@ const internalGiftCreators = [
 	CardIds.ExpiredMerchant,
 	CardIds.ExplorersHat_WON_022,
 	CardIds.ExplorersHat,
+	CardIds.ExplorersHat_ExplorersHatEnchantment,
 	CardIds.EyeOfChaos_YOG_515,
 	CardIds.Falric_CORE_EDR_003,
 	CardIds.FalseDisciple,
