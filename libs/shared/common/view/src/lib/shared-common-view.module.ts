@@ -11,8 +11,6 @@ import { VirtualScrollerModule } from '@sebastientromp/ngx-virtual-scroller';
 import { InlineSVGModule } from 'ng-inline-svg-2';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { CardTileComponent } from './components/card/card-tile.component';
-import { LoadingStateComponent } from './components/loading/loading-state.component';
-import { WithLoadingComponent } from './components/loading/with-loading.component';
 import { BasicBarChart2Component } from './components/charts/basic-bar-chart-2.component';
 import { StatCellComponent } from './components/charts/stat-cell.component';
 import { CopyDesckstringComponent } from './components/deck/copy-deckstring.component';
@@ -27,6 +25,8 @@ import { NumericInputWithArrowsComponent } from './components/input/numeric-inpu
 import { NumericInputComponent } from './components/input/numeric-input.component';
 import { PreferenceNumericInputComponent } from './components/input/preference-numeric-input.component';
 import { TextInputComponent } from './components/input/text-input.component';
+import { LoadingStateComponent } from './components/loading/loading-state.component';
+import { WithLoadingComponent } from './components/loading/with-loading.component';
 import { ProgressBarComponent } from './components/misc/progress-bar.component';
 import { ScrollableDirective } from './components/misc/scrollable.directive';
 import { PreferenceSliderComponent } from './components/slider/preference-slider.component';
@@ -42,6 +42,7 @@ import { ComponentTooltipDirective } from './components/tooltip/component-toolti
 import { ConfirmationComponent } from './components/tooltip/confirmation.component';
 import { HelpTooltipComponent } from './components/tooltip/help-tooltip.component';
 import { HelpTooltipDirective } from './components/tooltip/help-tooltip.directive';
+import { ActiveThemeDirective } from './directives/active-theme.directive';
 import { PremiumSettingDirective } from './directives/premium-setting.directive';
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 import { ShortDatePipe } from './pipes/short-date.pipe';
@@ -56,6 +57,7 @@ const components = [
 	HelpTooltipComponent,
 	ComponentTooltipDirective,
 	CachedComponentTooltipDirective,
+	ActiveThemeDirective,
 	CardTileComponent,
 	CopyDesckstringComponent,
 	DeckListBasicComponent,

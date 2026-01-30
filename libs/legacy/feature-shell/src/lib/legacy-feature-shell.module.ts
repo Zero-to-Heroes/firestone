@@ -424,11 +424,15 @@ import { CdkOverlayContainer, Store } from '@firestone/shared/framework/common';
 import {
 	ADS_SERVICE_TOKEN,
 	CARDS_HIGHLIGHT_SERVICE_TOKEN,
-	CardsFacadeService, HOTKEY_HANDLER_SERVICE_TOKEN, ILocalizationService,
+	CardsFacadeService,
+	HOTKEY_HANDLER_SERVICE_TOKEN,
+	ILocalizationService,
 	PLAUSIBLE_DOMAIN,
 	SharedFrameworkCoreModule,
 	USER_SERVICE_TOKEN,
-	UserService, WINDOW_HANDLER_SERVICE_TOKEN, setAppInjector
+	UserService,
+	WINDOW_HANDLER_SERVICE_TOKEN,
+	setAppInjector,
 } from '@firestone/shared/framework/core';
 import { StatsCommonModule } from '@firestone/stats/common';
 import { StatsDataAccessModule } from '@firestone/stats/data-access';
@@ -525,7 +529,6 @@ import { TwitterShareButtonComponent } from './js/components/sharing/twitter/twi
 import { TwitterShareModalComponent } from './js/components/sharing/twitter/twitter-share-modal.component';
 import { VersionComponent } from './js/components/version.component';
 import { WindowWrapperComponent } from './js/components/window-wrapper.component';
-import { ActiveThemeDirective } from './js/directives/active-theme.directive';
 import { BindCssVariableDirective } from './js/directives/bind-css-variable-directive';
 import { DoubleClickDirective } from './js/directives/exclusive-double-click.directive';
 import { GrowOnClickDirective } from './js/directives/grow-on-click.directive';
@@ -715,7 +718,6 @@ try {
 		HotkeyComponent,
 		VersionComponent,
 
-		ActiveThemeDirective,
 		PulseDirective,
 		BindCssVariableDirective,
 		GrowOnClickDirective,
