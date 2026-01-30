@@ -29,6 +29,7 @@ import { PlayerGameState } from '../models/full-game-state';
 import { GameState } from '../models/game-state';
 import { hasDynamicPool } from '../services/cards/_card.type';
 import { cardsInfoCache } from '../services/cards/_mapping';
+import { buildExcavateTreasures } from './excavate-treasures';
 
 const IMBUED_HERO_POWERS = [
 	CardIds.BlessingOfTheDragon_EDR_445p,
@@ -91,6 +92,18 @@ const getDynamicRelatedCardIdsInternal = (
 			allCards,
 			inputOptions: options,
 		});
+	}
+
+	// Handle excavate cards - show the pool of treasures they can create
+	const refCard = allCards.getCard(cardId);
+	if (hasMechanic(refCard, GameTag.EXCAVATE)) {
+		const excavateTreasures = getExcavateTreasuresPool(
+			inputOptions.deckState,
+			inputOptions.deckState?.hero?.classes ?? [],
+		);
+		if (excavateTreasures.length > 0) {
+			return excavateTreasures;
+		}
 	}
 
 	switch (cardId) {
@@ -1798,4 +1811,19 @@ const wantsColossalMinions = (sourceCardId: string): boolean => {
 		default:
 			return false;
 	}
+};
+
+// Helper function for excavate pool
+const getExcavateTreasuresPool = (
+	deckState: DeckState | undefined,
+	playerClasses: readonly CardClass[],
+): readonly string[] => {
+	if (!deckState) {
+		return [];
+	}
+
+	const maxTier = deckState.maxExcavateTier + 1;
+	// The next tier the player will excavate to (1-indexed)
+	const nextTier = (deckState.currentExcavateTier % maxTier) + 1;
+	return buildExcavateTreasures(nextTier, playerClasses);
 };
