@@ -30,6 +30,7 @@ export { Brightwing } from './brightwing';
 export { BrutishEndmaw } from './brutish-endmaw';
 export { Burgle } from './burgle';
 export { BygoneEchoes } from './bygone-echoes';
+export { CabalistsTome } from './cabalists-tome';
 export { CavernDreamer } from './cavern-dreamer';
 export { ChampionsOfAzeroth } from './champions-of-azeroth';
 export { Chromie } from './chromie';
