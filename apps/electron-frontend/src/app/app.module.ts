@@ -1,8 +1,10 @@
-import { CommonModule, LocationStrategy, HashLocationStrategy } from '@angular/common';
+import { CommonModule, HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { ElectronViewModule } from '@firestone/electron/view';
 import { LegacyFeatureShellModule } from '@firestone/legacy/feature-shell';
 import { StandaloneAdService } from '@firestone/shared/common/service';
+import { SharedCommonViewModule } from '@firestone/shared/common/view';
 import {
 	ADS_SERVICE_TOKEN,
 	CardsFacadeService,
@@ -14,10 +16,19 @@ import { LocalizationFacadeService } from '@legacy-import/src/lib/js/services/lo
 import { AppComponent } from './app.component';
 import { appRoutes } from './app.routes';
 import { ElectronOverlayComponent } from './overlay/electron-overlay.component';
+import { ElectronSettingsComponent } from './overlay/electron-settings.component';
 
 @NgModule({
-	imports: [CommonModule, LegacyFeatureShellModule, RouterModule.forRoot(appRoutes)],
-	declarations: [AppComponent, ElectronOverlayComponent],
+	imports: [
+		CommonModule,
+
+		LegacyFeatureShellModule,
+		SharedCommonViewModule,
+		ElectronViewModule,
+
+		RouterModule.forRoot(appRoutes),
+	],
+	declarations: [AppComponent, ElectronOverlayComponent, ElectronSettingsComponent],
 	providers: [
 		{ provide: CardsFacadeService, useExisting: CardsFacadeStandaloneService },
 		{ provide: ILocalizationService, useExisting: LocalizationStandaloneService },

@@ -1,0 +1,12 @@
+.controls {
+	position: absolute;
+	height: 30px;
+	display: flex;
+	z-index: 1;
+	margin-right: -10px;
+	align-items: center;
+	justify-content: flex-end;
+	width: 100%;
+
+	--on-close-button-background-color: var(--on-control-button-background-color);
+}
