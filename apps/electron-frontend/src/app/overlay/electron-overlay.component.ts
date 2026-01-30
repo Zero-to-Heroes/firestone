@@ -44,22 +44,17 @@ export class ElectronOverlayComponent implements OnInit, OnDestroy {
 	) {}
 
 	async ngOnInit() {
-		console.log('[ElectronOverlay] Initializing...');
-
-		console.log('[ElectronOverlay] Initializing cards...');
 		const service = new AllCardsService();
 		await service.initializeCardsDb();
 		await this.allCards.init(service, 'enUS');
-		console.log('[ElectronOverlay] Cards initialized...');
 
-		console.log('[i18n] [ElectronOverlay] Initializing localization...');
 		await this.initLocalization();
-		console.log('[i18n] [ElectronOverlay] Localization initialized...');
 
 		await waitForReady(this.gameStatusService, this.memoryUpdateService);
 
 		this.init_ScalingService.subscribeToWindowHeight(true);
 
+		document.title = 'Firestone Overlay';
 		this.ready = true;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

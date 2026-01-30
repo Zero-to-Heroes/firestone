@@ -1,6 +1,6 @@
 import { sleep, sortByProperties } from '@firestone/shared/framework/common';
 import { BehaviorSubject, distinctUntilChanged, map, Observable } from 'rxjs';
-import { DropdownOption, SettingContext, SettingNode } from '../../settings.types';
+import { DropdownOption, Setting, SettingButton, SettingContext, SettingNode } from '../../settings.types';
 
 const isRefreshingGames$$ = new BehaviorSubject<boolean>(false);
 const settingImportStatus$$ = new BehaviorSubject<'done' | 'working' | 'showing-confirmation'>('done');
@@ -48,12 +48,14 @@ export const generalDataSettings = (context: SettingContext): SettingNode => {
 							},
 						},
 					},
-					{
-						label: context.i18n.translateString('settings.general.data.open-local-cache-folder'),
-						text: context.i18n.translateString('settings.general.data.open-local-cache-folder-button'),
-						tooltip: null,
-						action: async () => context.ow.openLocalCacheFolder(),
-					},
+					!!context.ow
+						? {
+								label: context.i18n.translateString('settings.general.data.open-local-cache-folder'),
+								text: context.i18n.translateString('settings.general.data.open-local-cache-folder-button'),
+								tooltip: null,
+								action: async () => context.ow.openLocalCacheFolder(),
+							}
+						: null,
 					{
 						label: context.i18n.translateString('settings.general.data.clear-local-cache'),
 						text: clearCacheButtonText$(context),
@@ -65,7 +67,7 @@ export const generalDataSettings = (context: SettingContext): SettingNode => {
 							isClearingLocalCache$$.next(false);
 						},
 					},
-				],
+				].filter((s) => !!s) as readonly (Setting | SettingButton)[],
 			},
 			{
 				id: 'general-data-games',
@@ -109,32 +111,36 @@ export const generalDataSettings = (context: SettingContext): SettingNode => {
 				id: 'general-data-settings',
 				title: context.i18n.translateString('settings.general.data.settings-title'),
 				settings: [
-					{
-						label: context.i18n.translateString('settings.general.data.export-settings-button-label'),
-						text: context.i18n.translateString('settings.general.data.export-settings-button-label'),
-						tooltip: context.i18n.translateString('settings.general.data.export-settings-button-tooltip'),
-						action: async () => {
-							await context.services.settingsController.exportSettings();
-							context.ow.openLocalCacheFolder();
-						},
-					},
-					{
-						label: context.i18n.translateString('settings.general.data.import-settings-button-label'),
-						text: importingSettingsButtonText$(context),
-						tooltip: context.i18n.translateString('settings.general.data.import-settings-button-tooltip'),
-						action: async () => {
-							const selectedFilePath = await context.ow.openAppFilePicker();
-							if (selectedFilePath != null) {
-								settingImportStatus$$.next('working');
-								await context.services.settingsController.importSettings(selectedFilePath);
-								await sleep(1000);
-								settingImportStatus$$.next('showing-confirmation');
-								await sleep(8000);
-								settingImportStatus$$.next('done');
+					!!context.ow
+						? {
+								label: context.i18n.translateString('settings.general.data.export-settings-button-label'),
+								text: context.i18n.translateString('settings.general.data.export-settings-button-label'),
+								tooltip: context.i18n.translateString('settings.general.data.export-settings-button-tooltip'),
+								action: async () => {
+									await context.services.settingsController.exportSettings();
+									context.ow.openLocalCacheFolder();
+								},
 							}
-						},
-					},
-				],
+						: null,
+					!!context.ow
+						? {
+								label: context.i18n.translateString('settings.general.data.import-settings-button-label'),
+								text: importingSettingsButtonText$(context),
+								tooltip: context.i18n.translateString('settings.general.data.import-settings-button-tooltip'),
+								action: async () => {
+									const selectedFilePath = await context.ow.openAppFilePicker();
+									if (selectedFilePath != null) {
+										settingImportStatus$$.next('working');
+										await context.services.settingsController.importSettings(selectedFilePath);
+										await sleep(1000);
+										settingImportStatus$$.next('showing-confirmation');
+										await sleep(8000);
+										settingImportStatus$$.next('done');
+									}
+								},
+							}
+						: null,
+				].filter((s) => !!s) as readonly (Setting | SettingButton)[],
 			},
 			// {
 			// 	id: 'general-data-other',

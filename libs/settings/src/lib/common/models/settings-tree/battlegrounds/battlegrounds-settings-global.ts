@@ -38,7 +38,7 @@ export const battlegroundsGlobalSettings = (context: SettingContext): SettingNod
 						tooltip: context.i18n.translateString('settings.battlegrounds.general.integrated-mode-tooltip'),
 						disabledIf: (prefs: Preferences) => !prefs.bgsFullToggle || !prefs.bgsEnableApp,
 						toggleConfig: {
-							toggleFunction: (newValue: boolean) => context.ow.getMainWindow().reloadBgWindows(),
+							toggleFunction: (newValue: boolean) => context.ow?.getMainWindow?.().reloadBgWindows(),
 						},
 					},
 					{

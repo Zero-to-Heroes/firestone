@@ -18,7 +18,7 @@ import { troubleshootingSettings } from './troubleshooting/_troubleshooting-sett
  * - Mercenaries Quest. It's quite a lot of work, and I don't think it's used
  */
 export const settingsDefinition = (context: SettingContext): SettingNode => {
-	return {
+	const result = {
 		id: 'root',
 		name: context.i18n.translateString('settings.title'),
 		keywords: null,
@@ -38,6 +38,8 @@ export const settingsDefinition = (context: SettingContext): SettingNode => {
 			context.services.account.region$$.value !== BnetRegion.REGION_CN ? modsSettings(context) : null,
 		].filter((c) => !!c) as SettingNode[],
 	};
+	console.debug('[debug] [settings-definition] root node', result);
+	return result;
 };
 
 export const findNode = (node: SettingNode | null, id: string | undefined | null): SettingNode | null => {

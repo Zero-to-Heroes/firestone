@@ -32,6 +32,7 @@
 					"apps/legacy/src/styles.scss",
 					"libs/shared/styles/src/lib/styles/battlegrounds-theme.scss",
 					"libs/shared/styles/src/lib/styles/decktracker-theme.scss",
+					"libs/shared/styles/src/lib/styles/general-theme.scss",
 					"apps/electron-frontend/src/styles.scss"
 				],
 				"allowedCommonJsDependencies": [

@@ -26,7 +26,7 @@ export const generalLaunchSettings = (context: SettingContext): SettingNode => {
 						toggleConfig: {
 							toggleFunction: (newValue: boolean) => {
 								console.debug('changing integrated mode', newValue);
-								context.ow.getMainWindow().reloadWindows();
+								context.ow?.getMainWindow?.().reloadWindows();
 							},
 						},
 					},

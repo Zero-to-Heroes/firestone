@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ElectronViewModule } from '@firestone/electron/view';
 import { LegacyFeatureShellModule } from '@firestone/legacy/feature-shell';
+import { SettingsModule } from '@firestone/settings';
 import { StandaloneAdService } from '@firestone/shared/common/service';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
 import {
@@ -25,6 +26,7 @@ import { ElectronSettingsComponent } from './overlay/electron-settings.component
 		LegacyFeatureShellModule,
 		SharedCommonViewModule,
 		ElectronViewModule,
+		SettingsModule,
 
 		RouterModule.forRoot(appRoutes),
 	],

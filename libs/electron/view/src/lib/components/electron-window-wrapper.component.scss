@@ -1,18 +1,3 @@
-body,
-html {
-	width: 100%;
-	height: 100%;
-	overflow: hidden;
-}
-
-body {
-	background-color: transparent;
-	border: 0;
-	margin: 0;
-	padding: 0;
-	// overflow: hidden;
-}
-
 .top {
 	position: relative;
 	height: 100%;
@@ -55,7 +40,9 @@ body {
 
 	.cdk-overlay-backdrop {
 		background: transparent;
-		transition: opacity 0.25s ease-in-out, background 0.25s ease-in-out;
+		transition:
+			opacity 0.25s ease-in-out,
+			background 0.25s ease-in-out;
 		opacity: 0;
 
 		&.cdk-overlay-backdrop-showing {

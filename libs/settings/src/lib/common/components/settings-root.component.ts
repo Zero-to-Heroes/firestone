@@ -5,6 +5,7 @@ import {
 	ChangeDetectorRef,
 	Component,
 	Inject,
+	Optional,
 	ViewRef,
 } from '@angular/core';
 import { ArenaRewardsService } from '@firestone/arena/common';
@@ -69,7 +70,7 @@ export class SettingsRootComponent extends AbstractSubscriptionComponent impleme
 		private readonly i18n: ILocalizationService,
 		private readonly prefs: PreferencesService,
 		private readonly analytics: AnalyticsService,
-		private readonly ow: OverwolfService,
+		@Optional() private readonly ow: OverwolfService,
 		private readonly controller: SettingsControllerService,
 		private readonly diskCache: DiskCacheService,
 		private readonly gamesLoader: GameStatsLoaderService,
@@ -83,6 +84,12 @@ export class SettingsRootComponent extends AbstractSubscriptionComponent impleme
 	}
 
 	async ngAfterContentInit() {
+		await waitForReady(this.controller);
+		console.debug('[debug] [settings-root] controller ready');
+		await waitForReady(this.gamesLoader);
+		console.debug('[debug] [settings-root] gamesLoader ready');
+		await waitForReady(this.account);
+		console.debug('[debug] [settings-root] account ready');
 		await waitForReady(this.prefs, this.adService, this.controller, this.gamesLoader, this.account);
 
 		this.buttonText$ = this.prefs.preferences$$.pipe(
@@ -94,7 +101,7 @@ export class SettingsRootComponent extends AbstractSubscriptionComponent impleme
 		);
 		this.rootNode$ = this.controller.rootNode$$.asObservable();
 
-		const isBeta = await this.ow.isBetaChannel();
+		const isBeta = (await this.ow?.isBetaChannel?.()) ?? false;
 		const context: SettingContext = {
 			allCards: this.allCards,
 			prefs: this.prefs,
@@ -113,6 +120,7 @@ export class SettingsRootComponent extends AbstractSubscriptionComponent impleme
 				settingsController: this.controller,
 			},
 		};
+		console.debug('[debug] [settings-root] context', context);
 		this.controller.setRootNode(settingsDefinition(context));
 
 		const localeSettings$ = combineLatest([
