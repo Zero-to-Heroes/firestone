@@ -24,7 +24,9 @@ export const buildExcavateTreasures = (tier: number, playerClasses: readonly Car
 		case 3:
 			return EXCAVATE_TREASURE_3_IDS;
 		case 4:
-			return playerClasses.map((playerClass) => getTier4ExcavateTreasure(playerClass)).filter((id) => !!id);
+			return playerClasses
+				.map((playerClass) => getTier4ExcavateTreasure(playerClass))
+				.filter((id) => !!id) as readonly string[];
 		default:
 			return [];
 	}

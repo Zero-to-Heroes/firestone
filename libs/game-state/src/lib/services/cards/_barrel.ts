@@ -60,7 +60,6 @@ export { EarthenMight } from './earthen-might';
 export { EliseTheNavigator } from './elise-the-navigator';
 export { EmergencyMeeting } from './emergency-meeting';
 export { EndtimeMurozond } from './endtime-murozond';
-export { EudorasTreasureHunt } from './eudoras-treasure-hunt';
 export { EternalToil } from './eternal-toil';
 export { EtherealConjurer } from './ethereal-conjurer';
 export { EudorasTreasureHunt } from './eudoras-treasure-hunt';
@@ -214,4 +213,3 @@ export { WorthyExpedition } from './worthy-expedition';
 export { YoggInTheBox } from './yogg-in-the-box';
 export { YrelBeaconOfHope } from './yrel-beacon-of-hope';
 export { ZephrysOptions } from './zephrys-options';
-
