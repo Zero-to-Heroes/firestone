@@ -1,4 +1,5 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
+// Siren Song: Get two random spells from spell schools you haven't cast this game.
 import { CardIds, CardType } from '@firestone-hs/reference-data';
 import { StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
@@ -12,6 +13,7 @@ export const SirenSong: StaticGeneratingCard = {
 		const playedSpellSchoolsSet = new Set(playedSpellSchools);
 
 		// Filter for spells that have a spell school not yet played
+		// No class filter - random spells can come from any class
 		return filterCards(
 			SirenSong.cardIds[0],
 			input.allCards,
