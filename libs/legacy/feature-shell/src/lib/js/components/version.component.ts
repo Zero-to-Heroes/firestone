@@ -7,13 +7,6 @@ import { OverwolfService } from '@firestone/shared/framework/core';
 	styleUrls: [`../../css/component/version.component.scss`],
 	template: `
 		<div class="version-info">v.{{ version }}</div>
-		<!-- <div
-			class="update check"
-			*ngIf="updateStatus === null"
-			inlineSVG="assets/svg/restore.svg"
-			helpTooltip="Check for updates"
-			(click)="checkForUpdates()"
-		></div> -->
 		<div
 			class="update available"
 			*ngIf="updateStatus === 'update-available'"

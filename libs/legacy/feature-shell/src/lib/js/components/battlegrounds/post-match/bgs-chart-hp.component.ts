@@ -12,7 +12,6 @@ import {
 } from '@angular/core';
 import { NumericTurnInfo } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { Label } from 'aws-sdk/clients/cloudhsm';
 import { ChartData, ChartOptions, TooltipItem } from 'chart.js';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
@@ -472,7 +471,7 @@ export class BgsChartHpComponent {
 		return playerOrder;
 	}
 
-	private buildChartLabels(value: { [playerId: string]: readonly NumericTurnInfo[] }): Label[] {
+	private buildChartLabels(value: { [playerId: string]: readonly NumericTurnInfo[] }): string[] {
 		if (!value || !Object.values(value)) {
 			console.error('Could not build chart label for', value);
 			return [];
