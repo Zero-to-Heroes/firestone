@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 @Component({
 	standalone: false,
 	selector: 'electron-settings',
-	styleUrls: [`./settings.component.scss`],
+	styleUrls: [`./electron-settings.component.scss`],
 	template: `
 		Here BE SETTINGS!
 		<!-- <electron-window-wrapper [activeTheme]="'general'" [allowResize]="true">
