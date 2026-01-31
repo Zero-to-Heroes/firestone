@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { GameFormat, GameType } from '@firestone-hs/reference-data';
-import { MemoryInspectionService } from '@firestone/memory';
+import { ArenaInfo, MemoryInspectionService } from '@firestone/memory';
 import { sleep } from '@firestone/shared/framework/common';
 import { filter } from 'rxjs/operators';
 import { DeckParserService } from './deck/deck-parser.service';
@@ -39,7 +39,7 @@ export class GameModeDataService {
 			case GameType.GT_ARENA:
 			case GameType.GT_UNDERGROUND_ARENA:
 				this.triggerRankMatchInfoRetrieve();
-				// this.arenaInfo.triggerArenaInfoRetrieve(spectating);
+				this.triggerArenaInfoRetrieve(spectating);
 				this.triggerPlayerDeckInfoRetrieve(spectating);
 				return;
 			case GameType.GT_MERCENARIES_PVP:
@@ -166,6 +166,22 @@ export class GameModeDataService {
 			}
 			return false;
 		}, 'playerDeckInfo');
+	}
+	
+
+	public async triggerArenaInfoRetrieve(spectating: boolean, callback?: (arenaInfo: ArenaInfo) => void) {
+		if (spectating) {
+			return;
+		}
+		await runLoop(async () => {
+			const arenaInfo = await this.memoryService.getArenaInfo();
+			console.log('[arena-info] retrieved arena info', arenaInfo);
+			if (arenaInfo?.losses != null && arenaInfo?.wins != null) {
+				callback?.(arenaInfo);
+				return true;
+			}
+			return false;
+		}, 'arenaInfo');
 	}
 }
 

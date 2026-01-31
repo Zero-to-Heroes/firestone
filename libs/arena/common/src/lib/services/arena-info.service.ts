@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { isArena, SceneMode } from '@firestone-hs/reference-data';
-import { GameStateFacadeService } from '@firestone/game-state';
+import { GameModeDataService, GameStateFacadeService } from '@firestone/game-state';
 import { ArenaInfo, MemoryInspectionService, SceneService } from '@firestone/memory';
 import { sleep } from '@firestone/shared/framework/common';
 import { BehaviorSubject, distinctUntilChanged, filter, map } from 'rxjs';
@@ -13,6 +13,7 @@ export class ArenaInfoService {
 		private readonly memory: MemoryInspectionService,
 		private readonly scene: SceneService,
 		private readonly gameState: GameStateFacadeService,
+		private readonly gameModeData: GameModeDataService,
 	) {
 		this.init();
 	}
@@ -22,7 +23,9 @@ export class ArenaInfoService {
 
 		this.scene.currentScene$$
 			.pipe(filter((scene) => scene === SceneMode.DRAFT))
-			.subscribe(() => this.triggerArenaInfoRetrieve(false));
+			.subscribe(() =>
+				this.gameModeData.triggerArenaInfoRetrieve(false, (arenaInfo) => this.arenaInfo$$.next(arenaInfo)),
+			);
 
 		this.gameState.gameState$$
 			.pipe(
@@ -31,7 +34,9 @@ export class ArenaInfoService {
 			)
 			.subscribe(({ gameType, spectating }) => {
 				if (isArena(gameType)) {
-					this.triggerArenaInfoRetrieve(spectating);
+					this.gameModeData.triggerArenaInfoRetrieve(spectating, (arenaInfo) =>
+						this.arenaInfo$$.next(arenaInfo),
+					);
 				}
 			});
 	}
@@ -48,21 +53,6 @@ export class ArenaInfoService {
 			this.arenaInfo$$.next(arenaInfo);
 		}
 		return arenaInfo;
-	}
-
-	public async triggerArenaInfoRetrieve(spectating: boolean) {
-		if (spectating) {
-			return;
-		}
-		await runLoop(async () => {
-			const arenaInfo = await this.memory.getArenaInfo();
-			console.log('[arena-info] retrieved arena info', arenaInfo);
-			if (arenaInfo?.losses != null && arenaInfo?.wins != null) {
-				this.arenaInfo$$.next(arenaInfo);
-				return true;
-			}
-			return false;
-		}, 'arenaInfo');
 	}
 }
 
