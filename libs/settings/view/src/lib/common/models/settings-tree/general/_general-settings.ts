@@ -1,4 +1,4 @@
-import { SettingContext, SettingNode } from '../../settings.types';
+import { SettingContext, SettingNode } from '@firestone/settings/services';
 import { generalAccessibilitySettings } from './general-settings-accessibility';
 import { generalAdminSettings } from './general-settings-admin';
 import { generalDataSettings } from './general-settings-data';

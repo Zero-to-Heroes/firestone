@@ -1,6 +1,6 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { Section, SectionReference, Setting, SettingButton, SettingNode } from '../models/settings.types';
+import { Section, SectionReference, Setting, SettingButton, SettingNode } from '@firestone/settings/services';
 
 export const filterSettings = (root: SettingNode, searchString: string | null): SettingNode => {
 	if (!searchString?.length) {

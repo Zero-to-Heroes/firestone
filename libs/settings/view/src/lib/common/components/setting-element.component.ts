@@ -7,11 +7,11 @@ import {
 	Input,
 	ViewRef,
 } from '@angular/core';
+import { Setting } from '@firestone/settings/services';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ADS_SERVICE_TOKEN, IAdsService, waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, filter } from 'rxjs';
-import { Setting } from '../models/settings.types';
 
 @Component({
 	standalone: false,

@@ -1,4 +1,4 @@
-import { SettingContext, SettingNode } from '../../settings.types';
+import { SettingContext, SettingNode } from '@firestone/settings/services';
 import { decktrackerGlobalSettings } from './decktracker-settings-global';
 import { decktrackerLaunchSettings } from './decktracker-settings-launch';
 import { decktrackerLobbySettings } from './decktracker-settings-lobby';

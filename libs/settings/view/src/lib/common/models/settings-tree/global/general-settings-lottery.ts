@@ -1,6 +1,6 @@
+import { SettingContext, SettingNode } from '@firestone/settings/services';
 import { ILocalizationService } from '@firestone/shared/framework/core';
 import { map, tap } from 'rxjs';
-import { SettingContext, SettingNode } from '../../settings.types';
 
 export const generalLotterySettings = (context: SettingContext): SettingNode => {
 	return {

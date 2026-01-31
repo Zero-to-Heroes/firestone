@@ -1,5 +1,5 @@
+import { DropdownOption, SettingContext, SettingNode } from '@firestone/settings/services';
 import { Preferences } from '@firestone/shared/common/service';
-import { DropdownOption, SettingContext, SettingNode } from '../../settings.types';
 
 export const generalNotificationsSettings = (context: SettingContext): SettingNode => {
 	return {

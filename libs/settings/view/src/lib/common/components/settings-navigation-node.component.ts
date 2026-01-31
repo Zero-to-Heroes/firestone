@@ -8,11 +8,10 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
+import { SettingNode, SettingsControllerService } from '@firestone/settings/services';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
-import { SettingNode } from '../models/settings.types';
-import { SettingsControllerService } from '../services/settings-controller.service';
 
 @Component({
 	standalone: false,
@@ -24,7 +23,7 @@ import { SettingsControllerService } from '../services/settings-controller.servi
 			[ngClass]="{
 				'is-leaf': !_node.children?.length,
 				selected: isSelected$ | async,
-				selectable: selectable
+				selectable: selectable,
 			}"
 		>
 			<div class="name" (click)="selectNode()">{{ _node.name }}</div>

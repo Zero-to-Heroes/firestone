@@ -24,16 +24,7 @@ import { PatchesConfigService, Preferences, PreferencesService } from '@fireston
 import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { gameFormatToStatGameFormatType } from '@firestone/stats/data-access';
-import {
-	auditTime,
-	combineLatest,
-	debounceTime,
-	distinctUntilChanged,
-	filter,
-	Observable,
-	shareReplay,
-	takeUntil,
-} from 'rxjs';
+import { combineLatest, debounceTime, distinctUntilChanged, filter, Observable, shareReplay, takeUntil } from 'rxjs';
 import { DecksProviderService } from '../../../services/decktracker/main/decks-provider.service';
 import { GameStatsProviderService } from '../../../services/stats/game/game-stats-provider.service';
 
@@ -248,7 +239,7 @@ export class DeckTrackerOverlayRootComponent
 			takeUntil(this.destroyed$),
 		);
 		this.deck$ = this.gameState.gameState$$.pipe(
-			auditTime(500),
+			// auditTime(500),
 			this.mapData((gameState) => {
 				const deck = !gameState ? null : this.deckExtractor(gameState);
 				// Add some information so that we can have it even when global effects are hidden

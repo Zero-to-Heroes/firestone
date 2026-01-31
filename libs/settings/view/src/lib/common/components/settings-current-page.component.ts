@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { Section, SectionReference, SettingNode, SettingsControllerService } from '@firestone/settings/services';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { findNode } from '../models/settings-tree/_settings-definition';
-import { Section, SectionReference, SettingNode } from '../models/settings.types';
-import { SettingsControllerService } from '../services/settings-controller.service';
 
 @Component({
 	standalone: false,

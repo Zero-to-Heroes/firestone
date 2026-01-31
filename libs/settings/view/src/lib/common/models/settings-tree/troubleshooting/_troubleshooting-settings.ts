@@ -1,4 +1,4 @@
-import { SettingContext, SettingNode } from '../../settings.types';
+import { SettingContext, SettingNode } from '@firestone/settings/services';
 import { generalBugSettings } from './general-settings-bug';
 
 export const troubleshootingSettings = (context: SettingContext): SettingNode => {

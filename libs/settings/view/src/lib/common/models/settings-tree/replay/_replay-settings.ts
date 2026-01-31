@@ -1,4 +1,4 @@
-import { SettingContext, SettingNode } from '../../settings.types';
+import { SettingContext, SettingNode } from '@firestone/settings/services';
 import { replayGeneralSettings } from './replay-settings-general';
 
 export const replaySettings = (context: SettingContext): SettingNode => {

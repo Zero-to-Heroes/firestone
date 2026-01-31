@@ -1,4 +1,4 @@
-import { SettingContext, SettingNode } from '../../settings.types';
+import { SettingContext, SettingNode } from '@firestone/settings/services';
 import { achievementsGeneralSettings } from './achievements-settings-general';
 
 export const achievementsSettings = (context: SettingContext): SettingNode => {

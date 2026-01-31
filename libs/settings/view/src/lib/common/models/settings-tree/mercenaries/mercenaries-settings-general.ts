@@ -1,4 +1,4 @@
-import { SettingContext, SettingNode } from '../../settings.types';
+import { SettingContext, SettingNode } from '@firestone/settings/services';
 import { sizeKnobs } from '../common';
 
 export const mercenariesGeneralSettings = (context: SettingContext): SettingNode => {

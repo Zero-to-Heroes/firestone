@@ -1,4 +1,4 @@
-import { SettingContext, SettingNode } from '../../settings.types';
+import { SettingContext, SettingNode } from '@firestone/settings/services';
 
 export const generalModsSettings = (context: SettingContext): SettingNode => {
 	return {

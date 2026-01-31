@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { BnetRegion } from '@firestone-hs/reference-data';
-import { SettingContext, SettingNode } from '../../settings.types';
+import { SettingContext, SettingNode } from '@firestone/settings/services';
 import { battlegroundsReconnectorSettings } from '../battlegrounds/battlegrounds-settings-reconnector';
 import { generalAppearanceSettings } from '../general/general-settings-appearance';
 import { generalLotterySettings } from './general-settings-lottery';

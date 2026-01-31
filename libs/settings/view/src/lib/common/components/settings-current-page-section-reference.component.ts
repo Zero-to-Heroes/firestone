@@ -1,11 +1,14 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ComponentType } from '@angular/cdk/portal';
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import {
+	SectionReference,
+	SettingsControllerService,
+	SettingsSectionReferenceType,
+} from '@firestone/settings/services';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { SectionReference, SettingsSectionReferenceType } from '../models/settings.types';
-import { SettingsControllerService } from '../services/settings-controller.service';
 import { AppearanceCustomizationPageComponent } from './custom-pages/appearance-customization.component';
 import { SettingsBroadcastComponent } from './custom-pages/settings-broadcast';
 import { SettingsDiscordComponent } from './custom-pages/settings-discord.component';

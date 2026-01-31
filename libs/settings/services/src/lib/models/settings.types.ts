@@ -2,7 +2,6 @@ import { ArenaRewardsService } from '@firestone/arena/common';
 import { ICollectionPackService } from '@firestone/collection/common';
 import { AccountService } from '@firestone/profile/common';
 import { DiskCacheService, Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { Knob } from '@firestone/shared/common/view';
 import {
 	AnalyticsService,
 	CardsFacadeService,
@@ -128,4 +127,10 @@ export interface TextInputConfig {
 export interface NumericInputConfig {
 	readonly minValue?: number;
 	readonly incrementStep?: number;
+}
+
+export interface Knob {
+	readonly absoluteValue?: number;
+	readonly percentageValue?: number;
+	readonly label?: string;
 }

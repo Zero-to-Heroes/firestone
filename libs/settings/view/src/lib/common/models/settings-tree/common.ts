@@ -1,4 +1,4 @@
-import { Setting, SettingContext } from '../settings.types';
+import { Setting, SettingContext } from '@firestone/settings/services';
 import { CounterSetting } from './decktracker/internal/decktracker-settings-internal';
 
 export const sizeKnobs = (context: SettingContext) => [

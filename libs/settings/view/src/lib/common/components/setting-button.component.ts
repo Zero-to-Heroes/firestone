@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { SettingButton } from '@firestone/settings/services';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { Observable } from 'rxjs';
-import { SettingButton } from '../models/settings.types';
 
 @Component({
 	standalone: false,

@@ -1,4 +1,4 @@
-import { SettingContext, SettingNode } from '../../settings.types';
+import { SettingContext, SettingNode } from '@firestone/settings/services';
 import { collectionGeneralSettings } from './collection-settings-general';
 
 export const collectionSettings = (context: SettingContext): SettingNode => {

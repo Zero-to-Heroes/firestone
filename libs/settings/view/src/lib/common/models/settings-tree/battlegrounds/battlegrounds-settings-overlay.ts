@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { getAllCounters } from '@firestone/game-state';
+import { SettingContext, SettingNode } from '@firestone/settings/services';
 import { Preferences } from '@firestone/shared/common/service';
-import { SettingContext, SettingNode } from '../../settings.types';
 import { sizeKnobs, toSetting } from '../common';
 import { CounterSetting } from '../decktracker/internal/decktracker-settings-internal';
 

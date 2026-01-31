@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { getAllCounters } from '@firestone/game-state';
+import { SettingContext, SettingNode } from '@firestone/settings/services';
 import { Preferences } from '@firestone/shared/common/service';
 import { Mutable } from '@firestone/shared/framework/common';
 import { debounceTime, map, Observable } from 'rxjs';
-import { SettingContext, SettingNode } from '../../settings.types';
 import { sizeKnobs, toSetting } from '../common';
 import { CounterSetting } from './internal/decktracker-settings-internal';
 
@@ -287,10 +287,7 @@ const rawCounters = (context: SettingContext): CounterSetting[] => [
 		.filter((counter) => counter.type === 'hearthstone')
 		.filter((counter) => counter.player?.pref)
 		.map((counter) => {
-			const keywords = [
-				...(counter.cards?.map((cardId) => context.allCards.getCard(cardId)?.name) ?? []),
-				...(counter.keywords ?? []),
-			]
+			const keywords = [...(counter.cards?.map((cardId) => context.allCards.getCard(cardId)?.name) ?? []), ...(counter.keywords ?? [])];
 			const result: CounterSetting = {
 				id: counter.id,
 				field: counter.player!.pref,

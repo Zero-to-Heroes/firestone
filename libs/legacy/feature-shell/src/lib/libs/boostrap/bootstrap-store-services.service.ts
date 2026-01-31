@@ -48,7 +48,7 @@ import { LotteryService, LotteryWidgetControllerService } from '@firestone/lotte
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { BgsSceneService, CardChoicesService, CardMousedOverService } from '@firestone/memory';
 import { AccountService } from '@firestone/profile/common';
-import { BootstrapSettingsService, SettingsControllerService } from '@firestone/settings/view';
+import { BootstrapSettingsService, SettingsControllerService } from '@firestone/settings/services';
 import {
 	AppNavigationService,
 	ExpertContributorsService,

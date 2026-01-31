@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AchievementsCommonModule } from '@firestone/achievements/common';
 import { ArenaCommonModule } from '@firestone/arena/common';
 import { CollectionCommonModule } from '@firestone/collection/common';
+import { SettingsServicesModule } from '@firestone/settings/services';
 import { SharedCommonServiceModule } from '@firestone/shared/common/service';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
 import { SharedFrameworkCommonModule } from '@firestone/shared/framework/common';
@@ -25,9 +26,6 @@ import { SettingsCurrentPageComponent } from './common/components/settings-curre
 import { SettingsNavigationNodeComponent } from './common/components/settings-navigation-node.component';
 import { SettingsRootComponent } from './common/components/settings-root.component';
 import { SettingsSearchComponent } from './common/components/settings-search.component';
-import { BootstrapSettingsService } from './common/services/bootstrap-settings.service';
-import { CustomAppearanceService } from './common/services/custom-appearance.service';
-import { SettingsControllerService } from './common/services/settings-controller.service';
 import { CustomColorPickerComponent } from './general/custom-color-picker.component';
 import { SettingsGeneralAppearanceComponent } from './general/settings-general-appearance.component';
 
@@ -69,8 +67,9 @@ const components = [
 		CollectionCommonModule,
 		AchievementsCommonModule,
 		ArenaCommonModule,
+		SettingsServicesModule,
 	],
-	providers: [BootstrapSettingsService, CustomAppearanceService, SettingsControllerService],
+	providers: [],
 	declarations: components,
 	exports: components,
 })

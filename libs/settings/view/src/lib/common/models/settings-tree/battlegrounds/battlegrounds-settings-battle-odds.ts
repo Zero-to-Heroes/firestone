@@ -1,6 +1,6 @@
+import { SettingContext, SettingNode } from '@firestone/settings/services';
 import { Preferences } from '@firestone/shared/common/service';
 import { Knob } from '@firestone/shared/common/view';
-import { SettingContext, SettingNode } from '../../settings.types';
 import { sizeKnobs } from '../common';
 
 export const battlegroundsBattleOddsSettings = (context: SettingContext): SettingNode => {

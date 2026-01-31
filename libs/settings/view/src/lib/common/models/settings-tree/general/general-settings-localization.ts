@@ -1,4 +1,4 @@
-import { DropdownOption, SettingContext, SettingNode } from '../../settings.types';
+import { DropdownOption, SettingContext, SettingNode } from '@firestone/settings/services';
 
 export const generalLocalizationSettings = (context: SettingContext): SettingNode => {
 	return {

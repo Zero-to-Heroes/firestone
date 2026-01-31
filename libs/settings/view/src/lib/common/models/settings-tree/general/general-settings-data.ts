@@ -1,6 +1,6 @@
+import { DropdownOption, Setting, SettingButton, SettingContext, SettingNode } from '@firestone/settings/services';
 import { sleep, sortByProperties } from '@firestone/shared/framework/common';
 import { BehaviorSubject, distinctUntilChanged, map, Observable } from 'rxjs';
-import { DropdownOption, Setting, SettingButton, SettingContext, SettingNode } from '../../settings.types';
 
 const isRefreshingGames$$ = new BehaviorSubject<boolean>(false);
 const settingImportStatus$$ = new BehaviorSubject<'done' | 'working' | 'showing-confirmation'>('done');

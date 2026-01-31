@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { CustomAppearanceService } from '@firestone/settings/services';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
-import { CustomAppearanceService } from '../../services/custom-appearance.service';
 
 @Component({
 	standalone: false,

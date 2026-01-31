@@ -8,10 +8,11 @@ Beta
 
 - settings
 - validate that logged in user is premium / get their premium status
+- custom installer
+
 - BG overlay
     - Hero stats overlay
     - board highlight seems off
-- update builder / overlay tech
 - disk cache on overlay window
 - notifications (component and service, which relies on OW)
 - mercenaries widgets (move store to shared module, like game-state)

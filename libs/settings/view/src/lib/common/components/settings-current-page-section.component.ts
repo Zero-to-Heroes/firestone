@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { Section, Setting, SettingButton } from '@firestone/settings/services';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { BehaviorSubject, filter, Observable, switchMap } from 'rxjs';
-import { Section, Setting, SettingButton } from '../models/settings.types';
 
 @Component({
 	standalone: false,

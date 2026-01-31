@@ -1,5 +1,5 @@
+import { SettingContext, SettingNode } from '@firestone/settings/services';
 import { Preferences } from '@firestone/shared/common/service';
-import { SettingContext, SettingNode } from '../../settings.types';
 import { sizeKnobs } from '../common';
 
 export const battlegroundsBannedTribesSettings = (context: SettingContext): SettingNode => {

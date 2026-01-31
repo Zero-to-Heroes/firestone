@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { CustomAppearanceService, CustomStyleKey, defaultStyleKeys } from '@firestone/settings/services';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
-import { CustomStyleKey, defaultStyleKeys } from '../common/models/custom-appearance';
-import { CustomAppearanceService } from '../common/services/custom-appearance.service';
 
 @Component({
 	standalone: false,

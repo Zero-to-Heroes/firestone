@@ -1,4 +1,4 @@
-import { SettingContext, SettingNode } from '../../settings.types';
+import { SettingContext, SettingNode } from '@firestone/settings/services';
 import { arenaGeneralSettings } from './arena-settings-general';
 import { arenaSessionWidgetSettings } from './arena-settings-session-widget';
 

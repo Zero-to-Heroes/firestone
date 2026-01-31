@@ -1,4 +1,4 @@
-import { Setting, SettingButton, SettingContext, SettingNode } from '../../settings.types';
+import { Setting, SettingButton, SettingContext, SettingNode } from '@firestone/settings/services';
 
 export const generalAdminSettings = (context: SettingContext): SettingNode => {
 	return {

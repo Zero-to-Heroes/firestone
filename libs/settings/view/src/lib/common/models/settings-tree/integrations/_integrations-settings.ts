@@ -1,4 +1,4 @@
-import { SettingContext, SettingNode } from '../../settings.types';
+import { SettingContext, SettingNode } from '@firestone/settings/services';
 import { generalDiscordSettings } from './general-settings-discord';
 import { generalThirdPartiesSettings } from './general-settings-third-parties';
 import { generalTwitchSettings } from './general-settings-twitch';

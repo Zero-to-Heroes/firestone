@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { SettingContext, SettingNode } from '../../settings.types';
+import { SettingContext, SettingNode } from '@firestone/settings/services';
 import { battlegroundsBannedTribesSettings } from './battlegrounds-settings-banned-tribes';
 import { battlegroundsBattleOddsSettings } from './battlegrounds-settings-battle-odds';
 import { battlegroundsGlobalSettings } from './battlegrounds-settings-global';

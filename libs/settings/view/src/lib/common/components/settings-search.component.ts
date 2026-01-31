@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { SettingsControllerService } from '../services/settings-controller.service';
+import { SettingsControllerService } from '@firestone/settings/services';
 
 @Component({
 	standalone: false,

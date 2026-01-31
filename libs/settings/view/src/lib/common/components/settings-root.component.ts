@@ -11,6 +11,7 @@ import {
 import { ArenaRewardsService } from '@firestone/arena/common';
 import { COLLECTION_PACK_SERVICE_TOKEN, ICollectionPackService } from '@firestone/collection/common';
 import { AccountService } from '@firestone/profile/common';
+import { SettingContext, SettingNode, SettingsControllerService } from '@firestone/settings/services';
 import { DiskCacheService, Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import {
@@ -27,9 +28,7 @@ import {
 import { GameStatsLoaderService } from '@firestone/stats/data-access';
 import { combineLatest, Observable } from 'rxjs';
 import { findNode, settingsDefinition } from '../models/settings-tree/_settings-definition';
-import { SettingContext, SettingNode } from '../models/settings.types';
 import { filterSettings } from '../services/search';
-import { SettingsControllerService } from '../services/settings-controller.service';
 
 @Component({
 	standalone: false,

@@ -2,11 +2,13 @@ import {
 	APP_VERSION_SERVICE_TOKEN,
 	EndGameListenerService,
 	EndGameUploaderService,
+	GameNativeStateStoreService,
 	GameParserService,
+	LocalizationLoaderWithCache,
+	QuestsService,
 	ReplayUploadService,
 	RewardMonitorService,
 } from '@firestone/app/common';
-import { GameNativeStateStoreService, LocalizationLoaderWithCache, QuestsService } from '@firestone/app/common';
 import {
 	ArenaCardStatsService,
 	ArenaClassStatsService,
@@ -62,6 +64,7 @@ import {
 	SecretConfigService,
 	SecretsParserService,
 } from '@firestone/game-state';
+import { LotteryFacadeService, LotteryService, LotteryWidgetControllerService } from '@firestone/lottery/common';
 import {
 	CardChoicesService,
 	CardMousedOverService,
@@ -71,11 +74,9 @@ import {
 	MindVisionStateMachineService,
 	SceneService,
 } from '@firestone/memory';
-import { BgsBattleSimulationWorkerService } from './bgs-battle-simulation-worker.service';
-// import { CustomAppearanceService } from '@firestone/settings';
-import { LotteryFacadeService, LotteryService, LotteryWidgetControllerService } from '@firestone/lottery/common';
 import { MercenariesMemoryCacheService, MercenariesReferenceDataService } from '@firestone/mercenaries/common';
 import { AccountService } from '@firestone/profile/common';
+import { CustomAppearanceService } from '@firestone/settings/services';
 import {
 	DiskCacheService,
 	Events,
@@ -104,8 +105,8 @@ import {
 	OwUtilsService,
 	USER_SERVICE_TOKEN,
 	UserService,
-	WindowManagerService,
 	WINDOW_HANDLER_SERVICE_TOKEN,
+	WindowManagerService,
 } from '@firestone/shared/framework/core';
 import { GameStatsLoaderService } from '@firestone/stats/data-access';
 import { MatchAnalysisService, ReplayMetadataBuilderService } from '@firestone/stats/services';
@@ -116,6 +117,7 @@ import {
 	TranslateService,
 	TranslateStore,
 } from '@ngx-translate/core';
+import { BgsBattleSimulationWorkerService } from './bgs-battle-simulation-worker.service';
 import { ElectronAngularInjector } from './electron-angular-injector';
 import { ElectronAppVersionService } from './electron-app-version.service';
 import { ElectronDiskCacheService } from './electron-disk-cache.service';
@@ -303,9 +305,6 @@ export const buildAppInjector = () => {
 	const patchesConfig = new PatchesConfigService(windowManager);
 	electronInjector.register(PatchesConfigService, patchesConfig);
 
-	// const customAppearance = new CustomAppearanceService(windowManager);
-	// electronInjector.register(CustomAppearanceService, customAppearance);
-
 	const bgsBoardHighlighter = new BgsBoardHighlighterService(windowManager);
 	electronInjector.register(BgsBoardHighlighterService, bgsBoardHighlighter);
 
@@ -420,8 +419,7 @@ export const buildAppInjector = () => {
 	const realTimeParsers = new RealTimeStatsParsersService(allCards);
 	electronInjector.register(RealTimeStatsParsersService, realTimeParsers);
 
-	const realTimeStats = new RealTimeStatsService(gameEventsEmitter, scene, realTimeParsers,
-		zone,);
+	const realTimeStats = new RealTimeStatsService(gameEventsEmitter, scene, realTimeParsers, zone);
 	electronInjector.register(RealTimeStatsService, realTimeStats);
 
 	const gameState = new GameStateService(
@@ -480,9 +478,8 @@ export const buildAppInjector = () => {
 	const bgsMetaCompositionStrategies = new BgsMetaCompositionStrategiesService(windowManager);
 	electronInjector.register(BgsMetaCompositionStrategiesService, bgsMetaCompositionStrategies);
 
-	// Need to clean up the settings module first (split components / services)
-	// const customAppearance = new CustomAppearanceService(windowManager);
-	// electronInjector.register(CustomAppearanceService, customAppearance);
+	const customAppearance = new CustomAppearanceService(windowManager);
+	electronInjector.register(CustomAppearanceService, customAppearance);
 
 	const appVersion = new ElectronAppVersionService();
 	electronInjector.register(APP_VERSION_SERVICE_TOKEN, appVersion);

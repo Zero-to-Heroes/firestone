@@ -1,5 +1,5 @@
 import { BnetRegion } from '@firestone-hs/reference-data';
-import { SettingContext, SettingNode } from '../settings.types';
+import { SettingContext, SettingNode } from '@firestone/settings/services';
 import { achievementsSettings } from './achievements/_achievements-settings';
 import { arenaSettings } from './arena/_arena-settings';
 import { battlegroundsSettings } from './battlegrounds/_battlegrounds-settings';
