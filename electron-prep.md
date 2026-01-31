@@ -7,6 +7,7 @@ Beta
 ===============
 
 - settings
+    - when opening as overlay, allow drag & drop and control buttons
 - validate that logged in user is premium / get their premium status
 - custom installer
 - settings window: use custom controls instead of native ones

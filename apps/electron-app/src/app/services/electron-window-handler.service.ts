@@ -171,8 +171,8 @@ export class ElectronWindowHandlerService implements IWindowHandlerService {
 			transparent: false,
 			resizable: false,
 			webPreferences: {
-				contextIsolation: true,
-				backgroundThrottling: false,
+				nodeIntegration: true,
+				contextIsolation: false,
 				preload: preloadPath,
 			},
 		};
