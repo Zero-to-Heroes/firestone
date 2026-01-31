@@ -1,7 +1,7 @@
 import { ElectronGameWindowService } from '@firestone/electron/common';
 import { IBattlegroundsWindowOptions, IWindowHandlerService } from '@firestone/shared/framework/core';
 import { OverlayBrowserWindow, OverlayWindowOptions } from '@overwolf/ow-electron-packages-types';
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, nativeImage } from 'electron';
 import { join } from 'path';
 import App from '../app';
 import { rendererAppPort } from '../constants';
@@ -9,6 +9,29 @@ import { OverlayService } from './overlay.service';
 
 const SETTINGS_WIDTH = 700;
 const SETTINGS_HEIGHT = 620;
+
+function getAppIconPath(): string {
+	return app.isPackaged
+		? join(app.getAppPath(), 'assets', 'tray_icon.png')
+		: join(__dirname, 'assets', 'tray_icon.png');
+}
+
+/**
+ * When DevTools are opened in a separate window, set its icon to match the app.
+ * Call this on a webContents before or after calling openDevTools().
+ */
+function setDevToolsWindowIcon(webContents: Electron.WebContents): void {
+	const iconPath = getAppIconPath();
+	webContents.once('devtools-opened', () => {
+		const devToolsWC = webContents.devToolsWebContents;
+		if (devToolsWC) {
+			const devToolsWindow = BrowserWindow.fromWebContents(devToolsWC);
+			if (devToolsWindow && !devToolsWindow.isDestroyed()) {
+				devToolsWindow.setIcon(iconPath);
+			}
+		}
+	});
+}
 
 /**
  * Electron implementation of window handling. Single place responsible for
@@ -68,12 +91,15 @@ export class ElectronWindowHandlerService implements IWindowHandlerService {
 		}
 
 		const preloadPath = join(__dirname, 'main.preload.js');
+		const windowIcon = nativeImage.createFromPath(getAppIconPath());
+
 		this.settingsWindow = new BrowserWindow({
 			width: SETTINGS_WIDTH,
 			height: SETTINGS_HEIGHT,
 			resizable: false,
 			show: false,
 			title: 'Firestone Settings',
+			icon: windowIcon.isEmpty() ? undefined : windowIcon,
 			webPreferences: {
 				nodeIntegration: true,
 				contextIsolation: false,
@@ -90,6 +116,7 @@ export class ElectronWindowHandlerService implements IWindowHandlerService {
 		});
 
 		if (App.isDevelopmentMode()) {
+			setDevToolsWindowIcon(this.settingsWindow.webContents);
 			this.settingsWindow.webContents.once('did-finish-load', () => {
 				if (!this.settingsWindow?.isDestroyed() && !this.settingsWindow.webContents.isDevToolsOpened()) {
 					this.settingsWindow.webContents.openDevTools({ mode: 'detach', activate: true });
@@ -158,6 +185,7 @@ export class ElectronWindowHandlerService implements IWindowHandlerService {
 		});
 
 		if (App.isDevelopmentMode()) {
+			setDevToolsWindowIcon(this.settingsOverlayWindow.window.webContents);
 			this.settingsOverlayWindow.window.webContents.once('did-finish-load', () => {
 				if (
 					this.settingsOverlayWindow &&

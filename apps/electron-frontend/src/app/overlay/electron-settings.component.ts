@@ -1,12 +1,12 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component } from '@angular/core';
-import { ScalingService } from '@firestone/shared/common/service';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewRef } from '@angular/core';
+import { ElectronEntryPointComponent } from './electron-entry-point.component';
 
 @Component({
 	standalone: false,
 	selector: 'electron-settings',
 	styleUrls: [`./electron-settings.component.scss`],
 	template: `
-		<electron-window-wrapper [activeTheme]="'general'" [allowResize]="true">
+		<electron-window-wrapper [activeTheme]="'general'" [allowResize]="true" *ngIf="ready">
 			<!-- Here BE SETTINGS! -->
 			<!-- <div class="controls">
 				<control-close [windowId]="thisWindowId" [shouldHide]="false"></control-close>
@@ -16,14 +16,21 @@ import { ScalingService } from '@firestone/shared/common/service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ElectronSettingsComponent implements AfterViewInit {
-	constructor(private readonly init_ScalingService: ScalingService) {}
+export class ElectronSettingsComponent extends ElectronEntryPointComponent implements OnInit {
+	ready = false;
 
-	async ngAfterViewInit() {
-		// this.thisWindowId = (await this.ow.getCurrentWindow()).id;
-		console.log('ngAfterViewInit complete');
+	constructor(private readonly cdr: ChangeDetectorRef) {
+		super();
+	}
+
+	async ngOnInit() {
+		await super.ngOnInit();
 
 		// Change the title of the window to "Settings"
 		document.title = 'Settings';
+		this.ready = true;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.markForCheck();
+		}
 	}
 }

@@ -1,15 +1,9 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewRef } from '@angular/core';
-import { AllCardsService } from '@firestone-hs/reference-data';
-import { MemoryUpdatesService, SceneService } from '@firestone/memory';
-import { GameStatusService, PreferencesService, ScalingService } from '@firestone/shared/common/service';
-import {
-	CardsFacadeStandaloneService,
-	ILocalizationService,
-	LocalizationStandaloneService,
-	waitForReady,
-} from '@firestone/shared/framework/core';
-import { TranslateService } from '@ngx-translate/core';
+import { MemoryUpdatesService } from '@firestone/memory';
+import { GameStatusService } from '@firestone/shared/common/service';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { Subscription } from 'rxjs';
+import { ElectronEntryPointComponent } from './electron-entry-point.component';
 
 declare const window: any;
 
@@ -24,7 +18,7 @@ declare const window: any;
 	styleUrls: ['./electron-overlay.component.scss'],
 	changeDetection: ChangeDetectionStrategy.Default,
 })
-export class ElectronOverlayComponent implements OnInit, OnDestroy {
+export class ElectronOverlayComponent extends ElectronEntryPointComponent implements OnInit, OnDestroy {
 	ready = false;
 
 	private subscriptions: Subscription[] = [];
@@ -32,23 +26,13 @@ export class ElectronOverlayComponent implements OnInit, OnDestroy {
 	constructor(
 		private readonly cdr: ChangeDetectorRef,
 		private readonly gameStatusService: GameStatusService,
-		private readonly sceneService: SceneService,
 		private readonly memoryUpdateService: MemoryUpdatesService,
-		private readonly allCards: CardsFacadeStandaloneService,
-		private readonly i18n: ILocalizationService,
-		private readonly init_ScalingService: ScalingService,
-		private readonly prefs: PreferencesService,
-		private readonly translate: TranslateService,
-		private readonly localizationService: LocalizationStandaloneService,
-		// private readonly injector: Injector,
-	) {}
+	) {
+		super();
+	}
 
 	async ngOnInit() {
-		const service = new AllCardsService();
-		await service.initializeCardsDb();
-		await this.allCards.init(service, 'enUS');
-
-		await this.initLocalization();
+		await super.ngOnInit();
 
 		await waitForReady(this.gameStatusService, this.memoryUpdateService);
 
@@ -63,26 +47,5 @@ export class ElectronOverlayComponent implements OnInit, OnDestroy {
 
 	ngOnDestroy() {
 		this.subscriptions.forEach((sub) => sub.unsubscribe());
-	}
-
-	private async initLocalization() {
-		// console.debug('[bootstrap] setting default language');
-		// this language will be used as a fallback when a translation isn't found in the current language
-		// this.translate.setDefaultLang('enUS');
-		// Load the locales first, otherwise some windows will be displayed with missing text
-		let prefs = await this.prefs.getPreferences();
-		console.log('[i18n] setting language', prefs.locale);
-
-		return new Promise<void>((resolve) => {
-			console.log('[i18n] preparing to set language', prefs.locale);
-			this.translate.use(prefs.locale).subscribe(async (info) => {
-				console.log('[i18n] language set', prefs.locale);
-				// await this.localizationService.start(this.translate);
-				await this.localizationService.setLocale(prefs.locale);
-				console.log('[i18n] localization service ready');
-
-				resolve();
-			});
-		});
 	}
 }

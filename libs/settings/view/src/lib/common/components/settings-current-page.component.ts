@@ -5,6 +5,7 @@ import { AbstractSubscriptionComponent } from '@firestone/shared/framework/commo
 import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { findNode } from '../models/settings-tree/_settings-definition';
+import { SettingsUiControllerService } from '../services/settings-ui-controller.service';
 
 @Component({
 	standalone: false,
@@ -38,6 +39,7 @@ export class SettingsCurrentPageComponent extends AbstractSubscriptionComponent 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
 		private readonly controller: SettingsControllerService,
+		private readonly uiController: SettingsUiControllerService,
 	) {
 		super(cdr);
 	}
@@ -46,7 +48,7 @@ export class SettingsCurrentPageComponent extends AbstractSubscriptionComponent 
 		await waitForReady(this.controller);
 
 		this.node$ = this.controller.selectedNodeId$$.pipe(
-			this.mapData((selectedNodeId) => findNode(this.controller.rootNode$$.value, selectedNodeId)),
+			this.mapData((selectedNodeId) => findNode(this.uiController.rootNode$$.value, selectedNodeId)),
 		);
 
 		if (!(this.cdr as ViewRef).destroyed) {

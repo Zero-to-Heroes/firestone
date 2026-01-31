@@ -52,6 +52,7 @@ import {
 	GameEvents,
 	GameEventsEmitterService,
 	GameEventsFacadeService,
+	GameModeDataService,
 	GameStateFacadeService,
 	GameStateMetaInfoService,
 	GameStateParsersService,
@@ -76,7 +77,7 @@ import {
 } from '@firestone/memory';
 import { MercenariesMemoryCacheService, MercenariesReferenceDataService } from '@firestone/mercenaries/common';
 import { AccountService } from '@firestone/profile/common';
-import { CustomAppearanceService } from '@firestone/settings/services';
+import { CustomAppearanceService, SettingsControllerService } from '@firestone/settings/services';
 import {
 	DiskCacheService,
 	Events,
@@ -478,9 +479,6 @@ export const buildAppInjector = () => {
 	const bgsMetaCompositionStrategies = new BgsMetaCompositionStrategiesService(windowManager);
 	electronInjector.register(BgsMetaCompositionStrategiesService, bgsMetaCompositionStrategies);
 
-	const customAppearance = new CustomAppearanceService(windowManager);
-	electronInjector.register(CustomAppearanceService, customAppearance);
-
 	const appVersion = new ElectronAppVersionService();
 	electronInjector.register(APP_VERSION_SERVICE_TOKEN, appVersion);
 
@@ -545,7 +543,10 @@ export const buildAppInjector = () => {
 	const lottery = new LotteryFacadeService(windowManager);
 	electronInjector.register(LotteryFacadeService, lottery);
 
-	const arenaInfo = new ArenaInfoService(memoryInspection, scene, gameStateFacade);
+	const gameModeData = new GameModeDataService(gameEventsEmitter, memoryInspection, deckParser);
+	electronInjector.register(GameModeDataService, gameModeData);
+
+	const arenaInfo = new ArenaInfoService(memoryInspection, scene, gameStateFacade, gameModeData);
 	electronInjector.register(ArenaInfoService, arenaInfo);
 
 	const endGameListener = new EndGameListenerService(
@@ -568,6 +569,12 @@ export const buildAppInjector = () => {
 
 	const notifications = new NotificationsService(windowManager);
 	electronInjector.register(NotificationsService, notifications);
+
+	const customAppearance = new CustomAppearanceService(windowManager);
+	electronInjector.register(CustomAppearanceService, customAppearance);
+
+	const settingsController = new SettingsControllerService(windowManager);
+	electronInjector.register(SettingsControllerService, settingsController);
 
 	return electronInjector;
 };

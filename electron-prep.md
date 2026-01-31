@@ -9,6 +9,7 @@ Beta
 - settings
 - validate that logged in user is premium / get their premium status
 - custom installer
+- settings window: use custom controls instead of native ones
 
 - BG overlay
     - Hero stats overlay

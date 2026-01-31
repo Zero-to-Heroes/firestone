@@ -26,6 +26,7 @@ import { SettingsCurrentPageComponent } from './common/components/settings-curre
 import { SettingsNavigationNodeComponent } from './common/components/settings-navigation-node.component';
 import { SettingsRootComponent } from './common/components/settings-root.component';
 import { SettingsSearchComponent } from './common/components/settings-search.component';
+import { SettingsUiControllerService } from './common/services/settings-ui-controller.service';
 import { CustomColorPickerComponent } from './general/custom-color-picker.component';
 import { SettingsGeneralAppearanceComponent } from './general/settings-general-appearance.component';
 
@@ -69,7 +70,7 @@ const components = [
 		ArenaCommonModule,
 		SettingsServicesModule,
 	],
-	providers: [],
+	providers: [SettingsUiControllerService],
 	declarations: components,
 	exports: components,
 })

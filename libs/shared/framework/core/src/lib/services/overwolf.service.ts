@@ -257,6 +257,9 @@ export class OverwolfService {
 	}
 
 	public async isBetaChannel(): Promise<boolean> {
+		if (!this.isOwEnabled()) {
+			return false;
+		}
 		return new Promise<boolean>((resolve) => {
 			overwolf.settings.getExtensionSettings((settingsResult) => {
 				resolve(settingsResult?.settings?.channel === 'beta' || process.env['NODE_ENV'] !== 'production');

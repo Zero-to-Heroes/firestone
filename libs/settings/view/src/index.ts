@@ -13,6 +13,7 @@ export * from './lib/common/components/settings-navigation-node.component';
 export * from './lib/common/components/settings-root.component';
 export * from './lib/common/components/settings-search.component';
 export * from './lib/common/services/search';
+export * from './lib/common/services/settings-ui-controller.service';
 export * from './lib/general/custom-color-picker.component';
 export * from './lib/general/settings-general-appearance.component';
 export * from './lib/settings-view.module';

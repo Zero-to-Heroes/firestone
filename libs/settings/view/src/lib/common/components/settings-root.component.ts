@@ -29,6 +29,7 @@ import { GameStatsLoaderService } from '@firestone/stats/data-access';
 import { combineLatest, Observable } from 'rxjs';
 import { findNode, settingsDefinition } from '../models/settings-tree/_settings-definition';
 import { filterSettings } from '../services/search';
+import { SettingsUiControllerService } from '../services/settings-ui-controller.service';
 
 @Component({
 	standalone: false,
@@ -71,6 +72,7 @@ export class SettingsRootComponent extends AbstractSubscriptionComponent impleme
 		private readonly analytics: AnalyticsService,
 		@Optional() private readonly ow: OverwolfService,
 		private readonly controller: SettingsControllerService,
+		private readonly uiController: SettingsUiControllerService,
 		private readonly diskCache: DiskCacheService,
 		private readonly gamesLoader: GameStatsLoaderService,
 		private readonly arenaRewards: ArenaRewardsService,
@@ -83,12 +85,6 @@ export class SettingsRootComponent extends AbstractSubscriptionComponent impleme
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.controller);
-		console.debug('[debug] [settings-root] controller ready');
-		await waitForReady(this.gamesLoader);
-		console.debug('[debug] [settings-root] gamesLoader ready');
-		await waitForReady(this.account);
-		console.debug('[debug] [settings-root] account ready');
 		await waitForReady(this.prefs, this.adService, this.controller, this.gamesLoader, this.account);
 
 		this.buttonText$ = this.prefs.preferences$$.pipe(
@@ -98,7 +94,7 @@ export class SettingsRootComponent extends AbstractSubscriptionComponent impleme
 					: this.i18n.translateString('settings.global.show-advanced-settings-button'),
 			),
 		);
-		this.rootNode$ = this.controller.rootNode$$.asObservable();
+		this.rootNode$ = this.uiController.rootNode$$.asObservable();
 
 		const isBeta = (await this.ow?.isBetaChannel?.()) ?? false;
 		const context: SettingContext = {
@@ -120,7 +116,7 @@ export class SettingsRootComponent extends AbstractSubscriptionComponent impleme
 			},
 		};
 		console.debug('[debug] [settings-root] context', context);
-		this.controller.setRootNode(settingsDefinition(context));
+		this.uiController.setRootNode(settingsDefinition(context));
 
 		const localeSettings$ = combineLatest([
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.locale)),
@@ -135,7 +131,7 @@ export class SettingsRootComponent extends AbstractSubscriptionComponent impleme
 				const selectedNodeId = this.controller.selectedNodeId$$.value;
 				const filteredSettings = filterSettings(settingsDefinition, searchString);
 				const newSelectedNode = findNode(filteredSettings, selectedNodeId);
-				this.controller.setRootNode(filteredSettings);
+				this.uiController.setRootNode(filteredSettings);
 				this.controller.selectedNodeId$$.next(newSelectedNode?.id ?? null);
 				if (!(this.cdr as ViewRef).destroyed) {
 					this.cdr.markForCheck();
@@ -143,8 +139,8 @@ export class SettingsRootComponent extends AbstractSubscriptionComponent impleme
 			},
 		);
 
-		if (!this.controller.selectedNodeId$$.value && this.controller.rootNode$$.value) {
-			this.controller.selectedNodeId$$.next(this.controller.rootNode$$.value.children![0].children![0]!.id);
+		if (!this.controller.selectedNodeId$$.value && this.uiController.rootNode$$.value) {
+			this.controller.selectedNodeId$$.next(this.uiController.rootNode$$.value.children![0].children![0]!.id);
 		}
 
 		if (!(this.cdr as ViewRef).destroyed) {

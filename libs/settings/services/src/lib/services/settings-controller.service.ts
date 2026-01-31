@@ -7,12 +7,9 @@ import {
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
-import { SettingNode } from '../models/settings.types';
 
 @Injectable()
 export class SettingsControllerService extends AbstractFacadeService<SettingsControllerService> {
-	public rootNode$$: BehaviorSubject<SettingNode | null>;
-	// public selectedNode$$: BehaviorSubject<SettingNode | null>;
 	public selectedNodeId$$: BehaviorSubject<string | null>;
 	public searchString$$: BehaviorSubject<string | null>;
 
@@ -20,41 +17,24 @@ export class SettingsControllerService extends AbstractFacadeService<SettingsCon
 	private ow: OverwolfService;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
-		super(windowManager, 'SettingsControllerService', () => !!this.rootNode$$);
+		super(windowManager, 'SettingsControllerService', () => !!this.selectedNodeId$$);
 	}
 
 	protected override assignSubjects() {
-		this.rootNode$$ = this.mainInstance.rootNode$$;
-		// this.selectedNode$$ = this.mainInstance.selectedNode$$;
 		this.selectedNodeId$$ = this.mainInstance.selectedNodeId$$;
 		this.searchString$$ = this.mainInstance.searchString$$;
 	}
 
 	protected async init() {
-		this.rootNode$$ = new BehaviorSubject<SettingNode | null>(null);
-		// this.selectedNode$$ = new BehaviorSubject<SettingNode | null>(null);
 		this.selectedNodeId$$ = new BehaviorSubject<string | null>(null);
 		this.searchString$$ = new BehaviorSubject<string | null>(null);
 
 		this.prefs = AppInjector.get(PreferencesService);
-		this.ow = AppInjector.get(OverwolfService);
-	}
-
-	public setRootNode(node: SettingNode) {
-		this.rootNode$$.next(node);
-	}
-
-	public selectNodeId(nodeId: string | null) {
-		this.selectedNodeId$$.next(nodeId);
-	}
-
-	public selectNodeFromOutside(nodeId: string | null) {
-		this.selectedNodeId$$.next(nodeId);
-		this.searchString$$.next(null);
-	}
-
-	public newSearchString(searchString: string) {
-		this.searchString$$.next(searchString);
+		try {
+			this.ow = AppInjector.get(OverwolfService);
+		} catch (error) {
+			console.warn('No OW provider', error);
+		}
 	}
 
 	protected override async initElectronMainProcess() {
@@ -62,6 +42,47 @@ export class SettingsControllerService extends AbstractFacadeService<SettingsCon
 		this.registerMainProcessMethod('importSettingsInternal', (filePath: string) =>
 			this.importSettingsInternal(filePath),
 		);
+		this.registerMainProcessMethod('selectNodeIdInternal', (nodeId: string | null) =>
+			this.selectNodeIdInternal(nodeId),
+		);
+		this.registerMainProcessMethod('selectNodeFromOutsideInternal', (nodeId: string | null) =>
+			this.selectNodeFromOutsideInternal(nodeId),
+		);
+		this.registerMainProcessMethod('newSearchStringInternal', (searchString: string) =>
+			this.newSearchStringInternal(searchString),
+		);
+	}
+
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.selectedNodeId$$ = new BehaviorSubject<string | null>(null);
+		this.searchString$$ = new BehaviorSubject<string | null>(null);
+	}
+
+	protected override initElectronSubjects() {
+		this.setupElectronSubject(this.selectedNodeId$$, 'settings-controller-selected-node-id');
+		this.setupElectronSubject(this.searchString$$, 'settings-controller-search-string');
+	}
+
+	public selectNodeId(nodeId: string | null) {
+		this.callOnMainProcess('selectNodeIdInternal', nodeId);
+	}
+	private selectNodeIdInternal(nodeId: string | null) {
+		this.selectedNodeId$$.next(nodeId);
+	}
+
+	public selectNodeFromOutside(nodeId: string | null) {
+		this.callOnMainProcess('selectNodeFromOutsideInternal', nodeId);
+	}
+	private selectNodeFromOutsideInternal(nodeId: string | null) {
+		this.selectedNodeId$$.next(nodeId);
+		this.searchString$$.next(null);
+	}
+
+	public newSearchString(searchString: string) {
+		this.callOnMainProcess('newSearchStringInternal', searchString);
+	}
+	private newSearchStringInternal(searchString: string) {
+		this.searchString$$.next(searchString);
 	}
 
 	public async exportSettings() {
