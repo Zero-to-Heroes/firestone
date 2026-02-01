@@ -17,6 +17,8 @@ const WILD_GOD_CARD_IDS: readonly string[] = [
 	CardIds.Ashamane_EDR_527,
 	CardIds.Ursoc_EDR_819,
 	CardIds.AvianaElunesChosen_EDR_895,
+	CardIds.Tortolla_EDR_471,
+	CardIds.Agamaggan_EDR_489,
 ];
 
 export const MalorneTheWaywatcher: GeneratingCard & StaticGeneratingCard = {
