@@ -107,6 +107,7 @@ import {
 	USER_SERVICE_TOKEN,
 	UserService,
 	WINDOW_HANDLER_SERVICE_TOKEN,
+	WindowHandlerFacadeService,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
 import { GameStatsLoaderService } from '@firestone/stats/data-access';
@@ -575,6 +576,9 @@ export const buildAppInjector = () => {
 
 	const settingsController = new SettingsControllerService(windowManager);
 	electronInjector.register(SettingsControllerService, settingsController);
+
+	const windowHandlerFacade = new WindowHandlerFacadeService(windowManager);
+	electronInjector.register(WindowHandlerFacadeService, windowHandlerFacade);
 
 	return electronInjector;
 };

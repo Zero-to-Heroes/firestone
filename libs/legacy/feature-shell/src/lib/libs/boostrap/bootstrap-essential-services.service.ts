@@ -9,6 +9,7 @@ import {
 	DATABASE_SERVICE_TOKEN,
 	IDatabaseService,
 	OverwolfService,
+	WindowHandlerFacadeService,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
 import { TranslateService } from '@ngx-translate/core';
@@ -27,6 +28,7 @@ export class BootstrapEssentialServicesService {
 		private readonly ow: OverwolfService, // No deps
 		@Inject(DATABASE_SERVICE_TOKEN) private readonly db: IDatabaseService, // No deps
 		private readonly windowManager: WindowManagerService, // OverwolfService
+		private readonly windowHandlerFacade: WindowHandlerFacadeService,
 		private readonly prefs: PreferencesService, // WindowManager
 		private readonly diskCache: DiskCacheService, // Overwolf, Prefs
 		// Localization indirectly depend on diskCache because of the loader

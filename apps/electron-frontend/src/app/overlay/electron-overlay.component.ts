@@ -36,7 +36,7 @@ export class ElectronOverlayComponent extends ElectronEntryPointComponent implem
 
 		await waitForReady(this.gameStatusService, this.memoryUpdateService);
 
-		this.init_ScalingService.subscribeToWindowHeight(true);
+		this.init_ScalingService.subscribeToWindowHeight(false);
 
 		document.title = 'Firestone Overlay';
 		this.ready = true;

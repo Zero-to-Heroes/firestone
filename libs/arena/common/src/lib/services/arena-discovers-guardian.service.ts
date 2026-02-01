@@ -50,7 +50,7 @@ export class ArenaDiscoversGuardianService extends AbstractFacadeService<ArenaDi
 	}
 
 	public acknowledgeDiscoverStatsSeen() {
-		void this.callOnMainProcess('acknowledgeDiscoverStatsSeenInternal');
+		this.callOnMainProcess('acknowledgeDiscoverStatsSeenInternal');
 	}
 
 	private acknowledgeDiscoverStatsSeenInternal() {

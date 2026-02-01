@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { SettingsControllerService } from '@firestone/settings/services';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { OverwolfService, WindowHandlerFacadeService } from '@firestone/shared/framework/core';
 
 @Component({
 	standalone: false,
@@ -30,24 +29,11 @@ export class ControlSettingsComponent {
 	constructor(
 		private readonly ow: OverwolfService,
 		private readonly prefs: PreferencesService,
-		private readonly settingsController: SettingsControllerService,
+		private readonly windowHandlerFacade: WindowHandlerFacadeService,
 	) {}
 
 	async showSettings() {
 		const prefs = await this.prefs.getPreferences();
-		const windowName = await this.ow.getSettingsWindowName(prefs);
-		const settingsWindow = await this.ow.obtainDeclaredWindow(windowName);
-		// Window hidden, we show it
-		if (settingsWindow.stateEx !== 'normal') {
-			// Avoid flickering
-			setTimeout(async () => {
-				await this.ow.restoreWindow(settingsWindow.id);
-				this.ow.bringToFront(settingsWindow.id);
-			}, 10);
-		}
-		// Otherwise we hide it
-		else {
-			this.ow.hideWindow(settingsWindow.id);
-		}
+		this.windowHandlerFacade.showSettingsWindow(prefs.collectionUseOverlay);
 	}
 }

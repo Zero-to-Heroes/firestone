@@ -6,11 +6,10 @@ Alpha: Ready for constructed overlay
 Beta
 ===============
 
-- settings
-    - implement reloadWindows()
-- validate that logged in user is premium / get their premium status
+- settings:
+    - check that we can open it from the tracker (both electron and native)
 - custom installer
-- settings window: use custom controls instead of native ones
+- validate that logged in user is premium / get their premium status
 
 - BG overlay
     - Hero stats overlay
