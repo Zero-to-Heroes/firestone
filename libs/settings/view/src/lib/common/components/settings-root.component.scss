@@ -15,21 +15,23 @@
 
 .header-container {
 	position: relative;
+	height: 30px;
+	flex-shrink: 0;
 
 	.header {
 		padding: 10px;
 		background: rgba(255, 255, 255, 0.08);
 		// color: var(--default-title-color);
-		font-size: 1.1em;
+		font-size: 0.9em;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		// height: 40px;
 		border-bottom: 1px solid var(--default-text-color);
 		user-select: none;
 		cursor: grab;
 		-webkit-app-region: drag;
 		position: relative;
+		height: 100%;
 	}
 
 	.header-buttons {
@@ -38,6 +40,7 @@
 		top: 0;
 		right: 0;
 		display: flex;
+		-webkit-app-region: no-drag;
 
 		.button {
 			&:hover {

@@ -99,6 +99,7 @@ export class ElectronWindowHandlerService implements IWindowHandlerService {
 			height: SETTINGS_HEIGHT,
 			resizable: false,
 			show: false,
+			frame: false,
 			title: 'Firestone Settings',
 			icon: windowIcon.isEmpty() ? undefined : windowIcon,
 			webPreferences: {
