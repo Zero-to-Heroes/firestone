@@ -55,7 +55,9 @@ body {
 
 	.cdk-overlay-backdrop {
 		background: transparent;
-		transition: opacity 0.25s ease-in-out, background 0.25s ease-in-out;
+		transition:
+			opacity 0.25s ease-in-out,
+			background 0.25s ease-in-out;
 		opacity: 0;
 
 		&.cdk-overlay-backdrop-showing {

@@ -37,6 +37,8 @@
 	background-image: var(--window-background-image);
 	outline: 1px solid var(--window-outline-color);
 	z-index: 1;
+	border-radius: 8px;
+	overflow: hidden;
 
 	.cdk-overlay-backdrop {
 		background: transparent;

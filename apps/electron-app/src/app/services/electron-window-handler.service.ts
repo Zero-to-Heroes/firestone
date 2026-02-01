@@ -1,7 +1,7 @@
 import { ElectronGameWindowService } from '@firestone/electron/common';
 import { IBattlegroundsWindowOptions, IWindowHandlerService } from '@firestone/shared/framework/core';
 import { OverlayBrowserWindow, OverlayWindowOptions } from '@overwolf/ow-electron-packages-types';
-import { app, BrowserWindow, nativeImage } from 'electron';
+import { app, BrowserWindow, nativeImage, screen } from 'electron';
 import { join } from 'path';
 import App from '../app';
 import { rendererAppPort } from '../constants';
@@ -102,6 +102,7 @@ export class ElectronWindowHandlerService implements IWindowHandlerService {
 			frame: false,
 			title: 'Firestone Settings',
 			icon: windowIcon.isEmpty() ? undefined : windowIcon,
+			transparent: true,
 			webPreferences: {
 				nodeIntegration: true,
 				contextIsolation: false,
@@ -163,16 +164,19 @@ export class ElectronWindowHandlerService implements IWindowHandlerService {
 		const y = Math.max(0, Math.floor(gameHeight / 2 - SETTINGS_HEIGHT / 2));
 
 		const preloadPath = join(__dirname, 'main.preload.js');
-		const options: OverlayWindowOptions = {
+		const options: OverlayWindowOptions & { dpiAware?: boolean } = {
 			name: 'firestone-settings-' + Math.floor(Math.random() * 1000),
 			width: SETTINGS_WIDTH,
 			height: SETTINGS_HEIGHT,
 			x,
 			y,
 			show: false,
-			transparent: false,
+			transparent: true,
 			frame: false,
 			resizable: false,
+			roundedCorners: true,
+			// DPI-aware: scales the overlay correctly on high-DPI displays (ow-electron 1.7.0+)
+			dpiAware: true,
 			webPreferences: {
 				nodeIntegration: true,
 				contextIsolation: false,
@@ -203,6 +207,30 @@ export class ElectronWindowHandlerService implements IWindowHandlerService {
 		this.settingsOverlayWindow.window.loadURL(this.getSettingsLoadUrl()).catch((err) => {
 			console.error('[ElectronWindowHandler] Failed to load Settings overlay:', err);
 		});
+	}
+
+	/**
+	 * Get the DPI scale factor for the display where the overlay appears.
+	 * Use this when you need DPI-aware scaling (e.g. zoomFactor, layout calculations).
+	 *
+	 * @returns scaleFactor (e.g. 1.25 for 125% DPI scaling, 1.0 for 100%)
+	 */
+	private getDisplayScaleFactorForOverlay(x: number, y: number, overlayApi: any): number {
+		// 1. Try to get scale from ow-electron's gameWindowInfo.screen (Display) if available
+		const activeGame = overlayApi.getActiveGameInfo?.();
+		const screenDisplay = activeGame?.gameWindowInfo?.screen;
+		if (screenDisplay?.scaleFactor != null && screenDisplay.scaleFactor > 0) {
+			return screenDisplay.scaleFactor;
+		}
+		// 2. Use Electron screen.getDisplayMatching with game bounds
+		const bounds = activeGame?.gameWindowInfo?.bounds ?? { x, y, width: SETTINGS_WIDTH, height: SETTINGS_HEIGHT };
+		try {
+			const display = screen.getDisplayMatching(bounds);
+			return display?.scaleFactor ?? 1;
+		} catch {
+			// 3. Fallback to primary display
+			return screen.getPrimaryDisplay().scaleFactor;
+		}
 	}
 
 	/**
