@@ -45,6 +45,7 @@ export { ConvokeTheSpirits } from './convoke-the-spirits';
 export { CountessAshmore } from './countess-ashmore';
 export { CryofrozenChampion } from './cryofrozen-champion';
 export { DaUndatakah } from './da-undatakah';
+export { DarkPeddler } from './dark-peddler';
 export { DeepSpaceCurator } from './deep-space-curator';
 export { DejaVu } from './deja-vu';
 export { DrBoomMadGeniusDeliveryDrone } from './delivery-drone';
