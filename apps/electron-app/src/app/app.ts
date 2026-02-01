@@ -343,6 +343,24 @@ export default class App {
 			ipcMain.emit('renderer-log-batch', event, [{ level, args }]);
 		});
 
+		// Allow overlay windows (e.g. Settings overlay) to initiate drag via mousedown
+		// ow-electron requires startDragging() to be called from main process; CSS -webkit-app-region does not work
+		ipcMain.on('start-overlay-dragging', (event) => {
+			const overlayApi = App.overlay?.overlayApi;
+			const overlayWindow = overlayApi?.fromWebContents(event.sender);
+			if (overlayWindow && typeof (overlayWindow as any).startDragging === 'function') {
+				(overlayWindow as any).startDragging();
+			}
+		});
+
+		// Close the current window (Settings overlay or regular BrowserWindow)
+		ipcMain.on('close-settings-window', (event) => {
+			const win = BrowserWindow.fromWebContents(event.sender);
+			if (win && !win.isDestroyed()) {
+				win.close();
+			}
+		});
+
 		// Store flush function for cleanup on quit
 		App.flushRendererLogs = flushRendererLogs;
 

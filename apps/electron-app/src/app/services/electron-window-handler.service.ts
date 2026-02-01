@@ -53,6 +53,7 @@ export class ElectronWindowHandlerService implements IWindowHandlerService {
 
 		// Overlay only when user asked for overlay AND game is running; otherwise always normal window
 		const effectiveUseOverlay = useOverlay && gameIsRunning;
+		console.log('[ElectronWindowHandler] [settings] openSettingsWindow: effectiveUseOverlay', effectiveUseOverlay);
 
 		if (App.isDevelopmentMode()) {
 			console.log('[ElectronWindowHandler] openSettingsWindow:', {
@@ -169,6 +170,7 @@ export class ElectronWindowHandlerService implements IWindowHandlerService {
 			y,
 			show: false,
 			transparent: false,
+			frame: false,
 			resizable: false,
 			webPreferences: {
 				nodeIntegration: true,

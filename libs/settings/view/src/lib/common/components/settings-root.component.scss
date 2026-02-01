@@ -2,10 +2,55 @@
 	flex-grow: 1;
 	color: var(--default-text-color);
 	min-height: 0;
+	// border: 1px solid var(--default-text-color);
 }
 
 .settings-root {
 	display: flex;
+	flex-direction: column;
+	height: 100%;
+	width: 100%;
+	overflow: hidden;
+}
+
+.header-container {
+	position: relative;
+
+	.header {
+		padding: 10px;
+		background: rgba(255, 255, 255, 0.08);
+		// color: var(--default-title-color);
+		font-size: 1.1em;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		// height: 40px;
+		border-bottom: 1px solid var(--default-text-color);
+		user-select: none;
+		cursor: grab;
+		-webkit-app-region: drag;
+		position: relative;
+	}
+
+	.header-buttons {
+		height: 100%;
+		position: absolute;
+		top: 0;
+		right: 0;
+		display: flex;
+
+		.button {
+			&:hover {
+				background: var(--default-text-color);
+				color: var(--color-7);
+			}
+		}
+	}
+}
+
+.contant-container {
+	display: flex;
+	flex-direction: row;
 	height: 100%;
 	width: 100%;
 	overflow: hidden;
@@ -22,17 +67,7 @@
 	flex-direction: column;
 	padding-bottom: 30px; // To not overlap with the version indication
 	font-size: 13px;
-
-	.header {
-		padding: 10px;
-		background: rgba(255, 255, 255, 0.08);
-		color: var(--default-title-color);
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		height: 40px;
-		border-bottom: 1px solid var(--card-highlight-color-1);
-	}
+	margin-top: -1px; // to not have a double border
 
 	.search {
 		width: 100%;

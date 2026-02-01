@@ -100,6 +100,10 @@ const electronAPI = {
 		// console.log('[Preload] getRunningGameInfo called');
 		return ipcRenderer.invoke('get-running-game-info');
 	},
+	/** Initiate overlay window drag (ow-electron). Call on mousedown of drag handle. */
+	startOverlayDragging: () => ipcRenderer.send('start-overlay-dragging'),
+	/** Close the current window (Settings overlay or regular). */
+	closeSettingsWindow: () => ipcRenderer.send('close-settings-window'),
 	platform: process.platform,
 };
 

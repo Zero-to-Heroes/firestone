@@ -37,24 +37,31 @@ import { SettingsUiControllerService } from '../services/settings-ui-controller.
 	styleUrls: [`../../settings-common.component.scss`, `./settings-root.component.scss`],
 	template: `
 		<div class="settings-root">
-			<nav class="navigation" *ngIf="rootNode$ | async as rootNode">
-				<div class="header" [fsTranslate]="'settings.title'"></div>
-				<settings-search class="search"></settings-search>
-				<ul class="nodes" scrollable>
-					<settings-navigation-node
-						*ngFor="let child of rootNode.children"
-						[node]="child"
-						[indentLevel]="0"
-					></settings-navigation-node>
-				</ul>
-				<div class="advanced-settings-container">
-					<button class="settings-advanced-toggle" (click)="toggleAdvancedSettings()">
-						{{ buttonText$ | async }}
-					</button>
+			<div class="header-container">
+				<div class="header" [fsTranslate]="'settings.title'" (mousedown)="onHeaderMouseDown()"></div>
+				<div class="header-buttons">
+					<div class="button close" inlineSVG="assets/svg/close.svg" (click)="close()"></div>
 				</div>
-			</nav>
-			<div class="current-section">
-				<settings-current-page></settings-current-page>
+			</div>
+			<div class="contant-container">
+				<nav class="navigation" *ngIf="rootNode$ | async as rootNode">
+					<settings-search class="search"></settings-search>
+					<ul class="nodes" scrollable>
+						<settings-navigation-node
+							*ngFor="let child of rootNode.children"
+							[node]="child"
+							[indentLevel]="0"
+						></settings-navigation-node>
+					</ul>
+					<div class="advanced-settings-container">
+						<button class="settings-advanced-toggle" (click)="toggleAdvancedSettings()">
+							{{ buttonText$ | async }}
+						</button>
+					</div>
+				</nav>
+				<div class="current-section">
+					<settings-current-page></settings-current-page>
+				</div>
 			</div>
 		</div>
 	`,
@@ -146,6 +153,14 @@ export class SettingsRootComponent extends AbstractSubscriptionComponent impleme
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.markForCheck();
 		}
+	}
+
+	onHeaderMouseDown(): void {
+		(window as any)?.electronAPI?.startOverlayDragging?.();
+	}
+
+	close(): void {
+		(window as any)?.electronAPI?.closeSettingsWindow?.();
 	}
 
 	async toggleAdvancedSettings() {
