@@ -1,6 +1,6 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
+// Discovery of Magic: Discover a spell from a spell school you haven't cast this game (from any class).
 import { CardIds, CardType } from '@firestone-hs/reference-data';
-import { canBeDiscoveredByClass } from '../../related-cards/dynamic-pools';
 import { StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
 
@@ -13,7 +13,7 @@ export const DiscoveryOfMagic: StaticGeneratingCard = {
 		const playedSpellSchoolsSet = new Set(playedSpellSchools);
 
 		// Filter for spells that have a spell school not yet played
-		// Discovery of Magic can discover from any class
+		// Discovery of Magic can discover from any class (as per card text)
 		return filterCards(
 			DiscoveryOfMagic.cardIds[0],
 			input.allCards,
@@ -31,8 +31,8 @@ export const DiscoveryOfMagic: StaticGeneratingCard = {
 				// Check if this spell has a spell school not yet played
 				// For spells with multiple spell schools, include if ANY school hasn't been played
 				const hasUnplayedSpellSchool = !playedSpellSchoolsSet.has(c.spellSchool);
-				// Must be discoverable (can be from any class according to card text)
-				return hasUnplayedSpellSchool && canBeDiscoveredByClass(c, input.inputOptions.currentClass);
+				// No class filter - card explicitly says "from any class"
+				return hasUnplayedSpellSchool;
 			},
 			input.inputOptions,
 		);
