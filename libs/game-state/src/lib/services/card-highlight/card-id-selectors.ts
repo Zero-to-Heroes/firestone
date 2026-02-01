@@ -2310,6 +2310,7 @@ export const cardIdSelector = (
 		case CardIds.MalygosAspectOfMagic:
 			return and(side(inputSide), or(inDeck, inHand), dragon);
 		case CardIds.MalygosTheSpellweaverCore:
+		case CardIds.MalygosTheSpellweaver_LEG_CS3_034:
 			return and(side(inputSide), inDeck, spell);
 		case CardIds.ManaCyclone:
 			return and(side(inputSide), or(inDeck, inHand), spell);
