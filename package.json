@@ -107,7 +107,7 @@
 		"@firestone-hs/official-leaderboards": "^0.0.1",
 		"@firestone-hs/reference-data": "^3.0.167",
 		"@firestone-hs/replay-metadata": "^0.0.82",
-		"@firestone-hs/replay-parser": "^2.0.2",
+		"@firestone-hs/replay-parser": "^2.0.4",
 		"@firestone-hs/save-dungeon-loot-info": "^1.0.8",
 		"@firestone-hs/simulate-bgs-battle": "^1.1.681",
 		"@firestone-hs/tavern-brawl-stats": "^1.0.31",
