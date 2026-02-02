@@ -1,6 +1,11 @@
 import { Injectable } from '@angular/core';
 import { isArena, SceneMode } from '@firestone-hs/reference-data';
-import { GameModeDataService, GameStateFacadeService } from '@firestone/game-state';
+import {
+	GameEvent,
+	GameEventsEmitterService,
+	GameModeDataService,
+	GameStateFacadeService,
+} from '@firestone/game-state';
 import { ArenaInfo, MemoryInspectionService, SceneService } from '@firestone/memory';
 import { sleep } from '@firestone/shared/framework/common';
 import { BehaviorSubject, distinctUntilChanged, filter, map } from 'rxjs';
@@ -14,6 +19,7 @@ export class ArenaInfoService {
 		private readonly scene: SceneService,
 		private readonly gameState: GameStateFacadeService,
 		private readonly gameModeData: GameModeDataService,
+		private readonly gameEventsEmitter: GameEventsEmitterService,
 	) {
 		this.init();
 	}
@@ -23,9 +29,7 @@ export class ArenaInfoService {
 
 		this.scene.currentScene$$
 			.pipe(filter((scene) => scene === SceneMode.DRAFT))
-			.subscribe(() =>
-				this.gameModeData.triggerArenaInfoRetrieve(false, (arenaInfo) => this.arenaInfo$$.next(arenaInfo)),
-			);
+			.subscribe(() => this.triggerArenaInfoRetrieve(false, (arenaInfo) => this.arenaInfo$$.next(arenaInfo)));
 
 		this.gameState.gameState$$
 			.pipe(
@@ -34,7 +38,16 @@ export class ArenaInfoService {
 			)
 			.subscribe(({ gameType, spectating }) => {
 				if (isArena(gameType)) {
-					this.gameModeData.triggerArenaInfoRetrieve(spectating, (arenaInfo) =>
+					this.triggerArenaInfoRetrieve(spectating, (arenaInfo) => this.arenaInfo$$.next(arenaInfo));
+				}
+			});
+
+		this.gameEventsEmitter.allEvents
+			.asObservable()
+			.pipe(filter((event) => event.type === GameEvent.MATCH_METADATA))
+			.subscribe((event) => {
+				if (isArena(event.additionalData.metaData.GameType)) {
+					this.triggerArenaInfoRetrieve(event.additionalData.spectating, (arenaInfo) =>
 						this.arenaInfo$$.next(arenaInfo),
 					);
 				}
@@ -53,6 +66,21 @@ export class ArenaInfoService {
 			this.arenaInfo$$.next(arenaInfo);
 		}
 		return arenaInfo;
+	}
+
+	private async triggerArenaInfoRetrieve(spectating: boolean, callback: (arenaInfo: ArenaInfo) => void) {
+		if (spectating) {
+			return;
+		}
+		await runLoop(async () => {
+			const arenaInfo = await this.memory.getArenaInfo();
+			console.log('[arena-info] retrieved arena info', arenaInfo);
+			if (arenaInfo?.losses != null && arenaInfo?.wins != null) {
+				callback(arenaInfo);
+				return true;
+			}
+			return false;
+		}, 'arenaInfo');
 	}
 }
 
