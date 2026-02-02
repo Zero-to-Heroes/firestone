@@ -14,12 +14,16 @@ export class TyrandeCounterDefinitionV2 extends CounterDefinitionV2<number> {
 		pref: 'playerTyrandeCounter' as const,
 		display: (state: GameState): boolean => true,
 		value: (state: GameState): number | null => {
-			const value =
-				state.playerDeck.enchantments
-					.filter((e) => e.cardId === CardIds.Tyrande_PullOfTheMoonEnchantment_EDR_464e2)
-					.flatMap((e) => e?.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_1] ?? 0)
-					.reduce((a, b) => a + b, 0) || null;
-			return value;
+			const enchantments = state.playerDeck.enchantments.filter(
+				(e) => e.cardId === CardIds.Tyrande_PullOfTheMoonEnchantment_EDR_464e2,
+			);
+			if (enchantments.length === 0) {
+				return null;
+			}
+
+			return enchantments
+				.flatMap((e) => e?.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_1] ?? 0)
+				.reduce((a, b) => a + b, 0);
 		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>
@@ -32,11 +36,18 @@ export class TyrandeCounterDefinitionV2 extends CounterDefinitionV2<number> {
 	readonly opponent = {
 		pref: 'opponentTyrandeCounter' as const,
 		display: (state: GameState): boolean => true,
-		value: (state: GameState): number | null =>
-			state.opponentDeck.enchantments
-				.filter((e) => e.cardId === CardIds.Tyrande_PullOfTheMoonEnchantment_EDR_464e2)
+		value: (state: GameState): number | null => {
+			const enchantments = state.opponentDeck.enchantments.filter(
+				(e) => e.cardId === CardIds.Tyrande_PullOfTheMoonEnchantment_EDR_464e2,
+			);
+			if (enchantments.length === 0) {
+				return null;
+			}
+
+			return enchantments
 				.flatMap((e) => e?.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_1] ?? 0)
-				.reduce((a, b) => a + b, 0) || null,
+				.reduce((a, b) => a + b, 0);
+		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>
 				i18n.translateString('settings.decktracker.your-deck.counters.tyrande-label'),
