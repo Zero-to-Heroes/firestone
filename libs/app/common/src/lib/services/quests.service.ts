@@ -17,7 +17,7 @@ import {
 	waitForReady,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
-import { combineLatest } from 'rxjs';
+import { BehaviorSubject, combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter, map, switchMap, take } from 'rxjs/operators';
 
 const REFERENCE_QUESTS_URL = 'https://static.firestoneapp.com/data/quests/quests-data_%locale%.gz.json';
@@ -26,7 +26,7 @@ const REFERENCE_QUESTS_URL = 'https://static.firestoneapp.com/data/quests/quests
 export class QuestsService extends AbstractFacadeService<QuestsService> {
 	public referenceQuests$$: SubscriberAwareBehaviorSubject<QuestsInfo | null>;
 	public activeQuests$$: SubscriberAwareBehaviorSubject<MemoryQuestsLog | null>;
-	public xpBonus: number | undefined;
+	public xpBonus$$: BehaviorSubject<number>;
 
 	private api: ApiRunner;
 	private localStorage: LocalStorageService;
@@ -42,12 +42,13 @@ export class QuestsService extends AbstractFacadeService<QuestsService> {
 	protected assignSubjects(): void {
 		this.referenceQuests$$ = this.mainInstance.referenceQuests$$;
 		this.activeQuests$$ = this.mainInstance.activeQuests$$;
-		this.xpBonus = this.mainInstance.xpBonus;
+		this.xpBonus$$ = this.mainInstance.xpBonus$$;
 	}
 
 	protected async init() {
 		this.referenceQuests$$ = new SubscriberAwareBehaviorSubject<QuestsInfo | null>(null);
 		this.activeQuests$$ = new SubscriberAwareBehaviorSubject<MemoryQuestsLog | null>(null);
+		this.xpBonus$$ = new BehaviorSubject<number>(0);
 		this.api = AppInjector.get(ApiRunner);
 		this.localStorage = AppInjector.get(LocalStorageService);
 		this.prefs = AppInjector.get(PreferencesService);
@@ -97,7 +98,7 @@ export class QuestsService extends AbstractFacadeService<QuestsService> {
 						const rewardTrackInfo: RewardsTrackInfo | undefined = rewardsTrackInfos?.TrackEntries?.find(
 							(track) => track.TrackType === RewardTrackType.GLOBAL,
 						);
-						this.xpBonus = rewardTrackInfo?.XpBonusPercent;
+						this.xpBonus$$.next(rewardTrackInfo?.XpBonusPercent ?? 0);
 					}
 				});
 		});
@@ -106,11 +107,13 @@ export class QuestsService extends AbstractFacadeService<QuestsService> {
 	protected override async initElectronSubjects() {
 		this.setupElectronSubject(this.referenceQuests$$, 'QuestsService-referenceQuests');
 		this.setupElectronSubject(this.activeQuests$$, 'QuestsService-activeQuests');
+		this.setupElectronSubject(this.xpBonus$$, 'QuestsService-xpBonus');
 	}
 
 	protected override async createElectronProxy(ipcRenderer: any) {
 		this.referenceQuests$$ = new SubscriberAwareBehaviorSubject<QuestsInfo | null>(null);
 		this.activeQuests$$ = new SubscriberAwareBehaviorSubject<MemoryQuestsLog | null>(null);
+		this.xpBonus$$ = new BehaviorSubject<number>(0);
 	}
 
 	private async loadReferenceQuests(locale?: string) {
