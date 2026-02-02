@@ -12,7 +12,7 @@ export const revealCard = (deck: DeckState, card: DeckCard | null | undefined, a
 	if (!card) {
 		return deck;
 	}
-	
+
 	const deckStateFromCard = revealRelatedCards(deck, card, allCards);
 	const deckStateFromCreator = revealCardFromCreator(deckStateFromCard, card);
 	return deckStateFromCreator;
@@ -119,12 +119,21 @@ const revealRelatedCards = (deck: DeckState, card: DeckCard, allCards: CardsFaca
 			return deck;
 		}
 
-		const additionalKnownCardsInDeck = [...(deck.additionalKnownCardsInDeck || []), ...otherFableCards].filter(
-			(c, index, self) => self.indexOf(c) === index,
-		);
-		return deck.update({
-			additionalKnownCardsInDeck: additionalKnownCardsInDeck,
-		});
+		if (card.creatorCardId === CardIds.Murozond_TOT_332) {
+			const additionalKnownCardsInHand = [...(deck.additionalKnownCardsInHand || []), ...otherFableCards].filter(
+				(c, index, self) => self.indexOf(c) === index,
+			);
+			return deck.update({
+				additionalKnownCardsInHand: additionalKnownCardsInHand,
+			});
+		} else {
+			const additionalKnownCardsInDeck = [...(deck.additionalKnownCardsInDeck || []), ...otherFableCards].filter(
+				(c, index, self) => self.indexOf(c) === index,
+			);
+			return deck.update({
+				additionalKnownCardsInDeck: additionalKnownCardsInDeck,
+			});
+		}
 	}
 
 	return deck;
