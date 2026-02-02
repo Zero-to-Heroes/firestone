@@ -25,7 +25,7 @@ import { Mutable, NonFunctionProperties, sleep } from '@firestone/shared/framewo
 import { CardsFacadeService, ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
 import { deflate, inflate } from 'pako';
 import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
-import { delay, distinctUntilChanged, filter, map, sampleTime, switchMap, take, tap } from 'rxjs/operators';
+import { delay, distinctUntilChanged, filter, map, sampleTime, switchMap, take } from 'rxjs/operators';
 import { TwitchEvent } from '../model/ebs-event';
 import { TwitchBgsBoard, TwitchBgsBoardEntity, TwitchBgsPlayer, TwitchBgsState } from '../model/twitch-bgs-state';
 
@@ -119,8 +119,7 @@ export class TwitchAuthService {
 					.pipe(
 						sampleTime(2000),
 						distinctUntilChanged(),
-						map(([currentScene, deckEvent, twitchAccessToken, streamerPrefs, twitchDelay]) =>
-						({
+						map(([currentScene, deckEvent, twitchAccessToken, streamerPrefs, twitchDelay]) => ({
 							event: this.buildEvent(
 								currentScene,
 								deckEvent,
@@ -129,12 +128,10 @@ export class TwitchAuthService {
 								streamerPrefs,
 							),
 							delayMs: twitchDelay,
-						}),
-						),
+						})),
 						switchMap(({ event, delayMs }) => {
 							return event ? of(event).pipe(delay(delayMs)) : of(null);
 						}),
-						tap((event) => console.log('[twitch-auth] built event', event)),
 					)
 					.subscribe((event: TwitchEvent | null) => this.sendEvent(event));
 			});
@@ -218,32 +215,32 @@ export class TwitchAuthService {
 		const latestBattle = bgsState?.currentGame?.lastNonEmptyFaceOff();
 		const newBgsState: TwitchBgsState | null = !!bgsState
 			? ({
-				leaderboard: this.buildLeaderboard(bgsState),
-				currentBattle: {
-					battleInfo:
-						latestBattle?.battleResult && latestBattle?.battleInfoStatus !== 'ongoing'
-							? { ...latestBattle?.battleResult, outcomeSamples: undefined }
-							: null,
-					status:
-						latestBattle?.battleInfoStatus === 'ongoing'
-							? 'waiting-for-result'
-							: latestBattle?.battleInfoStatus,
-				},
-				currentTurn: state.currentTurnNumeric,
-				inGame: state.gameStarted && !state.gameEnded && !!state.bgState.currentGame,
-				gameEnded: state.gameEnded,
-				availableRaces: bgsState.currentGame?.availableRaces,
-				phase: bgsState.currentGame?.phase,
-				config: {
-					hasBuddies: bgsState.currentGame?.hasBuddies,
-					hasPrizes: bgsState.currentGame?.hasPrizes,
-					hasQuests: bgsState.currentGame?.hasQuests,
-					hasSpells: bgsState.currentGame?.hasSpells,
-					hasTrinkets: bgsState.currentGame?.hasTrinkets,
-					hasTimewarped: bgsState.currentGame?.hasTimewarped,
-					anomalies: bgsState.currentGame?.anomalies,
-				},
-			} as TwitchBgsState)
+					leaderboard: this.buildLeaderboard(bgsState),
+					currentBattle: {
+						battleInfo:
+							latestBattle?.battleResult && latestBattle?.battleInfoStatus !== 'ongoing'
+								? { ...latestBattle?.battleResult, outcomeSamples: undefined }
+								: null,
+						status:
+							latestBattle?.battleInfoStatus === 'ongoing'
+								? 'waiting-for-result'
+								: latestBattle?.battleInfoStatus,
+					},
+					currentTurn: state.currentTurnNumeric,
+					inGame: state.gameStarted && !state.gameEnded && !!state.bgState.currentGame,
+					gameEnded: state.gameEnded,
+					availableRaces: bgsState.currentGame?.availableRaces,
+					phase: bgsState.currentGame?.phase,
+					config: {
+						hasBuddies: bgsState.currentGame?.hasBuddies,
+						hasPrizes: bgsState.currentGame?.hasPrizes,
+						hasQuests: bgsState.currentGame?.hasQuests,
+						hasSpells: bgsState.currentGame?.hasSpells,
+						hasTrinkets: bgsState.currentGame?.hasTrinkets,
+						hasTimewarped: bgsState.currentGame?.hasTimewarped,
+						anomalies: bgsState.currentGame?.anomalies,
+					},
+				} as TwitchBgsState)
 			: null;
 
 		const result: TwitchEvent = {

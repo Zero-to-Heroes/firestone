@@ -75,7 +75,7 @@ export class ArenaDiscoversGuardianService extends AbstractFacadeService<ArenaDi
 			gameIds: newGames,
 		};
 		this.localStorage.setItem(LocalStorageService.LOCAL_STORAGE_ARENA_DISCOVER_STATS_SEEN, newFreeUse);
-		console.log('[arena-discover-guardian] new use count', today, newCount);
+		// console.log('[arena-discover-guardian] new use count', today, newCount);
 		this.freeUsesLeft$$.next(Math.max(0, ARENA_DISCOVERS_DAILY_FREE_USES - newCount));
 	}
 }

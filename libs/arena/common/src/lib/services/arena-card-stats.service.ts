@@ -213,7 +213,6 @@ export class ArenaCardStatsService extends AbstractFacadeService<ArenaCardStatsS
 			return null;
 		}
 
-		console.log('[arena-card-stats] loaded arena stats', context, timePeriod);
 		console.debug('[arena-card-stats] loaded arena stats', cardPerformanceStats, cardDraftStats);
 
 		const result: ArenaCombinedCardStats = {
