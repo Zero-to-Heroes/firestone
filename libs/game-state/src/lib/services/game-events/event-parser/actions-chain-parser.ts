@@ -12,7 +12,7 @@ import { FuturisticForefatherParser } from './action-chains/futuristic-forefathe
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 
 export class ActionsChainParser implements EventParser {
-	public static readonly REGISTERED_EVENT_TYPES = [
+	public static REGISTERED_EVENT_TYPES = [
 		GameEvent.CARD_CHANGED_IN_HAND,
 		GameEvent.CARD_PLAYED,
 		GameEvent.CARD_REMOVED_FROM_BOARD,
@@ -51,6 +51,9 @@ export class ActionsChainParser implements EventParser {
 			const eventType = parser.appliesOnEvent();
 			this.chainParser[eventType] = [...(this.chainParser[eventType] ?? []), parser];
 		}
+
+		const allEvents = [...ActionsChainParser.REGISTERED_EVENT_TYPES, ...Object.keys(this.chainParser)];
+		ActionsChainParser.REGISTERED_EVENT_TYPES = [...new Set(allEvents)];
 	}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
@@ -72,6 +75,7 @@ export class ActionsChainParser implements EventParser {
 		const chainParsers = this.chainParser[gameEvent.type] ?? [];
 		let newState = currentState;
 		for (const chainParser of chainParsers) {
+			console.debug('[lady-azshara] chainParser', chainParser);
 			newState = await chainParser.parse(newState, this.events);
 		}
 		return newState;

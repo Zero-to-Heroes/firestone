@@ -203,7 +203,7 @@ export class GameStateParsersService {
 		private readonly reviewIdService: ReviewIdService,
 		// private readonly highlighter: BgsBoardHighlighterService,
 		// private readonly nav: BgsInGameWindowNavigationService,
-	) { }
+	) {}
 
 	public buildEventParsers(): { [eventKey: string]: readonly EventParser[] } {
 		// Lazy-load GameEvents to break circular dependency
@@ -460,11 +460,12 @@ export class GameStateParsersService {
 
 		// For actions chaining
 		const chainsParser = new ActionsChainParser(this.helper, this.allCards, this.i18n);
-		parsers[GameEvent.GAME_START].push(chainsParser);
-		parsers[GameEvent.GAME_END].push(chainsParser);
-		parsers[GameEvent.ENTITY_CHOSEN].push(chainsParser);
-		parsers[GameEvent.SUB_SPELL_START].push(chainsParser);
-
+		for (const eventType of ActionsChainParser.REGISTERED_EVENT_TYPES) {
+			if (!parsers[eventType]) {
+				parsers[eventType] = [];
+			}
+			parsers[eventType].push(chainsParser);
+		}
 		return parsers;
 	}
 }

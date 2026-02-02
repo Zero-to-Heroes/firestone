@@ -133,7 +133,6 @@ export class GameStateService {
 			});
 		});
 
-
 		const decktrackerDisplayEventBus: BehaviorSubject<boolean> = this.overlayDisplay.decktrackerDisplayEventBus$$;
 		decktrackerDisplayEventBus.subscribe((event) => {
 			if (this.showDecktrackerFromGameMode === event) {
@@ -221,9 +220,9 @@ export class GameStateService {
 						udpatedOpponentDeck !== currentState.opponentDeck;
 					currentState = hasChanged
 						? currentState.update({
-							playerDeck: updatedPlayerDeck,
-							opponentDeck: udpatedOpponentDeck,
-						})
+								playerDeck: updatedPlayerDeck,
+								opponentDeck: udpatedOpponentDeck,
+							})
 						: currentState;
 				}
 
@@ -246,9 +245,9 @@ export class GameStateService {
 						udpatedOpponentDeck !== currentState.opponentDeck;
 					currentState = hasChanged
 						? currentState.update({
-							playerDeck: updatedPlayerDeck,
-							opponentDeck: udpatedOpponentDeck,
-						})
+								playerDeck: updatedPlayerDeck,
+								opponentDeck: udpatedOpponentDeck,
+							})
 						: currentState;
 				}
 
@@ -425,15 +424,17 @@ export class GameStateService {
 			);
 		}
 
-		if (![
-			GameEvent.TOTAL_ATTACK_ON_BOARD,
-			GameEvent.ZONE_POSITION_CHANGED,
-			GameEvent.RESOURCES_UPDATED,
-			GameEvent.NUM_CARDS_DRAW_THIS_TURN,
-			GameEvent.GAME_STATE_UPDATE,
-			GameEvent.SUB_SPELL_START,
-			GameEvent.SUB_SPELL_END,
-		].includes(gameEvent.type)) {
+		if (
+			![
+				GameEvent.TOTAL_ATTACK_ON_BOARD,
+				GameEvent.ZONE_POSITION_CHANGED,
+				GameEvent.RESOURCES_UPDATED,
+				GameEvent.NUM_CARDS_DRAW_THIS_TURN,
+				GameEvent.GAME_STATE_UPDATE,
+				// GameEvent.SUB_SPELL_START,
+				// GameEvent.SUB_SPELL_END,
+			].includes(gameEvent.type)
+		) {
 			console.debug(
 				'[game-state] processed event',
 				gameEvent.type,
@@ -468,8 +469,8 @@ export class GameStateService {
 		const newHero: HeroCard | undefined =
 			manaLeft != deck.hero?.manaLeft
 				? deck.hero!.update({
-					manaLeft: maxMana == null || manaSpent == null ? undefined : maxMana - manaSpent,
-				})
+						manaLeft: maxMana == null || manaSpent == null ? undefined : maxMana - manaSpent,
+					})
 				: deck.hero;
 
 		// We need this because we don't know the exact content of cards in the opponent's deck
@@ -483,11 +484,11 @@ export class GameStateService {
 
 		return hasChanged
 			? deck.update({
-				board: newBoard,
-				hero: newHero,
-				cardsLeftInDeck: cardsLeftInDeck,
-				// totalAttackOnBoard: totalAttackOnBoard,
-			})
+					board: newBoard,
+					hero: newHero,
+					cardsLeftInDeck: cardsLeftInDeck,
+					// totalAttackOnBoard: totalAttackOnBoard,
+				})
 			: deck;
 	}
 
