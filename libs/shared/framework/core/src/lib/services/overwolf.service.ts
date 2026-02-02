@@ -349,7 +349,7 @@ export class OverwolfService {
 			// https://overwolf.github.io/docs/api/overwolf-windows#setdesktoponlywindowid-shouldbedesktoponly-callback
 			try {
 				overwolf.windows.bringToFront(windowId, grabFocus, (result) => {
-					console.debug('brought to front', windowId, result);
+					// console.debug('brought to front', windowId, result);
 					resolve(result);
 				});
 			} catch (e) {

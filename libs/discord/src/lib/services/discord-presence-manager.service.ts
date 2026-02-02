@@ -18,7 +18,7 @@ export class DiscordPresenceManagerService {
 	// TODO: use different app ID based on premium/non premium to customize main text?
 	private async init() {
 		this.presenceManager.presence$$.pipe(filter((presence) => !!presence)).subscribe(async (presence) => {
-			console.debug('[discord-presence] got new presence', presence);
+			// console.debug('[discord-presence] got new presence', presence);
 			if (presence?.inGame && presence.enabled) {
 				await this.discordRpc.updatePresence(
 					presence.text || IN_GAME_TEXT_PLACEHOLDER,
