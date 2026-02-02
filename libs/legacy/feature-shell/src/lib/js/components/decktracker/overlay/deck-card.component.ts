@@ -35,7 +35,7 @@ import {
 	IAdsService,
 	waitForReady,
 } from '@firestone/shared/framework/core';
-import { auditTime, BehaviorSubject, combineLatest, distinctUntilChanged, filter, Observable, takeUntil } from 'rxjs';
+import { BehaviorSubject, combineLatest, distinctUntilChanged, filter, Observable, takeUntil } from 'rxjs';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
@@ -354,7 +354,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		])
 			.pipe(
 				filter(([card]) => !!card),
-				auditTime(250),
+				// auditTime(250),
 				takeUntil(this.destroyed$),
 			)
 			.subscribe(([card, showUpdatedCost, showStatsChange, groupSameCardsTogether]) => {
