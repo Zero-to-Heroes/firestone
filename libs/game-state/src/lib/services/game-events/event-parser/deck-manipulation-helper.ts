@@ -15,7 +15,7 @@ export class DeckManipulationHelper {
 	constructor(
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: ILocalizationService,
-	) { }
+	) {}
 
 	public removeSingleCardFromZone(
 		zone: readonly DeckCard[],
@@ -89,14 +89,18 @@ export class DeckManipulationHelper {
 		// a) no card matches the known entityId,
 		// b) we find a card that matches our input card id and
 		// c) all such cards have a valid entityId (typically the case with Soul Fragments)
-		// However, this means that, when we don't know the deck list, and the discover offers us twice the same card
+		// UPDATE 2024: However, this means that, when we don't know the deck list, and the discover offers us twice the same card
 		// from our deck, we will update the first card with the entityId of the second card, and fail to create a
 		// new card in the deck
 		// Test scenario: no-deck mode, discover / dredge and get offered the same card twice
 		// So we should have a way to force the utils to match the entityId
+		// UPDATE 2026-02-02: this is still a valid use case. If the opponent trades a card back to the deck,
+		// we know its entityId; when they copy a card from their deck, if it's the same card but with another entityId,
+		// we want to behave as if we weren't aware that these were two different cards, and need to replace the
+		// existing card (and thus ignore the entityId in the matching)
 		const shouldIgnoreEntityId =
 			// TODO: test with soul fragments?
-			false &&
+			// false &&
 			!zone.filter((card) => card.entityId === entityId).length &&
 			zone.some((card) => this.normalizeCardId(card.cardId, normalizeUpgradedCards) === normalizedCardId) &&
 			zone
@@ -331,10 +335,10 @@ export class DeckManipulationHelper {
 			card.entityId !== entityId
 				? card
 				: card.update(newCard).update({
-					entityId: hideEntityId ? null : entityId,
-					cardId: cardId,
-					cardName: this.allCards.getCard(cardId).name,
-				} as DeckCard),
+						entityId: hideEntityId ? null : entityId,
+						cardId: cardId,
+						cardName: this.allCards.getCard(cardId).name,
+					} as DeckCard),
 		);
 	}
 
@@ -542,6 +546,7 @@ export class DeckManipulationHelper {
 		newCard: DeckCard,
 		removeFillerCard: boolean,
 		cardInfos: { cost?: number } | null = null,
+		debug = false,
 	): readonly DeckCard[] {
 		// removeFillerCard here doesn't always work - we need to consider the UnknownXXX as filler cards
 		const [newZone, removedCard] = this.removeSingleCardFromZone(
@@ -552,7 +557,7 @@ export class DeckManipulationHelper {
 			false,
 			cardInfos,
 		);
-		//console.debug('[empiricReplaceCardInZone] removedCard', removedCard, newCard, newZone);
+		debug && console.debug('[empiricReplaceCardInZone] removedCard', removedCard, newCard, newZone);
 		const updatedZone = this.addSingleCardToZone(newZone, newCard);
 		//console.debug('[empiricReplaceCardInZone] updatedZone', updatedZone);
 		return updatedZone;

@@ -170,9 +170,14 @@ export class CopiedFromEntityIdParser implements EventParser {
 		const newCopiedDeck =
 			// Sometimes the card already exists in the deck (eg if it has a start of combat effect)
 			copiedCardZone === Zone.DECK && !isCardMovedAroundInPlayerDeck
-				? this.helper.empiricReplaceCardInZone(copiedDeck.deck, updatedCopiedCardWithPosition, true, {
-						cost: updatedCopiedCardWithPosition.refManaCost, // Not totally sure about ref vs actual
-					})
+				? this.helper.empiricReplaceCardInZone(
+						copiedDeck.deck,
+						updatedCopiedCardWithPosition,
+						true,
+						{
+							cost: updatedCopiedCardWithPosition.refManaCost, // Not totally sure about ref vs actual
+						},
+					)
 				: copiedDeck.deck;
 		console.debug('[copied-from-entity] newCopiedDeck', newCopiedDeck, copiedDeck);
 		const newCopiedPlayer =

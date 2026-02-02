@@ -23,7 +23,7 @@ export class CardDrawParser implements EventParser {
 	constructor(
 		private readonly helper: DeckManipulationHelper,
 		private readonly allCards: CardsFacadeService,
-	) { }
+	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return !!state;
@@ -54,12 +54,12 @@ export class CardDrawParser implements EventParser {
 
 		const cardsWithMatchingCardId = !!cardId?.length
 			? deck.deck
-				.filter((e) => e.cardId === cardId)
-				.filter((e) =>
-					!!gameEvent.additionalData.dataTag1 && supportedAdditionalData.includes(e.cardId as CardIds)
-						? e.mainAttributeChange! - 1 === gameEvent.additionalData.dataTag1
-						: true,
-				)
+					.filter((e) => e.cardId === cardId)
+					.filter((e) =>
+						!!gameEvent.additionalData.dataTag1 && supportedAdditionalData.includes(e.cardId as CardIds)
+							? e.mainAttributeChange! - 1 === gameEvent.additionalData.dataTag1
+							: true,
+					)
 			: [];
 		console.debug('[card-draw] cards with matching card id', cardsWithMatchingCardId);
 		// So that we don't remove the "card from bottom" when the user doesn't know about it, e.g.
@@ -69,10 +69,12 @@ export class CardDrawParser implements EventParser {
 		// If no cardId is provided, we use the entityId
 		const shouldUseEntityId =
 			// Initially, it was !isPlayer, but I don't understand why. If it's the opponent, we don't want to use the entityId
+			// Looking at the commit history, it was to avoid info leaks on tradeable, but I don't understand why
 			isPlayer &&
 			(!cardId ||
 				cardsWithMatchingCardId.length === 1 ||
 				cardsWithMatchingCardId.every((e) => e.positionFromBottom == null && e.positionFromTop == null));
+		console.debug('[card-draw] shouldUseEntityId', shouldUseEntityId, cardId, cardsWithMatchingCardId, deck.deck);
 		const isTutoring = tutors.includes(drawnByCardId as CardIds);
 
 		const useTopOfDeckToIdentifyCard = !isTutoring && !isPlayer && deck.deck.some((c) => c.positionFromTop != null);
@@ -101,10 +103,10 @@ export class CardDrawParser implements EventParser {
 			? deck.deck.filter((c) => c.positionFromTop != null).sort((c) => c.positionFromTop!)[0]
 			: useBottomOfDeckToIdentifyCard
 				? deck.deck
-					.filter((c) => c.positionFromBottom != null)
-					// Because Finley puts the cards at the bottom before drawing
-					.filter((c) => c.lastAffectedByCardId !== drawnByCardId)
-					.sort((c) => c.positionFromBottom!)[0]
+						.filter((c) => c.positionFromBottom != null)
+						// Because Finley puts the cards at the bottom before drawing
+						.filter((c) => c.lastAffectedByCardId !== drawnByCardId)
+						.sort((c) => c.positionFromBottom!)[0]
 				: this.helper.findCardInZone(deckToDrawnFromTop, cardId, shouldUseEntityId ? entityId : null, true);
 		console.debug(
 			'[card-draw] found card in zone 0',
@@ -199,8 +201,8 @@ export class CardDrawParser implements EventParser {
 			cardName: isCardInfoPublic ? (refCard.name ?? card?.cardName) : undefined,
 			lastAffectedByCardId: isCreatorPublic
 				? // Use drawnByCardId first to remove info leak when drawing a card that was created by a public tutor
-				// (eg draw a card with a public tutor that was created by Queen Carnassa)
-				(drawnByCardId ?? lastInfluencedByCardId ?? card!.lastAffectedByCardId)
+					// (eg draw a card with a public tutor that was created by Queen Carnassa)
+					(drawnByCardId ?? lastInfluencedByCardId ?? card!.lastAffectedByCardId)
 				: isDrawnByCardIdPublic
 					? drawnByCardId
 					: undefined,
@@ -220,7 +222,7 @@ export class CardDrawParser implements EventParser {
 			// 	timestampAtWhichCardEnteredHand: new Date().getTime(),
 			// },
 		} as DeckCard);
-		// console.debug('[card-draw] card with creator', cardWithCreator, isPlayer, isCardInfoPublic, card, refCard);
+		console.debug('[card-draw] card with creator', cardWithCreator, isPlayer, isCardInfoPublic, card, refCard);
 		const cardWithGuessInfo = addGuessInfoToCard(
 			cardWithCreator,
 			drawnByCardId,
@@ -230,7 +232,7 @@ export class CardDrawParser implements EventParser {
 			currentState,
 			this.allCards,
 		);
-		// console.debug('[card-draw] cardWithGuessInfo', cardWithGuessInfo, gameEvent);
+		console.debug('[card-draw] cardWithGuessInfo', cardWithGuessInfo, gameEvent);
 		const previousDeck = deck.deck;
 
 		// We didn't use the top of deck to identify the card, but we still need to remove the card at the top of the deck
@@ -242,18 +244,25 @@ export class CardDrawParser implements EventParser {
 		// console.debug('[card-draw] removeFillerCard', removeFillerCard, useTopOfDeckToIdentifyCard);
 		let [newDeck, removedCard] = isCardInfoPublic
 			? this.helper.removeSingleCardFromZone(
-				previousDeck,
-				updatedCardId,
-				entityId,
-				deck.deckList.length === 0,
-				true,
-				{
-					cost: gameEvent.additionalData.cost,
-				},
-				useTopOfDeckToIdentifyCard,
-			)
+					previousDeck,
+					updatedCardId,
+					entityId,
+					deck.deckList.length === 0,
+					true,
+					{
+						cost: gameEvent.additionalData.cost,
+					},
+				)
 			: this.helper.removeSingleCardFromZone(previousDeck, null, -1, deck.deckList.length === 0, true);
-		console.debug('[card-draw] newDeck 0', newDeck, isCardInfoPublic, previousDeck, removedCard);
+		console.debug(
+			'[card-draw] newDeck 0',
+			newDeck,
+			isCardInfoPublic,
+			updatedCardId,
+			entityId,
+			previousDeck,
+			removedCard,
+		);
 
 		// It can happen that the previous step still removed something (like a filler or created by card)
 		if (drawFromTop && !removedCard) {
