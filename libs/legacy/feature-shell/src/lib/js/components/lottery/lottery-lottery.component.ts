@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { LotteryConfigResourceStatType, LotteryFacadeService, LotteryState } from '@firestone/lottery/common';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { OverwolfService, UserService } from '@firestone/shared/framework/core';
+import { OverwolfService, UserService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, filter, shareReplay } from 'rxjs';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 
@@ -100,7 +100,7 @@ export class LotteryLotteryWidgetComponent extends AbstractSubscriptionComponent
 	}
 
 	async ngAfterContentInit() {
-		await this.userService.isReady();
+		await waitForReady(this.userService, this.lottery);
 
 		this.userName$ = this.userService.user$$.pipe(this.mapData((currentUser) => currentUser?.username));
 		this.loggedIn$ = this.userName$.pipe(this.mapData((userName) => !!userName));

@@ -85,9 +85,11 @@ export class LotteryWidgetControllerService extends AbstractFacadeService<Lotter
 		])
 			.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)))
 			.subscribe(async ([lotteryOverlay, visible]) => {
-				await this.windowManager.closeWindow(OverwolfService.LOTTERY_WINDOW);
+				if (lotteryOverlay) {
+					await this.windowManager.closeWindow(OverwolfService.LOTTERY_WINDOW);
+				}
 
-				if (visible) {
+				if (visible && !lotteryOverlay) {
 					await this.windowManager.restoreWindow(OverwolfService.LOTTERY_WINDOW, true);
 				} else {
 					await this.windowManager.closeWindow(OverwolfService.LOTTERY_WINDOW);

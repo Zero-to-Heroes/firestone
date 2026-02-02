@@ -135,7 +135,7 @@ export class LotteryWidgetComponent extends AbstractSubscriptionComponent implem
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.prefs, this.ads, this.lotteryWidgetController);
+		await waitForReady(this.prefs, this.ads, this.lotteryWidgetController, this.lottery);
 
 		this.displayAd$ = this.ads.hasPremiumSub$$.pipe(this.mapData((hasPremium) => !hasPremium));
 		this.closeConfirmationText = `

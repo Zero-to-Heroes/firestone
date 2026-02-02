@@ -154,9 +154,9 @@ import { DebugService } from '../../services/debug.service';
 			<player-max-resources-widget-wrapper></player-max-resources-widget-wrapper>
 			<opponent-max-resources-widget-wrapper></opponent-max-resources-widget-wrapper>
 
-			<!-- <lottery-widget-wrapper></lottery-widget-wrapper> -->
+			<lottery-widget-wrapper></lottery-widget-wrapper>
 
-			<!-- <notifications></notifications> -->
+			<notifications></notifications>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
