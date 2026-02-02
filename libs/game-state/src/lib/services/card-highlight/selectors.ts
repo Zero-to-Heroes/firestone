@@ -412,7 +412,7 @@ const PLAGUE_GENERATORS = [CardIds.DistressedKvaldir, CardIds.DownWithTheShip, C
 export const generatesPlague = (input: SelectorInput): boolean => PLAGUE_GENERATORS.includes(input.cardId as CardIds);
 export const isPlague = (input: SelectorInput): boolean => PLAGUES.includes(input.cardId as CardIds);
 
-export const spellSchool =
+export const spellSchoolStrict =
 	(spellSchool: SpellSchool) =>
 	(input: SelectorInput): boolean =>
 		spellSchool == null
@@ -420,6 +420,8 @@ export const spellSchool =
 			: input.card?.spellSchool === SpellSchool[spellSchool] ||
 				input.deckCard?.guessedInfo?.spellSchools?.includes(spellSchool) ||
 				false;
+export const spellSchool = (spellSchool: SpellSchool) =>
+	or(spellSchoolStrict(spellSchool), hasMechanicStr(`GENERATES_${SpellSchool[spellSchool]}_SPELL`));
 export const arcane = spellSchool(SpellSchool.ARCANE);
 export const fel = spellSchool(SpellSchool.FEL);
 export const fire = spellSchool(SpellSchool.FIRE);
@@ -455,7 +457,7 @@ export const cardType =
 		input.deckCard?.guessedInfo?.cardType === type;
 export const location = cardType(CardType.LOCATION);
 export const minion = cardType(CardType.MINION);
-export const spell = and(cardType(CardType.SPELL), not(passive));
+export const spell = and(or(cardType(CardType.SPELL), hasMechanicStr('GENERATES_SPELL')), not(passive));
 export const givesWeapon = hasMechanicStr('EQUIPS_WEAPON');
 export const weapon = or(cardType(CardType.WEAPON), givesWeapon);
 
