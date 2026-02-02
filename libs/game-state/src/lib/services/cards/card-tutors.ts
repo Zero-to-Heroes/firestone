@@ -64,6 +64,7 @@ const internalTutors = [
 	CardIds.ClericOfAnshe,
 	CardIds.ClericOfScales,
 	CardIds.ColdStorage,
+	CardIds.ColiferoTheArtist_TOY_703,
 	CardIds.CostumedSinger,
 	CardIds.CountessAshmore,
 	CardIds.CrushclawEnforcer,
