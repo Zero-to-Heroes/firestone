@@ -166,6 +166,8 @@ export class CardPlayedFromHandParser implements EventParser {
 			creatorEntityId: cardWithZone?.creatorEntityId ?? gameEvent.additionalData.creatorEntityId,
 			storedInformation: storeInformationOnCardPlayed(cardWithZone.cardId, gameEvent.additionalData.tags, {
 				manaLeft: deck.manaLeft,
+				deckState: deck,
+				gameTagTurnNumber: currentState.gameTagTurnNumber,
 			}),
 			tags: toTagsObject(gameEvent.additionalData.tags),
 		});

@@ -157,6 +157,7 @@ export interface StoredInformation {
 	tagScriptValues?: (number | null)[];
 	cards?: readonly { cardId: string; entityId: number }[];
 	manaLeftWhenPlayed?: number | null;
+	gameTagTurnNumberPlayed?: number | null;
 }
 
 export interface GuessedInfo {

@@ -82,6 +82,7 @@ import { QueensguardCounterDefinitionV2 } from './impl/queensguard';
 import { RafaamTimeCounterDefinitionV2 } from './impl/rafaam-time';
 import { RelicCounterDefinitionV2 } from './impl/relic';
 import { RenferalTheMalignantCounterDefinitionV2 } from './impl/renferal-the-malignant';
+import { RuniTemporalGuardianCounterDefinitionV2 } from './impl/runi-temporal-guardian';
 import { SeaShantyCounterDefinitionV2 } from './impl/sea-shanty';
 import { SecretsPlayedCounterDefinitionV2 } from './impl/secrets-played';
 import { ShockspitterCounterDefinitionV2 } from './impl/shockspitter';
@@ -137,6 +138,7 @@ export const getAllCounters: (
 	new ShockspitterCounterDefinitionV2(i18n, allCards),
 	new BonelordFrostwhisperCounterDefinitionV2(i18n, allCards),
 	new AnachronosCounterDefinitionV2(i18n, allCards),
+	new RuniTemporalGuardianCounterDefinitionV2(i18n, allCards),
 	new GardensGraceCounterDefinitionV2(i18n, allCards),
 	new NagaGiantCounterDefinitionV2(i18n, allCards),
 	new OverdraftCounterDefinitionV2(i18n, allCards),
@@ -281,6 +283,7 @@ export type CounterType =
 	| 'nagaGiant'
 	| 'gardensGrace'
 	| 'anachronos'
+	| 'runiTemporalGuardian'
 	| 'bonelordFrostwhisper'
 	| 'queensguard'
 	| 'heroPowerDamage'

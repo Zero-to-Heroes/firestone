@@ -462,6 +462,7 @@ export class Preferences implements IPreferences {
 	readonly playerGardensGraceCounter: BooleanWithLimited = true;
 	readonly playerAnachronosCounter: BooleanWithLimited = true;
 	readonly opponentAnachronosCounter: BooleanWithLimited = true;
+	readonly playerRuniTemporalGuardianCounter: boolean = true;
 	readonly playerBonelordFrostwhisperCounter: BooleanWithLimited = true;
 	readonly opponentBonelordFrostwhisperCounter: BooleanWithLimited = true;
 	readonly playerShockspitterCounter: BooleanWithLimited = true;

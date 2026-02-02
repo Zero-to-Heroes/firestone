@@ -152,6 +152,8 @@ export const storeInformationOnCardPlayed = (
 	tags: readonly { Name: GameTag; Value: number }[],
 	options?: {
 		manaLeft?: number | null;
+		deckState?: DeckState;
+		gameTagTurnNumber?: number;
 	},
 ): StoredInformation | null => {
 	switch (cardId) {
@@ -166,6 +168,11 @@ export const storeInformationOnCardPlayed = (
 		case CardIds.ScrappyScavenger_TLC_461:
 			return {
 				manaLeftWhenPlayed: options?.manaLeft,
+			};
+		case CardIds.RuniTemporalGuardian_TIME_EVENT_998:
+			return {
+				cards: options?.deckState?.hand?.map((c) => ({ cardId: c.cardId, entityId: c.entityId })),
+				gameTagTurnNumberPlayed: options?.gameTagTurnNumber,
 			};
 		default:
 			return null;
@@ -221,11 +228,11 @@ export const addGuessInfoToCard = (
 				});
 				return guessedInfo != null
 					? card.update({
-						guessedInfo: {
-							...card.guessedInfo,
-							...guessedInfo,
-						},
-					})
+							guessedInfo: {
+								...card.guessedInfo,
+								...guessedInfo,
+							},
+						})
 					: card;
 			}
 			return card;
