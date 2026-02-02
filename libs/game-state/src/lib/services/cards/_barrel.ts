@@ -2,6 +2,7 @@ export { GeneratingCard } from './_card.type';
 export { ALightInTheDarkness } from './a-light-in-the-darkness';
 export { AeonWizard } from './aeon-wizard';
 export { AlakirTheWindsOfTime } from './alakir-the-winds-of-time';
+export { AlgalonsVision } from './algalons-vision';
 export { AlterTime } from './alter-time';
 export { AmberWarden } from './amber-warden';
 export { Amirdrassil } from './amirdrassil';
