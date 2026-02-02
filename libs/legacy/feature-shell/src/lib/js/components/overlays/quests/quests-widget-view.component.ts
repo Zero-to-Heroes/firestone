@@ -45,7 +45,7 @@ import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 				[quests]="quests$ | async"
 				[theme]="theme"
 			>
-			</hs-quests-list>
+			</hs-quests-list> 
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -102,7 +102,6 @@ export class QuestsWidgetViewComponent extends AbstractSubscriptionComponent imp
 						const xpBonus = this.xpBonusExtractor
 							? this.xpBonusExtractor(this.questsService, refQuest.rewardTrackType)
 							: 0;
-						console.debug('QuestsWidgetViewComponent quest', refQuest, xpBonus);
 						const result: Quest = {
 							name: refQuest?.name ?? 'Unknown quest',
 							description:
