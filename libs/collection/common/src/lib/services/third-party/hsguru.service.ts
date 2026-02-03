@@ -69,7 +69,11 @@ export class HsGuruService extends AbstractFacadeService<HsGuruService> {
 			});
 	}
 
-	private async syncCollection(collection: readonly Card[]): Promise<boolean> {
+	private async syncCollection(collection: readonly Card[] | null): Promise<boolean> {
+		if (collection == null || !Array.isArray(collection)) {
+			console.warn('[hsguru] syncCollection called with null or non-array collection');
+			return false;
+		}
 		const totalCards = collection
 			.map((c) => (c.count ?? 0) + (c.premiumCount ?? 0) + (c.diamondCount ?? 0) + (c.signatureCount ?? 0))
 			.reduce((a, b) => a + b, 0);
