@@ -547,7 +547,7 @@ export const buildAppInjector = () => {
 	const gameModeData = new GameModeDataService(gameEventsEmitter, memoryInspection, deckParser);
 	electronInjector.register(GameModeDataService, gameModeData);
 
-	const arenaInfo = new ArenaInfoService(memoryInspection, scene, gameStateFacade, gameModeData);
+	const arenaInfo = new ArenaInfoService(memoryInspection, scene, gameStateFacade, gameModeData, gameEventsEmitter);
 	electronInjector.register(ArenaInfoService, arenaInfo);
 
 	const endGameListener = new EndGameListenerService(

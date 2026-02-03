@@ -6,10 +6,13 @@ Alpha: Ready for constructed overlay
 Beta
 ===============
 
-- settings:
-    - check that we can open it from the tracker (both electron and native)
+- settings
+    - import/export settings
+    - reload windows after changing the "overlay" mode
 - custom installer
 - validate that logged in user is premium / get their premium status
+- Installer link should always point to the latest version
+- [2026-02-03 11:23:55.118] [ERROR] Cannot inject to elevated game - app is not elevated
 
 - BG overlay
     - Hero stats overlay

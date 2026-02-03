@@ -13,7 +13,6 @@ import { appendFileSync, existsSync, mkdirSync, readdirSync, statSync, unlinkSyn
 import { appendFile } from 'fs/promises';
 import { join } from 'path';
 import { environment } from '../environments/environment';
-import { electronAppInjector } from './services/electron-app-injector';
 import { buildAppInjector } from './services/electron-app-injector-setup';
 import { ElectronDiskCacheService } from './services/electron-disk-cache.service';
 import { MindVisionElectronService } from './services/mind-vision-electron.service';
@@ -446,7 +445,7 @@ export default class App {
 		App.overlay = OverlayService.getInstance();
 		App.gameWindow.initialize(App.overlay);
 
-		console.log('🔧 Registered services:', electronAppInjector.getRegisteredServices());
+		// console.log('🔧 Registered services:', electronAppInjector.getRegisteredServices());
 
 		// Wait for overlay to be ready before registering to games
 		App.overlay.on('ready', async () => {

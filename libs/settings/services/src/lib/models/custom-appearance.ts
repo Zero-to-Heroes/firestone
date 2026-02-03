@@ -25,9 +25,30 @@ export type FinalStyleKey =
 	| '--bgs-minions-list-widget-background-image'
 	| CommonStyleKey;
 
+/** Fallback defaults when document/CSS is not available (e.g. Electron main process). */
+const FALLBACK_DEFAULT_STYLE_KEYS: CustomAppearance = {
+	'--bgs-widget-background-color-start': 'rgba(94, 11, 70, 0.7)',
+	'--bgs-widget-background-color-end': 'rgba(30, 1, 22, 1)',
+	'--bgs-color-1': '',
+	'--bgs-color-2': '',
+	'--bgs-color-3': '',
+	'--bgs-color-4': '',
+	'--bgs-color-5': '',
+	'--bgs-color-6': '',
+	'--bgs-color-7': '',
+	'--bgs-color-8': '',
+	'--bgs-color-9': '',
+};
+
 let defaultStyleKeysValue: CustomAppearance | null = null;
 export const defaultStyleKeys = async (): Promise<CustomAppearance> => {
 	if (!!defaultStyleKeysValue) {
+		return defaultStyleKeysValue;
+	}
+
+	// No document in Electron main process (Node) – use fallback defaults
+	if (typeof document === 'undefined') {
+		defaultStyleKeysValue = { ...FALLBACK_DEFAULT_STYLE_KEYS };
 		return defaultStyleKeysValue;
 	}
 
