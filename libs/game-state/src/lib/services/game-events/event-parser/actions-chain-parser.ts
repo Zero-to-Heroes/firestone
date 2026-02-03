@@ -14,6 +14,7 @@ import { DeckManipulationHelper } from './deck-manipulation-helper';
 export class ActionsChainParser implements EventParser {
 	public static REGISTERED_EVENT_TYPES = [
 		GameEvent.CARD_CHANGED_IN_HAND,
+		GameEvent.CARD_DRAW_FROM_DECK,
 		GameEvent.CARD_PLAYED,
 		GameEvent.CARD_REMOVED_FROM_BOARD,
 		GameEvent.CARD_REMOVED_FROM_DECK,
@@ -26,6 +27,7 @@ export class ActionsChainParser implements EventParser {
 		GameEvent.GAME_START,
 		GameEvent.LINKED_ENTITY,
 		GameEvent.MINION_ON_BOARD_ATTACK_UPDATED,
+		GameEvent.RECEIVE_CARD_IN_HAND,
 		GameEvent.SPECIAL_TARGET,
 		GameEvent.SUB_SPELL_END,
 		GameEvent.SUB_SPELL_START,

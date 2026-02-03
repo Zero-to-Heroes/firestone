@@ -109,6 +109,7 @@ export { MalorneTheWaywatcher } from './malorne-the-waywatcher';
 export { MechagnomeGuide } from './mechagnome-guide';
 export { MendTheTimeline } from './mend-the-timeline';
 export { Metrognome } from './metrognome';
+export { Mimicry } from './mimicry';
 export { MismatchedFossils } from './mismatched-fossils';
 export { Morchie } from './morchie';
 export { MountHyjalImposter } from './mount-hyjal-imposter';
