@@ -147,7 +147,8 @@ export const isCardCreated = (card: DeckCard | undefined): boolean => {
 		card.creatorCardId != null ||
 		card.creatorEntityId != null ||
 		card.stolenFromOpponent ||
-		!!card.tags?.[GameTag.TRANSFORMED_FROM_CARD]
+		// Forged cards are not created cards, and are not resurrected by Ra-Den
+		(!!card.tags?.[GameTag.TRANSFORMED_FROM_CARD] && !card.tags?.[GameTag.FORGED] && !card.forged)
 	);
 };
 
