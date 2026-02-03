@@ -650,10 +650,24 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		this.isDredged = card.dredged && !card.zone;
 		// For now don't recompute the info dynamically (with the logic from onMouseEnter). If I start getting feedback
 		// that this is an issue, I'll revisit
-		this.relatedCardIds = arraysEqual(this.relatedCardIds, card.relatedCardIds)
-			? this.relatedCardIds
-			: card.relatedCardIds;
-
+		if (!!card.relatedCardIds?.length && !arraysEqual(this.relatedCardIds, card.relatedCardIds)) {
+			console.debug(
+				'relatedCardIds changed',
+				card.cardName,
+				this.relatedCardIds,
+				card.relatedCardIds,
+				card,
+				this,
+			);
+		}
+		// Related card ids are often set in the mouseEnter event, so we don't update them if they are set and the
+		// input doesn't have any info
+		// Possible issue: if the card.relatedCardIds is updated outside (eg in a parser) and set to something empty
+		// (maybe like when a tidepool pupil is sent back to hand?)
+		this.relatedCardIds =
+			!!card.relatedCardIds?.length && !arraysEqual(this.relatedCardIds, card.relatedCardIds)
+				? card.relatedCardIds
+				: this.relatedCardIds;
 		this.isBurned = !groupSameCardsTogether && (card.zone === 'BURNED' || card.milled);
 		this.isDiscarded = !groupSameCardsTogether && card.zone === 'DISCARD';
 		this.isCountered = !groupSameCardsTogether && card.countered;
