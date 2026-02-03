@@ -55,11 +55,11 @@
 				"resizable": true,
 				"show_in_taskbar": true,
 				"size": {
-					"width": 1400,
+					"width": 1440,
 					"height": 790
 				},
 				"min_size": {
-					"width": 1400,
+					"width": 1440,
 					"height": 790
 				},
 				"block_top_window_navigation": true,
@@ -77,11 +77,11 @@
 				"topmost": false,
 				"disable_hardware_acceleration": true,
 				"size": {
-					"width": 1400,
+					"width": 1440,
 					"height": 790
 				},
 				"min_size": {
-					"width": 1400,
+					"width": 1440,
 					"height": 790
 				},
 				"block_top_window_navigation": true,
@@ -185,11 +185,11 @@
 				"resizable": true,
 				"show_in_taskbar": true,
 				"size": {
-					"width": 1320,
+					"width": 1360,
 					"height": 790
 				},
 				"min_size": {
-					"width": 1320,
+					"width": 1360,
 					"height": 790
 				},
 				"block_top_window_navigation": true,
@@ -207,11 +207,11 @@
 				"topmost": false,
 				"disable_hardware_acceleration": true,
 				"size": {
-					"width": 1320,
+					"width": 1360,
 					"height": 790
 				},
 				"min_size": {
-					"width": 1320,
+					"width": 1360,
 					"height": 790
 				},
 				"block_top_window_navigation": true,

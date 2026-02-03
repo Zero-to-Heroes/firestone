@@ -1,11 +1,12 @@
 :host {
-	width: 400px;
+	width: 440px;
 	height: 100%;
 	z-index: 99999999;
 	pointer-events: none;
 	padding-top: 0px;
 	padding-bottom: 15px;
-	margin-right: 15px;
+	padding-right: 15px;
+	flex-shrink: 0;
 }
 
 .ads {
@@ -13,6 +14,8 @@
 	width: 100%;
 	display: flex;
 	flex-direction: column;
+	align-items: flex-end;
+	justify-content: center;
 }
 
 .ad-container {

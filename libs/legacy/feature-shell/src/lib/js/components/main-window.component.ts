@@ -88,7 +88,6 @@ import { AbstractSubscriptionStoreComponent } from './abstract-subscription-stor
 						<tavern-brawl-desktop class="main-section" *ngIf="value.currentApp === 'tavern-brawl'">
 						</tavern-brawl-desktop>
 						<stats-desktop class="main-section" *ngIf="value.currentApp === 'profile'"> </stats-desktop>
-						<mailbox-desktop class="main-section" *ngIf="value.currentApp === 'mailbox'"> </mailbox-desktop>
 						<streams-desktop class="main-section" *ngIf="value.currentApp === 'streams'"> </streams-desktop>
 						<communities-desktop class="main-section" *ngIf="value.currentApp === 'communities'">
 						</communities-desktop>

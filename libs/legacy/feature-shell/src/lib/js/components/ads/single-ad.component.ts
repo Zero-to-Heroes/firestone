@@ -10,7 +10,7 @@ import {
 	Output,
 	ViewRef,
 } from '@angular/core';
-import { AbstractSubscriptionComponent, sleep } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
 
 declare let adsReady: any;
@@ -28,9 +28,6 @@ declare let OwAd: any;
 						<use xlink:href="assets/svg/sprite.svg#ad_placeholder" />
 					</svg>
 				</i>
-				<div class="bazaar-tracker-ad" *ngIf="bazaarTrackerAdActive">
-					<img src="https://i.imgur.com/NhQA7El.png" />
-				</div>
 				<ad-tip class="tip" *ngIf="tip && !bazaarTrackerAdActive"></ad-tip>
 			</div>
 			<div class="ads" id="ads-div-{{ this.adId }}"></div>
@@ -42,9 +39,9 @@ export class SingleAdComponent extends AbstractSubscriptionComponent implements 
 	@Output() adVisibility = new EventEmitter<'hidden' | 'partial' | 'full'>();
 
 	@Input() tip: boolean;
-	@Input() showBazaarTrackerAd: boolean;
 	@Input() adId: string;
 	@Input() adSize: { width: number; height: number } = { width: 400, height: 300 };
+	@Input() enableHighImpact: boolean;
 	@Input() overlayAd = false;
 
 	bazaarTrackerAdActive: boolean;
@@ -55,27 +52,18 @@ export class SingleAdComponent extends AbstractSubscriptionComponent implements 
 	private playListener: (message: any) => void;
 	private displayAdLoadedListener: (message: any) => void;
 	private adsReadyListener: (message: any) => void;
+	private highImpactAdLoadedListener: (message: any) => void;
 
-	constructor(protected readonly cdr: ChangeDetectorRef, private readonly ow: OverwolfService) {
+	constructor(
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly ow: OverwolfService,
+	) {
 		super(cdr);
 	}
 
 	async ngAfterViewInit() {
 		this.initializeAds();
 		this.initializeVisibilityCheck();
-
-		await sleep(1000);
-		console.debug(
-			'[cross-promotion] considering BazaarTracker ad',
-			this.showBazaarTrackerAd,
-			this.bazaarTrackerAdActive,
-		);
-		if (this.showBazaarTrackerAd) {
-			// this.bazaarTrackerAdActive = !this.bazaarTrackerAdActive;
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.markForCheck();
-			}
-		}
 	}
 
 	@HostListener('window:beforeunload')
@@ -86,6 +74,7 @@ export class SingleAdComponent extends AbstractSubscriptionComponent implements 
 		this.adRef?.removeEventListener(this.playListener);
 		this.adRef?.removeEventListener(this.displayAdLoadedListener);
 		this.adRef?.removeEventListener(this.adsReadyListener);
+		this.adRef?.removeEventListener(this.highImpactAdLoadedListener);
 	}
 
 	private async initializeAds() {
@@ -109,13 +98,19 @@ export class SingleAdComponent extends AbstractSubscriptionComponent implements 
 				return;
 			}
 			if (!this.adRef) {
-				if (this.videoImpressionListener || this.displayAdLoadedListener || this.playListener) {
+				if (
+					this.videoImpressionListener ||
+					this.displayAdLoadedListener ||
+					this.playListener ||
+					this.highImpactAdLoadedListener
+				) {
 					console.warn(`[ads-${this.adId}] Redefining the impression listener, could cause memory leaks`);
 				}
 				this.adInit = true;
 				console.log(`[ads-${this.adId}] first time init ads, creating OwAd`);
 				this.adRef = new OwAd(document.getElementById(`ads-div-${this.adId}`), {
 					size: this.adSize,
+					highImpact: this.enableHighImpact,
 				});
 
 				this.displayAdLoadedListener = async (data) => {
@@ -130,6 +125,9 @@ export class SingleAdComponent extends AbstractSubscriptionComponent implements 
 				this.videoImpressionListener = async (data) => {
 					console.log(`[ads-${this.adId}] video impression`);
 				};
+				this.highImpactAdLoadedListener = async (data) => {
+					console.log(`[ads-${this.adId}] high impact ad loaded`);
+				};
 				// https://overwolf.github.io/api/general/ads-sdk/overwolf-platform/owad
 				// Fires when an Ad started "playing" (Video Ad started playing, or display Ad was presented).
 				this.adRef.addEventListener('play', this.playListener);
@@ -141,6 +139,7 @@ export class SingleAdComponent extends AbstractSubscriptionComponent implements 
 				// display impression served after the display_ad_loaded event like user
 				// history/size/geo/time of day etc. all could affect fill rates.
 				this.adRef.addEventListener('display_ad_loaded', this.displayAdLoadedListener);
+				this.adRef.addEventListener('high-impact-ad-loaded', this.highImpactAdLoadedListener);
 				// Internal event, should be removed?
 				this.adRef.addEventListener('ow_internal_rendered', this.adsReadyListener);
 

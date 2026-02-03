@@ -33,13 +33,9 @@ import { ADS_SERVICE_TOKEN, AnalyticsService, IAdsService, OverwolfService } fro
 				</div>
 				<div
 					class="features-link"
-					*ngIf="!showBazaarTrackerAd"
 					(click)="showFeatures()"
 					[owTranslate]="'app.global.ads.features-link'"
 				></div>
-				<div class="features-link" *ngIf="showBazaarTrackerAd" (click)="openBazaarTrackerPage()">
-					Get BazaarTracker on Overwolf
-				</div>
 			</div>
 
 			<!-- In large layouts -->
@@ -47,8 +43,8 @@ import { ADS_SERVICE_TOKEN, AnalyticsService, IAdsService, OverwolfService } fro
 				<single-ad
 					[adId]="'double'"
 					[adSize]="doubleAdSize"
+					[enableHighImpact]="true"
 					[tip]="true"
-					[showBazaarTrackerAd]="showBazaarTrackerAd"
 					(adVisibility)="onAdVisibilityChanged($event)"
 				></single-ad>
 			</div>
@@ -60,7 +56,6 @@ export class AdsComponent extends AbstractSubscriptionComponent implements OnDes
 	@Output() adVisibility = new EventEmitter<'hidden' | 'partial' | 'full'>();
 
 	doubleAdSize = { width: 400, height: 600 };
-	showBazaarTrackerAd = false;
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
