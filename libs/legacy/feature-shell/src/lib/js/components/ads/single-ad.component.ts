@@ -108,10 +108,12 @@ export class SingleAdComponent extends AbstractSubscriptionComponent implements 
 				}
 				this.adInit = true;
 				console.log(`[ads-${this.adId}] first time init ads, creating OwAd`);
-				this.adRef = new OwAd(document.getElementById(`ads-div-${this.adId}`), {
+				const params = {
 					size: this.adSize,
 					highImpact: this.enableHighImpact,
-				});
+				};
+				console.log(`[ads-${this.adId}] initializing ads with params`, params);
+				this.adRef = new OwAd(document.getElementById(`ads-div-${this.adId}`), params);
 
 				this.displayAdLoadedListener = async (data) => {
 					console.log(`[ads-${this.adId}] display ad loaded`);
