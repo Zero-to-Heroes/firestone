@@ -28,7 +28,7 @@ declare let OwAd: any;
 						<use xlink:href="assets/svg/sprite.svg#ad_placeholder" />
 					</svg>
 				</i>
-				<ad-tip class="tip" *ngIf="tip && !bazaarTrackerAdActive"></ad-tip>
+				<ad-tip class="tip" *ngIf="tip"></ad-tip>
 			</div>
 			<div class="ads" id="ads-div-{{ this.adId }}"></div>
 		</div>
@@ -43,8 +43,6 @@ export class SingleAdComponent extends AbstractSubscriptionComponent implements 
 	@Input() adSize: { width: number; height: number } = { width: 400, height: 300 };
 	@Input() enableHighImpact: boolean;
 	@Input() overlayAd = false;
-
-	bazaarTrackerAdActive: boolean;
 
 	private adRef;
 	private adInit = false;
