@@ -94,16 +94,7 @@ export class GameEvents {
 
 		const gameStateUpdateInterval = 2000;
 		interval(gameStateUpdateInterval).subscribe(() => {
-			// console.debug(
-			// 	'will ask for game state updat?',
-			// 	this.lastProcessedTimestamp,
-			// 	// this.receivedLastGameStateUpdate,
-			// );
 			if (!this.lastProcessedTimestamp) {
-				// console.debug(
-				// 	'[game-events] [game-state] not asking for game state update yet, lastProcessedTimestamp',
-				// 	this.lastProcessedTimestamp,
-				// );
 				return;
 			}
 			// if (!this.receivedLastGameStateUpdate) {
@@ -118,27 +109,12 @@ export class GameEvents {
 				// Only ask for a game state update if we haven't received one in the last 2 seconds
 				// TODO: also don't ask if a request is sent but not received yet
 				if (this.gameStateUpdateInProgress) {
-					// console.debug(
-					// 	'[game-events] [game-state] not asking for game state update, already in progress',
-					// 	timeSinceLastLog,
-					// );
 					return;
 				}
 				if (!this.lastGameStateUpdateTimestamp || timeSinceLastGameStateUpdate > gameStateUpdateInterval) {
-					// console.debug('[game-events] [game-state] asking for game state update', timeSinceLastLog);
 					this.gameStateUpdateInProgress = true;
 					this.gameEventsPlugin.askForGameStateUpdate();
-				} else {
-					// console.debug(
-					// 	'[game-events] [game-state] not asking for game state update, timeSinceLastGameStateUpdate',
-					// 	timeSinceLastGameStateUpdate,
-					// );
 				}
-			} else {
-				// console.debug(
-				// 	'[game-events] [game-state] not asking for game state update, timeSinceLastLog',
-				// 	timeSinceLastLog,
-				// );
 			}
 		});
 	}
@@ -362,7 +338,6 @@ export class GameEvents {
 				);
 				break;
 			case 'RUMBLE_RUN_STEP':
-				// console.debug(gameEvent.Type + ' event', gameEvent.Value - 1);
 				this.doEventDispatch(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.RUMBLE_RUN_STEP,
@@ -373,7 +348,6 @@ export class GameEvents {
 				);
 				break;
 			case 'DUNGEON_RUN_STEP':
-				console.debug('[game-events]', gameEvent.Type + ' event', gameEvent.Value - 1);
 				this.doEventDispatch(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.DUNGEON_RUN_STEP,
@@ -384,7 +358,6 @@ export class GameEvents {
 				);
 				break;
 			case 'MONSTER_HUNT_STEP':
-				console.debug('[game-events]', gameEvent.Type + ' event', gameEvent.Value - 1);
 				this.doEventDispatch(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.MONSTER_HUNT_STEP,
@@ -401,16 +374,16 @@ export class GameEvents {
 						gameEvent,
 						gameEvent.Value.AdditionalProps
 							? {
-								targetEntityId: gameEvent.Value.AdditionalProps.TargetEntityId,
-								targetCardId: gameEvent.Value.AdditionalProps.TargetCardId,
-								creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
-								transientCard: gameEvent.Value.AdditionalProps.TransientCard,
-								immune: gameEvent.Value.AdditionalProps.Immune,
-								dormant: gameEvent.Value.AdditionalProps.Dormant,
-								cost: gameEvent.Value.AdditionalProps.Cost,
-								magnetized: gameEvent.Value.AdditionalProps.Magnetized,
-								tags: gameEvent.Value.AdditionalProps.Tags,
-							}
+									targetEntityId: gameEvent.Value.AdditionalProps.TargetEntityId,
+									targetCardId: gameEvent.Value.AdditionalProps.TargetCardId,
+									creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
+									transientCard: gameEvent.Value.AdditionalProps.TransientCard,
+									immune: gameEvent.Value.AdditionalProps.Immune,
+									dormant: gameEvent.Value.AdditionalProps.Dormant,
+									cost: gameEvent.Value.AdditionalProps.Cost,
+									magnetized: gameEvent.Value.AdditionalProps.Magnetized,
+									tags: gameEvent.Value.AdditionalProps.Tags,
+								}
 							: {},
 					),
 				);
@@ -430,9 +403,9 @@ export class GameEvents {
 			case 'MINION_SUMMONED_FROM_HAND':
 				const summonFromHandAdditionProps = gameEvent.Value.AdditionalProps
 					? {
-						creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
-						tags: gameEvent.Value.AdditionalProps.Tags,
-					}
+							creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
+							tags: gameEvent.Value.AdditionalProps.Tags,
+						}
 					: null;
 				this.doEventDispatch(
 					GameEvent.build(GameEvent.MINION_SUMMONED_FROM_HAND, gameEvent, summonFromHandAdditionProps),
@@ -594,9 +567,9 @@ export class GameEvents {
 			case 'CARD_CHANGED_ON_BOARD':
 				const summonAdditionProps2 = gameEvent.Value.AdditionalProps
 					? {
-						creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
-						lastAffectedByCardId: gameEvent.Value.AdditionalProps.LastAffectedByCardId,
-					}
+							creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
+							lastAffectedByCardId: gameEvent.Value.AdditionalProps.LastAffectedByCardId,
+						}
 					: null;
 				this.doEventDispatch(GameEvent.build(GameEvent.CARD_CHANGED_ON_BOARD, gameEvent, summonAdditionProps2));
 				break;
@@ -711,9 +684,9 @@ export class GameEvents {
 						gameEvent,
 						gameEvent.Value.AdditionalProps
 							? {
-								reactingToCardId: gameEvent.Value.AdditionalProps.InReactionToCardId,
-								reactingToEntityId: gameEvent.Value.AdditionalProps.InReactionToEntityId,
-							}
+									reactingToCardId: gameEvent.Value.AdditionalProps.InReactionToCardId,
+									reactingToEntityId: gameEvent.Value.AdditionalProps.InReactionToEntityId,
+								}
 							: null,
 					),
 				);
@@ -725,9 +698,9 @@ export class GameEvents {
 						gameEvent,
 						gameEvent.Value.AdditionalProps
 							? {
-								reactingToCardId: gameEvent.Value.AdditionalProps.InReactionToCardId,
-								reactingToEntityId: gameEvent.Value.AdditionalProps.InReactionToEntityId,
-							}
+									reactingToCardId: gameEvent.Value.AdditionalProps.InReactionToCardId,
+									reactingToEntityId: gameEvent.Value.AdditionalProps.InReactionToEntityId,
+								}
 							: null,
 					),
 				);
@@ -742,14 +715,14 @@ export class GameEvents {
 						gameEvent,
 						gameEvent.Value.AdditionalProps
 							? {
-								// Reuse the same props name as the ATTACKING events to make it easier to share code
-								attackerCardId: gameEvent.Value.AdditionalProps.ProposedAttackerCardId,
-								attackerEntityId: gameEvent.Value.AdditionalProps.ProposedAttackerEntityId,
-								attackerControllerId: gameEvent.Value.AdditionalProps.ProposedAttackerControllerId,
-								defenderCardId: gameEvent.Value.AdditionalProps.ProposedDefenderCardId,
-								defenderEntityId: gameEvent.Value.AdditionalProps.ProposedDefenderEntityId,
-								defenderControllerId: gameEvent.Value.AdditionalProps.ProposedDefenderControllerId,
-							}
+									// Reuse the same props name as the ATTACKING events to make it easier to share code
+									attackerCardId: gameEvent.Value.AdditionalProps.ProposedAttackerCardId,
+									attackerEntityId: gameEvent.Value.AdditionalProps.ProposedAttackerEntityId,
+									attackerControllerId: gameEvent.Value.AdditionalProps.ProposedAttackerControllerId,
+									defenderCardId: gameEvent.Value.AdditionalProps.ProposedDefenderCardId,
+									defenderEntityId: gameEvent.Value.AdditionalProps.ProposedDefenderEntityId,
+									defenderControllerId: gameEvent.Value.AdditionalProps.ProposedDefenderControllerId,
+								}
 							: null,
 					),
 				);
@@ -860,10 +833,10 @@ export class GameEvents {
 			case 'CARD_ON_BOARD_AT_GAME_START':
 				const additionalProps = gameEvent.Value.AdditionalProps
 					? {
-						health: gameEvent.Value.AdditionalProps.Health,
-						creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
-						tags: gameEvent.Value.AdditionalProps.Tags,
-					}
+							health: gameEvent.Value.AdditionalProps.Health,
+							creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
+							tags: gameEvent.Value.AdditionalProps.Tags,
+						}
 					: null;
 				this.doEventDispatch(
 					GameEvent.build(GameEvent.CARD_ON_BOARD_AT_GAME_START, gameEvent, additionalProps),
@@ -883,7 +856,6 @@ export class GameEvents {
 				this.doEventDispatch(GameEvent.build(GameEvent.FIRST_PLAYER, gameEvent));
 				break;
 			case 'PASSIVE_BUFF':
-				console.debug('[game-events]', gameEvent.Type + ' event', gameEvent.Value.CardId);
 				this.doEventDispatch(GameEvent.build(GameEvent.PASSIVE_BUFF, gameEvent));
 				break;
 			case 'MINION_ON_BOARD_ATTACK_UPDATED':
@@ -1012,7 +984,6 @@ export class GameEvents {
 				);
 				break;
 			case 'MAX_RESOURCES_UPDATED':
-				console.debug('[game-events]', gameEvent.Type + ' event', gameEvent.Value);
 				this.doEventDispatch(
 					GameEvent.build(GameEvent.MAX_RESOURCES_UPDATED, gameEvent, {
 						playerId: gameEvent.Value.AdditionalProps.PlayerId,
@@ -1599,10 +1570,10 @@ export class GameEvents {
 			case 'MINION_SUMMONED':
 				const summonAdditionProps = gameEvent.Value.AdditionalProps
 					? {
-						creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
-						creatorEntityId: gameEvent.Value.AdditionalProps.CreatorEntityId,
-						tags: gameEvent.Value.AdditionalProps.Tags,
-					}
+							creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
+							creatorEntityId: gameEvent.Value.AdditionalProps.CreatorEntityId,
+							tags: gameEvent.Value.AdditionalProps.Tags,
+						}
 					: null;
 				this.doEventDispatch(GameEvent.build(GameEvent.MINION_SUMMONED, gameEvent, summonAdditionProps));
 				break;
@@ -1616,6 +1587,7 @@ export class GameEvents {
 							deadMinions: gameEvent.Value.AdditionalProps.DeadMinions,
 							activePlayerId: gameEvent.Value.AdditionalProps.ActivePlayerId,
 						},
+						debug: gameEvent.Debug,
 					} as MinionsDiedEvent),
 				);
 				break;
@@ -1628,6 +1600,7 @@ export class GameEvents {
 						additionalData: {
 							deadMinions: gameEvent.Value.AdditionalProps.DeadMinions,
 						},
+						debug: gameEvent.Debug,
 					} as MinionsDiedEvent),
 				);
 				break;
