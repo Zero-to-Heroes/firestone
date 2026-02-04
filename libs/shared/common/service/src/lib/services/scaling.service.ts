@@ -56,6 +56,7 @@ export class ScalingService {
 		this._multiScale('decktrackerOpponentHandScale', '--decktracker-opponent-hand-scale');
 		this._multiScale('secretsHelperScale', '--secrets-helper-scale');
 		this._multiScale('sessionWidgetScale', '--session-widget-scale');
+		this._multiScale('decktrackerMinionPlayOrderScale', '--decktracker-minion-play-order-scale');
 		this.lottery();
 	}
 

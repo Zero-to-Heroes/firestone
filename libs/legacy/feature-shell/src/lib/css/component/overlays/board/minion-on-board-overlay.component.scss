@@ -17,6 +17,7 @@
 		position: absolute;
 		top: -4%;
 		left: 40%;
+		transform: scale(var(--decktracker-minion-play-order-scale));
 	}
 
 	.turn-number {

@@ -40,6 +40,12 @@ export const decktrackerOverlaysSettings = (context: SettingContext): SettingNod
 							knobs: sizeKnobs(context),
 						},
 					},
+				],
+			},
+			{
+				id: 'decktracker-play-order',
+				title: context.i18n.translateString('settings.decktracker.global.play-order-title'),
+				settings: [
 					{
 						type: 'toggle',
 						field: 'decktrackerShowMinionPlayOrderOnBoard',
@@ -51,19 +57,31 @@ export const decktrackerOverlaysSettings = (context: SettingContext): SettingNod
 						field: 'decktrackerShowWeaponPlayOrderOnBoard',
 						label: context.i18n.translateString('settings.decktracker.global.weapons-play-order'),
 						tooltip: context.i18n.translateString('settings.decktracker.global.weapons-play-order-tooltip'),
-						disabledIf: (prefs: Preferences) => !prefs.decktrackerShowMinionPlayOrderOnBoard,
-						indented: true,
+						disabledIf: (prefs: Preferences) => !prefs.decktrackerShowMinionPlayOrderOnBoard && !prefs.decktrackerShowWeaponPlayOrderOnBoard,
 					},
 					{
 						type: 'slider',
 						field: 'decktrackerMinionPlayOrderOpacity',
 						label: context.i18n.translateString('settings.decktracker.turn-timer.opacity-title'),
 						tooltip: null,
-						disabledIf: (prefs: Preferences) => !prefs.decktrackerShowMinionPlayOrderOnBoard,
+						disabledIf: (prefs: Preferences) => !prefs.decktrackerShowMinionPlayOrderOnBoard && !prefs.decktrackerShowWeaponPlayOrderOnBoard,
 						sliderConfig: {
 							min: 0,
 							max: 100,
 							snapSensitivity: 5,
+						},
+					},
+					{
+						type: 'slider',
+						field: 'decktrackerMinionPlayOrderScale',
+						label: context.i18n.translateString('settings.decktracker.mulligan.size'),
+						tooltip: null,
+						disabledIf: (prefs: Preferences) => !prefs.decktrackerShowMinionPlayOrderOnBoard && !prefs.decktrackerShowWeaponPlayOrderOnBoard,
+						sliderConfig: {
+							min: 25,
+							max: 175,
+							snapSensitivity: 5,
+							knobs: sizeKnobs(context),
 						},
 					},
 				],
