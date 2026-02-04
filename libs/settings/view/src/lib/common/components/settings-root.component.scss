@@ -10,7 +10,6 @@
 	flex-direction: column;
 	height: 100%;
 	width: 100%;
-	overflow: hidden;
 }
 
 .header-container {
@@ -56,7 +55,6 @@
 	flex-direction: row;
 	height: 100%;
 	width: 100%;
-	overflow: hidden;
 }
 
 .navigation {
@@ -110,5 +108,6 @@
 .current-section {
 	flex-grow: 1;
 	display: flex;
-	margin-left: 15px;
+	margin-left: 10px;
+	min-width: 0;
 }

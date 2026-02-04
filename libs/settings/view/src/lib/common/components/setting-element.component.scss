@@ -19,7 +19,8 @@ preferences-dropdown {
 	display: flex;
 
 	::ng-deep .label {
-		width: 300px;
+		width: 280px;
+		flex-shrink: 0;
 		margin-right: 15px;
 	}
 }
@@ -42,7 +43,8 @@ preferences-dropdown {
 	align-items: center;
 
 	.label {
-		width: 300px;
+		width: 280px;
+		flex-shrink: 0;
 		font-size: 1em;
 		margin-right: 15px;
 		display: flex;
