@@ -120,8 +120,9 @@ export class SettingsControllerService extends AbstractFacadeService<SettingsCon
 		const prefs = JSON.parse(prefsAsString);
 		// Now update the prefs with the new ones, excluding the ones with FORCE_LOCAL_PROP metadata
 		// Also exclude the "position" properties
+		const prefsForCheck = new Preferences();
 		Object.keys(prefs).forEach((prop) => {
-			if (Reflect.getMetadata(FORCE_LOCAL_PROP, existingPrefs, prop) || prop.endsWith('Position')) {
+			if (Reflect.getMetadata(FORCE_LOCAL_PROP, prefsForCheck, prop) || prop.endsWith('Position')) {
 				delete prefs[prop];
 			}
 		});
