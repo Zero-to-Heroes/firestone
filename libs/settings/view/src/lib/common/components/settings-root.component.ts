@@ -5,7 +5,6 @@ import {
 	ChangeDetectorRef,
 	Component,
 	Inject,
-	Optional,
 	ViewRef,
 } from '@angular/core';
 import { ArenaRewardsService } from '@firestone/arena/common';
@@ -22,7 +21,6 @@ import {
 	IAdsService,
 	IDatabaseService,
 	ILocalizationService,
-	OverwolfService,
 	waitForReady,
 } from '@firestone/shared/framework/core';
 import { GameStatsLoaderService } from '@firestone/stats/data-access';
@@ -77,7 +75,6 @@ export class SettingsRootComponent extends AbstractSubscriptionComponent impleme
 		private readonly i18n: ILocalizationService,
 		private readonly prefs: PreferencesService,
 		private readonly analytics: AnalyticsService,
-		@Optional() private readonly ow: OverwolfService,
 		private readonly controller: SettingsControllerService,
 		private readonly uiController: SettingsUiControllerService,
 		private readonly diskCache: DiskCacheService,
@@ -103,15 +100,12 @@ export class SettingsRootComponent extends AbstractSubscriptionComponent impleme
 		);
 		this.rootNode$ = this.uiController.rootNode$$.asObservable();
 
-		const isBeta = (await this.ow?.isBetaChannel?.()) ?? false;
 		const context: SettingContext = {
 			allCards: this.allCards,
 			prefs: this.prefs,
 			analytics: this.analytics,
-			ow: this.ow,
 			i18n: this.i18n,
 			adService: this.adService,
-			isBeta: isBeta,
 			services: {
 				account: this.account,
 				diskCache: this.diskCache,

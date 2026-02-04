@@ -6,13 +6,17 @@ import type {
 	LogListenOptions,
 } from '@firestone/shared/common/service';
 import { HEARTHSTONE_GAME_ID, ListenObject } from '@firestone/shared/framework/core';
+import { dialog, shell } from 'electron';
 import { Stats, constants as fsConstants, promises as fsPromises, unwatchFile, watchFile } from 'fs';
-import { dirname } from 'path';
+import path, { dirname } from 'path';
+import { ElectronDiskCacheService } from './electron-disk-cache.service';
 
 type WatchCallback = (lineInfo: ListenObject) => void;
 
 export class ElectronLogFileBackendService implements LogFileBackend {
 	private watchers = new Map<string, NodeLogFileWatcher>();
+
+	constructor(private readonly diskCache: ElectronDiskCacheService) {}
 
 	async getRunningGameInfo(): Promise<any> {
 		const gameWindowService = ElectronGameWindowService.getInstance();
@@ -92,6 +96,44 @@ export class ElectronLogFileBackendService implements LogFileBackend {
 				path: directory,
 			};
 		}
+	}
+
+	async deleteAppFile(fileName: string): Promise<boolean> {
+		const filePath = path.join(this.diskCache.getCacheDirectory(), fileName);
+		try {
+			await fsPromises.unlink(filePath);
+			return true;
+		} catch (e) {
+			console.error('[electron-log-backend] error deleting file', filePath, e);
+			return false;
+		}
+	}
+
+	async storeAppFile(fileName: string, content: string): Promise<boolean> {
+		const filePath = path.join(this.diskCache.getCacheDirectory(), fileName);
+		return this.writeFileContents(filePath, content);
+	}
+
+	async openLocalCacheFolder(): Promise<void> {
+		const path = this.diskCache.getCacheDirectory();
+		await shell.openExternal(path);
+	}
+
+	async openAppFilePicker(): Promise<string | undefined> {
+		const defaultPath = this.diskCache.getCacheDirectory();
+		const result = await dialog.showOpenDialog({
+			title: 'Select file',
+			defaultPath,
+			properties: ['openFile'],
+			filters: [
+				{ name: 'Settings / JSON', extensions: ['json'] },
+				{ name: 'All Files', extensions: ['*'] },
+			],
+		});
+		if (result.canceled || result.filePaths.length === 0) {
+			return undefined;
+		}
+		return result.filePaths[0];
 	}
 
 	async getGameDbInfo(): Promise<any | null> {

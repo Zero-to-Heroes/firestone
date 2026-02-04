@@ -10,7 +10,7 @@ import { IBattlegroundsWindowOptions, IWindowHandlerService, OverwolfService } f
 export class OwWindowHandlerService implements IWindowHandlerService {
 	constructor(
 		private readonly ow: OverwolfService,
-		private readonly prefs: PreferencesService
+		private readonly prefs: PreferencesService,
 	) {}
 
 	public async openSettingsWindow() {
@@ -41,11 +41,10 @@ export class OwWindowHandlerService implements IWindowHandlerService {
 		if (forcedStatus === 'open') {
 			console.debug('[ow-window-handler] forcedStatus is open, obtaining window');
 			await this.ow.obtainDeclaredWindow(windowName);
-			if (
-				battlegroundsWindow.window_state_ex !== 'maximized' &&
-				battlegroundsWindow.stateEx !== 'maximized'
-			) {
-				console.debug('[ow-window-handler] battlegroundsWindow is not maximized, restoring and bringing to front');
+			if (battlegroundsWindow.window_state_ex !== 'maximized' && battlegroundsWindow.stateEx !== 'maximized') {
+				console.debug(
+					'[ow-window-handler] battlegroundsWindow is not maximized, restoring and bringing to front',
+				);
 				await this.ow.restoreWindow(windowName);
 				await this.ow.bringToFront(windowName);
 			}
@@ -55,8 +54,13 @@ export class OwWindowHandlerService implements IWindowHandlerService {
 		} else {
 			// Toggle it - if it's open, close it, if it's closed, open it
 			console.debug('[ow-window-handler] forcedStatus is null, toggling window');
-			if (isWindowClosed(battlegroundsWindow.window_state_ex) || isWindowHidden(battlegroundsWindow.window_state_ex)) {
-				console.debug('[ow-window-handler] battlegroundsWindow is closed or hidden, restoring and bringing to front');
+			if (
+				isWindowClosed(battlegroundsWindow.window_state_ex) ||
+				isWindowHidden(battlegroundsWindow.window_state_ex)
+			) {
+				console.debug(
+					'[ow-window-handler] battlegroundsWindow is closed or hidden, restoring and bringing to front',
+				);
 				await this.ow.obtainDeclaredWindow(windowName);
 				await this.ow.restoreWindow(windowName);
 				await this.ow.bringToFront(windowName);
@@ -65,6 +69,14 @@ export class OwWindowHandlerService implements IWindowHandlerService {
 				await this.ow.closeWindow(windowName);
 			}
 		}
+	}
+
+	public reloadWindows(): void {
+		this.ow.getMainWindow().reloadWindows();
+	}
+
+	public relaunchApp(): void {
+		this.ow.relaunchApp();
 	}
 }
 

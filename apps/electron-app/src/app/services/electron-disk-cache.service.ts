@@ -49,6 +49,10 @@ export class ElectronDiskCacheService {
 		}
 	}
 
+	public getCacheDirectory(): string | null {
+		return this.cacheDirectory;
+	}
+
 	private getFilePath(key: string): string | null {
 		if (!this.cacheDirectory) {
 			return null;

@@ -26,6 +26,8 @@ export class WindowHandlerFacadeService extends AbstractFacadeService<WindowHand
 		this.registerMainProcessMethod('showSettingsWindowInternal', (useOverlay: boolean) =>
 			this.showSettingsWindowInternal(useOverlay),
 		);
+		this.registerMainProcessMethod('reloadWindowsInternal', () => this.reloadWindowsInternal());
+		this.registerMainProcessMethod('relaunchAppInternal', () => this.relaunchAppInternal());
 	}
 
 	public showSettingsWindow(useOverlay: boolean) {
@@ -33,5 +35,19 @@ export class WindowHandlerFacadeService extends AbstractFacadeService<WindowHand
 	}
 	private async showSettingsWindowInternal(useOverlay: boolean) {
 		this.windowHandler.openSettingsWindow(useOverlay);
+	}
+
+	public reloadWindows() {
+		this.callOnMainProcess('reloadWindowsInternal');
+	}
+	private async reloadWindowsInternal() {
+		this.windowHandler.reloadWindows();
+	}
+
+	public relaunchApp() {
+		this.callOnMainProcess('relaunchAppInternal');
+	}
+	private async relaunchAppInternal() {
+		this.windowHandler.relaunchApp();
 	}
 }

@@ -46,4 +46,20 @@ export class OverwolfLogFileBackendService implements LogFileBackend {
 	async getGameDbInfo(): Promise<any | null> {
 		return this.overwolfService.getGameDbInfo();
 	}
+
+	async deleteAppFile(fileName: string): Promise<boolean> {
+		return this.overwolfService.deleteAppFile(fileName);
+	}
+
+	async storeAppFile(fileName: string, content: string): Promise<boolean> {
+		return this.overwolfService.storeAppFile(fileName, content);
+	}
+
+	async openLocalCacheFolder(): Promise<void> {
+		return this.overwolfService.openLocalCacheFolder();
+	}
+
+	async openAppFilePicker(): Promise<string | undefined> {
+		return this.overwolfService.openAppFilePicker();
+	}
 }

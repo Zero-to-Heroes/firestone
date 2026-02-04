@@ -209,6 +209,26 @@ export class ElectronWindowHandlerService implements IWindowHandlerService {
 		});
 	}
 
+	public reloadWindows(): void {
+		const browserWindows = [this.settingsWindow];
+		const overlayWindows = [this.settingsOverlayWindow];
+		for (const window of browserWindows) {
+			if (window && !window.isDestroyed()) {
+				window.reload();
+			}
+		}
+		for (const window of overlayWindows) {
+			if (window && !window.window.isDestroyed()) {
+				window.window.reload();
+			}
+		}
+	}
+
+	public relaunchApp(): void {
+		app.relaunch();
+		app.exit(0);
+	}
+
 	/**
 	 * Get the DPI scale factor for the display where the overlay appears.
 	 * Use this when you need DPI-aware scaling (e.g. zoomFactor, layout calculations).

@@ -8,7 +8,6 @@ import {
 	IAdsService,
 	IDatabaseService,
 	ILocalizationService,
-	OverwolfService,
 } from '@firestone/shared/framework/core';
 import { GameStatsLoaderService } from '@firestone/stats/data-access';
 import { Observable } from 'rxjs';
@@ -17,11 +16,9 @@ import { SettingsControllerService } from '../services/settings-controller.servi
 export interface SettingContext {
 	readonly prefs: PreferencesService;
 	readonly analytics: AnalyticsService;
-	readonly ow: OverwolfService;
 	readonly i18n: ILocalizationService;
 	readonly adService: IAdsService;
 	readonly allCards: CardsFacadeService;
-	readonly isBeta: boolean;
 	readonly services: {
 		readonly diskCache: DiskCacheService;
 		readonly db: IDatabaseService;

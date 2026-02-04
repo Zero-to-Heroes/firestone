@@ -33,6 +33,10 @@ export interface LogFileBackend {
 	readTextFile(filePathOnDisk: string): Promise<string>;
 	listFilesInDirectory(directory: string): Promise<LogDirectoryResult | null>;
 	getGameDbInfo(): Promise<any | null>;
+	deleteAppFile(fileName: string): Promise<boolean>;
+	storeAppFile(fileName: string, content: string): Promise<boolean>;
+	openLocalCacheFolder(): Promise<void>;
+	openAppFilePicker(): Promise<string | undefined>;
 }
 
 export const LOG_FILE_BACKEND = new InjectionToken<LogFileBackend>('LOG_FILE_BACKEND');

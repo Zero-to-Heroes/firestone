@@ -48,14 +48,12 @@ export const generalDataSettings = (context: SettingContext): SettingNode => {
 							},
 						},
 					},
-					!!context.ow
-						? {
-								label: context.i18n.translateString('settings.general.data.open-local-cache-folder'),
-								text: context.i18n.translateString('settings.general.data.open-local-cache-folder-button'),
-								tooltip: null,
-								action: async () => context.ow.openLocalCacheFolder(),
-							}
-						: null,
+					{
+						label: context.i18n.translateString('settings.general.data.open-local-cache-folder'),
+						text: context.i18n.translateString('settings.general.data.open-local-cache-folder-button'),
+						tooltip: null,
+						action: async () => context.services.settingsController.openLocalCacheFolder(),
+					},
 					{
 						label: context.i18n.translateString('settings.general.data.clear-local-cache'),
 						text: clearCacheButtonText$(context),
@@ -111,35 +109,31 @@ export const generalDataSettings = (context: SettingContext): SettingNode => {
 				id: 'general-data-settings',
 				title: context.i18n.translateString('settings.general.data.settings-title'),
 				settings: [
-					!!context.ow
-						? {
-								label: context.i18n.translateString('settings.general.data.export-settings-button-label'),
-								text: context.i18n.translateString('settings.general.data.export-settings-button-label'),
-								tooltip: context.i18n.translateString('settings.general.data.export-settings-button-tooltip'),
-								action: async () => {
-									await context.services.settingsController.exportSettings();
-									context.ow.openLocalCacheFolder();
-								},
+					{
+						label: context.i18n.translateString('settings.general.data.export-settings-button-label'),
+						text: context.i18n.translateString('settings.general.data.export-settings-button-label'),
+						tooltip: context.i18n.translateString('settings.general.data.export-settings-button-tooltip'),
+						action: async () => {
+							await context.services.settingsController.exportSettings();
+							context.services.settingsController.openLocalCacheFolder();
+						},
+					},
+					{
+						label: context.i18n.translateString('settings.general.data.import-settings-button-label'),
+						text: importingSettingsButtonText$(context),
+						tooltip: context.i18n.translateString('settings.general.data.import-settings-button-tooltip'),
+						action: async () => {
+							const selectedFilePath = await context.services.settingsController.openAppFilePicker();
+							if (selectedFilePath != null) {
+								settingImportStatus$$.next('working');
+								await context.services.settingsController.importSettings(selectedFilePath);
+								await sleep(1000);
+								settingImportStatus$$.next('showing-confirmation');
+								await sleep(8000);
+								settingImportStatus$$.next('done');
 							}
-						: null,
-					!!context.ow
-						? {
-								label: context.i18n.translateString('settings.general.data.import-settings-button-label'),
-								text: importingSettingsButtonText$(context),
-								tooltip: context.i18n.translateString('settings.general.data.import-settings-button-tooltip'),
-								action: async () => {
-									const selectedFilePath = await context.ow.openAppFilePicker();
-									if (selectedFilePath != null) {
-										settingImportStatus$$.next('working');
-										await context.services.settingsController.importSettings(selectedFilePath);
-										await sleep(1000);
-										settingImportStatus$$.next('showing-confirmation');
-										await sleep(8000);
-										settingImportStatus$$.next('done');
-									}
-								},
-							}
-						: null,
+						},
+					},
 				].filter((s) => !!s) as readonly (Setting | SettingButton)[],
 			},
 			// {

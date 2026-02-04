@@ -11,28 +11,24 @@ export const generalAdminSettings = (context: SettingContext): SettingNode => {
 				id: 'general-admin',
 				title: context.i18n.translateString('settings.general.menu.admin'),
 				settings: [
-					!!context.ow
-						? {
-								label: context.i18n.translateString('settings.general.launch.reset-prefs-button-label'),
-								text: context.i18n.translateString('settings.general.launch.reset-prefs-button-default'),
-								tooltip: context.i18n.translateString('settings.general.launch.reset-prefs-tooltip'),
-								confirmation: context.i18n.translateString('settings.general.launch.reset-prefs-button-confirmation'),
-								action: async () => {
-									await context.prefs.reset();
-									context.ow.getMainWindow().reloadWindows();
-								},
-							}
-						: null,
-					!!context.ow
-						? {
-								label: context.i18n.translateString('settings.general.launch.restart-app-button-label'),
-								text: context.i18n.translateString('settings.general.launch.restart-app-button-text'),
-								tooltip: null,
-								action: async () => {
-									context.ow.relaunchApp();
-								},
-							}
-						: null,
+					{
+						label: context.i18n.translateString('settings.general.launch.reset-prefs-button-label'),
+						text: context.i18n.translateString('settings.general.launch.reset-prefs-button-default'),
+						tooltip: context.i18n.translateString('settings.general.launch.reset-prefs-tooltip'),
+						confirmation: context.i18n.translateString('settings.general.launch.reset-prefs-button-confirmation'),
+						action: async () => {
+							await context.prefs.reset();
+							context.services.settingsController.reloadWindows();
+						},
+					},
+					{
+						label: context.i18n.translateString('settings.general.launch.restart-app-button-label'),
+						text: context.i18n.translateString('settings.general.launch.restart-app-button-text'),
+						tooltip: null,
+						action: async () => {
+							context.services.settingsController.relaunchApp();
+						},
+					},
 				].filter((s) => !!s) as readonly (Setting | SettingButton)[],
 			},
 		],

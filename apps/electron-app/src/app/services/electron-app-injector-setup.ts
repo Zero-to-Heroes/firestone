@@ -153,7 +153,11 @@ export const buildAppInjector = () => {
 	const preferences = new PreferencesService(windowManager);
 	electronInjector.register(PreferencesService, preferences);
 
-	const logFileBackend = new ElectronLogFileBackendService();
+	const diskCache = new ElectronDiskCacheService(preferences);
+	electronInjector.register(DiskCacheService, diskCache as any as DiskCacheService);
+	electronInjector.register(ElectronDiskCacheService, diskCache);
+
+	const logFileBackend = new ElectronLogFileBackendService(diskCache);
 	electronInjector.register(LOG_FILE_BACKEND, logFileBackend);
 
 	const logUtils = new LogUtilsService(logFileBackend, preferences, gameStatus);
@@ -167,10 +171,6 @@ export const buildAppInjector = () => {
 
 	const sqliteDb = new SqliteDatabaseService();
 	electronInjector.register(DATABASE_SERVICE_TOKEN, sqliteDb as IDatabaseService);
-
-	const diskCache = new ElectronDiskCacheService(preferences);
-	electronInjector.register(DiskCacheService, diskCache as any as DiskCacheService);
-	electronInjector.register(ElectronDiskCacheService, diskCache);
 
 	const api = new ElectronApiRunner();
 	electronInjector.register(ApiRunner, api as any as ApiRunner);
