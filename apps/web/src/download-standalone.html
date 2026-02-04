@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Download Firestone</title>
+	<style>
+		body { font-family: system-ui, sans-serif; text-align: center; padding: 2rem; }
+		.spinner { margin: 2rem auto; width: 40px; height: 40px; border: 3px solid #eee; border-top-color: #333; border-radius: 50%; animation: spin 0.8s linear infinite; }
+		@keyframes spin { to { transform: rotate(360deg); } }
+		.error { color: #c00; }
+		a { color: #06c; }
+	</style>
+</head>
+<body>
+	<h1>Firestone Installer</h1>
+	<div id="status">
+		<div class="spinner" aria-hidden="true"></div>
+		<p>Finding latest version…</p>
+	</div>
+	<script>
+		(function () {
+			var UPDATES_BASE = '/updates';
+			var statusEl = document.getElementById('status');
+
+			function showError(msg) {
+				statusEl.innerHTML = '<p class="error">' + msg + '</p><p><a href="' + UPDATES_BASE + '/latest.yml">Check updates</a></p>';
+			}
+
+			function redirect(url) {
+				window.location.replace(url);
+			}
+
+			fetch(UPDATES_BASE + '/latest.yml', { cache: 'no-store' })
+				.then(function (r) {
+					if (!r.ok) throw new Error('Could not load version info');
+					return r.text();
+				})
+				.then(function (yaml) {
+					var pathMatch = yaml.match(/path:\s*(.+)/m);
+					if (!pathMatch || !pathMatch[1]) {
+						showError('Invalid update info.');
+						return;
+					}
+					var path = pathMatch[1].trim().replace(/^['"]|['"]$/g, '');
+					var downloadUrl = UPDATES_BASE + '/' + encodeURIComponent(path);
+					redirect(downloadUrl);
+				})
+				.catch(function (err) {
+					showError('Could not get latest installer. Please try again later.');
+					console.error(err);
+				});
+		})();
+	</script>
+</body>
+</html>
