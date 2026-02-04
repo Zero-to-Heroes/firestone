@@ -37,6 +37,7 @@ declare let OwAd: any;
 })
 export class SingleAdComponent extends AbstractSubscriptionComponent implements AfterViewInit, OnDestroy {
 	@Output() adVisibility = new EventEmitter<'hidden' | 'partial' | 'full'>();
+	@Output() showHighImpactAd = new EventEmitter<boolean>();
 
 	@Input() tip: boolean;
 	@Input() adId: string;
@@ -51,6 +52,7 @@ export class SingleAdComponent extends AbstractSubscriptionComponent implements 
 	private displayAdLoadedListener: (message: any) => void;
 	private adsReadyListener: (message: any) => void;
 	private highImpactAdLoadedListener: (message: any) => void;
+	private highImpactAdRemovedListener: (message: any) => void;
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
@@ -73,6 +75,7 @@ export class SingleAdComponent extends AbstractSubscriptionComponent implements 
 		this.adRef?.removeEventListener(this.displayAdLoadedListener);
 		this.adRef?.removeEventListener(this.adsReadyListener);
 		this.adRef?.removeEventListener(this.highImpactAdLoadedListener);
+		this.adRef?.removeEventListener(this.highImpactAdRemovedListener);
 	}
 
 	private async initializeAds() {
@@ -100,7 +103,8 @@ export class SingleAdComponent extends AbstractSubscriptionComponent implements 
 					this.videoImpressionListener ||
 					this.displayAdLoadedListener ||
 					this.playListener ||
-					this.highImpactAdLoadedListener
+					this.highImpactAdLoadedListener ||
+					this.highImpactAdRemovedListener
 				) {
 					console.warn(`[ads-${this.adId}] Redefining the impression listener, could cause memory leaks`);
 				}
@@ -108,7 +112,7 @@ export class SingleAdComponent extends AbstractSubscriptionComponent implements 
 				console.log(`[ads-${this.adId}] first time init ads, creating OwAd`);
 				const params = {
 					size: this.adSize,
-					highImpact: this.enableHighImpact,
+					enableHighImpact: this.enableHighImpact,
 				};
 				console.log(`[ads-${this.adId}] initializing ads with params`, params);
 				this.adRef = new OwAd(document.getElementById(`ads-div-${this.adId}`), params);
@@ -127,6 +131,11 @@ export class SingleAdComponent extends AbstractSubscriptionComponent implements 
 				};
 				this.highImpactAdLoadedListener = async (data) => {
 					console.log(`[ads-${this.adId}] high impact ad loaded`);
+					this.showHighImpactAd.next(true);
+				};
+				this.highImpactAdRemovedListener = async (data) => {
+					console.log(`[ads-${this.adId}] high impact ad removed`);
+					this.showHighImpactAd.next(false);
 				};
 				// https://overwolf.github.io/api/general/ads-sdk/overwolf-platform/owad
 				// Fires when an Ad started "playing" (Video Ad started playing, or display Ad was presented).
@@ -140,6 +149,7 @@ export class SingleAdComponent extends AbstractSubscriptionComponent implements 
 				// history/size/geo/time of day etc. all could affect fill rates.
 				this.adRef.addEventListener('display_ad_loaded', this.displayAdLoadedListener);
 				this.adRef.addEventListener('high-impact-ad-loaded', this.highImpactAdLoadedListener);
+				this.adRef.addEventListener('high-impact-ad-removed', this.highImpactAdRemovedListener);
 				// Internal event, should be removed?
 				this.adRef.addEventListener('ow_internal_rendered', this.adsReadyListener);
 
