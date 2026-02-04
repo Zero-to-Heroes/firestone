@@ -42,7 +42,7 @@ export class BgsPlayerBoardParser implements EventParser {
 		private readonly gameIdService: GameUniqueIdService,
 		private readonly guardian: BgsIntermediateResultsSimGuardianService,
 		private readonly gameEventsService: GameEvents,
-	) { }
+	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return !!state && isBattlegrounds(state.metadata?.gameType);
@@ -532,6 +532,8 @@ export class BgsPlayerBoardParser implements EventParser {
 				DeepBluesPlayed: opponentBoard.globalInfo?.DeepBluesPlayed ?? 0,
 				VolumizerAttackBuff: opponentBoard.globalInfo?.VolumizerAttackBuff ?? 0,
 				VolumizerHealthBuff: opponentBoard.globalInfo?.VolumizerHealthBuff ?? 0,
+				WhelpAttackBuff: opponentBoard.globalInfo?.WhelpAttackBuff ?? 0,
+				WhelpHealthBuff: opponentBoard.globalInfo?.WhelpHealthBuff ?? 0,
 				GoldrinnBuffAtk: opponentBoard.globalInfo?.GoldrinnBuffAtk ?? 0,
 				GoldrinnBuffHealth: opponentBoard.globalInfo?.GoldrinnBuffHealth ?? 0,
 				ChoralAttackBuff: opponentBoard.globalInfo?.ChoralAttackBuff ?? 0,
@@ -607,6 +609,8 @@ export class BgsPlayerBoardParser implements EventParser {
 					DeepBluesPlayed: playerBoard.globalInfo?.DeepBluesPlayed ?? 0,
 					VolumizerAttackBuff: playerBoard.globalInfo?.VolumizerAttackBuff ?? 0,
 					VolumizerHealthBuff: playerBoard.globalInfo?.VolumizerHealthBuff ?? 0,
+					WhelpAttackBuff: playerBoard.globalInfo?.WhelpAttackBuff ?? 0,
+					WhelpHealthBuff: playerBoard.globalInfo?.WhelpHealthBuff ?? 0,
 					GoldrinnBuffAtk: playerBoard.globalInfo?.GoldrinnBuffAtk ?? 0,
 					GoldrinnBuffHealth: playerBoard.globalInfo?.GoldrinnBuffHealth ?? 0,
 					ChoralAttackBuff: playerBoard.globalInfo?.ChoralAttackBuff ?? 0,

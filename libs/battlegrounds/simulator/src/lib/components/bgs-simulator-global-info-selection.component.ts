@@ -84,6 +84,24 @@ import { CardsFacadeService, ILocalizationService } from '@firestone/shared/fram
 				>
 				</fs-numeric-input-with-arrows>
 				<fs-numeric-input-with-arrows
+					class="input whelp-attack"
+					[label]="'battlegrounds.sim.whelp-attack' | fsTranslate"
+					[helpTooltip]="'battlegrounds.sim.whelp-attack-tooltip' | fsTranslate"
+					[value]="whelpAttackBuff"
+					[minValue]="0"
+					(fsModelUpdate)="onWhelpAttackBuffChanged($event)"
+				>
+				</fs-numeric-input-with-arrows>
+				<fs-numeric-input-with-arrows
+					class="input whelp-health"
+					[label]="'battlegrounds.sim.whelp-health' | fsTranslate"
+					[helpTooltip]="'battlegrounds.sim.whelp-health-tooltip' | fsTranslate"
+					[value]="whelpHealthBuff"
+					[minValue]="0"
+					(fsModelUpdate)="onWhelpHealthBuffChanged($event)"
+				>
+				</fs-numeric-input-with-arrows>
+				<fs-numeric-input-with-arrows
 					class="input goldrinn-attack"
 					[label]="'battlegrounds.sim.goldrinn-attack' | fsTranslate"
 					[helpTooltip]="'battlegrounds.sim.goldrinn-attack-tooltip' | fsTranslate"
@@ -286,6 +304,8 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 		this.deepBluesPlayed = value?.DeepBluesPlayed ?? 0;
 		this.volumizerAttackBuff = value?.VolumizerAttackBuff ?? 0;
 		this.volumizerHealthBuff = value?.VolumizerHealthBuff ?? 0;
+		this.whelpAttackBuff = value?.WhelpAttackBuff ?? 0;
+		this.whelpHealthBuff = value?.WhelpHealthBuff ?? 0;
 		this.goldrinnAttackBonus = value?.GoldrinnBuffAtk ?? 0;
 		this.goldrinnHealthBonus = value?.GoldrinnBuffHealth ?? 0;
 		this.frostlingBonus = value?.FrostlingBonus ?? 0;
@@ -319,6 +339,8 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 	deepBluesPlayed: number;
 	volumizerAttackBuff: number;
 	volumizerHealthBuff: number;
+	whelpAttackBuff: number;
+	whelpHealthBuff: number;
 	goldrinnAttackBonus: number;
 	goldrinnHealthBonus: number;
 	frostlingBonus: number;
@@ -375,6 +397,14 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 
 	onVolumizerHealthBuffChanged(value: number) {
 		this.volumizerHealthBuff = value;
+	}
+
+	onWhelpAttackBuffChanged(value: number) {
+		this.whelpAttackBuff = value;
+	}
+
+	onWhelpHealthBuffChanged(value: number) {
+		this.whelpHealthBuff = value;
 	}
 
 	onGoldrinnAttackBonusChanged(value: number) {
@@ -436,6 +466,8 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 			DeepBluesPlayed: this.deepBluesPlayed,
 			VolumizerAttackBuff: this.volumizerAttackBuff,
 			VolumizerHealthBuff: this.volumizerHealthBuff,
+			WhelpAttackBuff: this.whelpAttackBuff,
+			WhelpHealthBuff: this.whelpHealthBuff,
 			GoldrinnBuffAtk: this.goldrinnAttackBonus,
 			GoldrinnBuffHealth: this.goldrinnHealthBonus,
 			FrostlingBonus: this.frostlingBonus,

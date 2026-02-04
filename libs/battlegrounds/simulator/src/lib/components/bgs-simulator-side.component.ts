@@ -174,6 +174,8 @@ export class BgsSimulatorSideComponent {
 	deepBluesPlayed: number;
 	volumizerAttackBuff: number;
 	volumizerHealthBuff: number;
+	whelpAttackBuff: number;
+	whelpHealthBuff: number;
 	goldrinnAttackBonus: number;
 	goldrinnHealthBonus: number;
 	tavernSpellsCastThisGame: number;
@@ -283,6 +285,8 @@ export class BgsSimulatorSideComponent {
 		this.deepBluesPlayed = this._player.player?.globalInfo?.DeepBluesPlayed ?? 0;
 		this.volumizerAttackBuff = this._player.player?.globalInfo?.VolumizerAttackBuff ?? 0;
 		this.volumizerHealthBuff = this._player.player?.globalInfo?.VolumizerHealthBuff ?? 0;
+		this.whelpAttackBuff = this._player.player?.globalInfo?.WhelpAttackBuff ?? 0;
+		this.whelpHealthBuff = this._player.player?.globalInfo?.WhelpHealthBuff ?? 0;
 		this.goldrinnAttackBonus = this._player.player?.globalInfo?.GoldrinnBuffAtk ?? 0;
 		this.goldrinnHealthBonus = this._player.player?.globalInfo?.GoldrinnBuffHealth ?? 0;
 		this.eternalLegion = this._player.player?.globalInfo?.EternalKnightsDeadThisGame ?? 0;

@@ -191,6 +191,8 @@ export class BgsBattleSideComponent {
 	deepBluesPlayed: number;
 	volumizerAttackBuff: number;
 	volumizerHealthBuff: number;
+	whelpAttackBuff: number;
+	whelpHealthBuff: number;
 	goldrinnAttackBonus: number;
 	goldrinnHealthBonus: number;
 	eternalLegion: number;
@@ -209,7 +211,7 @@ export class BgsBattleSideComponent {
 	constructor(
 		private readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
-	) { }
+	) {}
 
 	trackByFn(index, item: Entity) {
 		return item.id;
@@ -320,6 +322,8 @@ export class BgsBattleSideComponent {
 		this.deepBluesPlayed = this._player.player?.globalInfo?.DeepBluesPlayed ?? 0;
 		this.volumizerAttackBuff = this._player.player?.globalInfo?.VolumizerAttackBuff ?? 0;
 		this.volumizerHealthBuff = this._player.player?.globalInfo?.VolumizerHealthBuff ?? 0;
+		this.whelpAttackBuff = this._player.player?.globalInfo?.WhelpAttackBuff ?? 0;
+		this.whelpHealthBuff = this._player.player?.globalInfo?.WhelpHealthBuff ?? 0;
 		this.goldrinnAttackBonus = this._player.player?.globalInfo?.GoldrinnBuffAtk ?? 0;
 		this.goldrinnHealthBonus = this._player.player?.globalInfo?.GoldrinnBuffHealth ?? 0;
 		// this.bloodGemAttackBonus = this._player.player?.globalInfo?.BloodGemAttackBonus ?? 0;

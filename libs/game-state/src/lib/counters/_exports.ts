@@ -203,6 +203,7 @@ export const getAllCounters: (
 	new DeepBlueCounterDefinitionV2(i18n, allCards),
 	new UndeadArmyCounterDefinitionV2(i18n, allCards),
 	new VolumizerBuffCounterDefinitionV2(i18n, allCards),
+	// new WhelpBuffCounterDefinitionV2(i18n, allCards),
 	new RightmostBuffCounterDefinitionV2(i18n, allCards),
 	new TavernBuffCounterDefinitionV2(i18n, allCards),
 ];
@@ -312,5 +313,6 @@ export type CounterType =
 	| 'bgsDeepBlue'
 	| 'bgsUndeadArmy'
 	| 'bgsVolumizerBuff'
+	| 'bgsWhelpBuff'
 	| 'bgsRightmostBuff'
 	| 'bgsTavernBuff';

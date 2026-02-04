@@ -535,6 +535,7 @@ export class Preferences implements IPreferences {
 	readonly playerBgsDeepBlueCounter: boolean = true;
 	readonly playerBgsUndeadArmyCounter: boolean = true;
 	readonly playerBgsVolumizerBuffCounter: boolean = true;
+	readonly playerBgsWhelpBuffCounter: boolean = true;
 	readonly playerBgsRightmostBuffCounter: boolean = true;
 
 	readonly replaysLoadPeriod: 'all-time' | 'past-100' | 'last-patch' | 'season-start' | 'past-7' = 'past-100';
