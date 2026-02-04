@@ -24,8 +24,18 @@ import {
 import { Mutable, NonFunctionProperties, sleep } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
 import { deflate, inflate } from 'pako';
-import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
-import { delay, distinctUntilChanged, filter, map, sampleTime, switchMap, take } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, Observable, of, throwError } from 'rxjs';
+import {
+	delay,
+	distinctUntilChanged,
+	filter,
+	map,
+	sampleTime,
+	switchMap,
+	take,
+	timeout,
+	catchError,
+} from 'rxjs/operators';
 import { TwitchEvent } from '../model/ebs-event';
 import { TwitchBgsBoard, TwitchBgsBoardEntity, TwitchBgsPlayer, TwitchBgsState } from '../model/twitch-bgs-state';
 
@@ -35,6 +45,7 @@ const SCOPES = 'channel_read';
 export const TWITCH_LOGIN_URL = `https://id.twitch.tv/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=token&scope=${SCOPES}`;
 
 const EBS_URL = 'https://twitch-ebs.firestoneapp.com/deck/event';
+const EBS_REQUEST_TIMEOUT_MS = 30000;
 // const EBS_URL = 'https://ebs.firestoneapp.com/deck/event';
 // const EBS_URL = 'https://localhost:8081/deck/event';
 
@@ -356,58 +367,73 @@ export class TwitchAuthService {
 
 		const httpHeaders: HttpHeaders = new HttpHeaders().set('Authorization', `Bearer ${prefs.twitchAccessToken}`);
 		// console.debug('[twitch-auth] sending event', newEvent);
-		this.http.post(EBS_URL, newEvent, { headers: httpHeaders }).subscribe(
-			(data: any) => {
-				// Do nothing
-				if (!this.hasLoggedInfoOnce && data.statusCode === 422) {
-					this.hasLoggedInfoOnce = true;
-					console.log('no-format', '[twitch] message', data, JSON.stringify(newEvent), newEvent);
-					console.debug(
-						'[twitch] message debug',
-						deflate(JSON.stringify(newEvent)).byteLength,
-						deflate(JSON.stringify(newEvent)).byteLength,
-						JSON.stringify(newEvent),
-					);
-					console.error(
-						'no-format',
-						'[twitch] Message sent to Twitch is too large',
-						JSON.stringify(newEvent),
-					);
-				}
-				if (data.statusCode === 422) {
-					console.debug('ERROR', 'Twitch message too large', newEvent);
-				}
-			},
-			(error) => {
-				console.debug('error sending message to twitch', error);
-				if (!this.hasLoggedInfoOnce) {
-					this.hasLoggedInfoOnce = true;
-					console.error(
-						'no-format',
-						'[twitch-auth] Could not send deck event to EBS',
-						error,
-						JSON.stringify(newEvent),
-						newEvent,
-					);
-					this.bugReport.submitAutomatedReport({
-						type: 'twitch-ebs-error',
-						info: JSON.stringify({
-							token: prefs.twitchAccessToken,
-							error: error,
-							event: newEvent,
-						}),
-					});
-				} else {
-					console.warn('[twitch-auth] Could not send deck event to EBS', JSON.stringify(error));
-				}
-				if (!this.hasLoggedExpiredTokenInfoOnce) {
-					if (error?.error?.text?.toLowerCase()?.includes('invalid bearer')) {
-						this.sendExpiredTwitchTokenNotification();
-						this.hasLoggedExpiredTokenInfoOnce = true;
+		this.http
+			.post(EBS_URL, newEvent, { headers: httpHeaders })
+			.pipe(
+				timeout(EBS_REQUEST_TIMEOUT_MS),
+				catchError((err) => {
+					if (err.name === 'TimeoutError') {
+						console.warn(
+							'[twitch-auth] EBS request timed out after',
+							EBS_REQUEST_TIMEOUT_MS,
+							'ms',
+						);
 					}
-				}
-			},
-		);
+					return throwError(() => err);
+				}),
+			)
+			.subscribe({
+				next: (data: any) => {
+					// Do nothing
+					if (!this.hasLoggedInfoOnce && data.statusCode === 422) {
+						this.hasLoggedInfoOnce = true;
+						console.log('no-format', '[twitch] message', data, JSON.stringify(newEvent), newEvent);
+						console.debug(
+							'[twitch] message debug',
+							deflate(JSON.stringify(newEvent)).byteLength,
+							deflate(JSON.stringify(newEvent)).byteLength,
+							JSON.stringify(newEvent),
+						);
+						console.error(
+							'no-format',
+							'[twitch] Message sent to Twitch is too large',
+							JSON.stringify(newEvent),
+						);
+					}
+					if (data.statusCode === 422) {
+						console.debug('ERROR', 'Twitch message too large', newEvent);
+					}
+				},
+				error: (error) => {
+					console.debug('error sending message to twitch', error);
+					if (!this.hasLoggedInfoOnce) {
+						this.hasLoggedInfoOnce = true;
+						console.error(
+							'no-format',
+							'[twitch-auth] Could not send deck event to EBS',
+							error,
+							JSON.stringify(newEvent),
+							newEvent,
+						);
+						this.bugReport.submitAutomatedReport({
+							type: 'twitch-ebs-error',
+							info: JSON.stringify({
+								token: prefs.twitchAccessToken,
+								error: error,
+								event: newEvent,
+							}),
+						});
+					} else {
+						console.warn('[twitch-auth] Could not send deck event to EBS', JSON.stringify(error));
+					}
+					if (!this.hasLoggedExpiredTokenInfoOnce) {
+						if (error?.error?.text?.toLowerCase()?.includes('invalid bearer')) {
+							this.sendExpiredTwitchTokenNotification();
+							this.hasLoggedExpiredTokenInfoOnce = true;
+						}
+					}
+				},
+			});
 	}
 
 	private buildLeaderboard(state: BattlegroundsState): readonly TwitchBgsPlayer[] {
