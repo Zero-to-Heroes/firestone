@@ -10,19 +10,18 @@
 
 	.turn-number-container {
 		position: absolute;
-		width: 30px;
-		height: 30px;
+		width: 100%;
+		height: 1vh;
 		--icon-color: var(--default-title-color);
 		--icon-secondary-color: var(--color-7);
-		position: absolute;
-		top: -4%;
-		left: 40%;
-		transform: scale(var(--decktracker-minion-play-order-scale));
+		left: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 
 	.turn-number {
 		background: #07081f;
-		padding: 5px;
 		width: 25px;
 		height: 25px;
 		display: flex;
@@ -33,7 +32,7 @@
 		align-items: center;
 		justify-content: center;
 		position: relative;
-		top: 15%;
+		transform: scale(var(--decktracker-minion-play-order-scale));
 	}
 
 	.turn-number {
