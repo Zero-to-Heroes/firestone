@@ -35,8 +35,8 @@ export class FilterShownAchievementsProcessor implements Processor {
 		const selectedCategory = findCategory(selectedCategoryId, groupedAchievements);
 
 		const allAchievements: readonly VisualAchievement[] = selectedCategory
-			? selectedCategory.retrieveAllAchievements()
-			: retrieveAllAchievements(groupedAchievements);
+			? retrieveAllAchievements([selectedCategory])
+			: retrieveAllAchievements(groupedAchievements ?? []);
 		const displayedAchievementsList: readonly string[] =
 			searchString?.length && searchString.length > 2
 				? allAchievements

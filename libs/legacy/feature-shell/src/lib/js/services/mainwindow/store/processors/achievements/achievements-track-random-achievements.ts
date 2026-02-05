@@ -1,4 +1,8 @@
-import { AchievementsMemoryMonitor, AchievementsStateManagerService } from '@firestone/achievements/common';
+import {
+	AchievementsMemoryMonitor,
+	AchievementsStateManagerService,
+	retrieveAllAchievements,
+} from '@firestone/achievements/common';
 import { AchievementsRefLoaderService, HsRefAchievement } from '@firestone/achievements/data-access';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { shuffleArray, sortByProperties } from '@firestone/shared/framework/common';
@@ -54,9 +58,7 @@ export class AchievementsTrackRandomAchievementsProcessor implements Processor {
 			.filter((c) => c.id !== 'hearthstone_game_1')
 			// Collection
 			.filter((c) => c.id !== 'hearthstone_game_3');
-		const validAchievements = validCategories
-			.flatMap((c) => c.retrieveAllAchievements())
-			.map((a) => a.hsAchievementId);
+		const validAchievements = retrieveAllAchievements(validCategories).map((a) => a.hsAchievementId);
 
 		const uncompleteAchievements = refAchievements
 			.filter((a) => validAchievements.includes(a.id))

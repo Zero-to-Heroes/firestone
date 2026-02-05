@@ -29,7 +29,7 @@ export class AchievementCompletionStepComponent {
 		console.debug('[achievement-completion-step] setting step', step.completedText, step);
 		this.completionStep = step;
 		this.completedTimes = step.numberOfCompletions;
-		this.tooltip = step.text(true);
+		this.tooltip = step.displayText ?? step.text?.(true) ?? '';
 		this.svgAndTooltip = this.domSanitizer.bypassSecurityTrustHtml(`
 			<i class="i-30">
                 <svg class="svg-icon-fill">

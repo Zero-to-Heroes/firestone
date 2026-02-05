@@ -7,7 +7,12 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { isBattlegroundsDuo, normalizeHeroCardId } from '@firestone-hs/reference-data';
-import { AchievementsStateManagerService, VisualAchievement, findCategory } from '@firestone/achievements/common';
+import {
+	AchievementsStateManagerService,
+	VisualAchievement,
+	findCategory,
+	retrieveAllAchievements,
+} from '@firestone/achievements/common';
 import { BgsHeroTier, BgsMetaHeroStatTierItem, buildTiers } from '@firestone/battlegrounds/data-access';
 import { BgsPlayerHeroStatsService, DEFAULT_MMR_PERCENTILE } from '@firestone/battlegrounds/services';
 import { BgsHeroSelectionOverviewPanel, Config, GameStateFacadeService, equalConfig } from '@firestone/game-state';
@@ -145,8 +150,9 @@ export class BgsHeroSelectionOverviewComponent extends AbstractSubscriptionCompo
 				}
 
 				const heroesAchievementCategory = findCategory('hearthstone_game_sub_13', achievements);
-				const heroAchievements: readonly VisualAchievement[] =
-					heroesAchievementCategory?.retrieveAllAchievements() ?? [];
+				const heroAchievements: readonly VisualAchievement[] = heroesAchievementCategory
+					? retrieveAllAchievements([heroesAchievementCategory])
+					: [];
 				const heroOverviews: readonly InternalBgsHeroStat[] = selectionOptions.map((cardId) => {
 					const normalized = normalizeHeroCardId(cardId, this.allCards);
 					const tier = tiers.find((t) => t.items.map((i) => i.baseCardId).includes(normalized));

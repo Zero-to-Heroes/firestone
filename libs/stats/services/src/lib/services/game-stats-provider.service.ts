@@ -8,9 +8,9 @@ import {
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
 import { GameStat, GameStatsLoaderService } from '@firestone/stats/data-access';
-import { IGameStatsProviderService } from '@firestone/stats/services';
 import { combineLatest } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
+import { IGameStatsProviderService } from './game-stats-provider.interface';
 
 const eventName = 'game-stats-changed';
 

@@ -7,7 +7,12 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { Race, isBattlegroundsDuo, normalizeHeroCardId } from '@firestone-hs/reference-data';
-import { AchievementsStateManagerService, VisualAchievement, findCategory } from '@firestone/achievements/common';
+import {
+	AchievementsStateManagerService,
+	VisualAchievement,
+	findCategory,
+	retrieveAllAchievements,
+} from '@firestone/achievements/common';
 import { BgsMetaHeroStatTier, BgsMetaHeroStatTierItem, buildTiers } from '@firestone/battlegrounds/data-access';
 import {
 	BgsInGameHeroSelectionGuardianService,
@@ -219,8 +224,9 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionCompon
 				}
 
 				const heroesAchievementCategory = findCategory('hearthstone_game_sub_13', achievements);
-				const heroAchievements: readonly VisualAchievement[] =
-					heroesAchievementCategory?.retrieveAllAchievements() ?? [];
+				const heroAchievements: readonly VisualAchievement[] = heroesAchievementCategory
+					? retrieveAllAchievements([heroesAchievementCategory])
+					: [];
 				const result: readonly InternalBgsHeroStat[] = heroOverviews.map((hero) => {
 					const achievementsForHero: readonly VisualAchievement[] = showAchievements
 						? getAchievementsForHero(hero.baseCardId, heroAchievements, this.allCards)

@@ -1,4 +1,4 @@
-import { VisualAchievement, VisualAchievementCategory } from '@firestone/achievements/common';
+import { VisualAchievement, VisualAchievementCategory, retrieveAllAchievements } from '@firestone/achievements/common';
 import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { FilterOption } from '../filter-option';
@@ -56,7 +56,5 @@ export const findAchievements = (
 		return [];
 	}
 
-	return [...categories.map((cat) => cat.retrieveAllAchievements()).reduce((a, b) => a.concat(b), [])].filter(
-		(achv) => ids.indexOf(achv.id) !== -1,
-	);
+	return retrieveAllAchievements(categories).filter((achv) => ids.indexOf(achv.id) !== -1);
 };

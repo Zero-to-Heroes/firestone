@@ -77,6 +77,8 @@ export interface CompletionStep {
 	readonly priority: number;
 	// For HS exclusive achievements?
 	readonly progress?: number;
+	/** Serializable display string (used when sent over IPC; avoids sending the text() function). */
+	readonly displayText?: string;
 
-	text(showTimes?: boolean): string;
+	text?(showTimes?: boolean): string;
 }

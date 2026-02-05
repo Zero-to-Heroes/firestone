@@ -9,11 +9,12 @@ import {
 import {
 	AchievementsNavigationService,
 	AchievementsStateManagerService,
+	findCategory,
 	VisualAchievementCategory,
 } from '@firestone/achievements/common';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import { Observable, combineLatest } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { SelectAchievementCategoryEvent } from '../../services/mainwindow/store/events/achievements/select-achievement-category-event';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 
@@ -61,10 +62,7 @@ export class AchievementsCategoriesComponent extends AbstractSubscriptionCompone
 		this.categories$ = combineLatest([this.achievements.groupedAchievements$$, this.nav.selectedCategoryId$$]).pipe(
 			this.mapData(
 				([categories, selectedCategoryId]) =>
-					categories?.map((cat) => cat.findCategory(selectedCategoryId)).filter((cat) => cat)[0]
-						?.categories ??
-					categories ??
-					[],
+					findCategory(selectedCategoryId, categories ?? [])?.categories ?? categories ?? [],
 			),
 		);
 

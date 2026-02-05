@@ -1,8 +1,8 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { AchievementHistory } from '@firestone/achievements/common';
+import { AchievementHistory, AchievementHistoryService } from '@firestone/achievements/common';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Component({
 	standalone: false,
@@ -36,18 +36,22 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AchievementHistoryComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class AchievementHistoryComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	achievementHistory$: Observable<readonly AchievementHistory[]>;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly achievementsHistoryService: AchievementHistoryService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
-	ngAfterContentInit() {
-		this.achievementHistory$ = this.store.achievementsHistory$().pipe(this.mapData((history) => history));
+	async ngAfterContentInit() {
+		await waitForReady(this.achievementsHistoryService);
+
+		this.achievementHistory$ = this.achievementsHistoryService.achievementsHistory$$.pipe(
+			this.mapData((history) => history),
+		);
 	}
 
 	trackById(index, history: AchievementHistory) {

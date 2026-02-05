@@ -316,6 +316,9 @@ export const buildCompletionSteps = (
 			text = achv.completedText;
 			alreadyDefinedText = true;
 		}
+		const displayText = achv.completedText
+			? `${achv.completedText} <span class="number-of-times"></span>`
+			: '';
 		invertedCompletionSteps.push({
 			id: `${achv.id}`,
 			hsAchievementId: achv.hsAchievementId,
@@ -324,10 +327,7 @@ export const buildCompletionSteps = (
 			icon: achv.icon,
 			completedText: achv.completedText,
 			priority: achv.priority ?? 0,
-			text(showTimes = false): string {
-				const times = ``;
-				return `${achv.completedText} <span class="number-of-times">${times}</span>`;
-			},
+			displayText,
 		});
 	}
 

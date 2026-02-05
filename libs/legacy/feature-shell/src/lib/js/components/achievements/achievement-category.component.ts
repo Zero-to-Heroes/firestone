@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
-import { VisualAchievementCategory } from '@firestone/achievements/common';
+import { retrieveAllAchievements, VisualAchievementCategory } from '@firestone/achievements/common';
 
 @Component({
 	standalone: false,
@@ -34,7 +34,7 @@ export class AchievementCategoryComponent {
 		if (value) {
 			this.categoryIcon = `assets/svg/achievements/categories/${value.icon}.svg`;
 			this.displayName = value.name;
-			const aggregatedAchievements = value.retrieveAllAchievements();
+			const aggregatedAchievements = retrieveAllAchievements([value]);
 			const flatCompletions = aggregatedAchievements
 				.map((achievement) => achievement.completionSteps)
 				.reduce((a, b) => a.concat(b), []);
