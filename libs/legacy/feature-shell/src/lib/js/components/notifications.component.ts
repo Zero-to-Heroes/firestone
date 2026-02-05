@@ -67,7 +67,7 @@ export class NotificationsComponent implements AfterViewInit {
 	) {}
 
 	async ngAfterViewInit() {
-		await waitForReady(this.prefs);
+		await waitForReady(this.prefs, this.notifs);
 
 		this.notifs.notifications$$
 			.pipe(
