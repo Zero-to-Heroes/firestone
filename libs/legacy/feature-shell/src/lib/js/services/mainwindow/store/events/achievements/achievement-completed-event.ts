@@ -1,4 +1,4 @@
-import { Achievement } from '../../../../../models/achievement';
+import { Achievement } from '@firestone/achievements/common';
 import { MainWindowStoreEvent } from '../main-window-store-event';
 
 export class AchievementCompletedEvent implements MainWindowStoreEvent {

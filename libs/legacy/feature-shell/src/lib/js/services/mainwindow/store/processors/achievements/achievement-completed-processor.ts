@@ -1,6 +1,6 @@
+import { AchievementHistoryService } from '@firestone/achievements/common';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
-import { AchievementHistoryService } from '../../../../achievement/achievements-history.service';
 import { AchievementCompletedEvent } from '../../events/achievements/achievement-completed-event';
 import { Processor } from '../processor';
 

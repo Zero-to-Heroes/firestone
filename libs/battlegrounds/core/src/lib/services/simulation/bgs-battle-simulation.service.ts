@@ -5,7 +5,6 @@ import { BgsBattleOptions } from '@firestone-hs/simulate-bgs-battle/dist/bgs-bat
 import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
 import { GameSample } from '@firestone-hs/simulate-bgs-battle/dist/simulation/spectator/game-sample';
 import { BugReportService, Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { sleep } from '@firestone/shared/framework/common';
 import type { IAdsService } from '@firestone/shared/framework/core';
 import { ADS_SERVICE_TOKEN, ApiRunner, CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
@@ -105,19 +104,15 @@ export class BgsBattleSimulationService {
 						console.log('[bgs-simulation] battle simulation result', resultForLog);
 					}
 
-					// Use requestAnimationFrame for smoother UI updates
-					// This batches the update with the next paint cycle
-					requestAnimationFrame(() => {
-						this.battleInfo$$.next({
-							battleId: battleId,
-							result: result,
-							intermediateResult: isIntermediate,
-							heroCardId: normalizeHeroCardId(
-								battleInfoInput.opponentBoard.player.cardId ??
-									CardIds.Kelthuzad_TB_BaconShop_HERO_KelThuzad,
-								this.cards,
-							),
-						});
+					this.battleInfo$$.next({
+						battleId: battleId,
+						result: result,
+						intermediateResult: isIntermediate,
+						heroCardId: normalizeHeroCardId(
+							battleInfoInput.opponentBoard.player.cardId ??
+								CardIds.Kelthuzad_TB_BaconShop_HERO_KelThuzad,
+							this.cards,
+						),
 					});
 				},
 			);

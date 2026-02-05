@@ -1,5 +1,5 @@
+import { RawRequirement } from '@firestone/achievements/common';
 import { GameEvent } from '@firestone/game-state';
-import { RawRequirement } from '../../../../../models/achievement/raw-requirement';
 import { QualifierType } from '../_qualifier.type';
 import { Requirement } from '../_requirement';
 

@@ -1,5 +1,11 @@
 import { EventEmitter, Injectable, NgZone } from '@angular/core';
-import { AchievementsNavigationService } from '@firestone/achievements/common';
+import {
+	AchievementHistoryService,
+	AchievementsMemoryMonitor,
+	AchievementsNavigationService,
+	AchievementsStateManagerService,
+	FirestoneRemoteAchievementsLoaderService,
+} from '@firestone/achievements/common';
 import { AchievementsRefLoaderService } from '@firestone/achievements/data-access';
 import { ArenaNavigationService } from '@firestone/arena/common';
 import { BattlegroundsNavigationService } from '@firestone/battlegrounds/services';
@@ -8,7 +14,7 @@ import { CollectionNavigationService } from '@firestone/collection/common';
 import { ConstructedNavigationService, ConstructedPersonalDecksService } from '@firestone/constructed/common';
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { MemoryInspectionService } from '@firestone/memory';
-import { AppNavigationService, PreferencesService } from '@firestone/shared/common/service';
+import { AppNavigationService, Events, PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { GameStatsLoaderService } from '@firestone/stats/data-access';
 import { TranslateService } from '@ngx-translate/core';
@@ -20,17 +26,12 @@ import { MailboxMarkMessageReadProcessor } from '../../../../libs/mails/services
 import { PackStatsService } from '../../../../libs/packs/services/pack-stats.service';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
-import { AchievementHistoryService } from '../../achievement/achievements-history.service';
-import { AchievementsStateManagerService } from '../../achievement/achievements-state-manager.service';
-import { AchievementsMemoryMonitor } from '../../achievement/data/achievements-memory-monitor.service';
-import { FirestoneRemoteAchievementsLoaderService } from '../../achievement/data/firestone-remote-achievements-loader.service';
 import { BgsPerfectGamesService } from '../../battlegrounds/bgs-perfect-games.service';
 import { BgsRunStatsService } from '../../battlegrounds/bgs-run-stats.service';
 import { CollectionManager } from '../../collection/collection-manager.service';
 import { SetsManagerService } from '../../collection/sets-manager.service';
 import { SetsService } from '../../collection/sets-service.service';
 import { DecksProviderService } from '../../decktracker/main/decks-provider.service';
-import { Events } from '@firestone/shared/common/service';
 import { ProcessingQueue } from '../../processing-queue.service';
 import { GameStatsUpdaterService } from '../../stats/game/game-stats-updater.service';
 import { CollectionBootstrapService } from './collection-bootstrap.service';

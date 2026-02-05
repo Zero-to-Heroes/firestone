@@ -1,11 +1,11 @@
 import { ComponentType } from '@angular/cdk/portal';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { GameType, defaultStartingHp } from '@firestone-hs/reference-data';
+import { VisualAchievement } from '@firestone/achievements/common';
 import { BgsHeroTier, BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
 import { BgsPlayer } from '@firestone/game-state';
 import { TooltipPositionType } from '@firestone/shared/common/view';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { VisualAchievement } from '../../../models/visual-achievement';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { BgsHeroSelectionTooltipComponent } from './bgs-hero-selection-tooltip.component';
 

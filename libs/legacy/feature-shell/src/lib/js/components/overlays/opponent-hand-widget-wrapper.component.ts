@@ -100,24 +100,24 @@ export class OpponentHandWidgetWrapperComponent extends AbstractWidgetWrapperCom
 		this.showWidget$ = combineLatest([currentScene$$, displayFromPrefs$$, gameState$$]).pipe(
 			this.mapData(([currentScene, displayFromPrefs, { gameStarted, gameEnded, isBgs, isMercs }]) => {
 				if (!gameStarted || isBgs || isMercs || !displayFromPrefs) {
-					console.log(
-						'[opponent-hand-widget-wrapper] not showing widget 1',
-						gameStarted,
-						isBgs,
-						isMercs,
-						displayFromPrefs,
-					);
+					// console.log(
+					// 	'[opponent-hand-widget-wrapper] not showing widget 1',
+					// 	gameStarted,
+					// 	isBgs,
+					// 	isMercs,
+					// 	displayFromPrefs,
+					// );
 					return false;
 				}
 
 				// We explicitely don't check for null, so that if the memory updates are broken
 				// we still somehow show the info
 				if (currentScene !== SceneMode.GAMEPLAY) {
-					console.log('[opponent-hand-widget-wrapper] not showing widget 2', currentScene);
+					// console.log('[opponent-hand-widget-wrapper] not showing widget 2', currentScene);
 					return false;
 				}
 
-				console.log('[opponent-hand-widget-wrapper] showing widget?', gameEnded);
+				// console.log('[opponent-hand-widget-wrapper] showing widget?', gameEnded);
 				return !gameEnded;
 			}),
 			this.handleReposition(),

@@ -6,12 +6,14 @@ import {
 	EventEmitter,
 	ViewRef,
 } from '@angular/core';
-import { AchievementsNavigationService } from '@firestone/achievements/common';
+import {
+	AchievementsNavigationService,
+	AchievementsStateManagerService,
+	VisualAchievementCategory,
+} from '@firestone/achievements/common';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
-import { VisualAchievementCategory } from '../../models/visual-achievement-category';
-import { AchievementsStateManagerService } from '../../services/achievement/achievements-state-manager.service';
 import { SelectAchievementCategoryEvent } from '../../services/mainwindow/store/events/achievements/select-achievement-category-event';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 

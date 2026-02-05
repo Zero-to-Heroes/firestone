@@ -7,6 +7,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { isBattlegroundsDuo, normalizeHeroCardId } from '@firestone-hs/reference-data';
+import { AchievementsStateManagerService, VisualAchievement, findCategory } from '@firestone/achievements/common';
 import { BgsHeroTier, BgsMetaHeroStatTierItem, buildTiers } from '@firestone/battlegrounds/data-access';
 import { BgsPlayerHeroStatsService, DEFAULT_MMR_PERCENTILE } from '@firestone/battlegrounds/services';
 import { BgsHeroSelectionOverviewPanel, Config, GameStateFacadeService, equalConfig } from '@firestone/game-state';
@@ -14,9 +15,6 @@ import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ADS_SERVICE_TOKEN, CardsFacadeService, IAdsService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, distinctUntilChanged, switchMap, takeUntil, tap } from 'rxjs';
-import { VisualAchievement } from '../../../models/visual-achievement';
-import { findCategory } from '../../../services/achievement/achievement-utils';
-import { AchievementsStateManagerService } from '../../../services/achievement/achievements-state-manager.service';
 import { getAchievementsForHero } from '../../../services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 

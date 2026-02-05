@@ -1,11 +1,14 @@
-import { AchievementsNavigationService } from '@firestone/achievements/common';
+import {
+	AchievementsNavigationService,
+	AchievementsStateManagerService,
+	findCategory,
+	retrieveAllAchievements,
+	VisualAchievement,
+} from '@firestone/achievements/common';
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationAchievements } from '../../../../../models/mainwindow/navigation/navigation-achievements';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
-import { VisualAchievement } from '../../../../../models/visual-achievement';
-import { findCategory, retrieveAllAchievements } from '../../../../achievement/achievement-utils';
-import { AchievementsStateManagerService } from '../../../../achievement/achievements-state-manager.service';
 import { FilterShownAchievementsEvent } from '../../events/achievements/filter-shown-achievements-event';
 import { Processor } from '../processor';
 
@@ -56,14 +59,14 @@ export class FilterShownAchievementsProcessor implements Processor {
 						viewBeforeSearch:
 							currentView !== 'list'
 								? currentView
-								: navigationState.navigationAchievements.viewBeforeSearch ?? currentView,
+								: (navigationState.navigationAchievements.viewBeforeSearch ?? currentView),
 						textBeforeSearch:
 							navigationState.navigationAchievements.textBeforeSearch ?? this.mainNav.text$$.getValue(),
 						displayedAchievementsList: displayedAchievementsList,
-				  } as NavigationAchievements)
+					} as NavigationAchievements)
 				: navigationState.navigationAchievements.update({
 						displayedAchievementsList: displayedAchievementsList,
-				  } as NavigationAchievements);
+					} as NavigationAchievements);
 		const categoryName = selectedCategory?.name ?? 'all achievements';
 		const text =
 			searchString?.length && searchString.length > 2

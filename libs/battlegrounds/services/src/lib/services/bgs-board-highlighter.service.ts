@@ -76,6 +76,7 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 		this.setupElectronSubject(this.highlightedTribes$$, 'bgs-board-highlighter-highlighted-tribes');
 		this.setupElectronSubject(this.highlightedMechanics$$, 'bgs-board-highlighter-highlighted-mechanics');
 		this.setupElectronSubject(this.highlightedMinions$$, 'bgs-board-highlighter-highlighted-minions');
+		this.setupElectronSubject(this.highlightedTiers$$, 'bgs-board-highlighter-highlighted-tiers');
 	}
 
 	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
@@ -83,6 +84,7 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 		this.highlightedTribes$$ = new BehaviorSubject<readonly Race[]>([]);
 		this.highlightedMechanics$$ = new BehaviorSubject<readonly GameTag[]>([]);
 		this.highlightedMinions$$ = new BehaviorSubject<readonly string[]>([]);
+		this.highlightedTiers$$ = new BehaviorSubject<readonly number[]>([]);
 	}
 
 	protected override async initElectronMainProcess() {

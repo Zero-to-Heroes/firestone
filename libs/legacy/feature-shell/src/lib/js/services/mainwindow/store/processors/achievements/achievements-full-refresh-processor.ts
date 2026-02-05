@@ -1,6 +1,6 @@
+import { FirestoneRemoteAchievementsLoaderService } from '@firestone/achievements/common';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
-import { FirestoneRemoteAchievementsLoaderService } from '../../../../achievement/data/firestone-remote-achievements-loader.service';
 import { AchievementsFullRefreshEvent } from '../../events/achievements/achievements-full-refresh-event';
 import { Processor } from '../processor';
 

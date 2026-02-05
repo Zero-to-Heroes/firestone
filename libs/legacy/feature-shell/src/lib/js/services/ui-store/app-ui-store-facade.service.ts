@@ -7,10 +7,10 @@ import { Observable } from 'rxjs';
 
 import { ProfileBgHeroStat, ProfileClassProgress } from '@firestone-hs/api-user-profile';
 import { PackResult } from '@firestone-hs/user-packs';
+import { AchievementHistory } from '@firestone/achievements/common';
 import { DeckSummary } from '@firestone/constructed/common';
 import { Card, CardBack, PackInfoForCollection as PackInfo } from '@firestone/memory';
 import { Preferences } from '@firestone/shared/common/service';
-import { AchievementHistory } from '../../models/achievement/achievement-history';
 import { CardHistory } from '../../models/card-history';
 import { Coin } from '../../models/coin';
 import { Set } from '../../models/set';

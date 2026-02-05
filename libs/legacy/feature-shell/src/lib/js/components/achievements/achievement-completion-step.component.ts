@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { CompletionStep } from '../../models/visual-achievement';
+import { CompletionStep } from '@firestone/achievements/common';
 
 @Component({
 	standalone: false,

@@ -300,7 +300,7 @@ export class FullScreenOverlaysComponent
 		const height = gameHeight;
 		const width = gameWidth;
 		console.log('full screen change window size', width, height, gameWidth, gameHeight);
-		console.log('no-format', 'gameInfo', gameInfo);
+		// console.log('no-format', 'gameInfo', gameInfo);
 		const currentWindow = await this.ow.getCurrentWindow();
 		console.log('no-format', 'full screen current window', currentWindow);
 		if (!this.windowId) {

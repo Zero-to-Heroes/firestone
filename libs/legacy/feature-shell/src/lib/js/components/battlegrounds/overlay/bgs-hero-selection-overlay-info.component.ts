@@ -8,12 +8,12 @@ import {
 	Input,
 	ViewRef,
 } from '@angular/core';
+import { VisualAchievement } from '@firestone/achievements/common';
 import { BgsHeroTier, BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
 import { BGS_HERO_SELECTION_DAILY_FREE_USES, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ADS_SERVICE_TOKEN, IAdsService, ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
-import { VisualAchievement } from '../../../models/visual-achievement';
 import { BgsHeroSelectionTooltipComponent } from '../hero-selection/bgs-hero-selection-tooltip.component';
 import {
 	BattlegroundsTribeDetailsTooltipComponent,

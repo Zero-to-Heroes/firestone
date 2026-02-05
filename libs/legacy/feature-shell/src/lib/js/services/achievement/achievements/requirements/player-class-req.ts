@@ -1,6 +1,6 @@
+import { RawRequirement } from '@firestone/achievements/common';
 import { GameEvent } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { RawRequirement } from '../../../../models/achievement/raw-requirement';
 import { Requirement } from './_requirement';
 
 export class PlayerClassReq implements Requirement {

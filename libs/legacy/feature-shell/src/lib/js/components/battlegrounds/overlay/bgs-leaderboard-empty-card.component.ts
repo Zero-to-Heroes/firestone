@@ -17,9 +17,10 @@ import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import {
 	ADS_SERVICE_TOKEN,
+	HOTKEY_HANDLER_SERVICE_TOKEN,
 	IAdsService,
+	IHotkeyHandlerService,
 	ILocalizationService,
-	OverwolfService,
 	waitForReady,
 } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, takeUntil } from 'rxjs';
@@ -131,11 +132,11 @@ export class BgsLeaderboardEmptyCardComponent
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
-		private readonly ow: OverwolfService,
 		private readonly i18n: ILocalizationService,
 		private readonly prefs: PreferencesService,
 		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 		private readonly mouseOver: CardMousedOverService,
+		@Inject(HOTKEY_HANDLER_SERVICE_TOKEN) private readonly hotkeyHandler: IHotkeyHandlerService,
 	) {
 		super(cdr);
 	}
@@ -164,7 +165,7 @@ export class BgsLeaderboardEmptyCardComponent
 			this.isPremiumUser = premium;
 		});
 		this.showLiveInfo$ = this.showLiveInfo.pipe(this.mapData((info) => info));
-		this.callbackHandle = this.ow.addHotKeyHoldListener(
+		this.callbackHandle = this.hotkeyHandler.addHotKeyHoldListener(
 			'live-info',
 			() => this.onTabDown(),
 			() => this.onTabUp(),
@@ -181,7 +182,7 @@ export class BgsLeaderboardEmptyCardComponent
 	ngOnDestroy(): void {
 		super.ngOnDestroy();
 		if (this.callbackHandle) {
-			this.ow.removeHotKeyHoldListener(this.callbackHandle);
+			this.hotkeyHandler.removeHotKeyHoldListener(this.callbackHandle);
 		}
 	}
 

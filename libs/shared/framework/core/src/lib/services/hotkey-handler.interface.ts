@@ -5,9 +5,7 @@ import { InjectionToken } from '@angular/core';
  * Responsible for listening to global hotkeys. Implementations may depend
  * on the window handler (e.g. for context like current window).
  */
-export const HOTKEY_HANDLER_SERVICE_TOKEN = new InjectionToken<IHotkeyHandlerService>(
-	'HotkeyHandlerService'
-);
+export const HOTKEY_HANDLER_SERVICE_TOKEN = new InjectionToken<IHotkeyHandlerService>('HotkeyHandlerService');
 
 /** Unsubscribe function for hotkey hold listener */
 export type HotkeyHoldUnsubscribe = (message?: unknown) => void;
@@ -20,4 +18,10 @@ export type HotkeyChangedUnsubscribe = (message?: unknown) => void;
  * ow-native (Overwolf) or electron-app (Electron).
  */
 export interface IHotkeyHandlerService {
+	addHotKeyHoldListener(hotkey: string, onDown: () => void, onUp: () => void): HotkeyHoldUnsubscribe;
+	removeHotKeyHoldListener(listener: HotkeyHoldUnsubscribe): void;
+	addHotKeyPressedListener(hotkey: string, callback: () => void): void;
+	// removeHotKeyPressedListener(listener: (message: any) => void): void;
+	addHotkeyChangedListener(callback: (message: any) => void): HotkeyChangedUnsubscribe;
+	removeHotkeyChangedListener(listener: HotkeyChangedUnsubscribe): void;
 }

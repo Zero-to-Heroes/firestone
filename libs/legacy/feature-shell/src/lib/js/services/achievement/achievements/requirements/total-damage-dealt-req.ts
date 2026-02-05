@@ -1,5 +1,5 @@
+import { RawRequirement } from '@firestone/achievements/common';
 import { DamageGameEvent, GameEvent } from '@firestone/game-state';
-import { RawRequirement } from '../../../../models/achievement/raw-requirement';
 import { AbstractRequirement } from './_abstract-requirement';
 import { Requirement } from './_requirement';
 

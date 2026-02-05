@@ -95,7 +95,6 @@ export class CustomAppearanceService extends AbstractFacadeService<CustomAppeara
 	}
 
 	protected override async initElectronSubjects() {
-		console.log('[game-state-facade] initElectronSubjects');
 		this.setupElectronSubject(this.colors$$, colorsEventName);
 		this.setupElectronSubject(this.finalStyles$$, finalStylesEventName);
 	}

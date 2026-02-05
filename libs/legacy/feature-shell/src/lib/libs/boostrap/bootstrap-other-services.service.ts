@@ -1,4 +1,10 @@
 import { Injectable } from '@angular/core';
+import {
+	AchievementsNotificationService,
+	AchievementsStorageService,
+	FirestoneRemoteAchievementsLoaderService,
+	RawAchievementsLoaderService,
+} from '@firestone/achievements/common';
 import { EndGameListenerService, QuestsService, RewardMonitorService } from '@firestone/app/common';
 import { OwHotkeyHandlerService } from '@firestone/app/ow-native';
 import { ArenaRefService } from '@firestone/arena/common';
@@ -15,11 +21,8 @@ import {
 import { MercenariesNavigationService } from '@firestone/mercenaries/common';
 import { ModsBootstrapService, ModsManagerService } from '@firestone/mods/common';
 import { GameStatusService } from '@firestone/shared/common/service';
+import { GameStatsProviderService } from '@firestone/stats/services';
 import { TwitchAuthService } from '@firestone/twitch/common';
-import { AchievementsNotificationService } from '../../js/services/achievement/achievements-notification.service';
-import { AchievementsStorageService as AchievementsDb } from '../../js/services/achievement/achievements-storage.service';
-import { FirestoneRemoteAchievementsLoaderService } from '../../js/services/achievement/data/firestone-remote-achievements-loader.service';
-import { RawAchievementsLoaderService } from '../../js/services/achievement/data/raw-achievements-loader.service';
 import { HearthArenaAnalyticsService } from '../../js/services/analytics/heartharena-analytics.service';
 import { BgsPerfectGamesService } from '../../js/services/battlegrounds/bgs-perfect-games.service';
 import { CardsMonitorService } from '../../js/services/collection/cards-monitor.service';
@@ -35,7 +38,6 @@ import { LiveStreamsService } from '../../js/services/mainwindow/live-streams.se
 import { OutOfCardsService } from '../../js/services/mainwindow/out-of-cards.service';
 import { TwitchPresenceService } from '../../js/services/mainwindow/twitch-presence.service';
 import { ReplaysNotificationService } from '../../js/services/replays/replays-notification.service';
-import { GameStatsProviderService } from '../../js/services/stats/game/game-stats-provider.service';
 import { SystemTrayService } from '../../js/services/system-tray.service';
 import { MailsService } from '../mails/services/mails.service';
 import { PackMonitor } from '../packs/services/pack-monitor.service';
@@ -52,7 +54,7 @@ export class BootstrapOtherServicesService {
 		private readonly init_TwitchPresenceService: TwitchPresenceService,
 		private readonly init_OutOfCardsAuth: OutOfCardsService,
 		private readonly collectionDb: CollectionStorageService,
-		private readonly achievementsDb: AchievementsDb,
+		private readonly achievementsDb: AchievementsStorageService,
 		private readonly achievementsLoader: RawAchievementsLoaderService,
 		private readonly packMonitor: PackMonitor,
 		private readonly init_AchievementsNotifications: AchievementsNotificationService,
@@ -89,7 +91,7 @@ export class BootstrapOtherServicesService {
 		private readonly modsBootstrap: ModsBootstrapService,
 		private readonly modsManager: ModsManagerService,
 		private readonly init_OwHotkeyHandlerService: OwHotkeyHandlerService,
-	) { }
+	) {}
 
 	public async bootstrapServices(): Promise<void> {
 		this.modsBootstrap.init();

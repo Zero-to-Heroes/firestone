@@ -1,10 +1,12 @@
-import { AchievementsNavigationService } from '@firestone/achievements/common';
+import {
+	AchievementsNavigationService,
+	AchievementsStateManagerService,
+	builCategoryHierarchy,
+} from '@firestone/achievements/common';
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationAchievements } from '../../../../../models/mainwindow/navigation/navigation-achievements';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
-import { builCategoryHierarchy } from '../../../../achievement/achievement-utils';
-import { AchievementsStateManagerService } from '../../../../achievement/achievements-state-manager.service';
 import { SelectAchievementCategoryEvent } from '../../events/achievements/select-achievement-category-event';
 import { Processor } from '../processor';
 

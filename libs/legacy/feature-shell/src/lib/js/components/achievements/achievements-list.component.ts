@@ -8,13 +8,12 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { AchievementsStateManagerService, VisualAchievement } from '@firestone/achievements/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { sortByProperties } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { findAchievements } from '../../models/mainwindow/achievements-state';
-import { VisualAchievement } from '../../models/visual-achievement';
-import { AchievementsStateManagerService } from '../../services/achievement/achievements-state-manager.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
@@ -29,7 +28,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 			*ngIf="{
 				totalAchievements: totalAchievements$ | async,
 				activeAchievements: activeAchievements$ | async,
-				pinnedAchievements: pinnedAchievements$ | async
+				pinnedAchievements: pinnedAchievements$ | async,
 			} as value"
 			scrollable
 		>

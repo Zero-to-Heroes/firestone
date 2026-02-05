@@ -1,20 +1,23 @@
 import { Injectable, NgZone } from '@angular/core';
+import {
+	Achievement,
+	AchievementsStateManagerService,
+	AchievementsStorageService,
+	CompletedAchievement,
+	FirestoneRemoteAchievementsLoaderService,
+} from '@firestone/achievements/common';
 import { GameEvent, GameEventsEmitterService } from '@firestone/game-state';
 import { Events, GameStatusService, PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { combineLatest, distinctUntilChanged, filter, map, take } from 'rxjs';
-import { Achievement } from '../../models/achievement';
-import { CompletedAchievement } from '../../models/completed-achievement';
 import { AchievementCompletedEvent } from '../mainwindow/store/events/achievements/achievement-completed-event';
 import { ProcessingQueue } from '../processing-queue.service';
-import { AchievementsStateManagerService } from './achievements-state-manager.service';
-import { AchievementsStorageService } from './achievements-storage.service';
 import { Challenge } from './achievements/challenges/challenge';
 import { ChallengeBuilderService } from './achievements/challenges/challenge-builder.service';
-import { FirestoneRemoteAchievementsLoaderService } from './data/firestone-remote-achievements-loader.service';
 
 @Injectable()
 // Everything linked to Firestone challenges, as opposed to HS native achievements
+// Not used anymore?
 export class FirestoneAchievementsChallengeService {
 	public challengeModules: readonly Challenge[] = [];
 

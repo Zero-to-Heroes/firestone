@@ -78,7 +78,7 @@ export class StandaloneUserService extends AbstractFacadeService<StandaloneUserS
 				),
 			)
 			.subscribe(([premium, user]) => {
-				console.log('[user-service] info', premium, user);
+				console.log('[user-service] user', user, 'isPremium', premium);
 				this.sendCurrentUser(user, premium);
 			});
 	}

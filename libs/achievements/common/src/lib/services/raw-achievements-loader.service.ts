@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { ApiRunner } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
-import { RawAchievement } from '../../../models/achievement/raw-achievement';
+import { RawAchievement } from '../models/raw-achievement';
 
 const ACHIEVEMENTS_URL = 'https://static.zerotoheroes.com/hearthstone/data/achievements';
 
@@ -10,7 +10,10 @@ const ACHIEVEMENTS_URL = 'https://static.zerotoheroes.com/hearthstone/data/achie
 export class RawAchievementsLoaderService {
 	private rawAchievements$$ = new BehaviorSubject<readonly RawAchievement[]>([]);
 
-	constructor(private readonly api: ApiRunner, private readonly prefs: PreferencesService) {}
+	constructor(
+		private readonly api: ApiRunner,
+		private readonly prefs: PreferencesService,
+	) {}
 
 	public async loadRawAchievements(): Promise<readonly RawAchievement[]> {
 		if (this.rawAchievements$$.getValue().length > 0) {
@@ -46,12 +49,12 @@ export class RawAchievementsLoaderService {
 		const achievementsFromRemote = await Promise.all(
 			achievementFiles.map((fileName) => this.loadAchievements(fileName)),
 		);
-		const result = achievementsFromRemote.reduce((a, b) => a.concat(b), []);
+		const result = achievementsFromRemote.reduce((a, b) => a?.concat(b ?? []) ?? [], []);
 		console.log('[achievements-loader] returning full achievements', result && result.length);
-		return result;
+		return result ?? [];
 	}
 
-	private async loadAchievements(fileName: string): Promise<readonly RawAchievement[]> {
+	private async loadAchievements(fileName: string): Promise<readonly RawAchievement[] | null> {
 		return this.api.callGetApi(`${ACHIEVEMENTS_URL}/${fileName}.json`);
 	}
 }

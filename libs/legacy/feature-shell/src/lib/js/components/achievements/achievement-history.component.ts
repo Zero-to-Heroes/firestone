@@ -1,6 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AchievementHistory } from '@firestone/achievements/common';
 import { Observable } from 'rxjs';
-import { AchievementHistory } from '../../models/achievement/achievement-history';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
@@ -39,7 +39,10 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 export class AchievementHistoryComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
 	achievementHistory$: Observable<readonly AchievementHistory[]>;
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
+	constructor(
+		protected readonly store: AppUiStoreFacadeService,
+		protected readonly cdr: ChangeDetectorRef,
+	) {
 		super(store, cdr);
 	}
 

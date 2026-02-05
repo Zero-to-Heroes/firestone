@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Events, Message, NotificationsService, PreferencesService } from '@firestone/shared/common/service';
-import { Achievement } from '../../models/achievement';
-import { uuid } from '../utils';
+import { uuidShort } from '@firestone/shared/framework/common';
+import { Achievement } from '../models/achievement';
 
 @Injectable()
 export class AchievementsNotificationService {
@@ -35,7 +35,7 @@ export class AchievementsNotificationService {
 		).replace('to get started', '');
 		console.log('[achievements-notification] sending new achievement completed notification', achievement.id);
 		this.notificationService.addNotification({
-			notificationId: achievement.id + uuid(),
+			notificationId: achievement.id + uuidShort(),
 			content: this.buildNotificationTemplate(achievement, recapText),
 			type: 'achievement-no-record',
 			app: 'achievement',

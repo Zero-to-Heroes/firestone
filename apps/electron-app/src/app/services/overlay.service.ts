@@ -171,13 +171,14 @@ export class OverlayService extends EventEmitter {
 		console.log('Preload script path:', preloadPath);
 		console.log('Current __dirname:', __dirname);
 
-		const options: OverlayWindowOptions = {
+		const options: OverlayWindowOptions & { dpiAware?: boolean } = {
 			name: 'firestone-overlay-' + Math.floor(Math.random() * 1000),
 			height: gameHeight,
 			width: gameWidth,
 			show: true,
 			transparent: true,
 			resizable: false,
+			dpiAware: false,
 			webPreferences: {
 				devTools: true,
 				nodeIntegration: true,
@@ -434,7 +435,7 @@ export class OverlayService extends EventEmitter {
 		});
 
 		this.overlayApi.on('game-window-changed', async (window, game, reason) => {
-			console.log('Game window changed:', reason, game.name);
+			// console.log('Game window changed:', reason, game.name);
 			// Note: Resizing is now handled by onGameInfoChanged callback in subscribeToGameInfoChanges()
 			// This ensures the overlay is resized AFTER ElectronGameWindowService has updated its cached info
 		});

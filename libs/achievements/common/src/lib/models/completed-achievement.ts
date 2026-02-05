@@ -1,10 +1,10 @@
-import { NonFunctionProperties } from '../services/utils';
+import { NonFunctionProperties } from '@firestone/shared/framework/common';
 
 export class CompletedAchievement {
-	readonly id: string;
-	readonly numberOfCompletions: number;
+	readonly id: string | null;
+	readonly numberOfCompletions: number | null;
 
-	constructor(id: string, numberOfCompletions: number) {
+	constructor(id: string | null, numberOfCompletions: number | null) {
 		this.id = id;
 		this.numberOfCompletions = numberOfCompletions;
 	}

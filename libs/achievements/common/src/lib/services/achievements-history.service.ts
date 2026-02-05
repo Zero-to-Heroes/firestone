@@ -1,20 +1,19 @@
 import { Injectable } from '@angular/core';
 import { SubscriberAwareBehaviorSubject, sortByProperties } from '@firestone/shared/framework/common';
-import { Achievement } from '../../models/achievement';
-import { AchievementHistory } from '../../models/achievement/achievement-history';
+import { Achievement } from '../models/achievement';
+import { AchievementHistory } from '../models/achievement-history';
 import { AchievementHistoryStorageService } from './achievement-history-storage.service';
-import { RawAchievementsLoaderService } from './data/raw-achievements-loader.service';
+import { RawAchievementsLoaderService } from './raw-achievements-loader.service';
 
 @Injectable()
 export class AchievementHistoryService {
-	public achievementsHistory$$ = new SubscriberAwareBehaviorSubject<readonly AchievementHistory[]>(null);
+	public achievementsHistory$$ = new SubscriberAwareBehaviorSubject<readonly AchievementHistory[]>([]);
 
 	constructor(
 		private readonly achievementHistoryStorage: AchievementHistoryStorageService,
 		private readonly achievementsLoader: RawAchievementsLoaderService,
 	) {
 		this.init();
-		window['achievementsHistory'] = this;
 	}
 
 	public async addHistoryItem(achievement: Achievement) {
@@ -61,12 +60,12 @@ export class AchievementHistoryService {
 					}
 					return {
 						...history,
-						displayName: achievements.find((ach) => ach.id === history.achievementId).displayName,
+						displayName: achievements.find((ach) => ach.id === history.achievementId)?.displayName,
 					} as AchievementHistory;
 				})
 				.filter((history) => history)
 				// We want to have the most recent at the top
-				.sort(sortByProperties((a) => [-a.creationTimestamp]))
+				.sort(sortByProperties((a) => [-a!.creationTimestamp])) as readonly AchievementHistory[]
 		);
 	}
 }

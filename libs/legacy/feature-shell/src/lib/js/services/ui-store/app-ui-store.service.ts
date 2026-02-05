@@ -10,11 +10,12 @@ import { distinctUntilChanged, filter, map, shareReplay } from 'rxjs/operators';
 
 import { ProfileBgHeroStat, ProfileClassProgress } from '@firestone-hs/api-user-profile';
 import { PackResult } from '@firestone-hs/user-packs';
+import { AchievementHistory, AchievementHistoryService } from '@firestone/achievements/common';
 import { DeckSummary } from '@firestone/constructed/common';
 import { BattlegroundsState, GameState, GameStateFacadeService } from '@firestone/game-state';
 import { Card, CardBack, PackInfoForCollection as PackInfo } from '@firestone/memory';
 import { PatchesConfigService, Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { AchievementHistory } from '../../models/achievement/achievement-history';
+import { GameStatsProviderService } from '@firestone/stats/services';
 import { CardHistory } from '../../models/card-history';
 import { Coin } from '../../models/coin';
 import { MainWindowState } from '../../models/mainwindow/main-window-state';
@@ -22,19 +23,16 @@ import { NavigationState } from '../../models/mainwindow/navigation/navigation-s
 import { MercenariesBattleState } from '../../models/mercenaries/mercenaries-battle-state';
 import { MercenariesOutOfCombatState } from '../../models/mercenaries/out-of-combat/mercenaries-out-of-combat-state';
 import { Set } from '../../models/set';
-import { AchievementHistoryService } from '../achievement/achievements-history.service';
 import {
 	AchievementsLiveProgressTrackingService,
 	AchievementsProgressTracking,
 } from '../achievement/achievements-live-progress-tracking.service';
-import { AchievementsStateManagerService } from '../achievement/achievements-state-manager.service';
 import { CollectionManager } from '../collection/collection-manager.service';
 import { SetsManagerService } from '../collection/sets-manager.service';
 import { DecksProviderService } from '../decktracker/main/decks-provider.service';
 import { CollectionBootstrapService } from '../mainwindow/store/collection-bootstrap.service';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
 import { HighlightSelector } from '../mercenaries/highlights/mercenaries-synergies-highlight.service';
-import { GameStatsProviderService } from '../stats/game/game-stats-provider.service';
 import { arraysEqual } from '../utils';
 
 export type Selector<T> = (fullState: [MainWindowState, NavigationState, Preferences?]) => T;
@@ -83,7 +81,6 @@ export class AppUiStoreService extends Store<Preferences> {
 		private readonly collectionManager: CollectionManager,
 		private readonly collectionBootstrapService: CollectionBootstrapService,
 		private readonly setsManager: SetsManagerService,
-		private readonly achievementsStateManagerService: AchievementsStateManagerService,
 		private readonly gameStateFacade: GameStateFacadeService,
 	) {
 		super();

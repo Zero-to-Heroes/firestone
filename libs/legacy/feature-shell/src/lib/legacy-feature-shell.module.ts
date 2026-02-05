@@ -368,7 +368,11 @@ import { ProfileMatchStatsClassInfoComponent } from '@components/stats/desktop/m
 import { ProfileMatchStatsModeOverviewComponent } from '@components/stats/desktop/match-stats/profile-match-stats-mode-overview.component';
 import { ProfileMatchStatsComponent } from '@components/stats/desktop/match-stats/profile-match-stats.component';
 import { AllCardsService } from '@firestone-hs/replay-parser';
-import { AchievementsCommonModule, REMOTE_ACHIEVEMENTS_SERVICE_TOKEN } from '@firestone/achievements/common';
+import {
+	AchievementsCommonModule,
+	FirestoneRemoteAchievementsLoaderService,
+	REMOTE_ACHIEVEMENTS_SERVICE_TOKEN,
+} from '@firestone/achievements/common';
 import { AchievementsDataAccessModule } from '@firestone/achievements/data-access';
 import { AchievementsViewModule } from '@firestone/achievements/view';
 import { AppCommonModule, LocalizationLoaderWithCache } from '@firestone/app/common';
@@ -436,7 +440,11 @@ import {
 } from '@firestone/shared/framework/core';
 import { StatsCommonModule } from '@firestone/stats/common';
 import { StatsDataAccessModule } from '@firestone/stats/data-access';
-import { GAME_STATS_PROVIDER_SERVICE_TOKEN, StatsServicesModule } from '@firestone/stats/services';
+import {
+	GAME_STATS_PROVIDER_SERVICE_TOKEN,
+	GameStatsProviderService,
+	StatsServicesModule,
+} from '@firestone/stats/services';
 import { TwitchCommonModule } from '@firestone/twitch/common';
 import { MailboxDesktopComponent } from '@mails/components/mailbox-desktop.component';
 import { MailboxMessageComponent } from '@mails/components/mailbox-message/mailbox-message.component';
@@ -538,16 +546,8 @@ import { OwTranslatePipe } from './js/directives/ow-translate.pipe';
 import { PulseDirective } from './js/directives/pulse.directive';
 import { RippleOnClickDirective } from './js/directives/ripple-on-click.directive';
 import { RotateOnMouseOverDirective } from './js/directives/rotate-on-mouse-over.directive';
-import { AchievementHistoryStorageService } from './js/services/achievement/achievement-history-storage.service';
-import { AchievementHistoryService } from './js/services/achievement/achievements-history.service';
 import { AchievementsLiveProgressTrackingService } from './js/services/achievement/achievements-live-progress-tracking.service';
-import { AchievementsNotificationService } from './js/services/achievement/achievements-notification.service';
-import { AchievementsStateManagerService } from './js/services/achievement/achievements-state-manager.service';
-import { AchievementsStorageService } from './js/services/achievement/achievements-storage.service';
 import { ChallengeBuilderService } from './js/services/achievement/achievements/challenges/challenge-builder.service';
-import { AchievementsMemoryMonitor } from './js/services/achievement/data/achievements-memory-monitor.service';
-import { FirestoneRemoteAchievementsLoaderService } from './js/services/achievement/data/firestone-remote-achievements-loader.service';
-import { RawAchievementsLoaderService } from './js/services/achievement/data/raw-achievements-loader.service';
 import { FirestoneAchievementsChallengeService } from './js/services/achievement/firestone-achievements-challenges.service';
 import { AdService } from './js/services/ad.service';
 import { HearthArenaAnalyticsService } from './js/services/analytics/heartharena-analytics.service';
@@ -596,7 +596,6 @@ import { InternalProfileInfoService } from './js/services/profile/internal/inter
 import { ProfileUploaderService } from './js/services/profile/profile-uploader.service';
 import { ReplaysNotificationService } from './js/services/replays/replays-notification.service';
 import { GameOverService } from './js/services/stats/game/game-over.service';
-import { GameStatsProviderService } from './js/services/stats/game/game-stats-provider.service';
 import { GameStatsUpdaterService } from './js/services/stats/game/game-stats-updater.service';
 import { MatchStatsService } from './js/services/stats/match-stats.service';
 import { SystemTrayService } from './js/services/system-tray.service';
@@ -1285,14 +1284,7 @@ try {
 		DebugService,
 		Events,
 
-		AchievementHistoryStorageService,
-		AchievementHistoryService,
-
 		ChallengeBuilderService,
-		RawAchievementsLoaderService,
-		FirestoneRemoteAchievementsLoaderService,
-		AchievementsStorageService,
-		AchievementsStateManagerService,
 
 		CollectionManager,
 		SetsManagerService,
@@ -1347,8 +1339,6 @@ try {
 
 		AchievementsLiveProgressTrackingService,
 		FirestoneAchievementsChallengeService,
-		AchievementsMemoryMonitor,
-		AchievementsNotificationService,
 		FirestoneRemoteAchievementsLoaderService,
 
 		DecktrackerStateLoaderService,
@@ -1368,7 +1358,6 @@ try {
 
 		GameStatsUpdaterService,
 		GameOverService,
-		GameStatsProviderService,
 		MatchStatsService,
 
 		DeckCardService,

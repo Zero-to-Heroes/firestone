@@ -1,6 +1,6 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, HostListener, Input } from '@angular/core';
+import { AchievementHistory } from '@firestone/achievements/common';
 import { ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
-import { AchievementHistory } from '../../models/achievement/achievement-history';
 import { ChangeVisibleAchievementEvent } from '../../services/mainwindow/store/events/achievements/change-visible-achievement-event';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 

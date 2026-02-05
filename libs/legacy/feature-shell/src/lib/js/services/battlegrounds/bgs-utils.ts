@@ -1,7 +1,7 @@
 import { ReferenceCard } from '@firestone-hs/reference-data';
+import { VisualAchievement } from '@firestone/achievements/common';
 import { getAchievementSectionIdFromHeroCardId } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { VisualAchievement } from '../../models/visual-achievement';
 
 export const getAchievementsForHero = (
 	heroCardId: string,

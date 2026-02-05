@@ -11,12 +11,15 @@ export class VisualAchievementCategory {
 		return Object.assign(new VisualAchievementCategory(), value);
 	}
 
-	public findCategory(categoryHierarchy: string): VisualAchievementCategory {
+	public findCategory(categoryHierarchy: string): VisualAchievementCategory | null | undefined {
 		if (!categoryHierarchy) {
 			return null;
 		}
 
 		const categoryId = categoryHierarchy.split('/').pop();
+		if (!categoryId) {
+			return null;
+		}
 		if (categoryId === this.id) {
 			return this;
 		}
@@ -30,7 +33,7 @@ export class VisualAchievementCategory {
 			return [this];
 		}
 
-		if (this.categories.length === 0) {
+		if (!categoryId || this.categories.length === 0) {
 			return [];
 		}
 
@@ -47,7 +50,7 @@ export class VisualAchievementCategory {
 
 	public findAchievementHierarchy(achievementId: string | number): {
 		categories: VisualAchievementCategory[];
-		achievement: VisualAchievement;
+		achievement: VisualAchievement | null;
 	} {
 		const achievement = this.achievements.find(
 			(ach) =>

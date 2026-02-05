@@ -6,10 +6,10 @@ import {
 	MemoryInspectionService,
 	MemoryUpdatesService,
 } from '@firestone/memory';
+import { Events } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { BehaviorSubject, debounceTime, distinctUntilChanged, filter } from 'rxjs';
-import { Events } from '@firestone/shared/common/service';
-import { AchievementsStorageService } from '../achievements-storage.service';
+import { AchievementsStorageService } from './achievements-storage.service';
 
 @Injectable()
 export class AchievementsMemoryMonitor {
@@ -31,7 +31,7 @@ export class AchievementsMemoryMonitor {
 	public async fetchInGameAchievementsInfo(): Promise<readonly HsAchievementInfo[]> {
 		const achievementsFromMemory = await this.memory.getAchievementsInfo();
 		console.debug('[achievements-memory-monitor] updated achievements from memory 2', achievementsFromMemory);
-		this.achievementsFromMemory$$.next(achievementsFromMemory?.achievements);
+		this.achievementsFromMemory$$.next(achievementsFromMemory?.achievements ?? []);
 		return achievementsFromMemory?.achievements ?? [];
 	}
 
@@ -48,17 +48,17 @@ export class AchievementsMemoryMonitor {
 	}
 
 	private async initAchievements() {
-		const forceRetrigger$ = new BehaviorSubject<void>(null);
+		const forceRetrigger$ = new BehaviorSubject<void>(undefined);
 		this.numberOfCompletedAchievements$$
 			.pipe(
 				filter((value) => !!value),
 				distinctUntilChanged(),
 				debounceTime(1000),
 			)
-			.subscribe(() => forceRetrigger$.next(null));
+			.subscribe(() => forceRetrigger$.next(undefined));
 		// Also update the achievements (their progress) once a game ends
 		this.gameEvents.allEvents.pipe(filter((event) => event.type === GameEvent.GAME_END)).subscribe((event) => {
-			forceRetrigger$.next(null);
+			forceRetrigger$.next(undefined);
 		});
 
 		this.memoryUpdates.memoryUpdates$$.subscribe(async (changes) => {
@@ -75,7 +75,7 @@ export class AchievementsMemoryMonitor {
 		forceRetrigger$.subscribe(async () => {
 			const achievementCategories = await this.memory.getAchievementCategories();
 			console.debug('[achievements-memory-monitor] updated achievement categories', achievementCategories);
-			this.achievementCategories$$.next(achievementCategories);
+			this.achievementCategories$$.next(achievementCategories ?? []);
 		});
 
 		this.achievementsFromMemory$$

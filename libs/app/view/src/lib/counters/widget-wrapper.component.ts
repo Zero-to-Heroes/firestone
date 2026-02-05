@@ -60,7 +60,7 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 			distinctUntilChanged(),
 			switchMap(async (visible: boolean) => {
 				if (visible) {
-					console.debug('repositioning 2', this);
+					// console.debug('repositioning 2', this);
 					const repositioned = await this.reposition();
 				}
 				return visible;

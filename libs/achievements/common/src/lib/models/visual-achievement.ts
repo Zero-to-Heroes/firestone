@@ -1,6 +1,6 @@
-import { buildCompletionSteps } from '../services/achievement/achievements-state-manager.service';
+import { buildCompletionSteps } from '../services/achievements-state-manager.service';
 import { Achievement } from './achievement';
-import { AchievementStatus } from './achievement/achievement-status.type';
+import { AchievementStatus } from './achievement-status.type';
 
 export class VisualAchievement {
 	readonly hsAchievementId: number;
@@ -50,7 +50,7 @@ export class VisualAchievement {
 		return 'missing';
 	}
 
-	public getFirstMissingStep(): CompletionStep {
+	public getFirstMissingStep(): CompletionStep | undefined {
 		return this.completionSteps.find((step) => !step.numberOfCompletions);
 	}
 
@@ -73,7 +73,7 @@ export interface CompletionStep {
 	readonly hsAchievementId: number;
 	readonly numberOfCompletions: number;
 	readonly icon: string;
-	readonly completedText: string;
+	readonly completedText: string | undefined;
 	readonly priority: number;
 	// For HS exclusive achievements?
 	readonly progress?: number;

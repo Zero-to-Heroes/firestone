@@ -7,7 +7,7 @@ import { ElectronGameWindowService } from '@firestone/electron/common';
 import { AllCardsService } from '@firestone-hs/reference-data';
 import { GameEvents } from '@firestone/game-state';
 import { DiskCacheService, LogListenerService } from '@firestone/shared/common/service';
-import { CardsFacadeStandaloneService, DATABASE_SERVICE_TOKEN, setAppInjector } from '@firestone/shared/framework/core';
+import { CardsFacadeStandaloneService, DATABASE_SERVICE_TOKEN } from '@firestone/shared/framework/core';
 import { BrowserWindow, app as electronApp, ipcMain, shell } from 'electron';
 import { appendFileSync, existsSync, mkdirSync, readdirSync, statSync, unlinkSync } from 'fs';
 import { appendFile } from 'fs/promises';
@@ -437,18 +437,36 @@ export default class App {
 	private static async initGameDetection() {
 		// Initialize dependency injection system
 		const electronInjector = buildAppInjector();
-		setAppInjector(electronInjector);
 
 		const diskCache = electronInjector.get(DiskCacheService) as any as ElectronDiskCacheService;
 		await diskCache.init();
 		console.log('[app] diskCache initialized');
 
+		// Initialize MindVision service for memory reading
+		const mindVision = electronInjector.get(MindVisionElectronService);
+		const allCards = electronInjector.get(CardsFacadeStandaloneService);
+		const gameEvents = electronInjector.get(GameEvents);
+		const logListener = electronInjector.get(LogListenerService);
+		logListener
+			.configure(
+				'Power.log',
+				(data) => gameEvents.receiveLogLine(data),
+				(existingLine) => gameEvents.receiveExistingLogLine(existingLine),
+			)
+			.subscribe((status) => {
+				console.log('[log-register] status for Power.log', status);
+			})
+			.start();
+		await allCards.init(new AllCardsService(), 'enUS');
+		console.log('[app] allCards initialized', allCards.getCards()?.length ?? 'null');
+
+		const db = electronInjector.get(DATABASE_SERVICE_TOKEN);
+		await db.init();
+
 		// Initialize game services
 		App.gameWindow = ElectronGameWindowService.getInstance();
 		App.overlay = OverlayService.getInstance();
 		App.gameWindow.initialize(App.overlay);
-
-		// console.log('🔧 Registered services:', electronAppInjector.getRegisteredServices());
 
 		// Wait for overlay to be ready before registering to games
 		App.overlay.on('ready', async () => {
@@ -460,33 +478,6 @@ export default class App {
 			// Don't create overlay window yet - wait for game launch event
 			console.log('⏳ Waiting for Hearthstone to launch...');
 		});
-
-		// Initialize MindVision service for memory reading
-		const mindVision = electronInjector.get(MindVisionElectronService);
-		const allCards = electronInjector.get(CardsFacadeStandaloneService);
-		// const gameEventsPlugin = electronInjector.get(GameEventsElectronService);
-		const gameEvents = electronInjector.get(GameEvents);
-		const logListener = electronInjector.get(LogListenerService);
-		// gameEventsPlugin.init((gameEvent) => {
-		// 	console.log('[GameEventsElectron] [app] received event', gameEvent);
-		// });
-		logListener
-			.configure(
-				'Power.log',
-				(data) => gameEvents.receiveLogLine(data),
-				(existingLine) => gameEvents.receiveExistingLogLine(existingLine),
-			)
-			.subscribe((status) => {
-				console.log('[log-register] status for Power.log', status);
-			})
-			.start();
-		// TODO: nx graph, and remove UI dependencies (probably some transitive stuff for game-state or battelgrounds-core?)
-		console.log('[app] allCards', allCards);
-		allCards.init(new AllCardsService(), 'enUS');
-		console.log('[app] allCards initialized', allCards.getCards()?.length ?? 'null');
-
-		const db = electronInjector.get(DATABASE_SERVICE_TOKEN);
-		await db.init();
 
 		// Keep the old game detection for logging purposes
 		// App.gameDetection.on('game-launched', (gameInfo) => {

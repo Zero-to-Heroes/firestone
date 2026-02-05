@@ -4,14 +4,14 @@ import { PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { AbstractFacadeService, ApiRunner, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, filter } from 'rxjs';
-import { Achievement } from '../../models/achievement';
-import { CompletedAchievement } from '../../models/completed-achievement';
-import { IndexedVisualAchievement } from '../../models/indexed-visual-achievement';
-import { CompletionStep, VisualAchievement } from '../../models/visual-achievement';
-import { VisualAchievementCategory } from '../../models/visual-achievement-category';
-import { AchievementsMemoryMonitor } from './data/achievements-memory-monitor.service';
-import { FirestoneRemoteAchievementsLoaderService } from './data/firestone-remote-achievements-loader.service';
-import { RawAchievementsLoaderService } from './data/raw-achievements-loader.service';
+import { Achievement } from '../models/achievement';
+import { CompletedAchievement } from '../models/completed-achievement';
+import { IndexedVisualAchievement } from '../models/indexed-visual-achievement';
+import { CompletionStep, VisualAchievement } from '../models/visual-achievement';
+import { VisualAchievementCategory } from '../models/visual-achievement-category';
+import { AchievementsMemoryMonitor } from './achievements-memory-monitor.service';
+import { FirestoneRemoteAchievementsLoaderService } from './firestone-remote-achievements-loader.service';
+import { RawAchievementsLoaderService } from './raw-achievements-loader.service';
 
 const CATEGORIES_CONFIG_URL = 'https://static.zerotoheroes.com/hearthstone/data/achievements/configuration';
 
@@ -43,10 +43,8 @@ export class AchievementsStateManagerService extends AbstractFacadeService<Achie
 	}
 
 	protected async init() {
-		this.groupedAchievements$$ = new SubscriberAwareBehaviorSubject<readonly VisualAchievementCategory[] | null>(
-			null,
-		);
-		this.rawAchievements$$ = new SubscriberAwareBehaviorSubject<readonly Achievement[] | null>(null);
+		this.groupedAchievements$$ = new SubscriberAwareBehaviorSubject<readonly VisualAchievementCategory[]>([]);
+		this.rawAchievements$$ = new SubscriberAwareBehaviorSubject<readonly Achievement[]>([]);
 		this.rawAchievementsLoader = AppInjector.get(RawAchievementsLoaderService);
 		this.remoteAchievementsLoader = AppInjector.get(FirestoneRemoteAchievementsLoaderService);
 		this.memoryMonitor = AppInjector.get(AchievementsMemoryMonitor);
@@ -130,6 +128,16 @@ export class AchievementsStateManagerService extends AbstractFacadeService<Achie
 		});
 	}
 
+	protected override initElectronSubjects(): void {
+		this.setupElectronSubject(this.groupedAchievements$$, 'AchievementsStateManagerService-groupedAchievements');
+		this.setupElectronSubject(this.rawAchievements$$, 'AchievementsStateManagerService-rawAchievements');
+	}
+
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.groupedAchievements$$ = new SubscriberAwareBehaviorSubject<readonly VisualAchievementCategory[]>([]);
+		this.rawAchievements$$ = new SubscriberAwareBehaviorSubject<readonly Achievement[]>([]);
+	}
+
 	private buildGroupedAchievements(
 		rawAchievements: readonly Achievement[],
 		achievementsFromMemory: readonly HsAchievementInfo[],
@@ -144,14 +152,14 @@ export class AchievementsStateManagerService extends AbstractFacadeService<Achie
 		);
 		const mergedAchievements = convertForDisplay(achievementsWithCompletion);
 		const categories = buildCategories(mergedAchievements, categoryConfiguration);
-		console.debug(
-			'[achievements-state] built categories',
-			categories,
-			'in',
-			Date.now() - start,
-			'ms',
-			achievementsWithCompletion.filter((a) => a.hsRewardTrackXp),
-		);
+		// console.debug(
+		// 	'[achievements-state] built categories',
+		// 	categories,
+		// 	'in',
+		// 	Date.now() - start,
+		// 	'ms',
+		// 	achievementsWithCompletion.filter((a) => a.hsRewardTrackXp),
+		// );
 		return categories;
 	}
 
@@ -194,7 +202,7 @@ const buildCategory = (
 		id: category.id,
 		name: category.name,
 		icon: category.icon,
-		achievements: buildAchievements(category.achievementTypes, achievements),
+		achievements: buildAchievements(category.achievementTypes ?? [], achievements),
 		categories:
 			(category.categories
 				?.filter((cat) => cat)
@@ -220,7 +228,7 @@ const addCompletionInfo = (
 	const achievementsWithCompletion = allAchievements.map((ref: Achievement) => {
 		const completedAchievement = completedAchievements?.find((compl) => compl.id === ref.id);
 		const achievementFromMemory = achievementsFromMemory?.find((ach) => ach.id === ref.hsAchievementId);
-		let numberOfCompletions = completedAchievement ? completedAchievement.numberOfCompletions : 0;
+		let numberOfCompletions = completedAchievement ? (completedAchievement.numberOfCompletions ?? 0) : 0;
 		numberOfCompletions = numberOfCompletions > 0 ? numberOfCompletions : achievementFromMemory?.completed ? 1 : 0;
 		const result = {
 			...ref,
@@ -251,7 +259,7 @@ const convertForDisplay = (achievementsWithCompletion: readonly Achievement[]): 
 };
 
 const isAchievementVisualRoot = (achievement: Achievement): boolean => {
-	return achievement.root;
+	return achievement.root ?? false;
 };
 
 const convertToVisual = (
@@ -261,7 +269,7 @@ const convertToVisual = (
 ): IndexedVisualAchievement => {
 	const achievementForCompletionSteps: Achievement[] = allAchievements
 		.filter((achv) => achv.type === achievement.type)
-		.sort((a, b) => a.priority - b.priority);
+		.sort((a, b) => (a.priority ?? 0) - (b.priority ?? 0));
 	let text = achievement.text || achievement.emptyText;
 	const [completionSteps, textFromStep] = buildCompletionSteps(achievementForCompletionSteps, achievement, text);
 	text = text || textFromStep;
@@ -285,14 +293,14 @@ const convertToVisual = (
 export const buildCompletionSteps = (
 	achievementForCompletionSteps: readonly (Achievement | CompletionStep)[],
 	achievement: Achievement,
-	text: string,
+	text: string | undefined,
 ): [readonly CompletionStep[], string] => {
 	const areProgressionSteps =
 		achievementForCompletionSteps
 			.map((achv) => achv.priority)
 			.filter((value, index, self) => self.indexOf(value) === index).length !== 1;
 
-	const invertedCompletionSteps = [];
+	const invertedCompletionSteps: CompletionStep[] = [];
 	let alreadyDefinedText = achievement.text || false;
 	// Useful to make sure we have some consistency in the number of comletions
 	let maxNumberOfCompletions = 0;
@@ -315,15 +323,18 @@ export const buildCompletionSteps = (
 			numberOfCompletions: areProgressionSteps ? completions : achv.numberOfCompletions,
 			icon: achv.icon,
 			completedText: achv.completedText,
-			priority: achv.priority,
+			priority: achv.priority ?? 0,
 			text(showTimes = false): string {
 				const times = ``;
 				return `${achv.completedText} <span class="number-of-times">${times}</span>`;
 			},
-		} as CompletionStep);
+		});
 	}
 
-	return [invertedCompletionSteps.reverse() as readonly CompletionStep[], text];
+	return [invertedCompletionSteps.reverse() as readonly CompletionStep[], text].filter((value) => !!value) as [
+		readonly CompletionStep[],
+		string,
+	];
 };
 
 interface AchievementConfiguration {

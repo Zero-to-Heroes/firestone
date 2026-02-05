@@ -15,7 +15,7 @@ export const initSystemTray = async () => {
 		? join(app.getAppPath(), 'assets', 'tray_icon.png')
 		: join(__dirname, 'assets', 'tray_icon.png');
 
-	console.log('[SystemTray] Loading icon from:', iconPath);
+	// console.log('[SystemTray] Loading icon from:', iconPath);
 
 	const icon = nativeImage.createFromPath(iconPath);
 	if (icon.isEmpty()) {
@@ -36,7 +36,7 @@ export const initSystemTray = async () => {
 	await waitForReady(userService);
 
 	userService.user$$.subscribe((currentUser) => {
-		console.log('[SystemTray] User changed:', currentUser);
+		// console.log('[SystemTray] User changed:', currentUser);
 		const isLoggedIn = !!currentUser?.username;
 
 		const windowHandler = AppInjector.get(WINDOW_HANDLER_SERVICE_TOKEN);

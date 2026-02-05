@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
-import { VisualAchievementCategory } from '../../models/visual-achievement-category';
+import { VisualAchievementCategory } from '@firestone/achievements/common';
 
 @Component({
 	standalone: false,

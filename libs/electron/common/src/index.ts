@@ -1,3 +1,4 @@
+export * from '../../../../apps/electron-app/src/app/services/electron-hotkey-handler-facade.service';
 export * from './lib/common';
 export * from './lib/electron-api-runner.interface';
 export * from './lib/electron-api-runner.service';

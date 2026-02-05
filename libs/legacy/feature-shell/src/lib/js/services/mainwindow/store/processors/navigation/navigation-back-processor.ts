@@ -1,4 +1,8 @@
-import { AchievementsNavigationService } from '@firestone/achievements/common';
+import {
+	AchievementsNavigationService,
+	AchievementsStateManagerService,
+	builCategoryHierarchy,
+} from '@firestone/achievements/common';
 import { BattlegroundsNavigationService } from '@firestone/battlegrounds/services';
 import { CollectionNavigationService } from '@firestone/collection/common';
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
@@ -6,8 +10,6 @@ import { MainWindowState } from '../../../../../models/mainwindow/main-window-st
 import { NavigationCollection } from '../../../../../models/mainwindow/navigation/navigation-collection';
 import { NavigationReplays } from '../../../../../models/mainwindow/navigation/navigation-replays';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
-import { builCategoryHierarchy } from '../../../../achievement/achievement-utils';
-import { AchievementsStateManagerService } from '../../../../achievement/achievements-state-manager.service';
 import { SetsManagerService } from '../../../../collection/sets-manager.service';
 import { NavigationBackEvent } from '../../events/navigation/navigation-back-event';
 import { Processor } from '../processor';

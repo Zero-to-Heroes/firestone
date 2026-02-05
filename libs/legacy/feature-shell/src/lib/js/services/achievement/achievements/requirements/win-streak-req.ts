@@ -1,6 +1,6 @@
-import { GameStats, StatGameFormatType, StatGameModeType } from '@firestone/stats/data-access';
+import { RawRequirement } from '@firestone/achievements/common';
 import { GameEvent } from '@firestone/game-state';
-import { RawRequirement } from '../../../../models/achievement/raw-requirement';
+import { GameStats, StatGameFormatType, StatGameModeType } from '@firestone/stats/data-access';
 import { Requirement } from './_requirement';
 
 export class WinStreakReq implements Requirement {

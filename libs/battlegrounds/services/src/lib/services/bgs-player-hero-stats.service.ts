@@ -106,6 +106,16 @@ export class BgsPlayerHeroStatsService extends AbstractFacadeService<BgsPlayerHe
 		);
 	}
 
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.tiersWithPlayerData$$ = new SubscriberAwareBehaviorSubject<
+			readonly BgsMetaHeroStatTierItem[] | null | undefined
+		>(null);
+	}
+
+	protected override async initElectronSubjects() {
+		this.setupElectronSubject(this.tiersWithPlayerData$$, 'bgs-player-hero-stats-tiers-with-player-data');
+	}
+
 	// Not super fan of moving everything to an "await" pattern
 	public async buildFinalStats(
 		config: Config,

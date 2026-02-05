@@ -1,11 +1,11 @@
 import { Inject, Injectable } from '@angular/core';
 import { ProfileAchievementCategory } from '@firestone-hs/api-user-profile';
 import { SceneMode } from '@firestone-hs/reference-data';
+import { AchievementsMemoryMonitor } from '@firestone/achievements/common';
 import { SceneService } from '@firestone/memory';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { ADS_SERVICE_TOKEN, IAdsService } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, debounceTime, distinctUntilChanged, filter, map, take } from 'rxjs';
-import { AchievementsMemoryMonitor } from '../../achievement/data/achievements-memory-monitor.service';
 import { AppUiStoreFacadeService } from '../../ui-store/app-ui-store-facade.service';
 import { equalProfileAchievementCategory } from '../profile-uploader.service';
 

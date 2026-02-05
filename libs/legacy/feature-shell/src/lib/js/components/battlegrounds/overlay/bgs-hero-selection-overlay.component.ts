@@ -7,6 +7,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { Race, isBattlegroundsDuo, normalizeHeroCardId } from '@firestone-hs/reference-data';
+import { AchievementsStateManagerService, VisualAchievement, findCategory } from '@firestone/achievements/common';
 import { BgsMetaHeroStatTier, BgsMetaHeroStatTierItem, buildTiers } from '@firestone/battlegrounds/data-access';
 import {
 	BgsInGameHeroSelectionGuardianService,
@@ -31,9 +32,6 @@ import {
 	switchMap,
 	takeUntil,
 } from 'rxjs';
-import { VisualAchievement } from '../../../models/visual-achievement';
-import { findCategory } from '../../../services/achievement/achievement-utils';
-import { AchievementsStateManagerService } from '../../../services/achievement/achievements-state-manager.service';
 import { getAchievementsForHero } from '../../../services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
@@ -82,6 +80,10 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionCompon
 	}
 
 	async ngAfterContentInit() {
+		await waitForReady(this.achievements);
+		console.debug('[bgs-hero-selection-overlay] achievements ready');
+		await waitForReady(this.guardian);
+		console.debug('[bgs-hero-selection-overlay] guardian ready');
 		await waitForReady(this.prefs, this.ads, this.playerHeroStats, this.achievements, this.guardian);
 
 		combineLatest([this.ads.hasPremiumSub$$, this.guardian.freeUsesLeft$$]).pipe(

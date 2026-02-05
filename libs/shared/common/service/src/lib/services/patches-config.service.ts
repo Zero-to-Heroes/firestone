@@ -74,7 +74,7 @@ export class PatchesConfigService extends AbstractFacadeService<PatchesConfigSer
 
 		this.internalSubject$$.onFirstSubscribe(async () => {
 			const patchConfig: PatchesConfig | null = await this.api.callGetApi(PATCHES_CONFIG_URL);
-			console.log('[patch-config] loaded config');
+			// console.log('[patch-config] loaded config');
 			console.debug('[patch-config] loaded config', patchConfig);
 			this.config$$.next(patchConfig);
 			this.currentBattlegroundsMetaPatch$$.next(
@@ -97,7 +97,6 @@ export class PatchesConfigService extends AbstractFacadeService<PatchesConfigSer
 	}
 
 	protected override async initElectronSubjects() {
-		console.log('[patches-config] initElectronSubjects');
 		this.setupElectronSubject(this.config$$, configEventName);
 		this.setupElectronSubject(this.currentBattlegroundsMetaPatch$$, battlegroundsMetaPatchEventName);
 		this.setupElectronSubject(this.currentConstructedMetaPatch$$, constructedMetaPatchEventName);
@@ -107,7 +106,6 @@ export class PatchesConfigService extends AbstractFacadeService<PatchesConfigSer
 	}
 
 	protected override async createElectronProxy(ipcRenderer: any) {
-		console.log('[patches-config] createElectronProxy');
 		this.config$$ = new SubscriberAwareBehaviorSubject<PatchesConfig | null>(null);
 		this.currentBattlegroundsMetaPatch$$ = new SubscriberAwareBehaviorSubject<PatchInfo | null>(null);
 		this.currentConstructedMetaPatch$$ = new SubscriberAwareBehaviorSubject<PatchInfo | null>(null);

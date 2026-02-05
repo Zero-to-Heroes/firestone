@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
+import { RawAchievement, RawRequirement } from '@firestone/achievements/common';
 import { MemoryInspectionService } from '@firestone/memory';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { RawAchievement } from '../../../../models/achievement/raw-achievement';
-import { RawRequirement } from '../../../../models/achievement/raw-requirement';
 import { Requirement } from '../requirements/_requirement';
 import { ArmorAtEndReq } from '../requirements/armor-at-end-req';
 import { BattlegroundsHeroSelectedReq } from '../requirements/battlegrounds-hero-selected-req';

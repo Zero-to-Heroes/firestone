@@ -28,9 +28,7 @@ export class BgsMatchMemoryInfoService {
 	}
 
 	private async startMemoryReading() {
-		console.log('[bgs-match-memory-info] getting ready to start memory reading');
 		await waitForReady(this.prefs, this.gameStatus);
-		console.log('[bgs-match-memory-info] starting memory reading');
 
 		const gameStateService = AppInjector.get(GameStateFacadeService);
 		await waitForReady(gameStateService);

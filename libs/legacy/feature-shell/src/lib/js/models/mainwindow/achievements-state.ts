@@ -1,8 +1,7 @@
+import { VisualAchievement, VisualAchievementCategory } from '@firestone/achievements/common';
 import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { FilterOption } from '../filter-option';
-import { VisualAchievement } from '../visual-achievement';
-import { VisualAchievementCategory } from '../visual-achievement-category';
 
 export class AchievementsState {
 	readonly filters: readonly FilterOption[];

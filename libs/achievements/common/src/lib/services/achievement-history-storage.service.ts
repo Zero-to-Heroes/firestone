@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AchievementHistory } from '../../models/achievement/achievement-history';
+import { AchievementHistory } from '../models/achievement-history';
 import { AchievementsStorageService } from './achievements-storage.service';
 
 @Injectable()
