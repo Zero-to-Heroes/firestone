@@ -349,7 +349,7 @@ export class OverlayService extends EventEmitter {
 	private subscribeToGameInfoChanges(): void {
 		this.gameWindowService.onGameInfoChanged((gameInfo) => {
 			if (gameInfo && this.overlayWindow) {
-				console.log(`Game info changed, resizing overlay to: ${gameInfo.width}x${gameInfo.height}`);
+				// console.log(`Game info changed, resizing overlay to: ${gameInfo.width}x${gameInfo.height}`);
 				this.resizeOverlayToGame();
 			}
 		});

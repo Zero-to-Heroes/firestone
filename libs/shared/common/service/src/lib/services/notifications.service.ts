@@ -26,6 +26,14 @@ export class NotificationsService extends AbstractFacadeService<NotificationsSer
 		this.isDev = process.env['NODE_ENV'] !== 'production';
 	}
 
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.notifications$$ = new BehaviorSubject<Message | null>(null);
+	}
+
+	protected override async initElectronSubjects() {
+		this.setupElectronSubject(this.notifications$$, 'NotificationsService-notifications');
+	}
+
 	public async addNotification(htmlMessage: Message) {
 		if (!(await this.prefs.getPreferences()).setAllNotifications) {
 			console.log('not showing any notification');

@@ -83,7 +83,7 @@ export class ElectronDiskCacheService {
 	}
 
 	public async storeItem(key: string, value: any, timeout = 5000) {
-		console.log('[electron-disk-cache] storing item', key);
+		// console.log('[electron-disk-cache] storing item', key);
 		if (this.cacheDisabled) {
 			return true;
 		}
@@ -122,7 +122,7 @@ export class ElectronDiskCacheService {
 			// Write new file
 			await fsPromises.writeFile(filePath, stringified, { encoding: 'utf8' });
 			this.savingFiles[key] = false;
-			console.log('[electron-disk-cache] stored value', key, Date.now() - start);
+			// console.log('[electron-disk-cache] stored value', key, Date.now() - start);
 			return true;
 		} catch (e) {
 			console.error('[electron-disk-cache] error while storing info on local disk', key, e);
@@ -132,7 +132,7 @@ export class ElectronDiskCacheService {
 	}
 
 	public async getItem<T>(key: string): Promise<T | null> {
-		console.log('[electron-disk-cache] getting item', key);
+		// console.log('[electron-disk-cache] getting item', key);
 		if (this.cacheDisabled) {
 			return null;
 		}
@@ -154,7 +154,7 @@ export class ElectronDiskCacheService {
 			const start = Date.now();
 			const strResult = await fsPromises.readFile(filePath, { encoding: 'utf8' });
 			const result = !!strResult?.length ? JSON.parse(strResult) : null;
-			console.log('[electron-disk-cache] read value', key, Date.now() - start);
+			// console.log('[electron-disk-cache] read value', key, Date.now() - start);
 			return result;
 		} catch (e) {
 			// File doesn't exist or other error - return null (not an error condition)

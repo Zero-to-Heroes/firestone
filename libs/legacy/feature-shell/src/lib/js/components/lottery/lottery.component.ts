@@ -4,14 +4,14 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
+	Inject,
 	ViewRef,
 } from '@angular/core';
 import { LotteryFacadeService, LotteryWidgetControllerService } from '@firestone/lottery/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { AnalyticsService, waitForReady } from '@firestone/shared/framework/core';
+import { ADS_SERVICE_TOKEN, AnalyticsService, IAdsService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, filter, interval, tap } from 'rxjs';
-import { AdService } from '../../services/ad.service';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { LotteryTabType } from './lottery-navigation.component';
 
@@ -127,9 +127,9 @@ export class LotteryWidgetComponent extends AbstractSubscriptionComponent implem
 		private readonly i18n: LocalizationFacadeService,
 		private readonly analytics: AnalyticsService,
 		private readonly prefs: PreferencesService,
-		private readonly ads: AdService,
 		private readonly lotteryWidgetController: LotteryWidgetControllerService,
 		private readonly lottery: LotteryFacadeService,
+		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 	) {
 		super(cdr);
 	}

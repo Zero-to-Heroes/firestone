@@ -1,12 +1,27 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	Inject,
+	Input,
+	ViewRef,
+} from '@angular/core';
 import { MercenarySelector, RarityTYpe, RewardItemType, TaskStatus } from '@firestone-hs/reference-data';
 import { MemoryMercenary, MemoryVisitor } from '@firestone/memory';
-import { MercenariesNavigationService } from '@firestone/mercenaries/common';
+import {
+	getHeroRole,
+	isPassiveMercsTreasure,
+	MercenariesMemoryCacheService,
+	MercenariesNavigationService,
+	MercenariesReferenceData,
+	MercenariesReferenceDataService,
+} from '@firestone/mercenaries/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { ADS_SERVICE_TOKEN, CardsFacadeService, IAdsService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { Observable, combineLatest } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
 import {
 	MercenariesFullyUpgradedFilterType,
@@ -16,15 +31,7 @@ import {
 	MercenariesPersonalHeroesSortCriteria,
 	MercenariesPersonalHeroesSortCriteriaType,
 } from '../../../models/mercenaries/personal-heroes-sort-criteria.type';
-import { AdService } from '../../../services/ad.service';
 import { MercenariesPersonalHeroesSortEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-personal-heroes-sort-event';
-import { MercenariesMemoryCacheService } from '@firestone/mercenaries/common';
-import {
-	getHeroRole,
-	isPassiveMercsTreasure,
-	MercenariesReferenceData,
-	MercenariesReferenceDataService,
-} from '@firestone/mercenaries/common';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { applySearchStringFilter, buildBounties } from '../../../services/ui-store/mercenaries-ui-helper';
 import { arraysEqual, sortByProperties, sumOnArray } from '../../../services/utils';
@@ -148,7 +155,7 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 		private readonly mercenariesReferenceData: MercenariesReferenceDataService,
 		private readonly prefs: PreferencesService,
 		private readonly nav: MercenariesNavigationService,
-		private readonly ads: AdService,
+		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 	) {
 		super(cdr);
 	}
@@ -232,14 +239,14 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 		const currentStep = !memMerc.Owned
 			? 0
 			: !visitorInfo
-			? // Visitor is missing from the full list, which means that all tasks have been completed
-			  // (or that we don't own that merc)
-			  // We have to be careful with the case where all mercs are maxxed out, in which case we have no visitors
-			  visitors != null
-				? taskChain?.tasks?.length
-				: // We haven't been able to get the list of visitors
-				  null
-			: Math.max(0, currentTaskStep);
+				? // Visitor is missing from the full list, which means that all tasks have been completed
+					// (or that we don't own that merc)
+					// We have to be careful with the case where all mercs are maxxed out, in which case we have no visitors
+					visitors != null
+					? taskChain?.tasks?.length
+					: // We haven't been able to get the list of visitors
+						null
+				: Math.max(0, currentTaskStep);
 
 		const currentTaskDescription = this.buildTaskDescription(taskChain, currentStep, visitorInfo);
 		const lastLevel = [...referenceData.mercenaryLevels].pop();
@@ -279,15 +286,15 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 			xpNeededForLevel: isMaxLevel
 				? 0
 				: memMerc.Level === 30
-				? null
-				: referenceData.mercenaryLevels.find((info) => info.currentLevel === memMerc.Level + 1)?.xpToNext -
-				  memMerc.Experience,
+					? null
+					: referenceData.mercenaryLevels.find((info) => info.currentLevel === memMerc.Level + 1)?.xpToNext -
+						memMerc.Experience,
 			xpInCurrentLevel: isMaxLevel
 				? lastLevel.xpToNext
 				: memMerc.Level <= 1
-				? memMerc.Experience
-				: memMerc.Experience -
-				  referenceData.mercenaryLevels.find((info) => info.currentLevel === memMerc.Level)?.xpToNext,
+					? memMerc.Experience
+					: memMerc.Experience -
+						referenceData.mercenaryLevels.find((info) => info.currentLevel === memMerc.Level)?.xpToNext,
 			abilities: abilities,
 			equipments: equipments,
 			minCostOfNextUpgrade: null,
@@ -374,7 +381,7 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 						abilityCard.id ?? memAbilityCard.id ?? baseAbilityCard.id,
 						this.allCards,
 					)
-						? abilityCard.cost ?? memAbilityCard.cost ?? baseAbilityCard.cost ?? 0
+						? (abilityCard.cost ?? memAbilityCard.cost ?? baseAbilityCard.cost ?? 0)
 						: null,
 					cooldown:
 						abilityCard.mercenaryAbilityCooldown ??
@@ -413,11 +420,11 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 			? this.i18n.translateString(`mercenaries.hero-stats.current-task-tooltip-title`, {
 					taskNumber: currentStep + 1,
 					taskTitle: currentTask.title,
-			  })
+				})
 			: this.i18n.translateString(`mercenaries.hero-stats.next-task-tooltip-title`, {
 					taskNumber: currentStep + 1,
 					taskTitle: currentTask.title,
-			  });
+				});
 
 		const currentTaskDescription = `
 				<div class="current-task">
@@ -466,8 +473,8 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 				fullyUpgraded === 'all'
 					? true
 					: fullyUpgraded === 'upgraded'
-					? stat.isFullyUpgraded
-					: !stat.isFullyUpgraded,
+						? stat.isFullyUpgraded
+						: !stat.isFullyUpgraded,
 			)
 			.filter((stat) => (owned === 'all' ? true : owned === 'owned' ? stat.owned : !stat.owned))
 			// So that minions that you own are always displayed above the ones you don't have in case of ties
@@ -549,7 +556,7 @@ export class MercenariesPersonalHeroStatsComponent extends AbstractSubscriptionC
 			[ngClass]="{
 				sortable: _isSortable,
 				'active-asc': _sort?.criteria === _criteria && _sort?.direction === 'asc',
-				'active-desc': _sort?.criteria === _criteria && _sort?.direction === 'desc'
+				'active-desc': _sort?.criteria === _criteria && _sort?.direction === 'desc',
 			}"
 			(click)="startSort()"
 		>
@@ -597,7 +604,10 @@ export class SortableLabelComponent {
 	_isSortable = true;
 	_sort: MercenariesPersonalHeroesSortCriteria;
 
-	constructor(private readonly cdr: ChangeDetectorRef, private readonly store: AppUiStoreFacadeService) {}
+	constructor(
+		private readonly cdr: ChangeDetectorRef,
+		private readonly store: AppUiStoreFacadeService,
+	) {}
 
 	startSort() {
 		if (!this._isSortable) {

@@ -3,12 +3,12 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
+	Inject,
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { waitForReady } from '@firestone/shared/framework/core';
-import { AdService } from '@legacy-import/src/lib/js/services/ad.service';
+import { ADS_SERVICE_TOKEN, IAdsService, waitForReady } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { BehaviorSubject, from, Observable } from 'rxjs';
 
@@ -52,7 +52,7 @@ export class TavernBrawlDesktopComponent extends AbstractSubscriptionComponent i
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
-		private readonly ads: AdService,
+		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 	) {
 		super(cdr);
 	}

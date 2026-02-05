@@ -1,8 +1,14 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { waitForReady } from '@firestone/shared/framework/core';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	Inject,
+	ViewRef,
+} from '@angular/core';
+import { ADS_SERVICE_TOKEN, IAdsService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { StatsCategory, StatsCategoryType } from '../../../models/mainwindow/stats/stats-category';
-import { AdService } from '../../../services/ad.service';
 import { ProfileSelectCategoryEvent } from '../../../services/mainwindow/store/processors/stats/profile-select-category';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
@@ -52,7 +58,7 @@ export class StatsDesktopComponent extends AbstractSubscriptionStoreComponent im
 	constructor(
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
-		private readonly ads: AdService,
+		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 	) {
 		super(store, cdr);
 	}

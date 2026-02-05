@@ -4,18 +4,16 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
-	ElementRef,
+	Inject,
 	Input,
-	Renderer2,
 	ViewRef,
 } from '@angular/core';
 import { BgsHeroTier, BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
 import { BGS_HERO_SELECTION_DAILY_FREE_USES, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
+import { ADS_SERVICE_TOKEN, IAdsService, ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { VisualAchievement } from '../../../models/visual-achievement';
-import { AdService } from '../../../services/ad.service';
 import { BgsHeroSelectionTooltipComponent } from '../hero-selection/bgs-hero-selection-tooltip.component';
 import {
 	BattlegroundsTribeDetailsTooltipComponent,
@@ -161,10 +159,8 @@ export class BgsHeroSelectionOverlayInfoComponent extends AbstractSubscriptionCo
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: ILocalizationService,
-		private readonly ads: AdService,
+		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 		private readonly prefs: PreferencesService,
-		private readonly el: ElementRef,
-		private readonly renderer: Renderer2,
 	) {
 		super(cdr);
 	}

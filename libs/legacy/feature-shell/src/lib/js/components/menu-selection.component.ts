@@ -5,14 +5,21 @@ import {
 	ChangeDetectorRef,
 	Component,
 	EventEmitter,
+	Inject,
 	Input,
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
 import { CurrentAppType, PreferencesService } from '@firestone/shared/common/service';
-import { AnalyticsService, OverwolfService, UserService, waitForReady } from '@firestone/shared/framework/core';
+import {
+	ADS_SERVICE_TOKEN,
+	AnalyticsService,
+	IAdsService,
+	OverwolfService,
+	UserService,
+	waitForReady,
+} from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
-import { AdService } from '../services/ad.service';
 import { ChangeVisibleApplicationEvent } from '../services/mainwindow/store/events/change-visible-application-event';
 import { MainWindowStoreEvent } from '../services/mainwindow/store/events/main-window-store-event';
 import { AppUiStoreFacadeService } from '../services/ui-store/app-ui-store-facade.service';
@@ -247,7 +254,7 @@ export class MenuSelectionComponent
 		private ow: OverwolfService,
 		private readonly analytics: AnalyticsService,
 		private readonly userService: UserService,
-		private readonly ads: AdService,
+		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 		private readonly prefs: PreferencesService,
 	) {
 		super(store, cdr);

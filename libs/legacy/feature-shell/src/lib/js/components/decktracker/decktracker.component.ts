@@ -1,9 +1,16 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	Inject,
+	Input,
+	ViewRef,
+} from '@angular/core';
 import { ConstructedNavigationService } from '@firestone/constructed/common';
-import { waitForReady } from '@firestone/shared/framework/core';
+import { ADS_SERVICE_TOKEN, IAdsService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { DecktrackerViewType } from '../../models/mainwindow/decktracker/decktracker-view.type';
-import { AdService } from '../../services/ad.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
@@ -62,7 +69,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 				class="secondary"
 				*ngIf="!(showAds$ | async) && showSidebar(value.currentView)"
 				[ngClass]="{
-					'second-display': !showAds && value.currentView === 'deck-details'
+					'second-display': !showAds && value.currentView === 'deck-details',
 				}"
 			>
 				<decktracker-deck-recap *ngIf="value.currentView === 'deck-details'"></decktracker-deck-recap>
@@ -84,7 +91,7 @@ export class DecktrackerComponent extends AbstractSubscriptionStoreComponent imp
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly nav: ConstructedNavigationService,
-		private readonly ads: AdService,
+		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 	) {
 		super(store, cdr);
 	}

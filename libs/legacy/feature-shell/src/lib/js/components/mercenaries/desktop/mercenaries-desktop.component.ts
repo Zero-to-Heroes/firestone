@@ -5,13 +5,13 @@ import {
 	ChangeDetectorRef,
 	Component,
 	EventEmitter,
+	Inject,
 	ViewRef,
 } from '@angular/core';
-import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
+import { ADS_SERVICE_TOKEN, IAdsService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable } from 'rxjs';
 import { MercenariesCategoryId } from '../../../models/mercenaries/mercenary-category-id.type';
-import { AdService } from '../../../services/ad.service';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { MercenariesSelectCategoryEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-select-category-event';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
@@ -73,7 +73,7 @@ export class MercenariesDesktopComponent
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
 		private readonly i18n: LocalizationFacadeService,
-		private readonly ads: AdService,
+		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 	) {
 		super(store, cdr);
 	}

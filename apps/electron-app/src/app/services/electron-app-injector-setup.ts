@@ -25,6 +25,8 @@ import {
 	BgsInGameHeroSelectionGuardianService,
 	BgsInGameQuestsGuardianService,
 	BgsInGameQuestsService,
+	BgsInGameTimewarpedGuardianService,
+	BgsInGameTimewarpedService,
 	BgsInGameTrinketsGuardianService,
 	BgsInGameTrinketsService,
 	BgsMetaCompositionStrategiesService,
@@ -287,6 +289,7 @@ export const buildAppInjector = () => {
 	);
 	// Initialize the service
 	translate.setDefaultLang('enUS');
+	electronInjector.register(TranslateService, translate);
 
 	const i18n = new LocalizationStandaloneService(allCardsRaw, translate);
 	electronInjector.register(LocalizationStandaloneService, i18n);
@@ -579,6 +582,12 @@ export const buildAppInjector = () => {
 
 	const windowHandlerFacade = new WindowHandlerFacadeService(windowManager);
 	electronInjector.register(WindowHandlerFacadeService, windowHandlerFacade);
+
+	const bgsInGameTimewarpedService = new BgsInGameTimewarpedService(windowManager);
+	electronInjector.register(BgsInGameTimewarpedService, bgsInGameTimewarpedService);
+
+	const bgsInGameTimewarpedGuardianService = new BgsInGameTimewarpedGuardianService(windowManager);
+	electronInjector.register(BgsInGameTimewarpedGuardianService, bgsInGameTimewarpedGuardianService);
 
 	return electronInjector;
 };

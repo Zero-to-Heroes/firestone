@@ -74,9 +74,7 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 			return null;
 		}
 		this.repositioning = true;
-		console.debug(this.constructor.name, 'repositioning');
 		const gameInfo = await this.gameInfoService.getRunningGameInfo();
-		console.debug(this.constructor.name, 'got game info', gameInfo);
 		if (!gameInfo) {
 			console.warn(this.constructor.name, 'missing game info', gameInfo);
 			this.repositioning = false;

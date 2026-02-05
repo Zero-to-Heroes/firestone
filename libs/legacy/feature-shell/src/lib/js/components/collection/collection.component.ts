@@ -1,12 +1,18 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	Inject,
+	ViewRef,
+} from '@angular/core';
 import { ReferenceCard } from '@firestone-hs/reference-data';
 import { CollectionNavigationService, CurrentView } from '@firestone/collection/common';
 import { CardBack } from '@firestone/memory';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
+import { ADS_SERVICE_TOKEN, CardsFacadeService, IAdsService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { Set, SetCard } from '../../models/set';
-import { AdService } from '../../services/ad.service';
 import { CollectionManager } from '../../services/collection/collection-manager.service';
 import { SetsManagerService } from '../../services/collection/sets-manager.service';
 import { MainWindowStateFacadeService } from '../../services/mainwindow/store/main-window-state-facade.service';
@@ -26,7 +32,7 @@ import { MainWindowStateFacadeService } from '../../services/mainwindow/store/ma
 				selectedSet: selectedSet$ | async,
 				selectedCard: selectedCard$ | async,
 				selectedCardBack: selectedCardBack$ | async,
-				searchString: searchString$ | async
+				searchString: searchString$ | async,
 			} as value"
 		>
 			<section class="main" [ngClass]="{ divider: value.currentView === 'cards' }">
@@ -111,7 +117,7 @@ export class CollectionComponent extends AbstractSubscriptionComponent implement
 		private readonly mainWindowState: MainWindowStateFacadeService,
 		private readonly setsManager: SetsManagerService,
 		private readonly collectionManager: CollectionManager,
-		private readonly ads: AdService,
+		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 	) {
 		super(cdr);
 	}
@@ -129,9 +135,9 @@ export class CollectionComponent extends AbstractSubscriptionComponent implement
 		this.selectedCard$ = combineLatest([this.setsManager.sets$$, this.nav.selectedCardId$$]).pipe(
 			this.mapData(([allSets, selectedCardId]) =>
 				selectedCardId
-					? allSets.map((set) => set.getCard(selectedCardId)).find((card) => !!card) ??
-					  // This is the case when it's not a collectible card for instance
-					  this.allCards.getCard(selectedCardId)
+					? (allSets.map((set) => set.getCard(selectedCardId)).find((card) => !!card) ??
+						// This is the case when it's not a collectible card for instance
+						this.allCards.getCard(selectedCardId))
 					: null,
 			),
 		);

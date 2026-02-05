@@ -1,4 +1,11 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	Inject,
+	ViewRef,
+} from '@angular/core';
 import { Race, isBattlegroundsDuo, normalizeHeroCardId } from '@firestone-hs/reference-data';
 import { BgsMetaHeroStatTier, BgsMetaHeroStatTierItem, buildTiers } from '@firestone/battlegrounds/data-access';
 import {
@@ -10,7 +17,7 @@ import { BgsHeroSelectionOverviewPanel, Config, GameStateFacadeService, equalCon
 import { PreferencesService } from '@firestone/shared/common/service';
 import { TooltipPositionType } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent, arraysEqual } from '@firestone/shared/framework/common';
-import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
+import { ADS_SERVICE_TOKEN, CardsFacadeService, IAdsService, waitForReady } from '@firestone/shared/framework/core';
 import {
 	BehaviorSubject,
 	Observable,
@@ -27,7 +34,6 @@ import {
 import { VisualAchievement } from '../../../models/visual-achievement';
 import { findCategory } from '../../../services/achievement/achievement-utils';
 import { AchievementsStateManagerService } from '../../../services/achievement/achievements-state-manager.service';
-import { AdService } from '../../../services/ad.service';
 import { getAchievementsForHero } from '../../../services/battlegrounds/bgs-utils';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
@@ -67,7 +73,7 @@ export class BgsHeroSelectionOverlayComponent extends AbstractSubscriptionCompon
 		private readonly i18n: LocalizationFacadeService,
 		private readonly prefs: PreferencesService,
 		private readonly gameState: GameStateFacadeService,
-		private readonly ads: AdService,
+		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 		private readonly playerHeroStats: BgsPlayerHeroStatsService,
 		private readonly achievements: AchievementsStateManagerService,
 		private readonly guardian: BgsInGameHeroSelectionGuardianService,

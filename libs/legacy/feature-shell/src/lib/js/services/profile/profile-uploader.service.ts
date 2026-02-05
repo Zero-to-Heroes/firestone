@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import {
 	CardsForSet,
 	Profile,
@@ -11,9 +11,8 @@ import {
 } from '@firestone-hs/api-user-profile';
 import { DiskCacheService, GameStatusService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
-import { ApiRunner, waitForReady } from '@firestone/shared/framework/core';
+import { ADS_SERVICE_TOKEN, ApiRunner, IAdsService, waitForReady } from '@firestone/shared/framework/core';
 import { combineLatest, distinctUntilChanged, filter, map, skip, take } from 'rxjs';
-import { AdService } from '../ad.service';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 import { deepEqual } from '../utils';
 import { InternalProfileAchievementsService } from './internal/internal-profile-achievements.service';
@@ -36,7 +35,7 @@ export class ProfileUploaderService {
 		private readonly gameStatus: GameStatusService,
 		private readonly store: AppUiStoreFacadeService,
 		private readonly diskCache: DiskCacheService,
-		private readonly ads: AdService,
+		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 	) {
 		window['profileClassesProgress'] = this.internalProfileInfo.classesProgress$$;
 		window['profileBgHeroStat'] = this.internalBattlegrounds.bgFullTimeStatsByHero$$;

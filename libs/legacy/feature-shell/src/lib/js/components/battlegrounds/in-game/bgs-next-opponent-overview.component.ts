@@ -1,4 +1,11 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	Inject,
+	ViewRef,
+} from '@angular/core';
 import { BgsInGameWindowNavigationService } from '@firestone/battlegrounds/services';
 import {
 	BgsFaceOffWithSimulation,
@@ -8,10 +15,9 @@ import {
 } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { waitForReady } from '@firestone/shared/framework/core';
+import { ADS_SERVICE_TOKEN, IAdsService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { auditTime, distinctUntilChanged, filter, map, shareReplay, takeUntil } from 'rxjs/operators';
-import { AdService } from '../../../services/ad.service';
 
 @Component({
 	standalone: false,
@@ -102,7 +108,7 @@ export class BgsNextOpponentOverviewComponent extends AbstractSubscriptionCompon
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly state: GameStateFacadeService,
 		private readonly prefs: PreferencesService,
-		private readonly ads: AdService,
+		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 		private readonly nav: BgsInGameWindowNavigationService,
 	) {
 		super(cdr);

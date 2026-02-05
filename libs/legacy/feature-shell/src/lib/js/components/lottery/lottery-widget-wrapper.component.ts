@@ -58,7 +58,7 @@ export class LotteryWidgetWrapperComponent extends AbstractWidgetWrapperComponen
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.prefs);
+		await waitForReady(this.prefs, this.lottery);
 
 		this.showWidget$ = combineLatest([
 			this.lottery.shouldShowOverlay$$,

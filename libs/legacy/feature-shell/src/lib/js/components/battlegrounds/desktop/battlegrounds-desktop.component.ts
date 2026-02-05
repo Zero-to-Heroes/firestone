@@ -5,15 +5,21 @@ import {
 	ChangeDetectorRef,
 	Component,
 	EventEmitter,
+	Inject,
 	ViewRef,
 } from '@angular/core';
 import { BG_USE_TRINKETS, BattlegroundsNavigationService, CategoryId } from '@firestone/battlegrounds/services';
 import { ENABLE_BGS_COMP_STATS } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { AnalyticsService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
+import {
+	ADS_SERVICE_TOKEN,
+	AnalyticsService,
+	IAdsService,
+	OverwolfService,
+	waitForReady,
+} from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { BattlegroundsCategory } from '../../../models/mainwindow/battlegrounds/battlegrounds-category';
-import { AdService } from '../../../services/ad.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { SelectBattlegroundsCategoryEvent } from '../../../services/mainwindow/store/events/battlegrounds/select-battlegrounds-category-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
@@ -103,7 +109,7 @@ export class BattlegroundsDesktopComponent
 		private readonly i18n: LocalizationFacadeService,
 		private readonly analytics: AnalyticsService,
 		private readonly nav: BattlegroundsNavigationService,
-		private readonly ads: AdService,
+		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 	) {
 		super(cdr);
 	}

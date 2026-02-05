@@ -4,6 +4,7 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
+	Inject,
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
@@ -11,10 +12,15 @@ import { BgsInGameWindowNavigationService } from '@firestone/battlegrounds/servi
 import { BgsFaceOffWithSimulation, BgsPanel, GameStateFacadeService } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { AnalyticsService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
+import {
+	ADS_SERVICE_TOKEN,
+	AnalyticsService,
+	IAdsService,
+	OverwolfService,
+	waitForReady,
+} from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { auditTime, filter, startWith } from 'rxjs/operators';
-import { AdService } from '../../services/ad.service';
 
 @Component({
 	standalone: false,
@@ -70,7 +76,7 @@ export class BattlegroundsContentComponent
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
 		private readonly analytics: AnalyticsService,
-		private readonly ads: AdService,
+		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 		private readonly nav: BgsInGameWindowNavigationService,
 		private readonly gameState: GameStateFacadeService,
 		private readonly prefs: PreferencesService,

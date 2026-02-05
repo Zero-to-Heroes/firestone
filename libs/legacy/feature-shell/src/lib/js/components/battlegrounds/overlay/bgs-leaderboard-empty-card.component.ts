@@ -4,6 +4,7 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
+	Inject,
 	Input,
 	OnDestroy,
 	ViewRef,
@@ -15,15 +16,15 @@ import { CardMousedOverService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import {
-	CardsFacadeService,
+	ADS_SERVICE_TOKEN,
+	IAdsService,
 	ILocalizationService,
 	OverwolfService,
 	waitForReady,
 } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, takeUntil } from 'rxjs';
-import { AdService } from '../../../services/ad.service';
 import { BgsOverlayHeroOverviewComponent } from './bgs-overlay-hero-overview.component';
-import { BgsOverlayHeroOverviewService, PlayerInfo } from './bgs-overlay-hero-overview.service';
+import { PlayerInfo } from './bgs-overlay-hero-overview.service';
 
 @Component({
 	standalone: false,
@@ -130,13 +131,11 @@ export class BgsLeaderboardEmptyCardComponent
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
-		private readonly allCards: CardsFacadeService,
 		private readonly ow: OverwolfService,
 		private readonly i18n: ILocalizationService,
 		private readonly prefs: PreferencesService,
-		private readonly ads: AdService,
+		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 		private readonly mouseOver: CardMousedOverService,
-		private readonly controller: BgsOverlayHeroOverviewService,
 	) {
 		super(cdr);
 	}

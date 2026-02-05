@@ -192,6 +192,18 @@ export class LotteryWidgetControllerService extends AbstractFacadeService<Lotter
 			});
 	}
 
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.shouldTrack$$ = new BehaviorSubject<boolean>(true);
+		this.shouldShowOverlay$$ = new BehaviorSubject<boolean>(true);
+		this.events$$ = new BehaviorSubject<{ name: LotteryEventName; data?: any } | null>(null);
+	}
+
+	protected override async initElectronSubjects() {
+		this.setupElectronSubject(this.shouldTrack$$, 'LotteryWidgetControllerService-shouldTrack');
+		this.setupElectronSubject(this.shouldShowOverlay$$, 'LotteryWidgetControllerService-shouldShowOverlay');
+		this.setupElectronSubject(this.events$$, 'LotteryWidgetControllerService-events');
+	}
+
 	private async setInitialOverlayValue() {
 		const prefs = await this.prefs.getPreferences();
 		if (prefs.lotteryOverlay != null) {

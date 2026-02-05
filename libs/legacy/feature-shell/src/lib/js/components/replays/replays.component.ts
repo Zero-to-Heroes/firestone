@@ -1,10 +1,16 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	Inject,
+	ViewRef,
+} from '@angular/core';
 import { BgsPostMatchStatsPanel } from '@firestone/game-state';
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
-import { waitForReady } from '@firestone/shared/framework/core';
+import { ADS_SERVICE_TOKEN, IAdsService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { CurrentViewType } from '../../models/mainwindow/replays/current-view.type';
-import { AdService } from '../../services/ad.service';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
@@ -29,7 +35,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 
 			<ng-container
 				*ngIf="{
-					bgsPostMatchStatsPanel: bgsPostMatchStatsPanel$ | async
+					bgsPostMatchStatsPanel: bgsPostMatchStatsPanel$ | async,
 				} as value"
 			>
 				<section
@@ -59,7 +65,7 @@ export class ReplaysComponent extends AbstractSubscriptionStoreComponent impleme
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly nav: MainWindowNavigationService,
-		private readonly ads: AdService,
+		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 	) {
 		super(store, cdr);
 	}

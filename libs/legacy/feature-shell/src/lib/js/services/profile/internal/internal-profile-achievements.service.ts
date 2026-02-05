@@ -1,11 +1,11 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { ProfileAchievementCategory } from '@firestone-hs/api-user-profile';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { SceneService } from '@firestone/memory';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
+import { ADS_SERVICE_TOKEN, IAdsService } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, debounceTime, distinctUntilChanged, filter, map, take } from 'rxjs';
 import { AchievementsMemoryMonitor } from '../../achievement/data/achievements-memory-monitor.service';
-import { AdService } from '../../ad.service';
 import { AppUiStoreFacadeService } from '../../ui-store/app-ui-store-facade.service';
 import { equalProfileAchievementCategory } from '../profile-uploader.service';
 
@@ -17,7 +17,7 @@ export class InternalProfileAchievementsService {
 		private readonly store: AppUiStoreFacadeService,
 		private readonly achievementsMonitor: AchievementsMemoryMonitor,
 		private readonly sceneService: SceneService,
-		private readonly ads: AdService,
+		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 	) {
 		this.init();
 	}

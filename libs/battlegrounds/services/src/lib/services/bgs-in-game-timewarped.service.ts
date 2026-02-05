@@ -2,7 +2,12 @@
 import { Injectable } from '@angular/core';
 import { BgsCardStats } from '@firestone-hs/bgs-global-stats';
 import { SceneMode, isBattlegrounds } from '@firestone-hs/reference-data';
-import { BgsMetaCardStatTier, buildCardStats, buildCardTiers, isBgsTimewarped } from '@firestone/battlegrounds/data-access';
+import {
+	BgsMetaCardStatTier,
+	buildCardStats,
+	buildCardTiers,
+	isBgsTimewarped,
+} from '@firestone/battlegrounds/data-access';
 import {
 	BgsTimewarpedCardChoiceOption,
 	GameStateFacadeService,
@@ -141,9 +146,7 @@ export class BgsInGameTimewarpedService extends AbstractFacadeService<BgsInGameT
 				cardIds: state!.opponentDeck.board.map((entity) => entity.cardId),
 				currentTurn: state?.currentTurn ?? 1,
 			})),
-			distinctUntilChanged(
-				(a, b) => arraysEqual(a.cardIds, b.cardIds) && a.currentTurn === b.currentTurn,
-			),
+			distinctUntilChanged((a, b) => arraysEqual(a.cardIds, b.cardIds) && a.currentTurn === b.currentTurn),
 		);
 
 		const options$ = combineLatest([
@@ -164,15 +167,31 @@ export class BgsInGameTimewarpedService extends AbstractFacadeService<BgsInGameT
 					return [];
 				}
 				const currentTurn = shopCards.currentTurn as number;
-				const timewarpedStats = cardStatsInput?.cardStats?.filter(s => isBgsTimewarped(this.allCards.getCard(s.cardId))).filter(s => s.totalPlayed > 0) ?? []
-				const cardStats = timewarpedStats.filter(s => this.allCards.getCard(s.cardId).techLevel === (currentTurn === 6 ? 3 : 5));
-				const tierItems = buildCardStats(cardStats, [], 0, currentTurn, this.allCards)
+				const timewarpedStats =
+					cardStatsInput?.cardStats
+						?.filter((s) => isBgsTimewarped(this.allCards.getCard(s.cardId)))
+						.filter((s) => s.totalPlayed > 0) ?? [];
+				const cardStats = timewarpedStats.filter(
+					(s) => this.allCards.getCard(s.cardId).techLevel === (currentTurn === 6 ? 3 : 5),
+				);
+				const tierItems = buildCardStats(cardStats, [], 0, currentTurn, this.allCards);
 				console.debug('[bgs-timewarped] tierItems', tierItems, currentTurn);
-				const tiers = buildCardTiers(tierItems, { criteria: 'impact', direction: 'asc' }, [], this.i18n, this.allCards);
+				const tiers = buildCardTiers(
+					tierItems,
+					{ criteria: 'impact', direction: 'asc' },
+					[],
+					this.i18n,
+					this.allCards,
+				);
 				console.debug('[bgs-timewarped] tiers', tiers);
 				return shopCards.cardIds
 					.map((cardId) =>
-						buildBgsTimewarpedCardChoiceValue(cardId, shopCards.currentTurn as number, tiers, this.allCards),
+						buildBgsTimewarpedCardChoiceValue(
+							cardId,
+							shopCards.currentTurn as number,
+							tiers,
+							this.allCards,
+						),
 					)
 					.filter((option) => option !== null) as readonly BgsTimewarpedCardChoiceOption[];
 			}),
@@ -188,6 +207,16 @@ export class BgsInGameTimewarpedService extends AbstractFacadeService<BgsInGameT
 			this.timewarpedStats$$.next(options);
 		});
 	}
+
+	protected override async initElectronSubjects() {
+		this.setupElectronSubject(this.showWidget$$, 'BgsInGameTimewarpedService-showWidget');
+		this.setupElectronSubject(this.timewarpedStats$$, 'BgsInGameTimewarpedService-timewarpedStats');
+	}
+
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.showWidget$$ = new BehaviorSubject<boolean | null>(null);
+		this.timewarpedStats$$ = new BehaviorSubject<readonly BgsTimewarpedCardChoiceOption[] | null>(null);
+	}
 }
 
 const buildBgsTimewarpedCardChoiceValue = (
@@ -197,7 +226,9 @@ const buildBgsTimewarpedCardChoiceValue = (
 	allCards: CardsFacadeService,
 ): BgsTimewarpedCardChoiceOption | null => {
 	const tier = tiers.find((t) => t.sections.some((s) => s.items.some((i) => i.cardId === cardId)));
-	const tierItem = tier?.sections.find((s) => s.items.some((i) => i.cardId === cardId))?.items.find((i) => i.cardId === cardId);
+	const tierItem = tier?.sections
+		.find((s) => s.items.some((i) => i.cardId === cardId))
+		?.items.find((i) => i.cardId === cardId);
 	// const mmrStat = cardStats?.placementAtMmr?.find((s) => s.mmr === TIMEWARPED_MMR_PERCENTILE);
 
 	// Use the current turn's stats for the timewarped shop

@@ -4,6 +4,7 @@ import {
 	ChangeDetectorRef,
 	Component,
 	ElementRef,
+	Inject,
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
@@ -11,9 +12,8 @@ import { isBattlegrounds, SceneMode } from '@firestone-hs/reference-data';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
+import { ADS_SERVICE_TOKEN, IAdsService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { auditTime, combineLatest, Observable } from 'rxjs';
-import { AdService } from '../../../services/ad.service';
 import { AbstractWidgetWrapperComponent } from '../_widget-wrapper.component';
 
 @Component({
@@ -49,7 +49,7 @@ export class BgsHeroTipsWidgetWrapperComponent extends AbstractWidgetWrapperComp
 		protected readonly renderer: Renderer2,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly scene: SceneService,
-		private readonly ads: AdService,
+		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 		private readonly gameState: GameStateFacadeService,
 	) {
 		super(ow, el, prefs, renderer, cdr);

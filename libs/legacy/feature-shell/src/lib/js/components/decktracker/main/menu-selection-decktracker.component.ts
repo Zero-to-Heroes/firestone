@@ -5,13 +5,19 @@ import {
 	ChangeDetectorRef,
 	Component,
 	EventEmitter,
+	Inject,
 	ViewRef,
 } from '@angular/core';
 import { ConstructedNavigationService, DecktrackerViewType } from '@firestone/constructed/common';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { AnalyticsService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
+import {
+	ADS_SERVICE_TOKEN,
+	AnalyticsService,
+	IAdsService,
+	OverwolfService,
+	waitForReady,
+} from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { AdService } from '../../../services/ad.service';
 import { SelectDecksViewEvent } from '../../../services/mainwindow/store/events/decktracker/select-decks-view-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 
@@ -30,7 +36,7 @@ import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/
 				tabindex="0"
 				[ngClass]="{
 					selected: selectedTab === menuItem.id || menuItem.subMenus?.includes(selectedTab),
-					disabled: menuItem.comingSoon
+					disabled: menuItem.comingSoon,
 				}"
 				premiumSetting
 				[premiumSettingEnabled]="menuItem.isPremium"
@@ -97,7 +103,7 @@ export class MenuSelectionDecktrackerComponent
 		private readonly ow: OverwolfService,
 		private readonly analytics: AnalyticsService,
 		private readonly nav: ConstructedNavigationService,
-		private readonly ads: AdService,
+		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 	) {
 		super(cdr);
 	}

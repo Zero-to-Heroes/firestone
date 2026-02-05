@@ -1,12 +1,12 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { CardsForSet, ProfilePackStat, ProfileSet } from '@firestone-hs/api-user-profile';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { SceneService } from '@firestone/memory';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
+import { ADS_SERVICE_TOKEN, IAdsService } from '@firestone/shared/framework/core';
 import { combineLatest, debounceTime, distinctUntilChanged, filter, map, take } from 'rxjs';
 import { CollectionCardType } from '../../../models/collection/collection-card-type.type';
 import { Set as CollectionSet } from '../../../models/set';
-import { AdService } from '../../ad.service';
 import { AppUiStoreFacadeService } from '../../ui-store/app-ui-store-facade.service';
 import { equalProfilePackStat, equalProfileSet } from '../profile-uploader.service';
 
@@ -18,7 +18,7 @@ export class InternalProfileCollectionService {
 	constructor(
 		private readonly store: AppUiStoreFacadeService,
 		private readonly sceneService: SceneService,
-		private readonly ads: AdService,
+		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 	) {
 		this.init();
 	}

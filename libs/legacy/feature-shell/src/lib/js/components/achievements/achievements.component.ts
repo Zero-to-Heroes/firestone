@@ -1,10 +1,16 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	Inject,
+	ViewRef,
+} from '@angular/core';
 import { AchievementsNavigationService } from '@firestone/achievements/common';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { waitForReady } from '@firestone/shared/framework/core';
+import { ADS_SERVICE_TOKEN, IAdsService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { CurrentView } from '../../models/mainwindow/achievement/current-view.type';
-import { AdService } from '../../services/ad.service';
 
 @Component({
 	standalone: false,
@@ -42,7 +48,7 @@ export class AchievementsComponent extends AbstractSubscriptionComponent impleme
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly nav: AchievementsNavigationService,
-		private readonly ads: AdService,
+		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 	) {
 		super(cdr);
 	}

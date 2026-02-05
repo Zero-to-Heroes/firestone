@@ -4,15 +4,15 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
+	Inject,
 	ViewRef,
 } from '@angular/core';
 import { BattleResultHistory, BgsBattleSimulationResult } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { BgsFaceOffWithSimulation, GameStateFacadeService } from '@firestone/game-state';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { waitForReady } from '@firestone/shared/framework/core';
+import { ADS_SERVICE_TOKEN, IAdsService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, of } from 'rxjs';
 import { auditTime, filter } from 'rxjs/operators';
-import { AdService } from '../../../services/ad.service';
 
 @Component({
 	standalone: false,
@@ -48,7 +48,7 @@ export class BgsBattlesComponent extends AbstractSubscriptionComponent implement
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
-		private readonly ads: AdService,
+		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 		private readonly gameState: GameStateFacadeService,
 	) {
 		super(cdr);
@@ -78,7 +78,7 @@ export class BgsBattlesComponent extends AbstractSubscriptionComponent implement
 								wonPercent: faceOff.battleResult?.wonPercent,
 							} as BgsBattleSimulationResult,
 							actualResult: null,
-						} as BattleResultHistory),
+						}) as BattleResultHistory,
 				),
 			),
 		);
