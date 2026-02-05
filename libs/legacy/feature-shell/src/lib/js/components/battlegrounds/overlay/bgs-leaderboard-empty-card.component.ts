@@ -6,7 +6,6 @@ import {
 	Component,
 	Inject,
 	Input,
-	OnDestroy,
 	ViewRef,
 } from '@angular/core';
 import { getTribeIcon } from '@firestone-hs/reference-data';
@@ -17,13 +16,12 @@ import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import {
 	ADS_SERVICE_TOKEN,
-	HOTKEY_HANDLER_SERVICE_TOKEN,
+	HotkeyFacadeService,
 	IAdsService,
-	IHotkeyHandlerService,
 	ILocalizationService,
 	waitForReady,
 } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, takeUntil } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable, takeUntil } from 'rxjs';
 import { BgsOverlayHeroOverviewComponent } from './bgs-overlay-hero-overview.component';
 import { PlayerInfo } from './bgs-overlay-hero-overview.service';
 
@@ -64,15 +62,10 @@ import { PlayerInfo } from './bgs-overlay-hero-overview.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsLeaderboardEmptyCardComponent
-	extends AbstractSubscriptionComponent
-	implements AfterContentInit, OnDestroy
-{
+export class BgsLeaderboardEmptyCardComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	componentType: ComponentType<BgsOverlayHeroOverviewComponent> = BgsOverlayHeroOverviewComponent;
 	showLiveInfo$: Observable<boolean>;
 	showMmr$: Observable<boolean>;
-
-	showLiveInfo = new BehaviorSubject<boolean>(false);
 
 	@Input() set currentTurn(value: number) {
 		if (this._currentTurn === value) {
@@ -127,8 +120,7 @@ export class BgsLeaderboardEmptyCardComponent
 	lesserTrinket: string;
 	greaterTrinket: string;
 
-	private callbackHandle;
-	private isPremiumUser: boolean;
+	showLiveInfo$$ = new BehaviorSubject<boolean>(false);
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
@@ -136,40 +128,21 @@ export class BgsLeaderboardEmptyCardComponent
 		private readonly prefs: PreferencesService,
 		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 		private readonly mouseOver: CardMousedOverService,
-		@Inject(HOTKEY_HANDLER_SERVICE_TOKEN) private readonly hotkeyHandler: IHotkeyHandlerService,
+		private readonly hotkeyFacade: HotkeyFacadeService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.prefs, this.ads, this.mouseOver);
+		await waitForReady(this.prefs, this.ads, this.mouseOver, this.hotkeyFacade);
 
-		// this.mouseOver.mousedOverCard$$.pipe(this.mapData((card) => card)).subscribe((card) => {
-		// 	if (card?.PlayerId != null && card.PlayerId === this._previousPlayer.playerId) {
-		// 		console.debug('show info', this._bgsPlayer, card)
-		// 		this.controller.showInfo(this._bgsPlayer);
-		// 	} else {
-		// 		console.debug('hide info', this._bgsPlayer, card)
-		// 		this.controller.hideInfo(this._bgsPlayer);
-		// 	}
-		// });
-
-		// this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsOpponentOverlayAtTop)).subscribe((value) => {
-		// 	this.position = value ? 'global-top-left' : 'global-bottom-left';
-		// 	this.componentClass = value ? null : 'bottom';
-		// 	this.updateInfo();
-		// });
-
-		this.ads.enablePremiumFeatures$$.pipe(takeUntil(this.destroyed$)).subscribe((premium) => {
-			// console.debug('isPremiumUser', premium);
-			this.isPremiumUser = premium;
-		});
-		this.showLiveInfo$ = this.showLiveInfo.pipe(this.mapData((info) => info));
-		this.callbackHandle = this.hotkeyHandler.addHotKeyHoldListener(
-			'live-info',
-			() => this.onTabDown(),
-			() => this.onTabUp(),
-		);
+		this.showLiveInfo$ = this.showLiveInfo$$.pipe(this.mapData((info) => info));
+		combineLatest([this.ads.enablePremiumFeatures$$, this.hotkeyFacade.liveInfoPressed$$])
+			.pipe(takeUntil(this.destroyed$))
+			.subscribe(([premium, liveInfoKeyDown]) => {
+				// console.debug('isPremiumUser', premium);
+				this.showLiveInfo$$.next(liveInfoKeyDown);
+			});
 		this.showMmr$ = this.prefs.preferences$$.pipe(
 			this.mapData((prefs) => prefs.bgsUseLeaderboardDataInOverlay && prefs.bgsShowMmrInLeaderboardOverlay),
 		);
@@ -177,23 +150,6 @@ export class BgsLeaderboardEmptyCardComponent
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.markForCheck();
 		}
-	}
-
-	ngOnDestroy(): void {
-		super.ngOnDestroy();
-		if (this.callbackHandle) {
-			this.hotkeyHandler.removeHotKeyHoldListener(this.callbackHandle);
-		}
-	}
-
-	private onTabDown() {
-		if (this.isPremiumUser) {
-			this.showLiveInfo.next(true);
-		}
-	}
-
-	private onTabUp() {
-		this.showLiveInfo.next(false);
 	}
 
 	private updateInfo() {

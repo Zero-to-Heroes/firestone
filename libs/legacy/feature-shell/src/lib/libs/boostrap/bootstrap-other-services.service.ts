@@ -21,6 +21,7 @@ import {
 import { MercenariesNavigationService } from '@firestone/mercenaries/common';
 import { ModsBootstrapService, ModsManagerService } from '@firestone/mods/common';
 import { GameStatusService } from '@firestone/shared/common/service';
+import { HotkeyFacadeService } from '@firestone/shared/framework/core';
 import { GameStatsProviderService } from '@firestone/stats/services';
 import { TwitchAuthService } from '@firestone/twitch/common';
 import { HearthArenaAnalyticsService } from '../../js/services/analytics/heartharena-analytics.service';
@@ -91,6 +92,7 @@ export class BootstrapOtherServicesService {
 		private readonly modsBootstrap: ModsBootstrapService,
 		private readonly modsManager: ModsManagerService,
 		private readonly init_OwHotkeyHandlerService: OwHotkeyHandlerService,
+		private readonly init_HotkeyFacadeService: HotkeyFacadeService,
 	) {}
 
 	public async bootstrapServices(): Promise<void> {

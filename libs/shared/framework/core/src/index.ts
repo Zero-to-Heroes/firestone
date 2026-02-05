@@ -15,6 +15,7 @@ export * from './lib/services/cards-highlight-service.interface';
 export * from './lib/services/database-service.interface';
 export * from './lib/services/electron-utils';
 export * from './lib/services/game-info.service';
+export * from './lib/services/hotkey-facade.service';
 export * from './lib/services/hotkey-handler.interface';
 export * from './lib/services/indexeddb.service';
 export * from './lib/services/local-storage';

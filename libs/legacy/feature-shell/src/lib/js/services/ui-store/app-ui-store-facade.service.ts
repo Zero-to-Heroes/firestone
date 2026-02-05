@@ -7,7 +7,6 @@ import { Observable } from 'rxjs';
 
 import { ProfileBgHeroStat, ProfileClassProgress } from '@firestone-hs/api-user-profile';
 import { PackResult } from '@firestone-hs/user-packs';
-import { AchievementHistory } from '@firestone/achievements/common';
 import { DeckSummary } from '@firestone/constructed/common';
 import { Card, CardBack, PackInfoForCollection as PackInfo } from '@firestone/memory';
 import { Preferences } from '@firestone/shared/common/service';
@@ -138,10 +137,6 @@ export class AppUiStoreFacadeService {
 
 	public profileBgHeroStat$(): Observable<readonly ProfileBgHeroStat[]> {
 		return this.store.profileBgHeroStat$();
-	}
-
-	public achievementsHistory$(): Observable<readonly AchievementHistory[]> {
-		return this.store.achievementsHistory$();
 	}
 
 	public packStats$(): Observable<readonly PackResult[]> {

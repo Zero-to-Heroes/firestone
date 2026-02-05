@@ -1,4 +1,5 @@
 import { InjectionToken } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 /**
  * Token for injecting the hotkey handler implementation (OW or Electron).
@@ -18,6 +19,8 @@ export type HotkeyChangedUnsubscribe = (message?: unknown) => void;
  * ow-native (Overwolf) or electron-app (Electron).
  */
 export interface IHotkeyHandlerService {
+	liveInfoKeyPressed$$: BehaviorSubject<boolean>;
+
 	addHotKeyHoldListener(hotkey: string, onDown: () => void, onUp: () => void): HotkeyHoldUnsubscribe;
 	removeHotKeyHoldListener(listener: HotkeyHoldUnsubscribe): void;
 	addHotKeyPressedListener(hotkey: string, callback: () => void): void;

@@ -124,6 +124,7 @@ import {
 	HOTKEY_HANDLER_SERVICE_TOKEN,
 	IAdsService,
 	IDatabaseService,
+	IHotkeyHandlerService,
 	ILocalizationService,
 	LocalizationStandaloneService,
 	LocalStorageService,
@@ -177,7 +178,10 @@ export const buildAppInjector = () => {
 
 	const electronHotkeyHandler = new ElectronHotkeyHandlerService();
 	const electronHotkeyHandlerFacade = new ElectronHotkeyHandlerFacadeService(windowManager);
-	electronInjector.register(HOTKEY_HANDLER_SERVICE_TOKEN, electronHotkeyHandlerFacade);
+	electronInjector.register(
+		HOTKEY_HANDLER_SERVICE_TOKEN,
+		electronHotkeyHandlerFacade as any as IHotkeyHandlerService,
+	);
 	electronInjector.register(ElectronHotkeyHandlerFacadeService, electronHotkeyHandlerFacade);
 	electronInjector.register(ElectronHotkeyHandlerService, electronHotkeyHandler);
 
@@ -667,10 +671,7 @@ export const buildAppInjector = () => {
 	const achievementsHistoryStorage = new AchievementHistoryStorageService(achievementsStorage);
 	electronInjector.register(AchievementHistoryStorageService, achievementsHistoryStorage);
 
-	const achievementsHistoryService = new AchievementHistoryService(
-		achievementsHistoryStorage,
-		achievementsRawAchievementsLoader,
-	);
+	const achievementsHistoryService = new AchievementHistoryService(windowManager);
 	electronInjector.register(AchievementHistoryService, achievementsHistoryService);
 
 	const achievementsNotificationService = new AchievementsNotificationService(notifications, preferences, events);

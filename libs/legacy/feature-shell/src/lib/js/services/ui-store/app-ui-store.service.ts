@@ -10,7 +10,6 @@ import { distinctUntilChanged, filter, map, shareReplay } from 'rxjs/operators';
 
 import { ProfileBgHeroStat, ProfileClassProgress } from '@firestone-hs/api-user-profile';
 import { PackResult } from '@firestone-hs/user-packs';
-import { AchievementHistory, AchievementHistoryService } from '@firestone/achievements/common';
 import { DeckSummary } from '@firestone/constructed/common';
 import { BattlegroundsState, GameState, GameStateFacadeService } from '@firestone/game-state';
 import { Card, CardBack, PackInfoForCollection as PackInfo } from '@firestone/memory';
@@ -61,7 +60,6 @@ export class AppUiStoreService extends Store<Preferences> {
 	private bgHeroSkins: Observable<readonly number[]>;
 	private sets: Observable<readonly Set[]>;
 	private achievementsProgressTracking: Observable<readonly AchievementsProgressTracking[]>;
-	private achievementsHistory: BehaviorSubject<readonly AchievementHistory[]>;
 	private packStats: Observable<readonly PackResult[]>;
 	private cardHistory: Observable<readonly CardHistory[]>;
 	private profileClassesProgress: Observable<readonly ProfileClassProgress[]>;
@@ -239,10 +237,6 @@ export class AppUiStoreService extends Store<Preferences> {
 		return this.profileBgHeroStat;
 	}
 
-	public achievementsHistory$(): Observable<readonly AchievementHistory[]> {
-		return this.achievementsHistory;
-	}
-
 	public packStats$(): Observable<readonly PackResult[]> {
 		return this.packStats;
 	}
@@ -274,9 +268,6 @@ export class AppUiStoreService extends Store<Preferences> {
 		this.initAchievementsProgressTracking();
 		this.initProfileClassProgress();
 		this.initProfileBgHeroStat();
-		this.achievementsHistory = (
-			this.ow.getMainWindow().achievementsHistory as AchievementHistoryService
-		).achievementsHistory$$;
 		this.initPackStats();
 		this.initCardsHistory();
 		this.initialized = true;

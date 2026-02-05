@@ -3,9 +3,12 @@ import {
 	HotkeyHoldUnsubscribe,
 	IHotkeyHandlerService,
 } from '@firestone/shared/framework/core';
+import { BehaviorSubject } from 'rxjs';
 
 // TODO: will probably need to act as a facade that delegates the implementation to the service in the main process
 export class ElectronHotkeyHandlerService implements IHotkeyHandlerService {
+	public liveInfoKeyPressed$$ = new BehaviorSubject<boolean>(false);
+
 	addHotKeyHoldListener(hotkey: string, onDown: () => void, onUp: () => void): HotkeyHoldUnsubscribe {
 		console.warn('addHotKeyHoldListener is not implemented');
 		return () => {};

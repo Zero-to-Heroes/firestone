@@ -8,12 +8,15 @@ import {
 	IHotkeyHandlerService,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class ElectronHotkeyHandlerFacadeService
 	extends AbstractFacadeService<ElectronHotkeyHandlerFacadeService>
 	implements IHotkeyHandlerService
 {
+	public liveInfoKeyPressed$$: BehaviorSubject<boolean>;
+
 	private hotkeyHandler: IHotkeyHandlerService;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
@@ -21,19 +24,20 @@ export class ElectronHotkeyHandlerFacadeService
 	}
 
 	protected override assignSubjects() {
-		// Do nothing
+		this.liveInfoKeyPressed$$ = this.mainInstance.liveInfoKeyPressed$$;
 	}
 
 	protected async init() {
+		this.liveInfoKeyPressed$$ = new BehaviorSubject<boolean>(false);
 		this.hotkeyHandler = AppInjector.get(HOTKEY_HANDLER_SERVICE_TOKEN);
 	}
 
 	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
-		// Do nothing yet
+		this.liveInfoKeyPressed$$ = new BehaviorSubject<boolean>(false);
 	}
 
 	protected override async initElectronSubjects() {
-		// Do nothing yet
+		this.setupElectronSubject(this.liveInfoKeyPressed$$, 'ElectronHotkeyHandlerFacadeService-liveInfoKeyPressed');
 	}
 
 	public addHotKeyHoldListener(hotkey: string, onDown: () => void, onUp: () => void): HotkeyHoldUnsubscribe {

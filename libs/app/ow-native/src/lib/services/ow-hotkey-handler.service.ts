@@ -9,6 +9,7 @@ import {
 	waitForReady,
 	WINDOW_HANDLER_SERVICE_TOKEN,
 } from '@firestone/shared/framework/core';
+import { BehaviorSubject } from 'rxjs';
 
 /**
  * Overwolf implementation of global hotkey handling. Listens to hotkeys
@@ -16,6 +17,8 @@ import {
  */
 @Injectable({ providedIn: 'root' })
 export class OwHotkeyHandlerService implements IHotkeyHandlerService {
+	public liveInfoKeyPressed$$ = new BehaviorSubject<boolean>(false);
+
 	constructor(
 		private readonly ow: OverwolfService,
 		private readonly prefs: PreferencesService,
@@ -31,6 +34,12 @@ export class OwHotkeyHandlerService implements IHotkeyHandlerService {
 			const prefs: Preferences = await this.prefs.getPreferences();
 			this.windowHandler.toggleBattlegroundsWindow(prefs.bgsUseOverlay);
 		});
+
+		this.ow.addHotKeyHoldListener(
+			'live-info',
+			() => this.liveInfoKeyPressed$$.next(true),
+			() => this.liveInfoKeyPressed$$.next(false),
+		);
 	}
 
 	addHotKeyHoldListener(hotkey: string, onDown: () => void, onUp: () => void): HotkeyHoldUnsubscribe {
