@@ -58,7 +58,7 @@ export class ElectronAppInjector {
 	register<T>(token: Token<T>, instance: T): void {
 		this.services.set(token, instance);
 		const tokenName = this.getTokenName(token);
-		console.log(`🔧 Registered service: ${tokenName}`);
+		// console.log(`🔧 Registered service: ${tokenName}`);
 	}
 
 	/**
