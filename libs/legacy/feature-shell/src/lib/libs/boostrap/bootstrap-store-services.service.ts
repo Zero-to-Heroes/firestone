@@ -59,6 +59,7 @@ import {
 	TebexService,
 } from '@firestone/shared/common/service';
 import { CardRulesService, OwUtilsService } from '@firestone/shared/framework/core';
+import { GameStatsProviderService } from '@firestone/stats/services';
 import { AchievementsLiveProgressTrackingService } from '../../js/services/achievement/achievements-live-progress-tracking.service';
 import { AdService } from '../../js/services/ad.service';
 import { BgsPerfectGamesService } from '../../js/services/battlegrounds/bgs-perfect-games.service';
@@ -71,7 +72,6 @@ import { MercenariesStoreService } from '../../js/services/mercenaries/mercenari
 import { MercenariesOutOfCombatService } from '../../js/services/mercenaries/out-of-combat/mercenaries-out-of-combat.service';
 import { ProfileUploaderService } from '../../js/services/profile/profile-uploader.service';
 import { GameOverService } from '../../js/services/stats/game/game-over.service';
-import { GameStatsProviderService } from '../../js/services/stats/game/game-stats-provider.service';
 import { AppUiStoreService } from '../../js/services/ui-store/app-ui-store.service';
 import { MailsService } from '../mails/services/mails.service';
 import { TavernBrawlService } from '../tavern-brawl/services/tavern-brawl.service';

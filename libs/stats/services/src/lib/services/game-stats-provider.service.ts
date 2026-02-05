@@ -14,7 +14,7 @@ import { map, startWith } from 'rxjs/operators';
 
 const eventName = 'game-stats-changed';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class GameStatsProviderService
 	extends AbstractFacadeService<GameStatsProviderService>
 	implements IGameStatsProviderService

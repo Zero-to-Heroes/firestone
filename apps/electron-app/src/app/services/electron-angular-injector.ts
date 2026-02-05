@@ -1,4 +1,5 @@
 import { InjectFlags, InjectionToken, InjectOptions, Injector, ProviderToken, Type } from '@angular/core';
+import { sleep } from '@firestone/shared/framework/common';
 import { electronAppInjector, Token } from './electron-app-injector';
 
 /**
@@ -6,6 +7,8 @@ import { electronAppInjector, Token } from './electron-app-injector';
  * This allows us to use the existing setAppInjector function
  */
 export class ElectronAngularInjector implements Injector {
+	public ready = false;
+
 	get<T>(token: ProviderToken<T>, notFoundValue: undefined, options: InjectOptions & { optional?: false }): T;
 	get<T>(token: ProviderToken<T>, notFoundValue: null, options: InjectOptions): T;
 	get<T>(token: ProviderToken<T>, notFoundValue?: T, options?: InjectOptions | InjectFlags): T;
@@ -31,12 +34,12 @@ export class ElectronAngularInjector implements Injector {
 
 	/**
 	 * Register a service with the underlying ElectronAppInjector
-	 * 
+	 *
 	 * Supports:
 	 * - Concrete classes: `register(MyService, instance)`
 	 * - Abstract classes: `register(ILocalizationService, instance)`
 	 * - InjectionTokens: `register(MY_TOKEN, instance)`
-	 * 
+	 *
 	 * Note: TypeScript interfaces must use InjectionToken, not the interface directly
 	 */
 	register<T>(token: Token<T>, instance: T): void {
@@ -46,10 +49,16 @@ export class ElectronAngularInjector implements Injector {
 	/**
 	 * Automatically instantiate a class with constructor injection
 	 * Delegates to the underlying ElectronAppInjector.instantiate method
-	 * 
+	 *
 	 * @see ElectronAppInjector.instantiate for details
 	 */
 	instantiate<T>(type: Type<T>): T {
 		return electronAppInjector.instantiate(type);
+	}
+
+	public async awaitReady() {
+		while (!this.ready) {
+			await sleep(50);
+		}
 	}
 }

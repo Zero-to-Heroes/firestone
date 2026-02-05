@@ -116,6 +116,16 @@ export class BgsMetaHeroStatsDuoService extends AbstractFacadeService<BgsMetaHer
 		);
 	}
 
+	protected override initElectronSubjects(): void {
+		this.setupElectronSubject(this.metaHeroStats$$, 'BgsMetaHeroStatsDuoService-metaHeroStats');
+		this.setupElectronSubject(this.tiers$$, 'BgsMetaHeroStatsDuoService-tiers');
+	}
+
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.metaHeroStats$$ = new SubscriberAwareBehaviorSubject<BgsHeroStatsV2 | null>(null);
+		this.tiers$$ = new SubscriberAwareBehaviorSubject<readonly BgsMetaHeroStatTierItem[] | null>(null);
+	}
+
 	public async getStats(config: Config): Promise<BgsHeroStatsV2 | null> {
 		return this.callOnMainProcess<BgsHeroStatsV2 | null>('getStatsInternal', config);
 	}

@@ -5,7 +5,7 @@ import { Injector } from '@angular/core';
  * `ReflectiveInjector.resolveAndCreate(MyService)` would create a new instance
  * of the service).
  */
-export let AppInjector: Injector;
+export let AppInjector: Injector & { awaitReady?: () => Promise<void> };
 
 /**
  * Helper to set the exported {@link AppInjector}, needed as ES6 modules export

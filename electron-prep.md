@@ -6,7 +6,6 @@ Beta
 - validate that logged in user is premium / get their premium status (pending)
 
 - BG overlay
-    - Hero stats overlay
     - board highlight seems off
 - disk cache on overlay window
 - notifications (component and service, which relies on OW)

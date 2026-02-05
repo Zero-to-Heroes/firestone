@@ -4,6 +4,7 @@ import { PatchInfo, PatchesConfigService, PreferencesService } from '@firestone/
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { GameStat, StatGameFormatType } from '@firestone/stats/data-access';
+import { GameStatsProviderService } from '@firestone/stats/services';
 import { addDaysToDate, arraysEqual, daysBetweenDates, formatDate, groupByFunction } from '@services/utils';
 import { ChartData } from 'chart.js';
 import { Observable, combineLatest } from 'rxjs';
@@ -14,7 +15,6 @@ import { DeckTimeFilterType } from '../../../models/mainwindow/decktracker/deck-
 import { DecksProviderService } from '../../../services/decktracker/main/decks-provider.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { MainWindowStateFacadeService } from '../../../services/mainwindow/store/main-window-state-facade.service';
-import { GameStatsProviderService } from '../../../services/stats/game/game-stats-provider.service';
 
 @Component({
 	standalone: false,

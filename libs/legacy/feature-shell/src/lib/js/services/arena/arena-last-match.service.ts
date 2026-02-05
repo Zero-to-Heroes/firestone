@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { isArena } from '@firestone-hs/reference-data';
 import { GameStat } from '@firestone/stats/data-access';
+import { GameStatsProviderService } from '@firestone/stats/services';
 import { BehaviorSubject, distinctUntilChanged, filter, map, startWith } from 'rxjs';
-import { GameStatsProviderService } from '../stats/game/game-stats-provider.service';
 
 // Not used yet, and not plugged in
 @Injectable()

@@ -18,6 +18,7 @@ import {
 	StatGameFormatTypeExtended,
 	StatGameModeType,
 } from '@firestone/stats/data-access';
+import { GameStatsProviderService } from '@firestone/stats/services';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter, map, shareReplay, take, tap } from 'rxjs/operators';
 import { DeckFilters } from '../../../models/mainwindow/decktracker/deck-filters';
@@ -26,7 +27,6 @@ import { DeckTimeFilterType } from '../../../models/mainwindow/decktracker/deck-
 import { ConstructedDeckVersions } from '../../../models/mainwindow/decktracker/decktracker-state';
 import { MatchupStat } from '../../../models/mainwindow/stats/matchup-stat';
 import { MainWindowStateFacadeService } from '../../mainwindow/store/main-window-state-facade.service';
-import { GameStatsProviderService } from '../../stats/game/game-stats-provider.service';
 import { groupByFunction, removeFromArray, sumOnArray } from '../../utils';
 
 const eventName = 'decks-changed';

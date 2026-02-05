@@ -35,6 +35,14 @@ export class BattlegroundsCardsService extends AbstractFacadeService<Battlegroun
 		);
 	}
 
+	protected override initElectronSubjects(): void {
+		// Do nothing
+	}
+
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		// Do nothing
+	}
+
 	public async loadCardStats(
 		timeFilter: BgsActiveTimeFilterType,
 		rankFilter: BgsRankFilterType,

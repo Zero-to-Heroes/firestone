@@ -1,6 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { CardClass, isArena } from '@firestone-hs/reference-data';
 import { ARENA_REVAMP_BUILD_NUMBER, ArenaRun } from '@firestone/arena/common';
+import { formatClass } from '@firestone/game-state';
 import {
 	ArenaClassFilterType,
 	ArenaModeFilterType,
@@ -11,11 +12,10 @@ import {
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
+import { GameStatsProviderService } from '@firestone/stats/services';
 import { Observable, combineLatest } from 'rxjs';
 import { ArenaTimeFilterType } from '../../../models/arena/arena-time-filter.type';
-import { formatClass } from '@firestone/game-state';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { GameStatsProviderService } from '../../../services/stats/game/game-stats-provider.service';
 import { groupByFunction } from '../../../services/utils';
 
 @Component({

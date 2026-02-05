@@ -6,9 +6,9 @@ import { PatchesConfigService, PreferencesService } from '@firestone/shared/comm
 import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { toFormatType } from '@firestone/stats/data-access';
+import { GameStatsProviderService } from '@firestone/stats/services';
 import { combineLatest, debounceTime, distinctUntilChanged, filter, Observable, tap } from 'rxjs';
 import { DecksProviderService } from '../../../services/decktracker/main/decks-provider.service';
-import { GameStatsProviderService } from '../../../services/stats/game/game-stats-provider.service';
 
 @Component({
 	standalone: false,

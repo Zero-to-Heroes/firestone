@@ -8,7 +8,7 @@ export class StandaloneAdService extends AbstractFacadeService<StandaloneAdServi
 	public enablePremiumFeatures$$: BehaviorSubject<boolean>;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
-		super(windowManager, 'StandaloneAdService', () => true);
+		super(windowManager, 'StandaloneAdService', () => !!this.hasPremiumSub$$);
 	}
 
 	protected override assignSubjects() {

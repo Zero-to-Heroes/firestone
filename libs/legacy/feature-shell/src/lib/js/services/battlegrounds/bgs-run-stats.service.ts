@@ -4,14 +4,13 @@ import { normalizeHeroCardId } from '@firestone-hs/reference-data';
 import { BgsBestStat, Input as BgsComputeRunStatsInput, buildNewStats } from '@firestone-hs/user-bgs-post-match-stats';
 import { buildBgsRunStatsInput } from '@firestone/battlegrounds/services';
 import { BgsGame, BgsPostMatchStats, BgsPostMatchStatsForReview, RealTimeStatsState } from '@firestone/game-state';
-import { ApiRunner, CardsFacadeService, OverwolfService, UserService } from '@firestone/shared/framework/core';
-import { GameForUpload } from '@firestone/stats/services';
 import { Events } from '@firestone/shared/common/service';
+import { ApiRunner, CardsFacadeService, OverwolfService, UserService } from '@firestone/shared/framework/core';
+import { GameForUpload, GameStatsProviderService } from '@firestone/stats/services';
 import { BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent } from '../mainwindow/store/events/battlegrounds/bgs-personal-stats-select-hero-details-with-remote-info-event';
 import { BgsPostMatchStatsComputedEvent } from '../mainwindow/store/events/battlegrounds/bgs-post-match-stats-computed-event';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
 import { ShowMatchStatsEvent } from '../mainwindow/store/events/replays/show-match-stats-event';
-import { GameStatsProviderService } from '../stats/game/game-stats-provider.service';
 import { sleep } from '../utils';
 
 @Injectable()

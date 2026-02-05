@@ -1,15 +1,15 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { isBattlegrounds, isBattlegroundsDuo, normalizeHeroCardId } from '@firestone-hs/reference-data';
 import { StatGameModeType } from '@firestone-hs/replay-metadata';
+import { isMercenaries, isMercenariesPvE, isMercenariesPvP } from '@firestone/mercenaries/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, arraysEqual } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { GameStat, toGameTypeEnum } from '@firestone/stats/data-access';
+import { GameStatsProviderService } from '@firestone/stats/services';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
-import { isMercenaries, isMercenariesPvE, isMercenariesPvP } from '@firestone/mercenaries/common';
-import { GameStatsProviderService } from '../../services/stats/game/game-stats-provider.service';
 
 @Component({
 	standalone: false,
@@ -19,7 +19,7 @@ import { GameStatsProviderService } from '../../services/stats/game/game-stats-p
 		<div
 			class="replays-container"
 			*ngIf="{
-				showMercDetailsToggle: showMercDetailsToggle$ | async
+				showMercDetailsToggle: showMercDetailsToggle$ | async,
 			} as value"
 		>
 			<div class="filters">

@@ -30,9 +30,9 @@ import { Preferences, PreferencesService } from '@firestone/shared/common/servic
 import { AbstractSubscriptionComponent, groupByFunction } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
+import { GameStatsProviderService } from '@firestone/stats/services';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable, combineLatest, distinctUntilChanged, shareReplay, takeUntil } from 'rxjs';
-import { GameStatsProviderService } from '../../../services/stats/game/game-stats-provider.service';
 
 @Component({
 	standalone: false,
@@ -256,16 +256,16 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionComponent
 			this.mapData(({ currentSessionStartDate, gameType }) =>
 				currentSessionStartDate
 					? this.i18n.translateString('session.summary.total-games-tooltip', {
-						gameMode: this.i18n.translateString(`global.game-mode.${gameType}`),
-						value: currentSessionStartDate.toLocaleDateString(this.i18n.formatCurrentLocale(), {
-							month: 'short',
-							day: '2-digit',
-							year: 'numeric',
-						}),
-					})
+							gameMode: this.i18n.translateString(`global.game-mode.${gameType}`),
+							value: currentSessionStartDate.toLocaleDateString(this.i18n.formatCurrentLocale(), {
+								month: 'short',
+								day: '2-digit',
+								year: 'numeric',
+							}),
+						})
 					: this.i18n.translateString('session.summary.total-games-tooltip-all-time', {
-						gameMode: this.i18n.translateString(`global.game-mode.${gameType}`),
-					}),
+							gameMode: this.i18n.translateString(`global.game-mode.${gameType}`),
+						}),
 			),
 		);
 

@@ -1,4 +1,14 @@
 import {
+	AchievementHistoryService,
+	AchievementHistoryStorageService,
+	AchievementsMemoryMonitor,
+	AchievementsNotificationService,
+	AchievementsStateManagerService,
+	AchievementsStorageService,
+	FirestoneRemoteAchievementsLoaderService,
+	RawAchievementsLoaderService,
+} from '@firestone/achievements/common';
+import {
 	APP_VERSION_SERVICE_TOKEN,
 	EndGameListenerService,
 	EndGameUploaderService,
@@ -18,7 +28,9 @@ import {
 	ArenaMulliganGuideService,
 } from '@firestone/arena/common';
 import { BgsBattleSimulationService, CompositionDetectorService } from '@firestone/battlegrounds/core';
+import { BgsMetaHeroStatsAccessService } from '@firestone/battlegrounds/data-access';
 import {
+	BattlegroundsCardsService,
 	BattlegroundsQuestsService,
 	BattlegroundsTrinketsService,
 	BgsBoardHighlighterService,
@@ -30,6 +42,9 @@ import {
 	BgsInGameTrinketsGuardianService,
 	BgsInGameTrinketsService,
 	BgsMetaCompositionStrategiesService,
+	BgsMetaHeroStatsDuoService,
+	BgsMetaHeroStatsService,
+	BgsPlayerHeroStatsService,
 } from '@firestone/battlegrounds/services';
 import {
 	ConstructedMetaDecksStateService,
@@ -37,7 +52,12 @@ import {
 	ConstructedMulliganGuideService,
 	ConstructedNavigationService,
 } from '@firestone/constructed/common';
-import { ElectronApiRunner, ElectronStorageService, StandaloneUserService } from '@firestone/electron/common';
+import {
+	ElectronApiRunner,
+	ElectronHotkeyHandlerFacadeService,
+	ElectronStorageService,
+	StandaloneUserService,
+} from '@firestone/electron/common';
 import {
 	AiDeckService,
 	BattlegroundsOfficialLeaderboardService,
@@ -63,6 +83,7 @@ import {
 	OverlayDisplayService,
 	RealTimeStatsParsersService,
 	RealTimeStatsService,
+	REVIEW_ID_SERVICE_TOKEN,
 	ReviewIdService,
 	SecretConfigService,
 	SecretsParserService,
@@ -100,12 +121,14 @@ import {
 	CardsFacadeService,
 	CardsFacadeStandaloneService,
 	DATABASE_SERVICE_TOKEN,
+	HOTKEY_HANDLER_SERVICE_TOKEN,
 	IAdsService,
 	IDatabaseService,
 	ILocalizationService,
 	LocalizationStandaloneService,
 	LocalStorageService,
 	OwUtilsService,
+	setAppInjector,
 	USER_SERVICE_TOKEN,
 	UserService,
 	WINDOW_HANDLER_SERVICE_TOKEN,
@@ -113,7 +136,12 @@ import {
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
 import { GameStatsLoaderService } from '@firestone/stats/data-access';
-import { MatchAnalysisService, ReplayMetadataBuilderService } from '@firestone/stats/services';
+import {
+	GAME_STATS_PROVIDER_SERVICE_TOKEN,
+	GameStatsProviderService,
+	MatchAnalysisService,
+	ReplayMetadataBuilderService,
+} from '@firestone/stats/services';
 import {
 	FakeMissingTranslationHandler,
 	TranslateDefaultParser,
@@ -125,6 +153,7 @@ import { BgsBattleSimulationWorkerService } from './bgs-battle-simulation-worker
 import { ElectronAngularInjector } from './electron-angular-injector';
 import { ElectronAppVersionService } from './electron-app-version.service';
 import { ElectronDiskCacheService } from './electron-disk-cache.service';
+import { ElectronHotkeyHandlerService } from './electron-hotkey-handler.service';
 import { ElectronLogFileBackendService } from './electron-log-file-backend.service';
 import { ElectronWindowHandlerService } from './electron-window-handler.service';
 import { GameEventsElectronService } from './game-events-electron.service';
@@ -134,6 +163,7 @@ import { SqliteDatabaseService } from './sqlite-database.service';
 
 export const buildAppInjector = () => {
 	const electronInjector = new ElectronAngularInjector();
+	setAppInjector(electronInjector);
 
 	// Create and register services with the injector
 	// FIXME: this instantiate everything, while we might want to have lazy loading
@@ -145,6 +175,12 @@ export const buildAppInjector = () => {
 	const windowManager = new WindowManagerService(null);
 	electronInjector.register(WindowManagerService, windowManager);
 
+	const electronHotkeyHandler = new ElectronHotkeyHandlerService();
+	const electronHotkeyHandlerFacade = new ElectronHotkeyHandlerFacadeService(windowManager);
+	electronInjector.register(HOTKEY_HANDLER_SERVICE_TOKEN, electronHotkeyHandlerFacade);
+	electronInjector.register(ElectronHotkeyHandlerFacadeService, electronHotkeyHandlerFacade);
+	electronInjector.register(ElectronHotkeyHandlerService, electronHotkeyHandler);
+
 	const electronWindowHandler = new ElectronWindowHandlerService();
 	electronInjector.register(WINDOW_HANDLER_SERVICE_TOKEN, electronWindowHandler);
 	electronInjector.register(ElectronWindowHandlerService, electronWindowHandler);
@@ -155,11 +191,11 @@ export const buildAppInjector = () => {
 	const preferences = new PreferencesService(windowManager);
 	electronInjector.register(PreferencesService, preferences);
 
-	const diskCache = new ElectronDiskCacheService(preferences);
-	electronInjector.register(DiskCacheService, diskCache as any as DiskCacheService);
-	electronInjector.register(ElectronDiskCacheService, diskCache);
+	const diskCache: DiskCacheService = new ElectronDiskCacheService(preferences) as any as DiskCacheService;
+	electronInjector.register(DiskCacheService, diskCache);
+	electronInjector.register(ElectronDiskCacheService, diskCache as any as ElectronDiskCacheService);
 
-	const logFileBackend = new ElectronLogFileBackendService(diskCache);
+	const logFileBackend = new ElectronLogFileBackendService(diskCache as any as ElectronDiskCacheService);
 	electronInjector.register(LOG_FILE_BACKEND, logFileBackend);
 
 	const logUtils = new LogUtilsService(logFileBackend, preferences, gameStatus);
@@ -174,8 +210,8 @@ export const buildAppInjector = () => {
 	const sqliteDb = new SqliteDatabaseService();
 	electronInjector.register(DATABASE_SERVICE_TOKEN, sqliteDb as IDatabaseService);
 
-	const api = new ElectronApiRunner();
-	electronInjector.register(ApiRunner, api as any as ApiRunner);
+	const api: ApiRunner = new ElectronApiRunner() as any as ApiRunner;
+	electronInjector.register(ApiRunner, api);
 
 	const preferencesStorage = new PreferencesStorageService(localStorage);
 	electronInjector.register(PreferencesStorageService, preferencesStorage);
@@ -242,6 +278,7 @@ export const buildAppInjector = () => {
 
 	const reviewId = new ReviewIdService(gameEventsEmitter);
 	electronInjector.register(ReviewIdService, reviewId);
+	electronInjector.register(REVIEW_ID_SERVICE_TOKEN, reviewId);
 
 	const gameEventsFacade = new GameEventsFacadeService();
 	electronInjector.register(GameEventsFacadeService, gameEventsFacade);
@@ -589,5 +626,63 @@ export const buildAppInjector = () => {
 	const bgsInGameTimewarpedGuardianService = new BgsInGameTimewarpedGuardianService(windowManager);
 	electronInjector.register(BgsInGameTimewarpedGuardianService, bgsInGameTimewarpedGuardianService);
 
+	const bgsPlayerHeroStats = new BgsPlayerHeroStatsService(windowManager);
+	electronInjector.register(BgsPlayerHeroStatsService, bgsPlayerHeroStats);
+
+	const bgsMetaHeroStats = new BgsMetaHeroStatsService(windowManager);
+	electronInjector.register(BgsMetaHeroStatsService, bgsMetaHeroStats);
+
+	const bgsMetaHeroStatsDuo = new BgsMetaHeroStatsDuoService(windowManager);
+	electronInjector.register(BgsMetaHeroStatsDuoService, bgsMetaHeroStatsDuo);
+
+	const bgsMetaHeroStatsAccess = new BgsMetaHeroStatsAccessService(api);
+	electronInjector.register(BgsMetaHeroStatsAccessService, bgsMetaHeroStatsAccess);
+
+	const bgsCards = new BattlegroundsCardsService(windowManager);
+	electronInjector.register(BattlegroundsCardsService, bgsCards);
+
+	const achievementsRawAchievementsLoader = new RawAchievementsLoaderService(api, preferences);
+	electronInjector.register(RawAchievementsLoaderService, achievementsRawAchievementsLoader);
+
+	const achievementsFirestoneRemoteAchievementsLoader = new FirestoneRemoteAchievementsLoaderService(
+		api,
+		userService,
+		reviewId,
+		diskCache,
+	);
+	electronInjector.register(FirestoneRemoteAchievementsLoaderService, achievementsFirestoneRemoteAchievementsLoader);
+
+	const achievementsStorage = new AchievementsStorageService(localStorage);
+	electronInjector.register(AchievementsStorageService, achievementsStorage);
+
+	const achievementsMemoryMonitor = new AchievementsMemoryMonitor(
+		events,
+		memoryUpdates,
+		gameEventsEmitter,
+		memoryInspection,
+		achievementsStorage,
+	);
+	electronInjector.register(AchievementsMemoryMonitor, achievementsMemoryMonitor);
+
+	const achievementsHistoryStorage = new AchievementHistoryStorageService(achievementsStorage);
+	electronInjector.register(AchievementHistoryStorageService, achievementsHistoryStorage);
+
+	const achievementsHistoryService = new AchievementHistoryService(
+		achievementsHistoryStorage,
+		achievementsRawAchievementsLoader,
+	);
+	electronInjector.register(AchievementHistoryService, achievementsHistoryService);
+
+	const achievementsNotificationService = new AchievementsNotificationService(notifications, preferences, events);
+	electronInjector.register(AchievementsNotificationService, achievementsNotificationService);
+
+	const achievementsStateManager = new AchievementsStateManagerService(windowManager);
+	electronInjector.register(AchievementsStateManagerService, achievementsStateManager);
+
+	const gameStatsProviderService = new GameStatsProviderService(windowManager);
+	electronInjector.register(GameStatsProviderService, gameStatsProviderService);
+	electronInjector.register(GAME_STATS_PROVIDER_SERVICE_TOKEN, gameStatsProviderService);
+
+	electronInjector.ready = true;
 	return electronInjector;
 };

@@ -4,6 +4,7 @@ import { BattlegroundsCoreModule } from '@firestone/battlegrounds/core';
 import { SharedFrameworkCommonModule } from '@firestone/shared/framework/common';
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { StatsDataAccessModule } from '@firestone/stats/data-access';
+import { GameStatsProviderService } from './services/game-stats-provider.service';
 import { MatchAnalysisService } from './services/match-analysis.service';
 import { ReplayMetadataBuilderService } from './services/replay-metadata-bulder.service';
 
@@ -16,6 +17,6 @@ import { ReplayMetadataBuilderService } from './services/replay-metadata-bulder.
 		SharedFrameworkCommonModule,
 		StatsDataAccessModule,
 	],
-	providers: [ReplayMetadataBuilderService, MatchAnalysisService],
+	providers: [ReplayMetadataBuilderService, MatchAnalysisService, GameStatsProviderService],
 })
 export class StatsServicesModule {}

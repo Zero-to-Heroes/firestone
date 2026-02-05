@@ -4,7 +4,7 @@ import { PatchInfo, PatchesConfigService, PreferencesService } from '@firestone/
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
-import { GameStatsProviderService } from '@legacy-import/src/lib/js/services/stats/game/game-stats-provider.service';
+import { GameStatsProviderService } from '@firestone/stats/services';
 import { ChartData } from 'chart.js';
 import { Observable, combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
@@ -139,7 +139,7 @@ export class BattlegroundsPersonalStatsRatingComponent
 			? GameStat.create({
 					...data[data.length - 1],
 					playerRank: data[data.length - 1].newPlayerRank,
-			  } as GameStat)
+				} as GameStat)
 			: null;
 		const dataWithCurrentMmr = fakeMatchWithCurrentMmr ? [...data, fakeMatchWithCurrentMmr] : data;
 		const dataWithTime = dataWithCurrentMmr.filter((stat) =>
