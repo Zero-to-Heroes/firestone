@@ -386,11 +386,14 @@ export default class App {
 	}
 
 	private static async onWindowAllClosed() {
+		// Not sure about this in fact, let's
+		return;
 		// App is tray-only (no main window). Keep running so user can open Settings again from tray.
 		// Only quit when user chooses "Exit" from the tray menu.
-		if (App.overlay) {
-			await App.overlay.destroyOverlay();
-		}
+		// if (App.overlay) {
+		// 	console.log('onWindowAllClosed: destroying overlay');
+		// 	await App.overlay.destroyOverlay();
+		// }
 	}
 
 	private static async onWillQuit() {

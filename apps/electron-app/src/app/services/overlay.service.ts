@@ -65,6 +65,7 @@ export class OverlayService extends EventEmitter {
 	public async destroyOverlay(): Promise<void> {
 		if (this.overlayWindow) {
 			// Note: ow-electron manages overlay lifecycle automatically
+			this.overlayWindow.window.close();
 			this.overlayWindow = null;
 			console.log('💥 Overlay destroyed');
 		}
@@ -75,6 +76,23 @@ export class OverlayService extends EventEmitter {
 	 */
 	public isOverlayVisible(): boolean {
 		return this.overlayWindow !== null;
+	}
+
+	/**
+	 * Returns true if we should create an overlay (we have none, or the current one is destroyed).
+	 * Clears the reference if the current overlay window is destroyed.
+	 */
+	private shouldCreateOverlay(): boolean {
+		if (!this.overlayWindow) {
+			console.log('shouldCreateOverlay: no overlay window');
+			return true;
+		}
+		if (this.overlayWindow.window.isDestroyed()) {
+			console.log('shouldCreateOverlay: overlay window is destroyed');
+			this.overlayWindow = null;
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -175,6 +193,10 @@ export class OverlayService extends EventEmitter {
 
 		this.overlayWindow = await this.overlayApi.createWindow(options);
 
+		this.overlayWindow.window.once('closed', () => {
+			this.overlayWindow = null;
+		});
+
 		try {
 			// Load the Angular frontend - from bundled files in production, or dev server in development
 			let frontendUrl: string;
@@ -207,22 +229,25 @@ export class OverlayService extends EventEmitter {
 				console.log('Frontend directory:', frontendDir);
 
 				// Set up error handlers for debugging
-				this.overlayWindow.window.webContents.on('did-fail-load', (event, errorCode, errorDescription, validatedURL, isMainFrame) => {
-					if (isMainFrame) {
-						console.error('Overlay main frame failed to load:', {
-							errorCode,
-							errorDescription,
-							validatedURL,
-							frontendPath,
-						});
-					} else {
-						console.error('Resource failed to load:', {
-							errorCode,
-							errorDescription,
-							validatedURL,
-						});
-					}
-				});
+				this.overlayWindow.window.webContents.on(
+					'did-fail-load',
+					(event, errorCode, errorDescription, validatedURL, isMainFrame) => {
+						if (isMainFrame) {
+							console.error('Overlay main frame failed to load:', {
+								errorCode,
+								errorDescription,
+								validatedURL,
+								frontendPath,
+							});
+						} else {
+							console.error('Resource failed to load:', {
+								errorCode,
+								errorDescription,
+								validatedURL,
+							});
+						}
+					},
+				);
 			} else {
 				// Development: load from dev server
 				frontendUrl = 'http://localhost:4200/overlay';
@@ -375,16 +400,12 @@ export class OverlayService extends EventEmitter {
 
 		this.overlayApi.on('game-injected', async (gameInfo) => {
 			console.log('Game injected successfully!', gameInfo.name);
-			// console.log('Waiting for game to get focus before creating overlay...');
-
-			// if (game.classId === 9898) {
-			// if (focus) {
-			// Game focused - create or resize overlay
-			if (!this.overlayWindow) {
-				console.log('Hearthstone focused! Creating overlay window...');
-				await this.createOverlayWindow();
-				console.log('Overlay window created when game got focus!');
+			if (!this.shouldCreateOverlay()) {
+				return;
 			}
+			console.log('Hearthstone injected! Creating overlay window...');
+			await this.createOverlayWindow();
+			console.log('Overlay window created when game was injected!');
 			// else {
 			// 	// console.log('Hearthstone focused! Resizing existing overlay...');
 			// 	await this.resizeOverlayToGame();
@@ -401,24 +422,14 @@ export class OverlayService extends EventEmitter {
 		});
 
 		this.overlayApi.on('game-focus-changed', async (window, game, focus) => {
-			// console.log('🔍 Game focus changed:', game.name, focus ? 'focused' : 'unfocused');
-			if (game.classId === 9898) {
-				if (focus) {
-					// Game focused - create overlay if needed
-					// Resizing is handled by subscribeToGameInfoChanges() callback
-					if (!this.overlayWindow) {
-						console.log('Hearthstone focused! Creating overlay window...');
-						await this.createOverlayWindow();
-						console.log('Overlay window created when game got focus!');
-					}
-					// Note: Resizing is now handled by onGameInfoChanged callback
-				} else {
-					// Game unfocused - hide overlay but keep it alive
-					// if (this.overlayWindow) {
-					// 	console.log('Hearthstone unfocused! Hiding overlay...');
-					// 	this.overlayWindow.window.hide();
-					// }
+			if (game.classId === 9898 && focus) {
+				// Resizing is handled by subscribeToGameInfoChanges() callback
+				if (!this.shouldCreateOverlay()) {
+					return;
 				}
+				console.log('Hearthstone focused! Creating overlay window...');
+				await this.createOverlayWindow();
+				console.log('Overlay window created when game got focus!');
 			}
 		});
 

@@ -113,6 +113,10 @@ export class ElectronWindowHandlerService implements IWindowHandlerService {
 		this.settingsWindow.setMenu(null);
 		this.settingsWindow.center();
 
+		this.settingsWindow.once('closed', () => {
+			this.settingsWindow = null;
+		});
+
 		this.settingsWindow.once('ready-to-show', () => {
 			this.settingsWindow?.show();
 			this.settingsWindow?.focus();
@@ -185,6 +189,10 @@ export class ElectronWindowHandlerService implements IWindowHandlerService {
 		};
 
 		this.settingsOverlayWindow = await overlayApi.createWindow(options);
+
+		this.settingsOverlayWindow.window.once('closed', () => {
+			this.settingsOverlayWindow = null;
+		});
 
 		this.settingsOverlayWindow.window.once('ready-to-show', () => {
 			this.settingsOverlayWindow?.window.show();
