@@ -29,6 +29,14 @@ export class BgsMetaHeroStrategiesService extends AbstractFacadeService<BgsMetaH
 			this.strategies$$.next(result);
 		});
 	}
+
+	protected override async initElectronSubjects() {
+		this.setupElectronSubject(this.strategies$$, 'BgsMetaHeroStrategiesService-strategies');
+	}
+
+	protected override async createElectronProxy(ipcRenderer: any) {
+		this.strategies$$ = new SubscriberAwareBehaviorSubject<BgsHeroStrategies | null>(null);
+	}
 }
 
 export interface BgsHeroStrategies {

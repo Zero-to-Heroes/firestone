@@ -27,7 +27,11 @@ import {
 	ArenaInfoService,
 	ArenaMulliganGuideService,
 } from '@firestone/arena/common';
-import { BgsBattleSimulationService, CompositionDetectorService } from '@firestone/battlegrounds/core';
+import {
+	BgsBattleSimulationService,
+	BgsIntermediateResultsSimGuardianService,
+	CompositionDetectorService,
+} from '@firestone/battlegrounds/core';
 import { BgsMetaHeroStatsAccessService } from '@firestone/battlegrounds/data-access';
 import {
 	BattlegroundsCardsService,
@@ -44,6 +48,7 @@ import {
 	BgsMetaCompositionStrategiesService,
 	BgsMetaHeroStatsDuoService,
 	BgsMetaHeroStatsService,
+	BgsMetaHeroStrategiesService,
 	BgsPlayerHeroStatsService,
 } from '@firestone/battlegrounds/services';
 import {
@@ -104,6 +109,7 @@ import { CustomAppearanceService, SettingsControllerService } from '@firestone/s
 import {
 	DiskCacheService,
 	Events,
+	ExpertContributorsService,
 	GameStatusService,
 	LOG_FILE_BACKEND,
 	LogListenerService,
@@ -113,6 +119,7 @@ import {
 	PreferencesService,
 	PreferencesStorageService,
 	StandaloneAdService,
+	SubscriptionService,
 } from '@firestone/shared/common/service';
 import {
 	ADS_SERVICE_TOKEN,
@@ -683,6 +690,18 @@ export const buildAppInjector = () => {
 	const gameStatsProviderService = new GameStatsProviderService(windowManager);
 	electronInjector.register(GameStatsProviderService, gameStatsProviderService);
 	electronInjector.register(GAME_STATS_PROVIDER_SERVICE_TOKEN, gameStatsProviderService);
+
+	const expertContributors = new ExpertContributorsService(windowManager);
+	electronInjector.register(ExpertContributorsService, expertContributors);
+
+	const subscriptionService = new SubscriptionService(windowManager);
+	electronInjector.register(SubscriptionService, subscriptionService);
+
+	const bgsIntermediateResultsSimGuardianService = new BgsIntermediateResultsSimGuardianService(windowManager);
+	electronInjector.register(BgsIntermediateResultsSimGuardianService, bgsIntermediateResultsSimGuardianService);
+
+	const bgsMetaHeroStrategiesService = new BgsMetaHeroStrategiesService(windowManager);
+	electronInjector.register(BgsMetaHeroStrategiesService, bgsMetaHeroStrategiesService);
 
 	electronInjector.ready = true;
 	return electronInjector;

@@ -29,6 +29,14 @@ export class BgsIntermediateResultsSimGuardianService extends AbstractFacadeServ
 		this.addDevMode();
 	}
 
+	protected override async initElectronSubjects() {
+		this.setupElectronSubject(this.freeUsesLeft$$, 'BgsIntermediateResultsSimGuardianService-freeUsesLeft');
+	}
+
+	protected override async createElectronProxy(ipcRenderer: any) {
+		this.freeUsesLeft$$ = new BehaviorSubject<number>(0);
+	}
+
 	public hasFreeUses(gameId: string): boolean {
 		// Don't paywall it anymore
 		return true;

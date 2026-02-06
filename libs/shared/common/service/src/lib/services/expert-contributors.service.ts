@@ -43,6 +43,14 @@ export class ExpertContributorsService extends AbstractFacadeService<ExpertContr
 			this.contributors$$.next(result);
 		});
 	}
+
+	protected override async initElectronSubjects() {
+		this.setupElectronSubject(this.contributors$$, 'ExpertContributorsService-contributors');
+	}
+
+	protected override async createElectronProxy(ipcRenderer: any) {
+		this.contributors$$ = new SubscriberAwareBehaviorSubject<readonly ExpertContributor[] | null>(null);
+	}
 }
 
 export interface ExpertContributor {
