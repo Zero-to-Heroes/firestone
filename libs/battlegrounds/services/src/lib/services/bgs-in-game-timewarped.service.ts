@@ -26,6 +26,7 @@ import {
 } from '@firestone/shared/framework/core';
 import {
 	BehaviorSubject,
+	EMPTY,
 	Observable,
 	auditTime,
 	combineLatest,
@@ -33,6 +34,7 @@ import {
 	distinctUntilChanged,
 	filter,
 	map,
+	of,
 	shareReplay,
 	switchMap,
 	tap,
@@ -118,90 +120,128 @@ export class BgsInGameTimewarpedService extends AbstractFacadeService<BgsInGameT
 			shareReplay(1),
 		);
 		showWidget$.subscribe((show) => {
+			console.debug('[bgs-timewarped] showWidget', show);
 			this.showWidget$$.next(show);
 		});
 
 		const cardStats$: Observable<BgsCardStats | null> = showWidget$.pipe(
-			filter((show) => show),
-			distinctUntilChanged(),
-			switchMap(() =>
-				this.gameState.gameState$$.pipe(
-					auditTime(500),
-					map((state) => state?.bgState?.currentGame?.hasTimewarped),
-				),
-			),
-			filter((hasTimewarped) => !!hasTimewarped),
-			distinctUntilChanged(),
-			switchMap(() => {
-				return this.cardsService.loadCardStats('last-patch', TIMEWARPED_MMR_PERCENTILE);
+			switchMap((show) => {
+				if (!show) return EMPTY;
+				return this.gameState.gameState$$
+					.pipe(
+						auditTime(500),
+						map((state) => state?.bgState?.currentGame?.hasTimewarped),
+					)
+					.pipe(
+						filter((hasTimewarped) => !!hasTimewarped),
+						distinctUntilChanged(),
+						switchMap(() => this.cardsService.loadCardStats('last-patch', TIMEWARPED_MMR_PERCENTILE)),
+					);
 			}),
 			shareReplay(1),
 			tap((cardStats) => console.debug('[bgs-timewarped] loaded cardStats', cardStats)),
 		) as Observable<BgsCardStats | null>;
 
-		const shopCards$ = this.gameState.gameState$$.pipe(
-			filter((state) => state != null),
-			auditTime(500),
-			map((state) => ({
-				cardIds: state!.opponentDeck.board.map((entity) => entity.cardId),
-				currentTurn: state?.currentTurn ?? 1,
-			})),
-			distinctUntilChanged((a, b) => arraysEqual(a.cardIds, b.cardIds) && a.currentTurn === b.currentTurn),
+		const shopCards$ = showWidget$.pipe(
+			switchMap((show) => {
+				if (!show) return EMPTY;
+				return this.gameState.gameState$$.pipe(
+					filter((state) => state != null),
+					auditTime(500),
+					map((state) => ({
+						cardIds: state!.opponentDeck.board.map((entity) => entity.cardId),
+						currentTurn: state?.currentTurn ?? 1,
+					})),
+					distinctUntilChanged(
+						(a, b) => arraysEqual(a.cardIds, b.cardIds) && a.currentTurn === b.currentTurn,
+					),
+				);
+			}),
 		);
 
-		const options$ = combineLatest([
-			shopCards$,
-			this.prefs.preferences$$.pipe(
-				map((prefs) => prefs.bgsShowTimewarpedStatsOverlay),
-				distinctUntilChanged(),
-			),
-			cardStats$,
-		]).pipe(
-			debounceTime(500),
-			filter(([shopCards, showFromPrefs, cardStats]) => {
-				return !!cardStats && !!shopCards?.cardIds?.length;
+		const currentTurn$ = showWidget$.pipe(
+			switchMap((show) => {
+				if (!show) return EMPTY;
+				return this.gameState.gameState$$.pipe(
+					map((state) => state?.currentTurn ?? 1),
+					distinctUntilChanged(),
+				);
 			}),
-			map(([shopCards, showFromPrefs, cardStatsInput]) => {
-				console.debug('[bgs-timewarped] checking options', shopCards, showFromPrefs, cardStatsInput);
-				if (!showFromPrefs) {
-					return [];
-				}
-				const currentTurn = shopCards.currentTurn as number;
-				const timewarpedStats =
-					cardStatsInput?.cardStats
-						?.filter((s) => isBgsTimewarped(this.allCards.getCard(s.cardId)))
-						.filter((s) => s.totalPlayed > 0) ?? [];
-				const cardStats = timewarpedStats.filter(
-					(s) => this.allCards.getCard(s.cardId).techLevel === (currentTurn === 6 ? 3 : 5),
-				);
-				const tierItems = buildCardStats(cardStats, [], 0, currentTurn, this.allCards);
-				console.debug('[bgs-timewarped] tierItems', tierItems, currentTurn);
-				const tiers = buildCardTiers(
-					tierItems,
-					{ criteria: 'impact', direction: 'asc' },
-					[],
-					this.i18n,
-					this.allCards,
-				);
-				console.debug('[bgs-timewarped] tiers', tiers);
-				return shopCards.cardIds
-					.map((cardId) =>
-						buildBgsTimewarpedCardChoiceValue(
-							cardId,
-							shopCards.currentTurn as number,
-							tiers,
+		);
+
+		const tierItems$ = showWidget$.pipe(
+			switchMap((show) => {
+				if (!show) return EMPTY;
+				return combineLatest([cardStats$, currentTurn$]).pipe(
+					map(([cardStatsInput, currentTurn]) => {
+						if (!cardStatsInput) {
+							return [];
+						}
+						if (!currentTurn) {
+							return [];
+						}
+						const timewarpedStats =
+							cardStatsInput?.cardStats
+								?.filter((s) => isBgsTimewarped(this.allCards.getCard(s.cardId)))
+								.filter((s) => s.totalPlayed > 0) ?? [];
+						const cardStats = timewarpedStats.filter(
+							(s) => this.allCards.getCard(s.cardId).techLevel === (currentTurn === 6 ? 3 : 5),
+						);
+						const tierItems = buildCardStats(cardStats, [], 0, currentTurn as number, this.allCards);
+						console.debug('[bgs-timewarped] tierItems', tierItems, currentTurn);
+						const tiers = buildCardTiers(
+							tierItems,
+							{ criteria: 'impact', direction: 'asc' },
+							[],
+							this.i18n,
 							this.allCards,
-						),
-					)
-					.filter((option) => option !== null) as readonly BgsTimewarpedCardChoiceOption[];
+						);
+						return tiers;
+					}),
+				);
 			}),
-			tap((options) => console.debug('[bgs-timewarped] options', options)),
-			distinctUntilChanged(
-				(a, b) =>
-					a?.length === b?.length &&
-					!!a?.every((option, index) => equalBgsTimewarpedCardChoiceOption(option, b?.[index])),
-			),
-			shareReplay(1),
+		);
+
+		const options$ = showWidget$.pipe(
+			switchMap((show) => {
+				if (!show) return of([] as readonly BgsTimewarpedCardChoiceOption[]);
+				return combineLatest([
+					shopCards$,
+					this.prefs.preferences$$.pipe(
+						map((prefs) => prefs.bgsShowTimewarpedStatsOverlay),
+						distinctUntilChanged(),
+					),
+					tierItems$,
+				]).pipe(
+					debounceTime(500),
+					filter(([shopCards, showFromPrefs, tiers]) => {
+						return !!tiers && !!shopCards?.cardIds?.length;
+					}),
+					map(([shopCards, showFromPrefs, tiers]) => {
+						console.debug('[bgs-timewarped] checking options', shopCards, showFromPrefs, tiers);
+						if (!showFromPrefs) {
+							return [];
+						}
+						return shopCards.cardIds
+							.map((cardId) =>
+								buildBgsTimewarpedCardChoiceValue(
+									cardId,
+									shopCards.currentTurn as number,
+									tiers,
+									this.allCards,
+								),
+							)
+							.filter((option) => option !== null) as readonly BgsTimewarpedCardChoiceOption[];
+					}),
+					tap((options) => console.debug('[bgs-timewarped] options', options)),
+					distinctUntilChanged(
+						(a, b) =>
+							a?.length === b?.length &&
+							!!a?.every((option, index) => equalBgsTimewarpedCardChoiceOption(option, b?.[index])),
+					),
+					shareReplay(1),
+				);
+			}),
 		);
 		options$.subscribe((options) => {
 			this.timewarpedStats$$.next(options);
