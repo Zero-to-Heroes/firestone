@@ -26,6 +26,7 @@ import { CardsFacadeService, ILocalizationService, waitForReady } from '@firesto
 import { deflate, inflate } from 'pako';
 import { BehaviorSubject, combineLatest, Observable, of, throwError } from 'rxjs';
 import {
+	catchError,
 	delay,
 	distinctUntilChanged,
 	filter,
@@ -34,7 +35,6 @@ import {
 	switchMap,
 	take,
 	timeout,
-	catchError,
 } from 'rxjs/operators';
 import { TwitchEvent } from '../model/ebs-event';
 import { TwitchBgsBoard, TwitchBgsBoardEntity, TwitchBgsPlayer, TwitchBgsState } from '../model/twitch-bgs-state';
@@ -356,7 +356,6 @@ export class TwitchAuthService {
 	}
 
 	private async sendEvent(newEvent: TwitchEvent | null) {
-		console.debug('[twitch-auth] sending event', newEvent);
 		const prefs = await this.prefs.getPreferences();
 		if (!newEvent) {
 			return;
@@ -373,11 +372,7 @@ export class TwitchAuthService {
 				timeout(EBS_REQUEST_TIMEOUT_MS),
 				catchError((err) => {
 					if (err.name === 'TimeoutError') {
-						console.warn(
-							'[twitch-auth] EBS request timed out after',
-							EBS_REQUEST_TIMEOUT_MS,
-							'ms',
-						);
+						console.warn('[twitch-auth] EBS request timed out after', EBS_REQUEST_TIMEOUT_MS, 'ms');
 					}
 					return throwError(() => err);
 				}),

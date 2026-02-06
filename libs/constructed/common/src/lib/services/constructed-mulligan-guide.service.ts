@@ -120,12 +120,6 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 				// );
 
 				if (!gameStarted || mulliganOver || !displayFromPrefs) {
-					console.debug(
-						'[mulligan-guide] constructed-mulligan-guide-service not showing widget 1',
-						gameStarted,
-						mulliganOver,
-						displayFromPrefs,
-					);
 					return false;
 				}
 
@@ -134,10 +128,6 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 						gameState.metadata.gameType,
 					)
 				) {
-					console.debug(
-						'[mulligan-guide] constructed-mulligan-guide-service not showing widget 2',
-						gameState.metadata.gameType,
-					);
 					return false;
 				}
 
@@ -145,34 +135,20 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 					gameState.metadata.gameType === GameType.GT_VS_AI &&
 					!PRACTICE_ALL.includes(gameState.metadata.scenarioId)
 				) {
-					console.debug(
-						'[mulligan-guide] constructed-mulligan-guide-service not showing widget 3',
-						gameState.metadata.gameType,
-					);
 					return false;
 				}
 
 				if (currentScene !== SceneMode.GAMEPLAY) {
-					console.debug(
-						'[mulligan-guide] constructed-mulligan-guide-service not showing widget 4',
-						currentScene,
-					);
 					return false;
 				}
 
 				if (gameEnded) {
-					console.debug(
-						'[mulligan-guide] constructed-mulligan-guide-service not showing widget 5',
-						gameEnded,
-					);
 					return false;
 				}
 
-				console.debug('[mulligan-guide] constructed-mulligan-guide-service showing widget');
 				return true;
 			}),
 			distinctUntilChanged(),
-			tap((showWidget) => console.debug('[mulligan-guide] showWidget', showWidget)),
 			shareReplay(1),
 		);
 
@@ -674,7 +650,8 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 	protected override async initElectronMainProcess() {
 		this.registerMainProcessMethod(
 			'getMulliganAdviceInternal',
-			(deckstring: string, prefs: Preferences, options?: MulliganGuideOptions) => this.getMulliganAdviceInternal(deckstring, prefs, options),
+			(deckstring: string, prefs: Preferences, options?: MulliganGuideOptions) =>
+				this.getMulliganAdviceInternal(deckstring, prefs, options),
 		);
 	}
 
