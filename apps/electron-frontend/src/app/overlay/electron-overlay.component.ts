@@ -1,8 +1,15 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewRef } from '@angular/core';
+import {
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	ElementRef,
+	NgZone,
+	OnInit,
+	ViewRef,
+} from '@angular/core';
 import { MemoryUpdatesService } from '@firestone/memory';
 import { GameStatusService } from '@firestone/shared/common/service';
 import { waitForReady } from '@firestone/shared/framework/core';
-import { Subscription } from 'rxjs';
 import { ElectronEntryPointComponent } from './electron-entry-point.component';
 
 declare const window: any;
@@ -18,15 +25,15 @@ declare const window: any;
 	styleUrls: ['./electron-overlay.component.scss'],
 	changeDetection: ChangeDetectionStrategy.Default,
 })
-export class ElectronOverlayComponent extends ElectronEntryPointComponent implements OnInit, OnDestroy {
+export class ElectronOverlayComponent extends ElectronEntryPointComponent implements OnInit {
 	ready = false;
-
-	private subscriptions: Subscription[] = [];
 
 	constructor(
 		private readonly cdr: ChangeDetectorRef,
+		private readonly elementRef: ElementRef<HTMLElement>,
 		private readonly gameStatusService: GameStatusService,
 		private readonly memoryUpdateService: MemoryUpdatesService,
+		private readonly ngZone: NgZone,
 	) {
 		super();
 	}
@@ -43,9 +50,5 @@ export class ElectronOverlayComponent extends ElectronEntryPointComponent implem
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
-	}
-
-	ngOnDestroy() {
-		this.subscriptions.forEach((sub) => sub.unsubscribe());
 	}
 }
