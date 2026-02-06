@@ -21,20 +21,17 @@ export class TavernBuffCounterDefinitionV2 extends CounterDefinitionV2<{ atk: nu
 				[
 					CardIds.ShopBuffPlayerEnchantDntEnchantment_BG_ShopBuff, // ok
 				].includes(e.cardId as CardIds),
-			); 4
-			console.debug('[debug] bgshop buff', relevantEnchantsSingle);
+			);
 			const value = {
-				atk:
-					relevantEnchantsSingle
-						.map((e) => e.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_1] ?? 0)
-						.reduce((a, b) => a + b, 0),
+				atk: relevantEnchantsSingle
+					.map((e) => e.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_1] ?? 0)
+					.reduce((a, b) => a + b, 0),
 				// relevantEnchantsMulti
 				// 	.map((e) => e.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_1] ?? 0)
 				// 	.reduce((a, b) => a + b, 0),
-				health:
-					relevantEnchantsSingle
-						.map((e) => e.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_1] ?? 0)
-						.reduce((a, b) => a + b, 0),
+				health: relevantEnchantsSingle
+					.map((e) => e.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_1] ?? 0)
+					.reduce((a, b) => a + b, 0),
 				// relevantEnchantsMulti
 				// 	.map((e) => e.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_2] ?? 0)
 				// 	.reduce((a, b) => a + b, 0),
