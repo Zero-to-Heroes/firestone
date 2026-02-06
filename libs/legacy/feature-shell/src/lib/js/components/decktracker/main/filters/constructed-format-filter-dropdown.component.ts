@@ -1,23 +1,13 @@
-import {
-	AfterContentInit,
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	EventEmitter,
-	ViewRef,
-} from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { GameFormat } from '@firestone-hs/constructed-deck-stats';
 import { ConstructedNavigationService } from '@firestone/constructed/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { IOption } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-window-store-event';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
-import { GenericPreferencesUpdateEvent } from '../../../../services/mainwindow/store/events/generic-preferences-update-event';
 
 @Component({
 	standalone: false,
@@ -40,14 +30,11 @@ import { GenericPreferencesUpdateEvent } from '../../../../services/mainwindow/s
 })
 export class ConstructedFormatFilterDropdownComponent
 	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit
+	implements AfterContentInit
 {
 	filter$: Observable<{ filter: string; placeholder: string; options: IOption[]; visible: boolean }>;
 
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
 	constructor(
-		private readonly ow: OverwolfService,
 		private readonly i18n: LocalizationFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly nav: ConstructedNavigationService,
@@ -86,17 +73,8 @@ export class ConstructedFormatFilterDropdownComponent
 		}
 	}
 
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-	}
-
 	onSelected(option: IOption) {
-		this.stateUpdater.next(
-			new GenericPreferencesUpdateEvent((prefs) => ({
-				...prefs,
-				constructedMetaDecksFormatFilter: (option as FilterOption).value,
-			})),
-		);
+		this.prefs.updatePrefs('constructedMetaDecksFormatFilter', (option as FilterOption).value);
 	}
 }
 

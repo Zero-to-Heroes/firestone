@@ -1,5 +1,5 @@
 import { PackResult } from '@firestone-hs/user-packs';
-import { MainWindowStoreEvent } from '../main-window-store-event';
+import { MainWindowStoreEvent } from '@firestone/mainwindow/common';
 
 export class CollectionPacksUpdatedEvent implements MainWindowStoreEvent {
 	public static eventName(): string {

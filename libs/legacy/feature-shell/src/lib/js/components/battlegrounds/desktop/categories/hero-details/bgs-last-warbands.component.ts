@@ -1,14 +1,15 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { Entity, EntityDefinition } from '@firestone-hs/replay-parser';
 import { BgsPostMatchStatsForReview, MinionStat } from '@firestone/game-state';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
+import { GameStatsProviderService } from '@firestone/stats/services';
 import { Map } from 'immutable';
 import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../../../services/localization-facade.service';
-import { AppUiStoreFacadeService } from '../../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../../../abstract-subscription-store.component';
 import { normalizeCardId } from '../../../post-match/card-utils';
 
 @Component({
@@ -94,7 +95,7 @@ import { normalizeCardId } from '../../../post-match/card-utils';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsLastWarbandsComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class BgsLastWarbandsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	boards$: Observable<readonly KnownBoard[]>;
 
 	loading = true;
@@ -103,19 +104,24 @@ export class BgsLastWarbandsComponent extends AbstractSubscriptionStoreComponent
 	constructor(
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly mainWindowState: MainWindowStateFacadeService,
+		private readonly gameStats: GameStatsProviderService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
-	ngAfterContentInit() {
-		this.boards$ = combineLatest(
-			this.store.gameStats$(),
-			this.store.listen$(([main, nav]) => main.battlegrounds.lastHeroPostMatchStats),
-		).pipe(
-			filter(([gameStats, [postMatch]]) => !!postMatch && !!gameStats),
-			this.mapData(([gameStats, [postMatch]]) =>
+	async ngAfterContentInit() {
+		await waitForReady(this.mainWindowState, this.gameStats);
+
+		this.boards$ = combineLatest([
+			this.gameStats.gameStats$$,
+			this.mainWindowState.mainWindowState$$.pipe(
+				this.mapData((state) => state.battlegrounds.lastHeroPostMatchStats),
+			),
+		]).pipe(
+			filter(([gameStats, postMatch]) => !!postMatch && !!gameStats),
+			this.mapData(([gameStats, postMatch]) =>
 				postMatch
 					.filter((postMatch) => !!postMatch?.stats?.boardHistory?.length)
 					.slice(0, 15)
@@ -124,6 +130,10 @@ export class BgsLastWarbandsComponent extends AbstractSubscriptionStoreComponent
 					.slice(0, 5),
 			),
 		);
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.markForCheck();
+		}
 	}
 
 	private buildLastKnownBoard(postMatch: BgsPostMatchStatsForReview, gameStats: readonly GameStat[]): KnownBoard {
@@ -137,21 +147,20 @@ export class BgsLastWarbandsComponent extends AbstractSubscriptionStoreComponent
 		const title =
 			review && review.additionalResult
 				? this.i18n.translateString(
-
-					'app.battlegrounds.personal-stats.hero-details.last-warbands.finished-position',
-					{ value: this.getFinishPlace(parseInt(review.additionalResult)) },
-				)
+						'app.battlegrounds.personal-stats.hero-details.last-warbands.finished-position',
+						{ value: this.getFinishPlace(parseInt(review.additionalResult)) },
+					)
 				: this.i18n.translateString('app.battlegrounds.personal-stats.hero-details.last-warbands.last-board');
 		const normalizedIds = [
 			...new Set(boardEntities.map((entity) => normalizeCardId(entity.cardID, this.allCards))),
 		];
 		const minionStats = normalizedIds.map(
 			(cardId) =>
-			({
-				cardId: cardId,
-				damageDealt: this.extractDamage(cardId, postMatch?.stats?.totalMinionsDamageDealt),
-				damageTaken: this.extractDamage(cardId, postMatch?.stats?.totalMinionsDamageTaken),
-			} as MinionStat),
+				({
+					cardId: cardId,
+					damageDealt: this.extractDamage(cardId, postMatch?.stats?.totalMinionsDamageDealt),
+					damageTaken: this.extractDamage(cardId, postMatch?.stats?.totalMinionsDamageTaken),
+				}) as MinionStat,
 		);
 		const result = {
 			entities: boardEntities,

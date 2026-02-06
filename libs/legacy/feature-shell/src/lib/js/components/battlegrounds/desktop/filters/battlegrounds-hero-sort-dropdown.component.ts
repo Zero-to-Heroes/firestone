@@ -1,6 +1,5 @@
 import {
 	AfterContentInit,
-	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
@@ -9,15 +8,15 @@ import {
 } from '@angular/core';
 import { BattlegroundsNavigationService } from '@firestone/battlegrounds/services';
 import { BgsHeroSortFilterType } from '@firestone/battlegrounds/view';
+import { MainWindowStateFacadeService, MainWindowStoreEvent } from '@firestone/mainwindow/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { IOption } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { BgsHeroSortFilterSelectedEvent } from '../../../../services/mainwindow/store/events/battlegrounds/bgs-hero-sort-filter-selected-event';
-import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 
 @Component({
 	standalone: false,
@@ -37,10 +36,7 @@ import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/even
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsHeroSortDropdownComponent
-	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit
-{
+export class BattlegroundsHeroSortDropdownComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	options: HeroSortFilterOption[];
 
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
@@ -48,11 +44,11 @@ export class BattlegroundsHeroSortDropdownComponent
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
-		private readonly ow: OverwolfService,
 		private readonly i18n: LocalizationFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly nav: BattlegroundsNavigationService,
 		private readonly prefs: PreferencesService,
+		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
 	) {
 		super(cdr);
 	}
@@ -106,12 +102,8 @@ export class BattlegroundsHeroSortDropdownComponent
 		}
 	}
 
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-	}
-
 	onSelected(option: IOption) {
-		this.stateUpdater.next(new BgsHeroSortFilterSelectedEvent((option as HeroSortFilterOption).value));
+		this.mainWindowStateFacade.send(new BgsHeroSortFilterSelectedEvent((option as HeroSortFilterOption).value));
 	}
 }
 

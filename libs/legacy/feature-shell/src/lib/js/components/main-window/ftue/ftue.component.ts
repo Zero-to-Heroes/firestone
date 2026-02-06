@@ -1,11 +1,10 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { CurrentAppType } from '@firestone/shared/common/service';
-import { OverwolfService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { NextFtueEvent } from '../../../services/mainwindow/store/events/ftue/next-ftue-event';
 import { PreviousFtueEvent } from '../../../services/mainwindow/store/events/ftue/previous-ftue-event';
 import { SkipFtueEvent } from '../../../services/mainwindow/store/events/ftue/skip-ftue-event';
-import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 
 @Component({
 	standalone: false,
@@ -71,7 +70,7 @@ import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FtueComponent implements AfterViewInit {
+export class FtueComponent {
 	currentIndex = 0;
 	isHome = true;
 	ftueSteps: FtueStep[] = [
@@ -125,24 +124,21 @@ export class FtueComponent implements AfterViewInit {
 		this.isHome = this.currentIndex < 0;
 	}
 
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
-	constructor(private readonly ow: OverwolfService, private readonly i18n: LocalizationFacadeService) {}
-
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-	}
+	constructor(
+		private readonly i18n: LocalizationFacadeService,
+		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
+	) {}
 
 	next() {
-		this.stateUpdater.next(new NextFtueEvent());
+		this.mainWindowStateFacade.send(new NextFtueEvent());
 	}
 
 	previous() {
-		this.stateUpdater.next(new PreviousFtueEvent());
+		this.mainWindowStateFacade.send(new PreviousFtueEvent());
 	}
 
 	skip() {
-		this.stateUpdater.next(new SkipFtueEvent());
+		this.mainWindowStateFacade.send(new SkipFtueEvent());
 	}
 }
 

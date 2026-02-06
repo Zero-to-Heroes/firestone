@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
-import { SocialUserInfo } from '../../models/mainwindow/social-user-info';
-import { capitalizeEachWord } from '../../services/utils';
+import { SocialUserInfo } from '@firestone/mainwindow/common';
+import { capitalizeEachWord } from '@firestone/shared/framework/common';
 
 @Component({
 	standalone: false,

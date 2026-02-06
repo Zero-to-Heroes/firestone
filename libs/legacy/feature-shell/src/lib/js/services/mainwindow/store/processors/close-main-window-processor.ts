@@ -1,6 +1,5 @@
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
-import { MainWindowState } from '../../../../models/mainwindow/main-window-state';
-import { NavigationState } from '../../../../models/mainwindow/navigation/navigation-state';
+import { MainWindowState, NavigationState } from '@firestone/mainwindow/common';
 import { CloseMainWindowEvent } from '../events/close-main-window-event';
 import { Processor } from './processor';
 

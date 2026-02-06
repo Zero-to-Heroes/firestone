@@ -1,5 +1,4 @@
-import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
-import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
+import { MainWindowState, NavigationState } from '@firestone/mainwindow/common';
 import { CollectionPacksUpdatedEvent } from '../../events/collection/colection-packs-updated-event';
 import { Processor } from '../processor';
 

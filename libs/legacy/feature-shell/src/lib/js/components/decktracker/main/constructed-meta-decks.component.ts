@@ -1,16 +1,9 @@
-import {
-	AfterContentInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	EventEmitter,
-	ViewRef,
-} from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { ConstructedMetaDecksStateService, ExtendedDeckStats } from '@firestone/constructed/common';
+import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { AnalyticsService, OverwolfService } from '@firestone/shared/framework/core';
+import { AnalyticsService } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
-import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { ConstructedMetaDeckDetailsShowEvent } from '../../../services/mainwindow/store/processors/decktracker/constructed-meta-deck-show-details';
 import { EnhancedDeckStat } from './meta-decks-visualization.component';
 
@@ -32,21 +25,17 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionComponent
 	decks$: Observable<ExtendedDeckStats>;
 	cardSearch$: Observable<readonly string[]>;
 
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly constructedMetaStats: ConstructedMetaDecksStateService,
 		private readonly analytics: AnalyticsService,
-		private readonly ow: OverwolfService,
+		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
 		await Promise.all([this.constructedMetaStats.isReady()]);
-
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 
 		this.decks$ = this.constructedMetaStats.constructedMetaDecks$$.pipe(this.mapData((stats) => stats));
 		this.cardSearch$ = this.constructedMetaStats.cardSearch$$.pipe(this.mapData((cardSearch) => cardSearch));
@@ -58,6 +47,6 @@ export class ConstructedMetaDecksComponent extends AbstractSubscriptionComponent
 
 	onDeckSelected(deck: EnhancedDeckStat) {
 		this.analytics.trackEvent('meta-deck-view-details', { deckstring: deck.decklist });
-		this.stateUpdater.next(new ConstructedMetaDeckDetailsShowEvent(deck.decklist));
+		this.mainWindowStateFacade.send(new ConstructedMetaDeckDetailsShowEvent(deck.decklist));
 	}
 }

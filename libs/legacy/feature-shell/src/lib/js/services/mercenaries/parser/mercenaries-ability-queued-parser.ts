@@ -1,9 +1,9 @@
-import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '@firestone/game-state';
-import { MainWindowState } from '../../../models/mainwindow/main-window-state';
+import { MainWindowState } from '@firestone/mainwindow/common';
+import { isPassiveMercsTreasure } from '@firestone/mercenaries/common';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { MercenariesAction, MercenariesBattleState } from '../../../models/mercenaries/mercenaries-battle-state';
 import { sortByProperties } from '../../utils';
-import { isPassiveMercsTreasure } from '@firestone/mercenaries/common';
 import { MercenariesParser } from './_mercenaries-parser';
 
 export class MercenariesAbilityQueuedParser implements MercenariesParser {

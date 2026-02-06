@@ -7,12 +7,11 @@ import {
 	Input,
 	ViewRef,
 } from '@angular/core';
-import { ConstructedNavigationService } from '@firestone/constructed/common';
+import { ConstructedNavigationService, DecktrackerViewType } from '@firestone/constructed/common';
+import { MainWindowNavigationService, MainWindowStateFacadeService } from '@firestone/mainwindow/common';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ADS_SERVICE_TOKEN, IAdsService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
-import { DecktrackerViewType } from '../../models/mainwindow/decktracker/decktracker-view.type';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Component({
 	standalone: false,
@@ -79,7 +78,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DecktrackerComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class DecktrackerComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	currentView$: Observable<DecktrackerViewType>;
 	menuDisplayType$: Observable<string>;
 	loading$: Observable<boolean>;
@@ -88,24 +87,25 @@ export class DecktrackerComponent extends AbstractSubscriptionStoreComponent imp
 	@Input() showAds: boolean;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly nav: ConstructedNavigationService,
 		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
+		private readonly mainWindowState: MainWindowStateFacadeService,
+		private readonly mainWindowNavigation: MainWindowNavigationService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.nav, this.ads);
+		await waitForReady(this.nav, this.ads, this.mainWindowState, this.mainWindowNavigation);
 
 		this.currentView$ = this.nav.currentView$$.pipe(this.mapData((currentView) => currentView));
-		this.menuDisplayType$ = this.store
-			.listen$(([main, nav, prefs]) => nav.navigationDecktracker.menuDisplayType)
-			.pipe(this.mapData(([menuDisplayType]) => menuDisplayType));
-		this.loading$ = this.store
-			.listen$(([main, nav, prefs]) => main.decktracker.isLoading)
-			.pipe(this.mapData(([isLoading]) => isLoading));
+		this.menuDisplayType$ = this.mainWindowNavigation.navigationState$$.pipe(
+			this.mapData((state) => state.navigationDecktracker.menuDisplayType),
+		);
+		this.loading$ = this.mainWindowState.mainWindowState$$.pipe(
+			this.mapData((state) => state.decktracker.isLoading),
+		);
 		this.showAds$ = this.ads.hasPremiumSub$$.pipe(this.mapData((info) => !info));
 
 		if (!(this.cdr as ViewRef).destroyed) {

@@ -1,4 +1,4 @@
-import { CollectionCardType } from './collection-card-type.type';
+import { CollectionCardType } from '@firestone-hs/user-packs';
 
 export interface InternalCardInfo {
 	readonly cardId: string;

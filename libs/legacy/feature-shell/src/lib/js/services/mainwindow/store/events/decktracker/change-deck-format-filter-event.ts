@@ -1,5 +1,5 @@
+import { MainWindowStoreEvent } from '@firestone/mainwindow/common';
 import { StatGameFormatType } from '@firestone/stats/data-access';
-import { MainWindowStoreEvent } from '../main-window-store-event';
 
 export class ChangeDeckFormatFilterEvent implements MainWindowStoreEvent {
 	public static eventName(): string {

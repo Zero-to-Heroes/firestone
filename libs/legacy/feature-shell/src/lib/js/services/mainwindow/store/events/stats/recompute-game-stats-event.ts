@@ -1,5 +1,5 @@
+import { MainWindowStoreEvent } from '@firestone/mainwindow/common';
 import { GameStat } from '@firestone/stats/data-access';
-import { MainWindowStoreEvent } from '../main-window-store-event';
 
 export class RecomputeGameStatsEvent implements MainWindowStoreEvent {
 	constructor(public readonly gameStat: GameStat) {}

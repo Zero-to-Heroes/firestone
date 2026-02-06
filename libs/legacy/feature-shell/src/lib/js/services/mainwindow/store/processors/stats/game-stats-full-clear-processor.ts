@@ -1,6 +1,5 @@
+import { MainWindowState, NavigationState } from '@firestone/mainwindow/common';
 import { GameStatsLoaderService } from '@firestone/stats/data-access';
-import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
-import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { GamesFullClearEvent } from '../../events/stats/game-stats-full-clear-event';
 import { Processor } from '../processor';
 

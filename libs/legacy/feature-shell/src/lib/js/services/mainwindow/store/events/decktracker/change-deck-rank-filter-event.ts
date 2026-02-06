@@ -1,5 +1,5 @@
-import { DeckRankFilterType } from '../../../../../models/mainwindow/decktracker/deck-rank-filter.type';
-import { MainWindowStoreEvent } from '../main-window-store-event';
+import { MainWindowStoreEvent } from '@firestone/mainwindow/common';
+import { DeckRankFilterType } from '@firestone/mainwindow/common';
 
 export class ChangeDeckRankFilterEvent implements MainWindowStoreEvent {
 	constructor(public readonly newRank: DeckRankFilterType) {}

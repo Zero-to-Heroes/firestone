@@ -1,8 +1,5 @@
+import { DeckFilters, DecktrackerState, MainWindowState, NavigationState } from '@firestone/mainwindow/common';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { DeckFilters } from '../../../../../models/mainwindow/decktracker/deck-filters';
-import { DecktrackerState } from '../../../../../models/mainwindow/decktracker/decktracker-state';
-import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
-import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { ChangeDeckRankFilterEvent } from '../../events/decktracker/change-deck-rank-filter-event';
 import { Processor } from '../processor';
 

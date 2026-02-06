@@ -1,4 +1,4 @@
-import { MainWindowStoreEvent } from '../main-window-store-event';
+import { MainWindowStoreEvent } from '@firestone/mainwindow/common';
 
 export class ShareVideoOnSocialNetworkEvent implements MainWindowStoreEvent {
 	constructor(network: string, videoPathOnDisk: string, message: string) {

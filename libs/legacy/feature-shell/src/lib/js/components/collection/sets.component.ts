@@ -1,15 +1,15 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { Set } from '@firestone/collection/common';
+import { MainWindowStoreEvent } from '@firestone/mainwindow/common';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { IOption } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { StatGameFormatType } from '@firestone/stats/data-access';
 import { Observable, combineLatest } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
-import { Set } from '../../models/set';
 import { SetsManagerService } from '../../services/collection/sets-manager.service';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { GenericPreferencesUpdateEvent } from '../../services/mainwindow/store/events/generic-preferences-update-event';
-import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 
 @Component({
 	standalone: false,

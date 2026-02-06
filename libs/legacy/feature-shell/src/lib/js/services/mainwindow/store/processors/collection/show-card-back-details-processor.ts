@@ -1,9 +1,11 @@
 import { CollectionNavigationService } from '@firestone/collection/common';
-import { MainWindowNavigationService } from '@firestone/mainwindow/common';
+import {
+	MainWindowNavigationService,
+	MainWindowState,
+	NavigationCollection,
+	NavigationState,
+} from '@firestone/mainwindow/common';
 import { CardBack } from '@firestone/memory';
-import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
-import { NavigationCollection } from '../../../../../models/mainwindow/navigation/navigation-collection';
-import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { CollectionManager } from '../../../../collection/collection-manager.service';
 import { ShowCardBackDetailsEvent } from '../../events/collection/show-card-back-details-event';
 import { Processor } from '../processor';

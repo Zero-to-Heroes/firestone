@@ -1,11 +1,11 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { classes, formatClass } from '@firestone/game-state';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { IOption } from '@firestone/shared/common/view';
-import { Observable } from 'rxjs';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { waitForReady } from '@firestone/shared/framework/core';
+import { combineLatest, Observable } from 'rxjs';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { GenericPreferencesUpdateEvent } from '../../../services/mainwindow/store/events/generic-preferences-update-event';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	standalone: false,
@@ -24,18 +24,18 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReplaysOpponentClassFilterDropdownComponent
-	extends AbstractSubscriptionStoreComponent
+	extends AbstractSubscriptionComponent
 	implements AfterContentInit
 {
 	options: IOption[];
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly prefs: PreferencesService,
 	) {
-		super(store, cdr);
+		super(cdr);
 		const collator = new Intl.Collator(this.i18n.formatCurrentLocale());
 		this.options = [
 			{
@@ -54,27 +54,26 @@ export class ReplaysOpponentClassFilterDropdownComponent
 		];
 	}
 
-	ngAfterContentInit() {
-		this.filter$ = this.store
-			.listen$(
-				([main, nav, prefs]) => prefs.replaysActiveOpponentClassFilter,
-				([main, nav, prefs]) => prefs.replaysActiveGameModeFilter,
-			)
-			.pipe(
-				this.mapData(([filter, gameModeFilter]) => ({
-					filter: filter,
-					placeholder: this.options.find((option) => option.value === filter)?.label,
-					visible: ['ranked', 'ranked-standard', 'ranked-wild'].includes(gameModeFilter),
-				})),
-			);
+	async ngAfterContentInit() {
+		await waitForReady(this.prefs);
+
+		this.filter$ = combineLatest([
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.replaysActiveOpponentClassFilter)),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.replaysActiveGameModeFilter)),
+		]).pipe(
+			this.mapData(([filter, gameModeFilter]) => ({
+				filter: filter,
+				placeholder: this.options.find((option) => option.value === filter)?.label,
+				visible: ['ranked', 'ranked-standard', 'ranked-wild'].includes(gameModeFilter),
+			})),
+		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.markForCheck();
+		}
 	}
 
 	onSelected(option: IOption) {
-		this.store.send(
-			new GenericPreferencesUpdateEvent((prefs) => ({
-				...prefs,
-				replaysActiveOpponentClassFilter: option.value,
-			})),
-		);
+		this.prefs.updatePrefs('replaysActiveOpponentClassFilter', option.value as string);
 	}
 }

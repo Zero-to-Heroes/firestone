@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { ApiRunner } from '@firestone/shared/framework/core';
 import { loadAsync } from 'jszip';
-import { MatchDetail } from '../../models/mainwindow/replays/match-detail';
+import { MatchDetail } from '@firestone/mainwindow/common';
 
 const RETRIEVE_REVIEW_URL = 'https://itkmxena7k2kkmkgpevc6skcie0tlwmk.lambda-url.us-west-2.on.aws/';
 const REPLAY_API = 'https://xml.firestoneapp.com/';

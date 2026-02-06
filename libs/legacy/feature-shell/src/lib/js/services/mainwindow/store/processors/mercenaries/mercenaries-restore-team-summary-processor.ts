@@ -1,6 +1,5 @@
+import { MainWindowState, NavigationState } from '@firestone/mainwindow/common';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
-import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { MercenariesRestoreTeamSummaryEvent } from '../../events/mercenaries/mercenaries-restore-team-summary-event';
 import { Processor } from '../processor';
 

@@ -7,9 +7,8 @@ import {
 	Output,
 	ViewRef,
 } from '@angular/core';
+import { MainWindowState, NavigationState } from '@firestone/mainwindow/common';
 import { IOption } from '@firestone/shared/common/view';
-import { MainWindowState } from '../models/mainwindow/main-window-state';
-import { NavigationState } from '../models/mainwindow/navigation/navigation-state';
 
 @Component({
 	standalone: false,

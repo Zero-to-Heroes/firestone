@@ -1,14 +1,17 @@
 import { Injectable } from '@angular/core';
 import { GameEvent, GameEventsEmitterService } from '@firestone/game-state';
+import {
+	MainWindowNavigationService,
+	MainWindowState,
+	MainWindowStateFacadeService,
+	NavigationState,
+} from '@firestone/mainwindow/common';
+import { MercenariesMemoryCacheService, MercenariesReferenceDataService } from '@firestone/mercenaries/common';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { CardsFacadeService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
+import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
+import { BehaviorSubject, combineLatest } from 'rxjs';
 import { concatMap, debounceTime, distinctUntilChanged, filter, skipWhile } from 'rxjs/operators';
-import { MainWindowState } from '../../models/mainwindow/main-window-state';
-import { NavigationState } from '../../models/mainwindow/navigation/navigation-state';
 import { MercenariesBattleState } from '../../models/mercenaries/mercenaries-battle-state';
-import { MercenariesMemoryCacheService } from '@firestone/mercenaries/common';
-import { MercenariesReferenceDataService } from '@firestone/mercenaries/common';
 import { MercenariesParser } from './parser/_mercenaries-parser';
 import { MercenariesAbilityActivatedParser } from './parser/mercenaries-ability-activated-parser';
 import { MercenariesAbilityQueuedParser } from './parser/mercenaries-ability-queued-parser';
@@ -39,7 +42,8 @@ export class MercenariesStoreService {
 	private internalStore$ = new BehaviorSubject<MercenariesBattleState>(null);
 	private internalEventSubject$ = new BehaviorSubject<GameEvent>(null);
 
-	private mainWindowState$: Observable<[MainWindowState, NavigationState]>;
+	private mainWindowState$ = new BehaviorSubject<MainWindowState>(null);
+	private navigationState$ = new BehaviorSubject<NavigationState>(null);
 
 	private parsers: { [eventType: string]: readonly MercenariesParser[] };
 	private eventEmitters: ((state: MercenariesBattleState) => void)[] = [];
@@ -47,10 +51,11 @@ export class MercenariesStoreService {
 	constructor(
 		private readonly events: GameEventsEmitterService,
 		private readonly allCards: CardsFacadeService,
-		private readonly ow: OverwolfService,
 		private readonly memoryCache: MercenariesMemoryCacheService,
 		private readonly referenceData: MercenariesReferenceDataService,
 		private readonly prefs: PreferencesService,
+		private readonly mainWindowState: MainWindowStateFacadeService,
+		private readonly navigationState: MainWindowNavigationService,
 	) {
 		window['battleStateUpdater'] = this.internalEventSubject$;
 		window['mercenariesStore'] = this.store$;
@@ -99,12 +104,14 @@ export class MercenariesStoreService {
 		this.registerParser();
 		this.buildEventEmitters();
 
+		this.mainWindowState.mainWindowState$$.subscribe((state) => {
+			this.mainWindowState$.next(state);
+		});
+		this.navigationState.navigationState$$.subscribe((state) => {
+			this.navigationState$.next(state);
+		});
 		// So that we're sure that all services have been initialized
 		setTimeout(() => {
-			this.mainWindowState$ = this.ow.getMainWindow().mainWindowStoreMerged as BehaviorSubject<
-				[MainWindowState, NavigationState]
-			>;
-
 			combineLatest([this.internalEventSubject$, this.mainWindowState$])
 				.pipe(
 					distinctUntilChanged(),

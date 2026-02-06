@@ -3,13 +3,13 @@ import { HsLogsWatcherService } from '@firestone/app/common';
 import { GameEvents } from '@firestone/game-state';
 import type { LogFileBackend } from '@firestone/shared/common/service';
 import {
+	Events,
 	GameStatusService,
 	LOG_FILE_BACKEND,
 	LogListenerService,
 	LogUtilsService,
 	PreferencesService,
 } from '@firestone/shared/common/service';
-import { Events } from '@firestone/shared/common/service';
 import { CardsMonitorService } from './collection/cards-monitor.service';
 
 @Injectable()
@@ -35,7 +35,6 @@ export class LogRegisterService {
 		// turn can lead to some weird behavior (previous match still updating while the current match
 		// is being played, and some events being delayed because not all the states have been initialized)
 		this.init();
-		// this.events.on(Events.STORE_READY).subscribe(() => this.init());
 	}
 
 	private init(): void {

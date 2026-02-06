@@ -1,5 +1,5 @@
-import { MercenariesCategoryId } from '../../../../../models/mercenaries/mercenary-category-id.type';
-import { MainWindowStoreEvent } from '../main-window-store-event';
+import { MainWindowStoreEvent } from '@firestone/mainwindow/common';
+import { MercenariesCategoryId } from '@firestone/shared/common/service';
 
 export class MercenariesSelectCategoryEvent implements MainWindowStoreEvent {
 	constructor(public readonly categoryId: MercenariesCategoryId) {}

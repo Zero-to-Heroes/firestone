@@ -1,8 +1,8 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { MainWindowNavigationService, MatchDetail } from '@firestone/mainwindow/common';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
-import { MatchDetail } from '../../models/mainwindow/replays/match-detail';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Component({
 	standalone: false,
@@ -36,21 +36,32 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MatchDetailsComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class MatchDetailsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	selectedView$: Observable<string>;
 	selectedReplay$: Observable<MatchDetail>;
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
-		super(store, cdr);
+	constructor(
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly nav: MainWindowNavigationService,
+	) {
+		super(cdr);
 	}
 
-	ngAfterContentInit() {
-		this.selectedView$ = this.store
-			.listen$(([main, nav, prefs]) => nav.navigationReplays)
-			.pipe(this.mapData(([nav]) => (nav.currentView === 'match-details' ? nav.selectedTab : null)));
-		this.selectedReplay$ = this.store
-			.listen$(([main, nav, prefs]) => nav.navigationReplays.selectedReplay)
-			.pipe(this.mapData(([selectedReplay]) => selectedReplay));
+	async ngAfterContentInit() {
+		await waitForReady(this.nav);
+
+		this.selectedView$ = this.nav.navigationState$$.pipe(
+			this.mapData((state) =>
+				state.navigationReplays.currentView === 'match-details' ? state.navigationReplays.selectedTab : null,
+			),
+		);
+		this.selectedReplay$ = this.nav.navigationState$$.pipe(
+			this.mapData((state) => state.navigationReplays.selectedReplay),
+		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.markForCheck();
+		}
 	}
 
 	parseInt(value: string | number): number {

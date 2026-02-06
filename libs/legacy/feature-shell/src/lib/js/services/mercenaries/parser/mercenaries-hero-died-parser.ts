@@ -1,6 +1,6 @@
-import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameEvent } from '@firestone/game-state';
-import { MainWindowState } from '../../../models/mainwindow/main-window-state';
+import { MainWindowState } from '@firestone/mainwindow/common';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { MercenariesAction, MercenariesBattleState } from '../../../models/mercenaries/mercenaries-battle-state';
 import { MercenariesParser } from './_mercenaries-parser';
 

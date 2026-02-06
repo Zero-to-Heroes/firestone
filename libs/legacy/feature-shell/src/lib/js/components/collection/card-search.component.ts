@@ -1,10 +1,19 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	OnDestroy,
+	ViewRef,
+} from '@angular/core';
+import { SetCard } from '@firestone/collection/common';
+import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
-import { SetCard } from '../../models/set';
+import { SetsManagerService } from '../../services/collection/sets-manager.service';
 import { SearchCardsEvent } from '../../services/mainwindow/store/events/collection/search-cards-event';
 import { ShowCardDetailsEvent } from '../../services/mainwindow/store/events/collection/show-card-details-event';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Component({
 	standalone: false,
@@ -23,24 +32,34 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CardSearchComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit, OnDestroy {
+export class CardSearchComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
 	cards$: Observable<readonly SetCard[]>;
 
 	valueMatcher: (element: SetCard) => string = (card) => card.name;
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
-		super(store, cdr);
+	constructor(
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly sets: SetsManagerService,
+		private readonly mainWindowState: MainWindowStateFacadeService,
+	) {
+		super(cdr);
 	}
 
-	ngAfterContentInit() {
-		this.cards$ = this.store.sets$().pipe(this.mapData((sets) => sets.flatMap((set) => set.allCards)));
+	async ngAfterContentInit() {
+		await waitForReady(this.sets);
+
+		this.cards$ = this.sets.sets$$.pipe(this.mapData((sets) => sets.flatMap((set) => set.allCards)));
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.markForCheck();
+		}
 	}
 
 	onValidateSearch(searchString: string) {
-		this.store.send(new SearchCardsEvent(searchString));
+		this.mainWindowState.send(new SearchCardsEvent(searchString));
 	}
 
 	showCard(result: SetCard) {
-		this.store.send(new ShowCardDetailsEvent(result.id));
+		this.mainWindowState.send(new ShowCardDetailsEvent(result.id));
 	}
 }

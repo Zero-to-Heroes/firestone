@@ -1,20 +1,17 @@
 import { Injectable } from '@angular/core';
 import { PrefsSelector } from '@firestone/shared/framework/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { GameStat } from '@firestone/stats/data-access';
 import { MailState } from '@mails/mail-state';
 import { Observable } from 'rxjs';
 
 import { ProfileBgHeroStat, ProfileClassProgress } from '@firestone-hs/api-user-profile';
 import { PackResult } from '@firestone-hs/user-packs';
 import { DeckSummary } from '@firestone/constructed/common';
-import { Card, CardBack, PackInfoForCollection as PackInfo } from '@firestone/memory';
+import { Card, CardBack } from '@firestone/memory';
 import { Preferences } from '@firestone/shared/common/service';
 import { CardHistory } from '../../models/card-history';
 import { Coin } from '../../models/coin';
-import { Set } from '../../models/set';
 import { AchievementsProgressTracking } from '../achievement/achievements-live-progress-tracking.service';
-import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
 import { sleep } from '../utils';
 import {
 	AppUiStoreService,
@@ -22,7 +19,6 @@ import {
 	MercenariesHighlightsSelector,
 	MercenariesOutOfCombatStateSelector,
 	MercenariesStateSelector,
-	Selector,
 } from './app-ui-store.service';
 
 // To be used in the UI, so that we only have a single service instantiated
@@ -49,13 +45,6 @@ export class AppUiStoreFacadeService {
 	public async initComplete(): Promise<void> {
 		await this.waitForStoreInstance();
 		return this.store.initComplete();
-	}
-
-	/** @deprecated */
-	public listen$<S extends Selector<any>[]>(
-		...selectors: S
-	): Observable<{ [K in keyof S]: S[K] extends Selector<infer T> ? T : never }> {
-		return this.store.listen$(...selectors);
 	}
 
 	/** @deprecated */
@@ -90,21 +79,12 @@ export class AppUiStoreFacadeService {
 	}
 
 	/** @deprecated */
-	public gameStats$(): Observable<readonly GameStat[]> {
-		return this.store.gameStats$();
-	}
-
-	/** @deprecated */
 	public decks$(): Observable<readonly DeckSummary[]> {
 		return this.store.decks$();
 	}
 
 	public mails$(): Observable<MailState> {
 		return this.store.mails$();
-	}
-
-	public sets$(): Observable<readonly Set[]> {
-		return this.store.sets$();
 	}
 
 	public bgHeroSkins$(): Observable<readonly number[]> {
@@ -121,10 +101,6 @@ export class AppUiStoreFacadeService {
 
 	public cardBacks$(): Observable<readonly CardBack[]> {
 		return this.store.cardBacks$();
-	}
-
-	public allTimeBoosters$(): Observable<readonly PackInfo[]> {
-		return this.store.allTimeBoosters$();
 	}
 
 	public achievementsProgressTracking$(): Observable<readonly AchievementsProgressTracking[]> {
@@ -145,10 +121,6 @@ export class AppUiStoreFacadeService {
 
 	public cardHistory$(): Observable<readonly CardHistory[]> {
 		return this.store.cardHistory$();
-	}
-
-	public send(event: MainWindowStoreEvent) {
-		return this.store.send(event);
 	}
 
 	private async waitForStoreInstance(): Promise<void> {

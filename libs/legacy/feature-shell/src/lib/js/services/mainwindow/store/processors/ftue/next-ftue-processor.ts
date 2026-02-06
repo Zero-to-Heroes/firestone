@@ -1,12 +1,13 @@
-import { MainWindowNavigationService } from '@firestone/mainwindow/common';
+import { MainWindowNavigationService, MainWindowState, NavigationState } from '@firestone/mainwindow/common';
 import { CurrentAppType, PreferencesService } from '@firestone/shared/common/service';
-import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
-import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { NextFtueEvent } from '../../events/ftue/next-ftue-event';
 import { Processor } from '../processor';
 
 export class NextFtueProcessor implements Processor {
-	constructor(private readonly prefs: PreferencesService, private readonly mainNav: MainWindowNavigationService) {}
+	constructor(
+		private readonly prefs: PreferencesService,
+		private readonly mainNav: MainWindowNavigationService,
+	) {}
 
 	public async process(
 		event: NextFtueEvent,

@@ -1,7 +1,5 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { DeckCard, DeckHandlerService } from '@firestone/game-state';
-import { OverwolfService } from '@firestone/shared/framework/core';
-import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { groupByFunction } from '../../../services/utils';
 import { CardsByCost } from './cards-by-cost';
 
@@ -20,7 +18,7 @@ import { CardsByCost } from './cards-by-cost';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DeckManaCurveComponent implements AfterViewInit {
+export class DeckManaCurveComponent {
 	@Input() set deckstring(value: string) {
 		if (!value) {
 			return;
@@ -44,11 +42,5 @@ export class DeckManaCurveComponent implements AfterViewInit {
 	cardsByCost: readonly CardsByCost[];
 	maxQuantity = 0;
 
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
-	constructor(private readonly ow: OverwolfService, private readonly deckHandler: DeckHandlerService) {}
-
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-	}
+	constructor(private readonly deckHandler: DeckHandlerService) {}
 }

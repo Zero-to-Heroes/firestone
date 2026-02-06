@@ -1,13 +1,6 @@
-import {
-	AfterContentInit,
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	EventEmitter,
-	ViewRef,
-} from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { BattlegroundsNavigationService } from '@firestone/battlegrounds/services';
+import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { IOption } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
@@ -16,7 +9,6 @@ import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { BgsHeroFilterSelectedEvent } from '../../../../services/mainwindow/store/events/battlegrounds/bgs-hero-filter-selected-event';
-import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 
 @Component({
 	standalone: false,
@@ -37,13 +29,12 @@ import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/even
 })
 export class BattlegroundsHeroFilterDropdownComponent
 	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit
+	implements AfterContentInit
 {
 	options: HeroFilterOption[];
 
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
 
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 	private collator = new Intl.Collator('en-US');
 
 	constructor(
@@ -53,6 +44,7 @@ export class BattlegroundsHeroFilterDropdownComponent
 		private readonly i18n: LocalizationFacadeService,
 		private readonly nav: BattlegroundsNavigationService,
 		private readonly prefs: PreferencesService,
+		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
 	) {
 		super(cdr);
 		this.options = [
@@ -94,12 +86,8 @@ export class BattlegroundsHeroFilterDropdownComponent
 		}
 	}
 
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-	}
-
 	onSelected(option: HeroFilterOption) {
-		this.stateUpdater.next(new BgsHeroFilterSelectedEvent(option.value));
+		this.mainWindowStateFacade.send(new BgsHeroFilterSelectedEvent(option.value));
 	}
 }
 

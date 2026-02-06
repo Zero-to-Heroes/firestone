@@ -4,11 +4,11 @@ import { GlobalStatKey } from '@firestone-hs/build-global-stats/dist/model/globa
 import { GlobalStats } from '@firestone-hs/build-global-stats/dist/model/global-stats';
 import { AchievementStatus, CompletionStep, VisualAchievement } from '@firestone/achievements/common';
 import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
+import { GlobalStatsService } from '../../services/global-stats/global-stats.service';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Component({
 	standalone: false,
@@ -55,7 +55,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AchievementViewComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class AchievementViewComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	achievement$: Observable<VisualAchievement>;
 	achievementStatus$: Observable<AchievementStatus>;
 	achievementText$: Observable<string>;
@@ -82,26 +82,23 @@ export class AchievementViewComponent extends AbstractSubscriptionStoreComponent
 	}
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly prefs: PreferencesService,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly globalStatsService: GlobalStatsService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.prefs);
+		await waitForReady(this.prefs, this.globalStatsService);
 
 		this.achievement$ = this.achievement$$.asObservable();
 		this.achievementStatus$ = this.achievement$.pipe(
 			this.mapData((achievement) => achievement.achievementStatus()),
 		);
-		this.achievementText$ = combineLatest([
-			this.achievement$,
-			this.store.listen$(([main, nav, prefs]) => main.getGlobalStats()),
-		]).pipe(
-			this.mapData(([achievement, [globalStats]]) =>
+		this.achievementText$ = combineLatest([this.achievement$, this.globalStatsService.globalStats$$]).pipe(
+			this.mapData(([achievement, globalStats]) =>
 				this.buildAchievementText(achievement.text, achievement.getFirstMissingStep(), globalStats),
 			),
 		);

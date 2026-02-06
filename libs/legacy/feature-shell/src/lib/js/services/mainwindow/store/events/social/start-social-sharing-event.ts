@@ -1,5 +1,5 @@
 import { SafeHtml } from '@angular/platform-browser';
-import { MainWindowStoreEvent } from '../main-window-store-event';
+import { MainWindowStoreEvent } from '@firestone/mainwindow/common';
 
 export class StartSocialSharingEvent implements MainWindowStoreEvent {
 	constructor(network: string, videoPath: string, videoPathOnDisk: string, title: SafeHtml, achievementName: string) {

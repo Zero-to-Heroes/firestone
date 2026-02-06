@@ -1,20 +1,13 @@
-import {
-	AfterContentInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	EventEmitter,
-	ViewRef,
-} from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { CardBack } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { IOption } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { CollectionManager } from '../../services/collection/collection-manager.service';
 import { ShowCardBackDetailsEvent } from '../../services/mainwindow/store/events/collection/show-card-back-details-event';
-import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { InternalCardBack } from './internal-card-back';
 
 @Component({
@@ -64,21 +57,17 @@ export class CardBacksComponent extends AbstractSubscriptionComponent implements
 
 	cardWidth = this.DEFAULT_CARD_WIDTH;
 
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly prefs: PreferencesService,
 		private readonly collectionManager: CollectionManager,
-		private readonly ow: OverwolfService,
+		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await Promise.all([this.prefs.isReady(), this.collectionManager.isReady()]);
-
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
+		await waitForReady(this.prefs, this.collectionManager, this.mainWindowStateFacade);
 
 		this.animated$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.collectionUseAnimatedCardBacks));
 		this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.collectionCardScale)).subscribe((value) => {
@@ -114,7 +103,7 @@ export class CardBacksComponent extends AbstractSubscriptionComponent implements
 	}
 
 	showFullCardBack(cardBack: CardBack) {
-		this.stateUpdater.next(new ShowCardBackDetailsEvent(cardBack.id));
+		this.mainWindowStateFacade.send(new ShowCardBackDetailsEvent(cardBack.id));
 	}
 
 	trackByCardId(index: number, card: CardBack) {

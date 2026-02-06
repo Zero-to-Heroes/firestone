@@ -1,7 +1,5 @@
-import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
-import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
-import { StatsCategoryType } from '../../../../../models/mainwindow/stats/stats-category';
-import { MainWindowStoreEvent } from '../../events/main-window-store-event';
+import { MainWindowStoreEvent } from '@firestone/mainwindow/common';
+import { MainWindowState, NavigationState, StatsCategoryType } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 
 export class ProfileSelectCategoryEvent implements MainWindowStoreEvent {

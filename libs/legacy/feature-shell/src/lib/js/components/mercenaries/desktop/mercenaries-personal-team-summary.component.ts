@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
+import { getHeroRole, normalizeMercenariesCardId } from '@firestone/mercenaries/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { MercenariesHideTeamSummaryEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-hide-team-summary-event';
 import { MercenariesRestoreTeamSummaryEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-restore-team-summary-event';
-import { getHeroRole, normalizeMercenariesCardId } from '@firestone/mercenaries/common';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { groupByFunction } from '../../../services/utils';
 import { MercenaryPersonalTeamInfo } from './mercenary-info';
 
@@ -99,7 +99,7 @@ export class MercenariesPersonalTeamSummaryComponent {
 			? parseFloat('' + (100 * totalWins) / gamesForTeam.length).toLocaleString(this.i18n.formatCurrentLocale(), {
 					minimumIntegerDigits: 1,
 					maximumFractionDigits: 2,
-			  })
+				})
 			: null;
 		const lastUsed = gamesForTeam.filter((stat) => stat.creationTimestamp)[0]?.creationTimestamp;
 		this.lastUsed = lastUsed ? this.buildLastUsedDate(lastUsed) : 'N/A';
@@ -146,18 +146,18 @@ export class MercenariesPersonalTeamSummaryComponent {
 
 	constructor(
 		private readonly allCards: CardsFacadeService,
-		private readonly store: AppUiStoreFacadeService,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
 	) {}
 
 	hideTeam(event: MouseEvent) {
-		this.store.send(new MercenariesHideTeamSummaryEvent(this.teamId));
+		this.mainWindowStateFacade.send(new MercenariesHideTeamSummaryEvent(this.teamId));
 		event.stopPropagation();
 		event.preventDefault();
 	}
 
 	restoreTeam(event: MouseEvent) {
-		this.store.send(new MercenariesRestoreTeamSummaryEvent(this.teamId));
+		this.mainWindowStateFacade.send(new MercenariesRestoreTeamSummaryEvent(this.teamId));
 		event.stopPropagation();
 		event.preventDefault();
 	}

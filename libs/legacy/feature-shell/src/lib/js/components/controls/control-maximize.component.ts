@@ -4,14 +4,13 @@ import {
 	ChangeDetectorRef,
 	Component,
 	ElementRef,
-	EventEmitter,
 	HostListener,
 	Input,
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
+import { MainWindowStateFacadeService, MainWindowStoreEvent } from '@firestone/mainwindow/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 
 @Component({
 	standalone: false,
@@ -46,14 +45,16 @@ export class ControlMaximizeComponent implements AfterViewInit, OnDestroy {
 
 	maximized = false;
 
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 	private stateChangedListener: (message: any) => void;
 
-	constructor(private ow: OverwolfService, private el: ElementRef, private cdr: ChangeDetectorRef) {}
+	constructor(
+		private ow: OverwolfService,
+		private el: ElementRef,
+		private cdr: ChangeDetectorRef,
+		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
+	) {}
 
 	async ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-
 		const currentWindow = await this.ow.getCurrentWindow();
 		const windowName = currentWindow.name;
 		this.stateChangedListener = this.ow.addStateChangedListener(windowName, (message) => {
@@ -94,7 +95,7 @@ export class ControlMaximizeComponent implements AfterViewInit, OnDestroy {
 
 		// Delegate all the logic
 		if (this.eventProvider) {
-			this.stateUpdater.next(this.eventProvider());
+			this.mainWindowStateFacade.send(this.eventProvider());
 			return;
 		}
 		if (this.maximized) {

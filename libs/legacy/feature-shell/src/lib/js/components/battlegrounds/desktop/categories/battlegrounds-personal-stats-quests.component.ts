@@ -1,9 +1,7 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { BgsQuestStat } from '@firestone/game-state';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { Observable } from 'rxjs';
-import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 // UNUSED
 @Component({
@@ -27,46 +25,11 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsPersonalStatsQuestsComponent
-	extends AbstractSubscriptionStoreComponent
-	implements AfterContentInit
-{
+export class BattlegroundsPersonalStatsQuestsComponent extends AbstractSubscriptionComponent {
 	stats$: Observable<readonly BgsQuestStat[]>;
 
-	constructor(
-		protected readonly store: AppUiStoreFacadeService,
-		protected readonly cdr: ChangeDetectorRef,
-		private readonly allCards: CardsFacadeService,
-	) {
-		super(store, cdr);
-	}
-
-	ngAfterContentInit() {
-		// this.stats$ = combineLatest(
-		// 	this.store.gameStats$(),
-		// 	this.store.listen$(
-		// 		([main, nav]) => main.battlegrounds.globalStats.getQuestStats(),
-		// 		([main, nav]) => main.battlegrounds.globalStats.mmrPercentiles,
-		// 		([main, nav, prefs]) => prefs.bgsActiveTimeFilter,
-		// 		([main, nav, prefs]) => prefs.bgsActiveRankFilter,
-		// 		([main, nav, prefs]) => prefs.bgsActiveHeroSortFilter,
-		// 		([main, nav]) => main.battlegrounds.currentBattlegroundsMetaPatch,
-		// 	),
-		// ).pipe(
-		// 	filter(([gameStats, [stats, mmrPercentiles, timeFilter, rankFilter, heroSort, patch]]) => !!stats?.length),
-		// 	this.mapData(([gameStats, [stats, mmrPercentiles, timeFilter, rankFilter, heroSort, patch]]) => {
-		// 		return buildQuestStats(
-		// 			stats,
-		// 			mmrPercentiles,
-		// 			gameStats,
-		// 			timeFilter,
-		// 			rankFilter,
-		// 			heroSort,
-		// 			patch,
-		// 			this.allCards,
-		// 		);
-		// 	}),
-		// );
+	constructor(protected readonly cdr: ChangeDetectorRef) {
+		super(cdr);
 	}
 
 	trackByFn(index: number, stat: BgsQuestStat) {

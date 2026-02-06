@@ -3,7 +3,6 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
-	EventEmitter,
 	HostListener,
 	Input,
 	OnDestroy,
@@ -11,13 +10,13 @@ import {
 } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ReferenceCard } from '@firestone-hs/reference-data';
+import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, capitalizeFirstLetter } from '@firestone/shared/framework/common';
 import { CardsFacadeService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { GameStat, StatGameModeType } from '@firestone/stats/data-access';
 import { Subscription } from 'rxjs';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { ShowReplayEvent } from '../../../services/mainwindow/store/events/replays/show-replay-event';
 import { capitalizeEachWord } from '../../../services/utils';
 
@@ -117,9 +116,9 @@ export class ReplayInfoRankedComponent extends AbstractSubscriptionComponent imp
 	replayDate: string;
 	reviewId: string;
 
-	private bgsPerfectGame: boolean;
+	bgsPerfectGame: boolean;
+
 	private sub$$: Subscription;
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 	private battleTagTooltipTimeout: any;
 
 	constructor(
@@ -129,6 +128,7 @@ export class ReplayInfoRankedComponent extends AbstractSubscriptionComponent imp
 		private readonly i18n: LocalizationFacadeService,
 		private readonly ow: OverwolfService,
 		private readonly prefs: PreferencesService,
+		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
 	) {
 		super(cdr);
 	}
@@ -136,7 +136,6 @@ export class ReplayInfoRankedComponent extends AbstractSubscriptionComponent imp
 	async ngAfterContentInit() {
 		await waitForReady(this.prefs);
 
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 		this.sub$$ = this.prefs.preferences$$
 			.pipe(this.mapData((prefs) => prefs.replaysShowClassIcon))
 			.subscribe((replaysShowClassIcon) => {
@@ -159,7 +158,7 @@ export class ReplayInfoRankedComponent extends AbstractSubscriptionComponent imp
 	}
 
 	showReplay = () => {
-		this.stateUpdater.next(new ShowReplayEvent(this.reviewId));
+		this.mainWindowStateFacade.send(new ShowReplayEvent(this.reviewId));
 	};
 
 	capitalize(input: string): string {

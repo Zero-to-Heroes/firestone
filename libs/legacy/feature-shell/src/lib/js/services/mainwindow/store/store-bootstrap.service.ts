@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
+import { ArenaState } from '@firestone/arena/common';
+import {
+	AchievementsState,
+	DeckFilters,
+	DecktrackerState,
+	MainWindowState,
+	StatsState,
+} from '@firestone/mainwindow/common';
 import { Preferences } from '@firestone/shared/common/service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { ArenaState } from '../../../models/arena/arena-state';
-import { AchievementsState } from '../../../models/mainwindow/achievements-state';
-import { DeckFilters } from '../../../models/mainwindow/decktracker/deck-filters';
-import { DecktrackerState } from '../../../models/mainwindow/decktracker/decktracker-state';
-import { MainWindowState } from '../../../models/mainwindow/main-window-state';
-import { StatsState } from '../../../models/mainwindow/stats/stats-state';
 
 @Injectable()
 export class StoreBootstrapService {

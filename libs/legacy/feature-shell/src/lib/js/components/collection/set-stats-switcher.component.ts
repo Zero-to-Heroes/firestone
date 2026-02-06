@@ -1,10 +1,9 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { CollectionNavigationService } from '@firestone/collection/common';
+import { CollectionNavigationService, Set } from '@firestone/collection/common';
 import { CollectionSetStatsTypeFilterType, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, debounceTime } from 'rxjs';
-import { Set } from '../../models/set';
 import { SetsManagerService } from '../../services/collection/sets-manager.service';
 
 @Component({
@@ -55,10 +54,10 @@ export class SetStatsSwitcherComponent extends AbstractSubscriptionComponent imp
 					activeFilter === 'all'
 						? allSets
 						: activeFilter === 'standard'
-						? allSets.filter((set) => set.standard)
-						: activeFilter === 'twist'
-						? allSets.filter((set) => set.twist)
-						: allSets.filter((set) => !set.standard);
+							? allSets.filter((set) => set.standard)
+							: activeFilter === 'twist'
+								? allSets.filter((set) => set.twist)
+								: allSets.filter((set) => !set.standard);
 				return sets;
 			}),
 		);

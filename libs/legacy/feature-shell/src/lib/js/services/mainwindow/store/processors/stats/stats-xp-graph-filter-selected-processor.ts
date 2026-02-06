@@ -1,7 +1,5 @@
+import { MainWindowState, NavigationState, StatsState } from '@firestone/mainwindow/common';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
-import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
-import { StatsState } from '../../../../../models/mainwindow/stats/stats-state';
 import { StatsXpGraphFilterSelectedEvent } from '../../events/stats/stats-xp-graph-filter-selected-event';
 import { Processor } from '../processor';
 

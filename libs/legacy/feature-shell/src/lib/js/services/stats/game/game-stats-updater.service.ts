@@ -1,20 +1,18 @@
-import { EventEmitter, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
+import { ManastormInfo } from '@firestone/app/common';
+import { Events } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { buildGameStat } from '@firestone/stats/services';
-import { Events } from '@firestone/shared/common/service';
-import { MainWindowStoreEvent } from '../../mainwindow/store/events/main-window-store-event';
 import { RecomputeGameStatsEvent } from '../../mainwindow/store/events/stats/recompute-game-stats-event';
-import { ManastormInfo } from '@firestone/app/common';
+import { MainWindowStoreService } from '../../mainwindow/store/main-window-store.service';
 
 @Injectable()
 export class GameStatsUpdaterService {
-	// This is set directly by the store
-	public stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
 	constructor(
 		private readonly events: Events,
 		private readonly allCards: CardsFacadeService,
+		private readonly store: MainWindowStoreService,
 	) {
 		this.init();
 	}
@@ -32,7 +30,7 @@ export class GameStatsUpdaterService {
 			);
 			console.log('​[manastorm-bridge] built new game stat', newGameStat.reviewId);
 			console.debug('​[manastorm-bridge] built new game stat', newGameStat);
-			this.stateUpdater.next(new RecomputeGameStatsEvent(newGameStat));
+			this.store.send(new RecomputeGameStatsEvent(newGameStat));
 		});
 	}
 }

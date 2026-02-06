@@ -7,7 +7,9 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { ConstructedNavigationService, DeckSummary } from '@firestone/constructed/common';
+import { MainWindowNavigationService, MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { Observable, combineLatest } from 'rxjs';
@@ -15,8 +17,6 @@ import { DecksProviderService } from '../../../services/decktracker/main/decks-p
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { ConstructedEjectDeckVersionEvent } from '../../../services/mainwindow/store/events/decktracker/constructed-eject-deck-version-event';
 import { ConstructedToggleDeckVersionStatsEvent } from '../../../services/mainwindow/store/events/decktracker/constructed-toggle-deck-version-stats-event';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	standalone: false,
@@ -28,7 +28,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 			*ngIf="{
 				deck: deck$ | async,
 				selectedDeck: selectedDeck$ | async,
-				selectedVersion: selectedVersion$ | async
+				selectedVersion: selectedVersion$ | async,
 			} as value"
 		>
 			<decktracker-stats-for-replays
@@ -46,7 +46,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 						*ngFor="let version of value.deck.allVersions"
 						[ngClass]="{
 							inactive: value.selectedVersion && value.selectedVersion !== version.deckstring,
-							archived: version.hidden
+							archived: version.hidden,
 						}"
 					>
 						<div class="background-image" [style.background-image]="version.backgroundImage"></div>
@@ -94,7 +94,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 					[deck]="value.selectedDeck"
 					[showMatchupAsPercentagesValue]="showMatchupAsPercentages$ | async"
 					[ngClass]="{
-						'with-versions': value.deck?.allVersions?.length && value.deck?.allVersions?.length > 1
+						'with-versions': value.deck?.allVersions?.length && value.deck?.allVersions?.length > 1,
 					}"
 				>
 				</deck-winrate-matrix>
@@ -104,7 +104,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DecktrackerDeckDetailsComponent
-	extends AbstractSubscriptionStoreComponent
+	extends AbstractSubscriptionComponent
 	implements AfterContentInit, OnDestroy
 {
 	replays$: Observable<readonly GameStat[]>;
@@ -114,18 +114,19 @@ export class DecktrackerDeckDetailsComponent
 	showMatchupAsPercentages$: Observable<boolean>;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly decks: DecksProviderService,
 		private readonly nav: ConstructedNavigationService,
 		private readonly prefs: PreferencesService,
+		private readonly mainWindowNavigation: MainWindowNavigationService,
+		private readonly mainWindowState: MainWindowStateFacadeService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.nav, this.decks, this.prefs);
+		await waitForReady(this.nav, this.decks, this.prefs, this.mainWindowNavigation, this.mainWindowState);
 
 		this.deck$ = combineLatest([this.decks.decks$$, this.nav.selectedDeckstring$$]).pipe(
 			this.mapData(([decks, selectedDeckstring]) =>
@@ -136,9 +137,9 @@ export class DecktrackerDeckDetailsComponent
 				),
 			),
 		);
-		this.selectedVersion$ = this.store
-			.listen$(([main, nav]) => nav.navigationDecktracker.selectedVersionDeckstring)
-			.pipe(this.mapData(([deckstring]) => deckstring));
+		this.selectedVersion$ = this.mainWindowNavigation.navigationState$$.pipe(
+			this.mapData((state) => state.navigationDecktracker.selectedVersionDeckstring),
+		);
 		this.selectedDeck$ = combineLatest([this.deck$, this.selectedVersion$]).pipe(
 			this.mapData(([deck, selectedVersion]) => {
 				if (!selectedVersion) {
@@ -159,15 +160,15 @@ export class DecktrackerDeckDetailsComponent
 
 	ngOnDestroy(): void {
 		// So that the version is not persisted between different decks
-		this.store.send(new ConstructedToggleDeckVersionStatsEvent(null));
+		this.mainWindowState.send(new ConstructedToggleDeckVersionStatsEvent(null));
 	}
 
 	ejectVersion(version: DeckSummary, deck: DeckSummary) {
-		this.store.send(new ConstructedEjectDeckVersionEvent(version.deckstring, deck));
+		this.mainWindowState.send(new ConstructedEjectDeckVersionEvent(version.deckstring, deck));
 	}
 
 	toggleVersionStats(version: DeckSummary) {
-		this.store.send(new ConstructedToggleDeckVersionStatsEvent(version.deckstring));
+		this.mainWindowState.send(new ConstructedToggleDeckVersionStatsEvent(version.deckstring));
 	}
 
 	getVersionTooltip(version: DeckSummary, selectedVersion: string): string {

@@ -1,18 +1,9 @@
-import {
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	Component,
-	EventEmitter,
-	HostListener,
-	Input,
-	OnDestroy,
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, HostListener, Input, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { FilterShownAchievementsEvent } from '../../services/mainwindow/store/events/achievements/filter-shown-achievements-event';
-import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 
 @Component({
 	standalone: false,
@@ -37,13 +28,11 @@ export class AchievementsFilterComponent implements AfterViewInit, OnDestroy {
 	@Input() searchString: string;
 	searchForm = new FormControl();
 
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 	private subscription: Subscription;
 
-	constructor(private ow: OverwolfService) {}
+	constructor(private readonly mainWindowStateFacade: MainWindowStateFacadeService) {}
 
 	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 		this.subscription = this.searchForm.valueChanges
 			.pipe(debounceTime(400))
 			.pipe(distinctUntilChanged())
@@ -58,7 +47,7 @@ export class AchievementsFilterComponent implements AfterViewInit, OnDestroy {
 	}
 
 	onSearchStringChange() {
-		this.stateUpdater.next(new FilterShownAchievementsEvent(this.searchString));
+		this.mainWindowStateFacade.send(new FilterShownAchievementsEvent(this.searchString));
 	}
 
 	onMouseDown(event: Event) {

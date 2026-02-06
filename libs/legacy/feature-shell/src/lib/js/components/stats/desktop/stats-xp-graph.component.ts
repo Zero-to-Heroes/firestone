@@ -1,10 +1,14 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
+import { StatsXpGraphSeasonFilterType } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
+import { GameStatsProviderService } from '@firestone/stats/services';
 import { addDaysToDate, daysBetweenDates, formatDate, groupByFunction } from '@services/utils';
 import { ChartData } from 'chart.js';
 import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { StatsXpGraphSeasonFilterType } from '../../../models/mainwindow/stats/stats-xp-graph-season-filter.type';
 import {
 	computeXpFromLevel,
 	getSeason,
@@ -18,8 +22,6 @@ import {
 	xpSeason8,
 	xpSeason9,
 } from '../../../services/stats/xp/xp-tables/xp-computation';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	standalone: false,
@@ -35,20 +37,28 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class StatsXpGraphComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class StatsXpGraphComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	value$: Observable<Value>;
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
-		super(store, cdr);
+	constructor(
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly mainWindowState: MainWindowStateFacadeService,
+		private readonly gameStats: GameStatsProviderService,
+	) {
+		super(cdr);
 	}
 
-	ngAfterContentInit(): void {
-		this.value$ = combineLatest(
-			this.store.gameStats$(),
-			this.store.listen$(([main, nav]) => main.stats.filters.xpGraphSeasonFilter),
-		).pipe(
+	async ngAfterContentInit() {
+		await waitForReady(this.mainWindowState, this.gameStats);
+
+		this.value$ = combineLatest([
+			this.gameStats.gameStats$$,
+			this.mainWindowState.mainWindowState$$.pipe(
+				this.mapData((state) => state.stats.filters.xpGraphSeasonFilter),
+			),
+		]).pipe(
 			filter(([stats, seasonFilter]) => !!seasonFilter),
-			this.mapData(([stats, [seasonFilter]]) =>
+			this.mapData(([stats, seasonFilter]) =>
 				this.buildValue(
 					stats.filter((stat) => stat.levelAfterMatch),
 					seasonFilter,

@@ -1,8 +1,7 @@
 import { ConstructedNavigationService } from '@firestone/constructed/common';
-import { MainWindowState } from '@models/mainwindow/main-window-state';
-import { NavigationState } from '@models/mainwindow/navigation/navigation-state';
+import { MainWindowStoreEvent } from '@firestone/mainwindow/common';
+import { MainWindowState, NavigationState } from '@firestone/mainwindow/common';
 import { Processor } from '@services/mainwindow/store/processors/processor';
-import { MainWindowStoreEvent } from '../../events/main-window-store-event';
 
 export class ConstructedMetaDeckDetailsShowEvent implements MainWindowStoreEvent {
 	constructor(public readonly deckstring: string) {}

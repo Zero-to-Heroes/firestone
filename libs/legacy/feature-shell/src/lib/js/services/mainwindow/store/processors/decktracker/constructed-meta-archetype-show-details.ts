@@ -1,8 +1,6 @@
 import { ConstructedNavigationService } from '@firestone/constructed/common';
-import { MainWindowState } from '@models/mainwindow/main-window-state';
-import { NavigationState } from '@models/mainwindow/navigation/navigation-state';
+import { MainWindowState, MainWindowStoreEvent, NavigationState } from '@firestone/mainwindow/common';
 import { Processor } from '@services/mainwindow/store/processors/processor';
-import { MainWindowStoreEvent } from '../../events/main-window-store-event';
 
 export class ConstructedMetaArchetypeDetailsShowEvent implements MainWindowStoreEvent {
 	constructor(public readonly id: number) {}

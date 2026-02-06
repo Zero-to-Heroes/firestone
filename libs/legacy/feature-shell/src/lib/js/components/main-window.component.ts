@@ -11,8 +11,9 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { CardsHighlightFacadeService } from '@firestone/game-state';
-import { MainWindowNavigationService } from '@firestone/mainwindow/common';
+import { MainWindowNavigationService, MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { CurrentAppType, PreferencesService, ScalingService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import {
 	ADS_SERVICE_TOKEN,
 	AnalyticsService,
@@ -24,8 +25,6 @@ import {
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { DebugService } from '../services/debug.service';
 import { HotkeyService } from '../services/hotkey.service';
-import { AppUiStoreFacadeService } from '../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from './abstract-subscription-store.component';
 
 @Component({
 	standalone: false,
@@ -114,7 +113,7 @@ import { AbstractSubscriptionStoreComponent } from './abstract-subscription-stor
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MainWindowComponent
-	extends AbstractSubscriptionStoreComponent
+	extends AbstractSubscriptionComponent
 	implements AfterContentInit, AfterViewInit, OnDestroy
 {
 	activeTheme$: Observable<CurrentAppType | 'decktracker-desktop'>;
@@ -138,7 +137,6 @@ export class MainWindowComponent
 	private hotkey;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
 		private readonly debug: DebugService,
@@ -150,17 +148,16 @@ export class MainWindowComponent
 		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 		private readonly init_ScalingService: ScalingService,
 		private readonly init_cardsHighlight: CardsHighlightFacadeService,
+		private readonly mainWindowStateService: MainWindowStateFacadeService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.nav, this.ads);
+		await waitForReady(this.nav, this.ads, this.mainWindowStateService);
 
 		this.forceShowReleaseNotes$ = this.forceShowReleaseNotes.asObservable();
-		this.showFtue$ = this.store
-			.listen$(([main, nav, prefs]) => main.showFtue)
-			.pipe(this.mapData(([showFtue]) => showFtue));
+		this.showFtue$ = this.mainWindowStateService.mainWindowState$$.pipe(this.mapData((state) => state.showFtue));
 		this.currentApp$ = this.nav.currentApp$$.pipe(this.mapData((currentApp) => currentApp));
 		this.currentApp$.subscribe((currentApp) => {
 			this.analytics.trackPageView(currentApp);
@@ -175,13 +172,6 @@ export class MainWindowComponent
 			),
 		);
 		this.showAds$ = this.ads.hasPremiumSub$$.pipe(this.mapData((sub) => !sub));
-		// combineLatest([
-		// 	this.ads.hasPremiumSub$$.pipe(this.mapData((sub) => !sub)),
-		// 	this.store.listen$(([main, nav, prefs]) => main.showFtue),
-		// ]).pipe(
-		// 	this.mapData(([showAds, [showFtue]]) => showAds && !showFtue),
-		// 	startWith(true),
-		// );
 		this.nav.isVisible$$.pipe(this.mapData((visible) => visible)).subscribe(async (visible) => {
 			console.debug('update visible', visible);
 			const window = await this.ow.getCurrentWindow();

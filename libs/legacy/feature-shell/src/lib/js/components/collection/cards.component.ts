@@ -1,7 +1,10 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { CardClass } from '@firestone-hs/reference-data';
+import { Set, SetCard } from '@firestone/collection/common';
+import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { Card } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import {
 	CollectionCardClassFilterType,
@@ -9,10 +12,7 @@ import {
 	CollectionCardRarityFilterType,
 } from '@models/collection/filter-types';
 import { Observable, combineLatest, distinctUntilChanged } from 'rxjs';
-import { Set, SetCard } from '../../models/set';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { sortByProperties } from '../../services/utils';
-import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 export const DEFAULT_CARD_WIDTH = 170;
 export const DEFAULT_CARD_HEIGHT = 240;
@@ -57,7 +57,7 @@ export const DEFAULT_CARD_HEIGHT = 240;
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CardsComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class CardsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	highRes$: Observable<boolean>;
 	cards$: Observable<SetCard[]>;
 
@@ -69,15 +69,15 @@ export class CardsComponent extends AbstractSubscriptionStoreComponent implement
 	cardHeight = DEFAULT_CARD_HEIGHT;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly prefs: PreferencesService,
+		private readonly nav: MainWindowNavigationService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.prefs);
+		await waitForReady(this.prefs, this.nav);
 
 		this.highRes$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.collectionUseHighResImages));
 		this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.collectionCardScale)).subscribe((value) => {
@@ -90,7 +90,7 @@ export class CardsComponent extends AbstractSubscriptionStoreComponent implement
 		});
 
 		this.cards$ = combineLatest(
-			this.store.listen$(([main, nav, prefs]) => nav.navigationCollection.cardList),
+			this.nav.navigationState$$.pipe(this.mapData((state) => state.navigationCollection.cardList)),
 			this.prefs.preferences$$.pipe(
 				this.mapData((prefs) => ({
 					classFilter: prefs.collectionCardClassFilter,
@@ -105,7 +105,7 @@ export class CardsComponent extends AbstractSubscriptionStoreComponent implement
 				),
 			),
 		).pipe(
-			this.mapData(([[cardList], { classFilter, rarityFilter, ownedFilter }]) =>
+			this.mapData(([cardList, { classFilter, rarityFilter, ownedFilter }]) =>
 				cardList
 					.filter((card) => this.filterRarity(card, rarityFilter))
 					.filter((card) => this.filterClass(card, classFilter))

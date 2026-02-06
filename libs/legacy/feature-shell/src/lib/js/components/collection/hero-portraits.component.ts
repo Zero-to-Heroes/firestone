@@ -8,24 +8,25 @@ import {
 } from '@angular/core';
 import { CardClass, ReferenceCard } from '@firestone-hs/reference-data';
 import { formatClass, normalizeHeroCardId } from '@firestone/game-state';
+import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { Card, MemoryMercenary } from '@firestone/memory';
+import {
+	MercenariesMemoryCacheService,
+	MercenariesReferenceData,
+	MercenariesReferenceDataService,
+	normalizeMercenariesCardId,
+} from '@firestone/mercenaries/common';
 import { PreferencesService } from '@firestone/shared/common/service';
+import { groupByFunction2 } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, distinctUntilChanged } from 'rxjs';
 import { CollectionPortraitCategoryFilter, CollectionPortraitOwnedFilter } from '../../models/collection/filter-types';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { ShowCardDetailsEvent } from '../../services/mainwindow/store/events/collection/show-card-details-event';
-import { MercenariesMemoryCacheService } from '@firestone/mercenaries/common';
-import {
-	MercenariesReferenceData,
-	MercenariesReferenceDataService,
-	normalizeMercenariesCardId,
-} from '@firestone/mercenaries/common';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { groupByFunction, sortByProperties } from '../../services/utils';
+import { sortByProperties } from '../../services/utils';
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 import { CollectionReferenceCard } from './collection-reference-card';
-import { groupByFunction2 } from '@firestone/shared/framework/common';
 
 @Component({
 	standalone: false,
@@ -100,6 +101,7 @@ export class HeroPortraitsComponent extends AbstractSubscriptionStoreComponent i
 		private readonly mercenariesCollection: MercenariesMemoryCacheService,
 		private readonly mercenariesReferenceData: MercenariesReferenceDataService,
 		private readonly prefs: PreferencesService,
+		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
 	) {
 		super(store, cdr);
 	}
@@ -168,7 +170,7 @@ export class HeroPortraitsComponent extends AbstractSubscriptionStoreComponent i
 	}
 
 	showFullHeroPortrait(heroPortrait: ReferenceCard | CollectionReferenceCard) {
-		this.store.send(new ShowCardDetailsEvent(heroPortrait.id));
+		this.mainWindowStateFacade.send(new ShowCardDetailsEvent(heroPortrait.id));
 	}
 
 	onScrolling(scrolling: boolean) {

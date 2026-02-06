@@ -121,6 +121,7 @@ export type MercenariesPersonalHeroesSortCriteriaType =
 	| 'coins-to-farm-to-max'
 	| 'task-progress';
 export type MercenariesPersonalHeroesSortCriteriaDirection = 'asc' | 'desc';
+export type MercenariesCategoryId = 'mercenaries-personal-hero-stats' | 'mercenaries-my-teams';
 export type ArenaClassFilterType =
 	| 'all'
 	| 'deathknight'

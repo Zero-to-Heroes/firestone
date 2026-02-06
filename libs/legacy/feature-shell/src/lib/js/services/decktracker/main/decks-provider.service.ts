@@ -4,6 +4,14 @@ import { DeckDefinition, DeckList, decode } from '@firestone-hs/deckstrings';
 import { GameFormat } from '@firestone-hs/reference-data';
 import { ConstructedPersonalDecksService, DeckSummary, DeckSummaryVersion } from '@firestone/constructed/common';
 import { classes } from '@firestone/game-state';
+import {
+	ConstructedDeckVersions,
+	DeckFilters,
+	DeckRankFilterType,
+	DeckTimeFilterType,
+	MainWindowStateFacadeService,
+	MatchupStat,
+} from '@firestone/mainwindow/common';
 import { PatchInfo, PatchesConfigService, PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject, arraysEqual } from '@firestone/shared/framework/common';
 import {
@@ -21,12 +29,6 @@ import {
 import { GameStatsProviderService } from '@firestone/stats/services';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter, map, shareReplay, take, tap } from 'rxjs/operators';
-import { DeckFilters } from '../../../models/mainwindow/decktracker/deck-filters';
-import { DeckRankFilterType } from '../../../models/mainwindow/decktracker/deck-rank-filter.type';
-import { DeckTimeFilterType } from '../../../models/mainwindow/decktracker/deck-time-filter.type';
-import { ConstructedDeckVersions } from '../../../models/mainwindow/decktracker/decktracker-state';
-import { MatchupStat } from '../../../models/mainwindow/stats/matchup-stat';
-import { MainWindowStateFacadeService } from '../../mainwindow/store/main-window-state-facade.service';
 import { groupByFunction, removeFromArray, sumOnArray } from '../../utils';
 
 const eventName = 'decks-changed';

@@ -9,6 +9,7 @@ import {
 	Output,
 } from '@angular/core';
 import { CardIds } from '@firestone-hs/reference-data';
+import { SetCard } from '@firestone/collection/common';
 import {
 	cardTutors,
 	DeckState,
@@ -21,7 +22,6 @@ import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { SetCard } from '../../../models/set';
 import { groupByFunction } from '../../../services/utils';
 
 @Component({

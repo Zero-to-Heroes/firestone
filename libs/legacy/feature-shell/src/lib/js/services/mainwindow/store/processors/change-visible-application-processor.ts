@@ -6,11 +6,13 @@ import { ConstructedNavigationService } from '@firestone/constructed/common';
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { LocalizationService } from '@services/localization.service';
-import { MainWindowState } from '../../../../models/mainwindow/main-window-state';
-import { NavigationAchievements } from '../../../../models/mainwindow/navigation/navigation-achievements';
-import { NavigationDecktracker } from '../../../../models/mainwindow/navigation/navigation-decktracker';
-import { NavigationReplays } from '../../../../models/mainwindow/navigation/navigation-replays';
-import { NavigationState } from '../../../../models/mainwindow/navigation/navigation-state';
+import {
+	MainWindowState,
+	NavigationAchievements,
+	NavigationDecktracker,
+	NavigationReplays,
+	NavigationState,
+} from '@firestone/mainwindow/common';
 import { ChangeVisibleApplicationEvent } from '../events/change-visible-application-event';
 import { Processor } from './processor';
 

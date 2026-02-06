@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
+import { Set, SetCard } from '@firestone/collection/common';
 import { Card } from '@firestone/memory';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { AbstractFacadeService, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
 import { debounceTime } from 'rxjs';
-import { Set, SetCard } from '../../models/set';
 import { CollectionManager } from './collection-manager.service';
 import { SetsService } from './sets-service.service';
 

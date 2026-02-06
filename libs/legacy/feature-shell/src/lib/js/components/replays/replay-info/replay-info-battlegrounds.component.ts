@@ -1,20 +1,12 @@
-import {
-	AfterContentInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	EventEmitter,
-	Input,
-} from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { getReferenceTribeCardId, getTribeIcon, getTribeName } from '@firestone-hs/reference-data';
 import { Entity, EntityDefinition } from '@firestone-hs/replay-parser';
 import { MinionStat } from '@firestone/game-state';
+import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameStat, StatGameModeType } from '@firestone/stats/data-access';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { ShowReplayEvent } from '../../../services/mainwindow/store/events/replays/show-replay-event';
 import { TriggerShowMatchStatsEvent } from '../../../services/mainwindow/store/events/replays/trigger-show-match-stats-event';
 import { capitalizeEachWord } from '../../../services/utils';
@@ -119,7 +111,7 @@ import { extractTime } from './replay-info-ranked.component';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ReplayInfoBattlegroundsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class ReplayInfoBattlegroundsComponent extends AbstractSubscriptionComponent {
 	@Input() showStatsLabel = this.i18n.translateString('app.replays.replay-info.show-stats-button');
 	@Input() showReplayLabel = this.i18n.translateString('app.replays.replay-info.watch-replay-button');
 	@Input() displayTime = true;
@@ -151,30 +143,23 @@ export class ReplayInfoBattlegroundsComponent extends AbstractSubscriptionCompon
 	tribesTooltip: string;
 	anomalies: readonly InternalTribe[];
 	anomaliesTooltip: string;
-
-	private bgsPerfectGame: boolean;
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+	bgsPerfectGame: boolean;
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
-		private readonly sanitizer: DomSanitizer,
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
-		private readonly ow: OverwolfService,
+		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
 	) {
 		super(cdr);
 	}
 
-	ngAfterContentInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-	}
-
 	showReplay = () => {
-		this.stateUpdater.next(new ShowReplayEvent(this.reviewId));
+		this.mainWindowStateFacade.send(new ShowReplayEvent(this.reviewId));
 	};
 
 	showStats() {
-		this.stateUpdater.next(new TriggerShowMatchStatsEvent(this.reviewId));
+		this.mainWindowStateFacade.send(new TriggerShowMatchStatsEvent(this.reviewId));
 	}
 
 	capitalize(input: string): string {

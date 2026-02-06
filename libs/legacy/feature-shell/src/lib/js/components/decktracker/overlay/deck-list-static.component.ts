@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 import { Sideboard, decode } from '@firestone-hs/deckstrings';
 import { CardIds, GameType } from '@firestone-hs/reference-data';
+import { SetCard } from '@firestone/collection/common';
 import { CardsHighlightFacadeService, Metadata, VisualDeckCard } from '@firestone/game-state';
 import { Card } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
@@ -31,7 +32,6 @@ import {
 	takeUntil,
 	tap,
 } from 'rxjs';
-import { SetCard } from '../../../models/set';
 import { getOwnedForDeckBuilding } from '../../../services/collection/collection-utils';
 
 @Component({

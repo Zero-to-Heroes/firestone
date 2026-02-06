@@ -1,6 +1,6 @@
 import { BgsPostMatchStats } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { BgsBestStat } from '@firestone-hs/user-bgs-post-match-stats';
-import { MainWindowStoreEvent } from '../main-window-store-event';
+import { MainWindowStoreEvent } from '@firestone/mainwindow/common';
 
 export class BgsPostMatchStatsComputedEvent implements MainWindowStoreEvent {
 	constructor(

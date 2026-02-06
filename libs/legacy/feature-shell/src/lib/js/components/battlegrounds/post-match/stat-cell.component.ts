@@ -1,7 +1,7 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
-import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { ShowReplayEvent } from '../../../services/mainwindow/store/events/replays/show-replay-event';
 
 @Component({
@@ -57,7 +57,7 @@ import { ShowReplayEvent } from '../../../services/mainwindow/store/events/repla
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class StatCellComponent implements AfterViewInit {
+export class StatCellComponent {
 	@Input() label: string;
 	@Input() value: number | string;
 	@Input() isNewRecord: boolean;
@@ -73,20 +73,14 @@ export class StatCellComponent implements AfterViewInit {
 	_heroCardId: string;
 	heroImage: string;
 
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
 	constructor(
-		private readonly ow: OverwolfService,
 		private readonly cards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
 	) {}
 
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-	}
-
 	showReplay() {
-		this.stateUpdater.next(new ShowReplayEvent(this.reviewId));
+		this.mainWindowStateFacade.send(new ShowReplayEvent(this.reviewId));
 	}
 
 	getCardName(cardId: string): string {

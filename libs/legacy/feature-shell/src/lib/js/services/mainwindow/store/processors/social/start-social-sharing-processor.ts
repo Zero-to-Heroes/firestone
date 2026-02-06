@@ -1,7 +1,9 @@
-import { SharingAchievement } from '../../../../../models/mainwindow/achievement/sharing-achievement';
-import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
-import { NavigationAchievements } from '../../../../../models/mainwindow/navigation/navigation-achievements';
-import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
+import {
+	MainWindowState,
+	NavigationAchievements,
+	NavigationState,
+	SharingAchievement,
+} from '@firestone/mainwindow/common';
 import { StartSocialSharingEvent } from '../../events/social/start-social-sharing-event';
 import { Processor } from '../processor';
 

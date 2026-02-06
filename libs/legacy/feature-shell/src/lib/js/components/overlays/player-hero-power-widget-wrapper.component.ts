@@ -8,12 +8,11 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { isBattlegrounds, isMercenaries, SceneMode } from '@firestone-hs/reference-data';
-import { DeckCard } from '@firestone/game-state';
+import { DeckCard, GameStateFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { combineLatest, Observable } from 'rxjs';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
 @Component({
@@ -48,27 +47,25 @@ export class PlayerHeroPowerWidgetWrapperComponent extends AbstractWidgetWrapper
 		protected readonly el: ElementRef,
 		protected readonly prefs: PreferencesService,
 		protected readonly renderer: Renderer2,
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly scene: SceneService,
+		private readonly gameState: GameStateFacadeService,
 	) {
 		super(ow, el, prefs, renderer, cdr);
 	}
 
 	async ngAfterContentInit() {
-		await this.scene.isReady();
+		await waitForReady(this.scene, this.prefs, this.gameState);
 
 		this.showWidget$ = combineLatest([
 			this.scene.currentScene$$,
-			this.store.listen$(([main, nav, prefs]) => prefs.overlayHighlightRelatedCards),
-			this.store.listenDeckState$(
-				(deckState) => deckState?.gameStarted,
-				(deckState) => deckState?.gameEnded,
-				(deckState) => isBattlegrounds(deckState?.metadata?.gameType),
-				(deckState) => isMercenaries(deckState?.metadata?.gameType),
-			),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.overlayHighlightRelatedCards)),
+			this.gameState.gameState$$.pipe(this.mapData((state) => state.gameStarted)),
+			this.gameState.gameState$$.pipe(this.mapData((state) => state.gameEnded)),
+			this.gameState.gameState$$.pipe(this.mapData((state) => isBattlegrounds(state?.metadata?.gameType))),
+			this.gameState.gameState$$.pipe(this.mapData((state) => isMercenaries(state?.metadata?.gameType))),
 		]).pipe(
-			this.mapData(([currentScene, [displayFromPrefs], [gameStarted, gameEnded, isBgs, isMercs]]) => {
+			this.mapData(([currentScene, displayFromPrefs, gameStarted, gameEnded, isBgs, isMercs]) => {
 				if (!gameStarted || isBgs || isMercs || !displayFromPrefs) {
 					return false;
 				}
@@ -84,9 +81,7 @@ export class PlayerHeroPowerWidgetWrapperComponent extends AbstractWidgetWrapper
 			this.handleReposition(),
 		);
 
-		this.heroPower$ = this.store
-			.listenDeckState$((state) => state.playerDeck?.heroPower)
-			.pipe(this.mapData(([heroPower]) => heroPower));
+		this.heroPower$ = this.gameState.gameState$$.pipe(this.mapData((state) => state.playerDeck?.heroPower));
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.markForCheck();

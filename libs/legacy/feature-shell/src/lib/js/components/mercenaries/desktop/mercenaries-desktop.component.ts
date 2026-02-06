@@ -1,21 +1,18 @@
 import {
 	AfterContentInit,
-	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
-	EventEmitter,
 	Inject,
 	ViewRef,
 } from '@angular/core';
-import { ADS_SERVICE_TOKEN, IAdsService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
+import { MainWindowNavigationService, MainWindowStateFacadeService } from '@firestone/mainwindow/common';
+import { MercenariesCategoryId } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { ADS_SERVICE_TOKEN, IAdsService, waitForReady } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable } from 'rxjs';
-import { MercenariesCategoryId } from '../../../models/mercenaries/mercenary-category-id.type';
-import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { MercenariesSelectCategoryEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-select-category-event';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	standalone: false,
@@ -56,43 +53,38 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MercenariesDesktopComponent
-	extends AbstractSubscriptionStoreComponent
-	implements AfterContentInit, AfterViewInit
-{
+export class MercenariesDesktopComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	loading$: Observable<boolean>;
 	menuDisplayType$: Observable<string>;
 	categories$: Observable<readonly MercenariesCategoryId[]>;
 	selectedCategoryId$: Observable<MercenariesCategoryId>;
 	showAds$: Observable<boolean>;
 
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
-		private readonly ow: OverwolfService,
 		private readonly i18n: LocalizationFacadeService,
 		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
+		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
+		private readonly navigationService: MainWindowNavigationService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.ads);
+		await waitForReady(this.ads, this.navigationService, this.mainWindowStateFacade);
 
-		this.loading$ = this.store
-			.listen$(([main, nav]) => main.mercenaries.loading)
-			.pipe(this.mapData(([loading]) => loading));
-		this.menuDisplayType$ = this.store
-			.listen$(([main, nav]) => nav.navigationMercenaries.menuDisplayType)
-			.pipe(this.mapData(([menuDisplayType]) => menuDisplayType));
-		this.selectedCategoryId$ = this.store
-			.listen$(([main, nav]) => nav.navigationMercenaries.selectedCategoryId)
-			.pipe(this.mapData(([selectedCategoryId]) => selectedCategoryId));
-		this.categories$ = this.store
-			.listen$(([main, nav]) => main.mercenaries.categoryIds)
-			.pipe(this.mapData(([categories]) => categories ?? []));
+		this.loading$ = this.mainWindowStateFacade.mainWindowState$$.pipe(
+			this.mapData((state) => state.mercenaries.loading),
+		);
+		this.menuDisplayType$ = this.navigationService.navigationState$$.pipe(
+			this.mapData((state) => state.navigationMercenaries.menuDisplayType),
+		);
+		this.selectedCategoryId$ = this.navigationService.navigationState$$.pipe(
+			this.mapData((state) => state.navigationMercenaries.selectedCategoryId),
+		);
+		this.categories$ = this.mainWindowStateFacade.mainWindowState$$.pipe(
+			this.mapData((state) => state.mercenaries.categoryIds),
+		);
 		this.showAds$ = this.ads.hasPremiumSub$$.pipe(this.mapData((info) => !info));
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -100,15 +92,11 @@ export class MercenariesDesktopComponent
 		}
 	}
 
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-	}
-
 	getCatName(categoryId: MercenariesCategoryId) {
 		return this.i18n.translateString(`mercenaries.menu.${categoryId}`);
 	}
 
 	selectCategory(categoryId: MercenariesCategoryId) {
-		this.stateUpdater.next(new MercenariesSelectCategoryEvent(categoryId));
+		this.mainWindowStateFacade.send(new MercenariesSelectCategoryEvent(categoryId));
 	}
 }

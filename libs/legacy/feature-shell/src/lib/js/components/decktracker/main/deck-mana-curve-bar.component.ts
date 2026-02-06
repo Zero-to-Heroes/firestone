@@ -1,6 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
-import { OverwolfService } from '@firestone/shared/framework/core';
-import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CardsByCost } from './cards-by-cost';
 
 @Component({
@@ -19,7 +17,7 @@ import { CardsByCost } from './cards-by-cost';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DeckManaCurveBarComponent implements AfterViewInit {
+export class DeckManaCurveBarComponent {
 	@Input() set info(value: CardsByCost) {
 		this._info = value;
 		this.updateValues();
@@ -33,14 +31,6 @@ export class DeckManaCurveBarComponent implements AfterViewInit {
 	_info: CardsByCost;
 	_maxQuantity: number;
 	fillHeight: number;
-
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
-	constructor(private readonly ow: OverwolfService) {}
-
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-	}
 
 	private updateValues() {
 		if (!this._info || !this._maxQuantity) {

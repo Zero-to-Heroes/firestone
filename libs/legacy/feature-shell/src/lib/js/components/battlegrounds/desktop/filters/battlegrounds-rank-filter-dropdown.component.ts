@@ -7,7 +7,7 @@ import { AbstractSubscriptionComponent } from '@firestone/shared/framework/commo
 import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
-import { BgsRankFilterType } from '../../../../models/mainwindow/battlegrounds/bgs-rank-filter.type';
+import { BgsRankFilterType } from '@firestone/mainwindow/common';
 import { arraysEqual } from '../../../../services/utils';
 
 @Component({

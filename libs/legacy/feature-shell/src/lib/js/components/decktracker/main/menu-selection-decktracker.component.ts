@@ -1,6 +1,5 @@
 import {
 	AfterContentInit,
-	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
@@ -9,17 +8,11 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { ConstructedNavigationService, DecktrackerViewType } from '@firestone/constructed/common';
+import { MainWindowStateFacadeService, MainWindowStoreEvent } from '@firestone/mainwindow/common';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import {
-	ADS_SERVICE_TOKEN,
-	AnalyticsService,
-	IAdsService,
-	OverwolfService,
-	waitForReady,
-} from '@firestone/shared/framework/core';
+import { ADS_SERVICE_TOKEN, AnalyticsService, IAdsService, waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { SelectDecksViewEvent } from '../../../services/mainwindow/store/events/decktracker/select-decks-view-event';
-import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 
 @Component({
 	standalone: false,
@@ -57,10 +50,7 @@ import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MenuSelectionDecktrackerComponent
-	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit
-{
+export class MenuSelectionDecktrackerComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	selectedTab$: Observable<DecktrackerViewType>;
 
 	menuItems: readonly MenuItem[] = [
@@ -100,7 +90,7 @@ export class MenuSelectionDecktrackerComponent
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
-		private readonly ow: OverwolfService,
+		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
 		private readonly analytics: AnalyticsService,
 		private readonly nav: ConstructedNavigationService,
 		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
@@ -121,10 +111,6 @@ export class MenuSelectionDecktrackerComponent
 		}
 	}
 
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-	}
-
 	selectStage(item: MenuItem) {
 		if (item.comingSoon) {
 			return;
@@ -134,7 +120,7 @@ export class MenuSelectionDecktrackerComponent
 		}
 
 		this.analytics.trackEvent(`navigation-decktracker`, { tab: item.id });
-		this.stateUpdater.next(new SelectDecksViewEvent(item.id));
+		this.mainWindowStateFacade.send(new SelectDecksViewEvent(item.id));
 	}
 }
 

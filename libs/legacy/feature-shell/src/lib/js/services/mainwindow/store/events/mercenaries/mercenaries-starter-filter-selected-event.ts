@@ -1,5 +1,5 @@
+import { MainWindowStoreEvent } from '@firestone/mainwindow/common';
 import { MercenariesStarterFilterType } from '../../../../../models/mercenaries/mercenaries-filter-types';
-import { MainWindowStoreEvent } from '../main-window-store-event';
 
 export class MercenariesStarterFilterSelectedEvent implements MainWindowStoreEvent {
 	constructor(public readonly starter: MercenariesStarterFilterType) {}

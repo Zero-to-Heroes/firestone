@@ -1,10 +1,12 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { GameStat } from '@firestone/stats/data-access';
-import { Observable, combineLatest } from 'rxjs';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { isMercenariesPvP, normalizeMercenariesCardId } from '@firestone/mercenaries/common';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { waitForReady } from '@firestone/shared/framework/core';
+import { GameStat } from '@firestone/stats/data-access';
+import { GameStatsProviderService } from '@firestone/stats/services';
+import { Observable, combineLatest } from 'rxjs';
 import { groupByFunction } from '../../../services/utils';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 import { MercenaryPersonalTeamInfo } from './mercenary-info';
 
 @Component({
@@ -27,23 +29,27 @@ import { MercenaryPersonalTeamInfo } from './mercenary-info';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MercenariesMyTeamsComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class MercenariesMyTeamsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	teams$: Observable<readonly MercenaryPersonalTeamInfo[]>;
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
-		super(store, cdr);
+	constructor(
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly perfs: PreferencesService,
+		private readonly gameStats: GameStatsProviderService,
+	) {
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
+		await waitForReady(this.gameStats, this.perfs);
+
 		this.teams$ = combineLatest([
-			this.store.gameStats$(),
-			this.store.listen$(
-				([main, nav, prefs]) => prefs.mercenariesActivePvpMmrFilter,
-				([main, nav, prefs]) => prefs.mercenariesHiddenTeamIds,
-				([main, nav, prefs]) => prefs.mercenariesShowHiddenTeams,
-			),
+			this.gameStats.gameStats$$,
+			this.perfs.preferences$$.pipe(this.mapData((prefs) => prefs.mercenariesActivePvpMmrFilter)),
+			this.perfs.preferences$$.pipe(this.mapData((prefs) => prefs.mercenariesHiddenTeamIds)),
+			this.perfs.preferences$$.pipe(this.mapData((prefs) => prefs.mercenariesShowHiddenTeams)),
 		]).pipe(
-			this.mapData(([gameStats, [mmrFilter, hiddenTeamIds, showHiddenTeams]]) => {
+			this.mapData(([gameStats, mmrFilter, hiddenTeamIds, showHiddenTeams]) => {
 				const mmrThreshold = 0;
 				const relevantStats = gameStats
 					// Include the AI games here, as otherwise this is confusing
@@ -68,6 +74,10 @@ export class MercenariesMyTeamsComponent extends AbstractSubscriptionStoreCompon
 				return teams.length === 0 ? null : teams;
 			}),
 		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.markForCheck();
+		}
 	}
 
 	trackByFn(index: number, item: MercenaryPersonalTeamInfo) {

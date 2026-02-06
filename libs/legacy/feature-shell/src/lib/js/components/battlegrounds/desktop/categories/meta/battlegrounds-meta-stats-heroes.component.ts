@@ -1,11 +1,4 @@
-import {
-	AfterContentInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	EventEmitter,
-	ViewRef,
-} from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
 import {
 	BattlegroundsNavigationService,
@@ -13,13 +6,12 @@ import {
 	BgsMetaHeroStatsService,
 	BgsPlayerHeroStatsService,
 } from '@firestone/battlegrounds/services';
-import { BgsHeroSortFilterType } from '@firestone/battlegrounds/view';
 import { Config } from '@firestone/game-state';
+import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { BgsPersonalStatsSelectHeroDetailsEvent } from '@legacy-import/src/lib/js/services/mainwindow/store/events/battlegrounds/bgs-personal-stats-select-hero-details-event';
-import { MainWindowStoreEvent } from '@legacy-import/src/lib/js/services/mainwindow/store/events/main-window-store-event';
 import { Observable, shareReplay, switchMap, takeUntil } from 'rxjs';
 
 @Component({
@@ -46,8 +38,6 @@ export class BattlegroundsMetaStatsHeroesComponent extends AbstractSubscriptionC
 	totalGames$: Observable<number>;
 	lastUpdate$: Observable<Date>;
 
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly playerHeroStats: BgsPlayerHeroStatsService,
@@ -56,6 +46,7 @@ export class BattlegroundsMetaStatsHeroesComponent extends AbstractSubscriptionC
 		private readonly prefs: PreferencesService,
 		private readonly ow: OverwolfService,
 		private readonly nav: BattlegroundsNavigationService,
+		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
 	) {
 		super(cdr);
 	}
@@ -63,7 +54,6 @@ export class BattlegroundsMetaStatsHeroesComponent extends AbstractSubscriptionC
 	async ngAfterContentInit() {
 		await waitForReady(this.metaHeroStats, this.metaHeroStatsDuo, this.playerHeroStats, this.prefs, this.nav);
 
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 		this.stats$ = this.playerHeroStats.tiersWithPlayerData$$.pipe(
 			this.mapData((stats) => {
 				const maxTribeImpact = Math.max(
@@ -113,7 +103,7 @@ export class BattlegroundsMetaStatsHeroesComponent extends AbstractSubscriptionC
 	}
 
 	onHeroStatsClick(heroCardId: string) {
-		this.stateUpdater.next(new BgsPersonalStatsSelectHeroDetailsEvent(heroCardId));
+		this.mainWindowStateFacade.send(new BgsPersonalStatsSelectHeroDetailsEvent(heroCardId));
 	}
 
 	onSearchStringChange(value: string) {

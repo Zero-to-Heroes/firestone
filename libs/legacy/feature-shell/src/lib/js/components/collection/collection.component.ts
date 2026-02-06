@@ -7,15 +7,14 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { ReferenceCard } from '@firestone-hs/reference-data';
-import { CollectionNavigationService, CurrentView } from '@firestone/collection/common';
+import { CollectionNavigationService, CurrentView, Set, SetCard } from '@firestone/collection/common';
+import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { CardBack } from '@firestone/memory';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ADS_SERVICE_TOKEN, CardsFacadeService, IAdsService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
-import { Set, SetCard } from '../../models/set';
 import { CollectionManager } from '../../services/collection/collection-manager.service';
 import { SetsManagerService } from '../../services/collection/sets-manager.service';
-import { MainWindowStateFacadeService } from '../../services/mainwindow/store/main-window-state-facade.service';
 
 @Component({
 	standalone: false,

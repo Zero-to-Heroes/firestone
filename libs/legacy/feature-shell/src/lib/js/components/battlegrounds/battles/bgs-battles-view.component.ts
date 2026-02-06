@@ -9,13 +9,12 @@ import {
 } from '@angular/core';
 import { BattleResultHistory } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { BgsFaceOffWithSimulation } from '@firestone/game-state';
-import { sleep } from '@firestone/shared/framework/common';
+import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
+import { AbstractSubscriptionComponent, sleep } from '@firestone/shared/framework/common';
 import { AnalyticsService, OwUtilsService } from '@firestone/shared/framework/core';
 import domtoimage from 'dom-to-image-more';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { BattlegroundsMainWindowSelectBattleEvent } from '../../../services/mainwindow/store/events/battlegrounds/battlegrounds-main-window-select-battle-event';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	standalone: false,
@@ -55,7 +54,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 							[selectable]="true || canSelectBattle"
 							(click)="selectBattle(faceOff)"
 							[ngClass]="{
-								highlighted: selectedFaceOff?.id && faceOff.id === selectedFaceOff.id
+								highlighted: selectedFaceOff?.id && faceOff.id === selectedFaceOff.id,
 							}"
 						></bgs-battle-recap>
 					</div>
@@ -72,7 +71,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 // TODO: remove store and use stateUpdater instead
-export class BgsBattlesViewComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit, OnDestroy {
+export class BgsBattlesViewComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
 	screenshotText$: Observable<string>;
 	screenshotTooltip$: Observable<string>;
 
@@ -93,12 +92,12 @@ export class BgsBattlesViewComponent extends AbstractSubscriptionStoreComponent 
 	private screenshotTooltip$$ = new BehaviorSubject<string>('Copy the list of battles to your clipboard');
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly analytics: AnalyticsService,
 		private readonly owUtils: OwUtilsService,
+		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	ngAfterContentInit(): void {
@@ -116,10 +115,10 @@ export class BgsBattlesViewComponent extends AbstractSubscriptionStoreComponent 
 	selectBattle(faceOff: BgsFaceOffWithSimulation) {
 		if (this._isMainWindow) {
 			this.analytics.trackEvent('select-battle', { origin: 'bgs-battles-view-main-window' });
-			this.store.send(new BattlegroundsMainWindowSelectBattleEvent(faceOff));
+			this.mainWindowStateFacade.send(new BattlegroundsMainWindowSelectBattleEvent(faceOff));
 		} else {
 			this.analytics.trackEvent('select-battle', { origin: 'bgs-battles-view-bg-window' });
-			this.store.send(new BattlegroundsMainWindowSelectBattleEvent(faceOff));
+			this.mainWindowStateFacade.send(new BattlegroundsMainWindowSelectBattleEvent(faceOff));
 		}
 	}
 

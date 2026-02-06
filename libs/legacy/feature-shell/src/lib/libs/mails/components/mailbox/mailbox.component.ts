@@ -1,6 +1,6 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
-import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
-import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { Observable } from 'rxjs';
 import { Mail } from '../../mail-state';
 import { MailboxMarkMessageReadEvent } from '../../services/mailbox-mark-message-read-event';
@@ -28,23 +28,20 @@ import { MailboxMarkMessageReadEvent } from '../../services/mailbox-mark-message
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MailboxComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit, OnDestroy {
+export class MailboxComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	messages$: Observable<readonly Mail[]>;
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
-		super(store, cdr);
+	constructor(
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
+	) {
+		super(cdr);
 	}
 
-	ngAfterContentInit() {
-		this.messages$ = this.store.mails$().pipe(
-			this.mapData((state) => {
-				return !!state.mails.length ? state.mails : null;
-			}),
-		);
-	}
+	ngAfterContentInit() {}
 
 	markMessageRead(message: Mail) {
-		this.store.send(new MailboxMarkMessageReadEvent(message));
+		this.mainWindowStateFacade.send(new MailboxMarkMessageReadEvent(message));
 	}
 
 	trackByFn(index: number, item: Mail): string {

@@ -7,12 +7,15 @@ import {
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
+import {
+	MainWindowNavigationService,
+	MainWindowStateFacadeService,
+	StreamsCategoryType,
+} from '@firestone/mainwindow/common';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ADS_SERVICE_TOKEN, IAdsService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
-import { StreamsCategoryType } from '../../../models/mainwindow/streams/streams.type';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	standalone: false,
@@ -43,33 +46,34 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class StreamsDesktopComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit, OnDestroy {
+export class StreamsDesktopComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
 	menuDisplayType$: Observable<string>;
 	category$: Observable<StreamsCategoryType>;
 	categories$: Observable<readonly StreamsCategoryType[]>;
 	showAds$: Observable<boolean>;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
 		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
+		private readonly nav: MainWindowNavigationService,
+		private readonly mainWindowState: MainWindowStateFacadeService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.ads);
+		await waitForReady(this.ads, this.nav, this.mainWindowState);
 
-		this.menuDisplayType$ = this.store
-			.listen$(([main, nav]) => nav.navigationStreams.menuDisplayType)
-			.pipe(this.mapData(([menuDisplayType]) => menuDisplayType));
-		this.category$ = this.store
-			.listen$(([main, nav]) => nav.navigationStreams.selectedCategoryId)
-			.pipe(this.mapData(([selectedCategoryId]) => selectedCategoryId));
-		this.categories$ = this.store
-			.listen$(([main, nav]) => main.streams.categories)
-			.pipe(this.mapData(([categories]) => categories ?? []));
+		this.menuDisplayType$ = this.nav.navigationState$$.pipe(
+			this.mapData((state) => state.navigationStreams.menuDisplayType),
+		);
+		this.category$ = this.nav.navigationState$$.pipe(
+			this.mapData((state) => state.navigationStreams.selectedCategoryId),
+		);
+		this.categories$ = this.mainWindowState.mainWindowState$$.pipe(
+			this.mapData((state) => state.streams.categories),
+		);
 		this.showAds$ = this.ads.hasPremiumSub$$.pipe(this.mapData((info) => !info));
 
 		if (!(this.cdr as ViewRef)?.destroyed) {

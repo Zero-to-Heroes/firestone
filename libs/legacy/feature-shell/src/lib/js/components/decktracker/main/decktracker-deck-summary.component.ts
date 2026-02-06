@@ -1,18 +1,10 @@
-import {
-	AfterContentInit,
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	EventEmitter,
-	Input,
-	ViewRef,
-} from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { getDefaultHeroDbfIdForClass } from '@firestone-hs/reference-data';
 import { DeckSummary } from '@firestone/constructed/common';
+import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { CardsFacadeService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
+import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { StatGameFormatType } from '@firestone/stats/data-access';
 import { BehaviorSubject, combineLatest, filter, Observable } from 'rxjs';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
@@ -21,7 +13,6 @@ import { DecktrackerDeleteDeckEvent } from '../../../services/mainwindow/store/e
 import { HideDeckSummaryEvent } from '../../../services/mainwindow/store/events/decktracker/hide-deck-summary-event';
 import { RestoreDeckSummaryEvent } from '../../../services/mainwindow/store/events/decktracker/restore-deck-summary-event';
 import { SelectDeckDetailsEvent } from '../../../services/mainwindow/store/events/decktracker/select-deck-details-event';
-import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 
 @Component({
 	standalone: false,
@@ -121,10 +112,7 @@ import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DecktrackerDeckSummaryComponent
-	extends AbstractSubscriptionComponent
-	implements AfterViewInit, AfterContentInit
-{
+export class DecktrackerDeckSummaryComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	skin$: Observable<string>;
 
 	@Input() set deck(value: DeckSummary) {
@@ -162,14 +150,12 @@ export class DecktrackerDeckSummaryComponent
 
 	private skin$$ = new BehaviorSubject<string | null>(null);
 
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
-		private readonly ow: OverwolfService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly prefs: PreferencesService,
 		private readonly allCards: CardsFacadeService,
+		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
 	) {
 		super(cdr);
 	}
@@ -198,25 +184,21 @@ export class DecktrackerDeckSummaryComponent
 		}
 	}
 
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-	}
-
 	hideDeck(event: MouseEvent) {
-		this.stateUpdater.next(new HideDeckSummaryEvent(this._deck.deckstring));
+		this.mainWindowStateFacade.send(new HideDeckSummaryEvent(this._deck.deckstring));
 		event.stopPropagation();
 		event.preventDefault();
 	}
 
 	restoreDeck(event: MouseEvent) {
-		this.stateUpdater.next(new RestoreDeckSummaryEvent(this._deck.deckstring));
+		this.mainWindowStateFacade.send(new RestoreDeckSummaryEvent(this._deck.deckstring));
 		event.stopPropagation();
 		event.preventDefault();
 	}
 
 	deleteDeck() {
 		console.log('[deck-delete] deleting deck', this._deck?.deckstring);
-		this.stateUpdater.next(new DecktrackerDeleteDeckEvent(this._deck?.deckstring));
+		this.mainWindowStateFacade.send(new DecktrackerDeleteDeckEvent(this._deck?.deckstring));
 	}
 
 	selectDeck(event: MouseEvent) {
@@ -225,8 +207,8 @@ export class DecktrackerDeckSummaryComponent
 		if ((event.target as any)?.tagName === 'BUTTON') {
 			return;
 		}
-		this.stateUpdater.next(new ChangeVisibleApplicationEvent('decktracker'));
-		this.stateUpdater.next(new SelectDeckDetailsEvent(this._deck.deckstring));
+		this.mainWindowStateFacade.send(new ChangeVisibleApplicationEvent('decktracker'));
+		this.mainWindowStateFacade.send(new SelectDeckDetailsEvent(this._deck.deckstring));
 	}
 
 	private buildLastUsedDate(lastUsedTimestamp: number): string {

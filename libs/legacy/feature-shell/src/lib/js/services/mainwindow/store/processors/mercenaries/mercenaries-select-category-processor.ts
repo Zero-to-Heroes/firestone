@@ -1,6 +1,4 @@
-import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
-import { NavigationMercenaries } from '../../../../../models/mainwindow/navigation/navigation-mercenaries';
-import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
+import { MainWindowState, NavigationMercenaries, NavigationState } from '@firestone/mainwindow/common';
 import { MercenariesSelectCategoryEvent } from '../../events/mercenaries/mercenaries-select-category-event';
 import { Processor } from '../processor';
 

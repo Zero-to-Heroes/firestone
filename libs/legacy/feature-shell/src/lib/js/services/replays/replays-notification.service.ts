@@ -8,9 +8,9 @@ import { distinctUntilChanged, filter, map, skip, take } from 'rxjs';
 import { RewardMonitorService } from '@firestone/app/common';
 import { BgsInGameWindowNavigationService } from '@firestone/battlegrounds/services';
 import { isBattlegrounds } from '@firestone/game-state';
+import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { GameStatsLoaderService } from '@firestone/stats/data-access';
 import { ShowReplayEvent } from '../mainwindow/store/events/replays/show-replay-event';
-import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 
 @Injectable()
 export class ReplaysNotificationService {
@@ -18,11 +18,11 @@ export class ReplaysNotificationService {
 		private readonly notificationService: NotificationsService,
 		private readonly prefs: PreferencesService,
 		private readonly i18n: LocalizationFacadeService,
-		private readonly store: AppUiStoreFacadeService,
 		private readonly gameStats: GameStatsLoaderService,
 		private readonly gameStatus: GameStatusService,
 		private readonly rewardsMonitor: RewardMonitorService,
 		private readonly bgsNav: BgsInGameWindowNavigationService,
+		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
 	) {
 		this.init();
 	}
@@ -74,7 +74,7 @@ export class ReplaysNotificationService {
 			cardId: undefined,
 			theClass: 'active',
 			clickToClose: true,
-			eventToSendOnClick: () => this.store.send(new ShowReplayEvent(gameStat.reviewId)),
+			eventToSendOnClick: () => this.mainWindowStateFacade.send(new ShowReplayEvent(gameStat.reviewId)),
 		} as Message);
 	}
 

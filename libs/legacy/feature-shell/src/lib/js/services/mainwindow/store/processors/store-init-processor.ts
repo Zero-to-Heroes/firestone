@@ -3,21 +3,15 @@ import { ArenaNavigationService } from '@firestone/arena/common';
 import { BattlegroundsNavigationService } from '@firestone/battlegrounds/services';
 import { CollectionNavigationService } from '@firestone/collection/common';
 import { ConstructedNavigationService } from '@firestone/constructed/common';
-import { MainWindowNavigationService } from '@firestone/mainwindow/common';
+import { MainWindowNavigationService, MainWindowState, NavigationState } from '@firestone/mainwindow/common';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { LocalizationService } from '@services/localization.service';
-import { MainWindowState } from '../../../../models/mainwindow/main-window-state';
-import { NavigationState } from '../../../../models/mainwindow/navigation/navigation-state';
-import { Events } from '@firestone/shared/common/service';
 import { ChangeVisibleApplicationEvent } from '../events/change-visible-application-event';
-import { StoreInitEvent } from '../events/store-init-event';
 import { ChangeVisibleApplicationProcessor } from './change-visible-application-processor';
-import { Processor } from './processor';
 
-export class StoreInitProcessor implements Processor {
+export class StoreInitProcessor {
 	constructor(
-		private readonly events: Events,
 		private readonly prefs: PreferencesService,
 		private readonly i18n: LocalizationService,
 		private readonly mainNav: MainWindowNavigationService,
@@ -28,19 +22,16 @@ export class StoreInitProcessor implements Processor {
 		private readonly arenaNav: ArenaNavigationService,
 	) {}
 
-	public async process(
-		event: StoreInitEvent,
+	public async buildInitialNavigationState(
 		currentState: MainWindowState,
 		navigationState: NavigationState,
-	): Promise<[MainWindowState, NavigationState]> {
+	): Promise<NavigationState> {
 		const prefs = await this.prefs.getPreferences();
 		const navState = await this.buildCurrentAppNavState(currentState, navigationState, prefs);
-		console.debug('[store-init] emitting STORE_READY event');
-		this.events.broadcast(Events.STORE_READY);
-		return [currentState, navState];
+		return navState;
 	}
 
-	private async buildCurrentAppNavState(
+	public async buildCurrentAppNavState(
 		currentState: MainWindowState,
 		navigationState: NavigationState,
 		prefs: Preferences,

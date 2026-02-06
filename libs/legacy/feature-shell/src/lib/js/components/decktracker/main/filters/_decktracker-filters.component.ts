@@ -1,18 +1,10 @@
-import {
-	AfterContentInit,
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	EventEmitter,
-	ViewRef,
-} from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { ConstructedNavigationService } from '@firestone/constructed/common';
+import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { ToggleShowHiddenDecksEvent } from '@services/mainwindow/store/events/decktracker/toggle-show-hidden-decks-event';
-import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-window-store-event';
 import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
@@ -94,10 +86,7 @@ import { LocalizationFacadeService } from '../../../../services/localization-fac
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DecktrackerFiltersComponent
-	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit
-{
+export class DecktrackerFiltersComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	showRegionFilter$: Observable<boolean>;
 	showHiddenDecksLink$: Observable<boolean>;
 	showUseConservativeWinrateLink$: Observable<boolean>;
@@ -110,20 +99,18 @@ export class DecktrackerFiltersComponent
 	showInfo$: Observable<boolean>;
 	helpTooltip: string;
 
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
-		private readonly ow: OverwolfService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly nav: ConstructedNavigationService,
 		private readonly prefs: PreferencesService,
+		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.nav, this.prefs);
+		await waitForReady(this.nav, this.prefs, this.mainWindowStateFacade);
 
 		this.helpTooltip = this.i18n.translateString('app.decktracker.filters.filter-info-tooltip');
 		this.showRegionFilter$ = this.nav.currentView$$.pipe(
@@ -195,11 +182,7 @@ export class DecktrackerFiltersComponent
 		}
 	}
 
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-	}
-
 	toggleShowHiddenDecks = (newValue: boolean) => {
-		this.stateUpdater.next(new ToggleShowHiddenDecksEvent(newValue));
+		this.mainWindowStateFacade.send(new ToggleShowHiddenDecksEvent(newValue));
 	};
 }

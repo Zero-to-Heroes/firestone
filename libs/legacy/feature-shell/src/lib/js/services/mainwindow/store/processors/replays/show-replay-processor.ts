@@ -1,11 +1,8 @@
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { LocalizationService } from '@services/localization.service';
 
+import { MainWindowState, MatchDetail, NavigationReplays, NavigationState } from '@firestone/mainwindow/common';
 import { GameStatsLoaderService } from '@firestone/stats/data-access';
-import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
-import { NavigationReplays } from '../../../../../models/mainwindow/navigation/navigation-replays';
-import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
-import { MatchDetail } from '../../../../../models/mainwindow/replays/match-detail';
 import { BgsPerfectGamesService } from '../../../../battlegrounds/bgs-perfect-games.service';
 import { BgsRunStatsService } from '../../../../battlegrounds/bgs-run-stats.service';
 import { ShowReplayEvent } from '../../events/replays/show-replay-event';

@@ -1,5 +1,5 @@
 import { BgsFaceOffWithSimulation } from '@firestone/game-state';
-import { MainWindowStoreEvent } from '../main-window-store-event';
+import { MainWindowStoreEvent } from '@firestone/mainwindow/common';
 
 export class BattlegroundsMainWindowSelectBattleEvent implements MainWindowStoreEvent {
 	constructor(public readonly faceOff: BgsFaceOffWithSimulation) {}

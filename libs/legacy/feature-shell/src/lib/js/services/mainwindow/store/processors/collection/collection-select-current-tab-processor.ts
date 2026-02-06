@@ -1,8 +1,10 @@
 import { CollectionNavigationService } from '@firestone/collection/common';
-import { MainWindowNavigationService } from '@firestone/mainwindow/common';
-import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
-import { NavigationCollection } from '../../../../../models/mainwindow/navigation/navigation-collection';
-import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
+import {
+	MainWindowNavigationService,
+	MainWindowState,
+	NavigationCollection,
+	NavigationState,
+} from '@firestone/mainwindow/common';
 import { CollectionSelectCurrentTabEvent } from '../../events/collection/collection-select-current-tab-event';
 import { Processor } from '../processor';
 

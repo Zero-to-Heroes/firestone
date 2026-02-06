@@ -1,5 +1,4 @@
-import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
-import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
+import { MainWindowState, NavigationState } from '@firestone/mainwindow/common';
 import { ChangeDeckModeFilterEvent } from '../../events/decktracker/change-deck-mode-filter-event';
 import { Processor } from '../processor';
 

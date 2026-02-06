@@ -1,5 +1,4 @@
-import { MainWindowState } from '@models/mainwindow/main-window-state';
-import { NavigationState } from '@models/mainwindow/navigation/navigation-state';
+import { MainWindowState, NavigationState } from '@firestone/mainwindow/common';
 import { Processor } from '@services/mainwindow/store/processors/processor';
 import { ConstructedDeckbuilderClassSelectedEvent } from '../../events/decktracker/constructed-deckbuilder-class-selected-event';
 

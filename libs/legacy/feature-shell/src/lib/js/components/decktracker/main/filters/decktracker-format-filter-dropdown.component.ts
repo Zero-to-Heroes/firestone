@@ -1,23 +1,14 @@
-import {
-	AfterContentInit,
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	EventEmitter,
-	ViewRef,
-} from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { ConstructedNavigationService } from '@firestone/constructed/common';
+import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { IOption } from '@firestone/shared/common/view';
-import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { StatGameFormatType } from '@firestone/stats/data-access';
 import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { ChangeDeckFormatFilterEvent } from '../../../../services/mainwindow/store/events/decktracker/change-deck-format-filter-event';
-import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
-import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	standalone: false,
@@ -36,32 +27,31 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DecktrackerFormatFilterDropdownComponent
-	extends AbstractSubscriptionStoreComponent
-	implements AfterContentInit, AfterViewInit
+	extends AbstractSubscriptionComponent
+	implements AfterContentInit
 {
 	filter$: Observable<{ filter: string; placeholder: string; options: IOption[]; visible: boolean }>;
 
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
-		private readonly ow: OverwolfService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly nav: ConstructedNavigationService,
+		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.nav);
+		await waitForReady(this.nav, this.mainWindowStateFacade);
 
 		this.filter$ = combineLatest([
-			this.store.listen$(([main, nav]) => main.decktracker.filters?.gameFormat),
+			this.mainWindowStateFacade.mainWindowState$$.pipe(
+				this.mapData((state) => state.decktracker.filters.gameFormat),
+			),
 			this.nav.currentView$$,
 		]).pipe(
-			filter(([[filter], currentView]) => !!filter && !!currentView),
-			this.mapData(([[filter], currentView]) => {
+			filter(([filter, currentView]) => !!filter && !!currentView),
+			this.mapData(([filter, currentView]) => {
 				const options = [
 					{
 						value: 'all',
@@ -114,12 +104,8 @@ export class DecktrackerFormatFilterDropdownComponent
 		}
 	}
 
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-	}
-
 	onSelected(option: IOption) {
-		this.stateUpdater.next(new ChangeDeckFormatFilterEvent((option as FormatFilterOption).value));
+		this.mainWindowStateFacade.send(new ChangeDeckFormatFilterEvent((option as FormatFilterOption).value));
 	}
 }
 

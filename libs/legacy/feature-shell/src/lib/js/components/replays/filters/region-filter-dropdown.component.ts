@@ -1,6 +1,5 @@
 import {
 	AfterContentInit,
-	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
@@ -9,15 +8,14 @@ import {
 } from '@angular/core';
 import { BnetRegion } from '@firestone-hs/reference-data';
 import { ConstructedNavigationService } from '@firestone/constructed/common';
+import { MainWindowStoreEvent } from '@firestone/mainwindow/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { IOption } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { GameStatsLoaderService } from '@firestone/stats/data-access';
-import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-window-store-event';
 import { Observable, combineLatest } from 'rxjs';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { GenericPreferencesUpdateEvent } from '../../../services/mainwindow/store/events/generic-preferences-update-event';
 
 @Component({
 	standalone: false,
@@ -36,10 +34,7 @@ import { GenericPreferencesUpdateEvent } from '../../../services/mainwindow/stor
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RegionFilterDropdownComponent
-	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit
-{
+export class RegionFilterDropdownComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	filter$: Observable<{
 		filter: string;
 		placeholder: string;
@@ -51,7 +46,6 @@ export class RegionFilterDropdownComponent
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
-		private readonly ow: OverwolfService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly gamesLoader: GameStatsLoaderService,
 		private readonly nav: ConstructedNavigationService,
@@ -104,16 +98,10 @@ export class RegionFilterDropdownComponent
 		}
 	}
 
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-	}
-
 	onSelected(option: FilterOption) {
-		this.stateUpdater.next(
-			new GenericPreferencesUpdateEvent((prefs) => ({
-				...prefs,
-				regionFilter: !option?.value || option.value === 'all' ? 'all' : BnetRegion[option.value.toUpperCase()],
-			})),
+		this.prefs.updatePrefs(
+			'regionFilter',
+			!option?.value || option.value === 'all' ? 'all' : BnetRegion[option.value.toUpperCase()],
 		);
 	}
 }

@@ -1,15 +1,7 @@
-import {
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	EventEmitter,
-	Input,
-} from '@angular/core';
-import { OverwolfService } from '@firestone/shared/framework/core';
-import { CurrentView } from '../../models/mainwindow/collection/current-view.type';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { CurrentView } from '@firestone/collection/common';
+import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { CollectionSelectCurrentTabEvent } from '../../services/mainwindow/store/events/collection/collection-select-current-tab-event';
-import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 
 @Component({
 	standalone: false,
@@ -40,18 +32,12 @@ import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/mai
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CollectionMenuSelectionComponent implements AfterViewInit {
+export class CollectionMenuSelectionComponent {
 	@Input() selectedTab: CurrentView;
 
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
-	constructor(private ow: OverwolfService, private cdr: ChangeDetectorRef) {}
-
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-	}
+	constructor(private readonly mainWindowStateFacade: MainWindowStateFacadeService) {}
 
 	selectTab(stage: CurrentView) {
-		this.stateUpdater.next(new CollectionSelectCurrentTabEvent(stage));
+		this.mainWindowStateFacade.send(new CollectionSelectCurrentTabEvent(stage));
 	}
 }

@@ -2,9 +2,11 @@ import { Injectable } from '@angular/core';
 import { CurrentAppType, Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractFacadeService, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
+import { NavigationState } from '../model/_barrel';
 
 @Injectable()
 export class MainWindowNavigationService extends AbstractFacadeService<MainWindowNavigationService> {
+	public navigationState$$: BehaviorSubject<NavigationState | null>;
 	public currentApp$$: BehaviorSubject<CurrentAppType | null>;
 	public text$$: BehaviorSubject<string | null>;
 	public image$$: BehaviorSubject<string | null>;
@@ -19,6 +21,7 @@ export class MainWindowNavigationService extends AbstractFacadeService<MainWindo
 	}
 
 	protected override assignSubjects() {
+		this.navigationState$$ = this.mainInstance.navigationState$$;
 		this.currentApp$$ = this.mainInstance.currentApp$$;
 		this.text$$ = this.mainInstance.text$$;
 		this.image$$ = this.mainInstance.image$$;
@@ -28,6 +31,7 @@ export class MainWindowNavigationService extends AbstractFacadeService<MainWindo
 	}
 
 	protected async init() {
+		this.navigationState$$ = new BehaviorSubject<NavigationState | null>(null);
 		this.currentApp$$ = new BehaviorSubject<CurrentAppType | null>('replays');
 		this.text$$ = new BehaviorSubject<string | null>('Categories');
 		this.image$$ = new BehaviorSubject<string | null>(null);
@@ -51,5 +55,13 @@ export class MainWindowNavigationService extends AbstractFacadeService<MainWindo
 			};
 			await this.prefs.savePreferences(newPrefs);
 		});
+	}
+
+	protected override async initElectronSubjects() {
+		this.setupElectronSubject(this.navigationState$$, 'MainWindowNavigationService-navigationState');
+	}
+
+	protected override async createElectronProxy(ipcRenderer: any) {
+		this.navigationState$$ = new BehaviorSubject<NavigationState | null>(null);
 	}
 }

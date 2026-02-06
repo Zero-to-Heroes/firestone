@@ -5,7 +5,7 @@ import { PreferencesService } from '@firestone/shared/common/service';
 import { ImageLocalizationOptions } from '@firestone/shared/framework/core';
 import { TranslateService } from '@ngx-translate/core';
 import { distinctUntilChanged, map } from 'rxjs/operators';
-import { CollectionCardType } from '../models/collection/collection-card-type.type';
+import { CollectionCardType } from '@firestone-hs/user-packs';
 import { sleep } from './utils';
 
 @Injectable()

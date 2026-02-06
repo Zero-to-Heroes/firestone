@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
-import { CardPackResult, PackResult } from '@firestone-hs/user-packs';
-import { CollectionCardType } from '@legacy-import/src/lib/js/models/collection/collection-card-type.type';
+import { CardPackResult, CollectionCardType, PackResult } from '@firestone-hs/user-packs';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 
 @Component({

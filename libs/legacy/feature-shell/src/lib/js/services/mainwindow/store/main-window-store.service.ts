@@ -1,4 +1,4 @@
-import { EventEmitter, Injectable, NgZone } from '@angular/core';
+import { Inject, Injectable, NgZone } from '@angular/core';
 import {
 	AchievementHistoryService,
 	AchievementsMemoryMonitor,
@@ -12,10 +12,20 @@ import { BattlegroundsNavigationService } from '@firestone/battlegrounds/service
 import { BgsSimulatorControllerService } from '@firestone/battlegrounds/simulator';
 import { CollectionNavigationService } from '@firestone/collection/common';
 import { ConstructedNavigationService, ConstructedPersonalDecksService } from '@firestone/constructed/common';
-import { MainWindowNavigationService } from '@firestone/mainwindow/common';
-import { MemoryInspectionService } from '@firestone/memory';
+import {
+	IMainWindowStoreService,
+	MainWindowNavigationService,
+	MainWindowState,
+	MainWindowStoreEvent,
+	NavigationState,
+} from '@firestone/mainwindow/common';
 import { AppNavigationService, Events, PreferencesService } from '@firestone/shared/common/service';
-import { CardsFacadeService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
+import {
+	CardsFacadeService,
+	IWindowHandlerService,
+	waitForReady,
+	WINDOW_HANDLER_SERVICE_TOKEN,
+} from '@firestone/shared/framework/core';
 import { GameStatsLoaderService } from '@firestone/stats/data-access';
 import { TranslateService } from '@ngx-translate/core';
 import { LocalizationService } from '@services/localization.service';
@@ -24,8 +34,6 @@ import { BehaviorSubject, filter } from 'rxjs';
 import { MailboxMarkMessageReadEvent } from '../../../../libs/mails/services/mailbox-mark-message-read-event';
 import { MailboxMarkMessageReadProcessor } from '../../../../libs/mails/services/mailbox-mark-message-read-processor';
 import { PackStatsService } from '../../../../libs/packs/services/pack-stats.service';
-import { MainWindowState } from '../../../models/mainwindow/main-window-state';
-import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
 import { BgsPerfectGamesService } from '../../battlegrounds/bgs-perfect-games.service';
 import { BgsRunStatsService } from '../../battlegrounds/bgs-run-stats.service';
 import { CollectionManager } from '../../collection/collection-manager.service';
@@ -33,7 +41,6 @@ import { SetsManagerService } from '../../collection/sets-manager.service';
 import { SetsService } from '../../collection/sets-service.service';
 import { DecksProviderService } from '../../decktracker/main/decks-provider.service';
 import { ProcessingQueue } from '../../processing-queue.service';
-import { GameStatsUpdaterService } from '../../stats/game/game-stats-updater.service';
 import { CollectionBootstrapService } from './collection-bootstrap.service';
 import { AchievementCompletedEvent } from './events/achievements/achievement-completed-event';
 import { AchievementsFullRefreshEvent } from './events/achievements/achievements-full-refresh-event';
@@ -48,7 +55,6 @@ import { BgsPersonalStatsSelectHeroDetailsEvent } from './events/battlegrounds/b
 import { BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent } from './events/battlegrounds/bgs-personal-stats-select-hero-details-with-remote-info-event';
 import { BgsPostMatchStatsComputedEvent } from './events/battlegrounds/bgs-post-match-stats-computed-event';
 import { BgsShowStrategiesEvent } from './events/battlegrounds/bgs-show-strategies-event';
-import { BgsTribesFilterSelectedEvent } from './events/battlegrounds/bgs-tribes-filter-selected-event';
 import { SelectBattlegroundsCategoryEvent } from './events/battlegrounds/select-battlegrounds-category-event';
 import { ChangeVisibleApplicationEvent } from './events/change-visible-application-event';
 import { CloseMainWindowEvent } from './events/close-main-window-event';
@@ -88,7 +94,6 @@ import { PreviousFtueEvent } from './events/ftue/previous-ftue-event';
 import { SkipFtueEvent } from './events/ftue/skip-ftue-event';
 import { GenericPreferencesUpdateEvent } from './events/generic-preferences-update-event';
 import { LocalizationUpdateEvent } from './events/localization-update-event';
-import { MainWindowStoreEvent } from './events/main-window-store-event';
 import { MercenariesAddMercToBackupTeamEvent } from './events/mercenaries/mercenaries-add-merc-to-backup-team-event';
 import { MercenariesHeroLevelFilterSelectedEvent } from './events/mercenaries/mercenaries-hero-level-filter-selected-event';
 import { MercenariesHeroSelectedEvent } from './events/mercenaries/mercenaries-hero-selected-event';
@@ -110,15 +115,11 @@ import { ShowReplaysEvent } from './events/replays/show-replays-event';
 import { TriggerShowMatchStatsEvent } from './events/replays/trigger-show-match-stats-event';
 import { ShowMainWindowEvent } from './events/show-main-window-event';
 import { CloseSocialShareModalEvent } from './events/social/close-social-share-modal-event';
-import { ShareVideoOnSocialNetworkEvent } from './events/social/share-video-on-social-network-event';
 import { StartSocialSharingEvent } from './events/social/start-social-sharing-event';
 import { GamesFullClearEvent } from './events/stats/game-stats-full-clear-event';
 import { GamesFullRefreshEvent } from './events/stats/game-stats-full-refresh-event';
-import { GlobalStatsLoadedEvent } from './events/stats/global/global-stats-loaded-event';
-import { GlobalStatsUpdatedEvent } from './events/stats/global/global-stats-updated-event';
 import { RecomputeGameStatsEvent } from './events/stats/recompute-game-stats-event';
 import { StatsXpGraphFilterSelectedEvent } from './events/stats/stats-xp-graph-filter-selected-event';
-import { StoreInitEvent } from './events/store-init-event';
 import { AchievementCompletedProcessor } from './processors/achievements/achievement-completed-processor';
 import { AchievementsFullRefreshProcessor } from './processors/achievements/achievements-full-refresh-processor';
 import {
@@ -140,7 +141,6 @@ import { BgsPersonalStatsSelectHeroDetailsProcessor } from './processors/battleg
 import { BgsPersonalStatsSelectHeroDetailsWithRemoteInfoProcessor } from './processors/battlegrounds/bgs-personal-stats-select-hero-details-with-remote-info-processor';
 import { BgsPostMatchStatsComputedProcessor } from './processors/battlegrounds/bgs-post-match-stats-computed-event';
 import { BgsShowStrategiesProcessor } from './processors/battlegrounds/bgs-show-strategies-processor';
-import { BgsTribesFilterSelectedProcessor } from './processors/battlegrounds/bgs-tribes-filter-selected-processor';
 import { SelectBattlegroundsCategoryProcessor } from './processors/battlegrounds/select-battlegrounds-category-processor';
 import { ChangeVisibleApplicationProcessor } from './processors/change-visible-application-processor';
 import { CloseMainWindowProcessor } from './processors/close-main-window-processor';
@@ -214,12 +214,9 @@ import { ShowReplaysProcessor } from './processors/replays/show-replays-processo
 import { TriggerShowMatchStatsProcessor } from './processors/replays/trigger-show-match-stats-processor';
 import { ShowMainWindowProcessor } from './processors/show-main-window-processor';
 import { CloseSocialShareModalProcessor } from './processors/social/close-social-share-modal-processor';
-import { ShareVideoOnSocialNetworkProcessor } from './processors/social/share-video-on-social-network-processor';
 import { StartSocialSharingProcessor } from './processors/social/start-social-sharing-processor';
 import { GameStatsFullClearProcessor } from './processors/stats/game-stats-full-clear-processor';
 import { GameStatsFullRefreshProcessor } from './processors/stats/game-stats-full-refresh-processor';
-import { GlobalStatsLoadedProcessor } from './processors/stats/global/global-stats-loaded-processor';
-import { GlobalStatsUpdatedProcessor } from './processors/stats/global/global-stats-updated-processor';
 import { ProfileSelectCategoryEvent, ProfileSelectCategoryProcessor } from './processors/stats/profile-select-category';
 import { RecomputeGameStatsProcessor } from './processors/stats/recompute-game-stats-processor';
 import { StatsXpGraphFilterSelectedProcessor } from './processors/stats/stats-xp-graph-filter-selected-processor';
@@ -229,14 +226,11 @@ import { StoreBootstrapService } from './store-bootstrap.service';
 const MAX_HISTORY_SIZE = 30;
 
 @Injectable()
-export class MainWindowStoreService {
-	public stateUpdater = new EventEmitter<MainWindowStoreEvent>();
-	public state: MainWindowState = null;
-	public navigationState = new NavigationState();
+export class MainWindowStoreService implements IMainWindowStoreService {
+	public mainWindowState$$ = new BehaviorSubject<MainWindowState | null>(null);
+	public navigationState$$ = new BehaviorSubject<NavigationState | null>(null);
 
-	private mergedEmitter = new BehaviorSubject<[MainWindowState, NavigationState]>([this.state, this.navigationState]);
 	private processors: Map<string, Processor>;
-
 	private processingQueue: ProcessingQueue<MainWindowStoreEvent>;
 
 	constructor(
@@ -245,10 +239,7 @@ export class MainWindowStoreService {
 		private readonly collectionManager: CollectionManager,
 		private readonly achievementHistory: AchievementHistoryService,
 		private readonly firestoneRemoteAchievements: FirestoneRemoteAchievementsLoaderService,
-		private readonly gameStatsUpdater: GameStatsUpdaterService,
 		private readonly gameStatsLoader: GameStatsLoaderService,
-		private readonly ow: OverwolfService,
-		private readonly memoryReading: MemoryInspectionService,
 		private readonly events: Events,
 		private readonly storeBootstrap: StoreBootstrapService,
 		private readonly prefs: PreferencesService,
@@ -274,6 +265,7 @@ export class MainWindowStoreService {
 		private readonly simulationController: BgsSimulatorControllerService,
 		private readonly appNavigation: AppNavigationService,
 		private readonly ngZone: NgZone,
+		@Inject(WINDOW_HANDLER_SERVICE_TOKEN) private readonly windowHandler: IWindowHandlerService,
 	) {
 		this.processingQueue = new ProcessingQueue<MainWindowStoreEvent>(
 			(eventQueue) => this.processQueue(eventQueue),
@@ -282,23 +274,42 @@ export class MainWindowStoreService {
 			undefined,
 			this.ngZone,
 		);
-		window['mainWindowStoreMerged'] = this.mergedEmitter;
-		window['mainWindowStoreUpdater'] = this.stateUpdater;
-		this.serviceInit();
+		this.initService();
 	}
 
-	private async serviceInit() {
-		this.gameStatsUpdater.stateUpdater = this.stateUpdater;
-		this.processors = this.buildProcessors();
-
-		this.stateUpdater.subscribe((event: MainWindowStoreEvent) => {
-			this.processingQueue.enqueue(event);
+	public async init() {
+		console.log('building initial window state');
+		this.navigationState$$.subscribe((state) => {
+			this.mainNavigation.navigationState$$.next(state);
 		});
+		const prefs = await this.prefs.getPreferences();
+		const state = this.storeBootstrap.buildInitialStore(prefs);
+		const navState = await new StoreInitProcessor(
+			this.prefs,
+			this.i18n,
+			this.mainNavigation,
+			this.collectionNavigation,
+			this.battlegroundsNavigation,
+			this.constructedNavigation,
+			this.achievementsNavigation,
+			this.arenaNavigation,
+		).buildCurrentAppNavState(state, new NavigationState(), prefs);
+		this.mainWindowState$$.next(state);
+		this.navigationState$$.next(navState);
+		console.log('initial window state built');
+	}
+
+	public send(event: MainWindowStoreEvent) {
+		this.processingQueue.enqueue(event);
+	}
+
+	private async initService() {
+		this.processors = this.buildProcessors();
 
 		await waitForReady(this.appNavigation);
 		this.appNavigation.currentTab$$.pipe(filter((tab) => !!tab)).subscribe((tab) => {
 			console.debug('[navigation] changing tab', tab);
-			this.stateUpdater.next(new ChangeVisibleApplicationEvent(tab));
+			this.send(new ChangeVisibleApplicationEvent(tab));
 		});
 	}
 
@@ -314,14 +325,15 @@ export class MainWindowStoreService {
 		// Don't modify the current state here, as it could make state lookup impossible
 		// (for back / forward arrows for instance)
 		try {
-			console.debug('processing nav', this.navigationState);
-			const [newState, newNavState] = await processor.process(event, this.state, this.navigationState);
+			let currentState = this.mainWindowState$$.value;
+			let currentNavState = this.navigationState$$.value;
+			const [newState, newNavState] = await processor.process(event, currentState, currentNavState);
 
 			if (newNavState) {
-				this.navigationState = newNavState;
+				this.navigationState$$.next(newNavState);
 			}
 			if (newState) {
-				this.state = newState;
+				this.mainWindowState$$.next(newState);
 				if (Date.now() - start > 1000) {
 					console.warn(
 						'[store] Event',
@@ -330,11 +342,7 @@ export class MainWindowStoreService {
 						Date.now() - start,
 					);
 				}
-			} else {
 			}
-
-			// console.debug('emitting new merged state', event.eventName(), this.state);
-			this.mergedEmitter.next([this.state, this.navigationState]);
 		} catch (e) {
 			console.error('[store] exception while processing event', event.eventName(), event, e.message, e.stack, e);
 		}
@@ -344,21 +352,6 @@ export class MainWindowStoreService {
 
 	private buildProcessors(): Map<string, Processor> {
 		const processors: readonly [string, Processor][] = [
-			[
-				StoreInitEvent.eventName(),
-				new StoreInitProcessor(
-					this.events,
-					this.prefs,
-					this.i18n,
-					this.mainNavigation,
-					this.collectionNavigation,
-					this.battlegroundsNavigation,
-					this.constructedNavigation,
-					this.achievementsNavigation,
-					this.arenaNavigation,
-				),
-			],
-			[GlobalStatsLoadedEvent.eventName(), new GlobalStatsLoadedProcessor()],
 			[
 				NavigationBackEvent.eventName(),
 				new NavigationBackProcessor(
@@ -488,11 +481,9 @@ export class MainWindowStoreService {
 				),
 			],
 
-			[GlobalStatsUpdatedEvent.eventName(), new GlobalStatsUpdatedProcessor(this.events)],
-
 			// Social
 			[StartSocialSharingEvent.eventName(), new StartSocialSharingProcessor()],
-			[ShareVideoOnSocialNetworkEvent.eventName(), new ShareVideoOnSocialNetworkProcessor(this.ow)],
+			// [ShareVideoOnSocialNetworkEvent.eventName(), new ShareVideoOnSocialNetworkProcessor(this.ow)],
 			[CloseSocialShareModalEvent.eventName(), new CloseSocialShareModalProcessor()],
 			// Ftue
 			[NextFtueEvent.eventName(), new NextFtueProcessor(this.prefs, this.mainNavigation)],
@@ -602,10 +593,6 @@ export class MainWindowStoreService {
 				SelectBattlegroundsCategoryEvent.eventName(),
 				new SelectBattlegroundsCategoryProcessor(this.battlegroundsNavigation, this.mainNavigation),
 			],
-			[
-				BgsTribesFilterSelectedEvent.eventName(),
-				new BgsTribesFilterSelectedProcessor(this.prefs, this.stateUpdater),
-			],
 			// [
 			// 	BgsRequestNewGlobalStatsLoadEvent.eventName(),
 			// 	new BgsRequestNewGlobalStatsLoadProcessor(this.bgsGlobalStats),
@@ -633,9 +620,9 @@ export class MainWindowStoreService {
 					this.i18n,
 					this.battlegroundsNavigation,
 					this.mainNavigation,
-					this.ow,
 					this.prefs,
 					this.simulationController,
+					this.windowHandler,
 				),
 			],
 			[
@@ -684,12 +671,5 @@ export class MainWindowStoreService {
 		];
 
 		return Map(processors);
-	}
-
-	public async init() {
-		console.log('building initial window state');
-		const prefs = await this.prefs.getPreferences();
-		this.state = this.storeBootstrap.buildInitialStore(prefs);
-		this.stateUpdater.next(new StoreInitEvent(this.state, false));
 	}
 }

@@ -1,29 +1,27 @@
-import { EventEmitter, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { BgsPostMatchStats as IBgsPostMatchStats } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { normalizeHeroCardId } from '@firestone-hs/reference-data';
 import { BgsBestStat, Input as BgsComputeRunStatsInput, buildNewStats } from '@firestone-hs/user-bgs-post-match-stats';
 import { buildBgsRunStatsInput } from '@firestone/battlegrounds/services';
 import { BgsGame, BgsPostMatchStats, BgsPostMatchStatsForReview, RealTimeStatsState } from '@firestone/game-state';
+import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { Events } from '@firestone/shared/common/service';
-import { ApiRunner, CardsFacadeService, OverwolfService, UserService } from '@firestone/shared/framework/core';
+import { ApiRunner, CardsFacadeService, UserService } from '@firestone/shared/framework/core';
 import { GameForUpload, GameStatsProviderService } from '@firestone/stats/services';
 import { BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent } from '../mainwindow/store/events/battlegrounds/bgs-personal-stats-select-hero-details-with-remote-info-event';
 import { BgsPostMatchStatsComputedEvent } from '../mainwindow/store/events/battlegrounds/bgs-post-match-stats-computed-event';
-import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
 import { ShowMatchStatsEvent } from '../mainwindow/store/events/replays/show-match-stats-event';
 import { sleep } from '../utils';
 
 @Injectable()
 export class BgsRunStatsService {
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
 	constructor(
 		private readonly apiRunner: ApiRunner,
 		private readonly events: Events,
-		private readonly ow: OverwolfService,
 		private readonly userService: UserService,
 		private readonly games: GameStatsProviderService,
 		private readonly allCards: CardsFacadeService,
+		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
 	) {
 		this.events.on(Events.START_BGS_RUN_STATS).subscribe(async (event) => {
 			console.debug(
@@ -38,9 +36,6 @@ export class BgsRunStatsService {
 		this.events.on(Events.POPULATE_HERO_DETAILS_FOR_BG).subscribe(async (event) => {
 			this.computeHeroDetailsForBg(event.data[0]);
 		});
-		setTimeout(() => {
-			this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-		});
 	}
 
 	public async retrieveReviewPostMatchStats(reviewId: string): Promise<void> {
@@ -49,14 +44,14 @@ export class BgsRunStatsService {
 		);
 		console.debug('[bgs-run-stats] post-match results for review', reviewId, resultFromS3);
 		if (!!resultFromS3) {
-			this.stateUpdater.next(new ShowMatchStatsEvent(reviewId, resultFromS3));
+			this.mainWindowStateFacade.send(new ShowMatchStatsEvent(reviewId, resultFromS3));
 			return;
 		}
 	}
 
 	private async computeHeroDetailsForBg(heroCardId: string) {
 		const lastHeroPostMatchStats = await this.retrieveLastBgsRunStats(heroCardId);
-		this.stateUpdater.next(
+		this.mainWindowStateFacade.send(
 			new BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent(lastHeroPostMatchStats, heroCardId),
 		);
 	}
@@ -112,7 +107,7 @@ export class BgsRunStatsService {
 		console.debug('[bgs-run-stats] newBestVaues');
 		// Wait a bit, to be sure that the stats have been created
 		await sleep(1000);
-		this.stateUpdater.next(new BgsPostMatchStatsComputedEvent(reviewId, postMatchStats, newBestValues));
+		this.mainWindowStateFacade.send(new BgsPostMatchStatsComputedEvent(reviewId, postMatchStats, newBestValues));
 	}
 
 	private populateObject(

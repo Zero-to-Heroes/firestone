@@ -1,6 +1,5 @@
-import { MainWindowState } from '../../../../models/mainwindow/main-window-state';
-import { NavigationState } from '../../../../models/mainwindow/navigation/navigation-state';
-import { MainWindowStoreEvent } from '../events/main-window-store-event';
+import { MainWindowStoreEvent } from '@firestone/mainwindow/common';
+import { MainWindowState, NavigationState } from '@firestone/mainwindow/common';
 
 export interface Processor {
 	process(

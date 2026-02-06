@@ -2,7 +2,8 @@ import { Inject, Injectable } from '@angular/core';
 import { BoosterType, CardIds, getDefaultBoosterIdForSetId } from '@firestone-hs/reference-data';
 import { CardPackResult, PackCardInfo, PackResult } from '@firestone-hs/user-packs';
 import { ICollectionPackService } from '@firestone/collection/common';
-import { DiskCacheService } from '@firestone/shared/common/service';
+import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
+import { DiskCacheService, Events } from '@firestone/shared/common/service';
 import {
 	ApiRunner,
 	COLLECTION_PACK_STATS,
@@ -12,9 +13,7 @@ import {
 } from '@firestone/shared/framework/core';
 import { InternalCardInfo } from '../../../js/models/collection/internal-card-info';
 import { SetsService } from '../../../js/services/collection/sets-service.service';
-import { Events } from '@firestone/shared/common/service';
 import { CollectionPacksUpdatedEvent } from '../../../js/services/mainwindow/store/events/collection/colection-packs-updated-event';
-import { AppUiStoreFacadeService } from '../../../js/services/ui-store/app-ui-store-facade.service';
 
 const PACKS_UPDATE_URL = 'https://zbfdquy6qvpmragkcwjzpr3v5a0bcgfn.lambda-url.us-west-2.on.aws/';
 const PACKS_RETRIEVE_URL = 'https://dwfrvwcatnkfohkhcksuxweoii0mtgch.lambda-url.us-west-2.on.aws/';
@@ -27,8 +26,8 @@ export class PackStatsService implements ICollectionPackService {
 		private readonly ow: OverwolfService,
 		private readonly api: ApiRunner,
 		private readonly diskCache: DiskCacheService,
-		private readonly store: AppUiStoreFacadeService,
 		@Inject(DATABASE_SERVICE_TOKEN) private readonly indexedDb: IDatabaseService,
+		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
 	) {
 		this.events.on(Events.NEW_PACK).subscribe((event) => this.publishPackStat(event));
 	}
@@ -63,7 +62,7 @@ export class PackStatsService implements ICollectionPackService {
 
 	public async refreshPackStats() {
 		const packs: readonly PackResult[] = await this.loadPacksFromRemote();
-		this.store.send(new CollectionPacksUpdatedEvent(packs));
+		this.mainWindowStateFacade.send(new CollectionPacksUpdatedEvent(packs));
 	}
 
 	private async loadPacksFromRemote(): Promise<readonly PackResult[]> {

@@ -1,22 +1,13 @@
-import {
-	AfterContentInit,
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	EventEmitter,
-	ViewRef,
-} from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { ALL_BG_RACES, Race } from '@firestone-hs/reference-data';
 import { BattlegroundsNavigationService } from '@firestone/battlegrounds/services';
+import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
-import { BgsTribesFilterSelectedEvent } from '../../../../services/mainwindow/store/events/battlegrounds/bgs-tribes-filter-selected-event';
-import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 
 @Component({
 	standalone: false,
@@ -36,7 +27,7 @@ import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/even
 })
 export class BattlegroundsTribesFilterDropdownComponent
 	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit
+	implements AfterContentInit
 {
 	allTribes$: Observable<readonly Race[]>;
 	currentFilter$: Observable<readonly Race[]>;
@@ -44,14 +35,12 @@ export class BattlegroundsTribesFilterDropdownComponent
 
 	validationErrorTooltip = this.i18n.translateString('app.battlegrounds.filters.tribe.validation-error-tooltip');
 
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
 	constructor(
-		private readonly ow: OverwolfService,
 		private readonly i18n: LocalizationFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly nav: BattlegroundsNavigationService,
 		private readonly prefs: PreferencesService,
+		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
 	) {
 		super(cdr);
 	}
@@ -87,11 +76,7 @@ export class BattlegroundsTribesFilterDropdownComponent
 		}
 	}
 
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-	}
-
 	onSelected(values: readonly Race[]) {
-		this.stateUpdater.next(new BgsTribesFilterSelectedEvent((values ?? []).map((value) => +value as Race)));
+		this.prefs.updatePrefs('bgsActiveTribesFilter', [...values].sort());
 	}
 }

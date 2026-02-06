@@ -7,12 +7,10 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { BgsPostMatchStatsPanel } from '@firestone/game-state';
-import { MainWindowNavigationService } from '@firestone/mainwindow/common';
+import { CurrentViewType, MainWindowNavigationService } from '@firestone/mainwindow/common';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ADS_SERVICE_TOKEN, IAdsService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
-import { CurrentViewType } from '../../models/mainwindow/replays/current-view.type';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Component({
 	standalone: false,
@@ -54,7 +52,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ReplaysComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class ReplaysComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	loading$: Observable<boolean>;
 	showGlobalHeader$: Observable<boolean>;
 	currentView$: Observable<CurrentViewType>;
@@ -62,24 +60,23 @@ export class ReplaysComponent extends AbstractSubscriptionStoreComponent impleme
 	showAds$: Observable<boolean>;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly nav: MainWindowNavigationService,
 		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
 		await waitForReady(this.nav, this.ads);
 
 		this.showGlobalHeader$ = this.nav.text$$.pipe(this.mapData((text) => !!text));
-		this.currentView$ = this.store
-			.listen$(([main, nav, prefs]) => nav.navigationReplays.currentView)
-			.pipe(this.mapData(([currentView]) => currentView));
-		this.bgsPostMatchStatsPanel$ = this.store
-			.listen$(([main, nav, prefs]) => nav.navigationReplays.selectedReplay?.bgsPostMatchStatsPanel)
-			.pipe(this.mapData(([bgsPostMatchStatsPanel]) => bgsPostMatchStatsPanel));
+		this.currentView$ = this.nav.navigationState$$.pipe(
+			this.mapData((state) => state.navigationReplays.currentView),
+		);
+		this.bgsPostMatchStatsPanel$ = this.nav.navigationState$$.pipe(
+			this.mapData((state) => state.navigationReplays.selectedReplay?.bgsPostMatchStatsPanel),
+		);
 		this.showAds$ = this.ads.hasPremiumSub$$.pipe(this.mapData((info) => !info));
 
 		if (!(this.cdr as ViewRef).destroyed) {

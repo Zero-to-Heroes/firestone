@@ -9,13 +9,12 @@ import {
 } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { AchievementsStateManagerService, VisualAchievement } from '@firestone/achievements/common';
+import { MainWindowNavigationService, MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { sortByProperties } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent, sortByProperties } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
-import { findAchievements } from '../../models/mainwindow/achievements-state';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
+import { findAchievements } from '@firestone/mainwindow/common';
 
 @Component({
 	standalone: false,
@@ -58,7 +57,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AchievementsListComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class AchievementsListComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	activeAchievements$: Observable<VisualAchievement[]>;
 	totalAchievements$: Observable<number>;
 	achieved$: Observable<number>;
@@ -68,24 +67,27 @@ export class AchievementsListComponent extends AbstractSubscriptionStoreComponen
 	pinnedAchievements$: Observable<readonly number[]>;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly el: ElementRef,
 		private readonly domSanitizer: DomSanitizer,
 		private readonly achievements: AchievementsStateManagerService,
 		private readonly prefs: PreferencesService,
+		private readonly mainWindowNavigation: MainWindowNavigationService,
+		private readonly mainWindowState: MainWindowStateFacadeService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.achievements, this.prefs);
+		await waitForReady(this.achievements, this.prefs, this.mainWindowNavigation, this.mainWindowState);
 
 		const achievements$ = combineLatest([
 			this.achievements.groupedAchievements$$,
-			this.store.listen$(([main, nav, prefs]) => nav.navigationAchievements.displayedAchievementsList),
+			this.mainWindowNavigation.navigationState$$.pipe(
+				this.mapData((nav) => nav.navigationAchievements.displayedAchievementsList),
+			),
 		]).pipe(
-			this.mapData(([categories, [displayedAchievementsList]]) =>
+			this.mapData(([categories, displayedAchievementsList]) =>
 				findAchievements(categories, displayedAchievementsList),
 			),
 		);
@@ -100,8 +102,8 @@ export class AchievementsListComponent extends AbstractSubscriptionStoreComponen
 		);
 		const filterOption$ = combineLatest([
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.achievementsCompletedActiveFilter)),
-			this.store.listen$(([main, nav]) => main.achievements.filters),
-		]).pipe(this.mapData(([pref, [filters]]) => filters.find((option) => option.value === pref)));
+			this.mainWindowState.mainWindowState$$.pipe(this.mapData((state) => state.achievements.filters)),
+		]).pipe(this.mapData(([pref, filters]) => filters.find((option) => option.value === pref)));
 		this.emptyStateTitle$ = filterOption$.pipe(this.mapData((option) => option.emptyStateTitle));
 		this.emptyStateText$ = filterOption$.pipe(this.mapData((option) => option.emptyStateText));
 		this.emptyStateSvgTemplate$ = filterOption$.pipe(
@@ -120,9 +122,9 @@ export class AchievementsListComponent extends AbstractSubscriptionStoreComponen
 					.sort(sortByProperties((a) => [a.isFullyCompleted(), a.name])),
 			),
 		);
-		this.store
-			.listen$(([main, nav, prefs]) => nav.navigationAchievements.selectedAchievementId)
-			.pipe(this.mapData(([selectedAchievementId]) => selectedAchievementId))
+		this.mainWindowNavigation.navigationState$$
+			.pipe(this.mapData((nav) => nav.navigationAchievements.selectedAchievementId))
+			.pipe(this.mapData((selectedAchievementId) => selectedAchievementId))
 			.subscribe((selectedAchievementId) => {
 				const achievementToShow: Element = this.el.nativeElement.querySelector(
 					`achievement-view[data-achievement-id=${selectedAchievementId?.toLowerCase()}]`,
@@ -134,9 +136,7 @@ export class AchievementsListComponent extends AbstractSubscriptionStoreComponen
 					});
 				}
 			});
-		this.pinnedAchievements$ = this.store
-			.listen$(([main, nav, prefs]) => prefs.pinnedAchievementIds)
-			.pipe(this.mapData(([pinnedAchievementIds]) => pinnedAchievementIds));
+		this.pinnedAchievements$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.pinnedAchievementIds));
 
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.markForCheck();

@@ -1,13 +1,14 @@
 import { Inject, Injectable } from '@angular/core';
 import { CardsForSet, ProfilePackStat, ProfileSet } from '@firestone-hs/api-user-profile';
 import { SceneMode } from '@firestone-hs/reference-data';
+import { CollectionCardType } from '@firestone-hs/user-packs';
+import { Set as CollectionSet } from '@firestone/collection/common';
 import { SceneService } from '@firestone/memory';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
-import { ADS_SERVICE_TOKEN, IAdsService } from '@firestone/shared/framework/core';
+import { ADS_SERVICE_TOKEN, IAdsService, waitForReady } from '@firestone/shared/framework/core';
 import { combineLatest, debounceTime, distinctUntilChanged, filter, map, take } from 'rxjs';
-import { CollectionCardType } from '../../../models/collection/collection-card-type.type';
-import { Set as CollectionSet } from '../../../models/set';
-import { AppUiStoreFacadeService } from '../../ui-store/app-ui-store-facade.service';
+import { CollectionManager } from '../../collection/collection-manager.service';
+import { SetsManagerService } from '../../collection/sets-manager.service';
 import { equalProfilePackStat, equalProfileSet } from '../profile-uploader.service';
 
 @Injectable()
@@ -16,15 +17,16 @@ export class InternalProfileCollectionService {
 	public packsAllTime$$ = new SubscriberAwareBehaviorSubject<readonly ProfilePackStat[]>([]);
 
 	constructor(
-		private readonly store: AppUiStoreFacadeService,
 		private readonly sceneService: SceneService,
 		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
+		private readonly sets: SetsManagerService,
+		private readonly collectionManager: CollectionManager,
 	) {
 		this.init();
 	}
 
 	private async init() {
-		await Promise.all([this.store.initComplete(), this.sceneService.isReady(), this.ads.isReady()]);
+		await waitForReady(this.sceneService, this.ads, this.sets, this.collectionManager);
 
 		this.sets$$.onFirstSubscribe(() => {
 			combineLatest([this.sceneService.currentScene$$, this.ads.enablePremiumFeatures$$])
@@ -51,9 +53,7 @@ export class InternalProfileCollectionService {
 	}
 
 	private initSets() {
-		// TODO: don't upload if the collection didn't change since last upload
-
-		const setsToUpload$ = combineLatest([this.ads.enablePremiumFeatures$$, this.store.sets$()]).pipe(
+		const setsToUpload$ = combineLatest([this.ads.enablePremiumFeatures$$, this.sets.sets$$]).pipe(
 			filter(([premium, sets]) => premium),
 			// So that we don't spam the server when the user is opening packs
 			debounceTime(10000),
@@ -93,7 +93,10 @@ export class InternalProfileCollectionService {
 	}
 
 	private initBoosters() {
-		const boostersToUpload$ = combineLatest([this.ads.enablePremiumFeatures$$, this.store.allTimeBoosters$()]).pipe(
+		const boostersToUpload$ = combineLatest([
+			this.ads.enablePremiumFeatures$$,
+			this.collectionManager.allTimeBoosters$$,
+		]).pipe(
 			filter(([premium, sets]) => premium),
 			debounceTime(2000),
 			map(([premium, boosters]) => {

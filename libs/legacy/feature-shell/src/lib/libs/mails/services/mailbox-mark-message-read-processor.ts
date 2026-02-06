@@ -1,6 +1,5 @@
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { MainWindowState } from '../../../js/models/mainwindow/main-window-state';
-import { NavigationState } from '../../../js/models/mainwindow/navigation/navigation-state';
+import { MainWindowState, NavigationState } from '@firestone/mainwindow/common';
 import { Processor } from '../../../js/services/mainwindow/store/processors/processor';
 import { MailboxMarkMessageReadEvent } from './mailbox-mark-message-read-event';
 

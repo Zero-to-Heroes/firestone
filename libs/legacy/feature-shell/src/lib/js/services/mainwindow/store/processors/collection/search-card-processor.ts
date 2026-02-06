@@ -1,11 +1,12 @@
-import { CollectionNavigationService } from '@firestone/collection/common';
-import { MainWindowNavigationService } from '@firestone/mainwindow/common';
+import { CollectionNavigationService, SetCard } from '@firestone/collection/common';
+import {
+	MainWindowNavigationService,
+	MainWindowState,
+	NavigationCollection,
+	NavigationState,
+} from '@firestone/mainwindow/common';
 import { Card } from '@firestone/memory';
 import { LocalizationService } from '@services/localization.service';
-import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
-import { NavigationCollection } from '../../../../../models/mainwindow/navigation/navigation-collection';
-import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
-import { SetCard } from '../../../../../models/set';
 import { CollectionManager } from '../../../../collection/collection-manager.service';
 import { SetsService } from '../../../../collection/sets-service.service';
 import { SearchCardsEvent } from '../../events/collection/search-cards-event';

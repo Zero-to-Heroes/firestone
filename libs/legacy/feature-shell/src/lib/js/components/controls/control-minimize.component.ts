@@ -1,7 +1,7 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { MainWindowStateFacadeService, MainWindowStoreEvent } from '@firestone/mainwindow/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { CloseMainWindowEvent } from '../../services/mainwindow/store/events/close-main-window-event';
-import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 
 @Component({
 	standalone: false,
@@ -19,23 +19,20 @@ import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/mai
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ControlMinimizeComponent implements AfterViewInit {
+export class ControlMinimizeComponent {
 	@Input() windowId: string;
 	@Input() isMainWindow: boolean;
 	@Input() eventProvider: () => MainWindowStoreEvent;
 
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
-	constructor(private ow: OverwolfService) {}
-
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-	}
+	constructor(
+		private ow: OverwolfService,
+		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
+	) {}
 
 	async minimizeWindow() {
 		const windowName = (await this.ow.getCurrentWindow()).name;
 		if (this.isMainWindow) {
-			this.stateUpdater.next(new CloseMainWindowEvent());
+			this.mainWindowStateFacade.send(new CloseMainWindowEvent());
 		}
 		// Delegate all the logic
 		if (this.eventProvider) {

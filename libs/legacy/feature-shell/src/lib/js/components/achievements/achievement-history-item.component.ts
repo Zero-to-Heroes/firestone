@@ -1,8 +1,8 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, HostListener, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostListener, Input } from '@angular/core';
 import { AchievementHistory } from '@firestone/achievements/common';
+import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
 import { ChangeVisibleAchievementEvent } from '../../services/mainwindow/store/events/achievements/change-visible-achievement-event';
-import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 
 @Component({
 	standalone: false,
@@ -16,21 +16,17 @@ import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/mai
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AchievementHistoryItemComponent implements AfterViewInit {
+export class AchievementHistoryItemComponent {
 	achievementName: string;
 	creationDate: string;
 
 	private achievementId: string;
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
 		private readonly ow: OverwolfService,
 		private readonly i18n: ILocalizationService,
+		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
 	) {}
-
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-	}
 
 	@Input() set historyItem(history: AchievementHistory) {
 		if (!history) {
@@ -47,6 +43,6 @@ export class AchievementHistoryItemComponent implements AfterViewInit {
 
 	@HostListener('mousedown')
 	onClick() {
-		this.stateUpdater.next(new ChangeVisibleAchievementEvent(this.achievementId));
+		this.mainWindowStateFacade.send(new ChangeVisibleAchievementEvent(this.achievementId));
 	}
 }

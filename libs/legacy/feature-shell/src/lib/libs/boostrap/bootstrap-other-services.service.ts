@@ -32,7 +32,7 @@ import { CollectionStorageService } from '../../js/services/collection/collectio
 import { ConstructedConfigService } from '../../js/services/decktracker/constructed-config.service';
 import { DecksProviderService } from '../../js/services/decktracker/main/decks-provider.service';
 import { DevService } from '../../js/services/dev.service';
-import { GlobalStatsNotifierService } from '../../js/services/global-stats/global-stats-notifier.service';
+import { GlobalStatsService } from '../../js/services/global-stats/global-stats.service';
 import { HsClientConfigService } from '../../js/services/hs-client-config.service';
 import { LogRegisterService } from '../../js/services/log-register.service';
 import { LiveStreamsService } from '../../js/services/mainwindow/live-streams.service';
@@ -66,7 +66,6 @@ export class BootstrapOtherServicesService {
 		private readonly init_ReviewIdService: ReviewIdService,
 		private readonly init_decktrackerDisplayService: OverlayDisplayService,
 		private readonly init_endGameListenerService: EndGameListenerService,
-		private readonly init_GlobalStatsNotifierService: GlobalStatsNotifierService,
 		private readonly init_ReplaysNotificationService: ReplaysNotificationService,
 		private readonly init_BgsInitService: BgsPerfectGamesService,
 		private readonly init_BgsBestUserStatsService: BgsBestUserStatsService,
@@ -93,6 +92,7 @@ export class BootstrapOtherServicesService {
 		private readonly modsManager: ModsManagerService,
 		private readonly init_OwHotkeyHandlerService: OwHotkeyHandlerService,
 		private readonly init_HotkeyFacadeService: HotkeyFacadeService,
+		private readonly init_GlobalStatsService: GlobalStatsService,
 	) {}
 
 	public async bootstrapServices(): Promise<void> {

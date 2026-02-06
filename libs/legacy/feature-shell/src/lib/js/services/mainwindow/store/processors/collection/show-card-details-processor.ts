@@ -1,10 +1,11 @@
-import { CollectionNavigationService } from '@firestone/collection/common';
-import { MainWindowNavigationService } from '@firestone/mainwindow/common';
+import { CollectionNavigationService, Set } from '@firestone/collection/common';
+import {
+	MainWindowNavigationService,
+	MainWindowState,
+	NavigationCollection,
+	NavigationState,
+} from '@firestone/mainwindow/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
-import { NavigationCollection } from '../../../../../models/mainwindow/navigation/navigation-collection';
-import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
-import { Set } from '../../../../../models/set';
 import { SetsManagerService } from '../../../../collection/sets-manager.service';
 import { ShowCardDetailsEvent } from '../../events/collection/show-card-details-event';
 import { Processor } from '../processor';

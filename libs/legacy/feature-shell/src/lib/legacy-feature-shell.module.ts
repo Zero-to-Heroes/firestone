@@ -416,7 +416,7 @@ import {
 	REVIEW_ID_SERVICE_TOKEN,
 	ReviewIdService,
 } from '@firestone/game-state';
-import { MainwindowCommonModule } from '@firestone/mainwindow/common';
+import { MAIN_WINDOW_STORE_SERVICE_TOKEN, MainwindowCommonModule } from '@firestone/mainwindow/common';
 import { MemoryModule } from '@firestone/memory';
 import { MercenariesCommonModule, MercenariesMemoryCacheService } from '@firestone/mercenaries/common';
 import { ModsCommonModule } from '@firestone/mods/common';
@@ -571,18 +571,15 @@ import { DecksProviderService } from './js/services/decktracker/main/decks-provi
 import { DecktrackerStateLoaderService } from './js/services/decktracker/main/decktracker-state-loader.service';
 import { ZoneOrderingService } from './js/services/decktracker/zone-ordering.service';
 import { DevService } from './js/services/dev.service';
-import { GlobalStatsNotifierService } from './js/services/global-stats/global-stats-notifier.service';
 import { GlobalStatsService } from './js/services/global-stats/global-stats.service';
 import { HotkeyService } from './js/services/hotkey.service';
 import { HsClientConfigService } from './js/services/hs-client-config.service';
-import { LazyDataInitService } from './js/services/lazy-data-init.service';
 import { LocalizationFacadeService } from './js/services/localization-facade.service';
 import { LocalizationService } from './js/services/localization.service';
 import { LogRegisterService } from './js/services/log-register.service';
 import { LiveStreamsService } from './js/services/mainwindow/live-streams.service';
 import { OutOfCardsService } from './js/services/mainwindow/out-of-cards.service';
 import { CollectionBootstrapService } from './js/services/mainwindow/store/collection-bootstrap.service';
-import { MainWindowStateFacadeService } from './js/services/mainwindow/store/main-window-state-facade.service';
 import { MainWindowStoreService } from './js/services/mainwindow/store/main-window-store.service';
 import { StoreBootstrapService } from './js/services/mainwindow/store/store-bootstrap.service';
 import { TwitchPresenceService } from './js/services/mainwindow/twitch-presence.service';
@@ -1278,6 +1275,7 @@ try {
 		{ provide: GAME_STATS_PROVIDER_SERVICE_TOKEN, useExisting: GameStatsProviderService },
 		{ provide: REVIEW_ID_SERVICE_TOKEN, useExisting: ReviewIdService },
 		{ provide: USER_SERVICE_TOKEN, useExisting: UserService },
+		{ provide: MAIN_WINDOW_STORE_SERVICE_TOKEN, useExisting: MainWindowStoreService },
 		{ provide: PLAUSIBLE_DOMAIN, useValue: 'firestoneapp.gg-app' },
 
 		SetsService,
@@ -1300,9 +1298,7 @@ try {
 		AdService,
 		TipService,
 		MainWindowStoreService,
-		MainWindowStateFacadeService,
 		StoreBootstrapService,
-		LazyDataInitService,
 		LiveStreamsService,
 		SystemTrayService,
 
@@ -1368,7 +1364,6 @@ try {
 		ArenaLastMatchService,
 
 		GlobalStatsService,
-		GlobalStatsNotifierService,
 
 		ReplaysNotificationService,
 

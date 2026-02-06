@@ -33,7 +33,7 @@ import {
 	waitForReady,
 } from '@firestone/shared/framework/core';
 import { auditTime, combineLatest, distinctUntilChanged, filter, Observable, takeUntil } from 'rxjs';
-import { CurrentAppType } from '../../models/mainwindow/current-app.type';
+import { CurrentAppType } from '@firestone/mainwindow/common';
 import { DebugService } from '../../services/debug.service';
 
 @Component({

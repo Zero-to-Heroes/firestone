@@ -1,5 +1,5 @@
 import { GameEvent } from '@firestone/game-state';
-import { MainWindowState } from '../../../models/mainwindow/main-window-state';
+import { MainWindowState } from '@firestone/mainwindow/common';
 import { MercenariesBattleState } from '../../../models/mercenaries/mercenaries-battle-state';
 
 export interface MercenariesParser {

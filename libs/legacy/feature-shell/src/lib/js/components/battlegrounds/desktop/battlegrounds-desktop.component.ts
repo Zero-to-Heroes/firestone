@@ -1,14 +1,13 @@
 import {
 	AfterContentInit,
-	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
-	EventEmitter,
 	Inject,
 	ViewRef,
 } from '@angular/core';
 import { BG_USE_TRINKETS, BattlegroundsNavigationService, CategoryId } from '@firestone/battlegrounds/services';
+import { BattlegroundsCategory, MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { ENABLE_BGS_COMP_STATS } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import {
@@ -19,10 +18,8 @@ import {
 	waitForReady,
 } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
-import { BattlegroundsCategory } from '../../../models/mainwindow/battlegrounds/battlegrounds-category';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { SelectBattlegroundsCategoryEvent } from '../../../services/mainwindow/store/events/battlegrounds/select-battlegrounds-category-event';
-import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 
 @Component({
 	standalone: false,
@@ -89,10 +86,7 @@ import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsDesktopComponent
-	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit
-{
+export class BattlegroundsDesktopComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	categories: readonly BattlegroundsCategory[];
 
 	loading$: Observable<boolean>;
@@ -101,8 +95,6 @@ export class BattlegroundsDesktopComponent
 	categoryId$: Observable<string>;
 	showAds$: Observable<boolean>;
 
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
@@ -110,6 +102,7 @@ export class BattlegroundsDesktopComponent
 		private readonly analytics: AnalyticsService,
 		private readonly nav: BattlegroundsNavigationService,
 		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
+		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
 	) {
 		super(cdr);
 	}
@@ -174,13 +167,9 @@ export class BattlegroundsDesktopComponent
 		}
 	}
 
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-	}
-
 	selectCategory(categoryId: string) {
 		this.analytics.trackEvent('bgs-navigation', { section: categoryId });
-		this.stateUpdater.next(new SelectBattlegroundsCategoryEvent(categoryId));
+		this.mainWindowStateFacade.send(new SelectBattlegroundsCategoryEvent(categoryId));
 	}
 
 	showSidebar(categoryId: string): boolean {

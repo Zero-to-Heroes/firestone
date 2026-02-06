@@ -1,7 +1,9 @@
-import { MainWindowNavigationService } from '@firestone/mainwindow/common';
-import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
-import { NavigationCollection } from '../../../../../models/mainwindow/navigation/navigation-collection';
-import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
+import {
+	MainWindowNavigationService,
+	MainWindowState,
+	NavigationCollection,
+	NavigationState,
+} from '@firestone/mainwindow/common';
 import { CollectionManager } from '../../../../collection/collection-manager.service';
 import { SetsService } from '../../../../collection/sets-service.service';
 import { UpdateCardSearchResultsEvent } from '../../events/collection/update-card-search-results-event';

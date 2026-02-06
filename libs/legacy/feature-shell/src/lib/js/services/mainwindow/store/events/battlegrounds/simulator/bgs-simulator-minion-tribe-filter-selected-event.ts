@@ -1,4 +1,4 @@
-import { MainWindowStoreEvent } from '../../main-window-store-event';
+import { MainWindowStoreEvent } from '@firestone/mainwindow/common';
 
 export class BgsSimulatorMinionTribeFilterSelectedEvent implements MainWindowStoreEvent {
 	constructor(public readonly tribe: string) {}

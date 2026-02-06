@@ -1,20 +1,17 @@
-import { EventEmitter, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { BoosterType, boosterIdToSetId } from '@firestone-hs/reference-data';
 import { CATCH_UP_PACK_IDS } from '@firestone/collection/view';
+import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { CardPackInfo, MemoryInspectionService, MemoryUpdate, MemoryUpdatesService, PackInfo } from '@firestone/memory';
-import { PreferencesService } from '@firestone/shared/common/service';
+import { MercenariesReferenceData, MercenariesReferenceDataService } from '@firestone/mercenaries/common';
+import { Events, PreferencesService } from '@firestone/shared/common/service';
 import { sleep } from '@firestone/shared/framework/common';
-import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
 import { debounceTime, filter, tap } from 'rxjs/operators';
-import { CollectionCardType } from '../../models/collection/collection-card-type.type';
+import { CollectionCardType } from '@firestone-hs/user-packs';
 import { InternalCardInfo } from '../../models/collection/internal-card-info';
-import { MainWindowState } from '../../models/mainwindow/main-window-state';
-import { NavigationState } from '../../models/mainwindow/navigation/navigation-state';
-import { Events } from '@firestone/shared/common/service';
 import { NewPackEvent } from '../mainwindow/store/events/collection/new-pack-event';
-import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
-import { MercenariesReferenceData, MercenariesReferenceDataService } from '@firestone/mercenaries/common';
 import { groupByFunction } from '../utils';
 import { CardNotificationsService } from './card-notifications.service';
 import { CollectionManager } from './collection-manager.service';
@@ -23,15 +20,11 @@ import { dustFor } from './collection-utils';
 // Only works when cards are logged in the Achievements.log
 @Injectable()
 export class CardsMonitorService {
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-	private mainWindowStore: BehaviorSubject<[MainWindowState, NavigationState]>;
-
 	private packNotificationQueue = new BehaviorSubject<boolean>(false);
 
 	constructor(
 		private readonly cards: CardsFacadeService,
 		private readonly events: Events,
-		private readonly ow: OverwolfService,
 		private readonly collectionManager: CollectionManager,
 		private readonly prefs: PreferencesService,
 		private readonly notifications: CardNotificationsService,
@@ -39,14 +32,13 @@ export class CardsMonitorService {
 		private readonly allCards: CardsFacadeService,
 		private readonly mercenariesReferenceData: MercenariesReferenceDataService,
 		private readonly memoryUpdates: MemoryUpdatesService,
+		private readonly state: MainWindowStateFacadeService,
 	) {
 		this.init();
 	}
 
 	private async init() {
 		await sleep(1);
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-		this.mainWindowStore = this.ow.getMainWindow().mainWindowStoreMerged;
 		this.memoryUpdates.memoryUpdates$$.subscribe(async (changes) => {
 			if (changes.IsOpeningPack) {
 				this.packNotificationQueue.next(true);
@@ -171,7 +163,7 @@ export class CardsMonitorService {
 		console.debug('[cards-monitor] notifying new pack opening', setId, boosterId, packCards);
 
 		this.events.broadcast(Events.NEW_PACK, setId, packCards, boosterId, options.skipPlayerInput);
-		this.stateUpdater.next(new NewPackEvent(setId, boosterId, packCards));
+		this.state.send(new NewPackEvent(setId, boosterId, packCards));
 
 		// Don't show notifs for Merc packs, at least for now.
 		// Would showing the total number of coins be interesting? It would feel very

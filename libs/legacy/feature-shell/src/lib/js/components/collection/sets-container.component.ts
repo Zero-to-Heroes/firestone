@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
-import { Set } from '../../models/set';
+import { Set } from '@firestone/collection/common';
 
 @Component({
 	standalone: false,

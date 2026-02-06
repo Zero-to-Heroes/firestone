@@ -1,12 +1,15 @@
 import { DeckSummary } from '@firestone/constructed/common';
-import { MainWindowStoreEvent } from '../main-window-store-event';
+import { MainWindowStoreEvent } from '@firestone/mainwindow/common';
 
 export class ConstructedEjectDeckVersionEvent implements MainWindowStoreEvent {
 	public static eventName(): string {
 		return 'ConstructedEjectDeckVersionEvent';
 	}
 
-	constructor(public readonly deckstringToEject: string, public readonly deck: DeckSummary) {}
+	constructor(
+		public readonly deckstringToEject: string,
+		public readonly deck: DeckSummary,
+	) {}
 
 	public eventName(): string {
 		return 'ConstructedEjectDeckVersionEvent';

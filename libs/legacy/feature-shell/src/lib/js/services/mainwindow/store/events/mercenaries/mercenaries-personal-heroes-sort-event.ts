@@ -1,5 +1,5 @@
+import { MainWindowStoreEvent } from '@firestone/mainwindow/common';
 import { MercenariesPersonalHeroesSortCriteriaType } from '../../../../../models/mercenaries/personal-heroes-sort-criteria.type';
-import { MainWindowStoreEvent } from '../main-window-store-event';
 
 export class MercenariesPersonalHeroesSortEvent implements MainWindowStoreEvent {
 	public static eventName(): string {

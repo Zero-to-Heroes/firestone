@@ -45,7 +45,7 @@ import {
 	GameStateService,
 } from '@firestone/game-state';
 import { LotteryService, LotteryWidgetControllerService } from '@firestone/lottery/common';
-import { MainWindowNavigationService } from '@firestone/mainwindow/common';
+import { MainWindowNavigationService, MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { BgsSceneService, CardChoicesService, CardMousedOverService } from '@firestone/memory';
 import { AccountService } from '@firestone/profile/common';
 import { BootstrapSettingsService, SettingsControllerService } from '@firestone/settings/services';
@@ -65,7 +65,6 @@ import { AdService } from '../../js/services/ad.service';
 import { BgsPerfectGamesService } from '../../js/services/battlegrounds/bgs-perfect-games.service';
 import { DecksProviderService } from '../../js/services/decktracker/main/decks-provider.service';
 import { CollectionBootstrapService } from '../../js/services/mainwindow/store/collection-bootstrap.service';
-import { MainWindowStateFacadeService } from '../../js/services/mainwindow/store/main-window-state-facade.service';
 import { MainWindowStoreService } from '../../js/services/mainwindow/store/main-window-store.service';
 import { MercenariesSynergiesHighlightService } from '../../js/services/mercenaries/highlights/mercenaries-synergies-highlight.service';
 import { MercenariesStoreService } from '../../js/services/mercenaries/mercenaries-store.service';

@@ -1,11 +1,12 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { CardClass } from '@firestone-hs/reference-data';
 import { classes } from '@firestone/game-state';
+import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable } from 'rxjs';
 import { ConstructedDeckbuilderClassSelectedEvent } from '../../../../services/mainwindow/store/events/decktracker/constructed-deckbuilder-class-selected-event';
-import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	standalone: false,
@@ -34,10 +35,7 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ConstructedDeckbuilderClassComponent
-	extends AbstractSubscriptionStoreComponent
-	implements AfterContentInit
-{
+export class ConstructedDeckbuilderClassComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	rows = [
 		{
 			id: 'top',
@@ -58,18 +56,20 @@ export class ConstructedDeckbuilderClassComponent
 	classOptions$: Observable<readonly ClassOption[]>;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
-	ngAfterContentInit() {
-		this.classOptions$ = this.store
-			.listen$(([main, nav]) => main.decktracker.deckbuilder.currentFormat)
+	async ngAfterContentInit() {
+		await waitForReady(this.mainWindowStateFacade);
+
+		this.classOptions$ = this.mainWindowStateFacade.mainWindowState$$
+			.pipe(this.mapData((state) => state.decktracker.deckbuilder.currentFormat))
 			.pipe(
-				this.mapData(([currentFormat]) => {
+				this.mapData((currentFormat) => {
 					const validClasses =
 						currentFormat === 'twist' || currentFormat === 'classic'
 							? classes.filter(
@@ -88,6 +88,10 @@ export class ConstructedDeckbuilderClassComponent
 					});
 				}),
 			);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.markForCheck();
+		}
 	}
 
 	trackByCardId(index: number, item: ClassOption) {
@@ -95,7 +99,7 @@ export class ConstructedDeckbuilderClassComponent
 	}
 
 	onCardClicked(playerClass: ClassOption) {
-		this.store.send(new ConstructedDeckbuilderClassSelectedEvent(playerClass.id));
+		this.mainWindowStateFacade.send(new ConstructedDeckbuilderClassSelectedEvent(playerClass.id));
 	}
 }
 

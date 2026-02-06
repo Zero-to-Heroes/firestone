@@ -10,8 +10,7 @@ import {
 } from '@angular/core';
 import { BoosterType } from '@firestone-hs/reference-data';
 import { InternalPackInfo } from '@firestone/collection/view';
-import { GenericPreferencesUpdateEvent } from '@legacy-import/src/lib/js/services/mainwindow/store/events/generic-preferences-update-event';
-import { AppUiStoreFacadeService } from '@legacy-import/src/lib/js/services/ui-store/app-ui-store-facade.service';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { LocalizationFacadeService } from '../../../js/services/localization-facade.service';
 import { EPIC_PITY_TIMER, LEGENDARY_PITY_TIMER } from './pack-stats.component';
 
@@ -106,7 +105,7 @@ export class PackStatTooltipComponent {
 	constructor(
 		private readonly i18n: LocalizationFacadeService,
 		private readonly cdr: ChangeDetectorRef,
-		private readonly store: AppUiStoreFacadeService,
+		private readonly prefs: PreferencesService,
 	) {}
 
 	@HostListener('mouseleave', ['$event'])
@@ -114,18 +113,12 @@ export class PackStatTooltipComponent {
 		this.mouseLeave.next(event);
 	}
 
-	resetTimers() {
-		this.store.send(
-			new GenericPreferencesUpdateEvent((prefs) => {
-				const resetDates = {
-					...prefs.collectionPityTimerResets,
-					[this.packId]: Date.now(),
-				};
-				return {
-					...prefs,
-					collectionPityTimerResets: resetDates,
-				};
-			}),
-		);
+	async resetTimers() {
+		const prefs = await this.prefs.getPreferences();
+		const resetDates = {
+			...prefs.collectionPityTimerResets,
+			[this.packId]: Date.now(),
+		};
+		this.prefs.updatePrefs('collectionPityTimerResets', resetDates);
 	}
 }

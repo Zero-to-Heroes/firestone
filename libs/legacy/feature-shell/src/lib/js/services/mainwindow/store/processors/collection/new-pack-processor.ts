@@ -1,13 +1,15 @@
 import { CardPackResult, PackResult } from '@firestone-hs/user-packs';
+import { MainWindowState, NavigationState } from '@firestone/mainwindow/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
-import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { CollectionBootstrapService } from '../../collection-bootstrap.service';
 import { NewPackEvent } from '../../events/collection/new-pack-event';
 import { Processor } from '../processor';
 
 export class NewPackProcessor implements Processor {
-	constructor(private collectionBootstrap: CollectionBootstrapService, private allCards: CardsFacadeService) {}
+	constructor(
+		private collectionBootstrap: CollectionBootstrapService,
+		private allCards: CardsFacadeService,
+	) {}
 
 	public async process(
 		event: NewPackEvent,

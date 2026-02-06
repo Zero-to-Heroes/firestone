@@ -1,23 +1,21 @@
 import {
 	AfterContentInit,
-	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
-	EventEmitter,
 	HostListener,
 	Input,
 	ViewRef,
 } from '@angular/core';
-import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
-import { OverwolfService } from '@firestone/shared/framework/core';
-import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
+import { CollectionCardType } from '@firestone-hs/user-packs';
+import { SetCard } from '@firestone/collection/common';
+import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
-import { CollectionCardType } from '../../models/collection/collection-card-type.type';
-import { SetCard } from '../../models/set';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { ShowCardDetailsEvent } from '../../services/mainwindow/store/events/collection/show-card-details-event';
-import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { CollectionReferenceCard } from './collection-reference-card';
 
 @Component({
@@ -76,7 +74,7 @@ import { CollectionReferenceCard } from './collection-reference-card';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CardComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit, AfterViewInit {
+export class CardComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	showRelatedCards$: Observable<boolean>;
 
 	@Input() set card(card: SetCard | CollectionReferenceCard) {
@@ -147,29 +145,32 @@ export class CardComponent extends AbstractSubscriptionStoreComponent implements
 
 	// private _loadImage = true;
 	private _imageLoaded: boolean;
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
-		protected readonly store: AppUiStoreFacadeService,
-		private readonly ow: OverwolfService,
+		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly prefs: PreferencesService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
-	ngAfterContentInit() {
-		this.showRelatedCards$ = this.listenForBasicPref$((prefs) => prefs.collectionShowRelatedCards);
-	}
+	async ngAfterContentInit() {
+		await waitForReady(this.prefs);
 
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
+		this.showRelatedCards$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.collectionShowRelatedCards),
+		);
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.markForCheck();
+		}
 	}
 
 	@HostListener('mousedown')
 	onClick() {
 		if (this.tooltips) {
-			this.stateUpdater.next(new ShowCardDetailsEvent(this._card.id));
+			this.mainWindowStateFacade.send(new ShowCardDetailsEvent(this._card.id));
 		}
 	}
 

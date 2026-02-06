@@ -1,13 +1,11 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ConstructedNavigationService } from '@firestone/constructed/common';
-import { Preferences } from '@firestone/shared/common/service';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { startWith } from 'rxjs/operators';
-import { GenericPreferencesUpdateEvent } from '../../../../services/mainwindow/store/events/generic-preferences-update-event';
-import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	standalone: false,
@@ -31,21 +29,21 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ConstructedMyDecksSearchComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class ConstructedMyDecksSearchComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	showWidget$: Observable<boolean>;
 
 	searchForm = new FormControl();
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly nav: ConstructedNavigationService,
+		private readonly prefs: PreferencesService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.nav);
+		await waitForReady(this.nav, this.prefs);
 
 		this.showWidget$ = this.nav.currentView$$.pipe(this.mapData((currentView) => currentView === 'decks'));
 
@@ -54,14 +52,7 @@ export class ConstructedMyDecksSearchComponent extends AbstractSubscriptionStore
 				startWith(null),
 				this.mapData((data: string) => data?.toLowerCase(), null, 50),
 			)
-			.subscribe((search) =>
-				this.store.send(
-					new GenericPreferencesUpdateEvent((prefs: Preferences) => ({
-						...prefs,
-						constructedDecksSearchString: search,
-					})),
-				),
-			);
+			.subscribe((search) => this.prefs.updatePrefs('constructedDecksSearchString', search));
 
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.markForCheck();

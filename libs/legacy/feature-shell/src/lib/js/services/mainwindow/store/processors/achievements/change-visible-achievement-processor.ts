@@ -4,9 +4,7 @@ import {
 	buildAchievementHierarchy,
 	VisualAchievement,
 } from '@firestone/achievements/common';
-import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
-import { NavigationAchievements } from '../../../../../models/mainwindow/navigation/navigation-achievements';
-import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
+import { MainWindowState, NavigationAchievements, NavigationState } from '@firestone/mainwindow/common';
 import { ChangeVisibleAchievementEvent } from '../../events/achievements/change-visible-achievement-event';
 import { Processor } from '../processor';
 

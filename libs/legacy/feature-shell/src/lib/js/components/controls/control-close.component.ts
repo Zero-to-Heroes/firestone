@@ -1,8 +1,8 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { CloseMainWindowEvent } from '../../services/mainwindow/store/events/close-main-window-event';
-import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { isWindowClosed } from '../../services/utils';
 
 @Component({
@@ -29,7 +29,7 @@ import { isWindowClosed } from '../../services/utils';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ControlCloseComponent implements AfterViewInit {
+export class ControlCloseComponent {
 	@Input() windowId: string;
 	@Input() closeAll: boolean;
 	@Input() isMainWindow: boolean;
@@ -37,22 +37,17 @@ export class ControlCloseComponent implements AfterViewInit {
 	@Input() askConfirmation: boolean;
 	@Input() eventProvider: () => void;
 
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
 	constructor(
-		private ow: OverwolfService,
-		private prefs: PreferencesService,
+		private readonly ow: OverwolfService,
+		private readonly prefs: PreferencesService,
+		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
 	) {}
-
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-	}
 
 	async closeWindow() {
 		const windowName = (await this.ow.getCurrentWindow()).name;
 
 		if (this.isMainWindow) {
-			this.stateUpdater.next(new CloseMainWindowEvent());
+			this.mainWindowStateFacade.send(new CloseMainWindowEvent());
 		}
 		// Delegate all the logic
 		// If game is not running, we close all other windows

@@ -1,11 +1,14 @@
-import { MainWindowStoreEvent } from '../main-window-store-event';
+import { MainWindowStoreEvent } from '@firestone/mainwindow/common';
 
 export class ConstructedNewDeckVersionEvent implements MainWindowStoreEvent {
 	public static eventName(): string {
 		return 'ConstructedNewDeckVersionEvent';
 	}
 
-	constructor(public readonly newVersionDeckstring: string, public readonly previousVersionDeckstring) {}
+	constructor(
+		public readonly newVersionDeckstring: string,
+		public readonly previousVersionDeckstring,
+	) {}
 
 	public eventName(): string {
 		return 'ConstructedNewDeckVersionEvent';

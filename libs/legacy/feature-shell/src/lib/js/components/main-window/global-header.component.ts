@@ -1,20 +1,10 @@
-import {
-	AfterContentInit,
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	EventEmitter,
-	Input,
-	ViewRef,
-} from '@angular/core';
-import { MainWindowNavigationService } from '@firestone/mainwindow/common';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { MainWindowNavigationService, MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@legacy-import/src/lib/js/services/localization-facade.service';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { NavigationBackEvent } from '../../services/mainwindow/store/events/navigation/navigation-back-event';
 import { NavigationNextEvent } from '../../services/mainwindow/store/events/navigation/navigation-next-event';
 
@@ -45,7 +35,7 @@ import { NavigationNextEvent } from '../../services/mainwindow/store/events/navi
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GlobalHeaderComponent extends AbstractSubscriptionComponent implements AfterContentInit, AfterViewInit {
+export class GlobalHeaderComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	text$: Observable<string>;
 	image$: Observable<string>;
 	// backArrow$: Observable<boolean>;
@@ -53,13 +43,11 @@ export class GlobalHeaderComponent extends AbstractSubscriptionComponent impleme
 
 	@Input() backArrow: boolean;
 
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
-		private readonly ow: OverwolfService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly nav: MainWindowNavigationService,
+		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
 	) {
 		super(cdr);
 	}
@@ -83,15 +71,11 @@ export class GlobalHeaderComponent extends AbstractSubscriptionComponent impleme
 		}
 	}
 
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-	}
-
 	back() {
-		this.stateUpdater.next(new NavigationBackEvent());
+		this.mainWindowStateFacade.send(new NavigationBackEvent());
 	}
 
 	next() {
-		this.stateUpdater.next(new NavigationNextEvent());
+		this.mainWindowStateFacade.send(new NavigationNextEvent());
 	}
 }

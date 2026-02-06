@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { PresenceInfo } from '@firestone-hs/twitch-presence';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
-import { StreamsCategoryType } from '../../../models/mainwindow/streams/streams.type';
+import { StreamsCategoryType } from '@firestone/mainwindow/common';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { LiveStreamsService } from '../../../services/mainwindow/live-streams.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';

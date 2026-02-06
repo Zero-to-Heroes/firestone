@@ -1,13 +1,13 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { Preferences } from '@firestone/shared/common/service';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { MainWindowNavigationService } from '@firestone/mainwindow/common';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { IOption } from '@firestone/shared/common/view';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { Observable } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { MercenariesFullyUpgradedFilterType } from '../../../../models/mercenaries/mercenaries-filter-types';
-import { GenericPreferencesUpdateEvent } from '../../../../services/mainwindow/store/events/generic-preferences-update-event';
-import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	standalone: false,
@@ -27,7 +27,7 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MercenariesFullyUpgradedFilterDropdownComponent
-	extends AbstractSubscriptionStoreComponent
+	extends AbstractSubscriptionComponent
 	implements AfterContentInit
 {
 	options: FilterOption[];
@@ -35,14 +35,17 @@ export class MercenariesFullyUpgradedFilterDropdownComponent
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly prefs: PreferencesService,
+		private readonly mainNavigationService: MainWindowNavigationService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
-	ngAfterContentInit(): void {
+	async ngAfterContentInit() {
+		await waitForReady(this.prefs, this.mainNavigationService);
+
 		this.options = ['all', 'upgraded', 'non-upgraded'].map(
 			(filter) =>
 				({
@@ -50,28 +53,27 @@ export class MercenariesFullyUpgradedFilterDropdownComponent
 					label: this.i18n.translateString(`mercenaries.filters.fully-upgraded.${filter}`),
 				}) as FilterOption,
 		);
-		this.filter$ = this.store
-			.listen$(
-				([main, nav, prefs]) => prefs.mercenariesActiveFullyUpgradedFilter,
-				([main, nav]) => nav.navigationMercenaries.selectedCategoryId,
-			)
-			.pipe(
-				filter(([filter, selectedCategoryId]) => !!filter && !!selectedCategoryId),
-				this.mapData(([filter, selectedCategoryId]) => ({
-					filter: filter,
-					placeholder: this.options.find((option) => option.value === filter)?.label,
-					visible: selectedCategoryId === 'mercenaries-personal-hero-stats',
-				})),
-			);
+		this.filter$ = combineLatest([
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.mercenariesActiveFullyUpgradedFilter)),
+			this.mainNavigationService.navigationState$$.pipe(
+				this.mapData((state) => state.navigationMercenaries.selectedCategoryId),
+			),
+		]).pipe(
+			filter(([filter, selectedCategoryId]) => !!filter && !!selectedCategoryId),
+			this.mapData(([filter, selectedCategoryId]) => ({
+				filter: filter,
+				placeholder: this.options.find((option) => option.value === filter)?.label,
+				visible: selectedCategoryId === 'mercenaries-personal-hero-stats',
+			})),
+		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.markForCheck();
+		}
 	}
 
 	onSelected(option: IOption) {
-		this.store.send(
-			new GenericPreferencesUpdateEvent((prefs: Preferences) => ({
-				...prefs,
-				mercenariesActiveFullyUpgradedFilter: (option as FilterOption).value,
-			})),
-		);
+		this.prefs.updatePrefs('mercenariesActiveFullyUpgradedFilter', (option as FilterOption).value);
 	}
 }
 

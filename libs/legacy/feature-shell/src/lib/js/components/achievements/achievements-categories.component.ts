@@ -1,22 +1,15 @@
-import {
-	AfterContentInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	EventEmitter,
-	ViewRef,
-} from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import {
 	AchievementsNavigationService,
 	AchievementsStateManagerService,
 	findCategory,
 	VisualAchievementCategory,
 } from '@firestone/achievements/common';
+import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { combineLatest, Observable } from 'rxjs';
 import { SelectAchievementCategoryEvent } from '../../services/mainwindow/store/events/achievements/select-achievement-category-event';
-import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 
 @Component({
 	standalone: false,
@@ -43,21 +36,17 @@ import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/mai
 export class AchievementsCategoriesComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	categories$: Observable<readonly VisualAchievementCategory[]>;
 
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly achievements: AchievementsStateManagerService,
 		private readonly nav: AchievementsNavigationService,
-		private readonly ow: OverwolfService,
+		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.achievements, this.nav);
-
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
+		await waitForReady(this.achievements, this.nav, this.mainWindowStateFacade);
 
 		this.categories$ = combineLatest([this.achievements.groupedAchievements$$, this.nav.selectedCategoryId$$]).pipe(
 			this.mapData(
@@ -72,7 +61,7 @@ export class AchievementsCategoriesComponent extends AbstractSubscriptionCompone
 	}
 
 	selectCategory(category: VisualAchievementCategory) {
-		this.stateUpdater.next(new SelectAchievementCategoryEvent(category.id));
+		this.mainWindowStateFacade.send(new SelectAchievementCategoryEvent(category.id));
 	}
 
 	trackByFn(index: number, value: VisualAchievementCategory) {

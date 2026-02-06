@@ -1,6 +1,4 @@
-import { BattlegroundsAppState } from '../../../../../models/mainwindow/battlegrounds/battlegrounds-app-state';
-import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
-import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
+import { BattlegroundsAppState, MainWindowState, NavigationState } from '@firestone/mainwindow/common';
 import { BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent } from '../../events/battlegrounds/bgs-personal-stats-select-hero-details-with-remote-info-event';
 import { Processor } from '../processor';
 

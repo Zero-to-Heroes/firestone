@@ -1,5 +1,6 @@
-import { EventEmitter, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { generateToken } from '@components/third-party/out-of-cards-callback.component';
+import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import {
 	FORCE_LOCAL_PROP,
 	GameStatusService,
@@ -15,7 +16,6 @@ import { LocalizationFacadeService } from '../../js/services/localization-facade
 import { OutOfCardsService, OutOfCardsToken } from '../../js/services/mainwindow/out-of-cards.service';
 import { ChangeVisibleApplicationEvent } from '../../js/services/mainwindow/store/events/change-visible-application-event';
 import { CloseMainWindowEvent } from '../../js/services/mainwindow/store/events/close-main-window-event';
-import { MainWindowStoreEvent } from '../../js/services/mainwindow/store/events/main-window-store-event';
 import { ShowMainWindowEvent } from '../../js/services/mainwindow/store/events/show-main-window-event';
 import { MainWindowStoreService } from '../../js/services/mainwindow/store/main-window-store.service';
 
@@ -24,7 +24,6 @@ export class AppStartupService {
 	// private static readonly STATES = ['INIT', 'READY'];
 	private static readonly LOADING_SCREEN_DURATION = 10000;
 
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 	private currentState = 'INIT';
 	private loadingWindowId: string;
 	private loadingWindowShown = false;
@@ -42,6 +41,7 @@ export class AppStartupService {
 		private readonly localizationService: LocalizationFacadeService,
 		private readonly notifs: NotificationsService,
 		private readonly api: ApiRunner,
+		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
 	) {}
 
 	public async init() {
@@ -129,7 +129,6 @@ export class AppStartupService {
 			}
 		});
 
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 		// const settingsWindow = await this.ow.getSettingsWindow(prefs);
 		// await this.ow.hideWindow(settingsWindow.id);
 		setTimeout(() => this.addAnalytics());
@@ -189,7 +188,7 @@ export class AppStartupService {
 		const window = await this.ow.getCollectionWindow(prefs);
 		if (window.isVisible) {
 			console.log('[startup] closing main window');
-			this.store.stateUpdater.next(new CloseMainWindowEvent());
+			this.mainWindowStateFacade.send(new CloseMainWindowEvent());
 			await this.ow.hideWindow(window.id);
 			// await this.ow.closeWindow(window.id);
 		} else {
@@ -292,7 +291,7 @@ export class AppStartupService {
 		const window = await this.ow.getCollectionWindow(prefs);
 		this.ow.restoreWindow(window.id);
 		this.ow.bringToFront(window.id);
-		this.store.stateUpdater.next(new ShowMainWindowEvent());
+		this.mainWindowStateFacade.send(new ShowMainWindowEvent());
 		this.ow.closeWindow(OverwolfService.LOADING_WINDOW);
 		console.debug('[startup] GOOOOOOOOOOOOOOOOOOOOO collection window restored', window);
 	}
@@ -306,8 +305,8 @@ export class AppStartupService {
 	private async handleExitGame() {
 		const prefs = (await this.prefs.getPreferences()) ?? new Preferences();
 		this.prefs.updateRemotePreferences();
-		if (prefs.showSessionRecapOnExit && this.stateUpdater) {
-			this.stateUpdater.next(new ChangeVisibleApplicationEvent('replays', true));
+		if (prefs.showSessionRecapOnExit && this.mainWindowStateFacade) {
+			this.mainWindowStateFacade.send(new ChangeVisibleApplicationEvent('replays', true));
 			const collectionWindow = await this.ow.getCollectionWindow(prefs);
 			this.ow.restoreWindow(collectionWindow.id);
 		} else {

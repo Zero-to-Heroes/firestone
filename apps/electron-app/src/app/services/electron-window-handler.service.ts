@@ -46,6 +46,11 @@ export class ElectronWindowHandlerService implements IWindowHandlerService {
 		console.warn('toggleBattlegroundsWindow is not implemented');
 	}
 
+	public showCollectionWindow(useOverlay: boolean): void {
+		// To be implemented later
+		console.warn('showCollectionWindow is not implemented');
+	}
+
 	public openSettingsWindow(useOverlay: boolean): void {
 		const gameWindowService = ElectronGameWindowService.getInstance();
 		const gameInfo = gameWindowService.getCurrentGameInfo();

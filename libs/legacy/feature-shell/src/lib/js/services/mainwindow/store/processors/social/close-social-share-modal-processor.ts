@@ -1,6 +1,4 @@
-import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
-import { NavigationAchievements } from '../../../../../models/mainwindow/navigation/navigation-achievements';
-import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
+import { MainWindowState, NavigationAchievements, NavigationState } from '@firestone/mainwindow/common';
 import { CloseSocialShareModalEvent } from '../../events/social/close-social-share-modal-event';
 import { Processor } from '../processor';
 

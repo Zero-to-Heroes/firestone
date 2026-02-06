@@ -18,11 +18,11 @@ export class ElementalPowersBuffCounterDefinitionV2 extends CounterDefinitionV2<
 		value: (state: GameState, bgState: BattlegroundsState | null | undefined) => {
 			const value = {
 				atk:
-					state.fullGameState?.Player.PlayerEntity.tags.find(
+					state.fullGameState?.Player.PlayerEntity.tags?.find(
 						(t) => t.Name === GameTag.BACON_ELEMENTAL_BUFFATKVALUE,
 					)?.Value ?? 0,
 				health:
-					state.fullGameState?.Player.PlayerEntity.tags.find(
+					state.fullGameState?.Player.PlayerEntity.tags?.find(
 						(t) => t.Name === GameTag.BACON_ELEMENTAL_BUFFHEALTHVALUE,
 					)?.Value ?? 0,
 			};

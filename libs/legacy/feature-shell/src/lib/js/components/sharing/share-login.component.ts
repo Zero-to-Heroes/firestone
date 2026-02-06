@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { SocialUserInfo } from '@firestone/mainwindow/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { SocialUserInfo } from '../../models/mainwindow/social-user-info';
 
 @Component({
 	standalone: false,

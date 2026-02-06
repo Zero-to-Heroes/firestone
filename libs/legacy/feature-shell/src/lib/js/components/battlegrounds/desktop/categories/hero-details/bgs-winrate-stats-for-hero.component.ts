@@ -3,13 +3,13 @@ import { BattleResultHistory } from '@firestone-hs/hs-replay-xml-parser/dist/pub
 import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
 import { BattlegroundsNavigationService, BgsPlayerHeroStatsService } from '@firestone/battlegrounds/services';
 import { BgsPostMatchStatsForReview, NumericTurnInfo } from '@firestone/game-state';
+import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter, map } from 'rxjs/operators';
-import { AppUiStoreFacadeService } from '../../../../../services/ui-store/app-ui-store-facade.service';
 import { currentBgHeroId } from '../../../../../services/ui-store/app-ui-store.service';
 import { arraysEqual } from '../../../../../services/utils';
-import { AbstractSubscriptionStoreComponent } from '../../../../abstract-subscription-store.component';
 
 @Component({
 	standalone: false,
@@ -37,27 +37,29 @@ import { AbstractSubscriptionStoreComponent } from '../../../../abstract-subscri
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsWinrateStatsForHeroComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class BgsWinrateStatsForHeroComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	values$: Observable<Value>;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly heroStats: BgsPlayerHeroStatsService,
 		private readonly nav: BattlegroundsNavigationService,
+		private readonly mainWindowState: MainWindowStateFacadeService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.heroStats, this.nav);
+		await waitForReady(this.heroStats, this.nav, this.mainWindowState);
 
 		this.values$ = combineLatest([
 			this.heroStats.tiersWithPlayerData$$,
-			this.store.listen$(([main, nav]) => main.battlegrounds.lastHeroPostMatchStats),
+			this.mainWindowState.mainWindowState$$.pipe(
+				this.mapData((state) => state.battlegrounds.lastHeroPostMatchStats),
+			),
 			this.nav.selectedCategoryId$$,
 		]).pipe(
-			map(([heroStats, [postMatch], selectedCategoryId]) => ({
+			map(([heroStats, postMatch, selectedCategoryId]) => ({
 				heroStats: heroStats,
 				postMatch: postMatch,
 				heroId: currentBgHeroId(selectedCategoryId),

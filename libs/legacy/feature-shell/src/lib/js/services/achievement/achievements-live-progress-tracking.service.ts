@@ -6,6 +6,7 @@ import {
 } from '@firestone/achievements/common';
 import { AchievementsRefLoaderService, HsRefAchievement } from '@firestone/achievements/data-access';
 import { GameEvent, GameEventsEmitterService } from '@firestone/game-state';
+import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import {
 	equalHsAchievementInfo,
 	HsAchievementInfo,
@@ -41,6 +42,7 @@ export class AchievementsLiveProgressTrackingService {
 		private readonly ow: OverwolfService,
 		private readonly gameStatus: GameStatusService,
 		private readonly prefs: PreferencesService,
+		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
 	) {
 		window['achievementsMonitor'] = this;
 		this.init();
@@ -49,7 +51,7 @@ export class AchievementsLiveProgressTrackingService {
 	private init() {
 		this.achievementsProgressTracking$$.onFirstSubscribe(async () => {
 			console.debug('[achievements-live-progress-tracking] init');
-			await waitForReady(this.prefs);
+			await waitForReady(this.prefs, this.mainWindowStateFacade);
 
 			combineLatest([
 				this.gameStatus.inGame$$,
@@ -117,13 +119,9 @@ export class AchievementsLiveProgressTrackingService {
 							// 	pinnedAchievementIds,
 							// 	achievementsOnGameStart,
 							// );
-							this.ow
-								.getMainWindow()
-								.mainWindowStoreUpdater.next(
-									new AchievementsRemovePinnedAchievementsEvent(
-										completedAchievements.map((a) => a.id),
-									),
-								);
+							this.mainWindowStateFacade.send(
+								new AchievementsRemovePinnedAchievementsEvent(completedAchievements.map((a) => a.id)),
+							);
 
 							// When pinning an achievement, we get the first step of the achievements chain
 							// We actually want to pin the most recent uncompleted step

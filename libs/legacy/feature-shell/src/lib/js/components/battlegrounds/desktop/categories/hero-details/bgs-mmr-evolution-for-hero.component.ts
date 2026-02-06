@@ -1,15 +1,15 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { BattlegroundsNavigationService } from '@firestone/battlegrounds/services';
 import { isBattlegrounds } from '@firestone/game-state';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
+import { GameStatsProviderService } from '@firestone/stats/services';
 import { ChartData } from 'chart.js';
 import { combineLatest } from 'rxjs';
 import { Observable } from 'rxjs/internal/Observable';
 import { LocalizationFacadeService } from '../../../../../services/localization-facade.service';
-import { AppUiStoreFacadeService } from '../../../../../services/ui-store/app-ui-store-facade.service';
 import { currentBgHeroId } from '../../../../../services/ui-store/app-ui-store.service';
-import { AbstractSubscriptionStoreComponent } from '../../../../abstract-subscription-store.component';
 
 @Component({
 	standalone: false,
@@ -29,22 +29,22 @@ import { AbstractSubscriptionStoreComponent } from '../../../../abstract-subscri
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsMmrEvolutionForHeroComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class BgsMmrEvolutionForHeroComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	value$: Observable<ChartData<'line'>>;
 
 	constructor(
 		private readonly i18n: LocalizationFacadeService,
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly nav: BattlegroundsNavigationService,
+		private readonly gameStats: GameStatsProviderService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.nav);
+		await waitForReady(this.nav, this.gameStats);
 
-		this.value$ = combineLatest(this.store.gameStats$(), this.nav.selectedCategoryId$$).pipe(
+		this.value$ = combineLatest([this.gameStats.gameStats$$, this.nav.selectedCategoryId$$]).pipe(
 			this.mapData(([gameStats, selectedCategoryId]) =>
 				this.buildValue(
 					gameStats.filter((stat) => isBattlegrounds(stat.gameMode)),

@@ -1,8 +1,7 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
-import { OverwolfService } from '@firestone/shared/framework/core';
-import { Set } from '../../models/set';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { Set } from '@firestone/collection/common';
+import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { SelectCollectionSetEvent } from '../../services/mainwindow/store/events/collection/select-collection-set-event';
-import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 
 @Component({
 	standalone: false,
@@ -23,7 +22,7 @@ import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/mai
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SetComponent implements AfterViewInit {
+export class SetComponent {
 	@Input() set cardSet(set: Set) {
 		this._cardSet = set;
 		this.released = set.allCards && set.allCards.length > 0;
@@ -36,18 +35,12 @@ export class SetComponent implements AfterViewInit {
 	released = true;
 	collectedCardsGolden: number;
 
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
-	constructor(private ow: OverwolfService) {}
-
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-	}
+	constructor(private readonly mainWindowStateFacade: MainWindowStateFacadeService) {}
 
 	browseSet(setId: string) {
 		if (!this.released) {
 			return;
 		}
-		this.stateUpdater.next(new SelectCollectionSetEvent(setId));
+		this.mainWindowStateFacade.send(new SelectCollectionSetEvent(setId));
 	}
 }

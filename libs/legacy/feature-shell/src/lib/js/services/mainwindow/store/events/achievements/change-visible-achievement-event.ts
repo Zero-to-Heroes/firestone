@@ -1,4 +1,4 @@
-import { MainWindowStoreEvent } from '../main-window-store-event';
+import { MainWindowStoreEvent } from '@firestone/mainwindow/common';
 
 export class ChangeVisibleAchievementEvent implements MainWindowStoreEvent {
 	constructor(achievementId: string) {

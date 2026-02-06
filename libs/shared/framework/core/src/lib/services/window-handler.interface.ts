@@ -13,6 +13,7 @@ export const WINDOW_HANDLER_SERVICE_TOKEN = new InjectionToken<IWindowHandlerSer
  */
 export interface IWindowHandlerService {
 	toggleBattlegroundsWindow(useOverlay: boolean, options?: IBattlegroundsWindowOptions);
+	showCollectionWindow(useOverlay: boolean): void | Promise<void>;
 	openSettingsWindow(userOverlay: boolean): void | Promise<void>;
 	reloadWindows(): void | Promise<void>;
 	relaunchApp(): void | Promise<void>;

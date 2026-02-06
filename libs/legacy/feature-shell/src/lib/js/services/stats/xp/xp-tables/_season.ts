@@ -1,4 +1,4 @@
-import { StatsXpGraphSeasonFilterType } from '@legacy-import/src/lib/js/models/mainwindow/stats/stats-xp-graph-season-filter.type';
+import { StatsXpGraphSeasonFilterType } from '@firestone/mainwindow/common';
 import { Map } from 'immutable';
 
 export interface Season {

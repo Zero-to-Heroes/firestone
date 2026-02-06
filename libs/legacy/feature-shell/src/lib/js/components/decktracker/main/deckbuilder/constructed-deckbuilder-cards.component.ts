@@ -11,18 +11,19 @@ import {
 	Race,
 	ReferenceCard,
 } from '@firestone-hs/reference-data';
+import { SetCard } from '@firestone/collection/common';
 import { VisualDeckCard, dustToCraftFor, getDefaultHeroDbfIdForClass } from '@firestone/game-state';
+import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
+import { SetsManagerService } from '@legacy-import/src/lib/js/services/collection/sets-manager.service';
 import { ConstructedConfigService } from '@legacy-import/src/lib/js/services/decktracker/constructed-config.service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { groupByFunction, sortByProperties } from '@services/utils';
 import { BehaviorSubject, Observable, combineLatest, from } from 'rxjs';
 import { filter, shareReplay, startWith, takeUntil } from 'rxjs/operators';
-import { SetCard } from '../../../../models/set';
 import { ConstructedDeckbuilderSaveDeckEvent } from '../../../../services/mainwindow/store/events/decktracker/constructed-deckbuilder-save-deck-event';
-import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 export const DEFAULT_CARD_WIDTH = 170;
 export const DEFAULT_CARD_HEIGHT = 221;
@@ -142,10 +143,7 @@ export const DEFAULT_CARD_HEIGHT = 221;
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ConstructedDeckbuilderCardsComponent
-	extends AbstractSubscriptionStoreComponent
-	implements AfterContentInit
-{
+export class ConstructedDeckbuilderCardsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	currentDeckCards$: Observable<readonly string[]>;
 	activeCards$: Observable<DeckBuilderCard[]>;
 	// highRes$: Observable<boolean>;
@@ -174,18 +172,19 @@ export class ConstructedDeckbuilderCardsComponent
 	private dkRunes$$ = new BehaviorSubject<readonly DkRune[]>(null);
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly constructedConfig: ConstructedConfigService,
 		private readonly prefs: PreferencesService,
+		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
+		private readonly setsManager: SetsManagerService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.constructedConfig, this.prefs);
+		await waitForReady(this.constructedConfig, this.prefs, this.mainWindowStateFacade, this.setsManager);
 
 		// this.highRes$ = this.listenForBasicPref$((prefs) => prefs.collectionUseHighResImages);
 		this.showRelatedCards$ = this.prefs.preferences$$.pipe(
@@ -207,18 +206,20 @@ export class ConstructedDeckbuilderCardsComponent
 
 		this.allowedCards$ = combineLatest([
 			this.constructedConfig.config$$,
-			this.store.listen$(
-				([main, nav]) => main.decktracker.deckbuilder.currentFormat,
-				([main, nav]) => main.decktracker.deckbuilder.currentClass,
+			this.mainWindowStateFacade.mainWindowState$$.pipe(
+				this.mapData((state) => state.decktracker.deckbuilder.currentFormat),
+			),
+			this.mainWindowStateFacade.mainWindowState$$.pipe(
+				this.mapData((state) => state.decktracker.deckbuilder.currentClass),
 			),
 			this.currentDeckCards$$,
 			from([this.allCards.getCards()]),
 		]).pipe(
 			filter(
-				([config, [currentFormat, currentClass], currentDeckCards, cards]) =>
+				([config, currentFormat, currentClass, currentDeckCards, cards]) =>
 					!!config && !!currentFormat && !!currentClass && !!cards,
 			),
-			this.mapData(([config, [currentFormat, currentClass], currentDeckCards, cards]) => {
+			this.mapData(([config, currentFormat, currentClass, currentDeckCards, cards]) => {
 				const validSets =
 					currentFormat === 'classic'
 						? config.vanillaSets
@@ -287,7 +288,7 @@ export class ConstructedDeckbuilderCardsComponent
 			shareReplay(1),
 			takeUntil(this.destroyed$),
 		);
-		this.collection$ = this.store.sets$().pipe(
+		this.collection$ = this.setsManager.sets$$.pipe(
 			this.mapData(
 				(allSets) => allSets.map((set) => set.allCards).reduce((a, b) => a.concat(b), []) as readonly SetCard[],
 			),
@@ -344,20 +345,24 @@ export class ConstructedDeckbuilderCardsComponent
 		);
 		// TODO: externalize rules?
 		this.maxCardsInDeck$ = combineLatest([
-			this.store.listen$(([main, nav]) => main.decktracker.deckbuilder.currentFormat),
+			this.mainWindowStateFacade.mainWindowState$$.pipe(
+				this.mapData((state) => state.decktracker.deckbuilder.currentFormat),
+			),
 			this.currentDeckCards$,
 		]).pipe(
-			this.mapData(([[currentFormat], cards]) =>
+			this.mapData(([currentFormat, cards]) =>
 				cards?.includes(CardIds.PrinceRenathal) || cards?.includes(CardIds.PrinceRenathal_CORE_REV_018)
 					? 40
 					: 30,
 			),
 		);
 		this.minCardsInDeck$ = combineLatest([
-			this.store.listen$(([main, nav]) => main.decktracker.deckbuilder.currentFormat),
+			this.mainWindowStateFacade.mainWindowState$$.pipe(
+				this.mapData((state) => state.decktracker.deckbuilder.currentFormat),
+			),
 			this.currentDeckCards$,
 		]).pipe(
-			this.mapData(([[currentFormat], cards]) =>
+			this.mapData(([currentFormat, cards]) =>
 				cards?.includes(CardIds.PrinceRenathal) || cards?.includes(CardIds.PrinceRenathal_CORE_REV_018)
 					? 40
 					: 30,
@@ -375,23 +380,23 @@ export class ConstructedDeckbuilderCardsComponent
 			}),
 		);
 		// Init cards if they already exist in the store (because of a deck import for instance)
-		this.store
-			.listen$(([main, nav]) => main.decktracker.deckbuilder.currentCards)
-			.pipe(this.mapData(([cards]) => cards))
+		this.mainWindowStateFacade.mainWindowState$$
+			.pipe(this.mapData((state) => state.decktracker.deckbuilder.currentCards))
 			.subscribe((cards) => this.currentDeckCards$$.next(cards));
-		this.store
-			.listen$(([main, nav]) => main.decktracker.deckbuilder.sideboards)
-			.pipe(this.mapData(([sideboards]) => sideboards))
+		this.mainWindowStateFacade.mainWindowState$$
+			.pipe(this.mapData((state) => state.decktracker.deckbuilder.sideboards))
 			.subscribe((sideboards) => this.sideboards$$.next(sideboards));
 		this.deckstring$ = combineLatest([
 			this.currentDeckCards$,
 			this.sideboards$$,
-			this.store.listen$(
-				([main, nav]) => main.decktracker.deckbuilder.currentFormat,
-				([main, nav]) => main.decktracker.deckbuilder.currentClass,
+			this.mainWindowStateFacade.mainWindowState$$.pipe(
+				this.mapData((state) => state.decktracker.deckbuilder.currentFormat),
+			),
+			this.mainWindowStateFacade.mainWindowState$$.pipe(
+				this.mapData((state) => state.decktracker.deckbuilder.currentClass),
 			),
 		]).pipe(
-			this.mapData(([cards, sideboards, [currentFormat, currentClass]]) => {
+			this.mapData(([cards, sideboards, currentFormat, currentClass]) => {
 				const groupedCards = groupByFunction((cardId: string) => cardId)(cards);
 				const cardDbfIds = Object.values(groupedCards).map(
 					(cards) => [this.allCards.getCard(cards[0]).dbfId, cards.length] as [number, number],
@@ -526,7 +531,7 @@ export class ConstructedDeckbuilderCardsComponent
 	}
 
 	saveDeck(deckstring: string) {
-		this.store.send(new ConstructedDeckbuilderSaveDeckEvent(deckstring, this.deckName));
+		this.mainWindowStateFacade.send(new ConstructedDeckbuilderSaveDeckEvent(deckstring, this.deckName));
 		this.saveDeckcodeButtonLabel = this.i18n.translateString('app.duels.deckbuilder.deck-saved-info');
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.markForCheck();

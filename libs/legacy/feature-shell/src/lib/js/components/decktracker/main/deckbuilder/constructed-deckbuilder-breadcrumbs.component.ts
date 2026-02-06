@@ -1,11 +1,11 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
+import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { OverwolfService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable } from 'rxjs';
 import { ConstructedDeckbuilderGoBackEvent } from '../../../../services/mainwindow/store/events/decktracker/constructed-deckbuilder-go-back-event';
 import { ConstructedDeckbuilderImportDeckEvent } from '../../../../services/mainwindow/store/events/decktracker/constructed-deckbuilder-import-deck-event';
-import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 import { parseClipboardContent } from '../../import-deckstring.component';
 
 export const DEFAULT_CARD_WIDTH = 170;
@@ -53,7 +53,7 @@ export const DEFAULT_CARD_HEIGHT = 221;
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConstructedDeckbuilderBreadcrumbsComponent
-	extends AbstractSubscriptionStoreComponent
+	extends AbstractSubscriptionComponent
 	implements AfterContentInit
 {
 	currentStep$: Observable<string>;
@@ -61,20 +61,19 @@ export class ConstructedDeckbuilderBreadcrumbsComponent
 	currentClass$: Observable<SelectionStep>;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly ow: OverwolfService,
-		private readonly allCards: CardsFacadeService,
+		private readonly mainWindowState: MainWindowStateFacadeService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	ngAfterContentInit() {
-		this.currentStep$ = this.store
-			.listen$(([main, nav]) => main.decktracker.deckbuilder)
+		this.currentStep$ = this.mainWindowState.mainWindowState$$
+			.pipe(this.mapData((state) => state.decktracker.deckbuilder))
 			.pipe(
-				this.mapData(([deckbuilder]) => {
+				this.mapData((deckbuilder) => {
 					if (!deckbuilder.currentFormat) {
 						return this.i18n.translateString('app.decktracker.deckbuilder.choose-your-format-title');
 					} else if (!deckbuilder.currentClass) {
@@ -83,36 +82,36 @@ export class ConstructedDeckbuilderBreadcrumbsComponent
 					return this.i18n.translateString('app.decktracker.deckbuilder.build-your-deck-title');
 				}),
 			);
-		this.currentFormat$ = this.store
-			.listen$(([main, nav]) => main.decktracker.deckbuilder.currentFormat)
+		this.currentFormat$ = this.mainWindowState.mainWindowState$$
+			.pipe(this.mapData((state) => state.decktracker.deckbuilder.currentFormat))
 			.pipe(
-				this.mapData(([format]) => {
+				this.mapData((format) => {
 					return !!format
 						? {
 								cardId: null,
 								name: this.i18n.translateString(`global.format.${format}`),
 								image: `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/format/${format}.webp`,
-						  }
+							}
 						: null;
 				}),
 			);
-		this.currentClass$ = this.store
-			.listen$(([main, nav]) => main.decktracker.deckbuilder.currentClass)
+		this.currentClass$ = this.mainWindowState.mainWindowState$$
+			.pipe(this.mapData((state) => state.decktracker.deckbuilder.currentClass))
 			.pipe(
-				this.mapData(([currentClass]) => {
+				this.mapData((currentClass) => {
 					return !!currentClass
 						? {
 								cardId: null,
 								name: this.i18n.translateString(`global.class.${currentClass}`),
 								image: `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/classes/${currentClass}.png`,
-						  }
+							}
 						: null;
 				}),
 			);
 	}
 
 	goBack(step: 'format' | 'class') {
-		this.store.send(new ConstructedDeckbuilderGoBackEvent(step));
+		this.mainWindowState.send(new ConstructedDeckbuilderGoBackEvent(step));
 	}
 
 	heroTooltip(step: 'format' | 'class', name: string) {
@@ -129,7 +128,7 @@ export class ConstructedDeckbuilderBreadcrumbsComponent
 	async importDeckFromClickpboard() {
 		const clipboardContent = await this.ow.getFromClipboard();
 		const { deckstring, deckName } = parseClipboardContent(clipboardContent);
-		this.store.send(new ConstructedDeckbuilderImportDeckEvent(deckstring, deckName));
+		this.mainWindowState.send(new ConstructedDeckbuilderImportDeckEvent(deckstring, deckName));
 	}
 }
 

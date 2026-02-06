@@ -8,6 +8,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { MercenarySelector, RarityTYpe, RewardItemType, TaskStatus } from '@firestone-hs/reference-data';
+import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { MemoryMercenary, MemoryVisitor } from '@firestone/memory';
 import {
 	getHeroRole,
@@ -32,7 +33,6 @@ import {
 	MercenariesPersonalHeroesSortCriteriaType,
 } from '../../../models/mercenaries/personal-heroes-sort-criteria.type';
 import { MercenariesPersonalHeroesSortEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-personal-heroes-sort-event';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { applySearchStringFilter, buildBounties } from '../../../services/ui-store/mercenaries-ui-helper';
 import { arraysEqual, sortByProperties, sumOnArray } from '../../../services/utils';
 
@@ -606,14 +606,14 @@ export class SortableLabelComponent {
 
 	constructor(
 		private readonly cdr: ChangeDetectorRef,
-		private readonly store: AppUiStoreFacadeService,
+		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
 	) {}
 
 	startSort() {
 		if (!this._isSortable) {
 			return;
 		}
-		this.store.send(new MercenariesPersonalHeroesSortEvent(this._criteria));
+		this.mainWindowStateFacade.send(new MercenariesPersonalHeroesSortEvent(this._criteria));
 	}
 }
 

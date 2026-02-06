@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BgsCompAdvice } from '@firestone-hs/content-craetor-input';
 import { decode, encode } from '@firestone-hs/deckstrings';
 import { SceneMode } from '@firestone-hs/reference-data';
+import { CollectionCardType } from '@firestone-hs/user-packs';
 import { CompositionDetectorService } from '@firestone/battlegrounds/core';
 import { BgsMetaCompositionStrategiesService } from '@firestone/battlegrounds/services';
 import {
@@ -20,7 +21,6 @@ import { PreferencesService } from '@firestone/shared/common/service';
 import { ApiRunner, CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { sortByProperties } from '@services/utils';
-import { CollectionCardType } from '../models/collection/collection-card-type.type';
 import { CardNotificationsService } from './collection/card-notifications.service';
 
 const RETRIEVE_REVIEW_URL = 'https://itkmxena7k2kkmkgpevc6skcie0tlwmk.lambda-url.us-west-2.on.aws/';
@@ -106,7 +106,7 @@ export class DevService {
 		window['startDeckCycle'] = async (logName, repeats, deckString) => {
 			console.debug('starting new deck cycle', logName, repeats, deckString);
 			// eslint-disable-next-line @typescript-eslint/no-empty-function
-			console.debug = console.debug = (args) => { };
+			console.debug = console.debug = (args) => {};
 			const logsLocation = `E:\\Source\\zerotoheroes\\firestone\\integration-tests\\events\\${logName}.json`;
 			const logContents = await this.ow.readTextFile(logsLocation);
 			const events = JSON.parse(logContents);

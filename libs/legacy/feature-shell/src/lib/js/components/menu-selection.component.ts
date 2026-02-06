@@ -1,16 +1,16 @@
 import {
 	AfterContentInit,
-	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
-	EventEmitter,
 	Inject,
 	Input,
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
+import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { CurrentAppType, PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import {
 	ADS_SERVICE_TOKEN,
 	AnalyticsService,
@@ -21,9 +21,6 @@ import {
 } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { ChangeVisibleApplicationEvent } from '../services/mainwindow/store/events/change-visible-application-event';
-import { MainWindowStoreEvent } from '../services/mainwindow/store/events/main-window-store-event';
-import { AppUiStoreFacadeService } from '../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from './abstract-subscription-store.component';
 
 @Component({
 	standalone: false,
@@ -233,10 +230,7 @@ import { AbstractSubscriptionStoreComponent } from './abstract-subscription-stor
 	encapsulation: ViewEncapsulation.None,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MenuSelectionComponent
-	extends AbstractSubscriptionStoreComponent
-	implements AfterContentInit, AfterViewInit
-{
+export class MenuSelectionComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	enableMailboxTab$: Observable<boolean>;
 	userName$: Observable<string>;
 	avatarUrl$: Observable<string>;
@@ -246,22 +240,20 @@ export class MenuSelectionComponent
 
 	@Input() selectedModule: string;
 
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private ow: OverwolfService,
 		private readonly analytics: AnalyticsService,
 		private readonly userService: UserService,
 		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 		private readonly prefs: PreferencesService,
+		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.userService, this.ads, this.prefs);
+		await waitForReady(this.userService, this.ads, this.prefs, this.mainWindowStateFacade);
 
 		this.userName$ = this.userService.user$$.pipe(this.mapData((currentUser) => currentUser?.username));
 		this.avatarUrl$ = this.userService.user$$.pipe(
@@ -271,22 +263,18 @@ export class MenuSelectionComponent
 					'https://static.zerotoheroes.com/hearthstone/asset/firestone/images/social-share-login.png',
 			),
 		);
-		this.tabIndex$ = this.store
-			.listen$(([main, nav]) => main.showFtue)
-			.pipe(this.mapData(([showFtue]) => (showFtue ? -1 : 0)));
+		this.tabIndex$ = this.mainWindowStateFacade.mainWindowState$$.pipe(
+			this.mapData((state) => (state?.showFtue ? -1 : 0)),
+		);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.markForCheck();
 		}
 	}
 
-	async ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-	}
-
 	selectModule(module: CurrentAppType) {
 		this.analytics.trackEvent('app-navigation', { section: module });
-		this.stateUpdater.next(new ChangeVisibleApplicationEvent(module));
+		this.mainWindowStateFacade.send(new ChangeVisibleApplicationEvent(module));
 	}
 
 	login() {

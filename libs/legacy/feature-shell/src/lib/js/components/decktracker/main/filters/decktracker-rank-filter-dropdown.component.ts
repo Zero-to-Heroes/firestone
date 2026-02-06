@@ -1,23 +1,13 @@
-import {
-	AfterContentInit,
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	EventEmitter,
-	ViewRef,
-} from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { ConstructedNavigationService } from '@firestone/constructed/common';
+import { DeckRankFilterType, MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { IOption } from '@firestone/shared/common/view';
-import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-window-store-event';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { DeckRankFilterType } from '../../../../models/mainwindow/decktracker/deck-rank-filter.type';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { ChangeDeckRankFilterEvent } from '../../../../services/mainwindow/store/events/decktracker/change-deck-rank-filter-event';
-import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	standalone: false,
@@ -38,33 +28,27 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DecktrackerRankFilterDropdownComponent
-	extends AbstractSubscriptionStoreComponent
-	implements AfterContentInit, AfterViewInit
-{
+export class DecktrackerRankFilterDropdownComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	filter$: Observable<{ filter: string; placeholder: string; options: IOption[]; visible: boolean }>;
 
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
-		private readonly ow: OverwolfService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly nav: ConstructedNavigationService,
+		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.nav);
+		await waitForReady(this.nav, this.mainWindowStateFacade);
 
 		this.filter$ = combineLatest([
-			this.store.listen$(([main, nav]) => main.decktracker.filters?.rank),
+			this.mainWindowStateFacade.mainWindowState$$.pipe(this.mapData((state) => state.decktracker.filters.rank)),
 			this.nav.currentView$$,
 		]).pipe(
-			filter(([[filter], currentView]) => !!filter && !!currentView),
-			this.mapData(([[filter], currentView]) => {
+			filter(([filter, currentView]) => !!filter && !!currentView),
+			this.mapData(([filter, currentView]) => {
 				const options = [
 					{
 						value: 'all',
@@ -116,12 +100,8 @@ export class DecktrackerRankFilterDropdownComponent
 		}
 	}
 
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-	}
-
 	onSelected(option: IOption) {
-		this.stateUpdater.next(new ChangeDeckRankFilterEvent((option as DeckRankOption).value));
+		this.mainWindowStateFacade.send(new ChangeDeckRankFilterEvent((option as DeckRankOption).value));
 	}
 }
 

@@ -1,22 +1,17 @@
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import {
-	AfterContentInit,
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	EventEmitter,
-} from '@angular/core';
+	MainWindowNavigationService,
+	MainWindowStateFacadeService,
+	StatsXpGraphSeasonFilterType,
+} from '@firestone/mainwindow/common';
 import { IOption } from '@firestone/shared/common/view';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@legacy-import/src/lib/js/services/localization-facade.service';
 import { allSeasons } from '@legacy-import/src/lib/js/services/stats/xp/xp-tables/xp-computation';
-import { Observable } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { StatsXpGraphSeasonFilterType } from '../../../../models/mainwindow/stats/stats-xp-graph-season-filter.type';
-import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { StatsXpGraphFilterSelectedEvent } from '../../../../services/mainwindow/store/events/stats/stats-xp-graph-filter-selected-event';
-import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	standalone: false,
@@ -34,63 +29,62 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class StatsXpSeasonFilterDropdownComponent
-	extends AbstractSubscriptionStoreComponent
-	implements AfterContentInit, AfterViewInit
-{
+export class StatsXpSeasonFilterDropdownComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	filter$: Observable<{ filter: string; placeholder: string; options: FilterOption[]; visible: boolean }>;
 
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
-		private readonly ow: OverwolfService,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
+		private readonly navigationService: MainWindowNavigationService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
-	ngAfterContentInit() {
-		this.filter$ = this.store
-			.listen$(
-				([main, nav]) => main.stats.filters.xpGraphSeasonFilter,
-				([main, nav]) => nav.navigationStats.selectedCategoryId,
-			)
-			.pipe(
-				filter(([filter, selectedCategoryId]) => !!filter),
-				this.mapData(([filter, selectedCategoryId]) => {
-					const options = [
-						{
-							value: 'all-seasons',
-							label: 'All seasons',
-						},
-						...allSeasons.map((season) => ({
-							value: season.id,
-							label: this.i18n.translateString('app.profile.xp-seasons.season', {
-								seasonNumber: season.id.split('-')[1],
-							}),
-							tooltip: this.i18n.translateString('app.profile.xp-seasons.start-date', {
-								startDate: season.startDate.toLocaleDateString(this.i18n.formatCurrentLocale()),
-							}),
-						})),
-					] as FilterOption[];
-					return {
-						filter: filter,
-						options: options,
-						placeholder: options.find((option) => option.value === filter)?.label,
-						visible: ['xp-graph'].includes(selectedCategoryId),
-					};
-				}),
-			);
-	}
+	async ngAfterContentInit() {
+		await waitForReady(this.navigationService, this.mainWindowStateFacade);
 
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
+		this.filter$ = combineLatest([
+			this.mainWindowStateFacade.mainWindowState$$.pipe(
+				this.mapData((state) => state.stats.filters.xpGraphSeasonFilter),
+			),
+			this.navigationService.navigationState$$.pipe(
+				this.mapData((state) => state.navigationStats.selectedCategoryId),
+			),
+		]).pipe(
+			filter(([filter, selectedCategoryId]) => !!filter),
+			this.mapData(([filter, selectedCategoryId]) => {
+				const options = [
+					{
+						value: 'all-seasons',
+						label: 'All seasons',
+					},
+					...allSeasons.map((season) => ({
+						value: season.id,
+						label: this.i18n.translateString('app.profile.xp-seasons.season', {
+							seasonNumber: season.id.split('-')[1],
+						}),
+						tooltip: this.i18n.translateString('app.profile.xp-seasons.start-date', {
+							startDate: season.startDate.toLocaleDateString(this.i18n.formatCurrentLocale()),
+						}),
+					})),
+				] as FilterOption[];
+				return {
+					filter: filter,
+					options: options,
+					placeholder: options.find((option) => option.value === filter)?.label,
+					visible: ['xp-graph'].includes(selectedCategoryId),
+				};
+			}),
+		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.markForCheck();
+		}
 	}
 
 	onSelected(option: FilterOption | IOption) {
-		this.stateUpdater.next(new StatsXpGraphFilterSelectedEvent((option as FilterOption).value));
+		this.mainWindowStateFacade.send(new StatsXpGraphFilterSelectedEvent((option as FilterOption).value));
 	}
 }
 

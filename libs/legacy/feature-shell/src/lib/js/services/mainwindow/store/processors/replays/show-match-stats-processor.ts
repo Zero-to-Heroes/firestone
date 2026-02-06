@@ -6,11 +6,8 @@ import { PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationService } from '@services/localization.service';
 
+import { MainWindowState, MatchDetail, NavigationReplays, NavigationState } from '@firestone/mainwindow/common';
 import { GameStatsLoaderService } from '@firestone/stats/data-access';
-import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
-import { NavigationReplays } from '../../../../../models/mainwindow/navigation/navigation-replays';
-import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
-import { MatchDetail } from '../../../../../models/mainwindow/replays/match-detail';
 import { BgsPerfectGamesService } from '../../../../battlegrounds/bgs-perfect-games.service';
 import { ShowMatchStatsEvent } from '../../events/replays/show-match-stats-event';
 import { Processor } from '../processor';
@@ -23,7 +20,7 @@ export class ShowMatchStatsProcessor implements Processor {
 		private readonly gameStats: GameStatsLoaderService,
 		private readonly perfectGames: BgsPerfectGamesService,
 		private readonly mainNav: MainWindowNavigationService,
-	) { }
+	) {}
 
 	public async process(
 		event: ShowMatchStatsEvent,
@@ -46,12 +43,12 @@ export class ShowMatchStatsProcessor implements Processor {
 		const playerCardId = selectedInfo.playerCardId;
 		const mappedBoardInfo = matchStats
 			? matchStats.boardHistory.map(
-				(history) =>
-				({
-					turn: history.turn,
-					board: history.board.map((value) => Entity.create(value as Entity)),
-				} as BgsBoard),
-			)
+					(history) =>
+						({
+							turn: history.turn,
+							board: history.board.map((value) => Entity.create(value as Entity)),
+						}) as BgsBoard,
+				)
 			: [];
 
 		const matchDetail = Object.assign(new MatchDetail(), {
@@ -62,14 +59,14 @@ export class ShowMatchStatsProcessor implements Processor {
 				// globalStats: currentState.battlegrounds.globalStats,
 				player: matchStats
 					? BgsPlayer.create({
-						cardId: playerCardId,
-						displayedCardId: playerCardId,
-						tavernUpgradeHistory: matchStats?.tavernTimings || [],
-						boardHistory: mappedBoardInfo as readonly BgsBoard[],
-						highestWinStreak: matchStats?.highestWinStreak,
-						initialHealth: defaultStartingHp(GameType.GT_BATTLEGROUNDS, playerCardId, this.allCards),
-						// questRewards: matchStats.qu TODO: implement this
-					} as BgsPlayer)
+							cardId: playerCardId,
+							displayedCardId: playerCardId,
+							tavernUpgradeHistory: matchStats?.tavernTimings || [],
+							boardHistory: mappedBoardInfo as readonly BgsBoard[],
+							highestWinStreak: matchStats?.highestWinStreak,
+							initialHealth: defaultStartingHp(GameType.GT_BATTLEGROUNDS, playerCardId, this.allCards),
+							// questRewards: matchStats.qu TODO: implement this
+						} as BgsPlayer)
 					: null,
 				tabs: [
 					'hp-by-turn',

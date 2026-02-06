@@ -1,5 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
+import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { GameStatusService, Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { sortByProperties } from '@firestone/shared/framework/common';
 import { Observable, tap } from 'rxjs';
@@ -19,7 +20,7 @@ import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-fa
 			class="main-content"
 			*ngIf="{
 				inGame: inGame$ | async,
-				achievements: achievements$ | async
+				achievements: achievements$ | async,
 			} as value"
 		>
 			<ng-container *ngIf="value.achievements?.length || value.inGame; else notInGame">
@@ -70,6 +71,7 @@ export class LotteryAchievementsWidgetComponent extends AbstractSubscriptionStor
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly prefs: PreferencesService,
 		private readonly gameStatus: GameStatusService,
+		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
 	) {
 		super(store, cdr);
 	}
@@ -90,7 +92,7 @@ export class LotteryAchievementsWidgetComponent extends AbstractSubscriptionStor
 								-a.progressTotal,
 								a.name,
 							]),
-					  ),
+						),
 			),
 		);
 
@@ -112,6 +114,6 @@ export class LotteryAchievementsWidgetComponent extends AbstractSubscriptionStor
 
 	pickRandomAchievements() {
 		console.debug('[lottery-achievements] picking achievements');
-		this.store.send(new AchievementsTrackRandomAchievementsEvent());
+		this.mainWindowStateFacade.send(new AchievementsTrackRandomAchievementsEvent());
 	}
 }

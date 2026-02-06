@@ -10,7 +10,7 @@ import { AchievementsNavigationService } from '@firestone/achievements/common';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ADS_SERVICE_TOKEN, IAdsService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
-import { CurrentView } from '../../models/mainwindow/achievement/current-view.type';
+import { CurrentView } from '@firestone/mainwindow/common';
 
 @Component({
 	standalone: false,

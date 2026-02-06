@@ -1,4 +1,4 @@
-import { MainWindowStoreEvent } from '../../../js/services/mainwindow/store/events/main-window-store-event';
+import { MainWindowStoreEvent } from '@firestone/mainwindow/common';
 import { Mail } from '../mail-state';
 
 export class MailboxMarkMessageReadEvent implements MainWindowStoreEvent {

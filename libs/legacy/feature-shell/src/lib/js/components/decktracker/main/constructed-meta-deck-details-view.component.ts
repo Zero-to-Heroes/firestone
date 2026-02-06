@@ -12,13 +12,13 @@ import {
 	ConstructedMatchupInfo,
 } from '@firestone-hs/constructed-deck-stats';
 import { Sideboard } from '@firestone-hs/deckstrings';
+import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { Card } from '@firestone/memory';
 import { AbstractSubscriptionComponent, buildPercents } from '@firestone/shared/framework/common';
 import { AnalyticsService, OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, distinctUntilChanged, Observable } from 'rxjs';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { ConstructedMetaArchetypeShowDecksEvent } from '../../../services/mainwindow/store/processors/decktracker/constructed-meta-archetype-show-decks';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { ConstructedMatchupDetails } from './constructed-meta-deck-details-matchups.component';
 
 @Component({
@@ -229,7 +229,7 @@ export class ConstructedMetaDeckDetailsViewComponent extends AbstractSubscriptio
 		private readonly i18n: LocalizationFacadeService,
 		private readonly analytics: AnalyticsService,
 		@Optional() private readonly ow: OverwolfService,
-		@Optional() private readonly store: AppUiStoreFacadeService,
+		@Optional() private readonly mainWindowStateFacade: MainWindowStateFacadeService,
 	) {
 		super(cdr);
 	}
@@ -269,8 +269,8 @@ export class ConstructedMetaDeckDetailsViewComponent extends AbstractSubscriptio
 
 	viewDecks() {
 		this.analytics.trackEvent('meta-archetype-view-decks', { archetype: this.deck.archetypeId });
-		if (!!this.store) {
-			this.store.send(new ConstructedMetaArchetypeShowDecksEvent(this.deck.archetypeId));
+		if (!!this.mainWindowStateFacade) {
+			this.mainWindowStateFacade.send(new ConstructedMetaArchetypeShowDecksEvent(this.deck.archetypeId));
 		} else {
 			// Navigate to the correct URL
 		}
@@ -293,7 +293,7 @@ export class ConstructedMetaDeckDetailsViewComponent extends AbstractSubscriptio
 						name: this.i18n.translateString('app.decktracker.meta.discover-stats-header'),
 						tooltip: this.i18n.translateString('app.decktracker.meta.discover-stats-header-tooltip'),
 						// isPremium: true,
-				  }
+					}
 				: null,
 			{
 				id: 'matchups' as const,

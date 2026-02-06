@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { formatClass } from '@firestone/game-state';
-import { MatchupStat } from '../../../models/mainwindow/stats/matchup-stat';
+import { MatchupStat } from '@firestone/mainwindow/common';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({

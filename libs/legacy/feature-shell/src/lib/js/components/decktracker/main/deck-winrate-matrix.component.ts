@@ -1,21 +1,11 @@
-import {
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	EventEmitter,
-	Input,
-	ViewRef,
-} from '@angular/core';
-import { DeckSummary } from '@firestone/constructed/common';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { DeckSummary, MatchupStat } from '@firestone/constructed/common';
 import { classesForPieChart, colorForClass, formatClass } from '@firestone/game-state';
-import { OverwolfService } from '@firestone/shared/framework/core';
-import { MatchupStat } from '../../../models/mainwindow/stats/matchup-stat';
+import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { buildDefaultMatchupStats } from '../../../services/decktracker/main/decks-provider.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { DecktrackerDeleteDeckEvent } from '../../../services/mainwindow/store/events/decktracker/decktracker-delete-deck-event';
 import { DecktrackerResetDeckStatsEvent } from '../../../services/mainwindow/store/events/decktracker/decktracker-reset-deck-stats-event';
-import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { InputPieChartData, InputPieChartOptions } from '../../common/chart/input-pie-chart-data';
 
 @Component({
@@ -99,7 +89,7 @@ import { InputPieChartData, InputPieChartOptions } from '../../common/chart/inpu
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DeckWinrateMatrixComponent implements AfterViewInit {
+export class DeckWinrateMatrixComponent {
 	@Input() set deck(value: DeckSummary) {
 		this._deck = value;
 		this.updateValues();
@@ -121,17 +111,11 @@ export class DeckWinrateMatrixComponent implements AfterViewInit {
 	confirmationShown = false;
 	showResetConfirmationText = false;
 
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
 	constructor(
-		private readonly ow: OverwolfService,
 		private readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
 	) {}
-
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-	}
 
 	async reset() {
 		if (!this._deck) {
@@ -150,12 +134,12 @@ export class DeckWinrateMatrixComponent implements AfterViewInit {
 		this.resetText = this.i18n.translateString('app.decktracker.matchup-info.reset-button-label');
 		this.confirmationShown = false;
 		this.showResetConfirmationText = true;
-		this.stateUpdater.next(new DecktrackerResetDeckStatsEvent(this._deck.deckstring));
+		this.mainWindowStateFacade.send(new DecktrackerResetDeckStatsEvent(this._deck.deckstring));
 	}
 
 	deleteDeck() {
 		console.log('deleting deck', this._deck.deckstring);
-		this.stateUpdater.next(new DecktrackerDeleteDeckEvent(this._deck.deckstring));
+		this.mainWindowStateFacade.send(new DecktrackerDeleteDeckEvent(this._deck.deckstring));
 	}
 
 	private updateValues() {

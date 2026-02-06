@@ -7,16 +7,17 @@ import {
 	Input,
 	ViewRef,
 } from '@angular/core';
+import { CollectionCardType } from '@firestone-hs/user-packs';
 import { dustFor } from '@firestone/game-state';
-import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
+import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { CardHistory } from '../../models/card-history';
-import { CollectionCardType } from '../../models/collection/collection-card-type.type';
 import { cardPremiumToCardType } from '../../services/collection/cards-monitor.service';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { ShowCardDetailsEvent } from '../../services/mainwindow/store/events/collection/show-card-details-event';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Component({
 	standalone: false,
@@ -51,7 +52,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CardHistoryItemComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class CardHistoryItemComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	@Input() active: boolean;
 
 	@Input('historyItem') set historyItem(history: CardHistory) {
@@ -73,20 +74,20 @@ export class CardHistoryItemComponent extends AbstractSubscriptionStoreComponent
 	private history$$ = new BehaviorSubject<CardHistory>(null);
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
-		private readonly ow: OverwolfService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly cards: CardsFacadeService,
+		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
+		private readonly prefs: PreferencesService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	ngAfterContentInit(): void {
-		combineLatest(
+		combineLatest([
 			this.history$$.asObservable(),
-			this.listenForBasicPref$((prefs) => prefs.locale),
-		)
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.locale)),
+		])
 			.pipe(this.mapData(([history, locale]) => ({ history, locale })))
 			.subscribe((info) => {
 				const history = info.history;
@@ -124,6 +125,6 @@ export class CardHistoryItemComponent extends AbstractSubscriptionStoreComponent
 	}
 
 	@HostListener('mousedown') onClick() {
-		this.store.send(new ShowCardDetailsEvent(this.cardId));
+		this.mainWindowStateFacade.send(new ShowCardDetailsEvent(this.cardId));
 	}
 }

@@ -1,4 +1,4 @@
-import { MainWindowStoreEvent } from '../main-window-store-event';
+import { MainWindowStoreEvent } from '@firestone/mainwindow/common';
 
 export class BgsPersonalStatsSelectHeroDetailsEvent implements MainWindowStoreEvent {
 	constructor(public readonly heroCardId: string) {}

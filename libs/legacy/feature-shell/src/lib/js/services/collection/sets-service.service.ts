@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { CardClass, Race, ReferenceCard, sets, standardSets, twistSets } from '@firestone-hs/reference-data';
+import { Set, SetCard } from '@firestone/collection/common';
 import { Card } from '@firestone/memory';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { Set, SetCard } from '../../models/set';
 
 @Injectable()
 export class SetsService {

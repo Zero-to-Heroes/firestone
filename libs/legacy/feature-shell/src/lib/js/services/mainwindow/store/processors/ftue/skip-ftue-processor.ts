@@ -1,12 +1,13 @@
-import { MainWindowNavigationService } from '@firestone/mainwindow/common';
+import { MainWindowNavigationService, MainWindowState, NavigationState } from '@firestone/mainwindow/common';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
-import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { SkipFtueEvent } from '../../events/ftue/skip-ftue-event';
 import { Processor } from '../processor';
 
 export class SkipFtueProcessor implements Processor {
-	constructor(private readonly prefs: PreferencesService, private readonly mainNav: MainWindowNavigationService) {}
+	constructor(
+		private readonly prefs: PreferencesService,
+		private readonly mainNav: MainWindowNavigationService,
+	) {}
 
 	public async process(
 		event: SkipFtueEvent,

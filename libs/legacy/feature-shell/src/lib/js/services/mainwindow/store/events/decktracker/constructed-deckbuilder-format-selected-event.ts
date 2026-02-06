@@ -1,5 +1,5 @@
 import { GameFormatString } from '@firestone-hs/reference-data';
-import { MainWindowStoreEvent } from '../main-window-store-event';
+import { MainWindowStoreEvent } from '@firestone/mainwindow/common';
 
 export class ConstructedDeckbuilderFormatSelectedEvent implements MainWindowStoreEvent {
 	public static eventName(): string {

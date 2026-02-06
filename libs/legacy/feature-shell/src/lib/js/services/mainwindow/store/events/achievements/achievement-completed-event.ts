@@ -1,5 +1,5 @@
 import { Achievement } from '@firestone/achievements/common';
-import { MainWindowStoreEvent } from '../main-window-store-event';
+import { MainWindowStoreEvent } from '@firestone/mainwindow/common';
 
 export class AchievementCompletedEvent implements MainWindowStoreEvent {
 	constructor(public readonly achievement: Achievement) {}

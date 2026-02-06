@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { NotificationsService, PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { CollectionCardType } from '../../models/collection/collection-card-type.type';
+import { CollectionCardType } from '@firestone-hs/user-packs';
 
 @Injectable()
 export class CardNotificationsService {

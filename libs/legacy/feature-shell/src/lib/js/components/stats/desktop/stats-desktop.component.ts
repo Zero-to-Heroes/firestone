@@ -6,12 +6,16 @@ import {
 	Inject,
 	ViewRef,
 } from '@angular/core';
+import {
+	MainWindowNavigationService,
+	MainWindowStateFacadeService,
+	StatsCategory,
+	StatsCategoryType,
+} from '@firestone/mainwindow/common';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ADS_SERVICE_TOKEN, IAdsService, waitForReady } from '@firestone/shared/framework/core';
-import { Observable } from 'rxjs';
-import { StatsCategory, StatsCategoryType } from '../../../models/mainwindow/stats/stats-category';
+import { combineLatest, Observable } from 'rxjs';
 import { ProfileSelectCategoryEvent } from '../../../services/mainwindow/store/processors/stats/profile-select-category';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	standalone: false,
@@ -47,7 +51,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class StatsDesktopComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class StatsDesktopComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	loading$: Observable<boolean>;
 	menuDisplayType$: Observable<string>;
 	category$: Observable<StatsCategory>;
@@ -56,34 +60,29 @@ export class StatsDesktopComponent extends AbstractSubscriptionStoreComponent im
 	showAds$: Observable<boolean>;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
+		private readonly nav: MainWindowNavigationService,
+		private readonly mainWindowState: MainWindowStateFacadeService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.ads);
+		await waitForReady(this.ads, this.nav, this.mainWindowState);
 
-		this.loading$ = this.store
-			.listen$(([main, nav]) => main.stats.loading)
-			.pipe(this.mapData(([loading]) => loading));
-		this.menuDisplayType$ = this.store
-			.listen$(([main, nav]) => nav.navigationStats.menuDisplayType)
-			.pipe(this.mapData(([menuDisplayType]) => menuDisplayType));
-		this.category$ = this.store
-			.listen$(
-				([main, nav]) => main.stats,
-				([main, nav]) => nav.navigationStats.selectedCategoryId,
-			)
-			.pipe(this.mapData(([stats, selectedCategoryId]) => stats.findCategory(selectedCategoryId)));
-		this.showFilters$ = this.store
-			.listen$(([main, nav]) => nav.navigationStats.selectedCategoryId)
-			.pipe(this.mapData(([selectedCategoryId]) => selectedCategoryId !== 'match-stats'));
-		this.categories$ = this.store
-			.listen$(([main, nav]) => main.stats.categories)
-			.pipe(this.mapData(([categories]) => categories ?? []));
+		this.loading$ = this.mainWindowState.mainWindowState$$.pipe(this.mapData((state) => state.stats.loading));
+		this.menuDisplayType$ = this.nav.navigationState$$.pipe(
+			this.mapData((state) => state.navigationStats.menuDisplayType),
+		);
+		this.category$ = combineLatest([
+			this.mainWindowState.mainWindowState$$.pipe(this.mapData((state) => state.stats)),
+			this.nav.navigationState$$.pipe(this.mapData((state) => state.navigationStats.selectedCategoryId)),
+		]).pipe(this.mapData(([stats, selectedCategoryId]) => stats.findCategory(selectedCategoryId)));
+		this.showFilters$ = this.nav.navigationState$$.pipe(
+			this.mapData((state) => state.navigationStats.selectedCategoryId !== 'match-stats'),
+		);
+		this.categories$ = this.mainWindowState.mainWindowState$$.pipe(this.mapData((state) => state.stats.categories));
 		this.showAds$ = this.ads.hasPremiumSub$$.pipe(this.mapData((info) => !info));
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -92,6 +91,6 @@ export class StatsDesktopComponent extends AbstractSubscriptionStoreComponent im
 	}
 
 	selectCategory(categoryId: StatsCategoryType) {
-		this.store.send(new ProfileSelectCategoryEvent(categoryId));
+		this.mainWindowState.send(new ProfileSelectCategoryEvent(categoryId));
 	}
 }

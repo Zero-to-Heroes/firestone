@@ -1,9 +1,8 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { ConstructedStatsTab } from '@firestone/mainwindow/common';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { Observable } from 'rxjs';
-import { ConstructedStatsTab } from '../../../models/mainwindow/decktracker/decktracker-view.type';
-import { GenericPreferencesUpdateEvent } from '../../../services/mainwindow/store/events/generic-preferences-update-event';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	standalone: false,
@@ -44,18 +43,21 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DecktrackerLadderStatsComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class DecktrackerLadderStatsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	selectedTab$: Observable<ConstructedStatsTab>;
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
-		super(store, cdr);
+	constructor(
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly prefs: PreferencesService,
+	) {
+		super(cdr);
 	}
 
 	ngAfterContentInit() {
-		this.selectedTab$ = this.listenForBasicPref$((prefs) => prefs.constructedStatsTab);
+		this.selectedTab$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.constructedStatsTab));
 	}
 
 	selectTab(tab: ConstructedStatsTab) {
-		this.store.send(new GenericPreferencesUpdateEvent((prefs) => ({ ...prefs, constructedStatsTab: tab })));
+		this.prefs.updatePrefs('constructedStatsTab', tab);
 	}
 }

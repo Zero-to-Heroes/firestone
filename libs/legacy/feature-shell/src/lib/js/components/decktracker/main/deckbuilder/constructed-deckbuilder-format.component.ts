@@ -1,9 +1,9 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { GameFormatString } from '@firestone-hs/reference-data';
+import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { ConstructedDeckbuilderFormatSelectedEvent } from '../../../../services/mainwindow/store/events/decktracker/constructed-deckbuilder-format-selected-event';
-import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	standalone: false,
@@ -27,18 +27,15 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ConstructedDeckbuilderFormatComponent
-	extends AbstractSubscriptionStoreComponent
-	implements AfterContentInit
-{
+export class ConstructedDeckbuilderFormatComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	formatOptions: readonly FormatOption[];
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	ngAfterContentInit() {
@@ -60,7 +57,7 @@ export class ConstructedDeckbuilderFormatComponent
 	}
 
 	onCardClicked(format: FormatOption) {
-		this.store.send(new ConstructedDeckbuilderFormatSelectedEvent(format.id));
+		this.mainWindowStateFacade.send(new ConstructedDeckbuilderFormatSelectedEvent(format.id));
 	}
 }
 

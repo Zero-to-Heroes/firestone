@@ -1,5 +1,5 @@
+import { MainWindowStoreEvent } from '@firestone/mainwindow/common';
 import { MercenariesPveDifficultyFilterType } from '../../../../../models/mercenaries/mercenaries-filter-types';
-import { MainWindowStoreEvent } from '../main-window-store-event';
 
 export class MercenariesPveDifficultyFilterSelectedEvent implements MainWindowStoreEvent {
 	constructor(public readonly difficulty: MercenariesPveDifficultyFilterType) {}

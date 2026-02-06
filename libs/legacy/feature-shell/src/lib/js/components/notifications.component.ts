@@ -7,6 +7,7 @@ import {
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
+import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { NotificationsService as FsNotifications, Message, PreferencesService } from '@firestone/shared/common/service';
 import { waitForReady } from '@firestone/shared/framework/core';
 import {
@@ -20,7 +21,6 @@ import {
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { ShowAchievementDetailsEvent } from '../services/mainwindow/store/events/achievements/show-achievement-details-event';
 import { ShowCardDetailsEvent } from '../services/mainwindow/store/events/collection/show-card-details-event';
-import { AppUiStoreFacadeService } from '../services/ui-store/app-ui-store-facade.service';
 
 @Component({
 	standalone: false,
@@ -61,9 +61,9 @@ export class NotificationsComponent implements AfterViewInit {
 		private readonly notificationService: NotificationsService,
 		private readonly cdr: ChangeDetectorRef,
 		private readonly elRef: ElementRef,
-		private readonly store: AppUiStoreFacadeService,
 		private readonly prefs: PreferencesService,
 		private readonly notifs: FsNotifications,
+		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
 	) {}
 
 	async ngAfterViewInit() {
@@ -224,10 +224,10 @@ export class NotificationsComponent implements AfterViewInit {
 		if (messageObject.cardId) {
 			const isAchievement = messageObject.app === 'achievement';
 			if (isAchievement) {
-				this.store.send(new ShowAchievementDetailsEvent(messageObject.cardId));
+				this.mainWindowStateFacade.send(new ShowAchievementDetailsEvent(messageObject.cardId));
 				this.fadeNotificationOut(messageObject.notificationId);
 			} else {
-				this.store.send(new ShowCardDetailsEvent(messageObject.cardId));
+				this.mainWindowStateFacade.send(new ShowCardDetailsEvent(messageObject.cardId));
 			}
 			return;
 		}

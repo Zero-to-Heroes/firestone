@@ -6,6 +6,7 @@ export * from './lib/models/arena-deck-details';
 export * from './lib/models/arena-draft';
 export * from './lib/models/arena-high-wins-runs';
 export * from './lib/models/arena-run';
+export * from './lib/models/arena-state';
 export * from './lib/services/arena-card-stats.service';
 export * from './lib/services/arena-class-stats.service';
 export * from './lib/services/arena-deck-details.service';

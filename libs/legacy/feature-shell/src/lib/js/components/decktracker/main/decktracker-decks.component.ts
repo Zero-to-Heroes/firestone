@@ -1,23 +1,14 @@
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
-import {
-	AfterContentInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	EventEmitter,
-	Input,
-	ViewRef,
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { DeckSummary } from '@firestone/constructed/common';
+import { DeckSortType, MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, arraysEqual } from '@firestone/shared/framework/common';
-import { CardsFacadeService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged } from 'rxjs';
-import { DeckSortType } from '../../../models/mainwindow/decktracker/deck-sort.type';
 import { DecksProviderService } from '../../../services/decktracker/main/decks-provider.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { ConstructedNewDeckVersionEvent } from '../../../services/mainwindow/store/events/decktracker/constructed-new-deck-version-event';
-import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 
 @Component({
 	standalone: false,
@@ -79,30 +70,25 @@ import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DecktrackerDecksComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+export class DecktrackerDecksComponent extends AbstractSubscriptionComponent {
 	decks$: Observable<readonly InternalDeckSummary[]>;
 	currentDragText$: Observable<string>;
 
 	private currentlyDraggedDeck = new BehaviorSubject<string>(null);
 	private currentlyMousedOverDeck = new BehaviorSubject<string>(null);
 
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly deckService: DecksProviderService,
 		private readonly prefs: PreferencesService,
-		private readonly ow: OverwolfService,
-		private readonly allCards: CardsFacadeService,
+		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
 		await waitForReady(this.deckService, this.prefs);
-
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 
 		const deckSource$: Observable<readonly DeckSummary[]> = combineLatest([
 			this.deckService.decks$$,
@@ -233,7 +219,9 @@ export class DecktrackerDecksComponent extends AbstractSubscriptionComponent imp
 		const dragged: DeckSummary = event.item.data;
 		console.debug('dropping', dragged.deckstring, droppedOn.deckstring);
 		if (dragged.deckstring !== droppedOn.deckstring) {
-			this.stateUpdater.next(new ConstructedNewDeckVersionEvent(dragged.deckstring, droppedOn.deckstring));
+			this.mainWindowStateFacade.send(
+				new ConstructedNewDeckVersionEvent(dragged.deckstring, droppedOn.deckstring),
+			);
 		}
 	}
 

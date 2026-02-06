@@ -1,6 +1,5 @@
+import { MainWindowState, NavigationState } from '@firestone/mainwindow/common';
 import { ConstructedDeckVersions, PreferencesService } from '@firestone/shared/common/service';
-import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
-import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { HideDeckSummaryEvent } from '../../events/decktracker/hide-deck-summary-event';
 import { Processor } from '../processor';
 

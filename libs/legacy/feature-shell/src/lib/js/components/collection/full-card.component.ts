@@ -10,14 +10,14 @@ import {
 } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { CardClass, ReferenceCard, ReferenceCardAudio } from '@firestone-hs/reference-data';
+import { SetCard } from '@firestone/collection/common';
 import { formatClass } from '@firestone/game-state';
+import { getHeroFaction } from '@firestone/mercenaries/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, capitalizeFirstLetter } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
-import { getHeroFaction } from '@firestone/mercenaries/common';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { CollectionCardType } from '../../models/collection/collection-card-type.type';
-import { SetCard } from '../../models/set';
+import { CollectionCardType } from '@firestone-hs/user-packs';
 import { SetsService } from '../../services/collection/sets-service.service';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { capitalizeEachWord, pickRandom } from '../../services/utils';

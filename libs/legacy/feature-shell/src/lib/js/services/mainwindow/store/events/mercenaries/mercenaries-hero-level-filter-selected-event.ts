@@ -1,5 +1,5 @@
+import { MainWindowStoreEvent } from '@firestone/mainwindow/common';
 import { MercenariesHeroLevelFilterType } from '../../../../../models/mercenaries/mercenaries-filter-types';
-import { MainWindowStoreEvent } from '../main-window-store-event';
 
 export class MercenariesHeroLevelFilterSelectedEvent implements MainWindowStoreEvent {
 	constructor(public readonly level: MercenariesHeroLevelFilterType) {}

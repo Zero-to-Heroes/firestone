@@ -1,9 +1,10 @@
-import { CollectionNavigationService } from '@firestone/collection/common';
-import { MainWindowNavigationService } from '@firestone/mainwindow/common';
-import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
-import { NavigationCollection } from '../../../../../models/mainwindow/navigation/navigation-collection';
-import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
-import { Set } from '../../../../../models/set';
+import { CollectionNavigationService, Set } from '@firestone/collection/common';
+import {
+	MainWindowNavigationService,
+	MainWindowState,
+	NavigationCollection,
+	NavigationState,
+} from '@firestone/mainwindow/common';
 import { SetsManagerService } from '../../../../collection/sets-manager.service';
 import { SelectCollectionSetEvent } from '../../events/collection/select-collection-set-event';
 import { Processor } from '../processor';

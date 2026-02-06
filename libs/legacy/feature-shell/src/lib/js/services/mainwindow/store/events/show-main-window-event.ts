@@ -1,4 +1,4 @@
-import { MainWindowStoreEvent } from './main-window-store-event';
+import { MainWindowStoreEvent } from '@firestone/mainwindow/common';
 
 export class ShowMainWindowEvent implements MainWindowStoreEvent {
 	public static eventName(): string {

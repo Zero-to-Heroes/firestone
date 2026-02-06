@@ -7,8 +7,9 @@ import {
 	FirestoneRemoteAchievementsLoaderService,
 } from '@firestone/achievements/common';
 import { GameEvent, GameEventsEmitterService } from '@firestone/game-state';
+import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { Events, GameStatusService, PreferencesService } from '@firestone/shared/common/service';
-import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { combineLatest, distinctUntilChanged, filter, map, take } from 'rxjs';
 import { AchievementCompletedEvent } from '../mainwindow/store/events/achievements/achievement-completed-event';
 import { ProcessingQueue } from '../processing-queue.service';
@@ -33,8 +34,8 @@ export class FirestoneAchievementsChallengeService {
 		private readonly achievementsStateManager: AchievementsStateManagerService,
 		private readonly challengeBuilder: ChallengeBuilderService,
 		private readonly gameStatus: GameStatusService,
-		private readonly ow: OverwolfService,
 		private readonly ngZone: NgZone,
+		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
 	) {
 		this.processingQueue = new ProcessingQueue<InternalEvent>(
 			(eventQueue) => this.processQueue(eventQueue),
@@ -47,7 +48,7 @@ export class FirestoneAchievementsChallengeService {
 	}
 
 	private async init() {
-		await waitForReady(this.prefs);
+		await waitForReady(this.prefs, this.mainWindowStateFacade);
 		return;
 
 		combineLatest([
@@ -201,7 +202,7 @@ export class FirestoneAchievementsChallengeService {
 	}
 
 	private async prepareAchievementCompletedEvent(achievement: Achievement) {
-		this.ow.getMainWindow().mainWindowStoreUpdater.next(new AchievementCompletedEvent(achievement));
+		this.mainWindowStateFacade.send(new AchievementCompletedEvent(achievement));
 	}
 }
 

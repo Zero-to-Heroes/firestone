@@ -3,7 +3,7 @@ import { PackResult } from '@firestone-hs/user-packs';
 import { Card } from '@firestone/memory';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { totalOwned } from '../../models/card';
-import { CollectionCardType } from '../../models/collection/collection-card-type.type';
+import { CollectionCardType } from '@firestone-hs/user-packs';
 
 export const getOwnedForDeckBuilding = (
 	cardId: string,

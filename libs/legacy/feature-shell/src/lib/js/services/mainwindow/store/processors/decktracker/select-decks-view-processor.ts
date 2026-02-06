@@ -1,7 +1,5 @@
 import { ConstructedNavigationService } from '@firestone/constructed/common';
-import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
-import { NavigationDecktracker } from '../../../../../models/mainwindow/navigation/navigation-decktracker';
-import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
+import { MainWindowState, NavigationDecktracker, NavigationState } from '@firestone/mainwindow/common';
 import { SelectDecksViewEvent } from '../../events/decktracker/select-decks-view-event';
 import { Processor } from '../processor';
 

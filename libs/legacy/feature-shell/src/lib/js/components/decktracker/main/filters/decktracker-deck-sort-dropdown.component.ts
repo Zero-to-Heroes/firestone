@@ -1,24 +1,14 @@
-import {
-	AfterContentInit,
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	EventEmitter,
-	ViewRef,
-} from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { ConstructedNavigationService } from '@firestone/constructed/common';
-import { PatchesConfigService } from '@firestone/shared/common/service';
+import { DeckSortType, MainWindowStateFacadeService } from '@firestone/mainwindow/common';
+import { PatchesConfigService, PreferencesService } from '@firestone/shared/common/service';
 import { IOption } from '@firestone/shared/common/view';
-import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-window-store-event';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { DeckSortType } from '../../../../models/mainwindow/decktracker/deck-sort.type';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { ChangeDeckSortEvent } from '../../../../services/mainwindow/store/events/decktracker/change-deck-sort-event';
-import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	standalone: false,
@@ -36,23 +26,18 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DecktrackerDeckSortDropdownComponent
-	extends AbstractSubscriptionStoreComponent
-	implements AfterContentInit, AfterViewInit
-{
+export class DecktrackerDeckSortDropdownComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	filter$: Observable<{ filter: string; placeholder: string; options: IOption[]; visible: boolean }>;
 
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
-		private readonly ow: OverwolfService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly patchesConfig: PatchesConfigService,
 		private readonly nav: ConstructedNavigationService,
+		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
+		private readonly prefs: PreferencesService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
@@ -60,11 +45,11 @@ export class DecktrackerDeckSortDropdownComponent
 
 		this.filter$ = combineLatest([
 			this.patchesConfig.currentConstructedMetaPatch$$,
-			this.store.listen$(([main, nav, prefs]) => prefs.desktopDeckFilters?.sort),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.desktopDeckFilters?.sort)),
 			this.nav.currentView$$,
 		]).pipe(
-			filter(([patch, [filter], currentView]) => !!filter && !!patch && !!currentView),
-			this.mapData(([patch, [filter], currentView]) => {
+			filter(([patch, filter, currentView]) => !!filter && !!patch && !!currentView),
+			this.mapData(([patch, filter, currentView]) => {
 				const options = [
 					{
 						value: 'last-played',
@@ -102,12 +87,8 @@ export class DecktrackerDeckSortDropdownComponent
 		}
 	}
 
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-	}
-
 	onSelected(option: IOption) {
-		this.stateUpdater.next(new ChangeDeckSortEvent((option as DeckSortOption).value));
+		this.mainWindowStateFacade.send(new ChangeDeckSortEvent((option as DeckSortOption).value));
 	}
 }
 

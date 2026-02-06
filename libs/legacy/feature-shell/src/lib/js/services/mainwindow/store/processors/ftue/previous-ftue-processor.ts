@@ -1,7 +1,5 @@
-import { MainWindowNavigationService } from '@firestone/mainwindow/common';
+import { MainWindowNavigationService, MainWindowState, NavigationState } from '@firestone/mainwindow/common';
 import { CurrentAppType } from '@firestone/shared/common/service';
-import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
-import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { PreviousFtueEvent } from '../../events/ftue/previous-ftue-event';
 import { Processor } from '../processor';
 

@@ -10,16 +10,15 @@ import {
 } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ReferenceCard } from '@firestone-hs/reference-data';
+import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { capitalizeFirstLetter } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent, capitalizeFirstLetter } from '@firestone/shared/framework/common';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { GameStat, StatGameModeType } from '@firestone/stats/data-access';
 import { Subscription } from 'rxjs';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { ShowReplayEvent } from '../../../services/mainwindow/store/events/replays/show-replay-event';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { capitalizeEachWord } from '../../../services/utils';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 import { extractTime } from './replay-info-ranked.component';
 
 @Component({
@@ -83,10 +82,7 @@ import { extractTime } from './replay-info-ranked.component';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ReplayInfoGenericComponent
-	extends AbstractSubscriptionStoreComponent
-	implements AfterContentInit, OnDestroy
-{
+export class ReplayInfoGenericComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
 	@Input() showStatsLabel = this.i18n.translateString('app.replays.replay-info.show-stats-button');
 	@Input() showReplayLabel = this.i18n.translateString('app.replays.replay-info.watch-replay-button');
 	@Input() displayCoin = true;
@@ -120,15 +116,15 @@ export class ReplayInfoGenericComponent
 	private battleTagTooltipTimeout: any;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly sanitizer: DomSanitizer,
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly prefs: PreferencesService,
 		private readonly ow: OverwolfService,
+		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
@@ -156,7 +152,7 @@ export class ReplayInfoGenericComponent
 	}
 
 	showReplay = () => {
-		this.store.send(new ShowReplayEvent(this.reviewId));
+		this.mainWindowStateFacade.send(new ShowReplayEvent(this.reviewId));
 	};
 
 	capitalize(input: string): string {

@@ -21,6 +21,13 @@ export class OwWindowHandlerService implements IWindowHandlerService {
 		this.ow.bringToFront(settingsWindow.id);
 	}
 
+	public async showCollectionWindow(useOverlay: boolean) {
+		const windowName = useOverlay ? OverwolfService.COLLECTION_WINDOW_OVERLAY : OverwolfService.COLLECTION_WINDOW;
+		const collectionWindow = await this.ow.obtainDeclaredWindow(windowName);
+		await this.ow.restoreWindow(collectionWindow.id);
+		this.ow.bringToFront(collectionWindow.id);
+	}
+
 	public async toggleBattlegroundsWindow(useOverlay: boolean, options?: IBattlegroundsWindowOptions) {
 		console.debug('[ow-window-handler] toggleBattlegroundsWindow', useOverlay, options);
 		const forcedStatus = options?.forced ?? null;

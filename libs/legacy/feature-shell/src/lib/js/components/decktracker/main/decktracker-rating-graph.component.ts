@@ -1,5 +1,11 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { ladderIntRankToString, ladderRankToInt } from '@firestone/game-state';
+import {
+	DeckRankingCategoryType,
+	DeckTimeFilterType,
+	MainWindowStateFacadeService,
+	MmrGroupFilterType,
+} from '@firestone/mainwindow/common';
 import { PatchInfo, PatchesConfigService, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
@@ -9,12 +15,8 @@ import { addDaysToDate, arraysEqual, daysBetweenDates, formatDate, groupByFuncti
 import { ChartData } from 'chart.js';
 import { Observable, combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter, map } from 'rxjs/operators';
-import { MmrGroupFilterType } from '../../../models/mainwindow/battlegrounds/mmr-group-filter-type';
-import { DeckRankingCategoryType } from '../../../models/mainwindow/decktracker/deck-ranking-category.type';
-import { DeckTimeFilterType } from '../../../models/mainwindow/decktracker/deck-time-filter.type';
 import { DecksProviderService } from '../../../services/decktracker/main/decks-provider.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { MainWindowStateFacadeService } from '../../../services/mainwindow/store/main-window-state-facade.service';
 
 @Component({
 	standalone: false,

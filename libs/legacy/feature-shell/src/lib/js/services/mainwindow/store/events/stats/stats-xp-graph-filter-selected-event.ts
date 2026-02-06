@@ -1,5 +1,5 @@
-import { StatsXpGraphSeasonFilterType } from '../../../../../models/mainwindow/stats/stats-xp-graph-season-filter.type';
-import { MainWindowStoreEvent } from '../main-window-store-event';
+import { MainWindowStoreEvent } from '@firestone/mainwindow/common';
+import { StatsXpGraphSeasonFilterType } from '@firestone/mainwindow/common';
 
 export class StatsXpGraphFilterSelectedEvent implements MainWindowStoreEvent {
 	public static eventName(): string {

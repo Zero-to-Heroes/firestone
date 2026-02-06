@@ -1,5 +1,5 @@
 import { BgsPostMatchStatsForReview } from '@firestone/game-state';
-import { MainWindowStoreEvent } from '../main-window-store-event';
+import { MainWindowStoreEvent } from '@firestone/mainwindow/common';
 
 export class BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent implements MainWindowStoreEvent {
 	constructor(

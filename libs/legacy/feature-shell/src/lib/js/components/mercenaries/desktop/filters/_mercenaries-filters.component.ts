@@ -1,9 +1,11 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { Observable } from 'rxjs';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { MainWindowNavigationService, MainWindowStateFacadeService } from '@firestone/mainwindow/common';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { waitForReady } from '@firestone/shared/framework/core';
+import { combineLatest, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { MercenariesToggleShowHiddenTeamsEvent } from '../../../../services/mainwindow/store/events/mercenaries/mercenaries-toggle-show-hidden-teams-event';
-import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	standalone: false,
@@ -34,43 +36,49 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MercenariesFiltersComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class MercenariesFiltersComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	showHiddenTeamsLink$: Observable<boolean>;
 	showRegionFilter$: Observable<boolean>;
 	showSearch$: Observable<boolean>;
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
-		super(store, cdr);
+	constructor(
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly nav: MainWindowNavigationService,
+		private readonly prefs: PreferencesService,
+		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
+	) {
+		super(cdr);
 	}
 
-	ngAfterContentInit() {
-		this.showHiddenTeamsLink$ = this.store
-			.listen$(
-				([main, nav, prefs]) => nav.navigationMercenaries.selectedCategoryId,
-				([main, nav, prefs]) => prefs.mercenariesHiddenTeamIds,
-			)
-			.pipe(
-				filter(([currentView, hiddenTeamIds]) => !!currentView && !!hiddenTeamIds),
-				this.mapData(
-					([currentView, hiddenTeamIds]) =>
-						currentView === 'mercenaries-my-teams' && hiddenTeamIds.length > 0,
-				),
-			);
-		this.showRegionFilter$ = this.store
-			.listen$(([main, nav, prefs]) => nav.navigationMercenaries.selectedCategoryId)
-			.pipe(
-				filter(([currentView]) => !!currentView),
-				this.mapData(([currentView]) => currentView === 'mercenaries-my-teams'),
-			);
-		this.showSearch$ = this.store
-			.listen$(([main, nav, prefs]) => nav.navigationMercenaries.selectedCategoryId)
-			.pipe(
-				filter(([currentView]) => !!currentView),
-				this.mapData(([currentView]) => currentView === 'mercenaries-personal-hero-stats'),
-			);
+	async ngAfterContentInit() {
+		await waitForReady(this.nav, this.prefs, this.mainWindowStateFacade);
+
+		this.showHiddenTeamsLink$ = combineLatest([
+			this.nav.navigationState$$.pipe(this.mapData((state) => state.navigationMercenaries.selectedCategoryId)),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.mercenariesHiddenTeamIds)),
+		]).pipe(
+			filter(([currentView, hiddenTeamIds]) => !!currentView && !!hiddenTeamIds),
+			this.mapData(
+				([currentView, hiddenTeamIds]) => currentView === 'mercenaries-my-teams' && hiddenTeamIds.length > 0,
+			),
+		);
+		this.showRegionFilter$ = this.nav.navigationState$$.pipe(
+			this.mapData((state) => state.navigationMercenaries.selectedCategoryId),
+			filter((currentView) => !!currentView),
+			this.mapData((currentView) => currentView === 'mercenaries-my-teams'),
+		);
+		this.showSearch$ = this.nav.navigationState$$.pipe(
+			this.mapData((state) => state.navigationMercenaries.selectedCategoryId),
+			filter((currentView) => !!currentView),
+			this.mapData((currentView) => currentView === 'mercenaries-personal-hero-stats'),
+		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.markForCheck();
+		}
 	}
 
 	toggleShowHiddenDecks = (newValue: boolean) => {
-		this.store.send(new MercenariesToggleShowHiddenTeamsEvent(newValue));
+		this.mainWindowStateFacade.send(new MercenariesToggleShowHiddenTeamsEvent(newValue));
 	};
 }

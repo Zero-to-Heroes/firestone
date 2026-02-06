@@ -4,13 +4,12 @@ import {
 	ChangeDetectorRef,
 	Component,
 	ElementRef,
-	EventEmitter,
 	Input,
 	ViewRef,
 } from '@angular/core';
+import { MainWindowStateFacadeService, MainWindowStoreEvent } from '@firestone/mainwindow/common';
 import { IOption } from '@firestone/shared/common/view';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { MainWindowStoreEvent } from '../services/mainwindow/store/events/main-window-store-event';
 
 @Component({
 	standalone: false,
@@ -48,16 +47,14 @@ export class FilterComponent implements AfterViewInit {
 	@Input() delegateFullControl: boolean;
 	@Input() filterChangeFunction: (option: IOption) => MainWindowStoreEvent;
 
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
 	constructor(
 		private ow: OverwolfService,
 		private el: ElementRef,
 		private cdr: ChangeDetectorRef,
+		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
 	) {}
 
 	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 		const singleEls: HTMLElement[] = this.el.nativeElement.querySelectorAll('.single');
 		singleEls.forEach((singleEl) => {
 			const caretEl = singleEl.appendChild(document.createElement('i'));
@@ -81,7 +78,7 @@ export class FilterComponent implements AfterViewInit {
 		if (this.delegateFullControl) {
 			this.filterChangeFunction(option);
 		} else {
-			this.stateUpdater.next(this.filterChangeFunction(option));
+			this.mainWindowStateFacade.send(this.filterChangeFunction(option));
 		}
 	}
 

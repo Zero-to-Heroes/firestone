@@ -1,5 +1,5 @@
+import { MainWindowStoreEvent } from '@firestone/mainwindow/common';
 import { MercenariesModeFilterType } from '../../../../../models/mercenaries/mercenaries-filter-types';
-import { MainWindowStoreEvent } from '../main-window-store-event';
 
 export class MercenariesModeFilterSelectedEvent implements MainWindowStoreEvent {
 	constructor(public readonly mode: MercenariesModeFilterType) {}

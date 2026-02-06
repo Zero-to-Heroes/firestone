@@ -1,11 +1,13 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { MainWindowNavigationService, MainWindowStateFacadeService } from '@firestone/mainwindow/common';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { IOption } from '@firestone/shared/common/view';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { Observable } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { MercenariesHeroLevelFilterSelectedEvent } from '../../../../services/mainwindow/store/events/mercenaries/mercenaries-hero-level-filter-selected-event';
-import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	standalone: false,
@@ -25,7 +27,7 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MercenariesHeroLevelFilterDropdownComponent
-	extends AbstractSubscriptionStoreComponent
+	extends AbstractSubscriptionComponent
 	implements AfterContentInit
 {
 	options: FilterOption[];
@@ -33,14 +35,18 @@ export class MercenariesHeroLevelFilterDropdownComponent
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
+		private readonly prefs: PreferencesService,
+		private readonly mainNavigationService: MainWindowNavigationService,
+		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
-	ngAfterContentInit(): void {
+	async ngAfterContentInit() {
+		await waitForReady(this.prefs, this.mainNavigationService);
+
 		this.options = ['0', '1', '5', '15', '30'].map(
 			(filter) =>
 				({
@@ -48,24 +54,28 @@ export class MercenariesHeroLevelFilterDropdownComponent
 					label: this.i18n.translateString(`mercenaries.filters.hero-level.level-${filter}`),
 				}) as FilterOption,
 		);
-		this.filter$ = this.store
-			.listen$(
-				([main, nav, prefs]) => prefs.mercenariesActiveHeroLevelFilter2,
-				([main, nav]) => nav.navigationMercenaries.selectedCategoryId,
-			)
-			.pipe(
-				filter(([filter, selectedCategoryId]) => !!filter && !!selectedCategoryId),
-				this.mapData(([filter, selectedCategoryId]) => ({
-					filter: '' + filter,
-					placeholder:
-						this.options.find((option) => option.value === '' + filter)?.label ?? this.options[0].label,
-					visible: false,
-				})),
-			);
+		this.filter$ = combineLatest([
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.mercenariesActiveHeroLevelFilter2)),
+			this.mainNavigationService.navigationState$$.pipe(
+				this.mapData((state) => state.navigationMercenaries.selectedCategoryId),
+			),
+		]).pipe(
+			filter(([filter, selectedCategoryId]) => !!filter && !!selectedCategoryId),
+			this.mapData(([filter, selectedCategoryId]) => ({
+				filter: '' + filter,
+				placeholder:
+					this.options.find((option) => option.value === '' + filter)?.label ?? this.options[0].label,
+				visible: false,
+			})),
+		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.markForCheck();
+		}
 	}
 
 	onSelected(option: FilterOption) {
-		this.store.send(new MercenariesHeroLevelFilterSelectedEvent(+option.value as any));
+		this.mainWindowStateFacade.send(new MercenariesHeroLevelFilterSelectedEvent(+option.value as any));
 	}
 }
 

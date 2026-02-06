@@ -1,5 +1,5 @@
-import { MmrGroupFilterType } from '../../../../../models/mainwindow/battlegrounds/mmr-group-filter-type';
-import { MainWindowStoreEvent } from '../main-window-store-event';
+import { MainWindowStoreEvent } from '@firestone/mainwindow/common';
+import { MmrGroupFilterType } from '@firestone/mainwindow/common';
 
 export class ChangeDeckRankGroupEvent implements MainWindowStoreEvent {
 	constructor(public readonly newRank: MmrGroupFilterType) {}

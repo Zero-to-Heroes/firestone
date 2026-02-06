@@ -7,13 +7,13 @@ import {
 	BgsHeroAveragePositionDetails,
 } from '@firestone/battlegrounds/view';
 import { BgsQuestStat } from '@firestone/game-state';
+import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { SimpleBarChartData } from '@firestone/shared/common/view';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { BgsShowStrategiesEvent } from '../../../services/mainwindow/store/events/battlegrounds/bgs-show-strategies-event';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 import { BgsHeroStrategyTipsTooltipComponent } from './bgs-hero-strategy-tips-tooltip.component';
 
 @Component({
@@ -96,7 +96,7 @@ import { BgsHeroStrategyTipsTooltipComponent } from './bgs-hero-strategy-tips-to
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsHeroStatsComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class BgsHeroStatsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	componentType: ComponentType<BgsHeroStrategyTipsTooltipComponent> = BgsHeroStrategyTipsTooltipComponent;
 	averagePositionComponentType: ComponentType<BattlegroundsHeroAveragePositionDetailsTooltipComponent> =
 		BattlegroundsHeroAveragePositionDetailsTooltipComponent;
@@ -136,11 +136,11 @@ export class BgsHeroStatsComponent extends AbstractSubscriptionStoreComponent im
 	}
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly playerHeroStats: BgsPlayerHeroStatsService,
+		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
@@ -192,7 +192,7 @@ export class BgsHeroStatsComponent extends AbstractSubscriptionStoreComponent im
 	}
 
 	showStrategies() {
-		this.store.send(new BgsShowStrategiesEvent(this._hero.baseCardId ?? this._hero.id));
+		this.mainWindowStateFacade.send(new BgsShowStrategiesEvent(this._hero.baseCardId ?? this._hero.id));
 	}
 }
 

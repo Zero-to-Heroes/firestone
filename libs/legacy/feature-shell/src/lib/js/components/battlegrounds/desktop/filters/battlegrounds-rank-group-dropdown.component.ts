@@ -6,7 +6,7 @@ import { AbstractSubscriptionComponent } from '@firestone/shared/framework/commo
 import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
-import { MmrGroupFilterType } from '../../../../models/mainwindow/battlegrounds/mmr-group-filter-type';
+import { MmrGroupFilterType } from '@firestone/mainwindow/common';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { arraysEqual } from '../../../../services/utils';
 
