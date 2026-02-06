@@ -61,8 +61,9 @@ export class BgsBattleSimulationWorkerService extends BgsBattleSimulationExecuto
 			onResultReceived(result);
 		});
 
-		worker.on('error', (error) => {
-			console.error('[bgs-simulation] Worker error:', error);
+		worker.on('error', (error: Error) => {
+			// Node worker_threads emit Error with message and stack
+			console.error('[bgs-simulation] Worker error:', error?.message ?? error, error?.stack ?? '');
 			worker.terminate();
 			onResultReceived(null);
 		});

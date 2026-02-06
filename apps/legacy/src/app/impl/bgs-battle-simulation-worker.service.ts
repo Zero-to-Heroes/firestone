@@ -128,8 +128,19 @@ export class BgsBattleSimulationWorkerService extends BgsBattleSimulationExecuto
 				});
 			};
 
-			worker.onerror = (error) => {
-				console.error('[bgs-simulation] Worker error:', error);
+			worker.onerror = (error: ErrorEvent) => {
+				// ErrorEvent has message, filename, lineno, colno, and error (actual Error with stack)
+				const msg = error?.message ?? 'Unknown worker error';
+				const file = error?.filename ?? '';
+				const line = error?.lineno ?? 0;
+				const col = error?.colno ?? 0;
+				const err = error?.error;
+				console.error(
+					'[bgs-simulation] Worker error:',
+					msg,
+					file ? `at ${file}:${line}:${col}` : '',
+					err ?? '',
+				);
 				worker.terminate();
 				this.ngZone.run(() => {
 					onResultReceived(null);
