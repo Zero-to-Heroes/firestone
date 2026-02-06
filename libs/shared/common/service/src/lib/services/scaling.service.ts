@@ -35,6 +35,8 @@ export class ScalingService {
 		// await this.initializeGlobalScale();
 		this.cardTooltip();
 		this._multiScale('helpTooltipScale', '--help-tooltip-scale');
+		this._multiScale('notificationsScale', '--notifications-scale');
+
 		this._multiScale('bgsBannedTribeScale', '--banned-tribes-scale');
 		this._multiScale('bgsSimulatorScale', '--bgs-simulator-scale');
 		this._multiScale('bgsMinionsListScale', '--bgs-minions-list-scale');

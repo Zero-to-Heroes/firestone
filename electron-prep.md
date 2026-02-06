@@ -4,10 +4,9 @@ Beta
 
 - custom installer (pending)
 - validate that logged in user is premium / get their premium status (pending)
+    - udpate welcome notification accordingly
 
-- disk cache on overlay window
-- notifications (component and service, which relies on OW)
-    - [2026-02-03 11:23:55.118] [ERROR] Cannot inject to elevated game - app is not elevated
+- main window
 - mercenaries widgets (move store to shared module, like game-state)
 - basically everything linked to the old store - remove it completely
 - resize window
@@ -15,6 +14,7 @@ Beta
 - all the rest (prefs, settings, main windows, etc)
 - indexeddb service (in settings-root.component)
 - hotkeys (bg tab, bg window, main window)
+- disk cache on overlay window
 
 ====================
 Final release

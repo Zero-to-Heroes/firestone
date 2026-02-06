@@ -1,4 +1,6 @@
 import { ElectronGameWindowService } from '@firestone/electron/common';
+import { NotificationsService } from '@firestone/shared/common/service';
+import { AppInjector, ILocalizationService } from '@firestone/shared/framework/core';
 import { overwolf } from '@overwolf/ow-electron';
 import {
 	GamesFilter,
@@ -305,6 +307,36 @@ export class OverlayService extends EventEmitter {
 				}
 			});
 
+			// Show a notification
+			console.log('[debug] Showing a notification');
+			const notificationsService = AppInjector.get(NotificationsService);
+			const localizationService = AppInjector.get(ILocalizationService);
+			const title = localizationService.translateString('app.internal.startup.firestone-ready-title');
+			const text = localizationService.translateString('app.internal.startup.firestone-ready-text');
+			notificationsService.emitNewNotification({
+				content: `
+					<div class="general-message-container general-theme">
+						<div class="firestone-icon">
+							<svg class="svg-icon-fill">
+								<use xlink:href="assets/svg/sprite.svg#ad_placeholder" />
+							</svg>
+						</div>
+						<div class="message">
+							<div class="title">
+								<span>${title}</span>
+							</div>
+							<span class="text">${text}</span>
+						</div>
+						<button class="i-30 close-button">
+							<svg class="svg-icon-fill">
+								<use xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="assets/svg/sprite.svg#window-control_close"></use>
+							</svg>
+						</button>
+					</div>`,
+				notificationId: `app-ready`,
+			});
+			console.log('[debug] Notification shown');
+
 			console.log('Angular overlay window created successfully! Waiting for show/focus...');
 		} catch (error) {
 			console.error('Error loading Angular overlay:', error);
@@ -379,6 +411,12 @@ export class OverlayService extends EventEmitter {
 				// Check for elevation issues
 				if (gameInfo.processInfo.isElevated) {
 					console.error('Cannot inject to elevated game - app is not elevated');
+					const notificationsService = AppInjector.get(NotificationsService);
+					notificationsService.notifyError(
+						'Could not inject',
+						'The game is running as administrator, so you need to run Firestone as an administrator to enable game injection.',
+						'game-injection-error',
+					);
 					return;
 				}
 
