@@ -1346,13 +1346,15 @@ const BAN_LIST = [
 ];
 
 const BAN_LIST_ARENA = [
-	CardIds.Kiljaeden_GDB_145,
-	CardIds.TheGreatDracorex_DINO_401,
-	CardIds.Shaladrassil_EDR_846,
+	CardIds.Amirdrassil_FIR_907,
 	CardIds.FyrakkTheBlazing_FIR_959,
-	CardIds.Tortolla_EDR_471,
+	CardIds.Kiljaeden_GDB_145,
 	CardIds.Razidir_TLC_463,
+	CardIds.Shaladrassil_EDR_846,
 	CardIds.StormTheGates_TLC_EVENT_400,
+	CardIds.StoryOfUmbra_DINO_415,
+	CardIds.TheGreatDracorex_DINO_401,
+	CardIds.Tortolla_EDR_471,
 	CardIds.WelcomeHome_TIME_EVENT_997,
 ];
 
