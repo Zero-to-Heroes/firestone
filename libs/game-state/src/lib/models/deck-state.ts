@@ -2,8 +2,8 @@
 import { CardClass, CardIds, CardType, GameTag, SpellSchool } from '@firestone-hs/reference-data';
 import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { NumericTurnInfo, PlayerGameState } from './_barrel';
 import { ChoosingOptionsGameEvent } from '../services/game-events/events/choosing-options-game-event';
+import { NumericTurnInfo, PlayerGameState } from './_barrel';
 import { AttackOnBoard } from './attack-on-board';
 import { BoardSecret } from './board-secret';
 import { DeckCard } from './deck-card';
@@ -346,9 +346,18 @@ export class DeckState {
 		let pool = [...this.hand, ...this.currentOptions].map((card) => card.cardId);
 		pool.concat(this.additionalKnownCardsInHand);
 		if (options?.includeBoard) {
-			pool = pool.concat(this.board.map((card) => card.cardId));
+			pool = pool.concat(
+				this.board.map((card) => card.cardId),
+				this.secrets?.map((secret) => secret.cardId) ?? [],
+			);
 		}
-		pool = pool.concat(this.deck.map((card) => card.cardId)).concat(this.additionalKnownCardsInDeck);
+		if (options?.includesOtherZone) {
+			pool = pool.concat(this.otherZone.filter((card) => card.zone !== 'SETASIDE').map((card) => card.cardId));
+		}
+		pool = pool.concat(
+			this.deck.map((card) => card.cardId),
+			this.additionalKnownCardsInDeck,
+		);
 		return pool
 			.concat(this.getCardsInSideboards())
 			.filter((cardId: string) => !!cardId)
