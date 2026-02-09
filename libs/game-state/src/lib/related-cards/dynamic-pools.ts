@@ -365,7 +365,7 @@ const getDynamicRelatedCardIdsInternal = (
 		// If the pool is empty, remove "canBeDiscoveredByClass" requirement
 		const newOptions = {
 			...options,
-			currentClass: '',
+			currentClass: allCards.getCard(cardId)?.classes?.[0] ?? '',
 		};
 		filters = getDynamicFilters(cardId, entityId, allCards, newOptions)!;
 		result = Array.isArray(filters)
