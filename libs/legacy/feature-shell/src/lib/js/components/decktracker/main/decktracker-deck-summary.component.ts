@@ -223,12 +223,6 @@ export class DecktrackerDeckSummaryComponent extends AbstractSubscriptionCompone
 		this.mainWindowStateFacade.send(new SelectDeckDetailsEvent(this._deck.deckstring));
 	}
 
-	preventDefault(event: MouseEvent) {
-		console.debug('[deck-summary] preventDefault', event);
-		event.stopPropagation();
-		event.preventDefault();
-	}
-
 	private buildLastUsedDate(lastUsedTimestamp: number): string {
 		const date = new Date(lastUsedTimestamp);
 		return date
