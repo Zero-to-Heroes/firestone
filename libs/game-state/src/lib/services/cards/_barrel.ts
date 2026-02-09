@@ -154,6 +154,7 @@ export { RunicAdornment } from './runic-adornment';
 export { RunicInscriptions } from './runic-inscriptions';
 export { ScaleReplica } from './scale-replica';
 export { SemiStablePortal } from './semi-stable-portal';
+export { ServantOfYoggSaron } from './servant-of-yogg-saron';
 export { ShakuTheCollector } from './shaku-the-collector';
 export { ShallowGravedigger } from './shallow-gravedigger';
 export { ShellGame } from './shell-game';
