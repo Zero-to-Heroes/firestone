@@ -21,7 +21,7 @@ export class CardsHighlightService extends CardsHighlightCommonService {
 	}
 
 	protected override async setup() {
-		await waitForReady(this.gameStateService);
+		await waitForReady(this.gameStateService, this.mousedOverService);
 
 		const obs: Observable<GameState> = this.gameStateService.gameState$$.pipe(filter((gameState) => !!gameState));
 		super.setup(obs, async () => {

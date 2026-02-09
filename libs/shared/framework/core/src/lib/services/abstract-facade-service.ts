@@ -271,7 +271,7 @@ export abstract class AbstractFacadeService<T extends AbstractFacadeService<T>> 
 }
 
 export const waitForReady = async (...services: HasIsReady[]) => {
-	return Promise.all(services.map((service) => service.isReady()));
+	return Promise.all(services.filter((service) => service != null).map((service) => service.isReady()));
 };
 
 interface HasIsReady {
