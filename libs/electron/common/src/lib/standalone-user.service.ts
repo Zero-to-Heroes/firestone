@@ -26,6 +26,7 @@ export interface AuthCallbackData {
 	avatar: string;
 	isPremium: boolean;
 	provider: string;
+	internalUserName: string;
 }
 
 // Stored auth data (persisted to disk)
@@ -36,6 +37,7 @@ interface StoredAuthData {
 	displayName?: string;
 	avatar?: string;
 	provider?: string;
+	internalUserName?: string;
 }
 
 @Injectable()
@@ -161,12 +163,13 @@ export class StandaloneUserService extends AbstractFacadeService<StandaloneUserS
 
 		// Create updated user data
 		const updatedUser: StoredAuthData = {
-			userId: currentUser?.userId || `fs-std-${uuid()}`,
+			userId: authData.internalUserName || currentUser?.userId || `fs-std-${uuid()}`,
 			token: authData.token,
 			userName: authData.userName,
 			displayName: authData.displayName,
 			avatar: authData.avatar,
 			provider: authData.provider,
+			internalUserName: authData.internalUserName,
 		};
 
 		// Save to disk for persistence

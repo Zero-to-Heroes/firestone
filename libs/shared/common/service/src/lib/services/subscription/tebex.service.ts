@@ -22,9 +22,9 @@ const TEBEX_SUB_DETAILS_URL = `https://x3dealpmov6br4o7vmtiy5peyq0wzbms.lambda-u
 export class TebexService extends AbstractFacadeService<TebexService> {
 	public packages$$: SubscriberAwareBehaviorSubject<readonly TebexPackage[] | null>;
 
-	private api: ApiRunner;
 	private ow: OverwolfService;
-	private user: UserService;
+	protected api: ApiRunner;
+	protected user: UserService;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'TebexService', () => !!this.packages$$);
@@ -78,7 +78,8 @@ export class TebexService extends AbstractFacadeService<TebexService> {
 		return this.callOnMainProcess<CurrentPlan | null>('getSubscriptionStatusInternal');
 	}
 
-	private async getSubscriptionStatusInternal(): Promise<CurrentPlan | null> {
+	protected async getSubscriptionStatusInternal(): Promise<CurrentPlan | null> {
+		console.log('[ads] [tebex] getting subscription status internal parent');
 		const currentUser = await this.user.getCurrentUser();
 		if (!currentUser?.username) {
 			return null;
@@ -142,7 +143,7 @@ export interface TebexPackage {
 	updated_at: string;
 }
 
-interface TebexSub {
+export interface TebexSub {
 	userId: string;
 	packageId: number;
 	recurringPaymentId: string;

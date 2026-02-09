@@ -27,6 +27,7 @@ export interface AuthCallbackData {
 	avatar: string;
 	isPremium: boolean;
 	provider: string;
+	internalUserName: string;
 }
 
 export default class App {
@@ -76,6 +77,8 @@ export default class App {
 				avatar: params.get('avatar') || '',
 				isPremium: params.get('isPremium') === 'true',
 				provider: params.get('provider') || 'overwolf',
+				// UserId in case of Overwolf, used to get the Tebex info
+				internalUserName: params.get('internalUserName') || '',
 			};
 
 			if (!authData.token) {

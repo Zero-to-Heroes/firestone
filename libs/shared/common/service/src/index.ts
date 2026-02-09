@@ -29,5 +29,6 @@ export * from './lib/services/standalone-ad.service';
 export * from './lib/services/subscription/ow-legacy-premium.service';
 export * from './lib/services/subscription/subscription.service';
 export * from './lib/services/subscription/tebex-deeplink.service';
+export * from './lib/services/subscription/tebex-headless.service';
 export * from './lib/services/subscription/tebex.service';
 export * from './lib/shared-common-service.module';

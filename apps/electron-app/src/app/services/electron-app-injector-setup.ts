@@ -59,8 +59,8 @@ import {
 } from '@firestone/constructed/common';
 import {
 	ElectronApiRunner,
-	ElectronHotkeyHandlerFacadeService,
 	ElectronStorageService,
+	ElectronSubscriptionService,
 	StandaloneUserService,
 } from '@firestone/electron/common';
 import {
@@ -120,6 +120,7 @@ import {
 	PreferencesStorageService,
 	StandaloneAdService,
 	SubscriptionService,
+	TebexHeadlessService,
 } from '@firestone/shared/common/service';
 import {
 	ADS_SERVICE_TOKEN,
@@ -161,6 +162,7 @@ import { BgsBattleSimulationWorkerService } from './bgs-battle-simulation-worker
 import { ElectronAngularInjector } from './electron-angular-injector';
 import { ElectronAppVersionService } from './electron-app-version.service';
 import { ElectronDiskCacheService } from './electron-disk-cache.service';
+import { ElectronHotkeyHandlerFacadeService } from './electron-hotkey-handler-facade.service';
 import { ElectronHotkeyHandlerService } from './electron-hotkey-handler.service';
 import { ElectronLogFileBackendService } from './electron-log-file-backend.service';
 import { ElectronWindowHandlerService } from './electron-window-handler.service';
@@ -694,8 +696,12 @@ export const buildAppInjector = () => {
 	const expertContributors = new ExpertContributorsService(windowManager);
 	electronInjector.register(ExpertContributorsService, expertContributors);
 
-	const subscriptionService = new SubscriptionService(windowManager);
-	electronInjector.register(SubscriptionService, subscriptionService);
+	const tebexService = new TebexHeadlessService(windowManager);
+	electronInjector.register(TebexHeadlessService, tebexService);
+
+	const subscriptionService = new ElectronSubscriptionService(windowManager);
+	electronInjector.register(ElectronSubscriptionService, subscriptionService);
+	electronInjector.register(SubscriptionService, subscriptionService as any as SubscriptionService);
 
 	const bgsIntermediateResultsSimGuardianService = new BgsIntermediateResultsSimGuardianService(windowManager);
 	electronInjector.register(BgsIntermediateResultsSimGuardianService, bgsIntermediateResultsSimGuardianService);

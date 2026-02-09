@@ -1,34 +1,30 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { Injectable } from '@angular/core';
+import { CurrentPlan, equalCurrentPlan, TebexHeadlessService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import {
 	AbstractFacadeService,
 	AppInjector,
 	LocalStorageService,
-	OverwolfService,
 	UserService,
 	waitForReady,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
-import { OwLegacyPremiumService } from './ow-legacy-premium.service';
-import { TebexService } from './tebex.service';
 
-@Injectable()
-export class SubscriptionService extends AbstractFacadeService<SubscriptionService> {
+@Injectable({ providedIn: 'root' })
+export class ElectronSubscriptionService extends AbstractFacadeService<ElectronSubscriptionService> {
 	public currentPlan$$: SubscriberAwareBehaviorSubject<CurrentPlan | null>;
 
-	private legacy: OwLegacyPremiumService;
-	private tebex: TebexService;
+	private tebex: TebexHeadlessService;
 	private localStorage: LocalStorageService;
-	private ow: OverwolfService;
 	private user: UserService;
 
 	// Do this to avoid spamming the server with subscription status check messages
 	private shouldCheckForUpdates = false;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
-		super(windowManager, 'SubscriptionService', () => !!this.currentPlan$$);
+		super(windowManager, 'ElectronSubscriptionService', () => !!this.currentPlan$$);
 	}
 
 	protected override assignSubjects() {
@@ -37,10 +33,8 @@ export class SubscriptionService extends AbstractFacadeService<SubscriptionServi
 
 	protected async init() {
 		this.currentPlan$$ = new SubscriberAwareBehaviorSubject<CurrentPlan | null>(null);
-		this.legacy = AppInjector.get(OwLegacyPremiumService);
-		this.tebex = AppInjector.get(TebexService);
+		this.tebex = AppInjector.get(TebexHeadlessService);
 		this.localStorage = AppInjector.get(LocalStorageService);
-		this.ow = AppInjector.get(OverwolfService);
 		this.user = AppInjector.get(UserService);
 
 		this.currentPlan$$.onFirstSubscribe(async () => {
@@ -57,11 +51,6 @@ export class SubscriptionService extends AbstractFacadeService<SubscriptionServi
 			});
 
 			await this.fetchCurrentPlan();
-		});
-
-		this.ow.onSubscriptionChanged(() => {
-			console.log('[ads] [subscription]ow  subscription changed, fetching new plan');
-			this.startCheckingForUpdates();
 		});
 
 		await waitForReady(this.user);
@@ -93,28 +82,22 @@ export class SubscriptionService extends AbstractFacadeService<SubscriptionServi
 	}
 
 	public async fetchCurrentPlan(): Promise<CurrentPlan | null> {
+		console.log('[ads] [subscription] fetching current plan');
 		return this.callOnMainProcess<CurrentPlan | null>('fetchCurrentPlanInternal');
 	}
 
 	private async subscribeInternal(planId: string) {
-		if (planId === 'legacy') {
-			await this.legacy.subscribe();
-			// this.currentPlan$$.next({ id: 'legacy', expireAt: null, active: true, autoRenews: false, cancelled: false });
-		}
 		await this.tebex.subscribe(planId);
 		this.startCheckingForUpdates();
 	}
 
 	private async unsubscribeInternal(planId: string) {
-		if (planId === 'legacy') {
-			await this.legacy.unsubscribe();
-		} else {
-			await this.tebex.unsubscribe(planId);
-		}
+		await this.tebex.unsubscribe(planId);
 		this.startCheckingForUpdates();
 	}
 
 	private async fetchCurrentPlanInternal(): Promise<CurrentPlan | null> {
+		console.log('[ads] [subscription] fetching current plan internal');
 		const currentPlan = await this.getCurrentPlanInternal();
 		console.debug('[ads] [subscription] current plan', currentPlan);
 		// Once it is initialized, it should not be null, otherwise the getValueWithInit() will hang indefinitely
@@ -136,18 +119,10 @@ export class SubscriptionService extends AbstractFacadeService<SubscriptionServi
 	}
 
 	private async getCurrentPlanInternal(): Promise<CurrentPlan | null> {
+		console.log('[ads] [subscription] getting current plan internal');
 		const tebexPlan = await this.tebex.getSubscriptionStatus();
 		console.log('[ads] [subscription] tebex plan', tebexPlan);
-		if (tebexPlan != null) {
-			return tebexPlan;
-		}
-
-		const legacyPlan = await this.legacy.getSubscriptionStatus();
-		console.log('[ads] [subscription] legacy plan', legacyPlan);
-		if (legacyPlan != null) {
-			return legacyPlan;
-		}
-		return null;
+		return tebexPlan;
 	}
 
 	private startCheckingForUpdates() {
@@ -160,33 +135,26 @@ export class SubscriptionService extends AbstractFacadeService<SubscriptionServi
 	}
 }
 
-export interface CurrentPlan {
-	readonly id: PremiumPlanId;
-	readonly expireAt: Date | null;
-	readonly active: boolean;
-	readonly cancelled: boolean;
-	readonly autoRenews: boolean;
-	readonly discordCode?: string;
-}
-export const equalCurrentPlan = (a: CurrentPlan | null | undefined, b: CurrentPlan | null | undefined): boolean => {
-	const expireA = a?.expireAt ? new Date(a.expireAt) : null;
-	const expireB = b?.expireAt ? new Date(b.expireAt) : null;
-	return (
-		a?.active === b?.active &&
-		a?.id === b?.id &&
-		a?.autoRenews === b?.autoRenews &&
-		a?.cancelled === b?.cancelled &&
-		a?.discordCode === b?.discordCode &&
-		(!!expireA && !!expireB ? expireA.getTime() === expireB.getTime() : expireA == expireB)
-	);
-};
+// export interface CurrentPlan {
+// 	readonly id: PremiumPlanId;
+// 	readonly expireAt: Date | null;
+// 	readonly active: boolean;
+// 	readonly cancelled: boolean;
+// 	readonly autoRenews: boolean;
+// 	readonly discordCode?: string;
+// }
+// export const equalCurrentPlan = (a: CurrentPlan | null | undefined, b: CurrentPlan | null | undefined): boolean => {
+// 	const expireA = a?.expireAt ? new Date(a.expireAt) : null;
+// 	const expireB = b?.expireAt ? new Date(b.expireAt) : null;
+// 	return (
+// 		a?.active === b?.active &&
+// 		a?.id === b?.id &&
+// 		a?.autoRenews === b?.autoRenews &&
+// 		a?.cancelled === b?.cancelled &&
+// 		a?.discordCode === b?.discordCode &&
+// 		(!!expireA && !!expireB ? expireA.getTime() === expireB.getTime() : expireA == expireB)
+// 	);
+// };
 
-export interface OwSub {
-	readonly id: number;
-	readonly username: string;
-	readonly expireAt: Date;
-	readonly state: number;
-}
-
-export type PremiumPlanId = 'legacy' | 'premium' | 'premium-annual' | 'premium-six-months';
-export const premiumPlanIds = ['legacy', 'premium', 'premium-annual', 'premium-six-months'] as PremiumPlanId[];
+// export type PremiumPlanId = 'legacy' | 'premium' | 'premium-annual' | 'premium-six-months';
+// export const premiumPlanIds = ['legacy', 'premium', 'premium-annual', 'premium-six-months'] as PremiumPlanId[];

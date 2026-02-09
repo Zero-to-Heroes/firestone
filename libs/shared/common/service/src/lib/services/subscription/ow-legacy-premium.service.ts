@@ -19,7 +19,7 @@ export class OwLegacyPremiumService extends AbstractFacadeService<OwLegacyPremiu
 	private ow: OverwolfService;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
-		super(windowManager, 'owLegacyPremium', () => this.initialized);
+		super(windowManager, 'OwLegacyPremiumService', () => this.initialized);
 	}
 
 	protected override assignSubjects() {
