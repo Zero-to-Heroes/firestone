@@ -356,6 +356,7 @@ const internalTutors = [
 	CardIds.TimelineWitness,
 	CardIds.NightmareLordXavius_EDR_856,
 	CardIds.Finality_END_003,
+	CardIds.TimelineAccelerator_WON_139,
 ];
 for (const cardId of Object.keys(cardsInfoCache)) {
 	const card = cardsInfoCache[cardId];

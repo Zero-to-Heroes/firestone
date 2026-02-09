@@ -914,7 +914,6 @@ const internalGiftCreators = [
 	CardIds.TidestoneOfGolganneth,
 	CardIds.TigressPlushy_TigressPlushyToken_TOY_811t,
 	CardIds.TigressPlushy_TOY_811,
-	CardIds.TimelineAccelerator_WON_139,
 	CardIds.TimeLostProtodrake,
 	CardIds.TinkertownTechnician,
 	CardIds.TinyThimbleTavernBrawl,
