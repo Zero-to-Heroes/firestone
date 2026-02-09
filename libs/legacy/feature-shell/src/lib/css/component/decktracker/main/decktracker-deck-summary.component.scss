@@ -117,6 +117,21 @@
 		}
 	}
 
+	.copy-button {
+		width: 30px;
+		height: 30px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		::ng-deep .copy-deckstring {
+			svg {
+				width: 20px;
+				height: 20px;
+			}
+		}
+	}
+
 	&.hidden {
 		opacity: 0.7;
 	}

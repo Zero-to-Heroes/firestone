@@ -37,47 +37,56 @@ import { SelectDeckDetailsEvent } from '../../../services/mainwindow/store/event
 			<div class="stats">
 				<div
 					class="text total-games"
-					[owTranslate]="'app.decktracker.deck-summary.total-games'"
+					[fsTranslate]="'app.decktracker.deck-summary.total-games'"
 					[translateParams]="{ value: totalGames }"
-					[attr.aria-label]="'app.decktracker.deck-summary.total-games' | owTranslate: { value: totalGames }"
+					[attr.aria-label]="'app.decktracker.deck-summary.total-games' | fsTranslate: { value: totalGames }"
 				></div>
 				<div
 					class="text win-rate"
 					*ngIf="winRatePercentage != null"
-					[owTranslate]="'app.decktracker.deck-summary.winrate'"
+					[fsTranslate]="'app.decktracker.deck-summary.winrate'"
 					[translateParams]="{ value: winRatePercentage }"
 					[attr.aria-label]="
-						'app.decktracker.deck-summary.winrate' | owTranslate: { value: winRatePercentage }
+						'app.decktracker.deck-summary.winrate' | fsTranslate: { value: winRatePercentage }
 					"
 				></div>
 				<div
 					class="last-used"
 					*ngIf="totalGames > 0"
-					[owTranslate]="'app.decktracker.deck-summary.last-used'"
+					[fsTranslate]="'app.decktracker.deck-summary.last-used'"
 					[translateParams]="{ value: lastUsed }"
-					[attr.aria-label]="'app.decktracker.deck-summary.last-used' | owTranslate: { value: lastUsed }"
+					[attr.aria-label]="'app.decktracker.deck-summary.last-used' | fsTranslate: { value: lastUsed }"
 				></div>
 				<div
 					class="last-used"
 					*ngIf="totalGames == 0"
-					[owTranslate]="'app.decktracker.deck-summary.created-on'"
+					[fsTranslate]="'app.decktracker.deck-summary.created-on'"
 					[translateParams]="{ value: lastUsed }"
-					[attr.aria-label]="'app.decktracker.deck-summary.created-on' | owTranslate: { value: lastUsed }"
+					[attr.aria-label]="'app.decktracker.deck-summary.created-on' | fsTranslate: { value: lastUsed }"
 				></div>
 			</div>
 			<div class="buttons">
 				<button
 					class="move-button"
-					[helpTooltip]="'app.decktracker.deck-summary.move-button-tooltip' | owTranslate"
+					[helpTooltip]="'app.decktracker.deck-summary.move-button-tooltip' | fsTranslate"
 					aria-hidden="true"
 				>
 					<svg class="svg-icon-fill">
 						<use xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="assets/svg/sprite.svg#move"></use>
 					</svg>
 				</button>
+				<copy-deckstring
+					class="copy-button"
+					[copyText]="'decktracker.deck-name.copy-deckstring-label' | fsTranslate"
+					[showTooltip]="true"
+					[origin]="'decktracker-main-window'"
+					[deckName]="deckName"
+					[deckstring]="deckstring"
+					(click)="$event.stopPropagation()"
+				></copy-deckstring>
 				<button
 					class="close-button"
-					[helpTooltip]="'app.decktracker.deck-summary.archive-button-tooltip' | owTranslate"
+					[helpTooltip]="'app.decktracker.deck-summary.archive-button-tooltip' | fsTranslate"
 					(mousedown)="hideDeck($event)"
 					*ngIf="!hidden"
 				>
@@ -87,7 +96,7 @@ import { SelectDeckDetailsEvent } from '../../../services/mainwindow/store/event
 				</button>
 				<button
 					class="restore-button"
-					[helpTooltip]="'app.decktracker.deck-summary.restore-button-tooltip' | owTranslate"
+					[helpTooltip]="'app.decktracker.deck-summary.restore-button-tooltip' | fsTranslate"
 					(mousedown)="restoreDeck($event)"
 					*ngIf="hidden"
 				>
@@ -100,10 +109,10 @@ import { SelectDeckDetailsEvent } from '../../../services/mainwindow/store/event
 					[helpTooltip]="deleteDeckTooltip"
 					confirmationTooltip
 					[askConfirmation]="true"
-					[confirmationTitle]="'app.duels.deck-stat.delete-deck-confirmation-title' | owTranslate"
-					[confirmationText]="'app.duels.deck-stat.delete-deck-confirmation-text' | owTranslate"
-					[validButtonText]="'app.duels.deck-stat.delete-deck-confirmation-ok' | owTranslate"
-					[cancelButtonText]="'app.duels.deck-stat.delete-deck-confirmation-cancel' | owTranslate"
+					[confirmationTitle]="'app.duels.deck-stat.delete-deck-confirmation-title' | fsTranslate"
+					[confirmationText]="'app.duels.deck-stat.delete-deck-confirmation-text' | fsTranslate"
+					[validButtonText]="'app.duels.deck-stat.delete-deck-confirmation-ok' | fsTranslate"
+					[cancelButtonText]="'app.duels.deck-stat.delete-deck-confirmation-cancel' | fsTranslate"
 					(onConfirm)="deleteDeck()"
 					inlineSVG="assets/svg/bin.svg"
 				></button>
@@ -118,6 +127,7 @@ export class DecktrackerDeckSummaryComponent extends AbstractSubscriptionCompone
 	@Input() set deck(value: DeckSummary) {
 		this._deck = value;
 		this.deckName = value.deckName || this.i18n.translateString('app.decktracker.deck-summary.default-deck-name');
+		this.deckstring = value.deckstring;
 		this.format = value.format;
 		this.deckNameTooltip = `${this.deckName} (${this.i18n.translateString('global.format.' + this.format)})`;
 		this.totalGames = value.totalGames ?? 0;
@@ -137,6 +147,7 @@ export class DecktrackerDeckSummaryComponent extends AbstractSubscriptionCompone
 
 	_deck: DeckSummary;
 	deckName: string;
+	deckstring: string;
 	deckNameTooltip: string;
 	deckNameClass: string;
 	totalGames: number;
@@ -202,13 +213,20 @@ export class DecktrackerDeckSummaryComponent extends AbstractSubscriptionCompone
 	}
 
 	selectDeck(event: MouseEvent) {
+		console.debug('[deck-summary] selectDeck', event);
 		event.stopPropagation();
 		event.preventDefault();
-		if ((event.target as any)?.tagName === 'BUTTON') {
+		if ((event.target as any)?.tagName === 'BUTTON' || (event.target as any)?.tagName === 'COPY-DECKSTRING') {
 			return;
 		}
 		this.mainWindowStateFacade.send(new ChangeVisibleApplicationEvent('decktracker'));
 		this.mainWindowStateFacade.send(new SelectDeckDetailsEvent(this._deck.deckstring));
+	}
+
+	preventDefault(event: MouseEvent) {
+		console.debug('[deck-summary] preventDefault', event);
+		event.stopPropagation();
+		event.preventDefault();
 	}
 
 	private buildLastUsedDate(lastUsedTimestamp: number): string {
