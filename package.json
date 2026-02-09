@@ -105,11 +105,11 @@
 		"@firestone-hs/hs-replay-xml-parser": "^1.0.4",
 		"@firestone-hs/mailbox": "^1.0.29",
 		"@firestone-hs/official-leaderboards": "^0.0.1",
-		"@firestone-hs/reference-data": "^3.0.167",
+		"@firestone-hs/reference-data": "^3.0.171",
 		"@firestone-hs/replay-metadata": "^0.0.82",
 		"@firestone-hs/replay-parser": "^2.0.4",
 		"@firestone-hs/save-dungeon-loot-info": "^1.0.8",
-		"@firestone-hs/simulate-bgs-battle": "^1.1.682",
+		"@firestone-hs/simulate-bgs-battle": "^1.1.683",
 		"@firestone-hs/tavern-brawl-stats": "^1.0.31",
 		"@firestone-hs/trigger-process-mercenaries-review": "^1.0.10",
 		"@firestone-hs/twitch-presence": "^1.0.1",
@@ -239,7 +239,7 @@
 		"typescript": "~5.6.0"
 	},
 	"overrides": {
-		"@firestone-hs/reference-data": "^3.0.167",
+		"@firestone-hs/reference-data": "^3.0.171",
 		"@firestone-hs/hs-replay-xml-parser": "^1.0.4",
 		"@angular/common": "^19.0.0",
 		"@angular/core": "^19.0.0",
