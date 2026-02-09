@@ -7,8 +7,6 @@ import { GameState } from '../../models/game-state';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
 import { CounterType } from '../_exports';
 
-const relevantCardIds = [CardIds.Anachronos, CardIds.Anachronos_CORE_RLK_919];
-
 export class RuniTemporalGuardianCounterDefinitionV2 extends CounterDefinitionV2<{
 	cards: readonly string[];
 	turn: number;

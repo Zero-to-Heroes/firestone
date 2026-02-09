@@ -1,4 +1,12 @@
-import { CardIds, GameTag, LIBRAM_IDS, Race, ReferenceCard, WATCH_POST_IDS } from '@firestone-hs/reference-data';
+import {
+	CardIds,
+	CardType,
+	GameTag,
+	LIBRAM_IDS,
+	Race,
+	ReferenceCard,
+	WATCH_POST_IDS,
+} from '@firestone-hs/reference-data';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { DeckCard, toTagsObject } from '../../../models/deck-card';
 import { DeckState } from '../../../models/deck-state';
@@ -282,9 +290,19 @@ export class CardPlayedFromHandParser implements EventParser {
 							cardId: cardId,
 							turn: currentState.gameTagTurnNumber,
 							playerEntities: currentState.playerDeck.board
+								?.filter(
+									(e) =>
+										this.allCards.getCard(e.cardId).type?.toUpperCase() ===
+											CardType[CardType.MINION] && e.tags?.[GameTag.DORMANT] !== 1,
+								)
 								?.map((e) => e.entityId)
 								.filter((e) => e !== entityId),
 							opponentEntities: currentState.opponentDeck.board
+								?.filter(
+									(e) =>
+										this.allCards.getCard(e.cardId).type?.toUpperCase() ===
+											CardType[CardType.MINION] && e.tags?.[GameTag.DORMANT] !== 1,
+								)
 								?.map((e) => e.entityId)
 								.filter((e) => e !== entityId),
 						},
