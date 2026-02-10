@@ -71,6 +71,7 @@ import { MercenariesStoreService } from '../../js/services/mercenaries/mercenari
 import { MercenariesOutOfCombatService } from '../../js/services/mercenaries/out-of-combat/mercenaries-out-of-combat.service';
 import { ProfileUploaderService } from '../../js/services/profile/profile-uploader.service';
 import { GameOverService } from '../../js/services/stats/game/game-over.service';
+import { GameStatsUpdaterService } from '../../js/services/stats/game/game-stats-updater.service';
 import { AppUiStoreService } from '../../js/services/ui-store/app-ui-store.service';
 import { MailsService } from '../mails/services/mails.service';
 import { TavernBrawlService } from '../tavern-brawl/services/tavern-brawl.service';
@@ -153,6 +154,7 @@ export class BootstrapStoreServicesService {
 		private readonly init_TavernBrawlService: TavernBrawlService,
 		private readonly init_DeckParserFacadeService: DeckParserFacadeService,
 		private readonly init_AccountService: AccountService,
+		private readonly init_GameStatsUpdaterService: GameStatsUpdaterService,
 	) {}
 
 	public async bootstrapServices(): Promise<void> {
