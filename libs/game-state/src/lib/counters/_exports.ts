@@ -23,6 +23,7 @@ import { TavernBuffCounterDefinitionV2 } from './impl/battlegrounds/tavern-buff'
 import { TavernSpellsBuffCounterDefinitionV2 } from './impl/battlegrounds/tavern-spells-buff';
 import { UndeadArmyCounterDefinitionV2 } from './impl/battlegrounds/undead-army';
 import { VolumizerBuffCounterDefinitionV2 } from './impl/battlegrounds/volumizer-buff';
+import { WhelpBuffCounterDefinitionV2 } from './impl/battlegrounds/whelp-buff';
 import { BolnerHammerbeakCounterDefinitionV2 } from './impl/bolner-hammerbeak';
 import { BonelordFrostwhisperCounterDefinitionV2 } from './impl/bonelord-frostwhisper';
 import { CardsDrawnCounterDefinitionV2 } from './impl/cards-drawn';
@@ -203,7 +204,7 @@ export const getAllCounters: (
 	new DeepBlueCounterDefinitionV2(i18n, allCards),
 	new UndeadArmyCounterDefinitionV2(i18n, allCards),
 	new VolumizerBuffCounterDefinitionV2(i18n, allCards),
-	// new WhelpBuffCounterDefinitionV2(i18n, allCards),
+	new WhelpBuffCounterDefinitionV2(i18n, allCards),
 	new RightmostBuffCounterDefinitionV2(i18n, allCards),
 	new TavernBuffCounterDefinitionV2(i18n, allCards),
 ];
