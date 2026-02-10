@@ -511,6 +511,12 @@ export abstract class CardsHighlightCommonService {
 		) {
 			selectors.push(and(side(inputSide), or(inDeck, inHand), riff));
 		}
+		// if (
+		// 	refCard.mechanics?.includes(GameTag[GameTag.HERALD]) ||
+		// 	refCard.referencedTags?.includes(GameTag[GameTag.HERALD])
+		// ) {
+		// 	selectors.push(and(side(inputSide), or(inDeck, inHand), herald));
+		// }
 		if (
 			refCard.type?.toUpperCase() === CardType[CardType.SPELL] &&
 			refCard.mechanics?.includes(GameTag[GameTag.KINDRED])
