@@ -42,6 +42,7 @@ export class CompositionDetectorService {
 		playerCards: PlayerCards,
 		availableCompositions: readonly BgsCompAdvice[],
 	): CompositionMatch | null {
+		console.debug('[bgComp] detectComposition', playerCards, availableCompositions);
 		if (!playerCards.board.length && !playerCards.hand.length) {
 			return null;
 		}

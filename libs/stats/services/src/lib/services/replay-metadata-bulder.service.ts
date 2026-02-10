@@ -29,7 +29,7 @@ export class ReplayMetadataBuilderService {
 		private readonly patches: PatchesConfigService,
 		private readonly compsDetector: CompositionDetectorService,
 		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
-	) { }
+	) {}
 
 	public async buildMetadata(
 		game: GameForUpload,
@@ -55,8 +55,9 @@ export class ReplayMetadataBuilderService {
 		);
 		const isPremium = this.ads.hasPremiumSub$$.getValue();
 		const newSuffix = !userName?.length ? 'anonymous' : isPremium ? 'premium' : 'logged-in';
-		const replayKey = `hearthstone/replay-${newSuffix}/${today.getUTCFullYear()}/${today.getUTCMonth() + 1
-			}/${today.getUTCDate()}/${game.reviewId}.xml.zip`;
+		const replayKey = `hearthstone/replay-${newSuffix}/${today.getUTCFullYear()}/${
+			today.getUTCMonth() + 1
+		}/${today.getUTCDate()}/${game.reviewId}.xml.zip`;
 		const matchAnalysis = this.matchAnalysisService.buildMatchStats(game);
 
 		const parser = new CardsPlayedByTurnParser(this.allCards.getService());
@@ -102,8 +103,8 @@ export class ReplayMetadataBuilderService {
 				gameFormat: game.gameFormat,
 				additionalResult:
 					game.gameMode === 'battlegrounds' ||
-						game.gameMode === 'battlegrounds-friendly' ||
-						game.gameMode === 'battlegrounds-duo'
+					game.gameMode === 'battlegrounds-friendly' ||
+					game.gameMode === 'battlegrounds-duo'
 						? replay.additionalResult
 						: (game.additionalResult as string),
 				runId: game.runId as string,
@@ -163,15 +164,15 @@ export class ReplayMetadataBuilderService {
 			postMatchStats == null
 				? null
 				: {
-					...postMatchStats,
-					oldMmr: game.playerRank,
-					newMmr: game.newPlayerRank,
-				};
+						...postMatchStats,
+						oldMmr: game.playerRank,
+						newMmr: game.newPlayerRank,
+					};
 		const boardHistory: readonly BgsBoardLight[] = buildBoardHistory(postMatchStats.boardHistory);
 		const finalComp = postMatchStats?.boardHistory?.length
 			? postMatchStats.boardHistory[postMatchStats.boardHistory.length - 1]
 			: null;
-		const validComps = comps?.filter((comp) => !!currentBgPatch && comp.patchNumber >= currentBgPatch.number) ?? [];
+		const validComps = comps ?? []; //?.filter((comp) => !!currentBgPatch && comp.patchNumber >= currentBgPatch.number) ?? [];
 		const compArchetype = this.compsDetector.detectComposition(
 			{
 				board: finalComp?.board?.map((e) => e.cardID) ?? [],

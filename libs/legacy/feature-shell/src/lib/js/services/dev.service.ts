@@ -216,10 +216,18 @@ export class DevService {
 			refComps,
 		);
 		console.debug(
-			'[bgComp] detected',
+			'[bgComp] possible detected',
 			finalComp.board.map((entity) => entity.cardID),
 			detected,
 		);
+		const actualComp = this.compositionDetector.detectComposition(
+			{
+				board: finalComp.board.map((entity) => entity.cardID),
+				hand: [],
+			},
+			refComps,
+		);
+		console.debug('[bgComp] actual comp', actualComp);
 	}
 
 	private async testAllBgsComps() {
