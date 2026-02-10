@@ -366,18 +366,7 @@ export class TwitchAuthService {
 
 		const httpHeaders: HttpHeaders = new HttpHeaders().set('Authorization', `Bearer ${prefs.twitchAccessToken}`);
 		// console.debug('[twitch-auth] sending event', newEvent);
-		this.http
-			.post(EBS_URL, newEvent, { headers: httpHeaders })
-			.pipe(
-				timeout(EBS_REQUEST_TIMEOUT_MS),
-				catchError((err) => {
-					if (err.name === 'TimeoutError') {
-						console.warn('[twitch-auth] EBS request timed out after', EBS_REQUEST_TIMEOUT_MS, 'ms');
-					}
-					return throwError(() => err);
-				}),
-			)
-			.subscribe({
+		this.postEbsOnce(newEvent, httpHeaders).subscribe({
 				next: (data: any) => {
 					// Do nothing
 					if (!this.hasLoggedInfoOnce && data.statusCode === 422) {
@@ -401,6 +390,8 @@ export class TwitchAuthService {
 				},
 				error: (error) => {
 					console.debug('error sending message to twitch', error);
+					// Don't submit bug report for status 0 - it's usually a transient network error
+					const isStatus0 = error?.status === 0;
 					if (!this.hasLoggedInfoOnce) {
 						this.hasLoggedInfoOnce = true;
 						console.error(
@@ -410,14 +401,18 @@ export class TwitchAuthService {
 							JSON.stringify(newEvent),
 							newEvent,
 						);
-						this.bugReport.submitAutomatedReport({
-							type: 'twitch-ebs-error',
-							info: JSON.stringify({
-								token: prefs.twitchAccessToken,
-								error: error,
-								event: newEvent,
-							}),
-						});
+						if (!isStatus0) {
+							this.bugReport.submitAutomatedReport({
+								type: 'twitch-ebs-error',
+								info: JSON.stringify({
+									token: prefs.twitchAccessToken,
+									error: error,
+									event: newEvent,
+								}),
+							});
+						} else {
+							console.warn('[twitch-auth] Skipping bug report for status 0 (network error)');
+						}
 					} else {
 						console.warn('[twitch-auth] Could not send deck event to EBS', JSON.stringify(error));
 					}
@@ -429,6 +424,19 @@ export class TwitchAuthService {
 					}
 				},
 			});
+	}
+
+	/** Single EBS POST with timeout. */
+	private postEbsOnce(newEvent: TwitchEvent, httpHeaders: HttpHeaders): Observable<any> {
+		return this.http.post(EBS_URL, newEvent, { headers: httpHeaders }).pipe(
+			timeout(EBS_REQUEST_TIMEOUT_MS),
+			catchError((err) => {
+				if (err.name === 'TimeoutError') {
+					console.warn('[twitch-auth] EBS request timed out after', EBS_REQUEST_TIMEOUT_MS, 'ms');
+				}
+				return throwError(() => err);
+			}),
+		);
 	}
 
 	private buildLeaderboard(state: BattlegroundsState): readonly TwitchBgsPlayer[] {
