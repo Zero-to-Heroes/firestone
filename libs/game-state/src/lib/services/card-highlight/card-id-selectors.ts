@@ -2,7 +2,7 @@
 
 import { CardClass, CardIds, CardType, GameTag, Race, SpellSchool } from '@firestone-hs/reference-data';
 import { groupByFunction, pickLast, sortByProperties } from '@firestone/shared/framework/common';
-import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
+import { CardsFacadeService, HighlightSide, TempCardIds } from '@firestone/shared/framework/core';
 import { DeckCard } from '../../models/deck-card';
 import { DeckState } from '../../models/deck-state';
 import { ShortCard } from '../../models/game-state';
@@ -465,6 +465,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, outcast);
 		case CardIds.BatMask_DINO_402:
 			return and(side(inputSide), or(inDeck, inHand), minion);
+		case TempCardIds.BattlefieldBlaster:
+			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.Battlepickaxe_WW_347:
 			return and(side(inputSide), or(inDeck, inHand), minion, taunt);
 		case CardIds.BattleTotem_LOOTA_846:

@@ -172,9 +172,6 @@ export class GameStatsLoaderService extends AbstractFacadeService<GameStatsLoade
 			userName: user.username,
 			fullRetrieve: fullRetrieve,
 		};
-		// const input = {
-		// 	userId: 'zerg',
-		// };
 		console.log('[game-stats-loader] retrieving stats from API', input);
 		const data = await this.api.callPostApi(GAME_STATS_ENDPOINT, input);
 
@@ -182,44 +179,35 @@ export class GameStatsLoaderService extends AbstractFacadeService<GameStatsLoade
 		console.log('[game-stats-loader] Retrieved game stats from API', endpointResult?.length);
 		const stats: readonly GameStat[] = endpointResult
 			.map((stat) => {
+				let postMatchStats: BgsPostMatchStats = null;
 				try {
 					const decoded = stat.finalComp ? decodeBase64(stat.finalComp) : null;
-					const postMatchStats: BgsPostMatchStats =
-						decoded == null ? null : ({ boardHistory: [decoded] } as any);
-					let playerInfoFromDeckstring = null;
-					return GameStat.create({
-						...stat,
-						playerDecklist: isMercenaries(stat.gameMode)
-							? stat.playerDecklist
-							: this.allCards.normalizeDeckList(stat.playerDecklist),
-						// Because old stats are corrupted
-						runId: stat.creationTimestamp < new Date('2020-12-14').getTime() ? null : stat.runId,
-						postMatchStats: postMatchStats,
-						playerClass:
-							stat.playerClass ??
-							(playerInfoFromDeckstring =
-								playerInfoFromDeckstring ??
-								extractPlayerInfoFromDeckstring(
-									stat.playerDecklist,
-									this.allCards,
-									stat.gameMode,
-									stat,
-								))?.playerClass,
-						playerCardId:
-							stat.playerCardId ??
-							(playerInfoFromDeckstring =
-								playerInfoFromDeckstring ??
-								extractPlayerInfoFromDeckstring(
-									stat.playerDecklist,
-									this.allCards,
-									stat.gameMode,
-									stat,
-								))?.playerCardId,
-					});
+					postMatchStats = decoded == null ? null : ({ boardHistory: [decoded] } as any);
 				} catch (e) {
-					console.warn('[game-stats-loader] error decoding stat', e);
-					return null;
+					console.warn('[game-stats-loader] error decoding BG post-match stats', e);
 				}
+				let playerInfoFromDeckstring = null;
+				try {
+					playerInfoFromDeckstring = extractPlayerInfoFromDeckstring(
+						stat.playerDecklist,
+						this.allCards,
+						stat.gameMode,
+						stat,
+					);
+				} catch (e) {
+					console.warn('[game-stats-loader] error extracting player info from deckstring', e);
+				}
+				return GameStat.create({
+					...stat,
+					playerDecklist: isMercenaries(stat.gameMode)
+						? stat.playerDecklist
+						: this.allCards.normalizeDeckList(stat.playerDecklist),
+					// Because old stats are corrupted
+					runId: stat.creationTimestamp < new Date('2020-12-14').getTime() ? null : stat.runId,
+					postMatchStats: postMatchStats,
+					playerClass: stat.playerClass ?? playerInfoFromDeckstring?.playerClass,
+					playerCardId: stat.playerCardId ?? playerInfoFromDeckstring?.playerCardId,
+				});
 			})
 			.filter((stat) => !!stat)
 			.filter((stat) => this.isCorrectPeriod(stat, prefs.replaysLoadPeriod))
