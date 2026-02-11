@@ -43,7 +43,7 @@ export class QuestPlayedFromDeckParser implements EventParser {
 			},
 			tags: {
 				...card!.tags,
-				[GameTag.QUEST]: 1,
+				// [GameTag.QUEST]: 1, // Not always true, because of Sigils and Auras
 				[GameTag.CARDTYPE]: CardType.SPELL,
 			},
 		} as DeckCard);
