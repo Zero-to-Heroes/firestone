@@ -1,8 +1,8 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { CardBack } from '@firestone/memory';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { Observable } from 'rxjs';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 import { InternalCardBack } from './internal-card-back';
 
 @Component({
@@ -29,7 +29,7 @@ import { InternalCardBack } from './internal-card-back';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FullCardBackComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class FullCardBackComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	animated$: Observable<boolean>;
 	_cardBack: InternalCardBack;
 
@@ -40,20 +40,27 @@ export class FullCardBackComponent extends AbstractSubscriptionStoreComponent im
 		this._cardBack = {
 			...value,
 			image: `https://static.firestoneapp.com/cardbacks/512/${value.id}.png`,
-			// animatedImage: `https://static.zerotoheroes.com/hearthstone/cardBacks/animated/${value.id}.webm`,
-			animatedImage: null,
+			animatedImage: `https://static.firestoneapp.com/cardbacks/512/${value.id}.webm`,
 		};
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.markForCheck();
 		}
 	}
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
-		super(store, cdr);
+	constructor(
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly prefs: PreferencesService,
+	) {
+		super(cdr);
 	}
 
 	ngAfterContentInit() {
-		this.animated$ = this.listenForBasicPref$((prefs) => prefs.collectionUseAnimatedCardBacks);
+		this.animated$ = this.prefs.preferences$$.pipe(
+			this.mapData(
+				(prefs) =>
+					prefs.cardBackAnimatedToggle === 'animated' || prefs.cardBackAnimatedToggle === 'animated-all',
+			),
+		);
 	}
 
 	transformFlavor(flavor: string): string {

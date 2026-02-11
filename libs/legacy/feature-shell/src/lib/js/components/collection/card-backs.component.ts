@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { CardBack } from '@firestone/memory';
-import { PreferencesService } from '@firestone/shared/common/service';
+import { PictureAnimatedToggleType, PreferencesService } from '@firestone/shared/common/service';
 import { IOption } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
@@ -21,6 +21,7 @@ import { InternalCardBack } from './internal-card-back';
 					class="owned-filter"
 					(onOptionSelected)="selectCardsOwnedFilter($event)"
 				></collection-owned-filter>
+				<card-back-animated-toggle class="animated-toggle"></card-back-animated-toggle>
 				<progress-bar
 					class="progress-bar"
 					[current]="unlocked$ | async"
@@ -33,7 +34,8 @@ import { InternalCardBack } from './internal-card-back';
 						class="card-back"
 						*ngFor="let cardBack of value.shownCardBacks; let i = index; trackBy: trackByCardId"
 						[cardBack]="cardBack"
-						[animated]="value2.animated"
+						[animated]="value2.animated === 'animated' || value2.animated === 'animated-all'"
+						[alwaysOn]="value2.animated === 'animated-all'"
 						[style.width.px]="cardWidth"
 						(click)="showFullCardBack(cardBack)"
 					>
@@ -48,7 +50,7 @@ import { InternalCardBack } from './internal-card-back';
 export class CardBacksComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	readonly DEFAULT_CARD_WIDTH = 139;
 
-	animated$: Observable<boolean>;
+	animated$: Observable<PictureAnimatedToggleType>;
 	shownCardBacks$: Observable<readonly InternalCardBack[]>;
 	unlocked$: Observable<number>;
 	total$: Observable<number>;
@@ -69,7 +71,7 @@ export class CardBacksComponent extends AbstractSubscriptionComponent implements
 	async ngAfterContentInit() {
 		await waitForReady(this.prefs, this.collectionManager, this.mainWindowStateFacade);
 
-		this.animated$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.collectionUseAnimatedCardBacks));
+		this.animated$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.cardBackAnimatedToggle));
 		this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.collectionCardScale)).subscribe((value) => {
 			const cardScale = value / 100;
 			this.cardWidth = cardScale * this.DEFAULT_CARD_WIDTH;
@@ -87,8 +89,7 @@ export class CardBacksComponent extends AbstractSubscriptionComponent implements
 				cardBacks?.filter(this.filterCardsOwned(filter)).map((cardBack) => ({
 					...cardBack,
 					image: `https://static.firestoneapp.com/cardbacks/512/${cardBack.id}.png`,
-					// animatedImage: `https://static.zerotoheroes.com/hearthstone/cardBacks/animated/${cardBack.id}.webm`,
-					animatedImage: null,
+					animatedImage: `https://static.firestoneapp.com/cardbacks/512/${cardBack.id}.webm`,
 				})),
 			),
 		);

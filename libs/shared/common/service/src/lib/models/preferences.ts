@@ -36,6 +36,7 @@ import {
 	MercenariesRoleFilterType,
 	MercenariesStarterFilterType,
 	MmrGroupFilterType,
+	PictureAnimatedToggleType,
 	StatGameFormatType,
 	StatsXpGraphSeasonFilterType,
 } from './pref-model';
@@ -156,13 +157,13 @@ export class Preferences implements IPreferences {
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly collectionCardScale: number = 100;
 	readonly collectionSetShowGoldenStats: boolean = false;
-	readonly collectionUseAnimatedCardBacks: boolean = false;
 	readonly collectionShowOnlyBuyablePacks: boolean = false;
 	readonly collectionActivePortraitCategoryFilter: CollectionPortraitCategoryFilter = 'collectible';
 	readonly collectionActivePortraitOwnedFilter: CollectionPortraitOwnedFilter = 'all';
 	readonly collectionCardRarityFilter: CollectionCardRarityFilterType = 'all';
 	readonly collectionCardClassFilter: CollectionCardClassFilterType = 'all';
 	readonly collectionCardOwnedFilter: CollectionCardOwnedFilterType = 'all';
+	readonly cardBackAnimatedToggle: PictureAnimatedToggleType = 'static';
 	readonly collectionShowRelatedCards: boolean = true;
 	readonly collectionSetStatsTypeFilter: CollectionSetStatsTypeFilterType = 'cards-stats';
 

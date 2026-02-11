@@ -295,6 +295,7 @@ import { BattlegroundsTribeDetailsTooltipComponent } from '@components/battlegro
 import { BgsHeroOverviewWidgetWrapperComponent } from '@components/battlegrounds/overlay/bgs-hero-overview-widget-wrapper.component';
 import { BgsHeroSelectionOverlayInfoComponent } from '@components/battlegrounds/overlay/bgs-hero-selection-overlay-info.component';
 import { BgsOverlayHeroOverviewService } from '@components/battlegrounds/overlay/bgs-overlay-hero-overview.service';
+import { CardBackAnimatedToggleComponent } from '@components/collection/filters/card-back-animated-toggle.component';
 import { SetStatsSwitcherComponent } from '@components/collection/set-stats-switcher.component';
 import { ControlCloseSimpleComponent } from '@components/controls/control-close-simple.component';
 import { ControlCloseComponent } from '@components/controls/control-close.component';
@@ -980,6 +981,7 @@ try {
 		CollectionHeroPortraitCategoriesFilterDropdownComponent,
 		CollectionCardRarityFilterDropdownComponent,
 		CollectionCardClassFilterDropdownComponent,
+		CardBackAnimatedToggleComponent,
 		CollectionCardOwnedFilterDropdownComponent,
 		OwnedFilterComponent,
 

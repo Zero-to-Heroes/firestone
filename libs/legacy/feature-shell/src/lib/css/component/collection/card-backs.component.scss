@@ -12,6 +12,7 @@
 
 	.show-filter {
 		display: flex;
+		gap: 10px;
 		flex-shrink: 0;
 		align-items: center;
 		margin-right: 20px;
@@ -20,8 +21,6 @@
 		margin-bottom: 10px;
 
 		.owned-filter {
-			width: 250px;
-
 			// Colors are not properly aligned between all the themes
 			::ng-deep filter-dropdown ng-select select-dropdown .below {
 				background: var(--color-5);

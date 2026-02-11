@@ -44,6 +44,7 @@ export type CollectionCardClassFilterType =
 	| 'shaman'
 	| 'warlock'
 	| 'warrior';
+export type PictureAnimatedToggleType = 'static' | 'animated' | 'animated-all';
 export type StatGameModeType =
 	| 'unknown'
 	| 'arena'
