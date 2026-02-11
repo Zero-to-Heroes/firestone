@@ -10,10 +10,17 @@ export const ThiefOfFutures: GeneratingCard = {
 	publicCreator: true,
 	publicTutor: true,
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
-		const possibleCards = input.opponentDeckState.deck.map((c) => c.cardId).filter((c) => !!c)
+		const possibleCards = input.opponentDeckState.deck
+			.map((c) => c.cardId)
+			.filter((c) => !!c)
 			// These are revealed right away
-			.filter(c => !input.allCards.getCard(c).mechanics?.includes(GameTag[GameTag.CASTS_WHEN_DRAWN])
-				&& !input.allCards.getCard(c).mechanics?.includes(GameTag[GameTag.SUMMONED_WHEN_DRAWN]))
+			// Don't use isCastWhenDrawn and isSummonedWhenDrawn here, because of some weird circular dependency
+			// TODO: refactor this
+			.filter(
+				(c) =>
+					!input.allCards.getCard(c).mechanics?.includes(GameTag[GameTag.CASTS_WHEN_DRAWN]) &&
+					!input.allCards.getCard(c).mechanics?.includes(GameTag[GameTag.SUMMONED_WHEN_DRAWN]),
+			);
 		return {
 			possibleCards,
 		};
