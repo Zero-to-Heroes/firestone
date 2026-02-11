@@ -634,7 +634,13 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		// is a strict reflection of the "raw" cost, and the actualManaCost is what gets updated after discounts
 		this.manaCost = showUpdatedCost ? card.getEffectiveManaCost() : card.refManaCost;
 		this.manaCostStr =
-			this._referenceCard?.hideStats || card.hideStats ? '' : this.manaCost == null ? '?' : `${this.manaCost}`;
+			this._referenceCard?.hideStats || card.hideStats
+				? ''
+				: this.manaCost == null
+					? '?'
+					: this.manaCost > 100_000
+						? '∞'
+						: `${this.manaCost}`;
 		this.manaCostReduction = this.manaCost != null && this.manaCost < card.refManaCost;
 		this.cardName = this.buildCardName(card, showStatsChange);
 		// console.debug('updateInfos', this.cardName, this.cardId, this.cards.getCard(this.cardId));
