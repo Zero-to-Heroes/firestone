@@ -176,18 +176,20 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 			// - We compute the class when the card is created, but we might not know it (because of tourists)
 			// - We compute the class afterwards, but the hero might have changed
 			// - temp fix: remove the hero classes
-			const cardClasses: readonly CardClass[] = context
-				.getAllCardsFromStarterDeck()
-				.filter((c) => c?.cardId)
-				.map((card) => this.allCards.getCard(card.cardId).classes ?? [])
-				.filter((classes) => classes.length === 1)
-				.flat()
-				.filter((value, index, self) => self.indexOf(value) === index)
-				.map((cardClass) => CardClass[cardClass]);
-			const heroClasses: readonly CardClass[] = context.hero?.initialClasses || context.hero?.classes || [];
-			const allClasses: readonly CardClass[] = [...cardClasses, ...heroClasses].filter(
-				(value, index, self) => self.indexOf(value) === index,
-			);
+			// const cardClasses: readonly CardClass[] = context
+			// 	.getAllCardsFromStarterDeck()
+			// 	.filter((c) => c?.cardId)
+			// 	.map((card) => this.allCards.getCard(card.cardId).classes ?? [])
+			// 	.filter((classes) => classes.length === 1)
+			// 	.flat()
+			// 	.filter((value, index, self) => self.indexOf(value) === index)
+			// 	.map((cardClass) => CardClass[cardClass]);
+			// const heroClasses: readonly CardClass[] = context.hero?.initialClasses || context.hero?.classes || [];
+			// const allClasses: readonly CardClass[] = [...cardClasses, ...heroClasses].filter(
+			// 	(value, index, self) => self.indexOf(value) === index,
+			// );
+			// Maestra is less important now, so we go back to simply using the hero class
+			const allClasses: readonly CardClass[] = context.hero?.initialClasses || context.hero?.classes || [];
 			const possibleForgedCards = getPossibleForgedCards(
 				metadata.formatType,
 				metadata.gameType,
