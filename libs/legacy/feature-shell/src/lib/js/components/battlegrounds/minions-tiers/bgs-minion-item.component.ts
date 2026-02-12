@@ -3,7 +3,7 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { CardType, GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { BgsTrinketStrategyTipsTooltipComponent } from '@firestone/battlegrounds/common';
 import { ExtendedReferenceCard, isBgsTrinket, MECHANICS_IN_GAME } from '@firestone/battlegrounds/core';
-import { isBgsTimewarped } from '@firestone/battlegrounds/data-access';
+import { buildAllCardIds, buildRelatedCardIds, isBgsTimewarped } from '@firestone/battlegrounds/data-access';
 import { BgsBoardHighlighterService } from '@firestone/battlegrounds/services';
 import { isBgsSpell } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
@@ -232,8 +232,8 @@ export class BattlegroundsMinionItemComponent extends AbstractSubscriptionCompon
 
 					const result: Minion = {
 						cardId: card.id,
-						displayedCardIds: this.buildAllCardIds(card.id, showGoldenCards),
-						relatedCardIds: this.buildRelatedCardIds(card.id),
+						displayedCardIds: buildAllCardIds(card.id, showGoldenCards, this.allCards),
+						relatedCardIds: buildRelatedCardIds(card.id, this.allCards),
 						image: `https://static.zerotoheroes.com/hearthstone/cardart/tiles/${card.id}.png`,
 						fallbackImage: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${card.id}.jpg`,
 						name: card.name, // Already enhanced when building groups
@@ -291,29 +291,6 @@ export class BattlegroundsMinionItemComponent extends AbstractSubscriptionCompon
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.markForCheck();
 		}
-	}
-
-	private buildAllCardIds(id: string, showGoldenCards: boolean): string {
-		if (!showGoldenCards) {
-			return id;
-		}
-
-		const premiumId = this.allCards.getCard(id).battlegroundsPremiumDbfId;
-		if (!premiumId) {
-			return id;
-		}
-
-		const premiumCard = this.allCards.getCardFromDbfId(premiumId);
-		if (!premiumCard) {
-			return id;
-		}
-
-		return [id, `${premiumCard.id}_golden`].join(',');
-	}
-
-	private buildRelatedCardIds(id: string): readonly string[] {
-		const refCard = this.allCards.getCard(id);
-		return refCard.relatedCardDbfIds?.map((dbfId) => this.allCards.getCard(dbfId).id) ?? [];
 	}
 }
 

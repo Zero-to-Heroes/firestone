@@ -1,6 +1,6 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { BgsMetaCardStatTierItem } from '@firestone/battlegrounds/data-access';
+import { BgsMetaCardStatTierItem, buildAllCardIds, buildRelatedCardIds } from '@firestone/battlegrounds/data-access';
 
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 
@@ -10,7 +10,12 @@ import { CardsFacadeService, ILocalizationService } from '@firestone/shared/fram
 	styleUrls: [`./battlegrounds-meta-stats-cards-columns.scss`, `./battlegrounds-meta-stats-card-info.component.scss`],
 	template: `
 		<div class="info">
-			<div class="cell image" [cardTooltip]="cardCardId" [cardTooltipBgs]="true">
+			<div
+				class="cell image"
+				[cardTooltip]="displayedCardIds"
+				[cardTooltipRelatedCardIds]="relatedCardIds"
+				[cardTooltipBgs]="true"
+			>
 				<tavern-level-icon *ngIf="tavernTier" [level]="tavernTier" class="tavern"></tavern-level-icon>
 				<img class="icon" [src]="icon" />
 			</div>
@@ -50,6 +55,8 @@ export class BattlegroundsMetaStatsCardInfoComponent {
 		this.averagePlacement = this.buildValue(value.averagePlacement);
 		this.impactValue = value.impact;
 		this.impact = this.buildValue(Math.abs(value.impact));
+		this.displayedCardIds = buildAllCardIds(value.cardId, true, this.allCards, true);
+		this.relatedCardIds = buildRelatedCardIds(value.cardId, this.allCards);
 		// this.averagePlacementHighMmr = this.buildValue(value.averagePlacementTop25);
 		// this.pickRate = buildPercents(value.pickRate, this.i18n.formatCurrentLocale());
 		// this.pickRateHighMmr = buildPercents(value.pickRateTop25, this.i18n.formatCurrentLocale());
@@ -60,6 +67,8 @@ export class BattlegroundsMetaStatsCardInfoComponent {
 	icon: string;
 	cardName: string;
 	dataPoints: string;
+	displayedCardIds: string;
+	relatedCardIds: readonly string[];
 
 	impactValue: number;
 	impact: string;
