@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { IBattlegroundsWindowOptions, IWindowHandlerService, OverwolfService } from '@firestone/shared/framework/core';
+import { IWindowHandlerService, IWindowOptions, OverwolfService } from '@firestone/shared/framework/core';
 
 /**
  * Overwolf implementation of window handling. Single place responsible for
@@ -28,51 +28,59 @@ export class OwWindowHandlerService implements IWindowHandlerService {
 		this.ow.bringToFront(collectionWindow.id);
 	}
 
-	public async toggleBattlegroundsWindow(useOverlay: boolean, options?: IBattlegroundsWindowOptions) {
-		console.debug('[ow-window-handler] toggleBattlegroundsWindow', useOverlay, options);
-		const forcedStatus = options?.forced ?? null;
-		const canBringUpFromMinimized = options?.canBringUpFromMinimized ?? true;
+	public async toggleCollectionWindow(useOverlay: boolean, options?: IWindowOptions) {
+		const windowName = useOverlay ? OverwolfService.COLLECTION_WINDOW_OVERLAY : OverwolfService.COLLECTION_WINDOW;
+		console.debug('[ow-window-handler] toggle Window', windowName, useOverlay, options);
+		this.toggleWindow(windowName, useOverlay, options);
+	}
 
+	public async toggleBattlegroundsWindow(useOverlay: boolean, options?: IWindowOptions) {
 		const windowName = useOverlay
 			? OverwolfService.BATTLEGROUNDS_WINDOW_OVERLAY
 			: OverwolfService.BATTLEGROUNDS_WINDOW;
+		console.debug('[ow-window-handler] toggle Window', windowName, useOverlay, options);
+		this.toggleWindow(windowName, useOverlay, options);
+	}
 
-		const battlegroundsWindow = await this.ow.getWindowState(windowName);
-		console.debug('[ow-window-handler] battlegroundsWindow', battlegroundsWindow);
+	private async toggleWindow(windowName: string, useOverlay: boolean, options?: IWindowOptions) {
+		const forcedStatus = options?.forced ?? null;
+		const canBringUpFromMinimized = options?.canBringUpFromMinimized ?? true;
+
+		const theWindow = await this.ow.getWindowState(windowName);
+		console.debug('[ow-window-handler] window', windowName, theWindow);
 		// Minimize is only triggered by a user action, so if they minimize it we don't touch it
-		if (!canBringUpFromMinimized && battlegroundsWindow.window_state_ex === 'minimized') {
-			console.debug('[ow-window-handler] battlegroundsWindow is minimized, skipping');
+		if (!canBringUpFromMinimized && theWindow.window_state_ex === 'minimized') {
+			console.debug('[ow-window-handler] window is minimized, skipping', windowName);
 			return;
 		}
 
 		if (forcedStatus === 'open') {
-			console.debug('[ow-window-handler] forcedStatus is open, obtaining window');
+			console.debug('[ow-window-handler] forcedStatus is open, obtaining window', windowName);
 			await this.ow.obtainDeclaredWindow(windowName);
-			if (battlegroundsWindow.window_state_ex !== 'maximized' && battlegroundsWindow.stateEx !== 'maximized') {
+			if (theWindow.window_state_ex !== 'maximized' && theWindow.stateEx !== 'maximized') {
 				console.debug(
-					'[ow-window-handler] battlegroundsWindow is not maximized, restoring and bringing to front',
+					'[ow-window-handler] window is not maximized, restoring and bringing to front',
+					windowName,
 				);
 				await this.ow.restoreWindow(windowName);
 				await this.ow.bringToFront(windowName);
 			}
 		} else if (forcedStatus === 'closed') {
-			console.debug('[ow-window-handler] forcedStatus is closed, closing window');
+			console.debug('[ow-window-handler] forcedStatus is closed, closing window', windowName);
 			await this.ow.closeWindow(windowName);
 		} else {
 			// Toggle it - if it's open, close it, if it's closed, open it
-			console.debug('[ow-window-handler] forcedStatus is null, toggling window');
-			if (
-				isWindowClosed(battlegroundsWindow.window_state_ex) ||
-				isWindowHidden(battlegroundsWindow.window_state_ex)
-			) {
+			console.debug('[ow-window-handler] forcedStatus is null, toggling window', windowName);
+			if (isWindowClosed(theWindow.window_state_ex) || isWindowHidden(theWindow.window_state_ex)) {
 				console.debug(
-					'[ow-window-handler] battlegroundsWindow is closed or hidden, restoring and bringing to front',
+					'[ow-window-handler] window is closed or hidden, restoring and bringing to front',
+					windowName,
 				);
 				await this.ow.obtainDeclaredWindow(windowName);
 				await this.ow.restoreWindow(windowName);
 				await this.ow.bringToFront(windowName);
 			} else {
-				console.debug('[ow-window-handler] battlegroundsWindow is open, closing it');
+				console.debug('[ow-window-handler] window is open, closing it', windowName);
 				await this.ow.closeWindow(windowName);
 			}
 		}

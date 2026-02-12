@@ -15,7 +15,6 @@ import { AdService } from '../../js/services/ad.service';
 import { LocalizationFacadeService } from '../../js/services/localization-facade.service';
 import { OutOfCardsService, OutOfCardsToken } from '../../js/services/mainwindow/out-of-cards.service';
 import { ChangeVisibleApplicationEvent } from '../../js/services/mainwindow/store/events/change-visible-application-event';
-import { CloseMainWindowEvent } from '../../js/services/mainwindow/store/events/close-main-window-event';
 import { ShowMainWindowEvent } from '../../js/services/mainwindow/store/events/show-main-window-event';
 import { MainWindowStoreService } from '../../js/services/mainwindow/store/main-window-store.service';
 
@@ -62,18 +61,8 @@ export class AppStartupService {
 		}
 
 		console.log('[startup] app init starting');
-		window['mainWindowHotkeyPressed'] = () => this.onHotkeyPress();
 		window['reloadWindows'] = () => this.reloadWindows();
 		window['reloadBgWindows'] = () => this.reloadBgWindows();
-
-		if (!this.collectionHotkeyListener) {
-			this.collectionHotkeyListener = this.ow.addHotKeyPressedListener('collection', async (hotkeyResult) => {
-				if (this.currentState !== 'READY') {
-					return;
-				}
-				this.onHotkeyPress();
-			});
-		}
 
 		this.gameStatus.onGameStart(() => {
 			this.showFullScreenOverlaysWindow();
@@ -181,19 +170,6 @@ export class AppStartupService {
 		const bgWindows = await this.ow.getBattlegroundsWindow(prefs);
 		await this.ow.restoreWindow(bgWindows.id);
 		this.ow.bringToFront(bgWindows.id);
-	}
-
-	private async onHotkeyPress() {
-		const prefs = await this.prefs.getPreferences();
-		const window = await this.ow.getCollectionWindow(prefs);
-		if (window.isVisible) {
-			console.log('[startup] closing main window');
-			this.mainWindowStateFacade.send(new CloseMainWindowEvent());
-			await this.ow.hideWindow(window.id);
-			// await this.ow.closeWindow(window.id);
-		} else {
-			this.showCollectionWindow();
-		}
 	}
 
 	// To Oled: the code where things happen

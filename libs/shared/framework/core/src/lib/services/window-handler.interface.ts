@@ -12,14 +12,15 @@ export const WINDOW_HANDLER_SERVICE_TOKEN = new InjectionToken<IWindowHandlerSer
  * can work with either platform.
  */
 export interface IWindowHandlerService {
-	toggleBattlegroundsWindow(useOverlay: boolean, options?: IBattlegroundsWindowOptions);
+	toggleBattlegroundsWindow(useOverlay: boolean, options?: IWindowOptions);
+	toggleCollectionWindow(useOverlay: boolean): void | Promise<void>;
 	showCollectionWindow(useOverlay: boolean): void | Promise<void>;
 	openSettingsWindow(userOverlay: boolean): void | Promise<void>;
 	reloadWindows(): void | Promise<void>;
 	relaunchApp(): void | Promise<void>;
 }
 
-export interface IBattlegroundsWindowOptions {
+export interface IWindowOptions {
 	forced?: 'open' | 'closed' | null;
 	canBringUpFromMinimized?: boolean;
 }

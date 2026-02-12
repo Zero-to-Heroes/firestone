@@ -12,7 +12,7 @@ import {
 } from '@angular/core';
 import { CardsHighlightFacadeService } from '@firestone/game-state';
 import { MainWindowNavigationService, MainWindowStateFacadeService } from '@firestone/mainwindow/common';
-import { CurrentAppType, PreferencesService, ScalingService } from '@firestone/shared/common/service';
+import { CurrentAppType, ScalingService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import {
 	ADS_SERVICE_TOKEN,
@@ -24,7 +24,6 @@ import {
 } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { DebugService } from '../services/debug.service';
-import { HotkeyService } from '../services/hotkey.service';
 
 @Component({
 	standalone: false,
@@ -128,21 +127,12 @@ export class MainWindowComponent
 	forceShowReleaseNotes = new BehaviorSubject<boolean>(false);
 
 	takeScreenshotFunction: (copyToCliboard: boolean) => Promise<[string, any]> = this.takeScreenshot();
-	hotkeyText: string;
-
-	private isMaximized = false;
-	private stateChangedListener: (message: any) => void;
-	private messageReceivedListener: (message: any) => void;
-	private hotkeyPressedHandler;
-	private hotkey;
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
 		private readonly debug: DebugService,
 		private readonly owUtils: OwUtilsService,
-		private readonly hotkeyService: HotkeyService,
-		private readonly preferencesService: PreferencesService,
 		private readonly analytics: AnalyticsService,
 		private readonly nav: MainWindowNavigationService,
 		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
@@ -162,30 +152,16 @@ export class MainWindowComponent
 		this.currentApp$.subscribe((currentApp) => {
 			this.analytics.trackPageView(currentApp);
 		});
-		this.activeTheme$ = combineLatest(
+		this.activeTheme$ = combineLatest([
 			this.showFtue$,
 			this.nav.currentApp$$,
 			this.displayingNewVersion.asObservable(),
-		).pipe(
+		]).pipe(
 			this.mapData(([showFtue, currentApp, displayingNewVersion]) =>
 				this.buildActiveTheme(showFtue, currentApp, displayingNewVersion),
 			),
 		);
 		this.showAds$ = this.ads.hasPremiumSub$$.pipe(this.mapData((sub) => !sub));
-		this.nav.isVisible$$.pipe(this.mapData((visible) => visible)).subscribe(async (visible) => {
-			console.debug('update visible', visible);
-			const window = await this.ow.getCurrentWindow();
-			const currentlyVisible = window.isVisible;
-			if (visible && !currentlyVisible) {
-				await this.ow.restoreWindow(this.windowId);
-				this.ow.bringToFront(this.windowId);
-				if (this.isMaximized) {
-					await this.ow.maximizeWindow(this.windowId);
-				}
-			} else if (!visible && currentlyVisible) {
-				await this.ow.hideWindow(this.windowId);
-			}
-		});
 
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.markForCheck();
@@ -196,56 +172,8 @@ export class MainWindowComponent
 		const currentWindow = await this.ow.getCurrentWindow();
 		this.windowId = currentWindow.id;
 
-		this.messageReceivedListener = this.ow.addMessageReceivedListener(async (message) => {
-			if (message.id === 'move') {
-				const window = await this.ow.getCurrentWindow();
-				const newX = message.content.x - window.width / 2;
-				const newY = message.content.y - window.height / 2;
-				this.ow.changeWindowPosition(this.windowId, newX, newY);
-			}
-		});
-		const prefs = await this.preferencesService.getPreferences();
-		const windowName = this.ow.getCollectionWindowName(prefs);
-		this.stateChangedListener = this.ow.addStateChangedListener(windowName, (message) => {
-			// If hidden, restore window to as it was
-			if (message.window_state === 'maximized') {
-				this.isMaximized = true;
-			} else if (message.window_state !== 'minimized') {
-				// When minimized we want to remember the last position
-				this.isMaximized = false;
-			}
-		});
-
-		this.hotkey = await this.ow.getHotKey('collection');
-		this.hotkeyText = await this.hotkeyService.getHotkeyCombination('collection');
-		this.hotkeyPressedHandler = this.ow.getMainWindow().mainWindowHotkeyPressed;
-		// Only needed for the hotkey
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.markForCheck();
-		}
-	}
-
-	@HostListener('window:keydown', ['$event'])
-	async onKeyDown(e: KeyboardEvent) {
-		const currentWindow = await this.ow.getCurrentWindow();
-		if (currentWindow.id.includes('Overlay')) {
-			return;
-		}
-
-		if (!this.hotkey || this.hotkey.IsUnassigned) {
-			return;
-		}
-		const isAltKey = [1, 3, 5, 7].indexOf(this.hotkey.modifierKeys) !== -1;
-		const isCtrlKey = [2, 3, 6, 7].indexOf(this.hotkey.modifierKeys) !== -1;
-		const isShiftKey = [4, 5, 6, 7].indexOf(this.hotkey.modifierKeys) !== -1;
-
-		if (
-			e.shiftKey === isShiftKey &&
-			e.altKey === isAltKey &&
-			e.ctrlKey === isCtrlKey &&
-			e.keyCode == this.hotkey.virtualKeycode
-		) {
-			this.hotkeyPressedHandler();
 		}
 	}
 
@@ -268,8 +196,6 @@ export class MainWindowComponent
 	@HostListener('window:beforeunload')
 	ngOnDestroy(): void {
 		super.ngOnDestroy();
-		this.ow.removeStateChangedListener(this.stateChangedListener);
-		this.ow.removeMessageReceivedListener(this.messageReceivedListener);
 	}
 
 	onHelp() {

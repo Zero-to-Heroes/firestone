@@ -27,4 +27,6 @@ export interface IHotkeyHandlerService {
 	// removeHotKeyPressedListener(listener: (message: any) => void): void;
 	addHotkeyChangedListener(callback: (message: any) => void): HotkeyChangedUnsubscribe;
 	removeHotkeyChangedListener(listener: HotkeyChangedUnsubscribe): void;
+
+	// getHotkeyCombination(hotkey: string): string;
 }

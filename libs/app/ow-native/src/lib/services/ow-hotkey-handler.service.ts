@@ -34,6 +34,10 @@ export class OwHotkeyHandlerService implements IHotkeyHandlerService {
 			const prefs: Preferences = await this.prefs.getPreferences();
 			this.windowHandler.toggleBattlegroundsWindow(prefs.bgsUseOverlay);
 		});
+		this.ow.addHotKeyPressedListener('collection', async (hotkeyResult) => {
+			const prefs: Preferences = await this.prefs.getPreferences();
+			this.windowHandler.toggleCollectionWindow(prefs.collectionUseOverlay);
+		});
 
 		this.ow.addHotKeyHoldListener(
 			'live-info',

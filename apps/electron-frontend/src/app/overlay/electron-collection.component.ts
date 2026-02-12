@@ -3,16 +3,15 @@ import { ElectronEntryPointComponent } from './electron-entry-point.component';
 
 @Component({
 	standalone: false,
-	selector: 'electron-settings',
-	styleUrls: [`./electron-settings.component.scss`],
+	selector: 'electron-collection',
+	styleUrls: [`./electron-collection.component.scss`],
 	template: `
 		<electron-window-wrapper [activeTheme]="'general'" [allowResize]="true" *ngIf="ready">
-			<settings-root></settings-root>
 		</electron-window-wrapper>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ElectronSettingsComponent extends ElectronEntryPointComponent implements OnInit {
+export class ElectronCollectionComponent extends ElectronEntryPointComponent implements OnInit {
 	ready = false;
 
 	constructor(private readonly cdr: ChangeDetectorRef) {
@@ -23,7 +22,7 @@ export class ElectronSettingsComponent extends ElectronEntryPointComponent imple
 		await super.ngOnInit();
 
 		// Change the title of the window to "Settings"
-		document.title = 'Settings';
+		document.title = 'Main Window';
 		this.ready = true;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.markForCheck();
