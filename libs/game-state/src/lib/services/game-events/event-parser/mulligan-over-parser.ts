@@ -15,6 +15,6 @@ export class MulliganOverParser implements EventParser {
 	}
 
 	event(): string {
-		return GameEvent.MULLIGAN_INPUT;
+		return GameEvent.MULLIGAN_DEALING;
 	}
 }

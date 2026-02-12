@@ -277,6 +277,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 					deckstring: state?.playerDeck.deckstring,
 					archetypeId: state?.playerDeck.archetypeId,
 				})),
+				tap((info) => console.debug('[mulligan-guide] archetypeId$', info)),
 				distinctUntilChanged((a, b) => a?.deckstring === b?.deckstring && a?.archetypeId === b?.archetypeId),
 			),
 		]).pipe(
@@ -289,7 +290,6 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 
 		const archetype$: Observable<ArchetypeStat | null> = combineLatest([showWidget$, format$, timeFrame$]).pipe(
 			filter(([showWidget, format, timeFrame]) => showWidget),
-			// tap((showWidget: boolean) => console.debug('[mulligan-guide] will show archetype', showWidget)),
 			debounceTime(200),
 			switchMap(([showWidget, format, timeFrame]) =>
 				combineLatest([archetypeId$, playerRank$, of(format), of(timeFrame)]),
@@ -332,8 +332,8 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 					return of(null);
 				}
 
-				console.debug('[mulligan-guide] archetype result', result);
 				return from(result).pipe(
+					tap((archetype) => console.debug('[mulligan-guide] archetype result', archetype)),
 					tap((archetype) => {
 						if (archetype === undefined) {
 							console.warn(
@@ -346,10 +346,6 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 					map((archetype) => archetype ?? null),
 				);
 			}),
-			// filter((archetype) => !!archetype),
-			// map(archetype => archetype as ArchetypeStat),
-			// tap((archetype) => console.debug('[mulligan-guide] archetype', archetype)),
-			// shareReplay(1),
 		);
 
 		const deckDetails$ = combineLatest([showWidget$, format$, timeFrame$]).pipe(
@@ -398,6 +394,7 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 				}
 
 				return from(result).pipe(
+					tap((deckDetails) => console.debug('[mulligan-guide] deckDetails result', deckDetails)),
 					tap((deckDetails) => {
 						if (deckDetails === undefined) {
 							console.warn(
@@ -520,6 +517,19 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 					opponentClass,
 					deckstring,
 				}) => {
+					console.debug(
+						'[mulligan-guide] bulding mulliganAdvice$',
+						archetype,
+						deckDetails,
+						cardsInHand,
+						deckCards,
+						format,
+						gameType,
+						playCoin,
+						playerRank,
+						opponentClass,
+						deckstring,
+					);
 					const aStatToUse =
 						playCoin === 'coin'
 							? archetype?.coinPlayInfo.find((s) => s.coinPlay === 'coin')

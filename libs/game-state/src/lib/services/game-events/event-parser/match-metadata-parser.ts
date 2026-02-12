@@ -34,7 +34,7 @@ export class MatchMetadataParser implements EventParser {
 		private readonly memory: MemoryInspectionService,
 		private readonly constructedArchetypes: ConstructedArchetypeServiceOrchestrator,
 		private readonly i18n: ILocalizationService,
-	) { }
+	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return !!state;
@@ -89,11 +89,7 @@ export class MatchMetadataParser implements EventParser {
 				}),
 			});
 			console.log('[match-metadata-parser] newState', newState.metadata);
-
 			return newState;
-		} else if (stateWithMetaData.isMercenaries()) {
-			console.log('[match-metadata-parser] mercs 2');
-			return stateWithMetaData;
 		}
 
 		const noDeckMode = prefs.decktrackerNoDeckMode;
@@ -107,6 +103,8 @@ export class MatchMetadataParser implements EventParser {
 		const currentDeck = noDeckMode
 			? undefined
 			: await this.deckParser.retrieveCurrentDeck(metaData.gameType === GameType.GT_VS_AI, metaData);
+		console.debug('[match-metadata-parser] currentDeck', currentDeck);
+
 		const deckstringToUse = stateWithMetaData.playerDeck?.deckstring || currentDeck?.deckstring;
 		console.log(
 			'[match-metadata-parser] init game with deck',
@@ -114,7 +112,6 @@ export class MatchMetadataParser implements EventParser {
 			currentDeck && currentDeck.deckstring,
 			currentDeck && currentDeck.name,
 		);
-
 		console.log('[match-metadata-parser] match metadata', format, deckstringToUse);
 		const board = await this.memory.getCurrentBoard();
 		const sideboards: readonly DeckSideboard[] = this.handler.buildSideboards(currentDeck?.deckstring!)!;

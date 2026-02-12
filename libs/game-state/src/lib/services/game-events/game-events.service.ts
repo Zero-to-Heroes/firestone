@@ -273,13 +273,13 @@ export class GameEvents {
 			case 'START_OF_GAME':
 				this.doEventDispatch(GameEvent.build(GameEvent.START_OF_GAME, gameEvent));
 				break;
-			case 'MULLIGAN_INPUT':
-				this.doEventDispatch(
-					Object.assign(new GameEvent(), {
-						type: GameEvent.MULLIGAN_INPUT,
-					} as GameEvent),
-				);
-				break;
+			// case 'MULLIGAN_INPUT':
+			// 	this.doEventDispatch(
+			// 		Object.assign(new GameEvent(), {
+			// 			type: GameEvent.MULLIGAN_INPUT,
+			// 		} as GameEvent),
+			// 	);
+			// 	break;
 			case 'MULLIGAN_DEALING':
 				this.doEventDispatch(
 					Object.assign(new GameEvent(), {

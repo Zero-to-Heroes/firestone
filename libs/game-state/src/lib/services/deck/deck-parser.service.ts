@@ -31,6 +31,19 @@ import { GameEventsEmitterService } from '../game-events/game-events-emitter.ser
 
 const DECK_TEMPLATES_URL = `https://static.zerotoheroes.com/hearthstone/data/deck-templates.gz.json`;
 const OPEN_BRAWL_LISTS_URL = `https://static.zerotoheroes.com/hearthstone/data/brawl_lists`;
+const WHIZBANG_DECK_IDS = [
+	5342, // Priest
+	5343, // Death Knight Rainbow
+	5345, // Rogue
+	5344, // Warlock
+	5385, // Mage
+	5346, // Druid
+	5381, // Paladin
+	5382, // Hunter
+	5383, // DH
+	5384, // Shaman
+	5410, // Warrior
+];
 
 @Injectable()
 export class DeckParserService {
@@ -233,7 +246,7 @@ export class DeckParserService {
 		return this.currentDeck;
 	}
 
-	private async getDeckTemplates(): Promise<readonly DeckTemplate[]> {
+	public async getDeckTemplates(): Promise<readonly DeckTemplate[]> {
 		if (!this.deckTemplates?.length) {
 			const templatesFromRemote: readonly DeckTemplate[] | null = await this.api.callGetApi(DECK_TEMPLATES_URL);
 			this.deckTemplates = (templatesFromRemote ?? [])
@@ -243,6 +256,7 @@ export class DeckParserService {
 						({
 							...template,
 							DeckList: template.DeckList.map((dbfId) => +dbfId),
+							IsWhizbang: WHIZBANG_DECK_IDS.includes(template.DeckId ?? 0),
 						}) as DeckTemplate,
 				);
 		}
@@ -518,4 +532,5 @@ export interface DeckInfo {
 
 export interface DeckTemplate extends DeckInfoFromMemory {
 	TemplateId: number;
+	IsWhizbang: boolean;
 }
