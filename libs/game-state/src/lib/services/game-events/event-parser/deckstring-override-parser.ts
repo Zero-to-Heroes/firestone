@@ -1,13 +1,16 @@
 import { Board } from '@firestone-hs/reference-data';
-import { DeckCard } from '../../../models/deck-card';
 import { DeckSideboard, DeckState } from '../../../models/deck-state';
 import { GameState } from '../../../models/game-state';
 import { DeckHandlerService } from '../../deck-handler.service';
+import { ConstructedArchetypeServiceOrchestrator } from '../../deck/constructed-archetype-orchestrator.service';
 import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 
 export class DeckstringOverrideParser implements EventParser {
-	constructor(private readonly deckHandler: DeckHandlerService) {}
+	constructor(
+		private readonly deckHandler: DeckHandlerService,
+		private readonly constructedArchetypes: ConstructedArchetypeServiceOrchestrator,
+	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return !!state;
@@ -79,6 +82,9 @@ export class DeckstringOverrideParser implements EventParser {
 			sideboards: sideboards,
 			deck: cardsWithPositions,
 		});
+		if (playerOrOpponent === 'player') {
+			this.constructedArchetypes.triggerArchetypeCategorization(newDeck.deckstring!);
+		}
 		return Object.assign(new GameState(), currentState, {
 			[playerOrOpponent === 'opponent' ? 'opponentDeck' : 'playerDeck']: newDeck,
 		});

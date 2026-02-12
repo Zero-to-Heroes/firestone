@@ -320,7 +320,9 @@ export class GameStateParsersService {
 			[GameEvent.DECKLIST_UPDATE]: [
 				new DecklistUpdateParser(this.aiDecks, this.deckHandler, this.prefs, this.memory),
 			],
-			[GameEvent.DECKSTRING_OVERRIDE]: [new DeckstringOverrideParser(this.deckHandler)],
+			[GameEvent.DECKSTRING_OVERRIDE]: [
+				new DeckstringOverrideParser(this.deckHandler, this.constructedArchetypes),
+			],
 			[GameEvent.DISCARD_CARD]: [new DiscardedCardParser(this.helper, this.allCards)],
 			[GameEvent.END_OF_ECHO_IN_HAND]: [new EndOfEchoInHandParser(this.helper)],
 			[GameEvent.ENCHANTMENT_ATTACHED]: [new EnchantmentAttachedParser(this.helper, this.allCards, this.i18n)],
@@ -347,7 +349,9 @@ export class GameStateParsersService {
 			[GameEvent.IMMOLATE_CHANGED]: [new ImmolateChangedParser(this.helper, this.allCards)],
 			[GameEvent.JADE_GOLEM]: [new JadeGolemParser()],
 			[GameEvent.LINKED_ENTITY]: [new LinkedEntityParser(this.helper, this.allCards)],
-			[GameEvent.LOCAL_PLAYER]: [new LocalPlayerParser(this.allCards, this.deckParser, this.deckHandler)],
+			[GameEvent.LOCAL_PLAYER]: [
+				new LocalPlayerParser(this.allCards, this.deckParser, this.deckHandler, this.constructedArchetypes),
+			],
 			[GameEvent.LOCATION_USED]: [new LocationUsedParser(this.allCards)],
 			[GameEvent.LOCATION_DESTROYED]: [new LocationDestroyedParser(this.helper, this.allCards)],
 			[GameEvent.MAIN_STEP_READY]: [new MainStepReadyParser(this.allCards)],
@@ -393,7 +397,13 @@ export class GameStateParsersService {
 			[GameEvent.PARENT_CARD_CHANGED]: [new ParentCardChangedParser(this.helper, this.allCards)],
 			[GameEvent.PASSIVE_BUFF]: [new PassiveTriggeredParser(this.helper, this.allCards, this.i18n)],
 			[GameEvent.PLAYER_DECK_INFO]: [
-				new PlayerDeckInfoParser(this.deckParser, this.deckHandler, this.allCards, this.eventsEmitter),
+				new PlayerDeckInfoParser(
+					this.deckParser,
+					this.deckHandler,
+					this.allCards,
+					this.eventsEmitter,
+					this.constructedArchetypes,
+				),
 			],
 			[GameEvent.QUEST_COMPLETED]: [new QuestCompletedParser(this.helper, this.allCards)],
 			[GameEvent.QUEST_CREATED_IN_GAME]: [new QuestCreatedInGameParser(this.helper, this.allCards)],
@@ -407,7 +417,7 @@ export class GameStateParsersService {
 				new ListCardsPlayedFromInitialDeckParser(this.helper, this.allCards),
 			],
 			[GameEvent.RECEIVE_CARD_IN_HAND]: [new ReceiveCardInHandParser(this.helper, this.allCards)],
-			[GameEvent.RECONNECT_OVER]: [new ReconnectOverParser(this.deckHandler)],
+			[GameEvent.RECONNECT_OVER]: [new ReconnectOverParser(this.deckHandler, this.constructedArchetypes)],
 			[GameEvent.RECONNECT_START]: [new ReconnectStartParser()],
 			[GameEvent.RECRUIT_CARD]: [new CardRecruitedParser(this.helper, this.allCards)],
 			[GameEvent.RESOURCES_UPDATED]: [new ResourcesParser()],
@@ -456,7 +466,9 @@ export class GameStateParsersService {
 			[GameEvent.WEAPON_DESTROYED]: [new WeaponDestroyedParser(this.helper)],
 			[GameEvent.WEAPON_EQUIPPED]: [new WeaponEquippedParser(this.allCards, this.helper)],
 			[GameEvent.WHEEL_OF_DEATH_COUNTER_UPDATED]: [new WheelOfDeathCounterUpdatedParser()],
-			[GameEvent.WHIZBANG_DECK_ID]: [new WhizbangDeckParser(this.deckParser, this.deckHandler)],
+			[GameEvent.WHIZBANG_DECK_ID]: [
+				new WhizbangDeckParser(this.deckParser, this.deckHandler, this.constructedArchetypes),
+			],
 			[GameEvent.ZONE_POSITION_CHANGED]: [new ZonePositionChangedParser(this.helper)],
 			// [GameEvent.MINDRENDER_ILLUCIA_END]: [new  MindrenderIlluciaParser(),],
 			// [GameEvent.MINDRENDER_ILLUCIA_START]: [new  MindrenderIlluciaParser(),],

@@ -13,6 +13,7 @@ export class ConstructedArchetypeServiceOrchestrator {
 	public async triggerArchetypeCategorization(deckstring: string) {
 		// TODO: check premium tier / uses left in free tier
 		const archetypeId = await this.service.getArchetypeForDeck(deckstring);
+		console.log('[mulligan-guide] triggering archetype categorization for deckstring', deckstring, archetypeId);
 		this.gameEventsEmitter.allEvents.next(
 			Object.assign(new GameEvent(), {
 				type: GameEvent.ARCHETYPE_CATEGORIZATION,

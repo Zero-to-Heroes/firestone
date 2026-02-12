@@ -5,7 +5,10 @@ const ARCHETYPE_ID_FETCH_URL = 'https://mbw3zfj7y4ti3pmb3wxwqdzu7i0vxdjg.lambda-
 
 @Injectable()
 export class ConstructedArchetypeService {
-	constructor(private readonly api: ApiRunner, private readonly allCards: CardsFacadeService) {}
+	constructor(
+		private readonly api: ApiRunner,
+		private readonly allCards: CardsFacadeService,
+	) {}
 
 	public async getArchetypeForDeck(rawDeckstring: string): Promise<number | null> {
 		if (!rawDeckstring?.length) {
@@ -19,6 +22,10 @@ export class ConstructedArchetypeService {
 			ARCHETYPE_ID_FETCH_URL.replace('%deckstring%', slug ?? ''),
 		);
 		console.log('[constructed-archetype] archetypeId', archetypeId, slug, deckstring, 'after', Date.now() - start);
+		// All Whizbang decks have the same archetype
+		if (archetypeId === 2404) {
+			return null;
+		}
 		return archetypeId;
 	}
 }

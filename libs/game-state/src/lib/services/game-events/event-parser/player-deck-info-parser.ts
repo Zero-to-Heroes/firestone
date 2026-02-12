@@ -3,6 +3,7 @@ import { sleep } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameState } from '../../../models/game-state';
 import { DeckHandlerService } from '../../deck-handler.service';
+import { ConstructedArchetypeServiceOrchestrator } from '../../deck/constructed-archetype-orchestrator.service';
 import { DeckParserService } from '../../deck/deck-parser.service';
 import { DeckstringOverrideEvent } from '../../game-state-events/deckstring-override-event';
 import { GameEvent } from '../game-event';
@@ -16,6 +17,7 @@ export class PlayerDeckInfoParser implements EventParser {
 		private readonly handler: DeckHandlerService,
 		private readonly allCards: CardsFacadeService,
 		private readonly gameEventsEmitter: GameEventsEmitterService,
+		private readonly constructedArchetypes: ConstructedArchetypeServiceOrchestrator,
 	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
@@ -67,7 +69,10 @@ export class PlayerDeckInfoParser implements EventParser {
 					);
 					console.debug('[player-deck-info-parser] force using whizbang deck', whizbangDeckInfo);
 					if (!!whizbangDeckInfo) {
-						const newCurrentState = await new DeckstringOverrideParser(this.handler).parse(
+						const newCurrentState = await new DeckstringOverrideParser(
+							this.handler,
+							this.constructedArchetypes,
+						).parse(
 							currentState,
 							new DeckstringOverrideEvent(whizbangDeckInfo?.name, whizbangDeckInfo.deckstring!, 'player'),
 						);

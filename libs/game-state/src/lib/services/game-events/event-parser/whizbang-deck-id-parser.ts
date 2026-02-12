@@ -1,5 +1,6 @@
 import { GameState } from '../../../models/game-state';
 import { DeckHandlerService } from '../../deck-handler.service';
+import { ConstructedArchetypeServiceOrchestrator } from '../../deck/constructed-archetype-orchestrator.service';
 import { DeckParserService } from '../../deck/deck-parser.service';
 import { DeckstringOverrideEvent } from '../../game-state-events/deckstring-override-event';
 import { GameEvent } from '../game-event';
@@ -10,6 +11,7 @@ export class WhizbangDeckParser implements EventParser {
 	constructor(
 		private readonly deckParser: DeckParserService,
 		private readonly deckHandler: DeckHandlerService,
+		private readonly constructedArchetypes: ConstructedArchetypeServiceOrchestrator,
 	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
@@ -36,7 +38,10 @@ export class WhizbangDeckParser implements EventParser {
 			return currentState;
 		}
 
-		const stateAfterPlayerDeckUpdate = await new DeckstringOverrideParser(this.deckHandler).parse(
+		const stateAfterPlayerDeckUpdate = await new DeckstringOverrideParser(
+			this.deckHandler,
+			this.constructedArchetypes,
+		).parse(
 			currentState,
 			new DeckstringOverrideEvent(templateDeck.name, templateDeck.deckstring!, isPlayer ? 'player' : 'opponent'),
 		);

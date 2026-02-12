@@ -5,6 +5,7 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameState } from '../../../models/game-state';
 import { HeroCard } from '../../../models/hero-card';
 import { DeckHandlerService } from '../../deck-handler.service';
+import { ConstructedArchetypeServiceOrchestrator } from '../../deck/constructed-archetype-orchestrator.service';
 import { DeckParserService } from '../../deck/deck-parser.service';
 import { DeckstringOverrideEvent } from '../../game-state-events/deckstring-override-event';
 import { GameEvent } from '../game-event';
@@ -16,6 +17,7 @@ export class LocalPlayerParser implements EventParser {
 		private readonly allCards: CardsFacadeService,
 		private readonly deckParser: DeckParserService,
 		private readonly handler: DeckHandlerService,
+		private readonly constructedArchetypes: ConstructedArchetypeServiceOrchestrator,
 	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
@@ -37,7 +39,7 @@ export class LocalPlayerParser implements EventParser {
 		if (!currentState.playerDeck.deckstring) {
 			const newString = await this.deckParser.getOpenDecklist(newHero.cardId, currentState.metadata);
 			if (!!newString) {
-				newCurrentState = await new DeckstringOverrideParser(this.handler).parse(
+				newCurrentState = await new DeckstringOverrideParser(this.handler, this.constructedArchetypes).parse(
 					currentState,
 					new DeckstringOverrideEvent(currentState.playerDeck.name!, newString, 'player'),
 				);
