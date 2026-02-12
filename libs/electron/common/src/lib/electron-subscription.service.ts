@@ -37,6 +37,8 @@ export class ElectronSubscriptionService extends AbstractFacadeService<ElectronS
 		this.localStorage = AppInjector.get(LocalStorageService);
 		this.user = AppInjector.get(UserService);
 
+		await waitForReady(this.tebex, this.user);
+
 		this.currentPlan$$.onFirstSubscribe(async () => {
 			const localPlan = this.localStorage.getItem<CurrentPlan>(LocalStorageService.CURRENT_SUB_PLAN);
 			if (localPlan) {

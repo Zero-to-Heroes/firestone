@@ -121,6 +121,7 @@ import {
 	StandaloneAdService,
 	SubscriptionService,
 	TebexHeadlessService,
+	TebexService,
 } from '@firestone/shared/common/service';
 import {
 	ADS_SERVICE_TOKEN,
@@ -698,6 +699,7 @@ export const buildAppInjector = () => {
 
 	const tebexService = new TebexHeadlessService(windowManager);
 	electronInjector.register(TebexHeadlessService, tebexService);
+	electronInjector.register(TebexService, tebexService as any as TebexService);
 
 	const subscriptionService = new ElectronSubscriptionService(windowManager);
 	electronInjector.register(ElectronSubscriptionService, subscriptionService);

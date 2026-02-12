@@ -12,13 +12,12 @@ import {
 import { CurrentPlan, PremiumPlanId } from './subscription.service';
 
 // const STORE_ID = 1564884;
-const STORE_PUBLIC_TOKEN = 'xjh0-5ef1e6461f2aa381db4df635c3c0c5556aed5191';
-const TEBEX_PACKAGES_URL = `https://subscriptions-api.overwolf.com/packages/${STORE_PUBLIC_TOKEN}?extensionId=${EXTENSION_ID}`;
+export const STORE_PUBLIC_TOKEN = 'xjh0-5ef1e6461f2aa381db4df635c3c0c5556aed5191';
+export const TEBEX_PACKAGES_URL = `https://subscriptions-api.overwolf.com/packages/${STORE_PUBLIC_TOKEN}?extensionId=${EXTENSION_ID}`;
 const TEBEX_SUBSCRIPTIONS_URL = `https://subscriptions-api.overwolf.com/subscriptions/${STORE_PUBLIC_TOKEN}?extensionId=${EXTENSION_ID}`;
 const TEBEX_SUB_DETAILS_URL = `https://x3dealpmov6br4o7vmtiy5peyq0wzbms.lambda-url.us-west-2.on.aws`;
 
 @Injectable({ providedIn: 'root' })
-@Injectable()
 export class TebexService extends AbstractFacadeService<TebexService> {
 	public packages$$: SubscriberAwareBehaviorSubject<readonly TebexPackage[] | null>;
 
@@ -49,6 +48,10 @@ export class TebexService extends AbstractFacadeService<TebexService> {
 		});
 	}
 
+	protected override async createElectronProxy(ipcRenderer: any) {
+		this.packages$$ = new SubscriberAwareBehaviorSubject<readonly TebexPackage[] | null>(null);
+	}
+
 	public async subscribe(planId: string) {
 		const allPackages = await this.packages$$.getValueWithInit();
 		const currentUser = await this.user.getCurrentUser();
@@ -68,10 +71,6 @@ export class TebexService extends AbstractFacadeService<TebexService> {
 
 	public async unsubscribe(planId: string) {
 		this.ow.openUrlInDefaultBrowser(`https://checkout.tebex.io/payment-history/recurring-payments`);
-	}
-
-	protected override async initElectronMainProcess() {
-		this.registerMainProcessMethod('getSubscriptionStatusInternal', () => this.getSubscriptionStatusInternal());
 	}
 
 	public async getSubscriptionStatus(): Promise<CurrentPlan | null> {

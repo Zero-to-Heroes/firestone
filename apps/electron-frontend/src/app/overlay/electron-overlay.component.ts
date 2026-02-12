@@ -1,12 +1,4 @@
-import {
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	ElementRef,
-	NgZone,
-	OnInit,
-	ViewRef,
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewRef } from '@angular/core';
 import { MemoryUpdatesService } from '@firestone/memory';
 import { GameStatusService } from '@firestone/shared/common/service';
 import { waitForReady } from '@firestone/shared/framework/core';
@@ -30,10 +22,8 @@ export class ElectronOverlayComponent extends ElectronEntryPointComponent implem
 
 	constructor(
 		private readonly cdr: ChangeDetectorRef,
-		private readonly elementRef: ElementRef<HTMLElement>,
 		private readonly gameStatusService: GameStatusService,
 		private readonly memoryUpdateService: MemoryUpdatesService,
-		private readonly ngZone: NgZone,
 	) {
 		super();
 	}
@@ -47,6 +37,7 @@ export class ElectronOverlayComponent extends ElectronEntryPointComponent implem
 
 		document.title = 'Firestone Overlay';
 		this.ready = true;
+
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

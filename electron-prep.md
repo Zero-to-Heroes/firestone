@@ -2,12 +2,14 @@
 Beta
 ===============
 
+- logging:
+    - don't serialize debug logs from the frontend
 - custom installer (pending)
 - validate that logged in user is premium / get their premium status (pending)
     - udpate welcome notification accordingly
-- be able to subscribe to a new plan or manage existing plans
 
 - main window
+    - be able to subscribe to a new plan or manage existing plans
 - mercenaries widgets (move store to shared module, like game-state)
 - basically everything linked to the old store - remove it completely
 - resize window
