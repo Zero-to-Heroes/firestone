@@ -1,4 +1,5 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
+// Nefarian (BRM_030) - Battlecry: Add 2 random spells to your hand (from your opponent's class).
 import { CardIds, CardRarity, CardType, GameTag } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DeckCard, GuessedInfo } from '../../models/deck-card';
@@ -19,7 +20,7 @@ export const Nefarian: GeneratingCard & StaticGeneratingCard = {
 		return filterCards(
 			Nefarian.cardIds[0],
 			input.allCards,
-			(c) => hasCorrectClass(c, opponentClass),
+			(c) => hasCorrectClass(c, opponentClass) && hasCorrectType(c, CardType.SPELL),
 			input.inputOptions,
 		);
 	},
