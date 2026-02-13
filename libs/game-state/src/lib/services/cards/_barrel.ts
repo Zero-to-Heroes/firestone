@@ -73,6 +73,7 @@ export { Fishflinger } from './fishflinger';
 export { FlameBehemoth } from './flame-behemoth';
 export { FoolsGold } from './fools-gold';
 export { ForgottenMillenium } from './forgotten-millenium';
+export { Gazlowe } from './gazlowe';
 export { GorgonzormuDeliciousCheese } from './gorgonzormu-delicious-cheese';
 export { GravelsnoutKnight } from './gravelsnout-knight';
 export { Grillmaster } from './grillmaster';
