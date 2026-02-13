@@ -1,4 +1,5 @@
 import { Route } from '@angular/router';
+import { ElectronCollectionComponent } from './overlay/electron-collection.component';
 import { ElectronOverlayComponent } from './overlay/electron-overlay.component';
 import { ElectronSettingsComponent } from './overlay/electron-settings.component';
 
@@ -15,5 +16,9 @@ export const appRoutes: Route[] = [
 	{
 		path: 'settings',
 		component: ElectronSettingsComponent,
+	},
+	{
+		path: 'collection',
+		component: ElectronCollectionComponent,
 	},
 ];

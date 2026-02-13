@@ -1,5 +1,10 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter } from '@angular/core';
-import { ApiRunner, OverwolfService } from '@firestone/shared/framework/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Inject } from '@angular/core';
+import {
+	ApiRunner,
+	EXTERNAL_URL_SERVICE_TOKEN,
+	IExternalUrlService,
+	OverwolfService,
+} from '@firestone/shared/framework/core';
 import { DebugService } from '../../services/debug.service';
 import { OutOfCardsToken } from '../../services/mainwindow/out-of-cards.service';
 
@@ -14,7 +19,12 @@ import { OutOfCardsToken } from '../../services/mainwindow/out-of-cards.service'
 export class OutOfCardsCallbackComponent implements AfterViewInit {
 	private stateUpdater: EventEmitter<any>;
 
-	constructor(private debugService: DebugService, private ow: OverwolfService, private api: ApiRunner) {}
+	constructor(
+		private debugService: DebugService,
+		private ow: OverwolfService,
+		@Inject(EXTERNAL_URL_SERVICE_TOKEN) private externalUrl: IExternalUrlService,
+		private api: ApiRunner,
+	) {}
 
 	async ngAfterViewInit() {
 		const windowId = (await this.ow.getCurrentWindow()).id;
@@ -37,7 +47,7 @@ export class OutOfCardsCallbackComponent implements AfterViewInit {
 			window.close();
 		} else {
 			console.debug('[ooc-auth] no code, redirecting to login page');
-			this.ow.openUrlInDefaultBrowser(
+			this.externalUrl.openUrlInDefaultBrowser(
 				`https://outof.games/oauth/authorize/?client_id=oqEn7ONIAOmugFTjFQGe1lFSujGxf3erhNDDTvkC&response_type=code&scope=hearthcollection&redirect_uri=https://www.firestoneapp.com/oog-login.html`,
 			);
 			this.ow.closeWindow(windowId);

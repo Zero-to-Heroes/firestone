@@ -1,7 +1,7 @@
 import { CommonModule, HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { ElectronViewModule } from '@firestone/electron/view';
+import { ElectronExternalUrlRendererService, ElectronViewModule } from '@firestone/electron/view';
 import { LegacyFeatureShellModule } from '@firestone/legacy/feature-shell';
 import { SettingsViewModule } from '@firestone/settings/view';
 import { StandaloneAdService } from '@firestone/shared/common/service';
@@ -10,6 +10,7 @@ import {
 	ADS_SERVICE_TOKEN,
 	CardsFacadeService,
 	CardsFacadeStandaloneService,
+	EXTERNAL_URL_SERVICE_TOKEN,
 	ILocalizationService,
 	LocalizationStandaloneService,
 } from '@firestone/shared/framework/core';
@@ -31,12 +32,14 @@ import { ElectronSettingsComponent } from './overlay/electron-settings.component
 
 		RouterModule.forRoot(appRoutes),
 	],
-	declarations: [AppComponent, ElectronCollectionComponent, ElectronOverlayComponent, ElectronSettingsComponent],
+	declarations: [AppComponent, ElectronOverlayComponent, ElectronSettingsComponent, ElectronCollectionComponent],
 	providers: [
 		{ provide: CardsFacadeService, useExisting: CardsFacadeStandaloneService },
 		{ provide: ILocalizationService, useExisting: LocalizationStandaloneService },
 		{ provide: LocalizationFacadeService, useExisting: LocalizationStandaloneService },
 		{ provide: ADS_SERVICE_TOKEN, useExisting: StandaloneAdService },
+		// Renderer-only: no Overwolf dependency; uses electronAPI IPC when in Electron
+		{ provide: EXTERNAL_URL_SERVICE_TOKEN, useClass: ElectronExternalUrlRendererService },
 		// Use HashLocationStrategy for file:// protocol compatibility
 		{ provide: LocationStrategy, useClass: HashLocationStrategy },
 	],

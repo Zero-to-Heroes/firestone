@@ -15,6 +15,7 @@ export class OwUtilsService {
 
 	constructor(protected readonly windowManager: WindowManagerService) {
 		this.initFacade();
+
 		if (typeof window !== 'undefined') {
 			window['showWindowsNotification'] = async () => {
 				await sleep(1000);

@@ -10,6 +10,7 @@ const USER_MAPPING_UPDATE_URL = 'https://gpiulkkg75uipxcgcbfr4ixkju0ntere.lambda
 @Injectable({ providedIn: 'root' })
 export class HotkeyFacadeService extends AbstractFacadeService<HotkeyFacadeService> {
 	public liveInfoPressed$$: BehaviorSubject<boolean>;
+	public;
 
 	private hotkeyHandler: IHotkeyHandlerService;
 

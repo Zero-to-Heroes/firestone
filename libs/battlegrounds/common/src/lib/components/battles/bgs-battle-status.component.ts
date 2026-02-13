@@ -18,7 +18,9 @@ import { AbstractSubscriptionComponent } from '@firestone/shared/framework/commo
 import {
 	ADS_SERVICE_TOKEN,
 	CardsFacadeService,
+	EXTERNAL_URL_SERVICE_TOKEN,
 	IAdsService,
+	IExternalUrlService,
 	ILocalizationService,
 	OverwolfService,
 	waitForReady,
@@ -232,6 +234,7 @@ export class BgsBattleStatusComponent extends AbstractSubscriptionComponent impl
 		protected override readonly cdr: ChangeDetectorRef,
 		private readonly i18n: ILocalizationService,
 		@Optional() private readonly ow: OverwolfService,
+		@Inject(EXTERNAL_URL_SERVICE_TOKEN) private readonly externalUrl: IExternalUrlService,
 		private readonly bgsSim: BgsBattleSimulationService,
 		private readonly allCards: CardsFacadeService,
 		private readonly guardian: BgsIntermediateResultsSimGuardianService,
@@ -389,12 +392,7 @@ export class BgsBattleStatusComponent extends AbstractSubscriptionComponent impl
 			? await this.bgsSim.getIdForSimulationSample(simulationSample)
 			: await this.bgsSim.getIdForSimulationSampleWithFetch(simulationSample);
 		if (id) {
-			if (this.ow?.isOwEnabled()) {
-				// Using window.open sometimes doesn't work?
-				this.ow.openUrlInDefaultBrowser(`https://replays.firestoneapp.com/?bgsSimulationId=${id}`);
-			} else {
-				window.open(`https://replays.firestoneapp.com/?bgsSimulationId=${id}`, '_blank');
-			}
+			this.externalUrl.openUrlInDefaultBrowser(`https://replays.firestoneapp.com/?bgsSimulationId=${id}`);
 		}
 		this.processingSimulationSample = false;
 		if (!(this.cdr as ViewRef)?.destroyed) {

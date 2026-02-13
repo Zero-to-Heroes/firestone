@@ -1,6 +1,6 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import { Injectable } from '@angular/core';
-import { ILocalizationService } from '@firestone/shared/framework/core';
+import { Inject, Injectable } from '@angular/core';
+import { EXTERNAL_URL_SERVICE_TOKEN, IExternalUrlService, ILocalizationService } from '@firestone/shared/framework/core';
 import { GameStatusService } from './game-status.service';
 import { NotificationsService } from './notifications.service';
 
@@ -10,7 +10,7 @@ export class GlobalErrorService {
 		private readonly notifications: NotificationsService,
 		private readonly i18n: ILocalizationService,
 		private readonly gameStatus: GameStatusService,
-		// private readonly ow: OverwolfService,
+		@Inject(EXTERNAL_URL_SERVICE_TOKEN) private readonly externalUrl: IExternalUrlService,
 	) {}
 
 	public async notifyCriticalError(error: GlobalErrorType) {
@@ -21,12 +21,12 @@ export class GlobalErrorService {
 			console.debug('[global-error] critical error', title, message, url);
 			const onClick = url
 				? () => {
-						this.ow.openUrlInDefaultBrowser(url);
+						this.externalUrl.openUrlInDefaultBrowser(url);
 					}
 				: undefined;
 			this.notifications.notifyError(title, message, error, onClick);
 		} else if (url) {
-			this.ow.openUrlInDefaultBrowser(url);
+			this.externalUrl.openUrlInDefaultBrowser(url);
 		}
 	}
 

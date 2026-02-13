@@ -9,7 +9,7 @@ import { ElectronEntryPointComponent } from './electron-entry-point.component';
 	styleUrls: [`./electron-collection.component.scss`],
 	template: `
 		<electron-window-wrapper [activeTheme]="activeTheme$$ | async" [allowResize]="true" *ngIf="ready">
-			<main-window-root (activeTheme)="activeTheme$$.next($event)"></main-window-root>
+			<main-window-root (activeTheme)="activeTheme$$.next($any($event))"></main-window-root>
 		</electron-window-wrapper>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

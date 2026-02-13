@@ -11,7 +11,13 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { ADS_SERVICE_TOKEN, AnalyticsService, IAdsService, OverwolfService } from '@firestone/shared/framework/core';
+import {
+	ADS_SERVICE_TOKEN,
+	AnalyticsService,
+	EXTERNAL_URL_SERVICE_TOKEN,
+	IAdsService,
+	IExternalUrlService,
+} from '@firestone/shared/framework/core';
 
 @Component({
 	standalone: false,
@@ -61,7 +67,7 @@ export class AdsComponent extends AbstractSubscriptionComponent implements OnDes
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
-		private readonly ow: OverwolfService,
+		@Inject(EXTERNAL_URL_SERVICE_TOKEN) private readonly externalUrl: IExternalUrlService,
 		private readonly analytics: AnalyticsService,
 		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 	) {
@@ -85,13 +91,13 @@ export class AdsComponent extends AbstractSubscriptionComponent implements OnDes
 	}
 
 	showFeatures() {
-		this.ow.openUrlInDefaultBrowser('https://github.com/Zero-to-Heroes/firestone/wiki/Premium-features');
+		this.externalUrl.openUrlInDefaultBrowser('https://github.com/Zero-to-Heroes/firestone/wiki/Premium-features');
 		this.analytics.trackEvent('show-premium-features');
 	}
 
 	openBazaarTrackerPage() {
 		console.log('[cross-promotion] opening BazaarTracker page');
-		this.ow.openUrlInDefaultBrowser('https://www.overwolf.com/app/Sebastien_Tromp-BazaarTracker');
+		this.externalUrl.openUrlInDefaultBrowser('https://www.overwolf.com/app/Sebastien_Tromp-BazaarTracker');
 	}
 
 	onAdVisibilityChanged(visible: 'hidden' | 'partial' | 'full') {

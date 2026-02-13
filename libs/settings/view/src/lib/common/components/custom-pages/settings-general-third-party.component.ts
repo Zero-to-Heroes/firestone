@@ -3,6 +3,7 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
+	Inject,
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
@@ -10,10 +11,12 @@ import { HEARTHPWN_SYNC, PreferencesService } from '@firestone/shared/common/ser
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import {
 	ApiRunner,
+	EXTERNAL_URL_SERVICE_TOKEN,
+	IExternalUrlService,
 	ILocalizationService,
-	OverwolfService,
 	UserService,
 	waitForReady,
+	WindowManagerService,
 } from '@firestone/shared/framework/core';
 import { interval, Observable, Subscription } from 'rxjs';
 
@@ -231,10 +234,11 @@ export class SettingsGeneralThirdPartyComponent
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
 		private readonly prefs: PreferencesService,
-		private readonly ow: OverwolfService,
+		@Inject(EXTERNAL_URL_SERVICE_TOKEN) private readonly externalUrl: IExternalUrlService,
 		private readonly i18n: ILocalizationService,
 		private readonly userService: UserService,
 		private readonly api: ApiRunner,
+		private readonly windowManager: WindowManagerService,
 	) {
 		super(cdr);
 	}
@@ -258,9 +262,7 @@ export class SettingsGeneralThirdPartyComponent
 	}
 
 	async oocConnect() {
-		await this.ow.obtainDeclaredWindow('OutOfCardsAuthWindow');
-		await this.ow.restoreWindow('OutOfCardsAuthWindow');
-		await this.ow.bringToFront('OutOfCardsAuthWindow');
+		await this.windowManager.restoreWindow('OutOfCardsAuthWindow', true);
 	}
 
 	oocDisconnect() {
@@ -269,7 +271,7 @@ export class SettingsGeneralThirdPartyComponent
 	}
 
 	async hearthpwnConnect(loginToken: string) {
-		this.ow.openUrlInDefaultBrowser(`https://www.hearthpwn.com/set-auth/${loginToken}?provider=Firestone`);
+		this.externalUrl.openUrlInDefaultBrowser(`https://www.hearthpwn.com/set-auth/${loginToken}?provider=Firestone`);
 		this.hearthpwnSub = interval(5000).subscribe(async () => {
 			const url = `https://www.hearthpwn.com/get-auth-info/${loginToken}`;
 			const apiResult: { userToken: string; userID: number } | null = await this.api.callGetApi<{

@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable } from '@angular/core';
+import { IExternalUrlService } from './external-url.interface';
 
 export const EXTENSION_ID = 'lnknbakkpommmjjdnelmfbjjdbocfpnpbkijjnob';
 export const HEARTHSTONE_GAME_ID = 9898;
@@ -11,7 +12,7 @@ type TwitterUserInfo = any;
 type RedditUserInfo = any;
 
 @Injectable()
-export class OverwolfService {
+export class OverwolfService implements IExternalUrlService {
 	public static MAIN_WINDOW = 'MainWindow';
 	public static COLLECTION_WINDOW = 'CollectionWindow';
 	public static COLLECTION_WINDOW_OVERLAY = 'CollectionOverlayWindow';
@@ -190,7 +191,11 @@ export class OverwolfService {
 	}
 
 	public openUrlInDefaultBrowser(url: string) {
-		overwolf.utils.openUrlInDefaultBrowser(url);
+		if (this.isOwEnabled()) {
+			overwolf.utils.openUrlInDefaultBrowser(url);
+		} else {
+			window.open(url, '_blank');
+		}
 	}
 
 	public async getOpenWindows() {

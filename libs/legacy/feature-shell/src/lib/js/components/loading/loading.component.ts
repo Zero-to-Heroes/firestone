@@ -4,12 +4,19 @@ import {
 	ChangeDetectorRef,
 	Component,
 	HostListener,
+	Inject,
 	OnDestroy,
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
 import { getNoCardsUrl } from '@firestone/shared/common/service';
-import { CardsFacadeService, GameInfoService, OverwolfService } from '@firestone/shared/framework/core';
+import {
+	CardsFacadeService,
+	EXTERNAL_URL_SERVICE_TOKEN,
+	GameInfoService,
+	IExternalUrlService,
+	OverwolfService,
+} from '@firestone/shared/framework/core';
 import { DebugService } from '../../services/debug.service';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 
@@ -93,6 +100,7 @@ export class LoadingComponent implements AfterViewInit, OnDestroy {
 		private readonly debugService: DebugService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly ow: OverwolfService,
+		@Inject(EXTERNAL_URL_SERVICE_TOKEN) private readonly externalUrl: IExternalUrlService,
 		private readonly gameInfo: GameInfoService,
 		private readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
@@ -145,7 +153,7 @@ export class LoadingComponent implements AfterViewInit, OnDestroy {
 	}
 
 	showError() {
-		this.ow.openUrlInDefaultBrowser(getNoCardsUrl(this.i18n));
+		this.externalUrl.openUrlInDefaultBrowser(getNoCardsUrl(this.i18n));
 	}
 
 	private async positionWindow() {

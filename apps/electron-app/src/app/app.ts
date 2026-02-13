@@ -392,6 +392,11 @@ export default class App {
 			}
 		});
 
+		// Open URL in default browser (called from renderer process)
+		ipcMain.handle('open-url-in-default-browser', async (_event, url: string) => {
+			await shell.openExternal(url);
+		});
+
 		// Store flush function for cleanup on quit
 		App.flushRendererLogs = flushRendererLogs;
 

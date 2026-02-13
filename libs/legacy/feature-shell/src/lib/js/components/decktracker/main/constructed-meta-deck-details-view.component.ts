@@ -3,6 +3,7 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
+	Inject,
 	Input,
 	Optional,
 } from '@angular/core';
@@ -15,7 +16,12 @@ import { Sideboard } from '@firestone-hs/deckstrings';
 import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { Card } from '@firestone/memory';
 import { AbstractSubscriptionComponent, buildPercents } from '@firestone/shared/framework/common';
-import { AnalyticsService, OverwolfService } from '@firestone/shared/framework/core';
+import {
+	AnalyticsService,
+	EXTERNAL_URL_SERVICE_TOKEN,
+	IExternalUrlService,
+	OverwolfService,
+} from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, distinctUntilChanged, Observable } from 'rxjs';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { ConstructedMetaArchetypeShowDecksEvent } from '../../../services/mainwindow/store/processors/decktracker/constructed-meta-archetype-show-decks';
@@ -229,6 +235,7 @@ export class ConstructedMetaDeckDetailsViewComponent extends AbstractSubscriptio
 		private readonly i18n: LocalizationFacadeService,
 		private readonly analytics: AnalyticsService,
 		@Optional() private readonly ow: OverwolfService,
+		@Inject(EXTERNAL_URL_SERVICE_TOKEN) private readonly externalUrl: IExternalUrlService,
 		@Optional() private readonly mainWindowStateFacade: MainWindowStateFacadeService,
 	) {
 		super(cdr);
@@ -260,11 +267,7 @@ export class ConstructedMetaDeckDetailsViewComponent extends AbstractSubscriptio
 	viewOnline() {
 		this.analytics.trackEvent('meta-deck-view-online', { deckstring: this.deckstring });
 		const url = `https://www.hsguru.com/deck/${encodeURIComponent(this.deckstring)}?utm_source=firestone`;
-		if (!!this.ow) {
-			this.ow.openUrlInDefaultBrowser(url);
-		} else {
-			window.open(url, '_blank');
-		}
+		this.externalUrl.openUrlInDefaultBrowser(url);
 	}
 
 	viewDecks() {

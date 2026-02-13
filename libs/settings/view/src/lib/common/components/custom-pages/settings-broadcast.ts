@@ -1,7 +1,18 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	Inject,
+	ViewRef,
+} from '@angular/core';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
+import {
+	EXTERNAL_URL_SERVICE_TOKEN,
+	IExternalUrlService,
+	waitForReady,
+} from '@firestone/shared/framework/core';
 import { TWITCH_LOGIN_URL, TwitchAuthService } from '@firestone/twitch/common';
 import { Observable } from 'rxjs';
 
@@ -119,7 +130,7 @@ export class SettingsBroadcastComponent extends AbstractSubscriptionComponent im
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
 		private readonly prefs: PreferencesService,
-		private readonly ow: OverwolfService,
+		@Inject(EXTERNAL_URL_SERVICE_TOKEN) private readonly externalUrl: IExternalUrlService,
 		private readonly twitch: TwitchAuthService,
 	) {
 		super(cdr);
@@ -142,7 +153,7 @@ export class SettingsBroadcastComponent extends AbstractSubscriptionComponent im
 	}
 
 	connect() {
-		this.ow.openUrlInDefaultBrowser(this.twitchLoginUrl);
+		this.externalUrl.openUrlInDefaultBrowser(this.twitchLoginUrl);
 	}
 
 	disconnect() {

@@ -5,6 +5,8 @@ import {
 	ApiRunner,
 	AppInjector,
 	EXTENSION_ID,
+	EXTERNAL_URL_SERVICE_TOKEN,
+	IExternalUrlService,
 	OverwolfService,
 	UserService,
 	waitForReady,
@@ -23,6 +25,7 @@ export class TebexService extends AbstractFacadeService<TebexService> {
 	public packages$$: SubscriberAwareBehaviorSubject<readonly TebexPackage[] | null>;
 
 	private ow: OverwolfService;
+	private externalUrl: IExternalUrlService;
 	protected api: ApiRunner;
 	protected user: UserService;
 
@@ -38,6 +41,7 @@ export class TebexService extends AbstractFacadeService<TebexService> {
 		this.packages$$ = new SubscriberAwareBehaviorSubject<readonly TebexPackage[] | null>(null);
 		this.api = AppInjector.get(ApiRunner);
 		this.ow = AppInjector.get(OverwolfService);
+		this.externalUrl = AppInjector.get(EXTERNAL_URL_SERVICE_TOKEN);
 		this.user = AppInjector.get(UserService);
 
 		this.packages$$.onFirstSubscribe(async () => {
@@ -67,11 +71,11 @@ export class TebexService extends AbstractFacadeService<TebexService> {
 		}
 		const url = `https://subscriptions-api.overwolf.com/checkout/${STORE_PUBLIC_TOKEN}/${packageForPlan.id}?extensionId=${EXTENSION_ID}&userId=${userUuid}`;
 		console.log('[ads] [tebex] opening url', url);
-		this.ow.openUrlInDefaultBrowser(url);
+		this.externalUrl.openUrlInDefaultBrowser(url);
 	}
 
 	public async unsubscribe(planId: string) {
-		this.ow.openUrlInDefaultBrowser(`https://checkout.tebex.io/payment-history/recurring-payments`);
+		this.externalUrl.openUrlInDefaultBrowser(`https://checkout.tebex.io/payment-history/recurring-payments`);
 	}
 
 	public async getSubscriptionStatus(): Promise<CurrentPlan | null> {

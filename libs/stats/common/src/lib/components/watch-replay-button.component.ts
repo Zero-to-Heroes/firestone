@@ -13,7 +13,9 @@ import { ENABLE_IN_GAME_REPLAY } from '@firestone/shared/common/service';
 import {
 	ADS_SERVICE_TOKEN,
 	AnalyticsService,
+	EXTERNAL_URL_SERVICE_TOKEN,
 	IAdsService,
+	IExternalUrlService,
 	ILocalizationService,
 	OverwolfService,
 } from '@firestone/shared/framework/core';
@@ -120,11 +122,12 @@ export class WatchReplayButtonComponent {
 
 	constructor(
 		private readonly i18n: ILocalizationService,
-		private readonly ow: OverwolfService,
 		private readonly inGameReplayService: InGameReplayService,
 		private readonly cdr: ChangeDetectorRef,
 		private readonly analytics: AnalyticsService,
 		private readonly gameStatsLoader: GameStatsLoaderService,
+		@Optional() private readonly ow: OverwolfService,
+		@Inject(EXTERNAL_URL_SERVICE_TOKEN) private readonly externalUrl: IExternalUrlService,
 		@Optional() @Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 	) {}
 
@@ -157,7 +160,7 @@ export class WatchReplayButtonComponent {
 		event.stopPropagation();
 		this.showWatchMenu = false;
 		this.cdr.detectChanges();
-		this.ow.openUrlInDefaultBrowser(
+		this.externalUrl.openUrlInDefaultBrowser(
 			`https://replays.firestoneapp.com/?reviewId=${this.reviewId}&source=replays-list`,
 		);
 	}

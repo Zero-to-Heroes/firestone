@@ -7,11 +7,11 @@ import {
 	OnDestroy,
 } from '@angular/core';
 import { CardsHighlightFacadeService } from '@firestone/game-state';
-import { DebugService } from '@firestone/legacy/feature-shell';
 import { CurrentAppType, ScalingService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
+import { DebugService } from '../services/debug.service';
 
 @Component({
 	standalone: false,

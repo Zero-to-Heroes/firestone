@@ -1,5 +1,5 @@
 import { ElectronGameWindowService } from '@firestone/electron/common';
-import { IBattlegroundsWindowOptions, IWindowHandlerService } from '@firestone/shared/framework/core';
+import { IWindowHandlerService, IWindowOptions } from '@firestone/shared/framework/core';
 import { OverlayBrowserWindow, OverlayWindowOptions } from '@overwolf/ow-electron-packages-types';
 import { app, BrowserWindow, nativeImage, screen } from 'electron';
 import { join } from 'path';
@@ -9,6 +9,8 @@ import { OverlayService } from './overlay.service';
 
 const SETTINGS_WIDTH = 700;
 const SETTINGS_HEIGHT = 620;
+const COLLECTION_WIDTH = 1440;
+const COLLECTION_HEIGHT = 790;
 
 function getAppIconPath(): string {
 	return app.isPackaged
@@ -40,39 +42,137 @@ function setDevToolsWindowIcon(webContents: Electron.WebContents): void {
 export class ElectronWindowHandlerService implements IWindowHandlerService {
 	private settingsWindow: BrowserWindow | null = null;
 	private settingsOverlayWindow: OverlayBrowserWindow | null = null;
+	private collectionWindow: BrowserWindow | null = null;
+	private collectionOverlayWindow: OverlayBrowserWindow | null = null;
 
-	public toggleBattlegroundsWindow(_useOverlay: boolean, _options?: IBattlegroundsWindowOptions) {
+	public toggleCollectionWindow(useOverlay: boolean): void {
+		const gameWindowService = ElectronGameWindowService.getInstance();
+		const gameInfo = gameWindowService.getCurrentGameInfo();
+		const gameIsRunning = gameInfo != null;
+		const effectiveUseOverlay = useOverlay && gameIsRunning;
+
+		if (effectiveUseOverlay) {
+			// Overlay mode: toggle the overlay window
+			if (this.collectionOverlayWindow && !this.collectionOverlayWindow.window.isDestroyed()) {
+				// Window exists and is open — close it
+				this.collectionOverlayWindow.window.close();
+				this.collectionOverlayWindow = null;
+			} else {
+				// Window doesn't exist or was destroyed — show it
+				this.showCollectionWindow(useOverlay);
+			}
+		} else {
+			// Normal window mode: toggle the BrowserWindow
+			if (this.collectionWindow && !this.collectionWindow.isDestroyed()) {
+				if (this.collectionWindow.isVisible()) {
+					// Window is visible — close it
+					this.collectionWindow.close();
+				} else {
+					// Window exists but is hidden — show it
+					this.collectionWindow.show();
+					this.collectionWindow.focus();
+				}
+			} else {
+				// Window doesn't exist — create & show it
+				this.showCollectionWindow(useOverlay);
+			}
+		}
+	}
+
+	public toggleBattlegroundsWindow(_useOverlay: boolean, _options?: IWindowOptions) {
 		// To be implemented later
 		console.warn('toggleBattlegroundsWindow is not implemented');
 	}
 
 	public showCollectionWindow(useOverlay: boolean): void {
-		// To be implemented later
-		console.warn('showCollectionWindow is not implemented');
+		const gameWindowService = ElectronGameWindowService.getInstance();
+		const gameInfo = gameWindowService.getCurrentGameInfo();
+		const gameIsRunning = gameInfo != null;
+		// Overlay only when user asked for overlay AND game is running; otherwise always normal window
+		const effectiveUseOverlay = useOverlay && gameIsRunning;
+
+		if (effectiveUseOverlay) {
+			this.openCollectionAsOverlay(gameInfo!.width, gameInfo!.height);
+		} else {
+			this.openCollectionAsNormalWindow();
+		}
+	}
+	private openCollectionAsNormalWindow(): void {
+		// If we already have an overlay collection window, close it so we only have one collection window at a time
+		if (this.collectionOverlayWindow) {
+			try {
+				if (!this.collectionOverlayWindow.window.isDestroyed()) {
+					this.collectionOverlayWindow.window.close();
+				}
+			} catch (_) {}
+			this.collectionOverlayWindow = null;
+		}
+
+		if (this.collectionWindow && !this.collectionWindow.isDestroyed()) {
+			if (this.collectionWindow.isMinimized()) {
+				this.collectionWindow.restore();
+			}
+			this.collectionWindow.show();
+			this.collectionWindow.focus();
+			return;
+		}
+
+		const preloadPath = join(__dirname, 'main.preload.js');
+		const windowIcon = nativeImage.createFromPath(getAppIconPath());
+
+		this.collectionWindow = new BrowserWindow({
+			width: COLLECTION_WIDTH,
+			height: COLLECTION_HEIGHT,
+			resizable: true,
+			show: false,
+			frame: false,
+			title: 'Firestone Collection',
+			icon: windowIcon.isEmpty() ? undefined : windowIcon,
+			transparent: true,
+			webPreferences: {
+				nodeIntegration: true,
+				contextIsolation: false,
+				preload: preloadPath,
+			},
+		});
+
+		this.collectionWindow.setMenu(null);
+		this.collectionWindow.center();
+
+		this.collectionWindow.once('closed', () => {
+			this.collectionWindow = null;
+		});
+
+		this.collectionWindow.once('ready-to-show', () => {
+			this.collectionWindow?.show();
+			this.collectionWindow?.focus();
+		});
+
+		if (App.isDevelopmentMode()) {
+			setDevToolsWindowIcon(this.collectionWindow.webContents);
+			this.collectionWindow.webContents.once('did-finish-load', () => {
+				if (!this.collectionWindow?.isDestroyed() && !this.collectionWindow.webContents.isDevToolsOpened()) {
+					this.collectionWindow.webContents.openDevTools({ mode: 'detach', activate: true });
+				}
+			});
+		}
+
+		this.collectionWindow.loadURL(this.getCollectionLoadUrl()).catch((err) => {
+			console.error('[ElectronWindowHandler] Failed to load collection window:', err);
+		});
 	}
 
-	public toggleCollectionWindow(useOverlay: boolean): void {
+	private openCollectionAsOverlay(gameWidth: number, gameHeight: number): void {
 		// To be implemented later
-		console.warn('toggleCollectionWindow is not implemented');
+		console.warn('openCollectionAsOverlay is not implemented');
 	}
 
 	public openSettingsWindow(useOverlay: boolean): void {
 		const gameWindowService = ElectronGameWindowService.getInstance();
 		const gameInfo = gameWindowService.getCurrentGameInfo();
 		const gameIsRunning = gameInfo != null;
-
 		// Overlay only when user asked for overlay AND game is running; otherwise always normal window
 		const effectiveUseOverlay = useOverlay && gameIsRunning;
-		console.log('[ElectronWindowHandler] [settings] openSettingsWindow: effectiveUseOverlay', effectiveUseOverlay);
-
-		if (App.isDevelopmentMode()) {
-			console.log('[ElectronWindowHandler] openSettingsWindow:', {
-				useOverlay,
-				gameIsRunning,
-				effectiveUseOverlay,
-				settingsUrl: this.getSettingsLoadUrl(),
-			});
-		}
 
 		if (effectiveUseOverlay) {
 			this.openSettingsAsOverlay(gameInfo!.width, gameInfo!.height);
@@ -269,6 +369,25 @@ export class ElectronWindowHandlerService implements IWindowHandlerService {
 			// 3. Fallback to primary display
 			return screen.getPrimaryDisplay().scaleFactor;
 		}
+	}
+
+	private getCollectionLoadUrl(): string {
+		if (app.isPackaged) {
+			const frontendDir = join(process.resourcesPath, 'electron-frontend');
+			const frontendPath = join(frontendDir, 'index.html');
+			const fs = require('fs');
+			if (!fs.existsSync(frontendPath)) {
+				console.error('[ElectronWindowHandler] Frontend not found at:', frontendPath);
+			}
+			let normalizedPath = frontendPath.replace(/\\/g, '/');
+			normalizedPath = normalizedPath.replace(
+				/^([a-z]):/i,
+				(_: string, drive: string) => drive.toUpperCase() + ':',
+			);
+			return `file:///${normalizedPath}#/collection`;
+		}
+		// Hash is required: electron-frontend uses HashLocationStrategy, so path must be in the hash
+		return `http://localhost:${rendererAppPort}/#/collection`;
 	}
 
 	/**

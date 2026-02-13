@@ -94,6 +94,7 @@ import {
 	SecretsParserService,
 } from '@firestone/game-state';
 import { LotteryFacadeService, LotteryService, LotteryWidgetControllerService } from '@firestone/lottery/common';
+import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import {
 	CardChoicesService,
 	CardMousedOverService,
@@ -104,6 +105,7 @@ import {
 	SceneService,
 } from '@firestone/memory';
 import { MercenariesMemoryCacheService, MercenariesReferenceDataService } from '@firestone/mercenaries/common';
+import { InGameReplayService, ModsManagerService } from '@firestone/mods/common';
 import { AccountService } from '@firestone/profile/common';
 import { CustomAppearanceService, SettingsControllerService } from '@firestone/settings/services';
 import {
@@ -118,6 +120,7 @@ import {
 	LogUtilsService,
 	NotificationsService,
 	PatchesConfigService,
+	PowerLogBufferService,
 	PreferencesService,
 	PreferencesStorageService,
 	StandaloneAdService,
@@ -132,6 +135,7 @@ import {
 	CardsFacadeService,
 	CardsFacadeStandaloneService,
 	DATABASE_SERVICE_TOKEN,
+	EXTERNAL_URL_SERVICE_TOKEN,
 	HOTKEY_HANDLER_SERVICE_TOKEN,
 	IAdsService,
 	IDatabaseService,
@@ -165,6 +169,7 @@ import { BgsBattleSimulationWorkerService } from './bgs-battle-simulation-worker
 import { ElectronAngularInjector } from './electron-angular-injector';
 import { ElectronAppVersionService } from './electron-app-version.service';
 import { ElectronDiskCacheService } from './electron-disk-cache.service';
+import { ElectronExternalUrlService } from './electron-external-url.service';
 import { ElectronHotkeyHandlerFacadeService } from './electron-hotkey-handler-facade.service';
 import { ElectronHotkeyHandlerService } from './electron-hotkey-handler.service';
 import { ElectronLogFileBackendService } from './electron-log-file-backend.service';
@@ -200,6 +205,9 @@ export const buildAppInjector = () => {
 	const electronWindowHandler = new ElectronWindowHandlerService();
 	electronInjector.register(WINDOW_HANDLER_SERVICE_TOKEN, electronWindowHandler);
 	electronInjector.register(ElectronWindowHandlerService, electronWindowHandler);
+
+	const externalUrlService = new ElectronExternalUrlService();
+	electronInjector.register(EXTERNAL_URL_SERVICE_TOKEN, externalUrlService);
 
 	const gameStatus = new GameStatusService(windowManager);
 	electronInjector.register(GameStatusService, gameStatus);
@@ -337,7 +345,7 @@ export const buildAppInjector = () => {
 	electronInjector.register(LocalizationStandaloneService, i18n);
 	electronInjector.register(ILocalizationService, i18n);
 
-	const globalError = new GlobalErrorService(notifications, i18n, ow);
+	const globalError = new GlobalErrorService(notifications, i18n, gameStatus, externalUrlService);
 
 	const gameEvents = new GameEvents(
 		gameEventsElectron,
@@ -563,7 +571,15 @@ export const buildAppInjector = () => {
 	);
 	electronInjector.register(ReplayMetadataBuilderService, replayMetadataBuilder);
 
-	const replayUploadService = new ReplayUploadService(preferences, userService, replayMetadataBuilder);
+	const powerLogBuffer = new PowerLogBufferService();
+	electronInjector.register(PowerLogBufferService, powerLogBuffer);
+
+	const replayUploadService = new ReplayUploadService(
+		preferences,
+		userService,
+		replayMetadataBuilder,
+		powerLogBuffer,
+	);
 	electronInjector.register(ReplayUploadService, replayUploadService);
 
 	const gameParserService = new GameParserService(allCards);
@@ -615,6 +631,9 @@ export const buildAppInjector = () => {
 	const arenaInfo = new ArenaInfoService(memoryInspection, scene, gameStateFacade, gameModeData, gameEventsEmitter);
 	electronInjector.register(ArenaInfoService, arenaInfo);
 
+	const inGameReplayService = new InGameReplayService(windowManager);
+	electronInjector.register(InGameReplayService, inGameReplayService);
+
 	const endGameListener = new EndGameListenerService(
 		gameEventsEmitter,
 		memoryUpdates,
@@ -629,6 +648,7 @@ export const buildAppInjector = () => {
 		arenaInfo,
 		gameStateFacade,
 		gameId,
+		inGameReplayService,
 		appVersion,
 	);
 	electronInjector.register(EndGameListenerService, endGameListener);
@@ -718,6 +738,12 @@ export const buildAppInjector = () => {
 
 	const bgsMetaHeroStrategiesService = new BgsMetaHeroStrategiesService(windowManager);
 	electronInjector.register(BgsMetaHeroStrategiesService, bgsMetaHeroStrategiesService);
+
+	const mainWindowNavigationService = new MainWindowNavigationService(windowManager);
+	electronInjector.register(MainWindowNavigationService, mainWindowNavigationService);
+
+	const modsManager = new ModsManagerService(windowManager);
+	electronInjector.register(ModsManagerService, modsManager);
 
 	electronInjector.ready = true;
 	return electronInjector;

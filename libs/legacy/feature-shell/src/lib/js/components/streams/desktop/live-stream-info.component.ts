@@ -1,7 +1,11 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, Input } from '@angular/core';
 import { GameType, ReferenceCard, isBattlegrounds, normalizeHeroCardId } from '@firestone-hs/reference-data';
 import { PresenceInfo } from '@firestone-hs/twitch-presence';
-import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
+import {
+	CardsFacadeService,
+	EXTERNAL_URL_SERVICE_TOKEN,
+	IExternalUrlService,
+} from '@firestone/shared/framework/core';
 import { GameStat, toFormatType, toGameType } from '@firestone/stats/data-access';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { isMercenaries } from '@firestone/mercenaries/common';
@@ -73,10 +77,13 @@ export class LiveStreamInfoComponent {
 	twitchUrl: string;
 	watchTooltip = this.i18n.translateString('app.streams.watch-on-twitch-button');
 
-	constructor(private readonly ow: OverwolfService, private readonly i18n: LocalizationFacadeService) {}
+	constructor(
+		@Inject(EXTERNAL_URL_SERVICE_TOKEN) private readonly externalUrl: IExternalUrlService,
+		private readonly i18n: LocalizationFacadeService,
+	) {}
 
 	watchOnTwitch() {
-		this.ow.openUrlInDefaultBrowser(this.twitchUrl);
+		this.externalUrl.openUrlInDefaultBrowser(this.twitchUrl);
 	}
 }
 

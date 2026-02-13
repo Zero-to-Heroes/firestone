@@ -59,6 +59,14 @@ export const initSystemTray = async () => {
 						},
 					},
 			{ type: 'separator' },
+			// {
+			// 	label: 'Main Window',
+			// 	click: async () => {
+			// 		console.log('[SystemTray] Main Window clicked');
+			// 		const prefs = await prefService.getPreferences();
+			// 		windowHandler.showCollectionWindow(prefs.collectionUseOverlay);
+			// 	},
+			// },
 			{
 				label: 'Settings',
 				click: async () => {
