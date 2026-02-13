@@ -3950,7 +3950,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, minion, neutral, effectiveCostLess(4));
 		// Warmaster Blackhorn (CATA_720): Battlecry: Destroy all cards that cost (2) or less in both player's hands and decks.
 		case CardIds.WarmasterBlackhorn_CATA_720:
-			return and(opposingSide(inputSide), or(inDeck, inHand), effectiveCostLess(3));
+			return and(or(inDeck, inHand), effectiveCostLess(3));
 		case CardIds.WarpDrive_GDB_474:
 			return and(side(inputSide), or(inHand, inDeck), starshipExtended);
 		case CardIds.WarpGate_SC_751:
