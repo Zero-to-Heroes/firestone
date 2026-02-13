@@ -219,6 +219,7 @@ export const globalEffectCardsPlayed = [
 	CardIds.RaidTheDocks_SecureTheSuppliesToken, // Cap'n Rokara
 	CardIds.SurvivalOfTheFittest,
 	CardIds.StarlightGroove,
+	CardIds.SurrenderToMadness,
 	CardIds.SupremeDinomancy_TLC_828,
 	CardIds.TheCavernsBelow_CrystalCoreToken,
 	CardIds.TheDemonSeed_CompleteTheRitualToken, // BLightborn Tamsin
