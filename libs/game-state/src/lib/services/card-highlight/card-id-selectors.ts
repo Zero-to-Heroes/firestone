@@ -3219,6 +3219,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, deathrattle, effectiveCostLess(5));
 		case CardIds.SketchArtist_TOY_916:
 			return and(side(inputSide), inDeck, spell, shadow);
+		case CardIds.SkyClaw:
+			return and(side(inputSide), or(inDeck, inHand), mech);
 		case CardIds.Skyfin:
 			return and(side(inputSide), or(inHand, inDeck), dragon);
 		case CardIds.SkulkingGeist_CORE_ICC_701:
