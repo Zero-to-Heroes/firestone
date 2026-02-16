@@ -13,10 +13,7 @@ export const SporeHallucination: GeneratingCard & StaticGeneratingCard = {
 	cardIds: [CardIds.Hallucination],
 	publicCreator: true,
 	dynamicPool: (input: StaticGeneratingCardInput) => {
-		const opponentClassStr =
-			input.inputOptions.opponentDeckState.hero?.initialClasses?.[0] ??
-			input.inputOptions.opponentDeckState.hero?.classes?.[0] ??
-			null;
+		const opponentClassStr = input.inputOptions.opponentDeckState.getCurrentClass();
 		return filterCards(
 			SporeHallucination.cardIds[0],
 			input.allCards,
@@ -25,8 +22,7 @@ export const SporeHallucination: GeneratingCard & StaticGeneratingCard = {
 		);
 	},
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
-		const opponentClassStr =
-			input.opponentDeckState?.hero?.initialClasses?.[0] ?? input.opponentDeckState?.hero?.classes?.[0] ?? null;
+		const opponentClassStr = input.opponentDeckState?.getCurrentClass();
 		const possibleCards = filterCards(
 			SporeHallucination.cardIds[0],
 			input.allCards,
