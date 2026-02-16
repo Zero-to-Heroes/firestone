@@ -191,6 +191,7 @@ export { TimewayWanderer } from './timeway-wanderer';
 export { TinyRafaam } from './tiny-rafaam';
 export { TitanforgedTraps } from './titanforged-traps';
 export { TokiTimeTinker } from './toki-time-tinker';
+export { TomeOfIntellect } from './tome-of-intellect';
 export { Torga } from './torga';
 export { ToysnatchingGeist } from './toysnatching-geist';
 export { TrickySatyr } from './tricky-satyr';
