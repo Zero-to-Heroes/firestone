@@ -118,6 +118,7 @@ export { MurgurglePrime } from './murgurgle-prime';
 export { MurlocHolmes } from './murloc-holmes';
 export { MurlocKnight } from './murloc-knight';
 export { Murozond } from './murozond';
+export { MurozondThiefOfTime } from './murozond-thief-of-time';
 export { MuseumCurator } from './museum-curator';
 export { NaturalTalent } from './natural-talent';
 export { Nefarian } from './nefarian';
