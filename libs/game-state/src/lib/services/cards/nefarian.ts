@@ -19,7 +19,7 @@ export const Nefarian: GeneratingCard & StaticGeneratingCard = {
 		return filterCards(
 			Nefarian.cardIds[0],
 			input.allCards,
-			(c) => hasCorrectClass(c, opponentClass),
+			(c) => hasCorrectClass(c, opponentClass) && hasCorrectType(c, CardType.SPELL),
 			input.inputOptions,
 		);
 	},
