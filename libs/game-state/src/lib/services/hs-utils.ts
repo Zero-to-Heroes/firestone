@@ -428,6 +428,7 @@ export const CURRENT_EFFECTS_WHITELIST = [
 	CardIds.ExarchMaladaar_NecromanticPowerEnchantment_GDB_470e,
 	CardIds.ExpeditionSergeant_ExpeditionSergeantFutureBuffEnchantment_GDB_229e,
 	CardIds.FelfireBonfire_AmpleOfferingEnchantment_VAC_952e,
+	CardIds.FencingCoach_FencingPracticeEnchantment,
 	CardIds.FierceOutsider_IntrovertedEnchantment,
 	CardIds.FierceOutsider_IntrovertedEnchantment,
 	CardIds.FlameWaves_FlameWavesTavernBrawlEnchantment,
