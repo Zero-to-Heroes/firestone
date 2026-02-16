@@ -475,6 +475,9 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.BeastmasterLeoroxx:
 			return and(side(inputSide), or(inHand, inDeck), beast);
+		// Bestial Madness (YOG_505): "Give +1 Attack to all minions in your hand, deck, and battlefield."
+		case CardIds.BestialMadness_YOG_505:
+			return and(side(inputSide), or(inDeck, inHand, inPlay), minion);
 		case CardIds.BeckoningBicornTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), pirate);
 		case CardIds.ArchVillainRafaam_BeholdMyStuff_THD_032p:
