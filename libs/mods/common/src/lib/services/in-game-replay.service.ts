@@ -36,10 +36,7 @@ export class InGameReplayService extends AbstractFacadeService<InGameReplayServi
 	readonly status$$ = new BehaviorSubject<ReplayStatus>({ type: 'status', state: 'idle' });
 
 	/** True when a replay is loading, playing, or paused. Use this to gate uploads and tracking. */
-	readonly isReplayOngoing$$ = this.status$$.pipe(
-		map((s) => s.state !== 'idle'),
-		distinctUntilChanged(),
-	);
+	readonly isReplayOngoing$$ = new BehaviorSubject<boolean>(false);
 
 	/** Synchronous check — true when a replay is active (not idle). */
 	get isReplayOngoing(): boolean {
@@ -64,6 +61,16 @@ export class InGameReplayService extends AbstractFacadeService<InGameReplayServi
 	protected override init(): void | Promise<void> {
 		this.modsManager = AppInjector.get(ModsManagerService);
 		this.gameStatus = AppInjector.get(GameStatusService);
+
+		this.status$$
+			.pipe(
+				map((s) => s.state !== 'idle'),
+				distinctUntilChanged(),
+			)
+			.subscribe((ongoing) => {
+				console.log('[in-game-replay] isReplayOngoing', ongoing);
+				this.isReplayOngoing$$.next(ongoing);
+			});
 	}
 
 	protected override initElectronSubjects(): void {

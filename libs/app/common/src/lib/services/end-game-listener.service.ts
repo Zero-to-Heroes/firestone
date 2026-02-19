@@ -13,6 +13,7 @@ import {
 import { LotteryFacadeService } from '@firestone/lottery/common';
 import { BattlegroundsInfo, MatchInfo, MemoryInspectionService, MemoryUpdatesService } from '@firestone/memory';
 import { MercenariesMemoryCacheService } from '@firestone/mercenaries/common';
+import { InGameReplayService } from '@firestone/mods/common';
 import { GameStatusService, sanitizeDeckstring } from '@firestone/shared/common/service';
 import { deepEqual } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
@@ -51,6 +52,7 @@ export class EndGameListenerService {
 		private readonly arenaInfo: ArenaInfoService,
 		private readonly gameState: GameStateFacadeService,
 		private readonly gameUniqueId: GameUniqueIdService,
+		private readonly inGameReplayService: InGameReplayService,
 		@Inject(APP_VERSION_SERVICE_TOKEN) private readonly appVersionService: IAppVersionService,
 	) {
 		this.init();
@@ -319,6 +321,11 @@ export class EndGameListenerService {
 
 	// Load all the memory info that has to be loaded once the game is over
 	private async prepareUpload(info: UploadInfo) {
+		const isReplay = this.inGameReplayService.isReplayOngoing;
+		if (isReplay) {
+			console.log('[manastorm-bridge] replay is ongoing, skipping upload');
+			return;
+		}
 		// Get the memory info first, because parsing the XML can take some time and make the
 		// info in memory stale / unavailable
 		console.log('[manastorm-bridge] preparing to upload');
