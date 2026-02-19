@@ -6,6 +6,7 @@ import { GameStatusService } from '../game-status.service';
 import { getLogsDir, LogUtilsService } from '../log-utils.service';
 import { PreferencesService } from '../preferences.service';
 import { LOG_FILE_BACKEND, LogFileBackend } from './log-file-backend';
+import { LogListenerCacheService } from './log-listener-cache.service';
 
 @Injectable()
 export class LogListenerService {
@@ -24,7 +25,8 @@ export class LogListenerService {
 		private readonly gameStatus: GameStatusService,
 		private readonly prefs: PreferencesService,
 		private readonly logUtils: LogUtilsService,
-	) { }
+		private readonly logListenerCache: LogListenerCacheService,
+	) {}
 
 	public configure(
 		logFile: string,
@@ -40,6 +42,7 @@ export class LogListenerService {
 		if (existingLineHandler) {
 			console.log('[log-listener] [' + this.logFile + '] will read from start of file');
 		}
+		this.logListenerCache.cache[logFile] = this;
 		return this;
 	}
 
@@ -50,6 +53,7 @@ export class LogListenerService {
 
 	public start() {
 		this.configureLogListeners();
+		return this;
 	}
 
 	async configureLogListeners() {
@@ -80,6 +84,10 @@ export class LogListenerService {
 			}
 		});
 		// this.startLogRegister();
+	}
+
+	public readFileContents(): Promise<string> {
+		return this.backend.readTextFile(this.logsLocation);
 	}
 
 	private async startLogRegister() {
@@ -161,8 +169,8 @@ export class LogListenerService {
 				if (lineInfo.state === 'truncated') {
 					console.log(
 						'[log-listener] [' +
-						this.logFile +
-						'] truncated log file - HS probably just overwrote the file. Restarting listening',
+							this.logFile +
+							'] truncated log file - HS probably just overwrote the file. Restarting listening',
 					);
 					this.backend.stopFileListener(fileIdentifier);
 					this.callback('truncated');

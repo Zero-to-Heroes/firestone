@@ -58,6 +58,7 @@ export const buildGameStat = (
 		newPlayerRank: game.newPlayerRank,
 		result: replay.result,
 		reviewId: reviewId,
+		powerLogKey: metadata.game.powerLogKey,
 		scenarioId: game.scenarioId,
 		gameDurationSeconds: durationInSeconds,
 		gameDurationTurns: durationInTurns,

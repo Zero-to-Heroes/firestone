@@ -450,7 +450,7 @@ export default class App {
 		const allCards = electronInjector.get(CardsFacadeStandaloneService);
 		const gameEvents = electronInjector.get(GameEvents);
 		const logListener = electronInjector.get(LogListenerService);
-		logListener
+		const powerLog = logListener
 			.configure(
 				'Power.log',
 				(data) => gameEvents.receiveLogLine(data),

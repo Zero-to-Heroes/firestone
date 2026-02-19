@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { BgsCompAdvice } from '@firestone-hs/content-craetor-input';
 import { ReplayUploadMetadata } from '@firestone-hs/replay-metadata';
 import { Input as BgsComputeRunStatsInput } from '@firestone-hs/user-bgs-post-match-stats';
-import { PreferencesService } from '@firestone/shared/common/service';
+import { LogListenerCacheService, PreferencesService } from '@firestone/shared/common/service';
+import { Mutable, uuid } from '@firestone/shared/framework/common';
 import { UserService } from '@firestone/shared/framework/core';
 import { GameForUpload, ReplayMetadataBuilderService } from '@firestone/stats/services';
 import * as S3 from 'aws-sdk/clients/s3';
@@ -11,6 +12,7 @@ import * as JSZip from 'jszip';
 
 const BUCKET_METADATA = 'com.zerotoheroes.batch';
 const BUCKET_REPLAY = 'xml.firestoneapp.com';
+const BUCKET_POWER_LOG = 'power.firestoneapp.com';
 
 @Injectable({ providedIn: 'root' })
 export class ReplayUploadService {
@@ -18,6 +20,7 @@ export class ReplayUploadService {
 		private readonly prefs: PreferencesService,
 		private readonly userService: UserService,
 		private readonly metadataBuilder: ReplayMetadataBuilderService,
+		private readonly logListenerCache: LogListenerCacheService,
 	) {}
 
 	public async uploadGame(
@@ -103,8 +106,25 @@ export class ReplayUploadService {
 			userType: userType,
 		});
 
-		// const fileToUpload = JSON.stringify(fullMetaData) + '\n' + game.uncompressedXmlReplay;
-		// const fileToUpload = game.uncompressedXmlReplay;
+		// Now upload the full Power.log file, keeping only the last game
+		if (fullMetaData.user.isPremium) {
+			const powerLogZip = new JSZip();
+			const powerLog = await this.extractLastGameFromPowerLog(xml);
+			console.debug('[manastorm-bridge] extracted last game from power log', powerLog);
+			powerLogZip.file('power.log', powerLog);
+			const powerLogBlob: Blob = await powerLogZip.generateAsync({
+				type: 'blob',
+				compression: 'DEFLATE',
+				compressionOptions: {
+					level: 9,
+				},
+			});
+			const powerLogKey = 'premium' + '/' + uuid() + '.power.zip';
+			console.log('[manastorm-bridge] uploading power log', powerLogKey);
+			await this.uploadPowerLog(powerLogKey, powerLogBlob);
+			console.log('[manastorm-bridge] uploaded power log');
+			(fullMetaData.game as Mutable<ReplayUploadMetadata['game']>).powerLogKey = powerLogKey;
+		}
 
 		const metaDataZipFile = new JSZip();
 		metaDataZipFile.file('power.log', JSON.stringify(fullMetaData));
@@ -138,6 +158,26 @@ export class ReplayUploadService {
 			s3.makeUnauthenticatedRequest('putObject', params, async (err, data2) => {
 				if (err) {
 					console.error('[manastorm-bridge] An error during replay upload', err);
+					reject();
+				}
+				resolve();
+			});
+		});
+	}
+
+	private async uploadPowerLog(powerLogKey: string, powerLogBlob: Blob) {
+		return new Promise<void>(async (resolve, reject) => {
+			const s3 = new S3();
+			const body = await this.convertBlobToBody(powerLogBlob);
+			const params = {
+				Bucket: BUCKET_POWER_LOG,
+				Key: powerLogKey,
+				Body: body,
+				ContentType: 'application/zip',
+			};
+			s3.makeUnauthenticatedRequest('putObject', params, async (err, data2) => {
+				if (err) {
+					console.error('[manastorm-bridge] An error during power log upload', err);
 					reject();
 				}
 				resolve();
@@ -180,5 +220,62 @@ export class ReplayUploadService {
 		}
 		// In browser environment, return Blob as-is
 		return blob;
+	}
+
+	private async extractLastGameFromPowerLog(xml: string): Promise<string> {
+		const startTime = Date.now();
+		const powerLog = await this.logListenerCache.cache['Power.log'].readFileContents();
+		if (!powerLog) {
+			console.warn('[manastorm-bridge] Power log is empty');
+			return '';
+		}
+
+		const tsMatch = xml.match(/<Game ts="([^"]+)"/);
+		if (!tsMatch) {
+			console.warn('[manastorm-bridge] Could not find game timestamp in XML, returning full power log');
+			return powerLog;
+		}
+
+		const gameTimestamp = tsMatch[1];
+		const lines = powerLog.split('\n');
+		let gameStartIndex = -1;
+
+		// Search from the end for the last CREATE_GAME line matching the XML timestamp
+		for (let i = lines.length - 1; i >= 0; i--) {
+			if (lines[i].includes('GameState.DebugPrintPower() - CREATE_GAME')) {
+				const logTsMatch = lines[i].match(/^D (\d+:\d+:\d+\.\d+)/);
+				if (logTsMatch) {
+					const logTs = logTsMatch[1];
+					const minLen = Math.min(gameTimestamp.length, logTs.length);
+					if (logTs.substring(0, minLen) === gameTimestamp.substring(0, minLen)) {
+						gameStartIndex = i;
+						break;
+					}
+				}
+			}
+		}
+
+		// Fallback: use the last CREATE_GAME if no timestamp match was found
+		if (gameStartIndex === -1) {
+			console.warn(
+				'[manastorm-bridge] Could not find game timestamp in power log, falling back to last CREATE_GAME',
+				tsMatch,
+			);
+			for (let i = lines.length - 1; i >= 0; i--) {
+				if (lines[i].includes('GameState.DebugPrintPower() - CREATE_GAME')) {
+					gameStartIndex = i;
+					break;
+				}
+			}
+		}
+
+		if (gameStartIndex === -1) {
+			console.warn('[manastorm-bridge] Could not find CREATE_GAME in power log, returning full power log');
+			return powerLog;
+		}
+
+		const result = lines.slice(gameStartIndex).join('\n');
+		console.log('[manastorm-bridge] extracted last game from power log in', Date.now() - startTime, 'ms');
+		return result;
 	}
 }

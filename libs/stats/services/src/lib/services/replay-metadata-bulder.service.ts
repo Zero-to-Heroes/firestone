@@ -86,6 +86,7 @@ export class ReplayMetadataBuilderService {
 				uniqueId: game.uniqueId,
 				reviewId: game.reviewId,
 				replayKey: replayKey,
+				powerLogKey: null,
 				deckstring: game.deckstring,
 				normalizedDeckstring: !game.deckstring?.length
 					? null

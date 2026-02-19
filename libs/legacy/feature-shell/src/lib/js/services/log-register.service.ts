@@ -6,6 +6,7 @@ import {
 	Events,
 	GameStatusService,
 	LOG_FILE_BACKEND,
+	LogListenerCacheService,
 	LogListenerService,
 	LogUtilsService,
 	PreferencesService,
@@ -28,6 +29,7 @@ export class LogRegisterService {
 		private readonly prefs: PreferencesService,
 		private readonly logUtils: LogUtilsService,
 		private readonly hsLogsWatcher: HsLogsWatcherService,
+		private readonly logListenerCache: LogListenerCacheService,
 		@Inject(LOG_FILE_BACKEND) private readonly backend: LogFileBackend,
 	) {
 		// Only init the log listener once the store has been initialized. This aims at preventing
@@ -38,7 +40,7 @@ export class LogRegisterService {
 	}
 
 	private init(): void {
-		new LogListenerService(this.backend, this.gameStatus, this.prefs, this.logUtils)
+		new LogListenerService(this.backend, this.gameStatus, this.prefs, this.logUtils, this.logListenerCache)
 			.configure(
 				'Net.log',
 				(data) => this.cardsMonitor.receiveLogLine(data),
@@ -55,7 +57,7 @@ export class LogRegisterService {
 				this.events.broadcast(status, 'Net.log');
 			})
 			.start();
-		new LogListenerService(this.backend, this.gameStatus, this.prefs, this.logUtils)
+		new LogListenerService(this.backend, this.gameStatus, this.prefs, this.logUtils, this.logListenerCache)
 			.configure(
 				'Power.log',
 				(data) => this.gameEvents.receiveLogLine(data),
@@ -65,7 +67,7 @@ export class LogRegisterService {
 				console.log('[log-register] status for Power.log', status);
 			})
 			.start();
-		new LogListenerService(this.backend, this.gameStatus, this.prefs, this.logUtils)
+		new LogListenerService(this.backend, this.gameStatus, this.prefs, this.logUtils, this.logListenerCache)
 			.configure(
 				'Hearthstone.log',
 				(data) => this.hsLogsWatcher.receiveLogLine(data),

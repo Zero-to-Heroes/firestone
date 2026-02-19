@@ -112,6 +112,7 @@ import {
 	ExpertContributorsService,
 	GameStatusService,
 	LOG_FILE_BACKEND,
+	LogListenerCacheService,
 	LogListenerService,
 	LogUtilsService,
 	NotificationsService,
@@ -215,7 +216,10 @@ export const buildAppInjector = () => {
 	const logUtils = new LogUtilsService(logFileBackend, preferences, gameStatus);
 	electronInjector.register(LogUtilsService, logUtils);
 
-	const logListener = new LogListenerService(logFileBackend, gameStatus, preferences, logUtils);
+	const logListenerCache = new LogListenerCacheService();
+	electronInjector.register(LogListenerCacheService, logListenerCache);
+
+	const logListener = new LogListenerService(logFileBackend, gameStatus, preferences, logUtils, logListenerCache);
 	electronInjector.register(LogListenerService, logListener);
 
 	const localStorage = new ElectronStorageService();

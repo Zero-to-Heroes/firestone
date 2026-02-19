@@ -28,6 +28,7 @@ export class GameStat {
 	readonly opponentCardId: string;
 	readonly opponentName: string;
 	readonly reviewId: string;
+	readonly powerLogKey?: string | null;
 	readonly gameDurationSeconds: number;
 	readonly gameDurationTurns: number;
 	readonly runId: string;
