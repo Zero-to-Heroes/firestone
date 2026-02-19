@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { GameStatusService } from '@firestone/shared/common/service';
 import { AbstractFacadeService, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
 import * as JSZip from 'jszip';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, distinctUntilChanged, map } from 'rxjs';
 import { ModsManagerService } from './mods-manager.service';
 
 const WS_URL = 'ws://localhost:54321';
@@ -34,6 +34,17 @@ export type ReplayMessage = ReplayStatus | ReplayAck | ReplayError;
 @Injectable({ providedIn: 'root' })
 export class InGameReplayService extends AbstractFacadeService<InGameReplayService> {
 	readonly status$$ = new BehaviorSubject<ReplayStatus>({ type: 'status', state: 'idle' });
+
+	/** True when a replay is loading, playing, or paused. Use this to gate uploads and tracking. */
+	readonly isReplayOngoing$$ = this.status$$.pipe(
+		map((s) => s.state !== 'idle'),
+		distinctUntilChanged(),
+	);
+
+	/** Synchronous check — true when a replay is active (not idle). */
+	get isReplayOngoing(): boolean {
+		return this.status$$.value.state !== 'idle';
+	}
 
 	private ws: WebSocket | null = null;
 	private reconnectTimer: ReturnType<typeof setTimeout> | null = null;
