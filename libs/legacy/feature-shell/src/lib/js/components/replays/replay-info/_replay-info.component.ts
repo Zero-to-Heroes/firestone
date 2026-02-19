@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
-import { GameStat, StatGameModeType } from '@firestone/stats/data-access';
 import { isMercenaries } from '@firestone/mercenaries/common';
+import { GameStat, StatGameModeType } from '@firestone/stats/data-access';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';

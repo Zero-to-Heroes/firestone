@@ -104,6 +104,7 @@ import { extractTime } from './replay-info-ranked.component';
 					class=""
 					*ngIf="reviewId"
 					[reviewId]="reviewId"
+					[powerLogKey]="powerLogKey"
 					[showReplayEvent]="showReplay"
 				></watch-replay-button>
 			</div>
@@ -133,6 +134,7 @@ export class ReplayInfoBattlegroundsComponent extends AbstractSubscriptionCompon
 
 	result: string;
 	reviewId: string;
+	powerLogKey: string;
 	hasMatchStats: boolean;
 	deltaMmr: number;
 	gameTime: string;
@@ -185,6 +187,7 @@ export class ReplayInfoBattlegroundsComponent extends AbstractSubscriptionCompon
 
 		this.result = buildMatchResultText(this.replayInfo, this.i18n);
 		this.reviewId = this.replayInfo.reviewId;
+		this.powerLogKey = this.replayInfo.powerLogKey;
 
 		const isBg =
 			this.replayInfo.gameMode === 'battlegrounds' ||

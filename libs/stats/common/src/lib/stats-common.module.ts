@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { BattlegroundsCoreModule } from '@firestone/battlegrounds/core';
+import { ModsCommonModule } from '@firestone/mods/common';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
 import { SharedFrameworkCommonModule } from '@firestone/shared/framework/common';
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
@@ -22,6 +23,7 @@ const components = [ReplayInfoGeneric2Component, RankImageComponent, WatchReplay
 		SharedFrameworkCommonModule,
 		StatsDataAccessModule,
 		StatsServicesModule,
+		ModsCommonModule,
 	],
 	providers: [],
 	declarations: components,

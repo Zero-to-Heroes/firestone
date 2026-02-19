@@ -19,7 +19,7 @@ import {
 	ReviewIdService,
 } from '@firestone/game-state';
 import { MercenariesNavigationService } from '@firestone/mercenaries/common';
-import { ModsBootstrapService, ModsManagerService } from '@firestone/mods/common';
+import { InGameReplayService, ModsBootstrapService, ModsManagerService } from '@firestone/mods/common';
 import { GameStatusService } from '@firestone/shared/common/service';
 import { HotkeyFacadeService } from '@firestone/shared/framework/core';
 import { GameStatsProviderService } from '@firestone/stats/services';
@@ -93,6 +93,7 @@ export class BootstrapOtherServicesService {
 		private readonly init_OwHotkeyHandlerService: OwHotkeyHandlerService,
 		private readonly init_HotkeyFacadeService: HotkeyFacadeService,
 		private readonly init_GlobalStatsService: GlobalStatsService,
+		private readonly init_InGameReplayService: InGameReplayService,
 	) {}
 
 	public async bootstrapServices(): Promise<void> {

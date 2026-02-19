@@ -12,11 +12,13 @@
 	&.lost {
 		background: linear-gradient(90deg, rgba(255, 71, 71, 0.2) 0%, rgba(255, 71, 71, 0) 100%);
 	}
+
 	&.won {
 		background: linear-gradient(90deg, rgba(77, 255, 61, 0.2) 0%, rgba(77, 255, 61, 0) 100%);
 	}
 
 	&.ranked {
+
 		// Probably temporary, but in the meantime we need to make the ranked icons bigger
 		.player-rank {
 			width: 37px;
@@ -39,6 +41,7 @@
 	&.won {
 		background: #61ff47;
 	}
+
 	&.lost {
 		background: #ff4747;
 	}
@@ -51,6 +54,7 @@
 	&.won {
 		color: #61ff47;
 	}
+
 	&.lost {
 		color: #ff4747;
 	}
@@ -91,6 +95,7 @@
 				content: '+';
 			}
 		}
+
 		&.negative .value {
 			color: #ff4747;
 		}
@@ -121,7 +126,7 @@
 	align-items: center;
 	height: 100%;
 
-	& > div:last-child {
+	&>div:last-child {
 		border-right: none;
 	}
 }
@@ -195,6 +200,7 @@
 .short-loot,
 .short-treasure {
 	margin-right: 0;
+
 	.pick {
 		display: none;
 	}
