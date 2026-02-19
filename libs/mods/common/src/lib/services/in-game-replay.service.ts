@@ -117,6 +117,7 @@ export class InGameReplayService extends AbstractFacadeService<InGameReplayServi
 			}
 
 			console.log(`[in-game-replay] Power.log content: ${textContent.length} chars`);
+			console.debug('[in-game-replay] Power.log content:', textContent);
 
 			// Tell the mod to expect raw Power.log text in the next message
 			this.send({ action: 'startReplayRaw' });
