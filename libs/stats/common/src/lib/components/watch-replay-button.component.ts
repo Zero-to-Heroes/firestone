@@ -1,6 +1,7 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { InGameReplayService } from '@firestone/mods/common';
+import { ENABLE_IN_GAME_REPLAY } from '@firestone/shared/common/service';
 import { ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
 
 @Component({
@@ -36,7 +37,7 @@ import { ILocalizationService, OverwolfService } from '@firestone/shared/framewo
 				</svg>
 			</div>
 		</div>
-		<div class="replay in-game" *ngIf="powerLogKey" (click)="showInGame()">
+		<div class="replay in-game" *ngIf="powerLogKey && enableInGameReplay" (click)="showInGame()">
 			<div class="watch" *ngIf="showInGameLabel">{{ showInGameLabel }}</div>
 			<div
 				class="watch-icon"
@@ -63,6 +64,8 @@ export class WatchReplayButtonComponent {
 	@Input() powerLogKey: string;
 	@Input() showReplayEvent: (reviewId: string) => void;
 	@Input() showInGameEvent: (powerLogKey: string) => void;
+
+	readonly enableInGameReplay = ENABLE_IN_GAME_REPLAY;
 
 	constructor(
 		private readonly i18n: ILocalizationService,
