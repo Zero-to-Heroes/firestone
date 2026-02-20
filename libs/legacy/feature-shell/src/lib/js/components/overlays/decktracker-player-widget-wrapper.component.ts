@@ -38,7 +38,8 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 })
 export class DecktrackerPlayerWidgetWrapperComponent
 	extends AbstractWidgetWrapperComponent
-	implements AfterContentInit {
+	implements AfterContentInit
+{
 	protected defaultPositionLeftProvider = (gameWidth: number, gameHeight: number) => gameWidth - 250;
 	protected defaultPositionTopProvider = (gameWidth: number, gameHeight: number) => 10;
 	protected positionUpdater = (left: number, top: number) => this.prefs.updateTrackerPosition(left, top);
@@ -67,13 +68,7 @@ export class DecktrackerPlayerWidgetWrapperComponent
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.prefs, this.scene);
-
-		this.gameState.gameState$$
-			.pipe(
-				takeUntil(this.destroyed$),
-			)
-			.subscribe();
+		await waitForReady(this.prefs, this.scene, this.gameState, this.overlayDisplay);
 
 		const displayFromGameMode$ = this.overlayDisplay.decktrackerDisplayEventBus$$;
 		this.showWidget$ = combineLatest([

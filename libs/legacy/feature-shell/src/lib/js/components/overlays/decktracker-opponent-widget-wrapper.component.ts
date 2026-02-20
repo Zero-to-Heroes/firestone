@@ -71,7 +71,7 @@ export class DecktrackerOpponentWidgetWrapperComponent
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.scene, this.prefs, this.gameNativeStore, this.overlayDisplay);
+		await waitForReady(this.scene, this.prefs, this.gameNativeStore, this.overlayDisplay, this.gameState);
 
 		const displayFromGameMode$ = this.overlayDisplay.decktrackerDisplayEventBus$$;
 		this.showWidget$ = combineLatest([
