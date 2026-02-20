@@ -33,10 +33,9 @@ export type ReplayMessage = ReplayStatus | ReplayAck | ReplayError;
 
 @Injectable({ providedIn: 'root' })
 export class InGameReplayService extends AbstractFacadeService<InGameReplayService> {
-	readonly status$$ = new BehaviorSubject<ReplayStatus>({ type: 'status', state: 'idle' });
-
+	public status$$: BehaviorSubject<ReplayStatus>;
 	/** True when a replay is loading, playing, or paused. Use this to gate uploads and tracking. */
-	readonly isReplayOngoing$$ = new BehaviorSubject<boolean>(false);
+	public isReplayOngoing$$: BehaviorSubject<boolean>;
 
 	/** Synchronous check — true when a replay is active (not idle). */
 	get isReplayOngoing(): boolean {
@@ -51,14 +50,17 @@ export class InGameReplayService extends AbstractFacadeService<InGameReplayServi
 	private gameStatus: GameStatusService;
 
 	constructor(windowManager: WindowManagerService) {
-		super(windowManager, 'InGameReplayService', () => !!this.modsManager);
+		super(windowManager, 'InGameReplayService', () => !!this.status$$);
 	}
 
 	protected override assignSubjects(): void {
-		// Do nothing
+		this.status$$ = this.mainInstance.status$$;
+		this.isReplayOngoing$$ = this.mainInstance.isReplayOngoing$$;
 	}
 
 	protected override init(): void | Promise<void> {
+		this.status$$ = new BehaviorSubject<ReplayStatus>({ type: 'status', state: 'idle' });
+		this.isReplayOngoing$$ = new BehaviorSubject<boolean>(false);
 		this.modsManager = AppInjector.get(ModsManagerService);
 		this.gameStatus = AppInjector.get(GameStatusService);
 

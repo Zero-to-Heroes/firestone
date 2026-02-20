@@ -20,7 +20,9 @@ import {
 	getAllCounters,
 	isBattlegroundsScene,
 } from '@firestone/game-state';
+import { CurrentAppType } from '@firestone/mainwindow/common';
 import { SceneService } from '@firestone/memory';
+import { InGameReplayService } from '@firestone/mods/common';
 import { CustomAppearanceService } from '@firestone/settings/services';
 import { PreferencesService, ScalingService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
@@ -33,7 +35,6 @@ import {
 	waitForReady,
 } from '@firestone/shared/framework/core';
 import { auditTime, combineLatest, distinctUntilChanged, filter, Observable, takeUntil } from 'rxjs';
-import { CurrentAppType } from '@firestone/mainwindow/common';
 import { DebugService } from '../../services/debug.service';
 
 @Component({
@@ -56,6 +57,7 @@ import { DebugService } from '../../services/debug.service';
 			tabindex="0"
 			class="full-screen-overlays drag-boundary overlay-container-parent"
 			[activeTheme]="activeTheme$ | async"
+			*ngIf="allowOverlays$ | async"
 		>
 			<div class="game-area-container">
 				<div class="game-area">
@@ -168,6 +170,8 @@ export class FullScreenOverlaysComponent
 {
 	@ViewChild('container', { static: false }) container: ElementRef;
 
+	allowOverlays$: Observable<boolean>;
+
 	activeTheme$: Observable<CurrentAppType>;
 	useGroupedCounters$: Observable<boolean>;
 	playerCounters$: Observable<readonly CounterInstance<any>[]>;
@@ -190,13 +194,15 @@ export class FullScreenOverlaysComponent
 		private readonly i18n: ILocalizationService,
 		private readonly init_ScalingService: ScalingService,
 		private readonly init_cardsHighlight: CardsHighlightFacadeService,
+		private readonly inGameReplayService: InGameReplayService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.scene, this.gameState, this.customStyles, this.prefs);
+		await waitForReady(this.scene, this.gameState, this.customStyles, this.prefs, this.inGameReplayService);
 
+		this.allowOverlays$ = this.inGameReplayService.isReplayOngoing$$.pipe(this.mapData((isOngoing) => !isOngoing));
 		this.useGroupedCounters$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.useGroupedCounters));
 		this.activeTheme$ = combineLatest([
 			this.scene.currentScene$$,
