@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { isVersionBefore } from '@firestone/app/common';
 import { GameStatusService, Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { Mutable, sortByProperties } from '@firestone/shared/framework/common';
 import {
@@ -586,3 +585,14 @@ export interface ModData {
 	readonly alreadyInstalled: boolean;
 	readonly lastTrustedVersion: string | null;
 }
+
+const isVersionBefore = (appVersion: string, reference: string): boolean => {
+	const appValue = buildAppValue(appVersion);
+	const referenceValue = buildAppValue(reference);
+	return appValue < referenceValue;
+};
+
+const buildAppValue = (appVersion: string): number => {
+	const [major, minor, patch] = appVersion.split('.').map((info) => parseInt(info));
+	return 1000 * major + 100 * minor + patch;
+};
