@@ -131,6 +131,8 @@ export class Preferences implements IPreferences {
 	readonly turnTimerWidgetWidth: number = 175;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly turnTimerWidgetPosition: { left: number; top: number };
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly inGameReplayWidgetPosition: { left: number; top: number };
 
 	readonly achievementsFullEnabled = false;
 	readonly achievementsEnabled2 = false;

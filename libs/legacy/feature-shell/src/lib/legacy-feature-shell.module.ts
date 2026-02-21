@@ -220,6 +220,8 @@ import {
 import { SecretsHelperWidgetWrapperComponent } from './js/components/overlays/secrets-helper-widget-wrapper.component';
 import { CurrentSessionBgsBoardTooltipComponent } from './js/components/overlays/session/current-session-bgs-board-tooltip.component';
 import { CurrentSessionWidgetComponent } from './js/components/overlays/session/current-session-widget.component';
+import { InGameReplayWidgetWrapperComponent } from './js/components/overlays/replay/in-game-replay-widget-wrapper.component';
+import { InGameReplayWidgetComponent } from './js/components/overlays/replay/in-game-replay-widget.component';
 import { TurnTimerWidgetWrapperComponent } from './js/components/overlays/turn-timer-widget-wrapper.component';
 import {
 	TurnTimerPlayerComponent,
@@ -930,6 +932,7 @@ try {
 		CurrentSessionWidgetComponent,
 		TurnTimerWidgetComponent,
 		TurnTimerPlayerComponent,
+		InGameReplayWidgetComponent,
 
 		GenericCountersComponent,
 
@@ -1179,6 +1182,7 @@ try {
 		CurrentSessionWidgetWrapperComponent,
 		ArenaCurrentSessionWidgetWrapperComponent,
 		TurnTimerWidgetWrapperComponent,
+		InGameReplayWidgetWrapperComponent,
 		MinionOnBoardOverlayComponent,
 		HeroPowerOverlayComponent,
 		QuestsWidgetViewComponent,

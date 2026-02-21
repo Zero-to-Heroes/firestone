@@ -287,6 +287,11 @@ export class InGameReplayService extends AbstractFacadeService<InGameReplayServi
 		this.send({ action: 'setSpeed', speed });
 	}
 
+	async playAgain(): Promise<void> {
+		await this.ensureConnected();
+		this.send({ action: 'playAgain' });
+	}
+
 	async leave(): Promise<void> {
 		await this.ensureConnected();
 		this.send({ action: 'leave' });

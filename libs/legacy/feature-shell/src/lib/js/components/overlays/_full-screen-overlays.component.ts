@@ -52,6 +52,7 @@ import { DebugService } from '../../services/debug.service';
 		'./_full-screen-overlays.component.scss',
 	],
 	template: `
+		<in-game-replay-widget-wrapper></in-game-replay-widget-wrapper>
 		<div
 			id="container"
 			tabindex="0"
