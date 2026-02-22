@@ -367,63 +367,64 @@ export class TwitchAuthService {
 		const httpHeaders: HttpHeaders = new HttpHeaders().set('Authorization', `Bearer ${prefs.twitchAccessToken}`);
 		// console.debug('[twitch-auth] sending event', newEvent);
 		this.postEbsOnce(newEvent, httpHeaders).subscribe({
-				next: (data: any) => {
-					// Do nothing
-					if (!this.hasLoggedInfoOnce && data.statusCode === 422) {
-						this.hasLoggedInfoOnce = true;
-						console.log('no-format', '[twitch] message', data, JSON.stringify(newEvent), newEvent);
-						console.debug(
-							'[twitch] message debug',
-							deflate(JSON.stringify(newEvent)).byteLength,
-							deflate(JSON.stringify(newEvent)).byteLength,
-							JSON.stringify(newEvent),
-						);
-						console.error(
-							'no-format',
-							'[twitch] Message sent to Twitch is too large',
-							JSON.stringify(newEvent),
-						);
-					}
-					if (data.statusCode === 422) {
-						console.debug('ERROR', 'Twitch message too large', newEvent);
-					}
-				},
-				error: (error) => {
-					console.debug('error sending message to twitch', error);
-					// Don't submit bug report for status 0 - it's usually a transient network error
-					const isStatus0 = error?.status === 0;
-					if (!this.hasLoggedInfoOnce) {
-						this.hasLoggedInfoOnce = true;
-						console.error(
-							'no-format',
-							'[twitch-auth] Could not send deck event to EBS',
-							error,
-							JSON.stringify(newEvent),
-							newEvent,
-						);
-						if (!isStatus0) {
-							this.bugReport.submitAutomatedReport({
-								type: 'twitch-ebs-error',
-								info: JSON.stringify({
-									token: prefs.twitchAccessToken,
-									error: error,
-									event: newEvent,
-								}),
-							});
-						} else {
-							console.warn('[twitch-auth] Skipping bug report for status 0 (network error)');
-						}
+			next: (data: any) => {
+				// Do nothing
+				if (!this.hasLoggedInfoOnce && data.statusCode === 422) {
+					this.hasLoggedInfoOnce = true;
+					console.log('no-format', '[twitch] message', data, JSON.stringify(newEvent), newEvent);
+					console.debug(
+						'[twitch] message debug',
+						deflate(JSON.stringify(newEvent)).byteLength,
+						deflate(JSON.stringify(newEvent)).byteLength,
+						JSON.stringify(newEvent),
+					);
+					console.error(
+						'no-format',
+						'[twitch] Message sent to Twitch is too large',
+						JSON.stringify(newEvent),
+					);
+				}
+				if (data.statusCode === 422) {
+					console.debug('ERROR', 'Twitch message too large', newEvent);
+				}
+			},
+			error: (error) => {
+				console.debug('error sending message to twitch', error);
+				const isStatus0 = error?.status === 0;
+				const isUnauthorized = error?.status === 401;
+				const skipBugReport = isStatus0 || isUnauthorized;
+				if (!this.hasLoggedInfoOnce) {
+					this.hasLoggedInfoOnce = true;
+					console.error(
+						'no-format',
+						'[twitch-auth] Could not send deck event to EBS',
+						error,
+						JSON.stringify(newEvent),
+						newEvent,
+					);
+					if (!skipBugReport) {
+						this.bugReport.submitAutomatedReport({
+							type: 'twitch-ebs-error',
+							info: JSON.stringify({
+								token: prefs.twitchAccessToken,
+								error: error,
+								event: newEvent,
+							}),
+						});
 					} else {
-						console.warn('[twitch-auth] Could not send deck event to EBS', JSON.stringify(error));
+						console.warn('[twitch-auth] Skipping bug report for transient/auth error', error?.status);
 					}
-					if (!this.hasLoggedExpiredTokenInfoOnce) {
-						if (error?.error?.text?.toLowerCase()?.includes('invalid bearer')) {
-							this.sendExpiredTwitchTokenNotification();
-							this.hasLoggedExpiredTokenInfoOnce = true;
-						}
+				} else {
+					console.warn('[twitch-auth] Could not send deck event to EBS', JSON.stringify(error));
+				}
+				if (!this.hasLoggedExpiredTokenInfoOnce) {
+					if (isUnauthorized || error?.error?.message?.toLowerCase()?.includes('invalid')) {
+						this.sendExpiredTwitchTokenNotification();
+						this.hasLoggedExpiredTokenInfoOnce = true;
 					}
-				},
-			});
+				}
+			},
+		});
 	}
 
 	/** Single EBS POST with timeout. */
