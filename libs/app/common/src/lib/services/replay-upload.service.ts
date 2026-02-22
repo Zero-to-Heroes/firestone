@@ -2,7 +2,11 @@ import { Injectable } from '@angular/core';
 import { BgsCompAdvice } from '@firestone-hs/content-craetor-input';
 import { ReplayUploadMetadata } from '@firestone-hs/replay-metadata';
 import { Input as BgsComputeRunStatsInput } from '@firestone-hs/user-bgs-post-match-stats';
-import { LogListenerCacheService, PreferencesService } from '@firestone/shared/common/service';
+import {
+	ENABLE_IN_GAME_REPLAY_FOR_ALL,
+	LogListenerCacheService,
+	PreferencesService,
+} from '@firestone/shared/common/service';
 import { Mutable, uuid } from '@firestone/shared/framework/common';
 import { UserService } from '@firestone/shared/framework/core';
 import { GameForUpload, ReplayMetadataBuilderService } from '@firestone/stats/services';
@@ -107,7 +111,7 @@ export class ReplayUploadService {
 		});
 
 		// Now upload the full Power.log file, keeping only the last game
-		if (fullMetaData.user.isPremium) {
+		if (fullMetaData.user.isPremium || ENABLE_IN_GAME_REPLAY_FOR_ALL) {
 			const powerLogZip = new JSZip();
 			const powerLog = await this.extractLastGameFromPowerLog(xml);
 			console.debug('[manastorm-bridge] extracted last game from power log', powerLog);
@@ -119,7 +123,7 @@ export class ReplayUploadService {
 					level: 9,
 				},
 			});
-			const powerLogKey = 'premium' + '/' + uuid() + '.power.zip';
+			const powerLogKey = userType + '/' + uuid() + '.power.zip';
 			console.log('[manastorm-bridge] uploading power log', powerLogKey);
 			await this.uploadPowerLog(powerLogKey, powerLogBlob);
 			console.log('[manastorm-bridge] uploaded power log');

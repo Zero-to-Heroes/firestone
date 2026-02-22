@@ -11,7 +11,6 @@
 	align-items: center;
 	flex-grow: 0;
 	justify-content: flex-end;
-	// margin-left: auto;
 
 	.watch {
 		margin-right: 10px;
@@ -25,10 +24,14 @@
 }
 
 .online,
-.in-game {
+.in-game-container {
 	margin-left: 10px;
 	padding-left: 10px;
 	border-left: 1px solid var(--default-text-color);
+}
+
+.in-game-container {
+	position: relative;
 }
 
 .watch-icon {
@@ -44,5 +47,38 @@
 
 	svg {
 		fill: transparent;
+	}
+}
+
+.in-game-error {
+	position: absolute;
+	top: calc(100% + 6px);
+	right: 0;
+	background: #4a1c1c;
+	border: 1px solid #8b3a3a;
+	border-radius: 4px;
+	padding: 6px 10px;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	white-space: nowrap;
+	z-index: 100;
+	cursor: pointer;
+	filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.5));
+
+	.error-text {
+		color: #e8a0a0;
+		font-size: 12px;
+		line-height: 16px;
+	}
+
+	.close-icon {
+		color: #e8a0a0;
+		font-size: 10px;
+		opacity: 0.7;
+
+		&:hover {
+			opacity: 1;
+		}
 	}
 }

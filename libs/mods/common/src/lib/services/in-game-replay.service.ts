@@ -105,6 +105,7 @@ export class InGameReplayService extends AbstractFacadeService<InGameReplayServi
 
 		const mods = this.modsManager.modsData$$.value;
 		const replayMod = mods?.find((m) => m.AssemblyName === 'com.firestoneapp.mods.bepinex.ReplayViewer');
+		console.log('[in-game-replay] replayMod', replayMod, mods);
 		if (!replayMod) {
 			return 'mod-not-installed';
 		}
