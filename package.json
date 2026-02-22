@@ -1,6 +1,6 @@
 {
 	"name": "firestone",
-	"version": "16.13.6",
+	"version": "16.13.7",
 	"productName": "Firestone",
 	"author": {
 		"name": "Sébastien Tromp",
@@ -13,7 +13,7 @@
 	},
 	"scripts": {
 		"ng": "nx",
-		"postinstall": "node ./decorate-angular-cli.js && echo \"// https://github.com/microsoft/TypeScript/issues/27956#issuecomment-430849185\" > ./node_modules/@overwolf/ow-cli/index.d.ts && electron-builder install-app-deps && electron-rebuild --only=better-sqlite3",
+		"postinstall": "node ./decorate-angular-cli.js && echo \"// https://github.com/microsoft/TypeScript/issues/27956#issuecomment-430849185\" > ./node_modules/@overwolf/ow-cli/index.d.ts && (electron-builder install-app-deps || echo Skipping electron-builder install-app-deps - dist not built yet) && electron-rebuild --only=better-sqlite3",
 		"clear-cache": "rm -rf node_modules/.cache/nx",
 		"c1": "=============== Overwolf app scripts =================",
 		"dev": "npm run pre-build && cross-env NODE_OPTIONS=--max-old-space-size=8192 nx build --source-map=true --configuration=development --watch",
