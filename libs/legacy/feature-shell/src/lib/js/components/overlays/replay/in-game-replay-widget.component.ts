@@ -14,30 +14,43 @@ import { waitForReady } from '@firestone/shared/framework/core';
 	selector: 'in-game-replay-widget',
 	styleUrls: ['../../../../css/component/overlays/replay/in-game-replay-widget.component.scss'],
 	template: `
-		<div class="replay-controls">
-			<img class="logo" src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/tray_icon.png" />
-
-			<div class="progress-section">
-				<div class="progress-bar">
-					<div class="progress-fill" [style.width.%]="progressPercent"></div>
-				</div>
-				<div class="status-line">{{ statusText }}</div>
-			</div>
-
-			<div class="buttons">
-				<button class="control-btn play-pause" (click)="togglePlayPause()" [attr.aria-label]="isPaused ? 'Play' : 'Pause'">
+		<div class="replay-widget" [ngClass]="{ collapsed: collapsed }">
+			<!-- Header row: always visible -->
+			<div class="header" (mousedown)="onHeaderMouseDown($event)" (click)="onHeaderClick($event)">
+				<img
+					class="logo"
+					src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/tray_icon.png"
+				/>
+				<span class="time">{{ statusText }}</span>
+				<button
+					class="control-btn play-pause"
+					(click)="togglePlayPause(); $event.stopPropagation()"
+					[attr.aria-label]="isPaused ? 'Play' : 'Pause'"
+				>
 					<span *ngIf="isPaused">&#9654;</span>
 					<span *ngIf="!isPaused">&#8214;</span>
 				</button>
+				<span class="collapse-icon">{{ collapsed ? '&#9660;' : '&#9650;' }}</span>
+			</div>
 
-				<div class="speed-group">
-					<button class="control-btn speed-btn" (click)="speedDown()" aria-label="Slow down">&#8722;</button>
-					<span class="speed-label">{{ speedLabel }}</span>
-					<button class="control-btn speed-btn" (click)="speedUp()" aria-label="Speed up">+</button>
+			<!-- Expanded body -->
+			<div class="body" *ngIf="!collapsed">
+				<div class="progress-bar">
+					<div class="progress-fill" [style.width.%]="progressPercent"></div>
 				</div>
 
-				<button class="control-btn play-again" (click)="playAgain()" aria-label="Play again">&#8634;</button>
-				<button class="control-btn leave-btn" (click)="leaveReplay()">Leave</button>
+				<div class="controls-row">
+					<div class="speed-group">
+						<button class="control-btn speed-btn" (click)="speedDown()" aria-label="Slow down">
+							&#8722;
+						</button>
+						<span class="speed-label">{{ speedLabel }}</span>
+						<button class="control-btn speed-btn" (click)="speedUp()" aria-label="Speed up">+</button>
+					</div>
+
+					<button class="control-btn icon-btn" (click)="playAgain()" aria-label="Play again">&#8634;</button>
+					<button class="control-btn text-btn" (click)="leaveReplay()">Leave</button>
+				</div>
 			</div>
 		</div>
 	`,
@@ -48,7 +61,9 @@ export class InGameReplayWidgetComponent extends AbstractSubscriptionComponent i
 	statusText = '';
 	isPaused = false;
 	speedLabel = '1.0x';
+	collapsed = false;
 	private currentSpeed = 1;
+	private mouseDownPos: { x: number; y: number } | null = null;
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
@@ -65,8 +80,26 @@ export class InGameReplayWidgetComponent extends AbstractSubscriptionComponent i
 		});
 	}
 
+	onHeaderMouseDown(event: MouseEvent): void {
+		this.mouseDownPos = { x: event.clientX, y: event.clientY };
+	}
+
+	onHeaderClick(event: MouseEvent): void {
+		if (!this.mouseDownPos) {
+			return;
+		}
+		const dx = Math.abs(event.clientX - this.mouseDownPos.x);
+		const dy = Math.abs(event.clientY - this.mouseDownPos.y);
+		this.mouseDownPos = null;
+		if (dx > 5 || dy > 5) {
+			return;
+		}
+		this.collapsed = !this.collapsed;
+	}
+
 	togglePlayPause(): void {
-		if (this.isPaused) {
+		this.isPaused = !this.isPaused;
+		if (!this.isPaused) {
 			this.replayService.resume();
 		} else {
 			this.replayService.pause();
@@ -74,11 +107,17 @@ export class InGameReplayWidgetComponent extends AbstractSubscriptionComponent i
 	}
 
 	speedDown(): void {
-		this.replayService.setSpeed(this.currentSpeed * 0.5);
+		this.applySpeed(this.currentSpeed * 0.5);
 	}
 
 	speedUp(): void {
-		this.replayService.setSpeed(this.currentSpeed * 2);
+		this.applySpeed(this.currentSpeed * 2);
+	}
+
+	private applySpeed(speed: number): void {
+		this.currentSpeed = speed;
+		this.speedLabel = `${speed.toFixed(1)}x`;
+		this.replayService.setSpeed(speed);
 	}
 
 	playAgain(): void {

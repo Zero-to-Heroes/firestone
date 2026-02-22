@@ -16,7 +16,10 @@ import { AbstractWidgetWrapperComponent } from '../_widget-wrapper.component';
 @Component({
 	standalone: false,
 	selector: 'in-game-replay-widget-wrapper',
-	styleUrls: ['../../../../css/component/overlays/decktracker-player-widget-wrapper.component.scss'],
+	styleUrls: [
+		'../../../../css/component/overlays/decktracker-player-widget-wrapper.component.scss',
+		'./in-game-replay-widget-wrapper.component.scss',
+	],
 	template: `
 		<in-game-replay-widget
 			class="widget"
@@ -33,8 +36,7 @@ import { AbstractWidgetWrapperComponent } from '../_widget-wrapper.component';
 export class InGameReplayWidgetWrapperComponent extends AbstractWidgetWrapperComponent implements AfterContentInit {
 	protected defaultPositionLeftProvider = (gameWidth: number, gameHeight: number) => gameWidth - 420;
 	protected defaultPositionTopProvider = (gameWidth: number, gameHeight: number) => 0;
-	protected positionUpdater = (left: number, top: number) =>
-		this.prefs.updateInGameReplayWidgetPosition(left, top);
+	protected positionUpdater = (left: number, top: number) => this.prefs.updateInGameReplayWidgetPosition(left, top);
 	protected positionExtractor = async (prefs: Preferences) => prefs.inGameReplayWidgetPosition;
 	protected getRect = () => this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect();
 

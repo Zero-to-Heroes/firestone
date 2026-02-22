@@ -52,112 +52,118 @@ import { DebugService } from '../../services/debug.service';
 		'./_full-screen-overlays.component.scss',
 	],
 	template: `
-		<in-game-replay-widget-wrapper></in-game-replay-widget-wrapper>
 		<div
 			id="container"
 			tabindex="0"
 			class="full-screen-overlays drag-boundary overlay-container-parent"
 			[activeTheme]="activeTheme$ | async"
-			*ngIf="allowOverlays$ | async"
 		>
-			<div class="game-area-container">
-				<div class="game-area">
-					<bgs-leaderboard-widget-wrapper></bgs-leaderboard-widget-wrapper>
-					<bgs-board-widget-wrapper></bgs-board-widget-wrapper>
-					<bgs-hero-selection-widget-wrapper></bgs-hero-selection-widget-wrapper>
-					<choosing-bgs-quest-widget-wrapper></choosing-bgs-quest-widget-wrapper>
-					<choosing-bgs-trinket-widget-wrapper></choosing-bgs-trinket-widget-wrapper>
-					<choosing-bgs-timewarped-widget-wrapper></choosing-bgs-timewarped-widget-wrapper>
+			<in-game-replay-widget-wrapper></in-game-replay-widget-wrapper>
+			<ng-container *ngIf="allowOverlays$ | async">
+				<div class="game-area-container">
+					<div class="game-area">
+						<bgs-leaderboard-widget-wrapper></bgs-leaderboard-widget-wrapper>
+						<bgs-board-widget-wrapper></bgs-board-widget-wrapper>
+						<bgs-hero-selection-widget-wrapper></bgs-hero-selection-widget-wrapper>
+						<choosing-bgs-quest-widget-wrapper></choosing-bgs-quest-widget-wrapper>
+						<choosing-bgs-trinket-widget-wrapper></choosing-bgs-trinket-widget-wrapper>
+						<choosing-bgs-timewarped-widget-wrapper></choosing-bgs-timewarped-widget-wrapper>
 
-					<constructed-board-widget-wrapper></constructed-board-widget-wrapper>
-					<constructed-mulligan-hand-widget-wrapper></constructed-mulligan-hand-widget-wrapper>
-					<choosing-card-widget-wrapper></choosing-card-widget-wrapper>
+						<constructed-board-widget-wrapper></constructed-board-widget-wrapper>
+						<constructed-mulligan-hand-widget-wrapper></constructed-mulligan-hand-widget-wrapper>
+						<choosing-card-widget-wrapper></choosing-card-widget-wrapper>
 
-					<!-- Need to implement proper mouse-over support, will add this when I get a report -->
-					<!-- <mercs-treasure-selection-widget-wrapper></mercs-treasure-selection-widget-wrapper> -->
+						<!-- Need to implement proper mouse-over support, will add this when I get a report -->
+						<!-- <mercs-treasure-selection-widget-wrapper></mercs-treasure-selection-widget-wrapper> -->
 
-					<arena-hero-selection-widget-wrapper></arena-hero-selection-widget-wrapper>
-					<arena-card-selection-widget-wrapper></arena-card-selection-widget-wrapper>
-					<arena-package-card-selection-widget-wrapper></arena-package-card-selection-widget-wrapper>
-					<arena-mulligan-widget-wrapper></arena-mulligan-widget-wrapper>
+						<arena-hero-selection-widget-wrapper></arena-hero-selection-widget-wrapper>
+						<arena-card-selection-widget-wrapper></arena-card-selection-widget-wrapper>
+						<arena-package-card-selection-widget-wrapper></arena-package-card-selection-widget-wrapper>
+						<arena-mulligan-widget-wrapper></arena-mulligan-widget-wrapper>
+					</div>
 				</div>
-			</div>
-			<!-- Global -->
-			<!-- Use different wrappers to make it easier to position each one differently -->
-			<hs-quests-widget-wrapper></hs-quests-widget-wrapper>
-			<bgs-quests-widget-wrapper></bgs-quests-widget-wrapper>
-			<!-- <mercs-quests-widget-wrapper></mercs-quests-widget-wrapper> -->
+				<!-- Global -->
+				<!-- Use different wrappers to make it easier to position each one differently -->
+				<hs-quests-widget-wrapper></hs-quests-widget-wrapper>
+				<bgs-quests-widget-wrapper></bgs-quests-widget-wrapper>
+				<!-- <mercs-quests-widget-wrapper></mercs-quests-widget-wrapper> -->
 
-			<!-- "Constructed" -->
-			<decktracker-player-widget-wrapper
-				class="focusable"
-				style="pointer-events: none;"
-				tabindex="0"
-			></decktracker-player-widget-wrapper>
-			<decktracker-opponent-widget-wrapper style="pointer-events: none;"></decktracker-opponent-widget-wrapper>
-			<secrets-helper-widget-wrapper></secrets-helper-widget-wrapper>
-			<opponent-hand-widget-wrapper></opponent-hand-widget-wrapper>
-			<turn-timer-widget-wrapper></turn-timer-widget-wrapper>
-			<constructed-mulligan-deck-widget-wrapper></constructed-mulligan-deck-widget-wrapper>
-			<constructed-decktracker-ooc-widget-wrapper></constructed-decktracker-ooc-widget-wrapper>
+				<!-- "Constructed" -->
+				<decktracker-player-widget-wrapper
+					class="focusable"
+					style="pointer-events: none;"
+					tabindex="0"
+				></decktracker-player-widget-wrapper>
+				<decktracker-opponent-widget-wrapper
+					style="pointer-events: none;"
+				></decktracker-opponent-widget-wrapper>
+				<secrets-helper-widget-wrapper></secrets-helper-widget-wrapper>
+				<opponent-hand-widget-wrapper></opponent-hand-widget-wrapper>
+				<turn-timer-widget-wrapper></turn-timer-widget-wrapper>
+				<constructed-mulligan-deck-widget-wrapper></constructed-mulligan-deck-widget-wrapper>
+				<constructed-decktracker-ooc-widget-wrapper></constructed-decktracker-ooc-widget-wrapper>
 
-			<!-- BG -->
-			<bgs-minion-tiers-widget-wrapper></bgs-minion-tiers-widget-wrapper>
-			<bgs-battle-simulation-widget-wrapper></bgs-battle-simulation-widget-wrapper>
-			<bgs-banned-tribes-widget-wrapper></bgs-banned-tribes-widget-wrapper>
-			<bgs-window-button-widget-wrapper></bgs-window-button-widget-wrapper>
-			<bgs-hero-tips-widget-wrapper></bgs-hero-tips-widget-wrapper>
-			<bgs-reconnector-widget-wrapper></bgs-reconnector-widget-wrapper>
-			<current-session-widget-wrapper></current-session-widget-wrapper>
-			<bgs-hero-overview-widget-wrapper></bgs-hero-overview-widget-wrapper>
-			<bgs-action-count-widget-wrapper></bgs-action-count-widget-wrapper>
-			<bgs-full-anomaly-widget-wrapper></bgs-full-anomaly-widget-wrapper>
+				<!-- BG -->
+				<bgs-minion-tiers-widget-wrapper></bgs-minion-tiers-widget-wrapper>
+				<bgs-battle-simulation-widget-wrapper></bgs-battle-simulation-widget-wrapper>
+				<bgs-banned-tribes-widget-wrapper></bgs-banned-tribes-widget-wrapper>
+				<bgs-window-button-widget-wrapper></bgs-window-button-widget-wrapper>
+				<bgs-hero-tips-widget-wrapper></bgs-hero-tips-widget-wrapper>
+				<bgs-reconnector-widget-wrapper></bgs-reconnector-widget-wrapper>
+				<current-session-widget-wrapper></current-session-widget-wrapper>
+				<bgs-hero-overview-widget-wrapper></bgs-hero-overview-widget-wrapper>
+				<bgs-action-count-widget-wrapper></bgs-action-count-widget-wrapper>
+				<bgs-full-anomaly-widget-wrapper></bgs-full-anomaly-widget-wrapper>
 
-			<!-- Mercs -->
-			<!-- <mercs-player-team-widget-wrapper></mercs-player-team-widget-wrapper>
-			<mercs-opponent-team-widget-wrapper></mercs-opponent-team-widget-wrapper>
-			<mercs-out-of-combat-player-team-widget-wrapper></mercs-out-of-combat-player-team-widget-wrapper>
-			<mercs-action-queue-widget-wrapper></mercs-action-queue-widget-wrapper> -->
+				<!-- Mercs -->
+				<!-- <mercs-player-team-widget-wrapper></mercs-player-team-widget-wrapper>
+				<mercs-opponent-team-widget-wrapper></mercs-opponent-team-widget-wrapper>
+				<mercs-out-of-combat-player-team-widget-wrapper></mercs-out-of-combat-player-team-widget-wrapper>
+				<mercs-action-queue-widget-wrapper></mercs-action-queue-widget-wrapper> -->
 
-			<!-- Arena -->
-			<arena-decktracker-ooc-widget-wrapper></arena-decktracker-ooc-widget-wrapper>
-			<arena-mulligan-deck-widget-wrapper></arena-mulligan-deck-widget-wrapper>
-			<arena-current-session-widget-wrapper></arena-current-session-widget-wrapper>
+				<!-- Arena -->
+				<arena-decktracker-ooc-widget-wrapper></arena-decktracker-ooc-widget-wrapper>
+				<arena-mulligan-deck-widget-wrapper></arena-mulligan-deck-widget-wrapper>
+				<arena-current-session-widget-wrapper></arena-current-session-widget-wrapper>
 
-			<player-attack-widget-wrapper></player-attack-widget-wrapper>
-			<opponent-attack-widget-wrapper></opponent-attack-widget-wrapper>
+				<player-attack-widget-wrapper></player-attack-widget-wrapper>
+				<opponent-attack-widget-wrapper></opponent-attack-widget-wrapper>
 
-			<ng-container *ngIf="(useGroupedCounters$ | async) === false">
-				<!-- Player Counters -->
-				<counters-positioner class="widget-positioner player-counters" [positionerId]="'player-counters'">
-					<counter-wrapper
-						*ngFor="let counter of playerCounters$ | async; trackBy: trackForCounter"
-						side="player"
-						[counter]="counter"
-					></counter-wrapper
-				></counters-positioner>
+				<ng-container *ngIf="(useGroupedCounters$ | async) === false">
+					<!-- Player Counters -->
+					<counters-positioner class="widget-positioner player-counters" [positionerId]="'player-counters'">
+						<counter-wrapper
+							*ngFor="let counter of playerCounters$ | async; trackBy: trackForCounter"
+							side="player"
+							[counter]="counter"
+						></counter-wrapper
+					></counters-positioner>
 
-				<!-- Opponent counters -->
-				<counters-positioner class="widget-positioner opponent-counters" [positionerId]="'opponent-counters'">
-					<counter-wrapper
-						*ngFor="let counter of opponentCounters$ | async; trackBy: trackForCounter"
-						side="opponent"
-						[counter]="counter"
-					></counter-wrapper>
-				</counters-positioner>
+					<!-- Opponent counters -->
+					<counters-positioner
+						class="widget-positioner opponent-counters"
+						[positionerId]="'opponent-counters'"
+					>
+						<counter-wrapper
+							*ngFor="let counter of opponentCounters$ | async; trackBy: trackForCounter"
+							side="opponent"
+							[counter]="counter"
+						></counter-wrapper>
+					</counters-positioner>
+				</ng-container>
+				<ng-container *ngIf="(useGroupedCounters$ | async) === true">
+					<grouped-counters-wrapper
+						class="grouped-counters"
+						[playerCounters]="playerCounters$ | async"
+						[opponentCounters]="opponentCounters$ | async"
+					></grouped-counters-wrapper>
+				</ng-container>
+
+				<player-max-resources-widget-wrapper></player-max-resources-widget-wrapper>
+				<opponent-max-resources-widget-wrapper></opponent-max-resources-widget-wrapper>
+
+				<lottery-widget-wrapper></lottery-widget-wrapper>
 			</ng-container>
-			<ng-container *ngIf="(useGroupedCounters$ | async) === true">
-				<grouped-counters-wrapper
-					class="grouped-counters"
-					[playerCounters]="playerCounters$ | async"
-					[opponentCounters]="opponentCounters$ | async"
-				></grouped-counters-wrapper>
-			</ng-container>
-
-			<player-max-resources-widget-wrapper></player-max-resources-widget-wrapper>
-			<opponent-max-resources-widget-wrapper></opponent-max-resources-widget-wrapper>
-
-			<lottery-widget-wrapper></lottery-widget-wrapper>
 
 			<notifications></notifications>
 		</div>
