@@ -4,7 +4,10 @@ import { BgsPanelId, GameStateFacadeService } from '@firestone/game-state';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import {
 	AbstractFacadeService,
-	AppInjector, IWindowHandlerService, WINDOW_HANDLER_SERVICE_TOKEN, WindowManagerService
+	AppInjector,
+	IWindowHandlerService,
+	WINDOW_HANDLER_SERVICE_TOKEN,
+	WindowManagerService,
 } from '@firestone/shared/framework/core';
 import { auditTime, BehaviorSubject, distinctUntilChanged, filter, map } from 'rxjs';
 
@@ -54,19 +57,36 @@ export class BgsInGameWindowNavigationService extends AbstractFacadeService<BgsI
 			});
 		});
 
-		this.gameState.gameState$$.pipe(
-			auditTime(1000),
-			filter(gameState => isBattlegrounds(gameState?.metadata.gameType)),
-			map(gameState => gameState.gameStarted && !gameState.gameEnded),
-			distinctUntilChanged()
-		).subscribe(async (maybeShowHeroSelectionScreen) => {
-			const prefs = await this.prefs.getPreferences();
-			if (!maybeShowHeroSelectionScreen) {
-				return;
-			}
+		this.gameState.gameState$$
+			.pipe(
+				auditTime(1000),
+				filter((gameState) => isBattlegrounds(gameState?.metadata.gameType)),
+				map((gameState) => gameState.gameStarted && !gameState.gameEnded),
+				distinctUntilChanged(),
+			)
+			.subscribe(async (maybeShowHeroSelectionScreen) => {
+				const prefs = await this.prefs.getPreferences();
+				if (!maybeShowHeroSelectionScreen) {
+					return;
+				}
 
-			this.currentPanelId$$.next('bgs-hero-selection-overview');
-			this.forcedStatus$$.next(prefs.bgsShowHeroSelectionScreen ? 'open' : null);
-		});
+				this.currentPanelId$$.next('bgs-hero-selection-overview');
+				this.forcedStatus$$.next(prefs.bgsShowHeroSelectionScreen ? 'open' : null);
+			});
+		this.gameState.gameState$$
+			.pipe(
+				auditTime(1000),
+				filter(
+					(gameState) =>
+						isBattlegrounds(gameState?.metadata.gameType) && gameState.gameStarted && !gameState.gameEnded,
+				),
+				map((gameState) => gameState.bgState.heroSelectionDone),
+				distinctUntilChanged(),
+			)
+			.subscribe(async (heroSelectionDone) => {
+				if (heroSelectionDone) {
+					this.currentPanelId$$.next('bgs-next-opponent-overview');
+				}
+			});
 	}
 }
