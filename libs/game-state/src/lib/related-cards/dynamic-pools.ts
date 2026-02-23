@@ -1355,7 +1355,6 @@ const BAN_LIST_ARENA = [
 	CardIds.StoryOfUmbra_DINO_415,
 	CardIds.TheGreatDracorex_DINO_401,
 	CardIds.Tortolla_EDR_471,
-	CardIds.WelcomeHome_TIME_EVENT_997,
 ];
 
 let uncollectibleCards: readonly ReferenceCard[] = [];
