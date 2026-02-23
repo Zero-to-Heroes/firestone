@@ -2,7 +2,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { InGameReplayService } from '@firestone/mods/common';
 import { ENABLE_IN_GAME_REPLAY } from '@firestone/shared/common/service';
-import { ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
+import { AnalyticsService, ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
 
 @Component({
 	standalone: false,
@@ -82,6 +82,7 @@ export class WatchReplayButtonComponent {
 		private readonly ow: OverwolfService,
 		private readonly inGameReplayService: InGameReplayService,
 		private readonly cdr: ChangeDetectorRef,
+		private readonly analytics: AnalyticsService,
 	) {}
 
 	showReplay() {
@@ -101,7 +102,10 @@ export class WatchReplayButtonComponent {
 		if (result !== 'started') {
 			this.inGameError = this.i18n.translateString(`app.replays.in-game.error.${result}`);
 			this.errorTimeout = setTimeout(() => this.dismissError(), 5000);
+			this.analytics.trackEvent('replay-in-game-error', { error: result as string });
 			this.cdr.detectChanges();
+		} else {
+			this.analytics.trackEvent('replay-in-game-started');
 		}
 	}
 
