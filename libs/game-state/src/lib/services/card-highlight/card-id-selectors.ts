@@ -1179,6 +1179,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), dragon);
 		case CardIds.DragonGolem_WW_822:
 			return and(side(inputSide), or(inHand, inDeck), dragon);
+		case CardIds.Dragonhatcher:
+			return and(side(inputSide), inDeck, dragon);
 		case CardIds.DragonsFury:
 			return and(side(inputSide), inDeck, spell);
 		case CardIds.DragonscaleArmaments_EDR_251:
