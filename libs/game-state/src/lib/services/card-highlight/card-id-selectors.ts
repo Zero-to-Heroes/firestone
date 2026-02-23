@@ -529,7 +529,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), undead);
 		case CardIds.BlessingOfTheWolf_EDR_850p:
 			return and(side(inputSide), or(inDeck, inHand), beast);
-			// Blindeye Sharpshooter: After you play a Naga, deal 2 damage to a random enemy and draw a spell. (Then switch!)2After you cast a spell, deal 2 damage to a random enemy and...
+			// Blindeye Sharpshooter: After you play a Naga, deal 2 damage to a random enemy and draw a spell. (Then switch!) / After you cast a spell, deal 2 damage to a random enemy and draw a Naga.
 		case CardIds.BlindeyeSharpshooter_WW_402:
 			return highlightConditions(
 				and(side(inputSide), or(inDeck, inHand), naga),
@@ -1519,7 +1519,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, beast);
 		case CardIds.Pelagos_CORE_REV_250:
 		case CardIds.Pelagos_REV_250:
-			// Pelagos: {0} {1} {2} {3}
+			// Pelagos: After you cast a spell on a minion, set its stats to the highest stat.
 		case CardIds.Pelagos_REV_781:
 			return and(side(inputSide), or(inHand, inDeck), spellExtended, canTargetFriendlyCharacter);
 		case CardIds.PerennialSerpent_TIME_022:
@@ -2584,7 +2584,7 @@ export const cardIdSelector = (
 				and(side(inputSide), or(inHand, inDeck), minion, effectiveCostEqual(1)),
 				and(side(inputSide), or(inHand, inDeck), spellExtended, effectiveCostEqual(1)),
 			);
-		// Nordrassil Druid (CORE_CS3_012 / CS3_012): Battlecry: The next spellExtended you cast this turn costs (3) less.
+		// Nordrassil Druid (CORE_CS3_012 / CS3_012): Battlecry: The next spell you cast this turn costs (3) less.
 		case CardIds.NordrassilDruid:
 			// Nordrassil Druid: Battlecry: The next spell you cast this turn costs (3) less.
 		case CardIds.NordrassilDruidLegacy:
@@ -3469,7 +3469,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), dragon);
 		case CardIds.SpitefulSummoner:
 			return and(side(inputSide), inDeck, spell);
-			// Spitelash Siren: After you play a Naga, refresh two Mana Crystals. (Then switch to spell!)2After you cast a spell, refresh two Mana Crystals. (Then switch to Naga!)
+			// Spitelash Siren: After you play a Naga, refresh two Mana Crystals. (Then switch!) / After you cast a spell, refresh two Mana Crystals. (Then switch!)
 		case CardIds.SpitelashSiren:
 			return highlightConditions(
 				and(side(inputSide), or(inHand, inDeck), spellExtended),
