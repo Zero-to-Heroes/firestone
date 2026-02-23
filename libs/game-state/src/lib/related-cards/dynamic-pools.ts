@@ -1194,8 +1194,8 @@ const getDynamicFilters = (
 		case CardIds.TwilightInfluence_EDR_463:
 		case CardIds.TwilightInfluence_ControllingVines_EDR_463b:
 		case CardIds.PaltryFlutterwing_TIME_058:
-			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 2);
 		case CardIds.FacelessLackey:
+			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 2);
 		case CardIds.HarbingerOfTheBlighted_EDR_781:
 		case CardIds.HiddenMeaning:
 		case CardIds.KureTheLightBeyond_GDB_442:
