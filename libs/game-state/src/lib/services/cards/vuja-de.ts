@@ -23,7 +23,8 @@ export const VujaDe: GeneratingCard & StaticGeneratingCard = {
 			input.inputOptions.deckState.spellsPlayedThisMatch
 				?.map((c) => c.cardId)
 				.filter((c) => !!c)
-				.filter((c, index, self) => self.indexOf(c) === index) ?? [];
+				.filter((c, index, self) => self.indexOf(c) === index)
+				.filter((cardId) => cardId !== VujaDe.cardIds[0]) ?? [];
 
 		// Get minions played this match
 		const uniqueMinions =
@@ -34,7 +35,8 @@ export const VujaDe: GeneratingCard & StaticGeneratingCard = {
 					const card = input.allCards.getCard(cardId);
 					return card?.type?.toUpperCase() === CardType[CardType.MINION];
 				})
-				.filter((c, index, self) => self.indexOf(c) === index) ?? [];
+				.filter((c, index, self) => self.indexOf(c) === index)
+				.filter((cardId) => cardId !== VujaDe.cardIds[0]) ?? [];
 
 		// Always show both spells and minions in the dynamic pool
 		return [...uniqueSpells, ...uniqueMinions];
@@ -47,7 +49,8 @@ export const VujaDe: GeneratingCard & StaticGeneratingCard = {
 				input.deckState.spellsPlayedThisMatch
 					?.map((c) => c.cardId)
 					.filter((c) => !!c)
-					.filter((c, index, self) => self.indexOf(c) === index) ?? [];
+					.filter((c, index, self) => self.indexOf(c) === index)
+					.filter((cardId) => cardId !== VujaDe.cardIds[0]) ?? [];
 			return {
 				cardType: CardType.SPELL,
 				possibleCards: uniqueSpells,
@@ -61,7 +64,8 @@ export const VujaDe: GeneratingCard & StaticGeneratingCard = {
 						const card = input.allCards.getCard(cardId);
 						return card?.type?.toUpperCase() === CardType[CardType.MINION];
 					})
-					.filter((c, index, self) => self.indexOf(c) === index) ?? [];
+					.filter((c, index, self) => self.indexOf(c) === index)
+					.filter((cardId) => cardId !== VujaDe.cardIds[0]) ?? [];
 			return {
 				cardType: CardType.MINION,
 				possibleCards: uniqueMinions,
