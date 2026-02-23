@@ -158,6 +158,189 @@
 	}
 }
 
+.example-boards-trigger {
+	margin-top: 2px;
+	margin-left: 5px;
+	margin-right: 5px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	.example-boards-header {
+		background: var(--color-5);
+		color: var(--color-1);
+		width: auto;
+		height: 26px;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding-left: 10px;
+		padding-right: 10px;
+		cursor: pointer;
+		border-radius: 8px;
+
+		.header-text {
+			font-size: 0.8em;
+		}
+
+		&:hover {
+			background: var(--color-4);
+		}
+
+		&.locked {
+			opacity: 0.5;
+			gap: 6px;
+
+			.premium-lock {
+				display: flex;
+				width: 14px;
+				height: 14px;
+				color: var(--default-title-color);
+				margin-left: auto;
+			}
+
+			&:hover {
+				opacity: 0.8;
+				background: var(--color-5);
+			}
+		}
+	}
+}
+
+.example-boards-popup-overlay {
+	position: fixed;
+	top: -50%;
+	left: -300%;
+	width: 500%;
+	height: 300%;
+	z-index: 1000;
+
+	.example-boards-popup {
+		position: fixed;
+		top: 0;
+		right: calc(100% + 15px);
+		max-height: 100%;
+		background: var(--color-7);
+		border: 1px solid var(--color-5);
+		border-radius: 8px;
+		width: auto;
+		display: flex;
+		flex-direction: column;
+		overflow: hidden;
+		box-shadow: -4px 4px 12px rgba(0, 0, 0, 0.5);
+
+		.popup-header {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			padding: 8px 12px;
+			background: var(--color-9);
+			flex-shrink: 0;
+
+			.popup-title {
+				color: var(--color-1);
+				font-size: 1em;
+				margin: 0;
+				white-space: nowrap;
+			}
+
+			.close-button {
+				width: 18px;
+				height: 18px;
+				color: var(--color-2);
+				background: none;
+				border: none;
+				cursor: pointer;
+				padding: 0;
+				display: flex;
+				margin-left: 12px;
+
+				&:hover {
+					color: var(--color-1);
+				}
+			}
+		}
+
+		.boards-list {
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+			padding: 8px 30px;
+			overflow-y: auto;
+
+			.example-board {
+				background: var(--color-5);
+				border-radius: 6px;
+				padding: 6px 8px;
+
+				.board-header {
+					display: flex;
+					align-items: center;
+					gap: 6px;
+					margin-bottom: 4px;
+
+					.hero-portrait {
+						width: 28px;
+						height: 28px;
+						border-radius: 50%;
+						object-fit: cover;
+						flex-shrink: 0;
+					}
+
+					.hero-name {
+						font-size: 0.8em;
+						color: var(--color-1);
+						overflow: hidden;
+						text-overflow: ellipsis;
+						white-space: nowrap;
+						max-width: 120px;
+					}
+
+					.mmr-badge {
+						display: flex;
+						align-items: center;
+						gap: 3px;
+						background: var(--color-5);
+						border-radius: 10px;
+						padding: 2px 6px;
+						font-size: 0.75em;
+						color: var(--color-1);
+						flex-shrink: 0;
+						margin-left: auto;
+
+						.mmr-value {
+							font-weight: bold;
+						}
+
+						.mmr-label {
+							opacity: 0.6;
+						}
+					}
+				}
+
+				.board-minions {
+					display: flex;
+					flex-wrap: nowrap;
+					gap: 10px;
+
+					.card-item {
+						width: 50px;
+						height: 68px;
+						flex-shrink: 0;
+
+						::ng-deep .overlay.minion_divine_shield,
+						.overlay.minion_windfury {
+							width: 150%;
+							left: -26%;
+							top: -11%;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
 .highlight-comp-button {
 	width: 26px;
 	max-width: 26px;

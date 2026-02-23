@@ -1,12 +1,30 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Input } from '@angular/core';
 import { BgsCompTip } from '@firestone-hs/content-craetor-input';
 import { GameTag, normalizeMinionCardId, Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { ExtendedBgsCompAdvice, ExtendedReferenceCard, isCardOrSubstitute } from '@firestone/battlegrounds/core';
-import { BgsBoardHighlighterService, BgsInGameCompositionsService } from '@firestone/battlegrounds/services';
+import {
+	BgsBoardHighlighterService,
+	BgsInGameCompositionsService,
+	InGameFinalBoard,
+} from '@firestone/battlegrounds/services';
 import { BgsCompositionsListMode } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
+import {
+	ADS_SERVICE_TOKEN,
+	AnalyticsService,
+	CardsFacadeService,
+	IAdsService,
+	ILocalizationService,
+} from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, Observable, startWith } from 'rxjs';
+
+interface ProcessedInGameBoard {
+	readonly mmr: number;
+	readonly heroCardId: string;
+	readonly heroName: string;
+	readonly heroImage: string;
+	readonly board: InGameFinalBoard['board'];
+}
 
 @Component({
 	standalone: false,
@@ -18,6 +36,8 @@ import { BehaviorSubject, combineLatest, Observable, startWith } from 'rxjs';
 				collapsed: collapsed$ | async,
 				displayMode: displayMode$ | async,
 				highlightedMinions: highlightedMinions$ | async,
+				exampleBoards: exampleBoards$ | async,
+				isPremium: isPremium$ | async,
 			} as value"
 		>
 			<div class="composition {{ value.displayMode ?? '' }}" [ngClass]="{ collapsed: value.collapsed }">
@@ -230,6 +250,77 @@ import { BehaviorSubject, combineLatest, Observable, startWith } from 'rxjs';
 						[leftPadding]="20"
 					></bgs-minion-item>
 				</div>
+				<div class="example-boards-trigger" *ngIf="!value.collapsed && value.exampleBoards?.length">
+					<div
+						class="header example-boards-header"
+						*ngIf="value.isPremium"
+						(click)="toggleExampleBoards($event)"
+					>
+						<div
+							class="header-text"
+							[fsTranslate]="'app.battlegrounds.compositions.tabs.example-boards-header'"
+						></div>
+					</div>
+					<div
+						class="header example-boards-header locked"
+						*ngIf="!value.isPremium"
+						(click)="goToPremium($event)"
+						[helpTooltip]="
+							'app.battlegrounds.compositions.tabs.example-boards-locked-tooltip' | fsTranslate
+						"
+					>
+						<div
+							class="header-text"
+							[fsTranslate]="'app.battlegrounds.compositions.tabs.example-boards-header'"
+						></div>
+						<span class="premium-lock" inlineSVG="assets/svg/lock.svg"></span>
+					</div>
+				</div>
+			</div>
+
+			<div
+				class="example-boards-popup-overlay"
+				*ngIf="showExampleBoards && value.isPremium && value.exampleBoards?.length"
+				(click)="toggleExampleBoards($event)"
+			>
+				<div class="example-boards-popup" (click)="$event.stopPropagation()">
+					<div class="popup-header">
+						<h3 class="popup-title">{{ name }}</h3>
+						<button
+							class="close-button"
+							(click)="toggleExampleBoards($event)"
+							inlineSVG="assets/svg/close.svg"
+						></button>
+					</div>
+					<div class="boards-list" scrollable>
+						<div class="example-board" *ngFor="let board of value.exampleBoards">
+							<div class="board-header">
+								<img
+									class="hero-portrait"
+									[src]="board.heroImage"
+									[cardTooltip]="board.heroCardId"
+									[cardTooltipBgs]="true"
+								/>
+								<span class="hero-name">{{ board.heroName }}</span>
+								<div class="mmr-badge">
+									<span class="mmr-value">{{ board.mmr | number }}</span>
+									<span class="mmr-label">MMR</span>
+								</div>
+							</div>
+							<div class="board-minions">
+								<div class="card-item" *ngFor="let entity of board.board">
+									<card-on-board
+										class="card"
+										[entity]="entity"
+										[cardTooltip]="entity.cardID"
+										[cardTooltipBgs]="true"
+									>
+									</card-on-board>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</ng-container>
 	`,
@@ -240,6 +331,10 @@ export class BgsMinionsListCompositionComponent extends AbstractSubscriptionComp
 	displayMode$: Observable<BgsCompositionsListMode>;
 	highlightedMinions$: Observable<readonly string[]>;
 	isCompHighlighted$: Observable<boolean>;
+	exampleBoards$: Observable<readonly ProcessedInGameBoard[]>;
+	isPremium$: Observable<boolean>;
+
+	showExampleBoards = false;
 
 	name: string;
 	powerLevel: string;
@@ -361,6 +456,8 @@ export class BgsMinionsListCompositionComponent extends AbstractSubscriptionComp
 		private readonly controller: BgsInGameCompositionsService,
 		private readonly highlighter: BgsBoardHighlighterService,
 		private readonly i18n: ILocalizationService,
+		private readonly analytics: AnalyticsService,
+		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 	) {
 		super(cdr);
 	}
@@ -379,8 +476,25 @@ export class BgsMinionsListCompositionComponent extends AbstractSubscriptionComp
 				return cards.every((c) => highlightedMinions.includes(c.id));
 			}),
 		);
-
-		// this.displayMode$ = this.displayMode$$.pipe(this.mapData((mode) => mode));
+		this.exampleBoards$ = combineLatest([this.controller.finalBoardsByCompId$$, this.compId$$]).pipe(
+			this.mapData(([boardsMap, compId]) => {
+				if (!compId || !boardsMap?.size) {
+					return [];
+				}
+				const boards = boardsMap.get(compId);
+				if (!boards?.length) {
+					return [];
+				}
+				return boards.map((b) => ({
+					mmr: Math.round(b.mmr / 500) * 500,
+					heroCardId: b.heroCardId,
+					heroName: this.allCards.getCard(b.heroCardId)?.name ?? b.heroCardId,
+					heroImage: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${b.heroCardId}.jpg`,
+					board: b.board,
+				}));
+			}),
+		);
+		this.isPremium$ = this.ads.enablePremiumFeatures$$.pipe(this.mapData((premium) => premium));
 	}
 
 	trackByFn(index: number, minion: ExtendedReferenceCard) {
@@ -406,6 +520,19 @@ export class BgsMinionsListCompositionComponent extends AbstractSubscriptionComp
 			...this.addonCards.map((c) => c.id),
 			...this.recommendedCards.map((c) => c.id),
 		]);
+	}
+
+	toggleExampleBoards(event: MouseEvent) {
+		event.preventDefault();
+		event.stopPropagation();
+		this.showExampleBoards = !this.showExampleBoards;
+	}
+
+	goToPremium(event: MouseEvent) {
+		event.preventDefault();
+		event.stopPropagation();
+		this.analytics.trackEvent('subscription-click', { page: 'bgs-in-game-example-boards' });
+		this.ads.goToPremium();
 	}
 
 	isIncluded(minionsOnBoardAndHand: readonly string[], minionId: string) {

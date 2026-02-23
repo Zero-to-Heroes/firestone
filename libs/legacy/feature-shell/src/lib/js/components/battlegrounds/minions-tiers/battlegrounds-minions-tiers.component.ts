@@ -9,6 +9,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { CardIds, GameTag, Race, getBuddy, getHeroPower, normalizeHeroCardId } from '@firestone-hs/reference-data';
+import { Entity } from '@firestone-hs/replay-parser';
 import {
 	BuildTierGameState,
 	BuildTierOptions,
@@ -22,7 +23,13 @@ import {
 	getActualTribes,
 	getAllCardsInGame,
 } from '@firestone/battlegrounds/core';
-import { BgsBoardHighlighterService, BgsMetaCompositionStrategiesService } from '@firestone/battlegrounds/services';
+import {
+	BattlegroundsCompsService,
+	BgsBoardHighlighterService,
+	BgsInGameCompositionsService,
+	BgsMetaCompositionStrategiesService,
+	InGameFinalBoard,
+} from '@firestone/battlegrounds/services';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { ExpertContributorsService, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, arraysEqual } from '@firestone/shared/framework/common';
@@ -110,6 +117,8 @@ export class BattlegroundsMinionsTiersOverlayComponent
 		private readonly strategies: BgsMetaCompositionStrategiesService,
 		private readonly contributors: ExpertContributorsService,
 		private readonly highlighter: BgsBoardHighlighterService,
+		private readonly compsService: BattlegroundsCompsService,
+		private readonly inGameComps: BgsInGameCompositionsService,
 	) {
 		super(cdr);
 	}
@@ -413,6 +422,39 @@ export class BattlegroundsMinionsTiersOverlayComponent
 					: [],
 			),
 		);
+
+		this.compositions$
+			.pipe(
+				filter((comps) => !!comps?.length),
+				takeUntil(this.destroyed$),
+			)
+			.subscribe(async (compositions) => {
+				const compStats = await this.compsService.loadCompStats('last-patch', 100);
+				if (!compStats?.compStats?.length) {
+					return;
+				}
+				const boardsByCompId = new Map<string, readonly InGameFinalBoard[]>();
+				for (const comp of compositions) {
+					const stat = compStats.compStats.find((s) => s.archetype === comp.compId);
+					if (!stat) {
+						continue;
+					}
+					const boards: InGameFinalBoard[] = stat.heroStats
+						.flatMap((h) =>
+							h.finalBoards.map((board) => ({
+								mmr: board.mmr,
+								heroCardId: h.heroCardId,
+								board: board.finalComp.board.map((e) => Entity.create(new Entity(), e)),
+							})),
+						)
+						.sort((a, b) => b.mmr - a.mmr)
+						.slice(0, 10);
+					if (boards.length) {
+						boardsByCompId.set(comp.compId, boards);
+					}
+				}
+				this.inGameComps.finalBoardsByCompId$$.next(boardsByCompId);
+			});
 
 		this.highlightedTribes$ = this.highlighter.highlightedTribes$$.pipe(this.mapData((info) => info));
 		this.highlightedTiers$ = this.highlighter.highlightedTiers$$.pipe(this.mapData((info) => info));
