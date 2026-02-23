@@ -59,7 +59,7 @@ export class RenferalTheMalignantCounterDefinitionV2 extends CounterDefinitionV2
 	protected override tooltip(side: 'player' | 'opponent', gameState: GameState): string {
 		const value = this[side]?.value(gameState) ?? 0;
 		return this.i18n.translateString(`counters.card-name-played.${side}`, {
-			value: value,
+			times: value,
 			cardName: this.allCards.getCard(CardIds.RenferalTheMalignant_EDR_526).name,
 		});
 	}
