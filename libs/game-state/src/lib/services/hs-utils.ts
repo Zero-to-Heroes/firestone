@@ -586,6 +586,7 @@ export const CURRENT_EFFECTS_WHITELIST = [
 	CardIds.TimelooperToki_LoopingTimeEnchantment_TIME_861e1,
 	CardIds.TogwagglesDice_TogwagglesDicePlayerEnchantment,
 	CardIds.ToTheFront_FrontlinedEnchantment,
+	CardIds.TrailMix_SugarRushEnchantment_VAC_508e,
 	CardIds.TwinbowTerrorcoil_TwinnedEnchantment,
 	CardIds.TwinbowTerrorcoil_TwinningEnchantment,
 	CardIds.Tyrande_PullOfTheMoonEnchantment_EDR_464e2,
