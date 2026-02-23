@@ -169,6 +169,7 @@ export { Skyfin } from './skyfin';
 export { SneedsOldShredder } from './sneeds-old-shredder';
 export { Solitude } from './solitude';
 export { SootSpewer } from './soot-spewer';
+export { SoulburnerVaria } from './soulburner-varia';
 export { SporeHallucination } from './spore-hallucination';
 export { Spellslinger } from './spellslinger';
 export { SpiritGuide } from './spirit-guide';
