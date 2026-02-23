@@ -533,7 +533,7 @@ export const cardIdSelector = (
 		case CardIds.BlindeyeSharpshooter_WW_402:
 			return highlightConditions(
 				and(side(inputSide), or(inDeck, inHand), naga),
-				and(side(inputSide), or(inDeck, inHand), spellExtended),
+				and(side(inputSide), or(inDeck, inHand), spell),
 			);
 		case CardIds.Blink_SC_761:
 			return and(side(inputSide), inDeck, protoss, minion);
@@ -1318,7 +1318,7 @@ export const cardIdSelector = (
 		case CardIds.EtherealOracle_GDB_310:
 			return highlightConditions(
 				and(side(inputSide), or(inHand, inDeck), spellExtended, damage),
-				and(side(inputSide), inDeck, spellExtended),
+				and(side(inputSide), inDeck, spell),
 			);
 		case CardIds.Eureka:
 			return and(side(inputSide), or(inHand, inDeck), minion);
@@ -2389,7 +2389,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), inOther, spell, hasSpellSchool, spellPlayedThisMatch);
 			// Magister Unchained: Until the end of your turn, after you cast a spell, draw a spell. Allied: Mage.
 		case CardIds.MagisterUnchainedTavernBrawlToken:
-			return and(side(inputSide), inDeck, spellExtended);
+			return and(side(inputSide), inDeck, spell);
 			// Magister's Apprentice: Your Arcane spells cost (1) less.
 		case CardIds.MagistersApprentice:
 			return and(side(inputSide), inDeck, spellExtended, arcane);
