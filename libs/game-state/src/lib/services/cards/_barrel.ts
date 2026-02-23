@@ -100,6 +100,7 @@ export { KaldoreiCultivator } from './kaldorei-cultivator';
 export { Kiljaeden } from './kiljaeden';
 export { LadyAzshara } from './lady-azshara';
 export { Lifeweaver } from './lifeweaver';
+export { LilianVoss } from './lilian-voss';
 export { LockAndLoad } from './lock-and-load';
 export { LotusAgents } from './lotus-agents';
 export { MadameLazul } from './madame-lazul';
