@@ -46,3 +46,4 @@ Thumbs.db
 .github\instructions\nx.instructions.md
 .nx
 .cursor/reviews
+node_modules/
