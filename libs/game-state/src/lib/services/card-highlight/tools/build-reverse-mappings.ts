@@ -656,6 +656,7 @@ function convertToConditionString(part: string): string | null {
 		givesArmor: 'GIVES_ARMOR',
 		starshipExtended: 'STARSHIP_EXTENDED',
 		locationExtended: 'LOCATION_EXTENDED',
+		spellExtended: 'SPELL_EXTENDED',
 		darkGift: 'DARK_GIFT',
 		imbue: 'IMBUE',
 		dredge: 'DREDGE',

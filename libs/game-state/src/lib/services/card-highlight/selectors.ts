@@ -457,7 +457,8 @@ export const cardType =
 		input.deckCard?.guessedInfo?.cardType === type;
 export const location = cardType(CardType.LOCATION);
 export const minion = cardType(CardType.MINION);
-export const spell = and(or(cardType(CardType.SPELL), hasMechanicStr('GENERATES_SPELL')), not(passive));
+export const spell = and(cardType(CardType.SPELL), not(passive));
+export const spellExtended = or(spell, and(hasMechanicStr('GENERATES_SPELL'), not(passive)));
 export const givesWeapon = hasMechanicStr('EQUIPS_WEAPON');
 export const weapon = or(cardType(CardType.WEAPON), givesWeapon);
 
