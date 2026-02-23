@@ -23,3 +23,7 @@ Once you're done, before assigning the PR to me for review, please mention @curs
 - If the card generates another card in hand, the "guessInfo" from GeneratingCard should be implemented
     - If the card text mentions a "discover", then it needs to use the "canBeDiscoveredBy" filter. If it's random, this filter should not be used, as it draws from the full pool of cards
 - If not, and the card still requires a dynamic pool (like summons a minion, so nothing generated in hand), the card should extend the StaticGeneratingCard interface
+
+### Common considerations
+
+- When you want to get teh current class, use DeckState.getCurrentClass()
