@@ -582,8 +582,6 @@ const getDynamicFilters = (
 				canBeDiscoveredByClass(c, options.currentClass);
 
 		// Random Legendaries
-		case CardIds.ArchVillainRafaam_DAL_422:
-		case CardIds.ArchVillainRafaam_CORE_DAL_422:
 		case CardIds.ChalkArtist_TOY_388:
 		case CardIds.CryofrozenChampion_TIME_613:
 		case CardIds.GoldenKobold:
