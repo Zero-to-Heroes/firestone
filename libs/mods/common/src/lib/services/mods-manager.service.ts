@@ -29,8 +29,8 @@ const BEPINEX_ZIP_INSTALL = 'https://static.zerotoheroes.com/mods/BepInEx_win_x8
 const DOORSTOP_CONFIG_URL = 'https://static.zerotoheroes.com/mods/doorstop_config.ini';
 const UNSTRIPPED_LIBS_BASE_URL = 'https://static.zerotoheroes.com/mods/unstripped_corlibs';
 const UNSTRIPPED_LIBS = ['mscorlib.dll', 'Mono.Security.dll', 'System.Core.dll', 'System.dll', 'UniTask.dll'];
-// Built in firestone-data
-const MODS_CONFIG_URL = 'https://static.zerotoheroes.com/mods/mods-config.json?v=3';
+// Built in mods-backend lambda
+const MODS_CONFIG_URL = 'https://static.zerotoheroes.com/mods/mods-config.json?v=4';
 
 const modsLocation = 'BepInEx\\plugins';
 export const configLocation = 'BepInEx\\config';
