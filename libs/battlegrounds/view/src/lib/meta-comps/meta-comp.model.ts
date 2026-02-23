@@ -24,6 +24,13 @@ export interface BgsMetaCompStatTierItem {
 	readonly addonCards: readonly BgsMetaCompCard[];
 	readonly recommendedCards: readonly BgsMetaCompCard[];
 	readonly cycleCards: readonly BgsMetaCompCard[];
+	readonly finalBoards: readonly BgsFinalBoard[];
+}
+
+export interface BgsFinalBoard {
+	readonly mmr: number;
+	readonly heroCardId: string;
+	readonly board: readonly Entity[];
 }
 
 export interface BgsMetaCompCard {

@@ -210,7 +210,8 @@ export const buildHeroStats = (
 			shouldDebug &&
 				console.debug('[bgs-2] tribeStatsToUse', tribeStatsToUse, tribesAveragePositionModifierDetails);
 
-			const placementDistribution: readonly { rank: number; percentage: number }[] = stat.placementDistribution;
+			const placementDistribution: readonly { rank: number; percentage: number }[] =
+				stat.placementDistribution as readonly { rank: number; percentage: number; totalMatches: number }[];
 			const combatWinrate = stat.combatWinrate;
 			const warbandStats = stat.warbandStats;
 

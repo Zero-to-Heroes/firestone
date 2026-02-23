@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { BgsCompAdvice } from '@firestone-hs/content-craetor-input';
 import { capitalizeFirstLetter } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
-import { BgsMetaCompCard, BgsMetaCompStatTierItem } from './meta-comp.model';
+import { BgsFinalBoard, BgsMetaCompCard, BgsMetaCompStatTierItem } from './meta-comp.model';
 
 @Component({
 	standalone: false,
@@ -168,6 +168,7 @@ export class BattlegroundsCompositionDetailsModalComponent {
 	@Input() compositionAdvice: BgsCompAdvice | null = null;
 
 	@Input() set composition(value: BgsMetaCompStatTierItem) {
+		console.debug('[debug] composition', value);
 		if (!value) return;
 
 		this.compName = value.name;
@@ -186,6 +187,7 @@ export class BattlegroundsCompositionDetailsModalComponent {
 			value.coreCards
 				?.slice(0, 3)
 				.map((card) => `https://static.zerotoheroes.com/hearthstone/cardart/tiles/${card.cardId}.png`) || [];
+		this.exampleBoards = value.finalBoards;
 	}
 
 	compName: string;
@@ -199,6 +201,7 @@ export class BattlegroundsCompositionDetailsModalComponent {
 	cycleCards: readonly BgsMetaCompCard[];
 	averagePlacement: string;
 	coreCardArts: string[];
+	exampleBoards: readonly BgsFinalBoard[];
 
 	get hasAdvice(): boolean {
 		return !!(this.compositionAdvice && this.compositionAdvice.tips?.length);

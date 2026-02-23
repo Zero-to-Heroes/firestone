@@ -8,6 +8,7 @@ import { getStandardDeviation, sortByProperties, SortCriteria } from '@firestone
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import {
 	BgsCompTier,
+	BgsFinalBoard,
 	BgsMetaCompCard,
 	BgsMetaCompStatTier,
 	BgsMetaCompStatTierItem,
@@ -53,6 +54,18 @@ export const buildCompStats = (
 					: (distribInfo?.placementDistribution?.find((p) => p.rank === 1)?.totalMatches ?? 0) /
 						gamesForFirstDistrib;
 			const firstPercent = firstForStat / allStatsFirsts;
+			const allFinalBoards: readonly BgsFinalBoard[] = s?.heroStats
+				.flatMap((h) => {
+					// console.debug('final boards', s.archetype, h.heroCardId, h.finalBoards, s, h);
+					const result = h.finalBoards.map((board) => ({
+						mmr: board.mmr,
+						heroCardId: h.heroCardId,
+						board: board.finalComp.board as readonly Entity[],
+					}));
+					return result;
+				})
+				.sort((a, b) => b.mmr - a.mmr)
+				.slice(0, 10);
 			const result: BgsMetaCompStatTierItem = {
 				compId: refInfo.compId,
 				name: i18n.translateString(`bgs-comp.${refInfo.compId}`),
@@ -70,6 +83,7 @@ export const buildCompStats = (
 					refInfo.cards.filter((c) => c.status === 'ADDON').map((c) => buildCompCard(c, allCards)) ?? [],
 				cycleCards:
 					refInfo.cards.filter((c) => c.status === 'CYCLE').map((c) => buildCompCard(c, allCards)) ?? [],
+				finalBoards: allFinalBoards,
 			};
 			return result;
 		})
