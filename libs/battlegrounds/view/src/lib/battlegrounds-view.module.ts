@@ -10,9 +10,15 @@ import { InlineSVGModule } from 'ng-inline-svg-2';
 import { BattlegroundsEmptyStateComponent } from './common/battlegrounds-empty-state.component';
 import { BgsHeroPortraitComponent } from './common/bgs-hero-portrait.component';
 import { BattlegroundsAnomaliesFilterDropdownViewComponent } from './filters/battlegrounds-anomalies-filter-dropdown-view.component';
+import { BattlegroundsCardTierFilterDropdownViewComponent } from './filters/battlegrounds-card-tier-filter-dropdown-view.component';
+import { BattlegroundsCardTurnFilterDropdownViewComponent } from './filters/battlegrounds-card-turn-filter-dropdown-view.component';
+import { BattlegroundsCardTypeFilterDropdownViewComponent } from './filters/battlegrounds-card-type-filter-dropdown-view.component';
 import { BattlegroundsRankFilterDropdownViewComponent } from './filters/battlegrounds-rank-filter-dropdown-view.component';
 import { BattlegroundsTimeFilterDropdownViewComponent } from './filters/battlegrounds-time-filter-dropdown-view.component';
 import { BattlegroundsTribesFilterDropdownViewComponent } from './filters/battlegrounds-tribes-filter-dropdown-view.component';
+import { BattlegroundsMetaStatsCardInfoComponent } from './meta-cards/battlegrounds-meta-stats-card-info.component';
+import { BattlegroundsMetaStatsCardTierComponent } from './meta-cards/battlegrounds-meta-stats-card-tier.component';
+import { BattlegroundsMetaStatsCardsViewComponent } from './meta-cards/battlegrounds-meta-stats-cards-view.component';
 import { BattlegroundsCompositionDetailsModalComponent } from './meta-comps/battlegrounds-composition-details-modal.component';
 import { BattlegroundsMetaStatsCompInfoComponent } from './meta-comps/battlegrounds-meta-stats-comps-info.component';
 import { BattlegroundsMetaStatsCompTierComponent } from './meta-comps/battlegrounds-meta-stats-comps-tier.component';
@@ -38,12 +44,6 @@ import { BgsFullAnomalyWidgetWrapperComponent } from './overlay/bgs-full-anomaly
 import { FullAnomalyComponent } from './overlay/bgs-full-anomaly.component';
 import { BattlegroundsDesktopYourStatsComponent } from './personal-stats/battlegrounds-desktop-your-stats.component';
 import { BattlegroundsPersonalStatsInfoComponent } from './personal-stats/battlegrounds-personal-stats-info.component';
-import { BattlegroundsMetaStatsCardsViewComponent } from './meta-cards/battlegrounds-meta-stats-cards-view.component';
-import { BattlegroundsMetaStatsCardTierComponent } from './meta-cards/battlegrounds-meta-stats-card-tier.component';
-import { BattlegroundsMetaStatsCardInfoComponent } from './meta-cards/battlegrounds-meta-stats-card-info.component';
-import { BattlegroundsCardTurnFilterDropdownViewComponent } from './filters/battlegrounds-card-turn-filter-dropdown-view.component';
-import { BattlegroundsCardTierFilterDropdownViewComponent } from './filters/battlegrounds-card-tier-filter-dropdown-view.component';
-import { BattlegroundsCardTypeFilterDropdownViewComponent } from './filters/battlegrounds-card-type-filter-dropdown-view.component';
 
 const components = [
 	BattlegroundsMetaStatsHeroesViewComponent,
@@ -95,11 +95,12 @@ const components = [
 		ReactiveFormsModule,
 		DragDropModule,
 
+		InlineSVGModule,
+
 		ReplayColiseumModule,
 		SharedCommonViewModule,
 		SharedFrameworkCoreModule,
 		BattlegroundsCoreModule,
-		InlineSVGModule,
 	],
 	declarations: components,
 	exports: components,

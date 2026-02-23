@@ -1,8 +1,14 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, Input } from '@angular/core';
 import { BgsCompAdvice } from '@firestone-hs/content-craetor-input';
 import { Entity } from '@firestone-hs/replay-parser';
 import { capitalizeFirstLetter } from '@firestone/shared/framework/common';
-import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
+import {
+	ADS_SERVICE_TOKEN,
+	AnalyticsService,
+	CardsFacadeService,
+	IAdsService,
+	ILocalizationService,
+} from '@firestone/shared/framework/core';
 import { BgsMetaCompCard, BgsMetaCompStatTierItem } from './meta-comp.model';
 
 export interface ProcessedFinalBoard {
@@ -34,10 +40,20 @@ export interface ProcessedFinalBoard {
 					></button>
 					<button
 						class="tab"
+						*ngIf="ads.enablePremiumFeatures$$ | async"
 						[ngClass]="{ active: selectedTab === 'boards' }"
 						(click)="selectedTab = 'boards'"
 						[fsTranslate]="'app.battlegrounds.compositions.tabs.example-boards'"
 					></button>
+					<button
+						class="tab locked"
+						*ngIf="!(ads.enablePremiumFeatures$$ | async)"
+						(click)="goToPremium()"
+						[helpTooltip]="'app.battlegrounds.compositions.tabs.example-boards-locked-tooltip' | fsTranslate"
+					>
+						<span [fsTranslate]="'app.battlegrounds.compositions.tabs.example-boards'"></span>
+						<span class="premium-lock" inlineSVG="assets/svg/lock.svg"></span>
+					</button>
 				</div>
 
 				<div class="modal-body" scrollable *ngIf="selectedTab === 'details'">
@@ -250,7 +266,7 @@ export class BattlegroundsCompositionDetailsModalComponent {
 				?.slice(0, 3)
 				.map((card) => `https://static.zerotoheroes.com/hearthstone/cardart/tiles/${card.cardId}.png`) || [];
 		this.processedBoards = (value.finalBoards ?? []).map((b) => ({
-			mmr: b.mmr,
+			mmr: Math.round(b.mmr / 500) * 500,
 			heroCardId: b.heroCardId,
 			heroName: this.allCards.getCard(b.heroCardId)?.name ?? b.heroCardId,
 			heroImage: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${b.heroCardId}.jpg`,
@@ -279,7 +295,14 @@ export class BattlegroundsCompositionDetailsModalComponent {
 	constructor(
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: ILocalizationService,
+		private readonly analytics: AnalyticsService,
+		@Inject(ADS_SERVICE_TOKEN) public readonly ads: IAdsService,
 	) {}
+
+	goToPremium() {
+		this.analytics.trackEvent('subscription-click', { page: 'bgs-comp-example-boards' });
+		this.ads.goToPremium();
+	}
 
 	closeModal() {
 		if (this.closeHandler) {

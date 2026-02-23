@@ -88,6 +88,7 @@
 
 		&:hover {
 			opacity: 1;
+			color: var(--default-title-color);
 		}
 
 		&.active {
@@ -103,6 +104,24 @@
 				height: 2px;
 				background: var(--default-title-color);
 				border-radius: 1px 1px 0 0;
+			}
+		}
+
+		&.locked {
+			display: flex;
+			align-items: center;
+			gap: 6px;
+			opacity: 0.5;
+
+			.premium-lock {
+				display: flex;
+				width: 14px;
+				height: 14px;
+				color: var(--default-title-color);
+			}
+
+			&:hover {
+				opacity: 0.8;
 			}
 		}
 	}

@@ -311,10 +311,10 @@ export class BattlegroundsMetaStatsCompsViewComponent
 
 	private updateUrlForComposition(composition: BgsMetaCompStatTierItem) {
 		const slug = this.createSlug(composition.name);
-		const newUrl = `/battlegrounds/comps/${slug}`;
-		window.history.pushState({}, '', newUrl);
-		// Track page view for composition clicks since pushState doesn't trigger router events
-		this.analytics.trackPageView(newUrl);
+		const url = new URL(window.location.href);
+		url.searchParams.set('composition', slug);
+		window.history.pushState({}, '', url.toString());
+		this.analytics.trackPageView(url.pathname + url.search);
 	}
 
 	private createSlug(text: string): string {
@@ -324,11 +324,8 @@ export class BattlegroundsMetaStatsCompsViewComponent
 			text
 				.toLowerCase()
 				.trim()
-				// Replace spaces and special characters with hyphens
 				.replace(/[\s\W-]+/g, '-')
-				// Remove leading/trailing hyphens
 				.replace(/^-+|-+$/g, '')
-				// Replace multiple consecutive hyphens with single hyphen
 				.replace(/-+/g, '-')
 		);
 	}
@@ -374,14 +371,11 @@ export class BattlegroundsMetaStatsCompsViewComponent
 	}
 
 	private updateUrlOnModalClose() {
-		// Check if we're currently on a composition-specific URL
-		const currentUrl = window.location.pathname;
-		if (currentUrl.includes('/battlegrounds/comps/') && currentUrl !== '/battlegrounds/comps') {
-			// Navigate back to the compositions list without the specific composition
-			const newUrl = '/battlegrounds/comps';
-			window.history.replaceState({}, '', newUrl);
-			// Track page view when returning to compositions list
-			this.analytics.trackPageView(newUrl);
+		const url = new URL(window.location.href);
+		if (url.searchParams.has('composition')) {
+			url.searchParams.delete('composition');
+			window.history.replaceState({}, '', url.toString());
+			this.analytics.trackPageView(url.pathname + url.search);
 		}
 	}
 
