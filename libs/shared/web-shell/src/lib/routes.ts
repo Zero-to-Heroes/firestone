@@ -12,7 +12,6 @@ export const routes: Routes = [
 	{ path: 'battlegrounds', redirectTo: '/battlegrounds/heroes', pathMatch: 'full' },
 	{ path: 'battlegrounds/heroes', component: BattlegroundsHeroesComponent },
 	{ path: 'battlegrounds/comps', component: BattlegroundsCompositionsComponent },
-	{ path: 'battlegrounds/comps/:compSlug', component: BattlegroundsCompositionsComponent },
 	{ path: 'battlegrounds/cards', component: BattlegroundsCardsComponent },
 	{ path: 'arena', redirectTo: '/arena/classes', pathMatch: 'full' },
 	{ path: 'arena/classes', component: ArenaClassesComponent },

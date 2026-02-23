@@ -94,10 +94,10 @@ export class BattlegroundsCompositionsComponent extends AbstractSubscriptionComp
 		);
 		this.lastUpdate$ = baseStats$.pipe(this.mapData((stats) => (stats ? new Date(stats.lastUpdateDate) : null)));
 
-		// Handle URL-based composition modal opening
-		this.route?.params
+		// Handle URL-based composition modal opening via ?composition= query param
+		this.route?.queryParams
 			.pipe(
-				this.mapData((params) => params['compSlug']),
+				this.mapData((params) => params['composition']),
 				distinctUntilChanged(),
 				takeUntil(this.destroyed$),
 			)
@@ -138,6 +138,6 @@ export class BattlegroundsCompositionsComponent extends AbstractSubscriptionComp
 
 	generateCompositionUrl(composition: BgsMetaCompStatTierItem): string {
 		const slug = createSlug(composition.name);
-		return `/battlegrounds/comps/${slug}`;
+		return `/battlegrounds/comps?composition=${slug}`;
 	}
 }

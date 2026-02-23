@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Inject, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, Input, Optional } from '@angular/core';
 import { BgsCompAdvice } from '@firestone-hs/content-craetor-input';
 import { Entity } from '@firestone-hs/replay-parser';
 import { capitalizeFirstLetter } from '@firestone/shared/framework/common';
@@ -40,16 +40,18 @@ export interface ProcessedFinalBoard {
 					></button>
 					<button
 						class="tab"
-						*ngIf="ads.enablePremiumFeatures$$ | async"
+						*ngIf="ads && (ads.enablePremiumFeatures$$ | async)"
 						[ngClass]="{ active: selectedTab === 'boards' }"
 						(click)="selectedTab = 'boards'"
 						[fsTranslate]="'app.battlegrounds.compositions.tabs.example-boards'"
 					></button>
 					<button
 						class="tab locked"
-						*ngIf="!(ads.enablePremiumFeatures$$ | async)"
+						*ngIf="ads && !(ads.enablePremiumFeatures$$ | async)"
 						(click)="goToPremium()"
-						[helpTooltip]="'app.battlegrounds.compositions.tabs.example-boards-locked-tooltip' | fsTranslate"
+						[helpTooltip]="
+							'app.battlegrounds.compositions.tabs.example-boards-locked-tooltip' | fsTranslate
+						"
 					>
 						<span [fsTranslate]="'app.battlegrounds.compositions.tabs.example-boards'"></span>
 						<span class="premium-lock" inlineSVG="assets/svg/lock.svg"></span>
@@ -296,12 +298,12 @@ export class BattlegroundsCompositionDetailsModalComponent {
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: ILocalizationService,
 		private readonly analytics: AnalyticsService,
-		@Inject(ADS_SERVICE_TOKEN) public readonly ads: IAdsService,
+		@Optional() @Inject(ADS_SERVICE_TOKEN) public readonly ads?: IAdsService,
 	) {}
 
 	goToPremium() {
 		this.analytics.trackEvent('subscription-click', { page: 'bgs-comp-example-boards' });
-		this.ads.goToPremium();
+		this.ads?.goToPremium();
 	}
 
 	closeModal() {
