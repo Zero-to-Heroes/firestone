@@ -212,7 +212,14 @@ export class DeckTrackerOverlayRootComponent
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.patchesConfig, this.gameState, this.prefs, this.gameStats, this.decksProvider, this.region);
+		await waitForReady(
+			this.patchesConfig,
+			this.gameState,
+			this.prefs,
+			this.gameStats,
+			this.decksProvider,
+			this.region,
+		);
 
 		this.showDeckWinrate$ = this.prefs.preferences$$.pipe(
 			this.mapData((preferences) => this.showDeckWinrateExtractor(preferences)),
@@ -269,7 +276,11 @@ export class DeckTrackerOverlayRootComponent
 		);
 		const gamesForRegion$ = combineLatest([this.gameStats.gameStats$$, this.region.region$$]).pipe(
 			filter(([gameStats, region]) => !!gameStats?.length),
-			this.mapData(([gameStats, region]) => (!region ? gameStats : gameStats.filter((s) => s.region === region))),
+			this.mapData(
+				([gameStats, region]) =>
+					// If no games for the current region, return all games
+					(!region ? gameStats : gameStats.filter((s) => s.region === region)) || gameStats,
+			),
 		);
 		const gamesForDeck$ = combineLatest([
 			this.showDeckWinrate$,
