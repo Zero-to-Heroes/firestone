@@ -1,8 +1,17 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { BgsCompAdvice } from '@firestone-hs/content-craetor-input';
+import { Entity } from '@firestone-hs/replay-parser';
 import { capitalizeFirstLetter } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
-import { BgsFinalBoard, BgsMetaCompCard, BgsMetaCompStatTierItem } from './meta-comp.model';
+import { BgsMetaCompCard, BgsMetaCompStatTierItem } from './meta-comp.model';
+
+export interface ProcessedFinalBoard {
+	readonly mmr: number;
+	readonly heroCardId: string;
+	readonly heroName: string;
+	readonly heroImage: string;
+	readonly board: readonly Entity[];
+}
 
 @Component({
 	standalone: false,
@@ -16,7 +25,22 @@ import { BgsFinalBoard, BgsMetaCompCard, BgsMetaCompStatTierItem } from './meta-
 					<button class="close-button" (click)="closeModal()" inlineSVG="assets/svg/close.svg"></button>
 				</div>
 
-				<div class="modal-body" scrollable>
+				<div class="tab-bar">
+					<button
+						class="tab"
+						[ngClass]="{ active: selectedTab === 'details' }"
+						(click)="selectedTab = 'details'"
+						[fsTranslate]="'app.battlegrounds.compositions.tabs.details'"
+					></button>
+					<button
+						class="tab"
+						[ngClass]="{ active: selectedTab === 'boards' }"
+						(click)="selectedTab = 'boards'"
+						[fsTranslate]="'app.battlegrounds.compositions.tabs.example-boards'"
+					></button>
+				</div>
+
+				<div class="modal-body" scrollable *ngIf="selectedTab === 'details'">
 					<div class="composition-overview">
 						<div class="background-cards">
 							<div class="background-image" *ngFor="let card of coreCardArts">
@@ -158,6 +182,44 @@ import { BgsFinalBoard, BgsMetaCompCard, BgsMetaCompStatTierItem } from './meta-
 						</div>
 					</div>
 				</div>
+
+				<div class="modal-body" scrollable *ngIf="selectedTab === 'boards'">
+					<div class="example-boards-section" *ngIf="processedBoards?.length; else noBoards">
+						<div class="example-board" *ngFor="let board of processedBoards">
+							<div class="board-header">
+								<div class="hero-info">
+									<img
+										class="hero-portrait"
+										[src]="board.heroImage"
+										[cardTooltip]="board.heroCardId"
+										[cardTooltipBgs]="true"
+									/>
+									<span class="hero-name">{{ board.heroName }}</span>
+								</div>
+								<div class="mmr-badge">
+									<span class="mmr-value">{{ board.mmr | number }}</span>
+									<span class="mmr-label">MMR</span>
+								</div>
+							</div>
+							<div class="board-minions">
+								<div class="card-item" *ngFor="let entity of board.board">
+									<card-on-board
+										class="card"
+										[entity]="entity"
+										[cardTooltip]="entity.cardID"
+										[cardTooltipBgs]="true"
+									>
+									</card-on-board>
+								</div>
+							</div>
+						</div>
+					</div>
+					<ng-template #noBoards>
+						<div class="no-boards-message">
+							<span [fsTranslate]="'app.battlegrounds.compositions.no-example-boards'"></span>
+						</div>
+					</ng-template>
+				</div>
 			</div>
 		</div>
 	`,
@@ -187,9 +249,16 @@ export class BattlegroundsCompositionDetailsModalComponent {
 			value.coreCards
 				?.slice(0, 3)
 				.map((card) => `https://static.zerotoheroes.com/hearthstone/cardart/tiles/${card.cardId}.png`) || [];
-		this.exampleBoards = value.finalBoards;
+		this.processedBoards = (value.finalBoards ?? []).map((b) => ({
+			mmr: b.mmr,
+			heroCardId: b.heroCardId,
+			heroName: this.allCards.getCard(b.heroCardId)?.name ?? b.heroCardId,
+			heroImage: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${b.heroCardId}.jpg`,
+			board: b.board,
+		}));
 	}
 
+	selectedTab: 'details' | 'boards' = 'details';
 	compName: string;
 	dataPoints: string;
 	firstPercent: number;
@@ -201,7 +270,7 @@ export class BattlegroundsCompositionDetailsModalComponent {
 	cycleCards: readonly BgsMetaCompCard[];
 	averagePlacement: string;
 	coreCardArts: string[];
-	exampleBoards: readonly BgsFinalBoard[];
+	processedBoards: readonly ProcessedFinalBoard[];
 
 	get hasAdvice(): boolean {
 		return !!(this.compositionAdvice && this.compositionAdvice.tips?.length);

@@ -60,7 +60,7 @@ export const buildCompStats = (
 					const result = h.finalBoards.map((board) => ({
 						mmr: board.mmr,
 						heroCardId: h.heroCardId,
-						board: board.finalComp.board as readonly Entity[],
+						board: board.finalComp.board.map((entity) => Entity.create(new Entity(), entity)),
 					}));
 					return result;
 				})
