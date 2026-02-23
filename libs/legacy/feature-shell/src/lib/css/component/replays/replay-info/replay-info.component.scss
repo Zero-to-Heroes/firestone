@@ -8,6 +8,7 @@
 	font-style: normal;
 	font-weight: normal;
 	color: var(--default-text-color);
+	overflow: visible;
 
 	&.lost {
 		background: linear-gradient(90deg, rgba(255, 71, 71, 0.2) 0%, rgba(255, 71, 71, 0) 100%);
@@ -18,7 +19,6 @@
 	}
 
 	&.ranked {
-
 		// Probably temporary, but in the meantime we need to make the ranked icons bigger
 		.player-rank {
 			width: 37px;
@@ -126,7 +126,7 @@
 	align-items: center;
 	height: 100%;
 
-	&>div:last-child {
+	& > div:last-child {
 		border-right: none;
 	}
 }
