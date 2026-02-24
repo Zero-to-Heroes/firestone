@@ -21,7 +21,6 @@ export const GorgonzormuDeliciousCheese: StaticGeneratingCard = {
 			(c) => c.cost === cheeseCost && hasCorrectType(c, CardType.MINION),
 			input.inputOptions,
 		);
-		console.debug('[debug] GorgonzormuDeliciousCheese', possibleCards);
 		return possibleCards;
 	},
 };

@@ -38,7 +38,6 @@ export const settingsDefinition = (context: SettingContext): SettingNode => {
 			context.services.account.region$$.value !== BnetRegion.REGION_CN ? modsSettings(context) : null,
 		].filter((c) => !!c) as SettingNode[],
 	};
-	console.debug('[debug] [settings-definition] root node', result);
 	return result;
 };
 

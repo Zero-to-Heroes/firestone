@@ -116,7 +116,6 @@ export class SettingsRootComponent extends AbstractSubscriptionComponent impleme
 				settingsController: this.controller,
 			},
 		};
-		console.debug('[debug] [settings-root] context', context);
 		this.uiController.setRootNode(settingsDefinition(context));
 
 		const localeSettings$ = combineLatest([

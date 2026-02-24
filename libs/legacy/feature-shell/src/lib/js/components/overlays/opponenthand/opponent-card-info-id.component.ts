@@ -137,7 +137,6 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 		gameState: GameState,
 	): void {
 		const debug = card.entityId == 139;
-		// debug && console.debug('[debug] buildInfo', card);
 		this.possibleCards = [];
 		// console.debug('[opponent-card-info-id] buildInfo', card);
 		// Keep the || to handle empty card id
@@ -218,18 +217,15 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 				validArenaPool: validArenaPool,
 			});
 			const pool = hasOverride(dynamicPool) ? (dynamicPool as { cards: readonly string[] }).cards : dynamicPool;
-			// debug && console.debug('[debug] pool', pool, dynamicPool);
 			if (!!pool?.length) {
 				this.possibleCards = [...(pool ?? [])];
 			}
 		}
 
-		// debug && console.debug('[debug] considering creator card', card?.creatorEntityId);
 		// Avoid duplicating the info in some cases, like Tidepool Pupil
 		if (!this.possibleCards?.length) {
 			if (card?.creatorEntityId) {
 				const cardImpl = cardsMapping[card?.creatorCardId];
-				// debug && console.debug('[debug] cardImpl', cardImpl);
 				if (hasGetRelatedCards(cardImpl)) {
 					const result = cardImpl.getRelatedCards(
 						card?.creatorEntityId,
@@ -237,7 +233,6 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 						gameState,
 						this.allCards,
 					);
-					// debug && console.debug('[debug] result', result);
 					if (result != null) {
 						if (Array.isArray(result) && typeof result[0] === 'string') {
 							this.possibleCards.push(...result);

@@ -27,7 +27,6 @@ import {
 	map,
 	shareReplay,
 	takeUntil,
-	tap,
 } from 'rxjs';
 import { CardTooltipPositionType } from './card-tooltip-position.type';
 
@@ -445,7 +444,6 @@ export class CardTooltipComponent
 		);
 		this.additionalInfo$ = this.additionalInfo$$.pipe(
 			filter((info) => !!info),
-			tap((info) => console.debug('[debug] additionalInfo$', info)),
 			this.mapData((info) => (isGuessedInfoEmpty(info) ? null : info)),
 		);
 

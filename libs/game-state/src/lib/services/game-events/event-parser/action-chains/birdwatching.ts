@@ -39,7 +39,6 @@ export class BirdwatchingParser implements ActionChainParser {
 			return currentState;
 		}
 
-		console.debug('[debug] birdwatching parser', attackUpdatedEvent);
 		const deckState = currentState.opponentDeck;
 		const drawnCardInHand = deckState.hand.find(
 			(c) => c.lastAffectedByEntityId === attackUpdatedEvent!.additionalData.sourceEntityId,

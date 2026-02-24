@@ -248,7 +248,6 @@ export class BattlegroundsCompositionDetailsModalComponent {
 	@Input() compositionAdvice: BgsCompAdvice | null = null;
 
 	@Input() set composition(value: BgsMetaCompStatTierItem) {
-		console.debug('[debug] composition', value);
 		if (!value) return;
 
 		this.compName = value.name;

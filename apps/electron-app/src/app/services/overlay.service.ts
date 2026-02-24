@@ -308,7 +308,6 @@ export class OverlayService extends EventEmitter {
 			});
 
 			// Show a notification
-			console.log('[debug] Showing a notification');
 			const notificationsService = AppInjector.get(NotificationsService);
 			const localizationService = AppInjector.get(ILocalizationService);
 			const title = localizationService.translateString('app.internal.startup.firestone-ready-title');
@@ -335,7 +334,6 @@ export class OverlayService extends EventEmitter {
 					</div>`,
 				notificationId: `app-ready`,
 			});
-			console.log('[debug] Notification shown');
 
 			console.log('Angular overlay window created successfully! Waiting for show/focus...');
 		} catch (error) {
