@@ -13,6 +13,7 @@ export { AmuletOfTrackingPhony } from './amulet-of-tracking-phony';
 export { AmuletOfUndying } from './amulet-of-undying';
 export { ArcaneBrilliance } from './arcane-brilliance';
 export { ArcaneKeysmith } from './arcane-keysmith';
+export { ArchVillainRafaam } from './arch-villain-rafaam';
 export { Ashamane } from './ashamane';
 export { AssemblyLine } from './assembly-line';
 export { BarakKodobane } from './barak-kodobane';
