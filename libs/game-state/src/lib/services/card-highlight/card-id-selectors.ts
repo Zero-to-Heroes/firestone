@@ -132,8 +132,8 @@ import {
 	shufflesCardIntoDeck,
 	side,
 	spell,
-	spellExtended,
 	spellDamage,
+	spellExtended,
 	spellPlayedThisMatch,
 	spellPlayedThisMatchOnFriendly,
 	spellSchool,
@@ -263,7 +263,7 @@ export const cardIdSelector = (
 				and(side(inputSide), or(inDeck, inHand), restoreHealthToMinion),
 				and(side(inputSide), or(inDeck, inHand), minion),
 			);
-			// Ancient Krakenbane: Battlecry: If you've cast three spells while holding this, deal 5 damage.
+		// Ancient Krakenbane: Battlecry: If you've cast three spells while holding this, deal 5 damage.
 		case CardIds.AncientKrakenbane:
 			return and(side(inputSide), or(inHand, inDeck), spellExtended);
 		case CardIds.AncientMysteries:
@@ -281,7 +281,7 @@ export const cardIdSelector = (
 		case CardIds.AnimatedBerserker_CORE_ICC_238:
 		case CardIds.AnimatedBerserker_ICC_238:
 			return and(side(inputSide), or(inHand, inDeck), minion);
-			// Animated Moonwell: After you cast a spell, gain Attack equal to its Cost.
+		// Animated Moonwell: After you cast a spell, gain Attack equal to its Cost.
 		case CardIds.AnimatedMoonwell_EDR_254:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
 		case CardIds.AnonymousInformant:
@@ -298,7 +298,7 @@ export const cardIdSelector = (
 		case CardIds.AquaArchivist:
 			return and(side(inputSide), inDeck, elemental);
 		case CardIds.ArcaneArtificer:
-			// Arcane Artificer: Whenever you cast a spell, gain Armor equal to its Cost.
+		// Arcane Artificer: Whenever you cast a spell, gain Armor equal to its Cost.
 		case CardIds.ArcaneArtificerCore:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
 		case CardIds.ArcaneBrilliance:
@@ -329,10 +329,10 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand, inGraveyard), demon, notInInitialDeck);
 		case CardIds.ArchmageAntonidas:
 		case CardIds.ArchmageAntonidasLegacy:
-			// Archmage Antonidas: Whenever you cast a spell, add a 'Fireball' spell to your hand.
+		// Archmage Antonidas: Whenever you cast a spell, add a 'Fireball' spell to your hand.
 		case CardIds.ArchmageAntonidas_CORE_EX1_559:
 			return and(side(inputSide), or(inHand, inDeck), spellExtended);
-			// Archmage Vargoth: At the end of your turn, cast a spell you've cast this turn (targets are random).
+		// Archmage Vargoth: At the end of your turn, cast a spell you've cast this turn (targets are random).
 		case CardIds.ArchmageVargoth:
 			return and(side(inputSide), or(inHand, inDeck), spellExtended);
 		case CardIds.ArcticArmorTavernBrawl:
@@ -345,7 +345,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), undead);
 		case CardIds.TheLichKing_ArmyOfTheFrozenThroneToken:
 			return and(side(inputSide), inDeck, minion);
-			// Arrow Smith: After you cast a spell, deal 1 damage to the lowest Health enemy.
+		// Arrow Smith: After you cast a spell, deal 1 damage to the lowest Health enemy.
 		case CardIds.ArrowSmith:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
 		case CardIds.Artanis_SC_754:
@@ -377,7 +377,7 @@ export const cardIdSelector = (
 			};
 		case CardIds.AuchenaiPhantasm:
 			return and(side(inputSide), or(inDeck, inHand), restoreHealth);
-			// Atiesh the Greatstaff: Costs (0) if you control Medivh. Double the damage and healing of your spells.
+		// Atiesh the Greatstaff: Costs (0) if you control Medivh. Double the damage and healing of your spells.
 		case CardIds.MedivhTheHallowed_AtieshTheGreatstaffToken_TIME_890t:
 			return highlightConditions(
 				and(side(inputSide), or(inDeck, inHand, inPlay), cardIs(CardIds.MedivhTheHallowed_TIME_890)),
@@ -413,16 +413,16 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, beast);
 		case CardIds.AzsharanScavenger_SunkenScavengerToken:
 			return and(side(inputSide), murloc);
-			// Azure Queen Sindragosa: Fabled If you control another Dragon, your Arcane spells cost (2) less.
+		// Azure Queen Sindragosa: Fabled If you control another Dragon, your Arcane spells cost (2) less.
 		case CardIds.AzureQueenSindragosa_TIME_852:
 			return highlightConditions(
 				and(side(inputSide), or(inDeck, inHand), dragon),
 				and(side(inputSide), or(inDeck, inHand), arcane, spellExtended),
 			);
-			// Azure King Malygos: If you control another Dragon, your Arcane spells cast twice.
+		// Azure King Malygos: If you control another Dragon, your Arcane spells cast twice.
 		case CardIds.AzureQueenSindragosa_AzureKingMalygosToken_TIME_852t1:
 			return and(side(inputSide), or(inDeck, inHand), arcane, spellExtended);
-			// Baba Naga: Battlecry: If you've cast a spell while holding this, deal 3 damage.
+		// Baba Naga: Battlecry: If you've cast a spell while holding this, deal 3 damage.
 		case CardIds.BabaNaga:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
 		case CardIds.BackstageBouncer:
@@ -529,7 +529,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), undead);
 		case CardIds.BlessingOfTheWolf_EDR_850p:
 			return and(side(inputSide), or(inDeck, inHand), beast);
-			// Blindeye Sharpshooter: After you play a Naga, deal 2 damage to a random enemy and draw a spell. (Then switch!) / After you cast a spell, deal 2 damage to a random enemy and draw a Naga.
+		// Blindeye Sharpshooter: After you play a Naga, deal 2 damage to a random enemy and draw a spell. (Then switch!) / After you cast a spell, deal 2 damage to a random enemy and draw a Naga.
 		case CardIds.BlindeyeSharpshooter_WW_402:
 			return highlightConditions(
 				and(side(inputSide), or(inDeck, inHand), naga),
@@ -537,7 +537,7 @@ export const cardIdSelector = (
 			);
 		case CardIds.Blink_SC_761:
 			return and(side(inputSide), inDeck, protoss, minion);
-			// Bloodbloom: The next spell you cast this turn costs Health instead of Mana.
+		// Bloodbloom: The next spell you cast this turn costs Health instead of Mana.
 		case CardIds.Bloodbloom:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
 		case CardIds.BloodCrusader:
@@ -609,7 +609,7 @@ export const cardIdSelector = (
 		case CardIds.BrittleboneDestroyer:
 			// Self-damage, like weapons, might be useful to highlight?
 			return and(side(inputSide), or(inDeck, inHand), or(restoreHealth, lifesteal));
-			// Broll Bearmantle: After you cast a spell, summon a random Animal Companion.
+		// Broll Bearmantle: After you cast a spell, summon a random Animal Companion.
 		case CardIds.BrollBearmantle_EDR_853:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
 		case CardIds.BronzeSignetTavernBrawl:
@@ -691,7 +691,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.CardboardGolem_TOY_809:
 			return and(side(inputSide), or(inDeck, inHand), aura);
-			// Card Grader: Battlecry: If you've cast a spell while holding this, Discover a card from your deck.
+		// Card Grader: Battlecry: If you've cast a spell while holding this, Discover a card from your deck.
 		case CardIds.CardGrader_TOY_054:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
 		case CardIds.CariaFelsoul:
@@ -719,7 +719,7 @@ export const cardIdSelector = (
 			);
 		case CardIds.CattleRustler_WW_351:
 			return and(side(inputSide), inDeck, beast);
-			// Celestial Shot: Deal $3 damage. Your next spell has Spell Damage +2.
+		// Celestial Shot: Deal $3 damage. Your next spell has Spell Damage +2.
 		case CardIds.CelestialShot_YOG_082:
 			return and(side(inputSide), or(inHand, inDeck), spellExtended, dealsDamage);
 		case CardIds.CenarionHold_WON_015:
@@ -734,7 +734,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.ChattyBartender:
 			return and(side(inputSide), inDeck, secret);
-			// Chatty Macaw: Battlecry: Repeat the last spell you cast at an enemy (at a random enemy if possible).
+		// Chatty Macaw: Battlecry: Repeat the last spell you cast at an enemy (at a random enemy if possible).
 		case CardIds.ChattyMacaw_VAC_407:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
 		case CardIds.ChemicalSpill_TOY_602:
@@ -832,7 +832,7 @@ export const cardIdSelector = (
 		case CardIds.ClockworkAssistant_GILA_907:
 		case CardIds.ClockworkAssistant_ONY_005ta11:
 		case CardIds.ClockworkAssistantTavernBrawl_PVPDR_SCH_Active48:
-			// Clockwork Assistant: Has +1/+1 for each spell you've cast this game.
+		// Clockwork Assistant: Has +1/+1 for each spell you've cast this game.
 		case CardIds.ClockworkAssistantTavernBrawl_PVPDR_Toki_T5:
 			return and(side(inputSide), inDeck, spellExtended);
 		case CardIds.ClockworkKnight:
@@ -845,7 +845,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), dragon);
 		case CardIds.CoilCastingTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), naga);
-			// Coilskar Commander: Taunt. Battlecry: If you've cast three spells while holding this, summon two copies of this.
+		// Coilskar Commander: Taunt. Battlecry: If you've cast three spells while holding this, summon two copies of this.
 		case CardIds.CoilskarCommander:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
 		case CardIds.ColdFeet:
@@ -854,17 +854,17 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.CollectorsIreTavernBrawlToken:
 			return and(side(inputSide), inDeck, minion, or(dragon, pirate, mech));
-			// Colossus: Battlecry: Deal 1 damage to all enemies, twice. (Improved by Protoss spells you cast this game!)
+		// Colossus: Battlecry: Deal 1 damage to all enemies, twice. (Improved by Protoss spells you cast this game!)
 		case CardIds.Colossus_SC_758:
 			return and(side(inputSide), or(inHand, inDeck), protoss, spellExtended);
-			// Commander Sivara: Battlecry: If you've cast three spells while holding this, add those spells back to your hand.
+		// Commander Sivara: Battlecry: If you've cast three spells while holding this, add those spells back to your hand.
 		case CardIds.CommanderSivara_TSC_087:
 			return and(side(inputSide), or(inHand, inDeck), spellExtended);
 		case CardIds.ConchsCall:
 			return and(side(inputSide), inDeck, or(naga, spell));
 		case CardIds.Concierge_VAC_463:
 			return and(side(inputSide), or(inDeck, inHand), fromAnotherClass);
-			// Conductivity: The next spell you cast this turn also targets adjacent minions.
+		// Conductivity: The next spell you cast this turn also targets adjacent minions.
 		case CardIds.Conductivity_YOG_522:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
 		case CardIds.ConjuredBookkeeper_TLC_226:
@@ -897,7 +897,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), protoss);
 		case CardIds.Consume_SC_020:
 			return and(side(inputSide), or(inHand, inDeck), locationExtended);
-			// Contaminated Lasher: Battlecry: If you've cast 5 or more spells this game, refresh 4 Mana Crystals.
+		// Contaminated Lasher: Battlecry: If you've cast 5 or more spells this game, refresh 4 Mana Crystals.
 		case CardIds.ContaminatedLasher_YOG_528:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
 		case CardIds.ContrabandStash:
@@ -911,7 +911,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.ConcussiveShells_SC_411:
 			return and(side(inputSide), or(inHand, inDeck), starshipExtended);
-			// Cosmic Keyboard: After you cast a spell, summon an Elemental with stats equal to its Cost. Lose 1 Durability.
+		// Cosmic Keyboard: After you cast a spell, summon an Elemental with stats equal to its Cost. Lose 1 Durability.
 		case CardIds.CosmicKeyboard:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
 		case CardIds.Cosmonaut_GDB_443:
@@ -963,7 +963,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), starshipExtended);
 		case CardIds.CrowdRoaster:
 			return and(side(inputSide), or(inDeck, inHand), dragon);
-			// Crushclaw Enforcer: Battlecry: If you've cast a spell while holding this, draw a Naga.
+		// Crushclaw Enforcer: Battlecry: If you've cast a spell while holding this, draw a Naga.
 		case CardIds.CrushclawEnforcer:
 			return highlightConditions(
 				and(side(inputSide), inDeck, naga),
@@ -1027,7 +1027,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), or(corrupt, corrupted));
 		case CardIds.NzothTheCorruptor_DarkMachinations_THD_039p:
 			return and(side(inputSide), or(inDeck, inHand), minion, deathrattle);
-			// Darkmoon Magician: Elusive After you cast a spell, cast a random spell that costs (1) more.
+		// Darkmoon Magician: Elusive After you cast a spell, cast a random spell that costs (1) more.
 		case CardIds.DarkmoonMagician_MIS_303:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
 		case CardIds.Darkrider_EDR_456:
@@ -1048,7 +1048,7 @@ export const cardIdSelector = (
 		case CardIds.DeathBlossomWhomper:
 			return and(side(inputSide), inDeck, minion, deathrattle);
 		case CardIds.Deathchiller_RLK_083:
-			// Deathchiller: After you cast a spell, deal 1 damage to two random enemies.
+		// Deathchiller: After you cast a spell, deal 1 damage to two random enemies.
 		case CardIds.Deathchiller_CORE_RLK_083:
 			return and(side(inputSide), or(inHand, inDeck), spellExtended);
 		case CardIds.DeathGrowl:
@@ -1080,7 +1080,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), dragon);
 		case CardIds.DetonationJuggernaut_WW_329:
 			return and(side(inputSide), or(inDeck, inHand), minion, taunt);
-			// Deviate Dreadfang: After you cast a Nature spell, summon a 4/2 Viper with Rush.
+		// Deviate Dreadfang: After you cast a Nature spell, summon a 4/2 Viper with Rush.
 		case CardIds.DeviateDreadfang:
 			return and(side(inputSide), or(inDeck, inHand), nature, spellExtended);
 		case CardIds.DevilsaurMask_DINO_403:
@@ -1089,7 +1089,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), inGraveyard, minion, deathrattle, minionsDeadSinceLastTurn);
 		case CardIds.DevoutDungeoneer:
 			return highlightConditions(and(side(inputSide), inDeck, holy, spell), and(side(inputSide), inDeck, spell));
-			// Devout Pupil: Divine Shield, Taunt Costs (1) less for each spell you've cast on friendly characters this game.
+		// Devout Pupil: Divine Shield, Taunt Costs (1) less for each spell you've cast on friendly characters this game.
 		case CardIds.DevoutPupil:
 			return and(side(inputSide), or(inHand, inDeck), spellExtended, canTargetFriendlyCharacter);
 		case CardIds.LesserDiamondSpellstone:
@@ -1154,10 +1154,10 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), fromAnotherClass);
 		case CardIds.DoubleJump_SCH_422:
 			return and(side(inputSide), inDeck, outcast);
-			// Double Time: Passive After you cast your first spell in a turn, cast a copy of it (targets chosen randomly).
+		// Double Time: Passive After you cast your first spell in a turn, cast a copy of it (targets chosen randomly).
 		case CardIds.DoubleTime:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
-			// Dozing Kelpkeeper: Rush. Starts Dormant. After you've cast 5 Mana worth of spells, awaken.
+		// Dozing Kelpkeeper: Rush. Starts Dormant. After you've cast 5 Mana worth of spells, awaken.
 		case CardIds.DozingKelpkeeper:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
 		case CardIds.DraconicDreamTavernBrawl:
@@ -1228,7 +1228,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.EdgeOfDredgeTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), dredge);
-			// Eerie Stone: Passive After you destroy an enemy minion with a Shadow spell, add a copy of that minion to your hand. It costs (2) less.
+		// Eerie Stone: Passive After you destroy an enemy minion with a Shadow spell, add a copy of that minion to your hand. It costs (2) less.
 		case CardIds.EerieStoneTavernBrawl:
 			return and(side(inputSide), spellExtended, shadow);
 		case CardIds.ElementalAllies:
@@ -1316,7 +1316,7 @@ export const cardIdSelector = (
 		case CardIds.EternalServitude_CORE_ICC_213:
 		case CardIds.EternalServitude_ICC_213:
 			return and(side(inputSide), inGraveyard, minion);
-			// Ethereal Oracle: Spell Damage +1 Spellburst: Draw 2 spells.
+		// Ethereal Oracle: Spell Damage +1 Spellburst: Draw 2 spells.
 		case CardIds.EtherealOracle_GDB_310:
 			return highlightConditions(
 				and(side(inputSide), or(inHand, inDeck), spellExtended, damage),
@@ -1352,10 +1352,10 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, chooseOne);
 		case CardIds.FangboundDruid:
 			return and(side(inputSide), or(inHand, inDeck), beast);
-			// Farseer Nobundo: Deathrattle: Open the Galaxy's Lens. It absorbs the power of the next spell you cast.
+		// Farseer Nobundo: Deathrattle: Open the Galaxy's Lens. It absorbs the power of the next spell you cast.
 		case CardIds.FarseerNobundo_GDB_447:
 			return and(side(inputSide), or(inHand, inDeck), spellExtended);
-			// Farseer Wo: Elusive After you cast a spell, Discover a Nature spell from the past.
+		// Farseer Wo: Elusive After you cast a spell, Discover a Nature spell from the past.
 		case CardIds.FarseerWo_TIME_013:
 			return and(side(inputSide), or(inHand, inDeck), spellExtended);
 		case CardIds.Fatebreaker_TIME_028:
@@ -1388,7 +1388,7 @@ export const cardIdSelector = (
 			};
 		case CardIds.FeldoreiWarband:
 			return and(side(inputSide), inDeck, minion);
-			// Felfire Blaze: After you cast a Fel spell, destroy this and deal 2 damage to all enemies.
+		// Felfire Blaze: After you cast a Fel spell, destroy this and deal 2 damage to all enemies.
 		case CardIds.FelfireBlaze_FIR_904:
 			return and(side(inputSide), or(inHand, inDeck), fel, spellExtended);
 		case CardIds.FelfireBonfire_VAC_952:
@@ -1410,7 +1410,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.Felosophy:
 			return and(side(inputSide), or(inHand, inDeck), demon);
-			// Felscale Evoker: Battlecry: If you've cast three spells while holding this, summon a different Demon from your deck.
+		// Felscale Evoker: Battlecry: If you've cast three spells while holding this, summon a different Demon from your deck.
 		case CardIds.FelscaleEvoker:
 			return highlightConditions(
 				and(side(inputSide), inDeck, demon, not(cardIs(CardIds.FelscaleEvoker))),
@@ -1438,7 +1438,7 @@ export const cardIdSelector = (
 				and(side(inputSide), or(inHand, inDeck), minion, or(elemental, murloc)),
 				and(side(inputSide), or(inHand, inDeck), minion),
 			);
-			// Firekeeper's Idol: Passive After you cast a Fire spell, summon a 1/2 Flame Elemental and add one to your hand.
+		// Firekeeper's Idol: Passive After you cast a Fire spell, summon a 1/2 Flame Elemental and add one to your hand.
 		case CardIds.FirekeepersIdolTavernBrawl:
 			return and(side(inputSide), spellExtended, fire);
 		case CardIds.FirePlumeHarbinger:
@@ -1451,14 +1451,14 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), elemental);
 		case CardIds.FlamesOfTheFirelord_FIR_923:
 			return and(side(inputSide), or(inDeck, inHand), effectiveCostMore(7));
-			// Flames of the Kirin Tor: Passive After you cast your first Fire spell in a turn, add a random non-Legendary Fire spell from your class to your hand.
+		// Flames of the Kirin Tor: Passive After you cast your first Fire spell in a turn, add a random non-Legendary Fire spell from your class to your hand.
 		case CardIds.FlamesOfTheKirinTorTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended, fire);
 		case CardIds.Flamewaker:
-			// Flamewaker: After you cast a spell, deal 2 damage randomly split among all enemies.
+		// Flamewaker: After you cast a spell, deal 2 damage randomly split among all enemies.
 		case CardIds.Flamewaker_TUTR_BRM_002:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
-			// Flame Waves: Passive At the end of your turn, deal 2 damage to all enemy minions for each Fire spell you've cast this turn.
+		// Flame Waves: Passive At the end of your turn, deal 2 damage to all enemy minions for each Fire spell you've cast this turn.
 		case CardIds.FlameWavesTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended, fire);
 		case CardIds.FlashSale_TOY_716:
@@ -1467,7 +1467,7 @@ export const cardIdSelector = (
 		case CardIds.FleshBehemoth_RLK_Prologue_RLK_830:
 			return and(side(inputSide), inDeck, undead, not(cardIs(CardIds.FleshBehemoth_RLK_830)));
 		case CardIds.FlickeringLightbot_MIS_918:
-			// Flickering Lightbot: Gigantic Costs (1) less for each Holy spell you've cast this game.
+		// Flickering Lightbot: Gigantic Costs (1) less for each Holy spell you've cast this game.
 		case CardIds.FlickeringLightbot_FlickeringLightbotToken_MIS_918t:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended, holy);
 		case CardIds.FlightOfTheFirehawk_TLC_222:
@@ -1507,7 +1507,7 @@ export const cardIdSelector = (
 		case CardIds.FoxyFraud:
 		case CardIds.FoxyFraud_CORE_DMF_511:
 			return and(side(inputSide), or(inHand, inDeck), combo);
-			// Fragment of Nothing: After you cast a spell on a minion, draw a card.
+		// Fragment of Nothing: After you cast a spell on a minion, draw a card.
 		case CardIds.FragmentOfNothing_END_026:
 			return and(side(inputSide), or(inHand, inDeck), spellExtended);
 		case CardIds.FreeAdmission:
@@ -1521,7 +1521,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, beast);
 		case CardIds.Pelagos_CORE_REV_250:
 		case CardIds.Pelagos_REV_250:
-			// Pelagos: After you cast a spell on a minion, set its stats to the highest stat.
+		// Pelagos: After you cast a spell on a minion, set its stats to the highest stat.
 		case CardIds.Pelagos_REV_781:
 			return and(side(inputSide), or(inHand, inDeck), spellExtended, canTargetFriendlyCharacter);
 		case CardIds.PerennialSerpent_TIME_022:
@@ -1548,7 +1548,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), dragon);
 		case CardIds.GaiaTheTechtonic_TSC_029:
 			return and(side(inputSide), or(inDeck, inHand), mech);
-			// The Galactic Projection Orb: Recast a random spell of each Cost you've cast this game (targets enemies if possible).
+		// The Galactic Projection Orb: Recast a random spell of each Cost you've cast this game (targets enemies if possible).
 		case CardIds.TheGalacticProjectionOrb_TOY_378:
 			return (input: SelectorInput): SelectorOutput => {
 				const spellsPlayed = input.deckState?.spellsPlayedThisMatch;
@@ -1571,7 +1571,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, demon);
 		case CardIds.GatherYourParty:
 			return and(side(inputSide), inDeck, minion);
-			// Gazlowe: Whenever you cast a 1-Cost spell, add a random Mech to your hand.
+		// Gazlowe: Whenever you cast a 1-Cost spell, add a random Mech to your hand.
 		case CardIds.Gazlowe:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended, effectiveCostEqual(1));
 		case CardIds.GelbinOfTomorrow_TIME_009:
@@ -1608,7 +1608,7 @@ export const cardIdSelector = (
 				dragon,
 				not(entityIs({ entityId: card?.entityId, cardId: card?.cardId })),
 			);
-			// Gladesong Siren: Lifesteal Costs (1) if you've played a Holy and Shadow spell this turn.
+		// Gladesong Siren: Lifesteal Costs (1) if you've played a Holy and Shadow spell this turn.
 		case CardIds.GladesongSiren_TLC_819:
 			return highlightConditions(
 				and(side(inputSide), or(inDeck, inHand), holy, spellExtended),
@@ -1624,10 +1624,10 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, undead);
 		case CardIds.GluthTavernBrawl_PVPDR_Sai_T1:
 			return and(side(inputSide), or(inDeck, inHand), undead);
-			// Glacial Advance: Deal $4 damage. Your next spell this turn costs (2) less.
+		// Glacial Advance: Deal $4 damage. Your next spell this turn costs (2) less.
 		case CardIds.GlacialAdvance_RLK_512:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
-			// Glacial Downpour: Passive At the end of your turn, summon a 2/3 Water Elemental if you've cast a Frost spell this turn.
+		// Glacial Downpour: Passive At the end of your turn, summon a 2/3 Water Elemental if you've cast a Frost spell this turn.
 		case CardIds.GlacialDownpourTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended, frost);
 		case CardIds.GlacialMysteries_ICC_086:
@@ -1640,7 +1640,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), mech);
 		case CardIds.Goldrinn_EDR_480:
 			return and(side(inputSide), or(inDeck, inHand), beast);
-			// Golganneth, the Thunderer: Titan Your first spell each turn costs (3) less.
+		// Golganneth, the Thunderer: Titan Your first spell each turn costs (3) less.
 		case CardIds.GolgannethTheThunderer:
 			return highlightConditions(
 				and(side(inputSide), inDeck, overload),
@@ -1663,7 +1663,7 @@ export const cardIdSelector = (
 			return tooltip(and(side(inputSide), inDeck, spell));
 		case CardIds.GrandMagisterRommath:
 			return tooltip(and(side(inputSide), cardsPlayedThisMatch, spell, notInInitialDeck));
-			// Grand Magus Antonidas: Battlecry: If you've cast a Fire spell on each of your last three turns, cast 3 Fireballs at random enemies. (0/3)
+		// Grand Magus Antonidas: Battlecry: If you've cast a Fire spell on each of your last three turns, cast 3 Fireballs at random enemies. (0/3)
 		case CardIds.GrandMagusAntonidas:
 			return and(side(inputSide), or(inHand, inDeck), spellExtended, fire);
 		case CardIds.GraveDefiler:
@@ -1676,7 +1676,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.GreenThumbGardener:
 			return and(side(inputSide), or(inDeck, inHand), spell);
-			// Grey Sage Parrot: Battlecry: Repeat the last spell you've cast that costs (6) or more.
+		// Grey Sage Parrot: Battlecry: Repeat the last spell you've cast that costs (6) or more.
 		case CardIds.GreySageParrot:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended, effectiveCostMore(5));
 		case CardIds.Grillmaster_VAC_917:
@@ -1713,12 +1713,12 @@ export const cardIdSelector = (
 			);
 		case CardIds.Groundskeeper:
 			return and(side(inputSide), or(inDeck, inHand), spell, effectiveCostMore(4));
-			// Grove Shaper: After you cast a Nature spell, summon a 2/2 Treant with "Deathrattle: Get a copy of that spell."
+		// Grove Shaper: After you cast a Nature spell, summon a 2/2 Treant with "Deathrattle: Get a copy of that spell."
 		case CardIds.GroveShaper_EDR_271:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended, nature);
 		case CardIds.GuardianAnimals:
 			return and(side(inputSide), inDeck, beast, effectiveCostLess(6));
-			// Guardian Light: Passive After you cast a Holy spell, summon an Ancient Guardian with stats equal to its Cost.
+		// Guardian Light: Passive After you cast a Holy spell, summon an Ancient Guardian with stats equal to its Cost.
 		case CardIds.GuardianLightTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended, holy);
 		case CardIds.GuessTheWeight_Less:
@@ -1747,7 +1747,7 @@ export const cardIdSelector = (
 			};
 		case CardIds.GuffRunetotem_BAR_720:
 			return and(side(inputSide), spell, spellSchool(SpellSchool.NATURE));
-			// Guiding Figure: Spellburst: Trigger a random friendly minion's Deathrattle. Starship Piece
+		// Guiding Figure: Spellburst: Trigger a random friendly minion's Deathrattle. Starship Piece
 		case CardIds.GuidingFigure_GDB_106:
 			return highlightConditions(
 				and(side(inputSide), or(inHand, inDeck), minion, deathrattle),
@@ -1772,7 +1772,7 @@ export const cardIdSelector = (
 		case CardIds.HagathaTheFabled_TOY_504:
 			return and(side(inputSide), inDeck, spell, effectiveCostMore(4));
 		case CardIds.HallazealTheAscended:
-			// Hallazeal the Ascended: Spell Damage +1 Your spells have Lifesteal.
+		// Hallazeal the Ascended: Spell Damage +1 Your spells have Lifesteal.
 		case CardIds.HallazealTheAscended_WON_336:
 			return and(side(inputSide), or(inHand, inDeck), spellExtended);
 		case CardIds.Hallucination_SC_757:
@@ -1792,7 +1792,7 @@ export const cardIdSelector = (
 				and(side(inputSide), inDeck, spell, not(nature)),
 				and(side(inputSide), inDeck, spell, nature),
 			);
-			// Handmaiden: Battlecry: If you've cast three spells while holding this, draw 3 cards.
+		// Handmaiden: Battlecry: If you've cast three spells while holding this, draw 3 cards.
 		case CardIds.Handmaiden:
 			return and(side(inputSide), or(inHand, inDeck), spellExtended);
 		case CardIds.HarbingerOfWinterCore_RLK_511:
@@ -1822,7 +1822,7 @@ export const cardIdSelector = (
 		case CardIds.HedgeMaze_REV_333:
 		case CardIds.HedgeMaze_REV_792:
 			return and(side(inputSide), inDeck, minion, deathrattle);
-			// Hedra the Heretic: Battlecry: For each spell you've cast while holding this, summon a minion of that spell's Cost.
+		// Hedra the Heretic: Battlecry: For each spell you've cast while holding this, summon a minion of that spell's Cost.
 		case CardIds.HedraTheHeretic_TSC_658:
 			return and(side(inputSide), or(inHand, inDeck), spellExtended);
 		case CardIds.HeirOfHereafter_TIME_871:
@@ -1841,25 +1841,25 @@ export const cardIdSelector = (
 		case CardIds.HenchClanThug:
 		case CardIds.HenchClanThugCore:
 			return and(side(inputSide), or(inHand, inDeck), givesHeroAttack);
-			// Herald of Chaos: Lifesteal Battlecry: If you've cast a Fel spell while holding this, gain Rush.
+		// Herald of Chaos: Lifesteal Battlecry: If you've cast a Fel spell while holding this, gain Rush.
 		case CardIds.HeraldOfChaos:
 			return and(side(inputSide), or(inHand, inDeck), spellExtended, fel);
 		case CardIds.HeraldOfFlame_TRLA_176:
 			return and(side(inputSide), or(inHand, inDeck), dragon);
-			// Herald of Light: Battlecry: If you've cast a Holy spell while holding this, restore #6 Health to all friendly characters.
+		// Herald of Light: Battlecry: If you've cast a Holy spell while holding this, restore #6 Health to all friendly characters.
 		case CardIds.HeraldOfLight:
 			return and(side(inputSide), or(inHand, inDeck), spellExtended, holy);
 		case CardIds.HeraldOfLokholar:
 			return and(side(inputSide), inDeck, spell, frost);
-			// Herald of Nature: Battlecry: If you've cast a Nature spell while holding this, give your other minions +1/+1.
+		// Herald of Nature: Battlecry: If you've cast a Nature spell while holding this, give your other minions +1/+1.
 		case CardIds.HeraldOfNature:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended, nature);
-			// Herald of Shadows: Battlecry: If you've cast a Shadow spell while holding this, steal 2 Health from a minion.
+		// Herald of Shadows: Battlecry: If you've cast a Shadow spell while holding this, steal 2 Health from a minion.
 		case CardIds.HeraldOfShadows:
 			return and(side(inputSide), inDeck, spellExtended, shadow);
 		case CardIds.HerbivoreAssistant_DINO_419:
 			return and(side(inputSide), or(inHand, inDeck), beast);
-			// High Abbess Alura: Spellburst: Cast a spell from your deck (targets this if possible).
+		// High Abbess Alura: Spellburst: Cast a spell from your deck (targets this if possible).
 		case CardIds.HighAbbessAlura:
 			return and(side(inputSide), inDeck, spellExtended);
 		case CardIds.HighCultistBasaleph:
@@ -1877,12 +1877,12 @@ export const cardIdSelector = (
 			return and(side(inputSide), taunt);
 		case CardIds.HollowDirehorn_DINO_416:
 			return and(side(inputSide), or(inDeck, inHand), generateCorpse);
-			// Holy Cowboy: Battlecry: Your next Holy spell costs (2) less.
+		// Holy Cowboy: Battlecry: Your next Holy spell costs (2) less.
 		case CardIds.HolyCowboy_WW_335:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended, holy);
 		case CardIds.HolyEggbearer_DINO_411:
 			return and(side(inputSide), or(inHand, inDeck), attackIs(0), minion);
-			// Holy Glowsticks: Lifesteal Deal $4 damage to a minion. Costs (1) if you've cast a Holy spell this turn.
+		// Holy Glowsticks: Lifesteal Deal $4 damage to a minion. Costs (1) if you've cast a Holy spell this turn.
 		case CardIds.HolyGlowsticks_MIS_709:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended, holy);
 		case CardIds.Hookfist3000:
@@ -1894,7 +1894,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, dragon);
 		case CardIds.HotSpringGlider_TLC_428:
 			return and(side(inputSide), or(inDeck, inHand), murloc);
-			// Hot Streak: Your next Fire spell this turn costs (2) less.
+		// Hot Streak: Your next Fire spell this turn costs (2) less.
 		case CardIds.HotStreak:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended, fire);
 		case CardIds.HoundsOfFury_TIME_443:
@@ -1957,7 +1957,7 @@ export const cardIdSelector = (
 		case CardIds.IceFishing_CORE_ICC_089:
 		case CardIds.IceFishing_ICC_089:
 			return and(side(inputSide), inDeck, murloc);
-			// Ice Revenant: Whenever you cast a Frost spell, gain +2/+2.
+		// Ice Revenant: Whenever you cast a Frost spell, gain +2/+2.
 		case CardIds.IceRevenant:
 			return and(side(inputSide), inDeck, spellExtended, frost);
 		case CardIds.IllidariStudiesCore:
@@ -1974,14 +1974,14 @@ export const cardIdSelector = (
 			);
 		case CardIds.IdolOfYshaarj:
 			return and(side(inputSide), inDeck, minion);
-			// Idols of Elune: Passive At the end of your turn, cast a spell you've cast this turn (targets are random).
+		// Idols of Elune: Passive At the end of your turn, cast a spell you've cast this turn (targets are random).
 		case CardIds.IdolsOfEluneTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
 		case CardIds.IngeniousArtificer_GDB_135:
 			return and(side(inputSide), or(inHand, inDeck), draenei);
 		case CardIds.IgnisTheEternalFlame:
 			return and(side(inputSide), or(inDeck, inHand), forge);
-			// Imp-credible Trousers: Passive After you cast your first Fel spell in a turn, shuffle 2 Fel Rifts into your deck. Draw a card.
+		// Imp-credible Trousers: Passive After you cast your first Fel spell in a turn, shuffle 2 Fel Rifts into your deck. Draw a card.
 		case CardIds.ImpCredibleTrousersTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended, fel);
 		case CardIds.ImployeeOfTheMonth_WORK_009:
@@ -1995,14 +1995,14 @@ export const cardIdSelector = (
 				and(side(inputSide), or(inHand, inDeck), undead),
 				and(side(inputSide), inGraveyard, undead),
 			);
-			// Inferno Herald: After you cast a Fire spell, get a random Elemental and reduce its Cost by (3).
+		// Inferno Herald: After you cast a Fire spell, get a random Elemental and reduce its Cost by (3).
 		case CardIds.InfernoHerald_FIR_913:
 			return and(side(inputSide), or(inHand, inDeck), spellExtended, fire);
 		case CardIds.InfernalStratagem_GDB_122:
 			return and(side(inputSide), or(inDeck, inHand), demon);
 		case CardIds.Infestor_SC_002:
 			return and(side(inputSide), or(inHand, inDeck), minion, zerg);
-			// Inkmaster Solia: Battlecry: If your deck has no duplicates, the next spell you cast this turn costs (0).
+		// Inkmaster Solia: Battlecry: If your deck has no duplicates, the next spell you cast this turn costs (0).
 		case CardIds.InkmasterSolia:
 			return highlightConditions(
 				and(side(inputSide), or(inHand, inDeck), spellExtended),
@@ -2045,7 +2045,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), magnetic);
 		case CardIds.InvestmentOpportunity:
 			return and(side(inputSide), inDeck, overload);
-			// Invigorating Light: Passive Whenever you play a Holy spell, give all friendly characters +1 Health.
+		// Invigorating Light: Passive Whenever you play a Holy spell, give all friendly characters +1 Health.
 		case CardIds.InvigoratingLightTavernBrawl:
 			return and(side(inputSide), spellExtended, holy);
 		case CardIds.InvigoratingSermon:
@@ -2054,7 +2054,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), undead);
 		case CardIds.Inzah:
 			return and(side(inputSide), or(inDeck, inHand), overload);
-			// Iron Roots: Passive After you cast a Nature spell, give a random friendly minion +1/+1 and Taunt.
+		// Iron Roots: Passive After you cast a Nature spell, give a random friendly minion +1/+1 and Taunt.
 		case CardIds.IronRootsTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended, nature);
 		case CardIds.ItsRainingFin:
@@ -2097,7 +2097,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), beast);
 		case CardIds.JungleGiants_BarnabusTheStomperToken:
 			return and(side(inputSide), inDeck, minion);
-			// Jungle Jammer: Deathrattle: Summon a random 1-Cost Beast. (Cast spells while equipped to improve!)
+		// Jungle Jammer: Deathrattle: Summon a random 1-Cost Beast. (Cast spells while equipped to improve!)
 		case CardIds.JungleJammer:
 			return and(side(inputSide), or(inHand, inDeck), spellExtended);
 		case CardIds.K90tron:
@@ -2114,7 +2114,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), inGraveyard, mech);
 		case CardIds.KanrethadEbonlocke_KanrethadPrimeToken:
 			return and(side(inputSide), demon, inGraveyard, minion);
-			// K'ara, the Dark Star: Spellburst: Steal 2 Health from a random enemy. (Shadow spells don't remove this Spellburst.)
+		// K'ara, the Dark Star: Spellburst: Steal 2 Health from a random enemy. (Shadow spells don't remove this Spellburst.)
 		case CardIds.KaraTheDarkStar_GDB_127:
 			return and(side(inputSide), or(inHand, inDeck), spellExtended, shadow);
 		case CardIds.MedivhTheHallowed_KarazhanTheSanctumToken_TIME_890t2:
@@ -2130,7 +2130,7 @@ export const cardIdSelector = (
 		case CardIds.Khazgoroth:
 		case CardIds.Khazgoroth_TitanforgeToken:
 			return and(side(inputSide), inDeck, weapon);
-			// Khadgar's Scrying Orb: Passive Your spells cost (1) less.
+		// Khadgar's Scrying Orb: Passive Your spells cost (1) less.
 		case CardIds.KhadgarsScryingOrb:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
 		case CardIds.KeeneyeSpotter:
@@ -2176,7 +2176,7 @@ export const cardIdSelector = (
 				or(inDeck, inHand, inGraveyard),
 				cardIs(CardIds.OgreGangOutlaw_WW_418, CardIds.OgreGangRider_WW_419, CardIds.OgreGangAce_WW_420),
 			);
-			// King's Decree: After you cast a spell, reduce the Cost of a Beast in your hand by the spell's Cost.
+		// King's Decree: After you cast a spell, reduce the Cost of a Beast in your hand by the spell's Cost.
 		case CardIds.KingKrush_KingsDecree_THD_012p:
 			return highlightConditions(
 				and(side(inputSide), or(inDeck, inHand), spellExtended),
@@ -2184,7 +2184,7 @@ export const cardIdSelector = (
 			);
 		case CardIds.KingsDefender:
 			return and(side(inputSide), or(inDeck, inHand), minion, taunt);
-			// King Tide: Battlecry: Both players' spells cost (5) until the end of your next turn.
+		// King Tide: Battlecry: Both players' spells cost (5) until the end of your next turn.
 		case CardIds.KingTide_VAC_524:
 			return and(or(inDeck, inHand), spellExtended);
 		case CardIds.KnightOfAnointment:
@@ -2221,10 +2221,10 @@ export const cardIdSelector = (
 					),
 				)(input);
 			};
-			// Kolkar Pack Runner: After you cast a spell, summon a 1/1 Hyena with Rush.
+		// Kolkar Pack Runner: After you cast a spell, summon a 1/1 Hyena with Rush.
 		case CardIds.KolkarPackRunner:
 			return and(side(inputSide), or(inHand, inDeck), spellExtended);
-			// K'ure, the Light Beyond: Spellburst: Summon a random 3-Cost minion. (Holy spells don't remove this Spellburst.)
+		// K'ure, the Light Beyond: Spellburst: Summon a random 3-Cost minion. (Holy spells don't remove this Spellburst.)
 		case CardIds.KureTheLightBeyond_GDB_442:
 			return and(side(inputSide), or(inHand, inDeck), spellExtended, holy);
 
@@ -2249,14 +2249,14 @@ export const cardIdSelector = (
 		case CardIds.LadyLiadrin:
 		case CardIds.LadyLiadrin_CORE_BT_334:
 			return tooltip(and(side(inputSide), spellPlayedThisMatchOnFriendly));
-			// Lady Naz'jar: While in your hand, this transforms after you cast a Fire, Frost, or Arcane spell.
+		// Lady Naz'jar: While in your hand, this transforms after you cast a Fire, Frost, or Arcane spell.
 		case CardIds.LadyNazjar_TID_709:
 			return highlightConditions(
 				and(side(inputSide), or(inHand, inDeck), spellExtended, fire),
 				and(side(inputSide), or(inHand, inDeck), spellExtended, frost),
 				and(side(inputSide), or(inHand, inDeck), spellExtended, arcane),
 			);
-			// Lady S'theno: Immune while attacking. After you cast a spell, attack the lowest Health enemy.
+		// Lady S'theno: Immune while attacking. After you cast a spell, attack the lowest Health enemy.
 		case CardIds.LadyStheno_TSC_218:
 			return and(side(inputSide), or(inHand, inDeck), spellExtended);
 		case CardIds.LadyVashj_VashjPrimeToken:
@@ -2272,7 +2272,7 @@ export const cardIdSelector = (
 		case CardIds.LeadDancer:
 			// TODO: implement current attack
 			return and(inDeck, minion, attackLessThan(4));
-			// Learn Draconic: Sidequest: Spend 8 Mana on spells. Reward: Summon a 6/6 Dragon.
+		// Learn Draconic: Sidequest: Spend 8 Mana on spells. Reward: Summon a 6/6 Dragon.
 		case CardIds.LearnDraconic:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
 		case CardIds.LeylineManipulator:
@@ -2297,14 +2297,14 @@ export const cardIdSelector = (
 		case CardIds.LifebindersGift:
 		case CardIds.LifebindersGrowth:
 			return and(side(inputSide), or(inHand, inDeck), spell);
-			// Lifeguard: Taunt Battlecry: The next spell you cast has Lifesteal.
+		// Lifeguard: Taunt Battlecry: The next spell you cast has Lifesteal.
 		case CardIds.Lifeguard_VAC_919:
 			return and(side(inputSide), or(inHand, inDeck), spellExtended, dealsDamage);
 		case CardIds.Liferender_TIME_614:
 			return and(side(inputSide), or(inHand, inDeck), or(restoreHealth, givesHeroAttack, costHealth));
 		case CardIds.LiftOff_SC_410:
 			return and(side(inputSide), or(inHand, inDeck), terran);
-			// Light of the New Moon: Give a minion +3/+3. (Cast 3 spells to return this to your hand when played.)
+		// Light of the New Moon: Give a minion +3/+3. (Cast 3 spells to return this to your hand when played.)
 		case CardIds.LightOfTheNewMoon_FIR_918:
 			return highlightConditions(
 				and(side(inputSide), or(inHand, inDeck), minion),
@@ -2326,7 +2326,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.LilypadLurker:
 			return and(side(inputSide), or(inHand, inDeck), elemental);
-			// Li'Na, Shop Manager: Whenever you cast a spell, fill your board with random minions of that Cost.
+		// Li'Na, Shop Manager: Whenever you cast a spell, fill your board with random minions of that Cost.
 		case CardIds.LinaShopManager_TOY_531:
 			return and(side(inputSide), or(inHand, inDeck), spellExtended);
 		case CardIds.LinedancePartner_WW_433:
@@ -2351,7 +2351,7 @@ export const cardIdSelector = (
 			);
 		case CardIds.LockAndLoad_AT_061:
 		case CardIds.LockAndLoad_CORE_AT_061:
-			// Lock and Load: Each time you cast a spell this turn, get a random Hunter card.
+		// Lock and Load: Each time you cast a spell this turn, get a random Hunter card.
 		case CardIds.LockAndLoad_WON_023:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
 		case CardIds.LockOn_SC_407:
@@ -2366,12 +2366,12 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.LorewalkerChoLegacy:
 		case CardIds.LorewalkerChoVanilla:
-			// Lorewalker Cho: Whenever a player casts a spell, put a copy into the other player’s hand.
+		// Lorewalker Cho: Whenever a player casts a spell, put a copy into the other player’s hand.
 		case CardIds.LorewalkerCho_CORE_EX1_100:
 			return and(side(inputSide), or(inHand, inDeck), spellExtended);
 		case CardIds.LorthemarTheron_RLK_593:
 			return and(side(inputSide), inDeck, minion);
-			// Love Everlasting: Your first spell each turn costs (2) less. Lasts until you don't play a spell on your turn.
+		// Love Everlasting: Your first spell each turn costs (2) less. Lasts until you don't play a spell on your turn.
 		case CardIds.LoveEverlasting:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
 		case CardIds.LuckyComet_GDB_873:
@@ -2389,10 +2389,10 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, spell);
 		case CardIds.MagisterDawngrasp_AV_200:
 			return and(side(inputSide), inOther, spell, hasSpellSchool, spellPlayedThisMatch);
-			// Magister Unchained: Until the end of your turn, after you cast a spell, draw a spell. Allied: Mage.
+		// Magister Unchained: Until the end of your turn, after you cast a spell, draw a spell. Allied: Mage.
 		case CardIds.MagisterUnchainedTavernBrawlToken:
 			return and(side(inputSide), inDeck, spell);
-			// Magister's Apprentice: Your Arcane spells cost (1) less.
+		// Magister's Apprentice: Your Arcane spells cost (1) less.
 		case CardIds.MagistersApprentice:
 			return and(side(inputSide), inDeck, spellExtended, arcane);
 		case CardIds.Malfunction_MIS_107:
@@ -2410,7 +2410,7 @@ export const cardIdSelector = (
 		case CardIds.MalygosTheSpellweaverCore:
 		case CardIds.MalygosTheSpellweaver_LEG_CS3_034:
 			return and(side(inputSide), inDeck, spell);
-			// Mana Cyclone: Battlecry: For each spell you've cast this turn, add a random Mage spell to your hand.
+		// Mana Cyclone: Battlecry: For each spell you've cast this turn, add a random Mage spell to your hand.
 		case CardIds.ManaCyclone:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
 		case CardIds.ManaGiant:
@@ -2419,7 +2419,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), weapon);
 		case CardIds.ManifestedTimeways_TIME_019:
 			return and(side(inputSide), or(inDeck, inHand), aura);
-			// Mantle Shaper: Costs (1) less for each spell you've cast while holding this.
+		// Mantle Shaper: Costs (1) less for each spell you've cast while holding this.
 		case CardIds.MantleShaper_DEEP_004:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
 		case CardIds.ManufacturingError_TOY_371:
@@ -2431,14 +2431,14 @@ export const cardIdSelector = (
 				and(side(inputSide), or(inHand, inDeck), taunt, minion),
 				and(side(inputSide), or(inHand, inDeck), minion),
 			);
-			// Marooned Archmage: Your first spell each turn costs (2) less.
+		// Marooned Archmage: Your first spell each turn costs (2) less.
 		case CardIds.MaroonedArchmage_VAC_435:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
-			// Marshland Thresher: After you cast a spell, gain Divine Shield.
+		// Marshland Thresher: After you cast a spell, gain Divine Shield.
 		case CardIds.MarshlandThresher_TLC_256:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
 		case CardIds.Marshspawn_BT_115:
-			// Marshspawn: Battlecry: If you cast a spell last turn, Discover a spell.
+		// Marshspawn: Battlecry: If you cast a spell last turn, Discover a spell.
 		case CardIds.Marshspawn_CORE_BT_115:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
 		case CardIds.MaskedReveler:
@@ -2459,12 +2459,12 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.Merithra_EDR_238:
 			return and(side(inputSide), or(inDeck, inHand), minion, costMore(7));
-			// Mechanized Magma: Whenever you play a Fire spell, gain stats equal to its Cost.
+		// Mechanized Magma: Whenever you play a Fire spell, gain stats equal to its Cost.
 		case CardIds.MechanizedMagma_TLC_224:
 			return and(side(inputSide), or(inDeck, inHand), fire, spellExtended);
 		case CardIds.MechaShark_TSC_054:
 			return and(side(inputSide), or(inDeck, inHand), mech);
-			// Meddlesome Servant: Battlecry: If you've cast 5 or more spells this game, draw 2 cards.
+		// Meddlesome Servant: Battlecry: If you've cast 5 or more spells this game, draw 2 cards.
 		case CardIds.MeddlesomeServant_YOG_518:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
 		case CardIds.MedivhTheHallowed_TIME_890:
@@ -2488,7 +2488,7 @@ export const cardIdSelector = (
 		case CardIds.MenagerieWarden_KAR_065:
 		case CardIds.MenagerieWarden_WON_305:
 			return and(side(inputSide), or(inDeck, inHand), beast);
-			// Mending Pools: Passive After you cast your first Nature spell in a turn, restore 2 Health to all friendly characters.
+		// Mending Pools: Passive After you cast your first Nature spell in a turn, restore 2 Health to all friendly characters.
 		case CardIds.MendingPoolsTavernBrawl:
 			return and(side(inputSide), spellExtended, nature);
 		case CardIds.MemoriamManifest_TIME_616:
@@ -2506,7 +2506,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), dragon);
 		case CardIds.MinecartCruiser_WW_326:
 			return and(side(inputSide), or(inHand, inDeck), elemental);
-			// Mistah Vistah: Mage Tourist Battlecry: In 3 turns, replay every spell you've cast between now and then.
+		// Mistah Vistah: Mage Tourist Battlecry: In 3 turns, replay every spell you've cast between now and then.
 		case CardIds.MistahVistah_VAC_519:
 			return and(side(inputSide), or(inHand, inDeck), spellExtended);
 		case CardIds.Mixtape:
@@ -2529,14 +2529,14 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), minion, battlecry);
 		case CardIds.MurmuringElemental:
 			return and(side(inputSide), or(inDeck, inHand), battlecry);
-			// Murkwater Scribe: Battlecry: The next spell you play costs (1) less.
+		// Murkwater Scribe: Battlecry: The next spell you play costs (1) less.
 		case CardIds.MurkwaterScribe:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
 		case CardIds.MuscleOTron_YOG_525:
 			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.MutatingInjection_NAX11_04:
 			return and(side(inputSide), or(inDeck, inHand), minion);
-			// Myrmidon: After you cast a spell on this minion, draw a card.
+		// Myrmidon: After you cast a spell on this minion, draw a card.
 		case CardIds.Myrmidon:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended, canTargetFriendlyMinion);
 		case CardIds.MysteriousChallenger:
@@ -2545,7 +2545,7 @@ export const cardIdSelector = (
 		case CardIds.MysteryEgg_TOY_351:
 		case CardIds.MysteryEgg_MysteryEggToken_TOY_351t:
 			return and(side(inputSide), inDeck, beast);
-			// Naga Giant: Costs (1) less for each Mana you've spent on spells this game.
+		// Naga Giant: Costs (1) less for each Mana you've spent on spells this game.
 		case CardIds.NagaGiant:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
 		case CardIds.NagasPride:
@@ -2580,7 +2580,7 @@ export const cardIdSelector = (
 			return highlightConditions(and(side(inputSide), inDeck, minion), and(side(inputSide), inDeck, spell));
 		case CardIds.NineLives:
 			return and(side(inputSide), or(inHand, inDeck, inGraveyard), minion, deathrattle);
-			// Niri of the Crater: Whenever you play a 1-Cost minion, double its stats. Whenever you cast a 1-Cost spell, cast it twice.
+		// Niri of the Crater: Whenever you play a 1-Cost minion, double its stats. Whenever you cast a 1-Cost spell, cast it twice.
 		case CardIds.NiriOfTheCrater_TLC_836:
 			return highlightConditions(
 				and(side(inputSide), or(inHand, inDeck), minion, effectiveCostEqual(1)),
@@ -2588,7 +2588,7 @@ export const cardIdSelector = (
 			);
 		// Nordrassil Druid (CORE_CS3_012 / CS3_012): Battlecry: The next spell you cast this turn costs (3) less.
 		case CardIds.NordrassilDruid:
-			// Nordrassil Druid: Battlecry: The next spell you cast this turn costs (3) less.
+		// Nordrassil Druid: Battlecry: The next spell you cast this turn costs (3) less.
 		case CardIds.NordrassilDruidLegacy:
 			return and(side(inputSide), or(inHand, inDeck), spellExtended);
 		case CardIds.NorthernNavigation:
@@ -2597,7 +2597,7 @@ export const cardIdSelector = (
 				and(side(inputSide), or(inHand, inDeck), spell),
 			);
 		case CardIds.NostalgicInitiate_TOY_340:
-			// Nostalgic Initiate: Mini The first time you cast a spell, gain +2/+2.
+		// Nostalgic Initiate: Mini The first time you cast a spell, gain +2/+2.
 		case CardIds.NostalgicInitiate_NostalgicInitiateToken_TOY_340t1:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
 		case CardIds.NoxiousInfiltrator:
@@ -2636,7 +2636,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), dragon);
 		case CardIds.Oondasta:
 			return and(side(inputSide), or(inDeck, inHand), beast);
-			// Oops, All Spells!: Passive At the start of the game, destroy all minions in your deck. Your spells cost (1) less.
+		// Oops, All Spells!: Passive At the start of the game, destroy all minions in your deck. Your spells cost (1) less.
 		case CardIds.OopsAllSpellsTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
 		case CardIds.OpenTheDoorwaysTavernBrawl:
@@ -2692,7 +2692,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), pirate);
 		case CardIds.ParallaxCannon_GDB_843:
 			return and(side(inputSide), or(inDeck, inHand), discover);
-			// Parched Desperado: Battlecry: If you've cast a spell while holding this, give your hero +3 Attack this turn.
+		// Parched Desperado: Battlecry: If you've cast a spell while holding this, give your hero +3 Attack this turn.
 		case CardIds.ParchedDesperado_WW_407:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
 		case CardIds.ParrotSanctuary_VAC_409:
@@ -2701,7 +2701,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), mech);
 		case CardIds.PartyAnimal:
 			return and(side(inputSide), or(inHand, inDeck), minion, not(tribeless));
-			// Party Portal: Whenever you cast a spell, summon a random minion of the same Cost.
+		// Party Portal: Whenever you cast a spell, summon a random minion of the same Cost.
 		case CardIds.PartyPortalTavernBrawl_PVPDR_SCH_Active08:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
 		case CardIds.PeacefulPiper:
@@ -2747,7 +2747,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, demon);
 		case CardIds.PitStop:
 			return and(side(inputSide), inDeck, mech);
-			// Plaguebringer: Passive Your spells Overload (1) and cost (2) less, but not less than (1).
+		// Plaguebringer: Passive Your spells Overload (1) and cost (2) less, but not less than (1).
 		case CardIds.PlaguebringerTavernBrawl:
 			return and(side(inputSide), spellExtended, effectiveCostMore(1));
 		case CardIds.PlanetaryNavigator_GDB_444:
@@ -2761,7 +2761,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, weapon);
 		case CardIds.PoisonBreath_CORE_EDR_002:
 			return and(side(inputSide), or(inDeck, inHand), undead);
-			// Pop'gar the Putrid: Your Fel spells cost (2) less and have Lifesteal. Battlecry: Get two Barrels of Sludge.
+		// Pop'gar the Putrid: Your Fel spells cost (2) less and have Lifesteal. Battlecry: Get two Barrels of Sludge.
 		case CardIds.PopgarThePutrid_WW_091:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended, fel);
 		case CardIds.PortalmancerSkyla_WORK_063:
@@ -2796,7 +2796,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), naga);
 		case CardIds.PreparationCore:
 		case CardIds.PreparationLegacy:
-			// Preparation: The next spell you cast this turn costs (3) less.
+		// Preparation: The next spell you cast this turn costs (3) less.
 		case CardIds.PreparationVanilla:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
 		case CardIds.Prescience:
@@ -2808,7 +2808,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), dragon);
 		case CardIds.PressurePoints_GDB_881:
 			return and(side(inputSide), or(inHand, inDeck), combo);
-			// Priestess Valishj: Battlecry: Refresh an empty Mana Crystal for each spell you've cast this turn. (0)
+		// Priestess Valishj: Battlecry: Refresh an empty Mana Crystal for each spell you've cast this turn. (0)
 		case CardIds.PriestessValishj:
 			return and(side(inputSide), or(inHand, inDeck), spellExtended);
 		case CardIds.PrimalDungeoneer:
@@ -2819,7 +2819,7 @@ export const cardIdSelector = (
 			);
 		case CardIds.PrimalfinChallenger_TLC_251:
 			return and(side(inputSide), or(inHand, inDeck), kindred);
-			// Primordial Overseer: Battlecry: If you've cast a Nature spell while holding this, gain +1/+1 and draw a card.
+		// Primordial Overseer: Battlecry: If you've cast a Nature spell while holding this, gain +1/+1 and draw a card.
 		case CardIds.PrimordialOverseer_TIME_213:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended, nature);
 		case CardIds.PrimordialProtector_BAR_042:
@@ -2828,7 +2828,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, effectiveCostEqual(1));
 		case CardIds.PrincessTavernBrawl:
 			return and(side(inputSide), inDeck, minion, deathrattle);
-			// Prison Breaker: Battlecry: If you've cast 5 or more spells this game, deal 2 damage to all enemies.
+		// Prison Breaker: Battlecry: If you've cast 5 or more spells this game, deal 2 damage to all enemies.
 		case CardIds.PrisonBreaker_YOG_411:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
 		case CardIds.PrivateEye:
@@ -2853,15 +2853,15 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.Psychopomp:
 			return and(side(inputSide), inGraveyard, minion);
-			// Pyrotechnician: After you cast a spell, add a random Fire spell to your hand.
+		// Pyrotechnician: After you cast a spell, add a random Fire spell to your hand.
 		case CardIds.Pyrotechnician:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
 		case CardIds.QualityAssurance_TOY_605:
 			return and(side(inputSide), inDeck, minion, taunt);
-			// Queen Azshara: Battlecry: If you've cast three spells while holding this, choose an Ancient Relic.
+		// Queen Azshara: Battlecry: If you've cast three spells while holding this, choose an Ancient Relic.
 		case CardIds.QueenAzshara_TSC_641:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
-			// Queensguard: Battlecry: Gain +1/+1 for each spell you've cast this turn.
+		// Queensguard: Battlecry: Gain +1/+1 for each spell you've cast this turn.
 		case CardIds.Queensguard:
 			return and(side(inputSide), or(inHand, inDeck), spellExtended);
 		case CardIds.RaiseDead_SCH_514:
@@ -2882,7 +2882,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, mech);
 		case CardIds.RaDen:
 			return tooltip(and(side(inputSide), minionPlayedThisMatch, notInInitialDeck, not(cardIs(CardIds.RaDen))));
-			// Radiance of Azshara: Fire Spell Damage +2 Your Nature spells cost (1) less. After you cast a Frost spell, gain 3 Armor.
+		// Radiance of Azshara: Fire Spell Damage +2 Your Nature spells cost (1) less. After you cast a Frost spell, gain 3 Armor.
 		case CardIds.RadianceOfAzshara_TSC_635:
 			return highlightConditions(
 				and(side(inputSide), or(inHand, inDeck), spellExtended, fire),
@@ -2902,17 +2902,17 @@ export const cardIdSelector = (
 			);
 		case CardIds.RaidTheDocks:
 			return highlightConditions(and(side(inputSide), inDeck, pirate), and(side(inputSide), inDeck, weapon));
-			// Raid the Sky Temple: Quest: Cast 10 spells. Reward: Ascendant Scroll.
+		// Raid the Sky Temple: Quest: Cast 10 spells. Reward: Ascendant Scroll.
 		case CardIds.RaidTheSkyTemple:
 			return and(side(inputSide), or(inHand, inDeck), spellExtended);
-			// Raj Naz'jan: After you cast a spell, deal damage equal to its Cost to the enemy Hero.
+		// Raj Naz'jan: After you cast a spell, deal damage equal to its Cost to the enemy Hero.
 		case CardIds.RajNazjan:
 			return and(side(inputSide), or(inHand, inDeck), spellExtended);
 		case CardIds.Rally:
 			return and(side(inputSide), inGraveyard, minion, effectiveCostLess(4), effectiveCostMore(0));
 		case CardIds.RallyTheTroopsTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), battlecry);
-			// Rambunctious Stuffy: Rush After you cast a Frost spell, gain Reborn.
+		// Rambunctious Stuffy: Rush After you cast a Frost spell, gain Reborn.
 		case CardIds.RambunctiousStuffy_TOY_821:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended, frost);
 		case CardIds.RamkahenWildtamer:
@@ -2929,7 +2929,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), minion, zerg);
 		case CardIds.RavenousFelhunter_EDR_891:
 			return and(side(inputSide), or(inHand, inDeck, inGraveyard), minion, deathrattle, baseCostLessThan(5));
-			// Raylla, Sand Sculptor: Paladin Tourist After you cast a spell, summon a random 2-Cost minion and give it Divine Shield.
+		// Raylla, Sand Sculptor: Paladin Tourist After you cast a spell, summon a random 2-Cost minion and give it Divine Shield.
 		case CardIds.RayllaSandSculptor_VAC_424:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
 		case CardIds.Razorboar:
@@ -2938,16 +2938,16 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), minion, deathrattle, effectiveCostLess(5));
 		case CardIds.RazormaneBattleguard:
 			return and(side(inputSide), or(inDeck, inHand), minion, taunt);
-			// Reach Equilibrium: Quest: Cast 4 Holy spells Reward: Life's Breath. Quest: Cast 4 Shadow spells. Reward: Death's Touch.
+		// Reach Equilibrium: Quest: Cast 4 Holy spells Reward: Life's Breath. Quest: Cast 4 Shadow spells. Reward: Death's Touch.
 		case CardIds.ReachEquilibrium_TLC_817:
 			return highlightConditions(
 				and(side(inputSide), or(inHand, inDeck), holy, spellExtended),
 				and(side(inputSide), or(inHand, inDeck), shadow, spellExtended),
 			);
-			// Cleanse the Shadow: Quest: Cast 4 Holy spells. Reward: Life's Breath.
+		// Cleanse the Shadow: Quest: Cast 4 Holy spells. Reward: Life's Breath.
 		case CardIds.ReachEquilibrium_CleanseTheShadowToken_TLC_817t:
 			return and(side(inputSide), or(inHand, inDeck), holy, spellExtended);
-			// Corrupt the Light: Quest: Cast 4 Shadow spells. Reward: Death's Touch.
+		// Corrupt the Light: Quest: Cast 4 Shadow spells. Reward: Death's Touch.
 		case CardIds.ReachEquilibrium_CorruptTheLightToken_TLC_817t2:
 			return and(side(inputSide), or(inHand, inDeck), shadow, spellExtended);
 		case CardIds.ReanimateTheTerror_TLC_433:
@@ -3026,7 +3026,7 @@ export const cardIdSelector = (
 				and(side(inputSide), or(inHand, inDeck), spell, not(cardIs(CardIds.Rewind_ETC_532))),
 				and(side(inputSide), inOther, spell, not(cardIs(CardIds.Rewind_ETC_532))),
 			);
-			// Rhonin's Scrying Orb: Passive The first spell you cast each turn costs (1) less.
+		// Rhonin's Scrying Orb: Passive The first spell you cast each turn costs (1) less.
 		case CardIds.RhoninsScryingOrbTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
 		case CardIds.RhymeSpinner:
@@ -3036,10 +3036,10 @@ export const cardIdSelector = (
 		case CardIds.RimefangSwordCore:
 		case CardIds.RimefangSword_LEG_RLK_710:
 			return and(side(inputSide), or(inDeck, inHand), spell);
-			// Rimescale Siren: Battlecry: If you've cast three spells while holding this, Freeze 3 random enemy minions.
+		// Rimescale Siren: Battlecry: If you've cast three spells while holding this, Freeze 3 random enemy minions.
 		case CardIds.RimescaleSiren:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
-			// Rimetongue: After you cast a Frost spell, summon a 1/1 Elemental that Freezes.
+		// Rimetongue: After you cast a Frost spell, summon a 1/1 Elemental that Freezes.
 		case CardIds.Rimetongue:
 			return and(side(inputSide), or(inDeck, inHand), frost, spellExtended);
 		case CardIds.RingmastersBaton:
@@ -3058,14 +3058,14 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), freeze);
 		case CardIds.RingOfPhaseshiftingTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), minion, legendary);
-			// Ring of Refreshment: Passive After you cast a spell, refresh your Hero Power.
+		// Ring of Refreshment: Passive After you cast a spell, refresh your Hero Power.
 		case CardIds.RingOfRefreshmentTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
 		case CardIds.RippleInTime:
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.RiskySkipper:
 			return and(side(inputSide), or(inHand, inDeck), minion);
-			// Ritual of the New Moon: Summon two random 3-Cost minions. (Cast 3 spells to summon 6-Cost minions instead.)
+		// Ritual of the New Moon: Summon two random 3-Cost minions. (Cast 3 spells to summon 6-Cost minions instead.)
 		case CardIds.RitualOfTheNewMoon_EDR_461:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
 		case CardIds.RivendareWarrider:
@@ -3158,7 +3158,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, minion, healthLessThan(2));
 		case CardIds.Sandbinder:
 			return and(side(inputSide), inDeck, elemental);
-			// Saronite Shambler: Battlecry: If you've cast 5 or more spells this game, give your hero +4 Attack this turn.
+		// Saronite Shambler: Battlecry: If you've cast 5 or more spells this game, give your hero +4 Attack this turn.
 		case CardIds.SaroniteShambler_YOG_521:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
 		case CardIds.Saruun_GDB_304:
@@ -3242,7 +3242,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), naga);
 		case CardIds.ServiceBell:
 			return and(side(inputSide), inDeck, not(neutral));
-			// Sethekk Veilweaver: After you cast a spell on a minion, add a Priest spell to your hand.
+		// Sethekk Veilweaver: After you cast a spell on a minion, add a Priest spell to your hand.
 		case CardIds.SethekkVeilweaver:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
 		case CardIds.Shadehound:
@@ -3257,13 +3257,13 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.Shadowcasting101TavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), minion);
-			// Shadowcloth Needle: After you cast a Shadow spell, deal 1 damage to all enemies. Lose 1 Durability.
+		// Shadowcloth Needle: After you cast a Shadow spell, deal 1 damage to all enemies. Lose 1 Durability.
 		case CardIds.ShadowclothNeedle:
 			return and(side(inputSide), or(inDeck, inHand), shadow, spellExtended);
 		case CardIds.ShadowEssence_CORE_ICC_235:
 		case CardIds.ShadowEssence_ICC_235:
 			return and(side(inputSide), inDeck, minion);
-			// Shadow of Demise: Each time you cast a spell, transform this into a copy of it.
+		// Shadow of Demise: Each time you cast a spell, transform this into a copy of it.
 		case CardIds.ShadowOfDemise:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
 		case CardIds.ShadowtouchedKvaldir_YOG_300:
@@ -3310,17 +3310,17 @@ export const cardIdSelector = (
 		case CardIds.ShadowstepLegacy:
 		case CardIds.ShadowstepVanilla:
 			return and(side(inputSide), or(inDeck, inHand), minion);
-			// Sha'tari Cloakfield: Elusive. Your first spell each turn costs (1) less. Starship Piece
+		// Sha'tari Cloakfield: Elusive. Your first spell each turn costs (1) less. Starship Piece
 		case CardIds.ShatariCloakfield_GDB_103:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
-			// Shield Battery: Gain 6 Armor. Your next Protoss spell costs (2) less.
+		// Shield Battery: Gain 6 Armor. Your next Protoss spell costs (2) less.
 		case CardIds.ShieldBattery_SC_759:
 			return and(side(inputSide), or(inHand, inDeck), protoss, spellExtended);
 		case CardIds.ShieldSlamCore:
 		case CardIds.ShieldSlamLegacy:
 		case CardIds.ShieldSlamVanilla:
 			return and(side(inputSide), or(inHand, inDeck), givesArmor);
-			// Shirvallah, the Tiger: Divine Shield, Rush, Lifesteal Costs (1) less for each Mana you've spent on spells.
+		// Shirvallah, the Tiger: Divine Shield, Rush, Lifesteal Costs (1) less for each Mana you've spent on spells.
 		case CardIds.ShirvallahTheTiger:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
 		case CardIds.ShiveringSorceress:
@@ -3375,7 +3375,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand, inOther), excavate);
 		case CardIds.SlipperySlope_VAC_513:
 			return and(side(inputSide), or(inDeck, inHand), freeze);
-			// Slithering Deathscale: Battlecry: If you've cast three spells while holding this, deal 3 damage to all enemies.
+		// Slithering Deathscale: Battlecry: If you've cast three spells while holding this, deal 3 damage to all enemies.
 		case CardIds.SlitheringDeathscale:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
 		case CardIds.SmallTimeBuccaneer:
@@ -3428,10 +3428,10 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), weapon);
 		case CardIds.SpecialDeliveryTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), minion, rush);
-			// Spectral Trainee: After you cast a spell, deal 1 damage to all enemy minions.
+		// Spectral Trainee: After you cast a spell, deal 1 damage to all enemy minions.
 		case CardIds.SpectralTrainee:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
-			// Spellcoiler: Battlecry: If you've cast a spell while holding this, Discover a spell.
+		// Spellcoiler: Battlecry: If you've cast a spell while holding this, Discover a spell.
 		case CardIds.Spellcoiler:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
 		case CardIds.Spelunker_TLC_450:
@@ -3471,7 +3471,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), dragon);
 		case CardIds.SpitefulSummoner:
 			return and(side(inputSide), inDeck, spell);
-			// Spitelash Siren: After you play a Naga, refresh two Mana Crystals. (Then switch!) / After you cast a spell, refresh two Mana Crystals. (Then switch!)
+		// Spitelash Siren: After you play a Naga, refresh two Mana Crystals. (Then switch!) / After you cast a spell, refresh two Mana Crystals. (Then switch!)
 		case CardIds.SpitelashSiren:
 			return highlightConditions(
 				and(side(inputSide), or(inHand, inDeck), spellExtended),
@@ -3489,7 +3489,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), elemental);
 		case CardIds.SpotTheDifference_TOY_374:
 			return and(side(inputSide), inDeck, minion);
-			// Spreading Saplings: Passive After you cast a Nature spell, summon a 1/1 Sapling.
+		// Spreading Saplings: Passive After you cast a Nature spell, summon a 1/1 Sapling.
 		case CardIds.SpreadingSaplingsTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended, nature);
 		case CardIds.RuleModifier_SpreadOfCorruptionToken_TTN_002t45:
@@ -3506,7 +3506,7 @@ export const cardIdSelector = (
 				side(inputSide),
 				or(and(or(inDeck, inHand), spell, secret), and(inOther, cardsPlayedThisMatch, spell, secret)),
 			);
-			// Staff of Pain: Passive After you cast a Shadow spell, deal 2 damage to each hero.
+		// Staff of Pain: Passive After you cast a Shadow spell, deal 2 damage to each hero.
 		case CardIds.StaffOfPainTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended, shadow);
 		case CardIds.StaffOfRenewal:
@@ -3538,10 +3538,10 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), discover);
 		case CardIds.Stargazing_WW_425:
 			return and(side(inputSide), inDeck, spell, arcane, not(cardIs(CardIds.Stargazing_WW_425)));
-			// Starlight Groove: Give your hero Divine Shield. For the rest of the game, playing a Holy spell refreshes it.
+		// Starlight Groove: Give your hero Divine Shield. For the rest of the game, playing a Holy spell refreshes it.
 		case CardIds.StarlightGroove:
 			return and(side(inputSide), or(inDeck, inHand), holy, spellExtended);
-			// Starlight Reactor: After you cast an Arcane spell, recast it (targets chosen randomly). Starship Piece
+		// Starlight Reactor: After you cast an Arcane spell, recast it (targets chosen randomly). Starship Piece
 		case CardIds.StarlightReactor_GDB_108:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended, arcane);
 		case CardIds.StarlightWanderer_GDB_720:
@@ -3612,17 +3612,17 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, effectiveCostMore(5));
 		case CardIds.SummonerDarkmarrow_VAC_503:
 			return and(side(inputSide), or(inHand, inDeck), deathrattle);
-			// Sunfury Champion: After you cast a Fire spell, deal 1 damage to all minions.
+		// Sunfury Champion: After you cast a Fire spell, deal 1 damage to all minions.
 		case CardIds.SunfuryChampion:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended, fire);
 		case CardIds.SunreaverWarmage:
 			return and(side(inputSide), or(inDeck, inHand), spell, costMore(4));
 		case CardIds.SunsapperLynessa_VAC_507:
 			return and(side(inputSide), or(inDeck, inHand), spell, effectiveCostLess(3));
-			// Sunstrider's Crown: Passive Every third spell you cast each turn costs (1).
+		// Sunstrider's Crown: Passive Every third spell you cast each turn costs (1).
 		case CardIds.SunstridersCrownTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
-			// Sunwing Squawker: Battlecry: Repeat the last spell you've cast on a friendly minion on this.
+		// Sunwing Squawker: Battlecry: Repeat the last spell you've cast on a friendly minion on this.
 		case CardIds.SunwingSquawker:
 			return (input: SelectorInput): SelectorOutput => {
 				const lastSpell = pickLast(input.deckState.spellsPlayedOnFriendlyMinions);
@@ -3643,7 +3643,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck, inPlay), minion);
 		case CardIds.SwarthySwordshiner_VAC_701:
 			return and(side(inputSide), or(inHand, inDeck), weapon);
-			// Swiftscale Trickster: Battlecry: Your next spell this turn costs (0).
+		// Swiftscale Trickster: Battlecry: Your next spell this turn costs (0).
 		case CardIds.SwiftscaleTrickster:
 			return and(side(inputSide), or(inHand, inDeck), spellExtended);
 		case CardIds.Swindle:
@@ -3703,12 +3703,12 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), elemental);
 		case CardIds.TakeToTheSkies_WW_816:
 			return and(side(inputSide), inDeck, dragon);
-			// Talented Arcanist: Battlecry: Your next spell this turn has Spell Damage +2.
+		// Talented Arcanist: Battlecry: Your next spell this turn has Spell Damage +2.
 		case CardIds.TalentedArcanist:
 			return and(side(inputSide), or(inHand, inDeck), spellExtended, dealsDamage);
 		case CardIds.TamsinsPhylactery:
 			return and(side(inputSide), minion, inGraveyard, deathrattle);
-			// Tamsin Roame: Whenever you cast a Shadow spell that costs (1) or more, add a copy to your hand that costs (0).
+		// Tamsin Roame: Whenever you cast a Shadow spell that costs (1) or more, add a copy to your hand that costs (0).
 		case CardIds.TamsinRoame_BAR_918:
 			return and(side(inputSide), or(inHand, inDeck), shadow, spellExtended, effectiveCostMore(0));
 		case CardIds.TangledWrath:
@@ -3725,7 +3725,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.ToadOfTheWilds:
 			return and(side(inputSide), or(inDeck, inHand), spell, nature);
-			// Topior the Shrubbagazzor: Battlecry: For the rest of the game, after you cast a Nature spell, summon a 3/3 Whelp with Rush.
+		// Topior the Shrubbagazzor: Battlecry: For the rest of the game, after you cast a Nature spell, summon a 3/3 Whelp with Rush.
 		case CardIds.TopiorTheShrubbagazzor:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended, nature);
 		case CardIds.TerrorscaleStalker:
@@ -3764,7 +3764,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.TheExodar_GDB_120:
 			return and(side(inputSide), or(inDeck, inHand), starshipExtended);
-			// The Fist of Ra-den: After you cast a spell, summon a Legendary minion of that Cost. Lose 1 Durability.
+		// The Fist of Ra-den: After you cast a spell, summon a Legendary minion of that Cost. Lose 1 Durability.
 		case CardIds.TheFistOfRaDen:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
 		case CardIds.TheFinsBeyondTime_TIME_706:
@@ -3779,10 +3779,10 @@ export const cardIdSelector = (
 		case CardIds.TheForbiddenSequence_TLC_460:
 		case CardIds.TheForbiddenSequence_TheOriginStoneToken_TLC_460t:
 			return and(side(inputSide), or(inDeck, inHand), discover);
-			// The Galaxy's Lens: Spellburst: Absorb the spell's power!
+		// The Galaxy's Lens: Spellburst: Absorb the spell's power!
 		case CardIds.ExarchHataaru_TheGalaxysLensToken_GDB_136t:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
-			// The Garden's Grace: Give a minion +4/+4 and Divine Shield. Costs (1) less for each Mana you've spent on Holy spells this game.
+		// The Garden's Grace: Give a minion +4/+4 and Divine Shield. Costs (1) less for each Mana you've spent on Holy spells this game.
 		case CardIds.TheGardensGrace:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended, holy);
 		case CardIds.GaronaHalforcen_TheKingslayersToken_TIME_875t1:
@@ -3806,7 +3806,7 @@ export const cardIdSelector = (
 		case CardIds.Thor_SC_414:
 		case CardIds.Thor_ThorExplosivePayloadToken_SC_414t:
 			return and(side(inputSide), or(inHand, inDeck), starshipExtended);
-			// Thori'belore: Rush. Deathrattle: Go Dormant. Cast a Fire spell to revive Thori'belore!
+		// Thori'belore: Rush. Deathrattle: Go Dormant. Cast a Fire spell to revive Thori'belore!
 		case CardIds.Thoribelore:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended, fire);
 		case CardIds.ThornmantleMusician:
@@ -3817,10 +3817,10 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, or(elemental, beast));
 		case CardIds.TidelostBurrower:
 			return and(side(inputSide), or(inDeck, inHand), murloc);
-			// Tidepool Pupil: Battlecry: If you've cast 3 spells while holding this, Discover one of them.
+		// Tidepool Pupil: Battlecry: If you've cast 3 spells while holding this, Discover one of them.
 		case CardIds.TidepoolPupil_VAC_304:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
-			// Tide Pools: Discover a spell that costs (3) or less. After you cast a spell, reopen this.
+		// Tide Pools: Discover a spell that costs (3) or less. After you cast a spell, reopen this.
 		case CardIds.TidePools_VAC_522:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
 		case CardIds.TimberTambourine:
@@ -3934,7 +3934,7 @@ export const cardIdSelector = (
 				and(side(inputSide), or(inDeck, inHand), currentClass, minion),
 				tooltip(and(side(inputSide), inGraveyard, currentClass, minion)),
 			);
-			// Tyrande: Battlecry: The next 3 spells you play cast twice.
+		// Tyrande: Battlecry: The next 3 spells you play cast twice.
 		case CardIds.Tyrande_EDR_464:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
 		case CardIds.Tuskpiercer:
@@ -3946,7 +3946,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), dragon);
 		case CardIds.TwilightsCall:
 			return and(side(inputSide), inGraveyard, minion, deathrattle);
-			// Twinbow Terrorcoil: Battlecry: If you've cast a spell while holding this, your next spell casts twice.
+		// Twinbow Terrorcoil: Battlecry: If you've cast a spell while holding this, your next spell casts twice.
 		case CardIds.TwinbowTerrorcoil:
 			return and(side(inputSide), or(inHand, inDeck), spellExtended);
 		case CardIds.TwistedTether:
@@ -3963,7 +3963,7 @@ export const cardIdSelector = (
 				)(input);
 			};
 		case CardIds.UmbralOwl:
-			// Umbral Owl: Rush Costs (1) less for each spell you've cast this game.
+		// Umbral Owl: Rush Costs (1) less for each spell you've cast this game.
 		case CardIds.UmbralOwl_CORE_DMF_060:
 			return and(side(inputSide), or(inHand, inDeck), spellExtended);
 		case CardIds.UmpiresGrasp_TOY_641:
@@ -3990,7 +3990,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), minion, healthBiggerThanAttack);
 		case CardIds.UnluckyPowderman_WW_367:
 			return and(side(inputSide), or(inDeck, inHand), minion, taunt);
-			// Unstable Magic: Passive After you cast an Arcane spell, transform a random enemy minion into a 1/1 Sheep.
+		// Unstable Magic: Passive After you cast an Arcane spell, transform a random enemy minion into a 1/1 Sheep.
 		case CardIds.UnstableMagicTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended, arcane);
 		case CardIds.UntappedPotential:
@@ -3998,7 +3998,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), chooseOne);
 		case CardIds.UnyieldingVindicator_GDB_232:
 			return and(side(inputSide), or(inDeck, inHand), draenei);
-			// Urchin Spines: Your spells this turn are Poisonous.
+		// Urchin Spines: Your spells this turn are Poisonous.
 		case CardIds.UrchinSpines:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended, dealsDamage);
 		case CardIds.Ursatron:
@@ -4069,7 +4069,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), spell, damage);
 		case CardIds.Vendetta:
 			return and(side(inputSide), or(inHand, inDeck), fromAnotherClass);
-			// Veteran Warmedic: After you cast a Holy spell, summon a 2/2 Medic with Lifesteal.
+		// Veteran Warmedic: After you cast a Holy spell, summon a 2/2 Medic with Lifesteal.
 		case CardIds.VeteranWarmedic:
 			return and(side(inputSide), or(inHand, inDeck), holy, spellExtended);
 		case CardIds.VengefulSpirit_BAR_328:
@@ -4079,13 +4079,13 @@ export const cardIdSelector = (
 		case CardIds.VentureCoMercenaryLegacy:
 		case CardIds.VentureCoMercenaryVanilla:
 			return and(side(inputSide), or(inHand, inDeck), minion);
-			// Vexallus: Your Arcane spells cast twice.
+		// Vexallus: Your Arcane spells cast twice.
 		case CardIds.Vexallus:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended, arcane);
 		case CardIds.ViciousBloodworm_RLK_711:
 			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.ViciousSlitherspear_TSC_827:
-			// Vicious Slitherspear: After you cast a spell, gain +1 Attack until your next turn.
+		// Vicious Slitherspear: After you cast a spell, gain +1 Attack until your next turn.
 		case CardIds.ViciousSlitherspear_CORE_TSC_827:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
 		case CardIds.VioletTreasuregill_TLC_438:
@@ -4124,7 +4124,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, minion, neutral, effectiveCostLess(4));
 		// Warmaster Blackhorn (CATA_720): Battlecry: Destroy all cards that cost (2) or less in both player's hands and decks.
 		case CardIds.WarmasterBlackhorn_CATA_720:
-			return and(or(inDeck, inHand), effectiveCostLess(3));
+			return and(inDeck, effectiveCostLess(3));
 		case CardIds.WarpDrive_GDB_474:
 			return and(side(inputSide), or(inHand, inDeck), starshipExtended);
 		case CardIds.WarpGate_SC_751:
@@ -4155,7 +4155,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.WelcomeHome_TIME_EVENT_997:
 			return and(side(inputSide), or(inDeck, inHand), location);
-			// Whirlweaver: Battlecry: If you've cast a spell last turn, Discover an Elemental.
+		// Whirlweaver: Battlecry: If you've cast a spell last turn, Discover an Elemental.
 		case CardIds.Whirlweaver:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
 		case CardIds.Wither:
@@ -4163,14 +4163,14 @@ export const cardIdSelector = (
 		case CardIds.WickedBlightspawn_END_002:
 			return and(side(inputSide), or(inDeck, inHand), weapon);
 		case CardIds.WickedWitchdoctor:
-			// Wicked Witchdoctor: Whenever you cast a spell, summon a random basic Totem.
+		// Wicked Witchdoctor: Whenever you cast a spell, summon a random basic Totem.
 		case CardIds.WickedWitchdoctor_WON_083:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
 		case CardIds.WidowbloomSeedsman:
 			return and(side(inputSide), inDeck, spell, nature);
 		case CardIds.WildPyromancerCore:
 		case CardIds.WildPyromancerLegacy:
-			// Wild Pyromancer: After you cast a spell, deal 1 damage to ALL minions.
+		// Wild Pyromancer: After you cast a spell, deal 1 damage to ALL minions.
 		case CardIds.WildPyromancerVanilla:
 			return and(side(inputSide), or(inHand, inDeck), spellExtended);
 		case CardIds.WildSpirits:
@@ -4194,14 +4194,14 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), dragon);
 		case CardIds.WingCommanderIchman_AV_336:
 			return and(side(inputSide), inDeck, beast);
-			// Wish of the New Moon: Deal $6 damage to a minion. (Cast 3 spells to gain Lifesteal.)
+		// Wish of the New Moon: Deal $6 damage to a minion. (Cast 3 spells to gain Lifesteal.)
 		case CardIds.WishOfTheNewMoon_EDR_460:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
 		case CardIds.WishUponAStar_TOY_877:
 			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.WitchingHour:
 			return and(side(inputSide), inGraveyard, beast);
-			// Wither the Weak: Passive After you cast your first Fel spell in a turn, deal 1 damage to the lowest-Health enemy.
+		// Wither the Weak: Passive After you cast your first Fel spell in a turn, deal 1 damage to the lowest-Health enemy.
 		case CardIds.WitherTheWeakTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended, fel);
 		case CardIds.Woecleaver:
@@ -4243,14 +4243,14 @@ export const cardIdSelector = (
 		case CardIds.YoggInTheBox_TOY_372:
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.YoggSaronHopesEnd_OG_134:
-			// Yogg-Saron, Master of Fate: Battlecry: If you've cast 10 spells this game, spin the Wheel of Yogg-Saron.
+		// Yogg-Saron, Master of Fate: Battlecry: If you've cast 10 spells this game, spin the Wheel of Yogg-Saron.
 		case CardIds.YoggSaronMasterOfFate:
 			return and(side(inputSide), or(inHand, inDeck), spellExtended);
 		case CardIds.YshaarjTheDefiler:
 			return and(side(inputSide), cardsPlayedThisMatch, corrupted);
 		case CardIds.YshaarjRageUnbound:
 			return and(side(inputSide), inDeck, minion);
-			// Ysiel Windsinger: Your spells cost (1).
+		// Ysiel Windsinger: Your spells cost (1).
 		case CardIds.YsielWindsinger:
 			return and(side(inputSide), or(inHand, inDeck), spellExtended);
 

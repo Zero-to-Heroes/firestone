@@ -57,6 +57,11 @@ export const modifyDecksForSpecialCards = (
 				return [handleExploreUngoro(deckState, allCards, i18n), opponentDeckState];
 			case CardIds.HemetJungleHunter:
 				return [handleHemet(deckState, allCards, i18n), opponentDeckState];
+			case CardIds.WarmasterBlackhorn_CATA_720:
+				return [
+					handleWarmasterBlackhorn(deckState, allCards, i18n),
+					handleWarmasterBlackhorn(opponentDeckState, allCards, i18n),
+				];
 			case CardIds.CerathineFleetrunner:
 				return [handleCerathineFleetrunner(deckState, allCards, i18n), opponentDeckState];
 			case CardIds.LadyPrestor_SW_078:
@@ -218,11 +223,7 @@ const handleLorthemarTheron = (
 	});
 };
 
-const handleKingLlane = (
-	deckState: DeckState,
-	allCards: CardsFacadeService,
-	i18n: ILocalizationService,
-): DeckState => {
+const handleKingLlane = (deckState: DeckState, allCards: CardsFacadeService, i18n: ILocalizationService): DeckState => {
 	const otherFableCards = kingLlaneFablePackage.filter((c) => c !== CardIds.GaronaHalforcen_KingLlaneToken_TIME_875t);
 	if (otherFableCards.some((c) => deckState.hasRelevantCard([c], { includesOtherZone: true, includeBoard: true }))) {
 		return deckState;
@@ -233,11 +234,7 @@ const handleKingLlane = (
 	return result;
 };
 
-const handleBroxigar = (
-	deckState: DeckState,
-	allCards: CardsFacadeService,
-	i18n: ILocalizationService,
-): DeckState => {
+const handleBroxigar = (deckState: DeckState, allCards: CardsFacadeService, i18n: ILocalizationService): DeckState => {
 	const otherFableCards = broxigarFablePackage.filter((c) => c !== CardIds.Broxigar_TIME_020);
 	if (otherFableCards.some((c) => deckState.hasRelevantCard([c], { includesOtherZone: true, includeBoard: true }))) {
 		return deckState;
@@ -569,6 +566,20 @@ const handleHemet = (deckState: DeckState, allCards: CardsFacadeService, i18n: I
 		// We use the initial cost here, see
 		// https://www.reddit.com/r/hearthstone/comments/oo8cjr/if_a_cards_costs_are_reduced_during_a_game_does/h5wxgqr/?context=3
 		(card, refCard) => (refCard?.cost ?? 0) <= 3,
+		(card) => null,
+		deckState,
+		allCards,
+		i18n,
+	);
+};
+
+const handleWarmasterBlackhorn = (
+	deckState: DeckState,
+	allCards: CardsFacadeService,
+	i18n: ILocalizationService,
+): DeckState => {
+	return updateCardInDeck(
+		(card, refCard) => (refCard?.cost ?? 0) <= 2,
 		(card) => null,
 		deckState,
 		allCards,
