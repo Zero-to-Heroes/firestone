@@ -1,20 +1,38 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Input } from '@angular/core';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	Inject,
+	Input,
+	ViewRef,
+} from '@angular/core';
 import { BgsCompTip } from '@firestone-hs/content-craetor-input';
-import { GameTag, normalizeMinionCardId, Race, ReferenceCard } from '@firestone-hs/reference-data';
+import {
+	CardRules,
+	GameTag,
+	hasCorrectTribe,
+	normalizeMinionCardId,
+	Race,
+	ReferenceCard,
+} from '@firestone-hs/reference-data';
 import { ExtendedBgsCompAdvice, ExtendedReferenceCard, isCardOrSubstitute } from '@firestone/battlegrounds/core';
 import {
 	BgsBoardHighlighterService,
 	BgsInGameCompositionsService,
 	InGameFinalBoard,
 } from '@firestone/battlegrounds/services';
+import { GameStateFacadeService } from '@firestone/game-state';
 import { BgsCompositionsListMode } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import {
 	ADS_SERVICE_TOKEN,
 	AnalyticsService,
+	CardRulesService,
 	CardsFacadeService,
 	IAdsService,
 	ILocalizationService,
+	waitForReady,
 } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, Observable, startWith } from 'rxjs';
 
@@ -458,11 +476,15 @@ export class BgsMinionsListCompositionComponent extends AbstractSubscriptionComp
 		private readonly i18n: ILocalizationService,
 		private readonly analytics: AnalyticsService,
 		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
+		private readonly gameState: GameStateFacadeService,
+		private readonly cardRules: CardRulesService,
 	) {
 		super(cdr);
 	}
 
-	ngAfterContentInit() {
+	async ngAfterContentInit() {
+		await waitForReady(this.gameState, this.cardRules);
+
 		this.collapsed$ = combineLatest([this.controller.expandedCompositions$$, this.compId$$]).pipe(
 			this.mapData(([expandedIds, compId]) => !expandedIds.includes(compId)),
 			startWith(true),
@@ -476,8 +498,16 @@ export class BgsMinionsListCompositionComponent extends AbstractSubscriptionComp
 				return cards.every((c) => highlightedMinions.includes(c.id));
 			}),
 		);
-		this.exampleBoards$ = combineLatest([this.controller.finalBoardsByCompId$$, this.compId$$]).pipe(
-			this.mapData(([boardsMap, compId]) => {
+		const tribesInGame$ = this.gameState.gameState$$.pipe(
+			this.mapData((state) => state.bgState.currentGame?.availableRaces),
+		);
+		this.exampleBoards$ = combineLatest([
+			this.controller.finalBoardsByCompId$$,
+			this.compId$$,
+			tribesInGame$,
+			this.cardRules.rules$$,
+		]).pipe(
+			this.mapData(([boardsMap, compId, tribesInGame, cardRules]) => {
 				if (!compId || !boardsMap?.size) {
 					return [];
 				}
@@ -485,7 +515,16 @@ export class BgsMinionsListCompositionComponent extends AbstractSubscriptionComp
 				if (!boards?.length) {
 					return [];
 				}
-				return boards.map((b) => ({
+				console.debug('[debug] all boardsboards', boards);
+				const validBoardsForLobby = boards.filter((b) =>
+					isValidBoardForLobby(b, tribesInGame, this.allCards, cardRules),
+				);
+				console.debug('[debug] valid boards for lobby', validBoardsForLobby);
+				console.debug(
+					'[debug] invalid boards for lobby',
+					boards.filter((b) => !isValidBoardForLobby(b, tribesInGame, this.allCards, cardRules)),
+				);
+				return validBoardsForLobby.slice(0, 10).map((b) => ({
 					mmr: Math.round(b.mmr / 500) * 500,
 					heroCardId: b.heroCardId,
 					heroName: this.allCards.getCard(b.heroCardId)?.name ?? b.heroCardId,
@@ -495,6 +534,10 @@ export class BgsMinionsListCompositionComponent extends AbstractSubscriptionComp
 			}),
 		);
 		this.isPremium$ = this.ads.enablePremiumFeatures$$.pipe(this.mapData((premium) => premium));
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.markForCheck();
+		}
 	}
 
 	trackByFn(index: number, minion: ExtendedReferenceCard) {
@@ -547,3 +590,40 @@ export class BgsMinionsListCompositionComponent extends AbstractSubscriptionComp
 		return normalizedMinionsOnBoard?.some((id) => isCardOrSubstitute(normalizedMinionId, id));
 	}
 }
+
+const isValidBoardForLobby = (
+	board: InGameFinalBoard,
+	tribesInGame: readonly Race[],
+	allCards: CardsFacadeService,
+	cardRules: CardRules,
+): boolean => {
+	if (!tribesInGame?.length) {
+		return true;
+	}
+
+	return board.board.every((entity) => {
+		const card = allCards.getCard(entity.cardID);
+		return isValidCardForTribes(card.id, tribesInGame, allCards, cardRules);
+	});
+};
+const isValidCardForTribes = (
+	cardId: string,
+	tribesInGame: readonly Race[],
+	allCards: CardsFacadeService,
+	cardRules: CardRules,
+): boolean => {
+	const card = allCards.getCard(cardId);
+	if (tribesInGame.some((t) => hasCorrectTribe(card, t))) {
+		return true;
+	}
+
+	if (!cardRules) {
+		return false;
+	}
+
+	const rule = cardRules[cardId];
+	if (!rule) {
+		return false;
+	}
+	return rule.bgsMinionTypesRules?.needTypesInLobby?.every((tribe) => tribesInGame.includes(Race[tribe]));
+};

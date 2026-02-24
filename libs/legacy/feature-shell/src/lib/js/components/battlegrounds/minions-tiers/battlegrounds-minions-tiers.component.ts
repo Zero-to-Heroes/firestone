@@ -447,8 +447,8 @@ export class BattlegroundsMinionsTiersOverlayComponent
 								board: board.finalComp.board.map((e) => Entity.create(new Entity(), e)),
 							})),
 						)
-						.sort((a, b) => b.mmr - a.mmr)
-						.slice(0, 10);
+						.sort((a, b) => b.mmr - a.mmr);
+					// .slice(0, 10);
 					if (boards.length) {
 						boardsByCompId.set(comp.compId, boards);
 					}
