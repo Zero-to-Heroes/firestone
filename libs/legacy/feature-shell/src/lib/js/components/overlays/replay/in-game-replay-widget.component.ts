@@ -1,10 +1,4 @@
-import {
-	AfterContentInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	ViewRef,
-} from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { InGameReplayService, ReplayStatus } from '@firestone/mods/common';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
@@ -12,7 +6,7 @@ import { waitForReady } from '@firestone/shared/framework/core';
 @Component({
 	standalone: false,
 	selector: 'in-game-replay-widget',
-	styleUrls: ['../../../../css/component/overlays/replay/in-game-replay-widget.component.scss'],
+	styleUrls: ['./in-game-replay-widget.component.scss'],
 	template: `
 		<div class="replay-widget" [ngClass]="{ collapsed: collapsed }">
 			<!-- Header row: always visible -->
@@ -63,6 +57,7 @@ export class InGameReplayWidgetComponent extends AbstractSubscriptionComponent i
 	speedLabel = '1.0x';
 	collapsed = false;
 	private currentSpeed = 1;
+	private lastLocalSpeedChange = 0;
 	private mouseDownPos: { x: number; y: number } | null = null;
 
 	constructor(
@@ -117,6 +112,7 @@ export class InGameReplayWidgetComponent extends AbstractSubscriptionComponent i
 	private applySpeed(speed: number): void {
 		this.currentSpeed = speed;
 		this.speedLabel = `${speed.toFixed(1)}x`;
+		this.lastLocalSpeedChange = Date.now();
 		this.replayService.setSpeed(speed);
 	}
 
@@ -133,8 +129,12 @@ export class InGameReplayWidgetComponent extends AbstractSubscriptionComponent i
 		const total = status.total ?? 0;
 		this.progressPercent = total > 0 ? (elapsed / total) * 100 : 0;
 		this.isPaused = status.state === 'paused';
-		this.currentSpeed = status.speed ?? 1;
-		this.speedLabel = `${this.currentSpeed.toFixed(1)}x`;
+
+		const recentLocalChange = Date.now() - this.lastLocalSpeedChange < 2000;
+		if (!recentLocalChange) {
+			this.currentSpeed = status.speed ?? 1;
+			this.speedLabel = `${this.currentSpeed.toFixed(1)}x`;
+		}
 
 		const elapsedMin = Math.floor(elapsed / 60);
 		const elapsedSec = Math.floor(elapsed % 60);

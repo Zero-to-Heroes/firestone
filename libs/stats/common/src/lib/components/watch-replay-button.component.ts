@@ -97,6 +97,7 @@ export class WatchReplayButtonComponent {
 
 	async showInGame() {
 		this.dismissError();
+		console.log('[watch-replay-button] loading powerLogKey', this.powerLogKey);
 		const result = await this.inGameReplayService.showReplay(this.powerLogKey);
 		console.log('[watch-replay-button] showInGame result', result);
 		if (result !== 'started') {
