@@ -18,6 +18,10 @@ import { EventParser } from './_event-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 
 const NOT_REAL_DRAW = [CardIds.SirFinleySeaGuide];
+const DRAW_KNOWN_CARDS_FROM_DECK = [
+	// The card is stolen, the drawn right away, so we need to pick up the exact card (with stolenFromOpponent flag)
+	CardIds.Chronogor_TIME_032,
+];
 
 export class CardDrawParser implements EventParser {
 	constructor(
@@ -67,13 +71,15 @@ export class CardDrawParser implements EventParser {
 		// about it. This could change (via a whitelist?) if there are cards that start drawing from
 		// the bottom of the deck
 		// If no cardId is provided, we use the entityId
-		const shouldUseEntityId =
+		const shouldUseEntityIdForPlayer =
 			// Initially, it was !isPlayer, but I don't understand why. If it's the opponent, we don't want to use the entityId
 			// Looking at the commit history, it was to avoid info leaks on tradeable, but I don't understand why
 			isPlayer &&
 			(!cardId ||
 				cardsWithMatchingCardId.length === 1 ||
 				cardsWithMatchingCardId.every((e) => e.positionFromBottom == null && e.positionFromTop == null));
+		const shouldUseEntityIdForOpponent = !isPlayer && DRAW_KNOWN_CARDS_FROM_DECK.includes(drawnByCardId as CardIds);
+		const shouldUseEntityId = shouldUseEntityIdForPlayer || shouldUseEntityIdForOpponent;
 		console.debug('[card-draw] shouldUseEntityId', shouldUseEntityId, cardId, cardsWithMatchingCardId, deck.deck);
 		const isTutoring = tutors.includes(drawnByCardId as CardIds);
 
@@ -216,6 +222,7 @@ export class CardDrawParser implements EventParser {
 			rarity: isCardInfoPublic ? (card!.rarity ?? card!.rarity) : null,
 			zone: 'HAND',
 			tags: gameEvent.additionalData.tags ? toTagsObject(gameEvent.additionalData.tags) : card!.tags,
+			createdIndex: createdIndex,
 			// metaInfo: {
 			// 	turnAtWhichCardEnteredCurrentZone: currentState.currentTurnNumeric,
 			// 	turnAtWhichCardEnteredHand: currentState.currentTurnNumeric,
