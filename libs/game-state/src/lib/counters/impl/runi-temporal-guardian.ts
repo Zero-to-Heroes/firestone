@@ -38,7 +38,7 @@ export class RuniTemporalGuardianCounterDefinitionV2 extends CounterDefinitionV2
 				return null;
 			}
 
-			const delta = state.currentTurnNumeric - lastRuni.storedInformation!.gameTagTurnNumberPlayed!;
+			const delta = state.gameTagTurnNumber - lastRuni.storedInformation!.gameTagTurnNumberPlayed!;
 			if (delta <= 0 || !lastRuni.storedInformation!.cards?.length) {
 				return null;
 			}
