@@ -47,9 +47,11 @@ export class QuestCreatedInGameParser implements EventParser {
 
 		let newGlobalEffects: readonly DeckCard[] = deck.globalEffects;
 		if (
-			globalEffectQuestlinesTriggers.includes(cardId as CardIds) ||
+			globalEffectQuestlinesTriggers.includes(cardId as CardIds)
 			// For Twist passive abilities
-			dbCard.mechanics?.includes(GameTag[GameTag.OBJECTIVE])
+			// UPDATE 2026-02-24: this doesn't work, as objectives created in game by cards like Violet Treasuregill
+			// get marked as global effects
+			//||  dbCard.mechanics?.includes(GameTag[GameTag.OBJECTIVE])
 		) {
 			// console.debug('[quest-created-in-game] adding objective to global effects', card);
 			const stepCard = globalEffectQuestlines.find((q) => q.questStepCreated === cardId);
