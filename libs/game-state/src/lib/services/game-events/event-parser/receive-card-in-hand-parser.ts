@@ -18,6 +18,8 @@ import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 
+const CREATOR_STEALS = [CardIds.NightmareFuel_EDR_528];
+
 export class ReceiveCardInHandParser implements EventParser {
 	constructor(
 		private readonly helper: DeckManipulationHelper,
@@ -174,6 +176,7 @@ export class ReceiveCardInHandParser implements EventParser {
 		const cardWithZone = cardWithKnownInfo.update({
 			zone: 'HAND',
 			tags: gameEvent.additionalData.tags ? toTagsObject(gameEvent.additionalData.tags) : cardWithKnownInfo.tags,
+			stolenFromOpponent: CREATOR_STEALS.includes(creatorCardId as CardIds) ? true : undefined,
 			// So that cards don't keep info from their previous zones, or when they were previously in hand
 			// metaInfo: {
 			// 	turnAtWhichCardEnteredCurrentZone: currentState.currentTurnNumeric,

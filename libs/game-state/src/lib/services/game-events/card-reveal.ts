@@ -100,10 +100,12 @@ const revealRelatedCards = (deck: DeckState, card: DeckCard, allCards: CardsFaca
 	}
 
 	if (
-		hasMechanic(refCard, GameTag.FABLED) ||
-		hasMechanic(refCard, GameTag.FABLED_PLUS) ||
-		hasMechanic(refCard, GameTag.IS_FABLED_BUNDLE_CARD)
+		!card.stolenFromOpponent &&
+		(hasMechanic(refCard, GameTag.FABLED) ||
+			hasMechanic(refCard, GameTag.FABLED_PLUS) ||
+			hasMechanic(refCard, GameTag.IS_FABLED_BUNDLE_CARD))
 	) {
+		console.debug('[debug] reveal related cards', card.cardId, refCard, card, deck);
 		const fablePackage = fablePackages.find((p) => p.includes(card.cardId as CardIds));
 		if (!fablePackage) {
 			return deck;
