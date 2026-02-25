@@ -168,34 +168,6 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 		this.guessedInfo = isGuessedInfoEmpty(card.guessedInfo) ? null : card.guessedInfo;
 		if (card.guessedInfo?.possibleCards?.length) {
 			this.possibleCards = [...card.guessedInfo!.possibleCards];
-		} else if (this.forged) {
-			// Build the list of possible card classes based on the card classes in the deck that were part of the initial deck
-			// and the hero classes
-			// This is a bit difficult, because we have two scenarios at odd with each other:
-			// - We compute the class when the card is created, but we might not know it (because of tourists)
-			// - We compute the class afterwards, but the hero might have changed
-			// - temp fix: remove the hero classes
-			// const cardClasses: readonly CardClass[] = context
-			// 	.getAllCardsFromStarterDeck()
-			// 	.filter((c) => c?.cardId)
-			// 	.map((card) => this.allCards.getCard(card.cardId).classes ?? [])
-			// 	.filter((classes) => classes.length === 1)
-			// 	.flat()
-			// 	.filter((value, index, self) => self.indexOf(value) === index)
-			// 	.map((cardClass) => CardClass[cardClass]);
-			// const heroClasses: readonly CardClass[] = context.hero?.initialClasses || context.hero?.classes || [];
-			// const allClasses: readonly CardClass[] = [...cardClasses, ...heroClasses].filter(
-			// 	(value, index, self) => self.indexOf(value) === index,
-			// );
-			// Maestra is less important now, so we go back to simply using the hero class
-			const allClasses: readonly CardClass[] = context.hero?.initialClasses || context.hero?.classes || [];
-			const possibleForgedCards = getPossibleForgedCards(
-				metadata.formatType,
-				metadata.gameType,
-				allClasses,
-				this.allCards,
-			);
-			this.possibleCards = [...(possibleForgedCards ?? [])];
 		}
 		if (!this.possibleCards?.length) {
 			let validArenaPool: readonly string[] = [];
@@ -242,6 +214,41 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 						}
 					}
 				}
+			}
+		}
+
+		if (this.forged) {
+			// Build the list of possible card classes based on the card classes in the deck that were part of the initial deck
+			// and the hero classes
+			// This is a bit difficult, because we have two scenarios at odd with each other:
+			// - We compute the class when the card is created, but we might not know it (because of tourists)
+			// - We compute the class afterwards, but the hero might have changed
+			// - temp fix: remove the hero classes
+			// const cardClasses: readonly CardClass[] = context
+			// 	.getAllCardsFromStarterDeck()
+			// 	.filter((c) => c?.cardId)
+			// 	.map((card) => this.allCards.getCard(card.cardId).classes ?? [])
+			// 	.filter((classes) => classes.length === 1)
+			// 	.flat()
+			// 	.filter((value, index, self) => self.indexOf(value) === index)
+			// 	.map((cardClass) => CardClass[cardClass]);
+			// const heroClasses: readonly CardClass[] = context.hero?.initialClasses || context.hero?.classes || [];
+			// const allClasses: readonly CardClass[] = [...cardClasses, ...heroClasses].filter(
+			// 	(value, index, self) => self.indexOf(value) === index,
+			// );
+			// Maestra is less important now, so we go back to simply using the hero class
+			const allClasses: readonly CardClass[] = context.hero?.initialClasses || context.hero?.classes || [];
+			const possibleForgedCards = getPossibleForgedCards(
+				metadata.formatType,
+				metadata.gameType,
+				allClasses,
+				this.allCards,
+			);
+			if (!this.possibleCards?.length) {
+				this.possibleCards = [...(possibleForgedCards ?? [])];
+			} else {
+				// Interesct the pool of forged cards with the pool of possible cards
+				this.possibleCards = this.possibleCards.filter((cardId) => possibleForgedCards.includes(cardId));
 			}
 		}
 
