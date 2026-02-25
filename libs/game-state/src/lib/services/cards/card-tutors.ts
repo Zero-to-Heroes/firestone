@@ -357,6 +357,8 @@ const internalTutors = [
 	CardIds.NightmareLordXavius_EDR_856,
 	CardIds.Finality_END_003,
 	CardIds.TimelineAccelerator_WON_139,
+	CardIds.SplendiferousWhizbang_QuestAcceptedToken_TOY_700t14,
+	CardIds.PebblyPage_WON_090,
 ];
 for (const cardId of Object.keys(cardsInfoCache)) {
 	const card = cardsInfoCache[cardId];

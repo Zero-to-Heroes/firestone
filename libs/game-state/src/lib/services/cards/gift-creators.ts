@@ -646,7 +646,6 @@ const internalGiftCreators = [
 	CardIds.PandarenImporter,
 	CardIds.Paparazzi,
 	CardIds.PeacefulPiper,
-	CardIds.PebblyPage_WON_090,
 	CardIds.Peon_BAR_022,
 	CardIds.PettyTheft_VAC_335,
 	CardIds.PharaohCat,
