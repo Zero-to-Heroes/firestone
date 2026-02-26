@@ -97,7 +97,7 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 		// Auto-update mods when game exits or when app launches and game is not running
 		this.gameStatus.inGame$$
 			.pipe(
-				filter((inGame) => inGame != null),
+				filter((inGame) => inGame !== null),
 				distinctUntilChanged(),
 			)
 			.subscribe(async (inGame) => {
@@ -490,10 +490,7 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 			const newVersion = await this.hasUpdates(mod);
 			if (newVersion) {
 				console.log('[mods-manager] auto-updating mod', mod.Name, 'to', newVersion);
-				const updatedMod = this.modsData$$.getValue().find((m) => m.AssemblyName === mod.AssemblyName);
-				if (updatedMod) {
-					await this.updateMod(updatedMod);
-				}
+				await this.updateMod({ ...mod, updateAvailableVersion: newVersion });
 			}
 		}
 		console.log('[mods-manager] auto-update check complete');
