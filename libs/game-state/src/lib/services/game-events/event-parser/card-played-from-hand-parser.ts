@@ -293,7 +293,10 @@ export class CardPlayedFromHandParser implements EventParser {
 								?.filter(
 									(e) =>
 										this.allCards.getCard(e.cardId).type?.toUpperCase() ===
-											CardType[CardType.MINION] && e.tags?.[GameTag.DORMANT] !== 1,
+											CardType[CardType.MINION] &&
+										currentState.playerDeck.fullGameState?.AllEntities.find(
+											(e2) => e2.entityId === e.entityId,
+										)?.tags?.[GameTag.DORMANT]?.Value !== 1,
 								)
 								?.map((e) => e.entityId)
 								.filter((e) => e !== entityId),
@@ -301,7 +304,10 @@ export class CardPlayedFromHandParser implements EventParser {
 								?.filter(
 									(e) =>
 										this.allCards.getCard(e.cardId).type?.toUpperCase() ===
-											CardType[CardType.MINION] && e.tags?.[GameTag.DORMANT] !== 1,
+											CardType[CardType.MINION] &&
+										currentState.opponentDeck.fullGameState?.AllEntities.find(
+											(e2) => e2.entityId === e.entityId,
+										)?.tags?.[GameTag.DORMANT]?.Value !== 1,
 								)
 								?.map((e) => e.entityId)
 								.filter((e) => e !== entityId),
