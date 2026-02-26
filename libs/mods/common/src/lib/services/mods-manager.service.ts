@@ -11,7 +11,7 @@ import {
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
-import { distinctUntilChanged, map } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map } from 'rxjs/operators';
 import {
 	BepInExConfig,
 	buildBepInExConfig,
@@ -93,6 +93,19 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 				const refreshedMods = await this.refreshModsInternal(installPath);
 				this.modsData$$.next(refreshedMods);
 			});
+
+		// Auto-update mods when game exits or when app launches and game is not running
+		this.gameStatus.inGame$$
+			.pipe(
+				filter((inGame) => inGame != null),
+				distinctUntilChanged(),
+			)
+			.subscribe(async (inGame) => {
+				if (!inGame) {
+					await this.autoUpdateModsIfNeeded();
+				}
+			});
+
 		console.debug('[mods-manager] initialized');
 	}
 
@@ -451,6 +464,39 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 			console.warn('[mods-manager] could not parse release data', releaseDataStr);
 			return null;
 		}
+	}
+
+	private async autoUpdateModsIfNeeded(): Promise<void> {
+		const prefs = await this.prefs.getPreferences();
+		if (!prefs.modsEnabled || !prefs.modsAutoUpdate) {
+			console.debug('[mods-manager] auto-update skipped, modsEnabled:', prefs.modsEnabled, 'modsAutoUpdate:', prefs.modsAutoUpdate);
+			return;
+		}
+
+		const installPath = prefs.gameInstallPath;
+		if (!installPath) {
+			return;
+		}
+
+		const modsStatus = await this.checkMods(installPath);
+		if (modsStatus !== 'installed') {
+			return;
+		}
+
+		console.log('[mods-manager] checking for auto-updates');
+		const mods = this.modsData$$.getValue();
+		const modsWithDownloadLinks = mods.filter((m) => !!m.DownloadLink && m.alreadyInstalled);
+		for (const mod of modsWithDownloadLinks) {
+			const newVersion = await this.hasUpdates(mod);
+			if (newVersion) {
+				console.log('[mods-manager] auto-updating mod', mod.Name, 'to', newVersion);
+				const updatedMod = this.modsData$$.getValue().find((m) => m.AssemblyName === mod.AssemblyName);
+				if (updatedMod) {
+					await this.updateMod(updatedMod);
+				}
+			}
+		}
+		console.log('[mods-manager] auto-update check complete');
 	}
 
 	private async installUnstrippedLibs(installPath: string) {
