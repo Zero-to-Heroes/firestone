@@ -1786,6 +1786,7 @@ const doesSummonInPlay = (sourceCardId: string): boolean => {
 			return true;
 
 		// Cards that summon based on cost
+		case CardIds.CorpseFarm_WW_374:
 		case CardIds.RayllaSandSculptor_VAC_424:
 		case CardIds.AegisOfLight_EDR_264:
 		case CardIds.BuildingBlockGolem_MIS_314:
