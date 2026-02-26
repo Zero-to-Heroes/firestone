@@ -71,6 +71,7 @@ const internalTutors = [
 	CardIds.Crystology,
 	// Cultist Map - Discover a card from your deck. If you play it this turn, also pick one of the others.
 	CardIds.CultistMap_TLC_515,
+	CardIds.CultistMap_CultistMapPlayerEnchantEnchantment_TLC_515e,
 	CardIds.CursedCastaway,
 	CardIds.CutlassCourier,
 	CardIds.Darkbomb_WON_095,
