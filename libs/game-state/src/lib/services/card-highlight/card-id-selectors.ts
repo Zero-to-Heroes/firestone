@@ -3924,9 +3924,11 @@ export const cardIdSelector = (
 		case CardIds.TundraRhinoLegacy:
 		case CardIds.TundraRhinoVanilla:
 			return and(side(inputSide), or(inDeck, inHand), beast);
+		// Tyr: Battlecry: Resurrect a 2-Attack, 3-Attack, and 4-Attack friendly minion.
 		case CardIds.Tyr:
-			return tooltip(
-				and(side(inputSide), inGraveyard, currentClass, minion, attackGreaterThan(1), attackLessThan(5)),
+			return highlightConditions(
+				and(side(inputSide), or(inDeck, inHand), currentClass, minion, attackGreaterThan(1), attackLessThan(5)),
+				tooltip(and(side(inputSide), inGraveyard, currentClass, minion, attackGreaterThan(1), attackLessThan(5))),
 			);
 		case CardIds.TyrsTears:
 		case CardIds.TyrsTears_TyrsTearsToken:
