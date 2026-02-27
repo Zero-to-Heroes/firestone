@@ -42,9 +42,9 @@ export class CorpsesCounterDefinitionV2 extends CounterDefinitionV2<number> {
 		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>
-				i18n.translateString('settings.decktracker.your-deck.counters.corpses-label'),
+				i18n.translateString('settings.decktracker.opponent-deck.counters.corpses-label'),
 			tooltip: (i18n: ILocalizationService): string =>
-				i18n.translateString('settings.decktracker.your-deck.counters.corpses-tooltip'),
+				i18n.translateString('settings.decktracker.opponent-deck.counters.corpses-tooltip'),
 		},
 	};
 	readonly opponent = {
