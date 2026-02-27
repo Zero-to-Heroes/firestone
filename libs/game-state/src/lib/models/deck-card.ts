@@ -161,6 +161,7 @@ export interface StoredInformation {
 	gameTagTurnNumberPlayed?: number | null;
 	targetCardId?: string;
 	targetEntityId?: number;
+	armorGained?: number;
 }
 
 export interface GuessedInfo {
