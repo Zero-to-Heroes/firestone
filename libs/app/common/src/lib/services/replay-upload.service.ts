@@ -4,7 +4,7 @@ import { ReplayUploadMetadata } from '@firestone-hs/replay-metadata';
 import { Input as BgsComputeRunStatsInput } from '@firestone-hs/user-bgs-post-match-stats';
 import {
 	ENABLE_IN_GAME_REPLAY_FOR_ALL,
-	LogListenerCacheService,
+	PowerLogBufferService,
 	PreferencesService,
 } from '@firestone/shared/common/service';
 import { Mutable, uuid } from '@firestone/shared/framework/common';
@@ -24,7 +24,7 @@ export class ReplayUploadService {
 		private readonly prefs: PreferencesService,
 		private readonly userService: UserService,
 		private readonly metadataBuilder: ReplayMetadataBuilderService,
-		private readonly logListenerCache: LogListenerCacheService,
+		private readonly powerLogBuffer: PowerLogBufferService,
 	) {}
 
 	public async uploadGame(
@@ -109,12 +109,14 @@ export class ReplayUploadService {
 		await this.uploadReplay(replayKey, fileReplayBlob, {
 			userType: userType,
 		});
+		console.log('[manastorm-bridge] uploaded replay');
 
 		// Now upload the full Power.log file, keeping only the last game
 		if (fullMetaData.user.isPremium || ENABLE_IN_GAME_REPLAY_FOR_ALL) {
+			const { log: powerLog, generation } = this.powerLogBuffer.getCurrentGameLog();
+			console.log('[manastorm-bridge] got power log from buffer, length', powerLog.length);
+			console.debug('[manastorm-bridge] got power log from buffer', powerLog);
 			const powerLogZip = new JSZip();
-			const powerLog = await this.extractLastGameFromPowerLog(xml);
-			console.debug('[manastorm-bridge] extracted last game from power log', powerLog);
 			powerLogZip.file('power.log', powerLog);
 			const powerLogBlob: Blob = await powerLogZip.generateAsync({
 				type: 'blob',
@@ -127,6 +129,7 @@ export class ReplayUploadService {
 			console.log('[manastorm-bridge] uploading power log', powerLogKey);
 			await this.uploadPowerLog(powerLogKey, powerLogBlob);
 			console.log('[manastorm-bridge] uploaded power log');
+			this.powerLogBuffer.clearAfterUpload(generation);
 			(fullMetaData.game as Mutable<ReplayUploadMetadata['game']>).powerLogKey = powerLogKey;
 		}
 
@@ -224,62 +227,5 @@ export class ReplayUploadService {
 		}
 		// In browser environment, return Blob as-is
 		return blob;
-	}
-
-	private async extractLastGameFromPowerLog(xml: string): Promise<string> {
-		const startTime = Date.now();
-		const powerLog = await this.logListenerCache.cache['Power.log'].readFileContents();
-		if (!powerLog) {
-			console.warn('[manastorm-bridge] Power log is empty');
-			return '';
-		}
-
-		const tsMatch = xml.match(/<Game ts="([^"]+)"/);
-		if (!tsMatch) {
-			console.warn('[manastorm-bridge] Could not find game timestamp in XML, returning full power log');
-			return powerLog;
-		}
-
-		const gameTimestamp = tsMatch[1];
-		const lines = powerLog.split('\n');
-		let gameStartIndex = -1;
-
-		// Search from the end for the last CREATE_GAME line matching the XML timestamp
-		for (let i = lines.length - 1; i >= 0; i--) {
-			if (lines[i].includes('GameState.DebugPrintPower() - CREATE_GAME')) {
-				const logTsMatch = lines[i].match(/^D (\d+:\d+:\d+\.\d+)/);
-				if (logTsMatch) {
-					const logTs = logTsMatch[1];
-					const minLen = Math.min(gameTimestamp.length, logTs.length);
-					if (logTs.substring(0, minLen) === gameTimestamp.substring(0, minLen)) {
-						gameStartIndex = i;
-						break;
-					}
-				}
-			}
-		}
-
-		// Fallback: use the last CREATE_GAME if no timestamp match was found
-		if (gameStartIndex === -1) {
-			console.warn(
-				'[manastorm-bridge] Could not find game timestamp in power log, falling back to last CREATE_GAME',
-				tsMatch,
-			);
-			for (let i = lines.length - 1; i >= 0; i--) {
-				if (lines[i].includes('GameState.DebugPrintPower() - CREATE_GAME')) {
-					gameStartIndex = i;
-					break;
-				}
-			}
-		}
-
-		if (gameStartIndex === -1) {
-			console.warn('[manastorm-bridge] Could not find CREATE_GAME in power log, returning full power log');
-			return powerLog;
-		}
-
-		const result = lines.slice(gameStartIndex).join('\n');
-		console.log('[manastorm-bridge] extracted last game from power log in', Date.now() - startTime, 'ms');
-		return result;
 	}
 }

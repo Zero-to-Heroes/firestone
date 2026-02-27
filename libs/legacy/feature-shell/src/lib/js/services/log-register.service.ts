@@ -9,6 +9,7 @@ import {
 	LogListenerCacheService,
 	LogListenerService,
 	LogUtilsService,
+	PowerLogBufferService,
 	PreferencesService,
 } from '@firestone/shared/common/service';
 import { CardsMonitorService } from './collection/cards-monitor.service';
@@ -30,6 +31,7 @@ export class LogRegisterService {
 		private readonly logUtils: LogUtilsService,
 		private readonly hsLogsWatcher: HsLogsWatcherService,
 		private readonly logListenerCache: LogListenerCacheService,
+		private readonly powerLogBuffer: PowerLogBufferService,
 		@Inject(LOG_FILE_BACKEND) private readonly backend: LogFileBackend,
 	) {
 		// Only init the log listener once the store has been initialized. This aims at preventing
@@ -60,8 +62,16 @@ export class LogRegisterService {
 		new LogListenerService(this.backend, this.gameStatus, this.prefs, this.logUtils, this.logListenerCache)
 			.configure(
 				'Power.log',
-				(data) => this.gameEvents.receiveLogLine(data),
-				(existingLine) => this.gameEvents.receiveExistingLogLine(existingLine),
+				(data) => {
+					this.powerLogBuffer.pushLine(data);
+					this.gameEvents.receiveLogLine(data);
+				},
+				(existingLine) => {
+					if (existingLine !== 'end_of_existing_data') {
+						this.powerLogBuffer.pushLine(existingLine);
+					}
+					this.gameEvents.receiveExistingLogLine(existingLine);
+				},
 			)
 			.subscribe((status) => {
 				console.log('[log-register] status for Power.log', status);

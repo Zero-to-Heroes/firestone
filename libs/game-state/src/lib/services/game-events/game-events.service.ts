@@ -1,7 +1,7 @@
 import { Injectable, NgZone } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { SceneService } from '@firestone/memory';
-import { GameStatusService, GlobalErrorService } from '@firestone/shared/common/service';
+import { GameStatusService, GlobalErrorService, PowerLogBufferService } from '@firestone/shared/common/service';
 import { chunk, freeRegexp, sleep } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ProcessingQueue } from '@firestone/shared/framework/core';
 import Deque from 'double-ended-queue';
@@ -41,6 +41,7 @@ export class GameEvents {
 		private readonly gameUniqueId: GameUniqueIdService,
 		private readonly eventsFacade: GameEventsFacadeService,
 		private readonly globalError: GlobalErrorService,
+		private readonly powerLogBuffer: PowerLogBufferService,
 		private readonly ngZone: NgZone,
 	) {
 		this.processingQueue = new ProcessingQueue<string>(
@@ -180,6 +181,7 @@ export class GameEvents {
 		switch (gameEvent.Type) {
 			case 'NEW_GAME':
 				console.log('[game-events]', gameEvent.Type + ' event');
+				this.powerLogBuffer.confirmNewGame();
 				// this.hasSentToS3 = false;
 				const event = Object.assign(new GameEvent(), {
 					type: GameEvent.GAME_START,
@@ -1493,6 +1495,7 @@ export class GameEvents {
 				break;
 			case 'RECONNECT_START':
 				console.log('[game-events]', gameEvent.Type + ' event', gameEvent);
+				this.powerLogBuffer.confirmReconnect();
 				this.doEventDispatch(Object.assign(new GameEvent(), { type: GameEvent.RECONNECT_START }));
 				break;
 			case 'RECONNECT_OVER':

@@ -17,6 +17,7 @@ export * from './lib/services/log-utils.service';
 export * from './lib/services/logs-uploader.service';
 export * from './lib/services/logs/log-file-backend';
 export * from './lib/services/logs/log-listener-cache.service';
+export * from './lib/services/logs/power-log-buffer.service';
 export * from './lib/services/logs/log-listener.service';
 export * from './lib/services/logs/overwolf-log-file-backend.service';
 export * from './lib/services/notifications.service';
