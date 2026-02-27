@@ -56,6 +56,7 @@ export class Preferences implements IPreferences {
 	readonly gameInstallPath: string;
 
 	readonly modsEnabled: boolean;
+	readonly modsAutoUpdate: boolean = true;
 	readonly disableLocalCache: boolean;
 
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)

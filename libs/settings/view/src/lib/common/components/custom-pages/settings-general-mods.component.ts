@@ -92,6 +92,13 @@ import { Observable, filter } from 'rxjs';
 						{{ checkForUpdatesLabel }}
 					</button>
 
+					<preference-toggle
+						*ngIf="areModsInstalled"
+						[field]="'modsAutoUpdate'"
+						[label]="'settings.general.mods.auto-update-label' | fsTranslate"
+						[tooltip]="'settings.general.mods.auto-update-tooltip' | fsTranslate"
+					></preference-toggle>
+
 					<div class="installed-mods">
 						<div class="mod" *ngFor="let mod of installedMods; trackBy: trackByMod">
 							<div
