@@ -237,7 +237,10 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 			// 	(value, index, self) => self.indexOf(value) === index,
 			// );
 			// Maestra is less important now, so we go back to simply using the hero class
-			const allClasses: readonly CardClass[] = context.hero?.initialClasses || context.hero?.classes || [];
+			const allClasses: readonly CardClass[] =
+				context.hero?.initialClasses && context.hero.initialClasses.length > 0
+					? context.hero.initialClasses
+					: context.hero?.classes || [];
 			const possibleForgedCards = getPossibleForgedCards(
 				metadata.formatType,
 				metadata.gameType,
