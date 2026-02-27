@@ -18,6 +18,9 @@ import { BehaviorSubject } from 'rxjs';
 @Injectable({ providedIn: 'root' })
 export class OwHotkeyHandlerService implements IHotkeyHandlerService {
 	public liveInfoKeyPressed$$ = new BehaviorSubject<boolean>(false);
+	public isCollectionHotkeyActive = false;
+
+	private onCollectionHotkeyPressed: (() => void)[] = [];
 
 	constructor(
 		private readonly ow: OverwolfService,
@@ -35,8 +38,12 @@ export class OwHotkeyHandlerService implements IHotkeyHandlerService {
 			this.windowHandler.toggleBattlegroundsWindow(prefs.bgsUseOverlay);
 		});
 		this.ow.addHotKeyPressedListener('collection', async (hotkeyResult) => {
+			if (!this.isCollectionHotkeyActive) {
+				return;
+			}
 			const prefs: Preferences = await this.prefs.getPreferences();
 			this.windowHandler.toggleCollectionWindow(prefs.collectionUseOverlay);
+			this.onCollectionHotkeyPressed.forEach((listener) => listener());
 		});
 
 		this.ow.addHotKeyHoldListener(
@@ -44,6 +51,10 @@ export class OwHotkeyHandlerService implements IHotkeyHandlerService {
 			() => this.liveInfoKeyPressed$$.next(true),
 			() => this.liveInfoKeyPressed$$.next(false),
 		);
+	}
+
+	public addOnCollectionHotkeyPressedListener(listener: () => void): void {
+		this.onCollectionHotkeyPressed.push(listener);
 	}
 
 	addHotKeyHoldListener(hotkey: string, onDown: () => void, onUp: () => void): HotkeyHoldUnsubscribe {

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { generateToken } from '@components/third-party/out-of-cards-callback.component';
+import { OwHotkeyHandlerService } from '@firestone/app/ow-native';
 import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import {
 	FORCE_LOCAL_PROP,
@@ -41,10 +42,14 @@ export class AppStartupService {
 		private readonly notifs: NotificationsService,
 		private readonly api: ApiRunner,
 		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
+		private readonly owHotkeyHandler: OwHotkeyHandlerService,
 	) {}
 
 	public async init() {
 		console.log('[startup] essential services started, in doInit()');
+		this.owHotkeyHandler.addOnCollectionHotkeyPressedListener(() => {
+			this.onHotkeyPress();
+		});
 		// Do it after the localization has been initialized
 		await this.store.init();
 
@@ -121,6 +126,10 @@ export class AppStartupService {
 		// const settingsWindow = await this.ow.getSettingsWindow(prefs);
 		// await this.ow.hideWindow(settingsWindow.id);
 		setTimeout(() => this.addAnalytics());
+	}
+
+	private async onHotkeyPress() {
+		this.ow.closeWindow(OverwolfService.LOADING_WINDOW);
 	}
 
 	private async reloadWindows() {
@@ -202,6 +211,7 @@ export class AppStartupService {
 			}, AppStartupService.LOADING_SCREEN_DURATION);
 		} else {
 			this.currentState = 'READY';
+			this.owHotkeyHandler.isCollectionHotkeyActive = true;
 			if (!shouldShowAds) {
 				const title = this.localizationService.translateString('app.internal.startup.firestone-ready-title');
 				const text = this.localizationService.translateString('app.internal.startup.firestone-ready-text');
@@ -233,6 +243,7 @@ export class AppStartupService {
 
 	private notifyAbilitiesReady() {
 		this.currentState = 'READY';
+		this.owHotkeyHandler.isCollectionHotkeyActive = true;
 		this.ow.sendMessage(this.loadingWindowId, 'ready', 'ready');
 	}
 
