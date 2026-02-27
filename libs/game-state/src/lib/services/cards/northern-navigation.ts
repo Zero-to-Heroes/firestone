@@ -1,7 +1,7 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { CardIds, CardType, GameTag, hasSpellSchool, SpellSchool } from '@firestone-hs/reference-data';
 import { GuessedInfo } from '../../models/deck-card';
-import { hasCorrectType } from '../../related-cards/dynamic-pools';
+import { canBeDiscoveredByClass, hasCorrectType } from '../../related-cards/dynamic-pools';
 import { GeneratingCard, GuessInfoInput } from './_card.type';
 import { filterCards } from './utils';
 
@@ -15,7 +15,11 @@ export const NorthernNavigation: GeneratingCard = {
 			const possibleCards = filterCards(
 				NorthernNavigation.cardIds[0],
 				input.allCards,
-				(c) => hasCorrectType(c, CardType.MINION) && hasSpellSchool(c, SpellSchool.FROST),
+				(c) =>
+					hasCorrectType(c, CardType.MINION) &&
+					hasSpellSchool(c, SpellSchool.FROST) &&
+					// This is not technically correct, but it's the most likely
+					canBeDiscoveredByClass(c, input.deckState.getCurrentClass()),
 				input.options,
 			);
 			return {
@@ -29,7 +33,8 @@ export const NorthernNavigation: GeneratingCard = {
 			possibleCards: filterCards(
 				NorthernNavigation.cardIds[0],
 				input.allCards,
-				(c) => hasCorrectType(c, CardType.SPELL),
+				(c) =>
+					hasCorrectType(c, CardType.SPELL) && canBeDiscoveredByClass(c, input.deckState.getCurrentClass()),
 				input.options,
 			),
 		};
