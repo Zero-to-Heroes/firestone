@@ -167,6 +167,7 @@ export { ShokkJungleTyrant } from './shokk-jungle-tyrant';
 export { SilvermoonPortal } from './silvermoon-portal';
 export { SirenSong } from './siren-song';
 export { SkyMotherAviana } from './sky-mother-aviana';
+export { SkyRaider } from './sky-raider';
 export { Skyfin } from './skyfin';
 export { SneedsOldShredder } from './sneeds-old-shredder';
 export { Solitude } from './solitude';
