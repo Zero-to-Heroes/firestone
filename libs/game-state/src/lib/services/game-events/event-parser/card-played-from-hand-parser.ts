@@ -337,10 +337,20 @@ export class CardPlayedFromHandParser implements EventParser {
 		});
 		// console.debug('deckAfterSpecialCaseUpdate', deckAfterSpecialCaseUpdate);
 
-		const playerDeckAfterReveal = isPlayer ? finalPlayerDeck : opponentDeckAfterSpecialCaseUpdate;
+		// Grasp the Future / SHIFTING_TOP: when the opponent plays a card that was a copy of the
+		// top of their deck, mark the top of their deck as that card
+		const isShiftingTop =
+			gameEvent.additionalData.tags?.find((t: { Name: number; Value: number }) => t.Name === GameTag.SHIFTING_TOP)
+				?.Value === 1;
+		const finalPlayerDeckAfterShiftingTop =
+			!isPlayer && isShiftingTop && cardId
+				? markTopOfDeckFromShiftingTop(finalPlayerDeck, cardId, this.allCards)
+				: finalPlayerDeck;
+
+		const playerDeckAfterReveal = isPlayer ? finalPlayerDeckAfterShiftingTop : opponentDeckAfterSpecialCaseUpdate;
 		const opponentDeckAfterReveal = isPlayer
 			? opponentDeckAfterSpecialCaseUpdate
-			: revealCard(finalPlayerDeck, cardWithZone, this.allCards);
+			: revealCard(finalPlayerDeckAfterShiftingTop, cardWithZone, this.allCards);
 
 		return currentState.update({
 			playerDeck: playerDeckAfterReveal,
@@ -622,4 +632,33 @@ export const updateGlobalEffects = (
 		}
 	}
 	return { battlecriesMultiplier, newGlobalEffects };
+};
+
+const markTopOfDeckFromShiftingTop = (
+	deck: DeckState,
+	cardId: string,
+	allCards: CardsFacadeService,
+): DeckState => {
+	const fillerCard =
+		deck.deck.find(
+			(c) => !c.cardId && !c.entityId && c.positionFromTop == null && c.positionFromBottom == null,
+		) ??
+		deck.deck.find((c) => !c.cardId && c.positionFromTop == null && c.positionFromBottom == null);
+	if (!fillerCard) {
+		return deck;
+	}
+
+	const refCard = allCards.getCard(cardId);
+	const updatedDeck = deck.deck.map((c) =>
+		c === fillerCard
+			? c.update({
+					cardId: cardId,
+					cardName: refCard?.name,
+					refManaCost: refCard?.cost,
+					rarity: refCard?.rarity?.toLowerCase(),
+					positionFromTop: DeckCard.deckIndexFromTop--,
+				})
+			: c,
+	);
+	return deck.update({ deck: updatedDeck });
 };
