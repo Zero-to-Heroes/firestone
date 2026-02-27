@@ -52,7 +52,6 @@ export class CorpsesCounterDefinitionV2 extends CounterDefinitionV2<number> {
 		display: (state: GameState): boolean => {
 			// When the opponent is a DK or Tourist DK, the corpse counter is shown by default in the game
 			if (initialHeroClassIs(state.opponentDeck.hero, [CardClass.DEATHKNIGHT])) {
-				this.debug && console.debug(this.type, 'opponent is a DK');
 				return false;
 			}
 
@@ -62,14 +61,6 @@ export class CorpsesCounterDefinitionV2 extends CounterDefinitionV2<number> {
 					this.allCards.getCard(c.cardId).mechanics?.includes(GameTag[GameTag.SPEND_CORPSE]),
 				)
 			) {
-				this.debug &&
-					console.debug(
-						this.type,
-						'opponent has a corpse-spending card on board',
-						state.opponentDeck.board.filter((c) =>
-							this.allCards.getCard(c.cardId).mechanics?.includes(GameTag[GameTag.SPEND_CORPSE]),
-						),
-					);
 				return false;
 			}
 

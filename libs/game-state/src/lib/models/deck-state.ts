@@ -278,16 +278,25 @@ export class DeckState {
 	}
 
 	public getAllPotentialFutureCards(): readonly { entityId: number; cardId: string }[] {
-		return [...this.hand, ...this.deck, ...this.board, ...this.currentOptions];
-	}
-
-	public getAllCardsInDeck(): readonly { entityId: number; cardId: string }[] {
 		return [
-			...this.deckList,
 			...this.hand,
 			...this.deck,
 			...this.board,
 			...this.currentOptions,
+			...this.additionalKnownCardsInHand?.map((cardId) => ({ entityId: 0, cardId })),
+			...this.additionalKnownCardsInDeck?.map((cardId) => ({ entityId: 0, cardId })),
+		];
+	}
+
+	public getAllCardsInDeck(): readonly { entityId: number; cardId: string }[] {
+		return [
+			...this.hand,
+			...this.deck,
+			...this.board,
+			...this.currentOptions,
+			...this.additionalKnownCardsInHand?.map((cardId) => ({ entityId: 0, cardId })),
+			...this.additionalKnownCardsInDeck?.map((cardId) => ({ entityId: 0, cardId })),
+			...this.deckList,
 			...this.otherZone.filter((card) => card.zone !== 'SETASIDE'),
 		];
 	}
