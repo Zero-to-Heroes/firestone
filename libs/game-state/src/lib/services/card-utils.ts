@@ -154,29 +154,46 @@ export const storeInformationOnCardPlayed = (
 		manaLeft?: number | null;
 		deckState?: DeckState;
 		gameTagTurnNumber?: number;
+		targetCardId?: string | null;
+		targetEntityId?: number | null;
 	},
 ): StoredInformation | null => {
+	let result: StoredInformation | null = null;
 	switch (cardId) {
 		case CardIds.Robocaller_WORK_006:
-			return {
+			result = {
 				tagScriptValues: [
 					tags.find((tag) => tag.Name === GameTag.TAG_SCRIPT_DATA_NUM_1)?.Value ?? null,
 					tags.find((tag) => tag.Name === GameTag.TAG_SCRIPT_DATA_NUM_2)?.Value ?? null,
 					tags.find((tag) => tag.Name === GameTag.TAG_SCRIPT_DATA_NUM_3)?.Value ?? null,
 				],
 			};
+			break;
 		case CardIds.ScrappyScavenger_TLC_461:
-			return {
+			result = {
 				manaLeftWhenPlayed: options?.manaLeft,
 			};
+			break;
 		case CardIds.RuniTemporalGuardian_TIME_EVENT_998:
-			return {
+			result = {
 				cards: options?.deckState?.hand?.map((c) => ({ cardId: c.cardId, entityId: c.entityId })),
 				gameTagTurnNumberPlayed: options?.gameTagTurnNumber,
 			};
-		default:
-			return null;
+			break;
 	}
+
+	const hasTargetInfo = !!options?.targetCardId || (options?.targetEntityId != null && options.targetEntityId > 0);
+	if (hasTargetInfo) {
+		return {
+			...result,
+			...(options?.targetCardId ? { targetCardId: options.targetCardId } : {}),
+			...(options?.targetEntityId != null && options.targetEntityId > 0
+				? { targetEntityId: options.targetEntityId }
+				: {}),
+		};
+	}
+
+	return result;
 };
 
 export const addGuessInfoToCard = (

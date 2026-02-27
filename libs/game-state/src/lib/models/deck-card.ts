@@ -159,6 +159,8 @@ export interface StoredInformation {
 	cards?: readonly { cardId: string; entityId: number }[];
 	manaLeftWhenPlayed?: number | null;
 	gameTagTurnNumberPlayed?: number | null;
+	targetCardId?: string;
+	targetEntityId?: number;
 }
 
 export interface GuessedInfo {

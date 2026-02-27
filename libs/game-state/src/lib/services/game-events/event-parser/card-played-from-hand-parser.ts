@@ -176,6 +176,8 @@ export class CardPlayedFromHandParser implements EventParser {
 				manaLeft: deck.manaLeft,
 				deckState: deck,
 				gameTagTurnNumber: currentState.gameTagTurnNumber,
+				targetCardId: gameEvent.additionalData.targetCardId,
+				targetEntityId: gameEvent.additionalData.targetEntityId,
 			}),
 			tags: toTagsObject(gameEvent.additionalData.tags),
 		});

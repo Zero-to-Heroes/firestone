@@ -4,6 +4,7 @@ export { AeonWizard } from './aeon-wizard';
 export { AlakirTheWindsOfTime } from './alakir-the-winds-of-time';
 export { AlgalonsVision } from './algalons-vision';
 export { AlterTime } from './alter-time';
+export { AmalgamOfTheDeep } from './amalgam-of-the-deep';
 export { AmberWarden } from './amber-warden';
 export { Amirdrassil } from './amirdrassil';
 export { AmuletOfCritters } from './amulet-of-critters';
