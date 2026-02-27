@@ -26,4 +26,10 @@ Once you're done, before assigning the PR to me for review, please mention @curs
 
 ### Common considerations
 
-- When you want to get teh current class, use DeckState.getCurrentClass()
+- When you want to get the current class, use DeckState.getCurrentClass()
+
+## Global bugs
+
+- The app's main repo is this one
+- The log parser is at ..\hs-game-converter-csharp-port
+- The reference cards are at ..\hs-reference-data\src\cards_short.json
