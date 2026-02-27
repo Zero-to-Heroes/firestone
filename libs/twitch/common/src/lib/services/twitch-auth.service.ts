@@ -392,7 +392,8 @@ export class TwitchAuthService {
 				console.debug('error sending message to twitch', error);
 				const isStatus0 = error?.status === 0;
 				const isUnauthorized = error?.status === 401;
-				const skipBugReport = isStatus0 || isUnauthorized;
+				const isTimeout = error?.name === 'TimeoutError';
+				const skipBugReport = isStatus0 || isUnauthorized || isTimeout;
 				if (!this.hasLoggedInfoOnce) {
 					this.hasLoggedInfoOnce = true;
 					console.error(
@@ -412,7 +413,7 @@ export class TwitchAuthService {
 							}),
 						});
 					} else {
-						console.warn('[twitch-auth] Skipping bug report for transient/auth error', error?.status);
+						console.warn('[twitch-auth] Skipping bug report for transient/auth error', error?.status, error?.name);
 					}
 				} else {
 					console.warn('[twitch-auth] Could not send deck event to EBS', JSON.stringify(error));
