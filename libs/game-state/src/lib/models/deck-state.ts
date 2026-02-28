@@ -152,7 +152,7 @@ export class DeckState {
 	readonly manaLeft: number = 0;
 	// readonly cardsPlayedThisMatch: readonly DeckCard[] = [];
 	readonly damageTakenThisTurn: number;
-	readonly heroDamageInstancesThisTurn: number = 0;
+	readonly heroDamageHitsThisTurn: number = 0;
 	// Only accounts for damage taken on your turns
 	readonly damageTakenOnYourTurns: readonly TurnDamage[] = [];
 	readonly cardsPlayedFromInitialDeck: readonly { entityId: number; cardId: string }[] = [];
@@ -167,7 +167,7 @@ export class DeckState {
 	}[] = [];
 	readonly burnedCards: readonly { entityId: number; cardId: string }[] = [];
 	readonly destroyedCardsInDeck: readonly { entityId: number; cardId: string }[] = [];
-	readonly nonClassCardsAddedToHand: number = 0;
+	readonly cardsAddedToHand: readonly ShortCardWithTurn[] = [];
 	readonly weaponsEquippedThisGame: number = 0;
 	readonly starshipsLaunched: readonly number[] = [];
 	readonly fullGameState?: PlayerGameState;

@@ -1,4 +1,4 @@
-import { CardIds } from '@firestone-hs/reference-data';
+import { CardClass, CardIds } from '@firestone-hs/reference-data';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { GameState } from '../../models/game-state';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
@@ -13,7 +13,21 @@ export class NonClassCardsAddedToHandCounterDefinitionV2 extends CounterDefiniti
 	readonly player = {
 		pref: 'playerNonClassCardsAddedToHandCounter' as const,
 		display: (state: GameState): boolean => true,
-		value: (state: GameState): number => state.playerDeck.nonClassCardsAddedToHand ?? 0,
+		value: (state: GameState): number => {
+			const currentClass = state.playerDeck.getCurrentClass();
+			if (!currentClass) {
+				return 0;
+			}
+			return (
+				state.playerDeck.cardsAddedToHand?.filter((c) => {
+					const ref = this.allCards.getCard(c.cardId);
+					return (
+						!ref?.classes?.includes(CardClass[CardClass.NEUTRAL]) &&
+						!ref?.classes?.includes(currentClass.toUpperCase())
+					);
+				}).length ?? 0
+			);
+		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>
 				i18n.translateString('settings.decktracker.your-deck.counters.non-class-cards-added-to-hand-label'),

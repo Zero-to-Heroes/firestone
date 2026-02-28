@@ -13,7 +13,7 @@ export class HeroDamageInstancesThisTurnCounterDefinitionV2 extends CounterDefin
 	readonly player = {
 		pref: 'playerHeroDamageInstancesThisTurnCounter' as const,
 		display: (state: GameState): boolean => true,
-		value: (state: GameState): number => state.opponentDeck.heroDamageInstancesThisTurn ?? 0,
+		value: (state: GameState): number => state.opponentDeck.heroDamageHitsThisTurn ?? 0,
 		setting: {
 			label: (i18n: ILocalizationService): string =>
 				i18n.translateString(

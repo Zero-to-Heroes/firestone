@@ -1,4 +1,4 @@
-import { CardClass, CardIds, CardType, GameTag, hasCorrectTribe, Race, ReferenceCard } from '@firestone-hs/reference-data';
+import { CardIds, CardType, GameTag, hasCorrectTribe, Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DeckCard, toTagsObject } from '../../../models/deck-card';
 import { DeckState } from '../../../models/deck-state';
@@ -261,19 +261,18 @@ export class ReceiveCardInHandParser implements EventParser {
 		);
 		// console.debug('[receive-card-in-hand] new hand', handAfterCardInference);
 
-		const receivedCardRef = cardId ? this.allCards.getCard(cardId) : null;
-		const currentClass = deck.getCurrentClass();
-		const isNonClassCard =
-			!!receivedCardRef &&
-			!!currentClass &&
-			!receivedCardRef.classes?.includes(CardClass[CardClass.NEUTRAL]) &&
-			!receivedCardRef.classes?.includes(currentClass.toUpperCase());
+		const newCardsAddedToHand = cardId
+			? [
+					...(deck.cardsAddedToHand ?? []),
+					{ cardId: cardId, entityId: entityId, turn: currentState.currentTurnNumeric },
+				]
+			: deck.cardsAddedToHand;
 
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			hand: handAfterCardInference,
 			board: newBoard,
 			otherZone: newOther,
-			nonClassCardsAddedToHand: (deck.nonClassCardsAddedToHand ?? 0) + (isNonClassCard ? 1 : 0),
+			cardsAddedToHand: newCardsAddedToHand,
 			abyssalCurseHighestValue:
 				cardWithAdditionalAttributes.cardId === CardIds.SirakessCultist_AbyssalCurseToken
 					? Math.max(

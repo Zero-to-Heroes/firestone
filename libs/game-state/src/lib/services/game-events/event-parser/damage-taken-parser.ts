@@ -59,8 +59,7 @@ export class DamageTakenParser implements EventParser {
 		}
 		const playerDeck = currentState.playerDeck.update({
 			damageTakenThisTurn: (currentState.playerDeck.damageTakenThisTurn ?? 0) + localPlayerDamage,
-			heroDamageInstancesThisTurn:
-				(currentState.playerDeck.heroDamageInstancesThisTurn ?? 0) + (localPlayerDamage > 0 ? 1 : 0),
+			heroDamageHitsThisTurn: (currentState.playerDeck.heroDamageHitsThisTurn ?? 0) + localPlayerHits,
 			damageTakenOnYourTurns: playerDamageByTurn,
 		});
 
@@ -84,8 +83,7 @@ export class DamageTakenParser implements EventParser {
 		}
 		const opponentDeck = currentState.opponentDeck.update({
 			damageTakenThisTurn: (currentState.opponentDeck.damageTakenThisTurn ?? 0) + opponentPlayerDamage,
-			heroDamageInstancesThisTurn:
-				(currentState.opponentDeck.heroDamageInstancesThisTurn ?? 0) + (opponentPlayerDamage > 0 ? 1 : 0),
+			heroDamageHitsThisTurn: (currentState.opponentDeck.heroDamageHitsThisTurn ?? 0) + opponentPlayerHits,
 			damageTakenOnYourTurns: opponentDamageByTurn,
 		});
 
