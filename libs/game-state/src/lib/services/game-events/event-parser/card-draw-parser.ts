@@ -1,4 +1,4 @@
-import { CardIds } from '@firestone-hs/reference-data';
+import { CardClass, CardIds } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DeckCard, toTagsObject } from '../../../models/deck-card';
 import { GameState } from '../../../models/game-state';
@@ -309,6 +309,14 @@ export class CardDrawParser implements EventParser {
 				value: 1,
 			});
 		}
+		const drawnCardRef = cardId ? this.allCards.getCard(cardId) : null;
+		const currentClass = deck.getCurrentClass();
+		const isNonClassCard =
+			!!drawnCardRef &&
+			!!currentClass &&
+			!drawnCardRef.classes?.includes(CardClass[CardClass.NEUTRAL]) &&
+			!drawnCardRef.classes?.includes(currentClass.toUpperCase());
+
 		const newPlayerDeck = deck.update({
 			deck: newDeck,
 			hand: newHand,
@@ -319,6 +327,7 @@ export class CardDrawParser implements EventParser {
 					: NOT_REAL_DRAW?.includes(drawnByCardId as CardIds)
 						? deck.cardDrawnThisGame
 						: deck.cardDrawnThisGame + 1,
+			nonClassCardsAddedToHand: (deck.nonClassCardsAddedToHand ?? 0) + (isNonClassCard ? 1 : 0),
 			additionalKnownCardsInDeck: additionalKnownCardsInDeck,
 		});
 		// console.debug('new player deck', newPlayerDeck);

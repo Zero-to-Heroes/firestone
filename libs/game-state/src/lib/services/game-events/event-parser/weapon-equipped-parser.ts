@@ -60,6 +60,7 @@ export class WeaponEquippedParser implements EventParser {
 			deck: newDeck,
 			otherZone: newOtherZone,
 			additionalKnownCardsInDeck: additionalKnownCardsInDeck,
+			weaponsEquippedThisGame: (deck.weaponsEquippedThisGame ?? 0) + 1,
 		} as DeckState);
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,

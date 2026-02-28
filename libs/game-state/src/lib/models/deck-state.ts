@@ -77,6 +77,8 @@ export class DeckState {
 	readonly treantsSummoned: number = 0;
 	readonly dragonsSummoned: number = 0;
 	readonly piratesSummoned: number = 0;
+	readonly totemsSummoned: number = 0;
+	readonly beastsSummoned: number = 0;
 	readonly fatigue: number = 0;
 	readonly overloadedCrystals: number = 0;
 	readonly corpsesGainedThisGame: number = 0;
@@ -150,6 +152,7 @@ export class DeckState {
 	readonly manaLeft: number = 0;
 	// readonly cardsPlayedThisMatch: readonly DeckCard[] = [];
 	readonly damageTakenThisTurn: number;
+	readonly heroDamageInstancesThisTurn: number = 0;
 	// Only accounts for damage taken on your turns
 	readonly damageTakenOnYourTurns: readonly TurnDamage[] = [];
 	readonly cardsPlayedFromInitialDeck: readonly { entityId: number; cardId: string }[] = [];
@@ -164,6 +167,8 @@ export class DeckState {
 	}[] = [];
 	readonly burnedCards: readonly { entityId: number; cardId: string }[] = [];
 	readonly destroyedCardsInDeck: readonly { entityId: number; cardId: string }[] = [];
+	readonly nonClassCardsAddedToHand: number = 0;
+	readonly weaponsEquippedThisGame: number = 0;
 	readonly starshipsLaunched: readonly number[] = [];
 	readonly fullGameState?: PlayerGameState;
 

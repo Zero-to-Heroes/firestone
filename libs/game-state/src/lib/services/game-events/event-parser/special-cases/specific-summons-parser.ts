@@ -30,6 +30,16 @@ const PROCESSORS = [
 			card?.races?.includes(Race[Race.PIRATE]) || card?.races?.includes(Race[Race.ALL]),
 		updater: (deck: DeckState): DeckState => deck.update({ piratesSummoned: (deck.piratesSummoned ?? 0) + 1 }),
 	},
+	{
+		cardSelector: (card: ReferenceCard) =>
+			card?.races?.includes(Race[Race.TOTEM]) || card?.races?.includes(Race[Race.ALL]),
+		updater: (deck: DeckState): DeckState => deck.update({ totemsSummoned: (deck.totemsSummoned ?? 0) + 1 }),
+	},
+	{
+		cardSelector: (card: ReferenceCard) =>
+			card?.races?.includes(Race[Race.BEAST]) || card?.races?.includes(Race[Race.ALL]),
+		updater: (deck: DeckState): DeckState => deck.update({ beastsSummoned: (deck.beastsSummoned ?? 0) + 1 }),
+	},
 ];
 export class SpecificSummonsParser implements EventParser {
 	constructor(private readonly allCards: CardsFacadeService) {}

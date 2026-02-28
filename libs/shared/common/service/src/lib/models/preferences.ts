@@ -520,6 +520,12 @@ export class Preferences implements IPreferences {
 	readonly playerFrostSpellsCounter: boolean = true;
 	readonly playerFriendlyDeadMinionsThisTurnCounter: boolean = true;
 	readonly playerDamageTakenThisTurnCounter: boolean = true;
+	readonly playerDamageToOpponentThisTurnCounter: boolean = true;
+	readonly playerHeroDamageInstancesThisTurnCounter: boolean = true;
+	readonly playerNonClassCardsAddedToHandCounter: boolean = true;
+	readonly playerTotemsSummonedCounter: boolean = true;
+	readonly playerBeastsSummonedCounter: boolean = true;
+	readonly playerWeaponsEquippedCounter: boolean = true;
 
 	readonly playerBgsPogoCounter: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)

@@ -1,6 +1,7 @@
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { CounterDefinitionV2 } from './_counter-definition-v2';
 import { AbyssalCurseCounterDefinitionV2 } from './impl/abyssal-curse';
+import { BeastsSummonedCounterDefinitionV2 } from './impl/beasts-summoned';
 import { AnachronosCounterDefinitionV2 } from './impl/anachronos';
 import { AstralAutomatonCounterDefinitionV2 } from './impl/astral-automaton';
 import { AvianaElunesChoseCounterDefinitionV2 } from './impl/aviana-elunes-chosen';
@@ -40,6 +41,7 @@ import { CorpseSpentCounterDefinitionV2 } from './impl/corpse-spent';
 import { CorpsesCounterDefinitionV2 } from './impl/corpses';
 import { CthunCounterDefinitionV2 } from './impl/cthun';
 import { DamageTakenOnYourTurnCounterDefinitionV2 } from './impl/damage-taken-on-your-turn';
+import { DamageToOpponentThisTurnCounterDefinitionV2 } from './impl/damage-to-opponent-this-turn';
 import { DamageTakenThisTurnCounterDefinitionV2 } from './impl/damage-taken-this-turn';
 import { DarkGiftsCounterDefinitionV2 } from './impl/dark-gifts';
 import { DiscoversCounterDefinitionV2 } from './impl/discovers';
@@ -61,6 +63,7 @@ import { FriendlyMinionsDeadThisTurnCounterDefinitionV2 } from './impl/friendly-
 import { FrostSpellsCounterDefinitionV2 } from './impl/frost-spells';
 import { GalakrondCounterDefinitionV2 } from './impl/galakrond';
 import { GardensGraceCounterDefinitionV2 } from './impl/gardens-grace';
+import { HeroDamageInstancesThisTurnCounterDefinitionV2 } from './impl/hero-damage-instances-this-turn';
 import { HeroPowerDamageCounterDefinitionV2 } from './impl/hero-power-damage';
 import { HeroPowerUseCounterDefinitionV2 } from './impl/hero-power-used';
 import { HolySpellsCounterDefinitionV2 } from './impl/holy-spells';
@@ -76,6 +79,7 @@ import { MinionsDeadThisGameCounterDefinitionV2 } from './impl/minions-dead-this
 import { MinionsDeadThisTurnCounterDefinitionV2 } from './impl/minions-dead-this-turn';
 import { MulticasterCounterDefinitionV2 } from './impl/multicaster';
 import { NagaGiantCounterDefinitionV2 } from './impl/naga-giant';
+import { NonClassCardsAddedToHandCounterDefinitionV2 } from './impl/non-class-cards-added-to-hand';
 import { NextStarshipLaunchCounterDefinitionV2 } from './impl/next-starship-launch';
 import { OutcastCounterDefinitionV2 } from './impl/outcast';
 import { OverdraftCounterDefinitionV2 } from './impl/overdraft';
@@ -100,11 +104,13 @@ import { SpellsPlayedCounterDefinitionV2 as SpellsPlayedConstructedCounterDefini
 import { StarshipsLaunchedCounterDefinitionV2 } from './impl/starships-launched';
 import { TableFlipCounterDefinitionV2 } from './impl/table-flip';
 import { ThirstyDrifterCounterDefinitionV2 } from './impl/thirsty-drifter';
+import { TotemsSummonedCounterDefinitionV2 } from './impl/totems-summoned';
 import { TreantCounterDefinitionV2 } from './impl/treant';
 import { TreantDeadCounterDefinitionV2 } from './impl/treant-dead';
 import { TyrandeCounterDefinitionV2 } from './impl/tyrande';
 import { VolatileSkeletonCounterDefinitionV2 } from './impl/volatile-skeleton';
 import { WatchpostCounterDefinitionV2 } from './impl/watchpost';
+import { WeaponsEquippedCounterDefinitionV2 } from './impl/weapons-equipped';
 import { WheelOfDeathCounterDefinitionV2 } from './impl/wheel-of-death';
 import { WindrunnerSistersCounterDefinitionV2 } from './impl/windrunner-sisters';
 import { YsondreCounterDefinitionV2 } from './impl/ysondre';
@@ -201,6 +207,12 @@ export const getAllCounters: (
 	new FrostSpellsCounterDefinitionV2(i18n, allCards),
 	new FriendlyMinionsDeadThisTurnCounterDefinitionV2(i18n, allCards),
 	new DamageTakenThisTurnCounterDefinitionV2(i18n, allCards),
+	new DamageToOpponentThisTurnCounterDefinitionV2(i18n, allCards),
+	new HeroDamageInstancesThisTurnCounterDefinitionV2(i18n, allCards),
+	new NonClassCardsAddedToHandCounterDefinitionV2(i18n, allCards),
+	new TotemsSummonedCounterDefinitionV2(i18n, allCards),
+	new BeastsSummonedCounterDefinitionV2(i18n, allCards),
+	new WeaponsEquippedCounterDefinitionV2(i18n, allCards),
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n, allCards),
 	new BallerBuffCounterDefinitionV2(i18n, allCards),
@@ -315,6 +327,12 @@ export type CounterType =
 	| 'frostSpells'
 	| 'friendlyDeadMinionsThisTurn'
 	| 'damageTakenThisTurn'
+	| 'damageToOpponentThisTurn'
+	| 'heroDamageInstancesThisTurn'
+	| 'nonClassCardsAddedToHand'
+	| 'totemsSummoned'
+	| 'beastsSummoned'
+	| 'weaponsEquipped'
 	| 'si7Counter'
 	| 'elwynnBoar'
 	| 'volatileSkeleton'

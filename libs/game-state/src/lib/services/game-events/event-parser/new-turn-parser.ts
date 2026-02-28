@@ -76,6 +76,7 @@ export class NewTurnParser implements EventParser {
 				: currentState.playerDeck.cardsPlayedThisTurn,
 			cardsCounteredThisTurn: 0,
 			damageTakenThisTurn: 0,
+			heroDamageInstancesThisTurn: 0,
 			elementalsPlayedLastTurn: isPlayerActive
 				? currentState.playerDeck.elementalsPlayedLastTurn
 				: currentState.playerDeck.elementalsPlayedThisTurn,
@@ -94,6 +95,7 @@ export class NewTurnParser implements EventParser {
 				? ([] as readonly DeckCard[])
 				: currentState.opponentDeck.cardsPlayedThisTurn,
 			damageTakenThisTurn: 0,
+			heroDamageInstancesThisTurn: 0,
 			elementalsPlayedLastTurn: !isPlayerActive
 				? currentState.opponentDeck.elementalsPlayedLastTurn
 				: currentState.opponentDeck.elementalsPlayedThisTurn,
