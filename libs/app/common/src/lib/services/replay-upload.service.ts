@@ -176,12 +176,13 @@ export class ReplayUploadService {
 		return new Promise<void>(async (resolve, reject) => {
 			const s3 = new S3();
 			const body = await this.convertBlobToBody(powerLogBlob);
-			const params = {
-				Bucket: BUCKET_POWER_LOG,
-				Key: powerLogKey,
-				Body: body,
-				ContentType: 'application/zip',
-			};
+		const params = {
+			Bucket: BUCKET_POWER_LOG,
+			Key: powerLogKey,
+			Body: body,
+			ContentType: 'application/zip',
+			Tagging: 'accessed=false',
+		};
 			s3.makeUnauthenticatedRequest('putObject', params, async (err, data2) => {
 				if (err) {
 					console.error('[manastorm-bridge] An error during power log upload', err);

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { GameStatusService } from '@firestone/shared/common/service';
 import { AbstractFacadeService, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
+import * as S3 from 'aws-sdk/clients/s3';
 import * as JSZip from 'jszip';
 import { BehaviorSubject, distinctUntilChanged, map } from 'rxjs';
 import { ModsManagerService } from './mods-manager.service';
@@ -9,6 +10,7 @@ const WS_URL = 'ws://localhost:54321';
 const WS_RECONNECT_DELAY = 3000;
 const WS_CONNECT_TIMEOUT = 5000;
 const S3_BASE_URL = 'https://power.firestoneapp.com/';
+const BUCKET_POWER_LOG = 'power.firestoneapp.com';
 
 export interface ReplayStatus {
 	type: 'status';
@@ -139,6 +141,8 @@ export class InGameReplayService extends AbstractFacadeService<InGameReplayServi
 			console.log(`[in-game-replay] Power.log content: ${textContent.length} chars`);
 			// console.debug('[in-game-replay] Power.log content:', textContent);
 
+			this.markPowerLogAsAccessed(powerLogKey);
+
 			// Tell the mod to expect raw Power.log text in the next message
 			this.send({ action: 'startReplayRaw' });
 			// Send the raw Power.log text directly — no base64, no JSON wrapping
@@ -159,6 +163,24 @@ export class InGameReplayService extends AbstractFacadeService<InGameReplayServi
 			throw new Error(`No Power.log found in zip. Files: ${Object.keys(zip.files).join(', ')}`);
 		}
 		return zip.files[match].async('text');
+	}
+
+	private markPowerLogAsAccessed(powerLogKey: string): void {
+		const s3 = new S3({ region: 'us-west-2' });
+		const params = {
+			Bucket: BUCKET_POWER_LOG,
+			Key: powerLogKey,
+			Tagging: {
+				TagSet: [{ Key: 'accessed', Value: 'true' }],
+			},
+		};
+		s3.makeUnauthenticatedRequest('putObjectTagging', params, (err) => {
+			if (err) {
+				console.warn('[in-game-replay] Failed to tag power log as accessed', powerLogKey, err);
+			} else {
+				console.log('[in-game-replay] Tagged power log as accessed', powerLogKey);
+			}
+		});
 	}
 
 	// --- WebSocket lifecycle ---
