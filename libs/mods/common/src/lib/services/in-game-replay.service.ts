@@ -92,7 +92,6 @@ export class InGameReplayService extends AbstractFacadeService<InGameReplayServi
 	async showReplay(powerLogKey: string) {
 		return this.callOnMainProcess('showReplayInternal', powerLogKey);
 	}
-
 	private async showReplayInternal(
 		powerLogKey: string,
 	): Promise<
@@ -138,7 +137,7 @@ export class InGameReplayService extends AbstractFacadeService<InGameReplayServi
 			}
 
 			console.log(`[in-game-replay] Power.log content: ${textContent.length} chars`);
-			console.debug('[in-game-replay] Power.log content:', textContent);
+			// console.debug('[in-game-replay] Power.log content:', textContent);
 
 			// Tell the mod to expect raw Power.log text in the next message
 			this.send({ action: 'startReplayRaw' });

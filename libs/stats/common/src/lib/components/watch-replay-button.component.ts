@@ -38,10 +38,11 @@ import { AnalyticsService, ILocalizationService, OverwolfService } from '@firest
 			</div>
 		</div>
 		<div class="in-game-container" *ngIf="powerLogKey && enableInGameReplay">
-			<div class="replay in-game" (click)="showInGame()">
+			<div class="replay in-game" (click)="showInGame()" [class.disabled]="inGameLoading">
 				<div class="watch" *ngIf="showInGameLabel">{{ showInGameLabel }}</div>
 				<div
 					class="watch-icon"
+					*ngIf="!inGameLoading"
 					[helpTooltip]="
 						!showInGameLabel
 							? ('app.replays.replay-info.watch-replay-in-game-button-tooltip' | fsTranslate)
@@ -52,6 +53,7 @@ import { AnalyticsService, ILocalizationService, OverwolfService } from '@firest
 						<use xlink:href="assets/svg/replays/replays_icons.svg#match_watch" />
 					</svg>
 				</div>
+				<div class="loading-spinner" *ngIf="inGameLoading"></div>
 			</div>
 			<div class="in-game-error" *ngIf="inGameError" (click)="dismissError()">
 				<span class="error-text">{{ inGameError }}</span>
@@ -72,6 +74,7 @@ export class WatchReplayButtonComponent {
 	@Input() showInGameEvent: (powerLogKey: string) => void;
 
 	inGameError: string | null;
+	inGameLoading = false;
 
 	readonly enableInGameReplay = ENABLE_IN_GAME_REPLAY;
 
@@ -96,17 +99,26 @@ export class WatchReplayButtonComponent {
 	}
 
 	async showInGame() {
+		if (this.inGameLoading) {
+			return;
+		}
 		this.dismissError();
+		this.inGameLoading = true;
+		this.cdr.detectChanges();
 		console.log('[watch-replay-button] loading powerLogKey', this.powerLogKey);
-		const result = await this.inGameReplayService.showReplay(this.powerLogKey);
-		console.log('[watch-replay-button] showInGame result', result);
-		if (result !== 'started') {
-			this.inGameError = this.i18n.translateString(`app.replays.in-game.error.${result}`);
-			this.errorTimeout = setTimeout(() => this.dismissError(), 5000);
-			this.analytics.trackEvent('replay-in-game-error', { error: result as string });
+		try {
+			const result = await this.inGameReplayService.showReplay(this.powerLogKey);
+			console.log('[watch-replay-button] showInGame result', result);
+			if (result !== 'started') {
+				this.inGameError = this.i18n.translateString(`app.replays.in-game.error.${result}`);
+				this.errorTimeout = setTimeout(() => this.dismissError(), 5000);
+				this.analytics.trackEvent('replay-in-game-error', { error: result as string });
+			} else {
+				this.analytics.trackEvent('replay-in-game-started');
+			}
+		} finally {
+			this.inGameLoading = false;
 			this.cdr.detectChanges();
-		} else {
-			this.analytics.trackEvent('replay-in-game-started');
 		}
 	}
 
