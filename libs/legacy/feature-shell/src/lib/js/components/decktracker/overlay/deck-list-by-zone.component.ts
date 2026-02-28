@@ -285,8 +285,9 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 						sourceCard = this.allCards.getCard(forcedSourceCardId);
 					}
 					if (!sourceCard) {
-						sourceCard = e.cardId?.endsWith('e')
-							? this.allCards.getCard(e.cardId.slice(0, -1))
+						const enchantmentMatch = e.cardId?.match(/e\d*$/);
+						sourceCard = enchantmentMatch
+							? this.allCards.getCard(e.cardId.slice(0, -enchantmentMatch[0].length))
 							: this.allCards.getCard(e.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_1]);
 					}
 					if (!sourceCard?.id) {
