@@ -40,6 +40,7 @@ import { CorpseSpentCounterDefinitionV2 } from './impl/corpse-spent';
 import { CorpsesCounterDefinitionV2 } from './impl/corpses';
 import { CthunCounterDefinitionV2 } from './impl/cthun';
 import { DamageTakenOnYourTurnCounterDefinitionV2 } from './impl/damage-taken-on-your-turn';
+import { DamageTakenThisTurnCounterDefinitionV2 } from './impl/damage-taken-this-turn';
 import { DarkGiftsCounterDefinitionV2 } from './impl/dark-gifts';
 import { DiscoversCounterDefinitionV2 } from './impl/discovers';
 import { DiveTheGolakkaDepthsCounterDefinitionV2 } from './impl/dive-the-golakka-depths';
@@ -54,7 +55,10 @@ import { ElizaGorebladeCounterDefinitionV2 } from './impl/eliza-goreblade';
 import { ElwynnBoarCounterDefinitionV2 } from './impl/elwynn-boar';
 import { ExcavateCounterDefinitionV2 } from './impl/excavate';
 import { FatigueCounterDefinitionV2 } from './impl/fatigue';
+import { FreebirdCounterDefinitionV2 } from './impl/freebird';
 import { FriendlyMinionsDeadThisGameCounterDefinitionV2 } from './impl/friendly-minions-dead-this-game';
+import { FriendlyMinionsDeadThisTurnCounterDefinitionV2 } from './impl/friendly-minions-dead-this-turn';
+import { FrostSpellsCounterDefinitionV2 } from './impl/frost-spells';
 import { GalakrondCounterDefinitionV2 } from './impl/galakrond';
 import { GardensGraceCounterDefinitionV2 } from './impl/gardens-grace';
 import { HeroPowerDamageCounterDefinitionV2 } from './impl/hero-power-damage';
@@ -73,7 +77,9 @@ import { MinionsDeadThisTurnCounterDefinitionV2 } from './impl/minions-dead-this
 import { MulticasterCounterDefinitionV2 } from './impl/multicaster';
 import { NagaGiantCounterDefinitionV2 } from './impl/naga-giant';
 import { NextStarshipLaunchCounterDefinitionV2 } from './impl/next-starship-launch';
+import { OutcastCounterDefinitionV2 } from './impl/outcast';
 import { OverdraftCounterDefinitionV2 } from './impl/overdraft';
+import { OverloadCardsPlayedCounterDefinitionV2 } from './impl/overload-cards-played';
 import { OverloadThisGameCounterDefinitionV2 } from './impl/overload-this-game';
 import { PiratesSummonedCounterDefinitionV2 } from './impl/pirates-summoned';
 import { PogoCounterDefinitionV2 } from './impl/pogo';
@@ -86,6 +92,8 @@ import { RenferalTheMalignantCounterDefinitionV2 } from './impl/renferal-the-mal
 import { RuniTemporalGuardianCounterDefinitionV2 } from './impl/runi-temporal-guardian';
 import { SeaShantyCounterDefinitionV2 } from './impl/sea-shanty';
 import { SecretsPlayedCounterDefinitionV2 } from './impl/secrets-played';
+import { SecretsTriggeredCounterDefinitionV2 } from './impl/secrets-triggered';
+import { ShirvallahCounterDefinitionV2 } from './impl/shirvallah';
 import { ShockspitterCounterDefinitionV2 } from './impl/shockspitter';
 import { SpellCastOnFriendlyCharacterCounterDefinitionV2 } from './impl/spell-cast-on-friendly-character';
 import { SpellsPlayedCounterDefinitionV2 as SpellsPlayedConstructedCounterDefinitionV2 } from './impl/spells-played';
@@ -185,6 +193,14 @@ export const getAllCounters: (
 	new TreantDeadCounterDefinitionV2(i18n, allCards),
 	new MinionsDeadThisTurnCounterDefinitionV2(i18n, allCards),
 	new OverloadThisGameCounterDefinitionV2(i18n, allCards),
+	new OutcastCounterDefinitionV2(i18n, allCards),
+	new SecretsTriggeredCounterDefinitionV2(i18n, allCards),
+	new ShirvallahCounterDefinitionV2(i18n, allCards),
+	new OverloadCardsPlayedCounterDefinitionV2(i18n, allCards),
+	new FreebirdCounterDefinitionV2(i18n, allCards),
+	new FrostSpellsCounterDefinitionV2(i18n, allCards),
+	new FriendlyMinionsDeadThisTurnCounterDefinitionV2(i18n, allCards),
+	new DamageTakenThisTurnCounterDefinitionV2(i18n, allCards),
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n, allCards),
 	new BallerBuffCounterDefinitionV2(i18n, allCards),
@@ -292,6 +308,13 @@ export type CounterType =
 	| 'shockspitter'
 	| 'multicaster'
 	| 'kiljaeden'
+	| 'secretsTriggered'
+	| 'shirvallah'
+	| 'overloadCardsPlayed'
+	| 'freebird'
+	| 'frostSpells'
+	| 'friendlyDeadMinionsThisTurn'
+	| 'damageTakenThisTurn'
 	| 'si7Counter'
 	| 'elwynnBoar'
 	| 'volatileSkeleton'

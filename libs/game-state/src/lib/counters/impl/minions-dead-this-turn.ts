@@ -15,6 +15,10 @@ export class MinionsDeadThisTurnCounterDefinitionV2 extends CounterDefinitionV2<
 		CardIds.SolemnVigil,
 		CardIds.WickedSkeleton_ICC_904,
 		CardIds.WickedSkeleton_CORE_ICC_904,
+		// Dragon's Breath: Deal $4 damage. Costs (1) less for each minion that died this turn.
+		CardIds.DragonsBreath,
+		// Snakebite: Rush. Battlecry: Gain +1/+1 for each minion that died this turn.
+		CardIds.Snakebite,
 	];
 
 	readonly player = {

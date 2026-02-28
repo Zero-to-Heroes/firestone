@@ -27,6 +27,8 @@ export class CardsPlayedThisTurnCounterDefinitionV2 extends CounterDefinitionV2<
 		CardIds.SinstoneGraveyard_REV_750,
 		CardIds.SinstoneGraveyard_REV_795,
 		CardIds.SinstoneGraveyard_CORE_REV_750,
+		// Everburning Phoenix: Costs (1) less for each card you've played this turn. Deathrattle: At end of turn, get another Phoenix.
+		CardIds.EverburningPhoenix_FIR_919,
 	];
 
 	readonly player = {

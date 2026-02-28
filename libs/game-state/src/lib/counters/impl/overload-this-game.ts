@@ -10,7 +10,12 @@ export class OverloadThisGameCounterDefinitionV2 extends CounterDefinitionV2<num
 	public override id: CounterType = 'overloadThisGame';
 	public override image = CardIds.HaywireHornswog_END_030;
 	public override type: 'hearthstone' | 'battlegrounds' = 'hearthstone';
-	public override cards: readonly CardIds[] = [CardIds.HaywireHornswog_END_030];
+	public override cards: readonly CardIds[] = [
+		CardIds.HaywireHornswog_END_030,
+		// Snowfury Giant: Costs (1) less for each Mana Crystal you've Overloaded this game.
+		CardIds.SnowfuryGiant_ICC_090,
+		CardIds.SnowfuryGiant_CORE_ICC_090,
+	];
 
 	readonly player = {
 		pref: 'playerOverloadThisGameCounter' as const,

@@ -10,7 +10,13 @@ export class QueensguardCounterDefinitionV2 extends CounterDefinitionV2<number> 
 	public override id: CounterType = 'queensguard';
 	public override image = CardIds.Queensguard;
 	public override type: 'hearthstone' | 'battlegrounds' = 'hearthstone';
-	public override cards: readonly CardIds[] = [CardIds.Queensguard];
+	public override cards: readonly CardIds[] = [
+		CardIds.Queensguard,
+		// Priestess Valishj: Battlecry: Refresh an empty Mana Crystal for each spell you've cast this turn.
+		CardIds.PriestessValishj,
+		// Mana Cyclone: Battlecry: For each spell you've cast this turn, add a random Mage spell to your hand.
+		CardIds.ManaCyclone,
+	];
 
 	readonly player = {
 		pref: 'playerQueensguardCounter' as const,

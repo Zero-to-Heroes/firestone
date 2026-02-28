@@ -12,7 +12,12 @@ const opponentClasses = [CardClass.PRIEST, CardClass.WARLOCK, CardClass.DEMONHUN
 export class DamageTakenOnYourTurnCounterDefinitionV2 extends CounterDefinitionV2<readonly TurnDamage[]> {
 	public override id: CounterType = 'damageTakenOnYourTurn';
 	public override image = CardIds.PartyPlannerVona_VAC_945;
-	public override cards: readonly CardIds[] = [CardIds.SaunaRegular_VAC_418, CardIds.PartyPlannerVona_VAC_945];
+	public override cards: readonly CardIds[] = [
+		CardIds.SaunaRegular_VAC_418,
+		CardIds.PartyPlannerVona_VAC_945,
+		// Imprisoned Horror: Costs (1) less for each damage you've taken on your turns this game.
+		CardIds.ImprisonedHorror,
+	];
 
 	readonly player = {
 		pref: 'playerDamageTakenOnYourTurnCounter' as const,

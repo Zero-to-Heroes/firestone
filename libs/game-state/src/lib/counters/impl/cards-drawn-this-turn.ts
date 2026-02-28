@@ -8,7 +8,19 @@ import { CounterType } from '../_exports';
 export class CardsDrawnThisTurnCounterDefinitionV2 extends CounterDefinitionV2<number> {
 	public override id: CounterType = 'cardsDrawnThisTurn';
 	public override image = CardIds.EverythingMustGo_TOY_519;
-	public override cards: readonly CardIds[] = [CardIds.EverythingMustGo_TOY_519];
+	public override cards: readonly CardIds[] = [
+		CardIds.EverythingMustGo_TOY_519,
+		// Irebound Brute: Taunt. Costs (1) less for each card drawn this turn.
+		CardIds.IreboundBrute,
+		// Argunite Golem: Has +1 Attack for each card you've drawn this turn.
+		CardIds.ArguniteGolem,
+		// Mindbender: Battlecry: Deal 1 damage for each card you have drawn this turn.
+		CardIds.Mindbender_YOG_402,
+		// Momentum: Give your hero +4 Attack this turn. Costs (1) less for each card you've drawn this turn.
+		CardIds.Momentum,
+		// Lion's Frenzy: Has Attack equal to the number of cards you've drawn this turn.
+		CardIds.LionsFrenzy,
+	];
 
 	readonly player = {
 		pref: 'playerCardsDrawnThisTurnCounter' as const,

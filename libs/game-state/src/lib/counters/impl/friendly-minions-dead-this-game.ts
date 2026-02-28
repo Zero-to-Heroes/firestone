@@ -9,7 +9,12 @@ import { CounterType } from '../_exports';
 export class FriendlyMinionsDeadThisGameCounterDefinitionV2 extends CounterDefinitionV2<number> {
 	public override id: CounterType = 'friendlyDeadMinionsThisGame';
 	public override image = CardIds.Aessina_EDR_430;
-	public override cards: readonly CardIds[] = [CardIds.Aessina_EDR_430, CardIds.Starsurge_EDR_941];
+	public override cards: readonly CardIds[] = [
+		CardIds.Aessina_EDR_430,
+		CardIds.Starsurge_EDR_941,
+		// Ur'zul Giant: Costs (1) less for each friendly minion that died this game.
+		CardIds.UrzulGiant,
+	];
 
 	readonly player = {
 		pref: 'playerFriendlyDeadMinionsThisGameCounter2' as const,

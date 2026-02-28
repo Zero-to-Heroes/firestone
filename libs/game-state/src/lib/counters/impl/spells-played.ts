@@ -21,6 +21,8 @@ export class SpellsPlayedCounterDefinitionV2 extends CounterDefinitionV2<number>
 		CardIds.GraveHorror,
 		CardIds.UmbralOwl,
 		CardIds.UmbralOwl_CORE_DMF_060,
+		// Clockwork Assistant: Has +1/+1 for each spell you've cast this game.
+		CardIds.ClockworkAssistant_GILA_907,
 	];
 
 	readonly player = {
