@@ -1,6 +1,7 @@
 import { CardClass, CardIds } from '@firestone-hs/reference-data';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { GameState } from '../../models/game-state';
+import { hasCorrectClass } from '../../related-cards/dynamic-pools';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
 import { CounterType } from '../_exports';
 
@@ -22,8 +23,7 @@ export class NonClassCardsAddedToHandCounterDefinitionV2 extends CounterDefiniti
 				state.playerDeck.cardsAddedToHand?.filter((c) => {
 					const ref = this.allCards.getCard(c.cardId);
 					return (
-						!ref?.classes?.includes(CardClass[CardClass.NEUTRAL]) &&
-						!ref?.classes?.includes(currentClass.toUpperCase())
+						!ref?.classes?.includes(CardClass[CardClass.NEUTRAL]) && !hasCorrectClass(ref, CardClass.ROGUE)
 					);
 				}).length ?? 0
 			);
