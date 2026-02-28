@@ -1010,6 +1010,7 @@ const internalGiftCreators = [
 	CardIds.WretchedExile,
 	CardIds.XarilPoisonedMind,
 	CardIds.XortothBreakerOfStars_GDB_118,
+	CardIds.X21Repairbot,
 	CardIds.YoggSaronMasterOfFate_HandOfFateToken,
 	CardIds.YoggSaronUnleashed_TentacleSwarmToken_YOG_516t3,
 	CardIds.YseraLegacy,
