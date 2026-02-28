@@ -1385,7 +1385,7 @@ export const filterCards = (
 		.filter((c) => canIncludeStarcraftFaction(c, options.initialDecklist, options.currentClass, allCards))
 		.filter((c) => canIncludeCthun(c, options.initialDecklist, options.currentClass, allCards))
 		.filter((c) => canIncludeGalakrond(c, options.initialDecklist, options.currentClass, allCards))
-		.filter((c) => canIncludeImbue(c, options.initialDecklist, allCards))
+		.filter((c) => canIncludeImbue(c, options.initialDecklist, options.currentClass, allCards))
 		.filter((c) => {
 			const debug = false;
 			if (gameType === GameType.GT_ARENA || gameType === GameType.GT_UNDERGROUND_ARENA) {
@@ -1651,9 +1651,11 @@ const canIncludeGalakrond = (
 
 // Imbue cards cannot be generated unless the starting deck contains at least one imbue card
 // https://www.reddit.com/r/hearthstone/comments/1reubn0/comment/o7kckv7
+// https://www.reddit.com/r/hearthstone/comments/1reubn0/comment/o7nyg8p
 const canIncludeImbue = (
 	refCard: ReferenceCard,
 	initialDecklist: readonly string[] | undefined,
+	currentClass: string | undefined,
 	allCards: AllCardsService,
 ): boolean => {
 	if (!isImbueCard(refCard)) {
@@ -1661,7 +1663,12 @@ const canIncludeImbue = (
 	}
 
 	if (!initialDecklist?.length) {
-		return false;
+		if (!currentClass?.length) {
+			return false;
+		}
+		// Non-imbue classes (Demon Hunter, Warlock, Warrior) can be safely assumed
+		// to not have imbue cards in their deck
+		return !NON_IMBUE_CLASSES.includes(CardClass[currentClass.toUpperCase()]);
 	}
 
 	for (const cardId of initialDecklist) {
@@ -1676,19 +1683,11 @@ const canIncludeImbue = (
 	return false;
 };
 
-const isImbueCard = (card: ReferenceCard): boolean => {
-	return (
-		(!!card.mechanics?.includes(GameTag[GameTag.IMBUE]) ||
-			!!card.referencedTags?.includes(GameTag[GameTag.IMBUE])) &&
-		!IMBUE_CARD_EXCEPTIONS.includes(card.id as CardIds)
-	);
-};
+const NON_IMBUE_CLASSES = [CardClass.DEMONHUNTER, CardClass.WARLOCK, CardClass.WARRIOR];
 
-const IMBUE_CARD_EXCEPTIONS = [
-	CardIds.PetalPicker_FIR_921,
-	CardIds.ResplendentDreamweaver_EDR_860,
-	CardIds.MalorneTheWaywatcher_EDR_888,
-];
+const isImbueCard = (card: ReferenceCard): boolean => {
+	return !!card.mechanics?.includes(GameTag[GameTag.IMBUE]) || !!card.referencedTags?.includes(GameTag[GameTag.IMBUE]);
+};
 
 const canIncludeStarcraftFaction = (
 	refCard: ReferenceCard,
