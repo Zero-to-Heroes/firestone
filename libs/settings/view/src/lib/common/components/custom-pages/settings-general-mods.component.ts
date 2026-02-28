@@ -94,6 +94,7 @@ import { Observable, filter } from 'rxjs';
 
 					<preference-toggle
 						*ngIf="areModsInstalled"
+						class="auto-update-toggle"
 						[field]="'modsAutoUpdate'"
 						[label]="'settings.general.mods.auto-update-label' | fsTranslate"
 						[tooltip]="'settings.general.mods.auto-update-tooltip' | fsTranslate"
