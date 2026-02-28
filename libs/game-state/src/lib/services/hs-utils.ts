@@ -315,8 +315,6 @@ export const getCardForCurrentEffect = (cardId: CardIds | string | null | undefi
 	switch (cardId) {
 		case CardIds.DistressedKvaldir_FrostFeverEnchantment_TTN_450e:
 			return CardIds.DistressedKvaldir_FrostPlagueToken;
-		case CardIds.TimelooperToki_LoopingTimeEnchantment_TIME_861e1:
-			return CardIds.TimelooperToki_TIME_861;
 		default:
 			return null;
 	}
