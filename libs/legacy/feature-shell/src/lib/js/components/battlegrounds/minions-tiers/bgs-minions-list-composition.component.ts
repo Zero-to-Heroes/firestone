@@ -373,60 +373,27 @@ export class BgsMinionsListCompositionComponent extends AbstractSubscriptionComp
 		this.name = value.name;
 		this.powerLevel = value.powerLevel;
 		this.tips = value.tips;
-		this.coreCards = value.cards
-			.filter((c) => c.status === 'CORE')
-			.map((c) => {
-				const ref: ReferenceCard = this.allCards.getCard(c.cardId);
-				const result: ExtendedReferenceCard = {
-					...ref,
-				};
-				return result;
-			});
-		this.recommendedCards = value.cards
-			.filter((c) => c.status === 'RECOMMENDED')
-			.map((c) => {
-				const ref: ReferenceCard = this.allCards.getCard(c.cardId);
-				const result: ExtendedReferenceCard = {
-					...ref,
-				};
-				return result;
-			});
-		this.addonCards = value.cards
-			.filter((c) => c.status === 'ADDON')
-			.map((c) => {
-				const ref: ReferenceCard = this.allCards.getCard(c.cardId);
-				const result: ExtendedReferenceCard = {
-					...ref,
-				};
-				return result;
-			});
-		this.cycleCards = value.cards
-			.filter((c) => c.status === 'CYCLE')
-			.map((c) => {
-				const ref: ReferenceCard = this.allCards.getCard(c.cardId);
-				const result: ExtendedReferenceCard = {
-					...ref,
-				};
-				return result;
-			});
-		this.trinkets = value.cards
-			.filter((c) => c.status === 'TRINKET')
-			.map((c) => {
-				const ref: ReferenceCard = this.allCards.getCard(c.cardId);
-				const result: ExtendedReferenceCard = {
-					...ref,
-				};
-				return result;
-			});
-		this.enablerCards = value.cards
-			.filter((c) => c.status === 'ENABLER')
-			.map((c) => {
-				const ref: ReferenceCard = this.allCards.getCard(c.cardId);
-				const result: ExtendedReferenceCard = {
-					...ref,
-				};
-				return result;
-			});
+		const getCardsByStatus = (status: string): readonly ExtendedReferenceCard[] => {
+			return value.cards
+				.filter((c) => c.status === status)
+				.map((c) => {
+					const ref: ReferenceCard = this.allCards.getCard(c.cardId);
+					if (!ref.isBaconPool) {
+						return null;
+					}
+					const result: ExtendedReferenceCard = {
+						...ref,
+					};
+					return result;
+				})
+				.filter((c) => c !== null);
+		};
+		this.coreCards = getCardsByStatus('CORE');
+		this.recommendedCards = getCardsByStatus('RECOMMENDED');
+		this.addonCards = getCardsByStatus('ADDON');
+		this.cycleCards = getCardsByStatus('CYCLE');
+		this.trinkets = getCardsByStatus('TRINKET');
+		this.enablerCards = getCardsByStatus('ENABLER');
 		this.headerImages = [`https://static.zerotoheroes.com/hearthstone/cardart/256x/${value.minionIcon}.jpg`];
 		this.compCards$$.next([
 			...(this.coreCards ?? []),
