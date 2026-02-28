@@ -26,7 +26,7 @@ import { revealCard } from '../card-reveal';
 import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 import { modifyDecksForSpecialCards } from './deck-contents-utils';
-import { DeckManipulationHelper } from './deck-manipulation-helper';
+import { DeckManipulationHelper, reconcileCardInHandWithDeck } from './deck-manipulation-helper';
 import { updateHandWithStonebrewInfo } from './special-cases/stonebrew/stonebrew';
 
 export class CardPlayedFromHandParser implements EventParser {
@@ -73,54 +73,29 @@ export class CardPlayedFromHandParser implements EventParser {
 		);
 		// console.debug('[card-played] newHand', newHand, removedCard, card, deck.hand, deck);
 
-		let newDeck = deck.deck;
-		// 	removedCard != null ? this.helper.updateDeckForAi(gameEvent, currentState, removedCard) : deck.deck;
-
 		// This happens when we create a card in the deck, then leave it there when the opponent draws it
 		// (to avoid info leaks). When they play it we won't find it in the "hand" zone, so we try
 		// and see if it is somewhere in the deck
-		let additionalKnownCardsInDeck = deck.additionalKnownCardsInDeck;
-		if (!removedCard?.cardId) {
-			additionalKnownCardsInDeck = additionalKnownCardsInDeck.filter(
-				(c, i) => c !== cardId || deck.additionalKnownCardsInDeck.indexOf(c) !== i,
-			);
-		}
-		if (!removedCard?.cardId && cardId && !gameEvent.additionalData.transientCard) {
-			// Technically this should also be done in "card-played-by-effect", but the use case is pretty marginal,
-			// and not worth the added complexity for now
-			if (removedCard?.stolenFromOpponent) {
-				const [newDeckAfterReveal, removedCardFromDeck] = this.helper.removeSingleCardFromZone(
-					opponentDeck.deck,
+		const reconciled = !gameEvent.additionalData.transientCard
+			? reconcileCardInHandWithDeck({
+					removedCard,
 					cardId,
 					entityId,
-					false, // Only remove known cards
-				);
-				// console.debug(
-				// 	'[card-played] newDeckAfterReveal otherDeck',
-				// 	newDeckAfterReveal,
-				// 	newDeck,
-				// 	removedCardFromDeck,
-				// );
-				if (removedCardFromDeck) {
-					removedCard = removedCardFromDeck;
-					opponentDeck = opponentDeck.update({
-						deck: newDeckAfterReveal,
-					});
-				}
-			} else {
-				const [newDeckAfterReveal, removedCardFromDeck] = this.helper.removeSingleCardFromZone(
-					newDeck,
-					cardId,
-					entityId,
-					false, // Only remove known cards
-				);
-				if (removedCardFromDeck) {
-					// console.debug('[card-played] newDeckAfterReveal', newDeckAfterReveal, newDeck, removedCardFromDeck);
-					removedCard = removedCardFromDeck;
-					newDeck = newDeckAfterReveal;
-				}
-			}
-		}
+					deck,
+					deckCards: deck.deck,
+					opponentDeck,
+					helper: this.helper,
+				})
+			: {
+					removedCard,
+					additionalKnownCardsInDeck: deck.additionalKnownCardsInDeck,
+					deckCards: deck.deck,
+					opponentDeck,
+				};
+		removedCard = reconciled.removedCard;
+		let { additionalKnownCardsInDeck } = reconciled;
+		let newDeck = reconciled.deckCards;
+		opponentDeck = reconciled.opponentDeck;
 
 		const isCardCountered: boolean = !!(
 			((additionalInfo?.secretWillTrigger?.reactingToEntityId &&

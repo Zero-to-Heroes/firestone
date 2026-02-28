@@ -6,7 +6,7 @@ import { GameState } from '../../../models/game-state';
 import { getProcessedCard } from '../../card-utils';
 import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
-import { DeckManipulationHelper } from './deck-manipulation-helper';
+import { DeckManipulationHelper, reconcileCardInHandWithDeck } from './deck-manipulation-helper';
 
 const CARD_IS_NOT_DESTROYED = [CardIds.Ursol_EDR_259];
 const CARD_IS_NOT_ACTUALLY_MILLED = [CardIds.TheFinsBeyondTime_TIME_706];
@@ -26,13 +26,24 @@ export class CardRemovedFromHandParser implements EventParser {
 
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
+		let opponentDeck = !isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const card = this.helper.findCardInZone(deck.hand, cardId, entityId);
 
 		const previousHand = deck.hand;
-		const [newHand, removedCard] = this.helper.removeSingleCardFromZone(previousHand, cardId, entityId);
+		const [newHand, handRemovedCard] = this.helper.removeSingleCardFromZone(previousHand, cardId, entityId);
 
-		// See card-played-from-hand
-		const newDeck = deck.deck; // this.helper.updateDeckForAi(gameEvent, currentState, removedCard);
+		const reconciled = reconcileCardInHandWithDeck({
+			removedCard: handRemovedCard,
+			cardId,
+			entityId,
+			deck,
+			deckCards: deck.deck,
+			opponentDeck,
+			helper: this.helper,
+		});
+		let { removedCard } = reconciled;
+		const { additionalKnownCardsInDeck, deckCards: newDeck } = reconciled;
+		opponentDeck = reconciled.opponentDeck;
 
 		const refCard = getProcessedCard(card?.cardId, card?.entityId, deck, this.allCards);
 		const isMilled = !CARD_IS_NOT_ACTUALLY_MILLED.includes(gameEvent.additionalData.removedByCardId as CardIds);
@@ -58,9 +69,7 @@ export class CardRemovedFromHandParser implements EventParser {
 			additionalKnownCardsInHand: deck.additionalKnownCardsInHand.filter(
 				(c, i) => c !== cardId || deck.additionalKnownCardsInHand.indexOf(c) !== i,
 			),
-			additionalKnownCardsInDeck: deck.additionalKnownCardsInDeck.filter(
-				(c, i) => c !== cardId || deck.additionalKnownCardsInDeck.indexOf(c) !== i,
-			),
+			additionalKnownCardsInDeck: additionalKnownCardsInDeck,
 			otherZone: newOtherZone,
 			deck: newDeck,
 			destroyedCardsInDeck: isDestroyed
@@ -69,6 +78,7 @@ export class CardRemovedFromHandParser implements EventParser {
 		});
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
+			[!isPlayer ? 'playerDeck' : 'opponentDeck']: opponentDeck,
 		});
 	}
 

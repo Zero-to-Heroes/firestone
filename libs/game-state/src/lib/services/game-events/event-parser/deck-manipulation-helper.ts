@@ -630,3 +630,59 @@ export class DeckManipulationHelper {
 const isInvalidForOther = (cardId: string): boolean => {
 	return cardId?.startsWith(CardIds.DarkGiftToken_EDR_102t) || cardId?.startsWith(CardIds.WakingTerrorToken_EDR_100t);
 };
+
+export const reconcileCardInHandWithDeck = (
+	input: {
+		removedCard: DeckCard | undefined;
+		cardId: string;
+		entityId: number;
+		deck: DeckState;
+		deckCards: readonly DeckCard[];
+		opponentDeck: DeckState;
+		helper: DeckManipulationHelper;
+	},
+): {
+	removedCard: DeckCard | undefined;
+	additionalKnownCardsInDeck: readonly string[];
+	deckCards: readonly DeckCard[];
+	opponentDeck: DeckState;
+} => {
+	let { removedCard, deckCards, opponentDeck } = input;
+	const { cardId, entityId, deck, helper } = input;
+
+	let additionalKnownCardsInDeck = deck.additionalKnownCardsInDeck;
+	if (!removedCard?.cardId) {
+		additionalKnownCardsInDeck = additionalKnownCardsInDeck.filter(
+			(c, i) => c !== cardId || deck.additionalKnownCardsInDeck.indexOf(c) !== i,
+		);
+	}
+	if (!removedCard?.cardId && cardId) {
+		if (removedCard?.stolenFromOpponent) {
+			const [newDeckAfterReveal, removedCardFromDeck] = helper.removeSingleCardFromZone(
+				opponentDeck.deck,
+				cardId,
+				entityId,
+				false,
+			);
+			if (removedCardFromDeck) {
+				removedCard = removedCardFromDeck;
+				opponentDeck = opponentDeck.update({
+					deck: newDeckAfterReveal,
+				});
+			}
+		} else {
+			const [newDeckAfterReveal, removedCardFromDeck] = helper.removeSingleCardFromZone(
+				deckCards,
+				cardId,
+				entityId,
+				false,
+			);
+			if (removedCardFromDeck) {
+				removedCard = removedCardFromDeck;
+				deckCards = newDeckAfterReveal;
+			}
+		}
+	}
+
+	return { removedCard, additionalKnownCardsInDeck, deckCards, opponentDeck };
+};
