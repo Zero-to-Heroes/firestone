@@ -41,7 +41,8 @@
 					.decktracker-deck-summary {
 						background: rgba(255, 255, 255, 0.08);
 					}
-					button {
+					button,
+					copy-deckstring {
 						display: none;
 					}
 				}
@@ -49,7 +50,8 @@
 			&.current-merging-target:not(.invalid-merging-target) {
 				opacity: 1;
 				::ng-deep decktracker-deck-summary {
-					button {
+					button,
+					copy-deckstring {
 						display: none;
 					}
 				}
@@ -60,7 +62,8 @@
 					.decktracker-deck-summary {
 						background: rgba(255, 255, 255, 0.08);
 					}
-					button {
+					button,
+					copy-deckstring {
 						display: none;
 					}
 				}
