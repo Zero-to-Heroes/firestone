@@ -610,6 +610,10 @@ const getDynamicFilters = (
 		case CardIds.ShockHopper_YOG_524:
 			return (c) => hasMechanic(c, GameTag.OVERLOAD);
 
+		// Discover Overload
+		case CardIds.FindersKeepers:
+			return (c) => hasMechanic(c, GameTag.OVERLOAD) && canBeDiscoveredByClass(c, options.currentClass);
+
 		// Random Secret
 		case CardIds.FacelessEnigma_TIME_860:
 			return (c) => hasMechanic(c, GameTag.SECRET);
