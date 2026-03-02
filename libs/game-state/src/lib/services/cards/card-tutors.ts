@@ -360,6 +360,7 @@ const internalTutors = [
 	CardIds.TimelineAccelerator_WON_139,
 	CardIds.SplendiferousWhizbang_QuestAcceptedToken_TOY_700t14,
 	CardIds.PebblyPage_WON_090,
+	CardIds.ConjuredBookkeeper_TLC_226,
 ];
 for (const cardId of Object.keys(cardsInfoCache)) {
 	const card = cardsInfoCache[cardId];

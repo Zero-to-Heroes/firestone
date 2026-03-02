@@ -1031,7 +1031,6 @@ const internalGiftCreators = [
 	CardIds.TheFoodChain_TLC_830,
 	CardIds.TheFoodChain_ShokkJungleTyrantToken_TLC_830t,
 	CardIds.OddMap_TLC_824,
-	CardIds.ConjuredBookkeeper_TLC_226,
 	CardIds.UnearthedArtifacts_TLC_462,
 	CardIds.RelicOfKings_TLC_334,
 	CardIds.ScrappyScavenger_TLC_461,
