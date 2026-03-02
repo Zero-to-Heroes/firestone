@@ -6,6 +6,8 @@ import { broxigarFablePackage, kingLlaneFablePackage } from '../../card-utils';
 import { hasRace } from '../../hs-utils';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 
+// FIXME: when card is played by effect, it doesn't necessarily trigger (eg battlecry cards)
+/** @deprecated Because of the above, prefer custom cards implementation (check warmaster-blackthorn) */
 export const modifyDecksForSpecialCards = (
 	cardId: string,
 	entityId: number,
@@ -55,14 +57,9 @@ export const modifyDecksForSpecialCards = (
 				return [handleDeckOfChaos(deckState, allCards, i18n), opponentDeckState];
 			case CardIds.ExploreUngoro:
 				return [handleExploreUngoro(deckState, allCards, i18n), opponentDeckState];
-			case CardIds.HemetJungleHunter:
-				return [handleHemet(deckState, allCards, i18n), opponentDeckState];
-			case CardIds.WarmasterBlackhorn_CATA_720:
-				return [
-					handleWarmasterBlackhorn(deckState, allCards, i18n),
-					handleWarmasterBlackhorn(opponentDeckState, allCards, i18n),
-				];
-			case CardIds.CerathineFleetrunner:
+		case CardIds.HemetJungleHunter:
+			return [handleHemet(deckState, allCards, i18n), opponentDeckState];
+		case CardIds.CerathineFleetrunner:
 				return [handleCerathineFleetrunner(deckState, allCards, i18n), opponentDeckState];
 			case CardIds.LadyPrestor_SW_078:
 				return [handleLadyPrestor(deckState, allCards, i18n), opponentDeckState];
@@ -566,20 +563,6 @@ const handleHemet = (deckState: DeckState, allCards: CardsFacadeService, i18n: I
 		// We use the initial cost here, see
 		// https://www.reddit.com/r/hearthstone/comments/oo8cjr/if_a_cards_costs_are_reduced_during_a_game_does/h5wxgqr/?context=3
 		(card, refCard) => (refCard?.cost ?? 0) <= 3,
-		(card) => null,
-		deckState,
-		allCards,
-		i18n,
-	);
-};
-
-const handleWarmasterBlackhorn = (
-	deckState: DeckState,
-	allCards: CardsFacadeService,
-	i18n: ILocalizationService,
-): DeckState => {
-	return updateCardInDeck(
-		(card, refCard) => refCard?.cost != null && refCard.cost <= 2,
 		(card) => null,
 		deckState,
 		allCards,

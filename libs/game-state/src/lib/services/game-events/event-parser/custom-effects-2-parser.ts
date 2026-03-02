@@ -2,15 +2,24 @@ import { CardIds } from '@firestone-hs/reference-data';
 
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameState } from '../../../models/game-state';
+import { hasCustomEffect } from '../../cards/_card.type';
+import { cardsInfoCache } from '../../cards/_mapping';
 import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 
-const SUPPORTED_EFFECTS = [
+const HARDCODED_EFFECTS = [
 	{
 		cardId: CardIds.Plaguespreader,
 		effect: 'ReuseFX_Shadow_Impact_Transform_CardInHand_Super',
 	},
+];
+
+const SUPPORTED_EFFECTS = [
+	...HARDCODED_EFFECTS,
+	...Object.values(cardsInfoCache)
+		.filter(hasCustomEffect)
+		.flatMap((card) => card.cardIds.map((cardId) => ({ cardId, effect: card.effect }))),
 ];
 
 export class CustomEffects2Parser implements EventParser {
@@ -31,6 +40,15 @@ export class CustomEffects2Parser implements EventParser {
 		);
 		if (!effect) {
 			return currentState;
+		}
+
+		const cardImpl = cardsInfoCache[effect.cardId];
+		if (hasCustomEffect(cardImpl)) {
+			return cardImpl.customEffect({
+				currentState,
+				gameEvent,
+				allCards: this.allCards.getService(),
+			});
 		}
 
 		switch (effect.cardId) {

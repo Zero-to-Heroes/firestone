@@ -218,6 +218,7 @@ export { VarianKingOfStormwind } from './varian-king-of-stormwind';
 export { VoodooTotem } from './voodoo-totem';
 export { VujaDe } from './vuja-de';
 export { WarCache } from './war-cache';
+export { WarmasterBlackhorn } from './warmaster-blackhorn';
 export { WelcomeHome } from './welcome-home';
 export { WhatDoesThisDo } from './what-does-this-do';
 export { WildlandsAdventurer } from './wildlands-adventurer';

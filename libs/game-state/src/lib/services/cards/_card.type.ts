@@ -122,3 +122,15 @@ export interface OnCardPlayedWhileInHandInput {
 	opponentDeckState: DeckState | null;
 	allCards: AllCardsService;
 }
+
+export interface CustomEffectCard extends Card {
+	effect: string;
+	customEffect: (input: CustomEffectInput) => GameState;
+}
+export const hasCustomEffect = (card: Card): card is CustomEffectCard =>
+	(card as CustomEffectCard)?.customEffect !== undefined;
+export interface CustomEffectInput {
+	currentState: GameState;
+	gameEvent: GameEvent;
+	allCards: AllCardsService;
+}
