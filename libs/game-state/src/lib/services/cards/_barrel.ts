@@ -71,6 +71,7 @@ export { FadingMemory } from './fading-memory';
 export { FarseerWo } from './farseer-wo';
 export { Fetch } from './fetch';
 export { FiddlefireImp } from './fiddlefire-imp';
+export { FindersKeepers } from './finders-keepers';
 export { Fishflinger } from './fishflinger';
 export { FlameBehemoth } from './flame-behemoth';
 export { FoolsGold } from './fools-gold';
