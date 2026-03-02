@@ -1176,6 +1176,7 @@ const getDynamicFilters = (
 		// Random X Cost Minion(s)
 		case CardIds.BuildingBlockGolem_MIS_314:
 		case CardIds.FirstContact_GDB_864:
+		case CardIds.ShimmerShot_DEEP_003:
 		case CardIds.UndefeatedChampion_TIME_872:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 1);
 		case CardIds.RayllaSandSculptor_VAC_424:
@@ -1186,7 +1187,6 @@ const getDynamicFilters = (
 		case CardIds.MaelstromPortal_CORE_KAR_073:
 		case CardIds.MazeGuide_CORE_REV_308:
 		case CardIds.MazeGuide:
-		case CardIds.ShimmerShot_DEEP_003:
 		case CardIds.ShriekingShroom:
 		case CardIds.TunnelTerror_TLC_469:
 		case CardIds.TwilightInfluence_EDR_463:
@@ -1685,7 +1685,9 @@ const canIncludeImbue = (
 const NON_IMBUE_CLASSES = [CardClass.DEMONHUNTER, CardClass.WARLOCK, CardClass.WARRIOR];
 
 const isImbueCard = (card: ReferenceCard): boolean => {
-	return !!card.mechanics?.includes(GameTag[GameTag.IMBUE]) || !!card.referencedTags?.includes(GameTag[GameTag.IMBUE]);
+	return (
+		!!card.mechanics?.includes(GameTag[GameTag.IMBUE]) || !!card.referencedTags?.includes(GameTag[GameTag.IMBUE])
+	);
 };
 
 const canIncludeStarcraftFaction = (
