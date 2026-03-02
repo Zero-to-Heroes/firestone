@@ -181,6 +181,7 @@ export { Spellslinger } from './spellslinger';
 export { SpiritGuide } from './spirit-guide';
 export { SunkenScroll } from './sunken-scroll';
 export { SunkenSweeper } from './sunken-sweeper';
+export { SwampqueenHagatha } from './swampqueen-hagatha';
 export { SweetenedSnowflurry } from './sweetened-snowflurry';
 export { Swindle } from './swindle';
 export { Synthesize } from './synthesize';
