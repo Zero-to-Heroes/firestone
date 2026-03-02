@@ -40,7 +40,33 @@ export class CardsPlayedFromAnotherClassCounterDefinitionV2 extends CounterDefin
 				i18n.translateString('settings.decktracker.your-deck.counters.cards-played-from-another-class-tooltip'),
 		},
 	};
-	readonly opponent = undefined;
+	readonly opponent = {
+		pref: 'opponentCardsPlayedFromAnotherClassCounter' as const,
+		display: (state: GameState): boolean => true,
+		value: (state: GameState) => {
+			return (
+				state.opponentDeck.cardsPlayedThisMatch
+					.filter(
+						(c) =>
+							!!this.allCards.getCard(c.cardId).classes?.length &&
+							this.allCards.getCard(c.cardId).classes?.[0] !== CardClass[CardClass.NEUTRAL],
+					)
+					.filter(
+						(c) =>
+							!anyOverlap(
+								this.allCards.getCard(c.cardId).classes?.map((c) => CardClass[c]) ?? [],
+								state.opponentDeck.hero?.classes ?? [],
+							),
+					).length ?? null
+			);
+		},
+		setting: {
+			label: (i18n: ILocalizationService): string =>
+				i18n.translateString('settings.decktracker.your-deck.counters.cards-played-from-another-class-label'),
+			tooltip: (i18n: ILocalizationService): string =>
+				i18n.translateString('settings.decktracker.your-deck.counters.cards-played-from-another-class-tooltip'),
+		},
+	};
 
 	constructor(
 		private readonly i18n: ILocalizationService,

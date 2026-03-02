@@ -429,7 +429,8 @@ export class Preferences implements IPreferences {
 	readonly playerWheelOfDeathCounter: BooleanWithLimited = true;
 	readonly opponentWheelOfDeathCounter: BooleanWithLimited = true;
 	readonly playerThirstyDrifterCounter: BooleanWithLimited = true;
-	readonly playerCardsPlayedFromAnotherClassCounter: BooleanWithLimited = true;
+	readonly playerCardsPlayedFromAnotherClassCounter: boolean = true;
+	readonly opponentCardsPlayedFromAnotherClassCounter: boolean = true;
 	readonly playerCardsDrawnCounter: BooleanWithLimited = true;
 	readonly opponentCardsDrawnCounter: boolean = false;
 	readonly playerCardsDrawnThisTurnCounter: boolean = true;
