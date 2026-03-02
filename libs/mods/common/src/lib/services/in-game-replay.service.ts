@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { GameStatusService } from '@firestone/shared/common/service';
-import { AbstractFacadeService, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
-import * as S3 from 'aws-sdk/clients/s3';
+import { AbstractFacadeService, ApiRunner, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
 import * as JSZip from 'jszip';
 import { BehaviorSubject, distinctUntilChanged, map } from 'rxjs';
 import { ModsManagerService } from './mods-manager.service';
@@ -10,7 +9,7 @@ const WS_URL = 'ws://localhost:54321';
 const WS_RECONNECT_DELAY = 3000;
 const WS_CONNECT_TIMEOUT = 5000;
 const S3_BASE_URL = 'https://power.firestoneapp.com/';
-const BUCKET_POWER_LOG = 'power.firestoneapp.com';
+const MARK_ACCESSED_ENDPOINT = 'https://gkd7rn4gqzt2lqbhtlqbiez5w40awjqg.lambda-url.us-west-2.on.aws/';
 
 export interface ReplayStatus {
 	type: 'status';
@@ -50,6 +49,7 @@ export class InGameReplayService extends AbstractFacadeService<InGameReplayServi
 
 	private modsManager: ModsManagerService;
 	private gameStatus: GameStatusService;
+	private api: ApiRunner;
 
 	constructor(windowManager: WindowManagerService) {
 		super(windowManager, 'InGameReplayService', () => !!this.status$$);
@@ -65,6 +65,7 @@ export class InGameReplayService extends AbstractFacadeService<InGameReplayServi
 		this.isReplayOngoing$$ = new BehaviorSubject<boolean>(false);
 		this.modsManager = AppInjector.get(ModsManagerService);
 		this.gameStatus = AppInjector.get(GameStatusService);
+		this.api = AppInjector.get(ApiRunner);
 
 		this.status$$
 			.pipe(
@@ -86,17 +87,18 @@ export class InGameReplayService extends AbstractFacadeService<InGameReplayServi
 	}
 
 	override async initElectronMainProcess(): Promise<void> {
-		this.registerMainProcessMethod('showReplayInternal', (powerLogKey: string) =>
-			this.showReplayInternal(powerLogKey),
+		this.registerMainProcessMethod('showReplayInternal', (args: { powerLogKey: string; reviewId: string }) =>
+			this.showReplayInternal(args),
 		);
 	}
 
-	async showReplay(powerLogKey: string) {
-		return this.callOnMainProcess('showReplayInternal', powerLogKey);
+	async showReplay(powerLogKey: string, reviewId: string) {
+		return this.callOnMainProcess('showReplayInternal', { powerLogKey, reviewId });
 	}
-	private async showReplayInternal(
-		powerLogKey: string,
-	): Promise<
+	private async showReplayInternal(args: {
+		powerLogKey: string;
+		reviewId: string;
+	}): Promise<
 		'not-in-game' | 'mod-not-installed' | 'mod-not-active' | 'connection-failed' | 'started' | 'download-failed'
 	> {
 		const inGame = await this.gameStatus.inGame();
@@ -121,8 +123,8 @@ export class InGameReplayService extends AbstractFacadeService<InGameReplayServi
 			// Download the replay file in the app (browser/Overwolf) and
 			// extract if zip, then send the raw Power.log text to the mod.
 			// The game process can't reliably make HTTPS requests or extract zips.
-			const url = S3_BASE_URL + powerLogKey;
-			console.log('[in-game-replay] Downloading replay from', url);
+			const url = S3_BASE_URL + args.powerLogKey;
+			console.log('[in-game-replay] Downloading replay from', url, args.powerLogKey, args.reviewId);
 
 			const response = await fetch(url);
 			if (!response.ok) {
@@ -131,7 +133,7 @@ export class InGameReplayService extends AbstractFacadeService<InGameReplayServi
 			}
 
 			let textContent: string;
-			if (powerLogKey.endsWith('.zip')) {
+			if (args.powerLogKey.endsWith('.zip')) {
 				const buffer = await response.arrayBuffer();
 				textContent = await this.extractPowerLogFromZip(buffer);
 			} else {
@@ -139,9 +141,8 @@ export class InGameReplayService extends AbstractFacadeService<InGameReplayServi
 			}
 
 			console.log(`[in-game-replay] Power.log content: ${textContent.length} chars`);
-			// console.debug('[in-game-replay] Power.log content:', textContent);
 
-			this.markPowerLogAsAccessed(powerLogKey);
+			this.markPowerLogAsAccessed(args.reviewId, args.powerLogKey);
 
 			// Tell the mod to expect raw Power.log text in the next message
 			this.send({ action: 'startReplayRaw' });
@@ -165,22 +166,11 @@ export class InGameReplayService extends AbstractFacadeService<InGameReplayServi
 		return zip.files[match].async('text');
 	}
 
-	private markPowerLogAsAccessed(powerLogKey: string): void {
-		const s3 = new S3({ region: 'us-west-2' });
-		const params = {
-			Bucket: BUCKET_POWER_LOG,
-			Key: powerLogKey,
-			Tagging: {
-				TagSet: [{ Key: 'accessed', Value: 'true' }],
-			},
-		};
-		s3.makeUnauthenticatedRequest('putObjectTagging', params, (err) => {
-			if (err) {
-				console.warn('[in-game-replay] Failed to tag power log as accessed', powerLogKey, err);
-			} else {
-				console.log('[in-game-replay] Tagged power log as accessed', powerLogKey);
-			}
-		});
+	private markPowerLogAsAccessed(reviewId: string, powerLogKey: string): void {
+		this.api
+			.callPostApi(MARK_ACCESSED_ENDPOINT, { reviewId, powerLogKey })
+			.then(() => console.log('[in-game-replay] Marked power log as accessed', reviewId))
+			.catch((err) => console.warn('[in-game-replay] Failed to mark power log as accessed', reviewId, err));
 	}
 
 	// --- WebSocket lifecycle ---

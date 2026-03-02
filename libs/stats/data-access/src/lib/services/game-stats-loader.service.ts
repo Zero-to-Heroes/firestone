@@ -108,6 +108,17 @@ export class GameStatsLoaderService extends AbstractFacadeService<GameStatsLoade
 		this.gameStats$$.next(newStats);
 	}
 
+	public async updatePowerLogAccessed(reviewId: string) {
+		const currentStats: GameStats = await this.gameStats$$.getValueWithInit();
+		if (!currentStats?.stats?.length) {
+			return;
+		}
+		const updatedStats = currentStats.stats.map((stat) =>
+			stat.reviewId === reviewId ? stat.update({ powerLogAccessed: true }) : stat,
+		);
+		this.gameStats$$.next(currentStats.update({ stats: updatedStats }));
+	}
+
 	private async retrieveStats() {
 		const localStats = await this.loadLocalGameStats();
 		if (!!localStats?.length) {

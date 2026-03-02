@@ -79,6 +79,8 @@ import { capitalizeEachWord } from '../../../services/utils';
 					*ngIf="reviewId"
 					[reviewId]="reviewId"
 					[powerLogKey]="powerLogKey"
+					[powerLogAccessed]="powerLogAccessed"
+					[creationTimestamp]="creationTimestamp"
 					[showReplayEvent]="showReplay"
 				></watch-replay-button>
 			</div>
@@ -117,6 +119,8 @@ export class ReplayInfoRankedComponent extends AbstractSubscriptionComponent imp
 	replayDate: string;
 	reviewId: string;
 	powerLogKey: string;
+	powerLogAccessed: boolean;
+	creationTimestamp: number;
 
 	bgsPerfectGame: boolean;
 
@@ -217,6 +221,8 @@ export class ReplayInfoRankedComponent extends AbstractSubscriptionComponent imp
 		[this.playCoinIconSvg, this.playCoinTooltip] = this.buildPlayCoinIconSvg(this.replayInfo);
 		this.reviewId = this.replayInfo.reviewId;
 		this.powerLogKey = this.replayInfo.powerLogKey;
+		this.powerLogAccessed = this.replayInfo.powerLogAccessed;
+		this.creationTimestamp = this.replayInfo.creationTimestamp;
 
 		this.opponentName = this.sanitizeName(this.replayInfo.opponentName);
 		this.opponentBattleTag = this.replayInfo.opponentName;

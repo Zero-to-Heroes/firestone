@@ -76,6 +76,8 @@ import { extractTime } from './replay-info-ranked.component';
 					*ngIf="reviewId"
 					[reviewId]="reviewId"
 					[powerLogKey]="powerLogKey"
+					[powerLogAccessed]="powerLogAccessed"
+					[creationTimestamp]="creationTimestamp"
 					[showReplayEvent]="showReplay"
 				></watch-replay-button>
 			</div>
@@ -111,6 +113,8 @@ export class ReplayInfoGenericComponent extends AbstractSubscriptionComponent im
 	playCoinTooltip: SafeHtml;
 	reviewId: string;
 	powerLogKey: string;
+	powerLogAccessed: boolean;
+	creationTimestamp: number;
 	gameTime: string;
 	replayDate: string;
 
@@ -211,6 +215,8 @@ export class ReplayInfoGenericComponent extends AbstractSubscriptionComponent im
 		[this.playCoinIconSvg, this.playCoinTooltip] = this.buildPlayCoinIconSvg(this.replayInfo);
 		this.reviewId = this.replayInfo.reviewId;
 		this.powerLogKey = this.replayInfo.powerLogKey;
+		this.powerLogAccessed = this.replayInfo.powerLogAccessed;
+		this.creationTimestamp = this.replayInfo.creationTimestamp;
 
 		this.opponentName = this.sanitizeName(this.replayInfo.opponentName);
 		this.opponentBattleTag = this.replayInfo.opponentName;
