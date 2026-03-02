@@ -305,6 +305,7 @@ export class ReceiveCardInHandParser implements EventParser {
 		switch (lastInfluencedByCardId) {
 			case CardIds.ElementaryReaction:
 			case CardIds.LadyDeathwhisper_RLK_713:
+			case CardIds.PuppetmasterDorian_MIS_026:
 			case CardIds.RangariScout_GDB_841:
 				// const sortedHand = [...hand].sort(
 				// 	(a, b) => (a.tags?.[GameTag.ZONE_POSITION] ?? 0) - (b.tags?.[GameTag.ZONE_POSITION] ?? 0),
