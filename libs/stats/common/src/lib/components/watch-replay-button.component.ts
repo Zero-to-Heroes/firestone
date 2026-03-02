@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@a
 import { InGameReplayService } from '@firestone/mods/common';
 import { ENABLE_IN_GAME_REPLAY } from '@firestone/shared/common/service';
 import { AnalyticsService, ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
+import { GameStatsLoaderService } from '@firestone/stats/data-access';
 
 @Component({
 	standalone: false,
@@ -37,7 +38,7 @@ import { AnalyticsService, ILocalizationService, OverwolfService } from '@firest
 				</svg>
 			</div>
 		</div>
-		<div class="in-game-container" *ngIf="powerLogKey && enableInGameReplay">
+		<div class="in-game-container" *ngIf="powerLogKey && enableInGameReplay && isPowerLogAvailable">
 			<div class="replay in-game" (click)="showInGame()" [class.disabled]="inGameLoading">
 				<div class="watch" *ngIf="showInGameLabel">{{ showInGameLabel }}</div>
 				<div
@@ -70,6 +71,8 @@ export class WatchReplayButtonComponent {
 
 	@Input() reviewId: string;
 	@Input() powerLogKey: string;
+	@Input() powerLogAccessed: boolean;
+	@Input() creationTimestamp: number;
 	@Input() showReplayEvent: (reviewId: string) => void;
 	@Input() showInGameEvent: (powerLogKey: string) => void;
 
@@ -77,6 +80,14 @@ export class WatchReplayButtonComponent {
 	inGameLoading = false;
 
 	readonly enableInGameReplay = ENABLE_IN_GAME_REPLAY;
+
+	get isPowerLogAvailable(): boolean {
+		if (this.powerLogAccessed) {
+			return true;
+		}
+		const thirtyDaysMs = 30 * 24 * 60 * 60 * 1000;
+		return !!this.creationTimestamp && Date.now() - this.creationTimestamp < thirtyDaysMs;
+	}
 
 	private errorTimeout: ReturnType<typeof setTimeout> | null;
 
@@ -86,6 +97,7 @@ export class WatchReplayButtonComponent {
 		private readonly inGameReplayService: InGameReplayService,
 		private readonly cdr: ChangeDetectorRef,
 		private readonly analytics: AnalyticsService,
+		private readonly gameStatsLoader: GameStatsLoaderService,
 	) {}
 
 	showReplay() {
@@ -105,9 +117,10 @@ export class WatchReplayButtonComponent {
 		this.dismissError();
 		this.inGameLoading = true;
 		this.cdr.detectChanges();
-		console.log('[watch-replay-button] loading powerLogKey', this.powerLogKey);
+		//this.powerLogKey = 'premium/cdf90f15-138d-4901-badf-9257cd678880.power.zip';
+		console.log('[watch-replay-button] loading powerLogKey', this.powerLogKey, this.reviewId);
 		try {
-			const result = await this.inGameReplayService.showReplay(this.powerLogKey);
+			const result = await this.inGameReplayService.showReplay(this.powerLogKey, this.reviewId);
 			console.log('[watch-replay-button] showInGame result', result);
 			if (result !== 'started') {
 				this.inGameError = this.i18n.translateString(`app.replays.in-game.error.${result}`);
@@ -115,6 +128,8 @@ export class WatchReplayButtonComponent {
 				this.analytics.trackEvent('replay-in-game-error', { error: result as string });
 			} else {
 				this.analytics.trackEvent('replay-in-game-started');
+				this.powerLogAccessed = true;
+				this.gameStatsLoader.updatePowerLogAccessed(this.reviewId);
 			}
 		} finally {
 			this.inGameLoading = false;

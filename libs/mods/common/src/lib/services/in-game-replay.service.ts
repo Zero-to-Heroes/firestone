@@ -99,7 +99,13 @@ export class InGameReplayService extends AbstractFacadeService<InGameReplayServi
 		powerLogKey: string;
 		reviewId: string;
 	}): Promise<
-		'not-in-game' | 'mod-not-installed' | 'mod-not-active' | 'connection-failed' | 'started' | 'download-failed'
+		| 'not-in-game'
+		| 'mod-not-installed'
+		| 'mod-not-active'
+		| 'connection-failed'
+		| 'started'
+		| 'download-failed'
+		| 'rewind-block'
 	> {
 		const inGame = await this.gameStatus.inGame();
 		if (!inGame) {
@@ -147,6 +153,10 @@ export class InGameReplayService extends AbstractFacadeService<InGameReplayServi
 			// Tell the mod to expect raw Power.log text in the next message
 			this.send({ action: 'startReplayRaw' });
 			// Send the raw Power.log text directly — no base64, no JSON wrapping
+			const hasRewindBlock = textContent.includes('BLOCK_START BlockType=GAME_RESET');
+			if (hasRewindBlock) {
+				return 'rewind-block';
+			}
 			this.sendRaw(textContent);
 			return 'started';
 		} catch (e) {
