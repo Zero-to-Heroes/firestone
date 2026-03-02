@@ -488,6 +488,15 @@ const getDynamicFilters = (
 			return (c) =>
 				hasCorrectType(c, CardType.SPELL) &&
 				hasCost(c, '==', options.deckState.chaoticTendrilsPlayedThisMatch + 1);
+		case CardIds.ChargedCall:
+			const overloadCardsPlayed =
+				options.deckState.cardsPlayedThisMatch?.filter((c) =>
+					allCards.getCard(c.cardId).mechanics?.includes(GameTag[GameTag.OVERLOAD]),
+				)?.length ?? 0;
+			return (c) =>
+				hasCorrectType(c, CardType.MINION) &&
+				hasCost(c, '==', 1 + overloadCardsPlayed) &&
+				canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.OnceUponATime_TOY_506:
 			return (c) =>
 				hasCorrectType(c, CardType.MINION) &&

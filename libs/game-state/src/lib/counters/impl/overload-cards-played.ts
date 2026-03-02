@@ -1,6 +1,8 @@
-import { CardIds, GameTag } from '@firestone-hs/reference-data';
+import { CardClass, CardIds, CardType, GameTag } from '@firestone-hs/reference-data';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
+import { BattlegroundsState } from '../../models/_barrel';
 import { GameState } from '../../models/game-state';
+import { filterCards, hasCost, hasCorrectType, canBeDiscoveredByClass } from '../../related-cards/dynamic-pools';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
 import { CounterType } from '../_exports';
 
@@ -45,6 +47,34 @@ export class OverloadCardsPlayedCounterDefinitionV2 extends CounterDefinitionV2<
 		protected override readonly allCards: CardsFacadeService,
 	) {
 		super(allCards);
+	}
+
+	protected override cardTooltip(
+		side: 'player' | 'opponent',
+		gameState: GameState,
+		bgState: BattlegroundsState,
+		value: number | null | undefined,
+	): readonly string[] | undefined {
+		const overloadCount = value ?? 0;
+		const targetCost = 1 + overloadCount;
+		const deck = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
+		const heroClass = deck?.hero?.classes?.[0];
+		const currentClass = heroClass ? CardClass[heroClass] : '';
+		return filterCards(
+			this.allCards.getService(),
+			{
+				format: gameState.metadata.formatType,
+				gameType: gameState.metadata.gameType,
+				scenarioId: gameState.metadata.scenarioId,
+				currentClass: currentClass,
+				validArenaPool: [],
+			},
+			CardIds.ChargedCall,
+			(c) =>
+				hasCorrectType(c, CardType.MINION) &&
+				hasCost(c, '==', targetCost) &&
+				canBeDiscoveredByClass(c, currentClass),
+		);
 	}
 
 	protected override tooltip(side: 'player' | 'opponent', gameState: GameState): string {
