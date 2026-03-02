@@ -25,7 +25,20 @@ export class OverloadCardsPlayedCounterDefinitionV2 extends CounterDefinitionV2<
 				i18n.translateString('settings.decktracker.your-deck.counters.overload-cards-played-tooltip'),
 		},
 	};
-	readonly opponent = undefined;
+	readonly opponent = {
+		pref: 'opponentOverloadCardsPlayedCounter' as const,
+		display: (state: GameState): boolean => true,
+		value: (state: GameState): number =>
+			state.opponentDeck.cardsPlayedThisMatch?.filter((c) =>
+				this.allCards.getCard(c.cardId).mechanics?.includes(GameTag[GameTag.OVERLOAD]),
+			)?.length ?? null,
+		setting: {
+			label: (i18n: ILocalizationService): string =>
+				i18n.translateString('settings.decktracker.your-deck.counters.overload-cards-played-label'),
+			tooltip: (i18n: ILocalizationService): string =>
+				i18n.translateString('settings.decktracker.your-deck.counters.overload-cards-played-tooltip'),
+		},
+	};
 
 	constructor(
 		private readonly i18n: ILocalizationService,
