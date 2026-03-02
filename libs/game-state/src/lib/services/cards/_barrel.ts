@@ -158,6 +158,7 @@ export { RuniValdrakken } from './runi-valdrakken';
 export { RuniWindRiderRoost } from './runi-wind-rider-roost';
 export { RunicAdornment } from './runic-adornment';
 export { RunicInscriptions } from './runic-inscriptions';
+export { SandsOfTime } from './sands-of-time';
 export { ScaleReplica } from './scale-replica';
 export { SemiStablePortal } from './semi-stable-portal';
 export { ServantOfYoggSaron } from './servant-of-yogg-saron';
