@@ -43,7 +43,7 @@ const filterSection = (section: Section | SectionReference, searchString: string
 	const sectionMatches =
 		section.title?.toLocaleLowerCase().includes(searchString.toLocaleLowerCase()) ||
 		section.keywords?.some((keyword) => keyword.toLocaleLowerCase().includes(searchString.toLocaleLowerCase()));
-	const filteredSettings = section.settings!.filter((setting) => settingMatches(setting, searchString));
+	const filteredSettings = section.settings?.filter((setting) => settingMatches(setting, searchString)) ?? [];
 	const result: Section = {
 		...section,
 		settings: sectionMatches ? section.settings : filteredSettings,
