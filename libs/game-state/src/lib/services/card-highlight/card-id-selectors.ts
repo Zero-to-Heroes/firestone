@@ -1006,6 +1006,8 @@ export const cardIdSelector = (
 			);
 		case CardIds.Cultivation:
 			return and(side(inputSide), or(inDeck, inHand), treant);
+		case CardIds.CumuloMaximus:
+			return and(side(inputSide), or(inDeck, inHand), overload);
 		case CardIds.CupOMuscle_VAC_338:
 		case CardIds.CupOMuscle_CupOMuscleToken_VAC_338t:
 		case CardIds.CupOMuscle_CupOMuscleToken_VAC_338t2:
@@ -4081,6 +4083,8 @@ export const cardIdSelector = (
 		case CardIds.VentureCoMercenaryLegacy:
 		case CardIds.VentureCoMercenaryVanilla:
 			return and(side(inputSide), or(inHand, inDeck), minion);
+		case CardIds.Vessina_ULD_173:
+			return and(side(inputSide), or(inDeck, inHand), overload);
 		// Vexallus: Your Arcane spells cast twice.
 		case CardIds.Vexallus:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended, arcane);
