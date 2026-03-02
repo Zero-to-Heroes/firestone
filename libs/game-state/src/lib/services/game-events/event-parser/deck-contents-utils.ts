@@ -579,7 +579,7 @@ const handleWarmasterBlackhorn = (
 	i18n: ILocalizationService,
 ): DeckState => {
 	return updateCardInDeck(
-		(card, refCard) => (refCard?.cost ?? 0) <= 2,
+		(card, refCard) => refCard?.cost != null && refCard.cost <= 2,
 		(card) => null,
 		deckState,
 		allCards,
