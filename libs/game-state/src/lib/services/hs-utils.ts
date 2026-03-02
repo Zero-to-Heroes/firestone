@@ -97,8 +97,6 @@ export const classForTribe = (tribe: Race): CardClass => {
 };
 
 export const battlecryGlobalEffectCards = [
-	CardIds.AldorAttendant,
-	CardIds.AldorTruthseeker,
 	CardIds.AlexandrosMograine,
 	CardIds.ArchbishopBenedictus_CORE_ICC_215,
 	CardIds.ArchbishopBenedictus_ICC_215,
@@ -129,15 +127,12 @@ export const battlecryGlobalEffectCards = [
 	CardIds.HobartGrapplehammer,
 	CardIds.HobartGrapplehammer_WON_117,
 	CardIds.InfiniteMurloc,
-	CardIds.InterstellarStarslicer_GDB_726,
-	CardIds.InterstellarWayfarer_GDB_721,
 	CardIds.Inzah,
 	CardIds.IronweaveBloodletterTavernBrawl,
 	CardIds.JotunTheEternal,
 	CardIds.JungleGiants_BarnabusTheStomperToken,
 	CardIds.LadyInWhite,
 	CardIds.LadyPrestor_SW_078,
-	CardIds.LordaeronAttendantToken,
 	CardIds.LorekeeperPolkelt,
 	CardIds.LorthemarTheron_RLK_593,
 	CardIds.LothraxionTheRedeemedCore,
@@ -147,7 +142,6 @@ export const battlecryGlobalEffectCards = [
 	CardIds.OrderInTheCourt,
 	CardIds.PrinceKeleseth_CORE_ICC_851,
 	CardIds.PrinceKeleseth_ICC_851,
-	CardIds.RadiantLightspawn,
 	CardIds.RazaTheChained,
 	CardIds.RiseToTheOccasion_LightbornCarielToken,
 	CardIds.RottenRodent,
@@ -172,7 +166,6 @@ export const battlecryGlobalEffectCards = [
 export const deathrattleGlobalEffectCards = [
 	CardIds.BonelordFrostwhisper,
 	CardIds.Infestor_SC_002,
-	CardIds.InterstellarStarslicer_GDB_726,
 	CardIds.JadeDisplay_TOY_803,
 	CardIds.Therazane_DEEP_036,
 	CardIds.UnluckyPowderman_WW_367,
