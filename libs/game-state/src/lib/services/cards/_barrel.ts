@@ -36,6 +36,7 @@ export { BygoneEchoes } from './bygone-echoes';
 export { CabalistsTome } from './cabalists-tome';
 export { CavernDreamer } from './cavern-dreamer';
 export { ChampionsOfAzeroth } from './champions-of-azeroth';
+export { ChargedCall } from './charged-call';
 export { Chromie } from './chromie';
 export { ChromieBronzeEmissary } from './chromie-bronze-emissary';
 export { ChromieEscapeFromDurnholde } from './chromie-escape-from-durnholde';
