@@ -495,7 +495,8 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 				// In the Other zone, we only want to have known cards (as they have been played / removed / etc.)
 				.filter((c) => !!c.cardId?.length)
 				.filter((c) => !showBoardCardsInSeparateZone || c.zone !== 'SECRET')
-				.filter((c) => (c.cardType ?? this.allCards.getCard(c.cardId).type)?.toLowerCase() !== 'enchantment'),
+				.filter((c) => (c.cardType ?? this.allCards.getCard(c.cardId).type)?.toLowerCase() !== 'enchantment')
+				.filter((c) => !c.temporaryCard),
 			...(showBoardCardsInSeparateZone ? [] : deckState.board),
 		].filter((c) => (showGeneratedCardsInSeparateZone ? !c.creatorCardId?.length && !c.stolenFromOpponent : true));
 		zones.push(
@@ -536,7 +537,9 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 						(c) => (c.cardType ?? this.allCards.getCard(c.cardId).type)?.toLowerCase() !== 'enchantment',
 					),
 				...(showBoardCardsInSeparateZone ? [] : deckState.board),
-			].filter((c) => !!c.creatorCardId?.length || c.stolenFromOpponent);
+			]
+				.filter((c) => !!c.creatorCardId?.length || c.stolenFromOpponent)
+				.filter((c) => !c.temporaryCard);
 			zones.push(
 				this.buildZone(
 					otherGeneratedZone,
