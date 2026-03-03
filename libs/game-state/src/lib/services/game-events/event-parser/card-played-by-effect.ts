@@ -45,13 +45,6 @@ export class CardPlayedByEffectParser implements EventParser {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 		const creatorCardId = gameEvent.additionalData.creatorCardId;
 
-		// Hack to avoid showing the the "choose one" options, which sometimes cause a "card-play-by-effect" event
-		// to be triggered
-		// 2026-01-06: let's see when this happens again, as it doesn't seem to be a good solution - what if the effect of
-		// a CHOOSE_ONE card is to play a card?
-		// if (this.allCards.getCard(creatorCardId)?.mechanics?.includes(GameTag[GameTag.CHOOSE_ONE])) {
-		// 	return currentState;
-		// }
 		const refCard = this.allCards.getCard(cardId);
 		// Weapons trigger a WEAPON_EQUIPPED event
 		if (refCard.type?.toUpperCase() === CardType[CardType.WEAPON]) {
@@ -93,6 +86,7 @@ export class CardPlayedByEffectParser implements EventParser {
 				(c, i) => c !== cardFromHand.cardId || additionalKnownCardsInDeck.indexOf(c) !== i,
 			);
 		}
+		const existingTemporaryCard = !isOnBoard ? deck.otherZone.find((c) => c.entityId === entityId) : null;
 		const cardWithZone = DeckCard.create({
 			entityId: entityId,
 			cardId: cardId,
@@ -100,7 +94,7 @@ export class CardPlayedByEffectParser implements EventParser {
 			refManaCost: refCard?.cost,
 			rarity: refCard?.rarity?.toLowerCase(),
 			zone: isOnBoard ? 'PLAY' : null,
-			temporaryCard: false,
+			temporaryCard: !!existingTemporaryCard?.temporaryCard,
 			playTiming: isOnBoard ? GameState.playTiming++ : null,
 			countered: isCardCountered,
 			creatorCardId: creatorCardId,
