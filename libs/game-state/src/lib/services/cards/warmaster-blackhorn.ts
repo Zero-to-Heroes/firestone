@@ -1,5 +1,6 @@
 import { AllCardsService, CardIds } from '@firestone-hs/reference-data';
 import { DeckState } from '../../models/deck-state';
+import { getProcessedCard } from '../card-utils';
 import { CustomEffectCard } from './_card.type';
 
 export const WarmasterBlackhorn: CustomEffectCard = {
@@ -15,7 +16,7 @@ export const WarmasterBlackhorn: CustomEffectCard = {
 
 const removeLowCostCards = (deckState: DeckState, allCards: AllCardsService): DeckState => {
 	const newDeck = deckState.deck.filter((card) => {
-		const refCard = card.cardId ? allCards.getCard(card.cardId) : null;
+		const refCard = card.cardId ? getProcessedCard(card.cardId, card.entityId, deckState, allCards) : null;
 		return refCard?.cost == null || refCard.cost > 2;
 	});
 	return deckState.update({ deck: newDeck });
