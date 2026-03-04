@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BgsCompAdvice } from '@firestone-hs/content-craetor-input';
+import { BnetRegion } from '@firestone-hs/reference-data';
 import { ReplayUploadMetadata } from '@firestone-hs/replay-metadata';
 import { Input as BgsComputeRunStatsInput } from '@firestone-hs/user-bgs-post-match-stats';
 import {
@@ -112,7 +113,11 @@ export class ReplayUploadService {
 		console.log('[manastorm-bridge] uploaded replay');
 
 		// Now upload the full Power.log file, keeping only the last game
-		if (fullMetaData.user.isPremium || ENABLE_IN_GAME_REPLAY_FOR_ALL) {
+		const currentRegion = fullMetaData.meta.region;
+		// Mods are banned in China
+		// In the future, might add a setting to allow uploading from China, but only if requested
+		const shouldUploadFromRegion = currentRegion !== BnetRegion.REGION_CN;
+		if (shouldUploadFromRegion && (fullMetaData.user.isPremium || ENABLE_IN_GAME_REPLAY_FOR_ALL)) {
 			const { log: powerLog, generation } = this.powerLogBuffer.getCurrentGameLog();
 			console.log('[manastorm-bridge] got power log from buffer, length', powerLog.length);
 			console.debug('[manastorm-bridge] got power log from buffer', powerLog);
@@ -176,13 +181,13 @@ export class ReplayUploadService {
 		return new Promise<void>(async (resolve, reject) => {
 			const s3 = new S3();
 			const body = await this.convertBlobToBody(powerLogBlob);
-		const params = {
-			Bucket: BUCKET_POWER_LOG,
-			Key: powerLogKey,
-			Body: body,
-			ContentType: 'application/zip',
-			Tagging: 'accessed=false',
-		};
+			const params = {
+				Bucket: BUCKET_POWER_LOG,
+				Key: powerLogKey,
+				Body: body,
+				ContentType: 'application/zip',
+				Tagging: 'accessed=false',
+			};
 			s3.makeUnauthenticatedRequest('putObject', params, async (err, data2) => {
 				if (err) {
 					console.error('[manastorm-bridge] An error during power log upload', err);
