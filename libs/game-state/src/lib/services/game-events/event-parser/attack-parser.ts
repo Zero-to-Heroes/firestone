@@ -13,7 +13,6 @@ export class AttackParser implements EventParser {
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
-		// const attackerId = gameEvent.additionalData.attackerEntityId;
 		const attackerControllerId = gameEvent.additionalData.attackerControllerId;
 
 		const isPlayer = attackerControllerId === gameEvent.localPlayer.PlayerId;
@@ -23,12 +22,9 @@ export class AttackParser implements EventParser {
 		const attackerCard = this.allCards.getCard(attackerCardId);
 		const isAttackerHero = attackerCard?.type?.toUpperCase() === CardType[CardType.HERO].toUpperCase();
 
-		if (!isAttackerHero) {
-			return currentState;
-		}
-
 		const newDeck = deck.update({
-			heroAttacksThisMatch: deck.heroAttacksThisMatch + 1,
+			heroAttacksThisMatch: isAttackerHero ? deck.heroAttacksThisMatch + 1 : deck.heroAttacksThisMatch,
+			friendlyAttacksThisMatch: deck.friendlyAttacksThisMatch + 1,
 		});
 
 		return Object.assign(new GameState(), currentState, {

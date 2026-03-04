@@ -105,7 +105,7 @@
 		"@firestone-hs/hs-replay-xml-parser": "^1.0.4",
 		"@firestone-hs/mailbox": "^1.0.29",
 		"@firestone-hs/official-leaderboards": "^0.0.1",
-		"@firestone-hs/reference-data": "^3.0.171",
+		"@firestone-hs/reference-data": "^3.0.173",
 		"@firestone-hs/replay-metadata": "^0.0.84",
 		"@firestone-hs/replay-parser": "^2.0.4",
 		"@firestone-hs/save-dungeon-loot-info": "^1.0.8",

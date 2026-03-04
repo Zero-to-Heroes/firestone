@@ -1,3 +1,1 @@
-export enum TempCardIds {
-	BattlefieldBlaster = 'BattlefieldBlaster',
-}
+export enum TempCardIds {}

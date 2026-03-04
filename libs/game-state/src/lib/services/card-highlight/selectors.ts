@@ -656,3 +656,14 @@ export const drawCard = (input: SelectorInput): boolean => {
 	return false;
 };
 export const costHealth = hasMechanicStr('COSTS_HEALTH');
+
+export const herald = hasMechanic(GameTag.HERALD);
+export const objectiveAura = hasMechanicStr('OBJECTIVE_AURA');
+export const effectiveCostEven = (input: SelectorInput): boolean => {
+	const cost = getCost(input.deckCard, input.deckState, input.allCards);
+	return cost != null && cost % 2 === 0;
+};
+export const effectiveCostOdd = (input: SelectorInput): boolean => {
+	const cost = getCost(input.deckCard, input.deckState, input.allCards);
+	return cost != null && cost % 2 !== 0;
+};

@@ -2,7 +2,7 @@
 
 import { CardClass, CardIds, CardType, GameTag, Race, SpellSchool } from '@firestone-hs/reference-data';
 import { groupByFunction, pickLast, sortByProperties } from '@firestone/shared/framework/common';
-import { CardsFacadeService, HighlightSide, TempCardIds } from '@firestone/shared/framework/core';
+import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
 import { DeckCard } from '../../models/deck-card';
 import { DeckState } from '../../models/deck-state';
 import { ShortCard } from '../../models/game-state';
@@ -48,9 +48,11 @@ import {
 	dragon,
 	dredge,
 	effectiveCostEqual,
+	effectiveCostEven,
 	effectiveCostLess,
 	effectiveCostLessThanRemainingMana,
 	effectiveCostMore,
+	effectiveCostOdd,
 	elemental,
 	endOfTurn,
 	entityIs,
@@ -332,6 +334,11 @@ export const cardIdSelector = (
 		// Archmage Antonidas: Whenever you cast a spell, add a 'Fireball' spell to your hand.
 		case CardIds.ArchmageAntonidas_CORE_EX1_559:
 			return and(side(inputSide), or(inHand, inDeck), spellExtended);
+		case CardIds.ArchmageKalec_CATA_458:
+			return highlightConditions(
+				and(side(inputSide), or(inHand, inDeck), spellExtended, dealsDamage),
+				and(side(inputSide), or(inHand, inDeck), spellExtended),
+			);
 		// Archmage Vargoth: At the end of your turn, cast a spell you've cast this turn (targets are random).
 		case CardIds.ArchmageVargoth:
 			return and(side(inputSide), or(inHand, inDeck), spellExtended);
@@ -476,8 +483,11 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, outcast);
 		case CardIds.BatMask_DINO_402:
 			return and(side(inputSide), or(inDeck, inHand), minion);
-		case TempCardIds.BattlefieldBlaster:
-			return and(side(inputSide), or(inDeck, inHand), spell);
+		case CardIds.BattlefieldBlaster_CATA_209:
+			return highlightConditions(
+				and(side(inputSide), or(inDeck, inHand), spell, dealsDamage),
+				and(side(inputSide), or(inDeck, inHand), spell),
+			);
 		case CardIds.Battlepickaxe_WW_347:
 			return and(side(inputSide), or(inDeck, inHand), minion, taunt);
 		case CardIds.BattleTotem_LOOTA_846:
@@ -666,6 +676,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, minion, effectiveCostLess(3));
 		case CardIds.CagematchCustodian:
 			return and(side(inputSide), inDeck, cardType(CardType.WEAPON));
+		case CardIds.CaliaMenethil_CORE_CATA_002:
+			return and(side(inputSide), inGraveyard, minion);
 		case CardIds.CannonBarrage:
 			return and(side(inputSide), or(inDeck, inHand), pirate);
 		case CardIds.CaptainsLog_GDB_228:
@@ -728,6 +740,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), generatesPlague);
 		case CardIds.ChalkArtist_TOY_388:
 			return and(side(inputSide), inDeck, minion);
+		case CardIds.ChaosSupplicant_CATA_786:
+			return and(side(inputSide), or(inHand, inDeck), spell);
 		case CardIds.ChampionOfStorms:
 			return and(side(inputSide), or(inHand, inDeck), nature);
 		case CardIds.CharredChameleon_FIR_908:
@@ -807,6 +821,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, neutral);
 		case CardIds.ClawMachine:
 			return and(side(inputSide), inDeck, minion);
+		case CardIds.CleansingCleric_CATA_216:
+			return and(side(inputSide), or(inHand, inDeck), restoreHealth);
 		case CardIds.ClearancePromoter_TOY_390:
 			return and(side(inputSide), or(inHand, inDeck), spell);
 		case CardIds.ClearTheWay:
@@ -869,6 +885,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
 		case CardIds.ConjuredBookkeeper_TLC_226:
 			return and(side(inputSide), or(inDeck, inHand), spell);
+		case CardIds.ConjurationSpecialist_CATA_979:
+			return and(side(inputSide), inHand, spell);
 		case CardIds.ConnivingConman_VAC_333:
 			return (input: SelectorInput): SelectorOutput => {
 				const currentClassInfo = input.deckState.hero?.classes?.[0];
@@ -900,6 +918,8 @@ export const cardIdSelector = (
 		// Contaminated Lasher: Battlecry: If you've cast 5 or more spells this game, refresh 4 Mana Crystals.
 		case CardIds.ContaminatedLasher_YOG_528:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
+		case CardIds.ConfrontTheTolvir_CATA_560:
+			return and(side(inputSide), or(inHand, inDeck), effectiveCostEqual(1));
 		case CardIds.ContrabandStash:
 			return highlightConditions(
 				tooltip(and(side(inputSide), cardsPlayedThisMatch, fromAnotherClassStrict)),
@@ -935,6 +955,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.CowerInFear_TLC_823:
 			return and(side(inputSide), or(inHand, inDeck), beast);
+		case CardIds.CracklingCloudstrider_CATA_563:
+			return and(side(inputSide), or(inHand, inDeck), spell, effectiveCostLess(5));
 		case CardIds.CraneGame_TOY_884:
 			return and(side(inputSide), inDeck, demon);
 		case CardIds.CrashOfThunder:
@@ -1034,6 +1056,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
 		case CardIds.Darkrider_EDR_456:
 			return and(side(inputSide), or(inDeck, inHand), dragon);
+		case CardIds.DarkscaleBroodmother_CATA_111:
+			return and(side(inputSide), or(inHand, inDeck), dragon);
 		case CardIds.DarkTemplar_SC_752:
 			return and(side(inputSide), or(inHand, inDeck), templar);
 		case CardIds.DaUndatakah:
@@ -1224,8 +1248,14 @@ export const cardIdSelector = (
 		case CardIds.EaglehornBowLegacy:
 		case CardIds.EaglehornBowVanilla:
 			return and(side(inputSide), or(inDeck, inHand), secret);
+		case CardIds.EarthenRoar_CATA_554:
+			return and(side(inputSide), or(inHand, inDeck), dragon);
 		case CardIds.EbbAndFlow_TIME_702:
 			return and(side(inputSide), or(inDeck, inHand), minion);
+		case CardIds.StonetalonStriker_CATA_551:
+		case CardIds.EbonscaleScout_CATA_552:
+		case CardIds.Ebyssian_CATA_553:
+			return and(side(inputSide), or(inHand, inDeck), dragon);
 		case CardIds.EchoOfMedivh:
 			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.EdgeOfDredgeTavernBrawl:
@@ -1313,6 +1343,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.ErodedSediment_WW_428:
 			return and(side(inputSide), or(inDeck, inHand), elemental);
+		case CardIds.EruptingVolcano_CATA_584:
+			return and(side(inputSide), or(inHand, inDeck), spell, fire);
 		case CardIds.EternalLayover_WORK_028:
 			return and(side(inputSide), or(inDeck, inHand), generateCorpse);
 		case CardIds.EternalServitude_CORE_ICC_213:
@@ -1497,6 +1529,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), minion, deathrattle);
 		case CardIds.ForebodingFlame_GDB_121:
 			return and(side(inputSide), or(inDeck, inHand), demon, notInInitialDeck);
+		case CardIds.ForestsGift_CATA_138:
+			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.ForsakenLieutenant_AV_601:
 			return and(side(inputSide), or(inDeck, inHand), deathrattle, minion);
 		case CardIds.ForgedInFlame:
@@ -1578,6 +1612,11 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), spellExtended, effectiveCostEqual(1));
 		case CardIds.GelbinOfTomorrow_TIME_009:
 			return and(side(inputSide), inDeck, aura);
+		case CardIds.GennCursedKing_CATA_615:
+			return highlightConditions(
+				and(side(inputSide), or(inHand, inDeck), effectiveCostEven),
+				and(side(inputSide), or(inHand, inDeck), effectiveCostOdd),
+			);
 		case CardIds.GhastlyGravedigger:
 			return and(side(inputSide), or(inDeck, inHand), secret);
 		case CardIds.Ghost_SC_408:
@@ -2024,6 +2063,8 @@ export const cardIdSelector = (
 		case CardIds.Insight:
 		case CardIds.Insight_InsightToken:
 			return and(side(inputSide), inDeck, minion);
+		case CardIds.InspiringMaul_CATA_472:
+			return and(side(inputSide), or(inHand, inDeck), endOfTurn);
 		case CardIds.InspiringPresenceTavernBrawl:
 			return and(side(inputSide), minion, legendary);
 		case CardIds.InstrumentSmasher:
@@ -2057,6 +2098,8 @@ export const cardIdSelector = (
 		case CardIds.Inzah:
 			return and(side(inputSide), or(inDeck, inHand), overload);
 		// Iron Roots: Passive After you cast a Nature spell, give a random friendly minion +1/+1 and Taunt.
+		case CardIds.IridescentFlitterwing_CATA_133:
+			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.IronRootsTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended, nature);
 		case CardIds.ItsRainingFin:
@@ -2362,6 +2405,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), pirate);
 		case CardIds.LohTheLivingLegend_TLC_257:
 			return and(side(inputSide), or(inHand, inDeck), minion);
+		case CardIds.LogoshsLastStand_CATA_610:
+			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.LokenJailerOfYoggSaron:
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.LongneckEgg_DINO_130:
@@ -2397,6 +2442,8 @@ export const cardIdSelector = (
 		// Magister's Apprentice: Your Arcane spells cost (1) less.
 		case CardIds.MagistersApprentice:
 			return and(side(inputSide), inDeck, spellExtended, arcane);
+		case CardIds.MalevolentMutant_CATA_697:
+			return and(side(inputSide), inHand, spell, fel);
 		case CardIds.Malfunction_MIS_107:
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.MalganisCore:
@@ -2469,6 +2516,8 @@ export const cardIdSelector = (
 		// Meddlesome Servant: Battlecry: If you've cast 5 or more spells this game, draw 2 cards.
 		case CardIds.MeddlesomeServant_YOG_518:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
+		case CardIds.MedivhsTriumph_CATA_308:
+			return and(side(inputSide), or(inDeck, inHand, inPlay), legendary);
 		case CardIds.MedivhTheHallowed_TIME_890:
 			return and(
 				side(inputSide),
@@ -2569,6 +2618,8 @@ export const cardIdSelector = (
 		case CardIds.NecroticMortician:
 		case CardIds.NecroticMortician_CORE_RLK_116:
 			return and(side(inputSide), or(inDeck, inHand), undead);
+		case CardIds.NespirahEnthralled_CATA_527:
+			return and(side(inputSide), or(inHand, inDeck), spell, fel);
 		case CardIds.NetherBreath_DRG_205:
 			return and(side(inputSide), or(inDeck, inHand), dragon);
 		case CardIds.NightbaneTemplar:
@@ -2604,6 +2655,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
 		case CardIds.NoxiousInfiltrator:
 			return and(side(inputSide), or(inDeck, inHand), undead);
+		case CardIds.NozdormuBronzeAspect_CATA_473:
+			return and(side(inputSide), or(inHand, inDeck, inPlay), minion, divineShield);
 		case CardIds.NydusWorm_SC_015:
 			return and(side(inputSide), inDeck, zerg);
 		case CardIds.NzothGodOfTheDeep:
@@ -2894,6 +2947,8 @@ export const cardIdSelector = (
 		case CardIds.RagingFelscreamerCore:
 		case CardIds.RagingFelscreamer_BT_416:
 			return and(side(inputSide), or(inDeck, inHand), demon);
+		case CardIds.RagnarosTheGreatFire_CATA_150:
+			return and(side(inputSide), or(inHand, inDeck, inPlay), deathrattle);
 		case CardIds.RaidBossOnyxia_ONY_004:
 			return and(side(inputSide), or(inDeck, inHand, inPlay, inGraveyard), minion, whelp);
 		case CardIds.RaidingParty:
@@ -2929,6 +2984,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), treant);
 		case CardIds.Ravage_SC_004hp:
 			return and(side(inputSide), or(inHand, inDeck), minion, zerg);
+		case CardIds.RavenousFelfisher_CATA_529:
+			return and(side(inputSide), or(inHand, inDeck), spell, fel);
 		case CardIds.RavenousFelhunter_EDR_891:
 			return and(side(inputSide), or(inHand, inDeck, inGraveyard), minion, deathrattle, baseCostLessThan(5));
 		// Raylla, Sand Sculptor: Paladin Tourist After you cast a spell, summon a random 2-Cost minion and give it Divine Shield.
@@ -3436,6 +3493,11 @@ export const cardIdSelector = (
 		// Spellcoiler: Battlecry: If you've cast a spell while holding this, Discover a spell.
 		case CardIds.Spellcoiler:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
+		case CardIds.SpellweaversBrilliance_CATA_452:
+			return highlightConditions(
+				and(side(inputSide), or(inHand, inDeck), spell, dealsDamage),
+				and(side(inputSide), or(inHand, inDeck), spell),
+			);
 		case CardIds.Spelunker_TLC_450:
 			return and(side(inputSide), or(inDeck, inHand), generatesTemporaryCard);
 		case CardIds.LesserSpinelSpellstone_TOY_825:
@@ -3643,6 +3705,10 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, spell);
 		case CardIds.SurvivalOfTheFittest:
 			return and(side(inputSide), or(inHand, inDeck, inPlay), minion);
+		case CardIds.Survivalist_CATA_613:
+			return and(side(inputSide), or(inHand, inDeck), minion);
+		case CardIds.SylvanassTriumph_CATA_557:
+			return and(side(inputSide), or(inHand, inDeck), cardIs(CardIds.SylvanassTriumph_CATA_557));
 		case CardIds.SwarthySwordshiner_VAC_701:
 			return and(side(inputSide), or(inHand, inDeck), weapon);
 		// Swiftscale Trickster: Battlecry: Your next spell this turn costs (0).
@@ -3752,6 +3818,8 @@ export const cardIdSelector = (
 					.map((c) => c.cardId as CardIds);
 				return and(side(inputSide), inDeck, cardIs(...candidates))(input);
 			};
+		case CardIds.TheBlackBlood_CATA_300:
+			return and(side(inputSide), or(inHand, inDeck), restoreHealth);
 		case CardIds.TheBoomReaver:
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.TheBoomship:
@@ -3817,6 +3885,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, spell);
 		case CardIds.Thunderbringer_WW_440:
 			return and(side(inputSide), inDeck, or(elemental, beast));
+		case CardIds.Tichondrius_CORE_CATA_001:
+			return and(side(inputSide), or(inHand, inDeck), demon);
 		case CardIds.TidelostBurrower:
 			return and(side(inputSide), or(inDeck, inHand), murloc);
 		// Tidepool Pupil: Battlecry: If you've cast 3 spells while holding this, Discover one of them.
@@ -4094,6 +4164,8 @@ export const cardIdSelector = (
 		// Vicious Slitherspear: After you cast a spell, gain +1 Attack until your next turn.
 		case CardIds.ViciousSlitherspear_CORE_TSC_827:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
+		case CardIds.VictorNefarius_CATA_470:
+			return and(side(inputSide), or(inHand, inDeck), dragon);
 		case CardIds.VioletTreasuregill_TLC_438:
 			return and(side(inputSide), inDeck, spell, effectiveCostLess(3));
 		case CardIds.Viper_SC_018:
@@ -4128,6 +4200,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), darkGift);
 		case CardIds.WarCommandsTavernBrawl:
 			return and(side(inputSide), inDeck, minion, neutral, effectiveCostLess(4));
+		case CardIds.Warloc_CATA_180:
+			return and(side(inputSide), or(inHand, inDeck), murloc, effectiveCostLess(4));
 		// Warmaster Blackhorn (CATA_720): Battlecry: Destroy all cards that cost (2) or less in both player's hands and decks.
 		case CardIds.WarmasterBlackhorn_CATA_720:
 			return and(inDeck, effectiveCostLess(3));

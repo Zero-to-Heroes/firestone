@@ -105,6 +105,7 @@ export class DeckState {
 	readonly heroPowerDamageThisMatch: number = 0;
 	readonly heroPowerUsed: number = 0;
 	readonly heroAttacksThisMatch: number = 0;
+	readonly friendlyAttacksThisMatch: number = 0;
 	readonly minionsDeadSinceLastTurn: readonly ShortCard[] = [];
 	readonly minionsDeadThisTurn: readonly ShortCard[] = [];
 	readonly minionsDeadThisMatch: readonly ShortCard[] = [];

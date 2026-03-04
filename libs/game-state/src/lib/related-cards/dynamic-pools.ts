@@ -61,6 +61,24 @@ export const getDynamicRelatedCardIds = (
 	},
 ): readonly string[] | { override: true; cards: readonly string[] } => {
 	const result = getDynamicRelatedCardIdsInternal(cardId, entityId, allCards, inputOptions);
+
+	const refCard = allCards.getCard(cardId);
+	if (hasMechanic(refCard, GameTag.HERALD)) {
+		const classColossals = allCards
+			.getCards()
+			.filter((c) => c.collectible)
+			.filter((c) => c.set?.toLowerCase() === 'cataclysm')
+			.filter((c) => hasMechanic(c, GameTag.COLOSSAL))
+			.filter((c) => c.classes?.includes(inputOptions.currentClass))
+			.map((c) => c.id);
+		if (classColossals.length > 0) {
+			if (hasOverride(result)) {
+				return { override: true, cards: [...(result as { cards: readonly string[] }).cards, ...classColossals] };
+			}
+			return [...((result as readonly string[]) ?? []), ...classColossals];
+		}
+	}
+
 	return result;
 };
 
@@ -94,8 +112,8 @@ const getDynamicRelatedCardIdsInternal = (
 		});
 	}
 
-	// Handle excavate cards - show the pool of treasures they can create
 	const refCard = allCards.getCard(cardId);
+
 	if (hasMechanic(refCard, GameTag.EXCAVATE)) {
 		const excavateTreasures = getExcavateTreasuresPool(
 			inputOptions.deckState,
@@ -1854,6 +1872,13 @@ const doesSummonInPlay = (sourceCardId: string): boolean => {
 
 		// Cards that summon based on game state
 		case CardIds.TravelSecurity_WORK_010: // Summons 8-cost minions
+			return true;
+
+		// CATA cards that summon random minions into play
+		case CardIds.DrakeadonMongrel_CATA_723:
+		case CardIds.TalanjisLastStand_CATA_471:
+		case CardIds.DisposableAcolytes_CATA_499:
+		case CardIds.CeremonialClash_CATA_569:
 			return true;
 
 		default:

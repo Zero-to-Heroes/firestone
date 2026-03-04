@@ -26,6 +26,7 @@ import { UndeadArmyCounterDefinitionV2 } from './impl/battlegrounds/undead-army'
 import { VolumizerBuffCounterDefinitionV2 } from './impl/battlegrounds/volumizer-buff';
 import { WhelpBuffCounterDefinitionV2 } from './impl/battlegrounds/whelp-buff';
 import { BolnerHammerbeakCounterDefinitionV2 } from './impl/bolner-hammerbeak';
+import { CardsDiscardedCounterDefinitionV2 } from './impl/cards-discarded';
 import { BonelordFrostwhisperCounterDefinitionV2 } from './impl/bonelord-frostwhisper';
 import { CardsDrawnCounterDefinitionV2 } from './impl/cards-drawn';
 import { CardsDrawnThisTurnCounterDefinitionV2 } from './impl/cards-drawn-this-turn';
@@ -57,7 +58,9 @@ import { ElizaGorebladeCounterDefinitionV2 } from './impl/eliza-goreblade';
 import { ElwynnBoarCounterDefinitionV2 } from './impl/elwynn-boar';
 import { ExcavateCounterDefinitionV2 } from './impl/excavate';
 import { FatigueCounterDefinitionV2 } from './impl/fatigue';
+import { FelSpellsPlayedCounterDefinitionV2 } from './impl/fel-spells-played';
 import { FreebirdCounterDefinitionV2 } from './impl/freebird';
+import { FriendlyAttacksCounterDefinitionV2 } from './impl/friendly-attacks';
 import { FriendlyMinionsDeadThisGameCounterDefinitionV2 } from './impl/friendly-minions-dead-this-game';
 import { FriendlyMinionsDeadThisTurnCounterDefinitionV2 } from './impl/friendly-minions-dead-this-turn';
 import { FrostSpellsCounterDefinitionV2 } from './impl/frost-spells';
@@ -213,6 +216,9 @@ export const getAllCounters: (
 	new TotemsSummonedCounterDefinitionV2(i18n, allCards),
 	new BeastsSummonedCounterDefinitionV2(i18n, allCards),
 	new WeaponsEquippedCounterDefinitionV2(i18n, allCards),
+	new FelSpellsPlayedCounterDefinitionV2(i18n, allCards),
+	new CardsDiscardedCounterDefinitionV2(i18n, allCards),
+	new FriendlyAttacksCounterDefinitionV2(i18n, allCards),
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n, allCards),
 	new BallerBuffCounterDefinitionV2(i18n, allCards),
@@ -357,4 +363,7 @@ export type CounterType =
 	| 'bgsVolumizerBuff'
 	| 'bgsWhelpBuff'
 	| 'bgsRightmostBuff'
-	| 'bgsTavernBuff';
+	| 'bgsTavernBuff'
+	| 'felSpells'
+	| 'cardsDiscarded'
+	| 'friendlyAttacks';
