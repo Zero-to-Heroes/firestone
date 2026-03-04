@@ -4000,7 +4000,9 @@ export const cardIdSelector = (
 		case CardIds.Tyr:
 			return highlightConditions(
 				and(side(inputSide), or(inDeck, inHand), currentClass, minion, attackGreaterThan(1), attackLessThan(5)),
-				tooltip(and(side(inputSide), inGraveyard, currentClass, minion, attackGreaterThan(1), attackLessThan(5))),
+				tooltip(
+					and(side(inputSide), inGraveyard, currentClass, minion, attackGreaterThan(1), attackLessThan(5)),
+				),
 			);
 		case CardIds.TyrsTears:
 		case CardIds.TyrsTears_TyrsTearsToken:
@@ -4077,17 +4079,17 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), spellExtended, dealsDamage);
 		case CardIds.Ursatron:
 			return and(side(inputSide), inDeck, mech);
-		case CardIds.UrsineMaul_EDR_253:
-			return (input: SelectorInput): SelectorOutput => {
-				const highestCostMinion = input.deckState.deck
-					.filter((c) => allCards.getCard(c.cardId).type === 'Minion')
-					.sort((a, b) => b.getEffectiveManaCost() - a.getEffectiveManaCost())[0];
-				const highestMinionCost = highestCostMinion?.getEffectiveManaCost() ?? 0;
-				return highlightConditions(
-					and(side(inputSide), inDeck, minion, effectiveCostEqual(highestMinionCost)),
-					and(side(inputSide), inDeck, minion),
-				)(input);
-			};
+		// case CardIds.UrsineMaul_EDR_253:
+		// 	return (input: SelectorInput): SelectorOutput => {
+		// 		const highestCostMinion = input.deckState.deck
+		// 			.filter((c) => allCards.getCard(c.cardId).type === 'Minion')
+		// 			.sort((a, b) => b.getEffectiveManaCost() - a.getEffectiveManaCost())[0];
+		// 		const highestMinionCost = highestCostMinion?.getEffectiveManaCost() ?? 0;
+		// 		return highlightConditions(
+		// 			and(side(inputSide), inDeck, minion, effectiveCostEqual(highestMinionCost)),
+		// 			and(side(inputSide), inDeck, minion),
+		// 		)(input);
+		// 	};
 		case CardIds.Ursol_EDR_259:
 			return and(side(inputSide), or(inHand, inDeck), spell);
 		case CardIds.ValstannStaghelm_WON_345:

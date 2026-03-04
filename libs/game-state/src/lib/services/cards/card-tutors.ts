@@ -314,7 +314,7 @@ const internalTutors = [
 	CardIds.UngoroBrochure_DalaranBrochureToken_WORK_050t,
 	CardIds.UngoroBrochure_WORK_050,
 	CardIds.Ursatron,
-	CardIds.UrsineMaul_EDR_253,
+	// CardIds.UrsineMaul_EDR_253,
 	CardIds.UrzulHorror,
 	CardIds.UtgardeGrapplesniper,
 	CardIds.VarianKingOfStormwind,

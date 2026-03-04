@@ -239,7 +239,7 @@
 		"typescript": "~5.6.0"
 	},
 	"overrides": {
-		"@firestone-hs/reference-data": "^3.0.171",
+		"@firestone-hs/reference-data": "^3.0.173",
 		"@firestone-hs/hs-replay-xml-parser": "^1.0.4",
 		"@angular/common": "^19.0.0",
 		"@angular/core": "^19.0.0",
