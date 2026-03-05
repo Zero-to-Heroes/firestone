@@ -65,6 +65,7 @@ import { FriendlyMinionsDeadThisGameCounterDefinitionV2 } from './impl/friendly-
 import { FriendlyMinionsDeadThisTurnCounterDefinitionV2 } from './impl/friendly-minions-dead-this-turn';
 import { FrostSpellsCounterDefinitionV2 } from './impl/frost-spells';
 import { GalakrondCounterDefinitionV2 } from './impl/galakrond';
+import { HeraldCounterDefinitionV2 } from './impl/herald';
 import { GardensGraceCounterDefinitionV2 } from './impl/gardens-grace';
 import { HeroDamageInstancesThisTurnCounterDefinitionV2 } from './impl/hero-damage-instances-this-turn';
 import { HeroPowerDamageCounterDefinitionV2 } from './impl/hero-power-damage';
@@ -192,6 +193,7 @@ export const getAllCounters: (
 	new WatchpostCounterDefinitionV2(i18n, allCards),
 	new FriendlyMinionsDeadThisGameCounterDefinitionV2(i18n, allCards),
 	new ImbueCounterDefinitionV2(i18n, allCards),
+	new HeraldCounterDefinitionV2(i18n, allCards),
 	new RenferalTheMalignantCounterDefinitionV2(i18n, allCards),
 	new DiveTheGolakkaDepthsCounterDefinitionV2(i18n, allCards),
 	new ElizaGorebladeCounterDefinitionV2(i18n, allCards),
@@ -261,6 +263,7 @@ export type CounterType =
 	| 'ysondre'
 	| 'overloadThisGame'
 	| 'dragonsInHand'
+	| 'herald'
 	| 'imbue'
 	| 'tableFlip'
 	| 'heroPowerUse'
