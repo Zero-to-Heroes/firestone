@@ -45,7 +45,12 @@ import { extractTime } from './replay-info-ranked.component';
 				</div>
 
 				<div class="group anomalies" *ngIf="anomalies?.length">
-					<div class="item" *ngFor="let anomaly of anomalies" [cardTooltip]="anomaly.cardId">
+					<div
+						class="item"
+						*ngFor="let anomaly of anomalies"
+						[cardTooltip]="anomaly.cardId"
+						[cardTooltipBgs]="true"
+					>
 						<img class="icon" [src]="anomaly.icon" />
 					</div>
 				</div>
