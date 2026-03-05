@@ -7,7 +7,7 @@ import { giftCreators } from './cards/gift-creators';
 
 // Used for cache purposes, only in dev
 export const CARDS_VERSION = '';
-export const isPreReleaseBuild = false;
+export const isPreReleaseBuild = true;
 
 /** @deprecated use ALL_CLASSES */
 export const classes = [
@@ -161,6 +161,7 @@ export const battlecryGlobalEffectCards = [
 	CardIds.TheStonewright,
 	CardIds.ValdrisFelgorge,
 	CardIds.WyrmrestPurifier,
+	CardIds.Vyranoth_CATA_213,
 ];
 
 export const deathrattleGlobalEffectCards = [
@@ -592,6 +593,7 @@ export const CURRENT_EFFECTS_WHITELIST = [
 	CardIds.WorkForHagatha_WorkForHagathaTavernBrawlEnchantment,
 	CardIds.YshaarjTheDefiler_TrueCorruptionEnchantment,
 	CardIds.Chronikar_EonFragmentsEnchantment_END_006e,
+	CardIds.Warloc_DoomEnchantment_CATA_180e,
 ];
 
 export const cardsRevealedWhenDrawn = [

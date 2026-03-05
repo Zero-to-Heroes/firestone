@@ -2,9 +2,9 @@
 // Shadowed Informant (CATA_614): 2 Mana 2/2 Dragon Neutral
 // "Battlecry: Discover a spell from your class. (Swaps class each turn!)"
 
-import { CardClass, CardIds, CardType, GameTag } from '@firestone-hs/reference-data';
+import { CardIds, CardType, GameTag } from '@firestone-hs/reference-data';
 import { GuessedInfo } from '../../models/deck-card';
-import { canBeDiscoveredByClass, hasCorrectType } from '../../related-cards/dynamic-pools';
+import { canBeDiscoveredByClass, hasCorrectClass, hasCorrectType } from '../../related-cards/dynamic-pools';
 import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
 
@@ -20,16 +20,14 @@ export const ShadowedInformant: GeneratingCard & StaticGeneratingCard = {
 		);
 	},
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
-		const classTag = input.options?.tags?.find((t) => t.Name === GameTag.TAG_SCRIPT_DATA_NUM_1);
-		const classValue = classTag
-			? CardClass[classTag.Value]
-			: input.deckState.hero?.classes?.[0]
-				? CardClass[input.deckState.hero?.classes?.[0]]
-				: '';
+		const creatorEntityId = input.card?.creatorEntityId;
+		const creator = input.deckState.findCard(creatorEntityId)?.card;
+		const classTag: number | undefined = creator?.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_1];
+		console.debug('[shadowed-informant] class tag', { classTag }, input, creator);
 		const possibleCards = filterCards(
 			ShadowedInformant.cardIds[0],
 			input.allCards,
-			(c) => hasCorrectType(c, CardType.SPELL) && canBeDiscoveredByClass(c, classValue),
+			(c) => hasCorrectType(c, CardType.SPELL) && (classTag ? hasCorrectClass(c, classTag) : true),
 			input.options,
 		);
 		return {

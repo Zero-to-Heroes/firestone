@@ -1128,6 +1128,7 @@ const internalGiftCreators = [
 	CardIds.ConsiderThePast_ConsiderThePastEnchantment_TOT_341e,
 	CardIds.EternalFirebolt_EternalFireboltEnchantment_END_025e,
 	CardIds.MimicPod,
+	CardIds.VictorNefarius_CATA_470,
 ];
 for (const cardId of Object.keys(cardsInfoCache)) {
 	const card = cardsInfoCache[cardId];

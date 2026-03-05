@@ -63,6 +63,7 @@ export const getDynamicRelatedCardIds = (
 	const result = getDynamicRelatedCardIdsInternal(cardId, entityId, allCards, inputOptions);
 
 	const refCard = allCards.getCard(cardId);
+	const additionalCards: string[] = [];
 	if (hasMechanic(refCard, GameTag.HERALD)) {
 		const classColossals = allCards
 			.getCards()
@@ -70,16 +71,17 @@ export const getDynamicRelatedCardIds = (
 			.filter((c) => c.set?.toLowerCase() === 'cataclysm')
 			.filter((c) => hasMechanic(c, GameTag.COLOSSAL))
 			.filter((c) => c.classes?.includes(inputOptions.currentClass))
-			.map((c) => c.id);
+			.flatMap((c) => c.relatedCardDbfIds ?? []);
 		if (classColossals.length > 0) {
-			if (hasOverride(result)) {
-				return { override: true, cards: [...(result as { cards: readonly string[] }).cards, ...classColossals] };
-			}
-			return [...((result as readonly string[]) ?? []), ...classColossals];
+			const allIds: string[] = classColossals.map((c) => allCards.getCard(c)?.id).filter((c) => !!c);
+			additionalCards.push(...allIds);
 		}
 	}
 
-	return result;
+	if (hasOverride(result)) {
+		return { override: true, cards: [...(result as { cards: readonly string[] }).cards, ...additionalCards] };
+	}
+	return [...((result as readonly string[]) ?? []), ...additionalCards];
 };
 
 const getDynamicRelatedCardIdsInternal = (
