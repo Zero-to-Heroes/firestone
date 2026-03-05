@@ -4213,6 +4213,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), protoss, minion);
 		case CardIds.WayOfTheShell_TLC_513hp:
 			return and(side(inputSide), inDeck, notInInitialDeck);
+		case CardIds.ZereksCloningGallery:
+			return and(side(inputSide), inDeck, minion);
 		case CardIds.Zuljin:
 			return and(side(inputSide), or(inDeck, inHand), spell /*, generateSecret */);
 		case CardIds.Zuljin_WarriorsOfAmani_THD_010p:
