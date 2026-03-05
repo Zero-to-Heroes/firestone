@@ -2,6 +2,7 @@ import { CardIds } from '@firestone-hs/reference-data';
 
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DeckCard } from '../../../models/deck-card';
+import { DeckState } from '../../../models/deck-state';
 import { GameState } from '../../../models/game-state';
 import { getProcessedCard } from '../../card-utils';
 import { GameEvent } from '../game-event';
@@ -10,6 +11,7 @@ import { DeckManipulationHelper, reconcileCardInHandWithDeck } from './deck-mani
 
 const CARD_IS_NOT_DESTROYED = [CardIds.Ursol_EDR_259];
 const CARD_IS_NOT_ACTUALLY_MILLED = [CardIds.TheFinsBeyondTime_TIME_706];
+const DEVOUR_CARDS = [CardIds.Isorath_CATA_481];
 
 export class CardRemovedFromHandParser implements EventParser {
 	constructor(
@@ -76,9 +78,34 @@ export class CardRemovedFromHandParser implements EventParser {
 				? [...deck.destroyedCardsInDeck, { cardId, entityId }]
 				: deck.destroyedCardsInDeck,
 		});
+
+		opponentDeck = this.updateDevourerRelatedCards(opponentDeck, gameEvent, cardId);
+
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
 			[!isPlayer ? 'playerDeck' : 'opponentDeck']: opponentDeck,
+		});
+	}
+
+	private updateDevourerRelatedCards(
+		opponentDeck: DeckState,
+		gameEvent: GameEvent,
+		eatenCardId: string,
+	): DeckState {
+		const removedByCardId = gameEvent.additionalData.removedByCardId;
+		const removedByEntityId = gameEvent.additionalData.removedByEntityId;
+		if (!DEVOUR_CARDS.includes(removedByCardId as CardIds) || !eatenCardId) {
+			return opponentDeck;
+		}
+		const devourerCard = this.helper.findCardInZone(opponentDeck.board, null, removedByEntityId);
+		if (!devourerCard) {
+			return opponentDeck;
+		}
+		const updatedDevourer = devourerCard.update({
+			relatedCardIds: [...devourerCard.relatedCardIds, eatenCardId],
+		});
+		return opponentDeck.update({
+			board: this.helper.replaceCardInZone(opponentDeck.board, updatedDevourer),
 		});
 	}
 
