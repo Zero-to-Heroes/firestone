@@ -38,13 +38,18 @@ export class OpponentMaxResourcesWidgetWrapperComponent
 {
 	protected override prefName: keyof Preferences = 'showOpponentMaxResourcesWidget';
 	protected override positionPrefName: keyof Preferences = 'opponentMaxResourcesWidgetPosition';
+	protected override positionPrefNameBgs: keyof Preferences = 'opponentMaxResourcesWidgetPositionBgs';
 	protected override alwaysOnPrefName: keyof Preferences = 'opponentMaxResourcesWidgetAlwaysOn';
 	protected override scalePrefName: keyof Preferences = 'opponentMaxResourcesWidgetScale';
 
 	protected override deckExtractor: (gameState: GameState) => DeckState = (gameState) => gameState.opponentDeck;
-	protected override defaultPositionLeftProvider = (gameWidth: number, gameHeight: number) =>
+	protected override defaultPositionLeftProviderStandard = (gameWidth: number, gameHeight: number) =>
 		gameWidth / 2 + gameHeight * 0.22;
-	protected override defaultPositionTopProvider = (gameWidth: number, gameHeight: number) => gameHeight * 0.09;
+	protected override defaultPositionTopProviderStandard = (gameWidth: number, gameHeight: number) =>
+		gameHeight * 0.09;
+	protected override defaultPositionLeftProviderBgs = (gameWidth: number, gameHeight: number) =>
+		gameWidth / 2 + gameHeight * 0.22;
+	protected override defaultPositionTopProviderBgs = (gameWidth: number, gameHeight: number) => gameHeight * 0.09;
 
 	constructor(
 		protected readonly ow: OverwolfService,

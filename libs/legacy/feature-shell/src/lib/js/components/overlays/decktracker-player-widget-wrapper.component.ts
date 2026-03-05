@@ -104,16 +104,29 @@ export class DecktrackerPlayerWidgetWrapperComponent
 					displayFromGameMode,
 				]) => {
 					if (closedByUser || !gameStarted || isBgs || isMercs || !displayFromGameMode) {
+						console.debug('[decktracker-player-widget-wrapper] not showing widget', {
+							closedByUser,
+							gameStarted,
+							isBgs,
+							isMercs,
+							displayFromGameMode,
+						});
 						return false;
 					}
 
 					if (!decktrackerCloseOnGameEnd) {
+						console.debug('[decktracker-player-widget-wrapper] showing widget from game mode', {
+							displayFromGameMode,
+						});
 						return displayFromGameMode;
 					}
 
 					// We explicitely don't check for null, so that if the memory updates are broken
 					// we still somehow show the info
 					if (currentScene !== SceneMode.GAMEPLAY) {
+						console.debug('[decktracker-player-widget-wrapper] not showing widget because not in game', {
+							currentScene,
+						});
 						return false;
 					}
 

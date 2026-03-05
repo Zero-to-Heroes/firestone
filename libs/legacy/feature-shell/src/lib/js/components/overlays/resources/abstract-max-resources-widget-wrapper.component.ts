@@ -18,17 +18,34 @@ export abstract class AbstractMaxResourcesWidgetWrapperComponent
 	protected abstract prefName: keyof Preferences;
 	protected abstract alwaysOnPrefName: keyof Preferences;
 	protected abstract positionPrefName: keyof Preferences;
+	protected abstract positionPrefNameBgs: keyof Preferences;
 	protected abstract scalePrefName: keyof Preferences;
 	protected abstract deckExtractor: (gameState: GameState) => DeckState;
 
-	protected abstract defaultPositionLeftProvider: (gameWidth: number, gameHeight: number) => number;
-	protected abstract defaultPositionTopProvider: (gameWidth: number, gameHeight: number) => number;
+	protected abstract defaultPositionLeftProviderStandard: (gameWidth: number, gameHeight: number) => number;
+	protected abstract defaultPositionTopProviderStandard: (gameWidth: number, gameHeight: number) => number;
+	protected abstract defaultPositionLeftProviderBgs: (gameWidth: number, gameHeight: number) => number;
+	protected abstract defaultPositionTopProviderBgs: (gameWidth: number, gameHeight: number) => number;
 
-	protected positionUpdater = (left: number, top: number) =>
-		this.prefs.updatePrefs(this.positionPrefName, { left, top });
+	private currentIsBgs = false;
+
+	protected override defaultPositionLeftProvider = (gameWidth: number, gameHeight: number): number =>
+		this.currentIsBgs
+			? this.defaultPositionLeftProviderBgs(gameWidth, gameHeight)
+			: this.defaultPositionLeftProviderStandard(gameWidth, gameHeight);
+	protected override defaultPositionTopProvider = (gameWidth: number, gameHeight: number): number =>
+		this.currentIsBgs
+			? this.defaultPositionTopProviderBgs(gameWidth, gameHeight)
+			: this.defaultPositionTopProviderStandard(gameWidth, gameHeight);
+
+	protected positionUpdater = (left: number, top: number) => {
+		const prefName = this.currentIsBgs ? this.positionPrefNameBgs : this.positionPrefName;
+		return this.prefs.updatePrefs(prefName, { left, top });
+	};
 	protected positionExtractor = async () => {
 		const prefs = await this.prefs.getPreferences();
-		return prefs[this.positionPrefName] as { left: number; top: number };
+		const prefName = this.currentIsBgs ? this.positionPrefNameBgs : this.positionPrefName;
+		return prefs[prefName] as { left: number; top: number };
 	};
 	protected getRect = () => this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect();
 	protected bounds = {
@@ -63,6 +80,13 @@ export abstract class AbstractMaxResourcesWidgetWrapperComponent
 			distinctUntilChanged(),
 			takeUntil(this.destroyed$),
 		);
+		gameMode$.subscribe((gameMode) => {
+			const wasBgs = this.currentIsBgs;
+			this.currentIsBgs = isBattlegrounds(gameMode);
+			if (wasBgs !== this.currentIsBgs) {
+				this.reposition();
+			}
+		});
 		this.showWidget$ = combineLatest([
 			this.scene.currentScene$$,
 			this.gameState.gameState$$.pipe(
