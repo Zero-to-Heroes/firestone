@@ -96,6 +96,7 @@ export const classForTribe = (tribe: Race): CardClass => {
 	}
 };
 
+// TODO: we should probably have the C# parser return an event for POWER blocks being sent, and use this
 export const battlecryGlobalEffectCards = [
 	CardIds.AlexandrosMograine,
 	CardIds.ArchbishopBenedictus_CORE_ICC_215,
@@ -161,7 +162,10 @@ export const battlecryGlobalEffectCards = [
 	CardIds.TheStonewright,
 	CardIds.ValdrisFelgorge,
 	CardIds.WyrmrestPurifier,
+	// Below this: use POWER blocks (I have made sure their effects have a POWER block)
 	CardIds.Vyranoth_CATA_213,
+	CardIds.Ebyssian_CATA_553,
+	CardIds.Ebyssian_EbyssianToken_CATA_553t,
 ];
 
 export const deathrattleGlobalEffectCards = [
@@ -229,6 +233,7 @@ const globalEffectEnchantments = [
 	CardIds.AvianaElunesChosen_FullMoonEnchantment_EDR_895e,
 	CardIds.Kiljaeden_KiljaedensPortalEnchantment_GDB_145e,
 	CardIds.LieInWait_MasterDuskReshufflePlayerEnchantEnchantment_TLC_513e2,
+	CardIds.AlexstraszaGuardianOfLife_CleansedOfCorruptionEnchantment_CATA_307e,
 	// CardIds.CityChiefEsho_KinEnchantment_TLC_110e, // The enchantment is applied to each card, so we don't have a global thing
 ];
 
@@ -283,6 +288,10 @@ export const globalEffectTriggers: { effectPrefab: string; cardId: string; force
 	{
 		effectPrefab: 'ReuseFX_Nature_DeckAndHandAE_WithBuffImpact_Super',
 		cardId: CardIds.Turbulus_WORK_013,
+	},
+	{
+		effectPrefab: 'CATAFX_ArchmageKalec_Hand_AE_Super',
+		cardId: CardIds.ArchmageKalec_CATA_458,
 	},
 	// {
 	// 	effectPrefab: 'EDRFX_AvianaElunesChosen_StartOfTurnComplete',

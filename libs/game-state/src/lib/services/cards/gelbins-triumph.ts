@@ -1,5 +1,5 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import { CardIds } from '@firestone-hs/reference-data';
+import { CardIds, GameTag, hasMechanic } from '@firestone-hs/reference-data';
 import { GuessedInfo } from '../../models/deck-card';
 import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
@@ -11,7 +11,7 @@ export const GelbinsTriumph: GeneratingCard & StaticGeneratingCard = {
 		return filterCards(
 			GelbinsTriumph.cardIds[0],
 			input.allCards,
-			(c) => c.mechanics?.includes('OBJECTIVE_AURA') ?? false,
+			(c) => hasMechanic(c, GameTag.PALADIN_AURA),
 			input.inputOptions,
 		);
 	},
@@ -19,7 +19,7 @@ export const GelbinsTriumph: GeneratingCard & StaticGeneratingCard = {
 		const possibleCards = filterCards(
 			GelbinsTriumph.cardIds[0],
 			input.allCards,
-			(c) => c.mechanics?.includes('OBJECTIVE_AURA') ?? false,
+			(c) => hasMechanic(c, GameTag.PALADIN_AURA),
 			input.options,
 		);
 		return {

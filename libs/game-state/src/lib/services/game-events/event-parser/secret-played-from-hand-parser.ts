@@ -133,14 +133,16 @@ export class SecretPlayedFromHandParser implements EventParser {
 			effectiveCost: effectiveCost,
 		};
 
-		const deckAfterSpecialCaseUpdate: DeckState = isCardCountered
-			? newPlayerDeck
-			: newPlayerDeck.update({
-					cardsPlayedThisMatch: [
-						...newPlayerDeck.cardsPlayedThisMatch,
-						newCardPlayedThisMatch,
-					] as readonly ShortCardWithTurn[],
-				});
+		// Don't double-count
+		const deckAfterSpecialCaseUpdate: DeckState = newPlayerDeck;
+		//  isCardCountered
+		// 	? newPlayerDeck
+		// 	: newPlayerDeck.update({
+		// 			cardsPlayedThisMatch: [
+		// 				...newPlayerDeck.cardsPlayedThisMatch,
+		// 				newCardPlayedThisMatch,
+		// 			] as readonly ShortCardWithTurn[],
+		// 		});
 
 		const [playerDeckAfterSpecialCaseUpdate, opponentDeckAfterSpecialCaseUpdate] = modifyDecksForSpecialCards(
 			knownCardId,

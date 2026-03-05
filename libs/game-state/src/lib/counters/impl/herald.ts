@@ -9,10 +9,13 @@ import { CounterType } from '../_exports';
 
 const CATACLYSM_COLOSSAL_BY_CLASS: Partial<Record<CardClass, string>> = {
 	[CardClass.DEATHKNIGHT]: CardIds.ArisenOnyxia_CATA_155,
+	[CardClass.DEMONHUNTER]: CardIds.AzsharaOceanLord_CATA_151,
 	[CardClass.DRUID]: CardIds.Wickerfang_CATA_139,
+	[CardClass.MAGE]: CardIds.ArchmageKalec_CATA_458,
 	[CardClass.HUNTER]: CardIds.Magmaw_CATA_550,
 	[CardClass.PALADIN]: CardIds.Chromatus_CATA_432,
 	[CardClass.PRIEST]: CardIds.TheBlackBlood_CATA_300,
+	[CardClass.ROGUE]: CardIds.Sinestra_CATA_154,
 	[CardClass.SHAMAN]: CardIds.AlakirLordOfStorms_CATA_153,
 	[CardClass.WARLOCK]: CardIds.ChogallMastermind_CATA_726,
 	[CardClass.WARRIOR]: CardIds.RagnarosTheGreatFire_CATA_150,

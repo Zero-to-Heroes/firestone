@@ -361,6 +361,9 @@ const internalTutors = [
 	CardIds.SplendiferousWhizbang_QuestAcceptedToken_TOY_700t14,
 	CardIds.PebblyPage_WON_090,
 	CardIds.ConjuredBookkeeper_TLC_226,
+	CardIds.Morchok_CATA_570,
+	CardIds.Morchok_WorldbreakEnchantment_CATA_570e,
+	CardIds.CommanderGeddon_CATA_591,
 ];
 for (const cardId of Object.keys(cardsInfoCache)) {
 	const card = cardsInfoCache[cardId];
