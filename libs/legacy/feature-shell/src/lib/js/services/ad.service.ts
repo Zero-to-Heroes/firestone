@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { isPreReleaseBuild } from '@firestone/game-state';
 import { LotteryWidgetControllerService } from '@firestone/lottery/common';
 import { AppNavigationService, premiumPlanIds, SubscriptionService } from '@firestone/shared/common/service';
 import {
@@ -9,14 +10,12 @@ import {
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, distinctUntilChanged } from 'rxjs';
-import { AppUiStoreFacadeService } from './ui-store/app-ui-store-facade.service';
 
 @Injectable()
 export class AdService extends AbstractFacadeService<AdService> implements IAdsService {
 	public hasPremiumSub$$: BehaviorSubject<boolean>;
 	public enablePremiumFeatures$$: BehaviorSubject<boolean>;
 
-	private store: AppUiStoreFacadeService;
 	private subscriptions: SubscriptionService;
 	private appNavigation: AppNavigationService;
 	private lottery: LotteryWidgetControllerService;
@@ -33,16 +32,18 @@ export class AdService extends AbstractFacadeService<AdService> implements IAdsS
 	protected async init() {
 		this.enablePremiumFeatures$$ = new BehaviorSubject<boolean>(false);
 		this.hasPremiumSub$$ = new BehaviorSubject<boolean>(false);
-		this.store = AppInjector.get(AppUiStoreFacadeService);
 		this.subscriptions = AppInjector.get(SubscriptionService);
 		this.appNavigation = AppInjector.get(AppNavigationService);
 		this.lottery = AppInjector.get(LotteryWidgetControllerService);
 		this.addDevMode();
 
-		await waitForReady(this.subscriptions);
-		await this.store.initComplete();
+		await waitForReady(this.subscriptions, this.lottery);
 
 		this.subscriptions.currentPlan$$.subscribe((plan) => {
+			if (isPreReleaseBuild) {
+				this.hasPremiumSub$$.next(true);
+				return;
+			}
 			console.log('[ads] current plan', plan);
 			const hasPremiumSub = premiumPlanIds.includes(plan?.id);
 			this.hasPremiumSub$$.next(hasPremiumSub);
@@ -54,6 +55,10 @@ export class AdService extends AbstractFacadeService<AdService> implements IAdsS
 		this.hasPremiumSub$$.pipe(distinctUntilChanged()).subscribe((hasPremiumSub) => {
 			console.debug('[ads] hasPremiumSub?', hasPremiumSub);
 		});
+		if (isPreReleaseBuild) {
+			this.hasPremiumSub$$.next(true);
+			return;
+		}
 	}
 
 	protected override async initElectronMainProcess() {

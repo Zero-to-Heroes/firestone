@@ -7,6 +7,7 @@ import {
 	EXTENSION_ID,
 	OverwolfService,
 	UserService,
+	waitForReady,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
 import { CurrentPlan, PremiumPlanId } from './subscription.service';
@@ -78,6 +79,7 @@ export class TebexService extends AbstractFacadeService<TebexService> {
 	}
 
 	protected async getSubscriptionStatusInternal(): Promise<CurrentPlan | null> {
+		await waitForReady(this.user);
 		console.log('[ads] [tebex] getting subscription status internal parent');
 		const currentUser = await this.user.getCurrentUser();
 		if (!currentUser?.username) {

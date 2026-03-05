@@ -186,6 +186,9 @@ const strip = (content: string): string => {
 };
 
 const parseConfig = (content: string): LogConfig => {
+	if (!content?.length) {
+		return { blocks: [] };
+	}
 	const blocks: LogConfigBlock[] = [];
 	const lines = content.split('\n');
 	let currentBlock: LogConfigBlock = null;
