@@ -88,6 +88,7 @@ export { FoolsGold } from './fools-gold';
 export { ForgottenMillenium } from './forgotten-millenium';
 export { Gazlowe } from './gazlowe';
 export { GelbinsTriumph } from './gelbins-triumph';
+export { GemstoneHoarder } from './gemstone-hoarder';
 export { GorgonzormuDeliciousCheese } from './gorgonzormu-delicious-cheese';
 export { GravelsnoutKnight } from './gravelsnout-knight';
 export { Grillmaster } from './grillmaster';
