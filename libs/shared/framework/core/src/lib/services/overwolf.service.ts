@@ -1,6 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable } from '@angular/core';
+import { IClipboardService } from './clipboard-service.interface';
 import { IExternalUrlService } from './external-url.interface';
+import { IFileSystemUIService } from './file-system-ui-service.interface';
+import { IMonitorsService, MonitorsListResult } from './monitors-service.interface';
+import { IRegionInfoService, RegionInfoResult } from './region-info-service.interface';
+import { ISystemInfoService, SystemInfo } from './system-info-service.interface';
 
 export const EXTENSION_ID = 'lnknbakkpommmjjdnelmfbjjdbocfpnpbkijjnob';
 export const HEARTHSTONE_GAME_ID = 9898;
@@ -12,7 +17,15 @@ type TwitterUserInfo = any;
 type RedditUserInfo = any;
 
 @Injectable()
-export class OverwolfService implements IExternalUrlService {
+export class OverwolfService
+	implements
+		IExternalUrlService,
+		IClipboardService,
+		IFileSystemUIService,
+		IMonitorsService,
+		ISystemInfoService,
+		IRegionInfoService
+{
 	public static MAIN_WINDOW = 'MainWindow';
 	public static COLLECTION_WINDOW = 'CollectionWindow';
 	public static COLLECTION_WINDOW_OVERLAY = 'CollectionOverlayWindow';
@@ -191,11 +204,7 @@ export class OverwolfService implements IExternalUrlService {
 	}
 
 	public openUrlInDefaultBrowser(url: string) {
-		if (this.isOwEnabled()) {
-			overwolf.utils.openUrlInDefaultBrowser(url);
-		} else {
-			window.open(url, '_blank');
-		}
+		overwolf.utils.openUrlInDefaultBrowser(url);
 	}
 
 	public async getOpenWindows() {
@@ -544,10 +553,10 @@ export class OverwolfService implements IExternalUrlService {
 		});
 	}
 
-	public async openWindowsExplorer(path: string): Promise<any> {
-		return new Promise<boolean>((resolve) => {
+	public async openPath(path: string): Promise<{ success: boolean; error?: string }> {
+		return new Promise<{ success: boolean; error?: string }>((resolve) => {
 			overwolf.utils.openWindowsExplorer(path, (res: any) => {
-				resolve(res);
+				resolve(res?.success ? { success: true } : { success: false, error: res?.error });
 			});
 		});
 	}
@@ -878,16 +887,22 @@ export class OverwolfService implements IExternalUrlService {
 	}
 
 	public async openLocalCacheFolder(): Promise<void> {
+		if (!this.isOwEnabled()) {
+			return;
+		}
 		const path = await this.getStoragePath();
 		return new Promise<void>((resolve) => {
-			overwolf.utils.openWindowsExplorer(path, (res) => {
+			overwolf.utils.openWindowsExplorer(path, () => {
 				resolve();
 			});
 		});
 	}
 
-	public async openAppFilePicker(): Promise<string | undefined> {
-		const path = await this.getStoragePath();
+	public async openFilePicker(options?: {
+		defaultPath?: string;
+		filters?: { name: string; extensions: string[] }[];
+	}): Promise<string | undefined> {
+		const path = options?.defaultPath ?? (await this.getStoragePath());
 		return new Promise<string | undefined>((resolve) => {
 			overwolf.utils.openFilePicker(
 				'',
@@ -899,6 +914,11 @@ export class OverwolfService implements IExternalUrlService {
 				false,
 			);
 		});
+	}
+
+	/** @deprecated Use openFilePicker */
+	public async openAppFilePicker(): Promise<string | undefined> {
+		return this.openFilePicker();
 	}
 
 	public async getStoragePath(): Promise<string> {
@@ -930,18 +950,18 @@ export class OverwolfService implements IExternalUrlService {
 		});
 	}
 
-	public async getMonitorsList(): Promise<overwolf.utils.getMonitorsListResult> {
-		return new Promise<overwolf.utils.getMonitorsListResult>((resolve) => {
-			overwolf.utils.getMonitorsList((res) => {
+	public async getMonitorsList(): Promise<MonitorsListResult> {
+		return new Promise<MonitorsListResult>((resolve) => {
+			overwolf.utils.getMonitorsList((res: any) => {
 				resolve(res);
 			});
 		});
 	}
 
-	public async getSystemInformation(): Promise<ExtendedSystemInfo | null> {
-		return new Promise<ExtendedSystemInfo | null>((resolve) => {
+	public async getSystemInformation(): Promise<SystemInfo | null> {
+		return new Promise<SystemInfo | null>((resolve) => {
 			overwolf.utils.getSystemInformation((res) => {
-				resolve((res?.systemInfo as ExtendedSystemInfo) ?? null);
+				resolve((res?.systemInfo as SystemInfo) ?? null);
 			});
 		});
 	}
@@ -1028,11 +1048,16 @@ export class OverwolfService implements IExternalUrlService {
 		});
 	}
 
-	public async getRegionInfo(): Promise<overwolf.os.GetRegionInfoResult> {
-		return new Promise<overwolf.os.GetRegionInfoResult>((resolve) => {
-			overwolf.os.getRegionInfo((result) => {
-				// console.debug('[bootstrap] got region info', result);
-				resolve(result);
+	public async getRegionInfo(): Promise<RegionInfoResult> {
+		return new Promise<RegionInfoResult>((resolve) => {
+			overwolf.os.getRegionInfo((result: any) => {
+				resolve({
+					success: result?.success ?? true,
+					region: result?.region ?? 'US',
+					country: result?.country ?? 'US',
+					language: result?.language ?? 'en-US',
+					timezone: result?.timezone ?? Intl.DateTimeFormat().resolvedOptions().timeZone,
+				});
 			});
 		});
 	}

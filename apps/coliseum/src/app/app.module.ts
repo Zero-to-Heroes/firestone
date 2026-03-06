@@ -7,10 +7,14 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ReplayColiseumModule } from '@firestone/replay/coliseum';
 import { CdkOverlayContainer } from '@firestone/shared/framework/common';
 import {
+	BrowserClipboardService,
+	BrowserMonitorsService,
 	CardsFacadeService,
 	CardsFacadeStandaloneService,
+	CLIPBOARD_SERVICE_TOKEN,
 	ILocalizationService,
 	LocalizationStandaloneService,
+	MONITORS_SERVICE_TOKEN,
 	PLAUSIBLE_DOMAIN,
 	setAppInjector,
 	SharedFrameworkCoreModule,
@@ -53,6 +57,8 @@ const httpLoaderFactory: (http: HttpClient) => TranslateHttpLoader = (http: Http
 		{ provide: ILocalizationService, useExisting: LocalizationStandaloneService },
 		{ provide: OverlayContainer, useClass: CdkOverlayContainer },
 		{ provide: PLAUSIBLE_DOMAIN, useValue: 'replays.firestoneapp.com' },
+		{ provide: CLIPBOARD_SERVICE_TOKEN, useClass: BrowserClipboardService },
+		{ provide: MONITORS_SERVICE_TOKEN, useClass: BrowserMonitorsService },
 	],
 	bootstrap: [ColiseumAppComponent],
 })

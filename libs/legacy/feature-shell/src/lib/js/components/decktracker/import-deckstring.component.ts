@@ -1,8 +1,19 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input, Optional } from '@angular/core';
+import {
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	Component,
+	EventEmitter,
+	Inject,
+	Input,
+} from '@angular/core';
 import { decode } from '@firestone-hs/deckstrings';
 import { DeckstringOverrideEvent, GameEvent, GameStateEvent } from '@firestone/game-state';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import {
+	CLIPBOARD_SERVICE_TOKEN,
+	IClipboardService,
+	OverwolfService,
+} from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 
 @Component({
@@ -51,7 +62,8 @@ export class ImportDeckstringComponent implements AfterViewInit {
 
 	constructor(
 		private readonly i18n: LocalizationFacadeService,
-		@Optional() private readonly ow: OverwolfService,
+		private readonly ow: OverwolfService,
+		@Inject(CLIPBOARD_SERVICE_TOKEN) private readonly clipboard: IClipboardService,
 	) {}
 
 	ngAfterViewInit() {
@@ -59,7 +71,7 @@ export class ImportDeckstringComponent implements AfterViewInit {
 	}
 
 	async importDeckstring() {
-		const clipboardContent = await this.ow.getFromClipboard();
+		const clipboardContent = await this.clipboard.getFromClipboard();
 		const { deckstring, deckName } = parseClipboardContent(clipboardContent);
 
 		if (!deckstring) {

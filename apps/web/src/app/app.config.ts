@@ -8,10 +8,14 @@ import { BattlegroundsServicesModule } from '@firestone/battlegrounds/services';
 import { SharedCommonServiceModule } from '@firestone/shared/common/service';
 import { CdkOverlayContainer, translationFileVersion } from '@firestone/shared/framework/common';
 import {
+	BrowserClipboardService,
+	BrowserMonitorsService,
 	CardsFacadeService,
 	CardsFacadeStandaloneService,
+	CLIPBOARD_SERVICE_TOKEN,
 	ILocalizationService,
 	LocalizationStandaloneService,
+	MONITORS_SERVICE_TOKEN,
 	PLAUSIBLE_DOMAIN,
 	SharedFrameworkCoreModule,
 } from '@firestone/shared/framework/core';
@@ -53,6 +57,8 @@ export const appConfig: ApplicationConfig = {
 		{ provide: ILocalizationService, useExisting: LocalizationStandaloneService },
 		{ provide: OverlayContainer, useClass: CdkOverlayContainer },
 		{ provide: PLAUSIBLE_DOMAIN, useValue: 'www.firestoneapp.com' },
+		{ provide: CLIPBOARD_SERVICE_TOKEN, useClass: BrowserClipboardService },
+		{ provide: MONITORS_SERVICE_TOKEN, useClass: BrowserMonitorsService },
 
 		// CdkOverlayContainer,
 	],

@@ -1,11 +1,15 @@
-import { Injectable, NgZone } from '@angular/core';
+import { Inject, Injectable, NgZone } from '@angular/core';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
 import {
 	BgsBattlePositioningExecutorService,
 	PermutationResult,
 	ProcessingStatus,
 } from '@firestone/battlegrounds/simulator';
-import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
+import {
+	CardsFacadeService,
+	ISystemInfoService,
+	SYSTEM_INFO_SERVICE_TOKEN,
+} from '@firestone/shared/framework/core';
 import { chunk } from '../../../../../libs/legacy/feature-shell/src/lib/js/services/utils';
 import { Chunk, InternalPermutationResult, Permutation } from './bgs-battle-positioning-worker.worker';
 
@@ -19,7 +23,7 @@ export class BgsBattlePositioningWorkerService extends BgsBattlePositioningExecu
 
 	constructor(
 		private readonly allCards: CardsFacadeService,
-		private readonly ow: OverwolfService,
+		@Inject(SYSTEM_INFO_SERVICE_TOKEN) private readonly systemInfoService: ISystemInfoService,
 		private readonly ngZone: NgZone,
 	) {
 		super();
@@ -27,7 +31,7 @@ export class BgsBattlePositioningWorkerService extends BgsBattlePositioningExecu
 	}
 
 	private async init() {
-		const systemInfo = await this.ow.getSystemInformation();
+		const systemInfo = await this.systemInfoService.getSystemInformation();
 		this.cpuCount = (systemInfo?.PhysicalCPUCount ?? 1) - 1 || 1;
 		console.log('CPU count', this.cpuCount);
 	}

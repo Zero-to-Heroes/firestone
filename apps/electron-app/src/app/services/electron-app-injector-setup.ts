@@ -64,6 +64,13 @@ import {
 	StandaloneUserService,
 } from '@firestone/electron/common';
 import {
+	ElectronClipboardFacadeService,
+	ElectronFileSystemUIFacadeService,
+	ElectronMonitorsFacadeService,
+	ElectronRegionInfoFacadeService,
+	ElectronSystemInfoFacadeService,
+} from '@firestone/electron/view';
+import {
 	AiDeckService,
 	BattlegroundsOfficialLeaderboardService,
 	BgsMatchMemoryInfoService,
@@ -134,8 +141,10 @@ import {
 	CardRulesService,
 	CardsFacadeService,
 	CardsFacadeStandaloneService,
+	CLIPBOARD_SERVICE_TOKEN,
 	DATABASE_SERVICE_TOKEN,
 	EXTERNAL_URL_SERVICE_TOKEN,
+	FILE_SYSTEM_UI_SERVICE_TOKEN,
 	HOTKEY_HANDLER_SERVICE_TOKEN,
 	IAdsService,
 	IDatabaseService,
@@ -143,8 +152,12 @@ import {
 	ILocalizationService,
 	LocalizationStandaloneService,
 	LocalStorageService,
+	MONITORS_SERVICE_TOKEN,
+	OverwolfService,
 	OwUtilsService,
+	REGION_INFO_SERVICE_TOKEN,
 	setAppInjector,
+	SYSTEM_INFO_SERVICE_TOKEN,
 	USER_SERVICE_TOKEN,
 	UserService,
 	WINDOW_HANDLER_SERVICE_TOKEN,
@@ -183,6 +196,8 @@ export const buildAppInjector = () => {
 	const electronInjector = new ElectronAngularInjector();
 	setAppInjector(electronInjector);
 
+	const ow: OverwolfService = null;
+
 	// Create and register services with the injector
 	// FIXME: this instantiate everything, while we might want to have lazy loading
 	const allCardsRaw = new CardsFacadeStandaloneService();
@@ -190,7 +205,17 @@ export const buildAppInjector = () => {
 	electronInjector.register(CardsFacadeStandaloneService, allCardsRaw);
 	electronInjector.register(CardsFacadeService, allCards);
 
-	const windowManager = new WindowManagerService(null);
+	// Stub for facades that need WindowManagerService before it exists (breaks circular dep)
+	const stubWindowManager = {
+		isMainWindow: () => Promise.resolve(true),
+		getMainWindow: () => Promise.reject(new Error('Not used in Electron main')),
+	} as any as WindowManagerService;
+
+	const electronMonitorsFacade = new ElectronMonitorsFacadeService(stubWindowManager);
+	electronInjector.register(MONITORS_SERVICE_TOKEN, electronMonitorsFacade);
+	electronInjector.register(ElectronMonitorsFacadeService, electronMonitorsFacade);
+
+	const windowManager = new WindowManagerService(ow, electronMonitorsFacade);
 	electronInjector.register(WindowManagerService, windowManager);
 
 	const electronHotkeyHandler = new ElectronHotkeyHandlerService();
@@ -208,6 +233,22 @@ export const buildAppInjector = () => {
 
 	const externalUrlService = new ElectronExternalUrlService();
 	electronInjector.register(EXTERNAL_URL_SERVICE_TOKEN, externalUrlService);
+
+	const electronClipboardFacade = new ElectronClipboardFacadeService(windowManager);
+	electronInjector.register(CLIPBOARD_SERVICE_TOKEN, electronClipboardFacade);
+	electronInjector.register(ElectronClipboardFacadeService, electronClipboardFacade);
+
+	const electronFileSystemUIFacade = new ElectronFileSystemUIFacadeService(windowManager);
+	electronInjector.register(FILE_SYSTEM_UI_SERVICE_TOKEN, electronFileSystemUIFacade);
+	electronInjector.register(ElectronFileSystemUIFacadeService, electronFileSystemUIFacade);
+
+	const electronSystemInfoFacade = new ElectronSystemInfoFacadeService(windowManager);
+	electronInjector.register(SYSTEM_INFO_SERVICE_TOKEN, electronSystemInfoFacade);
+	electronInjector.register(ElectronSystemInfoFacadeService, electronSystemInfoFacade);
+
+	const electronRegionInfoFacade = new ElectronRegionInfoFacadeService(windowManager);
+	electronInjector.register(REGION_INFO_SERVICE_TOKEN, electronRegionInfoFacade);
+	electronInjector.register(ElectronRegionInfoFacadeService, electronRegionInfoFacade);
 
 	const gameStatus = new GameStatusService(windowManager);
 	electronInjector.register(GameStatusService, gameStatus);
@@ -501,7 +542,7 @@ export const buildAppInjector = () => {
 		gameEventsEmitter,
 		gameStateMetaInfos,
 		preferences,
-		null, // OverwolfService
+		ow,
 		secretsParser,
 		gameEventsParser,
 		overlayDisplay,

@@ -9,9 +9,11 @@ import {
 	DATABASE_SERVICE_TOKEN,
 	IDatabaseService,
 	OverwolfService,
+	SYSTEM_INFO_SERVICE_TOKEN,
 	WindowHandlerFacadeService,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
+import type { ISystemInfoService } from '@firestone/shared/framework/core';
 import { TranslateService } from '@ngx-translate/core';
 import { CardsInitService } from '../../js/services/cards-init.service';
 import { DebugService } from '../../js/services/debug.service';
@@ -27,6 +29,7 @@ export class BootstrapEssentialServicesService {
 		private readonly debugService: DebugService, // No deps
 		private readonly ow: OverwolfService, // No deps
 		@Inject(DATABASE_SERVICE_TOKEN) private readonly db: IDatabaseService, // No deps
+		@Inject(SYSTEM_INFO_SERVICE_TOKEN) private readonly systemInfoService: ISystemInfoService, // OW or Electron
 		private readonly windowManager: WindowManagerService, // OverwolfService
 		private readonly windowHandlerFacade: WindowHandlerFacadeService,
 		private readonly prefs: PreferencesService, // WindowManager
@@ -60,7 +63,7 @@ export class BootstrapEssentialServicesService {
 		console.log('[bootstrap] [localization] setting language', prefs.locale);
 		let locale = prefs.locale;
 		if (!prefs.hasChangedLocale) {
-			const systemInfo = await this.ow.getSystemInformation();
+			const systemInfo = await this.systemInfoService.getSystemInformation();
 			console.log('[bootstrap] [localization] system info', systemInfo);
 			const systemLocale = systemInfo?.SystemLanguage;
 			if (!!systemLocale?.length) {

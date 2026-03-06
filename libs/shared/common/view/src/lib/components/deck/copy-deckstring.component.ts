@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, Optional, ViewRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Input, ViewRef } from '@angular/core';
 import { DeckDefinition, DeckList, decode, encode, FormatType } from '@firestone-hs/deckstrings';
 import { GameFormat, getDefaultHeroDbfIdForClass } from '@firestone-hs/reference-data';
 import { sanitizeDeckDefinition } from '@firestone/shared/common/service';
@@ -6,8 +6,9 @@ import { groupByFunction2 } from '@firestone/shared/framework/common';
 import {
 	AnalyticsService,
 	CardsFacadeService,
+	CLIPBOARD_SERVICE_TOKEN,
+	IClipboardService,
 	ILocalizationService,
-	OverwolfService,
 } from '@firestone/shared/framework/core';
 
 @Component({
@@ -56,7 +57,7 @@ export class CopyDesckstringComponent {
 
 	constructor(
 		private readonly cdr: ChangeDetectorRef,
-		@Optional() private readonly ow: OverwolfService,
+		@Inject(CLIPBOARD_SERVICE_TOKEN) private readonly clipboard: IClipboardService,
 		private readonly i18n: ILocalizationService,
 		private readonly allCards: CardsFacadeService,
 		private readonly analytics: AnalyticsService,
@@ -71,16 +72,11 @@ export class CopyDesckstringComponent {
 			deducedDeckstring = buildCurrentDeckstring(this.cardsList, GameFormat.FT_STANDARD, this.allCards);
 		}
 
-		if (!this.ow?.isOwEnabled()) {
-			console.log('no OW service present, copying with browser API');
-			this.copyDeckstringWithoutOverwolf();
-			return;
-		}
 		let copiedString = deducedDeckstring ?? this.normalizedDeckstring;
 		if (this.deckName) {
 			copiedString = '### ' + this.deckName + '\n' + copiedString;
 		}
-		this.ow.placeOnClipboard(copiedString);
+		await this.clipboard.placeOnClipboard(copiedString);
 		this.inputCopy = this.title || this.copyText;
 		this.copyText = this.i18n.translateString('decktracker.deck-name.copy-deckstring-confirmation');
 		console.log('copied deckstring to clipboard', copiedString, this._deckstring);
@@ -94,58 +90,6 @@ export class CopyDesckstringComponent {
 			}
 		}, 2000);
 		this.analytics.trackEvent('copy-deckstring', { origin: this.origin });
-	}
-
-	private async copyDeckstringWithoutOverwolf() {
-		console.debug('navigator.userAgent', navigator.userAgent);
-
-		// Try modern clipboard API first
-		if (navigator.clipboard && navigator.clipboard.writeText) {
-			try {
-				await navigator.clipboard.writeText(this.normalizedDeckstring);
-				this.copyDone();
-				return;
-			} catch (err) {
-				console.warn('Modern clipboard API failed, falling back to execCommand', err);
-			}
-		}
-
-		// Fallback to legacy execCommand approach
-		let worked = false;
-		const listener = (e: ClipboardEvent) => {
-			const clipboardData = e.clipboardData;
-			if (clipboardData) {
-				clipboardData.setData('text/plain', this.normalizedDeckstring);
-				worked = true;
-				e.preventDefault();
-			}
-		};
-
-		document.addEventListener('copy', listener);
-		try {
-			document.execCommand('copy');
-		} finally {
-			document.removeEventListener('copy', listener);
-		}
-
-		if (worked) {
-			this.copyDone();
-		}
-	}
-
-	private copyDone() {
-		this.inputCopy = this.title || this.copyText;
-		this.copyText = this.i18n.translateString('decktracker.deck-name.copy-deckstring-confirmation');
-		console.debug('copied deckstring to clipboard', this._deckstring);
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.markForCheck();
-		}
-		setTimeout(() => {
-			this.copyText = this.title ? null : this.inputCopy;
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.markForCheck();
-			}
-		}, 2000);
 	}
 }
 

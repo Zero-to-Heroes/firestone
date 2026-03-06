@@ -148,7 +148,10 @@ export class WindowWrapperComponent extends AbstractSubscriptionComponent implem
 				this.changeWindowSize();
 
 				const monitors = await this.ow.getMonitorsList();
-				const monitor = monitors?.displays?.find((monitor) => monitor.id === currentWindow.monitorId);
+				const targetId = String(currentWindow.monitorId ?? '');
+				const monitor = monitors?.displays?.find(
+					(m) => String(m.id) === targetId || (m.handle != null && String(m.handle.value) === targetId),
+				);
 				if (!!monitor && (this.originalTop < monitor.y || this.originalLeft < monitor.x)) {
 					const newX = Math.max(this.originalTop, monitor.y);
 					const newY = Math.max(this.originalLeft, monitor.x);
