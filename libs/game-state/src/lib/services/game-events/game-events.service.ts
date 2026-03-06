@@ -594,7 +594,10 @@ export class GameEvents {
 								? gameEvent.Value.AdditionalProps?.Position - 1
 								: null,
 						referencedCardIds: gameEvent.Value.AdditionalProps?.ReferencedCardIds,
-						tags: gameEvent.Value.AdditionalProps?.GuessedTags ?? [],
+						tags:
+							gameEvent.Value.AdditionalProps?.GuessedTags ??
+							gameEvent.Value.AdditionalProps?.Tags ??
+							[],
 					}),
 				);
 				break;

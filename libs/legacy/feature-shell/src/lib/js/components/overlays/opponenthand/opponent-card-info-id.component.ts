@@ -29,7 +29,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 	template: `
 		<div
 			class="opponent-card-info-id"
-			*ngIf="(hasBuffs && displayBuff) || (cardId && displayGuess) || forged"
+			*ngIf="(hasBuffs && displayBuff) || (cardId && displayGuess) || forged || onlyKnownPossibleCards"
 			cardTooltip
 			[cardTooltipCard]="_card"
 			cardTooltipPosition="bottom-right"
@@ -51,6 +51,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 					<use xlink:href="assets/svg/sprite.svg#card_only_buff" />
 				</svg>
 			</div>
+			<div *ngIf="onlyKnownPossibleCards" class="question-mark" inlineSVG="assets/svg/question_mark.svg"></div>
 
 			<div *ngIf="forged && cardUrl" class="card-image forged icon" inlineSVG="assets/svg/forged.svg"></div>
 			<div *ngIf="drawnBy" class="drawn">
@@ -70,6 +71,7 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 	drawnBy: boolean;
 	forged: boolean;
 	hasBuffs: boolean;
+	onlyKnownPossibleCards: boolean;
 	guessedInfo: GuessedInfo;
 	possibleCards: string[] | null = [];
 	_card: DeckCard;
@@ -138,7 +140,7 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 	): void {
 		const debug = card.entityId == 139;
 		this.possibleCards = [];
-		// console.debug('[opponent-card-info-id] buildInfo', card);
+		console.debug('[opponent-card-info-id] buildInfo', card);
 		// Keep the || to handle empty card id
 		// CreatorCardId first because this feels like the most relevant?
 		const realCardId = this.normalizeEnchantment(card.cardId, card.creatorCardId || card.lastAffectedByCardId);
@@ -261,6 +263,10 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 				cardsWithCreationSequenceInfo.includes(card.lastAffectedByCardId as CardIds))
 		) {
 			this.sequenceInfo = card.createdIndex + 1;
+		}
+
+		if (this.possibleCards?.length && !this.createdBy && !this.drawnBy) {
+			this.onlyKnownPossibleCards = true;
 		}
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.markForCheck();

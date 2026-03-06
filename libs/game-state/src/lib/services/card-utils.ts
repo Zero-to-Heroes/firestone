@@ -196,6 +196,31 @@ export const storeInformationOnCardPlayed = (
 	return result;
 };
 
+/**
+ * When the opponent draws a SHATTER card, it splits into two SHATTERED cards in their hand.
+ * These cards have the SHATTERED tag but no cardId (hidden). This allows showing the list of
+ * possible SHATTERED cards (restricted to their class) when hovering over them.
+ */
+const getShatteredPossibleCards = (
+	deckState: DeckState,
+	allCards: AllCardsService,
+): readonly string[] => {
+	const currentClass = deckState.getCurrentClass();
+	if (!currentClass) {
+		return [];
+	}
+	const classUpper = currentClass.toUpperCase();
+	return allCards
+		.getCards()
+		.filter(
+			(c) =>
+				c.mechanics?.includes(GameTag[GameTag.SHATTERED]) &&
+				(c.cardClass === classUpper || c.classes?.includes(classUpper)),
+		)
+		.map((c) => c.id)
+		.filter((id): id is string => !!id);
+};
+
 export const addGuessInfoToCard = (
 	card: DeckCard,
 	creatorCardId: string,
@@ -212,6 +237,22 @@ export const addGuessInfoToCard = (
 ): DeckCard => {
 	if (card.cardId) {
 		return card;
+	}
+	// SHATTERED cards: when opponent draws a SHATTER card, two cards are created with SHATTERED tag.
+	// We don't get creatorCardId from the parser, but we can show possible cards by class from the tag.
+	const hasShatteredTag =
+		options?.tags?.some((t) => t.Name === GameTag.SHATTERED && t.Value === 1) ||
+		card.tags?.[GameTag.SHATTERED] === 1;
+	if (hasShatteredTag) {
+		const possibleCards = getShatteredPossibleCards(deckState, allCards.getService());
+		if (possibleCards.length > 0) {
+			return card.update({
+				guessedInfo: {
+					...card.guessedInfo,
+					possibleCards,
+				},
+			});
+		}
 	}
 	switch (creatorCardId) {
 		case CardIds.HarthStonebrew_CORE_GIFT_01:
