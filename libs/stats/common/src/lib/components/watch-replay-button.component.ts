@@ -1,64 +1,80 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import {
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	HostListener,
+	Inject,
+	Input,
+	Optional,
+} from '@angular/core';
 import { InGameReplayService } from '@firestone/mods/common';
 import { ENABLE_IN_GAME_REPLAY } from '@firestone/shared/common/service';
-import { AnalyticsService, ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
+import {
+	ADS_SERVICE_TOKEN,
+	AnalyticsService,
+	IAdsService,
+	ILocalizationService,
+	OverwolfService,
+} from '@firestone/shared/framework/core';
 import { GameStatsLoaderService } from '@firestone/stats/data-access';
+
+const IN_GAME_REPLAY_URL_PREFIX = 'firestoneapp://replay/in-game?reviewId=';
+const WEB_REPLAY_URL_PREFIX = 'https://replays.firestoneapp.com/?reviewId=';
 
 @Component({
 	standalone: false,
 	selector: 'watch-replay-button',
 	styleUrls: [`./watch-replay-button.component.scss`],
 	template: `
-		<div class="replay" *ngIf="reviewId" (click)="showReplay()">
-			<div class="watch" *ngIf="showReplayLabel">{{ showReplayLabel }}</div>
+		<div class="watch-dropdown-container" *ngIf="reviewId" (click)="toggleWatchMenu($event)">
+			<div class="text" *ngIf="showReplayLabel">{{ showReplayLabel }}</div>
 			<div
 				class="watch-icon"
 				[helpTooltip]="
-					!showReplayLabel ? ('app.replays.replay-info.watch-replay-button-tooltip' | fsTranslate) : null
+					!showWatchMenu ? ('app.replays.replay-info.watch-replay-button-tooltip' | fsTranslate) : null
 				"
 			>
 				<svg class="svg-icon-fill">
 					<use xlink:href="assets/svg/replays/replays_icons.svg#match_watch" />
 				</svg>
 			</div>
-		</div>
-		<div class="replay online" *ngIf="reviewId" (click)="showOnline()">
-			<div class="watch" *ngIf="showReplayOnlineLabel">{{ showReplayOnlineLabel }}</div>
-			<div
-				class="watch-icon"
-				[helpTooltip]="
-					!showReplayOnlineLabel
-						? ('app.replays.replay-info.watch-replay-online-button-tooltip' | fsTranslate)
-						: null
-				"
-			>
-				<svg class="svg-icon-fill">
-					<use xlink:href="assets/svg/replays/replays_icons.svg#match_watch" />
-				</svg>
-			</div>
-		</div>
-		<div class="in-game-container" *ngIf="powerLogKey && enableInGameReplay && isPowerLogAvailable">
-			<div class="replay in-game" (click)="showInGame()" [class.disabled]="inGameLoading">
-				<div class="watch" *ngIf="showInGameLabel">{{ showInGameLabel }}</div>
-				<div
-					class="watch-icon"
-					*ngIf="!inGameLoading"
-					[helpTooltip]="
-						!showInGameLabel
-							? ('app.replays.replay-info.watch-replay-in-game-button-tooltip' | fsTranslate)
-							: null
-					"
-				>
-					<svg class="svg-icon-fill">
-						<use xlink:href="assets/svg/replays/replays_icons.svg#match_watch" />
-					</svg>
+			<div class="watch-dropdown" *ngIf="showWatchMenu" (click)="$event.stopPropagation()">
+				<div class="watch-option" (click)="showReplay($event)">
+					{{ 'app.replays.replay-info.watch-replay-in-app-button' | fsTranslate }}
 				</div>
-				<div class="loading-spinner" *ngIf="inGameLoading"></div>
+				<div class="watch-option" (click)="showOnline($event)">
+					{{ 'app.replays.replay-info.watch-replay-online-button' | fsTranslate }}
+				</div>
+				<div
+					class="watch-option"
+					*ngIf="powerLogKey && enableInGameReplay && isPowerLogAvailable"
+					(click)="showInGame($event)"
+					[class.disabled]="inGameLoading"
+				>
+					<span *ngIf="!inGameLoading">{{
+						'app.replays.replay-info.watch-replay-in-game-button' | fsTranslate
+					}}</span>
+					<span class="loading-spinner" *ngIf="inGameLoading"></span>
+				</div>
 			</div>
 			<div class="in-game-error" *ngIf="inGameError" (click)="dismissError()">
 				<span class="error-text">{{ inGameError }}</span>
 				<span class="close-icon">&#x2715;</span>
+			</div>
+		</div>
+		<div class="copy-link-container" *ngIf="reviewId && isPremium" (click)="toggleCopyMenu($event)">
+			<div class="text">{{ copyLinkText }}</div>
+			<div class="copy-icon" [helpTooltip]="'app.replays.replay-info.copy-link-tooltip' | fsTranslate">
+				<div class="icon" inlineSVG="assets/svg/copy.svg"></div>
+			</div>
+			<div class="copy-dropdown" *ngIf="showCopyMenu" (click)="$event.stopPropagation()">
+				<div class="copy-option" (click)="copyLink($event, 'web')">
+					{{ 'app.replays.replay-info.copy-web-link' | fsTranslate }}
+				</div>
+				<div class="copy-option" *ngIf="canCopyInGameLink" (click)="copyLink($event, 'in-game')">
+					{{ 'app.replays.replay-info.copy-in-game-link' | fsTranslate }}
+				</div>
 			</div>
 		</div>
 	`,
@@ -76,8 +92,11 @@ export class WatchReplayButtonComponent {
 	@Input() showReplayEvent: (reviewId: string) => void;
 	@Input() showInGameEvent: (powerLogKey: string) => void;
 
+	copyLinkText = this.i18n.translateString('app.replays.replay-info.copy-link');
 	inGameError: string | null;
 	inGameLoading = false;
+	showWatchMenu = false;
+	showCopyMenu = false;
 
 	readonly enableInGameReplay = ENABLE_IN_GAME_REPLAY;
 
@@ -89,6 +108,14 @@ export class WatchReplayButtonComponent {
 		return !!this.creationTimestamp && Date.now() - this.creationTimestamp < thirtyDaysMs;
 	}
 
+	get isPremium(): boolean {
+		return this.ads?.hasPremiumSub$$?.getValue() ?? false;
+	}
+
+	get canCopyInGameLink(): boolean {
+		return !!(this.powerLogKey && this.enableInGameReplay && this.isPowerLogAvailable);
+	}
+
 	private errorTimeout: ReturnType<typeof setTimeout> | null;
 
 	constructor(
@@ -98,23 +125,51 @@ export class WatchReplayButtonComponent {
 		private readonly cdr: ChangeDetectorRef,
 		private readonly analytics: AnalyticsService,
 		private readonly gameStatsLoader: GameStatsLoaderService,
+		@Optional() @Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 	) {}
 
-	showReplay() {
-		this.showReplayEvent?.(this.reviewId);
+	@HostListener('document:click')
+	onDocumentClick() {
+		if (this.showCopyMenu || this.showWatchMenu) {
+			this.showCopyMenu = false;
+			this.showWatchMenu = false;
+			this.cdr.detectChanges();
+		}
 	}
 
-	showOnline() {
+	toggleWatchMenu(event: MouseEvent) {
+		event.preventDefault();
+		event.stopPropagation();
+		this.showWatchMenu = !this.showWatchMenu;
+		this.cdr.detectChanges();
+	}
+
+	showReplay(event: MouseEvent) {
+		event.preventDefault();
+		event.stopPropagation();
+		this.showWatchMenu = false;
+		this.showReplayEvent?.(this.reviewId);
+		this.cdr.detectChanges();
+	}
+
+	showOnline(event: MouseEvent) {
+		event.preventDefault();
+		event.stopPropagation();
+		this.showWatchMenu = false;
+		this.cdr.detectChanges();
 		this.ow.openUrlInDefaultBrowser(
 			`https://replays.firestoneapp.com/?reviewId=${this.reviewId}&source=replays-list`,
 		);
 	}
 
-	async showInGame() {
+	async showInGame(event: MouseEvent) {
 		if (this.inGameLoading) {
 			return;
 		}
+		event.preventDefault();
+		event.stopPropagation();
 		this.dismissError();
+		this.showWatchMenu = false;
 		this.inGameLoading = true;
 		this.cdr.detectChanges();
 		//this.powerLogKey = 'premium/cdf90f15-138d-4901-badf-9257cd678880.power.zip';
@@ -143,6 +198,38 @@ export class WatchReplayButtonComponent {
 			this.errorTimeout = null;
 		}
 		this.inGameError = null;
+		this.cdr.detectChanges();
+	}
+
+	toggleCopyMenu(event: MouseEvent) {
+		event.preventDefault();
+		event.stopPropagation();
+		this.showCopyMenu = !this.showCopyMenu;
+		this.cdr.detectChanges();
+	}
+
+	async copyLink(event: MouseEvent, type: 'web' | 'in-game') {
+		if (!this.reviewId) {
+			return;
+		}
+		event.preventDefault();
+		event.stopPropagation();
+		const url =
+			type === 'web'
+				? `${WEB_REPLAY_URL_PREFIX}${this.reviewId}&source=replays-list`
+				: `${IN_GAME_REPLAY_URL_PREFIX}${this.reviewId}`;
+		if (this.ow?.isOwEnabled?.()) {
+			this.ow.placeOnClipboard(url);
+		} else if (navigator.clipboard?.writeText) {
+			await navigator.clipboard.writeText(url);
+		}
+		this.showCopyMenu = false;
+		this.copyLinkText = this.i18n.translateString('decktracker.deck-name.copy-deckstring-confirmation');
+		setTimeout(() => {
+			this.copyLinkText = this.i18n.translateString('app.replays.replay-info.copy-link');
+			this.cdr.detectChanges();
+		}, 2000);
+		this.analytics.trackEvent('replay-link-copied', { type });
 		this.cdr.detectChanges();
 	}
 }

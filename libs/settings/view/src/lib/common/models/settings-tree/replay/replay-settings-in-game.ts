@@ -12,6 +12,11 @@ export const replayInGameSettings = (context: SettingContext): SettingNode => {
 				title: context.i18n.translateString('settings.replay.menu.in-game'),
 				texts: [context.i18n.translateString('settings.replay.in-game.description'), context.i18n.translateString('settings.replay.in-game.how-to-activate'), context.i18n.translateString('settings.replay.in-game.limitations')],
 			},
+			{
+				id: 'replay-in-game-sharing',
+				title: context.i18n.translateString('settings.replay.menu.in-game-sharing'),
+				texts: [context.i18n.translateString('settings.replay.in-game-sharing.description')],
+			},
 		],
 	};
 };

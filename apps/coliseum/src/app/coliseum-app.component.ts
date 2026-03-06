@@ -26,6 +26,7 @@ export class ColiseumAppComponent implements AfterContentInit, AfterViewInit {
 	replayXml: string | null;
 	bgsSimulation: GameSample | null;
 	initialLocation: ReplayLocation;
+	powerLogKey: string | null = null;
 
 	private ready$$ = new BehaviorSubject<boolean>(false);
 
@@ -86,7 +87,7 @@ export class ColiseumAppComponent implements AfterContentInit, AfterViewInit {
 		}
 
 		if (reviewId) {
-			const { replayXml, playerDecklist } = await this.getReplayXml(reviewId);
+			const { replayXml, playerDecklist, powerLogKey } = await this.getReplayXml(reviewId);
 			this.analytics.trackEvent('reviewId');
 			if (!replayXml) {
 				console.error('[game-replay] could not load replay xml', reviewId);
@@ -94,6 +95,7 @@ export class ColiseumAppComponent implements AfterContentInit, AfterViewInit {
 			}
 			this.replayXml = replayXml;
 			this.playerDecklist = playerDecklist;
+			this.powerLogKey = powerLogKey ?? null;
 		} else if (bgsSimulationId) {
 			console.log('loading', bgsSimulationId);
 			this.analytics.trackEvent('bgsSimulationId');
@@ -130,18 +132,28 @@ export class ColiseumAppComponent implements AfterContentInit, AfterViewInit {
 		window.history.replaceState({ path: newUrl }, '', newUrl);
 	}
 
-	private async getReplayXml(reviewId: string): Promise<{ replayXml: string | null; playerDecklist: string | null }> {
-		// window['coliseum'].zone.run(() => {
-		// 	window['coliseum'].component.updateStatus('Downloading replay file');
-		// });
+	private async getReplayXml(
+		reviewId: string,
+	): Promise<{ replayXml: string | null; playerDecklist: string | null; powerLogKey: string | null }> {
 		const review: any = await this.api.callGetApi<any>(`${RETRIEVE_REVIEW_URL}/${reviewId}`);
 		if (!review) {
-			return { replayXml: null, playerDecklist: null };
+			return { replayXml: null, playerDecklist: null, powerLogKey: null };
 		}
 		console.debug('[game-replay] retrieved review', review);
 		const replay = (await this.loadReplay(review.replayKey)) ?? null;
 		console.log('loaded replay');
-		return { replayXml: replay, playerDecklist: review.playerDecklist ?? null };
+		return {
+			replayXml: replay,
+			playerDecklist: review.playerDecklist ?? null,
+			powerLogKey: review.powerLogKey ?? null,
+		};
+	}
+
+	openInFirestone() {
+		if (this.reviewId) {
+			window.location.href = `firestoneapp://replay/in-game?reviewId=${this.reviewId}`;
+			this.analytics.trackEvent('coliseum-open-in-firestone');
+		}
 	}
 
 	private async loadReplay(replayKey: string): Promise<string | undefined> {

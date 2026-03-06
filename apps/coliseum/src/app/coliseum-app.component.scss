@@ -11,6 +11,28 @@
 	color: var(--color-1);
 }
 
+.open-in-firestone-bar {
+	display: flex;
+	justify-content: center;
+	padding: 8px;
+	background: rgba(0, 0, 0, 0.2);
+}
+
+.open-in-firestone-btn {
+	padding: 8px 16px;
+	border-radius: 4px;
+	border: 1px solid var(--color-3);
+	background: var(--color-2);
+	color: var(--color-1);
+	cursor: pointer;
+	font-size: 14px;
+	transition: background 0.2s;
+
+	&:hover {
+		background: var(--color-3);
+	}
+}
+
 .external-player {
 	position: relative;
 	width: 75%;

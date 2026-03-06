@@ -7,6 +7,7 @@ import { SharedFrameworkCommonModule } from '@firestone/shared/framework/common'
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { StatsDataAccessModule } from '@firestone/stats/data-access';
 import { StatsServicesModule } from '@firestone/stats/services';
+import { InlineSVGModule } from 'ng-inline-svg-2';
 import { RankImageComponent } from './components/rank-image.component';
 import { ReplayInfoGeneric2Component } from './components/replay-info-generic-2.component';
 import { WatchReplayButtonComponent } from './components/watch-replay-button.component';
@@ -16,6 +17,8 @@ const components = [ReplayInfoGeneric2Component, RankImageComponent, WatchReplay
 @NgModule({
 	imports: [
 		CommonModule,
+
+		InlineSVGModule,
 
 		BattlegroundsCoreModule,
 		SharedCommonViewModule,

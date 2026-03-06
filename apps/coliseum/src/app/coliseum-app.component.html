@@ -1,4 +1,9 @@
 <div class="coliseum-container battlegrounds-theme overlay-container-parent" *ngIf="ready$ | async">
+	<div class="open-in-firestone-bar" *ngIf="powerLogKey && reviewId">
+		<button class="open-in-firestone-btn" (click)="openInFirestone()">
+			Open in Firestone (in-game replay)
+		</button>
+	</div>
 	<fs-coliseum
 		class="external-player"
 		[reviewId]="reviewId"

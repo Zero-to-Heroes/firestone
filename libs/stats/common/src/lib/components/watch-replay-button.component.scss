@@ -2,67 +2,123 @@
 	display: flex;
 }
 
-.replay {
+.watch-dropdown-container {
+	position: relative;
 	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
 	font-size: 13px;
 	line-height: 18px;
 	color: var(--default-text-color);
 	--icon-color: var(--default-text-color);
-	align-items: center;
-	flex-grow: 0;
-	justify-content: flex-end;
 
-	.watch {
+	&:hover {
+		.text {
+			color: var(--on-menu-selection-color);
+		}
+		.watch-icon,
+		.watch-icon svg {
+			color: var(--on-menu-selection-color);
+			--icon-color: var(--on-menu-selection-color);
+		}
+	}
+
+	.text {
 		margin-right: 10px;
 	}
 
-	&:hover,
-	&:hover svg {
-		color: var(--on-menu-selection-color);
-		--icon-color: var(--on-menu-selection-color);
+	.watch-icon {
+		width: 30px;
+		height: 30px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex: 0 0 auto;
+		cursor: default;
+		transition: 0.15s;
+		color: transparent;
+
+		svg {
+			fill: transparent;
+		}
 	}
-}
 
-.online,
-.in-game-container {
-	margin-left: 10px;
-	padding-left: 10px;
-	border-left: 1px solid var(--default-text-color);
-}
+	.watch-dropdown {
+		position: absolute;
+		top: 100%;
+		left: 0;
+		margin-top: 4px;
+		background: var(--color-7);
+		border: 1px solid var(--default-text-color);
+		border-radius: 4px;
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+		z-index: 1000;
+		min-width: 160px;
+		overflow: hidden;
 
-.in-game-container {
-	position: relative;
-}
+		.watch-option {
+			padding: 8px 12px;
+			font-size: 13px;
+			color: var(--default-text-color);
+			cursor: pointer;
+			white-space: nowrap;
+			display: flex;
+			align-items: center;
 
-.watch-icon {
-	width: 30px;
-	height: 30px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	flex: 0 0 auto;
-	cursor: default;
-	transition: 0.15s;
-	color: transparent;
+			&:hover:not(.disabled) {
+				background: var(--on-menu-selection-color);
+				color: var(--color-7);
+			}
 
-	svg {
-		fill: transparent;
+			&.disabled {
+				pointer-events: none;
+				opacity: 0.6;
+			}
+
+			.loading-spinner {
+				width: 16px;
+				height: 16px;
+				border: 2px solid transparent;
+				border-top-color: var(--default-text-color);
+				border-radius: 50%;
+				animation: spin 0.8s linear infinite;
+			}
+		}
 	}
-}
 
-.replay.disabled {
-	pointer-events: none;
-	opacity: 0.6;
-}
+	.in-game-error {
+		position: absolute;
+		top: calc(100% + 6px);
+		left: 0;
+		background: #4a1c1c;
+		border: 1px solid #8b3a3a;
+		border-radius: 4px;
+		padding: 6px 10px;
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		white-space: nowrap;
+		z-index: 100;
+		cursor: pointer;
+		filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.5));
 
-.loading-spinner {
-	width: 20px;
-	height: 20px;
-	margin: 5px;
-	border: 2px solid transparent;
-	border-top-color: var(--default-text-color);
-	border-radius: 50%;
-	animation: spin 0.8s linear infinite;
+		.error-text {
+			color: #e8a0a0;
+			font-size: 12px;
+			line-height: 16px;
+		}
+
+		.close-icon {
+			color: #e8a0a0;
+			font-size: 10px;
+			opacity: 0.7;
+
+			&:hover {
+				opacity: 1;
+			}
+		}
+	}
 }
 
 @keyframes spin {
@@ -71,35 +127,71 @@
 	}
 }
 
-.in-game-error {
-	position: absolute;
-	top: calc(100% + 6px);
-	right: 0;
-	background: #4a1c1c;
-	border: 1px solid #8b3a3a;
-	border-radius: 4px;
-	padding: 6px 10px;
+.copy-link-container {
+	position: relative;
+	margin-left: 10px;
+	padding-left: 10px;
+	border-left: 1px solid var(--default-text-color);
 	display: flex;
 	align-items: center;
-	gap: 8px;
-	white-space: nowrap;
-	z-index: 100;
+	justify-content: center;
 	cursor: pointer;
-	filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.5));
+	font-size: 13px;
 
-	.error-text {
-		color: #e8a0a0;
-		font-size: 12px;
-		line-height: 16px;
+	&:hover {
+		.text {
+			color: var(--on-menu-selection-color);
+		}
+		.icon {
+			opacity: 1;
+			color: var(--on-menu-selection-color);
+		}
 	}
 
-	.close-icon {
-		color: #e8a0a0;
-		font-size: 10px;
-		opacity: 0.7;
+	.text {
+		margin-right: 10px;
+	}
 
-		&:hover {
-			opacity: 1;
+	.copy-icon {
+		width: 30px;
+		height: 30px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: transparent;
+		--icon-color-secondary: var(--default-text-color);
+
+		.icon {
+			width: 18px;
+			height: 18px;
+			opacity: 0.8;
+		}
+	}
+
+	.copy-dropdown {
+		position: absolute;
+		top: 100%;
+		right: 0;
+		margin-top: 4px;
+		background: var(--color-7);
+		border: 1px solid var(--default-text-color);
+		border-radius: 4px;
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+		z-index: 1000;
+		min-width: 160px;
+		overflow: hidden;
+
+		.copy-option {
+			padding: 8px 12px;
+			font-size: 13px;
+			color: var(--default-text-color);
+			cursor: pointer;
+			white-space: nowrap;
+
+			&:hover {
+				background: var(--on-menu-selection-color);
+				color: var(--color-7);
+			}
 		}
 	}
 }

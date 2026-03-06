@@ -19,7 +19,12 @@ import {
 	ReviewIdService,
 } from '@firestone/game-state';
 import { MercenariesNavigationService } from '@firestone/mercenaries/common';
-import { InGameReplayService, ModsBootstrapService, ModsManagerService } from '@firestone/mods/common';
+import {
+	InGameReplayService,
+	ModsBootstrapService,
+	ModsManagerService,
+	ReplayProtocolHandlerService,
+} from '@firestone/mods/common';
 import { GameStatusService } from '@firestone/shared/common/service';
 import { HotkeyFacadeService } from '@firestone/shared/framework/core';
 import { GameStatsProviderService } from '@firestone/stats/services';
@@ -90,6 +95,7 @@ export class BootstrapOtherServicesService {
 		// TODO: might not be the best place
 		private readonly modsBootstrap: ModsBootstrapService,
 		private readonly modsManager: ModsManagerService,
+		private readonly init_ReplayProtocolHandlerService: ReplayProtocolHandlerService,
 		private readonly init_OwHotkeyHandlerService: OwHotkeyHandlerService,
 		private readonly init_HotkeyFacadeService: HotkeyFacadeService,
 		private readonly init_GlobalStatsService: GlobalStatsService,

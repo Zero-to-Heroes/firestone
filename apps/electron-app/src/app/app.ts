@@ -55,19 +55,48 @@ export default class App {
 	}
 
 	/**
-	 * Parse and handle auth callback from deep link URL
+	 * Parse and handle deep link URL (auth or replay)
 	 */
-	private static handleAuthDeepLink(url: string): void {
-		console.log('[Auth] Received deep link:', url);
+	private static handleDeepLink(url: string): void {
+		console.log('[DeepLink] Received:', url);
 
 		try {
 			const urlObj = new URL(url);
-
-			// Check if this is an auth callback
-			if (urlObj.protocol !== 'firestone:' || urlObj.hostname !== 'auth') {
-				console.log('[Auth] Not an auth deep link, ignoring');
+			if (urlObj.protocol !== 'firestone:') {
+				console.log('[DeepLink] Not a firestone protocol, ignoring');
 				return;
 			}
+
+			// Handle replay links: firestone://replay/in-game?reviewId=X
+			if (urlObj.hostname === 'replay' && urlObj.pathname === '/in-game') {
+				const reviewId = urlObj.searchParams.get('reviewId');
+				if (reviewId) {
+					console.log('[DeepLink] Replay link, opening in browser:', reviewId);
+					shell.openExternal(`https://replays.firestoneapp.com/?reviewId=${reviewId}`);
+				}
+				return;
+			}
+
+			// Handle auth callback
+			if (urlObj.hostname !== 'auth') {
+				console.log('[DeepLink] Not auth or replay, ignoring');
+				return;
+			}
+
+			App.handleAuthDeepLink(url);
+		} catch (err) {
+			console.error('[DeepLink] Failed to parse URL:', err);
+		}
+	}
+
+	/**
+	 * Parse and handle auth callback from deep link URL
+	 */
+	private static handleAuthDeepLink(url: string): void {
+		console.log('[Auth] Received auth deep link');
+
+		try {
+			const urlObj = new URL(url);
 
 			const params = urlObj.searchParams;
 			const authData: AuthCallbackData = {
@@ -251,7 +280,7 @@ export default class App {
 			// Find the deep link URL in command line args
 			const deepLinkUrl = commandLine.find((arg) => arg.startsWith('firestone://'));
 			if (deepLinkUrl) {
-				App.handleAuthDeepLink(deepLinkUrl);
+				App.handleDeepLink(deepLinkUrl);
 			}
 		});
 
@@ -259,7 +288,7 @@ export default class App {
 		app.on('open-url', (event, url) => {
 			event.preventDefault();
 			console.log('[Auth] open-url event:', url);
-			App.handleAuthDeepLink(url);
+			App.handleDeepLink(url);
 		});
 
 		// Check if app was launched with a deep link URL (Windows - cold start)
@@ -268,7 +297,7 @@ export default class App {
 			// Delay handling until app is ready
 			app.whenReady().then(() => {
 				console.log('[Auth] App launched with deep link:', deepLinkArg);
-				App.handleAuthDeepLink(deepLinkArg);
+				App.handleDeepLink(deepLinkArg);
 			});
 		}
 
