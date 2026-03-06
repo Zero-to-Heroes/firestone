@@ -8,13 +8,15 @@ import { AllCardsService } from '@firestone-hs/reference-data';
 import { GameEvents } from '@firestone/game-state';
 import { DiskCacheService, LogListenerService } from '@firestone/shared/common/service';
 import { CardsFacadeStandaloneService, DATABASE_SERVICE_TOKEN } from '@firestone/shared/framework/core';
-import { BrowserWindow, app as electronApp, ipcMain, shell } from 'electron';
+import { BrowserWindow, app as electronApp, globalShortcut, ipcMain, shell } from 'electron';
+import { uIOhook } from 'uiohook-napi';
 import { appendFileSync, existsSync, mkdirSync, readdirSync, statSync, unlinkSync } from 'fs';
 import { appendFile } from 'fs/promises';
 import { join } from 'path';
 import { environment } from '../environments/environment';
 import { buildAppInjector } from './services/electron-app-injector-setup';
 import { ElectronDiskCacheService } from './services/electron-disk-cache.service';
+import { ElectronHotkeyHandlerService } from './services/electron-hotkey-handler.service';
 import { MindVisionElectronService } from './services/mind-vision-electron.service';
 import { OverlayService } from './services/overlay.service';
 import { destroySystemTray, initSystemTray } from './services/system-tray';
@@ -436,6 +438,10 @@ export default class App {
 	private static async onWillQuit() {
 		destroySystemTray();
 
+		// Unregister all global hotkeys and stop uiohook (Tab hold)
+		globalShortcut.unregisterAll();
+		uIOhook.stop();
+
 		// Flush any remaining renderer logs
 		if (App.rendererLogFlushTimer) {
 			clearTimeout(App.rendererLogFlushTimer);
@@ -511,6 +517,10 @@ export default class App {
 
 			// Register to monitor Hearthstone
 			await App.overlay.registerToHearthstone();
+
+			// Register global hotkeys (Alt+C, Alt+B, Tab)
+			const hotkeyHandler = electronInjector.get(ElectronHotkeyHandlerService);
+			await hotkeyHandler.init();
 
 			// Don't create overlay window yet - wait for game launch event
 			console.log('⏳ Waiting for Hearthstone to launch...');

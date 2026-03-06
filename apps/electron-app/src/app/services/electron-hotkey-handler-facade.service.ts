@@ -2,13 +2,13 @@ import { Injectable } from '@angular/core';
 import {
 	AbstractFacadeService,
 	AppInjector,
-	HOTKEY_HANDLER_SERVICE_TOKEN,
 	HotkeyChangedUnsubscribe,
 	HotkeyHoldUnsubscribe,
 	IHotkeyHandlerService,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
+import { ElectronHotkeyHandlerService } from './electron-hotkey-handler.service';
 
 @Injectable({ providedIn: 'root' })
 export class ElectronHotkeyHandlerFacadeService
@@ -17,7 +17,7 @@ export class ElectronHotkeyHandlerFacadeService
 {
 	public liveInfoKeyPressed$$: BehaviorSubject<boolean>;
 
-	private hotkeyHandler: IHotkeyHandlerService;
+	private hotkeyHandler: ElectronHotkeyHandlerService;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'ElectronHotkeyHandlerFacadeService', () => !!this.hotkeyHandler);
@@ -28,8 +28,8 @@ export class ElectronHotkeyHandlerFacadeService
 	}
 
 	protected async init() {
-		this.liveInfoKeyPressed$$ = new BehaviorSubject<boolean>(false);
-		this.hotkeyHandler = AppInjector.get(HOTKEY_HANDLER_SERVICE_TOKEN);
+		this.hotkeyHandler = AppInjector.get(ElectronHotkeyHandlerService);
+		this.liveInfoKeyPressed$$ = this.hotkeyHandler.liveInfoKeyPressed$$;
 	}
 
 	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
@@ -41,29 +41,22 @@ export class ElectronHotkeyHandlerFacadeService
 	}
 
 	public addHotKeyHoldListener(hotkey: string, onDown: () => void, onUp: () => void): HotkeyHoldUnsubscribe {
-		// Do nothing yet
-		// Not sure how to handle this with the process / main communication later on?
-		return () => {};
+		return this.hotkeyHandler?.addHotKeyHoldListener(hotkey, onDown, onUp) ?? (() => {});
 	}
 
 	public removeHotKeyHoldListener(listener: HotkeyHoldUnsubscribe): void {
-		// Do nothing yet
-		// Not sure how to handle this with the process / main communication later on?
+		this.hotkeyHandler?.removeHotKeyHoldListener(listener);
 	}
 
 	public addHotKeyPressedListener(hotkey: string, callback: () => void): void {
-		// Do nothing yet
-		// Not sure how to handle this with the process / main communication later on?
+		this.hotkeyHandler?.addHotKeyPressedListener(hotkey, callback);
 	}
 
 	public addHotkeyChangedListener(callback: (message: any) => void): HotkeyChangedUnsubscribe {
-		// Do nothing yet
-		// Not sure how to handle this with the process / main communication later on?
-		return () => {};
+		return this.hotkeyHandler?.addHotkeyChangedListener(callback) ?? (() => {});
 	}
 
 	public removeHotkeyChangedListener(listener: HotkeyChangedUnsubscribe): void {
-		// Do nothing yet
-		// Not sure how to handle this with the process / main communication later on?
+		this.hotkeyHandler?.removeHotkeyChangedListener(listener);
 	}
 }

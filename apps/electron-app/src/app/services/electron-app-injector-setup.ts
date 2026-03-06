@@ -222,15 +222,6 @@ export const buildAppInjector = () => {
 	const windowManager = new WindowManagerService(ow, electronMonitorsFacade);
 	electronInjector.register(WindowManagerService, windowManager);
 
-	const electronHotkeyHandler = new ElectronHotkeyHandlerService();
-	const electronHotkeyHandlerFacade = new ElectronHotkeyHandlerFacadeService(windowManager);
-	electronInjector.register(
-		HOTKEY_HANDLER_SERVICE_TOKEN,
-		electronHotkeyHandlerFacade as any as IHotkeyHandlerService,
-	);
-	electronInjector.register(ElectronHotkeyHandlerFacadeService, electronHotkeyHandlerFacade);
-	electronInjector.register(ElectronHotkeyHandlerService, electronHotkeyHandler);
-
 	const electronWindowHandler = new ElectronWindowHandlerService();
 	electronInjector.register(WINDOW_HANDLER_SERVICE_TOKEN, electronWindowHandler);
 	electronInjector.register(ElectronWindowHandlerService, electronWindowHandler);
@@ -259,6 +250,15 @@ export const buildAppInjector = () => {
 
 	const preferences = new PreferencesService(windowManager);
 	electronInjector.register(PreferencesService, preferences);
+
+	const electronHotkeyHandler = new ElectronHotkeyHandlerService();
+	const electronHotkeyHandlerFacade = new ElectronHotkeyHandlerFacadeService(windowManager);
+	electronInjector.register(
+		HOTKEY_HANDLER_SERVICE_TOKEN,
+		electronHotkeyHandlerFacade as any as IHotkeyHandlerService,
+	);
+	electronInjector.register(ElectronHotkeyHandlerFacadeService, electronHotkeyHandlerFacade);
+	electronInjector.register(ElectronHotkeyHandlerService, electronHotkeyHandler);
 
 	const diskCache: DiskCacheService = new ElectronDiskCacheService(preferences) as any as DiskCacheService;
 	electronInjector.register(DiskCacheService, diskCache);
