@@ -34,6 +34,10 @@ export class ReplayProtocolHandlerService {
 	private init() {
 		// Handle when app is already running and receives the link
 		const href = decodeURIComponent(window.location.href);
+		if (href.includes('source=relaunch')) {
+			console.debug('[replay-protocol] relaunch source detected, skipping');
+			return;
+		}
 		if (href.includes(REPLAY_IN_GAME_PREFIX)) {
 			const reviewId = this.extractReviewId(href);
 			if (reviewId) {
