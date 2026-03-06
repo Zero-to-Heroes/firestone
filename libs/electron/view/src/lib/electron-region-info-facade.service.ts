@@ -34,7 +34,7 @@ export class ElectronRegionInfoFacadeService
 	}
 
 	private buildRegionInfo(): RegionInfoResult {
-		const { app } = require('electron');
+		const { app } = eval('require')('electron');
 		const locale = app.getLocale();
 		const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 		return {

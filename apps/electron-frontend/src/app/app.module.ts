@@ -7,8 +7,10 @@ import {
 	ElectronFileSystemUIFacadeService,
 	ElectronMonitorsFacadeService,
 	ElectronRegionInfoFacadeService,
+	ElectronScreenshotFacadeService,
 	ElectronSystemInfoFacadeService,
 	ElectronViewModule,
+	ElectronWindowControlsFacadeService,
 } from '@firestone/electron/view';
 import { LegacyFeatureShellModule } from '@firestone/legacy/feature-shell';
 import { SettingsViewModule } from '@firestone/settings/view';
@@ -25,7 +27,9 @@ import {
 	LocalizationStandaloneService,
 	MONITORS_SERVICE_TOKEN,
 	REGION_INFO_SERVICE_TOKEN,
+	SCREENSHOT_SERVICE_TOKEN,
 	SYSTEM_INFO_SERVICE_TOKEN,
+	WINDOW_CONTROLS_SERVICE_TOKEN,
 } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@legacy-import/src/lib/js/services/localization-facade.service';
 import { AppComponent } from './app.component';
@@ -59,6 +63,8 @@ import { ElectronSettingsComponent } from './overlay/electron-settings.component
 		{ provide: MONITORS_SERVICE_TOKEN, useClass: ElectronMonitorsFacadeService },
 		{ provide: SYSTEM_INFO_SERVICE_TOKEN, useClass: ElectronSystemInfoFacadeService },
 		{ provide: REGION_INFO_SERVICE_TOKEN, useClass: ElectronRegionInfoFacadeService },
+		{ provide: WINDOW_CONTROLS_SERVICE_TOKEN, useClass: ElectronWindowControlsFacadeService },
+		{ provide: SCREENSHOT_SERVICE_TOKEN, useClass: ElectronScreenshotFacadeService },
 		// Use HashLocationStrategy for file:// protocol compatibility
 		{ provide: LocationStrategy, useClass: HashLocationStrategy },
 	],

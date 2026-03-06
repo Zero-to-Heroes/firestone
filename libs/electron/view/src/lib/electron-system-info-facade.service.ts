@@ -34,7 +34,7 @@ export class ElectronSystemInfoFacadeService
 	}
 
 	private buildSystemInfo(): SystemInfo {
-		const os = require('os');
+		const os = eval('require')('os');
 		const cpus = os.cpus();
 		const totalMem = os.totalmem();
 		const freeMem = os.freemem();

@@ -7,9 +7,10 @@ import { InjectionToken } from '@angular/core';
 export const WINDOW_HANDLER_SERVICE_TOKEN = new InjectionToken<IWindowHandlerService>('WindowHandlerService');
 
 /**
- * Abstraction for window management. Implementations are provided by
- * ow-native (Overwolf) or electron-app (Electron) so the rest of the app
- * can work with either platform.
+ * Abstraction for app-level window orchestration. Implementations are provided by
+ * ow-native (Overwolf) or electron-app (Electron). Handles which windows to show/hide
+ * (collection, settings, battlegrounds), reload, relaunch. For per-window chrome
+ * (minimize, maximize, close buttons), see IWindowControlsService.
  */
 export interface IWindowHandlerService {
 	toggleBattlegroundsWindow(useOverlay: boolean, options?: IWindowOptions);

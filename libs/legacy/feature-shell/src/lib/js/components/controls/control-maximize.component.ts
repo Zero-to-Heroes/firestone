@@ -5,11 +5,12 @@ import {
 	Component,
 	ElementRef,
 	HostListener,
+	Inject,
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
 import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { IWindowControlsService, WINDOW_CONTROLS_SERVICE_TOKEN } from '@firestone/shared/framework/core';
 
 @Component({
 	standalone: false,
@@ -39,23 +40,23 @@ import { OverwolfService } from '@firestone/shared/framework/core';
 export class ControlMaximizeComponent implements AfterViewInit, OnDestroy {
 	maximized = false;
 
-	private stateChangedListener: (message: any) => void;
+	private stateChangedListener: (message: unknown) => void;
 
 	constructor(
-		private ow: OverwolfService,
+		@Inject(WINDOW_CONTROLS_SERVICE_TOKEN) private readonly windowControls: IWindowControlsService,
 		private el: ElementRef,
 		private cdr: ChangeDetectorRef,
 		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
 	) {}
 
 	async ngAfterViewInit() {
-		if (!this.ow?.isOwEnabled()) {
+		if (!this.windowControls?.canControlWindow()) {
 			return;
 		}
-		const currentWindow = await this.ow.getCurrentWindow();
+		const currentWindow = await this.windowControls.getCurrentWindow();
 		const windowName = currentWindow.name;
-		this.stateChangedListener = this.ow.addStateChangedListener(windowName, (message) => {
-			this.maximized = message.window_state_ex === 'maximized';
+		this.stateChangedListener = this.windowControls.addStateChangedListener(windowName, (message) => {
+			this.maximized = (message as { window_state_ex?: string }).window_state_ex === 'maximized';
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.markForCheck();
 			}
@@ -69,19 +70,20 @@ export class ControlMaximizeComponent implements AfterViewInit, OnDestroy {
 	}
 
 	async toggleMaximizeWindow() {
-		if (!this.ow?.isOwEnabled()) {
+		if (!this.windowControls?.canControlWindow()) {
 			return;
 		}
-		const windowId = (await this.ow.getCurrentWindow()).id;
+		const currentWindow = await this.windowControls.getCurrentWindow();
+		const windowId = currentWindow.id;
 
 		if (this.maximized) {
-			await this.ow.restoreWindow(windowId);
+			await this.windowControls.restoreWindow(windowId);
 			this.maximized = false;
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.markForCheck();
 			}
 		} else {
-			await this.ow.maximizeWindow(windowId);
+			await this.windowControls.maximizeWindow(windowId);
 			this.maximized = true;
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.markForCheck();
@@ -91,6 +93,6 @@ export class ControlMaximizeComponent implements AfterViewInit, OnDestroy {
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy(): void {
-		this.ow.removeStateChangedListener(this.stateChangedListener);
+		this.windowControls.removeStateChangedListener(this.stateChangedListener);
 	}
 }

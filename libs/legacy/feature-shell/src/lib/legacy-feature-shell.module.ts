@@ -217,11 +217,11 @@ import {
 	HsQuestsListWidgetComponent,
 	QuestsWidgetViewComponent,
 } from './js/components/overlays/quests/quests-widget-view.component';
+import { InGameReplayWidgetWrapperComponent } from './js/components/overlays/replay/in-game-replay-widget-wrapper.component';
+import { InGameReplayWidgetComponent } from './js/components/overlays/replay/in-game-replay-widget.component';
 import { SecretsHelperWidgetWrapperComponent } from './js/components/overlays/secrets-helper-widget-wrapper.component';
 import { CurrentSessionBgsBoardTooltipComponent } from './js/components/overlays/session/current-session-bgs-board-tooltip.component';
 import { CurrentSessionWidgetComponent } from './js/components/overlays/session/current-session-widget.component';
-import { InGameReplayWidgetWrapperComponent } from './js/components/overlays/replay/in-game-replay-widget-wrapper.component';
-import { InGameReplayWidgetComponent } from './js/components/overlays/replay/in-game-replay-widget.component';
 import { TurnTimerWidgetWrapperComponent } from './js/components/overlays/turn-timer-widget-wrapper.component';
 import {
 	TurnTimerPlayerComponent,
@@ -240,8 +240,8 @@ import { ReplayInfoComponent } from './js/components/replays/replay-info/_replay
 import { ReplayInfoBattlegroundsComponent } from './js/components/replays/replay-info/replay-info-battlegrounds.component';
 import { ReplayInfoGenericComponent } from './js/components/replays/replay-info/replay-info-generic.component';
 import {
-	ReplayInfoMercPlayerComponent,
 	ReplayInfoMercenariesComponent,
+	ReplayInfoMercPlayerComponent,
 } from './js/components/replays/replay-info/replay-info-mercenaries.component';
 import { ReplayInfoRankedComponent } from './js/components/replays/replay-info/replay-info-ranked.component';
 import { ReplayIconToggleComponent } from './js/components/replays/replays-icon-toggle.component';
@@ -437,18 +437,22 @@ import {
 	CLIPBOARD_SERVICE_TOKEN,
 	EXTERNAL_URL_SERVICE_TOKEN,
 	FILE_SYSTEM_UI_SERVICE_TOKEN,
-	MONITORS_SERVICE_TOKEN,
-	REGION_INFO_SERVICE_TOKEN,
-	SYSTEM_INFO_SERVICE_TOKEN,
 	HOTKEY_HANDLER_SERVICE_TOKEN,
 	ILocalizationService,
-	PLAUSIBLE_DOMAIN,
+	MONITORS_SERVICE_TOKEN,
+	OverwolfScreenshotFacadeService,
 	OverwolfService,
+	OverwolfWindowControlsFacadeService,
+	PLAUSIBLE_DOMAIN,
+	SCREENSHOT_SERVICE_TOKEN,
+	REGION_INFO_SERVICE_TOKEN,
+	setAppInjector,
 	SharedFrameworkCoreModule,
+	SYSTEM_INFO_SERVICE_TOKEN,
 	USER_SERVICE_TOKEN,
 	UserService,
+	WINDOW_CONTROLS_SERVICE_TOKEN,
 	WINDOW_HANDLER_SERVICE_TOKEN,
-	setAppInjector,
 } from '@firestone/shared/framework/core';
 import { StatsCommonModule } from '@firestone/stats/common';
 import { StatsDataAccessModule } from '@firestone/stats/data-access';
@@ -1294,6 +1298,10 @@ try {
 		{ provide: GAME_STATS_PROVIDER_SERVICE_TOKEN, useExisting: GameStatsProviderService },
 		{ provide: REVIEW_ID_SERVICE_TOKEN, useExisting: ReviewIdService },
 		{ provide: USER_SERVICE_TOKEN, useExisting: UserService },
+		{ provide: WINDOW_CONTROLS_SERVICE_TOKEN, useExisting: OverwolfWindowControlsFacadeService },
+		{ provide: SCREENSHOT_SERVICE_TOKEN, useExisting: OverwolfScreenshotFacadeService },
+		OverwolfWindowControlsFacadeService,
+		OverwolfScreenshotFacadeService,
 		{ provide: MAIN_WINDOW_STORE_SERVICE_TOKEN, useExisting: MainWindowStoreService },
 		{ provide: PLAUSIBLE_DOMAIN, useValue: 'firestoneapp.gg-app' },
 

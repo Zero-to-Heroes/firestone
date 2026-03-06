@@ -49,7 +49,7 @@ export class ElectronFileSystemUIFacadeService
 	}
 
 	private async doOpenFilePicker(options?: FilePickerOptions): Promise<string | undefined> {
-		const { dialog, app } = require('electron');
+		const { dialog, app } = eval('require')('electron');
 		const defaultPath = options?.defaultPath ?? app.getPath('userData');
 		const result = await dialog.showOpenDialog({
 			title: 'Select file',

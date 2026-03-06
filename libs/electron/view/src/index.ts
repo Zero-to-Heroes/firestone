@@ -4,5 +4,7 @@ export * from './lib/electron-external-url-renderer.service';
 export * from './lib/electron-file-system-ui-facade.service';
 export * from './lib/electron-monitors-facade.service';
 export * from './lib/electron-region-info-facade.service';
+export * from './lib/electron-screenshot-facade.service';
 export * from './lib/electron-system-info-facade.service';
 export * from './lib/electron-view.module';
+export * from './lib/electron-window-controls-facade.service';

@@ -18,8 +18,10 @@ import {
 	ADS_SERVICE_TOKEN,
 	AnalyticsService,
 	IAdsService,
-	OverwolfService,
-	OwUtilsService,
+	IScreenshotService,
+	IWindowControlsService,
+	SCREENSHOT_SERVICE_TOKEN,
+	WINDOW_CONTROLS_SERVICE_TOKEN,
 	waitForReady,
 } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
@@ -129,8 +131,8 @@ export class MainWindowRootComponent
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
-		private readonly ow: OverwolfService,
-		private readonly owUtils: OwUtilsService,
+		@Inject(WINDOW_CONTROLS_SERVICE_TOKEN) private readonly windowControls: IWindowControlsService,
+		@Inject(SCREENSHOT_SERVICE_TOKEN) private readonly screenshot: IScreenshotService,
 		private readonly analytics: AnalyticsService,
 		private readonly nav: MainWindowNavigationService,
 		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
@@ -168,7 +170,7 @@ export class MainWindowRootComponent
 	}
 
 	async ngAfterViewInit() {
-		const currentWindow = await this.ow.getCurrentWindow();
+		const currentWindow = await this.windowControls.getCurrentWindow();
 		this.windowId = currentWindow.id;
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -190,7 +192,7 @@ export class MainWindowRootComponent
 
 	takeScreenshot(): (copyToCliboard: boolean) => Promise<[string | null, any]> {
 		return (copyToCliboard: boolean) => {
-			return this.owUtils.captureWindow('Firestone - Main', copyToCliboard);
+			return this.screenshot.captureWindow('Firestone - Main', copyToCliboard);
 		};
 	}
 

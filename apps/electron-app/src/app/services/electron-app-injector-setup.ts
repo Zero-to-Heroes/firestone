@@ -68,7 +68,9 @@ import {
 	ElectronFileSystemUIFacadeService,
 	ElectronMonitorsFacadeService,
 	ElectronRegionInfoFacadeService,
+	ElectronScreenshotFacadeService,
 	ElectronSystemInfoFacadeService,
+	ElectronWindowControlsFacadeService,
 } from '@firestone/electron/view';
 import {
 	AiDeckService,
@@ -159,10 +161,12 @@ import {
 	OverwolfService,
 	OwUtilsService,
 	REGION_INFO_SERVICE_TOKEN,
+	SCREENSHOT_SERVICE_TOKEN,
 	setAppInjector,
 	SYSTEM_INFO_SERVICE_TOKEN,
 	USER_SERVICE_TOKEN,
 	UserService,
+	WINDOW_CONTROLS_SERVICE_TOKEN,
 	WINDOW_HANDLER_SERVICE_TOKEN,
 	WindowHandlerFacadeService,
 	WindowManagerService,
@@ -244,6 +248,14 @@ export const buildAppInjector = () => {
 	const electronRegionInfoFacade = new ElectronRegionInfoFacadeService(windowManager);
 	electronInjector.register(REGION_INFO_SERVICE_TOKEN, electronRegionInfoFacade);
 	electronInjector.register(ElectronRegionInfoFacadeService, electronRegionInfoFacade);
+
+	const electronWindowControlsFacade = new ElectronWindowControlsFacadeService(windowManager);
+	electronInjector.register(WINDOW_CONTROLS_SERVICE_TOKEN, electronWindowControlsFacade);
+	electronInjector.register(ElectronWindowControlsFacadeService, electronWindowControlsFacade);
+
+	const electronScreenshotFacade = new ElectronScreenshotFacadeService(windowManager);
+	electronInjector.register(SCREENSHOT_SERVICE_TOKEN, electronScreenshotFacade);
+	electronInjector.register(ElectronScreenshotFacadeService, electronScreenshotFacade);
 
 	const gameStatus = new GameStatusService(windowManager);
 	electronInjector.register(GameStatusService, gameStatus);

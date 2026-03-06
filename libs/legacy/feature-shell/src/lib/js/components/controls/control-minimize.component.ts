@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, Input } from '@angular/core';
 import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import { IWindowControlsService, WINDOW_CONTROLS_SERVICE_TOKEN } from '@firestone/shared/framework/core';
 import { CloseMainWindowEvent } from '../../services/mainwindow/store/events/close-main-window-event';
 
 @Component({
@@ -23,18 +23,18 @@ export class ControlMinimizeComponent {
 	@Input() isMainWindow: boolean;
 
 	constructor(
-		private ow: OverwolfService,
+		@Inject(WINDOW_CONTROLS_SERVICE_TOKEN) private readonly windowControls: IWindowControlsService,
 		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
 	) {}
 
 	async minimizeWindow() {
-		if (!this.ow?.isOwEnabled()) {
+		if (!this.windowControls?.canControlWindow()) {
 			return;
 		}
-		const currentWindow = await this.ow.getCurrentWindow();
+		const currentWindow = await this.windowControls.getCurrentWindow();
 		if (this.isMainWindow) {
 			this.mainWindowStateFacade.send(new CloseMainWindowEvent());
 		}
-		this.ow.minimizeWindow(currentWindow.id);
+		await this.windowControls.minimizeWindow(currentWindow.id);
 	}
 }

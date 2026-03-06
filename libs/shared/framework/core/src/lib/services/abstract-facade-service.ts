@@ -237,6 +237,32 @@ export abstract class AbstractFacadeService<T extends AbstractFacadeService<T>> 
 	}
 
 	/**
+	 * Register a method that receives the IPC event (e.g. to get sender's BrowserWindow).
+	 * Use when the handler needs event.sender to identify the calling renderer.
+	 */
+	protected registerMainProcessMethodWithEvent(
+		methodName: string,
+		handler: (event: any, ...args: any[]) => Promise<any> | any,
+	): void {
+		if (isMainProcess()) {
+			const { ipcMain } = eval('require')('electron');
+			if (typeof ipcMain !== 'undefined') {
+				const channel = `${this.serviceName}-${methodName}`;
+				ipcMain.removeHandler(channel);
+				ipcMain.handle(channel, async (event: any, ...args: any[]) => {
+					try {
+						return await handler(event, ...args);
+					} catch (error) {
+						console.error(`[${this.constructor.name}] Error in main process method ${methodName}:`, error);
+						throw error;
+					}
+				});
+				this.registeredMainProcessMethods.set(methodName, handler);
+			}
+		}
+	}
+
+	/**
 	 * Call a method on the main process. Works in both Electron and Overwolf/browser contexts.
 	 * In Electron renderer: uses IPC to call the method on the main process
 	 * In Overwolf/browser: delegates to mainInstance

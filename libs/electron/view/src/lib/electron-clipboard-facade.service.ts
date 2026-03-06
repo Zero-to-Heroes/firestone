@@ -47,12 +47,12 @@ export class ElectronClipboardFacadeService
 	}
 
 	private doPlaceOnClipboard(text: string): void {
-		const { clipboard } = require('electron');
+		const { clipboard } = eval('require')('electron');
 		clipboard.writeText(text);
 	}
 
 	private doGetFromClipboard(): string {
-		const { clipboard } = require('electron');
+		const { clipboard } = eval('require')('electron');
 		return clipboard.readText();
 	}
 }

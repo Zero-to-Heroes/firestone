@@ -34,7 +34,7 @@ export class ElectronMonitorsFacadeService
 	}
 
 	private buildMonitorsList(): MonitorsListResult {
-		const { screen } = require('electron');
+		const { screen } = eval('require')('electron');
 		const displays = screen.getAllDisplays();
 		return {
 			displays: displays.map((d: any) => ({
