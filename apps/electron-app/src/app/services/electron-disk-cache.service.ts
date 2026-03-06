@@ -53,6 +53,11 @@ export class ElectronDiskCacheService {
 		return this.cacheDirectory;
 	}
 
+	/** Path to app logs directory (userData/logs) for bug reports. */
+	public getLogsDirectory(): string {
+		return join(app.getPath('userData'), 'logs');
+	}
+
 	private getFilePath(key: string): string | null {
 		if (!this.cacheDirectory) {
 			return null;

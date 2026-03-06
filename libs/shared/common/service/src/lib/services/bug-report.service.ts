@@ -1,5 +1,6 @@
-import { Injectable } from '@angular/core';
-import { ApiRunner, OverwolfService } from '@firestone/shared/framework/core';
+import { Inject, Injectable } from '@angular/core';
+import { ApiRunner, USER_SERVICE_TOKEN } from '@firestone/shared/framework/core';
+import type { IUserService } from '@firestone/shared/framework/core';
 import { LogsUploaderService } from './logs-uploader.service';
 import { SubscriptionService } from './subscription/subscription.service';
 
@@ -9,7 +10,7 @@ const FEEDBACK_ENDPOINT_POST = 'https://pimeswfluvdckrzixlrn3ohkby0bxpra.lambda-
 export class BugReportService {
 	constructor(
 		private readonly logService: LogsUploaderService,
-		private readonly ow: OverwolfService,
+		@Inject(USER_SERVICE_TOKEN) private readonly userService: IUserService,
 		private readonly api: ApiRunner,
 		private readonly subs: SubscriptionService,
 	) {}
@@ -25,7 +26,7 @@ export class BugReportService {
 		const [appLogs, gameLogs, currentUser, subPlan] = await Promise.all([
 			this.logService.uploadAppLogs(),
 			this.logService.uploadGameLogs(),
-			this.ow.getCurrentUser(),
+			this.userService.getCurrentUser(),
 			this.subs.currentPlan$$.getValueWithInit(),
 		]);
 		const submission = {

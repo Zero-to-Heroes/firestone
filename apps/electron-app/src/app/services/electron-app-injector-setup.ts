@@ -116,6 +116,7 @@ import { InGameReplayService, ModsManagerService } from '@firestone/mods/common'
 import { AccountService } from '@firestone/profile/common';
 import { CustomAppearanceService, SettingsControllerService } from '@firestone/settings/services';
 import {
+	BugReportService,
 	DiskCacheService,
 	Events,
 	ExpertContributorsService,
@@ -125,11 +126,13 @@ import {
 	LogListenerCacheService,
 	LogListenerService,
 	LogUtilsService,
+	LogsUploaderService,
 	NotificationsService,
 	PatchesConfigService,
 	PowerLogBufferService,
 	PreferencesService,
 	PreferencesStorageService,
+	S3FileUploadService,
 	StandaloneAdService,
 	SubscriptionService,
 	TebexHeadlessService,
@@ -186,6 +189,7 @@ import { ElectronExternalUrlService } from './electron-external-url.service';
 import { ElectronHotkeyHandlerFacadeService } from './electron-hotkey-handler-facade.service';
 import { ElectronHotkeyHandlerService } from './electron-hotkey-handler.service';
 import { ElectronLogFileBackendService } from './electron-log-file-backend.service';
+import { ElectronLogsUploaderService } from './electron-logs-uploader.service';
 import { ElectronWindowHandlerService } from './electron-window-handler.service';
 import { GameEventsElectronService } from './game-events-electron.service';
 import { LowLevelUtilsElectronService } from './low-level-utils-electron.service';
@@ -262,6 +266,17 @@ export const buildAppInjector = () => {
 
 	const logFileBackend = new ElectronLogFileBackendService(diskCache as any as ElectronDiskCacheService);
 	electronInjector.register(LOG_FILE_BACKEND, logFileBackend);
+
+	const s3FileUpload = new S3FileUploadService();
+	electronInjector.register(S3FileUploadService, s3FileUpload);
+
+	const logsUploader = new ElectronLogsUploaderService(
+		logFileBackend,
+		diskCache as any as ElectronDiskCacheService,
+		s3FileUpload,
+		preferences,
+	) as any as LogsUploaderService;
+	electronInjector.register(LogsUploaderService, logsUploader);
 
 	const logUtils = new LogUtilsService(logFileBackend, preferences, gameStatus);
 	electronInjector.register(LogUtilsService, logUtils);
@@ -481,6 +496,27 @@ export const buildAppInjector = () => {
 	const ads: IAdsService = new StandaloneAdService(windowManager);
 	electronInjector.register(ADS_SERVICE_TOKEN, ads);
 
+	const tebexService = new TebexHeadlessService(windowManager);
+	electronInjector.register(TebexHeadlessService, tebexService);
+	electronInjector.register(TebexService, tebexService as any as TebexService);
+
+	const subscriptionService = new ElectronSubscriptionService(windowManager);
+	electronInjector.register(ElectronSubscriptionService, subscriptionService);
+	electronInjector.register(SubscriptionService, subscriptionService as any as SubscriptionService);
+
+	const userService = new StandaloneUserService(windowManager) as any as UserService;
+	electronInjector.register(StandaloneUserService, userService as any as StandaloneUserService);
+	electronInjector.register(UserService, userService);
+	electronInjector.register(USER_SERVICE_TOKEN, userService);
+
+	const bugReportService = new BugReportService(
+		logsUploader,
+		userService,
+		api as any as ApiRunner,
+		subscriptionService as any as SubscriptionService,
+	);
+	electronInjector.register(BugReportService, bugReportService);
+
 	const bgsOfficialLeaderboard = new BattlegroundsOfficialLeaderboardService(windowManager);
 	electronInjector.register(BattlegroundsOfficialLeaderboardService, bgsOfficialLeaderboard);
 
@@ -490,7 +526,7 @@ export const buildAppInjector = () => {
 		allCards,
 		battleExecutor,
 		ads,
-		null, // BugReportService
+		bugReportService,
 		preferences,
 		null, // BgsIntermediateResultsSimGuardianService
 	);
@@ -512,8 +548,8 @@ export const buildAppInjector = () => {
 		secretsConfig,
 		constructedArchetypesOthestrator,
 		gameEventsEmitter,
-		null, // BugReportService
-		null, // LogUploader
+		bugReportService,
+		logsUploader,
 		simulation,
 		ads,
 		gameId,
@@ -561,11 +597,6 @@ export const buildAppInjector = () => {
 
 	const bgsTrinkets = new BattlegroundsTrinketsService(windowManager);
 	electronInjector.register(BattlegroundsTrinketsService, bgsTrinkets);
-
-	const userService = new StandaloneUserService(windowManager) as any as UserService;
-	electronInjector.register(StandaloneUserService, userService as any as StandaloneUserService);
-	electronInjector.register(UserService, userService);
-	electronInjector.register(USER_SERVICE_TOKEN, userService);
 
 	const arenaCardStats = new ArenaCardStatsService(windowManager);
 	electronInjector.register(ArenaCardStatsService, arenaCardStats);
@@ -765,14 +796,6 @@ export const buildAppInjector = () => {
 
 	const expertContributors = new ExpertContributorsService(windowManager);
 	electronInjector.register(ExpertContributorsService, expertContributors);
-
-	const tebexService = new TebexHeadlessService(windowManager);
-	electronInjector.register(TebexHeadlessService, tebexService);
-	electronInjector.register(TebexService, tebexService as any as TebexService);
-
-	const subscriptionService = new ElectronSubscriptionService(windowManager);
-	electronInjector.register(ElectronSubscriptionService, subscriptionService);
-	electronInjector.register(SubscriptionService, subscriptionService as any as SubscriptionService);
 
 	const bgsIntermediateResultsSimGuardianService = new BgsIntermediateResultsSimGuardianService(windowManager);
 	electronInjector.register(BgsIntermediateResultsSimGuardianService, bgsIntermediateResultsSimGuardianService);
