@@ -5,11 +5,10 @@ import {
 	Component,
 	ElementRef,
 	HostListener,
-	Input,
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
-import { MainWindowStateFacadeService, MainWindowStoreEvent } from '@firestone/mainwindow/common';
+import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
 
 @Component({
@@ -38,11 +37,6 @@ import { OverwolfService } from '@firestone/shared/framework/core';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ControlMaximizeComponent implements AfterViewInit, OnDestroy {
-	@Input() windowId: string;
-	@Input() doubleClickListenerParentClass: string;
-	@Input() exludeClassForDoubleClick: string;
-	@Input() eventProvider: () => MainWindowStoreEvent;
-
 	maximized = false;
 
 	private stateChangedListener: (message: any) => void;
@@ -55,6 +49,9 @@ export class ControlMaximizeComponent implements AfterViewInit, OnDestroy {
 	) {}
 
 	async ngAfterViewInit() {
+		if (!this.ow?.isOwEnabled()) {
+			return;
+		}
 		const currentWindow = await this.ow.getCurrentWindow();
 		const windowName = currentWindow.name;
 		this.stateChangedListener = this.ow.addStateChangedListener(windowName, (message) => {
@@ -69,47 +66,22 @@ export class ControlMaximizeComponent implements AfterViewInit, OnDestroy {
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.markForCheck();
 		}
-
-		if (this.doubleClickListenerParentClass) {
-			let parent = this.el.nativeElement;
-			while (parent && !(parent.classList as DOMTokenList).contains(this.doubleClickListenerParentClass)) {
-				parent = parent.parentNode;
-			}
-			if (parent && (parent.classList as DOMTokenList).contains(this.doubleClickListenerParentClass)) {
-				parent.addEventListener('dblclick', (event: MouseEvent) => {
-					let parent: any = event.srcElement;
-					while (parent) {
-						if ((parent.classList as DOMTokenList)?.contains(this.exludeClassForDoubleClick)) {
-							return;
-						}
-						parent = parent.parentNode;
-					}
-					this.toggleMaximizeWindow();
-				});
-			}
-		}
 	}
 
 	async toggleMaximizeWindow() {
-		const windowName = (await this.ow.getCurrentWindow()).name;
-
-		// Delegate all the logic
-		if (this.eventProvider) {
-			this.mainWindowStateFacade.send(this.eventProvider());
+		if (!this.ow?.isOwEnabled()) {
 			return;
 		}
+		const windowId = (await this.ow.getCurrentWindow()).id;
+
 		if (this.maximized) {
-			await this.ow.restoreWindow(this.windowId);
+			await this.ow.restoreWindow(windowId);
 			this.maximized = false;
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.markForCheck();
 			}
 		} else {
-			// const window = await this.ow.getCurrentWindow();
-			// this.previousWidth = window.width;
-			// this.previousHeight = window.height;
-
-			await this.ow.maximizeWindow(this.windowId);
+			await this.ow.maximizeWindow(windowId);
 			this.maximized = true;
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.markForCheck();

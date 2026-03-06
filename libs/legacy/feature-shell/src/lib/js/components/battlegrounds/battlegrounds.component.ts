@@ -4,7 +4,7 @@ import {
 	ChangeDetectorRef,
 	Component,
 	HostListener,
-	ViewEncapsulation
+	ViewEncapsulation,
 } from '@angular/core';
 import { BgsInGameWindowNavigationService } from '@firestone/battlegrounds/services';
 import { PreferencesService, ScalingService } from '@firestone/shared/common/service';
@@ -16,7 +16,7 @@ import { DebugService } from '../../services/debug.service';
 	standalone: false,
 	selector: 'battlegrounds',
 	styleUrls: [
-		`../../../css/global/ngx-tooltips.scss`,
+		`../../../../../../../shared/styles/src/lib/styles/ngx-tooltips.scss`,
 		`../../../css/component/battlegrounds/battlegrounds.component.scss`,
 	],
 	encapsulation: ViewEncapsulation.None, // FIXME: not sure that's needed
@@ -39,13 +39,9 @@ import { DebugService } from '../../services/debug.service';
 					<control-settings [settingsApp]="'battlegrounds'"></control-settings>
 					<control-discord></control-discord>
 					<!-- <control-website></control-website> -->
-					<control-minimize [windowId]="windowId"></control-minimize>
-					<control-maximize
-						[windowId]="windowId"
-						[doubleClickListenerParentClass]="'menu-bar'"
-						[exludeClassForDoubleClick]="'exclude-dbclick'"
-					></control-maximize>
-					<control-close [windowId]="windowId" [closeAll]="true"></control-close>
+					<control-minimize></control-minimize>
+					<control-maximize></control-maximize>
+					<control-close [closeAll]="true"></control-close>
 				</div>
 			</section>
 			<battlegrounds-content> </battlegrounds-content>
@@ -65,7 +61,7 @@ export class BattlegroundsComponent extends AbstractSubscriptionComponent implem
 		private readonly ow: OverwolfService,
 		private readonly gameInfo: GameInfoService,
 		private readonly init_ScalingService: ScalingService,
-		private readonly nav: BgsInGameWindowNavigationService
+		private readonly nav: BgsInGameWindowNavigationService,
 	) {
 		super(cdr);
 		this.init();

@@ -143,7 +143,7 @@ import { DeckTrackerOverlayPlayerComponent } from './js/components/decktracker/o
 import { GameCountersComponent } from './js/components/game-counters/game-counters.component';
 import { GenericCountersComponent } from './js/components/game-counters/generic-counter.component';
 import { LoadingComponent } from './js/components/loading/loading.component';
-import { MainWindowComponent } from './js/components/main-window.component';
+import { MainWindowRootComponent } from './js/components/main-window-root.component';
 import { FtueComponent } from './js/components/main-window/ftue/ftue.component';
 import { GlobalHeaderComponent } from './js/components/main-window/global-header.component';
 import { MenuSelectionComponent } from './js/components/menu-selection.component';
@@ -339,6 +339,7 @@ import { LotteryNavigationComponent } from '@components/lottery/lottery-navigati
 import { LotteryWidgetWrapperComponent } from '@components/lottery/lottery-widget-wrapper.component';
 import { LotteryWindowComponent } from '@components/lottery/lottery-window.component';
 import { LotteryWidgetComponent } from '@components/lottery/lottery.component';
+import { MainWindowComponent } from '@components/main-window.component';
 import { ArenaCardSelectionWidgetWrapperComponent } from '@components/overlays/arena-card-selection-widget-wrapper.component';
 import { ArenaDecktrackerOocWidgetWrapperComponent } from '@components/overlays/arena-decktracker-ooc-widget-wrapper.component';
 import { ArenaHeroSelectionWidgetWrapperComponent } from '@components/overlays/arena-hero-selection-widget-wrapper.component';
@@ -420,6 +421,7 @@ import {
 	ReviewIdService,
 } from '@firestone/game-state';
 import { MAIN_WINDOW_STORE_SERVICE_TOKEN, MainwindowCommonModule } from '@firestone/mainwindow/common';
+import { MainwindowViewModule } from '@firestone/mainwindow/view';
 import { MemoryModule } from '@firestone/memory';
 import { MercenariesCommonModule, MercenariesMemoryCacheService } from '@firestone/mercenaries/common';
 import { ModsCommonModule } from '@firestone/mods/common';
@@ -683,6 +685,7 @@ try {
 		ModsCommonModule,
 		ProfileCommonModule,
 		BattlegroundsServicesModule,
+		MainwindowViewModule,
 
 		NgxChartsModule,
 		// NgChartsModule,
@@ -809,9 +812,6 @@ try {
 		ImportDeckstringComponent,
 		SecretsHelperListComponent,
 
-		WindowWrapperComponent,
-		SecondaryDefaultComponent,
-
 		HotkeyComponent,
 		VersionComponent,
 
@@ -880,6 +880,7 @@ try {
 
 		// Only for the app
 		DaemonComponent,
+		MainWindowRootComponent,
 		MainWindowComponent,
 		LoadingComponent,
 		NotificationsComponent,
@@ -961,7 +962,6 @@ try {
 		CollectionMenuSelectionComponent,
 		CollectionEmptyStateComponent,
 		FullCardComponent,
-		MainWindowComponent,
 		MenuSelectionComponent,
 		RarityComponent,
 		SetComponent,
@@ -1384,7 +1384,6 @@ try {
 	],
 	exports: [
 		DaemonComponent,
-		MainWindowComponent,
 		LoadingComponent,
 		NotificationsComponent,
 		SettingsComponent,
@@ -1392,6 +1391,9 @@ try {
 		OutOfCardsCallbackComponent,
 		FullScreenOverlaysComponent,
 		LotteryWindowComponent,
+		WindowWrapperComponent,
+		MainWindowRootComponent,
+		MainWindowComponent,
 
 		DeckTrackerOverlayContainerComponent,
 

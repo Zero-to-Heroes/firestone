@@ -44,6 +44,7 @@
 			"@firestone/legacy/feature-shell": ["libs/legacy/feature-shell/src/index.ts"],
 			"@firestone/lottery/common": ["libs/lottery/common/src/index.ts"],
 			"@firestone/mainwindow/common": ["libs/mainwindow/common/src/index.ts"],
+			"@firestone/mainwindow/view": ["libs/mainwindow/view/src/index.ts"],
 			"@firestone/memory": ["libs/memory/src/index.ts"],
 			"@firestone/mercenaries/common": ["libs/mercenaries/common/src/index.ts"],
 			"@firestone/mods/common": ["libs/mods/common/src/index.ts"],

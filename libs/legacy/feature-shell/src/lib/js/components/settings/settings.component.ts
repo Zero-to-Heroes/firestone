@@ -11,7 +11,7 @@ import { DebugService } from '../../services/debug.service';
 	template: `
 		<window-wrapper [activeTheme]="'general'" [allowResize]="true">
 			<div class="controls">
-				<control-close [windowId]="thisWindowId" [shouldHide]="false"></control-close>
+				<control-close [shouldHide]="false"></control-close>
 			</div>
 			<settings-root></settings-root>
 		</window-wrapper>

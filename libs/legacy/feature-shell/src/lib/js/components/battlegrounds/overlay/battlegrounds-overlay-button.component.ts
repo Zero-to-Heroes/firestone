@@ -20,7 +20,6 @@ import { BgsInGameWindowNavigationService } from '@firestone/battlegrounds/servi
 				<div class="icon idle"></div>
 				<div class="icon active"></div>
 			</div>
-			<!-- <control-close class="close" [windowId]="windowId"></control-close> -->
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -31,7 +30,7 @@ export class BattlegroundsOverlayButtonComponent {
 	constructor(
 		private cdr: ChangeDetectorRef,
 		private readonly nav: BgsInGameWindowNavigationService,
-	) { }
+	) {}
 
 	private mouseDownStart: number;
 

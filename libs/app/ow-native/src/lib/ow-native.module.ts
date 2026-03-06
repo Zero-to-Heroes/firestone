@@ -8,9 +8,6 @@ import { OwWindowHandlerService } from './services/ow-window-handler.service';
 
 @NgModule({
 	imports: [CommonModule, SharedFrameworkCoreModule, SharedCommonServiceModule, BattlegroundsServicesModule],
-	providers: [
-		OwWindowHandlerService,
-		OwHotkeyHandlerService,
-	],
+	providers: [OwWindowHandlerService, OwHotkeyHandlerService],
 })
-export class OwNativeModule { }
+export class OwNativeModule {}

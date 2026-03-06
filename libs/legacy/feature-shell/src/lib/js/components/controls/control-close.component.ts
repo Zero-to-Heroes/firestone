@@ -30,7 +30,6 @@ import { isWindowClosed } from '../../services/utils';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ControlCloseComponent {
-	@Input() windowId: string;
 	@Input() closeAll: boolean;
 	@Input() isMainWindow: boolean;
 	@Input() shouldHide: boolean;
@@ -44,7 +43,18 @@ export class ControlCloseComponent {
 	) {}
 
 	async closeWindow() {
-		const windowName = (await this.ow.getCurrentWindow()).name;
+		if (this.eventProvider) {
+			console.log('delegating closing logic');
+			this.eventProvider();
+			return;
+		}
+
+		if (!this.ow?.isOwEnabled()) {
+			return;
+		}
+
+		const currentWindow = await this.ow.getCurrentWindow();
+		const windowId = currentWindow.id;
 
 		if (this.isMainWindow) {
 			this.mainWindowStateFacade.send(new CloseMainWindowEvent());
@@ -64,9 +74,9 @@ export class ControlCloseComponent {
 			!isWindowClosed(mainWindowOverlay.window_state_ex) &&
 			!isWindowClosed(bgsWindow.window_state_ex) &&
 			!isWindowClosed(bgsWindowOverlay.window_state_ex);
-		if (this.closeAll && !isRunning && !areBothMainAndBgWindowsOpen && this.windowId) {
+		if (this.closeAll && !isRunning && !areBothMainAndBgWindowsOpen && windowId) {
 			console.log('[control-close] closing all app windows');
-			this.ow.hideWindow(this.windowId);
+			this.ow.hideWindow(windowId);
 			const prefs = await this.prefs.getPreferences();
 			let openWindows = await this.ow.getOpenWindows();
 			for (const [name] of Object.entries(openWindows)) {
@@ -75,19 +85,12 @@ export class ControlCloseComponent {
 				}
 				this.ow.closeWindowFromName(name);
 			}
-		} else if (this.eventProvider) {
-			console.log('delegating closing logic');
-			this.eventProvider();
-			return;
 		} else {
-			console.log('[control-close] requested window close', this.windowId);
+			console.log('[control-close] requested window close', windowId);
 			if (this.shouldHide) {
-				this.ow.hideWindow(this.windowId);
-				// } else if (this.isMainWindow) {
-				// 	const prefs = await this.prefs.getPreferences();
-				// 	this.ow.hideCollectionWindow(prefs);
+				this.ow.hideWindow(windowId);
 			} else {
-				this.ow.closeWindow(this.windowId);
+				this.ow.closeWindow(windowId);
 			}
 		}
 	}

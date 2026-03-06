@@ -41,7 +41,10 @@ export class AnalyticsService {
 		});
 	}
 
-	public async trackPageView(page: string) {
+	public async trackPageView(page: string | null) {
+		if (!page) {
+			return;
+		}
 		await this.ready();
 		this.plausible.trackEvent('pageview', {
 			props: {

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { MainWindowStateFacadeService, MainWindowStoreEvent } from '@firestone/mainwindow/common';
+import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { CloseMainWindowEvent } from '../../services/mainwindow/store/events/close-main-window-event';
 
@@ -20,9 +20,7 @@ import { CloseMainWindowEvent } from '../../services/mainwindow/store/events/clo
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ControlMinimizeComponent {
-	@Input() windowId: string;
 	@Input() isMainWindow: boolean;
-	@Input() eventProvider: () => MainWindowStoreEvent;
 
 	constructor(
 		private ow: OverwolfService,
@@ -30,15 +28,13 @@ export class ControlMinimizeComponent {
 	) {}
 
 	async minimizeWindow() {
-		const windowName = (await this.ow.getCurrentWindow()).name;
+		if (!this.ow?.isOwEnabled()) {
+			return;
+		}
+		const currentWindow = await this.ow.getCurrentWindow();
 		if (this.isMainWindow) {
 			this.mainWindowStateFacade.send(new CloseMainWindowEvent());
 		}
-		// Delegate all the logic
-		if (this.eventProvider) {
-			this.eventProvider();
-			return;
-		}
-		this.ow.minimizeWindow(this.windowId);
+		this.ow.minimizeWindow(currentWindow.id);
 	}
 }

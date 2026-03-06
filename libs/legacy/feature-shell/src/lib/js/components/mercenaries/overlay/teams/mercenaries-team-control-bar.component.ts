@@ -16,7 +16,6 @@ import { BehaviorSubject } from 'rxjs';
 			<div class="controls">
 				<control-bug></control-bug>
 				<control-settings [settingsApp]="'mercenaries'" [shouldMoveSettingsWindow]="false"> </control-settings>
-				<!-- <control-close [eventProvider]="closeHandler" [askConfirmation]="true"></control-close> -->
 			</div>
 		</div>
 	`,
