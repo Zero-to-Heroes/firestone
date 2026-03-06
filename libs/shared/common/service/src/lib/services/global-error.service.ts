@@ -1,6 +1,7 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { Injectable } from '@angular/core';
-import { ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
+import { ILocalizationService } from '@firestone/shared/framework/core';
+import { GameStatusService } from './game-status.service';
 import { NotificationsService } from './notifications.service';
 
 @Injectable({ providedIn: 'root' })
@@ -8,13 +9,12 @@ export class GlobalErrorService {
 	constructor(
 		private readonly notifications: NotificationsService,
 		private readonly i18n: ILocalizationService,
-		private readonly ow: OverwolfService,
-	) {
-		(window as any)['showCriticalError'] = () => this.notifyCriticalError('truncated-logs');
-	}
+		private readonly gameStatus: GameStatusService,
+		// private readonly ow: OverwolfService,
+	) {}
 
 	public async notifyCriticalError(error: GlobalErrorType) {
-		const inGame = await this.ow.inGame();
+		const inGame = this.gameStatus.inGame$$?.value ?? false;
 		console.error('[global-error] critical error', error, inGame);
 		const { title, message, url } = this.getTexts(error);
 		if (inGame) {

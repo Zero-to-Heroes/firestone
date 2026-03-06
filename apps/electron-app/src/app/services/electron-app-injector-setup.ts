@@ -111,6 +111,7 @@ import {
 	Events,
 	ExpertContributorsService,
 	GameStatusService,
+	GlobalErrorService,
 	LOG_FILE_BACKEND,
 	LogListenerCacheService,
 	LogListenerService,
@@ -303,22 +304,8 @@ export const buildAppInjector = () => {
 
 	const zone = null;
 
-	const gameEvents = new GameEvents(
-		gameEventsElectron,
-		gameEventsEmitter,
-		scene,
-		gameStatus,
-		allCards,
-		gameStateFacade,
-		gameId,
-		gameEventsFacade,
-		null,
-		zone,
-	);
-	electronInjector.register(GameEvents, gameEvents);
-
-	const gameStateMetaInfos = new GameStateMetaInfoService();
-	electronInjector.register(GameStateMetaInfoService, gameStateMetaInfos);
+	const notifications = new NotificationsService(windowManager);
+	electronInjector.register(NotificationsService, notifications);
 
 	// Translation service
 	const translateLoader = new LocalizationLoaderWithCache(
@@ -349,6 +336,26 @@ export const buildAppInjector = () => {
 	const i18n = new LocalizationStandaloneService(allCardsRaw, translate);
 	electronInjector.register(LocalizationStandaloneService, i18n);
 	electronInjector.register(ILocalizationService, i18n);
+
+	const globalError = new GlobalErrorService(notifications, i18n, ow);
+
+	const gameEvents = new GameEvents(
+		gameEventsElectron,
+		gameEventsEmitter,
+		scene,
+		gameStatus,
+		allCards,
+		gameStateFacade,
+		gameId,
+		gameEventsFacade,
+		globalError,
+		null,
+		zone,
+	);
+	electronInjector.register(GameEvents, gameEvents);
+
+	const gameStateMetaInfos = new GameStateMetaInfoService();
+	electronInjector.register(GameStateMetaInfoService, gameStateMetaInfos);
 
 	const helper = new DeckManipulationHelper(allCards, i18n);
 	electronInjector.register(DeckManipulationHelper, helper);
@@ -625,9 +632,6 @@ export const buildAppInjector = () => {
 		appVersion,
 	);
 	electronInjector.register(EndGameListenerService, endGameListener);
-
-	const notifications = new NotificationsService(windowManager);
-	electronInjector.register(NotificationsService, notifications);
 
 	const customAppearance = new CustomAppearanceService(windowManager);
 	electronInjector.register(CustomAppearanceService, customAppearance);

@@ -259,7 +259,7 @@ export class GameStateService {
 					// console.debug(
 					// 	'[game-state] state is unchanged, not emitting event',
 					// 	// gameEvent.type,
-					// 	// gameEvent.cardId,
+					// 	// gameEvent.cardId,f
 					// 	// gameEvent.entityId,
 					// );
 				}
@@ -441,6 +441,8 @@ export class GameStateService {
 				gameEvent.cardId,
 				`entityId:${gameEvent.entityId}`,
 				(gameEvent as MinionsDiedEvent)?.additionalData?.deadMinions?.map((m) => `entityId:${m.EntityId}`),
+				currentState.opponentDeck.board.map((c) => c.relatedCardIds),
+				currentState.opponentDeck.board,
 				currentState,
 				gameEvent,
 			);

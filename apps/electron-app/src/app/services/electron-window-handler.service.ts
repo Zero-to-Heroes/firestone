@@ -51,6 +51,11 @@ export class ElectronWindowHandlerService implements IWindowHandlerService {
 		console.warn('showCollectionWindow is not implemented');
 	}
 
+	public toggleCollectionWindow(useOverlay: boolean): void {
+		// To be implemented later
+		console.warn('toggleCollectionWindow is not implemented');
+	}
+
 	public openSettingsWindow(useOverlay: boolean): void {
 		const gameWindowService = ElectronGameWindowService.getInstance();
 		const gameInfo = gameWindowService.getCurrentGameInfo();

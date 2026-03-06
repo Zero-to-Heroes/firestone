@@ -16,6 +16,7 @@ import {
 import { LocalizationFacadeService } from '@legacy-import/src/lib/js/services/localization-facade.service';
 import { AppComponent } from './app.component';
 import { appRoutes } from './app.routes';
+import { ElectronCollectionComponent } from './overlay/electron-collection.component';
 import { ElectronOverlayComponent } from './overlay/electron-overlay.component';
 import { ElectronSettingsComponent } from './overlay/electron-settings.component';
 
@@ -30,7 +31,7 @@ import { ElectronSettingsComponent } from './overlay/electron-settings.component
 
 		RouterModule.forRoot(appRoutes),
 	],
-	declarations: [AppComponent, ElectronOverlayComponent, ElectronSettingsComponent],
+	declarations: [AppComponent, ElectronCollectionComponent, ElectronOverlayComponent, ElectronSettingsComponent],
 	providers: [
 		{ provide: CardsFacadeService, useExisting: CardsFacadeStandaloneService },
 		{ provide: ILocalizationService, useExisting: LocalizationStandaloneService },
