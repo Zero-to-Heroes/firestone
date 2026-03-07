@@ -9,6 +9,7 @@ import { SharedCommonServiceModule } from '@firestone/shared/common/service';
 import { SharedFrameworkCommonModule } from '@firestone/shared/framework/common';
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { StatsDataAccessModule } from '@firestone/stats/data-access';
+import { StatsServicesModule } from '@firestone/stats/services';
 import { BgsCommonBootstrapService } from './services/_bgs-common-bootstrap.service';
 import { BgsBoardHighlighterService } from './services/bgs-board-highlighter.service';
 import { BattlegroundsCardsService } from './services/bgs-cards.service';
@@ -29,6 +30,7 @@ import { BattlegroundsNavigationService } from './services/bgs-navigation.servic
 import { BgsPlayerHeroStatsService } from './services/bgs-player-hero-stats.service';
 import { BattlegroundsQuestsService } from './services/bgs-quests.service';
 import { BattlegroundsTrinketsService } from './services/bgs-trinkets.service';
+import { BgsRunStatsService } from './services/bgs-run-stats.service';
 
 @NgModule({
 	imports: [
@@ -42,9 +44,11 @@ import { BattlegroundsTrinketsService } from './services/bgs-trinkets.service';
 		GameStateModule,
 		MemoryModule,
 		StatsDataAccessModule,
+		StatsServicesModule,
 		ProfileCommonModule,
 	],
 	providers: [
+		BgsRunStatsService,
 		BgsCommonBootstrapService,
 		BattlegroundsTrinketsService,
 		BgsInGameTrinketsGuardianService,

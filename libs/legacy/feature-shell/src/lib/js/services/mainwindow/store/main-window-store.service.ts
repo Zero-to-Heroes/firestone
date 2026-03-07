@@ -112,7 +112,7 @@ import { Map } from 'immutable';
 import { BehaviorSubject, filter } from 'rxjs';
 import { PackStatsService } from '@firestone/collection/data-access';
 import { BgsPerfectGamesService } from '@firestone/battlegrounds/data-access';
-import { BgsRunStatsService } from '../../battlegrounds/bgs-run-stats.service';
+import { BgsRunStatsService } from '@firestone/battlegrounds/services';
 import { CollectionManager } from '../../collection/collection-manager.service';
 import { SetsManagerService } from '../../collection/sets-manager.service';
 import { SetsService } from '@firestone/collection/data-access';

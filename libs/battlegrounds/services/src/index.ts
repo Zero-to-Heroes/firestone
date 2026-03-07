@@ -24,6 +24,8 @@ export * from './lib/services/bgs-player-hero-stats.service';
 export * from './lib/services/bgs-quests.service';
 export * from './lib/services/bgs-reconnector-plugin.service';
 export * from './lib/services/bgs-reconnector.service';
+export * from './lib/services/bgs-run-stats-event-handler.interface';
 export * from './lib/services/bgs-run-stats-input-builder';
+export * from './lib/services/bgs-run-stats.service';
 export * from './lib/services/bgs-trinkets.service';
 

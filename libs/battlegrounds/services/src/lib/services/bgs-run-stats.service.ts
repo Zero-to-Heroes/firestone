@@ -1,19 +1,14 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, Optional } from '@angular/core';
 import { BgsPostMatchStats as IBgsPostMatchStats } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { normalizeHeroCardId } from '@firestone-hs/reference-data';
 import { BgsBestStat, Input as BgsComputeRunStatsInput, buildNewStats } from '@firestone-hs/user-bgs-post-match-stats';
-import { buildBgsRunStatsInput } from '@firestone/battlegrounds/services';
 import { BgsGame, BgsPostMatchStats, BgsPostMatchStatsForReview, RealTimeStatsState } from '@firestone/game-state';
-import {
-	BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent,
-	BgsPostMatchStatsComputedEvent,
-	ShowMatchStatsEvent,
-} from '@firestone/mainwindow/common';
-import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { Events } from '@firestone/shared/common/service';
 import { sleep } from '@firestone/shared/framework/common';
 import { ApiRunner, CardsFacadeService, UserService } from '@firestone/shared/framework/core';
 import { GameForUpload, GameStatsProviderService } from '@firestone/stats/services';
+import { buildBgsRunStatsInput } from './bgs-run-stats-input-builder';
+import { BGS_RUN_STATS_EVENT_HANDLER, IBgsRunStatsEventHandler } from './bgs-run-stats-event-handler.interface';
 
 @Injectable()
 export class BgsRunStatsService {
@@ -23,7 +18,7 @@ export class BgsRunStatsService {
 		private readonly userService: UserService,
 		private readonly games: GameStatsProviderService,
 		private readonly allCards: CardsFacadeService,
-		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
+		@Optional() @Inject(BGS_RUN_STATS_EVENT_HANDLER) private readonly eventHandler?: IBgsRunStatsEventHandler,
 	) {
 		this.events.on(Events.START_BGS_RUN_STATS).subscribe(async (event) => {
 			console.debug(
@@ -46,16 +41,14 @@ export class BgsRunStatsService {
 		);
 		console.debug('[bgs-run-stats] post-match results for review', reviewId, resultFromS3);
 		if (!!resultFromS3) {
-			this.mainWindowStateFacade.send(new ShowMatchStatsEvent(reviewId, resultFromS3));
+			this.eventHandler?.onShowMatchStats(reviewId, resultFromS3);
 			return;
 		}
 	}
 
 	private async computeHeroDetailsForBg(heroCardId: string) {
 		const lastHeroPostMatchStats = await this.retrieveLastBgsRunStats(heroCardId);
-		this.mainWindowStateFacade.send(
-			new BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent(lastHeroPostMatchStats, heroCardId),
-		);
+		this.eventHandler?.onHeroDetails(lastHeroPostMatchStats, heroCardId);
 	}
 
 	private async retrieveLastBgsRunStats(
@@ -70,18 +63,19 @@ export class BgsRunStatsService {
 				),
 			),
 		);
-		const results: readonly BgsPostMatchStatsForReview[] = reviewIds.map((reviewId, index) => {
-			const stat: BgsPostMatchStatsForReview = {
-				reviewId: reviewId,
-				stats: resultsFromS3[index],
-			};
-			return stat;
-		});
+		const results: readonly BgsPostMatchStatsForReview[] = reviewIds
+			.map((reviewId, index) => {
+				const stats = resultsFromS3[index];
+				if (!stats) return null;
+				return { reviewId, stats } as BgsPostMatchStatsForReview;
+			})
+			.filter((r): r is BgsPostMatchStatsForReview => r != null);
 		return results;
 	}
 
 	private async retrieveReviewIds(heroCardId: string, numberOfStats?: number): Promise<readonly string[]> {
 		const allGames = await this.games.gameStats$$.getValueWithInit();
+		if (!allGames) return [];
 		const gamesForHero = allGames.filter(
 			(game) =>
 				normalizeHeroCardId(game.playerCardId, this.allCards) ===
@@ -101,17 +95,24 @@ export class BgsRunStatsService {
 		if (!user) {
 			return;
 		}
-		const input = buildBgsRunStatsInput(reviewId, game, currentGame, user.userId, user.username);
+		const input = buildBgsRunStatsInput(
+			reviewId,
+			game,
+			currentGame,
+			user.userId ?? '',
+			user.username,
+		);
 
+		const mainPlayerId = currentGame.getMainPlayer(true)?.playerId ?? -1;
 		const [postMatchStats, newBestValues] = this.populateObject(
 			liveStats,
 			input,
 			bestBgsUserStats || [],
-			currentGame.getMainPlayer(true)?.playerId,
+			mainPlayerId,
 		);
 		console.debug('[bgs-run-stats] newBestVaues');
 		await sleep(1000);
-		this.mainWindowStateFacade.send(new BgsPostMatchStatsComputedEvent(reviewId, postMatchStats, newBestValues));
+		this.eventHandler?.onPostMatchStatsComputed(reviewId, postMatchStats, newBestValues);
 	}
 
 	private populateObject(

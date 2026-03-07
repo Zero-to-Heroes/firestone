@@ -395,7 +395,8 @@ import {
 	BgsBattleSimulationMockExecutorService,
 } from '@firestone/battlegrounds/core';
 import { BattlegroundsDataAccessModule } from '@firestone/battlegrounds/data-access';
-import { BgsRunStatsService } from './js/services/battlegrounds/bgs-run-stats.service';
+import { BGS_RUN_STATS_EVENT_HANDLER } from '@firestone/battlegrounds/services';
+import { BgsRunStatsEventHandlerService } from './js/services/battlegrounds/bgs-run-stats-event-handler.service';
 import { BattlegroundsServicesModule } from '@firestone/battlegrounds/services';
 import {
 	BattlegroundsSimulatorModule,
@@ -1307,6 +1308,8 @@ try {
 			}),
 			deps: [MainWindowStateFacadeService],
 		},
+		{ provide: BGS_RUN_STATS_EVENT_HANDLER, useExisting: BgsRunStatsEventHandlerService },
+		BgsRunStatsEventHandlerService,
 		{ provide: COLLECTION_PACK_SERVICE_TOKEN, useExisting: PackStatsService },
 		{ provide: REMOTE_ACHIEVEMENTS_SERVICE_TOKEN, useExisting: FirestoneRemoteAchievementsLoaderService },
 		{ provide: GAME_STATS_PROVIDER_SERVICE_TOKEN, useExisting: GameStatsProviderService },
@@ -1382,7 +1385,6 @@ try {
 		ConstructedConfigService,
 
 		BgsGlobalStatsService,
-		BgsRunStatsService,
 		BgsCustomSimulationService,
 		BgsOverlayHeroOverviewService,
 
