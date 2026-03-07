@@ -13,7 +13,7 @@ import { AbstractSubscriptionComponent } from '@firestone/shared/framework/commo
 import { waitForReady } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { Observable, combineLatest } from 'rxjs';
-import { DecksProviderService } from '../../../services/decktracker/main/decks-provider.service';
+import { DecksProviderService } from '@firestone/decktracker/common';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import {
 	ConstructedEjectDeckVersionEvent,

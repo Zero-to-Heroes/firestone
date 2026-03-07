@@ -8,7 +8,7 @@ import { AbstractSubscriptionComponent, arraysEqual } from '@firestone/shared/fr
 import { waitForReady } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable, combineLatest, distinctUntilChanged } from 'rxjs';
-import { DecksProviderService } from '../../../services/decktracker/main/decks-provider.service';
+import { DecksProviderService } from '@firestone/decktracker/common';
 import { sortByProperties } from '../../../services/utils';
 
 @Component({

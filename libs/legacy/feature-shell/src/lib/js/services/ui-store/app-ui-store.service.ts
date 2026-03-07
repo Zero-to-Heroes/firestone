@@ -21,7 +21,7 @@ import {
 	AchievementsProgressTracking,
 } from '../achievement/achievements-live-progress-tracking.service';
 import { CollectionManager } from '@firestone/collection/services';
-import { DecksProviderService } from '../decktracker/main/decks-provider.service';
+import { DecksProviderService } from '@firestone/decktracker/common';
 import { CollectionBootstrapService } from '@firestone/collection/services';
 import { HighlightSelector } from '../mercenaries/highlights/mercenaries-synergies-highlight.service';
 import { arraysEqual } from '../utils';

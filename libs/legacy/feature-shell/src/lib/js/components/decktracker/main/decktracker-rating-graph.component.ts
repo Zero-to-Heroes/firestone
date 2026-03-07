@@ -16,7 +16,7 @@ import { addDaysToDate, arraysEqual, daysBetweenDates, formatDate, groupByFuncti
 import { ChartData } from 'chart.js';
 import { Observable, combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter, map } from 'rxjs/operators';
-import { DecksProviderService } from '../../../services/decktracker/main/decks-provider.service';
+import { DecksProviderService } from '@firestone/decktracker/common';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({

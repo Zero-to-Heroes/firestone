@@ -63,7 +63,7 @@ import { GameStatsProviderService } from '@firestone/stats/services';
 import { AchievementsLiveProgressTrackingService } from '../../js/services/achievement/achievements-live-progress-tracking.service';
 import { AdService } from '../../js/services/ad.service';
 import { BgsPerfectGamesService } from '@firestone/battlegrounds/data-access';
-import { DecksProviderService } from '../../js/services/decktracker/main/decks-provider.service';
+import { DecksProviderService } from '@firestone/decktracker/common';
 import { CollectionBootstrapService } from '@firestone/collection/services';
 import { MainWindowStoreService } from '../../js/services/mainwindow/store/main-window-store.service';
 import { MercenariesSynergiesHighlightService } from '../../js/services/mercenaries/highlights/mercenaries-synergies-highlight.service';

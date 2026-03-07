@@ -587,7 +587,7 @@ import { DebugService } from './js/services/debug.service';
 import { ConstructedConfigService } from './js/services/decktracker/constructed-config.service';
 import { DeckCardService } from './js/services/decktracker/deck-card.service';
 import { DynamicZoneHelperService } from './js/services/decktracker/dynamic-zone-helper.service';
-import { DecksProviderService } from './js/services/decktracker/main/decks-provider.service';
+import { DecktrackerCommonModule } from '@firestone/decktracker/common';
 import { DecktrackerStateLoaderService } from './js/services/decktracker/main/decktracker-state-loader.service';
 import { ZoneOrderingService } from './js/services/decktracker/zone-ordering.service';
 import { DevService } from './js/services/dev.service';
@@ -690,6 +690,7 @@ try {
 		StatsServicesModule,
 		ConstructedCommonModule,
 		ConstructedViewModule,
+		DecktrackerCommonModule,
 		CommunitiesCommonModule,
 		CollectionCommonModule,
 		CollectionDataAccessModule,
@@ -1374,7 +1375,6 @@ try {
 		FirestoneRemoteAchievementsLoaderService,
 
 		DecktrackerStateLoaderService,
-		DecksProviderService,
 		ConstructedConfigService,
 
 		BgsGlobalStatsService,

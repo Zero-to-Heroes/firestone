@@ -6,7 +6,7 @@ import { ENABLE_RANKED_ARCHETYPE, PreferencesService } from '@firestone/shared/c
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, filter } from 'rxjs';
-import { DecksProviderService } from '../../../services/decktracker/main/decks-provider.service';
+import { DecksProviderService } from '@firestone/decktracker/common';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { ShowReplaysEvent } from '@firestone/mainwindow/common';
 

@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef }
 import { DeckSummary, MatchupStat } from '@firestone/constructed/common';
 import { classesForPieChart, colorForClass, formatClass } from '@firestone/game-state';
 import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
-import { buildDefaultMatchupStats } from '../../../services/decktracker/main/decks-provider.service';
+import { buildDefaultMatchupStats } from '@firestone/decktracker/common';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import {
 	DecktrackerDeleteDeckEvent,

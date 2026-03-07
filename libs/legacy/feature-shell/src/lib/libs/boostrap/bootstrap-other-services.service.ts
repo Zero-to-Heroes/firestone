@@ -37,7 +37,7 @@ import {
 	CollectionStorageService,
 } from '@firestone/collection/services';
 import { ConstructedConfigService } from '../../js/services/decktracker/constructed-config.service';
-import { DecksProviderService } from '../../js/services/decktracker/main/decks-provider.service';
+import { DecksProviderService } from '@firestone/decktracker/common';
 import { DevService } from '../../js/services/dev.service';
 import { GlobalStatsService } from '../../js/services/global-stats/global-stats.service';
 import { HsClientConfigService } from '../../js/services/hs-client-config.service';

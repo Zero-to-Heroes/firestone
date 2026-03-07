@@ -8,7 +8,7 @@ import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/co
 import { toFormatType } from '@firestone/stats/data-access';
 import { GameStatsProviderService } from '@firestone/stats/services';
 import { combineLatest, debounceTime, distinctUntilChanged, filter, Observable, tap } from 'rxjs';
-import { DecksProviderService } from '../../../services/decktracker/main/decks-provider.service';
+import { DecksProviderService } from '@firestone/decktracker/common';
 
 @Component({
 	standalone: false,

@@ -39,6 +39,7 @@
 			"@firestone/communities/common": ["libs/communities/common/src/index.ts"],
 			"@firestone/constructed/common": ["libs/constructed/common/src/index.ts"],
 			"@firestone/constructed/view": ["libs/constructed/view/src/index.ts"],
+			"@firestone/decktracker/common": ["libs/decktracker/common/src/index.ts"],
 			"@firestone/discord": ["libs/discord/src/index.ts"],
 			"@firestone/electron/common": ["libs/electron/common/src/index.ts"],
 			"@firestone/electron/view": ["libs/electron/view/src/index.ts"],

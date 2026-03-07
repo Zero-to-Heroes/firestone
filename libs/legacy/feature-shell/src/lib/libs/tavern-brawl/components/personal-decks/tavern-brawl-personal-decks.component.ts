@@ -8,7 +8,7 @@ import {
 	OverwolfService,
 	waitForReady,
 } from '@firestone/shared/framework/core';
-import { DecksProviderService } from '@legacy-import/src/lib/js/services/decktracker/main/decks-provider.service';
+import { DecksProviderService } from '@firestone/decktracker/common';
 import { Observable, combineLatest } from 'rxjs';
 
 @Component({

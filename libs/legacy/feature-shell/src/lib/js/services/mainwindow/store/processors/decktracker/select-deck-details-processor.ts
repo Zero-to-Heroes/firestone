@@ -5,7 +5,7 @@ import {
 	NavigationDecktracker,
 	NavigationState,
 } from '@firestone/mainwindow/common';
-import { DecksProviderService } from '../../../../decktracker/main/decks-provider.service';
+import { DecksProviderService } from '@firestone/decktracker/common';
 import { SelectDeckDetailsEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 
