@@ -2,7 +2,7 @@ import { ConstructedPersonalDecksService, DeckSummary } from '@firestone/constru
 import { MainWindowState, NavigationState } from '@firestone/mainwindow/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { Processor } from '@services/mainwindow/store/processors/processor';
-import { ConstructedDeckbuilderSaveDeckEvent } from '../../events/decktracker/constructed-deckbuilder-save-deck-event';
+import { ConstructedDeckbuilderSaveDeckEvent } from '@firestone/mainwindow/common';
 
 export class ConstructedDeckbuilderSaveDeckProcessor implements Processor {
 	constructor(

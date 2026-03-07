@@ -15,8 +15,10 @@ import { FirestoneAchievementsChallengeService } from '../../js/services/achieve
 import { AdService } from '../../js/services/ad.service';
 import { LocalizationFacadeService } from '../../js/services/localization-facade.service';
 import { OutOfCardsService, OutOfCardsToken } from '../../js/services/mainwindow/out-of-cards.service';
-import { ChangeVisibleApplicationEvent } from '../../js/services/mainwindow/store/events/change-visible-application-event';
-import { ShowMainWindowEvent } from '../../js/services/mainwindow/store/events/show-main-window-event';
+import {
+	ChangeVisibleApplicationEvent,
+	ShowMainWindowEvent,
+} from '@firestone/mainwindow/common';
 import { MainWindowStoreService } from '../../js/services/mainwindow/store/main-window-store.service';
 
 @Injectable()

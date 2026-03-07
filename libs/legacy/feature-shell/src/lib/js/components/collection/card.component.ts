@@ -15,7 +15,7 @@ import { AbstractSubscriptionComponent } from '@firestone/shared/framework/commo
 import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
-import { ShowCardDetailsEvent } from '../../services/mainwindow/store/events/collection/show-card-details-event';
+import { ShowCardDetailsEvent } from '@firestone/mainwindow/common';
 import { CollectionReferenceCard } from './collection-reference-card';
 
 @Component({

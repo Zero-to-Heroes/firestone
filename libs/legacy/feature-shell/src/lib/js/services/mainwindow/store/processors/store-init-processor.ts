@@ -7,7 +7,7 @@ import { MainWindowNavigationService, MainWindowState, NavigationState } from '@
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { ILocalizationService } from '@firestone/shared/framework/core';
-import { ChangeVisibleApplicationEvent } from '../events/change-visible-application-event';
+import { ChangeVisibleApplicationEvent } from '@firestone/mainwindow/common';
 import { ChangeVisibleApplicationProcessor } from './change-visible-application-processor';
 
 export class StoreInitProcessor {

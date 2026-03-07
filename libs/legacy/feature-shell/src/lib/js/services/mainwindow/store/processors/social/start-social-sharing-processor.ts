@@ -4,7 +4,7 @@ import {
 	NavigationState,
 	SharingAchievement,
 } from '@firestone/mainwindow/common';
-import { StartSocialSharingEvent } from '../../events/social/start-social-sharing-event';
+import { StartSocialSharingEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 
 export class StartSocialSharingProcessor implements Processor {

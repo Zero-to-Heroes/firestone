@@ -12,8 +12,7 @@ import { AbstractSubscriptionComponent } from '@firestone/shared/framework/commo
 import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { SetsManagerService } from '../../services/collection/sets-manager.service';
-import { SearchCardsEvent } from '../../services/mainwindow/store/events/collection/search-cards-event';
-import { ShowCardDetailsEvent } from '../../services/mainwindow/store/events/collection/show-card-details-event';
+import { SearchCardsEvent, ShowCardDetailsEvent } from '@firestone/mainwindow/common';
 
 @Component({
 	standalone: false,

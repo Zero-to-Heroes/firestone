@@ -8,7 +8,7 @@ import { StatGameFormatType } from '@firestone/stats/data-access';
 import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
-import { ChangeDeckFormatFilterEvent } from '../../../../services/mainwindow/store/events/decktracker/change-deck-format-filter-event';
+import { ChangeDeckFormatFilterEvent } from '@firestone/mainwindow/common';
 
 @Component({
 	standalone: false,

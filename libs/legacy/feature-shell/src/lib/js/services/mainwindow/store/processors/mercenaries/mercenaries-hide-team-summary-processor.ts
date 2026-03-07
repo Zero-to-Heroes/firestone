@@ -1,6 +1,6 @@
 import { MainWindowState, NavigationState } from '@firestone/mainwindow/common';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { MercenariesHideTeamSummaryEvent } from '../../events/mercenaries/mercenaries-hide-team-summary-event';
+import { MercenariesHideTeamSummaryEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 
 export class MercenariesHideTeamSummaryProcessor implements Processor {

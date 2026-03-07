@@ -1,7 +1,7 @@
 import { PreferencesService } from '@firestone/shared/common/service';
 import { MainWindowState } from '../../../../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../../../../models/mainwindow/navigation/navigation-state';
-import { BgsSimulatorMinionTribeFilterSelectedEvent } from '../../../events/battlegrounds/simulator/bgs-simulator-minion-tribe-filter-selected-event';
+import { BgsSimulatorMinionTribeFilterSelectedEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../../processor';
 
 export class BgsSimulatorMinionTribeFilterSelectedProcessor implements Processor {

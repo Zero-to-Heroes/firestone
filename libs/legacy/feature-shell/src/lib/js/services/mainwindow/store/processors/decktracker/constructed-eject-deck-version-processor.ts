@@ -1,7 +1,7 @@
 import { MainWindowState, NavigationState } from '@firestone/mainwindow/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { Processor } from '@services/mainwindow/store/processors/processor';
-import { ConstructedEjectDeckVersionEvent } from '../../events/decktracker/constructed-eject-deck-version-event';
+import { ConstructedEjectDeckVersionEvent } from '@firestone/mainwindow/common';
 
 export class ConstructedEjectDeckVersionProcessor implements Processor {
 	constructor(private readonly prefs: PreferencesService) {}

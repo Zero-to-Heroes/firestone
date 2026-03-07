@@ -2,7 +2,7 @@ import { OverwolfService } from '@firestone/shared/framework/core';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationAchievements } from '../../../../../models/mainwindow/navigation/navigation-achievements';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
-import { ShareVideoOnSocialNetworkEvent } from '../../events/social/share-video-on-social-network-event';
+import { ShareVideoOnSocialNetworkEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 
 export class ShareVideoOnSocialNetworkProcessor implements Processor {

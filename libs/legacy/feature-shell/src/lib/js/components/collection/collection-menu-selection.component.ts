@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CurrentView } from '@firestone/collection/common';
 import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
-import { CollectionSelectCurrentTabEvent } from '../../services/mainwindow/store/events/collection/collection-select-current-tab-event';
+import { CollectionSelectCurrentTabEvent } from '@firestone/mainwindow/common';
 
 @Component({
 	standalone: false,

@@ -1,6 +1,6 @@
 import { MainWindowState, NavigationState } from '@firestone/mainwindow/common';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { ToggleShowHiddenDecksEvent } from '../../events/decktracker/toggle-show-hidden-decks-event';
+import { ToggleShowHiddenDecksEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 
 export class ToggleShowHiddenDecksProcessor implements Processor {

@@ -1,4 +1,5 @@
 export * from './lib/battlegrounds-services.module';
+export * from './lib/model/bgs-hero-sort-filter.type';
 export * from './lib/services/_bgs-common-bootstrap.service';
 export * from './lib/services/bgs-anomalies.service';
 export * from './lib/services/bgs-board-highlighter.service';

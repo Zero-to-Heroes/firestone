@@ -5,7 +5,7 @@ import {
 } from '@firestone/achievements/common';
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { MainWindowState, NavigationAchievements, NavigationState } from '@firestone/mainwindow/common';
-import { SelectAchievementCategoryEvent } from '../../events/achievements/select-achievement-category-event';
+import { SelectAchievementCategoryEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 
 export class SelectAchievementCategoryProcessor implements Processor {

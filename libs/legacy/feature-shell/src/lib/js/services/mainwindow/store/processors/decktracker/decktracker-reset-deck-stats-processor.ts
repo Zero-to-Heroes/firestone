@@ -1,6 +1,6 @@
 import { MainWindowState, NavigationState } from '@firestone/mainwindow/common';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { DecktrackerResetDeckStatsEvent } from '../../events/decktracker/decktracker-reset-deck-stats-event';
+import { DecktrackerResetDeckStatsEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 
 export class DecktrackerResetDeckStatsProcessor implements Processor {

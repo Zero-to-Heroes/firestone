@@ -1,7 +1,7 @@
 import { MainWindowState, NavigationState } from '@firestone/mainwindow/common';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { TranslateService } from '@ngx-translate/core';
-import { LocalizationUpdateEvent } from '../events/localization-update-event';
+import { LocalizationUpdateEvent } from '@firestone/mainwindow/common';
 import { Processor } from './processor';
 
 export class LocalizationUpdateProcessor implements Processor {

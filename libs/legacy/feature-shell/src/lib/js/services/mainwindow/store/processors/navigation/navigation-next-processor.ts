@@ -1,5 +1,5 @@
 import { MainWindowNavigationService, MainWindowState, NavigationState } from '@firestone/mainwindow/common';
-import { NavigationNextEvent } from '../../events/navigation/navigation-next-event';
+import { NavigationNextEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 
 export class NavigationNextProcessor implements Processor {

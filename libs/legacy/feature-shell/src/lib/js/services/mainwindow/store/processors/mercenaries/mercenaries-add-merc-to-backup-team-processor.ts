@@ -1,6 +1,6 @@
 import { MainWindowState, NavigationState } from '@firestone/mainwindow/common';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { MercenariesAddMercToBackupTeamEvent } from '../../events/mercenaries/mercenaries-add-merc-to-backup-team-event';
+import { MercenariesAddMercToBackupTeamEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 
 export class MercenariesAddMercToBackupTeamProcessor implements Processor {

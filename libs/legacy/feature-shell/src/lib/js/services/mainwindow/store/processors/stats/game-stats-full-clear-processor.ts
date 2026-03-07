@@ -1,6 +1,6 @@
 import { MainWindowState, NavigationState } from '@firestone/mainwindow/common';
 import { GameStatsLoaderService } from '@firestone/stats/data-access';
-import { GamesFullClearEvent } from '../../events/stats/game-stats-full-clear-event';
+import { GamesFullClearEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 
 export class GameStatsFullClearProcessor implements Processor {

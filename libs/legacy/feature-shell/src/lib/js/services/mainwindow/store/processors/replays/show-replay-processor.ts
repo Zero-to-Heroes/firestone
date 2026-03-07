@@ -4,7 +4,7 @@ import { MainWindowState, MatchDetail, NavigationReplays, NavigationState } from
 import { GameStatsLoaderService } from '@firestone/stats/data-access';
 import { BgsPerfectGamesService } from '@firestone/battlegrounds/data-access';
 import { BgsRunStatsService } from '../../../../battlegrounds/bgs-run-stats.service';
-import { ShowReplayEvent } from '../../events/replays/show-replay-event';
+import { ShowReplayEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 
 export class ShowReplayProcessor implements Processor {

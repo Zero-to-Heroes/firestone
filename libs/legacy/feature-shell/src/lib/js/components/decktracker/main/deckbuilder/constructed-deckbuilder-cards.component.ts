@@ -23,7 +23,7 @@ import { LocalizationFacadeService } from '@services/localization-facade.service
 import { groupByFunction, sortByProperties } from '@services/utils';
 import { BehaviorSubject, Observable, combineLatest, from } from 'rxjs';
 import { filter, shareReplay, startWith, takeUntil } from 'rxjs/operators';
-import { ConstructedDeckbuilderSaveDeckEvent } from '../../../../services/mainwindow/store/events/decktracker/constructed-deckbuilder-save-deck-event';
+import { ConstructedDeckbuilderSaveDeckEvent } from '@firestone/mainwindow/common';
 
 export const DEFAULT_CARD_WIDTH = 170;
 export const DEFAULT_CARD_HEIGHT = 221;

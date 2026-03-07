@@ -7,7 +7,7 @@ import { AbstractSubscriptionComponent } from '@firestone/shared/framework/commo
 import { waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { CollectionManager } from '../../services/collection/collection-manager.service';
-import { ShowCardBackDetailsEvent } from '../../services/mainwindow/store/events/collection/show-card-back-details-event';
+import { ShowCardBackDetailsEvent } from '@firestone/mainwindow/common';
 import { InternalCardBack } from './internal-card-back';
 
 @Component({

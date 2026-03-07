@@ -6,7 +6,7 @@ import {
 	NavigationState,
 } from '@firestone/mainwindow/common';
 import { SetsManagerService } from '../../../../collection/sets-manager.service';
-import { SelectCollectionSetEvent } from '../../events/collection/select-collection-set-event';
+import { SelectCollectionSetEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 
 export class SelectCollectionSetProcessor implements Processor {

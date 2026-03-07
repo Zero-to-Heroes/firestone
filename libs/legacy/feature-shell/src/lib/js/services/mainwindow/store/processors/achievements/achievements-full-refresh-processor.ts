@@ -1,6 +1,6 @@
 import { FirestoneRemoteAchievementsLoaderService } from '@firestone/achievements/common';
 import { MainWindowState, NavigationState } from '@firestone/mainwindow/common';
-import { AchievementsFullRefreshEvent } from '../../events/achievements/achievements-full-refresh-event';
+import { AchievementsFullRefreshEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 
 export class AchievementsFullRefreshProcessor implements Processor {

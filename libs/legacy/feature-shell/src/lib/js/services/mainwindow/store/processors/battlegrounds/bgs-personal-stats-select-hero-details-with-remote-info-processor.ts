@@ -1,5 +1,5 @@
 import { BattlegroundsAppState, MainWindowState, NavigationState } from '@firestone/mainwindow/common';
-import { BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent } from '../../events/battlegrounds/bgs-personal-stats-select-hero-details-with-remote-info-event';
+import { BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 
 export class BgsPersonalStatsSelectHeroDetailsWithRemoteInfoProcessor implements Processor {

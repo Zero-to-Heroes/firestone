@@ -20,7 +20,7 @@ import {
 	waitForReady,
 } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
-import { ChangeVisibleApplicationEvent } from '../services/mainwindow/store/events/change-visible-application-event';
+import { ChangeVisibleApplicationEvent } from '@firestone/mainwindow/common';
 
 @Component({
 	standalone: false,

@@ -7,7 +7,7 @@ import {
 } from '@firestone/mainwindow/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { SetsManagerService } from '../../../../collection/sets-manager.service';
-import { ShowCardDetailsEvent } from '../../events/collection/show-card-details-event';
+import { ShowCardDetailsEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 
 export class ShowCardDetailsProcessor implements Processor {

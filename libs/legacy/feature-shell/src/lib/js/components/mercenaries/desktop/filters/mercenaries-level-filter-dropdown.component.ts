@@ -7,7 +7,7 @@ import { waitForReady } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { combineLatest, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { MercenariesHeroLevelFilterSelectedEvent } from '../../../../services/mainwindow/store/events/mercenaries/mercenaries-hero-level-filter-selected-event';
+import { MercenariesHeroLevelFilterSelectedEvent } from '@firestone/mainwindow/common';
 
 @Component({
 	standalone: false,

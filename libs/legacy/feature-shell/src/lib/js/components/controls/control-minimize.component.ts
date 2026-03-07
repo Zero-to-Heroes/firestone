@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Inject, Input } from '@angular/core';
 import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { IWindowControlsService, WINDOW_CONTROLS_SERVICE_TOKEN } from '@firestone/shared/framework/core';
-import { CloseMainWindowEvent } from '../../services/mainwindow/store/events/close-main-window-event';
+import { CloseMainWindowEvent } from '@firestone/mainwindow/common';
 
 @Component({
 	standalone: false,

@@ -11,7 +11,7 @@ import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import { BgsPersonalStatsSelectHeroDetailsEvent } from '@legacy-import/src/lib/js/services/mainwindow/store/events/battlegrounds/bgs-personal-stats-select-hero-details-event';
+import { BgsPersonalStatsSelectHeroDetailsEvent } from '@firestone/mainwindow/common';
 import { Observable, shareReplay, switchMap, takeUntil } from 'rxjs';
 
 @Component({

@@ -12,7 +12,7 @@ import { MainWindowStateFacadeService, MainWindowStoreEvent } from '@firestone/m
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ADS_SERVICE_TOKEN, AnalyticsService, IAdsService, waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { SelectDecksViewEvent } from '../../../services/mainwindow/store/events/decktracker/select-decks-view-event';
+import { SelectDecksViewEvent } from '@firestone/mainwindow/common';
 
 @Component({
 	standalone: false,

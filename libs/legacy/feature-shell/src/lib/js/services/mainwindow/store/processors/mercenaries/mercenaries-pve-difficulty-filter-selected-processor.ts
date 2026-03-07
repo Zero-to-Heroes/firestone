@@ -1,6 +1,6 @@
 import { MainWindowState, NavigationState } from '@firestone/mainwindow/common';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { MercenariesPveDifficultyFilterSelectedEvent } from '../../events/mercenaries/mercenaries-pve-difficulty-filter-selected-event';
+import { MercenariesPveDifficultyFilterSelectedEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 
 export class MercenariesPveDifficultyFilterSelectedProcessor implements Processor {

@@ -1,5 +1,5 @@
 import { MainWindowNavigationService, MainWindowState, NavigationState } from '@firestone/mainwindow/common';
-import { ShowMainWindowEvent } from '../events/show-main-window-event';
+import { ShowMainWindowEvent } from '@firestone/mainwindow/common';
 import { Processor } from './processor';
 
 export class ShowMainWindowProcessor implements Processor {

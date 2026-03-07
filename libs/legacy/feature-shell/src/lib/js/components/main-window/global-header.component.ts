@@ -5,8 +5,7 @@ import { waitForReady } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@legacy-import/src/lib/js/services/localization-facade.service';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { NavigationBackEvent } from '../../services/mainwindow/store/events/navigation/navigation-back-event';
-import { NavigationNextEvent } from '../../services/mainwindow/store/events/navigation/navigation-next-event';
+import { NavigationBackEvent, NavigationNextEvent } from '@firestone/mainwindow/common';
 
 @Component({
 	standalone: false,

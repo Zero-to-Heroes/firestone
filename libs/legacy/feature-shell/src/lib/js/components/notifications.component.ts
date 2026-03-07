@@ -19,8 +19,10 @@ import {
 	VerticalPosition,
 } from 'angular2-notifications';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
-import { ShowAchievementDetailsEvent } from '../services/mainwindow/store/events/achievements/show-achievement-details-event';
-import { ShowCardDetailsEvent } from '../services/mainwindow/store/events/collection/show-card-details-event';
+import {
+	ShowAchievementDetailsEvent,
+	ShowCardDetailsEvent,
+} from '@firestone/mainwindow/common';
 
 @Component({
 	standalone: false,

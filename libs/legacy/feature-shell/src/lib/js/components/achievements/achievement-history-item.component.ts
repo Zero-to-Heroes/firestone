@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, HostListener, Input } from '@angula
 import { AchievementHistory } from '@firestone/achievements/common';
 import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
-import { ChangeVisibleAchievementEvent } from '../../services/mainwindow/store/events/achievements/change-visible-achievement-event';
+import { ChangeVisibleAchievementEvent } from '@firestone/mainwindow/common';
 
 @Component({
 	standalone: false,

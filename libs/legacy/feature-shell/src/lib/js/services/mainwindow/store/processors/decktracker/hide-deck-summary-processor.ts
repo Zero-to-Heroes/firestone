@@ -1,6 +1,6 @@
 import { MainWindowState, NavigationState } from '@firestone/mainwindow/common';
 import { ConstructedDeckVersions, PreferencesService } from '@firestone/shared/common/service';
-import { HideDeckSummaryEvent } from '../../events/decktracker/hide-deck-summary-event';
+import { HideDeckSummaryEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 
 export class HideDeckSummaryProcessor implements Processor {

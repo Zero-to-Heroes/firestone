@@ -5,8 +5,10 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { MainWindowState, NavigationState } from '@firestone/mainwindow/common';
 import { Events } from '@firestone/shared/common/service';
 import { ILocalizationService } from '@firestone/shared/framework/core';
-import { BgsPersonalStatsSelectHeroDetailsEvent } from '../../events/battlegrounds/bgs-personal-stats-select-hero-details-event';
-import { BgsShowStrategiesEvent } from '../../events/battlegrounds/bgs-show-strategies-event';
+import {
+	BgsPersonalStatsSelectHeroDetailsEvent,
+	BgsShowStrategiesEvent,
+} from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 import { BgsPersonalStatsSelectHeroDetailsProcessor } from './bgs-personal-stats-select-hero-details-processor';
 

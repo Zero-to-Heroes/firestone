@@ -9,7 +9,7 @@ import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { combineLatest, Observable } from 'rxjs';
-import { SelectAchievementCategoryEvent } from '../../services/mainwindow/store/events/achievements/select-achievement-category-event';
+import { SelectAchievementCategoryEvent } from '@firestone/mainwindow/common';
 
 @Component({
 	standalone: false,

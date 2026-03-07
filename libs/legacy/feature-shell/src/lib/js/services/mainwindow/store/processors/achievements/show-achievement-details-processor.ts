@@ -5,7 +5,7 @@ import {
 } from '@firestone/achievements/common';
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { MainWindowState, NavigationAchievements, NavigationState } from '@firestone/mainwindow/common';
-import { ShowAchievementDetailsEvent } from '../../events/achievements/show-achievement-details-event';
+import { ShowAchievementDetailsEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 
 export class ShowAchievementDetailsProcessor implements Processor {

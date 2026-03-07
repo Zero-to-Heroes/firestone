@@ -32,7 +32,7 @@ import {
 	MercenariesPersonalHeroesSortCriteria,
 	MercenariesPersonalHeroesSortCriteriaType,
 } from '../../../models/mercenaries/personal-heroes-sort-criteria.type';
-import { MercenariesPersonalHeroesSortEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-personal-heroes-sort-event';
+import { MercenariesPersonalHeroesSortEvent } from '@firestone/mainwindow/common';
 import { applySearchStringFilter, buildBounties } from '../../../services/ui-store/mercenaries-ui-helper';
 import { arraysEqual, sortByProperties, sumOnArray } from '../../../services/utils';
 

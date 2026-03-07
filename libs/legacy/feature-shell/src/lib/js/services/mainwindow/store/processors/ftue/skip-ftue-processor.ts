@@ -1,6 +1,6 @@
 import { MainWindowNavigationService, MainWindowState, NavigationState } from '@firestone/mainwindow/common';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { SkipFtueEvent } from '../../events/ftue/skip-ftue-event';
+import { SkipFtueEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 
 export class SkipFtueProcessor implements Processor {

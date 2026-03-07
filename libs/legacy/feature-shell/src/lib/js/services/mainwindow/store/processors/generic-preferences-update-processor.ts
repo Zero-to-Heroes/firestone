@@ -1,6 +1,6 @@
 import { MainWindowState, NavigationState } from '@firestone/mainwindow/common';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { GenericPreferencesUpdateEvent } from '../events/generic-preferences-update-event';
+import { GenericPreferencesUpdateEvent } from '@firestone/mainwindow/common';
 import { Processor } from './processor';
 
 export class GenericPreferencesUpdateProcessor implements Processor {

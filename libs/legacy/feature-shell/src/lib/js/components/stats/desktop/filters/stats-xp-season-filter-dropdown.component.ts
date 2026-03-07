@@ -11,7 +11,7 @@ import { LocalizationFacadeService } from '@legacy-import/src/lib/js/services/lo
 import { allSeasons } from '@legacy-import/src/lib/js/services/stats/xp/xp-tables/xp-computation';
 import { combineLatest, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { StatsXpGraphFilterSelectedEvent } from '../../../../services/mainwindow/store/events/stats/stats-xp-graph-filter-selected-event';
+import { StatsXpGraphFilterSelectedEvent } from '@firestone/mainwindow/common';
 
 @Component({
 	standalone: false,

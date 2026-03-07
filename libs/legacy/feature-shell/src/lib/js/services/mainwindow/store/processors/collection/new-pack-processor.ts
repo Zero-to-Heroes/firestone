@@ -2,7 +2,7 @@ import { CardPackResult, PackResult } from '@firestone-hs/user-packs';
 import { MainWindowState, NavigationState } from '@firestone/mainwindow/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { CollectionBootstrapService } from '../../collection-bootstrap.service';
-import { NewPackEvent } from '../../events/collection/new-pack-event';
+import { NewPackEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 
 export class NewPackProcessor implements Processor {

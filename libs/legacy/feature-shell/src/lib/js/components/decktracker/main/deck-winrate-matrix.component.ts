@@ -4,8 +4,10 @@ import { classesForPieChart, colorForClass, formatClass } from '@firestone/game-
 import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { buildDefaultMatchupStats } from '../../../services/decktracker/main/decks-provider.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { DecktrackerDeleteDeckEvent } from '../../../services/mainwindow/store/events/decktracker/decktracker-delete-deck-event';
-import { DecktrackerResetDeckStatsEvent } from '../../../services/mainwindow/store/events/decktracker/decktracker-reset-deck-stats-event';
+import {
+	DecktrackerDeleteDeckEvent,
+	DecktrackerResetDeckStatsEvent,
+} from '@firestone/mainwindow/common';
 import { InputPieChartData, InputPieChartOptions } from '../../common/chart/input-pie-chart-data';
 
 @Component({

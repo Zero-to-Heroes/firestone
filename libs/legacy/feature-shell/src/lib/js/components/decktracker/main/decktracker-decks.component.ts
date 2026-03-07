@@ -8,7 +8,7 @@ import { waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged } from 'rxjs';
 import { DecksProviderService } from '../../../services/decktracker/main/decks-provider.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { ConstructedNewDeckVersionEvent } from '../../../services/mainwindow/store/events/decktracker/constructed-new-deck-version-event';
+import { ConstructedNewDeckVersionEvent } from '@firestone/mainwindow/common';
 
 @Component({
 	standalone: false,

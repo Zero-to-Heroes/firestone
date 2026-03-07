@@ -8,7 +8,7 @@ import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, filter } from 'rxjs';
 import { DecksProviderService } from '../../../services/decktracker/main/decks-provider.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { ShowReplaysEvent } from '../../../services/mainwindow/store/events/replays/show-replays-event';
+import { ShowReplaysEvent } from '@firestone/mainwindow/common';
 
 @Component({
 	standalone: false,

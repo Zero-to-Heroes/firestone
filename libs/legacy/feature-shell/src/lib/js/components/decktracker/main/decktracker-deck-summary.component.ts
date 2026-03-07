@@ -8,11 +8,13 @@ import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/co
 import { StatGameFormatType } from '@firestone/stats/data-access';
 import { BehaviorSubject, combineLatest, filter, Observable } from 'rxjs';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { ChangeVisibleApplicationEvent } from '../../../services/mainwindow/store/events/change-visible-application-event';
-import { DecktrackerDeleteDeckEvent } from '../../../services/mainwindow/store/events/decktracker/decktracker-delete-deck-event';
-import { HideDeckSummaryEvent } from '../../../services/mainwindow/store/events/decktracker/hide-deck-summary-event';
-import { RestoreDeckSummaryEvent } from '../../../services/mainwindow/store/events/decktracker/restore-deck-summary-event';
-import { SelectDeckDetailsEvent } from '../../../services/mainwindow/store/events/decktracker/select-deck-details-event';
+import {
+	ChangeVisibleApplicationEvent,
+	DecktrackerDeleteDeckEvent,
+	HideDeckSummaryEvent,
+	RestoreDeckSummaryEvent,
+	SelectDeckDetailsEvent,
+} from '@firestone/mainwindow/common';
 
 @Component({
 	standalone: false,

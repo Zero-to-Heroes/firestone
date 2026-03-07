@@ -5,7 +5,7 @@ import {
 	VisualAchievement,
 } from '@firestone/achievements/common';
 import { MainWindowState, NavigationAchievements, NavigationState } from '@firestone/mainwindow/common';
-import { ChangeVisibleAchievementEvent } from '../../events/achievements/change-visible-achievement-event';
+import { ChangeVisibleAchievementEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 
 export class ChangeVisibleAchievementProcessor implements Processor {

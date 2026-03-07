@@ -1,6 +1,6 @@
 import { ConstructedNavigationService } from '@firestone/constructed/common';
 import { MainWindowState, NavigationDecktracker, NavigationState } from '@firestone/mainwindow/common';
-import { SelectDecksViewEvent } from '../../events/decktracker/select-decks-view-event';
+import { SelectDecksViewEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 
 export class SelectDeckViewProcessor implements Processor {

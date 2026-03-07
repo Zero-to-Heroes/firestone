@@ -6,7 +6,7 @@ import {
 	NavigationState,
 } from '@firestone/mainwindow/common';
 import { DecksProviderService } from '../../../../decktracker/main/decks-provider.service';
-import { SelectDeckDetailsEvent } from '../../events/decktracker/select-deck-details-event';
+import { SelectDeckDetailsEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 
 export class SelectDeckDetailsProcessor implements Processor {

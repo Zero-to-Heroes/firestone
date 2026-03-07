@@ -4,7 +4,7 @@ import { Events } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { buildGameStat } from '@firestone/stats/services';
-import { RecomputeGameStatsEvent } from '../../mainwindow/store/events/stats/recompute-game-stats-event';
+import { RecomputeGameStatsEvent } from '@firestone/mainwindow/common';
 import { MainWindowStoreService } from '../../mainwindow/store/main-window-store.service';
 
 @Injectable()

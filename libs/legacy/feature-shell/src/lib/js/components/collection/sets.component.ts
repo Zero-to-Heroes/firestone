@@ -9,7 +9,7 @@ import { Observable, combineLatest } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { SetsManagerService } from '../../services/collection/sets-manager.service';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
-import { GenericPreferencesUpdateEvent } from '../../services/mainwindow/store/events/generic-preferences-update-event';
+import { GenericPreferencesUpdateEvent } from '@firestone/mainwindow/common';
 
 @Component({
 	standalone: false,

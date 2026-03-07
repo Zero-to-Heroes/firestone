@@ -3,7 +3,7 @@ import { GameFormatString } from '@firestone-hs/reference-data';
 import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { ConstructedDeckbuilderFormatSelectedEvent } from '../../../../services/mainwindow/store/events/decktracker/constructed-deckbuilder-format-selected-event';
+import { ConstructedDeckbuilderFormatSelectedEvent } from '@firestone/mainwindow/common';
 
 @Component({
 	standalone: false,

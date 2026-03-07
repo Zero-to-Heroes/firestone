@@ -13,7 +13,7 @@ import {
 	NavigationReplays,
 	NavigationState,
 } from '@firestone/mainwindow/common';
-import { ChangeVisibleApplicationEvent } from '../events/change-visible-application-event';
+import { ChangeVisibleApplicationEvent } from '@firestone/mainwindow/common';
 import { Processor } from './processor';
 
 export class ChangeVisibleApplicationProcessor implements Processor {

@@ -16,7 +16,7 @@ import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
-import { BgsHeroSortFilterSelectedEvent } from '../../../../services/mainwindow/store/events/battlegrounds/bgs-hero-sort-filter-selected-event';
+import { BgsHeroSortFilterSelectedEvent } from '@firestone/mainwindow/common';
 
 @Component({
 	standalone: false,

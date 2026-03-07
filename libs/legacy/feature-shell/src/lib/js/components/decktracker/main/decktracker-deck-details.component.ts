@@ -15,8 +15,10 @@ import { GameStat } from '@firestone/stats/data-access';
 import { Observable, combineLatest } from 'rxjs';
 import { DecksProviderService } from '../../../services/decktracker/main/decks-provider.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { ConstructedEjectDeckVersionEvent } from '../../../services/mainwindow/store/events/decktracker/constructed-eject-deck-version-event';
-import { ConstructedToggleDeckVersionStatsEvent } from '../../../services/mainwindow/store/events/decktracker/constructed-toggle-deck-version-stats-event';
+import {
+	ConstructedEjectDeckVersionEvent,
+	ConstructedToggleDeckVersionStatsEvent,
+} from '@firestone/mainwindow/common';
 
 @Component({
 	standalone: false,

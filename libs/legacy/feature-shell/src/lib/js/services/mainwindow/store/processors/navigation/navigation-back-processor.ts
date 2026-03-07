@@ -13,7 +13,7 @@ import {
 	NavigationState,
 } from '@firestone/mainwindow/common';
 import { SetsManagerService } from '../../../../collection/sets-manager.service';
-import { NavigationBackEvent } from '../../events/navigation/navigation-back-event';
+import { NavigationBackEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 
 export class NavigationBackProcessor implements Processor {

@@ -13,6 +13,84 @@ import { BgsSimulatorControllerService } from '@firestone/battlegrounds/simulato
 import { CollectionNavigationService } from '@firestone/collection/common';
 import { ConstructedNavigationService, ConstructedPersonalDecksService } from '@firestone/constructed/common';
 import {
+	AchievementCompletedEvent,
+	AchievementsFullRefreshEvent,
+	BattlegroundsMainWindowSelectBattleEvent,
+	BgsHeroFilterSelectedEvent,
+	BgsHeroSortFilterSelectedEvent,
+	BgsPersonalStatsSelectHeroDetailsEvent,
+	BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent,
+	BgsPostMatchStatsComputedEvent,
+	BgsShowStrategiesEvent,
+	ChangeDeckFormatFilterEvent,
+	ChangeDeckModeFilterEvent,
+	ChangeDeckRankCategoryFilterEvent,
+	ChangeDeckRankFilterEvent,
+	ChangeDeckRankGroupEvent,
+	ChangeDeckSortEvent,
+	ChangeDeckTimeFilterEvent,
+	ChangeVisibleAchievementEvent,
+	ChangeVisibleApplicationEvent,
+	CloseMainWindowEvent,
+	CloseSocialShareModalEvent,
+	CollectionPacksUpdatedEvent,
+	CollectionRefreshPacksEvent,
+	CollectionSelectCurrentTabEvent,
+	ConstructedDeckbuilderClassSelectedEvent,
+	ConstructedDeckbuilderFormatSelectedEvent,
+	ConstructedDeckbuilderGoBackEvent,
+	ConstructedDeckbuilderImportDeckEvent,
+	ConstructedDeckbuilderSaveDeckEvent,
+	ConstructedEjectDeckVersionEvent,
+	ConstructedNewDeckVersionEvent,
+	ConstructedToggleDeckVersionStatsEvent,
+	DecktrackerDeleteDeckEvent,
+	DecktrackerResetDeckStatsEvent,
+	FilterShownAchievementsEvent,
+	GamesFullClearEvent,
+	GamesFullRefreshEvent,
+	GenericPreferencesUpdateEvent,
+	HideDeckSummaryEvent,
+	LocalizationUpdateEvent,
+	MercenariesAddMercToBackupTeamEvent,
+	MercenariesHeroLevelFilterSelectedEvent,
+	MercenariesHeroSelectedEvent,
+	MercenariesHideTeamSummaryEvent,
+	MercenariesModeFilterSelectedEvent,
+	MercenariesPersonalHeroesSortEvent,
+	MercenariesPveDifficultyFilterSelectedEvent,
+	MercenariesRemoveMercToBackupTeamEvent,
+	MercenariesRestoreTeamSummaryEvent,
+	MercenariesRoleFilterSelectedEvent,
+	MercenariesSelectCategoryEvent,
+	MercenariesStarterFilterSelectedEvent,
+	MercenariesToggleShowHiddenTeamsEvent,
+	NavigationBackEvent,
+	NavigationNextEvent,
+	NewPackEvent,
+	NextFtueEvent,
+	PreviousFtueEvent,
+	RecomputeGameStatsEvent,
+	RestoreDeckSummaryEvent,
+	SearchCardsEvent,
+	SelectAchievementCategoryEvent,
+	SelectBattlegroundsCategoryEvent,
+	SelectCollectionSetEvent,
+	SelectDeckDetailsEvent,
+	SelectDecksViewEvent,
+	ShowAchievementDetailsEvent,
+	ShowCardBackDetailsEvent,
+	ShowCardDetailsEvent,
+	ShowMainWindowEvent,
+	ShowMatchStatsEvent,
+	ShowReplayEvent,
+	ShowReplaysEvent,
+	SkipFtueEvent,
+	StartSocialSharingEvent,
+	StatsXpGraphFilterSelectedEvent,
+	ToggleShowHiddenDecksEvent,
+	TriggerShowMatchStatsEvent,
+	UpdateCardSearchResultsEvent,
 	IMainWindowStoreService,
 	MainWindowNavigationService,
 	MainWindowState,
@@ -40,84 +118,6 @@ import { SetsManagerService } from '../../collection/sets-manager.service';
 import { SetsService } from '@firestone/collection/data-access';
 import { DecksProviderService } from '../../decktracker/main/decks-provider.service';
 import { CollectionBootstrapService } from './collection-bootstrap.service';
-import { AchievementCompletedEvent } from './events/achievements/achievement-completed-event';
-import { AchievementsFullRefreshEvent } from './events/achievements/achievements-full-refresh-event';
-import { ChangeVisibleAchievementEvent } from './events/achievements/change-visible-achievement-event';
-import { FilterShownAchievementsEvent } from './events/achievements/filter-shown-achievements-event';
-import { SelectAchievementCategoryEvent } from './events/achievements/select-achievement-category-event';
-import { ShowAchievementDetailsEvent } from './events/achievements/show-achievement-details-event';
-import { BattlegroundsMainWindowSelectBattleEvent } from './events/battlegrounds/battlegrounds-main-window-select-battle-event';
-import { BgsHeroFilterSelectedEvent } from './events/battlegrounds/bgs-hero-filter-selected-event';
-import { BgsHeroSortFilterSelectedEvent } from './events/battlegrounds/bgs-hero-sort-filter-selected-event';
-import { BgsPersonalStatsSelectHeroDetailsEvent } from './events/battlegrounds/bgs-personal-stats-select-hero-details-event';
-import { BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent } from './events/battlegrounds/bgs-personal-stats-select-hero-details-with-remote-info-event';
-import { BgsPostMatchStatsComputedEvent } from './events/battlegrounds/bgs-post-match-stats-computed-event';
-import { BgsShowStrategiesEvent } from './events/battlegrounds/bgs-show-strategies-event';
-import { SelectBattlegroundsCategoryEvent } from './events/battlegrounds/select-battlegrounds-category-event';
-import { ChangeVisibleApplicationEvent } from './events/change-visible-application-event';
-import { CloseMainWindowEvent } from './events/close-main-window-event';
-import { CollectionPacksUpdatedEvent } from '@firestone/mainwindow/common';
-import { CollectionRefreshPacksEvent } from './events/collection/colection-refresh-packs-event';
-import { CollectionSelectCurrentTabEvent } from './events/collection/collection-select-current-tab-event';
-import { NewPackEvent } from './events/collection/new-pack-event';
-import { SearchCardsEvent } from './events/collection/search-cards-event';
-import { SelectCollectionSetEvent } from './events/collection/select-collection-set-event';
-import { ShowCardBackDetailsEvent } from './events/collection/show-card-back-details-event';
-import { ShowCardDetailsEvent } from './events/collection/show-card-details-event';
-import { UpdateCardSearchResultsEvent } from './events/collection/update-card-search-results-event';
-import { ChangeDeckFormatFilterEvent } from './events/decktracker/change-deck-format-filter-event';
-import { ChangeDeckModeFilterEvent } from './events/decktracker/change-deck-mode-filter-event';
-import { ChangeDeckRankCategoryFilterEvent } from './events/decktracker/change-deck-rank-category-filter-event';
-import { ChangeDeckRankFilterEvent } from './events/decktracker/change-deck-rank-filter-event';
-import { ChangeDeckRankGroupEvent } from './events/decktracker/change-deck-rank-group-event';
-import { ChangeDeckSortEvent } from './events/decktracker/change-deck-sort-event';
-import { ChangeDeckTimeFilterEvent } from './events/decktracker/change-deck-time-filter-event';
-import { ConstructedDeckbuilderClassSelectedEvent } from './events/decktracker/constructed-deckbuilder-class-selected-event';
-import { ConstructedDeckbuilderFormatSelectedEvent } from './events/decktracker/constructed-deckbuilder-format-selected-event';
-import { ConstructedDeckbuilderGoBackEvent } from './events/decktracker/constructed-deckbuilder-go-back-event';
-import { ConstructedDeckbuilderImportDeckEvent } from './events/decktracker/constructed-deckbuilder-import-deck-event';
-import { ConstructedDeckbuilderSaveDeckEvent } from './events/decktracker/constructed-deckbuilder-save-deck-event';
-import { ConstructedEjectDeckVersionEvent } from './events/decktracker/constructed-eject-deck-version-event';
-import { ConstructedNewDeckVersionEvent } from './events/decktracker/constructed-new-deck-version-event';
-import { ConstructedToggleDeckVersionStatsEvent } from './events/decktracker/constructed-toggle-deck-version-stats-event';
-import { DecktrackerDeleteDeckEvent } from './events/decktracker/decktracker-delete-deck-event';
-import { DecktrackerResetDeckStatsEvent } from './events/decktracker/decktracker-reset-deck-stats-event';
-import { HideDeckSummaryEvent } from './events/decktracker/hide-deck-summary-event';
-import { RestoreDeckSummaryEvent } from './events/decktracker/restore-deck-summary-event';
-import { SelectDeckDetailsEvent } from './events/decktracker/select-deck-details-event';
-import { SelectDecksViewEvent } from './events/decktracker/select-decks-view-event';
-import { ToggleShowHiddenDecksEvent } from './events/decktracker/toggle-show-hidden-decks-event';
-import { NextFtueEvent } from './events/ftue/next-ftue-event';
-import { PreviousFtueEvent } from './events/ftue/previous-ftue-event';
-import { SkipFtueEvent } from './events/ftue/skip-ftue-event';
-import { GenericPreferencesUpdateEvent } from './events/generic-preferences-update-event';
-import { LocalizationUpdateEvent } from './events/localization-update-event';
-import { MercenariesAddMercToBackupTeamEvent } from './events/mercenaries/mercenaries-add-merc-to-backup-team-event';
-import { MercenariesHeroLevelFilterSelectedEvent } from './events/mercenaries/mercenaries-hero-level-filter-selected-event';
-import { MercenariesHeroSelectedEvent } from './events/mercenaries/mercenaries-hero-selected-event';
-import { MercenariesHideTeamSummaryEvent } from './events/mercenaries/mercenaries-hide-team-summary-event';
-import { MercenariesModeFilterSelectedEvent } from './events/mercenaries/mercenaries-mode-filter-selected-event';
-import { MercenariesPersonalHeroesSortEvent } from './events/mercenaries/mercenaries-personal-heroes-sort-event';
-import { MercenariesPveDifficultyFilterSelectedEvent } from './events/mercenaries/mercenaries-pve-difficulty-filter-selected-event';
-import { MercenariesRemoveMercToBackupTeamEvent } from './events/mercenaries/mercenaries-remove-merc-to-backup-team-event';
-import { MercenariesRestoreTeamSummaryEvent } from './events/mercenaries/mercenaries-restore-team-summary-event';
-import { MercenariesRoleFilterSelectedEvent } from './events/mercenaries/mercenaries-role-filter-selected-event';
-import { MercenariesSelectCategoryEvent } from './events/mercenaries/mercenaries-select-category-event';
-import { MercenariesStarterFilterSelectedEvent } from './events/mercenaries/mercenaries-starter-filter-selected-event';
-import { MercenariesToggleShowHiddenTeamsEvent } from './events/mercenaries/mercenaries-toggle-show-hidden-teams-event';
-import { NavigationBackEvent } from './events/navigation/navigation-back-event';
-import { NavigationNextEvent } from './events/navigation/navigation-next-event';
-import { ShowMatchStatsEvent } from './events/replays/show-match-stats-event';
-import { ShowReplayEvent } from './events/replays/show-replay-event';
-import { ShowReplaysEvent } from './events/replays/show-replays-event';
-import { TriggerShowMatchStatsEvent } from './events/replays/trigger-show-match-stats-event';
-import { ShowMainWindowEvent } from './events/show-main-window-event';
-import { CloseSocialShareModalEvent } from './events/social/close-social-share-modal-event';
-import { StartSocialSharingEvent } from './events/social/start-social-sharing-event';
-import { GamesFullClearEvent } from './events/stats/game-stats-full-clear-event';
-import { GamesFullRefreshEvent } from './events/stats/game-stats-full-refresh-event';
-import { RecomputeGameStatsEvent } from './events/stats/recompute-game-stats-event';
-import { StatsXpGraphFilterSelectedEvent } from './events/stats/stats-xp-graph-filter-selected-event';
 import { AchievementCompletedProcessor } from './processors/achievements/achievement-completed-processor';
 import { AchievementsFullRefreshProcessor } from './processors/achievements/achievements-full-refresh-processor';
 import {

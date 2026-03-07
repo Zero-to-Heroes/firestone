@@ -7,8 +7,7 @@ import { AbstractSubscriptionComponent } from '@firestone/shared/framework/commo
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameStat, StatGameModeType } from '@firestone/stats/data-access';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { ShowReplayEvent } from '../../../services/mainwindow/store/events/replays/show-replay-event';
-import { TriggerShowMatchStatsEvent } from '../../../services/mainwindow/store/events/replays/trigger-show-match-stats-event';
+import { ShowReplayEvent, TriggerShowMatchStatsEvent } from '@firestone/mainwindow/common';
 import { capitalizeEachWord } from '../../../services/utils';
 import { normalizeCardId } from '../../battlegrounds/post-match/card-utils';
 import { extractTime } from './replay-info-ranked.component';

@@ -1,6 +1,6 @@
 import { MainWindowState, NavigationState } from '@firestone/mainwindow/common';
 import { PackStatsService } from '../../../../../../libs/packs/services/pack-stats.service';
-import { CollectionRefreshPacksEvent } from '../../events/collection/colection-refresh-packs-event';
+import { CollectionRefreshPacksEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 
 export class CollectionRefreshPacksProcessor implements Processor {

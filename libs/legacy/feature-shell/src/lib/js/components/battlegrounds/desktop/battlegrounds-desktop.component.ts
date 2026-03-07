@@ -19,7 +19,7 @@ import {
 } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { SelectBattlegroundsCategoryEvent } from '../../../services/mainwindow/store/events/battlegrounds/select-battlegrounds-category-event';
+import { SelectBattlegroundsCategoryEvent } from '@firestone/mainwindow/common';
 
 @Component({
 	standalone: false,

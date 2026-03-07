@@ -6,7 +6,7 @@ import {
 } from '@firestone/mainwindow/common';
 import { CollectionManager } from '../../../../collection/collection-manager.service';
 import { SetsService } from '@firestone/collection/data-access';
-import { UpdateCardSearchResultsEvent } from '../../events/collection/update-card-search-results-event';
+import { UpdateCardSearchResultsEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 
 export class UpdateCardSearchResultsProcessor implements Processor {

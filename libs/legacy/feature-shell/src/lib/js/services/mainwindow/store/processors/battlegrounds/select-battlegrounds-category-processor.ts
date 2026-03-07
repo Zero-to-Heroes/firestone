@@ -1,7 +1,7 @@
 import { BattlegroundsNavigationService } from '@firestone/battlegrounds/services';
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { MainWindowState, NavigationState } from '@firestone/mainwindow/common';
-import { SelectBattlegroundsCategoryEvent } from '../../events/battlegrounds/select-battlegrounds-category-event';
+import { SelectBattlegroundsCategoryEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 
 export class SelectBattlegroundsCategoryProcessor implements Processor {

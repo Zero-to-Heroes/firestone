@@ -1,6 +1,6 @@
 import { MainWindowNavigationService, MainWindowState, NavigationState } from '@firestone/mainwindow/common';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { ShowReplaysEvent } from '../../events/replays/show-replays-event';
+import { ShowReplaysEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 
 export class ShowReplaysProcessor implements Processor {

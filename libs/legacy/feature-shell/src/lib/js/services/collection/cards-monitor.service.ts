@@ -11,7 +11,7 @@ import { BehaviorSubject } from 'rxjs';
 import { debounceTime, filter, tap } from 'rxjs/operators';
 import { CollectionCardType } from '@firestone-hs/user-packs';
 import { InternalCardInfo } from '@firestone/collection/data-access';
-import { NewPackEvent } from '../mainwindow/store/events/collection/new-pack-event';
+import { NewPackEvent } from '@firestone/mainwindow/common';
 import { groupByFunction } from '../utils';
 import { CardNotificationsService } from './card-notifications.service';
 import { CollectionManager } from './collection-manager.service';

@@ -7,7 +7,7 @@ import {
 } from '@firestone/mainwindow/common';
 import { CardBack } from '@firestone/memory';
 import { CollectionManager } from '../../../../collection/collection-manager.service';
-import { ShowCardBackDetailsEvent } from '../../events/collection/show-card-back-details-event';
+import { ShowCardBackDetailsEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 
 export class ShowCardBackDetailsProcessor implements Processor {

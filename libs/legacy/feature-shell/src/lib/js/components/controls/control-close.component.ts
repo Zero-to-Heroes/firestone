@@ -6,7 +6,7 @@ import {
 	OverwolfService,
 	WINDOW_CONTROLS_SERVICE_TOKEN,
 } from '@firestone/shared/framework/core';
-import { CloseMainWindowEvent } from '../../services/mainwindow/store/events/close-main-window-event';
+import { CloseMainWindowEvent } from '@firestone/mainwindow/common';
 import { isWindowClosed } from '../../services/utils';
 
 @Component({

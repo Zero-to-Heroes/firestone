@@ -7,7 +7,7 @@ import { CardsFacadeService, ILocalizationService } from '@firestone/shared/fram
 import { MainWindowState, MatchDetail, NavigationReplays, NavigationState } from '@firestone/mainwindow/common';
 import { GameStatsLoaderService } from '@firestone/stats/data-access';
 import { BgsPerfectGamesService } from '@firestone/battlegrounds/data-access';
-import { ShowMatchStatsEvent } from '../../events/replays/show-match-stats-event';
+import { ShowMatchStatsEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 
 export class ShowMatchStatsProcessor implements Processor {

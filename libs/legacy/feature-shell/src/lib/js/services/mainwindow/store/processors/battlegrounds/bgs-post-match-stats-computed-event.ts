@@ -1,6 +1,6 @@
 import { GameStatsLoaderService } from '@firestone/stats/data-access';
 import { MainWindowState, NavigationState } from '@firestone/mainwindow/common';
-import { BgsPostMatchStatsComputedEvent } from '../../events/battlegrounds/bgs-post-match-stats-computed-event';
+import { BgsPostMatchStatsComputedEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 
 export class BgsPostMatchStatsComputedProcessor implements Processor {

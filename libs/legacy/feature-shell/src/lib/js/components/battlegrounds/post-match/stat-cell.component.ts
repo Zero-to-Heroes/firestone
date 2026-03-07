@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { ShowReplayEvent } from '../../../services/mainwindow/store/events/replays/show-replay-event';
+import { ShowReplayEvent } from '@firestone/mainwindow/common';
 
 @Component({
 	standalone: false,

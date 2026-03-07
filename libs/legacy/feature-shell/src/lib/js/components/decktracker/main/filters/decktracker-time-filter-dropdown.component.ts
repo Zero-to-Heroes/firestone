@@ -5,7 +5,7 @@ import { DeckTimeFilterType, PatchesConfigService } from '@firestone/shared/comm
 import { IOption } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
-import { ChangeDeckTimeFilterEvent } from '@services/mainwindow/store/events/decktracker/change-deck-time-filter-event';
+import { ChangeDeckTimeFilterEvent } from '@firestone/mainwindow/common';
 import { formatPatch } from '@services/utils';
 import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';

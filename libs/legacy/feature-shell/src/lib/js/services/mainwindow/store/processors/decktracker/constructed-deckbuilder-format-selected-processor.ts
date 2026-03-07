@@ -1,6 +1,6 @@
 import { MainWindowState, NavigationState } from '@firestone/mainwindow/common';
 import { Processor } from '@services/mainwindow/store/processors/processor';
-import { ConstructedDeckbuilderFormatSelectedEvent } from '../../events/decktracker/constructed-deckbuilder-format-selected-event';
+import { ConstructedDeckbuilderFormatSelectedEvent } from '@firestone/mainwindow/common';
 
 export class ConstructedDeckbuilderFormatSelectedProcessor implements Processor {
 	public async process(

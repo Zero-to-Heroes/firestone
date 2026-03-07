@@ -1,5 +1,5 @@
 import { MainWindowState, NavigationMercenaries, NavigationState } from '@firestone/mainwindow/common';
-import { MercenariesSelectCategoryEvent } from '../../events/mercenaries/mercenaries-select-category-event';
+import { MercenariesSelectCategoryEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 
 export class MercenariesSelectCategoryProcessor implements Processor {

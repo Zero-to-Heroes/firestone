@@ -3,7 +3,7 @@ import { formatFormat } from '@firestone-hs/reference-data';
 import { MainWindowState, NavigationState } from '@firestone/mainwindow/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Processor } from '@services/mainwindow/store/processors/processor';
-import { ConstructedDeckbuilderImportDeckEvent } from '../../events/decktracker/constructed-deckbuilder-import-deck-event';
+import { ConstructedDeckbuilderImportDeckEvent } from '@firestone/mainwindow/common';
 
 export class ConstructedDeckbuilderImportDeckProcessor implements Processor {
 	constructor(private readonly allCards: CardsFacadeService) {}

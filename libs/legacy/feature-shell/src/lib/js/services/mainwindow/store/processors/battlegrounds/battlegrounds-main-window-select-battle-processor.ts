@@ -4,7 +4,7 @@ import { MainWindowNavigationService, MainWindowState, NavigationState } from '@
 import { PreferencesService } from '@firestone/shared/common/service';
 import { IWindowHandlerService, waitForReady } from '@firestone/shared/framework/core';
 import { ILocalizationService } from '@firestone/shared/framework/core';
-import { BattlegroundsMainWindowSelectBattleEvent } from '../../events/battlegrounds/battlegrounds-main-window-select-battle-event';
+import { BattlegroundsMainWindowSelectBattleEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 
 export class BattlegroundsMainWindowSelectBattleProcessor implements Processor {

@@ -1,6 +1,6 @@
 import { DeckFilters, MainWindowState, NavigationState } from '@firestone/mainwindow/common';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { ChangeDeckSortEvent } from '../../events/decktracker/change-deck-sort-event';
+import { ChangeDeckSortEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 
 export class ChangeDeckSortProcessor implements Processor {

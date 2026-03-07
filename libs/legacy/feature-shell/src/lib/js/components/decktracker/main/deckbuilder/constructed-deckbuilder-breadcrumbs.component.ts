@@ -4,8 +4,10 @@ import { AbstractSubscriptionComponent } from '@firestone/shared/framework/commo
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable } from 'rxjs';
-import { ConstructedDeckbuilderGoBackEvent } from '../../../../services/mainwindow/store/events/decktracker/constructed-deckbuilder-go-back-event';
-import { ConstructedDeckbuilderImportDeckEvent } from '../../../../services/mainwindow/store/events/decktracker/constructed-deckbuilder-import-deck-event';
+import {
+	ConstructedDeckbuilderGoBackEvent,
+	ConstructedDeckbuilderImportDeckEvent,
+} from '@firestone/mainwindow/common';
 import { parseClipboardContent } from '../../import-deckstring.component';
 
 export const DEFAULT_CARD_WIDTH = 170;

@@ -1,6 +1,6 @@
 import { MainWindowState, NavigationState } from '@firestone/mainwindow/common';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { MercenariesRoleFilterSelectedEvent } from '../../events/mercenaries/mercenaries-role-filter-selected-event';
+import { MercenariesRoleFilterSelectedEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 
 export class MercenariesRoleFilterSelectedProcessor implements Processor {

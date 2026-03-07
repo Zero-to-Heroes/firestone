@@ -4,7 +4,7 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { ILocalizationService } from '@firestone/shared/framework/core';
 import { MainWindowState, NavigationState } from '@firestone/mainwindow/common';
 import { Events } from '@firestone/shared/common/service';
-import { BgsPersonalStatsSelectHeroDetailsEvent } from '../../events/battlegrounds/bgs-personal-stats-select-hero-details-event';
+import { BgsPersonalStatsSelectHeroDetailsEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 
 export class BgsPersonalStatsSelectHeroDetailsProcessor implements Processor {

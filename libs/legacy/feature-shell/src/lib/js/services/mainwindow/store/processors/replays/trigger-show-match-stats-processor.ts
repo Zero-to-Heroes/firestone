@@ -6,7 +6,7 @@ import { MainWindowState, MatchDetail, NavigationReplays, NavigationState } from
 import { GameStatsLoaderService } from '@firestone/stats/data-access';
 import { BgsPerfectGamesService } from '@firestone/battlegrounds/data-access';
 import { BgsRunStatsService } from '../../../../battlegrounds/bgs-run-stats.service';
-import { TriggerShowMatchStatsEvent } from '../../events/replays/trigger-show-match-stats-event';
+import { TriggerShowMatchStatsEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 
 export class TriggerShowMatchStatsProcessor implements Processor {

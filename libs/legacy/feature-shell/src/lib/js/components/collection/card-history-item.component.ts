@@ -17,7 +17,7 @@ import { BehaviorSubject, combineLatest } from 'rxjs';
 import { CardHistory } from '../../models/card-history';
 import { cardPremiumToCardType } from '../../services/collection/cards-monitor.service';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
-import { ShowCardDetailsEvent } from '../../services/mainwindow/store/events/collection/show-card-details-event';
+import { ShowCardDetailsEvent } from '@firestone/mainwindow/common';
 
 @Component({
 	standalone: false,

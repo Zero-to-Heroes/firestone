@@ -1,6 +1,6 @@
 import { AchievementHistoryService } from '@firestone/achievements/common';
 import { MainWindowState, NavigationState } from '@firestone/mainwindow/common';
-import { AchievementCompletedEvent } from '../../events/achievements/achievement-completed-event';
+import { AchievementCompletedEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 
 export class AchievementCompletedProcessor implements Processor {

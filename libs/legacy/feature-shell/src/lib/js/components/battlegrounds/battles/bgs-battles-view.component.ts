@@ -14,7 +14,7 @@ import { AbstractSubscriptionComponent, sleep } from '@firestone/shared/framewor
 import { AnalyticsService, OwUtilsService } from '@firestone/shared/framework/core';
 import domtoimage from 'dom-to-image-more';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { BattlegroundsMainWindowSelectBattleEvent } from '../../../services/mainwindow/store/events/battlegrounds/battlegrounds-main-window-select-battle-event';
+import { BattlegroundsMainWindowSelectBattleEvent } from '@firestone/mainwindow/common';
 
 @Component({
 	standalone: false,

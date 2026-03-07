@@ -4,8 +4,10 @@ import { getHeroRole, normalizeMercenariesCardId } from '@firestone/mercenaries/
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { MercenariesHideTeamSummaryEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-hide-team-summary-event';
-import { MercenariesRestoreTeamSummaryEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-restore-team-summary-event';
+import {
+	MercenariesHideTeamSummaryEvent,
+	MercenariesRestoreTeamSummaryEvent,
+} from '@firestone/mainwindow/common';
 import { groupByFunction } from '../../../services/utils';
 import { MercenaryPersonalTeamInfo } from './mercenary-info';
 

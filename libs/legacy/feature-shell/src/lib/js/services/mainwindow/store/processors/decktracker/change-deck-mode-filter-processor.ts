@@ -1,5 +1,5 @@
 import { MainWindowState, NavigationState } from '@firestone/mainwindow/common';
-import { ChangeDeckModeFilterEvent } from '../../events/decktracker/change-deck-mode-filter-event';
+import { ChangeDeckModeFilterEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 
 export class ChangeDeckModeFilterProcessor implements Processor {

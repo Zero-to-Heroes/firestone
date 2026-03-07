@@ -1,5 +1,5 @@
 import { MainWindowState, NavigationAchievements, NavigationState } from '@firestone/mainwindow/common';
-import { CloseSocialShareModalEvent } from '../../events/social/close-social-share-modal-event';
+import { CloseSocialShareModalEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 
 export class CloseSocialShareModalProcessor implements Processor {

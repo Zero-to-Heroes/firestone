@@ -11,7 +11,7 @@ import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { Events, GameStatusService, PreferencesService } from '@firestone/shared/common/service';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { combineLatest, distinctUntilChanged, filter, map, take } from 'rxjs';
-import { AchievementCompletedEvent } from '../mainwindow/store/events/achievements/achievement-completed-event';
+import { AchievementCompletedEvent } from '@firestone/mainwindow/common';
 import { ProcessingQueue } from '../processing-queue.service';
 import { Challenge } from './achievements/challenges/challenge';
 import { ChallengeBuilderService } from './achievements/challenges/challenge-builder.service';

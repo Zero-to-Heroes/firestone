@@ -3,7 +3,7 @@ import { FormControl } from '@angular/forms';
 import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { FilterShownAchievementsEvent } from '../../services/mainwindow/store/events/achievements/filter-shown-achievements-event';
+import { FilterShownAchievementsEvent } from '@firestone/mainwindow/common';
 
 @Component({
 	standalone: false,

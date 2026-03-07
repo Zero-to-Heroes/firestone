@@ -1,6 +1,6 @@
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { MainWindowState, NavigationState } from '@firestone/mainwindow/common';
-import { CloseMainWindowEvent } from '../events/close-main-window-event';
+import { CloseMainWindowEvent } from '@firestone/mainwindow/common';
 import { Processor } from './processor';
 
 export class CloseMainWindowProcessor implements Processor {

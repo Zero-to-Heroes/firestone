@@ -1,6 +1,6 @@
 import { MainWindowState, NavigationState } from '@firestone/mainwindow/common';
 import { Processor } from '@services/mainwindow/store/processors/processor';
-import { ConstructedToggleDeckVersionStatsEvent } from '../../events/decktracker/constructed-toggle-deck-version-stats-event';
+import { ConstructedToggleDeckVersionStatsEvent } from '@firestone/mainwindow/common';
 
 export class ConstructedToggleDeckVersionStatsProcessor implements Processor {
 	public async process(

@@ -12,7 +12,7 @@ import { AbstractSubscriptionComponent } from '@firestone/shared/framework/commo
 import { ADS_SERVICE_TOKEN, IAdsService, waitForReady } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable } from 'rxjs';
-import { MercenariesSelectCategoryEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-select-category-event';
+import { MercenariesSelectCategoryEvent } from '@firestone/mainwindow/common';
 
 @Component({
 	standalone: false,

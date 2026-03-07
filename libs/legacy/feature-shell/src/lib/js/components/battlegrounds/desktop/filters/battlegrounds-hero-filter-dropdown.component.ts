@@ -8,7 +8,7 @@ import { CardsFacadeService, OverwolfService, waitForReady } from '@firestone/sh
 import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
-import { BgsHeroFilterSelectedEvent } from '../../../../services/mainwindow/store/events/battlegrounds/bgs-hero-filter-selected-event';
+import { BgsHeroFilterSelectedEvent } from '@firestone/mainwindow/common';
 
 @Component({
 	standalone: false,

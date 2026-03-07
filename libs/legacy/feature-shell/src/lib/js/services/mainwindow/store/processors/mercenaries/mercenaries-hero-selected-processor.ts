@@ -1,6 +1,6 @@
 import { MainWindowState, NavigationState } from '@firestone/mainwindow/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { MercenariesHeroSelectedEvent } from '../../events/mercenaries/mercenaries-hero-selected-event';
+import { MercenariesHeroSelectedEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 
 export class MercenariesHeroSelectedProcessor implements Processor {

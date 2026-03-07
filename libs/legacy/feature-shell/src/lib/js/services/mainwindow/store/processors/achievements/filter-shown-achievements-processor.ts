@@ -11,7 +11,7 @@ import {
 	NavigationAchievements,
 	NavigationState,
 } from '@firestone/mainwindow/common';
-import { FilterShownAchievementsEvent } from '../../events/achievements/filter-shown-achievements-event';
+import { FilterShownAchievementsEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 
 export class FilterShownAchievementsProcessor implements Processor {

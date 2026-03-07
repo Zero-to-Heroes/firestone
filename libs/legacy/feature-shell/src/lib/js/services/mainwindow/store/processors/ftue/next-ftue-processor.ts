@@ -1,6 +1,6 @@
 import { MainWindowNavigationService, MainWindowState, NavigationState } from '@firestone/mainwindow/common';
 import { CurrentAppType, PreferencesService } from '@firestone/shared/common/service';
-import { NextFtueEvent } from '../../events/ftue/next-ftue-event';
+import { NextFtueEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 
 export class NextFtueProcessor implements Processor {

@@ -1,6 +1,6 @@
 import { MainWindowState, NavigationState } from '@firestone/mainwindow/common';
 import { GameStatsLoaderService } from '@firestone/stats/data-access';
-import { RecomputeGameStatsEvent } from '../../events/stats/recompute-game-stats-event';
+import { RecomputeGameStatsEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 
 export class RecomputeGameStatsProcessor implements Processor {

@@ -6,12 +6,14 @@ import { buildBgsRunStatsInput } from '@firestone/battlegrounds/services';
 import { BgsGame, BgsPostMatchStats, BgsPostMatchStatsForReview, RealTimeStatsState } from '@firestone/game-state';
 import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { Events } from '@firestone/shared/common/service';
+import { sleep } from '@firestone/shared/framework/common';
 import { ApiRunner, CardsFacadeService, UserService } from '@firestone/shared/framework/core';
 import { GameForUpload, GameStatsProviderService } from '@firestone/stats/services';
-import { BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent } from '../mainwindow/store/events/battlegrounds/bgs-personal-stats-select-hero-details-with-remote-info-event';
-import { BgsPostMatchStatsComputedEvent } from '../mainwindow/store/events/battlegrounds/bgs-post-match-stats-computed-event';
-import { ShowMatchStatsEvent } from '../mainwindow/store/events/replays/show-match-stats-event';
-import { sleep } from '../utils';
+import {
+	BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent,
+	BgsPostMatchStatsComputedEvent,
+	ShowMatchStatsEvent,
+} from '@firestone/mainwindow/common';
 
 @Injectable()
 export class BgsRunStatsService {

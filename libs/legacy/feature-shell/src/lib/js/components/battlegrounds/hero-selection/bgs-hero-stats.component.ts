@@ -13,7 +13,7 @@ import { AbstractSubscriptionComponent } from '@firestone/shared/framework/commo
 import { waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { BgsShowStrategiesEvent } from '../../../services/mainwindow/store/events/battlegrounds/bgs-show-strategies-event';
+import { BgsShowStrategiesEvent } from '@firestone/mainwindow/common';
 import { BgsHeroStrategyTipsTooltipComponent } from './bgs-hero-strategy-tips-tooltip.component';
 
 @Component({

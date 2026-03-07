@@ -2,18 +2,16 @@ import { Inject, Injectable } from '@angular/core';
 import { BoosterType, CardIds, getDefaultBoosterIdForSetId } from '@firestone-hs/reference-data';
 import { CardPackResult, PackCardInfo, PackResult } from '@firestone-hs/user-packs';
 import { ICollectionPackService } from '@firestone/collection/common';
-import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
+import { InternalCardInfo, SetsService } from '@firestone/collection/data-access';
+import { CollectionPacksUpdatedEvent, MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { DiskCacheService, Events } from '@firestone/shared/common/service';
 import {
 	ApiRunner,
 	COLLECTION_PACK_STATS,
 	DATABASE_SERVICE_TOKEN,
 	IDatabaseService,
-	OverwolfService,
+	UserService,
 } from '@firestone/shared/framework/core';
-import { InternalCardInfo } from '@firestone/collection/data-access';
-import { SetsService } from '@firestone/collection/data-access';
-import { CollectionPacksUpdatedEvent } from '@firestone/mainwindow/common';
 
 const PACKS_UPDATE_URL = 'https://zbfdquy6qvpmragkcwjzpr3v5a0bcgfn.lambda-url.us-west-2.on.aws/';
 const PACKS_RETRIEVE_URL = 'https://dwfrvwcatnkfohkhcksuxweoii0mtgch.lambda-url.us-west-2.on.aws/';
@@ -23,7 +21,7 @@ export class PackStatsService implements ICollectionPackService {
 	constructor(
 		private readonly events: Events,
 		private readonly allCards: SetsService,
-		private readonly ow: OverwolfService,
+		private readonly userService: UserService,
 		private readonly api: ApiRunner,
 		private readonly diskCache: DiskCacheService,
 		@Inject(DATABASE_SERVICE_TOKEN) private readonly indexedDb: IDatabaseService,
@@ -66,7 +64,7 @@ export class PackStatsService implements ICollectionPackService {
 	}
 
 	private async loadPacksFromRemote(): Promise<readonly PackResult[]> {
-		const user = await this.ow.getCurrentUser();
+		const user = await this.userService.getCurrentUser();
 		const input = {
 			userId: user.userId,
 			userName: user.username,
@@ -130,7 +128,7 @@ export class PackStatsService implements ICollectionPackService {
 			return;
 		}
 		const boosterId: BoosterType = event.data[2];
-		const user = await this.ow.getCurrentUser();
+		const user = await this.userService.getCurrentUser();
 		const statEvent = {
 			creationDate: new Date(),
 			setId: setId,

@@ -6,7 +6,7 @@ import { AbstractSubscriptionComponent } from '@firestone/shared/framework/commo
 import { waitForReady } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { Observable } from 'rxjs';
-import { ConstructedDeckbuilderClassSelectedEvent } from '../../../../services/mainwindow/store/events/decktracker/constructed-deckbuilder-class-selected-event';
+import { ConstructedDeckbuilderClassSelectedEvent } from '@firestone/mainwindow/common';
 
 @Component({
 	standalone: false,

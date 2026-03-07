@@ -1,6 +1,6 @@
 import { DeckFilters, DecktrackerState, MainWindowState, NavigationState } from '@firestone/mainwindow/common';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { ChangeDeckTimeFilterEvent } from '../../events/decktracker/change-deck-time-filter-event';
+import { ChangeDeckTimeFilterEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 
 export class ChangeDeckTimeFilterProcessor implements Processor {

@@ -1,6 +1,6 @@
 import { DeckFilters, DecktrackerState, MainWindowState, NavigationState } from '@firestone/mainwindow/common';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { ChangeDeckRankFilterEvent } from '../../events/decktracker/change-deck-rank-filter-event';
+import { ChangeDeckRankFilterEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 
 export class ChangeDeckRankFilterProcessor implements Processor {

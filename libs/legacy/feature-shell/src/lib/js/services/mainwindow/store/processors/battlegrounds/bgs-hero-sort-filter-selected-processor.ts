@@ -1,6 +1,6 @@
 import { PreferencesService } from '@firestone/shared/common/service';
 import { MainWindowState, NavigationState } from '@firestone/mainwindow/common';
-import { BgsHeroSortFilterSelectedEvent } from '../../events/battlegrounds/bgs-hero-sort-filter-selected-event';
+import { BgsHeroSortFilterSelectedEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 
 export class BgsHeroSortFilterSelectedProcessor implements Processor {

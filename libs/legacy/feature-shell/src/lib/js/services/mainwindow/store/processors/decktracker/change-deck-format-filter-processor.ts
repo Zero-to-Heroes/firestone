@@ -1,6 +1,6 @@
 import { DeckFilters, DecktrackerState, MainWindowState, NavigationState } from '@firestone/mainwindow/common';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { ChangeDeckFormatFilterEvent } from '../../events/decktracker/change-deck-format-filter-event';
+import { ChangeDeckFormatFilterEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 
 export class ChangeDeckFormatFilterProcessor implements Processor {

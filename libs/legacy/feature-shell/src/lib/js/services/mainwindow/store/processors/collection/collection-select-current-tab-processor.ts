@@ -5,7 +5,7 @@ import {
 	NavigationCollection,
 	NavigationState,
 } from '@firestone/mainwindow/common';
-import { CollectionSelectCurrentTabEvent } from '../../events/collection/collection-select-current-tab-event';
+import { CollectionSelectCurrentTabEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 
 export class CollectionSelectCurrentTabProcessor implements Processor {

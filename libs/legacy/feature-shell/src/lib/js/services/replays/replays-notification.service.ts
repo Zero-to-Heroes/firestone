@@ -10,7 +10,7 @@ import { BgsInGameWindowNavigationService } from '@firestone/battlegrounds/servi
 import { isBattlegrounds } from '@firestone/game-state';
 import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { GameStatsLoaderService } from '@firestone/stats/data-access';
-import { ShowReplayEvent } from '../mainwindow/store/events/replays/show-replay-event';
+import { ShowReplayEvent } from '@firestone/mainwindow/common';
 
 @Injectable()
 export class ReplaysNotificationService {

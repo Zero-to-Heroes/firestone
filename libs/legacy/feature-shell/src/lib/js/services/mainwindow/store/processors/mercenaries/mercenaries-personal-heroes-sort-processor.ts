@@ -4,7 +4,7 @@ import {
 	MercenariesPersonalHeroesSortCriteria,
 	MercenariesPersonalHeroesSortCriteriaDirection,
 } from '../../../../../models/mercenaries/personal-heroes-sort-criteria.type';
-import { MercenariesPersonalHeroesSortEvent } from '../../events/mercenaries/mercenaries-personal-heroes-sort-event';
+import { MercenariesPersonalHeroesSortEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 
 export class MercenariesPersonalHeroesSortProcessor implements Processor {

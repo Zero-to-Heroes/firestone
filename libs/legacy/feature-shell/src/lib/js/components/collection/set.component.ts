@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Set } from '@firestone/collection/common';
 import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
-import { SelectCollectionSetEvent } from '../../services/mainwindow/store/events/collection/select-collection-set-event';
+import { SelectCollectionSetEvent } from '@firestone/mainwindow/common';
 
 @Component({
 	standalone: false,

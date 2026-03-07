@@ -1,7 +1,7 @@
 import { ConstructedDeckVersions, MainWindowState, NavigationState } from '@firestone/mainwindow/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { Processor } from '@services/mainwindow/store/processors/processor';
-import { ConstructedNewDeckVersionEvent } from '../../events/decktracker/constructed-new-deck-version-event';
+import { ConstructedNewDeckVersionEvent } from '@firestone/mainwindow/common';
 
 export class ConstructedNewDeckVersionProcessor implements Processor {
 	constructor(private readonly prefs: PreferencesService) {}

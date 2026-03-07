@@ -27,7 +27,7 @@ import {
 	shareReplay,
 	takeUntil,
 } from 'rxjs';
-import { BgsHeroSortFilterType } from './bgs-hero-sort-filter.type';
+import { BgsHeroSortFilterType } from '@firestone/battlegrounds/services';
 
 @Component({
 	standalone: false,

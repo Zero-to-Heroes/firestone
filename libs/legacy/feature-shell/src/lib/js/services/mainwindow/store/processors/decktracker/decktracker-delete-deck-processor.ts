@@ -3,7 +3,7 @@ import { PreferencesService } from '@firestone/shared/common/service';
 
 import { MainWindowState, NavigationState } from '@firestone/mainwindow/common';
 import { GameStatsLoaderService } from '@firestone/stats/data-access';
-import { DecktrackerDeleteDeckEvent } from '../../events/decktracker/decktracker-delete-deck-event';
+import { DecktrackerDeleteDeckEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 
 export class DecktrackerDeleteDeckProcessor implements Processor {

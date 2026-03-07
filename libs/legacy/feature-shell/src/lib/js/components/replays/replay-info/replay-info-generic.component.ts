@@ -17,7 +17,7 @@ import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework
 import { GameStat, StatGameModeType } from '@firestone/stats/data-access';
 import { Subscription } from 'rxjs';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { ShowReplayEvent } from '../../../services/mainwindow/store/events/replays/show-replay-event';
+import { ShowReplayEvent } from '@firestone/mainwindow/common';
 import { capitalizeEachWord } from '../../../services/utils';
 import { extractTime } from './replay-info-ranked.component';
 

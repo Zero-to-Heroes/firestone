@@ -1,6 +1,6 @@
 import { MainWindowState, NavigationState } from '@firestone/mainwindow/common';
 import { ConstructedDeckVersions, PreferencesService } from '@firestone/shared/common/service';
-import { RestoreDeckSummaryEvent } from '../../events/decktracker/restore-deck-summary-event';
+import { RestoreDeckSummaryEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 
 export class RestoreDeckSummaryProcessor implements Processor {

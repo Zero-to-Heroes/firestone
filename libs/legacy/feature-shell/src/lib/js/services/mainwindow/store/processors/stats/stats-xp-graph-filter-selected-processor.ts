@@ -1,6 +1,6 @@
 import { MainWindowState, NavigationState, StatsState } from '@firestone/mainwindow/common';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { StatsXpGraphFilterSelectedEvent } from '../../events/stats/stats-xp-graph-filter-selected-event';
+import { StatsXpGraphFilterSelectedEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 
 export class StatsXpGraphFilterSelectedProcessor implements Processor {

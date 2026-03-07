@@ -8,7 +8,7 @@ import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
-import { ChangeDeckRankGroupEvent } from '../../../../services/mainwindow/store/events/decktracker/change-deck-rank-group-event';
+import { ChangeDeckRankGroupEvent } from '@firestone/mainwindow/common';
 
 @Component({
 	standalone: false,

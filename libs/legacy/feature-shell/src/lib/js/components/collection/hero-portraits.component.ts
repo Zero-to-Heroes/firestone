@@ -22,7 +22,7 @@ import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/co
 import { Observable, combineLatest, distinctUntilChanged } from 'rxjs';
 import { CollectionPortraitCategoryFilter, CollectionPortraitOwnedFilter } from '../../models/collection/filter-types';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
-import { ShowCardDetailsEvent } from '../../services/mainwindow/store/events/collection/show-card-details-event';
+import { ShowCardDetailsEvent } from '@firestone/mainwindow/common';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { sortByProperties } from '../../services/utils';
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
