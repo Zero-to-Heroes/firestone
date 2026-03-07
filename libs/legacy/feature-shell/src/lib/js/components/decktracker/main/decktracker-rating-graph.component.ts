@@ -1,7 +1,13 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { ladderIntRankToString, ladderRankToInt } from '@firestone/game-state';
-import { DeckRankingCategoryType, DeckTimeFilterType, MmrGroupFilterType } from '@firestone/mainwindow/common';
-import { PatchInfo, PatchesConfigService, PreferencesService } from '@firestone/shared/common/service';
+import {
+	DeckRankingCategoryType,
+	DeckTimeFilterType,
+	MmrGroupFilterType,
+	PatchInfo,
+	PatchesConfigService,
+	PreferencesService,
+} from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { GameStat, StatGameFormatType } from '@firestone/stats/data-access';

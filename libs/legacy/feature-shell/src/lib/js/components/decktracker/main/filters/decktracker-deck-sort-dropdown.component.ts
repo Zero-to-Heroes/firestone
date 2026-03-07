@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { ConstructedNavigationService } from '@firestone/constructed/common';
-import { DeckSortType, MainWindowStateFacadeService } from '@firestone/mainwindow/common';
-import { PatchesConfigService, PreferencesService } from '@firestone/shared/common/service';
+import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
+import { DeckSortType, PatchesConfigService, PreferencesService } from '@firestone/shared/common/service';
 import { IOption } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';

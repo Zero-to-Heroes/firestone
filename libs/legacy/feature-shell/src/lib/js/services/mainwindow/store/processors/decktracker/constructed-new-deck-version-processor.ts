@@ -1,5 +1,5 @@
-import { ConstructedDeckVersions, MainWindowState, NavigationState } from '@firestone/mainwindow/common';
-import { PreferencesService } from '@firestone/shared/common/service';
+import { MainWindowState, NavigationState } from '@firestone/mainwindow/common';
+import { ConstructedDeckVersions, PreferencesService } from '@firestone/shared/common/service';
 import { Processor } from '@services/mainwindow/store/processors/processor';
 import { ConstructedNewDeckVersionEvent } from '@firestone/mainwindow/common';
 

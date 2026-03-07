@@ -1,5 +1,5 @@
 import { MainWindowStoreEvent } from '../main-window-store-event';
-import { DeckSortType } from '../../../model/decktracker/deck-sort.type';
+import { DeckSortType } from '@firestone/shared/common/service';
 
 export class ChangeDeckSortEvent implements MainWindowStoreEvent {
 	constructor(public readonly sort: DeckSortType) {}

@@ -1,5 +1,5 @@
-import { DeckFilters, MainWindowState, NavigationState } from '@firestone/mainwindow/common';
-import { PreferencesService } from '@firestone/shared/common/service';
+import { MainWindowState, NavigationState } from '@firestone/mainwindow/common';
+import { DeckFilters, PreferencesService } from '@firestone/shared/common/service';
 import { ChangeDeckTimeFilterEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 

@@ -8,7 +8,7 @@ import { GameStatsProviderService } from '@firestone/stats/services';
 import { ChartData } from 'chart.js';
 import { Observable, combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
-import { MmrGroupFilterType } from '@firestone/mainwindow/common';
+import { MmrGroupFilterType } from '@firestone/shared/common/service';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { addDaysToDate, daysBetweenDates, formatDate, groupByFunction } from '../../../../services/utils';
 

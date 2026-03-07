@@ -5,14 +5,18 @@ import { GameFormat } from '@firestone-hs/reference-data';
 import { ConstructedPersonalDecksService, DeckSummary, DeckSummaryVersion } from '@firestone/constructed/common';
 import { classes } from '@firestone/game-state';
 import {
+	MainWindowStateFacadeService,
+	MatchupStat,
+} from '@firestone/mainwindow/common';
+import {
 	ConstructedDeckVersions,
 	DeckFilters,
 	DeckRankFilterType,
 	DeckTimeFilterType,
-	MainWindowStateFacadeService,
-	MatchupStat,
-} from '@firestone/mainwindow/common';
-import { PatchInfo, PatchesConfigService, PreferencesService } from '@firestone/shared/common/service';
+	PatchInfo,
+	PatchesConfigService,
+	PreferencesService,
+} from '@firestone/shared/common/service';
 import {
 	SubscriberAwareBehaviorSubject,
 	arraysEqual,

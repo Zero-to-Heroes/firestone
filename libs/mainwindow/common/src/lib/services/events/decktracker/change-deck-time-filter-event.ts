@@ -1,5 +1,5 @@
 import { MainWindowStoreEvent } from '../main-window-store-event';
-import { DeckTimeFilterType } from '../../../model/decktracker/deck-time-filter.type';
+import { DeckTimeFilterType } from '@firestone/shared/common/service';
 
 export class ChangeDeckTimeFilterEvent implements MainWindowStoreEvent {
 	public static eventName(): string {

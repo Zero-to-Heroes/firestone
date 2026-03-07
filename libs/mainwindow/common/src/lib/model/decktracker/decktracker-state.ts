@@ -14,12 +14,3 @@ export class DecktrackerState {
 		return Object.assign(new DecktrackerState(), this, base);
 	}
 }
-
-export interface ConstructedDeckVersions {
-	readonly versions: readonly ConstructedDeckVersion[];
-}
-
-export interface ConstructedDeckVersion {
-	readonly deckstring: string;
-	// Leave the option to name the version, or add comments
-}

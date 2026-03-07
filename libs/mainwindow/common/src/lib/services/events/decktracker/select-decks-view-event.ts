@@ -1,5 +1,5 @@
 import { MainWindowStoreEvent } from '../main-window-store-event';
-import { DecktrackerViewType } from '../../../model/decktracker/decktracker-view.type';
+import { DecktrackerViewType } from '@firestone/shared/common/service';
 
 export class SelectDecksViewEvent implements MainWindowStoreEvent {
 	constructor(public readonly newView: DecktrackerViewType) {}

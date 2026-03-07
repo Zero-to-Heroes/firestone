@@ -1,7 +1,8 @@
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { DeckSummary } from '@firestone/constructed/common';
-import { DeckSortType, MainWindowStateFacadeService } from '@firestone/mainwindow/common';
+import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
+import { DeckSortType } from '@firestone/shared/common/service';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, arraysEqual } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';

@@ -1,5 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { ConstructedStatsTab } from '@firestone/mainwindow/common';
+import { ConstructedStatsTab } from '@firestone/shared/common/service';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { Observable } from 'rxjs';
