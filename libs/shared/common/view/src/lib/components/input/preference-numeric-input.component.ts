@@ -8,8 +8,8 @@ import { Observable, tap } from 'rxjs';
 	standalone: false,
 	selector: 'preference-numeric-input',
 	styleUrls: [
-		`../../../../../../../../libs/legacy/feature-shell/src/lib/css/global/toggle.scss`,
-		`../../../../../../../../libs/legacy/feature-shell/src/lib/css/component/settings/settings-common.component.scss`,
+		`../../../../../../../../libs/shared/styles/src/lib/styles/toggle.scss`,
+		`../../../../../../../../libs/shared/styles/src/lib/styles/settings-common.component.scss`,
 		`./preference-numeric-input.component.scss`,
 	],
 	template: `

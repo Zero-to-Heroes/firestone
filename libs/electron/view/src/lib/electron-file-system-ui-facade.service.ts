@@ -43,7 +43,7 @@ export class ElectronFileSystemUIFacadeService
 	}
 
 	private async doOpenPath(path: string): Promise<{ success: boolean; error?: string }> {
-		const { shell } = require('electron');
+		const { shell } = eval('require')('electron');
 		const result = await shell.openPath(path);
 		return result === '' ? { success: true } : { success: false, error: result };
 	}

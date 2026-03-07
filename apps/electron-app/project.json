@@ -26,7 +26,8 @@
 				"externalDependencies": [
 					"better-sqlite3",
 					"electron-edge-js",
-					"electron"
+					"electron",
+					"uiohook-napi"
 				],
 				"assets": [
 					"apps/electron-app/src/assets",

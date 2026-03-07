@@ -4,7 +4,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 	standalone: false,
 	selector: 'numeric-input',
 	styleUrls: [
-		`../../../../../../../../libs/legacy/feature-shell/src/lib/css/component/settings/settings-common.component.scss`,
+		`../../../../../../../../libs/shared/styles/src/lib/styles/settings-common.component.scss`,
 		`./numeric-input.component.scss`,
 	],
 	template: `

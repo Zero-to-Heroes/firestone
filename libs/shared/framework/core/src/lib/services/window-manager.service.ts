@@ -1,4 +1,4 @@
-import { Inject, Injectable, Optional } from '@angular/core';
+import { Injectable, Injector, Optional } from '@angular/core';
 import { isElectronContext, isMainProcess } from './electron-utils';
 import { MONITORS_SERVICE_TOKEN } from './monitors-service.interface';
 import type { IMonitorsService } from './monitors-service.interface';
@@ -10,7 +10,7 @@ export class WindowManagerService {
 
 	constructor(
 		@Optional() private readonly ow: OverwolfService,
-		@Inject(MONITORS_SERVICE_TOKEN) private readonly monitorsService: IMonitorsService,
+		private readonly injector: Injector,
 	) {
 		this.init();
 	}
@@ -60,7 +60,11 @@ export class WindowManagerService {
 	}
 
 	public async getMonitorsList() {
-		return this.monitorsService.getMonitorsList();
+		const monitorsService = this.injector.get(MONITORS_SERVICE_TOKEN, null);
+		if (!monitorsService) {
+			throw new Error('MonitorsService not available');
+		}
+		return monitorsService.getMonitorsList();
 	}
 
 	private async init() {

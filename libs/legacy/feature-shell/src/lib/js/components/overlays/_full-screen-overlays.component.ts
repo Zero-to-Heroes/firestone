@@ -34,7 +34,7 @@ import {
 	OverwolfService,
 	waitForReady,
 } from '@firestone/shared/framework/core';
-import { auditTime, combineLatest, distinctUntilChanged, filter, Observable, takeUntil } from 'rxjs';
+import { auditTime, combineLatest, distinctUntilChanged, filter, Observable, takeUntil, tap } from 'rxjs';
 import { DebugService } from '../../services/debug.service';
 
 @Component({
@@ -207,10 +207,27 @@ export class FullScreenOverlaysComponent
 	}
 
 	async ngAfterContentInit() {
+		console.debug('[debug] full-screen-overlays ngAfterContentInit');
+		await waitForReady(this.scene);
+		console.debug('[debug] full-screen-overlays waitForReady scene');
+		await waitForReady(this.gameState);
+		console.debug('[debug] full-screen-overlays waitForReady gameState');
+		await waitForReady(this.customStyles);
+		console.debug('[debug] full-screen-overlays waitForReady customStyles');
+		await waitForReady(this.prefs);
+		console.debug('[debug] full-screen-overlays waitForReady prefs');
+		await waitForReady(this.inGameReplayService);
+		console.debug('[debug] full-screen-overlays waitForReady inGameReplayService');
 		await waitForReady(this.scene, this.gameState, this.customStyles, this.prefs, this.inGameReplayService);
+		console.debug('[debug] full-screen-overlays waitForReady');
 
-		this.allowOverlays$ = this.inGameReplayService.isReplayOngoing$$.pipe(this.mapData((isOngoing) => !isOngoing));
+		this.allowOverlays$ = this.inGameReplayService.isReplayOngoing$$.pipe(
+			tap((isOngoing) => console.debug('[debug] full-screen-overlays isReplayOngoing$', isOngoing)),
+			this.mapData((isOngoing) => !isOngoing),
+		);
+		console.debug('[debug] full-screen-overlays allowOverlays$', this.allowOverlays$);
 		this.useGroupedCounters$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.useGroupedCounters));
+		console.debug('[debug] full-screen-overlays useGroupedCounters$', this.useGroupedCounters$);
 		this.activeTheme$ = combineLatest([
 			this.scene.currentScene$$,
 			this.scene.lastNonGamePlayScene$$,

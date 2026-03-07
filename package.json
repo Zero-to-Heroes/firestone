@@ -13,7 +13,7 @@
 	},
 	"scripts": {
 		"ng": "nx",
-		"postinstall": "node ./decorate-angular-cli.js && echo \"// https://github.com/microsoft/TypeScript/issues/27956#issuecomment-430849185\" > ./node_modules/@overwolf/ow-cli/index.d.ts && (electron-builder install-app-deps || echo Skipping electron-builder install-app-deps - dist not built yet) && electron-rebuild --only=better-sqlite3",
+		"postinstall": "node ./decorate-angular-cli.js && echo \"// https://github.com/microsoft/TypeScript/issues/27956#issuecomment-430849185\" > ./node_modules/@overwolf/ow-cli/index.d.ts && (electron-builder install-app-deps || echo Skipping electron-builder install-app-deps - dist not built yet) && electron-rebuild --only=better-sqlite3,uiohook-napi",
 		"clear-cache": "rm -rf node_modules/.cache/nx",
 		"c1": "=============== Overwolf app scripts =================",
 		"dev": "npm run pre-build && cross-env NODE_OPTIONS=--max-old-space-size=8192 nx build --source-map=true --configuration=development --watch",
@@ -48,7 +48,7 @@
 		"build-both": "nx build web --configuration=production && nx build mobile --configuration=production",
 		"c6": "=============== Electron (serve frontend first, then start:ow-electron) =================",
 		"nxe:serve:frontend": "nx serve electron-frontend",
-		"restart:ow-electron": "nx build electron-app && ow-electron dist/apps/electron-app --owepm-packages-url=https://electronapi-qa.overwolf.com/packages",
+		"restart:ow-electron": "nx build electron-app && electron-builder install-app-deps && ow-electron dist/apps/electron-app --owepm-packages-url=https://electronapi-qa.overwolf.com/packages",
 		"restart:ow-electron:no-color": "cross-env NO_COLOR=1 FORCE_COLOR=0 nx build electron-app && cross-env NO_COLOR=1 FORCE_COLOR=0 ow-electron dist/apps/electron-app --owepm-packages-url=https://electronapi-qa.overwolf.com/packages",
 		"debug:ow-electron": "nx build electron-app && ow-electron --inspect-brk=5858 dist/apps/electron-app --owepm-packages-url=https://electronapi-qa.overwolf.com/packages",
 		"redebug:ow-electron": "nx build electron-app && ow-electron --inspect-brk=5858 dist/apps/electron-app --owepm-packages-url=https://electronapi-qa.overwolf.com/packages",

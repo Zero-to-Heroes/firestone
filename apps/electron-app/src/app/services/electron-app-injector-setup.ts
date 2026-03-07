@@ -103,7 +103,7 @@ import {
 	SecretsParserService,
 } from '@firestone/game-state';
 import { LotteryFacadeService, LotteryService, LotteryWidgetControllerService } from '@firestone/lottery/common';
-import { MainWindowNavigationService } from '@firestone/mainwindow/common';
+import { MainWindowNavigationService, MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import {
 	CardChoicesService,
 	CardMousedOverService,
@@ -127,8 +127,8 @@ import {
 	LOG_FILE_BACKEND,
 	LogListenerCacheService,
 	LogListenerService,
-	LogUtilsService,
 	LogsUploaderService,
+	LogUtilsService,
 	NotificationsService,
 	PatchesConfigService,
 	PowerLogBufferService,
@@ -223,7 +223,7 @@ export const buildAppInjector = () => {
 	electronInjector.register(MONITORS_SERVICE_TOKEN, electronMonitorsFacade);
 	electronInjector.register(ElectronMonitorsFacadeService, electronMonitorsFacade);
 
-	const windowManager = new WindowManagerService(ow, electronMonitorsFacade);
+	const windowManager = new WindowManagerService(ow, electronInjector);
 	electronInjector.register(WindowManagerService, windowManager);
 
 	const electronWindowHandler = new ElectronWindowHandlerService();
@@ -814,6 +814,9 @@ export const buildAppInjector = () => {
 
 	const bgsMetaHeroStrategiesService = new BgsMetaHeroStrategiesService(windowManager);
 	electronInjector.register(BgsMetaHeroStrategiesService, bgsMetaHeroStrategiesService);
+
+	const mainWindowStateService = new MainWindowStateFacadeService(windowManager);
+	electronInjector.register(MainWindowStateFacadeService, mainWindowStateService);
 
 	const mainWindowNavigationService = new MainWindowNavigationService(windowManager);
 	electronInjector.register(MainWindowNavigationService, mainWindowNavigationService);
