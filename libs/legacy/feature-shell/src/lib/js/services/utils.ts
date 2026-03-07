@@ -150,13 +150,6 @@ export const formatPatch = (input: PatchInfo, i18n: LocalizationFacadeService): 
 	});
 };
 
-export const removeFromArray = <T>(array: T[], element: T) => {
-	const index = array.indexOf(element, 0);
-	if (index > -1) {
-		array.splice(index, 1);
-	}
-};
-
 /** @deprecated */
 export const replaceInArray = <T>(array: readonly T[], index: number, element: T): T[] => {
 	const ret = array.slice(0);

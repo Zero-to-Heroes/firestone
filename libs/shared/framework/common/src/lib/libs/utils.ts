@@ -178,6 +178,13 @@ export const buildPercents = (value: number, locale?: string): string => {
 	);
 };
 
+export const removeFromArray = <T>(array: T[], element: T): void => {
+	const index = array.indexOf(element, 0);
+	if (index > -1) {
+		array.splice(index, 1);
+	}
+};
+
 export const removeFromReadonlyArray = <T>(array: readonly T[], index: number): T[] => {
 	const ret = array.slice(0);
 	if (index > -1) {

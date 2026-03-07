@@ -17,6 +17,7 @@ import {
 	SubscriberAwareBehaviorSubject,
 	arraysEqual,
 	groupByFunction2,
+	removeFromArray,
 	sumOnArray,
 } from '@firestone/shared/framework/common';
 import {
@@ -34,7 +35,6 @@ import {
 import { GameStatsProviderService } from '@firestone/stats/services';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter, map, shareReplay, take, tap } from 'rxjs/operators';
-import { removeFromArray } from '../../utils';
 
 const eventName = 'decks-changed';
 
