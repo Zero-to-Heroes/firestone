@@ -1,4 +1,4 @@
-import { DeckFilters, DecktrackerState, MainWindowState, NavigationState } from '@firestone/mainwindow/common';
+import { DeckFilters, MainWindowState, NavigationState } from '@firestone/mainwindow/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { ChangeDeckRankCategoryFilterEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
@@ -8,20 +8,14 @@ export class ChangeDeckRankCategoryFilterProcessor implements Processor {
 
 	public async process(
 		event: ChangeDeckRankCategoryFilterEvent,
-		currentState: MainWindowState,
+		_currentState: MainWindowState,
 	): Promise<[MainWindowState, NavigationState]> {
-		const filters = Object.assign(new DeckFilters(), currentState.decktracker.filters, {
+		const prefs = await this.prefs.getPreferences();
+		const currentFilters = prefs?.desktopDeckFilters ?? new DeckFilters();
+		const filters = Object.assign(new DeckFilters(), currentFilters, {
 			rankingCategory: event.newRank,
 		} as DeckFilters);
 		await this.prefs.setDesktopDeckFilters(filters);
-		const newState: DecktrackerState = Object.assign(new DecktrackerState(), currentState.decktracker, {
-			filters: filters,
-		} as DecktrackerState);
-		return [
-			currentState.update({
-				decktracker: newState,
-			} as MainWindowState),
-			null,
-		];
+		return [null, null];
 	}
 }

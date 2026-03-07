@@ -84,8 +84,8 @@ export class DecksProviderService extends AbstractFacadeService<DecksProviderSer
 				shareReplay(1),
 				tap((stats) => console.debug('[decks-provider] stats', stats)),
 			);
-			const filters$ = this.mainWindowState.mainWindowState$$.pipe(
-				map((state) => state.decktracker.filters),
+			const filters$ = this.prefs.preferences$$.pipe(
+				map((prefs) => prefs?.desktopDeckFilters ?? new DeckFilters()),
 				distinctUntilChanged(
 					(a, b) =>
 						a?.gameFormat === b?.gameFormat &&

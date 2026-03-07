@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { ConstructedNavigationService } from '@firestone/constructed/common';
 import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
-import { DeckTimeFilterType, PatchesConfigService } from '@firestone/shared/common/service';
+import { DeckTimeFilterType, PatchesConfigService, PreferencesService } from '@firestone/shared/common/service';
 import { IOption } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
@@ -36,16 +36,17 @@ export class DecktrackerTimeFilterDropdownComponent extends AbstractSubscription
 		private readonly patchesConfig: PatchesConfigService,
 		private readonly nav: ConstructedNavigationService,
 		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
+		private readonly prefs: PreferencesService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.patchesConfig, this.nav, this.mainWindowStateFacade);
+		await waitForReady(this.patchesConfig, this.nav, this.mainWindowStateFacade, this.prefs);
 
 		this.filter$ = combineLatest([
 			this.patchesConfig.currentConstructedMetaPatch$$,
-			this.mainWindowStateFacade.mainWindowState$$.pipe(this.mapData((state) => state.decktracker.filters.time)),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.desktopDeckFilters?.time)),
 			this.nav.currentView$$,
 		]).pipe(
 			filter(([patch, filter, currentView]) => !!filter && !!patch && !!currentView),

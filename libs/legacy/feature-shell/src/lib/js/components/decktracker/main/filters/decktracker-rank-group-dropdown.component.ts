@@ -1,7 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { ConstructedNavigationService } from '@firestone/constructed/common';
 import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
-import { MmrGroupFilterType } from '@firestone/shared/common/service';
+import { MmrGroupFilterType, PreferencesService } from '@firestone/shared/common/service';
 import { IOption } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
@@ -34,16 +34,17 @@ export class DecktrackerRankGroupDropdownComponent extends AbstractSubscriptionC
 		private readonly i18n: LocalizationFacadeService,
 		private readonly nav: ConstructedNavigationService,
 		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
+		private readonly prefs: PreferencesService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.nav, this.mainWindowStateFacade);
+		await waitForReady(this.nav, this.mainWindowStateFacade, this.prefs);
 
 		this.filter$ = combineLatest([
-			this.mainWindowStateFacade.mainWindowState$$.pipe(
-				this.mapData((state) => state.decktracker.filters.rankingGroup),
+			this.prefs.preferences$$.pipe(
+				this.mapData((prefs) => prefs.desktopDeckFilters?.rankingGroup),
 			),
 			this.nav.currentView$$,
 		]).pipe(

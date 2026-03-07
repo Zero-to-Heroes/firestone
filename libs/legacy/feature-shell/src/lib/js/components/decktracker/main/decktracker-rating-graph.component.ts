@@ -1,11 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { ladderIntRankToString, ladderRankToInt } from '@firestone/game-state';
-import {
-	DeckRankingCategoryType,
-	DeckTimeFilterType,
-	MainWindowStateFacadeService,
-	MmrGroupFilterType,
-} from '@firestone/mainwindow/common';
+import { DeckRankingCategoryType, DeckTimeFilterType, MmrGroupFilterType } from '@firestone/mainwindow/common';
 import { PatchInfo, PatchesConfigService, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
@@ -55,13 +50,12 @@ export class DecktrackerRatingGraphComponent extends AbstractSubscriptionCompone
 		private readonly patchesConfig: PatchesConfigService,
 		private readonly prefs: PreferencesService,
 		private readonly gameStats: GameStatsProviderService,
-		private readonly mainWindowState: MainWindowStateFacadeService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.patchesConfig, this.prefs, this.gameStats, this.mainWindowState);
+		await waitForReady(this.patchesConfig, this.prefs, this.gameStats);
 
 		// Force a region select only if multiple regions are available in the stats
 		this.regionSelected$ = combineLatest([
@@ -78,12 +72,12 @@ export class DecktrackerRatingGraphComponent extends AbstractSubscriptionCompone
 		);
 		this.value$ = combineLatest([
 			this.gameStats.gameStats$$,
-			this.mainWindowState.mainWindowState$$.pipe(
-				this.mapData((state) => ({
-					gameFormat: state.decktracker.filters.gameFormat,
-					time: state.decktracker.filters.time,
-					rankingGroup: state.decktracker.filters.rankingGroup,
-					rankingCategory: state.decktracker.filters.rankingCategory,
+			this.prefs.preferences$$.pipe(
+				this.mapData((prefs) => ({
+					gameFormat: prefs.desktopDeckFilters?.gameFormat,
+					time: prefs.desktopDeckFilters?.time,
+					rankingGroup: prefs.desktopDeckFilters?.rankingGroup,
+					rankingCategory: prefs.desktopDeckFilters?.rankingCategory,
 				})),
 				distinctUntilChanged(
 					(a, b) =>

@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { Injectable } from '@angular/core';
-import { DeckFilters, DecktrackerState } from '@firestone/mainwindow/common';
-import { Preferences } from '@firestone/shared/common/service';
+import { DecktrackerState } from '@firestone/mainwindow/common';
 
 @Injectable()
 export class DecktrackerStateLoaderService {
@@ -9,21 +8,10 @@ export class DecktrackerStateLoaderService {
 		currentState: DecktrackerState,
 		// config: ConstructedConfig = null,
 		// patch: PatchInfo = null,
-		prefs: Preferences = null,
+		_prefs?: unknown,
 	): DecktrackerState {
-		const existingFilters = prefs?.desktopDeckFilters ?? currentState.filters ?? new DeckFilters();
-		const filters: DeckFilters = {
-			gameFormat: existingFilters.gameFormat ?? 'all',
-			gameMode: existingFilters.gameMode ?? 'ranked',
-			time: existingFilters.time ?? 'all-time',
-			sort: existingFilters.sort ?? 'last-played',
-			rank: existingFilters.rank ?? 'all',
-			rankingGroup: existingFilters.rankingGroup ?? 'per-match',
-			rankingCategory: existingFilters.rankingCategory ?? 'leagues',
-		};
 		// patch = patch || currentState.patch;
 		return currentState.update({
-			filters: filters,
 			isLoading: false,
 			// patch: patch,
 			// config: config ?? currentState.config,

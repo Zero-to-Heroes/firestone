@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { ArenaState } from '@firestone/arena/common';
 import {
 	AchievementsState,
-	DeckFilters,
 	DecktrackerState,
 	MainWindowState,
 	StatsState,
@@ -15,7 +14,6 @@ export class StoreBootstrapService {
 	constructor(private readonly i18n: LocalizationFacadeService) {}
 
 	public buildInitialStore(prefs: Preferences): MainWindowState {
-		const existingDecktrackerFilters = prefs?.desktopDeckFilters ?? new DeckFilters();
 		return MainWindowState.create({
 			showFtue: !prefs.ftue.hasSeenGlobalFtue,
 			achievements: AchievementsState.create({
@@ -30,15 +28,6 @@ export class StoreBootstrapService {
 				],
 			}),
 			decktracker: DecktrackerState.create({
-				filters: {
-					gameFormat: existingDecktrackerFilters.gameFormat ?? 'all',
-					gameMode: existingDecktrackerFilters.gameMode ?? 'ranked',
-					time: existingDecktrackerFilters.time ?? 'all-time',
-					sort: existingDecktrackerFilters.sort ?? 'last-played',
-					rank: existingDecktrackerFilters.rank ?? 'all',
-					rankingGroup: existingDecktrackerFilters.rankingGroup ?? 'per-match',
-					rankingCategory: existingDecktrackerFilters.rankingCategory ?? 'leagues',
-				},
 				isLoading: false,
 				initComplete: true,
 			}),
