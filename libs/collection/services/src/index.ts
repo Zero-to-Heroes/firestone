@@ -10,6 +10,7 @@ export {
 	cardTypeToPremium,
 	isCatchupPack,
 } from './lib/services/cards-monitor.service';
+export * from './lib/services/collection-bootstrap.service';
 export * from './lib/services/collection-manager.service';
 export * from './lib/services/collection-storage.service';
 export * from './lib/services/collection-utils';

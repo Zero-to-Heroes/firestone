@@ -1,7 +1,7 @@
 import { CardPackResult, PackResult } from '@firestone-hs/user-packs';
 import { MainWindowState, NavigationState } from '@firestone/mainwindow/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { CollectionBootstrapService } from '../../collection-bootstrap.service';
+import { CollectionBootstrapService } from '@firestone/collection/services';
 import { NewPackEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 

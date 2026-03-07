@@ -599,7 +599,6 @@ import { LocalizationService } from './js/services/localization.service';
 import { LogRegisterService } from './js/services/log-register.service';
 import { LiveStreamsService } from './js/services/mainwindow/live-streams.service';
 import { OutOfCardsService } from './js/services/mainwindow/out-of-cards.service';
-import { CollectionBootstrapService } from './js/services/mainwindow/store/collection-bootstrap.service';
 import { MainWindowStoreService } from './js/services/mainwindow/store/main-window-store.service';
 import { StoreBootstrapService } from './js/services/mainwindow/store/store-bootstrap.service';
 import { TwitchPresenceService } from './js/services/mainwindow/twitch-presence.service';
@@ -1367,7 +1366,6 @@ try {
 		TwitchCardsFacadeManagerService,
 		TwitchLocalizationManagerService,
 
-		CollectionBootstrapService,
 		PackMonitor,
 		PackStatsService,
 

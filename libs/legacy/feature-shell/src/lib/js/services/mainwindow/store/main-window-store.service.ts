@@ -116,7 +116,7 @@ import { BgsRunStatsService } from '@firestone/battlegrounds/services';
 import { CollectionManager, SetsManagerService } from '@firestone/collection/services';
 import { SetsService } from '@firestone/collection/data-access';
 import { DecksProviderService } from '../../decktracker/main/decks-provider.service';
-import { CollectionBootstrapService } from './collection-bootstrap.service';
+import { CollectionBootstrapService } from '@firestone/collection/services';
 import { AchievementCompletedProcessor } from './processors/achievements/achievement-completed-processor';
 import { AchievementsFullRefreshProcessor } from './processors/achievements/achievements-full-refresh-processor';
 import {

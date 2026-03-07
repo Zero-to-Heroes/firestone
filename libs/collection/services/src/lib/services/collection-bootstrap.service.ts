@@ -8,13 +8,15 @@ import {
 	waitForReady,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
-import { BehaviorSubject, filter } from 'rxjs';
-import { CardHistory, cardTypeToPremium, CollectionManager } from '@firestone/collection/services';
+import { filter } from 'rxjs';
+import { CardHistory } from '../model/card-history';
+import { cardTypeToPremium } from './cards-monitor.service';
+import { CollectionManager } from './collection-manager.service';
 
 @Injectable()
 export class CollectionBootstrapService extends AbstractFacadeService<CollectionBootstrapService> {
 	public packStats$$: SubscriberAwareBehaviorSubject<readonly PackResult[]>;
-	public cardHistory$$: BehaviorSubject<readonly CardHistory[]>;
+	public cardHistory$$: SubscriberAwareBehaviorSubject<readonly CardHistory[]>;
 
 	private memoryUpdates: MemoryUpdatesService;
 	private collectionManager: CollectionManager;
@@ -31,8 +33,8 @@ export class CollectionBootstrapService extends AbstractFacadeService<Collection
 	}
 
 	protected async init() {
-		this.packStats$$ = new SubscriberAwareBehaviorSubject<readonly PackResult[] | null>([]);
-		this.cardHistory$$ = new SubscriberAwareBehaviorSubject<readonly CardHistory[] | null>([]);
+		this.packStats$$ = new SubscriberAwareBehaviorSubject<readonly PackResult[]>([]);
+		this.cardHistory$$ = new SubscriberAwareBehaviorSubject<readonly CardHistory[]>([]);
 		this.memoryUpdates = AppInjector.get(MemoryUpdatesService);
 		this.collectionManager = AppInjector.get(CollectionManager);
 

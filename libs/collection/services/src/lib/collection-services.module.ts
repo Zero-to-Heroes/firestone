@@ -9,6 +9,7 @@ import { SharedFrameworkCommonModule } from '@firestone/shared/framework/common'
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { CardNotificationsService } from './services/card-notifications.service';
 import { CardsMonitorService } from './services/cards-monitor.service';
+import { CollectionBootstrapService } from './services/collection-bootstrap.service';
 import { CollectionManager } from './services/collection-manager.service';
 import { CollectionStorageService } from './services/collection-storage.service';
 import { SetsManagerService } from './services/sets-manager.service';
@@ -26,6 +27,7 @@ import { COLLECTION_MANAGER_SERVICE_TOKEN } from '@firestone/collection/common';
 		MercenariesCommonModule,
 	],
 	providers: [
+		CollectionBootstrapService,
 		CollectionManager,
 		SetsManagerService,
 		CollectionStorageService,
