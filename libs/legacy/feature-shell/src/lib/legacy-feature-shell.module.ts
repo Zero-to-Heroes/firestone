@@ -395,6 +395,7 @@ import {
 	BgsBattleSimulationMockExecutorService,
 } from '@firestone/battlegrounds/core';
 import { BattlegroundsDataAccessModule } from '@firestone/battlegrounds/data-access';
+import { BgsRunStatsService } from './js/services/battlegrounds/bgs-run-stats.service';
 import { BattlegroundsServicesModule } from '@firestone/battlegrounds/services';
 import {
 	BattlegroundsSimulatorModule,
@@ -406,8 +407,9 @@ import {
 	COLLECTION_MANAGER_SERVICE_TOKEN,
 	COLLECTION_PACK_SERVICE_TOKEN,
 	CollectionCommonModule,
+	PACK_STATS_UPDATED_HANDLER,
 } from '@firestone/collection/common';
-import { CollectionDataAccessModule } from '@firestone/collection/data-access';
+import { CollectionDataAccessModule, PackStatsService } from '@firestone/collection/data-access';
 import { CollectionViewModule } from '@firestone/collection/view';
 import { CommunitiesCommonModule } from '@firestone/communities/common';
 import { ConstructedCommonModule } from '@firestone/constructed/common';
@@ -421,7 +423,12 @@ import {
 	REVIEW_ID_SERVICE_TOKEN,
 	ReviewIdService,
 } from '@firestone/game-state';
-import { MAIN_WINDOW_STORE_SERVICE_TOKEN, MainwindowCommonModule } from '@firestone/mainwindow/common';
+import {
+	CollectionPacksUpdatedEvent,
+	MAIN_WINDOW_STORE_SERVICE_TOKEN,
+	MainWindowStateFacadeService,
+	MainwindowCommonModule,
+} from '@firestone/mainwindow/common';
 import { MainwindowViewModule } from '@firestone/mainwindow/view';
 import { MemoryModule } from '@firestone/memory';
 import { MercenariesCommonModule, MercenariesMemoryCacheService } from '@firestone/mercenaries/common';
@@ -475,7 +482,6 @@ import { PackStatTooltipComponent } from '@packs/components/pack-stat-tooltip.co
 import { PackStatComponent } from '@packs/components/pack-stat.component';
 import { CollectionPackStatsComponent } from '@packs/components/pack-stats.component';
 import { PackMonitor } from '@packs/services/pack-monitor.service';
-import { PackStatsService } from '@packs/services/pack-stats.service';
 import { TavernBrawlStatComponent } from '@tavern-brawl/components/stat/tavern-brawl-stat.component';
 import { TavernBrawlDesktopComponent } from '@tavern-brawl/components/tavern-brawl-desktop.component';
 import { TavernBrawlService } from '@tavern-brawl/services/tavern-brawl.service';
@@ -571,7 +577,6 @@ import { HearthArenaAnalyticsService } from './js/services/analytics/heartharena
 import { ArenaLastMatchService } from './js/services/arena/arena-last-match.service';
 import { BgsCustomSimulationService } from './js/services/battlegrounds/bgs-custom-simulation-service.service';
 import { BgsGlobalStatsService } from './js/services/battlegrounds/bgs-global-stats.service';
-import { BgsRunStatsService } from './js/services/battlegrounds/bgs-run-stats.service';
 import { CardsInitService } from './js/services/cards-init.service';
 import { CardNotificationsService } from './js/services/collection/card-notifications.service';
 import { CardsMonitorService } from './js/services/collection/cards-monitor.service';
@@ -1294,6 +1299,14 @@ try {
 		{ provide: WINDOW_HANDLER_SERVICE_TOKEN, useExisting: OwWindowHandlerService },
 		{ provide: HOTKEY_HANDLER_SERVICE_TOKEN, useExisting: OwHotkeyHandlerService },
 		{ provide: COLLECTION_MANAGER_SERVICE_TOKEN, useExisting: CollectionManager },
+		{
+			provide: PACK_STATS_UPDATED_HANDLER,
+			useFactory: (facade: MainWindowStateFacadeService) => ({
+				onPacksUpdated: (packs: readonly import('@firestone-hs/user-packs').PackResult[]) =>
+					facade.send(new CollectionPacksUpdatedEvent(packs)),
+			}),
+			deps: [MainWindowStateFacadeService],
+		},
 		{ provide: COLLECTION_PACK_SERVICE_TOKEN, useExisting: PackStatsService },
 		{ provide: REMOTE_ACHIEVEMENTS_SERVICE_TOKEN, useExisting: FirestoneRemoteAchievementsLoaderService },
 		{ provide: GAME_STATS_PROVIDER_SERVICE_TOKEN, useExisting: GameStatsProviderService },

@@ -4,16 +4,16 @@ import { normalizeHeroCardId } from '@firestone-hs/reference-data';
 import { BgsBestStat, Input as BgsComputeRunStatsInput, buildNewStats } from '@firestone-hs/user-bgs-post-match-stats';
 import { buildBgsRunStatsInput } from '@firestone/battlegrounds/services';
 import { BgsGame, BgsPostMatchStats, BgsPostMatchStatsForReview, RealTimeStatsState } from '@firestone/game-state';
-import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
-import { Events } from '@firestone/shared/common/service';
-import { sleep } from '@firestone/shared/framework/common';
-import { ApiRunner, CardsFacadeService, UserService } from '@firestone/shared/framework/core';
-import { GameForUpload, GameStatsProviderService } from '@firestone/stats/services';
 import {
 	BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent,
 	BgsPostMatchStatsComputedEvent,
 	ShowMatchStatsEvent,
 } from '@firestone/mainwindow/common';
+import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
+import { Events } from '@firestone/shared/common/service';
+import { sleep } from '@firestone/shared/framework/common';
+import { ApiRunner, CardsFacadeService, UserService } from '@firestone/shared/framework/core';
+import { GameForUpload, GameStatsProviderService } from '@firestone/stats/services';
 
 @Injectable()
 export class BgsRunStatsService {
@@ -98,6 +98,9 @@ export class BgsRunStatsService {
 	) {
 		const liveStats = currentGame.liveStats;
 		const user = await this.userService.getCurrentUser();
+		if (!user) {
+			return;
+		}
 		const input = buildBgsRunStatsInput(reviewId, game, currentGame, user.userId, user.username);
 
 		const [postMatchStats, newBestValues] = this.populateObject(
@@ -107,7 +110,6 @@ export class BgsRunStatsService {
 			currentGame.getMainPlayer(true)?.playerId,
 		);
 		console.debug('[bgs-run-stats] newBestVaues');
-		// Wait a bit, to be sure that the stats have been created
 		await sleep(1000);
 		this.mainWindowStateFacade.send(new BgsPostMatchStatsComputedEvent(reviewId, postMatchStats, newBestValues));
 	}

@@ -3,5 +3,6 @@
 	"dest": "../../../dist/libs/collection/common",
 	"lib": {
 		"entryFile": "src/index.ts"
-	}
+	},
+	"allowedNonPeerDependencies": ["@firestone-hs/user-packs"]
 }

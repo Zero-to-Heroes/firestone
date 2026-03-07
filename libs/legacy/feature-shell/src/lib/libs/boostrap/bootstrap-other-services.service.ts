@@ -47,7 +47,7 @@ import { ReplaysNotificationService } from '../../js/services/replays/replays-no
 import { SystemTrayService } from '../../js/services/system-tray.service';
 import { MailsService } from '../mails/services/mails.service';
 import { PackMonitor } from '../packs/services/pack-monitor.service';
-import { PackStatsService } from '../packs/services/pack-stats.service';
+import { PackStatsService } from '@firestone/collection/data-access';
 
 @Injectable()
 export class BootstrapOtherServicesService {

@@ -1,5 +1,5 @@
 import { MainWindowState, NavigationState } from '@firestone/mainwindow/common';
-import { PackStatsService } from '../../../../../../libs/packs/services/pack-stats.service';
+import { PackStatsService } from '@firestone/collection/data-access';
 import { CollectionRefreshPacksEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 

@@ -1,9 +1,13 @@
-import { Inject, Injectable } from '@angular/core';
+import { Inject, Injectable, Optional } from '@angular/core';
 import { BoosterType, CardIds, getDefaultBoosterIdForSetId } from '@firestone-hs/reference-data';
 import { CardPackResult, PackCardInfo, PackResult } from '@firestone-hs/user-packs';
-import { ICollectionPackService } from '@firestone/collection/common';
-import { InternalCardInfo, SetsService } from '@firestone/collection/data-access';
-import { CollectionPacksUpdatedEvent, MainWindowStateFacadeService } from '@firestone/mainwindow/common';
+import {
+	ICollectionPackService,
+	IPackStatsUpdatedHandler,
+	PACK_STATS_UPDATED_HANDLER,
+} from '@firestone/collection/common';
+import { InternalCardInfo } from '../model/internal-card-info';
+import { SetsService } from './sets-service.service';
 import { DiskCacheService, Events } from '@firestone/shared/common/service';
 import {
 	ApiRunner,
@@ -25,7 +29,7 @@ export class PackStatsService implements ICollectionPackService {
 		private readonly api: ApiRunner,
 		private readonly diskCache: DiskCacheService,
 		@Inject(DATABASE_SERVICE_TOKEN) private readonly indexedDb: IDatabaseService,
-		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
+		@Optional() @Inject(PACK_STATS_UPDATED_HANDLER) private readonly packStatsUpdatedHandler?: IPackStatsUpdatedHandler,
 	) {
 		this.events.on(Events.NEW_PACK).subscribe((event) => this.publishPackStat(event));
 	}
@@ -58,21 +62,27 @@ export class PackStatsService implements ICollectionPackService {
 		return existingPackStats;
 	}
 
-	public async refreshPackStats() {
+	public async refreshPackStats(): Promise<void> {
 		const packs: readonly PackResult[] = await this.loadPacksFromRemote();
-		this.mainWindowStateFacade.send(new CollectionPacksUpdatedEvent(packs));
+		this.packStatsUpdatedHandler?.onPacksUpdated(packs);
 	}
 
 	private async loadPacksFromRemote(): Promise<readonly PackResult[]> {
 		const user = await this.userService.getCurrentUser();
+		if (!user) {
+			return [];
+		}
 		const input = {
 			userId: user.userId,
 			userName: user.username,
 		};
-		const data: { results: readonly PackResult[] } = await this.api.callPostApi<{ results: readonly PackResult[] }>(
+		const data = await this.api.callPostApi<{ results: readonly PackResult[] }>(
 			PACKS_RETRIEVE_URL,
 			input,
 		);
+		if (!data) {
+			return [];
+		}
 		const packs: readonly PackResult[] = (data.results ?? [])
 			.map((pack) => this.buildPackResult(pack))
 			.filter((pack) => !!pack.cards?.length)
@@ -97,7 +107,6 @@ export class PackStatsService implements ICollectionPackService {
 	}
 
 	private buildPackResult(pack: PackResult): PackResult {
-		// console.debug('[pack-stats] building pack', pack);
 		return {
 			...pack,
 			cards: !!pack.cards?.length ? pack.cards : this.buildCards(pack.cardsJson),
@@ -129,6 +138,9 @@ export class PackStatsService implements ICollectionPackService {
 		}
 		const boosterId: BoosterType = event.data[2];
 		const user = await this.userService.getCurrentUser();
+		if (!user) {
+			return;
+		}
 		const statEvent = {
 			creationDate: new Date(),
 			setId: setId,
@@ -143,7 +155,6 @@ export class PackStatsService implements ICollectionPackService {
 	}
 
 	private async updateLocalPackStats(boosterId: BoosterType, setId: string, cards: readonly InternalCardInfo[]) {
-		// The "id" field in indexedDb is a kind of auto-increment. How can I get the next value?
 		const id = await this.indexedDb.table<PackResult, string>(COLLECTION_PACK_STATS).count();
 		const newPack: PackResult = {
 			id: id,

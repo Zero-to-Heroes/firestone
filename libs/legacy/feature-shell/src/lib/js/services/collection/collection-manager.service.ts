@@ -19,7 +19,7 @@ import {
 } from '@firestone/memory';
 import { GameStatusService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
-import { PackStatsService } from '../../../libs/packs/services/pack-stats.service';
+import { PackStatsService } from '@firestone/collection/data-access';
 import { Coin } from '../../models/coin';
 import { Events } from '@firestone/shared/common/service';
 import { CollectionStorageService } from './collection-storage.service';

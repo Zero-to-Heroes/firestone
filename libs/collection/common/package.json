@@ -6,6 +6,7 @@
 		"@angular/core": "^15.0.0"
 	},
 	"dependencies": {
+		"@firestone-hs/user-packs": "^1.0.4",
 		"tslib": "^2.3.0"
 	}
 }

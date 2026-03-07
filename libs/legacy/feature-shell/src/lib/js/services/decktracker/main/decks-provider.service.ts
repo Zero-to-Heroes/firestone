@@ -13,7 +13,12 @@ import {
 	MatchupStat,
 } from '@firestone/mainwindow/common';
 import { PatchInfo, PatchesConfigService, PreferencesService } from '@firestone/shared/common/service';
-import { SubscriberAwareBehaviorSubject, arraysEqual } from '@firestone/shared/framework/common';
+import {
+	SubscriberAwareBehaviorSubject,
+	arraysEqual,
+	groupByFunction2,
+	sumOnArray,
+} from '@firestone/shared/framework/common';
 import {
 	AbstractFacadeService,
 	AppInjector,
@@ -29,7 +34,7 @@ import {
 import { GameStatsProviderService } from '@firestone/stats/services';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter, map, shareReplay, take, tap } from 'rxjs/operators';
-import { groupByFunction, removeFromArray, sumOnArray } from '../../utils';
+import { removeFromArray } from '../../utils';
 
 const eventName = 'decks-changed';
 
@@ -253,7 +258,7 @@ export class DecksProviderService extends AbstractFacadeService<DecksProviderSer
 					(filters.gameMode === 'casual' && stat.gameMode === 'casual'),
 			)
 			.filter((stat) => !!stat.playerDecklist);
-		const statsByDeck = groupByFunction((stat: GameStat) => stat.playerDecklist)(rankedStats);
+		const statsByDeck = groupByFunction2(rankedStats, (stat: GameStat) => stat.playerDecklist);
 		// const validReplays = this.buildValidReplays(statsByDeck[deckstring], filters, prefs, patch);
 		const deckstrings = Object.keys(statsByDeck);
 		// console.debug('[decks-provider] deckstrings', deckstrings);
@@ -311,12 +316,13 @@ export class DecksProviderService extends AbstractFacadeService<DecksProviderSer
 		constructedDeckVersions: readonly ConstructedDeckVersions[],
 		desktopDeckHiddenDeckCodes: readonly string[],
 	): readonly DeckSummary[] {
-		const groupedByVersion = groupByFunction(
+		const groupedByVersion = groupByFunction2(
+			decks,
 			(deck: DeckSummary) =>
 				constructedDeckVersions.find((links) =>
 					links.versions.map((v) => v.deckstring).includes(deck.deckstring),
 				)?.versions[0].deckstring ?? deck.deckstring,
-		)(decks);
+		);
 		return Object.values(groupedByVersion).map((versions) =>
 			this.groupDeckVersions(versions, desktopDeckHiddenDeckCodes),
 		);

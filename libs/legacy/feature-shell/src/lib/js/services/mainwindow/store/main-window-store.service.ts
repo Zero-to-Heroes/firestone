@@ -110,7 +110,7 @@ import { GameStatsLoaderService } from '@firestone/stats/data-access';
 import { TranslateService } from '@ngx-translate/core';
 import { Map } from 'immutable';
 import { BehaviorSubject, filter } from 'rxjs';
-import { PackStatsService } from '../../../../libs/packs/services/pack-stats.service';
+import { PackStatsService } from '@firestone/collection/data-access';
 import { BgsPerfectGamesService } from '@firestone/battlegrounds/data-access';
 import { BgsRunStatsService } from '../../battlegrounds/bgs-run-stats.service';
 import { CollectionManager } from '../../collection/collection-manager.service';
