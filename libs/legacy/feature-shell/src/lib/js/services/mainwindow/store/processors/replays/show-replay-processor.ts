@@ -2,7 +2,7 @@ import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { ILocalizationService } from '@firestone/shared/framework/core';
 import { MainWindowState, MatchDetail, NavigationReplays, NavigationState } from '@firestone/mainwindow/common';
 import { GameStatsLoaderService } from '@firestone/stats/data-access';
-import { BgsPerfectGamesService } from '../../../../battlegrounds/bgs-perfect-games.service';
+import { BgsPerfectGamesService } from '@firestone/battlegrounds/data-access';
 import { BgsRunStatsService } from '../../../../battlegrounds/bgs-run-stats.service';
 import { ShowReplayEvent } from '../../events/replays/show-replay-event';
 import { Processor } from '../processor';

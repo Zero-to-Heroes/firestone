@@ -1,5 +1,5 @@
 import { MainWindowStoreEvent } from '@firestone/mainwindow/common';
-import { InternalCardInfo } from '../../../../../models/collection/internal-card-info';
+import { InternalCardInfo } from '@firestone/collection/data-access';
 
 export class NewPackEvent implements MainWindowStoreEvent {
 	constructor(

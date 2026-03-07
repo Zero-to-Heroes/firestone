@@ -1,4 +1,5 @@
 export * from './lib/battlegrounds-data-access.module';
+export * from './lib/services/bgs-perfect-games.service';
 export * from './lib/meta-cards/bgs-meta-card-stats';
 export * from './lib/meta-cards/meta-card.model';
 export * from './lib/meta-heroes/bgs-active-time-filter.type';

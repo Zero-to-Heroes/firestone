@@ -11,9 +11,9 @@ import {
 	IDatabaseService,
 	OverwolfService,
 } from '@firestone/shared/framework/core';
-import { InternalCardInfo } from '../../../js/models/collection/internal-card-info';
-import { SetsService } from '../../../js/services/collection/sets-service.service';
-import { CollectionPacksUpdatedEvent } from '../../../js/services/mainwindow/store/events/collection/colection-packs-updated-event';
+import { InternalCardInfo } from '@firestone/collection/data-access';
+import { SetsService } from '@firestone/collection/data-access';
+import { CollectionPacksUpdatedEvent } from '@firestone/mainwindow/common';
 
 const PACKS_UPDATE_URL = 'https://zbfdquy6qvpmragkcwjzpr3v5a0bcgfn.lambda-url.us-west-2.on.aws/';
 const PACKS_RETRIEVE_URL = 'https://dwfrvwcatnkfohkhcksuxweoii0mtgch.lambda-url.us-west-2.on.aws/';

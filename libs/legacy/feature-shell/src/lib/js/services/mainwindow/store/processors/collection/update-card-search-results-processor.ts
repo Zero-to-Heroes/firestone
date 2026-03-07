@@ -5,7 +5,7 @@ import {
 	NavigationState,
 } from '@firestone/mainwindow/common';
 import { CollectionManager } from '../../../../collection/collection-manager.service';
-import { SetsService } from '../../../../collection/sets-service.service';
+import { SetsService } from '@firestone/collection/data-access';
 import { UpdateCardSearchResultsEvent } from '../../events/collection/update-card-search-results-event';
 import { Processor } from '../processor';
 

@@ -10,7 +10,7 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
 import { debounceTime, filter, tap } from 'rxjs/operators';
 import { CollectionCardType } from '@firestone-hs/user-packs';
-import { InternalCardInfo } from '../../models/collection/internal-card-info';
+import { InternalCardInfo } from '@firestone/collection/data-access';
 import { NewPackEvent } from '../mainwindow/store/events/collection/new-pack-event';
 import { groupByFunction } from '../utils';
 import { CardNotificationsService } from './card-notifications.service';

@@ -12,7 +12,7 @@ import { BG_USE_ANOMALIES, PreferencesService } from '@firestone/shared/common/s
 import { AbstractSubscriptionComponent, arraysEqual } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
-import { BgsPerfectGamesService } from '@legacy-import/src/lib/js/services/battlegrounds/bgs-perfect-games.service';
+import { BgsPerfectGamesService } from '@firestone/battlegrounds/data-access';
 import { Observable, combineLatest } from 'rxjs';
 import { filter, tap } from 'rxjs/operators';
 import { getMmrThreshold } from '../../../../services/ui-store/bgs-ui-helper';

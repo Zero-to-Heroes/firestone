@@ -18,7 +18,7 @@ import { AbstractSubscriptionComponent, capitalizeFirstLetter } from '@firestone
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { CollectionCardType } from '@firestone-hs/user-packs';
-import { SetsService } from '../../services/collection/sets-service.service';
+import { SetsService } from '@firestone/collection/data-access';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { capitalizeEachWord, pickRandom } from '../../services/utils';
 

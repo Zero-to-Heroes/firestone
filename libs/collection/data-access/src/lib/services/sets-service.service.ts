@@ -53,7 +53,7 @@ export class SetsService {
 		}
 
 		const fragments = buildFragments(searchString);
-		const filterFunctions = [];
+		const filterFunctions: ((card: ReferenceCard) => boolean)[] = [];
 		// const fragments = searchString.includes(' ') ? searchString.split(' ') : [searchString];
 		console.debug('fragments', fragments);
 		let nameSearch = searchString;
@@ -63,13 +63,11 @@ export class SetsService {
 			if (fragment.includes('text:') && fragment.split('text:')[1]) {
 				const textToFind = fragment.split('text:')[1].replaceAll('"', '').trim().toLowerCase();
 				console.debug('textToFind', textToFind);
-				filterFunctions.push((card) => card.text && card.text.toLowerCase().includes(textToFind));
+				filterFunctions.push((card) => !!(card.text && card.text.toLowerCase().includes(textToFind)));
 			}
 			if (fragment.includes('name:') && fragment.split('name:')[1]) {
 				const textToFind = fragment.split('name:')[1].replaceAll('"', '').trim().toLowerCase();
-				filterFunctions.push((card) => {
-					return card.name && card.name.toLowerCase().includes(textToFind);
-				});
+				filterFunctions.push((card) => !!(card.name && card.name.toLowerCase().includes(textToFind)));
 			}
 			// Include non-collectible
 			if (fragment.includes('cards:') && fragment.split('cards:')[1] === 'all') {
@@ -82,13 +80,15 @@ export class SetsService {
 				const textToFind = fragment.split('tribe:')[1].trim().toLowerCase();
 				filterFunctions.push(
 					(card) =>
-						card.races?.some((race) => race.toLowerCase().includes(textToFind)) ||
-						(Object.values(Race)
-							.filter((race) => isNaN(Number(race)))
-							.map((r) => r as string)
-							.map((r) => r.toLowerCase())
-							.includes(textToFind) &&
-							card.races?.includes(Race[Race.ALL])),
+						!!(
+							card.races?.some((race) => race.toLowerCase().includes(textToFind)) ||
+							(Object.values(Race)
+								.filter((race) => isNaN(Number(race)))
+								.map((r) => r as string)
+								.map((r) => r.toLowerCase())
+								.includes(textToFind) &&
+								card.races?.includes(Race[Race.ALL]))
+						),
 				);
 			}
 
@@ -119,13 +119,13 @@ export class SetsService {
 				filterFunctions.push((card: ReferenceCard) => !card.rarity || card.rarity.toLowerCase() !== rarity);
 			} else if (fragment.includes('rarity:') && fragment.split('rarity:')[1]) {
 				const rarity = fragment.split('rarity:')[1].toLowerCase();
-				filterFunctions.push((card: ReferenceCard) => card.rarity && card.rarity.toLowerCase() === rarity);
+				filterFunctions.push((card: ReferenceCard) => !!(card.rarity && card.rarity.toLowerCase() === rarity));
 			}
 		}
 		nameSearch = nameSearch.trim().toLowerCase();
 		// Default filtering based on name
 		if (filterFunctions.length === 0) {
-			filterFunctions.push((card) => card.name && card.name.toLowerCase().includes(nameSearch));
+			filterFunctions.push((card) => !!(card.name && card.name.toLowerCase().includes(nameSearch)));
 		}
 
 		const basicFiltered = collectibleOnly

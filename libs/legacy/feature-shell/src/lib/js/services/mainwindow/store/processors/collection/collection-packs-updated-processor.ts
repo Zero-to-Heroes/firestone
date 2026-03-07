@@ -1,5 +1,5 @@
 import { MainWindowState, NavigationState } from '@firestone/mainwindow/common';
-import { CollectionPacksUpdatedEvent } from '../../events/collection/colection-packs-updated-event';
+import { CollectionPacksUpdatedEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 
 export class CollectionPacksUpdatedProcessor implements Processor {

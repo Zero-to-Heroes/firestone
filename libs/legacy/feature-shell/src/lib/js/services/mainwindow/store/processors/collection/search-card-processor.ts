@@ -8,7 +8,7 @@ import {
 import { Card } from '@firestone/memory';
 import { ILocalizationService } from '@firestone/shared/framework/core';
 import { CollectionManager } from '../../../../collection/collection-manager.service';
-import { SetsService } from '../../../../collection/sets-service.service';
+import { SetsService } from '@firestone/collection/data-access';
 import { SearchCardsEvent } from '../../events/collection/search-cards-event';
 import { Processor } from '../processor';
 

@@ -5,7 +5,7 @@ import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/comm
 import { AbstractFacadeService, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
 import { debounceTime } from 'rxjs';
 import { CollectionManager } from './collection-manager.service';
-import { SetsService } from './sets-service.service';
+import { SetsService } from '@firestone/collection/data-access';
 
 @Injectable()
 export class SetsManagerService extends AbstractFacadeService<SetsManagerService> {

@@ -30,7 +30,7 @@ import { HotkeyFacadeService } from '@firestone/shared/framework/core';
 import { GameStatsProviderService } from '@firestone/stats/services';
 import { TwitchAuthService } from '@firestone/twitch/common';
 import { HearthArenaAnalyticsService } from '../../js/services/analytics/heartharena-analytics.service';
-import { BgsPerfectGamesService } from '../../js/services/battlegrounds/bgs-perfect-games.service';
+import { BgsPerfectGamesService } from '@firestone/battlegrounds/data-access';
 import { CardsMonitorService } from '../../js/services/collection/cards-monitor.service';
 import { CollectionManager } from '../../js/services/collection/collection-manager.service';
 import { CollectionStorageService } from '../../js/services/collection/collection-storage.service';

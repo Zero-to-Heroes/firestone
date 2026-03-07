@@ -407,6 +407,7 @@ import {
 	COLLECTION_PACK_SERVICE_TOKEN,
 	CollectionCommonModule,
 } from '@firestone/collection/common';
+import { CollectionDataAccessModule } from '@firestone/collection/data-access';
 import { CollectionViewModule } from '@firestone/collection/view';
 import { CommunitiesCommonModule } from '@firestone/communities/common';
 import { ConstructedCommonModule } from '@firestone/constructed/common';
@@ -570,7 +571,6 @@ import { HearthArenaAnalyticsService } from './js/services/analytics/heartharena
 import { ArenaLastMatchService } from './js/services/arena/arena-last-match.service';
 import { BgsCustomSimulationService } from './js/services/battlegrounds/bgs-custom-simulation-service.service';
 import { BgsGlobalStatsService } from './js/services/battlegrounds/bgs-global-stats.service';
-import { BgsPerfectGamesService } from './js/services/battlegrounds/bgs-perfect-games.service';
 import { BgsRunStatsService } from './js/services/battlegrounds/bgs-run-stats.service';
 import { CardsInitService } from './js/services/cards-init.service';
 import { CardNotificationsService } from './js/services/collection/card-notifications.service';
@@ -578,7 +578,7 @@ import { CardsMonitorService } from './js/services/collection/cards-monitor.serv
 import { CollectionManager } from './js/services/collection/collection-manager.service';
 import { CollectionStorageService } from './js/services/collection/collection-storage.service';
 import { SetsManagerService } from './js/services/collection/sets-manager.service';
-import { SetsService } from './js/services/collection/sets-service.service';
+import { SetsService } from '@firestone/collection/data-access';
 import { DebugService } from './js/services/debug.service';
 import { ConstructedConfigService } from './js/services/decktracker/constructed-config.service';
 import { DeckCardService } from './js/services/decktracker/deck-card.service';
@@ -689,6 +689,7 @@ try {
 		ConstructedViewModule,
 		CommunitiesCommonModule,
 		CollectionCommonModule,
+		CollectionDataAccessModule,
 		MercenariesCommonModule,
 		MainwindowCommonModule,
 		SettingsViewModule,
@@ -1305,7 +1306,6 @@ try {
 		{ provide: MAIN_WINDOW_STORE_SERVICE_TOKEN, useExisting: MainWindowStoreService },
 		{ provide: PLAUSIBLE_DOMAIN, useValue: 'firestoneapp.gg-app' },
 
-		SetsService,
 		DebugService,
 		Events,
 
@@ -1368,7 +1368,6 @@ try {
 		DecksProviderService,
 		ConstructedConfigService,
 
-		BgsPerfectGamesService,
 		BgsGlobalStatsService,
 		BgsRunStatsService,
 		BgsCustomSimulationService,

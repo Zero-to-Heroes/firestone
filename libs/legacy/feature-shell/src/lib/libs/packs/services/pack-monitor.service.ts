@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { BoosterType } from '@firestone-hs/reference-data';
 import { dustFor, GameEventsEmitterService } from '@firestone/game-state';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
-import { InternalCardInfo } from '../../../js/models/collection/internal-card-info';
+import { InternalCardInfo } from '@firestone/collection/data-access';
 import { CardNotificationsService } from '../../../js/services/collection/card-notifications.service';
 import { Events } from '@firestone/shared/common/service';
 

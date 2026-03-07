@@ -6,7 +6,7 @@ import { PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { MainWindowState, MatchDetail, NavigationReplays, NavigationState } from '@firestone/mainwindow/common';
 import { GameStatsLoaderService } from '@firestone/stats/data-access';
-import { BgsPerfectGamesService } from '../../../../battlegrounds/bgs-perfect-games.service';
+import { BgsPerfectGamesService } from '@firestone/battlegrounds/data-access';
 import { ShowMatchStatsEvent } from '../../events/replays/show-match-stats-event';
 import { Processor } from '../processor';
 

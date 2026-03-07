@@ -24,6 +24,7 @@ import {
 	CardsFacadeService,
 	ILocalizationService,
 	IWindowHandlerService,
+	ProcessingQueue,
 	waitForReady,
 	WINDOW_HANDLER_SERVICE_TOKEN,
 } from '@firestone/shared/framework/core';
@@ -32,13 +33,12 @@ import { TranslateService } from '@ngx-translate/core';
 import { Map } from 'immutable';
 import { BehaviorSubject, filter } from 'rxjs';
 import { PackStatsService } from '../../../../libs/packs/services/pack-stats.service';
-import { BgsPerfectGamesService } from '../../battlegrounds/bgs-perfect-games.service';
+import { BgsPerfectGamesService } from '@firestone/battlegrounds/data-access';
 import { BgsRunStatsService } from '../../battlegrounds/bgs-run-stats.service';
 import { CollectionManager } from '../../collection/collection-manager.service';
 import { SetsManagerService } from '../../collection/sets-manager.service';
-import { SetsService } from '../../collection/sets-service.service';
+import { SetsService } from '@firestone/collection/data-access';
 import { DecksProviderService } from '../../decktracker/main/decks-provider.service';
-import { ProcessingQueue } from '../../processing-queue.service';
 import { CollectionBootstrapService } from './collection-bootstrap.service';
 import { AchievementCompletedEvent } from './events/achievements/achievement-completed-event';
 import { AchievementsFullRefreshEvent } from './events/achievements/achievements-full-refresh-event';
@@ -56,7 +56,7 @@ import { BgsShowStrategiesEvent } from './events/battlegrounds/bgs-show-strategi
 import { SelectBattlegroundsCategoryEvent } from './events/battlegrounds/select-battlegrounds-category-event';
 import { ChangeVisibleApplicationEvent } from './events/change-visible-application-event';
 import { CloseMainWindowEvent } from './events/close-main-window-event';
-import { CollectionPacksUpdatedEvent } from './events/collection/colection-packs-updated-event';
+import { CollectionPacksUpdatedEvent } from '@firestone/mainwindow/common';
 import { CollectionRefreshPacksEvent } from './events/collection/colection-refresh-packs-event';
 import { CollectionSelectCurrentTabEvent } from './events/collection/collection-select-current-tab-event';
 import { NewPackEvent } from './events/collection/new-pack-event';
