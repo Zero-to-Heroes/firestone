@@ -2,7 +2,7 @@ import { BoosterType } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';
 import { Card } from '@firestone/memory';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { totalOwned } from '../../models/card';
+import { totalOwned } from '../model/card-utils';
 import { CollectionCardType } from '@firestone-hs/user-packs';
 
 export const getOwnedForDeckBuilding = (
@@ -19,9 +19,7 @@ const getAllCardDuplicateIdsForDeckbuilding = (cardId: string, allCards: CardsFa
 	const card = allCards.getCard(cardId);
 	let duplicateDbfId = card.counterpartCards?.[0];
 	while (!!duplicateDbfId) {
-		// console.debug('handling duplicate', duplicateDbfId, cardId);
 		const duplicateCard = allCards.getCard(duplicateDbfId);
-		// Prevent infinite loops due to circular dependencies
 		if (allDuplicates.includes(duplicateCard.id)) {
 			break;
 		}
@@ -31,9 +29,8 @@ const getAllCardDuplicateIdsForDeckbuilding = (cardId: string, allCards: CardsFa
 	return allDuplicates.filter((c) => !!c);
 };
 
-export const dustFor = (rarity: string, cardType: CollectionCardType): number => {
-	return cardType === 'NORMAL' ? dustForNormal(rarity) : dustForPremium(rarity);
-};
+export const dustFor = (rarity: string, cardType: CollectionCardType): number =>
+	cardType === 'NORMAL' ? dustForNormal(rarity) : dustForPremium(rarity);
 
 const dustForNormal = (rarity: string): number => {
 	switch (rarity?.toLowerCase()) {
@@ -48,9 +45,7 @@ const dustForNormal = (rarity: string): number => {
 	}
 };
 
-const dustForPremium = (rarity: string): number => {
-	return 4 * dustForNormal(rarity?.toLowerCase());
-};
+const dustForPremium = (rarity: string): number => 4 * dustForNormal(rarity?.toLowerCase());
 
 export const dustToCraftFor = (rarity: string): number => {
 	switch (rarity?.toLowerCase()) {
@@ -65,12 +60,10 @@ export const dustToCraftFor = (rarity: string): number => {
 	}
 };
 
-export const dustToCraftForPremium = (rarity: string): number => {
-	return 4 * dustToCraftFor(rarity?.toLowerCase());
-};
+export const dustToCraftForPremium = (rarity: string): number =>
+	4 * dustToCraftFor(rarity?.toLowerCase());
 
-export const getPackDustValue = (pack: PackResult): number => {
-	return pack.boosterId === BoosterType.MERCENARIES
+export const getPackDustValue = (pack: PackResult): number =>
+	pack.boosterId === BoosterType.MERCENARIES
 		? pack.cards.map((card) => card.currencyAmount ?? 0).reduce((a, b) => a + b, 0)
 		: pack.cards.map((card) => dustFor(card.cardRarity, card.cardType)).reduce((a, b) => a + b, 0);
-};

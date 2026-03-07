@@ -21,7 +21,7 @@ import { PreferencesService } from '@firestone/shared/common/service';
 import { ApiRunner, CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { sortByProperties } from '@services/utils';
-import { CardNotificationsService } from './collection/card-notifications.service';
+import { CardNotificationsService } from '@firestone/collection/services';
 
 const RETRIEVE_REVIEW_URL = 'https://itkmxena7k2kkmkgpevc6skcie0tlwmk.lambda-url.us-west-2.on.aws/';
 

@@ -7,8 +7,7 @@ import { SceneService } from '@firestone/memory';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { ADS_SERVICE_TOKEN, IAdsService, waitForReady } from '@firestone/shared/framework/core';
 import { combineLatest, debounceTime, distinctUntilChanged, filter, map, take } from 'rxjs';
-import { CollectionManager } from '../../collection/collection-manager.service';
-import { SetsManagerService } from '../../collection/sets-manager.service';
+import { CollectionManager, SetsManagerService } from '@firestone/collection/services';
 import { equalProfilePackStat, equalProfileSet } from '../profile-uploader.service';
 
 @Injectable()

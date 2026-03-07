@@ -32,7 +32,7 @@ import {
 	takeUntil,
 	tap,
 } from 'rxjs';
-import { getOwnedForDeckBuilding } from '../../../services/collection/collection-utils';
+import { getOwnedForDeckBuilding } from '@firestone/collection/services';
 
 @Component({
 	standalone: false,

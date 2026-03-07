@@ -7,7 +7,6 @@ import {
 	CardsFacadeService,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
-
 import { ICollectionManagerService } from '@firestone/collection/common';
 import {
 	Card,
@@ -20,7 +19,7 @@ import {
 import { GameStatusService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { PackStatsService } from '@firestone/collection/data-access';
-import { Coin } from '../../models/coin';
+import { Coin } from '../model/coin';
 import { Events } from '@firestone/shared/common/service';
 import { CollectionStorageService } from './collection-storage.service';
 import { AllTimeBoostersInternalService } from './details/all-time-boosters';
@@ -133,8 +132,7 @@ export class CollectionManager extends AbstractFacadeService<CollectionManager> 
 		return this.packStatsService.getPackStats();
 	}
 
-	// type is NORMAL or GOLDEN
-	public inCollection(collection: Card[], cardId: string): Card {
+	public inCollection(collection: Card[], cardId: string): Card | null {
 		for (const card of collection) {
 			if (card.id === cardId) {
 				return card;

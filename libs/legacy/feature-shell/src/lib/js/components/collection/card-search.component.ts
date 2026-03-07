@@ -11,7 +11,7 @@ import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
-import { SetsManagerService } from '../../services/collection/sets-manager.service';
+import { SetsManagerService } from '@firestone/collection/services';
 import { SearchCardsEvent, ShowCardDetailsEvent } from '@firestone/mainwindow/common';
 
 @Component({

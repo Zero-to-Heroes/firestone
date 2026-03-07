@@ -31,9 +31,11 @@ import { GameStatsProviderService } from '@firestone/stats/services';
 import { TwitchAuthService } from '@firestone/twitch/common';
 import { HearthArenaAnalyticsService } from '../../js/services/analytics/heartharena-analytics.service';
 import { BgsPerfectGamesService } from '@firestone/battlegrounds/data-access';
-import { CardsMonitorService } from '../../js/services/collection/cards-monitor.service';
-import { CollectionManager } from '../../js/services/collection/collection-manager.service';
-import { CollectionStorageService } from '../../js/services/collection/collection-storage.service';
+import {
+	CardsMonitorService,
+	CollectionManager,
+	CollectionStorageService,
+} from '@firestone/collection/services';
 import { ConstructedConfigService } from '../../js/services/decktracker/constructed-config.service';
 import { DecksProviderService } from '../../js/services/decktracker/main/decks-provider.service';
 import { DevService } from '../../js/services/dev.service';

@@ -411,6 +411,8 @@ import {
 	PACK_STATS_UPDATED_HANDLER,
 } from '@firestone/collection/common';
 import { CollectionDataAccessModule, PackStatsService } from '@firestone/collection/data-access';
+import { CARDS_MONITOR_EVENT_HANDLER } from '@firestone/collection/services';
+import { CollectionServicesModule } from '@firestone/collection/services';
 import { CollectionViewModule } from '@firestone/collection/view';
 import { CommunitiesCommonModule } from '@firestone/communities/common';
 import { ConstructedCommonModule } from '@firestone/constructed/common';
@@ -579,11 +581,7 @@ import { ArenaLastMatchService } from './js/services/arena/arena-last-match.serv
 import { BgsCustomSimulationService } from './js/services/battlegrounds/bgs-custom-simulation-service.service';
 import { BgsGlobalStatsService } from './js/services/battlegrounds/bgs-global-stats.service';
 import { CardsInitService } from './js/services/cards-init.service';
-import { CardNotificationsService } from './js/services/collection/card-notifications.service';
-import { CardsMonitorService } from './js/services/collection/cards-monitor.service';
-import { CollectionManager } from './js/services/collection/collection-manager.service';
-import { CollectionStorageService } from './js/services/collection/collection-storage.service';
-import { SetsManagerService } from './js/services/collection/sets-manager.service';
+import { CardsMonitorEventHandlerService } from './js/services/collection/cards-monitor-event-handler.service';
 import { SetsService } from '@firestone/collection/data-access';
 import { DebugService } from './js/services/debug.service';
 import { ConstructedConfigService } from './js/services/decktracker/constructed-config.service';
@@ -696,6 +694,7 @@ try {
 		CommunitiesCommonModule,
 		CollectionCommonModule,
 		CollectionDataAccessModule,
+		CollectionServicesModule,
 		MercenariesCommonModule,
 		MainwindowCommonModule,
 		SettingsViewModule,
@@ -1299,7 +1298,6 @@ try {
 		{ provide: REGION_INFO_SERVICE_TOKEN, useExisting: OverwolfService },
 		{ provide: WINDOW_HANDLER_SERVICE_TOKEN, useExisting: OwWindowHandlerService },
 		{ provide: HOTKEY_HANDLER_SERVICE_TOKEN, useExisting: OwHotkeyHandlerService },
-		{ provide: COLLECTION_MANAGER_SERVICE_TOKEN, useExisting: CollectionManager },
 		{
 			provide: PACK_STATS_UPDATED_HANDLER,
 			useFactory: (facade: MainWindowStateFacadeService) => ({
@@ -1310,6 +1308,8 @@ try {
 		},
 		{ provide: BGS_RUN_STATS_EVENT_HANDLER, useExisting: BgsRunStatsEventHandlerService },
 		BgsRunStatsEventHandlerService,
+		{ provide: CARDS_MONITOR_EVENT_HANDLER, useExisting: CardsMonitorEventHandlerService },
+		CardsMonitorEventHandlerService,
 		{ provide: COLLECTION_PACK_SERVICE_TOKEN, useExisting: PackStatsService },
 		{ provide: REMOTE_ACHIEVEMENTS_SERVICE_TOKEN, useExisting: FirestoneRemoteAchievementsLoaderService },
 		{ provide: GAME_STATS_PROVIDER_SERVICE_TOKEN, useExisting: GameStatsProviderService },
@@ -1327,9 +1327,6 @@ try {
 
 		ChallengeBuilderService,
 
-		CollectionManager,
-		SetsManagerService,
-		CollectionStorageService,
 		HotkeyService,
 
 		AppBootstrapService,
@@ -1363,7 +1360,6 @@ try {
 		{ provide: AllCardsService, useExisting: CardsFacadeService },
 
 		DevService,
-		CardsMonitorService,
 		LogRegisterService,
 		HsClientConfigService,
 		OutOfCardsService,
@@ -1374,7 +1370,6 @@ try {
 		CollectionBootstrapService,
 		PackMonitor,
 		PackStatsService,
-		CardNotificationsService,
 
 		AchievementsLiveProgressTrackingService,
 		FirestoneAchievementsChallengeService,

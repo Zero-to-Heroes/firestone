@@ -1,4 +1,10 @@
-import { CardBack, MemoryInspectionService, MemoryUpdate, MemoryUpdatesService, SceneService } from '@firestone/memory';
+import {
+	CardBack,
+	MemoryInspectionService,
+	MemoryUpdate,
+	MemoryUpdatesService,
+	SceneService,
+} from '@firestone/memory';
 import { GameStatusService } from '@firestone/shared/common/service';
 import { ApiRunner } from '@firestone/shared/framework/core';
 import { Events } from '@firestone/shared/common/service';
@@ -12,16 +18,16 @@ export class CardBacksInternalService extends AbstractCollectionInternalService<
 
 	protected type = () => 'card-backs';
 	protected memoryInfoCountExtractor = (update: MemoryUpdate) => update.CollectionCardBacksCount;
-	protected memoryReadingOperation = () => this.memoryReading.getCardBacks();
+	protected memoryReadingOperation = async () => (await this.memoryReading.getCardBacks()) ?? [];
 	protected isMemoryInfoEmpty = (collection: readonly CardBack[]) => !collection?.length;
 	protected localDbRetrieveOperation = () => this.db.getCardBacks();
 	protected localDbSaveOperation = (collection: readonly CardBack[]) => this.db.saveCardBacks(collection);
 
 	constructor(
-		protected readonly events: Events,
-		protected readonly scene: SceneService,
-		protected readonly memoryUpdates: MemoryUpdatesService,
-		protected readonly gameStatus: GameStatusService,
+		protected override readonly events: Events,
+		protected override readonly scene: SceneService,
+		protected override readonly memoryUpdates: MemoryUpdatesService,
+		protected override readonly gameStatus: GameStatusService,
 		private readonly memoryReading: MemoryInspectionService,
 		private readonly db: CollectionStorageService,
 		private readonly api: ApiRunner,
@@ -29,7 +35,7 @@ export class CardBacksInternalService extends AbstractCollectionInternalService<
 		super(events, scene, memoryUpdates, gameStatus);
 	}
 
-	protected async preInit(): Promise<void> {
+	protected override async preInit(): Promise<void> {
 		this.referenceCardBacks = (await this.api.callGetApi(CARD_BACKS_URL)) ?? [];
 	}
 
@@ -43,12 +49,7 @@ export class CardBacksInternalService extends AbstractCollectionInternalService<
 	): readonly CardBack[] {
 		return referenceCardBacks.map((cardBack) => {
 			const owned = ownedCardBacks.find((cb) => cb.id === cardBack.id);
-			return owned?.owned
-				? ({
-						...cardBack,
-						owned: true,
-				  } as CardBack)
-				: cardBack;
+			return owned?.owned ? ({ ...cardBack, owned: true } as CardBack) : cardBack;
 		});
 	}
 }

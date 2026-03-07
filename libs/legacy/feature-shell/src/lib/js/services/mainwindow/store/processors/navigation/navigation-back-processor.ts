@@ -12,7 +12,7 @@ import {
 	NavigationReplays,
 	NavigationState,
 } from '@firestone/mainwindow/common';
-import { SetsManagerService } from '../../../../collection/sets-manager.service';
+import { SetsManagerService } from '@firestone/collection/services';
 import { NavigationBackEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 

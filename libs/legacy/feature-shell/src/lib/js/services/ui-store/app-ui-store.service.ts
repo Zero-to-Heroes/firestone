@@ -13,15 +13,14 @@ import { DeckSummary } from '@firestone/constructed/common';
 import { BattlegroundsState, GameState, GameStateFacadeService } from '@firestone/game-state';
 import { Card, CardBack } from '@firestone/memory';
 import { PatchesConfigService, Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { CardHistory } from '../../models/card-history';
-import { Coin } from '../../models/coin';
+import { CardHistory, Coin } from '@firestone/collection/services';
 import { MercenariesBattleState } from '../../models/mercenaries/mercenaries-battle-state';
 import { MercenariesOutOfCombatState } from '../../models/mercenaries/out-of-combat/mercenaries-out-of-combat-state';
 import {
 	AchievementsLiveProgressTrackingService,
 	AchievementsProgressTracking,
 } from '../achievement/achievements-live-progress-tracking.service';
-import { CollectionManager } from '../collection/collection-manager.service';
+import { CollectionManager } from '@firestone/collection/services';
 import { DecksProviderService } from '../decktracker/main/decks-provider.service';
 import { CollectionBootstrapService } from '../mainwindow/store/collection-bootstrap.service';
 import { HighlightSelector } from '../mercenaries/highlights/mercenaries-synergies-highlight.service';

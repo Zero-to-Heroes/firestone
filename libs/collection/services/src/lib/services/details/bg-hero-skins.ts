@@ -7,17 +7,18 @@ import { AbstractCollectionInternalService } from './base-is';
 export class BgHeroSkinsInternalService extends AbstractCollectionInternalService<number> {
 	protected type = () => 'bg-hero-skins';
 	protected memoryInfoCountExtractor = (update: MemoryUpdate) => update.CollectionBgHeroSkinsCount;
-	protected memoryReadingOperation = () => this.memoryReading.getBattlegroundsOwnedHeroSkinDbfIds();
+	protected memoryReadingOperation = async () =>
+		(await this.memoryReading.getBattlegroundsOwnedHeroSkinDbfIds()) ?? [];
 	protected isMemoryInfoEmpty = (collection: readonly number[]) => !collection?.length;
 	protected localDbRetrieveOperation = () => this.db.getBattlegroundsOwnedHeroSkinDbfIds();
 	protected localDbSaveOperation = (collection: readonly number[]) =>
 		this.db.saveBattlegroundsOwnedHeroSkinDbfIds(collection);
 
 	constructor(
-		protected readonly events: Events,
-		protected readonly scene: SceneService,
-		protected readonly memoryUpdates: MemoryUpdatesService,
-		protected readonly gameStatus: GameStatusService,
+		protected override readonly events: Events,
+		protected override readonly scene: SceneService,
+		protected override readonly memoryUpdates: MemoryUpdatesService,
+		protected override readonly gameStatus: GameStatusService,
 		private readonly memoryReading: MemoryInspectionService,
 		private readonly db: CollectionStorageService,
 	) {

@@ -12,7 +12,7 @@ import {
 	PowerLogBufferService,
 	PreferencesService,
 } from '@firestone/shared/common/service';
-import { CardsMonitorService } from './collection/cards-monitor.service';
+import { CardsMonitorService } from '@firestone/collection/services';
 
 @Injectable()
 export class LogRegisterService {

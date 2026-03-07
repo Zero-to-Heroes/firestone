@@ -25,7 +25,9 @@ export class SetsManagerService extends AbstractFacadeService<SetsManagerService
 	}
 
 	protected async init() {
-		this.sets$$ = new SubscriberAwareBehaviorSubject<readonly Set[] | null>([]);
+		this.sets$$ = new SubscriberAwareBehaviorSubject<readonly Set[]>([]) as SubscriberAwareBehaviorSubject<
+			readonly Set[]
+		>;
 		this.collectionManager = AppInjector.get(CollectionManager);
 		this.setsService = AppInjector.get(SetsService);
 
@@ -34,7 +36,6 @@ export class SetsManagerService extends AbstractFacadeService<SetsManagerService
 			this.collectionManager.collection$$.pipe(debounceTime(1000)).subscribe((collection) => {
 				collection = collection ?? [];
 				const newSets = this.allSets.map((set) => this.buildSet(collection, set));
-				console.debug('[sets-manager] new sets', collection.length, newSets);
 				this.sets$$.next(newSets);
 			});
 		});
@@ -57,11 +58,11 @@ export class SetsManagerService extends AbstractFacadeService<SetsManagerService
 
 	private buildFullCards(collection: readonly Card[], setCards: readonly SetCard[]): SetCard[] {
 		return setCards.map((card: SetCard) => {
-			const collectionCard: Card = collection.find((collectionCard: Card) => collectionCard.id === card.id);
-			const ownedNonPremium = collectionCard ? collectionCard.count : 0;
-			const ownedPremium = collectionCard ? collectionCard.premiumCount : 0;
-			const ownedDiamond = collectionCard ? collectionCard.diamondCount : 0;
-			const ownedSignature = collectionCard ? collectionCard.signatureCount : 0;
+			const collectionCard: Card | undefined = collection.find((c: Card) => c.id === card.id);
+			const ownedNonPremium = collectionCard?.count ?? 0;
+			const ownedPremium = collectionCard?.premiumCount ?? 0;
+			const ownedDiamond = collectionCard?.diamondCount ?? 0;
+			const ownedSignature = collectionCard?.signatureCount ?? 0;
 			return new SetCard(
 				card.id,
 				card.name,
@@ -77,10 +78,8 @@ export class SetsManagerService extends AbstractFacadeService<SetsManagerService
 	}
 }
 
-export const getCard = (allSets: readonly Set[], cardId: string): SetCard => {
-	return allSets?.map((set) => set.getCard(cardId)).find((card) => card);
-};
+export const getCard = (allSets: readonly Set[], cardId: string): SetCard | undefined =>
+	allSets?.map((set) => set.getCard(cardId)).find((card) => card);
 
-export const getAllCards = (allSets: readonly Set[]): readonly SetCard[] => {
-	return allSets?.map((set) => set.allCards).reduce((a, b) => a.concat(b), []);
-};
+export const getAllCards = (allSets: readonly Set[]): readonly SetCard[] =>
+	allSets?.map((set) => set.allCards).reduce((a, b) => a.concat(b), []);

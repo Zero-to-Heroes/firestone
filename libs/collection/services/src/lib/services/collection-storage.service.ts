@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { Card, CardBack, PackInfoForCollection as PackInfo } from '@firestone/memory';
 import { DiskCacheService } from '@firestone/shared/common/service';
 import { LocalStorageService } from '@firestone/shared/framework/core';
-import { CardHistory } from '../../models/card-history';
-import { Coin } from '../../models/coin';
+import { CardHistory } from '../model/card-history';
+import { Coin } from '../model/coin';
 
 @Injectable()
 export class CollectionStorageService {

@@ -5,7 +5,7 @@ import {
 	NavigationCollection,
 	NavigationState,
 } from '@firestone/mainwindow/common';
-import { SetsManagerService } from '../../../../collection/sets-manager.service';
+import { SetsManagerService } from '@firestone/collection/services';
 import { SelectCollectionSetEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 

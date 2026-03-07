@@ -34,6 +34,7 @@
 			"@firestone/battlegrounds/view": ["libs/battlegrounds/view/src/index.ts"],
 			"@firestone/collection/common": ["libs/collection/common/src/index.ts"],
 			"@firestone/collection/data-access": ["libs/collection/data-access/src/index.ts"],
+			"@firestone/collection/services": ["libs/collection/services/src/index.ts"],
 			"@firestone/collection/view": ["libs/collection/view/src/index.ts"],
 			"@firestone/communities/common": ["libs/communities/common/src/index.ts"],
 			"@firestone/constructed/common": ["libs/constructed/common/src/index.ts"],

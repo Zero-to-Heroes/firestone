@@ -13,19 +13,17 @@ import { AbstractCollectionInternalService } from './base-is';
 export class AllTimeBoostersInternalService extends AbstractCollectionInternalService<PackInfo> {
 	protected type = () => 'all-time-boosters';
 	protected memoryInfoCountExtractor = (update: MemoryUpdate) => update.BoostersCount;
-	protected memoryReadingOperation = () => this.memoryReading.getBoostersInfo();
+	protected memoryReadingOperation = async () => (await this.memoryReading.getBoostersInfo()) ?? [];
 	protected isMemoryInfoEmpty = (collection: readonly PackInfo[]) => !collection?.length;
 	protected localDbRetrieveOperation = () => this.db.getAllTimeBoosters();
-	protected localDbSaveOperation = (collection: readonly PackInfo[]) => {
-		console.log('[all-time-boosters] saving collection', collection?.length);
-		return this.db.saveAllTimeBoosters(collection);
-	};
+	protected localDbSaveOperation = (collection: readonly PackInfo[]) =>
+		this.db.saveAllTimeBoosters(collection);
 
 	constructor(
-		protected readonly events: Events,
-		protected readonly scene: SceneService,
-		protected readonly memoryUpdates: MemoryUpdatesService,
-		protected readonly gameStatus: GameStatusService,
+		protected override readonly events: Events,
+		protected override readonly scene: SceneService,
+		protected override readonly memoryUpdates: MemoryUpdatesService,
+		protected override readonly gameStatus: GameStatusService,
 		private readonly memoryReading: MemoryInspectionService,
 		private readonly db: CollectionStorageService,
 	) {

@@ -6,7 +6,7 @@ import { IOption } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
-import { CollectionManager } from '../../services/collection/collection-manager.service';
+import { CollectionManager } from '@firestone/collection/services';
 import { ShowCardBackDetailsEvent } from '@firestone/mainwindow/common';
 import { InternalCardBack } from './internal-card-back';
 

@@ -4,8 +4,7 @@ import { IOption } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
-import { Coin } from '../../models/coin';
-import { CollectionManager } from '../../services/collection/collection-manager.service';
+import { Coin, CollectionManager } from '@firestone/collection/services';
 import { CollectionReferenceCard } from './collection-reference-card';
 
 @Component({

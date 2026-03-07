@@ -14,8 +14,7 @@ import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest } from 'rxjs';
-import { CardHistory } from '../../models/card-history';
-import { cardPremiumToCardType } from '../../services/collection/cards-monitor.service';
+import { CardHistory, cardPremiumToCardType } from '@firestone/collection/services';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { ShowCardDetailsEvent } from '@firestone/mainwindow/common';
 

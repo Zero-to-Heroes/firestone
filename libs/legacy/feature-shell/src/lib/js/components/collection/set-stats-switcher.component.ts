@@ -4,7 +4,7 @@ import { CollectionSetStatsTypeFilterType, PreferencesService } from '@firestone
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, debounceTime } from 'rxjs';
-import { SetsManagerService } from '../../services/collection/sets-manager.service';
+import { SetsManagerService } from '@firestone/collection/services';
 
 @Component({
 	standalone: false,

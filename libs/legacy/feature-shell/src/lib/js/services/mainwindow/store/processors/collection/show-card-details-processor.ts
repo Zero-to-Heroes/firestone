@@ -6,7 +6,7 @@ import {
 	NavigationState,
 } from '@firestone/mainwindow/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { SetsManagerService } from '../../../../collection/sets-manager.service';
+import { SetsManagerService } from '@firestone/collection/services';
 import { ShowCardDetailsEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 

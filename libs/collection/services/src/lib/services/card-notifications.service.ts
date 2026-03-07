@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { NotificationsService, PreferencesService } from '@firestone/shared/common/service';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { CollectionCardType } from '@firestone-hs/user-packs';
+import { NotificationsService, PreferencesService } from '@firestone/shared/common/service';
+import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 
 @Injectable()
 export class CardNotificationsService {
@@ -10,26 +9,17 @@ export class CardNotificationsService {
 		private readonly notificationService: NotificationsService,
 		private readonly cards: CardsFacadeService,
 		private readonly prefs: PreferencesService,
-		private readonly i18n: LocalizationFacadeService,
+		private readonly i18n: ILocalizationService,
 	) {}
 
 	public async createNewCardToast(cardId: string, isSecondCopy: boolean, type: CollectionCardType) {
-		console.debug('[card-notification] creating new card toast', cardId, isSecondCopy, type);
 		const dbCard = this.cards.getCard(cardId);
-		if (!dbCard) {
-			console.warn('[card-notification] missing card', cardId);
-			return;
-		}
+		if (!dbCard) return;
 
 		const prefs = await this.prefs.getPreferences();
-		if (!prefs.collectionEnableNotifications) {
-			// console.debug('[card-notification] notifs disabled, not showing any notif');
-			return;
-		}
+		if (!prefs.collectionEnableNotifications) return;
 
-		if (!prefs.showCommon && dbCard.rarity === 'Common') {
-			return;
-		}
+		if (!prefs.showCommon && dbCard.rarity === 'Common') return;
 
 		const cardName: string = dbCard.name;
 		const goldenClass = type === 'GOLDEN' || type === 'DIAMOND' || type === 'SIGNATURE' ? 'premium' : '';
@@ -44,10 +34,9 @@ export class CardNotificationsService {
 						? this.i18n.translateString(`app.collection.card-history.version.${type.toLowerCase()}`) + ' '
 						: '',
 				});
-		console.log('[card-notification] displaying new card toast notification for', cardName);
 		const rarity = dbCard?.rarity?.toLowerCase() || 'free';
-
 		const clickText = this.i18n.translateString('app.collection.card-history.click-to-expand');
+
 		this.notificationService.emitNewNotification({
 			content: `<div class="message-container message-new-card ${goldenClass}">
 					<div class="outer-border" *ngIf="goldenClass"></div>
@@ -84,13 +73,9 @@ export class CardNotificationsService {
 
 	public async createDustToast(dust: number, numberOfCards: number) {
 		const prefs = await this.prefs.getPreferences();
-		if (!prefs.collectionEnableNotifications) {
-			// console.debug('[card-notification] notifs disabled, not showing any notif');
-			return;
-		}
+		if (!prefs.collectionEnableNotifications) return;
 
 		if (prefs.showDust) {
-			// console.debug('[card-notification] showing dust notification', dust, numberOfCards);
 			const duplicateCardsText = this.i18n.translateString('app.collection.card-history.duplicate-cards', {
 				numberOfCards: numberOfCards,
 			});

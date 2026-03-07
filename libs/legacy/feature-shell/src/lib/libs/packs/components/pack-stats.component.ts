@@ -14,8 +14,7 @@ import {
 } from '@firestone/collection/view';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { CollectionManager } from '@legacy-import/src/lib/js/services/collection/collection-manager.service';
-import { getPackDustValue } from '@legacy-import/src/lib/js/services/collection/collection-utils';
+import { CollectionManager, getPackDustValue } from '@firestone/collection/services';
 import { CollectionBootstrapService } from '@legacy-import/src/lib/js/services/mainwindow/store/collection-bootstrap.service';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { LocalizationFacadeService } from '../../../js/services/localization-facade.service';

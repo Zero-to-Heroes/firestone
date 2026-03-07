@@ -9,9 +9,7 @@ import {
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
 import { BehaviorSubject, filter } from 'rxjs';
-import { CardHistory } from '../../../models/card-history';
-import { cardTypeToPremium } from '../../collection/cards-monitor.service';
-import { CollectionManager } from '../../collection/collection-manager.service';
+import { CardHistory, cardTypeToPremium, CollectionManager } from '@firestone/collection/services';
 
 @Injectable()
 export class CollectionBootstrapService extends AbstractFacadeService<CollectionBootstrapService> {
@@ -78,7 +76,7 @@ export class CollectionBootstrapService extends AbstractFacadeService<Collection
 	private buildCardHistory(card: CardPackResult, creationTimestamp: number): CardHistory {
 		const result: CardHistory = {
 			cardId: card.cardId,
-			premium: cardTypeToPremium(card.cardType, card),
+			premium: cardTypeToPremium(card.cardType),
 			isNewCard: card.isNew || card.isSecondCopy,
 			relevantCount: card.isNew ? 1 : card.isSecondCopy ? 2 : -1,
 			creationTimestamp: creationTimestamp,

@@ -2,7 +2,7 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { Set } from '@firestone/collection/common';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, filter } from 'rxjs';
-import { CardHistory } from '../../models/card-history';
+import { CardHistory } from '@firestone/collection/services';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 

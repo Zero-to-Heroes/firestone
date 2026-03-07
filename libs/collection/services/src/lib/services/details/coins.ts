@@ -1,9 +1,15 @@
 import { isCoin, ReferenceCard } from '@firestone-hs/reference-data';
-import { CoinInfo, MemoryInspectionService, MemoryUpdate, MemoryUpdatesService, SceneService } from '@firestone/memory';
+import {
+	CoinInfo,
+	MemoryInspectionService,
+	MemoryUpdate,
+	MemoryUpdatesService,
+	SceneService,
+} from '@firestone/memory';
 import { GameStatusService } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { Coin } from '../../../models/coin';
 import { Events } from '@firestone/shared/common/service';
+import { Coin } from '../../model/coin';
 import { CollectionStorageService } from '../collection-storage.service';
 import { AbstractCollectionInternalService } from './base-is';
 
@@ -12,16 +18,16 @@ export class CoinsInternalService extends AbstractCollectionInternalService<Coin
 
 	protected type = () => 'coins';
 	protected memoryInfoCountExtractor = (update: MemoryUpdate) => update.CollectionCoinsCount;
-	protected memoryReadingOperation = () => this.memoryReading.getCoins();
+	protected memoryReadingOperation = async () => (await this.memoryReading.getCoins()) ?? [];
 	protected isMemoryInfoEmpty = (collection: readonly CoinInfo[]) => !collection?.length;
 	protected localDbRetrieveOperation = () => this.db.getCoins();
 	protected localDbSaveOperation = (collection: readonly Coin[]) => this.db.saveCoins(collection);
 
 	constructor(
-		protected readonly events: Events,
-		protected readonly scene: SceneService,
-		protected readonly memoryUpdates: MemoryUpdatesService,
-		protected readonly gameStatus: GameStatusService,
+		protected override readonly events: Events,
+		protected override readonly scene: SceneService,
+		protected override readonly memoryUpdates: MemoryUpdatesService,
+		protected override readonly gameStatus: GameStatusService,
 		private readonly memoryReading: MemoryInspectionService,
 		private readonly db: CollectionStorageService,
 		private readonly allCards: CardsFacadeService,

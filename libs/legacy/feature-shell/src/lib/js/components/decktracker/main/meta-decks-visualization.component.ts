@@ -25,8 +25,11 @@ import {
 import { CardsFacadeService, getDateAgo } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, shareReplay, startWith, takeUntil } from 'rxjs/operators';
-import { CollectionManager } from '../../../services/collection/collection-manager.service';
-import { dustToCraftFor, getOwnedForDeckBuilding } from '../../../services/collection/collection-utils';
+import {
+	CollectionManager,
+	dustToCraftFor,
+	getOwnedForDeckBuilding,
+} from '@firestone/collection/services';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({

@@ -9,8 +9,7 @@ import { PackResult } from '@firestone-hs/user-packs';
 import { DeckSummary } from '@firestone/constructed/common';
 import { Card, CardBack } from '@firestone/memory';
 import { Preferences } from '@firestone/shared/common/service';
-import { CardHistory } from '../../models/card-history';
-import { Coin } from '../../models/coin';
+import { CardHistory, Coin } from '@firestone/collection/services';
 import { AchievementsProgressTracking } from '../achievement/achievements-live-progress-tracking.service';
 import { sleep } from '../utils';
 import {

@@ -13,8 +13,7 @@ import { CardBack } from '@firestone/memory';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ADS_SERVICE_TOKEN, CardsFacadeService, IAdsService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
-import { CollectionManager } from '../../services/collection/collection-manager.service';
-import { SetsManagerService } from '../../services/collection/sets-manager.service';
+import { CollectionManager, SetsManagerService } from '@firestone/collection/services';
 
 @Component({
 	standalone: false,

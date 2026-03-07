@@ -1,0 +1,32 @@
+{
+	"name": "collection/services",
+	"$schema": "../../../node_modules/nx/schemas/project-schema.json",
+	"projectType": "library",
+	"sourceRoot": "libs/collection/services/src",
+	"prefix": "firestone",
+	"targets": {
+		"build": {
+			"executor": "@nx/angular:package",
+			"outputs": ["{workspaceRoot}/dist/{projectRoot}"],
+			"options": {
+				"project": "libs/collection/services/ng-package.json"
+			},
+			"configurations": {
+				"production": {
+					"tsConfig": "libs/collection/services/tsconfig.lib.prod.json"
+				},
+				"development": {
+					"tsConfig": "libs/collection/services/tsconfig.lib.json"
+				}
+			},
+			"defaultConfiguration": "production"
+		},
+		"lint": {
+			"executor": "@nx/linter:eslint",
+			"options": {
+				"lintFilePatterns": ["libs/collection/services/**/*.ts", "libs/collection/services/**/*.html"]
+			}
+		}
+	},
+	"tags": []
+}

@@ -6,7 +6,7 @@ import {
 	NavigationState,
 } from '@firestone/mainwindow/common';
 import { CardBack } from '@firestone/memory';
-import { CollectionManager } from '../../../../collection/collection-manager.service';
+import { CollectionManager } from '@firestone/collection/services';
 import { ShowCardBackDetailsEvent } from '@firestone/mainwindow/common';
 import { Processor } from '../processor';
 

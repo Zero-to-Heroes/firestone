@@ -4,7 +4,7 @@ import { GameStatusService, NotificationsService, PreferencesService } from '@fi
 import { ApiRunner, CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { combineLatest, distinctUntilChanged, filter, map, take } from 'rxjs';
-import { CollectionManager } from '../collection/collection-manager.service';
+import { CollectionManager } from '@firestone/collection/services';
 
 const COLLECTION_UPLOAD = `https://outof.games/api/hearthstone/collection/import/`;
 

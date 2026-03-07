@@ -7,7 +7,7 @@ import { AbstractSubscriptionComponent } from '@firestone/shared/framework/commo
 import { StatGameFormatType } from '@firestone/stats/data-access';
 import { Observable, combineLatest } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
-import { SetsManagerService } from '../../services/collection/sets-manager.service';
+import { SetsManagerService } from '@firestone/collection/services';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { GenericPreferencesUpdateEvent } from '@firestone/mainwindow/common';
 

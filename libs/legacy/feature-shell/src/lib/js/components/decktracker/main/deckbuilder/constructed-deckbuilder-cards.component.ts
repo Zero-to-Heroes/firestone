@@ -17,7 +17,7 @@ import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
-import { SetsManagerService } from '@legacy-import/src/lib/js/services/collection/sets-manager.service';
+import { SetsManagerService } from '@firestone/collection/services';
 import { ConstructedConfigService } from '@legacy-import/src/lib/js/services/decktracker/constructed-config.service';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { groupByFunction, sortByProperties } from '@services/utils';
