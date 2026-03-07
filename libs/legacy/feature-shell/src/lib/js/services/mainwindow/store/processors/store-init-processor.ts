@@ -6,14 +6,14 @@ import { ConstructedNavigationService } from '@firestone/constructed/common';
 import { MainWindowNavigationService, MainWindowState, NavigationState } from '@firestone/mainwindow/common';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { waitForReady } from '@firestone/shared/framework/core';
-import { LocalizationService } from '@services/localization.service';
+import { ILocalizationService } from '@firestone/shared/framework/core';
 import { ChangeVisibleApplicationEvent } from '../events/change-visible-application-event';
 import { ChangeVisibleApplicationProcessor } from './change-visible-application-processor';
 
 export class StoreInitProcessor {
 	constructor(
 		private readonly prefs: PreferencesService,
-		private readonly i18n: LocalizationService,
+		private readonly i18n: ILocalizationService,
 		private readonly mainNav: MainWindowNavigationService,
 		private readonly collectionNav: CollectionNavigationService,
 		private readonly battlegroundsNav: BattlegroundsNavigationService,

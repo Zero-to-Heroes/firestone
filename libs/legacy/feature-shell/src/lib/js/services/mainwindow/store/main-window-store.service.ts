@@ -22,17 +22,15 @@ import {
 import { AppNavigationService, Events, PreferencesService } from '@firestone/shared/common/service';
 import {
 	CardsFacadeService,
+	ILocalizationService,
 	IWindowHandlerService,
 	waitForReady,
 	WINDOW_HANDLER_SERVICE_TOKEN,
 } from '@firestone/shared/framework/core';
 import { GameStatsLoaderService } from '@firestone/stats/data-access';
 import { TranslateService } from '@ngx-translate/core';
-import { LocalizationService } from '@services/localization.service';
 import { Map } from 'immutable';
 import { BehaviorSubject, filter } from 'rxjs';
-import { MailboxMarkMessageReadEvent } from '../../../../libs/mails/services/mailbox-mark-message-read-event';
-import { MailboxMarkMessageReadProcessor } from '../../../../libs/mails/services/mailbox-mark-message-read-processor';
 import { PackStatsService } from '../../../../libs/packs/services/pack-stats.service';
 import { BgsPerfectGamesService } from '../../battlegrounds/bgs-perfect-games.service';
 import { BgsRunStatsService } from '../../battlegrounds/bgs-run-stats.service';
@@ -246,7 +244,7 @@ export class MainWindowStoreService implements IMainWindowStoreService {
 		private readonly decksProvider: DecksProviderService,
 		private readonly bgsRunStatsService: BgsRunStatsService,
 		private readonly translate: TranslateService,
-		private readonly i18n: LocalizationService,
+		private readonly i18n: ILocalizationService,
 		private readonly packsService: PackStatsService,
 		private readonly setsManager: SetsManagerService,
 		private readonly collectionBootstrap: CollectionBootstrapService,
@@ -493,8 +491,6 @@ export class MainWindowStoreService implements IMainWindowStoreService {
 			[RecomputeGameStatsEvent.eventName(), new RecomputeGameStatsProcessor(this.gameStats)],
 			[GamesFullRefreshEvent.eventName(), new GameStatsFullRefreshProcessor(this.gameStatsLoader)],
 			[GamesFullClearEvent.eventName(), new GameStatsFullClearProcessor(this.gameStatsLoader)],
-			// Mailbox
-			[MailboxMarkMessageReadEvent.eventName(), new MailboxMarkMessageReadProcessor(this.prefs)],
 			// Replays
 			[
 				ShowReplayEvent.eventName(),

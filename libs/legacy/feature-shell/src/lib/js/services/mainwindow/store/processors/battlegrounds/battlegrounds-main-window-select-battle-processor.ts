@@ -3,13 +3,13 @@ import { BgsSimulatorControllerService } from '@firestone/battlegrounds/simulato
 import { MainWindowNavigationService, MainWindowState, NavigationState } from '@firestone/mainwindow/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { IWindowHandlerService, waitForReady } from '@firestone/shared/framework/core';
-import { LocalizationService } from '@services/localization.service';
+import { ILocalizationService } from '@firestone/shared/framework/core';
 import { BattlegroundsMainWindowSelectBattleEvent } from '../../events/battlegrounds/battlegrounds-main-window-select-battle-event';
 import { Processor } from '../processor';
 
 export class BattlegroundsMainWindowSelectBattleProcessor implements Processor {
 	constructor(
-		private readonly i18n: LocalizationService,
+		private readonly i18n: ILocalizationService,
 		private readonly nav: BattlegroundsNavigationService,
 		private readonly mainNav: MainWindowNavigationService,
 		private readonly prefs: PreferencesService,

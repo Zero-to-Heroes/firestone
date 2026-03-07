@@ -1,6 +1,5 @@
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
-import { LocalizationService } from '@services/localization.service';
-
+import { ILocalizationService } from '@firestone/shared/framework/core';
 import { MainWindowState, MatchDetail, NavigationReplays, NavigationState } from '@firestone/mainwindow/common';
 import { GameStatsLoaderService } from '@firestone/stats/data-access';
 import { BgsPerfectGamesService } from '../../../../battlegrounds/bgs-perfect-games.service';
@@ -11,7 +10,7 @@ import { Processor } from '../processor';
 export class ShowReplayProcessor implements Processor {
 	constructor(
 		private readonly bgsRunStats: BgsRunStatsService,
-		private readonly i18n: LocalizationService,
+		private readonly i18n: ILocalizationService,
 		private readonly gameStats: GameStatsLoaderService,
 		private readonly perfectGames: BgsPerfectGamesService,
 		private readonly mainNav: MainWindowNavigationService,

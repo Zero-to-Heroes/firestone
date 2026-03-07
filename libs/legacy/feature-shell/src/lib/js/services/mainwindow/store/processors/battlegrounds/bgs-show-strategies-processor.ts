@@ -4,7 +4,7 @@ import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { MainWindowState, NavigationState } from '@firestone/mainwindow/common';
 import { Events } from '@firestone/shared/common/service';
-import { LocalizationService } from '../../../../localization.service';
+import { ILocalizationService } from '@firestone/shared/framework/core';
 import { BgsPersonalStatsSelectHeroDetailsEvent } from '../../events/battlegrounds/bgs-personal-stats-select-hero-details-event';
 import { BgsShowStrategiesEvent } from '../../events/battlegrounds/bgs-show-strategies-event';
 import { Processor } from '../processor';
@@ -14,7 +14,7 @@ export class BgsShowStrategiesProcessor implements Processor {
 	constructor(
 		private readonly events: Events,
 		private readonly allCards: CardsFacadeService,
-		private readonly i18n: LocalizationService,
+		private readonly i18n: ILocalizationService,
 		private readonly nav: BattlegroundsNavigationService,
 		private readonly mainNav: MainWindowNavigationService,
 	) {}

@@ -6,7 +6,7 @@ import {
 	NavigationState,
 } from '@firestone/mainwindow/common';
 import { Card } from '@firestone/memory';
-import { LocalizationService } from '@services/localization.service';
+import { ILocalizationService } from '@firestone/shared/framework/core';
 import { CollectionManager } from '../../../../collection/collection-manager.service';
 import { SetsService } from '../../../../collection/sets-service.service';
 import { SearchCardsEvent } from '../../events/collection/search-cards-event';
@@ -16,7 +16,7 @@ export class SearchCardProcessor implements Processor {
 	constructor(
 		private readonly collectionManager: CollectionManager,
 		private readonly cards: SetsService,
-		private readonly i18n: LocalizationService,
+		private readonly i18n: ILocalizationService,
 		private readonly collectionNav: CollectionNavigationService,
 		private readonly mainNav: MainWindowNavigationService,
 	) {}

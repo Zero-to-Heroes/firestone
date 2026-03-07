@@ -1,8 +1,7 @@
 import { BgsPostMatchStatsPanel } from '@firestone/game-state';
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { LocalizationService } from '@services/localization.service';
-
+import { ILocalizationService } from '@firestone/shared/framework/core';
 import { MainWindowState, MatchDetail, NavigationReplays, NavigationState } from '@firestone/mainwindow/common';
 import { GameStatsLoaderService } from '@firestone/stats/data-access';
 import { BgsPerfectGamesService } from '../../../../battlegrounds/bgs-perfect-games.service';
@@ -14,7 +13,7 @@ export class TriggerShowMatchStatsProcessor implements Processor {
 	constructor(
 		private readonly bgsRunStats: BgsRunStatsService,
 		private readonly prefs: PreferencesService,
-		private readonly i18n: LocalizationService,
+		private readonly i18n: ILocalizationService,
 		private readonly gameStats: GameStatsLoaderService,
 		private readonly perfectGames: BgsPerfectGamesService,
 		private readonly mainNav: MainWindowNavigationService,

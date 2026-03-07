@@ -5,7 +5,7 @@ import { CollectionNavigationService } from '@firestone/collection/common';
 import { ConstructedNavigationService } from '@firestone/constructed/common';
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { LocalizationService } from '@services/localization.service';
+import { ILocalizationService } from '@firestone/shared/framework/core';
 import {
 	MainWindowState,
 	NavigationAchievements,
@@ -19,7 +19,7 @@ import { Processor } from './processor';
 export class ChangeVisibleApplicationProcessor implements Processor {
 	constructor(
 		private readonly prefs: PreferencesService,
-		private readonly i18n: LocalizationService,
+		private readonly i18n: ILocalizationService,
 		private readonly mainNav: MainWindowNavigationService,
 		private readonly collectionNav: CollectionNavigationService,
 		private readonly bgNav: BattlegroundsNavigationService,
