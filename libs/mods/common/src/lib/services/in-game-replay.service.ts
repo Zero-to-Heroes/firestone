@@ -53,19 +53,23 @@ export class InGameReplayService extends AbstractFacadeService<InGameReplayServi
 
 	constructor(windowManager: WindowManagerService) {
 		super(windowManager, 'InGameReplayService', () => !!this.status$$);
+		console.debug('[debug] [in-game-replay] constructor');
 	}
 
 	protected override assignSubjects(): void {
 		this.status$$ = this.mainInstance.status$$;
 		this.isReplayOngoing$$ = this.mainInstance.isReplayOngoing$$;
+		console.debug('[debug] [in-game-replay] assignSubjects');
 	}
 
 	protected override init(): void | Promise<void> {
+		console.debug('[debug] [in-game-replay] init');
 		this.status$$ = new BehaviorSubject<ReplayStatus>({ type: 'status', state: 'idle' });
 		this.isReplayOngoing$$ = new BehaviorSubject<boolean>(false);
 		this.modsManager = AppInjector.get(ModsManagerService);
 		this.gameStatus = AppInjector.get(GameStatusService);
 		this.api = AppInjector.get(ApiRunner);
+		console.debug('[debug] [in-game-replay] init 2');
 
 		this.status$$
 			.pipe(
@@ -76,14 +80,19 @@ export class InGameReplayService extends AbstractFacadeService<InGameReplayServi
 				console.log('[in-game-replay] isReplayOngoing', ongoing);
 				this.isReplayOngoing$$.next(ongoing);
 			});
+		console.debug('[debug] [in-game-replay] init 3');
 	}
 
 	protected override initElectronSubjects(): void {
-		// Do nothing
+		this.setupElectronSubject(this.status$$, 'InGameReplayService-status');
+		this.setupElectronSubject(this.isReplayOngoing$$, 'InGameReplayService-isReplayOngoing');
+		console.debug('[debug] [in-game-replay] initElectronSubjects');
 	}
 
 	protected override createElectronProxy(ipcRenderer: any): void {
-		// Do nothing
+		this.status$$ = new BehaviorSubject<ReplayStatus>({ type: 'status', state: 'idle' });
+		this.isReplayOngoing$$ = new BehaviorSubject<boolean>(false);
+		console.debug('[debug] [in-game-replay] createElectronProxy');
 	}
 
 	override async initElectronMainProcess(): Promise<void> {

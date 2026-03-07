@@ -21,11 +21,15 @@ export class MainWindowStateFacadeService extends AbstractFacadeService<MainWind
 
 	protected async init() {
 		this.mainWindowState$$ = new BehaviorSubject<MainWindowState | null>(new MainWindowState());
-		this.store = AppInjector.get(MAIN_WINDOW_STORE_SERVICE_TOKEN);
+		try {
+			this.store = AppInjector.get(MAIN_WINDOW_STORE_SERVICE_TOKEN);
 
-		this.store.mainWindowState$$.subscribe((state) => {
-			this.mainWindowState$$.next(state);
-		});
+			this.store.mainWindowState$$.subscribe((state) => {
+				this.mainWindowState$$.next(state);
+			});
+		} catch (e) {
+			console.error('[main-window-state-facade] error initializing', e);
+		}
 	}
 
 	protected override async initElectronMainProcess() {
