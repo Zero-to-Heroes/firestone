@@ -1,4 +1,4 @@
-import { OverwolfService } from '@firestone/shared/framework/core';
+import type { LogFileBackend } from '@firestone/shared/common/service';
 import { configLocation, ModData } from '../..';
 
 export interface BepInExConfig {
@@ -12,10 +12,10 @@ export interface BepInExConfig {
 export const buildBepInExConfig = async (
 	configFile: string,
 	assemblyName: string,
-	ow: OverwolfService,
+	fileBackend: LogFileBackend,
 ): Promise<BepInExConfig> => {
 	console.debug('[mods-manager] building bepin-ex config', configFile, assemblyName);
-	const config = await ow.readTextFile(configFile);
+	const config = (await fileBackend.readTextFile(configFile)) ?? '';
 	// console.debug('[mods-manager] config', config);
 	const configObj = parseConfig(config);
 	console.debug('[mods-manager] configObj', configObj);
@@ -28,9 +28,13 @@ export const buildBepInExConfig = async (
 	};
 };
 
-export const updateModeVersionInBepInExConfig = async (mod: ModData, installPath: string, ow: OverwolfService) => {
+export const updateModeVersionInBepInExConfig = async (
+	mod: ModData,
+	installPath: string,
+	fileBackend: LogFileBackend,
+) => {
 	const configFile = `${installPath}\\${configLocation}\\${mod.AssemblyName}.cfg`;
-	const config = await ow.readTextFile(configFile);
+	const config = (await fileBackend.readTextFile(configFile)) ?? '';
 	console.debug('[mods] config file', config, mod, installPath);
 
 	// Replace only the Version line, preserving all other content and formatting
@@ -45,12 +49,16 @@ export const updateModeVersionInBepInExConfig = async (mod: ModData, installPath
 		})
 		.join('\n');
 
-	await ow.writeFileContents(configFile, newConfig);
+	await fileBackend.writeFileContents(configFile, newConfig);
 };
 
-export const createInitialConfigFile = async (mod: ModData, installPath: string, ow: OverwolfService) => {
+export const createInitialConfigFile = async (
+	mod: ModData,
+	installPath: string,
+	fileBackend: LogFileBackend,
+) => {
 	const configFile = `${installPath}\\${configLocation}\\${mod.AssemblyName}.cfg`;
-	const existingConfig = await ow.readTextFile(configFile);
+	const existingConfig = await fileBackend.readTextFile(configFile);
 	console.debug('[mods] existing config file', existingConfig, mod, installPath);
 	if (existingConfig?.length) {
 		return;
@@ -71,7 +79,7 @@ Version = ${mod.Version}
 # Setting type: String
 DownloadLink = ${mod.DownloadLink}
 `;
-	await ow.writeFileContents(configFile, newConfig);
+	await fileBackend.writeFileContents(configFile, newConfig);
 };
 
 /*

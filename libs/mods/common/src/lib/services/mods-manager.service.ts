@@ -1,11 +1,16 @@
 import { Injectable } from '@angular/core';
-import { GameStatusService, Preferences, PreferencesService } from '@firestone/shared/common/service';
+import {
+	GameStatusService,
+	LOG_FILE_BACKEND,
+	Preferences,
+	PreferencesService,
+} from '@firestone/shared/common/service';
+import type { LogFileBackend } from '@firestone/shared/common/service';
 import { Mutable, sortByProperties } from '@firestone/shared/framework/common';
 import {
 	AbstractFacadeService,
 	ApiRunner,
 	AppInjector,
-	OverwolfService,
 	OwUtilsService,
 	waitForReady,
 	WindowManagerService,
@@ -45,7 +50,7 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 	private gameStatus: GameStatusService;
 	private api: ApiRunner;
 	private prefs: PreferencesService;
-	private ow: OverwolfService;
+	private fileBackend: LogFileBackend;
 	private io: OwUtilsService;
 
 	private modsConfig: { trustedMods: readonly ModData[] } | null = null;
@@ -65,7 +70,7 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 		this.gameStatus = AppInjector.get(GameStatusService);
 		this.api = AppInjector.get(ApiRunner);
 		this.prefs = AppInjector.get(PreferencesService);
-		this.ow = AppInjector.get(OverwolfService);
+		this.fileBackend = AppInjector.get(LOG_FILE_BACKEND);
 		this.io = AppInjector.get(OwUtilsService);
 
 		await waitForReady(this.prefs, this.gameStatus);
@@ -136,19 +141,19 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 		return this.callOnMainProcess<'wrong-path' | 'installed' | 'not-installed'>('checkModsInternal', installPath);
 	}
 	private async checkModsInternal(installPath: string): Promise<'wrong-path' | 'installed' | 'not-installed'> {
-		const files = await this.ow.listFilesInDirectory(installPath);
-		if (!files.data?.some((f) => f.type === 'file' && f.name === 'Hearthstone.exe')) {
+		const files = await this.fileBackend.listFilesInDirectory(installPath);
+		if (!files?.data?.some((f) => f.type === 'file' && f.name === 'Hearthstone.exe')) {
 			console.warn('Not a Hearthstone directory, missing Hearthstone.exe', installPath, files);
 			return 'wrong-path';
 		}
 		await this.updateInstallPath(installPath);
 		console.debug('files in HS dir', files);
 		let modsEnabled =
-			files.data?.some((f) => f.type === 'dir' && f.name === 'BepInEx') &&
-			files.data?.some((f) => f.type === 'file' && f.name === 'winhttp.dll');
+			files?.data?.some((f) => f.type === 'dir' && f.name === 'BepInEx') &&
+			files?.data?.some((f) => f.type === 'file' && f.name === 'winhttp.dll');
 		// Also check if the unstripped libs are present
-		const unstrippedLibs = await this.ow.listFilesInDirectory(`${installPath}\\BepInEx\\unstripped_corlib`);
-		modsEnabled = modsEnabled && unstrippedLibs.data?.length === UNSTRIPPED_LIBS.length;
+		const unstrippedLibs = await this.fileBackend.listFilesInDirectory(`${installPath}\\BepInEx\\unstripped_corlib`);
+		modsEnabled = modsEnabled && unstrippedLibs?.data?.length === UNSTRIPPED_LIBS.length;
 		console.debug('mods enabled?', modsEnabled);
 		return modsEnabled ? 'installed' : 'not-installed';
 	}
@@ -158,11 +163,11 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 	}
 	private async installedModsInternal(installPath: string): Promise<readonly ModData[]> {
 		// First we look into the config files
-		const configFiles = await this.ow.listFilesInDirectory(`${installPath}\\${configLocation}\\`);
+		const configFiles = await this.fileBackend.listFilesInDirectory(`${installPath}\\${configLocation}\\`);
 		console.debug('[mods-manager] configFiles', configFiles, installPath);
 		const bepInExConfigs: readonly BepInExConfig[] = await Promise.all(
-			configFiles.data?.map((f) =>
-				buildBepInExConfig(configFiles.path + '\\' + f.name, f.name.split('.cfg')[0], this.ow),
+			configFiles?.data?.map((f) =>
+				buildBepInExConfig((configFiles?.path ?? '') + '\\' + f.name, f.name.split('.cfg')[0], this.fileBackend),
 			) ?? [],
 		);
 		console.debug('[mods-manager] bepInExConfigs', bepInExConfigs);
@@ -170,8 +175,8 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 
 		// Then we look into the plugins folder. This is only useful to remove configs that don't have a
 		// corresponding plugin
-		const pluginsFiles = await this.ow.listFilesInDirectory(`${installPath}\\${modsLocation}\\`);
-		const uniqueFiles = pluginsFiles.data?.filter((f) => f.type === 'file').map((f) => f.name) ?? [];
+		const pluginsFiles = await this.fileBackend.listFilesInDirectory(`${installPath}\\${modsLocation}\\`);
+		const uniqueFiles = pluginsFiles?.data?.filter((f) => f.type === 'file').map((f) => f.name) ?? [];
 		const validConfigs = bepInExConfigs.filter(
 			(c) =>
 				uniqueFiles.includes(c.AssemblyName + '.dll') || uniqueFiles.includes(c.AssemblyName + '.dll.disabled'),
@@ -310,10 +315,10 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 		};
 		if (wasAlreadyInstalled) {
 			console.debug('[mods-manager] updating config file', newMod, installPath);
-			await updateModeVersionInBepInExConfig(newMod, installPath, this.ow);
+			await updateModeVersionInBepInExConfig(newMod, installPath, this.fileBackend);
 		} else {
 			console.debug('[mods-manager] creating config file', newMod, installPath);
-			await createInitialConfigFile(newMod, installPath, this.ow);
+			await createInitialConfigFile(newMod, installPath, this.fileBackend);
 		}
 		console.log('[mods-manager] updating mod', newMod);
 		const newMods = this.modsData$$.getValue().map((m) => (m.AssemblyName === mod.AssemblyName ? newMod : m));
@@ -517,7 +522,7 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 	}
 
 	private async installBaseMods(installPath: string) {
-		this.ow.writeFileContents(
+		await this.fileBackend.writeFileContents(
 			`${installPath}\\${modsLocation}\\README.md`,
 			`Put all your Mods DLLs and dependencies here`,
 		);
