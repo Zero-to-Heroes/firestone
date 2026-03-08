@@ -180,7 +180,9 @@ export class WatchReplayButtonComponent {
 			if (result !== 'started') {
 				const translationKey = `app.replays.in-game.error.${result}`;
 				const translated = this.i18n.translateString(translationKey);
-				this.inGameError = translated === translationKey ? (IN_GAME_REPLAY_ERROR_MESSAGES[result] ?? translated) : translated;
+				this.inGameError = translated !== translationKey
+					? translated
+					: (IN_GAME_REPLAY_ERROR_MESSAGES[result] ?? translated);
 				this.errorTimeout = setTimeout(() => this.dismissError(), 5000);
 				this.analytics.trackEvent('replay-in-game-error', { error: result as string });
 			} else {
