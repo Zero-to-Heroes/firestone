@@ -395,9 +395,7 @@ import {
 	BgsBattleSimulationMockExecutorService,
 } from '@firestone/battlegrounds/core';
 import { BattlegroundsDataAccessModule } from '@firestone/battlegrounds/data-access';
-import { BGS_RUN_STATS_EVENT_HANDLER } from '@firestone/battlegrounds/services';
-import { BgsRunStatsEventHandlerService } from './js/services/battlegrounds/bgs-run-stats-event-handler.service';
-import { BattlegroundsServicesModule } from '@firestone/battlegrounds/services';
+import { BattlegroundsServicesModule, BGS_RUN_STATS_EVENT_HANDLER } from '@firestone/battlegrounds/services';
 import {
 	BattlegroundsSimulatorModule,
 	BgsBattlePositioningExecutorService,
@@ -405,18 +403,17 @@ import {
 } from '@firestone/battlegrounds/simulator';
 import { BattlegroundsViewModule } from '@firestone/battlegrounds/view';
 import {
-	COLLECTION_MANAGER_SERVICE_TOKEN,
 	COLLECTION_PACK_SERVICE_TOKEN,
 	CollectionCommonModule,
 	PACK_STATS_UPDATED_HANDLER,
 } from '@firestone/collection/common';
 import { CollectionDataAccessModule, PackStatsService } from '@firestone/collection/data-access';
-import { CARDS_MONITOR_EVENT_HANDLER } from '@firestone/collection/services';
-import { CollectionServicesModule } from '@firestone/collection/services';
+import { CARDS_MONITOR_EVENT_HANDLER, CollectionServicesModule } from '@firestone/collection/services';
 import { CollectionViewModule } from '@firestone/collection/view';
 import { CommunitiesCommonModule } from '@firestone/communities/common';
 import { ConstructedCommonModule } from '@firestone/constructed/common';
 import { ConstructedViewModule } from '@firestone/constructed/view';
+import { DecktrackerCommonModule } from '@firestone/decktracker/common';
 import { DiscordModule } from '@firestone/discord';
 import {
 	CardsHighlightFacadeService,
@@ -429,8 +426,8 @@ import {
 import {
 	CollectionPacksUpdatedEvent,
 	MAIN_WINDOW_STORE_SERVICE_TOKEN,
-	MainWindowStateFacadeService,
 	MainwindowCommonModule,
+	MainWindowStateFacadeService,
 } from '@firestone/mainwindow/common';
 import { MainwindowViewModule } from '@firestone/mainwindow/view';
 import { MemoryModule } from '@firestone/memory';
@@ -455,8 +452,8 @@ import {
 	OverwolfService,
 	OverwolfWindowControlsFacadeService,
 	PLAUSIBLE_DOMAIN,
-	SCREENSHOT_SERVICE_TOKEN,
 	REGION_INFO_SERVICE_TOKEN,
+	SCREENSHOT_SERVICE_TOKEN,
 	setAppInjector,
 	SharedFrameworkCoreModule,
 	SYSTEM_INFO_SERVICE_TOKEN,
@@ -551,16 +548,11 @@ import { SecondaryDefaultComponent } from './js/components/main-window/secondary
 import { SecretsHelperListComponent } from './js/components/secrets-helper/secrets-helper-list.component';
 import { DropdownComponent } from './js/components/settings/dropdown.component';
 import { ClipboardShareButtonComponent } from './js/components/sharing/clipboard/clipboard-share-button.component';
-import { RedditShareButtonComponent } from './js/components/sharing/reddit/reddit-share-button.component';
-import { RedditShareInfoComponent } from './js/components/sharing/reddit/reddit-share-info.component';
-import { RedditShareModalComponent } from './js/components/sharing/reddit/reddit-share-modal.component';
 import { ShareInfoComponent } from './js/components/sharing/share-info.component';
 import { ShareLoginComponent } from './js/components/sharing/share-login.component';
 import { SocialShareButtonComponent } from './js/components/sharing/social-share-button.component';
 import { SocialShareModalComponent } from './js/components/sharing/social-share-modal.component';
 import { SocialSharesComponent } from './js/components/sharing/social-shares.component';
-import { TwitterShareButtonComponent } from './js/components/sharing/twitter/twitter-share-button.component';
-import { TwitterShareModalComponent } from './js/components/sharing/twitter/twitter-share-modal.component';
 import { VersionComponent } from './js/components/version.component';
 import { WindowWrapperComponent } from './js/components/window-wrapper.component';
 import { BindCssVariableDirective } from './js/directives/bind-css-variable-directive';
@@ -580,14 +572,13 @@ import { HearthArenaAnalyticsService } from './js/services/analytics/heartharena
 import { ArenaLastMatchService } from './js/services/arena/arena-last-match.service';
 import { BgsCustomSimulationService } from './js/services/battlegrounds/bgs-custom-simulation-service.service';
 import { BgsGlobalStatsService } from './js/services/battlegrounds/bgs-global-stats.service';
+import { BgsRunStatsEventHandlerService } from './js/services/battlegrounds/bgs-run-stats-event-handler.service';
 import { CardsInitService } from './js/services/cards-init.service';
 import { CardsMonitorEventHandlerService } from './js/services/collection/cards-monitor-event-handler.service';
-import { SetsService } from '@firestone/collection/data-access';
 import { DebugService } from './js/services/debug.service';
 import { ConstructedConfigService } from './js/services/decktracker/constructed-config.service';
 import { DeckCardService } from './js/services/decktracker/deck-card.service';
 import { DynamicZoneHelperService } from './js/services/decktracker/dynamic-zone-helper.service';
-import { DecktrackerCommonModule } from '@firestone/decktracker/common';
 import { DecktrackerStateLoaderService } from './js/services/decktracker/main/decktracker-state-loader.service';
 import { ZoneOrderingService } from './js/services/decktracker/zone-ordering.service';
 import { DevService } from './js/services/dev.service';
@@ -751,16 +742,6 @@ try {
 		FilterComponent,
 		OwTranslatePipe,
 
-		SocialSharesComponent,
-		SocialShareModalComponent,
-		ShareLoginComponent,
-		ShareInfoComponent,
-		SocialShareButtonComponent,
-		TwitterShareModalComponent,
-		TwitterShareButtonComponent,
-		RedditShareModalComponent,
-		RedditShareButtonComponent,
-		RedditShareInfoComponent,
 		ClipboardShareButtonComponent,
 
 		DeckCardComponent,
@@ -840,11 +821,6 @@ try {
 		ShareLoginComponent,
 		ShareInfoComponent,
 		SocialShareButtonComponent,
-		TwitterShareModalComponent,
-		TwitterShareButtonComponent,
-		RedditShareModalComponent,
-		RedditShareButtonComponent,
-		RedditShareInfoComponent,
 		ClipboardShareButtonComponent,
 
 		AdsComponent,

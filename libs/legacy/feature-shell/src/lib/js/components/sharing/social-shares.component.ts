@@ -12,18 +12,6 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 				[page]="page"
 				[showLabel]="showLabel"
 			></clipboard-share-button>
-			<twitter-share-button
-				class="social-share-button"
-				[onSocialClick]="onSocialClick"
-				[page]="page"
-				[showLabel]="showLabel"
-			></twitter-share-button>
-			<reddit-share-button
-				class="social-share-button"
-				[onSocialClick]="onSocialClick"
-				[page]="page"
-				[showLabel]="showLabel"
-			></reddit-share-button>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

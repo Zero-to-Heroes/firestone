@@ -8,10 +8,14 @@ import {
 } from '@firestone/achievements/common';
 import { AchievementsRefLoaderService } from '@firestone/achievements/data-access';
 import { ArenaNavigationService } from '@firestone/arena/common';
-import { BattlegroundsNavigationService } from '@firestone/battlegrounds/services';
+import { BgsPerfectGamesService } from '@firestone/battlegrounds/data-access';
+import { BattlegroundsNavigationService, BgsRunStatsService } from '@firestone/battlegrounds/services';
 import { BgsSimulatorControllerService } from '@firestone/battlegrounds/simulator';
 import { CollectionNavigationService } from '@firestone/collection/common';
+import { PackStatsService, SetsService } from '@firestone/collection/data-access';
+import { CollectionBootstrapService, CollectionManager, SetsManagerService } from '@firestone/collection/services';
 import { ConstructedNavigationService, ConstructedPersonalDecksService } from '@firestone/constructed/common';
+import { DecksProviderService } from '@firestone/decktracker/common';
 import {
 	AchievementCompletedEvent,
 	AchievementsFullRefreshEvent,
@@ -32,7 +36,6 @@ import {
 	ChangeVisibleAchievementEvent,
 	ChangeVisibleApplicationEvent,
 	CloseMainWindowEvent,
-	CloseSocialShareModalEvent,
 	CollectionPacksUpdatedEvent,
 	CollectionRefreshPacksEvent,
 	CollectionSelectCurrentTabEvent,
@@ -51,7 +54,10 @@ import {
 	GamesFullRefreshEvent,
 	GenericPreferencesUpdateEvent,
 	HideDeckSummaryEvent,
-	LocalizationUpdateEvent,
+	IMainWindowStoreService,
+	MainWindowNavigationService,
+	MainWindowState,
+	MainWindowStoreEvent,
 	MercenariesAddMercToBackupTeamEvent,
 	MercenariesHeroLevelFilterSelectedEvent,
 	MercenariesHeroSelectedEvent,
@@ -67,6 +73,7 @@ import {
 	MercenariesToggleShowHiddenTeamsEvent,
 	NavigationBackEvent,
 	NavigationNextEvent,
+	NavigationState,
 	NewPackEvent,
 	NextFtueEvent,
 	PreviousFtueEvent,
@@ -86,16 +93,10 @@ import {
 	ShowReplayEvent,
 	ShowReplaysEvent,
 	SkipFtueEvent,
-	StartSocialSharingEvent,
 	StatsXpGraphFilterSelectedEvent,
 	ToggleShowHiddenDecksEvent,
 	TriggerShowMatchStatsEvent,
 	UpdateCardSearchResultsEvent,
-	IMainWindowStoreService,
-	MainWindowNavigationService,
-	MainWindowState,
-	MainWindowStoreEvent,
-	NavigationState,
 } from '@firestone/mainwindow/common';
 import { AppNavigationService, Events, PreferencesService } from '@firestone/shared/common/service';
 import {
@@ -107,16 +108,8 @@ import {
 	WINDOW_HANDLER_SERVICE_TOKEN,
 } from '@firestone/shared/framework/core';
 import { GameStatsLoaderService } from '@firestone/stats/data-access';
-import { TranslateService } from '@ngx-translate/core';
 import { Map } from 'immutable';
 import { BehaviorSubject, filter } from 'rxjs';
-import { PackStatsService } from '@firestone/collection/data-access';
-import { BgsPerfectGamesService } from '@firestone/battlegrounds/data-access';
-import { BgsRunStatsService } from '@firestone/battlegrounds/services';
-import { CollectionManager, SetsManagerService } from '@firestone/collection/services';
-import { SetsService } from '@firestone/collection/data-access';
-import { DecksProviderService } from '@firestone/decktracker/common';
-import { CollectionBootstrapService } from '@firestone/collection/services';
 import { AchievementCompletedProcessor } from './processors/achievements/achievement-completed-processor';
 import { AchievementsFullRefreshProcessor } from './processors/achievements/achievements-full-refresh-processor';
 import {
@@ -188,7 +181,6 @@ import { NextFtueProcessor } from './processors/ftue/next-ftue-processor';
 import { PreviousFtueProcessor } from './processors/ftue/previous-ftue-processor';
 import { SkipFtueProcessor } from './processors/ftue/skip-ftue-processor';
 import { GenericPreferencesUpdateProcessor } from './processors/generic-preferences-update-processor';
-import { LocalizationUpdateProcessor } from './processors/localization-update-processor';
 import { MercenariesAddMercToBackupTeamProcessor } from './processors/mercenaries/mercenaries-add-merc-to-backup-team-processor';
 import { MercenariesHeroLevelFilterSelectedProcessor } from './processors/mercenaries/mercenaries-hero-level-filter-selected-processor';
 import { MercenariesHeroSelectedProcessor } from './processors/mercenaries/mercenaries-hero-selected-processor';
@@ -210,8 +202,6 @@ import { ShowReplayProcessor } from './processors/replays/show-replay-processor'
 import { ShowReplaysProcessor } from './processors/replays/show-replays-processor';
 import { TriggerShowMatchStatsProcessor } from './processors/replays/trigger-show-match-stats-processor';
 import { ShowMainWindowProcessor } from './processors/show-main-window-processor';
-import { CloseSocialShareModalProcessor } from './processors/social/close-social-share-modal-processor';
-import { StartSocialSharingProcessor } from './processors/social/start-social-sharing-processor';
 import { GameStatsFullClearProcessor } from './processors/stats/game-stats-full-clear-processor';
 import { GameStatsFullRefreshProcessor } from './processors/stats/game-stats-full-refresh-processor';
 import { ProfileSelectCategoryEvent, ProfileSelectCategoryProcessor } from './processors/stats/profile-select-category';
@@ -242,7 +232,6 @@ export class MainWindowStoreService implements IMainWindowStoreService {
 		private readonly prefs: PreferencesService,
 		private readonly decksProvider: DecksProviderService,
 		private readonly bgsRunStatsService: BgsRunStatsService,
-		private readonly translate: TranslateService,
 		private readonly i18n: ILocalizationService,
 		private readonly packsService: PackStatsService,
 		private readonly setsManager: SetsManagerService,
@@ -377,7 +366,6 @@ export class MainWindowStoreService implements IMainWindowStoreService {
 			[CloseMainWindowEvent.eventName(), new CloseMainWindowProcessor(this.mainNavigation)],
 			[ShowMainWindowEvent.eventName(), new ShowMainWindowProcessor(this.mainNavigation)],
 			[GenericPreferencesUpdateEvent.eventName(), new GenericPreferencesUpdateProcessor(this.prefs)],
-			[LocalizationUpdateEvent.eventName(), new LocalizationUpdateProcessor(this.prefs, this.translate)],
 			// Collection
 			[CollectionRefreshPacksEvent.eventName(), new CollectionRefreshPacksProcessor(this.packsService)],
 			[CollectionPacksUpdatedEvent.eventName(), new CollectionPacksUpdatedProcessor()],
@@ -478,10 +466,6 @@ export class MainWindowStoreService implements IMainWindowStoreService {
 				),
 			],
 
-			// Social
-			[StartSocialSharingEvent.eventName(), new StartSocialSharingProcessor()],
-			// [ShareVideoOnSocialNetworkEvent.eventName(), new ShareVideoOnSocialNetworkProcessor(this.ow)],
-			[CloseSocialShareModalEvent.eventName(), new CloseSocialShareModalProcessor()],
 			// Ftue
 			[NextFtueEvent.eventName(), new NextFtueProcessor(this.prefs, this.mainNavigation)],
 			[PreviousFtueEvent.eventName(), new PreviousFtueProcessor(this.mainNavigation)],
