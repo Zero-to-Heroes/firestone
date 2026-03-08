@@ -1,3 +1,4 @@
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { BattlegroundsCommonModule } from '@firestone/battlegrounds/common';
@@ -18,6 +19,7 @@ const components = [BgsSimulationOverlayStandaloneComponent, TwitchBgsHeroOvervi
 @NgModule({
 	imports: [
 		CommonModule,
+		DragDropModule,
 
 		BattlegroundsSimulatorModule,
 		BattlegroundsCommonModule,

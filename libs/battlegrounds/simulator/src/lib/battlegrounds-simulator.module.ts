@@ -1,3 +1,4 @@
+import { A11yModule } from '@angular/cdk/a11y';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
@@ -48,6 +49,7 @@ const components = [
 
 @NgModule({
 	imports: [
+		A11yModule,
 		CommonModule,
 		DragDropModule,
 		ReactiveFormsModule,
