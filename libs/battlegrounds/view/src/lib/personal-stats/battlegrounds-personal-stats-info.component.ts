@@ -4,7 +4,7 @@ import { CardType, GameType, defaultStartingHp, getHeroPower } from '@firestone-
 
 import { SimpleBarChartData } from '@firestone/shared/common/view';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
-import { BattlegroundsYourStat } from './your-stats.model';
+import type { BattlegroundsYourStat } from './your-stats.model';
 
 @Component({
 	standalone: false,

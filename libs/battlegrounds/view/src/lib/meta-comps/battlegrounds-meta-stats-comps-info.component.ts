@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 
 import { capitalizeFirstLetter } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
-import { BgsMetaCompCard, BgsMetaCompStatTierItem } from './meta-comp.model';
+import type { BgsMetaCompCard, BgsMetaCompStatTierItem } from './meta-comp.model';
 
 @Component({
 	standalone: false,

@@ -3,7 +3,7 @@ import { CardIds, normalizeHeroCardId, Race } from '@firestone-hs/reference-data
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
 import { BgsBattleOptions } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-options';
 import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
-import { GameSample } from '@firestone-hs/simulate-bgs-battle/dist/simulation/spectator/game-sample';
+import type { GameSample } from '@firestone-hs/simulate-bgs-battle/dist/simulation/spectator/game-sample';
 import { BugReportService, Preferences, PreferencesService } from '@firestone/shared/common/service';
 import type { IAdsService } from '@firestone/shared/framework/core';
 import { ADS_SERVICE_TOKEN, ApiRunner, CardsFacadeService } from '@firestone/shared/framework/core';

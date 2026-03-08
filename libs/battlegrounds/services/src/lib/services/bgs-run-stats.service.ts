@@ -1,14 +1,16 @@
 import { Inject, Injectable, Optional } from '@angular/core';
-import { BgsPostMatchStats as IBgsPostMatchStats } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
+import type { BgsPostMatchStats as IBgsPostMatchStats } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { normalizeHeroCardId } from '@firestone-hs/reference-data';
-import { BgsBestStat, Input as BgsComputeRunStatsInput, buildNewStats } from '@firestone-hs/user-bgs-post-match-stats';
+import { BgsBestStat, buildNewStats } from '@firestone-hs/user-bgs-post-match-stats';
+import type { Input as BgsComputeRunStatsInput } from '@firestone-hs/user-bgs-post-match-stats';
 import { BgsGame, BgsPostMatchStats, BgsPostMatchStatsForReview, RealTimeStatsState } from '@firestone/game-state';
 import { Events } from '@firestone/shared/common/service';
 import { sleep } from '@firestone/shared/framework/common';
 import { ApiRunner, CardsFacadeService, UserService } from '@firestone/shared/framework/core';
 import { GameForUpload, GameStatsProviderService } from '@firestone/stats/services';
 import { buildBgsRunStatsInput } from './bgs-run-stats-input-builder';
-import { BGS_RUN_STATS_EVENT_HANDLER, IBgsRunStatsEventHandler } from './bgs-run-stats-event-handler.interface';
+import { BGS_RUN_STATS_EVENT_HANDLER } from './bgs-run-stats-event-handler.interface';
+import type { IBgsRunStatsEventHandler } from './bgs-run-stats-event-handler.interface';
 
 @Injectable()
 export class BgsRunStatsService {

@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { Overlay, OverlayPositionBuilder, OverlayRef, PositionStrategy } from '@angular/cdk/overlay';
-import { ComponentPortal, ComponentType } from '@angular/cdk/portal';
+import { ComponentPortal } from '@angular/cdk/portal';
+import type { Type } from '@angular/core';
 import {
 	AfterViewInit,
 	ChangeDetectionStrategy,
@@ -15,9 +16,9 @@ import {
 } from '@angular/core';
 import { TrinketSlot } from '@firestone-hs/reference-data';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
-import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
+import type { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
 import { BgsPlayerGlobalInfo, BoardTrinket } from '@firestone-hs/simulate-bgs-battle/dist/bgs-player-entity';
-import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
+import type { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { BgsBattleSimulationService } from '@firestone/battlegrounds/core';
 import { BgsFaceOffWithSimulation } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
@@ -644,7 +645,7 @@ export class BgsSimulatorComponent extends AbstractSubscriptionComponent impleme
 		}
 	}
 
-	private createModal<T extends SimulatorModal>(type: ComponentType<T>): ComponentRef<T> {
+	private createModal<T extends SimulatorModal>(type: Type<T>): ComponentRef<T> {
 		const portal = new ComponentPortal(type);
 		const modalRef = this.overlayRef.attach(portal);
 		if (this.overlayRef) {

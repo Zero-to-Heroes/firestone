@@ -10,7 +10,7 @@ import {
 	getTribeIcon,
 	getTribeName,
 } from '@firestone-hs/reference-data';
-import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
+import type { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
 import { SimpleBarChartData } from '@firestone/shared/common/view';
 
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';

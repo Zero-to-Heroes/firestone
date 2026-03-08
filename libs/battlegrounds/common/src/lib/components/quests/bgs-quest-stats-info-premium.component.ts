@@ -3,10 +3,10 @@ import { BGS_QUESTS_DAILY_FREE_USES } from '@firestone/shared/common/service';
 import {
 	ADS_SERVICE_TOKEN,
 	AnalyticsService,
-	IAdsService,
 	ILocalizationService,
 	OverwolfService,
 } from '@firestone/shared/framework/core';
+import type { IAdsService } from '@firestone/shared/framework/core';
 
 @Component({
 	standalone: false,

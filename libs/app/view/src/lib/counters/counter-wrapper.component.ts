@@ -11,9 +11,10 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { BattlegroundsState, CounterInstance, GameState } from '@firestone/game-state';
+import type { BattlegroundsState, CounterInstance, GameState } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
-import { BooleanWithLimited, PreferencesService } from '@firestone/shared/common/service';
+import { PreferencesService } from '@firestone/shared/common/service';
+import type { BooleanWithLimited } from '@firestone/shared/common/service';
 import { uuidShort } from '@firestone/shared/framework/common';
 import { AppInjector, OverwolfService } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';

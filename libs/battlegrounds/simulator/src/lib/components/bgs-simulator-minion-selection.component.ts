@@ -13,7 +13,7 @@ import {
 import { FormControl } from '@angular/forms';
 import { CardIds, CardType, GameTag, getEffectiveTribes, ReferenceCard } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
-import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
+import type { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService, waitForReady } from '@firestone/shared/framework/core';

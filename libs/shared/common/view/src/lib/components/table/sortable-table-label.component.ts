@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
-import { SortCriteria } from '@firestone/shared/framework/common';
+import type { SortCriteria } from '@firestone/shared/framework/common';
 
 @Component({
 	standalone: false,

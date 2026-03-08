@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
-import { BgsMetaHeroStatTier, BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
+import type { BgsMetaHeroStatTier, BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
 
 @Component({
 	standalone: false,

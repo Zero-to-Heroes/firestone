@@ -16,8 +16,9 @@ import {
 import { sleep } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
-import { CardTooltipPositionType } from './card-tooltip-position.type';
-import { CardTooltipAdditionalInfo, CardTooltipComponent, isGuessedInfoEmpty } from './card-tooltip.component';
+import type { CardTooltipPositionType } from './card-tooltip-position.type';
+import { CardTooltipComponent, isGuessedInfoEmpty } from './card-tooltip.component';
+import type { CardTooltipAdditionalInfo } from './card-tooltip.component';
 
 @Directive({
 	standalone: false,

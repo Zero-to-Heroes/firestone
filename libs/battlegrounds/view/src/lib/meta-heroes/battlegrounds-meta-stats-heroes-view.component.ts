@@ -8,7 +8,8 @@ import {
 	Input,
 	Output,
 } from '@angular/core';
-import { BgsMetaHeroStatTier, BgsMetaHeroStatTierItem, buildTiers } from '@firestone/battlegrounds/data-access';
+import type { BgsMetaHeroStatTier, BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
+import { buildTiers } from '@firestone/battlegrounds/data-access';
 import {
 	AbstractSubscriptionComponent,
 	SortCriteria,

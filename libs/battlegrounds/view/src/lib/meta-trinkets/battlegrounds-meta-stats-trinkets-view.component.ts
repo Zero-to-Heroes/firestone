@@ -1,14 +1,11 @@
 /* eslint-disable @angular-eslint/template/no-negated-async */
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { SpellSchool } from '@firestone-hs/reference-data';
-import {
-	BgsMetaTrinketStatTier,
-	BgsMetaTrinketStatTierItem,
-	ColumnSortType,
-	buildTrinketTiers,
-} from '@firestone/battlegrounds/data-access';
-import { BgsTrinketActiveTabType } from '@firestone/shared/common/service';
-import { AbstractSubscriptionComponent, SortCriteria } from '@firestone/shared/framework/common';
+import type { BgsMetaTrinketStatTier, BgsMetaTrinketStatTierItem } from '@firestone/battlegrounds/data-access';
+import { ColumnSortType, buildTrinketTiers } from '@firestone/battlegrounds/data-access';
+import type { BgsTrinketActiveTabType } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import type { SortCriteria } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService, getDateAgo } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest, filter, tap } from 'rxjs';
 

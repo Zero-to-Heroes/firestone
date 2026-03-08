@@ -6,10 +6,10 @@ import {
 	ADS_SERVICE_TOKEN,
 	AnalyticsService,
 	CardsFacadeService,
-	IAdsService,
 	ILocalizationService,
 } from '@firestone/shared/framework/core';
-import { BgsMetaCompCard, BgsMetaCompStatTierItem } from './meta-comp.model';
+import type { IAdsService } from '@firestone/shared/framework/core';
+import type { BgsMetaCompCard, BgsMetaCompStatTierItem } from './meta-comp.model';
 
 export interface ProcessedFinalBoard {
 	readonly mmr: number;

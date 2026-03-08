@@ -1,10 +1,7 @@
 /* eslint-disable @angular-eslint/template/no-negated-async */
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
-import {
-	BgsMetaQuestRewardStatTier,
-	BgsMetaQuestRewardStatTierItem,
-	buildQuestRewardTiers,
-} from '@firestone/battlegrounds/data-access';
+import type { BgsMetaQuestRewardStatTier, BgsMetaQuestRewardStatTierItem } from '@firestone/battlegrounds/data-access';
+import { buildQuestRewardTiers } from '@firestone/battlegrounds/data-access';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ILocalizationService, getDateAgo } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest, filter } from 'rxjs';

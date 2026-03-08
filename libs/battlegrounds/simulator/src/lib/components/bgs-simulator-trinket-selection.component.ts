@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { CardType, SpellSchool, TrinketSlot } from '@firestone-hs/reference-data';
-import { BoardTrinket } from '@firestone-hs/simulate-bgs-battle/dist/bgs-player-entity';
+import type { BoardTrinket } from '@firestone-hs/simulate-bgs-battle/dist/bgs-player-entity';
 import { AbstractSubscriptionComponent, sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';

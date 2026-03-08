@@ -13,11 +13,11 @@ import { AbstractSubscriptionComponent } from '@firestone/shared/framework/commo
 import {
 	ADS_SERVICE_TOKEN,
 	AnalyticsService,
-	IAdsService,
 	ILocalizationService,
 	OverwolfService,
 	waitForReady,
 } from '@firestone/shared/framework/core';
+import type { IAdsService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest, filter, shareReplay, takeUntil, tap } from 'rxjs';
 
 @Component({

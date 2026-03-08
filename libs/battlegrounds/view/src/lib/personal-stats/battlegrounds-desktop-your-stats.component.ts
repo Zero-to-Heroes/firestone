@@ -1,6 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { normalizeHeroCardId } from '@firestone-hs/reference-data';
-import { BgsActiveTimeFilterType } from '@firestone/battlegrounds/data-access';
+import type { BgsActiveTimeFilterType } from '@firestone/battlegrounds/data-access';
 import {
 	BgsRankFilterType,
 	PatchesConfigService,
@@ -12,13 +12,13 @@ import {
 	AbstractSubscriptionComponent,
 	groupByFunction,
 	invertDirection,
-	SortCriteria,
 	SortDirection,
 } from '@firestone/shared/framework/common';
+import type { SortCriteria } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { GameStat, GameStatsLoaderService } from '@firestone/stats/data-access';
 import { BehaviorSubject, combineLatest, distinctUntilChanged, Observable, shareReplay, takeUntil, tap } from 'rxjs';
-import { BattlegroundsYourStat } from './your-stats.model';
+import type { BattlegroundsYourStat } from './your-stats.model';
 
 @Component({
 	standalone: false,

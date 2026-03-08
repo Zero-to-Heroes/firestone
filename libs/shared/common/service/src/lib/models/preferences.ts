@@ -40,7 +40,7 @@ import {
 	StatGameFormatType,
 	StatsXpGraphSeasonFilterType,
 } from './pref-model';
-import { OutOfCardsToken } from './unfit-pref-model';
+import type { OutOfCardsToken } from './unfit-pref-model';
 
 export const FORCE_LOCAL_PROP = 'forceLocalProp';
 

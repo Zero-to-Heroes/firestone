@@ -8,7 +8,7 @@ import {
 	Output,
 } from '@angular/core';
 import { MmrPercentile } from '@firestone-hs/bgs-global-stats';
-import { BgsCardTypeFilterType } from '@firestone/shared/common/service';
+import type { BgsCardTypeFilterType } from '@firestone/shared/common/service';
 import { IOption } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent, arraysEqual } from '@firestone/shared/framework/common';
 import { ILocalizationService } from '@firestone/shared/framework/core';

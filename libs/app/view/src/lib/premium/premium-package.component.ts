@@ -11,11 +11,11 @@ import {
 	Output,
 	ViewRef,
 } from '@angular/core';
-import { PremiumPlanId } from '@firestone/shared/common/service';
+import type { PremiumPlanId } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, sleep } from '@firestone/shared/framework/common';
 import { ILocalizationService, OverwolfService, UserService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
-import { PremiumPlan } from './premium-desktop.component';
+import type { PremiumPlan } from './premium-desktop.component';
 
 @Component({
 	standalone: false,

@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { CardType, isBaconGhost } from '@firestone-hs/reference-data';
-import { CardTooltipPositionType } from '@firestone/shared/common/view';
+import type { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { BgsSimulatorControllerService, Side } from '../services/sim-ui-controller/bgs-simulator-controller.service';
+import { BgsSimulatorControllerService } from '../services/sim-ui-controller/bgs-simulator-controller.service';
+import type { Side } from '../services/sim-ui-controller/bgs-simulator-controller.service';
 
 @Component({
 	standalone: false,

@@ -8,7 +8,8 @@ import {
 	Input,
 	Output,
 } from '@angular/core';
-import { BgsMetaQuestStatTier, BgsMetaQuestStatTierItem, buildQuestTiers } from '@firestone/battlegrounds/data-access';
+import type { BgsMetaQuestStatTier, BgsMetaQuestStatTierItem } from '@firestone/battlegrounds/data-access';
+import { buildQuestTiers } from '@firestone/battlegrounds/data-access';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ILocalizationService, getDateAgo } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest, filter } from 'rxjs';

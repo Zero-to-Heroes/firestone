@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { BgsMetaTrinketStatTier, BgsMetaTrinketStatTierItem } from '@firestone/battlegrounds/data-access';
+import type { BgsMetaTrinketStatTier, BgsMetaTrinketStatTierItem } from '@firestone/battlegrounds/data-access';
 
 @Component({
 	standalone: false,

@@ -1,4 +1,4 @@
-export { GeneratingCard } from './_card.type';
+export type { GeneratingCard } from './_card.type';
 export { ALightInTheDarkness } from './a-light-in-the-darkness';
 export { AeonWizard } from './aeon-wizard';
 export { AlakirLordOfStorms } from './alakir-lord-of-storms';

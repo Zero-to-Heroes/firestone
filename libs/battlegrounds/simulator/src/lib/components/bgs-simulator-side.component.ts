@@ -1,15 +1,16 @@
-import { ComponentType } from '@angular/cdk/portal';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import type { Type } from '@angular/core';
 import { CardIds, GameType, TrinketSlot, defaultStartingHp } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
-import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
-import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
+import type { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
+import type { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { BgsCardTooltipComponent } from '@firestone/battlegrounds/common';
 import { buildEntityFromBoardEntity } from '@firestone/battlegrounds/core';
 import { BgsBoard, BgsPlayer } from '@firestone/game-state';
-import { CardTooltipPositionType } from '@firestone/shared/common/view';
+import type { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { BgsSimulatorControllerService, Side } from '../services/sim-ui-controller/bgs-simulator-controller.service';
+import { BgsSimulatorControllerService } from '../services/sim-ui-controller/bgs-simulator-controller.service';
+import type { Side } from '../services/sim-ui-controller/bgs-simulator-controller.service';
 
 @Component({
 	standalone: false,
@@ -134,7 +135,7 @@ import { BgsSimulatorControllerService, Side } from '../services/sim-ui-controll
 export class BgsSimulatorSideComponent {
 	enableDuos = true;
 
-	componentType: ComponentType<any> = BgsCardTooltipComponent;
+	componentType: Type<unknown> = BgsCardTooltipComponent;
 
 	@Input() side: Side;
 

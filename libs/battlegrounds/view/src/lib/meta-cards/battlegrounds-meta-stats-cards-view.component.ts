@@ -3,14 +3,12 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { CardType } from '@firestone-hs/reference-data';
 import { isBgsTimewarped } from '@firestone/battlegrounds/core';
-import {
-	BgsMetaCardStatTier,
-	BgsMetaCardStatTierItem,
-	ColumnSortTypeCard,
-	buildCardTiers,
-} from '@firestone/battlegrounds/data-access';
-import { BgsCardTierFilterType, BgsCardTypeFilterType, PreferencesService } from '@firestone/shared/common/service';
-import { AbstractSubscriptionComponent, SortCriteria } from '@firestone/shared/framework/common';
+import type { BgsMetaCardStatTier, BgsMetaCardStatTierItem } from '@firestone/battlegrounds/data-access';
+import { ColumnSortTypeCard, buildCardTiers } from '@firestone/battlegrounds/data-access';
+import { PreferencesService } from '@firestone/shared/common/service';
+import type { BgsCardTierFilterType, BgsCardTypeFilterType } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import type { SortCriteria } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService, getDateAgo, waitForReady } from '@firestone/shared/framework/core';
 import {
 	BehaviorSubject,

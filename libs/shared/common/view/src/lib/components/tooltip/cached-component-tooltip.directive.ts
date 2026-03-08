@@ -3,7 +3,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @angular-eslint/no-input-rename */
 import { ConnectedPosition, Overlay, OverlayPositionBuilder, OverlayRef, PositionStrategy } from '@angular/cdk/overlay';
-import { ComponentPortal, ComponentType } from '@angular/cdk/portal';
+import { ComponentPortal } from '@angular/cdk/portal';
+import type { Type } from '@angular/core';
 import {
 	AfterViewInit,
 	ChangeDetectorRef,
@@ -23,10 +24,10 @@ import {
 // See https://blog.angularindepth.com/building-tooltips-for-angular-3cdaac16d138
 export class CachedComponentTooltipDirective implements AfterViewInit, OnDestroy {
 	private _componentInput: any;
-	private _componentType: ComponentType<any>;
+	private _componentType: Type<unknown>;
 	private viewInit = false;
 
-	@Input() set componentType(value: ComponentType<any>) {
+	@Input() set componentType(value: Type<unknown>) {
 		this._componentType = value;
 		if (value && value !== this._componentType) {
 			this.updatePositionStrategy();

@@ -28,7 +28,7 @@ import {
 	shareReplay,
 	takeUntil,
 } from 'rxjs';
-import { CardTooltipPositionType } from './card-tooltip-position.type';
+import type { CardTooltipPositionType } from './card-tooltip-position.type';
 
 @Component({
 	standalone: false,

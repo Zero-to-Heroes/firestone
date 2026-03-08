@@ -1,6 +1,6 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
-import { BgsMetaQuestStatTierItem } from '@firestone/battlegrounds/data-access';
+import type { BgsMetaQuestStatTierItem } from '@firestone/battlegrounds/data-access';
 
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 

@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AfterContentInit, AfterViewInit, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { AllCardsService } from '@firestone-hs/reference-data';
-import { GameSample } from '@firestone-hs/simulate-bgs-battle/dist/simulation/spectator/game-sample';
+import type { GameSample } from '@firestone-hs/simulate-bgs-battle/dist/simulation/spectator/game-sample';
 import { ColiseumDebugService, ReplayLocation } from '@firestone/replay/coliseum';
 import { AnalyticsService, ApiRunner, CardsFacadeStandaloneService } from '@firestone/shared/framework/core';
 import { loadAsync } from 'jszip';

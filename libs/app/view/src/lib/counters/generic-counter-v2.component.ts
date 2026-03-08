@@ -1,6 +1,6 @@
-import { ComponentType } from '@angular/cdk/overlay';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { CounterInstance } from '@firestone/game-state';
+import type { Type } from '@angular/core';
+import type { CounterInstance } from '@firestone/game-state';
 import { CheckOffCardsListComponent } from './check-off-cards-list.component';
 
 @Component({
@@ -32,11 +32,11 @@ import { CheckOffCardsListComponent } from './check-off-cards-list.component';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GenericCountersV2Component {
-	private static readonly COMPONENT_TYPE_MAP: Record<string, ComponentType<any>> = {
+	private static readonly COMPONENT_TYPE_MAP: Record<string, Type<unknown>> = {
 		CheckOffCardsListComponent: CheckOffCardsListComponent,
 	};
 
-	advancedTooltipType: ComponentType<any> | undefined;
+	advancedTooltipType: Type<unknown> | undefined;
 	advancedTooltipInput: any | undefined;
 
 	value: number | string | undefined | null;

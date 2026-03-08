@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
-import { BgsMetaCompStatTier, BgsMetaCompStatTierItem } from './meta-comp.model';
+import type { BgsMetaCompStatTier, BgsMetaCompStatTierItem } from './meta-comp.model';
 
 @Component({
 	standalone: false,

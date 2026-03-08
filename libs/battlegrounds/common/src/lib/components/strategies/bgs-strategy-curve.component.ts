@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
-import { LocalizedBgsHeroCurve } from '../../models/strategies';
+import type { LocalizedBgsHeroCurve } from '../../models/strategies';
 
 @Component({
 	standalone: false,

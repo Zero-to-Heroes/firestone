@@ -17,7 +17,8 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
 import { debounceTime, filter, tap } from 'rxjs/operators';
 import { dustFor } from './collection-utils';
-import { CARDS_MONITOR_EVENT_HANDLER, ICardsMonitorEventHandler } from './cards-monitor-event-handler.interface';
+import { CARDS_MONITOR_EVENT_HANDLER } from './cards-monitor-event-handler.interface';
+import type { ICardsMonitorEventHandler } from './cards-monitor-event-handler.interface';
 import { CardNotificationsService } from './card-notifications.service';
 import { CollectionManager } from './collection-manager.service';
 

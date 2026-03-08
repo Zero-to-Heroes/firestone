@@ -30,7 +30,8 @@ import {
 	tap,
 	withLatestFrom,
 } from 'rxjs/operators';
-import { APP_VERSION_SERVICE_TOKEN, IAppVersionService } from './app-version.interface';
+import { APP_VERSION_SERVICE_TOKEN } from './app-version.interface';
+import type { IAppVersionService } from './app-version.interface';
 import { EndGameUploaderService, UploadInfo } from './end-game-uploader.service';
 import { RewardMonitorService } from './rewards-monitor.service';
 

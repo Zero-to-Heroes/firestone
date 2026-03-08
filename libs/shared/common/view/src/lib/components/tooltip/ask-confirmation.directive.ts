@@ -13,7 +13,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { ILocalizationService } from '@firestone/shared/framework/core';
-import { CardTooltipPositionType } from './card-tooltip-position.type';
+import type { CardTooltipPositionType } from './card-tooltip-position.type';
 import { ConfirmationComponent } from './confirmation.component';
 
 @Directive({

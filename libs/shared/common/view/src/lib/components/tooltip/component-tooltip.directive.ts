@@ -1,5 +1,6 @@
 import { ConnectedPosition, Overlay, OverlayPositionBuilder, OverlayRef, PositionStrategy } from '@angular/cdk/overlay';
-import { ComponentPortal, ComponentType } from '@angular/cdk/portal';
+import { ComponentPortal } from '@angular/cdk/portal';
+import type { Type } from '@angular/core';
 import {
 	AfterViewInit,
 	ChangeDetectorRef,
@@ -20,10 +21,10 @@ import { Subscription } from 'rxjs';
 // See https://blog.angularindepth.com/building-tooltips-for-angular-3cdaac16d138
 export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 	private _componentInput: any;
-	private _componentType: ComponentType<any> | undefined;
+	private _componentType: Type<unknown> | undefined;
 	private viewInit = false;
 
-	@Input() set componentType(value: ComponentType<any> | undefined) {
+	@Input() set componentType(value: Type<unknown> | undefined) {
 		if (value === this._componentType) {
 			return;
 		}

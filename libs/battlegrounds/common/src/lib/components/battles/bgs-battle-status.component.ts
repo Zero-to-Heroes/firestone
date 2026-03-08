@@ -10,7 +10,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { CardIds } from '@firestone-hs/reference-data';
-import { GameSample } from '@firestone-hs/simulate-bgs-battle/dist/simulation/spectator/game-sample';
+import type { GameSample } from '@firestone-hs/simulate-bgs-battle/dist/simulation/spectator/game-sample';
 import { BgsBattleSimulationService, BgsIntermediateResultsSimGuardianService } from '@firestone/battlegrounds/core';
 import { BgsFaceOffWithSimulation } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
@@ -19,12 +19,11 @@ import {
 	ADS_SERVICE_TOKEN,
 	CardsFacadeService,
 	EXTERNAL_URL_SERVICE_TOKEN,
-	IAdsService,
-	IExternalUrlService,
 	ILocalizationService,
 	OverwolfService,
 	waitForReady,
 } from '@firestone/shared/framework/core';
+import type { IAdsService, IExternalUrlService } from '@firestone/shared/framework/core';
 import { combineLatest, debounceTime, Observable } from 'rxjs';
 
 @Component({
