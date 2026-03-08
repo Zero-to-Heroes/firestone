@@ -7,7 +7,7 @@ import {
 	AnalyticsService,
 	CardsFacadeService,
 	CLIPBOARD_SERVICE_TOKEN,
-	IClipboardService,
+	type IClipboardService,
 	ILocalizationService,
 } from '@firestone/shared/framework/core';
 

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {
 	FORCE_LOCAL_PROP,
 	LOG_FILE_BACKEND,
-	LogFileBackend,
+	type LogFileBackend,
 	Preferences,
 	PreferencesService,
 } from '@firestone/shared/common/service';

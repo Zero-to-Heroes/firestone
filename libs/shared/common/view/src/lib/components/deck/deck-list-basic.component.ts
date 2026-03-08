@@ -12,7 +12,7 @@ import { AbstractSubscriptionComponent, sortByProperties } from '@firestone/shar
 import {
 	CARDS_HIGHLIGHT_SERVICE_TOKEN,
 	CardsFacadeService,
-	ICardsHighlightService,
+	type ICardsHighlightService,
 } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, filter, tap } from 'rxjs';
 

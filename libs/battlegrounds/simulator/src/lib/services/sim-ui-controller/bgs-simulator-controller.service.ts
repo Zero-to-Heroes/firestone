@@ -44,12 +44,13 @@ export class BgsSimulatorControllerService extends AbstractFacadeService<BgsSimu
 	}
 
 	protected async init() {
+		this.allCards = AppInjector.get(CardsFacadeService);
 		this.stateManager = AppInjector.get(StateManagerService);
+		await this.allCards.waitForReady();
+
 		this.faceOff$$ = new BehaviorSubject<BgsFaceOffWithSimulation | null>(
 			this.stateManager.buildInitialBattle(null),
 		);
-		this.allCards = AppInjector.get(CardsFacadeService);
-
 		this.faceOff$$.subscribe((faceOff) => console.debug('[simulator] updated faceOff', faceOff));
 	}
 

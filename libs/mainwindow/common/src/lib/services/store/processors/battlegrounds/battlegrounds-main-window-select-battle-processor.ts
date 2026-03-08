@@ -1,7 +1,7 @@
 import { BattlegroundsNavigationService } from '@firestone/battlegrounds/services';
 import { BgsSimulatorControllerService } from '@firestone/battlegrounds/simulator';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { ILocalizationService, IWindowHandlerService, waitForReady } from '@firestone/shared/framework/core';
+import { ILocalizationService, type IWindowHandlerService, waitForReady } from '@firestone/shared/framework/core';
 import {
 	BattlegroundsMainWindowSelectBattleEvent,
 	MainWindowNavigationService,

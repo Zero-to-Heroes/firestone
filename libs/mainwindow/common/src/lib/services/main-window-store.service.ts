@@ -20,7 +20,7 @@ import { AppNavigationService, Events, PreferencesService } from '@firestone/sha
 import {
 	CardsFacadeService,
 	ILocalizationService,
-	IWindowHandlerService,
+	type IWindowHandlerService,
 	ProcessingQueue,
 	waitForReady,
 	WINDOW_HANDLER_SERVICE_TOKEN,

@@ -12,6 +12,11 @@ export interface IDatabaseService {
 	init(): Promise<void>;
 
 	/**
+	 * Wait until the database is ready for use. Resolves when init() has completed.
+	 */
+	isReady(): Promise<void>;
+
+	/**
 	 * Clear the entire database
 	 */
 	clearDb(): Promise<void>;

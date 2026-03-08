@@ -14,8 +14,8 @@ import {
 	ADS_SERVICE_TOKEN,
 	AnalyticsService,
 	EXTERNAL_URL_SERVICE_TOKEN,
-	IAdsService,
-	IExternalUrlService,
+	type IAdsService,
+	type IExternalUrlService,
 	ILocalizationService,
 	OverwolfService,
 } from '@firestone/shared/framework/core';

@@ -2,8 +2,8 @@ import { Inject, Injectable, Optional } from '@angular/core';
 import { BoosterType, CardIds, getDefaultBoosterIdForSetId } from '@firestone-hs/reference-data';
 import { CardPackResult, PackCardInfo, PackResult } from '@firestone-hs/user-packs';
 import {
-	ICollectionPackService,
-	IPackStatsUpdatedHandler,
+	type ICollectionPackService,
+	type IPackStatsUpdatedHandler,
 	PACK_STATS_UPDATED_HANDLER,
 } from '@firestone/collection/common';
 import { InternalCardInfo } from '../model/internal-card-info';
@@ -13,7 +13,7 @@ import {
 	ApiRunner,
 	COLLECTION_PACK_STATS,
 	DATABASE_SERVICE_TOKEN,
-	IDatabaseService,
+	type IDatabaseService,
 	UserService,
 } from '@firestone/shared/framework/core';
 

@@ -18,7 +18,7 @@ import {
 	GameStatusService,
 	getLogsDir,
 	LOG_FILE_BACKEND,
-	LogFileBackend,
+	type LogFileBackend,
 	PreferencesService,
 } from '@firestone/shared/common/service';
 import { ApiRunner, CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';

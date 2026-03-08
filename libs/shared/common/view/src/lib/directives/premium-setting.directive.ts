@@ -12,7 +12,7 @@ import {
 	Self,
 } from '@angular/core';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { ADS_SERVICE_TOKEN, IAdsService, waitForReady } from '@firestone/shared/framework/core';
+import { ADS_SERVICE_TOKEN, type IAdsService, waitForReady } from '@firestone/shared/framework/core';
 import { PreferenceToggleComponent } from '../components/toggle/preference-toggle.component';
 
 @Directive({

@@ -16,7 +16,7 @@ import { AbstractSubscriptionComponent, uuidShort } from '@firestone/shared/fram
 import {
 	CARDS_HIGHLIGHT_SERVICE_TOKEN,
 	CardsFacadeService,
-	ICardsHighlightService,
+	type ICardsHighlightService,
 	waitForReady,
 } from '@firestone/shared/framework/core';
 import { distinctUntilChanged } from 'rxjs';

@@ -39,13 +39,13 @@ export abstract class AbstractFacadeService<T extends AbstractFacadeService<T>> 
 				// We're in the main process, initialize normally like a main window
 				// window[this.serviceName] = this;
 				this.mainInstance = this as unknown as T;
-				this.init();
-				this.initElectronMainProcess();
+				await this.init();
+				await this.initElectronMainProcess();
 			} else {
 				// We're in a renderer process, create IPC proxy
 				this.mainInstance = this as unknown as T;
 				const { ipcRenderer } = (window as any).require('electron');
-				this.createElectronProxy(ipcRenderer);
+				await this.createElectronProxy(ipcRenderer);
 			}
 			this.initElectronSubjects();
 		} else {

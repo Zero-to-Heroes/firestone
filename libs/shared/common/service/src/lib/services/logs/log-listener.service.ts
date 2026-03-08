@@ -5,7 +5,7 @@ import { combineLatest, distinctUntilChanged, filter, Subject } from 'rxjs';
 import { GameStatusService } from '../game-status.service';
 import { getLogsDir, LogUtilsService } from '../log-utils.service';
 import { PreferencesService } from '../preferences.service';
-import { LOG_FILE_BACKEND, LogFileBackend } from './log-file-backend';
+import { LOG_FILE_BACKEND, type LogFileBackend } from './log-file-backend';
 import { LogListenerCacheService } from './log-listener-cache.service';
 
 @Injectable()

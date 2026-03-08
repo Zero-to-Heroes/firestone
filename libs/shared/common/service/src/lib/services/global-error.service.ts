@@ -1,6 +1,10 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { Inject, Injectable } from '@angular/core';
-import { EXTERNAL_URL_SERVICE_TOKEN, IExternalUrlService, ILocalizationService } from '@firestone/shared/framework/core';
+import {
+	EXTERNAL_URL_SERVICE_TOKEN,
+	type IExternalUrlService,
+	ILocalizationService,
+} from '@firestone/shared/framework/core';
 import { GameStatusService } from './game-status.service';
 import { NotificationsService } from './notifications.service';
 

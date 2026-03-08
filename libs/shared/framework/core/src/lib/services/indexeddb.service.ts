@@ -107,12 +107,20 @@ class IndexedDbWhereClauseWrapper<T, K = string> implements IDatabaseWhereClause
 })
 export class IndexedDbService implements IDatabaseService {
 	private dexie: Dexie;
+	private initPromise: Promise<void> | null = null;
 
 	constructor() {
 		this.dexie = new Dexie(dbName);
 	}
 
 	public async init() {
+		if (!this.initPromise) {
+			this.initPromise = this.doInit();
+		}
+		return this.initPromise;
+	}
+
+	private async doInit() {
 		this.dexie.version(1).stores({
 			// CompletedAchievement
 			[ACHIEVEMENTS_COMPLETED]: 'id',
@@ -143,7 +151,12 @@ export class IndexedDbService implements IDatabaseService {
 		await this.dexie.open();
 	}
 
+	public async isReady(): Promise<void> {
+		await (this.initPromise ?? this.init());
+	}
+
 	public async clearDb() {
+		this.initPromise = null;
 		this.dexie.close(); // Close the database before deleting it
 		const success = await new Promise<boolean>((resolve) => {
 			const request = indexedDB.deleteDatabase(dbName);

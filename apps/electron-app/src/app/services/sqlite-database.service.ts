@@ -25,12 +25,21 @@ const dbName = 'FirestoneDB';
 export class SqliteDatabaseService implements IDatabaseService {
 	private db: any;
 	private isInitialized = false;
+	private initPromise: Promise<void> | null = null;
 
 	constructor() {
 		// Database will be initialized in init()
 	}
 
 	public async init(): Promise<void> {
+		if (this.initPromise) {
+			return this.initPromise;
+		}
+		this.initPromise = this.doInit();
+		return this.initPromise;
+	}
+
+	private async doInit(): Promise<void> {
 		if (!Database) {
 			throw new Error('better-sqlite3 is not installed. Please run: npm install better-sqlite3');
 		}
@@ -54,7 +63,12 @@ export class SqliteDatabaseService implements IDatabaseService {
 		}
 	}
 
+	public async isReady(): Promise<void> {
+		await (this.initPromise ?? this.init());
+	}
+
 	private async createTables(): Promise<void> {
+
 		// Create tables based on IndexedDbService schema
 		// Version 1 tables
 		this.db.exec(`

@@ -295,6 +295,7 @@ export class GameStatsLoaderService extends AbstractFacadeService<GameStatsLoade
 	}
 
 	private async loadLocalGameStats(): Promise<readonly GameStat[]> {
+		await this.indexedDb.isReady();
 		let existingGameStats = await this.indexedDb.table<GameStat, string>(MATCH_HISTORY).toArray();
 		if (!existingGameStats?.length) {
 			existingGameStats = await this.diskCache.getItem(DiskCacheService.DISK_CACHE_KEYS.USER_MATCH_HISTORY);

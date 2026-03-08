@@ -5,8 +5,8 @@ import { DiskCacheService, Preferences, PreferencesService } from '@firestone/sh
 import {
 	AnalyticsService,
 	CardsFacadeService,
-	IAdsService,
-	IDatabaseService,
+	type IAdsService,
+	type IDatabaseService,
 	ILocalizationService,
 } from '@firestone/shared/framework/core';
 import { GameStatsLoaderService } from '@firestone/stats/data-access';
