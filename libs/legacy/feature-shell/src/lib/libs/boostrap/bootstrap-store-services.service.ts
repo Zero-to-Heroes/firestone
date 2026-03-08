@@ -65,7 +65,7 @@ import { CardRulesService, OwUtilsService } from '@firestone/shared/framework/co
 import { GameStatsProviderService } from '@firestone/stats/services';
 import { AchievementsLiveProgressTrackingService } from '../../js/services/achievement/achievements-live-progress-tracking.service';
 import { AdService } from '../../js/services/ad.service';
-import { MainWindowStoreService } from '../../js/services/mainwindow/store/main-window-store.service';
+import { MainWindowStoreService } from '@firestone/mainwindow/common';
 import { MercenariesSynergiesHighlightService } from '../../js/services/mercenaries/highlights/mercenaries-synergies-highlight.service';
 import { MercenariesStoreService } from '../../js/services/mercenaries/mercenaries-store.service';
 import { MercenariesOutOfCombatService } from '../../js/services/mercenaries/out-of-combat/mercenaries-out-of-combat.service';

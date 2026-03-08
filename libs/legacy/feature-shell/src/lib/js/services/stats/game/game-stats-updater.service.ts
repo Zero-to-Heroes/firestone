@@ -5,7 +5,7 @@ import { Events } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { buildGameStat } from '@firestone/stats/services';
-import { MainWindowStoreService } from '../../mainwindow/store/main-window-store.service';
+import { MainWindowStoreService } from '@firestone/mainwindow/common';
 
 @Injectable()
 export class GameStatsUpdaterService {

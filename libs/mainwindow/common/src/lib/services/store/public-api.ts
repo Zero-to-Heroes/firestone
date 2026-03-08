@@ -1,5 +1,5 @@
 /**
- * Store public API - use @firestone/mainwindow/store to import.
+ * Store public API - use @firestone/mainwindow/common to import.
  * Kept separate from main package to avoid circular dependencies.
  */
 export * from './store-bootstrap.service';

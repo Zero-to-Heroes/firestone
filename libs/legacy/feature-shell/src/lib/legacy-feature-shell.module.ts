@@ -591,7 +591,7 @@ import { LogRegisterService } from './js/services/log-register.service';
 import { LiveStreamsService } from './js/services/mainwindow/live-streams.service';
 import { OutOfCardsService } from './js/services/mainwindow/out-of-cards.service';
 import { StoreBootstrapService } from '@firestone/mainwindow/common';
-import { MainWindowStoreService } from './js/services/mainwindow/store/main-window-store.service';
+import { MainWindowStoreService } from '@firestone/mainwindow/common';
 import { TwitchPresenceService } from './js/services/mainwindow/twitch-presence.service';
 import { MercenariesSynergiesHighlightService } from './js/services/mercenaries/highlights/mercenaries-synergies-highlight.service';
 import { MercenariesStoreService } from './js/services/mercenaries/mercenaries-store.service';

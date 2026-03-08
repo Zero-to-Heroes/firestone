@@ -4,4 +4,5 @@ export * from './lib/services/events';
 export * from './lib/services/main-window-navigation.service';
 export * from './lib/services/main-window-state-facade.service';
 export * from './lib/services/main-window-store.interface';
+export * from './lib/services/main-window-store.service';
 export * from './lib/services/store/public-api';

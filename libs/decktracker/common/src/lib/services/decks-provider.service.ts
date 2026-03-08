@@ -2,12 +2,13 @@
 import { Injectable } from '@angular/core';
 import { DeckDefinition, DeckList, decode } from '@firestone-hs/deckstrings';
 import { GameFormat } from '@firestone-hs/reference-data';
-import { ConstructedPersonalDecksService, DeckSummary, DeckSummaryVersion } from '@firestone/constructed/common';
-import { classes } from '@firestone/game-state';
 import {
-	MainWindowStateFacadeService,
+	ConstructedPersonalDecksService,
+	DeckSummary,
+	DeckSummaryVersion,
 	MatchupStat,
-} from '@firestone/mainwindow/common';
+} from '@firestone/constructed/common';
+import { classes } from '@firestone/game-state';
 import {
 	ConstructedDeckVersions,
 	DeckFilters,
@@ -51,7 +52,6 @@ export class DecksProviderService extends AbstractFacadeService<DecksProviderSer
 	private allCards: CardsFacadeService;
 	private patchesConfig: PatchesConfigService;
 	private constructedPersonalDecks: ConstructedPersonalDecksService;
-	private mainWindowState: MainWindowStateFacadeService;
 	private prefs: PreferencesService;
 	private gameStats: GameStatsProviderService;
 
@@ -72,13 +72,11 @@ export class DecksProviderService extends AbstractFacadeService<DecksProviderSer
 		this.allCards = AppInjector.get(CardsFacadeService);
 		this.patchesConfig = AppInjector.get(PatchesConfigService);
 		this.constructedPersonalDecks = AppInjector.get(ConstructedPersonalDecksService);
-		this.mainWindowState = AppInjector.get(MainWindowStateFacadeService);
 		this.prefs = AppInjector.get(PreferencesService);
 		this.gameStats = AppInjector.get(GameStatsProviderService);
 
 		await this.patchesConfig.isReady();
 		await this.constructedPersonalDecks.isReady();
-		await this.mainWindowState.isReady();
 		await this.prefs.isReady();
 		await this.gameStats.isReady();
 

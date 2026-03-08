@@ -1,7 +1,5 @@
-import { SafeHtml } from '@angular/platform-browser';
-
 export class SharingAchievement {
-	readonly title: SafeHtml;
+	readonly title: string;
 	readonly videoPath: string;
 	readonly videoPathOnDisk: string;
 	readonly network: string;
