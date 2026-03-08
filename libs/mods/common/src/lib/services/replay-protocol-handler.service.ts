@@ -9,20 +9,11 @@ import {
 	OwUtilsService,
 	waitForReady,
 } from '@firestone/shared/framework/core';
-import { InGameReplayService } from './in-game-replay.service';
+import { InGameReplayService, IN_GAME_REPLAY_ERROR_MESSAGES } from './in-game-replay.service';
 import { ModsManagerService } from './mods-manager.service';
 
 const REPLAY_IN_GAME_PREFIX = 'firestoneapp://replay/in-game';
 const RETRIEVE_REVIEW_URL = 'https://itkmxena7k2kkmkgpevc6skcie0tlwmk.lambda-url.us-west-2.on.aws/';
-
-const IN_GAME_ERROR_MESSAGES: Record<string, string> = {
-	'not-in-game': 'Hearthstone is not running',
-	'mod-not-installed': 'Replay mod is not installed',
-	'mod-not-active': 'Replay mod is not active',
-	'connection-failed': 'Could not connect to the replay mod',
-	'download-failed': "Could not download the replay",
-	'rewind-block': 'Rewind replays are not supported yet',
-};
 
 @Injectable()
 export class ReplayProtocolHandlerService {
@@ -166,7 +157,7 @@ export class ReplayProtocolHandlerService {
 			const text = this.i18n?.translateString?.(textKey) ?? textKey;
 			if (useErrorKeys && title === titleKey) {
 				const errorCode = titleKey.replace('app.replays.in-game.error.', '');
-				const fallbackText = IN_GAME_ERROR_MESSAGES[errorCode] ?? text || title;
+				const fallbackText = IN_GAME_REPLAY_ERROR_MESSAGES[errorCode] ?? text || title;
 				this.notifs.notifyError('Replay error', fallbackText, 'replay-protocol-error');
 			} else {
 				this.notifs.notifyError(title, text, 'replay-protocol-error');

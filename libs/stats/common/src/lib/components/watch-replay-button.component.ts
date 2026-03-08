@@ -8,7 +8,7 @@ import {
 	Input,
 	Optional,
 } from '@angular/core';
-import { InGameReplayService } from '@firestone/mods/common';
+import { InGameReplayService, IN_GAME_REPLAY_ERROR_MESSAGES } from '@firestone/mods/common';
 import { ENABLE_IN_GAME_REPLAY } from '@firestone/shared/common/service';
 import {
 	ADS_SERVICE_TOKEN,
@@ -21,15 +21,6 @@ import { GameStatsLoaderService } from '@firestone/stats/data-access';
 
 const IN_GAME_REPLAY_URL_PREFIX = 'firestoneapp://replay/in-game?reviewId=';
 const WEB_REPLAY_URL_PREFIX = 'https://replays.firestoneapp.com/?reviewId=';
-
-const IN_GAME_ERROR_MESSAGES: Record<string, string> = {
-	'not-in-game': 'Hearthstone is not running',
-	'mod-not-installed': 'Replay mod is not installed',
-	'mod-not-active': 'Replay mod is not active',
-	'connection-failed': 'Could not connect to the replay mod',
-	'download-failed': "Could not download the replay",
-	'rewind-block': 'Rewind replays are not supported yet',
-};
 
 @Component({
 	standalone: false,
@@ -189,7 +180,7 @@ export class WatchReplayButtonComponent {
 			if (result !== 'started') {
 				const translationKey = `app.replays.in-game.error.${result}`;
 				const translated = this.i18n.translateString(translationKey);
-				this.inGameError = translated === translationKey ? (IN_GAME_ERROR_MESSAGES[result] ?? translated) : translated;
+				this.inGameError = translated === translationKey ? (IN_GAME_REPLAY_ERROR_MESSAGES[result] ?? translated) : translated;
 				this.errorTimeout = setTimeout(() => this.dismissError(), 5000);
 				this.analytics.trackEvent('replay-in-game-error', { error: result as string });
 			} else {

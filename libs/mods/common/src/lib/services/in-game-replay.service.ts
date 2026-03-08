@@ -32,6 +32,15 @@ export interface ReplayError {
 
 export type ReplayMessage = ReplayStatus | ReplayAck | ReplayError;
 
+export const IN_GAME_REPLAY_ERROR_MESSAGES: Record<string, string> = {
+	'not-in-game': 'Hearthstone is not running',
+	'mod-not-installed': 'Replay mod is not installed',
+	'mod-not-active': 'Replay mod is not active',
+	'connection-failed': 'Could not connect to the replay mod',
+	'download-failed': 'Could not download the replay',
+	'rewind-block': 'Rewind replays are not supported yet',
+};
+
 @Injectable({ providedIn: 'root' })
 export class InGameReplayService extends AbstractFacadeService<InGameReplayService> {
 	public status$$: BehaviorSubject<ReplayStatus>;
