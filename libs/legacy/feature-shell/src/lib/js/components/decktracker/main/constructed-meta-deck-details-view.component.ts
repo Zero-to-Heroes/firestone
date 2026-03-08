@@ -13,7 +13,7 @@ import {
 	ConstructedMatchupInfo,
 } from '@firestone-hs/constructed-deck-stats';
 import { Sideboard } from '@firestone-hs/deckstrings';
-import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
+import { ConstructedMetaArchetypeShowDecksEvent, MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { Card } from '@firestone/memory';
 import { AbstractSubscriptionComponent, buildPercents } from '@firestone/shared/framework/common';
 import {
@@ -24,7 +24,6 @@ import {
 } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, distinctUntilChanged, Observable } from 'rxjs';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { ConstructedMetaArchetypeShowDecksEvent } from '../../../services/mainwindow/store/processors/decktracker/constructed-meta-archetype-show-decks';
 import { ConstructedMatchupDetails } from './constructed-meta-deck-details-matchups.component';
 
 @Component({

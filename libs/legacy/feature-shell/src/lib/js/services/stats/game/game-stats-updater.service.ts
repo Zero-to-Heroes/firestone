@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { ManastormInfo } from '@firestone/app/common';
+import { RecomputeGameStatsEvent } from '@firestone/mainwindow/common';
 import { Events } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { buildGameStat } from '@firestone/stats/services';
-import { RecomputeGameStatsEvent } from '@firestone/mainwindow/common';
 import { MainWindowStoreService } from '../../mainwindow/store/main-window-store.service';
 
 @Injectable()

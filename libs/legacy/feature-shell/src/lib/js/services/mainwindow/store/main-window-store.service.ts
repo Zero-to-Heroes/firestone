@@ -18,85 +18,175 @@ import { ConstructedNavigationService, ConstructedPersonalDecksService } from '@
 import { DecksProviderService } from '@firestone/decktracker/common';
 import {
 	AchievementCompletedEvent,
+	AchievementCompletedProcessor,
 	AchievementsFullRefreshEvent,
+	AchievementsFullRefreshProcessor,
+	AchievementsRemovePinnedAchievementsEvent,
+	AchievementsRemovePinnedAchievementsProcessor,
+	AchievementsTrackRandomAchievementsEvent,
+	AchievementsTrackRandomAchievementsProcessor,
 	BattlegroundsMainWindowSelectBattleEvent,
+	BattlegroundsMainWindowSelectBattleProcessor,
 	BgsHeroFilterSelectedEvent,
+	BgsHeroFilterSelectedProcessor,
 	BgsHeroSortFilterSelectedEvent,
+	BgsHeroSortFilterSelectedProcessor,
 	BgsPersonalStatsSelectHeroDetailsEvent,
+	BgsPersonalStatsSelectHeroDetailsProcessor,
 	BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent,
+	BgsPersonalStatsSelectHeroDetailsWithRemoteInfoProcessor,
 	BgsPostMatchStatsComputedEvent,
+	BgsPostMatchStatsComputedProcessor,
 	BgsShowStrategiesEvent,
+	BgsShowStrategiesProcessor,
 	ChangeDeckFormatFilterEvent,
+	ChangeDeckFormatFilterProcessor,
 	ChangeDeckModeFilterEvent,
+	ChangeDeckModeFilterProcessor,
 	ChangeDeckRankCategoryFilterEvent,
+	ChangeDeckRankCategoryFilterProcessor,
 	ChangeDeckRankFilterEvent,
+	ChangeDeckRankFilterProcessor,
 	ChangeDeckRankGroupEvent,
+	ChangeDeckRankGroupProcessor,
 	ChangeDeckSortEvent,
+	ChangeDeckSortProcessor,
 	ChangeDeckTimeFilterEvent,
+	ChangeDeckTimeFilterProcessor,
 	ChangeVisibleAchievementEvent,
+	ChangeVisibleAchievementProcessor,
 	ChangeVisibleApplicationEvent,
+	ChangeVisibleApplicationProcessor,
 	CloseMainWindowEvent,
+	CloseMainWindowProcessor,
 	CollectionPacksUpdatedEvent,
+	CollectionPacksUpdatedProcessor,
 	CollectionRefreshPacksEvent,
+	CollectionRefreshPacksProcessor,
 	CollectionSelectCurrentTabEvent,
+	CollectionSelectCurrentTabProcessor,
 	ConstructedDeckbuilderClassSelectedEvent,
+	ConstructedDeckbuilderClassSelectedProcessor,
 	ConstructedDeckbuilderFormatSelectedEvent,
+	ConstructedDeckbuilderFormatSelectedProcessor,
 	ConstructedDeckbuilderGoBackEvent,
+	ConstructedDeckbuilderGoBackProcessor,
 	ConstructedDeckbuilderImportDeckEvent,
+	ConstructedDeckbuilderImportDeckProcessor,
 	ConstructedDeckbuilderSaveDeckEvent,
+	ConstructedDeckbuilderSaveDeckProcessor,
 	ConstructedEjectDeckVersionEvent,
+	ConstructedEjectDeckVersionProcessor,
+	ConstructedMetaArchetypeDetailsShowEvent,
+	ConstructedMetaArchetypeDetailsShowProcessor,
+	ConstructedMetaArchetypeShowDecksEvent,
+	ConstructedMetaArchetypeShowDecksProcessor,
+	ConstructedMetaDeckDetailsShowEvent,
+	ConstructedMetaDeckDetailsShowProcessor,
 	ConstructedNewDeckVersionEvent,
+	ConstructedNewDeckVersionProcessor,
 	ConstructedToggleDeckVersionStatsEvent,
+	ConstructedToggleDeckVersionStatsProcessor,
 	DecktrackerDeleteDeckEvent,
+	DecktrackerDeleteDeckProcessor,
 	DecktrackerResetDeckStatsEvent,
+	DecktrackerResetDeckStatsProcessor,
 	FilterShownAchievementsEvent,
+	FilterShownAchievementsProcessor,
 	GamesFullClearEvent,
 	GamesFullRefreshEvent,
+	GameStatsFullClearProcessor,
+	GameStatsFullRefreshProcessor,
 	GenericPreferencesUpdateEvent,
+	GenericPreferencesUpdateProcessor,
 	HideDeckSummaryEvent,
+	HideDeckSummaryProcessor,
 	IMainWindowStoreService,
 	MainWindowNavigationService,
 	MainWindowState,
 	MainWindowStoreEvent,
 	MercenariesAddMercToBackupTeamEvent,
+	MercenariesAddMercToBackupTeamProcessor,
 	MercenariesHeroLevelFilterSelectedEvent,
+	MercenariesHeroLevelFilterSelectedProcessor,
 	MercenariesHeroSelectedEvent,
+	MercenariesHeroSelectedProcessor,
 	MercenariesHideTeamSummaryEvent,
+	MercenariesHideTeamSummaryProcessor,
 	MercenariesModeFilterSelectedEvent,
+	MercenariesModeFilterSelectedProcessor,
 	MercenariesPersonalHeroesSortEvent,
+	MercenariesPersonalHeroesSortProcessor,
 	MercenariesPveDifficultyFilterSelectedEvent,
+	MercenariesPveDifficultyFilterSelectedProcessor,
 	MercenariesRemoveMercToBackupTeamEvent,
+	MercenariesRemoveMercToBackupTeamProcessor,
 	MercenariesRestoreTeamSummaryEvent,
+	MercenariesRestoreTeamSummaryProcessor,
 	MercenariesRoleFilterSelectedEvent,
+	MercenariesRoleFilterSelectedProcessor,
 	MercenariesSelectCategoryEvent,
+	MercenariesSelectCategoryProcessor,
 	MercenariesStarterFilterSelectedEvent,
+	MercenariesStarterFilterSelectedProcessor,
 	MercenariesToggleShowHiddenTeamsEvent,
+	MercenariesToggleShowHiddenTeamsProcessor,
 	NavigationBackEvent,
+	NavigationBackProcessor,
 	NavigationNextEvent,
+	NavigationNextProcessor,
 	NavigationState,
 	NewPackEvent,
+	NewPackProcessor,
 	NextFtueEvent,
+	NextFtueProcessor,
 	PreviousFtueEvent,
+	PreviousFtueProcessor,
+	ProfileSelectCategoryEvent,
+	ProfileSelectCategoryProcessor,
 	RecomputeGameStatsEvent,
+	RecomputeGameStatsProcessor,
 	RestoreDeckSummaryEvent,
+	RestoreDeckSummaryProcessor,
+	SearchCardProcessor,
 	SearchCardsEvent,
 	SelectAchievementCategoryEvent,
+	SelectAchievementCategoryProcessor,
 	SelectBattlegroundsCategoryEvent,
+	SelectBattlegroundsCategoryProcessor,
 	SelectCollectionSetEvent,
+	SelectCollectionSetProcessor,
 	SelectDeckDetailsEvent,
+	SelectDeckDetailsProcessor,
 	SelectDecksViewEvent,
+	SelectDeckViewProcessor,
 	ShowAchievementDetailsEvent,
+	ShowAchievementDetailsProcessor,
 	ShowCardBackDetailsEvent,
+	ShowCardBackDetailsProcessor,
 	ShowCardDetailsEvent,
+	ShowCardDetailsProcessor,
 	ShowMainWindowEvent,
+	ShowMainWindowProcessor,
 	ShowMatchStatsEvent,
+	ShowMatchStatsProcessor,
 	ShowReplayEvent,
+	ShowReplayProcessor,
 	ShowReplaysEvent,
+	ShowReplaysProcessor,
 	SkipFtueEvent,
+	SkipFtueProcessor,
 	StatsXpGraphFilterSelectedEvent,
+	StatsXpGraphFilterSelectedProcessor,
+	StoreBootstrapService,
+	StoreInitProcessor,
 	ToggleShowHiddenDecksEvent,
+	ToggleShowHiddenDecksProcessor,
 	TriggerShowMatchStatsEvent,
+	TriggerShowMatchStatsProcessor,
 	UpdateCardSearchResultsEvent,
+	UpdateCardSearchResultsProcessor,
+	type Processor,
 } from '@firestone/mainwindow/common';
 import { AppNavigationService, Events, PreferencesService } from '@firestone/shared/common/service';
 import {
@@ -110,107 +200,6 @@ import {
 import { GameStatsLoaderService } from '@firestone/stats/data-access';
 import { Map } from 'immutable';
 import { BehaviorSubject, filter } from 'rxjs';
-import { AchievementCompletedProcessor } from './processors/achievements/achievement-completed-processor';
-import { AchievementsFullRefreshProcessor } from './processors/achievements/achievements-full-refresh-processor';
-import {
-	AchievementsRemovePinnedAchievementsEvent,
-	AchievementsRemovePinnedAchievementsProcessor,
-} from './processors/achievements/achievements-remove-pinned-achievements';
-import {
-	AchievementsTrackRandomAchievementsEvent,
-	AchievementsTrackRandomAchievementsProcessor,
-} from './processors/achievements/achievements-track-random-achievements';
-import { ChangeVisibleAchievementProcessor } from './processors/achievements/change-visible-achievement-processor';
-import { FilterShownAchievementsProcessor } from './processors/achievements/filter-shown-achievements-processor';
-import { SelectAchievementCategoryProcessor } from './processors/achievements/select-achievement-category-processor';
-import { ShowAchievementDetailsProcessor } from './processors/achievements/show-achievement-details-processor';
-import { BattlegroundsMainWindowSelectBattleProcessor } from './processors/battlegrounds/battlegrounds-main-window-select-battle-processor';
-import { BgsHeroFilterSelectedProcessor } from './processors/battlegrounds/bgs-hero-filter-selected-processor';
-import { BgsHeroSortFilterSelectedProcessor } from './processors/battlegrounds/bgs-hero-sort-filter-selected-processor';
-import { BgsPersonalStatsSelectHeroDetailsProcessor } from './processors/battlegrounds/bgs-personal-stats-select-hero-details-processor';
-import { BgsPersonalStatsSelectHeroDetailsWithRemoteInfoProcessor } from './processors/battlegrounds/bgs-personal-stats-select-hero-details-with-remote-info-processor';
-import { BgsPostMatchStatsComputedProcessor } from './processors/battlegrounds/bgs-post-match-stats-computed-event';
-import { BgsShowStrategiesProcessor } from './processors/battlegrounds/bgs-show-strategies-processor';
-import { SelectBattlegroundsCategoryProcessor } from './processors/battlegrounds/select-battlegrounds-category-processor';
-import { ChangeVisibleApplicationProcessor } from './processors/change-visible-application-processor';
-import { CloseMainWindowProcessor } from './processors/close-main-window-processor';
-import { CollectionPacksUpdatedProcessor } from './processors/collection/collection-packs-updated-processor';
-import { CollectionRefreshPacksProcessor } from './processors/collection/collection-refresh-packs-processor';
-import { CollectionSelectCurrentTabProcessor } from './processors/collection/collection-select-current-tab-processor';
-import { NewPackProcessor } from './processors/collection/new-pack-processor';
-import { SearchCardProcessor } from './processors/collection/search-card-processor';
-import { SelectCollectionSetProcessor } from './processors/collection/select-collection-set-processor';
-import { ShowCardBackDetailsProcessor } from './processors/collection/show-card-back-details-processor';
-import { ShowCardDetailsProcessor } from './processors/collection/show-card-details-processor';
-import { UpdateCardSearchResultsProcessor } from './processors/collection/update-card-search-results-processor';
-import { ChangeDeckFormatFilterProcessor } from './processors/decktracker/change-deck-format-filter-processor';
-import { ChangeDeckModeFilterProcessor } from './processors/decktracker/change-deck-mode-filter-processor';
-import { ChangeDeckRankCategoryFilterProcessor } from './processors/decktracker/change-deck-rank-category-filter-processor';
-import { ChangeDeckRankFilterProcessor } from './processors/decktracker/change-deck-rank-filter-processor';
-import { ChangeDeckRankGroupProcessor } from './processors/decktracker/change-deck-rank-group-processor';
-import { ChangeDeckSortProcessor } from './processors/decktracker/change-deck-sort-processor';
-import { ChangeDeckTimeFilterProcessor } from './processors/decktracker/change-deck-time-filter-processor';
-import { ConstructedDeckbuilderClassSelectedProcessor } from './processors/decktracker/constructed-deckbuilder-class-selected-processor';
-import { ConstructedDeckbuilderFormatSelectedProcessor } from './processors/decktracker/constructed-deckbuilder-format-selected-processor';
-import { ConstructedDeckbuilderGoBackProcessor } from './processors/decktracker/constructed-deckbuilder-go-back-processor';
-import { ConstructedDeckbuilderImportDeckProcessor } from './processors/decktracker/constructed-deckbuilder-import-deck-processor';
-import { ConstructedDeckbuilderSaveDeckProcessor } from './processors/decktracker/constructed-deckbuilder-save-deck-processor';
-import { ConstructedEjectDeckVersionProcessor } from './processors/decktracker/constructed-eject-deck-version-processor';
-import {
-	ConstructedMetaArchetypeShowDecksEvent,
-	ConstructedMetaArchetypeShowDecksProcessor,
-} from './processors/decktracker/constructed-meta-archetype-show-decks';
-import {
-	ConstructedMetaArchetypeDetailsShowEvent,
-	ConstructedMetaArchetypeDetailsShowProcessor,
-} from './processors/decktracker/constructed-meta-archetype-show-details';
-import {
-	ConstructedMetaDeckDetailsShowEvent,
-	ConstructedMetaDeckDetailsShowProcessor,
-} from './processors/decktracker/constructed-meta-deck-show-details';
-import { ConstructedNewDeckVersionProcessor } from './processors/decktracker/constructed-new-deck-version-processor';
-import { ConstructedToggleDeckVersionStatsProcessor } from './processors/decktracker/constructed-toggle-deck-version-stats-processor';
-import { DecktrackerDeleteDeckProcessor } from './processors/decktracker/decktracker-delete-deck-processor';
-import { DecktrackerResetDeckStatsProcessor } from './processors/decktracker/decktracker-reset-deck-stats-processor';
-import { HideDeckSummaryProcessor } from './processors/decktracker/hide-deck-summary-processor';
-import { RestoreDeckSummaryProcessor } from './processors/decktracker/restore-deck-summary-processor';
-import { SelectDeckDetailsProcessor } from './processors/decktracker/select-deck-details-processor';
-import { SelectDeckViewProcessor } from './processors/decktracker/select-decks-view-processor';
-import { ToggleShowHiddenDecksProcessor } from './processors/decktracker/toggle-show-hidden-decks-processor';
-import { NextFtueProcessor } from './processors/ftue/next-ftue-processor';
-import { PreviousFtueProcessor } from './processors/ftue/previous-ftue-processor';
-import { SkipFtueProcessor } from './processors/ftue/skip-ftue-processor';
-import { GenericPreferencesUpdateProcessor } from './processors/generic-preferences-update-processor';
-import { MercenariesAddMercToBackupTeamProcessor } from './processors/mercenaries/mercenaries-add-merc-to-backup-team-processor';
-import { MercenariesHeroLevelFilterSelectedProcessor } from './processors/mercenaries/mercenaries-hero-level-filter-selected-processor';
-import { MercenariesHeroSelectedProcessor } from './processors/mercenaries/mercenaries-hero-selected-processor';
-import { MercenariesHideTeamSummaryProcessor } from './processors/mercenaries/mercenaries-hide-team-summary-processor';
-import { MercenariesModeFilterSelectedProcessor } from './processors/mercenaries/mercenaries-mode-filter-selected-processor';
-import { MercenariesPersonalHeroesSortProcessor } from './processors/mercenaries/mercenaries-personal-heroes-sort-processor';
-import { MercenariesPveDifficultyFilterSelectedProcessor } from './processors/mercenaries/mercenaries-pve-difficulty-filter-selected-processor';
-import { MercenariesRemoveMercToBackupTeamProcessor } from './processors/mercenaries/mercenaries-remove-merc-to-backup-team-processor';
-import { MercenariesRestoreTeamSummaryProcessor } from './processors/mercenaries/mercenaries-restore-team-summary-processor';
-import { MercenariesRoleFilterSelectedProcessor } from './processors/mercenaries/mercenaries-role-filter-selected-processor';
-import { MercenariesSelectCategoryProcessor } from './processors/mercenaries/mercenaries-select-category-processor';
-import { MercenariesStarterFilterSelectedProcessor } from './processors/mercenaries/mercenaries-starter-filter-selected-processor';
-import { MercenariesToggleShowHiddenTeamsProcessor } from './processors/mercenaries/mercenaries-toggle-show-hidden-teams-processor';
-import { NavigationBackProcessor } from './processors/navigation/navigation-back-processor';
-import { NavigationNextProcessor } from './processors/navigation/navigation-next-processor';
-import { Processor } from './processors/processor';
-import { ShowMatchStatsProcessor } from './processors/replays/show-match-stats-processor';
-import { ShowReplayProcessor } from './processors/replays/show-replay-processor';
-import { ShowReplaysProcessor } from './processors/replays/show-replays-processor';
-import { TriggerShowMatchStatsProcessor } from './processors/replays/trigger-show-match-stats-processor';
-import { ShowMainWindowProcessor } from './processors/show-main-window-processor';
-import { GameStatsFullClearProcessor } from './processors/stats/game-stats-full-clear-processor';
-import { GameStatsFullRefreshProcessor } from './processors/stats/game-stats-full-refresh-processor';
-import { ProfileSelectCategoryEvent, ProfileSelectCategoryProcessor } from './processors/stats/profile-select-category';
-import { RecomputeGameStatsProcessor } from './processors/stats/recompute-game-stats-processor';
-import { StatsXpGraphFilterSelectedProcessor } from './processors/stats/stats-xp-graph-filter-selected-processor';
-import { StoreInitProcessor } from './processors/store-init-processor';
-import { StoreBootstrapService } from './store-bootstrap.service';
-
-const MAX_HISTORY_SIZE = 30;
 
 @Injectable()
 export class MainWindowStoreService implements IMainWindowStoreService {
@@ -281,7 +270,7 @@ export class MainWindowStoreService implements IMainWindowStoreService {
 			this.arenaNavigation,
 		).buildCurrentAppNavState(state, new NavigationState(), prefs);
 		this.mainWindowState$$.next(state);
-		this.navigationState$$.next(navState);
+		this.navigationState$$.next(navState ?? new NavigationState());
 		console.log('initial window state built');
 	}
 
@@ -303,13 +292,11 @@ export class MainWindowStoreService implements IMainWindowStoreService {
 		console.debug('handling events', eventQueue);
 		const event = eventQueue[0];
 		const start = Date.now();
-		const processor: Processor = this.processors.get(event.eventName());
+		const processor = this.processors.get(event.eventName());
 		if (!processor) {
 			console.error('[store] missing processor for event', event.eventName());
 			return;
 		}
-		// Don't modify the current state here, as it could make state lookup impossible
-		// (for back / forward arrows for instance)
 		try {
 			let currentState = this.mainWindowState$$.value;
 			let currentNavState = this.navigationState$$.value;
@@ -366,7 +353,6 @@ export class MainWindowStoreService implements IMainWindowStoreService {
 			[CloseMainWindowEvent.eventName(), new CloseMainWindowProcessor(this.mainNavigation)],
 			[ShowMainWindowEvent.eventName(), new ShowMainWindowProcessor(this.mainNavigation)],
 			[GenericPreferencesUpdateEvent.eventName(), new GenericPreferencesUpdateProcessor(this.prefs)],
-			// Collection
 			[CollectionRefreshPacksEvent.eventName(), new CollectionRefreshPacksProcessor(this.packsService)],
 			[CollectionPacksUpdatedEvent.eventName(), new CollectionPacksUpdatedProcessor()],
 			[
@@ -409,8 +395,6 @@ export class MainWindowStoreService implements IMainWindowStoreService {
 				new UpdateCardSearchResultsProcessor(this.collectionManager, this.sets, this.mainNavigation),
 			],
 			[NewPackEvent.eventName(), new NewPackProcessor(this.collectionBootstrap, this.cards)],
-
-			// Achievements
 			[
 				AchievementsFullRefreshEvent.eventName(),
 				new AchievementsFullRefreshProcessor(this.firestoneRemoteAchievements),
@@ -418,14 +402,6 @@ export class MainWindowStoreService implements IMainWindowStoreService {
 			[
 				ChangeVisibleAchievementEvent.eventName(),
 				new ChangeVisibleAchievementProcessor(this.achievementsStateManager, this.achievementsNavigation),
-			],
-			[
-				SelectAchievementCategoryEvent.eventName(),
-				new SelectAchievementCategoryProcessor(
-					this.achievementsStateManager,
-					this.mainNavigation,
-					this.achievementsNavigation,
-				),
 			],
 			[
 				SelectAchievementCategoryEvent.eventName(),
@@ -465,16 +441,12 @@ export class MainWindowStoreService implements IMainWindowStoreService {
 					this.achievementsRefLoader,
 				),
 			],
-
-			// Ftue
 			[NextFtueEvent.eventName(), new NextFtueProcessor(this.prefs, this.mainNavigation)],
 			[PreviousFtueEvent.eventName(), new PreviousFtueProcessor(this.mainNavigation)],
 			[SkipFtueEvent.eventName(), new SkipFtueProcessor(this.prefs, this.mainNavigation)],
-			// Stats
 			[RecomputeGameStatsEvent.eventName(), new RecomputeGameStatsProcessor(this.gameStats)],
 			[GamesFullRefreshEvent.eventName(), new GameStatsFullRefreshProcessor(this.gameStatsLoader)],
 			[GamesFullClearEvent.eventName(), new GameStatsFullClearProcessor(this.gameStatsLoader)],
-			// Replays
 			[
 				ShowReplayEvent.eventName(),
 				new ShowReplayProcessor(
@@ -508,7 +480,6 @@ export class MainWindowStoreService implements IMainWindowStoreService {
 					this.mainNavigation,
 				),
 			],
-			// Decktracker
 			[SelectDecksViewEvent.eventName(), new SelectDeckViewProcessor(this.constructedNavigation)],
 			[
 				SelectDeckDetailsEvent.eventName(),
@@ -518,11 +489,7 @@ export class MainWindowStoreService implements IMainWindowStoreService {
 			[ChangeDeckRankFilterEvent.eventName(), new ChangeDeckRankFilterProcessor(this.prefs)],
 			[ChangeDeckRankGroupEvent.eventName(), new ChangeDeckRankGroupProcessor(this.prefs)],
 			[ChangeDeckRankCategoryFilterEvent.eventName(), new ChangeDeckRankCategoryFilterProcessor(this.prefs)],
-			[
-				// TODO: remove this
-				ChangeDeckModeFilterEvent.eventName(),
-				new ChangeDeckModeFilterProcessor(),
-			],
+			[ChangeDeckModeFilterEvent.eventName(), new ChangeDeckModeFilterProcessor()],
 			[ChangeDeckTimeFilterEvent.eventName(), new ChangeDeckTimeFilterProcessor(this.prefs)],
 			[ChangeDeckSortEvent.eventName(), new ChangeDeckSortProcessor(this.prefs)],
 			[HideDeckSummaryEvent.eventName(), new HideDeckSummaryProcessor(this.prefs)],
@@ -567,15 +534,10 @@ export class MainWindowStoreService implements IMainWindowStoreService {
 				ConstructedMetaArchetypeShowDecksEvent.eventName(),
 				new ConstructedMetaArchetypeShowDecksProcessor(this.prefs, this.constructedNavigation),
 			],
-			// Battlegrounds
 			[
 				SelectBattlegroundsCategoryEvent.eventName(),
 				new SelectBattlegroundsCategoryProcessor(this.battlegroundsNavigation, this.mainNavigation),
 			],
-			// [
-			// 	BgsRequestNewGlobalStatsLoadEvent.eventName(),
-			// 	new BgsRequestNewGlobalStatsLoadProcessor(this.bgsGlobalStats),
-			// ],
 			[BgsHeroSortFilterSelectedEvent.eventName(), new BgsHeroSortFilterSelectedProcessor(this.prefs)],
 			[BgsHeroFilterSelectedEvent.eventName(), new BgsHeroFilterSelectedProcessor(this.prefs)],
 			[BgsPostMatchStatsComputedEvent.eventName(), new BgsPostMatchStatsComputedProcessor(this.gameStats)],
@@ -614,8 +576,6 @@ export class MainWindowStoreService implements IMainWindowStoreService {
 					this.mainNavigation,
 				),
 			],
-
-			// Mercenaries
 			[MercenariesModeFilterSelectedEvent.eventName(), new MercenariesModeFilterSelectedProcessor(this.prefs)],
 			[MercenariesRoleFilterSelectedEvent.eventName(), new MercenariesRoleFilterSelectedProcessor(this.prefs)],
 			[
@@ -644,7 +604,6 @@ export class MainWindowStoreService implements IMainWindowStoreService {
 				MercenariesRemoveMercToBackupTeamEvent.eventName(),
 				new MercenariesRemoveMercToBackupTeamProcessor(this.prefs),
 			],
-			// Stats
 			[StatsXpGraphFilterSelectedEvent.eventName(), new StatsXpGraphFilterSelectedProcessor(this.prefs)],
 			[ProfileSelectCategoryEvent.eventName(), new ProfileSelectCategoryProcessor()],
 		];

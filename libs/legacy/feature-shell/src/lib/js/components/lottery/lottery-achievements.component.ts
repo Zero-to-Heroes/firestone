@@ -1,11 +1,10 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
-import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
+import { AchievementsTrackRandomAchievementsEvent, MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { GameStatusService, Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { sortByProperties } from '@firestone/shared/framework/common';
 import { Observable, tap } from 'rxjs';
 import { AchievementsProgressTracking } from '../../services/achievement/achievements-live-progress-tracking.service';
-import { AchievementsTrackRandomAchievementsEvent } from '../../services/mainwindow/store/processors/achievements/achievements-track-random-achievements';
 import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 
 @Component({

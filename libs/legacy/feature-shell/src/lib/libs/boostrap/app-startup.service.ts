@@ -1,7 +1,11 @@
 import { Injectable } from '@angular/core';
 import { generateToken } from '@components/third-party/out-of-cards-callback.component';
 import { OwHotkeyHandlerService } from '@firestone/app/ow-native';
-import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
+import {
+	ChangeVisibleApplicationEvent,
+	MainWindowStateFacadeService,
+	ShowMainWindowEvent,
+} from '@firestone/mainwindow/common';
 import {
 	FORCE_LOCAL_PROP,
 	GameStatusService,
@@ -15,10 +19,6 @@ import { FirestoneAchievementsChallengeService } from '../../js/services/achieve
 import { AdService } from '../../js/services/ad.service';
 import { LocalizationFacadeService } from '../../js/services/localization-facade.service';
 import { OutOfCardsService, OutOfCardsToken } from '../../js/services/mainwindow/out-of-cards.service';
-import {
-	ChangeVisibleApplicationEvent,
-	ShowMainWindowEvent,
-} from '@firestone/mainwindow/common';
 import { MainWindowStoreService } from '../../js/services/mainwindow/store/main-window-store.service';
 
 @Injectable()

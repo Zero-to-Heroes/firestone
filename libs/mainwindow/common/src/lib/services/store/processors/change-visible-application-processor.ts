@@ -1,0 +1,103 @@
+import { AchievementsNavigationService } from '@firestone/achievements/common';
+import { ArenaNavigationService } from '@firestone/arena/common';
+import { BattlegroundsNavigationService } from '@firestone/battlegrounds/services';
+import { CollectionNavigationService } from '@firestone/collection/common';
+import { ConstructedNavigationService } from '@firestone/constructed/common';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { ILocalizationService } from '@firestone/shared/framework/core';
+import {
+	ChangeVisibleApplicationEvent,
+	MainWindowNavigationService,
+	MainWindowState,
+	NavigationAchievements,
+	NavigationDecktracker,
+	NavigationReplays,
+	NavigationState,
+} from '../store-internal';
+import { Processor } from './processor';
+
+export class ChangeVisibleApplicationProcessor implements Processor {
+	constructor(
+		private readonly prefs: PreferencesService,
+		private readonly i18n: ILocalizationService,
+		private readonly mainNav: MainWindowNavigationService,
+		private readonly collectionNav: CollectionNavigationService,
+		private readonly bgNav: BattlegroundsNavigationService,
+		private readonly constructedNav: ConstructedNavigationService,
+		private readonly achievementsNav: AchievementsNavigationService,
+		private readonly arenaNav: ArenaNavigationService,
+	) {}
+
+	public async process(
+		event: ChangeVisibleApplicationEvent,
+		currentState: MainWindowState,
+		navigationState: NavigationState,
+	): Promise<[MainWindowState | null, NavigationState | null]> {
+		// if (event.module === navigationState.currentApp) {
+		// 	return [null, null];
+		// }
+		if (event.module === 'collection') {
+			this.collectionNav.currentView$$.next('sets');
+			this.collectionNav.menuDisplayType$$.next('menu');
+		} else if (event.module === 'battlegrounds') {
+			this.bgNav.selectedCategoryId$$.next('bgs-category-meta-heroes');
+			this.bgNav.currentView$$.next('list');
+			this.bgNav.menuDisplayType$$.next('menu');
+		} else if (event.module === 'decktracker') {
+			this.constructedNav.currentView$$.next('decks');
+			this.constructedNav.selectedDeckstring$$.next(null);
+		} else if (event.module === 'achievements') {
+			this.achievementsNav.currentView$$.next('categories');
+			this.achievementsNav.menuDisplayType$$.next('menu');
+			this.achievementsNav.selectedCategoryId$$.next(null);
+		} else if (event.module === 'arena') {
+			this.arenaNav.menuDisplayType$$.next('menu');
+			this.arenaNav.expandedRunIds$$.next([]);
+		}
+
+		const achievements =
+			event.module === 'achievements'
+				? navigationState.navigationAchievements.update({
+						selectedAchievementId: undefined,
+					} as Partial<NavigationAchievements> as NavigationAchievements)
+				: navigationState.navigationAchievements;
+		const replays =
+			event.module === 'replays'
+				? navigationState.navigationReplays.update({
+						currentView: 'list',
+						selectedReplay: undefined,
+					} as Partial<NavigationReplays> as NavigationReplays)
+				: navigationState.navigationReplays;
+		const decktracker =
+			event.module === 'decktracker'
+				? navigationState.navigationDecktracker.update({
+						menuDisplayType: 'menu',
+					} as Partial<NavigationDecktracker> as NavigationDecktracker)
+				: navigationState.navigationDecktracker;
+		// TODO: if this is the live tab, default to the decktracker
+		await this.prefs.setMainVisibleSection(event.module === 'live' ? 'decktracker' : event.module);
+		this.mainNav.text$$.next(this.getInitialText(event.module));
+		this.mainNav.image$$.next(null);
+		this.mainNav.isVisible$$.next(event.forceApplicationVisible || this.mainNav.isVisible$$.getValue());
+		this.mainNav.currentApp$$.next(event.module);
+		return [
+			null,
+			navigationState.update({
+				navigationAchievements: achievements,
+				navigationReplays: replays,
+				navigationDecktracker: decktracker,
+			} as NavigationState),
+		];
+	}
+
+	private getInitialText(module: string): string | null {
+		switch (module) {
+			case 'achievements':
+				return this.i18n.translateString('app.achievements.menu.categories');
+			case 'decktracker':
+				return this.i18n.translateString('app.achievements.menu.decks-header');
+			default:
+				return null;
+		}
+	}
+}

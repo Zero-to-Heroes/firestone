@@ -14,6 +14,7 @@ import {
 	ArenaNavigationService,
 	ArenaRunsService,
 } from '@firestone/arena/common';
+import { BgsPerfectGamesService } from '@firestone/battlegrounds/data-access';
 import {
 	BattlegroundsAnomaliesService,
 	BattlegroundsNavigationService,
@@ -28,6 +29,7 @@ import {
 } from '@firestone/battlegrounds/services';
 import { BgsSimulatorControllerService } from '@firestone/battlegrounds/simulator';
 import { HearthpwnService, HsGuruService } from '@firestone/collection/common';
+import { CollectionBootstrapService } from '@firestone/collection/services';
 import { CommunityBootstrapService } from '@firestone/communities/common';
 import {
 	ConstructedDiscoverService,
@@ -37,6 +39,7 @@ import {
 	ConstructedMulliganGuideService,
 	ConstructedPersonalDecksService,
 } from '@firestone/constructed/common';
+import { DecksProviderService } from '@firestone/decktracker/common';
 import {
 	BattlegroundsOfficialLeaderboardService,
 	BgsMatchPlayersMmrService,
@@ -62,9 +65,6 @@ import { CardRulesService, OwUtilsService } from '@firestone/shared/framework/co
 import { GameStatsProviderService } from '@firestone/stats/services';
 import { AchievementsLiveProgressTrackingService } from '../../js/services/achievement/achievements-live-progress-tracking.service';
 import { AdService } from '../../js/services/ad.service';
-import { BgsPerfectGamesService } from '@firestone/battlegrounds/data-access';
-import { DecksProviderService } from '@firestone/decktracker/common';
-import { CollectionBootstrapService } from '@firestone/collection/services';
 import { MainWindowStoreService } from '../../js/services/mainwindow/store/main-window-store.service';
 import { MercenariesSynergiesHighlightService } from '../../js/services/mercenaries/highlights/mercenaries-synergies-highlight.service';
 import { MercenariesStoreService } from '../../js/services/mercenaries/mercenaries-store.service';

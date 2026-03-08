@@ -6,7 +6,7 @@ import {
 } from '@firestone/achievements/common';
 import { AchievementsRefLoaderService, HsRefAchievement } from '@firestone/achievements/data-access';
 import { GameEvent, GameEventsEmitterService } from '@firestone/game-state';
-import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
+import { AchievementsRemovePinnedAchievementsEvent, MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import {
 	equalHsAchievementInfo,
 	HsAchievementInfo,
@@ -17,7 +17,6 @@ import { GameStatusService, PreferencesService } from '@firestone/shared/common/
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { HEARTHSTONE_GAME_ID, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, distinctUntilChanged, filter, map, skipWhile, take, tap } from 'rxjs';
-import { AchievementsRemovePinnedAchievementsEvent } from '../mainwindow/store/processors/achievements/achievements-remove-pinned-achievements';
 import { arraysEqual } from '../utils';
 
 @Injectable()

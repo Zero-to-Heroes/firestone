@@ -1,9 +1,8 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { overrideClassIcon, overrideDeckName } from '@firestone/constructed/common';
-import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
+import { ConstructedMetaArchetypeDetailsShowEvent, MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { AnalyticsService, CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { ConstructedMetaArchetypeDetailsShowEvent } from '../../../services/mainwindow/store/processors/decktracker/constructed-meta-archetype-show-details';
 import { EnhancedArchetypeStat } from './constructed-meta-archetypes.component';
 import { CardVariation, buildCardVariations } from './constructed-meta-deck-summary.component';
 

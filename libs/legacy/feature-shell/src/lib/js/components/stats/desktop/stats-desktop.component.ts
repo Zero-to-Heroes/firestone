@@ -9,13 +9,13 @@ import {
 import {
 	MainWindowNavigationService,
 	MainWindowStateFacadeService,
+	ProfileSelectCategoryEvent,
 	StatsCategory,
 	StatsCategoryType,
 } from '@firestone/mainwindow/common';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ADS_SERVICE_TOKEN, IAdsService, waitForReady } from '@firestone/shared/framework/core';
 import { combineLatest, Observable } from 'rxjs';
-import { ProfileSelectCategoryEvent } from '../../../services/mainwindow/store/processors/stats/profile-select-category';
 
 @Component({
 	standalone: false,
