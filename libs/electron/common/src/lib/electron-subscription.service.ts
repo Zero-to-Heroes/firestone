@@ -69,6 +69,14 @@ export class ElectronSubscriptionService extends AbstractFacadeService<ElectronS
 		}, 60 * 1000);
 	}
 
+	protected override initElectronSubjects(): void {
+		this.setupElectronSubject(this.currentPlan$$, 'ElectronSubscriptionService-currentPlan');
+	}
+
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.currentPlan$$ = new SubscriberAwareBehaviorSubject<CurrentPlan | null>(null);
+	}
+
 	protected override async initElectronMainProcess() {
 		this.registerMainProcessMethod('subscribeInternal', (planId: string) => this.subscribeInternal(planId));
 		this.registerMainProcessMethod('unsubscribeInternal', (planId: string) => this.unsubscribeInternal(planId));

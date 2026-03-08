@@ -1,13 +1,7 @@
 import { Injectable } from '@angular/core';
 import { PackResult } from '@firestone-hs/user-packs';
-import {
-	AbstractFacadeService,
-	ApiRunner,
-	AppInjector,
-	CardsFacadeService,
-	WindowManagerService,
-} from '@firestone/shared/framework/core';
 import { ICollectionManagerService } from '@firestone/collection/common';
+import { PackStatsService } from '@firestone/collection/data-access';
 import {
 	Card,
 	CardBack,
@@ -16,11 +10,16 @@ import {
 	PackInfoForCollection as PackInfo,
 	SceneService,
 } from '@firestone/memory';
-import { GameStatusService } from '@firestone/shared/common/service';
+import { Events, GameStatusService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
-import { PackStatsService } from '@firestone/collection/data-access';
+import {
+	AbstractFacadeService,
+	ApiRunner,
+	AppInjector,
+	CardsFacadeService,
+	WindowManagerService,
+} from '@firestone/shared/framework/core';
 import { Coin } from '../model/coin';
-import { Events } from '@firestone/shared/common/service';
 import { CollectionStorageService } from './collection-storage.service';
 import { AllTimeBoostersInternalService } from './details/all-time-boosters';
 import { BgHeroSkinsInternalService } from './details/bg-hero-skins';
@@ -126,6 +125,22 @@ export class CollectionManager extends AbstractFacadeService<CollectionManager> 
 		this.bgHeroSkins$$ = this.bgHeroSkinsIS.collection$$;
 		this.allTimeBoosters$$ = this.allTimeBoostersIS.collection$$;
 		this.coins$$ = this.coinsIS.collection$$;
+	}
+
+	protected override initElectronSubjects(): void {
+		this.setupElectronSubject(this.collection$$, 'CollectionManager-collection');
+		this.setupElectronSubject(this.cardBacks$$, 'CollectionManager-cardBacks');
+		this.setupElectronSubject(this.bgHeroSkins$$, 'CollectionManager-bgHeroSkins');
+		this.setupElectronSubject(this.allTimeBoosters$$, 'CollectionManager-allTimeBoosters');
+		this.setupElectronSubject(this.coins$$, 'CollectionManager-coins');
+	}
+
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.collection$$ = new SubscriberAwareBehaviorSubject<readonly Card[]>([]);
+		this.cardBacks$$ = new SubscriberAwareBehaviorSubject<readonly CardBack[]>([]);
+		this.bgHeroSkins$$ = new SubscriberAwareBehaviorSubject<readonly number[]>([]);
+		this.allTimeBoosters$$ = new SubscriberAwareBehaviorSubject<readonly PackInfo[]>([]);
+		this.coins$$ = new SubscriberAwareBehaviorSubject<readonly Coin[]>([]);
 	}
 
 	public async getPackStats(): Promise<readonly PackResult[]> {

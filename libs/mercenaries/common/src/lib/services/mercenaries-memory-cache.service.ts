@@ -190,6 +190,16 @@ export class MercenariesMemoryCacheService extends AbstractFacadeService<Mercena
 		return;
 	}
 
+	protected override initElectronSubjects(): void {
+		this.setupElectronSubject(this.memoryCollectionInfo$$, 'mercenariesMemoryCache-memoryCollectionInfo');
+		this.setupElectronSubject(this.memoryMapInfo$$, 'mercenariesMemoryCache-memoryMapInfo');
+	}
+
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.memoryCollectionInfo$$ = new SubscriberAwareBehaviorSubject<MemoryMercenariesCollectionInfo | null>(null);
+		this.memoryMapInfo$$ = new SubscriberAwareBehaviorSubject<MemoryMercenariesInfo | null>(null);
+	}
+
 	private async loadLocalMercenariesCollectionInfo(): Promise<MemoryMercenariesCollectionInfo> {
 		const result = this.localStorageService.getItem<MemoryMercenariesCollectionInfo>(
 			LocalStorageService.LOCAL_STORAGE_MERCENARIES_COLLECTION,

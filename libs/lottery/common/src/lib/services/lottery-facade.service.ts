@@ -25,4 +25,12 @@ export class LotteryFacadeService extends AbstractFacadeService<LotteryFacadeSer
 			this.service.lottery$$.subscribe(this.lottery$$);
 		});
 	}
+
+	protected override initElectronSubjects(): void {
+		this.setupElectronSubject(this.lottery$$, 'LotteryFacadeService-lottery');
+	}
+
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.lottery$$ = new SubscriberAwareBehaviorSubject<LotteryState | null>(null);
+	}
 }

@@ -22,6 +22,10 @@ export class WindowHandlerFacadeService extends AbstractFacadeService<WindowHand
 		this.windowHandler = AppInjector.get(WINDOW_HANDLER_SERVICE_TOKEN);
 	}
 
+	protected override initElectronSubjects(): void {
+		// No BehaviorSubjects to sync - only main process methods
+	}
+
 	protected override async initElectronMainProcess() {
 		this.registerMainProcessMethod('showSettingsWindowInternal', (useOverlay: boolean) =>
 			this.showSettingsWindowInternal(useOverlay),

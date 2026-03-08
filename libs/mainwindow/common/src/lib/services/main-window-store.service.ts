@@ -1,4 +1,4 @@
-import { Inject, Injectable, NgZone } from '@angular/core';
+import { Inject, Injectable, NgZone, Optional } from '@angular/core';
 import {
 	AchievementHistoryService,
 	AchievementsMemoryMonitor,
@@ -16,14 +16,94 @@ import { PackStatsService, SetsService } from '@firestone/collection/data-access
 import { CollectionBootstrapService, CollectionManager, SetsManagerService } from '@firestone/collection/services';
 import { ConstructedNavigationService, ConstructedPersonalDecksService } from '@firestone/constructed/common';
 import { DecksProviderService } from '@firestone/decktracker/common';
+import { AppNavigationService, Events, PreferencesService } from '@firestone/shared/common/service';
 import {
-	AchievementCompletedEvent,
-	ChangeVisibleApplicationEvent,
-	MainWindowNavigationService,
-	MainWindowState,
-	MainWindowStoreEvent,
-	NavigationState,
-} from './store/store-internal';
+	CardsFacadeService,
+	ILocalizationService,
+	IWindowHandlerService,
+	ProcessingQueue,
+	waitForReady,
+	WINDOW_HANDLER_SERVICE_TOKEN,
+} from '@firestone/shared/framework/core';
+import { GameStatsLoaderService } from '@firestone/stats/data-access';
+import { Map } from 'immutable';
+import { BehaviorSubject, filter } from 'rxjs';
+import {
+	AchievementsFullRefreshEvent,
+	BattlegroundsMainWindowSelectBattleEvent,
+	BgsHeroFilterSelectedEvent,
+	BgsHeroSortFilterSelectedEvent,
+	BgsPersonalStatsSelectHeroDetailsEvent,
+	BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent,
+	BgsPostMatchStatsComputedEvent,
+	BgsShowStrategiesEvent,
+	ChangeDeckFormatFilterEvent,
+	ChangeDeckModeFilterEvent,
+	ChangeDeckRankCategoryFilterEvent,
+	ChangeDeckRankFilterEvent,
+	ChangeDeckRankGroupEvent,
+	ChangeDeckSortEvent,
+	ChangeDeckTimeFilterEvent,
+	ChangeVisibleAchievementEvent,
+	CloseMainWindowEvent,
+	CollectionPacksUpdatedEvent,
+	CollectionRefreshPacksEvent,
+	CollectionSelectCurrentTabEvent,
+	ConstructedDeckbuilderClassSelectedEvent,
+	ConstructedDeckbuilderFormatSelectedEvent,
+	ConstructedDeckbuilderGoBackEvent,
+	ConstructedDeckbuilderImportDeckEvent,
+	ConstructedDeckbuilderSaveDeckEvent,
+	ConstructedEjectDeckVersionEvent,
+	ConstructedNewDeckVersionEvent,
+	ConstructedToggleDeckVersionStatsEvent,
+	DecktrackerDeleteDeckEvent,
+	DecktrackerResetDeckStatsEvent,
+	FilterShownAchievementsEvent,
+	GamesFullClearEvent,
+	GamesFullRefreshEvent,
+	GenericPreferencesUpdateEvent,
+	HideDeckSummaryEvent,
+	MercenariesAddMercToBackupTeamEvent,
+	MercenariesHeroLevelFilterSelectedEvent,
+	MercenariesHeroSelectedEvent,
+	MercenariesHideTeamSummaryEvent,
+	MercenariesModeFilterSelectedEvent,
+	MercenariesPersonalHeroesSortEvent,
+	MercenariesPveDifficultyFilterSelectedEvent,
+	MercenariesRemoveMercToBackupTeamEvent,
+	MercenariesRestoreTeamSummaryEvent,
+	MercenariesRoleFilterSelectedEvent,
+	MercenariesSelectCategoryEvent,
+	MercenariesStarterFilterSelectedEvent,
+	MercenariesToggleShowHiddenTeamsEvent,
+	NavigationBackEvent,
+	NavigationNextEvent,
+	NewPackEvent,
+	NextFtueEvent,
+	PreviousFtueEvent,
+	RecomputeGameStatsEvent,
+	RestoreDeckSummaryEvent,
+	SearchCardsEvent,
+	SelectAchievementCategoryEvent,
+	SelectBattlegroundsCategoryEvent,
+	SelectCollectionSetEvent,
+	SelectDeckDetailsEvent,
+	SelectDecksViewEvent,
+	ShowAchievementDetailsEvent,
+	ShowCardBackDetailsEvent,
+	ShowCardDetailsEvent,
+	ShowMainWindowEvent,
+	ShowMatchStatsEvent,
+	ShowReplayEvent,
+	ShowReplaysEvent,
+	SkipFtueEvent,
+	StatsXpGraphFilterSelectedEvent,
+	ToggleShowHiddenDecksEvent,
+	TriggerShowMatchStatsEvent,
+	UpdateCardSearchResultsEvent,
+} from './events';
+import { IMainWindowStoreService } from './main-window-store.interface';
 import {
 	AchievementCompletedProcessor,
 	AchievementsFullRefreshProcessor,
@@ -117,93 +197,13 @@ import {
 	type Processor,
 } from './store/public-api';
 import {
-	AchievementsFullRefreshEvent,
-	BattlegroundsMainWindowSelectBattleEvent,
-	BgsHeroFilterSelectedEvent,
-	BgsHeroSortFilterSelectedEvent,
-	BgsPersonalStatsSelectHeroDetailsEvent,
-	BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent,
-	BgsPostMatchStatsComputedEvent,
-	BgsShowStrategiesEvent,
-	ChangeDeckFormatFilterEvent,
-	ChangeDeckModeFilterEvent,
-	ChangeDeckRankCategoryFilterEvent,
-	ChangeDeckRankFilterEvent,
-	ChangeDeckRankGroupEvent,
-	ChangeDeckSortEvent,
-	ChangeDeckTimeFilterEvent,
-	ChangeVisibleAchievementEvent,
-	CloseMainWindowEvent,
-	CollectionPacksUpdatedEvent,
-	CollectionRefreshPacksEvent,
-	CollectionSelectCurrentTabEvent,
-	ConstructedDeckbuilderClassSelectedEvent,
-	ConstructedDeckbuilderFormatSelectedEvent,
-	ConstructedDeckbuilderGoBackEvent,
-	ConstructedDeckbuilderImportDeckEvent,
-	ConstructedDeckbuilderSaveDeckEvent,
-	ConstructedEjectDeckVersionEvent,
-	ConstructedNewDeckVersionEvent,
-	ConstructedToggleDeckVersionStatsEvent,
-	DecktrackerDeleteDeckEvent,
-	DecktrackerResetDeckStatsEvent,
-	FilterShownAchievementsEvent,
-	GamesFullClearEvent,
-	GamesFullRefreshEvent,
-	GenericPreferencesUpdateEvent,
-	HideDeckSummaryEvent,
-	MercenariesAddMercToBackupTeamEvent,
-	MercenariesHeroLevelFilterSelectedEvent,
-	MercenariesHeroSelectedEvent,
-	MercenariesHideTeamSummaryEvent,
-	MercenariesModeFilterSelectedEvent,
-	MercenariesPersonalHeroesSortEvent,
-	MercenariesPveDifficultyFilterSelectedEvent,
-	MercenariesRemoveMercToBackupTeamEvent,
-	MercenariesRestoreTeamSummaryEvent,
-	MercenariesRoleFilterSelectedEvent,
-	MercenariesSelectCategoryEvent,
-	MercenariesStarterFilterSelectedEvent,
-	MercenariesToggleShowHiddenTeamsEvent,
-	NavigationBackEvent,
-	NavigationNextEvent,
-	NewPackEvent,
-	NextFtueEvent,
-	PreviousFtueEvent,
-	RecomputeGameStatsEvent,
-	RestoreDeckSummaryEvent,
-	SearchCardsEvent,
-	SelectAchievementCategoryEvent,
-	SelectBattlegroundsCategoryEvent,
-	SelectCollectionSetEvent,
-	SelectDeckDetailsEvent,
-	SelectDecksViewEvent,
-	ShowAchievementDetailsEvent,
-	ShowCardBackDetailsEvent,
-	ShowCardDetailsEvent,
-	ShowMainWindowEvent,
-	ShowMatchStatsEvent,
-	ShowReplayEvent,
-	ShowReplaysEvent,
-	SkipFtueEvent,
-	StatsXpGraphFilterSelectedEvent,
-	ToggleShowHiddenDecksEvent,
-	TriggerShowMatchStatsEvent,
-	UpdateCardSearchResultsEvent,
-} from './events';
-import { IMainWindowStoreService } from './main-window-store.interface';
-import { AppNavigationService, Events, PreferencesService } from '@firestone/shared/common/service';
-import {
-	CardsFacadeService,
-	ILocalizationService,
-	IWindowHandlerService,
-	ProcessingQueue,
-	waitForReady,
-	WINDOW_HANDLER_SERVICE_TOKEN,
-} from '@firestone/shared/framework/core';
-import { GameStatsLoaderService } from '@firestone/stats/data-access';
-import { Map } from 'immutable';
-import { BehaviorSubject, filter } from 'rxjs';
+	AchievementCompletedEvent,
+	ChangeVisibleApplicationEvent,
+	MainWindowNavigationService,
+	MainWindowState,
+	MainWindowStoreEvent,
+	NavigationState,
+} from './store/store-internal';
 
 @Injectable()
 export class MainWindowStoreService implements IMainWindowStoreService {
@@ -243,7 +243,7 @@ export class MainWindowStoreService implements IMainWindowStoreService {
 		private readonly achievementsNavigation: AchievementsNavigationService,
 		private readonly simulationController: BgsSimulatorControllerService,
 		private readonly appNavigation: AppNavigationService,
-		private readonly ngZone: NgZone,
+		@Optional() private readonly ngZone: NgZone,
 		@Inject(WINDOW_HANDLER_SERVICE_TOKEN) private readonly windowHandler: IWindowHandlerService,
 	) {
 		this.processingQueue = new ProcessingQueue<MainWindowStoreEvent>(
@@ -325,7 +325,14 @@ export class MainWindowStoreService implements IMainWindowStoreService {
 			}
 		} catch (e) {
 			const err = e as Error;
-			console.error('[store] exception while processing event', event.eventName(), event, err.message, err.stack, e);
+			console.error(
+				'[store] exception while processing event',
+				event.eventName(),
+				event,
+				err.message,
+				err.stack,
+				e,
+			);
 		}
 
 		return eventQueue.slice(1);

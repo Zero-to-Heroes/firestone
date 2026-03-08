@@ -37,8 +37,6 @@ export class BgsSimulatorControllerService extends AbstractFacadeService<BgsSimu
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'BgsSimulatorControllerService', () => !!this.faceOff$$);
-		this.stateManager = AppInjector.get(StateManagerService); // Make it available on the UI side, since it's stateless
-		this.allCards = AppInjector.get(CardsFacadeService); // Make it available on the UI side, since it's stateless
 	}
 
 	protected override assignSubjects() {
@@ -46,12 +44,21 @@ export class BgsSimulatorControllerService extends AbstractFacadeService<BgsSimu
 	}
 
 	protected async init() {
-		await this.allCards.waitForReady();
-
+		this.stateManager = AppInjector.get(StateManagerService);
 		this.faceOff$$ = new BehaviorSubject<BgsFaceOffWithSimulation | null>(
 			this.stateManager.buildInitialBattle(null),
 		);
+		this.allCards = AppInjector.get(CardsFacadeService);
+
 		this.faceOff$$.subscribe((faceOff) => console.debug('[simulator] updated faceOff', faceOff));
+	}
+
+	protected override initElectronSubjects(): void {
+		this.setupElectronSubject(this.faceOff$$, 'BgsSimulatorControllerService-faceOff');
+	}
+
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.faceOff$$ = new BehaviorSubject<BgsFaceOffWithSimulation | null>(null);
 	}
 
 	public initBattleWithSideEffects(battle: BgsFaceOffWithSimulation, setInitialBattle: boolean = true) {

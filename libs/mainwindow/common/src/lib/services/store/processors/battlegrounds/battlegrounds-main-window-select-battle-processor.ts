@@ -1,8 +1,7 @@
 import { BattlegroundsNavigationService } from '@firestone/battlegrounds/services';
 import { BgsSimulatorControllerService } from '@firestone/battlegrounds/simulator';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { IWindowHandlerService, waitForReady } from '@firestone/shared/framework/core';
-import { ILocalizationService } from '@firestone/shared/framework/core';
+import { ILocalizationService, IWindowHandlerService, waitForReady } from '@firestone/shared/framework/core';
 import {
 	BattlegroundsMainWindowSelectBattleEvent,
 	MainWindowNavigationService,
@@ -28,6 +27,7 @@ export class BattlegroundsMainWindowSelectBattleProcessor implements Processor {
 	): Promise<[MainWindowState | null, NavigationState | null]> {
 		console.debug('handling event', event);
 		await waitForReady(this.controller);
+
 		this.controller.initBattleWithSideEffects(event.faceOff);
 
 		this.nav.selectedCategoryId$$.next('bgs-category-simulator');

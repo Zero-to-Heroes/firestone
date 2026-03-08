@@ -1,13 +1,16 @@
+import { NgZone } from '@angular/core';
 import {
 	AchievementHistoryService,
 	AchievementHistoryStorageService,
 	AchievementsMemoryMonitor,
+	AchievementsNavigationService,
 	AchievementsNotificationService,
 	AchievementsStateManagerService,
 	AchievementsStorageService,
 	FirestoneRemoteAchievementsLoaderService,
 	RawAchievementsLoaderService,
 } from '@firestone/achievements/common';
+import { AchievementsRefLoaderService } from '@firestone/achievements/data-access';
 import {
 	APP_VERSION_SERVICE_TOKEN,
 	EndGameListenerService,
@@ -26,15 +29,17 @@ import {
 	ArenaDraftManagerService,
 	ArenaInfoService,
 	ArenaMulliganGuideService,
+	ArenaNavigationService,
 } from '@firestone/arena/common';
 import {
 	BgsBattleSimulationService,
 	BgsIntermediateResultsSimGuardianService,
 	CompositionDetectorService,
 } from '@firestone/battlegrounds/core';
-import { BgsMetaHeroStatsAccessService } from '@firestone/battlegrounds/data-access';
+import { BgsMetaHeroStatsAccessService, BgsPerfectGamesService } from '@firestone/battlegrounds/data-access';
 import {
 	BattlegroundsCardsService,
+	BattlegroundsNavigationService,
 	BattlegroundsQuestsService,
 	BattlegroundsTrinketsService,
 	BgsBoardHighlighterService,
@@ -50,13 +55,25 @@ import {
 	BgsMetaHeroStatsService,
 	BgsMetaHeroStrategiesService,
 	BgsPlayerHeroStatsService,
+	BgsRunStatsService,
 } from '@firestone/battlegrounds/services';
+import { BgsSimulatorControllerService, StateManagerService } from '@firestone/battlegrounds/simulator';
+import { CollectionNavigationService } from '@firestone/collection/common';
+import { PackStatsService, SetsService } from '@firestone/collection/data-access';
+import {
+	CollectionBootstrapService,
+	CollectionManager,
+	CollectionStorageService,
+	SetsManagerService,
+} from '@firestone/collection/services';
 import {
 	ConstructedMetaDecksStateService,
 	ConstructedMulliganGuideGuardianService,
 	ConstructedMulliganGuideService,
 	ConstructedNavigationService,
+	ConstructedPersonalDecksService,
 } from '@firestone/constructed/common';
+import { DecksProviderService } from '@firestone/decktracker/common';
 import {
 	ElectronApiRunner,
 	ElectronStorageService,
@@ -103,7 +120,13 @@ import {
 	SecretsParserService,
 } from '@firestone/game-state';
 import { LotteryFacadeService, LotteryService, LotteryWidgetControllerService } from '@firestone/lottery/common';
-import { MainWindowNavigationService, MainWindowStateFacadeService } from '@firestone/mainwindow/common';
+import {
+	MAIN_WINDOW_STORE_SERVICE_TOKEN,
+	MainWindowNavigationService,
+	MainWindowStateFacadeService,
+	MainWindowStoreService,
+	StoreBootstrapService,
+} from '@firestone/mainwindow/common';
 import {
 	CardChoicesService,
 	CardMousedOverService,
@@ -118,6 +141,7 @@ import { InGameReplayService, ModsManagerService } from '@firestone/mods/common'
 import { AccountService } from '@firestone/profile/common';
 import { CustomAppearanceService, SettingsControllerService } from '@firestone/settings/services';
 import {
+	AppNavigationService,
 	BugReportService,
 	DiskCacheService,
 	Events,
@@ -815,15 +839,156 @@ export const buildAppInjector = () => {
 	const bgsMetaHeroStrategiesService = new BgsMetaHeroStrategiesService(windowManager);
 	electronInjector.register(BgsMetaHeroStrategiesService, bgsMetaHeroStrategiesService);
 
-	const mainWindowStateService = new MainWindowStateFacadeService(windowManager);
-	electronInjector.register(MainWindowStateFacadeService, mainWindowStateService);
-
 	const mainWindowNavigationService = new MainWindowNavigationService(windowManager);
 	electronInjector.register(MainWindowNavigationService, mainWindowNavigationService);
+
+	// MainWindowStoreService dependencies
+	const setsService = new SetsService(allCards);
+	electronInjector.register(SetsService, setsService);
+
+	const storeBootstrapService = new StoreBootstrapService(i18n);
+	electronInjector.register(StoreBootstrapService, storeBootstrapService);
+
+	const bgsRunStatsService = new BgsRunStatsService(
+		api as any as ApiRunner,
+		events,
+		userService,
+		gameStatsProviderService,
+		allCards,
+	);
+	electronInjector.register(BgsRunStatsService, bgsRunStatsService);
+
+	const packStatsService = new PackStatsService(
+		events,
+		setsService,
+		userService,
+		api as any as ApiRunner,
+		diskCache,
+		sqliteDb as any,
+	);
+	electronInjector.register(PackStatsService, packStatsService);
+
+	const collectionManager = new CollectionManager(windowManager);
+	electronInjector.register(CollectionManager, collectionManager);
+
+	const setsManagerService = new SetsManagerService(windowManager);
+	electronInjector.register(SetsManagerService, setsManagerService);
+
+	const collectionBootstrapService = new CollectionBootstrapService(windowManager);
+	electronInjector.register(CollectionBootstrapService, collectionBootstrapService);
+
+	const achievementsRefLoaderService = new AchievementsRefLoaderService(api);
+	electronInjector.register(AchievementsRefLoaderService, achievementsRefLoaderService);
+
+	const bgsPerfectGamesService = new BgsPerfectGamesService(windowManager);
+	electronInjector.register(BgsPerfectGamesService, bgsPerfectGamesService);
+
+	const constructedPersonalDecksService = new ConstructedPersonalDecksService(windowManager);
+	electronInjector.register(ConstructedPersonalDecksService, constructedPersonalDecksService);
+
+	const collectionNavigationService = new CollectionNavigationService(windowManager);
+	electronInjector.register(CollectionNavigationService, collectionNavigationService);
+
+	const arenaNavigationService = new ArenaNavigationService(windowManager);
+	electronInjector.register(ArenaNavigationService, arenaNavigationService);
+
+	const battlegroundsNavigationService = new BattlegroundsNavigationService(windowManager);
+	electronInjector.register(BattlegroundsNavigationService, battlegroundsNavigationService);
+
+	const achievementsNavigationService = new AchievementsNavigationService(windowManager);
+	electronInjector.register(AchievementsNavigationService, achievementsNavigationService);
+
+	const bgsSimulatorControllerService = new BgsSimulatorControllerService(windowManager);
+	electronInjector.register(BgsSimulatorControllerService, bgsSimulatorControllerService);
+
+	const appNavigationService = new AppNavigationService(windowManager);
+	electronInjector.register(AppNavigationService, appNavigationService);
+
+	const decksProviderService = new DecksProviderService(windowManager);
+	electronInjector.register(DecksProviderService, decksProviderService);
+
+	const ngZone = null;
+	electronInjector.register(NgZone, ngZone);
+
+	const stateManagerService = new StateManagerService(allCards);
+	electronInjector.register(StateManagerService, stateManagerService);
 
 	const modsManager = new ModsManagerService(windowManager);
 	electronInjector.register(ModsManagerService, modsManager);
 
+	const achievementHistoryService = new AchievementHistoryService(windowManager);
+	electronInjector.register(AchievementHistoryService, achievementHistoryService);
+
+	const firestoneRemoteAchievementsLoaderService = new FirestoneRemoteAchievementsLoaderService(
+		api,
+		userService,
+		reviewId,
+		diskCache,
+	);
+	electronInjector.register(FirestoneRemoteAchievementsLoaderService, firestoneRemoteAchievementsLoaderService);
+
+	const gameStatsLoaderService = new GameStatsLoaderService(windowManager);
+	electronInjector.register(GameStatsLoaderService, gameStatsLoaderService);
+
+	const achievementsManager = new AchievementsMemoryMonitor(
+		events,
+		memoryUpdates,
+		gameEventsEmitter,
+		memoryInspection,
+		achievementsStorage,
+	);
+	electronInjector.register(AchievementsMemoryMonitor, achievementsManager);
+
+	const gameStatsService = new GameStatsLoaderService(windowManager);
+	electronInjector.register(GameStatsLoaderService, gameStatsService);
+
+	const constructedNavigationService = new ConstructedNavigationService(windowManager);
+	electronInjector.register(ConstructedNavigationService, constructedNavigationService);
+
+	const windowHandlerService = new ElectronWindowHandlerService();
+	electronInjector.register(ElectronWindowHandlerService, windowHandlerService);
+
+	const mainWindowStoreService = new MainWindowStoreService(
+		allCards,
+		setsService,
+		collectionManager,
+		achievementHistoryService,
+		firestoneRemoteAchievementsLoaderService,
+		gameStatsLoaderService,
+		events,
+		storeBootstrapService,
+		preferences,
+		decksProviderService,
+		bgsRunStatsService,
+		i18n,
+		packStatsService,
+		setsManagerService,
+		collectionBootstrapService,
+		achievementsManager,
+		achievementsStateManager,
+		achievementsRefLoaderService,
+		gameStatsService,
+		bgsPerfectGamesService,
+		constructedPersonalDecksService,
+		constructedNavigationService,
+		collectionNavigationService,
+		arenaNavigationService,
+		battlegroundsNavigationService,
+		mainWindowNavigationService,
+		achievementsNavigationService,
+		bgsSimulatorControllerService,
+		appNavigationService,
+		ngZone,
+		windowHandlerService,
+	);
+	electronInjector.register(MainWindowStoreService, mainWindowStoreService);
+	electronInjector.register(MAIN_WINDOW_STORE_SERVICE_TOKEN, mainWindowStoreService);
+
+	const mainWindowStateService = new MainWindowStateFacadeService(windowManager);
+	electronInjector.register(MainWindowStateFacadeService, mainWindowStateService);
+
+	const collectionStorageService = new CollectionStorageService(localStorage, diskCache);
+	electronInjector.register(CollectionStorageService, collectionStorageService);
 	electronInjector.ready = true;
 	return electronInjector;
 };

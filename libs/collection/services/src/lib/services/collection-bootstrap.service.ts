@@ -75,6 +75,16 @@ export class CollectionBootstrapService extends AbstractFacadeService<Collection
 		return packStats.flatMap((pack) => pack.cards.map((card) => this.buildCardHistory(card, pack.creationDate)));
 	}
 
+	protected override initElectronSubjects(): void {
+		this.setupElectronSubject(this.packStats$$, 'CollectionBootstrapService-packStats');
+		this.setupElectronSubject(this.cardHistory$$, 'CollectionBootstrapService-cardHistory');
+	}
+
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.packStats$$ = new SubscriberAwareBehaviorSubject<readonly PackResult[]>([]);
+		this.cardHistory$$ = new SubscriberAwareBehaviorSubject<readonly CardHistory[]>([]);
+	}
+
 	private buildCardHistory(card: CardPackResult, creationTimestamp: number): CardHistory {
 		const result: CardHistory = {
 			cardId: card.cardId,

@@ -65,6 +65,14 @@ export class MercenariesReferenceDataService extends AbstractFacadeService<Merce
 		await this.diskCache.storeItem(DiskCacheService.DISK_CACHE_KEYS.MERCENARIES_REFERENCE_DATA, referenceData);
 		this.referenceData$$.next(referenceData);
 	}
+
+	protected override initElectronSubjects(): void {
+		this.setupElectronSubject(this.referenceData$$, 'mercenariesReferenceData-referenceData');
+	}
+
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.referenceData$$ = new SubscriberAwareBehaviorSubject<MercenariesReferenceData | null>(null);
+	}
 }
 
 export interface MercenariesReferenceData {

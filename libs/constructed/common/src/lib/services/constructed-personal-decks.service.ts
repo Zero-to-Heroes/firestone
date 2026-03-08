@@ -47,6 +47,14 @@ export class ConstructedPersonalDecksService extends AbstractFacadeService<Const
 		});
 	}
 
+	protected override initElectronSubjects(): void {
+		this.setupElectronSubject(this.decks$$, 'constructedPersonalDecks-decks');
+	}
+
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.decks$$ = new SubscriberAwareBehaviorSubject<readonly DeckSummary[] | null>(null);
+	}
+
 	public async addDeck(newDeck: DeckSummary) {
 		const existingDecks = (await this.decks$$.getValueWithInit()) || [];
 		const newDecks = [...existingDecks, newDeck].map((deck) =>

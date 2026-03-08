@@ -31,6 +31,22 @@ export class ArenaNavigationService extends AbstractFacadeService<ArenaNavigatio
 		this.expandedRunIds$$ = new BehaviorSubject<readonly string[] | null>(null);
 	}
 
+	protected override initElectronSubjects(): void {
+		this.setupElectronSubject(this.menuDisplayType$$, 'ArenaNavigationService-menuDisplayType');
+		this.setupElectronSubject(this.selectedPersonalRunId$$, 'ArenaNavigationService-selectedPersonalRunId');
+		this.setupElectronSubject(this.selectedHighWinsRunId$$, 'ArenaNavigationService-selectedHighWinsRunId');
+		this.setupElectronSubject(this.selectedCategoryId$$, 'ArenaNavigationService-selectedCategoryId');
+		this.setupElectronSubject(this.expandedRunIds$$, 'ArenaNavigationService-expandedRunIds');
+	}
+
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.menuDisplayType$$ = new BehaviorSubject<'menu' | 'breadcrumbs'>('menu');
+		this.selectedPersonalRunId$$ = new BehaviorSubject<string | null>(null);
+		this.selectedHighWinsRunId$$ = new BehaviorSubject<number | null>(null);
+		this.selectedCategoryId$$ = new BehaviorSubject<ArenaCategoryType | null>('arena-runs');
+		this.expandedRunIds$$ = new BehaviorSubject<readonly string[] | null>(null);
+	}
+
 	public setHighWinsRunId(runId: number) {
 		this.selectedPersonalRunId$$.next(null);
 		this.selectedHighWinsRunId$$.next(runId);

@@ -46,6 +46,24 @@ export class CollectionNavigationService extends AbstractFacadeService<Collectio
 		});
 	}
 
+	protected override initElectronSubjects(): void {
+		this.setupElectronSubject(this.currentView$$, 'CollectionNavigationService-currentView');
+		this.setupElectronSubject(this.menuDisplayType$$, 'CollectionNavigationService-menuDisplayType');
+		this.setupElectronSubject(this.searchString$$, 'CollectionNavigationService-searchString');
+		this.setupElectronSubject(this.selectedSetId$$, 'CollectionNavigationService-selectedSetId');
+		this.setupElectronSubject(this.selectedCardId$$, 'CollectionNavigationService-selectedCardId');
+		this.setupElectronSubject(this.selectedCardBackId$$, 'CollectionNavigationService-selectedCardBackId');
+	}
+
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.currentView$$ = new BehaviorSubject<CurrentView | null>('sets');
+		this.menuDisplayType$$ = new BehaviorSubject<'menu' | 'breadcrumbs'>('menu');
+		this.searchString$$ = new BehaviorSubject<string | null>(null);
+		this.selectedSetId$$ = new BehaviorSubject<string | null>(null);
+		this.selectedCardId$$ = new BehaviorSubject<string | null>(null);
+		this.selectedCardBackId$$ = new BehaviorSubject<number | null>(null);
+	}
+
 	public goUp(): void {
 		switch (this.currentView$$.getValue()) {
 			case 'sets':

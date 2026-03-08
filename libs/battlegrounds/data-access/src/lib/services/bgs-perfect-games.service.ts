@@ -43,4 +43,12 @@ export class BgsPerfectGamesService extends AbstractFacadeService<BgsPerfectGame
 			console.debug('[bgs-perfect-games] loaded perfect games', remotePerfectGames);
 		});
 	}
+
+	protected override initElectronSubjects(): void {
+		this.setupElectronSubject(this.perfectGames$$, 'bgsPerfectGames-perfectGames');
+	}
+
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.perfectGames$$ = new SubscriberAwareBehaviorSubject<readonly GameStat[]>(null);
+	}
 }

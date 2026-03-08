@@ -38,6 +38,18 @@ export class AchievementsNavigationService extends AbstractFacadeService<Achieve
 		});
 	}
 
+	protected override initElectronSubjects(): void {
+		this.setupElectronSubject(this.currentView$$, 'AchievementsNavigationService-currentView');
+		this.setupElectronSubject(this.menuDisplayType$$, 'AchievementsNavigationService-menuDisplayType');
+		this.setupElectronSubject(this.selectedCategoryId$$, 'AchievementsNavigationService-selectedCategoryId');
+	}
+
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.currentView$$ = new BehaviorSubject<CurrentView | null>('categories');
+		this.menuDisplayType$$ = new BehaviorSubject<'menu' | 'breadcrumbs'>('menu');
+		this.selectedCategoryId$$ = new BehaviorSubject<string | null>(null);
+	}
+
 	public goUp(): void {
 		console.debug('[navigation] goUp', this.currentView$$.getValue());
 		switch (this.currentView$$.getValue()) {

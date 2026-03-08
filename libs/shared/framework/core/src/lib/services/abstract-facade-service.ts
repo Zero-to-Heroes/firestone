@@ -125,9 +125,13 @@ export abstract class AbstractFacadeService<T extends AbstractFacadeService<T>> 
 	}
 
 	protected setupElectronSubject<V>(obs: BehaviorSubject<V>, eventName: string) {
+		if (!obs) {
+			throw new Error(`[${this.constructor.name}] setupElectronSubject: ${eventName} subject is undefined`);
+		}
 		if (isMainProcess()) {
 			const { ipcMain } = eval('require')('electron');
 			if (typeof ipcMain !== 'undefined') {
+				ipcMain.removeHandler(eventName);
 				ipcMain.handle(eventName, async () => {
 					if (obs instanceof SubscriberAwareBehaviorSubject) {
 						return await obs.getValueWithInit();
@@ -142,6 +146,7 @@ export abstract class AbstractFacadeService<T extends AbstractFacadeService<T>> 
 				};
 				// Listen for updates from renderer processes
 				const updateChannel = `${eventName}-update`;
+				ipcMain.removeAllListeners(updateChannel);
 				ipcMain.on(updateChannel, (_, value: V) => {
 					const transformedValue = this.transformValueForElectron(value);
 					// Apply the update to the main subject using the wrapped next(),

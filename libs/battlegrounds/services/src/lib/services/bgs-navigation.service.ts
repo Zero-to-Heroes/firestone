@@ -29,6 +29,25 @@ export class BattlegroundsNavigationService extends AbstractFacadeService<Battle
 		this.menuDisplayType$$ = new BehaviorSubject<string | null>('menu');
 		this.selectedPersonalHeroStatsTab$$ = new BehaviorSubject<BgsHeroStatsFilterId | null>('winrate-stats');
 	}
+
+	protected override initElectronSubjects(): void {
+		this.setupElectronSubject(this.selectedCategoryId$$, 'BattlegroundsNavigationService-selectedCategoryId');
+		this.setupElectronSubject(this.heroSearchString$$, 'BattlegroundsNavigationService-heroSearchString');
+		this.setupElectronSubject(this.currentView$$, 'BattlegroundsNavigationService-currentView');
+		this.setupElectronSubject(this.menuDisplayType$$, 'BattlegroundsNavigationService-menuDisplayType');
+		this.setupElectronSubject(
+			this.selectedPersonalHeroStatsTab$$,
+			'BattlegroundsNavigationService-selectedPersonalHeroStatsTab',
+		);
+	}
+
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.selectedCategoryId$$ = new BehaviorSubject<CategoryId | string | null>('bgs-category-meta-heroes');
+		this.heroSearchString$$ = new BehaviorSubject<string | null>(null);
+		this.currentView$$ = new BehaviorSubject<CurrentView | null>('list');
+		this.menuDisplayType$$ = new BehaviorSubject<string | null>('menu');
+		this.selectedPersonalHeroStatsTab$$ = new BehaviorSubject<BgsHeroStatsFilterId | null>('winrate-stats');
+	}
 }
 
 export type CategoryId =

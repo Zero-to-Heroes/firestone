@@ -56,6 +56,16 @@ export class SetsManagerService extends AbstractFacadeService<SetsManagerService
 		});
 	}
 
+	protected override initElectronSubjects(): void {
+		this.setupElectronSubject(this.sets$$, 'SetsManagerService-sets');
+	}
+
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.sets$$ = new SubscriberAwareBehaviorSubject<readonly Set[]>([]) as SubscriberAwareBehaviorSubject<
+			readonly Set[]
+		>;
+	}
+
 	private buildFullCards(collection: readonly Card[], setCards: readonly SetCard[]): SetCard[] {
 		return setCards.map((card: SetCard) => {
 			const collectionCard: Card | undefined = collection.find((c: Card) => c.id === card.id);
