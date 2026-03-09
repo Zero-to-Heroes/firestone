@@ -18,6 +18,10 @@ export class WindowHandlerFacadeService extends AbstractFacadeService<WindowHand
 		// Nothing to do
 	}
 
+	protected override createElectronProxy(_ipcRenderer: any): void {
+		// No-op: WindowHandlerFacadeService uses callOnMainProcess which handles IPC automatically
+	}
+
 	protected async init() {
 		this.windowHandler = AppInjector.get(WINDOW_HANDLER_SERVICE_TOKEN);
 	}

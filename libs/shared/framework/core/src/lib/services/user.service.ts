@@ -27,6 +27,16 @@ export class UserService extends AbstractFacadeService<UserService> implements I
 		this.user$$ = this.mainInstance.user$$;
 	}
 
+	protected override createElectronProxy(_ipcRenderer: any): void {
+		// In Electron renderer, sync with main process StandaloneUserService
+		this.user$$ = new SubscriberAwareBehaviorSubject<CurrentUser | null>(null);
+	}
+
+	protected override initElectronSubjects(): void {
+		// Sync user$$ with main process StandaloneUserService (same IPC channel)
+		this.setupElectronSubject(this.user$$, 'StandaloneUserService-user');
+	}
+
 	protected async init() {
 		this.user$$ = new SubscriberAwareBehaviorSubject<CurrentUser | null>(null);
 		this.api = AppInjector.get(ApiRunner);

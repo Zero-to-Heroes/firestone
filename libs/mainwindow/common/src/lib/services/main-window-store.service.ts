@@ -20,10 +20,10 @@ import { AppNavigationService, Events, PreferencesService } from '@firestone/sha
 import {
 	CardsFacadeService,
 	ILocalizationService,
-	type IWindowHandlerService,
 	ProcessingQueue,
 	waitForReady,
 	WINDOW_HANDLER_SERVICE_TOKEN,
+	type IWindowHandlerService,
 } from '@firestone/shared/framework/core';
 import { GameStatsLoaderService } from '@firestone/stats/data-access';
 import { Map } from 'immutable';
@@ -296,6 +296,7 @@ export class MainWindowStoreService implements IMainWindowStoreService {
 		console.debug('handling events', eventQueue);
 		const event = eventQueue[0];
 		const start = Date.now();
+		console.log('[MainWindowStoreService] processing event', event);
 		const processor = this.processors.get(event.eventName());
 		if (!processor) {
 			console.error('[store] missing processor for event', event.eventName());
