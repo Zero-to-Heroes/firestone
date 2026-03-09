@@ -1,4 +1,12 @@
-import { AllCardsService, GameFormat, GameTag, GameType, ReferenceCard } from '@firestone-hs/reference-data';
+import {
+	AllCardsService,
+	GameFormat,
+	GameTag,
+	GameType,
+	isValidSet,
+	ReferenceCard,
+	SetId,
+} from '@firestone-hs/reference-data';
 import { Metadata } from '../../models/metadata';
 import { FilterCardsOptions, filterCards as filterCardsOriginal } from '../../related-cards/dynamic-pools';
 import { StaticGeneratingCardInput } from './_card.type';
@@ -9,6 +17,34 @@ export const filterCards = (
 	filter: (c: ReferenceCard) => boolean,
 	options?: FilterCardsInput | StaticGeneratingCardInput['inputOptions'],
 ): readonly string[] => {
+	const inputOptions = convertOptions(options);
+	return filterCardsOriginal(allCards, inputOptions, sourceCardId, (c) => filter(c));
+};
+
+export const filterCardsFromThePast = (
+	sourceCardId: string,
+	allCards: AllCardsService,
+	filter: (c: ReferenceCard) => boolean,
+	options?: FilterCardsInput | StaticGeneratingCardInput['inputOptions'],
+): readonly string[] => {
+	const inputOptions = convertOptions(options);
+	const newOptions = {
+		...inputOptions,
+		format: GameFormat.FT_WILD,
+		gameType: GameType.GT_RANKED,
+	};
+	return filterCards(
+		sourceCardId,
+		allCards,
+		(c) =>
+			filter(c) &&
+			!isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
+			isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_WILD, GameType.GT_RANKED),
+		newOptions,
+	);
+};
+
+const convertOptions = (options?: FilterCardsInput | StaticGeneratingCardInput['inputOptions']): FilterCardsOptions => {
 	const optionsAsFilterCardsInput = options as FilterCardsInput;
 	const optionsAsStaticGeneratingCardInput = options as StaticGeneratingCardInput['inputOptions'];
 	const metadata: Metadata | undefined = optionsAsFilterCardsInput?.metadata;
@@ -25,7 +61,7 @@ export const filterCards = (
 			optionsAsFilterCardsInput?.initialDecklist ??
 			undefined,
 	};
-	return filterCardsOriginal(allCards, inputOptions, sourceCardId, (c) => filter(c));
+	return inputOptions;
 };
 
 export interface FilterCardsInput {
