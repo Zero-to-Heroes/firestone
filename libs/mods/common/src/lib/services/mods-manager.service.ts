@@ -1,11 +1,6 @@
 import { Injectable } from '@angular/core';
-import {
-	GameStatusService,
-	LOG_FILE_BACKEND,
-	Preferences,
-	PreferencesService,
-} from '@firestone/shared/common/service';
 import type { LogFileBackend } from '@firestone/shared/common/service';
+import { GameStatusService, LOG_FILE_BACKEND, Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { Mutable, sortByProperties } from '@firestone/shared/framework/common';
 import {
 	AbstractFacadeService,
@@ -92,6 +87,7 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 		this.prefs.preferences$$
 			.pipe(
 				map((prefs) => prefs.gameInstallPath),
+				filter((installPath) => !!installPath),
 				distinctUntilChanged(),
 			)
 			.subscribe(async (installPath) => {
@@ -152,7 +148,9 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 			files?.data?.some((f) => f.type === 'dir' && f.name === 'BepInEx') &&
 			files?.data?.some((f) => f.type === 'file' && f.name === 'winhttp.dll');
 		// Also check if the unstripped libs are present
-		const unstrippedLibs = await this.fileBackend.listFilesInDirectory(`${installPath}\\BepInEx\\unstripped_corlib`);
+		const unstrippedLibs = await this.fileBackend.listFilesInDirectory(
+			`${installPath}\\BepInEx\\unstripped_corlib`,
+		);
 		modsEnabled = modsEnabled && unstrippedLibs?.data?.length === UNSTRIPPED_LIBS.length;
 		console.debug('mods enabled?', modsEnabled);
 		return modsEnabled ? 'installed' : 'not-installed';
@@ -167,7 +165,11 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 		console.debug('[mods-manager] configFiles', configFiles, installPath);
 		const bepInExConfigs: readonly BepInExConfig[] = await Promise.all(
 			configFiles?.data?.map((f) =>
-				buildBepInExConfig((configFiles?.path ?? '') + '\\' + f.name, f.name.split('.cfg')[0], this.fileBackend),
+				buildBepInExConfig(
+					(configFiles?.path ?? '') + '\\' + f.name,
+					f.name.split('.cfg')[0],
+					this.fileBackend,
+				),
 			) ?? [],
 		);
 		console.debug('[mods-manager] bepInExConfigs', bepInExConfigs);
@@ -282,6 +284,10 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 	private async updateModInternal(mod: ModData): Promise<ModData | null> {
 		const prefs = await this.prefs.getPreferences();
 		const installPath = prefs.gameInstallPath;
+		if (!installPath) {
+			console.warn('[mods-manager] No install path found', prefs);
+			return null;
+		}
 		console.debug('[mods-manager] updating mod', mod, installPath);
 		if (!mod.DownloadLink) {
 			console.error('[mods-manager] Mod has no download link', mod);
@@ -389,6 +395,10 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 
 		const prefs = await this.prefs.getPreferences();
 		const installPath = prefs.gameInstallPath;
+		if (!installPath) {
+			console.warn('[mods-manager] No install path found', prefs);
+			return;
+		}
 		// Rename the DLL from .dll to .dll.disabled
 		for (const mod of mods) {
 			console.debug('[mods-manager] toggling mod', mod);
@@ -474,7 +484,12 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 	private async autoUpdateModsIfNeeded(): Promise<void> {
 		const prefs = await this.prefs.getPreferences();
 		if (!prefs.modsEnabled || !prefs.modsAutoUpdate) {
-			console.debug('[mods-manager] auto-update skipped, modsEnabled:', prefs.modsEnabled, 'modsAutoUpdate:', prefs.modsAutoUpdate);
+			console.debug(
+				'[mods-manager] auto-update skipped, modsEnabled:',
+				prefs.modsEnabled,
+				'modsAutoUpdate:',
+				prefs.modsAutoUpdate,
+			);
 			return;
 		}
 
