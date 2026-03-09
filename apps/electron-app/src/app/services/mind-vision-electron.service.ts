@@ -23,6 +23,7 @@ export class MindVisionElectronService implements IMindVisionFacade {
 	private mindVision: any;
 
 	private initialized = false;
+	private initializing = false;
 	private initializationRetries = 0;
 	private maxRetries = 3;
 
@@ -45,6 +46,17 @@ export class MindVisionElectronService implements IMindVisionFacade {
 	}
 
 	private async initializePluginInternal() {
+		// Guard against double initialization (can happen when game-focus-changed and
+		// game-window-changed fire in quick succession, both triggering GAME_START)
+		if (this.initialized) {
+			console.log('[MindVisionElectron] Already initialized, skipping');
+			return;
+		}
+		if (this.initializing) {
+			console.log('[MindVisionElectron] Already initializing, skipping duplicate request');
+			return;
+		}
+		this.initializing = true;
 		try {
 			console.log('[MindVisionElectron] Attempting to initialize MindVision...');
 
@@ -115,6 +127,8 @@ export class MindVisionElectronService implements IMindVisionFacade {
 				this.updateOverlayStatus('Failed to load MindVision plugin');
 				throw new Error('Failed to load MindVision plugin');
 			}
+		} finally {
+			this.initializing = false;
 		}
 	}
 
@@ -141,6 +155,7 @@ export class MindVisionElectronService implements IMindVisionFacade {
 
 	public destroy() {
 		this.initialized = false;
+		this.initializing = false;
 	}
 
 	private updateOverlayStatus(status: string) {

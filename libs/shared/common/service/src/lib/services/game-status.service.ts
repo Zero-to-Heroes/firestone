@@ -77,8 +77,13 @@ export class GameStatusService extends AbstractFacadeService<GameStatusService> 
 		gameWindowService.onGameInfoChanged((gameInfo: any) => {
 			if (gameInfo?.isRunning && Math.floor((gameInfo?.id ?? 0) / 10) === HEARTHSTONE_GAME_ID) {
 				// console.debug('[game-status] game launched', gameInfo);
+				const wasInGame = this.inGame$$.getValue() === true;
 				this.inGame$$.next(true);
-				this.startListeners.forEach((cb: any) => cb(gameInfo));
+				// Only invoke startListeners when transitioning to in-game (prevents duplicate GAME_START
+				// when game-focus-changed and game-window-changed fire in quick succession)
+				if (!wasInGame) {
+					this.startListeners.forEach((cb: any) => cb(gameInfo));
+				}
 				this.updateExecutionPathInPrefs(gameInfo?.executionPath ?? '');
 			}
 		});
