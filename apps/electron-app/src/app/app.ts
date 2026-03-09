@@ -9,10 +9,10 @@ import { GameEvents } from '@firestone/game-state';
 import { DiskCacheService, LogListenerService } from '@firestone/shared/common/service';
 import { CardsFacadeStandaloneService, DATABASE_SERVICE_TOKEN } from '@firestone/shared/framework/core';
 import { BrowserWindow, app as electronApp, globalShortcut, ipcMain, shell } from 'electron';
-import { uIOhook } from 'uiohook-napi';
 import { appendFileSync, existsSync, mkdirSync, readdirSync, statSync, unlinkSync } from 'fs';
 import { appendFile } from 'fs/promises';
 import { join } from 'path';
+import { uIOhook } from 'uiohook-napi';
 import { environment } from '../environments/environment';
 import { buildAppInjector } from './services/electron-app-injector-setup';
 import { ElectronDiskCacheService } from './services/electron-disk-cache.service';
@@ -69,7 +69,7 @@ export default class App {
 				return;
 			}
 
-			// Handle replay links: firestone://replay/in-game?reviewId=X
+			// Handle replay links: firestoneapp://replay/in-game?reviewId=X
 			if (urlObj.hostname === 'replay' && urlObj.pathname === '/in-game') {
 				const reviewId = urlObj.searchParams.get('reviewId');
 				if (reviewId) {
@@ -250,7 +250,7 @@ export default class App {
 		App.application = app;
 		// app.disableHardwareAcceleration();
 
-		// Register firestone:// protocol for deep linking (SSO auth callbacks)
+		// Register firestoneapp:// protocol for deep linking (SSO auth callbacks)
 		// First, remove any existing registration to ensure clean state
 		app.removeAsDefaultProtocolClient('firestone');
 
@@ -265,7 +265,7 @@ export default class App {
 			// Production mode
 			app.setAsDefaultProtocolClient('firestone');
 		}
-		console.log('[Auth] Registered firestone:// protocol handler');
+		console.log('[Auth] Registered firestoneapp:// protocol handler');
 
 		// Handle deep link when app is already running (Windows/Linux)
 		// Make this instance the single instance
@@ -280,7 +280,7 @@ export default class App {
 			console.log('[Auth] second-instance event, commandLine:', commandLine);
 
 			// Find the deep link URL in command line args
-			const deepLinkUrl = commandLine.find((arg) => arg.startsWith('firestone://'));
+			const deepLinkUrl = commandLine.find((arg) => arg.startsWith('firestoneapp://'));
 			if (deepLinkUrl) {
 				App.handleDeepLink(deepLinkUrl);
 			}
@@ -294,7 +294,7 @@ export default class App {
 		});
 
 		// Check if app was launched with a deep link URL (Windows - cold start)
-		const deepLinkArg = process.argv.find((arg) => arg.startsWith('firestone://'));
+		const deepLinkArg = process.argv.find((arg) => arg.startsWith('firestoneapp://'));
 		if (deepLinkArg) {
 			// Delay handling until app is ready
 			app.whenReady().then(() => {

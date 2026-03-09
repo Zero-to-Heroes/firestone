@@ -114,7 +114,7 @@ export class AuthCallbackComponent implements OnInit {
 				provider: 'overwolf',
 			});
 
-			const deepLinkUrl = 'firestone://auth?' + deepLinkParams.toString();
+			const deepLinkUrl = 'firestoneapp://auth?' + deepLinkParams.toString();
 
 			// Show success state
 			this.state = 'success';

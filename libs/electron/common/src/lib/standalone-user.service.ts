@@ -154,7 +154,7 @@ export class StandaloneUserService extends AbstractFacadeService<StandaloneUserS
 
 	/**
 	 * Handle successful authentication callback from deep link.
-	 * This should be called by the main process when a firestone://auth deep link is received.
+	 * This should be called by the main process when a firestoneapp://auth deep link is received.
 	 */
 	public async handleAuthCallback(authData: AuthCallbackData): Promise<void> {
 		console.log('[user-service] Auth callback received for user:', authData);
