@@ -30,6 +30,10 @@ export class OwHotkeyHandlerService implements IHotkeyHandlerService {
 		this.init();
 	}
 
+	public async isReady(): Promise<void> {
+		return;
+	}
+
 	private async init() {
 		await waitForReady(this.prefs);
 
@@ -79,5 +83,10 @@ export class OwHotkeyHandlerService implements IHotkeyHandlerService {
 
 	removeHotkeyChangedListener(listener: HotkeyChangedUnsubscribe): void {
 		this.ow.removeHotkeyChangedListener(listener);
+	}
+
+	async getHotkeyBinding(hotkeyName: string): Promise<string | null> {
+		const hotkey = await this.ow.getHotKey(hotkeyName);
+		return hotkey?.binding ?? null;
 	}
 }

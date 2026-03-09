@@ -4,12 +4,18 @@ import {
 	ChangeDetectorRef,
 	Component,
 	HostListener,
+	Inject,
 	Input,
 	OnDestroy,
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
-import { HotkeyFacadeService, ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
+import {
+	HOTKEY_HANDLER_SERVICE_TOKEN,
+	IHotkeyHandlerService,
+	ILocalizationService,
+	waitForReady,
+} from '@firestone/shared/framework/core';
 
 @Component({
 	standalone: false,
@@ -28,25 +34,27 @@ export class HotkeyComponent implements AfterViewInit, OnDestroy {
 
 	constructor(
 		private readonly cdr: ChangeDetectorRef,
-		private readonly ow: OverwolfService,
 		private readonly i18n: ILocalizationService,
-		private readonly hotkeyService: HotkeyFacadeService,
+		@Inject(HOTKEY_HANDLER_SERVICE_TOKEN) private readonly hotkeyService: IHotkeyHandlerService,
 	) {}
 
-	ngAfterViewInit() {
+	async ngAfterViewInit() {
+		await waitForReady(this.hotkeyService);
+
 		this.detectHotKey();
-		this.hotkeyChangedListener = this.ow.addHotkeyChangedListener(() => {
+		this.hotkeyChangedListener = this.hotkeyService.addHotkeyChangedListener(() => {
 			this.detectHotKey();
 		});
 	}
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
-		this.ow.removeHotkeyChangedListener(this.hotkeyChangedListener);
+		this.hotkeyService.removeHotkeyChangedListener(this.hotkeyChangedListener);
 	}
 
 	private async detectHotKey() {
-		this.hotkey = (await this.ow.getHotKey(this.hotkeyName))?.binding || 'Unassigned';
+		const binding = await this.hotkeyService.getHotkeyBinding(this.hotkeyName);
+		this.hotkey = binding ?? 'Unassigned';
 		if (this.hotkey === 'Unassigned') {
 			this.hotkeyHtml = '<span class="no-hotkey">No hotkey assigned</span>';
 		} else {

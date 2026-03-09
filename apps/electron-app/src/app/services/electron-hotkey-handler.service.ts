@@ -1,13 +1,15 @@
+import { PreferencesService } from '@firestone/shared/common/service';
+import type { IWindowHandlerService } from '@firestone/shared/framework/core';
 import {
+	AppInjector,
 	HotkeyChangedUnsubscribe,
 	HotkeyHoldUnsubscribe,
 	IHotkeyHandlerService,
+	waitForReady,
+	WINDOW_HANDLER_SERVICE_TOKEN,
 } from '@firestone/shared/framework/core';
-import { PreferencesService } from '@firestone/shared/common/service';
-import type { IWindowHandlerService } from '@firestone/shared/framework/core';
-import { AppInjector, WINDOW_HANDLER_SERVICE_TOKEN, waitForReady } from '@firestone/shared/framework/core';
-import { BehaviorSubject } from 'rxjs';
 import { globalShortcut } from 'electron';
+import { BehaviorSubject } from 'rxjs';
 import { uIOhook, UiohookKey } from 'uiohook-napi';
 
 /** Maps hotkey names (from OW manifest) to Electron accelerator strings. */
@@ -60,6 +62,10 @@ export class ElectronHotkeyHandlerService implements IHotkeyHandlerService {
 		this.setupLiveInfoHoldHotkey();
 	}
 
+	public async isReady(): Promise<void> {
+		return;
+	}
+
 	private setupLiveInfoHoldHotkey(): void {
 		const accelerator = this.getAcceleratorFor('live-info');
 		// Ensure hold callbacks map exists (for addHotKeyHoldListener('live-info', ...))
@@ -98,6 +104,10 @@ export class ElectronHotkeyHandlerService implements IHotkeyHandlerService {
 
 	private getAcceleratorFor(hotkeyName: string): string {
 		return DEFAULT_ACCELERATORS[hotkeyName] ?? hotkeyName;
+	}
+
+	async getHotkeyBinding(hotkeyName: string): Promise<string | null> {
+		return DEFAULT_ACCELERATORS[hotkeyName] ?? null;
 	}
 
 	private registerBuiltInHotkey(hotkeyName: string, callback: () => void): void {

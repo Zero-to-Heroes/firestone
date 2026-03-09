@@ -7,4 +7,5 @@ export * from './lib/electron-region-info-facade.service';
 export * from './lib/electron-screenshot-facade.service';
 export * from './lib/electron-system-info-facade.service';
 export * from './lib/electron-view.module';
+export * from './lib/electron-hotkey-handler-facade.service';
 export * from './lib/electron-window-controls-facade.service';

@@ -8,6 +8,7 @@ export abstract class AbstractFacadeService<T extends AbstractFacadeService<T>> 
 	protected mainInstance: T;
 
 	protected isElectronContext: boolean;
+	protected debug = false;
 
 	// Map to store registered main process methods (methodName -> handler)
 	private registeredMainProcessMethods: Map<string, (...args: any[]) => Promise<any> | any> = new Map();

@@ -83,6 +83,7 @@ import {
 import {
 	ElectronClipboardFacadeService,
 	ElectronFileSystemUIFacadeService,
+	ElectronHotkeyHandlerFacadeService,
 	ElectronMonitorsFacadeService,
 	ElectronRegionInfoFacadeService,
 	ElectronScreenshotFacadeService,
@@ -172,9 +173,11 @@ import {
 	CardsFacadeStandaloneService,
 	CLIPBOARD_SERVICE_TOKEN,
 	DATABASE_SERVICE_TOKEN,
+	ELECTRON_HOTKEY_HANDLER_IMPL_TOKEN,
 	EXTERNAL_URL_SERVICE_TOKEN,
 	FILE_SYSTEM_UI_SERVICE_TOKEN,
 	HOTKEY_HANDLER_SERVICE_TOKEN,
+	HotkeyFacadeService,
 	IAdsService,
 	IDatabaseService,
 	IHotkeyHandlerService,
@@ -214,7 +217,6 @@ import { ElectronAngularInjector } from './electron-angular-injector';
 import { ElectronAppVersionService } from './electron-app-version.service';
 import { ElectronDiskCacheService } from './electron-disk-cache.service';
 import { ElectronExternalUrlService } from './electron-external-url.service';
-import { ElectronHotkeyHandlerFacadeService } from './electron-hotkey-handler-facade.service';
 import { ElectronHotkeyHandlerService } from './electron-hotkey-handler.service';
 import { ElectronLogFileBackendService } from './electron-log-file-backend.service';
 import { ElectronLogsUploaderService } from './electron-logs-uploader.service';
@@ -288,13 +290,15 @@ export const buildAppInjector = () => {
 	electronInjector.register(PreferencesService, preferences);
 
 	const electronHotkeyHandler = new ElectronHotkeyHandlerService();
+	electronInjector.register(ElectronHotkeyHandlerService, electronHotkeyHandler);
+	electronInjector.register(ELECTRON_HOTKEY_HANDLER_IMPL_TOKEN, electronHotkeyHandler);
+
 	const electronHotkeyHandlerFacade = new ElectronHotkeyHandlerFacadeService(windowManager);
 	electronInjector.register(
 		HOTKEY_HANDLER_SERVICE_TOKEN,
 		electronHotkeyHandlerFacade as any as IHotkeyHandlerService,
 	);
 	electronInjector.register(ElectronHotkeyHandlerFacadeService, electronHotkeyHandlerFacade);
-	electronInjector.register(ElectronHotkeyHandlerService, electronHotkeyHandler);
 
 	const diskCache: DiskCacheService = new ElectronDiskCacheService(preferences) as any as DiskCacheService;
 	electronInjector.register(DiskCacheService, diskCache);
@@ -989,6 +993,10 @@ export const buildAppInjector = () => {
 
 	const collectionStorageService = new CollectionStorageService(localStorage, diskCache);
 	electronInjector.register(CollectionStorageService, collectionStorageService);
+
+	const hotkeyFacadeService = new HotkeyFacadeService(windowManager);
+	electronInjector.register(HotkeyFacadeService, hotkeyFacadeService);
+
 	electronInjector.ready = true;
 	return electronInjector;
 };

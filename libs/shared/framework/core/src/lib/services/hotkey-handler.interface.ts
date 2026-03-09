@@ -8,6 +8,15 @@ import { BehaviorSubject } from 'rxjs';
  */
 export const HOTKEY_HANDLER_SERVICE_TOKEN = new InjectionToken<IHotkeyHandlerService>('HotkeyHandlerService');
 
+/**
+ * Token for the Electron main-process hotkey handler implementation.
+ * Used by ElectronHotkeyHandlerFacadeService to resolve the handler in main process.
+ * electron-app registers ElectronHotkeyHandlerService with this token.
+ */
+export const ELECTRON_HOTKEY_HANDLER_IMPL_TOKEN = new InjectionToken<IHotkeyHandlerService>(
+	'ElectronHotkeyHandlerImpl',
+);
+
 /** Unsubscribe function for hotkey hold listener */
 export type HotkeyHoldUnsubscribe = (message?: unknown) => void;
 
@@ -19,6 +28,7 @@ export type HotkeyChangedUnsubscribe = (message?: unknown) => void;
  * ow-native (Overwolf) or electron-app (Electron).
  */
 export interface IHotkeyHandlerService {
+	isReady(): Promise<void>;
 	liveInfoKeyPressed$$: BehaviorSubject<boolean>;
 
 	addHotKeyHoldListener(hotkey: string, onDown: () => void, onUp: () => void): HotkeyHoldUnsubscribe;
@@ -28,5 +38,6 @@ export interface IHotkeyHandlerService {
 	addHotkeyChangedListener(callback: (message: any) => void): HotkeyChangedUnsubscribe;
 	removeHotkeyChangedListener(listener: HotkeyChangedUnsubscribe): void;
 
-	// getHotkeyCombination(hotkey: string): string;
+	/** Returns the binding string for a hotkey (e.g. "Alt+C") or null if unassigned. Works in both Electron and Overwolf. */
+	getHotkeyBinding(hotkeyName: string): Promise<string | null>;
 }
