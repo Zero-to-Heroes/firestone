@@ -26,7 +26,7 @@ export abstract class CounterDefinitionV2<T> {
 	// Ceaseless expanse which tracks things game-wide, instead of per-player
 	protected singleton = false;
 
-	constructor(protected readonly allCards: CardsFacadeService) { }
+	constructor(protected readonly allCards: CardsFacadeService) {}
 
 	public abstract readonly player?: PlayerImplementation<T>;
 	public abstract readonly opponent?: PlayerImplementation<T>;
@@ -67,12 +67,16 @@ export abstract class CounterDefinitionV2<T> {
 		bgState: BattlegroundsState,
 		prefs: Preferences,
 	): boolean {
+		this.debug && console.debug('[debug] isActive', this.id, side, gameState, bgState, prefs);
 		if (this.type === 'battlegrounds' && !isBattlegrounds(gameState.metadata.gameType)) {
+			this.debug && console.debug('[debug] not active for battlegrounds', this.id, side);
 			return false;
 		} else if (this.type === 'hearthstone' && isBattlegrounds(gameState.metadata.gameType)) {
+			this.debug && console.debug('[debug] not active for hearthstone', this.id, side);
 			return false;
 		}
 		if (this.singleton && side === 'opponent' && this.isActive('player', gameState, bgState, prefs)) {
+			this.debug && console.debug('[debug] not active for singleton', this.id, side);
 			return false;
 		}
 
@@ -205,7 +209,11 @@ export abstract class CounterDefinitionV2<T> {
 				this.opponent.cachedValue = this.opponent.value(gameState, bgState);
 				return true;
 			}
-			if (!!this.cards?.length && !areCardsValidInCurrentGame(this.cards, gameState.metadata, this.allCards)) {
+			if (
+				!!this.cards?.length &&
+				!areCardsValidInCurrentGame(this.cards, gameState.metadata, this.allCards, this.debug)
+			) {
+				this.debug && console.debug('[debug] not active for invalid cards', this.id, side);
 				return false;
 			}
 			if (!this.opponent.display(gameState, bgState)) {
@@ -219,6 +227,7 @@ export abstract class CounterDefinitionV2<T> {
 			this.debug && console.debug('returning true', this.id, side, this);
 			return true;
 		}
+		this.debug && console.debug('[debug] not active for unknown reason', this.id, side);
 		return false;
 	}
 

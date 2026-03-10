@@ -17,6 +17,7 @@ export const areCardsValidInCurrentGame = (
 	cards: readonly CardIds[],
 	metadata: Metadata,
 	allCards: CardsFacadeService,
+	debug = false,
 ): boolean => {
 	const validSets = getValidSetsInCurrentGame(metadata);
 	return cards.some((cardId) => validSets.includes(allCards.getCard(cardId)?.set?.toLowerCase() as SetId));

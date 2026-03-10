@@ -13,7 +13,7 @@ export class CthunCounterDefinitionV2 extends CounterDefinitionV2<{ atk: number;
 	public override id: CounterType = 'cthun';
 	public override image = CardIds.Cthun_OG_280;
 	public override type: 'hearthstone' | 'battlegrounds' = 'hearthstone';
-	public override cards: readonly CardIds[] = [CardIds.Cthun_OG_279, CardIds.Cthun_OG_280];
+	public override cards: readonly CardIds[] = [CardIds.Cthun_OG_279, CardIds.Cthun_OG_280, CardIds.Cthun_WON_135];
 
 	readonly player = {
 		pref: 'playerCthunCounter' as const,
@@ -35,10 +35,11 @@ export class CthunCounterDefinitionV2 extends CounterDefinitionV2<{ atk: number;
 		pref: 'opponentCthunCounter' as const,
 		display: (state: GameState): boolean => !!state?.opponentDeck?.containsCthun(this.allCards),
 		value: (state: GameState) => {
-			return {
+			const result = {
 				atk: state.opponentDeck.cthunAtk || DEFAULT_CTHUN_ATK,
 				health: state.opponentDeck.cthunHealth || DEFAULT_CTHUN_HEALTH,
 			};
+			return result;
 		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>
