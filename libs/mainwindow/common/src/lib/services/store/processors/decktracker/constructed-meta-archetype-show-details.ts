@@ -7,23 +7,12 @@ import {
 import { Processor } from '../processor';
 
 export class ConstructedMetaArchetypeDetailsShowEvent implements MainWindowStoreEvent {
+	
+	readonly eventName = ConstructedMetaArchetypeDetailsShowEvent.eventName
+
 	constructor(public readonly id: number) {}
 
-	public static eventName(): string {
-		return 'ConstructedMetaArchetypeDetailsShowEvent';
-	}
-
-	public eventName(): string {
-		return 'ConstructedMetaArchetypeDetailsShowEvent';
-	}
-
-	public isNavigationEvent(): boolean {
-		return true;
-	}
-
-	public isResetHistoryEvent(): boolean {
-		return false;
-	}
+	static readonly eventName = 'ConstructedMetaArchetypeDetailsShowEvent'
 }
 
 export class ConstructedMetaArchetypeDetailsShowProcessor implements Processor {

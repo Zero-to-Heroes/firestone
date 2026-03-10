@@ -1,21 +1,10 @@
 import { MainWindowStoreEvent } from '../main-window-store-event';
 
 export class ShowCardBackDetailsEvent implements MainWindowStoreEvent {
+	
+	readonly eventName = ShowCardBackDetailsEvent.eventName
+
 	constructor(public readonly cardBackId: number) {}
 
-	public static eventName(): string {
-		return 'ShowCardBackDetailsEvent';
-	}
-
-	public eventName(): string {
-		return 'ShowCardBackDetailsEvent';
-	}
-
-	public isNavigationEvent(): boolean {
-		return true;
-	}
-
-	public isResetHistoryEvent(): boolean {
-		return false;
-	}
+	static readonly eventName = 'ShowCardBackDetailsEvent'
 }

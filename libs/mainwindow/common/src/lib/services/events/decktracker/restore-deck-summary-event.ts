@@ -1,21 +1,10 @@
 import { MainWindowStoreEvent } from '../main-window-store-event';
 
 export class RestoreDeckSummaryEvent implements MainWindowStoreEvent {
+	
+	readonly eventName = RestoreDeckSummaryEvent.eventName
+
 	constructor(public readonly deckstring: string) {}
 
-	public static eventName(): string {
-		return 'RestoreDeckSummaryEvent';
-	}
-
-	public eventName(): string {
-		return 'RestoreDeckSummaryEvent';
-	}
-
-	public isNavigationEvent(): boolean {
-		return false;
-	}
-
-	public isResetHistoryEvent(): boolean {
-		return false;
-	}
+	static readonly eventName = 'RestoreDeckSummaryEvent'
 }

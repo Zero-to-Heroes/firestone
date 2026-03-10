@@ -1,21 +1,10 @@
 import { MainWindowStoreEvent } from '../main-window-store-event';
 
 export class MercenariesHideTeamSummaryEvent implements MainWindowStoreEvent {
+	
+	readonly eventName = MercenariesHideTeamSummaryEvent.eventName
+
 	constructor(public readonly teamId: string) {}
 
-	public static eventName(): string {
-		return 'MercenariesHideTeamSummaryEvent';
-	}
-
-	public eventName(): string {
-		return 'MercenariesHideTeamSummaryEvent';
-	}
-
-	public isNavigationEvent(): boolean {
-		return false;
-	}
-
-	public isResetHistoryEvent(): boolean {
-		return false;
-	}
+	static readonly eventName = 'MercenariesHideTeamSummaryEvent'
 }

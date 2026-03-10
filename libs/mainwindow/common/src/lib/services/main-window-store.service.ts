@@ -297,9 +297,9 @@ export class MainWindowStoreService implements IMainWindowStoreService {
 		const event = eventQueue[0];
 		const start = Date.now();
 		console.log('[MainWindowStoreService] processing event', event);
-		const processor = this.processors.get(event.eventName());
+		const processor = this.processors.get(event.eventName);
 		if (!processor) {
-			console.error('[store] missing processor for event', event.eventName());
+			console.error('[store] missing processor for event', event.eventName);
 			return eventQueue.slice(1);
 		}
 		const currentState = this.mainWindowState$$.value;
@@ -318,7 +318,7 @@ export class MainWindowStoreService implements IMainWindowStoreService {
 				if (Date.now() - start > 1000) {
 					console.warn(
 						'[store] Event',
-						event.eventName(),
+						event.eventName,
 						'processing took too long, consider splitting it',
 						Date.now() - start,
 					);
@@ -328,7 +328,7 @@ export class MainWindowStoreService implements IMainWindowStoreService {
 			const err = e as Error;
 			console.error(
 				'[store] exception while processing event',
-				event.eventName(),
+				event.eventName,
 				event,
 				err.message,
 				err.stack,
@@ -342,7 +342,7 @@ export class MainWindowStoreService implements IMainWindowStoreService {
 	private buildProcessors(): Map<string, Processor> {
 		const processors: readonly [string, Processor][] = [
 			[
-				NavigationBackEvent.eventName(),
+				NavigationBackEvent.eventName,
 				new NavigationBackProcessor(
 					this.setsManager,
 					this.mainNavigation,
@@ -352,9 +352,9 @@ export class MainWindowStoreService implements IMainWindowStoreService {
 					this.battlegroundsNavigation,
 				),
 			],
-			[NavigationNextEvent.eventName(), new NavigationNextProcessor(this.mainNavigation)],
+			[NavigationNextEvent.eventName, new NavigationNextProcessor(this.mainNavigation)],
 			[
-				ChangeVisibleApplicationEvent.eventName(),
+				ChangeVisibleApplicationEvent.eventName,
 				new ChangeVisibleApplicationProcessor(
 					this.prefs,
 					this.i18n,
@@ -366,17 +366,17 @@ export class MainWindowStoreService implements IMainWindowStoreService {
 					this.arenaNavigation,
 				),
 			],
-			[CloseMainWindowEvent.eventName(), new CloseMainWindowProcessor(this.mainNavigation)],
-			[ShowMainWindowEvent.eventName(), new ShowMainWindowProcessor(this.mainNavigation)],
-			[GenericPreferencesUpdateEvent.eventName(), new GenericPreferencesUpdateProcessor(this.prefs)],
-			[CollectionRefreshPacksEvent.eventName(), new CollectionRefreshPacksProcessor(this.packsService)],
-			[CollectionPacksUpdatedEvent.eventName(), new CollectionPacksUpdatedProcessor()],
+			[CloseMainWindowEvent.eventName, new CloseMainWindowProcessor(this.mainNavigation)],
+			[ShowMainWindowEvent.eventName, new ShowMainWindowProcessor(this.mainNavigation)],
+			[GenericPreferencesUpdateEvent.eventName, new GenericPreferencesUpdateProcessor(this.prefs)],
+			[CollectionRefreshPacksEvent.eventName, new CollectionRefreshPacksProcessor(this.packsService)],
+			[CollectionPacksUpdatedEvent.eventName, new CollectionPacksUpdatedProcessor()],
 			[
-				CollectionSelectCurrentTabEvent.eventName(),
+				CollectionSelectCurrentTabEvent.eventName,
 				new CollectionSelectCurrentTabProcessor(this.collectionNavigation, this.mainNavigation),
 			],
 			[
-				SearchCardsEvent.eventName(),
+				SearchCardsEvent.eventName,
 				new SearchCardProcessor(
 					this.collectionManager,
 					this.sets,
@@ -386,11 +386,11 @@ export class MainWindowStoreService implements IMainWindowStoreService {
 				),
 			],
 			[
-				SelectCollectionSetEvent.eventName(),
+				SelectCollectionSetEvent.eventName,
 				new SelectCollectionSetProcessor(this.setsManager, this.collectionNavigation, this.mainNavigation),
 			],
 			[
-				ShowCardDetailsEvent.eventName(),
+				ShowCardDetailsEvent.eventName,
 				new ShowCardDetailsProcessor(
 					this.cards,
 					this.setsManager,
@@ -399,7 +399,7 @@ export class MainWindowStoreService implements IMainWindowStoreService {
 				),
 			],
 			[
-				ShowCardBackDetailsEvent.eventName(),
+				ShowCardBackDetailsEvent.eventName,
 				new ShowCardBackDetailsProcessor(
 					this.collectionManager,
 					this.collectionNavigation,
@@ -407,20 +407,20 @@ export class MainWindowStoreService implements IMainWindowStoreService {
 				),
 			],
 			[
-				UpdateCardSearchResultsEvent.eventName(),
+				UpdateCardSearchResultsEvent.eventName,
 				new UpdateCardSearchResultsProcessor(this.collectionManager, this.sets, this.mainNavigation),
 			],
-			[NewPackEvent.eventName(), new NewPackProcessor(this.collectionBootstrap, this.cards)],
+			[NewPackEvent.eventName, new NewPackProcessor(this.collectionBootstrap, this.cards)],
 			[
-				AchievementsFullRefreshEvent.eventName(),
+				AchievementsFullRefreshEvent.eventName,
 				new AchievementsFullRefreshProcessor(this.firestoneRemoteAchievements),
 			],
 			[
-				ChangeVisibleAchievementEvent.eventName(),
+				ChangeVisibleAchievementEvent.eventName,
 				new ChangeVisibleAchievementProcessor(this.achievementsStateManager, this.achievementsNavigation),
 			],
 			[
-				SelectAchievementCategoryEvent.eventName(),
+				SelectAchievementCategoryEvent.eventName,
 				new SelectAchievementCategoryProcessor(
 					this.achievementsStateManager,
 					this.mainNavigation,
@@ -428,16 +428,16 @@ export class MainWindowStoreService implements IMainWindowStoreService {
 				),
 			],
 			[
-				ShowAchievementDetailsEvent.eventName(),
+				ShowAchievementDetailsEvent.eventName,
 				new ShowAchievementDetailsProcessor(
 					this.achievementsStateManager,
 					this.mainNavigation,
 					this.achievementsNavigation,
 				),
 			],
-			[AchievementCompletedEvent.eventName(), new AchievementCompletedProcessor(this.achievementHistory)],
+			[AchievementCompletedEvent.eventName, new AchievementCompletedProcessor(this.achievementHistory)],
 			[
-				FilterShownAchievementsEvent.eventName(),
+				FilterShownAchievementsEvent.eventName,
 				new FilterShownAchievementsProcessor(
 					this.achievementsStateManager,
 					this.mainNavigation,
@@ -445,11 +445,11 @@ export class MainWindowStoreService implements IMainWindowStoreService {
 				),
 			],
 			[
-				AchievementsRemovePinnedAchievementsEvent.eventName(),
+				AchievementsRemovePinnedAchievementsEvent.eventName,
 				new AchievementsRemovePinnedAchievementsProcessor(this.prefs),
 			],
 			[
-				AchievementsTrackRandomAchievementsEvent.eventName(),
+				AchievementsTrackRandomAchievementsEvent.eventName,
 				new AchievementsTrackRandomAchievementsProcessor(
 					this.prefs,
 					this.achievementsManager,
@@ -457,14 +457,14 @@ export class MainWindowStoreService implements IMainWindowStoreService {
 					this.achievementsRefLoader,
 				),
 			],
-			[NextFtueEvent.eventName(), new NextFtueProcessor(this.prefs, this.mainNavigation)],
-			[PreviousFtueEvent.eventName(), new PreviousFtueProcessor(this.mainNavigation)],
-			[SkipFtueEvent.eventName(), new SkipFtueProcessor(this.prefs, this.mainNavigation)],
-			[RecomputeGameStatsEvent.eventName(), new RecomputeGameStatsProcessor(this.gameStats)],
-			[GamesFullRefreshEvent.eventName(), new GameStatsFullRefreshProcessor(this.gameStatsLoader)],
-			[GamesFullClearEvent.eventName(), new GameStatsFullClearProcessor(this.gameStatsLoader)],
+			[NextFtueEvent.eventName, new NextFtueProcessor(this.prefs, this.mainNavigation)],
+			[PreviousFtueEvent.eventName, new PreviousFtueProcessor(this.mainNavigation)],
+			[SkipFtueEvent.eventName, new SkipFtueProcessor(this.prefs, this.mainNavigation)],
+			[RecomputeGameStatsEvent.eventName, new RecomputeGameStatsProcessor(this.gameStats)],
+			[GamesFullRefreshEvent.eventName, new GameStatsFullRefreshProcessor(this.gameStatsLoader)],
+			[GamesFullClearEvent.eventName, new GameStatsFullClearProcessor(this.gameStatsLoader)],
 			[
-				ShowReplayEvent.eventName(),
+				ShowReplayEvent.eventName,
 				new ShowReplayProcessor(
 					this.bgsRunStatsService,
 					this.i18n,
@@ -473,9 +473,9 @@ export class MainWindowStoreService implements IMainWindowStoreService {
 					this.mainNavigation,
 				),
 			],
-			[ShowReplaysEvent.eventName(), new ShowReplaysProcessor(this.prefs, this.mainNavigation)],
+			[ShowReplaysEvent.eventName, new ShowReplaysProcessor(this.prefs, this.mainNavigation)],
 			[
-				TriggerShowMatchStatsEvent.eventName(),
+				TriggerShowMatchStatsEvent.eventName,
 				new TriggerShowMatchStatsProcessor(
 					this.bgsRunStatsService,
 					this.prefs,
@@ -486,7 +486,7 @@ export class MainWindowStoreService implements IMainWindowStoreService {
 				),
 			],
 			[
-				ShowMatchStatsEvent.eventName(),
+				ShowMatchStatsEvent.eventName,
 				new ShowMatchStatsProcessor(
 					this.prefs,
 					this.i18n,
@@ -496,22 +496,22 @@ export class MainWindowStoreService implements IMainWindowStoreService {
 					this.mainNavigation,
 				),
 			],
-			[SelectDecksViewEvent.eventName(), new SelectDeckViewProcessor(this.constructedNavigation)],
+			[SelectDecksViewEvent.eventName, new SelectDeckViewProcessor(this.constructedNavigation)],
 			[
-				SelectDeckDetailsEvent.eventName(),
+				SelectDeckDetailsEvent.eventName,
 				new SelectDeckDetailsProcessor(this.decksProvider, this.mainNavigation, this.constructedNavigation),
 			],
-			[ChangeDeckFormatFilterEvent.eventName(), new ChangeDeckFormatFilterProcessor(this.prefs)],
-			[ChangeDeckRankFilterEvent.eventName(), new ChangeDeckRankFilterProcessor(this.prefs)],
-			[ChangeDeckRankGroupEvent.eventName(), new ChangeDeckRankGroupProcessor(this.prefs)],
-			[ChangeDeckRankCategoryFilterEvent.eventName(), new ChangeDeckRankCategoryFilterProcessor(this.prefs)],
-			[ChangeDeckModeFilterEvent.eventName(), new ChangeDeckModeFilterProcessor()],
-			[ChangeDeckTimeFilterEvent.eventName(), new ChangeDeckTimeFilterProcessor(this.prefs)],
-			[ChangeDeckSortEvent.eventName(), new ChangeDeckSortProcessor(this.prefs)],
-			[HideDeckSummaryEvent.eventName(), new HideDeckSummaryProcessor(this.prefs)],
-			[DecktrackerResetDeckStatsEvent.eventName(), new DecktrackerResetDeckStatsProcessor(this.prefs)],
+			[ChangeDeckFormatFilterEvent.eventName, new ChangeDeckFormatFilterProcessor(this.prefs)],
+			[ChangeDeckRankFilterEvent.eventName, new ChangeDeckRankFilterProcessor(this.prefs)],
+			[ChangeDeckRankGroupEvent.eventName, new ChangeDeckRankGroupProcessor(this.prefs)],
+			[ChangeDeckRankCategoryFilterEvent.eventName, new ChangeDeckRankCategoryFilterProcessor(this.prefs)],
+			[ChangeDeckModeFilterEvent.eventName, new ChangeDeckModeFilterProcessor()],
+			[ChangeDeckTimeFilterEvent.eventName, new ChangeDeckTimeFilterProcessor(this.prefs)],
+			[ChangeDeckSortEvent.eventName, new ChangeDeckSortProcessor(this.prefs)],
+			[HideDeckSummaryEvent.eventName, new HideDeckSummaryProcessor(this.prefs)],
+			[DecktrackerResetDeckStatsEvent.eventName, new DecktrackerResetDeckStatsProcessor(this.prefs)],
 			[
-				DecktrackerDeleteDeckEvent.eventName(),
+				DecktrackerDeleteDeckEvent.eventName,
 				new DecktrackerDeleteDeckProcessor(
 					this.prefs,
 					this.gameStats,
@@ -519,46 +519,46 @@ export class MainWindowStoreService implements IMainWindowStoreService {
 					this.constructedNavigation,
 				),
 			],
-			[RestoreDeckSummaryEvent.eventName(), new RestoreDeckSummaryProcessor(this.prefs)],
-			[ToggleShowHiddenDecksEvent.eventName(), new ToggleShowHiddenDecksProcessor(this.prefs)],
-			[ConstructedDeckbuilderGoBackEvent.eventName(), new ConstructedDeckbuilderGoBackProcessor()],
+			[RestoreDeckSummaryEvent.eventName, new RestoreDeckSummaryProcessor(this.prefs)],
+			[ToggleShowHiddenDecksEvent.eventName, new ToggleShowHiddenDecksProcessor(this.prefs)],
+			[ConstructedDeckbuilderGoBackEvent.eventName, new ConstructedDeckbuilderGoBackProcessor()],
 			[
-				ConstructedDeckbuilderFormatSelectedEvent.eventName(),
+				ConstructedDeckbuilderFormatSelectedEvent.eventName,
 				new ConstructedDeckbuilderFormatSelectedProcessor(),
 			],
-			[ConstructedDeckbuilderClassSelectedEvent.eventName(), new ConstructedDeckbuilderClassSelectedProcessor()],
+			[ConstructedDeckbuilderClassSelectedEvent.eventName, new ConstructedDeckbuilderClassSelectedProcessor()],
 			[
-				ConstructedDeckbuilderSaveDeckEvent.eventName(),
+				ConstructedDeckbuilderSaveDeckEvent.eventName,
 				new ConstructedDeckbuilderSaveDeckProcessor(this.prefs, this.constructedPersonalDeckService),
 			],
 			[
-				ConstructedDeckbuilderImportDeckEvent.eventName(),
+				ConstructedDeckbuilderImportDeckEvent.eventName,
 				new ConstructedDeckbuilderImportDeckProcessor(this.cards),
 			],
-			[ConstructedNewDeckVersionEvent.eventName(), new ConstructedNewDeckVersionProcessor(this.prefs)],
-			[ConstructedEjectDeckVersionEvent.eventName(), new ConstructedEjectDeckVersionProcessor(this.prefs)],
-			[ConstructedToggleDeckVersionStatsEvent.eventName(), new ConstructedToggleDeckVersionStatsProcessor()],
+			[ConstructedNewDeckVersionEvent.eventName, new ConstructedNewDeckVersionProcessor(this.prefs)],
+			[ConstructedEjectDeckVersionEvent.eventName, new ConstructedEjectDeckVersionProcessor(this.prefs)],
+			[ConstructedToggleDeckVersionStatsEvent.eventName, new ConstructedToggleDeckVersionStatsProcessor()],
 			[
-				ConstructedMetaDeckDetailsShowEvent.eventName(),
+				ConstructedMetaDeckDetailsShowEvent.eventName,
 				new ConstructedMetaDeckDetailsShowProcessor(this.constructedNavigation),
 			],
 			[
-				ConstructedMetaArchetypeDetailsShowEvent.eventName(),
+				ConstructedMetaArchetypeDetailsShowEvent.eventName,
 				new ConstructedMetaArchetypeDetailsShowProcessor(this.constructedNavigation),
 			],
 			[
-				ConstructedMetaArchetypeShowDecksEvent.eventName(),
+				ConstructedMetaArchetypeShowDecksEvent.eventName,
 				new ConstructedMetaArchetypeShowDecksProcessor(this.prefs, this.constructedNavigation),
 			],
 			[
-				SelectBattlegroundsCategoryEvent.eventName(),
+				SelectBattlegroundsCategoryEvent.eventName,
 				new SelectBattlegroundsCategoryProcessor(this.battlegroundsNavigation, this.mainNavigation),
 			],
-			[BgsHeroSortFilterSelectedEvent.eventName(), new BgsHeroSortFilterSelectedProcessor(this.prefs)],
-			[BgsHeroFilterSelectedEvent.eventName(), new BgsHeroFilterSelectedProcessor(this.prefs)],
-			[BgsPostMatchStatsComputedEvent.eventName(), new BgsPostMatchStatsComputedProcessor(this.gameStats)],
+			[BgsHeroSortFilterSelectedEvent.eventName, new BgsHeroSortFilterSelectedProcessor(this.prefs)],
+			[BgsHeroFilterSelectedEvent.eventName, new BgsHeroFilterSelectedProcessor(this.prefs)],
+			[BgsPostMatchStatsComputedEvent.eventName, new BgsPostMatchStatsComputedProcessor(this.gameStats)],
 			[
-				BgsPersonalStatsSelectHeroDetailsEvent.eventName(),
+				BgsPersonalStatsSelectHeroDetailsEvent.eventName,
 				new BgsPersonalStatsSelectHeroDetailsProcessor(
 					this.events,
 					this.cards,
@@ -568,11 +568,11 @@ export class MainWindowStoreService implements IMainWindowStoreService {
 				),
 			],
 			[
-				BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent.eventName(),
+				BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent.eventName,
 				new BgsPersonalStatsSelectHeroDetailsWithRemoteInfoProcessor(),
 			],
 			[
-				BattlegroundsMainWindowSelectBattleEvent.eventName(),
+				BattlegroundsMainWindowSelectBattleEvent.eventName,
 				new BattlegroundsMainWindowSelectBattleProcessor(
 					this.i18n,
 					this.battlegroundsNavigation,
@@ -583,7 +583,7 @@ export class MainWindowStoreService implements IMainWindowStoreService {
 				),
 			],
 			[
-				BgsShowStrategiesEvent.eventName(),
+				BgsShowStrategiesEvent.eventName,
 				new BgsShowStrategiesProcessor(
 					this.events,
 					this.cards,
@@ -592,36 +592,36 @@ export class MainWindowStoreService implements IMainWindowStoreService {
 					this.mainNavigation,
 				),
 			],
-			[MercenariesModeFilterSelectedEvent.eventName(), new MercenariesModeFilterSelectedProcessor(this.prefs)],
-			[MercenariesRoleFilterSelectedEvent.eventName(), new MercenariesRoleFilterSelectedProcessor(this.prefs)],
+			[MercenariesModeFilterSelectedEvent.eventName, new MercenariesModeFilterSelectedProcessor(this.prefs)],
+			[MercenariesRoleFilterSelectedEvent.eventName, new MercenariesRoleFilterSelectedProcessor(this.prefs)],
 			[
-				MercenariesPveDifficultyFilterSelectedEvent.eventName(),
+				MercenariesPveDifficultyFilterSelectedEvent.eventName,
 				new MercenariesPveDifficultyFilterSelectedProcessor(this.prefs),
 			],
 			[
-				MercenariesStarterFilterSelectedEvent.eventName(),
+				MercenariesStarterFilterSelectedEvent.eventName,
 				new MercenariesStarterFilterSelectedProcessor(this.prefs),
 			],
 			[
-				MercenariesHeroLevelFilterSelectedEvent.eventName(),
+				MercenariesHeroLevelFilterSelectedEvent.eventName,
 				new MercenariesHeroLevelFilterSelectedProcessor(this.prefs),
 			],
-			[MercenariesHeroSelectedEvent.eventName(), new MercenariesHeroSelectedProcessor(this.cards)],
-			[MercenariesSelectCategoryEvent.eventName(), new MercenariesSelectCategoryProcessor()],
-			[MercenariesPersonalHeroesSortEvent.eventName(), new MercenariesPersonalHeroesSortProcessor(this.prefs)],
-			[MercenariesHideTeamSummaryEvent.eventName(), new MercenariesHideTeamSummaryProcessor(this.prefs)],
-			[MercenariesRestoreTeamSummaryEvent.eventName(), new MercenariesRestoreTeamSummaryProcessor(this.prefs)],
+			[MercenariesHeroSelectedEvent.eventName, new MercenariesHeroSelectedProcessor(this.cards)],
+			[MercenariesSelectCategoryEvent.eventName, new MercenariesSelectCategoryProcessor()],
+			[MercenariesPersonalHeroesSortEvent.eventName, new MercenariesPersonalHeroesSortProcessor(this.prefs)],
+			[MercenariesHideTeamSummaryEvent.eventName, new MercenariesHideTeamSummaryProcessor(this.prefs)],
+			[MercenariesRestoreTeamSummaryEvent.eventName, new MercenariesRestoreTeamSummaryProcessor(this.prefs)],
 			[
-				MercenariesToggleShowHiddenTeamsEvent.eventName(),
+				MercenariesToggleShowHiddenTeamsEvent.eventName,
 				new MercenariesToggleShowHiddenTeamsProcessor(this.prefs),
 			],
-			[MercenariesAddMercToBackupTeamEvent.eventName(), new MercenariesAddMercToBackupTeamProcessor(this.prefs)],
+			[MercenariesAddMercToBackupTeamEvent.eventName, new MercenariesAddMercToBackupTeamProcessor(this.prefs)],
 			[
-				MercenariesRemoveMercToBackupTeamEvent.eventName(),
+				MercenariesRemoveMercToBackupTeamEvent.eventName,
 				new MercenariesRemoveMercToBackupTeamProcessor(this.prefs),
 			],
-			[StatsXpGraphFilterSelectedEvent.eventName(), new StatsXpGraphFilterSelectedProcessor(this.prefs)],
-			[ProfileSelectCategoryEvent.eventName(), new ProfileSelectCategoryProcessor()],
+			[StatsXpGraphFilterSelectedEvent.eventName, new StatsXpGraphFilterSelectedProcessor(this.prefs)],
+			[ProfileSelectCategoryEvent.eventName, new ProfileSelectCategoryProcessor()],
 		];
 
 		return Map(processors);

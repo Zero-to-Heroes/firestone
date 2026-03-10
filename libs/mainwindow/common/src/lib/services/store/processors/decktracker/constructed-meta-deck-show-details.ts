@@ -7,23 +7,12 @@ import {
 import { Processor } from '../processor';
 
 export class ConstructedMetaDeckDetailsShowEvent implements MainWindowStoreEvent {
+	
+	readonly eventName = ConstructedMetaDeckDetailsShowEvent.eventName
+
 	constructor(public readonly deckstring: string) {}
 
-	public static eventName(): string {
-		return 'ConstructedMetaDeckDetailsShowEvent';
-	}
-
-	public eventName(): string {
-		return 'ConstructedMetaDeckDetailsShowEvent';
-	}
-
-	public isNavigationEvent(): boolean {
-		return true;
-	}
-
-	public isResetHistoryEvent(): boolean {
-		return false;
-	}
+	static readonly eventName = 'ConstructedMetaDeckDetailsShowEvent'
 }
 
 export class ConstructedMetaDeckDetailsShowProcessor implements Processor {

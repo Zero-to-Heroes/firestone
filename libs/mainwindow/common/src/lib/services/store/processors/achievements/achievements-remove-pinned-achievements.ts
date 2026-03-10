@@ -7,23 +7,12 @@ import {
 import { Processor } from '../processor';
 
 export class AchievementsRemovePinnedAchievementsEvent implements MainWindowStoreEvent {
+	
+	readonly eventName = AchievementsRemovePinnedAchievementsEvent.eventName
+
 	constructor(public readonly achievementIds: readonly number[]) {}
 
-	public static eventName(): string {
-		return 'AchievementsRemovePinnedAchievementsEvent';
-	}
-
-	public eventName(): string {
-		return 'AchievementsRemovePinnedAchievementsEvent';
-	}
-
-	public isNavigationEvent(): boolean {
-		return false;
-	}
-
-	public isResetHistoryEvent(): boolean {
-		return false;
-	}
+	static readonly eventName = 'AchievementsRemovePinnedAchievementsEvent'
 }
 
 export class AchievementsRemovePinnedAchievementsProcessor implements Processor {

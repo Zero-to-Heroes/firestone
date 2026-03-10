@@ -2,24 +2,13 @@ import { DeckSummary } from '@firestone/constructed/common';
 import { MainWindowStoreEvent } from '../main-window-store-event';
 
 export class ConstructedEjectDeckVersionEvent implements MainWindowStoreEvent {
-	public static eventName(): string {
-		return 'ConstructedEjectDeckVersionEvent';
-	}
+	
+	readonly eventName = ConstructedEjectDeckVersionEvent.eventName
+
+	static readonly eventName = 'ConstructedEjectDeckVersionEvent'
 
 	constructor(
 		public readonly deckstringToEject: string,
 		public readonly deck: DeckSummary,
 	) {}
-
-	public eventName(): string {
-		return 'ConstructedEjectDeckVersionEvent';
-	}
-
-	public isNavigationEvent(): boolean {
-		return false;
-	}
-
-	public isResetHistoryEvent(): boolean {
-		return false;
-	}
 }

@@ -1,21 +1,10 @@
 import { MainWindowStoreEvent } from '../main-window-store-event';
 
 export class TriggerShowMatchStatsEvent implements MainWindowStoreEvent {
+	
+	readonly eventName = TriggerShowMatchStatsEvent.eventName
+
 	constructor(public readonly reviewId: string) {}
 
-	public static eventName(): string {
-		return 'TriggerShowMatchStatsEvent';
-	}
-
-	public eventName(): string {
-		return 'TriggerShowMatchStatsEvent';
-	}
-
-	public isNavigationEvent(): boolean {
-		return false;
-	}
-
-	public isResetHistoryEvent(): boolean {
-		return false;
-	}
+	static readonly eventName = 'TriggerShowMatchStatsEvent'
 }

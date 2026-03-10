@@ -8,23 +8,12 @@ import { Preferences, PreferencesService } from '@firestone/shared/common/servic
 import { Processor } from '../processor';
 
 export class ConstructedMetaArchetypeShowDecksEvent implements MainWindowStoreEvent {
+	
+	readonly eventName = ConstructedMetaArchetypeShowDecksEvent.eventName
+
 	constructor(public readonly archetypeId: number) {}
 
-	public static eventName(): string {
-		return 'ConstructedMetaArchetypeShowDecksEvent';
-	}
-
-	public eventName(): string {
-		return 'ConstructedMetaArchetypeShowDecksEvent';
-	}
-
-	public isNavigationEvent(): boolean {
-		return true;
-	}
-
-	public isResetHistoryEvent(): boolean {
-		return false;
-	}
+	static readonly eventName = 'ConstructedMetaArchetypeShowDecksEvent'
 }
 
 export class ConstructedMetaArchetypeShowDecksProcessor implements Processor {

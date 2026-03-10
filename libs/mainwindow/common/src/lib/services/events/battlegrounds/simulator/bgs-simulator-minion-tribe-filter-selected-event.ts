@@ -1,17 +1,10 @@
 import { MainWindowStoreEvent } from '../../main-window-store-event';
 
 export class BgsSimulatorMinionTribeFilterSelectedEvent implements MainWindowStoreEvent {
+	
+	readonly eventName = BgsSimulatorMinionTribeFilterSelectedEvent.eventName
+
 	constructor(public readonly tribe: string) {}
 
-	public static eventName(): string {
-		return 'BgsSimulatorMinionTribeFilterSelectedEvent';
-	}
-
-	public eventName(): string {
-		return 'BgsSimulatorMinionTribeFilterSelectedEvent';
-	}
-
-	public isNavigationEvent(): boolean {
-		return false;
-	}
+	static readonly eventName = 'BgsSimulatorMinionTribeFilterSelectedEvent'
 }

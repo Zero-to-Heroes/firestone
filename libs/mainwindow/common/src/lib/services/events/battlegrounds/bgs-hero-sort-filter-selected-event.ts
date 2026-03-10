@@ -2,17 +2,10 @@ import { BgsHeroSortFilterType } from '@firestone/battlegrounds/services';
 import { MainWindowStoreEvent } from '../main-window-store-event';
 
 export class BgsHeroSortFilterSelectedEvent implements MainWindowStoreEvent {
+	
+	readonly eventName = BgsHeroSortFilterSelectedEvent.eventName
+
 	constructor(public readonly heroSortFilter: BgsHeroSortFilterType) {}
 
-	public static eventName(): string {
-		return 'BgsHeroSortFilterSelectedEvent';
-	}
-
-	public eventName(): string {
-		return 'BgsHeroSortFilterSelectedEvent';
-	}
-
-	public isNavigationEvent(): boolean {
-		return false;
-	}
+	static readonly eventName = 'BgsHeroSortFilterSelectedEvent'
 }

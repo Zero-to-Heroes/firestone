@@ -2,17 +2,10 @@ import { MainWindowStoreEvent } from '../main-window-store-event';
 import { MercenariesPveDifficultyFilterType } from '@firestone/mercenaries/common';
 
 export class MercenariesPveDifficultyFilterSelectedEvent implements MainWindowStoreEvent {
+	
+	readonly eventName = MercenariesPveDifficultyFilterSelectedEvent.eventName
+
 	constructor(public readonly difficulty: MercenariesPveDifficultyFilterType) {}
 
-	public static eventName(): string {
-		return 'MercenariesPveDifficultyFilterSelectedEvent';
-	}
-
-	public eventName(): string {
-		return 'MercenariesPveDifficultyFilterSelectedEvent';
-	}
-
-	public isNavigationEvent(): boolean {
-		return false;
-	}
+	static readonly eventName = 'MercenariesPveDifficultyFilterSelectedEvent'
 }

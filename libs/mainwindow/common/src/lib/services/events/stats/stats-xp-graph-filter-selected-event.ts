@@ -2,21 +2,10 @@ import { MainWindowStoreEvent } from '../main-window-store-event';
 import { StatsXpGraphSeasonFilterType } from '../../../model/stats/stats-xp-graph-season-filter.type';
 
 export class StatsXpGraphFilterSelectedEvent implements MainWindowStoreEvent {
-	public static eventName(): string {
-		return 'StatsXpGraphFilterSelectedEvent';
-	}
+	
+	readonly eventName = StatsXpGraphFilterSelectedEvent.eventName
+
+	static readonly eventName = 'StatsXpGraphFilterSelectedEvent'
 
 	constructor(public readonly value: StatsXpGraphSeasonFilterType) {}
-
-	public eventName(): string {
-		return 'StatsXpGraphFilterSelectedEvent';
-	}
-
-	public isNavigationEvent(): boolean {
-		return false;
-	}
-
-	public isResetHistoryEvent(): boolean {
-		return false;
-	}
 }

@@ -14,21 +14,10 @@ import { shuffleArray, sortByProperties } from '@firestone/shared/framework/comm
 import { Processor } from '../processor';
 
 export class AchievementsTrackRandomAchievementsEvent implements MainWindowStoreEvent {
-	public static eventName(): string {
-		return 'AchievementsTrackRandomAchievementsEvent';
-	}
+	
+	readonly eventName = AchievementsTrackRandomAchievementsEvent.eventName
 
-	public eventName(): string {
-		return 'AchievementsTrackRandomAchievementsEvent';
-	}
-
-	public isNavigationEvent(): boolean {
-		return false;
-	}
-
-	public isResetHistoryEvent(): boolean {
-		return false;
-	}
+	static readonly eventName = 'AchievementsTrackRandomAchievementsEvent'
 }
 
 const EXCLUDED_ACHIEVEMENTS = [

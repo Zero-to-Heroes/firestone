@@ -1,15 +1,8 @@
 import { MainWindowStoreEvent } from '../main-window-store-event';
 
 export class GamesFullRefreshEvent implements MainWindowStoreEvent {
-	public static eventName(): string {
-		return 'GamesFullRefreshEvent';
-	}
+	
+	readonly eventName = GamesFullRefreshEvent.eventName
 
-	public eventName(): string {
-		return 'GamesFullRefreshEvent';
-	}
-
-	public isNavigationEvent(): boolean {
-		return false;
-	}
+	static readonly eventName = 'GamesFullRefreshEvent'
 }
