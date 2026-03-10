@@ -166,6 +166,7 @@ export const battlecryGlobalEffectCards = [
 	CardIds.Vyranoth_CATA_213,
 	CardIds.Ebyssian_CATA_553,
 	CardIds.Ebyssian_EbyssianToken_CATA_553t,
+	CardIds.LadyAshvane_TSC_943,
 ];
 
 export const deathrattleGlobalEffectCards = [
