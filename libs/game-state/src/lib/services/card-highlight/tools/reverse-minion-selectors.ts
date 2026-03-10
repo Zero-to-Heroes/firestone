@@ -1294,7 +1294,8 @@ export const reverseMinionSelector = (
 			CardIds.YouthfulBrewmasterCore,
 			CardIds.YouthfulBrewmasterLegacy,
 			CardIds.YouthfulBrewmasterVanilla,
-			CardIds.YshaarjRageUnbound
+			CardIds.YshaarjRageUnbound,
+			CardIds.ZereksCloningGallery
 		);
 	}
 
