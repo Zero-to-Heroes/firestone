@@ -21,6 +21,7 @@ const NOT_REAL_DRAW = [CardIds.SirFinleySeaGuide];
 const DRAW_KNOWN_CARDS_FROM_DECK = [
 	// The card is stolen, the drawn right away, so we need to pick up the exact card (with stolenFromOpponent flag)
 	CardIds.Chronogor_TIME_032,
+	CardIds.ThiefOfFutures,
 ];
 
 export class CardDrawParser implements EventParser {
