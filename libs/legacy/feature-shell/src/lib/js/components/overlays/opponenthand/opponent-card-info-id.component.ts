@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { AfterContentInit, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
-import { CardClass, CardIds, GameType } from '@firestone-hs/reference-data';
+import { CardClass, CardIds, GameTag, GameType } from '@firestone-hs/reference-data';
 import { ArenaRefService } from '@firestone/arena/common';
 import {
 	cardsMapping,
@@ -263,6 +263,24 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 				cardsWithCreationSequenceInfo.includes(card.lastAffectedByCardId as CardIds))
 		) {
 			this.sequenceInfo = card.createdIndex + 1;
+		}
+
+		// Shattered cards: the 1st piece always goes to the far-left and the 2nd to the far-right
+		if (this.sequenceInfo == null && card.tags?.[GameTag.SHATTERED] === 1) {
+			if (card.createdIndex != null) {
+				this.sequenceInfo = card.createdIndex + 1;
+			} else {
+				const shatteredCards = context.hand
+					.filter((c) => c.tags?.[GameTag.SHATTERED] === 1)
+					.sort(
+						(a, b) =>
+							(a.tags?.[GameTag.ZONE_POSITION] ?? 0) - (b.tags?.[GameTag.ZONE_POSITION] ?? 0),
+					);
+				const index = shatteredCards.findIndex((c) => c.entityId === card.entityId);
+				if (index >= 0) {
+					this.sequenceInfo = index + 1;
+				}
+			}
 		}
 
 		if (this.possibleCards?.length && !this.createdBy && !this.drawnBy) {
