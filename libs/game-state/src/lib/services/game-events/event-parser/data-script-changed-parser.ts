@@ -48,7 +48,7 @@ export class DataScriptChangedParser implements EventParser {
 					update,
 					this.allCards,
 				);
-				newHand = deck.hand;
+				newHand = this.helper.replaceCardInZone(deck.hand, cardWithAdditionalAttributes);
 
 				newAbyssalCurseHighestValue =
 					cardWithAdditionalAttributes.cardId === CardIds.SirakessCultist_AbyssalCurseToken
@@ -61,7 +61,6 @@ export class DataScriptChangedParser implements EventParser {
 									: cardWithAdditionalAttributes.mainAttributeChange! + 1,
 							)
 						: deck.abyssalCurseHighestValue;
-				continue;
 			}
 			// Modify in place
 			if (isPlayer) {
