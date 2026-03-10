@@ -62,7 +62,7 @@ export class HeraldCounterDefinitionV2 extends CounterDefinitionV2<number> {
 		value: (state: GameState): number | null => getHeraldAmount(state, 'opponent'),
 		setting: {
 			label: (i18n: ILocalizationService): string =>
-				i18n.translateString('settings.decktracker.opponent-deck.counters.herald-label'),
+				i18n.translateString('settings.decktracker.your-deck.counters.herald-label'),
 			tooltip: (i18n: ILocalizationService): string =>
 				i18n.translateString('settings.decktracker.opponent-deck.counters.herald-tooltip'),
 		},
