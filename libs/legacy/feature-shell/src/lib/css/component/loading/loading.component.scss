@@ -16,7 +16,7 @@ button {
 	transition: $fast-hover;
 }
 
-.menu-bar {
+.menu-bar.menu-bar {
 	background: transparent;
 	display: flex;
 	flex-direction: row;
@@ -28,6 +28,7 @@ button {
 	height: 80px;
 	z-index: 400;
 	flex-shrink: 0;
+	flex-grow: 0;
 	color: $green01;
 
 	.logo {
@@ -120,9 +121,7 @@ button {
 	animation-duration: 2000ms;
 	animation-iteration-count: 50; // In case something goes wrong, we don't hog the CPU all the time
 	animation-timing-function: linear;
-	transform: translateZ(
-		0
-	); // https://stackoverflow.com/questions/13176746/css-keyframe-animation-cpu-usage-is-high-should-it-be-this-way
+	transform: translateZ(0); // https://stackoverflow.com/questions/13176746/css-keyframe-animation-cpu-usage-is-high-should-it-be-this-way
 }
 
 .ads {
@@ -141,6 +140,7 @@ button {
 	from {
 		transform: rotate(0deg);
 	}
+
 	to {
 		transform: rotate(-360deg);
 	}
