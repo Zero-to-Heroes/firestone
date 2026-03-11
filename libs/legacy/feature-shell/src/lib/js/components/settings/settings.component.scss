@@ -7,6 +7,8 @@
 	align-items: center;
 	justify-content: flex-end;
 	width: 100%;
+	flex-grow: 0;
+	flex-direction: row;
 
 	--on-close-button-background-color: var(--on-control-button-background-color);
 }
