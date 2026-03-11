@@ -1,5 +1,6 @@
 :host {
 	display: flex;
+	flex-direction: row;
 	min-height: 0;
 }
 
@@ -27,7 +28,7 @@
 	flex-direction: column;
 	height: calc(100% - 62px);
 
-	& > * {
+	&>* {
 		flex-grow: 1;
 		display: flex;
 		max-height: 100%;

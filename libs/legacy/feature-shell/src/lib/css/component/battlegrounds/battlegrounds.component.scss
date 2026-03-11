@@ -37,7 +37,7 @@ battlegrounds-content {
 	}
 }
 
-.menu-bar {
+.menu-bar.menu-bar {
 	background: transparent;
 	display: flex;
 	flex-direction: row;
@@ -72,6 +72,7 @@ battlegrounds-content {
 			width: auto;
 			height: auto;
 		}
+
 		.plus {
 			margin: 0;
 		}
@@ -105,6 +106,7 @@ card-tooltip {
 		width: 208px;
 		height: auto;
 	}
+
 	.text {
 		margin-top: 0;
 		font-size: 16px;
