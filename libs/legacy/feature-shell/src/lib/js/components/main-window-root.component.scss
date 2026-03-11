@@ -1,3 +1,10 @@
+:host {
+	flex-grow: 1;
+	display: flex;
+	flex-direction: column;
+	min-height: 0;
+}
+
 .layout {
 	display: flex;
 	padding: 1px;
@@ -41,6 +48,7 @@
 		menu-selection {
 			pointer-events: none;
 		}
+
 		.attention-icon-container {
 			display: none;
 		}
@@ -105,6 +113,7 @@
 			width: auto;
 			height: auto;
 		}
+
 		.plus {
 			margin: 0;
 		}
@@ -125,7 +134,7 @@
 	flex-direction: column;
 	height: calc(100% - 62px);
 
-	& > * {
+	&>* {
 		flex-grow: 1;
 		display: flex;
 		max-height: 100%;
