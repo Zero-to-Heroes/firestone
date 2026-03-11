@@ -162,11 +162,6 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 		this.cardUrl = this.cardId
 			? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${this.cardId}.jpg`
 			: undefined;
-		this._card = card.update({
-			cardId: this.cardId,
-			// We probably don't need to update the other fields, as they are not displayed
-			cardName: this.cardId === card.cardId ? card.cardName : this.allCards.getCard(this.cardId).name,
-		} as DeckCard);
 		this.guessedInfo = isGuessedInfoEmpty(card.guessedInfo) ? null : card.guessedInfo;
 		if (card.guessedInfo?.possibleCards?.length) {
 			this.possibleCards = [...card.guessedInfo!.possibleCards];
@@ -272,10 +267,7 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 			} else {
 				const shatteredCards = context.hand
 					.filter((c) => c.tags?.[GameTag.SHATTERED] === 1)
-					.sort(
-						(a, b) =>
-							(a.tags?.[GameTag.ZONE_POSITION] ?? 0) - (b.tags?.[GameTag.ZONE_POSITION] ?? 0),
-					);
+					.sort((a, b) => (a.tags?.[GameTag.ZONE_POSITION] ?? 0) - (b.tags?.[GameTag.ZONE_POSITION] ?? 0));
 				const index = shatteredCards.findIndex((c) => c.entityId === card.entityId);
 				if (index >= 0) {
 					this.sequenceInfo = index + 1;
@@ -286,6 +278,19 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 		if (this.possibleCards?.length && !this.createdBy && !this.drawnBy) {
 			this.onlyKnownPossibleCards = true;
 		}
+		if (!this.cardId && this.possibleCards?.length === 1) {
+			this.cardId = this.possibleCards[0];
+			this.cardUrl = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${this.cardId}.jpg`;
+			this.onlyKnownPossibleCards = false;
+			this.possibleCards = [];
+		}
+
+		this._card = card.update({
+			cardId: this.cardId,
+			// We probably don't need to update the other fields, as they are not displayed
+			cardName: this.cardId === card.cardId ? card.cardName : this.allCards.getCard(this.cardId).name,
+		} as DeckCard);
+
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.markForCheck();
 		}

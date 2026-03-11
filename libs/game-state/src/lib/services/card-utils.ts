@@ -15,10 +15,11 @@ import {
 } from '@firestone-hs/reference-data';
 import { Mutable } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { DeckCard, StoredInformation } from '../models/deck-card';
+import { DeckCard, GuessedInfo, StoredInformation } from '../models/deck-card';
 import { DeckState } from '../models/deck-state';
 import { GameState } from '../models/game-state';
 import { Metadata } from '../models/metadata';
+import { hasCorrectClass } from '../related-cards/dynamic-pools';
 import { hasGeneratingCard } from './cards/_card.type';
 import { cardsInfoCache } from './cards/_mapping';
 
@@ -200,25 +201,31 @@ export const storeInformationOnCardPlayed = (
  * When the opponent draws a SHATTER card, it splits into two SHATTERED cards in their hand.
  * These cards have the SHATTERED tag but no cardId (hidden). This allows showing the list of
  * possible SHATTERED cards (restricted to their class) when hovering over them.
+ * TODO: this won't always be the case, as some classes can probably generate shattered cards from other classes
  */
 const getShatteredPossibleCards = (
 	deckState: DeckState,
 	allCards: AllCardsService,
+	guessedInfo: GuessedInfo,
 ): readonly string[] => {
-	const currentClass = deckState.getCurrentClass();
-	if (!currentClass) {
+	const cardClasses: readonly CardClass[] = guessedInfo?.cardClasses ?? [
+		...[deckState.getCurrentClass()].filter((c) => !!c).map((c) => CardClass[c!]),
+		CardClass.NEUTRAL,
+	];
+	console.debug('[debug] cardClasses', cardClasses);
+	if (!cardClasses.length) {
 		return [];
 	}
-	const classUpper = currentClass.toUpperCase();
-	return allCards
+	const result = allCards
 		.getCards()
 		.filter(
 			(c) =>
-				c.mechanics?.includes(GameTag[GameTag.SHATTERED]) &&
-				(c.cardClass === classUpper || c.classes?.includes(classUpper)),
+				c.mechanics?.includes(GameTag[GameTag.SHATTERED]) && cardClasses.some((cc) => hasCorrectClass(c, cc)),
 		)
 		.map((c) => c.id)
 		.filter((id): id is string => !!id);
+	console.debug('[debug] result', result);
+	return result;
 };
 
 export const addGuessInfoToCard = (
@@ -238,22 +245,7 @@ export const addGuessInfoToCard = (
 	if (card.cardId) {
 		return card;
 	}
-	// SHATTERED cards: when opponent draws a SHATTER card, two cards are created with SHATTERED tag.
-	// We don't get creatorCardId from the parser, but we can show possible cards by class from the tag.
-	const hasShatteredTag =
-		options?.tags?.some((t) => t.Name === GameTag.SHATTERED && t.Value === 1) ||
-		card.tags?.[GameTag.SHATTERED] === 1;
-	if (hasShatteredTag) {
-		const possibleCards = getShatteredPossibleCards(deckState, allCards.getService());
-		if (possibleCards.length > 0) {
-			return card.update({
-				guessedInfo: {
-					...card.guessedInfo,
-					possibleCards,
-				},
-			});
-		}
-	}
+	let newGuessedInfo: GuessedInfo | null = card.guessedInfo;
 	switch (creatorCardId) {
 		case CardIds.HarthStonebrew_CORE_GIFT_01:
 		case CardIds.HarthStonebrew_GIFT_01:
@@ -284,17 +276,41 @@ export const addGuessInfoToCard = (
 					creatorEntityId,
 					options,
 				});
-				return guessedInfo != null
-					? card.update({
-							guessedInfo: {
-								...card.guessedInfo,
-								...guessedInfo,
-							},
-						})
-					: card;
+				newGuessedInfo = {
+					...card.guessedInfo,
+					...guessedInfo,
+				};
 			}
-			return card;
 	}
+
+	// SHATTERED cards: when opponent draws a SHATTER card, two cards are created with SHATTERED tag.
+	// We don't get creatorCardId from the parser, but we can show possible cards by class from the tag.
+	const hasShatteredTag =
+		options?.tags?.some((t) => t.Name === GameTag.SHATTERED && t.Value === 1) ||
+		card.tags?.[GameTag.SHATTERED] === 1;
+	if (hasShatteredTag) {
+		const possibleCards = getShatteredPossibleCards(deckState, allCards.getService(), newGuessedInfo);
+		console.debug('[debug] possibleCards', possibleCards);
+		if (possibleCards.length > 0) {
+			// The first card is created in the SETASIDE zone, then moved to hand, so the createdIndex is not present
+			if (card.createdIndex === 0 || !card.createdIndex) {
+				newGuessedInfo = {
+					...card.guessedInfo,
+					possibleCards: possibleCards.filter((c, index) => index % 2 === 0),
+				};
+			} else if (card.createdIndex === 1) {
+				newGuessedInfo = {
+					...card.guessedInfo,
+					possibleCards: possibleCards.filter((c, index) => index % 2 === 1),
+				};
+			}
+		}
+	}
+	console.debug('[debug] newGuessedInfo', newGuessedInfo, card);
+
+	return card.update({
+		guessedInfo: newGuessedInfo,
+	});
 };
 
 export const getPossibleForgedCards = (
