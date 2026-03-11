@@ -11,7 +11,7 @@ export const StolenPower: GeneratingCard & StaticGeneratingCard = {
 		return filterCards(
 			StolenPower.cardIds[0],
 			input.allCards,
-			(c) => c.referencedTags?.includes(GameTag[GameTag.SHATTER]) ?? false,
+			(c) => c.mechanics?.includes(GameTag[GameTag.SHATTER]) ?? false,
 			input.inputOptions,
 		);
 	},
@@ -19,7 +19,7 @@ export const StolenPower: GeneratingCard & StaticGeneratingCard = {
 		const possibleCards = filterCards(
 			StolenPower.cardIds[0],
 			input.allCards,
-			(c) => c.referencedTags?.includes(GameTag[GameTag.SHATTER]) ?? false,
+			(c) => c.mechanics?.includes(GameTag[GameTag.SHATTER]) ?? false,
 			input.options,
 		);
 		return {
