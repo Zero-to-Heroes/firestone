@@ -202,29 +202,46 @@ export const storeInformationOnCardPlayed = (
  * These cards have the SHATTERED tag but no cardId (hidden). This allows showing the list of
  * possible SHATTERED cards (restricted to their class) when hovering over them.
  * TODO: this won't always be the case, as some classes can probably generate shattered cards from other classes
+ * TODO: use the card's creator to restrict the list of possible classes?
  */
 const getShatteredPossibleCards = (
 	deckState: DeckState,
 	allCards: AllCardsService,
 	guessedInfo: GuessedInfo,
 ): readonly string[] => {
-	const cardClasses: readonly CardClass[] = guessedInfo?.cardClasses ?? [
-		...[deckState.getCurrentClass()].filter((c) => !!c).map((c) => CardClass[c!]),
-		CardClass.NEUTRAL,
-	];
-	console.debug('[debug] cardClasses', cardClasses);
-	if (!cardClasses.length) {
-		return [];
-	}
-	const result = allCards
+	const cardClasses: readonly CardClass[] = guessedInfo?.cardClasses ?? [];
+	// // console.debug('cardClasses', cardClasses);
+	// if (!cardClasses.length) {
+	// 	return [];
+	// }
+	let result: readonly string[] = allCards
 		.getCards()
 		.filter(
 			(c) =>
-				c.mechanics?.includes(GameTag[GameTag.SHATTERED]) && cardClasses.some((cc) => hasCorrectClass(c, cc)),
+				c.mechanics?.includes(GameTag[GameTag.SHATTERED]) &&
+				(!cardClasses.length || cardClasses.some((cc) => hasCorrectClass(c, cc))),
 		)
 		.map((c) => c.id)
 		.filter((id): id is string => !!id);
-	console.debug('[debug] result', result);
+	if (!result.length) {
+		result = allCards
+			.getCards()
+			.filter((c) => c.mechanics?.includes(GameTag[GameTag.SHATTERED]))
+			.map((c) => c.id)
+			.filter((id): id is string => !!id);
+	}
+	// console.debug(
+	// 	'result',
+	// 	result,
+	// 	allCards.getCards().filter((c) => c.mechanics?.includes(GameTag[GameTag.SHATTERED])),
+	// 	allCards
+	// 		.getCards()
+	// 		.filter(
+	// 			(c) =>
+	// 				c.mechanics?.includes(GameTag[GameTag.SHATTERED]) &&
+	// 				cardClasses.some((cc) => hasCorrectClass(c, cc)),
+	// 		),
+	// );
 	return result;
 };
 
