@@ -245,6 +245,47 @@ const getShatteredPossibleCards = (
 	return result;
 };
 
+export const getShatteredRecombinedPossibleCards = (
+	deckState: DeckState,
+	allCards: AllCardsService,
+	guessedInfo: GuessedInfo,
+): readonly string[] => {
+	const cardClasses: readonly CardClass[] = guessedInfo?.cardClasses ?? [];
+	// // console.debug('cardClasses', cardClasses);
+	// if (!cardClasses.length) {
+	// 	return [];
+	// }
+	let result: readonly string[] = allCards
+		.getCards()
+		.filter(
+			(c) =>
+				c.mechanics?.includes(GameTag[GameTag.SHATTER]) &&
+				(!cardClasses.length || cardClasses.some((cc) => hasCorrectClass(c, cc))),
+		)
+		.map((c) => c.id)
+		.filter((id): id is string => !!id);
+	if (!result.length) {
+		result = allCards
+			.getCards()
+			.filter((c) => c.mechanics?.includes(GameTag[GameTag.SHATTER]))
+			.map((c) => c.id)
+			.filter((id): id is string => !!id);
+	}
+	// console.debug(
+	// 	'result',
+	// 	result,
+	// 	allCards.getCards().filter((c) => c.mechanics?.includes(GameTag[GameTag.SHATTERED])),
+	// 	allCards
+	// 		.getCards()
+	// 		.filter(
+	// 			(c) =>
+	// 				c.mechanics?.includes(GameTag[GameTag.SHATTERED]) &&
+	// 				cardClasses.some((cc) => hasCorrectClass(c, cc)),
+	// 		),
+	// );
+	return result;
+};
+
 export const addGuessInfoToCard = (
 	card: DeckCard,
 	creatorCardId: string,

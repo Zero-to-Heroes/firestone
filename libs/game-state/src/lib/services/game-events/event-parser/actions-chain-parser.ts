@@ -9,6 +9,7 @@ import { ActionChainParser } from './action-chains/_action-chain-parser';
 import { BirdwatchingParser } from './action-chains/birdwatching';
 import { DoommaidenParser } from './action-chains/doommaiden';
 import { FuturisticForefatherParser } from './action-chains/futuristic-forefather-parser';
+import { ShatterRecombineParser } from './action-chains/shatter-recombine';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 
 export class ActionsChainParser implements EventParser {
@@ -42,6 +43,7 @@ export class ActionsChainParser implements EventParser {
 			// new WaveshapingParser(helper)
 			new BirdwatchingParser(helper, cards),
 			new DoommaidenParser(helper, cards),
+			new ShatterRecombineParser(helper, cards),
 		];
 
 		for (const cardId of Object.keys(cardsInfoCache)) {
