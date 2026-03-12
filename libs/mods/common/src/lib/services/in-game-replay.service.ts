@@ -5,8 +5,9 @@ import * as JSZip from 'jszip';
 import { BehaviorSubject, distinctUntilChanged, map } from 'rxjs';
 import { ModsManagerService } from './mods-manager.service';
 
-const WS_URL = 'ws://localhost:54321';
+const WS_URLS = ['ws://localhost:54321', 'ws://127.0.0.1:54321'] as const;
 const WS_RECONNECT_DELAY = 3000;
+const WS_RECONNECT_MAX_DELAY = 30000;
 const WS_CONNECT_TIMEOUT = 5000;
 const S3_BASE_URL = 'https://power.firestoneapp.com/';
 const MARK_ACCESSED_ENDPOINT = 'https://gkd7rn4gqzt2lqbhtlqbiez5w40awjqg.lambda-url.us-west-2.on.aws/';
@@ -55,6 +56,8 @@ export class InGameReplayService extends AbstractFacadeService<InGameReplayServi
 	private ws: WebSocket | null = null;
 	private reconnectTimer: ReturnType<typeof setTimeout> | null = null;
 	private shouldReconnect = false;
+	private reconnectDelay = WS_RECONNECT_DELAY;
+	private urlIndex = 0;
 
 	private modsManager: ModsManagerService;
 	private gameStatus: GameStatusService;
@@ -218,10 +221,15 @@ export class InGameReplayService extends AbstractFacadeService<InGameReplayServi
 		if (this.ws?.readyState === WebSocket.OPEN) {
 			return Promise.resolve();
 		}
+		// Reset reconnect state for fresh user-initiated attempt
+		this.reconnectDelay = WS_RECONNECT_DELAY;
+		this.urlIndex = 0;
 		return this.connect();
 	}
 
 	private connect(): Promise<void> {
+		const url = WS_URLS[this.urlIndex];
+		console.debug('[in-game-replay] connecting to websocket', url, `(attempt ${this.urlIndex + 1}/${WS_URLS.length})`);
 		return new Promise<void>((resolve, reject) => {
 			this.disconnect();
 
@@ -230,12 +238,14 @@ export class InGameReplayService extends AbstractFacadeService<InGameReplayServi
 				this.ws?.close();
 			}, WS_CONNECT_TIMEOUT);
 
-			this.ws = new WebSocket(WS_URL);
+			this.ws = new WebSocket(url);
 			this.shouldReconnect = true;
 
 			this.ws.onopen = () => {
 				clearTimeout(timeout);
-				console.log('[in-game-replay] WebSocket connected');
+				this.reconnectDelay = WS_RECONNECT_DELAY;
+				this.urlIndex = 0;
+				console.log('[in-game-replay] WebSocket connected', url);
 				resolve();
 			};
 
@@ -245,12 +255,14 @@ export class InGameReplayService extends AbstractFacadeService<InGameReplayServi
 
 			this.ws.onerror = (event) => {
 				clearTimeout(timeout);
-				console.warn('[in-game-replay] WebSocket error', event);
+				console.warn('[in-game-replay] WebSocket error', url, event);
 				reject(new Error('WebSocket connection error'));
 			};
 
-			this.ws.onclose = () => {
-				console.log('[in-game-replay] WebSocket closed');
+			this.ws.onclose = (event) => {
+				const code = event?.code ?? '?';
+				const reason = event?.reason || 'unknown';
+				console.log('[in-game-replay] WebSocket closed', url, 'code=', code, 'reason=', reason);
 				this.ws = null;
 				this.status$$.next({ type: 'status', state: 'idle' });
 				this.scheduleReconnect();
@@ -276,6 +288,9 @@ export class InGameReplayService extends AbstractFacadeService<InGameReplayServi
 		if (!this.shouldReconnect || this.reconnectTimer) {
 			return;
 		}
+		const delay = this.reconnectDelay;
+		this.reconnectDelay = Math.min(this.reconnectDelay * 1.5, WS_RECONNECT_MAX_DELAY);
+		this.urlIndex = (this.urlIndex + 1) % WS_URLS.length;
 		this.reconnectTimer = setTimeout(() => {
 			this.reconnectTimer = null;
 			if (this.shouldReconnect) {
@@ -283,7 +298,7 @@ export class InGameReplayService extends AbstractFacadeService<InGameReplayServi
 					// Will retry via onclose → scheduleReconnect
 				});
 			}
-		}, WS_RECONNECT_DELAY);
+		}, delay);
 	}
 
 	// --- Messaging ---
