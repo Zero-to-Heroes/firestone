@@ -364,6 +364,7 @@ const internalTutors = [
 	CardIds.Morchok_CATA_570,
 	CardIds.Morchok_WorldbreakEnchantment_CATA_570e,
 	CardIds.CommanderGeddon_CATA_591,
+	CardIds.HarbingerOfWinterCore_RLK_511,
 ];
 for (const cardId of Object.keys(cardsInfoCache)) {
 	const card = cardsInfoCache[cardId];
