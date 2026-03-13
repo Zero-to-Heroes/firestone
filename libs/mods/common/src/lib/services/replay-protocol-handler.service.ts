@@ -9,7 +9,7 @@ import {
 	OwUtilsService,
 	waitForReady,
 } from '@firestone/shared/framework/core';
-import { InGameReplayService } from './in-game-replay.service';
+import { InGameReplayService, IN_GAME_REPLAY_ERROR_MESSAGES } from './in-game-replay.service';
 import { ModsManagerService } from './mods-manager.service';
 
 const REPLAY_IN_GAME_PREFIX = 'firestoneapp://replay/in-game';
@@ -141,7 +141,7 @@ export class ReplayProtocolHandlerService {
 		this.showFirestoneNotification(
 			`app.replays.in-game.error.${result}`,
 			`app.replays.in-game.error.${result}`,
-			true,
+			result,
 		);
 	}
 
@@ -151,12 +151,13 @@ export class ReplayProtocolHandlerService {
 		return !!(replayMod?.Registered && replayMod?.alreadyInstalled);
 	}
 
-	private showFirestoneNotification(titleKey: string, textKey: string, useErrorKeys = false) {
+	private showFirestoneNotification(titleKey: string, textKey: string, errorCode?: string) {
 		waitForReady(this.notifs).then(() => {
 			const title = this.i18n?.translateString?.(titleKey) ?? titleKey;
 			const text = this.i18n?.translateString?.(textKey) ?? textKey;
-			if (useErrorKeys && title === titleKey) {
-				this.notifs.notifyError('Replay error', text || title, 'replay-protocol-error');
+			if (errorCode && title === titleKey) {
+				const fallbackText = IN_GAME_REPLAY_ERROR_MESSAGES[errorCode] ?? text || title;
+				this.notifs.notifyError('Replay error', fallbackText, 'replay-protocol-error');
 			} else {
 				this.notifs.notifyError(title, text, 'replay-protocol-error');
 			}

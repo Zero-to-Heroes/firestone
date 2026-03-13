@@ -32,6 +32,15 @@ export interface ReplayError {
 
 export type ReplayMessage = ReplayStatus | ReplayAck | ReplayError;
 
+export const IN_GAME_REPLAY_ERROR_MESSAGES: Record<string, string> = {
+	'not-in-game': 'Hearthstone is not running',
+	'mod-not-installed': 'Replay mod is not installed',
+	'mod-not-active': 'Replay mod is not active',
+	'connection-failed': 'Could not connect to the replay mod',
+	'download-failed': 'Could not download the replay',
+	'rewind-block': 'Rewind replays are not supported yet',
+};
+
 @Injectable({ providedIn: 'root' })
 export class InGameReplayService extends AbstractFacadeService<InGameReplayService> {
 	public status$$: BehaviorSubject<ReplayStatus>;
@@ -134,7 +143,13 @@ export class InGameReplayService extends AbstractFacadeService<InGameReplayServi
 
 		try {
 			await this.ensureConnected();
+		} catch (e) {
+			console.error('[in-game-replay] WebSocket connection failed', e);
+			return 'connection-failed';
+		}
 
+		let textContent: string;
+		try {
 			// Download the replay file in the app (browser/Overwolf) and
 			// extract if zip, then send the raw Power.log text to the mod.
 			// The game process can't reliably make HTTPS requests or extract zips.
@@ -147,25 +162,30 @@ export class InGameReplayService extends AbstractFacadeService<InGameReplayServi
 				return 'download-failed';
 			}
 
-			let textContent: string;
 			if (args.powerLogKey.endsWith('.zip')) {
 				const buffer = await response.arrayBuffer();
 				textContent = await this.extractPowerLogFromZip(buffer);
 			} else {
 				textContent = await response.text();
 			}
+		} catch (e) {
+			console.error('[in-game-replay] Failed to download replay', e);
+			return 'download-failed';
+		}
 
-			console.log(`[in-game-replay] Power.log content: ${textContent.length} chars`);
+		console.log(`[in-game-replay] Power.log content: ${textContent.length} chars`);
 
-			this.markPowerLogAsAccessed(args.reviewId, args.powerLogKey);
+		this.markPowerLogAsAccessed(args.reviewId, args.powerLogKey);
 
+		const hasRewindBlock = textContent.includes('BLOCK_START BlockType=GAME_RESET');
+		if (hasRewindBlock) {
+			return 'rewind-block';
+		}
+
+		try {
 			// Tell the mod to expect raw Power.log text in the next message
 			this.send({ action: 'startReplayRaw' });
 			// Send the raw Power.log text directly — no base64, no JSON wrapping
-			const hasRewindBlock = textContent.includes('BLOCK_START BlockType=GAME_RESET');
-			if (hasRewindBlock) {
-				return 'rewind-block';
-			}
 			this.sendRaw(textContent);
 			return 'started';
 		} catch (e) {

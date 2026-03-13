@@ -8,7 +8,7 @@ import {
 	Input,
 	Optional,
 } from '@angular/core';
-import { InGameReplayService } from '@firestone/mods/common';
+import { InGameReplayService, IN_GAME_REPLAY_ERROR_MESSAGES } from '@firestone/mods/common';
 import { ENABLE_IN_GAME_REPLAY } from '@firestone/shared/common/service';
 import {
 	ADS_SERVICE_TOKEN,
@@ -181,7 +181,11 @@ export class WatchReplayButtonComponent {
 			const result = await this.inGameReplayService.showReplay(this.powerLogKey, this.reviewId);
 			console.log('[watch-replay-button] showInGame result', result);
 			if (result !== 'started') {
-				this.inGameError = this.i18n.translateString(`app.replays.in-game.error.${result}`);
+				const translationKey = `app.replays.in-game.error.${result}`;
+				const translated = this.i18n.translateString(translationKey);
+				this.inGameError = translated !== translationKey
+					? translated
+					: (IN_GAME_REPLAY_ERROR_MESSAGES[result] ?? translated);
 				this.errorTimeout = setTimeout(() => this.dismissError(), 5000);
 				this.analytics.trackEvent('replay-in-game-error', { error: result as string });
 			} else {
