@@ -91,6 +91,7 @@ import { CreateCardInGraveyardParser } from './event-parser/create-card-in-grave
 import { CustomEffects2Parser } from './event-parser/custom-effects-2-parser';
 import { CustomEffectsParser } from './event-parser/custom-effects-parser';
 import { DamageTakenParser } from './event-parser/damage-taken-parser';
+import { DamageDealtParser } from './event-parser/damage-dealt-parser';
 import { DataScriptChangedParser } from './event-parser/data-script-changed-parser';
 import { DeathrattleTriggeredParser } from './event-parser/deathrattle-triggered-parser';
 import { DeckManipulationHelper } from './event-parser/deck-manipulation-helper';
@@ -312,6 +313,7 @@ export class GameStateParsersService {
 			[GameEvent.CTHUN]: [new CthunParser()],
 			[GameEvent.DAMAGE]: [
 				new DamageTakenParser(),
+				new DamageDealtParser(this.allCards),
 				new HeroPowerDamageParser(this.allCards),
 				new BgsDamageDealtParser(this.allCards),
 			],
