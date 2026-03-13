@@ -241,6 +241,7 @@ export { UnstablePortal } from './unstable-portal';
 export { VarianKingOfStormwind } from './varian-king-of-stormwind';
 export { VoodooTotem } from './voodoo-totem';
 export { VujaDe } from './vuja-de';
+export { Vulcanos } from './vulcanos';
 export { WarCache } from './war-cache';
 export { WarmasterBlackhorn } from './warmaster-blackhorn';
 export { WelcomeHome } from './welcome-home';

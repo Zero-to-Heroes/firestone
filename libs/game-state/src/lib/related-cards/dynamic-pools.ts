@@ -850,8 +850,6 @@ const getDynamicFilters = (
 				canBeDiscoveredByClass(c, options.currentClass);
 
 		// Discover an Elemental
-		case CardIds.Vulcanos_PlumeOfVulcanosToken_CATA_488t:
-		case CardIds.Vulcanos_PlumeOfVulcanosToken_CATA_488t2:
 		case CardIds.Whirlweaver:
 			return (c) =>
 				hasCorrectType(c, CardType.MINION) &&
