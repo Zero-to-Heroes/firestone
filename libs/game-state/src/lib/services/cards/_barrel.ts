@@ -248,6 +248,7 @@ export { WhatDoesThisDo } from './what-does-this-do';
 export { WildlandsAdventurer } from './wildlands-adventurer';
 export { WindowShopper } from './window-shopper';
 export { WingsOfEternity } from './wings-of-eternity';
+export { WinterspringWhelp } from './winterspring-whelp';
 export { WitchsApprentice } from './witchs-apprentice';
 export { WitchsCauldron } from './witchs-cauldron';
 export { WorthyExpedition } from './worthy-expedition';

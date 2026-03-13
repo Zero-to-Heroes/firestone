@@ -1002,6 +1002,7 @@ const internalGiftCreators = [
 	CardIds.WildGrowthVanilla,
 	CardIds.WindowShopper_TOY_652,
 	CardIds.WindowShopper_WindowShopperToken_TOY_652t,
+	CardIds.WinterspringWhelp_CATA_484,
 	CardIds.WishingWell_WW_415,
 	CardIds.WitchsApprentice,
 	CardIds.WitchwoodApple,
