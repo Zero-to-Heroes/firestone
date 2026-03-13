@@ -54,7 +54,12 @@ export class EntityUpdateParser implements EventParser {
 			// additional information about the card, like for Abyssal Curses
 			// cardInHand.cardId !== cardId &&
 			// Introduced for Lorewalker Cho
-			(isPlayer || publicCardCreators.includes(cardInHand.creatorCardId as CardIds));
+			(isPlayer ||
+				publicCardCreators.includes(cardInHand.creatorCardId as CardIds) ||
+				// Jotun, the Eternal: when the opponent draws their first spell, it's revealed via SHOW_ENTITY (REVEALED=1)
+				// before we get the cardId. The card is added to hand first (RECEIVE_CARD_IN_HAND/CARD_DRAW_FROM_DECK)
+				// without cardId, then ENTITY_UPDATE reveals it. We must show it when revealed=true.
+				!!gameEvent.additionalData?.revealed);
 
 		const newCardInHand = shouldShowCardIdInHand
 			? addAdditionalAttribuesInHand(
