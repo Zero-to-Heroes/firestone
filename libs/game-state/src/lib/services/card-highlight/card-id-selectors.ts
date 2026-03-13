@@ -260,6 +260,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.Ancharrr:
 			return and(side(inputSide), inDeck, pirate);
+		// Anchorite: Whenever another minion is Overhealed, give it that much extra Health.
 		case CardIds.Anchorite_GDB_441:
 			return highlightConditions(
 				and(side(inputSide), or(inDeck, inHand), restoreHealthToMinion),
@@ -382,6 +383,7 @@ export const cardIdSelector = (
 					and(side(inputSide), or(inDeck, inHand), draenei),
 				)(input);
 			};
+		// Auchenai Phantasm: Battlecry: This turn, your healing effects deal damage instead.
 		case CardIds.AuchenaiPhantasm:
 			return and(side(inputSide), or(inDeck, inHand), restoreHealth);
 		// Atiesh the Greatstaff: Costs (0) if you control Medivh. Double the damage and healing of your spells.
@@ -395,6 +397,7 @@ export const cardIdSelector = (
 				and(side(inputSide), or(inDeck, inHand), minion, reborn),
 				and(side(inputSide), or(inDeck, inHand), minion),
 			);
+		// Auchenai Soulpriest: Your cards and powers that restore Health now deal damage instead.
 		case CardIds.AuchenaiSoulpriestLegacy:
 		case CardIds.AuchenaiSoulpriestVanilla:
 			return and(side(inputSide), or(inDeck, inHand), restoreHealth);
@@ -616,9 +619,9 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), deathrattle, minion);
 		case CardIds.BronzeBroodmother:
 			return and(side(inputSide), or(inDeck, inHand), dragon);
+		// Brittlebone Destroyer: Battlecry: If your hero's Health changed this turn, destroy a minion.
 		case CardIds.BrittleboneDestroyer:
-			// Self-damage, like weapons, might be useful to highlight?
-			return and(side(inputSide), or(inDeck, inHand), or(restoreHealth, lifesteal));
+			return and(side(inputSide), or(inDeck, inHand), restoreHealth);
 		// Broll Bearmantle: After you cast a spell, summon a random Animal Companion.
 		case CardIds.BrollBearmantle_EDR_853:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
@@ -821,12 +824,14 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, neutral);
 		case CardIds.ClawMachine:
 			return and(side(inputSide), inDeck, minion);
+		// Cleansing Cleric: Battlecry: Your healing effects restore 2 more Health this game.
 		case CardIds.CleansingCleric_CATA_216:
 			return and(side(inputSide), or(inHand, inDeck), restoreHealth);
 		case CardIds.ClearancePromoter_TOY_390:
 			return and(side(inputSide), or(inHand, inDeck), spell);
 		case CardIds.ClearTheWay:
 			return and(side(inputSide), or(inHand, inDeck), minion, rush);
+		// Cleric of An'she: Battlecry: If you've restored Health this turn, Discover a spell from your deck.
 		case CardIds.ClericOfAnshe:
 			return highlightConditions(
 				and(side(inputSide), inDeck, spell),
@@ -979,6 +984,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), draenei);
 		case CardIds.CrystallineGreatmace_GDB_231:
 			return and(side(inputSide), or(inDeck, inHand), draenei);
+		// Crystal Stag: Rush. Battlecry: If you've restored 5 Health this game, summon a copy of this.
 		case CardIds.CrystalStag:
 			return and(side(inputSide), or(inDeck, inHand), restoreHealth);
 		case CardIds.CrystalWelder_GDB_130:
@@ -1083,6 +1089,7 @@ export const cardIdSelector = (
 			return and(opposingSide(inputSide), inDeck, minion);
 		case CardIds.DeathlyDeathTavernBrawl:
 			return and(side(inputSide), minion, deathrattle);
+		// Death Metal Knight: Taunt. Costs Health instead of Mana if your hero was healed this turn.
 		case CardIds.DeathMetalKnight:
 		case CardIds.DeathMetalKnight_CORE_ETC_523:
 			return and(side(inputSide), or(inHand, inDeck), restoreHealth);
@@ -2345,8 +2352,9 @@ export const cardIdSelector = (
 		// Lifeguard: Taunt Battlecry: The next spell you cast has Lifesteal.
 		case CardIds.Lifeguard_VAC_919:
 			return and(side(inputSide), or(inHand, inDeck), spellExtended, dealsDamage);
+		// Liferender: Battlecry: If your hero's Health changed this turn, deal 6 damage to an enemy minion.
 		case CardIds.Liferender_TIME_614:
-			return and(side(inputSide), or(inHand, inDeck), or(restoreHealth, lifesteal, givesHeroAttack, costHealth));
+			return and(side(inputSide), or(inHand, inDeck), or(restoreHealth, givesHeroAttack, costHealth));
 		case CardIds.LiftOff_SC_410:
 			return and(side(inputSide), or(inHand, inDeck), terran);
 		// Light of the New Moon: Give a minion +3/+3. (Cast 3 spells to return this to your hand when played.)
@@ -3325,6 +3333,7 @@ export const cardIdSelector = (
 		// Shadow of Demise: Each time you cast a spell, transform this into a copy of it.
 		case CardIds.ShadowOfDemise:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
+		// Shadowtouched Kvaldir: Battlecry: Your next healing effect deals damage instead.
 		case CardIds.ShadowtouchedKvaldir_YOG_300:
 			return and(side(inputSide), or(inDeck, inHand), restoreHealth);
 		case CardIds.ShadowVisions:
@@ -3818,6 +3827,7 @@ export const cardIdSelector = (
 					.map((c) => c.cardId as CardIds);
 				return and(side(inputSide), inDeck, cardIs(...candidates))(input);
 			};
+		// The Black Blood: Colossal +3. After you restore Health to a character, attack a random enemy minion.
 		case CardIds.TheBlackBlood_CATA_300:
 			return and(side(inputSide), or(inHand, inDeck), restoreHealth);
 		case CardIds.TheBoomReaver:
@@ -4308,6 +4318,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), locationExtended);
 		case CardIds.WyrmrestPurifier:
 			return and(side(inputSide), inDeck, neutral);
+		// Xyrella: Battlecry: If you've restored Health this turn, deal that much damage to all enemy minions.
 		case CardIds.Xyrella_BAR_735:
 			return and(side(inputSide), or(inHand, inDeck), restoreHealth);
 		case CardIds.XyrellaTheDevout:

@@ -1502,9 +1502,7 @@
     "BountyBoard_WW_003"
   ],
   "HAS_MECHANIC_LIFESTEAL": [
-    "BrittleboneDestroyer",
-    "CountessAshmore",
-    "Liferender_TIME_614"
+    "CountessAshmore"
   ],
   "LOCATION": [
     "BusyPeon_WORK_041",
