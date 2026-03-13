@@ -37,17 +37,20 @@ export class WeaponEquippedParser implements EventParser {
 			creatorEntityId: gameEvent.additionalData.creatorEntityId,
 		} as DeckCard);
 
-		const existingCard = deck.findCard(entityId);
+		const wasCreatedByAnother = !!gameEvent.additionalData?.creatorCardId;
 		let newDeck = deck.deck;
-		// Also need to remove it from the previous zone, if it was equipped directly
-		if (existingCard?.zone === 'deck' || !existingCard?.card) {
-			newDeck = this.helper.removeSingleCardFromZone(deck.deck, cardId, entityId, true)?.[0] ?? newDeck;
-		}
 		let additionalKnownCardsInDeck = deck.additionalKnownCardsInDeck;
-		if (!existingCard?.card?.cardId) {
-			additionalKnownCardsInDeck = additionalKnownCardsInDeck.filter(
-				(c, i) => c !== cardId || deck.additionalKnownCardsInDeck.indexOf(c) !== i,
-			);
+		if (!wasCreatedByAnother) {
+			const existingCard = deck.findCard(entityId);
+			// Remove from deck if it was equipped directly from deck
+			if (existingCard?.zone === 'deck' || !existingCard?.card) {
+				newDeck = this.helper.removeSingleCardFromZone(deck.deck, cardId, entityId, true)?.[0] ?? newDeck;
+			}
+			if (!existingCard?.card?.cardId) {
+				additionalKnownCardsInDeck = additionalKnownCardsInDeck.filter(
+					(c, i) => c !== cardId || deck.additionalKnownCardsInDeck.indexOf(c) !== i,
+				);
+			}
 		}
 
 		const newOtherZone: readonly DeckCard[] = this.helper.addSingleCardToOtherZone(
