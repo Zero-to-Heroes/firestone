@@ -19,7 +19,7 @@ export class SpellweaversBrillianceCounterDefinitionV2 extends CounterDefinition
 					const card = this.allCards.getCard(d.sourceCardId);
 					return card?.type?.toUpperCase() === CardType[CardType.SPELL];
 				})
-				.reduce((total, d) => total + d.damage, 0) ?? 0,
+				.reduce((total, d) => total + d.damage, 0),
 		setting: {
 			label: (i18n: ILocalizationService): string =>
 				i18n.translateString('settings.decktracker.your-deck.counters.spellweavers-brilliance-label'),
