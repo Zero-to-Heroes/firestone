@@ -10,6 +10,7 @@ import { filterCards } from './utils';
 
 export const EndtimeMurozond: StaticGeneratingCard = {
 	cardIds: [CardIds.EndtimeMurozond_END_037],
+	summonInPlay: true,
 	dynamicPool: (input: StaticGeneratingCardInput) => {
 		return filterCards(
 			EndtimeMurozond.cardIds[0],

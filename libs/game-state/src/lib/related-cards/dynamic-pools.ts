@@ -1779,96 +1779,79 @@ const hasFactionInDecklist = (
 };
 
 const doesSummonInPlay = (sourceCardId: string): boolean => {
+	const dynamicPoolImpl = cardsInfoCache[sourceCardId];
+	if (hasDynamicPool(dynamicPoolImpl)) {
+		if (dynamicPoolImpl.summonInPlay != null) {
+			return dynamicPoolImpl.summonInPlay;
+		}
+	}
+
 	switch (sourceCardId) {
-		// Portal cards that summon minions directly
-		case CardIds.PastConflux_TIME_436:
-		case CardIds.PastConflux_PresentConfluxToken_TIME_436t1:
-		case CardIds.PastConflux_FutureConfluxToken_TIME_436t2:
+		case CardIds.AegisOfLight_EDR_264:
+		case CardIds.Anomalize_TIME_859:
+		case CardIds.BigBadArchmage:
+		case CardIds.BuildingBlockGolem_MIS_314:
+		case CardIds.CeremonialClash_CATA_569:
+		case CardIds.ChaosCreation_DEEP_031:
+		case CardIds.ContainmentUnit:
+		case CardIds.CorpseFarm_WW_374:
+		case CardIds.Cremate_FIR_900: // Summons minions
+		case CardIds.CrystalBroker: // Summons minions based on mana
+		case CardIds.DangerousVariant_TIME_049:
+		case CardIds.Dethrone_TIME_712:
+		case CardIds.DisposableAcolytes_CATA_499:
+		case CardIds.DistressSignal_GDB_883:
+		case CardIds.DrakeadonMongrel_CATA_723:
+		case CardIds.DwarfPlanet_GDB_233:
+		case CardIds.EndtimeMurozond_END_037:
+		case CardIds.FacelessLackey:
 		case CardIds.FirelandsPortal:
 		case CardIds.FirelandsPortalCore:
-		case CardIds.MaelstromPortal_CORE_KAR_073:
-		case CardIds.SilvermoonPortal_CORE_KAR_077:
-		case CardIds.SilvermoonPortal:
-		case CardIds.SilvermoonPortal_WON_309:
-		case CardIds.IronforgePortal:
-		case CardIds.IronforgePortal_WON_337:
-		case CardIds.MoongladePortal_KAR_075:
-		case CardIds.SerpentshrinePortal_BT_100:
-		case CardIds.TalanjiOfTheGraves_BwonsamdiToken_TIME_619t:
-		case CardIds.Wormhole_TIME_602:
-		case CardIds.MedivhTheHallowed_KarazhanTheSanctumToken_TIME_890t2:
-		case CardIds.UnknownVoyager_TIME_055:
-		case CardIds.PaltryFlutterwing_TIME_058:
-		case CardIds.DangerousVariant_TIME_049:
-		case CardIds.Stormrook_TIME_217:
-		case CardIds.Dethrone_TIME_712:
-		case CardIds.Flashback_TIME_711:
-		case CardIds.Anomalize_TIME_859:
-			return true;
-
-		// Cards that summon specific minions directly
-		case CardIds.BigBadArchmage:
-		case CardIds.JandiceBarov_SCH_351:
-		case CardIds.PlaguedProtodrake:
-		case CardIds.ContainmentUnit:
-		case CardIds.SunsetVolley_WW_427:
-		case CardIds.ChaosCreation_DEEP_031:
-		case CardIds.WardOfEarth_EDR_060:
-		case CardIds.RitualOfTheNewMoon_RitualOfTheFullMoonToken_EDR_461t:
-			return true;
-
-		// Cards that summon multiple minions
+		case CardIds.FirstContact_GDB_864:
 		case CardIds.FirstDayOfSchool:
-		case CardIds.MazeGuide_CORE_REV_308:
-		case CardIds.MazeGuide:
-		case CardIds.ShimmerShot_DEEP_003:
-		case CardIds.ShriekingShroom:
-		case CardIds.TunnelTerror_TLC_469:
-		case CardIds.FacelessLackey:
+		case CardIds.Flashback_TIME_711:
+		case CardIds.GravedawnVoidbulb_TLC_815:
 		case CardIds.HarbingerOfTheBlighted_EDR_781:
 		case CardIds.HiddenMeaning:
+		case CardIds.InfernoHerald_FIR_913: // Summons Elementals
+		case CardIds.InFormation: // Summons Taunt minions
+		case CardIds.IronforgePortal_WON_337:
+		case CardIds.IronforgePortal:
+		case CardIds.JandiceBarov_SCH_351:
 		case CardIds.KureTheLightBeyond_GDB_442:
 		case CardIds.LinedancePartner_WW_433:
-		case CardIds.TwilightInfluence_EDR_463:
-		case CardIds.ThreshridersBlessing_TLC_477:
-		case CardIds.GravedawnVoidbulb_TLC_815:
-		case CardIds.UnearthedArtifacts_TLC_462:
-			return true;
-
-		// Cards that summon based on cost
-		case CardIds.CorpseFarm_WW_374:
-		case CardIds.RayllaSandSculptor_VAC_424:
-		case CardIds.AegisOfLight_EDR_264:
-		case CardIds.BuildingBlockGolem_MIS_314:
-		case CardIds.DistressSignal_GDB_883:
-		case CardIds.DwarfPlanet_GDB_233:
-		case CardIds.FirstContact_GDB_864:
-			return true;
-
-		// Cards that summon tokens or specific creatures
-		case CardIds.CrystalBroker: // Summons minions based on mana
+		case CardIds.MaelstromPortal_CORE_KAR_073:
+		case CardIds.MazeGuide_CORE_REV_308:
+		case CardIds.MazeGuide:
+		case CardIds.MedivhTheHallowed_KarazhanTheSanctumToken_TIME_890t2:
+		case CardIds.MoongladePortal_KAR_075:
+		case CardIds.PaltryFlutterwing_TIME_058:
+		case CardIds.PastConflux_FutureConfluxToken_TIME_436t2:
+		case CardIds.PastConflux_PresentConfluxToken_TIME_436t1:
+		case CardIds.PastConflux_TIME_436:
+		case CardIds.PlaguedProtodrake:
 		case CardIds.RaptorNestNurse_DINO_434: // Summons 1-cost minions/spells
-			return true;
-
-		// Cards that fill the board or summon multiple
-		case CardIds.InFormation: // Summons Taunt minions
+		case CardIds.RayllaSandSculptor_VAC_424:
+		case CardIds.RitualOfTheNewMoon_RitualOfTheFullMoonToken_EDR_461t:
+		case CardIds.SerpentshrinePortal_BT_100:
+		case CardIds.ShimmerShot_DEEP_003:
+		case CardIds.ShriekingShroom:
+		case CardIds.SilvermoonPortal_CORE_KAR_077:
+		case CardIds.SilvermoonPortal_WON_309:
+		case CardIds.SilvermoonPortal:
 		case CardIds.StandardizedPack_MIS_705: // Summons Taunt minions
-			return true;
-
-		// Specific summoning effects
-		case CardIds.Cremate_FIR_900: // Summons minions
-		case CardIds.InfernoHerald_FIR_913: // Summons Elementals
-			return true;
-
-		// Cards that summon based on game state
-		case CardIds.TravelSecurity_WORK_010: // Summons 8-cost minions
-			return true;
-
-		// CATA cards that summon random minions into play
-		case CardIds.DrakeadonMongrel_CATA_723:
+		case CardIds.Stormrook_TIME_217:
+		case CardIds.SunsetVolley_WW_427:
+		case CardIds.TalanjiOfTheGraves_BwonsamdiToken_TIME_619t:
 		case CardIds.TalanjisLastStand_CATA_471:
-		case CardIds.DisposableAcolytes_CATA_499:
-		case CardIds.CeremonialClash_CATA_569:
+		case CardIds.ThreshridersBlessing_TLC_477:
+		case CardIds.TravelSecurity_WORK_010: // Summons 8-cost minions
+		case CardIds.TunnelTerror_TLC_469:
+		case CardIds.TwilightInfluence_EDR_463:
+		case CardIds.UnearthedArtifacts_TLC_462:
+		case CardIds.UnknownVoyager_TIME_055:
+		case CardIds.WardOfEarth_EDR_060:
+		case CardIds.Wormhole_TIME_602:
 			return true;
 
 		default:
