@@ -1,6 +1,7 @@
 import { CardIds } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DeckCard, toTagsObject } from '../../../models/deck-card';
+import { DeckState } from '../../../models/deck-state';
 import { GameState } from '../../../models/game-state';
 import { addGuessInfoToCard } from '../../card-utils';
 import { tutors } from '../../cards/card-tutors';
@@ -330,10 +331,51 @@ export class CardDrawParser implements EventParser {
 			cardsAddedToHand: newCardsAddedToHand,
 			additionalKnownCardsInDeck: additionalKnownCardsInDeck,
 		});
-		// console.debug('new player deck', newPlayerDeck);
-		return Object.assign(new GameState(), currentState, {
+
+		// Plagiarizarrr: "Battlecry: Get a copy of the top card of your opponent's deck."
+		// - When WE play Plagiarizarrr: we copy opponent's top deck → we learn when OPPONENT draws
+		// - When OPPONENT plays Plagiarizarrr: they copy our top deck → we learn when WE draw
+		let updatedState = Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
 		});
+		if (cardId) {
+			const refCard = this.allCards.getCard(cardId);
+			const updatePlagiarizarrrCopy = (deck: DeckState) => {
+				const copies = deck.hand.filter(
+					(c) => c.creatorCardId === CardIds.Plagiarizarrr && !c.cardId,
+				);
+				const toUpdate =
+					copies.length > 0
+						? copies.reduce((a, b) =>
+								(a.createdIndex ?? 0) >= (b.createdIndex ?? 0) ? a : b,
+							)
+						: null;
+				if (!toUpdate) return deck;
+				return deck.update({
+					hand: deck.hand.map((c) =>
+						c.entityId === toUpdate.entityId
+							? c.update({
+									cardId: cardId,
+									cardName: refCard?.name,
+									refManaCost: gameEvent.additionalData.cost ?? refCard?.cost,
+								} as DeckCard)
+							: c,
+					),
+				});
+			};
+			if (isPlayer) {
+				// We drew: opponent may have a Plagiarizarrr copy of our top deck card
+				updatedState = Object.assign(new GameState(), updatedState, {
+					opponentDeck: updatePlagiarizarrrCopy(updatedState.opponentDeck),
+				});
+			} else {
+				// Opponent drew: we may have a Plagiarizarrr copy of their top deck card
+				updatedState = Object.assign(new GameState(), updatedState, {
+					playerDeck: updatePlagiarizarrrCopy(updatedState.playerDeck),
+				});
+			}
+		}
+		return updatedState;
 	}
 
 	event(): string {
