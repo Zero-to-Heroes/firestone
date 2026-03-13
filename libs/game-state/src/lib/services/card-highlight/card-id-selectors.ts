@@ -2346,7 +2346,7 @@ export const cardIdSelector = (
 		case CardIds.Lifeguard_VAC_919:
 			return and(side(inputSide), or(inHand, inDeck), spellExtended, dealsDamage);
 		case CardIds.Liferender_TIME_614:
-			return and(side(inputSide), or(inHand, inDeck), or(restoreHealth, givesHeroAttack, costHealth));
+			return and(side(inputSide), or(inHand, inDeck), or(restoreHealth, lifesteal, givesHeroAttack, costHealth));
 		case CardIds.LiftOff_SC_410:
 			return and(side(inputSide), or(inHand, inDeck), terran);
 		// Light of the New Moon: Give a minion +3/+3. (Cast 3 spells to return this to your hand when played.)

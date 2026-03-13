@@ -1503,7 +1503,8 @@
   ],
   "HAS_MECHANIC_LIFESTEAL": [
     "BrittleboneDestroyer",
-    "CountessAshmore"
+    "CountessAshmore",
+    "Liferender_TIME_614"
   ],
   "LOCATION": [
     "BusyPeon_WORK_041",
