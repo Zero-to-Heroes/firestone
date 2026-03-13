@@ -1393,6 +1393,7 @@ export const filterCards = (
 		.filter((c) => canIncludeCthun(c, options.initialDecklist, options.currentClass, allCards))
 		.filter((c) => canIncludeGalakrond(c, options.initialDecklist, options.currentClass, allCards))
 		.filter((c) => canIncludeImbue(c, options.initialDecklist, options.currentClass, allCards))
+		.filter((c) => canIncludeHerald(c, options.initialDecklist, options.currentClass, allCards))
 		.filter((c) => {
 			const debug = false;
 			if (gameType === GameType.GT_ARENA || gameType === GameType.GT_UNDERGROUND_ARENA) {
@@ -1656,6 +1657,47 @@ const canIncludeGalakrond = (
 	return false;
 };
 
+/**
+ * Herald cards and cards that reference the keyword
+ * (including the Colossal minions that can be Heralded) cannot be randomly
+ * generated unless the player's deck started with one of those cards.
+ * Source is on https://hearthstone.wiki.gg/wiki/Herald
+ */
+const canIncludeHerald = (
+	refCard: ReferenceCard,
+	initialDecklist: readonly string[] | undefined,
+	currentClass: string | undefined,
+	allCards: AllCardsService,
+): boolean => {
+	if (!isHeraldCard(refCard)) {
+		return true;
+	}
+
+	if (!initialDecklist?.length) {
+		if (!currentClass?.length) {
+			return false;
+		}
+		return HEARLD_CLASSES.includes(CardClass[currentClass.toUpperCase()]);
+	}
+
+	for (const cardId of initialDecklist) {
+		const deckCard = allCards.getCard(cardId);
+		if (!deckCard) {
+			continue;
+		}
+		if (isHeraldCard(deckCard)) {
+			return true;
+		}
+	}
+	return false;
+};
+
+const isHeraldCard = (card: ReferenceCard): boolean => {
+	return (
+		!!card.mechanics?.includes(GameTag[GameTag.HERALD]) || !!card.referencedTags?.includes(GameTag[GameTag.HERALD])
+	);
+};
+
 // Imbue cards cannot be generated unless the starting deck contains at least one imbue card
 // https://www.reddit.com/r/hearthstone/comments/1reubn0/comment/o7kckv7
 // https://www.reddit.com/r/hearthstone/comments/1reubn0/comment/o7nyg8p
@@ -1691,6 +1733,14 @@ const canIncludeImbue = (
 };
 
 const NON_IMBUE_CLASSES = [CardClass.DEMONHUNTER, CardClass.WARLOCK, CardClass.WARRIOR];
+const HEARLD_CLASSES = [
+	CardClass.DEATHKNIGHT,
+	CardClass.DEMONHUNTER,
+	CardClass.ROGUE,
+	CardClass.SHAMAN,
+	CardClass.WARLOCK,
+	CardClass.WARRIOR,
+];
 
 const isImbueCard = (card: ReferenceCard): boolean => {
 	return (
