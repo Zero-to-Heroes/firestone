@@ -156,6 +156,8 @@ export class DeckState {
 	readonly heroDamageHitsThisTurn: number = 0;
 	// Only accounts for damage taken on your turns
 	readonly damageTakenOnYourTurns: readonly TurnDamage[] = [];
+	// Tracks all damage dealt by this player this turn, with source and target info
+	readonly damageDealtThisTurn: readonly DamageDealt[] = [];
 	readonly cardsPlayedFromInitialDeck: readonly { entityId: number; cardId: string }[] = [];
 	readonly turnTimings: readonly TurnTiming[] = [];
 	readonly turnDuration: number;
@@ -539,4 +541,14 @@ export interface TurnDamage {
 	readonly turn: number;
 	readonly damage: readonly number[];
 	readonly hits: readonly number[];
+}
+
+export interface DamageDealt {
+	readonly sourceCardId: string;
+	readonly sourceEntityId: number;
+	readonly sourceControllerId: number;
+	readonly targetCardId: string;
+	readonly targetEntityId: number;
+	readonly targetControllerId: number;
+	readonly damage: number;
 }

@@ -3,7 +3,7 @@ import { PreferencesService } from '@firestone/shared/common/service';
 import { ILocalizationService, OwUtilsService } from '@firestone/shared/framework/core';
 import { BattlegroundsState, BgsNextOpponentOverviewPanel, BgsPanel } from '../../../models/_barrel';
 import { DeckCard } from '../../../models/deck-card';
-import { TurnTiming } from '../../../models/deck-state';
+import { DamageDealt, TurnTiming } from '../../../models/deck-state';
 import { GameState, ShortCard } from '../../../models/game-state';
 import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
@@ -77,6 +77,7 @@ export class NewTurnParser implements EventParser {
 			cardsCounteredThisTurn: 0,
 			damageTakenThisTurn: 0,
 			heroDamageHitsThisTurn: 0,
+			damageDealtThisTurn: [] as readonly DamageDealt[],
 			elementalsPlayedLastTurn: isPlayerActive
 				? currentState.playerDeck.elementalsPlayedLastTurn
 				: currentState.playerDeck.elementalsPlayedThisTurn,
@@ -96,6 +97,7 @@ export class NewTurnParser implements EventParser {
 				: currentState.opponentDeck.cardsPlayedThisTurn,
 			damageTakenThisTurn: 0,
 			heroDamageHitsThisTurn: 0,
+			damageDealtThisTurn: [] as readonly DamageDealt[],
 			elementalsPlayedLastTurn: !isPlayerActive
 				? currentState.opponentDeck.elementalsPlayedLastTurn
 				: currentState.opponentDeck.elementalsPlayedThisTurn,

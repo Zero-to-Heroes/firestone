@@ -104,6 +104,7 @@ import { SecretsTriggeredCounterDefinitionV2 } from './impl/secrets-triggered';
 import { ShirvallahCounterDefinitionV2 } from './impl/shirvallah';
 import { ShockspitterCounterDefinitionV2 } from './impl/shockspitter';
 import { SpellCastOnFriendlyCharacterCounterDefinitionV2 } from './impl/spell-cast-on-friendly-character';
+import { SpellweaversBrillianceCounterDefinitionV2 } from './impl/spellweavers-brilliance';
 import { SpellsPlayedCounterDefinitionV2 as SpellsPlayedConstructedCounterDefinitionV2 } from './impl/spells-played';
 import { StarshipsLaunchedCounterDefinitionV2 } from './impl/starships-launched';
 import { TableFlipCounterDefinitionV2 } from './impl/table-flip';
@@ -221,6 +222,7 @@ export const getAllCounters: (
 	new FelSpellsPlayedCounterDefinitionV2(i18n, allCards),
 	new CardsDiscardedCounterDefinitionV2(i18n, allCards),
 	new FriendlyAttacksCounterDefinitionV2(i18n, allCards),
+	new SpellweaversBrillianceCounterDefinitionV2(i18n, allCards),
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n, allCards),
 	new BallerBuffCounterDefinitionV2(i18n, allCards),
@@ -369,4 +371,5 @@ export type CounterType =
 	| 'bgsTavernBuff'
 	| 'felSpells'
 	| 'cardsDiscarded'
-	| 'friendlyAttacks';
+	| 'friendlyAttacks'
+	| 'spellweaversBrilliance';
