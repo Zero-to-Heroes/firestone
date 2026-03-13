@@ -1,13 +1,13 @@
-import { CardIds, CardType, hasCorrectTribe, Race, ReferenceCard } from '@firestone-hs/reference-data';
+// Vulcanos (CATA_488): 7-Cost 4/8 Mage Elemental Minion
+// "Colossal +2. At the end of your turn, deal 2 damage to all other minions."
+// Plume of Vulcanos (CATA_488t / CATA_488t2): 2-Cost 1/4 Elemental Minion (tokens)
+// "Whenever this takes damage, get a random Fire spell. It costs (3) less."
+
+import { CardIds, CardType, hasSpellSchool, SpellSchool } from '@firestone-hs/reference-data';
 import { GuessedInfo } from '../../models/deck-card';
-import { canBeDiscoveredByClass, hasCorrectType } from '../../related-cards/dynamic-pools';
+import { hasCorrectType } from '../../related-cards/dynamic-pools';
 import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
-
-const isDiscoverableElemental = (c: ReferenceCard, currentClass: string | null | undefined) =>
-	hasCorrectType(c, CardType.MINION) &&
-	hasCorrectTribe(c, Race.ELEMENTAL) &&
-	canBeDiscoveredByClass(c, currentClass ?? undefined);
 
 export const Vulcanos: GeneratingCard & StaticGeneratingCard = {
 	cardIds: [
@@ -19,21 +19,20 @@ export const Vulcanos: GeneratingCard & StaticGeneratingCard = {
 		return filterCards(
 			input.cardId,
 			input.allCards,
-			(c) => isDiscoverableElemental(c, input.inputOptions.currentClass),
+			(c) => hasCorrectType(c, CardType.SPELL) && hasSpellSchool(c, SpellSchool.FIRE),
 			input.inputOptions,
 		);
 	},
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
-		const currentClass = input.deckState.getCurrentClass();
 		const possibleCards = filterCards(
 			Vulcanos.cardIds[0],
 			input.allCards,
-			(c) => isDiscoverableElemental(c, currentClass),
+			(c) => hasCorrectType(c, CardType.SPELL) && hasSpellSchool(c, SpellSchool.FIRE),
 			input.options,
 		);
 		return {
-			cardType: CardType.MINION,
-			races: [Race.ELEMENTAL],
+			cardType: CardType.SPELL,
+			spellSchools: [SpellSchool.FIRE],
 			possibleCards: possibleCards,
 		};
 	},
