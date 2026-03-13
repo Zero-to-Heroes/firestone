@@ -2,9 +2,9 @@
 // Winterspring Whelp (CATA_484): 1 Mana 2/1 Dragon
 // "Battlecry: Add a random Frost spell to your hand."
 
-import { CardIds, CardType, hasSpellSchool, SpellSchool } from '@firestone-hs/reference-data';
+import { CardIds, CardType } from '@firestone-hs/reference-data';
 import { GuessedInfo } from '../../models/deck-card';
-import { hasCorrectType } from '../../related-cards/dynamic-pools';
+import { hasCorrectType, hasCost } from '../../related-cards/dynamic-pools';
 import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
 
@@ -15,12 +15,12 @@ export const WinterspringWhelp: GeneratingCard & StaticGeneratingCard = {
 		const possibleCards = filterCards(
 			WinterspringWhelp.cardIds[0],
 			input.allCards,
-			(c) => hasCorrectType(c, CardType.SPELL) && hasSpellSchool(c, SpellSchool.FROST),
+			(c) => hasCorrectType(c, CardType.SPELL) && hasCost(c, '==', 1),
 			input.options,
 		);
 		return {
 			cardType: CardType.SPELL,
-			spellSchools: [SpellSchool.FROST],
+			cost: { cost: 1, comparison: '==' },
 			possibleCards: possibleCards,
 		};
 	},
@@ -28,7 +28,7 @@ export const WinterspringWhelp: GeneratingCard & StaticGeneratingCard = {
 		return filterCards(
 			WinterspringWhelp.cardIds[0],
 			input.allCards,
-			(c) => hasCorrectType(c, CardType.SPELL) && hasSpellSchool(c, SpellSchool.FROST),
+			(c) => hasCorrectType(c, CardType.SPELL) && hasCost(c, '==', 1),
 			input.inputOptions,
 		);
 	},

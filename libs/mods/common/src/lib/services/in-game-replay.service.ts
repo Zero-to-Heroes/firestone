@@ -106,7 +106,18 @@ export class InGameReplayService extends AbstractFacadeService<InGameReplayServi
 		);
 	}
 
-	async showReplay(powerLogKey: string, reviewId: string) {
+	async showReplay(
+		powerLogKey: string,
+		reviewId: string,
+	): Promise<
+		| 'not-in-game'
+		| 'mod-not-installed'
+		| 'mod-not-active'
+		| 'connection-failed'
+		| 'started'
+		| 'download-failed'
+		| 'rewind-block'
+	> {
 		return this.callOnMainProcess('showReplayInternal', { powerLogKey, reviewId });
 	}
 	private async showReplayInternal(args: {
