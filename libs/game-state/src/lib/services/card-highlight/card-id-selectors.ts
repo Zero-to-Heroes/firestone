@@ -2064,7 +2064,7 @@ export const cardIdSelector = (
 		case CardIds.Insight_InsightToken:
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.InspiringMaul_CATA_472:
-			return and(side(inputSide), or(inHand, inDeck), endOfTurn);
+			return and(side(inputSide), or(inHand, inDeck), minion, endOfTurn);
 		case CardIds.InspiringPresenceTavernBrawl:
 			return and(side(inputSide), minion, legendary);
 		case CardIds.InstrumentSmasher:
