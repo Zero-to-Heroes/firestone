@@ -74,6 +74,7 @@ export { EarthenMight } from './earthen-might';
 export { EliseTheNavigator } from './elise-the-navigator';
 export { EmergencyMeeting } from './emergency-meeting';
 export { EndtimeMurozond } from './endtime-murozond';
+export { Enthrall } from './enthrall';
 export { EternalToil } from './eternal-toil';
 export { EtherealConjurer } from './ethereal-conjurer';
 export { EudorasTreasureHunt } from './eudoras-treasure-hunt';
