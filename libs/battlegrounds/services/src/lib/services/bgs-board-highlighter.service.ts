@@ -189,7 +189,7 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 			this.highlightedMinions$$,
 			this.highlightedMechanics$$,
 			this.gameState.gameState$$.pipe(
-				auditTime(500),
+				auditTime(50),
 				map((state) => state?.opponentDeck?.board?.map((e) => ({ cardId: e.cardId, entityId: e.entityId }))),
 				distinctUntilChanged(
 					(a, b) =>
@@ -201,7 +201,7 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 			),
 			enableAutoHighlight$,
 		]).pipe(
-			auditTime(200),
+			auditTime(50),
 			filter(
 				([
 					showTribesHighlight,

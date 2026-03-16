@@ -73,10 +73,14 @@ export class BgsBoardWidgetWrapperComponent extends AbstractWidgetWrapperCompone
 			this.handleReposition(),
 		);
 		this.highlightedMinions$ = this.highlighter.shopMinions$$.pipe(
-			this.mapData((highlightedMinion) => {
-				console.debug('[bgs-board-widget-wrapper] highlightedMinion', highlightedMinion);
-				return highlightedMinion;
-			}),
+			this.mapData(
+				(highlightedMinion) => {
+					console.debug('[bgs-board-widget-wrapper] highlightedMinion', highlightedMinion);
+					return highlightedMinion;
+				},
+				null,
+				50,
+			),
 		);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
