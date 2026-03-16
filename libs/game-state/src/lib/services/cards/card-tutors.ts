@@ -366,6 +366,8 @@ const internalTutors = [
 	CardIds.CommanderGeddon_CATA_591,
 	CardIds.HarbingerOfWinterCore_RLK_511,
 	CardIds.SummerFlowerchild,
+	CardIds.ChiaDrake_ChiaDrakeToken_TOY_801t,
+	CardIds.ChiaDrake_TOY_801,
 ];
 for (const cardId of Object.keys(cardsInfoCache)) {
 	const card = cardsInfoCache[cardId];

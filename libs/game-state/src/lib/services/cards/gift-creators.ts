@@ -188,8 +188,6 @@ const internalGiftCreators = [
 	CardIds.CelestialProjectionist,
 	CardIds.ChaosStorm_ChaosStormTavernBrawlEnchantment,
 	CardIds.ChaosStormTavernBrawl,
-	CardIds.ChiaDrake_ChiaDrakeToken_TOY_801t,
-	CardIds.ChiaDrake_TOY_801,
 	CardIds.ChromieTimehopper_EscapeFromDurnholdeToken_WON_041t3,
 	CardIds.ChromieTimehopper_OpeningTheDarkPortalToken_WON_041t,
 	CardIds.Cicigi_TOY_913,
