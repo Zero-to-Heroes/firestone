@@ -9,10 +9,15 @@ export const AlakirLordOfStorms: GeneratingCard & StaticGeneratingCard = {
 	cardIds: [CardIds.AlakirLordOfStorms_CATA_153],
 	publicCreator: true,
 	dynamicPool: (input: StaticGeneratingCardInput) => {
+		const playerState = input.inputOptions.deckState.isOpponent
+			? input.inputOptions.gameState.fullGameState?.Opponent
+			: input.inputOptions.gameState.fullGameState?.Player;
+		const entity = playerState?.AllEntities?.find((e) => e.entityId === input.entityId);
+		const attack = entity?.attack ?? input.allCards.getCard(input.cardId)?.attack ?? 2;
 		return filterCards(
 			AlakirLordOfStorms.cardIds[0],
 			input.allCards,
-			(c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 2),
+			(c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', attack),
 			input.inputOptions,
 		);
 	},
