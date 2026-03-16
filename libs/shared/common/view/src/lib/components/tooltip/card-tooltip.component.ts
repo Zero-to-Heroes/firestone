@@ -96,6 +96,13 @@ import type { CardTooltipPositionType } from './card-tooltip-position.type';
 							<div class="value">{{ info.healthBuff }}</div>
 						</div>
 						<div
+							class="info-item main-attritube"
+							*ngIf="info.mainAttribute !== null && info.mainAttribute !== undefined"
+						>
+							<div class="label" [fsTranslate]="'decktracker.guessed-info.main-attribute'"></div>
+							<div class="value">{{ info.mainAttribute }}</div>
+						</div>
+						<div
 							class="info-item spell-schools"
 							*ngIf="
 								info.spellSchools !== null &&
@@ -533,9 +540,20 @@ export interface CardTooltipAdditionalInfo {
 	readonly rarity?: CardRarity | null;
 	readonly attackBuff?: number | null;
 	readonly healthBuff?: number | null;
+	readonly mainAttribute?: number | null;
 }
 export const isGuessedInfoEmpty = (info: CardTooltipAdditionalInfo | null) => {
-	return info?.cost == null && info?.attackBuff == null && info?.healthBuff == null && !info?.spellSchools?.length;
+	return (
+		info?.cost == null &&
+		!info?.cardType &&
+		!info?.possibleCards?.length &&
+		!info?.spellSchools?.length &&
+		!info?.races?.length &&
+		!info?.rarity &&
+		info?.attackBuff == null &&
+		info?.healthBuff == null &&
+		info?.mainAttribute == null
+	);
 };
 
 interface InternalCard {

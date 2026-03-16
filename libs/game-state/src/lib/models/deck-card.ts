@@ -177,6 +177,7 @@ export interface GuessedInfo {
 	readonly rarity?: CardRarity | null;
 	readonly cardClasses?: readonly CardClass[] | null;
 	readonly mechanics?: readonly GameTag[] | null;
+	readonly mainAttribute?: number | null;
 }
 
 export const toTagsObject = (inputTags: readonly { Name: number; Value: number }[]): { [Name in GameTag]?: number } => {

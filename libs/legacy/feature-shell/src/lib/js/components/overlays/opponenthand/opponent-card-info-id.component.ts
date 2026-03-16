@@ -166,6 +166,12 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 		if (card.guessedInfo?.possibleCards?.length) {
 			this.possibleCards = [...card.guessedInfo!.possibleCards];
 		}
+		if (card.mainAttributeChange != null) {
+			this.guessedInfo = {
+				...(this.guessedInfo ?? {}),
+				mainAttribute: card.mainAttributeChange,
+			};
+		}
 		if (!this.possibleCards?.length) {
 			let validArenaPool: readonly string[] = [];
 			if (metadata.gameType === GameType.GT_ARENA || metadata.gameType === GameType.GT_UNDERGROUND_ARENA) {
