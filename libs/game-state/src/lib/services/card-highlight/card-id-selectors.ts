@@ -2964,7 +2964,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), spellExtended);
 		// Raincaller: After you cast a damage spell, gain +1/+1.
 		case CardIds.Raincaller_CATA_487:
-			return and(side(inputSide), or(inDeck, inHand), spell, damage);
+			return and(side(inputSide), or(inDeck, inHand), spell, dealsDamage);
 		// Raj Naz'jan: After you cast a spell, deal damage equal to its Cost to the enemy Hero.
 		case CardIds.RajNazjan:
 			return and(side(inputSide), or(inHand, inDeck), spellExtended);
