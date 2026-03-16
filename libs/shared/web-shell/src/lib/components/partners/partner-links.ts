@@ -19,6 +19,6 @@ export const PARTNER_LINKS: Record<string, string> = {
 	jambre: 'https://www.overwolf.com/app/sebastien_tromp-firestone?utm_source=influencer&utm_medium=owaa&utm_campaign=8umPZKy',
 	solary: 'https://www.overwolf.com/app/sebastien_tromp-firestone?utm_source=influencer&utm_medium=owaa&utm_campaign=0doxm1z',
 	dreads: 'https://www.overwolf.com/app/sebastien_tromp-firestone?utm_source=influencer&utm_medium=owaa&utm_campaign=x1L0WDO',
-	pika: 'https://www.overwolf.com/app/sebastien_tromp-firestone?utm_source=influencer&utm_medium=owaa&utm_campaign=TPGxB9t',
-	baobao: 'https://www.overwolf.com/app/sebastien_tromp-firestone?utm_source=influencer&utm_medium=owaa&utm_campaign=VVbRu2N',
+	pika: 'https://download.overwolf.com/install/Download?ExtensionId=lnknbakkpommmjjdnelmfbjjdbocfpnpbkijjnob&utm_source=influencer&utm_medium=owaa&utm_campaign=kxQz0jI',
+	baobao: 'https://download.overwolf.com/install/Download?ExtensionId=lnknbakkpommmjjdnelmfbjjdbocfpnpbkijjnob&utm_source=influencer&utm_medium=owaa&utm_campaign=y66AKZw',
 };
