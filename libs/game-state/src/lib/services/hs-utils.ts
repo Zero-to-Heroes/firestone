@@ -237,6 +237,7 @@ const globalEffectEnchantments = [
 	CardIds.LieInWait_MasterDuskReshufflePlayerEnchantEnchantment_TLC_513e2,
 	CardIds.AlexstraszaGuardianOfLife_CleansedOfCorruptionEnchantment_CATA_307e,
 	CardIds.CommanderGeddon_BarrenEnchantment_CATA_591e,
+	CardIds.CleansingCleric_FreeFromCorruptionEnchantment_CATA_216e,
 	// CardIds.CityChiefEsho_KinEnchantment_TLC_110e, // The enchantment is applied to each card, so we don't have a global thing
 ];
 
