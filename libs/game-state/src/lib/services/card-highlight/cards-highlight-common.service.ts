@@ -35,8 +35,8 @@ import {
 	damage,
 	excavate,
 	givesAbyssalCurse,
-	highlightConditions,
 	herald,
+	highlightConditions,
 	imbue,
 	inDeck,
 	inHand,
@@ -223,10 +223,16 @@ export abstract class CardsHighlightCommonService {
 			gameType !== metaData?.gameType
 				? ({ formatType: GameFormat.FT_WILD, gameType: gameType } as Metadata)
 				: metaData;
+		const existingRelatedCardIds =
+			card?.relatedCardIds ??
+			this.allCards
+				.getCard(cardId)
+				?.relatedCardDbfIds?.map((dbfId) => this.allCards.getCardFromDbfId(dbfId)?.id) ??
+			[];
 		const relatedCardIds = buildContextRelatedCardIds(
 			cardId,
 			entityId,
-			card?.relatedCardIds ?? [],
+			existingRelatedCardIds,
 			deck,
 			updatedMetadata,
 			this.allCards,
