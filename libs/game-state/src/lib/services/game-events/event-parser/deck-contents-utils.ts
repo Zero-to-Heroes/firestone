@@ -57,9 +57,11 @@ export const modifyDecksForSpecialCards = (
 				return [handleDeckOfChaos(deckState, allCards, i18n), opponentDeckState];
 			case CardIds.ExploreUngoro:
 				return [handleExploreUngoro(deckState, allCards, i18n), opponentDeckState];
-		case CardIds.HemetJungleHunter:
-			return [handleHemet(deckState, allCards, i18n), opponentDeckState];
-		case CardIds.CerathineFleetrunner:
+			case CardIds.HemetJungleHunter:
+				return [handleHemet(deckState, allCards, i18n), opponentDeckState];
+			case CardIds.Quasar_GDB_467:
+				return [handleQuasar(deckState, allCards, i18n), opponentDeckState];
+			case CardIds.CerathineFleetrunner:
 				return [handleCerathineFleetrunner(deckState, allCards, i18n), opponentDeckState];
 			case CardIds.LadyPrestor_SW_078:
 				return [handleLadyPrestor(deckState, allCards, i18n), opponentDeckState];
@@ -152,6 +154,15 @@ const handleCelestialAlignment = (
 		(card, refCard) => true,
 		(card) => 1,
 		withDeck,
+		allCards,
+	);
+};
+
+const handleQuasar = (deckState: DeckState, allCards: CardsFacadeService, i18n: ILocalizationService): DeckState => {
+	return updateCostInDeck(
+		(card, refCard) => refCard?.cost != null,
+		(card) => Math.max(0, card.getEffectiveManaCost() - 3),
+		deckState,
 		allCards,
 	);
 };
