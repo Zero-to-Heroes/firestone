@@ -1079,17 +1079,19 @@
   ],
   "RESTORE_HEALTH": [
     "Anchorite_GDB_441",
-    "AuchenaiPhantasm",
-    "AuchenaiSoulpriestLegacy",
-    "AuchenaiSoulpriestVanilla",
     "BrittleboneDestroyer",
     "ClericOfAnshe",
     "CrystalStag",
     "DeathMetalKnight",
     "DeathMetalKnight_CORE_ETC_523",
     "Liferender_TIME_614",
-    "ShadowtouchedKvaldir_YOG_300",
     "Xyrella_BAR_735"
+  ],
+  "RESTORE_HEALTH_STRICT": [
+    "AuchenaiPhantasm",
+    "AuchenaiSoulpriestLegacy",
+    "AuchenaiSoulpriestVanilla",
+    "ShadowtouchedKvaldir_YOG_300"
   ],
   "HAS_MECHANIC_SECRET": [
     "AncientMysteries",
@@ -1502,7 +1504,11 @@
     "BountyBoard_WW_003"
   ],
   "HAS_MECHANIC_LIFESTEAL": [
-    "CountessAshmore"
+    "AuchenaiPhantasm",
+    "AuchenaiSoulpriestLegacy",
+    "AuchenaiSoulpriestVanilla",
+    "CountessAshmore",
+    "ShadowtouchedKvaldir_YOG_300"
   ],
   "LOCATION": [
     "BusyPeon_WORK_041",

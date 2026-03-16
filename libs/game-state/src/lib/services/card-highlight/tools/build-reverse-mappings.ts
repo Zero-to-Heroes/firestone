@@ -652,6 +652,7 @@ function convertToConditionString(part: string): string | null {
 		terran: 'TERRAN',
 		templar: 'TEMPLAR',
 		restoreHealth: 'RESTORE_HEALTH',
+		restoreHealthStrict: 'RESTORE_HEALTH_STRICT',
 		dealsDamage: 'DEALS_DAMAGE',
 		givesArmor: 'GIVES_ARMOR',
 		starshipExtended: 'STARSHIP_EXTENDED',

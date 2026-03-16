@@ -124,6 +124,7 @@ import {
 	reborn,
 	relic,
 	restoreHealth,
+	restoreHealthStrict,
 	restoreHealthToMinion,
 	rewind,
 	rush,
@@ -385,7 +386,10 @@ export const cardIdSelector = (
 			};
 		// Auchenai Phantasm: Battlecry: This turn, your healing effects deal damage instead.
 		case CardIds.AuchenaiPhantasm:
-			return and(side(inputSide), or(inDeck, inHand), restoreHealth);
+			return highlightConditions(
+				and(side(inputSide), or(inDeck, inHand), restoreHealthStrict),
+				and(side(inputSide), or(inDeck, inHand), lifesteal),
+			);
 		// Atiesh the Greatstaff: Costs (0) if you control Medivh. Double the damage and healing of your spells.
 		case CardIds.MedivhTheHallowed_AtieshTheGreatstaffToken_TIME_890t:
 			return highlightConditions(
@@ -400,7 +404,10 @@ export const cardIdSelector = (
 		// Auchenai Soulpriest: Your cards and powers that restore Health now deal damage instead.
 		case CardIds.AuchenaiSoulpriestLegacy:
 		case CardIds.AuchenaiSoulpriestVanilla:
-			return and(side(inputSide), or(inDeck, inHand), restoreHealth);
+			return highlightConditions(
+				and(side(inputSide), or(inDeck, inHand), restoreHealthStrict),
+				and(side(inputSide), or(inDeck, inHand), lifesteal),
+			);
 		case CardIds.AuctionhouseGavel:
 			return and(side(inputSide), or(inDeck, inHand), battlecry, minion);
 		case CardIds.AudioSplitter:
@@ -3335,7 +3342,10 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
 		// Shadowtouched Kvaldir: Battlecry: Your next healing effect deals damage instead.
 		case CardIds.ShadowtouchedKvaldir_YOG_300:
-			return and(side(inputSide), or(inDeck, inHand), restoreHealth);
+			return highlightConditions(
+				and(side(inputSide), or(inDeck, inHand), restoreHealthStrict),
+				and(side(inputSide), or(inDeck, inHand), lifesteal),
+			);
 		case CardIds.ShadowVisions:
 			return and(side(inputSide), inDeck, spell);
 		case CardIds.ShadowWordUndeath:
