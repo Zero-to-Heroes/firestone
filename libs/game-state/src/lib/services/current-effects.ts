@@ -96,7 +96,7 @@ export const currentEffectsInternal = [
 	CardIds.FrostStrike_GlacialAdvanceEnchantment_RLK_025e,
 	CardIds.FrostStrike_GlacialAdvanceEnchantment_RLK_025o,
 	CardIds.FrozenBuckler_ChillyEnchantment,
-	CardIds.GhoulishAlchemist,
+	CardIds.GhoulishAlchemist_DoctoredEnchantment,
 	CardIds.GibberingReject_SharpStatueEnchantment_MIS_911e,
 	CardIds.GiftReceiptEnchantment_GIFT_99e,
 	CardIds.GlacialAdvanceEnchantment_RLK_Prologue_RLK_025e,
