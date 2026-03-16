@@ -23,9 +23,12 @@ export class EnchantmentAttachedParser implements EventParser {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 		const attachedToEntityId = gameEvent.additionalData.attachedTo;
 
-		const isPlayer = controllerId === localPlayer.PlayerId;
-		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
+		let isPlayer = controllerId === localPlayer.PlayerId;
+		if (attachedToEntityId === gameEvent.opponentPlayer.Id) {
+			isPlayer = false;
+		}
 		const playerEntityId = isPlayer ? localPlayer.Id : gameEvent.opponentPlayer.Id;
+		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const isAttachedToHero =
 			attachedToEntityId === playerEntityId ||
 			attachedToEntityId === deck.hero?.entityId ||
