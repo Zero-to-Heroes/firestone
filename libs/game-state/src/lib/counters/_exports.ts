@@ -5,6 +5,7 @@ import { BeastsSummonedCounterDefinitionV2 } from './impl/beasts-summoned';
 import { AnachronosCounterDefinitionV2 } from './impl/anachronos';
 import { AstralAutomatonCounterDefinitionV2 } from './impl/astral-automaton';
 import { AvianaElunesChoseCounterDefinitionV2 } from './impl/aviana-elunes-chosen';
+import { DeathwingReductionCounterDefinitionV2 } from './impl/deathwing-reduction';
 import { BallerBuffCounterDefinitionV2 } from './impl/battlegrounds/baller-buff';
 import { BeetlesBuffCounterDefinitionV2 } from './impl/battlegrounds/beetles-buff';
 import { BgsBloodGemCounterDefinitionV2 } from './impl/battlegrounds/bgs-blood-gem';
@@ -179,6 +180,7 @@ export const getAllCounters: (
 	new LocationsUsedCounterDefinitionV2(i18n, allCards),
 	new TyrandeCounterDefinitionV2(i18n, allCards),
 	new AvianaElunesChoseCounterDefinitionV2(i18n, allCards),
+	new DeathwingReductionCounterDefinitionV2(i18n, allCards),
 	new HeroPowerUseCounterDefinitionV2(i18n, allCards),
 	new YsondreCounterDefinitionV2(i18n, allCards),
 	new BolnerHammerbeakCounterDefinitionV2(i18n, allCards),
@@ -271,6 +273,7 @@ export type CounterType =
 	| 'heroPowerUse'
 	| 'tyrande'
 	| 'avianaElunesChosen'
+	| 'deathwingReduction'
 	| 'cardsPlayedThisTurn'
 	| 'nextStarshipLaunch'
 	| 'protossMinionReduction'
