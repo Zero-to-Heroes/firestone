@@ -3765,7 +3765,7 @@ export const cardIdSelector = (
 				const highestMinionCost = highestCostMinion?.getEffectiveManaCost() ?? 0;
 				return highlightConditions(
 					and(side(inputSide), inDeck, minion, effectiveCostEqual(highestMinionCost)),
-					and(side(inputSide), inDeck, minion),
+					// and(side(inputSide), inDeck, minion),
 				)(input);
 			};
 		case CardIds.TaethelanBloodwatcher_WW_430:
