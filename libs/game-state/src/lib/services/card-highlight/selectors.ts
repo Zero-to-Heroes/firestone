@@ -575,7 +575,7 @@ export const spellDamage = (input: SelectorInput): boolean => {
 export const damage = (input: SelectorInput): boolean => {
 	return input.card?.mechanics?.includes(GameTag[GameTag.DEAL_DAMAGE]) ?? false;
 };
-export const restoreHealth = (input: SelectorInput): boolean => {
+export const restoreHealthStrict = (input: SelectorInput): boolean => {
 	return (
 		!!input.card?.mechanics?.includes('RESTORE_HEALTH') &&
 		!cardIs(
@@ -586,8 +586,9 @@ export const restoreHealth = (input: SelectorInput): boolean => {
 		)(input)
 	);
 };
+export const restoreHealth = or(restoreHealthStrict, lifesteal);
 // TODO: ignore effects that target the hero specifically
-export const restoreHealthToMinion = and(restoreHealth, not(cardIs(CardIds.WatcherOfTheSun)));
+export const restoreHealthToMinion = and(restoreHealthStrict, not(cardIs(CardIds.WatcherOfTheSun)));
 export const spendCorpse = (input: SelectorInput): boolean => {
 	return input.card?.mechanics?.includes(GameTag[GameTag.SPEND_CORPSE]) ?? false;
 };
