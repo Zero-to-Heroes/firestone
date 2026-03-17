@@ -150,6 +150,7 @@ export { NexusChampionSaraad } from './nexus-champion-saraad';
 export { NightmareFuel } from './nightmare-fuel';
 export { NorthernNavigation } from './northern-navigation';
 export { OnyxiasWing } from './onyxias-wing';
+export { PandarenImporter } from './pandaren-importer';
 export { PartnerAssignment } from './partner-assignment';
 export { PilotedShredder } from './piloted-shredder';
 export { PilotedSkyGolem } from './piloted-sky-golem';
