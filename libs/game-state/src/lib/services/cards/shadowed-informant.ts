@@ -4,7 +4,7 @@
 
 import { CardIds, CardType, GameTag } from '@firestone-hs/reference-data';
 import { GuessedInfo } from '../../models/deck-card';
-import { canBeDiscoveredByClass, hasCorrectClass, hasCorrectType } from '../../related-cards/dynamic-pools';
+import { hasCorrectClass, hasCorrectType } from '../../related-cards/dynamic-pools';
 import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
 
@@ -12,10 +12,12 @@ export const ShadowedInformant: GeneratingCard & StaticGeneratingCard = {
 	cardIds: [CardIds.ShadowedInformant_CATA_614],
 	publicCreator: true,
 	dynamicPool: (input: StaticGeneratingCardInput) => {
+		const card = input.inputOptions.deckState.findCard(input.entityId)?.card;
+		const classTag: number | undefined = card?.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_1];
 		return filterCards(
 			ShadowedInformant.cardIds[0],
 			input.allCards,
-			(c) => hasCorrectType(c, CardType.SPELL) && canBeDiscoveredByClass(c, input.inputOptions.currentClass),
+			(c) => hasCorrectType(c, CardType.SPELL) && (classTag ? hasCorrectClass(c, classTag) : true),
 			input.inputOptions,
 		);
 	},
@@ -23,7 +25,6 @@ export const ShadowedInformant: GeneratingCard & StaticGeneratingCard = {
 		const creatorEntityId = input.card?.creatorEntityId;
 		const creator = input.deckState.findCard(creatorEntityId)?.card;
 		const classTag: number | undefined = creator?.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_1];
-		console.debug('[shadowed-informant] class tag', { classTag }, input, creator);
 		const possibleCards = filterCards(
 			ShadowedInformant.cardIds[0],
 			input.allCards,
