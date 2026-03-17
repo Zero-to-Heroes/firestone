@@ -7,6 +7,7 @@
 
 General guidelines:
 
+- In order for me to check that you have correctly read this, please add an "I have read the AGENTS.md file before starting" line at the top of the PR explanation in GitHub
 - When cards are mentioned, always check the reference at https://github.com/Zero-to-Heroes/hs-reference-data/blob/master/src/cards_short.json
 - Recap their text / effects at the top of the file that implements the card. This will help you make sure you're implementing the card correctly, and will help the reviewer understand what you're doing
 - Do not touch files that are flagged as automatically generated (there is a comment in the header)
