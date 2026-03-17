@@ -30,6 +30,8 @@ Once you're done, before assigning the PR to me for review, please mention @curs
     - If the card text mentions a "discover", then it needs to use the "canBeDiscoveredBy" filter. If it's random, this filter should not be used, as it draws from the full pool of cards
 - If not, and the card still requires a dynamic pool (like summons a minion, so nothing generated in hand), the card should extend the StaticGeneratingCard interface
 - _Don't use the deprecated \_register card entry point_
+- If the card can create a card from any class, set guessedInfo.canBeAnyCardClass
+- If the card can create a card from any class and neutral, set guessedInfo.canBeAnyCardClassOrNeutral
 
 ### Common considerations
 
