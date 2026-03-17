@@ -27,6 +27,7 @@ import {
 	map,
 	shareReplay,
 	takeUntil,
+	tap,
 } from 'rxjs';
 import type { CardTooltipPositionType } from './card-tooltip-position.type';
 
@@ -546,7 +547,7 @@ export const isGuessedInfoEmpty = (info: CardTooltipAdditionalInfo | null) => {
 	return (
 		info?.cost == null &&
 		!info?.cardType &&
-		!info?.possibleCards?.length &&
+		// !info?.possibleCards?.length &&
 		!info?.spellSchools?.length &&
 		!info?.races?.length &&
 		!info?.rarity &&
