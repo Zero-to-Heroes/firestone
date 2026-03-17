@@ -126,6 +126,7 @@ const getDynamicRelatedCardIdsInternal = (
 		}
 	}
 
+	const creatorEntityId = inputOptions.deckState.findCard(entityId)?.card?.creatorEntityId;
 	switch (cardId) {
 		// Show static list of related card ids as possible options
 		case CardIds.HopefulDryad_EDR_001:
@@ -305,10 +306,11 @@ const getDynamicRelatedCardIdsInternal = (
 				(c) => c?.cost === tagValue && hasCorrectTribe(c, Race.BEAST),
 			);
 		case CardIds.ScrappyScavenger_TLC_461:
-			const card = inputOptions.deckState.findCard(entityId)?.card;
+			const card = inputOptions.deckState.findCard(creatorEntityId)?.card;
+			console.debug('[debug] [dynamic-pools] Scrappy Scavenger', cardId, creatorEntityId, card);
 			const hasBeenPlayed = card?.storedInformation?.manaLeftWhenPlayed != null;
 			const targetCost = hasBeenPlayed
-				? (card.storedInformation.manaLeftWhenPlayed ?? 0)
+				? card.storedInformation.manaLeftWhenPlayed!
 				: Math.min(10, Math.max(0, (options.deckState.manaLeft ?? 0) - (allCards.getCard(cardId)?.cost ?? 0)));
 			return filterCards(
 				allCards,
