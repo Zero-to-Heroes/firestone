@@ -7,9 +7,10 @@ import { WillBeActiveCard, WillBeActiveInput } from './_card.type';
 export const Vyranoth: WillBeActiveCard = {
 	cardIds: [CardIds.Vyranoth_CATA_213],
 	willBeActive: (input: WillBeActiveInput) => {
-		const totalCost = input.playerDeck.deckList
-			.filter((c) => input.allCards.getCard(c.cardId).type?.toUpperCase() === CardType[CardType.MINION])
-			.reduce((sum, c) => sum + (input.allCards.getCard(c.cardId).cost ?? 0), 0);
+		const totalCost = input.playerDeck.deckList.reduce((sum, c) => {
+			const ref = input.allCards.getCard(c.cardId);
+			return ref.type?.toUpperCase() === CardType[CardType.MINION] ? sum + (ref.cost ?? 0) : sum;
+		}, 0);
 		return totalCost === 100;
 	},
 };
