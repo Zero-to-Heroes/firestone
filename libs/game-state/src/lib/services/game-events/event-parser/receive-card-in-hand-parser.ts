@@ -392,6 +392,13 @@ export const addAdditionalAttribuesInHand = (
 						relatedCardIds: gameEvent.additionalData.referencedCardIds,
 					})
 				: card;
+		case CardIds.InvasiveShadeleaf_BottledShadeleafToken_WW_393t:
+		case CardIds.HolySpringwater_BottledSpringwaterToken_WW_395t: {
+			const storedAmount = gameEvent.additionalData?.storedAmount;
+			return storedAmount != null && storedAmount > 0
+				? card.update({ mainAttributeChange: storedAmount })
+				: card;
+		}
 	}
 	return card;
 };

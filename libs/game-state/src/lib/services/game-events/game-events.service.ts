@@ -598,6 +598,7 @@ export class GameEvents {
 							gameEvent.Value.AdditionalProps?.GuessedTags ??
 							gameEvent.Value.AdditionalProps?.Tags ??
 							[],
+						storedAmount: gameEvent.Value.AdditionalProps?.StoredAmount,
 					}),
 				);
 				break;
