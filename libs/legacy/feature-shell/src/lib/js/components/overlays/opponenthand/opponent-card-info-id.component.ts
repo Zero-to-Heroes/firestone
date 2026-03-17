@@ -238,31 +238,44 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 			// const allClasses: readonly CardClass[] = [...cardClasses, ...heroClasses].filter(
 			// 	(value, index, self) => self.indexOf(value) === index,
 			// );
-			// Maestra is less important now, so we go back to simply using the hero class
-			const allClasses: readonly CardClass[] =
-				context.hero?.initialClasses && context.hero.initialClasses.length > 0
-					? context.hero.initialClasses
-					: context.hero?.classes || [];
-			const possibleForgedCards = getPossibleForgedCards(
-				metadata.formatType,
-				metadata.gameType,
-				allClasses,
-				this.allCards,
-				{ arena: validArenaPool },
-			);
-			console.debug(
-				'[opponent-card-info-id] possibleForgedCards',
-				card.entityId,
-				possibleForgedCards,
-				allClasses,
-				metadata,
-			);
 			if (!this.possibleCards?.length) {
+				// Maestra is less important now, so we go back to simply using the hero class
+				let allClasses: readonly CardClass[] =
+					context.hero?.initialClasses && context.hero.initialClasses.length > 0
+						? context.hero.initialClasses
+						: context.hero?.classes || [];
+				if (card.guessedInfo?.canBeAnyCardClass) {
+					allClasses = [];
+				}
+				allClasses = [...allClasses, CardClass.NEUTRAL];
+				const possibleForgedCards = getPossibleForgedCards(
+					metadata.formatType,
+					metadata.gameType,
+					allClasses,
+					this.allCards,
+					{ arena: validArenaPool },
+				);
 				this.possibleCards = [...(possibleForgedCards ?? [])];
 			} else {
+				const possibleForgedCards = getPossibleForgedCards(
+					metadata.formatType,
+					metadata.gameType,
+					[], // Simply use the list of possible cards to restrict the list of forged cards
+					this.allCards,
+					{ arena: validArenaPool },
+				);
+				console.debug(
+					'[opponent-card-info-id] possibleForgedCards 2',
+					card.entityId,
+					possibleForgedCards,
+					metadata,
+				);
 				// Interesct the pool of forged cards with the pool of possible cards
 				const before = [...this.possibleCards];
-				this.possibleCards = this.possibleCards.filter((cardId) => possibleForgedCards.includes(cardId));
+				// Forged cards appear as their forged version, while in the data we have the base vresion
+				this.possibleCards = this.possibleCards.filter((cardId) =>
+					possibleForgedCards.some((c) => c.startsWith(cardId)),
+				);
 				console.debug(
 					'[opponent-card-info-id] possibleCards after filtering',
 					card.entityId,

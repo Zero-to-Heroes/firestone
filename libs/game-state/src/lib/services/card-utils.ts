@@ -377,18 +377,17 @@ export const addGuessInfoToCard = (
 export const getPossibleForgedCards = (
 	format: GameFormat,
 	gameType: GameType,
-	inputCardClasses: readonly CardClass[],
+	cardClasses: readonly CardClass[],
 	allCards: CardsFacadeService,
 	curatedPools: {
 		arena: readonly string[];
 	},
 ): readonly string[] => {
-	const cardClasses = [...(inputCardClasses ?? []), CardClass.NEUTRAL];
 	const result = allCards
 		.getCards()
 		.filter((c) => (!!c.set ? isCardValidForGame(c, format, gameType, curatedPools) : false))
 		.filter((c) => c.mechanics?.includes(GameTag[GameTag.FORGE]))
-		.filter((c) => c.classes?.some((cc) => cardClasses.includes(CardClass[cc])))
+		.filter((c) => !cardClasses.length || c.classes?.some((cc) => cardClasses.includes(CardClass[cc])))
 		.map((c) => allCards.getCard(c.relatedCardDbfIds?.[0] ?? 0))
 		.filter((c) => !!c.id)
 		.sort((a, b) => (a.cost ?? 0) - (b.cost ?? 0) || a.name.localeCompare(b.name))
