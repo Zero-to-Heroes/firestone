@@ -71,7 +71,7 @@ export class CardsHighlightFacadeService implements ICardsHighlightService {
 			readonly arena: readonly string[];
 		},
 	): readonly string[] {
-		return this.service.getGlobalRelatedCards(entityId, cardId, side, gameTypeOverride);
+		return this.service.getGlobalRelatedCards(entityId, cardId, side, gameTypeOverride, curatedPools);
 	}
 
 	onMouseLeave(cardId: string) {

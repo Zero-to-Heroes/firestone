@@ -250,12 +250,26 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 				this.allCards,
 				{ arena: validArenaPool },
 			);
-			console.debug('[opponent-card-info-id] possibleForgedCards', possibleForgedCards, allClasses, metadata);
+			console.debug(
+				'[opponent-card-info-id] possibleForgedCards',
+				card.entityId,
+				possibleForgedCards,
+				allClasses,
+				metadata,
+			);
 			if (!this.possibleCards?.length) {
 				this.possibleCards = [...(possibleForgedCards ?? [])];
 			} else {
 				// Interesct the pool of forged cards with the pool of possible cards
+				const before = [...this.possibleCards];
 				this.possibleCards = this.possibleCards.filter((cardId) => possibleForgedCards.includes(cardId));
+				console.debug(
+					'[opponent-card-info-id] possibleCards after filtering',
+					card.entityId,
+					this.possibleCards,
+					before,
+					possibleForgedCards,
+				);
 			}
 		}
 
@@ -284,12 +298,14 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 
 		if (this.possibleCards?.length && !this.createdBy && !this.drawnBy) {
 			this.onlyKnownPossibleCards = true;
+			console.debug('[opponent-card-info-id] onlyKnownPossibleCards', card.entityId);
 		}
 		if (!this.cardId && this.possibleCards?.length === 1) {
 			this.cardId = this.possibleCards[0];
 			this.cardUrl = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${this.cardId}.jpg`;
 			this.onlyKnownPossibleCards = false;
 			this.possibleCards = [];
+			console.debug('[opponent-card-info-id] cardId set to single card', card.entityId, this.cardId);
 		}
 
 		this._card = card.update({
