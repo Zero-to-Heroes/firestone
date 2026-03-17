@@ -1,3 +1,5 @@
+Deprecated - look into the root agents.md
+
 ## When Tickets are assigned to you
 
 General guidelines:
