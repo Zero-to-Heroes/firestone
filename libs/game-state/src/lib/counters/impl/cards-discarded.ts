@@ -8,7 +8,7 @@ export class CardsDiscardedCounterDefinitionV2 extends CounterDefinitionV2<numbe
 	public override id: CounterType = 'cardsDiscarded';
 	public override image = CardIds.DukeOfBelow_CATA_493;
 	public override type: 'hearthstone' | 'battlegrounds' = 'hearthstone';
-	public override cards: readonly CardIds[] = [CardIds.DukeOfBelow_CATA_493, CardIds.Maloriak_CATA_494];
+	public override cards: readonly CardIds[] = [CardIds.DukeOfBelow_CATA_493];
 
 	readonly player = {
 		pref: 'playerCardsDiscardedCounter' as const,
