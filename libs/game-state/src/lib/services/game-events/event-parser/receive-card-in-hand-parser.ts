@@ -393,12 +393,12 @@ export const addAdditionalAttribuesInHand = (
 					})
 				: card;
 		case CardIds.InvasiveShadeleaf_BottledShadeleafToken_WW_393t:
-		case CardIds.HolySpringwater_BottledSpringwaterToken_WW_395t:
-			// Excess damage/healing comes from tag 1068 (EXCESS_DAMAGE) in GuessedTags - set by hs-game-converter
-			const excessDamage = card.tags?.[GameTag.EXCESS_DAMAGE];
-			return excessDamage != null && excessDamage > 0
-				? card.update({ mainAttributeChange: excessDamage })
+		case CardIds.HolySpringwater_BottledSpringwaterToken_WW_395t: {
+			const storedAmount = gameEvent.additionalData?.storedAmount;
+			return storedAmount != null && storedAmount > 0
+				? card.update({ mainAttributeChange: storedAmount })
 				: card;
+		}
 	}
 	return card;
 };
