@@ -154,6 +154,9 @@ export abstract class CardsHighlightCommonService {
 		cardId: string,
 		side: HighlightSide,
 		gameTypeOverride: GameType | null = null,
+		curatedPools?: {
+			readonly arena: readonly string[];
+		},
 	): readonly string[] {
 		let gameState = this.gameState;
 		if (this.options?.skipGameState) {
@@ -210,14 +213,8 @@ export abstract class CardsHighlightCommonService {
 		const card =
 			deckCards.find((c) => !!entityId && c.entityId === entityId) ?? deckCards.find((c) => c.cardId === cardId);
 
-		let validArenaPool: readonly string[] = [];
 		const gameType = gameTypeOverride ?? metaData?.gameType;
-		if (gameType === GameType.GT_ARENA || gameType === GameType.GT_UNDERGROUND_ARENA) {
-			// This will fail the first time, because the pool is not initialized yet, but we'll try it like that to avoid
-			// blocking the call
-			// this.arenaRef.validDiscoveryPool$$.getValueWithInit();
-			// validArenaPool = this.arenaRef.validDiscoveryPool$$.value ?? [];
-		}
+		const validArenaPool = curatedPools?.arena ?? [];
 
 		const updatedMetadata: Metadata =
 			gameType !== metaData?.gameType

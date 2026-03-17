@@ -172,15 +172,14 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 				mainAttribute: card.mainAttributeChange,
 			};
 		}
+		let validArenaPool: readonly string[] = [];
+		if (metadata.gameType === GameType.GT_ARENA || metadata.gameType === GameType.GT_UNDERGROUND_ARENA) {
+			// This will fail the first time, because the pool is not initialized yet, but we'll try it like that to avoid
+			// blocking the call
+			this.arenaRef.validDiscoveryPool$$.getValueWithInit();
+			validArenaPool = this.arenaRef.validDiscoveryPool$$.value ?? [];
+		}
 		if (!this.possibleCards?.length) {
-			let validArenaPool: readonly string[] = [];
-			if (metadata.gameType === GameType.GT_ARENA || metadata.gameType === GameType.GT_UNDERGROUND_ARENA) {
-				// This will fail the first time, because the pool is not initialized yet, but we'll try it like that to avoid
-				// blocking the call
-				this.arenaRef.validDiscoveryPool$$.getValueWithInit();
-				validArenaPool = this.arenaRef.validDiscoveryPool$$.value ?? [];
-			}
-
 			const dynamicPool = getDynamicRelatedCardIds(this.cardId, card?.entityId, this.allCards.getService(), {
 				format: metadata.formatType,
 				gameType: metadata.gameType,
@@ -249,7 +248,9 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 				metadata.gameType,
 				allClasses,
 				this.allCards,
+				{ arena: validArenaPool },
 			);
+			console.debug('[opponent-card-info-id] possibleForgedCards', possibleForgedCards, allClasses, metadata);
 			if (!this.possibleCards?.length) {
 				this.possibleCards = [...(possibleForgedCards ?? [])];
 			} else {

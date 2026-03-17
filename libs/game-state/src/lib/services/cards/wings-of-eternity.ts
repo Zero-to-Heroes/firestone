@@ -1,15 +1,6 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import {
-	CardIds,
-	CardType,
-	GameFormat,
-	GameType,
-	hasCorrectTribe,
-	isValidSet,
-	Race,
-	SetId,
-} from '@firestone-hs/reference-data';
-import { canBeDiscoveredByClass, GuessedInfo, hasCorrectType } from '../../..';
+import { CardIds, CardType, GameFormat, GameType, hasCorrectTribe, Race } from '@firestone-hs/reference-data';
+import { canBeDiscoveredByClass, GuessedInfo, hasCorrectType, isCardValidForGame } from '../../..';
 import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
 
@@ -28,8 +19,8 @@ export const WingsOfEternity: GeneratingCard & StaticGeneratingCard = {
 				WingsOfEternity.cardIds[0],
 				input.allCards,
 				(c) =>
-					!isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
-					isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_WILD, GameType.GT_RANKED) &&
+					!isCardValidForGame(c, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
+					isCardValidForGame(c, GameFormat.FT_WILD, GameType.GT_RANKED) &&
 					hasCorrectTribe(c, Race.DRAGON) &&
 					hasCorrectType(c, CardType.MINION) &&
 					canBeDiscoveredByClass(c, input.deckState.getCurrentClass()),
@@ -43,8 +34,8 @@ export const WingsOfEternity: GeneratingCard & StaticGeneratingCard = {
 			input.allCards,
 			(c) =>
 				// "from the past" = usable in Wild but not in Standard
-				!isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
-				isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_WILD, GameType.GT_RANKED) &&
+				!isCardValidForGame(c, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
+				isCardValidForGame(c, GameFormat.FT_WILD, GameType.GT_RANKED) &&
 				hasCorrectTribe(c, Race.DRAGON) &&
 				hasCorrectType(c, CardType.MINION) &&
 				canBeDiscoveredByClass(c, input.inputOptions.deckState.getCurrentClass()),

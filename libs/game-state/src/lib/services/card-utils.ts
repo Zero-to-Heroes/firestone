@@ -3,15 +3,18 @@
 /* eslint-disable no-case-declarations */
 import {
 	AllCardsService,
+	arenaSets,
 	CardClass,
 	CardIds,
 	CardType,
 	GameFormat,
 	GameTag,
 	GameType,
-	isValidSet,
 	ReferenceCard,
 	SetId,
+	standardSets,
+	twistSets,
+	wildSets,
 } from '@firestone-hs/reference-data';
 import { Mutable } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
@@ -376,11 +379,14 @@ export const getPossibleForgedCards = (
 	gameType: GameType,
 	inputCardClasses: readonly CardClass[],
 	allCards: CardsFacadeService,
+	curatedPools: {
+		arena: readonly string[];
+	},
 ): readonly string[] => {
 	const cardClasses = [...(inputCardClasses ?? []), CardClass.NEUTRAL];
-	return allCards
+	const result = allCards
 		.getCards()
-		.filter((c) => (!!c.set ? isValidSet(c.set.toLowerCase() as SetId, format, gameType) : false))
+		.filter((c) => (!!c.set ? isCardValidForGame(c, format, gameType, curatedPools) : false))
 		.filter((c) => c.mechanics?.includes(GameTag[GameTag.FORGE]))
 		.filter((c) => c.classes?.some((cc) => cardClasses.includes(CardClass[cc])))
 		.map((c) => allCards.getCard(c.relatedCardDbfIds?.[0] ?? 0))
@@ -396,6 +402,48 @@ export const getPossibleForgedCards = (
 			return a.classes![0]?.localeCompare(b.classes![0]);
 		})
 		.map((c) => c.id);
+	console.debug(
+		'[getPossibleForgedCards] result',
+		result,
+		cardClasses,
+		format,
+		gameType,
+		allCards.getCards().filter((c) => c.mechanics?.includes(GameTag[GameTag.FORGE])),
+	);
+	return result;
+};
+
+export const isCardValidForGame = (
+	card: ReferenceCard,
+	format: GameFormat,
+	gameType: GameType,
+	curatedPools?: {
+		arena: readonly string[];
+	},
+): boolean => {
+	const set = card.set?.toLowerCase() as SetId;
+	switch (gameType) {
+		case GameType.GT_ARENA:
+		case GameType.GT_UNDERGROUND_ARENA:
+			if (arenaSets.length === 0) {
+				if (curatedPools?.arena?.length) {
+					return curatedPools.arena.includes(card.id);
+				}
+				// Fallback and use wild pool
+				return wildSets.includes(set);
+			} else {
+				return arenaSets.includes(set);
+			}
+	}
+	switch (format) {
+		case GameFormat.FT_STANDARD:
+			return standardSets.includes(set);
+		case GameFormat.FT_TWIST:
+			return twistSets.includes(set);
+		case GameFormat.FT_WILD:
+		default:
+			return wildSets.includes(set);
+	}
 };
 
 export const isTakePlaceOnBoard = (card: ReferenceCard): boolean => {

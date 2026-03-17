@@ -1,7 +1,8 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import { CardIds, CardType, GameFormat, GameType, isValidSet, SetId } from '@firestone-hs/reference-data';
+import { CardIds, CardType, GameFormat, GameType } from '@firestone-hs/reference-data';
 import { GuessedInfo } from '../../models/deck-card';
 import { canBeDiscoveredByClass, hasCorrectType } from '../../related-cards/dynamic-pools';
+import { isCardValidForGame } from '../card-utils';
 import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
 
@@ -17,8 +18,8 @@ export const ConsiderThePast: GeneratingCard & StaticGeneratingCard = {
 			input.allCards,
 			(c) =>
 				hasCorrectType(c, CardType.SPELL) &&
-				!isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
-				isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_WILD, GameType.GT_RANKED) &&
+				!isCardValidForGame(c, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
+				isCardValidForGame(c, GameFormat.FT_WILD, GameType.GT_RANKED) &&
 				canBeDiscoveredByClass(c, input.inputOptions.currentClass),
 			{ ...input.inputOptions, format: GameFormat.FT_WILD, gameType: GameType.GT_RANKED },
 		);
@@ -31,8 +32,8 @@ export const ConsiderThePast: GeneratingCard & StaticGeneratingCard = {
 				input.allCards,
 				(c) =>
 					hasCorrectType(c, CardType.SPELL) &&
-					!isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
-					isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_WILD, GameType.GT_RANKED) &&
+					!isCardValidForGame(c, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
+					isCardValidForGame(c, GameFormat.FT_WILD, GameType.GT_RANKED) &&
 					canBeDiscoveredByClass(c, input.deckState.getCurrentClass()),
 				{ ...input.options, format: GameFormat.FT_WILD, gameType: GameType.GT_RANKED },
 			),

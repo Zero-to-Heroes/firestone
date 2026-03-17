@@ -1,6 +1,7 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import { CardIds, CardType, GameFormat, GameType, SetId, isValidSet } from '@firestone-hs/reference-data';
+import { CardIds, CardType, GameFormat, GameType } from '@firestone-hs/reference-data';
 import { hasCorrectType } from '../../related-cards/dynamic-pools';
+import { isCardValidForGame } from '../card-utils';
 import { StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
 
@@ -11,7 +12,7 @@ export const TokiTimeTinker: StaticGeneratingCard = {
 			TokiTimeTinker.cardIds[0],
 			input.allCards,
 			(c) =>
-				!isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
+				!isCardValidForGame(c, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
 				hasCorrectType(c, CardType.MINION),
 		);
 	},

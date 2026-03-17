@@ -6,18 +6,17 @@ import {
 	GameFormat,
 	GameType,
 	hasCorrectTribe,
-	isValidSet,
 	Race,
 	ReferenceCard,
-	SetId,
 } from '@firestone-hs/reference-data';
 import { GuessedInfo } from '../../models/deck-card';
 import { filterCards, hasCorrectRarity, hasCorrectType } from '../../related-cards/dynamic-pools';
+import { isCardValidForGame } from '../card-utils';
 import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 
 const isLegendaryBeastFromThePast = (c: ReferenceCard): boolean => {
 	return (
-		!isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
+		!isCardValidForGame(c, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
 		hasCorrectType(c, CardType.MINION) &&
 		hasCorrectTribe(c, Race.BEAST) &&
 		hasCorrectRarity(c, CardRarity.LEGENDARY)

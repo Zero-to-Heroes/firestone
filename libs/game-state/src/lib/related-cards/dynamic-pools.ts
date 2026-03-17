@@ -17,7 +17,6 @@ import {
 	hasMechanic,
 	hasSpellSchool,
 	isArena,
-	isValidSet,
 	Race,
 	ReferenceCard,
 	SetId,
@@ -27,6 +26,7 @@ import {
 import { DeckState } from '../models/deck-state';
 import { PlayerGameState } from '../models/full-game-state';
 import { GameState } from '../models/game-state';
+import { isCardValidForGame } from '../services/card-utils';
 import { hasDynamicPool } from '../services/cards/_card.type';
 import { cardsInfoCache } from '../services/cards/_mapping';
 import { buildExcavateTreasures } from './excavate-treasures';
@@ -146,7 +146,7 @@ const getDynamicRelatedCardIdsInternal = (
 				{ ...options, format: GameFormat.FT_WILD, gameType: GameType.GT_RANKED },
 				cardId,
 				(c) =>
-					!isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
+					!isCardValidForGame(c, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
 					hasCorrectType(c, CardType.MINION) &&
 					c.classes?.includes(CardClass[CardClass.PRIEST]) &&
 					c.rarity?.toUpperCase() === CardRarity[CardRarity.LEGENDARY],
@@ -158,7 +158,7 @@ const getDynamicRelatedCardIdsInternal = (
 				{ ...options, format: GameFormat.FT_WILD, gameType: GameType.GT_RANKED },
 				cardId,
 				(c) =>
-					!isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
+					!isCardValidForGame(c, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
 					hasCorrectTribe(c, Race.MECH) &&
 					c.classes?.includes(CardClass[CardClass.PALADIN]),
 			);
@@ -169,8 +169,9 @@ const getDynamicRelatedCardIdsInternal = (
 				{ ...options, format: GameFormat.FT_WILD, gameType: GameType.GT_RANKED },
 				cardId,
 				(c) =>
-					!isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
-					hasCorrectTribe(c, Race.DEMON),
+					!isCardValidForGame(c, GameFormat.FT_STANDARD, GameType.GT_RANKED, {
+						arena: inputOptions.validArenaPool,
+					}) && hasCorrectTribe(c, Race.DEMON),
 			);
 		case CardIds.Flashback_TIME_711:
 			return filterCards(
@@ -179,7 +180,7 @@ const getDynamicRelatedCardIdsInternal = (
 				{ ...options, format: GameFormat.FT_WILD, gameType: GameType.GT_RANKED },
 				cardId,
 				(c) =>
-					!isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
+					!isCardValidForGame(c, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
 					hasCorrectType(c, CardType.MINION) &&
 					hasCost(c, '==', 1),
 			);
@@ -190,7 +191,7 @@ const getDynamicRelatedCardIdsInternal = (
 				{ ...options, format: GameFormat.FT_WILD, gameType: GameType.GT_RANKED },
 				cardId,
 				(c) =>
-					!isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
+					!isCardValidForGame(c, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
 					hasMechanic(c, GameTag.CHOOSE_ONE),
 			);
 		case CardIds.AlterTime_TIME_857:
@@ -199,7 +200,7 @@ const getDynamicRelatedCardIdsInternal = (
 				{ ...options, format: GameFormat.FT_WILD, gameType: GameType.GT_RANKED },
 				cardId,
 				(c) =>
-					!isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
+					!isCardValidForGame(c, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
 					hasCorrectType(c, CardType.SPELL) &&
 					hasSpellSchool(c, SpellSchool.ARCANE) &&
 					canBeDiscoveredByClass(c, options.currentClass),
@@ -210,7 +211,7 @@ const getDynamicRelatedCardIdsInternal = (
 				{ ...options, format: GameFormat.FT_WILD, gameType: GameType.GT_RANKED },
 				cardId,
 				(c) =>
-					!isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
+					!isCardValidForGame(c, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
 					hasCorrectType(c, CardType.SPELL),
 			);
 		case CardIds.FadingMemory_TIME_040:
@@ -220,7 +221,7 @@ const getDynamicRelatedCardIdsInternal = (
 				{ ...options, format: GameFormat.FT_WILD, gameType: GameType.GT_RANKED },
 				cardId,
 				(c) =>
-					!isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
+					!isCardValidForGame(c, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
 					hasCorrectType(c, CardType.MINION) &&
 					hasCost(c, '==', 5),
 			);
@@ -231,7 +232,7 @@ const getDynamicRelatedCardIdsInternal = (
 				{ ...options, format: GameFormat.FT_WILD, gameType: GameType.GT_RANKED },
 				cardId,
 				(c) =>
-					!isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
+					!isCardValidForGame(c, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
 					hasCorrectType(c, CardType.MINION) &&
 					hasCost(c, '==', 10) &&
 					canBeDiscoveredByClass(c, options.currentClass),
@@ -243,7 +244,7 @@ const getDynamicRelatedCardIdsInternal = (
 				{ ...options, format: GameFormat.FT_WILD, gameType: GameType.GT_RANKED },
 				cardId,
 				(c) =>
-					!isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
+					!isCardValidForGame(c, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
 					hasCorrectType(c, CardType.SPELL) &&
 					hasCorrectClass(c, CardClass.MAGE),
 			);
@@ -253,7 +254,7 @@ const getDynamicRelatedCardIdsInternal = (
 				{ ...options, format: GameFormat.FT_WILD, gameType: GameType.GT_RANKED },
 				cardId,
 				(c) =>
-					!isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
+					!isCardValidForGame(c, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
 					hasCorrectType(c, CardType.WEAPON) &&
 					c.classes?.includes(CardClass[CardClass.PALADIN]),
 			);
@@ -263,7 +264,7 @@ const getDynamicRelatedCardIdsInternal = (
 				{ ...options, format: GameFormat.FT_WILD, gameType: GameType.GT_RANKED },
 				cardId,
 				(c) =>
-					!isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
+					!isCardValidForGame(c, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
 					hasCorrectTribe(c, Race.ELEMENTAL),
 			);
 		case CardIds.WaveOfNostalgia_MIS_701:
@@ -273,7 +274,7 @@ const getDynamicRelatedCardIdsInternal = (
 				cardId,
 				(c) =>
 					hasCorrectType(c, CardType.MINION) &&
-					!isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
+					!isCardValidForGame(c, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
 					hasCorrectRarity(c, CardRarity.LEGENDARY),
 			);
 		case CardIds.HighborneMentor_TIME_704:
@@ -284,7 +285,7 @@ const getDynamicRelatedCardIdsInternal = (
 				{ ...options, format: GameFormat.FT_WILD, gameType: GameType.GT_RANKED },
 				cardId,
 				(c) =>
-					!isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
+					!isCardValidForGame(c, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
 					hasCorrectType(c, CardType.SPELL) &&
 					hasCost(c, '>=', 7) &&
 					canBeDiscoveredByClass(c, options.currentClass),
@@ -345,8 +346,8 @@ const getDynamicRelatedCardIdsInternal = (
 					// Usable in Wild, but not in Standard ("from the past")
 					.filter((c) =>
 						!!c.set
-							? !isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, options.gameType) &&
-								isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_WILD, options.gameType)
+							? !isCardValidForGame(c, GameFormat.FT_STANDARD, options.gameType) &&
+								isCardValidForGame(c, GameFormat.FT_WILD, options.gameType)
 							: false,
 					)
 					// From another class
@@ -1414,7 +1415,7 @@ export const filterCards = (
 				}
 				// Use the default pool otherwise
 			}
-			return !!c.set ? isValidSet(c.set.toLowerCase() as SetId, format, gameType) : false;
+			return !!c.set ? isCardValidForGame(c, format, gameType) : false;
 		})
 		.filter(
 			(c) =>

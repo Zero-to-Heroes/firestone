@@ -15,6 +15,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { CardClass, CardIds, GameTag, GameType, ReferenceCard } from '@firestone-hs/reference-data';
+import { ArenaRefService } from '@firestone/arena/common';
 import {
 	CARDS_TO_HIGHLIGHT_INSIDE_RELATED_CARDS_WITHOUT_DUPES,
 	CardsHighlightFacadeService,
@@ -325,12 +326,18 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		private readonly prefs: PreferencesService,
 		@Optional() private readonly cardsHighlightService: CardsHighlightFacadeService,
 		@Optional() private readonly i18n: LocalizationFacadeService,
+		@Optional() private readonly arenaRef: ArenaRefService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
 		await waitForReady(this.cardMouseOverService, this.ads, this.prefs);
+		if (this.arenaRef) {
+			await waitForReady(this.arenaRef);
+			// This means we init even when not in arena. Let's test it for now, and will change it later if needed
+			this.arenaRef.validDiscoveryPool$$.getValueWithInit();
+		}
 
 		this.forceMouseOver$ = this.forceMouseOver$$.pipe(this.mapData((value) => value));
 
@@ -476,11 +483,14 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 			return this.relatedCardIds;
 		}
 
+		let validArenaPool: readonly string[] = this.arenaRef?.validDiscoveryPool$$.value ?? [];
+
 		const globalHighlights = this.cardsHighlightService?.getGlobalRelatedCards(
 			this.entityId,
 			this.cardId,
 			this._side,
 			this.gameTypeOverride,
+			{ arena: validArenaPool },
 		);
 		// console.debug('globalHighlights', this.cardId, globalHighlights);
 		if (!!globalHighlights?.length) {

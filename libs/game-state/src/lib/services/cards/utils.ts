@@ -1,14 +1,7 @@
-import {
-	AllCardsService,
-	GameFormat,
-	GameTag,
-	GameType,
-	isValidSet,
-	ReferenceCard,
-	SetId,
-} from '@firestone-hs/reference-data';
+import { AllCardsService, GameFormat, GameTag, GameType, ReferenceCard } from '@firestone-hs/reference-data';
 import { Metadata } from '../../models/metadata';
 import { FilterCardsOptions, filterCards as filterCardsOriginal } from '../../related-cards/dynamic-pools';
+import { isCardValidForGame } from '../card-utils';
 import { StaticGeneratingCardInput } from './_card.type';
 
 export const filterCards = (
@@ -38,8 +31,8 @@ export const filterCardsFromThePast = (
 		allCards,
 		(c) =>
 			filter(c) &&
-			!isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
-			isValidSet(c.set.toLowerCase() as SetId, GameFormat.FT_WILD, GameType.GT_RANKED),
+			!isCardValidForGame(c, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
+			isCardValidForGame(c, GameFormat.FT_WILD, GameType.GT_RANKED),
 		newOptions,
 	);
 };

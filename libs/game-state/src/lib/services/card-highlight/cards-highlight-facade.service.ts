@@ -67,6 +67,9 @@ export class CardsHighlightFacadeService implements ICardsHighlightService {
 		cardId: string,
 		side: HighlightSide,
 		gameTypeOverride: GameType | null = null,
+		curatedPools?: {
+			readonly arena: readonly string[];
+		},
 	): readonly string[] {
 		return this.service.getGlobalRelatedCards(entityId, cardId, side, gameTypeOverride);
 	}
