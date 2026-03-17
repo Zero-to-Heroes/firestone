@@ -206,6 +206,7 @@ export { StickybombSaboteur } from './stickybomb-saboteur';
 export { StolenPower } from './stolen-power';
 export { SunkenScroll } from './sunken-scroll';
 export { SunkenSweeper } from './sunken-sweeper';
+export { SupplyRun } from './supply-run';
 export { SwampqueenHagatha } from './swampqueen-hagatha';
 export { SweetenedSnowflurry } from './sweetened-snowflurry';
 export { Swindle } from './swindle';
