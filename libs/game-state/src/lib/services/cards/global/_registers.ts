@@ -66,6 +66,7 @@ import { WallowTheWretched } from './wallow-the-wretched';
 import { XyrellaTheDevout } from './xyrella-the-devout';
 import { Zuljin } from './zul-jin';
 
+/** @deprecated use _card.type.ts dynamicPool instead */
 const cards = [
 	Archimonde,
 	Bonecaller,
@@ -152,5 +153,5 @@ export interface GlobalHighlightCard extends Card {
 export const hasGetRelatedCards = (card: Card): card is GlobalHighlightCard =>
 	(card as GlobalHighlightCard)?.getRelatedCards !== undefined;
 export interface GlobalHighlightCardOptions {
-	sourceCard?: DeckCard
+	sourceCard?: DeckCard;
 }
