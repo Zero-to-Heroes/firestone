@@ -580,6 +580,7 @@ export class GameEvents {
 					GameEvent.build(GameEvent.RECEIVE_CARD_IN_HAND, gameEvent, {
 						creatorCardId: gameEvent.Value.AdditionalProps?.CreatorCardId,
 						creatorEntityId: gameEvent.Value.AdditionalProps?.CreatorEntityId,
+						creatorZone: gameEvent.Value.AdditionalProps?.CreatorZone,
 						createdIndex: gameEvent.Value.AdditionalProps?.CreatedIndex,
 						lastInfluencedByCardId: gameEvent.Value.AdditionalProps?.LastInfluencedByCardId,
 						isPremium: gameEvent.Value.AdditionalProps?.IsPremium,
@@ -595,9 +596,7 @@ export class GameEvents {
 								: null,
 						referencedCardIds: gameEvent.Value.AdditionalProps?.ReferencedCardIds,
 						tags:
-							gameEvent.Value.AdditionalProps?.GuessedTags ??
-							gameEvent.Value.AdditionalProps?.Tags ??
-							[],
+							gameEvent.Value.AdditionalProps?.GuessedTags ?? gameEvent.Value.AdditionalProps?.Tags ?? [],
 						storedAmount: gameEvent.Value.AdditionalProps?.StoredAmount,
 					}),
 				);

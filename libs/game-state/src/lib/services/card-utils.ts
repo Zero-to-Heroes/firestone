@@ -15,6 +15,7 @@ import {
 	standardSets,
 	twistSets,
 	wildSets,
+	Zone,
 } from '@firestone-hs/reference-data';
 import { Mutable } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
@@ -299,6 +300,7 @@ export const addGuessInfoToCard = (
 	allCards: CardsFacadeService,
 	options?: {
 		positionInHand?: number;
+		creatorZone?: Zone | null;
 		tags?: readonly { Name: GameTag; Value: number }[];
 		metadata?: Metadata;
 	},

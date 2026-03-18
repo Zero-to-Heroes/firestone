@@ -1,4 +1,4 @@
-import { AllCardsService, CardIds, GameFormat, GameTag, GameType } from '@firestone-hs/reference-data';
+import { AllCardsService, CardIds, GameFormat, GameTag, GameType, Zone } from '@firestone-hs/reference-data';
 import { HighlightSide } from '@firestone/shared/framework/core';
 import { DeckCard, GuessedInfo } from '../../models/deck-card';
 import { DeckState } from '../../models/deck-state';
@@ -35,6 +35,7 @@ export interface GuessInfoInput {
 	creatorEntityId: number | undefined | null;
 	options?: {
 		positionInHand?: number;
+		creatorZone?: Zone | null;
 		tags?: readonly { Name: GameTag; Value: number }[];
 		metadata?: Metadata;
 	};

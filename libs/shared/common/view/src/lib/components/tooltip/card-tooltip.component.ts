@@ -27,7 +27,6 @@ import {
 	map,
 	shareReplay,
 	takeUntil,
-	tap,
 } from 'rxjs';
 import type { CardTooltipPositionType } from './card-tooltip-position.type';
 
@@ -78,6 +77,10 @@ import type { CardTooltipPositionType } from './card-tooltip-position.type';
 				<div class="additional-info" *ngIf="additionalInfo$ | async as info">
 					<div class="header" [fsTranslate]="'decktracker.guessed-info.header'"></div>
 					<div class="info">
+						<div class="info-item card-type" *ngIf="info.cardType !== null && info.cardType !== undefined">
+							<div class="label" [fsTranslate]="'decktracker.guessed-info.card-type'"></div>
+							<div class="value">{{ formatCardType(info.cardType) }}</div>
+						</div>
 						<div class="info-item cost" *ngIf="info.cost !== null && info.cost !== undefined">
 							<div class="label" [fsTranslate]="'decktracker.guessed-info.cost'"></div>
 							<div class="value">{{ formatCost(info.cost) }}</div>
@@ -476,6 +479,10 @@ export class CardTooltipComponent
 			return cost.toString();
 		}
 		return `${cost.comparison} ${cost.cost}`;
+	}
+
+	formatCardType(cardType: CardType): string {
+		return this.i18n.translateString(`app.collection.card-details.types.${CardType[cardType].toLowerCase()}`);
 	}
 
 	private async keepInBounds(top: number, left: number, height: number, width: number) {
