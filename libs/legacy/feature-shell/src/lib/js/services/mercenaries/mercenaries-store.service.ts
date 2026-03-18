@@ -94,7 +94,7 @@ export class MercenariesStoreService {
 	}
 
 	private async init() {
-		await waitForReady(this.prefs);
+		await waitForReady(this.prefs, this.mainWindowState);
 		const prefs = await this.prefs.getPreferences();
 		if (!prefs.mercenariesEnabled) {
 			return;
