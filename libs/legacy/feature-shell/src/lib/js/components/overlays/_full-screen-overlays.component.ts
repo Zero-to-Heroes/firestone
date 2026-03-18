@@ -12,6 +12,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { GameType, SceneMode } from '@firestone-hs/reference-data';
+import { ArenaRefService } from '@firestone/arena/common';
 import {
 	CardsHighlightFacadeService,
 	CounterInstance,
@@ -202,6 +203,7 @@ export class FullScreenOverlaysComponent
 		private readonly init_ScalingService: ScalingService,
 		private readonly init_cardsHighlight: CardsHighlightFacadeService,
 		private readonly inGameReplayService: InGameReplayService,
+		private readonly arenaRef: ArenaRefService,
 	) {
 		super(cdr);
 	}
@@ -241,7 +243,14 @@ export class FullScreenOverlaysComponent
 			}),
 		);
 
+		const arenaCards = await this.arenaRef.validDiscoveryPool$$.getValueWithInit();
 		const allCounters = getAllCounters(this.i18n, this.allCards).sort((a, b) => a.id.localeCompare(b.id));
+		allCounters.forEach((c) => {
+			c.init({
+				arena: arenaCards,
+			});
+		});
+
 		this.playerCounters$ = combineLatest([this.gameState.gameState$$, this.prefs.preferences$$]).pipe(
 			auditTime(500),
 			filter(([gameState, prefs]) => !!gameState && !!prefs),

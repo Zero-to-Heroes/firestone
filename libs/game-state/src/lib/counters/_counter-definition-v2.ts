@@ -4,7 +4,7 @@ import { Preferences } from '@firestone/shared/common/service';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { BattlegroundsState } from '../models/_barrel';
 import { GameState } from '../models/game-state';
-import { CounterType } from './_exports';
+import { CounterType } from './counter-type';
 import { areCardsValidInCurrentGame } from './utils';
 
 export abstract class CounterDefinitionV2<T> {
@@ -17,6 +17,7 @@ export abstract class CounterDefinitionV2<T> {
 	public readonly type: 'hearthstone' | 'battlegrounds' = 'hearthstone';
 	public abstract readonly cards: readonly CardIds[];
 	public readonly keywords: readonly string[] | null = null;
+
 	protected readonly cardsOnBoard: readonly CardIds[] = [];
 	protected showOnlyInDiscovers = false;
 	protected includeBoardForCards = true;
@@ -26,7 +27,15 @@ export abstract class CounterDefinitionV2<T> {
 	// Ceaseless expanse which tracks things game-wide, instead of per-player
 	protected singleton = false;
 
+	private curatedPools: {
+		arena: readonly string[];
+	};
+
 	constructor(protected readonly allCards: CardsFacadeService) {}
+
+	public init(pools: { arena: readonly string[] }) {
+		this.curatedPools = pools;
+	}
 
 	public abstract readonly player?: PlayerImplementation<T>;
 	public abstract readonly opponent?: PlayerImplementation<T>;
@@ -211,9 +220,15 @@ export abstract class CounterDefinitionV2<T> {
 			}
 			if (
 				!!this.cards?.length &&
-				!areCardsValidInCurrentGame(this.cards, gameState.metadata, this.allCards, this.debug)
+				!areCardsValidInCurrentGame(
+					this.cards,
+					gameState.metadata,
+					this.allCards,
+					this.curatedPools,
+					this.debug,
+				)
 			) {
-				this.debug && console.debug('[debug] not active for invalid cards', this.id, side);
+				this.debug && console.debug('[debug] not active for invalid cards', this.id, side, gameState.metadata);
 				return false;
 			}
 			if (!this.opponent.display(gameState, bgState)) {

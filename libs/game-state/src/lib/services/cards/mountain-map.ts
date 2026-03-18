@@ -1,6 +1,6 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { CardIds, CardType, Race } from '@firestone-hs/reference-data';
-import { extractUniqueTribes } from '../../counters/impl/menagerie';
+import { extractUniqueTribes } from '../../utils/tribe-utils';
 import { canBeDiscoveredByClass } from '../../related-cards/dynamic-pools';
 import { StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';

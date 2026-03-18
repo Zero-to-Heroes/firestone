@@ -16,6 +16,7 @@ export class LibramReductionCounterDefinitionV2 extends CounterDefinitionV2<numb
 		CardIds.LibramOfJudgment,
 		CardIds.LibramOfHope,
 	];
+	public override debug = true;
 
 	readonly player = {
 		pref: 'playerLibramReductionCounter' as const,
@@ -41,16 +42,20 @@ export class LibramReductionCounterDefinitionV2 extends CounterDefinitionV2<numb
 	readonly opponent = {
 		pref: 'opponentLibramReductionCounter' as const,
 		display: (state: GameState): boolean => true,
-		value: (state: GameState): number =>
-			state.opponentDeck.enchantments.filter(
-				(e) =>
-					e.cardId === CardIds.InterstellarStarslicer_InterstellarLibramEnchantment_GDB_726e ||
-					e.cardId === CardIds.AldorAttendant_AldorAttendantEnchantment,
-			).length +
-			2 *
+		value: (state: GameState): number => {
+			const result =
 				state.opponentDeck.enchantments.filter(
-					(e) => e.cardId === CardIds.AldorTruthseeker_AldorTruthseekerEnchantment,
-				).length,
+					(e) =>
+						e.cardId === CardIds.InterstellarStarslicer_InterstellarLibramEnchantment_GDB_726e ||
+						e.cardId === CardIds.AldorAttendant_AldorAttendantEnchantment,
+				).length +
+				2 *
+					state.opponentDeck.enchantments.filter(
+						(e) => e.cardId === CardIds.AldorTruthseeker_AldorTruthseekerEnchantment,
+					).length;
+			console.debug('[libram-reduction] opponent value', result, state.opponentDeck.enchantments);
+			return result;
+		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>
 				i18n.translateString('settings.decktracker.your-deck.counters.libram-reduction-label'),
