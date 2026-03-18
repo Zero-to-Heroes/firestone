@@ -70,6 +70,7 @@ export { DraconicHerald } from './draconic-herald';
 export { DragonscaleArmaments } from './dragonscale-armament';
 export { DragonsHoard } from './dragons-hoard';
 export { DrakeadonMongrel } from './drakeadon-mongrel';
+export { DrakonidOperative } from './drakonid-operative';
 export { DurnholdeImposter } from './durnholde-imposter';
 export { EarthenMight } from './earthen-might';
 export { EliseTheNavigator } from './elise-the-navigator';
