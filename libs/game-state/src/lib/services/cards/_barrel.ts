@@ -220,6 +220,7 @@ export { TalanjisLastStand } from './talanji-last-stand';
 export { TemporalAnomaly } from './temporal-anomaly';
 export { TheCurator } from './the-curator';
 export { TheEternalHold } from './the-eternal-hold';
+export { TheGalacticProjectionOrb } from './the-galactic-projection-orb';
 export { TheNighthold } from './the-nighthold';
 export { TheScourge } from './the-scourge';
 export { TheSunwell } from './the-sunwell';

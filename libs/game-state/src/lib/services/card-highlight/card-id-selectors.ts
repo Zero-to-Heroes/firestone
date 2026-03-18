@@ -1600,23 +1600,10 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), mech);
 		// The Galactic Projection Orb: Recast a random spell of each Cost you've cast this game (targets enemies if possible).
 		case CardIds.TheGalacticProjectionOrb_TOY_378:
-			return (input: SelectorInput): SelectorOutput => {
-				const spellsPlayed = input.deckState?.spellsPlayedThisMatch;
-				if (!spellsPlayed) {
-					return false;
-				}
-
-				const groupedByCost = groupByFunction((c: DeckCard) => c.refManaCost)(spellsPlayed);
-				const firstOfEachCost = Object.keys(groupedByCost)
-					.sort()
-					.map((key) => groupedByCost[key][0])
-					.map((c) => ({ entityId: c.entityId, cardId: c.cardId }));
-				return highlightConditions(
-					tooltip(and(side(inputSide), entityIs(...firstOfEachCost))),
-					and(side(inputSide), spellPlayedThisMatch),
-					and(side(inputSide), or(inHand, inDeck), spellExtended),
-				)(input);
-			};
+			return highlightConditions(
+				and(side(inputSide), spellPlayedThisMatch),
+				and(side(inputSide), or(inHand, inDeck), spellExtended),
+			);
 		case CardIds.GameMasterNemsy_TOY_524:
 			return and(side(inputSide), inDeck, demon);
 		case CardIds.GatherYourParty:
