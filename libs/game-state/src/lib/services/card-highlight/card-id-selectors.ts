@@ -2172,7 +2172,7 @@ export const cardIdSelector = (
 		case CardIds.KathrenaWinterwisp:
 			return and(side(inputSide), inDeck, beast);
 		case CardIds.Kazakusan_ONY_005:
-			return and(side(inputSide), or(inDeck, cardsPlayedThisMatch), dragon);
+			return and(side(inputSide), or(inDeck, inHand, cardsPlayedThisMatch), dragon);
 		case CardIds.Khazgoroth:
 		case CardIds.Khazgoroth_TitanforgeToken:
 			return and(side(inputSide), inDeck, weapon);
