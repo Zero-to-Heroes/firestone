@@ -100,6 +100,7 @@ export { GrimestreetInformant } from './grimestreet-informant';
 export { GuitarSoloist } from './guitar-soloist';
 export { HagathaTheWitchBewitchHeroic } from './hagatha-the-witch-bewitch';
 export { HemetFoamMarksman } from './hemet-foam-marksman';
+export { Hipster } from './hipster';
 export { HornOfAncients } from './horn-of-ancients';
 export { HungeringAncient } from './hungering-ancient';
 export { HuntersPack } from './hunters-pack';
