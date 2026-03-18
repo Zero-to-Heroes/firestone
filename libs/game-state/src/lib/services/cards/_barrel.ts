@@ -31,6 +31,7 @@ export { Blingtron3000 } from './blingtron-3000';
 export { BlinkFox } from './blink-fox';
 export { BloodDraw } from './blood-draw';
 export { BoneDrake } from './bone-drake';
+export { BoomSquad } from './boom-squad';
 export { Brightwing } from './brightwing';
 export { BrutishEndmaw } from './brutish-endmaw';
 export { Burgle } from './burgle';
