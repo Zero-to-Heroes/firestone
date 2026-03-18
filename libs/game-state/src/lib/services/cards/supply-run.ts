@@ -8,22 +8,10 @@ import { GeneratingCard, GuessInfoInput } from './_card.type';
 
 export const SupplyRun: GeneratingCard = {
 	cardIds: [CardIds.SupplyRun_CATA_820, CardIds.SupplyRun_SupplyRunToken_CATA_820t],
-	hasSequenceInfo: true,
 	publicTutor: true,
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
-		if (input.card.createdIndex === 0) {
-			return {
-				cardType: CardType.MINION,
-			};
-		} else if (input.card.createdIndex === 1) {
-			return {
-				cardType: CardType.MINION,
-			};
-		} else if (input.card.createdIndex === 2) {
-			return {
-				cardType: CardType.MINION,
-			};
-		}
-		return null;
+		return {
+			cardType: CardType.MINION,
+		};
 	},
 };
