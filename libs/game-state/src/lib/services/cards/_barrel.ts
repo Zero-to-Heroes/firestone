@@ -162,6 +162,7 @@ export { PilotedSkyGolem } from './piloted-sky-golem';
 export { PrimalDungeoneer } from './primal-dungeoneer';
 export { PrimalfinLookout } from './primalfin-lookout';
 export { PrismaticLens } from './prismatic-lens';
+export { PsychicConjurer } from './psychic-conjurer';
 export { QuestAccepted } from './quest-accepted';
 export { RaidingParty } from './raiding-party';
 export { RaptorNestNurse } from './raptor-nest-nurse';
