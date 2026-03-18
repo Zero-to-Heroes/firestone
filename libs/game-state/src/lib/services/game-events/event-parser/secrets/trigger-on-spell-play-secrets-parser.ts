@@ -16,6 +16,7 @@ export class TriggerOnSpellPlaySecretsParser implements EventParser {
 		CardIds.IceTrap_CORE_AV_226,
 		CardIds.BeaststalkerTavish_ImprovedIceTrapToken,
 		CardIds.PressurePlate,
+		CardIds.PressurePlate_CORE_ULD_152,
 		CardIds.CounterspellLegacy,
 		CardIds.CounterspellCore,
 		CardIds.CounterspellVanilla,
@@ -116,6 +117,7 @@ export class TriggerOnSpellPlaySecretsParser implements EventParser {
 		const deckWithBoard = isSpellPlayedByPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		if (deckWithBoard.board.length === 0) {
 			secretsWeCantRuleOut.push(CardIds.PressurePlate);
+			secretsWeCantRuleOut.push(CardIds.PressurePlate_CORE_ULD_152);
 		}
 
 		const isBoardFull = deckWithSecretToCheck.board.length === 7;
