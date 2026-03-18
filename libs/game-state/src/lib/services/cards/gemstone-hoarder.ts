@@ -4,15 +4,21 @@
 
 import { CardIds } from '@firestone-hs/reference-data';
 import { GuessedInfo } from '../../models/deck-card';
-import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
+import { GeneratingCard, GuessInfoInput } from './_card.type';
 
-export const GemstoneHoarder: GeneratingCard & StaticGeneratingCard = {
+export const GemstoneHoarder: GeneratingCard = {
 	cardIds: [CardIds.GemstoneHoarder_CATA_897],
 	publicCreator: true,
-	dynamicPool: (input: StaticGeneratingCardInput) => {
-		return [];
-	},
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
-		return null;
+		const hoarder =
+			input.deckState.findCard(input.creatorEntityId)?.card ??
+			input.opponentDeckState.findCard(input.creatorEntityId)?.card;
+		const relatedCardIds = hoarder?.relatedCardIds;
+		if (!relatedCardIds?.length) {
+			return null;
+		}
+		return {
+			possibleCards: relatedCardIds,
+		};
 	},
 };
