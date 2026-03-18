@@ -1,24 +1,14 @@
 // Boom Squad (YOD_023)
 // 1-cost Warrior Spell
 // "Discover a Lackey, Mech, or Dragon."
-import { CardIds, CardType, hasCorrectTribe, Race } from '@firestone-hs/reference-data';
+import { CardIds, CardType, GameTag, hasCorrectTribe, Race } from '@firestone-hs/reference-data';
 import { GuessedInfo } from '../../models/deck-card';
 import { canBeDiscoveredByClass, hasCorrectType } from '../../related-cards/dynamic-pools';
 import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
 
-const LACKEY_CARD_IDS: readonly string[] = [
-	CardIds.GoblinLackey,
-	CardIds.EtherealLackey,
-	CardIds.FacelessLackey,
-	CardIds.KoboldLackey,
-	CardIds.WitchyLackey,
-	CardIds.TitanicLackey,
-	CardIds.DraconicLackey,
-];
-
-const isLackeyOrMechOrDragon = (c: { id?: string; type?: string }, currentClass: string): boolean => {
-	if (LACKEY_CARD_IDS.includes(c.id ?? '')) {
+const isLackeyOrMechOrDragon = (c: { id?: string; type?: string; mechanics?: string[] }, currentClass: string): boolean => {
+	if (c.mechanics?.includes(GameTag[GameTag.EVILZUG])) {
 		return true;
 	}
 	return (
