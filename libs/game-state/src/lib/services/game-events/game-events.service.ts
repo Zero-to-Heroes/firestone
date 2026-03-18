@@ -975,6 +975,13 @@ export class GameEvents {
 					}),
 				);
 				break;
+			case 'PLAYER_HERALDED':
+				this.doEventDispatch(
+					GameEvent.build(GameEvent.PLAYER_HERALDED, gameEvent, {
+						value: gameEvent.Value?.AdditionalProps?.Value,
+					}),
+				);
+				break;
 			case 'OVERLOADED_CRYSTALS_CHANGED':
 				this.doEventDispatch(
 					GameEvent.build(GameEvent.OVERLOADED_CRYSTALS_CHANGED, gameEvent, {

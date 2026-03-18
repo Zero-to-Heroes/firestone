@@ -31,9 +31,14 @@ const getHeraldAmount = (gameState: GameState, side: 'player' | 'opponent'): num
 	if (!getColossalForSide(gameState, side)) {
 		return null;
 	}
+	const deck = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
+	const eventCount = deck?.heraldCountThisGame ?? 0;
 	const playerState = side === 'player' ? gameState.fullGameState?.Player : gameState.fullGameState?.Opponent;
-	const amount = playerState?.PlayerEntity?.tags?.find((t) => t.Name === GameTag.HERALD_COLOSSAL_AMOUNT)?.Value;
-	return amount && amount > 0 ? amount : null;
+	const fullStateCount = playerState?.PlayerEntity?.tags?.find((t) => t.Name === GameTag.HERALD_COLOSSAL_AMOUNT)
+		?.Value;
+	// Prefer event-based count for real-time updates; fall back to fullGameState for replays/rewinds
+	const amount = eventCount > 0 ? eventCount : (fullStateCount ?? null);
+	return amount != null && amount > 0 ? amount : null;
 };
 
 // Cataclysm Herald counter: tracks how many times each player has Heralded their class Colossal.

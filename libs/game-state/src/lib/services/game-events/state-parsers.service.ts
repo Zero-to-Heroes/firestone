@@ -112,6 +112,7 @@ import { GameSettingsParser } from './event-parser/game-settings-parser';
 import { GameStartParser } from './event-parser/game-start-parser';
 import { GameStateUpdateParser } from './event-parser/game-state-update-parser';
 import { GlobalMinionEffectParser } from './event-parser/global-minion-effect-parser';
+import { HeraldParser } from './event-parser/herald-parser';
 import { HeroChangedParser } from './event-parser/hero-changed-parser';
 import { HeroPowerChangedParser } from './event-parser/hero-power-changed-parser';
 import { HeroPowerDamageParser } from './event-parser/hero-power-damage-parser';
@@ -304,6 +305,7 @@ export class GameStateParsersService {
 			[GameEvent.COPIED_FROM_ENTITY_ID]: [new CopiedFromEntityIdParser(this.helper, this.allCards)],
 			[GameEvent.CORPSES_CHANGED]: [new CorpsesParser()],
 			[GameEvent.CORPSES_SPENT_THIS_GAME_CHANGED]: [new CorpsesSpentThisGameParser()],
+			[GameEvent.PLAYER_HERALDED]: [new HeraldParser()],
 			[GameEvent.COST_CHANGED]: [new CostChangedParser(this.helper, this.allCards)],
 			[GameEvent.CREATE_CARD_IN_DECK]: [
 				new CreateCardInDeckParser(this.helper, this.allCards, this.i18n),

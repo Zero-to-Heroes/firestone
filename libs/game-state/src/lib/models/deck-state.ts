@@ -83,6 +83,7 @@ export class DeckState {
 	readonly overloadedCrystals: number = 0;
 	readonly corpsesGainedThisGame: number = 0;
 	readonly corpsesSpent: number = 0;
+	readonly heraldCountThisGame: number = 0;
 	readonly cardsShuffledIntoDeck: number = 0;
 	readonly abyssalCurseHighestValue: number = 0;
 	readonly spellsPlayedThisMatch: readonly DeckCard[] = [];
