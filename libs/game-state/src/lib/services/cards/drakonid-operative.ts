@@ -11,10 +11,16 @@ export const DrakonidOperative: GeneratingCard & StaticGeneratingCard = {
 	cardIds: [CardIds.DrakonidOperative, CardIds.DrakonidOperativeCore],
 	publicCreator: true,
 	dynamicPool: (input: StaticGeneratingCardInput) => {
-		return input.inputOptions.opponentDeckState.deck.map((c) => c.cardId).filter((c) => !!c);
+		return input.inputOptions.opponentDeckState.deck
+			.map((c) => c.cardId)
+			.filter((c) => !!c)
+			.filter((c, index, self) => self.indexOf(c) === index);
 	},
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
-		const possibleCards = input.opponentDeckState.deck.map((c) => c.cardId).filter((c) => !!c);
+		const possibleCards = input.opponentDeckState.deck
+			.map((c) => c.cardId)
+			.filter((c) => !!c)
+			.filter((c, index, self) => self.indexOf(c) === index);
 		return {
 			possibleCards: possibleCards,
 		};
