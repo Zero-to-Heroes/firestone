@@ -68,6 +68,7 @@ export { DiscoveryOfMagic } from './discovery-of-magic';
 export { DisposableAcolytes } from './disposable-acolytes';
 export { DraconicHerald } from './draconic-herald';
 export { DragonscaleArmaments } from './dragonscale-armament';
+export { DragonsHoard } from './dragons-hoard';
 export { DrakeadonMongrel } from './drakeadon-mongrel';
 export { DurnholdeImposter } from './durnholde-imposter';
 export { EarthenMight } from './earthen-might';
