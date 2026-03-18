@@ -24,7 +24,7 @@ describe('TheGalacticProjectionOrb', () => {
 		},
 	});
 
-	it('returns all unique spells played this match sorted by cost', () => {
+	it('returns unique spells sorted by cost while preserving different spells of the same cost', () => {
 		const result = TheGalacticProjectionOrb.dynamicPool(
 			buildInput([
 				DeckCard.create({ cardId: 'spell-3-b', refManaCost: 3 }),
@@ -36,5 +36,23 @@ describe('TheGalacticProjectionOrb', () => {
 		);
 
 		expect(result).toEqual(['spell-1', 'spell-2', 'spell-3-b', 'spell-3-a']);
+	});
+
+	it('returns an empty pool when no spells have been played', () => {
+		const result = TheGalacticProjectionOrb.dynamicPool(buildInput([]));
+
+		expect(result).toEqual([]);
+	});
+
+	it('ignores entries without a card id and handles missing mana costs', () => {
+		const result = TheGalacticProjectionOrb.dynamicPool(
+			buildInput([
+				DeckCard.create({ cardId: undefined as any, refManaCost: 7 }),
+				DeckCard.create({ cardId: 'spell-unknown-cost' }),
+				DeckCard.create({ cardId: 'spell-2', refManaCost: 2 }),
+			]),
+		);
+
+		expect(result).toEqual(['spell-unknown-cost', 'spell-2']);
 	});
 });

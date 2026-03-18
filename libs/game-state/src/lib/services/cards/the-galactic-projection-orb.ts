@@ -1,4 +1,3 @@
-/* eslint-disable no-mixed-spaces-and-tabs */
 /**
  * The Galactic Projection Orb (TOY_378) - Mage Spell (10 mana)
  * Recast a random spell of each Cost you've cast this game (targets enemies if possible).
