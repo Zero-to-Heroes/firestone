@@ -1,6 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { BoosterType, boosterIdToBoosterName, boosterIdToSetId, sets } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';
+import { CollectionBootstrapService, CollectionManager, getPackDustValue } from '@firestone/collection/services';
 import {
 	CATCH_UP_PACK_IDS,
 	CLASS_PACKS,
@@ -14,8 +15,6 @@ import {
 } from '@firestone/collection/view';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { CollectionManager, getPackDustValue } from '@firestone/collection/services';
-import { CollectionBootstrapService } from '@firestone/collection/services';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { LocalizationFacadeService } from '../../../js/services/localization-facade.service';
 import { sortByProperties, sumOnArray } from '../../../js/services/utils';
@@ -159,7 +158,11 @@ export class CollectionPackStatsComponent extends AbstractSubscriptionComponent 
 							nextLegendary: buildPityTimer(
 								packsForBoosterId,
 								'legendary',
-								GOLDEN_SET_PACKS.includes(boosterId) ? 'GOLDEN' : 'NORMAL',
+								GOLDEN_SET_PACKS.includes(boosterId) ||
+									GOLDEN_YEAR_PACKS.includes(boosterId) ||
+									GOLDEN_FORMAT_PACKS.includes(boosterId)
+									? 'GOLDEN'
+									: 'NORMAL',
 								boosterId,
 								openedPacks,
 								pityTimerReset,
@@ -167,7 +170,11 @@ export class CollectionPackStatsComponent extends AbstractSubscriptionComponent 
 							nextEpic: buildPityTimer(
 								packsForBoosterId,
 								'epic',
-								GOLDEN_SET_PACKS.includes(boosterId) ? 'GOLDEN' : 'NORMAL',
+								GOLDEN_SET_PACKS.includes(boosterId) ||
+									GOLDEN_YEAR_PACKS.includes(boosterId) ||
+									GOLDEN_FORMAT_PACKS.includes(boosterId)
+									? 'GOLDEN'
+									: 'NORMAL',
 								boosterId,
 								openedPacks,
 								pityTimerReset,
