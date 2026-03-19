@@ -1,7 +1,9 @@
 .arena-tip-popup {
 	display: flex;
+	flex-direction: column;
 	background: var(--color-4);
-	background-image: radial-gradient(50% 50% at 50% 50%, rgba(94, 11, 70, 0.7) 0%, rgba(43, 24, 39, 0.7) 100%),
+	background-image:
+		radial-gradient(50% 50% at 50% 50%, rgba(94, 11, 70, 0.7) 0%, rgba(43, 24, 39, 0.7) 100%),
 		url('https://static.zerotoheroes.com/hearthstone/asset/firestone/images/backgrounds/decktracker_bg.png');
 	background-size: 100%;
 	background-position: 50% 50%;
@@ -25,6 +27,27 @@
 
 	min-width: 300px;
 	max-width: 450px;
+
+	.tip-meta {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+		margin-top: 10px;
+		padding-top: 8px;
+		border-top: 1px solid rgba(255, 255, 255, 0.2);
+		font-size: 11px;
+		color: var(--default-text-color);
+		opacity: 0.9;
+
+		.author {
+			font-weight: 600;
+			color: var(--default-title-color);
+		}
+
+		.patch-info {
+			opacity: 0.8;
+		}
+	}
 
 	.tip-content {
 		width: 100%;

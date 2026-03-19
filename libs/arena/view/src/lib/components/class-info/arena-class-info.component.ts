@@ -6,7 +6,7 @@ import { SimpleBarChartData } from '@firestone/shared/common/view';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { MarkdownService } from 'ngx-markdown';
 import { ArenaTipPopupComponent } from './arena-tip-popup.component';
-import { ArenaClassInfo } from './model';
+import { ArenaClassInfo, ArenaClassInfoTip } from './model';
 
 const TIP_PREVIEW_LENGTH = 40;
 
@@ -92,7 +92,7 @@ export class ArenaClassInfoComponent {
 	tipFull: string | null = null;
 
 	tipPopupComponentType: ComponentType<ArenaTipPopupComponent> = ArenaTipPopupComponent;
-	tipPopupInput: { tip: string } | null = null;
+	tipPopupInput: { tip: string; author?: string; patchNumber?: number; date?: string } | null = null;
 
 	constructor(
 		private readonly i18n: ILocalizationService,
@@ -101,18 +101,23 @@ export class ArenaClassInfoComponent {
 		private readonly cdr: ChangeDetectorRef,
 	) {}
 
-	private async setTip(tip: string | null | undefined) {
-		if (!tip) {
+	private async setTip(tipData: ArenaClassInfoTip | null | undefined) {
+		if (!tipData?.tip) {
 			this.tipPreview = '';
 			this.tipFull = null;
 			this.tipPopupInput = null;
 		} else {
-			const html = await this.markdown.parse(tip);
+			const html = await this.markdown.parse(tipData.tip);
 			const plainText = html ? stripHtml(html) : '';
 			if (plainText.length > TIP_PREVIEW_LENGTH) {
 				this.tipPreview = plainText.slice(0, TIP_PREVIEW_LENGTH) + '...';
 				this.tipFull = html;
-				this.tipPopupInput = { tip: html };
+				this.tipPopupInput = {
+					tip: html,
+					author: tipData.author,
+					patchNumber: tipData.patchNumber,
+					date: tipData.date,
+				};
 			} else {
 				this.tipPreview = plainText;
 				this.tipFull = null;
