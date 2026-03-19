@@ -13,6 +13,7 @@ import {
 	ArenaMetaHeroStrategiesService,
 	IArenaDraftManagerService,
 } from '@firestone/arena/common';
+import { PatchesConfigService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, shareReplay, tap } from 'rxjs';
@@ -41,21 +42,23 @@ export class ArenaHeroSelectionComponent extends AbstractSubscriptionComponent i
 		private readonly i18n: ILocalizationService,
 		private readonly allCards: CardsFacadeService,
 		private readonly arenaMetaHeroStrategies: ArenaMetaHeroStrategiesService,
+		private readonly patches: PatchesConfigService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.draftManager, this.arenaClassStats, this.arenaMetaHeroStrategies);
+		await waitForReady(this.draftManager, this.arenaClassStats, this.arenaMetaHeroStrategies, this.patches);
 		console.debug('[arena-hero-selection] ready');
 
 		const tiers$ = combineLatest([
 			this.arenaClassStats.classStats$$,
 			this.arenaMetaHeroStrategies.strategies$$,
+			this.patches.config$$,
 		]).pipe(
 			tap((info) => console.debug('[arena-class-tier-list] received info a', info)),
-			this.mapData(([stats, strategies]) => {
-				return buildArenaClassInfoTiers(stats?.stats, strategies?.heroes, null, this.i18n);
+			this.mapData(([stats, strategies, config]) => {
+				return buildArenaClassInfoTiers(stats?.stats, strategies?.heroes, null, config, this.i18n);
 			}),
 			shareReplay(1),
 			tap((info) => console.debug('[arena-class-tier-list] received info 1', info)),

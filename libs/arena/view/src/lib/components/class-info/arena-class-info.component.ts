@@ -92,7 +92,7 @@ export class ArenaClassInfoComponent {
 	tipFull: string | null = null;
 
 	tipPopupComponentType: ComponentType<ArenaTipPopupComponent> = ArenaTipPopupComponent;
-	tipPopupInput: { tip: string; author?: string; patchNumber?: number; date?: string } | null = null;
+	tipPopupInput: ArenaClassInfoTip | null = null;
 
 	constructor(
 		private readonly i18n: ILocalizationService,
@@ -116,6 +116,7 @@ export class ArenaClassInfoComponent {
 					tip: html,
 					author: tipData.author,
 					patchNumber: tipData.patchNumber,
+					patch: tipData.patch,
 					date: tipData.date,
 				};
 			} else {
