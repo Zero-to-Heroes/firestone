@@ -76,6 +76,7 @@ export class ArenaHeroSelectionComponent extends AbstractSubscriptionComponent i
 							cardId: option,
 							winrate: classStat?.winrate,
 							tier: tier?.id,
+							tip: classStat?.tip,
 						} as ArenaHeroOption;
 					}) ?? [],
 			),

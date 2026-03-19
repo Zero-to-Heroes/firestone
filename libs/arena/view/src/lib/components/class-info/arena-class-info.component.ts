@@ -2,11 +2,12 @@
 import { ComponentType } from '@angular/cdk/portal';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { getDefaultHeroDbfIdForClass } from '@firestone-hs/reference-data';
+import { ArenaClassInfoTip } from '@firestone/arena/common';
 import { SimpleBarChartData } from '@firestone/shared/common/view';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { MarkdownService } from 'ngx-markdown';
 import { ArenaTipPopupComponent } from './arena-tip-popup.component';
-import { ArenaClassInfo, ArenaClassInfoTip } from './model';
+import { ArenaClassInfo } from './model';
 
 const TIP_PREVIEW_LENGTH = 40;
 

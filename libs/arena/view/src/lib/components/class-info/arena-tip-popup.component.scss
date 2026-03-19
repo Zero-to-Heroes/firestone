@@ -2,9 +2,7 @@
 	display: flex;
 	flex-direction: column;
 	background: var(--color-4);
-	background-image:
-		radial-gradient(50% 50% at 50% 50%, rgba(94, 11, 70, 0.7) 0%, rgba(43, 24, 39, 0.7) 100%),
-		url('https://static.zerotoheroes.com/hearthstone/asset/firestone/images/backgrounds/decktracker_bg.png');
+	background-image: var(--window-background-image);
 	background-size: 100%;
 	background-position: 50% 50%;
 	background-repeat: no-repeat;

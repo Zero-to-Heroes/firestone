@@ -1,12 +1,5 @@
 import { WinsDistribution } from '@firestone-hs/arena-stats';
-
-export interface ArenaClassInfoTip {
-	readonly tip: string;
-	readonly author?: string;
-	readonly patchNumber?: number;
-	readonly patch?: string;
-	readonly date?: string;
-}
+import { ArenaClassInfoTip } from '@firestone/arena/common';
 
 export interface ArenaClassTier {
 	readonly id: string;
