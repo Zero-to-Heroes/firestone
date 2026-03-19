@@ -10,7 +10,7 @@ import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingC
 import { filterCards } from './utils';
 
 export const BattleVicar: GeneratingCard & StaticGeneratingCard = {
-	cardIds: [CardIds.BattleVicar],
+	cardIds: [CardIds.BattleVicar, CardIds.BattleVicar_CORE_ONY_022],
 	publicCreator: true,
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
 		const currentClass = input.deckState.getCurrentClass();

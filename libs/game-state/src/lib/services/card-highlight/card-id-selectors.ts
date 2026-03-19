@@ -1005,6 +1005,9 @@ export const cardIdSelector = (
 				and(side(inputSide), inDeck, naga),
 				and(side(inputSide), or(inHand, inDeck), spellExtended),
 			);
+		// Cryosleep (TLC_440): Deal 4 damage and draw a card. Kindred: Draw another.
+		case CardIds.Cryosleep_TLC_440:
+			return and(side(inputSide), or(inHand, inDeck), elemental);
 		case CardIds.CrystalsmithCultist:
 			return and(side(inputSide), or(inDeck, inHand), shadow);
 		case CardIds.Crystology:
@@ -4165,6 +4168,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), fromAnotherClass);
 		// Veteran Warmedic: After you cast a Holy spell, summon a 2/2 Medic with Lifesteal.
 		case CardIds.VeteranWarmedic:
+		case CardIds.VeteranWarmedic_CORE_BAR_878:
 			return and(side(inputSide), or(inHand, inDeck), holy, spellExtended);
 		case CardIds.VengefulSpirit_BAR_328:
 			return and(side(inputSide), inDeck, minion, deathrattle);
@@ -4438,6 +4442,8 @@ export const cardIdSelector = (
 		case CardIds.ShiverTheirTimbers:
 		case CardIds.ToyBoat_TOY_505:
 		case CardIds.Skybarge:
+		case CardIds.SkyRaider:
+		case CardIds.SkyRaider_CORE_DRG_024:
 		case CardIds.MrSmite_DED_006:
 		case CardIds.PirateAdmiralHooktusk:
 			return and(side(inputSide), or(inHand, inDeck), pirate);

@@ -319,6 +319,7 @@ const getDynamicRelatedCardIdsInternal = (
 				(c) => hasCost(c, '==', targetCost) && canBeDiscoveredByClass(c, options.currentClass),
 			);
 		case CardIds.Astromancer:
+		case CardIds.Astromancer_CORE_BOT_256:
 			return filterCards(
 				allCards,
 				options,
@@ -416,6 +417,7 @@ const getDynamicFilters = (
 			return (c) => hasCorrectRune(c, DkruneTypes.FROSTRUNE);
 
 		case CardIds.CorpseFarm_WW_374:
+		case CardIds.CorpseFarm_CORE_WW_374:
 			return (c) =>
 				hasCorrectType(c, CardType.MINION) &&
 				hasCost(
@@ -867,6 +869,7 @@ const getDynamicFilters = (
 		case CardIds.RelentlessWrathguard_GDB_132:
 		case CardIds.DemonicDynamics:
 		case CardIds.Netherwalker:
+		case CardIds.Netherwalker_CORE_BT_321:
 			return (c) =>
 				hasCorrectType(c, CardType.MINION) &&
 				hasCorrectTribe(c, Race.DEMON) &&
@@ -934,6 +937,7 @@ const getDynamicFilters = (
 		case CardIds.RangerGeneralSylvanas_RangerCaptainAlleriaToken_TIME_609t1:
 		case CardIds.Renew_BT_252:
 		case CardIds.RunedOrb_BAR_541:
+		case CardIds.RunedOrb_CORE_BAR_541:
 		case CardIds.Spellcoiler:
 		case CardIds.StewardOfScrolls_SCH_245:
 		case CardIds.SuspiciousAlchemist:
@@ -1216,6 +1220,7 @@ const getDynamicFilters = (
 				hasCorrectType(c, CardType.MINION) &&
 				hasCost(c, '==', (options?.deckState?.hero?.maxMana ?? 0) >= 10 ? 8 : 3);
 		case CardIds.IronforgePortal:
+		case CardIds.IronforgePortal_CORE_WON_337:
 		case CardIds.IronforgePortal_WON_337:
 		case CardIds.ThreshridersBlessing_TLC_477:
 		case CardIds.GravedawnVoidbulb_TLC_815:
@@ -1848,6 +1853,7 @@ const doesSummonInPlay = (sourceCardId: string): boolean => {
 		case CardIds.ChaosCreation_DEEP_031:
 		case CardIds.ContainmentUnit:
 		case CardIds.CorpseFarm_WW_374:
+		case CardIds.CorpseFarm_CORE_WW_374:
 		case CardIds.Cremate_FIR_900: // Summons minions
 		case CardIds.CrystalBroker: // Summons minions based on mana
 		case CardIds.DangerousVariant_TIME_049:
