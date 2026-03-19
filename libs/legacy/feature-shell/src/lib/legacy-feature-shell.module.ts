@@ -342,6 +342,7 @@ import { LotteryWidgetComponent } from '@components/lottery/lottery.component';
 import { MainWindowComponent } from '@components/main-window.component';
 import { ArenaCardSelectionWidgetWrapperComponent } from '@components/overlays/arena-card-selection-widget-wrapper.component';
 import { ArenaDecktrackerOocWidgetWrapperComponent } from '@components/overlays/arena-decktracker-ooc-widget-wrapper.component';
+import { ArenaHeroSelectedWidgetWrapperComponent } from '@components/overlays/arena-hero-selected-widget-wrapper.component';
 import { ArenaHeroSelectionWidgetWrapperComponent } from '@components/overlays/arena-hero-selection-widget-wrapper.component';
 import { ArenaMulliganDeckWidgetWrapperComponent } from '@components/overlays/arena-mulligan-deck-widget-wrapper.component';
 import { ArenaMulliganWidgetWrapperComponent } from '@components/overlays/arena-mulligan-widget-wrapper.component';
@@ -428,6 +429,8 @@ import {
 	MAIN_WINDOW_STORE_SERVICE_TOKEN,
 	MainwindowCommonModule,
 	MainWindowStateFacadeService,
+	MainWindowStoreService,
+	StoreBootstrapService,
 } from '@firestone/mainwindow/common';
 import { MainwindowViewModule } from '@firestone/mainwindow/view';
 import { MemoryModule } from '@firestone/memory';
@@ -590,8 +593,6 @@ import { LocalizationService } from './js/services/localization.service';
 import { LogRegisterService } from './js/services/log-register.service';
 import { LiveStreamsService } from './js/services/mainwindow/live-streams.service';
 import { OutOfCardsService } from './js/services/mainwindow/out-of-cards.service';
-import { StoreBootstrapService } from '@firestone/mainwindow/common';
-import { MainWindowStoreService } from '@firestone/mainwindow/common';
 import { TwitchPresenceService } from './js/services/mainwindow/twitch-presence.service';
 import { MercenariesSynergiesHighlightService } from './js/services/mercenaries/highlights/mercenaries-synergies-highlight.service';
 import { MercenariesStoreService } from './js/services/mercenaries/mercenaries-store.service';
@@ -1199,6 +1200,7 @@ try {
 		ChoosingCardBgsTimewarpedOptionComponent,
 
 		ArenaHeroSelectionWidgetWrapperComponent,
+		ArenaHeroSelectedWidgetWrapperComponent,
 		ArenaCardSelectionWidgetWrapperComponent,
 		ArenaDecktrackerOocWidgetWrapperComponent,
 		ArenaDecktrackerOocComponent,
