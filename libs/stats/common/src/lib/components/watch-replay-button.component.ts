@@ -8,7 +8,7 @@ import {
 	Input,
 	Optional,
 } from '@angular/core';
-import { InGameReplayService, IN_GAME_REPLAY_ERROR_MESSAGES } from '@firestone/mods/common';
+import { IN_GAME_REPLAY_ERROR_MESSAGES, InGameReplayService } from '@firestone/mods/common';
 import { ENABLE_IN_GAME_REPLAY } from '@firestone/shared/common/service';
 import {
 	ADS_SERVICE_TOKEN,
@@ -21,7 +21,7 @@ import {
 } from '@firestone/shared/framework/core';
 import { GameStatsLoaderService } from '@firestone/stats/data-access';
 
-const IN_GAME_REPLAY_URL_PREFIX = 'firestoneapp://replay/in-game?reviewId=';
+const IN_GAME_REPLAY_URL_PREFIX = 'https://www.firestoneapp.com/in-game-replay/';
 const WEB_REPLAY_URL_PREFIX = 'https://replays.firestoneapp.com/?reviewId=';
 
 @Component({
@@ -183,9 +183,8 @@ export class WatchReplayButtonComponent {
 			if (result !== 'started') {
 				const translationKey = `app.replays.in-game.error.${result}`;
 				const translated = this.i18n.translateString(translationKey);
-				this.inGameError = translated !== translationKey
-					? translated
-					: (IN_GAME_REPLAY_ERROR_MESSAGES[result] ?? translated);
+				this.inGameError =
+					translated !== translationKey ? translated : (IN_GAME_REPLAY_ERROR_MESSAGES[result] ?? translated);
 				this.errorTimeout = setTimeout(() => this.dismissError(), 5000);
 				this.analytics.trackEvent('replay-in-game-error', { error: result as string });
 			} else {
