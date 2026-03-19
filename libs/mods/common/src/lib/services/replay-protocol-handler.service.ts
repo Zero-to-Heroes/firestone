@@ -34,12 +34,13 @@ export class ReplayProtocolHandlerService {
 	private init() {
 		// Handle when app is already running and receives the link
 		const href = decodeURIComponent(window.location.href);
+		console.debug('[replay-protocol] init href', href);
 		if (href.includes('source=relaunch')) {
-			console.debug('[replay-protocol] relaunch source detected, skipping');
-			return;
-		}
-		if (href.includes(REPLAY_IN_GAME_PREFIX)) {
+			console.debug('[replay-protocol] relaunch source detected, skipping ' + href);
+		} else if (href.includes(REPLAY_IN_GAME_PREFIX)) {
+			console.debug('[replay-protocol] in-game replay prefix detected', href);
 			const reviewId = this.extractReviewId(href);
+			console.debug('[replay-protocol] reviewId', reviewId);
 			if (reviewId) {
 				this.handleReplayLink(reviewId);
 			}
@@ -47,6 +48,7 @@ export class ReplayProtocolHandlerService {
 
 		// Handle when app is launched via the link
 		this.ow.addAppLaunchTriggeredListener(async (info) => {
+			console.debug('[replay-protocol] app launch triggered', info);
 			if (info?.origin !== 'urlscheme') {
 				return;
 			}
@@ -61,6 +63,7 @@ export class ReplayProtocolHandlerService {
 				await this.handleReplayLink(reviewId);
 			}
 		});
+		console.debug('[replay-protocol] init complete');
 	}
 
 	private extractReviewId(urlOrParam: string): string | null {

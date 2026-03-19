@@ -27,8 +27,10 @@ export class ColiseumAppComponent implements AfterContentInit, AfterViewInit {
 	bgsSimulation: GameSample | null;
 	initialLocation: ReplayLocation;
 	powerLogKey: string | null = null;
+	showOpenInFirestoneHint = false;
 
 	private ready$$ = new BehaviorSubject<boolean>(false);
+	private openInFirestoneHintTimeout: ReturnType<typeof setTimeout> | null = null;
 
 	private bgsSimulationId: string;
 	private bgsSimulationString: string;
@@ -122,10 +124,10 @@ export class ColiseumAppComponent implements AfterContentInit, AfterViewInit {
 		const reviewQuery = this.reviewId
 			? `reviewId=${this.reviewId}&`
 			: this.bgsSimulationString
-			? `bgsSimulation=${this.bgsSimulationString}&`
-			: this.bgsSimulationId
-			? `bgsSimulationId=${this.bgsSimulationId}&`
-			: '';
+				? `bgsSimulation=${this.bgsSimulationString}&`
+				: this.bgsSimulationId
+					? `bgsSimulationId=${this.bgsSimulationId}&`
+					: '';
 
 		const queryString = `${reviewQuery}turn=${location.turn}&action=${location.action}`;
 		const newUrl = `${baseUrl}?${queryString}`;
@@ -151,8 +153,18 @@ export class ColiseumAppComponent implements AfterContentInit, AfterViewInit {
 
 	openInFirestone() {
 		if (this.reviewId) {
-			window.location.href = `firestoneapp://replay/in-game?reviewId=${this.reviewId}`;
+			window.location.href = `firestoneapp://replay/in-game?reviewId=${this.reviewId}&source=coliseum`;
 			this.analytics.trackEvent('coliseum-open-in-firestone');
+
+			this.showOpenInFirestoneHint = true;
+			if (this.openInFirestoneHintTimeout) {
+				clearTimeout(this.openInFirestoneHintTimeout);
+			}
+			this.openInFirestoneHintTimeout = setTimeout(() => {
+				this.showOpenInFirestoneHint = false;
+				this.openInFirestoneHintTimeout = null;
+				this.cdr.markForCheck();
+			}, 5000);
 		}
 	}
 
