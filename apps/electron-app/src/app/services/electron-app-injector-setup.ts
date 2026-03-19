@@ -28,6 +28,7 @@ import {
 	ArenaDeckStatsService,
 	ArenaDraftManagerService,
 	ArenaInfoService,
+	ArenaMetaHeroStrategiesService,
 	ArenaMulliganGuideService,
 	ArenaNavigationService,
 } from '@firestone/arena/common';
@@ -996,6 +997,9 @@ export const buildAppInjector = () => {
 
 	const hotkeyFacadeService = new HotkeyFacadeService(windowManager);
 	electronInjector.register(HotkeyFacadeService, hotkeyFacadeService);
+
+	const arenaMetaHeroStrategiesService = new ArenaMetaHeroStrategiesService(windowManager);
+	electronInjector.register(ArenaMetaHeroStrategiesService, arenaMetaHeroStrategiesService);
 
 	electronInjector.ready = true;
 	return electronInjector;

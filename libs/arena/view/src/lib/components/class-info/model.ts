@@ -12,4 +12,5 @@ export interface ArenaClassInfo {
 	readonly dataPoints: number;
 	readonly winrate: number;
 	readonly placementDistribution: readonly WinsDistribution[];
+	readonly tip?: string | null;
 }

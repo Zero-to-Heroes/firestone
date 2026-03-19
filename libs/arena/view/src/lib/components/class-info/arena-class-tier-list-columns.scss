@@ -2,6 +2,7 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	flex-shrink: 0;
 }
 
 .portrait {
@@ -19,4 +20,11 @@
 .placement {
 	width: 200px;
 	margin-left: 30px;
+}
+
+.tip {
+	flex-grow: 1;
+	justify-content: flex-start;
+	margin-left: 70px;
+	flex-shrink: 1;
 }
