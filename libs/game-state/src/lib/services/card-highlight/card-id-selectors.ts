@@ -1269,6 +1269,7 @@ export const cardIdSelector = (
 		case CardIds.StonetalonStriker_CATA_551:
 		case CardIds.EbonscaleScout_CATA_552:
 		case CardIds.Ebyssian_CATA_553:
+		case CardIds.Ebyssian_EbyssianToken_CATA_553t:
 			return and(side(inputSide), or(inHand, inDeck), dragon);
 		case CardIds.EchoOfMedivh:
 			return and(side(inputSide), or(inDeck, inHand), minion);
