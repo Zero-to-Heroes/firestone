@@ -2,6 +2,7 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { ArenaClassStat, WinsDistribution } from '@firestone-hs/arena-stats';
 import { ArenaHeroAdvice } from '@firestone-hs/content-craetor-input';
 import { ArenaClassStatsService, ArenaMetaHeroStrategiesService } from '@firestone/arena/common';
+import { PatchesConfig, PatchesConfigService } from '@firestone/shared/common/service';
 import {
 	AbstractSubscriptionComponent,
 	getStandardDeviation,
@@ -64,24 +65,35 @@ export class ArenaClassTierListComponent extends AbstractSubscriptionComponent i
 		private readonly arenaClassStats: ArenaClassStatsService,
 		private readonly i18n: ILocalizationService,
 		private readonly arenaMetaHeroStrategies: ArenaMetaHeroStrategiesService,
+		private readonly patches: PatchesConfigService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.arenaClassStats, this.arenaMetaHeroStrategies);
+		await waitForReady(this.arenaClassStats, this.arenaMetaHeroStrategies, this.patches);
 
 		console.debug('[arena-class-tier-list] after content init');
-		this.tiers$ = combineLatest(this.arenaClassStats.classStats$$, this.arenaMetaHeroStrategies.strategies$$).pipe(
-			filter(([stats]) => !!stats?.stats),
-			this.mapData(([stats, strategies]) => {
+		this.tiers$ = combineLatest([
+			this.arenaClassStats.classStats$$,
+			this.arenaMetaHeroStrategies.strategies$$,
+			this.patches.config$$,
+		]).pipe(
+			filter(([stats, strategies, config]) => !!stats?.stats && !!strategies?.heroes && !!config),
+			this.mapData(([stats, strategies, patchesConfig]) => {
 				const averageWinsDistribution = this.buildAverageWinsDistribution(stats?.stats);
 				console.debug(
 					'averageWinsDistribution',
 					averageWinsDistribution,
 					averageWinsDistribution.map((d) => d.total).reduce((a, b) => a + b, 0),
 				);
-				return buildArenaClassInfoTiers(stats?.stats, strategies?.heroes, averageWinsDistribution, this.i18n);
+				return buildArenaClassInfoTiers(
+					stats?.stats,
+					strategies?.heroes,
+					averageWinsDistribution,
+					patchesConfig,
+					this.i18n,
+				);
 			}),
 			shareReplay(1),
 			tap((info) => console.debug('[arena-class-tier-list] received info 1', info)),
@@ -175,9 +187,10 @@ export const buildArenaClassInfoTiers = (
 	stats: readonly ArenaClassStat[] | null | undefined,
 	strategies: readonly ArenaHeroAdvice[] | null | undefined,
 	averageWinsDistribution: readonly WinsDistribution[] | null,
+	patchesConfig: PatchesConfig | null,
 	i18n: ILocalizationService,
 ): readonly ArenaClassTier[] | null | undefined => {
-	const classInfos = buildClassInfos(stats, strategies, averageWinsDistribution);
+	const classInfos = buildClassInfos(stats, strategies, averageWinsDistribution, patchesConfig);
 	return buildTiers(classInfos, i18n);
 };
 
@@ -193,6 +206,7 @@ const buildClassInfos = (
 	stats: readonly ArenaClassStat[] | null | undefined,
 	strategies: readonly ArenaHeroAdvice[] | null | undefined,
 	averageWinsDistribution: readonly WinsDistribution[] | null,
+	patchesConfig: PatchesConfig | null,
 ): readonly ArenaClassInfo[] | null | undefined => {
 	if (!stats?.length) {
 		return stats === null ? null : undefined;
@@ -201,11 +215,14 @@ const buildClassInfos = (
 	return stats.map((stat) => {
 		const strategy = strategies?.find((s) => s.heroClass === stat.playerClass);
 		const strategyTip = strategy?.tips[0];
+		const patch = patchesConfig?.patches.find((p) => p.number === strategyTip?.patchNumber)?.name;
+		console.debug('patch', patch, strategyTip, patchesConfig);
 		const tip: ArenaClassInfoTip | null = strategyTip
 			? {
 					tip: strategyTip.tip,
 					author: strategyTip.author,
 					patchNumber: strategyTip.patchNumber,
+					patch: patch,
 					date: strategyTip.date,
 				}
 			: null;

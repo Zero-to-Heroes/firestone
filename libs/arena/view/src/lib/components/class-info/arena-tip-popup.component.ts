@@ -1,4 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { ILocalizationService } from '@firestone/shared/framework/core';
+import { ArenaClassInfoTip } from './model';
 
 @Component({
 	standalone: false,
@@ -16,12 +18,10 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef }
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ArenaTipPopupComponent {
-	@Input() set config(
-		value: { tip: string; author?: string; patchNumber?: number; date?: string } | null | undefined,
-	) {
+	@Input() set config(value: ArenaClassInfoTip | null | undefined) {
 		this.tip = value?.tip ?? null;
 		this.author = value?.author ?? null;
-		this.patchInfo = this.buildPatchInfo(value?.patchNumber, value?.date);
+		this.patchInfo = this.buildPatchInfo(value?.patch, value?.date);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.markForCheck();
 		}
@@ -31,15 +31,23 @@ export class ArenaTipPopupComponent {
 	author: string | null = null;
 	patchInfo: string | null = null;
 
-	constructor(private readonly cdr: ChangeDetectorRef) {}
+	constructor(
+		private readonly cdr: ChangeDetectorRef,
+		private readonly i18n: ILocalizationService,
+	) {}
 
-	private buildPatchInfo(patchNumber?: number, date?: string): string | null {
+	private buildPatchInfo(patch?: string, date?: string): string | null {
 		const parts: string[] = [];
-		if (patchNumber != null) {
-			parts.push(`Patch ${patchNumber}`);
+		if (patch != null) {
+			parts.push(`${patch}`);
 		}
 		if (date) {
-			parts.push(date);
+			const formattedDate = new Date(date).toLocaleDateString(this.i18n.formatCurrentLocale() ?? 'en-US', {
+				year: 'numeric',
+				month: 'numeric',
+				day: 'numeric',
+			});
+			parts.push(formattedDate);
 		}
 		return parts.length ? parts.join(' · ') : null;
 	}

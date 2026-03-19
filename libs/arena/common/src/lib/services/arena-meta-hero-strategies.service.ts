@@ -4,7 +4,7 @@ import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/comm
 import { AbstractFacadeService, ApiRunner, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
 
 const META_HERO_STRATEGIES_URL =
-	'https://static.zerotoheroes.com/hearthstone/data/arena/strategies/hero-strategies.gz.json';
+	'https://static.zerotoheroes.com/hearthstone/data/arena/strategies/hero-strategies.gz.json?v=2';
 
 @Injectable({ providedIn: 'root' })
 export class ArenaMetaHeroStrategiesService extends AbstractFacadeService<ArenaMetaHeroStrategiesService> {
