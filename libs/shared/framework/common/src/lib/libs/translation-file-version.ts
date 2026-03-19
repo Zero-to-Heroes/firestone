@@ -1,1 +1,1 @@
-export const translationFileVersion = '1196-main';
+export const translationFileVersion = '1198-main';

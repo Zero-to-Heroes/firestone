@@ -1,13 +1,14 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { ArenaClassStat, WinsDistribution } from '@firestone-hs/arena-stats';
-import { ArenaClassStatsService } from '@firestone/arena/common';
+import { ArenaHeroAdvice } from '@firestone-hs/content-craetor-input';
+import { ArenaClassStatsService, ArenaMetaHeroStrategiesService } from '@firestone/arena/common';
 import {
 	AbstractSubscriptionComponent,
 	getStandardDeviation,
 	sortByProperties,
 } from '@firestone/shared/framework/common';
-import { ILocalizationService, getDateAgo } from '@firestone/shared/framework/core';
-import { Observable, filter, shareReplay, startWith, takeUntil, tap } from 'rxjs';
+import { ILocalizationService, getDateAgo, waitForReady } from '@firestone/shared/framework/core';
+import { Observable, combineLatest, filter, shareReplay, startWith, takeUntil, tap } from 'rxjs';
 import { ArenaClassInfo, ArenaClassTier } from './model';
 
 @Component({
@@ -37,6 +38,7 @@ import { ArenaClassInfo, ArenaClassTier } from './model';
 						[fsTranslate]="'app.arena.class-tier-list.header-placement-distribution'"
 						[helpTooltip]="'app.arena.class-tier-list.header-placement-distribution-tooltip' | fsTranslate"
 					></div>
+					<div class="cell tip" [fsTranslate]="'app.arena.class-tier-list.header-tip'"></div>
 				</div>
 				<div class="heroes-list" role="list" scrollable>
 					<arena-class-tier-list-tier
@@ -61,24 +63,25 @@ export class ArenaClassTierListComponent extends AbstractSubscriptionComponent i
 		protected override readonly cdr: ChangeDetectorRef,
 		private readonly arenaClassStats: ArenaClassStatsService,
 		private readonly i18n: ILocalizationService,
+		private readonly arenaMetaHeroStrategies: ArenaMetaHeroStrategiesService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await this.arenaClassStats.isReady();
+		await waitForReady(this.arenaClassStats, this.arenaMetaHeroStrategies);
 
 		console.debug('[arena-class-tier-list] after content init');
-		this.tiers$ = this.arenaClassStats.classStats$$.pipe(
-			filter((stats) => !!stats?.stats),
-			this.mapData((stats) => {
+		this.tiers$ = combineLatest(this.arenaClassStats.classStats$$, this.arenaMetaHeroStrategies.strategies$$).pipe(
+			filter(([stats]) => !!stats?.stats),
+			this.mapData(([stats, strategies]) => {
 				const averageWinsDistribution = this.buildAverageWinsDistribution(stats?.stats);
 				console.debug(
 					'averageWinsDistribution',
 					averageWinsDistribution,
 					averageWinsDistribution.map((d) => d.total).reduce((a, b) => a + b, 0),
 				);
-				return buildArenaClassInfoTiers(stats?.stats, averageWinsDistribution, this.i18n);
+				return buildArenaClassInfoTiers(stats?.stats, strategies?.heroes, averageWinsDistribution, this.i18n);
 			}),
 			shareReplay(1),
 			tap((info) => console.debug('[arena-class-tier-list] received info 1', info)),
@@ -170,10 +173,11 @@ export class ArenaClassTierListComponent extends AbstractSubscriptionComponent i
 
 export const buildArenaClassInfoTiers = (
 	stats: readonly ArenaClassStat[] | null | undefined,
+	strategies: readonly ArenaHeroAdvice[] | null | undefined,
 	averageWinsDistribution: readonly WinsDistribution[] | null,
 	i18n: ILocalizationService,
 ): readonly ArenaClassTier[] | null | undefined => {
-	const classInfos = buildClassInfos(stats, averageWinsDistribution);
+	const classInfos = buildClassInfos(stats, strategies, averageWinsDistribution);
 	return buildTiers(classInfos, i18n);
 };
 
@@ -187,6 +191,7 @@ export const filterItems = (
 
 const buildClassInfos = (
 	stats: readonly ArenaClassStat[] | null | undefined,
+	strategies: readonly ArenaHeroAdvice[] | null | undefined,
 	averageWinsDistribution: readonly WinsDistribution[] | null,
 ): readonly ArenaClassInfo[] | null | undefined => {
 	if (!stats?.length) {
@@ -194,11 +199,16 @@ const buildClassInfos = (
 	}
 
 	return stats.map((stat) => {
+		const strategy = strategies?.find((s) => s.heroClass === stat.playerClass);
+		const strategyTip = strategy?.tips[0];
+		const strategyTipText = strategyTip ? strategyTip.tip : null;
+		console.debug('strategyTipText', strategyTipText, stat.playerClass, strategy);
 		const result: ArenaClassInfo = {
 			playerClass: stat.playerClass,
 			dataPoints: stat.totalGames,
 			winrate: stat.totalsWins / stat.totalGames,
 			placementDistribution: buildPlacementDistribution(stat.winsDistribution, averageWinsDistribution),
+			tip: strategyTipText,
 		};
 		return result;
 	});

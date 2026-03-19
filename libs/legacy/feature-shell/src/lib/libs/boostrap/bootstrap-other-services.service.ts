@@ -7,7 +7,11 @@ import {
 } from '@firestone/achievements/common';
 import { EndGameListenerService, QuestsService, RewardMonitorService } from '@firestone/app/common';
 import { OwHotkeyHandlerService } from '@firestone/app/ow-native';
-import { ArenaRefService } from '@firestone/arena/common';
+import { ArenaMetaHeroStrategiesService, ArenaRefService } from '@firestone/arena/common';
+import { BgsPerfectGamesService } from '@firestone/battlegrounds/data-access';
+import { PackStatsService } from '@firestone/collection/data-access';
+import { CardsMonitorService, CollectionManager, CollectionStorageService } from '@firestone/collection/services';
+import { DecksProviderService } from '@firestone/decktracker/common';
 import { DiscordPresenceManagerService } from '@firestone/discord';
 import {
 	BgsBestUserStatsService,
@@ -30,14 +34,7 @@ import { HotkeyFacadeService } from '@firestone/shared/framework/core';
 import { GameStatsProviderService } from '@firestone/stats/services';
 import { TwitchAuthService } from '@firestone/twitch/common';
 import { HearthArenaAnalyticsService } from '../../js/services/analytics/heartharena-analytics.service';
-import { BgsPerfectGamesService } from '@firestone/battlegrounds/data-access';
-import {
-	CardsMonitorService,
-	CollectionManager,
-	CollectionStorageService,
-} from '@firestone/collection/services';
 import { ConstructedConfigService } from '../../js/services/decktracker/constructed-config.service';
-import { DecksProviderService } from '@firestone/decktracker/common';
 import { DevService } from '../../js/services/dev.service';
 import { GlobalStatsService } from '../../js/services/global-stats/global-stats.service';
 import { HsClientConfigService } from '../../js/services/hs-client-config.service';
@@ -49,7 +46,6 @@ import { ReplaysNotificationService } from '../../js/services/replays/replays-no
 import { SystemTrayService } from '../../js/services/system-tray.service';
 import { MailsService } from '../mails/services/mails.service';
 import { PackMonitor } from '../packs/services/pack-monitor.service';
-import { PackStatsService } from '@firestone/collection/data-access';
 
 @Injectable()
 export class BootstrapOtherServicesService {
@@ -94,6 +90,7 @@ export class BootstrapOtherServicesService {
 		private readonly init_GameStateFacadeService: GameStateFacadeService,
 		private readonly init_MercenariesNavigationService: MercenariesNavigationService,
 		private readonly init_ArenaRefService: ArenaRefService,
+		private readonly init_ArenaMetaHeroStrategiesService: ArenaMetaHeroStrategiesService,
 		// TODO: might not be the best place
 		private readonly modsBootstrap: ModsBootstrapService,
 		private readonly modsManager: ModsManagerService,

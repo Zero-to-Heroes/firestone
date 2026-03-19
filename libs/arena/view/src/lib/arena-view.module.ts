@@ -24,6 +24,7 @@ import { ArenaCardStatsComponent } from './components/card-stats/arena-card-stat
 import { ArenaCardTypeFilterDropdownComponent } from './components/card-stats/arena-card-type-filter-dropdown.component';
 import { ArenaClassFilterDropdownComponent } from './components/card-stats/arena-class-filter-dropdown.component';
 import { ArenaClassInfoComponent } from './components/class-info/arena-class-info.component';
+import { ArenaTipPopupComponent } from './components/class-info/arena-tip-popup.component';
 import { ArenaClassTierListTierComponent } from './components/class-info/arena-class-tier-list-tier.component';
 import { ArenaClassTierListComponent } from './components/class-info/arena-class-tier-list.component';
 import { ArenaHighWinsCardSearchComponent } from './components/filters/arena-high-wins-card-search.component';
@@ -50,6 +51,7 @@ const components = [
 	ArenaClassTierListComponent,
 	ArenaClassTierListTierComponent,
 	ArenaClassInfoComponent,
+	ArenaTipPopupComponent,
 	ArenaCardStatsComponent,
 	ArenaCardStatItemComponent,
 	ArenaCardSearchComponent,

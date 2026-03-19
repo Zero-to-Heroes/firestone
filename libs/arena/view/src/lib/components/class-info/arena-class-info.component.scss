@@ -4,7 +4,7 @@
 	width: 100%;
 	padding: 5px;
 	background: rgba(255, 255, 255, 0.08);
-	flex-wrap: wrap;
+	flex-wrap: nowrap;
 	overflow: hidden;
 
 	& > * {
@@ -106,6 +106,44 @@
 					}
 				}
 			}
+		}
+	}
+}
+
+.tip {
+	max-height: 40px;
+	min-height: 24px;
+	font-size: 0.7em;
+	margin-top: 5px;
+	overflow: hidden;
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 4px;
+
+	.tip-preview {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		flex: 1;
+		min-width: 0;
+		flex-grow: 0;
+		flex-shrink: 0;
+		min-width: 200px;
+	}
+
+	.show-more-btn {
+		flex-shrink: 0;
+		font-size: inherit;
+		padding: 0 4px;
+		background: transparent;
+		border: none;
+		color: var(--color-1);
+		cursor: pointer;
+		text-decoration: underline;
+
+		&:hover {
+			opacity: 0.9;
 		}
 	}
 }
