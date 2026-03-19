@@ -78,6 +78,7 @@ import { DebugService } from '../../services/debug.service';
 						<!-- <mercs-treasure-selection-widget-wrapper></mercs-treasure-selection-widget-wrapper> -->
 
 						<arena-hero-selection-widget-wrapper></arena-hero-selection-widget-wrapper>
+						<arena-hero-selected-widget-wrapper></arena-hero-selected-widget-wrapper>
 						<arena-card-selection-widget-wrapper></arena-card-selection-widget-wrapper>
 						<arena-package-card-selection-widget-wrapper></arena-package-card-selection-widget-wrapper>
 						<arena-mulligan-widget-wrapper></arena-mulligan-widget-wrapper>
