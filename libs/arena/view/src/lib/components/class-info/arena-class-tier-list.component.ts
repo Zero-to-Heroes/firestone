@@ -9,7 +9,7 @@ import {
 } from '@firestone/shared/framework/common';
 import { ILocalizationService, getDateAgo, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, filter, shareReplay, startWith, takeUntil, tap } from 'rxjs';
-import { ArenaClassInfo, ArenaClassTier } from './model';
+import { ArenaClassInfo, ArenaClassInfoTip, ArenaClassTier } from './model';
 
 @Component({
 	standalone: false,
@@ -201,14 +201,20 @@ const buildClassInfos = (
 	return stats.map((stat) => {
 		const strategy = strategies?.find((s) => s.heroClass === stat.playerClass);
 		const strategyTip = strategy?.tips[0];
-		const strategyTipText = strategyTip ? strategyTip.tip : null;
-		console.debug('strategyTipText', strategyTipText, stat.playerClass, strategy);
+		const tip: ArenaClassInfoTip | null = strategyTip
+			? {
+					tip: strategyTip.tip,
+					author: strategyTip.author,
+					patchNumber: strategyTip.patchNumber,
+					date: strategyTip.date,
+				}
+			: null;
 		const result: ArenaClassInfo = {
 			playerClass: stat.playerClass,
 			dataPoints: stat.totalGames,
 			winrate: stat.totalsWins / stat.totalGames,
 			placementDistribution: buildPlacementDistribution(stat.winsDistribution, averageWinsDistribution),
-			tip: strategyTipText,
+			tip,
 		};
 		return result;
 	});
