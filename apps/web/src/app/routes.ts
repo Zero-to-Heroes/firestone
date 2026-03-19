@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { AuthCallbackComponent, LoginComponent, routes as sharedRoutes, WebShellComponent } from '@firestone/shared/web-shell';
+import { InGameReplayRedirectComponent } from './in-game-replay-redirect/in-game-replay-redirect.component';
 
 // Transform shared routes for use as children (convert absolute redirects to relative)
 const transformRoutesForChildren = (routes: Routes): Routes => {
@@ -18,6 +19,8 @@ const transformRoutesForChildren = (routes: Routes): Routes => {
 };
 
 export const routes: Routes = [
+	// Shareable in-game replay link - redirects to firestoneapp:// protocol
+	{ path: 'in-game-replay/:reviewId', component: InGameReplayRedirectComponent },
 	// Main app with shell (header/nav)
 	{
 		path: '',
