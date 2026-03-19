@@ -1,3 +1,4 @@
+import { ComponentType } from '@angular/cdk/portal';
 import {
 	AfterContentInit,
 	ChangeDetectionStrategy,
@@ -7,10 +8,12 @@ import {
 	Input,
 	ViewRef,
 } from '@angular/core';
-import { ArenaHeroOption } from '@firestone/arena/common';
+import { ArenaClassInfoTip, ArenaHeroOption } from '@firestone/arena/common';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ADS_SERVICE_TOKEN, IAdsService } from '@firestone/shared/framework/core';
+import { MarkdownService } from 'ngx-markdown';
 import { Observable, tap } from 'rxjs';
+import { ArenaTipPopupComponent } from '../class-info/arena-tip-popup.component';
 
 @Component({
 	standalone: false,
@@ -27,6 +30,19 @@ import { Observable, tap } from 'rxjs';
 					<span class="label" [fsTranslate]="'app.arena.draft.hero-winrate'"></span>
 					<span class="value">{{ winrate }}</span>
 				</div>
+				<div class="tip-info">
+					<div
+						*ngIf="tipPopupInput"
+						class="tip-info-icon"
+						componentTooltip
+						[componentType]="tipPopupComponentType"
+						[componentInput]="tipPopupInput"
+						componentTooltipPosition="left"
+						[componentTooltipAllowMouseOver]="true"
+						[fsTranslate]="'app.arena.class-tier-list.show-more-tip'"
+						inlineSVG="assets/svg/info.svg"
+					></div>
+				</div>
 			</div>
 			<arena-option-info-premium *ngIf="!value.showWidget"></arena-option-info-premium>
 		</div>
@@ -36,12 +52,16 @@ import { Observable, tap } from 'rxjs';
 export class ArenaHeroOptionComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	showWidget$: Observable<boolean>;
 
+	tipPopupComponentType: ComponentType<ArenaTipPopupComponent> = ArenaTipPopupComponent;
+	tipPopupInput: ArenaClassInfoTip | null = null;
+
 	@Input() set hero(value: ArenaHeroOption) {
 		if (!value) {
 			return;
 		}
 		this.tier = value.tier;
 		this.winrate = (100 * value.winrate).toFixed(1) + '%';
+		this.setTip(value.tip);
 	}
 
 	tier: string | null;
@@ -50,6 +70,7 @@ export class ArenaHeroOptionComponent extends AbstractSubscriptionComponent impl
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
 		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
+		private readonly markdown: MarkdownService,
 	) {
 		super(cdr);
 	}
@@ -62,6 +83,24 @@ export class ArenaHeroOptionComponent extends AbstractSubscriptionComponent impl
 			tap((info) => console.debug('[arena-hero-option] showWidget', info)),
 		);
 
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.markForCheck();
+		}
+	}
+
+	private async setTip(tipData: ArenaClassInfoTip | null | undefined) {
+		if (!tipData?.tip) {
+			this.tipPopupInput = null;
+		} else {
+			const html = await this.markdown.parse(tipData.tip);
+			this.tipPopupInput = {
+				tip: html,
+				author: tipData.author,
+				patchNumber: tipData.patchNumber,
+				patch: tipData.patch,
+				date: tipData.date,
+			};
+		}
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.markForCheck();
 		}

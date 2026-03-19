@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { ArenaClassInfoTip } from '@firestone/arena/common';
 import { ILocalizationService } from '@firestone/shared/framework/core';
-import { ArenaClassInfoTip } from './model';
 
 @Component({
 	standalone: false,
