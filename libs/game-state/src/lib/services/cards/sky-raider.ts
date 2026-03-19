@@ -10,7 +10,7 @@ import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingC
 import { filterCards } from './utils';
 
 export const SkyRaider: GeneratingCard & StaticGeneratingCard = {
-	cardIds: [CardIds.SkyRaider],
+	cardIds: [CardIds.SkyRaider, CardIds.SkyRaider_CORE_DRG_024],
 	publicCreator: true,
 	dynamicPool: (input: StaticGeneratingCardInput) => {
 		return filterCards(

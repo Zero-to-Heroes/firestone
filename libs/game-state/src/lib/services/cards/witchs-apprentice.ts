@@ -10,7 +10,7 @@ import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingC
 import { filterCards } from './utils';
 
 export const WitchsApprentice: GeneratingCard & StaticGeneratingCard = {
-	cardIds: [CardIds.WitchsApprentice],
+	cardIds: [CardIds.WitchsApprentice, CardIds.WitchsApprentice_CORE_GIL_531],
 	publicCreator: true,
 	dynamicPool: (input: StaticGeneratingCardInput) => {
 		return filterCards(
