@@ -64,13 +64,14 @@ export default class App {
 
 		try {
 			const urlObj = new URL(url);
-			if (urlObj.protocol !== 'firestone:') {
+			if (urlObj.protocol !== 'firestoneapp:') {
 				console.log('[DeepLink] Not a firestone protocol, ignoring');
 				return;
 			}
 
 			// Handle replay links: firestoneapp://replay/in-game?reviewId=X
 			if (urlObj.hostname === 'replay' && urlObj.pathname === '/in-game') {
+				console.warn('[DeepLink] IN-GAME REPLAY NOT SUPPORTED YET');
 				const reviewId = urlObj.searchParams.get('reviewId');
 				if (reviewId) {
 					console.log('[DeepLink] Replay link, opening in browser:', reviewId);
