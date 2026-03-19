@@ -2761,6 +2761,9 @@ export const cardIdSelector = (
 		// Party Portal: Whenever you cast a spell, summon a random minion of the same Cost.
 		case CardIds.PartyPortalTavernBrawl_PVPDR_SCH_Active08:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
+		// Pathmaker: Battlecry: Cast the other choice from the last Choose One spell you've cast.
+		case CardIds.Pathmaker:
+			return and(side(inputSide), or(inDeck, inHand), spell, chooseOne);
 		case CardIds.PeacefulPiper:
 			return and(side(inputSide), inDeck, beast);
 		case CardIds.PendantOfEarth_DEEP_026:
