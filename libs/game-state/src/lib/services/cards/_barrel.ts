@@ -131,6 +131,7 @@ export { MagicTrick } from './magic-trick';
 export { Magicfin } from './magicfin';
 export { Malkorok } from './malkorok';
 export { MalorneTheWaywatcher } from './malorne-the-waywatcher';
+export { Marshspawn } from './marshspawn';
 export { MechagnomeGuide } from './mechagnome-guide';
 export { MendTheTimeline } from './mend-the-timeline';
 export { MerithraOfTheDream } from './merithra-of-the-dream';
