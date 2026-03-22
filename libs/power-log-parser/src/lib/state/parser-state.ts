@@ -332,7 +332,7 @@ export class ParserState {
 
 			if (showEntities.length === 0) {
 				Logger.Log('No full entity in hand, fallback to fullentity', '');
-				showEntities = this.CurrentGame.FilterGameData(FullEntity) as IEntityData[];
+				showEntities = this.CurrentGame.FilterGameData(FullEntity) as unknown as IEntityData[];
 			}
 		}
 
