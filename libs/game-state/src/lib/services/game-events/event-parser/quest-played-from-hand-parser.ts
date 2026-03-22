@@ -3,7 +3,7 @@ import { CardIds, CardType, GameTag } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DeckCard } from '../../../models/deck-card';
 import { DeckState } from '../../../models/deck-state';
-import { GameState, ShortCard, ShortCardWithTurn } from '../../../models/game-state';
+import { GameState, ShortCardWithTurn } from '../../../models/game-state';
 import { COUNTERSPELLS } from '../../hs-utils';
 import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
@@ -113,22 +113,20 @@ export class QuestPlayedFromHandParser implements EventParser {
 			effectiveCost: effectiveCost,
 		};
 
-		// Don't double-count
-		const deckAfterSpecialCaseUpdate: DeckState = newPlayerDeck;
-		//  isCardCountered
-		// 	? newPlayerDeck
-		// 	: newPlayerDeck.update({
-		// 			cardsPlayedThisMatch: [
-		// 				...newPlayerDeck.cardsPlayedThisMatch,
-		// 				newCardPlayedThisMatch,
-		// 			] as readonly ShortCardWithTurn[],
-		// 		});
+		const deckAfterSpecialCaseUpdate: DeckState =
+			isCardCountered ||
+			// Don't double-count
+			newPlayerDeck.cardsPlayedThisMatch.some((c) => c.entityId === newCardPlayedThisMatch.entityId)
+				? newPlayerDeck
+				: newPlayerDeck.update({
+						cardsPlayedThisMatch: [
+							...newPlayerDeck.cardsPlayedThisMatch,
+							newCardPlayedThisMatch,
+						] as readonly ShortCardWithTurn[],
+					});
 
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: deckAfterSpecialCaseUpdate,
-			cardsPlayedThisMatch: isCardCountered
-				? currentState.cardsPlayedThisMatch
-				: ([...currentState.cardsPlayedThisMatch, newCardPlayedThisMatch] as readonly ShortCard[]),
 		});
 	}
 
