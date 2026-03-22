@@ -31,6 +31,15 @@ export class FriendlyMinionsDeadThisGameCounterDefinitionV2 extends CounterDefin
 	readonly opponent = {
 		pref: 'opponentFriendlyDeadMinionsThisGameCounter' as const,
 		display: (state: GameState): boolean => {
+			// Show the counter if the opponent has a card, in hand or deck, that was created by Malorne
+			const cardsToInspect = [...state.opponentDeck.hand, ...state.opponentDeck.deck];
+			const hasCreatedByMalorne = cardsToInspect.some(
+				(c) => c.creatorCardId === CardIds.MalorneTheWaywatcher_EDR_888,
+			);
+			if (hasCreatedByMalorne) {
+				return true;
+			}
+
 			if (!initialHeroClassIs(state.opponentDeck.hero, [CardClass.MAGE])) {
 				return false;
 			}
