@@ -33,11 +33,13 @@ export interface GuessInfoInput {
 	gameState: GameState;
 	allCards: AllCardsService;
 	creatorEntityId: number | undefined | null;
-	options?: {
+	options: {
 		positionInHand?: number;
 		creatorZone?: Zone | null;
 		tags?: readonly { Name: GameTag; Value: number }[];
 		metadata?: Metadata;
+		validArenaPool: readonly string[];
+		creatorTags?: readonly { Name: GameTag; Value: number }[];
 	};
 }
 export interface GuessCardIdInput {

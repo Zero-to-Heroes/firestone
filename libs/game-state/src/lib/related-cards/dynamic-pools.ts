@@ -319,6 +319,7 @@ const getDynamicRelatedCardIdsInternal = (
 				(c) => hasCost(c, '==', targetCost) && canBeDiscoveredByClass(c, options.currentClass),
 			);
 		case CardIds.Astromancer:
+		case CardIds.Astromancer_CORE_BOT_256:
 			return filterCards(
 				allCards,
 				options,
@@ -416,6 +417,7 @@ const getDynamicFilters = (
 			return (c) => hasCorrectRune(c, DkruneTypes.FROSTRUNE);
 
 		case CardIds.CorpseFarm_WW_374:
+		case CardIds.CorpseFarm_CORE_WW_374:
 			return (c) =>
 				hasCorrectType(c, CardType.MINION) &&
 				hasCost(
@@ -867,6 +869,7 @@ const getDynamicFilters = (
 		case CardIds.RelentlessWrathguard_GDB_132:
 		case CardIds.DemonicDynamics:
 		case CardIds.Netherwalker:
+		case CardIds.Netherwalker_CORE_BT_321:
 			return (c) =>
 				hasCorrectType(c, CardType.MINION) &&
 				hasCorrectTribe(c, Race.DEMON) &&
@@ -934,6 +937,7 @@ const getDynamicFilters = (
 		case CardIds.RangerGeneralSylvanas_RangerCaptainAlleriaToken_TIME_609t1:
 		case CardIds.Renew_BT_252:
 		case CardIds.RunedOrb_BAR_541:
+		case CardIds.RunedOrb_CORE_BAR_541:
 		case CardIds.Spellcoiler:
 		case CardIds.StewardOfScrolls_SCH_245:
 		case CardIds.SuspiciousAlchemist:
@@ -1216,6 +1220,7 @@ const getDynamicFilters = (
 				hasCorrectType(c, CardType.MINION) &&
 				hasCost(c, '==', (options?.deckState?.hero?.maxMana ?? 0) >= 10 ? 8 : 3);
 		case CardIds.IronforgePortal:
+		case CardIds.IronforgePortal_CORE_WON_337:
 		case CardIds.IronforgePortal_WON_337:
 		case CardIds.ThreshridersBlessing_TLC_477:
 		case CardIds.GravedawnVoidbulb_TLC_815:
@@ -1384,8 +1389,16 @@ export const filterCards = (
 	sourceCardId: string,
 	...filters: ((ref: ReferenceCard) => boolean | undefined)[]
 ) => {
-	let gameType = options.gameType;
 	let format = options.format;
+	let gameType = options.gameType;
+	if (gameType === GameType.GT_ARENA || gameType === GameType.GT_UNDERGROUND_ARENA) {
+		// If we have no valid arena sets and no valid arena pool, we default to ranked wild
+		if (!arenaSets?.length && options.validArenaPool.length === 0) {
+			gameType = GameType.GT_RANKED;
+			format = GameFormat.FT_WILD;
+		}
+	}
+
 	const summonsInPlay = doesSummonInPlay(sourceCardId);
 	const wantsColossal = wantsColossalMinions(sourceCardId);
 	const baseCards = getBaseCards(sourceCardId, allCards);
@@ -1398,16 +1411,12 @@ export const filterCards = (
 		.filter((c) => canIncludeImbue(c, options.initialDecklist, options.currentClass, allCards))
 		.filter((c) => canIncludeHerald(c, options.initialDecklist, options.currentClass, allCards))
 		.filter((c) => {
-			const debug = false;
+			const debug = c.id === CardIds.FinalShowdown;
 			if (gameType === GameType.GT_ARENA || gameType === GameType.GT_UNDERGROUND_ARENA) {
 				// If we have some valid arena sets, we use them
 				if (!arenaSets?.length) {
 					if (options.validArenaPool.length > 0) {
 						return options.validArenaPool.includes(c.id);
-					} else {
-						// Default to ranked wild otherwise
-						gameType = GameType.GT_RANKED;
-						format = GameFormat.FT_WILD;
 					}
 				}
 			} else if (gameType === GameType.GT_TAVERNBRAWL) {
@@ -1848,6 +1857,7 @@ const doesSummonInPlay = (sourceCardId: string): boolean => {
 		case CardIds.ChaosCreation_DEEP_031:
 		case CardIds.ContainmentUnit:
 		case CardIds.CorpseFarm_WW_374:
+		case CardIds.CorpseFarm_CORE_WW_374:
 		case CardIds.Cremate_FIR_900: // Summons minions
 		case CardIds.CrystalBroker: // Summons minions based on mana
 		case CardIds.DangerousVariant_TIME_049:

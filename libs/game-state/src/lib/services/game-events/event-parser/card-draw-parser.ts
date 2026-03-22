@@ -1,4 +1,5 @@
 import { CardIds } from '@firestone-hs/reference-data';
+import { ArenaRefService } from '@firestone/arena/data-access';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DeckCard, toTagsObject } from '../../../models/deck-card';
 import { DeckState } from '../../../models/deck-state';
@@ -29,6 +30,7 @@ export class CardDrawParser implements EventParser {
 	constructor(
 		private readonly helper: DeckManipulationHelper,
 		private readonly allCards: CardsFacadeService,
+		private readonly arenaRefService: ArenaRefService,
 	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
@@ -240,6 +242,9 @@ export class CardDrawParser implements EventParser {
 			opponentDeck,
 			currentState,
 			this.allCards,
+			{
+				validArenaPool: this.arenaRefService.validDiscoveryPool$$.value ?? [],
+			},
 		);
 		console.debug('[card-draw] cardWithGuessInfo', cardWithGuessInfo, gameEvent);
 		const previousDeck = deck.deck;
@@ -341,14 +346,10 @@ export class CardDrawParser implements EventParser {
 		if (cardId) {
 			const refCard = this.allCards.getCard(cardId);
 			const updatePlagiarizarrrCopy = (deck: DeckState) => {
-				const copies = deck.hand.filter(
-					(c) => c.creatorCardId === CardIds.Plagiarizarrr && !c.cardId,
-				);
+				const copies = deck.hand.filter((c) => c.creatorCardId === CardIds.Plagiarizarrr && !c.cardId);
 				const toUpdate =
 					copies.length > 0
-						? copies.reduce((a, b) =>
-								(a.createdIndex ?? 0) >= (b.createdIndex ?? 0) ? a : b,
-							)
+						? copies.reduce((a, b) => ((a.createdIndex ?? 0) >= (b.createdIndex ?? 0) ? a : b))
 						: null;
 				if (!toUpdate) return deck;
 				return deck.update({

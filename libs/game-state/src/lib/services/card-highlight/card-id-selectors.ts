@@ -1004,6 +1004,9 @@ export const cardIdSelector = (
 				and(side(inputSide), inDeck, naga),
 				and(side(inputSide), or(inHand, inDeck), spellExtended),
 			);
+		// Cryosleep (TLC_440): Deal 4 damage and draw a card. Kindred: Draw another.
+		case CardIds.Cryosleep_TLC_440:
+			return and(side(inputSide), or(inHand, inDeck), elemental);
 		case CardIds.CrystalsmithCultist:
 			return and(side(inputSide), or(inDeck, inHand), shadow);
 		case CardIds.Crystology:
@@ -1269,6 +1272,7 @@ export const cardIdSelector = (
 		case CardIds.StonetalonStriker_CATA_551:
 		case CardIds.EbonscaleScout_CATA_552:
 		case CardIds.Ebyssian_CATA_553:
+		case CardIds.Ebyssian_EbyssianToken_CATA_553t:
 			return and(side(inputSide), or(inHand, inDeck), dragon);
 		case CardIds.EchoOfMedivh:
 			return and(side(inputSide), or(inDeck, inHand), minion);
@@ -2761,6 +2765,9 @@ export const cardIdSelector = (
 		// Party Portal: Whenever you cast a spell, summon a random minion of the same Cost.
 		case CardIds.PartyPortalTavernBrawl_PVPDR_SCH_Active08:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
+		// Pathmaker: Battlecry: Cast the other choice from the last Choose One spell you've cast.
+		case CardIds.Pathmaker:
+			return and(side(inputSide), or(inDeck, inHand), spell, chooseOne);
 		case CardIds.PeacefulPiper:
 			return and(side(inputSide), inDeck, beast);
 		case CardIds.PendantOfEarth_DEEP_026:
@@ -4157,6 +4164,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), fromAnotherClass);
 		// Veteran Warmedic: After you cast a Holy spell, summon a 2/2 Medic with Lifesteal.
 		case CardIds.VeteranWarmedic:
+		case CardIds.VeteranWarmedic_CORE_BAR_878:
 			return and(side(inputSide), or(inHand, inDeck), holy, spellExtended);
 		case CardIds.VengefulSpirit_BAR_328:
 			return and(side(inputSide), inDeck, minion, deathrattle);
@@ -4430,6 +4438,8 @@ export const cardIdSelector = (
 		case CardIds.ShiverTheirTimbers:
 		case CardIds.ToyBoat_TOY_505:
 		case CardIds.Skybarge:
+		case CardIds.SkyRaider:
+		case CardIds.SkyRaider_CORE_DRG_024:
 		case CardIds.MrSmite_DED_006:
 		case CardIds.PirateAdmiralHooktusk:
 			return and(side(inputSide), or(inHand, inDeck), pirate);

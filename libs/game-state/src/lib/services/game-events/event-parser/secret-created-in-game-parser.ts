@@ -1,3 +1,4 @@
+import { ArenaRefService } from '@firestone/arena/data-access';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BoardSecret } from '../../../models/board-secret';
 import { DeckCard } from '../../../models/deck-card';
@@ -14,6 +15,7 @@ export class SecretCreatedInGameParser implements EventParser {
 		private readonly helper: DeckManipulationHelper,
 		private readonly secretConfig: SecretConfigService,
 		private readonly cards: CardsFacadeService,
+		private readonly arenaRefService: ArenaRefService,
 	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
@@ -62,6 +64,9 @@ export class SecretCreatedInGameParser implements EventParser {
 			opponentDeck,
 			currentState,
 			this.cards,
+			{
+				validArenaPool: this.arenaRefService.validDiscoveryPool$$.value ?? [],
+			},
 		);
 		// console.debug('[secret-created] card to add', card);
 		const previousOtherZone = deck.otherZone;

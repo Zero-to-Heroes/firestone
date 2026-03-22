@@ -1,4 +1,5 @@
 import { WinsDistribution } from '@firestone-hs/arena-stats';
+import { ArenaClassInfoTip } from '@firestone/arena/common';
 
 export interface ArenaClassTier {
 	readonly id: string;
@@ -12,4 +13,5 @@ export interface ArenaClassInfo {
 	readonly dataPoints: number;
 	readonly winrate: number;
 	readonly placementDistribution: readonly WinsDistribution[];
+	readonly tip?: ArenaClassInfoTip | null;
 }

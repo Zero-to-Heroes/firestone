@@ -1,4 +1,5 @@
 import { CardIds, CardType, GameTag, hasCorrectTribe, Race, ReferenceCard } from '@firestone-hs/reference-data';
+import { ArenaRefService } from '@firestone/arena/data-access';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DeckCard, toTagsObject } from '../../../models/deck-card';
 import { DeckState } from '../../../models/deck-state';
@@ -24,6 +25,7 @@ export class ReceiveCardInHandParser implements EventParser {
 	constructor(
 		private readonly helper: DeckManipulationHelper,
 		private readonly allCards: CardsFacadeService,
+		private readonly arenaRefService: ArenaRefService,
 	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
@@ -216,6 +218,8 @@ export class ReceiveCardInHandParser implements EventParser {
 				tags: gameEvent.additionalData.tags,
 				metadata: currentState.metadata,
 				creatorZone: gameEvent.additionalData.creatorZone,
+				validArenaPool: this.arenaRefService.validDiscoveryPool$$.value ?? [],
+				creatorTags: gameEvent.additionalData.creatorTags,
 			},
 		);
 		const cardWithAdditionalAttributes = addAdditionalAttribuesInHand(

@@ -187,6 +187,11 @@ export class DeckState {
 	public getCurrentClass(): string | undefined {
 		return this.hero?.classes?.[0] ? CardClass[this.hero?.classes?.[0]] : undefined;
 	}
+	public getCurrentClassEnum(): CardClass | undefined {
+		return this.getCurrentClass()
+			? CardClass[this.getCurrentClass()!.toUpperCase() as keyof typeof CardClass]
+			: undefined;
+	}
 
 	public updateSpellsPlayedThisMatch(
 		spell: DeckCard | null,

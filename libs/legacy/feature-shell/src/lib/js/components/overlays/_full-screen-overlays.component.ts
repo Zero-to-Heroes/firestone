@@ -12,7 +12,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { GameType, SceneMode } from '@firestone-hs/reference-data';
-import { ArenaRefService } from '@firestone/arena/common';
+import { ArenaRefService } from '@firestone/arena/data-access';
 import {
 	CardsHighlightFacadeService,
 	CounterInstance,
@@ -78,6 +78,7 @@ import { DebugService } from '../../services/debug.service';
 						<!-- <mercs-treasure-selection-widget-wrapper></mercs-treasure-selection-widget-wrapper> -->
 
 						<arena-hero-selection-widget-wrapper></arena-hero-selection-widget-wrapper>
+						<arena-hero-selected-widget-wrapper></arena-hero-selected-widget-wrapper>
 						<arena-card-selection-widget-wrapper></arena-card-selection-widget-wrapper>
 						<arena-package-card-selection-widget-wrapper></arena-package-card-selection-widget-wrapper>
 						<arena-mulligan-widget-wrapper></arena-mulligan-widget-wrapper>
@@ -243,7 +244,8 @@ export class FullScreenOverlaysComponent
 			}),
 		);
 
-		const arenaCards = await this.arenaRef.validDiscoveryPool$$.getValueWithInit();
+		const arenaCards = (await this.arenaRef.validDiscoveryPool$$.getValueWithInit()) ?? [];
+		console.debug('[full-screen-overlays] arenaCards', arenaCards);
 		const allCounters = getAllCounters(this.i18n, this.allCards).sort((a, b) => a.id.localeCompare(b.id));
 		allCounters.forEach((c) => {
 			c.init({

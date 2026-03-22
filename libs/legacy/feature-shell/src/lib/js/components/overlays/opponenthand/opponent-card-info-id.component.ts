@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { AfterContentInit, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { CardClass, CardIds, GameTag, GameType } from '@firestone-hs/reference-data';
-import { ArenaRefService } from '@firestone/arena/common';
+import { ArenaRefService } from '@firestone/arena/data-access';
 import {
 	cardsMapping,
 	cardsWithCreationSequenceInfo,

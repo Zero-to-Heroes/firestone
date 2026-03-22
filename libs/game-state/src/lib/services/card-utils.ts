@@ -213,7 +213,9 @@ const getShatteredPossibleCards = (
 	allCards: AllCardsService,
 	guessedInfo: GuessedInfo,
 ): readonly string[] => {
-	const cardClasses: readonly CardClass[] = guessedInfo?.cardClasses ?? [];
+	const cardClasses: readonly CardClass[] = guessedInfo?.cardClasses ?? [
+		deckState.getCurrentClassEnum() ?? CardClass.NEUTRAL,
+	];
 	// // console.debug('cardClasses', cardClasses);
 	// if (!cardClasses.length) {
 	// 	return [];
@@ -298,11 +300,13 @@ export const addGuessInfoToCard = (
 	opponentDeckState: DeckState,
 	gameState: GameState,
 	allCards: CardsFacadeService,
-	options?: {
+	options: {
 		positionInHand?: number;
 		creatorZone?: Zone | null;
 		tags?: readonly { Name: GameTag; Value: number }[];
 		metadata?: Metadata;
+		validArenaPool: readonly string[];
+		creatorTags?: readonly { Name: GameTag; Value: number }[];
 	},
 ): DeckCard => {
 	if (card.cardId) {
@@ -369,7 +373,6 @@ export const addGuessInfoToCard = (
 			}
 		}
 	}
-	console.debug('[debug] newGuessedInfo', newGuessedInfo, card);
 
 	return card.update({
 		guessedInfo: newGuessedInfo,

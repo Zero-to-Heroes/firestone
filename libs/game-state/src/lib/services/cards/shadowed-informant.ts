@@ -2,7 +2,7 @@
 // Shadowed Informant (CATA_614): 2 Mana 2/2 Dragon Neutral
 // "Battlecry: Discover a spell from your class. (Swaps class each turn!)"
 
-import { CardIds, CardType, GameTag } from '@firestone-hs/reference-data';
+import { CardClass, CardIds, CardType, GameTag } from '@firestone-hs/reference-data';
 import { GuessedInfo } from '../../models/deck-card';
 import { hasCorrectClass, hasCorrectType } from '../../related-cards/dynamic-pools';
 import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
@@ -33,6 +33,7 @@ export const ShadowedInformant: GeneratingCard & StaticGeneratingCard = {
 		);
 		return {
 			cardType: CardType.SPELL,
+			cardClasses: [classTag as CardClass],
 			possibleCards: possibleCards,
 		};
 	},

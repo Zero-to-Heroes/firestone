@@ -10,7 +10,7 @@ import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingC
 import { filterCards } from './utils';
 
 export const IvoryKnight: GeneratingCard & StaticGeneratingCard = {
-	cardIds: [CardIds.IvoryKnight, CardIds.IvoryKnight_WON_045],
+	cardIds: [CardIds.IvoryKnight, CardIds.IvoryKnight_WON_045, CardIds.IvoryKnight_CORE_KAR_057],
 	publicCreator: true,
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
 		const currentClass = input.deckState.getCurrentClass();

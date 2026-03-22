@@ -1,0 +1,72 @@
+.arena-tip-popup {
+	display: flex;
+	flex-direction: column;
+	background: var(--color-4);
+	background-image: var(--window-background-image);
+	background-size: 100%;
+	background-position: 50% 50%;
+	background-repeat: no-repeat;
+
+	border-color: #ffb948;
+	border-radius: 25px;
+	border-width: 1px;
+	border-style: solid;
+	margin-top: 3px;
+
+	padding: 15px 25px;
+	position: relative;
+	font-family: Open Sans;
+	font-style: normal;
+	font-weight: normal;
+	color: var(--default-text-color);
+	font-size: 13px;
+	line-height: 22px;
+	pointer-events: auto;
+
+	min-width: 300px;
+	max-width: 450px;
+
+	.tip-meta {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+		margin-top: 10px;
+		padding-top: 8px;
+		border-top: 1px solid rgba(255, 255, 255, 0.2);
+		font-size: 11px;
+		color: var(--default-text-color);
+		opacity: 0.9;
+
+		.author {
+			font-weight: 600;
+			color: var(--default-title-color);
+		}
+
+		.patch-info {
+			opacity: 0.8;
+		}
+	}
+
+	.tip-content {
+		width: 100%;
+
+		::ng-deep {
+			p {
+				margin: 0 0 8px 0;
+
+				&:last-child {
+					margin-bottom: 0;
+				}
+			}
+
+			ul {
+				margin: 0 0 8px 0;
+				padding-left: 20px;
+			}
+
+			strong {
+				color: var(--default-title-color);
+			}
+		}
+	}
+}

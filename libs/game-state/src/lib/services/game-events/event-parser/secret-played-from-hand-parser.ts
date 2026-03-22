@@ -3,7 +3,7 @@ import { CardsFacadeService, ILocalizationService } from '@firestone/shared/fram
 import { BoardSecret } from '../../../models/board-secret';
 import { DeckCard } from '../../../models/deck-card';
 import { DeckState } from '../../../models/deck-state';
-import { GameState, ShortCard, ShortCardWithTurn } from '../../../models/game-state';
+import { GameState, ShortCardWithTurn } from '../../../models/game-state';
 import { COUNTERSPELLS } from '../../hs-utils';
 import { SecretConfigService } from '../../secrets/secret-config.service';
 import { revealCard } from '../card-reveal';
@@ -133,16 +133,17 @@ export class SecretPlayedFromHandParser implements EventParser {
 			effectiveCost: effectiveCost,
 		};
 
-		// Don't double-count
-		const deckAfterSpecialCaseUpdate: DeckState = newPlayerDeck;
-		//  isCardCountered
-		// 	? newPlayerDeck
-		// 	: newPlayerDeck.update({
-		// 			cardsPlayedThisMatch: [
-		// 				...newPlayerDeck.cardsPlayedThisMatch,
-		// 				newCardPlayedThisMatch,
-		// 			] as readonly ShortCardWithTurn[],
-		// 		});
+		const deckAfterSpecialCaseUpdate: DeckState =
+			// Don't double-count
+			isCardCountered ||
+			newPlayerDeck.cardsPlayedThisMatch.some((c) => c.entityId === newCardPlayedThisMatch.entityId)
+				? newPlayerDeck
+				: newPlayerDeck.update({
+						cardsPlayedThisMatch: [
+							...newPlayerDeck.cardsPlayedThisMatch,
+							newCardPlayedThisMatch,
+						] as readonly ShortCardWithTurn[],
+					});
 
 		const [playerDeckAfterSpecialCaseUpdate, opponentDeckAfterSpecialCaseUpdate] = modifyDecksForSpecialCards(
 			knownCardId,
@@ -163,9 +164,6 @@ export class SecretPlayedFromHandParser implements EventParser {
 		return currentState.update({
 			playerDeck: playerDeckAfterReveal,
 			opponentDeck: opponentDeckAfterReveal,
-			cardsPlayedThisMatch: isCardCountered
-				? currentState.cardsPlayedThisMatch
-				: ([...currentState.cardsPlayedThisMatch, newCardPlayedThisMatch] as readonly ShortCard[]),
 		});
 	}
 

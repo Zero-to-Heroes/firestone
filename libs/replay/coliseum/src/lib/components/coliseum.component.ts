@@ -287,8 +287,8 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 			action <= 0
 				? 0
 				: action >= this.game.turns.get(this.currentTurn)!.actions.length
-				? this.game.turns.get(this.currentTurn)!.actions.length - 1
-				: action;
+					? this.game.turns.get(this.currentTurn)!.actions.length - 1
+					: action;
 		this.populateInfo(true);
 		this.showPreloader = false;
 		this.status = null;

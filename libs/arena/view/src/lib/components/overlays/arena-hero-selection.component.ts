@@ -10,10 +10,12 @@ import {
 	ARENA_DRAFT_MANAGER_SERVICE_TOKEN,
 	ArenaClassStatsService,
 	ArenaHeroOption,
+	ArenaMetaHeroStrategiesService,
 	IArenaDraftManagerService,
 } from '@firestone/arena/common';
+import { PatchesConfigService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, shareReplay, tap } from 'rxjs';
 import { buildArenaClassInfoTiers } from '../class-info/arena-class-tier-list.component';
 
@@ -39,19 +41,24 @@ export class ArenaHeroSelectionComponent extends AbstractSubscriptionComponent i
 		private readonly arenaClassStats: ArenaClassStatsService,
 		private readonly i18n: ILocalizationService,
 		private readonly allCards: CardsFacadeService,
+		private readonly arenaMetaHeroStrategies: ArenaMetaHeroStrategiesService,
+		private readonly patches: PatchesConfigService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await this.draftManager.isReady();
-		await this.arenaClassStats.isReady();
+		await waitForReady(this.draftManager, this.arenaClassStats, this.arenaMetaHeroStrategies, this.patches);
 		console.debug('[arena-hero-selection] ready');
 
-		const tiers$ = this.arenaClassStats.classStats$$.pipe(
+		const tiers$ = combineLatest([
+			this.arenaClassStats.classStats$$,
+			this.arenaMetaHeroStrategies.strategies$$,
+			this.patches.config$$,
+		]).pipe(
 			tap((info) => console.debug('[arena-class-tier-list] received info a', info)),
-			this.mapData((stats) => {
-				return buildArenaClassInfoTiers(stats?.stats, null, this.i18n);
+			this.mapData(([stats, strategies, config]) => {
+				return buildArenaClassInfoTiers(stats?.stats, strategies?.heroes, null, config, this.i18n);
 			}),
 			shareReplay(1),
 			tap((info) => console.debug('[arena-class-tier-list] received info 1', info)),
@@ -69,6 +76,7 @@ export class ArenaHeroSelectionComponent extends AbstractSubscriptionComponent i
 							cardId: option,
 							winrate: classStat?.winrate,
 							tier: tier?.id,
+							tip: classStat?.tip,
 						} as ArenaHeroOption;
 					}) ?? [],
 			),

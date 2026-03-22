@@ -34,7 +34,7 @@ export const PandarenImporter: GeneratingCard & StaticGeneratingCard = {
 				hasCorrectType(c, CardType.SPELL) &&
 				canBeDiscoveredByClass(c, currentClass) &&
 				!initialDecklist.includes(c.id),
-			{ currentClass, initialDecklist },
+			{ ...input.options, currentClass, initialDecklist },
 		);
 		return {
 			cardType: CardType.SPELL,

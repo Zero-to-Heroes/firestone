@@ -1,4 +1,5 @@
 import { CardClass, CardIds, GameTag } from '@firestone-hs/reference-data';
+import { ArenaRefService } from '@firestone/arena/data-access';
 import { pickLast } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DeckCard } from '../../../models/deck-card';
@@ -38,7 +39,8 @@ export class CustomEffectsParser implements EventParser {
 	constructor(
 		private readonly helper: DeckManipulationHelper,
 		private readonly allCards: CardsFacadeService,
-	) { }
+		private readonly arenaRefService: ArenaRefService,
+	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return !!state;
@@ -143,6 +145,9 @@ export class CustomEffectsParser implements EventParser {
 			isPlayer ? currentState.opponentDeck : currentState.playerDeck,
 			currentState,
 			this.allCards,
+			{
+				validArenaPool: this.arenaRefService.validDiscoveryPool$$.value ?? [],
+			},
 		);
 		const newHand = deck.hand.map((card) => (card.entityId === lastDrawnCardInHand.entityId ? updatedCard : card));
 		return currentState.update({

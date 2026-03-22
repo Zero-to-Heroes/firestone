@@ -758,6 +758,7 @@ export const reverseMinionSelector = (
 			CardIds.BonfireElemental,
 			CardIds.BralmaSearstone_TLC_228,
 			CardIds.CloudSerpent_TLC_888,
+			CardIds.Cryosleep_TLC_440,
 			CardIds.DangBlastedElemental_WW_397,
 			CardIds.ElementalAllies,
 			CardIds.ElementalEvocation,
