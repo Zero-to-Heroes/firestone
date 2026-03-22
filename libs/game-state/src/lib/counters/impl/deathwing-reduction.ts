@@ -54,8 +54,7 @@ export class DeathwingReductionCounterDefinitionV2 extends CounterDefinitionV2<n
 
 	protected override tooltip(side: 'player' | 'opponent', gameState: GameState): string {
 		const value = this[side].value(gameState);
-		return this.i18n.translateString(`counters.specific-cost-reduction.${side}`, {
-			cardName: this.allCards.getCard(CardIds.DeathwingWorldbreaker_CATA_190h).name,
+		return this.i18n.translateString(`counters.deathwing-cost-reduction.${side}`, {
 			value: value ?? 0,
 		});
 	}
