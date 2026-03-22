@@ -27,12 +27,15 @@ export enum State {
 }
 
 /**
- * MetaDataType values from the C# parser.
- * Maps to MetaTags in @firestone-hs/reference-data with some additions.
+ * MetaDataType values from the C# parser (HearthstoneReplays.Enums.MetaDataType).
+ * Must match the C# enum exactly for log parsing to work correctly.
  */
 export enum MetaDataType {
+	META_TARGET = 0,
 	TARGET = 0,
+	META_DAMAGE = 1,
 	DAMAGE = 1,
+	META_HEALING = 2,
 	HEALING = 2,
 	JOUST = 3,
 	CLIENT_HISTORY = 4,
@@ -49,15 +52,15 @@ export enum MetaDataType {
 	EFFECT_SELECTION = 15,
 	BEGIN_LISTENING_FOR_TURN_EVENTS = 16,
 	HOLD_DRAWN_CARD = 17,
-	ARTIFICIAL_PAUSE = 18,
-	BEGIN_ARTIFICIAL_HISTORY_CARD_TILE = 19,
-	OVERRIDE_HISTORY_AT_END = 20,
-	BEGIN_TURN_DISPLAY_TIMER = 21,
-	JUNK_1 = 22,
-	FATIGUE = 23,
-	START_OPPONENTS_DRAW = 24,
-	BEGIN_ARTIFICIAL_REVEAL_TILE = 25,
-	SKIP_TURN_TIMER = 26,
-	SHOW_OPPONENT_BIG_CARD = 27,
-	PLAYED_CARD_COST = 28,
+	CONTROLLER_AND_ZONE_CHANGE = 18,
+	ARTIFICIAL_PAUSE = 19,
+	SLUSH_TIME = 20,
+	ARTIFICIAL_HISTORY_INTERRUPT = 21,
+	POISONOUS = 22,
+	CRITICAL_HIT = 23,
+	HISTORY_TRIGGER_SOURCE = 24,
+	HISTORY_SOURCE_OWNER = 25,
+	HISTORY_REMOVE_ENTITIES = 26,
+	SPEND_HEALTH = 27,
+	SPEND_ARMOR = 28,
 }

@@ -49,6 +49,7 @@ export class BattlegroundsPlayerTechLevelUpdatedParser implements ActionParser {
 
 		if (
 			hero?.CardId != null &&
+			hero.CardId.length > 0 &&
 			!hero.IsBaconBartender() &&
 			!hero.IsBaconEnchantment() &&
 			!hero.IsBaconGhost() &&

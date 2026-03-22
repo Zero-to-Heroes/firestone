@@ -47,7 +47,7 @@ export class BattlegroundsBuddyGainedParser implements ActionParser {
 			return null;
 		}
 
-		if (hero?.CardId != null && !hero.IsBaconBartender() && tagChange.Value >= 1) {
+		if (hero?.CardId != null && hero.CardId.length > 0 && !hero.IsBaconBartender() && tagChange.Value >= 1) {
 			return [
 				GameEventProvider.Create(
 					tagChange.TimeStamp,

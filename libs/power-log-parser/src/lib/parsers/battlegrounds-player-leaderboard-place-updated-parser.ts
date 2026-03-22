@@ -36,7 +36,7 @@ export class BattlegroundsPlayerLeaderboardPlaceUpdatedParser implements ActionP
 	CreateGameEventProviderFromNew(node: Node): GameEventProvider[] | null {
 		const tagChange = node.Object as TagChange;
 		const hero = this.GameState.CurrentEntities.get(tagChange.Entity);
-		if (hero?.CardId != null && !hero.IsBaconBartender()) {
+		if (hero?.CardId != null && hero.CardId.length > 0 && !hero.IsBaconBartender()) {
 			const basePlace =
 				tagChange.Name === (GameTag.PLAYER_LEADERBOARD_PLACE as number)
 					? tagChange.Value

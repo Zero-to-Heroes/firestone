@@ -56,7 +56,7 @@ export class BattlegroundsNextOpponentParser implements ActionParser {
 		if (hero == null) {
 			this.GameState.NextBgsOpponentPlayerId = tagChange.Value;
 		}
-		if (hero?.CardId != null && !hero.IsBaconBartender()) {
+		if (hero?.CardId != null && hero.CardId.length > 0 && !hero.IsBaconBartender()) {
 			this.GameState.BgsHasSentNextOpponent = true;
 			return [
 				GameEventProvider.Create(
@@ -99,7 +99,7 @@ export class BattlegroundsNextOpponentParser implements ActionParser {
 		const hero = heroes.length === 0 ? null : heroes[0];
 		this.GameState.NextBgsOpponentPlayerId = nextOpponentPlayerId;
 		this.GameState.BgsHasSentNextOpponent = true;
-		if (hero?.CardId != null && !hero.IsBaconBartender()) {
+		if (hero?.CardId != null && hero.CardId.length > 0 && !hero.IsBaconBartender()) {
 			return [
 				GameEventProvider.Create(
 					timestamp,

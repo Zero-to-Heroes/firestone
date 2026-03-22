@@ -1,8 +1,7 @@
-import { GameTag } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
+import { MetaDataType } from '../enums';
 import { GameEventProvider, GameEventHelper } from '../game-event';
 import { MetaData, Node } from '../models';
-import { MetaTags } from '@firestone-hs/reference-data';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -26,7 +25,7 @@ export class RemovedFromHistoryParser implements ActionParser {
 		return (
 			stateType === StateType.PowerTaskList &&
 			node.Type === MetaData &&
-			(node.Object as MetaData).Meta === (MetaTags.HISTORY_REMOVE_ENTITIES as number)
+			(node.Object as MetaData).Meta === (MetaDataType.HISTORY_REMOVE_ENTITIES as number)
 		);
 	}
 
