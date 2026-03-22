@@ -78,6 +78,7 @@ import {
 	healthBiggerThanAttack,
 	healthIs,
 	healthLessThan,
+	herald,
 	highlightConditions,
 	holy,
 	imbue,
@@ -1104,6 +1105,9 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, minion, deathrattle, effectiveCostLess(6));
 		case CardIds.DeathstriderTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), minion, deathrattle);
+		// Deathwing, Worldbreaker (CATA_190h): Battlecry: Choose 1 Cataclysms to unleash! Herald twice to upgrade.
+		case CardIds.DeathwingWorldbreaker_CATA_190h:
+			return and(side(inputSide), or(inDeck, inHand), herald);
 		case CardIds.DeckOfChaos:
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.DeckOfLunacy:
