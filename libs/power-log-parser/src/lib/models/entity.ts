@@ -10,18 +10,18 @@ export abstract class BaseEntity extends GameData {
 	TagsHistory: Tag[] = [];
 	AllPreviousTags: Tag[] = [];
 
-	GetTag(tag: GameTag, defaultValue: number = -1): number {
-		const match = this.Tags.find((t) => t.Name === tag);
+	GetTag(tag: GameTag | number, defaultValue: number = -1): number {
+		const match = this.Tags.find((t) => t.Name === (tag as number));
 		return match == null ? defaultValue : match.Value;
 	}
 
-	HasTag(tag: GameTag): boolean {
-		const match = this.Tags.find((t) => t.Name === tag);
+	HasTag(tag: GameTag | number): boolean {
+		const match = this.Tags.find((t) => t.Name === (tag as number));
 		return match == null ? false : match.Value > 0;
 	}
 
-	GetTagSecure(tag: GameTag, defaultValue: number = -1): number {
-		const match = [...this.Tags].find((t) => t.Name === tag);
+	GetTagSecure(tag: GameTag | number, defaultValue: number = -1): number {
+		const match = [...this.Tags].find((t) => t.Name === (tag as number));
 		return match == null ? defaultValue : match.Value;
 	}
 
@@ -33,11 +33,11 @@ export abstract class BaseEntity extends GameData {
 		);
 	}
 
-	SetTag(tag: GameTag, value: number): BaseEntity {
-		let existing = this.Tags.find((t) => t.Name === tag);
+	SetTag(tag: GameTag | number, value: number): BaseEntity {
+		let existing = this.Tags.find((t) => t.Name === (tag as number));
 		if (existing == null) {
 			existing = new Tag();
-			existing.Name = tag;
+			existing.Name = tag as number;
 			existing.Value = value;
 			this.Tags.push(existing);
 		}
