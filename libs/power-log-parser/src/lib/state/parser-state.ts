@@ -20,6 +20,7 @@ import {
 	SubSpell,
 	Tag,
 } from '../models';
+import { GameEventProvider } from '../game-event';
 import { Logger } from '../logger';
 import { GameState } from './game-state';
 import type { StateFacade } from './state-facade';
@@ -32,13 +33,9 @@ export enum StateType {
 export interface INodeParser {
 	NewNode(node: Node, stateType: StateType): void;
 	CloseNode(node: Node, stateType: StateType): void;
-	EnqueueGameEvent(events: any[]): void;
+	EnqueueGameEvent(providers: GameEventProvider[]): void;
+	ClearQueue(): void;
 	Reset(state: ParserState, helper: StateFacade): void;
-}
-
-export interface IGameEventProvider {
-	Type: string;
-	Value: any;
 }
 
 export class ParserState {
@@ -126,17 +123,18 @@ export class ParserState {
 			playerEntity.IsMainPlayer = value.IsMainPlayer;
 		}
 		if (sendEvent) {
+			const localPlayer = this._localPlayer;
 			this.NodeParser.EnqueueGameEvent([
-				{
+				GameEventProvider.Create(
 					timestamp,
-					type: 'LOCAL_PLAYER',
-					creator: () => ({
+					'LOCAL_PLAYER',
+					() => ({
 						Type: 'LOCAL_PLAYER',
-						Value: this._localPlayer,
+						Value: localPlayer,
 					}),
-					isDamage: false,
-					node: new Node(Object, null, 0, null, data),
-				},
+					false,
+					new Node(Object, null, 0, null, data),
+				),
 			]);
 		}
 	}
@@ -149,19 +147,20 @@ export class ParserState {
 			playerEntity.IsMainPlayer = value.IsMainPlayer;
 		}
 		if (sendEvent) {
+			const opponentPlayer = this._opponentPlayer;
 			this.NodeParser.EnqueueGameEvent([
-				{
+				GameEventProvider.Create(
 					timestamp,
-					type: 'OPPONENT_PLAYER',
-					creator: () => ({
+					'OPPONENT_PLAYER',
+					() => ({
 						Type: 'OPPONENT_PLAYER',
 						Value: {
-							OpponentPlayer: this._opponentPlayer,
+							OpponentPlayer: opponentPlayer,
 						},
 					}),
-					isDamage: false,
-					node: new Node(Object, null, 0, null, data),
-				},
+					false,
+					new Node(Object, null, 0, null, data),
+				),
 			]);
 		}
 	}

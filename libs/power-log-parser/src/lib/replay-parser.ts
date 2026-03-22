@@ -6,7 +6,6 @@ import { StateFacade } from './state/state-facade';
 import { DataHandler } from './handlers/data-handler';
 import { PowerDataHandler } from './handlers/power-data-handler';
 import { ChoicesHandler } from './handlers/choices-handler';
-import { SendChoicesHandler } from './handlers/send-choices-handler';
 import { EntityChosenHandler } from './handlers/entity-chosen-handler';
 import { OptionsHandler } from './handlers/options-handler';
 import { PowerProcessorHandler } from './handlers/power-processor-handler';
@@ -14,7 +13,9 @@ import { Helper } from './helper';
 import { Regexes } from './regexes';
 import { Logger } from './logger';
 import { GameEventProvider, GameEvent } from './game-event';
-import { GameStateShort } from './state/game-state-short';
+import { EventQueueHandler } from './event-queue-handler';
+import { GameEventHandler } from './game-event-handler';
+import { NodeParser } from './node-parser';
 
 export { GameEvent } from './game-event';
 
@@ -25,12 +26,20 @@ export class ReplayParser {
 	private dataHandler: DataHandler;
 	private powerDataHandler: PowerDataHandler;
 	private helper: Helper;
+	private gameEventHandler: GameEventHandler;
 
 	private previousTimestamp: string = '';
 	private processedLines: string[] = [];
 	private CurrentGameSeed: number = 0;
 
-	onGameEvent: ((event: GameEvent) => void) | null = null;
+	private _onGameEvent: ((event: GameEvent) => void) | null = null;
+	get onGameEvent(): ((event: GameEvent) => void) | null {
+		return this._onGameEvent;
+	}
+	set onGameEvent(handler: ((event: GameEvent) => void) | null) {
+		this._onGameEvent = handler;
+		this.gameEventHandler.onEvent = handler;
+	}
 
 	private resettingGame: boolean = false;
 	private currentResetBlockIndex: number = 0;
@@ -43,6 +52,7 @@ export class ReplayParser {
 	private inResetBlockPTL: boolean = false;
 
 	constructor() {
+		this.gameEventHandler = new GameEventHandler();
 		this.State = new CombinedState(this.createNodeParser.bind(this));
 		this.helper = new Helper(this.State);
 		this.dataHandler = new DataHandler(this.helper);
@@ -52,8 +62,9 @@ export class ReplayParser {
 		Logger.Log('ReplayParser constructor over', this.State.GSState == null);
 	}
 
-	private createNodeParser(_stateFacade: StateFacade, _stateType: StateType): INodeParser {
-		return new SimpleNodeParser(this);
+	private createNodeParser(stateFacade: StateFacade, stateType: StateType): INodeParser {
+		const queueHandler = new EventQueueHandler(stateFacade, (event) => this.gameEventHandler.Handle(event));
+		return new NodeParser(queueHandler, stateFacade, stateType);
 	}
 
 	FromString(lines: readonly string[], ...gameTypes: GameType[]): HearthstoneReplay {
@@ -324,51 +335,5 @@ export class ReplayParser {
 			Logger.Log('CREATE_GAME without seed', lines[lines.length - 1]);
 		}
 		return isGameCreation ? -1 : 0;
-	}
-}
-
-class SimpleNodeParser implements INodeParser {
-	private parser: ReplayParser;
-	private eventQueue: GameEventProvider[] = [];
-
-	constructor(parser: ReplayParser) {
-		this.parser = parser;
-	}
-
-	NewNode(node: Node, stateType: StateType): void {
-		// Node tracking handled by ParserState
-	}
-
-	CloseNode(node: Node, stateType: StateType): void {
-		// Will be replaced by full NodeParser implementation in Phase 1.5
-	}
-
-	EnqueueGameEvent(events: GameEventProvider[]): void {
-		for (const provider of events) {
-			this.eventQueue.push(provider);
-			this.ProcessQueue();
-		}
-	}
-
-	ClearQueue(): void {
-		this.eventQueue.length = 0;
-	}
-
-	Reset(_state: any, _helper: any): void {
-		this.eventQueue.length = 0;
-	}
-
-	private ProcessQueue(): void {
-		while (this.eventQueue.length > 0) {
-			const provider = this.eventQueue.shift()!;
-			try {
-				const event = provider.Creator();
-				if (this.parser.onGameEvent) {
-					this.parser.onGameEvent(event);
-				}
-			} catch (e) {
-				Logger.Log('Error processing game event', e);
-			}
-		}
 	}
 }
