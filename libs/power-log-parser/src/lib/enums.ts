@@ -16,6 +16,17 @@ export enum ParserGameTag {
 }
 
 /**
+ * Hearthstone game-entity State values.
+ * Not exported by @firestone-hs/reference-data, so defined locally.
+ */
+export enum State {
+	INVALID = 0,
+	LOADING = 1,
+	RUNNING = 2,
+	COMPLETE = 3,
+}
+
+/**
  * MetaDataType values from the C# parser.
  * Maps to MetaTags in @firestone-hs/reference-data with some additions.
  */

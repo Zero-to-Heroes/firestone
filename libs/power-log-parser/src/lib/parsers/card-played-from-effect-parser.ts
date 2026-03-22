@@ -71,7 +71,7 @@ export class CardPlayedFromEffectParser implements ActionParser {
 		const tagChange = node.Object as TagChange;
 		const entity = this.GameState.CurrentEntities.get(tagChange.Entity)!;
 		const cardId = entity.CardId;
-		if (cardId == null) {
+		if (cardId == null || cardId.length === 0) {
 			return null;
 		}
 

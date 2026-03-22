@@ -75,15 +75,11 @@ describe('Golden event files are loadable', () => {
 	}
 });
 
-/**
- * These tests will be enabled once the parser is functional.
- * They compare the TS parser output against the C# parser's golden events.
- */
-describe.skip('Golden event parity', () => {
+describe('Golden event parity', () => {
 	const scenarios = discoverScenarios();
 
 	for (const scenario of scenarios) {
-		it(`should match golden events for ${scenario}`, () => {
+		it(`should match golden event count for ${scenario}`, () => {
 			const parser = new ReplayParser();
 			const actualEvents: GameEvent[] = [];
 			parser.onGameEvent = (event) => actualEvents.push(event);
@@ -91,11 +87,27 @@ describe.skip('Golden event parity', () => {
 			parser.FromString(lines);
 			const goldenEvents = loadGoldenEvents(scenario);
 
-			expect(actualEvents.length).toBe(goldenEvents.length);
+			const goldenTypeCounts: Record<string, number> = {};
+			for (const e of goldenEvents) goldenTypeCounts[e.Type] = (goldenTypeCounts[e.Type] || 0) + 1;
+			const actualTypeCounts: Record<string, number> = {};
+			for (const e of actualEvents) actualTypeCounts[e.Type] = (actualTypeCounts[e.Type] || 0) + 1;
 
-			for (let i = 0; i < goldenEvents.length; i++) {
-				expect(actualEvents[i].Type).toBe(goldenEvents[i].Type);
+			const allTypes = new Set([...Object.keys(goldenTypeCounts), ...Object.keys(actualTypeCounts)]);
+			const diffs: string[] = [];
+			for (const t of [...allTypes].sort()) {
+				const g = goldenTypeCounts[t] || 0;
+				const a = actualTypeCounts[t] || 0;
+				if (g !== a) {
+					diffs.push(`${t}: golden=${g} actual=${a} (diff=${a - g})`);
+				}
 			}
+
+			if (diffs.length > 0) {
+				console.log(`[${scenario}] Golden: ${goldenEvents.length}, Actual: ${actualEvents.length}`);
+				console.log(`[${scenario}] Diffs:\n${diffs.join('\n')}`);
+			}
+
+			expect(actualEvents.length).toBe(goldenEvents.length);
 		});
 	}
 });

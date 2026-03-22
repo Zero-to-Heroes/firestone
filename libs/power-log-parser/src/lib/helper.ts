@@ -10,6 +10,7 @@ import {
 	Step,
 	Zone,
 } from '@firestone-hs/reference-data';
+import { State } from './enums';
 import { GameEntity, PlayerEntity, Tag } from './models';
 import { Regexes } from './regexes';
 import type { CombinedState } from './state/combined-state';
@@ -23,6 +24,7 @@ const tagEnumTypes: Map<GameTag, Record<string, number>> = new Map([
 	[GameTag.RARITY, CardRarity as any],
 	[GameTag.MULLIGAN_STATE, Mulligan as any],
 	[GameTag.NEXT_STEP, Step as any],
+	[GameTag.STATE, State as any],
 	[GameTag.STEP, Step as any],
 	[GameTag.CARDRACE, Race as any],
 	[GameTag.ZONE, Zone as any],
@@ -244,8 +246,9 @@ export class Helper {
 	}
 
 	ParseEnum(enumType: Record<string, any>, tag: string): number {
-		if (enumType[tag] !== undefined) {
-			return enumType[tag];
+		const result = enumType[tag];
+		if (result !== undefined && typeof result === 'number') {
+			return result;
 		}
 		const numeric = parseInt(tag, 10);
 		if (!isNaN(numeric)) return numeric;

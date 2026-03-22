@@ -1,7 +1,8 @@
 import { GameTag, Zone } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventProvider, GameEventHelper } from '../game-event';
-import { FullEntity, Game, Node } from '../models';
+import { FullEntity, Node } from '../models';
+import { GameAction } from '../models/game-action';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -22,10 +23,12 @@ export class InitialCardInDeckParser implements ActionParser {
 	}
 
 	AppliesOnCloseNode(node: Node, stateType: StateType): boolean {
+		// C# checks typeof(GameAction) — an abstract class — so this never matches
+		// (the parent of initial deck FullEntities is typeof(Game), not typeof(GameAction))
 		const appliesOnFullEntity =
 			node.Type === FullEntity &&
 			(node.Object as FullEntity).GetTag(GameTag.ZONE) === (Zone.DECK as number) &&
-			node.Parent?.Type === Game;
+			node.Parent?.Type === GameAction;
 		return stateType === StateType.PowerTaskList && appliesOnFullEntity;
 	}
 
