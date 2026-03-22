@@ -10,7 +10,7 @@ import {
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { DeckCard, toTagsObject } from '../../../models/deck-card';
 import { DeckState } from '../../../models/deck-state';
-import { GameState, ShortCard, ShortCardWithTurn } from '../../../models/game-state';
+import { GameState, ShortCardWithTurn } from '../../../models/game-state';
 import { getProcessedCard, storeInformationOnCardPlayed } from '../../card-utils';
 import { hasOnCardPlayedWhileInHand } from '../../cards/_card.type';
 import { cardsInfoCache } from '../../cards/_mapping';
@@ -330,9 +330,6 @@ export class CardPlayedFromHandParser implements EventParser {
 		return currentState.update({
 			playerDeck: playerDeckAfterReveal,
 			opponentDeck: opponentDeckAfterReveal,
-			cardsPlayedThisMatch: isCardCountered
-				? currentState.cardsPlayedThisMatch
-				: ([...currentState.cardsPlayedThisMatch, newCardPlayedThisMatch] as readonly ShortCard[]),
 		});
 	}
 
@@ -609,15 +606,9 @@ export const updateGlobalEffects = (
 	return { battlecriesMultiplier, newGlobalEffects };
 };
 
-const markTopOfDeckFromShiftingTop = (
-	deck: DeckState,
-	cardId: string,
-	allCards: CardsFacadeService,
-): DeckState => {
+const markTopOfDeckFromShiftingTop = (deck: DeckState, cardId: string, allCards: CardsFacadeService): DeckState => {
 	const fillerCard =
-		deck.deck.find(
-			(c) => !c.cardId && !c.entityId && c.positionFromTop == null && c.positionFromBottom == null,
-		) ??
+		deck.deck.find((c) => !c.cardId && !c.entityId && c.positionFromTop == null && c.positionFromBottom == null) ??
 		deck.deck.find((c) => !c.cardId && c.positionFromTop == null && c.positionFromBottom == null);
 	if (!fillerCard) {
 		return deck;

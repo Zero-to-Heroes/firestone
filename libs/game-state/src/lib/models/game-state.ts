@@ -1,7 +1,6 @@
-import { BnetRegion, CardIds, GameType, SpellSchool } from '@firestone-hs/reference-data';
+import { BnetRegion, GameType } from '@firestone-hs/reference-data';
 import { MatchInfo } from '@firestone/memory';
 import { NonFunctionProperties } from '@firestone/shared/framework/common';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BattlegroundsState } from './_barrel';
 import { DeckState } from './deck-state';
 import { FullGameState } from './full-game-state';
@@ -33,9 +32,6 @@ export class GameState {
 	readonly gameEnded: boolean;
 	readonly spectating: boolean;
 	readonly doingGameReset: boolean;
-	// Not used anymore?
-	/** @deprecated */
-	readonly cardsPlayedThisMatch: readonly ShortCard[] = [];
 	readonly miscCardsDestroyed: readonly string[] = [];
 
 	readonly bgState: BattlegroundsState = new BattlegroundsState();
@@ -68,31 +64,6 @@ export class GameState {
 			this.metadata.gameType === GameType.GT_MERCENARIES_PVE ||
 			this.metadata.gameType === GameType.GT_MERCENARIES_PVE_COOP
 		);
-	}
-
-	public lastBattlecryPlayedForMacaw(allCards: CardsFacadeService, side: 'player' | 'opponent'): string | undefined {
-		return (
-			this.cardsPlayedThisMatch
-				.filter((card) => card.side === side)
-				.filter((card) => {
-					const ref = allCards.getCard(card.cardId);
-					return !!ref.mechanics?.length && ref.mechanics.includes('BATTLECRY');
-				})
-				// Because we want to know what card the macaw copies, so if we play two macaws in a row we still
-				// want the info
-				.filter((card) => card.cardId !== CardIds.BrilliantMacaw)
-				.pop()?.cardId
-		);
-	}
-
-	public lastShadowSpellPlayed(allCards: CardsFacadeService, side: 'player' | 'opponent'): string | undefined {
-		return this.cardsPlayedThisMatch
-			.filter((card) => card.side === side)
-			.filter((card) => {
-				const ref = allCards.getCard(card.cardId);
-				return ref.spellSchool === SpellSchool[SpellSchool.SHADOW];
-			})
-			.pop()?.cardId;
 	}
 
 	// Not all players finish their battles at the same time. So you might still be in battle, but
