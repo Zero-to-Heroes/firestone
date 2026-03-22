@@ -50,6 +50,7 @@
 			"@firestone/mainwindow/common": ["libs/mainwindow/common/src/index.ts"],
 			"@firestone/mainwindow/view": ["libs/mainwindow/view/src/index.ts"],
 			"@firestone/memory": ["libs/memory/src/index.ts"],
+			"@firestone/power-log-parser": ["libs/power-log-parser/src/index.ts"],
 			"@firestone/mercenaries/common": ["libs/mercenaries/common/src/index.ts"],
 			"@firestone/mods/common": ["libs/mods/common/src/index.ts"],
 			"@firestone/profile/common": ["libs/profile/common/src/index.ts"],
