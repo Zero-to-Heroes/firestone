@@ -203,6 +203,7 @@ export { Skyfin } from './skyfin';
 export { SneedsOldShredder } from './sneeds-old-shredder';
 export { Solitude } from './solitude';
 export { SoldierOfOnyxia } from './soldier-of-onyxia';
+export { SoldierOfSinestra } from './soldier-of-sinestra';
 export { SootSpewer } from './soot-spewer';
 export { SoulburnerVaria } from './soulburner-varia';
 export { SpearheartSentry } from './spearheart-sentry';
