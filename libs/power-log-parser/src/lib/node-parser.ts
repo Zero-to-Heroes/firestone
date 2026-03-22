@@ -7,6 +7,16 @@ import type { ActionParser } from './action-parser';
 import type { StateFacade } from './state/state-facade';
 import type { ParserState } from './state/parser-state';
 import { StateType, INodeParser } from './state/parser-state';
+import {
+	ChoosingOptionsParser,
+	CounterWillTriggerParser,
+	EntityChosenParser,
+	GameCleanupParser,
+	MinionsWillDieParser,
+	NewGameParser,
+	SecretWillTriggeredParser,
+	TurnCleanupParser,
+} from './parsers';
 
 export class NodeParser implements INodeParser {
 	private QueueHandler: EventQueueHandler;
@@ -98,9 +108,23 @@ export class NodeParser implements INodeParser {
 		this.QueueHandler.ClearQueue();
 	}
 
-	// Phase 2 will populate this with the full list of ~133 ActionParser implementations.
-	// For now returns empty; the infrastructure is fully wired and ready.
-	private BuildActionParsers(_parserState: ParserState, _stateType: StateType): ActionParser[] {
+	private BuildActionParsers(parserState: ParserState, stateType: StateType): ActionParser[] {
+		if (stateType === StateType.GameState) {
+			return [
+				new NewGameParser(parserState, this.StateFacade),
+				new TurnCleanupParser(parserState, this.StateFacade),
+				new GameCleanupParser(parserState, this.StateFacade),
+				new SecretWillTriggeredParser(parserState, this.StateFacade),
+				new CounterWillTriggerParser(parserState, this.StateFacade),
+				new MinionsWillDieParser(parserState, this.StateFacade),
+				new ChoosingOptionsParser(parserState, this.StateFacade),
+				new EntityChosenParser(parserState, this.StateFacade),
+				// BattlegroundsHeroSelectedParser, BattlegroundsActivePlayerBoardParser,
+				// BattlegroundsDuoTeammatePlayerBoardParser, BattlegroundsPlayerBoardParser
+				// will be added in the BG parsers batch
+			];
+		}
+		// PowerTaskList parsers will be added in subsequent batches
 		return [];
 	}
 }
