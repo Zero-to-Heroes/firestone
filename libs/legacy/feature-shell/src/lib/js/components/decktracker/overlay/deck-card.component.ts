@@ -15,7 +15,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { CardClass, CardIds, GameTag, GameType, ReferenceCard } from '@firestone-hs/reference-data';
-import { ArenaRefService } from '@firestone/arena/common';
+import { ArenaRefService } from '@firestone/arena/data-access';
 import {
 	CARDS_TO_HIGHLIGHT_INSIDE_RELATED_CARDS_WITHOUT_DUPES,
 	CardsHighlightFacadeService,

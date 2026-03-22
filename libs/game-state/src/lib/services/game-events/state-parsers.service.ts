@@ -11,6 +11,7 @@ import {
 	OwUtilsService,
 } from '@firestone/shared/framework/core';
 
+import { ArenaRefService } from '@firestone/arena/data-access';
 import { DeckHandlerService } from '../deck-handler.service';
 import { AiDeckService } from '../deck/ai-deck-service.service';
 import { ConstructedArchetypeServiceOrchestrator } from '../deck/constructed-archetype-orchestrator.service';
@@ -90,8 +91,8 @@ import { CreateCardInDeckParser } from './event-parser/create-card-in-deck-parse
 import { CreateCardInGraveyardParser } from './event-parser/create-card-in-graveyard-parser';
 import { CustomEffects2Parser } from './event-parser/custom-effects-2-parser';
 import { CustomEffectsParser } from './event-parser/custom-effects-parser';
-import { DamageTakenParser } from './event-parser/damage-taken-parser';
 import { DamageDealtParser } from './event-parser/damage-dealt-parser';
+import { DamageTakenParser } from './event-parser/damage-taken-parser';
 import { DataScriptChangedParser } from './event-parser/data-script-changed-parser';
 import { DeathrattleTriggeredParser } from './event-parser/deathrattle-triggered-parser';
 import { DeckManipulationHelper } from './event-parser/deck-manipulation-helper';
@@ -204,6 +205,7 @@ export class GameStateParsersService {
 		private readonly gameIdService: GameUniqueIdService,
 		private readonly guardian: BgsIntermediateResultsSimGuardianService,
 		private readonly reviewIdService: ReviewIdService,
+		private readonly arenaRefService: ArenaRefService,
 		// private readonly highlighter: BgsBoardHighlighterService,
 		// private readonly nav: BgsInGameWindowNavigationService,
 	) {}
@@ -281,7 +283,7 @@ export class GameStateParsersService {
 			[GameEvent.CARD_CHANGED_ON_BOARD]: [new CardChangedOnBoardParser(this.helper, this.allCards)],
 			[GameEvent.CARD_CREATOR_CHANGED]: [new CardCreatorChangedParser(this.helper, this.allCards)],
 			[GameEvent.CARD_DRAW_FROM_DECK]: [
-				new CardDrawParser(this.helper, this.allCards),
+				new CardDrawParser(this.helper, this.allCards, this.arenaRefService),
 				new SphereOfSapienceParser(this.helper),
 			],
 			[GameEvent.CARD_DREDGED]: [new CardDredgedParser(this.helper, this.allCards, this.i18n)],
@@ -308,7 +310,7 @@ export class GameStateParsersService {
 			[GameEvent.PLAYER_HERALDED]: [new HeraldParser()],
 			[GameEvent.COST_CHANGED]: [new CostChangedParser(this.helper, this.allCards)],
 			[GameEvent.CREATE_CARD_IN_DECK]: [
-				new CreateCardInDeckParser(this.helper, this.allCards, this.i18n),
+				new CreateCardInDeckParser(this.helper, this.allCards, this.i18n, this.arenaRefService),
 				new PlaguesParser(),
 			],
 			[GameEvent.CREATE_CARD_IN_GRAVEYARD]: [new CreateCardInGraveyardParser(this.helper, this.allCards)],
@@ -369,6 +371,7 @@ export class GameStateParsersService {
 					this.memory,
 					this.constructedArchetypes,
 					this.i18n,
+					this.arenaRefService,
 				),
 			],
 			[GameEvent.MAX_RESOURCES_UPDATED]: [new MaxResourcesUpdatedParser()],
@@ -420,14 +423,16 @@ export class GameStateParsersService {
 				new QuestPlayedFromHandParser(this.helper, this.allCards),
 				new ListCardsPlayedFromInitialDeckParser(this.helper, this.allCards),
 			],
-			[GameEvent.RECEIVE_CARD_IN_HAND]: [new ReceiveCardInHandParser(this.helper, this.allCards)],
+			[GameEvent.RECEIVE_CARD_IN_HAND]: [
+				new ReceiveCardInHandParser(this.helper, this.allCards, this.arenaRefService),
+			],
 			[GameEvent.RECONNECT_OVER]: [new ReconnectOverParser(this.deckHandler, this.constructedArchetypes)],
 			[GameEvent.RECONNECT_START]: [new ReconnectStartParser()],
 			[GameEvent.RECRUIT_CARD]: [new CardRecruitedParser(this.helper, this.allCards)],
 			[GameEvent.RESOURCES_UPDATED]: [new ResourcesParser()],
 			[GameEvent.REVIEW_ID]: [new ReviewIdParser()],
 			[GameEvent.SECRET_CREATED_IN_GAME]: [
-				new SecretCreatedInGameParser(this.helper, this.secretsConfig, this.allCards),
+				new SecretCreatedInGameParser(this.helper, this.secretsConfig, this.allCards, this.arenaRefService),
 			],
 			[GameEvent.SECRET_DESTROYED]: [new SecretDestroyedParser(this.helper)],
 			[GameEvent.SECRET_PLAYED_FROM_DECK]: [
@@ -455,7 +460,7 @@ export class GameStateParsersService {
 			[GameEvent.START_OF_GAME]: [new StartOfGameEffectParser(this.helper, this.allCards, this.i18n)],
 			[GameEvent.SUB_SPELL_END]: [new CustomEffects2Parser(this.helper, this.allCards)],
 			[GameEvent.SUB_SPELL_START]: [
-				new CustomEffectsParser(this.helper, this.allCards),
+				new CustomEffectsParser(this.helper, this.allCards, this.arenaRefService),
 				new CthunRevealedParser(this.helper, this.allCards, this.i18n),
 				new GlobalMinionEffectParser(this.helper, this.allCards, this.i18n),
 			],

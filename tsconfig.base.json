@@ -25,6 +25,7 @@
 			"@firestone/app/ow-native": ["libs/app/ow-native/src/index.ts"],
 			"@firestone/app/view": ["libs/app/view/src/index.ts"],
 			"@firestone/arena/common": ["libs/arena/common/src/index.ts"],
+			"@firestone/arena/data-access": ["libs/arena/data-access/src/index.ts"],
 			"@firestone/arena/view": ["libs/arena/view/src/index.ts"],
 			"@firestone/battlegrounds/common": ["libs/battlegrounds/common/src/index.ts"],
 			"@firestone/battlegrounds/core": ["libs/battlegrounds/core/src/index.ts"],

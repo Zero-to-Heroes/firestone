@@ -12,7 +12,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { GameType, SceneMode } from '@firestone-hs/reference-data';
-import { ArenaRefService } from '@firestone/arena/common';
+import { ArenaRefService } from '@firestone/arena/data-access';
 import {
 	CardsHighlightFacadeService,
 	CounterInstance,
