@@ -39,6 +39,7 @@ export interface GuessInfoInput {
 		tags?: readonly { Name: GameTag; Value: number }[];
 		metadata?: Metadata;
 		validArenaPool: readonly string[];
+		creatorTags?: readonly { Name: GameTag; Value: number }[];
 	};
 }
 export interface GuessCardIdInput {

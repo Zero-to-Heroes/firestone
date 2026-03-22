@@ -581,6 +581,7 @@ export class GameEvents {
 						creatorCardId: gameEvent.Value.AdditionalProps?.CreatorCardId,
 						creatorEntityId: gameEvent.Value.AdditionalProps?.CreatorEntityId,
 						creatorZone: gameEvent.Value.AdditionalProps?.CreatorZone,
+						creatorTags: gameEvent.Value.AdditionalProps?.CreatorTags,
 						createdIndex: gameEvent.Value.AdditionalProps?.CreatedIndex,
 						lastInfluencedByCardId: gameEvent.Value.AdditionalProps?.LastInfluencedByCardId,
 						isPremium: gameEvent.Value.AdditionalProps?.IsPremium,
