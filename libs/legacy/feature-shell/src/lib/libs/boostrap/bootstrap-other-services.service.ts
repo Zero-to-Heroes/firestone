@@ -7,7 +7,8 @@ import {
 } from '@firestone/achievements/common';
 import { EndGameListenerService, QuestsService, RewardMonitorService } from '@firestone/app/common';
 import { OwHotkeyHandlerService } from '@firestone/app/ow-native';
-import { ArenaMetaHeroStrategiesService, ArenaRefService } from '@firestone/arena/common';
+import { ArenaMetaHeroStrategiesService } from '@firestone/arena/common';
+import { ArenaRefService } from '@firestone/arena/data-access';
 import { BgsPerfectGamesService } from '@firestone/battlegrounds/data-access';
 import { PackStatsService } from '@firestone/collection/data-access';
 import { CardsMonitorService, CollectionManager, CollectionStorageService } from '@firestone/collection/services';

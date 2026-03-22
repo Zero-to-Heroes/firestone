@@ -1,4 +1,5 @@
-import { GameType, isBattlegrounds, isMercenaries } from '@firestone-hs/reference-data';
+import { GameType, isArena, isBattlegrounds, isMercenaries } from '@firestone-hs/reference-data';
+import { ArenaRefService } from '@firestone/arena/data-access';
 import { MemoryInspectionService } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
@@ -34,6 +35,7 @@ export class MatchMetadataParser implements EventParser {
 		private readonly memory: MemoryInspectionService,
 		private readonly constructedArchetypes: ConstructedArchetypeServiceOrchestrator,
 		private readonly i18n: ILocalizationService,
+		private readonly arenaRefService: ArenaRefService,
 	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
@@ -90,6 +92,9 @@ export class MatchMetadataParser implements EventParser {
 			});
 			console.log('[match-metadata-parser] newState', newState.metadata);
 			return newState;
+		} else if (isArena(gameEvent.additionalData.metaData.GameType)) {
+			// Get the valid arena pool
+			await this.arenaRefService.validDiscoveryPool$$.getValueWithInit();
 		}
 
 		const noDeckMode = prefs.decktrackerNoDeckMode;

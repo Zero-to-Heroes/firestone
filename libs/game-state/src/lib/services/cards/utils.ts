@@ -61,7 +61,7 @@ export interface FilterCardsInput {
 	positionInHand?: number;
 	tags?: readonly { Name: GameTag; Value: number }[];
 	metadata?: Metadata;
-	validArenaPool?: readonly string[];
+	validArenaPool: readonly string[];
 	currentClass?: string;
 	initialDecklist?: readonly string[];
 }

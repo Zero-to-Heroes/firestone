@@ -300,11 +300,12 @@ export const addGuessInfoToCard = (
 	opponentDeckState: DeckState,
 	gameState: GameState,
 	allCards: CardsFacadeService,
-	options?: {
+	options: {
 		positionInHand?: number;
 		creatorZone?: Zone | null;
 		tags?: readonly { Name: GameTag; Value: number }[];
 		metadata?: Metadata;
+		validArenaPool: readonly string[];
 	},
 ): DeckCard => {
 	if (card.cardId) {
@@ -371,7 +372,6 @@ export const addGuessInfoToCard = (
 			}
 		}
 	}
-	console.debug('[debug] newGuessedInfo', newGuessedInfo, card);
 
 	return card.update({
 		guessedInfo: newGuessedInfo,

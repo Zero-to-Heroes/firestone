@@ -1,4 +1,5 @@
 import { CardIds, ReferenceCard } from '@firestone-hs/reference-data';
+import { ArenaRefService } from '@firestone/arena/data-access';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { DeckCard } from '../../../models/deck-card';
 import { DeckState } from '../../../models/deck-state';
@@ -21,6 +22,7 @@ export class CreateCardInDeckParser implements EventParser {
 		private readonly helper: DeckManipulationHelper,
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: ILocalizationService,
+		private readonly arenaRefService: ArenaRefService,
 	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
@@ -160,6 +162,9 @@ export class CreateCardInDeckParser implements EventParser {
 			opponentDeck,
 			currentState,
 			this.allCards,
+			{
+				validArenaPool: this.arenaRefService.validDiscoveryPool$$.value,
+			},
 		);
 
 		// console.debug('[create-card-in-deck]', 'adding card', card, gameEvent);
