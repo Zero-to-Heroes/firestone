@@ -306,6 +306,7 @@ export const addGuessInfoToCard = (
 		tags?: readonly { Name: GameTag; Value: number }[];
 		metadata?: Metadata;
 		validArenaPool: readonly string[];
+		creatorTags?: readonly { Name: GameTag; Value: number }[];
 	},
 ): DeckCard => {
 	if (card.cardId) {
