@@ -218,7 +218,7 @@ export class ReceiveCardInHandParser implements EventParser {
 				tags: gameEvent.additionalData.tags,
 				metadata: currentState.metadata,
 				creatorZone: gameEvent.additionalData.creatorZone,
-				validArenaPool: this.arenaRefService.validDiscoveryPool$$.value,
+				validArenaPool: this.arenaRefService.validDiscoveryPool$$.value ?? [],
 			},
 		);
 		const cardWithAdditionalAttributes = addAdditionalAttribuesInHand(

@@ -244,7 +244,8 @@ export class FullScreenOverlaysComponent
 			}),
 		);
 
-		const arenaCards = await this.arenaRef.validDiscoveryPool$$.getValueWithInit();
+		const arenaCards = (await this.arenaRef.validDiscoveryPool$$.getValueWithInit()) ?? [];
+		console.debug('[full-screen-overlays] arenaCards', arenaCards);
 		const allCounters = getAllCounters(this.i18n, this.allCards).sort((a, b) => a.id.localeCompare(b.id));
 		allCounters.forEach((c) => {
 			c.init({
