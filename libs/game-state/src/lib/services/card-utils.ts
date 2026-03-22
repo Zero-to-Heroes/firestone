@@ -213,7 +213,9 @@ const getShatteredPossibleCards = (
 	allCards: AllCardsService,
 	guessedInfo: GuessedInfo,
 ): readonly string[] => {
-	const cardClasses: readonly CardClass[] = guessedInfo?.cardClasses ?? [];
+	const cardClasses: readonly CardClass[] = guessedInfo?.cardClasses ?? [
+		deckState.getCurrentClassEnum() ?? CardClass.NEUTRAL,
+	];
 	// // console.debug('cardClasses', cardClasses);
 	// if (!cardClasses.length) {
 	// 	return [];
