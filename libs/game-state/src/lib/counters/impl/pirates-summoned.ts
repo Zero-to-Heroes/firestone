@@ -1,8 +1,9 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { CardIds, GameFormat } from '@firestone-hs/reference-data';
+import { CardClass, CardIds, GameFormat } from '@firestone-hs/reference-data';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { GameState } from '../../models/game-state';
+import { initialHeroClassIs } from '../../models/hero-card';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
 import { CounterType } from '../_exports';
 
@@ -27,7 +28,13 @@ export class PiratesSummonedCounterDefinitionV2 extends CounterDefinitionV2<numb
 	};
 	readonly opponent = {
 		pref: 'opponentPiratesSummonedCounter' as const,
-		display: (state: GameState): boolean => state.metadata?.formatType !== GameFormat.FT_STANDARD,
+		display: (state: GameState): boolean => {
+			if (!initialHeroClassIs(state.opponentDeck.hero, [CardClass.ROGUE])) {
+				return false;
+			}
+
+			return state.metadata?.formatType !== GameFormat.FT_STANDARD;
+		},
 		value: (state: GameState) => {
 			const result = state.opponentDeck.piratesSummoned ?? 0;
 			return result >= 3 ? result : null;
