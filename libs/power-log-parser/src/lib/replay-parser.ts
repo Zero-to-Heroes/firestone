@@ -91,6 +91,8 @@ export class ReplayParser {
 		for (let i = 0; i < lines.length; i++) {
 			this.ReadLine(lines[i], this.CurrentGameSeed, i);
 		}
+		this.State.GSState.NodeParser.ClearQueue();
+		this.State.PTLState.NodeParser.ClearQueue();
 	}
 
 	Init(): void {

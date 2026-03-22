@@ -30,26 +30,25 @@ describe('ReplayParser', () => {
 
 	it('should accept log lines without throwing', () => {
 		const parser = new ReplayParser();
-		parser.initRealtimeLogConversion();
 		const lines = loadTestLog('dragon_breath');
-		expect(() => parser.readLines(lines)).not.toThrow();
+		expect(() => parser.FromString(lines)).not.toThrow();
 	});
 
 	it('should emit events via onGameEvent callback', () => {
 		const parser = new ReplayParser();
 		const events: GameEvent[] = [];
 		parser.onGameEvent = (event) => events.push(event);
-		parser.initRealtimeLogConversion();
 		const lines = loadTestLog('dragon_breath');
-		parser.readLines(lines);
+		parser.FromString(lines);
 		// TODO: Once the parser is implemented, assert events.length > 0
 	});
 
 	it('should produce events via fromString()', () => {
 		const parser = new ReplayParser();
 		const lines = loadTestLog('dragon_breath');
-		const events = parser.fromString(lines);
-		// TODO: Once the parser is implemented, assert events.length > 0
+		const events: GameEvent[] = [];
+		parser.onGameEvent = (event) => events.push(event);
+		parser.FromString(lines);
 		expect(events).toBeDefined();
 		expect(Array.isArray(events)).toBe(true);
 	});
@@ -80,14 +79,16 @@ describe('Golden event files are loadable', () => {
  * These tests will be enabled once the parser is functional.
  * They compare the TS parser output against the C# parser's golden events.
  */
-describe.skip('Golden event parity (Phase 2+)', () => {
+describe.skip('Golden event parity', () => {
 	const scenarios = discoverScenarios();
 
 	for (const scenario of scenarios) {
 		it(`should match golden events for ${scenario}`, () => {
 			const parser = new ReplayParser();
+			const actualEvents: GameEvent[] = [];
+			parser.onGameEvent = (event) => actualEvents.push(event);
 			const lines = loadTestLog(scenario);
-			const actualEvents = parser.fromString(lines);
+			parser.FromString(lines);
 			const goldenEvents = loadGoldenEvents(scenario);
 
 			expect(actualEvents.length).toBe(goldenEvents.length);
