@@ -33,6 +33,10 @@ Once you're done, before assigning the PR to me for review, please mention @curs
 - If the card can create a card from any class, set guessedInfo.canBeAnyCardClass
 - If the card can create a card from any class and neutral, set guessedInfo.canBeAnyCardClassOrNeutral
 
+### General implementation checks
+
+- Check if the card should also implement WillBeActiveCard or other interfaces defined in \_card.type.ts
+
 ### Common considerations
 
 - When you want to get the current class, use DeckState.getCurrentClass()
