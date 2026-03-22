@@ -6,7 +6,7 @@ const DISCOVERY_POOL_URL = 'https://static.zerotoheroes.com/api/arena/stats/disc
 
 @Injectable({ providedIn: 'root' })
 export class ArenaRefService extends AbstractFacadeService<ArenaRefService> {
-	public validDiscoveryPool$$: SubscriberAwareBehaviorSubject<readonly string[]>;
+	public validDiscoveryPool$$: SubscriberAwareBehaviorSubject<readonly string[] | null>;
 
 	private api: ApiRunner;
 
@@ -19,7 +19,7 @@ export class ArenaRefService extends AbstractFacadeService<ArenaRefService> {
 	}
 
 	protected async init() {
-		this.validDiscoveryPool$$ = new SubscriberAwareBehaviorSubject<readonly string[]>([]);
+		this.validDiscoveryPool$$ = new SubscriberAwareBehaviorSubject<readonly string[] | null>(null);
 		this.api = AppInjector.get(ApiRunner);
 
 		this.validDiscoveryPool$$.onFirstSubscribe(async () => {

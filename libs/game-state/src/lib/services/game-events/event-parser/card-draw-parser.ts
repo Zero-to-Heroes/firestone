@@ -243,7 +243,7 @@ export class CardDrawParser implements EventParser {
 			currentState,
 			this.allCards,
 			{
-				validArenaPool: this.arenaRefService.validDiscoveryPool$$.value,
+				validArenaPool: this.arenaRefService.validDiscoveryPool$$.value ?? [],
 			},
 		);
 		console.debug('[card-draw] cardWithGuessInfo', cardWithGuessInfo, gameEvent);

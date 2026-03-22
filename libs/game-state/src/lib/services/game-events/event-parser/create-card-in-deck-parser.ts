@@ -163,7 +163,7 @@ export class CreateCardInDeckParser implements EventParser {
 			currentState,
 			this.allCards,
 			{
-				validArenaPool: this.arenaRefService.validDiscoveryPool$$.value,
+				validArenaPool: this.arenaRefService.validDiscoveryPool$$.value ?? [],
 			},
 		);
 

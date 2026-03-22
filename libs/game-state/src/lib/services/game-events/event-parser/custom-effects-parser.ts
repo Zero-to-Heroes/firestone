@@ -146,7 +146,7 @@ export class CustomEffectsParser implements EventParser {
 			currentState,
 			this.allCards,
 			{
-				validArenaPool: this.arenaRefService.validDiscoveryPool$$.value,
+				validArenaPool: this.arenaRefService.validDiscoveryPool$$.value ?? [],
 			},
 		);
 		const newHand = deck.hand.map((card) => (card.entityId === lastDrawnCardInHand.entityId ? updatedCard : card));

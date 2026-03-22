@@ -65,7 +65,7 @@ export class SecretCreatedInGameParser implements EventParser {
 			currentState,
 			this.cards,
 			{
-				validArenaPool: this.arenaRefService.validDiscoveryPool$$.value,
+				validArenaPool: this.arenaRefService.validDiscoveryPool$$.value ?? [],
 			},
 		);
 		// console.debug('[secret-created] card to add', card);
