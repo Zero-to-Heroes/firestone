@@ -4,12 +4,24 @@
 import { CardClass, CardIds, CardType } from '@firestone-hs/reference-data';
 import { GuessedInfo } from '../../models/deck-card';
 import { canBeDiscoveredByClass } from '../../related-cards/dynamic-pools';
-import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
+import {
+	GeneratingCard,
+	GuessInfoInput,
+	StaticGeneratingCard,
+	StaticGeneratingCardInput,
+	WillBeActiveCard,
+	WillBeActiveInput,
+} from './_card.type';
 import { filterCards } from './utils';
 
-export const Marshspawn: GeneratingCard & StaticGeneratingCard = {
+export const Marshspawn: GeneratingCard & StaticGeneratingCard & WillBeActiveCard = {
 	cardIds: [CardIds.Marshspawn_BT_115, CardIds.Marshspawn_CORE_BT_115],
 	publicCreator: true,
+	willBeActive: (input: WillBeActiveInput) => {
+		return input.playerDeck.cardsPlayedLastTurn.some(
+			(c) => input.allCards.getCard(c.cardId).type?.toUpperCase() === CardType[CardType.SPELL],
+		);
+	},
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
 		const currentClass = input.deckState.getCurrentClass();
 		const possibleCards = filterCards(
