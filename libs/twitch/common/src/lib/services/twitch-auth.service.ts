@@ -217,7 +217,6 @@ export class TwitchAuthService {
 			currentTurn: state.currentTurn,
 			gameStarted: state.gameStarted,
 			gameEnded: state.gameEnded,
-			cardsPlayedThisMatch: undefined,
 			matchInfo: { anomalies: state.matchInfo?.anomalies } as MatchInfo,
 		});
 
@@ -413,7 +412,11 @@ export class TwitchAuthService {
 							}),
 						});
 					} else {
-						console.warn('[twitch-auth] Skipping bug report for transient/auth error', error?.status, error?.name);
+						console.warn(
+							'[twitch-auth] Skipping bug report for transient/auth error',
+							error?.status,
+							error?.name,
+						);
 					}
 				} else {
 					console.warn('[twitch-auth] Could not send deck event to EBS', JSON.stringify(error));

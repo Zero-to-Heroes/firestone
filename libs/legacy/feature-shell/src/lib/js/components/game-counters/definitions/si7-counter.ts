@@ -32,7 +32,8 @@ export class Si7CounterDefinition implements CounterDefinition<GameState, readon
 	}
 
 	public select(gameState: GameState): readonly ShortCard[] {
-		return gameState.cardsPlayedThisMatch.filter((c) => c.side === this.side);
+		const deck = this.side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
+		return deck.cardsPlayedThisMatch;
 	}
 
 	public emit(cardsPlayedThisMatch: readonly ShortCard[]): NonFunctionProperties<Si7CounterDefinition> {
