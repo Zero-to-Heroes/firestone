@@ -20,7 +20,7 @@ export abstract class AbstractWidgetWrapperComponent
 		prefs: Preferences,
 		prefService?: PreferencesService,
 	) => Promise<{ left: number; top: number }>;
-	protected abstract getRect: () => { left: number; top: number; width: number; height: number };
+	protected abstract getRect: (() => { left: number; top: number; width: number; height: number }) | null;
 	protected bounds = {
 		left: -20,
 		top: -20,
@@ -87,21 +87,23 @@ export abstract class AbstractWidgetWrapperComponent
 					this.onResize();
 				}),
 		);
-		this.subscriptions.push(
-			this.keepingInBounds$
-				.pipe(
-					takeUntil(this.destroyed$),
-					// Process sequentially so a slow getRect() can't let a newer resize complete first and then be overwritten
-					concatMap(async ({ gameWidth, gameHeight, positionFromPrefs }) => {
-						let widgetRect = this.getRect();
-						while (!(widgetRect = this.getRect())?.width) {
-							await sleep(500);
-						}
-						return this.keepInBounds(gameWidth, gameHeight, positionFromPrefs, widgetRect);
-					}),
-				)
-				.subscribe(),
-		);
+		if (!!this.getRect) {
+			this.subscriptions.push(
+				this.keepingInBounds$
+					.pipe(
+						takeUntil(this.destroyed$),
+						// Process sequentially so a slow getRect() can't let a newer resize complete first and then be overwritten
+						concatMap(async ({ gameWidth, gameHeight, positionFromPrefs }) => {
+							let widgetRect = this.getRect();
+							while (!(widgetRect = this.getRect())?.width) {
+								await sleep(500);
+							}
+							return this.keepInBounds(gameWidth, gameHeight, positionFromPrefs, widgetRect);
+						}),
+					)
+					.subscribe(),
+			);
+		}
 		// ResizeObserver only fires when the observed element's size changes. The host may have
 		// no explicit size (e.g. inline), so it often doesn't change when the window resizes.
 		// Listen to window resize and emit current container dimensions.
