@@ -36,6 +36,7 @@ const revealCardFromCreator = (deck: DeckState, card: DeckCard) => {
 		case CardIds.DollmasterDorian:
 		case CardIds.DoorOfShadows_DoorOfShadowsToken:
 		case CardIds.DryscaleDeputy_WW_383:
+		case CardIds.DryscaleDeputy_DryscaleDeputyEnchantment_WW_383e:
 		case CardIds.EyeOfOrsis:
 		case CardIds.FleshBehemoth_RLK_830:
 		case CardIds.FleshBehemoth_RLK_Prologue_RLK_830:
