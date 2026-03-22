@@ -4,6 +4,7 @@ import { CardClass, CardIds } from '@firestone-hs/reference-data';
 import { anyOverlap } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { GameState } from '../../models/game-state';
+import { initialHeroClassIs } from '../../models/hero-card';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
 import { CounterType } from '../_exports';
 
@@ -42,7 +43,13 @@ export class CardsPlayedFromAnotherClassCounterDefinitionV2 extends CounterDefin
 	};
 	readonly opponent = {
 		pref: 'opponentCardsPlayedFromAnotherClassCounter' as const,
-		display: (state: GameState): boolean => true,
+		display: (state: GameState): boolean => {
+			if (!initialHeroClassIs(state.opponentDeck.hero, [CardClass.ROGUE])) {
+				return false;
+			}
+
+			return true;
+		},
 		value: (state: GameState) => {
 			return (
 				state.opponentDeck.cardsPlayedThisMatch
