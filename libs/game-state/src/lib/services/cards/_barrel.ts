@@ -215,6 +215,7 @@ export { StolenPower } from './stolen-power';
 export { SunkenScroll } from './sunken-scroll';
 export { SunkenSweeper } from './sunken-sweeper';
 export { SupplyRun } from './supply-run';
+export { Swashburglar } from './swashburglar';
 export { SwampqueenHagatha } from './swampqueen-hagatha';
 export { SweetenedSnowflurry } from './sweetened-snowflurry';
 export { Swindle } from './swindle';
