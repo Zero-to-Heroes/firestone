@@ -32,7 +32,7 @@ import { interval, Observable, Subscription } from 'rxjs';
 		<div
 			class="general-third-party"
 			*ngIf="{
-				oocLoggedIn: oocLoggedIn$,
+				oocLoggedIn: oocLoggedIn$ | async,
 				hearthpwnLoggedIn: hearthpwnLoggedIn$ | async,
 				hearthpwnLoginUrl: hearthpwnLoginUrl$ | async,
 			} as value"
