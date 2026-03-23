@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DeckCard, Handler, SelectorOptions } from '@firestone/game-state';
+import { GameType } from '@firestone-hs/reference-data';
 import { HighlightSide, ICardsHighlightService, OverwolfService } from '@firestone/shared/framework/core';
 import { CardsHighlightStandaloneService } from './cards-highlight-standalone.service';
 
@@ -58,5 +59,17 @@ export class TwitchCardsHighlightFacadeService implements ICardsHighlightService
 		card?: DeckCard,
 	): readonly { cardId: string; playTiming: number }[] {
 		return this.service.getHighlightedCards(cardId, entityId, side, card).filter((c) => c.highlight === 'tooltip');
+	}
+
+	getGlobalRelatedCards(
+		entityId: number,
+		cardId: string,
+		side: HighlightSide,
+		gameTypeOverride: GameType | null = null,
+		curatedPools?: {
+			readonly arena: readonly string[];
+		},
+	): readonly string[] {
+		return this.service.getGlobalRelatedCards(entityId, cardId, side, gameTypeOverride, curatedPools);
 	}
 }

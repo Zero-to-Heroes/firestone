@@ -3,6 +3,8 @@ export class TwitchPreferences {
 	readonly adaptativeScaling: boolean = true;
 	readonly scale: number = 100;
 	readonly cardScale: number = 100;
+	readonly cardTooltipNumberOfRelatedCards: number = 50;
+
 	readonly useModernTracker: boolean = false;
 	readonly showHeroCards: boolean = true;
 	readonly showMinionsList: boolean = true;
@@ -11,6 +13,9 @@ export class TwitchPreferences {
 	readonly showRelatedCards: boolean = true;
 	readonly overlayHighlightRelatedCards: boolean = true;
 	readonly decktrackerColorManaCost: boolean = true;
+	readonly overlayHideGifts: boolean = true;
+	readonly overlayShowGlobalEffects: boolean = false;
+	readonly overlayShowCurrentEffects: boolean = false;
 
 	readonly decktrackerOpen: boolean = true;
 	readonly decktrackerShowOpponentTracker: boolean = false;

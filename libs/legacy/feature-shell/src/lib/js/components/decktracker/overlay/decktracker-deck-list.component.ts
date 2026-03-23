@@ -47,6 +47,7 @@ import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 					[currentEffectUseEnchantmentName]="currentEffectUseEnchantmentName"
 					[showDiscoveryZone]="showDiscoveryZone"
 					[showGiftsSeparately]="showGiftsSeparately"
+					[hideGifts]="hideGifts"
 					[groupSameCardsTogether]="groupSameCardsTogether"
 					[showGeneratedCardsInSeparateZone]="showGeneratedCardsInSeparateZone"
 					[showPlaguesOnTop]="showPlaguesOnTop"
@@ -72,6 +73,7 @@ import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 					[showUnknownCards]="showUnknownCards"
 					[showUpdatedCost]="showUpdatedCost"
 					[showGiftsSeparately]="showGiftsSeparately"
+					[hideGifts]="hideGifts"
 					[groupSameCardsTogether]="groupSameCardsTogether"
 					[showStatsChange]="showStatsChange"
 					[cardsGoToBottom]="cardsGoToBottom"
@@ -107,6 +109,7 @@ export class DeckTrackerDeckListComponent extends AbstractSubscriptionComponent 
 	@Input() currentEffectUseEnchantmentName: boolean;
 	@Input() showDiscoveryZone: boolean;
 	@Input() showGiftsSeparately: boolean;
+	@Input() hideGifts: boolean;
 	@Input() groupSameCardsTogether: boolean;
 	@Input() showGeneratedCardsInSeparateZone: boolean;
 	@Input() showPlaguesOnTop: boolean;

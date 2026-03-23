@@ -101,6 +101,9 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 	@Input() set showPlaguesOnTop(value: boolean) {
 		this.showPlaguesOnTop$$.next(value);
 	}
+	@Input() set hideGifts(value: boolean) {
+		this.hideGifts$$.next(value);
+	}
 
 	private deckState$$ = new BehaviorSubject<DeckState>(null);
 	private showWarning$$ = new BehaviorSubject<boolean>(null);
@@ -112,6 +115,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 	private hideGeneratedCardsInOtherZone$$ = new BehaviorSubject<boolean>(false);
 	private showStatsChange$$ = new BehaviorSubject<boolean>(false);
 	private showPlaguesOnTop$$ = new BehaviorSubject<boolean>(false);
+	private hideGifts$$ = new BehaviorSubject<boolean>(false);
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
@@ -141,6 +145,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 			this.showStatsChange$$,
 			this.groupSameCardsTogether$,
 			this.showPlaguesOnTop$$,
+			this.hideGifts$$,
 		]).pipe(
 			this.mapData(
 				([
@@ -154,6 +159,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 					showStatsChange,
 					groupSameCardsTogether,
 					showPlaguesOnTop,
+					hideGifts,
 				]) =>
 					this.buildGroupedList(
 						deckState,
@@ -166,6 +172,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 						showStatsChange,
 						groupSameCardsTogether,
 						showPlaguesOnTop,
+						hideGifts,
 					),
 			),
 		);
@@ -186,6 +193,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 		showStatsChange: boolean,
 		groupSameCardsTogether: boolean,
 		showPlaguesOnTop: boolean,
+		hideGifts: boolean,
 	) {
 		if (!deckState) {
 			return null;
@@ -219,7 +227,7 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 		const deckForBase: DeckState = deckState.update({
 			deck: cardsInDeckZone,
 		});
-		const base = this.buildBaseCards(deckForBase, hideGeneratedCardsInOtherZone, showStatsChange);
+		const base = this.buildBaseCards(deckForBase, hideGeneratedCardsInOtherZone, showStatsChange, hideGifts);
 		deckSections.push({
 			header: deckSections.length == 0 ? null : this.i18n.translateString('decktracker.zones.in-deck'),
 			cards: base,
@@ -249,12 +257,18 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 		deckState: DeckState,
 		hideGeneratedCardsInOtherZone: boolean,
 		showStatsChange: boolean,
+		hideGifts: boolean,
 	): readonly VisualDeckCard[] {
 		const mode = !!deckState.deckList?.length ? 'focus-decklist' : 'show-played';
 		const baseCards: readonly VisualDeckCard[] =
 			mode === 'focus-decklist'
-				? this.buildBaseCardForFocus(deckState, hideGeneratedCardsInOtherZone, showStatsChange)
-				: this.buildBaseCardsForShowPlayed(deckState, hideGeneratedCardsInOtherZone, showStatsChange);
+				? this.buildBaseCardForFocus(deckState, hideGeneratedCardsInOtherZone, showStatsChange, hideGifts)
+				: this.buildBaseCardsForShowPlayed(
+						deckState,
+						hideGeneratedCardsInOtherZone,
+						showStatsChange,
+						hideGifts,
+					);
 		return baseCards;
 	}
 
@@ -262,8 +276,9 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 		deckState: DeckState,
 		hideGeneratedCardsInOtherZone: boolean,
 		showStatsChange: boolean,
+		hideGifts: boolean,
 	): readonly VisualDeckCard[] {
-		const deck: readonly DeckCard[] = deckState.deck;
+		const deck: readonly DeckCard[] = deckState.deck.filter((c) => !hideGifts || !c.creatorCardId);
 		// Here we should get all the cards that were part of the initial deck (+ the generated cards,
 		// if the option is enabled)
 		const cardsToShowNotInDeck = [
@@ -271,8 +286,11 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 				.filter((c) => !c.creatorCardId)
 				// Remove "unknown cards"
 				.filter((c) => !!c.cardId),
-			...deckState.board.filter((c) => !hideGeneratedCardsInOtherZone || !c.creatorCardId),
+			...deckState.board
+				.filter((c) => !hideGifts || !c.creatorCardId)
+				.filter((c) => !hideGeneratedCardsInOtherZone || !c.creatorCardId),
 			...deckState.otherZone
+				.filter((c) => !hideGifts || !c.creatorCardId)
 				.filter((c) => !!c.cardId)
 				.filter((c) => this.allCards.getCard(c.cardId).type !== 'Enchantment')
 				.filter((c) => !hideGeneratedCardsInOtherZone || !c.creatorCardId)
@@ -366,8 +384,9 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 		deckState: DeckState,
 		hideGeneratedCardsInOtherZone: boolean,
 		showStatsChange: boolean,
+		hideGifts: boolean,
 	): readonly VisualDeckCard[] {
-		const deck: readonly DeckCard[] = deckState.deck;
+		const deck: readonly DeckCard[] = deckState.deck.filter((c) => !hideGifts || !c.creatorCardId);
 		// Here we should get all the cards that were part of the initial deck (+ the generated cards,
 		// if the option is enabled)
 		const cardsToShowNotInDeck = [
@@ -375,8 +394,11 @@ export class GroupedDeckListComponent extends AbstractSubscriptionComponent impl
 				.filter((c) => !c.creatorCardId)
 				// Remove "unknown cards"
 				.filter((c) => !!c.cardId),
-			...deckState.board.filter((c) => !hideGeneratedCardsInOtherZone || !c.creatorCardId),
+			...deckState.board
+				.filter((c) => !hideGifts || !c.creatorCardId)
+				.filter((c) => !hideGeneratedCardsInOtherZone || !c.creatorCardId),
 			...deckState.otherZone
+				.filter((c) => !hideGifts || !c.creatorCardId)
 				.filter((c) => !!c.cardId)
 				.filter((c) => this.allCards.getCard(c.cardId).type !== 'Enchantment')
 				.filter((c) => !hideGeneratedCardsInOtherZone || !c.creatorCardId)

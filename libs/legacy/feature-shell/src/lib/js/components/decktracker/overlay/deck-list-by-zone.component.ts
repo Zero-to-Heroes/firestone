@@ -128,6 +128,10 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 		this.sortHandByZoneOrder$$.next(value);
 	}
 
+	@Input() set hideGifts(value: boolean) {
+		this.hideGifts$$.next(value);
+	}
+
 	@Input() set deckState(value: DeckState) {
 		this.deckState$$.next(value);
 	}
@@ -150,6 +154,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 	private showPlaguesOnTop$$ = new BehaviorSubject<boolean>(true);
 	private sortHandByZoneOrder$$ = new BehaviorSubject<boolean>(false);
 	private groupSameCardsTogether$$ = new BehaviorSubject<boolean>(false);
+	private hideGifts$$ = new BehaviorSubject<boolean>(false);
 	private deckState$$ = new BehaviorSubject<DeckState>(null);
 
 	constructor(
@@ -186,6 +191,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 			this.groupSameCardsTogether$$,
 			this.sortHandByZoneOrder$$,
 			this.showDiscoveryZone$$,
+			this.hideGifts$$,
 		]).pipe(
 			filter(([deckState, _]) => !!deckState),
 			startWith([]),
@@ -206,6 +212,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 					groupSameCardsTogether,
 					sortHandByZoneOrder,
 					showDiscoveryZone,
+					hideGifts,
 				]) =>
 					this.buildZones(
 						showGlobalEffectsZone,
@@ -223,6 +230,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 						groupSameCardsTogether,
 						sortHandByZoneOrder,
 						deckState,
+						hideGifts,
 					),
 			),
 			takeUntil(this.destroyed$),
@@ -245,6 +253,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 		groupSameCardsTogether: boolean,
 		sortHandByZoneOrder: boolean,
 		deckState: DeckState,
+		hideGifts: boolean,
 	): readonly DeckZone[] {
 		if (!deckState) {
 			return;
@@ -366,6 +375,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 					deckSections.sort((a, b) => a.order - b.order),
 					{
 						groupSameCardsTogether: groupSameCardsTogether,
+						hideGifts: false, // Always show the gifts in the deck
 					},
 					'deck',
 					this.i18n.translateString('decktracker.zones.in-deck'),
@@ -399,6 +409,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 				{
 					groupSameCardsTogether: groupSameCardsTogether,
 					sortByZoneOrder: sortHandByZoneOrder,
+					hideGifts: false,
 				},
 				'hand',
 				this.i18n.translateString('decktracker.zones.in-hand'),
@@ -440,6 +451,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 					{
 						groupSameCardsTogether: groupSameCardsTogether,
 						sortByZoneOrder: sortHandByZoneOrder,
+						hideGifts: false,
 					},
 					'board',
 					this.i18n.translateString('decktracker.zones.board'),
@@ -505,6 +517,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 				null,
 				{
 					groupSameCardsTogether: groupSameCardsTogether,
+					hideGifts: hideGifts,
 				},
 				'other',
 				this.i18n.translateString('decktracker.zones.other'),
@@ -529,7 +542,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 			),
 		);
 
-		if (showGeneratedCardsInSeparateZone) {
+		if (showGeneratedCardsInSeparateZone && !hideGifts) {
 			const otherGeneratedZone = [
 				...otherZoneFromDeck
 					.filter((c) => !!c.cardId?.length)
@@ -570,6 +583,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 			groupSameCardsTogether?: boolean;
 			groupByName?: boolean;
 			sortByZoneOrder?: boolean;
+			hideGifts?: boolean;
 		},
 		id: string,
 		name: string,
@@ -583,6 +597,12 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 			sections.push({
 				header: null,
 				cards: cards
+					.filter((card) => {
+						if (options.hideGifts) {
+							return !card.creatorCardId;
+						}
+						return true;
+					})
 					.map((card) =>
 						VisualDeckCard.create(card).update({
 							creatorCardIds: (card.creatorCardId ? [card.creatorCardId] : []) as readonly string[],
@@ -599,6 +619,12 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 			sections = zones.map((zone) => ({
 				header: zone.header,
 				cards: zone.cards
+					.filter((card) => {
+						if (options.hideGifts) {
+							return !card.creatorCardId;
+						}
+						return true;
+					})
 					.map((card) =>
 						VisualDeckCard.create(card).update({
 							creatorCardIds: (card.creatorCardId ? [card.creatorCardId] : []) as readonly string[],

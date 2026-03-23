@@ -252,4 +252,5 @@ export const currentEffectsInternal = [
 	CardIds.YshaarjTheDefiler_TrueCorruptionEnchantment,
 	CardIds.Chronikar_EonFragmentsEnchantment_END_006e,
 	CardIds.Warloc_DoomEnchantment_CATA_180e,
+	CardIds.PetalPicker_ManaBloomEnchantment_FIR_921e,
 ];

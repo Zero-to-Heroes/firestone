@@ -81,6 +81,32 @@ import { DropdownOption } from '../../../settings/dropdown.component';
 							(valueChanged)="onUseModernTrackerChanged(prefs, $event)"
 						></checkbox>
 						<checkbox
+							class="item indented"
+							[label]="'settings.decktracker.opponent-deck.hide-generated-cards-label' | owTranslate"
+							[labelTooltip]="
+								'settings.decktracker.opponent-deck.hide-generated-cards-tooltip' | owTranslate
+							"
+							[value]="prefs.overlayHideGifts"
+							[disabled]="prefs.useModernTracker"
+							(valueChanged)="onOverlayHideGiftsChanged(prefs, $event)"
+						></checkbox>
+						<!-- <checkbox
+							class="item indented"
+							[label]="'settings.decktracker.global.global-effects-label' | owTranslate"
+							[labelTooltip]="'settings.decktracker.global.global-effects-tooltip' | owTranslate"
+							[value]="prefs.overlayShowGlobalEffects"
+							[disabled]="!prefs.useModernTracker"
+							(valueChanged)="onOverlayShowGlobalEffectsChanged(prefs, $event)"
+						></checkbox>
+						<checkbox
+							class="item indented"
+							[label]="'settings.decktracker.global.current-effects-label' | owTranslate"
+							[labelTooltip]="'settings.decktracker.global.current-effects-tooltip' | owTranslate"
+							[value]="prefs.overlayShowCurrentEffects"
+							[disabled]="!prefs.useModernTracker"
+							(valueChanged)="onOverlayShowCurrentEffectsChanged(prefs, $event)"
+						></checkbox> -->
+						<checkbox
 							class="item"
 							[label]="'twitch.show-related-cards-help' | owTranslate"
 							[labelTooltip]="'twitch.show-related-cards-help-tooltip' | owTranslate"
@@ -504,6 +530,24 @@ export class TwitchConfigWidgetComponent extends AbstractSubscriptionTwitchCompo
 	onHideBattleOddsWhenEmptyChanged(prefs: TwitchPreferences, value: boolean) {
 		const newPrefs: TwitchPreferences = { ...prefs, hideBattleOddsWhenEmpty: value };
 		console.log('changing hideBattleOddsWhenEmpty pref', newPrefs);
+		this.prefs.savePrefs(newPrefs);
+	}
+
+	onOverlayHideGiftsChanged(prefs: TwitchPreferences, value: boolean) {
+		const newPrefs: TwitchPreferences = { ...prefs, overlayHideGifts: value };
+		console.log('changing overlayHideGifts pref', newPrefs);
+		this.prefs.savePrefs(newPrefs);
+	}
+
+	onOverlayShowGlobalEffectsChanged(prefs: TwitchPreferences, value: boolean) {
+		const newPrefs: TwitchPreferences = { ...prefs, overlayShowGlobalEffects: value };
+		console.log('changing overlayShowGlobalEffects pref', newPrefs);
+		this.prefs.savePrefs(newPrefs);
+	}
+
+	onOverlayShowCurrentEffectsChanged(prefs: TwitchPreferences, value: boolean) {
+		const newPrefs: TwitchPreferences = { ...prefs, overlayShowCurrentEffects: value };
+		console.log('changing overlayShowCurrentEffects pref', newPrefs);
 		this.prefs.savePrefs(newPrefs);
 	}
 }

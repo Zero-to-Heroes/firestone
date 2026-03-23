@@ -322,6 +322,8 @@ export const getCardForCurrentEffect = (cardId: CardIds | string | null | undefi
 	switch (cardId) {
 		case CardIds.DistressedKvaldir_FrostFeverEnchantment_TTN_450e:
 			return CardIds.DistressedKvaldir_FrostPlagueToken;
+		case CardIds.PetalPicker_ManaBloomEnchantment_FIR_921e:
+			return CardIds.EmberscarredWhelp_FIR_927;
 		default:
 			return null;
 	}

@@ -5,6 +5,9 @@ import 'cross-fetch/polyfill';
 
 (window as any).process = {
 	env: { DEBUG: undefined },
+	// Bundled Node shims may call `process.version.slice(...)`; Twitch iframe has no real `process`.
+	version: 'v0.0.0',
+	versions: { node: '0.0.0' },
 };
 
 global.Buffer = global.Buffer || Buffer;

@@ -11,6 +11,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { CardClass } from '@firestone-hs/reference-data';
+import { DecksProviderService } from '@firestone/decktracker/common';
 import {
 	CardsHighlightFacadeService,
 	DeckState,
@@ -26,7 +27,6 @@ import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/co
 import { gameFormatToStatGameFormatType } from '@firestone/stats/data-access';
 import { GameStatsProviderService } from '@firestone/stats/services';
 import { combineLatest, debounceTime, distinctUntilChanged, filter, Observable, shareReplay, takeUntil } from 'rxjs';
-import { DecksProviderService } from '@firestone/decktracker/common';
 
 @Component({
 	standalone: false,
@@ -86,6 +86,7 @@ import { DecksProviderService } from '@firestone/decktracker/common';
 								[currentEffectUseEnchantmentName]="currentEffectUseEnchantmentName$ | async"
 								[showDiscoveryZone]="showDiscoveryZone$ | async"
 								[showGiftsSeparately]="showGiftsSeparately$ | async"
+								[hideGifts]="hideGifts$ | async"
 								[groupSameCardsTogether]="groupSameCardsTogether$ | async"
 								[showGeneratedCardsInSeparateZone]="showGeneratedCardsInSeparateZone$ | async"
 								[showPlaguesOnTop]="showPlaguesOnTop$ | async"
@@ -157,6 +158,7 @@ export class DeckTrackerOverlayRootComponent
 	showUnknownCards$: Observable<boolean>;
 	showUpdatedCost$: Observable<boolean>;
 	showGiftsSeparately$: Observable<boolean>;
+	hideGifts$: Observable<boolean>;
 	groupSameCardsTogether$: Observable<boolean>;
 	showGeneratedCardsInSeparateZone$: Observable<boolean>;
 	showBoardCardsInSeparateZone$: Observable<boolean>;
@@ -413,6 +415,7 @@ export class DeckTrackerOverlayRootComponent
 		this.showGiftsSeparately$ = this.prefs.preferences$$.pipe(
 			this.mapData((preferences) => preferences.overlayShowGiftedCardsInSeparateLine),
 		);
+		this.hideGifts$ = this.prefs.preferences$$.pipe(this.mapData((preferences) => preferences.overlayHideGifts));
 		this.groupSameCardsTogether$ = this.prefs.preferences$$.pipe(
 			this.mapData((preferences) => preferences.overlayGroupSameCardsTogether),
 		);

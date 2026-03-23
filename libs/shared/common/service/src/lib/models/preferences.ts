@@ -292,6 +292,7 @@ export class Preferences implements IPreferences {
 	readonly overlayShowGiftedCardsInSeparateLine: boolean = false;
 	readonly overlayGroupSameCardsTogether: boolean = false;
 	readonly overlayShowGiftedCardsSeparateZone: boolean = false;
+	readonly overlayHideGifts: boolean = false;
 	readonly overlayShowPlaguesOnTop: boolean = true;
 	readonly overlayShowBoardCardsSeparateZone: boolean = false;
 	readonly overlayShowHeroPowerInBoardZone: boolean = false;

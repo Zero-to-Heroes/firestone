@@ -49,6 +49,9 @@ import { CardsHighlightStandaloneService } from './cards-highlight-standalone.se
 							[showTotalCardsInZone]="true"
 							[showBottomCardsSeparately]="true"
 							[showTopCardsSeparately]="true"
+							[hideGifts]="hideGifts$ | async"
+							[showGlobalEffectsZone]="showGlobalEffectsZone$ | async"
+							[showCurrentEffectsZone]="showCurrentEffectsZone$ | async"
 							[side]="side$ | async"
 						>
 						</decktracker-deck-list>
@@ -67,6 +70,9 @@ export class DeckTrackerOverlayStandaloneComponent
 	showRelatedCards$ = new Observable<boolean>();
 	showTracker$: Observable<boolean>;
 	colorManaCost$: Observable<boolean>;
+	hideGifts$: Observable<boolean>;
+	showGlobalEffectsZone$: Observable<boolean>;
+	showCurrentEffectsZone$: Observable<boolean>;
 	side$: Observable<'player' | 'opponent'>;
 
 	@Input() set side(value: 'player' | 'opponent') {
@@ -108,15 +114,16 @@ export class DeckTrackerOverlayStandaloneComponent
 					this.cdr.markForCheck();
 				}
 			});
-		this.side$ = this.side$$.asObservable();
-		this.displayMode$ = this.prefs.prefs
-			.asObservable()
-			.pipe(this.mapData((prefs) => (prefs?.useModernTracker ? 'DISPLAY_MODE_ZONE' : 'DISPLAY_MODE_GROUPED')));
-		this.showRelatedCards$ = this.prefs.prefs.asObservable().pipe(this.mapData((prefs) => prefs?.showRelatedCards));
-		this.showTracker$ = this.prefs.prefs.asObservable().pipe(this.mapData((prefs) => prefs?.decktrackerOpen));
-		this.colorManaCost$ = this.prefs.prefs
-			.asObservable()
-			.pipe(this.mapData((prefs) => prefs?.decktrackerColorManaCost));
+		this.side$ = this.side$$;
+		this.displayMode$ = this.prefs.prefs.pipe(
+			this.mapData((prefs) => (prefs?.useModernTracker ? 'DISPLAY_MODE_ZONE' : 'DISPLAY_MODE_GROUPED')),
+		);
+		this.showRelatedCards$ = this.prefs.prefs.pipe(this.mapData((prefs) => prefs?.showRelatedCards));
+		this.showTracker$ = this.prefs.prefs.pipe(this.mapData((prefs) => prefs?.decktrackerOpen));
+		this.colorManaCost$ = this.prefs.prefs.pipe(this.mapData((prefs) => prefs?.decktrackerColorManaCost));
+		this.hideGifts$ = this.prefs.prefs.pipe(this.mapData((prefs) => prefs?.overlayHideGifts));
+		this.showGlobalEffectsZone$ = this.prefs.prefs.pipe(this.mapData((prefs) => prefs?.overlayShowGlobalEffects));
+		this.showCurrentEffectsZone$ = this.prefs.prefs.pipe(this.mapData((prefs) => prefs?.overlayShowCurrentEffects));
 		this.highlightService.setup(this.gameState$$);
 	}
 
