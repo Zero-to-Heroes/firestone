@@ -869,7 +869,7 @@ export const cardIdSelector = (
 		case CardIds.CloningDevice:
 			return and(not(side(inputSide)), inDeck, minion);
 		case CardIds.CloudSerpent_TLC_888:
-			return and(side(inputSide), or(inHand, inDeck), or(elemental, dragon));
+			return and(side(inputSide), or(inHand, inDeck), or(elemental, dragon), not(cardIs(CardIds.CloudSerpent_TLC_888)));
 		case CardIds.ClutchOfCorruption_EDR_454:
 			return and(side(inputSide), or(inDeck, inHand), dragon);
 		case CardIds.CoilCastingTavernBrawl:
