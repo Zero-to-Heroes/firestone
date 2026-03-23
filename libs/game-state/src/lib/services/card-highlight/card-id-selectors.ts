@@ -3716,6 +3716,9 @@ export const cardIdSelector = (
 			};
 		case CardIds.SuperchargeTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), minion);
+		case CardIds.SupplyRun_CATA_820:
+		case CardIds.SupplyRun_SupplyRunToken_CATA_820t:
+			return and(side(inputSide), inDeck, minion);
 		case CardIds.SupremeDinomancy_TLC_828:
 			return and(side(inputSide), or(inHand, inDeck, inPlay), beast);
 		case CardIds.Surfalopod_VAC_443:
