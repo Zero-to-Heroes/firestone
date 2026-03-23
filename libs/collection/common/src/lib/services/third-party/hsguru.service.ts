@@ -87,10 +87,11 @@ export class HsGuruService extends AbstractFacadeService<HsGuruService> {
 			return false;
 		}
 
+		const hsguruCards = collection;
 		const payload: Payload = {
 			battleTag: accountInfo?.BattleTag,
 			region: region,
-			cards: collection,
+			cards: hsguruCards,
 		};
 		console.debug('[hsguru] payload', payload);
 		const uploadResult = await this.api.callPostApi(UPLOAD_URL, payload);

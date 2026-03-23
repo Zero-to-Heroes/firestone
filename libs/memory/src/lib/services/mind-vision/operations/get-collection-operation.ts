@@ -15,16 +15,20 @@ export class GetCollectionOperation extends MindVisionOperationFacade<readonly C
 				memoryCollection.length === 0 ||
 				memoryCollection.every((entry) => entry.Count + entry.PremiumCount === 0),
 			(memoryCollection) =>
-				memoryCollection.map(
-					(memoryCard) =>
-						({
-							id: memoryCard.CardId,
-							count: memoryCard.Count,
-							premiumCount: memoryCard.PremiumCount,
-							diamondCount: memoryCard.DiamondCount,
-							signatureCount: memoryCard.SignatureCount,
-						}) as Card,
-				),
+				memoryCollection.map((memoryCard) => {
+					const result: Card = {
+						id: memoryCard.CardId,
+						count: memoryCard.Count,
+						premiumCount: memoryCard.PremiumCount,
+						diamondCount: memoryCard.DiamondCount,
+						signatureCount: memoryCard.SignatureCount,
+						trialCount: memoryCard.TrialCount,
+						trialPremiumCount: memoryCard.TrialPremiumCount,
+						trialDiamondCount: memoryCard.TrialDiamondCount,
+						trialSignatureCount: memoryCard.TrialSignatureCount,
+					};
+					return result;
+				}),
 			20,
 			5000,
 		);

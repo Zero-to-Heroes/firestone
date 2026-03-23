@@ -4,4 +4,8 @@ export interface Card {
 	readonly premiumCount: number;
 	readonly diamondCount: number;
 	readonly signatureCount: number;
+	readonly trialCount: number;
+	readonly trialPremiumCount: number;
+	readonly trialDiamondCount: number;
+	readonly trialSignatureCount: number;
 }
