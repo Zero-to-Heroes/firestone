@@ -45,32 +45,32 @@ const DK_UNHOLY_HAND = [
 const DRUID_HAND = [
 	CardIds.BranchingPaths,
 	CardIds.LesserJasperSpellstone,
-	CardIds.NaturalizeLegacy,
 	CardIds.SpreadingPlague_CORE_ICC_054,
+	CardIds.NaturalizeLegacy,
+	CardIds.AzalinaSoulthief,
+	CardIds.TwigOfTheWorldTree,
+	CardIds.KingTogwaggle,
 	CardIds.MalfurionThePestilent_ICC_832,
 	CardIds.MalfurionThePestilent_SpiderPlague,
 	CardIds.MalfurionThePestilent_ScarabPlague,
-	CardIds.KingTogwaggle,
-	CardIds.AzalinaSoulthief,
-	CardIds.TwigOfTheWorldTree,
 ];
 const HUNTER_HAND = [
 	CardIds.LesserEmeraldSpellstone,
-	CardIds.DeathstalkerRexxar_ICC_828,
-	CardIds.WanderingMonster,
 	CardIds.MisdirectionLegacy,
 	CardIds.CatTrickCore,
 	CardIds.ExplosiveTrapLegacy_EX1_610,
 	CardIds.CloakedHuntress_CORE_KAR_006,
 	CardIds.FreezingTrapCore,
+	CardIds.WanderingMonster,
+	CardIds.DeathstalkerRexxar_ICC_828,
 ];
 const MAGE_HAND = [
 	CardIds.DoomsayerCore,
 	CardIds.FrostboltLegacy,
+	CardIds.Alexstrasza_CORE_VAN_EX1_561,
 	CardIds.IceBlockLegacy,
 	CardIds.FireballLegacy,
 	CardIds.IceLanceLegacy,
-	CardIds.Alexstrasza_CORE_VAN_EX1_561,
 	CardIds.ArchmageAntonidasLegacy,
 	CardIds.FrostNovaLegacy,
 ];
@@ -116,14 +116,14 @@ const SHAMAN_HAND = [
 	CardIds.GrumbleWorldshaker,
 ];
 const WARLOCK_HAND = [
-	CardIds.BloodreaverGuldan_ICC_831,
-	CardIds.DefileCore,
-	CardIds.CarnivorousCube,
-	CardIds.DarkPact_LOOT_017,
-	CardIds.DoomguardLegacy,
 	CardIds.FacelessManipulator,
 	CardIds.SkullOfTheManari,
 	CardIds.Voidlord_LOOT_368,
+	CardIds.DarkPact_LOOT_017,
+	CardIds.DoomguardLegacy,
+	CardIds.CarnivorousCube,
+	CardIds.DefileCore,
+	CardIds.BloodreaverGuldan_ICC_831,
 ];
 const WARRIOR_HAND = [
 	CardIds.EmperorThaurissan_BRM_028,
