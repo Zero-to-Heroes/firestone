@@ -340,7 +340,7 @@ export const givesDivineShield = hasMechanicStr('GIVES_DIVINE_SHIELD');
 export const divineShield = or(hasMechanic(GameTag.DIVINE_SHIELD), givesDivineShield);
 export const dormant = or(hasMechanic(GameTag.DORMANT), hasReference(GameTag.DORMANT));
 export const dredge = hasMechanic(GameTag.DREDGE);
-export const endOfTurn = hasMechanic(GameTag.END_OF_TURN);
+export const endOfTurn = and(hasMechanic(GameTag.END_OF_TURN), not(cardIs(CardIds.TheFinsBeyondTime_TIME_706)));
 export const excavate = or(
 	hasMechanic(GameTag.EXCAVATE),
 	cardIs(CardIds.Arfus_DigUpUnholy_THD_100p, CardIds.Arfus_DigUpFrost_THD_100p2, CardIds.Arfus_DigUpBlood_THD_100p3),
