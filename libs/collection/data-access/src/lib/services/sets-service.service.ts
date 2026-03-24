@@ -145,7 +145,13 @@ export class SetsService {
 					cardName += ' (Hero)';
 				}
 				const rarity = card.rarity ? card.rarity.toLowerCase() : '';
-				return new SetCard(card.id, cardName, card.classes?.map((c) => CardClass[c]) ?? [], rarity, card.cost);
+				return SetCard.create({
+					id: card.id ?? '',
+					name: cardName ?? '',
+					classes: card.classes?.map((c) => CardClass[c]) ?? [],
+					rarity: rarity ?? '',
+					cost: card.cost ?? 0,
+				});
 			});
 		return result;
 	}
@@ -234,15 +240,14 @@ export class SetsService {
 			.filter((card) => card.set)
 			.filter((card) => !this.NON_COLLECTIBLE_HEROES.includes(card.id))
 			.filter((card) => setId === card.set?.toLowerCase())
-			.map(
-				(card) =>
-					new SetCard(
-						card.id,
-						card.name,
-						card.classes?.map((c) => CardClass[c]) ?? [],
-						card.rarity?.toLowerCase(),
-						card.cost,
-					),
+			.map((card) =>
+				SetCard.create({
+					id: card.id ?? '',
+					name: card.name ?? '',
+					classes: card.classes?.map((c) => CardClass[c]) ?? [],
+					rarity: card.rarity?.toLowerCase() ?? '',
+					cost: card.cost ?? 0,
+				}),
 			);
 	}
 }

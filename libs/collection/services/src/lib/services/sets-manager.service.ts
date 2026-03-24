@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Set, SetCard } from '@firestone/collection/common';
+import { SetsService } from '@firestone/collection/data-access';
 import { Card } from '@firestone/memory';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { AbstractFacadeService, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
 import { debounceTime } from 'rxjs';
 import { CollectionManager } from './collection-manager.service';
-import { SetsService } from '@firestone/collection/data-access';
 
 @Injectable()
 export class SetsManagerService extends AbstractFacadeService<SetsManagerService> {
@@ -73,17 +73,25 @@ export class SetsManagerService extends AbstractFacadeService<SetsManagerService
 			const ownedPremium = collectionCard?.premiumCount ?? 0;
 			const ownedDiamond = collectionCard?.diamondCount ?? 0;
 			const ownedSignature = collectionCard?.signatureCount ?? 0;
-			return new SetCard(
-				card.id,
-				card.name,
-				card.classes,
-				card.rarity,
-				card.cost,
-				ownedNonPremium,
-				ownedPremium,
-				ownedDiamond,
-				ownedSignature,
-			);
+			const ownedTrial = collectionCard?.trialCount ?? 0;
+			const ownedTrialPremium = collectionCard?.trialPremiumCount ?? 0;
+			const ownedTrialDiamond = collectionCard?.trialDiamondCount ?? 0;
+			const ownedTrialSignature = collectionCard?.trialSignatureCount ?? 0;
+			return SetCard.create({
+				id: card.id ?? '',
+				name: card.name ?? '',
+				classes: card.classes ?? [],
+				rarity: card.rarity?.toLowerCase(),
+				cost: card.cost ?? 0,
+				ownedNonPremium: ownedNonPremium ?? 0,
+				ownedPremium: ownedPremium ?? 0,
+				ownedDiamond: ownedDiamond ?? 0,
+				ownedSignature: ownedSignature ?? 0,
+				ownedTrial: ownedTrial ?? 0,
+				ownedTrialPremium: ownedTrialPremium ?? 0,
+				ownedTrialDiamond: ownedTrialDiamond ?? 0,
+				ownedTrialSignature: ownedTrialSignature ?? 0,
+			});
 		});
 	}
 }

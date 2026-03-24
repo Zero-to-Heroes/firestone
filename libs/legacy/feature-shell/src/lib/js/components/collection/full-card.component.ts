@@ -10,15 +10,15 @@ import {
 } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { CardClass, ReferenceCard, ReferenceCardAudio } from '@firestone-hs/reference-data';
+import { CollectionCardType } from '@firestone-hs/user-packs';
 import { SetCard } from '@firestone/collection/common';
+import { SetsService } from '@firestone/collection/data-access';
 import { formatClass } from '@firestone/game-state';
 import { getHeroFaction } from '@firestone/mercenaries/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, capitalizeFirstLetter } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { CollectionCardType } from '@firestone-hs/user-packs';
-import { SetsService } from '@firestone/collection/data-access';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 import { capitalizeEachWord, pickRandom } from '../../services/utils';
 
@@ -185,6 +185,10 @@ export class FullCardComponent extends AbstractSubscriptionComponent implements 
 					ownedSignature: (selectedCard as SetCard).ownedSignature,
 					ownedNonPremium: (selectedCard as SetCard).ownedNonPremium,
 					ownedPremium: (selectedCard as SetCard).ownedPremium,
+					ownedTrial: (selectedCard as SetCard).ownedTrial,
+					ownedTrialPremium: (selectedCard as SetCard).ownedTrialPremium,
+					ownedTrialDiamond: (selectedCard as SetCard).ownedTrialDiamond,
+					ownedTrialSignature: (selectedCard as SetCard).ownedTrialSignature,
 				});
 				if (
 					this.card.ownedNonPremium ||

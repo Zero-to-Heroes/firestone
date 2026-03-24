@@ -11,6 +11,7 @@ import {
 import { DeckStat } from '@firestone-hs/constructed-deck-stats';
 import { Sideboard, decode } from '@firestone-hs/deckstrings';
 import { CardIds } from '@firestone-hs/reference-data';
+import { CollectionManager, dustToCraftFor, getOwnedForDeckBuilding } from '@firestone/collection/services';
 import { ExtendedDeckStats } from '@firestone/constructed/common';
 import { Card } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
@@ -25,11 +26,6 @@ import {
 import { CardsFacadeService, getDateAgo } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, shareReplay, startWith, takeUntil } from 'rxjs/operators';
-import {
-	CollectionManager,
-	dustToCraftFor,
-	getOwnedForDeckBuilding,
-} from '@firestone/collection/services';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({

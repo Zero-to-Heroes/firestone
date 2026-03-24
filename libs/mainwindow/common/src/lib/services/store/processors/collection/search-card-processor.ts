@@ -23,17 +23,21 @@ export class SearchCardProcessor implements Processor {
 		const collection = (await this.collectionManager.collection$$.getValueWithInit()) ?? [];
 		const searchResults: readonly SetCard[] = this.cards.searchCards(event.searchString, collection).map((card) => {
 			const collectionCard = this.findCollectionCard(collection, card);
-			return new SetCard(
-				card.id,
-				card.name,
-				card.classes,
-				card.rarity,
-				card.cost,
-				collectionCard?.count ?? 0,
-				collectionCard?.premiumCount ?? 0,
-				collectionCard?.diamondCount ?? 0,
-				collectionCard?.signatureCount ?? 0,
-			);
+			return SetCard.create({
+				id: card.id ?? '',
+				name: card.name ?? '',
+				classes: card.classes ?? [],
+				rarity: card.rarity ?? '',
+				cost: card.cost ?? 0,
+				ownedNonPremium: collectionCard?.count ?? 0,
+				ownedPremium: collectionCard?.premiumCount ?? 0,
+				ownedDiamond: collectionCard?.diamondCount ?? 0,
+				ownedSignature: collectionCard?.signatureCount ?? 0,
+				ownedTrial: collectionCard?.trialCount ?? 0,
+				ownedTrialPremium: collectionCard?.trialPremiumCount ?? 0,
+				ownedTrialDiamond: collectionCard?.trialDiamondCount ?? 0,
+				ownedTrialSignature: collectionCard?.trialSignatureCount ?? 0,
+			});
 		});
 
 		this.collectionNav.currentView$$.next('cards');

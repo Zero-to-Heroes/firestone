@@ -11,6 +11,7 @@ import {
 import { Sideboard, decode } from '@firestone-hs/deckstrings';
 import { CardIds, GameType } from '@firestone-hs/reference-data';
 import { SetCard } from '@firestone/collection/common';
+import { getOwnedForDeckBuilding } from '@firestone/collection/services';
 import { CardsHighlightFacadeService, Metadata, VisualDeckCard } from '@firestone/game-state';
 import { Card } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
@@ -32,7 +33,6 @@ import {
 	takeUntil,
 	tap,
 } from 'rxjs';
-import { getOwnedForDeckBuilding } from '@firestone/collection/services';
 
 @Component({
 	standalone: false,
@@ -104,6 +104,10 @@ export class DeckListStaticComponent extends AbstractSubscriptionComponent imple
 					premiumCount: setCard.ownedPremium,
 					diamondCount: setCard.ownedDiamond,
 					signatureCount: setCard.ownedSignature,
+					trialCount: setCard.ownedTrial,
+					trialPremiumCount: setCard.ownedTrialPremium,
+					trialDiamondCount: setCard.ownedTrialDiamond,
+					trialSignatureCount: setCard.ownedTrialSignature,
 				};
 				normalizedValues[card.id] = result;
 			}

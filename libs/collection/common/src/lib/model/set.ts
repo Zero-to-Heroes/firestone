@@ -68,33 +68,15 @@ export class SetCard {
 	readonly ownedPremium: number = 0;
 	readonly ownedDiamond: number = 0;
 	readonly ownedSignature: number = 0;
+	readonly ownedTrial: number = 0;
+	readonly ownedTrialPremium: number = 0;
+	readonly ownedTrialDiamond: number = 0;
+	readonly ownedTrialSignature: number = 0;
 	readonly displayed: boolean = true;
 	readonly collectible: boolean = true;
 
 	public static create(base: Partial<NonFunctionProperties<SetCard>>): SetCard {
 		return Object.assign(new SetCard(), base);
-	}
-
-	constructor(
-		id?: string,
-		name?: string,
-		classes?: readonly CardClass[],
-		rarity?: string,
-		cost?: number,
-		ownedNonPremium?: number,
-		ownedPremium?: number,
-		ownedDiamond?: number,
-		ownedSignature?: number,
-	) {
-		this.id = id ?? '';
-		this.name = name ?? '';
-		this.classes = classes ?? [];
-		this.rarity = rarity?.toLowerCase() ?? '';
-		this.cost = cost ?? 0;
-		this.ownedNonPremium = ownedNonPremium || 0;
-		this.ownedPremium = ownedPremium || 0;
-		this.ownedDiamond = ownedDiamond || 0;
-		this.ownedSignature = ownedSignature || 0;
 	}
 
 	public getOwnedForPremium(premium: CollectionCardType) {

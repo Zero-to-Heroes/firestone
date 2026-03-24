@@ -2,12 +2,12 @@ import { Card } from '@firestone/memory';
 
 export const totalOwned = (card: Card) =>
 	!!card
-		? card.count +
-			card.premiumCount +
-			card.diamondCount +
-			card.signatureCount +
-			card.trialCount +
-			card.trialPremiumCount +
-			card.trialDiamondCount +
-			card.trialSignatureCount
+		? (card.count ?? 0) +
+			(card.premiumCount ?? 0) +
+			(card.diamondCount ?? 0) +
+			(card.signatureCount ?? 0) +
+			(card.trialCount ?? 0) +
+			(card.trialPremiumCount ?? 0) +
+			(card.trialDiamondCount ?? 0) +
+			(card.trialSignatureCount ?? 0)
 		: 0;
