@@ -3339,6 +3339,7 @@ export const cardIdSelector = (
 		case CardIds.ShadowEssence_ICC_235:
 			return and(side(inputSide), inDeck, minion);
 		// Shadow of Demise: Each time you cast a spell, transform this into a copy of it.
+		case CardIds.ShadowOfDemise_CORE_RLK_567:
 		case CardIds.ShadowOfDemise:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
 		// Shadowtouched Kvaldir: Battlecry: Your next healing effect deals damage instead.
