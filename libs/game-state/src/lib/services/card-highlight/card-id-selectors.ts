@@ -3433,6 +3433,9 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, minion, effectiveCostEqual(8));
 		case CardIds.SinisterSoulcage_YOG_513:
 			return and(side(inputSide), or(inDeck, inHand), undead, minion);
+		// Sinestra: Colossal +2. Your spells from other classes cast twice.
+		case CardIds.Sinestra_CATA_154:
+			return and(side(inputSide), or(inDeck, inHand), spell, fromAnotherClass);
 		case CardIds.SkarrTheCatastrophe_WW_026:
 			return and(side(inputSide), or(inHand, inDeck), elemental);
 		case CardIds.SkeletalSidekickCore_RLK_958:
