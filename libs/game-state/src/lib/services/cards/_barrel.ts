@@ -73,6 +73,7 @@ export { DragonsHoard } from './dragons-hoard';
 export { DrakeadonMongrel } from './drakeadon-mongrel';
 export { DrakonidOperative } from './drakonid-operative';
 export { DurnholdeImposter } from './durnholde-imposter';
+export { DwarvenArchaeologist } from './dwarven-archaeologist';
 export { EarthenMight } from './earthen-might';
 export { EliseTheNavigator } from './elise-the-navigator';
 export { EruptingVolcano } from './erupting-volcano';
