@@ -20,6 +20,7 @@
 		"dev-prod": "npm run pre-build && cross-env NODE_OPTIONS=--max-old-space-size=12288 nx build --source-map=true --configuration=production --watch",
 		"pre-build": "node apps/legacy/copy-overwolf-files.js",
 		"build": "npm i && npm run pre-build && cross-env NODE_ENV=production nx build --configuration=production && npm run replace-version && npm run opk-pipeline",
+		"build-quick": "cross-env NODE_ENV=production nx build --configuration=production && npm run replace-version && npm run opk-pipeline",
 		"build-dist": "npm run pre-build && cross-env NODE_ENV=production NODE_OPTIONS=--max-old-space-size=12288 nx build --configuration=production && npm run replace-version ",
 		"build-local": "npm run pre-build && cross-env NODE_ENV=production NODE_OPTIONS=--max-old-space-size=12288 nx build --configuration=production && npm run replace-version && npx tsx ./build-tools/opk-pipeline-no-upload.ts",
 		"replace-version": "npx tsx ./build-tools/replace-version.ts",

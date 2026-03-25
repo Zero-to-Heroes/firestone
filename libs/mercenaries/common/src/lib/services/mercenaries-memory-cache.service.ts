@@ -172,9 +172,9 @@ export class MercenariesMemoryCacheService extends AbstractFacadeService<Mercena
 		const localMercenariesInfo = await this.loadLocalMercenariesCollectionInfo();
 
 		const mergedInfo: MemoryMercenariesCollectionInfo = {
-			Mercenaries: newMercenariesInfo?.Mercenaries ?? localMercenariesInfo?.Mercenaries,
-			Teams: newMercenariesInfo?.Teams ?? localMercenariesInfo?.Teams,
-			Visitors: newMercenariesInfo?.Visitors ?? localMercenariesInfo?.Visitors,
+			Mercenaries: newMercenariesInfo?.Mercenaries ?? localMercenariesInfo?.Mercenaries ?? [],
+			Teams: newMercenariesInfo?.Teams ?? localMercenariesInfo?.Teams ?? [],
+			Visitors: newMercenariesInfo?.Visitors ?? localMercenariesInfo?.Visitors ?? [],
 		};
 
 		await this.saveLocalMercenariesCollectionInfo(mergedInfo);
@@ -200,7 +200,7 @@ export class MercenariesMemoryCacheService extends AbstractFacadeService<Mercena
 		this.memoryMapInfo$$ = new SubscriberAwareBehaviorSubject<MemoryMercenariesInfo | null>(null);
 	}
 
-	private async loadLocalMercenariesCollectionInfo(): Promise<MemoryMercenariesCollectionInfo> {
+	private async loadLocalMercenariesCollectionInfo(): Promise<MemoryMercenariesCollectionInfo | null> {
 		const result = this.localStorageService.getItem<MemoryMercenariesCollectionInfo>(
 			LocalStorageService.LOCAL_STORAGE_MERCENARIES_COLLECTION,
 		);

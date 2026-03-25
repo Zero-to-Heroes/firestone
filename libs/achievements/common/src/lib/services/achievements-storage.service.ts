@@ -15,7 +15,7 @@ export class AchievementsStorageService {
 		return info;
 	}
 
-	public async retrieveInGameAchievements(): Promise<HsAchievementsInfo> {
+	public async retrieveInGameAchievements(): Promise<HsAchievementsInfo | null> {
 		console.debug('[achievements-storage] retrieving in-game achievements');
 		const fromStorage = this.localStorageService.getItem<HsAchievementsInfo>(
 			LocalStorageService.LOCAL_STORAGE_IN_GAME_ACHIEVEMENTS,
