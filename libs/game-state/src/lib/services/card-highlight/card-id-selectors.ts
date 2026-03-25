@@ -1125,6 +1125,7 @@ export const cardIdSelector = (
 			return tooltip(and(side(inputSide), inGraveyard, minion, deathrattle));
 		case CardIds.DesertNestmatron_WW_826:
 			return and(side(inputSide), or(inHand, inDeck), dragon);
+		case CardIds.DetonationJuggernaut_CORE_WW_329:
 		case CardIds.DetonationJuggernaut_WW_329:
 			return and(side(inputSide), or(inDeck, inHand), minion, taunt);
 		// Deviate Dreadfang: After you cast a Nature spell, summon a 4/2 Viper with Rush.
