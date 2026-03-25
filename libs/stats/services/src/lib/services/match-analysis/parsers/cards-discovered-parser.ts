@@ -60,8 +60,8 @@ const handleCardDiscovery = (
 			emitter('card-discovered', {
 				time: toTimestamp(element.get('ts')!),
 				turn: structure.currentTurn,
-				cardId: getBaseCardId(element.get('cardID') ?? entity.cardId),
-				sourceCardId: getBaseCardId(choiceSource.cardId),
+				cardId: getBaseCardId(element.get('cardID') ?? entity.cardId, allCards.getService()),
+				sourceCardId: getBaseCardId(choiceSource.cardId, allCards.getService()),
 			});
 		}
 	};

@@ -25,7 +25,7 @@ export class ListCardsPlayedFromInitialDeckParser implements EventParser {
 		}
 
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
-		const baseCardId = getBaseCardId(cardId);
+		const baseCardId = getBaseCardId(cardId, this.allCards.getService());
 		const card = this.helper.findCardInZone(deck.hand, baseCardId, entityId);
 		if (
 			!card ||

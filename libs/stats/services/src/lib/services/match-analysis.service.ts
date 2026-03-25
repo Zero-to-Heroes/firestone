@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { decode } from '@firestone-hs/deckstrings';
 import { Replay } from '@firestone-hs/hs-replay-xml-parser';
-import { getBaseCardId } from '@firestone-hs/reference-data';
+import { GameTag, getBaseCardId } from '@firestone-hs/reference-data';
 import { CardAnalysis, MatchAnalysis } from '@firestone-hs/replay-metadata';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { StatGameModeType } from '@firestone/stats/data-access';
@@ -46,19 +46,30 @@ export class MatchAnalysisService {
 		let cardsPlayed: { cardId: string; cardDbfId: number; turn: number }[] = [];
 		parser.on('cards-in-hand', (event) => {
 			if (cardsBeforeMulligan?.length === 0) {
-				cardsBeforeMulligan = event.cardsInHand.map((cardId) => getBaseCardId(cardId));
+				cardsBeforeMulligan = event.cardsInHand.map((cardId) =>
+					getBaseCardId(cardId, this.allCards.getService()),
+				);
 			} else {
-				cardsAfterMulligan = event.cardsInHand.map((cardId) => {
-					const baseCardId = getBaseCardId(cardId);
-					return {
-						cardId: baseCardId,
-						kept: cardsBeforeMulligan.includes(baseCardId),
-					};
-				});
+				cardsAfterMulligan = event.cardsInHand
+					.map((cardId: string) => {
+						// Avoid double-counting SHATTER cards
+						if (
+							this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.SHATTERED]) &&
+							cardId.endsWith('t2')
+						) {
+							return null;
+						}
+						const baseCardId = getBaseCardId(cardId, this.allCards.getService());
+						return {
+							cardId: baseCardId,
+							kept: cardsBeforeMulligan.includes(baseCardId),
+						};
+					})
+					.filter((c) => !!c);
 			}
 		});
 		parser.on('card-draw', (event) => {
-			const baseCardId = getBaseCardId(event.cardId);
+			const baseCardId = getBaseCardId(event.cardId, this.allCards.getService());
 			// console.debug('card drawn', event.cardId);
 			cardsDrawn = [
 				...cardsDrawn,
@@ -66,7 +77,7 @@ export class MatchAnalysisService {
 			];
 		});
 		parser.on('card-play', (event) => {
-			const baseCardId = getBaseCardId(event.cardId);
+			const baseCardId = getBaseCardId(event.cardId, this.allCards.getService());
 			// console.debug('card played', event.cardId);
 			cardsPlayed = [
 				...cardsPlayed,
@@ -74,8 +85,8 @@ export class MatchAnalysisService {
 			];
 		});
 		parser.on('card-discovered', (event) => {
-			const baseCardId = getBaseCardId(event.cardId);
-			const sourceCardId = getBaseCardId(event.sourceCardId);
+			const baseCardId = getBaseCardId(event.cardId, this.allCards.getService());
+			const sourceCardId = getBaseCardId(event.sourceCardId, this.allCards.getService());
 			// console.debug('card created', event.cardId, event.sourceCardId);
 			cardsDiscovered = [
 				...cardsDiscovered,
@@ -101,6 +112,7 @@ export class MatchAnalysisService {
 			.sort();
 		const cardsAnalysis: readonly CardAnalysis[] = deckCards.map((cardId) => {
 			const refCard = this.allCards.getCard(cardId);
+			const normalizedCardId = getBaseCardId(cardId, this.allCards.getService());
 			// Remove the info from cards after mulligan
 			const cardAfterMulligan = cardsAfterMulligan.find((c) => c.cardId === cardId);
 			if (cardAfterMulligan) {
@@ -150,6 +162,6 @@ export class MatchAnalysisService {
 	}
 
 	public buildCardsPlayed(playerId: number, replay: Replay): readonly string[] {
-		return extractPlayedCards(replay, playerId);
+		return extractPlayedCards(replay, playerId, this.allCards.getService());
 	}
 }

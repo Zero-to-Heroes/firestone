@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { Replay } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
-import { GameTag, Zone, getBaseCardId } from '@firestone-hs/reference-data';
+import { AllCardsService, GameTag, Zone, getBaseCardId } from '@firestone-hs/reference-data';
 import { Element } from 'elementtree';
 
 const validZones = [Zone.PLAY, Zone.GRAVEYARD, Zone.REMOVEDFROMGAME, Zone.SETASIDE];
@@ -9,7 +9,7 @@ const validZones = [Zone.PLAY, Zone.GRAVEYARD, Zone.REMOVEDFROMGAME, Zone.SETASI
 
 // }
 
-export const extractPlayedCards = (replay: Replay, playerId: number): string[] => {
+export const extractPlayedCards = (replay: Replay, playerId: number, allCards: AllCardsService): string[] => {
 	const idControllerMapping = buildIdToControllerMapping(replay);
 	const entitiesWithCards = replay.replay
 		.findall(`.//*[@cardID]`)
@@ -41,12 +41,12 @@ export const extractPlayedCards = (replay: Replay, playerId: number): string[] =
 	const playerEntities: Element[] = validEntities.filter(
 		(entity) => idControllerMapping[getId(entity)] && idControllerMapping[getId(entity)] === playerId,
 	);
-	const playedCards = playerEntities.map((entity) => getCardId(entity));
+	const playedCards = playerEntities.map((entity) => getCardId(entity, allCards));
 	return playedCards;
 };
 
-const getCardId = (entity: Element): string => {
-	return getBaseCardId(entity.get('cardID')!);
+const getCardId = (entity: Element, allCards: AllCardsService): string => {
+	return getBaseCardId(entity.get('cardID')!, allCards);
 };
 
 const getId = (entity: Element): number => {

@@ -158,7 +158,7 @@ export const updateHandWithStonebrewInfo = (
 	allCards: CardsFacadeService,
 ): readonly DeckCard[] => {
 	console.debug('[stonebrew] updating hand with stonebrew info', playedCard, hand);
-	const playedCardBaseId = getBaseCardId(playedCard.cardId);
+	const playedCardBaseId = getBaseCardId(playedCard.cardId, allCards.getService());
 	for (const iconicHand of ALL_HANDS) {
 		if (iconicHand.includes(playedCardBaseId as CardIds)) {
 			console.debug(

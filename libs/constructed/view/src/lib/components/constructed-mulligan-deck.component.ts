@@ -142,8 +142,12 @@ export class ConstructedMulliganDeckComponent
 						value: advice.score ?? null,
 						keepRate: advice.keepRate == null ? null : 100 * advice.keepRate,
 						selected: !!guide?.cardsInHand
-							.map((cardId) => this.allCards.getRootCardId(getBaseCardId(cardId)))
-							.includes(this.allCards.getRootCardId(getBaseCardId(advice.cardId))),
+							.map((cardId) =>
+								this.allCards.getRootCardId(getBaseCardId(cardId, this.allCards.getService())),
+							)
+							.includes(
+								this.allCards.getRootCardId(getBaseCardId(advice.cardId, this.allCards.getService())),
+							),
 						keptColor: buildColor(
 							'hsl(112, 100%, 64%)',
 							'hsl(0, 100%, 64%)',

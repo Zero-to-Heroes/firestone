@@ -573,7 +573,7 @@ export class DeckManipulationHelper {
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		if (!isPlayer && currentState.opponentDeck.deckList && !removedCard?.creatorCardId && !removedCard?.cardId) {
-			const newCardId = getBaseCardId(cardId);
+			const newCardId = getBaseCardId(cardId, this.allCards.getService());
 			const result = this.removeSingleCardFromZone(deck.deck, newCardId, entityId);
 			return result[0];
 		}
@@ -623,7 +623,7 @@ export class DeckManipulationHelper {
 		if (!shouldNormalize) {
 			return cardId;
 		}
-		return getBaseCardId(cardId);
+		return getBaseCardId(cardId, this.allCards.getService());
 	}
 }
 
@@ -631,17 +631,15 @@ const isInvalidForOther = (cardId: string): boolean => {
 	return cardId?.startsWith(CardIds.DarkGiftToken_EDR_102t) || cardId?.startsWith(CardIds.WakingTerrorToken_EDR_100t);
 };
 
-export const reconcileCardInHandWithDeck = (
-	input: {
-		removedCard: DeckCard | undefined;
-		cardId: string;
-		entityId: number;
-		deck: DeckState;
-		deckCards: readonly DeckCard[];
-		opponentDeck: DeckState;
-		helper: DeckManipulationHelper;
-	},
-): {
+export const reconcileCardInHandWithDeck = (input: {
+	removedCard: DeckCard | undefined;
+	cardId: string;
+	entityId: number;
+	deck: DeckState;
+	deckCards: readonly DeckCard[];
+	opponentDeck: DeckState;
+	helper: DeckManipulationHelper;
+}): {
 	removedCard: DeckCard | undefined;
 	additionalKnownCardsInDeck: readonly string[];
 	deckCards: readonly DeckCard[];

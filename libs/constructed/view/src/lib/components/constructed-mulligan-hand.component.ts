@@ -134,12 +134,16 @@ export class ConstructedMulliganHandComponent
 					.map(
 						(cardId) =>
 							guide?.allDeckCards.find(
-								(advice) => getBaseCardId(advice.cardId) === getBaseCardId(cardId),
+								(advice) =>
+									getBaseCardId(advice.cardId, this.allCards.getService()) ===
+									getBaseCardId(cardId, this.allCards.getService()),
 							) ??
 							guide?.allDeckCards.find(
 								(advice) =>
-									this.allCards.getRootCardId(getBaseCardId(advice.cardId)) ===
-									this.allCards.getRootCardId(getBaseCardId(cardId)),
+									this.allCards.getRootCardId(
+										getBaseCardId(advice.cardId, this.allCards.getService()),
+									) ===
+									this.allCards.getRootCardId(getBaseCardId(cardId, this.allCards.getService())),
 							),
 					)
 					.map((advice) => ({

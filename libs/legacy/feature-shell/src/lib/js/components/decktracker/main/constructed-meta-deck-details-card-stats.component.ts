@@ -385,7 +385,9 @@ export class ConstructedMetaDeckDetailsCardStatsComponent
 	}
 
 	private getManaCost(card: ReferenceCard, sideboard: Sideboard): number {
-		if (sideboard?.keyCardDbfId === this.allCards.getCard(getBaseCardId(card.id)).dbfId) {
+		if (
+			sideboard?.keyCardDbfId === this.allCards.getCard(getBaseCardId(card.id, this.allCards.getService())).dbfId
+		) {
 			return sideboard?.cards?.map((c) => this.allCards.getCard(c[0]).cost).reduce((a, b) => a + b, 0) ?? 0;
 		}
 		return card.cost;

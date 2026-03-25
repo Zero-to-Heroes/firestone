@@ -602,11 +602,19 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 					const allDeckCards: readonly MulliganCardAdvice[] =
 						deckCards?.map((refCard) => {
 							const cardData =
-								cardsData.find((card) => getBaseCardId(card.cardId) === getBaseCardId(refCard.id)) ??
 								cardsData.find(
 									(card) =>
-										this.allCards.getRootCardId(getBaseCardId(card.cardId)) ===
-										this.allCards.getRootCardId(getBaseCardId(refCard.id)),
+										getBaseCardId(card.cardId, this.allCards.getService()) ===
+										getBaseCardId(refCard.id, this.allCards.getService()),
+								) ??
+								cardsData.find(
+									(card) =>
+										this.allCards.getRootCardId(
+											getBaseCardId(card.cardId, this.allCards.getService()),
+										) ===
+										this.allCards.getRootCardId(
+											getBaseCardId(refCard.id, this.allCards.getService()),
+										),
 								);
 							const rawImpact = !!cardData?.inHandAfterMulligan
 								? cardData.inHandAfterMulliganThenWin / cardData?.inHandAfterMulligan - archetypeWinrate
@@ -811,11 +819,15 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 		const allDeckCards: readonly MulliganCardAdvice[] =
 			cardsToGetStatsFor?.map((cardId) => {
 				const cardData =
-					cardsData.find((card) => getBaseCardId(card.cardId) === getBaseCardId(cardId)) ??
 					cardsData.find(
 						(card) =>
-							this.allCards.getRootCardId(getBaseCardId(card.cardId)) ===
-							this.allCards.getRootCardId(getBaseCardId(cardId)),
+							getBaseCardId(card.cardId, this.allCards.getService()) ===
+							getBaseCardId(cardId, this.allCards.getService()),
+					) ??
+					cardsData.find(
+						(card) =>
+							this.allCards.getRootCardId(getBaseCardId(card.cardId, this.allCards.getService())) ===
+							this.allCards.getRootCardId(getBaseCardId(cardId, this.allCards.getService())),
 					);
 				const rawImpact = !!cardData?.inHandAfterMulligan
 					? cardData.inHandAfterMulliganThenWin / cardData?.inHandAfterMulligan - archetypeWinrate

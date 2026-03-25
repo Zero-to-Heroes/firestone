@@ -16,12 +16,13 @@ export const cardDrawn = {
 		structure: ParsingStructure,
 		allCards: CardsFacadeService,
 		emitter: (eventName: EventName, event: any) => void,
-	) => handleCardDraw(replay, structure, emitter),
+	) => handleCardDraw(replay, structure, allCards, emitter),
 };
 
 const handleCardDraw = (
 	replay: Replay,
 	structure: ParsingStructure,
+	allCards: CardsFacadeService,
 	emitter: (eventName: EventName, event: any) => void,
 ) => {
 	return (element: Element) => {
@@ -60,7 +61,7 @@ const handleCardDraw = (
 			emitter('card-draw', {
 				time: toTimestamp(element.get('ts')!),
 				turn: structure.currentTurn,
-				cardId: getBaseCardId(element.get('cardID') ?? entity.cardId),
+				cardId: getBaseCardId(element.get('cardID') ?? entity.cardId, allCards.getService()),
 			});
 		}
 	};

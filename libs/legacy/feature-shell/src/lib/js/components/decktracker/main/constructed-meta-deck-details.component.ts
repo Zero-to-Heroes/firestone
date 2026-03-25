@@ -149,7 +149,9 @@ export const enrichCard = (
 	if (card.cardId?.startsWith(CardIds.ZilliaxDeluxe3000_TOY_330)) {
 		const result: ExtendedConstructedCardData = {
 			...card,
-			sideboard: sideboards?.find((sb) => sb.keyCardDbfId === allCards.getCard(getBaseCardId(card.cardId)).dbfId),
+			sideboard: sideboards?.find(
+				(sb) => sb.keyCardDbfId === allCards.getCard(getBaseCardId(card.cardId, allCards.getService())).dbfId,
+			),
 		};
 		return result;
 	}

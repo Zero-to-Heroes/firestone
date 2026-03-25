@@ -307,8 +307,8 @@ export class ArenaMulliganGuideService extends AbstractFacadeService<ArenaMullig
 					deckCards?.map((refCard) => {
 						const cardData = cardStats?.stats.find(
 							(card) =>
-								this.allCards.getRootCardId(getBaseCardId(card.cardId)) ===
-								this.allCards.getRootCardId(getBaseCardId(refCard.id)),
+								this.allCards.getRootCardId(getBaseCardId(card.cardId, this.allCards.getService())) ===
+								this.allCards.getRootCardId(getBaseCardId(refCard.id, this.allCards.getService())),
 						);
 						const matchup = cardData?.matchStats?.matchups?.find(
 							(matchup) => matchup.opponentClass === opponentClass,

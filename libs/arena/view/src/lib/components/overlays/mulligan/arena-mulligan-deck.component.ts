@@ -121,8 +121,12 @@ export class ArenaMulliganDeckComponent extends AbstractSubscriptionComponent im
 						value: advice.score ?? 0,
 						keepRate: 100 * (advice.keepRate ?? 0),
 						selected: !!guide?.cardsInHand
-							.map((cardId) => this.allCards.getRootCardId(getBaseCardId(cardId)))
-							.includes(this.allCards.getRootCardId(getBaseCardId(advice.cardId))),
+							.map((cardId) =>
+								this.allCards.getRootCardId(getBaseCardId(cardId, this.allCards.getService())),
+							)
+							.includes(
+								this.allCards.getRootCardId(getBaseCardId(advice.cardId, this.allCards.getService())),
+							),
 						keptColor: buildColor(
 							'hsl(112, 100%, 64%)',
 							'hsl(0, 100%, 64%)',

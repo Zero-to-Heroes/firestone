@@ -18,6 +18,7 @@ export interface ParserFunction {
 	endOfTurn?: (
 		replay: Replay,
 		structure: ParsingStructure,
+		allCards: CardsFacadeService,
 		emitter: (eventName: EventName, event: any) => void,
 	) => (currentTurn: number, turnChangeElement: Element) => void;
 }
@@ -59,14 +60,14 @@ export class ReplayParser extends EventEmitter {
 				entities.parser(structure),
 			],
 			[
-				entities.endOfTurn(this.replay, structure, (eventName: string, event: any) => {
+				entities.endOfTurn(this.replay, structure, this.allCards, (eventName: string, event: any) => {
 					this.emit(eventName, event);
 				}),
 				...(this.parseFunctions ?? [])
 					.map((fn) => fn.endOfTurn)
 					.filter((fn) => !!fn)
 					.map((fn) =>
-						fn!(this.replay, structure, (eventName: string, event: any) => {
+						fn!(this.replay, structure, this.allCards, (eventName: string, event: any) => {
 							this.emit(eventName, event);
 						}),
 					),

@@ -53,7 +53,14 @@ export class LocalStorageService {
 		localStorage.setItem(key, JSON.stringify(value));
 	}
 
-	public getItem<T>(key: string): T {
-		return this.cache[key] ?? JSON.parse(localStorage.getItem(key) as string);
+	public getItem<T>(key: string): T | null {
+		if (this.cache[key]) {
+			return this.cache[key];
+		}
+		const localStorageItem = localStorage.getItem(key);
+		if (localStorageItem) {
+			return JSON.parse(localStorageItem);
+		}
+		return null;
 	}
 }

@@ -158,7 +158,9 @@ export class ConstructedDecktrackerExtendedOocComponent
 		this.allDeckMulliganInfo$ = combineLatest([deckstring$, this.prefs.preferences$$]).pipe(
 			tap((info) => console.debug('[mulligan] will get mulligan info', info)),
 			distinctUntilChanged(),
-			switchMap(([deckstring, prefs]) => this.mulligan.getMulliganAdvice(deckstring, prefs, { useDeckFormat: true })),
+			switchMap(([deckstring, prefs]) =>
+				this.mulligan.getMulliganAdvice(deckstring, prefs, { useDeckFormat: true }),
+			),
 			tap((info) => console.debug('[mulligan] received mulligan info', info)),
 			filter((advice) => !!advice),
 			this.mapData((guide) => {
@@ -171,8 +173,12 @@ export class ConstructedDecktrackerExtendedOocComponent
 						value: advice.score ?? null,
 						keepRate: advice.keepRate == null ? null : 100 * advice.keepRate,
 						selected: !!guide?.cardsInHand
-							.map((cardId) => this.allCards.getRootCardId(getBaseCardId(cardId)))
-							.includes(this.allCards.getRootCardId(getBaseCardId(advice.cardId))),
+							.map((cardId) =>
+								this.allCards.getRootCardId(getBaseCardId(cardId, this.allCards.getService())),
+							)
+							.includes(
+								this.allCards.getRootCardId(getBaseCardId(advice.cardId, this.allCards.getService())),
+							),
 						keptColor: buildColor(
 							'hsl(112, 100%, 64%)',
 							'hsl(0, 100%, 64%)',
