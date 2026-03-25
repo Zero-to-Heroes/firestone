@@ -300,6 +300,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 						showMechanicsTiers: showMechanicsTiers,
 						showTribeTiers: showTribeTiers,
 						showTierSeven: showTierSeven,
+						showBuddiesTier: showBuddies,
 						showTrinkets: showTrinkets,
 						showSpellsAtBottom: showSpellsAtBottom,
 						showTimewarped: showTimewarped,

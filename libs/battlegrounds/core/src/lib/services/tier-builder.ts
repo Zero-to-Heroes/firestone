@@ -30,6 +30,7 @@ export const buildTiers = (
 	// Display config
 	const showAllBuddyCards =
 		gameState.hasBuddies ||
+		options.showBuddiesTier ||
 		anomalies.includes(CardIds.BringInTheBuddies_BG27_Anomaly_810) ||
 		gameState.heroPowerCardId === CardIds.ETCBandManager_SignANewArtist;
 	const showBuddiesTier =
@@ -111,6 +112,7 @@ export const buildTiers = (
 
 export interface BuildTierOptions {
 	showAllMechanics: boolean;
+	showBuddiesTier: boolean;
 	groupMinionsIntoTheirTribeGroup: boolean;
 	includeTrinketsInTribeGroups: boolean;
 	showMechanicsTiers: boolean;

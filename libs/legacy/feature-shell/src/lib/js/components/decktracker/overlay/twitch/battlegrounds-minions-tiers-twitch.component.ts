@@ -257,6 +257,7 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 					const cardsToIncludes = !!ownBuddy ? [...cardsInGame, ownBuddy] : cardsInGame;
 					const buildTierOptions: BuildTierOptions = {
 						showAllMechanics: showAllMechanics,
+						showBuddiesTier: showBuddies,
 						groupMinionsIntoTheirTribeGroup: bgsGroupMinionsIntoTheirTribeGroup,
 						includeTrinketsInTribeGroups: bgsIncludeTrinketsInTribeGroups,
 						showMechanicsTiers: showMechanicsTiers,

@@ -56,7 +56,13 @@ export const buildMechanicsTiers = (
 	config?: TierBuilderConfig,
 ): readonly Tier[] => {
 	const allBuddies = buildBuddies(availableTribes, heroPowerCardId, allPlayerCardIds, allCards, config);
+	console.debug('[debug] allBuddies', allBuddies);
 	let mechanicsInGame = config?.showAllMechanics ? [...MECHANICS_IN_GAME] : MAIN_MECHANICS_IN_GAME;
+
+	if (config?.showBuddiesTier && !mechanicsInGame.some((mechanic) => mechanic.mechanic === GameTag.BACON_BUDDY)) {
+		console.debug('[debug] adding buddies tier');
+		mechanicsInGame.push({ mechanic: GameTag.BACON_BUDDY, tierId: 'Bdy' });
+	}
 	if (!config?.spells) {
 		mechanicsInGame = mechanicsInGame.filter((mechanic) => mechanic.mechanic !== GameTag.BG_SPELL);
 	}
