@@ -690,6 +690,7 @@ const getDynamicFilters = (
 
 		// Random X Tribe
 		// Random Elementals
+		case CardIds.MenacingNimbus:
 		case CardIds.MenacingNimbusCore:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.ELEMENTAL);
 		case CardIds.Synthesize:
