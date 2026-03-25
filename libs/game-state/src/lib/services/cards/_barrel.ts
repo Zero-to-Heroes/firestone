@@ -138,6 +138,7 @@ export { MendTheTimeline } from './mend-the-timeline';
 export { MerithraOfTheDream } from './merithra-of-the-dream';
 export { Metrognome } from './metrognome';
 export { Mimicry } from './mimicry';
+export { MindEater } from './mind-eater';
 export { MismatchedFossils } from './mismatched-fossils';
 export { Morchie } from './morchie';
 export { Morchok } from './morchok';
