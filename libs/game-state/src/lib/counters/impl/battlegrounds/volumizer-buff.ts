@@ -3,6 +3,7 @@ import { CardIds, GameTag } from '@firestone-hs/reference-data';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { BattlegroundsState } from '../../../models/_barrel';
 import { GameState } from '../../../models/game-state';
+import { getControllerEntity, getEntityTag } from '../../../services/parser-entity-utils';
 import { CounterDefinitionV2 } from '../../_counter-definition-v2';
 import { CounterType } from '../../_exports';
 
@@ -16,15 +17,10 @@ export class VolumizerBuffCounterDefinitionV2 extends CounterDefinitionV2<{ atk:
 		pref: 'playerBgsVolumizerBuffCounter' as const,
 		display: (state: GameState, bgState: BattlegroundsState | null | undefined): boolean => true,
 		value: (state: GameState, bgState: BattlegroundsState | null | undefined) => {
+			const controllerEntity = getControllerEntity(state.parserState?.CurrentEntities, state.parserState?.ControllerEntityMap, state.localPlayerId!);
 			const value = {
-				atk:
-					state.fullGameState?.Player?.PlayerEntity.tags?.find(
-						(t) => t.Name === GameTag.BACON_VOLUMIZER_ATTACK_BUFF,
-					)?.Value ?? 0,
-				health:
-					state.fullGameState?.Player?.PlayerEntity.tags?.find(
-						(t) => t.Name === GameTag.BACON_VOLUMIZER_HEALTH_BUFF,
-					)?.Value ?? 0,
+				atk: getEntityTag(controllerEntity, GameTag.BACON_VOLUMIZER_ATTACK_BUFF, 0),
+				health: getEntityTag(controllerEntity, GameTag.BACON_VOLUMIZER_HEALTH_BUFF, 0),
 			};
 			if (value.atk === 0 && value.health === 0) {
 				return null;

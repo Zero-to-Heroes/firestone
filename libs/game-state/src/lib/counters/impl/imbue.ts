@@ -4,6 +4,7 @@
 import { CardClass, CardIds, GameTag } from '@firestone-hs/reference-data';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { GameState } from '../../models/game-state';
+import { getControllerEntity, getEntityTag } from '../../services/parser-entity-utils';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
 import { CounterType } from '../_exports';
 
@@ -45,8 +46,9 @@ export class ImbueCounterDefinitionV2 extends CounterDefinitionV2<number> {
 			return false;
 		},
 		value: (state: GameState) => {
-			return state.fullGameState?.Player?.PlayerEntity?.tags?.find((t) => t.Name === GameTag.IMBUES_THIS_GAME)
-				?.Value;
+			const controllerEntity = getControllerEntity(state.parserState?.CurrentEntities, state.parserState?.ControllerEntityMap, state.localPlayerId!);
+			const tagValue = getEntityTag(controllerEntity, GameTag.IMBUES_THIS_GAME);
+			return tagValue >= 0 ? tagValue : undefined;
 		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>
@@ -68,8 +70,9 @@ export class ImbueCounterDefinitionV2 extends CounterDefinitionV2<number> {
 			return false;
 		},
 		value: (state: GameState) => {
-			return state.fullGameState?.Opponent?.PlayerEntity?.tags?.find((t) => t.Name === GameTag.IMBUES_THIS_GAME)
-				?.Value;
+			const controllerEntity = getControllerEntity(state.parserState?.CurrentEntities, state.parserState?.ControllerEntityMap, state.opponentPlayerId!);
+			const tagValue = getEntityTag(controllerEntity, GameTag.IMBUES_THIS_GAME);
+			return tagValue >= 0 ? tagValue : undefined;
 		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>

@@ -24,9 +24,9 @@ import {
 } from '@firestone-hs/reference-data';
 
 import { DeckState } from '../models/deck-state';
-import { PlayerGameState } from '../models/full-game-state';
 import { GameState } from '../models/game-state';
 import { isCardValidForGame } from '../services/card-utils';
+import { EntityLike, getControllerEntity, getEnchantmentsForEntity, getEntityTag } from '../services/parser-entity-utils';
 import { hasDynamicPool } from '../services/cards/_card.type';
 import { cardsInfoCache } from '../services/cards/_mapping';
 import { buildExcavateTreasures } from './excavate-treasures';
@@ -282,11 +282,8 @@ const getDynamicRelatedCardIdsInternal = (
 
 		// We do it here so we don't recompute the data for every card
 		case CardIds.JungleJammer:
-			const fullGameState = options.deckState?.isOpponent
-				? options.gameState?.fullGameState?.Opponent
-				: options.gameState?.fullGameState?.Player;
-			const entity = fullGameState?.AllEntities.find((e) => e.entityId === entityId);
-			const tagValue = entity?.tags?.find((t) => t.Name === GameTag.TAG_SCRIPT_DATA_NUM_1)?.Value ?? 1;
+			const entity = options.gameState?.parserState?.CurrentEntities?.get(entityId);
+			const tagValue = getEntityTag(entity, GameTag.TAG_SCRIPT_DATA_NUM_1, 1);
 			return filterCards(
 				allCards,
 				options,
@@ -414,7 +411,7 @@ const getDynamicFilters = (
 					Math.min(
 						8,
 						getPlayerTag(
-							getPlayerOrOpponentFromFullGameState(options.deckState, options.gameState),
+							getPlayerOrOpponentControllerEntity(options.deckState, options.gameState),
 							GameTag.CORPSES,
 						),
 					),
@@ -430,7 +427,7 @@ const getDynamicFilters = (
 					Math.min(
 						10,
 						getPlayerTag(
-							getPlayerOrOpponentFromFullGameState(options.deckState, options.gameState),
+							getPlayerOrOpponentControllerEntity(options.deckState, options.gameState),
 							GameTag.IMBUES_THIS_GAME,
 						),
 					),
@@ -792,19 +789,17 @@ const getDynamicFilters = (
 		case CardIds.BeastSpeakerTaka_DINO_430:
 			// Scope the variables
 			if (true) {
-				const fullEntity =
-					options?.gameState?.fullGameState?.Opponent?.AllEntities?.find((e) => e.entityId === entityId) ??
-					options?.gameState?.fullGameState?.Player?.AllEntities?.find((e) => e.entityId === entityId) ??
-					null;
+				const currentEntities = options?.gameState?.parserState?.CurrentEntities;
+				const fullEntity = currentEntities?.get(entityId) ?? null;
 				if (fullEntity) {
-					const enchantments = fullEntity.enchantments?.filter(
-						(e) => e.cardId === CardIds.BeastSpeakerTaka_LegendaryMountEnchantment_DINO_430e,
+					const enchantments = getEnchantmentsForEntity(currentEntities, entityId).filter(
+						(e) => e.CardId === CardIds.BeastSpeakerTaka_LegendaryMountEnchantment_DINO_430e,
 					);
 					const allAttacks: number[] = [];
 					const allHealths: number[] = [];
 					for (const enchantment of enchantments) {
-						const gainedAttack = enchantment?.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_1]?.Value ?? 0;
-						const gainedHealth = enchantment?.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_2]?.Value ?? 0;
+						const gainedAttack = getEntityTag(enchantment, GameTag.TAG_SCRIPT_DATA_NUM_1, 0);
+						const gainedHealth = getEntityTag(enchantment, GameTag.TAG_SCRIPT_DATA_NUM_2, 0);
 						if (gainedHealth) {
 							allHealths.push(gainedHealth);
 							allAttacks.push(gainedAttack);
@@ -1481,11 +1476,11 @@ export const hasCorrectRarity = (card: ReferenceCard, targetRarity: CardRarity):
 };
 
 export const getPlayerTag = (
-	playerGameState: PlayerGameState | undefined,
+	playerEntity: EntityLike | undefined,
 	gameTag: GameTag,
 	defaultValue: number = 0,
 ): number => {
-	return playerGameState?.PlayerEntity?.tags?.find((t) => t.Name === gameTag)?.Value ?? defaultValue;
+	return getEntityTag(playerEntity, gameTag, defaultValue);
 };
 
 const hasCorrectRune = (card: ReferenceCard, runeType: DkruneTypes): boolean => {
@@ -1536,11 +1531,17 @@ export const fromAnotherClass = (card: ReferenceCard, currentClass: string | nul
 	);
 };
 
-export const getPlayerOrOpponentFromFullGameState = (
+export const getPlayerOrOpponentControllerEntity = (
 	deckState: DeckState,
 	gameState: GameState | null,
-): PlayerGameState | undefined => {
-	return deckState.isOpponent ? gameState?.fullGameState?.Opponent : gameState?.fullGameState?.Player;
+): EntityLike | undefined => {
+	const playerId = deckState.isOpponent ? gameState?.opponentPlayerId : gameState?.localPlayerId;
+	if (playerId == null) return undefined;
+	return getControllerEntity(
+		gameState?.parserState?.CurrentEntities,
+		gameState?.parserState?.ControllerEntityMap,
+		playerId,
+	);
 };
 
 export const hasOverride = (

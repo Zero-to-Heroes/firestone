@@ -3,6 +3,7 @@ import { CardClass, CardIds, GameTag } from '@firestone-hs/reference-data';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { GameState } from '../../models/game-state';
 import { HeroCard } from '../../models/hero-card';
+import { getControllerEntity, getEntityTag } from '../../services/parser-entity-utils';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
 import { CounterType } from '../_exports';
 
@@ -38,10 +39,10 @@ export class NextStarshipLaunchCounterDefinitionV2 extends CounterDefinitionV2<n
 					mechanics?.includes(GameTag[GameTag.STARSHIP])
 				);
 			}),
-		value: (state: GameState): number | null =>
-			state.fullGameState?.Player?.PlayerEntity?.tags?.find(
-				(t) => t.Name === GameTag.STARSHIP_LAUNCH_COST_DISCOUNT,
-			)?.Value || null,
+		value: (state: GameState): number | null => {
+			const controllerEntity = getControllerEntity(state.parserState?.CurrentEntities, state.parserState?.ControllerEntityMap, state.localPlayerId!);
+			return getEntityTag(controllerEntity, GameTag.STARSHIP_LAUNCH_COST_DISCOUNT, 0) || null;
+		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>
 				i18n.translateString('settings.decktracker.your-deck.counters.next-starship-launch-label'),

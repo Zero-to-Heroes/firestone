@@ -1,13 +1,21 @@
 import { EventEmitter, Injectable, NgZone, Optional } from '@angular/core';
-import { GameTag } from '@firestone-hs/reference-data';
+import { GameTag, Zone } from '@firestone-hs/reference-data';
+import { PtlGameStateUpdate } from '@firestone/power-log-parser';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { arraysEqual, chunk } from '@firestone/shared/framework/common';
 import { OverwolfService, ProcessingQueue, waitForReady } from '@firestone/shared/framework/core';
 // import { TwitchAuthService } from '@firestone/twitch/common';
 import { BgsBattleSimulationService } from '@firestone/battlegrounds/core';
 import { BehaviorSubject, debounceTime, distinctUntilChanged, filter } from 'rxjs';
-import { DeckCard, DeckState, HeroCard, PlayerGameState, RealTimeStatsState } from '../models/_barrel';
+import { DeckCard, DeckState, HeroCard, RealTimeStatsState } from '../models/_barrel';
 import { GameState } from '../models/game-state';
+import {
+	getBoard,
+	getEntitiesInZone,
+	getEntityTag,
+	getHero,
+	hasTag,
+} from './parser-entity-utils';
 import { BgsMatchMemoryInfoService } from './battlegrounds/bgs-match-memory-info.service';
 import { EventParser } from './game-events/event-parser/_event-parser';
 import { SecretsParserService } from './game-events/event-parser/secrets/secrets-parser.service';
@@ -152,20 +160,56 @@ export class GameStateService {
 		this.gameEvents.allEvents.subscribe((gameEvent: GameEvent) => {
 			this.processingQueue.enqueue(gameEvent);
 		});
+		this.gameEvents.ptlGameState$.subscribe((update) => {
+			this.updateFromPtlState(update);
+		});
+	}
+
+	updateFromPtlState(update: PtlGameStateUpdate): void {
+		let currentState = this.state;
+		if (!currentState) {
+			return;
+		}
+
+		currentState = currentState.update({
+			parserState: update.gameState,
+			localPlayerId: update.localPlayerId,
+			opponentPlayerId: update.opponentPlayerId,
+		});
+
+		if (currentState.playerDeck && currentState.opponentDeck) {
+			const updatedPlayerDeck = this.updateDeckFromParserState(
+				currentState.playerDeck,
+				currentState,
+				update.localPlayerId,
+			);
+			const updatedOpponentDeck = this.updateDeckFromParserState(
+				currentState.opponentDeck,
+				currentState,
+				update.opponentPlayerId,
+			);
+			const hasChanged =
+				updatedPlayerDeck !== currentState.playerDeck || updatedOpponentDeck !== currentState.opponentDeck;
+			if (hasChanged) {
+				currentState = currentState.update({
+					playerDeck: updatedPlayerDeck as DeckState,
+					opponentDeck: updatedOpponentDeck as DeckState,
+				});
+			}
+		}
+
+		if (currentState !== this.state) {
+			this.state = currentState;
+			this.eventEmitters.forEach((emitter) => emitter(currentState));
+		}
 	}
 
 	private async processQueue(eventQueue: readonly (GameEvent | GameStateEvent)[]) {
-		// So that ZONE_POSITION_CHANGED events are processed a bit more often
 		const gameEndEvent = eventQueue.find((event) => event.type === GameEvent.GAME_END);
 		const shouldProcessGameEnd = gameEndEvent && eventQueue.length === 1;
 		const chunks = chunk(eventQueue, 50);
 		for (const subQueue of chunks) {
 			try {
-				const stateUpdateEvents = subQueue.filter((event) => event.type === GameEvent.GAME_STATE_UPDATE);
-				const stateUpdateEvent: GameEvent | null =
-					stateUpdateEvents.length > 0
-						? (stateUpdateEvents[stateUpdateEvents.length - 1] as GameEvent)
-						: null;
 				const zonePositionChangedEvent = mergeZonePositionChangedEvents(
 					subQueue.filter((event) => event.type === GameEvent.ZONE_POSITION_CHANGED) as GameEvent[],
 				);
@@ -173,24 +217,17 @@ export class GameStateService {
 					subQueue.filter((event) => event.type === GameEvent.DATA_SCRIPT_CHANGED) as GameEvent[],
 				);
 				const gameEndEvent = subQueue.find((event) => event.type === GameEvent.GAME_END);
-				// Processing these should be super quick, as in most cases they won't lead to a state update
-				// const attackOnBoardEvents = subQueue.filter((event) => event.type === GameEvent.TOTAL_ATTACK_ON_BOARD);
 				const eventsToProcess = [
 					...subQueue.filter(
 						(event) =>
-							event.type !== GameEvent.GAME_STATE_UPDATE &&
 							event.type !== GameEvent.ZONE_POSITION_CHANGED &&
 							event.type !== GameEvent.DATA_SCRIPT_CHANGED &&
 							event.type !== GameEvent.GAME_END,
 					),
-					// stateUpdateEvents.length > 0 ? stateUpdateEvents[stateUpdateEvents.length - 1] : null,
 					zonePositionChangedEvent,
 					dataScriptChangedEvent,
-					stateUpdateEvent,
 					shouldProcessGameEnd ? gameEndEvent : null,
-					// attackOnBoardEvents.length > 0 ? attackOnBoardEvents[attackOnBoardEvents.length - 1] : null,
 				].filter((event) => event);
-				const start = Date.now();
 				let currentState = this.state;
 				const prefs = await this.prefs.getPreferences();
 				for (let i = 0; i < eventsToProcess.length; i++) {
@@ -205,7 +242,6 @@ export class GameStateService {
 				}
 
 				// TODO: completely remove this step
-				// Maybe only update this when we have NEW_TURN events?
 				if (currentState && currentState !== this.state) {
 					const updatedPlayerDeck = this.gameStateMetaInfos.updateDeck(
 						currentState.playerDeck,
@@ -226,44 +262,10 @@ export class GameStateService {
 						: currentState;
 				}
 
-				// TODO: completely remove this step
-				if (currentState && stateUpdateEvent != null) {
-					// Add information that is not linked to events, like the number of turns the
-					// card has been present in the zone
-					const updatedPlayerDeck = this.updateDeck(
-						currentState.playerDeck,
-						currentState,
-						stateUpdateEvent.gameState.Player,
-					);
-					const udpatedOpponentDeck = this.updateDeck(
-						currentState.opponentDeck,
-						currentState,
-						stateUpdateEvent.gameState.Opponent,
-					);
-					const hasChanged =
-						updatedPlayerDeck !== currentState.playerDeck ||
-						udpatedOpponentDeck !== currentState.opponentDeck;
-					currentState = hasChanged
-						? currentState.update({
-								playerDeck: updatedPlayerDeck,
-								opponentDeck: udpatedOpponentDeck,
-							})
-						: currentState;
-				}
-
 				if (currentState && currentState !== this.state) {
-					// console.debug('[game-state] state has changed', currentState);
 					this.state = currentState;
 					this.eventEmitters.forEach((emitter) => emitter(currentState));
-				} else {
-					// console.debug(
-					// 	'[game-state] state is unchanged, not emitting event',
-					// 	// gameEvent.type,
-					// 	// gameEvent.cardId,f
-					// 	// gameEvent.entityId,
-					// );
 				}
-				// console.debug('[game-state] processed events', eventsToProcess.length, 'in', Date.now() - start);
 			} catch (e) {
 				console.error('Exception while processing event', e);
 			}
@@ -430,7 +432,6 @@ export class GameStateService {
 				GameEvent.ZONE_POSITION_CHANGED,
 				GameEvent.RESOURCES_UPDATED,
 				GameEvent.NUM_CARDS_DRAW_THIS_TURN,
-				GameEvent.GAME_STATE_UPDATE,
 				// GameEvent.SUB_SPELL_START,
 				// GameEvent.SUB_SPELL_END,
 			].includes(gameEvent.type)
@@ -450,37 +451,32 @@ export class GameStateService {
 		return currentState;
 	}
 
-	// TODO: this should move elsewhere
-	// TODO: not a big fan of this. These methods should probably be called only once, on the appropriate action
-	// this feels lazy, and probably perf-hungry
-	private updateDeck(deck: DeckState, gameState: GameState, playerFromTracker: PlayerGameState): DeckState {
-		if (!playerFromTracker) {
+	private updateDeckFromParserState(deck: DeckState | undefined, gameState: GameState, playerId: number): DeckState | undefined {
+		if (!deck) {
 			return deck;
 		}
-		// Could also just support the DORMANT tag event
+		const entities = gameState.parserState?.CurrentEntities;
+		if (!entities) {
+			return deck;
+		}
+
 		const newBoard: readonly DeckCard[] = deck.board.map((card) => {
-			const entity = playerFromTracker.Board?.find((entity) => entity.entityId === card.entityId);
-			const dormantTag = hasTag(entity, GameTag.DORMANT);
+			const entity = entities.get(card.entityId);
+			const dormantTag = entity ? hasTag(entity.Tags, GameTag.DORMANT) : false;
 			return dormantTag === card.dormant ? card : card.update({ dormant: dormantTag });
 		});
 
-		// Same here, just supporting the events should be enough?
-		const maxMana = playerFromTracker.Hero.tags?.find((t) => t.Name == GameTag.RESOURCES)?.Value ?? 0;
-		const manaSpent = playerFromTracker.Hero.tags?.find((t) => t.Name == GameTag.RESOURCES_USED)?.Value ?? 0;
-		const manaLeft = maxMana == null || manaSpent == null ? null : maxMana - manaSpent;
+		const hero = getHero(entities, playerId);
+		const maxMana = hero ? getEntityTag(hero, GameTag.RESOURCES, 0) : 0;
+		const manaSpent = hero ? getEntityTag(hero, GameTag.RESOURCES_USED, 0) : 0;
+		const manaLeft = maxMana - manaSpent;
 		const newHero: HeroCard | undefined =
-			manaLeft != deck.hero?.manaLeft
-				? deck.hero!.update({
-						manaLeft: maxMana == null || manaSpent == null ? undefined : maxMana - manaSpent,
-					})
+			deck.hero && manaLeft != deck.hero.manaLeft
+				? deck.hero.update({ manaLeft: manaLeft })
 				: deck.hero;
 
-		// We need this because we don't know the exact content of cards in the opponent's deck
-		// simply fomr looking at the deck state (eg we have imported a list, and we don't know which ones
-		// are to be removed)
-		const cardsLeftInDeck = playerFromTracker.Deck?.length;
+		const cardsLeftInDeck = getEntitiesInZone(entities, playerId, Zone.DECK).length;
 
-		// Overall this whole process could likely be completely removed
 		const hasChanged =
 			!arraysEqual(newBoard, deck.board) || newHero !== deck.hero || cardsLeftInDeck !== deck.cardsLeftInDeck;
 
@@ -489,7 +485,6 @@ export class GameStateService {
 					board: newBoard,
 					hero: newHero,
 					cardsLeftInDeck: cardsLeftInDeck,
-					// totalAttackOnBoard: totalAttackOnBoard,
 				})
 			: deck;
 	}
@@ -549,10 +544,3 @@ const mergeZonePositionChangedEvents = (events: readonly GameEvent[]): GameEvent
 	return merged;
 };
 
-const hasTag = (entity, tag: number, value = 1): boolean => {
-	if (!entity?.tags) {
-		return false;
-	}
-	const matches = entity.tags.some((t) => t.Name === tag && t.Value === value);
-	return matches;
-};

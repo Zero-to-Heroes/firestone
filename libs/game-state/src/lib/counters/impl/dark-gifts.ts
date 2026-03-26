@@ -2,6 +2,7 @@ import { CardClass, CardIds, CardType, GameTag, Zone } from '@firestone-hs/refer
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { BattlegroundsState, hasOrHadHeroClass } from '../../models/_barrel';
 import { GameState } from '../../models/game-state';
+import { getEntitiesForPlayer, getEntityTag } from '../../services/parser-entity-utils';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
 import { CounterType } from '../_exports';
 
@@ -13,19 +14,23 @@ export class DarkGiftsCounterDefinitionV2 extends CounterDefinitionV2<readonly s
 	readonly player = {
 		pref: 'playerDarkGiftsCounter' as const,
 		display: (state: GameState): boolean => state.playerDeck?.hasRelevantCard([CardIds.WallowTheWretched_EDR_487]),
-		value: (state: GameState): readonly string[] | null =>
-			state.fullGameState?.Player?.AllEntities?.filter(
-				(e) =>
-					e.tags?.find((t) => t.Name === GameTag.IS_NIGHTMARE_BONUS)?.Value === 1 &&
-					e.tags.find((t) => t.Name === GameTag.CARDTYPE)?.Value === CardType.SPELL,
-			)
+		value: (state: GameState): readonly string[] | null => {
+			if (state.localPlayerId == null) return null;
+			const entities = getEntitiesForPlayer(state.parserState?.CurrentEntities, state.localPlayerId)
+				.filter(
+					(e) =>
+						getEntityTag(e, GameTag.IS_NIGHTMARE_BONUS) === 1 &&
+						getEntityTag(e, GameTag.CARDTYPE) === CardType.SPELL,
+				)
 				.filter((e) => {
-					const zone = e.tags.find((t) => t.Name === GameTag.ZONE)?.Value;
-					return zone !== Zone.SETASIDE && zone !== Zone.REMOVEDFROMGAME;
+					const zone = getEntityTag(e, GameTag.ZONE);
+					return zone !== (Zone.SETASIDE as number) && zone !== (Zone.REMOVEDFROMGAME as number);
 				})
-				.map((e) => e.cardId)
+				.map((e) => e.CardId)
 				// Unique - each dark gift is only applied once
-				.filter((e, index, self) => self.indexOf(e) === index) ?? null,
+				.filter((e, index, self) => self.indexOf(e) === index);
+			return entities.length ? entities : null;
+		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>
 				i18n.translateString('settings.decktracker.your-deck.counters.dark-gifts-label'),
@@ -40,28 +45,27 @@ export class DarkGiftsCounterDefinitionV2 extends CounterDefinitionV2<readonly s
 		pref: 'opponentDarkGiftsCounter' as const,
 		display: (state: GameState): boolean => hasOrHadHeroClass(state.opponentDeck?.hero, [CardClass.WARLOCK]),
 		value: (state: GameState): readonly string[] | null => {
-			const candidates =
-				state.fullGameState?.Opponent?.AllEntities?.filter(
-					(e) => e.tags?.find((t) => t.Name === GameTag.IS_NIGHTMARE_BONUS)?.Value === 1,
-				) ?? [];
+			const candidates = state.opponentPlayerId != null
+				? getEntitiesForPlayer(state.parserState?.CurrentEntities, state.opponentPlayerId)
+					.filter((e) => getEntityTag(e, GameTag.IS_NIGHTMARE_BONUS) === 1)
+				: [];
 			const knownGifts = candidates
 				// Once it has been revealed, it becomes an enchantment
-				.filter((e) => e.tags.find((t) => t.Name === GameTag.CARDTYPE)?.Value === CardType.ENCHANTMENT)
+				.filter((e) => getEntityTag(e, GameTag.CARDTYPE) === CardType.ENCHANTMENT)
 				.filter((e) => {
-					const zone = e.tags.find((t) => t.Name === GameTag.ZONE)?.Value;
-					// return zone !== Zone.SETASIDE && zone !== Zone.REMOVEDFROMGAME;
+					const zone = getEntityTag(e, GameTag.ZONE);
 					// So that we only see the ones that are currently in play, or ones attacked to minions that died
-					return zone === Zone.PLAY || zone === Zone.REMOVEDFROMGAME;
+					return zone === (Zone.PLAY as number) || zone === (Zone.REMOVEDFROMGAME as number);
 				});
 			const result =
 				knownGifts
 					.map((e) => {
-						const baseEntity = e.tags.find((t) => t.Name === GameTag.TAG_SCRIPT_DATA_NUM_6)?.Value;
-						return baseEntity ? this.allCards.getCard(baseEntity).id : e.cardId;
+						const baseEntity = getEntityTag(e, GameTag.TAG_SCRIPT_DATA_NUM_6);
+						return baseEntity > 0 ? this.allCards.getCard(baseEntity).id : e.CardId;
 					})
 					// Unique - each dark gift is only applied once
-					.filter((e, index, self) => self.indexOf(e) === index) ?? null;
-			return !!result?.length ? result : null;
+					.filter((e, index, self) => self.indexOf(e) === index);
+			return result?.length ? result : null;
 		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>

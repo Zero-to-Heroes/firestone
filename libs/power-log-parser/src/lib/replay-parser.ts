@@ -1,6 +1,8 @@
 import { GameType } from '@firestone-hs/reference-data';
+import { BehaviorSubject } from 'rxjs';
 import { HearthstoneReplay, Game, Node } from './models';
 import { CombinedState } from './state/combined-state';
+import { GameState } from './state/game-state';
 import { StateType, INodeParser } from './state/parser-state';
 import { StateFacade } from './state/state-facade';
 import { DataHandler } from './handlers/data-handler';
@@ -16,14 +18,21 @@ import { GameEventProvider, GameEvent } from './game-event';
 import { EventQueueHandler } from './event-queue-handler';
 import { GameEventHandler } from './game-event-handler';
 import { NodeParser } from './node-parser';
-import { buildGameState } from './build-game-state';
 
 export { GameEvent } from './game-event';
+
+export interface PtlGameStateUpdate {
+	readonly gameState: GameState;
+	readonly localPlayerId: number;
+	readonly opponentPlayerId: number;
+}
 
 export class ReplayParser {
 	static start: string = '';
 
 	State: CombinedState;
+	readonly ptlGameState$ = new BehaviorSubject<PtlGameStateUpdate | null>(null);
+
 	private dataHandler: DataHandler;
 	private powerDataHandler: PowerDataHandler;
 	private helper: Helper;
@@ -304,29 +313,16 @@ export class ReplayParser {
 		}
 	}
 
-	AskForGameStateUpdate(): void {
-		let gameState: any = null;
-		try {
-			gameState = buildGameState(this.State.PTLState, this.State.StateFacade, this.State.PTLState.GameState);
-		} catch (ex) {
-			Logger.Log('askForGameStateUpdate', `Could not create game state: ${ex}`);
-		}
+	emitPtlGameState(): void {
 		const facade = this.State.StateFacade;
-		const provider = GameEventProvider.Create(
-			new Date().toISOString(),
-			'GAME_STATE_UPDATE',
-			() => ({
-				Type: 'GAME_STATE_UPDATE',
-				Value: {
-					LocalPlayer: facade.LocalPlayer,
-					OpponentPlayer: facade.OpponentPlayer,
-					GameState: gameState,
-				},
-			}),
-			true,
-			null,
-		);
-		this.State.PTLState.NodeParser.EnqueueGameEvent([provider]);
+		if (!facade.LocalPlayer || !facade.OpponentPlayer) {
+			return;
+		}
+		this.ptlGameState$.next({
+			gameState: this.State.PTLState.GameState,
+			localPlayerId: facade.LocalPlayer.PlayerId,
+			opponentPlayerId: facade.OpponentPlayer.PlayerId,
+		});
 	}
 
 	private NormalizeTimestamp(timestamp: string): string {

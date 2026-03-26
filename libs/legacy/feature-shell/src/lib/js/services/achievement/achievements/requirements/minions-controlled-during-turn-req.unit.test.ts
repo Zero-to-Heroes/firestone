@@ -4,58 +4,10 @@ import { MinionsControlledDuringTurnReq } from './minions-controlled-during-turn
 
 describe('minions-controlled-during-turn-req', () => {
 	describe('qualifier is AT_LEAST', () => {
-		test('is completed when any event has exactly the required minions on board', () => {
+		test('is not completed when board minion count is not available on the event', () => {
 			const req = new MinionsControlledDuringTurnReq('ULD_703', 3, 'AT_LEAST');
 			const event = Object.assign(new GameEvent(), {
-				type: 'whatever-event-with-gameState',
-				gameState: {
-					Player: {
-						Board: [{ cardId: 'ULD_703' }, { cardId: 'ULD_703' }, { cardId: 'ULD_703' }],
-					},
-				} as unknown as GameState,
-			} as GameEvent);
-
-			req.test(event);
-
-			expect(req.isCompleted()).toBe(true);
-		});
-
-		test('is completed when any event has more than the required minions on board', () => {
-			const req = new MinionsControlledDuringTurnReq('ULD_703', 1, 'AT_LEAST');
-			const event = Object.assign(new GameEvent(), {
-				type: 'whatever-event-with-gameState',
-				gameState: {
-					Player: {
-						Board: [{ cardId: 'ULD_703' }, { cardId: 'ULD_703' }, { cardId: 'ULD_703' }],
-					},
-				} as unknown as GameState,
-			} as GameEvent);
-
-			req.test(event);
-
-			expect(req.isCompleted()).toBe(true);
-		});
-
-		test('is not completed when any event has less than the required minions on board', () => {
-			const req = new MinionsControlledDuringTurnReq('ULD_703', 3, 'AT_LEAST');
-			const event = Object.assign(new GameEvent(), {
-				type: 'whatever-event-with-gameState',
-				gameState: {
-					Player: {
-						Board: [{ cardId: 'ULD_703' }],
-					},
-				} as unknown as GameState,
-			} as GameEvent);
-
-			req.test(event);
-
-			expect(req.isCompleted()).toBeFalsy();
-		});
-
-		test('is not completed when any event without gameState', () => {
-			const req = new MinionsControlledDuringTurnReq('ULD_703', 3, 'AT_LEAST');
-			const event = Object.assign(new GameEvent(), {
-				type: 'whatever-event-without-gameState',
+				type: 'whatever-event',
 			} as GameEvent);
 
 			req.test(event);

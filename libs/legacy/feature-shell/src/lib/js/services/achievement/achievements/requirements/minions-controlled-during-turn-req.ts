@@ -33,16 +33,5 @@ export class MinionsControlledDuringTurnReq implements Requirement {
 		return this.numberOfMinions === this.targetNumberOfMinions;
 	}
 
-	test(gameEvent: GameEvent): void {
-		if (gameEvent.gameState) {
-			this.handleEvent(gameEvent);
-		}
-	}
-
-	private handleEvent(gameEvent: GameEvent) {
-		if (gameEvent.gameState && gameEvent.gameState.Player && gameEvent.gameState.Player.Board) {
-			const board = gameEvent.gameState.Player.Board;
-			this.numberOfMinions = board.filter((entity) => entity.cardId === this.minionCardId).length;
-		}
-	}
+	test(_gameEvent: GameEvent): void {}
 }

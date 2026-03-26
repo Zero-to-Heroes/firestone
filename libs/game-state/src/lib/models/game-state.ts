@@ -1,9 +1,9 @@
 import { BnetRegion, GameType } from '@firestone-hs/reference-data';
 import { MatchInfo } from '@firestone/memory';
+import { GameState as ParserGameState } from '@firestone/power-log-parser';
 import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { BattlegroundsState } from './_barrel';
 import { DeckState } from './deck-state';
-import { FullGameState } from './full-game-state';
 import { Metadata } from './metadata';
 
 // The goal of this state is ultimately to store all the information linked to the live data
@@ -36,9 +36,9 @@ export class GameState {
 
 	readonly bgState: BattlegroundsState = new BattlegroundsState();
 
-	// Can use this for non time-sensitive info, as it's only send back every now and then
-	// (e.g. for counters)
-	readonly fullGameState?: FullGameState;
+	readonly parserState?: ParserGameState;
+	readonly localPlayerId?: number;
+	readonly opponentPlayerId?: number;
 
 	readonly reconnectOngoing: boolean;
 	readonly hasReconnected: boolean;

@@ -111,7 +111,6 @@ import { GameEndParser } from './event-parser/game-end-parser';
 import { GameRunningParser } from './event-parser/game-running-parser';
 import { GameSettingsParser } from './event-parser/game-settings-parser';
 import { GameStartParser } from './event-parser/game-start-parser';
-import { GameStateUpdateParser } from './event-parser/game-state-update-parser';
 import { GlobalMinionEffectParser } from './event-parser/global-minion-effect-parser';
 import { HeraldParser } from './event-parser/herald-parser';
 import { HeroChangedParser } from './event-parser/hero-changed-parser';
@@ -344,7 +343,6 @@ export class GameStateParsersService {
 			[GameEvent.GALAKROND_INVOKED]: [new GalakrondInvokedParser()],
 			[GameEvent.GAME_END]: [new GameEndParser(this.prefs, this.owUtils)],
 			[GameEvent.GAME_RUNNING]: [new GameRunningParser(this.deckHandler)],
-			[GameEvent.GAME_STATE_UPDATE]: [new GameStateUpdateParser()],
 			[GameEvent.GAME_START]: [new GameStartParser(this.reviewIdService)],
 			[GameEvent.GAME_SETTINGS]: [new GameSettingsParser()],
 			[GameEvent.HEALING]: [new AssignCardIdParser(this.helper)],

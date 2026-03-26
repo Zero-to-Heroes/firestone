@@ -10,7 +10,7 @@ import {
 import { freeRegexp, sleep } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ProcessingQueue } from '@firestone/shared/framework/core';
 import Deque from 'double-ended-queue';
-import { filter, interval, take } from 'rxjs';
+import { filter, take } from 'rxjs';
 import { GameEventsFacadeService } from '../game-events-facade.service';
 import { HsGameMetaData } from '../game-mode-data.service';
 import { GameStateFacadeService } from '../game-state-facade.service';
@@ -28,8 +28,6 @@ export class GameEvents {
 	private processingQueue: ProcessingQueue<string>;
 
 	private lastProcessedTimestamp: number;
-	private lastGameStateUpdateTimestamp: number;
-	private gameStateUpdateInProgress: boolean;
 
 	private tsParser: ReplayParser | null = null;
 	private tsParserLineIndex: number = 0;
@@ -96,35 +94,6 @@ export class GameEvents {
 				});
 			});
 
-		const gameStateUpdateInterval = 2000;
-		interval(gameStateUpdateInterval).subscribe(() => {
-			if (!this.lastProcessedTimestamp) {
-				return;
-			}
-			// if (!this.receivedLastGameStateUpdate) {
-			// 	return;
-			// }
-
-			const timeSinceLastLog = Date.now() - this.lastProcessedTimestamp;
-			// Only ask for a game state update if we have received an event in the last 2 seconds
-			if (timeSinceLastLog < 3 * gameStateUpdateInterval) {
-				const timeSinceLastGameStateUpdate = Date.now() - this.lastGameStateUpdateTimestamp;
-				// this.receivedLastGameStateUpdate = false;
-				// Only ask for a game state update if we haven't received one in the last 2 seconds
-				// TODO: also don't ask if a request is sent but not received yet
-				if (this.gameStateUpdateInProgress) {
-					return;
-				}
-				if (!this.lastGameStateUpdateTimestamp || timeSinceLastGameStateUpdate > gameStateUpdateInterval) {
-					this.gameStateUpdateInProgress = true;
-					if (this.tsParser) {
-						this.tsParser.AskForGameStateUpdate();
-						this.tsParser.State.GSState.NodeParser.ClearQueue();
-						this.tsParser.State.PTLState.NodeParser.ClearQueue();
-					}
-				}
-			}
-		});
 	}
 
 	private async processQueue(eventQueue: readonly string[]): Promise<readonly string[]> {
@@ -160,16 +129,7 @@ export class GameEvents {
 			return;
 		}
 
-		// console.debug('[game-events] dispatching game event', gameEvent?.Type);
-		if (gameEvent.Type !== 'GAME_STATE_UPDATE') {
-			// console.debug('[game-events] received event', gameEvent.Type);
-			this.lastProcessedTimestamp = Date.now();
-		} else {
-			// console.debug('[game-events] received GAME_STATE_UPDATE', gameEvent);
-			this.lastGameStateUpdateTimestamp = Date.now();
-			this.gameStateUpdateInProgress = false;
-			// this.receivedLastGameStateUpdate = true;
-		}
+		this.lastProcessedTimestamp = Date.now();
 
 		const start = Date.now();
 		switch (gameEvent.Type) {
@@ -1429,11 +1389,6 @@ export class GameEvents {
 					} as GameEvent),
 				);
 				break;
-			case 'GAME_STATE_UPDATE':
-				if (gameEvent.Value.GameState != null) {
-					this.doEventDispatch(GameEvent.build(GameEvent.GAME_STATE_UPDATE, gameEvent));
-				}
-				break;
 			case 'TOTAL_ATTACK_ON_BOARD':
 				this.doEventDispatch(
 					GameEvent.build(GameEvent.TOTAL_ATTACK_ON_BOARD, gameEvent, {
@@ -1933,6 +1888,9 @@ export class GameEvents {
 		this.tsParser.onGameEvent = (event: ParserGameEvent) => {
 			this.dispatchGameEvent(event);
 		};
+		this.tsParser.ptlGameState$.pipe(filter((update) => !!update)).subscribe((update) => {
+			this.gameEventsEmitter.ptlGameState$.next(update);
+		});
 	}
 
 	private processLogsWithTsParser(eventQueue: readonly string[]): boolean {
@@ -1957,6 +1915,7 @@ export class GameEvents {
 
 		this.tsParser!.State.GSState.NodeParser.ClearQueue();
 		this.tsParser!.State.PTLState.NodeParser.ClearQueue();
+		this.tsParser!.emitPtlGameState();
 
 		return true;
 	}

@@ -5,7 +5,7 @@ import { CardsFacadeService, ILocalizationService } from '@firestone/shared/fram
 import { BoardSecret } from '../../../models/board-secret';
 import { DeckCard } from '../../../models/deck-card';
 import { DeckState } from '../../../models/deck-state';
-import { EntityGameState, FullGameState, PlayerGameState } from '../../../models/full-game-state';
+import { GameState as ParserGameState } from '@firestone/power-log-parser';
 import { GameState } from '../../../models/game-state';
 import { SecretOption } from '../../../models/secret-option';
 import { GameEvent } from '../game-event';
@@ -595,16 +595,8 @@ export class DeckManipulationHelper {
 		return secrets.map((secret) => this.removeSecretOptionFromSecret(secret, secretCardId));
 	}
 
-	public findEntityInGameState(gameState: FullGameState, entityId: number): EntityGameState | undefined {
-		const playerState: PlayerGameState = gameState.Player || ({} as PlayerGameState);
-		const opponentState: PlayerGameState = gameState.Opponent || ({} as PlayerGameState);
-		const allEntities = [
-			...(playerState.Board || []),
-			...(playerState.Hand || []),
-			...(opponentState.Board || []),
-			...(opponentState.Hand || []),
-		];
-		return allEntities.find((entity) => entity.entityId === entityId);
+	public findEntityInGameState(parserState: ParserGameState | undefined, entityId: number): any | undefined {
+		return parserState?.CurrentEntities?.get(entityId);
 	}
 
 	public removeSecretOptionFromSecret(secret: BoardSecret, secretCardId: string): BoardSecret {

@@ -3,6 +3,7 @@
 import { CardIds, GameTag } from '@firestone-hs/reference-data';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { GameState } from '../../models/game-state';
+import { getControllerEntity, getEntityTag } from '../../services/parser-entity-utils';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
 import { CounterType } from '../_exports';
 
@@ -21,10 +22,8 @@ export class OverloadThisGameCounterDefinitionV2 extends CounterDefinitionV2<num
 		pref: 'playerOverloadThisGameCounter' as const,
 		display: (state: GameState): boolean => true,
 		value: (state: GameState) => {
-			return (
-				state.playerDeck.fullGameState?.PlayerEntity?.tags?.find((t) => t.Name === GameTag.OVERLOAD_THIS_GAME)
-					?.Value ?? 0
-			);
+			const controllerEntity = getControllerEntity(state.parserState?.CurrentEntities, state.parserState?.ControllerEntityMap, state.localPlayerId!);
+			return getEntityTag(controllerEntity, GameTag.OVERLOAD_THIS_GAME, 0);
 		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>

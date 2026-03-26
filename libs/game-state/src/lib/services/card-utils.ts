@@ -26,14 +26,16 @@ import { Metadata } from '../models/metadata';
 import { hasCorrectClass } from '../related-cards/dynamic-pools';
 import { hasGeneratingCard } from './cards/_card.type';
 import { cardsInfoCache } from './cards/_mapping';
+import { EntityLike, getEntityTag, hasTag } from './parser-entity-utils';
 
 export const getProcessedCard = (
 	cardId: string | undefined | null,
 	entityId: number | undefined | null,
 	deckState: DeckState,
 	allCards: CardsFacadeService | AllCardsService,
-	debug = false,
+	debugOrCurrentEntities?: boolean | Map<number, EntityLike>,
 ): ReferenceCard => {
+	const currentEntities = debugOrCurrentEntities instanceof Map ? debugOrCurrentEntities : undefined;
 	const refCard = allCards.getCard(cardId!);
 	if (cardId?.startsWith(CardIds.ZilliaxDeluxe3000_TOY_330)) {
 		const updatedRefCard: Mutable<ReferenceCard> = { ...refCard };
@@ -75,13 +77,12 @@ export const getProcessedCard = (
 		refCard.id?.startsWith(CardIds.EliseTheNavigator_TLC_100) && refCard.id !== CardIds.EliseTheNavigator_TLC_100;
 	const isIgnisWeapon = refCard.id?.startsWith('TTN_060');
 	if (isEliseLocation || isIgnisWeapon) {
-		const fullGameState = deckState.fullGameState;
-		if (fullGameState) {
-			const cardInState = fullGameState.AllEntities.find((c) => c.entityId === entityId);
+		if (currentEntities && entityId != null) {
+			const cardInState = currentEntities.get(entityId);
 			if (cardInState) {
 				const updatedRefCard: Mutable<ReferenceCard> = { ...refCard };
 				const newMechanics = [...(updatedRefCard.mechanics ?? [])];
-				if (cardInState.tags?.some((t) => t.Name === GameTag.DEATHRATTLE && t.Value === 1)) {
+				if (hasTag(cardInState.Tags, GameTag.DEATHRATTLE)) {
 					newMechanics.push(GameTag[GameTag.DEATHRATTLE]);
 				}
 				updatedRefCard.mechanics = newMechanics;

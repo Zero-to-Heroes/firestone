@@ -1,5 +1,4 @@
 import { Rank } from '@firestone/memory';
-import { FullGameState } from '../../models/full-game-state';
 import { DeckInfo } from '../deck/deck-parser.service';
 import { GameStateEvent } from '../game-state-events/game-state-event';
 
@@ -136,7 +135,6 @@ export class GameEvent implements GameStateEvent {
 	public static readonly MINDRENDER_ILLUCIA_START = 'MINDRENDER_ILLUCIA_START';
 	public static readonly MINDRENDER_ILLUCIA_END = 'MINDRENDER_ILLUCIA_END';
 
-	public static readonly GAME_STATE_UPDATE = 'GAME_STATE_UPDATE';
 	public static readonly TOTAL_ATTACK_ON_BOARD = 'TOTAL_ATTACK_ON_BOARD';
 	public static readonly ENTITY_UPDATE = 'ENTITY_UPDATE';
 	public static readonly ENTITY_CHOSEN = 'ENTITY_CHOSEN';
@@ -213,7 +211,6 @@ export class GameEvent implements GameStateEvent {
 	readonly localPlayer: GameEventPlayer;
 	readonly opponentPlayer: GameEventPlayer;
 	readonly entityId: number;
-	readonly gameState: FullGameState = {} as FullGameState;
 
 	readonly additionalData: any;
 	readonly debug?: any;
@@ -226,7 +223,6 @@ export class GameEvent implements GameStateEvent {
 			localPlayer: gameEvent.Value?.LocalPlayer ?? {},
 			opponentPlayer: gameEvent.Value?.OpponentPlayer ?? {},
 			entityId: parseInt(gameEvent.Value?.EntityId || 0),
-			gameState: gameEvent.Value?.GameState,
 			additionalData: additionalProps,
 			debug: gameEvent.Debug,
 		} as GameEvent);

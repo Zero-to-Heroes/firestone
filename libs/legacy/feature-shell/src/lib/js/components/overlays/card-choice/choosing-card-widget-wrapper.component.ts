@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { CardClass, CardIds, GameTag, GameType, SceneMode } from '@firestone-hs/reference-data';
 import { BattlegroundsQuestsService } from '@firestone/battlegrounds/services';
-import { CardOption, GameState, GameStateFacadeService } from '@firestone/game-state';
+import { CardOption, GameState, GameStateFacadeService, getEntityTag } from '@firestone/game-state';
 import { CardChoicesService, SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
@@ -198,10 +198,8 @@ export class ChoosingCardWidgetWrapperComponent extends AbstractWidgetWrapperCom
 				const options = state.playerDeck?.currentOptions;
 				console.debug('[choosing-card-widget] options', options);
 				return options?.map((o) => {
-					const refEntity = state.fullGameState?.Player?.AllEntities?.find((e) => e.entityId === o.entityId);
-					const isTallCard = refEntity?.tags.some(
-						(t) => t.Name === GameTag.IS_NIGHTMARE_BONUS && t.Value === 1,
-					);
+					const refEntity = state.parserState?.CurrentEntities?.get(o.entityId);
+					const isTallCard = getEntityTag(refEntity, GameTag.IS_NIGHTMARE_BONUS) === 1;
 					const result: CardChoiceOption = {
 						cardId: o.cardId,
 						entityId: o.entityId,

@@ -5,6 +5,7 @@ import { CardIds, GameTag } from '@firestone-hs/reference-data';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { BattlegroundsState } from '../../../models/_barrel';
 import { GameState } from '../../../models/game-state';
+import { getControllerEntity, getEntityTag } from '../../../services/parser-entity-utils';
 import { CounterDefinitionV2 } from '../../_counter-definition-v2';
 import { CounterType } from '../../_exports';
 
@@ -91,10 +92,8 @@ export class GoldNextTurnCounterDefinitionV2 extends CounterDefinitionV2<{
 		overconfidences: number;
 		guaranteedGoldNextTurn: number;
 	} | null {
-		const guaranteedGoldNextTurn =
-			deckState.fullGameState?.Player?.PlayerEntity?.tags?.find(
-				(t) => t.Name === GameTag.BACON_PLAYER_EXTRA_GOLD_NEXT_TURN,
-			)?.Value ?? 0;
+		const controllerEntity = getControllerEntity(deckState.parserState?.CurrentEntities, deckState.parserState?.ControllerEntityMap, deckState.localPlayerId!);
+		const guaranteedGoldNextTurn = getEntityTag(controllerEntity, GameTag.BACON_PLAYER_EXTRA_GOLD_NEXT_TURN, 0);
 		const overconfidences = deckState.playerDeck.enchantments.filter(
 			(e) => e.cardId === CardIds.Overconfidence_OverconfidentDntEnchantment_BG28_884e,
 		).length;

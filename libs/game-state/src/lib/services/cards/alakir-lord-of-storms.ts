@@ -2,6 +2,7 @@
 import { CardIds, CardType, GameTag } from '@firestone-hs/reference-data';
 import { GuessedInfo } from '../../models/deck-card';
 import { hasCorrectType, hasCost } from '../../related-cards/dynamic-pools';
+import { getEntityTag } from '../../services/parser-entity-utils';
 import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
 
@@ -9,17 +10,12 @@ export const AlakirLordOfStorms: GeneratingCard & StaticGeneratingCard = {
 	cardIds: [CardIds.AlakirLordOfStorms_CATA_153],
 	publicCreator: true,
 	dynamicPool: (input: StaticGeneratingCardInput) => {
-		const playerState = input.inputOptions.deckState.isOpponent
-			? input.inputOptions.gameState.fullGameState?.Opponent
-			: input.inputOptions.gameState.fullGameState?.Player;
-		const entity = playerState?.AllEntities?.find((e) => e.entityId === input.entityId);
+		const entity = input.inputOptions.gameState.parserState?.CurrentEntities.get(input.entityId);
 		const baseAttack = input.allCards.getCard(input.cardId)?.attack ?? 2;
-		// Each Charged Hand of Al'akir buffs Al'akir's attack; the buff per hand scales with herald level:
-		// Herald 0-1: +1 per hand (total +2), Herald 2-3: +2 per hand (total +4), Herald 4+: +4 per hand (total +8)
 		const heraldCount = input.inputOptions.deckState.heraldCountThisGame ?? 0;
 		const buffPerHand = heraldCount >= 4 ? 4 : heraldCount >= 2 ? 2 : 1;
 		const totalAppendageBuff = 2 * buffPerHand;
-		const attack = entity?.attack ?? baseAttack + totalAppendageBuff;
+		const attack = entity ? getEntityTag(entity, GameTag.ATK, baseAttack + totalAppendageBuff) : baseAttack + totalAppendageBuff;
 		return filterCards(
 			AlakirLordOfStorms.cardIds[0],
 			input.allCards,

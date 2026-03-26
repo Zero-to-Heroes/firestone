@@ -12,6 +12,7 @@ import { DeckCard, toTagsObject } from '../../../models/deck-card';
 import { DeckState } from '../../../models/deck-state';
 import { GameState, ShortCardWithTurn } from '../../../models/game-state';
 import { getProcessedCard, storeInformationOnCardPlayed } from '../../card-utils';
+import { getEntityTag } from '../../parser-entity-utils';
 import { hasOnCardPlayedWhileInHand } from '../../cards/_card.type';
 import { cardsInfoCache } from '../../cards/_mapping';
 import {
@@ -258,6 +259,7 @@ export class CardPlayedFromHandParser implements EventParser {
 			this.helper,
 			this.i18n,
 		);
+		const currentEntities = currentState.parserState?.CurrentEntities;
 		const newAnachronos =
 			cardId === CardIds.Anachronos || cardId === CardIds.Anachronos_CORE_RLK_919
 				? [
@@ -271,9 +273,7 @@ export class CardPlayedFromHandParser implements EventParser {
 									(e) =>
 										this.allCards.getCard(e.cardId).type?.toUpperCase() ===
 											CardType[CardType.MINION] &&
-										currentState.playerDeck.fullGameState?.AllEntities.find(
-											(e2) => e2.entityId === e.entityId,
-										)?.tags?.[GameTag.DORMANT]?.Value !== 1,
+										getEntityTag(currentEntities?.get(e.entityId), GameTag.DORMANT) !== 1,
 								)
 								?.map((e) => e.entityId)
 								.filter((e) => e !== entityId),
@@ -282,9 +282,7 @@ export class CardPlayedFromHandParser implements EventParser {
 									(e) =>
 										this.allCards.getCard(e.cardId).type?.toUpperCase() ===
 											CardType[CardType.MINION] &&
-										currentState.opponentDeck.fullGameState?.AllEntities.find(
-											(e2) => e2.entityId === e.entityId,
-										)?.tags?.[GameTag.DORMANT]?.Value !== 1,
+										getEntityTag(currentEntities?.get(e.entityId), GameTag.DORMANT) !== 1,
 								)
 								?.map((e) => e.entityId)
 								.filter((e) => e !== entityId),

@@ -5,6 +5,7 @@ import { DeckCard } from '../../models/deck-card';
 import { DeckState } from '../../models/deck-state';
 import { GameState } from '../../models/game-state';
 import { broxigarFablePackage, fablePackages, kingLlaneFablePackage } from '../card-utils';
+import { getEntityTag } from '../parser-entity-utils';
 
 // TODO: also check the cardCopyLink, which looks like it does more or less the same thing
 export const revealCard = (deck: DeckState, card: DeckCard | null | undefined, allCards: CardsFacadeService) => {
@@ -160,13 +161,11 @@ export const revealCardInOpponentDeck = (
 		// When we guess the card, we flag it in the opponent's hand
 		case CardIds.SuspiciousAlchemist_AMysteryEnchantment:
 			// console.debug('[card-reveal] suspicious alchemist', card, deck, otherDeck);
-			const enchantment = gameState.fullGameState?.Opponent?.AllEntities?.find(
-				(e) => e.entityId === creatorEntityId,
-			);
+			const enchantment = gameState.parserState?.CurrentEntities?.get(creatorEntityId);
 			// console.debug('[card-reveal] enchantment', enchantment);
 			if (enchantment) {
 				const suspiciousCard = otherDeck.findCard(
-					enchantment.tags?.find((t) => t.Name === GameTag.CREATOR)?.Value ?? 0,
+					getEntityTag(enchantment, GameTag.CREATOR, 0),
 				)?.card;
 				// console.debug('[card-reveal] suspiciousCard', suspiciousCard);
 				if (!!suspiciousCard) {

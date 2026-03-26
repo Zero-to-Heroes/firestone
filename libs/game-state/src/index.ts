@@ -48,6 +48,7 @@ export * from './lib/services/game-state-events/game-state-event';
 export * from './lib/services/game-state-facade.service';
 export * from './lib/services/game-state-meta-info.service';
 export * from './lib/services/game-state.service';
+export * from './lib/services/parser-entity-utils';
 export * from './lib/services/game-unique-id.service';
 export * from './lib/services/hs-utils';
 export * from './lib/services/overlay-display.service';

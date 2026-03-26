@@ -1,26 +1,24 @@
 import { CardIds, CardType, GameTag, Zone } from '@firestone-hs/reference-data';
 import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
 import { GameState } from '../../../models/game-state';
+import { getEntityTag } from '../../../services/parser-entity-utils';
 import { GlobalHighlightCard } from './_registers';
 
 export const DrStitchensew: GlobalHighlightCard = {
 	cardIds: [CardIds.DrStitchensew_TOY_830],
 	getRelatedCards: (entityId: number, side: HighlightSide, gameState: GameState, allCards: CardsFacadeService) => {
-		const deckState = side === 'player' ? gameState.fullGameState!.Player : gameState.fullGameState!.Opponent;
-		// const entity = deckState.AllEntities.find((e) => e.entityId === entityId);
-		const createdBy = deckState.AllEntities.filter(
-			(e) =>
-				e.tags?.find((t) => t.Name === GameTag.CREATOR)?.Value === entityId &&
-				e.tags?.find((t) => t.Name === GameTag.CARDTYPE)?.Value === CardType.MINION &&
-				(e.tags?.find((t) => t.Name === GameTag.ZONE)?.Value === Zone.SETASIDE ||
-					e.tags?.find((t) => t.Name === GameTag.ZONE)?.Value === Zone.PLAY),
-		)
-			.sort(
-				(a, b) =>
-					(b.tags?.find((t) => t.Name === GameTag.COST)?.Value ?? 0) -
-					(a.tags?.find((t) => t.Name === GameTag.COST)?.Value ?? 0),
+		const currentEntities = gameState.parserState?.CurrentEntities;
+		if (!currentEntities) return [];
+		const createdBy = [...currentEntities.values()]
+			.filter(
+				(e) =>
+					getEntityTag(e, GameTag.CREATOR) === entityId &&
+					getEntityTag(e, GameTag.CARDTYPE) === (CardType.MINION as number) &&
+					(getEntityTag(e, GameTag.ZONE) === (Zone.SETASIDE as number) ||
+						getEntityTag(e, GameTag.ZONE) === (Zone.PLAY as number)),
 			)
-			.map((e) => e.cardId);
+			.sort((a, b) => getEntityTag(b, GameTag.COST, 0) - getEntityTag(a, GameTag.COST, 0))
+			.map((e) => e.CardId);
 		return createdBy;
 	},
 };

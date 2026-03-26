@@ -12,10 +12,10 @@ import {
 } from '@firestone-hs/reference-data';
 import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
+import { GameState as ParserGameState } from '@firestone/power-log-parser';
 import { DeckCard } from '../../models/deck-card';
 import { DeckState } from '../../models/deck-state';
 import { DeckZone } from '../../models/deck-zone';
-import { FullGameState } from '../../models/full-game-state';
 import { GameState } from '../../models/game-state';
 import { HeroCard } from '../../models/hero-card';
 import { Metadata } from '../../models/metadata';
@@ -133,7 +133,9 @@ export abstract class CardsHighlightCommonService {
 			card,
 			playerDeckProvider,
 			opponentDeckProvider,
-			this.gameState.fullGameState!,
+			this.gameState.parserState,
+			this.gameState.localPlayerId,
+			this.gameState.opponentPlayerId,
 			context,
 		);
 		// console.debug('[cards-highlight] cards to highlight', cardsToHighlight);
@@ -261,7 +263,9 @@ export abstract class CardsHighlightCommonService {
 			card,
 			playerDeckProvider,
 			opponentDeckProvider,
-			this.gameState.fullGameState!,
+			this.gameState.parserState,
+			this.gameState.localPlayerId,
+			this.gameState.opponentPlayerId,
 		);
 		// console.debug('cardsToHighlight in getHighlightedCards', cardsToHighlight);
 		return cardsToHighlight.map((i) => ({
@@ -299,7 +303,9 @@ export abstract class CardsHighlightCommonService {
 		card: DeckCard | null | undefined,
 		playerDeckProvider: () => DeckState,
 		opponentDeckProvider: () => DeckState | null,
-		fullGameState: FullGameState,
+		parserState: ParserGameState | undefined,
+		localPlayerId: number | undefined,
+		opponentPlayerId: number | undefined,
 		context?: 'discover',
 	): readonly SelectorInput[] {
 		let result: SelectorInput[] = [];
@@ -313,7 +319,9 @@ export abstract class CardsHighlightCommonService {
 		const allPlayerCards = this.getAllCards(
 			!!playerDeckProvider ? playerDeckProvider() : null,
 			side === 'single' || side === 'arena-draft' ? side : 'player',
-			fullGameState,
+			parserState,
+			localPlayerId,
+			opponentPlayerId,
 		);
 		// console.debug('[cards-highlight] all player cards', card, cardId, side, selector, allPlayerCards);
 		for (const playerCard of allPlayerCards) {
@@ -329,7 +337,9 @@ export abstract class CardsHighlightCommonService {
 		const allOpponentCards = this.getAllCards(
 			!!opponentDeckProvider ? opponentDeckProvider() : null,
 			side === 'single' || side === 'arena-draft' ? side : 'opponent',
-			fullGameState,
+			parserState,
+			localPlayerId,
+			opponentPlayerId,
 		);
 		// console.debug('[cards-highlight] all player cards', card, cardId, side, selector);
 		for (const oppCard of allOpponentCards) {
@@ -358,66 +368,64 @@ export abstract class CardsHighlightCommonService {
 	private getAllCards(
 		deckState: DeckState | null,
 		side: HighlightSide,
-		fullGameState: FullGameState,
+		parserState: ParserGameState | undefined,
+		localPlayerId: number | undefined,
+		opponentPlayerId: number | undefined,
 	): readonly SelectorInput[] {
 		if (!deckState) {
 			return [];
 		}
+		const shared = {
+			side,
+			deckState,
+			allCards: this.allCards,
+			parserState,
+			localPlayerId,
+			opponentPlayerId,
+		} as const;
 		const result: SelectorInput[] = [];
 		for (const card of [...deckState.deck]) {
 			result.push({
+				...shared,
 				cardId: card.cardId,
 				entityId: card.entityId,
 				internalEntityId: card.internalEntityId,
 				card: !!card.cardId ? this.allCards.getCard(card.cardId) : null,
 				zone: 'deck',
-				side: side,
 				deckCard: card,
-				deckState: deckState,
-				allCards: this.allCards,
-				fullGameState: fullGameState,
 			});
 		}
 		for (const card of [...deckState.hand]) {
 			result.push({
+				...shared,
 				cardId: card.cardId,
 				entityId: card.entityId,
 				internalEntityId: card.internalEntityId,
 				card: !!card.cardId ? this.allCards.getCard(card.cardId) : null,
 				zone: 'hand',
-				side: side,
 				deckCard: card,
-				deckState: deckState,
-				allCards: this.allCards,
-				fullGameState: fullGameState,
 			});
 		}
 		for (const card of [...deckState.board]) {
 			result.push({
+				...shared,
 				cardId: card.cardId,
 				entityId: card.entityId,
 				internalEntityId: card.internalEntityId,
 				card: !!card.cardId ? this.allCards.getCard(card.cardId) : null,
 				zone: 'other',
-				side: side,
 				deckCard: card,
-				deckState: deckState,
-				allCards: this.allCards,
-				fullGameState: fullGameState,
 			});
 		}
 		for (const card of [...deckState.otherZone]) {
 			result.push({
+				...shared,
 				cardId: card.cardId,
 				entityId: card.entityId,
 				internalEntityId: card.internalEntityId,
 				card: !!card.cardId ? this.allCards.getCard(card.cardId) : null,
 				zone: card.zone === 'GRAVEYARD' ? 'graveyard' : 'other',
-				side: side,
 				deckCard: card,
-				deckState: deckState,
-				allCards: this.allCards,
-				fullGameState: fullGameState,
 			});
 		}
 		return result;
@@ -632,7 +640,9 @@ export interface SelectorInput {
 	deckState: DeckState;
 	deckCard: DeckCard;
 	allCards: CardsFacadeService;
-	fullGameState: FullGameState;
+	parserState?: ParserGameState;
+	localPlayerId?: number;
+	opponentPlayerId?: number;
 	highlight?: SelectorOutput;
 	depth?: number;
 }

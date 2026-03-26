@@ -58,15 +58,7 @@ export class MinionAttackReq implements Requirement {
 	private handleMinionSummonedEvent(gameEvent: GameEvent) {
 		const isLocalPlayer = gameEvent.localPlayer?.PlayerId === gameEvent.controllerId;
 		if (isLocalPlayer) {
-			const entityId = gameEvent.entityId;
-			const summonedEntityInfo = gameEvent.gameState?.Player?.Board.find(
-				(entity) => entity.entityId === entityId,
-			);
-			if (summonedEntityInfo) {
-				this.minionAttack = summonedEntityInfo.attack;
-			} else {
-				this.minionAttack = undefined;
-			}
+			this.minionAttack = undefined;
 		} else {
 			this.minionAttack = undefined;
 		}

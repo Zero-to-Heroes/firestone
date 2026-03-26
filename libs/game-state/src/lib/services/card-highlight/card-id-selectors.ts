@@ -7,6 +7,7 @@ import { DeckCard } from '../../models/deck-card';
 import { DeckState } from '../../models/deck-state';
 import { ShortCard } from '../../models/game-state';
 import { getCost, getProcessedCard } from '../card-utils';
+import { getEntityTag } from '../parser-entity-utils';
 import { Selector, SelectorInput, SelectorOutput } from './cards-highlight-common.service';
 import {
 	and,
@@ -3163,15 +3164,14 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), spell, dealsDamage);
 		case CardIds.Robocaller_WORK_006:
 			return (input: SelectorInput): SelectorOutput => {
-				const state = input.side === 'opponent' ? input.fullGameState?.Opponent : input.fullGameState?.Player;
-				const found = state?.AllEntities.find((e) => e.entityId === entityId);
+				const found = input.parserState?.CurrentEntities?.get(entityId!);
 				return and(
 					side(inputSide),
 					inDeck,
 					or(
-						baseCostEqual(found?.tags?.find((t) => t.Name === GameTag.TAG_SCRIPT_DATA_NUM_1)?.Value ?? 0),
-						baseCostEqual(found?.tags?.find((t) => t.Name === GameTag.TAG_SCRIPT_DATA_NUM_2)?.Value ?? 0),
-						baseCostEqual(found?.tags?.find((t) => t.Name === GameTag.TAG_SCRIPT_DATA_NUM_3)?.Value ?? 0),
+						baseCostEqual(getEntityTag(found, GameTag.TAG_SCRIPT_DATA_NUM_1, 0)),
+						baseCostEqual(getEntityTag(found, GameTag.TAG_SCRIPT_DATA_NUM_2, 0)),
+						baseCostEqual(getEntityTag(found, GameTag.TAG_SCRIPT_DATA_NUM_3, 0)),
 					),
 				)(input);
 			};

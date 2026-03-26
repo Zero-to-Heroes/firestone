@@ -3,7 +3,7 @@ import { CardClass, CardIds, CardType, GameTag, SpellSchool } from '@firestone-h
 import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { ChoosingOptionsGameEvent } from '../services/game-events/events/choosing-options-game-event';
-import { NumericTurnInfo, PlayerGameState } from './_barrel';
+import { NumericTurnInfo } from './_barrel';
 import { AttackOnBoard } from './attack-on-board';
 import { BoardSecret } from './board-secret';
 import { DeckCard } from './deck-card';
@@ -174,7 +174,6 @@ export class DeckState {
 	readonly cardsAddedToHand: readonly ShortCardWithTurn[] = [];
 	readonly weaponsEquippedThisGame: number = 0;
 	readonly starshipsLaunched: readonly number[] = [];
-	readonly fullGameState?: PlayerGameState;
 
 	public static create(value: Partial<NonFunctionProperties<DeckState>>): DeckState {
 		return Object.assign(new DeckState(), value);

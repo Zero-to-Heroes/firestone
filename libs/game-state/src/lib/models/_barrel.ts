@@ -6,7 +6,6 @@ export * from './deck-card';
 export * from './deck-state';
 export * from './deck-zone';
 export * from './dynamic-zone';
-export * from './full-game-state';
 export * from './game-event';
 export * from './game-state';
 export * from './hero-card';

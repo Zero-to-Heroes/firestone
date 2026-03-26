@@ -64,7 +64,7 @@ describe('minion-attack-req', () => {
 				});
 			});
 			describe('minion is summoned ', () => {
-				test('is completed when any minion summoned has exactly the right attack', () => {
+				test('is not completed when local player summons without board attack data', () => {
 					const req = new MinionAttackReq(100, 'AT_LEAST');
 					const event = Object.assign(new GameEvent(), {
 						type: GameEvent.MINION_SUMMONED,
@@ -72,97 +72,6 @@ describe('minion-attack-req', () => {
 						entityId: 99,
 						controllerId: 1,
 						localPlayer: { PlayerId: 1 },
-						gameState: {
-							Player: {
-								Board: [
-									{
-										entityId: 99,
-										cardId: 'any',
-										attack: 100,
-									},
-								],
-							},
-						} as unknown as GameState,
-					} as GameEvent);
-
-					req.test(event);
-
-					expect(req.isCompleted()).toBe(true);
-				});
-				test('is completed when any minion summoned has more than the right attack', () => {
-					const req = new MinionAttackReq(100, 'AT_LEAST');
-					const event = Object.assign(new GameEvent(), {
-						type: GameEvent.MINION_SUMMONED,
-						cardId: 'any',
-						entityId: 99,
-						controllerId: 1,
-						localPlayer: { PlayerId: 1 },
-						gameState: {
-							Player: {
-								Board: [
-									{
-										entityId: 99,
-										cardId: 'any',
-										attack: 101,
-									},
-								],
-							},
-						} as unknown as GameState,
-					} as GameEvent);
-
-					req.test(event);
-
-					expect(req.isCompleted()).toBe(true);
-				});
-				test('is not completed when any minion summoned has less than the right attack', () => {
-					const req = new MinionAttackReq(100, 'AT_LEAST');
-					const event = Object.assign(new GameEvent(), {
-						type: GameEvent.MINION_SUMMONED,
-						cardId: 'any',
-						entityId: 99,
-						controllerId: 1,
-						localPlayer: { PlayerId: 1 },
-						gameState: {
-							Player: {
-								Board: [
-									{
-										entityId: 99,
-										cardId: 'any',
-										attack: 99,
-									},
-								],
-							},
-						} as unknown as GameState,
-					} as GameEvent);
-
-					req.test(event);
-
-					expect(req.isCompleted()).toBeFalsy();
-				});
-				test('is not when we summon a minion with an invalid attack and a minion with the same cardId is on board', () => {
-					const req = new MinionAttackReq(100, 'AT_LEAST');
-					const event = Object.assign(new GameEvent(), {
-						type: GameEvent.MINION_SUMMONED,
-						cardId: 'any',
-						entityId: 99,
-						controllerId: 1,
-						localPlayer: { PlayerId: 1 },
-						gameState: {
-							Player: {
-								Board: [
-									{
-										entityId: 998,
-										cardId: 'any',
-										attack: 100,
-									},
-									{
-										entityId: 99,
-										cardId: 'any',
-										attack: 1,
-									},
-								],
-							},
-						} as unknown as GameState,
 					} as GameEvent);
 
 					req.test(event);
@@ -177,36 +86,6 @@ describe('minion-attack-req', () => {
 						entityId: 99,
 						controllerId: 2,
 						localPlayer: { PlayerId: 1 },
-						gameState: {
-							Player: {
-								Board: [
-									{
-										entityId: 99,
-										cardId: 'any',
-										attack: 101,
-									},
-								],
-							},
-						} as unknown as GameState,
-					} as GameEvent);
-
-					req.test(event);
-
-					expect(req.isCompleted()).toBeFalsy();
-				});
-				test('is not completed when the minion does not appera onthe board state', () => {
-					const req = new MinionAttackReq(100, 'AT_LEAST');
-					const event = Object.assign(new GameEvent(), {
-						type: GameEvent.MINION_SUMMONED,
-						cardId: 'any',
-						entityId: 99,
-						controllerId: 1,
-						localPlayer: { PlayerId: 1 },
-						gameState: {
-							Player: {
-								Board: [],
-							},
-						} as unknown as GameState,
 					} as GameEvent);
 
 					req.test(event);

@@ -4,6 +4,7 @@ import { CardIds, GameTag, Race } from '@firestone-hs/reference-data';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { BattlegroundsState } from '../../../models/_barrel';
 import { GameState } from '../../../models/game-state';
+import { getControllerEntity, getEntityTag } from '../../../services/parser-entity-utils';
 import { CounterDefinitionV2 } from '../../_counter-definition-v2';
 import { CounterType } from '../../_exports';
 
@@ -19,11 +20,10 @@ export class SpellsPlayedCounterDefinitionV2 extends CounterDefinitionV2<number>
 		pref: 'playerBgsSpellsPlayedCounter' as const,
 		display: (state: GameState, bgState: BattlegroundsState | null | undefined): boolean => true,
 		value: (state: GameState, bgState: BattlegroundsState | null | undefined) => {
-			return !bgState?.currentGame?.availableRaces?.includes(Race.NAGA)
-				? null
-				: (state.fullGameState?.Player?.PlayerEntity?.tags?.find(
-						(tag) => tag.Name === GameTag.NUM_SPELLS_PLAYED_THIS_GAME,
-					)?.Value ?? null);
+			if (!bgState?.currentGame?.availableRaces?.includes(Race.NAGA)) return null;
+			const controllerEntity = getControllerEntity(state.parserState?.CurrentEntities, state.parserState?.ControllerEntityMap, state.localPlayerId!);
+			const tagValue = getEntityTag(controllerEntity, GameTag.NUM_SPELLS_PLAYED_THIS_GAME);
+			return tagValue >= 0 ? tagValue : null;
 		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>

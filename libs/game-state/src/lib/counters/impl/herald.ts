@@ -4,6 +4,7 @@
 import { CardClass, CardIds, GameTag } from '@firestone-hs/reference-data';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { GameState } from '../../models/game-state';
+import { getControllerEntity, getEntityTag } from '../../services/parser-entity-utils';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
 import { CounterType } from '../_exports';
 
@@ -33,9 +34,11 @@ const getHeraldAmount = (gameState: GameState, side: 'player' | 'opponent'): num
 	}
 	const deck = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
 	const eventCount = deck?.heraldCountThisGame ?? 0;
-	const playerState = side === 'player' ? gameState.fullGameState?.Player : gameState.fullGameState?.Opponent;
-	const fullStateCount = playerState?.PlayerEntity?.tags?.find((t) => t.Name === GameTag.HERALD_COLOSSAL_AMOUNT)
-		?.Value;
+	const playerId = side === 'player' ? gameState.localPlayerId : gameState.opponentPlayerId;
+	const controllerEntity = playerId != null
+		? getControllerEntity(gameState.parserState?.CurrentEntities, gameState.parserState?.ControllerEntityMap, playerId)
+		: undefined;
+	const fullStateCount = getEntityTag(controllerEntity, GameTag.HERALD_COLOSSAL_AMOUNT, 0);
 	// Prefer event-based count for real-time updates; fall back to fullGameState for replays/rewinds
 	const amount = eventCount > 0 ? eventCount : (fullStateCount ?? null);
 	return amount != null && amount > 0 ? amount : null;

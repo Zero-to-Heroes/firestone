@@ -35,8 +35,8 @@ export class GameState {
 
 	EntityIdsOnBoardWhenPlayingPotionOfIllusion: Map<number, FullEntity[]> | null = null;
 
-	private gameEntityId: number = -1;
-	private controllerEntity: Map<number, number> = new Map();
+	GameEntityId: number = -1;
+	ControllerEntityMap: Map<number, number> = new Map();
 
 	Reset(state: ParserState): void {
 		this.ParserState = state;
@@ -54,8 +54,8 @@ export class GameState {
 		this.BgsCurrentBattleOpponentPlayerId = 0;
 		this.BgsHasSentNextOpponent = false;
 		this.EntityIdsOnBoardWhenPlayingPotionOfIllusion = null;
-		this.gameEntityId = -1;
-		this.controllerEntity = new Map();
+		this.GameEntityId = -1;
+		this.ControllerEntityMap = new Map();
 	}
 
 	GameEntity(entity: GameEntity): void {
@@ -70,11 +70,11 @@ export class GameState {
 		fullEntity.Tags = [];
 		fullEntity.TimeStamp = entity.TimeStamp;
 		this.CurrentEntities.set(entity.Id, fullEntity);
-		this.gameEntityId = entity.Id;
+		this.GameEntityId = entity.Id;
 	}
 
 	GetGameEntity(): FullEntity | undefined {
-		return this.CurrentEntities.get(this.gameEntityId);
+		return this.CurrentEntities.get(this.GameEntityId);
 	}
 
 	UpdateEntityName(rawEntity: string): void {
@@ -115,11 +115,11 @@ export class GameState {
 		fullEntity.Tags = newTags;
 		fullEntity.TimeStamp = entity.TimeStamp;
 		this.CurrentEntities.set(entity.Id, fullEntity);
-		this.controllerEntity.set(entity.PlayerId, entity.Id);
+		this.ControllerEntityMap.set(entity.PlayerId, entity.Id);
 	}
 
 	GetController(controllerId: number): FullEntity | undefined {
-		const entityId = this.controllerEntity.get(controllerId);
+		const entityId = this.ControllerEntityMap.get(controllerId);
 		if (entityId == null) {
 			return undefined;
 		}
