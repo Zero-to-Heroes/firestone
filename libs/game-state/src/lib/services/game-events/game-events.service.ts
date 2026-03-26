@@ -1,15 +1,16 @@
 import { Injectable, NgZone } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { SceneService } from '@firestone/memory';
+import { GameEvent as ParserGameEvent, ReplayParser } from '@firestone/power-log-parser';
 import {
 	GameStatusService,
 	GlobalErrorService,
 	PowerLogBufferService,
 	PreferencesService,
+	USE_TYPESCRIPT_PARSER,
 } from '@firestone/shared/common/service';
 import { chunk, freeRegexp, sleep } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ProcessingQueue } from '@firestone/shared/framework/core';
-import { ReplayParser, GameEvent as ParserGameEvent } from '@firestone/power-log-parser';
 import Deque from 'double-ended-queue';
 import { filter, interval, take } from 'rxjs';
 import { IGameEventsPlugin } from '../../logs/game-events-plugin.interface';
@@ -38,7 +39,6 @@ export class GameEvents {
 	private tsParser: ReplayParser | null = null;
 	private tsParserLineIndex: number = 0;
 	private tsParserCurrentGameSeed: number = 0;
-	private useTypescriptParser: boolean = false;
 
 	constructor(
 		private readonly gameEventsPlugin: IGameEventsPlugin,
@@ -66,17 +66,6 @@ export class GameEvents {
 
 	async init() {
 		await this.scene.isReady();
-
-		this.prefs?.preferences$$?.subscribe((prefs) => {
-			const newValue = prefs?.useTypescriptParser ?? false;
-			if (newValue !== this.useTypescriptParser) {
-				console.log('[game-events] useTypescriptParser changed to', newValue);
-				this.useTypescriptParser = newValue;
-				if (newValue) {
-					this.initTsParser();
-				}
-			}
-		});
 
 		this.gameEventsEmitter.allEvents.subscribe((event) => {
 			this.eventsFacade.allEvents.next(event);
@@ -135,7 +124,7 @@ export class GameEvents {
 				}
 				if (!this.lastGameStateUpdateTimestamp || timeSinceLastGameStateUpdate > gameStateUpdateInterval) {
 					this.gameStateUpdateInProgress = true;
-					if (this.useTypescriptParser && this.tsParser) {
+					if (USE_TYPESCRIPT_PARSER && this.tsParser) {
 						this.tsParser.AskForGameStateUpdate();
 						this.tsParser.State.GSState.NodeParser.ClearQueue();
 						this.tsParser.State.PTLState.NodeParser.ClearQueue();
@@ -170,7 +159,7 @@ export class GameEvents {
 			return false;
 		}
 
-		if (this.useTypescriptParser) {
+		if (USE_TYPESCRIPT_PARSER) {
 			return this.processLogsWithTsParser(eventQueue);
 		}
 

@@ -58,7 +58,6 @@ export class Preferences implements IPreferences {
 	readonly modsEnabled: boolean;
 	readonly modsAutoUpdate: boolean = true;
 	readonly disableLocalCache: boolean;
-	readonly useTypescriptParser: boolean = false;
 
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly globalWidgetScale: number | null = 80;
