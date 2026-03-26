@@ -277,19 +277,9 @@ export class GameState {
 			return;
 		}
 
-		const newTags = fullEntity.GetTagsCopy();
-		const existingTag = newTags.find((tag) => tag.Name === tagChange.Name);
+		const existingTag = fullEntity.Tags.find((tag) => tag.Name === tagChange.Name);
+		fullEntity.SetTag(tagChange.Name, tagChange.Value);
 
-		if (existingTag == null) {
-			const t = new Tag();
-			t.Name = tagChange.Name;
-			t.Value = tagChange.Value;
-			newTags.push(t);
-		} else {
-			existingTag.Value = tagChange.Value;
-		}
-
-		fullEntity.Tags = newTags;
 		const historyTag = new Tag();
 		historyTag.Name = tagChange.Name;
 		historyTag.Value = tagChange.Value;
