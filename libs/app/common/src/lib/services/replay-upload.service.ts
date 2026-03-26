@@ -90,53 +90,56 @@ export class ReplayUploadService {
 		AWS.config.region = 'us-west-2';
 		AWS.config.httpOptions!.timeout = 3600 * 1000 * 10;
 
-		// First upload the replay file, then the metadata
-		const replayFileZip = new JSZip();
-		replayFileZip.file('replay.xml', xml);
-		const fileReplayBlob: Blob = await replayFileZip.generateAsync({
-			type: 'blob',
-			compression: 'DEFLATE',
-			compressionOptions: {
-				level: 9,
-			},
-		});
 		const replayKey = fullMetaData.game.replayKey;
-		console.log('[manastorm-bridge] uploading replay', replayKey);
 		const userType = !fullMetaData.user?.userName?.length
 			? 'anonymous'
 			: fullMetaData.user.isPremium
 				? 'premium'
 				: 'loggedIn';
-		await this.uploadReplay(replayKey, fileReplayBlob, {
-			userType: userType,
-		});
-		console.log('[manastorm-bridge] uploaded replay');
-
-		// Now upload the full Power.log file, keeping only the last game
 		const currentRegion = fullMetaData.meta.region;
-		// Mods are banned in China
-		// In the future, might add a setting to allow uploading from China, but only if requested
 		const shouldUploadFromRegion = currentRegion !== BnetRegion.REGION_CN;
-		if (shouldUploadFromRegion && (fullMetaData.user.isPremium || ENABLE_IN_GAME_REPLAY_FOR_ALL)) {
-			const { log: powerLog, generation } = this.powerLogBuffer.getCurrentGameLog();
-			console.log('[manastorm-bridge] got power log from buffer, length', powerLog.length);
-			console.debug('[manastorm-bridge] got power log from buffer', powerLog);
-			const powerLogZip = new JSZip();
-			powerLogZip.file('power.log', powerLog);
-			const powerLogBlob: Blob = await powerLogZip.generateAsync({
+		const shouldUploadPowerLog =
+			shouldUploadFromRegion && (fullMetaData.user.isPremium || ENABLE_IN_GAME_REPLAY_FOR_ALL);
+
+		const replayUploadPromise = (async () => {
+			const replayFileZip = new JSZip();
+			replayFileZip.file('replay.xml', xml);
+			const fileReplayBlob: Blob = await replayFileZip.generateAsync({
 				type: 'blob',
 				compression: 'DEFLATE',
 				compressionOptions: {
 					level: 9,
 				},
 			});
-			const powerLogKey = userType + '/' + uuid() + '.power.zip';
-			console.log('[manastorm-bridge] uploading power log', powerLogKey);
-			await this.uploadPowerLog(powerLogKey, powerLogBlob);
-			console.log('[manastorm-bridge] uploaded power log');
-			this.powerLogBuffer.clearAfterUpload(generation);
-			(fullMetaData.game as Mutable<ReplayUploadMetadata['game']>).powerLogKey = powerLogKey;
-		}
+			console.log('[manastorm-bridge] uploading replay', replayKey);
+			await this.uploadReplay(replayKey, fileReplayBlob, { userType });
+			console.log('[manastorm-bridge] uploaded replay');
+		})();
+
+		const powerLogUploadPromise = shouldUploadPowerLog
+			? (async () => {
+					const { log: powerLog, generation } = this.powerLogBuffer.getCurrentGameLog();
+					console.log('[manastorm-bridge] got power log from buffer, length', powerLog.length);
+					console.debug('[manastorm-bridge] got power log from buffer', powerLog);
+					const powerLogZip = new JSZip();
+					powerLogZip.file('power.log', powerLog);
+					const powerLogBlob: Blob = await powerLogZip.generateAsync({
+						type: 'blob',
+						compression: 'DEFLATE',
+						compressionOptions: {
+							level: 9,
+						},
+					});
+					const powerLogKey = userType + '/' + uuid() + '.power.zip';
+					console.log('[manastorm-bridge] uploading power log', powerLogKey);
+					await this.uploadPowerLog(powerLogKey, powerLogBlob);
+					console.log('[manastorm-bridge] uploaded power log');
+					this.powerLogBuffer.clearAfterUpload(generation);
+					(fullMetaData.game as Mutable<ReplayUploadMetadata['game']>).powerLogKey = powerLogKey;
+				})()
+			: Promise.resolve();
+
+		await Promise.all([replayUploadPromise, powerLogUploadPromise]);
 
 		const metaDataZipFile = new JSZip();
 		metaDataZipFile.file('power.log', JSON.stringify(fullMetaData));
