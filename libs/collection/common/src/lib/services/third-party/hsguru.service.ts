@@ -11,6 +11,23 @@ import { COLLECTION_MANAGER_SERVICE_TOKEN, ICollectionManagerService } from '../
 
 const UPLOAD_URL = `https://api.hsguru.com/api/dt/collection`;
 
+type HsGuruCardPayload = Pick<Card, 'id'> & Partial<Omit<Card, 'id'>>;
+
+/** Sends `id` plus every numeric property that is not `0` (shrinks JSON; new numeric fields on {@link Card} are included automatically). */
+function cardForHsGuruUpload(card: Card): HsGuruCardPayload {
+	const out: Record<string, string | number> = { id: card.id };
+	for (const key of Object.keys(card) as (keyof Card)[]) {
+		if (key === 'id') {
+			continue;
+		}
+		const value = card[key];
+		if (typeof value === 'number' && value !== 0) {
+			out[key as string] = value;
+		}
+	}
+	return out as HsGuruCardPayload;
+}
+
 @Injectable()
 export class HsGuruService extends AbstractFacadeService<HsGuruService> {
 	private collectionManager: ICollectionManagerService;
@@ -87,7 +104,7 @@ export class HsGuruService extends AbstractFacadeService<HsGuruService> {
 			return false;
 		}
 
-		const hsguruCards = collection;
+		const hsguruCards = collection.map(cardForHsGuruUpload);
 		const payload: Payload = {
 			battleTag: accountInfo?.BattleTag,
 			region: region,
@@ -103,5 +120,5 @@ export class HsGuruService extends AbstractFacadeService<HsGuruService> {
 interface Payload {
 	readonly battleTag: string;
 	readonly region: BnetRegion;
-	readonly cards: readonly Card[];
+	readonly cards: readonly HsGuruCardPayload[];
 }
