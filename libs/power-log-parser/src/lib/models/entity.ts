@@ -6,23 +6,34 @@ import type { SubSpell } from './sub-spell';
 
 export abstract class BaseEntity extends GameData {
 	Id: number = 0;
-	Tags: Tag[] = [];
+	private _tags: Tag[] = [];
+	private _tagMap: Map<number, number> = new Map();
 	TagsHistory: Tag[] = [];
 	AllPreviousTags: Tag[] = [];
 
+	get Tags(): Tag[] {
+		return this._tags;
+	}
+	set Tags(value: Tag[]) {
+		this._tags = value;
+		this._tagMap.clear();
+		for (const tag of value) {
+			this._tagMap.set(tag.Name, tag.Value);
+		}
+	}
+
 	GetTag(tag: GameTag | number, defaultValue: number = -1): number {
-		const match = this.Tags.find((t) => t.Name === (tag as number));
-		return match == null ? defaultValue : match.Value;
+		const val = this._tagMap.get(tag as number);
+		return val !== undefined ? val : defaultValue;
 	}
 
 	HasTag(tag: GameTag | number): boolean {
-		const match = this.Tags.find((t) => t.Name === (tag as number));
-		return match == null ? false : match.Value > 0;
+		const val = this._tagMap.get(tag as number);
+		return val !== undefined && val > 0;
 	}
 
 	GetTagSecure(tag: GameTag | number, defaultValue: number = -1): number {
-		const match = [...this.Tags].find((t) => t.Name === (tag as number));
-		return match == null ? defaultValue : match.Value;
+		return this.GetTag(tag, defaultValue);
 	}
 
 	TakesBoardSpace(): boolean {
@@ -34,14 +45,15 @@ export abstract class BaseEntity extends GameData {
 	}
 
 	SetTag(tag: GameTag | number, value: number): BaseEntity {
-		let existing = this.Tags.find((t) => t.Name === (tag as number));
+		const tagNum = tag as number;
+		let existing = this._tags.find((t) => t.Name === tagNum);
 		if (existing == null) {
 			existing = new Tag();
-			existing.Name = tag as number;
-			existing.Value = value;
-			this.Tags.push(existing);
+			existing.Name = tagNum;
+			this._tags.push(existing);
 		}
 		existing.Value = value;
+		this._tagMap.set(tagNum, value);
 		return this;
 	}
 

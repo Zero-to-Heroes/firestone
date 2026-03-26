@@ -310,13 +310,7 @@ export class GameState {
 		}
 
 		const currentEntity = this.CurrentEntities.get(entityId)!;
-		let existingTag = currentEntity.Tags.find((t) => tag.Name === t.Name);
-		if (existingTag == null) {
-			existingTag = new Tag();
-			existingTag.Name = tag.Name;
-			currentEntity.Tags.push(existingTag);
-		}
-		existingTag.Value = tag.Value;
+		currentEntity.SetTag(tag.Name, tag.Value);
 	}
 
 	PlayerIdFromEntityName(data: string): number {
