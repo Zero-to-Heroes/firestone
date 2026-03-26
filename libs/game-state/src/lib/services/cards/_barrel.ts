@@ -259,6 +259,7 @@ export { UnderbellyAngler } from './underbelly-angler';
 export { UndercityHuckster } from './undercity-huckster';
 export { UnstablePortal } from './unstable-portal';
 export { UnstableSpellcaster } from './unstable-spellcaster';
+export { UnpopularHasBeen } from './unpopular-has-been';
 export { VarianKingOfStormwind } from './varian-king-of-stormwind';
 export { VoodooTotem } from './voodoo-totem';
 export { VujaDe } from './vuja-de';
