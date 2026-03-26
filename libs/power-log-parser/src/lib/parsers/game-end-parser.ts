@@ -3,6 +3,7 @@ import { ActionParser } from '../action-parser';
 import { GameEventProvider } from '../game-event';
 import { Node, TagChange } from '../models';
 import { Logger } from '../logger';
+import { xmlFromReplay } from '../replay-converter';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -56,6 +57,16 @@ export class GameEndParser implements ActionParser {
 
 		const gameStateReport = this.GameState.BuildGameStateReport(this.StateFacade);
 		Logger.Log('gameStateReport built', '');
+
+		let replayXml: string | null = null;
+		try {
+			Logger.Log('Will convert to xml', '');
+			replayXml = xmlFromReplay(this.StateFacade.GSReplay);
+			Logger.Log('XML converted', '');
+		} catch (ex) {
+			Logger.Log('Could not convert replay to xml', `${ex}`);
+		}
+
 		Logger.Log('Enqueuing GAME_END event', '');
 		this.ParserState.EndCurrentGame();
 		return [
@@ -68,6 +79,7 @@ export class GameEndParser implements ActionParser {
 						LocalPlayer: this.StateFacade.LocalPlayer,
 						OpponentPlayer: this.StateFacade.OpponentPlayer,
 						GameStateReport: gameStateReport,
+						ReplayXml: replayXml,
 						FormatType: this.ParserState.CurrentGame.FormatType,
 						GameType: this.ParserState.CurrentGame.GameType,
 						ScenarioID: this.ParserState.CurrentGame.ScenarioID,

@@ -7,3 +7,4 @@ export { ActionParser } from './lib/action-parser';
 export { NodeParser } from './lib/node-parser';
 export { EventQueueHandler } from './lib/event-queue-handler';
 export { GameEventHandler } from './lib/game-event-handler';
+export { xmlFromReplay } from './lib/replay-converter';

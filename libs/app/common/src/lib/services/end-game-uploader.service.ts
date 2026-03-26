@@ -101,6 +101,7 @@ export class EndGameUploaderService {
 
 		if (!replayXml) {
 			console.warn('[manastorm-bridge]', currentReviewId, 'could not convert replay');
+			return { game: null, xml: null };
 		}
 		console.log('[manastorm-bridge]', currentReviewId, 'Creating new game', 'with replay length', replayXml.length);
 		const game: GameForUpload = GameForUpload.createEmptyGame(currentReviewId);
