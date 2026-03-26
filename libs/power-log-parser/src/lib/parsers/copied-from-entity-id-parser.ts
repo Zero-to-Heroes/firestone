@@ -1,7 +1,7 @@
 import { CardType, GameTag } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventHelper, GameEventProvider } from '../game-event';
-import { Node, ShowEntity, TagChange } from '../models';
+import { Node, NodeType, ShowEntity, TagChange } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -20,7 +20,7 @@ export class CopiedFromEntityIdParser implements ActionParser {
 	AppliesOnNewNode(node: Node, stateType: StateType): boolean {
 		return (
 			stateType === StateType.PowerTaskList &&
-			node.Type === TagChange &&
+			node.Type === NodeType.TagChange &&
 			(node.Object as TagChange).Name === (GameTag.COPIED_FROM_ENTITY_ID as number)
 		);
 	}
@@ -28,7 +28,7 @@ export class CopiedFromEntityIdParser implements ActionParser {
 	AppliesOnCloseNode(node: Node, stateType: StateType): boolean {
 		return (
 			stateType === StateType.PowerTaskList &&
-			node.Type === ShowEntity &&
+			node.Type === NodeType.ShowEntity &&
 			(node.Object as ShowEntity).GetTag(GameTag.COPIED_FROM_ENTITY_ID) > 0
 		);
 	}

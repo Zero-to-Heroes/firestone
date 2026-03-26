@@ -1,6 +1,6 @@
 import type { Helper } from '../helper';
 import { GameEventProvider } from '../game-event';
-import { Game, MetaData, Node, Option, Options, SubOption, Target } from '../models';
+import { Game, MetaData, Node, NodeType, Option, Options, SubOption, Target } from '../models';
 import { Regexes } from '../regexes';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -152,7 +152,7 @@ export class OptionsHandler {
 						Type: 'RECONNECT_OVER',
 					}),
 					false,
-					new Node(null as any, null, 0, null, data),
+					new Node(NodeType.Placeholder, null, 0, null, data),
 				),
 			]);
 		}
@@ -168,10 +168,10 @@ export class OptionsHandler {
 			state.Options = options;
 
 		if (false && stateType === StateType.GameState && !stateFacade.IsBattlegrounds()) {
-			if (state.Node!.Type !== MetaData) {
+			if (state.Node!.Type !== NodeType.MetaData) {
 				stateFacade.NotifyUpdateToRootNeeded();
-				state.UpdateCurrentNode(Game);
-				if (state.Node!.Type === Game) {
+				state.UpdateCurrentNode(NodeType.Game);
+				if (state.Node!.Type === NodeType.Game) {
 					(state.Node!.Object as Game).AddData(state.Options!);
 				} else {
 					throw new Error('Invalid node ' + state.Node!.Type + ' -- ' + data);

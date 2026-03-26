@@ -1,6 +1,6 @@
 import type { Helper } from '../helper';
 import { MetaDataType } from '../enums';
-import { Action, Game, Info, MetaData, Node } from '../models';
+import { Action, Game, Info, MetaData, Node, NodeType } from '../models';
 import { Regexes } from '../regexes';
 import type { ParserState } from '../state/parser-state';
 
@@ -26,15 +26,15 @@ export class ActionMetadataHandler {
 			metaData.MetaInfo = [];
 			metaData.TimeStamp = timestamp;
 
-			state.UpdateCurrentNode(Action);
-			if (state.Node!.Type === Action) {
+			state.UpdateCurrentNode(NodeType.Action);
+			if (state.Node!.Type === NodeType.Action) {
 				(state.Node!.Object as Action).Data.push(metaData);
-			} else if (state.Node!.Type === Game) {
+			} else if (state.Node!.Type === NodeType.Game) {
 				(state.Node!.Object as Game).AddData(metaData);
 			} else {
 				throw new Error('Invalid node ' + state.Node!.Type + ' for ' + timestamp + ' ' + data);
 			}
-			const newNode = new Node(MetaData, metaData, indentLevel, state.Node, data);
+			const newNode = new Node(NodeType.MetaData, metaData, indentLevel, state.Node, data);
 			state.CreateNewNode(newNode);
 			state.Node = newNode;
 			return true;

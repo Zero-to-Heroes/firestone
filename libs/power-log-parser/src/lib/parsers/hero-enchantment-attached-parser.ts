@@ -1,7 +1,7 @@
 import { CardType, GameTag, Zone } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventProvider, GameEventHelper } from '../game-event';
-import { Node, ShowEntity, TagChange } from '../models';
+import { Node, NodeType, ShowEntity, TagChange } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -20,7 +20,7 @@ export class HeroEnchantmentAttachedParser implements ActionParser {
 	}
 
 	AppliesOnNewNode(node: Node, stateType: StateType): boolean {
-		if (stateType !== StateType.PowerTaskList || node.Type !== TagChange) {
+		if (stateType !== StateType.PowerTaskList || node.Type !== NodeType.TagChange) {
 			return false;
 		}
 		const tagChange = node.Object as TagChange;
@@ -35,7 +35,7 @@ export class HeroEnchantmentAttachedParser implements ActionParser {
 	AppliesOnCloseNode(node: Node, stateType: StateType): boolean {
 		return (
 			stateType === StateType.PowerTaskList &&
-			node.Type === ShowEntity &&
+			node.Type === NodeType.ShowEntity &&
 			(node.Object as ShowEntity).GetTag(GameTag.ATTACHED) > 0 &&
 			(node.Object as ShowEntity).GetTag(GameTag.ZONE) === (Zone.PLAY as number)
 		);

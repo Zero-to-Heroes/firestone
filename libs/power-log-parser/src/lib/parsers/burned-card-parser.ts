@@ -1,7 +1,7 @@
 import { GameTag } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventProvider, GameEventHelper } from '../game-event';
-import { MetaData, Node } from '../models';
+import { MetaData, Node, NodeType } from '../models';
 import { MetaDataType } from '../enums';
 import { Logger } from '../logger';
 import { GameState } from '../state/game-state';
@@ -26,7 +26,7 @@ export class BurnedCardParser implements ActionParser {
 	AppliesOnCloseNode(node: Node, stateType: StateType): boolean {
 		return (
 			stateType === StateType.PowerTaskList &&
-			node.Type === MetaData &&
+			node.Type === NodeType.MetaData &&
 			(node.Object as MetaData).Meta === (MetaDataType.BURNED_CARD as number)
 		);
 	}

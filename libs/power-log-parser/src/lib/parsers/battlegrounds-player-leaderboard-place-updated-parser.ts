@@ -1,7 +1,7 @@
 import { GameTag, GameType } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventProvider } from '../game-event';
-import { Node, TagChange } from '../models';
+import { Node, NodeType, TagChange } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -23,7 +23,7 @@ export class BattlegroundsPlayerLeaderboardPlaceUpdatedParser implements ActionP
 		return (
 			stateType === StateType.PowerTaskList &&
 			this.StateFacade.IsBattlegrounds() &&
-			node.Type === TagChange &&
+			node.Type === NodeType.TagChange &&
 			((node.Object as TagChange).Name === (GameTag.PLAYER_LEADERBOARD_PLACE as number) ||
 				(node.Object as TagChange).Name === (GameTag.BACON_DUO_PLAYER_FIGHTS_FIRST_NEXT_COMBAT as number))
 		);

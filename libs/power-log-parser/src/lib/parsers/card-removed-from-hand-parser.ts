@@ -1,7 +1,7 @@
 import { GameTag, Zone } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventProvider, GameEventHelper } from '../game-event';
-import { Action, Node, TagChange } from '../models';
+import { Action, Node, NodeType, TagChange } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -22,7 +22,7 @@ export class CardRemovedFromHandParser implements ActionParser {
 	AppliesOnNewNode(node: Node, stateType: StateType): boolean {
 		return (
 			stateType === StateType.PowerTaskList &&
-			node.Type === TagChange &&
+			node.Type === NodeType.TagChange &&
 			(node.Object as TagChange).Name === (GameTag.ZONE as number) &&
 			(node.Object as TagChange).Value === (Zone.SETASIDE as number)
 		);
@@ -60,7 +60,7 @@ export class CardRemovedFromHandParser implements ActionParser {
 
 		let removedByCardId: string | null = null;
 		let removedByEntityId: number | null = null;
-		if (node.Parent?.Type === Action) {
+		if (node.Parent?.Type === NodeType.Action) {
 			const act = node.Parent.Object as Action;
 			removedByCardId = this.GameState.CurrentEntities.get(act.Entity)?.CardId ?? null;
 			removedByEntityId = act.Entity;

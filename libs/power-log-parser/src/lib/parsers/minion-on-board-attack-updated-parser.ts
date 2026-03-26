@@ -1,7 +1,7 @@
 import { GameTag, Zone } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventProvider, GameEventHelper } from '../game-event';
-import { Action, Node, TagChange } from '../models';
+import { Action, Node, NodeType, TagChange } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -20,7 +20,7 @@ export class MinionOnBoardAttackUpdatedParser implements ActionParser {
 	AppliesOnNewNode(node: Node, stateType: StateType): boolean {
 		return (
 			stateType === StateType.PowerTaskList &&
-			node.Type === TagChange &&
+			node.Type === NodeType.TagChange &&
 			(node.Object as TagChange).Name === (GameTag.ATK as number) &&
 			this.GameState.CurrentEntities.get((node.Object as TagChange).Entity)!.GetTag(GameTag.ZONE) ===
 				(Zone.PLAY as number)

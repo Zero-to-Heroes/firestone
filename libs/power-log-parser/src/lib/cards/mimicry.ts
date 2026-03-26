@@ -1,7 +1,7 @@
 import { GameTag } from '@firestone-hs/reference-data';
 import { Action } from '../models/action';
 import { FullEntity } from '../models/entity';
-import { Node } from '../models/node';
+import { Node, NodeType } from '../models/node';
 import type { GameState } from '../state/game-state';
 import type { StateFacade } from '../state/state-facade';
 
@@ -13,7 +13,7 @@ export class Mimicry {
 		node: Node,
 		stateFacade: StateFacade | null,
 	): string | null {
-		if (node.Parent?.Type !== Action) {
+		if (node.Parent?.Type !== NodeType.Action) {
 			return null;
 		}
 

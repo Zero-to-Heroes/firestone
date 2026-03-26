@@ -1,7 +1,7 @@
 import { CardType, GameTag, Zone } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventHelper, GameEventProvider } from '../game-event';
-import { FullEntity, Node, ShowEntity } from '../models';
+import { FullEntity, Node, NodeType, ShowEntity } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -24,9 +24,9 @@ export class MercenariesAbilityRevealedParser implements ActionParser {
 	AppliesOnCloseNode(node: Node, stateType: StateType): boolean {
 		return (
 			stateType === StateType.PowerTaskList &&
-			((node.Type === FullEntity &&
+			((node.Type === NodeType.FullEntity &&
 				(node.Object as FullEntity).GetTag(GameTag.ZONE) === (Zone.LETTUCE_ABILITY as number)) ||
-				(node.Type === ShowEntity &&
+				(node.Type === NodeType.ShowEntity &&
 					(node.Object as ShowEntity).GetTag(GameTag.ZONE) === (Zone.LETTUCE_ABILITY as number)))
 		);
 	}
@@ -36,9 +36,9 @@ export class MercenariesAbilityRevealedParser implements ActionParser {
 	}
 
 	CreateGameEventProviderFromClose(node: Node): GameEventProvider[] | null {
-		if (node.Type === FullEntity) {
+		if (node.Type === NodeType.FullEntity) {
 			return this.CreateFromFullEntity(node);
-		} else if (node.Type === ShowEntity) {
+		} else if (node.Type === NodeType.ShowEntity) {
 			return this.CreateFromShowEntity(node);
 		}
 		return null;

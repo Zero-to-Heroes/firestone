@@ -1,7 +1,7 @@
 import { GameTag } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventProvider, GameEventHelper } from '../game-event';
-import { Node, TagChange } from '../models';
+import { Node, NodeType, TagChange } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -18,7 +18,7 @@ export class MercenariesQueuedAbilityParser implements ActionParser {
 	}
 
 	AppliesOnNewNode(node: Node, stateType: StateType): boolean {
-		if (stateType !== StateType.PowerTaskList || node.Type !== TagChange) {
+		if (stateType !== StateType.PowerTaskList || node.Type !== NodeType.TagChange) {
 			return false;
 		}
 		const tagChange = node.Object as TagChange;

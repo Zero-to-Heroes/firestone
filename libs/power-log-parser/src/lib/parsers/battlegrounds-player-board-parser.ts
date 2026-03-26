@@ -3,7 +3,7 @@ import { ActionParser } from '../action-parser';
 import { TimewarpedNelliesShip } from '../cards/timewarped-nellies-ship';
 import { GameEventProvider } from '../game-event';
 import { Logger } from '../logger';
-import { FullEntity, Node, ShowEntity, Tag } from '../models';
+import { FullEntity, Node, NodeType, ShowEntity, Tag } from '../models';
 import { TagChange } from '../models/tag';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
@@ -151,7 +151,7 @@ export class BattlegroundsPlayerBoardParser implements ActionParser {
 		if (this.StateFacade.IsBattlegrounds() || this.StateFacade.IsBattlegroundsDuos()) {
 			return (
 				stateType === StateType.PowerTaskList &&
-				node.Type === TagChange &&
+				node.Type === NodeType.TagChange &&
 				(node.Object as TagChange).Name === (GameTag.BG_BATTLE_STARTING as number) &&
 				(node.Object as TagChange).Value === 0
 			);

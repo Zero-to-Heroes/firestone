@@ -1,7 +1,7 @@
 import { GameTag } from '@firestone-hs/reference-data';
 import type { Helper } from '../helper';
 import { Logger } from '../logger';
-import { ChangeEntity, FullEntity, Game, GameEntity, PlayerEntity, ShowEntity, Tag } from '../models';
+import { ChangeEntity, FullEntity, Game, GameEntity, NodeType, PlayerEntity, ShowEntity, Tag } from '../models';
 import { Regexes } from '../regexes';
 import type { ParserState } from '../state/parser-state';
 
@@ -11,7 +11,7 @@ export class TagHandler {
 			return false;
 		}
 
-		if (state.Node!.Type === Game) {
+		if (state.Node!.Type === NodeType.Game) {
 			return false;
 		}
 
@@ -31,19 +31,19 @@ export class TagHandler {
 				state.FirstPlayerEntityId = (state.Node!.Object as PlayerEntity).Id;
 			}
 
-		if (state.Node!.Type === GameEntity) {
+		if (state.Node!.Type === NodeType.GameEntity) {
 			(state.Node!.Object as GameEntity).SetTag(tag.Name, tag.Value);
 			if (tag.Name === (GameTag.GAME_SEED as number)) {
 				state.CurrentGame.GameSeed = tag.Value;
 			}
-		} else if (state.Node!.Type === PlayerEntity) {
+		} else if (state.Node!.Type === NodeType.PlayerEntity) {
 			(state.Node!.Object as PlayerEntity).SetTag(tag.Name, tag.Value);
-		} else if (state.Node!.Type === FullEntity) {
+		} else if (state.Node!.Type === NodeType.FullEntity) {
 			const fullEntity = state.Node!.Object as FullEntity;
 			fullEntity.SetTag(tag.Name, tag.Value);
-			} else if (state.Node!.Type === ShowEntity) {
+			} else if (state.Node!.Type === NodeType.ShowEntity) {
 				(state.Node!.Object as ShowEntity).Tags.push(tag);
-			} else if (state.Node!.Type === ChangeEntity) {
+			} else if (state.Node!.Type === NodeType.ChangeEntity) {
 				(state.Node!.Object as ChangeEntity).Tags.push(tag);
 				state.GameState.Tag(tag, (state.Node!.Object as ChangeEntity).Entity);
 			} else {

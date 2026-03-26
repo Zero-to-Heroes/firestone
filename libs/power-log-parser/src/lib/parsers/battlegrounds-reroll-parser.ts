@@ -1,7 +1,7 @@
 import { BlockType, CardIds } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventProvider } from '../game-event';
-import { Action, FullEntity, Node } from '../models';
+import { Action, FullEntity, Node, NodeType } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -27,7 +27,7 @@ export class BattlegroundsRerollParser implements ActionParser {
 		return (
 			stateType === StateType.PowerTaskList &&
 			this.StateFacade.IsBattlegrounds() &&
-			node.Type === Action &&
+			node.Type === NodeType.Action &&
 			(node.Object as Action).Type === (BlockType.POWER as number) &&
 			this.GameState.CurrentEntities.has((node.Object as Action).Entity) &&
 			(this.GameState.CurrentEntities.get((node.Object as Action).Entity)!.CardId ===

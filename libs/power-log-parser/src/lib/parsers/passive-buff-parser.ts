@@ -1,7 +1,7 @@
 import { CardType, GameTag, Zone } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventHelper, GameEventProvider } from '../game-event';
-import { Node, ShowEntity, TagChange } from '../models';
+import { Node, NodeType, ShowEntity, TagChange } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -22,7 +22,7 @@ export class PassiveBuffParser implements ActionParser {
 	AppliesOnNewNode(node: Node, stateType: StateType): boolean {
 		return (
 			stateType === StateType.PowerTaskList &&
-			node.Type === TagChange &&
+			node.Type === NodeType.TagChange &&
 			(node.Object as TagChange).Name === (GameTag.ZONE as number) &&
 			(node.Object as TagChange).Value === (Zone.PLAY as number)
 		);
@@ -31,7 +31,7 @@ export class PassiveBuffParser implements ActionParser {
 	AppliesOnCloseNode(node: Node, stateType: StateType): boolean {
 		return (
 			stateType === StateType.PowerTaskList &&
-			node.Type === ShowEntity &&
+			node.Type === NodeType.ShowEntity &&
 			(node.Object as ShowEntity).IsInPlay() &&
 			(node.Object as ShowEntity).GetTag(GameTag.DUNGEON_PASSIVE_BUFF) === 1 &&
 			(node.Object as ShowEntity).GetTag(GameTag.CARDTYPE) === (CardType.SPELL as number)

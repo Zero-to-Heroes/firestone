@@ -1,7 +1,7 @@
 import { GameTag } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventProvider } from '../game-event';
-import { GameEntity, Node } from '../models';
+import { GameEntity, Node, NodeType } from '../models';
 import { ParserState, StateType } from '../state/parser-state';
 
 export class BattlegroundsTavernPrizesParser implements ActionParser {
@@ -14,7 +14,7 @@ export class BattlegroundsTavernPrizesParser implements ActionParser {
 	}
 
 	AppliesOnCloseNode(node: Node, stateType: StateType): boolean {
-		return stateType === StateType.PowerTaskList && node.Type === GameEntity;
+		return stateType === StateType.PowerTaskList && node.Type === NodeType.GameEntity;
 	}
 
 	CreateGameEventProviderFromNew(_node: Node): GameEventProvider[] | null {

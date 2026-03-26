@@ -2,7 +2,7 @@ import { BlockType, CardType, GameTag } from '@firestone-hs/reference-data';
 import { ParserGameTag } from '../enums';
 import { ActionParser } from '../action-parser';
 import { GameEventProvider, GameEventHelper } from '../game-event';
-import { Action, Node } from '../models';
+import { Action, Node, NodeType } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -19,7 +19,7 @@ export class QuestCompletedParser implements ActionParser {
 	}
 
 	AppliesOnNewNode(node: Node, stateType: StateType): boolean {
-		if (stateType !== StateType.PowerTaskList || node.Type !== Action) {
+		if (stateType !== StateType.PowerTaskList || node.Type !== NodeType.Action) {
 			return false;
 		}
 		const action = node.Object as Action;

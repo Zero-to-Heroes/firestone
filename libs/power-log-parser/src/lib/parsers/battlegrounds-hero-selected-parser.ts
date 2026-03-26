@@ -1,7 +1,7 @@
 import { CardType, GameTag, GameType, Zone } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventProvider } from '../game-event';
-import { Choice, FullEntity, Node } from '../models';
+import { Choice, FullEntity, Node, NodeType } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -23,7 +23,7 @@ export class BattlegroundsHeroSelectedParser implements ActionParser {
 		return (
 			stateType === StateType.GameState &&
 			this.StateFacade.IsBattlegrounds() &&
-			node.Type === Choice &&
+			node.Type === NodeType.Choice &&
 			this.ParserState.CurrentChosenEntites != null
 		);
 	}
@@ -34,7 +34,7 @@ export class BattlegroundsHeroSelectedParser implements ActionParser {
 			stateType === StateType.PowerTaskList &&
 			this.StateFacade.IsBattlegrounds() &&
 			(this.GameState.GetGameEntity()?.GetTag(GameTag.BG_BATTLE_STARTING) ?? 0) !== 1 &&
-			node.Type === FullEntity &&
+			node.Type === NodeType.FullEntity &&
 			(fullEntity = node.Object as FullEntity).GetTag(GameTag.CARDTYPE) === (CardType.HERO as number) &&
 			fullEntity.GetTag(GameTag.ZONE) === (Zone.PLAY as number) &&
 			fullEntity.GetTag(GameTag.REPLACEMENT_ENTITY) !== 1 &&

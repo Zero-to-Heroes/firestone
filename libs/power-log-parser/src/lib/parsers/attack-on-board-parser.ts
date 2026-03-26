@@ -1,7 +1,7 @@
 import { CardType, GameTag, Zone } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventProvider, GameEventHelper } from '../game-event';
-import { Action, Node, TagChange } from '../models';
+import { Action, Node, NodeType, TagChange } from '../models';
 import { FullEntity } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
@@ -34,7 +34,7 @@ export class AttackOnBoardParser implements ActionParser {
 		return (
 			stateType === StateType.PowerTaskList &&
 			!this.StateFacade.IsBattlegrounds() &&
-			node.Type === TagChange &&
+			node.Type === NodeType.TagChange &&
 			(node.Object as TagChange).Name === (GameTag.ATK as number)
 		);
 	}
@@ -43,7 +43,7 @@ export class AttackOnBoardParser implements ActionParser {
 		return (
 			stateType === StateType.PowerTaskList &&
 			!this.StateFacade.IsBattlegrounds() &&
-			node.Type === Action
+			node.Type === NodeType.Action
 		);
 	}
 

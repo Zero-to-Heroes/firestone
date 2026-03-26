@@ -1,6 +1,6 @@
 import { GameEventProvider } from '../game-event';
 import { Logger } from '../logger';
-import { Node } from '../models';
+import { Node, NodeType } from '../models';
 import type { ParserState } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
 
@@ -28,7 +28,7 @@ export class SpectatorHandler {
 						},
 					}),
 					false,
-					new Node(null as any, null, 0, null, data),
+					new Node(NodeType.Placeholder, null, 0, null, data),
 					true,
 				),
 			]);
@@ -54,7 +54,7 @@ export class SpectatorHandler {
 						},
 					}),
 					false,
-					new Node(null as any, null, 0, null, data),
+					new Node(NodeType.Placeholder, null, 0, null, data),
 					true,
 				),
 			]);

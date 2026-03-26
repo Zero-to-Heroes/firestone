@@ -1,7 +1,7 @@
 import { GameTag } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEvent, GameEventProvider } from '../game-event';
-import { Action, MetaData, Node } from '../models';
+import { Action, MetaData, Node, NodeType } from '../models';
 import { MetaDataType } from '../enums';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
@@ -34,7 +34,7 @@ export class HealingParser implements ActionParser {
 	AppliesOnCloseNode(node: Node, stateType: StateType): boolean {
 		return (
 			stateType === StateType.PowerTaskList &&
-			node.Type === Action &&
+			node.Type === NodeType.Action &&
 			this.hasHealingTag(node.Object as Action)
 		);
 	}

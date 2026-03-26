@@ -1,7 +1,7 @@
 import { CardIds, GameTag } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventProvider } from '../game-event';
-import { Choice, Node } from '../models';
+import { Choice, Node, NodeType } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -20,7 +20,7 @@ export class EntityChosenParser implements ActionParser {
 	}
 
 	AppliesOnNewNode(node: Node, _stateType: StateType): boolean {
-		return node.Type === Choice && this.ParserState.CurrentChosenEntites != null;
+		return node.Type === NodeType.Choice && this.ParserState.CurrentChosenEntites != null;
 	}
 
 	AppliesOnCloseNode(_node: Node, _stateType: StateType): boolean {

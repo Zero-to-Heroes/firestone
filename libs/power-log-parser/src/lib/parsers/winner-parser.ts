@@ -1,7 +1,7 @@
 import { GameTag, PlayState } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventProvider } from '../game-event';
-import { Node, PlayerEntity, TagChange } from '../models';
+import { Node, NodeType, PlayerEntity, TagChange } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -22,7 +22,7 @@ export class WinnerParser implements ActionParser {
 	AppliesOnNewNode(node: Node, stateType: StateType): boolean {
 		return (
 			stateType === StateType.PowerTaskList &&
-			node.Type === TagChange &&
+			node.Type === NodeType.TagChange &&
 			((node.Object as TagChange).Name === (GameTag.PLAYSTATE as number) ||
 				(this.ParserState.IsBattlegrounds() &&
 					(node.Object as TagChange).Name ===

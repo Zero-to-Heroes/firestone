@@ -1,7 +1,7 @@
 import { BlockType, CardIds, GameTag, Step, Zone } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventHelper, GameEventProvider } from '../game-event';
-import { Action, FullEntity, Node, TagChange } from '../models';
+import { Action, FullEntity, Node, NodeType, TagChange } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -42,7 +42,7 @@ export class CardBackToDeckParser implements ActionParser {
 	AppliesOnNewNode(node: Node, stateType: StateType): boolean {
 		return (
 			stateType === StateType.PowerTaskList &&
-			node.Type === TagChange &&
+			node.Type === NodeType.TagChange &&
 			(node.Object as TagChange).Name === (GameTag.ZONE as number) &&
 			(node.Object as TagChange).Value === (Zone.DECK as number) &&
 			!this.isTrade(node.Parent)
@@ -114,7 +114,7 @@ export class CardBackToDeckParser implements ActionParser {
 
 	private isTrade(node: Node | null): boolean {
 		return (
-			node?.Type === Action && (node.Object as Action).Type === (BlockType.DECK_ACTION as number)
+			node?.Type === NodeType.Action && (node.Object as Action).Type === (BlockType.DECK_ACTION as number)
 		);
 	}
 }

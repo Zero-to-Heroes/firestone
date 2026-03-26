@@ -2,7 +2,7 @@ import { CardType, GameTag, Zone } from '@firestone-hs/reference-data';
 import type { Helper } from '../helper';
 import { GameEventProvider } from '../game-event';
 import { Logger } from '../logger';
-import { Game, Node } from '../models';
+import { Game, Node, NodeType } from '../models';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
 import type { GameMetaData } from '../state/game-meta-data';
@@ -45,7 +45,7 @@ export class NewGameHandler {
 								Type: 'RECONNECT_START',
 							}),
 							false,
-							new Node(null as any, null, 0, null, data),
+							new Node(NodeType.Placeholder, null, 0, null, data),
 						),
 					]);
 				}
@@ -62,7 +62,7 @@ export class NewGameHandler {
 						state.GameState.CurrentEntities.delete(minionId);
 					}
 				}
-				state.UpdateCurrentNode(Game);
+				state.UpdateCurrentNode(NodeType.Game);
 				return true;
 			}
 
@@ -90,7 +90,7 @@ export class NewGameHandler {
 			state.CurrentGame.GameType = metadata.GameType;
 
 			state.Replay.Games.push(state.CurrentGame);
-			const newNode = new Node(Game, state.CurrentGame, 0, null, data);
+			const newNode = new Node(NodeType.Game, state.CurrentGame, 0, null, data);
 			state.CreateNewNode(newNode);
 			state.Node = newNode;
 			Logger.Log('Created a new game', stateType + ' ' + timestamp + ',' + previousTimestamp);

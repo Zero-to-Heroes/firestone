@@ -1,7 +1,7 @@
 import { GameTag, Step } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventProvider } from '../game-event';
-import { Node, TagChange } from '../models';
+import { Node, NodeType, TagChange } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -18,7 +18,7 @@ export class TurnCleanupParser implements ActionParser {
 	}
 
 	AppliesOnNewNode(node: Node, stateType: StateType): boolean {
-		if (stateType !== StateType.GameState || node.Type !== TagChange) return false;
+		if (stateType !== StateType.GameState || node.Type !== NodeType.TagChange) return false;
 		const tc = node.Object as TagChange;
 		const isNormalTurnChange =
 			!this.ParserState.IsMercenaries() &&

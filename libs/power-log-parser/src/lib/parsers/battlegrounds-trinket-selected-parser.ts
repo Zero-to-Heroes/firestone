@@ -1,7 +1,7 @@
 import { GameTag } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventProvider } from '../game-event';
-import { Node, TagChange } from '../models';
+import { Node, NodeType, TagChange } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -24,7 +24,7 @@ export class BattlegroundsTrinketSelectedParser implements ActionParser {
 		return (
 			stateType === StateType.PowerTaskList &&
 			this.StateFacade.IsBattlegrounds() &&
-			node.Type === TagChange &&
+			node.Type === NodeType.TagChange &&
 			(tagChange.Name === (GameTag.BACON_FIRST_TRINKET_DATABASE_ID as number) ||
 				tagChange.Name === (GameTag.BACON_SECOND_TRINKET_DATABASE_ID as number))
 		);

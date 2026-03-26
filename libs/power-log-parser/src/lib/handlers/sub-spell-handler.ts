@@ -1,6 +1,6 @@
 import type { Helper } from '../helper';
 import { GameEventProvider } from '../game-event';
-import { Action, Node, SubSpell } from '../models';
+import { Action, Node, NodeType, SubSpell } from '../models';
 import { Regexes } from '../regexes';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -19,7 +19,7 @@ export class SubSpellHandler {
 			const subSpellPrefab = match[1];
 			let sourceEntityId = parseInt(match[2], 10);
 			let parentActionNode = state.Node;
-			while (parentActionNode != null && parentActionNode.Type !== Action) {
+			while (parentActionNode != null && parentActionNode.Type !== NodeType.Action) {
 				parentActionNode = parentActionNode.Parent;
 			}
 
@@ -41,7 +41,7 @@ export class SubSpellHandler {
 			}
 
 			state.NodeParser.NewNode(
-				new Node(SubSpell, state.CurrentSubSpell?.GetActiveSubSpell() ?? null, 0, state.Node, data),
+				new Node(NodeType.SubSpell, state.CurrentSubSpell?.GetActiveSubSpell() ?? null, 0, state.Node, data),
 				stateType,
 			);
 			if (stateType === StateType.PowerTaskList && !state.IsBattlegrounds()) {
@@ -67,7 +67,7 @@ export class SubSpellHandler {
 							},
 						}),
 						false,
-						new Node(null as any, null, 0, null, data),
+						new Node(NodeType.Placeholder, null, 0, null, data),
 					),
 				]);
 			}
@@ -95,13 +95,13 @@ export class SubSpellHandler {
 
 		if (data === 'SUB_SPELL_END') {
 			state.NodeParser.CloseNode(
-				new Node(SubSpell, state.CurrentSubSpell?.GetActiveSubSpell() ?? null, 0, state.Node, data),
+				new Node(NodeType.SubSpell, state.CurrentSubSpell?.GetActiveSubSpell() ?? null, 0, state.Node, data),
 				stateType,
 			);
 			if (stateType === StateType.PowerTaskList && state.CurrentSubSpell != null && !state.IsBattlegrounds()) {
 				const subSpell = state.CurrentSubSpell.GetActiveSubSpell();
 				let parentAction: Action | null = null;
-				if (state.Node?.Type === Action) {
+				if (state.Node?.Type === NodeType.Action) {
 					parentAction = state.Node.Object as Action;
 				}
 				let sourceEntityId2 = subSpell.Source;
@@ -126,7 +126,7 @@ export class SubSpellHandler {
 							},
 						}),
 						false,
-						new Node(null as any, null, 0, null, data),
+						new Node(NodeType.Placeholder, null, 0, null, data),
 					),
 				]);
 			}

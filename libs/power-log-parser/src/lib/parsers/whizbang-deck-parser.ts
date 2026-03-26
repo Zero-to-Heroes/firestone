@@ -1,7 +1,7 @@
 import { GameTag } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventProvider, GameEventHelper } from '../game-event';
-import { Action, FullEntity, Node, PlayerEntity, ShowEntity } from '../models';
+import { Action, FullEntity, Node, NodeType, PlayerEntity, ShowEntity } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -24,8 +24,8 @@ export class WhizbangDeckParser implements ActionParser {
 	}
 
 	AppliesOnCloseNode(node: Node, stateType: StateType): boolean {
-		const oldWhizbangAndLegacy = node.Type === PlayerEntity;
-		const newWhizbang = node.Type === FullEntity || node.Type === ShowEntity;
+		const oldWhizbangAndLegacy = node.Type === NodeType.PlayerEntity;
+		const newWhizbang = node.Type === NodeType.FullEntity || node.Type === NodeType.ShowEntity;
 		return stateType === StateType.PowerTaskList && (oldWhizbangAndLegacy || newWhizbang);
 	}
 
@@ -34,9 +34,9 @@ export class WhizbangDeckParser implements ActionParser {
 	}
 
 	CreateGameEventProviderFromClose(node: Node): GameEventProvider[] | null {
-		if (node.Type === PlayerEntity) {
+		if (node.Type === NodeType.PlayerEntity) {
 			return this.createFromPlayerEntity(node);
-		} else if (node.Type === FullEntity) {
+		} else if (node.Type === NodeType.FullEntity) {
 			return this.createFromFullEntity(node);
 		} else {
 			return this.createFromShowEntity(node);
@@ -45,7 +45,7 @@ export class WhizbangDeckParser implements ActionParser {
 
 	private createFromFullEntity(node: Node): GameEventProvider[] | null {
 		const entity = node.Object as FullEntity;
-		const parentAction = node.Parent?.Type === Action ? (node.Parent.Object as Action) : null;
+		const parentAction = node.Parent?.Type === NodeType.Action ? (node.Parent.Object as Action) : null;
 		if (parentAction == null) {
 			return null;
 		}
@@ -77,7 +77,7 @@ export class WhizbangDeckParser implements ActionParser {
 
 	private createFromShowEntity(node: Node): GameEventProvider[] | null {
 		const entity = node.Object as ShowEntity;
-		const parentAction = node.Parent?.Type === Action ? (node.Parent.Object as Action) : null;
+		const parentAction = node.Parent?.Type === NodeType.Action ? (node.Parent.Object as Action) : null;
 		if (parentAction == null) {
 			return null;
 		}

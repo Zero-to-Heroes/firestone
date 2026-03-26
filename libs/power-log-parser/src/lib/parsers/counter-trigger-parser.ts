@@ -1,7 +1,7 @@
 import { BlockType, CardType, GameTag } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventProvider, GameEventHelper } from '../game-event';
-import { Action, Node } from '../models';
+import { Action, Node, NodeType } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -20,7 +20,7 @@ export class CounterTriggerParser implements ActionParser {
 	AppliesOnNewNode(node: Node, stateType: StateType): boolean {
 		return (
 			stateType === StateType.PowerTaskList &&
-			node.Type === Action &&
+			node.Type === NodeType.Action &&
 			(node.Object as Action).Type === (BlockType.TRIGGER as number) &&
 			(node.Object as Action).TriggerKeyword === (GameTag.COUNTER as number)
 		);

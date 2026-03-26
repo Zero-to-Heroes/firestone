@@ -1,7 +1,7 @@
 import { BlockType, CardType, GameTag, Zone } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventHelper, GameEventProvider } from '../game-event';
-import { Action, FullEntity, Node, ShowEntity, TagChange } from '../models';
+import { Action, FullEntity, Node, NodeType, ShowEntity, TagChange } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -22,14 +22,14 @@ export class CardPlayedFromEffectParser implements ActionParser {
 	AppliesOnNewNode(node: Node, stateType: StateType): boolean {
 		const isPowerPhase =
 			node.Parent == null ||
-			node.Parent.Type !== Action ||
+			node.Parent.Type !== NodeType.Action ||
 			(node.Parent.Object as Action).Type === (BlockType.POWER as number) ||
 			(node.Parent.Object as Action).Type === (BlockType.TRIGGER as number);
 
 		let tagChange: TagChange | null = null;
 		let tagChangeEntity: FullEntity | undefined;
 		const cardPlayed =
-			node.Type === TagChange &&
+			node.Type === NodeType.TagChange &&
 			(tagChange = node.Object as TagChange).Name === (GameTag.ZONE as number) &&
 			tagChange.Value === (Zone.PLAY as number) &&
 			((tagChangeEntity = this.GameState.CurrentEntities.get(tagChange.Entity))?.GetTag(GameTag.ZONE) ===
@@ -38,7 +38,7 @@ export class CardPlayedFromEffectParser implements ActionParser {
 
 		let action: Action | null = null;
 		const castWhenDrawn =
-			node.Type === Action &&
+			node.Type === NodeType.Action &&
 			(action = node.Object as Action).Type === (BlockType.TRIGGER as number) &&
 			(action.TriggerKeyword === (GameTag.CASTS_WHEN_DRAWN as number) ||
 				action.TriggerKeyword === (GameTag.TOPDECK as number));
@@ -48,19 +48,19 @@ export class CardPlayedFromEffectParser implements ActionParser {
 	AppliesOnCloseNode(node: Node, stateType: StateType): boolean {
 		const isPowerPhase =
 			node.Parent == null ||
-			node.Parent.Type !== Action ||
+			node.Parent.Type !== NodeType.Action ||
 			(node.Parent.Object as Action).Type === (BlockType.POWER as number);
 
 		let showEntity: ShowEntity | null = null;
 		const cardPlayed =
-			node.Type === ShowEntity &&
+			node.Type === NodeType.ShowEntity &&
 			(showEntity = node.Object as ShowEntity).GetZone() === (Zone.PLAY as number) &&
 			showEntity.GetCardType() !== (CardType.ENCHANTMENT as number);
 		return stateType === StateType.PowerTaskList && isPowerPhase && cardPlayed;
 	}
 
 	CreateGameEventProviderFromNew(node: Node): GameEventProvider[] | null {
-		if (node.Type === TagChange) {
+		if (node.Type === NodeType.TagChange) {
 			return this.CreateGameEventProviderFromTagChange(node);
 		} else {
 			return this.CreateGameEventProviderFromCastsWhenDrawnAction(node);
@@ -120,7 +120,7 @@ export class CardPlayedFromEffectParser implements ActionParser {
 	}
 
 	CreateGameEventProviderFromClose(node: Node): GameEventProvider[] | null {
-		if (node.Type === ShowEntity) {
+		if (node.Type === NodeType.ShowEntity) {
 			return this.CreateGameEventProviderFromShowEntity(node);
 		}
 		return null;

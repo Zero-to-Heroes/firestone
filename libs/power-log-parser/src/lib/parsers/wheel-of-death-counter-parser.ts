@@ -1,7 +1,7 @@
 import { CardIds, GameTag } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventHelper, GameEventProvider } from '../game-event';
-import { Node, ShowEntity, TagChange } from '../models';
+import { Node, NodeType, ShowEntity, TagChange } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -21,7 +21,7 @@ export class WheelOfDeathCounterParser implements ActionParser {
 		let tagChange: TagChange | null = null;
 		return (
 			stateType === StateType.PowerTaskList &&
-			node.Type === TagChange &&
+			node.Type === NodeType.TagChange &&
 			(tagChange = node.Object as TagChange).Name === (GameTag.TAG_SCRIPT_DATA_NUM_1 as number) &&
 			this.GameState.CurrentEntities.get(tagChange.Entity)?.CardId ===
 				CardIds.WheelOfDeath_WheelOfDeathCounterEnchantment_TOY_529e1
@@ -31,7 +31,7 @@ export class WheelOfDeathCounterParser implements ActionParser {
 	AppliesOnCloseNode(node: Node, stateType: StateType): boolean {
 		return (
 			stateType === StateType.PowerTaskList &&
-			node.Type === ShowEntity &&
+			node.Type === NodeType.ShowEntity &&
 			(node.Object as ShowEntity).CardId === CardIds.WheelOfDeath_WheelOfDeathCounterEnchantment_TOY_529e1
 		);
 	}

@@ -1,7 +1,7 @@
 import { BlockType, CardType, GameTag } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventProvider, GameEventHelper } from '../game-event';
-import { Action, Node, TagChange } from '../models';
+import { Action, Node, NodeType, TagChange } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -22,7 +22,7 @@ export class SecretWillTriggeredParser implements ActionParser {
 	AppliesOnNewNode(node: Node, stateType: StateType): boolean {
 		return (
 			stateType === StateType.GameState &&
-			node.Type === Action &&
+			node.Type === NodeType.Action &&
 			(node.Object as Action).Type === (BlockType.TRIGGER as number) &&
 			(node.Object as Action).TriggerKeyword === (GameTag.SECRET as number)
 		);

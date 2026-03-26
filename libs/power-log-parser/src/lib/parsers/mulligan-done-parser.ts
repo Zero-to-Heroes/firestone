@@ -1,7 +1,7 @@
 import { GameTag, Mulligan } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventProvider } from '../game-event';
-import { Node, TagChange } from '../models';
+import { Node, NodeType, TagChange } from '../models';
 import { ParserState, StateType } from '../state/parser-state';
 
 export class MulliganDoneParser implements ActionParser {
@@ -16,7 +16,7 @@ export class MulliganDoneParser implements ActionParser {
 	AppliesOnNewNode(node: Node, stateType: StateType): boolean {
 		return (
 			stateType === StateType.PowerTaskList &&
-			node.Type === TagChange &&
+			node.Type === NodeType.TagChange &&
 			(node.Object as TagChange).Name === (GameTag.MULLIGAN_STATE as number) &&
 			(node.Object as TagChange).Value === (Mulligan.DONE as number)
 		);

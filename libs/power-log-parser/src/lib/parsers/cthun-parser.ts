@@ -1,7 +1,7 @@
 import { BlockType, CardIds, GameTag } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventProvider, GameEventHelper } from '../game-event';
-import { Action, Node, TagChange } from '../models';
+import { Action, Node, NodeType, TagChange } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -22,7 +22,7 @@ export class CthunParser implements ActionParser {
 	AppliesOnNewNode(node: Node, stateType: StateType): boolean {
 		return (
 			stateType === StateType.PowerTaskList &&
-			node.Type === TagChange &&
+			node.Type === NodeType.TagChange &&
 			((node.Object as TagChange).Name === (GameTag.CTHUN_ATTACK_BUFF as number) ||
 				(node.Object as TagChange).Name === (GameTag.CTHUN_HEALTH_BUFF as number))
 		);
@@ -33,7 +33,7 @@ export class CthunParser implements ActionParser {
 	}
 
 	CreateGameEventProviderFromNew(node: Node): GameEventProvider[] | null {
-		if (node.Parent != null && node.Parent.Type === Action) {
+		if (node.Parent != null && node.Parent.Type === NodeType.Action) {
 			const parentAction = node.Parent.Object as Action;
 			if (this.GameState.CurrentEntities.has(parentAction.Entity)) {
 				const parentEntity = this.GameState.CurrentEntities.get(parentAction.Entity)!;

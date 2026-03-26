@@ -1,7 +1,7 @@
 import { BlockType, GameTag } from '@firestone-hs/reference-data';
 import { Action, ShowEntity } from '../models/action';
 import { Tag } from '../models/tag';
-import { Node } from '../models/node';
+import { Node, NodeType } from '../models/node';
 import type { GameState } from '../state/game-state';
 import type { StateFacade } from '../state/state-facade';
 
@@ -13,7 +13,7 @@ export class DeepSpaceCurator {
 		node: Node,
 		stateFacade: StateFacade | null,
 	): Tag[] | null {
-		if (node.Parent?.Parent?.Type !== Action) {
+		if (node.Parent?.Parent?.Type !== NodeType.Action) {
 			return null;
 		}
 

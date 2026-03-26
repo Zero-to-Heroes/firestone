@@ -1,5 +1,5 @@
 import type { Helper } from '../helper';
-import { Action, ChangeEntity, Game, Node, Tag } from '../models';
+import { Action, ChangeEntity, Game, Node, NodeType, Tag } from '../models';
 import { Regexes } from '../regexes';
 import type { ParserState } from '../state/parser-state';
 
@@ -23,15 +23,15 @@ export class ChangeEntityHandler {
 			changeEntity.Tags = [];
 			changeEntity.TimeStamp = timestamp;
 
-			state.UpdateCurrentNode(Game, Action);
-			if (state.Node!.Type === Game) {
+			state.UpdateCurrentNode(NodeType.Game, NodeType.Action);
+			if (state.Node!.Type === NodeType.Game) {
 				(state.Node!.Object as Game).AddData(changeEntity);
-			} else if (state.Node!.Type === Action) {
+			} else if (state.Node!.Type === NodeType.Action) {
 				(state.Node!.Object as Action).Data.push(changeEntity);
 			} else {
 				throw new Error('Invalid node ' + state.Node!.Type);
 			}
-			const newNode = new Node(ChangeEntity, changeEntity, indentLevel, state.Node, data);
+			const newNode = new Node(NodeType.ChangeEntity, changeEntity, indentLevel, state.Node, data);
 			state.CreateNewNode(newNode);
 			state.Node = newNode;
 			return true;

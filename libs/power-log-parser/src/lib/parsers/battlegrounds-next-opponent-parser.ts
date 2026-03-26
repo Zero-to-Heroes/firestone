@@ -1,7 +1,7 @@
 import { CardType, GameTag } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventProvider } from '../game-event';
-import { Action, FullEntity, Node, PlayerEntity, TagChange } from '../models';
+import { Action, FullEntity, Node, NodeType, PlayerEntity, TagChange } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 
@@ -19,7 +19,7 @@ export class BattlegroundsNextOpponentParser implements ActionParser {
 	AppliesOnNewNode(node: Node, stateType: StateType): boolean {
 		return (
 			stateType === StateType.PowerTaskList &&
-			node.Type === TagChange &&
+			node.Type === NodeType.TagChange &&
 			(node.Object as TagChange).Name === (GameTag.NEXT_OPPONENT_PLAYER_ID as number)
 		);
 	}
@@ -27,11 +27,11 @@ export class BattlegroundsNextOpponentParser implements ActionParser {
 	AppliesOnCloseNode(node: Node, stateType: StateType): boolean {
 		return (
 			stateType === StateType.PowerTaskList &&
-			((node.Type === PlayerEntity &&
+			((node.Type === NodeType.PlayerEntity &&
 				(node.Object as PlayerEntity).Tags.find(
 					(tag) => tag.Name === (GameTag.NEXT_OPPONENT_PLAYER_ID as number),
 				) != null) ||
-				(node.Type === FullEntity &&
+				(node.Type === NodeType.FullEntity &&
 					(node.Object as FullEntity).Tags.find(
 						(tag) => tag.Name === (GameTag.NEXT_OPPONENT_PLAYER_ID as number),
 					) != null))
@@ -40,7 +40,7 @@ export class BattlegroundsNextOpponentParser implements ActionParser {
 
 	CreateGameEventProviderFromNew(node: Node): GameEventProvider[] | null {
 		const tagChange = node.Object as TagChange;
-		const isInAction = node.Parent != null && node.Parent.Type === Action;
+		const isInAction = node.Parent != null && node.Parent.Type === NodeType.Action;
 		if (isInAction && (node.Parent!.Object as Action).Entity !== this.GameState.GetGameEntity()?.Entity) {
 			return null;
 		}
@@ -79,11 +79,11 @@ export class BattlegroundsNextOpponentParser implements ActionParser {
 
 	CreateGameEventProviderFromClose(node: Node): GameEventProvider[] | null {
 		const tags =
-			node.Type === PlayerEntity
+			node.Type === NodeType.PlayerEntity
 				? (node.Object as PlayerEntity).Tags
 				: (node.Object as FullEntity).Tags;
 		const timestamp =
-			node.Type === PlayerEntity
+			node.Type === NodeType.PlayerEntity
 				? (node.Object as PlayerEntity).TimeStamp
 				: (node.Object as FullEntity).TimeStamp;
 		const nextOpponentPlayerId = tags.find(

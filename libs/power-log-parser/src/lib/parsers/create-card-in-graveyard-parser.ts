@@ -1,7 +1,7 @@
 import { CardType, GameTag, Zone } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventProvider } from '../game-event';
-import { FullEntity, Node } from '../models';
+import { FullEntity, Node, NodeType } from '../models';
 import { Oracle } from '../oracle';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
@@ -26,7 +26,7 @@ export class CreateCardInGraveyardParser implements ActionParser {
 		const isValidElement = !this.StateFacade.Spectating || this.StateFacade.LocalPlayer?.Name != null;
 		const appliesToFullEntity =
 			isValidElement &&
-			node.Type === FullEntity &&
+			node.Type === NodeType.FullEntity &&
 			(node.Object as FullEntity).GetTag(GameTag.ZONE) === (Zone.GRAVEYARD as number) &&
 			(node.Object as FullEntity).GetTag(GameTag.CARDTYPE) !== (CardType.ENCHANTMENT as number);
 		return stateType === StateType.PowerTaskList && appliesToFullEntity;
@@ -37,7 +37,7 @@ export class CreateCardInGraveyardParser implements ActionParser {
 	}
 
 	CreateGameEventProviderFromClose(node: Node): GameEventProvider[] | null {
-		if (node.Type === FullEntity) {
+		if (node.Type === NodeType.FullEntity) {
 			return this.CreateEventFromFullEntity(node);
 		}
 		return null;

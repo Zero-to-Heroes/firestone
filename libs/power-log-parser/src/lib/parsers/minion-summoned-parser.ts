@@ -1,7 +1,7 @@
 import { BlockType, GameTag, Zone } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventHelper, GameEventProvider } from '../game-event';
-import { Action, FullEntity, Node, ShowEntity, TagChange } from '../models';
+import { Action, FullEntity, Node, NodeType, ShowEntity, TagChange } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -22,18 +22,18 @@ export class MinionSummonedParser implements ActionParser {
 	AppliesOnNewNode(node: Node, stateType: StateType): boolean {
 		const isTriggerPhase =
 			node.Parent == null ||
-			node.Parent.Type !== Action ||
+			node.Parent.Type !== NodeType.Action ||
 			(node.Parent.Object as Action).Type === (BlockType.TRIGGER as number);
 		const isPowerPhase =
 			node.Parent == null ||
-			node.Parent.Type !== Action ||
+			node.Parent.Type !== NodeType.Action ||
 			(node.Parent.Object as Action).Type === (BlockType.POWER as number);
 		if (!isTriggerPhase && !isPowerPhase) {
 			return false;
 		}
 		return (
 			stateType === StateType.PowerTaskList &&
-			node.Type === TagChange &&
+			node.Type === NodeType.TagChange &&
 			(node.Object as TagChange).Name === (GameTag.ZONE as number) &&
 			(node.Object as TagChange).Value === (Zone.PLAY as number) &&
 			this.GameState.CurrentEntities.has((node.Object as TagChange).Entity) &&
@@ -43,11 +43,11 @@ export class MinionSummonedParser implements ActionParser {
 
 	AppliesOnCloseNode(node: Node, stateType: StateType): boolean {
 		const createFromFullEntity =
-			node.Type === FullEntity &&
+			node.Type === NodeType.FullEntity &&
 			(node.Object as FullEntity).GetTag(GameTag.ZONE) === (Zone.PLAY as number) &&
 			(node.Object as FullEntity).IsMinionLike();
 		const createFromShowEntity =
-			node.Type === ShowEntity &&
+			node.Type === NodeType.ShowEntity &&
 			(node.Object as ShowEntity).GetTag(GameTag.ZONE) === (Zone.PLAY as number) &&
 			(node.Object as ShowEntity).IsMinionLike() &&
 			this.GameState.CurrentEntities.has((node.Object as ShowEntity).Entity) &&
@@ -85,12 +85,12 @@ export class MinionSummonedParser implements ActionParser {
 	CreateGameEventProviderFromClose(node: Node): GameEventProvider[] | null {
 		const isPlayBlock =
 			node.Parent != null &&
-			node.Parent.Type === Action &&
+			node.Parent.Type === NodeType.Action &&
 			(node.Parent.Object as Action).Type === (BlockType.PLAY as number);
 		if (isPlayBlock) {
 			const parentAction = node.Parent!.Object as Action;
 			const createdEntityId =
-				node.Type === FullEntity
+				node.Type === NodeType.FullEntity
 					? (node.Object as FullEntity).Entity
 					: (node.Object as ShowEntity).Entity;
 			if (createdEntityId === parentAction.Entity) {
@@ -98,7 +98,7 @@ export class MinionSummonedParser implements ActionParser {
 			}
 		}
 
-		if (node.Type === FullEntity) {
+		if (node.Type === NodeType.FullEntity) {
 			return this.CreateFromFullEntity(node);
 		} else {
 			return this.CreateFromShowEntity(node);

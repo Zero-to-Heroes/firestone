@@ -1,7 +1,7 @@
 import { GameTag, Zone } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventProvider, GameEventHelper } from '../game-event';
-import { Action, ChangeEntity, Node } from '../models';
+import { Action, ChangeEntity, Node, NodeType } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -22,7 +22,7 @@ export class CardChangedParser implements ActionParser {
 	}
 
 	AppliesOnCloseNode(node: Node, stateType: StateType): boolean {
-		return stateType === StateType.PowerTaskList && node.Type === ChangeEntity;
+		return stateType === StateType.PowerTaskList && node.Type === NodeType.ChangeEntity;
 	}
 
 	CreateGameEventProviderFromNew(_node: Node): GameEventProvider[] | null {
@@ -55,7 +55,7 @@ export class CardChangedParser implements ActionParser {
 			: null;
 		let lastInfluencedByEntityId: number | null = null;
 		let lastAffectedByCardId: string | null = null;
-		if (node.Parent != null && node.Parent.Type === Action) {
+		if (node.Parent != null && node.Parent.Type === NodeType.Action) {
 			const parent = node.Parent.Object as Action;
 			lastInfluencedByEntityId = parent?.Entity ?? null;
 			lastAffectedByCardId =

@@ -1,7 +1,7 @@
 import { GameTag, ScenarioId } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventProvider } from '../game-event';
-import { Action, Node, TagChange } from '../models';
+import { Action, Node, NodeType, TagChange } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -28,7 +28,7 @@ export class RumbleRunStepParser implements ActionParser {
 	AppliesOnCloseNode(node: Node, stateType: StateType): boolean {
 		return (
 			stateType === StateType.PowerTaskList &&
-			node.Type === Action &&
+			node.Type === NodeType.Action &&
 			(node.Object as Action).Data
 				.filter((data) => data.constructor === TagChange)
 				.map((data) => data as unknown as TagChange)

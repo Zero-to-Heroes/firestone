@@ -1,7 +1,7 @@
 import { GameTag } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventProvider } from '../game-event';
-import { Node, TagChange } from '../models';
+import { Node, NodeType, TagChange } from '../models';
 import { Logger } from '../logger';
 import { xmlFromReplay } from '../replay-converter';
 import { GameState } from '../state/game-state';
@@ -27,7 +27,7 @@ export class GameEndParser implements ActionParser {
 		let tagChange: TagChange | null = null;
 		return (
 			stateType === StateType.PowerTaskList &&
-			node.Type === TagChange &&
+			node.Type === NodeType.TagChange &&
 			(((tagChange = node.Object as TagChange).Name === (GameTag.STATE as number) &&
 				tagChange.Value === STATE_COMPLETE) ||
 				(this.ParserState.IsBattlegrounds() &&

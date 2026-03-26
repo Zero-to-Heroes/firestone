@@ -1,7 +1,7 @@
 import { GameTag } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventProvider } from '../game-event';
-import { Node, Player, SubSpell } from '../models';
+import { Node, NodeType, Player, SubSpell } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -32,7 +32,7 @@ export class BattlegroundsDuoTeammatePlayerBoardParser implements ActionParser {
 			stateType === StateType.GameState &&
 			this.StateFacade.IsBattlegrounds() &&
 			(this.GameState.GetGameEntity()?.GetTag(GameTag.BOARD_VISUAL_STATE) ?? 0) === 2 &&
-			node.Type === SubSpell &&
+			node.Type === NodeType.SubSpell &&
 			(node.Object as SubSpell).Prefab.startsWith(
 				'ReuseFX_Generic_OverrideSpawn_FromPortal_Super_Random_SuppressPlaySounds',
 			)

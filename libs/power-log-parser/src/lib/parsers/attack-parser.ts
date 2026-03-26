@@ -1,7 +1,7 @@
 import { CardType, GameTag } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventProvider, GameEventHelper } from '../game-event';
-import { Action, Node, TagChange } from '../models';
+import { Action, Node, NodeType, TagChange } from '../models';
 import { GameState } from '../state/game-state';
 import { Logger } from '../logger';
 import { ParserState, StateType } from '../state/parser-state';
@@ -23,7 +23,7 @@ export class AttackParser implements ActionParser {
 	AppliesOnNewNode(node: Node, stateType: StateType): boolean {
 		return (
 			stateType === StateType.PowerTaskList &&
-			node.Type === TagChange &&
+			node.Type === NodeType.TagChange &&
 			(node.Object as TagChange).Name === (GameTag.DEFENDING as number) &&
 			(node.Object as TagChange).Value === 1
 		);

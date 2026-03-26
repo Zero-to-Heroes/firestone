@@ -2,7 +2,7 @@ import { CardIds, CardType, GameTag, Zone } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventProvider, GameEventHelper } from '../game-event';
 import { ShowEntity } from '../models/action';
-import { FullEntity, Node, PlayerEntity, TagChange } from '../models';
+import { FullEntity, Node, NodeType, PlayerEntity, TagChange } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -22,7 +22,7 @@ export class SecretCreatedInGameParser implements ActionParser {
 	AppliesOnNewNode(node: Node, stateType: StateType): boolean {
 		return (
 			stateType === StateType.PowerTaskList &&
-			node.Type === TagChange &&
+			node.Type === NodeType.TagChange &&
 			(node.Object as TagChange).Value === (Zone.SECRET as number) &&
 			(node.Object as TagChange).Name === (GameTag.ZONE as number) &&
 			(this.GameState.CurrentEntities.get((node.Object as TagChange).Entity)?.GetTag(GameTag.ZONE) ===
@@ -35,11 +35,11 @@ export class SecretCreatedInGameParser implements ActionParser {
 	AppliesOnCloseNode(node: Node, stateType: StateType): boolean {
 		const appliesFullEntity =
 			stateType === StateType.PowerTaskList &&
-			node.Type === FullEntity &&
+			node.Type === NodeType.FullEntity &&
 			(node.Object as FullEntity).GetTag(GameTag.ZONE) === (Zone.SECRET as number);
 		const appliesShowEntity =
 			stateType === StateType.PowerTaskList &&
-			node.Type === ShowEntity &&
+			node.Type === NodeType.ShowEntity &&
 			(node.Object as ShowEntity).GetTag(GameTag.ZONE) === (Zone.SECRET as number) &&
 			(this.GameState.CurrentEntities.get((node.Object as ShowEntity).Entity)?.GetTag(GameTag.ZONE) ===
 				(Zone.REMOVEDFROMGAME as number) ||

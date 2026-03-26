@@ -1,7 +1,7 @@
 import { CardType, GameTag, Zone } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventHelper, GameEventProvider } from '../game-event';
-import { FullEntity, Node, TagChange } from '../models';
+import { FullEntity, Node, NodeType, TagChange } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -22,7 +22,7 @@ export class BattlegroundsQuestRewardEquippedParser implements ActionParser {
 	AppliesOnNewNode(node: Node, stateType: StateType): boolean {
 		return (
 			stateType === StateType.PowerTaskList &&
-			node.Type === TagChange &&
+			node.Type === NodeType.TagChange &&
 			(node.Object as TagChange).Name === (GameTag.ZONE as number) &&
 			(node.Object as TagChange).Value === (Zone.PLAY as number) &&
 			this.GameState.CurrentEntities.has((node.Object as TagChange).Entity) &&
@@ -35,7 +35,7 @@ export class BattlegroundsQuestRewardEquippedParser implements ActionParser {
 	AppliesOnCloseNode(node: Node, stateType: StateType): boolean {
 		return (
 			stateType === StateType.PowerTaskList &&
-			node.Type === FullEntity &&
+			node.Type === NodeType.FullEntity &&
 			(node.Object as FullEntity).GetTag(GameTag.ZONE) === (Zone.PLAY as number) &&
 			(node.Object as FullEntity).GetTag(GameTag.CARDTYPE) ===
 				(CardType.BATTLEGROUND_QUEST_REWARD as number)

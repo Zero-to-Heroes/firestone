@@ -1,6 +1,6 @@
 import { ActionParser } from '../action-parser';
 import { GameEventProvider } from '../game-event';
-import { Game, Node } from '../models';
+import { Game, Node, NodeType } from '../models';
 import { Logger } from '../logger';
 import { Utility } from '../utility';
 import { ParserState, StateType } from '../state/parser-state';
@@ -18,7 +18,7 @@ export class NewGameParser implements ActionParser {
 	}
 
 	AppliesOnNewNode(node: Node, stateType: StateType): boolean {
-		return stateType === StateType.GameState && node.Type === Game && !this.ParserState.ReconnectionOngoing;
+		return stateType === StateType.GameState && node.Type === NodeType.Game && !this.ParserState.ReconnectionOngoing;
 	}
 
 	AppliesOnCloseNode(_node: Node, _stateType: StateType): boolean {

@@ -1,7 +1,7 @@
 import { BlockType, CardIds, GameTag, Zone } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventHelper, GameEventProvider } from '../game-event';
-import { Action, FullEntity, Node, ShowEntity } from '../models';
+import { Action, FullEntity, Node, NodeType, ShowEntity } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -56,12 +56,12 @@ export class CreateCardInDeckParser implements ActionParser {
 
 	AppliesOnCloseNode(node: Node, stateType: StateType): boolean {
 		const appliesOnShowEntity =
-			node.Type === ShowEntity &&
+			node.Type === NodeType.ShowEntity &&
 			(node.Object as ShowEntity).GetTag(GameTag.ZONE) === (Zone.DECK as number);
 		const appliesOnFullEntity =
-			node.Type === FullEntity &&
+			node.Type === NodeType.FullEntity &&
 			(node.Object as FullEntity).GetTag(GameTag.ZONE) === (Zone.DECK as number) &&
-			node.Parent!.Type === Action;
+			node.Parent!.Type === NodeType.Action;
 		return stateType === StateType.PowerTaskList && (appliesOnShowEntity || appliesOnFullEntity);
 	}
 
@@ -70,9 +70,9 @@ export class CreateCardInDeckParser implements ActionParser {
 	}
 
 	CreateGameEventProviderFromClose(node: Node): GameEventProvider[] | null {
-		if (node.Type === ShowEntity) {
+		if (node.Type === NodeType.ShowEntity) {
 			return this.createFromShowEntity(node);
-		} else if (node.Type === FullEntity) {
+		} else if (node.Type === NodeType.FullEntity) {
 			return this.createFromFullEntity(node);
 		}
 		return null;

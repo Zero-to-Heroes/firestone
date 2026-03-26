@@ -1,6 +1,6 @@
 import { ChoiceType } from '@firestone-hs/reference-data';
 import type { Helper } from '../helper';
-import { Action, Choice, Choices, Game, Node } from '../models';
+import { Action, Choice, Choices, Game, Node, NodeType } from '../models';
 import { Regexes } from '../regexes';
 import type { ParserState } from '../state/parser-state';
 
@@ -14,7 +14,7 @@ export class ChoicesHandler {
 
 		let match = Regexes.ChoicesChoiceRegex.exec(data);
 		if (match) {
-			state.UpdateCurrentNode(Game, Action);
+			state.UpdateCurrentNode(NodeType.Game, NodeType.Action);
 			const rawId = match[1];
 			const parsedId = parseInt(data, 10);
 			const id = isNaN(parsedId) ? 0 : parsedId;
@@ -38,9 +38,9 @@ export class ChoicesHandler {
 			choices.TimeStamp = timestamp;
 			state.Choices = choices;
 
-			if (state.Node.Type === Game) {
+			if (state.Node.Type === NodeType.Game) {
 				(state.Node.Object as Game).AddData(state.Choices);
-			} else if (state.Node.Type === Action) {
+			} else if (state.Node.Type === NodeType.Action) {
 				(state.Node.Object as Action).Data.push(state.Choices);
 			} else {
 				throw new Error('Invalid node ' + state.Node.Type + ' -- ' + data);
@@ -69,7 +69,7 @@ export class ChoicesHandler {
 
 		match = Regexes.ChoicesWaitingForInput.exec(data);
 		if (match) {
-			state.CreateNewNode(new Node(Choices, state.Choices, 0, null, data));
+			state.CreateNewNode(new Node(NodeType.Choices, state.Choices, 0, null, data));
 		}
 	}
 }

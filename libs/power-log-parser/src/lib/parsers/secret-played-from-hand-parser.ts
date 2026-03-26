@@ -1,7 +1,7 @@
 import { BlockType, CardIds, CardType, GameTag, Zone } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventHelper, GameEventProvider } from '../game-event';
-import { Action, Node, ShowEntity, TagChange } from '../models';
+import { Action, Node, NodeType, ShowEntity, TagChange } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -22,7 +22,7 @@ export class SecretPlayedFromHandParser implements ActionParser {
 	AppliesOnNewNode(node: Node, stateType: StateType): boolean {
 		return (
 			stateType === StateType.PowerTaskList &&
-			node.Type === TagChange &&
+			node.Type === NodeType.TagChange &&
 			(node.Object as TagChange).Name === (GameTag.ZONE as number) &&
 			(node.Object as TagChange).Value === (Zone.SECRET as number) &&
 			this.GameState.CurrentEntities.get((node.Object as TagChange).Entity)?.GetTag(GameTag.ZONE) ===
@@ -33,7 +33,7 @@ export class SecretPlayedFromHandParser implements ActionParser {
 	AppliesOnCloseNode(node: Node, stateType: StateType): boolean {
 		return (
 			stateType === StateType.PowerTaskList &&
-			node.Type === Action &&
+			node.Type === NodeType.Action &&
 			(node.Object as Action).Type === (BlockType.PLAY as number)
 		);
 	}
@@ -47,7 +47,7 @@ export class SecretPlayedFromHandParser implements ActionParser {
 			let eventName = 'QUEST_PLAYED';
 			if (this.GameState.CurrentEntities.get(tagChange.Entity)!.GetTag(GameTag.SECRET) === 1) {
 				eventName = 'SECRET_PLAYED';
-			} else if (node.Parent != null && node.Parent.Type === Action) {
+			} else if (node.Parent != null && node.Parent.Type === NodeType.Action) {
 				const parentAction = node.Parent.Object as Action;
 				if (
 					(parentAction.Type === (BlockType.TRIGGER as number) ||

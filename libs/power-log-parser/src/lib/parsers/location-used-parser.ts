@@ -1,7 +1,7 @@
 import { BlockType, CardType, GameTag } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventHelper, GameEventProvider } from '../game-event';
-import { Action, Node, TagChange } from '../models';
+import { Action, Node, NodeType, TagChange } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -25,7 +25,7 @@ export class LocationUsedParser implements ActionParser {
 		let action: Action | null = null;
 		return (
 			stateType === StateType.PowerTaskList &&
-			node.Type === Action &&
+			node.Type === NodeType.Action &&
 			(action = node.Object as Action).Type === (BlockType.POWER as number) &&
 			this.GameState.CurrentEntities.get(action.Entity)?.GetCardType() === (CardType.LOCATION as number)
 		);

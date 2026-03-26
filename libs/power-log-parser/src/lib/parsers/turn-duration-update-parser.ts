@@ -1,7 +1,7 @@
 import { GameTag } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventHelper, GameEventProvider } from '../game-event';
-import { Node, TagChange } from '../models';
+import { Node, NodeType, TagChange } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -21,7 +21,7 @@ export class TurnDurationUpdateParser implements ActionParser {
 
 	AppliesOnNewNode(node: Node, _stateType: StateType): boolean {
 		return (
-			node.Type === TagChange &&
+			node.Type === NodeType.TagChange &&
 			!this.ParserState.IsBattlegrounds() &&
 			(node.Object as TagChange).Name === (GameTag.TIMEOUT as number)
 		);

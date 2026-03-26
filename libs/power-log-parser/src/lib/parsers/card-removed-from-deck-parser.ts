@@ -1,7 +1,7 @@
 import { GameTag, MetaTags, Zone } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventHelper, GameEventProvider } from '../game-event';
-import { Action, FullEntity, MetaData, Node, ShowEntity, TagChange } from '../models';
+import { Action, FullEntity, MetaData, Node, NodeType, ShowEntity, TagChange } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -23,7 +23,7 @@ export class CardRemovedFromDeckParser implements ActionParser {
 		let tagChange: TagChange | null = null;
 		return (
 			stateType === StateType.PowerTaskList &&
-			node.Type === TagChange &&
+			node.Type === NodeType.TagChange &&
 			(tagChange = node.Object as TagChange).Name === (GameTag.ZONE as number) &&
 			(tagChange.Value === (Zone.SETASIDE as number) ||
 				tagChange.Value === (Zone.GRAVEYARD as number)) &&
@@ -34,14 +34,14 @@ export class CardRemovedFromDeckParser implements ActionParser {
 
 	AppliesOnCloseNode(node: Node, stateType: StateType): boolean {
 		const appliesToShowEntity =
-			node.Type === ShowEntity &&
+			node.Type === NodeType.ShowEntity &&
 			((node.Object as ShowEntity).GetTag(GameTag.ZONE) === (Zone.SETASIDE as number) ||
 				(node.Object as ShowEntity).GetTag(GameTag.ZONE) === (Zone.GRAVEYARD as number)) &&
 			this.GameState.CurrentEntities.has((node.Object as ShowEntity).Entity) &&
 			this.GameState.CurrentEntities.get((node.Object as ShowEntity).Entity)!.GetTag(GameTag.ZONE) ===
 				(Zone.DECK as number);
 		const appliesToFullEntity =
-			node.Type === FullEntity &&
+			node.Type === NodeType.FullEntity &&
 			((node.Object as FullEntity).GetTag(GameTag.ZONE) === (Zone.SETASIDE as number) ||
 				(node.Object as FullEntity).GetTag(GameTag.ZONE) === (Zone.GRAVEYARD as number)) &&
 			this.GameState.CurrentEntities.has((node.Object as FullEntity).Id) &&
@@ -71,7 +71,7 @@ export class CardRemovedFromDeckParser implements ActionParser {
 
 		let removedByCardId: string | null = null;
 		let removedByEntityId: number | null = null;
-		if (node.Parent!.Type === Action) {
+		if (node.Parent!.Type === NodeType.Action) {
 			const act = node.Parent!.Object as Action;
 			removedByCardId = this.GameState.CurrentEntities.get(act.Entity)?.CardId ?? null;
 			removedByEntityId = act.Entity;
@@ -99,9 +99,9 @@ export class CardRemovedFromDeckParser implements ActionParser {
 	}
 
 	CreateGameEventProviderFromClose(node: Node): GameEventProvider[] | null {
-		if (node.Type === ShowEntity) {
+		if (node.Type === NodeType.ShowEntity) {
 			return this.createEventFromShowEntity(node, node.Object as ShowEntity);
-		} else if (node.Type === FullEntity) {
+		} else if (node.Type === NodeType.FullEntity) {
 			return this.createEventFromFullEntity(node, node.Object as FullEntity);
 		}
 		return null;
@@ -110,7 +110,7 @@ export class CardRemovedFromDeckParser implements ActionParser {
 	private createEventFromShowEntity(node: Node, showEntity: ShowEntity): GameEventProvider[] | null {
 		let removedByCardId: string | null = null;
 		let removedByEntityId: number | null = null;
-		if (node.Parent!.Type === Action) {
+		if (node.Parent!.Type === NodeType.Action) {
 			const act = node.Parent!.Object as Action;
 			const cardBurned = act.Data.filter((data) => data.constructor === MetaData)
 				.map((data) => data as unknown as MetaData)
@@ -155,7 +155,7 @@ export class CardRemovedFromDeckParser implements ActionParser {
 	}
 
 	private createEventFromFullEntity(node: Node, fullEntity: FullEntity): GameEventProvider[] | null {
-		if (node.Parent!.Type === Action) {
+		if (node.Parent!.Type === NodeType.Action) {
 			const act = node.Parent!.Object as Action;
 			const cardBurned = act.Data.filter((data) => data.constructor === MetaData)
 				.map((data) => data as unknown as MetaData)

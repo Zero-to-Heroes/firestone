@@ -3,7 +3,7 @@ import type { Helper } from '../helper';
 import { innkeeperNames, bobTavernNames } from '../helper';
 import { GameEventProvider } from '../game-event';
 import { Logger } from '../logger';
-import { Action, FullEntity, Game, Node, PlayerEntity, Tag, TagChange } from '../models';
+import { Action, FullEntity, Game, Node, NodeType, PlayerEntity, Tag, TagChange } from '../models';
 import { Regexes } from '../regexes';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -63,7 +63,7 @@ export class TagChangeHandler {
 								Type: 'RECONNECT_OVER',
 							}),
 							false,
-							new Node(null as any, null, 0, null, data),
+							new Node(NodeType.Placeholder, null, 0, null, data),
 						),
 					]);
 				}
@@ -75,7 +75,7 @@ export class TagChangeHandler {
 			}
 
 			if (
-				state.Node?.Type === FullEntity &&
+				state.Node?.Type === NodeType.FullEntity &&
 				(state.Node.Object as FullEntity).Id === entity
 			) {
 				state.Node = state.Node.Parent ?? state.Node;
@@ -89,12 +89,12 @@ export class TagChangeHandler {
 			tagChange.DefChange = defChange ?? '';
 			tagChange.SubSpellInEffect = state.CurrentSubSpell?.GetActiveSubSpell() ?? null;
 
-			state.UpdateCurrentNode(Game, Action);
-			state.CreateNewNode(new Node(TagChange, tagChange, indentLevel, state.Node, data));
+			state.UpdateCurrentNode(NodeType.Game, NodeType.Action);
+			state.CreateNewNode(new Node(NodeType.TagChange, tagChange, indentLevel, state.Node, data));
 
-			if (state.Node!.Type === Game) {
+			if (state.Node!.Type === NodeType.Game) {
 				(state.Node!.Object as Game).AddData(tagChange);
-			} else if (state.Node!.Type === Action) {
+			} else if (state.Node!.Type === NodeType.Action) {
 				(state.Node!.Object as Action).Data.push(tagChange);
 			} else {
 				throw new Error('Invalid node ' + state.Node!.Type);
@@ -106,10 +106,10 @@ export class TagChangeHandler {
 				tagChange.Name === (GameTag.NUM_OPTIONS_PLAYED_THIS_TURN as number) &&
 				tagChange.Value > 0
 			) {
-				if (state.Node!.Type !== Game) {
+				if (state.Node!.Type !== NodeType.Game) {
 					state.EndAction();
 				}
-				state.UpdateCurrentNode(Game);
+				state.UpdateCurrentNode(NodeType.Game);
 			}
 			return true;
 		}

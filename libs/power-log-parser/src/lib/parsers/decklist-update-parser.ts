@@ -1,7 +1,7 @@
 import { CardType, GameTag, Zone } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventProvider, GameEventHelper } from '../game-event';
-import { Action, FullEntity, Node } from '../models';
+import { Action, FullEntity, Node, NodeType } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -73,7 +73,7 @@ export class DecklistUpdateParser implements ActionParser {
 	}
 
 	private isDecklistUpdateAction(node: Node): boolean {
-		if (node.Type !== Action) {
+		if (node.Type !== NodeType.Action) {
 			return false;
 		}
 		const action = node.Object as Action;

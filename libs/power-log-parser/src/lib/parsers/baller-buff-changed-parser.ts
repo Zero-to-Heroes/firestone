@@ -1,7 +1,7 @@
 import { CardIds, GameTag } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventHelper, GameEventProvider } from '../game-event';
-import { Node, TagChange } from '../models';
+import { Node, NodeType, TagChange } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -23,7 +23,7 @@ export class BallerBuffChangedParser implements ActionParser {
 		const tagChange = node.Object as TagChange;
 		return (
 			stateType === StateType.PowerTaskList &&
-			node.Type === TagChange &&
+			node.Type === NodeType.TagChange &&
 			this.GameState.CurrentEntities.get(tagChange?.Entity ?? -1)?.CardId ===
 				CardIds.BallerPlayerEnchantDntEnchantment_BG31_816pe &&
 			tagChange.Name === (GameTag.TAG_SCRIPT_DATA_NUM_1 as number)

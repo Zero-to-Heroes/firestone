@@ -1,7 +1,7 @@
 import { CardIds, GameTag } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventProvider } from '../game-event';
-import { Node, TagChange } from '../models';
+import { Node, NodeType, TagChange } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -23,7 +23,7 @@ export class BattlegroundsPlayerTechLevelUpdatedParser implements ActionParser {
 		return (
 			stateType === StateType.PowerTaskList &&
 			this.StateFacade.IsBattlegrounds() &&
-			node.Type === TagChange &&
+			node.Type === NodeType.TagChange &&
 			(node.Object as TagChange).Name === (GameTag.PLAYER_TECH_LEVEL as number)
 		);
 	}

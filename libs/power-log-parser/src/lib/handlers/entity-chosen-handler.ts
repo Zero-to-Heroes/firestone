@@ -1,5 +1,5 @@
 import type { Helper } from '../helper';
-import { Action, Choice, ChosenEntities, Game, Node } from '../models';
+import { Action, Choice, ChosenEntities, Game, Node, NodeType } from '../models';
 import { Regexes } from '../regexes';
 import type { ParserState } from '../state/parser-state';
 
@@ -24,9 +24,9 @@ export class EntityChosenHandler {
 			cEntities.Choices = [];
 			cEntities.TimeStamp = timestamp;
 
-			if (state.Node.Type === Game) {
+			if (state.Node.Type === NodeType.Game) {
 				(state.Node.Object as Game).AddData(cEntities);
-			} else if (state.Node.Type === Action) {
+			} else if (state.Node.Type === NodeType.Action) {
 				(state.Node.Object as Action).Data.push(cEntities);
 			} else {
 				throw new Error('Invalid node ' + state.Node.Type + ' -- ' + data);
@@ -44,8 +44,8 @@ export class EntityChosenHandler {
 			choice.Index = index;
 			choice.TimeStamp = timestamp;
 			state.CurrentChosenEntites?.Choices?.push(choice);
-			state.UpdateCurrentNode(Game, Action);
-			state.CreateNewNode(new Node(Choice, choice, 0, null, data));
+			state.UpdateCurrentNode(NodeType.Game, NodeType.Action);
+			state.CreateNewNode(new Node(NodeType.Choice, choice, 0, null, data));
 			return;
 		}
 		console.warn('Warning: Unhandled chosen entities: ' + data);

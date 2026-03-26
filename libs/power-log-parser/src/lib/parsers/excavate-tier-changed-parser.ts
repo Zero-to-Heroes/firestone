@@ -1,7 +1,7 @@
 import { GameTag } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventProvider, GameEventHelper } from '../game-event';
-import { Node, PlayerEntity, Tag, TagChange } from '../models';
+import { Node, NodeType, PlayerEntity, Tag, TagChange } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -20,13 +20,13 @@ export class ExcavateTierChangedParser implements ActionParser {
 	AppliesOnNewNode(node: Node, stateType: StateType): boolean {
 		return (
 			stateType === StateType.PowerTaskList &&
-			node.Type === TagChange &&
+			node.Type === NodeType.TagChange &&
 			(node.Object as TagChange).Name === (GameTag.CURRENT_EXCAVATE_TIER as number)
 		);
 	}
 
 	AppliesOnCloseNode(node: Node, stateType: StateType): boolean {
-		if (stateType !== StateType.PowerTaskList || node.Type !== PlayerEntity) {
+		if (stateType !== StateType.PowerTaskList || node.Type !== NodeType.PlayerEntity) {
 			return false;
 		}
 		const tags = (node.Object as PlayerEntity).Tags;

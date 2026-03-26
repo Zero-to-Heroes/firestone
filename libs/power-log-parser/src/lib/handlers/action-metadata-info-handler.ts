@@ -1,5 +1,5 @@
 import type { Helper } from '../helper';
-import { Info, MetaData, Node } from '../models';
+import { Info, MetaData, Node, NodeType } from '../models';
 import { Regexes } from '../regexes';
 import type { ParserState } from '../state/parser-state';
 
@@ -22,12 +22,12 @@ export class ActionMetadataInfoHandler {
 			metaInfo.Entity = entity;
 			metaInfo.TimeStamp = timestamp;
 
-			if (state.Node!.Type === MetaData) {
+			if (state.Node!.Type === NodeType.MetaData) {
 				(state.Node!.Object as MetaData).MetaInfo.push(metaInfo);
 			} else {
 				throw new Error('Invalid node ' + state.Node!.Type + ' while parsing ' + data);
 			}
-			state.CreateNewNode(new Node(Info, metaInfo, indentLevel, state.Node, data));
+			state.CreateNewNode(new Node(NodeType.Info, metaInfo, indentLevel, state.Node, data));
 			return true;
 		}
 		return false;

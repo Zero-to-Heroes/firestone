@@ -1,7 +1,7 @@
 import { CardIds, MetaTags } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventHelper, GameEventProvider } from '../game-event';
-import { Action, MetaData, Node } from '../models';
+import { Action, MetaData, Node, NodeType } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -26,7 +26,7 @@ export class SpecialTargetParser implements ActionParser {
 	AppliesOnCloseNode(node: Node, stateType: StateType): boolean {
 		return (
 			stateType === StateType.PowerTaskList &&
-			node.Type === MetaData &&
+			node.Type === NodeType.MetaData &&
 			(node.Object as MetaData).Meta === (MetaTags.TARGET as number)
 		);
 	}
@@ -43,7 +43,7 @@ export class SpecialTargetParser implements ActionParser {
 		}
 
 		const parent = node.Parent;
-		if (parent?.Type !== Action) {
+		if (parent?.Type !== NodeType.Action) {
 			return null;
 		}
 

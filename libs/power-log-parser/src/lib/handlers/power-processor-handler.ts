@@ -1,5 +1,5 @@
 import { GameEventProvider } from '../game-event';
-import { Node } from '../models';
+import { Node, NodeType } from '../models';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
 
@@ -22,7 +22,7 @@ export class PowerProcessorHandler {
 						Type: 'RECONNECT_OVER',
 					}),
 					false,
-					new Node(null as any, null, 0, null, data),
+					new Node(NodeType.Placeholder, null, 0, null, data),
 				),
 			]);
 		}

@@ -1,7 +1,7 @@
 import { CardType, GameTag, Zone } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventProvider, GameEventHelper } from '../game-event';
-import { FullEntity, Node } from '../models';
+import { FullEntity, Node, NodeType } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -25,7 +25,7 @@ export class HeroRevealedParser implements ActionParser {
 		let fullEntity: FullEntity;
 		return (
 			stateType === StateType.PowerTaskList &&
-			node.Type === FullEntity &&
+			node.Type === NodeType.FullEntity &&
 			(fullEntity = node.Object as FullEntity).GetTag(GameTag.ZONE) === (Zone.PLAY as number) &&
 			fullEntity.GetCardType() === (CardType.HERO as number)
 		);

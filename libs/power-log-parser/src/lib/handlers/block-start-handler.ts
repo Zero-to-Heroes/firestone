@@ -1,6 +1,6 @@
 import { BlockType, GameTag } from '@firestone-hs/reference-data';
 import type { Helper } from '../helper';
-import { Action, Game, GameData, Node } from '../models';
+import { Action, Game, GameData, Node, NodeType } from '../models';
 import { Regexes } from '../regexes';
 import type { ParserState } from '../state/parser-state';
 
@@ -46,23 +46,23 @@ export class BlockStartHandler {
 			}
 
 			if (type === (BlockType.PLAY as number)) {
-				state.UpdateCurrentNode(Game);
-			} else if (type !== (BlockType.TRIGGER as number) && state.Node?.Type === Action) {
+				state.UpdateCurrentNode(NodeType.Game);
+			} else if (type !== (BlockType.TRIGGER as number) && state.Node?.Type === NodeType.Action) {
 				const parentAction = state.Node.Object as Action;
 				if (parentAction.Type === (BlockType.ATTACK as number)) {
-					state.UpdateCurrentNode(Game);
+					state.UpdateCurrentNode(NodeType.Game);
 				}
 			}
 
-			state.UpdateCurrentNode(Game, Action);
-			if (state.Node!.Type === Game) {
+			state.UpdateCurrentNode(NodeType.Game, NodeType.Action);
+			if (state.Node!.Type === NodeType.Game) {
 				(state.Node!.Object as Game).AddData(action);
-			} else if (state.Node!.Type === Action) {
+			} else if (state.Node!.Type === NodeType.Action) {
 				(state.Node!.Object as Action).Data.push(action);
 			} else {
 				throw new Error('Invalid node ' + state.Node!.Type);
 			}
-			const newNode = new Node(Action, action, indentLevel, state.Node, data);
+			const newNode = new Node(NodeType.Action, action, indentLevel, state.Node, data);
 			state.CreateNewNode(newNode);
 			state.Node = newNode;
 			return true;

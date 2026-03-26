@@ -11,6 +11,7 @@ import {
 	IEntityData,
 	MetaData,
 	Node,
+	NodeType,
 	Option,
 	Options,
 	Player,
@@ -70,28 +71,28 @@ export class ParserState {
 		if (value !== this._node) {
 			if (
 				this._node != null &&
-				(this._node.Type === FullEntity ||
-					this._node.Type === ShowEntity ||
-					this._node.Type === ChangeEntity)
+				(this._node.Type === NodeType.FullEntity ||
+					this._node.Type === NodeType.ShowEntity ||
+					this._node.Type === NodeType.ChangeEntity)
 			) {
 				this.EndAction();
-				if (this._node.Type === ShowEntity) {
+				if (this._node.Type === NodeType.ShowEntity) {
 					this.GameState.ShowEntity(this._node.Object as ShowEntity);
-				} else if (this._node.Type === FullEntity) {
+				} else if (this._node.Type === NodeType.FullEntity) {
 					this.GameState.FullEntity(this._node.Object as FullEntity, false);
-				} else if (this._node.Type === ChangeEntity) {
+				} else if (this._node.Type === NodeType.ChangeEntity) {
 					this.GameState.ChangeEntity(this._node.Object as ChangeEntity);
 				}
 			}
-			if (this._node != null && this._node.Type === PlayerEntity) {
+			if (this._node != null && this._node.Type === NodeType.PlayerEntity) {
 				this.NodeParser.CloseNode(this._node, this.StateType);
 				this.GameState.PlayerEntity(this._node.Object as PlayerEntity);
 			}
-			if (this._node != null && this._node.Type === GameEntity) {
+			if (this._node != null && this._node.Type === NodeType.GameEntity) {
 				this.NodeParser.CloseNode(this._node, this.StateType);
 				this.GameState.GameEntity(this._node.Object as GameEntity);
 			}
-			if (this._node != null && this._node.Type === MetaData) {
+			if (this._node != null && this._node.Type === NodeType.MetaData) {
 				this.EndAction();
 			}
 			this._node = value;
@@ -132,12 +133,12 @@ export class ParserState {
 						Type: 'LOCAL_PLAYER',
 						Value: localPlayer,
 					}),
-					false,
-					new Node(Object, null, 0, null, data),
-				),
-			]);
-		}
+				false,
+				new Node(NodeType.Placeholder, null, 0, null, data),
+			),
+		]);
 	}
+}
 
 	SetOpponentPlayer(value: Player, timestamp: string, data: string, sendEvent: boolean): void {
 		this._opponentPlayer = value;
@@ -159,7 +160,7 @@ export class ParserState {
 						},
 					}),
 					false,
-					new Node(Object, null, 0, null, data),
+					new Node(NodeType.Placeholder, null, 0, null, data),
 				),
 			]);
 		}
@@ -214,7 +215,7 @@ export class ParserState {
 	}
 
 	EndAction(): void {
-		if (this.Node!.Type !== Game) {
+		if (this.Node!.Type !== NodeType.Game) {
 			this.NodeParser.CloseNode(this.Node!, this.StateType);
 		}
 	}
@@ -224,7 +225,7 @@ export class ParserState {
 		Logger.Log(`Game Ended in type=${this.StateType}`, `Ended=${this.Ended}`);
 	}
 
-	UpdateCurrentNode(...types: Function[]): void {
+	UpdateCurrentNode(...types: NodeType[]): void {
 		while (this.Node?.Parent != null && types.every((x) => x !== this.Node!.Type)) {
 			this.Node = this.Node.Parent;
 		}

@@ -1,7 +1,7 @@
 import { GameTag, Step, Zone } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventProvider } from '../game-event';
-import { FullEntity, GameEntity, Node, TagChange } from '../models';
+import { FullEntity, GameEntity, Node, NodeType, TagChange } from '../models';
 import { Logger } from '../logger';
 import { Utility } from '../utility';
 import { GameState } from '../state/game-state';
@@ -32,12 +32,12 @@ export class TurnStartParser implements ActionParser {
 	AppliesOnNewNode(node: Node, stateType: StateType): boolean {
 		const isNormalTurnChange =
 			!this.ParserState.IsMercenaries() &&
-			node.Type === TagChange &&
+			node.Type === NodeType.TagChange &&
 			(node.Object as TagChange).Name === (GameTag.TURN as number) &&
 			this.GameState.GetGameEntity()?.Entity === (node.Object as TagChange).Entity;
 		const isMercenariesTurnChange =
 			this.ParserState.IsMercenaries() &&
-			node.Type === TagChange &&
+			node.Type === NodeType.TagChange &&
 			(node.Object as TagChange).Name === (GameTag.STEP as number) &&
 			(node.Object as TagChange).Value === (Step.MAIN_PRE_ACTION as number) &&
 			this.GameState.GetGameEntity()?.Entity === (node.Object as TagChange).Entity &&
@@ -46,7 +46,7 @@ export class TurnStartParser implements ActionParser {
 	}
 
 	AppliesOnCloseNode(node: Node, stateType: StateType): boolean {
-		const isGameNode = node.Type === GameEntity;
+		const isGameNode = node.Type === NodeType.GameEntity;
 		return (
 			stateType === StateType.PowerTaskList &&
 			(this.ParserState.ReconnectionOngoing || this.StateFacade.Spectating) &&

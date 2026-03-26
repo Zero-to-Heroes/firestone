@@ -1,4 +1,4 @@
-import { Game, Node, PlayerEntity, Tag } from '../models';
+import { Game, Node, NodeType, PlayerEntity, Tag } from '../models';
 import { Regexes } from '../regexes';
 import type { ParserState } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -25,10 +25,10 @@ export class CreatePlayerHandler {
 			pEntity.LegendRank = gsPlayer?.LegendRank ?? '';
 			pEntity.Rank = gsPlayer?.Rank ?? '';
 
-			state.UpdateCurrentNode(Game);
+			state.UpdateCurrentNode(NodeType.Game);
 			state.CurrentGame.AddData(pEntity);
 
-			const newNode = new Node(PlayerEntity, pEntity, indentLevel, state.Node, data);
+			const newNode = new Node(NodeType.PlayerEntity, pEntity, indentLevel, state.Node, data);
 			state.CreateNewNode(newNode);
 			state.Node = newNode;
 			return true;

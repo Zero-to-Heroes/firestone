@@ -2,7 +2,7 @@ import { CardIds, CardType, GameTag, Step, Zone } from '@firestone-hs/reference-
 import { ActionParser } from '../action-parser';
 import { GameEventProvider } from '../game-event';
 import { Logger } from '../logger';
-import { FullEntity, Node, Player } from '../models';
+import { FullEntity, Node, NodeType, Player } from '../models';
 import { TagChange } from '../models/tag';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
@@ -38,7 +38,7 @@ export class BattlegroundsActivePlayerBoardParser implements ActionParser {
 	IsApplyOnNewNode(node: Node): boolean {
 		return (
 			this.StateFacade.IsBattlegroundsDuos() &&
-			node.Type === TagChange &&
+			node.Type === NodeType.TagChange &&
 			(node.Object as TagChange).Name === (GameTag.STEP as number) &&
 			(node.Object as TagChange).Value === (Step.MAIN_END as number) &&
 			(this.GameState.GetGameEntity()?.GetTag(GameTag.BOARD_VISUAL_STATE) ?? 0) < 2

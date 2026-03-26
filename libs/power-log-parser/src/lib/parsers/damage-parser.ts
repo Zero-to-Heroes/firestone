@@ -1,7 +1,7 @@
 import { BlockType, GameTag, Zone } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEvent, GameEventProvider } from '../game-event';
-import { Action, MetaData, Node, TagChange } from '../models';
+import { Action, MetaData, Node, NodeType, TagChange } from '../models';
 import { MetaDataType } from '../enums';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
@@ -34,16 +34,16 @@ export class DamageParser implements ActionParser {
 	AppliesOnNewNode(node: Node, stateType: StateType): boolean {
 		return (
 			stateType === StateType.PowerTaskList &&
-			node.Type === TagChange &&
+			node.Type === NodeType.TagChange &&
 			(node.Object as TagChange).Name === (GameTag.DAMAGE as number) &&
-			node.Parent?.Type !== Action
+			node.Parent?.Type !== NodeType.Action
 		);
 	}
 
 	AppliesOnCloseNode(node: Node, stateType: StateType): boolean {
 		return (
 			stateType === StateType.PowerTaskList &&
-			node.Type === Action &&
+			node.Type === NodeType.Action &&
 			this.hasDamageTag(node.Object as Action)
 		);
 	}

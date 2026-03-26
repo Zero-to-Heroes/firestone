@@ -1,5 +1,5 @@
 import type { Helper } from '../helper';
-import { Action, Game, HideEntity, Node } from '../models';
+import { Action, Game, HideEntity, Node, NodeType } from '../models';
 import { Regexes } from '../regexes';
 import type { ParserState } from '../state/parser-state';
 
@@ -24,17 +24,17 @@ export class HideEntityHandler {
 			hideEntity.Zone = zone.Value;
 			hideEntity.TimeStamp = timestamp;
 
-			state.UpdateCurrentNode(Game, Action);
+			state.UpdateCurrentNode(NodeType.Game, NodeType.Action);
 
-			if (state.Node!.Type === Game) {
+			if (state.Node!.Type === NodeType.Game) {
 				(state.Node!.Object as Game).AddData(hideEntity);
-			} else if (state.Node!.Type === Action) {
+			} else if (state.Node!.Type === NodeType.Action) {
 				(state.Node!.Object as Action).Data.push(hideEntity);
 			} else {
 				throw new Error('Invalid node: ' + state.Node!.Type);
 			}
 
-			const newNode = new Node(HideEntity, hideEntity, indentLevel, state.Node, data);
+			const newNode = new Node(NodeType.HideEntity, hideEntity, indentLevel, state.Node, data);
 			state.CreateNewNode(newNode);
 			state.Node = newNode;
 			return true;

@@ -1,7 +1,7 @@
 import { BlockType, CardIds, GameTag } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventHelper, GameEventProvider } from '../game-event';
-import { Action, Node, TagChange } from '../models';
+import { Action, Node, NodeType, TagChange } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -32,7 +32,7 @@ export class BattlegroundsMinionsBoughtParser implements ActionParser {
 		return (
 			stateType === StateType.PowerTaskList &&
 			this.StateFacade.IsBattlegrounds() &&
-			node.Type === Action &&
+			node.Type === NodeType.Action &&
 			(node.Object as Action).Type === (BlockType.POWER as number) &&
 			this.GameState.CurrentEntities.has((node.Object as Action).Entity) &&
 			this.Cards.includes(this.GameState.CurrentEntities.get((node.Object as Action).Entity)!.CardId)

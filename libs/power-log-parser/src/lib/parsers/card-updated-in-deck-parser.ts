@@ -1,7 +1,7 @@
 import { BlockType, CardIds, GameTag, Zone } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventProvider, GameEventHelper } from '../game-event';
-import { Action, FullEntity, MetaData, Node, ShowEntity } from '../models';
+import { Action, FullEntity, MetaData, Node, NodeType, ShowEntity } from '../models';
 import { MetaDataType } from '../enums';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
@@ -31,13 +31,13 @@ export class CardUpdatedInDeckParser implements ActionParser {
 
 	AppliesOnCloseNode(node: Node, stateType: StateType): boolean {
 		const appliesOnShow =
-			node.Type === ShowEntity &&
+			node.Type === NodeType.ShowEntity &&
 			(node.Object as ShowEntity).GetTag(GameTag.ZONE) === (Zone.DECK as number) &&
 			this.GameState.CurrentEntities.has((node.Object as ShowEntity).Entity) &&
 			this.GameState.CurrentEntities.get((node.Object as ShowEntity).Entity)!.GetTag(GameTag.ZONE) ===
 				(Zone.DECK as number);
 		const appliesForAction =
-			node.Type === Action &&
+			node.Type === NodeType.Action &&
 			this.GameState.CurrentEntities.has((node.Object as Action).Entity) &&
 			SPECIAL_CASE_CARD_IDS.includes(
 				this.GameState.CurrentEntities.get((node.Object as Action).Entity)!.CardId,
@@ -50,9 +50,9 @@ export class CardUpdatedInDeckParser implements ActionParser {
 	}
 
 	CreateGameEventProviderFromClose(node: Node): GameEventProvider[] | null {
-		if (node.Type === ShowEntity) {
+		if (node.Type === NodeType.ShowEntity) {
 			return this.createFromShowEntity(node);
-		} else if (node.Type === Action) {
+		} else if (node.Type === NodeType.Action) {
 			return this.createFromAction(node);
 		}
 		return null;

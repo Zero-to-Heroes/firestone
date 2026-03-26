@@ -3,7 +3,7 @@ import { ParserGameTag } from '../enums';
 import { ActionParser } from '../action-parser';
 import { GameEventProvider, GameEventHelper } from '../game-event';
 import { ShowEntity } from '../models/action';
-import { Node, TagChange } from '../models';
+import { Node, NodeType, TagChange } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -22,7 +22,7 @@ export class SecretDestroyedParser implements ActionParser {
 	AppliesOnNewNode(node: Node, stateType: StateType): boolean {
 		return (
 			stateType === StateType.PowerTaskList &&
-			node.Type === TagChange &&
+			node.Type === NodeType.TagChange &&
 			(node.Object as TagChange).Name === (GameTag.ZONE as number) &&
 			((node.Object as TagChange).Value === (Zone.GRAVEYARD as number) ||
 				(node.Object as TagChange).Value === (Zone.REMOVEDFROMGAME as number) ||
@@ -34,7 +34,7 @@ export class SecretDestroyedParser implements ActionParser {
 
 	AppliesOnCloseNode(node: Node, stateType: StateType): boolean {
 		const appliesToShowEntity =
-			node.Type === ShowEntity &&
+			node.Type === NodeType.ShowEntity &&
 			((node.Object as ShowEntity).GetTag(GameTag.ZONE) === (Zone.GRAVEYARD as number) ||
 				(node.Object as ShowEntity).GetTag(GameTag.ZONE) === (Zone.REMOVEDFROMGAME as number)) &&
 			this.GameState.CurrentEntities.has((node.Object as ShowEntity).Entity) &&

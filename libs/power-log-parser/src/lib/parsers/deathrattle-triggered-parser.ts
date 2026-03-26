@@ -2,7 +2,7 @@ import { BlockType, CardType, GameTag, Zone } from '@firestone-hs/reference-data
 import { ActionParser } from '../action-parser';
 import { GameEventProvider, GameEventHelper } from '../game-event';
 import { Action, ShowEntity } from '../models/action';
-import { Node } from '../models';
+import { Node, NodeType } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -24,7 +24,7 @@ export class DeathrattleTriggeredParser implements ActionParser {
 		return (
 			stateType === StateType.PowerTaskList &&
 			!this.ParserState.IsBattlegrounds() &&
-			node.Type === Action &&
+			node.Type === NodeType.Action &&
 			(node.Object as Action).Type === (BlockType.TRIGGER as number) &&
 			(node.Object as Action).TriggerKeyword === (GameTag.DEATHRATTLE as number)
 		);

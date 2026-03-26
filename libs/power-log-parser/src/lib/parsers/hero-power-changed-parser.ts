@@ -1,7 +1,7 @@
 import { CardType, GameTag, Zone } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventProvider, GameEventHelper } from '../game-event';
-import { FullEntity, Node, ShowEntity } from '../models';
+import { FullEntity, Node, NodeType, ShowEntity } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -26,12 +26,12 @@ export class HeroPowerChangedParser implements ActionParser {
 	AppliesOnCloseNode(node: Node, stateType: StateType): boolean {
 		const appliesOnFullEntity =
 			stateType === StateType.PowerTaskList &&
-			node.Type === FullEntity &&
+			node.Type === NodeType.FullEntity &&
 			(node.Object as FullEntity).GetTag(GameTag.ZONE) === (Zone.PLAY as number) &&
 			(node.Object as FullEntity).GetTag(GameTag.CARDTYPE) === (CardType.HERO_POWER as number);
 		const appliesOnShowEntity =
 			stateType === StateType.PowerTaskList &&
-			node.Type === ShowEntity &&
+			node.Type === NodeType.ShowEntity &&
 			(node.Object as ShowEntity).GetTag(GameTag.ZONE) === (Zone.PLAY as number) &&
 			(node.Object as ShowEntity).GetTag(GameTag.CARDTYPE) === (CardType.HERO_POWER as number);
 		return appliesOnFullEntity || appliesOnShowEntity;

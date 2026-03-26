@@ -1,7 +1,7 @@
 import { GameTag, Zone } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventProvider, GameEventHelper } from '../game-event';
-import { FullEntity, Node } from '../models';
+import { FullEntity, Node, NodeType } from '../models';
 import { GameAction } from '../models/game-action';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
@@ -26,9 +26,9 @@ export class InitialCardInDeckParser implements ActionParser {
 		// C# checks typeof(GameAction) — an abstract class — so this never matches
 		// (the parent of initial deck FullEntities is typeof(Game), not typeof(GameAction))
 		const appliesOnFullEntity =
-			node.Type === FullEntity &&
+			node.Type === NodeType.FullEntity &&
 			(node.Object as FullEntity).GetTag(GameTag.ZONE) === (Zone.DECK as number) &&
-			node.Parent?.Type === GameAction;
+			node.Parent?.Type === NodeType.GameAction;
 		return stateType === StateType.PowerTaskList && appliesOnFullEntity;
 	}
 

@@ -1,6 +1,6 @@
 import { ActionParser } from '../action-parser';
 import { GameEventProvider } from '../game-event';
-import { FullEntity, Node } from '../models';
+import { FullEntity, Node, NodeType } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -23,7 +23,7 @@ export class FullEntityParser implements ActionParser {
 	}
 
 	AppliesOnCloseNode(node: Node, stateType: StateType): boolean {
-		return stateType === StateType.PowerTaskList && node.Type === FullEntity;
+		return stateType === StateType.PowerTaskList && node.Type === NodeType.FullEntity;
 	}
 
 	CreateGameEventProviderFromNew(_node: Node): GameEventProvider[] | null {

@@ -1,7 +1,7 @@
 import { GameFormat, GameType } from '@firestone-hs/reference-data';
 import type { Helper } from '../helper';
 import { GameEventProvider, GameEvent } from '../game-event';
-import { Node } from '../models';
+import { Node, NodeType } from '../models';
 import { Regexes } from '../regexes';
 import type { ParserState, StateType } from '../state/parser-state';
 import { StateType as ST } from '../state/parser-state';
@@ -71,7 +71,7 @@ export class MetaDataHandler {
 								};
 							},
 							false,
-							new Node(null as any, null, 0, null, data),
+							new Node(NodeType.Placeholder, null, 0, null, data),
 						),
 					]);
 				}

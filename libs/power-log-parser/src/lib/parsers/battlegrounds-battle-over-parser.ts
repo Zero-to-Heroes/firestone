@@ -1,7 +1,7 @@
 import { BlockType, CardIds, CardType, GameTag, PlayState, Zone } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventProvider } from '../game-event';
-import { Action, FullEntity, Node, TagChange } from '../models';
+import { Action, FullEntity, Node, NodeType, TagChange } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -24,7 +24,7 @@ export class BattlegroundsBattleOverParser implements ActionParser {
 			stateType === StateType.PowerTaskList &&
 			this.StateFacade.IsBattlegrounds() &&
 			!this.GameState.BattleResultSent &&
-			node.Type === TagChange &&
+			node.Type === NodeType.TagChange &&
 			(node.Object as TagChange).Name === (GameTag.BOARD_VISUAL_STATE as number) &&
 			(node.Object as TagChange).Value === 1
 		);
@@ -34,7 +34,7 @@ export class BattlegroundsBattleOverParser implements ActionParser {
 		return (
 			stateType === StateType.PowerTaskList &&
 			this.StateFacade.IsBattlegrounds() &&
-			node.Type === Action &&
+			node.Type === NodeType.Action &&
 			(node.Object as Action).Type === (BlockType.TRIGGER as number) &&
 			(node.Object as Action).EffectIndex === 14
 		);

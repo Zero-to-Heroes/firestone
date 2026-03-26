@@ -1,7 +1,7 @@
 import { BlockType, CardIds, GameTag, MetaTags, Zone } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventHelper, GameEventProvider } from '../game-event';
-import { Action, FullEntity, MetaData, Node, SubSpell, TagChange } from '../models';
+import { Action, FullEntity, MetaData, Node, NodeType, SubSpell, TagChange } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -258,13 +258,13 @@ export class CardBuffedInHandParser implements ActionParser {
 
 	AppliesOnCloseNode(node: Node, stateType: StateType): boolean {
 		const isCorrectMeta =
-			node.Type === MetaData &&
+			node.Type === NodeType.MetaData &&
 			((node.Object as MetaData).Meta === (MetaTags.TARGET as number) ||
 				(node.Object as MetaData).Meta === (MetaTags.HOLD_DRAWN_CARD as number));
 		return (
 			(stateType === StateType.PowerTaskList && isCorrectMeta) ||
-			(node.Type === SubSpell && node.Object != null) ||
-			(node.Type === Action &&
+			(node.Type === NodeType.SubSpell && node.Object != null) ||
+			(node.Type === NodeType.Action &&
 				(node.Object as Action).Type === (BlockType.TRIGGER as number) &&
 				(node.Object as Action).TriggerKeyword === (GameTag.TRIGGER_VISUAL as number) &&
 				this.GameState.CurrentEntities.has((node.Object as Action).Entity) &&
@@ -279,11 +279,11 @@ export class CardBuffedInHandParser implements ActionParser {
 	}
 
 	CreateGameEventProviderFromClose(node: Node): GameEventProvider[] | null {
-		if (node.Type === MetaData) {
+		if (node.Type === NodeType.MetaData) {
 			return this.createEventProviderForMeta(node);
-		} else if (node.Type === SubSpell) {
+		} else if (node.Type === NodeType.SubSpell) {
 			return this.createEventProviderForSubSpell(node);
-		} else if (node.Type === Action) {
+		} else if (node.Type === NodeType.Action) {
 			return this.createEventProviderForAction(node);
 		}
 		return null;
@@ -378,10 +378,10 @@ export class CardBuffedInHandParser implements ActionParser {
 
 	private createEventProviderForMeta(node: Node): GameEventProvider[] | null {
 		const isPower =
-			node.Parent?.Type === Action &&
+			node.Parent?.Type === NodeType.Action &&
 			(node.Parent.Object as Action).Type === (BlockType.POWER as number);
 		const isTrigger =
-			node.Parent?.Type === Action &&
+			node.Parent?.Type === NodeType.Action &&
 			(node.Parent.Object as Action).Type === (BlockType.TRIGGER as number);
 		if (!isPower && !isTrigger) {
 			return null;

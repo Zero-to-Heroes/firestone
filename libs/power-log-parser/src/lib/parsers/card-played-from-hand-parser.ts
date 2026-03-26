@@ -1,7 +1,7 @@
 import { BlockType, CardIds, CardType, GameTag, Zone } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventHelper, GameEventProvider } from '../game-event';
-import { Action, FullEntity, Node, ShowEntity, TagChange } from '../models';
+import { Action, FullEntity, Node, NodeType, ShowEntity, TagChange } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -25,16 +25,16 @@ export class CardPlayedFromHandParser implements ActionParser {
 		}
 		const isTriggerPhase =
 			node.Parent == null ||
-			node.Parent.Type !== Action ||
+			node.Parent.Type !== NodeType.Action ||
 			(node.Parent.Object as Action).Type === (BlockType.TRIGGER as number);
 		const isPowerPhase =
 			node.Parent == null ||
-			node.Parent.Type !== Action ||
+			node.Parent.Type !== NodeType.Action ||
 			(node.Parent.Object as Action).Type === (BlockType.POWER as number);
 
 		const sigilPlayed =
 			!isTriggerPhase &&
-			node.Type === TagChange &&
+			node.Type === NodeType.TagChange &&
 			(node.Object as TagChange).Name === (GameTag.ZONE as number) &&
 			(node.Object as TagChange).Value === (Zone.SECRET as number) &&
 			this.GameState.CurrentEntities.get((node.Object as TagChange).Entity)?.GetTag(GameTag.SIGIL) === 1 &&
@@ -44,7 +44,7 @@ export class CardPlayedFromHandParser implements ActionParser {
 		let tagChange: TagChange;
 		let tagChangeEntity: FullEntity | undefined;
 		const cardPlayed =
-			node.Type === TagChange &&
+			node.Type === NodeType.TagChange &&
 			(tagChange = node.Object as TagChange).Name === (GameTag.ZONE as number) &&
 			tagChange.Value === (Zone.PLAY as number) &&
 			(tagChangeEntity = this.GameState.CurrentEntities.get(tagChange.Entity))?.GetTag(GameTag.ZONE) ===
@@ -56,9 +56,9 @@ export class CardPlayedFromHandParser implements ActionParser {
 	AppliesOnCloseNode(node: Node, stateType: StateType): boolean {
 		return (
 			stateType === StateType.PowerTaskList &&
-			node.Type === ShowEntity &&
+			node.Type === NodeType.ShowEntity &&
 			node.Parent != null &&
-			node.Parent.Type === Action &&
+			node.Parent.Type === NodeType.Action &&
 			(node.Parent.Object as Action).Type === (BlockType.PLAY as number)
 		);
 	}
@@ -74,7 +74,7 @@ export class CardPlayedFromHandParser implements ActionParser {
 		) {
 			let targetId = -1;
 			let targetCardId: string | null = null;
-			if (node.Parent!.Type === Action) {
+			if (node.Parent!.Type === NodeType.Action) {
 				const action = node.Parent!.Object as Action;
 				targetId = action.Target;
 				targetCardId = targetId > 0 ? this.GameState.CurrentEntities.get(targetId)?.CardId ?? null : null;

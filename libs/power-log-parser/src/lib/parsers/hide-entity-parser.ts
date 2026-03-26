@@ -1,6 +1,6 @@
 import { ActionParser } from '../action-parser';
 import { GameEventProvider } from '../game-event';
-import { HideEntity, Node } from '../models';
+import { HideEntity, Node, NodeType } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -19,7 +19,7 @@ export class HideEntityParser implements ActionParser {
 	}
 
 	AppliesOnNewNode(node: Node, stateType: StateType): boolean {
-		return stateType === StateType.PowerTaskList && node.Type === HideEntity;
+		return stateType === StateType.PowerTaskList && node.Type === NodeType.HideEntity;
 	}
 
 	AppliesOnCloseNode(_node: Node, _stateType: StateType): boolean {

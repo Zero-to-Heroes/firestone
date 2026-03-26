@@ -1,6 +1,6 @@
 import { ChoiceType } from '@firestone-hs/reference-data';
 import type { Helper } from '../helper';
-import { Action, Choice, Game, SendChoices } from '../models';
+import { Action, Choice, Game, NodeType, SendChoices } from '../models';
 import { Regexes } from '../regexes';
 import type { ParserState } from '../state/parser-state';
 
@@ -23,9 +23,9 @@ export class SendChoicesHandler {
 			sendChoices.TimeStamp = timestamp;
 			state.SendChoices = sendChoices;
 
-			if (state.Node.Type === Game) {
+			if (state.Node.Type === NodeType.Game) {
 				(state.Node.Object as Game).AddData(state.SendChoices);
-			} else if (state.Node.Type === Action) {
+			} else if (state.Node.Type === NodeType.Action) {
 				(state.Node.Object as Action).Data.push(state.SendChoices);
 			} else {
 				throw new Error('Invalid node ' + state.Node.Type + ' -- ' + data);

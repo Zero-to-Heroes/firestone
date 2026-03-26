@@ -1,5 +1,5 @@
 import type { Helper } from '../helper';
-import { Action, FullEntity, Game, Node, Tag } from '../models';
+import { Action, FullEntity, Game, Node, NodeType, Tag } from '../models';
 import { Regexes } from '../regexes';
 import type { ParserState } from '../state/parser-state';
 
@@ -28,12 +28,12 @@ export class FullEntityHandler {
 			fullEntity.TimeStamp = timestamp;
 			fullEntity.SubSpellInEffect = state.CurrentSubSpell?.GetActiveSubSpell() ?? null;
 
-			state.UpdateCurrentNode(Game, Action);
+			state.UpdateCurrentNode(NodeType.Game, NodeType.Action);
 
-			const newNode = new Node(FullEntity, fullEntity, indentLevel, state.Node, data);
-			if (state.Node!.Type === Game) {
+			const newNode = new Node(NodeType.FullEntity, fullEntity, indentLevel, state.Node, data);
+			if (state.Node!.Type === NodeType.Game) {
 				(state.Node!.Object as Game).AddData(fullEntity);
-			} else if (state.Node!.Type === Action) {
+			} else if (state.Node!.Type === NodeType.Action) {
 				(state.Node!.Object as Action).Data.push(fullEntity);
 			} else {
 				throw new Error('Invalid node ' + state.Node!.Type);

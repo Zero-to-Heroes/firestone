@@ -1,7 +1,7 @@
 import { BlockType, CardIds, GameTag, Zone } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventProvider, GameEventHelper } from '../game-event';
-import { Action, Node, ShowEntity } from '../models';
+import { Action, Node, NodeType, ShowEntity } from '../models';
 import { GameState } from '../state/game-state';
 import { Logger } from '../logger';
 import { ParserState, StateType } from '../state/parser-state';
@@ -25,7 +25,7 @@ export class EntityUpdateParser implements ActionParser {
 	}
 
 	AppliesOnCloseNode(node: Node, stateType: StateType): boolean {
-		return stateType === StateType.PowerTaskList && node.Type === ShowEntity;
+		return stateType === StateType.PowerTaskList && node.Type === NodeType.ShowEntity;
 	}
 
 	CreateGameEventProviderFromNew(_node: Node): GameEventProvider[] | null {

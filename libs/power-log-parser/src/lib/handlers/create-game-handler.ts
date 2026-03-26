@@ -1,4 +1,4 @@
-import { GameEntity, Node, Tag } from '../models';
+import { GameEntity, Node, NodeType, Tag } from '../models';
 import { Regexes } from '../regexes';
 import type { ParserState } from '../state/parser-state';
 
@@ -12,7 +12,7 @@ export class CreateGameHandler {
 			gEntity.Tags = [];
 			gEntity.TimeStamp = timestamp;
 			state.CurrentGame.AddData(gEntity);
-			const newNode = new Node(GameEntity, gEntity, indentLevel, state.Node, data);
+			const newNode = new Node(NodeType.GameEntity, gEntity, indentLevel, state.Node, data);
 			state.CreateNewNode(newNode);
 			state.Node = newNode;
 			return true;

@@ -1,7 +1,7 @@
 import { CardIds, CardType } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventHelper, GameEventProvider } from '../game-event';
-import { Action, FullEntity, Node } from '../models';
+import { Action, FullEntity, Node, NodeType } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -27,7 +27,7 @@ export class BattlegroundsTrinketSelectionParser implements ActionParser {
 		return (
 			stateType === StateType.PowerTaskList &&
 			this.StateFacade.IsBattlegrounds() &&
-			node.Type === FullEntity &&
+			node.Type === NodeType.FullEntity &&
 			(node.Object as FullEntity).GetCardType() === (CardType.BATTLEGROUND_TRINKET as number)
 		);
 	}
@@ -37,7 +37,7 @@ export class BattlegroundsTrinketSelectionParser implements ActionParser {
 	}
 
 	CreateGameEventProviderFromClose(node: Node): GameEventProvider[] | null {
-		if (node.Parent == null || node.Parent.Type !== Action) {
+		if (node.Parent == null || node.Parent.Type !== NodeType.Action) {
 			return null;
 		}
 

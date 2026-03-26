@@ -3,7 +3,7 @@ import { Action, ShowEntity } from './models/action';
 import { FullEntity } from './models/entity';
 import { GameData } from './models/game-data';
 import { MetaData } from './models/meta';
-import { Node } from './models/node';
+import { Node, NodeType } from './models/node';
 import { Tag, TagChange } from './models/tag';
 import { SubSpell } from './models/sub-spell';
 import { Logger } from './logger';
@@ -124,7 +124,7 @@ export class Oracle {
 	}
 
 	static FindParentEntity(gameState: GameState, node: Node): [string, number] | null {
-		if (node.Parent?.Type === Action) {
+		if (node.Parent?.Type === NodeType.Action) {
 			const act = node.Parent.Object as Action;
 			if (gameState.CurrentEntities.has(act.Entity)) {
 				const creator = gameState.CurrentEntities.get(act.Entity);
@@ -188,7 +188,7 @@ export class Oracle {
 		}
 
 		let isFunkyDeathrattleEffect = false;
-		if (node.Parent != null && node.Parent.Type === Action) {
+		if (node.Parent != null && node.Parent.Type === NodeType.Action) {
 			const action = node.Parent.Object as Action;
 			if (
 				action.Type === (BlockType.TRIGGER as number) &&
@@ -643,7 +643,7 @@ export class Oracle {
 				case CardIds.PuppetTheatre_MIS_919:
 				case CardIds.Convert:
 				case CardIds.Convert_WON_342:
-					if (node.Parent?.Type === Action) {
+					if (node.Parent?.Type === NodeType.Action) {
 						const act = node.Parent.Object as Action;
 						const target = gameState.CurrentEntities.get(act.Target);
 						if (target) {
@@ -732,7 +732,7 @@ export class Oracle {
 					return DemonicProject.PredictCardId(gameState, createdEntityId ?? -1, creatorEntityId, node, stateFacade);
 
 				case CardIds.AugmentedElekk:
-					if (node.Parent?.Parent?.Type === Action) {
+					if (node.Parent?.Parent?.Type === NodeType.Action) {
 						const act = node.Parent.Parent.Object as Action;
 						for (let i = act.Data.length - 1; i >= 0; i--) {
 							if (act.Data[i] instanceof ShowEntity) {
@@ -747,7 +747,7 @@ export class Oracle {
 					return null;
 
 				case CardIds.ExpiredMerchant:
-					if (node.Parent?.Type === Action) {
+					if (node.Parent?.Type === NodeType.Action) {
 						const act = node.Parent.Object as Action;
 						const actionEntity = gameState.CurrentEntities.get(act.Entity);
 						return actionEntity?.CardIdsToCreate?.[0] ?? null;
@@ -755,7 +755,7 @@ export class Oracle {
 					return null;
 
 				case CardIds.FightOverMe:
-					if (node.Parent?.Type === Action) {
+					if (node.Parent?.Type === NodeType.Action) {
 						const act = node.Parent.Object as Action;
 						const actionEntity = gameState.CurrentEntities.get(act.Entity);
 						if (actionEntity) {
@@ -778,7 +778,7 @@ export class Oracle {
 					return null;
 
 				case CardIds.X21Repairbot:
-					if (node.Parent?.Type === Action) {
+					if (node.Parent?.Type === NodeType.Action) {
 						const act = node.Parent.Object as Action;
 						if (creatorEntity) {
 							if (creatorEntity.KnownEntityIds.length === 0) {
@@ -797,7 +797,7 @@ export class Oracle {
 					return null;
 
 				case CardIds.SpiritOfTheDead:
-					if (node.Parent?.Type === Action) {
+					if (node.Parent?.Type === NodeType.Action) {
 						const act = node.Parent.Object as Action;
 						for (const data of act.Data) {
 							if (data instanceof MetaData) {
@@ -815,7 +815,7 @@ export class Oracle {
 				case CardIds.AzeriteVein_WW_422:
 				case CardIds.FrozenClone_CORE_ICC_082:
 				case CardIds.FrozenClone_ICC_082:
-					if (node.Parent?.Type === Action && node.Parent.Parent?.Type === Action) {
+					if (node.Parent?.Type === NodeType.Action && node.Parent.Parent?.Type === NodeType.Action) {
 						const act = node.Parent.Parent.Object as Action;
 						const existingEntity = gameState.CurrentEntities.get(act.Entity);
 						return existingEntity?.CardId ?? null;
@@ -825,7 +825,7 @@ export class Oracle {
 				case CardIds.Duplicate:
 				case CardIds.CheatDeathCore:
 				case CardIds.CheatDeath:
-					if (node.Parent?.Type === Action) {
+					if (node.Parent?.Type === NodeType.Action) {
 						const act = node.Parent.Object as Action;
 						if (act.Type === (BlockType.TRIGGER as number)) {
 							const metaData = act.Data
@@ -843,7 +843,7 @@ export class Oracle {
 					return null;
 
 				case CardIds.PotionOfIllusion:
-					if (node.Parent?.Type === Action) {
+					if (node.Parent?.Type === NodeType.Action) {
 						const act = node.Parent.Object as Action;
 						const existingEntity = gameState.CurrentEntities.get(act.Entity);
 						if (!existingEntity) {
@@ -878,7 +878,7 @@ export class Oracle {
 				}
 
 				case CardIds.CactusConstruct_WW_818:
-					if (node.Parent?.Type === Action) {
+					if (node.Parent?.Type === NodeType.Action) {
 						const gsData = stateFacade?.GsState?.CurrentGame
 							?.FilterGameData(Action)
 							?.filter((d): d is Action => d instanceof Action);
@@ -899,7 +899,7 @@ export class Oracle {
 			}
 		}
 
-		if (node.Parent != null && node.Parent.Type === Action) {
+		if (node.Parent != null && node.Parent.Type === NodeType.Action) {
 			const action = node.Parent.Object as Action;
 
 			if (action.Type === (BlockType.TRIGGER as number)) {
@@ -908,7 +908,7 @@ export class Oracle {
 					: null;
 
 				if (actionEntity?.CardId === CardIds.SonyaWaterdancer_TOY_515) {
-					if (node.Parent.Parent?.Type === Action) {
+					if (node.Parent.Parent?.Type === NodeType.Action) {
 						const initialAction = node.Parent.Parent.Object as Action;
 						return gameState.CurrentEntities.get(initialAction.Entity)?.CardId ?? null;
 					}
@@ -945,7 +945,7 @@ export class Oracle {
 					actionEntity?.CardId ===
 					CardIds.TwistReality_ChaoticShuffleCopyEnchantment_TTN_002t21e
 				) {
-					const entity = node.Type === FullEntity ? (node.Object as FullEntity) : null;
+					const entity = node.Type === NodeType.FullEntity ? (node.Object as FullEntity) : null;
 					if (entity) {
 						const copiedEntityId = entity.SubSpellInEffect?.Source ?? 0;
 						const copiedEntity = gameState.CurrentEntities.get(copiedEntityId);
@@ -956,12 +956,12 @@ export class Oracle {
 						CardIds.ElixirOfVigor_ElixirOfVigorPlayerTavernBrawlEnchantment ||
 					actionEntity?.CardId === CardIds.ElixirOfVigor_ElixirOfVigorPlayerEnchantment
 				) {
-					const entity = node.Type === FullEntity ? (node.Object as FullEntity) : null;
+					const entity = node.Type === NodeType.FullEntity ? (node.Object as FullEntity) : null;
 					if (entity) {
 						let playActionNode: Node | null = node;
 						while (playActionNode != null) {
 							playActionNode = playActionNode.Parent;
-							if (!playActionNode || playActionNode.Type !== Action) {
+							if (!playActionNode || playActionNode.Type !== NodeType.Action) {
 								continue;
 							}
 							const playAction = playActionNode.Object as Action;
@@ -1037,7 +1037,7 @@ export class Oracle {
 
 				// Tamsin Roana
 				if (actionEntity != null && actionEntity.CardId === CardIds.TamsinRoame_BAR_918) {
-					if (node.Parent.Parent != null && node.Parent.Parent.Type === Action) {
+					if (node.Parent.Parent != null && node.Parent.Parent.Type === NodeType.Action) {
 						const playAction = node.Parent.Parent.Object as Action;
 						if (playAction.Type === (BlockType.PLAY as number)) {
 							const playedEntity = gameState.CurrentEntities.get(playAction.Entity);
@@ -1492,7 +1492,7 @@ export class Oracle {
 						: null;
 				} else if (
 					actionEntity.CardId === CardIds.ConquerorsBanner &&
-					node.Type === TagChange
+					node.Type === NodeType.TagChange
 				) {
 					const tagChange = node.Object as TagChange;
 					const nodeElement = action.Data
@@ -1551,7 +1551,7 @@ export class Oracle {
 
 		// Libram of Wisdom
 		if (
-			node.Type === FullEntity &&
+			node.Type === NodeType.FullEntity &&
 			(node.Object as FullEntity).SubSpellInEffect?.Prefab ===
 				'Librams_SpawnToHand_Book'
 		) {
@@ -1574,7 +1574,7 @@ export class Oracle {
 			return inputCardId;
 		}
 
-		if (node.Parent != null && node.Parent.Type === Action) {
+		if (node.Parent != null && node.Parent.Type === NodeType.Action) {
 			const action = node.Parent.Object as Action;
 			if (action.Type === (BlockType.POWER as number)) {
 				const actionEntity = gameState.CurrentEntities.get(action.Entity);
@@ -1710,7 +1710,7 @@ export class Oracle {
 		node: Node,
 		cardsList: string[],
 	): string | null {
-		if (node.Parent?.Type === Action) {
+		if (node.Parent?.Type === NodeType.Action) {
 			const act = node.Parent.Object as Action;
 			const existingEntity = gameState.CurrentEntities.get(act.Entity);
 			if (!existingEntity) {

@@ -2,7 +2,7 @@ import { CardType, GameTag } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEvent, GameEventProvider } from '../game-event';
 import { Action, ShowEntity } from '../models/action';
-import { Node, TagChange } from '../models';
+import { Node, NodeType, TagChange } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -22,7 +22,7 @@ export class CardStolenParser implements ActionParser {
 	AppliesOnNewNode(node: Node, stateType: StateType): boolean {
 		return (
 			stateType === StateType.PowerTaskList &&
-			node.Type === TagChange &&
+			node.Type === NodeType.TagChange &&
 			(node.Object as TagChange).Name === (GameTag.CONTROLLER as number) &&
 			!MindrenderIlluciaParser.IsProcessingMindrenderIlluciaEffect(node, this.GameState)
 		);
@@ -31,7 +31,7 @@ export class CardStolenParser implements ActionParser {
 	AppliesOnCloseNode(node: Node, stateType: StateType): boolean {
 		return (
 			stateType === StateType.PowerTaskList &&
-			node.Type === ShowEntity &&
+			node.Type === NodeType.ShowEntity &&
 			this.GameState.CurrentEntities.has((node.Object as ShowEntity).Entity) &&
 			this.GameState.CurrentEntities.get((node.Object as ShowEntity).Entity)!.GetEffectiveController() !==
 				(node.Object as ShowEntity).GetEffectiveController() &&
@@ -55,7 +55,7 @@ export class CardStolenParser implements ActionParser {
 			const zone = entity.GetZone();
 			let stolenByCardId: string | null = null;
 			let stolenByEntityId: number | null = null;
-			if (node.Parent?.Type === Action) {
+			if (node.Parent?.Type === NodeType.Action) {
 				const parentAction = node.Parent.Object as Action;
 				stolenByEntityId = parentAction.Entity;
 				stolenByCardId = this.GameState.CurrentEntities.get(parentAction.Entity)?.CardId ?? null;
@@ -110,7 +110,7 @@ export class CardStolenParser implements ActionParser {
 					(): GameEvent => {
 						let stolenByCardId: string | null = null;
 						let stolenByEntityId: number | null = null;
-						if (node.Parent?.Type === Action) {
+						if (node.Parent?.Type === NodeType.Action) {
 							const parentAction = node.Parent.Object as Action;
 							stolenByEntityId = parentAction.Entity;
 							stolenByCardId =

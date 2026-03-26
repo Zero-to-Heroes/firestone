@@ -1,5 +1,5 @@
 import { BlockType, CardIds, CardType, GameTag, Zone } from '@firestone-hs/reference-data';
-import { Action, FullEntity, Node } from '../models';
+import { Action, FullEntity, Node, NodeType } from '../models';
 import { TagChange } from '../models/tag';
 import { GameState } from '../state/game-state';
 import { ParserState } from '../state/parser-state';
@@ -89,7 +89,7 @@ export class BattlegroundsStartOfBattleLegacySnapshot {
 			this.GameState.GetGameEntity() != null &&
 			this.GameState.GetGameEntity()!.GetTag(GameTag.TURN) % 2 === 0 &&
 			this.GameState.BgsCurrentBattleOpponent == null &&
-			node.Type === Action;
+			node.Type === NodeType.Action;
 		if (!isAction) {
 			return false;
 		}
@@ -167,7 +167,7 @@ export class BattlegroundsStartOfBattleLegacySnapshot {
 	}
 
 	private IsTavishPreparation(node: Node): boolean {
-		if (node.Type !== Action) {
+		if (node.Type !== NodeType.Action) {
 			return false;
 		}
 		const action = node.Object as Action;
@@ -182,7 +182,7 @@ export class BattlegroundsStartOfBattleLegacySnapshot {
 			return false;
 		}
 		const parent = node.Parent;
-		if (parent == null || parent.Type !== Action) {
+		if (parent == null || parent.Type !== NodeType.Action) {
 			return false;
 		}
 		const parentAction = parent.Object as Action;

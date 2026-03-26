@@ -1,7 +1,7 @@
 import { GameTag } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventHelper, GameEventProvider } from '../game-event';
-import { Node, TagChange } from '../models';
+import { Node, NodeType, TagChange } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -21,7 +21,7 @@ export class OverloadedCrystalsParser implements ActionParser {
 		let tagChange: TagChange | null = null;
 		return (
 			stateType === StateType.PowerTaskList &&
-			node.Type === TagChange &&
+			node.Type === NodeType.TagChange &&
 			((tagChange = node.Object as TagChange).Name === (GameTag.OVERLOAD_LOCKED as number) ||
 				tagChange.Name === (GameTag.OVERLOAD_OWED as number))
 		);

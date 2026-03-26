@@ -1,7 +1,7 @@
 import { BlockType, CardIds, GameTag } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventHelper, GameEventProvider } from '../game-event';
-import { Action, FullEntity, Node } from '../models';
+import { Action, FullEntity, Node, NodeType } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -34,7 +34,7 @@ export class SpecialCardPowerParser implements ActionParser {
 		let action: Action | null = null;
 		return (
 			stateType === StateType.PowerTaskList &&
-			node.Type === Action &&
+			node.Type === NodeType.Action &&
 			((action = node.Object as Action).Type === (BlockType.POWER as number) ||
 				action.Type === (BlockType.TRIGGER as number)) &&
 			this.GameState.CurrentEntities.has(action.Entity) &&

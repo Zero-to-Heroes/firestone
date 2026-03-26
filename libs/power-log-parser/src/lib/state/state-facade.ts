@@ -1,4 +1,4 @@
-import { PlayerEntity, Game, HearthstoneReplay } from '../models';
+import { PlayerEntity, Game, HearthstoneReplay, NodeType } from '../models';
 import { Player } from '../models';
 import { Regexes } from '../regexes';
 import { GameMetaData } from './game-meta-data';
@@ -115,7 +115,7 @@ export class StateFacade {
 
 	UpdatePTLToRoot(): void {
 		this.State.PTLState.EndAction();
-		this.State.PTLState.UpdateCurrentNode(Game);
+		this.State.PTLState.UpdateCurrentNode(NodeType.Game);
 		this._updateToRootAfterLine = null;
 	}
 }

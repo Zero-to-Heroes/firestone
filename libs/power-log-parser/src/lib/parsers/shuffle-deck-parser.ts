@@ -1,6 +1,6 @@
 import { ActionParser } from '../action-parser';
 import { GameEventProvider } from '../game-event';
-import { Node, ShuffleDeck } from '../models';
+import { Node, NodeType, ShuffleDeck } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -19,7 +19,7 @@ export class ShuffleDeckParser implements ActionParser {
 	}
 
 	AppliesOnNewNode(node: Node, stateType: StateType): boolean {
-		return stateType === StateType.PowerTaskList && node.Type === ShuffleDeck;
+		return stateType === StateType.PowerTaskList && node.Type === NodeType.ShuffleDeck;
 	}
 
 	AppliesOnCloseNode(_node: Node, _stateType: StateType): boolean {
