@@ -171,6 +171,7 @@ export class NodeParser implements INodeParser {
 	private Controller: ControlsManager;
 
 	private _parsers: ActionParser[] | null = null;
+	private _unfilteredParsers: ActionParser[] | null = null;
 	private get parsers(): ActionParser[] {
 		if (this._parsers != null) {
 			return this._parsers;
@@ -178,15 +179,19 @@ export class NodeParser implements INodeParser {
 		if (this.ParserState == null) {
 			return [];
 		}
+
+		if (this._unfilteredParsers == null) {
+			this._unfilteredParsers = this.BuildActionParsers(this.ParserState, this.StateType);
+		}
+
 		if (
 			this.StateFacade?.GsState?.CurrentGame?.GameType == null ||
-			this.ParserState == null ||
 			this.StateFacade?.GsState?.CurrentGame?.GameType === -1
 		) {
-			return this.BuildActionParsers(this.ParserState, this.StateType);
+			return this._unfilteredParsers;
 		}
-		const allParsers = this.BuildActionParsers(this.ParserState, this.StateType);
-		this._parsers = allParsers.filter((p) => this.Controller.Applies(p));
+
+		this._parsers = this._unfilteredParsers.filter((p) => this.Controller.Applies(p));
 		return this._parsers;
 	}
 
@@ -202,6 +207,7 @@ export class NodeParser implements INodeParser {
 		this.ParserState = parserState;
 		this.QueueHandler.Reset(helper);
 		this._parsers = null;
+		this._unfilteredParsers = null;
 	}
 
 	NewNode(node: Node, stateType: StateType): void {
