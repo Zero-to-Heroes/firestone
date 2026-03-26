@@ -5,7 +5,6 @@ import { BattlegroundsDataAccessModule } from '@firestone/battlegrounds/data-acc
 import { SharedFrameworkCommonModule } from '@firestone/shared/framework/common';
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { StatsDataAccessModule } from '@firestone/stats/data-access';
-import { GameEventsPluginService } from './logs/game-events-plugin.service';
 import { BootstrapGameStateService } from './services/_bootstrap-game-state.service';
 import { BgsBestUserStatsService } from './services/battlegrounds/bgs-best-user-stats.service';
 import { DeckHandlerService } from './services/deck-handler.service';
@@ -54,7 +53,6 @@ const components = [];
 		BgsBestUserStatsService,
 		RealTimeStatsParsersService,
 		RealTimeStatsService,
-		GameEventsPluginService,
 		ConstructedArchetypeService,
 		ConstructedArchetypeServiceOrchestrator,
 		GameModeDataService,

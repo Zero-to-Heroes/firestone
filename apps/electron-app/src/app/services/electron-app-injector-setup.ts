@@ -222,7 +222,6 @@ import { ElectronHotkeyHandlerService } from './electron-hotkey-handler.service'
 import { ElectronLogFileBackendService } from './electron-log-file-backend.service';
 import { ElectronLogsUploaderService } from './electron-logs-uploader.service';
 import { ElectronWindowHandlerService } from './electron-window-handler.service';
-import { GameEventsElectronService } from './game-events-electron.service';
 import { LowLevelUtilsElectronService } from './low-level-utils-electron.service';
 import { MindVisionElectronService } from './mind-vision-electron.service';
 import { SqliteDatabaseService } from './sqlite-database.service';
@@ -391,9 +390,6 @@ export const buildAppInjector = () => {
 	const overlayDisplay = new OverlayDisplayService(windowManager);
 	electronInjector.register(OverlayDisplayService, overlayDisplay);
 
-	const gameEventsElectron = new GameEventsElectronService();
-	electronInjector.register(GameEventsElectronService, gameEventsElectron);
-
 	const gameStateFacade = new GameStateFacadeService(windowManager);
 	electronInjector.register(GameStateFacadeService, gameStateFacade);
 
@@ -445,7 +441,6 @@ export const buildAppInjector = () => {
 	const globalError = new GlobalErrorService(notifications, i18n, gameStatus, externalUrlService);
 
 	const gameEvents = new GameEvents(
-		gameEventsElectron,
 		gameEventsEmitter,
 		scene,
 		gameStatus,
@@ -456,7 +451,6 @@ export const buildAppInjector = () => {
 		globalError,
 		null,
 		zone,
-		preferences,
 	);
 	electronInjector.register(GameEvents, gameEvents);
 
@@ -597,6 +591,7 @@ export const buildAppInjector = () => {
 		gameId,
 		null, // BgsIntermediateResultsSimGuardianService
 		reviewId,
+		null, // ArenaRefService
 	);
 
 	const bgsMatchPlayers = new BgsMatchPlayersMmrService(windowManager);

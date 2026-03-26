@@ -313,10 +313,6 @@
 			]
 		},
 		"extra-objects": {
-			"overwolf-replay-converter": {
-				"file": "plugins/HearthstoneReplays.dll",
-				"class": "HearthstoneReplays.ReplayConverterPlugin"
-			},
 			"mind-vision": {
 				"file": "plugins/OverwolfUnitySpy.dll",
 				"class": "OverwolfUnitySpy.MindVisionPlugin"

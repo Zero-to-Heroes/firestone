@@ -418,9 +418,7 @@ import { DecktrackerCommonModule } from '@firestone/decktracker/common';
 import { DiscordModule } from '@firestone/discord';
 import {
 	CardsHighlightFacadeService,
-	GameEventsPluginService,
 	GameStateModule,
-	IGameEventsPlugin,
 	REVIEW_ID_SERVICE_TOKEN,
 	ReviewIdService,
 } from '@firestone/game-state';
@@ -1327,7 +1325,6 @@ try {
 		{ provide: Store, useClass: AppUiStoreFacadeService },
 		AppUiStoreFacadeService,
 		{ provide: ILocalizationService, useClass: LocalizationFacadeService },
-		{ provide: IGameEventsPlugin, useExisting: GameEventsPluginService },
 		LocalizationFacadeService,
 
 		LocalizationService,

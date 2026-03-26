@@ -6,13 +6,11 @@ import {
 	GameStatusService,
 	GlobalErrorService,
 	PowerLogBufferService,
-	USE_TYPESCRIPT_PARSER,
 } from '@firestone/shared/common/service';
-import { chunk, freeRegexp, sleep } from '@firestone/shared/framework/common';
+import { freeRegexp, sleep } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ProcessingQueue } from '@firestone/shared/framework/core';
 import Deque from 'double-ended-queue';
 import { filter, interval, take } from 'rxjs';
-import { IGameEventsPlugin } from '../../logs/game-events-plugin.interface';
 import { GameEventsFacadeService } from '../game-events-facade.service';
 import { HsGameMetaData } from '../game-mode-data.service';
 import { GameStateFacadeService } from '../game-state-facade.service';
@@ -27,8 +25,6 @@ import { GameEventsEmitterService } from './game-events-emitter.service';
 
 @Injectable()
 export class GameEvents {
-	private plugin;
-
 	private processingQueue: ProcessingQueue<string>;
 
 	private lastProcessedTimestamp: number;
@@ -40,7 +36,6 @@ export class GameEvents {
 	private tsParserCurrentGameSeed: number = 0;
 
 	constructor(
-		private readonly gameEventsPlugin: IGameEventsPlugin,
 		private readonly gameEventsEmitter: GameEventsEmitterService,
 		private readonly scene: SceneService,
 		private readonly gameStatus: GameStatusService,
@@ -75,12 +70,8 @@ export class GameEvents {
 				take(1),
 			)
 			.subscribe(async () => {
-				console.log('[game-events] init game events monitor, useTypescriptParser = ', USE_TYPESCRIPT_PARSER);
-				if (USE_TYPESCRIPT_PARSER) {
-					this.initTsParser();
-				} else {
-					this.gameEventsPlugin.init((gameEvent) => this.dispatchGameEvent(gameEvent));
-				}
+				console.log('[game-events] init game events monitor');
+				this.initTsParser();
 				this.scene.currentScene$$.subscribe((scene) => {
 					console.log('[game-events] emitting new scene event', scene);
 					this.doEventDispatch(
@@ -126,12 +117,10 @@ export class GameEvents {
 				}
 				if (!this.lastGameStateUpdateTimestamp || timeSinceLastGameStateUpdate > gameStateUpdateInterval) {
 					this.gameStateUpdateInProgress = true;
-					if (USE_TYPESCRIPT_PARSER && this.tsParser) {
+					if (this.tsParser) {
 						this.tsParser.AskForGameStateUpdate();
 						this.tsParser.State.GSState.NodeParser.ClearQueue();
 						this.tsParser.State.PTLState.NodeParser.ClearQueue();
-					} else {
-						this.gameEventsPlugin.askForGameStateUpdate();
 					}
 				}
 			}
@@ -144,9 +133,6 @@ export class GameEvents {
 				'[game-events] preparing log lines that include game creation to feed to the plugin',
 				eventQueue.length,
 			);
-		}
-		if (!USE_TYPESCRIPT_PARSER) {
-			await this.gameEventsPlugin.isReady();
 		}
 		const hasProcessed = await this.processLogs(eventQueue);
 		return hasProcessed ? [] : eventQueue;
@@ -161,21 +147,7 @@ export class GameEvents {
 			return false;
 		}
 
-		if (USE_TYPESCRIPT_PARSER) {
-			console.debug('[game-events] processing logs with TypeScript parser');
-			return this.processLogsWithTsParser(eventQueue);
-		}
-
-		await this.gameEventsPlugin.isReady();
-
-		const chunkSize = 1000;
-		const chunks = chunk(eventQueue, chunkSize);
-
-		for (const chunk of chunks) {
-			await this.gameEventsPlugin.realtimeLogProcessing(chunk);
-		}
-
-		return true;
+		return this.processLogsWithTsParser(eventQueue);
 	}
 
 	private doEventDispatch(event: GameEvent) {

@@ -4,7 +4,6 @@ export const ENABLE_BGS_COMP_STATS = true;
 export const HEARTHPWN_SYNC = true;
 export const ENABLE_IN_GAME_REPLAY = true;
 export const ENABLE_IN_GAME_REPLAY_FOR_ALL = false;
-export const USE_TYPESCRIPT_PARSER = true;
 
 // Shelved for now
 export const ENABLE_MULTI_GRAPHS = false;
