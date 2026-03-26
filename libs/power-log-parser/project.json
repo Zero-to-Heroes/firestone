@@ -1,0 +1,33 @@
+{
+	"name": "power-log-parser",
+	"$schema": "../../node_modules/nx/schemas/project-schema.json",
+	"sourceRoot": "libs/power-log-parser/src",
+	"projectType": "library",
+	"targets": {
+		"build": {
+			"executor": "@nx/js:tsc",
+			"outputs": ["{options.outputPath}"],
+			"options": {
+				"outputPath": "dist/libs/power-log-parser",
+				"main": "libs/power-log-parser/src/index.ts",
+				"tsConfig": "libs/power-log-parser/tsconfig.lib.json",
+				"assets": ["libs/power-log-parser/*.md"]
+			}
+		},
+		"test": {
+			"executor": "@nx/jest:jest",
+			"outputs": ["{workspaceRoot}/coverage/libs/power-log-parser"],
+			"options": {
+				"jestConfig": "libs/power-log-parser/jest.config.ts",
+				"passWithNoTests": true
+			}
+		},
+		"lint": {
+			"executor": "@nx/linter:eslint",
+			"options": {
+				"lintFilePatterns": ["libs/power-log-parser/**/*.ts"]
+			}
+		}
+	},
+	"tags": []
+}

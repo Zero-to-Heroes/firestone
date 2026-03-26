@@ -456,6 +456,7 @@ export const buildAppInjector = () => {
 		globalError,
 		null,
 		zone,
+		preferences,
 	);
 	electronInjector.register(GameEvents, gameEvents);
 

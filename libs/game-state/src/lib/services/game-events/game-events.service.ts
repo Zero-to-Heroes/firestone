@@ -1,9 +1,15 @@
 import { Injectable, NgZone } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { SceneService } from '@firestone/memory';
-import { GameStatusService, GlobalErrorService, PowerLogBufferService } from '@firestone/shared/common/service';
+import {
+	GameStatusService,
+	GlobalErrorService,
+	PowerLogBufferService,
+	PreferencesService,
+} from '@firestone/shared/common/service';
 import { chunk, freeRegexp, sleep } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ProcessingQueue } from '@firestone/shared/framework/core';
+import { ReplayParser, GameEvent as ParserGameEvent } from '@firestone/power-log-parser';
 import Deque from 'double-ended-queue';
 import { filter, interval, take } from 'rxjs';
 import { IGameEventsPlugin } from '../../logs/game-events-plugin.interface';
@@ -28,11 +34,14 @@ export class GameEvents {
 	private lastProcessedTimestamp: number;
 	private lastGameStateUpdateTimestamp: number;
 	private gameStateUpdateInProgress: boolean;
-	// private receivedLastGameStateUpdate = true;
+
+	private tsParser: ReplayParser | null = null;
+	private tsParserLineIndex: number = 0;
+	private tsParserCurrentGameSeed: number = 0;
+	private useTypescriptParser: boolean = false;
 
 	constructor(
 		private readonly gameEventsPlugin: IGameEventsPlugin,
-		// private readonly events: Events,
 		private readonly gameEventsEmitter: GameEventsEmitterService,
 		private readonly scene: SceneService,
 		private readonly gameStatus: GameStatusService,
@@ -43,6 +52,7 @@ export class GameEvents {
 		private readonly globalError: GlobalErrorService,
 		private readonly powerLogBuffer: PowerLogBufferService,
 		private readonly ngZone: NgZone,
+		private readonly prefs: PreferencesService | null = null,
 	) {
 		this.processingQueue = new ProcessingQueue<string>(
 			(eventQueue) => this.processQueue(eventQueue),
@@ -56,6 +66,17 @@ export class GameEvents {
 
 	async init() {
 		await this.scene.isReady();
+
+		this.prefs?.preferences$$?.subscribe((prefs) => {
+			const newValue = prefs?.useTypescriptParser ?? false;
+			if (newValue !== this.useTypescriptParser) {
+				console.log('[game-events] useTypescriptParser changed to', newValue);
+				this.useTypescriptParser = newValue;
+				if (newValue) {
+					this.initTsParser();
+				}
+			}
+		});
 
 		this.gameEventsEmitter.allEvents.subscribe((event) => {
 			this.eventsFacade.allEvents.next(event);
@@ -114,7 +135,13 @@ export class GameEvents {
 				}
 				if (!this.lastGameStateUpdateTimestamp || timeSinceLastGameStateUpdate > gameStateUpdateInterval) {
 					this.gameStateUpdateInProgress = true;
-					this.gameEventsPlugin.askForGameStateUpdate();
+					if (this.useTypescriptParser && this.tsParser) {
+						this.tsParser.AskForGameStateUpdate();
+						this.tsParser.State.GSState.NodeParser.ClearQueue();
+						this.tsParser.State.PTLState.NodeParser.ClearQueue();
+					} else {
+						this.gameEventsPlugin.askForGameStateUpdate();
+					}
 				}
 			}
 		});
@@ -135,7 +162,6 @@ export class GameEvents {
 	}
 
 	private async processLogs(eventQueue: readonly string[]): Promise<boolean> {
-		// Because this will mess up the reconnect detection
 		if (
 			eventQueue.some((data) => data.includes('CREATE_GAME')) &&
 			!eventQueue.some((data) => data.includes('GAME_SEED'))
@@ -143,13 +169,17 @@ export class GameEvents {
 			console.warn("[game-events] can't process logs without a game seed", eventQueue[eventQueue.length - 1]);
 			return false;
 		}
+
+		if (this.useTypescriptParser) {
+			return this.processLogsWithTsParser(eventQueue);
+		}
+
 		await this.gameEventsPlugin.isReady();
 
-		const chunkSize = 1000; // Maximum number of lines per chunk
+		const chunkSize = 1000;
 		const chunks = chunk(eventQueue, chunkSize);
 
 		for (const chunk of chunks) {
-			const start = Date.now();
 			await this.gameEventsPlugin.realtimeLogProcessing(chunk);
 		}
 
@@ -1929,6 +1959,42 @@ export class GameEvents {
 		}
 		freeRegexp();
 		return undefined;
+	}
+
+	private initTsParser(): void {
+		console.log('[game-events] Initializing TypeScript parser');
+		this.tsParser = new ReplayParser();
+		this.tsParserLineIndex = 0;
+		this.tsParserCurrentGameSeed = 0;
+		this.tsParser.onGameEvent = (event: ParserGameEvent) => {
+			this.dispatchGameEvent(event);
+		};
+	}
+
+	private processLogsWithTsParser(eventQueue: readonly string[]): boolean {
+		if (!this.tsParser) {
+			this.initTsParser();
+		}
+
+		const gameSeed = this.tsParser!.ExtractGameSeed([...eventQueue]);
+		if (gameSeed > 0) {
+			this.tsParserCurrentGameSeed = gameSeed;
+		}
+
+		if (eventQueue.some((data) => data.includes('CREATE_GAME'))) {
+			console.log('[game-events] [ts-parser] Processing CREATE_GAME, resetting line index');
+			this.tsParserLineIndex = 0;
+		}
+
+		for (const line of eventQueue) {
+			this.tsParser!.ReadLine(line, this.tsParserCurrentGameSeed, this.tsParserLineIndex);
+			this.tsParserLineIndex++;
+		}
+
+		this.tsParser!.State.GSState.NodeParser.ClearQueue();
+		this.tsParser!.State.PTLState.NodeParser.ClearQueue();
+
+		return true;
 	}
 
 	private buildBattlegroundsPlayerBoardEvent(eventName: string, gameEvent: any) {
