@@ -57,7 +57,9 @@ export class GlobalStatsService extends AbstractFacadeService<GlobalStatsService
 				userId: currentUser.userId,
 				machineId: currentUser.machineId,
 			});
-			this.localStorage.setItem(LocalStorageService.USER_GLOBAL_STATS, remoteData?.result);
+			if (remoteData?.result != null) {
+				this.localStorage.setItem(LocalStorageService.USER_GLOBAL_STATS, remoteData.result);
+			}
 			console.log('loaded remote globalStats');
 		});
 
