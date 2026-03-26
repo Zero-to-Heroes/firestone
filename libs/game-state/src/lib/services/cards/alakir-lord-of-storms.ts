@@ -13,7 +13,13 @@ export const AlakirLordOfStorms: GeneratingCard & StaticGeneratingCard = {
 			? input.inputOptions.gameState.fullGameState?.Opponent
 			: input.inputOptions.gameState.fullGameState?.Player;
 		const entity = playerState?.AllEntities?.find((e) => e.entityId === input.entityId);
-		const attack = entity?.attack ?? input.allCards.getCard(input.cardId)?.attack ?? 2;
+		const baseAttack = input.allCards.getCard(input.cardId)?.attack ?? 2;
+		// Each Charged Hand of Al'akir buffs Al'akir's attack; the buff per hand scales with herald level:
+		// Herald 0-1: +1 per hand (total +2), Herald 2-3: +2 per hand (total +4), Herald 4+: +4 per hand (total +8)
+		const heraldCount = input.inputOptions.deckState.heraldCountThisGame ?? 0;
+		const buffPerHand = heraldCount >= 4 ? 4 : heraldCount >= 2 ? 2 : 1;
+		const totalAppendageBuff = 2 * buffPerHand;
+		const attack = entity?.attack ?? baseAttack + totalAppendageBuff;
 		return filterCards(
 			AlakirLordOfStorms.cardIds[0],
 			input.allCards,
