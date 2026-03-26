@@ -222,6 +222,8 @@ const internalGiftCreators = [
 	CardIds.Copycat_DED_514,
 	CardIds.Corpsicle_CorpsicleEnchantment_VAC_427e,
 	CardIds.Corpsicle_VAC_427,
+	CardIds.LibramOfDivinity_GDB_138,
+	CardIds.LibramOfDivinity_LibramOfDivinityEnchantment_GDB_138e2,
 	CardIds.CorpseFarm_CORE_WW_374,
 	CardIds.EternalFirebolt_EternalFireboltEnchantment_END_025e,
 	CardIds.CorsairCache,
