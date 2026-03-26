@@ -30,6 +30,7 @@ import { isCardValidForGame } from '../services/card-utils';
 import { hasDynamicPool } from '../services/cards/_card.type';
 import { cardsInfoCache } from '../services/cards/_mapping';
 import { buildExcavateTreasures } from './excavate-treasures';
+import { canIncludeHerald, getHeraldAdditionalCards } from './herald';
 
 const IMBUED_HERO_POWERS = [
 	CardIds.BlessingOfTheDragon_EDR_445p,
@@ -43,15 +44,6 @@ export const bwonsamdiBoonsEnchantments = [
 	CardIds.TalanjiOfTheGraves_BoonOfPowerPlayerEnchEnchantment_TIME_619e,
 	CardIds.TalanjiOfTheGraves_BoonOfSpeedPlayerEnchEnchantment_TIME_619e3,
 	CardIds.TalanjiOfTheGraves_BoonOfLongevityPlayerEnchEnchantment_TIME_619e2,
-];
-
-const HERALD_SOLDIERS = [
-	{ cardClass: CardClass.DEATHKNIGHT, cardId: CardIds.ObsessiveTechnician_SoldierOfOnyxiaToken_CATA_780t },
-	{ cardClass: CardClass.DEMONHUNTER, cardId: CardIds.ArmoredBloodletter_SoldierOfAzsharaToken_CATA_525t },
-	{ cardClass: CardClass.ROGUE, cardId: CardIds.ManiacalFollower_SoldierOfSinestraToken_CATA_158t },
-	{ cardClass: CardClass.SHAMAN, cardId: CardIds.SkywallSentinel_SoldierOfAlakirToken_CATA_565t },
-	{ cardClass: CardClass.WARLOCK, cardId: CardIds.ShadowswornDisciple_SoldierOfChogallToken_CATA_725t },
-	{ cardClass: CardClass.WARRIOR, cardId: CardIds.CataclysmicWarAxe_SoldierOfRagnarosToken_CATA_580t },
 ];
 
 export const getDynamicRelatedCardIds = (
@@ -72,44 +64,7 @@ export const getDynamicRelatedCardIds = (
 	const result = getDynamicRelatedCardIdsInternal(cardId, entityId, allCards, inputOptions);
 
 	const refCard = allCards.getCard(cardId);
-	const additionalCards: string[] = [];
-	// The rule is:
-	// - Herald is limited to Death Knight, Demon Hunter, Rogue, Shaman, Warlock, Warrior, and multi-class cards of those classes.
-	// - If other classes try to play a Herald card, it will summon a Soldier depending on the class of that card instead
-	// - Example: A Mage playing  Rite of Twilight into  Fel Infusion will summon a  Soldier of Sinestra and then a  Soldier of Azshara.
-	// - Example: If a mage manages to generate Envoy of the End or  Ultraxion, they will summon the Soldier of their opponent's class.
-	if (hasMechanic(refCard, GameTag.HERALD)) {
-		const currentClassEnum = inputOptions.deckState.getCurrentClassEnum() ?? CardClass.NEUTRAL;
-		if (HEARLD_CLASSES.includes(currentClassEnum)) {
-			// Player is a Herald class - show colossal pieces for their class
-			const classSoldiers = HERALD_SOLDIERS.filter((s) => s.cardClass === currentClassEnum).map((s) => s.cardId);
-			if (classSoldiers.length > 0) {
-				additionalCards.push(...classSoldiers);
-			}
-		} else {
-			// Player is NOT a Herald class - show Soldier token(s) based on the card's class
-			const heraldCardClasses = (refCard.classes ?? []).filter((c) =>
-				HEARLD_CLASSES.includes(CardClass[c as keyof typeof CardClass]),
-			);
-			if (heraldCardClasses.length > 0) {
-				for (const cls of heraldCardClasses) {
-					const soldier = HERALD_SOLDIERS.find((s) => CardClass[s.cardClass] === cls);
-					if (soldier) {
-						additionalCards.push(soldier.cardId);
-					}
-				}
-			} else {
-				// Card has no Herald class (neutral/multi-class) - use opponent's class
-				const opponentClass = inputOptions.opponentDeckState?.getCurrentClassEnum() ?? CardClass.NEUTRAL;
-				if (opponentClass) {
-					const soldier = HERALD_SOLDIERS.find((s) => s.cardClass === opponentClass);
-					if (soldier) {
-						additionalCards.push(soldier.cardId);
-					}
-				}
-			}
-		}
-	}
+	const additionalCards = getHeraldAdditionalCards(refCard, inputOptions.deckState, inputOptions.opponentDeckState);
 
 	if (hasOverride(result)) {
 		return { override: true, cards: [...(result as { cards: readonly string[] }).cards, ...additionalCards] };
@@ -1703,47 +1658,6 @@ const canIncludeGalakrond = (
 	return false;
 };
 
-/**
- * Herald cards and cards that reference the keyword
- * (including the Colossal minions that can be Heralded) cannot be randomly
- * generated unless the player's deck started with one of those cards.
- * Source is on https://hearthstone.wiki.gg/wiki/Herald
- */
-const canIncludeHerald = (
-	refCard: ReferenceCard,
-	initialDecklist: readonly string[] | undefined,
-	currentClass: string | undefined,
-	allCards: AllCardsService,
-): boolean => {
-	if (!isHeraldCard(refCard)) {
-		return true;
-	}
-
-	if (!initialDecklist?.length) {
-		if (!currentClass?.length) {
-			return false;
-		}
-		return HEARLD_CLASSES.includes(CardClass[currentClass.toUpperCase()]);
-	}
-
-	for (const cardId of initialDecklist) {
-		const deckCard = allCards.getCard(cardId);
-		if (!deckCard) {
-			continue;
-		}
-		if (isHeraldCard(deckCard)) {
-			return true;
-		}
-	}
-	return false;
-};
-
-const isHeraldCard = (card: ReferenceCard): boolean => {
-	return (
-		!!card.mechanics?.includes(GameTag[GameTag.HERALD]) || !!card.referencedTags?.includes(GameTag[GameTag.HERALD])
-	);
-};
-
 // Imbue cards cannot be generated unless the starting deck contains at least one imbue card
 // https://www.reddit.com/r/hearthstone/comments/1reubn0/comment/o7kckv7
 // https://www.reddit.com/r/hearthstone/comments/1reubn0/comment/o7nyg8p
@@ -1779,14 +1693,6 @@ const canIncludeImbue = (
 };
 
 const NON_IMBUE_CLASSES = [CardClass.DEMONHUNTER, CardClass.WARLOCK, CardClass.WARRIOR];
-const HEARLD_CLASSES = [
-	CardClass.DEATHKNIGHT,
-	CardClass.DEMONHUNTER,
-	CardClass.ROGUE,
-	CardClass.SHAMAN,
-	CardClass.WARLOCK,
-	CardClass.WARRIOR,
-];
 
 const isImbueCard = (card: ReferenceCard): boolean => {
 	return (
