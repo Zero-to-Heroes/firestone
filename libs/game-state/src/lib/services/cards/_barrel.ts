@@ -1,4 +1,5 @@
 export type { GeneratingCard } from './_card.type';
+export { AgencyEspionage } from './agency-espionage';
 export { ALightInTheDarkness } from './a-light-in-the-darkness';
 export { AeonWizard } from './aeon-wizard';
 export { AlakirLordOfStorms } from './alakir-lord-of-storms';
@@ -235,6 +236,7 @@ export { TheScourge } from './the-scourge';
 export { TheSunwell } from './the-sunwell';
 export { TheWellOfEternity } from './the-well-of-eternity';
 export { ThiefOfFutures } from './thief-of-futures';
+export { ThistleTeaSet } from './thistle-tea-set';
 export { Thoughtsteal } from './thoughtsteal';
 export { TidepoolPupil } from './tidepool-pupil';
 export { TidestoneOfGolganneth } from './tidestone-of-golganneth';
