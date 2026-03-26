@@ -39,6 +39,10 @@ export class ReplayParser {
 	private gameEventHandler: GameEventHandler;
 
 	private previousTimestamp: string = '';
+	// TODO: processedLines grows unbounded during a game (tens of thousands of
+	// strings in long BG matches). It is only consumed by the GAME_RESET/rewind
+	// path. Consider bounding it or storing it only when a rewind-capable game
+	// mode is detected.
 	private processedLines: string[] = [];
 	private CurrentGameSeed: number = 0;
 
