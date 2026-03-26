@@ -49,18 +49,39 @@ export class LocalStorageService {
 	private cache?: any = {};
 
 	public setItem(key: string, value: any): void {
+		if (value === undefined) {
+			console.error(
+				`[LocalStorageService] Refused to persist undefined for key "${key}" (would corrupt localStorage).`,
+				new Error().stack,
+			);
+			delete this.cache[key];
+			localStorage.removeItem(key);
+			return;
+		}
 		this.cache[key] = value;
 		localStorage.setItem(key, JSON.stringify(value));
 	}
 
 	public getItem<T>(key: string): T | null {
-		if (this.cache[key]) {
+		if (this.cache && Object.prototype.hasOwnProperty.call(this.cache, key)) {
 			return this.cache[key];
 		}
 		const localStorageItem = localStorage.getItem(key);
-		if (localStorageItem) {
-			return JSON.parse(localStorageItem);
+		if (localStorageItem == null || localStorageItem === '') {
+			return null;
 		}
-		return null;
+		if (localStorageItem === 'undefined') {
+			console.error(
+				`[LocalStorageService] Removed invalid localStorage entry for key "${key}": stored literal "undefined" (not valid JSON).`,
+			);
+			localStorage.removeItem(key);
+			return null;
+		}
+		try {
+			return JSON.parse(localStorageItem) as T;
+		} catch {
+			localStorage.removeItem(key);
+			return null;
+		}
 	}
 }
