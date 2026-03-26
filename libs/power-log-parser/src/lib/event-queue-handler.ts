@@ -47,13 +47,13 @@ export class EventQueueHandler {
 		}
 
 		this.eventQueue.push(...providers);
+	}
+
+	ClearQueue(): void {
 		this.eventQueue.sort((a, b) => {
 			const timestampComparison = a.Timestamp.localeCompare(b.Timestamp);
 			return timestampComparison !== 0 ? timestampComparison : a.Index - b.Index;
 		});
-	}
-
-	ClearQueue(): void {
 		for (const provider of this.eventQueue) {
 			this.ProcessGameEvent(provider);
 		}
