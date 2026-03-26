@@ -331,7 +331,6 @@ export class TwitchAuthService {
 		delete newCard.cardName;
 		delete newCard.metaInfo;
 		delete newCard.temporaryCard;
-		delete newCard.dormant;
 		delete newCard.rarity;
 		delete newCard.playTiming;
 		delete newCard.putIntoPlay;

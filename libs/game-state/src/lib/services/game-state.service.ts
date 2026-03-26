@@ -2,20 +2,13 @@ import { EventEmitter, Injectable, NgZone, Optional } from '@angular/core';
 import { GameTag, Zone } from '@firestone-hs/reference-data';
 import { PtlGameStateUpdate } from '@firestone/power-log-parser';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { arraysEqual, chunk } from '@firestone/shared/framework/common';
+import { chunk } from '@firestone/shared/framework/common';
 import { OverwolfService, ProcessingQueue, waitForReady } from '@firestone/shared/framework/core';
 // import { TwitchAuthService } from '@firestone/twitch/common';
 import { BgsBattleSimulationService } from '@firestone/battlegrounds/core';
 import { BehaviorSubject, debounceTime, distinctUntilChanged, filter } from 'rxjs';
-import { DeckCard, DeckState, HeroCard, RealTimeStatsState } from '../models/_barrel';
+import { DeckState, HeroCard, RealTimeStatsState } from '../models/_barrel';
 import { GameState } from '../models/game-state';
-import {
-	getBoard,
-	getEntitiesInZone,
-	getEntityTag,
-	getHero,
-	hasTag,
-} from './parser-entity-utils';
 import { BgsMatchMemoryInfoService } from './battlegrounds/bgs-match-memory-info.service';
 import { EventParser } from './game-events/event-parser/_event-parser';
 import { SecretsParserService } from './game-events/event-parser/secrets/secrets-parser.service';
@@ -27,6 +20,7 @@ import { DeckstringOverrideEvent } from './game-state-events/deckstring-override
 import { GameStateEvent } from './game-state-events/game-state-event';
 import { GameStateMetaInfoService } from './game-state-meta-info.service';
 import { OverlayDisplayService } from './overlay-display.service';
+import { getEntitiesInZone, getEntityTag, getHero } from './parser-entity-utils';
 import { RealTimeStatsService } from './real-time-stats/real-time-stats.service';
 
 @Injectable({ providedIn: 'root' })
@@ -451,7 +445,11 @@ export class GameStateService {
 		return currentState;
 	}
 
-	private updateDeckFromParserState(deck: DeckState | undefined, gameState: GameState, playerId: number): DeckState | undefined {
+	private updateDeckFromParserState(
+		deck: DeckState | undefined,
+		gameState: GameState,
+		playerId: number,
+	): DeckState | undefined {
 		if (!deck) {
 			return deck;
 		}
@@ -460,29 +458,19 @@ export class GameStateService {
 			return deck;
 		}
 
-		const newBoard: readonly DeckCard[] = deck.board.map((card) => {
-			const entity = entities.get(card.entityId);
-			const dormantTag = entity ? hasTag(entity.Tags, GameTag.DORMANT) : false;
-			return dormantTag === card.dormant ? card : card.update({ dormant: dormantTag });
-		});
-
 		const hero = getHero(entities, playerId);
 		const maxMana = hero ? getEntityTag(hero, GameTag.RESOURCES, 0) : 0;
 		const manaSpent = hero ? getEntityTag(hero, GameTag.RESOURCES_USED, 0) : 0;
 		const manaLeft = maxMana - manaSpent;
 		const newHero: HeroCard | undefined =
-			deck.hero && manaLeft != deck.hero.manaLeft
-				? deck.hero.update({ manaLeft: manaLeft })
-				: deck.hero;
+			deck.hero && manaLeft != deck.hero.manaLeft ? deck.hero.update({ manaLeft: manaLeft }) : deck.hero;
 
 		const cardsLeftInDeck = getEntitiesInZone(entities, playerId, Zone.DECK).length;
 
-		const hasChanged =
-			!arraysEqual(newBoard, deck.board) || newHero !== deck.hero || cardsLeftInDeck !== deck.cardsLeftInDeck;
+		const hasChanged = newHero !== deck.hero || cardsLeftInDeck !== deck.cardsLeftInDeck;
 
 		return hasChanged
 			? deck.update({
-					board: newBoard,
 					hero: newHero,
 					cardsLeftInDeck: cardsLeftInDeck,
 				})
@@ -543,4 +531,3 @@ const mergeZonePositionChangedEvents = (events: readonly GameEvent[]): GameEvent
 	});
 	return merged;
 };
-

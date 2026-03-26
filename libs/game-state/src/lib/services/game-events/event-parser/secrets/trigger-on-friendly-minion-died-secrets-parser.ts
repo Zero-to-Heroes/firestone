@@ -2,6 +2,7 @@ import { CardIds } from '@firestone-hs/reference-data';
 import { BoardSecret } from '../../../../models/board-secret';
 import { DeckState } from '../../../../models/deck-state';
 import { GameState } from '../../../../models/game-state';
+import { isDormant } from '../../../card-utils';
 import { MinionsDiedEvent } from '../../events/minions-died-event';
 import { GameEvent } from '../../game-event';
 import { EventParser } from '../_event-parser';
@@ -54,7 +55,11 @@ export class TriggerOnFriendlyMinionDiedSecretsParser implements EventParser {
 		}
 
 		// If it's the only minion on board, we trigger nothing
-		if (deckWithSecretToCheck.board.filter((entity) => !entity.dormant).length === deadEnemyMinions.length) {
+		if (
+			deckWithSecretToCheck.board.filter(
+				(entity) => !isDormant(entity, currentState.parserState?.CurrentEntities),
+			).length === deadEnemyMinions.length
+		) {
 			secretsWeCantRuleOut.push(CardIds.Avenge_FP1_020);
 			secretsWeCantRuleOut.push(CardIds.Avenge_CORE_FP1_020);
 		}

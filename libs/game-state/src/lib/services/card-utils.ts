@@ -26,7 +26,7 @@ import { Metadata } from '../models/metadata';
 import { hasCorrectClass } from '../related-cards/dynamic-pools';
 import { hasGeneratingCard } from './cards/_card.type';
 import { cardsInfoCache } from './cards/_mapping';
-import { EntityLike, getEntityTag, hasTag } from './parser-entity-utils';
+import { EntityLike, hasTag } from './parser-entity-utils';
 
 export const getProcessedCard = (
 	cardId: string | undefined | null,
@@ -531,4 +531,13 @@ export const fablePackages = [
 
 export const isTreant = (cardId: string, allCards: CardsFacadeService): boolean => {
 	return allCards.getCard(cardId)?.isTreant ?? false;
+};
+
+export const isDormant = (card: DeckCard, currentEntities?: Map<number, EntityLike>): boolean => {
+	return (
+		card.tags?.[GameTag.DORMANT] === 1 ||
+		(currentEntities &&
+			currentEntities.get(card.entityId)?.Tags?.some((t) => t.Name === GameTag.DORMANT && t.Value === 1)) ||
+		false
+	);
 };

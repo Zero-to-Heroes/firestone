@@ -2,6 +2,7 @@ import { CardIds } from '@firestone-hs/reference-data';
 import { BoardSecret } from '../../../../models/board-secret';
 import { DeckState } from '../../../../models/deck-state';
 import { GameState } from '../../../../models/game-state';
+import { isDormant } from '../../../card-utils';
 import { GameEvent } from '../../game-event';
 import { EventParser } from '../_event-parser';
 import { DeckManipulationHelper } from '../deck-manipulation-helper';
@@ -61,7 +62,9 @@ export class TriggerOnTurnEndSecretsParser implements EventParser {
 		}
 
 		const hasOpponentMinionsOnBoard =
-			playerWhoseCardsPlayedToCheck.board.filter((entity) => !entity.dormant).length > 0;
+			playerWhoseCardsPlayedToCheck.board.filter(
+				(entity) => !isDormant(entity, currentState.parserState?.CurrentEntities),
+			).length > 0;
 		if (!hasOpponentMinionsOnBoard) {
 			secretsWeCantRuleOut.push(CardIds.FlamesOfInfinity_END_024);
 		}

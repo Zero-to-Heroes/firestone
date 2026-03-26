@@ -2,6 +2,7 @@ import { CardIds } from '@firestone-hs/reference-data';
 import { BoardSecret } from '../../../../models/board-secret';
 import { DeckState } from '../../../../models/deck-state';
 import { GameState } from '../../../../models/game-state';
+import { isDormant } from '../../../card-utils';
 import { GameEvent } from '../../game-event';
 import { EventParser } from '../_event-parser';
 import { DeckManipulationHelper } from '../deck-manipulation-helper';
@@ -46,7 +47,12 @@ export class TriggerOnTurnStartSecretsParser implements EventParser {
 		}
 
 		// Only triggers if board has between 2 and 6 minions
-		if (deckWithSecretToCheck.board.filter((entity) => !entity.dormant).length < 2 || isBoardFull) {
+		if (
+			deckWithSecretToCheck.board.filter(
+				(entity) => !isDormant(entity, currentState.parserState?.CurrentEntities),
+			).length < 2 ||
+			isBoardFull
+		) {
 			secretsWeCantRuleOut.push(CardIds.BeaststalkerTavish_ImprovedOpenTheCagesToken);
 			secretsWeCantRuleOut.push(CardIds.OpenTheCages);
 		}
