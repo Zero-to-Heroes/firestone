@@ -17,7 +17,7 @@ export const buildCompositions = (
 ): readonly ExtendedBgsCompAdvice[] => {
 	const result =
 		compositions
-			?.map((s) => enhanceComp(s, allCards))
+			?.map((s) => enhanceComp(s, allCards, i18n))
 			.filter((s) => isAvailable(s, availableTribes, options, allCards))
 			.map((s) => trimComp(s, availableTribes, options, allCards))
 			.sort((a, b) => {
@@ -38,15 +38,7 @@ export const buildCompositions = (
 					(a.name ?? '').localeCompare(b.name ?? '')
 				);
 			}) ?? [];
-	console.debug(
-		'[compositions-builder] compositions built',
-		result,
-		compositions,
-		compositions?.map((s) => enhanceComp(s, allCards)),
-		compositions
-			?.map((s) => enhanceComp(s, allCards))
-			.filter((s) => isAvailable(s, availableTribes, options, allCards)),
-	);
+	console.debug('[compositions-builder] compositions built', result);
 	return result;
 };
 
@@ -55,12 +47,20 @@ const comparePowerLevel = (a: 'D' | 'C' | 'B' | 'A' | 'S', b: 'D' | 'C' | 'B' | 
 	return order.indexOf(b) - order.indexOf(a);
 };
 
-const enhanceComp = (comp: BgsCompAdvice, allCards: CardsFacadeService): ExtendedBgsCompAdvice => {
+const enhanceComp = (
+	comp: BgsCompAdvice,
+	allCards: CardsFacadeService,
+	i18n: ILocalizationService,
+): ExtendedBgsCompAdvice => {
 	const allTribes: readonly Race[] = comp.cards
 		.filter((c) => c.status === 'CORE')
 		.filter((c) => allCards.getCard(c.cardId).races?.length)
 		.flatMap((c) => allCards.getCard(c.cardId).races!)
 		.map((r) => Race[r]);
+	let name: string = i18n.translateString(`bgs-comps.${comp.compId}`);
+	if (name === `bgs-comps.${comp.compId}`) {
+		name = comp.name ?? comp.compId;
+	}
 	const result: ExtendedBgsCompAdvice = {
 		...comp,
 		minionIcon: comp.cards.filter((c) => c.status === 'CORE')[0]?.cardId,
