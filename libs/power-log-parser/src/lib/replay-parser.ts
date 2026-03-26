@@ -327,7 +327,15 @@ export class ReplayParser {
 
 	private NormalizeTimestamp(timestamp: string): string {
 		if (!timestamp) return '';
-		return timestamp;
+		const match = timestamp.match(/^(\d+):(\d+):(\d+)\.(\d+)$/);
+		if (!match) return timestamp;
+
+		const hours = parseInt(match[1], 10);
+		const minutes = match[2];
+		const seconds = match[3];
+		const fraction = match[4].slice(0, 6).padEnd(6, '0');
+
+		return hours.toString().padStart(2, '0') + ':' + minutes + ':' + seconds + '.' + fraction;
 	}
 
 	ExtractGameSeed(lines: string[]): number {

@@ -13,8 +13,8 @@ export interface IEntityData {
 }
 
 export class Action extends GameAction {
-	Index: number = -1;
-	EffectIndex: number = -1;
+	Index: number = 0;
+	EffectIndex: number = 0;
 	Target: number = 0;
 	Type: number = 0;
 	SubOption: number = 0;

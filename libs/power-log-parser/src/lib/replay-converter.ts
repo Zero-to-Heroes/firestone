@@ -38,7 +38,8 @@ function a(name: string, value: string | number | boolean): string {
 }
 
 function ts(data: { TimeStamp: string }): string {
-	return data.TimeStamp ? a('ts', data.TimeStamp) : '';
+	if (!data.TimeStamp) return a('ts', '00:00:00.000000');
+	return a('ts', data.TimeStamp);
 }
 
 function serializeTag(tag: Tag): string {
@@ -112,7 +113,9 @@ function serializePlayerEntity(entity: PlayerEntity): string {
 	if (entity.Cardback) attrs += a('cardback', entity.Cardback);
 	attrs += a('isMainPlayer', entity.IsMainPlayer);
 	const tags = serializeTags(entity.Tags);
-	return tags ? `<Player${attrs}>${tags}</Player>` : `<Player${attrs} />`;
+	const initialName = entity.InitialName != null ? `<InitialName>${escapeXml(entity.InitialName)}</InitialName>` : '';
+	const children = tags + initialName;
+	return children ? `<Player${attrs}>${children}</Player>` : `<Player${attrs} />`;
 }
 
 function serializeShowEntity(entity: ShowEntity): string {
@@ -140,7 +143,7 @@ function serializeTagChange(tc: TagChange): string {
 	attrs += a('entity', tc.Entity);
 	attrs += a('tag', tc.Name);
 	attrs += a('value', tc.Value);
-	if (tc.DefChange) attrs += a('defChange', tc.DefChange);
+	attrs += a('defChange', tc.DefChange);
 	return `<TagChange${attrs} />`;
 }
 

@@ -16,8 +16,11 @@ import { Regexes } from './regexes';
 import type { CombinedState } from './state/combined-state';
 import type { ParserState } from './state/parser-state';
 
+const extendedRace: Record<string, number> = { ...(Race as any), MECHANICAL: 17, PET: 20 };
+const extendedCardType: Record<string, number> = { ...(CardType as any), PET: 45, BATTLEGROUND_CLICKABLE_BUTTON: 46 };
+
 const tagEnumTypes: Map<GameTag, Record<string, number>> = new Map([
-	[GameTag.CARDTYPE, CardType as any],
+	[GameTag.CARDTYPE, extendedCardType],
 	[GameTag.CLASS, CardClass as any],
 	[GameTag.FACTION, Faction as any],
 	[GameTag.PLAYSTATE, PlayState as any],
@@ -26,7 +29,7 @@ const tagEnumTypes: Map<GameTag, Record<string, number>> = new Map([
 	[GameTag.NEXT_STEP, Step as any],
 	[GameTag.STATE, State as any],
 	[GameTag.STEP, Step as any],
-	[GameTag.CARDRACE, Race as any],
+	[GameTag.CARDRACE, extendedRace],
 	[GameTag.ZONE, Zone as any],
 ]);
 
@@ -256,8 +259,9 @@ export class Helper {
 	}
 
 	private ParseEnumFromObject(enumObj: Record<string, any>, tag: string): number {
-		if (enumObj[tag] !== undefined) {
-			return enumObj[tag];
+		const result = enumObj[tag];
+		if (result !== undefined && typeof result === 'number') {
+			return result;
 		}
 		const numeric = parseInt(tag, 10);
 		if (!isNaN(numeric)) return numeric;
