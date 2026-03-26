@@ -45,6 +45,15 @@ export const bwonsamdiBoonsEnchantments = [
 	CardIds.TalanjiOfTheGraves_BoonOfLongevityPlayerEnchEnchantment_TIME_619e2,
 ];
 
+const HERALD_SOLDIERS = [
+	{ cardClass: CardClass.DEATHKNIGHT, cardId: CardIds.ObsessiveTechnician_SoldierOfOnyxiaToken_CATA_780t },
+	{ cardClass: CardClass.DEMONHUNTER, cardId: CardIds.ArmoredBloodletter_SoldierOfAzsharaToken_CATA_525t },
+	{ cardClass: CardClass.ROGUE, cardId: CardIds.ManiacalFollower_SoldierOfSinestraToken_CATA_158t },
+	{ cardClass: CardClass.SHAMAN, cardId: CardIds.SkywallSentinel_SoldierOfAlakirToken_CATA_565t },
+	{ cardClass: CardClass.WARLOCK, cardId: CardIds.ShadowswornDisciple_SoldierOfChogallToken_CATA_725t },
+	{ cardClass: CardClass.WARRIOR, cardId: CardIds.CataclysmicWarAxe_SoldierOfRagnarosToken_CATA_580t },
+];
+
 export const getDynamicRelatedCardIds = (
 	cardId: string,
 	entityId: number,
@@ -64,17 +73,41 @@ export const getDynamicRelatedCardIds = (
 
 	const refCard = allCards.getCard(cardId);
 	const additionalCards: string[] = [];
+	// The rule is:
+	// - Herald is limited to Death Knight, Demon Hunter, Rogue, Shaman, Warlock, Warrior, and multi-class cards of those classes.
+	// - If other classes try to play a Herald card, it will summon a Soldier depending on the class of that card instead
+	// - Example: A Mage playing  Rite of Twilight into  Fel Infusion will summon a  Soldier of Sinestra and then a  Soldier of Azshara.
+	// - Example: If a mage manages to generate Envoy of the End or  Ultraxion, they will summon the Soldier of their opponent's class.
 	if (hasMechanic(refCard, GameTag.HERALD)) {
-		const classColossals = allCards
-			.getCards()
-			.filter((c) => c.collectible)
-			.filter((c) => c.set?.toLowerCase() === 'cataclysm')
-			.filter((c) => hasMechanic(c, GameTag.COLOSSAL))
-			.filter((c) => c.classes?.includes(inputOptions.currentClass))
-			.flatMap((c) => c.relatedCardDbfIds ?? []);
-		if (classColossals.length > 0) {
-			const allIds: string[] = classColossals.map((c) => allCards.getCard(c)?.id).filter((c) => !!c);
-			additionalCards.push(...allIds);
+		const currentClassEnum = inputOptions.deckState.getCurrentClassEnum() ?? CardClass.NEUTRAL;
+		if (HEARLD_CLASSES.includes(currentClassEnum)) {
+			// Player is a Herald class - show colossal pieces for their class
+			const classSoldiers = HERALD_SOLDIERS.filter((s) => s.cardClass === currentClassEnum).map((s) => s.cardId);
+			if (classSoldiers.length > 0) {
+				additionalCards.push(...classSoldiers);
+			}
+		} else {
+			// Player is NOT a Herald class - show Soldier token(s) based on the card's class
+			const heraldCardClasses = (refCard.classes ?? []).filter((c) =>
+				HEARLD_CLASSES.includes(CardClass[c as keyof typeof CardClass]),
+			);
+			if (heraldCardClasses.length > 0) {
+				for (const cls of heraldCardClasses) {
+					const soldier = HERALD_SOLDIERS.find((s) => CardClass[s.cardClass] === cls);
+					if (soldier) {
+						additionalCards.push(soldier.cardId);
+					}
+				}
+			} else {
+				// Card has no Herald class (neutral/multi-class) - use opponent's class
+				const opponentClass = inputOptions.opponentDeckState?.getCurrentClassEnum() ?? CardClass.NEUTRAL;
+				if (opponentClass) {
+					const soldier = HERALD_SOLDIERS.find((s) => s.cardClass === opponentClass);
+					if (soldier) {
+						additionalCards.push(soldier.cardId);
+					}
+				}
+			}
 		}
 	}
 
