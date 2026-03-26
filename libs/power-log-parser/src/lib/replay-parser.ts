@@ -16,6 +16,7 @@ import { GameEventProvider, GameEvent } from './game-event';
 import { EventQueueHandler } from './event-queue-handler';
 import { GameEventHandler } from './game-event-handler';
 import { NodeParser } from './node-parser';
+import { buildGameState } from './build-game-state';
 
 export { GameEvent } from './game-event';
 
@@ -301,6 +302,31 @@ export class ReplayParser {
 			default:
 				break;
 		}
+	}
+
+	AskForGameStateUpdate(): void {
+		let gameState: any = null;
+		try {
+			gameState = buildGameState(this.State.PTLState, this.State.StateFacade, this.State.PTLState.GameState);
+		} catch (ex) {
+			Logger.Log('askForGameStateUpdate', `Could not create game state: ${ex}`);
+		}
+		const facade = this.State.StateFacade;
+		const provider = GameEventProvider.Create(
+			new Date().toISOString(),
+			'GAME_STATE_UPDATE',
+			() => ({
+				Type: 'GAME_STATE_UPDATE',
+				Value: {
+					LocalPlayer: facade.LocalPlayer,
+					OpponentPlayer: facade.OpponentPlayer,
+					GameState: gameState,
+				},
+			}),
+			true,
+			null,
+		);
+		this.State.PTLState.NodeParser.EnqueueGameEvent([provider]);
 	}
 
 	private NormalizeTimestamp(timestamp: string): string {
