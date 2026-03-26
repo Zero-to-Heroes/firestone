@@ -6,7 +6,6 @@ import {
 	GameStatusService,
 	GlobalErrorService,
 	PowerLogBufferService,
-	PreferencesService,
 	USE_TYPESCRIPT_PARSER,
 } from '@firestone/shared/common/service';
 import { chunk, freeRegexp, sleep } from '@firestone/shared/framework/common';
@@ -52,7 +51,6 @@ export class GameEvents {
 		private readonly globalError: GlobalErrorService,
 		private readonly powerLogBuffer: PowerLogBufferService,
 		private readonly ngZone: NgZone,
-		private readonly prefs: PreferencesService | null = null,
 	) {
 		this.processingQueue = new ProcessingQueue<string>(
 			(eventQueue) => this.processQueue(eventQueue),
@@ -77,8 +75,12 @@ export class GameEvents {
 				take(1),
 			)
 			.subscribe(async () => {
-				console.log('[game-events] init game events monitor');
-				this.gameEventsPlugin.init((gameEvent) => this.dispatchGameEvent(gameEvent));
+				console.log('[game-events] init game events monitor, useTypescriptParser = ', USE_TYPESCRIPT_PARSER);
+				if (USE_TYPESCRIPT_PARSER) {
+					this.initTsParser();
+				} else {
+					this.gameEventsPlugin.init((gameEvent) => this.dispatchGameEvent(gameEvent));
+				}
 				this.scene.currentScene$$.subscribe((scene) => {
 					console.log('[game-events] emitting new scene event', scene);
 					this.doEventDispatch(
@@ -143,10 +145,10 @@ export class GameEvents {
 				eventQueue.length,
 			);
 		}
-		await this.gameEventsPlugin.isReady();
-		// console.log('[game-events] processing logs', eventQueue.length);
+		if (!USE_TYPESCRIPT_PARSER) {
+			await this.gameEventsPlugin.isReady();
+		}
 		const hasProcessed = await this.processLogs(eventQueue);
-		// console.log('[game-events] processed logs', eventQueue.length, hasProcessed);
 		return hasProcessed ? [] : eventQueue;
 	}
 
@@ -160,6 +162,7 @@ export class GameEvents {
 		}
 
 		if (USE_TYPESCRIPT_PARSER) {
+			console.debug('[game-events] processing logs with TypeScript parser');
 			return this.processLogsWithTsParser(eventQueue);
 		}
 
