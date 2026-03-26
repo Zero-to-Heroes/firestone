@@ -116,6 +116,7 @@ export { IntertwinedFate } from './intertwined-fate';
 export { IvoryKnight } from './ivory-knight';
 export { IvoryRook } from './ivory-rook';
 export { JarDealer } from './jar-dealer';
+export { Jackpot } from './jackpot';
 export { JerryRigCarpenter } from './jerry-rig-carpenter';
 export { JuicyPsychmelon } from './juicy-psychmelon';
 export { Jumpscare } from './jumpscare';

@@ -896,9 +896,6 @@ const getDynamicFilters = (
 					hasCorrectSpellSchool(c, SpellSchool.FROST) ||
 					hasCorrectSpellSchool(c, SpellSchool.NATURE));
 
-		case CardIds.Jackpot:
-			return (c) =>
-				hasCorrectType(c, CardType.SPELL) && hasCost(c, '>=', 5) && fromAnotherClass(c, options.currentClass);
 		case CardIds.TheFiresOfZinAzshari:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '>=', 5);
 		case CardIds.SubmergedSpacerock:
