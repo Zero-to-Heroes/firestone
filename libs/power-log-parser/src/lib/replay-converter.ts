@@ -38,7 +38,7 @@ function a(name: string, value: string | number | boolean): string {
 }
 
 function ts(data: { TimeStamp: string }): string {
-	if (!data.TimeStamp) return a('ts', '00:00:00.000000');
+	if (!data.TimeStamp) return '';
 	return a('ts', data.TimeStamp);
 }
 

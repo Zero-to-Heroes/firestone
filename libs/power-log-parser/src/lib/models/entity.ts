@@ -44,6 +44,11 @@ export abstract class BaseEntity extends GameData {
 		);
 	}
 
+	AddTag(tag: Tag): void {
+		this._tags.push(tag);
+		this._tagMap.set(tag.Name, tag.Value);
+	}
+
 	SetTag(tag: GameTag | number, value: number): BaseEntity {
 		const tagNum = tag as number;
 		let existing = this._tags.find((t) => t.Name === tagNum);

@@ -31,16 +31,15 @@ export class TagHandler {
 				state.FirstPlayerEntityId = (state.Node!.Object as PlayerEntity).Id;
 			}
 
-		if (state.Node!.Type === NodeType.GameEntity) {
-			(state.Node!.Object as GameEntity).SetTag(tag.Name, tag.Value);
-			if (tag.Name === (GameTag.GAME_SEED as number)) {
-				state.CurrentGame.GameSeed = tag.Value;
-			}
-		} else if (state.Node!.Type === NodeType.PlayerEntity) {
-			(state.Node!.Object as PlayerEntity).SetTag(tag.Name, tag.Value);
-		} else if (state.Node!.Type === NodeType.FullEntity) {
-			const fullEntity = state.Node!.Object as FullEntity;
-			fullEntity.SetTag(tag.Name, tag.Value);
+			if (state.Node!.Type === NodeType.GameEntity) {
+				(state.Node!.Object as GameEntity).AddTag(tag);
+				if (tag.Name === (GameTag.GAME_SEED as number)) {
+					state.CurrentGame.GameSeed = tag.Value;
+				}
+			} else if (state.Node!.Type === NodeType.PlayerEntity) {
+				(state.Node!.Object as PlayerEntity).AddTag(tag);
+			} else if (state.Node!.Type === NodeType.FullEntity) {
+				(state.Node!.Object as FullEntity).AddTag(tag);
 			} else if (state.Node!.Type === NodeType.ShowEntity) {
 				(state.Node!.Object as ShowEntity).Tags.push(tag);
 			} else if (state.Node!.Type === NodeType.ChangeEntity) {
