@@ -41,6 +41,100 @@ import {
 } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
 import { trimPowerLogLinesToLastGame } from '../../../../test-tools/lib/trim-power-log-last-game';
+
+/**
+ * Armor gained from Ivory Rook equals the discovered Taunt minion's mana cost.
+ * Parse it from power.log: after Ivory Rook's armor SUB_SPELL, read hero ARMOR vs last ARMOR before that block.
+ *
+ * Matches lines like:
+ * `TAG_CHANGE Entity=[entityName=Garrosh Hellscream id=64 ... cardId=HERO_01 player=1] tag=ARMOR value=7`
+ */
+const HERO_ARMOR_LINE_RE =
+	/TAG_CHANGE Entity=\[[^\]]*cardId=HERO_01 player=1\][^\n]*\btag=ARMOR value=(\d+)/;
+
+function extractHeroEntityIdFromSubSpellTargets(lines: readonly string[], subSpellLineIndex: number): number | null {
+	for (let i = subSpellLineIndex + 1; i < Math.min(subSpellLineIndex + 12, lines.length); i++) {
+		const m = lines[i].match(/Targets\[0\] = \[entityName=[^\]]*?\bid=(\d+)\b/);
+		if (m) {
+			return parseInt(m[1], 10);
+		}
+	}
+	return null;
+}
+
+function lastHeroArmorBeforeLine(lines: readonly string[], heroEntityId: number, beforeIndex: number): number {
+	const re = new RegExp(
+		`TAG_CHANGE Entity=\\[[^\\]]*\\bid=${heroEntityId}\\b[^\\]]*\\]\\s*tag=ARMOR value=(\\d+)`,
+	);
+	let last = 0;
+	for (let i = 0; i < beforeIndex; i++) {
+		const m = lines[i].match(re);
+		if (m) {
+			last = parseInt(m[1], 10);
+		}
+	}
+	return last;
+}
+
+function firstHeroArmorAtOrAfterLine(lines: readonly string[], heroEntityId: number, fromIndex: number): number | null {
+	const re = new RegExp(
+		`TAG_CHANGE Entity=\\[[^\\]]*\\bid=${heroEntityId}\\b[^\\]]*\\]\\s*tag=ARMOR value=(\\d+)`,
+	);
+	for (let i = fromIndex; i < lines.length; i++) {
+		const m = lines[i].match(re);
+		if (m) {
+			return parseInt(m[1], 10);
+		}
+	}
+	return null;
+}
+
+/**
+ * @returns Mana cost of the discovered minion (= armor gained), or null if the fixture block is missing.
+ */
+function extractIvoryRookDiscoverArmorGainFromPowerLogLines(lines: readonly string[]): number | null {
+	let subIdx = -1;
+	for (let i = 0; i < lines.length; i++) {
+		if (!lines[i].includes('SUB_SPELL_START')) {
+			continue;
+		}
+		const window = lines.slice(i, Math.min(i + 6, lines.length)).join('\n');
+		if (window.includes('Ivory Rook') && window.includes('WON_116')) {
+			subIdx = i;
+			break;
+		}
+	}
+	if (subIdx < 0) {
+		return null;
+	}
+	let heroId = extractHeroEntityIdFromSubSpellTargets(lines, subIdx);
+	let prevArmor: number;
+	let newArmor: number | null;
+	if (heroId != null) {
+		prevArmor = lastHeroArmorBeforeLine(lines, heroId, subIdx);
+		newArmor = firstHeroArmorAtOrAfterLine(lines, heroId, subIdx);
+	} else {
+		prevArmor = 0;
+		for (let i = 0; i < subIdx; i++) {
+			const m = lines[i].match(HERO_ARMOR_LINE_RE);
+			if (m) {
+				prevArmor = parseInt(m[1], 10);
+			}
+		}
+		newArmor = null;
+		for (let i = subIdx; i < Math.min(subIdx + 25, lines.length); i++) {
+			const m = lines[i].match(HERO_ARMOR_LINE_RE);
+			if (m) {
+				newArmor = parseInt(m[1], 10);
+				break;
+			}
+		}
+	}
+	if (newArmor == null) {
+		return null;
+	}
+	return newArmor - prevArmor;
+}
 import { DeckCard } from '../lib/models/deck-card';
 import { DeckState } from '../lib/models/deck-state';
 import { GameState } from '../lib/models/game-state';
@@ -56,7 +150,6 @@ import { GameStateParsersService } from '../lib/services/game-events/state-parse
 import { GameEventsFacadeService } from '../lib/services/game-events-facade.service';
 import { GameStateFacadeService } from '../lib/services/game-state-facade.service';
 import { GameStateMetaInfoService } from '../lib/services/game-state-meta-info.service';
-import { IvoryRook } from '../lib/services/cards/ivory-rook';
 import { GameStateService } from '../lib/services/game-state.service';
 import { RealTimeStatsService } from '../lib/services/real-time-stats/real-time-stats.service';
 import { GameUniqueIdService } from '../lib/services/game-unique-id.service';
@@ -86,6 +179,17 @@ function resolveIvoryLogPath(): string {
 
 describe('Power log replay → GameStateService (Ivory Rook cost narrowing)', () => {
 	const ivoryRookId = CardIds.IvoryRook_WON_116;
+
+	it('parses armor gained from ivory.log (equals discovered minion cost)', () => {
+		const logPath = resolveIvoryLogPath();
+		if (!fs.existsSync(logPath)) {
+			return;
+		}
+		const raw = fs.readFileSync(logPath, 'utf8');
+		const logLines = trimPowerLogLinesToLastGame(raw.split(/\r?\n/));
+		const gain = extractIvoryRookDiscoverArmorGainFromPowerLogLines(logLines);
+		expect(gain).toBe(7);
+	});
 
 	type ReplayContext = {
 		allCardsRef: AllCardsService;
@@ -250,84 +354,37 @@ describe('Power log replay → GameStateService (Ivory Rook cost narrowing)', ()
 	}
 
 	it(
-		'replays trimmed ivory.log through GameEvents + GameStateService and finds Ivory Rook–created cards',
+		'replays ivory.log, parses armor gained from the log, and expects discover possibleCards to match that mana cost',
 		async () => {
+			const logPath = resolveIvoryLogPath();
+			const cardsPath = resolveCardsJsonPath();
+			if (!fs.existsSync(cardsPath) || !fs.existsSync(logPath)) {
+				return;
+			}
+			const raw = fs.readFileSync(logPath, 'utf8');
+			const logLines = trimPowerLogLinesToLastGame(raw.split(/\r?\n/));
+			const expectedDiscoverCost = extractIvoryRookDiscoverArmorGainFromPowerLogLines(logLines);
+			expect(expectedDiscoverCost).toBe(7);
+
 			const ctx = await setupAndReplay();
 			if (!ctx) {
 				return;
 			}
 			expect(ctx.ivoryCreated.length).toBeGreaterThan(0);
-		},
-		120_000,
-	);
 
-	// Unskip once RECEIVE / guess pipeline attaches `guessedInfo.possibleCards` for Ivory discover during replay.
-	it.skip(
-		'keeps guessed discover possibleCards consistent with armor / discovered mana cost (regression for Ivory Rook)',
-		async () => {
-			const ctx = await setupAndReplay();
-			if (!ctx) {
-				return;
-			}
-			expect(ctx.ivoryCreated.length).toBeGreaterThan(0);
-
-			const { allCardsRef, state, ivoryCreated } = ctx;
-
+			const { allCardsRef, ivoryCreated } = ctx;
 			for (const zoneCard of ivoryCreated) {
 				const dc = zoneCard as DeckCard;
-				const gi = dc.guessedInfo;
-				const statePool = gi?.possibleCards ?? [];
-				const armorHint = gi?.cost ?? dc.storedInformation?.armorGained;
-				const discoveredCost = dc.cardId ? allCardsRef.getCard(dc.cardId)?.cost : undefined;
-
-				const refGuess = IvoryRook.guessInfo!({
-					card: dc,
-					deckState: state.playerDeck,
-					opponentDeckState: state.opponentDeck,
-					gameState: state,
-					allCards: allCardsRef,
-					creatorEntityId: dc.creatorEntityId,
-					options: {
-						validArenaPool: [],
-						metadata: state.metadata,
-					},
-				});
-				const refPool = refGuess?.possibleCards ?? [];
-
-				console.log('[ivory-rook-replay] entity', dc.entityId, {
-					discoveredCardId: dc.cardId,
-					discoveredCost,
-					armorFromGuess: gi?.cost,
-					armorStored: dc.storedInformation?.armorGained,
-					statePossibleCount: statePool.length,
-					refPossibleCount: refPool.length,
-				});
-
-				expect(refPool.length).toBeGreaterThan(0);
-
-				const costsInRef = new Set(
-					refPool.map((id: string) => allCardsRef.getCard(id)?.cost).filter((c) => c !== undefined),
-				);
-
-				if (typeof armorHint === 'number' && !Number.isNaN(armorHint)) {
-					expect(statePool.length).toBeGreaterThan(0);
-					const wrongInState = statePool.filter(
-						(id: string) => (allCardsRef.getCard(id)?.cost ?? -1) !== armorHint,
+				const pool = dc.guessedInfo?.possibleCards ?? [];
+				if (pool.length === 0) {
+					throw new Error(
+						`Ivory Rook discover (entity ${dc.entityId}): guessedInfo.possibleCards is empty after replay; cannot verify all options are ${expectedDiscoverCost}-cost taunts (armor gained from power.log).`,
 					);
-					expect(wrongInState).toEqual([]);
-				} else if (discoveredCost !== undefined && !Number.isNaN(discoveredCost)) {
-					expect(statePool.length).toBeGreaterThan(0);
-					const wrongInState = statePool.filter(
-						(id: string) => (allCardsRef.getCard(id)?.cost ?? -1) !== discoveredCost,
-					);
-					expect(wrongInState).toEqual([]);
-				} else if (costsInRef.size > 1) {
-					expect(statePool.length).toBeGreaterThan(0);
-					const stateCosts = new Set(
-						statePool.map((id: string) => allCardsRef.getCard(id)?.cost).filter((c) => c !== undefined),
-					);
-					expect(stateCosts.size).toBe(1);
 				}
+				const wrongCosts = pool.filter(
+					(cardId: string) => (allCardsRef.getCard(cardId)?.cost ?? -1) !== expectedDiscoverCost,
+				);
+				expect(wrongCosts).toEqual([]);
 			}
 		},
 		120_000,

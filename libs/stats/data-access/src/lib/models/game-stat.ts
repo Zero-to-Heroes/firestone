@@ -233,9 +233,9 @@ export class GameStat {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/member-ordering
-	public static encodeBgsFinalComp(finalComp: BgsBoard | null | undefined): string | null {
+	public static encodeBgsFinalComp(finalComp: BgsBoard | null | undefined): string | undefined {
 		if (!finalComp?.board?.length) {
-			return null;
+			return undefined;
 		}
 
 		console.debug('[game-stat] encoding finalComp', finalComp);

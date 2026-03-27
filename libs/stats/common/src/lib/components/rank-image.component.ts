@@ -13,10 +13,10 @@ import { GameStat, buildRankText } from '@firestone/stats/data-access';
 				rankTooltip
 					? rankTooltip
 					: playerRankImageTooltip
-					? playerRankImageTooltip
-					: rankIssue
-					? rankIssueTooltip
-					: null
+						? playerRankImageTooltip
+						: rankIssue
+							? rankIssueTooltip
+							: null
 			"
 			[ngClass]="{ legend: isLegend }"
 		>
@@ -47,7 +47,7 @@ export class RankImageComponent {
 		this.playerRankArt = rankImage.medalImage;
 		this.playerRankImageTooltip = rankImage.tooltip;
 		this.playerRankDecoration = rankImage.frameDecoration;
-		this.rankText = buildRankText(value.playerRank, value.gameMode, value.additionalResult);
+		this.rankText = buildRankText(value.playerRank, value.gameMode, value.additionalResult) ?? undefined;
 		this.rankIssue =
 			!this.playerRank &&
 			![
