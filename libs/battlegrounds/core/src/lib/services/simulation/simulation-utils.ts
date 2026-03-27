@@ -1,5 +1,5 @@
 import { GameTag } from '@firestone-hs/reference-data';
-import { Entity } from '@firestone-hs/replay-parser';
+import { Entity } from '@firestone/replay/replay-parser';
 import type { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 

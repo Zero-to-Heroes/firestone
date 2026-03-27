@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, Output, Renderer2 } from '@angular/core';
 import { GameTag } from '@firestone-hs/reference-data';
-import { Entity } from '@firestone-hs/replay-parser';
+import { Entity } from '@firestone/replay/replay-parser';
 
 @Component({
 	standalone: false,

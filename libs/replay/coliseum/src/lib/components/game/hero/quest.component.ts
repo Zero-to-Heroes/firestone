@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, HostListener, Input } from '@angular/core';
-import { Entity } from '@firestone-hs/replay-parser';
+import { Entity } from '@firestone/replay/replay-parser';
 import { Events } from '../../../services/events.service';
 
 @Component({

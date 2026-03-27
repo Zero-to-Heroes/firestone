@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { getReferenceTribeCardId, getTribeIcon, getTribeName } from '@firestone-hs/reference-data';
-import { Entity, EntityDefinition } from '@firestone-hs/replay-parser';
+import { Entity, EntityDefinition } from '@firestone/replay/replay-parser';
 import { MinionStat } from '@firestone/game-state';
 import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';

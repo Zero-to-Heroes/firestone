@@ -1,5 +1,5 @@
 import { GameTag, Zone } from '@firestone-hs/reference-data';
-import { Entity, GameEntity } from '@firestone-hs/replay-parser';
+import { Entity, GameEntity } from '@firestone/replay/replay-parser';
 import { Map } from 'immutable';
 
 export class GameHelper {

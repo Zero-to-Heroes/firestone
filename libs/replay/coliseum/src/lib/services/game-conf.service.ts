@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { isBattlegrounds } from '@firestone-hs/reference-data';
-import { Game } from '@firestone-hs/replay-parser';
+import { Game } from '@firestone/replay/replay-parser';
 
 @Injectable({
 	providedIn: 'root',

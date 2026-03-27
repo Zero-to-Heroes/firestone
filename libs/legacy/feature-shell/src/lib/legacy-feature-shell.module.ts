@@ -372,7 +372,7 @@ import { ChoosingCardBgsTrinketOptionComponent } from '@components/overlays/trin
 import { ProfileMatchStatsClassInfoComponent } from '@components/stats/desktop/match-stats/profile-match-stats-class-info.component';
 import { ProfileMatchStatsModeOverviewComponent } from '@components/stats/desktop/match-stats/profile-match-stats-mode-overview.component';
 import { ProfileMatchStatsComponent } from '@components/stats/desktop/match-stats/profile-match-stats.component';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { AllCardsService } from '@firestone/replay/replay-parser';
 import {
 	AchievementsCommonModule,
 	FirestoneRemoteAchievementsLoaderService,

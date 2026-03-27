@@ -8,7 +8,7 @@ import {
 	Input,
 	ViewRef,
 } from '@angular/core';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { AllCardsService } from '@firestone/replay/replay-parser';
 import { sleep } from '@firestone/shared/framework/common';
 
 @Component({

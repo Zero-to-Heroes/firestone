@@ -1,5 +1,5 @@
 import { defaultStartingHp, GameType } from '@firestone-hs/reference-data';
-import { Entity } from '@firestone-hs/replay-parser';
+import { Entity } from '@firestone/replay/replay-parser';
 import { BgsBoard, BgsPlayer, BgsPostMatchStatsPanel } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';

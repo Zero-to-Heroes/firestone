@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CardClass, CardType, GameTag, ReferenceCard } from '@firestone-hs/reference-data';
-import { AllCardsService, Entity } from '@firestone-hs/replay-parser';
+import { AllCardsService, Entity } from '@firestone/replay/replay-parser';
 import { ColiseumDebugService } from '../../../services/coliseum-debug.service';
 
 @Component({

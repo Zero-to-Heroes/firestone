@@ -2,7 +2,7 @@ import { OverlayModule } from '@angular/cdk/overlay';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ReplayParserModule } from '@firestone-hs/replay-parser';
+import { ReplayParserModule } from '@firestone/replay/replay-parser';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { InlineSVGModule } from 'ng-inline-svg-2';

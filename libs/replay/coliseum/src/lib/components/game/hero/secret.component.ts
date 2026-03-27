@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CardClass, GameTag } from '@firestone-hs/reference-data';
-import { AllCardsService, Entity } from '@firestone-hs/replay-parser';
+import { AllCardsService, Entity } from '@firestone/replay/replay-parser';
 
 @Component({
 	standalone: false,

@@ -9,7 +9,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { CardIds, GameTag, Race, getBuddy, getHeroPower, normalizeHeroCardId } from '@firestone-hs/reference-data';
-import { Entity } from '@firestone-hs/replay-parser';
+import { Entity } from '@firestone/replay/replay-parser';
 import {
 	BuildTierGameState,
 	BuildTierOptions,

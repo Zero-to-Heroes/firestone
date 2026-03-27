@@ -1,4 +1,4 @@
-import { Entity } from '@firestone-hs/replay-parser';
+import { Entity } from '@firestone/replay/replay-parser';
 
 export interface BgsMetaCompStatTier {
 	readonly id: BgsCompTier | null;

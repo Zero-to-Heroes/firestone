@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Entity } from '@firestone-hs/replay-parser';
+import { Entity } from '@firestone/replay/replay-parser';
 import { BehaviorSubject } from 'rxjs';
 
 export interface InGameFinalBoard {

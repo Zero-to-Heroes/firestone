@@ -14,7 +14,7 @@ import {
 	BaconBoardVisualStateAction,
 	CardPlayedFromHandAction,
 	Game,
-} from '@firestone-hs/replay-parser';
+} from '@firestone/replay/replay-parser';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { BehaviorSubject, combineLatest, distinctUntilChanged, Observable, tap } from 'rxjs';
 

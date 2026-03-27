@@ -12,7 +12,7 @@ import {
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { CardIds, CardType, GameTag, getEffectiveTribes, ReferenceCard } from '@firestone-hs/reference-data';
-import { Entity } from '@firestone-hs/replay-parser';
+import { Entity } from '@firestone/replay/replay-parser';
 import type { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, sortByProperties } from '@firestone/shared/framework/common';

@@ -56,6 +56,7 @@
 			"@firestone/profile/common": ["libs/profile/common/src/index.ts"],
 			"@firestone/profile/data-access": ["libs/profile/data-access/src/index.ts"],
 			"@firestone/replay/coliseum": ["libs/replay/coliseum/src/index.ts"],
+			"@firestone/replay/replay-parser": ["libs/replay/replay-parser/src/index.ts"],
 			"@firestone/settings/services": ["libs/settings/services/src/index.ts"],
 			"@firestone/settings/view": ["libs/settings/view/src/index.ts"],
 			"@firestone/shared/assets": ["libs/shared/assets/src/index.ts"],
@@ -88,7 +89,8 @@
 		"resolveJsonModule": true,
 		"allowSyntheticDefaultImports": true,
 		"useDefineForClassFields": false,
-		"noPropertyAccessFromIndexSignature": false
+		"noPropertyAccessFromIndexSignature": false,
+		"noFallthroughCasesInSwitch": false
 	},
 	"exclude": ["node_modules", "tmp"]
 }

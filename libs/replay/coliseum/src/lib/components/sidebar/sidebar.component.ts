@@ -8,7 +8,7 @@ import {
 	Output,
 	ViewRef,
 } from '@angular/core';
-import { Game } from '@firestone-hs/replay-parser';
+import { Game } from '@firestone/replay/replay-parser';
 
 @Component({
 	standalone: false,

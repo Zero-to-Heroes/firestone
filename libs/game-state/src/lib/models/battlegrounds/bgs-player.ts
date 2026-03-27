@@ -1,6 +1,6 @@
 import { Entity, BgsPlayer as IBgsPlayer } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { CardIds, GameTag, getHeroPower, normalizeHeroCardId } from '@firestone-hs/reference-data';
-import { Entity as ReplayEntity } from '@firestone-hs/replay-parser';
+import { Entity as ReplayEntity } from '@firestone/replay/replay-parser';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { QuestReward } from '@firestone/battlegrounds/core';
 import { NonFunctionProperties } from '@firestone/shared/framework/common';

@@ -1,7 +1,7 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { ComponentType } from '@angular/cdk/portal';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { Entity } from '@firestone-hs/replay-parser';
+import { Entity } from '@firestone/replay/replay-parser';
 import { BgsFaceOffWithSimulation } from '@firestone/game-state';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { BgsCardTooltipComponent } from '../bgs-card-tooltip.component';

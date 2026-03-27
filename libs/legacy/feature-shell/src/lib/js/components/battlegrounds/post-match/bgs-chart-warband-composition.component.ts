@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { Entity, BgsPostMatchStats as IBgsPostMatchStats } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { Race } from '@firestone-hs/reference-data';
-import { Entity as ParserEntity } from '@firestone-hs/replay-parser';
+import { Entity as ParserEntity } from '@firestone/replay/replay-parser';
 import { BgsBoard } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { Color, ScaleType } from '@sebastientromp/ngx-charts';

@@ -23,7 +23,7 @@ import {
 	isBattlegroundsDuo,
 	normalizeHeroCardId,
 } from '@firestone-hs/reference-data';
-import { Entity } from '@firestone-hs/replay-parser';
+import { Entity } from '@firestone/replay/replay-parser';
 import { GameStateFacadeService, isBattlegroundsScene } from '@firestone/game-state';
 import { BgsSceneService, SceneService } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';

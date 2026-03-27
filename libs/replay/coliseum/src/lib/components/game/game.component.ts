@@ -7,7 +7,7 @@ import {
 	Entity,
 	QuestCompletedAction,
 	SecretRevealedAction,
-} from '@firestone-hs/replay-parser';
+} from '@firestone/replay/replay-parser';
 import { Map } from 'immutable';
 import { Events } from '../../services/events.service';
 import { GameHelper } from '../../services/game-helper';

@@ -1,7 +1,7 @@
 import { ComponentType } from '@angular/cdk/portal';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { GameType, defaultStartingHp } from '@firestone-hs/reference-data';
-import { Entity } from '@firestone-hs/replay-parser';
+import { Entity } from '@firestone/replay/replay-parser';
 import type { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
 import { buildEntityFromBoardEntity } from '@firestone/battlegrounds/core';
 import { CardsFacadeService } from '@firestone/shared/framework/core';

@@ -1,5 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { Entity, EntityDefinition } from '@firestone-hs/replay-parser';
+import { Entity, EntityDefinition } from '@firestone/replay/replay-parser';
 import { BgsPostMatchStatsForReview, MinionStat } from '@firestone/game-state';
 import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';

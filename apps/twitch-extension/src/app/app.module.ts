@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { AllCardsService } from '@firestone/replay/replay-parser';
 import { CardsHighlightFacadeService } from '@firestone/game-state';
 import { LegacyFeatureShellModule } from '@firestone/legacy/feature-shell';
 import { Store } from '@firestone/shared/framework/common';

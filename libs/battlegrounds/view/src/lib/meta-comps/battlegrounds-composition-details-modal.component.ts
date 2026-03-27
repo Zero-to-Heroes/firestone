@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Inject, Input, Optional } from '@angular/core';
 import { BgsCompAdvice } from '@firestone-hs/content-craetor-input';
-import { Entity } from '@firestone-hs/replay-parser';
+import { Entity } from '@firestone/replay/replay-parser';
 import { capitalizeFirstLetter } from '@firestone/shared/framework/common';
 import {
 	ADS_SERVICE_TOKEN,

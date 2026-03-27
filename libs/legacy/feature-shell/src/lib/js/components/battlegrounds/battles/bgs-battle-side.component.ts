@@ -9,7 +9,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { CardIds, CardType, GameTag, GameType, Zone, defaultStartingHp } from '@firestone-hs/reference-data';
-import { Entity } from '@firestone-hs/replay-parser';
+import { Entity } from '@firestone/replay/replay-parser';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { BgsCardTooltipComponent } from '@firestone/battlegrounds/common';

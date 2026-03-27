@@ -7,7 +7,7 @@ import {
 	Input,
 	ViewRef,
 } from '@angular/core';
-import { Entity } from '@firestone-hs/replay-parser';
+import { Entity } from '@firestone/replay/replay-parser';
 import { QuestReward } from '@firestone/battlegrounds/core';
 import {
 	BgsFaceOffWithSimulation,

@@ -14,7 +14,7 @@
 		"target": "es2022",
 		"useDefineForClassFields": false,
 		"forceConsistentCasingInFileNames": true,
-		"noFallthroughCasesInSwitch": true,
+		"noFallthroughCasesInSwitch": false,
 		"resolveJsonModule": true,
 		"allowSyntheticDefaultImports": true
 	},

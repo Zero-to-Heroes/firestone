@@ -8,7 +8,7 @@ import {
 	DiscoverAction,
 	Entity,
 	FatigueDamageAction,
-} from '@firestone-hs/replay-parser';
+} from '@firestone/replay/replay-parser';
 import { Map } from 'immutable';
 
 @Component({
