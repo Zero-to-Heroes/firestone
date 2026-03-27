@@ -3,7 +3,7 @@ import { CardClass, CardIds, CardType, GameTag, SpellSchool } from '@firestone-h
 import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { ChoosingOptionsGameEvent } from '../services/game-events/events/choosing-options-game-event';
-import { NumericTurnInfo } from './_barrel';
+import { NumericTurnInfo } from './battlegrounds/post-match/numeric-turn-info';
 import { AttackOnBoard } from './attack-on-board';
 import { BoardSecret } from './board-secret';
 import { DeckCard } from './deck-card';

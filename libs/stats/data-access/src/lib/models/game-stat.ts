@@ -106,7 +106,7 @@ export class GameStat {
 				return {
 					frameImage: leagueFrame,
 					medalImage: `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/ranks/ranked/RankedPlay_Medal_Portrait_${leagueName}_${paddedRank}.png`,
-					frameDecoration: decoration,
+					frameDecoration: decoration ?? undefined,
 					tooltip: i18n.translateString('app.replays.replay-info.game-mode-tooltip.ladder', {
 						format: i18n.translateString(`global.format.${this.gameFormat.toLowerCase()}`),
 						leagueName: i18n.translateString(`global.ranks.constructed.${leagueName.toLowerCase()}`),
@@ -138,10 +138,11 @@ export class GameStat {
 					? i18n.translateString('global.game-mode.mercenaries-pvp')
 					: i18n.translateString('global.game-mode.mercenaries-pve');
 		} else if (this.gameMode === 'practice') {
-			if (GALAKROND_EXPLORER.indexOf(this.scenarioId) !== -1) {
+			const scenarioId = this.scenarioId;
+			if (scenarioId != null && GALAKROND_EXPLORER.indexOf(scenarioId) !== -1) {
 				rankIcon = 'galakrond_explorers';
 				rankIconTooltip = i18n.translateString('global.game-mode.galakrond-explorers');
-			} else if (GALAKROND_EVIL.indexOf(this.scenarioId) !== -1) {
+			} else if (scenarioId != null && GALAKROND_EVIL.indexOf(scenarioId) !== -1) {
 				rankIcon = 'galakrond_evil';
 				rankIconTooltip = i18n.translateString('global.game-mode.galakrond-evil');
 			} else {
@@ -158,7 +159,7 @@ export class GameStat {
 			if (!this.playerRank) {
 				return {};
 			}
-			if (this.buildNumber <= 221850) {
+			if ((this.buildNumber ?? 0) <= 221850) {
 				if (this.playerRank.indexOf('-') !== -1) {
 					const wins = this.playerRank.split('-')[0];
 					rankIcon = `arena/arena${wins}wins`;
@@ -232,7 +233,7 @@ export class GameStat {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/member-ordering
-	public static encodeBgsFinalComp(finalComp: BgsBoard | null | undefined): string {
+	public static encodeBgsFinalComp(finalComp: BgsBoard | null | undefined): string | null {
 		if (!finalComp?.board?.length) {
 			return null;
 		}
@@ -243,7 +244,7 @@ export class GameStat {
 		return base64data;
 	}
 	// eslint-disable-next-line @typescript-eslint/member-ordering
-	public static decodeBgsFinalComp(finalComp: string | null | undefined): BgsBoard {
+	public static decodeBgsFinalComp(finalComp: string | null | undefined): BgsBoard | null {
 		if (!finalComp?.length) {
 			return null;
 		}
@@ -259,7 +260,11 @@ export const buildNewFormatGameModeImage = (gameMode: 'arena' | 'arena-undergrou
 	return `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/mode/${gameModeKey}.webp`;
 };
 
-export const buildRankText = (playerRank: string | undefined, gameMode: string, additionalResult: string): string => {
+export const buildRankText = (
+	playerRank: string | undefined,
+	gameMode: string,
+	additionalResult: string,
+): string | null => {
 	if (playerRank == null) {
 		return null;
 	}

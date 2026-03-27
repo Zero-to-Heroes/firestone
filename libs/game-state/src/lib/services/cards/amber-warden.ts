@@ -1,6 +1,7 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { CardIds, CardType, GameFormat, GameType } from '@firestone-hs/reference-data';
-import { hasCorrectType, isCardValidForGame } from '../../..';
+import { hasCorrectType } from '../../related-cards/dynamic-pools';
+import { isCardValidForGame } from '../card-utils';
 import { StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
 

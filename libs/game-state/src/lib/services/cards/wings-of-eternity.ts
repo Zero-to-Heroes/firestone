@@ -1,6 +1,8 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { CardIds, CardType, GameFormat, GameType, hasCorrectTribe, Race } from '@firestone-hs/reference-data';
-import { canBeDiscoveredByClass, GuessedInfo, hasCorrectType, isCardValidForGame } from '../../..';
+import { GuessedInfo } from '../../models/deck-card';
+import { canBeDiscoveredByClass, hasCorrectType } from '../../related-cards/dynamic-pools';
+import { isCardValidForGame } from '../card-utils';
 import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
 

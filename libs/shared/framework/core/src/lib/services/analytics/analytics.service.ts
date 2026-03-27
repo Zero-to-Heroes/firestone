@@ -17,7 +17,8 @@ export class AnalyticsService {
 
 	private async init() {
 		const currentWindow = await this.ow?.getCurrentWindow();
-		if (!currentWindow || currentWindow?.name === OverwolfService.MAIN_WINDOW) {
+		const windowName = (currentWindow as { name?: string } | null | undefined)?.name;
+		if (!currentWindow || windowName === OverwolfService.MAIN_WINDOW) {
 			this.plausible = Plausible({
 				domain: this.domain,
 				trackLocalhost: true,
@@ -26,7 +27,7 @@ export class AnalyticsService {
 			window['plausibleInstance'] = this.plausible;
 			this.plausible['debugId'] = uuid();
 			this.plausible.trackEvent('app-started');
-			console.log('[analytics] created new Plausible instance', currentWindow?.name);
+			console.log('[analytics] created new Plausible instance', windowName);
 		} else {
 			this.plausible = this.ow.getMainWindow()['plausibleInstance'];
 			console.log('[analytics] reusing Plausible instance');

@@ -5,6 +5,7 @@ export * from './lib/counters/impl/next-starship-launch';
 export * from './lib/counters/impl/starships-launched';
 export * from './lib/game-state.module';
 export * from './lib/models/_barrel';
+export * from './lib/models/stats-recap';
 export * from './lib/related-cards/dynamic-pools';
 export * from './lib/related-cards/related-cards';
 export * from './lib/services/_bootstrap-game-state.service';

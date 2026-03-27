@@ -1,4 +1,8 @@
-import { GameStat } from '@firestone/stats/data-access';
+/** Minimal fields used by {@link StatsRecap.from}; avoids importing the stats data-access package graph. */
+export interface StatsRecapInputStat {
+	readonly creationTimestamp: number;
+	readonly result: string;
+}
 
 export class StatsRecap {
 	readonly opponentClass: string | undefined;
@@ -7,7 +11,7 @@ export class StatsRecap {
 	readonly totalLosses: number;
 	readonly winratePercent: number;
 
-	public static from(deckStats: readonly GameStat[], opponentClass?: string): StatsRecap | null {
+	public static from(deckStats: readonly StatsRecapInputStat[], opponentClass?: string): StatsRecap | null {
 		console.debug('building stats recap', deckStats, opponentClass);
 		if (!deckStats || deckStats.length === 0) {
 			return null;

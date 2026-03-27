@@ -39,7 +39,6 @@ export const IvoryRook: GeneratingCard & StaticGeneratingCard & ChainParsingCard
 	},
 	dynamicPool: (input: StaticGeneratingCardInput) => {
 		const currentClass = input.inputOptions.deckState.getCurrentClass();
-		const card = input.inputOptions.deckState.findCard(input.entityId)?.card;
 		return filterCards(
 			IvoryRook.cardIds[0],
 			input.allCards,
