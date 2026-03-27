@@ -2,52 +2,11 @@ import { BlockType, CardIds, GameTag, Zone } from '@firestone-hs/reference-data'
 import { ActionParser } from '../action-parser';
 import { GameEventProvider } from '../game-event';
 import { Action, FullEntity, Node, NodeType, ShowEntity, TagChange } from '../models';
+import { Obfuscator } from '../obfuscator';
+import { Oracle } from '../oracle';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
-
-// TODO: Oracle
-const Oracle = {
-	FindCardCreator(
-		_gameState: GameState,
-		_entity: FullEntity | ShowEntity,
-		_node: Node,
-		_skipDeck?: boolean,
-	): [string, number] | null {
-		return null;
-	},
-	FindCardCreatorCardId(
-		_gameState: GameState,
-		_entity: ShowEntity | FullEntity,
-		_node: Node,
-	): [string, number] | null {
-		return null;
-	},
-	PredictCardId(
-		_gameState: GameState,
-		_creatorCardId: string | null | undefined,
-		_creatorEntityId: number,
-		_node: Node,
-		_cardId: string | null,
-		_stateFacade?: StateFacade,
-		_targetEntityId?: number,
-	): string | null {
-		return null;
-	},
-};
-
-// TODO: Obfuscator
-const Obfuscator = {
-	shouldObfuscateCardDraw(
-		_entity: FullEntity,
-		_gameState: GameState,
-		_node: Node,
-		_isLocalPlayer: boolean,
-		_options?: { revealed?: boolean },
-	): boolean {
-		return false;
-	},
-};
 
 const SHOULD_USE_ADVANCED_PREDICTION_FOR_CARD_DRAW: string[] = [
 	CardIds.SuspiciousAlchemist_AMysteryEnchantment,
@@ -196,7 +155,7 @@ export class CardDrawFromDeckParser implements ActionParser {
 						this.GameState,
 						node,
 						controllerId === this.StateFacade.LocalPlayer?.PlayerId,
-						{ revealed },
+						revealed,
 					);
 					return {
 						Type: 'CARD_DRAW_FROM_DECK',
@@ -286,10 +245,10 @@ export class CardDrawFromDeckParser implements ActionParser {
 					}
 					const creatorCardId = wasInDeck
 						? null
-						: Oracle.FindCardCreatorCardId(this.GameState, showEntity, node);
-					const lastInfluencedByCardId = isCastsWhenDrawnReplacementDraw
-						? null
-						: Oracle.FindCardCreatorCardId(this.GameState, showEntity, node);
+					: Oracle.FindCardCreatorFromShowEntity(this.GameState, showEntity, node);
+				const lastInfluencedByCardId = isCastsWhenDrawnReplacementDraw
+					? null
+					: Oracle.FindCardCreatorFromShowEntity(this.GameState, showEntity, node);
 					this.GameState.OnCardDrawn(showEntity.Entity);
 					return {
 						Type: 'CARD_DRAW_FROM_DECK',

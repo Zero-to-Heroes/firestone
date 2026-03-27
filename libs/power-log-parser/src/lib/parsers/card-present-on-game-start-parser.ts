@@ -2,20 +2,10 @@ import { CardType, GameTag, Zone } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventHelper, GameEventProvider } from '../game-event';
 import { FullEntity, Game, Node, NodeType } from '../models';
+import { Oracle } from '../oracle';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
-
-// TODO: Oracle
-const Oracle = {
-	FindCardCreator(
-		_gameState: GameState,
-		_entity: FullEntity,
-		_node: Node,
-	): [string, number] | null {
-		return null;
-	},
-};
 
 export class CardPresentOnGameStartParser implements ActionParser {
 	readonly ParserName = 'CardPresentOnGameStartParser';

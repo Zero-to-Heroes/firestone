@@ -2,29 +2,10 @@ import { BlockType, CardIds, GameTag, Step, Zone } from '@firestone-hs/reference
 import { ActionParser } from '../action-parser';
 import { GameEventHelper, GameEventProvider } from '../game-event';
 import { Action, FullEntity, Node, NodeType, TagChange } from '../models';
+import { Oracle } from '../oracle';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
-
-// TODO: Oracle
-const Oracle = {
-	FindCardCreator(
-		_gameState: GameState,
-		_entity: FullEntity,
-		_node: Node,
-	): [string, number] | null {
-		return null;
-	},
-	PredictCardId(
-		_gameState: GameState,
-		_creatorCardId: string | null | undefined,
-		_creatorEntityId: number,
-		_node: Node,
-		_cardId: string | null,
-	): string | null {
-		return null;
-	},
-};
 
 export class CardBackToDeckParser implements ActionParser {
 	readonly ParserName = 'CardBackToDeckParser';

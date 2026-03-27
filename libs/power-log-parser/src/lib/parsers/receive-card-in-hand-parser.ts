@@ -2,67 +2,10 @@ import { BlockType, CardIds, CardType, GameTag, MetaTags, Zone } from '@fireston
 import { ActionParser } from '../action-parser';
 import { GameEventHelper, GameEventProvider } from '../game-event';
 import { Action, FullEntity, MetaData, Node, NodeType, ShowEntity, Tag, TagChange } from '../models';
+import { Oracle } from '../oracle';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
-
-// TODO: Oracle
-const Oracle = {
-	FindCardCreator(
-		_gameState: GameState,
-		_entity: FullEntity | ShowEntity,
-		_node: Node,
-	): [string, number] | null {
-		return null;
-	},
-	FindCardCreatorCardId(
-		_gameState: GameState,
-		_entity: ShowEntity,
-		_node: Node,
-	): [string, number] | null {
-		return null;
-	},
-	FindParentEntity(
-		_gameState: GameState,
-		_node: Node,
-	): [string, number] | null {
-		return null;
-	},
-	PredictCardId(
-		_gameState: GameState,
-		_creatorCardId: string | null | undefined,
-		_creatorEntityId: number,
-		_node: Node,
-		_cardId: string | null,
-		_stateFacade?: StateFacade,
-		_targetEntityId?: number,
-		_subSpellInEffect?: any,
-	): string | null {
-		return null;
-	},
-	GuessTags(
-		_gameState: GameState,
-		_creatorCardId: string | null | undefined,
-		_creatorEntityId: number,
-		_node: Node,
-		_cardId: string | null,
-		_stateFacade?: StateFacade,
-	): Tag[] | null {
-		return null;
-	},
-	GetBuffingCardCardId(
-		_creatorEntityId: number,
-		_creatorCardId: string | null | undefined,
-	): string | null {
-		return null;
-	},
-	GetBuffCardId(
-		_creatorEntityId: number,
-		_creatorCardId: string | null | undefined,
-	): string | null {
-		return null;
-	},
-};
 
 const ExcessAmountCardConfig: Map<string, { SpellAmount: number; MetaType: number }> = new Map([
 	[CardIds.InvasiveShadeleaf_WW_393, { SpellAmount: 10, MetaType: MetaTags.DAMAGE }],
@@ -203,7 +146,7 @@ export class ReceiveCardInHandParser implements ActionParser {
 
 	private createEventFromShowEntity(node: Node): GameEventProvider[] | null {
 		const showEntity = node.Object as ShowEntity;
-		const creator = Oracle.FindCardCreatorCardId(this.GameState, showEntity, node);
+		const creator = Oracle.FindCardCreatorFromShowEntity(this.GameState, showEntity, node);
 		const creatorEntity = this.GameState.CurrentEntities.get(creator?.[1] ?? -1);
 		let createdIndex: number | null = null;
 		let creatorZone: number | null = null;

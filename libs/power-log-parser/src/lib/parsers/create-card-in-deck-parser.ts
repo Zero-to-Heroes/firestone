@@ -2,40 +2,10 @@ import { BlockType, CardIds, GameTag, Zone } from '@firestone-hs/reference-data'
 import { ActionParser } from '../action-parser';
 import { GameEventHelper, GameEventProvider } from '../game-event';
 import { Action, FullEntity, Node, NodeType, ShowEntity } from '../models';
+import { Oracle } from '../oracle';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
-
-// TODO: Oracle
-const Oracle = {
-	FindCardCreator(
-		_gameState: GameState,
-		_entity: FullEntity,
-		_node: Node,
-		_recurse?: boolean,
-		_stateFacade?: StateFacade,
-	): [string, number] | null {
-		return null;
-	},
-	FindCardCreatorCardId(
-		_gameState: GameState,
-		_entity: ShowEntity,
-		_node: Node,
-	): [string, number] | null {
-		return null;
-	},
-	PredictCardId(
-		_gameState: GameState,
-		_creatorCardId: string | null | undefined,
-		_creatorEntityId: number,
-		_node: Node,
-		_cardId: string | null,
-		_stateFacade?: StateFacade,
-		_targetEntityId?: number,
-	): string | null {
-		return null;
-	},
-};
 
 export class CreateCardInDeckParser implements ActionParser {
 	readonly ParserName = 'CreateCardInDeckParser';
@@ -92,7 +62,7 @@ export class CreateCardInDeckParser implements ActionParser {
 			return null;
 		}
 
-		const creator = Oracle.FindCardCreatorCardId(this.GameState, showEntity, node);
+		const creator = Oracle.FindCardCreatorFromShowEntity(this.GameState, showEntity, node);
 		let cardId = Oracle.PredictCardId(
 			this.GameState,
 			creator?.[0] ?? null,

@@ -152,7 +152,7 @@ export class Oracle {
 
 	static GuessTags(
 		gameState: GameState,
-		creatorCardId: string,
+		creatorCardId: string | null | undefined,
 		creatorEntityId: number,
 		node: Node,
 		inputCardId: string | null = null,
@@ -175,7 +175,7 @@ export class Oracle {
 
 	static PredictCardId(
 		gameState: GameState,
-		creatorCardId: string,
+		creatorCardId: string | null | undefined,
 		creatorEntityId: number,
 		node: Node,
 		inputCardId: string | null = null,
@@ -1729,7 +1729,7 @@ export class Oracle {
 		return null;
 	}
 
-	static GetBuffCardId(creatorEntityId: number, creatorCardId: string): string | null {
+	static GetBuffCardId(creatorEntityId: number, creatorCardId: string | null | undefined): string | null {
 		switch (creatorCardId) {
 			case CardIds.TamsinRoame_BAR_918:
 				return CardIds.TamsinRoame_GatheredShadowsEnchantment;
@@ -1740,7 +1740,7 @@ export class Oracle {
 
 	static GetBuffingCardCardId(
 		creatorEntityId: number,
-		creatorCardId: string,
+		creatorCardId: string | null | undefined,
 	): string | null {
 		switch (creatorCardId) {
 			case CardIds.TamsinRoame_BAR_918:
