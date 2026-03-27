@@ -67,7 +67,7 @@ export class XmlParserService {
 		// - one chunk with both mulligans
 		// - one chunk for each turn
 		const mulliganSplits = xmlAsString.split(
-			new RegExp(`(?=<TagChange.*tag="${GameTag.MULLIGAN_STATE}" value="${Mulligan.INPUT}".*/>)`),
+			new RegExp(`(?=<TagChange[^>]*tag="${GameTag.MULLIGAN_STATE}"[^>]*value="${Mulligan.INPUT}"[^/]*/>)`),
 		);
 		// We isolate the pre-mulligan stuff
 		const [setupChunk, ...gameChunks] = mulliganSplits;
@@ -79,7 +79,7 @@ export class XmlParserService {
 		// console.log('[game-parser] [xml-parser] gameXml', gameXml);
 		// https://stackoverflow.com/questions/12001953/javascript-and-regex-split-string-and-keep-the-separator
 		const chunks = gameXml.split(
-			new RegExp(`(?=<TagChange.*tag="${GameTag.STEP}" value="${Step.MAIN_READY}".*/>)`),
+			new RegExp(`(?=<TagChange[^>]*tag="${GameTag.STEP}"[^>]*value="${Step.MAIN_READY}"[^/]*/>)`),
 		);
 		// console.log('[game-parser] [xml-parser] chunks', chunks.length);
 		const splitChunks = gameChunks && gameChunks.length > 0 ? [setupChunk, ...chunks] : [...chunks];

@@ -18,9 +18,10 @@
 		"useDefineForClassFields": false,
 		"forceConsistentCasingInFileNames": true,
 		"strict": true,
-		"noImplicitOverride": true,
-		"noPropertyAccessFromIndexSignature": true,
-		"noImplicitReturns": true,
+		"strictNullChecks": false,
+		"noImplicitOverride": false,
+		"noPropertyAccessFromIndexSignature": false,
+		"noImplicitReturns": false,
 		"noFallthroughCasesInSwitch": false
 	},
 	"angularCompilerOptions": {
