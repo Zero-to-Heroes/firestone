@@ -2,21 +2,20 @@
  * Regression: Torch (CATA_585) should carry {@link DeckCard.mainAttributeChange} from excess damage
  * (TAG_SCRIPT_DATA_NUM_1 / StoredAmount in receive flow).
  *
- * Fixture: `test-tools/power-logs/torch.log` (bug report game log, last match only).
- * Override: `TORCH_POWER_LOG_PATH` or `HS_REFERENCE_CARDS_JSON_PATH`.
+ * Fixture: `torch.log` in this folder. Override: `TORCH_POWER_LOG_PATH` or `HS_REFERENCE_CARDS_JSON_PATH`.
  *
  * Run:
- *   npx jest libs/game-state/src/testing/power-log-torch-replay.spec.ts --config=libs/game-state/jest.config.ts --runInBand
+ *   npx jest test-tools/bugs/torch/power-log-torch-replay.spec.ts --config=libs/game-state/jest.config.ts --runInBand
  */
 import * as fs from 'fs';
 import { CardIds } from '@firestone-hs/reference-data';
-import { trimPowerLogLinesToLastGame } from '../../../../test-tools/lib/trim-power-log-last-game';
+import { trimPowerLogLinesToLastGame } from '../../lib/trim-power-log-last-game';
 import {
 	collectAllDeckCards,
 	replayPowerLogToGameState,
 	resolveCardsJsonPath,
 	resolvePowerLogPathForSlug,
-} from './power-log-replay-harness';
+} from '../../lib/power-log-replay-harness';
 import { extractTorchScriptDataNum1ValuesFromPowerLogLines } from './torch-power-log-helpers';
 
 describe('Power log replay → GameStateService (Torch mainAttributeChange)', () => {

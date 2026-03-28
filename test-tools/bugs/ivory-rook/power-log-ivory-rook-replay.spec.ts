@@ -1,23 +1,23 @@
 /**
- * Integration test: replay `test-tools/power-logs/ivory.log` through GameEvents + GameStateService,
+ * Integration test: replay `ivory.log` through GameEvents + GameStateService,
  * then validate Ivory Rook discover guess state (armor vs possibleCards costs).
  *
  * Prerequisites: see {@link resolvePowerLogPathForSlug} / `IVORY_POWER_LOG_PATH`, `HS_REFERENCE_CARDS_JSON_PATH`.
  *
  * Run:
- *   npx jest libs/game-state/src/testing/power-log-ivory-rook-replay.spec.ts --config=libs/game-state/jest.config.ts --runInBand
+ *   npx jest test-tools/bugs/ivory-rook/power-log-ivory-rook-replay.spec.ts --config=libs/game-state/jest.config.ts --runInBand
  */
 import * as fs from 'fs';
 import { CardIds } from '@firestone-hs/reference-data';
-import { trimPowerLogLinesToLastGame } from '../../../../test-tools/lib/trim-power-log-last-game';
-import { DeckCard } from '../lib/models/deck-card';
-import { extractIvoryRookDiscoverArmorGainFromPowerLogLines } from './ivory-rook-power-log-helpers';
+import { DeckCard } from '@firestone/game-state';
+import { trimPowerLogLinesToLastGame } from '../../lib/trim-power-log-last-game';
 import {
 	collectAllDeckCards,
 	replayPowerLogToGameState,
 	resolveCardsJsonPath,
 	resolvePowerLogPathForSlug,
-} from './power-log-replay-harness';
+} from '../../lib/power-log-replay-harness';
+import { extractIvoryRookDiscoverArmorGainFromPowerLogLines } from './ivory-rook-power-log-helpers';
 
 describe('Power log replay → GameStateService (Ivory Rook cost narrowing)', () => {
 	const ivoryRookId = CardIds.IvoryRook_WON_116;

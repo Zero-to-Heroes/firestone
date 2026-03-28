@@ -7,5 +7,12 @@
 		"isolatedModules": true
 	},
 	"files": ["src/test-setup.ts"],
-	"include": ["jest.config.ts", "**/*.test.ts", "**/*.spec.ts", "**/*.d.ts"]
+	"include": [
+		"jest.config.ts",
+		"**/*.test.ts",
+		"**/*.spec.ts",
+		"**/*.d.ts",
+		"../../test-tools/bugs/**/*.spec.ts",
+		"../../test-tools/lib/**/*.ts"
+	]
 }

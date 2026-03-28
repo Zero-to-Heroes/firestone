@@ -18,9 +18,10 @@ Use this when investigating a **decktracker or parser** bug backed by a **power.
     - From repo root:  
       `git worktree add ../.worktrees/bug-<slug>/firestone -b bug/<slug>`
     - Do all reads/edits in that worktree until merge.
-2. After merge:  
-   `git worktree remove ../.worktrees/bug-<slug>/firestone`
-   remove the debug configuration in launch.json
+2. After merge:
+    - `git worktree remove ../.worktrees/bug-<slug>/firestone`
+    - remove the debug configuration in launch.json
+    - delete temporary .zip files you have downloaded
 
 ---
 
@@ -29,8 +30,9 @@ Use this when investigating a **decktracker or parser** bug backed by a **power.
 1. Download the **Game logs** zip from the URL, extract `power.log`.
 2. **Trim to the last game only** (multi-game files are common): keep from the **last** line containing both `GameState` and `CREATE_GAME` through end of file.
     - Helper in repo: `test-tools/lib/trim-power-log-last-game.ts` (`trimPowerLogLinesToLastGame`).
-3. Save as:  
-   **`test-tools/power-logs/<slug>.log`**
+3. Save under the bug folder (spec + log live together):  
+   **`test-tools/bugs/<bug-id>/<name>.log`** (e.g. `test-tools/bugs/blackwing/blackwing.log`)  
+   Map the slug to this path in `DEFAULT_BUG_LOG_BY_SLUG` inside `test-tools/lib/power-log-replay-harness.ts`, or use `<slug>/<slug>.log` under `test-tools/bugs/` and pass that slug to `resolvePowerLogPathForSlug`.
 4. If possible: truncate after the relevant sequence (e.g. stop after a key `PowerTaskList` block) to keep the fixture small—document why in the spec.
     - It not possible, **please say so** and don't continue
 
@@ -41,21 +43,21 @@ Use this when investigating a **decktracker or parser** bug backed by a **power.
 Goal: replay the log through the **same path as the app** (`GameEvents.receiveLogLine` → `GameStateService`) and assert on **final `GameState`**.
 
 1. **Shared harness** (reuse; do not duplicate):  
-   `libs/game-state/src/testing/power-log-replay-harness.ts`
+   `test-tools/lib/power-log-replay-harness.ts`
     - `resolveCardsJsonPath()` — needs `cards_short.json` (sibling `hs-reference-data` or `HS_REFERENCE_CARDS_JSON_PATH`).
-    - `resolvePowerLogPathForSlug('<slug>')` — default `test-tools/power-logs/<slug>.log`; overrides: `POWER_LOG_<SLUG>_PATH`, or legacy envs like `IVORY_POWER_LOG_PATH` / `TORCH_POWER_LOG_PATH` (see `LEGACY_ENV_BY_SLUG` in the harness).
+    - `resolvePowerLogPathForSlug('<slug>')` — default `test-tools/bugs/...` per `DEFAULT_BUG_LOG_BY_SLUG`; overrides: `POWER_LOG_<SLUG>_PATH`, or legacy envs like `IVORY_POWER_LOG_PATH` / `TORCH_POWER_LOG_PATH` (see `LEGACY_ENV_BY_SLUG` in the harness).
     - `replayPowerLogToGameState({ logPath, reviewId?, settleMs? })` — returns `{ allCardsRef, state, gameStateService }`.
     - `collectAllDeckCards(state)` — hand + deck + board + otherZone + deckList for both players.
 
-2. **New spec file**:  
-   `libs/game-state/src/testing/power-log-<slug>-replay.spec.ts`
-    - Mirror **Ivory** (`power-log-ivory-rook-replay.spec.ts`) or **Torch** (`power-log-torch-replay.spec.ts`) for structure.
+2. **New spec file** (next to the log under `test-tools/bugs/<bug-id>/`):  
+   `test-tools/bugs/<bug-id>/power-log-<slug>-replay.spec.ts`
+    - Mirror **Ivory** (`test-tools/bugs/ivory-rook/power-log-ivory-rook-replay.spec.ts`) or **Torch** (`test-tools/bugs/torch/power-log-torch-replay.spec.ts`) for structure.
     - Prefer **small helpers** in the same folder for slug-specific parsing from raw log lines (e.g. armor delta, `TAG_SCRIPT_DATA_NUM_1`) so expected values are **grounded in the fixture**, not guessed.
 
 3. **Run** (always **in-band**; harness uses `setAppInjector`):
 
     ```bash
-    npx jest libs/game-state/src/testing/power-log-<slug>-replay.spec.ts --config=libs/game-state/jest.config.ts --runInBand
+    npx jest test-tools/bugs/<bug-id>/power-log-<slug>-replay.spec.ts --config=libs/game-state/jest.config.ts --runInBand
     ```
 
     Or all power-log replay specs:
@@ -101,8 +103,8 @@ Game logs: <https://s3-.../....power.zip>
 In docs/BUG_REPORT_TEMPLATE.md, replace "<slug>" with "<your-slug>".
 
 Please download the Game logs zip, extract power.log, trim to the last game, save as
-test-tools/power-logs/<slug>.log, add a power-log-<slug>-replay.spec.ts using the shared
-power-log-replay-harness, and drive a fix for <expected behavior>.
+test-tools/bugs/<bug-id>/<name>.log (with spec + helpers in the same folder), add a power-log-<slug>-replay.spec.ts using the shared
+test-tools/lib/power-log-replay-harness, and drive a fix for <expected behavior>.
 Also check AGENTS.md.
 ```
 
@@ -114,7 +116,7 @@ When the assignee must **never touch the main checkout**:
 
 1. Create worktree:  
    `git worktree add ../.worktrees/bug-<slug>/firestone -b bug/<slug>`
-2. Copy the prepared log into the worktree if needed:  
-   `cp test-tools/power-logs/<slug>.log ../.worktrees/bug-<slug>/firestone/test-tools/power-logs/`
+2. Copy the prepared bug folder into the worktree if needed:  
+   `cp -r test-tools/bugs/<bug-id> ../.worktrees/bug-<slug>/firestone/test-tools/bugs/`
 3. Perform **all** file work inside `../.worktrees/bug-<slug>/firestone/`.
 4. Report branch name `bug/<slug>` for review/merge.

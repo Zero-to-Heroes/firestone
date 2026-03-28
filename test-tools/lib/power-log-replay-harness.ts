@@ -1,6 +1,7 @@
 /**
  * Shared setup for integration tests that replay a power.log through GameEvents + GameStateService.
- * Add new bug fixtures as `test-tools/power-logs/<slug>.log` and a spec that calls {@link replayPowerLogToGameState}.
+ *
+ * Fixtures live under `test-tools/bugs/<bug-id>/` (see {@link resolvePowerLogPathForSlug}).
  */
 import * as fs from 'fs';
 import * as path from 'path';
@@ -32,28 +33,31 @@ import {
 	setAppInjector,
 } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
-import { trimPowerLogLinesToLastGame } from '../../../../test-tools/lib/trim-power-log-last-game';
-import { DeckCard } from '../lib/models/deck-card';
-import { DeckState } from '../lib/models/deck-state';
-import { GameState } from '../lib/models/game-state';
-import { AiDeckService } from '../lib/services/deck/ai-deck-service.service';
-import { ConstructedArchetypeServiceOrchestrator } from '../lib/services/deck/constructed-archetype-orchestrator.service';
-import { DeckParserService } from '../lib/services/deck/deck-parser.service';
-import { DeckHandlerService } from '../lib/services/deck-handler.service';
-import { DeckManipulationHelper } from '../lib/services/game-events/event-parser/deck-manipulation-helper';
-import { SecretsParserService } from '../lib/services/game-events/event-parser/secrets/secrets-parser.service';
-import { GameEvents } from '../lib/services/game-events/game-events.service';
-import { GameEventsEmitterService } from '../lib/services/game-events/game-events-emitter.service';
-import { GameStateParsersService } from '../lib/services/game-events/state-parsers.service';
-import { GameEventsFacadeService } from '../lib/services/game-events-facade.service';
-import { GameStateFacadeService } from '../lib/services/game-state-facade.service';
-import { GameStateMetaInfoService } from '../lib/services/game-state-meta-info.service';
-import { GameStateService } from '../lib/services/game-state.service';
-import { RealTimeStatsService } from '../lib/services/real-time-stats/real-time-stats.service';
-import { GameUniqueIdService } from '../lib/services/game-unique-id.service';
-import { OverlayDisplayService } from '../lib/services/overlay-display.service';
-import { SecretConfigService } from '../lib/services/secrets/secret-config.service';
-import { BgsMatchMemoryInfoService } from '../lib/services/battlegrounds/bgs-match-memory-info.service';
+import {
+	AiDeckService,
+	BgsMatchMemoryInfoService,
+	ConstructedArchetypeServiceOrchestrator,
+	DeckCard,
+	DeckHandlerService,
+	DeckManipulationHelper,
+	DeckParserService,
+	DeckState,
+	GameEvents,
+	GameEventsEmitterService,
+	GameEventsFacadeService,
+	GameState,
+	GameStateFacadeService,
+	GameStateMetaInfoService,
+	GameStateParsersService,
+	GameStateService,
+	GameUniqueIdService,
+	OverlayDisplayService,
+	RealTimeStatsService,
+	ReviewIdService,
+	SecretConfigService,
+	SecretsParserService,
+} from '@firestone/game-state';
+import { trimPowerLogLinesToLastGame } from './trim-power-log-last-game';
 
 /** Env override per slug, e.g. `IVORY_POWER_LOG_PATH`, `TORCH_POWER_LOG_PATH`. */
 const LEGACY_ENV_BY_SLUG: Record<string, string> = {
@@ -61,12 +65,21 @@ const LEGACY_ENV_BY_SLUG: Record<string, string> = {
 	torch: 'TORCH_POWER_LOG_PATH',
 };
 
+/**
+ * Relative path under `test-tools/bugs/` for known investigations.
+ * New bugs: add a folder `test-tools/bugs/<id>/` with `<id>.log` (or map here) and pass the matching slug.
+ */
+const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
+	ivory: 'ivory-rook/ivory.log',
+	torch: 'torch/torch.log',
+};
+
 export function resolveCardsJsonPath(): string {
 	const env = process.env['HS_REFERENCE_CARDS_JSON_PATH'];
 	if (env && fs.existsSync(env)) {
 		return env;
 	}
-	const sibling = path.join(__dirname, '../../../../..', 'hs-reference-data', 'src', 'cards_short.json');
+	const sibling = path.join(__dirname, '..', '..', 'hs-reference-data', 'src', 'cards_short.json');
 	if (fs.existsSync(sibling)) {
 		return sibling;
 	}
@@ -74,8 +87,9 @@ export function resolveCardsJsonPath(): string {
 }
 
 /**
- * Default fixture: `test-tools/power-logs/<slug>.log` (last game only recommended).
- * Override with env: {@link LEGACY_ENV_BY_SLUG} for `ivory` / `torch`, or `POWER_LOG_<SLUG>_PATH`.
+ * Path to the trimmed power.log for a bug investigation.
+ * Default: `test-tools/bugs/<mapped path>` — see {@link DEFAULT_BUG_LOG_BY_SLUG}, or `<slug>/<slug>.log` for new slugs.
+ * Override: {@link LEGACY_ENV_BY_SLUG}, or `POWER_LOG_<SLUG>_PATH`.
  */
 export function resolvePowerLogPathForSlug(slug: string): string {
 	const legacy = LEGACY_ENV_BY_SLUG[slug];
@@ -89,7 +103,8 @@ export function resolvePowerLogPathForSlug(slug: string): string {
 	if (generic && fs.existsSync(generic)) {
 		return generic;
 	}
-	return path.join(__dirname, '../../../../', 'test-tools', 'power-logs', `${slug}.log`);
+	const rel = DEFAULT_BUG_LOG_BY_SLUG[slug] ?? `${slug}/${slug}.log`;
+	return path.join(__dirname, '..', 'bugs', rel);
 }
 
 export function collectAllDeckCards(state: GameState): DeckCard[] {
@@ -183,7 +198,7 @@ export async function replayPowerLogToGameState(
 
 	const reviewIdMock = {
 		reviewId$$: new BehaviorSubject<string | null>(reviewId),
-	} as unknown as import('../lib/services/review-id.service').ReviewIdService;
+	} as unknown as ReviewIdService;
 
 	const i18nMock = {
 		translate: (key: string) => key,
