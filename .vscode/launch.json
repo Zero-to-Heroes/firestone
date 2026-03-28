@@ -35,6 +35,21 @@
 			"env": {
 				"POWER_LOG_DEBUG_FULL": "1"
 			}
+		},
+		{
+			"type": "node",
+			"request": "launch",
+			"name": "Jest: debug Ivory Rook power-log replay (game-state)",
+			"program": "${workspaceFolder}/node_modules/jest/bin/jest.js",
+			"args": [
+				"libs/game-state/src/testing/power-log-ivory-rook-replay.spec.ts",
+				"--config=libs/game-state/jest.config.ts",
+				"--runInBand",
+				"--no-cache"
+			],
+			"cwd": "${workspaceFolder}",
+			"console": "integratedTerminal",
+			"internalConsoleOptions": "neverOpen"
 		}
 	]
 }
