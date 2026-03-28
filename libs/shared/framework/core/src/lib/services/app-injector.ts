@@ -22,3 +22,11 @@ export function setAppInjector(injector: Injector) {
 		AppInjector = injector;
 	}
 }
+
+/**
+ * Clears {@link AppInjector} so a later {@link setAppInjector} can run again.
+ * Used by integration tests that spin up multiple Angular TestBed harnesses in one process.
+ */
+export function resetAppInjectorForTesting(): void {
+	AppInjector = undefined as unknown as Injector & { awaitReady?: () => Promise<void> };
+}

@@ -50,6 +50,36 @@
 			"cwd": "${workspaceFolder}",
 			"console": "integratedTerminal",
 			"internalConsoleOptions": "neverOpen"
+		},
+		{
+			"type": "node",
+			"request": "launch",
+			"name": "Jest: debug Torch power-log replay (game-state)",
+			"program": "${workspaceFolder}/node_modules/jest/bin/jest.js",
+			"args": [
+				"libs/game-state/src/testing/power-log-torch-replay.spec.ts",
+				"--config=libs/game-state/jest.config.ts",
+				"--runInBand",
+				"--no-cache"
+			],
+			"cwd": "${workspaceFolder}",
+			"console": "integratedTerminal",
+			"internalConsoleOptions": "neverOpen"
+		},
+		{
+			"type": "node",
+			"request": "launch",
+			"name": "Jest: debug all power-log replay specs (game-state)",
+			"program": "${workspaceFolder}/node_modules/jest/bin/jest.js",
+			"args": [
+				"--testPathPattern=power-log-.*-replay\\.spec",
+				"--config=libs/game-state/jest.config.ts",
+				"--runInBand",
+				"--no-cache"
+			],
+			"cwd": "${workspaceFolder}",
+			"console": "integratedTerminal",
+			"internalConsoleOptions": "neverOpen"
 		}
 	]
 }
