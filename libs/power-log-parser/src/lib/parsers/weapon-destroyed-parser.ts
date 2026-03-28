@@ -20,15 +20,20 @@ export class WeaponDestroyedParser implements ActionParser {
 	}
 
 	AppliesOnNewNode(node: Node, stateType: StateType): boolean {
+		const tagChange = node.Object as TagChange;
+		const newZone = tagChange.Value;
+		const isWeaponLeavingPlay =
+			newZone === (Zone.GRAVEYARD as number) ||
+			newZone === (Zone.SETASIDE as number) ||
+			newZone === (Zone.REMOVEDFROMGAME as number);
 		return (
 			stateType === StateType.PowerTaskList &&
 			node.Type === NodeType.TagChange &&
-			(node.Object as TagChange).Name === (GameTag.ZONE as number) &&
-			(node.Object as TagChange).Value === (Zone.GRAVEYARD as number) &&
-			this.GameState.CurrentEntities.get((node.Object as TagChange).Entity)?.GetTag(GameTag.CARDTYPE) ===
+			tagChange.Name === (GameTag.ZONE as number) &&
+			isWeaponLeavingPlay &&
+			this.GameState.CurrentEntities.get(tagChange.Entity)?.GetTag(GameTag.CARDTYPE) ===
 				(CardType.WEAPON as number) &&
-			this.GameState.CurrentEntities.get((node.Object as TagChange).Entity)!.GetTag(GameTag.ZONE) ===
-				(Zone.PLAY as number)
+			this.GameState.CurrentEntities.get(tagChange.Entity)!.GetTag(GameTag.ZONE) === (Zone.PLAY as number)
 		);
 	}
 

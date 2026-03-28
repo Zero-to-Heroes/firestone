@@ -72,6 +72,7 @@ const LEGACY_ENV_BY_SLUG: Record<string, string> = {
 const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	ivory: 'ivory-rook/ivory.log',
 	torch: 'torch/torch.log',
+	remornia: 'remornia-weapon/remornia-weapon.log',
 };
 
 export function resolveCardsJsonPath(): string {
