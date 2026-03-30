@@ -499,17 +499,24 @@ const updateMistahVistah = (
 		return deck;
 	}
 
-	const scenicVista = deck.otherZone.find(
+	const mistahEntityId = Math.abs(mistahVistah.entityId);
+	const scenicVistaCandidates = deck.otherZone.filter(
 		(c) =>
-			c.cardId === CardIds.MistahVistah_ScenicVistaToken_VAC_519t3 &&
-			Math.abs(+c.creatorEntityId!) === Math.abs(mistahVistah.entityId) &&
-			c.zone !== 'REMOVEDFROMGAME',
+			c.cardId === CardIds.MistahVistah_ScenicVistaToken_VAC_519t3 && c.zone !== 'REMOVEDFROMGAME',
 	);
+	const scenicVista =
+		scenicVistaCandidates.find(
+			(c) => c.creatorEntityId != null && Math.abs(+c.creatorEntityId) === mistahEntityId,
+		) ??
+		scenicVistaCandidates.find(
+			(c) => c.creatorCardId === CardIds.MistahVistah_VAC_519,
+		) ??
+		(scenicVistaCandidates.length === 1 ? scenicVistaCandidates[0] : undefined);
 	if (!scenicVista) {
 		return deck;
 	}
 
-	const relatedCardIds = [...mistahVistah.relatedCardIds!];
+	const relatedCardIds = [...(mistahVistah.relatedCardIds ?? [])];
 	if (!relatedCardIds.length) {
 		relatedCardIds.push(CardIds.MistahVistah_ScenicVistaToken_VAC_519t3);
 	}
@@ -539,13 +546,25 @@ const updateMistahVistah = (
 	const scenicVistaGlobalEffect = deck.globalEffects.find(
 		(c) => c.cardId === CardIds.MistahVistah_ScenicVistaToken_VAC_519t3,
 	);
+	const refScenicVista = allCards.getCard(CardIds.MistahVistah_ScenicVistaToken_VAC_519t3);
 	const newGlobalEffects = scenicVistaGlobalEffect
 		? deck.globalEffects.map((c) =>
 				c.cardId === scenicVistaGlobalEffect.cardId
 					? scenicVistaGlobalEffect.update({ relatedCardIds: relatedCardIdsForGlobalEffect })
 					: c,
 			)
-		: deck.globalEffects;
+		: [
+				...deck.globalEffects,
+				DeckCard.create({
+					entityId: undefined,
+					cardId: CardIds.MistahVistah_ScenicVistaToken_VAC_519t3,
+					cardName: refScenicVista.name,
+					refManaCost: refScenicVista?.cost,
+					rarity: refScenicVista?.rarity?.toLowerCase(),
+					zone: undefined,
+					relatedCardIds: relatedCardIdsForGlobalEffect,
+				}),
+			];
 	return deck.update({
 		board: newBoard,
 		otherZone: newOtherZone2,

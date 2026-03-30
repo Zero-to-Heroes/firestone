@@ -420,6 +420,7 @@ export class GameEvents {
 							? gameEvent.Value.AdditionalProps.PlayerClass.toLowerCase()
 							: null,
 						creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
+						creatorEntityId: gameEvent.Value.AdditionalProps.CreatorEntityId,
 					}),
 				);
 				break;
