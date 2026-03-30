@@ -12,6 +12,7 @@ import {
 	waitForReady,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
+import { PreferencesService } from '../preferences.service';
 import { CurrentPlan, PremiumPlanId } from './subscription.service';
 
 // const STORE_ID = 1564884;
@@ -24,10 +25,11 @@ const TEBEX_SUB_DETAILS_URL = `https://x3dealpmov6br4o7vmtiy5peyq0wzbms.lambda-u
 export class TebexService extends AbstractFacadeService<TebexService> {
 	public packages$$: SubscriberAwareBehaviorSubject<readonly TebexPackage[] | null>;
 
-	private ow: OverwolfService;
-	private externalUrl: IExternalUrlService;
 	protected api: ApiRunner;
 	protected user: UserService;
+	private ow: OverwolfService;
+	private externalUrl: IExternalUrlService;
+	private prefs: PreferencesService;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'TebexService', () => !!this.packages$$);
@@ -41,6 +43,7 @@ export class TebexService extends AbstractFacadeService<TebexService> {
 		this.packages$$ = new SubscriberAwareBehaviorSubject<readonly TebexPackage[] | null>(null);
 		this.api = AppInjector.get(ApiRunner);
 		this.ow = AppInjector.get(OverwolfService);
+		this.prefs = AppInjector.get(PreferencesService);
 		this.externalUrl = AppInjector.get(EXTERNAL_URL_SERVICE_TOKEN);
 		this.user = AppInjector.get(UserService);
 
@@ -69,13 +72,18 @@ export class TebexService extends AbstractFacadeService<TebexService> {
 			console.error('[ads] [tebex] could not find package for plan', planId, allPackages);
 			return;
 		}
-		const url = `https://subscriptions-api.overwolf.com/checkout/${STORE_PUBLIC_TOKEN}/${packageForPlan.id}?extensionId=${EXTENSION_ID}&userId=${userUuid}`;
+		const prefs = await this.prefs.getPreferences();
+		const locale = prefs.locale;
+		const url = `https://subscriptions-api.overwolf.com/checkout/${STORE_PUBLIC_TOKEN}/${packageForPlan.id}?extensionId=${EXTENSION_ID}&userId=${userUuid}&locale=${locale}`;
 		console.log('[ads] [tebex] opening url', url);
 		this.externalUrl.openUrlInDefaultBrowser(url);
 	}
 
 	public async unsubscribe(planId: string) {
-		this.externalUrl.openUrlInDefaultBrowser(`https://checkout.tebex.io/payment-history/recurring-payments`);
+		const prefs = await this.prefs.getPreferences();
+		const locale = prefs.locale;
+		const paymentHistoryLink = `https://checkout.tebex.io/payment-history/recurring-payments?locale=${locale}`;
+		this.externalUrl.openUrlInDefaultBrowser(paymentHistoryLink);
 	}
 
 	public async getSubscriptionStatus(): Promise<CurrentPlan | null> {

@@ -14,7 +14,9 @@ Use this when investigating a **decktracker or parser** bug backed by a **power.
 
 ## 1. Isolate work (parallel agents)
 
-1. Prefer a **git worktree** so you do not clash with other agents:
+IMPORTANT! Always do this, and don't do your work on the main branch
+
+1. Use a **git worktree** so you do not clash with other agents:
     - From repo root:  
       `git worktree add ../.worktrees/bug-<slug>/firestone -b bug/<slug>`
     - Do all reads/edits in that worktree until merge.

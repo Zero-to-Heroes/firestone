@@ -5,11 +5,13 @@ import { AccountService } from '@firestone/profile/common';
 import {
 	CurrentPlan,
 	OwLegacyPremiumService,
+	PreferencesService,
 	PremiumPlanId,
 	SubscriptionService,
 	TebexService,
 } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import type { IAdsService } from '@firestone/shared/framework/core';
 import {
 	ADS_SERVICE_TOKEN,
 	AnalyticsService,
@@ -17,7 +19,6 @@ import {
 	OverwolfService,
 	waitForReady,
 } from '@firestone/shared/framework/core';
-import type { IAdsService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest, filter, shareReplay, takeUntil, tap } from 'rxjs';
 
 @Component({
@@ -185,6 +186,7 @@ export class PremiumDesktopComponent extends AbstractSubscriptionComponent imple
 		reduction: '10%',
 		expansionName: this.i18n.translateString(`global.set.${CardSet[CardSet.ACROSS_THE_TIMEWAYS].toLowerCase()}`),
 	});
+	paymentHistoryLink: string;
 
 	private showConfirmationPopUp$$ = new BehaviorSubject<UnsubscribeModel | null>(null);
 	private showPreSubscribeModal$$ = new BehaviorSubject<PresubscribeModel | null>(null);
@@ -200,12 +202,20 @@ export class PremiumDesktopComponent extends AbstractSubscriptionComponent imple
 		private readonly analytics: AnalyticsService,
 		private readonly ow: OverwolfService,
 		private readonly account: AccountService,
+		private readonly prefs: PreferencesService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterViewInit() {
-		await waitForReady(this.tebex, this.owLegacyPremium, this.ads, this.subscriptionService, this.account);
+		await waitForReady(
+			this.tebex,
+			this.owLegacyPremium,
+			this.ads,
+			this.subscriptionService,
+			this.account,
+			this.prefs,
+		);
 
 		this.showConfirmationPopUp$ = this.showConfirmationPopUp$$.asObservable();
 		this.showPreSubscribeModal$ = this.showPreSubscribeModal$$.asObservable();
@@ -297,6 +307,9 @@ export class PremiumDesktopComponent extends AbstractSubscriptionComponent imple
 			this.showPreSubscribeModal$$.next(null);
 			this.showConfirmationPopUp$$.next(null);
 		});
+		const prefs = await this.prefs.getPreferences();
+		const locale = prefs.locale;
+		this.paymentHistoryLink = `https://checkout.tebex.io/payment-history?locale=${locale}`;
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.markForCheck();

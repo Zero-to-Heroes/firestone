@@ -73,6 +73,7 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	ivory: 'ivory-rook/ivory.log',
 	torch: 'torch/torch.log',
 	remornia: 'remornia-weapon/remornia-weapon.log',
+	'shatter-recombine': 'shatter-recombine/shatter-recombine.log',
 };
 
 export function resolveCardsJsonPath(): string {

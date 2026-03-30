@@ -12,6 +12,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import type { PremiumPlanId } from '@firestone/shared/common/service';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, sleep } from '@firestone/shared/framework/common';
 import { ILocalizationService, OverwolfService, UserService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
@@ -112,6 +113,10 @@ export class PremiumPackageComponent extends AbstractSubscriptionComponent imple
 	@Output() unsubscribe = new EventEmitter<string>();
 
 	@Input() set plan(value: PremiumPlan) {
+		this.setPlan(value);
+	}
+
+	private async setPlan(value: PremiumPlan) {
 		this.id = value.id;
 		this.isReadonly = value.isReadonly ?? false;
 		this.isActive = value.activePlan?.id === value.id;
@@ -156,26 +161,29 @@ export class PremiumPackageComponent extends AbstractSubscriptionComponent imple
 			};
 		});
 
+		const prefs = await this.prefs.getPreferences();
+		const locale = prefs.locale;
+		const checkoutLink = `https://checkout.tebex.io/payment-history/recurring-payments?locale=${locale}`;
 		this.autoRenewText =
 			this.id === 'legacy'
 				? this.i18n.translateString('app.premium.auto-renew', {
 						date: expireAtDate?.toLocaleDateString(this.i18n.formatCurrentLocale()!),
-				  })
+					})
 				: this.i18n.translateString('app.premium.check-status-online', {
-						link: `<a href="https://checkout.tebex.io/payment-history/recurring-payments" target="_blank">${this.i18n.translateString(
+						link: `<a href="${checkoutLink}" target="_blank">${this.i18n.translateString(
 							'app.premium.check-status-online-link',
 						)}</a>`,
-				  });
+					});
 		this.cancelledText =
 			this.id === 'legacy'
 				? this.i18n.translateString('app.premium.active-until', {
 						date: expireAtDate?.toLocaleDateString(this.i18n.formatCurrentLocale()!),
-				  })
+					})
 				: this.i18n.translateString('app.premium.check-status-online-inactive', {
-						link: `<a href="https://checkout.tebex.io/payment-history/recurring-payments" target="_blank">${this.i18n.translateString(
+						link: `<a href="${checkoutLink}" target="_blank">${this.i18n.translateString(
 							'app.premium.check-status-online-link',
 						)}</a>`,
-				  });
+					});
 		this.activeText = this.i18n.translateString('app.premium.active-until', {
 			date: expireAtDate?.toLocaleDateString(this.i18n.formatCurrentLocale()!),
 		});
@@ -193,6 +201,9 @@ export class PremiumPackageComponent extends AbstractSubscriptionComponent imple
 		// 	this.id === 'legacy'
 		// 		? this.i18n.translateString(`app.premium.unsubscribe-button-tooltip-legacy`)
 		// 		: this.i18n.translateString(`app.premium.unsubscribe-button-tooltip`);
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.markForCheck();
+		}
 	}
 
 	isReadonly: boolean;
@@ -225,6 +236,7 @@ export class PremiumPackageComponent extends AbstractSubscriptionComponent imple
 		private readonly user: UserService,
 		private readonly ow: OverwolfService,
 		private readonly el: ElementRef,
+		private readonly prefs: PreferencesService,
 	) {
 		super(cdr);
 	}

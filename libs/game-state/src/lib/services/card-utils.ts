@@ -257,7 +257,9 @@ export const getShatteredRecombinedPossibleCards = (
 	allCards: AllCardsService,
 	guessedInfo: GuessedInfo,
 ): readonly string[] => {
-	const cardClasses: readonly CardClass[] = guessedInfo?.cardClasses ?? [];
+	const cardClasses: readonly CardClass[] = guessedInfo?.cardClasses ?? [
+		deckState.getCurrentClassEnum() ?? CardClass.NEUTRAL,
+	];
 	// // console.debug('cardClasses', cardClasses);
 	// if (!cardClasses.length) {
 	// 	return [];
@@ -358,7 +360,6 @@ export const addGuessInfoToCard = (
 		card.tags?.[GameTag.SHATTERED] === 1;
 	if (hasShatteredTag) {
 		const possibleCards = getShatteredPossibleCards(deckState, allCards.getService(), newGuessedInfo);
-		console.debug('[debug] possibleCards', possibleCards);
 		if (possibleCards.length > 0) {
 			// The first card is created in the SETASIDE zone, then moved to hand, so the createdIndex is not present
 			if (card.createdIndex === 0 || !card.createdIndex) {
