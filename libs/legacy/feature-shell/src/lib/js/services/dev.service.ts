@@ -5,6 +5,7 @@ import { SceneMode } from '@firestone-hs/reference-data';
 import { CollectionCardType } from '@firestone-hs/user-packs';
 import { CompositionDetectorService } from '@firestone/battlegrounds/core';
 import { BgsMetaCompositionStrategiesService } from '@firestone/battlegrounds/services';
+import { CardNotificationsService } from '@firestone/collection/services';
 import {
 	DeckCard,
 	DeckHandlerService,
@@ -21,7 +22,6 @@ import { PreferencesService } from '@firestone/shared/common/service';
 import { ApiRunner, CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { sortByProperties } from '@services/utils';
-import { CardNotificationsService } from '@firestone/collection/services';
 
 const RETRIEVE_REVIEW_URL = 'https://itkmxena7k2kkmkgpevc6skcie0tlwmk.lambda-url.us-west-2.on.aws/';
 
@@ -60,7 +60,7 @@ export class DevService {
 
 		window['fakeGame'] = async (
 			fileName: string,
-			options?: { isBg?: boolean; allowReconnects?: boolean; deckstring?: string },
+			options?: { isBg?: boolean; allowReconnects?: boolean; deckstring?: string; waitTime?: number },
 		) => {
 			const { isBg = false, allowReconnects = false, deckstring = null } = options || {};
 			const events = [];
@@ -76,7 +76,7 @@ export class DevService {
 			this.scene.currentScene$$.next(SceneMode.GAMEPLAY);
 			// Do it everytime to reset its memory
 			// await this.gameEvents['initPlugin']();
-			const logsLocation = `E:\\Source\\zerotoheroes\\firestone\\test-tools\\${fileName ?? 'game.log'}`;
+			const logsLocation = `D:\\sources\\firestone\\firestone\\test-tools\\${fileName ?? 'game.log'}`;
 			const logContents = await this.ow.readTextFile(logsLocation);
 			console.log('logContents', logContents, fileName);
 			const logLines = logContents.split('\n');
@@ -91,9 +91,9 @@ export class DevService {
 				this.gameEvents.receiveLogLine(line);
 
 				currentIndex++;
-				if (currentIndex % 4000 === 0) {
+				if (currentIndex % 2000 === 0) {
 					console.log('[game-events] processed', currentIndex, 'lines out of', logLines.length);
-					await sleep(500);
+					await sleep(options?.waitTime ?? 500);
 				}
 			}
 			sub.unsubscribe();
@@ -107,14 +107,11 @@ export class DevService {
 			console.debug('starting new deck cycle', logName, repeats, deckString);
 			// eslint-disable-next-line @typescript-eslint/no-empty-function
 			console.debug = console.debug = (args) => {};
-			const logsLocation = `E:\\Source\\zerotoheroes\\firestone\\integration-tests\\events\\${logName}.json`;
-			const logContents = await this.ow.readTextFile(logsLocation);
-			const events = JSON.parse(logContents);
-			while (repeats > 0) {
+			while (repeats == null || repeats > 0) {
 				console.warn('starting iteration', repeats);
-				await this.loadEvents(events, true, deckString);
+				await window['fakeGame']('power.log', { waitTime: 5000 });
 				await sleep(10000);
-				repeats--;
+				if (repeats != null) repeats--;
 			}
 			console.warn('iterations over');
 			// window['startDeckCycle'](logName, deckString);
@@ -231,7 +228,7 @@ export class DevService {
 	}
 
 	private async testAllBgsComps() {
-		const location = `E:\\Source\\zerotoheroes\\firestone\\test-tools\\comps\\identification.json`;
+		const location = `D:\\sources\\firestone\\firestone\\test-tools\\comps\\identification.json`;
 		const rawContent = await this.ow.readTextFile(location);
 		const content = JSON.parse(rawContent);
 
