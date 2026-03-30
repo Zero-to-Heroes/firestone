@@ -216,7 +216,6 @@ const internalGiftCreators = [
 	CardIds.ConnectionsTavernBrawl,
 	CardIds.Convert_WON_342,
 	CardIds.Convert,
-	CardIds.Consumption_CORE_CATA_007,
 	CardIds.CoppertailSnoop_CoppertailSnoopEnchantment,
 	CardIds.CoppertailSnoop,
 	CardIds.Copycat_DED_514,
