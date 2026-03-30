@@ -37,7 +37,8 @@ Use this when investigating a **decktracker or parser** bug backed by a **power.
 3. Save under the bug folder (spec + log live together):  
    **`test-tools/bugs/<bug-id>/<name>.log`** (e.g. `test-tools/bugs/blackwing/blackwing.log`)  
    Map the slug to this path in `DEFAULT_BUG_LOG_BY_SLUG` inside `test-tools/lib/power-log-replay-harness.ts`, or use `<slug>/<slug>.log` under `test-tools/bugs/` and pass that slug to `resolvePowerLogPathForSlug`.
-4. If possible: truncate after the relevant sequence (e.g. stop after a key `PowerTaskList` block) to keep the fixture small—document why in the spec.
+4. Explain why the initial report is indeed a bug. You should do this by looking into the power.log, then understand what happens in the game, and why the report mentions that the expected behavior doesn't match what actually happens in game
+5. If possible: truncate after the relevant sequence (e.g. stop after a key `PowerTaskList` block) to keep the fixture small—document why in the spec.
     - It not possible, **please say so** and don't continue
 
 ---
