@@ -127,7 +127,7 @@ export class Oracle {
 		if (node.Parent?.Type === NodeType.Action) {
 			const act = node.Parent.Object as Action;
 			if (gameState.CurrentEntities.has(act.Entity)) {
-				const creator = gameState.CurrentEntities.get(act.Entity);
+				const creator = gameState.CurrentEntities.get(act.Entity)!;
 				if (creator?.CardId === CardIds.YseraUnleashed_DreamPortalToken) {
 					if (node.Object instanceof ShowEntity) {
 						const handledEntity = node.Object as ShowEntity;
@@ -136,7 +136,20 @@ export class Oracle {
 						}
 					}
 				}
-				return [creator?.CardId ?? '', creator?.Entity ?? -1];
+				let cardId = creator?.CardId ?? '';
+				let entityId = creator?.Entity ?? -1;
+				// Concealed intermediary entities (e.g. Shatter flow) keep the real source in DISPLAYED_CREATOR.
+				if (!cardId.length) {
+					const displayedEntId = creator.GetTag(GameTag.DISPLAYED_CREATOR);
+					if (displayedEntId !== -1 && gameState.CurrentEntities.has(displayedEntId)) {
+						const displayed = gameState.CurrentEntities.get(displayedEntId)!;
+						if (displayed.CardId?.length) {
+							cardId = displayed.CardId;
+							entityId = displayedEntId;
+						}
+					}
+				}
+				return [cardId, entityId];
 			}
 		}
 		return null;

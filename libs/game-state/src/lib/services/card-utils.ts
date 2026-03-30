@@ -205,9 +205,8 @@ export const storeInformationOnCardPlayed = (
 /**
  * When the opponent draws a SHATTER card, it splits into two SHATTERED cards in their hand.
  * These cards have the SHATTERED tag but no cardId (hidden). This allows showing the list of
- * possible SHATTERED cards (restricted to their class) when hovering over them.
- * TODO: this won't always be the case, as some classes can probably generate shattered cards from other classes
- * TODO: use the card's creator to restrict the list of possible classes?
+ * possible SHATTERED cards (restricted to their class, or to `guessedInfo.cardClasses` from the creator)
+ * when hovering over them.
  */
 const getShatteredPossibleCards = (
 	deckState: DeckState,
@@ -353,26 +352,24 @@ export const addGuessInfoToCard = (
 			}
 	}
 
-	// SHATTERED cards: when opponent draws a SHATTER card, two cards are created with SHATTERED tag.
-	// We don't get creatorCardId from the parser, but we can show possible cards by class from the tag.
+	// SHATTERED cards: hidden hand pieces after a SHATTER; class filter uses deck class unless the
+	// creator's GeneratingCard.guessInfo already set cardClasses (see Spark of Life).
 	const hasShatteredTag =
 		options?.tags?.some((t) => t.Name === GameTag.SHATTERED && t.Value === 1) ||
 		card.tags?.[GameTag.SHATTERED] === 1;
 	if (hasShatteredTag) {
-		const possibleCards = getShatteredPossibleCards(deckState, allCards.getService(), newGuessedInfo);
+		const possibleCards = getShatteredPossibleCards(deckState, allCards.getService(), newGuessedInfo ?? {});
 		if (possibleCards.length > 0) {
-			// The first card is created in the SETASIDE zone, then moved to hand, so the createdIndex is not present
-			if (card.createdIndex === 0 || !card.createdIndex) {
-				newGuessedInfo = {
-					...card.guessedInfo,
-					possibleCards: possibleCards.filter((c, index) => index % 2 === 0),
-				};
-			} else if (card.createdIndex === 1) {
-				newGuessedInfo = {
-					...card.guessedInfo,
-					possibleCards: possibleCards.filter((c, index) => index % 2 === 1),
-				};
-			}
+			// Even/odd halves of the global SHATTERED list. createdIndex sequences all spawns from the
+			// source (e.g. Spark of Life may use 0–1 for setaside tokens before hand pieces get 2 and 3).
+			const useFirstHalf =
+				card.createdIndex == null || card.createdIndex < 0 || card.createdIndex % 2 === 0;
+			newGuessedInfo = {
+				...newGuessedInfo,
+				possibleCards: possibleCards.filter((c, index) =>
+					useFirstHalf ? index % 2 === 0 : index % 2 === 1,
+				),
+			};
 		}
 	}
 

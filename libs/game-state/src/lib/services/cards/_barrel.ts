@@ -211,6 +211,7 @@ export { SoldierOfSinestra } from './soldier-of-sinestra';
 export { Solitude } from './solitude';
 export { SootSpewer } from './soot-spewer';
 export { SoulburnerVaria } from './soulburner-varia';
+export { SparkOfLife } from './spark-of-life';
 export { SpearheartSentry } from './spearheart-sentry';
 export { Spellslinger } from './spellslinger';
 export { SpiritGuide } from './spirit-guide';
