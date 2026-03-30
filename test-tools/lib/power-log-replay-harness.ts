@@ -75,6 +75,8 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	remornia: 'remornia-weapon/remornia-weapon.log',
 	'shatter-recombine': 'shatter-recombine/shatter-recombine.log',
 	'mistah-vistah': 'mistah-vistah/mistah-vistah.log',
+	'interstellar-wayfarer': 'interstellar-wayfarer/interstellar-wayfarer.log',
+	'spark-life-shatter': 'spark-life-shatter/spark-life-shatter.log',
 };
 
 export function resolveCardsJsonPath(): string {

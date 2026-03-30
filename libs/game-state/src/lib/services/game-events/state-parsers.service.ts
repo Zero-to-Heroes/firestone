@@ -321,7 +321,7 @@ export class GameStateParsersService {
 				new BgsDamageDealtParser(this.allCards),
 			],
 			[GameEvent.DATA_SCRIPT_CHANGED]: [new DataScriptChangedParser(this.helper, this.allCards)],
-			[GameEvent.DEATHRATTLE_TRIGGERED]: [new DeathrattleTriggeredParser(this.allCards, this.helper)],
+			[GameEvent.DEATHRATTLE_TRIGGERED]: [new DeathrattleTriggeredParser(this.allCards, this.helper, this.i18n)],
 			[GameEvent.DECKLIST_UPDATE]: [
 				new DecklistUpdateParser(this.aiDecks, this.deckHandler, this.prefs, this.memory),
 			],
