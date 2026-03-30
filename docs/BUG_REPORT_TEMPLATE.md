@@ -20,7 +20,8 @@ IMPORTANT! Always do this, and don't do your work on the main branch
     - From repo root:  
       `git worktree add ../.worktrees/bug-<slug>/firestone -b bug/<slug>`
     - Do all reads/edits in that worktree until merge.
-2. After merge:
+2. Wait until I tell you to merge! The code needs to be complete, and the new test needs to be passing before I can give you the green light
+3. After merge:
     - `git worktree remove ../.worktrees/bug-<slug>/firestone`
     - remove the debug configuration in launch.json
     - delete temporary .zip files you have downloaded
@@ -30,8 +31,7 @@ IMPORTANT! Always do this, and don't do your work on the main branch
 ## 2. Prepare the power.log fixture
 
 1. Download the **Game logs** zip from the URL, extract `power.log`.
-2. **Trim to the last game only** (multi-game files are common): keep from the **last** line containing both `GameState` and `CREATE_GAME` through end of file.
-    - Helper in repo: `test-tools/lib/trim-power-log-last-game.ts` (`trimPowerLogLinesToLastGame`).
+2. **Trim to the last game only** (multi-game files are common): use `trimPowerLogLinesToLastGame` in `test-tools/lib/trim-power-log-last-game.ts`. It keeps from the last **GameState** `DebugPrintPower() - CREATE_GAME` line, or—if that stream is missing—from the last **PowerTaskList** `DebugPrintPower()` line containing `CREATE_GAME`, **through end of file** with no lines removed in between (all `GameState` and `PowerTaskList` lines in that range stay).
 3. Save under the bug folder (spec + log live together):  
    **`test-tools/bugs/<bug-id>/<name>.log`** (e.g. `test-tools/bugs/blackwing/blackwing.log`)  
    Map the slug to this path in `DEFAULT_BUG_LOG_BY_SLUG` inside `test-tools/lib/power-log-replay-harness.ts`, or use `<slug>/<slug>.log` under `test-tools/bugs/` and pass that slug to `resolvePowerLogPathForSlug`.
