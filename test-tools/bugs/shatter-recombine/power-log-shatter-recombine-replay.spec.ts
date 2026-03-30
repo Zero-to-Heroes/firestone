@@ -11,6 +11,7 @@ import * as fs from 'fs';
 import { CardClass, GameTag } from '@firestone-hs/reference-data';
 import { DeckCard, hasCorrectClass } from '@firestone/game-state';
 import {
+	isCardsJsonRefAvailable,
 	replayPowerLogToGameState,
 	resolveCardsJsonPath,
 	resolvePowerLogPathForSlug,
@@ -20,7 +21,7 @@ describe('Power log replay → GameStateService (shatter recombine possibleCards
 	it('restricts recombined SHATTER guessed pool to opponent class, not all SHATTER cards', async () => {
 		const logPath = resolvePowerLogPathForSlug('shatter-recombine');
 		const cardsPath = resolveCardsJsonPath();
-		if (!fs.existsSync(cardsPath) || !fs.existsSync(logPath)) {
+		if (!isCardsJsonRefAvailable(cardsPath) || !fs.existsSync(logPath)) {
 			return;
 		}
 

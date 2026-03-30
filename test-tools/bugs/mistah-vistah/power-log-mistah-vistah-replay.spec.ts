@@ -11,6 +11,7 @@
 import * as fs from 'fs';
 import { CardIds } from '@firestone-hs/reference-data';
 import {
+	isCardsJsonRefAvailable,
 	replayPowerLogToGameState,
 	resolveCardsJsonPath,
 	resolvePowerLogPathForSlug,
@@ -24,7 +25,7 @@ describe('Power log replay → GameStateService (Mistah Vistah / Scenic Vista gl
 	it('puts Scenic Vista in globalEffects with tracked spells after creatorEntityId fix', async () => {
 		const logPath = resolvePowerLogPathForSlug('mistah-vistah');
 		const cardsPath = resolveCardsJsonPath();
-		if (!fs.existsSync(cardsPath) || !fs.existsSync(logPath)) {
+		if (!isCardsJsonRefAvailable(cardsPath) || !fs.existsSync(logPath)) {
 			return;
 		}
 

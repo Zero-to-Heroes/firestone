@@ -9,6 +9,7 @@
  */
 import * as fs from 'fs';
 import {
+	isCardsJsonRefAvailable,
 	replayPowerLogToGameState,
 	resolveCardsJsonPath,
 	resolvePowerLogPathForSlug,
@@ -20,7 +21,7 @@ describe('Power log replay → GameStateService (Remornia weapon cleared on SETA
 		async () => {
 			const logPath = resolvePowerLogPathForSlug('remornia');
 			const cardsPath = resolveCardsJsonPath();
-			if (!fs.existsSync(cardsPath) || !fs.existsSync(logPath)) {
+			if (!isCardsJsonRefAvailable(cardsPath) || !fs.existsSync(logPath)) {
 				return;
 			}
 			const ctx = await replayPowerLogToGameState({

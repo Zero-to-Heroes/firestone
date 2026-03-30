@@ -11,6 +11,7 @@ import * as fs from 'fs';
 import { CardClass, CardIds, GameTag } from '@firestone-hs/reference-data';
 import { DeckCard, hasCorrectClass } from '@firestone/game-state';
 import {
+	isCardsJsonRefAvailable,
 	replayPowerLogToGameState,
 	resolveCardsJsonPath,
 	resolvePowerLogPathForSlug,
@@ -20,7 +21,7 @@ describe('Power log replay → GameStateService (Spark of Life shatter pool)', (
 	it('keeps SHATTERED possible cards as Mage ∪ Druid when Spark of Life is the resolved creator', async () => {
 		const logPath = resolvePowerLogPathForSlug('spark-life-shatter');
 		const cardsPath = resolveCardsJsonPath();
-		if (!fs.existsSync(cardsPath) || !fs.existsSync(logPath)) {
+		if (!isCardsJsonRefAvailable(cardsPath) || !fs.existsSync(logPath)) {
 			return;
 		}
 

@@ -14,6 +14,7 @@ import { getDynamicRelatedCardIds, hasOverride } from '@firestone/game-state';
 import { trimPowerLogLinesToLastGame } from '../../lib/trim-power-log-last-game';
 import {
 	collectAllDeckCards,
+	isCardsJsonRefAvailable,
 	replayPowerLogToGameState,
 	resolveCardsJsonPath,
 	resolvePowerLogPathForSlug,
@@ -40,7 +41,7 @@ describe('Power log replay → GameStateService (Soldier of Onyxia pool cost)', 
 		async () => {
 			const logPath = resolvePowerLogPathForSlug('soldier-onyxia');
 			const cardsPath = resolveCardsJsonPath();
-			if (!fs.existsSync(cardsPath) || !fs.existsSync(logPath)) {
+			if (!isCardsJsonRefAvailable(cardsPath) || !fs.existsSync(logPath)) {
 				return;
 			}
 			const ctx = await replayPowerLogToGameState({

@@ -59,6 +59,59 @@ import {
 } from '@firestone/game-state';
 import { trimPowerLogLinesToLastGame } from './trim-power-log-last-game';
 
+/** Raw JSON for `cards_short.json` (use with `HS_REFERENCE_CARDS_JSON_PATH` or fetch in tooling). */
+export const HS_REFERENCE_CARDS_SHORT_RAW_URL =
+	'https://raw.githubusercontent.com/Zero-to-Heroes/hs-reference-data/master/src/cards_short.json';
+
+/** True if `ref` is an http(s) URL to load, or an existing local file path. */
+export function isCardsJsonRefAvailable(ref: string): boolean {
+	return /^https?:\/\//i.test(ref.trim()) || fs.existsSync(ref);
+}
+
+/**
+ * Turn a GitHub "blob" browser URL into a raw.githubusercontent.com URL so `fetch` receives JSON.
+ * Leaves ordinary `https://` URLs unchanged.
+ */
+export function normalizeCardsJsonRefForFetch(ref: string): string {
+	const t = ref.trim();
+	const m = /^https:\/\/github\.com\/([^/]+)\/([^/]+)\/blob\/([^/]+)\/(.+?)(?:\?[^#]*)?(?:#.*)?$/i.exec(t);
+	if (m) {
+		const [, owner, repo, branch, filePath] = m;
+		return `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${filePath}`;
+	}
+	return t;
+}
+
+let cachedRemoteCardsJson: { readonly url: string; readonly text: string } | null = null;
+
+async function loadCardsShortJsonText(ref: string): Promise<string | null> {
+	const fetchable = normalizeCardsJsonRefForFetch(ref);
+	if (/^https?:\/\//i.test(fetchable)) {
+		if (cachedRemoteCardsJson?.url === fetchable) {
+			return cachedRemoteCardsJson.text;
+		}
+		try {
+			const res = await fetch(fetchable);
+			if (!res.ok) {
+				console.warn('[power-log-replay] cards HTTP', res.status, fetchable);
+				return null;
+			}
+			const text = await res.text();
+			cachedRemoteCardsJson = { url: fetchable, text };
+			return text;
+		} catch (e) {
+			console.warn('[power-log-replay] cards fetch failed', fetchable, e);
+			return null;
+		}
+	}
+	try {
+		return fs.readFileSync(fetchable, 'utf8');
+	} catch (e) {
+		console.warn('[power-log-replay] cards read failed', fetchable, e);
+		return null;
+	}
+}
+
 /** Env override per slug, e.g. `IVORY_POWER_LOG_PATH`, `TORCH_POWER_LOG_PATH`. */
 const LEGACY_ENV_BY_SLUG: Record<string, string> = {
 	ivory: 'IVORY_POWER_LOG_PATH',
@@ -79,12 +132,24 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	'spark-life-shatter': 'spark-life-shatter/spark-life-shatter.log',
 	azalina: 'azalina/azalina.log',
 	'soldier-onyxia': 'soldier-onyxia/soldier-onyxia.log',
+	'macaw-huntress': 'macaw-huntress/macaw-huntress.log',
 };
 
+/**
+ * Resolved reference to `cards_short.json`: local path and/or https URL.
+ * Set `HS_REFERENCE_CARDS_JSON_PATH` to a filesystem path, a `raw.githubusercontent.com` URL, or a
+ * GitHub `blob` URL (e.g. cards in browser) — the harness normalizes blob links for fetching.
+ * See {@link HS_REFERENCE_CARDS_SHORT_RAW_URL}.
+ */
 export function resolveCardsJsonPath(): string {
-	const env = process.env['HS_REFERENCE_CARDS_JSON_PATH'];
-	if (env && fs.existsSync(env)) {
-		return env;
+	const env = process.env['HS_REFERENCE_CARDS_JSON_PATH']?.trim();
+	if (env?.length) {
+		if (/^https?:\/\//i.test(env)) {
+			return normalizeCardsJsonRefForFetch(env);
+		}
+		if (fs.existsSync(env)) {
+			return env;
+		}
 	}
 	const sibling = path.join(__dirname, '..', '..', 'hs-reference-data', 'src', 'cards_short.json');
 	if (fs.existsSync(sibling)) {
@@ -142,9 +207,9 @@ export async function replayPowerLogToGameState(
 ): Promise<PowerLogReplayResult | null> {
 	const { logPath, reviewId = 'power-log-replay', settleMs = 8000 } = options;
 
-	const cardsPath = resolveCardsJsonPath();
-	if (!fs.existsSync(cardsPath)) {
-		console.warn('[power-log-replay] Skip: cards DB not found at', cardsPath);
+	const cardsRef = resolveCardsJsonPath();
+	if (!isCardsJsonRefAvailable(cardsRef)) {
+		console.warn('[power-log-replay] Skip: cards DB not found / unreachable at', cardsRef);
 		return null;
 	}
 	if (!fs.existsSync(logPath)) {
@@ -155,8 +220,14 @@ export async function replayPowerLogToGameState(
 	TestBed.resetTestingModule();
 	resetAppInjectorForTesting();
 
+	const cardsText = await loadCardsShortJsonText(cardsRef);
+	if (cardsText == null) {
+		console.warn('[power-log-replay] Skip: could not load cards JSON from', cardsRef);
+		return null;
+	}
+
 	const allCardsRef = new AllCardsService();
-	allCardsRef.initializeCardsDbFromCards(JSON.parse(fs.readFileSync(cardsPath, 'utf8')));
+	allCardsRef.initializeCardsDbFromCards(JSON.parse(cardsText));
 
 	const cardsFacade = new CardsFacadeStandaloneService();
 	(cardsFacade as unknown as { service: AllCardsService }).service = allCardsRef;

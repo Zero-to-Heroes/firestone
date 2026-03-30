@@ -45,7 +45,7 @@ Once you're done, before assigning the PR to me for review, please mention @curs
 
 - The app's main repo is this one
 - The log parser is at ..\hs-game-converter-csharp-port
-- The reference cards are at ..\hs-reference-data\src\cards_short.json
+- The reference cards live next to the repo at `..\hs-reference-data\src\cards_short.json`, or use the same file online: `https://raw.githubusercontent.com/Zero-to-Heroes/hs-reference-data/master/src/cards_short.json` (for power-log replay tests, set `HS_REFERENCE_CARDS_JSON_PATH` to that URL or the GitHub blob page URL for `cards_short.json`)
 
 # General Guidelines for working with Nx
 

@@ -1,3 +1,7 @@
+IMPORTANT! Please make sure you work in a worktree, as per the instructions below! This should be the first thing you do
+
+Thoroughly read the following instructions:
+
 # Bug report playbook (deck tracker / game-state)
 
 Use this when investigating a **decktracker or parser** bug backed by a **power.log**. Replace `<slug>` everywhere (short id, e.g. `ivory`, `torch`, `blackwing`)—no spaces.
@@ -13,8 +17,6 @@ Use this when investigating a **decktracker or parser** bug backed by a **power.
 ---
 
 ## 1. Isolate work (parallel agents)
-
-IMPORTANT! Always do this, and don't do your work on the main branch
 
 1. Use a **git worktree** so you do not clash with other agents:
     - From repo root:  
@@ -42,11 +44,14 @@ IMPORTANT! Always do this, and don't do your work on the main branch
 
 ## 3. Add a regression test (game-state replay)
 
-Goal: replay the log through the **same path as the app** (`GameEvents.receiveLogLine` → `GameStateService`) and assert on **final `GameState`**.
+Goal: replay the log through the **same path as the app** (`GameEvents.receiveLogLine` → `GameStateService`) and assert on **final `GameState`**.  
+The initial test should fail, to prove that the bug can indeed be reproduced.
 
 1. **Shared harness** (reuse; do not duplicate):  
    `test-tools/lib/power-log-replay-harness.ts`
-    - `resolveCardsJsonPath()` — needs `cards_short.json` (sibling `hs-reference-data` or `HS_REFERENCE_CARDS_JSON_PATH`).
+    - `resolveCardsJsonPath()` — `cards_short.json` from sibling `hs-reference-data`, or set `HS_REFERENCE_CARDS_JSON_PATH` to a local path or to the **raw** JSON URL  
+      `https://raw.githubusercontent.com/Zero-to-Heroes/hs-reference-data/master/src/cards_short.json`  
+      (a GitHub **blob** link from the repo browser is accepted and normalized to that raw URL). See `HS_REFERENCE_CARDS_SHORT_RAW_URL` in the harness.
     - `resolvePowerLogPathForSlug('<slug>')` — default `test-tools/bugs/...` per `DEFAULT_BUG_LOG_BY_SLUG`; overrides: `POWER_LOG_<SLUG>_PATH`, or legacy envs like `IVORY_POWER_LOG_PATH` / `TORCH_POWER_LOG_PATH` (see `LEGACY_ENV_BY_SLUG` in the harness).
     - `replayPowerLogToGameState({ logPath, reviewId?, settleMs? })` — returns `{ allCardsRef, state, gameStateService }`.
     - `collectAllDeckCards(state)` — hand + deck + board + otherZone + deckList for both players.
@@ -59,6 +64,7 @@ Goal: replay the log through the **same path as the app** (`GameEvents.receiveLo
 3. **Run** (always **in-band**; harness uses `setAppInjector`):
 
     ```bash
+    export HS_REFERENCE_CARDS_JSON_PATH=https://raw.githubusercontent.com/Zero-to-Heroes/hs-reference-data/master/src/cards_short.json
     npx jest test-tools/bugs/<bug-id>/power-log-<slug>-replay.spec.ts --config=libs/game-state/jest.config.ts --runInBand
     ```
 
@@ -122,3 +128,5 @@ When the assignee must **never touch the main checkout**:
    `cp -r test-tools/bugs/<bug-id> ../.worktrees/bug-<slug>/firestone/test-tools/bugs/`
 3. Perform **all** file work inside `../.worktrees/bug-<slug>/firestone/`.
 4. Report branch name `bug/<slug>` for review/merge.
+
+# Actual bug report below

@@ -20,12 +20,6 @@ jobs:
                   node-version: '20'
                   cache: 'npm'
 
-            - name: Download cards reference (power-log replay harness)
-              run: |
-                  mkdir -p .ci-refs
-                  curl -fsSL https://raw.githubusercontent.com/Zero-to-Heroes/hs-reference-data/master/src/cards_short.json \
-                    -o .ci-refs/cards_short.json
-
             - name: Install dependencies
               run: npm ci
 
@@ -34,5 +28,5 @@ jobs:
               # --testPathPattern (singular); Nx's testPathPatterns is not wired to it, so invoke Jest directly.
               run: npx jest --config libs/game-state/jest.config.ts --runInBand --ci --silent --passWithNoTests --testPathPattern=test-tools/bugs
               env:
-                  HS_REFERENCE_CARDS_JSON_PATH: ${{ github.workspace }}/.ci-refs/cards_short.json
+                  HS_REFERENCE_CARDS_JSON_PATH: https://raw.githubusercontent.com/Zero-to-Heroes/hs-reference-data/master/src/cards_short.json
                   NODE_OPTIONS: --max-old-space-size=8192

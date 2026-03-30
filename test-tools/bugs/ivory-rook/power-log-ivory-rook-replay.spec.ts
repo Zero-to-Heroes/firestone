@@ -13,6 +13,7 @@ import { DeckCard } from '@firestone/game-state';
 import { trimPowerLogLinesToLastGame } from '../../lib/trim-power-log-last-game';
 import {
 	collectAllDeckCards,
+	isCardsJsonRefAvailable,
 	replayPowerLogToGameState,
 	resolveCardsJsonPath,
 	resolvePowerLogPathForSlug,
@@ -38,7 +39,7 @@ describe('Power log replay → GameStateService (Ivory Rook cost narrowing)', ()
 		async () => {
 			const logPath = resolvePowerLogPathForSlug('ivory');
 			const cardsPath = resolveCardsJsonPath();
-			if (!fs.existsSync(cardsPath) || !fs.existsSync(logPath)) {
+			if (!isCardsJsonRefAvailable(cardsPath) || !fs.existsSync(logPath)) {
 				return;
 			}
 			const raw = fs.readFileSync(logPath, 'utf8');

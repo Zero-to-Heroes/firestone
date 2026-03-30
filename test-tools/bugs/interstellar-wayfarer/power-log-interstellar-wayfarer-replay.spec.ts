@@ -12,7 +12,12 @@
  */
 import * as fs from 'fs';
 import { CardIds } from '@firestone-hs/reference-data';
-import { replayPowerLogToGameState, resolveCardsJsonPath, resolvePowerLogPathForSlug } from '../../lib/power-log-replay-harness';
+import {
+	isCardsJsonRefAvailable,
+	replayPowerLogToGameState,
+	resolveCardsJsonPath,
+	resolvePowerLogPathForSlug,
+} from '../../lib/power-log-replay-harness';
 
 const libramOfFaith = CardIds.LibramOfFaith_GDB_139;
 /** Deck entity that stays in deck through mulligan in the fixture (see power.log). */
@@ -25,7 +30,7 @@ describe('Power log replay → GameStateService (Interstellar Wayfarer deathratt
 	it('applies deck Libram cost reduction on deathrattle as well as battlecry', async () => {
 		const logPath = resolvePowerLogPathForSlug('interstellar-wayfarer');
 		const cardsPath = resolveCardsJsonPath();
-		if (!fs.existsSync(cardsPath) || !fs.existsSync(logPath)) {
+		if (!isCardsJsonRefAvailable(cardsPath) || !fs.existsSync(logPath)) {
 			return;
 		}
 

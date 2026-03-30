@@ -7,7 +7,12 @@
  */
 import * as fs from 'fs';
 import { CardIds } from '@firestone-hs/reference-data';
-import { replayPowerLogToGameState, resolveCardsJsonPath, resolvePowerLogPathForSlug } from '../../lib/power-log-replay-harness';
+import {
+	isCardsJsonRefAvailable,
+	replayPowerLogToGameState,
+	resolveCardsJsonPath,
+	resolvePowerLogPathForSlug,
+} from '../../lib/power-log-replay-harness';
 
 describe('Power log replay → GameStateService (Azalina opponent hand)', () => {
 	it(
@@ -15,7 +20,7 @@ describe('Power log replay → GameStateService (Azalina opponent hand)', () => 
 		async () => {
 			const logPath = resolvePowerLogPathForSlug('azalina');
 			const cardsPath = resolveCardsJsonPath();
-			if (!fs.existsSync(cardsPath) || !fs.existsSync(logPath)) {
+			if (!isCardsJsonRefAvailable(cardsPath) || !fs.existsSync(logPath)) {
 				return;
 			}
 
