@@ -90,7 +90,7 @@ export class GlobalStatsService extends AbstractFacadeService<GlobalStatsService
 			gameMode: game.gameMode,
 			replayKey: undefined,
 			playerRank: game.playerRank,
-			// uploaderToken: undefined,
+			uploaderToken: undefined,
 		};
 		const statsFromGame = await extractStatsForGame(message, xml, this.allCards.getService());
 		if (!statsFromGame?.stats) {
