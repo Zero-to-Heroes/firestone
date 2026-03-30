@@ -11,6 +11,7 @@ import {
 	ArmorChangeParser,
 	AttackOnBoardParser,
 	AttackParser,
+	AzalinaSoulthiefDisplayedCreatorParser,
 	BallerBuffChangedParser,
 	BattlegroundFreezeParser,
 	BattlegroundsActivePlayerBoardParser,
@@ -428,6 +429,7 @@ export class NodeParser implements INodeParser {
 			new SpecialCardPowerParser(parserState, this.StateFacade),
 			new WheelOfDeathCounterParser(parserState, this.StateFacade),
 
+			new AzalinaSoulthiefDisplayedCreatorParser(parserState, this.StateFacade),
 			new CopiedFromEntityIdParser(parserState, this.StateFacade),
 			new SpecialTargetParser(parserState, this.StateFacade),
 		];

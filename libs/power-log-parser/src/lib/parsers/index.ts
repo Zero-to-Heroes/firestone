@@ -2,6 +2,7 @@ export { AbstractBasicTagChangeParser } from './abstract-basic-tag-change-parser
 export { ArmorChangeParser } from './armor-change-parser';
 export { AttackOnBoardParser } from './attack-on-board-parser';
 export { AttackParser } from './attack-parser';
+export { AzalinaSoulthiefDisplayedCreatorParser } from './azalina-soulthief-displayed-creator-parser';
 export { BallerBuffChangedParser } from './baller-buff-changed-parser';
 export { BattlegroundFreezeParser } from './battleground-freeze-parser';
 export { BattlegroundsActivePlayerBoardParser } from './battlegrounds-active-player-board-parser';

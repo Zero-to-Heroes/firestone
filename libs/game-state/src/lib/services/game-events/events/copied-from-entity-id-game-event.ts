@@ -6,5 +6,7 @@ export class CopiedFromEntityIdGameEvent extends GameEvent {
 		copiedCardEntityId: number;
 		copiedCardControllerId: number;
 		copiedCardZone: Zone;
+		/** True when the power-log parser synthesizes this event (DISPLAYED_CREATOR-only Azalina lines). */
+		syntheticAzalinaHandCopy?: boolean;
 	};
 }

@@ -77,6 +77,7 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	'mistah-vistah': 'mistah-vistah/mistah-vistah.log',
 	'interstellar-wayfarer': 'interstellar-wayfarer/interstellar-wayfarer.log',
 	'spark-life-shatter': 'spark-life-shatter/spark-life-shatter.log',
+	azalina: 'azalina/azalina.log',
 };
 
 export function resolveCardsJsonPath(): string {

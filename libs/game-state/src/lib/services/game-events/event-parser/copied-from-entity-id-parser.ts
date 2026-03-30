@@ -231,9 +231,37 @@ export class CopiedFromEntityIdParser implements EventParser {
 			}
 		}
 
-		return Object.assign(new GameState(), currentState, {
+		let result = Object.assign(new GameState(), currentState, {
 			[isCopiedPlayer ? 'playerDeck' : 'opponentDeck']: copiedDeckWithKnownCardsInHand,
 		});
+
+		// Opponent played Azalina (etc.): copies are in the opponent's hand but the source entities are ours.
+		const revealOppHandCopyFromPlayerHand =
+			copiedCardZone === Zone.HAND &&
+			isCopiedPlayer &&
+			!isPlayer &&
+			!!copiedCard?.cardId &&
+			!!newCopy &&
+			(shouldFlagExactCardInOpponentHand(newCopy) || !!gameEvent.additionalData.syntheticAzalinaHandCopy);
+		if (revealOppHandCopyFromPlayerHand) {
+			const sourceCardId = copiedCard.cardId;
+			const refCard = this.allCards.getCard(sourceCardId);
+			const opp = result.opponentDeck;
+			const newOppHand = opp.hand.map((card) =>
+				card.entityId === newCopy.entityId
+					? card.update({
+							cardId: sourceCardId,
+							cardName: refCard.name,
+							refManaCost: refCard.cost,
+						})
+					: card,
+			);
+			result = Object.assign(new GameState(), result, {
+				opponentDeck: opp.update({ hand: newOppHand }),
+			});
+		}
+
+		return result;
 	}
 
 	private updateSecrets(deck: DeckState, cardId: string, copiedCardEntityId: number | undefined | null): DeckState {

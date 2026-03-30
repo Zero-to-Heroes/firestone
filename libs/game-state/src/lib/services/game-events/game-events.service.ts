@@ -1022,6 +1022,7 @@ export class GameEvents {
 						copiedCardControllerId: gameEvent.Value.AdditionalProps.CopiedCardControllerId,
 						copiedCardEntityId: gameEvent.Value.AdditionalProps.CopiedCardEntityId,
 						copiedCardZone: gameEvent.Value.AdditionalProps.CopiedCardZone,
+						syntheticAzalinaHandCopy: gameEvent.Value.AdditionalProps.SyntheticAzalinaHandCopy,
 					}),
 				);
 				break;
