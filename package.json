@@ -139,6 +139,7 @@
 		"chart.js": "^4.0.0",
 		"chartjs-plugin-datalabels": "^2.2.0",
 		"crypto-browserify": "^3.12.0",
+		"cytoscape": "^3.33.1",
 		"deep-equal": "^2.2.0",
 		"deepmerge": "^4.3.0",
 		"dexie": "^4.0.11",
@@ -247,6 +248,11 @@
 		"@firestone-hs/hs-replay-xml-parser": "^1.0.4",
 		"@angular/common": "^19.0.0",
 		"@angular/core": "^19.0.0",
-		"rxjs": "^7.8.0"
+		"rxjs": "^7.8.0",
+		"mermaid": {
+			"d3": {
+				"d3-selection": "3.0.0"
+			}
+		}
 	}
 }
