@@ -21,6 +21,31 @@ import { DeckManipulationHelper } from './deck-manipulation-helper';
 
 const CREATOR_STEALS = [CardIds.NightmareFuel_EDR_528];
 
+/**
+ * Cosmetic set coins (e.g. TLC_COIN2) may appear in logs before reference data includes them, or may
+ * resolve to a non–GAME_005 id while still being the standard extra-mana coin. Normalize using COIN_CARD.
+ */
+function resolveCardIdForReceiveInHand(
+	cardIdOrDbfId: string | number,
+	tags: readonly { Name: number; Value: number }[] | undefined,
+	allCards: CardsFacadeService,
+): string | undefined {
+	const coinFromTags = tags?.some(
+		(t) => t.Name === (GameTag.COIN_CARD as number) && t.Value === 1,
+	);
+	if (coinFromTags) {
+		return CardIds.TheCoinCore;
+	}
+	const fromDb = allCards.getCard(cardIdOrDbfId)?.id;
+	if (fromDb) {
+		return fromDb;
+	}
+	if (typeof cardIdOrDbfId === 'string' && /_COIN/i.test(cardIdOrDbfId)) {
+		return CardIds.TheCoinCore;
+	}
+	return undefined;
+}
+
 export class ReceiveCardInHandParser implements EventParser {
 	constructor(
 		private readonly helper: DeckManipulationHelper,
@@ -43,7 +68,7 @@ export class ReceiveCardInHandParser implements EventParser {
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const opponentDeck = isPlayer ? currentState.opponentDeck : currentState.playerDeck;
 
-		const cardId = this.allCards.getCard(cardIdOrDbfId)?.id;
+		const cardId = resolveCardIdForReceiveInHand(cardIdOrDbfId, gameEvent.additionalData.tags, this.allCards);
 		const { creatorCardId, creatorEntityId } = denormalizeCreatorCardId(
 			gameEvent.additionalData.creatorCardId,
 			gameEvent.additionalData.creatorEntityId,
@@ -78,7 +103,7 @@ export class ReceiveCardInHandParser implements EventParser {
 			// Not sure why we would want to hide some info when the player plays the card and we're looking at
 			// cards added to the player's hand
 			// || (isPlayer && !hideInfoWhenPlayerPlaysIt.includes(lastInfluencedByCardId as CardIds))
-			(isCastWhenDrawn(cardId, this.allCards) ||
+			(!!cardId && isCastWhenDrawn(cardId, this.allCards) ||
 				publicCardCreators.includes(lastInfluencedByCardId as CardIds) ||
 				specialCasePublicCardCreators.includes(cardId as CardIds));
 		const isCardInfoPublic =
@@ -87,8 +112,9 @@ export class ReceiveCardInHandParser implements EventParser {
 			// with the dead entity as creator, and are never revealed
 			cardsConsideredPublic.includes(cardId as CardIds) ||
 			// There might be some edge cases where we don't want that, but for now it's a good approximation
-			this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.ECHO]) ||
-			this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.NON_KEYWORD_ECHO]) ||
+			(!!cardId &&
+				(this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.ECHO]) ||
+					this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.NON_KEYWORD_ECHO]))) ||
 			isSpecialCasePublicWhenOpponentDraws;
 		console.debug(
 			'[receive-card-in-hand] isCardInfoPublic',
