@@ -30,9 +30,7 @@ function resolveCardIdForReceiveInHand(
 	tags: readonly { Name: number; Value: number }[] | undefined,
 	allCards: CardsFacadeService,
 ): string | undefined {
-	const coinFromTags = tags?.some(
-		(t) => t.Name === (GameTag.COIN_CARD as number) && t.Value === 1,
-	);
+	const coinFromTags = tags?.some((t) => t.Name === (GameTag.COIN_CARD as number) && t.Value === 1);
 	if (coinFromTags) {
 		return CardIds.TheCoinCore;
 	}
@@ -77,9 +75,7 @@ export class ReceiveCardInHandParser implements EventParser {
 		// Shatter hand pieces may omit CREATOR in the log; infer Spark of Life from cards played this match.
 		if (!creatorCardId && !isPlayer) {
 			const tags = gameEvent.additionalData?.tags ?? [];
-			const isShattered = tags.some(
-				(t) => t.Name === (GameTag.SHATTERED as number) && t.Value === 1,
-			);
+			const isShattered = tags.some((t) => t.Name === (GameTag.SHATTERED as number) && t.Value === 1);
 			if (isShattered) {
 				const sparkPlayed = [...(deck.cardsPlayedThisMatch ?? [])]
 					.reverse()
@@ -122,7 +118,7 @@ export class ReceiveCardInHandParser implements EventParser {
 			// Not sure why we would want to hide some info when the player plays the card and we're looking at
 			// cards added to the player's hand
 			// || (isPlayer && !hideInfoWhenPlayerPlaysIt.includes(lastInfluencedByCardId as CardIds))
-			(!!cardId && isCastWhenDrawn(cardId, this.allCards) ||
+			((!!cardId && isCastWhenDrawn(cardId, this.allCards)) ||
 				publicCardCreators.includes(lastInfluencedByCardId as CardIds) ||
 				specialCasePublicCardCreators.includes(cardId as CardIds));
 		const isCardInfoPublic =
@@ -455,7 +451,7 @@ export const addAdditionalAttribuesInHand = (
 };
 
 const guessCardId = (
-	cardId: string,
+	cardId: string | undefined,
 	deckState: DeckState,
 	opponentDeckState: DeckState,
 	gameState: GameState,

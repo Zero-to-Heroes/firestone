@@ -43,7 +43,7 @@ export interface GuessInfoInput {
 	};
 }
 export interface GuessCardIdInput {
-	cardId: string;
+	cardId: string | undefined;
 	deckState: DeckState;
 	opponentDeckState: DeckState;
 	gameState: GameState;
