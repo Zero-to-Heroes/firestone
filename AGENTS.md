@@ -32,6 +32,7 @@ Once you're done, before assigning the PR to me for review, please mention @curs
 - _Don't use the deprecated \_register card entry point_
 - If the card can create a card from any class, set guessedInfo.canBeAnyCardClass
 - If the card can create a card from any class and neutral, set guessedInfo.canBeAnyCardClassOrNeutral
+- If the card does something "from another class", use ALL_CLASSES from @firestone-hs/reference-data to build a list of classes
 
 ### General implementation checks
 
