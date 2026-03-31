@@ -64,7 +64,7 @@ export class Oracle {
 			entity.GetTag(GameTag.DISPLAYED_CREATOR),
 			node,
 		);
-		if (!creatorTuple) {
+		if (!creatorTuple?.[0]) {
 			creatorTuple = Oracle.FindCardCreatorCardId(
 				gameState,
 				entity.GetTag(GameTag.CREATOR),
@@ -88,7 +88,38 @@ export class Oracle {
 				}
 			}
 		}
+		if (!creatorTuple?.[0]) {
+			const shatteredFallback = Oracle.FindShatteredPieceCreatorFromGraveyard(gameState, entity);
+			if (shatteredFallback) {
+				creatorTuple = shatteredFallback;
+			}
+		}
 		return creatorTuple;
+	}
+
+	/** When shatter pieces omit CREATOR / DISPLAYED_CREATOR, tie them to a known source spell in the graveyard (same controller). */
+	private static FindShatteredPieceCreatorFromGraveyard(
+		gameState: GameState,
+		entity: FullEntity,
+	): [string, number] | null {
+		if (entity.CardId?.length) {
+			return null;
+		}
+		const controller = entity.GetEffectiveController();
+		const shatteredSourceSpells: readonly string[] = [CardIds.SparkOfLife_EDR_872];
+		for (const e of gameState.CurrentEntities.values()) {
+			if (e.GetEffectiveController() !== controller) {
+				continue;
+			}
+			if (e.GetTag(GameTag.ZONE) !== (Zone.GRAVEYARD as number)) {
+				continue;
+			}
+			if (!e.CardId?.length || !shatteredSourceSpells.includes(e.CardId)) {
+				continue;
+			}
+			return [e.CardId, e.Entity];
+		}
+		return null;
 	}
 
 	static FindCardCreatorFromShowEntity(
@@ -96,19 +127,19 @@ export class Oracle {
 		entity: ShowEntity,
 		node: Node,
 	): [string, number] | null {
-		let creatorCardId = Oracle.FindCardCreatorCardId(
+		let creatorTuple = Oracle.FindCardCreatorCardId(
 			gameState,
 			entity.GetTag(GameTag.CREATOR),
 			node,
 		);
-		if (!creatorCardId) {
-			creatorCardId = Oracle.FindCardCreatorCardId(
+		if (!creatorTuple?.[0]) {
+			creatorTuple = Oracle.FindCardCreatorCardId(
 				gameState,
 				entity.GetTag(GameTag.DISPLAYED_CREATOR),
 				node,
 			);
 		}
-		return creatorCardId;
+		return creatorTuple;
 	}
 
 	static FindCardCreatorCardId(
@@ -117,40 +148,59 @@ export class Oracle {
 		node: Node,
 	): [string, number] | null {
 		if (creatorTag !== -1 && gameState.CurrentEntities.has(creatorTag)) {
-			const creator = gameState.CurrentEntities.get(creatorTag);
-			return [creator?.CardId ?? '', creator?.Entity ?? -1];
+			const creator = gameState.CurrentEntities.get(creatorTag)!;
+			let cardId = creator?.CardId ?? '';
+			let entityId = creator?.Entity ?? -1;
+			// Concealed intermediary entities (e.g. Shatter flow) keep the real source in DISPLAYED_CREATOR.
+			if (!cardId.length) {
+				const displayedEntId = creator.GetTag(GameTag.DISPLAYED_CREATOR);
+				if (displayedEntId !== -1 && gameState.CurrentEntities.has(displayedEntId)) {
+					const displayed = gameState.CurrentEntities.get(displayedEntId)!;
+					if (displayed.CardId?.length) {
+						cardId = displayed.CardId;
+						entityId = displayedEntId;
+					}
+				}
+			}
+			return [cardId, entityId];
 		}
 		return Oracle.FindParentEntity(gameState, node);
 	}
 
 	static FindParentEntity(gameState: GameState, node: Node): [string, number] | null {
-		if (node.Parent?.Type === NodeType.Action) {
-			const act = node.Parent.Object as Action;
-			if (gameState.CurrentEntities.has(act.Entity)) {
-				const creator = gameState.CurrentEntities.get(act.Entity)!;
-				if (creator?.CardId === CardIds.YseraUnleashed_DreamPortalToken) {
-					if (node.Object instanceof ShowEntity) {
-						const handledEntity = node.Object as ShowEntity;
-						if (handledEntity.GetTag(GameTag.ZONE) === (Zone.HAND as number)) {
-							return null;
+		let current: Node | null = node.Parent;
+		while (current != null) {
+			if (current.Type === NodeType.Action) {
+				const act = current.Object as Action;
+				if (gameState.CurrentEntities.has(act.Entity)) {
+					const creator = gameState.CurrentEntities.get(act.Entity)!;
+					if (creator?.CardId === CardIds.YseraUnleashed_DreamPortalToken) {
+						if (node.Object instanceof ShowEntity) {
+							const handledEntity = node.Object as ShowEntity;
+							if (handledEntity.GetTag(GameTag.ZONE) === (Zone.HAND as number)) {
+								return null;
+							}
 						}
 					}
-				}
-				let cardId = creator?.CardId ?? '';
-				let entityId = creator?.Entity ?? -1;
-				// Concealed intermediary entities (e.g. Shatter flow) keep the real source in DISPLAYED_CREATOR.
-				if (!cardId.length) {
-					const displayedEntId = creator.GetTag(GameTag.DISPLAYED_CREATOR);
-					if (displayedEntId !== -1 && gameState.CurrentEntities.has(displayedEntId)) {
-						const displayed = gameState.CurrentEntities.get(displayedEntId)!;
-						if (displayed.CardId?.length) {
-							cardId = displayed.CardId;
-							entityId = displayedEntId;
+					let cardId = creator?.CardId ?? '';
+					let entityId = creator?.Entity ?? -1;
+					// Concealed intermediary entities (e.g. Shatter flow) keep the real source in DISPLAYED_CREATOR.
+					if (!cardId.length) {
+						const displayedEntId = creator.GetTag(GameTag.DISPLAYED_CREATOR);
+						if (displayedEntId !== -1 && gameState.CurrentEntities.has(displayedEntId)) {
+							const displayed = gameState.CurrentEntities.get(displayedEntId)!;
+							if (displayed.CardId?.length) {
+								cardId = displayed.CardId;
+								entityId = displayedEntId;
+							}
 						}
 					}
+					if (cardId.length) {
+						return [cardId, entityId];
+					}
 				}
-				return [cardId, entityId];
 			}
+			current = current.Parent;
 		}
 		return null;
 	}

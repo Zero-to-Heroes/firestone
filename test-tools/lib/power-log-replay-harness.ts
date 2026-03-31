@@ -135,6 +135,7 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	'macaw-huntress': 'macaw-huntress/macaw-huntress.log',
 	'passive-buff-unknown-entity':
 		'passive-buff-unknown-entity/passive-buff-unknown-entity.log',
+	'coin-not-revealed': 'coin-not-revealed/coin-not-revealed.log',
 };
 
 /**
