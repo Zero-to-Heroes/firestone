@@ -133,6 +133,8 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	azalina: 'azalina/azalina.log',
 	'soldier-onyxia': 'soldier-onyxia/soldier-onyxia.log',
 	'macaw-huntress': 'macaw-huntress/macaw-huntress.log',
+	'passive-buff-unknown-entity':
+		'passive-buff-unknown-entity/passive-buff-unknown-entity.log',
 };
 
 /**
@@ -233,10 +235,17 @@ export async function replayPowerLogToGameState(
 	(cardsFacade as unknown as { service: AllCardsService }).service = allCardsRef;
 	await cardsFacade.waitForReady();
 
+	const replayPreferences = Object.assign(new Preferences(), {
+		flashWindowOnYourTurn: false,
+		showNotificationOnYourTurn: false,
+		opponentLoadAiDecklist: false,
+		opponentLoadKnownDecklist: false,
+	} as Partial<Preferences>);
+
 	const prefsMock: Partial<PreferencesService> = {
 		isReady: async () => undefined,
-		getPreferences: async () => new Preferences(),
-		preferences$$: new BehaviorSubject(new Preferences()),
+		getPreferences: async () => replayPreferences,
+		preferences$$: new BehaviorSubject(replayPreferences),
 	};
 
 	const overlayMock: Partial<OverlayDisplayService> = {
@@ -268,10 +277,14 @@ export async function replayPowerLogToGameState(
 	const memoryMock: Partial<MemoryInspectionService> = {
 		getGameUniqueId: async () => null,
 		getCurrentSceneFromMindVision: async () => null,
+		getCurrentBoard: async () => null,
 	};
 
 	const arenaRefMock = {
-		validDiscoveryPool$$: new BehaviorSubject<readonly string[]>([]),
+		validDiscoveryPool$$: {
+			getValueWithInit: async () => [] as readonly string[],
+			value: [] as readonly string[],
+		},
 	} as unknown as ArenaRefService;
 
 	const reviewIdMock = {
@@ -286,21 +299,37 @@ export async function replayPowerLogToGameState(
 
 	const cards = cardsFacade as unknown as CardsFacadeService;
 	const helper = new DeckManipulationHelper(cards, i18nMock);
+	const deckHandler = new DeckHandlerService(cards);
 	const secretsParser = new SecretsParserService(helper, cards);
 	const eventsEmitter = new GameEventsEmitterService();
+
+	const deckParserReplayMock = {
+		getOpenDecklist: async () => null as string | null,
+		getTemplateDeck: async () => null,
+		retrieveCurrentDeck: async () => null,
+	} as unknown as DeckParserService;
+
+	const aiDeckReplayMock = {
+		getAiDeck: async () => null,
+	} as unknown as AiDeckService;
+
+	const owUtilsReplayMock = {
+		flashWindow: () => undefined,
+		showWindowsNotification: () => undefined,
+	} as unknown as OwUtilsService;
 
 	const parserService = new GameStateParsersService(
 		helper,
 		cards,
 		i18nMock,
-		null as unknown as AiDeckService,
-		null as unknown as DeckHandlerService,
+		aiDeckReplayMock,
+		deckHandler,
 		memoryMock as MemoryInspectionService,
-		null as unknown as OwUtilsService,
+		owUtilsReplayMock,
 		prefsMock as PreferencesService,
-		null as unknown as DeckParserService,
+		deckParserReplayMock,
 		null as unknown as SecretConfigService,
-		null as unknown as ConstructedArchetypeServiceOrchestrator,
+		{ triggerArchetypeCategorization: () => undefined } as unknown as ConstructedArchetypeServiceOrchestrator,
 		eventsEmitter,
 		null as unknown as BugReportService,
 		null as unknown as LogsUploaderService,
