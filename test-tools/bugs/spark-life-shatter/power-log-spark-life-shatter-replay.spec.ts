@@ -37,8 +37,16 @@ describe('Power log replay → GameStateService (Spark of Life shatter pool)', (
 			(c) => c.tags?.[GameTag.SHATTERED] === 1 && !c.cardId,
 		) as DeckCard[];
 
-		const fromSpark = shatteredInHand.filter((c) => c.creatorCardId === CardIds.SparkOfLife_EDR_872);
-		expect(fromSpark.length).toBeGreaterThan(0);
+		expect(shatteredInHand.length).toBeGreaterThanOrEqual(2);
+		const sparkId = CardIds.SparkOfLife_EDR_872;
+		const missingCreator = shatteredInHand.filter((c) => c.creatorCardId !== sparkId);
+		expect({
+			entityIds: missingCreator.map((c) => c.entityId),
+			creators: missingCreator.map((c) => c.creatorCardId),
+		}).toEqual({ entityIds: [], creators: [] });
+
+		const fromSpark = shatteredInHand.filter((c) => c.creatorCardId === sparkId);
+		expect(fromSpark.length).toBe(shatteredInHand.length);
 
 		const { allCardsRef } = ctx;
 		for (const dc of fromSpark) {

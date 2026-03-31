@@ -69,11 +69,27 @@ export class ReceiveCardInHandParser implements EventParser {
 		const opponentDeck = isPlayer ? currentState.opponentDeck : currentState.playerDeck;
 
 		const cardId = resolveCardIdForReceiveInHand(cardIdOrDbfId, gameEvent.additionalData.tags, this.allCards);
-		const { creatorCardId, creatorEntityId } = denormalizeCreatorCardId(
+		let { creatorCardId, creatorEntityId } = denormalizeCreatorCardId(
 			gameEvent.additionalData.creatorCardId,
 			gameEvent.additionalData.creatorEntityId,
 			deck,
 		);
+		// Shatter hand pieces may omit CREATOR in the log; infer Spark of Life from cards played this match.
+		if (!creatorCardId && !isPlayer) {
+			const tags = gameEvent.additionalData?.tags ?? [];
+			const isShattered = tags.some(
+				(t) => t.Name === (GameTag.SHATTERED as number) && t.Value === 1,
+			);
+			if (isShattered) {
+				const sparkPlayed = [...(deck.cardsPlayedThisMatch ?? [])]
+					.reverse()
+					.find((c) => c.cardId === CardIds.SparkOfLife_EDR_872);
+				if (sparkPlayed) {
+					creatorCardId = CardIds.SparkOfLife_EDR_872;
+					creatorEntityId = sparkPlayed.entityId;
+				}
+			}
+		}
 		// console.debug(
 		// 	'creatorCardId',
 		// 	creatorCardId,
@@ -87,7 +103,10 @@ export class ReceiveCardInHandParser implements EventParser {
 		// by the game
 		// UPDATE 2026-01-23: we want to first pick the lastInfluencedByCardId from the event, because this is used by cards
 		// like Rangari Scout to build card links, and it might be different from the creatorCardId
-		const lastInfluencedByCardId: CardIds = gameEvent.additionalData?.lastInfluencedByCardId ?? creatorCardId;
+		const rawLastInfluencedBy = gameEvent.additionalData?.lastInfluencedByCardId;
+		const lastInfluencedByCardId: CardIds = (
+			rawLastInfluencedBy && rawLastInfluencedBy.length > 0 ? rawLastInfluencedBy : creatorCardId
+		) as CardIds;
 		const buffingEntityCardId = gameEvent.additionalData.buffingEntityCardId;
 		const buffCardId = gameEvent.additionalData.buffCardId;
 		const isSpecialCasePublicWhenOpponentDraws =
