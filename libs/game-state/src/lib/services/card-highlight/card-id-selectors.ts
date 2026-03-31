@@ -2454,8 +2454,9 @@ export const cardIdSelector = (
 		// Magister's Apprentice: Your Arcane spells cost (1) less.
 		case CardIds.MagistersApprentice:
 			return and(side(inputSide), inDeck, spellExtended, arcane);
+		// Malevolent Mutant: Battlecry: Choose a Fel spell in your hand. Get a copy of it.
 		case CardIds.MalevolentMutant_CATA_697:
-			return and(side(inputSide), inHand, spell, fel);
+			return and(side(inputSide), or(inDeck, inHand), spell, fel);
 		case CardIds.Malfunction_MIS_107:
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.MalganisCore:
