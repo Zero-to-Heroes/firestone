@@ -1,6 +1,5 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { CardIds, CardType } from '@firestone-hs/reference-data';
-import { pickLast } from '@firestone/shared/framework/common';
 import { hasCorrectType } from '../../related-cards/dynamic-pools';
 import { getProcessedCard } from '../card-utils';
 import { StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
@@ -12,10 +11,10 @@ export const CaliaMenethil: StaticGeneratingCard = {
 		const deadCards = deckState.minionsDeadThisMatch
 			.map((e) => getProcessedCard(e.cardId, e.entityId, deckState, input.allCards))
 			.filter((c) => hasCorrectType(c, CardType.MINION) && c.cost != null);
-		const highestCost = pickLast(deadCards.sort((a, b) => (a.cost ?? 0) - (b.cost ?? 0)))?.cost;
-		if (highestCost == null) {
+		if (!deadCards.length) {
 			return [];
 		}
-		return deadCards.filter((c) => c.cost === highestCost).map((e) => e.id);
+		const highestCost = Math.max(...deadCards.map((c) => c.cost!));
+		return deadCards.filter((c) => c.cost === highestCost).map((c) => c.id);
 	},
 };
