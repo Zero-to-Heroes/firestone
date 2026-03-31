@@ -127,7 +127,6 @@ export class HearthpwnService extends AbstractFacadeService<HearthpwnService> {
 					.post(PROFILE_UPLOAD_URL, encoded, {
 						headers: {
 							'Content-Type': 'application/x-www-form-urlencoded; charset=us-ascii',
-							origin: 'https://www.hearthpwn.com',
 						},
 						responseType: 'text',
 					})
