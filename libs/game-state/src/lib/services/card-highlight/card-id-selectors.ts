@@ -44,6 +44,7 @@ import {
 	discarded,
 	discover,
 	divineShield,
+	divineShieldStrict,
 	dormant,
 	draenei,
 	dragon,
@@ -1396,7 +1397,7 @@ export const cardIdSelector = (
 		case CardIds.ExpeditionSergeant_GDB_229:
 			return and(side(inputSide), or(inDeck, inHand), draenei);
 		case CardIds.FaeTrickster_EDR_571:
-			return and(side(inputSide), inDeck, spell, costMore(4));
+			return and(side(inputSide), inDeck, spell, effectiveCostMore(4));
 		case CardIds.FairyTaleForest_TOY_507:
 			return and(side(inputSide), inDeck, minion, battlecry);
 		case CardIds.Falric_CORE_EDR_003:
@@ -2454,8 +2455,9 @@ export const cardIdSelector = (
 		// Magister's Apprentice: Your Arcane spells cost (1) less.
 		case CardIds.MagistersApprentice:
 			return and(side(inputSide), inDeck, spellExtended, arcane);
+		// Malevolent Mutant: Battlecry: Choose a Fel spell in your hand. Get a copy of it.
 		case CardIds.MalevolentMutant_CATA_697:
-			return and(side(inputSide), inHand, spell, fel);
+			return and(side(inputSide), or(inDeck, inHand), spell, fel);
 		case CardIds.Malfunction_MIS_107:
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.MalganisCore:
@@ -2807,7 +2809,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), weapon);
 		case CardIds.PipsiPainthoof_TOY_812:
 			return highlightConditions(
-				and(side(inputSide), inDeck, divineShield),
+				and(side(inputSide), inDeck, divineShieldStrict),
 				and(side(inputSide), inDeck, rush),
 				and(side(inputSide), inDeck, taunt),
 			);
@@ -3234,6 +3236,9 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, minion, healthLessThan(2));
 		case CardIds.Sandbinder:
 			return and(side(inputSide), inDeck, elemental);
+		// Sandfury Aura: Your minions' end of turn effects trigger twice. Lasts 3 turns.
+		case CardIds.SandfuryAura_CATA_480:
+			return and(side(inputSide), or(inHand, inDeck), minion, endOfTurn);
 		// Saronite Shambler: Battlecry: If you've cast 5 or more spells this game, give your hero +4 Attack this turn.
 		case CardIds.SaroniteShambler_YOG_521:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);

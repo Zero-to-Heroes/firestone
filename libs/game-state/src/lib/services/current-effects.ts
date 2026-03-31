@@ -10,7 +10,7 @@ export const currentEffectsInternal = [
 	CardIds.Agamaggan_CorruptedThornsEnchantment_EDR_489e1,
 	CardIds.Agamaggan_CorruptedThornsEnchantment_EDR_489e2,
 	CardIds.AimedShot_AimingEnchantment,
-	CardIds.AlexandrosMograine_MograinesMigraineEnchantment,
+	// CardIds.AlexandrosMograine_MograinesMigraineEnchantment,
 	CardIds.AncientKnowledge_AncientKnowledgeEnchantment,
 	CardIds.AnonymousInformant_InformedEnchantment_REV_841e,
 	CardIds.Anubrekhan_HardenedCarapaceEnchantment_RLK_659e,

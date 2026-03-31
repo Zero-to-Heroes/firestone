@@ -791,3 +791,6 @@ export const isSummonedWhenDrawn = (cardId: string, allCards: CardsFacadeService
 export const shouldKeepOriginalCost = (cardId: string | CardIds): boolean => {
 	return cardId?.startsWith(CardIds.ZilliaxDeluxe3000_TOY_330);
 };
+
+/** Cards that create gifts in hand; used by UI to show the gift icon when only `lastAffectedByCardId` is set. */
+export { giftCreators } from './cards/gift-creators';

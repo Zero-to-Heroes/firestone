@@ -10,6 +10,7 @@ import {
 	GameState,
 	getDynamicRelatedCardIds,
 	getPossibleForgedCards,
+	giftCreators,
 	GuessedInfo,
 	hasGetRelatedCards,
 	hasOverride,
@@ -144,7 +145,12 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 		// Keep the || to handle empty card id
 		// CreatorCardId first because this feels like the most relevant?
 		const realCardId = this.normalizeEnchantment(card.cardId, card.creatorCardId || card.lastAffectedByCardId);
-		this.createdBy = !card.cardId && !!card.creatorCardId;
+		// Gift icon: explicit creator, or only lastAffectedBy (e.g. one SHATTERED half missing CREATOR in logs but Spark is lastAffectedBy)
+		this.createdBy =
+			!card.cardId &&
+			(!!card.creatorCardId ||
+				(!!card.lastAffectedByCardId &&
+					giftCreators.includes(card.lastAffectedByCardId as CardIds)));
 		this.drawnBy =
 			!card.cardId &&
 			!!card.lastAffectedByCardId &&
@@ -158,7 +164,9 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 		this.forged = card.forged > 0;
 
 		this.cardId =
-			realCardId || (this.createdBy && card.creatorCardId) || (this.drawnBy && card.lastAffectedByCardId);
+			realCardId ||
+			(this.createdBy && (card.creatorCardId || card.lastAffectedByCardId)) ||
+			(this.drawnBy && card.lastAffectedByCardId);
 		this.cardUrl = this.cardId
 			? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${this.cardId}.jpg`
 			: undefined;

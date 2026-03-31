@@ -31,6 +31,7 @@ import { hasDynamicPool } from '../services/cards/_card.type';
 import { cardsInfoCache } from '../services/cards/_mapping';
 import { buildExcavateTreasures } from './excavate-treasures';
 import { canIncludeHerald, getHeraldAdditionalCards } from './herald';
+import { getLastRiffPlayed } from './riff';
 
 const IMBUED_HERO_POWERS = [
 	CardIds.BlessingOfTheDragon_EDR_445p,
@@ -64,7 +65,10 @@ export const getDynamicRelatedCardIds = (
 	const result = getDynamicRelatedCardIdsInternal(cardId, entityId, allCards, inputOptions);
 
 	const refCard = allCards.getCard(cardId);
-	const additionalCards = getHeraldAdditionalCards(refCard, inputOptions.deckState, inputOptions.opponentDeckState);
+	const additionalCards = [
+		...getHeraldAdditionalCards(refCard, inputOptions.deckState, inputOptions.opponentDeckState),
+		...getLastRiffPlayed(refCard, inputOptions.deckState, allCards),
+	];
 
 	if (hasOverride(result)) {
 		return { override: true, cards: [...(result as { cards: readonly string[] }).cards, ...additionalCards] };
@@ -879,9 +883,6 @@ const getDynamicFilters = (
 					hasCorrectSpellSchool(c, SpellSchool.FROST) ||
 					hasCorrectSpellSchool(c, SpellSchool.NATURE));
 
-		case CardIds.Jackpot:
-			return (c) =>
-				hasCorrectType(c, CardType.SPELL) && hasCost(c, '>=', 5) && fromAnotherClass(c, options.currentClass);
 		case CardIds.TheFiresOfZinAzshari:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '>=', 5);
 		case CardIds.SubmergedSpacerock:
