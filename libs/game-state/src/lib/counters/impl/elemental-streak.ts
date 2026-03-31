@@ -14,8 +14,9 @@ export class ElementalStreakCounterDefinitionV2 extends CounterDefinitionV2<numb
 	public override type: 'hearthstone' | 'battlegrounds' = 'hearthstone';
 	public override cards: readonly CardIds[] = [
 		CardIds.AzeriteGiant_WW_025,
-		CardIds.SkarrTheCatastrophe_WW_026,
+		CardIds.Lamplighter_VAC_442,
 		CardIds.OverflowSurger_WW_424,
+		CardIds.SkarrTheCatastrophe_WW_026,
 	];
 
 	readonly player = {

@@ -160,9 +160,11 @@ const willBeActive = (
 		case CardIds.AridStormer:
 		case CardIds.Blazecaller:
 		case CardIds.BonfireElemental:
+		case CardIds.ConjuredBookkeeper_TLC_226:
 		case CardIds.ElementalLearningTavernBrawl:
 		case CardIds.ElementaryReaction:
 		case CardIds.ErodedSediment_WW_428:
+		case CardIds.Firegill_DINO_404:
 		case CardIds.FrostfinChomper:
 		case CardIds.Gyreworm:
 		case CardIds.KalimosPrimalLord_Core_UNG_211:
@@ -174,12 +176,14 @@ const willBeActive = (
 		case CardIds.ServantOfKalimos_UNG_816:
 		case CardIds.Scorch:
 		case CardIds.ShaleSpider_DEEP_034:
+		case CardIds.Slagclaw_TLC_482:
 		case CardIds.SpontaneousCombustion_GDB_456:
 		case CardIds.SteamSurger:
 		case CardIds.StoneSentinel:
 		case CardIds.TaintedRemnant_YOG_519:
 		case CardIds.ThunderLizard:
 		case CardIds.TolvirStoneshaper:
+		case CardIds.VolcanicThrasher_TLC_223:
 			return playerDeck.elementalsPlayedLastTurn > 0;
 		// Played 2 spells this turn
 		case CardIds.Wartbringer:
