@@ -249,10 +249,8 @@
 		"@angular/common": "^19.0.0",
 		"@angular/core": "^19.0.0",
 		"rxjs": "^7.8.0",
-		"mermaid": {
-			"d3": {
-				"d3-selection": "3.0.0"
-			}
+		"d3@7.9.0": {
+			"d3-selection": "3.0.0"
 		}
 	}
 }
