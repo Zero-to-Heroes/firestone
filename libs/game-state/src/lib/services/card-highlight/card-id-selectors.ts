@@ -1396,7 +1396,7 @@ export const cardIdSelector = (
 		case CardIds.ExpeditionSergeant_GDB_229:
 			return and(side(inputSide), or(inDeck, inHand), draenei);
 		case CardIds.FaeTrickster_EDR_571:
-			return and(side(inputSide), inDeck, spell, costMore(4));
+			return and(side(inputSide), inDeck, spell, effectiveCostMore(4));
 		case CardIds.FairyTaleForest_TOY_507:
 			return and(side(inputSide), inDeck, minion, battlecry);
 		case CardIds.Falric_CORE_EDR_003:
