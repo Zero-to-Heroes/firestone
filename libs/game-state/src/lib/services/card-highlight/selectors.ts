@@ -336,8 +336,9 @@ export const corrupted = hasMechanic(GameTag.CORRUPTED);
 export const deathrattle = hasMechanic(GameTag.DEATHRATTLE);
 export const discover =
 	hasMechanic(GameTag.DISCOVER) || (hasMechanic(GameTag.BATTLECRY) && hasReference(GameTag.DISCOVER));
+export const divineShieldStrict = hasMechanic(GameTag.DIVINE_SHIELD);
 export const givesDivineShield = hasMechanicStr('GIVES_DIVINE_SHIELD');
-export const divineShield = or(hasMechanic(GameTag.DIVINE_SHIELD), givesDivineShield);
+export const divineShield = or(divineShieldStrict, givesDivineShield);
 export const dormant = or(hasMechanic(GameTag.DORMANT), hasReference(GameTag.DORMANT));
 export const dredge = hasMechanic(GameTag.DREDGE);
 export const endOfTurn = and(hasMechanic(GameTag.END_OF_TURN), not(cardIs(CardIds.TheFinsBeyondTime_TIME_706)));

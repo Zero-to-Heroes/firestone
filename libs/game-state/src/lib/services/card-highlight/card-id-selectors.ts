@@ -44,6 +44,7 @@ import {
 	discarded,
 	discover,
 	divineShield,
+	divineShieldStrict,
 	dormant,
 	draenei,
 	dragon,
@@ -2808,7 +2809,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), weapon);
 		case CardIds.PipsiPainthoof_TOY_812:
 			return highlightConditions(
-				and(side(inputSide), inDeck, divineShield),
+				and(side(inputSide), inDeck, divineShieldStrict),
 				and(side(inputSide), inDeck, rush),
 				and(side(inputSide), inDeck, taunt),
 			);
