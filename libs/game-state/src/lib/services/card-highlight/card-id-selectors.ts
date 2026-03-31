@@ -3234,6 +3234,9 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, minion, healthLessThan(2));
 		case CardIds.Sandbinder:
 			return and(side(inputSide), inDeck, elemental);
+		// Sandfury Aura: Your minions' end of turn effects trigger twice. Lasts 3 turns.
+		case CardIds.SandfuryAura_CATA_480:
+			return and(side(inputSide), or(inHand, inDeck), minion, endOfTurn);
 		// Saronite Shambler: Battlecry: If you've cast 5 or more spells this game, give your hero +4 Attack this turn.
 		case CardIds.SaroniteShambler_YOG_521:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
