@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { EventEmitter, Injectable } from '@angular/core';
 import { CardIds, TrinketSlot } from '@firestone-hs/reference-data';
-import { Entity } from '@firestone/replay/replay-parser';
 import { BgsPlayerGlobalInfo, BoardTrinket } from '@firestone-hs/simulate-bgs-battle/dist/bgs-player-entity';
 import type { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { BgsFaceOffWithSimulation } from '@firestone/game-state';
+import { Entity } from '@firestone/replay/replay-parser';
 import {
 	AbstractFacadeService,
 	AppInjector,
@@ -62,26 +62,85 @@ export class BgsSimulatorControllerService extends AbstractFacadeService<BgsSimu
 		this.faceOff$$ = new BehaviorSubject<BgsFaceOffWithSimulation | null>(null);
 	}
 
+	protected override async initElectronMainProcess(): Promise<void> {
+		this.registerMainProcessMethod(
+			'initBattleWithSideEffectsInternal',
+			(battle: BgsFaceOffWithSimulation, setInitialBattle: boolean = true) =>
+				this.initBattleWithSideEffectsInternal(battle, setInitialBattle),
+		);
+		this.registerMainProcessMethod('setInitialBattleInternal', (battle: BgsFaceOffWithSimulation) =>
+			this.setInitialBattleInternal(battle),
+		);
+		this.registerMainProcessMethod('resetBattleInternal', () => this.resetBattleInternal());
+		this.registerMainProcessMethod('clearBattleInternal', () => this.clearBattleInternal());
+		this.registerMainProcessMethod('updateHeroInternal', (side: Side, heroCardId: string) =>
+			this.updateHeroInternal(side, heroCardId),
+		);
+		this.registerMainProcessMethod(
+			'updateHeroPowerInternal',
+			(side: Side, heroPowerCardId: string | null, heroPowerInfo: number) =>
+				this.updateHeroPowerInternal(side, heroPowerCardId, heroPowerInfo),
+		);
+		this.registerMainProcessMethod('updateGlobalInfoInternal', (side: Side, globalInfo: BgsPlayerGlobalInfo | null) =>
+			this.updateGlobalInfoInternal(side, globalInfo),
+		);
+		this.registerMainProcessMethod('updateQuestRewardsInternal', (side: Side, questRewardCardId: string | null) =>
+			this.updateQuestRewardsInternal(side, questRewardCardId),
+		);
+		this.registerMainProcessMethod('updateGreaterTrinketInternal', (side: Side, trinket: BoardTrinket | null) =>
+			this.updateGreaterTrinketInternal(side, trinket),
+		);
+		this.registerMainProcessMethod('updateLesserTrinketInternal', (side: Side, trinket: BoardTrinket | null) =>
+			this.updateLesserTrinketInternal(side, trinket),
+		);
+		this.registerMainProcessMethod('addMinionInternal', (side: Side, entity: BoardEntity) =>
+			this.addMinionInternal(side, entity),
+		);
+		this.registerMainProcessMethod('addTeammateInternal', (side: Side) => this.addTeammateInternal(side));
+		this.registerMainProcessMethod('removeTeammateInternal', (side: Side) => this.removeTeammateInternal(side));
+		this.registerMainProcessMethod('switchTeammatesInternal', (side: Side) => this.switchTeammatesInternal(side));
+		this.registerMainProcessMethod('updateMinionInternal', (side: Side, index: number, entity: BoardEntity | null) =>
+			this.updateMinionInternal(side, index, entity),
+		);
+		this.registerMainProcessMethod('removeMinionInternal', (side: Side, index: number) =>
+			this.removeMinionInternal(side, index),
+		);
+		this.registerMainProcessMethod('updateBoardInternal', (side: Side, newBoard: readonly Entity[]) =>
+			this.updateBoardInternal(side, newBoard),
+		);
+	}
+
 	public initBattleWithSideEffects(battle: BgsFaceOffWithSimulation, setInitialBattle: boolean = true) {
+		void this.callOnMainProcess('initBattleWithSideEffectsInternal', battle, setInitialBattle);
+	}
+	private initBattleWithSideEffectsInternal(battle: BgsFaceOffWithSimulation, setInitialBattle: boolean = true) {
 		console.debug('[simulator] initBattleWithSideEffects', battle);
 		const faceOff = this.stateManager.buildInitialBattle(battle);
 		this.faceOff$$.next(faceOff);
 		if (setInitialBattle) {
-			this.mainInstance.initialBattle = faceOff;
+			this.initialBattle = faceOff;
 		}
 		return faceOff;
 	}
 
 	public setInitialBattle(battle: BgsFaceOffWithSimulation) {
-		this.mainInstance.initialBattle = battle;
+		void this.callOnMainProcess('setInitialBattleInternal', battle);
+	}
+	private setInitialBattleInternal(battle: BgsFaceOffWithSimulation) {
+		this.initialBattle = battle;
 	}
 
 	public resetBattle() {
-		this.faceOff$$.next(this.mainInstance.initialBattle ?? this.stateManager.buildInitialBattle(null));
+		void this.callOnMainProcess('resetBattleInternal');
+	}
+	private resetBattleInternal() {
+		this.faceOff$$.next(this.initialBattle ?? this.stateManager.buildInitialBattle(null));
 	}
 
 	public clearBattle() {
-		// this.mainInstance.initialBattle = null;
+		void this.callOnMainProcess('clearBattleInternal');
+	}
+	private clearBattleInternal() {
 		this.faceOff$$.next(this.stateManager.buildInitialBattle(null));
 	}
 
@@ -92,6 +151,9 @@ export class BgsSimulatorControllerService extends AbstractFacadeService<BgsSimu
 		});
 	}
 	public updateHero(side: Side, heroCardId: string) {
+		void this.callOnMainProcess('updateHeroInternal', side, heroCardId);
+	}
+	private updateHeroInternal(side: Side, heroCardId: string) {
 		const faceOff = this.stateManager.updateHero(this.faceOff$$.value!, side, heroCardId);
 		this.faceOff$$.next(faceOff);
 	}
@@ -104,6 +166,9 @@ export class BgsSimulatorControllerService extends AbstractFacadeService<BgsSimu
 		});
 	}
 	public updateHeroPower(side: Side, heroPowerCardId: string | null, heroPowerInfo: number) {
+		void this.callOnMainProcess('updateHeroPowerInternal', side, heroPowerCardId, heroPowerInfo);
+	}
+	private updateHeroPowerInternal(side: Side, heroPowerCardId: string | null, heroPowerInfo: number) {
 		const faceOff = this.stateManager.updateHeroPower(this.faceOff$$.value!, side, heroPowerCardId, heroPowerInfo);
 		this.faceOff$$.next(faceOff);
 	}
@@ -115,6 +180,9 @@ export class BgsSimulatorControllerService extends AbstractFacadeService<BgsSimu
 		});
 	}
 	public updateGlobalInfo(side: Side, globalInfo: BgsPlayerGlobalInfo | null) {
+		void this.callOnMainProcess('updateGlobalInfoInternal', side, globalInfo);
+	}
+	private updateGlobalInfoInternal(side: Side, globalInfo: BgsPlayerGlobalInfo | null) {
 		const faceOff = this.stateManager.updateGlobalInfo(this.faceOff$$.value!, side, globalInfo);
 		this.faceOff$$.next(faceOff);
 	}
@@ -126,6 +194,9 @@ export class BgsSimulatorControllerService extends AbstractFacadeService<BgsSimu
 		});
 	}
 	public updateQuestRewards(side: Side, questRewardCardId: string | null) {
+		void this.callOnMainProcess('updateQuestRewardsInternal', side, questRewardCardId);
+	}
+	private updateQuestRewardsInternal(side: Side, questRewardCardId: string | null) {
 		const faceOff = this.stateManager.updateQuestReward(this.faceOff$$.value!, side, questRewardCardId);
 		this.faceOff$$.next(faceOff);
 	}
@@ -137,6 +208,9 @@ export class BgsSimulatorControllerService extends AbstractFacadeService<BgsSimu
 		});
 	}
 	public updateGreaterTrinket(side: Side, trinket: BoardTrinket | null) {
+		void this.callOnMainProcess('updateGreaterTrinketInternal', side, trinket);
+	}
+	private updateGreaterTrinketInternal(side: Side, trinket: BoardTrinket | null) {
 		const faceOff = this.stateManager.updateGreaterTrinket(this.faceOff$$.value!, side, trinket);
 		this.faceOff$$.next(faceOff);
 	}
@@ -148,6 +222,9 @@ export class BgsSimulatorControllerService extends AbstractFacadeService<BgsSimu
 		});
 	}
 	public updateLesserTrinket(side: Side, trinket: BoardTrinket | null) {
+		void this.callOnMainProcess('updateLesserTrinketInternal', side, trinket);
+	}
+	private updateLesserTrinketInternal(side: Side, trinket: BoardTrinket | null) {
 		const faceOff = this.stateManager.updateLesserTrinket(this.faceOff$$.value!, side, trinket);
 		this.faceOff$$.next(faceOff);
 	}
@@ -159,21 +236,33 @@ export class BgsSimulatorControllerService extends AbstractFacadeService<BgsSimu
 		});
 	}
 	public addMinion(side: Side, entity: BoardEntity) {
+		void this.callOnMainProcess('addMinionInternal', side, entity);
+	}
+	private addMinionInternal(side: Side, entity: BoardEntity) {
 		const faceOff = this.stateManager.addMinion(this.faceOff$$.value!, side, entity);
 		this.faceOff$$.next(faceOff);
 	}
 
 	public addTeammate(side: Side) {
+		void this.callOnMainProcess('addTeammateInternal', side);
+	}
+	private addTeammateInternal(side: Side) {
 		const faceOff = this.stateManager.addTeammate(this.faceOff$$.value!, side);
 		this.faceOff$$.next(faceOff);
 	}
 
 	public removeTeammate(side: Side) {
+		void this.callOnMainProcess('removeTeammateInternal', side);
+	}
+	private removeTeammateInternal(side: Side) {
 		const faceOff = this.stateManager.removeTeammate(this.faceOff$$.value!, side);
 		this.faceOff$$.next(faceOff);
 	}
 
 	public switchTeammates(side: Side) {
+		void this.callOnMainProcess('switchTeammatesInternal', side);
+	}
+	private switchTeammatesInternal(side: Side) {
 		const faceOff = this.stateManager.switchTeammates(this.faceOff$$.value!, side);
 		this.faceOff$$.next(faceOff);
 	}
@@ -187,6 +276,9 @@ export class BgsSimulatorControllerService extends AbstractFacadeService<BgsSimu
 		});
 	}
 	public updateMinion(side: Side, index: number, entity: BoardEntity | null) {
+		void this.callOnMainProcess('updateMinionInternal', side, index, entity);
+	}
+	private updateMinionInternal(side: Side, index: number, entity: BoardEntity | null) {
 		const faceOff = this.stateManager.updateMinion(this.faceOff$$.value!, side, index, entity);
 		this.faceOff$$.next(faceOff);
 	}
@@ -198,11 +290,17 @@ export class BgsSimulatorControllerService extends AbstractFacadeService<BgsSimu
 		});
 	}
 	public removeMinion(side: Side, index: number) {
+		void this.callOnMainProcess('removeMinionInternal', side, index);
+	}
+	private removeMinionInternal(side: Side, index: number) {
 		const faceOff = this.stateManager.removeMinion(this.faceOff$$.value!, side, index);
 		this.faceOff$$.next(faceOff);
 	}
 
 	public updateBoard(side: Side, newBoard: readonly Entity[]) {
+		void this.callOnMainProcess('updateBoardInternal', side, newBoard);
+	}
+	private updateBoardInternal(side: Side, newBoard: readonly Entity[]) {
 		const faceOff = this.stateManager.updateBoard(this.faceOff$$.value!, side, newBoard);
 		this.faceOff$$.next(faceOff);
 	}
