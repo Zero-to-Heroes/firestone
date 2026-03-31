@@ -2806,11 +2806,7 @@ export const cardIdSelector = (
 		case CardIds.PillageTheFallenTavernBrawl:
 			return and(side(inputSide), weapon);
 		case CardIds.PipsiPainthoof_TOY_812:
-			return highlightConditions(
-				and(side(inputSide), inDeck, divineShield),
-				and(side(inputSide), inDeck, rush),
-				and(side(inputSide), inDeck, taunt),
-			);
+			return and(side(inputSide), inDeck, minion, divineShield, rush, taunt);
 		case CardIds.PipThePotent_WW_394:
 			return and(side(inputSide), or(inDeck, inHand), effectiveCostEqual(1));
 		case CardIds.PitCommander:
