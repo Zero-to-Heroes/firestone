@@ -10,11 +10,11 @@
  *   export HS_REFERENCE_CARDS_JSON_PATH=https://raw.githubusercontent.com/Zero-to-Heroes/hs-reference-data/master/src/cards_short.json
  *   npx jest test-tools/bugs/fabled-package-not-updated/power-log-fabled-package-replay.spec.ts --config=libs/game-state/jest.config.ts --runInBand
  */
-import * as fs from 'fs';
 import { CardIds } from '@firestone-hs/reference-data';
 import {
-	isCardsJsonRefAvailable,
 	replayPowerLogToGameState,
+	requirePowerLogReplayPrerequisites,
+	requirePowerLogReplayResult,
 	resolveCardsJsonPath,
 	resolvePowerLogPathForSlug,
 } from '../../lib/power-log-replay-harness';
@@ -25,17 +25,13 @@ describe('Power log replay → GameStateService (Fabled package on QUEST_PLAYED)
 		async () => {
 			const logPath = resolvePowerLogPathForSlug('fabled-package');
 			const cardsPath = resolveCardsJsonPath();
-			if (!isCardsJsonRefAvailable(cardsPath) || !fs.existsSync(logPath)) {
-				return;
-			}
+			requirePowerLogReplayPrerequisites(cardsPath, logPath);
 			const ctx = await replayPowerLogToGameState({
 				logPath,
 				reviewId: 'fabled-package-power-log-replay',
 				settleMs: 12_000,
 			});
-			if (!ctx) {
-				return;
-			}
+			requirePowerLogReplayResult(ctx, cardsPath);
 
 			const { state } = ctx;
 			// Log: PlayerID=2 is the recorder (local); opponent (player 1) plays TIME_009t2 (Mekkatorque's Aura).

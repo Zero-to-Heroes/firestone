@@ -13,8 +13,10 @@ import { DeckCard } from '@firestone/game-state';
 import { trimPowerLogLinesToLastGame } from '../../lib/trim-power-log-last-game';
 import {
 	collectAllDeckCards,
-	isCardsJsonRefAvailable,
 	replayPowerLogToGameState,
+	requirePowerLogFixtureExists,
+	requirePowerLogReplayPrerequisites,
+	requirePowerLogReplayResult,
 	resolveCardsJsonPath,
 	resolvePowerLogPathForSlug,
 } from '../../lib/power-log-replay-harness';
@@ -25,9 +27,7 @@ describe('Power log replay → GameStateService (Ivory Rook cost narrowing)', ()
 
 	it('parses armor gained from ivory.log (equals discovered minion cost)', () => {
 		const logPath = resolvePowerLogPathForSlug('ivory');
-		if (!fs.existsSync(logPath)) {
-			return;
-		}
+		requirePowerLogFixtureExists(logPath);
 		const raw = fs.readFileSync(logPath, 'utf8');
 		const logLines = trimPowerLogLinesToLastGame(raw.split(/\r?\n/));
 		const gain = extractIvoryRookDiscoverArmorGainFromPowerLogLines(logLines);
@@ -39,9 +39,7 @@ describe('Power log replay → GameStateService (Ivory Rook cost narrowing)', ()
 		async () => {
 			const logPath = resolvePowerLogPathForSlug('ivory');
 			const cardsPath = resolveCardsJsonPath();
-			if (!isCardsJsonRefAvailable(cardsPath) || !fs.existsSync(logPath)) {
-				return;
-			}
+			requirePowerLogReplayPrerequisites(cardsPath, logPath);
 			const raw = fs.readFileSync(logPath, 'utf8');
 			const logLines = trimPowerLogLinesToLastGame(raw.split(/\r?\n/));
 			const expectedDiscoverCost = extractIvoryRookDiscoverArmorGainFromPowerLogLines(logLines);
@@ -51,9 +49,7 @@ describe('Power log replay → GameStateService (Ivory Rook cost narrowing)', ()
 				logPath,
 				reviewId: 'ivory-power-log-replay',
 			});
-			if (!ctx) {
-				return;
-			}
+			requirePowerLogReplayResult(ctx, cardsPath);
 
 			const ivoryCreated = collectAllDeckCards(ctx.state).filter((c) => c.creatorCardId === ivoryRookId);
 			expect(ivoryCreated.length).toBeGreaterThan(0);

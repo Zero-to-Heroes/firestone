@@ -11,8 +11,9 @@
 import * as fs from 'fs';
 import { CardIds } from '@firestone-hs/reference-data';
 import {
-	isCardsJsonRefAvailable,
 	replayPowerLogToGameState,
+	requirePowerLogReplayPrerequisites,
+	requirePowerLogReplayResult,
 	resolveCardsJsonPath,
 	resolvePowerLogPathForSlug,
 } from '../../lib/power-log-replay-harness';
@@ -29,17 +30,12 @@ describe('Power log replay → GameStateService (Secret Passage vs cardsDrawnByT
 		async () => {
 			const logPath = resolvePowerLogPathForSlug('secret-passage-draw-counter');
 			const cardsPath = resolveCardsJsonPath();
-			if (!isCardsJsonRefAvailable(cardsPath) || !fs.existsSync(logPath)) {
-				return;
-			}
+			requirePowerLogReplayPrerequisites(cardsPath, logPath);
 			const ctx = await replayPowerLogToGameState({
 				logPath,
 				reviewId: 'secret-passage-draw-counter-replay',
 			});
-			expect(ctx).not.toBeNull();
-			if (!ctx) {
-				return;
-			}
+			requirePowerLogReplayResult(ctx, cardsPath);
 			const raw = fs.readFileSync(logPath, 'utf8');
 			expect(raw).toContain(CardIds.SecretPassage);
 

@@ -10,11 +10,11 @@
  * Run:
  *   npx jest test-tools/bugs/interstellar-wayfarer/power-log-interstellar-wayfarer-replay.spec.ts --config=libs/game-state/jest.config.ts --runInBand
  */
-import * as fs from 'fs';
 import { CardIds } from '@firestone-hs/reference-data';
 import {
-	isCardsJsonRefAvailable,
 	replayPowerLogToGameState,
+	requirePowerLogReplayPrerequisites,
+	requirePowerLogReplayResult,
 	resolveCardsJsonPath,
 	resolvePowerLogPathForSlug,
 } from '../../lib/power-log-replay-harness';
@@ -30,17 +30,13 @@ describe('Power log replay → GameStateService (Interstellar Wayfarer deathratt
 	it('applies deck Libram cost reduction on deathrattle as well as battlecry', async () => {
 		const logPath = resolvePowerLogPathForSlug('interstellar-wayfarer');
 		const cardsPath = resolveCardsJsonPath();
-		if (!isCardsJsonRefAvailable(cardsPath) || !fs.existsSync(logPath)) {
-			return;
-		}
+		requirePowerLogReplayPrerequisites(cardsPath, logPath);
 
 		const ctx = await replayPowerLogToGameState({
 			logPath,
 			reviewId: 'interstellar-wayfarer-deathrattle-libram',
 		});
-		if (!ctx) {
-			return;
-		}
+		requirePowerLogReplayResult(ctx, cardsPath);
 
 		const { state, allCardsRef } = ctx;
 		const ref = allCardsRef.getCard(libramOfFaith);

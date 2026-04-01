@@ -4,6 +4,8 @@
  * Fixtures live under `test-tools/bugs/<bug-id>/` (see {@link resolvePowerLogPathForSlug}).
  */
 import * as fs from 'fs';
+import * as http from 'http';
+import * as https from 'https';
 import * as path from 'path';
 import { Injector, NgZone } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
@@ -98,25 +100,64 @@ export function normalizeCardsJsonRefForFetch(ref: string): string {
 
 let cachedRemoteCardsJson: { readonly url: string; readonly text: string } | null = null;
 
+/** When `fetch` is missing (e.g. some Jest/Node setups), load JSON over HTTP(S) with Node builtins. */
+function loadHttpUrlTextWithNode(url: string): Promise<string | null> {
+	const lib = url.startsWith('https') ? https : http;
+	return new Promise((resolve) => {
+		const req = lib.get(url, (res) => {
+			const status = res.statusCode ?? 0;
+			if (status >= 400) {
+				console.warn('[power-log-replay] cards HTTP', status, url);
+				res.resume();
+				resolve(null);
+				return;
+			}
+			const chunks: Buffer[] = [];
+			res.on('data', (c: Buffer) => chunks.push(c));
+			res.on('end', () => {
+				resolve(Buffer.concat(chunks).toString('utf8'));
+			});
+		});
+		req.on('error', (e) => {
+			console.warn('[power-log-replay] cards HTTP get failed', url, e);
+			resolve(null);
+		});
+		req.setTimeout(60_000, () => {
+			req.destroy();
+			console.warn('[power-log-replay] cards HTTP get timeout', url);
+			resolve(null);
+		});
+	});
+}
+
+async function loadHttpUrlText(url: string): Promise<string | null> {
+	if (typeof fetch === 'function') {
+		try {
+			const res = await fetch(url);
+			if (!res.ok) {
+				console.warn('[power-log-replay] cards HTTP', res.status, url);
+				return null;
+			}
+			return await res.text();
+		} catch (e) {
+			console.warn('[power-log-replay] cards fetch failed', url, e);
+			return null;
+		}
+	}
+	return loadHttpUrlTextWithNode(url);
+}
+
 async function loadCardsShortJsonText(ref: string): Promise<string | null> {
 	const fetchable = normalizeCardsJsonRefForFetch(ref);
 	if (/^https?:\/\//i.test(fetchable)) {
 		if (cachedRemoteCardsJson?.url === fetchable) {
 			return cachedRemoteCardsJson.text;
 		}
-		try {
-			const res = await fetch(fetchable);
-			if (!res.ok) {
-				console.warn('[power-log-replay] cards HTTP', res.status, fetchable);
-				return null;
-			}
-			const text = await res.text();
+		const text = await loadHttpUrlText(fetchable);
+		if (text != null) {
 			cachedRemoteCardsJson = { url: fetchable, text };
-			return text;
-		} catch (e) {
-			console.warn('[power-log-replay] cards fetch failed', fetchable, e);
-			return null;
 		}
+		return text;
 	}
 	try {
 		return fs.readFileSync(fetchable, 'utf8');
@@ -221,6 +262,53 @@ export type ReplayPowerLogOptions = {
 	/** Wait after last line so async parsers finish (default 8000). */
 	settleMs?: number;
 };
+
+/**
+ * Fail fast if the power.log fixture is missing (do not silently skip tests).
+ */
+export function requirePowerLogFixtureExists(logPath: string): void {
+	if (!fs.existsSync(logPath)) {
+		throw new Error(
+			`[power-log-replay] Power log fixture missing: ${logPath}. Commit the log under test-tools/bugs/ or set the slug's POWER_LOG_* env override.`,
+		);
+	}
+}
+
+/**
+ * Fail fast if `cards_short.json` cannot be resolved before replay.
+ * CI should set `HS_REFERENCE_CARDS_JSON_PATH` or clone `hs-reference-data` next to the repo.
+ * See {@link resolveCardsJsonPath} and {@link HS_REFERENCE_CARDS_SHORT_RAW_URL}.
+ */
+export function requireCardsJsonResolvableForReplay(cardsPath: string): void {
+	if (!isCardsJsonRefAvailable(cardsPath)) {
+		throw new Error(
+			`[power-log-replay] cards_short.json not resolvable at: ${cardsPath}. ` +
+				`Set HS_REFERENCE_CARDS_JSON_PATH to an existing file path or to ${HS_REFERENCE_CARDS_SHORT_RAW_URL}.`,
+		);
+	}
+}
+
+/**
+ * Call after {@link replayPowerLogToGameState}. Fails if replay returned null (cards load failed, etc.).
+ */
+export function requirePowerLogReplayResult(
+	ctx: PowerLogReplayResult | null,
+	cardsPath: string,
+): asserts ctx is PowerLogReplayResult {
+	if (!ctx) {
+		throw new Error(
+			`[power-log-replay] replayPowerLogToGameState returned null — could not load cards from ${cardsPath}. ` +
+				`If the path is an HTTPS URL, ensure fetch works and the network allows GitHub raw. ` +
+				`Otherwise set HS_REFERENCE_CARDS_JSON_PATH to a local cards_short.json file.`,
+		);
+	}
+}
+
+/** Convenience: fixture log exists + cards path is resolvable (URL or existing file). */
+export function requirePowerLogReplayPrerequisites(cardsPath: string, logPath: string): void {
+	requireCardsJsonResolvableForReplay(cardsPath);
+	requirePowerLogFixtureExists(logPath);
+}
 
 /**
  * Build TestBed, replay trimmed log lines, return final game state.

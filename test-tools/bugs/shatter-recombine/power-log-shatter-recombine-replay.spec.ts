@@ -7,12 +7,12 @@
  * Run:
  *   npx jest test-tools/bugs/shatter-recombine/power-log-shatter-recombine-replay.spec.ts --config=libs/game-state/jest.config.ts --runInBand
  */
-import * as fs from 'fs';
 import { CardClass, GameTag } from '@firestone-hs/reference-data';
 import { DeckCard, hasCorrectClass } from '@firestone/game-state';
 import {
-	isCardsJsonRefAvailable,
 	replayPowerLogToGameState,
+	requirePowerLogReplayPrerequisites,
+	requirePowerLogReplayResult,
 	resolveCardsJsonPath,
 	resolvePowerLogPathForSlug,
 } from '../../lib/power-log-replay-harness';
@@ -21,17 +21,13 @@ describe('Power log replay → GameStateService (shatter recombine possibleCards
 	it('restricts recombined SHATTER guessed pool to opponent class, not all SHATTER cards', async () => {
 		const logPath = resolvePowerLogPathForSlug('shatter-recombine');
 		const cardsPath = resolveCardsJsonPath();
-		if (!isCardsJsonRefAvailable(cardsPath) || !fs.existsSync(logPath)) {
-			return;
-		}
+		requirePowerLogReplayPrerequisites(cardsPath, logPath);
 
 		const ctx = await replayPowerLogToGameState({
 			logPath,
 			reviewId: 'shatter-recombine-replay',
 		});
-		if (!ctx) {
-			return;
-		}
+		requirePowerLogReplayResult(ctx, cardsPath);
 
 		const { allCardsRef, state } = ctx;
 		const opponent = state.opponentDeck;

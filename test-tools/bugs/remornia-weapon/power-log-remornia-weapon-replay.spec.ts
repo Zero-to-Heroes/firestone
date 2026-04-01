@@ -7,10 +7,10 @@
  * Run:
  *   npx jest test-tools/bugs/remornia-weapon/power-log-remornia-weapon-replay.spec.ts --config=libs/game-state/jest.config.ts --runInBand
  */
-import * as fs from 'fs';
 import {
-	isCardsJsonRefAvailable,
 	replayPowerLogToGameState,
+	requirePowerLogReplayPrerequisites,
+	requirePowerLogReplayResult,
 	resolveCardsJsonPath,
 	resolvePowerLogPathForSlug,
 } from '../../lib/power-log-replay-harness';
@@ -21,16 +21,12 @@ describe('Power log replay → GameStateService (Remornia weapon cleared on SETA
 		async () => {
 			const logPath = resolvePowerLogPathForSlug('remornia');
 			const cardsPath = resolveCardsJsonPath();
-			if (!isCardsJsonRefAvailable(cardsPath) || !fs.existsSync(logPath)) {
-				return;
-			}
+			requirePowerLogReplayPrerequisites(cardsPath, logPath);
 			const ctx = await replayPowerLogToGameState({
 				logPath,
 				reviewId: 'remornia-weapon-power-log-replay',
 			});
-			if (!ctx) {
-				return;
-			}
+			requirePowerLogReplayResult(ctx, cardsPath);
 
 			expect(ctx.state.opponentDeck.weapon).toBeNull();
 		},

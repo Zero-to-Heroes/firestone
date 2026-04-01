@@ -7,12 +7,12 @@
  * Run:
  *   npx jest test-tools/bugs/spark-life-shatter/power-log-spark-life-shatter-replay.spec.ts --config=libs/game-state/jest.config.ts --runInBand
  */
-import * as fs from 'fs';
 import { CardClass, CardIds, GameTag } from '@firestone-hs/reference-data';
 import { DeckCard, hasCorrectClass } from '@firestone/game-state';
 import {
-	isCardsJsonRefAvailable,
 	replayPowerLogToGameState,
+	requirePowerLogReplayPrerequisites,
+	requirePowerLogReplayResult,
 	resolveCardsJsonPath,
 	resolvePowerLogPathForSlug,
 } from '../../lib/power-log-replay-harness';
@@ -21,17 +21,13 @@ describe('Power log replay → GameStateService (Spark of Life shatter pool)', (
 	it('keeps SHATTERED possible cards as Mage ∪ Druid when Spark of Life is the resolved creator', async () => {
 		const logPath = resolvePowerLogPathForSlug('spark-life-shatter');
 		const cardsPath = resolveCardsJsonPath();
-		if (!isCardsJsonRefAvailable(cardsPath) || !fs.existsSync(logPath)) {
-			return;
-		}
+		requirePowerLogReplayPrerequisites(cardsPath, logPath);
 
 		const ctx = await replayPowerLogToGameState({
 			logPath,
 			reviewId: 'spark-life-shatter-replay',
 		});
-		if (!ctx) {
-			return;
-		}
+		requirePowerLogReplayResult(ctx, cardsPath);
 
 		const shatteredInHand = ctx.state.opponentDeck.hand.filter(
 			(c) => c.tags?.[GameTag.SHATTERED] === 1 && !c.cardId,

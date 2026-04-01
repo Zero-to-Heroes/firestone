@@ -1,5 +1,5 @@
-import { Race, ReferenceCard } from '@firestone-hs/reference-data';
-import { extractUniqueTribes } from './menagerie';
+import { ReferenceCard } from '@firestone-hs/reference-data';
+import { extractUniqueTribes } from '../../utils/tribe-utils';
 
 // Helper function to create mock ReferenceCard with tribes
 const createMinionWithTribes = (races: string[], name: string = 'TestMinion'): ReferenceCard =>
@@ -139,43 +139,11 @@ const testCases: TestCase[] = [
 	},
 ];
 
-// Run the tests
-console.log('=== MENAGERIE ALGORITHM TESTS ===\n');
-
-let passed = 0;
-let total = testCases.length;
-
-for (const testCase of testCases) {
-	console.log(`🧪 ${testCase.name}`);
-	console.log(`   Input: ${testCase.minions.map((m) => `${m.name}(${m.races!.join('/')})`).join(', ')}`);
-	console.log(`   Expected: ${testCase.expected} tribes`);
-	if (testCase.description) {
-		console.log(`   Note: ${testCase.description}`);
+describe('extractUniqueTribes', () => {
+	for (const testCase of testCases) {
+		it(testCase.name, () => {
+			const result = extractUniqueTribes(testCase.minions);
+			expect(result.length).toBe(testCase.expected);
+		});
 	}
-
-	try {
-		const result = extractUniqueTribes(testCase.minions);
-		const actualCount = result.length;
-		const raceNames = result.map((race) => Race[race]);
-
-		console.log(`   Actual: ${actualCount} tribes [${raceNames.join(', ')}]`);
-
-		if (actualCount === testCase.expected) {
-			console.log(`   ✅ PASS\n`);
-			passed++;
-		} else {
-			console.log(`   ❌ FAIL - Expected ${testCase.expected}, got ${actualCount}\n`);
-		}
-	} catch (error) {
-		console.log(`   💥 ERROR: ${error}\n`);
-	}
-}
-
-console.log(`=== RESULTS ===`);
-console.log(`${passed}/${total} tests passed (${Math.round((passed / total) * 100)}%)`);
-
-if (passed < total) {
-	console.log('\n🔧 Algorithm needs fixing!');
-} else {
-	console.log('\n🎉 All tests passed!');
-}
+});

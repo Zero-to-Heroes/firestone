@@ -14,8 +14,10 @@ import { getDynamicRelatedCardIds, hasOverride } from '@firestone/game-state';
 import { trimPowerLogLinesToLastGame } from '../../lib/trim-power-log-last-game';
 import {
 	collectAllDeckCards,
-	isCardsJsonRefAvailable,
 	replayPowerLogToGameState,
+	requirePowerLogFixtureExists,
+	requirePowerLogReplayPrerequisites,
+	requirePowerLogReplayResult,
 	resolveCardsJsonPath,
 	resolvePowerLogPathForSlug,
 } from '../../lib/power-log-replay-harness';
@@ -27,9 +29,7 @@ const STORED_MINION_COST = 2;
 describe('Power log replay → GameStateService (Soldier of Onyxia pool cost)', () => {
 	it('fixture log contains summoned Soldier of Onyxia (CATA_780t)', () => {
 		const logPath = resolvePowerLogPathForSlug('soldier-onyxia');
-		if (!fs.existsSync(logPath)) {
-			return;
-		}
+		requirePowerLogFixtureExists(logPath);
 		const raw = fs.readFileSync(logPath, 'utf8');
 		const lines = trimPowerLogLinesToLastGame(raw.split(/\r?\n/));
 		const hasSoldier = lines.some((l) => l.includes('CATA_780t') && l.includes('Soldier of Onyxia'));
@@ -41,16 +41,12 @@ describe('Power log replay → GameStateService (Soldier of Onyxia pool cost)', 
 		async () => {
 			const logPath = resolvePowerLogPathForSlug('soldier-onyxia');
 			const cardsPath = resolveCardsJsonPath();
-			if (!isCardsJsonRefAvailable(cardsPath) || !fs.existsSync(logPath)) {
-				return;
-			}
+			requirePowerLogReplayPrerequisites(cardsPath, logPath);
 			const ctx = await replayPowerLogToGameState({
 				logPath,
 				reviewId: 'soldier-onyxia-power-log-replay',
 			});
-			if (!ctx) {
-				return;
-			}
+			requirePowerLogReplayResult(ctx, cardsPath);
 
 			const soldiers = collectAllDeckCards(ctx.state).filter((c) => c.cardId === SOLDIER_CARD_ID);
 			expect(soldiers.length).toBeGreaterThan(0);

@@ -10,8 +10,9 @@ import * as fs from 'fs';
 import { DeckCard } from '@firestone/game-state';
 import { trimPowerLogLinesToLastGame } from '../../lib/trim-power-log-last-game';
 import {
-	isCardsJsonRefAvailable,
 	replayPowerLogToGameState,
+	requirePowerLogReplayPrerequisites,
+	requirePowerLogReplayResult,
 	resolveCardsJsonPath,
 	resolvePowerLogPathForSlug,
 } from '../../lib/power-log-replay-harness';
@@ -24,9 +25,7 @@ describe('Power log replay → GameStateService (opponent hand singleton possibl
 		async () => {
 			const logPath = resolvePowerLogPathForSlug(slug);
 			const cardsPath = resolveCardsJsonPath();
-			if (!isCardsJsonRefAvailable(cardsPath) || !fs.existsSync(logPath)) {
-				return;
-			}
+			requirePowerLogReplayPrerequisites(cardsPath, logPath);
 			const raw = fs.readFileSync(logPath, 'utf8');
 			const logLines = trimPowerLogLinesToLastGame(raw.split(/\r?\n/));
 			expect(logLines.length).toBeGreaterThan(100);
@@ -35,9 +34,7 @@ describe('Power log replay → GameStateService (opponent hand singleton possibl
 				logPath,
 				reviewId: 'opponent-hand-single-guess-replay',
 			});
-			if (!ctx) {
-				return;
-			}
+			requirePowerLogReplayResult(ctx, cardsPath);
 
 			const hand = ctx.state.opponentDeck.hand;
 			const singletonGuess = hand.filter(

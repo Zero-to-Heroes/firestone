@@ -22,8 +22,10 @@ import { CardsFacadeService, ILocalizationService } from '@firestone/shared/fram
 import { GameState, YsondreCounterDefinitionV2 } from '@firestone/game-state';
 import { trimPowerLogLinesToLastGame } from '../../lib/trim-power-log-last-game';
 import {
-	isCardsJsonRefAvailable,
 	replayPowerLogToGameState,
+	requirePowerLogFixtureExists,
+	requirePowerLogReplayPrerequisites,
+	requirePowerLogReplayResult,
 	resolveCardsJsonPath,
 	resolvePowerLogPathForSlug,
 } from '../../lib/power-log-replay-harness';
@@ -34,9 +36,7 @@ const ysondreId = CardIds.Ysondre_EDR_465;
 describe('Power log replay → GameStateService (Ysondre counter column)', () => {
 	it('ysondre.log records opponent (player=2) Ysondre dying at least once', () => {
 		const logPath = resolvePowerLogPathForSlug('ysondre');
-		if (!fs.existsSync(logPath)) {
-			return;
-		}
+		requirePowerLogFixtureExists(logPath);
 		const raw = fs.readFileSync(logPath, 'utf8');
 		const logLines = trimPowerLogLinesToLastGame(raw.split(/\r?\n/));
 		const graveyardMoves = countOpponentYsondreGraveyardTransitions(logLines);
@@ -48,17 +48,12 @@ describe('Power log replay → GameStateService (Ysondre counter column)', () =>
 		async () => {
 			const logPath = resolvePowerLogPathForSlug('ysondre');
 			const cardsPath = resolveCardsJsonPath();
-			if (!isCardsJsonRefAvailable(cardsPath) || !fs.existsSync(logPath)) {
-				return;
-			}
+			requirePowerLogReplayPrerequisites(cardsPath, logPath);
 			const ctx = await replayPowerLogToGameState({
 				logPath,
 				reviewId: 'ysondre-power-log-replay',
 			});
-			expect(ctx).not.toBeNull();
-			if (!ctx) {
-				return;
-			}
+			requirePowerLogReplayResult(ctx, cardsPath);
 
 			const state: GameState = ctx.state;
 			const opponentYsondreDeaths = state.opponentDeck.minionsDeadThisMatch.filter(

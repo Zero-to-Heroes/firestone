@@ -47,6 +47,7 @@ Once you're done, before assigning the PR to me for review, please mention @curs
 - The app's main repo is this one
 - The reference cards live next to the repo at `..\hs-reference-data\src\cards_short.json`, or use the same file online: `https://raw.githubusercontent.com/Zero-to-Heroes/hs-reference-data/master/src/cards_short.json` (for power-log replay tests, set `HS_REFERENCE_CARDS_JSON_PATH` to that URL or the GitHub blob page URL for `cards_short.json`)
 - When tasked with a bug to reproduce, always build a red/green test and if you're not able to build one (eg there is no power.log), stop immediately and ask for instructions
+- If a test can't be run, it should count as a failure
 
 # General Guidelines for working with Nx
 

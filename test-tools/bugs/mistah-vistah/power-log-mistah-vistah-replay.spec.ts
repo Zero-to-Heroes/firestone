@@ -8,11 +8,11 @@
  * Run:
  *   npx jest test-tools/bugs/mistah-vistah/power-log-mistah-vistah-replay.spec.ts --config=libs/game-state/jest.config.ts --runInBand
  */
-import * as fs from 'fs';
 import { CardIds } from '@firestone-hs/reference-data';
 import {
-	isCardsJsonRefAvailable,
 	replayPowerLogToGameState,
+	requirePowerLogReplayPrerequisites,
+	requirePowerLogReplayResult,
 	resolveCardsJsonPath,
 	resolvePowerLogPathForSlug,
 } from '../../lib/power-log-replay-harness';
@@ -25,17 +25,13 @@ describe('Power log replay → GameStateService (Mistah Vistah / Scenic Vista gl
 	it('puts Scenic Vista in globalEffects with tracked spells after creatorEntityId fix', async () => {
 		const logPath = resolvePowerLogPathForSlug('mistah-vistah');
 		const cardsPath = resolveCardsJsonPath();
-		if (!isCardsJsonRefAvailable(cardsPath) || !fs.existsSync(logPath)) {
-			return;
-		}
+		requirePowerLogReplayPrerequisites(cardsPath, logPath);
 
 		const ctx = await replayPowerLogToGameState({
 			logPath,
 			reviewId: 'mistah-vistah-replay',
 		});
-		if (!ctx) {
-			return;
-		}
+		requirePowerLogReplayResult(ctx, cardsPath);
 
 		const { state } = ctx;
 		const scenicInPlayer = state.playerDeck.globalEffects.find((c) => c.cardId === scenicVistaId);

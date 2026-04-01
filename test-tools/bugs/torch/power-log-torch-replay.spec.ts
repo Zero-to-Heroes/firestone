@@ -12,8 +12,10 @@ import { CardIds } from '@firestone-hs/reference-data';
 import { trimPowerLogLinesToLastGame } from '../../lib/trim-power-log-last-game';
 import {
 	collectAllDeckCards,
-	isCardsJsonRefAvailable,
 	replayPowerLogToGameState,
+	requirePowerLogFixtureExists,
+	requirePowerLogReplayPrerequisites,
+	requirePowerLogReplayResult,
 	resolveCardsJsonPath,
 	resolvePowerLogPathForSlug,
 } from '../../lib/power-log-replay-harness';
@@ -22,9 +24,7 @@ import { extractTorchScriptDataNum1ValuesFromPowerLogLines } from './torch-power
 describe('Power log replay → GameStateService (Torch mainAttributeChange)', () => {
 	it('parses TAG_SCRIPT_DATA_NUM_1 values for Torch from torch.log (excess damage hints)', () => {
 		const logPath = resolvePowerLogPathForSlug('torch');
-		if (!fs.existsSync(logPath)) {
-			return;
-		}
+		requirePowerLogFixtureExists(logPath);
 		const raw = fs.readFileSync(logPath, 'utf8');
 		const logLines = trimPowerLogLinesToLastGame(raw.split(/\r?\n/));
 		const scriptVals = extractTorchScriptDataNum1ValuesFromPowerLogLines(logLines);
@@ -39,16 +39,12 @@ describe('Power log replay → GameStateService (Torch mainAttributeChange)', ()
 		async () => {
 			const logPath = resolvePowerLogPathForSlug('torch');
 			const cardsPath = resolveCardsJsonPath();
-			if (!isCardsJsonRefAvailable(cardsPath) || !fs.existsSync(logPath)) {
-				return;
-			}
+			requirePowerLogReplayPrerequisites(cardsPath, logPath);
 			const ctx = await replayPowerLogToGameState({
 				logPath,
 				reviewId: 'torch-power-log-replay',
 			});
-			if (!ctx) {
-				return;
-			}
+			requirePowerLogReplayResult(ctx, cardsPath);
 
 			const torches = collectAllDeckCards(ctx.state).filter((c) => c.cardId === CardIds.Torch_CATA_585);
 			expect(torches.length).toBeGreaterThan(0);

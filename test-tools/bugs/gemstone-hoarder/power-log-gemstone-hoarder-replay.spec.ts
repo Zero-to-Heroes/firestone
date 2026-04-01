@@ -11,12 +11,12 @@
  * Run:
  *   npx jest test-tools/bugs/gemstone-hoarder/power-log-gemstone-hoarder-replay.spec.ts --config=libs/game-state/jest.config.ts --runInBand
  */
-import * as fs from 'fs';
 import { CardIds } from '@firestone-hs/reference-data';
 import {
 	collectAllDeckCards,
-	isCardsJsonRefAvailable,
 	replayPowerLogToGameState,
+	requirePowerLogReplayPrerequisites,
+	requirePowerLogReplayResult,
 	resolveCardsJsonPath,
 	resolvePowerLogPathForSlug,
 } from '../../lib/power-log-replay-harness';
@@ -27,16 +27,12 @@ describe('Power log replay → GameStateService (Gemstone Hoarder deathrattle or
 		async () => {
 			const logPath = resolvePowerLogPathForSlug('gemstone-hoarder');
 			const cardsPath = resolveCardsJsonPath();
-			if (!isCardsJsonRefAvailable(cardsPath) || !fs.existsSync(logPath)) {
-				return;
-			}
+			requirePowerLogReplayPrerequisites(cardsPath, logPath);
 			const ctx = await replayPowerLogToGameState({
 				logPath,
 				reviewId: 'gemstone-hoarder-power-log-replay',
 			});
-			if (!ctx) {
-				return;
-			}
+			requirePowerLogReplayResult(ctx, cardsPath);
 
 			const fromHoarderDr = collectAllDeckCards(ctx.state).filter(
 				(c) =>

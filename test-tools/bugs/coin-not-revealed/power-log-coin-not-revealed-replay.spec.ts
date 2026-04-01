@@ -9,12 +9,12 @@
  *   export HS_REFERENCE_CARDS_JSON_PATH=../hs-reference-data/src/cards_short.json
  *   npx jest test-tools/bugs/coin-not-revealed/power-log-coin-not-revealed-replay.spec.ts --config=libs/game-state/jest.config.ts --runInBand
  */
-import * as fs from 'fs';
 import { CardIds } from '@firestone-hs/reference-data';
 import {
 	collectAllDeckCards,
-	isCardsJsonRefAvailable,
 	replayPowerLogToGameState,
+	requirePowerLogReplayPrerequisites,
+	requirePowerLogReplayResult,
 	resolveCardsJsonPath,
 	resolvePowerLogPathForSlug,
 } from '../../lib/power-log-replay-harness';
@@ -26,18 +26,14 @@ describe('Power log replay → GameStateService (cosmetic coin id revealed as Th
 	it('maps TLC_COIN2 with COIN_CARD to CardIds.TheCoinCore (GAME_005) in hand', async () => {
 		const logPath = resolvePowerLogPathForSlug('coin-not-revealed');
 		const cardsPath = resolveCardsJsonPath();
-		if (!isCardsJsonRefAvailable(cardsPath) || !fs.existsSync(logPath)) {
-			return;
-		}
+		requirePowerLogReplayPrerequisites(cardsPath, logPath);
 
 		const ctx = await replayPowerLogToGameState({
 			logPath,
 			reviewId: 'coin-not-revealed-replay',
 			settleMs: 12_000,
 		});
-		if (!ctx) {
-			return;
-		}
+		requirePowerLogReplayResult(ctx, cardsPath);
 
 		const { state } = ctx;
 		const coinCard = collectAllDeckCards(state).find((c) => c.entityId === coinEntityId);

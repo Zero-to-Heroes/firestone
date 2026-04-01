@@ -218,53 +218,24 @@ const tooltipTestCases: TooltipTestCase[] = [
 	},
 ];
 
-// Run the tooltip tests
-console.log('=== MENAGERIE TOOLTIP TESTS ===\n');
+describe('analyzeTooltipTribes', () => {
+	for (const testCase of tooltipTestCases) {
+		it(testCase.name, () => {
+			const result = analyzeTooltipTribes(testCase.minions);
+			const actualSecured = result.securedTribes.map(capitalizeTribe);
+			const actualFlexible = result.flexibleOptions.map((option) =>
+				option.split('/').map(capitalizeTribe).join('/'),
+			);
 
-let passed = 0;
-let total = tooltipTestCases.length;
+			const securedMatch =
+				testCase.expectedSecuredTribes.length === actualSecured.length &&
+				testCase.expectedSecuredTribes.every((tribe) => actualSecured.includes(tribe));
 
-for (const testCase of tooltipTestCases) {
-	console.log(`🧪 ${testCase.name}`);
-	console.log(`   Input: ${testCase.minions.map((m) => `${m.name}(${m.races!.join('/')})`).join(', ')}`);
-	console.log(`   Description: ${testCase.description}`);
+			const flexibleMatch =
+				testCase.expectedFlexibleOptions.length === actualFlexible.length &&
+				testCase.expectedFlexibleOptions.every((option) => actualFlexible.includes(option));
 
-	try {
-		const result = analyzeTooltipTribes(testCase.minions);
-
-		// Convert the results to capitalized form for comparison
-		const actualSecured = result.securedTribes.map(capitalizeTribe);
-		const actualFlexible = result.flexibleOptions.map((option) => option.split('/').map(capitalizeTribe).join('/'));
-
-		console.log(`   Expected secured: [${testCase.expectedSecuredTribes.join(', ')}]`);
-		console.log(`   Actual secured: [${actualSecured.join(', ')}]`);
-		console.log(`   Expected flexible: [${testCase.expectedFlexibleOptions.join(', ')}]`);
-		console.log(`   Actual flexible: [${actualFlexible.join(', ')}]`);
-
-		const securedMatch =
-			testCase.expectedSecuredTribes.length === actualSecured.length &&
-			testCase.expectedSecuredTribes.every((tribe) => actualSecured.includes(tribe));
-
-		const flexibleMatch =
-			testCase.expectedFlexibleOptions.length === actualFlexible.length &&
-			testCase.expectedFlexibleOptions.every((option) => actualFlexible.includes(option));
-
-		if (securedMatch && flexibleMatch) {
-			console.log(`   ✅ PASS\n`);
-			passed++;
-		} else {
-			console.log(`   ❌ FAIL - Tooltip tribes don't match expected\n`);
-		}
-	} catch (error) {
-		console.log(`   💥 ERROR: ${error}\n`);
+			expect(securedMatch && flexibleMatch).toBe(true);
+		});
 	}
-}
-
-console.log(`=== TOOLTIP RESULTS ===`);
-console.log(`${passed}/${total} tests passed (${Math.round((passed / total) * 100)}%)`);
-
-if (passed < total) {
-	console.log('\n🔧 Tooltip logic needs fixing!');
-} else {
-	console.log('\n🎉 All tooltip tests passed!');
-}
+});
