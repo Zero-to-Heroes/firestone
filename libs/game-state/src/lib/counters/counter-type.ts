@@ -45,6 +45,7 @@ export type CounterType =
 	| 'piratesSummoned'
 	| 'attack'
 	| 'jadeGolem'
+	| 'kaelthasSpellCycle'
 	| 'cthun'
 	| 'abyssalCurse'
 	| 'spells'

@@ -198,6 +198,7 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	'fabled-package': 'fabled-package-not-updated/fabled-package.log',
 	ysondre: 'ysondre/ysondre.log',
 	'secret-passage-draw-counter': 'secret-passage-draw-counter/secret-passage-draw-counter.log',
+	'kaelthas-spell-cycle': 'kaelthas-spell-cycle/kaelthas.log',
 };
 
 /**

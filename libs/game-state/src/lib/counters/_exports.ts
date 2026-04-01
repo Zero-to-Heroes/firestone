@@ -74,6 +74,7 @@ import { HeroPowerUseCounterDefinitionV2 } from './impl/hero-power-used';
 import { HolySpellsCounterDefinitionV2 } from './impl/holy-spells';
 import { ImbueCounterDefinitionV2 } from './impl/imbue';
 import { JadeGolemCounterDefinitionV2 } from './impl/jade-golem';
+import { KaelthasSunstriderSpellCycleCounterDefinitionV2 } from './impl/kaelthas-spell-cycle';
 import { KiljaedenCounterDefinitionV2 } from './impl/kiljaeden';
 import { LibramPlayedCounterDefinitionV2 } from './impl/libram-played';
 import { LibramReductionCounterDefinitionV2 } from './impl/libram-reduction';
@@ -191,6 +192,7 @@ export const getAllCounters: (
 	new FatigueCounterDefinitionV2(i18n, allCards),
 	new GalakrondCounterDefinitionV2(i18n, allCards),
 	new JadeGolemCounterDefinitionV2(i18n, allCards),
+	new KaelthasSunstriderSpellCycleCounterDefinitionV2(i18n, allCards),
 	new AstralAutomatonCounterDefinitionV2(i18n, allCards),
 	new PogoCounterDefinitionV2(i18n, allCards),
 	new WatchpostCounterDefinitionV2(i18n, allCards),
