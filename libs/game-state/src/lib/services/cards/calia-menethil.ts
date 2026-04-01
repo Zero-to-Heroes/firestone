@@ -8,9 +8,13 @@ export const CaliaMenethil: StaticGeneratingCard = {
 	cardIds: [CardIds.CaliaMenethil_CORE_CATA_002],
 	dynamicPool: (input: StaticGeneratingCardInput) => {
 		const deckState = input.inputOptions.deckState;
-		return deckState.minionsDeadThisMatch
+		const deadCards = deckState.minionsDeadThisMatch
 			.map((e) => getProcessedCard(e.cardId, e.entityId, deckState, input.allCards))
-			.filter((c) => hasCorrectType(c, CardType.MINION))
-			.map((e) => e.id);
+			.filter((c) => hasCorrectType(c, CardType.MINION) && c.cost != null);
+		if (!deadCards.length) {
+			return [];
+		}
+		const highestCost = Math.max(...deadCards.map((c) => c.cost!));
+		return deadCards.filter((c) => c.cost === highestCost).map((c) => c.id);
 	},
 };
