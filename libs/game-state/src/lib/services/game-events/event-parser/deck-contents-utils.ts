@@ -352,15 +352,10 @@ const handleAlternateReality = (
 	return updateCardInDeck(
 		(card, refCard) => true,
 		(card) =>
-			card.update({
-				cardId: undefined,
+			DeckCard.create({
+				entityId: card.entityId,
 				cardName: i18n.getUnknownCardName(),
 				creatorCardId: CardIds.AlternateReality_TIME_707,
-				rarity: undefined,
-				cardType: undefined,
-				refManaCost: undefined,
-				actualManaCost: undefined,
-				relatedCardIds: undefined,
 			}),
 		deckState,
 		allCards,
