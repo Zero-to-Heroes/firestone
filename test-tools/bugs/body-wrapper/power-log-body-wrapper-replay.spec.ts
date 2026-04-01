@@ -1,5 +1,8 @@
 /**
- * Regression: Body Wrapper — shuffled discover choice should be a known card in deck.
+ * Regression: Body Wrapper — shuffled discover choice should be a known card in deck (reporter log:
+ * support ).
+ *
+ * Fixture:  — last game only ( from last ).
  *
  * Run:
  *   export HS_REFERENCE_CARDS_JSON_PATH=https://raw.githubusercontent.com/Zero-to-Heroes/hs-reference-data/master/src/cards_short.json
@@ -7,6 +10,7 @@
  */
 import * as fs from 'fs';
 import { CardIds } from '@firestone-hs/reference-data';
+import { Preferences } from '@firestone/shared/common/service';
 import { trimPowerLogLinesToLastGame } from '../../lib/trim-power-log-last-game';
 import {
 	replayPowerLogToGameState,
@@ -39,12 +43,14 @@ describe('Power log replay → GameStateService (Body Wrapper shuffle identity)'
 			});
 			requirePowerLogReplayResult(ctx, cardsPath);
 
+			const prefs = Preferences.initialize();
 			const shuffled = ctx!.state.playerDeck.deck.find(
 				(c) => c.entityId === BODY_WRAPPER_SHUFFLED_DECK_ENTITY_ID,
 			);
 			expect(shuffled).toBeTruthy();
 			expect(shuffled!.cardId).toBe(CardIds.Plagiarizarrr);
+			prefs.destroy();
 		},
-		120_000,
+		90000,
 	);
 });
