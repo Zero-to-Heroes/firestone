@@ -173,6 +173,7 @@ const LEGACY_ENV_BY_SLUG: Record<string, string> = {
 	torch: 'TORCH_POWER_LOG_PATH',
 	'fabled-package': 'FABLED_PACKAGE_POWER_LOG_PATH',
 	ysondre: 'YSONDRE_POWER_LOG_PATH',
+	'body-wrapper': 'BODY_WRAPPER_POWER_LOG_PATH',
 };
 
 /**
@@ -199,6 +200,7 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	ysondre: 'ysondre/ysondre.log',
 	'secret-passage-draw-counter': 'secret-passage-draw-counter/secret-passage-draw-counter.log',
 	'kaelthas-spell-cycle': 'kaelthas-spell-cycle/kaelthas.log',
+	'body-wrapper': 'body-wrapper/body-wrapper.log',
 };
 
 /**

@@ -24,6 +24,25 @@ export class Oracle {
 		CardIds.DistressedKvaldir_BloodPlagueToken,
 	];
 
+	/**
+	 * Body Wrapper: FULL_ENTITY in deck has empty CardID; the discover copy gets LAST_AFFECTED_BY = Body Wrapper entity id before the new deck entity is created.
+	 */
+	private static predictBodyWrapperShuffledCardId(
+		gameState: GameState,
+		bodyWrapperEntityId: number,
+	): string | null {
+		for (const e of gameState.CurrentEntities.values()) {
+			if (e.Entity === bodyWrapperEntityId) {
+				continue;
+			}
+			if (e.GetTag(GameTag.LAST_AFFECTED_BY) === bodyWrapperEntityId && e.CardId?.length) {
+				return e.CardId;
+			}
+		}
+		return null;
+	}
+
+
 	/** Gemstone Hoarder / Deathblossom Whomper: enchantment on the minion stores the linked entity id. */
 	private static predictGemstoneHoarderOrDeathBlossomLinkedCardId(
 		gameState: GameState,
@@ -330,6 +349,8 @@ export class Oracle {
 				case CardIds.BoneBaron_CORE_ICC_065: return CardIds.GrimNecromancer_SkeletonToken;
 				case CardIds.BoneBaron_ICC_065: return CardIds.GrimNecromancer_SkeletonToken;
 				case CardIds.BookOfWonders: return CardIds.DeckOfWonders_ScrollOfWonderToken;
+				case CardIds.BodyWrapper:
+					return Oracle.predictBodyWrapperShuffledCardId(gameState, creatorEntityId);
 				case CardIds.BootyBayBookie: return CardIds.TheCoinCore;
 				case CardIds.Bottomfeeder: return CardIds.Bottomfeeder;
 				case CardIds.BoomWrench_TOY_604: return CardIds.BoomWrench_BoomWrenchToken_TOY_604t;
