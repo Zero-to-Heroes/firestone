@@ -7,6 +7,7 @@ import { GameState } from '../../../models/game-state';
 import { addGuessInfoToCard } from '../../card-utils';
 import { tutors } from '../../cards/card-tutors';
 import {
+	doesNotCountTowardCardsDrawnThisTurn,
 	forceHideInfoWhenDrawnInfluencers,
 	hiddenWhenDrawFromDeck,
 	isCastWhenDrawn,
@@ -304,17 +305,23 @@ export class CardDrawParser implements EventParser {
 			? previousHand
 			: this.helper.addSingleCardToZone(previousHand, cardWithGuessInfo);
 		// console.debug('[card-draw] added card to hand', newHand);
+		const additionalDataLastInfluenced = gameEvent.additionalData?.lastInfluencedByCardId;
+		const shouldSkipCardsDrawnThisTurn =
+			doesNotCountTowardCardsDrawnThisTurn.includes(additionalDataLastInfluenced as CardIds) ||
+			doesNotCountTowardCardsDrawnThisTurn.includes(drawnByCardId as CardIds);
 		let cardsDrawnByTurn = [...deck.cardsDrawnByTurn];
-		let cardsDrawnThisTurn = deck.cardsDrawnByTurn.find((t) => t.turn === currentState.currentTurn);
-		if (cardsDrawnThisTurn) {
-			cardsDrawnByTurn = cardsDrawnByTurn.map((t) =>
-				t.turn === currentState.currentTurn ? { ...t, value: t.value + 1 } : t,
-			);
-		} else {
-			cardsDrawnByTurn.push({
-				turn: currentState.currentTurn as number,
-				value: 1,
-			});
+		if (!shouldSkipCardsDrawnThisTurn) {
+			const cardsDrawnThisTurn = deck.cardsDrawnByTurn.find((t) => t.turn === currentState.currentTurn);
+			if (cardsDrawnThisTurn) {
+				cardsDrawnByTurn = cardsDrawnByTurn.map((t) =>
+					t.turn === currentState.currentTurn ? { ...t, value: t.value + 1 } : t,
+				);
+			} else {
+				cardsDrawnByTurn.push({
+					turn: currentState.currentTurn as number,
+					value: 1,
+				});
+			}
 		}
 		const newCardsAddedToHand = cardId
 			? [

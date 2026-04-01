@@ -457,6 +457,9 @@ export const forceHideInfoWhenDrawnInfluencers = [
 	CardIds.ShadowVisions,
 ];
 
+/** Deck-to-hand moves that do not count toward "cards drawn this turn" (e.g. Everything Must Go!). */
+export const doesNotCountTowardCardsDrawnThisTurn: readonly CardIds[] = [CardIds.SecretPassage];
+
 export const cardsConsideredPublic = [CardIds.LibramOfWisdom_BT_025, CardIds.LibramOfWisdom_Story_01_LibramofWisdom];
 
 export const creatorChangeMeansCardChanged = [CardIds.MarinTheManager_GoldenKoboldToken_VAC_702t4];

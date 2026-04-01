@@ -59,6 +59,20 @@ import {
 } from '@firestone/game-state';
 import { trimPowerLogLinesToLastGame } from './trim-power-log-last-game';
 
+/** Wait until GameEvents' log line queue is empty (large replays enqueue faster than the 500ms batch). */
+async function waitForGameEventsQueueDrain(gameEvents: GameEvents, maxWaitMs: number): Promise<void> {
+	const queue = (
+		gameEvents as unknown as { processingQueue?: { eventsPendingCount(): number } }
+	).processingQueue;
+	if (!queue?.eventsPendingCount) {
+		return;
+	}
+	const start = Date.now();
+	while (queue.eventsPendingCount() > 0 && Date.now() - start < maxWaitMs) {
+		await new Promise((r) => setTimeout(r, 25));
+	}
+}
+
 /** Raw JSON for `cards_short.json` (use with `HS_REFERENCE_CARDS_JSON_PATH` or fetch in tooling). */
 export const HS_REFERENCE_CARDS_SHORT_RAW_URL =
 	'https://raw.githubusercontent.com/Zero-to-Heroes/hs-reference-data/master/src/cards_short.json';
@@ -142,6 +156,7 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	'gemstone-hoarder': 'gemstone-hoarder/gemstone-hoarder.log',
 	'fabled-package': 'fabled-package-not-updated/fabled-package.log',
 	ysondre: 'ysondre/ysondre.log',
+	'secret-passage-draw-counter': 'secret-passage-draw-counter/secret-passage-draw-counter.log',
 };
 
 /**
@@ -396,6 +411,7 @@ export async function replayPowerLogToGameState(
 		}
 	}
 
+	await waitForGameEventsQueueDrain(gameEvents, 600_000);
 	await new Promise((r) => setTimeout(r, settleMs));
 
 	return {
