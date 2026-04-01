@@ -10,7 +10,6 @@
  */
 import * as fs from 'fs';
 import { CardIds } from '@firestone-hs/reference-data';
-import { Preferences } from '@firestone/shared/common/service';
 import { trimPowerLogLinesToLastGame } from '../../lib/trim-power-log-last-game';
 import {
 	replayPowerLogToGameState,
@@ -43,13 +42,11 @@ describe('Power log replay → GameStateService (Body Wrapper shuffle identity)'
 			});
 			requirePowerLogReplayResult(ctx, cardsPath);
 
-			const prefs = Preferences.initialize();
 			const shuffled = ctx!.state.playerDeck.deck.find(
 				(c) => c.entityId === BODY_WRAPPER_SHUFFLED_DECK_ENTITY_ID,
 			);
 			expect(shuffled).toBeTruthy();
 			expect(shuffled!.cardId).toBe(CardIds.Plagiarizarrr);
-			prefs.destroy();
 		},
 		90000,
 	);
