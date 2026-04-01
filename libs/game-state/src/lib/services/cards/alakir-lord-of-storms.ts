@@ -16,25 +16,31 @@ export const AlakirLordOfStorms: GeneratingCard & StaticGeneratingCard = {
 		const buffPerHand = heraldCount >= 4 ? 4 : heraldCount >= 2 ? 2 : 1;
 		const totalAppendageBuff = 2 * buffPerHand;
 		const attack = entity ? getEntityTag(entity, GameTag.ATK, baseAttack + totalAppendageBuff) : baseAttack + totalAppendageBuff;
-		return filterCards(
+		const allMinions = filterCards(
 			AlakirLordOfStorms.cardIds[0],
 			input.allCards,
-			(c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', attack),
+			(c) => hasCorrectType(c, CardType.MINION),
 			input.inputOptions,
 		);
+		const maxCost = allMinions.reduce((max, id) => Math.max(max, input.allCards.getCard(id)?.cost ?? 0), 0);
+		const effectiveCost = Math.min(attack, maxCost);
+		return allMinions.filter((id) => (input.allCards.getCard(id)?.cost ?? 0) === effectiveCost);
 	},
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
 		const atkTag = input.options?.creatorTags?.find((t) => t.Name === GameTag.ATK);
 		const attack = atkTag?.Value ?? 2;
-		const possibleCards = filterCards(
+		const allMinions = filterCards(
 			AlakirLordOfStorms.cardIds[0],
 			input.allCards,
-			(c) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', attack),
+			(c) => hasCorrectType(c, CardType.MINION),
 			input.options,
 		);
+		const maxCost = allMinions.reduce((max, id) => Math.max(max, input.allCards.getCard(id)?.cost ?? 0), 0);
+		const effectiveCost = Math.min(attack, maxCost);
+		const possibleCards = allMinions.filter((id) => (input.allCards.getCard(id)?.cost ?? 0) === effectiveCost);
 		return {
 			cardType: CardType.MINION,
-			cost: { cost: attack, comparison: '==' },
+			cost: { cost: effectiveCost, comparison: '==' },
 			possibleCards: possibleCards,
 		};
 	},
