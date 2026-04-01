@@ -30,7 +30,8 @@ const DOORSTOP_CONFIG_URL = 'https://static.zerotoheroes.com/mods/doorstop_confi
 const UNSTRIPPED_LIBS_BASE_URL = 'https://static.zerotoheroes.com/mods/unstripped_corlibs';
 const UNSTRIPPED_LIBS = ['mscorlib.dll', 'Mono.Security.dll', 'System.Core.dll', 'System.dll', 'UniTask.dll'];
 // Built in mods-backend lambda
-const MODS_CONFIG_URL = 'https://static.zerotoheroes.com/mods/mods-config.json?v=4';
+// Bump ?v= when trustedMods schema changes (e.g. optional Description on entries).
+const MODS_CONFIG_URL = 'https://static.zerotoheroes.com/mods/mods-config.json?v=5';
 
 const modsLocation = 'BepInEx\\plugins';
 export const configLocation = 'BepInEx\\config';
@@ -195,6 +196,7 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 				Version: c.Version,
 				lastTrustedVersion: c.Version,
 				DownloadLink: c.DownloadLink,
+				Description: c.Description ?? null,
 				updateAvailableVersion: null,
 				alreadyInstalled: true,
 			};
@@ -224,6 +226,7 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 				existing.updateAvailableVersion = mod.updateAvailableVersion;
 				existing.DownloadLink = mod.DownloadLink;
 				existing.Name = mod.Name;
+				existing.Description = existing.Description ?? mod.Description;
 				existing.alreadyInstalled = true;
 			}
 		}
@@ -404,7 +407,7 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 			console.debug('[mods-manager] toggling mod', mod);
 			// Mod was disabled
 			if (mod.alreadyInstalled) {
-				const modName = mod.Name;
+				const modName = mod.AssemblyName;
 				let renamed = await this.io.renameFile(
 					`${installPath}\\${modsLocation}\\${modName}.dll`,
 					`${modName}.dll.disabled`,
@@ -645,6 +648,8 @@ export interface ModData {
 	readonly AssemblyName: string;
 	readonly Version: string;
 	readonly DownloadLink: string | null;
+	/** Tooltip text in mods settings; from mods-config.json trustedMods or BepInEx plugin .cfg. */
+	readonly Description?: string | null;
 	readonly updateAvailableVersion: string | null;
 	readonly alreadyInstalled: boolean;
 	readonly lastTrustedVersion: string | null;

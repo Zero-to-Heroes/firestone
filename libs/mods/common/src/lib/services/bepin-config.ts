@@ -7,6 +7,8 @@ export interface BepInExConfig {
 	Guid: string;
 	Version: string;
 	DownloadLink: string;
+	/** Shown as hover tooltip on the mod name in Firestone settings (optional). */
+	Description?: string | null;
 }
 
 export const buildBepInExConfig = async (
@@ -25,6 +27,7 @@ export const buildBepInExConfig = async (
 		Guid: configObj.Guid,
 		Version: configObj.Version,
 		DownloadLink: configObj.DownloadLink,
+		Description: configObj.Description ?? null,
 	};
 };
 
@@ -52,11 +55,7 @@ export const updateModeVersionInBepInExConfig = async (
 	await fileBackend.writeFileContents(configFile, newConfig);
 };
 
-export const createInitialConfigFile = async (
-	mod: ModData,
-	installPath: string,
-	fileBackend: LogFileBackend,
-) => {
+export const createInitialConfigFile = async (mod: ModData, installPath: string, fileBackend: LogFileBackend) => {
 	const configFile = `${installPath}\\${configLocation}\\${mod.AssemblyName}.cfg`;
 	const existingConfig = await fileBackend.readTextFile(configFile);
 	console.debug('[mods] existing config file', existingConfig, mod, installPath);
@@ -78,6 +77,9 @@ Version = ${mod.Version}
 
 # Setting type: String
 DownloadLink = ${mod.DownloadLink}
+
+# Setting type: String
+Description = ${mod.Description}
 `;
 	await fileBackend.writeFileContents(configFile, newConfig);
 };
@@ -104,6 +106,9 @@ Version = 1.0.0
 # Setting type: String
 # Default value: https://github.com/Zero-to-Heroes/firestone-bepinex-auto-squelch
 DownloadLink = https://github.com/Zero-to-Heroes/firestone-bepinex-auto-squelch
+
+# Optional: short plain-text description for the Firestone mods settings tooltip
+Description = What this mod does
 
  */
 const parseConfig = (config: string): any => {

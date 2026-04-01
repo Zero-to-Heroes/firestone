@@ -109,12 +109,13 @@ import { Observable, filter } from 'rxjs';
 								[helpTooltip]="'settings.general.mods.update-available' | fsTranslate"
 								(click)="updateMod(mod)"
 							></div>
-							<div class="mod-name" *ngIf="!mod.DownloadLink">{{ mod.Name }}</div>
+							<div class="mod-name" *ngIf="!mod.DownloadLink" [helpTooltip]="mod.Description">{{ mod.Name }}</div>
 							<a
 								class="mod-name"
 								*ngIf="mod.DownloadLink"
 								href="{{ mod.DownloadLink }}"
 								target="_blank"
+								[helpTooltip]="mod.Description"
 								>{{ mod.Name }}</a
 							>
 							<div class="mod-version" *ngIf="mod.Version">v{{ mod.Version }}</div>
