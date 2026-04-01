@@ -3,6 +3,7 @@ export * from './battlegrounds/_barrel';
 export * from './board-secret';
 export * from './card-meta-info';
 export * from './deck-card';
+export * from './deck-card-display';
 export * from './deck-state';
 export * from './deck-zone';
 export * from './dynamic-zone';

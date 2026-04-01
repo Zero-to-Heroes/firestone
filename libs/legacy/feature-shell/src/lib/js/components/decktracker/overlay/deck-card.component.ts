@@ -21,6 +21,7 @@ import {
 	CardsHighlightFacadeService,
 	cardTutors,
 	DeckZone,
+	getDisplayCardIdWhenGuessedPoolIsSingleCard,
 	Handler,
 	relatedCardIdsSelectorSort,
 	SelectorOutput,
@@ -636,7 +637,11 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		showStatsChange: boolean,
 		groupSameCardsTogether: boolean,
 	) {
-		this.cardId = card.cardId;
+		const displayIdFromSingleGuess =
+			this._side === 'opponent' && this._zone?.id === 'hand'
+				? getDisplayCardIdWhenGuessedPoolIsSingleCard(card)
+				: null;
+		this.cardId = card.cardId || displayIdFromSingleGuess;
 		this.entityId = card.entityId;
 		this._referenceCard = this.cardId ? this.cards.getCard(this.cardId) : null;
 		this.cardImage = `https://static.zerotoheroes.com/hearthstone/cardart/tiles/${card.cardId}.png`;

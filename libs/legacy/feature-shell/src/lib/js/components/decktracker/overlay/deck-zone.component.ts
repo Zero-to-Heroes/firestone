@@ -15,6 +15,7 @@ import {
 	DeckState,
 	DeckZone,
 	DeckZoneSection,
+	getDisplayCardIdWhenGuessedPoolIsSingleCard,
 	getProcessedCard,
 	VisualDeckCard,
 } from '@firestone/game-state';
@@ -338,8 +339,12 @@ export class DeckZoneComponent extends AbstractSubscriptionComponent implements 
 		showTopCardsSeparately: boolean,
 		collection: readonly SetCard[],
 	): string {
-		const refCard = this.allCards.getCard(card.cardId);
-		let cardIdForGrouping = !!card.cardId ? (refCard?.counterpartCards?.[0] ?? card.cardId) : '';
+		const singleGuessId = getDisplayCardIdWhenGuessedPoolIsSingleCard(card);
+		const effectiveCardId = card.cardId || singleGuessId;
+		const refCard = this.allCards.getCard(effectiveCardId);
+		let cardIdForGrouping = !!effectiveCardId
+			? (refCard?.counterpartCards?.[0] ?? effectiveCardId)
+			: '';
 		if (groupByName) {
 			cardIdForGrouping = card.cardName ?? refCard?.name;
 		}

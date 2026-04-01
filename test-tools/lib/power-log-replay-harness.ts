@@ -138,6 +138,7 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	'passive-buff-unknown-entity':
 		'passive-buff-unknown-entity/passive-buff-unknown-entity.log',
 	'coin-not-revealed': 'coin-not-revealed/coin-not-revealed.log',
+	'opponent-hand-single-guess': 'opponent-hand-single-guess/opponent-hand-single-guess.log',
 	'gemstone-hoarder': 'gemstone-hoarder/gemstone-hoarder.log',
 	'fabled-package': 'fabled-package-not-updated/fabled-package.log',
 	ysondre: 'ysondre/ysondre.log',
