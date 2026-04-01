@@ -3,6 +3,8 @@ import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { BgsPlayer, BgsTavernUpgrade, BgsTriple } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 
+import { buildBgsHeroPortraitCardTooltip } from '../bgs-hero-portrait-tooltip';
+
 @Component({
 	standalone: false,
 	selector: 'bgs-player-capsule',
@@ -19,7 +21,8 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 					[heroCardId]="heroCardId"
 					[health]="health"
 					[maxHealth]="maxHealth"
-					[cardTooltip]="heroPowerCardId"
+					[cardTooltip]="heroPortraitCardTooltip"
+					[cardTooltipBgs]="true"
 					[cardTooltipClass]="'bgs-hero-power'"
 					[rating]="rating"
 					[questRewardCardId]="questRewardCardId"
@@ -47,6 +50,7 @@ export class BgsPlayerCapsuleComponent {
 	health: number;
 	maxHealth: number;
 	heroPowerCardId: string;
+	heroPortraitCardTooltip: string;
 	questRewardCardId: string;
 	name: string;
 	mmr: number | null;
@@ -74,6 +78,11 @@ export class BgsPlayerCapsuleComponent {
 		this.health = value.initialHealth + value.currentArmor - value.damageTaken;
 		this.maxHealth = value.initialHealth;
 		this.heroPowerCardId = value.getDisplayHeroPowerCardId(this.allCards);
+		this.heroPortraitCardTooltip = buildBgsHeroPortraitCardTooltip(
+			this.heroCardId,
+			this.heroPowerCardId,
+			this.allCards,
+		);
 		// this.questRewardCardId = value.questRewardCardId;
 		this.name = value.name;
 		this.tavernTier = this.displayTavernTier ? value.getCurrentTavernTier() : undefined;

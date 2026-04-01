@@ -1,3 +1,4 @@
+export * from './lib/bgs-hero-portrait-tooltip';
 export * from './lib/battlegrounds-common.module';
 export * from './lib/cards/battlegrounds-meta-stats-cards.component';
 export * from './lib/components/battlegrounds-leaderboards.component';

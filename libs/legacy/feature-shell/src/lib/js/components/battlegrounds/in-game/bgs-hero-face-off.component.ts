@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { BgsFaceOff } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/bgs-face-off';
+import { buildBgsHeroPortraitCardTooltip } from '@firestone/battlegrounds/common';
 import { getHeroPower } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 
@@ -15,7 +16,8 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 					[heroCardId]="heroCardId"
 					[health]="health"
 					[maxHealth]="maxHealth"
-					[cardTooltip]="heroPowerIcon"
+					[cardTooltip]="heroPortraitCardTooltip"
+					[cardTooltipBgs]="true"
 					[cardTooltipClass]="'bgs-hero-power'"
 				></bgs-hero-portrait>
 			</div>
@@ -30,6 +32,7 @@ export class BgsHeroFaceOffComponent {
 	heroCardId: string;
 	// icon: string;
 	heroPowerIcon: string;
+	heroPortraitCardTooltip: string;
 	name: string;
 	health: number;
 	maxHealth: number;
@@ -42,6 +45,11 @@ export class BgsHeroFaceOffComponent {
 	@Input() set opponent(value: FaceOffHero) {
 		this.heroCardId = value.displayedCardId || value.cardId;
 		this.heroPowerIcon = getHeroPower(this.heroCardId, this.allCards);
+		this.heroPortraitCardTooltip = buildBgsHeroPortraitCardTooltip(
+			this.heroCardId,
+			this.heroPowerIcon,
+			this.allCards,
+		);
 		this.name = value.name;
 		this.health = Math.max(value.initialHealth + value.currentArmor - value.damageTaken, 0);
 		this.maxHealth = value.initialHealth;

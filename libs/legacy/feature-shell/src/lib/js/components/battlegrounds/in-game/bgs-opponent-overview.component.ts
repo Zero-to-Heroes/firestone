@@ -1,6 +1,7 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { Entity } from '@firestone/replay/replay-parser';
+import { buildBgsHeroPortraitCardTooltip } from '@firestone/battlegrounds/common';
 import { QuestReward } from '@firestone/battlegrounds/core';
+import { Entity } from '@firestone/replay/replay-parser';
 import { BgsPlayer, BgsTavernUpgrade, BgsTriple } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 
@@ -16,7 +17,8 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 					[heroCardId]="heroCardId"
 					[health]="health"
 					[maxHealth]="maxHealth"
-					[cardTooltip]="heroPowerCardId"
+					[cardTooltip]="heroPortraitCardTooltip"
+					[cardTooltipBgs]="true"
 					[cardTooltipClass]="'bgs-hero-power'"
 					[name]="name"
 					[mmr]="mmr"
@@ -74,6 +76,7 @@ export class BgsOpponentOverviewComponent implements AfterViewInit {
 	health: number;
 	maxHealth: number;
 	heroPowerCardId: string;
+	heroPortraitCardTooltip: string;
 	name: string;
 	mmr: number | null;
 	tavernTier: number;
@@ -114,6 +117,11 @@ export class BgsOpponentOverviewComponent implements AfterViewInit {
 		this.health = value.initialHealth + value.currentArmor - value.damageTaken;
 		this.maxHealth = value.initialHealth;
 		this.heroPowerCardId = value.getDisplayHeroPowerCardId(this.allCards);
+		this.heroPortraitCardTooltip = buildBgsHeroPortraitCardTooltip(
+			this.heroCardId,
+			this.heroPowerCardId,
+			this.allCards,
+		);
 		this.name = value.name;
 		this.mmr = value.mmr;
 		this.tavernTier = value.getCurrentTavernTier();

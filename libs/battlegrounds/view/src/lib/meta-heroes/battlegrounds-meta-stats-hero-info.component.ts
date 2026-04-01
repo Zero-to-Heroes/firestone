@@ -34,7 +34,7 @@ import {
 				aria-hidden="true"
 				class="portrait"
 				[heroCardId]="heroCardId"
-				[cardTooltip]="heroPowerCardId"
+				[cardTooltip]="heroPortraitCardTooltip"
 				[cardTooltipBgs]="true"
 				[health]="heroStartingHealth"
 			></bgs-hero-portrait>
@@ -160,6 +160,10 @@ export class BattlegroundsMetaStatsHeroInfoComponent {
 			value: value.dataPoints.toLocaleString(this.i18n.formatCurrentLocale()),
 		});
 		const buddyCardId = getBuddy(this.heroCardId as CardIds, this.allCards.getService());
+		// Buddy before hero power: CardTooltip reverses ids, so hero power renders first.
+		this.heroPortraitCardTooltip = [buddyCardId, this.heroPowerCardId]
+			.filter((id): id is string => !!id?.length)
+			.join(',');
 		const goldenBuddyCardId = this.allCards.getCard(
 			this.allCards.getCard(buddyCardId).battlegroundsPremiumDbfId,
 		).id;
@@ -220,6 +224,7 @@ export class BattlegroundsMetaStatsHeroInfoComponent {
 
 	heroCardId: string;
 	heroPowerCardId: string;
+	heroPortraitCardTooltip: string;
 	heroName: string;
 	heroStartingHealth: number;
 	dataPoints: string;
