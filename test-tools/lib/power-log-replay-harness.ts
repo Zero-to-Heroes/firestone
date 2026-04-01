@@ -117,6 +117,7 @@ const LEGACY_ENV_BY_SLUG: Record<string, string> = {
 	ivory: 'IVORY_POWER_LOG_PATH',
 	torch: 'TORCH_POWER_LOG_PATH',
 	'fabled-package': 'FABLED_PACKAGE_POWER_LOG_PATH',
+	ysondre: 'YSONDRE_POWER_LOG_PATH',
 };
 
 /**
@@ -139,6 +140,7 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	'coin-not-revealed': 'coin-not-revealed/coin-not-revealed.log',
 	'gemstone-hoarder': 'gemstone-hoarder/gemstone-hoarder.log',
 	'fabled-package': 'fabled-package-not-updated/fabled-package.log',
+	ysondre: 'ysondre/ysondre.log',
 };
 
 /**

@@ -1,5 +1,6 @@
 export * from './lib/counters/_counter-definition-v2';
 export * from './lib/counters/_exports';
+export { YsondreCounterDefinitionV2 } from './lib/counters/impl/ysondre';
 export * from './lib/counters/impl/cthun';
 export * from './lib/counters/impl/next-starship-launch';
 export * from './lib/counters/impl/starships-launched';
