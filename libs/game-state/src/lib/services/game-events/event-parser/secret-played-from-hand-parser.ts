@@ -92,15 +92,27 @@ export class SecretPlayedFromHandParser implements EventParser {
 			this.allCards,
 		);
 
+		const knownRef = knownCardId ? this.allCards.getCard(knownCardId) : null;
+		// Oh My Yogg: SECRET_PLAYED can carry the cast spell's CardId. Only treat the id as definitive
+		// when reference data resolves to a real Secret card (mechanics). getCard() returns {} on miss;
+		// do not use {} as a known secret. Passing a non-secret spell into getValidSecrets narrows the
+		// pool via card-info-filters (cost / spell school) — often to a single wrong card.
+		const isResolvedSecretCard =
+			!!knownCardId &&
+			!!knownRef?.id &&
+			!!knownRef.mechanics?.includes(GameTag[GameTag.SECRET]);
+		const cardForSecretPool = isResolvedSecretCard ? card : null;
+
 		// console.debug('getting valid secrets', card.cardName, card, creatorCardId, card.creatorCardId);
 		const secretsConfig = await this.secretConfig.getValidSecrets(
 			currentState.metadata,
 			secretClass,
 			currentState,
-			card,
+			cardForSecretPool,
 			creatorCardId || card?.creatorCardId,
 			card?.creatorEntityId,
 		);
+		const boardSecretCardId = isResolvedSecretCard ? knownCardId : '';
 		const newPlayerDeck = deck
 			.update({
 				hand: handAfterCardsRemembered,
@@ -109,7 +121,7 @@ export class SecretPlayedFromHandParser implements EventParser {
 					? deck.secrets
 					: ([
 							...deck.secrets,
-							BoardSecret.create(entityId, knownCardId, secretsConfig),
+							BoardSecret.create(entityId, boardSecretCardId, secretsConfig),
 						] as readonly BoardSecret[]),
 				cardsPlayedThisTurn:
 					isCardCountered || gameEvent.type === GameEvent.SECRET_PUT_IN_PLAY

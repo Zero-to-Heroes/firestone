@@ -27,6 +27,7 @@ import {
 } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import {
+	ApiRunner,
 	CardsFacadeService,
 	CardsFacadeStandaloneService,
 	ILocalizationService,
@@ -147,6 +148,19 @@ async function loadHttpUrlText(url: string): Promise<string | null> {
 	return loadHttpUrlTextWithNode(url);
 }
 
+async function loadHttpUrlJson<T>(url: string): Promise<T | null> {
+	const text = await loadHttpUrlText(url);
+	if (text == null) {
+		return null;
+	}
+	try {
+		return JSON.parse(text) as T;
+	} catch (e) {
+		console.warn('[power-log-replay] JSON parse failed', url, e);
+		return null;
+	}
+}
+
 async function loadCardsShortJsonText(ref: string): Promise<string | null> {
 	const fetchable = normalizeCardsJsonRefForFetch(ref);
 	if (/^https?:\/\//i.test(fetchable)) {
@@ -201,6 +215,7 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	'secret-passage-draw-counter': 'secret-passage-draw-counter/secret-passage-draw-counter.log',
 	'kaelthas-spell-cycle': 'kaelthas-spell-cycle/kaelthas.log',
 	'body-wrapper': 'body-wrapper/body-wrapper.log',
+	'oh-my-yogg-secret': 'oh-my-yogg-secret/oh-my-yogg-secret.log',
 };
 
 /**
@@ -431,6 +446,11 @@ export async function replayPowerLogToGameState(
 		showWindowsNotification: () => undefined,
 	} as unknown as OwUtilsService;
 
+	const apiRunnerReplayMock = {
+		callGetApi: async <T>(url: string) => loadHttpUrlJson<T>(url),
+	} as unknown as ApiRunner;
+	const secretConfigService = new SecretConfigService(apiRunnerReplayMock, cards);
+
 	const parserService = new GameStateParsersService(
 		helper,
 		cards,
@@ -441,7 +461,7 @@ export async function replayPowerLogToGameState(
 		owUtilsReplayMock,
 		prefsMock as PreferencesService,
 		deckParserReplayMock,
-		null as unknown as SecretConfigService,
+		secretConfigService,
 		{ triggerArchetypeCategorization: () => undefined } as unknown as ConstructedArchetypeServiceOrchestrator,
 		eventsEmitter,
 		null as unknown as BugReportService,
