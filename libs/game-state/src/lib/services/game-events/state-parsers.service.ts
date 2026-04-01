@@ -418,7 +418,7 @@ export class GameStateParsersService {
 				new ListCardsPlayedFromInitialDeckParser(this.helper, this.allCards),
 			],
 			[GameEvent.QUEST_PLAYED]: [
-				new QuestPlayedFromHandParser(this.helper, this.allCards),
+				new QuestPlayedFromHandParser(this.helper, this.allCards, this.i18n),
 				new ListCardsPlayedFromInitialDeckParser(this.helper, this.allCards),
 			],
 			[GameEvent.RECEIVE_CARD_IN_HAND]: [

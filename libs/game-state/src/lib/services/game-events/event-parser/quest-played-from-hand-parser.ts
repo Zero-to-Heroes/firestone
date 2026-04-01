@@ -1,19 +1,22 @@
 import { CardIds, CardType, GameTag } from '@firestone-hs/reference-data';
 
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { DeckCard } from '../../../models/deck-card';
 import { DeckState } from '../../../models/deck-state';
 import { GameState, ShortCardWithTurn } from '../../../models/game-state';
 import { COUNTERSPELLS } from '../../hs-utils';
+import { revealCard } from '../card-reveal';
 import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 import { rememberCardsInHand } from './card-played-from-hand-parser';
+import { modifyDecksForSpecialCards } from './deck-contents-utils';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 
 export class QuestPlayedFromHandParser implements EventParser {
 	constructor(
 		private readonly helper: DeckManipulationHelper,
 		private readonly allCards: CardsFacadeService,
+		private readonly i18n: ILocalizationService,
 	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
@@ -125,8 +128,25 @@ export class QuestPlayedFromHandParser implements EventParser {
 						] as readonly ShortCardWithTurn[],
 					});
 
-		return Object.assign(new GameState(), currentState, {
-			[isPlayer ? 'playerDeck' : 'opponentDeck']: deckAfterSpecialCaseUpdate,
+		const [playerDeckAfterModify, opponentDeckAfterModify] = modifyDecksForSpecialCards(
+			cardWithZone.cardId,
+			entityId,
+			isCardCountered,
+			deckAfterSpecialCaseUpdate,
+			!isPlayer ? currentState.playerDeck : currentState.opponentDeck,
+			this.allCards,
+			this.helper,
+			this.i18n,
+		);
+
+		const playerDeckAfterReveal = isPlayer ? playerDeckAfterModify : opponentDeckAfterModify;
+		const opponentDeckAfterReveal = isPlayer
+			? opponentDeckAfterModify
+			: revealCard(playerDeckAfterModify, cardWithZone, this.allCards);
+
+		return currentState.update({
+			playerDeck: playerDeckAfterReveal,
+			opponentDeck: opponentDeckAfterReveal,
 		});
 	}
 
