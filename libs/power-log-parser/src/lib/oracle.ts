@@ -24,6 +24,23 @@ export class Oracle {
 		CardIds.DistressedKvaldir_BloodPlagueToken,
 	];
 
+	/** Gemstone Hoarder / Deathblossom Whomper: enchantment on the minion stores the linked entity id. */
+	private static predictGemstoneHoarderOrDeathBlossomLinkedCardId(
+		gameState: GameState,
+		actionEntity: FullEntity,
+	): string | null {
+		const enchantment = Array.from(gameState.CurrentEntities.values())
+			.filter((e) => e.GetCardType() === (CardType.ENCHANTMENT as number))
+			.filter((e) => e.GetTag(GameTag.ATTACHED) === actionEntity.Entity)
+			.filter((e) => e.GetTag(GameTag.CREATOR) === actionEntity.Entity);
+		const lastEnchantment =
+			enchantment.length > 0 ? enchantment[enchantment.length - 1] : null;
+		const referencedEntityId =
+			lastEnchantment?.GetTag(GameTag.TAG_SCRIPT_DATA_NUM_1) ?? -1;
+		const linkedEntity = gameState.CurrentEntities.get(referencedEntityId);
+		return linkedEntity?.CardId ?? null;
+	}
+
 	static GetCreatorFromTags(
 		gameState: GameState,
 		entity: FullEntity | ShowEntity,
@@ -1005,6 +1022,16 @@ export class Oracle {
 					const entityInSack = gameState.CurrentEntities.get(entityIdInSack ?? -1);
 					return entityInSack?.CardId ?? null;
 				} else if (
+					action.TriggerKeyword === (GameTag.DEATHRATTLE as number) &&
+					actionEntity != null &&
+					(actionEntity.CardId === CardIds.DeathBlossomWhomper ||
+						actionEntity.CardId === CardIds.GemstoneHoarder_CATA_897)
+				) {
+					return Oracle.predictGemstoneHoarderOrDeathBlossomLinkedCardId(
+						gameState,
+						actionEntity,
+					);
+				} else if (
 					actionEntity?.CardId ===
 					CardIds.TwistReality_ChaoticShuffleCopyEnchantment_TTN_002t21e
 				) {
@@ -1586,28 +1613,10 @@ export class Oracle {
 					actionEntity.CardId === CardIds.DeathBlossomWhomper ||
 					actionEntity.CardId === CardIds.GemstoneHoarder_CATA_897
 				) {
-					const enchantment = Array.from(gameState.CurrentEntities.values())
-						.filter(
-							(e) => e.GetCardType() === (CardType.ENCHANTMENT as number),
-						)
-						.filter(
-							(e) =>
-								e.GetTag(GameTag.ATTACHED) === actionEntity.Entity,
-						)
-						.filter(
-							(e) =>
-								e.GetTag(GameTag.CREATOR) === actionEntity.Entity,
-						);
-					const lastEnchantment =
-						enchantment.length > 0
-							? enchantment[enchantment.length - 1]
-							: null;
-					const referencedEntityId =
-						lastEnchantment?.GetTag(GameTag.TAG_SCRIPT_DATA_NUM_1) ?? -1;
-					const linkedEntity = gameState.CurrentEntities.get(referencedEntityId);
-					if (linkedEntity) {
-						return linkedEntity.CardId;
-					}
+					return Oracle.predictGemstoneHoarderOrDeathBlossomLinkedCardId(
+						gameState,
+						actionEntity,
+					);
 				}
 			}
 		}
