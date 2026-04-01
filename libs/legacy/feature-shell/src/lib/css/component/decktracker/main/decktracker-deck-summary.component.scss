@@ -11,8 +11,23 @@
 	position: relative;
 	padding: 10px 5px 12px;
 
-	.deck-name {
+	.deck-title-row {
 		width: 100%;
+		display: flex;
+		flex-direction: row;
+		align-items: flex-start;
+		justify-content: center;
+		gap: 4px;
+		margin-bottom: 10px;
+		position: relative;
+		/* Above .buttons so rename / title receive clicks (buttons are later in DOM and would cover) */
+		z-index: 2;
+	}
+
+	.deck-name {
+		/* flex: 1 uses flex-basis 0%; with min-width: 0 the row can collapse and hide text */
+		flex: 1 1 auto;
+		min-width: 0;
 		font-family: Open Sans;
 		font-style: normal;
 		font-weight: normal;
@@ -22,12 +37,51 @@
 		text-align: center;
 		position: relative;
 		margin: auto;
-		flex-grow: 0;
-		flex-shrink: 0;
-		margin-bottom: 10px;
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
+	}
+
+	.deck-title-row > .deck-name:only-child {
+		width: 100%;
+		flex: 0 1 auto;
+	}
+
+	.rename-group-button {
+		flex-shrink: 0;
+		width: 22px;
+		height: 22px;
+		padding: 0;
+		background: transparent;
+		border: none;
+		cursor: pointer;
+		color: var(--color-1);
+		--icon-color: var(--color-1);
+		&:hover {
+			color: var(--color-1);
+			--icon-color: var(--color-1);
+		}
+	}
+
+	.group-name-edit-wrap {
+		width: 100%;
+		margin-bottom: 10px;
+		padding: 0 4px;
+		box-sizing: border-box;
+		position: relative;
+		z-index: 2;
+	}
+
+	.group-name-input {
+		width: 100%;
+		box-sizing: border-box;
+		font-size: 14px;
+		line-height: 18px;
+		padding: 4px 6px;
+		color: var(--default-title-color);
+		background: rgba(0, 0, 0, 0.35);
+		border: 1px solid rgba(255, 255, 255, 0.2);
+		border-radius: 4px;
 	}
 
 	.deck-image {
@@ -83,6 +137,7 @@
 		position: absolute;
 		top: 0;
 		right: 0;
+		z-index: 1;
 		background: transparent;
 		display: flex;
 		flex-direction: column;
@@ -129,6 +184,41 @@
 				width: 20px;
 				height: 20px;
 			}
+		}
+	}
+
+	&.multi-class-version-group {
+		/* No portrait row: push stats to the bottom so they line up with tiles that have flex-grown .deck-image */
+		.deck-title-row {
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			gap: 8px;
+			margin-bottom: 0;
+			flex-shrink: 0;
+		}
+
+		.deck-name {
+			width: 100%;
+			flex: 0 1 auto;
+			font-size: 18px;
+			font-weight: 600;
+			line-height: 1.25;
+			white-space: normal;
+			overflow: visible;
+			text-overflow: unset;
+			max-height: 3.75em;
+			text-align: center;
+		}
+
+		.rename-group-button {
+			flex-shrink: 0;
+		}
+
+		.stats {
+			margin-top: auto;
+			flex-shrink: 0;
+			width: 100%;
 		}
 	}
 

@@ -42,6 +42,7 @@ export * from './decktracker/constructed-deckbuilder-import-deck-event';
 export * from './decktracker/constructed-deckbuilder-save-deck-event';
 export * from './decktracker/constructed-eject-deck-version-event';
 export * from './decktracker/constructed-new-deck-version-event';
+export * from './decktracker/constructed-set-deck-group-name-event';
 export * from './decktracker/constructed-toggle-deck-version-stats-event';
 export * from './decktracker/decktracker-delete-deck-event';
 export * from './decktracker/decktracker-reset-deck-stats-event';

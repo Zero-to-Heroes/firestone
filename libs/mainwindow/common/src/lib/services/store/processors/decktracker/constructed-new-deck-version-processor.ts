@@ -35,8 +35,13 @@ export class ConstructedNewDeckVersionProcessor implements Processor {
 				event.newVersionDeckstring,
 			]),
 		];
+		const mergedGroupName =
+			existingLinkFromPreviousVersion?.groupName?.trim() ||
+			existingLinkFromNewVersion?.groupName?.trim() ||
+			undefined;
 		const newLink: ConstructedDeckVersions = {
 			versions: newLinkVersions.map((deckstring) => ({ deckstring })),
+			...(mergedGroupName ? { groupName: mergedGroupName } : {}),
 		};
 		console.log('newLink', newLink);
 		const newVersionLinks: readonly ConstructedDeckVersions[] = [...(versionLinks ?? []), newLink]

@@ -1,4 +1,13 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	ElementRef,
+	Input,
+	ViewChild,
+	ViewRef,
+} from '@angular/core';
 import { getDefaultHeroDbfIdForClass } from '@firestone-hs/reference-data';
 import { DeckSummary } from '@firestone/constructed/common';
 import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
@@ -10,6 +19,7 @@ import { BehaviorSubject, combineLatest, filter, Observable } from 'rxjs';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import {
 	ChangeVisibleApplicationEvent,
+	ConstructedSetDeckGroupNameEvent,
 	DecktrackerDeleteDeckEvent,
 	HideDeckSummaryEvent,
 	RestoreDeckSummaryEvent,
@@ -26,9 +36,37 @@ import {
 		`../../../../css/component/decktracker/main/decktracker-deck-summary.component.scss`,
 	],
 	template: `
-		<div class="decktracker-deck-summary" tabindex="0" [ngClass]="{ hidden: hidden }" (click)="selectDeck($event)">
-			<div class="deck-name" [helpTooltip]="deckNameTooltip">{{ deckName }}</div>
-			<div class="deck-image" aria-hidden="true">
+		<div
+			class="decktracker-deck-summary"
+			tabindex="0"
+			[ngClass]="{ hidden: hidden, 'multi-class-version-group': versionGroupHasMultipleClasses }"
+			(click)="selectDeck($event)"
+		>
+			<div class="deck-title-row" *ngIf="!editingGroupName; else groupNameEditTpl">
+				<div class="deck-name" [helpTooltip]="deckNameTooltip">{{ deckName }}</div>
+				<button
+					*ngIf="showGroupNameEdit"
+					type="button"
+					class="rename-group-button"
+					inlineSVG="assets/svg/rename.svg"
+					[helpTooltip]="'app.decktracker.decks.group-name-edit-tooltip' | fsTranslate"
+					(click)="startGroupNameEdit($event)"
+				></button>
+			</div>
+			<ng-template #groupNameEditTpl>
+				<div class="group-name-edit-wrap" (click)="$event.stopPropagation()">
+					<input
+						#groupNameInput
+						type="text"
+						class="group-name-input"
+						[value]="groupNameDraft"
+						(input)="onGroupNameDraftInput($event)"
+						(keydown)="onGroupNameKeydown($event)"
+						(blur)="commitGroupNameEdit()"
+					/>
+				</div>
+			</ng-template>
+			<div class="deck-image" *ngIf="!versionGroupHasMultipleClasses" aria-hidden="true">
 				<img class="skin" [src]="skin$ | async" />
 				<img
 					class="frame"
@@ -145,7 +183,12 @@ export class DecktrackerDeckSummaryComponent extends AbstractSubscriptionCompone
 		this.skin$$.next(value.skin);
 		this.hidden = value.hidden;
 		this.decoration = this.buildDecoration(value.format);
+		this.versionGroupHasMultipleClasses = !!value.versionGroupHasMultipleClasses;
+		this.showGroupNameEdit = (value.allVersions?.length ?? 0) > 1;
+		this.deckSkinContext$$.next({ versionGroupHasMultipleClasses: this.versionGroupHasMultipleClasses });
 	}
+
+	@ViewChild('groupNameInput') groupNameInput: ElementRef<HTMLInputElement>;
 
 	_deck: DeckSummary;
 	deckName: string;
@@ -158,10 +201,18 @@ export class DecktrackerDeckSummaryComponent extends AbstractSubscriptionCompone
 	hidden: boolean;
 	decoration: string;
 	format: StatGameFormatType;
+	versionGroupHasMultipleClasses = false;
+	showGroupNameEdit = false;
+	editingGroupName = false;
+	groupNameDraft = '';
 
 	deleteDeckTooltip = this.i18n.translateString('app.duels.deck-stat.delete-deck-tooltip');
 
+	private closingByEscape = false;
 	private skin$$ = new BehaviorSubject<string | null>(null);
+	private deckSkinContext$$ = new BehaviorSubject<{ versionGroupHasMultipleClasses: boolean }>({
+		versionGroupHasMultipleClasses: false,
+	});
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
@@ -179,10 +230,12 @@ export class DecktrackerDeckSummaryComponent extends AbstractSubscriptionCompone
 		this.skin$ = combineLatest([
 			this.skin$$,
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.replaysShowClassIcon)),
+			this.deckSkinContext$$,
 		]).pipe(
-			filter(([skin, showClassIcon]) => !!skin),
-			this.mapData(([skin, showClassIcon]) => {
-				if (!showClassIcon) {
+			filter(([skin]) => !!skin),
+			this.mapData(([skin, showClassIcon, ctx]) => {
+				const useRealPortrait = !showClassIcon || ctx.versionGroupHasMultipleClasses;
+				if (useRealPortrait) {
 					return `https://static.zerotoheroes.com/hearthstone/cardart/256x/${skin}.jpg`;
 				}
 				const card = this.allCards.getCard(skin);
@@ -218,11 +271,51 @@ export class DecktrackerDeckSummaryComponent extends AbstractSubscriptionCompone
 		console.debug('[deck-summary] selectDeck', event);
 		event.stopPropagation();
 		event.preventDefault();
-		if ((event.target as any)?.tagName === 'BUTTON' || (event.target as any)?.tagName === 'COPY-DECKSTRING') {
+		const tag = (event.target as HTMLElement)?.tagName;
+		if (tag === 'BUTTON' || tag === 'COPY-DECKSTRING' || tag === 'INPUT') {
 			return;
 		}
 		this.mainWindowStateFacade.send(new ChangeVisibleApplicationEvent('decktracker'));
 		this.mainWindowStateFacade.send(new SelectDeckDetailsEvent(this._deck.deckstring));
+	}
+
+	startGroupNameEdit(event: MouseEvent) {
+		event.stopPropagation();
+		event.preventDefault();
+		this.groupNameDraft = this._deck.versionGroupName ?? this.deckName;
+		this.editingGroupName = true;
+		this.cdr.markForCheck();
+		setTimeout(() => this.groupNameInput?.nativeElement?.focus(), 0);
+	}
+
+	onGroupNameDraftInput(event: Event) {
+		this.groupNameDraft = (event.target as HTMLInputElement).value;
+	}
+
+	onGroupNameKeydown(event: KeyboardEvent) {
+		if (event.key === 'Enter') {
+			event.preventDefault();
+			this.commitGroupNameEdit();
+		} else if (event.key === 'Escape') {
+			event.preventDefault();
+			this.closingByEscape = true;
+			this.editingGroupName = false;
+			this.cdr.markForCheck();
+			setTimeout(() => (this.closingByEscape = false), 0);
+		}
+	}
+
+	commitGroupNameEdit() {
+		if (this.closingByEscape) {
+			return;
+		}
+		this.editingGroupName = false;
+		const trimmed = this.groupNameDraft.trim();
+		const prev = (this._deck.versionGroupName ?? '').trim();
+		if (trimmed !== prev) {
+			this.mainWindowStateFacade.send(new ConstructedSetDeckGroupNameEvent(this._deck.deckstring, trimmed));
+		}
+		this.cdr.markForCheck();
 	}
 
 	private buildLastUsedDate(lastUsedTimestamp: number): string {

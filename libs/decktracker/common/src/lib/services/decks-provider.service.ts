@@ -325,25 +325,42 @@ export class DecksProviderService extends AbstractFacadeService<DecksProviderSer
 					links.versions.map((v) => v.deckstring).includes(deck.deckstring),
 				)?.versions[0].deckstring ?? deck.deckstring,
 		);
-		return Object.values(groupedByVersion).map((versions) =>
-			this.groupDeckVersions(versions, desktopDeckHiddenDeckCodes),
-		);
+		return Object.values(groupedByVersion).map((versions) => {
+			const link =
+				constructedDeckVersions.find((l) =>
+					versions.some((v) => l.versions.map((x) => x.deckstring).includes(v.deckstring)),
+				) ?? null;
+			return this.groupDeckVersions(versions, desktopDeckHiddenDeckCodes, link);
+		});
 	}
 
 	private groupDeckVersions(
 		versions: readonly DeckSummary[],
 		desktopDeckHiddenDeckCodes: readonly string[],
+		link: ConstructedDeckVersions | null,
 	): DeckSummary {
+		const versionGroupName = link?.groupName?.trim() || undefined;
+		const uniqueClasses = new Set(versions.map((v) => v.class));
+		const versionGroupHasMultipleClasses = uniqueClasses.size > 1;
+
 		// TODO: find a way to order versions, and take the one the user decides is the latest one
 		const replays = versions
 			.flatMap((v) => v.replays)
 			.filter((r) => !!r)
 			.sort((a, b) => b.creationTimestamp - a.creationTimestamp);
 		if (!replays?.length) {
+			const allVersions = this.buildVersions(versions);
+			const baseName = versions[0].deckName;
 			return {
 				...versions[0],
-				allVersions: this.buildVersions(versions),
-			};
+				deckName: versionGroupName || baseName,
+				allVersions,
+				allCardsInDeck: [...new Set(allVersions.flatMap((v) => v.allCardsInDeck))].sort((a, b) =>
+					this.allCards.getCard(a).name.localeCompare(this.allCards.getCard(b).name),
+				),
+				versionGroupHasMultipleClasses,
+				versionGroupName,
+			} as DeckSummary;
 		}
 
 		const lastReplay = replays[0];
@@ -351,11 +368,12 @@ export class DecksProviderService extends AbstractFacadeService<DecksProviderSer
 		const totalWins = sumOnArray(versions, (deck) => deck.totalWins);
 		const matchupStats = this.buildMatchupStats(replays);
 		const decodedDeckName = this.safeDecodeDeckName(lastReplay.playerDeckName);
+		const displayDeckName = versionGroupName || decodedDeckName;
 		const allVersions = this.buildVersions(versions);
 		return {
 			class: lastReplay.playerClass,
 			deckArchetype: lastReplay.playerArchetypeId,
-			deckName: decodedDeckName,
+			deckName: displayDeckName,
 			deckstring: lastReplay.playerDecklist,
 			lastUsedTimestamp: lastReplay.creationTimestamp,
 			skin: lastReplay.playerCardId,
@@ -376,6 +394,8 @@ export class DecksProviderService extends AbstractFacadeService<DecksProviderSer
 			allCardsInDeck: [...new Set(allVersions.flatMap((v) => v.allCardsInDeck))].sort((a, b) =>
 				this.allCards.getCard(a).name.localeCompare(this.allCards.getCard(b).name),
 			),
+			versionGroupHasMultipleClasses,
+			versionGroupName,
 		} as DeckSummary;
 	}
 

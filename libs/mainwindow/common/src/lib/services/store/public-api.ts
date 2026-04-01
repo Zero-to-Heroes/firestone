@@ -49,6 +49,7 @@ export * from './processors/decktracker/constructed-meta-archetype-show-decks';
 export * from './processors/decktracker/constructed-meta-archetype-show-details';
 export * from './processors/decktracker/constructed-meta-deck-show-details';
 export * from './processors/decktracker/constructed-new-deck-version-processor';
+export * from './processors/decktracker/constructed-set-deck-group-name-processor';
 export * from './processors/decktracker/constructed-toggle-deck-version-stats-processor';
 export * from './processors/decktracker/decktracker-delete-deck-processor';
 export * from './processors/decktracker/decktracker-reset-deck-stats-processor';

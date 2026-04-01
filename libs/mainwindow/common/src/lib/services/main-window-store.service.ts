@@ -56,6 +56,7 @@ import {
 	ConstructedDeckbuilderSaveDeckEvent,
 	ConstructedEjectDeckVersionEvent,
 	ConstructedNewDeckVersionEvent,
+	ConstructedSetDeckGroupNameEvent,
 	ConstructedToggleDeckVersionStatsEvent,
 	DecktrackerDeleteDeckEvent,
 	DecktrackerResetDeckStatsEvent,
@@ -144,6 +145,7 @@ import {
 	ConstructedMetaDeckDetailsShowEvent,
 	ConstructedMetaDeckDetailsShowProcessor,
 	ConstructedNewDeckVersionProcessor,
+	ConstructedSetDeckGroupNameProcessor,
 	ConstructedToggleDeckVersionStatsProcessor,
 	DecktrackerDeleteDeckProcessor,
 	DecktrackerResetDeckStatsProcessor,
@@ -536,6 +538,7 @@ export class MainWindowStoreService implements IMainWindowStoreService {
 				new ConstructedDeckbuilderImportDeckProcessor(this.cards),
 			],
 			[ConstructedNewDeckVersionEvent.eventName, new ConstructedNewDeckVersionProcessor(this.prefs)],
+			[ConstructedSetDeckGroupNameEvent.eventName, new ConstructedSetDeckGroupNameProcessor(this.prefs)],
 			[ConstructedEjectDeckVersionEvent.eventName, new ConstructedEjectDeckVersionProcessor(this.prefs)],
 			[ConstructedToggleDeckVersionStatsEvent.eventName, new ConstructedToggleDeckVersionStatsProcessor()],
 			[

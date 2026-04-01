@@ -13,10 +13,12 @@ import { AbstractSubscriptionComponent } from '@firestone/shared/framework/commo
 import { waitForReady } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { Observable, combineLatest } from 'rxjs';
+import { distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
 import { DecksProviderService } from '@firestone/decktracker/common';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import {
 	ConstructedEjectDeckVersionEvent,
+	ConstructedSetDeckGroupNameEvent,
 	ConstructedToggleDeckVersionStatsEvent,
 } from '@firestone/mainwindow/common';
 
@@ -37,6 +39,19 @@ import {
 				class="global-stats"
 				[replays]="replays$ | async"
 			></decktracker-stats-for-replays>
+			<div
+				class="deck-group-name"
+				*ngIf="value.deck?.allVersions?.length && value.deck?.allVersions?.length > 1"
+			>
+				<label class="deck-group-name-label" [owTranslate]="'app.decktracker.decks.group-name-label'"></label>
+				<input
+					type="text"
+					class="deck-group-name-input"
+					[value]="groupNameDraft"
+					(input)="onDeckGroupNameInput($event)"
+					(blur)="onDeckGroupNameBlur(value.deck)"
+				/>
+			</div>
 			<div class="container">
 				<div
 					class="deck-versions"
@@ -115,6 +130,8 @@ export class DecktrackerDeckDetailsComponent
 	selectedDeck$: Observable<DeckSummary>;
 	showMatchupAsPercentages$: Observable<boolean>;
 
+	groupNameDraft = '';
+
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
@@ -139,6 +156,29 @@ export class DecktrackerDeckDetailsComponent
 				),
 			),
 		);
+		combineLatest([this.nav.selectedDeckstring$$, this.decks.decks$$])
+			.pipe(
+				takeUntil(this.destroyed$),
+				map(([selectedDeckstring, decks]) => {
+					const d = (decks ?? []).find(
+						(deck) =>
+							deck.deckstring === selectedDeckstring ||
+							(deck.allVersions?.map((v) => v.deckstring) ?? []).includes(selectedDeckstring),
+					);
+					return { selectedDeckstring, d };
+				}),
+				distinctUntilChanged(
+					(a, b) =>
+						a.selectedDeckstring === b.selectedDeckstring &&
+						(a.d?.versionGroupName ?? '') === (b.d?.versionGroupName ?? ''),
+				),
+				tap(({ d }) => {
+					if (d) {
+						this.groupNameDraft = d.versionGroupName ?? '';
+					}
+				}),
+			)
+			.subscribe();
 		this.selectedVersion$ = this.mainWindowNavigation.navigationState$$.pipe(
 			this.mapData((state) => state.navigationDecktracker.selectedVersionDeckstring),
 		);
@@ -163,6 +203,22 @@ export class DecktrackerDeckDetailsComponent
 	ngOnDestroy(): void {
 		// So that the version is not persisted between different decks
 		this.mainWindowState.send(new ConstructedToggleDeckVersionStatsEvent(null));
+	}
+
+	onDeckGroupNameInput(event: Event) {
+		this.groupNameDraft = (event.target as HTMLInputElement).value;
+	}
+
+	onDeckGroupNameBlur(deck: DeckSummary) {
+		if (!deck) {
+			return;
+		}
+		const trimmed = this.groupNameDraft.trim();
+		const prev = (deck.versionGroupName ?? '').trim();
+		if (trimmed === prev) {
+			return;
+		}
+		this.mainWindowState.send(new ConstructedSetDeckGroupNameEvent(deck.deckstring, trimmed));
 	}
 
 	ejectVersion(version: DeckSummary, deck: DeckSummary) {

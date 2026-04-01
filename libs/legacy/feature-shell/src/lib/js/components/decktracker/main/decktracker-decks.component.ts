@@ -31,7 +31,6 @@ import { ConstructedNewDeckVersionEvent } from '@firestone/mainwindow/common';
 					[ngClass]="{
 						'merging-source': deck.isMergingSource,
 						'valid-merging-target': deck.isValidMergingTarget,
-						'invalid-merging-target': deck.isInvalidMergingTarget,
 						'current-merging-target': deck.isCurrentMergingTarget,
 					}"
 				>
@@ -43,7 +42,7 @@ import { ConstructedNewDeckVersionEvent } from '@firestone/mainwindow/common';
 						cdkDragPreviewClass="test-tracker-drag-class"
 						(mousedown)="preventAppDrag($event)"
 						(mouseenter)="mouseEnterDeck(deck)"
-						(moueaseleave)="mouseLeaveDeck(deck)"
+						(mouseleave)="mouseLeaveDeck(deck)"
 						(cdkDragStarted)="deckDragStart($event, deck)"
 						(cdkDragReleased)="deckDragRelease($event, deck)"
 					>
@@ -106,14 +105,18 @@ export class DecktrackerDecksComponent extends AbstractSubscriptionComponent {
 			),
 		]).pipe(
 			this.mapData(([decks, cardSearch, { sort, search, playerClass }]) => {
+				const searchLower = search?.toLowerCase()?.trim() ?? '';
 				const result = (decks?.filter((deck) => deck.totalGames > 0 || deck.isPersonalDeck) ?? [])
-					.filter((deck) => !playerClass?.length || playerClass.includes(deck.class))
 					.filter(
 						(deck) =>
-							!search?.length ||
-							deck.deckName?.toLowerCase()?.includes(search) ||
-							deck.class?.toLowerCase()?.includes(search) ||
-							this.i18n.translateString(`global.class.deck.class`)?.toLowerCase()?.includes(search),
+							!playerClass?.length ||
+							this.classesInDeckRow(deck).some((c) => playerClass.includes(c)),
+					)
+					.filter(
+						(deck) =>
+							!searchLower.length ||
+							this.deckRowMatchesSearch(deck, searchLower) ||
+							this.i18n.translateString(`global.class.deck.class`)?.toLowerCase()?.includes(searchLower),
 					)
 					.filter(
 						(deck) => !cardSearch?.length || cardSearch.every((card) => deck.allCardsInDeck.includes(card)),
@@ -151,12 +154,7 @@ export class DecktrackerDecksComponent extends AbstractSubscriptionComponent {
 									!!currentMergeSourceDeck && deck.deckstring === currentlyMousedOverDeck,
 								isValidMergingTarget:
 									!!currentMergeSourceDeck &&
-									currentMergeSourceDeck.deckstring !== deck.deckstring &&
-									currentMergeSourceDeck.class === deck.class,
-								isInvalidMergingTarget:
-									!!currentMergeSourceDeck &&
-									currentMergeSourceDeck.deckstring !== deck.deckstring &&
-									currentMergeSourceDeck.class !== deck.class,
+									currentMergeSourceDeck.deckstring !== deck.deckstring,
 							}) as InternalDeckSummary,
 					);
 				},
@@ -246,6 +244,25 @@ export class DecktrackerDecksComponent extends AbstractSubscriptionComponent {
 		this.currentlyMousedOverDeck.next(null);
 	}
 
+	private classesInDeckRow(deck: DeckSummary): readonly string[] {
+		if (deck.allVersions?.length) {
+			return deck.allVersions.map((v) => v.class);
+		}
+		return [deck.class];
+	}
+
+	private deckRowMatchesSearch(deck: DeckSummary, searchLower: string): boolean {
+		const names: string[] = [deck.deckName, deck.versionGroupName].filter(Boolean) as string[];
+		if (deck.allVersions?.length) {
+			names.push(...deck.allVersions.map((v) => v.deckName).filter(Boolean));
+		}
+		const classes = this.classesInDeckRow(deck);
+		return (
+			names.some((n) => n?.toLowerCase()?.includes(searchLower)) ||
+			classes.some((c) => c?.toLowerCase()?.includes(searchLower))
+		);
+	}
+
 	private getSortFunction(sort: DeckSortType): (a: DeckSummary, b: DeckSummary) => number {
 		switch (sort) {
 			case 'games-played':
@@ -298,5 +315,4 @@ interface InternalDeckSummary extends DeckSummary {
 	readonly isMergingSource: boolean;
 	readonly isValidMergingTarget: boolean;
 	readonly isCurrentMergingTarget: boolean;
-	readonly isInvalidMergingTarget: boolean;
 }

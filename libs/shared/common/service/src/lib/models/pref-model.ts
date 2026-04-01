@@ -159,6 +159,8 @@ export interface MercenariesPersonalHeroesSortCriteria {
 }
 export interface ConstructedDeckVersions {
 	readonly versions: readonly ConstructedDeckVersion[];
+	/** Custom label for the grouped row in the deck list (optional). */
+	readonly groupName?: string;
 }
 export interface ConstructedDeckVersion {
 	readonly deckstring: string;

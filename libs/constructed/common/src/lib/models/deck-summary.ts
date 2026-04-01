@@ -18,6 +18,10 @@ export interface DeckSummary {
 	readonly isPersonalDeck?: boolean;
 	readonly allVersions: readonly DeckSummaryVersion[];
 	readonly allCardsInDeck: readonly string[];
+	/** True when this row groups deckstrings from more than one class. */
+	readonly versionGroupHasMultipleClasses?: boolean;
+	/** Copy of `constructedDeckVersions[].groupName` when the row is a merged group. */
+	readonly versionGroupName?: string;
 }
 
 export interface DeckSummaryVersion extends DeckSummary {
