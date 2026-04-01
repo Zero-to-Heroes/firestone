@@ -9,7 +9,6 @@ export class CeaselessExpanseCounterDefinitionV2 extends CounterDefinitionV2<num
 	public override image = CardIds.TheCeaselessExpanse_GDB_142;
 	public override cards: readonly CardIds[] = [CardIds.TheCeaselessExpanse_GDB_142];
 	protected override singleton = true;
-	protected override debug = true;
 
 	readonly player = {
 		pref: 'playerCeaselessExpanseCounter' as const,
