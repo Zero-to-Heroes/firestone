@@ -362,8 +362,28 @@ export const addGuessInfoToCard = (
 		if (possibleCards.length > 0) {
 			// Even/odd halves of the global SHATTERED list. createdIndex sequences all spawns from the
 			// source (e.g. Spark of Life may use 0–1 for setaside tokens before hand pieces get 2 and 3).
-			const useFirstHalf =
-				card.createdIndex == null || card.createdIndex < 0 || card.createdIndex % 2 === 0;
+			// When createdIndex is missing for both hand pieces (common for Tigress Plushy / generic shatter),
+			// defaulting to "first half" for both made both markers show the same art — use hand order
+			// among SHATTERED entities (including this card before it is appended to deckState.hand).
+			let useFirstHalf: boolean;
+			if (card.createdIndex != null && card.createdIndex >= 0) {
+				useFirstHalf = card.createdIndex % 2 === 0;
+			} else {
+				const peers: DeckCard[] = [
+					...deckState.hand.filter(
+						(c) => c.tags?.[GameTag.SHATTERED] === 1 && !c.cardId?.length,
+					),
+				];
+				if (!peers.some((c) => c.entityId === card.entityId)) {
+					peers.push(card);
+				}
+				peers.sort(
+					(a, b) =>
+						(a.tags?.[GameTag.ZONE_POSITION] ?? 0) - (b.tags?.[GameTag.ZONE_POSITION] ?? 0),
+				);
+				const shardIdx = peers.findIndex((c) => c.entityId === card.entityId);
+				useFirstHalf = shardIdx >= 0 ? shardIdx % 2 === 0 : true;
+			}
 			newGuessedInfo = {
 				...newGuessedInfo,
 				possibleCards: possibleCards.filter((c, index) =>
