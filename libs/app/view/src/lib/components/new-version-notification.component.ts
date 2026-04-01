@@ -19,7 +19,7 @@ import { BehaviorSubject, debounceTime, distinctUntilChanged, firstValueFrom, Ob
 import { AppVersion } from '../model/app-version';
 
 const versions: readonly AppVersion[] = [
-	{ version: '18.0.1', date: '2026-04-01' },
+	{ version: '18.0.1', date: '2026-04-01', force: true },
 	{ version: '17.3.0', date: '2026-03-25' },
 	{ version: '17.2.0', date: '2026-03-13' },
 	{ version: '17.1.1', date: '2026-03-10' },
