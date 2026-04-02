@@ -1,9 +1,10 @@
 /**
  * Regression: cosmetic set coins (e.g. TLC_COIN2) must map to The Coin (GAME_005) in deck state so the
- * tracker shows the standard art/name. Uses COIN_CARD=1 on RECEIVE_CARD_IN_HAND; falls back when the id
- * is missing from cards_short.json (/_COIN/ heuristic).
+ * tracker shows the standard art/name. Asserts on real replay state only (no mocks)—same path as the app.
  *
- * Fixture: trimmed opening; coin entity id=69, CardID=TLC_COIN2, COIN_CARD=1.
+ * Fixture: trimmed opening; coin entity id=69, CardID=TLC_COIN2, COIN_CARD=1 (see coin-not-revealed.log).
+ * Red/green: run against the log before/after the fix; do not replace this with unit tests that fake
+ * CardsFacadeService or deck state.
  *
  * Run (set cards DB — sibling hs-reference-data or HS_REFERENCE_CARDS_JSON_PATH):
  *   export HS_REFERENCE_CARDS_JSON_PATH=../hs-reference-data/src/cards_short.json

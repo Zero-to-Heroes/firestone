@@ -61,6 +61,7 @@ The initial test should fail, to prove that the bug can indeed be reproduced.
    `test-tools/bugs/<bug-id>/power-log-<slug>-replay.spec.ts`
     - Mirror **Ivory** (`test-tools/bugs/ivory-rook/power-log-ivory-rook-replay.spec.ts`) or **Torch** (`test-tools/bugs/torch/power-log-torch-replay.spec.ts`) for structure.
     - Prefer **small helpers** in the same folder for slug-specific parsing from raw log lines (e.g. armor delta, `TAG_SCRIPT_DATA_NUM_1`) so expected values are **grounded in the fixture**, not guessed.
+    - The test should always start from a log file - no unit or mock tests!
 
 3. **Run** (always **in-band**; harness uses `setAppInjector`):
 

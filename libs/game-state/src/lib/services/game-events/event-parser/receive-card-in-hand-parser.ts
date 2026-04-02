@@ -23,7 +23,8 @@ const CREATOR_STEALS = [CardIds.NightmareFuel_EDR_528];
 
 /**
  * Cosmetic set coins (e.g. TLC_COIN2) may appear in logs before reference data includes them, or may
- * resolve to a non–GAME_005 id while still being the standard extra-mana coin. Normalize using COIN_CARD.
+ * resolve to a non–GAME_005 id while still being the standard extra-mana coin. Normalize using COIN_CARD
+ * tags or ReferenceCard.isCoin from the cards DB; unknown ids fall back to a /_COIN/ id heuristic.
  */
 function resolveCardIdForReceiveInHand(
 	cardIdOrDbfId: string | number,
@@ -34,9 +35,13 @@ function resolveCardIdForReceiveInHand(
 	if (coinFromTags) {
 		return CardIds.TheCoinCore;
 	}
-	const fromDb = allCards.getCard(cardIdOrDbfId)?.id;
-	if (fromDb) {
-		return fromDb;
+	const refCard = allCards.getCard(cardIdOrDbfId);
+	if (refCard) {
+		// Cosmetic coins have their own id in reference data but isCoin marks them as The Coin for UI.
+		if (refCard.isCoin) {
+			return CardIds.TheCoinCore;
+		}
+		return refCard.id;
 	}
 	if (typeof cardIdOrDbfId === 'string' && /_COIN/i.test(cardIdOrDbfId)) {
 		return CardIds.TheCoinCore;
