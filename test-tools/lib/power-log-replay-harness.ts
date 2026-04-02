@@ -217,6 +217,7 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	'secret-passage-draw-counter': 'secret-passage-draw-counter/secret-passage-draw-counter.log',
 	'kaelthas-spell-cycle': 'kaelthas-spell-cycle/kaelthas.log',
 	'body-wrapper': 'body-wrapper/body-wrapper.log',
+	'frostbite-current-effects': 'frostbite-current-effects/frostbite-current-effects-truncated.log',
 	'oh-my-yogg-secret': 'oh-my-yogg-secret/oh-my-yogg-secret.log',
 	'attack-counter-zero': 'attack-counter-zero/attack-counter-zero.log',
 	'libram-divinity': 'libram-divinity/libram-divinity.log',

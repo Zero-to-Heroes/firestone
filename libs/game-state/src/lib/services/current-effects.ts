@@ -93,6 +93,7 @@ export const currentEffectsInternal = [
 	CardIds.FreezingTrap_TrappedLegacyEnchantment,
 	CardIds.FrequencyOscillator_OscillatingEnchantment,
 	CardIds.Frostbite_FrostbittenEnchantment_AV_259e,
+	CardIds.Frostbite_FrostbittenEnchantment_AV_259e2,
 	CardIds.FrostStrike_GlacialAdvanceEnchantment_RLK_025e,
 	CardIds.FrostStrike_GlacialAdvanceEnchantment_RLK_025o,
 	CardIds.FrozenBuckler_ChillyEnchantment,
