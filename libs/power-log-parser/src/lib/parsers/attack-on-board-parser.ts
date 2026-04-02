@@ -6,6 +6,7 @@ import { FullEntity } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
+import { hasSummoningSicknessForAttackOnBoard } from './attack-on-board-summoning';
 
 interface AttackOnBoard {
 	Player: AttackOnBoardForPlayer;
@@ -201,14 +202,7 @@ export class AttackOnBoardParser implements ActionParser {
 		const canStarshipAttack =
 			!e.HasTag(GameTag.STARSHIP) ||
 			(!e.HasTag(GameTag.LAUNCHPAD) && (!isActivePlayer || e.GetTag(GameTag.NUM_TURNS_IN_PLAY) > 1));
-		const exhausted =
-			e.HasTag(GameTag.EXHAUSTED) || e.GetTag(GameTag.NUM_TURNS_IN_PLAY, 0) === 0;
-		const hasSummoningSickness =
-			!isHero &&
-			isActivePlayer &&
-			!e.HasTag(GameTag.CHARGE) &&
-			!e.HasTag(GameTag.NON_KEYWORD_CHARGE) &&
-			(exhausted || e.HasTag(GameTag.ATTACKABLE_BY_RUSH));
+		const hasSummoningSickness = hasSummoningSicknessForAttackOnBoard(e, isActivePlayer, isHero);
 		return !isDormant && !hasSummoningSickness && !isFrozen && !cantAttack && canTitanAttack && canStarshipAttack;
 	}
 

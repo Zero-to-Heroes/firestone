@@ -183,6 +183,7 @@ async function loadCardsShortJsonText(ref: string): Promise<string | null> {
 
 /** Env override per slug, e.g. `IVORY_POWER_LOG_PATH`, `TORCH_POWER_LOG_PATH`. */
 const LEGACY_ENV_BY_SLUG: Record<string, string> = {
+	'attack-counter-zero': 'POWER_LOG_ATTACK_COUNTER_ZERO_PATH',
 	ivory: 'IVORY_POWER_LOG_PATH',
 	torch: 'TORCH_POWER_LOG_PATH',
 	'fabled-package': 'FABLED_PACKAGE_POWER_LOG_PATH',
@@ -216,6 +217,7 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	'kaelthas-spell-cycle': 'kaelthas-spell-cycle/kaelthas.log',
 	'body-wrapper': 'body-wrapper/body-wrapper.log',
 	'oh-my-yogg-secret': 'oh-my-yogg-secret/oh-my-yogg-secret.log',
+	'attack-counter-zero': 'attack-counter-zero/attack-counter-zero.log',
 };
 
 /**
