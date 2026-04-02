@@ -504,6 +504,8 @@ export class Oracle {
 				case CardIds.LifesavingAura_VAC_922: return CardIds.Grillmaster_SunscreenToken_VAC_917t;
 				case CardIds.LightforgedBlessing_DAL_568: return CardIds.LightforgedBlessing_DAL_568ts;
 				case CardIds.LightOfTheNewMoon_LightOfTheFullMoonToken_FIR_918t: return CardIds.LightOfTheNewMoon_FIR_918;
+				case CardIds.LibramOfDivinity_LibramOfDivinityEnchantment_GDB_138e2:
+					return CardIds.LibramOfDivinity_GDB_138;
 				case CardIds.LoanShark: return CardIds.TheCoinCore;
 				case CardIds.Locuuuusts_ONY_005tb3: return CardIds.Locuuuusts_GiantLocustToken_ONY_005tb3t2;
 				case CardIds.Locuuuusts_ULDA_036: return CardIds.GiantLocust_Locuuuusts;
@@ -1642,13 +1644,15 @@ export class Oracle {
 			}
 		}
 
-		// Libram of Wisdom
-		if (
-			node.Type === NodeType.FullEntity &&
-			(node.Object as FullEntity).SubSpellInEffect?.Prefab ===
-				'Librams_SpawnToHand_Book'
-		) {
-			return CardIds.LibramOfWisdom_BT_025;
+		// Libram spawn-to-hand (empty CardID until linked entity resolves)
+		if (node.Type === NodeType.FullEntity) {
+			const prefab = (node.Object as FullEntity).SubSpellInEffect?.Prefab;
+			if (prefab === 'Librams_SpawnToHand_Book') {
+				return CardIds.LibramOfWisdom_BT_025;
+			}
+			if (prefab === 'BTFX_Librams_SpawnToHand_HolyLight_Book') {
+				return CardIds.LibramOfDivinity_GDB_138;
+			}
 		}
 
 		return null;
