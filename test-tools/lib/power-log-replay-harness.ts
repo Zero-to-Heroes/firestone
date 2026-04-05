@@ -221,6 +221,7 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	'oh-my-yogg-secret': 'oh-my-yogg-secret/oh-my-yogg-secret.log',
 	'attack-counter-zero': 'attack-counter-zero/attack-counter-zero.log',
 	'libram-divinity': 'libram-divinity/libram-divinity.log',
+	'enthrall-pool': 'enthrall-pool/enthrall-pool.log',
 };
 
 /**

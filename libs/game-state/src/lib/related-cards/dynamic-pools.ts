@@ -106,6 +106,22 @@ const getDynamicRelatedCardIdsInternal = (
 		});
 	}
 
+	// Cards generated into deck/hand (e.g. Enthrall shuffling random dragons) resolve to a concrete cardId; the
+	// generation pool lives on the creator (StaticGeneratingCard.dynamicPool), not on each outcome card.
+	const deckCardForCreator = inputOptions.deckState?.findCard(entityId)?.card;
+	const creatorCardIdForPool = deckCardForCreator?.creatorCardId;
+	if (creatorCardIdForPool) {
+		const creatorPoolImpl = cardsInfoCache[creatorCardIdForPool];
+		if (hasDynamicPool(creatorPoolImpl)) {
+			return creatorPoolImpl.dynamicPool({
+				cardId: creatorCardIdForPool,
+				entityId,
+				allCards,
+				inputOptions: options,
+			});
+		}
+	}
+
 	const refCard = allCards.getCard(cardId);
 
 	if (hasMechanic(refCard, GameTag.EXCAVATE)) {
