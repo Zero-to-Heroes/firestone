@@ -18,22 +18,28 @@ export class EnchantmentDetachedParser implements EventParser {
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
-		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
+		const [cardId, _controllerId, localPlayer, entityId] = gameEvent.parse();
 		const attachedToEntityId = gameEvent.additionalData.attachedTo;
 
-		let isPlayer = controllerId === localPlayer.PlayerId;
-		if (attachedToEntityId === gameEvent.opponentPlayer.Id) {
-			isPlayer = false;
-		}
-		const playerEntityId = isPlayer ? localPlayer.Id : gameEvent.opponentPlayer.Id;
-		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
-		const isAttachedToHero =
-			attachedToEntityId === playerEntityId ||
-			attachedToEntityId === deck.hero?.entityId ||
-			attachedToEntityId === deck.heroPower?.entityId;
-		if (!isAttachedToHero) {
+		const playerDeck = currentState.playerDeck;
+		const opponentDeck = currentState.opponentDeck;
+		const opponentPlayer = gameEvent.opponentPlayer;
+
+		const attachedToPlayerSide =
+			attachedToEntityId === localPlayer.Id ||
+			attachedToEntityId === playerDeck.hero?.entityId ||
+			attachedToEntityId === playerDeck.heroPower?.entityId;
+		const attachedToOpponentSide =
+			attachedToEntityId === opponentPlayer.Id ||
+			attachedToEntityId === opponentDeck.hero?.entityId ||
+			attachedToEntityId === opponentDeck.heroPower?.entityId;
+
+		if (!attachedToPlayerSide && !attachedToOpponentSide) {
 			return currentState;
 		}
+
+		const isPlayer = attachedToPlayerSide;
+		const deck = isPlayer ? playerDeck : opponentDeck;
 
 		let newGlobalEffects = deck.globalEffects;
 		if (globalEffectCards.includes(cardId as CardIds)) {
