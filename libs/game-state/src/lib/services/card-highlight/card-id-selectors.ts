@@ -199,6 +199,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), pirate);
 		case CardIds.AdvancedTargetingMonocle:
 			return and(side(inputSide), inDeck, spell);
+		case CardIds.AthleticStudies_SCH_237:
+			return and(side(inputSide), inDeck, minion, rush);
 		case CardIds.AegwynnTheGuardianCore:
 		case CardIds.AegwynnTheGuardian_LEG_CS3_001:
 			return and(side(inputSide), inDeck, minion);
