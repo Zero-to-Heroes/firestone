@@ -31,7 +31,7 @@ const buildInput = (cardId: string, zone: string, allCards: CardsFacadeService):
 	const deckCard = DeckCard.create({
 		cardId,
 		entityId: 1,
-		zone: zone === 'deck' ? ('PLAY' as const) : ('HAND' as const),
+		zone: zone === 'deck' ? ('DECK' as const) : ('HAND' as const),
 	});
 	return {
 		side: 'player',
