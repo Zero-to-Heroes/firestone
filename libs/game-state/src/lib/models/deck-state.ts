@@ -315,10 +315,24 @@ export class DeckState {
 	}
 
 	public getAllCardsFromStarterDeck(): readonly DeckCard[] {
-		return [...this.deckList, ...this.hand, ...this.deck, ...this.board, ...this.otherZone]
+		// If we know the initial deck list, use it directly to avoid double-counting
+		// cards that appear in both deckList and active zones
+		if (this.deckList?.length) {
+			return this.deckList.filter((c) => !!c);
+		}
+		// Otherwise, reconstruct from all zones, excluding created/stolen/temporary cards
+		const allCards = [...this.hand, ...this.deck, ...this.board, ...this.otherZone]
 			.filter((c) => !!c)
 			.filter((c) => !c.creatorCardId?.length && !c.stolenFromOpponent)
 			.filter((c) => !c.temporaryCard);
+		// Deduplicate by entityId to handle cards that might appear in multiple zones
+		const seen = new Set<number>();
+		return allCards.filter((c) => {
+			if (!c.entityId) return true;
+			if (seen.has(c.entityId)) return false;
+			seen.add(c.entityId);
+			return true;
+		});
 	}
 
 	// TODO: Probably not the place for these methods
