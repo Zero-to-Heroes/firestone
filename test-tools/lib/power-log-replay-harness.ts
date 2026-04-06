@@ -60,7 +60,7 @@ import {
 	SecretConfigService,
 	SecretsParserService,
 } from '@firestone/game-state';
-import { trimPowerLogLinesToLastGame } from './trim-power-log-last-game';
+import { trimPowerLogLinesToLastGame } from '@firestone/power-log-parser';
 
 /** Wait until GameEvents' log line queue is empty (large replays enqueue faster than the 500ms batch). */
 async function waitForGameEventsQueueDrain(gameEvents: GameEvents, maxWaitMs: number): Promise<void> {

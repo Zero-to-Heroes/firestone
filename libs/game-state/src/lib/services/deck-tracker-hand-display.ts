@@ -16,9 +16,16 @@ export function mergeHandCardsForDeckTrackerDisplay(
 	additionalKnownCardsInHand: readonly string[],
 	allCards: DeckTrackerCardLookup,
 ): readonly DeckCard[] {
-	let additionalKnownCards = [...additionalKnownCardsInHand].filter(
-		(c) => !cards.some((card) => card.cardId === c),
-	);
+	let additionalKnownCards = [...additionalKnownCardsInHand].filter((c) => {
+		const handRowsWithId = cards.filter((card) => card.cardId === c).length;
+		// One hand row with this id: suppress duplicate entries in `additional` (legacy double-tracking).
+		// Multiple rows with the same id: keep every additional entry — the old `!some(cardId)` wrongly dropped
+		// extras when several physical copies share one cardId (e.g. Sigil of Cinder x3).
+		if (handRowsWithId > 1) {
+			return true;
+		}
+		return !cards.some((card) => card.cardId === c);
+	});
 
 	let newCards: readonly DeckCard[] = cards;
 	for (let i = 0; i < additionalKnownCards.length; i++) {

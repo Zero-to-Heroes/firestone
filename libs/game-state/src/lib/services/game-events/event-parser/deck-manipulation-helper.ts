@@ -29,12 +29,22 @@ export class DeckManipulationHelper {
 		const normalizedCardId = this.normalizeCardId(cardId, normalizeUpgradedCards);
 
 		// We have the entityId, so we just remove it
-		if (!!entityId && zone.some((card) => card.entityId === entityId)) {
+		if (!!entityId && zone.some((card) => Math.abs(card.entityId ?? 0) === Math.abs(entityId))) {
 			debug && console.debug('[card-draw] removing card with entityId', entityId, zone);
 			return [
-				zone.map((card: DeckCard) => (card.entityId === entityId ? null : card)).filter((card) => !!card),
-				zone.find((card: DeckCard) => card.entityId === entityId)!,
+				zone
+					.map((card: DeckCard) =>
+						Math.abs(card.entityId ?? 0) === Math.abs(entityId) ? null : card,
+					)
+					.filter((card) => !!card),
+				zone.find((card: DeckCard) => Math.abs(card.entityId ?? 0) === Math.abs(entityId))!,
 			];
+		}
+		// Several copies of the same cardId can be in hand; never remove "the first FIR_902" when the
+		// event names a specific entity that we don't have yet — that drops the wrong row (e.g. Zugars replay:
+		// playing copied Sigil 178 removed original 47).
+		if (entityId != null && entityId !== 0) {
+			return [zone, undefined];
 		}
 
 		if (!normalizedCardId) {

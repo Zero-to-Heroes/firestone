@@ -9,3 +9,12 @@ export { NodeParser } from './lib/node-parser';
 export { EventQueueHandler } from './lib/event-queue-handler';
 export { GameEventHandler } from './lib/game-event-handler';
 export { xmlFromReplay } from './lib/replay-converter';
+export {
+	findCreateGameLineIndices,
+	findCreateGameLineIndicesGameState,
+	findCreateGameLineIndicesPowerTaskList,
+	findLastGameStartLineIndex,
+	POWER_LOG_CREATE_GAME_MARKER,
+	trimPowerLogFileContentToLastGame,
+	trimPowerLogLinesToLastGame,
+} from './lib/trim-power-log-last-game';

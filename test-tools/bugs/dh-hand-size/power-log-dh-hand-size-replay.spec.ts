@@ -1,7 +1,13 @@
 /**
  * Integration (power.log only): expected hand size comes from the last {@link GameState.DebugPrintOptions}
- * block in the fixture ({@link extractLocalPlayerHandCountFromLastDebugPrintOptions}). Replay must satisfy
- * {@link getDeckTrackerEffectiveHandSize} === that value (deck tracker contract).
+ * block in the fixture ({@link extractLocalPlayerHandCountFromLastDebugPrintOptions}), using the local
+ * player's `PlayerID` from {@link extractLocalPlayerIdFromFirstDebugPrintGame} (not always `1`). Replay
+ * must satisfy {@link getDeckTrackerEffectiveHandSize} === that value (deck tracker contract).
+ *
+ * `dh-hand-size-zugars-reporter-truncated.log` — trimmed from premium export
+ * https://power.firestoneapp.com/premium/22c67e33-ba74-48be-8fcb-5c62292e7d9e.power.zip (ends after last
+ * `DebugPrintOptions` id=95 where the log shows 10 cards in hand; overlay showed 9 — regression should fail
+ * until the deck-state / merge bug is fixed).
  *
  * Run:
  *   export HS_REFERENCE_CARDS_JSON_PATH=https://raw.githubusercontent.com/Zero-to-Heroes/hs-reference-data/master/src/cards_short.json
@@ -18,7 +24,10 @@ import {
 	requirePowerLogReplayResult,
 	resolveCardsJsonPath,
 } from '../../lib/power-log-replay-harness';
-import { extractLocalPlayerHandCountFromLastDebugPrintOptions } from './dh-hand-size-power-log-helpers';
+import {
+	extractLocalPlayerHandCountFromLastDebugPrintOptions,
+	extractLocalPlayerIdFromFirstDebugPrintGame,
+} from './dh-hand-size-power-log-helpers';
 
 describe('Power log replay → GameStateService (DH hand count vs power.log)', () => {
 	/** Same source as dh-hand-size.log (reporter zip), last game only; ends right after GameState.DebugPrintOptions where player 1 has 10 cards in hand. */
@@ -32,7 +41,11 @@ describe('Power log replay → GameStateService (DH hand count vs power.log)', (
 
 			const raw = fs.readFileSync(truncatedLogPath, 'utf8');
 			const logLines = raw.split(/\r?\n/);
-			const expectedHandCount = extractLocalPlayerHandCountFromLastDebugPrintOptions(logLines);
+			const localPlayerId = extractLocalPlayerIdFromFirstDebugPrintGame(logLines);
+			const expectedHandCount = extractLocalPlayerHandCountFromLastDebugPrintOptions(
+				logLines,
+				localPlayerId,
+			);
 
 			const ctx = await replayPowerLogToGameState({
 				logPath: truncatedLogPath,
@@ -54,6 +67,46 @@ describe('Power log replay → GameStateService (DH hand count vs power.log)', (
 			expect(effective).toBe(mergedLen);
 		},
 		180_000,
+	);
+
+	/** Full single-game export from support zip; local player is PlayerID=2 (Zugars). */
+	const zugarsReporterLogPath = path.join(__dirname, 'dh-hand-size-zugars-reporter-truncated.log');
+
+	it(
+		'Zugars reporter power.log: log-derived hand count matches replay effective deck-tracker hand size',
+		async () => {
+			const cardsPath = resolveCardsJsonPath();
+			requirePowerLogReplayPrerequisites(cardsPath, zugarsReporterLogPath);
+
+			const raw = fs.readFileSync(zugarsReporterLogPath, 'utf8');
+			const logLines = raw.split(/\r?\n/);
+			const localPlayerId = extractLocalPlayerIdFromFirstDebugPrintGame(logLines);
+			expect(localPlayerId).toBe(2);
+
+			const expectedHandCount = extractLocalPlayerHandCountFromLastDebugPrintOptions(
+				logLines,
+				localPlayerId,
+			);
+			expect(expectedHandCount).toBe(10);
+
+			const ctx = await replayPowerLogToGameState({
+				logPath: zugarsReporterLogPath,
+				reviewId: 'dh-hand-size-zugars-reporter',
+				settleMs: 12_000,
+			});
+			requirePowerLogReplayResult(ctx, cardsPath);
+
+			const deck = ctx.state.playerDeck;
+			const mergedLen = mergeHandCardsForDeckTrackerDisplay(
+				deck.hand,
+				deck.additionalKnownCardsInHand,
+				ctx.allCardsRef,
+			).length;
+			const effective = getDeckTrackerEffectiveHandSize(deck, ctx.allCardsRef);
+			expect(mergedLen).toBe(expectedHandCount);
+			expect(effective).toBe(mergedLen);
+		},
+		300_000,
 	);
 
 	it('dh-hand-size.log is a last-game slice starting at CREATE_GAME', () => {

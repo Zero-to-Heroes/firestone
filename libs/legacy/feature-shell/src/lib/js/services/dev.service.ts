@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BgsCompAdvice } from '@firestone-hs/content-craetor-input';
 import { decode, encode } from '@firestone-hs/deckstrings';
 import { SceneMode } from '@firestone-hs/reference-data';
+import { trimPowerLogLinesToLastGame } from '@firestone/power-log-parser';
 import { CollectionCardType } from '@firestone-hs/user-packs';
 import { CompositionDetectorService } from '@firestone/battlegrounds/core';
 import { BgsMetaCompositionStrategiesService } from '@firestone/battlegrounds/services';
@@ -60,7 +61,15 @@ export class DevService {
 
 		window['fakeGame'] = async (
 			fileName: string,
-			options?: { isBg?: boolean; allowReconnects?: boolean; deckstring?: string; waitTime?: number },
+			options?: {
+				isBg?: boolean;
+				allowReconnects?: boolean;
+				deckstring?: string;
+				/** Pause every N lines while feeding the log (default 500ms). */
+				waitTime?: number;
+				/** After the last line: wait for the game-events queue + this delay so GameState catches up (default 8000, same as power-log-replay-harness). */
+				settleMs?: number;
+			},
 		) => {
 			const { isBg = false, allowReconnects = false, deckstring = null } = options || {};
 			const events = [];
@@ -79,7 +88,8 @@ export class DevService {
 			const logsLocation = `E:\\Source\\zerotoheroes\\firestone\\test-tools\\${fileName ?? 'game.log'}`;
 			const logContents = await this.ow.readTextFile(logsLocation);
 			console.log('logContents', logContents, fileName);
-			const logLines = logContents.split('\n');
+			// Match power-log-replay-harness: CRLF-safe split + last game only (multi-match exports otherwise skew state).
+			const logLines = trimPowerLogLinesToLastGame(logContents.split(/\r?\n/));
 			console.log('logLines', logLines?.length);
 			await sleep(2000);
 			let currentIndex = 0;
@@ -96,6 +106,8 @@ export class DevService {
 					await sleep(options?.waitTime ?? 500);
 				}
 			}
+			await this.gameEvents.awaitProcessingQueueIdle();
+			await sleep(options?.settleMs ?? 8000);
 			sub.unsubscribe();
 			console.log('game-events', events.join(','));
 			console.log('time spent in event dispatch: ', this.gameEvents.totalTime);

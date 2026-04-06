@@ -389,14 +389,11 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 			),
 		);
 
-		const cardsForHand =
-			deckState.additionalKnownCardsInHand.length > 0
-				? mergeHandCardsForDeckTrackerDisplay(
-						deckState.hand,
-						deckState.additionalKnownCardsInHand,
-						this.allCards,
-					)
-				: deckState.hand;
+		const cardsForHand = mergeHandCardsForDeckTrackerDisplay(
+			deckState.hand,
+			deckState.additionalKnownCardsInHand,
+			this.allCards,
+		);
 
 		const handSortingFunction = sortHandByZoneOrder
 			? (a: VisualDeckCard, b: VisualDeckCard) =>

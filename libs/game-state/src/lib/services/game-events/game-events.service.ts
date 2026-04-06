@@ -1682,6 +1682,17 @@ export class GameEvents {
 		this.totalTime += timeSpent;
 	}
 
+	/**
+	 * Wait until the log-line processing queue is empty (batches run every 500ms).
+	 * Use after feeding a file in dev/tests so GameState matches the end of the replay.
+	 */
+	public async awaitProcessingQueueIdle(maxWaitMs = 600_000): Promise<void> {
+		const start = Date.now();
+		while (this.processingQueue.eventsPendingCount() > 0 && Date.now() - start < maxWaitMs) {
+			await sleep(25);
+		}
+	}
+
 	public receiveLogLine(data: string, postponed = false) {
 		// console.log('[game-events] received log line', data);
 		// In case the game overrides the info during the process, we stop everything and start from scratch

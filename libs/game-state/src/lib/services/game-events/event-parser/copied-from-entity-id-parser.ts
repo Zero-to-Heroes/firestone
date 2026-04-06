@@ -136,13 +136,16 @@ export class CopiedFromEntityIdParser implements EventParser {
 			refManaCost:
 				(isCopiedPlayer ? newCopy?.refManaCost : null) ??
 				getProcessedCard(obfuscatedCardId, copiedCardEntityId, copiedDeck, this.allCards)?.cost,
-			// Always set the entityId to null when it's the opponent's deck to avoid info leaks
-			// UPDATE: we don't do it here, do that when the card is drawn, so that we still have the entityId
-			// to differentiate the cards (e.g. when discovering copies of the same card)
-			// This was introduced so that discovering cards from deck would update the info of the card in deck
-			// with the updated info from the Discover (initially for Lady Prestor)
-			// UPDATE 2024-10-29: not sure what this means...
-			entityId: copiedCardZone === Zone.DECK && !shouldObfuscate ? copiedCardEntityId : null,
+			// DECK: keep entityId when not obfuscating (discover / deck updates; avoid leaking opponent deck ids).
+			// Non-deck + local source (`isCopiedPlayer`): `updateCardInDeck` must get the source entity id so
+			// `updateCardInZone` can match the hand/board row; otherwise entityId stays null and the update no-ops
+			// (e.g. Sigil of Cinder copy in hand — wrong deck-tracker hand count).
+			entityId:
+				copiedCardZone === Zone.DECK && !shouldObfuscate
+					? copiedCardEntityId
+					: isCopiedPlayer && copiedCardZone !== Zone.DECK && copiedCardEntityId != null
+						? copiedCardEntityId
+						: null,
 			positionFromTop: shouldObfuscate ? null : copiedCard?.positionFromTop,
 			positionFromBottom: shouldObfuscate ? null : copiedCard?.positionFromBottom,
 		} as DeckCard);
