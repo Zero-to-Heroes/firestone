@@ -16,7 +16,7 @@ Use this when investigating a **decktracker or parser** bug backed by a **power.
 
 ---
 
-## 1. Isolate work (parallel agents)
+## 1. Isolate work (parallel agents), if asked
 
 1. Use a **git worktree** so you do not clash with other agents:
     - From repo root:  
@@ -47,6 +47,7 @@ Use this when investigating a **decktracker or parser** bug backed by a **power.
 
 Goal: replay the log through the **same path as the app** (`GameEvents.receiveLogLine` → `GameStateService`) and assert on **final `GameState`**.  
 The initial test should fail, to prove that the bug can indeed be reproduced.
+Do don't manual unit tests - all tests should work from the provided power.log file
 
 1. **Shared harness** (reuse; do not duplicate):  
    `test-tools/lib/power-log-replay-harness.ts`

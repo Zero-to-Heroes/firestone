@@ -190,6 +190,7 @@ const LEGACY_ENV_BY_SLUG: Record<string, string> = {
 	'fabled-package': 'FABLED_PACKAGE_POWER_LOG_PATH',
 	ysondre: 'YSONDRE_POWER_LOG_PATH',
 	'body-wrapper': 'BODY_WRAPPER_POWER_LOG_PATH',
+	'lady-liadrin': 'POWER_LOG_LADY_LIADRIN_PATH',
 };
 
 /**
@@ -224,6 +225,7 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	'libram-divinity': 'libram-divinity/libram-divinity.log',
 	'enthrall-pool': 'enthrall-pool/enthrall-pool.log',
 	'dh-hand-size': 'dh-hand-size/dh-hand-size.log',
+	'lady-liadrin': 'lady-liadrin/lady-liadrin.log',
 };
 
 /**

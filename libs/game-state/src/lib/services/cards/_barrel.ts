@@ -127,6 +127,7 @@ export { KabalCourier } from './kabal-courier';
 export { KaldoreiCultivator } from './kaldorei-cultivator';
 export { Kiljaeden } from './kiljaeden';
 export { LadyAzshara } from './lady-azshara';
+export { LadyLiadrin } from './lady-liadrin';
 export { Lifeweaver } from './lifeweaver';
 export { LilianVoss } from './lilian-voss';
 export { LockAndLoad } from './lock-and-load';
