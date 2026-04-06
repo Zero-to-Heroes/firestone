@@ -5,10 +5,13 @@ import * as JSZip from 'jszip';
 import { BehaviorSubject, distinctUntilChanged, map } from 'rxjs';
 import { ModsManagerService } from './mods-manager.service';
 
-const WS_URLS = ['ws://localhost:54321', 'ws://127.0.0.1:54321'] as const;
+/** Prefer 127.0.0.1 first — the mod listens on IPv4 loopback; `localhost` may resolve to ::1 first. */
+const WS_URLS = ['ws://127.0.0.1:54321', 'ws://localhost:54321'] as const;
 const WS_RECONNECT_DELAY = 3000;
 const WS_RECONNECT_MAX_DELAY = 30000;
 const WS_CONNECT_TIMEOUT = 5000;
+const WS_ENSURE_TOTAL_MS = 5000;
+const WS_ENSURE_ATTEMPT_DELAY_MS = 350;
 const S3_BASE_URL = 'https://power.firestoneapp.com/';
 const MARK_ACCESSED_ENDPOINT = 'https://gkd7rn4gqzt2lqbhtlqbiez5w40awjqg.lambda-url.us-west-2.on.aws/';
 
@@ -150,8 +153,7 @@ export class InGameReplayService extends AbstractFacadeService<InGameReplayServi
 
 		try {
 			await this.ensureConnected();
-		} catch (e) {
-			console.error('[in-game-replay] WebSocket connection failed', e);
+		} catch {
 			return 'connection-failed';
 		}
 
@@ -221,61 +223,130 @@ export class InGameReplayService extends AbstractFacadeService<InGameReplayServi
 
 	// --- WebSocket lifecycle ---
 
-	private ensureConnected(): Promise<void> {
+	private async ensureConnected(): Promise<void> {
 		if (this.ws?.readyState === WebSocket.OPEN) {
-			return Promise.resolve();
+			return;
 		}
-		// Reset reconnect state for fresh user-initiated attempt
 		this.reconnectDelay = WS_RECONNECT_DELAY;
-		this.urlIndex = 0;
-		return this.connect();
+		const deadline = Date.now() + WS_ENSURE_TOTAL_MS;
+		let lastError: Error | undefined;
+		while (Date.now() < deadline) {
+			for (const url of WS_URLS) {
+				if (this.ws?.readyState === WebSocket.OPEN) {
+					return;
+				}
+				try {
+					await this.connectSingle(url);
+					return;
+				} catch (e) {
+					lastError = e instanceof Error ? e : new Error(String(e));
+					console.debug('[in-game-replay] connect attempt failed', url, lastError.message);
+				}
+			}
+			if (Date.now() < deadline) {
+				await new Promise((r) => setTimeout(r, WS_ENSURE_ATTEMPT_DELAY_MS));
+			}
+		}
+		console.warn('[in-game-replay] WebSocket connection failed after retries', lastError?.message);
+		throw lastError ?? new Error('WebSocket connection failed');
 	}
 
+	/** Single attempt; used by reconnect scheduler (alternates URL via `urlIndex`). */
 	private connect(): Promise<void> {
-		const url = WS_URLS[this.urlIndex];
-		console.debug(
-			'[in-game-replay] connecting to websocket',
-			url,
-			`(attempt ${this.urlIndex + 1}/${WS_URLS.length})`,
-		);
-		return new Promise<void>((resolve, reject) => {
-			this.disconnect();
+		return this.connectSingle(WS_URLS[this.urlIndex]);
+	}
 
-			const timeout = setTimeout(() => {
-				reject(new Error('WebSocket connection timed out'));
-				this.ws?.close();
-			}, WS_CONNECT_TIMEOUT);
+	private connectSingle(url: string): Promise<void> {
+		return new Promise((resolve, reject) => {
+			this.closeExistingSocket();
 
-			this.ws = new WebSocket(url);
-			this.shouldReconnect = true;
-
-			this.ws.onopen = () => {
-				clearTimeout(timeout);
-				this.reconnectDelay = WS_RECONNECT_DELAY;
-				this.urlIndex = 0;
-				console.log('[in-game-replay] WebSocket connected', url);
+			let settled = false;
+			const safeResolve = () => {
+				if (settled) {
+					return;
+				}
+				settled = true;
 				resolve();
 			};
+			const safeReject = (err: Error) => {
+				if (settled) {
+					return;
+				}
+				settled = true;
+				reject(err);
+			};
 
-			this.ws.onmessage = (event) => {
+			const timeout = setTimeout(() => {
+				safeReject(new Error('WebSocket connection timed out'));
+				this.closeExistingSocket();
+			}, WS_CONNECT_TIMEOUT);
+
+			const ws = new WebSocket(url);
+			this.ws = ws;
+
+			ws.onopen = () => {
+				if (this.ws !== ws) {
+					return;
+				}
+				clearTimeout(timeout);
+				this.reconnectDelay = WS_RECONNECT_DELAY;
+				const idx = (WS_URLS as readonly string[]).indexOf(url);
+				if (idx >= 0) {
+					this.urlIndex = idx;
+				}
+				this.shouldReconnect = true;
+				console.log('[in-game-replay] WebSocket connected', url);
+				safeResolve();
+			};
+
+			ws.onmessage = (event) => {
+				if (this.ws !== ws) {
+					return;
+				}
 				this.handleMessage(event.data);
 			};
 
-			this.ws.onerror = (event) => {
+			ws.onerror = () => {
+				if (this.ws !== ws) {
+					return;
+				}
 				clearTimeout(timeout);
-				console.warn('[in-game-replay] WebSocket error', url, event);
-				reject(new Error('WebSocket connection error'));
+				console.debug('[in-game-replay] WebSocket error', url);
+				safeReject(new Error('WebSocket connection error'));
 			};
 
-			this.ws.onclose = (event) => {
+			ws.onclose = (event) => {
+				if (this.ws !== ws) {
+					return;
+				}
+				clearTimeout(timeout);
 				const code = event?.code ?? '?';
 				const reason = event?.reason || 'unknown';
-				console.log('[in-game-replay] WebSocket closed', url, 'code=', code, 'reason=', reason);
+				console.debug('[in-game-replay] WebSocket closed', url, 'code=', code, 'reason=', reason);
 				this.ws = null;
 				this.status$$.next({ type: 'status', state: 'idle' });
-				this.scheduleReconnect();
+				if (this.shouldReconnect) {
+					this.scheduleReconnect();
+				}
 			};
 		});
+	}
+
+	private closeExistingSocket(): void {
+		if (!this.ws) {
+			return;
+		}
+		const ws = this.ws;
+		this.ws = null;
+		ws.onopen = null;
+		ws.onmessage = null;
+		ws.onerror = null;
+		ws.onclose = null;
+		try {
+			ws.close();
+		} catch {
+			/* ignore */
+		}
 	}
 
 	disconnect(): void {
@@ -284,12 +355,7 @@ export class InGameReplayService extends AbstractFacadeService<InGameReplayServi
 			clearTimeout(this.reconnectTimer);
 			this.reconnectTimer = null;
 		}
-		if (this.ws) {
-			this.ws.onclose = null;
-			this.ws.onerror = null;
-			this.ws.close();
-			this.ws = null;
-		}
+		this.closeExistingSocket();
 	}
 
 	private scheduleReconnect(): void {
