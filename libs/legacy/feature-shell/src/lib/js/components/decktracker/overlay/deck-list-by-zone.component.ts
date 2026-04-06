@@ -15,6 +15,7 @@ import {
 	DeckZoneSection,
 	getCardForCurrentEffect,
 	getProcessedCard,
+	mergeHandCardsForDeckTrackerDisplay,
 	PLAGUES,
 	VisualDeckCard,
 } from '@firestone/game-state';
@@ -388,15 +389,14 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 			),
 		);
 
-		// Hand
-		let cardsForHand = deckState.hand;
-		if (deckState.additionalKnownCardsInHand.length > 0) {
-			cardsForHand = updateWithAdditionalKnownCards(
-				cardsForHand,
-				deckState.additionalKnownCardsInHand,
-				this.allCards,
-			);
-		}
+		const cardsForHand =
+			deckState.additionalKnownCardsInHand.length > 0
+				? mergeHandCardsForDeckTrackerDisplay(
+						deckState.hand,
+						deckState.additionalKnownCardsInHand,
+						this.allCards,
+					)
+				: deckState.hand;
 
 		const handSortingFunction = sortHandByZoneOrder
 			? (a: VisualDeckCard, b: VisualDeckCard) =>
@@ -414,7 +414,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 				'hand',
 				this.i18n.translateString('decktracker.zones.in-hand'),
 				handSortingFunction,
-				deckState.hand.length,
+				cardsForHand.length,
 				null,
 				'in-hand',
 			),

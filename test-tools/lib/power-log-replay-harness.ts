@@ -205,7 +205,6 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	'interstellar-wayfarer': 'interstellar-wayfarer/interstellar-wayfarer.log',
 	'spark-life-shatter': 'spark-life-shatter/spark-life-shatter.log',
 	'sands-time-shatter': 'sands-time-shatter/sands-time-shatter.log',
-	'sands-time-shatter': 'sands-time-shatter/sands-time-shatter.log',
 	azalina: 'azalina/azalina.log',
 	'soldier-onyxia': 'soldier-onyxia/soldier-onyxia.log',
 	'macaw-huntress': 'macaw-huntress/macaw-huntress.log',
@@ -224,6 +223,7 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	'attack-counter-zero': 'attack-counter-zero/attack-counter-zero.log',
 	'libram-divinity': 'libram-divinity/libram-divinity.log',
 	'enthrall-pool': 'enthrall-pool/enthrall-pool.log',
+	'dh-hand-size': 'dh-hand-size/dh-hand-size.log',
 };
 
 /**

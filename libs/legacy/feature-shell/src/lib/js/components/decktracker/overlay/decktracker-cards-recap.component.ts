@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { DeckState } from '@firestone/game-state';
+import { DeckState, getDeckTrackerEffectiveHandSize } from '@firestone/game-state';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 
 @Component({
 	standalone: false,
@@ -41,13 +42,17 @@ export class DeckTrackerCardsRecapComponent {
 
 	@Input() showCardsInDeck = true;
 
+	constructor(private readonly allCards: CardsFacadeService) {}
+
 	@Input() set deck(value: DeckState) {
-		this.cardsInHand = value && value.hand ? value.hand.length : 0;
+		const handSize =
+			value && value.hand ? getDeckTrackerEffectiveHandSize(value, this.allCards) : 0;
+		this.cardsInHand = handSize;
 		if (value && value.cardsLeftInDeck != null) {
 			this.cardsInDeck = value.cardsLeftInDeck;
 		} else if (value && value.isOpponent && value.hero && value.deckList.length > 0 && value.deck.length > 0) {
 			// Our best guess if we don't have the direct info but have a decklist
-			this.cardsInDeck = value.deck.length - value.hand.length;
+			this.cardsInDeck = value.deck.length - handSize;
 		} else {
 			this.cardsInDeck = value && value.deck ? value.deck.length : 0;
 		}

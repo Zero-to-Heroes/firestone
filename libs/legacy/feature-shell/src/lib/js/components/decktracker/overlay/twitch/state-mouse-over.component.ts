@@ -8,7 +8,8 @@ import {
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
-import { GameState } from '@firestone/game-state';
+import { GameState, getDeckTrackerEffectiveHandSize } from '@firestone/game-state';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { TwitchBgsPlayer, TwitchBgsState, TwitchPreferencesService } from '@firestone/twitch/common';
 import { LocalizationFacadeService } from '@legacy-import/src/lib/js/services/localization-facade.service';
@@ -259,6 +260,7 @@ export class StateMouseOverComponent extends AbstractSubscriptionComponent imple
 		private readonly prefs: TwitchPreferencesService,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly highlight: TwitchCardsHighlightFacadeService,
+		private readonly allCards: CardsFacadeService,
 	) {
 		super(cdr);
 	}
@@ -341,13 +343,17 @@ export class StateMouseOverComponent extends AbstractSubscriptionComponent imple
 				this.constructedAnomaly = this._gameState?.matchInfo?.anomalies?.[0];
 				this.playerCardsLeftInDeckTooltip = this.i18n.translateString('twitch.cards-in-deck-player-tooltip', {
 					cardsInDeck: this._gameState?.playerDeck?.deck?.length ?? 0,
-					cardsInHand: this._gameState?.playerDeck?.hand?.length ?? 0,
+					cardsInHand: this._gameState?.playerDeck
+						? getDeckTrackerEffectiveHandSize(this._gameState.playerDeck, this.allCards)
+						: 0,
 				});
 				this.opponentCardsLeftInDeckTooltip = this.i18n.translateString(
 					'twitch.cards-in-deck-opponent-tooltip',
 					{
 						cardsInDeck: this._gameState?.opponentDeck?.deck?.length ?? 0,
-						cardsInHand: this._gameState?.opponentDeck?.hand?.length ?? 0,
+						cardsInHand: this._gameState?.opponentDeck
+							? getDeckTrackerEffectiveHandSize(this._gameState.opponentDeck, this.allCards)
+							: 0,
 					},
 				);
 

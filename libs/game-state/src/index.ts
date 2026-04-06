@@ -31,6 +31,7 @@ export * from './lib/services/cards/global/_registers';
 export * from './lib/services/creation-sequence-info';
 export * from './lib/services/deck-handler.service';
 export * from './lib/services/deck-utils';
+export * from './lib/services/deck-tracker-hand-display';
 export * from './lib/services/deck/ai-deck-service.service';
 export * from './lib/services/deck/constructed-archetype-orchestrator.service';
 export * from './lib/services/deck/constructed-archetype.service';
