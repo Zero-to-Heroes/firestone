@@ -195,6 +195,8 @@ export class CreateCardInDeckParser implements EventParser {
 			case CardIds.ElixirOfVigor:
 			case CardIds.TomeTampering:
 			case CardIds.TomeTampering_CORE_REV_240:
+			// Enthrall (CATA_190t13): "Shuffle five random Legendary Dragons into your deck. They cost (1)."
+			case CardIds.EnthrallToken_CATA_190t13:
 				return 1;
 			case CardIds.ElixirOfVigorTavernBrawl:
 				return 2;
