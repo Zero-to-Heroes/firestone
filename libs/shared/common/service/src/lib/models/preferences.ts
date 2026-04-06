@@ -44,6 +44,12 @@ import type { OutOfCardsToken } from './unfit-pref-model';
 
 export const FORCE_LOCAL_PROP = 'forceLocalProp';
 
+/**
+ * User-identifying or free-text fields that must not appear in exported/imported portable settings JSON.
+ * (OAuth tokens and machine-local UI prefs use {@link FORCE_LOCAL_PROP} instead.)
+ */
+export const EXCLUDE_FROM_PORTABLE_SETTINGS = 'excludeFromPortableSettings';
+
 export class Preferences implements IPreferences {
 	readonly lastUpdateDate: Date | null;
 	readonly id: number = 1;
@@ -90,6 +96,7 @@ export class Preferences implements IPreferences {
 	readonly shareGamesWithVS: boolean = true;
 	readonly setAllNotifications: boolean = true;
 	readonly notificationsPosition: CornerPosition = 'bottom-right';
+	@Reflect.metadata(EXCLUDE_FROM_PORTABLE_SETTINGS, true)
 	readonly contactEmail: string;
 	readonly lastSeenReleaseNotes: string;
 	readonly dontShowNewVersionNotif: boolean = false;
@@ -185,6 +192,7 @@ export class Preferences implements IPreferences {
 	readonly constructedDeckVersions: readonly ConstructedDeckVersions[] = [];
 	readonly constructedDeckArchetypeOverrides: { [deckstring: string]: number | null } = {};
 	readonly constructedStatsTab: ConstructedStatsTab = 'overview';
+	@Reflect.metadata(EXCLUDE_FROM_PORTABLE_SETTINGS, true)
 	readonly constructedDecksSearchString: string;
 	readonly constructedMetaDecksFormatFilter: GameFormat = 'standard';
 	readonly constructedMetaDecksTimeFilter: TimePeriod = 'last-patch';
@@ -687,6 +695,7 @@ export class Preferences implements IPreferences {
 	readonly bgsActiveHeroFilter: string = 'all';
 	readonly bgsActiveMmrGroupFilter: MmrGroupFilterType = 'per-match';
 	readonly bgsActiveCardsCardType: BgsCardTypeFilterType = 'minion';
+	@Reflect.metadata(EXCLUDE_FROM_PORTABLE_SETTINGS, true)
 	readonly bgsActiveCardsSearch: string | null = null;
 	readonly bgsActiveCardsTiers: readonly BgsCardTierFilterType[] = [1];
 	readonly bgsActiveCompsFilter: readonly string[] = [];
@@ -705,6 +714,7 @@ export class Preferences implements IPreferences {
 	// readonly bgsActiveUseAnomalyFilterInHeroSelection: boolean = true;
 	readonly bgsActiveGameMode: 'battlegrounds' | 'battlegrounds-duo' = 'battlegrounds';
 	readonly bgsLeaderboardRegionFilter: 'US' | 'EU' | 'AP' | 'CN' = 'EU';
+	@Reflect.metadata(EXCLUDE_FROM_PORTABLE_SETTINGS, true)
 	readonly bgsLeaderboardPlayerSearch: string;
 	readonly bgsYourStatsTypeFilter: 'hero' | 'trinket' = 'hero';
 	readonly bgsCompositionsListMode: BgsCompositionsListMode = 'exploring';
@@ -791,7 +801,9 @@ export class Preferences implements IPreferences {
 	readonly discordRichPresence: boolean = true;
 	readonly discordRpcEnableCustomInMatchText: boolean = false;
 	readonly discordRpcEnableCustomInGameText: boolean = false;
+	@Reflect.metadata(EXCLUDE_FROM_PORTABLE_SETTINGS, true)
 	readonly discordRpcCustomInGameText: string;
+	@Reflect.metadata(EXCLUDE_FROM_PORTABLE_SETTINGS, true)
 	readonly discordRpcCustomInMatchText: string;
 
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)

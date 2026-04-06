@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import {
+	EXCLUDE_FROM_PORTABLE_SETTINGS,
 	FORCE_LOCAL_PROP,
 	LOG_FILE_BACKEND,
 	type LogFileBackend,
@@ -100,13 +101,12 @@ export class SettingsControllerService extends AbstractFacadeService<SettingsCon
 		const prefs = await this.prefs.getPreferences();
 		const prefsToBeSaved: Partial<Preferences> = { ...prefs };
 		const prefsForMetaData = new Preferences();
-		// Remove all the properties that end with "Position" or that are annotated with
-		// @Reflect.metadata(FORCE_LOCAL_PROP, true)
 		Object.keys(prefsToBeSaved).forEach((prop) => {
-			if (prop.endsWith('Position') || Reflect.getMetadata(FORCE_LOCAL_PROP, prefsForMetaData, prop)) {
+			if (this.excludeKeyFromPortableSettings(prop, prefsForMetaData)) {
 				delete prefsToBeSaved[prop];
 			}
 		});
+		this.stripNestedPortableUserFields(prefsToBeSaved as Record<string, unknown>);
 		const prefsAsString = JSON.stringify(prefsToBeSaved, null, 4);
 		await this.fileBackend.deleteAppFile('settings.json');
 		await this.fileBackend.storeAppFile('settings.json', prefsAsString);
@@ -118,14 +118,13 @@ export class SettingsControllerService extends AbstractFacadeService<SettingsCon
 	private async importSettingsInternal(filePath: string) {
 		const prefsAsString = await this.fileBackend.readTextFile(filePath);
 		const prefs = JSON.parse(prefsAsString);
-		// Now update the prefs with the new ones, excluding the ones with FORCE_LOCAL_PROP metadata
-		// Also exclude the "position" properties
 		const prefsForCheck = new Preferences();
 		Object.keys(prefs).forEach((prop) => {
-			if (Reflect.getMetadata(FORCE_LOCAL_PROP, prefsForCheck, prop) || prop.endsWith('Position')) {
+			if (this.excludeKeyFromPortableSettings(prop, prefsForCheck)) {
 				delete prefs[prop];
 			}
 		});
+		this.stripNestedPortableUserFields(prefs as Record<string, unknown>);
 		const existingPrefs: Preferences = await this.prefs.getPreferences();
 		const prefsToSave = { ...existingPrefs, ...prefs };
 		await this.prefs.savePreferences(prefsToSave);
@@ -158,5 +157,26 @@ export class SettingsControllerService extends AbstractFacadeService<SettingsCon
 	}
 	private async relaunchAppInternal() {
 		this.windowHandler.relaunchApp();
+	}
+
+	private excludeKeyFromPortableSettings(prop: string, prefsTemplate: Preferences): boolean {
+		return (
+			prop.endsWith('Position') ||
+			!!Reflect.getMetadata(FORCE_LOCAL_PROP, prefsTemplate, prop) ||
+			!!Reflect.getMetadata(EXCLUDE_FROM_PORTABLE_SETTINGS, prefsTemplate, prop)
+		);
+	}
+
+	/** Nested user-defined labels (no per-field reflect metadata on `Preferences`). */
+	private stripNestedPortableUserFields(prefs: Record<string, unknown>): void {
+		const groups = prefs['constructedDeckVersions'];
+		if (!Array.isArray(groups)) {
+			return;
+		}
+		for (const group of groups) {
+			if (group && typeof group === 'object' && group !== null && 'groupName' in group) {
+				delete (group as { groupName?: unknown }).groupName;
+			}
+		}
 	}
 }
