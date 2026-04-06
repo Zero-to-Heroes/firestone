@@ -204,6 +204,8 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	'mistah-vistah': 'mistah-vistah/mistah-vistah.log',
 	'interstellar-wayfarer': 'interstellar-wayfarer/interstellar-wayfarer.log',
 	'spark-life-shatter': 'spark-life-shatter/spark-life-shatter.log',
+	'sands-time-shatter': 'sands-time-shatter/sands-time-shatter.log',
+	'sands-time-shatter': 'sands-time-shatter/sands-time-shatter.log',
 	azalina: 'azalina/azalina.log',
 	'soldier-onyxia': 'soldier-onyxia/soldier-onyxia.log',
 	'macaw-huntress': 'macaw-huntress/macaw-huntress.log',

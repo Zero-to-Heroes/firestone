@@ -16,6 +16,7 @@ import { Mimicry } from './cards/mimicry';
 import { RazaTheResealed } from './cards/raza-the-resealed';
 import { RunicAdornment } from './cards/runic-adornment';
 import { Triangulate } from './cards/triangulate';
+import { SHATTER_HAND_PIECE_CREATOR_FALLBACK_CARD_IDS } from './shatter-hand-piece-creator-fallback-card-ids';
 
 export class Oracle {
 	private static PLAGUES: string[] = [
@@ -142,7 +143,7 @@ export class Oracle {
 			return null;
 		}
 		const controller = entity.GetEffectiveController();
-		const shatteredSourceSpells: readonly string[] = [CardIds.SparkOfLife_EDR_872];
+		const shatteredSourceSpells = SHATTER_HAND_PIECE_CREATOR_FALLBACK_CARD_IDS;
 		for (const e of gameState.CurrentEntities.values()) {
 			if (e.GetEffectiveController() !== controller) {
 				continue;
@@ -150,7 +151,10 @@ export class Oracle {
 			if (e.GetTag(GameTag.ZONE) !== (Zone.GRAVEYARD as number)) {
 				continue;
 			}
-			if (!e.CardId?.length || !shatteredSourceSpells.includes(e.CardId)) {
+			if (
+				!e.CardId?.length ||
+				!(shatteredSourceSpells as readonly string[]).includes(e.CardId)
+			) {
 				continue;
 			}
 			return [e.CardId, e.Entity];

@@ -6,6 +6,9 @@ import { tutors } from './cards/card-tutors';
 import { giftCreators } from './cards/gift-creators';
 import { currentEffectsInternal } from './current-effects';
 
+/** Re-export: defined in power-log-parser so `Oracle` can use it without importing game-state (avoids circular deps). */
+export { SHATTER_HAND_PIECE_CREATOR_FALLBACK_CARD_IDS } from '@firestone/power-log-parser';
+
 // Used for cache purposes, only in dev
 export const CARDS_VERSION = '';
 export const isPreReleaseBuild = false;

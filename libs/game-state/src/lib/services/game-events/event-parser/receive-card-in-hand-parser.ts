@@ -13,6 +13,7 @@ import {
 	isCastWhenDrawn,
 	publicCardCreators,
 	specialCasePublicCardCreators,
+	SHATTER_HAND_PIECE_CREATOR_FALLBACK_CARD_IDS,
 } from '../../hs-utils';
 import { revealCardInOpponentDeck } from '../card-reveal';
 import { GameEvent } from '../game-event';
@@ -77,17 +78,23 @@ export class ReceiveCardInHandParser implements EventParser {
 			gameEvent.additionalData.creatorEntityId,
 			deck,
 		);
-		// Shatter hand pieces may omit CREATOR in the log; infer Spark of Life from cards played this match.
+		// Shatter hand pieces may omit CREATOR in the log; infer Spark of Life or Sands of Time from cards played this match (most recent wins).
 		if (!creatorCardId && !isPlayer) {
 			const tags = gameEvent.additionalData?.tags ?? [];
 			const isShattered = tags.some((t) => t.Name === (GameTag.SHATTERED as number) && t.Value === 1);
 			if (isShattered) {
-				const sparkPlayed = [...(deck.cardsPlayedThisMatch ?? [])]
+				const sourcePlayed = [...(deck.cardsPlayedThisMatch ?? [])]
 					.reverse()
-					.find((c) => c.cardId === CardIds.SparkOfLife_EDR_872);
-				if (sparkPlayed) {
-					creatorCardId = CardIds.SparkOfLife_EDR_872;
-					creatorEntityId = sparkPlayed.entityId;
+					.find(
+						(c) =>
+							c.cardId != null &&
+							(SHATTER_HAND_PIECE_CREATOR_FALLBACK_CARD_IDS as readonly string[]).includes(
+								c.cardId,
+							),
+					);
+				if (sourcePlayed) {
+					creatorCardId = sourcePlayed.cardId as CardIds;
+					creatorEntityId = sourcePlayed.entityId;
 				}
 			}
 		}

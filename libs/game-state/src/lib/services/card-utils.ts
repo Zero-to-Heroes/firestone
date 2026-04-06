@@ -208,14 +208,16 @@ export const storeInformationOnCardPlayed = (
  * possible SHATTERED cards (restricted to their class, or to `guessedInfo.cardClasses` from the creator)
  * when hovering over them.
  */
-const getShatteredPossibleCards = (
+export const getShatteredPossibleCards = (
 	deckState: DeckState,
 	allCards: AllCardsService,
 	guessedInfo: GuessedInfo,
 ): readonly string[] => {
-	const cardClasses: readonly CardClass[] = guessedInfo?.cardClasses ?? [
-		deckState.getCurrentClassEnum() ?? CardClass.NEUTRAL,
-	];
+	const cardClasses: readonly CardClass[] = guessedInfo?.canBeAnyCardClass
+		? []
+		: guessedInfo?.cardClasses ?? [
+				deckState.getCurrentClassEnum() ?? CardClass.NEUTRAL,
+			];
 	// // console.debug('cardClasses', cardClasses);
 	// if (!cardClasses.length) {
 	// 	return [];
@@ -256,9 +258,11 @@ export const getShatteredRecombinedPossibleCards = (
 	allCards: AllCardsService,
 	guessedInfo: GuessedInfo,
 ): readonly string[] => {
-	const cardClasses: readonly CardClass[] = guessedInfo?.cardClasses ?? [
-		deckState.getCurrentClassEnum() ?? CardClass.NEUTRAL,
-	];
+	const cardClasses: readonly CardClass[] = guessedInfo?.canBeAnyCardClass
+		? []
+		: guessedInfo?.cardClasses ?? [
+				deckState.getCurrentClassEnum() ?? CardClass.NEUTRAL,
+			];
 	// // console.debug('cardClasses', cardClasses);
 	// if (!cardClasses.length) {
 	// 	return [];
