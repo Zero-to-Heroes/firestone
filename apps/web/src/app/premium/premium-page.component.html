@@ -1,0 +1,50 @@
+<article class="premium-page">
+	<section class="hero">
+		<h1 class="hero-title">{{ hero.title }}</h1>
+		<p class="hero-subtitle">{{ hero.subtitle }}</p>
+		<div class="hero-ctas">
+			<a class="button primary" [href]="downloadUrl" target="_blank" rel="noopener noreferrer">
+				Download Firestone
+			</a>
+		</div>
+		<p class="hero-note">
+			Subscriptions are purchased inside the Firestone app (Premium tab or heart icon). Pricing is shown at
+			checkout in the app.
+		</p>
+	</section>
+
+	<section class="panel summary">
+		<h2 class="section-title">What you get</h2>
+		<ul class="checklist">
+			<li *ngFor="let line of summaryBullets">{{ line }}</li>
+		</ul>
+	</section>
+
+	<section class="panel free-tier">
+		<h2 class="section-title">Free vs Premium</h2>
+		<p class="lead">
+			Firestone stays usable for free. Many overlays include a daily or weekly allowance; Premium unlocks
+			unlimited use for those guides.
+		</p>
+		<ul class="bullet-list">
+			<li *ngFor="let line of freeTierLines">{{ line }}</li>
+		</ul>
+	</section>
+
+	<section class="panel" *ngFor="let section of sections">
+		<h2 class="section-title" [attr.id]="section.id">{{ section.title }}</h2>
+		<ul class="bullet-list">
+			<li *ngFor="let item of section.items">{{ item }}</li>
+		</ul>
+	</section>
+
+	<section class="panel">
+		<h2 class="section-title">How to subscribe</h2>
+		<ol class="steps">
+			<li *ngFor="let step of steps">{{ step }}</li>
+		</ol>
+		<div class="closing-ctas">
+			<a class="button primary" [href]="downloadUrl" target="_blank" rel="noopener noreferrer"> Get Firestone </a>
+		</div>
+	</section>
+</article>

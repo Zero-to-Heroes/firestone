@@ -29,6 +29,11 @@ export const routes: Routes = [
 			{ path: '', redirectTo: 'battlegrounds/heroes', pathMatch: 'full' },
 			{ path: 'login', component: LoginComponent },
 			{ path: 'auth-callback', component: AuthCallbackComponent },
+			{
+				path: 'premium',
+				loadComponent: () =>
+					import('./premium/premium-page.component').then((m) => m.PremiumPageComponent),
+			},
 			...transformRoutesForChildren(sharedRoutes),
 			// Wildcard route - must be last
 			{ path: '**', redirectTo: 'battlegrounds/heroes', pathMatch: 'full' },

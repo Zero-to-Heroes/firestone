@@ -63,6 +63,36 @@
 		}
 	}
 
+	.header-right {
+		display: flex;
+		align-items: center;
+		gap: 14px;
+		height: 100%;
+	}
+
+	.header-premium-link {
+		color: var(--default-title-color);
+		font-weight: 600;
+		font-size: 14px;
+		text-decoration: none;
+		white-space: nowrap;
+		padding: 6px 10px;
+		border-radius: 6px;
+		transition:
+			background 0.2s ease,
+			color 0.2s ease;
+
+		&:hover {
+			background: rgba(255, 255, 255, 0.08);
+			color: var(--default-text-color-bright);
+		}
+
+		&.active {
+			text-decoration: underline;
+			text-underline-offset: 3px;
+		}
+	}
+
 	.header-left {
 		display: flex;
 		align-items: center;
@@ -239,6 +269,10 @@
 	}
 
 	// Sub-menu Items
+	.premium-back-to-stats {
+		margin-left: 4px;
+	}
+
 	.sub-menu {
 		display: flex;
 		align-items: center;
@@ -364,6 +398,12 @@
 		display: flex;
 		flex-direction: column;
 		gap: 0; // Remove gap since we're managing spacing with margins on items
+	}
+
+	.premium-mobile-entry {
+		margin-top: 0;
+		margin-bottom: 8px;
+		border: 1px solid rgba(255, 185, 72, 0.35);
 	}
 
 	.mobile-nav-item {

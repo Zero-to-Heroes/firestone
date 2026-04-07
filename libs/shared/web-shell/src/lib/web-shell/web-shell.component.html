@@ -6,6 +6,7 @@
 
 				<!-- Desktop Navigation with Dropdown -->
 				<div class="desktop-nav">
+					<ng-container *ngIf="!isPremiumPage; else premiumDesktopNav">
 					<!-- Main Section Dropdown -->
 					<div class="section-dropdown" #dropdownContainer>
 						<button class="dropdown-trigger" (click)="toggleDropdown()" [class.active]="isDropdownOpen">
@@ -43,10 +44,24 @@
 							{{ subItem.label }}
 						</button>
 					</div>
+					</ng-container>
+					<ng-template #premiumDesktopNav>
+						<a routerLink="/battlegrounds/heroes" class="sub-menu-item premium-back-to-stats">{{ statsHomeLabel }}</a>
+					</ng-template>
 				</div>
 			</div>
 
-			<web-download-button class="download-button"></web-download-button>
+			<div class="header-right">
+				<a
+					routerLink="/premium"
+					routerLinkActive="active"
+					[routerLinkActiveOptions]="{ exact: true }"
+					class="header-premium-link"
+				>
+					Premium
+				</a>
+				<web-download-button class="download-button"></web-download-button>
+			</div>
 
 			<!-- Mobile Hamburger Button -->
 			<button class="hamburger-btn" (click)="toggleMobileMenu()" [class.active]="isMobileMenuOpen">
@@ -60,6 +75,15 @@
 	<!-- Mobile Navigation Overlay -->
 	<nav class="mobile-nav" [class.open]="isMobileMenuOpen">
 		<div class="mobile-nav-content">
+			<button
+				class="mobile-nav-item main-section premium-mobile-entry"
+				routerLink="/premium"
+				routerLinkActive="active"
+				[routerLinkActiveOptions]="{ exact: true }"
+				(click)="closeMobileMenu()"
+			>
+				<span class="nav-label">Premium</span>
+			</button>
 			<ng-container *ngFor="let section of navigationSections">
 				<!-- Main Section -->
 				<button
