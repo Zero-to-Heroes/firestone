@@ -21,10 +21,30 @@ export const reverseSpellSelector = (
 
 	const matchingCardIds: CardIds[] = [];
 
+	// COST_MORE_0 + HAS_MECHANIC_GENERATES_SPELL + SHADOW (1 cards)
+	if (refCard.cost != null && refCard.cost > 0 && refCard.mechanics?.includes('GENERATES_SPELL') && refCard.spellSchool?.toUpperCase() === 'SHADOW') {
+		matchingCardIds.push(
+			CardIds.TamsinRoame_BAR_918
+		);
+	}
+
 	// COST_MORE_0 + SHADOW + SPELL (1 cards)
 	if (refCard.cost != null && refCard.cost > 0 && refCard.spellSchool?.toUpperCase() === 'SHADOW' && refCard.type?.toUpperCase() === 'SPELL') {
 		matchingCardIds.push(
 			CardIds.TamsinRoame_BAR_918
+		);
+	}
+
+	// ARCANE + HAS_MECHANIC_GENERATES_SPELL (7 cards)
+	if (refCard.spellSchool?.toUpperCase() === 'ARCANE' && refCard.mechanics?.includes('GENERATES_SPELL')) {
+		matchingCardIds.push(
+			CardIds.AzureQueenSindragosa_AzureKingMalygosToken_TIME_852t1,
+			CardIds.AzureQueenSindragosa_TIME_852,
+			CardIds.LadyNazjar_TID_709,
+			CardIds.MagistersApprentice,
+			CardIds.StarlightReactor_GDB_108,
+			CardIds.UnstableMagicTavernBrawl,
+			CardIds.Vexallus
 		);
 	}
 
@@ -42,6 +62,14 @@ export const reverseSpellSelector = (
 			CardIds.StarlightReactor_GDB_108,
 			CardIds.UnstableMagicTavernBrawl,
 			CardIds.Vexallus
+		);
+	}
+
+	// COST_EQUAL_1 + HAS_MECHANIC_GENERATES_SPELL (2 cards)
+	if (refCard.cost === 1 && refCard.mechanics?.includes('GENERATES_SPELL')) {
+		matchingCardIds.push(
+			CardIds.Gazlowe,
+			CardIds.NiriOfTheCrater_TLC_836
 		);
 	}
 
@@ -84,6 +112,20 @@ export const reverseSpellSelector = (
 		);
 	}
 
+	// COST_LESS_5 + SPELL (1 cards)
+	if (refCard.cost != null && refCard.cost < 5 && refCard.type?.toUpperCase() === 'SPELL') {
+		matchingCardIds.push(
+			CardIds.CracklingCloudstrider_CATA_563
+		);
+	}
+
+	// COST_MORE_1 + HAS_MECHANIC_GENERATES_SPELL (1 cards)
+	if (refCard.cost != null && refCard.cost > 1 && refCard.mechanics?.includes('GENERATES_SPELL')) {
+		matchingCardIds.push(
+			CardIds.PlaguebringerTavernBrawl
+		);
+	}
+
 	// COST_MORE_1 + SPELL (1 cards)
 	if (refCard.cost != null && refCard.cost > 1 && refCard.type?.toUpperCase() === 'SPELL') {
 		matchingCardIds.push(
@@ -104,6 +146,13 @@ export const reverseSpellSelector = (
 		);
 	}
 
+	// COST_MORE_5 + HAS_MECHANIC_GENERATES_SPELL (1 cards)
+	if (refCard.cost != null && refCard.cost > 5 && refCard.mechanics?.includes('GENERATES_SPELL')) {
+		matchingCardIds.push(
+			CardIds.GreySageParrot
+		);
+	}
+
 	// COST_MORE_5 + SPELL (1 cards)
 	if (refCard.cost != null && refCard.cost > 5 && refCard.type?.toUpperCase() === 'SPELL') {
 		matchingCardIds.push(
@@ -111,7 +160,18 @@ export const reverseSpellSelector = (
 		);
 	}
 
-	// FEL + SPELL (13 cards)
+	// FEL + HAS_MECHANIC_GENERATES_SPELL (5 cards)
+	if (refCard.spellSchool?.toUpperCase() === 'FEL' && refCard.mechanics?.includes('GENERATES_SPELL')) {
+		matchingCardIds.push(
+			CardIds.FelfireBlaze_FIR_904,
+			CardIds.HeraldOfChaos,
+			CardIds.ImpCredibleTrousersTavernBrawl,
+			CardIds.PopgarThePutrid_WW_091,
+			CardIds.WitherTheWeakTavernBrawl
+		);
+	}
+
+	// FEL + SPELL (16 cards)
 	if (refCard.spellSchool?.toUpperCase() === 'FEL' && refCard.type?.toUpperCase() === 'SPELL') {
 		matchingCardIds.push(
 			CardIds.FelfireBlaze_FIR_904,
@@ -124,15 +184,36 @@ export const reverseSpellSelector = (
 			CardIds.ImpCredibleTrousersTavernBrawl,
 			CardIds.JaceDarkweaver,
 			CardIds.LoadTheChamber_WW_409,
+			CardIds.MalevolentMutant_CATA_697,
+			CardIds.NespirahEnthralled_CATA_527,
 			CardIds.PopgarThePutrid_WW_091,
+			CardIds.RavenousFelfisher_CATA_529,
 			CardIds.Scorchreaver_FIR_952,
 			CardIds.WitherTheWeakTavernBrawl
 		);
 	}
 
-	// FIRE + SPELL (17 cards)
+	// FIRE + HAS_MECHANIC_GENERATES_SPELL (11 cards)
+	if (refCard.spellSchool?.toUpperCase() === 'FIRE' && refCard.mechanics?.includes('GENERATES_SPELL')) {
+		matchingCardIds.push(
+			CardIds.FirekeepersIdolTavernBrawl,
+			CardIds.FlameWavesTavernBrawl,
+			CardIds.FlamesOfTheKirinTorTavernBrawl,
+			CardIds.GrandMagusAntonidas,
+			CardIds.HotStreak,
+			CardIds.InfernoHerald_FIR_913,
+			CardIds.LadyNazjar_TID_709,
+			CardIds.MechanizedMagma_TLC_224,
+			CardIds.RadianceOfAzshara_TSC_635,
+			CardIds.SunfuryChampion,
+			CardIds.Thoribelore
+		);
+	}
+
+	// FIRE + SPELL (18 cards)
 	if (refCard.spellSchool?.toUpperCase() === 'FIRE' && refCard.type?.toUpperCase() === 'SPELL') {
 		matchingCardIds.push(
+			CardIds.EruptingVolcano_CATA_584,
 			CardIds.FirekeepersIdolTavernBrawl,
 			CardIds.FlameWavesTavernBrawl,
 			CardIds.FlamesOfTheKirinTorTavernBrawl,
@@ -150,6 +231,18 @@ export const reverseSpellSelector = (
 			CardIds.Thoribelore,
 			CardIds.VolcanicThrasher_TLC_223,
 			CardIds.WrathspineEnchanter
+		);
+	}
+
+	// FROST + HAS_MECHANIC_GENERATES_SPELL (6 cards)
+	if (refCard.spellSchool?.toUpperCase() === 'FROST' && refCard.mechanics?.includes('GENERATES_SPELL')) {
+		matchingCardIds.push(
+			CardIds.GlacialDownpourTavernBrawl,
+			CardIds.IceRevenant,
+			CardIds.LadyNazjar_TID_709,
+			CardIds.RadianceOfAzshara_TSC_635,
+			CardIds.RambunctiousStuffy_TOY_821,
+			CardIds.Rimetongue
 		);
 	}
 
@@ -171,6 +264,64 @@ export const reverseSpellSelector = (
 			CardIds.SorcerersGambit,
 			CardIds.WatercolorArtist_TOY_376,
 			CardIds.WrathspineEnchanter
+		);
+	}
+
+	// HAS_MECHANIC_GENERATES_SPELL + HOLY (15 cards)
+	if (refCard.mechanics?.includes('GENERATES_SPELL') && refCard.spellSchool?.toUpperCase() === 'HOLY') {
+		matchingCardIds.push(
+			CardIds.FlickeringLightbot_FlickeringLightbotToken_MIS_918t,
+			CardIds.FlickeringLightbot_MIS_918,
+			CardIds.GladesongSiren_TLC_819,
+			CardIds.GuardianLightTavernBrawl,
+			CardIds.HeraldOfLight,
+			CardIds.HolyCowboy_WW_335,
+			CardIds.HolyGlowsticks_MIS_709,
+			CardIds.InvigoratingLightTavernBrawl,
+			CardIds.KureTheLightBeyond_GDB_442,
+			CardIds.ReachEquilibrium_CleanseTheShadowToken_TLC_817t,
+			CardIds.ReachEquilibrium_TLC_817,
+			CardIds.StarlightGroove,
+			CardIds.TheGardensGrace,
+			CardIds.VeteranWarmedic,
+			CardIds.VeteranWarmedic_CORE_BAR_878
+		);
+	}
+
+	// HAS_MECHANIC_GENERATES_SPELL + NATURE (9 cards)
+	if (refCard.mechanics?.includes('GENERATES_SPELL') && refCard.spellSchool?.toUpperCase() === 'NATURE') {
+		matchingCardIds.push(
+			CardIds.DeviateDreadfang,
+			CardIds.GroveShaper_EDR_271,
+			CardIds.HeraldOfNature,
+			CardIds.IronRootsTavernBrawl,
+			CardIds.MendingPoolsTavernBrawl,
+			CardIds.PrimordialOverseer_TIME_213,
+			CardIds.RadianceOfAzshara_TSC_635,
+			CardIds.SpreadingSaplingsTavernBrawl,
+			CardIds.TopiorTheShrubbagazzor
+		);
+	}
+
+	// HAS_MECHANIC_GENERATES_SPELL + PROTOSS (2 cards)
+	if (refCard.mechanics?.includes('GENERATES_SPELL') && refCard.mechanics?.includes('PROTOSS')) {
+		matchingCardIds.push(
+			CardIds.Colossus_SC_758,
+			CardIds.ShieldBattery_SC_759
+		);
+	}
+
+	// HAS_MECHANIC_GENERATES_SPELL + SHADOW (8 cards)
+	if (refCard.mechanics?.includes('GENERATES_SPELL') && refCard.spellSchool?.toUpperCase() === 'SHADOW') {
+		matchingCardIds.push(
+			CardIds.EerieStoneTavernBrawl,
+			CardIds.GladesongSiren_TLC_819,
+			CardIds.HeraldOfShadows,
+			CardIds.KaraTheDarkStar_GDB_127,
+			CardIds.ReachEquilibrium_CorruptTheLightToken_TLC_817t2,
+			CardIds.ReachEquilibrium_TLC_817,
+			CardIds.ShadowclothNeedle,
+			CardIds.StaffOfPainTavernBrawl
 		);
 	}
 
@@ -205,7 +356,7 @@ export const reverseSpellSelector = (
 		);
 	}
 
-	// HOLY + SPELL (20 cards)
+	// HOLY + SPELL (21 cards)
 	if (refCard.spellSchool?.toUpperCase() === 'HOLY' && refCard.type?.toUpperCase() === 'SPELL') {
 		matchingCardIds.push(
 			CardIds.CarielRoame_BAR_902,
@@ -227,7 +378,8 @@ export const reverseSpellSelector = (
 			CardIds.SpiritGuide_CORE_AV_328,
 			CardIds.StarlightGroove,
 			CardIds.TheGardensGrace,
-			CardIds.VeteranWarmedic
+			CardIds.VeteranWarmedic,
+			CardIds.VeteranWarmedic_CORE_BAR_878
 		);
 	}
 
@@ -312,6 +464,140 @@ export const reverseSpellSelector = (
 		);
 	}
 
+	// HAS_MECHANIC_GENERATES_SPELL (128 cards)
+	if (refCard.mechanics?.includes('GENERATES_SPELL')) {
+		matchingCardIds.push(
+			CardIds.AncientKrakenbane,
+			CardIds.AnimatedMoonwell_EDR_254,
+			CardIds.ArcaneArtificer,
+			CardIds.ArcaneArtificerCore,
+			CardIds.ArchmageAntonidas,
+			CardIds.ArchmageAntonidasLegacy,
+			CardIds.ArchmageAntonidas_CORE_EX1_559,
+			CardIds.ArchmageKalec_CATA_458,
+			CardIds.ArchmageVargoth,
+			CardIds.ArrowSmith,
+			CardIds.BabaNaga,
+			CardIds.Bloodbloom,
+			CardIds.BrollBearmantle_EDR_853,
+			CardIds.CardGrader_TOY_054,
+			CardIds.ChattyMacaw_VAC_407,
+			CardIds.ClockworkAssistantTavernBrawl_PVPDR_SCH_Active48,
+			CardIds.ClockworkAssistantTavernBrawl_PVPDR_Toki_T5,
+			CardIds.ClockworkAssistant_GILA_907,
+			CardIds.ClockworkAssistant_ONY_005ta11,
+			CardIds.CoilskarCommander,
+			CardIds.CommanderSivara_TSC_087,
+			CardIds.Conductivity_YOG_522,
+			CardIds.ContaminatedLasher_YOG_528,
+			CardIds.CosmicKeyboard,
+			CardIds.CrushclawEnforcer,
+			CardIds.DarkmoonMagician_MIS_303,
+			CardIds.Deathchiller_CORE_RLK_083,
+			CardIds.Deathchiller_RLK_083,
+			CardIds.DoubleTime,
+			CardIds.DozingKelpkeeper,
+			CardIds.ExarchHataaru_TheGalaxysLensToken_GDB_136t,
+			CardIds.FarseerNobundo_GDB_447,
+			CardIds.FarseerWo_TIME_013,
+			CardIds.FelscaleEvoker,
+			CardIds.Flamewaker,
+			CardIds.Flamewaker_TUTR_BRM_002,
+			CardIds.FragmentOfNothing_END_026,
+			CardIds.GlacialAdvance_RLK_512,
+			CardIds.GolgannethTheThunderer,
+			CardIds.GuidingFigure_GDB_106,
+			CardIds.HallazealTheAscended,
+			CardIds.HallazealTheAscended_WON_336,
+			CardIds.Handmaiden,
+			CardIds.HedraTheHeretic_TSC_658,
+			CardIds.HighAbbessAlura,
+			CardIds.IdolsOfEluneTavernBrawl,
+			CardIds.InkmasterSolia,
+			CardIds.JungleJammer,
+			CardIds.KhadgarsScryingOrb,
+			CardIds.KingKrush_KingsDecree_THD_012p,
+			CardIds.KingTide_VAC_524,
+			CardIds.KolkarPackRunner,
+			CardIds.LadyStheno_TSC_218,
+			CardIds.LearnDraconic,
+			CardIds.LightOfTheNewMoon_FIR_918,
+			CardIds.LinaShopManager_TOY_531,
+			CardIds.LockAndLoad_AT_061,
+			CardIds.LockAndLoad_CORE_AT_061,
+			CardIds.LockAndLoad_WON_023,
+			CardIds.LorewalkerChoLegacy,
+			CardIds.LorewalkerChoVanilla,
+			CardIds.LorewalkerCho_CORE_EX1_100,
+			CardIds.LoveEverlasting,
+			CardIds.ManaCyclone,
+			CardIds.MantleShaper_DEEP_004,
+			CardIds.MaroonedArchmage_VAC_435,
+			CardIds.MarshlandThresher_TLC_256,
+			CardIds.Marshspawn_BT_115,
+			CardIds.Marshspawn_CORE_BT_115,
+			CardIds.MeddlesomeServant_YOG_518,
+			CardIds.MedivhTheHallowed_AtieshTheGreatstaffToken_TIME_890t,
+			CardIds.MistahVistah_VAC_519,
+			CardIds.MurkwaterScribe,
+			CardIds.NagaGiant,
+			CardIds.NordrassilDruid,
+			CardIds.NordrassilDruidLegacy,
+			CardIds.NostalgicInitiate_NostalgicInitiateToken_TOY_340t1,
+			CardIds.NostalgicInitiate_TOY_340,
+			CardIds.OopsAllSpellsTavernBrawl,
+			CardIds.ParchedDesperado_WW_407,
+			CardIds.PartyPortalTavernBrawl_PVPDR_SCH_Active08,
+			CardIds.PreparationCore,
+			CardIds.PreparationLegacy,
+			CardIds.PreparationVanilla,
+			CardIds.PriestessValishj,
+			CardIds.PrisonBreaker_YOG_411,
+			CardIds.Pyrotechnician,
+			CardIds.QueenAzshara_TSC_641,
+			CardIds.Queensguard,
+			CardIds.RaidTheSkyTemple,
+			CardIds.RajNazjan,
+			CardIds.RayllaSandSculptor_VAC_424,
+			CardIds.RhoninsScryingOrbTavernBrawl,
+			CardIds.RimescaleSiren,
+			CardIds.RingOfRefreshmentTavernBrawl,
+			CardIds.RitualOfTheNewMoon_EDR_461,
+			CardIds.SaroniteShambler_YOG_521,
+			CardIds.SethekkVeilweaver,
+			CardIds.ShadowOfDemise,
+			CardIds.ShadowOfDemise_CORE_RLK_567,
+			CardIds.ShatariCloakfield_GDB_103,
+			CardIds.ShirvallahTheTiger,
+			CardIds.SlitheringDeathscale,
+			CardIds.SpectralTrainee,
+			CardIds.Spellcoiler,
+			CardIds.SpitelashSiren,
+			CardIds.SunstridersCrownTavernBrawl,
+			CardIds.SwiftscaleTrickster,
+			CardIds.TheFistOfRaDen,
+			CardIds.TheGalacticProjectionOrb_TOY_378,
+			CardIds.TidePools_VAC_522,
+			CardIds.TidepoolPupil_VAC_304,
+			CardIds.TwinbowTerrorcoil,
+			CardIds.Tyrande_EDR_464,
+			CardIds.UmbralOwl,
+			CardIds.UmbralOwl_CORE_DMF_060,
+			CardIds.ViciousSlitherspear_CORE_TSC_827,
+			CardIds.ViciousSlitherspear_TSC_827,
+			CardIds.Whirlweaver,
+			CardIds.WickedWitchdoctor,
+			CardIds.WickedWitchdoctor_WON_083,
+			CardIds.WildPyromancerCore,
+			CardIds.WildPyromancerLegacy,
+			CardIds.WildPyromancerVanilla,
+			CardIds.WishOfTheNewMoon_EDR_460,
+			CardIds.YoggSaronHopesEnd_OG_134,
+			CardIds.YoggSaronMasterOfFate,
+			CardIds.YsielWindsinger
+		);
+	}
+
 	// HAS_MECHANIC_SECRET (25 cards)
 	if (refCard.mechanics?.includes('SECRET')) {
 		matchingCardIds.push(
@@ -370,218 +656,99 @@ export const reverseSpellSelector = (
 		);
 	}
 
-	// SPELL (210 cards)
+	// SPELL (91 cards)
 	if (refCard.type?.toUpperCase() === 'SPELL') {
 		matchingCardIds.push(
 			CardIds.AdvancedTargetingMonocle,
-			CardIds.AncientKrakenbane,
-			CardIds.AnimatedMoonwell_EDR_254,
-			CardIds.ArcaneArtificer,
-			CardIds.ArcaneArtificerCore,
-			CardIds.ArchmageAntonidas,
-			CardIds.ArchmageAntonidasLegacy,
-			CardIds.ArchmageAntonidas_CORE_EX1_559,
-			CardIds.ArchmageVargoth,
 			CardIds.ArkoniteRevelation_GDB_852,
-			CardIds.ArrowSmith,
 			CardIds.AudioSplitter,
-			CardIds.BabaNaga,
 			CardIds.BalindaStonehearth,
 			CardIds.BarbaricSorceress,
 			CardIds.BargainBin_MIS_105,
 			CardIds.BenevolentBanker_WW_384,
 			CardIds.BlindeyeSharpshooter_WW_402,
-			CardIds.Bloodbloom,
 			CardIds.BookOfSpecters,
-			CardIds.BrollBearmantle_EDR_853,
 			CardIds.CactusCutter_WW_327,
-			CardIds.CardGrader_TOY_054,
-			CardIds.ChattyMacaw_VAC_407,
+			CardIds.ChaosSupplicant_CATA_786,
 			CardIds.ChiaDrake_Cultivate_TOY_801a,
 			CardIds.ChiaDrake_TOY_801,
 			CardIds.ClearancePromoter_TOY_390,
 			CardIds.ClericOfAnshe,
 			CardIds.ClericOfScales,
-			CardIds.ClockworkAssistantTavernBrawl_PVPDR_SCH_Active48,
-			CardIds.ClockworkAssistantTavernBrawl_PVPDR_Toki_T5,
-			CardIds.ClockworkAssistant_GILA_907,
-			CardIds.ClockworkAssistant_ONY_005ta11,
-			CardIds.CoilskarCommander,
-			CardIds.CommanderSivara_TSC_087,
 			CardIds.ConchsCall,
-			CardIds.Conductivity_YOG_522,
+			CardIds.ConjurationSpecialist_CATA_979,
 			CardIds.ConjuredBookkeeper_TLC_226,
-			CardIds.ContaminatedLasher_YOG_528,
-			CardIds.CosmicKeyboard,
 			CardIds.Cosmonaut_GDB_443,
-			CardIds.CrushclawEnforcer,
-			CardIds.DarkmoonMagician_MIS_303,
-			CardIds.Deathchiller_CORE_RLK_083,
-			CardIds.Deathchiller_RLK_083,
 			CardIds.DeckOfLunacy,
 			CardIds.DeepwaterEvoker,
 			CardIds.DoorOfShadows,
 			CardIds.DoorOfShadows_DoorOfShadowsToken,
-			CardIds.DoubleTime,
-			CardIds.DozingKelpkeeper,
 			CardIds.DragonsFury,
 			CardIds.DryscaleDeputy_WW_383,
 			CardIds.ElementalAllies,
 			CardIds.EnergyShaper,
-			CardIds.ExarchHataaru_TheGalaxysLensToken_GDB_136t,
-			CardIds.FarseerNobundo_GDB_447,
-			CardIds.FarseerWo_TIME_013,
-			CardIds.FelscaleEvoker,
 			CardIds.Fetch_TOY_352,
-			CardIds.Flamewaker,
-			CardIds.Flamewaker_TUTR_BRM_002,
 			CardIds.Flowrider,
-			CardIds.FragmentOfNothing_END_026,
-			CardIds.GlacialAdvance_RLK_512,
 			CardIds.GlowflySwarm,
-			CardIds.GolgannethTheThunderer,
 			CardIds.GreenThumbGardener,
 			CardIds.GuffRunetotem_BAR_720,
-			CardIds.GuidingFigure_GDB_106,
 			CardIds.GuitarSoloist,
-			CardIds.HallazealTheAscended,
-			CardIds.HallazealTheAscended_WON_336,
-			CardIds.Handmaiden,
 			CardIds.HarnessTheElementsTavernBrawl,
-			CardIds.HedraTheHeretic_TSC_658,
-			CardIds.HighAbbessAlura,
 			CardIds.Hullbreaker,
 			CardIds.IcebloodTower,
-			CardIds.IdolsOfEluneTavernBrawl,
 			CardIds.Illuminate,
 			CardIds.IncantersFlow,
-			CardIds.InkmasterSolia,
 			CardIds.JotunTheEternal,
-			CardIds.JungleJammer,
-			CardIds.KhadgarsScryingOrb,
 			CardIds.Kindle_DALA_911,
 			CardIds.Kindle_ULDA_911,
-			CardIds.KingKrush_KingsDecree_THD_012p,
 			CardIds.KingPhaoris,
-			CardIds.KingTide_VAC_524,
 			CardIds.KnightOfAnointment,
-			CardIds.KolkarPackRunner,
 			CardIds.LadyAnacondra_WC_006,
-			CardIds.LadyStheno_TSC_218,
 			CardIds.LadyVashj_VashjPrimeToken,
-			CardIds.LearnDraconic,
 			CardIds.LifebindersGift,
 			CardIds.LifebindersGrowth,
-			CardIds.LightOfTheNewMoon_FIR_918,
-			CardIds.LinaShopManager_TOY_531,
-			CardIds.LockAndLoad_AT_061,
-			CardIds.LockAndLoad_CORE_AT_061,
-			CardIds.LockAndLoad_WON_023,
-			CardIds.LorewalkerChoLegacy,
-			CardIds.LorewalkerChoVanilla,
-			CardIds.LorewalkerCho_CORE_EX1_100,
-			CardIds.LoveEverlasting,
 			CardIds.MagathaBaneOfMusic,
 			CardIds.MagisterUnchainedTavernBrawlToken,
 			CardIds.MalygosTheSpellweaverCore,
-			CardIds.ManaCyclone,
-			CardIds.MantleShaper_DEEP_004,
-			CardIds.MaroonedArchmage_VAC_435,
-			CardIds.MarshlandThresher_TLC_256,
-			CardIds.Marshspawn_BT_115,
-			CardIds.Marshspawn_CORE_BT_115,
-			CardIds.MeddlesomeServant_YOG_518,
-			CardIds.MistahVistah_VAC_519,
-			CardIds.MurkwaterScribe,
-			CardIds.NagaGiant,
+			CardIds.MalygosTheSpellweaver_LEG_CS3_034,
 			CardIds.NightshadeBud,
 			CardIds.NightshadeBud_CORE_REV_311,
-			CardIds.NostalgicInitiate_NostalgicInitiateToken_TOY_340t1,
-			CardIds.NostalgicInitiate_TOY_340,
-			CardIds.OopsAllSpellsTavernBrawl,
 			CardIds.PalmReading,
-			CardIds.ParchedDesperado_WW_407,
-			CardIds.PartyPortalTavernBrawl_PVPDR_SCH_Active08,
 			CardIds.PortalmancerSkyla_WORK_063,
 			CardIds.PowerWordFortitude,
-			CardIds.PreparationCore,
-			CardIds.PreparationLegacy,
-			CardIds.PreparationVanilla,
-			CardIds.PriestessValishj,
 			CardIds.PrimordialProtector_BAR_042,
-			CardIds.PrisonBreaker_YOG_411,
-			CardIds.Pyrotechnician,
-			CardIds.QueenAzshara_TSC_641,
-			CardIds.Queensguard,
-			CardIds.RaidTheSkyTemple,
-			CardIds.RajNazjan,
-			CardIds.RayllaSandSculptor_VAC_424,
 			CardIds.Reforestation_AidOfTheForest_EDR_843a,
 			CardIds.Reforestation_EDR_843,
 			CardIds.Reforestation_ReforestationToken_EDR_843t1,
 			CardIds.RefreshingSpringWater,
 			CardIds.Rewind_ETC_532,
-			CardIds.RhoninsScryingOrbTavernBrawl,
 			CardIds.RimefangSwordCore,
 			CardIds.RimefangSword_LEG_RLK_710,
-			CardIds.RimescaleSiren,
-			CardIds.RingOfRefreshmentTavernBrawl,
-			CardIds.RitualOfTheNewMoon_EDR_461,
 			CardIds.RobesOfShrinkingTavernBrawl,
 			CardIds.RuleModifier_SpreadOfCorruptionToken_TTN_002t45,
-			CardIds.SaroniteShambler_YOG_521,
 			CardIds.ScrollSavvy,
-			CardIds.SethekkVeilweaver,
-			CardIds.ShadowOfDemise,
 			CardIds.ShadowVisions,
-			CardIds.ShatariCloakfield_GDB_103,
 			CardIds.SheldrasMoontree,
-			CardIds.ShirvallahTheTiger,
 			CardIds.ShiveringSorceress,
 			CardIds.SkulkingGeist_CORE_ICC_701,
 			CardIds.SkulkingGeist_ICC_701,
-			CardIds.SlitheringDeathscale,
-			CardIds.SpectralTrainee,
-			CardIds.Spellcoiler,
 			CardIds.SpitefulSummoner,
-			CardIds.SpitelashSiren,
 			CardIds.Starscryer,
-			CardIds.SunstridersCrownTavernBrawl,
 			CardIds.Surfalopod_VAC_443,
-			CardIds.SwiftscaleTrickster,
 			CardIds.Swindle,
 			CardIds.TangledWrath,
-			CardIds.TheFistOfRaDen,
 			CardIds.TheStoneOfJordanTavernBrawlToken,
 			CardIds.TheUpperHand,
 			CardIds.ThriveInTheShadowsCore,
-			CardIds.TidePools_VAC_522,
-			CardIds.TidepoolPupil_VAC_304,
 			CardIds.TimewayWanderer,
 			CardIds.TortollanPilgrim,
 			CardIds.Triangulate_GDB_451,
 			CardIds.TrolleyProblem_WW_436,
-			CardIds.TwinbowTerrorcoil,
-			CardIds.Tyrande_EDR_464,
-			CardIds.UmbralOwl,
-			CardIds.UmbralOwl_CORE_DMF_060,
 			CardIds.UnderTheSea_VAC_431,
 			CardIds.UngoroBrochure_DalaranBrochureToken_WORK_050t,
 			CardIds.Ursol_EDR_259,
-			CardIds.ViciousSlitherspear_CORE_TSC_827,
-			CardIds.ViciousSlitherspear_TSC_827,
 			CardIds.VoidFlayer,
 			CardIds.VolumeUp,
-			CardIds.Whirlweaver,
-			CardIds.WickedWitchdoctor,
-			CardIds.WickedWitchdoctor_WON_083,
-			CardIds.WildPyromancerCore,
-			CardIds.WildPyromancerLegacy,
-			CardIds.WildPyromancerVanilla,
-			CardIds.WishOfTheNewMoon_EDR_460,
-			CardIds.YoggSaronHopesEnd_OG_134,
-			CardIds.YoggSaronMasterOfFate,
-			CardIds.YsielWindsinger,
 			CardIds.Zuljin
 		);
 	}

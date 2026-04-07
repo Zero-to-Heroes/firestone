@@ -1,7 +1,7 @@
 {
-  "totalOriginal": 1715,
-  "totalProcessed": 1603,
-  "totalMissing": 108,
+  "totalOriginal": 1783,
+  "totalProcessed": 1668,
+  "totalMissing": 111,
   "missingCards": [
     "AbyssalDepths",
     "AstralVigilant_GDB_461",
@@ -47,13 +47,15 @@
     "UsherOfSouls",
     "UsherOfSouls_WON_322",
     "CustomsEnforcer_VAC_440",
+    "Deathlord",
+    "DeathwingWorldbreaker_CATA_190h",
     "DefenseAttorneyNathanos",
     "Drekthar_AV_100",
     "Endgame_TOY_886",
     "Fatebreaker_TIME_028",
     "FateSplitter",
     "FiremancerFlurgl",
-    "TheGalacticProjectionOrb_TOY_378",
+    "GennCursedKing_CATA_615",
     "GhoulishAlchemist",
     "GrandArchivist",
     "GrandMagisterRommath",
@@ -98,6 +100,7 @@
     "StaffOfRenewalTavernBrawl",
     "StarlightWhelp",
     "SunwingSquawker",
+    "SylvanassTriumph_CATA_557",
     "SwinetuskShank",
     "SymphonyOfSins_MovementOfPrideToken",
     "TaelanFordringCore",
@@ -112,5 +115,5 @@
     "VelenLeaderOfTheExiled_GDB_131",
     "WildSpirits"
   ],
-  "analysisDate": "2026-01-20T16:40:48.381Z"
+  "analysisDate": "2026-04-07T06:07:40.866Z"
 }
