@@ -1,7 +1,12 @@
 import { Injectable } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
-import { AbstractFacadeService, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
+import {
+	AbstractFacadeService,
+	AppInjector,
+	waitForReady,
+	WindowManagerService,
+} from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
 import { MemoryInspectionService } from './memory-inspection.service';
 import { MemoryUpdatesService } from './memory-updates.service';
@@ -32,6 +37,8 @@ export class SceneService extends AbstractFacadeService<SceneService> {
 		this.memory = AppInjector.get(MemoryInspectionService);
 		this.memoryUpdates = AppInjector.get(MemoryUpdatesService);
 		console.log('[scene-service] ready');
+
+		await waitForReady(this.memoryUpdates);
 
 		this.memoryUpdates.memoryUpdates$$.subscribe((changes) => {
 			// console.debug('[scene-service] memory updates', changes, changes.CurrentScene);
