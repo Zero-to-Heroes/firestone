@@ -24,7 +24,7 @@ import {
 	WINDOW_CONTROLS_SERVICE_TOKEN,
 	waitForReady,
 } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, tap } from 'rxjs';
 
 @Component({
 	standalone: false,
@@ -142,13 +142,24 @@ export class MainWindowRootComponent
 	}
 
 	async ngAfterContentInit() {
+		console.debug('[debug]Main Window Root Component ngAfterContentInit');
+		await waitForReady(this.nav);
+		console.debug('[debug]nav ready');
+		await waitForReady(this.ads);
+		console.debug('[debug]ads ready');
+		await waitForReady(this.mainWindowStateService);
+		console.debug('[debug]mainWindowStateService ready');
 		await waitForReady(this.nav, this.ads, this.mainWindowStateService);
+		console.debug('[debug]Main Window Root Component initialized');
 
 		this.forceShowReleaseNotes$ = this.forceShowReleaseNotes.asObservable();
 		this.showFtue$ = this.mainWindowStateService.mainWindowState$$.pipe(
 			this.mapData((state) => state?.showFtue ?? false),
 		);
-		this.currentApp$ = this.nav.currentApp$$.pipe(this.mapData((currentApp) => currentApp));
+		this.currentApp$ = this.nav.currentApp$$.pipe(
+			tap((currentApp) => console.debug('currentApp', currentApp)),
+			this.mapData((currentApp) => currentApp),
+		);
 		this.currentApp$.subscribe((currentApp) => {
 			this.analytics.trackPageView(currentApp);
 		});

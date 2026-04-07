@@ -59,9 +59,21 @@ export class MainWindowNavigationService extends AbstractFacadeService<MainWindo
 
 	protected override async initElectronSubjects() {
 		this.setupElectronSubject(this.navigationState$$, 'MainWindowNavigationService-navigationState');
+		this.setupElectronSubject(this.currentApp$$, 'MainWindowNavigationService-currentApp');
+		this.setupElectronSubject(this.text$$, 'MainWindowNavigationService-text');
+		this.setupElectronSubject(this.image$$, 'MainWindowNavigationService-image');
+		this.setupElectronSubject(this.isVisible$$, 'MainWindowNavigationService-isVisible');
+		this.setupElectronSubject(this.backArrowEnabled$$, 'MainWindowNavigationService-backArrowEnabled');
+		this.setupElectronSubject(this.nextArrowEnabled$$, 'MainWindowNavigationService-nextArrowEnabled');
 	}
 
 	protected override async createElectronProxy(ipcRenderer: any) {
 		this.navigationState$$ = new BehaviorSubject<NavigationState | null>(null);
+		this.currentApp$$ = new BehaviorSubject<CurrentAppType | null>('replays');
+		this.text$$ = new BehaviorSubject<string | null>('Categories');
+		this.image$$ = new BehaviorSubject<string | null>(null);
+		this.isVisible$$ = new BehaviorSubject<boolean | null>(null);
+		this.backArrowEnabled$$ = new BehaviorSubject<boolean | null>(null);
+		this.nextArrowEnabled$$ = new BehaviorSubject<boolean | null>(null);
 	}
 }
