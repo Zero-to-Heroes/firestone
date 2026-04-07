@@ -81,6 +81,10 @@ import type { CardTooltipPositionType } from './card-tooltip-position.type';
 							<div class="label" [fsTranslate]="'decktracker.guessed-info.card-type'"></div>
 							<div class="value">{{ formatCardType(info.cardType) }}</div>
 						</div>
+						<div class="info-item rarity" *ngIf="info.rarity !== null && info.rarity !== undefined">
+							<div class="label" [fsTranslate]="'app.collection.card-details.rarity'"></div>
+							<div class="value">{{ formatRarity(info.rarity) }}</div>
+						</div>
 						<div class="info-item cost" *ngIf="info.cost !== null && info.cost !== undefined">
 							<div class="label" [fsTranslate]="'decktracker.guessed-info.cost'"></div>
 							<div class="value">{{ formatCost(info.cost) }}</div>
@@ -483,6 +487,10 @@ export class CardTooltipComponent
 
 	formatCardType(cardType: CardType): string {
 		return this.i18n.translateString(`app.collection.card-details.types.${CardType[cardType].toLowerCase()}`);
+	}
+
+	formatRarity(rarity: CardRarity): string {
+		return this.i18n.translateString(`app.collection.card-details.rarities.${CardRarity[rarity].toLowerCase()}`);
 	}
 
 	private async keepInBounds(top: number, left: number, height: number, width: number) {
