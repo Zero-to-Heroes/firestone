@@ -6,9 +6,9 @@
 
 import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
 import { Selector } from '../cards-highlight-common.service';
-import { reverseGeneralSelector } from './reverse-general-selectors';
 import { reverseMinionSelector } from './reverse-minion-selectors';
 import { reverseSpellSelector } from './reverse-spell-selectors';
+import { reverseGeneralSelector } from './reverse-general-selectors';
 
 export const reverseCardIdSelector = (
 	cardId: string,

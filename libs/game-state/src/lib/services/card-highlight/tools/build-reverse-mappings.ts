@@ -15,12 +15,12 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 // Step 1: Extract card cases and expand conditions
-interface ConditionMapping {
+export interface ConditionMapping {
 	cardId: string;
 	conditions: string[];
 }
 
-function extractCardConditions(): ConditionMapping[] {
+export function extractCardConditions(): ConditionMapping[] {
 	const selectorsFilePath = path.join(__dirname, '..', 'card-id-selectors.ts');
 	const content = fs.readFileSync(selectorsFilePath, 'utf8');
 
@@ -271,7 +271,7 @@ function extractCardConditions(): ConditionMapping[] {
 	return mappings;
 }
 
-function expandSelectorConditions(selectorCode: string): string[] {
+export function expandSelectorConditions(selectorCode: string): string[] {
 	// Remove generic selectors that we don't care about for reverse mapping
 	const genericSelectors = [
 		'side(inputSide)',
@@ -319,7 +319,7 @@ function expandSelectorConditions(selectorCode: string): string[] {
 	return conditions.filter((c) => c.length > 0);
 }
 
-function extractConditionsFromCleanedCode(code: string): string[] {
+export function extractConditionsFromCleanedCode(code: string): string[] {
 	// Handle basic patterns
 	const conditions: string[] = [];
 
@@ -378,7 +378,7 @@ function extractConditionsFromCleanedCode(code: string): string[] {
 	}
 }
 
-function smartSplit(str: string, delimiter: string): string[] {
+export function smartSplit(str: string, delimiter: string): string[] {
 	const parts: string[] = [];
 	let current = '';
 	let depth = 0;
@@ -399,8 +399,92 @@ function smartSplit(str: string, delimiter: string): string[] {
 	return parts;
 }
 
-// Function to analyze selector functions and extract their conditions
-function analyzeSelectorFunction(functionName: string, visitedFunctions: Set<string> = new Set()): string[] | null {
+export function extractFullDefinition(content: string, functionName: string): string | null {
+	const escapedName = functionName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+	const headerRegex = new RegExp(`export\\s+const\\s+${escapedName}\\s*=\\s*`);
+	const headerMatch = content.match(headerRegex);
+	if (!headerMatch || headerMatch.index == null) {
+		return null;
+	}
+
+	const startIdx = headerMatch.index + headerMatch[0].length;
+	let depth = 0;
+	let i = startIdx;
+
+	while (i < content.length) {
+		const ch = content[i];
+		if (ch === '(' || ch === '{' || ch === '[') {
+			depth++;
+		} else if (ch === ')' || ch === '}' || ch === ']') {
+			depth--;
+		} else if (ch === ';' && depth === 0) {
+			return content.slice(startIdx, i).trim();
+		}
+		i++;
+	}
+
+	return content.slice(startIdx).trim();
+}
+
+function resolveInlinePart(expr: string, visitedFunctions: Set<string>): string[] {
+	const nestedAnalysis = analyzeSelectorFunction(expr, new Set(visitedFunctions));
+	if (nestedAnalysis) {
+		return nestedAnalysis;
+	}
+
+	if (expr.startsWith('or(') && expr.endsWith(')')) {
+		const inner = expr.slice(3, -1);
+		const parts = smartSplit(inner, ',');
+		const results: string[] = [];
+		for (const p of parts) {
+			results.push(...resolveInlinePart(p.trim(), visitedFunctions));
+		}
+		return results;
+	}
+
+	if (expr.startsWith('and(') && expr.endsWith(')')) {
+		const inner = expr.slice(4, -1);
+		const parts = smartSplit(inner, ',');
+		const results: string[] = [];
+		for (const p of parts) {
+			results.push(...resolveInlinePart(p.trim(), visitedFunctions));
+		}
+		return results.length > 0 ? [results.sort().join(' + ')] : [];
+	}
+
+	if (expr.startsWith('not(') && expr.endsWith(')')) {
+		return [];
+	}
+
+	const mechanicStrMatch = expr.match(/hasMechanicStr\(['"]([^'"]+)['"]\)/);
+	if (mechanicStrMatch) {
+		return [`HAS_MECHANIC_${mechanicStrMatch[1]}`];
+	}
+
+	const mechanicMatch = expr.match(/hasMechanic\(GameTag\.([^)]+)\)/);
+	if (mechanicMatch) {
+		return [`HAS_MECHANIC_${mechanicMatch[1]}`];
+	}
+
+	const refMatch = expr.match(/hasReference\(GameTag\.([^)]+)\)/);
+	if (refMatch) {
+		return [`HAS_REF_TAG_${refMatch[1]}`];
+	}
+
+	const typeMatch = expr.match(/cardType\(CardType\.([^)]+)\)/);
+	if (typeMatch) {
+		return [typeMatch[1].toUpperCase()];
+	}
+
+	const condition = convertToConditionString(expr);
+	if (condition) {
+		return [condition];
+	}
+
+	return [];
+}
+
+export function analyzeSelectorFunction(functionName: string, visitedFunctions: Set<string> = new Set()): string[] | null {
 	// Prevent infinite recursion
 	if (visitedFunctions.has(functionName)) {
 		return null;
@@ -410,95 +494,29 @@ function analyzeSelectorFunction(functionName: string, visitedFunctions: Set<str
 	const selectorsFilePath = path.join(__dirname, '..', 'selectors.ts');
 	const content = fs.readFileSync(selectorsFilePath, 'utf8');
 
-	// Look for the function definition
-	const functionRegex = new RegExp(`export\\s+const\\s+${functionName}\\s*=\\s*([^;\\n]+)`, 's');
-	const match = content.match(functionRegex);
+	// Look for the function definition using balanced-delimiter parsing to handle multi-line definitions
+	const definition = extractFullDefinition(content, functionName);
 
-	if (!match) {
+	if (!definition) {
 		return null;
 	}
 
-	const definition = match[1].trim();
-
 	// Parse different types of function definitions
 	if (definition.startsWith('or(')) {
-		// Handle or(condition1, condition2, ...)
-		const orContent = definition.slice(3, -1); // Remove 'or(' and ')'
+		const orContent = definition.slice(3, -1);
 		const parts = smartSplit(orContent, ',');
 		const conditions: string[] = [];
-
 		for (const part of parts) {
-			const trimmed = part.trim();
-
-			// Check if this part is itself a function call that needs analysis
-			const nestedAnalysis = analyzeSelectorFunction(trimmed, visitedFunctions);
-			if (nestedAnalysis) {
-				// If the nested function returns multiple conditions, add them all
-				conditions.push(...nestedAnalysis);
-			} else {
-				// Handle direct hasMechanicStr calls
-				if (trimmed.includes('hasMechanicStr(')) {
-					const mechanicMatch = trimmed.match(/hasMechanicStr\(['"]([^'"]+)['"]\)/);
-					if (mechanicMatch) {
-						const mechanicName = mechanicMatch[1];
-						conditions.push(`HAS_MECHANIC_${mechanicName}`);
-					}
-				} else if (trimmed.includes('cardType(')) {
-					// Handle cardType(CardType.TYPE_NAME) calls
-					const typeMatch = trimmed.match(/cardType\(CardType\.([^)]+)\)/);
-					if (typeMatch) {
-						const typeName = typeMatch[1];
-						conditions.push(typeName.toUpperCase());
-					}
-				} else {
-					const condition = convertToConditionString(trimmed);
-					if (condition) {
-						conditions.push(condition);
-					}
-				}
-			}
+			conditions.push(...resolveInlinePart(part.trim(), visitedFunctions));
 		}
-
 		return conditions.length > 0 ? conditions : null;
 	} else if (definition.startsWith('and(')) {
-		// Handle and(condition1, condition2, ...)
-		const andContent = definition.slice(4, -1); // Remove 'and(' and ')'
+		const andContent = definition.slice(4, -1);
 		const parts = smartSplit(andContent, ',');
 		const conditions: string[] = [];
-
 		for (const part of parts) {
-			const trimmed = part.trim();
-
-			// Check if this part is itself a function call that needs analysis
-			const nestedAnalysis = analyzeSelectorFunction(trimmed, visitedFunctions);
-			if (nestedAnalysis) {
-				// If the nested function returns multiple conditions, add them all
-				conditions.push(...nestedAnalysis);
-			} else {
-				// Handle direct hasMechanicStr calls
-				if (trimmed.includes('hasMechanicStr(')) {
-					const mechanicMatch = trimmed.match(/hasMechanicStr\(['"]([^'"]+)['"]\)/);
-					if (mechanicMatch) {
-						const mechanicName = mechanicMatch[1];
-						conditions.push(`HAS_MECHANIC_${mechanicName}`);
-					}
-				} else if (trimmed.includes('cardType(')) {
-					// Handle cardType(CardType.TYPE_NAME) calls
-					const typeMatch = trimmed.match(/cardType\(CardType\.([^)]+)\)/);
-					if (typeMatch) {
-						const typeName = typeMatch[1];
-						conditions.push(typeName.toUpperCase());
-					}
-				} else {
-					const condition = convertToConditionString(trimmed);
-					if (condition) {
-						conditions.push(condition);
-					}
-				}
-			}
+			conditions.push(...resolveInlinePart(part.trim(), visitedFunctions));
 		}
-
-		// For AND conditions, we need to combine them as a single compound condition
 		return conditions.length > 0 ? [conditions.sort().join(' + ')] : null;
 	} else if (definition.includes('hasMechanicStr(')) {
 		// Handle hasMechanicStr('MECHANIC_NAME')
@@ -521,12 +539,44 @@ function analyzeSelectorFunction(functionName: string, visitedFunctions: Set<str
 			const typeName = typeMatch[1];
 			return [typeName.toUpperCase()];
 		}
+	} else if (definition.includes('hasReference(')) {
+		const refMatch = definition.match(/hasReference\(GameTag\.([^)]+)\)/);
+		if (refMatch) {
+			return [`HAS_REF_TAG_${refMatch[1]}`];
+		}
+	}
+
+	// Arrow functions: (input: SelectorInput): boolean => { ... }
+	const arrowBodyMatch = definition.match(
+		/\(\s*input\s*:\s*SelectorInput\s*\)\s*:\s*boolean\s*=>\s*\{?\s*([\s\S]*?)\s*\}?\s*$/,
+	);
+	if (arrowBodyMatch) {
+		const body = arrowBodyMatch[1].replace(/return\s+/g, '').replace(/;\s*$/g, '').trim();
+
+		if (body === 'false') {
+			return null;
+		}
+
+		const mechanicInclude = body.match(/input\.card\?\.(mechanics|referencedTags)\?\.includes\(GameTag\[GameTag\.([A-Z_]+)\]\)/);
+		if (mechanicInclude) {
+			const prefix = mechanicInclude[1] === 'mechanics' ? 'HAS_MECHANIC' : 'HAS_REF_TAG';
+			return [`${prefix}_${mechanicInclude[2]}`];
+		}
+
+		if (body.includes('input.card?.spellSchool')) {
+			return ['HAS_SPELL_SCHOOL'];
+		}
+	}
+
+	// cardIs(...) calls with specific card IDs
+	if (definition.startsWith('cardIs(')) {
+		return [`CARD_IS_${functionName.toUpperCase()}`];
 	}
 
 	return null;
 }
 
-function convertToConditionString(part: string): string | null {
+export function convertToConditionString(part: string): string | null {
 	// First, try to analyze if this is a function we can inspect
 	const analyzedConditions = analyzeSelectorFunction(part);
 	if (analyzedConditions) {
@@ -645,7 +695,7 @@ function convertToConditionString(part: string): string | null {
 		keyword: 'KEYWORD',
 		tribal: 'TRIBAL',
 		synergy: 'SYNERGY',
-		// Additional custom functions seen in warnings
+		// Selectors not defined in selectors.ts or that analyzeSelectorFunction can't resolve
 		libram: 'LIBRAM',
 		protoss: 'PROTOSS',
 		zerg: 'ZERG',
@@ -654,32 +704,13 @@ function convertToConditionString(part: string): string | null {
 		restoreHealth: 'RESTORE_HEALTH',
 		restoreHealthStrict: 'RESTORE_HEALTH_STRICT',
 		dealsDamage: 'DEALS_DAMAGE',
-		givesArmor: 'GIVES_ARMOR',
-		starshipExtended: 'STARSHIP_EXTENDED',
-		locationExtended: 'LOCATION_EXTENDED',
-		spellExtended: 'SPELL_EXTENDED',
-		darkGift: 'DARK_GIFT',
-		imbue: 'IMBUE',
-		dredge: 'DREDGE',
-		generateCorpse: 'GENERATE_CORPSE',
-		spendCorpse: 'SPEND_CORPSE',
-		generatesPlague: 'GENERATES_PLAGUE',
-		isPlague: 'IS_PLAGUE',
-		generatesTemporaryCard: 'GENERATES_TEMPORARY_CARD',
-		selfDamageHero: 'SELF_DAMAGE_HERO',
 		canTargetFriendlyCharacter: 'CAN_TARGET_FRIENDLY_CHARACTER',
 		canTargetFriendlyMinion: 'CAN_TARGET_FRIENDLY_MINION',
-		shufflesCardIntoDeck: 'SHUFFLES_CARD_INTO_DECK',
-		hasSpellSchool: 'HAS_SPELL_SCHOOL',
 		paladin: 'PALADIN',
 		imp: 'IMP',
 		whelp: 'WHELP',
-		relic: 'RELIC',
 		kindred: 'KINDRED',
 		isSi7: 'IS_SI7',
-		generateSlagclaw: 'GENERATE_SLAGCLAW',
-		libramDiscount: 'LIBRAM_DISCOUNT',
-		damage: 'DAMAGE',
 	};
 
 	// Handle not() wrapper
@@ -1123,7 +1154,11 @@ function generateGeneralFile(flatMappings: { [condition: string]: string[] }): s
 				condition.includes('DEATHRATTLE') ||
 				condition.includes('BATTLECRY') ||
 				condition.includes('TAUNT') ||
-				condition.includes('RUSH');
+				condition.includes('RUSH') ||
+				condition.includes('HAS_MECHANIC_') ||
+				condition.includes('HAS_REF_TAG_') ||
+				condition.includes('HAS_SPELL_SCHOOL') ||
+				condition.includes('CARD_IS_');
 
 			return matches;
 		})
@@ -1215,7 +1250,7 @@ function generateMainFile(): string {
 	return lines.join('\n');
 }
 
-function buildReverseCondition(condition: string): string | null {
+export function buildReverseCondition(condition: string): string | null {
 	const parts = condition.split(' + ').map((p) => p.trim());
 	const conditions: string[] = [];
 
@@ -1322,8 +1357,14 @@ function buildReverseCondition(condition: string): string | null {
 				} else if (part.startsWith('HAS_MECHANIC_')) {
 					const mechanicName = part.replace('HAS_MECHANIC_', '');
 					conditions.push(`refCard.mechanics?.includes('${mechanicName}')`);
+				} else if (part.startsWith('HAS_REF_TAG_')) {
+					const tagName = part.replace('HAS_REF_TAG_', '');
+					conditions.push(`refCard.referencedTags?.includes('${tagName}')`);
+				} else if (part === 'HAS_SPELL_SCHOOL') {
+					conditions.push('!!refCard.spellSchool');
+				} else if (part.startsWith('CARD_IS_')) {
+					return null;
 				} else {
-					// Skip unknown conditions
 					return null;
 				}
 				break;

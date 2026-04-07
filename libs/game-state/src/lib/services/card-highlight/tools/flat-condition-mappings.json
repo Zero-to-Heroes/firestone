@@ -532,8 +532,7 @@
     "WishOfTheNewMoon_EDR_460",
     "YoggSaronHopesEnd_OG_134",
     "YoggSaronMasterOfFate",
-    "YsielWindsinger",
-    "Zuljin"
+    "YsielWindsinger"
   ],
   "MINION": [
     "AcherusVeteran_CORE_ICC_092",
@@ -665,7 +664,6 @@
     "ImprisonedScrapImp",
     "Insight",
     "Insight_InsightToken",
-    "InspiringMaul_CATA_472",
     "InvigoratingSermon",
     "IridescentFlitterwing_CATA_133",
     "IxlidFungalLord",
@@ -745,7 +743,6 @@
     "RiskySkipper",
     "RunningWild",
     "RunningWild_RunningWild",
-    "SandfuryAura_CATA_480",
     "SeafloorSavior_TSC_083",
     "SearingReflection_FIR_941",
     "Seismopod_DINO_421",
@@ -891,7 +888,7 @@
   "HAS_MECHANIC_WINDFURY + MINION": [
     "AlakirTheWindsOfTime_WON_092h"
   ],
-  "LIBRAM": [
+  "CARD_IS_LIBRAM": [
     "AldorAttendant",
     "AldorTruthseeker",
     "InterstellarResearcher_GDB_728",
@@ -1296,8 +1293,7 @@
     "ScuttlebuttGhoul",
     "ScuttlebuttGhoul_CORE_REV_900",
     "SecretStudiesTavernBrawl",
-    "SpringTheTrap",
-    "Zuljin_WarriorsOfAmani_THD_010p"
+    "SpringTheTrap"
   ],
   "COST_LESS_4 + MINION": [
     "AnimateDead",
@@ -1353,7 +1349,7 @@
     "WailingVapor_CORE_WC_042",
     "WindsweptPageturner_TLC_220"
   ],
-  "EXCAVATE": [
+  "HAS_MECHANIC_EXCAVATE": [
     "AntiqueFlinger_WW_413",
     "BadlandsBrawler_WW_349",
     "BountyBoard_WW_003",
@@ -1419,7 +1415,7 @@
     "TalentedArcanist",
     "UrchinSpines"
   ],
-  "FREEZE": [
+  "HAS_MECHANIC_FREEZE": [
     "ArcticArmorTavernBrawl",
     "RingOfBlackIceTavernBrawl",
     "SlipperySlope_VAC_513",
@@ -1473,7 +1469,7 @@
     "Snapdragon",
     "Turbulus_WORK_013"
   ],
-  "IMBUE": [
+  "HAS_MECHANIC_IMBUE + HAS_REF_TAG_IMBUE": [
     "AwakenTheFlame",
     "AwakenTheFlame_THD_029hp",
     "DreamboundDisciple_EDR_847",
@@ -1549,7 +1545,7 @@
     "UnstableMagicTavernBrawl",
     "Vexallus"
   ],
-  "STARSHIP_EXTENDED": [
+  "HAS_MECHANIC_STARSHIP_PIECE": [
     "BadOmen_GDB_124",
     "BarrelRoll_GDB_465",
     "ConcussiveShells_SC_411",
@@ -1715,7 +1711,7 @@
     "BoomWrench_BoomWrenchToken_TOY_604t",
     "BoomWrench_TOY_604"
   ],
-  "SPELL_DAMAGE": [
+  "HAS_MECHANIC_SPELLPOWER": [
     "BottomlessToyChest_TOY_851",
     "SorcerousSubstitute",
     "WoodlandWonders_TOY_804"
@@ -1738,12 +1734,21 @@
     "WorkshopJanitor_TOY_891",
     "Xb931Housekeeper_VAC_956"
   ],
+  "CARD_IS_CREATELOCATION": [
+    "BusyPeon_WORK_041",
+    "Consume_SC_020",
+    "ScrapbookingStudent_VAC_529",
+    "SeasideGiant_VAC_439",
+    "SpineCrawler_SC_023",
+    "WorkshopJanitor_TOY_891",
+    "Xb931Housekeeper_VAC_956"
+  ],
   "HAS_SPELL_SCHOOL": [
     "Buttons_VAC_437",
     "CabaretHeadliner_VAC_954",
     "CarressCabaretStar_VAC_449"
   ],
-  "SPEND_CORPSE": [
+  "HAS_MECHANIC_SPEND_CORPSE": [
     "CadaverCollectorTavernBrawl",
     "ClimacticNecroticExplosion",
     "Falric_CORE_EDR_003",
@@ -1785,7 +1790,7 @@
     "VeteranWarmedic",
     "VeteranWarmedic_CORE_BAR_878"
   ],
-  "CHOOSE_ONE": [
+  "HAS_MECHANIC_CHOOSE_ONE": [
     "CenarionHold_WON_015",
     "DiscipleOfEonar",
     "EmbraceOfNature",
@@ -1795,10 +1800,6 @@
     "UntappedPotential",
     "UntappedPotential_OssirianTear"
   ],
-  "GENERATES_PLAGUE": [
-    "ChainedGuardian",
-    "TombTraitor"
-  ],
   "NATURE": [
     "ChampionOfStorms",
     "CrashOfThunder"
@@ -1807,7 +1808,10 @@
     "ChronoBoost_SC_750",
     "ConstructPylons_SC_755"
   ],
-  "DARK_GIFT": [
+  "HAS_MECHANIC_END_OF_TURN": [
+    "ChronoLordDeios_TIME_064"
+  ],
+  "HAS_REF_TAG_DARK_GIFT": [
     "Cindersword_FIR_922",
     "DragonTurtle_FIR_956",
     "FrostburnMatriarch_FIR_901",
@@ -1903,6 +1907,12 @@
   ],
   "COST_LESS_6 + HAS_MECHANIC_DEATHRATTLE + MINION": [
     "DeathSpeakerBlackthorn_BAR_329"
+  ],
+  "HAS_MECHANIC_HERALD": [
+    "DeathwingWorldbreaker_CATA_190h"
+  ],
+  "HAS_REF_TAG_HERALD": [
+    "DeathwingWorldbreaker_CATA_190h"
   ],
   "NATURE + SPELL": [
     "DeviateDreadfang",
@@ -2019,11 +2029,7 @@
     "ElitistSnob",
     "Lightray"
   ],
-  "SELF_DAMAGE_HERO": [
-    "EmberrootDestroyer_FIR_955",
-    "JobShadower_WORK_032"
-  ],
-  "GENERATES_TEMPORARY_CARD": [
+  "HAS_MECHANIC_TEMPORARY + HAS_REF_TAG_TEMPORARY": [
     "EscapeTheUnderfel_TLC_446",
     "EscapeTheUnderfel_UnderfelRiftToken_TLC_446t",
     "EscapeTheUnderfel_UnderfelRiftToken_TLC_446t1",
@@ -2049,18 +2055,18 @@
     "VolcanicThrasher_TLC_223",
     "WrathspineEnchanter"
   ],
-  "GENERATE_CORPSE": [
+  "HAS_MECHANIC_GENERATE_CORPSE": [
     "EternalLayover_WORK_028",
     "HollowDirehorn_DINO_416",
     "HuskEternalReaper_TIME_618",
     "Paleomancy_TLC_434",
     "ReanimatedPterrordax_TLC_436"
   ],
-  "DAMAGE + SPELL": [
+  "HAS_MECHANIC_DEAL_DAMAGE + SPELL": [
     "EtherealOracle_GDB_310",
     "VelensChosen"
   ],
-  "DAMAGE + HAS_MECHANIC_GENERATES_SPELL": [
+  "HAS_MECHANIC_DEAL_DAMAGE + HAS_MECHANIC_GENERATES_SPELL": [
     "EtherealOracle_GDB_310"
   ],
   "FEL + SPELL": [
@@ -2147,7 +2153,10 @@
     "NaturalForceTavernBrawl",
     "Stormrook_TIME_217"
   ],
-  "DORMANT": [
+  "HAS_MECHANIC_DORMANT": [
+    "PerennialSerpent_TIME_022"
+  ],
+  "HAS_REF_TAG_DORMANT": [
     "PerennialSerpent_TIME_022"
   ],
   "FROST + SPELL": [
@@ -2262,13 +2271,17 @@
     "Sif",
     "WisdomOfNorgannon"
   ],
+  "HAS_MECHANIC_END_OF_TURN + MINION": [
+    "InspiringMaul_CATA_472",
+    "SandfuryAura_CATA_480"
+  ],
   "COST_MORE_4 + MECH": [
     "InventorBoom_TOY_607"
   ],
   "HAS_MECHANIC_MODULAR": [
     "InventOMatic"
   ],
-  "CHOOSE_ONE + SPELL": [
+  "HAS_MECHANIC_CHOOSE_ONE + SPELL": [
     "JerryRigCarpenter",
     "KeeperStalladris",
     "Pathmaker"
@@ -2288,15 +2301,11 @@
     "JuicyPsychmelon",
     "SilverVanguard"
   ],
-  "CHOOSE_ONE + HAS_MECHANIC_GENERATES_SPELL": [
+  "HAS_MECHANIC_CHOOSE_ONE + HAS_MECHANIC_GENERATES_SPELL": [
     "KeeperStalladris"
   ],
   "DEALS_DAMAGE + FIRE + SPELL": [
     "KindlingFlameTavernBrawl"
-  ],
-  "SHUFFLES_CARD_INTO_DECK": [
-    "Knockback_TLC_517",
-    "UnderbrushTracker_TLC_520"
   ],
   "ATTACK_LESS_4 + MINION": [
     "LeadDancer",
@@ -2304,7 +2313,7 @@
     "WarsongCommanderVanilla",
     "WarsongCommander_CORE_EX1_084"
   ],
-  "LIBRAM_DISCOUNT": [
+  "CARD_IS_LIBRAMDISCOUNT": [
     "LibramOfClarity_GDB_137",
     "LibramOfDivinity_GDB_138",
     "LibramOfFaith_GDB_139",
@@ -2380,7 +2389,7 @@
   "COST_LESS_5 + HAS_MECHANIC_DEATHRATTLE + MINION": [
     "RazorfenBeastmaster"
   ],
-  "RELIC": [
+  "CARD_IS_RELIC": [
     "RelicVault_CORE_REV_942",
     "RelicVault_REV_797",
     "RelicVault_REV_942"
@@ -2399,7 +2408,7 @@
     "StewardOfDarkshire_OG_310",
     "StewardOfDarkshire_WON_310"
   ],
-  "DAMAGE + FIRE + SPELL": [
+  "FIRE + HAS_MECHANIC_DEAL_DAMAGE + SPELL": [
     "Saruun_GDB_304"
   ],
   "COST_MORE_5 + MINION": [
@@ -2423,7 +2432,7 @@
   "COST_LESS_5 + HAS_MECHANIC_DEATHRATTLE": [
     "SketchyInformation"
   ],
-  "GENERATE_SLAGCLAW": [
+  "CARD_IS_GENERATESLAGCLAW": [
     "Slagclaw_TLC_482"
   ],
   "MINION + TERRAN": [
@@ -2492,9 +2501,6 @@
     "TimethiefRafaam_TIME_005",
     "TimethiefRafaam_TinyRafaamToken_TIME_005t1",
     "TimethiefRafaam_WarchiefRafaamToken_TIME_005t4"
-  ],
-  "IS_PLAGUE": [
-    "TombTraitor"
   ],
   "MINION + TOTEM": [
     "TotemicMightLegacy",

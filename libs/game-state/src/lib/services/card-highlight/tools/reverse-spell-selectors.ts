@@ -7,7 +7,7 @@
 import { CardIds } from '@firestone-hs/reference-data';
 import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
 import { Selector } from '../cards-highlight-common.service';
-import { and, cardIs, inDeck, inHand, or, side } from '../selectors';
+import { and, or, side, inDeck, inHand, cardIs } from '../selectors';
 
 export const reverseSpellSelector = (
 	cardId: string,
@@ -20,23 +20,24 @@ export const reverseSpellSelector = (
 	const matchingCardIds: CardIds[] = [];
 
 	// COST_MORE_0 + HAS_MECHANIC_GENERATES_SPELL + SHADOW (1 cards)
-	if (
-		refCard.cost != null &&
-		refCard.cost > 0 &&
-		refCard.mechanics?.includes('GENERATES_SPELL') &&
-		refCard.spellSchool?.toUpperCase() === 'SHADOW'
-	) {
-		matchingCardIds.push(CardIds.TamsinRoame_BAR_918);
+	if (refCard.cost != null && refCard.cost > 0 && refCard.mechanics?.includes('GENERATES_SPELL') && refCard.spellSchool?.toUpperCase() === 'SHADOW') {
+		matchingCardIds.push(
+			CardIds.TamsinRoame_BAR_918
+		);
 	}
 
 	// COST_MORE_0 + SHADOW + SPELL (1 cards)
-	if (
-		refCard.cost != null &&
-		refCard.cost > 0 &&
-		refCard.spellSchool?.toUpperCase() === 'SHADOW' &&
-		refCard.type?.toUpperCase() === 'SPELL'
-	) {
-		matchingCardIds.push(CardIds.TamsinRoame_BAR_918);
+	if (refCard.cost != null && refCard.cost > 0 && refCard.spellSchool?.toUpperCase() === 'SHADOW' && refCard.type?.toUpperCase() === 'SPELL') {
+		matchingCardIds.push(
+			CardIds.TamsinRoame_BAR_918
+		);
+	}
+
+	// FIRE + HAS_MECHANIC_DEAL_DAMAGE + SPELL (1 cards)
+	if (refCard.spellSchool?.toUpperCase() === 'FIRE' && refCard.mechanics?.includes('DEAL_DAMAGE') && refCard.type?.toUpperCase() === 'SPELL') {
+		matchingCardIds.push(
+			CardIds.Saruun_GDB_304
+		);
 	}
 
 	// ARCANE + HAS_MECHANIC_GENERATES_SPELL (7 cards)
@@ -48,7 +49,7 @@ export const reverseSpellSelector = (
 			CardIds.MagistersApprentice,
 			CardIds.StarlightReactor_GDB_108,
 			CardIds.UnstableMagicTavernBrawl,
-			CardIds.Vexallus,
+			CardIds.Vexallus
 		);
 	}
 
@@ -65,53 +66,76 @@ export const reverseSpellSelector = (
 			CardIds.Stargazing_WW_425,
 			CardIds.StarlightReactor_GDB_108,
 			CardIds.UnstableMagicTavernBrawl,
-			CardIds.Vexallus,
+			CardIds.Vexallus
 		);
 	}
 
 	// COST_EQUAL_1 + HAS_MECHANIC_GENERATES_SPELL (2 cards)
 	if (refCard.cost === 1 && refCard.mechanics?.includes('GENERATES_SPELL')) {
-		matchingCardIds.push(CardIds.Gazlowe, CardIds.NiriOfTheCrater_TLC_836);
+		matchingCardIds.push(
+			CardIds.Gazlowe,
+			CardIds.NiriOfTheCrater_TLC_836
+		);
 	}
 
 	// COST_EQUAL_1 + SPELL (3 cards)
 	if (refCard.cost === 1 && refCard.type?.toUpperCase() === 'SPELL') {
-		matchingCardIds.push(CardIds.Gazlowe, CardIds.NiriOfTheCrater_TLC_836, CardIds.TrinketTracker);
+		matchingCardIds.push(
+			CardIds.Gazlowe,
+			CardIds.NiriOfTheCrater_TLC_836,
+			CardIds.TrinketTracker
+		);
 	}
 
 	// COST_EQUAL_2 + SPELL (2 cards)
 	if (refCard.cost === 2 && refCard.type?.toUpperCase() === 'SPELL') {
-		matchingCardIds.push(CardIds.BarakKodobane_BAR_551, CardIds.BarakKodobane_CORE_BAR_551);
+		matchingCardIds.push(
+			CardIds.BarakKodobane_BAR_551,
+			CardIds.BarakKodobane_CORE_BAR_551
+		);
 	}
 
 	// COST_EQUAL_8 + SPELL (1 cards)
 	if (refCard.cost === 8 && refCard.type?.toUpperCase() === 'SPELL') {
-		matchingCardIds.push(CardIds.ArcaneBrilliance);
+		matchingCardIds.push(
+			CardIds.ArcaneBrilliance
+		);
 	}
 
 	// COST_LESS_3 + SPELL (2 cards)
 	if (refCard.cost != null && refCard.cost < 3 && refCard.type?.toUpperCase() === 'SPELL') {
-		matchingCardIds.push(CardIds.SunsapperLynessa_VAC_507, CardIds.VioletTreasuregill_TLC_438);
+		matchingCardIds.push(
+			CardIds.SunsapperLynessa_VAC_507,
+			CardIds.VioletTreasuregill_TLC_438
+		);
 	}
 
 	// COST_LESS_4 + SPELL (1 cards)
 	if (refCard.cost != null && refCard.cost < 4 && refCard.type?.toUpperCase() === 'SPELL') {
-		matchingCardIds.push(CardIds.StonehearthVindicator);
+		matchingCardIds.push(
+			CardIds.StonehearthVindicator
+		);
 	}
 
 	// COST_LESS_5 + SPELL (1 cards)
 	if (refCard.cost != null && refCard.cost < 5 && refCard.type?.toUpperCase() === 'SPELL') {
-		matchingCardIds.push(CardIds.CracklingCloudstrider_CATA_563);
+		matchingCardIds.push(
+			CardIds.CracklingCloudstrider_CATA_563
+		);
 	}
 
 	// COST_MORE_1 + HAS_MECHANIC_GENERATES_SPELL (1 cards)
 	if (refCard.cost != null && refCard.cost > 1 && refCard.mechanics?.includes('GENERATES_SPELL')) {
-		matchingCardIds.push(CardIds.PlaguebringerTavernBrawl);
+		matchingCardIds.push(
+			CardIds.PlaguebringerTavernBrawl
+		);
 	}
 
 	// COST_MORE_1 + SPELL (1 cards)
 	if (refCard.cost != null && refCard.cost > 1 && refCard.type?.toUpperCase() === 'SPELL') {
-		matchingCardIds.push(CardIds.PlaguebringerTavernBrawl);
+		matchingCardIds.push(
+			CardIds.PlaguebringerTavernBrawl
+		);
 	}
 
 	// COST_MORE_4 + SPELL (7 cards)
@@ -123,18 +147,22 @@ export const reverseSpellSelector = (
 			CardIds.Groundskeeper,
 			CardIds.HagathaTheFabled_TOY_504,
 			CardIds.SunreaverWarmage,
-			CardIds.WeaverOfTheCycle_EDR_472,
+			CardIds.WeaverOfTheCycle_EDR_472
 		);
 	}
 
 	// COST_MORE_5 + HAS_MECHANIC_GENERATES_SPELL (1 cards)
 	if (refCard.cost != null && refCard.cost > 5 && refCard.mechanics?.includes('GENERATES_SPELL')) {
-		matchingCardIds.push(CardIds.GreySageParrot);
+		matchingCardIds.push(
+			CardIds.GreySageParrot
+		);
 	}
 
 	// COST_MORE_5 + SPELL (1 cards)
 	if (refCard.cost != null && refCard.cost > 5 && refCard.type?.toUpperCase() === 'SPELL') {
-		matchingCardIds.push(CardIds.GreySageParrot);
+		matchingCardIds.push(
+			CardIds.GreySageParrot
+		);
 	}
 
 	// FEL + HAS_MECHANIC_GENERATES_SPELL (5 cards)
@@ -144,7 +172,7 @@ export const reverseSpellSelector = (
 			CardIds.HeraldOfChaos,
 			CardIds.ImpCredibleTrousersTavernBrawl,
 			CardIds.PopgarThePutrid_WW_091,
-			CardIds.WitherTheWeakTavernBrawl,
+			CardIds.WitherTheWeakTavernBrawl
 		);
 	}
 
@@ -166,7 +194,7 @@ export const reverseSpellSelector = (
 			CardIds.PopgarThePutrid_WW_091,
 			CardIds.RavenousFelfisher_CATA_529,
 			CardIds.Scorchreaver_FIR_952,
-			CardIds.WitherTheWeakTavernBrawl,
+			CardIds.WitherTheWeakTavernBrawl
 		);
 	}
 
@@ -183,7 +211,7 @@ export const reverseSpellSelector = (
 			CardIds.MechanizedMagma_TLC_224,
 			CardIds.RadianceOfAzshara_TSC_635,
 			CardIds.SunfuryChampion,
-			CardIds.Thoribelore,
+			CardIds.Thoribelore
 		);
 	}
 
@@ -207,7 +235,7 @@ export const reverseSpellSelector = (
 			CardIds.SunfuryChampion,
 			CardIds.Thoribelore,
 			CardIds.VolcanicThrasher_TLC_223,
-			CardIds.WrathspineEnchanter,
+			CardIds.WrathspineEnchanter
 		);
 	}
 
@@ -219,7 +247,7 @@ export const reverseSpellSelector = (
 			CardIds.LadyNazjar_TID_709,
 			CardIds.RadianceOfAzshara_TSC_635,
 			CardIds.RambunctiousStuffy_TOY_821,
-			CardIds.Rimetongue,
+			CardIds.Rimetongue
 		);
 	}
 
@@ -240,7 +268,38 @@ export const reverseSpellSelector = (
 			CardIds.Rimetongue,
 			CardIds.SorcerersGambit,
 			CardIds.WatercolorArtist_TOY_376,
-			CardIds.WrathspineEnchanter,
+			CardIds.WrathspineEnchanter
+		);
+	}
+
+	// HAS_MECHANIC_CHOOSE_ONE + HAS_MECHANIC_GENERATES_SPELL (1 cards)
+	if (refCard.mechanics?.includes('CHOOSE_ONE') && refCard.mechanics?.includes('GENERATES_SPELL')) {
+		matchingCardIds.push(
+			CardIds.KeeperStalladris
+		);
+	}
+
+	// HAS_MECHANIC_CHOOSE_ONE + SPELL (3 cards)
+	if (refCard.mechanics?.includes('CHOOSE_ONE') && refCard.type?.toUpperCase() === 'SPELL') {
+		matchingCardIds.push(
+			CardIds.JerryRigCarpenter,
+			CardIds.KeeperStalladris,
+			CardIds.Pathmaker
+		);
+	}
+
+	// HAS_MECHANIC_DEAL_DAMAGE + HAS_MECHANIC_GENERATES_SPELL (1 cards)
+	if (refCard.mechanics?.includes('DEAL_DAMAGE') && refCard.mechanics?.includes('GENERATES_SPELL')) {
+		matchingCardIds.push(
+			CardIds.EtherealOracle_GDB_310
+		);
+	}
+
+	// HAS_MECHANIC_DEAL_DAMAGE + SPELL (2 cards)
+	if (refCard.mechanics?.includes('DEAL_DAMAGE') && refCard.type?.toUpperCase() === 'SPELL') {
+		matchingCardIds.push(
+			CardIds.EtherealOracle_GDB_310,
+			CardIds.VelensChosen
 		);
 	}
 
@@ -261,7 +320,7 @@ export const reverseSpellSelector = (
 			CardIds.StarlightGroove,
 			CardIds.TheGardensGrace,
 			CardIds.VeteranWarmedic,
-			CardIds.VeteranWarmedic_CORE_BAR_878,
+			CardIds.VeteranWarmedic_CORE_BAR_878
 		);
 	}
 
@@ -276,13 +335,16 @@ export const reverseSpellSelector = (
 			CardIds.PrimordialOverseer_TIME_213,
 			CardIds.RadianceOfAzshara_TSC_635,
 			CardIds.SpreadingSaplingsTavernBrawl,
-			CardIds.TopiorTheShrubbagazzor,
+			CardIds.TopiorTheShrubbagazzor
 		);
 	}
 
 	// HAS_MECHANIC_GENERATES_SPELL + PROTOSS (2 cards)
 	if (refCard.mechanics?.includes('GENERATES_SPELL') && refCard.mechanics?.includes('PROTOSS')) {
-		matchingCardIds.push(CardIds.Colossus_SC_758, CardIds.ShieldBattery_SC_759);
+		matchingCardIds.push(
+			CardIds.Colossus_SC_758,
+			CardIds.ShieldBattery_SC_759
+		);
 	}
 
 	// HAS_MECHANIC_GENERATES_SPELL + SHADOW (8 cards)
@@ -295,7 +357,7 @@ export const reverseSpellSelector = (
 			CardIds.ReachEquilibrium_CorruptTheLightToken_TLC_817t2,
 			CardIds.ReachEquilibrium_TLC_817,
 			CardIds.ShadowclothNeedle,
-			CardIds.StaffOfPainTavernBrawl,
+			CardIds.StaffOfPainTavernBrawl
 		);
 	}
 
@@ -326,7 +388,22 @@ export const reverseSpellSelector = (
 			CardIds.SecretkeeperVanilla,
 			CardIds.SparkjoyCheat,
 			CardIds.StarstrungBow,
-			CardIds.SwordOfTheFallen,
+			CardIds.SwordOfTheFallen
+		);
+	}
+
+	// HAS_SPELL_SCHOOL + SPELL (9 cards)
+	if (!!refCard.spellSchool && refCard.type?.toUpperCase() === 'SPELL') {
+		matchingCardIds.push(
+			CardIds.CoralKeeper,
+			CardIds.DiscoveryOfMagic,
+			CardIds.ElementalInspiration,
+			CardIds.InquisitiveCreation,
+			CardIds.MagisterDawngrasp_AV_200,
+			CardIds.Multicaster,
+			CardIds.RazzleDazzler_VAC_301,
+			CardIds.Sif,
+			CardIds.WisdomOfNorgannon
 		);
 	}
 
@@ -353,7 +430,7 @@ export const reverseSpellSelector = (
 			CardIds.StarlightGroove,
 			CardIds.TheGardensGrace,
 			CardIds.VeteranWarmedic,
-			CardIds.VeteranWarmedic_CORE_BAR_878,
+			CardIds.VeteranWarmedic_CORE_BAR_878
 		);
 	}
 
@@ -374,13 +451,16 @@ export const reverseSpellSelector = (
 			CardIds.ToadOfTheWilds,
 			CardIds.TopiorTheShrubbagazzor,
 			CardIds.WidowbloomSeedsman,
-			CardIds.WrathspineEnchanter,
+			CardIds.WrathspineEnchanter
 		);
 	}
 
 	// PROTOSS + SPELL (2 cards)
 	if (refCard.mechanics?.includes('PROTOSS') && refCard.type?.toUpperCase() === 'SPELL') {
-		matchingCardIds.push(CardIds.Colossus_SC_758, CardIds.ShieldBattery_SC_759);
+		matchingCardIds.push(
+			CardIds.Colossus_SC_758,
+			CardIds.ShieldBattery_SC_759
+		);
 	}
 
 	// SHADOW + SPELL (15 cards)
@@ -400,7 +480,7 @@ export const reverseSpellSelector = (
 			CardIds.SketchArtist_TOY_916,
 			CardIds.SpiritGuide_CORE_AV_328,
 			CardIds.StaffOfPainTavernBrawl,
-			CardIds.TwilightDeceptor,
+			CardIds.TwilightDeceptor
 		);
 	}
 
@@ -409,23 +489,30 @@ export const reverseSpellSelector = (
 		matchingCardIds.push(
 			CardIds.ArcaneFluxTavernBrawl,
 			CardIds.ArcaneQuiver_RLK_817,
-			CardIds.ArcaniteCrystalTavernBrawl,
+			CardIds.ArcaniteCrystalTavernBrawl
 		);
 	}
 
 	// FEL (1 cards)
 	if (refCard.spellSchool?.toUpperCase() === 'FEL') {
-		matchingCardIds.push(CardIds.CorruptedFelstoneTavernBrawl);
+		matchingCardIds.push(
+			CardIds.CorruptedFelstoneTavernBrawl
+		);
 	}
 
 	// FIRE (1 cards)
 	if (refCard.spellSchool?.toUpperCase() === 'FIRE') {
-		matchingCardIds.push(CardIds.BlazingAccretion_GDB_302);
+		matchingCardIds.push(
+			CardIds.BlazingAccretion_GDB_302
+		);
 	}
 
 	// FROST (2 cards)
 	if (refCard.spellSchool?.toUpperCase() === 'FROST') {
-		matchingCardIds.push(CardIds.OverseerFrigidaraCore_RLK_224, CardIds.OverseerFrigidara_LEG_RLK_224);
+		matchingCardIds.push(
+			CardIds.OverseerFrigidaraCore_RLK_224,
+			CardIds.OverseerFrigidara_LEG_RLK_224
+		);
 	}
 
 	// HAS_MECHANIC_GENERATES_SPELL (128 cards)
@@ -558,11 +645,11 @@ export const reverseSpellSelector = (
 			CardIds.WishOfTheNewMoon_EDR_460,
 			CardIds.YoggSaronHopesEnd_OG_134,
 			CardIds.YoggSaronMasterOfFate,
-			CardIds.YsielWindsinger,
+			CardIds.YsielWindsinger
 		);
 	}
 
-	// HAS_MECHANIC_SECRET (25 cards)
+	// HAS_MECHANIC_SECRET (24 cards)
 	if (refCard.mechanics?.includes('SECRET')) {
 		matchingCardIds.push(
 			CardIds.AncientMysteries,
@@ -588,8 +675,25 @@ export const reverseSpellSelector = (
 			CardIds.ScuttlebuttGhoul,
 			CardIds.ScuttlebuttGhoul_CORE_REV_900,
 			CardIds.SecretStudiesTavernBrawl,
-			CardIds.SpringTheTrap,
-			CardIds.Zuljin_WarriorsOfAmani_THD_010p,
+			CardIds.SpringTheTrap
+		);
+	}
+
+	// HAS_MECHANIC_SPELLPOWER (3 cards)
+	if (refCard.mechanics?.includes('SPELLPOWER')) {
+		matchingCardIds.push(
+			CardIds.BottomlessToyChest_TOY_851,
+			CardIds.SorcerousSubstitute,
+			CardIds.WoodlandWonders_TOY_804
+		);
+	}
+
+	// HAS_SPELL_SCHOOL (3 cards)
+	if (!!refCard.spellSchool) {
+		matchingCardIds.push(
+			CardIds.Buttons_VAC_437,
+			CardIds.CabaretHeadliner_VAC_954,
+			CardIds.CarressCabaretStar_VAC_449
 		);
 	}
 
@@ -598,13 +702,16 @@ export const reverseSpellSelector = (
 		matchingCardIds.push(
 			CardIds.CreatureOfTheSacredCave_TLC_430,
 			CardIds.DivineIlluminationTavernBrawl,
-			CardIds.SpiritGuide,
+			CardIds.SpiritGuide
 		);
 	}
 
 	// NATURE (2 cards)
 	if (refCard.spellSchool?.toUpperCase() === 'NATURE') {
-		matchingCardIds.push(CardIds.ChampionOfStorms, CardIds.CrashOfThunder);
+		matchingCardIds.push(
+			CardIds.ChampionOfStorms,
+			CardIds.CrashOfThunder
+		);
 	}
 
 	// SHADOW (4 cards)
@@ -613,11 +720,11 @@ export const reverseSpellSelector = (
 			CardIds.CrystalsmithCultist,
 			CardIds.Darkbomb,
 			CardIds.Darkbomb_WON_095,
-			CardIds.SpiritGuide,
+			CardIds.SpiritGuide
 		);
 	}
 
-	// SPELL (91 cards)
+	// SPELL (90 cards)
 	if (refCard.type?.toUpperCase() === 'SPELL') {
 		matchingCardIds.push(
 			CardIds.AdvancedTargetingMonocle,
@@ -709,8 +816,7 @@ export const reverseSpellSelector = (
 			CardIds.UngoroBrochure_DalaranBrochureToken_WORK_050t,
 			CardIds.Ursol_EDR_259,
 			CardIds.VoidFlayer,
-			CardIds.VolumeUp,
-			CardIds.Zuljin,
+			CardIds.VolumeUp
 		);
 	}
 
