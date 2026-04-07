@@ -5,14 +5,12 @@
  */
 
 import { CardIds } from '@firestone-hs/reference-data';
-import { DeckCard } from '../../../models/deck-card';
 import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
 import { Selector } from '../cards-highlight-common.service';
-import { and, or, side, inDeck, inHand, cardIs } from '../selectors';
+import { and, cardIs, inDeck, inHand, or, side } from '../selectors';
 
 export const reverseGeneralSelector = (
 	cardId: string,
-	card: DeckCard | undefined,
 	inputSide: HighlightSide,
 	allCards: CardsFacadeService,
 ): Selector | null => {
@@ -22,83 +20,93 @@ export const reverseGeneralSelector = (
 	const matchingCardIds: CardIds[] = [];
 
 	// COST_LESS_4 + HAS_MECHANIC_DEATHRATTLE + MINION (2 cards)
-	if (refCard.cost != null && refCard.cost < 4 && refCard.mechanics?.includes('DEATHRATTLE') && refCard.type?.toUpperCase() === 'MINION') {
-		matchingCardIds.push(
-			CardIds.DreadRaptor_TLC_432,
-			CardIds.Razorboar
-		);
+	if (
+		refCard.cost != null &&
+		refCard.cost < 4 &&
+		refCard.mechanics?.includes('DEATHRATTLE') &&
+		refCard.type?.toUpperCase() === 'MINION'
+	) {
+		matchingCardIds.push(CardIds.DreadRaptor_TLC_432, CardIds.Razorboar);
 	}
 
 	// COST_LESS_4 + MINION + NEUTRAL (1 cards)
-	if (refCard.cost != null && refCard.cost < 4 && refCard.type?.toUpperCase() === 'MINION' && refCard.classes?.includes('NEUTRAL')) {
-		matchingCardIds.push(
-			CardIds.WarCommandsTavernBrawl
-		);
+	if (
+		refCard.cost != null &&
+		refCard.cost < 4 &&
+		refCard.type?.toUpperCase() === 'MINION' &&
+		refCard.classes?.includes('NEUTRAL')
+	) {
+		matchingCardIds.push(CardIds.WarCommandsTavernBrawl);
 	}
 
 	// COST_LESS_5 + HAS_MECHANIC_DEATHRATTLE + MINION (1 cards)
-	if (refCard.cost != null && refCard.cost < 5 && refCard.mechanics?.includes('DEATHRATTLE') && refCard.type?.toUpperCase() === 'MINION') {
-		matchingCardIds.push(
-			CardIds.RazorfenBeastmaster
-		);
+	if (
+		refCard.cost != null &&
+		refCard.cost < 5 &&
+		refCard.mechanics?.includes('DEATHRATTLE') &&
+		refCard.type?.toUpperCase() === 'MINION'
+	) {
+		matchingCardIds.push(CardIds.RazorfenBeastmaster);
 	}
 
 	// COST_LESS_6 + HAS_MECHANIC_DEATHRATTLE + MINION (1 cards)
-	if (refCard.cost != null && refCard.cost < 6 && refCard.mechanics?.includes('DEATHRATTLE') && refCard.type?.toUpperCase() === 'MINION') {
-		matchingCardIds.push(
-			CardIds.DeathSpeakerBlackthorn_BAR_329
-		);
+	if (
+		refCard.cost != null &&
+		refCard.cost < 6 &&
+		refCard.mechanics?.includes('DEATHRATTLE') &&
+		refCard.type?.toUpperCase() === 'MINION'
+	) {
+		matchingCardIds.push(CardIds.DeathSpeakerBlackthorn_BAR_329);
 	}
 
 	// COST_MORE_0 + HAS_MECHANIC_GENERATES_SPELL + SHADOW (1 cards)
-	if (refCard.cost != null && refCard.cost > 0 && refCard.mechanics?.includes('GENERATES_SPELL') && refCard.spellSchool?.toUpperCase() === 'SHADOW') {
-		matchingCardIds.push(
-			CardIds.TamsinRoame_BAR_918
-		);
+	if (
+		refCard.cost != null &&
+		refCard.cost > 0 &&
+		refCard.mechanics?.includes('GENERATES_SPELL') &&
+		refCard.spellSchool?.toUpperCase() === 'SHADOW'
+	) {
+		matchingCardIds.push(CardIds.TamsinRoame_BAR_918);
 	}
 
 	// COST_MORE_0 + SHADOW + SPELL (1 cards)
-	if (refCard.cost != null && refCard.cost > 0 && refCard.spellSchool?.toUpperCase() === 'SHADOW' && refCard.type?.toUpperCase() === 'SPELL') {
-		matchingCardIds.push(
-			CardIds.TamsinRoame_BAR_918
-		);
+	if (
+		refCard.cost != null &&
+		refCard.cost > 0 &&
+		refCard.spellSchool?.toUpperCase() === 'SHADOW' &&
+		refCard.type?.toUpperCase() === 'SPELL'
+	) {
+		matchingCardIds.push(CardIds.TamsinRoame_BAR_918);
 	}
 
 	// COST_MORE_4 + HAS_MECHANIC_DEATHRATTLE + MINION (1 cards)
-	if (refCard.cost != null && refCard.cost > 4 && refCard.mechanics?.includes('DEATHRATTLE') && refCard.type?.toUpperCase() === 'MINION') {
-		matchingCardIds.push(
-			CardIds.FerociousFelbat_EDR_892
-		);
+	if (
+		refCard.cost != null &&
+		refCard.cost > 4 &&
+		refCard.mechanics?.includes('DEATHRATTLE') &&
+		refCard.type?.toUpperCase() === 'MINION'
+	) {
+		matchingCardIds.push(CardIds.FerociousFelbat_EDR_892);
 	}
 
 	// BEAST + COST_LESS_4 (1 cards)
-	if (refCard.races?.map(r => r.toUpperCase()).includes('BEAST') && refCard.cost != null && refCard.cost < 4) {
-		matchingCardIds.push(
-			CardIds.TrialOfTheJormungars_WON_028
-		);
+	if (refCard.races?.map((r) => r.toUpperCase()).includes('BEAST') && refCard.cost != null && refCard.cost < 4) {
+		matchingCardIds.push(CardIds.TrialOfTheJormungars_WON_028);
 	}
 
 	// BEAST + COST_LESS_6 (2 cards)
-	if (refCard.races?.map(r => r.toUpperCase()).includes('BEAST') && refCard.cost != null && refCard.cost < 6) {
-		matchingCardIds.push(
-			CardIds.GuardianAnimals,
-			CardIds.PetCollector
-		);
+	if (refCard.races?.map((r) => r.toUpperCase()).includes('BEAST') && refCard.cost != null && refCard.cost < 6) {
+		matchingCardIds.push(CardIds.GuardianAnimals, CardIds.PetCollector);
 	}
 
 	// BEAST + COST_MORE_4 (1 cards)
-	if (refCard.races?.map(r => r.toUpperCase()).includes('BEAST') && refCard.cost != null && refCard.cost > 4) {
-		matchingCardIds.push(
-			CardIds.StranglethornHeart
-		);
+	if (refCard.races?.map((r) => r.toUpperCase()).includes('BEAST') && refCard.cost != null && refCard.cost > 4) {
+		matchingCardIds.push(CardIds.StranglethornHeart);
 	}
 
 	// COST_EQUAL_1 + HAS_MECHANIC_GENERATES_SPELL (2 cards)
 	if (refCard.cost === 1 && refCard.mechanics?.includes('GENERATES_SPELL')) {
-		matchingCardIds.push(
-			CardIds.Gazlowe,
-			CardIds.NiriOfTheCrater_TLC_836
-		);
+		matchingCardIds.push(CardIds.Gazlowe, CardIds.NiriOfTheCrater_TLC_836);
 	}
 
 	// COST_EQUAL_1 + MINION (5 cards)
@@ -108,86 +116,58 @@ export const reverseGeneralSelector = (
 			CardIds.BoogieDown,
 			CardIds.K90tron,
 			CardIds.NiriOfTheCrater_TLC_836,
-			CardIds.TrustyFishingRod_VAC_960
+			CardIds.TrustyFishingRod_VAC_960,
 		);
 	}
 
 	// COST_EQUAL_1 + SPELL (3 cards)
 	if (refCard.cost === 1 && refCard.type?.toUpperCase() === 'SPELL') {
-		matchingCardIds.push(
-			CardIds.Gazlowe,
-			CardIds.NiriOfTheCrater_TLC_836,
-			CardIds.TrinketTracker
-		);
+		matchingCardIds.push(CardIds.Gazlowe, CardIds.NiriOfTheCrater_TLC_836, CardIds.TrinketTracker);
 	}
 
 	// COST_EQUAL_2 + SPELL (2 cards)
 	if (refCard.cost === 2 && refCard.type?.toUpperCase() === 'SPELL') {
-		matchingCardIds.push(
-			CardIds.BarakKodobane_BAR_551,
-			CardIds.BarakKodobane_CORE_BAR_551
-		);
+		matchingCardIds.push(CardIds.BarakKodobane_BAR_551, CardIds.BarakKodobane_CORE_BAR_551);
 	}
 
 	// COST_EQUAL_8 + MINION (2 cards)
 	if (refCard.cost === 8 && refCard.type?.toUpperCase() === 'MINION') {
-		matchingCardIds.push(
-			CardIds.JuicyPsychmelon,
-			CardIds.SilverVanguard
-		);
+		matchingCardIds.push(CardIds.JuicyPsychmelon, CardIds.SilverVanguard);
 	}
 
 	// COST_EQUAL_8 + SPELL (1 cards)
 	if (refCard.cost === 8 && refCard.type?.toUpperCase() === 'SPELL') {
-		matchingCardIds.push(
-			CardIds.ArcaneBrilliance
-		);
+		matchingCardIds.push(CardIds.ArcaneBrilliance);
 	}
 
 	// COST_LESS_3 + MINION (3 cards)
 	if (refCard.cost != null && refCard.cost < 3 && refCard.type?.toUpperCase() === 'MINION') {
-		matchingCardIds.push(
-			CardIds.BandOfBeesTavernBrawl,
-			CardIds.CallToArms,
-			CardIds.OracleOfElune
-		);
+		matchingCardIds.push(CardIds.BandOfBeesTavernBrawl, CardIds.CallToArms, CardIds.OracleOfElune);
 	}
 
 	// COST_LESS_3 + SPELL (2 cards)
 	if (refCard.cost != null && refCard.cost < 3 && refCard.type?.toUpperCase() === 'SPELL') {
-		matchingCardIds.push(
-			CardIds.SunsapperLynessa_VAC_507,
-			CardIds.VioletTreasuregill_TLC_438
-		);
+		matchingCardIds.push(CardIds.SunsapperLynessa_VAC_507, CardIds.VioletTreasuregill_TLC_438);
 	}
 
 	// COST_LESS_4 + MINION (2 cards)
 	if (refCard.cost != null && refCard.cost < 4 && refCard.type?.toUpperCase() === 'MINION') {
-		matchingCardIds.push(
-			CardIds.AnimateDead,
-			CardIds.Resuscitate_TLC_818
-		);
+		matchingCardIds.push(CardIds.AnimateDead, CardIds.Resuscitate_TLC_818);
 	}
 
 	// COST_LESS_4 + MURLOC (1 cards)
-	if (refCard.cost != null && refCard.cost < 4 && refCard.races?.map(r => r.toUpperCase()).includes('MURLOC')) {
-		matchingCardIds.push(
-			CardIds.Warloc_CATA_180
-		);
+	if (refCard.cost != null && refCard.cost < 4 && refCard.races?.map((r) => r.toUpperCase()).includes('MURLOC')) {
+		matchingCardIds.push(CardIds.Warloc_CATA_180);
 	}
 
 	// COST_LESS_4 + SPELL (1 cards)
 	if (refCard.cost != null && refCard.cost < 4 && refCard.type?.toUpperCase() === 'SPELL') {
-		matchingCardIds.push(
-			CardIds.StonehearthVindicator
-		);
+		matchingCardIds.push(CardIds.StonehearthVindicator);
 	}
 
 	// COST_LESS_5 + HAS_MECHANIC_DEATHRATTLE (1 cards)
 	if (refCard.cost != null && refCard.cost < 5 && refCard.mechanics?.includes('DEATHRATTLE')) {
-		matchingCardIds.push(
-			CardIds.SketchyInformation
-		);
+		matchingCardIds.push(CardIds.SketchyInformation);
 	}
 
 	// COST_LESS_5 + MINION (4 cards)
@@ -196,59 +176,43 @@ export const reverseGeneralSelector = (
 			CardIds.GrizzledGuardian,
 			CardIds.Hybridization_TLC_236,
 			CardIds.OakenSummons,
-			CardIds.OakenSummons_CORE_LOOT_309
+			CardIds.OakenSummons_CORE_LOOT_309,
 		);
 	}
 
 	// COST_LESS_5 + SPELL (1 cards)
 	if (refCard.cost != null && refCard.cost < 5 && refCard.type?.toUpperCase() === 'SPELL') {
-		matchingCardIds.push(
-			CardIds.CracklingCloudstrider_CATA_563
-		);
+		matchingCardIds.push(CardIds.CracklingCloudstrider_CATA_563);
 	}
 
 	// COST_MORE_0 + MINION (1 cards)
 	if (refCard.cost != null && refCard.cost > 0 && refCard.type?.toUpperCase() === 'MINION') {
-		matchingCardIds.push(
-			CardIds.Rally
-		);
+		matchingCardIds.push(CardIds.Rally);
 	}
 
 	// COST_MORE_1 + HAS_MECHANIC_GENERATES_SPELL (1 cards)
 	if (refCard.cost != null && refCard.cost > 1 && refCard.mechanics?.includes('GENERATES_SPELL')) {
-		matchingCardIds.push(
-			CardIds.PlaguebringerTavernBrawl
-		);
+		matchingCardIds.push(CardIds.PlaguebringerTavernBrawl);
 	}
 
 	// COST_MORE_1 + SPELL (1 cards)
 	if (refCard.cost != null && refCard.cost > 1 && refCard.type?.toUpperCase() === 'SPELL') {
-		matchingCardIds.push(
-			CardIds.PlaguebringerTavernBrawl
-		);
+		matchingCardIds.push(CardIds.PlaguebringerTavernBrawl);
 	}
 
 	// COST_MORE_2 + HAS_MECHANIC_BATTLECRY (1 cards)
 	if (refCard.cost != null && refCard.cost > 2 && refCard.mechanics?.includes('BATTLECRY')) {
-		matchingCardIds.push(
-			CardIds.AllTogetherNowTavernBrawl
-		);
+		matchingCardIds.push(CardIds.AllTogetherNowTavernBrawl);
 	}
 
 	// COST_MORE_4 + MECH (1 cards)
-	if (refCard.cost != null && refCard.cost > 4 && refCard.races?.map(r => r.toUpperCase()).includes('MECH')) {
-		matchingCardIds.push(
-			CardIds.InventorBoom_TOY_607
-		);
+	if (refCard.cost != null && refCard.cost > 4 && refCard.races?.map((r) => r.toUpperCase()).includes('MECH')) {
+		matchingCardIds.push(CardIds.InventorBoom_TOY_607);
 	}
 
 	// COST_MORE_4 + MINION (3 cards)
 	if (refCard.cost != null && refCard.cost > 4 && refCard.type?.toUpperCase() === 'MINION') {
-		matchingCardIds.push(
-			CardIds.CaricatureArtist_TOY_391,
-			CardIds.PrecursoryStrike_TIME_750,
-			CardIds.Prescience
-		);
+		matchingCardIds.push(CardIds.CaricatureArtist_TOY_391, CardIds.PrecursoryStrike_TIME_750, CardIds.Prescience);
 	}
 
 	// COST_MORE_4 + SPELL (7 cards)
@@ -260,50 +224,41 @@ export const reverseGeneralSelector = (
 			CardIds.Groundskeeper,
 			CardIds.HagathaTheFabled_TOY_504,
 			CardIds.SunreaverWarmage,
-			CardIds.WeaverOfTheCycle_EDR_472
+			CardIds.WeaverOfTheCycle_EDR_472,
 		);
 	}
 
 	// COST_MORE_5 + HAS_MECHANIC_GENERATES_SPELL (1 cards)
 	if (refCard.cost != null && refCard.cost > 5 && refCard.mechanics?.includes('GENERATES_SPELL')) {
-		matchingCardIds.push(
-			CardIds.GreySageParrot
-		);
+		matchingCardIds.push(CardIds.GreySageParrot);
 	}
 
 	// COST_MORE_5 + MINION (1 cards)
 	if (refCard.cost != null && refCard.cost > 5 && refCard.type?.toUpperCase() === 'MINION') {
-		matchingCardIds.push(
-			CardIds.ScepterOfSummoning
-		);
+		matchingCardIds.push(CardIds.ScepterOfSummoning);
 	}
 
 	// COST_MORE_5 + SPELL (1 cards)
 	if (refCard.cost != null && refCard.cost > 5 && refCard.type?.toUpperCase() === 'SPELL') {
-		matchingCardIds.push(
-			CardIds.GreySageParrot
-		);
+		matchingCardIds.push(CardIds.GreySageParrot);
 	}
 
 	// COST_MORE_6 + MINION (1 cards)
 	if (refCard.cost != null && refCard.cost > 6 && refCard.type?.toUpperCase() === 'MINION') {
-		matchingCardIds.push(
-			CardIds.RotheartDryad_EDR_485
-		);
+		matchingCardIds.push(CardIds.RotheartDryad_EDR_485);
 	}
 
 	// COST_MORE_7 + MINION (1 cards)
 	if (refCard.cost != null && refCard.cost > 7 && refCard.type?.toUpperCase() === 'MINION') {
-		matchingCardIds.push(
-			CardIds.Merithra_EDR_238
-		);
+		matchingCardIds.push(CardIds.Merithra_EDR_238);
 	}
 
 	// ELEMENTAL + LEGENDARY (1 cards)
-	if (refCard.races?.map(r => r.toUpperCase()).includes('ELEMENTAL') && refCard.rarity?.toUpperCase() === 'LEGENDARY') {
-		matchingCardIds.push(
-			CardIds.AlakirTheWindlord_ElementalEvocation_THD_026p
-		);
+	if (
+		refCard.races?.map((r) => r.toUpperCase()).includes('ELEMENTAL') &&
+		refCard.rarity?.toUpperCase() === 'LEGENDARY'
+	) {
+		matchingCardIds.push(CardIds.AlakirTheWindlord_ElementalEvocation_THD_026p);
 	}
 
 	// HAS_MECHANIC_BATTLECRY + MINION (7 cards)
@@ -315,16 +270,13 @@ export const reverseGeneralSelector = (
 			CardIds.Murmur_GDB_448,
 			CardIds.ParrotSanctuary_VAC_409,
 			CardIds.Snapdragon,
-			CardIds.Turbulus_WORK_013
+			CardIds.Turbulus_WORK_013,
 		);
 	}
 
 	// HAS_MECHANIC_DEATHRATTLE + MECH (2 cards)
-	if (refCard.mechanics?.includes('DEATHRATTLE') && refCard.races?.map(r => r.toUpperCase()).includes('MECH')) {
-		matchingCardIds.push(
-			CardIds.BoomWrench_BoomWrenchToken_TOY_604t,
-			CardIds.BoomWrench_TOY_604
-		);
+	if (refCard.mechanics?.includes('DEATHRATTLE') && refCard.races?.map((r) => r.toUpperCase()).includes('MECH')) {
+		matchingCardIds.push(CardIds.BoomWrench_BoomWrenchToken_TOY_604t, CardIds.BoomWrench_TOY_604);
 	}
 
 	// HAS_MECHANIC_DEATHRATTLE + MINION (48 cards)
@@ -377,7 +329,7 @@ export const reverseGeneralSelector = (
 			CardIds.VengefulSpirit_BAR_328,
 			CardIds.WakenerOfSouls_GDB_468,
 			CardIds.XyrellaTheDevout,
-			CardIds.YellingYodeler
+			CardIds.YellingYodeler,
 		);
 	}
 
@@ -394,7 +346,7 @@ export const reverseGeneralSelector = (
 			CardIds.StageDive,
 			CardIds.StageDive_StageDive,
 			CardIds.TownCrier_CORE_GIL_580,
-			CardIds.TownCrier_GIL_580
+			CardIds.TownCrier_GIL_580,
 		);
 	}
 
@@ -417,7 +369,7 @@ export const reverseGeneralSelector = (
 			CardIds.RazormaneBattleguard,
 			CardIds.TortollanTraveler_VAC_518,
 			CardIds.UnluckyPowderman_WW_367,
-			CardIds.ValstannStaghelm_WON_345
+			CardIds.ValstannStaghelm_WON_345,
 		);
 	}
 
@@ -428,16 +380,13 @@ export const reverseGeneralSelector = (
 			CardIds.InspiringPresenceTavernBrawl,
 			CardIds.OffensivePlayTavernBrawl,
 			CardIds.RingOfPhaseshiftingTavernBrawl,
-			CardIds.RoyalGreatswordTavernBrawlToken
+			CardIds.RoyalGreatswordTavernBrawlToken,
 		);
 	}
 
 	// MINION + NEUTRAL (2 cards)
 	if (refCard.type?.toUpperCase() === 'MINION' && refCard.classes?.includes('NEUTRAL')) {
-		matchingCardIds.push(
-			CardIds.MeekMasteryTavernBrawl,
-			CardIds.MulchMadnessTavernBrawl
-		);
+		matchingCardIds.push(CardIds.MeekMasteryTavernBrawl, CardIds.MulchMadnessTavernBrawl);
 	}
 
 	// COST_EQUAL_1 (5 cards)
@@ -447,72 +396,53 @@ export const reverseGeneralSelector = (
 			CardIds.PipThePotent_WW_394,
 			CardIds.PrinceLiam,
 			CardIds.RollingStone,
-			CardIds.ThirstyDrifter_WW_387
+			CardIds.ThirstyDrifter_WW_387,
 		);
 	}
 
 	// COST_EQUAL_2 (1 cards)
 	if (refCard.cost === 2) {
-		matchingCardIds.push(
-			CardIds.GreedyPartner_WW_901
-		);
+		matchingCardIds.push(CardIds.GreedyPartner_WW_901);
 	}
 
 	// COST_EQUAL_3 (1 cards)
 	if (refCard.cost === 3) {
-		matchingCardIds.push(
-			CardIds.LinedancePartner_WW_433
-		);
+		matchingCardIds.push(CardIds.LinedancePartner_WW_433);
 	}
 
 	// COST_EQUAL_4 (1 cards)
 	if (refCard.cost === 4) {
-		matchingCardIds.push(
-			CardIds.RowdyPartner_WW_906
-		);
+		matchingCardIds.push(CardIds.RowdyPartner_WW_906);
 	}
 
 	// COST_LESS_3 (2 cards)
 	if (refCard.cost != null && refCard.cost < 3) {
-		matchingCardIds.push(
-			CardIds.UnendingSwarm,
-			CardIds.WarmasterBlackhorn_CATA_720
-		);
+		matchingCardIds.push(CardIds.UnendingSwarm, CardIds.WarmasterBlackhorn_CATA_720);
 	}
 
 	// COST_MORE_2 (1 cards)
 	if (refCard.cost != null && refCard.cost > 2) {
-		matchingCardIds.push(
-			CardIds.OrbOfRevelationTavernBrawl
-		);
+		matchingCardIds.push(CardIds.OrbOfRevelationTavernBrawl);
 	}
 
 	// COST_MORE_3 (1 cards)
 	if (refCard.cost != null && refCard.cost > 3) {
-		matchingCardIds.push(
-			CardIds.HemetJungleHunter
-		);
+		matchingCardIds.push(CardIds.HemetJungleHunter);
 	}
 
 	// COST_MORE_4 (1 cards)
 	if (refCard.cost != null && refCard.cost > 4) {
-		matchingCardIds.push(
-			CardIds.TimberTambourine
-		);
+		matchingCardIds.push(CardIds.TimberTambourine);
 	}
 
 	// COST_MORE_5 (1 cards)
 	if (refCard.cost != null && refCard.cost > 5) {
-		matchingCardIds.push(
-			CardIds.SummerFlowerchild
-		);
+		matchingCardIds.push(CardIds.SummerFlowerchild);
 	}
 
 	// COST_MORE_7 (1 cards)
 	if (refCard.cost != null && refCard.cost > 7) {
-		matchingCardIds.push(
-			CardIds.FlamesOfTheFirelord_FIR_923
-		);
+		matchingCardIds.push(CardIds.FlamesOfTheFirelord_FIR_923);
 	}
 
 	// HAS_MECHANIC_BATTLECRY (13 cards)
@@ -530,7 +460,7 @@ export const reverseGeneralSelector = (
 			CardIds.RallyTheTroopsTavernBrawl,
 			CardIds.Shudderblock_ShudderblockToken_TOY_501t,
 			CardIds.Shudderblock_TOY_501,
-			CardIds.Shudderwock_GIL_820
+			CardIds.Shudderwock_GIL_820,
 		);
 	}
 
@@ -554,7 +484,7 @@ export const reverseGeneralSelector = (
 			CardIds.ShallowGrave,
 			CardIds.Smokescreen,
 			CardIds.SummonerDarkmarrow_VAC_503,
-			CardIds.TotemOfTheDead_LOOTA_845
+			CardIds.TotemOfTheDead_LOOTA_845,
 		);
 	}
 
@@ -612,7 +542,7 @@ export const reverseGeneralSelector = (
 			CardIds.VulperaToxinblade,
 			CardIds.WeaponsAttendant_VAC_924,
 			CardIds.WeaponsExpert,
-			CardIds.WickedBlightspawn_END_002
+			CardIds.WickedBlightspawn_END_002,
 		);
 	}
 
@@ -622,7 +552,7 @@ export const reverseGeneralSelector = (
 			CardIds.CountessAshmore,
 			CardIds.PipsiPainthoof_TOY_812,
 			CardIds.PluckyPaintfin_TOY_517,
-			CardIds.VarianKingOfStormwind
+			CardIds.VarianKingOfStormwind,
 		);
 	}
 
@@ -635,7 +565,7 @@ export const reverseGeneralSelector = (
 			CardIds.PipsiPainthoof_TOY_812,
 			CardIds.StolenGoods,
 			CardIds.StolenGoods_WON_110,
-			CardIds.VarianKingOfStormwind
+			CardIds.VarianKingOfStormwind,
 		);
 	}
 
@@ -645,7 +575,7 @@ export const reverseGeneralSelector = (
 			CardIds.ArchVillainRafaam_BeholdMyStuff_THD_032p,
 			CardIds.BountyBoard_WW_003,
 			CardIds.GaronaHalforcen_TheKingslayersToken_TIME_875t1,
-			CardIds.MedivhsTriumph_CATA_308
+			CardIds.MedivhsTriumph_CATA_308,
 		);
 	}
 
@@ -661,7 +591,7 @@ export const reverseGeneralSelector = (
 			CardIds.SpineCrawler_SC_023,
 			CardIds.WelcomeHome_TIME_EVENT_997,
 			CardIds.WorkshopJanitor_TOY_891,
-			CardIds.Xb931Housekeeper_VAC_956
+			CardIds.Xb931Housekeeper_VAC_956,
 		);
 	}
 
@@ -674,7 +604,7 @@ export const reverseGeneralSelector = (
 			CardIds.LightforgedZealot,
 			CardIds.TheCountess,
 			CardIds.ThePurator,
-			CardIds.WyrmrestPurifier
+			CardIds.WyrmrestPurifier,
 		);
 	}
 
@@ -732,7 +662,7 @@ export const reverseGeneralSelector = (
 			CardIds.VulperaToxinblade,
 			CardIds.WeaponsAttendant_VAC_924,
 			CardIds.WeaponsExpert,
-			CardIds.WickedBlightspawn_END_002
+			CardIds.WickedBlightspawn_END_002,
 		);
 	}
 

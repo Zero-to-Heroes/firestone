@@ -1,14 +1,9 @@
 import { CardIds } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { DeckCard } from '../../models/deck-card';
 import { Selector } from './cards-highlight-common.service';
 import { and, cardIs, drawCard, inDeck } from './selectors';
 
-export const cardIdSelectorForArenaDraft = (
-	cardId: string,
-	card: DeckCard | undefined,
-	allCards: CardsFacadeService,
-): Selector | null => {
+export const cardIdSelectorForArenaDraft = (cardId: string, allCards: CardsFacadeService): Selector | null => {
 	const inputSide = 'arena-draft';
 
 	switch (cardId) {

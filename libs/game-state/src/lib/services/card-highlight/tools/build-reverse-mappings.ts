@@ -64,7 +64,7 @@ function extractCardConditions(): ConditionMapping[] {
 
 		while (i < content.length) {
 			const char = content[i];
-			
+
 			if (char === '(') {
 				depth++;
 				current += char;
@@ -337,7 +337,7 @@ function extractConditionsFromCleanedCode(code: string): string[] {
 
 	for (const part of parts) {
 		const trimmed = part.trim();
-		
+
 		if (trimmed.startsWith('or(') && trimmed.endsWith(')')) {
 			orConditions.push(trimmed);
 		} else {
@@ -867,14 +867,12 @@ function generateMinionFile(flatMappings: { [condition: string]: string[] }): st
 	lines.push(' */');
 	lines.push('');
 	lines.push("import { CardIds } from '@firestone-hs/reference-data';");
-	lines.push("import { DeckCard } from '../../../models/deck-card';");
 	lines.push("import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';");
 	lines.push("import { Selector } from '../cards-highlight-common.service';");
 	lines.push("import { and, or, side, inDeck, inHand, cardIs } from '../selectors';");
 	lines.push('');
 	lines.push('export const reverseMinionSelector = (');
 	lines.push('	cardId: string,');
-	lines.push('	card: DeckCard | undefined,');
 	lines.push('	inputSide: HighlightSide,');
 	lines.push('	allCards: CardsFacadeService,');
 	lines.push('): Selector | null => {');
@@ -984,14 +982,12 @@ function generateSpellFile(flatMappings: { [condition: string]: string[] }): str
 	lines.push(' */');
 	lines.push('');
 	lines.push("import { CardIds } from '@firestone-hs/reference-data';");
-	lines.push("import { DeckCard } from '../../../models/deck-card';");
 	lines.push("import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';");
 	lines.push("import { Selector } from '../cards-highlight-common.service';");
 	lines.push("import { and, or, side, inDeck, inHand, cardIs } from '../selectors';");
 	lines.push('');
 	lines.push('export const reverseSpellSelector = (');
 	lines.push('	cardId: string,');
-	lines.push('	card: DeckCard | undefined,');
 	lines.push('	inputSide: HighlightSide,');
 	lines.push('	allCards: CardsFacadeService,');
 	lines.push('): Selector | null => {');
@@ -1102,14 +1098,12 @@ function generateGeneralFile(flatMappings: { [condition: string]: string[] }): s
 	lines.push(' */');
 	lines.push('');
 	lines.push("import { CardIds } from '@firestone-hs/reference-data';");
-	lines.push("import { DeckCard } from '../../../models/deck-card';");
 	lines.push("import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';");
 	lines.push("import { Selector } from '../cards-highlight-common.service';");
 	lines.push("import { and, or, side, inDeck, inHand, cardIs } from '../selectors';");
 	lines.push('');
 	lines.push('export const reverseGeneralSelector = (');
 	lines.push('	cardId: string,');
-	lines.push('	card: DeckCard | undefined,');
 	lines.push('	inputSide: HighlightSide,');
 	lines.push('	allCards: CardsFacadeService,');
 	lines.push('): Selector | null => {');
@@ -1185,7 +1179,6 @@ function generateMainFile(): string {
 	lines.push(' * MAIN ENTRY POINT FOR REVERSE SYNERGIES');
 	lines.push(' */');
 	lines.push('');
-	lines.push("import { DeckCard } from '../../../models/deck-card';");
 	lines.push("import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';");
 	lines.push("import { Selector } from '../cards-highlight-common.service';");
 	lines.push("import { reverseMinionSelector } from './reverse-minion-selectors';");
@@ -1194,7 +1187,6 @@ function generateMainFile(): string {
 	lines.push('');
 	lines.push('export const reverseCardIdSelector = (');
 	lines.push('	cardId: string,');
-	lines.push('	card: DeckCard | undefined,');
 	lines.push('	inputSide: HighlightSide,');
 	lines.push('	allCards: CardsFacadeService,');
 	lines.push('): Selector | null => {');
@@ -1203,18 +1195,18 @@ function generateMainFile(): string {
 	lines.push('');
 	lines.push('	// Try minion-specific selectors first');
 	lines.push("	if (refCard.type?.toUpperCase() === 'MINION') {");
-	lines.push('		const minionResult = reverseMinionSelector(cardId, card, inputSide, allCards);');
+	lines.push('		const minionResult = reverseMinionSelector(cardId, inputSide, allCards);');
 	lines.push('		if (minionResult) return minionResult;');
 	lines.push('	}');
 	lines.push('');
 	lines.push('	// Try spell-specific selectors');
 	lines.push("	if (refCard.type?.toUpperCase() === 'SPELL') {");
-	lines.push('		const spellResult = reverseSpellSelector(cardId, card, inputSide, allCards);');
+	lines.push('		const spellResult = reverseSpellSelector(cardId, inputSide, allCards);');
 	lines.push('		if (spellResult) return spellResult;');
 	lines.push('	}');
 	lines.push('');
 	lines.push('	// Try general selectors');
-	lines.push('	const generalResult = reverseGeneralSelector(cardId, card, inputSide, allCards);');
+	lines.push('	const generalResult = reverseGeneralSelector(cardId, inputSide, allCards);');
 	lines.push('	if (generalResult) return generalResult;');
 	lines.push('');
 	lines.push('	return null;');

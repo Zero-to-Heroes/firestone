@@ -10,9 +10,9 @@ import {
 	RELIC_IDS,
 	SpellSchool,
 } from '@firestone-hs/reference-data';
+import { GameState as ParserGameState } from '@firestone/power-log-parser';
 import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
-import { GameState as ParserGameState } from '@firestone/power-log-parser';
 import { DeckCard } from '../../models/deck-card';
 import { DeckState } from '../../models/deck-state';
 import { DeckZone } from '../../models/deck-zone';
@@ -592,7 +592,7 @@ export abstract class CardsHighlightCommonService {
 				);
 			}
 
-			const draftSelectors = getSelectorsForArenaDraft(cardId, card, this.allCards);
+			const draftSelectors = getSelectorsForArenaDraft(cardId, this.allCards);
 			// console.debug('draftSelectors', draftSelectors);
 			selectors.push(...draftSelectors);
 		}

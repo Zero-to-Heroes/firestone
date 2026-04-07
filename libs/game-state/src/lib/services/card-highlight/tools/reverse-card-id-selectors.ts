@@ -4,16 +4,14 @@
  * MAIN ENTRY POINT FOR REVERSE SYNERGIES
  */
 
-import { DeckCard } from '../../../models/deck-card';
 import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
 import { Selector } from '../cards-highlight-common.service';
+import { reverseGeneralSelector } from './reverse-general-selectors';
 import { reverseMinionSelector } from './reverse-minion-selectors';
 import { reverseSpellSelector } from './reverse-spell-selectors';
-import { reverseGeneralSelector } from './reverse-general-selectors';
 
 export const reverseCardIdSelector = (
 	cardId: string,
-	card: DeckCard | undefined,
 	inputSide: HighlightSide,
 	allCards: CardsFacadeService,
 ): Selector | null => {
@@ -22,18 +20,18 @@ export const reverseCardIdSelector = (
 
 	// Try minion-specific selectors first
 	if (refCard.type?.toUpperCase() === 'MINION') {
-		const minionResult = reverseMinionSelector(cardId, card, inputSide, allCards);
+		const minionResult = reverseMinionSelector(cardId, inputSide, allCards);
 		if (minionResult) return minionResult;
 	}
 
 	// Try spell-specific selectors
 	if (refCard.type?.toUpperCase() === 'SPELL') {
-		const spellResult = reverseSpellSelector(cardId, card, inputSide, allCards);
+		const spellResult = reverseSpellSelector(cardId, inputSide, allCards);
 		if (spellResult) return spellResult;
 	}
 
 	// Try general selectors
-	const generalResult = reverseGeneralSelector(cardId, card, inputSide, allCards);
+	const generalResult = reverseGeneralSelector(cardId, inputSide, allCards);
 	if (generalResult) return generalResult;
 
 	return null;
