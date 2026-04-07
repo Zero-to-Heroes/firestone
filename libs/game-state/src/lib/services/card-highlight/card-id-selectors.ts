@@ -2557,7 +2557,10 @@ export const cardIdSelector = (
 		case CardIds.MendingPoolsTavernBrawl:
 			return and(side(inputSide), spellExtended, nature);
 		case CardIds.MemoriamManifest_TIME_616:
-			return and(side(inputSide), or(inDeck, inHand), undead);
+			return highlightConditions(
+				and(side(inputSide), or(inDeck, inHand), undead),
+				and(side(inputSide), inGraveyard, undead),
+			);
 		case CardIds.MesaduneTheFractured_WW_429:
 			return and(side(inputSide), inDeck, elemental);
 		case CardIds.MessengerBuzzard_WW_807:
