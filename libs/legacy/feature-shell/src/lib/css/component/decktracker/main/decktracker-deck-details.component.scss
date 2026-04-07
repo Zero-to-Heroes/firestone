@@ -27,7 +27,9 @@
 
 	.deck-group-name {
 		display: flex;
-		flex-direction: column;
+		align-items: center;
+		// flex-direction: column;
+		gap: 15px;
 		width: 100%;
 		padding-right: 10px;
 		box-sizing: border-box;
@@ -36,7 +38,7 @@
 		.deck-group-name-label {
 			color: var(--default-title-color);
 			font-size: 14px;
-			margin-bottom: 6px;
+			// margin-bottom: 6px;
 		}
 
 		.deck-group-name-input {
@@ -48,6 +50,7 @@
 			background: rgba(0, 0, 0, 0.25);
 			border: 1px solid rgba(255, 255, 255, 0.15);
 			border-radius: 4px;
+			cursor: text;
 		}
 	}
 
@@ -141,8 +144,13 @@
 				z-index: 1;
 				padding-left: 10px;
 				color: var(--default-text-color);
-				text-shadow: -2px -2px 0 #090a0d, 0px -2px 0 #090a0d, 2px -2px 0 #090a0d, -2px 2px 0 #090a0d,
-					0px 2px 0 #090a0d, 2px 2px 0 #090a0d;
+				text-shadow:
+					-2px -2px 0 #090a0d,
+					0px -2px 0 #090a0d,
+					2px -2px 0 #090a0d,
+					-2px 2px 0 #090a0d,
+					0px 2px 0 #090a0d,
+					2px 2px 0 #090a0d;
 				max-width: 100%;
 				white-space: nowrap;
 				overflow: hidden;

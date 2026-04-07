@@ -42,6 +42,7 @@ import { Observable } from 'rxjs';
 						></decktracker-ladder-stats>
 						<decktracker-deck-details
 							*ngIf="value.currentView === 'deck-details'"
+							scrollable
 						></decktracker-deck-details>
 						<decktracker-rating-graph
 							*ngIf="value.currentView === 'ladder-ranking'"

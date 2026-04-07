@@ -7,20 +7,21 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { ConstructedNavigationService, DeckSummary } from '@firestone/constructed/common';
-import { MainWindowNavigationService, MainWindowStateFacadeService } from '@firestone/mainwindow/common';
+import { DecksProviderService } from '@firestone/decktracker/common';
+import {
+	ConstructedEjectDeckVersionEvent,
+	ConstructedSetDeckGroupNameEvent,
+	ConstructedToggleDeckVersionStatsEvent,
+	MainWindowNavigationService,
+	MainWindowStateFacadeService,
+} from '@firestone/mainwindow/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
 import { Observable, combineLatest } from 'rxjs';
 import { distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
-import { DecksProviderService } from '@firestone/decktracker/common';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import {
-	ConstructedEjectDeckVersionEvent,
-	ConstructedSetDeckGroupNameEvent,
-	ConstructedToggleDeckVersionStatsEvent,
-} from '@firestone/mainwindow/common';
 
 @Component({
 	standalone: false,
@@ -34,15 +35,9 @@ import {
 				selectedDeck: selectedDeck$ | async,
 				selectedVersion: selectedVersion$ | async,
 			} as value"
+			scrollable
 		>
-			<decktracker-stats-for-replays
-				class="global-stats"
-				[replays]="replays$ | async"
-			></decktracker-stats-for-replays>
-			<div
-				class="deck-group-name"
-				*ngIf="value.deck?.allVersions?.length && value.deck?.allVersions?.length > 1"
-			>
+			<div class="deck-group-name" *ngIf="value.deck?.allVersions?.length && value.deck?.allVersions?.length > 1">
 				<label class="deck-group-name-label" [owTranslate]="'app.decktracker.decks.group-name-label'"></label>
 				<input
 					type="text"
@@ -52,6 +47,10 @@ import {
 					(blur)="onDeckGroupNameBlur(value.deck)"
 				/>
 			</div>
+			<decktracker-stats-for-replays
+				class="global-stats"
+				[replays]="replays$ | async"
+			></decktracker-stats-for-replays>
 			<div class="container">
 				<div
 					class="deck-versions"
