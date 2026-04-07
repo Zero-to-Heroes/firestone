@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { CardIds, CardType, getBaseCardId } from '@firestone-hs/reference-data';
+import { GameState as ParserGameState } from '@firestone/power-log-parser';
 import { Mutable } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { BoardSecret } from '../../../models/board-secret';
 import { DeckCard } from '../../../models/deck-card';
 import { DeckState } from '../../../models/deck-state';
-import { GameState as ParserGameState } from '@firestone/power-log-parser';
 import { GameState } from '../../../models/game-state';
 import { SecretOption } from '../../../models/secret-option';
 import { GameEvent } from '../game-event';
@@ -33,18 +33,25 @@ export class DeckManipulationHelper {
 			debug && console.debug('[card-draw] removing card with entityId', entityId, zone);
 			return [
 				zone
-					.map((card: DeckCard) =>
-						Math.abs(card.entityId ?? 0) === Math.abs(entityId) ? null : card,
-					)
+					.map((card: DeckCard) => (Math.abs(card.entityId ?? 0) === Math.abs(entityId) ? null : card))
 					.filter((card) => !!card),
 				zone.find((card: DeckCard) => Math.abs(card.entityId ?? 0) === Math.abs(entityId))!,
 			];
 		}
 		// Several copies of the same cardId can be in hand; never remove "the first FIR_902" when the
 		// event names a specific entity that we don't have yet — that drops the wrong row (e.g. Zugars replay:
-		// playing copied Sigil 178 removed original 47).
-		if (entityId != null && entityId !== 0) {
-			return [zone, undefined];
+		// playing copied Sigil 178 removed original 47). Only skip cardId fallback when every copy of that
+		// id in this zone already has an entityId (ambiguous identified copies). Deck rows from the deckstring
+		// usually have no entityId until drawn; those must still fall through to cardId removal (mulligan, etc.).
+		if (entityId != null && entityId !== 0 && normalizedCardId) {
+			const sameIdCards = zone.filter(
+				(card) => this.normalizeCardId(card.cardId, normalizeUpgradedCards) === normalizedCardId,
+			);
+			const allSameIdHaveEntityIds =
+				sameIdCards.length > 0 && sameIdCards.every((c) => c.entityId != null && c.entityId !== 0);
+			if (allSameIdHaveEntityIds) {
+				return [zone, undefined];
+			}
 		}
 
 		if (!normalizedCardId) {
