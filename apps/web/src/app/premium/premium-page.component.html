@@ -1,5 +1,5 @@
 <article class="premium-page">
-	<section class="hero">
+	<section class="hero hero-banner">
 		<h1 class="hero-title">{{ hero.title }}</h1>
 		<p class="hero-subtitle">{{ hero.subtitle }}</p>
 		<div class="hero-ctas">
@@ -13,38 +13,45 @@
 		</p>
 	</section>
 
-	<section class="panel summary">
+	<section class="panel summary summary-panel">
 		<h2 class="section-title">What you get</h2>
 		<ul class="checklist">
 			<li *ngFor="let line of summaryBullets">{{ line }}</li>
 		</ul>
 	</section>
 
-	<section class="panel free-tier">
+	<section class="panel free-tier free-tier-panel">
 		<h2 class="section-title">Free vs Premium</h2>
 		<p class="lead">
 			Firestone stays usable for free. Many overlays include a daily or weekly allowance; Premium unlocks
 			unlimited use for those guides.
 		</p>
-		<ul class="bullet-list">
+		<ul class="bullet-list free-tier-list">
 			<li *ngFor="let line of freeTierLines">{{ line }}</li>
 		</ul>
 	</section>
 
-	<section class="panel" *ngFor="let section of sections">
-		<h2 class="section-title" [attr.id]="section.id">{{ section.title }}</h2>
-		<ul class="bullet-list">
+	<section
+		class="mode-section"
+		*ngFor="let section of sections"
+		[ngClass]="'section-' + section.id"
+	>
+		<header class="mode-section-header">
+			<span class="mode-section-icon" [inlineSVG]="section.icon"></span>
+			<h2 class="section-title" [attr.id]="section.id">{{ section.title }}</h2>
+		</header>
+		<ul class="feature-list">
 			<li *ngFor="let item of section.items">{{ item }}</li>
 		</ul>
 	</section>
 
-	<section class="panel">
-		<h2 class="section-title">How to subscribe</h2>
-		<ol class="steps">
-			<li *ngFor="let step of steps">{{ step }}</li>
+	<section class="panel subscribe-panel">
+		<h2 class="section-title subscribe-title">How to subscribe</h2>
+		<ol class="steps timeline-steps">
+			<li *ngFor="let step of steps"><span class="step-text">{{ step }}</span></li>
 		</ol>
 		<div class="closing-ctas">
-			<a class="button primary" [href]="downloadUrl" target="_blank" rel="noopener noreferrer"> Get Firestone </a>
+			<a class="button primary" [href]="downloadUrl" target="_blank" rel="noopener noreferrer">Get Firestone</a>
 		</div>
 	</section>
 </article>

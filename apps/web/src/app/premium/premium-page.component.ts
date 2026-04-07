@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
+import { InlineSVGModule } from 'ng-inline-svg-2';
 import {
 	ARENA_DISCOVERS_DAILY_FREE_USES,
 	ARENA_DRAFT_WEEKLY_FREE_USES,
@@ -23,9 +24,8 @@ import {
 @Component({
 	standalone: true,
 	selector: 'web-premium-page',
-	imports: [CommonModule],
+	imports: [CommonModule, InlineSVGModule],
 	templateUrl: './premium-page.component.html',
-	styleUrls: ['./premium-page.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PremiumPageComponent implements OnInit {

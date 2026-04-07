@@ -17,13 +17,15 @@ export const premiumSummaryBullets: readonly string[] = [
 ];
 
 export const premiumSections: readonly {
-	id: string;
-	title: string;
-	items: readonly string[];
+	readonly id: string;
+	readonly title: string;
+	readonly icon: string;
+	readonly items: readonly string[];
 }[] = [
 	{
 		id: 'battlegrounds',
 		title: 'Battlegrounds',
+		icon: 'assets/svg/ftue/battlegrounds.svg',
 		items: [
 			'Example boards on Composition details (meta comps)',
 			'Hero selection overlay with tiers and stats where it matters most during the initial selection',
@@ -43,6 +45,7 @@ export const premiumSections: readonly {
 	{
 		id: 'constructed',
 		title: 'Constructed',
+		icon: 'assets/svg/ftue/decktracker.svg',
 		items: [
 			'Current meta by rank: decks, archetypes, and detailed per-card stats',
 			'Deck overview and recent replays on the deck page',
@@ -55,6 +58,7 @@ export const premiumSections: readonly {
 	{
 		id: 'arena',
 		title: 'Arena',
+		icon: 'assets/svg/ftue/arena.svg',
 		items: [
 			'Aggregated stats across all your Arena runs',
 			'Class pick stats in the overlay',
@@ -65,11 +69,13 @@ export const premiumSections: readonly {
 	{
 		id: 'collection',
 		title: 'Collection',
+		icon: 'assets/svg/ftue/collection.svg',
 		items: ['Chronological card and pack history', 'Detailed per-set collection stats'],
 	},
 	{
 		id: 'general',
 		title: 'General & replays',
+		icon: 'assets/svg/ftue/replays.svg',
 		items: ['Discord rich presence with custom status placeholders (where enabled)', 'Rich in-game replays'],
 	},
 ];
