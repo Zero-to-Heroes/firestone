@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { GameTag } from '@firestone-hs/reference-data';
-import { formatClass } from '@firestone/game-state';
+import { CollectionCardType } from '@firestone-hs/user-packs';
+import { CARDS_VERSION, formatClass } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { FIRESTONE_STATIC_CARD_IMAGES_BASE, ImageLocalizationOptions } from '@firestone/shared/framework/core';
 import { TranslateService } from '@ngx-translate/core';
 import { distinctUntilChanged, map } from 'rxjs/operators';
-import { CollectionCardType } from '@firestone-hs/user-packs';
 import { sleep } from './utils';
 
 @Injectable()
@@ -88,7 +88,8 @@ export class LocalizationService {
 		const base = `${FIRESTONE_STATIC_CARD_IMAGES_BASE}/${bgs}${heroSkin}${this._locale}/${highRes}`;
 		const typeSuffix = this.buildTypeSuffix(options?.cardType);
 		const suffix = `${cardId}${typeSuffix}.png`;
-		return `${base}/${suffix}`;
+		const cacheBust = CARDS_VERSION?.length ? `?v=${CARDS_VERSION}` : '';
+		return `${base}/${suffix}${cacheBust}`;
 	}
 
 	public getNonLocalizedCardImage(cardId: string, options?: ImageLocalizationOptions): string {
