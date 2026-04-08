@@ -41,7 +41,21 @@
 			<h2 class="section-title" [attr.id]="section.id">{{ section.title }}</h2>
 		</header>
 		<ul class="feature-list">
-			<li *ngFor="let item of section.items">{{ item }}</li>
+			<li class="feature-list-item" *ngFor="let item of section.items">
+				<span class="feature-list-text">{{ item.text }}</span>
+				<div class="feature-item-screenshots" *ngIf="item.screenshots?.length">
+					<figure class="premium-screenshot" *ngFor="let shot of item.screenshots">
+						<img
+							class="premium-screenshot-img"
+							[src]="shot.src"
+							[alt]="shot.alt"
+							loading="lazy"
+							decoding="async"
+						/>
+						<figcaption *ngIf="shot.caption">{{ shot.caption }}</figcaption>
+					</figure>
+				</div>
+			</li>
 		</ul>
 	</section>
 
