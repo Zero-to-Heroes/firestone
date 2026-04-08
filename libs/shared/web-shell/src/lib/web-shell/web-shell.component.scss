@@ -292,6 +292,9 @@
 			font-weight: 500;
 			white-space: nowrap;
 			position: relative;
+			text-decoration: none;
+			display: inline-flex;
+			align-items: center;
 
 			&:hover,
 			&:focus {
