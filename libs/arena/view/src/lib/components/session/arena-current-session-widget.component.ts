@@ -12,7 +12,11 @@ import {
 	PreferencesService,
 } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
+import {
+	FIRESTONE_STATIC_CARD_IMAGES_BASE,
+	ILocalizationService,
+	waitForReady,
+} from '@firestone/shared/framework/core';
 import { Observable, combineLatest, debounceTime, distinctUntilChanged, filter, shareReplay, takeUntil } from 'rxjs';
 import { ArenaCurrentSessionTooltipComponent } from './arena-current-session-tooltip.component';
 
@@ -222,7 +226,7 @@ export class ArenaCurrentSessionWidgetComponent extends AbstractSubscriptionComp
 							.sort((a, b) => b.creationTimestamp - a.creationTimestamp)
 							.slice(0, 10) ?? [];
 					const groupDetails: readonly GroupDetail[] = runsInGroup.map((run) => ({
-						cardId: `https://static.firestoneapp.com/cards/heroSkins/enUS/256/${run.heroCardId}.png`,
+						cardId: `${FIRESTONE_STATIC_CARD_IMAGES_BASE}/heroSkins/enUS/256/${run.heroCardId}.png`,
 						deckstring: run.initialDeckList,
 						wins: run.wins,
 						losses: run.losses,
@@ -252,7 +256,7 @@ export class ArenaCurrentSessionWidgetComponent extends AbstractSubscriptionComp
 				([runs, sessionWidgetNumberOfMatchesToShow]) =>
 					(runs?.slice(0, sessionWidgetNumberOfMatchesToShow) ?? []).map((run) => {
 						const detail: GroupDetail = {
-							cardId: `https://static.firestoneapp.com/cards/heroSkins/enUS/256/${run.heroCardId}.png`,
+							cardId: `${FIRESTONE_STATIC_CARD_IMAGES_BASE}/heroSkins/enUS/256/${run.heroCardId}.png`,
 							deckstring: run.initialDeckList,
 							wins: run.wins,
 							losses: run.losses,

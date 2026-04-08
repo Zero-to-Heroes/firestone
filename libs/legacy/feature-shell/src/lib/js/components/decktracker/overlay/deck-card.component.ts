@@ -33,6 +33,7 @@ import { AbstractSubscriptionComponent, arraysEqual, uuidShort } from '@fireston
 import {
 	ADS_SERVICE_TOKEN,
 	CardsFacadeService,
+	FIRESTONE_STATIC_CARD_IMAGES_BASE,
 	HighlightSide,
 	IAdsService,
 	waitForReady,
@@ -717,7 +718,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		if (this.cardId) {
 			const imageUrl =
 				this.i18n?.getCardImage(this.cardId) ??
-				`https://static.firestoneapp.com/cards/512/enUS/${this.cardId}.png`;
+				`${FIRESTONE_STATIC_CARD_IMAGES_BASE}/512/enUS/${this.cardId}.png`;
 			const image = new Image();
 			image.src = imageUrl;
 		}
