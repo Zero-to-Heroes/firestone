@@ -70,23 +70,11 @@ export class WebShellComponent implements OnInit, OnDestroy {
 
 	private updateCurrentSection(url: string) {
 		const path = url.split('?')[0];
-		if (path === '/premium') {
-			return;
-		}
-		const section = this.navigationSections.find((s) => url.startsWith(s.route));
+		const section = this.navigationSections.find((s) => path.startsWith(s.route));
 		if (section) {
 			this.currentSection = section;
 		}
-	}
-
-	/** True on the marketing /premium route — desktop nav shows a minimal "back to stats" link instead of the section dropdown. */
-	get isPremiumPage(): boolean {
-		const path = this.router.url.split('?')[0];
-		return path === '/premium';
-	}
-
-	get statsHomeLabel(): string {
-		return this.i18n.translateString('app.battlegrounds.menu.heroes');
+		// Routes like /premium do not match any section — keep the last currentSection so the dropdown still reflects where the user came from.
 	}
 
 	toggleDropdown() {
