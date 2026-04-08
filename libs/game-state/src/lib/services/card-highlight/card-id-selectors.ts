@@ -1,7 +1,7 @@
 // Lab Constructor (TTN_730): At the end of your turn, summon a copy of this. Forge: Gain Magnetic.
 
 import { CardClass, CardIds, CardType, GameTag, Race, SpellSchool } from '@firestone-hs/reference-data';
-import { groupByFunction, pickLast, sortByProperties } from '@firestone/shared/framework/common';
+import { pickLast, sortByProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
 import { DeckCard } from '../../models/deck-card';
 import { DeckState } from '../../models/deck-state';
@@ -873,7 +873,12 @@ export const cardIdSelector = (
 		case CardIds.CloningDevice:
 			return and(not(side(inputSide)), inDeck, minion);
 		case CardIds.CloudSerpent_TLC_888:
-			return and(side(inputSide), or(inHand, inDeck), or(elemental, dragon), not(cardIs(CardIds.CloudSerpent_TLC_888)));
+			return and(
+				side(inputSide),
+				or(inHand, inDeck),
+				or(elemental, dragon),
+				not(cardIs(CardIds.CloudSerpent_TLC_888)),
+			);
 		case CardIds.ClutchOfCorruption_EDR_454:
 			return and(side(inputSide), or(inDeck, inHand), dragon);
 		case CardIds.CoilCastingTavernBrawl:
@@ -4017,7 +4022,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, spell, not(cardIs(CardIds.Triangulate_GDB_451)));
 		case CardIds.TrinketArtist_TOY_882:
 			return highlightConditions(
-				and(side(inputSide), inDeck, and(minion, divineShield)),
+				and(side(inputSide), inDeck, and(minion, divineShieldStrict)),
 				and(side(inputSide), inDeck, aura),
 			);
 		case CardIds.TrinketTracker:
