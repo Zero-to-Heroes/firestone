@@ -56,3 +56,5 @@ If you **replace** a file but keep the same name, browsers and the CDN may keep 
 ### 4. Layout and styling
 
 Rendering is in [`premium-page.component.html`](./premium-page.component.html) (lazy-loaded `<img>` inside each feature row). Visual rules live in [`premium-page.global.scss`](./premium-page.global.scss) under `.feature-item-screenshots` and `.premium-screenshot`.
+
+Thumbnails are wrapped in a **button**; clicking opens a **lightbox** that shows the same URL at **intrinsic resolution** (scrollable if the image is larger than the viewport). Close with the × control, **Escape**, or by clicking the dimmed backdrop. Logic is in [`premium-page.component.ts`](./premium-page.component.ts).

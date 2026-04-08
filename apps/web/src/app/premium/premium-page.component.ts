@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { InlineSVGModule } from 'ng-inline-svg-2';
 import {
@@ -15,6 +15,7 @@ import {
 } from '@firestone/shared/common/service';
 import {
 	OVERWOLF_DOWNLOAD_URL,
+	PremiumScreenshot,
 	premiumHero,
 	premiumSections,
 	premiumSummaryBullets,
@@ -28,7 +29,7 @@ import {
 	templateUrl: './premium-page.component.html',
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PremiumPageComponent implements OnInit {
+export class PremiumPageComponent implements OnDestroy, OnInit {
 	readonly hero = premiumHero;
 	readonly summaryBullets = premiumSummaryBullets;
 	readonly sections = premiumSections;
@@ -37,7 +38,13 @@ export class PremiumPageComponent implements OnInit {
 
 	readonly freeTierLines: readonly string[];
 
-	constructor(private readonly title: Title) {
+	/** When set, shows full-resolution image in a lightbox overlay. */
+	lightboxShot: PremiumScreenshot | null = null;
+
+	constructor(
+		private readonly title: Title,
+		private readonly cdr: ChangeDetectorRef,
+	) {
 		this.freeTierLines = [
 			`Constructed: ${CONSTRUCTED_DISCOVERS_DAILY_FREE_USES} Discover overlay uses per day; ${CONSTRUCTED_MULLIGAN_DAILY_FREE_USES} mulligan guide uses per day`,
 			`Arena: ${ARENA_DISCOVERS_DAILY_FREE_USES} Discover uses per day; ${ARENA_MULLIGAN_DAILY_FREE_USES} mulligan uses per day; ${ARENA_DRAFT_WEEKLY_FREE_USES} draft overlay use per week`,
@@ -48,5 +55,35 @@ export class PremiumPageComponent implements OnInit {
 
 	ngOnInit(): void {
 		this.title.setTitle('Firestone Premium — www.firestoneapp.com');
+	}
+
+	ngOnDestroy(): void {
+		this.setBodyScrollLocked(false);
+	}
+
+	@HostListener('document:keydown.escape')
+	onEscape(): void {
+		if (this.lightboxShot) {
+			this.closeLightbox();
+		}
+	}
+
+	openLightbox(shot: PremiumScreenshot): void {
+		this.lightboxShot = shot;
+		this.setBodyScrollLocked(true);
+		this.cdr.markForCheck();
+	}
+
+	closeLightbox(): void {
+		this.lightboxShot = null;
+		this.setBodyScrollLocked(false);
+		this.cdr.markForCheck();
+	}
+
+	private setBodyScrollLocked(locked: boolean): void {
+		if (typeof document === 'undefined') {
+			return;
+		}
+		document.body.style.overflow = locked ? 'hidden' : '';
 	}
 }

@@ -45,13 +45,20 @@
 				<span class="feature-list-text">{{ item.text }}</span>
 				<div class="feature-item-screenshots" *ngIf="item.screenshots?.length">
 					<figure class="premium-screenshot" *ngFor="let shot of item.screenshots">
-						<img
-							class="premium-screenshot-img"
-							[src]="shot.src"
-							[alt]="shot.alt"
-							loading="lazy"
-							decoding="async"
-						/>
+						<button
+							type="button"
+							class="premium-screenshot-trigger"
+							(click)="openLightbox(shot)"
+							[attr.aria-label]="'View full size: ' + shot.alt"
+						>
+							<img
+								class="premium-screenshot-img"
+								[src]="shot.src"
+								[alt]="shot.alt"
+								loading="lazy"
+								decoding="async"
+							/>
+						</button>
 						<figcaption *ngIf="shot.caption">{{ shot.caption }}</figcaption>
 					</figure>
 				</div>
@@ -68,4 +75,26 @@
 			<a class="button primary" [href]="downloadUrl" target="_blank" rel="noopener noreferrer">Get Firestone</a>
 		</div>
 	</section>
+
+	<ng-container *ngIf="lightboxShot as shot">
+		<div
+			class="premium-lightbox"
+			role="dialog"
+			aria-modal="true"
+			[attr.aria-label]="shot.alt"
+			(click)="closeLightbox()"
+		>
+			<button
+				type="button"
+				class="premium-lightbox-close"
+				(click)="closeLightbox(); $event.stopPropagation()"
+				aria-label="Close full-size image"
+			>
+				×
+			</button>
+			<div class="premium-lightbox-scroll" (click)="$event.stopPropagation()">
+				<img class="premium-lightbox-full" [src]="shot.src" [alt]="shot.alt" decoding="async" />
+			</div>
+		</div>
+	</ng-container>
 </article>
