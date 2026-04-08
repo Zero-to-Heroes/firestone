@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { GameTag } from '@firestone-hs/reference-data';
 import { formatClass } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { ImageLocalizationOptions } from '@firestone/shared/framework/core';
+import { FIRESTONE_STATIC_CARD_IMAGES_BASE, ImageLocalizationOptions } from '@firestone/shared/framework/core';
 import { TranslateService } from '@ngx-translate/core';
 import { distinctUntilChanged, map } from 'rxjs/operators';
 import { CollectionCardType } from '@firestone-hs/user-packs';
@@ -85,7 +85,7 @@ export class LocalizationService {
 		const bgs = options?.isBgs ? 'bgs/' : '';
 		const heroSkin = options?.isHeroSkin ? 'heroSkins/' : '';
 		const highRes = this.useHighResImages || options?.isHighRes ? '512' : '256';
-		const base = `https://static.firestoneapp.com/cards/${bgs}${heroSkin}${this._locale}/${highRes}`;
+		const base = `${FIRESTONE_STATIC_CARD_IMAGES_BASE}/${bgs}${heroSkin}${this._locale}/${highRes}`;
 		const typeSuffix = this.buildTypeSuffix(options?.cardType);
 		const suffix = `${cardId}${typeSuffix}.png`;
 		return `${base}/${suffix}`;
@@ -95,7 +95,7 @@ export class LocalizationService {
 		if (!cardId) {
 			return null;
 		}
-		const base = `https://static.firestoneapp.com/cards`;
+		const base = FIRESTONE_STATIC_CARD_IMAGES_BASE;
 		const typeSuffix = this.buildTypeSuffix(options?.cardType);
 		const suffix = `${cardId}${typeSuffix}.png`;
 		return `${base}/${suffix}`;

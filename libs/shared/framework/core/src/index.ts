@@ -2,6 +2,7 @@ export * from './lib/localization/fs-translate.directive';
 export * from './lib/localization/fs-translate.pipe';
 export * from './lib/localization/localization-standalone.service';
 export * from './lib/localization/localization-utils';
+export * from './lib/localization/card-image-static-urls';
 export * from './lib/localization/localization.service';
 export * from './lib/services/abstract-facade-service';
 export * from './lib/services/ads-service.interface';

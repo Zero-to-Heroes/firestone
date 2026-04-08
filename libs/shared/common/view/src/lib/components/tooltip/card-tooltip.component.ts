@@ -15,9 +15,15 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { CardRarity, CardType, Race, SpellSchool } from '@firestone-hs/reference-data';
+import { isPreReleaseBuild } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, groupByFunction } from '@firestone/shared/framework/common';
-import { CardsFacadeService, ILocalizationService, OverwolfService } from '@firestone/shared/framework/core';
+import {
+	CardsFacadeService,
+	ILocalizationService,
+	OverwolfService,
+	toPreReleaseFirestoneCardImageUrl,
+} from '@firestone/shared/framework/core';
 import {
 	BehaviorSubject,
 	Observable,
@@ -29,6 +35,22 @@ import {
 	takeUntil,
 } from 'rxjs';
 import type { CardTooltipPositionType } from './card-tooltip-position.type';
+
+function buildTooltipCardImages(usualUrl: string | null): {
+	image: string | null;
+	imageFallback?: string | null;
+} {
+	if (!usualUrl) {
+		return { image: null };
+	}
+	if (!isPreReleaseBuild) {
+		return { image: usualUrl };
+	}
+	return {
+		image: toPreReleaseFirestoneCardImageUrl(usualUrl),
+		imageFallback: usualUrl,
+	};
+}
 
 @Component({
 	standalone: false,
@@ -52,7 +74,12 @@ import type { CardTooltipPositionType } from './card-tooltip-position.type';
 				[ngClass]="{ hidden: !value.relativePosition }"
 			>
 				<div *ngIf="card.createdBy" class="created-by">Created by</div>
-				<img *ngIf="card.image" [src]="card.image" class="tooltip-image" />
+				<img
+					*ngIf="card.image"
+					[src]="card.image"
+					class="tooltip-image"
+					(error)="onTooltipImageError($event, card.imageFallback)"
+				/>
 				<div
 					class="buffs"
 					*ngIf="card.buffs?.length && value.displayBuffs"
@@ -140,7 +167,12 @@ import type { CardTooltipPositionType } from './card-tooltip-position.type';
 								[fsTranslate]="'decktracker.card-tooltip-scroll-text'"
 							></div>
 							<div class="related-card " *ngFor="let card of value.relatedCards">
-								<img *ngIf="card.image" [src]="card.image" class="tooltip-image" />
+								<img
+									*ngIf="card.image"
+									[src]="card.image"
+									class="tooltip-image"
+									(error)="onTooltipImageError($event, card.imageFallback)"
+								/>
 							</div>
 						</div>
 						<div
@@ -386,7 +418,7 @@ export class CardTooltipComponent
 						// Remove entity ids (eg in Fizzle's Snapshot card)
 						.filter((cardId) => isNaN(parseInt(cardId)))
 						.map((cardId) => {
-							const image = !!cardId
+							const usualUrl = !!cardId
 								? localized
 									? this.i18n.getCardImage(cardId, {
 											isBgs: isBgs,
@@ -394,9 +426,11 @@ export class CardTooltipComponent
 										})
 									: this.i18n.getNonLocalizedCardImage(cardId)
 								: null;
+							const { image, imageFallback } = buildTooltipCardImages(usualUrl);
 							const result: InternalCard = {
 								cardId: cardId,
 								image: image,
+								imageFallback,
 								cardType: 'NORMAL',
 							};
 							return result;
@@ -432,7 +466,7 @@ export class CardTooltipComponent
 							const adjustedCardType =
 								cardId?.endsWith('_golden') || !!card.premium ? 'GOLDEN' : cardType;
 							const realCardId = cardId?.split('_golden')[0];
-							const image = !!realCardId
+							const usualUrl = !!realCardId
 								? localized
 									? this.i18n.getCardImage(realCardId, {
 											isBgs: isBgs,
@@ -441,9 +475,11 @@ export class CardTooltipComponent
 										})
 									: this.i18n.getNonLocalizedCardImage(realCardId)
 								: null;
+							const { image, imageFallback } = buildTooltipCardImages(usualUrl);
 							const result: InternalCard = {
 								cardId: realCardId,
 								image: image,
+								imageFallback,
 								// For now there are no cases where we have multiple card IDs, and different buffs for
 								// each one. If the case arises, we'll have to handle this differently
 								buffs: buffs,
@@ -466,6 +502,18 @@ export class CardTooltipComponent
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
+	}
+
+	onTooltipImageError(event: Event, fallback: string | null | undefined): void {
+		if (!fallback) {
+			return;
+		}
+		const img = event.target as HTMLImageElement;
+		if (img.dataset['fsTooltipFb'] === '1') {
+			return;
+		}
+		img.dataset['fsTooltipFb'] = '1';
+		img.src = fallback;
 	}
 
 	trackByFn(index, item: InternalCard) {
@@ -575,6 +623,7 @@ export const isGuessedInfoEmpty = (info: CardTooltipAdditionalInfo | null) => {
 interface InternalCard {
 	readonly cardId: string;
 	readonly image: string | null;
+	readonly imageFallback?: string | null;
 	readonly cardType: CollectionCardType;
 
 	readonly createdBy?: boolean;
