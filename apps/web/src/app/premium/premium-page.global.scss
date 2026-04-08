@@ -257,6 +257,10 @@
 
 	// Full-resolution lightbox (click thumbnail to open; Escape or backdrop to close)
 	.premium-lightbox {
+		--premium-lightbox-pad-x: 12px;
+		--premium-lightbox-pad-top: 52px;
+		--premium-lightbox-pad-bottom: 12px;
+
 		position: fixed;
 		inset: 0;
 		z-index: 10000;
@@ -264,7 +268,8 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		padding: 52px 12px 12px;
+		padding: var(--premium-lightbox-pad-top) var(--premium-lightbox-pad-x)
+			var(--premium-lightbox-pad-bottom);
 		background: rgba(0, 0, 0, 0.88);
 		cursor: zoom-out;
 	}
@@ -299,17 +304,29 @@
 
 	.premium-lightbox-scroll {
 		overflow: auto;
-		max-width: 100%;
-		max-height: 100%;
+		box-sizing: border-box;
+		width: 100%;
+		max-width: calc(100vw - 2 * var(--premium-lightbox-pad-x));
+		max-height: calc(
+			100dvh - var(--premium-lightbox-pad-top) - var(--premium-lightbox-pad-bottom)
+		);
+		min-height: 0;
 		-webkit-overflow-scrolling: touch;
 		cursor: default;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 
 	.premium-lightbox-full {
 		display: block;
 		width: auto;
 		height: auto;
-		max-width: none;
+		max-width: 100%;
+		max-height: calc(
+			100dvh - var(--premium-lightbox-pad-top) - var(--premium-lightbox-pad-bottom)
+		);
+		object-fit: contain;
 	}
 
 	.subscribe-panel {
