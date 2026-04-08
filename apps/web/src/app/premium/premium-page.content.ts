@@ -8,6 +8,8 @@ export const OVERWOLF_DOWNLOAD_URL =
  * Upload pipeline: publish optimized WebP under this path prefix (see `premiumCdnImage()` on feature `screenshots` in `premiumSections`):
  * `https://static.firestoneapp.com/premium/`
  *
+ * For each screenshot, prefer a **preview** file (smaller dimensions / stronger compression) plus a **full** file for the lightbox — see {@link PremiumScreenshot.thumbSrc}.
+ *
  * Cache: after replacing a file in place, add or bump a `?v=` query on the URL in this file, or ship a new filename, so CDN/browser caches pick up the change.
  */
 export const PREMIUM_CDN_IMAGES_BASE = 'https://static.firestoneapp.com/premium';
@@ -20,7 +22,13 @@ export function premiumCdnImage(filename: string): string {
 }
 
 export interface PremiumScreenshot {
-	readonly src: string;
+	/** Full-resolution image for the lightbox (loaded on click). */
+	readonly fullSrc: string;
+	/**
+	 * Smaller preview for the inline figure (reduces bandwidth on initial load).
+	 * Omit to use {@link fullSrc} for both (same behavior as before thumbnails existed).
+	 */
+	readonly thumbSrc?: string;
 	readonly alt: string;
 	readonly caption?: string;
 }
@@ -63,7 +71,8 @@ export const premiumSections: readonly PremiumSection[] = [
 				text: 'Hero selection overlay with tiers and stats where it matters most during the initial selection',
 				screenshots: [
 					{
-						src: premiumCdnImage('battlegrounds-hero-selection.webp'),
+						// thumbSrc: premiumCdnImage('battlegrounds-hero-selection-thumb.webp'),
+						fullSrc: premiumCdnImage('battlegrounds-hero-selection.webp'),
 						alt: 'Battlegrounds hero selection overlay showing hero choices with tiers and stats during the pick phase',
 						caption: 'Hero selection overlay with tiers and stats',
 					},

@@ -53,7 +53,7 @@
 						>
 							<img
 								class="premium-screenshot-img"
-								[src]="shot.src"
+								[src]="shot.thumbSrc ?? shot.fullSrc"
 								[alt]="shot.alt"
 								loading="lazy"
 								decoding="async"
@@ -93,7 +93,7 @@
 				×
 			</button>
 			<div class="premium-lightbox-scroll" (click)="$event.stopPropagation()">
-				<img class="premium-lightbox-full" [src]="shot.src" [alt]="shot.alt" decoding="async" />
+				<img class="premium-lightbox-full" [src]="shot.fullSrc" [alt]="shot.alt" decoding="async" />
 			</div>
 		</div>
 	</ng-container>
