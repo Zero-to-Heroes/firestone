@@ -108,6 +108,19 @@
 			display: flex;
 			align-items: center;
 			justify-content: center;
+			text-decoration: none;
+			color: inherit;
+			flex-shrink: 0;
+
+			&:visited {
+				color: inherit;
+			}
+
+			&:focus-visible {
+				outline: 2px solid var(--default-title-color);
+				outline-offset: 4px;
+				border-radius: 4px;
+			}
 
 			::ng-deep svg {
 				height: 100%;
@@ -280,16 +293,19 @@
 		height: 100%;
 
 		.sub-menu-item {
-			background: none;
+			background: transparent;
 			border: none;
-			padding: 8px 16px;
-			color: var(--color-2);
+			padding: 8px 14px;
+			// Plain text links (inactive): gold text, no chip — matches reference nav
+			color: var(--default-title-color);
 			cursor: pointer;
-			transition: all 0.3s ease;
-			border-radius: 6px;
+			transition:
+				background 0.2s ease,
+				color 0.2s ease;
+			border-radius: 8px;
 			font-family: inherit;
 			font-size: 14px;
-			font-weight: 500;
+			font-weight: 600;
 			white-space: nowrap;
 			position: relative;
 			text-decoration: none;
@@ -297,25 +313,20 @@
 			align-items: center;
 
 			&:hover,
-			&:focus {
+			&:focus-visible {
 				background: rgba(255, 255, 255, 0.06);
-				color: var(--color-1);
+				color: var(--default-text-color-bright);
 			}
 
+			// Active route: dark rounded chip (like the reference “Heroes” tab)
 			&.active {
 				background: rgba(255, 255, 255, 0.1);
 				color: var(--color-1);
 
-				&::after {
-					content: '';
-					position: absolute;
-					bottom: 0;
-					left: 50%;
-					transform: translateX(-50%);
-					width: 24px;
-					height: 2px;
-					background: var(--color-orange);
-					border-radius: 1px;
+				&:hover,
+				&:focus-visible {
+					background: rgba(255, 255, 255, 0.14);
+					color: var(--color-1);
 				}
 			}
 
