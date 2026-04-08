@@ -74,7 +74,7 @@ export class TebexHeadlessService extends AbstractFacadeService<TebexService> {
 
 		console.log('[ads] [tebex-headless] calling tebex headless subscriptions url');
 		const tebexPlans = await this.api.callGetApi<readonly TebexSub[]>(TEBEX_HEADLESS_SUBSCRIPTIONS_URL, {
-			bearerToken: currentUser.username.replaceAll('-', ''),
+			bearerToken: currentUser.username,
 		});
 		console.log('[ads] [tebex-headless] tebexPlans', tebexPlans, currentUser.username);
 		if (!tebexPlans?.length) {
