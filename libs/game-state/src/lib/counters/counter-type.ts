@@ -16,6 +16,7 @@ export type CounterType =
 	| 'cardsShuffledIntoDeck'
 	| 'ysondre'
 	| 'overloadThisGame'
+	| 'fodderRefresh'
 	| 'dragonsInHand'
 	| 'herald'
 	| 'imbue'

@@ -1,11 +1,9 @@
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { CounterDefinitionV2 } from './_counter-definition-v2';
 import { AbyssalCurseCounterDefinitionV2 } from './impl/abyssal-curse';
-import { BeastsSummonedCounterDefinitionV2 } from './impl/beasts-summoned';
 import { AnachronosCounterDefinitionV2 } from './impl/anachronos';
 import { AstralAutomatonCounterDefinitionV2 } from './impl/astral-automaton';
 import { AvianaElunesChoseCounterDefinitionV2 } from './impl/aviana-elunes-chosen';
-import { DeathwingReductionCounterDefinitionV2 } from './impl/deathwing-reduction';
 import { BallerBuffCounterDefinitionV2 } from './impl/battlegrounds/baller-buff';
 import { BeetlesBuffCounterDefinitionV2 } from './impl/battlegrounds/beetles-buff';
 import { BgsBloodGemCounterDefinitionV2 } from './impl/battlegrounds/bgs-blood-gem';
@@ -17,6 +15,7 @@ import { BgsTuskarrRaiderCounterDefinitionV2 } from './impl/battlegrounds/bgs-tu
 import { DeepBlueCounterDefinitionV2 } from './impl/battlegrounds/deep-blue';
 import { ElementalPowersBuffCounterDefinitionV2 } from './impl/battlegrounds/elemental-powers-buff';
 import { ElementalTavernBuffCounterDefinitionV2 } from './impl/battlegrounds/elemental-tavern-buff';
+import { FodderRefreshCounterDefinitionV2 } from './impl/battlegrounds/fodder-refresh';
 import { FreeRefreshCounterDefinitionV2 } from './impl/battlegrounds/free-refresh';
 import { GoldNextTurnCounterDefinitionV2 } from './impl/battlegrounds/gold-next-turn';
 import { RightmostBuffCounterDefinitionV2 } from './impl/battlegrounds/rightmost-buff';
@@ -26,9 +25,10 @@ import { TavernSpellsBuffCounterDefinitionV2 } from './impl/battlegrounds/tavern
 import { UndeadArmyCounterDefinitionV2 } from './impl/battlegrounds/undead-army';
 import { VolumizerBuffCounterDefinitionV2 } from './impl/battlegrounds/volumizer-buff';
 import { WhelpBuffCounterDefinitionV2 } from './impl/battlegrounds/whelp-buff';
+import { BeastsSummonedCounterDefinitionV2 } from './impl/beasts-summoned';
 import { BolnerHammerbeakCounterDefinitionV2 } from './impl/bolner-hammerbeak';
-import { CardsDiscardedCounterDefinitionV2 } from './impl/cards-discarded';
 import { BonelordFrostwhisperCounterDefinitionV2 } from './impl/bonelord-frostwhisper';
+import { CardsDiscardedCounterDefinitionV2 } from './impl/cards-discarded';
 import { CardsDrawnCounterDefinitionV2 } from './impl/cards-drawn';
 import { CardsDrawnThisTurnCounterDefinitionV2 } from './impl/cards-drawn-this-turn';
 import { CardsPlayedFromAnotherClassCounterDefinitionV2 } from './impl/cards-played-from-another-class';
@@ -43,9 +43,10 @@ import { CorpseSpentCounterDefinitionV2 } from './impl/corpse-spent';
 import { CorpsesCounterDefinitionV2 } from './impl/corpses';
 import { CthunCounterDefinitionV2 } from './impl/cthun';
 import { DamageTakenOnYourTurnCounterDefinitionV2 } from './impl/damage-taken-on-your-turn';
-import { DamageToOpponentThisTurnCounterDefinitionV2 } from './impl/damage-to-opponent-this-turn';
 import { DamageTakenThisTurnCounterDefinitionV2 } from './impl/damage-taken-this-turn';
+import { DamageToOpponentThisTurnCounterDefinitionV2 } from './impl/damage-to-opponent-this-turn';
 import { DarkGiftsCounterDefinitionV2 } from './impl/dark-gifts';
+import { DeathwingReductionCounterDefinitionV2 } from './impl/deathwing-reduction';
 import { DiscoversCounterDefinitionV2 } from './impl/discovers';
 import { DiveTheGolakkaDepthsCounterDefinitionV2 } from './impl/dive-the-golakka-depths';
 import { DragoncallerAlannaCounterDefinitionV2 } from './impl/dragoncaller-alanna';
@@ -66,8 +67,8 @@ import { FriendlyMinionsDeadThisGameCounterDefinitionV2 } from './impl/friendly-
 import { FriendlyMinionsDeadThisTurnCounterDefinitionV2 } from './impl/friendly-minions-dead-this-turn';
 import { FrostSpellsCounterDefinitionV2 } from './impl/frost-spells';
 import { GalakrondCounterDefinitionV2 } from './impl/galakrond';
-import { HeraldCounterDefinitionV2 } from './impl/herald';
 import { GardensGraceCounterDefinitionV2 } from './impl/gardens-grace';
+import { HeraldCounterDefinitionV2 } from './impl/herald';
 import { HeroDamageInstancesThisTurnCounterDefinitionV2 } from './impl/hero-damage-instances-this-turn';
 import { HeroPowerDamageCounterDefinitionV2 } from './impl/hero-power-damage';
 import { HeroPowerUseCounterDefinitionV2 } from './impl/hero-power-used';
@@ -85,8 +86,8 @@ import { MinionsDeadThisGameCounterDefinitionV2 } from './impl/minions-dead-this
 import { MinionsDeadThisTurnCounterDefinitionV2 } from './impl/minions-dead-this-turn';
 import { MulticasterCounterDefinitionV2 } from './impl/multicaster';
 import { NagaGiantCounterDefinitionV2 } from './impl/naga-giant';
-import { NonClassCardsAddedToHandCounterDefinitionV2 } from './impl/non-class-cards-added-to-hand';
 import { NextStarshipLaunchCounterDefinitionV2 } from './impl/next-starship-launch';
+import { NonClassCardsAddedToHandCounterDefinitionV2 } from './impl/non-class-cards-added-to-hand';
 import { OutcastCounterDefinitionV2 } from './impl/outcast';
 import { OverdraftCounterDefinitionV2 } from './impl/overdraft';
 import { OverloadCardsPlayedCounterDefinitionV2 } from './impl/overload-cards-played';
@@ -106,8 +107,8 @@ import { SecretsTriggeredCounterDefinitionV2 } from './impl/secrets-triggered';
 import { ShirvallahCounterDefinitionV2 } from './impl/shirvallah';
 import { ShockspitterCounterDefinitionV2 } from './impl/shockspitter';
 import { SpellCastOnFriendlyCharacterCounterDefinitionV2 } from './impl/spell-cast-on-friendly-character';
-import { SpellweaversBrillianceCounterDefinitionV2 } from './impl/spellweavers-brilliance';
 import { SpellsPlayedCounterDefinitionV2 as SpellsPlayedConstructedCounterDefinitionV2 } from './impl/spells-played';
+import { SpellweaversBrillianceCounterDefinitionV2 } from './impl/spellweavers-brilliance';
 import { StarshipsLaunchedCounterDefinitionV2 } from './impl/starships-launched';
 import { TableFlipCounterDefinitionV2 } from './impl/table-flip';
 import { ThirstyDrifterCounterDefinitionV2 } from './impl/thirsty-drifter';
@@ -249,6 +250,7 @@ export const getAllCounters: (
 	new WhelpBuffCounterDefinitionV2(i18n, allCards),
 	new RightmostBuffCounterDefinitionV2(i18n, allCards),
 	new TavernBuffCounterDefinitionV2(i18n, allCards),
+	new FodderRefreshCounterDefinitionV2(i18n, allCards),
 ];
 
 export type { CounterType } from './counter-type';
