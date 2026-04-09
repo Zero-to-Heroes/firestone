@@ -94,6 +94,11 @@ export interface BgsPlayerGlobalInfo {
 	VolumizerHealthBuff: number;
 	WhelpAttackBuff: number;
 	WhelpHealthBuff: number;
+	DeathrattlesTriggeredThisGame: number;
+	TavernSpellsCastThisTurn: number;
+	MrrgltonsPlayedThisGame: number;
+	CardsPlayedThisTurn: number;
+	BackToBackCastThisGame: number;
 }
 
 export interface QuestReward {
@@ -260,9 +265,7 @@ export class BattlegroundsPlayerBoardParser implements ActionParser {
 			);
 
 			const linkedEntity =
-				heroesForTargetPlayerId.length > 0
-					? heroesForTargetPlayerId[heroesForTargetPlayerId.length - 1]
-					: null;
+				heroesForTargetPlayerId.length > 0 ? heroesForTargetPlayerId[heroesForTargetPlayerId.length - 1] : null;
 			if (linkedEntity != null) {
 				hero = linkedEntity;
 				cardId = hero.CardId;
@@ -273,9 +276,7 @@ export class BattlegroundsPlayerBoardParser implements ActionParser {
 		if (cardId == null) {
 			const activePlayer = gameState.CurrentEntities.get(stateFacade.LocalPlayer!.Id);
 			const opponentPlayerId = activePlayer?.GetTag(GameTag.NEXT_OPPONENT_PLAYER_ID) ?? -1;
-			hero =
-				currentEntities.find((data) => data.GetTag(GameTag.PLAYER_ID) === opponentPlayerId)?.Clone() ??
-				null;
+			hero = currentEntities.find((data) => data.GetTag(GameTag.PLAYER_ID) === opponentPlayerId)?.Clone() ?? null;
 			cardId = hero?.CardId ?? null;
 			playerId = hero?.GetTag(GameTag.PLAYER_ID) ?? playerId;
 		}
@@ -326,8 +327,7 @@ export class BattlegroundsPlayerBoardParser implements ActionParser {
 
 			if (isOpponent) {
 				hand = hand.map(
-					(e) =>
-						BattlegroundsPlayerBoardParser.GetEntitySpawnedFromHand(e.Id, board, stateFacade) ?? e,
+					(e) => BattlegroundsPlayerBoardParser.GetEntitySpawnedFromHand(e.Id, board, stateFacade) ?? e,
 				);
 			}
 
@@ -588,14 +588,15 @@ export class BattlegroundsPlayerBoardParser implements ActionParser {
 			GameTag.BACON_GOLD_SPENT_THIS_GAME,
 			currentEntities,
 		);
-		const bloodGemEnchant = currentEntities
-			.filter(
-				(entity) =>
-					entity.GetEffectiveController() === playerId &&
-					entity.GetTag(GameTag.ZONE) === (Zone.PLAY as number) &&
-					entity.CardId === CardIds.BloodGemPlayerEnchantEnchantment,
-			)
-			.pop() ?? null;
+		const bloodGemEnchant =
+			currentEntities
+				.filter(
+					(entity) =>
+						entity.GetEffectiveController() === playerId &&
+						entity.GetTag(GameTag.ZONE) === (Zone.PLAY as number) &&
+						entity.CardId === CardIds.BloodGemPlayerEnchantEnchantment,
+				)
+				.pop() ?? null;
 		const bloodGemAttackBonus = bloodGemEnchant?.GetTag(GameTag.TAG_SCRIPT_DATA_NUM_1, 0) ?? 0;
 		const bloodGemHealthBonus = bloodGemEnchant?.GetTag(GameTag.TAG_SCRIPT_DATA_NUM_2, 0) ?? 0;
 		const battlecriesTriggeredThisGame = BattlegroundsPlayerBoardParser.GetPlayerTag(
@@ -629,18 +630,42 @@ export class BattlegroundsPlayerBoardParser implements ActionParser {
 			currentEntities,
 			GameTag.TAG_SCRIPT_DATA_NUM_2,
 		);
+		const cardsPlayedThisTurn = BattlegroundsPlayerBoardParser.GetPlayerTag(
+			playerEntityId,
+			GameTag.NUM_CARDS_PLAYED_THIS_TURN,
+			currentEntities,
+		);
+		const mrrgltonsPlayedThisGame = BattlegroundsPlayerBoardParser.GetPlayerEnchantmentValue(
+			playerId,
+			CardIds.MamaMrrglton_MeetTheMrrgltonsEnchantment_BG35_140e,
+			currentEntities,
+		);
+		const backToBackCastThisGame = BattlegroundsPlayerBoardParser.GetPlayerEnchantmentValue(
+			playerId,
+			CardIds.BackToBack_GotYourBackEnchantment_BG35_952e,
+			currentEntities,
+		);
+		const deathrattlesTriggeredThisGame = BattlegroundsPlayerBoardParser.GetPlayerTag(
+			playerEntityId,
+			GameTag.DEATHRATTLES_TRIGGERED_THIS_GAME,
+			currentEntities,
+		);
+		const tavernSpellsCastThisTurn = BattlegroundsPlayerBoardParser.GetPlayerTag(
+			playerEntityId,
+			GameTag.SPELLS_PLAYED_THIS_TURN,
+			currentEntities,
+		);
 
 		const boardIds = board.map((b) => b.Id);
 		const choralEnchantments = currentEntitiesGs.filter(
 			(e) =>
-				e.CardId === CardIds.ChoralMrrrglr_ChorusEnchantment &&
-				boardIds.includes(e.GetTag(GameTag.ATTACHED)),
+				e.CardId === CardIds.ChoralMrrrglr_ChorusEnchantment && boardIds.includes(e.GetTag(GameTag.ATTACHED)),
 		);
 		const choralEnchantment = choralEnchantments[0] ?? null;
 		const choralSource =
 			choralEnchantment == null
 				? null
-				: gameState.CurrentEntities.get(choralEnchantment.GetTag(GameTag.CREATOR)) ?? null;
+				: (gameState.CurrentEntities.get(choralEnchantment.GetTag(GameTag.CREATOR)) ?? null);
 		const isChoralPremium = choralSource?.GetTag(GameTag.PREMIUM) === 1;
 		const choralAttackBuff =
 			(choralEnchantment?.GetTag(GameTag.TAG_SCRIPT_DATA_NUM_1, 0) ?? 0) / (isChoralPremium ? 2 : 1);
@@ -681,6 +706,11 @@ export class BattlegroundsPlayerBoardParser implements ActionParser {
 			DeepBluesPlayed: deepBluesPlayed,
 			VolumizerAttackBuff: volumizerAttackBuff,
 			VolumizerHealthBuff: volumizerHealthBuff,
+			DeathrattlesTriggeredThisGame: deathrattlesTriggeredThisGame,
+			TavernSpellsCastThisTurn: tavernSpellsCastThisTurn,
+			MrrgltonsPlayedThisGame: mrrgltonsPlayedThisGame,
+			CardsPlayedThisTurn: cardsPlayedThisTurn,
+			BackToBackCastThisGame: backToBackCastThisGame,
 		};
 	}
 
@@ -703,13 +733,8 @@ export class BattlegroundsPlayerBoardParser implements ActionParser {
 
 	static UpdateLockAndLoadMinion(stateFacade: StateFacade, heroPowers: BgsHeroPower[]): void {
 		for (const heroPower of heroPowers) {
-			if (
-				heroPower.Used &&
-				heroPower.CardId === CardIds.LockAndLoadToken_BG22_HERO_000p_Alt
-			) {
-				const createdEntity = [
-					...(stateFacade.PtlState?.GameState?.CurrentEntities?.values() ?? []),
-				]
+			if (heroPower.Used && heroPower.CardId === CardIds.LockAndLoadToken_BG22_HERO_000p_Alt) {
+				const createdEntity = [...(stateFacade.PtlState?.GameState?.CurrentEntities?.values() ?? [])]
 					.reverse()
 					.find(
 						(e) =>
@@ -723,9 +748,7 @@ export class BattlegroundsPlayerBoardParser implements ActionParser {
 					);
 					heroPower.Info = withEnchants;
 				} else {
-					const createdEntity2 = [
-						...(stateFacade.GsState?.GameState?.CurrentEntities?.values() ?? []),
-					]
+					const createdEntity2 = [...(stateFacade.GsState?.GameState?.CurrentEntities?.values() ?? [])]
 						.reverse()
 						.find(
 							(e) =>
@@ -785,7 +808,11 @@ export class BattlegroundsPlayerBoardParser implements ActionParser {
 			return entity;
 		}
 		const entityFromTheFuture = gsState.CurrentEntities.get(entity.Entity);
-		if (entityFromTheFuture == null || entityFromTheFuture.CardId == null || entityFromTheFuture.CardId.length === 0) {
+		if (
+			entityFromTheFuture == null ||
+			entityFromTheFuture.CardId == null ||
+			entityFromTheFuture.CardId.length === 0
+		) {
 			return entity;
 		}
 		entity.CardId = entityFromTheFuture.CardId;
@@ -817,7 +844,8 @@ export class BattlegroundsPlayerBoardParser implements ActionParser {
 					e.GetTag(GameTag.CREATOR) === entity.Id &&
 					e.GetTag(GameTag.ATTACHED) > 0,
 			);
-		const latestEnchantment = serenadedEnchantments.length > 0 ? serenadedEnchantments[serenadedEnchantments.length - 1] : null;
+		const latestEnchantment =
+			serenadedEnchantments.length > 0 ? serenadedEnchantments[serenadedEnchantments.length - 1] : null;
 		const latestEnchantmentId = latestEnchantment?.Entity;
 		if (latestEnchantmentId == null) {
 			return entity;

@@ -552,6 +552,11 @@ export class BgsPlayerBoardParser implements EventParser {
 				GoldSpentThisGame: opponentBoard.globalInfo?.GoldSpentThisGame ?? 0,
 				SanlaynScribesDeadThisGame: opponentBoard.globalInfo?.SanlaynScribesDeadThisGame ?? 0,
 				FriendlyMinionsDeadLastCombat: opponentBoard.globalInfo?.FriendlyMinionsDeadLastCombat ?? 0,
+				TavernSpellsCastThisTurn: opponentBoard.globalInfo?.TavernSpellsCastThisTurn ?? 0,
+				DeathrattlesTriggeredThisGame: opponentBoard.globalInfo?.DeathrattlesTriggeredThisGame ?? 0,
+				CardsPlayedThisTurn: opponentBoard.globalInfo?.CardsPlayedThisTurn ?? 0,
+				MrrgltonsPlayedThisGame: opponentBoard.globalInfo?.MrrgltonsPlayedThisGame ?? 0,
+				BackToBackCastThisGame: opponentBoard.globalInfo?.BackToBackCastThisGame ?? 0,
 			},
 		};
 		return result;
@@ -629,6 +634,11 @@ export class BgsPlayerBoardParser implements EventParser {
 					GoldSpentThisGame: playerBoard.globalInfo?.GoldSpentThisGame ?? 0,
 					SanlaynScribesDeadThisGame: playerBoard.globalInfo?.SanlaynScribesDeadThisGame ?? 0,
 					FriendlyMinionsDeadLastCombat: playerBoard.globalInfo?.FriendlyMinionsDeadLastCombat ?? 0,
+					TavernSpellsCastThisTurn: playerBoard.globalInfo?.TavernSpellsCastThisTurn ?? 0,
+					DeathrattlesTriggeredThisGame: playerBoard.globalInfo?.DeathrattlesTriggeredThisGame ?? 0,
+					CardsPlayedThisTurn: playerBoard.globalInfo?.CardsPlayedThisTurn ?? 0,
+					MrrgltonsPlayedThisGame: playerBoard.globalInfo?.MrrgltonsPlayedThisGame ?? 0,
+					BackToBackCastThisGame: playerBoard.globalInfo?.BackToBackCastThisGame ?? 0,
 				},
 			},
 			board: bgsBoard,

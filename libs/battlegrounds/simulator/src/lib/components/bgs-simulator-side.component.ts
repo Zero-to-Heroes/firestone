@@ -180,6 +180,11 @@ export class BgsSimulatorSideComponent {
 	goldrinnAttackBonus: number;
 	goldrinnHealthBonus: number;
 	tavernSpellsCastThisGame: number;
+	tavernSpellsCastThisTurn: number;
+	deathrattlesTriggeredThisGame: number;
+	mrrgltonsPlayedThisGame: number;
+	cardsPlayedThisTurn: number;
+	backToBackCastThisGame: number;
 	piratesPlayedThisGame: number;
 	piratesSummonedThisGame: number;
 	beastsSummonedThisGame: number;
@@ -292,6 +297,11 @@ export class BgsSimulatorSideComponent {
 		this.goldrinnHealthBonus = this._player.player?.globalInfo?.GoldrinnBuffHealth ?? 0;
 		this.eternalLegion = this._player.player?.globalInfo?.EternalKnightsDeadThisGame ?? 0;
 		this.tavernSpellsCastThisGame = this._player.player?.globalInfo?.TavernSpellsCastThisGame ?? 0;
+		this.tavernSpellsCastThisTurn = this._player.player?.globalInfo?.TavernSpellsCastThisTurn ?? 0;
+		this.deathrattlesTriggeredThisGame = this._player.player?.globalInfo?.DeathrattlesTriggeredThisGame ?? 0;
+		this.mrrgltonsPlayedThisGame = this._player.player?.globalInfo?.MrrgltonsPlayedThisGame ?? 0;
+		this.cardsPlayedThisTurn = this._player.player?.globalInfo?.CardsPlayedThisTurn ?? 0;
+		this.backToBackCastThisGame = this._player.player?.globalInfo?.BackToBackCastThisGame ?? 0;
 		this.piratesPlayedThisGame = this._player.player?.globalInfo?.PiratesPlayedThisGame ?? 0;
 		this.piratesSummonedThisGame = this._player.player?.globalInfo?.PiratesSummonedThisGame ?? 0;
 		this.beastsSummonedThisGame = this._player.player?.globalInfo?.BeastsSummonedThisGame ?? 0;

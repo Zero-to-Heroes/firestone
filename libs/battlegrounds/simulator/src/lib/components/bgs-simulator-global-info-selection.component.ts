@@ -157,11 +157,47 @@ import { CardsFacadeService, ILocalizationService } from '@firestone/shared/fram
 				</fs-numeric-input-with-arrows>
 				<fs-numeric-input-with-arrows
 					class="input"
+					[label]="'battlegrounds.sim.cards-played-this-turn' | fsTranslate"
+					[helpTooltip]="'battlegrounds.sim.cards-played-this-turn-tooltip' | fsTranslate"
+					[value]="cardsPlayedThisTurn"
+					[minValue]="0"
+					(fsModelUpdate)="cardsPlayedThisTurn = $event"
+				>
+				</fs-numeric-input-with-arrows>
+				<fs-numeric-input-with-arrows
+					class="input"
 					[label]="'battlegrounds.sim.tavern-spells-cast' | fsTranslate"
 					[helpTooltip]="'battlegrounds.sim.tavern-spells-cast-tooltip' | fsTranslate"
 					[value]="tavernSpellsCastThisGame"
 					[minValue]="0"
 					(fsModelUpdate)="onTavernSpellsCastThisGameChanged($event)"
+				>
+				</fs-numeric-input-with-arrows>
+				<fs-numeric-input-with-arrows
+					class="input"
+					[label]="'battlegrounds.sim.tavern-spells-cast-this-turn' | fsTranslate"
+					[helpTooltip]="'battlegrounds.sim.tavern-spells-cast-this-turn-tooltip' | fsTranslate"
+					[value]="tavernSpellsCastThisTurn"
+					[minValue]="0"
+					(fsModelUpdate)="tavernSpellsCastThisTurn = $event"
+				>
+				</fs-numeric-input-with-arrows>
+				<fs-numeric-input-with-arrows
+					class="input"
+					[label]="'battlegrounds.sim.mrrgltons-played-this-game' | fsTranslate"
+					[helpTooltip]="'battlegrounds.sim.mrrgltons-played-this-game-tooltip' | fsTranslate"
+					[value]="mrrgltonsPlayedThisGame"
+					[minValue]="0"
+					(fsModelUpdate)="mrrgltonsPlayedThisGame = $event"
+				>
+				</fs-numeric-input-with-arrows>
+				<fs-numeric-input-with-arrows
+					class="input"
+					[label]="'battlegrounds.sim.back-to-back-cast-this-game' | fsTranslate"
+					[helpTooltip]="'battlegrounds.sim.back-to-back-cast-this-game-tooltip' | fsTranslate"
+					[value]="backToBackCastThisGame"
+					[minValue]="0"
+					(fsModelUpdate)="backToBackCastThisGame = $event"
 				>
 				</fs-numeric-input-with-arrows>
 				<fs-numeric-input-with-arrows
@@ -268,6 +304,15 @@ import { CardsFacadeService, ILocalizationService } from '@firestone/shared/fram
 				</fs-numeric-input-with-arrows>
 				<fs-numeric-input-with-arrows
 					class="input"
+					[label]="'battlegrounds.sim.deathrattles-triggered-this-game' | fsTranslate"
+					[helpTooltip]="'battlegrounds.sim.deathrattles-triggered-this-game-tooltip' | fsTranslate"
+					[value]="deathrattlesTriggeredThisGame"
+					[minValue]="0"
+					(fsModelUpdate)="deathrattlesTriggeredThisGame = $event"
+				>
+				</fs-numeric-input-with-arrows>
+				<fs-numeric-input-with-arrows
+					class="input"
 					[label]="'battlegrounds.sim.goldSpentThisGame' | fsTranslate"
 					[value]="goldSpentThisGame"
 					[minValue]="0"
@@ -325,6 +370,11 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 		this.tavernSpellHealthBuff = value?.TavernSpellHealthBuff ?? 0;
 		this.tavernSpellAttackBuff = value?.TavernSpellAttackBuff ?? 0;
 		this.battlecriesTriggeredThisGame = value?.BattlecriesTriggeredThisGame ?? 0;
+		this.deathrattlesTriggeredThisGame = value?.DeathrattlesTriggeredThisGame ?? 0;
+		this.tavernSpellsCastThisTurn = value?.TavernSpellsCastThisTurn ?? 0;
+		this.mrrgltonsPlayedThisGame = value?.MrrgltonsPlayedThisGame ?? 0;
+		this.cardsPlayedThisTurn = value?.CardsPlayedThisTurn ?? 0;
+		this.backToBackCastThisGame = value?.BackToBackCastThisGame ?? 0;
 		this.goldSpentThisGame = value?.GoldSpentThisGame ?? 0;
 		this.friendlyMinionsDeadLastCombat = value?.FriendlyMinionsDeadLastCombat ?? 0;
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -360,6 +410,11 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 	tavernSpellHealthBuff: number;
 	tavernSpellAttackBuff: number;
 	battlecriesTriggeredThisGame: number;
+	deathrattlesTriggeredThisGame: number;
+	tavernSpellsCastThisTurn: number;
+	mrrgltonsPlayedThisGame: number;
+	cardsPlayedThisTurn: number;
+	backToBackCastThisGame: number;
 	goldSpentThisGame: number;
 	friendlyMinionsDeadLastCombat: number;
 
@@ -487,6 +542,11 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 			TavernSpellHealthBuff: this.tavernSpellHealthBuff,
 			TavernSpellAttackBuff: this.tavernSpellAttackBuff,
 			BattlecriesTriggeredThisGame: this.battlecriesTriggeredThisGame,
+			DeathrattlesTriggeredThisGame: this.deathrattlesTriggeredThisGame,
+			TavernSpellsCastThisTurn: this.tavernSpellsCastThisTurn,
+			MrrgltonsPlayedThisGame: this.mrrgltonsPlayedThisGame,
+			CardsPlayedThisTurn: this.cardsPlayedThisTurn,
+			BackToBackCastThisGame: this.backToBackCastThisGame,
 			GoldSpentThisGame: this.goldSpentThisGame,
 			FriendlyMinionsDeadLastCombat: this.friendlyMinionsDeadLastCombat,
 		};
