@@ -573,6 +573,50 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 		return zones;
 	}
 
+	/** Mana cost shown in the zone list when the real card is unknown. */
+	private refManaCostForZoneDisplay(card: DeckCard): number | null {
+		if (card.refManaCost != null) {
+			return card.refManaCost;
+		}
+		const guessed = card.guessedInfo?.cost;
+		if (typeof guessed === 'number') {
+			return guessed;
+		}
+		if (guessed && typeof guessed === 'object' && guessed.comparison === '==') {
+			return guessed.cost;
+		}
+		return null;
+	}
+
+	private buildZoneCards(
+		cards: readonly DeckCard[],
+		options: {
+			groupSameCardsTogether?: boolean;
+			groupByName?: boolean;
+			sortByZoneOrder?: boolean;
+			hideGifts?: boolean;
+		},
+		highlight?: string,
+	): readonly VisualDeckCard[] {
+		return cards
+			.filter((card) => {
+				if (options.hideGifts) {
+					return !card.creatorCardId;
+				}
+				return true;
+			})
+			.map((card) =>
+				VisualDeckCard.create(card).update({
+					creatorCardIds: (card.creatorCardId ? [card.creatorCardId] : []) as readonly string[],
+					lastAffectedByCardIds: (card.lastAffectedByCardId
+						? [card.lastAffectedByCardId]
+						: []) as readonly string[],
+					refManaCost: this.refManaCostForZoneDisplay(card),
+					highlight: highlight as any,
+				}),
+			);
+	}
+
 	private buildZone(
 		cards: readonly DeckCard[],
 		zones: readonly InternalDeckZoneSection[],
@@ -593,45 +637,17 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 		if (zones == null) {
 			sections.push({
 				header: null,
-				cards: cards
-					.filter((card) => {
-						if (options.hideGifts) {
-							return !card.creatorCardId;
-						}
-						return true;
-					})
-					.map((card) =>
-						VisualDeckCard.create(card).update({
-							creatorCardIds: (card.creatorCardId ? [card.creatorCardId] : []) as readonly string[],
-							lastAffectedByCardIds: (card.lastAffectedByCardId
-								? [card.lastAffectedByCardId]
-								: []) as readonly string[],
-							highlight: highlight as any,
-						}),
-					)
-					.filter((card) => !filterFunction || filterFunction(card)),
+				cards: this.buildZoneCards(cards, options, highlight).filter(
+					(card) => !filterFunction || filterFunction(card),
+				),
 				sortingFunction: sortingFunction,
 			});
 		} else if (cards == null) {
 			sections = zones.map((zone) => ({
 				header: zone.header,
-				cards: zone.cards
-					.filter((card) => {
-						if (options.hideGifts) {
-							return !card.creatorCardId;
-						}
-						return true;
-					})
-					.map((card) =>
-						VisualDeckCard.create(card).update({
-							creatorCardIds: (card.creatorCardId ? [card.creatorCardId] : []) as readonly string[],
-							lastAffectedByCardIds: (card.lastAffectedByCardId
-								? [card.lastAffectedByCardId]
-								: []) as readonly string[],
-							highlight: highlight as any,
-						}),
-					)
-					.filter((card) => !filterFunction || filterFunction(card)),
+				cards: this.buildZoneCards(zone.cards, options, highlight).filter(
+					(card) => !filterFunction || filterFunction(card),
+				),
 				sortingFunction: zone.sortingFunction,
 			}));
 		}
