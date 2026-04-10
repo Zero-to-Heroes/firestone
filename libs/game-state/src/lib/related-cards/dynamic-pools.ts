@@ -106,22 +106,6 @@ const getDynamicRelatedCardIdsInternal = (
 		});
 	}
 
-	// Cards generated into deck/hand (e.g. Enthrall shuffling random dragons) resolve to a concrete cardId; the
-	// generation pool lives on the creator (StaticGeneratingCard.dynamicPool), not on each outcome card.
-	const deckCardForCreator = inputOptions.deckState?.findCard(entityId)?.card;
-	const creatorCardIdForPool = deckCardForCreator?.creatorCardId;
-	if (creatorCardIdForPool) {
-		const creatorPoolImpl = cardsInfoCache[creatorCardIdForPool];
-		if (hasDynamicPool(creatorPoolImpl)) {
-			return creatorPoolImpl.dynamicPool({
-				cardId: creatorCardIdForPool,
-				entityId,
-				allCards,
-				inputOptions: options,
-			});
-		}
-	}
-
 	const refCard = allCards.getCard(cardId);
 
 	if (hasMechanic(refCard, GameTag.EXCAVATE)) {
@@ -372,6 +356,23 @@ const getDynamicRelatedCardIdsInternal = (
 
 	let filters = getDynamicFilters(cardId, entityId, allCards, options);
 	if (filters == null) {
+		// Outcome card has no pool in getDynamicFilters (incl. giant switch default). Use the creator's
+		// StaticGeneratingCard.dynamicPool when present (e.g. Enthrall shuffling a random dragon — show dragon
+		// pool, not an empty list). Must run only after getDynamicFilters so real cards with their own discover
+		// rules (switch-only or cache) are not overridden by the generator (see Hive Map + Winterspring Whelp).
+		const deckCardForCreator = inputOptions.deckState?.findCard(entityId)?.card;
+		const creatorCardIdForPool = deckCardForCreator?.creatorCardId;
+		if (creatorCardIdForPool) {
+			const creatorPoolImpl = cardsInfoCache[creatorCardIdForPool];
+			if (hasDynamicPool(creatorPoolImpl)) {
+				return creatorPoolImpl.dynamicPool({
+					cardId: creatorCardIdForPool,
+					entityId,
+					allCards,
+					inputOptions: options,
+				});
+			}
+		}
 		return [];
 	}
 
