@@ -1477,7 +1477,7 @@ export const hasCorrectType = (card: ReferenceCard, targetType: CardType): boole
 	return card?.type?.toUpperCase() === CardType[targetType];
 };
 
-const hasCorrectSpellSchool = (card: ReferenceCard, targetSpellSchool: SpellSchool): boolean => {
+export const hasCorrectSpellSchool = (card: ReferenceCard, targetSpellSchool: SpellSchool): boolean => {
 	return card?.spellSchool?.toUpperCase() === SpellSchool[targetSpellSchool];
 };
 

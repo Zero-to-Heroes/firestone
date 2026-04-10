@@ -228,6 +228,7 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	'dh-hand-size': 'dh-hand-size/dh-hand-size.log',
 	'lady-liadrin': 'lady-liadrin/lady-liadrin.log',
 	'wings-of-hate': 'wings-of-hate/wings-of-hate.log',
+	hivemap: 'hive-map-whelp/hive-map-whelp.log',
 };
 
 /**
