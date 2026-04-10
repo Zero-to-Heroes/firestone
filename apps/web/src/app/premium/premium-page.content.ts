@@ -5,10 +5,11 @@ export const OVERWOLF_DOWNLOAD_URL =
 /**
  * Premium marketing screenshots are served from the static CDN (same host as cards/i18n), not from the www web deploy bucket.
  *
- * Upload pipeline: publish optimized WebP under this path prefix (see `premiumCdnImage()` on feature `screenshots` in `premiumSections`):
+ * Upload pipeline: `build-tools/upload-premium-static.sh` — WebP from `docs/premium/highres/`, videos from
+ * `docs/premium/videos/` — to this path prefix (see `premiumCdnImage` / `premiumCdnVideo` in `premiumSections`):
  * `https://static.firestoneapp.com/premium/`
  *
- * For each screenshot, prefer a **preview** file (smaller dimensions / stronger compression) plus a **full** file for the lightbox — see {@link PremiumScreenshot.thumbSrc}.
+ * For each **image**, prefer a **preview** file (smaller dimensions / stronger compression) plus a **full** file for the lightbox — see {@link PremiumImage.thumbSrc}. For **videos**, use {@link PremiumVideo} with `kind: 'video'` and optional {@link PremiumVideo.posterSrc}.
  *
  * Cache: after replacing a file in place, add or bump a `?v=` query on the URL in this file, or ship a new filename, so CDN/browser caches pick up the change.
  */
@@ -18,10 +19,17 @@ export const PREMIUM_CDN_IMAGES_BASE = 'https://static.firestoneapp.com/premium'
 export function premiumCdnImage(filename: string): string {
 	const base = PREMIUM_CDN_IMAGES_BASE.replace(/\/$/, '');
 	const path = filename.replace(/^\//, '');
-	return `${base}/${path}?v=2`;
+	return `${base}/${path}?v=4`;
 }
 
-export interface PremiumScreenshot {
+/** Same as {@link premiumCdnImage} — videos live under the same `premium/` prefix (e.g. `.mp4`, `.webm`). */
+export function premiumCdnVideo(filename: string): string {
+	return premiumCdnImage(filename);
+}
+
+/** Still image: opens in the lightbox at full resolution when clicked. */
+export interface PremiumImage {
+	readonly kind?: 'image';
 	/** Full-resolution image for the lightbox (loaded on click). */
 	readonly fullSrc: string;
 	/**
@@ -33,10 +41,36 @@ export interface PremiumScreenshot {
 	readonly caption?: string;
 }
 
-/** One bullet under a mode section; optional screenshots illustrate that specific feature. */
+/**
+ * Inline video (e.g. short screen capture). Use {@link kind} `'video'` so the page renders a `<video>` with
+ * controls instead of a zoomable image. Host the file on the static CDN next to WebP assets.
+ */
+export interface PremiumVideo {
+	readonly kind: 'video';
+	readonly videoSrc: string;
+	/** Optional poster frame (WebP/JPEG on the CDN) shown before playback. */
+	readonly posterSrc?: string;
+	readonly alt: string;
+	readonly caption?: string;
+}
+
+export type PremiumMedia = PremiumImage | PremiumVideo;
+
+/** @deprecated Prefer {@link PremiumMedia} — kept as an alias because the field is still named `screenshots`. */
+export type PremiumScreenshot = PremiumMedia;
+
+export function isPremiumVideo(m: PremiumMedia): m is PremiumVideo {
+	return m.kind === 'video';
+}
+
+export function isPremiumImage(m: PremiumMedia): m is PremiumImage {
+	return !isPremiumVideo(m);
+}
+
+/** One bullet under a mode section; optional `screenshots` can mix images and short videos. */
 export interface PremiumFeatureItem {
 	readonly text: string;
-	readonly screenshots?: readonly PremiumScreenshot[];
+	readonly screenshots?: readonly PremiumMedia[];
 }
 
 export interface PremiumSection {
@@ -66,7 +100,17 @@ export const premiumSections: readonly PremiumSection[] = [
 		title: 'Battlegrounds',
 		icon: 'assets/svg/ftue/battlegrounds.svg',
 		items: [
-			{ text: 'Example boards on Composition details (meta comps)' },
+			{
+				text: 'Example boards on Composition details',
+				screenshots: [
+					{
+						thumbSrc: premiumCdnImage('battlegrounds-comp-details-thumb.webp'),
+						fullSrc: premiumCdnImage('battlegrounds-comp-details.webp'),
+						alt: 'Example boards on Composition details',
+						caption: 'Example boards for the Pirate APM comp',
+					},
+				],
+			},
 			{
 				text: 'Hero selection overlay with tiers and stats where it matters most during the initial selection',
 				screenshots: [
@@ -230,25 +274,115 @@ export const premiumSections: readonly PremiumSection[] = [
 		title: 'Arena',
 		icon: 'assets/svg/ftue/arena.svg',
 		items: [
-			{ text: 'Aggregated stats across all your Arena runs' },
-			{ text: 'Class pick stats in the overlay' },
-			{ text: 'Card pick stats in the overlay' },
-			{ text: 'Unlimited mulligan guide overlay' },
+			{
+				text: 'Unlimited class pick stats in the overlay',
+				screenshots: [
+					{
+						thumbSrc: premiumCdnImage('arena-class-stats-overlay-thumb.webp'),
+						fullSrc: premiumCdnImage('arena-class-stats-overlay.webp'),
+						alt: 'Unlimited class pick stats in the overlay',
+						caption: 'Unlimited class pick stats in the overlay',
+					},
+				],
+			},
+			{
+				text: 'Card pick stats in the overlay',
+				screenshots: [
+					{
+						thumbSrc: premiumCdnImage('arena-card-stats-overlay-thumb.webp'),
+						fullSrc: premiumCdnImage('arena-card-stats-overlay.webp'),
+						alt: 'Card pick stats in the overlay',
+						caption: 'Card pick stats in the overlay',
+					},
+				],
+			},
+			{
+				text: 'Unlimited mulligan guide overlay',
+				screenshots: [
+					{
+						thumbSrc: premiumCdnImage('arena-mulligan-guide-thumb.webp'),
+						fullSrc: premiumCdnImage('arena-mulligan-guide.webp'),
+						alt: 'Arena mulligan guide overlay',
+						caption: 'Unlimited mulligan guide overlay',
+					},
+				],
+			},
+			{
+				text: 'Additional insights on your Arena runs',
+				screenshots: [
+					{
+						thumbSrc: premiumCdnImage('arena-runs-overview-thumb.webp'),
+						fullSrc: premiumCdnImage('arena-runs-overview.webp'),
+						alt: 'Additional insights on your Arena runs',
+						caption: 'Additional insights on your Arena runs',
+					},
+				],
+			},
 		],
 	},
 	{
 		id: 'collection',
 		title: 'Collection',
 		icon: 'assets/svg/ftue/collection.svg',
-		items: [{ text: 'Chronological card and pack history' }, { text: 'Detailed per-set collection stats' }],
+		items: [
+			{
+				text: 'Detailed per-set collection stats',
+				screenshots: [
+					{
+						thumbSrc: premiumCdnImage('collection-stats-thumb.webp'),
+						fullSrc: premiumCdnImage('collection-stats.webp'),
+						alt: 'Detailed global collection stats',
+						caption: 'Detailed global collection stats',
+					},
+					{
+						thumbSrc: premiumCdnImage('collection-stats-for-set-thumb.webp'),
+						fullSrc: premiumCdnImage('collection-stats-for-set.webp'),
+						alt: 'Detailed per-set collection stats',
+						caption: 'Detailed per-set collection stats',
+					},
+				],
+			},
+			{
+				text: 'Chronological card and pack history',
+				screenshots: [
+					{
+						thumbSrc: premiumCdnImage('collection-pack-history-thumb.webp'),
+						fullSrc: premiumCdnImage('collection-pack-history-history.webp'),
+						alt: 'Chronological card and pack history',
+						caption: 'Chronological card and pack history',
+					},
+				],
+			},
+		],
 	},
 	{
 		id: 'general',
 		title: 'General & replays',
 		icon: 'assets/svg/ftue/replays.svg',
 		items: [
-			{ text: 'Discord rich presence with custom status placeholders (where enabled)' },
-			{ text: 'Rich in-game replays' },
+			{
+				text: 'Discord rich presence with custom status placeholders',
+				screenshots: [
+					{
+						thumbSrc: premiumCdnImage('discord-status-thumb.webp'),
+						fullSrc: premiumCdnImage('discord-status.webp'),
+						alt: 'Discord rich presence with custom status placeholders',
+						caption: 'Discord rich presence with custom status placeholders',
+					},
+				],
+			},
+			{
+				text: 'Rich in-game replays',
+				screenshots: [
+					{
+						kind: 'video',
+						videoSrc: premiumCdnVideo('in-game-replay.mp4'),
+						posterSrc: premiumCdnImage('in-game-replay-poster.webp'),
+						alt: 'Rich in-game replay, with the original sounds and animations of the game',
+						caption: 'Rich in-game replay, with the original sounds and animations of the game',
+					},
+				],
+			},
 		],
 	},
 ];

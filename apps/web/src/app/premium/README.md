@@ -30,11 +30,16 @@ From the repo root, with **ImageMagick 7** (`magick`) and **AWS CLI** (`aws`) on
 ```bash
 bash build-tools/upload-premium-static.sh --dry-run   # print magick + aws commands only
 PREMIUM_STATIC_S3_BUCKET=static.firestoneapp.com bash build-tools/upload-premium-static.sh
+bash build-tools/upload-premium-static.sh --force      # overwrite objects that already exist on S3
 ```
+
+By default the script **skips** uploading a key if an object already exists there (checks with `aws s3api head-object`). Use **`--force`** to replace existing objects. **`--dry-run`** and **`--force`** can be combined in any order.
 
 The script uploads each `*.webp` to `s3://$PREMIUM_STATIC_S3_BUCKET/premium/<file>` with **`--acl public-read`**, and, for files **not** already named `*-thumb.webp`, generates `<stem>-thumb.webp`: **resize to width** (`PREMIUM_THUMB_WIDTH`, default **400**), then **crop** to a fixed height from the **top** (`PREMIUM_THUMB_HEIGHT`, default **225** — 16:9 at that width) so inline previews stay small and uniform. WebP **quality** defaults to 82 (`PREMIUM_THUMB_QUALITY`). Outputs go under **`docs/premium/thumbnails/`** (gitignored) and are uploaded the same way. Those files stay on disk for local preview; the live site uses the CDN URLs in `thumbSrc`.
 
 After uploading, add or uncomment **`thumbSrc`** in [`premium-page.content.ts`](./premium-page.content.ts) for each screenshot that should use the preview file.
+
+**Videos:** Put `*.mp4`, `*.webm`, or `*.mov` under [`docs/premium/videos/`](../../../../../docs/premium/videos/). The **same** command uploads them to `s3://$PREMIUM_STATIC_S3_BUCKET/premium/<filename>` with the correct `Content-Type` (no transcoding). You can run the script when you only have new videos (no WebPs in `highres`) or when you have both; at least one asset in either folder is required.
 
 ### 2. Wire it in content
 
@@ -66,7 +71,19 @@ items: [
 - **`alt`**: Required on each shot. Describe the UI, not “screenshot”.
 - **`caption`**: Optional; rendered below the image inside a `<figure>`.
 
-Multiple objects in **`screenshots`** stack under that feature only.
+Multiple objects in **`screenshots`** stack under that feature only. You can **mix** still images and short clips in the same `screenshots` array.
+
+**Video entries** use `kind: 'video'`, `premiumCdnVideo('…')`, and optional `posterSrc` (a WebP/JPEG on the CDN, often a thumb generated like other screenshots):
+
+```ts
+{
+	kind: 'video',
+	videoSrc: premiumCdnVideo('in-game-replay.mp4'),
+	posterSrc: premiumCdnImage('in-game-replay-poster-thumb.webp'),
+	alt: 'Description for screen readers',
+	caption: 'Optional caption under the player',
+},
+```
 
 ### 3. Cache busting
 

@@ -211,6 +211,84 @@
 		gap: 14px;
 	}
 
+	// Multi-screenshot carousel (see premium-screenshot-carousel.component.html)
+	.premium-screenshot-carousel {
+		margin: 0;
+		padding: 12px 10px 14px;
+		border-radius: 12px;
+		border: 1px solid rgba(233, 205, 181, 0.14);
+		background: rgba(0, 0, 0, 0.28);
+		box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+		outline: none;
+
+		&:focus-visible {
+			box-shadow: 0 0 0 2px var(--default-title-color);
+		}
+	}
+
+	.premium-screenshot-carousel-top {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 8px 12px;
+		margin-bottom: 12px;
+		padding: 0 4px;
+	}
+
+	.premium-screenshot-carousel-counter {
+		font-size: 0.9rem;
+		font-weight: 700;
+		letter-spacing: 0.04em;
+		color: var(--default-title-color);
+	}
+
+	.premium-screenshot-carousel-hint {
+		font-size: 0.8rem;
+		color: var(--color-3);
+	}
+
+	.premium-screenshot-carousel-row {
+		display: flex;
+		flex-direction: row;
+		align-items: stretch;
+		gap: 8px;
+	}
+
+	.premium-screenshot-carousel-arrow {
+		flex-shrink: 0;
+		align-self: center;
+		width: 28px;
+		min-width: 28px;
+		height: 32px;
+		margin: 0;
+		padding: 0;
+		border: 1px solid rgba(233, 205, 181, 0.22);
+		border-radius: 6px;
+		background: rgba(0, 0, 0, 0.35);
+		color: var(--default-title-color);
+		font-size: 1.1rem;
+		line-height: 1;
+		cursor: pointer;
+		font-family: inherit;
+
+		&:hover {
+			background: rgba(255, 255, 255, 0.08);
+			color: var(--default-title-color);
+		}
+
+		&:focus-visible {
+			outline: 2px solid var(--default-title-color);
+			outline-offset: 2px;
+		}
+	}
+
+	.premium-screenshot-carousel-figure {
+		flex: 1;
+		min-width: 0;
+		margin: 0;
+	}
+
 	.premium-screenshot {
 		margin: 0;
 		padding: 0;
@@ -245,6 +323,14 @@
 		width: 100%;
 		max-width: 100%;
 		height: auto;
+	}
+
+	.premium-screenshot-video {
+		display: block;
+		width: 100%;
+		max-width: 100%;
+		height: auto;
+		background: #000;
 	}
 
 	.premium-screenshot figcaption {

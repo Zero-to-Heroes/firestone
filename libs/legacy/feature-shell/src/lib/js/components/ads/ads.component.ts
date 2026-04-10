@@ -91,7 +91,7 @@ export class AdsComponent extends AbstractSubscriptionComponent implements OnDes
 	}
 
 	showFeatures() {
-		this.externalUrl.openUrlInDefaultBrowser('https://github.com/Zero-to-Heroes/firestone/wiki/Premium-features');
+		this.externalUrl.openUrlInDefaultBrowser('https://www.firestoneapp.com/premium');
 		this.analytics.trackEvent('show-premium-features');
 	}
 

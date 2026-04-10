@@ -1,0 +1,72 @@
+<div
+	class="premium-screenshot-carousel"
+	role="region"
+	tabindex="0"
+	[attr.aria-roledescription]="'carousel'"
+	[attr.aria-label]="'Media gallery, ' + shots.length + ' items'"
+	(keydown)="onKeydown($event)"
+>
+	<div class="premium-screenshot-carousel-top">
+		<span class="premium-screenshot-carousel-counter" aria-live="polite">
+			{{ index + 1 }} / {{ shots.length }}
+		</span>
+		<span class="premium-screenshot-carousel-hint">Swipe or use arrows to browse</span>
+	</div>
+
+	<div class="premium-screenshot-carousel-row">
+		<button
+			type="button"
+			class="premium-screenshot-carousel-arrow"
+			(click)="prev()"
+			[attr.aria-label]="'Previous item'"
+		>
+			‹
+		</button>
+
+		<figure
+			class="premium-screenshot premium-screenshot-carousel-figure"
+			(touchstart)="onTouchStart($event)"
+			(touchend)="onTouchEnd($event)"
+		>
+			<ng-container *ngIf="isPremiumVideo(currentShot); else carouselImageTpl">
+				<video
+					#slideVideo
+					class="premium-screenshot-video"
+					controls
+					playsinline
+					preload="metadata"
+					[poster]="currentShot.posterSrc || undefined"
+					[src]="currentShot.videoSrc"
+					[attr.aria-label]="currentShot.alt"
+				></video>
+			</ng-container>
+			<ng-template #carouselImageTpl>
+				<button
+					*ngIf="isPremiumImage(currentShot)"
+					type="button"
+					class="premium-screenshot-trigger"
+					(click)="emitOpen(currentShot)"
+					[attr.aria-label]="'View full size: ' + currentShot.alt"
+				>
+					<img
+						class="premium-screenshot-img"
+						[src]="currentShot.thumbSrc ?? currentShot.fullSrc"
+						[alt]="currentShot.alt"
+						loading="lazy"
+						decoding="async"
+					/>
+				</button>
+			</ng-template>
+			<figcaption *ngIf="currentShot.caption">{{ currentShot.caption }}</figcaption>
+		</figure>
+
+		<button
+			type="button"
+			class="premium-screenshot-carousel-arrow"
+			(click)="next()"
+			[attr.aria-label]="'Next item'"
+		>
+			›
+		</button>
+	</div>
+</div>

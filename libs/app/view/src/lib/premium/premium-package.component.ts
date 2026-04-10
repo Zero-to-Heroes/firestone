@@ -154,10 +154,7 @@ export class PremiumPackageComponent extends AbstractSubscriptionComponent imple
 						value: featureValue,
 					})
 					.trim(),
-				link:
-					feature === 'premiumFeatures'
-						? 'https://github.com/Zero-to-Heroes/firestone/wiki/Premium-features'
-						: undefined,
+				link: feature === 'premiumFeatures' ? 'https://www.firestoneapp.com/premium' : undefined,
 			};
 		});
 

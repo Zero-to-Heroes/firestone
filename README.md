@@ -4,7 +4,7 @@
 
 Firestone is an app you run on Overwolf alongside Hearthstone (like HearthArena).
 
-See the [list of features](https://github.com/Zero-to-Heroes/firestone/wiki/Firestone-features) and the list of [premium-exclusive features](https://github.com/Zero-to-Heroes/firestone/wiki/Premium-features).
+See the [list of features](https://github.com/Zero-to-Heroes/firestone/wiki/Firestone-features) and the list of [premium-exclusive features](https://www.firestoneapp.com/premium).
 
 # Contributing
 
@@ -16,7 +16,7 @@ More information [here](https://github.com/Zero-to-Heroes/firestone/blob/master/
 - If you want to come and say hi on Discord: https://discord.gg/vKeB3gnKTy
 - Stay up-to-date with what we're doing and bugs found on X: https://x.com/Firestone_HS
 - See the list of all the app's features: https://github.com/Zero-to-Heroes/firestone/wiki/Firestone-features
-- And all the premium features: https://github.com/Zero-to-Heroes/firestone/wiki/Premium-features
+- And all the premium features: https://www.firestoneapp.com/premium
 
 ## Twitter features threads
 

@@ -14,18 +14,21 @@ import {
 	CONSTRUCTED_MULLIGAN_DAILY_FREE_USES,
 } from '@firestone/shared/common/service';
 import {
+	isPremiumImage,
+	isPremiumVideo,
 	OVERWOLF_DOWNLOAD_URL,
-	PremiumScreenshot,
+	PremiumImage,
 	premiumHero,
 	premiumSections,
 	premiumSummaryBullets,
 	subscribeSteps,
 } from './premium-page.content';
+import { PremiumScreenshotCarouselComponent } from './premium-screenshot-carousel.component';
 
 @Component({
 	standalone: true,
 	selector: 'web-premium-page',
-	imports: [CommonModule, InlineSVGModule],
+	imports: [CommonModule, InlineSVGModule, PremiumScreenshotCarouselComponent],
 	templateUrl: './premium-page.component.html',
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -36,10 +39,14 @@ export class PremiumPageComponent implements OnDestroy, OnInit {
 	readonly steps = subscribeSteps;
 	readonly downloadUrl = OVERWOLF_DOWNLOAD_URL;
 
+	/** For template guards (`*ngIf="isPremiumVideo(shot)"`). */
+	readonly isPremiumVideo = isPremiumVideo;
+	readonly isPremiumImage = isPremiumImage;
+
 	readonly freeTierLines: readonly string[];
 
 	/** When set, shows full-resolution image in a lightbox overlay. */
-	lightboxShot: PremiumScreenshot | null = null;
+	lightboxShot: PremiumImage | null = null;
 
 	constructor(
 		private readonly title: Title,
@@ -68,7 +75,7 @@ export class PremiumPageComponent implements OnDestroy, OnInit {
 		}
 	}
 
-	openLightbox(shot: PremiumScreenshot): void {
+	openLightbox(shot: PremiumImage): void {
 		this.lightboxShot = shot;
 		this.setBodyScrollLocked(true);
 		this.cdr.markForCheck();
