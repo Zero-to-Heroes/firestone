@@ -130,6 +130,32 @@ export class EntityUpdateParser implements EventParser {
 			: deck.otherZone;
 		// console.debug('[entity-update] newOther', newOther, deck.otherZone, newCardInOther);
 
+		// Ranked spells (e.g. ONY_016 → ONY_016t): deckstring deckList still lists the rank-1 id while the
+		// in-game entity upgrades. Keep one deckList row in sync so "remaining copies" / draw hints match
+		// the upgraded id (see wings-of-hate power-log replay).
+		let syncedDeckList = deck.deckList as DeckCard[];
+		if (obfsucatedCardId && deck.deckList?.length) {
+			const oldId =
+				newCardInDeck && newCardInDeck !== cardInDeck
+					? cardInDeck?.cardId
+					: newCardInHand && newCardInHand !== cardInHand
+						? cardInHand?.cardId
+						: null;
+			if (oldId && oldId !== obfsucatedCardId) {
+				const idx = deck.deckList.findIndex((c) => c.cardId === oldId);
+				if (idx >= 0) {
+					syncedDeckList = [...deck.deckList];
+					const refCard = this.allCards.getCard(obfsucatedCardId);
+					syncedDeckList[idx] = syncedDeckList[idx].update({
+						cardId: obfsucatedCardId,
+						cardName: refCard?.name,
+						refManaCost: refCard?.cost,
+						rarity: refCard?.rarity?.toLowerCase(),
+					} as DeckCard);
+				}
+			}
+		}
+
 		let globalEffects = deck.globalEffects;
 		if (WHIZBANG_DECK_CARD_IDS.includes(cardId as CardIds) && !globalEffects?.some((c) => c.cardId === cardId)) {
 			const dbCard = getProcessedCard(cardId, entityId, deck, this.allCards);
@@ -144,9 +170,10 @@ export class EntityUpdateParser implements EventParser {
 			globalEffects = this.helper.addSingleCardToZone(globalEffects, globalEffectCard);
 		}
 
-		const newPlayerDeck = Object.assign(new DeckState(), deck, {
+		const newPlayerDeck = deck.update({
 			hand: newHand,
 			deck: newDeck,
+			deckList: syncedDeckList,
 			otherZone: newOther,
 			abyssalCurseHighestValue:
 				newCardInHand?.cardId === CardIds.SirakessCultist_AbyssalCurseToken
@@ -154,7 +181,7 @@ export class EntityUpdateParser implements EventParser {
 					: deck.abyssalCurseHighestValue,
 			globalEffects: globalEffects,
 		});
-		let playerDeckWithLinks = newPlayerDeck;
+		let playerDeckWithLinks: DeckState = newPlayerDeck;
 		if (!!obfsucatedCardId && !!newCardInHand) {
 			playerDeckWithLinks = revealCard(playerDeckWithLinks, newCardInHand, this.allCards);
 		}

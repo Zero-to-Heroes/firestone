@@ -191,6 +191,7 @@ const LEGACY_ENV_BY_SLUG: Record<string, string> = {
 	ysondre: 'YSONDRE_POWER_LOG_PATH',
 	'body-wrapper': 'BODY_WRAPPER_POWER_LOG_PATH',
 	'lady-liadrin': 'POWER_LOG_LADY_LIADRIN_PATH',
+	'wings-of-hate': 'POWER_LOG_WINGS_OF_HATE_PATH',
 };
 
 /**
@@ -226,6 +227,7 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	'enthrall-pool': 'enthrall-pool/enthrall-pool.log',
 	'dh-hand-size': 'dh-hand-size/dh-hand-size.log',
 	'lady-liadrin': 'lady-liadrin/lady-liadrin.log',
+	'wings-of-hate': 'wings-of-hate/wings-of-hate.log',
 };
 
 /**
