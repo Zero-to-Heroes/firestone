@@ -23,9 +23,9 @@ import {
 	isBattlegroundsDuo,
 	normalizeHeroCardId,
 } from '@firestone-hs/reference-data';
-import { Entity } from '@firestone/replay/replay-parser';
 import { GameStateFacadeService, isBattlegroundsScene } from '@firestone/game-state';
 import { BgsSceneService, SceneService } from '@firestone/memory';
+import { Entity } from '@firestone/replay/replay-parser';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, groupByFunction } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
@@ -271,7 +271,12 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionComponent
 
 		const playerGames$ = combineLatest([currentGameType$, this.gameStats.gameStats$$]).pipe(
 			this.mapData(([gameType, stats]) => stats?.filter((stat) => this.gameModeFilter(stat, gameType))),
+			shareReplay(1),
+			takeUntil(this.destroyed$),
 		);
+		playerGames$.pipe(this.mapData((games) => games.length)).subscribe((totalGames) => {
+			console.log('[bg-session-widget] totalGames', totalGames);
+		});
 		const lastGames$: Observable<readonly GameStat[]> = combineLatest([
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.currentSessionStartDate)),
 			playerGames$,
@@ -284,7 +289,12 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionComponent
 					) ?? []
 				);
 			}),
+			shareReplay(1),
+			takeUntil(this.destroyed$),
 		);
+		lastGames$.pipe(this.mapData((games) => games.length)).subscribe((totalGames) => {
+			console.log('[bg-session-widget] totalGames after time filter', totalGames);
+		});
 		this.totalGamesLabel$ = lastGames$.pipe(
 			this.mapData((games) => {
 				return this.i18n.translateString('session.summary.total-games', { value: games.length });
