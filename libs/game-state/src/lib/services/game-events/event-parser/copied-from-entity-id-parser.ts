@@ -90,7 +90,11 @@ export class CopiedFromEntityIdParser implements EventParser {
 		// info leaks)
 
 		const updatedCardId = newCopy?.cardId ?? copiedCard?.cardId;
+		/** Copy and source are the same player (e.g. Malevolent Mutant); local may still be the opponent in replay. */
+		const copyAndSourceSameController = copiedCardControllerId === controllerId;
 		const shouldObfuscate =
+			// Copy + source same controller (e.g. Malevolent Mutant): not "opponent discovered our card" — allow cardId sync.
+			!copyAndSourceSameController &&
 			// There seems to be info leaks in the logs when the opponent discovers a card in their deck
 			// e.g. when they play Fracking or From the Depths (Dredge effects)
 			!isCopiedPlayer &&
@@ -143,7 +147,9 @@ export class CopiedFromEntityIdParser implements EventParser {
 			entityId:
 				copiedCardZone === Zone.DECK && !shouldObfuscate
 					? copiedCardEntityId
-					: isCopiedPlayer && copiedCardZone !== Zone.DECK && copiedCardEntityId != null
+					: copiedCardZone !== Zone.DECK &&
+						  copiedCardEntityId != null &&
+						  (isCopiedPlayer || copyAndSourceSameController)
 						? copiedCardEntityId
 						: null,
 			positionFromTop: shouldObfuscate ? null : copiedCard?.positionFromTop,
@@ -259,7 +265,48 @@ export class CopiedFromEntityIdParser implements EventParser {
 			});
 		}
 
+		// Same-side hand copy + source (e.g. Malevolent Mutant): bidirectional cardCopyLinks so
+		// processCardLinks can mirror cardId when either the copy or the original is played first.
+		if (
+			copiedCardZone === Zone.HAND &&
+			isPlayer === isCopiedPlayer &&
+			copiedCardEntityId != null &&
+			entityId != null &&
+			copiedCardEntityId !== entityId
+		) {
+			const deckKey = isPlayer ? 'playerDeck' : 'opponentDeck';
+			const deckState = result[deckKey];
+			const linked = this.linkBidirectionalCopyPair(deckState, entityId, copiedCardEntityId);
+			result = Object.assign(new GameState(), result, {
+				[deckKey]: linked,
+			});
+		}
+
 		return result;
+	}
+
+	/** Merge entity id into cardCopyLinks for both ends of a copy pair (hand/deck/board/other). */
+	private linkBidirectionalCopyPair(deck: DeckState, entityA: number, entityB: number): DeckState {
+		const addLink = (links: readonly number[] | undefined, id: number): readonly number[] => {
+			const next = [...(links ?? []), id];
+			return [...new Set(next)];
+		};
+		const patchZone = (cards: readonly DeckCard[]) =>
+			cards.map((c) => {
+				if (c.entityId === entityA) {
+					return c.update({ cardCopyLinks: addLink(c.cardCopyLinks, entityB) });
+				}
+				if (c.entityId === entityB) {
+					return c.update({ cardCopyLinks: addLink(c.cardCopyLinks, entityA) });
+				}
+				return c;
+			});
+		return deck.update({
+			hand: patchZone(deck.hand),
+			deck: patchZone(deck.deck),
+			board: patchZone(deck.board),
+			otherZone: patchZone(deck.otherZone),
+		});
 	}
 
 	private updateSecrets(deck: DeckState, cardId: string, copiedCardEntityId: number | undefined | null): DeckState {

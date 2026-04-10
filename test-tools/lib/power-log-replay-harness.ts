@@ -192,6 +192,7 @@ const LEGACY_ENV_BY_SLUG: Record<string, string> = {
 	'body-wrapper': 'BODY_WRAPPER_POWER_LOG_PATH',
 	'lady-liadrin': 'POWER_LOG_LADY_LIADRIN_PATH',
 	'wings-of-hate': 'POWER_LOG_WINGS_OF_HATE_PATH',
+	'malevolent-mutant': 'POWER_LOG_MALEVOLENT_MUTANT_PATH',
 };
 
 /**
@@ -229,6 +230,7 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	'lady-liadrin': 'lady-liadrin/lady-liadrin.log',
 	'wings-of-hate': 'wings-of-hate/wings-of-hate.log',
 	hivemap: 'hive-map-whelp/hive-map-whelp.log',
+	'malevolent-mutant': 'malevolent-mutant/malevolent-mutant.log',
 };
 
 /**
