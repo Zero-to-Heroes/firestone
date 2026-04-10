@@ -21,6 +21,21 @@ Upload both under the `premium/` prefix on **static.firestoneapp.com** using you
 
 Until a file exists at the URL you reference, the page will show a broken image for that entry.
 
+#### Upload script (highres → S3)
+
+Place source WebPs under [`docs/premium/highres/`](../../../../../docs/premium/highres/) (same basenames as in `premium-page.content.ts`, e.g. `battlegrounds-hero-selection.webp`).
+
+From the repo root, with **ImageMagick 7** (`magick`) and **AWS CLI** (`aws`) on your `PATH` and credentials configured:
+
+```bash
+bash build-tools/upload-premium-static.sh --dry-run   # print magick + aws commands only
+PREMIUM_STATIC_S3_BUCKET=static.firestoneapp.com bash build-tools/upload-premium-static.sh
+```
+
+The script uploads each `*.webp` to `s3://$PREMIUM_STATIC_S3_BUCKET/premium/<file>` with **`--acl public-read`**, and, for files **not** already named `*-thumb.webp`, generates `<stem>-thumb.webp`: **resize to width** (`PREMIUM_THUMB_WIDTH`, default **400**), then **crop** to a fixed height from the **top** (`PREMIUM_THUMB_HEIGHT`, default **225** — 16:9 at that width) so inline previews stay small and uniform. WebP **quality** defaults to 82 (`PREMIUM_THUMB_QUALITY`). Outputs go under **`docs/premium/thumbnails/`** (gitignored) and are uploaded the same way. Those files stay on disk for local preview; the live site uses the CDN URLs in `thumbSrc`.
+
+After uploading, add or uncomment **`thumbSrc`** in [`premium-page.content.ts`](./premium-page.content.ts) for each screenshot that should use the preview file.
+
 ### 2. Wire it in content
 
 Edit [`premium-page.content.ts`](./premium-page.content.ts).

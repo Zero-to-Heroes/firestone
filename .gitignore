@@ -47,3 +47,6 @@ Thumbs.db
 .nx
 .cursor/reviews
 node_modules/
+
+# Generated premium thumbnails (build-tools/upload-premium-static.sh)
+docs/premium/thumbnails/

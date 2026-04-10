@@ -18,7 +18,7 @@ export const PREMIUM_CDN_IMAGES_BASE = 'https://static.firestoneapp.com/premium'
 export function premiumCdnImage(filename: string): string {
 	const base = PREMIUM_CDN_IMAGES_BASE.replace(/\/$/, '');
 	const path = filename.replace(/^\//, '');
-	return `${base}/${path}`;
+	return `${base}/${path}?v=2`;
 }
 
 export interface PremiumScreenshot {
@@ -71,23 +71,93 @@ export const premiumSections: readonly PremiumSection[] = [
 				text: 'Hero selection overlay with tiers and stats where it matters most during the initial selection',
 				screenshots: [
 					{
-						// thumbSrc: premiumCdnImage('battlegrounds-hero-selection-thumb.webp'),
+						thumbSrc: premiumCdnImage('battlegrounds-hero-selection-thumb.webp'),
 						fullSrc: premiumCdnImage('battlegrounds-hero-selection.webp'),
 						alt: 'Battlegrounds hero selection overlay showing hero choices with tiers and stats during the pick phase',
 						caption: 'Hero selection overlay with tiers and stats',
 					},
 				],
 			},
-			{ text: 'Quest and reward stats on the overlay' },
-			{ text: 'Press Tab in the lobby for a quick full-hero overview' },
-			{ text: 'Strategy tips for your current hero in the overlay' },
-			{ text: 'Quest completion and reward placement context for your hero and MMR' },
-			{ text: 'Auto-highlight minions in the tavern based on your hero' },
-			{ text: 'Win/loss history against others in your lobby' },
-			{ text: 'Rich in-game and post-match stats' },
-			{ text: 'Fight-by-fight win-rate outlook chart' },
-			{ text: 'Hero page extras: tier summary, recent replays with that hero' },
-			{ text: 'Detailed recap stats for past matches in Replays' },
+			{ text: 'Trinket stats on the overlay' }, // Missing screenshot
+			{
+				text: 'Press Tab in the lobby for a quick full-hero overview',
+				screenshots: [
+					{
+						thumbSrc: premiumCdnImage('battlegrounds-quick-overview-thumb.webp'),
+						fullSrc: premiumCdnImage('battlegrounds-quick-overview.webp'),
+						alt: 'Quick overview of all heroes in the lobby',
+						caption: 'Quick overview of all heroes in the lobby',
+					},
+				],
+			},
+			// { text: 'Strategy tips for your current hero in the overlay' },
+			{
+				text: 'Quest completion and reward placement context for your hero and MMR',
+				screenshots: [
+					{
+						thumbSrc: premiumCdnImage('battlegrounds-quest-reward-stats-thumb.webp'),
+						fullSrc: premiumCdnImage('battlegrounds-quest-reward-stats.webp'),
+						alt: 'Battlegrounds quest and reward stats in the overlay',
+						caption: 'Quest completion and reward stats',
+					},
+				],
+			},
+			{
+				text: 'Win/loss history against others in your lobby',
+				screenshots: [
+					{
+						thumbSrc: premiumCdnImage('battlegrounds-scoreboard-thumb.webp'),
+						fullSrc: premiumCdnImage('battlegrounds-scoreboard.webp'),
+						alt: 'Battlegrounds lobby history showing win/loss history against others in your lobby',
+						caption: 'Win/loss history against others in your lobby',
+					},
+				],
+			},
+			{
+				text: 'Rich in-game and post-match stats',
+				screenshots: [
+					{
+						thumbSrc: premiumCdnImage('battlegrounds-post-match-stats-thumb.webp'),
+						fullSrc: premiumCdnImage('battlegrounds-post-match-stats.webp'),
+						alt: 'Battlegrounds post-match stats showing rich in-game and post-match stats',
+						caption: 'Rich in-game and post-match stats',
+					},
+				],
+			},
+			{
+				text: 'Fight-by-fight win-rate outlook chart',
+				screenshots: [
+					{
+						thumbSrc: premiumCdnImage('battlegrounds-fight-by-fight-winrate-thumb.webp'),
+						fullSrc: premiumCdnImage('battlegrounds-fight-by-fight-winrate.webp'),
+						alt: 'Battlegrounds fight-by-fight win-rate outlook chart',
+						caption: 'Fight-by-fight win-rate outlook chart',
+					},
+				],
+			},
+			{
+				text: 'Hero page extras: tier summary, recent replays with that hero',
+				screenshots: [
+					{
+						thumbSrc: premiumCdnImage('battlegrounds-hero-stats-thumb.webp'),
+						fullSrc: premiumCdnImage('battlegrounds-hero-stats.webp'),
+						alt: 'Battlegrounds hero page extras showing recent replays with that hero',
+						caption: 'Hero page extras: recent replays',
+					},
+				],
+			},
+			{
+				text: 'Detailed recap stats for past matches in Replays',
+				screenshots: [
+					{
+						thumbSrc: premiumCdnImage('battlegrounds-past-match-stats-thumb.webp'),
+						fullSrc: premiumCdnImage('battlegrounds-past-match-stats.webp'),
+						alt: 'Battlegrounds replays stats showing detailed recap stats for past matches',
+						caption: 'Detailed recap stats for past matches',
+					},
+				],
+			},
+			{ text: 'Auto-highlight minions in the tavern based on your hero' }, // Missing screenshot
 			{ text: 'Optional remote battle simulation when local sim is heavy on your PC' },
 		],
 	},
@@ -98,12 +168,61 @@ export const premiumSections: readonly PremiumSection[] = [
 		items: [
 			{
 				text: 'Current meta by rank: decks, archetypes, and detailed per-card stats',
+				screenshots: [
+					{
+						thumbSrc: premiumCdnImage('constructed-meta-decks-overview-thumb.webp'),
+						fullSrc: premiumCdnImage('constructed-meta-decks-overview.webp'),
+						alt: 'Constructed meta stats showing current meta decks at the Legend rank',
+						caption: 'Current meta decks at Legend rank',
+					},
+					{
+						thumbSrc: premiumCdnImage('constructed-meta-archetypes-overview-thumb.webp'),
+						fullSrc: premiumCdnImage('constructed-meta-archetypes-overview.webp'),
+						alt: 'Constructed meta stats showing current meta archetypes for competitive players',
+						caption: 'Current meta archetypes for Competitive rank brackets',
+					},
+					{
+						thumbSrc: premiumCdnImage('constructed-meta-card-stats-thumb.webp'),
+						fullSrc: premiumCdnImage('constructed-meta-card-stats.webp'),
+						alt: 'Constructed meta stats showing detailed card stats for the Herald Rogue archetype',
+						caption: 'Detailed card stats at the archetype level',
+					},
+				],
 			},
-			{ text: 'Deck overview and recent replays on the deck page' },
-			{ text: 'Expanded deckbuilder layout' },
-			{ text: 'Mulligan guide accessible in the lobby before queueing a game' },
+			{
+				text: 'Unlimited mulligan guide overlay',
+				screenshots: [
+					{
+						thumbSrc: premiumCdnImage('constructed-mulligan-guide-thumb.webp'),
+						fullSrc: premiumCdnImage('constructed-mulligan-guide.webp'),
+						alt: 'Constructed mulligan guide overlay',
+						caption: 'Unlimited mulligan guide overlay',
+					},
+				],
+			},
+			{
+				text: 'Deck overview and recent replays on the deck page',
+				screenshots: [
+					{
+						thumbSrc: premiumCdnImage('constructed-deck-details-thumb.webp'),
+						fullSrc: premiumCdnImage('constructed-deck-details.webp'),
+						alt: 'Constructed deck overview showing recent replays with that deck',
+						caption: 'Deck overview and recent replays',
+					},
+				],
+			},
+			{
+				text: 'Mulligan guide accessible in the lobby before queueing a game',
+				screenshots: [
+					{
+						thumbSrc: premiumCdnImage('constructed-lobby-mulligan-thumb.webp'),
+						fullSrc: premiumCdnImage('constructed-lobby-mulligan.webp'),
+						alt: 'Constructed mulligan guide accessible in the lobby before queueing a game',
+						caption: 'Mulligan guide accessible in the lobby',
+					},
+				],
+			},
 			{ text: 'Unlimited Discover overlay stats' },
-			{ text: 'Unlimited mulligan guide overlay' },
 		],
 	},
 	{
