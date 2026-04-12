@@ -15,7 +15,6 @@ import {
 	GameType,
 	hasCorrectTribe,
 	hasMechanic,
-	hasSpellSchool,
 	isArena,
 	Race,
 	ReferenceCard,
@@ -26,9 +25,14 @@ import {
 import { DeckState } from '../models/deck-state';
 import { GameState } from '../models/game-state';
 import { isCardValidForGame } from '../services/card-utils';
-import { EntityLike, getControllerEntity, getEnchantmentsForEntity, getEntityTag } from '../services/parser-entity-utils';
 import { hasDynamicPool } from '../services/cards/_card.type';
 import { cardsInfoCache } from '../services/cards/_mapping';
+import {
+	EntityLike,
+	getControllerEntity,
+	getEnchantmentsForEntity,
+	getEntityTag,
+} from '../services/parser-entity-utils';
 import { buildExcavateTreasures } from './excavate-treasures';
 import { canIncludeHerald, getHeraldAdditionalCards } from './herald';
 import { getLastRiffPlayed } from './riff';
@@ -186,17 +190,6 @@ const getDynamicRelatedCardIdsInternal = (
 				(c) =>
 					!isCardValidForGame(c, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
 					hasMechanic(c, GameTag.CHOOSE_ONE),
-			);
-		case CardIds.AlterTime_TIME_857:
-			return filterCards(
-				allCards,
-				{ ...options, format: GameFormat.FT_WILD, gameType: GameType.GT_RANKED },
-				cardId,
-				(c) =>
-					!isCardValidForGame(c, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
-					hasCorrectType(c, CardType.SPELL) &&
-					hasSpellSchool(c, SpellSchool.ARCANE) &&
-					canBeDiscoveredByClass(c, options.currentClass),
 			);
 		case CardIds.TimelooperToki_TIME_861:
 			return filterCards(

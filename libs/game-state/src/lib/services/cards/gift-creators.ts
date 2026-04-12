@@ -1129,7 +1129,6 @@ const internalGiftCreators = [
 	CardIds.Solitude_TIME_448,
 	CardIds.TheEternalHold_TIME_446,
 	CardIds.TimeLostGlaive_TIME_444,
-	CardIds.AlterTime_TIME_857,
 	CardIds.TimelooperToki_TIME_861,
 	CardIds.Chronogor_TIME_032,
 	CardIds.TimethiefRafaam_TinyRafaamToken_TIME_005t1,

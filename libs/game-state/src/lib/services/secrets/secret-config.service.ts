@@ -53,7 +53,7 @@ export class SecretConfigService {
 	constructor(
 		private readonly api: ApiRunner,
 		private readonly allCards: CardsFacadeService,
-	) { }
+	) {}
 
 	public async getValidSecrets(
 		metadata: Metadata,
@@ -64,13 +64,24 @@ export class SecretConfigService {
 		creatorEntityId?: number,
 	): Promise<readonly string[]> {
 		const debug = card?.entityId === 132;
+		if (!this.secretConfigs || this.secretConfigs.length === 0) {
+			await this.init();
+		}
+
+		if (card?.guessedInfo?.possibleCards?.length) {
+			const restrictedList = card.guessedInfo.possibleCards.filter((c) =>
+				this.allCards.getCard(c).mechanics?.includes(GameTag[GameTag.SECRET]),
+			);
+			// If we have a secret and the list is empty, something went wrong
+			if (!!restrictedList.length) {
+				return restrictedList;
+			}
+			console.warn('[secret-config] no secrets found for creator', card);
+		}
+
 		const staticList = this.getStaticSecrets(creatorCardId, metadata, playerClass);
 		if (staticList?.length) {
 			return staticList;
-		}
-
-		if (!this.secretConfigs || this.secretConfigs.length === 0) {
-			await this.init();
 		}
 
 		const mode: string = this.getMode(metadata, creatorCardId);
@@ -103,17 +114,8 @@ export class SecretConfigService {
 			});
 
 		let staticSecretsFromCreator: readonly string[] | null = null;
-		if (card?.guessedInfo?.possibleCards?.length) {
-			staticSecretsFromCreator = card.guessedInfo.possibleCards
-				.filter(c => this.allCards.getCard(c).mechanics?.includes(GameTag[GameTag.SECRET]))
-			// If we have a secret and the list is empty, something went wrong
-			if (!staticSecretsFromCreator.length) {
-				console.warn('[secret-config] no secrets found for creator', card);
-			}
-		}
 
-		const baseForSecrets = staticSecretsFromCreator?.length ? staticSecretsFromCreator : staticSecrets;
-		const result = baseForSecrets!
+		const result = staticSecrets!
 			.filter((secret) => this.canBeSpecificSecret(secret, card!))
 			.filter((secret) => this.canBeCreatedBy(secret, creatorCardId))
 			.filter((secret) => this.canBeCreatedByDynamic(secret, creatorCardId, creatorEntityId, gameState));
