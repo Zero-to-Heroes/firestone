@@ -20,6 +20,12 @@ export class PlayerNameHandler {
 					: bobTavernNames.includes(playerName)
 						? bobTavernNames[0]
 						: playerName;
+				if (state.LocalPlayer?.PlayerId === playerId) {
+					state.LocalPlayer.Name = playerName;
+				}
+				if (state.OpponentPlayer?.PlayerId === playerId) {
+					state.OpponentPlayer.Name = playerName;
+				}
 				state.TryAssignLocalPlayer(timestamp, data);
 				Logger.Log('Tried to assign player name', data);
 			} catch (e: any) {

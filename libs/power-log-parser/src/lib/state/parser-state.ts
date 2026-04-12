@@ -254,6 +254,14 @@ export class ParserState {
 		return null;
 	}
 
+	/** True once DebugPrintGame has assigned a non-blank name (bots with AccountHi 0 skip the wait). */
+	private playerHasDebugName(player: PlayerEntity): boolean {
+		if (player.AccountHi === '0') {
+			return true;
+		}
+		return player.Name != null && player.Name.trim().length > 0;
+	}
+
 	TryAssignLocalPlayer(timestamp: string, data: string): void {
 		if (this.IsMercenaries()) {
 			if (this.getPlayers().length === 3 && this.CurrentGame.ScenarioID === (ScenarioId.LETTUCE_PVP as number)) {
@@ -308,7 +316,7 @@ export class ParserState {
 		}
 
 		for (const player of this.getPlayers()) {
-			if (player.Name == null && player.AccountHi !== '0') {
+			if (!this.playerHasDebugName(player)) {
 				return;
 			}
 			const playerEntityIdTag = player.Tags.find((t) => t.Name === (GameTag.HERO_ENTITY as number));
