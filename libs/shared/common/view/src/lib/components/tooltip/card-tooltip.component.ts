@@ -156,6 +156,11 @@ function buildTooltipCardImages(usualUrl: string | null): {
 							{{ relatedCardIdsHeader }}
 						</div>
 						<div
+							class="pool-size"
+							[fsTranslate]="'decktracker.card-tooltip-pool-size'"
+							[fsTranslateParams]="{ value: value.relatedCards?.length }"
+						></div>
+						<div
 							class="related-cards"
 							#relatedCards
 							*ngIf="(value?.relatedCards?.length ?? 0) <= (value?.maxRelatedCardsToShow ?? 0)"
@@ -179,7 +184,6 @@ function buildTooltipCardImages(usualUrl: string | null): {
 							class="related-cards big-pool"
 							*ngIf="(value?.relatedCards?.length ?? 0) > (value?.maxRelatedCardsToShow ?? 0)"
 							[fsTranslate]="'decktracker.card-tooltip-big-pool-text'"
-							[fsTranslateParams]="{ value: value.relatedCards?.length }"
 						></div>
 					</div>
 				</div>
