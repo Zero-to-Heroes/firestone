@@ -12,6 +12,7 @@ import { isBattlegrounds } from '@firestone-hs/reference-data';
 import {
 	ActionButtonUsedAction,
 	BaconBoardVisualStateAction,
+	CardDrawAction,
 	CardPlayedFromHandAction,
 	Game,
 } from '@firestone/replay/replay-parser';
@@ -118,8 +119,18 @@ export class EventsLogComponent extends AbstractSubscriptionComponent implements
 			.entrySeq()
 			.map(([turnNumber, turn]) => {
 				if (!turn.actions?.length) {
-					// console.warn('No actions for turn', turnNumber, turn);
-					return [];
+					if (turnNumber === 0) {
+						return [];
+					}
+					return [
+						{
+							turnNumber: turnNumber,
+							actionNumber: 0,
+							isPlayer: false,
+							type: 'turn' as const,
+							text: `Turn ${Math.ceil(turnNumber / 2)}`,
+						},
+					];
 				}
 
 				const activePlayerName =
@@ -135,7 +146,6 @@ export class EventsLogComponent extends AbstractSubscriptionComponent implements
 					actionNumber: 0,
 					isPlayer: isPlayer,
 					type: 'turn' as const,
-					// activePlayer: activePlayerName,
 					text:
 						turnNumber === 0
 							? turn.actions[0].textRaw
@@ -143,18 +153,27 @@ export class EventsLogComponent extends AbstractSubscriptionComponent implements
 				});
 				const turnActions: ActionHistory[] = turn.actions
 					.map((action, actionIndex) => {
-						if (!(action instanceof CardPlayedFromHandAction)) {
-							return null;
+						if (action instanceof CardPlayedFromHandAction) {
+							const result: ActionHistory = {
+								turnNumber: turnNumber,
+								actionNumber: actionIndex,
+								isPlayer: isPlayer,
+								type: 'action' as const,
+								text: action.textRaw.split('\t').filter((t) => !!t?.length)[0],
+							};
+							return result;
 						}
-						const result: ActionHistory = {
-							turnNumber: turnNumber,
-							actionNumber: actionIndex,
-							isPlayer: isPlayer,
-							type: 'action' as const,
-							// activePlayer: activePlayerName,
-							text: action.textRaw.split('\t').filter((t) => !!t?.length)[0],
-						};
-						return result;
+						if (action instanceof CardDrawAction && action.textRaw) {
+							const result: ActionHistory = {
+								turnNumber: turnNumber,
+								actionNumber: actionIndex,
+								isPlayer: isPlayer,
+								type: 'action' as const,
+								text: action.textRaw.split('\t').filter((t) => !!t?.length)[0],
+							};
+							return result;
+						}
+						return null;
 					})
 					.filter((a) => !!a) as ActionHistory[];
 				logsForTurn.push(...turnActions);

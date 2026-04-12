@@ -105,6 +105,7 @@ export class ActionParserService {
 				actionsForTurn,
 				actionParsers,
 				entitiesBeforeAction,
+				previousStateEntities,
 				history,
 				game,
 			);
@@ -155,6 +156,7 @@ export class ActionParserService {
 		actionsForTurn: readonly Action[],
 		actionParsers: Parser[],
 		entitiesBeforeAction: Map<number, Entity>,
+		entitiesAfterItem: Map<number, Entity>,
 		history: readonly HistoryItem[],
 		game: Game,
 	): readonly Action[] {
@@ -170,7 +172,10 @@ export class ActionParserService {
 						(a: Action, b: Action) => a.index - b.index || a.timestamp - b.timestamp,
 					);
 					actionsForTurn = this.fillMissingEntities(actionsForTurn, entitiesBeforeAction);
-					actionsForTurn = [...actionsForTurn, ...actions];
+					const actionsWithSnapshot = actions.map((action) =>
+						action.entities ? action : action.update(entitiesAfterItem),
+					);
+					actionsForTurn = [...actionsForTurn, ...actionsWithSnapshot];
 				}
 			}
 		});

@@ -4,6 +4,7 @@ import { Action } from '../../models/action/action';
 import { StartTurnAction } from '../../models/action/start-turn-action';
 import { Entity } from '../../models/game/entity';
 import { PlayerEntity } from '../../models/game/player-entity';
+import { ActionHistoryItem } from '../../models/history/action-history-item';
 import { HistoryItem } from '../../models/history/history-item';
 import { TagChangeHistoryItem } from '../../models/history/tag-change-history-item';
 import { BaconBoardVisualStateAction, GameHepler } from '../../models/models';
@@ -25,17 +26,15 @@ export class StartTurnParser implements Parser {
 		entitiesBeforeAction: Map<number, Entity>,
 		history: readonly HistoryItem[],
 	): Action[] {
-		// // console.log('current turn?', currentTurn);
-		const activePlayerId = entitiesBeforeAction
-			.filter(entity => entity.getTag(GameTag.CURRENT_PLAYER) === 1)
-			.map(entity => entity as PlayerEntity)
-			.first().playerId;
+		// CURRENT_PLAYER on player entities is often still the *previous* turn at the MAIN_READY line.
+		// The first Block/Action whose entity is a Player (ids 2/3 in HSReplay) matches the client turn owner.
+		const activePlayerId = this.resolveActivePlayerId(item, entitiesBeforeAction, history);
 		const gameEntity = GameHepler.getGameEntity(entitiesBeforeAction);
 		const isBattlegrounds = gameEntity.getTag(GameTag.TECH_LEVEL_MANA_GEM) === 1;
 		// const hasShownVisualBoardState = gameEntity.getTag(GameTag.BOARD_VISUAL_STATE) > 0;
 		const shouldShowTurnActions = gameEntity.getTag(GameTag.DISABLE_TURN_INDICATORS) !== 1;
 		const result: Action[] = [];
-		if (shouldShowTurnActions) {
+		if (shouldShowTurnActions && activePlayerId != null) {
 			result.push(
 				StartTurnAction.create(
 					{
@@ -67,5 +66,43 @@ export class StartTurnParser implements Parser {
 
 	public reduce(actions: readonly Action[]): readonly Action[] {
 		return actions;
+	}
+
+	private resolveActivePlayerId(
+		item: TagChangeHistoryItem,
+		entitiesBeforeAction: Map<number, Entity>,
+		history: readonly HistoryItem[],
+	): number | undefined {
+		const itemIndex = history.indexOf(item);
+		if (itemIndex >= 0) {
+			const scanEnd = Math.min(history.length, itemIndex + 40);
+			for (let i = itemIndex + 1; i < scanEnd; i++) {
+				const hi = history[i];
+				if (!(hi instanceof ActionHistoryItem)) {
+					continue;
+				}
+				const node = hi.node;
+				if (node?.name !== 'Block' && node?.name !== 'Action') {
+					continue;
+				}
+				const rawEntity = node.attributes?.entity as string | undefined;
+				if (rawEntity == null || rawEntity === '') {
+					continue;
+				}
+				const entityId = parseInt(rawEntity, 10);
+				if (Number.isNaN(entityId)) {
+					continue;
+				}
+				const ent = entitiesBeforeAction.get(entityId);
+				if (ent instanceof PlayerEntity) {
+					return ent.playerId;
+				}
+			}
+		}
+
+		return entitiesBeforeAction
+			.filter((entity) => entity.getTag(GameTag.CURRENT_PLAYER) === 1)
+			.map((entity) => entity as PlayerEntity)
+			.first()?.playerId;
 	}
 }

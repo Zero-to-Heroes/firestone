@@ -4,7 +4,9 @@ import { Action } from '../../models/action/action';
 import { CardPlayedFromHandAction } from '../../models/action/card-played-from-hand-action';
 import { Entity } from '../../models/game/entity';
 import { ActionHistoryItem } from '../../models/history/action-history-item';
+import { FullEntityHistoryItem } from '../../models/history/full-entity-history-item';
 import { HistoryItem } from '../../models/history/history-item';
+import { ShowEntityHistoryItem } from '../../models/history/show-entity-history-item';
 import { TagChangeHistoryItem } from '../../models/history/tag-change-history-item';
 import { AllCardsService } from '../all-cards.service';
 import { ActionHelper } from './action-helper';
@@ -14,42 +16,56 @@ export class CardPlayedFromHandParser implements Parser {
 	constructor(private allCards: AllCardsService) {}
 
 	public applies(item: HistoryItem): boolean {
-		return item instanceof ActionHistoryItem || item instanceof TagChangeHistoryItem;
+		return (
+			item instanceof ActionHistoryItem ||
+			item instanceof TagChangeHistoryItem ||
+			item instanceof ShowEntityHistoryItem ||
+			item instanceof FullEntityHistoryItem
+		);
 	}
 
 	public parse(
-		item: ActionHistoryItem | TagChangeHistoryItem,
+		item: ActionHistoryItem | TagChangeHistoryItem | ShowEntityHistoryItem | FullEntityHistoryItem,
 		currentTurn: number,
 		entitiesBeforeAction: Map<number, Entity>,
 		history: readonly HistoryItem[],
 	): Action[] {
-		if (item instanceof ActionHistoryItem && parseInt(item.node.attributes.type) === BlockType.PLAY) {
-			// The case of a ShowEntity (or FullEntity) when we didn't previously know the
-			// card. In that case, a ShowEntity (or FullEntity) element is created that contains
-			// the tag with the proper zone
-			// Use entities when playing Eviscerate at t6o at
-			// http://www.zerotoheroes.com/r/hearthstone/572de12ee4b0d4231295c49e/an-arena-game-going-5-0
-			const result = [];
-			if (item.node.showEntities) {
-				for (const showEntity of item.node.showEntities) {
-					if (
-						showEntity.tags[GameTag[GameTag.ZONE]] === Zone.PLAY &&
-						showEntity.tags[GameTag[GameTag.CARDTYPE]] !== CardType.ENCHANTMENT
-					) {
-						result.push(
-							CardPlayedFromHandAction.create(
-								{
-									timestamp: showEntity.attributes.ts,
-									index: showEntity.index,
-									entityId: showEntity.id,
-								},
-								this.allCards,
-							),
-						);
-					}
-				}
+		if (item instanceof ShowEntityHistoryItem || item instanceof FullEntityHistoryItem) {
+			// Do not emit from Block PLAY + node.showEntities: that duplicates this path and snapshots entity
+			// state from before inner ShowEntity lines are applied (card still in hand).
+			const def = item.entityDefintion;
+			if (def.parentIndex == null) {
+				return [];
 			}
-			return result;
+			const parent = history.find((h) => h.index === def.parentIndex);
+			if (!parent || !(parent instanceof ActionHistoryItem)) {
+				return [];
+			}
+			if (parseInt(parent.node.attributes.type) !== BlockType.PLAY) {
+				return [];
+			}
+			if (
+				def.tags[GameTag[GameTag.ZONE]] === Zone.PLAY &&
+				def.tags[GameTag[GameTag.CARDTYPE]] !== CardType.ENCHANTMENT
+			) {
+				return [
+					CardPlayedFromHandAction.create(
+						{
+							timestamp: item.timestamp,
+							index: item.index,
+							entityId: def.id,
+						},
+						this.allCards,
+					),
+				];
+			}
+			return [];
+		}
+		if (item instanceof ActionHistoryItem && parseInt(item.node.attributes.type) === BlockType.PLAY) {
+			// Card plays are emitted from ShowEntityHistoryItem / FullEntityHistoryItem (reveal) or
+			// TagChangeHistoryItem (card already known). Block.showEntities duplicates ShowEntity and used a
+			// wrong entity snapshot (see Kafka replay Crystal Tender).
+			return [];
 		} else if (item instanceof TagChangeHistoryItem) {
 			// The case of a ShowEntity command when the card was already known - basically
 			// when we play our own card. In that case, the tags are already known, and
