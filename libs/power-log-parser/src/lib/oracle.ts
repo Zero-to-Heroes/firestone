@@ -131,6 +131,14 @@ export class Oracle {
 				creatorTuple = shatteredFallback;
 			}
 		}
+		// Shattered hand pieces often omit CREATOR / DISPLAYED_CREATOR; inferring the parent block
+		// would incorrectly attribute the enclosing minion PLAY (e.g. Violet Treasuregill) while the
+		// card was drawn from deck (e.g. Dragonscale Armaments) and split by Shatter. Only use
+		// parent-chain inference when the entity is not SHATTERED — Spark/Sands still resolve via
+		// {@link FindShatteredPieceCreatorFromGraveyard} above.
+		if (!creatorTuple?.[0] && entity.GetTag(GameTag.SHATTERED) !== 1) {
+			creatorTuple = Oracle.FindParentEntity(gameState, node);
+		}
 		return creatorTuple;
 	}
 
@@ -179,6 +187,9 @@ export class Oracle {
 				node,
 			);
 		}
+		if (!creatorTuple?.[0] && entity.GetTag(GameTag.SHATTERED) !== 1) {
+			creatorTuple = Oracle.FindParentEntity(gameState, node);
+		}
 		return creatorTuple;
 	}
 
@@ -187,7 +198,10 @@ export class Oracle {
 		creatorTag: number,
 		node: Node,
 	): [string, number] | null {
-		if (creatorTag !== -1 && gameState.CurrentEntities.has(creatorTag)) {
+		if (creatorTag === -1) {
+			return null;
+		}
+		if (gameState.CurrentEntities.has(creatorTag)) {
 			const creator = gameState.CurrentEntities.get(creatorTag)!;
 			let cardId = creator?.CardId ?? '';
 			let entityId = creator?.Entity ?? -1;
