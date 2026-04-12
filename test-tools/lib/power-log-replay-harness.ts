@@ -231,6 +231,7 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	'wings-of-hate': 'wings-of-hate/wings-of-hate.log',
 	hivemap: 'hive-map-whelp/hive-map-whelp.log',
 	'malevolent-mutant': 'malevolent-mutant/malevolent-mutant.log',
+	'flight-maneuvers-gift': 'flight-maneuvers-gift/flight-maneuvers-gift.log',
 };
 
 /**
@@ -286,6 +287,7 @@ export type PowerLogReplayResult = {
 	readonly allCardsRef: AllCardsService;
 	readonly state: GameState;
 	readonly gameStateService: GameStateService;
+	readonly secretConfigService: SecretConfigService;
 };
 
 export type ReplayPowerLogOptions = {
@@ -545,5 +547,6 @@ export async function replayPowerLogToGameState(
 		allCardsRef,
 		state: gameStateService.state,
 		gameStateService,
+		secretConfigService,
 	};
 }

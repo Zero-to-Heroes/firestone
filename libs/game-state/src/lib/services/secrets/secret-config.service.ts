@@ -183,6 +183,11 @@ export class SecretConfigService {
 				return (
 					this.allCards.getCard(secretCardId).spellSchool?.includes(SpellSchool[SpellSchool.ARCANE]) ?? false
 				);
+			// Alter Time discovers Arcane spells from Wild (see GeneratingCard in alter-time.ts).
+			case CardIds.AlterTime_TIME_857:
+				return (
+					this.allCards.getCard(secretCardId).spellSchool?.includes(SpellSchool[SpellSchool.ARCANE]) ?? false
+				);
 			case CardIds.DreamplannerZephrys_ExtravagantTourToken_WORK_027t2:
 				return [CardIds.IceBlock, CardIds.IceBlockLegacy].includes(secretCardId as CardIds);
 			default:
