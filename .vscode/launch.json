@@ -1,27 +1,10 @@
 {
 	"version": "0.2.0",
 	"configurations": [
-		
-
 		{
 			"type": "node",
 			"request": "launch",
-			"name": "Jest: debug power.log → console",
-			"program": "${workspaceFolder}/node_modules/jest/bin/jest.js",
-			"args": [
-				"--config=libs/power-log-parser/jest.config.ts",
-				"--runInBand",
-				"--no-cache",
-				"--testPathPattern=debug-power-log-console"
-			],
-			"cwd": "${workspaceFolder}",
-			"console": "integratedTerminal",
-			"internalConsoleOptions": "neverOpen"
-		},
-		{
-			"type": "node",
-			"request": "launch",
-			"name": "Jest: debug power.log (full JSON lines)",
+			"name": "Power log parser: test-tools/power.log (breakpoints)",
 			"program": "${workspaceFolder}/node_modules/jest/bin/jest.js",
 			"args": [
 				"--config=libs/power-log-parser/jest.config.ts",
@@ -33,6 +16,25 @@
 			"console": "integratedTerminal",
 			"internalConsoleOptions": "neverOpen",
 			"env": {
+				"POWER_LOG_DEBUG_PATH": "${workspaceFolder}/test-tools/power.log"
+			}
+		},
+		{
+			"type": "node",
+			"request": "launch",
+			"name": "Power log parser: test-tools/power.log (full JSON lines)",
+			"program": "${workspaceFolder}/node_modules/jest/bin/jest.js",
+			"args": [
+				"--config=libs/power-log-parser/jest.config.ts",
+				"--runInBand",
+				"--no-cache",
+				"--testPathPattern=debug-power-log-console"
+			],
+			"cwd": "${workspaceFolder}",
+			"console": "integratedTerminal",
+			"internalConsoleOptions": "neverOpen",
+			"env": {
+				"POWER_LOG_DEBUG_PATH": "${workspaceFolder}/test-tools/power.log",
 				"POWER_LOG_DEBUG_FULL": "1"
 			}
 		},
