@@ -97,9 +97,9 @@ export class ReceiveCardInHandParser implements ActionParser {
 		}
 
 		const lastInfluencedByCardId =
-			this.GameState.CurrentEntities.get(
-				(node.Parent?.Object as Action)?.Entity ?? -1,
-			)?.CardId ?? creator?.[0] ?? null;
+			this.GameState.CurrentEntities.get((node.Parent?.Object as Action)?.Entity ?? -1)?.CardId ??
+			creator?.[0] ??
+			null;
 		entity.PlayedWhileInHand.length = 0;
 		const position = entity.GetZonePosition();
 
@@ -172,7 +172,7 @@ export class ReceiveCardInHandParser implements ActionParser {
 		const position = showEntity.GetZonePosition();
 
 		const lastInfluencedBy = Oracle.FindParentEntity(this.GameState, node);
-		const lastInfluencedByCardId = lastInfluencedBy != null ? lastInfluencedBy?.[0] : creator?.[0] ?? null;
+		const lastInfluencedByCardId = lastInfluencedBy != null ? lastInfluencedBy?.[0] : (creator?.[0] ?? null);
 		const excessAmount = this.getExcessAmountFromCreatorBlock(node, creator?.[0] ?? null, creator?.[1] ?? -1);
 		return [
 			GameEventProvider.Create(
@@ -191,8 +191,7 @@ export class ReceiveCardInHandParser implements ActionParser {
 						CreatorZone: creatorZone,
 						CreatorTags: creatorTags,
 						LastInfluencedByCardId: lastInfluencedByCardId,
-						IsPremium:
-							entity.GetTag(GameTag.PREMIUM) === 1 || showEntity.GetTag(GameTag.PREMIUM) === 1,
+						IsPremium: entity.GetTag(GameTag.PREMIUM) === 1 || showEntity.GetTag(GameTag.PREMIUM) === 1,
 						DataNum1: dataNum1,
 						DataNum2: dataNum2,
 						Position: position,
@@ -232,11 +231,7 @@ export class ReceiveCardInHandParser implements ActionParser {
 				if (parentEntity != null) {
 					referencedCardIds = parentAction.Data.filter((d) => d instanceof TagChange)
 						.map((d) => d as unknown as TagChange)
-						.filter(
-							(t) =>
-								t.Name === (GameTag.ZONE as number) &&
-								t.Value === (Zone.SETASIDE as number),
-						)
+						.filter((t) => t.Name === (GameTag.ZONE as number) && t.Value === (Zone.SETASIDE as number))
 						.map((t) => this.GameState.CurrentEntities.get(t.Entity))
 						.filter((e) => e?.GetCardType() === (CardType.MINION as number))
 						.map((e) => e!.CardId);
@@ -252,6 +247,7 @@ export class ReceiveCardInHandParser implements ActionParser {
 				fullEntity.TimeStamp,
 				'RECEIVE_CARD_IN_HAND',
 				() => {
+					// TODO: all these should move back to before the event provider, as it causes a lot of issues based on events that occur after things happen
 					const creator = Oracle.FindCardCreator(this.GameState, fullEntity, node);
 					const creatorEntity = this.GameState.CurrentEntities.get(creator?.[1] ?? -1);
 					let createdIndex: number | null = null;
@@ -269,7 +265,7 @@ export class ReceiveCardInHandParser implements ActionParser {
 
 					const lastInfluencedBy = Oracle.FindParentEntity(this.GameState, node);
 					const lastInfluencedByCardId =
-						lastInfluencedBy != null ? lastInfluencedBy?.[0] : creator?.[0] ?? null;
+						lastInfluencedBy != null ? lastInfluencedBy?.[0] : (creator?.[0] ?? null);
 					let cardId = Oracle.PredictCardId(
 						this.GameState,
 						creatorCardId,
@@ -301,10 +297,7 @@ export class ReceiveCardInHandParser implements ActionParser {
 						cardId = 'MIXED_CONCOCTION_UNKNOWN';
 						creatorCardId = 'MIXED_CONCOCTION_UNKNOWN';
 					}
-					const buffingCardEntityCardId = Oracle.GetBuffingCardCardId(
-						creator?.[1] ?? -1,
-						creatorCardId,
-					);
+					const buffingCardEntityCardId = Oracle.GetBuffingCardCardId(creator?.[1] ?? -1, creatorCardId);
 					const buffCardId = Oracle.GetBuffCardId(creator?.[1] ?? -1, creatorCardId);
 
 					const guessedTags = Oracle.GuessTags(
@@ -334,8 +327,7 @@ export class ReceiveCardInHandParser implements ActionParser {
 							EntityId: fullEntity.Id,
 							AdditionalProps: {
 								CreatorCardId:
-									creatorCardId ??
-									(fullEntity.GetTag(GameTag.CREATOR) > 0 ? 'Unknown' : null),
+									creatorCardId ?? (fullEntity.GetTag(GameTag.CREATOR) > 0 ? 'Unknown' : null),
 								CreatorEntityId: creatorEntityId ?? fullEntity.GetTag(GameTag.CREATOR),
 								CreatorZone: creatorZone,
 								CreatedIndex: createdIndex,
