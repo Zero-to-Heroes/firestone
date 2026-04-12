@@ -433,13 +433,17 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 					.toArray();
 				const cardIds = opponentCards.map((e) => e.cardID);
 				const groupedByCardId = groupByFunction2(cardIds, (cardId) => cardId);
+				// Tokens / new cards / missing DB entries have no dbfId; encode() throws "Invalid card undefined".
+				const cards: [number, number][] = Object.values(groupedByCardId)
+					.map((group) => {
+						const dbfId = this.cards.getCard(group[0])?.dbfId;
+						return [dbfId, group.length] as [number | undefined, number];
+					})
+					.filter((pair): pair is [number, number] => pair[0] != null && Number.isFinite(pair[0]));
 				const deckDefinition: DeckDefinition = {
 					heroes: [7],
 					format: GameFormat.FT_WILD,
-					cards: Object.values(groupedByCardId).map((group) => {
-						const dbfId = this.cards.getCard(group[0])?.dbfId;
-						return [dbfId, group.length];
-					}),
+					cards,
 				};
 				const deckstring = encode(deckDefinition);
 				this.opponentDecklist = deckstring;
