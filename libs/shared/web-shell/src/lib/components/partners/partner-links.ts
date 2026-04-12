@@ -21,7 +21,7 @@ export const PARTNER_LINKS: Record<string, string> = {
 	dreads: 'https://www.overwolf.com/app/sebastien_tromp-firestone?utm_source=influencer&utm_medium=owaa&utm_campaign=x1L0WDO',
 	pika: 'https://download.overwolf.com/install/Download?ExtensionId=lnknbakkpommmjjdnelmfbjjdbocfpnpbkijjnob&utm_source=influencer&utm_medium=owaa&utm_campaign=kxQz0jI',
 	baobao: 'https://download.overwolf.com/install/Download?ExtensionId=lnknbakkpommmjjdnelmfbjjdbocfpnpbkijjnob&utm_source=influencer&utm_medium=owaa&utm_campaign=y66AKZw',
-	pf: 'https://download.overwolf.com/install/Download?ExtensionId=lnknbakkpommmjjdnelmfbjjdbocfpnpbkijjnob&utm_source=influencer&utm_medium=owaa&utm_campaign=wHEUyKJ',
+	cnhs: 'https://download.overwolf.com/install/Download?ExtensionId=lnknbakkpommmjjdnelmfbjjdbocfpnpbkijjnob&utm_source=influencer&utm_medium=owaa&utm_campaign=wHEUyKJ',
 	moyi: 'https://download.overwolf.com/install/Download?ExtensionId=lnknbakkpommmjjdnelmfbjjdbocfpnpbkijjnob&utm_source=influencer&utm_medium=owaa&utm_campaign=2B6h6k5',
 	thefishou:
 		'https://www.overwolf.com/app/sebastien_tromp-firestone?utm_source=influencer&utm_medium=owaa&utm_campaign=a0nqFZZ',
