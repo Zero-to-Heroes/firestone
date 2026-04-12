@@ -109,7 +109,10 @@ export class Oracle {
 		// parent-chain inference when the entity is not SHATTERED — Spark/Sands still resolve via
 		// {@link FindShatteredPieceCreatorFromGraveyard} above.
 		if (!creatorTuple?.[0] && entity.GetTag(GameTag.SHATTERED) !== 1) {
-			creatorTuple = Oracle.FindParentEntity(gameState, node);
+			// The SHATTERED tag isn't set, but we're in the process of shattering the card, so we assume it's a SHATTERED card
+			if (gameState.ParserState.CurrentSubSpell?.Prefab !== 'CATAFX_Shattered_Combined_OverrideSpawn_Super') {
+				creatorTuple = Oracle.FindParentEntity(gameState, node);
+			}
 		}
 		return creatorTuple;
 	}
