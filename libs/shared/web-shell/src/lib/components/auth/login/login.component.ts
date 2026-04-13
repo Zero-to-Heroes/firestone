@@ -1,5 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import {
+	OVERWOLF_OIDC_AUTHORIZATION_ENDPOINT,
+	OVERWOLF_OIDC_CLIENT_ID,
+} from '@firestone/shared/common/service';
 import { InlineSVGModule } from 'ng-inline-svg-2';
 
 interface AuthProvider {
@@ -51,9 +55,6 @@ export class LoginComponent implements OnInit {
 		},
 	];
 
-	// Overwolf OIDC configuration per https://dev.overwolf.com/ow-native/reference/overwolf-oidc/ow-oidc/
-	private readonly OVERWOLF_AUTH_ENDPOINT = 'https://id.overwolf.com/oidc/auth';
-	private readonly OVERWOLF_CLIENT_ID = 'c2w6jk8xh548uxeh6wqu3ivmxpgnh8qi';
 	private readonly SCOPE = 'openid profile subscriptions';
 
 	async ngOnInit(): Promise<void> {
@@ -103,7 +104,7 @@ export class LoginComponent implements OnInit {
 		// Build authorization URL with PKCE per Overwolf docs
 		const params = new URLSearchParams({
 			response_type: 'code',
-			client_id: this.OVERWOLF_CLIENT_ID,
+			client_id: OVERWOLF_OIDC_CLIENT_ID,
 			redirect_uri: redirectUri,
 			scope: this.SCOPE,
 			state: state,
@@ -111,7 +112,7 @@ export class LoginComponent implements OnInit {
 			code_challenge_method: 'S256',
 		});
 
-		return `${this.OVERWOLF_AUTH_ENDPOINT}?${params.toString()}`;
+		return `${OVERWOLF_OIDC_AUTHORIZATION_ENDPOINT}?${params.toString()}`;
 	}
 
 	/**

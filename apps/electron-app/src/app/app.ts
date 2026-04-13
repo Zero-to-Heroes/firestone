@@ -252,19 +252,20 @@ export default class App {
 		// app.disableHardwareAcceleration();
 
 		// Register firestoneapp:// protocol for deep linking (SSO auth callbacks)
-		// First, remove any existing registration to ensure clean state
+		// Clear legacy firestone:// registration from older builds, then current scheme
 		app.removeAsDefaultProtocolClient('firestone');
+		app.removeAsDefaultProtocolClient('firestoneapp');
 
 		if (process.defaultApp) {
 			// Development mode - need to pass the script path with absolute path
 			if (process.argv.length >= 2) {
 				const scriptPath = require('path').resolve(process.argv[1]);
 				console.log('[Auth] Registering protocol with script path:', scriptPath);
-				app.setAsDefaultProtocolClient('firestone', process.execPath, [scriptPath]);
+				app.setAsDefaultProtocolClient('firestoneapp', process.execPath, [scriptPath]);
 			}
 		} else {
 			// Production mode
-			app.setAsDefaultProtocolClient('firestone');
+			app.setAsDefaultProtocolClient('firestoneapp');
 		}
 		console.log('[Auth] Registered firestoneapp:// protocol handler');
 
@@ -307,6 +308,7 @@ export default class App {
 		// Set up IPC handler for renderer to request login
 		ipcMain.handle('auth-login', async () => {
 			const loginUrl = 'https://www.firestoneapp.com/login.html';
+			// const loginUrl = 'https://localhost:4200/login.html';
 			console.log('[Auth] Opening login page:', loginUrl);
 			await shell.openExternal(loginUrl);
 			return true;

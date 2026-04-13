@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { DiskCacheService } from '@firestone/shared/common/service';
+import { buildOverwolfEndSessionUrl, DiskCacheService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject, uuid } from '@firestone/shared/framework/common';
 import {
 	AbstractFacadeService,
@@ -93,6 +93,10 @@ export class StandaloneUserService extends AbstractFacadeService<StandaloneUserS
 		this.setupElectronSubject(this.user$$, 'StandaloneUserService-user');
 	}
 
+	protected override async initElectronMainProcess(): Promise<void> {
+		this.registerMainProcessMethod('logoutInternal', () => this.logoutInternal());
+	}
+
 	public async getCurrentUser(): Promise<CurrentUser | null> {
 		return this.user$$.getValue();
 	}
@@ -109,9 +113,14 @@ export class StandaloneUserService extends AbstractFacadeService<StandaloneUserS
 	}
 
 	/**
-	 * Log out the current user and clear auth data.
+	 * Log out the current user: clear local auth data, then open the Overwolf OIDC end-session URL
+	 * so the browser IdP session is cleared (RP-initiated logout).
 	 */
 	public async logout(): Promise<void> {
+		await this.callOnMainProcess('logoutInternal');
+	}
+
+	protected async logoutInternal(): Promise<void> {
 		console.log('[user-service] Logging out...');
 
 		const currentUser = await this.getCurrentUser();
@@ -122,18 +131,16 @@ export class StandaloneUserService extends AbstractFacadeService<StandaloneUserS
 		// Keep the local userId but clear auth-related fields
 		const loggedOutUser: StoredAuthData = {
 			userId: currentUser.userId!,
-			// Clear auth fields
 			token: undefined,
 			userName: undefined,
 			displayName: undefined,
 			avatar: undefined,
 			provider: undefined,
+			internalUserName: undefined,
 		};
 
-		// Save to disk
 		await this.diskCache.storeItem(DiskCacheService.DISK_CACHE_KEYS.LOCAL_USER, loggedOutUser);
 
-		// Update observable
 		this.user$$.next({
 			userId: currentUser.userId,
 			username: undefined,
@@ -141,7 +148,11 @@ export class StandaloneUserService extends AbstractFacadeService<StandaloneUserS
 			avatar: undefined,
 		});
 
-		console.log('[user-service] Logged out successfully');
+		console.log('[user-service] Logged out locally; opening OIDC end-session');
+
+		const endSessionUrl = buildOverwolfEndSessionUrl();
+		const { shell } = eval('require')('electron');
+		await shell.openExternal(endSessionUrl);
 	}
 
 	/**
