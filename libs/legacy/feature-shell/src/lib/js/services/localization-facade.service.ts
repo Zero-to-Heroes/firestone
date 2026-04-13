@@ -57,6 +57,10 @@ export class LocalizationFacadeService implements ILocalizationService {
 		return this.service.getLastAffectedByCardName(cardName);
 	}
 
+	public getDredgedByCardName(cardName: string): string {
+		return this.service.getDredgedByCardName(cardName);
+	}
+
 	public getUnknownCardName(playerClass: string = null): string {
 		return this.service.getUnknownCardName(this, playerClass);
 	}

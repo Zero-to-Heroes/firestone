@@ -759,6 +759,12 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 			cardName = card.cardName;
 		} else if (this._referenceCard?.name?.length) {
 			cardName = this._referenceCard.name;
+		} else if (card.dredged && (card.lastAffectedByCardIds?.length || card.lastAffectedByCardId)) {
+			const dredgerId = card.lastAffectedByCardIds?.[0] ?? card.lastAffectedByCardId;
+			const dredgerName = this.cards.getCard(dredgerId)?.name;
+			cardName = dredgerName?.length
+				? this.i18n.getDredgedByCardName(dredgerName)
+				: this.i18n.getUnknownCardName();
 		} else if (!!card.creatorCardIds?.length) {
 			const creatorCardId = card.creatorCardIds[0];
 			const creatorName = this.cards.getCard(creatorCardId)?.name;

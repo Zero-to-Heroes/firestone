@@ -78,6 +78,12 @@ export class LocalizationService {
 		});
 	}
 
+	public getDredgedByCardName(cardName: string): string {
+		return this.translateString('decktracker.dredged-by', {
+			value: cardName ?? 'unknown',
+		});
+	}
+
 	public getCardImage(cardId: string, options?: ImageLocalizationOptions): string {
 		if (!cardId) {
 			return null;

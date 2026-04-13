@@ -49,6 +49,10 @@ Once you're done, before assigning the PR to me for review, please mention @curs
 - When tasked with a bug to reproduce, always build a red/green test and if you're not able to build one (eg there is no power.log), stop immediately and ask for instructions
 - If a test can't be run, it should count as a failure
 
+## Localization
+
+- If you need to add texts, please use the localization mechanism, and update the English reference string at ../firestone-translations/firestone/enUS.json
+
 # General Guidelines for working with Nx
 
 - For navigating/exploring the workspace, invoke the `nx-workspace` skill first - it has patterns for querying projects, targets, and dependencies
