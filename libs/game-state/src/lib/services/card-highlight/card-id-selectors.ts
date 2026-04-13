@@ -3878,6 +3878,9 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.TheExodar_GDB_120:
 			return and(side(inputSide), or(inDeck, inHand), starshipExtended);
+		// The Eternal Hold: Discover any Demon that costs (5) or more. If your deck has no minions, your next one costs (0).
+		case CardIds.TheEternalHold_TIME_446:
+			return and(side(inputSide), inDeck, minion);
 		// The Fist of Ra-den: After you cast a spell, summon a Legendary minion of that Cost. Lose 1 Durability.
 		case CardIds.TheFistOfRaDen:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
