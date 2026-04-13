@@ -1130,9 +1130,6 @@ const getDynamicFilters = (
 				hasCost(c, '>=', 5) &&
 				canBeDiscoveredByClass(c, options.currentClass);
 
-		case CardIds.Photosynthesis_EDR_848:
-			return (c) => hasCorrectType(c, CardType.SPELL) && c.classes?.includes(CardClass[CardClass.DRUID]);
-
 		case CardIds.DaydreamingPixie_EDR_530:
 			return (c) => hasCorrectType(c, CardType.SPELL) && hasCorrectSpellSchool(c, SpellSchool.NATURE);
 		case CardIds.HornOfPlenty_EDR_270:

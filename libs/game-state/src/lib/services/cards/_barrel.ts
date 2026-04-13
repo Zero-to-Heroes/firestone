@@ -166,6 +166,7 @@ export { NorthernNavigation } from './northern-navigation';
 export { OnyxiasWing } from './onyxias-wing';
 export { PandarenImporter } from './pandaren-importer';
 export { PartnerAssignment } from './partner-assignment';
+export { Photosynthesis } from './photosynthesis';
 export { PilotedShredder } from './piloted-shredder';
 export { PilotedSkyGolem } from './piloted-sky-golem';
 export { PrimalDungeoneer } from './primal-dungeoneer';
