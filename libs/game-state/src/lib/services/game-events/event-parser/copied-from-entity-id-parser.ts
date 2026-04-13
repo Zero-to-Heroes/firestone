@@ -96,12 +96,15 @@ export class CopiedFromEntityIdParser implements EventParser {
 		const dredgeMechanicOnCreator =
 			!!dredgerCardIdHint &&
 			(this.allCards.getCard(dredgerCardIdHint)?.mechanics?.includes('DREDGE') ?? false);
+		const copyDredgeFromLog = gameEvent.additionalData.copyDredgeTag === true;
+		const dredgeSignalForSelfCopy =
+			newCopy?.tags?.[GameTag.DREDGE] === 1 || copyDredgeFromLog || dredgeMechanicOnCreator;
 		/** Opponent dredged their own deck: copy+source same controller; do not reveal dredge choice to local player. */
 		const isOpponentSelfDredge =
 			!isPlayer &&
 			copyAndSourceSameController &&
-			copiedCardZone === Zone.DECK &&
-			(newCopy?.tags?.[GameTag.DREDGE] === 1 || dredgeMechanicOnCreator);
+			(copiedCardZone === Zone.DECK || copiedCardZone === Zone.HAND) &&
+			dredgeSignalForSelfCopy;
 		const shouldObfuscate =
 			// Copy + source same controller (e.g. Malevolent Mutant): not "opponent discovered our card" — allow cardId sync.
 			!copyAndSourceSameController &&

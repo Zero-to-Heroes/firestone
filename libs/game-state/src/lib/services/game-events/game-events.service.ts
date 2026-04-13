@@ -1023,6 +1023,7 @@ export class GameEvents {
 						copiedCardEntityId: gameEvent.Value.AdditionalProps.CopiedCardEntityId,
 						copiedCardZone: gameEvent.Value.AdditionalProps.CopiedCardZone,
 						syntheticAzalinaHandCopy: gameEvent.Value.AdditionalProps.SyntheticAzalinaHandCopy,
+						copyDredgeTag: gameEvent.Value.AdditionalProps.CopyDredgeTag === true,
 					}),
 				);
 				break;
