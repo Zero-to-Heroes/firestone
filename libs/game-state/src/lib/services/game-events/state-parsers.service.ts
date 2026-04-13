@@ -276,7 +276,7 @@ export class GameStateParsersService {
 			[GameEvent.BEETLE_ARMY_CHANGED]: [new BgsBeetleArmyChangedParser()],
 			[GameEvent.BLOOD_GEM_BUFF_CHANGED]: [new BgsBloodGemBuffChangedParser()],
 			[GameEvent.BURNED_CARD]: [new BurnedCardParser(this.helper, this.allCards)],
-			[GameEvent.CARD_BACK_TO_DECK]: [new CardBackToDeckParser(this.helper, this.allCards)],
+			[GameEvent.CARD_BACK_TO_DECK]: [new CardBackToDeckParser(this.helper, this.allCards, this.i18n)],
 			[GameEvent.CARD_BUFFED_IN_HAND]: [new CardBuffedInHandParser(this.helper)],
 			[GameEvent.CARD_CHANGED_IN_HAND]: [new CardChangedInHandParser(this.helper, this.allCards)],
 			[GameEvent.CARD_CHANGED_ON_BOARD]: [new CardChangedOnBoardParser(this.helper, this.allCards)],

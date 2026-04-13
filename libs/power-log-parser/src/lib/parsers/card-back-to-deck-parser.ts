@@ -58,7 +58,10 @@ export class CardBackToDeckParser implements ActionParser {
 			}
 		}
 
-		if (!cardId || cardId.length === 0) {
+		if (
+			(!cardId || cardId.length === 0) &&
+			influencedByCardId !== CardIds.Kiljaeden_KiljaedensPortalEnchantment_GDB_145e
+		) {
 			const creator = Oracle.FindCardCreator(this.GameState, entity, node);
 			cardId = Oracle.PredictCardId(this.GameState, creator?.[0], creator?.[1] ?? -1, node, cardId);
 		}

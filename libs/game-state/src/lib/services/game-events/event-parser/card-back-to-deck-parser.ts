@@ -1,6 +1,6 @@
 import { CardIds, ReferenceCard } from '@firestone-hs/reference-data';
 
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { DeckCard } from '../../../models/deck-card';
 import { DeckState } from '../../../models/deck-state';
 import { GameState } from '../../../models/game-state';
@@ -32,6 +32,7 @@ export class CardBackToDeckParser implements EventParser {
 	constructor(
 		private readonly helper: DeckManipulationHelper,
 		private readonly allCards: CardsFacadeService,
+		private readonly i18n: ILocalizationService,
 	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
@@ -140,7 +141,7 @@ export class CardBackToDeckParser implements EventParser {
 		const cardWithInfluenceBack = cardWithoutInfluence?.update({
 			lastAffectedByCardId: gameEvent.additionalData.influencedByCardId,
 		});
-		const cardWithPosition = CARD_SENDING_TO_BOTTOM.includes(gameEvent.additionalData.influencedByCardId)
+		let cardWithPosition = CARD_SENDING_TO_BOTTOM.includes(gameEvent.additionalData.influencedByCardId)
 			? cardWithInfluenceBack.update({
 					positionFromBottom: DeckCard.deckIndexFromBottom++,
 				})
@@ -149,6 +150,18 @@ export class CardBackToDeckParser implements EventParser {
 						positionFromTop: DeckCard.deckIndexFromTop--,
 					})
 				: cardWithInfluenceBack;
+		if (gameEvent.additionalData.influencedByCardId === CardIds.Kiljaeden_KiljaedensPortalEnchantment_GDB_145e) {
+			const portalId = CardIds.Kiljaeden_KiljaedensPortalEnchantment_GDB_145e;
+			cardWithPosition = cardWithPosition.update({
+				cardId: undefined,
+				refManaCost: undefined,
+				actualManaCost: undefined,
+				rarity: undefined,
+				creatorCardId: portalId,
+				cardName: this.i18n.getCreatedByCardName(this.allCards.getCard(portalId).name)!,
+				guessedInfo: {},
+			});
+		}
 		// if (
 		// 	gameEvent.additionalData.influencedByCardId === CardIds.DarkGiftToken_EDR_102t &&
 		// 	initialZone === 'HAND' &&

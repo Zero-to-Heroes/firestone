@@ -148,6 +148,9 @@ export class CreateCardInDeckParser implements ActionParser {
 			cardId =
 				this.StateFacade.GsState?.GameState.CurrentEntities.get(fullEntity.Id)?.CardId ?? null;
 		}
+		if (creator?.[0] === CardIds.Kiljaeden_KiljaedensPortalEnchantment_GDB_145e) {
+			cardId = null;
+		}
 		const controllerId = fullEntity.GetEffectiveController();
 
 		return [

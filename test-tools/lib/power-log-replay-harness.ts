@@ -233,6 +233,7 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	'malevolent-mutant': 'malevolent-mutant/malevolent-mutant.log',
 	'flight-maneuvers-gift': 'flight-maneuvers-gift/flight-maneuvers-gift.log',
 	'local-player-name': 'local-player-name/local-player-name.log',
+	'kiljaeden-portal': 'kiljaeden-portal/kiljaeden-portal.log',
 };
 
 /**

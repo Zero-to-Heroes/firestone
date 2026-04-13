@@ -76,7 +76,12 @@ export class CreateCardInDeckParser implements EventParser {
 			});
 		}
 
-		const cardData = cardId?.length ? getProcessedCard(cardId, entityId, deck, this.allCards) : null;
+		const hideKiljaedenPortalDeck =
+			gameEvent.additionalData.creatorCardId === CardIds.Kiljaeden_KiljaedensPortalEnchantment_GDB_145e;
+		const cardData =
+			!hideKiljaedenPortalDeck && cardId?.length
+				? getProcessedCard(cardId, entityId, deck, this.allCards)
+				: null;
 		const positionFromBottom = buildPositionFromBottom(
 			deck,
 			gameEvent.additionalData.creatorCardId ?? gameEvent.additionalData.influencedByCardId,
@@ -116,7 +121,7 @@ export class CreateCardInDeckParser implements EventParser {
 		let { zone, card } = deck.findCard(entityId) ?? { zone: null, card: null };
 		// console.debug('[create-card-in-deck]', 'card added', card, zone, gameEvent, deck);
 		// Sometimes a CARD_REVEALED event occurs first, so we need to
-		const newCardId = cardId ?? card?.cardId;
+		const newCardId = hideKiljaedenPortalDeck ? undefined : (cardId ?? card?.cardId);
 		card = (card ?? DeckCard.create())
 			.update({
 				cardId: newCardId,
@@ -124,20 +129,29 @@ export class CreateCardInDeckParser implements EventParser {
 				// what they are
 				// Update: see ...
 				entityId: entityId,
-				cardName: this.buildCardName(cardData!, gameEvent.additionalData.creatorCardId) ?? card?.cardName,
-				refManaCost: cardData?.cost,
-				actualManaCost:
-					this.buildKnownUpdatedManaCost(gameEvent.additionalData.creatorCardId) ??
-					// If we discover a card, modify its cost and put it back in the deck, we want the updated mana cost
-					card?.actualManaCost ??
-					cardData?.cost,
-				rarity: cardData?.rarity?.toLowerCase(),
-				creatorCardId: shouldHideCreator
-					? null
-					: (creatorEntity?.cardId ??
-						gameEvent.additionalData.creatorCardId ??
-						gameEvent.additionalData.influencedByEntityId),
-				creatorEntityId: shouldHideCreator ? null : gameEvent.additionalData.creatorEntityId,
+				cardName: hideKiljaedenPortalDeck
+					? this.buildCardName(null, CardIds.Kiljaeden_KiljaedensPortalEnchantment_GDB_145e)
+					: this.buildCardName(cardData!, gameEvent.additionalData.creatorCardId) ?? card?.cardName,
+				refManaCost: hideKiljaedenPortalDeck ? undefined : cardData?.cost,
+				actualManaCost: hideKiljaedenPortalDeck
+					? undefined
+					: this.buildKnownUpdatedManaCost(gameEvent.additionalData.creatorCardId) ??
+						// If we discover a card, modify its cost and put it back in the deck, we want the updated mana cost
+						card?.actualManaCost ??
+						cardData?.cost,
+				rarity: hideKiljaedenPortalDeck ? undefined : cardData?.rarity?.toLowerCase(),
+				creatorCardId: hideKiljaedenPortalDeck
+					? CardIds.Kiljaeden_KiljaedensPortalEnchantment_GDB_145e
+					: shouldHideCreator
+						? null
+						: (creatorEntity?.cardId ??
+							gameEvent.additionalData.creatorCardId ??
+							gameEvent.additionalData.influencedByEntityId),
+				creatorEntityId: hideKiljaedenPortalDeck
+					? gameEvent.additionalData.creatorEntityId
+					: shouldHideCreator
+						? null
+						: gameEvent.additionalData.creatorEntityId,
 				mainAttributeChange: buildAttributeChange(creatorEntity!, newCardId),
 				positionFromBottom: positionFromBottom,
 				positionFromTop: positionFromTop,
