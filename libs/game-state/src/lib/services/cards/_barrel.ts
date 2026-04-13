@@ -160,6 +160,7 @@ export { NaturalTalent } from './natural-talent';
 export { Nefarian } from './nefarian';
 export { NeonInnovation } from './neon-innovation';
 export { Neptulon } from './neptulon';
+export { NespirahUnshackled } from './nespirah-unshackled';
 export { NexusChampionSaraad } from './nexus-champion-saraad';
 export { NightmareFuel } from './nightmare-fuel';
 export { NorthernNavigation } from './northern-navigation';
