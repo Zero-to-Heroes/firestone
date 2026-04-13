@@ -11,7 +11,7 @@ export const OnyxiasWing: StaticGeneratingCard = {
 		const entity = input.entityId
 			? input.inputOptions.gameState.parserState?.CurrentEntities.get(input.entityId)
 			: null;
-		const cost = entity ? getEntityTag(entity, GameTag.TAG_SCRIPT_DATA_NUM_1, 1) : 1;
+		const cost = entity ? getEntityTag(entity, GameTag.TAG_SCRIPT_DATA_NUM_1, 2) : 2;
 		return filterCards(
 			OnyxiasWing.cardIds[0],
 			input.allCards,
