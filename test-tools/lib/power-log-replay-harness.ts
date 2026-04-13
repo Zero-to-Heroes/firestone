@@ -234,6 +234,7 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	'flight-maneuvers-gift': 'flight-maneuvers-gift/flight-maneuvers-gift.log',
 	'local-player-name': 'local-player-name/local-player-name.log',
 	'kiljaeden-portal': 'kiljaeden-portal/kiljaeden-portal.log',
+	'dredge-info-leak': 'dredge-info-leak/dredge-info-leak.log',
 };
 
 /**

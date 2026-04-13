@@ -1070,7 +1070,6 @@ const internalGiftCreators = [
 	CardIds.ReachEquilibrium_TLC_817,
 	CardIds.GladeEcologist_TLC_820,
 	CardIds.TwilightMender_TLC_814,
-	CardIds.CultistMap_TLC_515,
 	CardIds.SpiritOfTheMountain_TLC_229,
 	CardIds.MountainMap_TLC_464,
 	CardIds.EscapeTheUnderfel_TLC_446,

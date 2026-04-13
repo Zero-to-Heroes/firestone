@@ -122,6 +122,7 @@ export class CreateCardInDeckParser implements EventParser {
 		// console.debug('[create-card-in-deck]', 'card added', card, zone, gameEvent, deck);
 		// Sometimes a CARD_REVEALED event occurs first, so we need to
 		const newCardId = hideKiljaedenPortalDeck ? undefined : (cardId ?? card?.cardId);
+		const newCardIdForAttrs = newCardId ?? '';
 		card = (card ?? DeckCard.create())
 			.update({
 				cardId: newCardId,
@@ -129,9 +130,11 @@ export class CreateCardInDeckParser implements EventParser {
 				// what they are
 				// Update: see ...
 				entityId: entityId,
-				cardName: hideKiljaedenPortalDeck
-					? this.buildCardName(null, CardIds.Kiljaeden_KiljaedensPortalEnchantment_GDB_145e)
-					: this.buildCardName(cardData!, gameEvent.additionalData.creatorCardId) ?? card?.cardName,
+				cardName:
+					(hideKiljaedenPortalDeck
+						? this.buildCardName(null, CardIds.Kiljaeden_KiljaedensPortalEnchantment_GDB_145e)
+						: this.buildCardName(cardData!, gameEvent.additionalData.creatorCardId) ?? card?.cardName) ??
+					'',
 				refManaCost: hideKiljaedenPortalDeck ? undefined : cardData?.cost,
 				actualManaCost: hideKiljaedenPortalDeck
 					? undefined
@@ -152,7 +155,7 @@ export class CreateCardInDeckParser implements EventParser {
 					: shouldHideCreator
 						? null
 						: gameEvent.additionalData.creatorEntityId,
-				mainAttributeChange: buildAttributeChange(creatorEntity!, newCardId),
+				mainAttributeChange: buildAttributeChange(creatorEntity!, newCardIdForAttrs),
 				positionFromBottom: positionFromBottom,
 				positionFromTop: positionFromTop,
 				createdByJoust: createdByJoust,
@@ -161,7 +164,7 @@ export class CreateCardInDeckParser implements EventParser {
 			})
 			.update({
 				relatedCardIds: this.buildRelatedCardIds(
-					newCardId,
+					newCardIdForAttrs,
 					deck,
 					card?.relatedCardIds!,
 					gameEvent.additionalData.creatorCardId,
@@ -239,7 +242,7 @@ export class CreateCardInDeckParser implements EventParser {
 		}
 	}
 
-	private buildCardName(card: ReferenceCard, creatorCardId: string): string | null {
+	private buildCardName(card: ReferenceCard | null, creatorCardId: string): string | null {
 		if (card) {
 			return card.name;
 		}

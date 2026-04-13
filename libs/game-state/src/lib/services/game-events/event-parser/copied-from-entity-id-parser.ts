@@ -1,4 +1,4 @@
-import { CardIds, Zone } from '@firestone-hs/reference-data';
+import { CardIds, GameTag, Zone } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BoardSecret } from '../../../models/board-secret';
 import { DeckCard } from '../../../models/deck-card';
@@ -92,6 +92,16 @@ export class CopiedFromEntityIdParser implements EventParser {
 		const updatedCardId = newCopy?.cardId ?? copiedCard?.cardId;
 		/** Copy and source are the same player (e.g. Malevolent Mutant); local may still be the opponent in replay. */
 		const copyAndSourceSameController = copiedCardControllerId === controllerId;
+		const dredgerCardIdHint = newCopy?.creatorCardId ?? newCopy?.lastAffectedByCardId;
+		const dredgeMechanicOnCreator =
+			!!dredgerCardIdHint &&
+			(this.allCards.getCard(dredgerCardIdHint)?.mechanics?.includes('DREDGE') ?? false);
+		/** Opponent dredged their own deck: copy+source same controller; do not reveal dredge choice to local player. */
+		const isOpponentSelfDredge =
+			!isPlayer &&
+			copyAndSourceSameController &&
+			copiedCardZone === Zone.DECK &&
+			(newCopy?.tags?.[GameTag.DREDGE] === 1 || dredgeMechanicOnCreator);
 		const shouldObfuscate =
 			// Copy + source same controller (e.g. Malevolent Mutant): not "opponent discovered our card" — allow cardId sync.
 			!copyAndSourceSameController &&
@@ -121,7 +131,8 @@ export class CopiedFromEntityIdParser implements EventParser {
 			// cards
 			shouldObfuscate ||
 			// Works for all "Suspicious" cards
-			(isPlayer && newCopy?.lastAffectedByCardId == CardIds.SuspiciousAlchemist_AMysteryEnchantment)
+			(isPlayer && newCopy?.lastAffectedByCardId == CardIds.SuspiciousAlchemist_AMysteryEnchantment) ||
+			isOpponentSelfDredge
 				? copiedCard?.cardId
 				: updatedCardId;
 		console.debug(
@@ -136,27 +147,47 @@ export class CopiedFromEntityIdParser implements EventParser {
 		// We don't add the initial cards in the deck, so if no card is found, we create it
 		const updatedCopiedCard = (copiedCard ?? DeckCard.create({})).update({
 			cardId: obfuscatedCardId,
-			cardName: this.allCards.getCard(obfuscatedCardId!).name,
+			cardName: obfuscatedCardId?.length
+				? this.allCards.getCard(obfuscatedCardId).name
+				: copiedCard?.cardName ?? null,
 			refManaCost:
 				(isCopiedPlayer ? newCopy?.refManaCost : null) ??
-				getProcessedCard(obfuscatedCardId, copiedCardEntityId, copiedDeck, this.allCards)?.cost,
+				(obfuscatedCardId?.length
+					? getProcessedCard(obfuscatedCardId, copiedCardEntityId, copiedDeck, this.allCards)?.cost
+					: copiedCard?.refManaCost),
 			// DECK: keep entityId when not obfuscating (discover / deck updates; avoid leaking opponent deck ids).
 			// Non-deck + local source (`isCopiedPlayer`): `updateCardInDeck` must get the source entity id so
 			// `updateCardInZone` can match the hand/board row; otherwise entityId stays null and the update no-ops
 			// (e.g. Sigil of Cinder copy in hand — wrong deck-tracker hand count).
 			entityId:
-				copiedCardZone === Zone.DECK && !shouldObfuscate
+				isOpponentSelfDredge
 					? copiedCardEntityId
-					: copiedCardZone !== Zone.DECK &&
-						  copiedCardEntityId != null &&
-						  (isCopiedPlayer || copyAndSourceSameController)
+					: copiedCardZone === Zone.DECK && !shouldObfuscate
 						? copiedCardEntityId
-						: null,
-			positionFromTop: shouldObfuscate ? null : copiedCard?.positionFromTop,
-			positionFromBottom: shouldObfuscate ? null : copiedCard?.positionFromBottom,
-		} as DeckCard);
+						: copiedCardZone !== Zone.DECK &&
+							  copiedCardEntityId != null &&
+							  (isCopiedPlayer || copyAndSourceSameController)
+							? copiedCardEntityId
+							: null,
+			positionFromTop: isOpponentSelfDredge
+				? 0
+				: shouldObfuscate
+					? null
+					: copiedCard?.positionFromTop,
+			positionFromBottom: isOpponentSelfDredge ? null : shouldObfuscate ? null : copiedCard?.positionFromBottom,
+		} as DeckCard).update(
+			isOpponentSelfDredge
+				? {
+						dredged: true,
+						lastAffectedByCardId: newCopy?.creatorCardId ?? newCopy?.lastAffectedByCardId,
+					}
+				: {},
+		);
 		const updatedCopiedCardWithPosition = updatedCopiedCard.update({
-			positionFromTop: newCopy?.creatorCardId === CardIds.Plagiarizarrr ? 0 : updatedCopiedCard.positionFromTop,
+			positionFromTop:
+				newCopy?.creatorCardId === CardIds.Plagiarizarrr && !isOpponentSelfDredge
+					? 0
+					: updatedCopiedCard.positionFromTop,
 		});
 		console.debug(
 			'[copied-from-entity] updatedCopiedCardWithPosition',
