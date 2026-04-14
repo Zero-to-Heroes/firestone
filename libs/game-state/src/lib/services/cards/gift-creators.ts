@@ -603,6 +603,7 @@ const internalGiftCreators = [
 	CardIds.MenacingNimbus,
 	CardIds.MenacingNimbusCore,
 	CardIds.MerchSeller,
+	CardIds.MerchSeller_CORE_ETC_111,
 	CardIds.MetalDetector_VAC_330,
 	CardIds.Metrognome,
 	CardIds.MimironTheMastermind,

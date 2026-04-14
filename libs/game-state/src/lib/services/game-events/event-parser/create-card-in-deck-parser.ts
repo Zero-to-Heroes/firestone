@@ -12,6 +12,7 @@ import { DeckManipulationHelper } from './deck-manipulation-helper';
 
 const CREATE_ON_TOP = [
 	CardIds.MerchSeller,
+	CardIds.MerchSeller_CORE_ETC_111,
 	CardIds.DemonicDeal_WORK_014,
 	CardIds.SweetDreamsToken_EDR_100t8,
 	CardIds.TimewayWanderer,

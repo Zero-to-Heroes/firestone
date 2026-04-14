@@ -238,6 +238,7 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	'cultist-map': 'cultist-map/cultist-map.log',
 	meadowstrider: 'meadowstrider/meadowstrider.log',
 	'shatter-reveal': 'shatter-reveal/shatter-reveal.log',
+	'merch-seller': 'merch-seller/merch-seller.log',
 };
 
 /**

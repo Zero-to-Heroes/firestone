@@ -743,6 +743,10 @@ export class Oracle {
 					return CardIds.Mankrik_OlgraMankriksWifeToken;
 				case CardIds.Marrowslicer:
 					return CardIds.SchoolSpirits_SoulFragmentToken;
+				case CardIds.MerchSeller:
+				case CardIds.MerchSeller_CORE_ETC_111:
+					// Random spell on the opponent's deck; identity comes from SHOW_ENTITY when played/drawn.
+					return null;
 				case CardIds.MetalDetector_VAC_330:
 					return CardIds.TheCoinCore;
 				case CardIds.MidaPureLight_ONY_028:

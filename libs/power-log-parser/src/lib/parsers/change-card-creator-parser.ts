@@ -47,10 +47,17 @@ export class ChangeCardCreatorParser implements ActionParser {
 			GameEventProvider.Create(
 				tagChange.TimeStamp,
 				'CARD_CREATOR_CHANGED',
-				GameEventHelper.CreateProvider('CARD_CREATOR_CHANGED', cardId!, controllerId, entity.Id, this.StateFacade, {
-					CreatorCardId: creatorCardId,
-					CreatorEntityId: tagChange.Value,
-				}),
+				GameEventHelper.CreateProvider(
+					'CARD_CREATOR_CHANGED',
+					cardId ?? (null as any),
+					controllerId,
+					entity.Id,
+					this.StateFacade,
+					{
+						CreatorCardId: creatorCardId,
+						CreatorEntityId: tagChange.Value,
+					},
+				),
 				true,
 				node,
 			),
