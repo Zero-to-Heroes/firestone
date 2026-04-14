@@ -19,8 +19,11 @@ export function hasSummoningSicknessForAttackOnBoard(
 	if (e.HasTag(GameTag.CHARGE) || e.HasTag(GameTag.NON_KEYWORD_CHARGE)) {
 		return false;
 	}
+	// Rush / Colossal appendages can attack the turn they enter play, but they still spawn with
+	// EXHAUSTED=1 for summoning sickness. Do not skip the exhausted check entirely, or we overcount
+	// (e.g. Magmaw limbs) vs the in-game attack counter.
 	if (e.HasTag(GameTag.RUSH) || e.HasTag(GameTag.COLOSSAL_LIMB)) {
-		return false;
+		return e.HasTag(GameTag.EXHAUSTED);
 	}
 	return e.HasTag(GameTag.EXHAUSTED) || e.GetTag(GameTag.NUM_TURNS_IN_PLAY, 0) === 0;
 }

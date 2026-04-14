@@ -193,6 +193,7 @@ const LEGACY_ENV_BY_SLUG: Record<string, string> = {
 	'lady-liadrin': 'POWER_LOG_LADY_LIADRIN_PATH',
 	'wings-of-hate': 'POWER_LOG_WINGS_OF_HATE_PATH',
 	'malevolent-mutant': 'POWER_LOG_MALEVOLENT_MUTANT_PATH',
+	'magmaw-attack': 'POWER_LOG_MAGMAW_ATTACK_PATH',
 };
 
 /**
@@ -239,6 +240,7 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	meadowstrider: 'meadowstrider/meadowstrider.log',
 	'shatter-reveal': 'shatter-reveal/shatter-reveal.log',
 	'merch-seller': 'merch-seller/merch-seller.log',
+	'magmaw-attack': 'magmaw-attack/magmaw-attack.log',
 };
 
 /**
