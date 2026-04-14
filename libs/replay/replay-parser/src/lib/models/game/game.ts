@@ -13,6 +13,7 @@ export class Game {
 	readonly scenarioID: number;
 
 	readonly entitiesBeforeMulligan: Map<number, Entity> = Map();
+	readonly latestChunkEndState: Map<number, Entity> = Map();
 
 	private constructor() {}
 

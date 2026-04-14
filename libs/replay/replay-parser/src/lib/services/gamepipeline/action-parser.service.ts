@@ -131,7 +131,10 @@ export class ActionParserService {
 		try {
 			if (currentTurn < 0) {
 				// // console.log('handling game init entity updates');
-				return Game.createGame(game, { entitiesBeforeMulligan: previousStateEntities } as Game);
+				return Game.createGame(game, {
+					entitiesBeforeMulligan: previousStateEntities,
+					latestChunkEndState: previousStateEntities,
+				} as Game);
 			}
 			if (!game.turns.get(currentTurn)) {
 				console.warn('could not get current turn', currentTurn, game.turns.toJS());
@@ -140,7 +143,7 @@ export class ActionParserService {
 			const turnNumber = turnWithNewActions.turn === 'mulligan' ? 0 : parseInt(turnWithNewActions.turn);
 			const turns = game.turns.set(turnNumber, turnWithNewActions);
 			// // console.log('turnWithNewActions', turnNumber, turnWithNewActions.actions);
-			const result = Game.createGame(game, { turns } as Game);
+			const result = Game.createGame(game, { turns, latestChunkEndState: previousStateEntities } as Game);
 			// // console.log('oriejg', result.getLatestParsedState().toJS());
 			return result;
 		} catch (e) {

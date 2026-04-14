@@ -25,11 +25,14 @@ export class GamePopulationService {
 		history: readonly HistoryItem[],
 		entityCardIdMapping: Map<number, string>,
 	): Map<number, Entity> {
-		// Map of entityId - entity definition
-		// TODO: should we remove here all the SETASIDE / REMOVEDFROMGAME entities?
-		const entities: Map<number, Entity> = game
-			.getLatestParsedState()
-			.filter((entity: Entity) => ![Zone.REMOVEDFROMGAME].includes(entity.getTag(GameTag.ZONE)));
+		// Use the fully-processed end-of-chunk state when available, since
+		// getLatestParsedState() returns the last action's snapshot which may
+		// not include tail tag changes (e.g. BG shop entities moving to REMOVEDFROMGAME)
+		const baseState =
+			game.latestChunkEndState?.size > 0 ? game.latestChunkEndState : game.getLatestParsedState();
+		const entities: Map<number, Entity> = baseState.filter(
+			(entity: Entity) => ![Zone.REMOVEDFROMGAME].includes(entity.getTag(GameTag.ZONE)),
+		);
 		// console.debug('entities reduced from', game.getLatestParsedState().size, 'to', entities.size);
 		const entitiesAfterInit: Map<number, Entity> = this.initializeEntities(history, entities);
 		const entitiesAfterFillingCardIds: Map<number, Entity> = this.addMissingCardIds(
