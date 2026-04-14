@@ -237,6 +237,7 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	'dredge-info-leak': 'dredge-info-leak/dredge-info-leak.log',
 	'cultist-map': 'cultist-map/cultist-map.log',
 	meadowstrider: 'meadowstrider/meadowstrider.log',
+	'shatter-reveal': 'shatter-reveal/shatter-reveal.log',
 };
 
 /**

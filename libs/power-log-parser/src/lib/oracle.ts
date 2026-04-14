@@ -103,6 +103,12 @@ export class Oracle {
 				creatorTuple = shatteredFallback;
 			}
 		}
+		if (!creatorTuple?.[0] && entity.GetTag(GameTag.SHATTERED) === 1) {
+			const informantDiscover = Oracle.FindShatteredPieceCreatorFromDiscoverInformant(gameState, entity);
+			if (informantDiscover) {
+				creatorTuple = informantDiscover;
+			}
+		}
 		// Shattered hand pieces often omit CREATOR / DISPLAYED_CREATOR; inferring the parent block
 		// would incorrectly attribute the enclosing minion PLAY (e.g. Violet Treasuregill) while the
 		// card was drawn from deck (e.g. Dragonscale Armaments) and split by Shatter. Only use
@@ -138,6 +144,42 @@ export class Oracle {
 				continue;
 			}
 			return [e.CardId, e.Entity];
+		}
+		return null;
+	}
+
+	/**
+	 * Shadowed Informant discover puts a spell in hand with DISPLAYED_CREATOR → Informant; when that
+	 * spell shatters, SHATTERED tokens often have no CREATOR. Non–graveyard discover options also
+	 * point at Informant but sit in GY — skip GY and empty CardId to find the real hand/setaside spell.
+	 */
+	private static FindShatteredPieceCreatorFromDiscoverInformant(
+		gameState: GameState,
+		entity: FullEntity,
+	): [string, number] | null {
+		if (entity.CardId?.length) {
+			return null;
+		}
+		const controller = entity.GetEffectiveController();
+		const informantId = CardIds.ShadowedInformant_CATA_614;
+		for (const e of gameState.CurrentEntities.values()) {
+			if (e.GetEffectiveController() !== controller || e.Entity === entity.Entity) {
+				continue;
+			}
+			if (e.GetTag(GameTag.ZONE) === (Zone.GRAVEYARD as number)) {
+				continue;
+			}
+			if (e.CardId?.length) {
+				continue;
+			}
+			const displayedCreatorEntId = e.GetTag(GameTag.DISPLAYED_CREATOR);
+			if (displayedCreatorEntId <= 0) {
+				continue;
+			}
+			const displayedCreator = gameState.CurrentEntities.get(displayedCreatorEntId);
+			if (displayedCreator?.CardId === informantId) {
+				return [informantId, displayedCreator.Entity];
+			}
 		}
 		return null;
 	}

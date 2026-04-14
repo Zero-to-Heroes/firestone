@@ -71,6 +71,24 @@
 		{
 			"type": "node",
 			"request": "launch",
+			"name": "Jest: debug Shatter reveal power-log replay (game-state)",
+			"program": "${workspaceFolder}/node_modules/jest/bin/jest.js",
+			"args": [
+				"test-tools/bugs/shatter-reveal/power-log-shatter-reveal-replay.spec.ts",
+				"--config=libs/game-state/jest.config.ts",
+				"--runInBand",
+				"--no-cache"
+			],
+			"cwd": "${workspaceFolder}",
+			"console": "integratedTerminal",
+			"internalConsoleOptions": "neverOpen",
+			"env": {
+				"HS_REFERENCE_CARDS_JSON_PATH": "https://raw.githubusercontent.com/Zero-to-Heroes/hs-reference-data/master/src/cards_short.json"
+			}
+		},
+		{
+			"type": "node",
+			"request": "launch",
 			"name": "Jest: debug all power-log replay specs (game-state)",
 			"program": "${workspaceFolder}/node_modules/jest/bin/jest.js",
 			"args": [
