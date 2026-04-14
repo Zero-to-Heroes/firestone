@@ -58,7 +58,13 @@ export class CreateCardInDeckParser implements ActionParser {
 		}
 
 		const currentCard = this.GameState.CurrentEntities.get(showEntity.Entity)!;
-		if (currentCard.GetTag(GameTag.ZONE) === (Zone.DECK as number)) {
+		// Skip only when the deck slot already has a known card id (e.g. real duplicate events).
+		// Spawn-to-deck often does FULL_ENTITY (empty CardID, ZONE=DECK) first, then SHOW_ENTITY
+		// with CardID + CREATOR; the first pass must not suppress the second (e.g. Meadowstrider DR).
+		if (
+			currentCard.GetTag(GameTag.ZONE) === (Zone.DECK as number) &&
+			currentCard.CardId.length > 0
+		) {
 			return null;
 		}
 

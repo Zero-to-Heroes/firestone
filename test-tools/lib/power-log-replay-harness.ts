@@ -236,6 +236,7 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	'kiljaeden-portal': 'kiljaeden-portal/kiljaeden-portal.log',
 	'dredge-info-leak': 'dredge-info-leak/dredge-info-leak.log',
 	'cultist-map': 'cultist-map/cultist-map.log',
+	meadowstrider: 'meadowstrider/meadowstrider.log',
 };
 
 /**
