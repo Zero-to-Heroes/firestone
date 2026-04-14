@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import { BgsCompAdvice } from '@firestone-hs/content-craetor-input';
+import { CARDS_VERSION } from '@firestone/game-state';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { AbstractFacadeService, ApiRunner, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
 
 const META_COMPOSITION_STRATEGIES_URL =
-	'https://static.zerotoheroes.com/hearthstone/data/battlegrounds-strategies/bgs-comps-strategies.gz.json';
+	'https://static.zerotoheroes.com/hearthstone/data/battlegrounds-strategies/bgs-comps-strategies.gz.json?v=' +
+	CARDS_VERSION;
 // const META_COMPOSITION_STRATEGIES_URL =
 // 	'https://s3.us-west-2.amazonaws.com/static.zerotoheroes.com/hearthstone/data/battlegrounds-strategies/bgs-comps-strategies.gz.json';
 

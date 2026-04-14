@@ -1,6 +1,6 @@
 {
 	"name": "firestone",
-	"version": "18.2.2",
+	"version": "18.2.4",
 	"productName": "Firestone",
 	"author": {
 		"name": "Sébastien Tromp",
@@ -111,7 +111,7 @@
 		"@firestone-hs/reference-data": "^3.0.186",
 		"@firestone-hs/replay-metadata": "^0.0.84",
 		"@firestone-hs/save-dungeon-loot-info": "^1.0.8",
-		"@firestone-hs/simulate-bgs-battle": "^1.1.698",
+		"@firestone-hs/simulate-bgs-battle": "^1.1.699",
 		"@firestone-hs/tavern-brawl-stats": "^1.0.31",
 		"@firestone-hs/trigger-process-mercenaries-review": "^1.0.10",
 		"@firestone-hs/twitch-presence": "^1.0.1",
