@@ -10,7 +10,7 @@ export const VanessaVanCleef: GlobalHighlightCard = {
 		if (side === 'single' || side === 'arena-draft') {
 			return [];
 		}
-		const deckState = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
+		const deckState = side === 'player' ? gameState.opponentDeck : gameState.playerDeck;
 		const lastPlayedCard: string | null = !!deckState.cardsPlayedThisMatch?.length
 			? deckState.cardsPlayedThisMatch[deckState.cardsPlayedThisMatch.length - 1]?.cardId
 			: null;
