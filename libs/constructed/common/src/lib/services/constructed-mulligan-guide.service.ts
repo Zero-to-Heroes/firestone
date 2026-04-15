@@ -128,7 +128,13 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 						gameState.metadata.gameType,
 					)
 				) {
-					return false;
+					// Brawliseum Standard should show the mulligan guide
+					const isHeroicBrawliseumStandard =
+						gameState.metadata.gameType === GameType.GT_TAVERNBRAWL &&
+						gameState.metadata.scenarioId === 2109;
+					if (!isHeroicBrawliseumStandard) {
+						return false;
+					}
 				}
 
 				if (
