@@ -424,14 +424,21 @@ export const spellSchoolStrict =
 export const spellSchool = (spellSchool: SpellSchool) =>
 	or(spellSchoolStrict(spellSchool), hasMechanicStr(`GENERATES_${SpellSchool[spellSchool]}_SPELL`));
 export const arcane = spellSchool(SpellSchool.ARCANE);
+export const arcaneStrict = spellSchoolStrict(SpellSchool.ARCANE);
 export const fel = spellSchool(SpellSchool.FEL);
+export const felStrict = spellSchoolStrict(SpellSchool.FEL);
 export const fire = spellSchool(SpellSchool.FIRE);
+export const fireStrict = spellSchoolStrict(SpellSchool.FIRE);
 export const frost = spellSchool(SpellSchool.FROST);
+export const frostStrict = spellSchoolStrict(SpellSchool.FROST);
 export const holy = spellSchool(SpellSchool.HOLY);
+export const holyStrict = spellSchoolStrict(SpellSchool.HOLY);
 export const nature = spellSchool(SpellSchool.NATURE);
+export const natureStrict = spellSchoolStrict(SpellSchool.NATURE);
 // I don't have a good way of highlighting transforming cards correctly, and there are not many
 // of them, so maybe this is ok
 export const shadow = or(spellSchool(SpellSchool.SHADOW), cardIs(CardIds.SilvermoonBrochure_WORK_017));
+export const shadowStrict = spellSchoolStrict(SpellSchool.SHADOW);
 export const hasSpellSchool = (input: SelectorInput): boolean => {
 	return !!input.card?.spellSchool;
 };

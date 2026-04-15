@@ -60,6 +60,7 @@ import {
 	entityIs,
 	excavate,
 	fel,
+	felStrict,
 	fire,
 	forge,
 	freeze,
@@ -1469,7 +1470,7 @@ export const cardIdSelector = (
 		case CardIds.KaelthasSunstrider_FelFueled_THD_043p:
 			return and(side(inputSide), or(inDeck, inHand), notInInitialDeck);
 		case CardIds.Felgorger_SW_043:
-			return and(side(inputSide), inDeck, spell, fel);
+			return and(side(inputSide), inDeck, spell, felStrict);
 		case CardIds.IllidanStormrage_FelInside_THD_004p:
 			return and(side(inputSide), or(inDeck, inHand), spell, fel);
 		case CardIds.IxlidFungalLord:
