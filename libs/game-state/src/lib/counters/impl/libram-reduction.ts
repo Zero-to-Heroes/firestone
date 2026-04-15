@@ -16,7 +16,6 @@ export class LibramReductionCounterDefinitionV2 extends CounterDefinitionV2<numb
 		CardIds.LibramOfJudgment,
 		CardIds.LibramOfHope,
 	];
-	public override debug = true;
 
 	readonly player = {
 		pref: 'playerLibramReductionCounter' as const,
