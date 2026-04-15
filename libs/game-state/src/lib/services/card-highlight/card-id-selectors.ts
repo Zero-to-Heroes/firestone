@@ -3244,6 +3244,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), pirate);
 		case CardIds.SalhetsPride:
 			return and(side(inputSide), inDeck, minion, healthLessThan(2));
+		case CardIds.SaloonBrewmaster_WW_423:
+			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.Sandbinder:
 			return and(side(inputSide), inDeck, elemental);
 		// Sandfury Aura: Your minions' end of turn effects trigger twice. Lasts 3 turns.
