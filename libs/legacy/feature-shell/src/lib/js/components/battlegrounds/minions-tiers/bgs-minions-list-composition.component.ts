@@ -522,7 +522,8 @@ export class BgsMinionsListCompositionComponent extends AbstractSubscriptionComp
 	highlightComp(event: MouseEvent) {
 		event.preventDefault();
 		event.stopPropagation();
-		if (!this.coreCards?.length || !this.addonCards?.length || !this.recommendedCards?.length) {
+		console.debug('[debug] highlightComp', this.coreCards, this.addonCards, this.recommendedCards);
+		if (!this.coreCards?.length && !this.addonCards?.length && !this.recommendedCards?.length) {
 			return;
 		}
 		this.highlighter.toggleMinionsToHighlight([
