@@ -50,10 +50,7 @@ export class CreateCardInDeckParser implements ActionParser {
 
 	private createFromShowEntity(node: Node): GameEventProvider[] | null {
 		const showEntity = node.Object as ShowEntity;
-		if (
-			showEntity.SubSpellInEffect?.Prefab ===
-			'DMFFX_SpawnToDeck_CthunTheShattered_CardFromScript_FX'
-		) {
+		if (showEntity.SubSpellInEffect?.Prefab === 'DMFFX_SpawnToDeck_CthunTheShattered_CardFromScript_FX') {
 			return null;
 		}
 
@@ -62,8 +59,10 @@ export class CreateCardInDeckParser implements ActionParser {
 		// Spawn-to-deck often does FULL_ENTITY (empty CardID, ZONE=DECK) first, then SHOW_ENTITY
 		// with CardID + CREATOR; the first pass must not suppress the second (e.g. Meadowstrider DR).
 		if (
-			currentCard.GetTag(GameTag.ZONE) === (Zone.DECK as number) &&
-			currentCard.CardId.length > 0
+			currentCard.GetTag(GameTag.ZONE) === (Zone.DECK as number)
+			// This wasn't a good fix, as it would lead to too many CREATE_CARD_IN_DECK events
+			// (eg for Ysera when it procs)
+			// && currentCard.CardId.length > 0
 		) {
 			return null;
 		}
@@ -109,10 +108,7 @@ export class CreateCardInDeckParser implements ActionParser {
 
 	private createFromFullEntity(node: Node): GameEventProvider[] | null {
 		const fullEntity = node.Object as FullEntity;
-		if (
-			fullEntity.SubSpellInEffect?.Prefab ===
-			'DMFFX_SpawnToDeck_CthunTheShattered_CardFromScript_FX'
-		) {
+		if (fullEntity.SubSpellInEffect?.Prefab === 'DMFFX_SpawnToDeck_CthunTheShattered_CardFromScript_FX') {
 			return null;
 		}
 
@@ -126,10 +122,7 @@ export class CreateCardInDeckParser implements ActionParser {
 				const realGiftCreatorEntityId =
 					[...futureEntity.TagsHistory]
 						.reverse()
-						.find(
-							(t) =>
-								t.Name === (GameTag.TAG_SCRIPT_DATA_ENT_1 as number) && t.Value > 0,
-						)?.Value ?? 0;
+						.find((t) => t.Name === (GameTag.TAG_SCRIPT_DATA_ENT_1 as number) && t.Value > 0)?.Value ?? 0;
 				const realGiftCreator =
 					this.StateFacade.GsState?.GameState.CurrentEntities.get(realGiftCreatorEntityId);
 				if (realGiftCreator != null) {
@@ -151,8 +144,7 @@ export class CreateCardInDeckParser implements ActionParser {
 		}
 
 		if (cardId == null) {
-			cardId =
-				this.StateFacade.GsState?.GameState.CurrentEntities.get(fullEntity.Id)?.CardId ?? null;
+			cardId = this.StateFacade.GsState?.GameState.CurrentEntities.get(fullEntity.Id)?.CardId ?? null;
 		}
 		if (creator?.[0] === CardIds.Kiljaeden_KiljaedensPortalEnchantment_GDB_145e) {
 			cardId = null;

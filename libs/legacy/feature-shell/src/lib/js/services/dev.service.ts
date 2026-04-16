@@ -2,23 +2,20 @@ import { Injectable } from '@angular/core';
 import { BgsCompAdvice } from '@firestone-hs/content-craetor-input';
 import { decode, encode } from '@firestone-hs/deckstrings';
 import { SceneMode } from '@firestone-hs/reference-data';
-import { trimPowerLogLinesToLastGame } from '@firestone/power-log-parser';
 import { CollectionCardType } from '@firestone-hs/user-packs';
 import { CompositionDetectorService } from '@firestone/battlegrounds/core';
 import { BgsMetaCompositionStrategiesService } from '@firestone/battlegrounds/services';
 import { CardNotificationsService } from '@firestone/collection/services';
 import {
-	DeckCard,
 	DeckHandlerService,
 	DeckManipulationHelper,
 	DeckParserService,
-	DeckState,
 	GameEvents,
 	GameEventsEmitterService,
-	GameState,
 	GameStateService,
 } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
+import { trimPowerLogLinesToLastGame } from '@firestone/power-log-parser';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { ApiRunner, CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
@@ -151,63 +148,6 @@ export class DevService {
 		};
 		window['bgComp'] = async (reviewId: string) => this.bgCompTest(reviewId);
 		window['bgCompsAll'] = async () => this.testAllBgsComps();
-	}
-
-	private async loadEvents(events: any, awaitEvents: boolean, deckstring?: string, timeBetweenEvents?: number) {
-		// return;
-
-		for (const event of events) {
-			if (event.Type === 'BATTLEGROUNDS_NEXT_OPPONENT') {
-				await sleep(1000);
-			}
-			if (event.Type === 'BATTLEGROUNDS_PLAYER_BOARD') {
-				await sleep(3000);
-			}
-
-			if (awaitEvents) {
-				await this.gameEvents.dispatchGameEvent({ ...event });
-				if (timeBetweenEvents) {
-					await sleep(timeBetweenEvents);
-				}
-			} else {
-				this.gameEvents.dispatchGameEvent({ ...event });
-			}
-
-			if (deckstring && event.Type === 'LOCAL_PLAYER') {
-				await sleep(500);
-				const decklist = this.handler.buildDeckList(deckstring);
-
-				// And since this event usually arrives after the cards in hand were drawn, remove from the deck
-				// whatever we can
-				let newDeck = decklist;
-				const currentState = this.gameState.state;
-				const deck = currentState.playerDeck;
-				for (const card of [...deck.hand, ...deck.otherZone, ...deck.board]) {
-					newDeck = this.helper.removeSingleCardFromZone(newDeck, card.cardId, card.entityId)[0];
-				}
-
-				const newPlayerDeck = deck.update({
-					deckstring: deckstring,
-					deckList: decklist,
-					deck: deckstring ? this.flagCards(newDeck) : newDeck,
-					hand: deckstring ? this.flagCards(deck.hand) : deck.hand,
-					otherZone: deckstring ? this.flagCards(deck.otherZone) : deck.otherZone,
-				} as DeckState);
-				console.debug('[opponent-player] newPlayerDeck', newPlayerDeck);
-				this.gameState.state = currentState.update({
-					playerDeck: newPlayerDeck,
-				} as GameState);
-				console.debug('updated decklist', this.gameState.state);
-			}
-		}
-	}
-
-	private flagCards(cards: readonly DeckCard[]): readonly DeckCard[] {
-		return cards.map((card) =>
-			card.update({
-				inInitialDeck: true,
-			} as DeckCard),
-		);
 	}
 
 	private async bgCompTest(reviewId: string) {

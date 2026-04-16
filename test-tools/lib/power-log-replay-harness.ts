@@ -3,39 +3,11 @@
  *
  * Fixtures live under `test-tools/bugs/<bug-id>/` (see {@link resolvePowerLogPathForSlug}).
  */
-import * as fs from 'fs';
-import * as http from 'http';
-import * as https from 'https';
-import * as path from 'path';
 import { Injector, NgZone } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { AllCardsService, SceneMode } from '@firestone-hs/reference-data';
 import { ArenaRefService } from '@firestone/arena/data-access';
-import {
-	BgsBattleSimulationService,
-	BgsIntermediateResultsSimGuardianService,
-} from '@firestone/battlegrounds/core';
-import { BattlegroundsInfo, MemoryInspectionService, SceneService } from '@firestone/memory';
-import {
-	BugReportService,
-	GameStatusService,
-	GlobalErrorService,
-	LogsUploaderService,
-	PowerLogBufferService,
-	Preferences,
-	PreferencesService,
-} from '@firestone/shared/common/service';
-import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
-import {
-	ApiRunner,
-	CardsFacadeService,
-	CardsFacadeStandaloneService,
-	ILocalizationService,
-	OwUtilsService,
-	resetAppInjectorForTesting,
-	setAppInjector,
-} from '@firestone/shared/framework/core';
-import { BehaviorSubject } from 'rxjs';
+import { BgsBattleSimulationService, BgsIntermediateResultsSimGuardianService } from '@firestone/battlegrounds/core';
 import {
 	AiDeckService,
 	BgsMatchMemoryInfoService,
@@ -60,13 +32,36 @@ import {
 	SecretConfigService,
 	SecretsParserService,
 } from '@firestone/game-state';
+import { BattlegroundsInfo, MemoryInspectionService, SceneService } from '@firestone/memory';
 import { trimPowerLogLinesToLastGame } from '@firestone/power-log-parser';
+import {
+	BugReportService,
+	GameStatusService,
+	GlobalErrorService,
+	LogsUploaderService,
+	PowerLogBufferService,
+	Preferences,
+	PreferencesService,
+} from '@firestone/shared/common/service';
+import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
+import {
+	ApiRunner,
+	CardsFacadeService,
+	CardsFacadeStandaloneService,
+	ILocalizationService,
+	OwUtilsService,
+	resetAppInjectorForTesting,
+	setAppInjector,
+} from '@firestone/shared/framework/core';
+import * as fs from 'fs';
+import * as http from 'http';
+import * as https from 'https';
+import * as path from 'path';
+import { BehaviorSubject } from 'rxjs';
 
 /** Wait until GameEvents' log line queue is empty (large replays enqueue faster than the 500ms batch). */
 async function waitForGameEventsQueueDrain(gameEvents: GameEvents, maxWaitMs: number): Promise<void> {
-	const queue = (
-		gameEvents as unknown as { processingQueue?: { eventsPendingCount(): number } }
-	).processingQueue;
+	const queue = (gameEvents as unknown as { processingQueue?: { eventsPendingCount(): number } }).processingQueue;
 	if (!queue?.eventsPendingCount) {
 		return;
 	}
@@ -212,8 +207,7 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	azalina: 'azalina/azalina.log',
 	'soldier-onyxia': 'soldier-onyxia/soldier-onyxia.log',
 	'macaw-huntress': 'macaw-huntress/macaw-huntress.log',
-	'passive-buff-unknown-entity':
-		'passive-buff-unknown-entity/passive-buff-unknown-entity.log',
+	'passive-buff-unknown-entity': 'passive-buff-unknown-entity/passive-buff-unknown-entity.log',
 	'coin-not-revealed': 'coin-not-revealed/coin-not-revealed.log',
 	'opponent-hand-single-guess': 'opponent-hand-single-guess/opponent-hand-single-guess.log',
 	'gemstone-hoarder': 'gemstone-hoarder/gemstone-hoarder.log',
@@ -358,9 +352,7 @@ export function requirePowerLogReplayPrerequisites(cardsPath: string, logPath: s
  * Build TestBed, replay trimmed log lines, return final game state.
  * Call from a single test file or reset TestBed between uses.
  */
-export async function replayPowerLogToGameState(
-	options: ReplayPowerLogOptions,
-): Promise<PowerLogReplayResult | null> {
+export async function replayPowerLogToGameState(options: ReplayPowerLogOptions): Promise<PowerLogReplayResult | null> {
 	const { logPath, reviewId = 'power-log-replay', settleMs = 8000 } = options;
 
 	const cardsRef = resolveCardsJsonPath();

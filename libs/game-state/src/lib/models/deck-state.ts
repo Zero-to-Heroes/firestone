@@ -3,8 +3,8 @@ import { CardClass, CardIds, CardType, GameTag, SpellSchool } from '@firestone-h
 import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { ChoosingOptionsGameEvent } from '../services/game-events/events/choosing-options-game-event';
-import { NumericTurnInfo } from './battlegrounds/post-match/numeric-turn-info';
 import { AttackOnBoard } from './attack-on-board';
+import { NumericTurnInfo } from './battlegrounds/post-match/numeric-turn-info';
 import { BoardSecret } from './board-secret';
 import { DeckCard } from './deck-card';
 import { ShortCard, ShortCardWithTurn } from './game-state';
@@ -54,6 +54,7 @@ export class DeckState {
 	readonly hero?: HeroCard;
 	readonly heroPower: DeckCard | null;
 	readonly weapon: DeckCard | null;
+	// Initial list, won't be modified during the game
 	readonly deckList: readonly DeckCard[] = [];
 	readonly archetypeId: number | null;
 	readonly cardsInStartingHand: readonly DeckCard[] = [];
