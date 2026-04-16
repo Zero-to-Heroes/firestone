@@ -646,6 +646,7 @@ export class Oracle {
 				case CardIds.HakkarTheSoulflayer:
 					return CardIds.HakkarTheSoulflayer_CorruptedBloodToken;
 				case CardIds.HalazziTheLynx:
+				case CardIds.HalazziTheLynx_CORE_TRL_900:
 					return CardIds.Springpaw_LynxToken;
 				case CardIds.HandleWithBear_WORK_024:
 					return CardIds.HandleWithBear_CarefulBearToken_WORK_024t;

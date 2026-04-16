@@ -429,6 +429,7 @@ const internalGiftCreators = [
 	CardIds.HakkarTheSoulflayer_CorruptedBloodToken,
 	CardIds.HammerOfTwilight_CORE_OG_031,
 	CardIds.HalazziTheLynx,
+	CardIds.HalazziTheLynx_CORE_TRL_900,
 	CardIds.Hallucination,
 	CardIds.HandleWithBear_WORK_024,
 	CardIds.HarbingerOfWinterCore_RLK_511,
