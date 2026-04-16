@@ -945,7 +945,8 @@ const getDynamicFilters = (
 			return (c) =>
 				hasCorrectType(c, CardType.SPELL) &&
 				hasCost(c, '>=', 1) &&
-				canBeDiscoveredByClass(c, options.currentClass);
+				canBeDiscoveredByClass(c, options.currentClass) &&
+				!isUnplayable(c);
 		case CardIds.SchoolTeacher:
 		case CardIds.TidePools_VAC_522:
 		case CardIds.VastWisdom:
@@ -1481,6 +1482,13 @@ export const hasCorrectClass = (card: ReferenceCard, targetClass: CardClass | nu
 
 export const hasCorrectRarity = (card: ReferenceCard, targetRarity: CardRarity): boolean => {
 	return card?.rarity?.toUpperCase() === CardRarity[targetRarity];
+};
+
+export const isUnplayable = (card: ReferenceCard): boolean => {
+	// TODO: extract the tag instead of using a hard-coded list
+	return [CardIds.ShadowOfDemise, CardIds.ShadowOfDemise_CORE_RLK_567, CardIds.ShiftingScroll].includes(
+		card.id as CardIds,
+	);
 };
 
 export const getPlayerTag = (
