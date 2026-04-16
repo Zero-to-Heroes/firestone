@@ -3080,7 +3080,9 @@ export const cardIdSelector = (
 					.getAllCardsInDeckWithoutOptions()
 					.filter((c) => c.creatorCardId === CardIds.SporeEmpressMoldara_ReplicatingSporeToken_GDB_234t)
 					// Won't work if two spores summon the same minion
-					.map((c) => c.cardId as CardIds);
+					.map((c) => c.cardId as CardIds)
+					// Remove duplicates
+					.filter((c, index, self) => self.indexOf(c) === index);
 				return tooltip(and(side(inputSide), cardIs(...summoned)))(input);
 			};
 		case CardIds.ResplendentDreamweaver_EDR_860:
