@@ -5,11 +5,11 @@ import { DeckCard } from '../../../../../models/deck-card';
 const DEMONHUNTER_HAND = [
 	CardIds.TwinSliceToken_TOY_400t3,
 	CardIds.SkullOfGuldanToken_TOY_401t,
-	CardIds.AltruisTheOutcastToken_TOY_401t2,
-	CardIds.WarglaivesOfAzzinothToken_TOY_400t7,
 	CardIds.MetamorphosisToken_TOY_400t6,
 	CardIds.PriestessOfFuryToken_TOY_400t5,
 	CardIds.ImprisonedAntaenToken_TOY_400t4,
+	CardIds.WarglaivesOfAzzinothToken_TOY_400t7,
+	CardIds.AltruisTheOutcastToken_TOY_401t2,
 	CardIds.EyeBeamToken_TOY_400t8,
 ];
 const DK_BLOOD_HAND = [
@@ -32,19 +32,8 @@ const DK_FROST_HAND = [
 	CardIds.FrostStrikeCore,
 	CardIds.HowlingBlast_RLK_015,
 ];
-const DK_UNHOLY_HAND = [
-	CardIds.Blightfang,
-	CardIds.SkeletalSidekickCore_RLK_958,
-	CardIds.AmalgamOfTheDeep,
-	CardIds.HawkstriderRancher,
-	CardIds.GraveStrengthCore_RLK_707,
-	CardIds.NerubianSwarmguard_RLK_062,
-	CardIds.BattlefieldNecromancerCore_RLK_061,
-	CardIds.PlagueStrike_RLK_018,
-];
+const DK_UNHOLY_HAND = [];
 const DRUID_HAND = [
-	CardIds.BranchingPaths,
-	CardIds.LesserJasperSpellstone,
 	CardIds.SpreadingPlague_CORE_ICC_054,
 	CardIds.NaturalizeLegacy,
 	CardIds.AzalinaSoulthief,
@@ -53,29 +42,30 @@ const DRUID_HAND = [
 	CardIds.MalfurionThePestilent_ICC_832,
 	CardIds.MalfurionThePestilent_SpiderPlague,
 	CardIds.MalfurionThePestilent_ScarabPlague,
+	CardIds.BranchingPaths,
+	CardIds.LesserJasperSpellstone,
 ];
 const HUNTER_HAND = [
-	CardIds.LesserEmeraldSpellstone,
 	CardIds.MisdirectionLegacy,
 	CardIds.CatTrickCore,
 	CardIds.ExplosiveTrapLegacy_EX1_610,
 	CardIds.CloakedHuntress_CORE_KAR_006,
 	CardIds.FreezingTrapCore,
-	CardIds.WanderingMonster,
+	CardIds.LesserEmeraldSpellstone,
 	CardIds.DeathstalkerRexxar_ICC_828,
+	CardIds.WanderingMonster,
 ];
 const MAGE_HAND = [
-	CardIds.DoomsayerCore,
 	CardIds.FrostboltLegacy,
+	CardIds.DoomsayerCore,
 	CardIds.Alexstrasza_CORE_VAN_EX1_561,
+	CardIds.ArchmageAntonidasLegacy,
 	CardIds.IceBlockLegacy,
 	CardIds.FireballLegacy,
 	CardIds.IceLanceLegacy,
-	CardIds.ArchmageAntonidasLegacy,
 	CardIds.FrostNovaLegacy,
 ];
 const PALADIN_HAND = [
-	CardIds.LadyLiadrin,
 	CardIds.LibramOfWisdom_BT_025,
 	CardIds.AldorAttendant,
 	CardIds.LibramOfJustice_BT_011,
@@ -83,17 +73,18 @@ const PALADIN_HAND = [
 	CardIds.LibramOfJudgment,
 	CardIds.AldorTruthseeker,
 	CardIds.PenFlinger,
+	CardIds.LadyLiadrin,
 ];
 const PRIEST_HAND = [
-	CardIds.GalakrondTheUnspeakable,
-	CardIds.GalakrondTheUnspeakable,
-	CardIds.TimeRip,
 	CardIds.SoulMirror,
 	CardIds.DevotedManiac,
 	CardIds.KronxDragonhoof,
 	CardIds.ShieldOfGalakrond,
 	CardIds.DiscipleOfGalakrond,
 	CardIds.FateWeaver,
+	CardIds.TimeRip,
+	CardIds.GalakrondTheUnspeakable,
+	CardIds.GalakrondTheUnspeakable,
 ];
 const ROGUE_HAND = [
 	CardIds.BrannBronzebeard_LOE_077,
@@ -106,9 +97,9 @@ const ROGUE_HAND = [
 	CardIds.VanishVanilla,
 ];
 const SHAMAN_HAND = [
+	CardIds.SaroniteChainGang_CORE_ICC_466,
 	CardIds.LifedrinkerCore,
 	CardIds.ZolaTheGorgonCore,
-	CardIds.SaroniteChainGang_CORE_ICC_466,
 	CardIds.Shudderwock_GIL_820,
 	CardIds.GlacialShardCore,
 	CardIds.HealingRain,
@@ -116,14 +107,14 @@ const SHAMAN_HAND = [
 	CardIds.GrumbleWorldshaker,
 ];
 const WARLOCK_HAND = [
-	CardIds.FacelessManipulator,
 	CardIds.SkullOfTheManari,
 	CardIds.Voidlord_LOOT_368,
-	CardIds.DarkPact_LOOT_017,
-	CardIds.DoomguardLegacy,
-	CardIds.CarnivorousCube,
+	CardIds.FacelessManipulator,
 	CardIds.DefileCore,
 	CardIds.BloodreaverGuldan_ICC_831,
+	CardIds.DoomguardLegacy,
+	CardIds.CarnivorousCube,
+	CardIds.DarkPact_LOOT_017,
 ];
 const WARRIOR_HAND = [
 	CardIds.EmperorThaurissan_BRM_028,
