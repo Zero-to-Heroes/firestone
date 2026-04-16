@@ -77,7 +77,10 @@ export const modifyDecksForSpecialCards = (
 				return [handleScepterOfSummoning(deckState, allCards, i18n), opponentDeckState];
 			case CardIds.SkulkingGeist_CORE_ICC_701:
 			case CardIds.SkulkingGeist_ICC_701:
-				return [handleSkulkingGeist(deckState, allCards, i18n), opponentDeckState];
+				return [
+					handleSkulkingGeist(deckState, allCards, i18n),
+					handleSkulkingGeist(opponentDeckState, allCards, i18n),
+				];
 			case CardIds.Steamcleaner:
 			case CardIds.Steamcleaner_CORE_REV_946:
 				return [
