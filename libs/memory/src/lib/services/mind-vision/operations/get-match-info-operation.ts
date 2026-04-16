@@ -29,7 +29,10 @@ export class GetMatchInfoOperation extends MindVisionOperationFacade<MatchInfo> 
 		);
 	}
 
-	private extractPlayerInfo(matchPlayer: any): PlayerInfo {
+	private extractPlayerInfo(matchPlayer: any): PlayerInfo | null {
+		if (!matchPlayer) {
+			return null;
+		}
 		return {
 			name: matchPlayer.Name,
 			cardBackId: matchPlayer.CardBackId,

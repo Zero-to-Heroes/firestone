@@ -126,7 +126,11 @@ export class GameModeDataService {
 				this.deckParser.getCurrentDeck(10000),
 			]);
 			console.log('[match-info] matchInfo', matchInfo);
-			if (!!matchInfo?.localPlayer && !!matchInfo?.opponent) {
+			if (
+				!!matchInfo?.localPlayer
+				// Opponent can be empty
+				// && !!matchInfo?.opponent
+			) {
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.MATCH_INFO,

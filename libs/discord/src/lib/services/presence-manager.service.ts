@@ -218,7 +218,10 @@ export class PresenceManagerService {
 		}
 	}
 
-	private buildRankedRank(player: PlayerInfo, format: GameFormat): string | null {
+	private buildRankedRank(player: PlayerInfo | null, format: GameFormat): string | null {
+		if (!player) {
+			return null;
+		}
 		switch (format) {
 			case GameFormat.FT_STANDARD:
 				return this.toRankedString(player.standard);
