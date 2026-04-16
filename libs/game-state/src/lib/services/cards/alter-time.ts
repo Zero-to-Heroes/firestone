@@ -1,8 +1,7 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import { CardIds, CardType, GameFormat, GameType, hasSpellSchool, SpellSchool } from '@firestone-hs/reference-data';
+import { CardIds, CardType, hasSpellSchool, SpellSchool } from '@firestone-hs/reference-data';
 import { GuessedInfo } from '../../models/deck-card';
 import { canBeDiscoveredByClass, hasCorrectType } from '../../related-cards/dynamic-pools';
-import { isCardValidForGame } from '../card-utils';
 import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards, filterCardsFromThePast } from './utils';
 
@@ -14,7 +13,6 @@ export const AlterTime: GeneratingCard & StaticGeneratingCard = {
 			AlterTime.cardIds[0],
 			input.allCards,
 			(c) =>
-				!isCardValidForGame(c, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
 				hasCorrectType(c, CardType.SPELL) &&
 				hasSpellSchool(c, SpellSchool.ARCANE) &&
 				canBeDiscoveredByClass(c, input.deckState.getCurrentClass()),
@@ -31,7 +29,6 @@ export const AlterTime: GeneratingCard & StaticGeneratingCard = {
 			AlterTime.cardIds[0],
 			input.allCards,
 			(c) =>
-				!isCardValidForGame(c, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
 				hasCorrectType(c, CardType.SPELL) &&
 				hasSpellSchool(c, SpellSchool.ARCANE) &&
 				canBeDiscoveredByClass(c, input.inputOptions.currentClass),
