@@ -640,9 +640,9 @@ export class BattlegroundsPlayerBoardParser implements ActionParser {
 			CardIds.MamaMrrglton_MeetTheMrrgltonsEnchantment_BG35_140e,
 			currentEntities,
 		);
-		const backToBackCastThisGame = BattlegroundsPlayerBoardParser.GetPlayerEnchantmentValue(
-			playerId,
-			CardIds.BackToBack_GotYourBackEnchantment_BG35_952e,
+		const backToBackCastThisGame = BattlegroundsPlayerBoardParser.GetPlayerTag(
+			playerEntityId,
+			GameTag.BACON_BACK_TO_BACK_CAST_THIS_GAME,
 			currentEntities,
 		);
 		const deathrattlesTriggeredThisGame = BattlegroundsPlayerBoardParser.GetPlayerTag(
