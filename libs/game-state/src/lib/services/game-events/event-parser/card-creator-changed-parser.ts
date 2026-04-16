@@ -102,6 +102,9 @@ const getNewRefCard = (creatorCardId: string, allCards: CardsFacadeService): Ref
 	switch (creatorCardId) {
 		case CardIds.Shenanigans:
 			return allCards.getCard(CardIds.KingMukla_BananasLegacyToken);
+		case CardIds.AgentOfTheOldOnes_CATA_200:
+			// Battlecry: choose a card in hand → it becomes a Coin (deterministic; DISPLAYED_CREATOR before reveal).
+			return allCards.getCard(CardIds.TheCoinCore);
 		default:
 			return null;
 	}

@@ -189,6 +189,7 @@ const LEGACY_ENV_BY_SLUG: Record<string, string> = {
 	'wings-of-hate': 'POWER_LOG_WINGS_OF_HATE_PATH',
 	'malevolent-mutant': 'POWER_LOG_MALEVOLENT_MUTANT_PATH',
 	'magmaw-attack': 'POWER_LOG_MAGMAW_ATTACK_PATH',
+	'agent-old-ones': 'POWER_LOG_AGENT_OLD_ONES_PATH',
 };
 
 /**
@@ -236,6 +237,7 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	'merch-seller': 'merch-seller/merch-seller.log',
 	'magmaw-attack': 'magmaw-attack/magmaw-attack.log',
 	'fyrakk-fire-secret': 'fyrakk-fire-secret/fyrakk-fire-secret.log',
+	'agent-old-ones': 'agent-old-ones/agent-old-ones.log',
 };
 
 /**
