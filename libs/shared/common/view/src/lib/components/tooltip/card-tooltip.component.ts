@@ -157,6 +157,7 @@ function buildTooltipCardImages(usualUrl: string | null): {
 						</div>
 						<div
 							class="pool-size"
+							*ngIf="(value.relatedCards?.length ?? 0) >= 5"
 							[fsTranslate]="'decktracker.card-tooltip-pool-size'"
 							[fsTranslateParams]="{ value: value.relatedCards?.length }"
 						></div>
