@@ -1,6 +1,6 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { CardIds } from '@firestone-hs/reference-data';
+import { CardIds, CardType } from '@firestone-hs/reference-data';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { BattlegroundsState } from '../../models/_barrel';
 import { GameState } from '../../models/game-state';
@@ -38,14 +38,17 @@ export class RuniTemporalGuardianCounterDefinitionV2 extends CounterDefinitionV2
 				return null;
 			}
 
-			const delta = state.gameTagTurnNumber - lastRuni.storedInformation!.gameTagTurnNumberPlayed!;
-			if (delta <= 0 || !lastRuni.storedInformation!.cards?.length) {
+			if (!lastRuni.storedInformation!.cards?.length) {
 				return null;
 			}
 
+			const delta = state.gameTagTurnNumber - lastRuni.storedInformation!.gameTagTurnNumberPlayed!;
 			return {
-				cards: lastRuni.storedInformation!.cards!.map((c) => c.cardId),
-				turn: Math.ceil(delta / 2),
+				cards: lastRuni
+					.storedInformation!.cards!.map((c) => c.cardId)
+					.filter((c) => c !== CardIds.RuniTemporalGuardian_TIME_EVENT_998)
+					.filter((c) => this.allCards.getCard(c).type?.toUpperCase() === CardType[CardType.MINION]),
+				turn: 2 - Math.ceil(delta / 2),
 			};
 		},
 		setting: {
