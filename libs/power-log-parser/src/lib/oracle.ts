@@ -223,6 +223,28 @@ export class Oracle {
 		return Oracle.FindParentEntity(gameState, node);
 	}
 
+	/**
+	 * Fyrakk's battlecry casts Fire spells via nested spell entities; CREATOR / parent resolution may
+	 * point at an intermediate spell. If any ancestor ACTION block is Fyrakk the Blazing, use it as
+	 * the logical creator (e.g. for SECRET_CREATED_IN_GAME + secret pool).
+	 */
+	static FindFyrakkTheBlazingInActionAncestors(gameState: GameState, node: Node): [string, number] | null {
+		let current: Node | null = node.Parent;
+		while (current != null) {
+			if (current.Type === NodeType.Action) {
+				const act = current.Object as Action;
+				if (gameState.CurrentEntities.has(act.Entity)) {
+					const ent = gameState.CurrentEntities.get(act.Entity)!;
+					if (ent.CardId === CardIds.FyrakkTheBlazing_FIR_959) {
+						return [CardIds.FyrakkTheBlazing_FIR_959, ent.Entity];
+					}
+				}
+			}
+			current = current.Parent;
+		}
+		return null;
+	}
+
 	static FindParentEntity(gameState: GameState, node: Node): [string, number] | null {
 		let current: Node | null = node.Parent;
 		while (current != null) {

@@ -235,6 +235,7 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	'shatter-reveal': 'shatter-reveal/shatter-reveal.log',
 	'merch-seller': 'merch-seller/merch-seller.log',
 	'magmaw-attack': 'magmaw-attack/magmaw-attack.log',
+	'fyrakk-fire-secret': 'fyrakk-fire-secret/fyrakk-fire-secret.log',
 };
 
 /**

@@ -1,12 +1,12 @@
 import { CardIds, CardType, GameTag, Zone } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
-import { GameEventProvider, GameEventHelper } from '../game-event';
+import { GameEventHelper, GameEventProvider } from '../game-event';
+import { FullEntity, Node, NodeType, TagChange } from '../models';
 import { ShowEntity } from '../models/action';
-import { FullEntity, Node, NodeType, PlayerEntity, TagChange } from '../models';
+import { Oracle } from '../oracle';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
-import { Oracle } from '../oracle';
 
 export class SecretCreatedInGameParser implements ActionParser {
 	readonly ParserName = 'SecretCreatedInGameParser';
@@ -75,6 +75,12 @@ export class SecretCreatedInGameParser implements ActionParser {
 			const resolved = this.ResolveDiscoverSourceCreator(creatorCardId, creatorEntityId, node);
 			creatorCardId = resolved[0];
 			creatorEntityId = resolved[1];
+			[creatorCardId, creatorEntityId] = this.applyFyrakkBattlecrySecretCreatorOverride(
+				eventName,
+				node,
+				creatorCardId,
+				creatorEntityId,
+			);
 			return [
 				GameEventProvider.Create(
 					tagChange.TimeStamp,
@@ -106,29 +112,24 @@ export class SecretCreatedInGameParser implements ActionParser {
 		const controllerId = fullEntity.GetEffectiveController();
 		const playerClass = fullEntity.GetPlayerClass();
 		const creator = Oracle.FindCardCreator(this.GameState, fullEntity, node);
-		const eventName =
-			fullEntity.GetTag(GameTag.SECRET) === 1 ? 'SECRET_CREATED_IN_GAME' : 'QUEST_CREATED_IN_GAME';
+		const eventName = fullEntity.GetTag(GameTag.SECRET) === 1 ? 'SECRET_CREATED_IN_GAME' : 'QUEST_CREATED_IN_GAME';
 		let cardId = fullEntity.CardId;
 		if (cardId.length === 0 && fullEntity.GetTag(GameTag.SECRET) === 1 && creator != null) {
-			cardId = Oracle.PredictSecret(this.GameState, creator[0] ?? '', creator[1] ?? -1, node, fullEntity.CardId) ?? cardId;
+			cardId =
+				Oracle.PredictSecret(this.GameState, creator[0] ?? '', creator[1] ?? -1, node, fullEntity.CardId) ??
+				cardId;
 		}
-		const resolved = this.ResolveDiscoverSourceCreator(creator?.[0] ?? null, creator?.[1] ?? -1, node);
+		let resolved = this.ResolveDiscoverSourceCreator(creator?.[0] ?? null, creator?.[1] ?? -1, node);
+		resolved = this.applyFyrakkBattlecrySecretCreatorOverride(eventName, node, resolved[0], resolved[1]);
 		return [
 			GameEventProvider.Create(
 				fullEntity.TimeStamp,
 				eventName,
-				GameEventHelper.CreateProvider(
-					eventName,
-					cardId,
-					controllerId,
-					fullEntity.Entity,
-					this.StateFacade,
-					{
-						PlayerClass: playerClass,
-						CreatorCardId: resolved[0],
-						CreatorEntityId: resolved[1],
-					},
-				),
+				GameEventHelper.CreateProvider(eventName, cardId, controllerId, fullEntity.Entity, this.StateFacade, {
+					PlayerClass: playerClass,
+					CreatorCardId: resolved[0],
+					CreatorEntityId: resolved[1],
+				}),
 				true,
 				node,
 			),
@@ -144,29 +145,38 @@ export class SecretCreatedInGameParser implements ActionParser {
 		const creatorEntityCardId = this.GameState.CurrentEntities.has(creatorEntityId)
 			? this.GameState.CurrentEntities.get(creatorEntityId)!.CardId
 			: null;
-		const eventName =
-			showEntity.GetTag(GameTag.SECRET) === 1 ? 'SECRET_CREATED_IN_GAME' : 'QUEST_CREATED_IN_GAME';
-		const resolved = this.ResolveDiscoverSourceCreator(creatorEntityCardId, creatorEntityId, node);
+		const eventName = showEntity.GetTag(GameTag.SECRET) === 1 ? 'SECRET_CREATED_IN_GAME' : 'QUEST_CREATED_IN_GAME';
+		let resolved = this.ResolveDiscoverSourceCreator(creatorEntityCardId, creatorEntityId, node);
+		resolved = this.applyFyrakkBattlecrySecretCreatorOverride(eventName, node, resolved[0], resolved[1]);
 		return [
 			GameEventProvider.Create(
 				showEntity.TimeStamp,
 				eventName,
-				GameEventHelper.CreateProvider(
-					eventName,
-					cardId,
-					controllerId,
-					showEntity.Entity,
-					this.StateFacade,
-					{
-						PlayerClass: playerClass,
-						CreatorCardId: resolved[0],
-						CreatorEntityId: resolved[1],
-					},
-				),
+				GameEventHelper.CreateProvider(eventName, cardId, controllerId, showEntity.Entity, this.StateFacade, {
+					PlayerClass: playerClass,
+					CreatorCardId: resolved[0],
+					CreatorEntityId: resolved[1],
+				}),
 				true,
 				node,
 			),
 		];
+	}
+
+	private applyFyrakkBattlecrySecretCreatorOverride(
+		eventName: string,
+		node: Node,
+		creatorCardId: string | null,
+		creatorEntityId: number,
+	): [string | null, number] {
+		if (eventName !== 'SECRET_CREATED_IN_GAME') {
+			return [creatorCardId, creatorEntityId];
+		}
+		const fyrakk = Oracle.FindFyrakkTheBlazingInActionAncestors(this.GameState, node);
+		if (fyrakk) {
+			return [fyrakk[0], fyrakk[1]];
+		}
+		return [creatorCardId, creatorEntityId];
 	}
 
 	// The Origin Stone plays the unchosen discover options. When it creates a

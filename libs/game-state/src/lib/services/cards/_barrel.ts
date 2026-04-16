@@ -93,6 +93,7 @@ export { Fishflinger } from './fishflinger';
 export { FlameBehemoth } from './flame-behemoth';
 export { FoolsGold } from './fools-gold';
 export { ForgottenMillenium } from './forgotten-millenium';
+export { FyrakkTheBlazing } from './fyrakk-the-blazing';
 export { Gazlowe } from './gazlowe';
 export { GelbinsTriumph } from './gelbins-triumph';
 export { GemstoneHoarder } from './gemstone-hoarder';

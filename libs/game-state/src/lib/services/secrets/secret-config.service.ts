@@ -69,9 +69,12 @@ export class SecretConfigService {
 		}
 
 		if (card?.guessedInfo?.possibleCards?.length) {
-			const restrictedList = card.guessedInfo.possibleCards.filter((c) =>
-				this.allCards.getCard(c).mechanics?.includes(GameTag[GameTag.SECRET]),
-			);
+			const restrictedList = card.guessedInfo.possibleCards.filter((c) => {
+				const ref = this.allCards.getCard(c);
+				return (
+					ref.mechanics?.includes(GameTag[GameTag.SECRET])
+				);
+			});
 			// If we have a secret and the list is empty, something went wrong
 			if (!!restrictedList.length) {
 				return restrictedList;
