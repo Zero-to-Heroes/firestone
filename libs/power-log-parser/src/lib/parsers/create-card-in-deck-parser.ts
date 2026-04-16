@@ -130,6 +130,23 @@ export class CreateCardInDeckParser implements ActionParser {
 				}
 			}
 		}
+
+		const spawnToDeckNoFxPrefab = 'ReuseFX_Generic_SpawnToDeck_NoFX_CardFromScript_Super';
+		// SubSpell is cleared on SUB_SPELL_END before FullEntity node closes; use the snapshot from parse time.
+		const activeSubSpell =
+			fullEntity.SubSpellInEffect ?? this.ParserState.CurrentSubSpell?.GetActiveSubSpell();
+		const subSpellSourceId = activeSubSpell?.Source ?? 0;
+		if (fullEntity.GetTag(GameTag.ZONE) === (Zone.DECK as number) && subSpellSourceId > 0) {
+			const sourceEntity = this.GameState.CurrentEntities.get(subSpellSourceId);
+			if (sourceEntity?.CardId?.length) {
+				const preferSubSpellSource =
+					!creator?.[0] || activeSubSpell?.Prefab === spawnToDeckNoFxPrefab;
+				if (preferSubSpellSource) {
+					creator = [sourceEntity.CardId, subSpellSourceId];
+				}
+			}
+		}
+
 		let cardId = Oracle.PredictCardId(
 			this.GameState,
 			creator?.[0],

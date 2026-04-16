@@ -34,6 +34,9 @@ export class SubSpellHandler {
 			const spell = new SubSpell();
 			spell.Prefab = subSpellPrefab;
 			spell.Timestamp = timestamp;
+			if (sourceEntityId > 0) {
+				spell.Source = sourceEntityId;
+			}
 
 			SubSpellHandler.SetActiveSubSpell(state, spell);
 			if (parentAction != null) {
