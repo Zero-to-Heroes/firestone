@@ -1,4 +1,4 @@
-import { BlockType, CardIds, GameTag, Zone } from '@firestone-hs/reference-data';
+import { BlockType, CardIds, CardType, GameTag, Zone } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventHelper, GameEventProvider } from '../game-event';
 import { Action, FullEntity, Node, NodeType, ShowEntity } from '../models';
@@ -133,14 +133,19 @@ export class CreateCardInDeckParser implements ActionParser {
 
 		const spawnToDeckNoFxPrefab = 'ReuseFX_Generic_SpawnToDeck_NoFX_CardFromScript_Super';
 		// SubSpell is cleared on SUB_SPELL_END before FullEntity node closes; use the snapshot from parse time.
-		const activeSubSpell =
-			fullEntity.SubSpellInEffect ?? this.ParserState.CurrentSubSpell?.GetActiveSubSpell();
+		const activeSubSpell = fullEntity.SubSpellInEffect ?? this.ParserState.CurrentSubSpell?.GetActiveSubSpell();
 		const subSpellSourceId = activeSubSpell?.Source ?? 0;
 		if (fullEntity.GetTag(GameTag.ZONE) === (Zone.DECK as number) && subSpellSourceId > 0) {
 			const sourceEntity = this.GameState.CurrentEntities.get(subSpellSourceId);
 			if (sourceEntity?.CardId?.length) {
-				const preferSubSpellSource =
-					!creator?.[0] || activeSubSpell?.Prefab === spawnToDeckNoFxPrefab;
+				let preferSubSpellSource = !creator?.[0];
+				if (
+					!preferSubSpellSource &&
+					activeSubSpell?.Prefab === spawnToDeckNoFxPrefab &&
+					sourceEntity.GetCardType() !== (CardType.HERO as number)
+				) {
+					preferSubSpellSource = true;
+				}
 				if (preferSubSpellSource) {
 					creator = [sourceEntity.CardId, subSpellSourceId];
 				}
