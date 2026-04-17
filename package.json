@@ -1,6 +1,6 @@
 {
 	"name": "firestone",
-	"version": "18.2.9",
+	"version": "18.2.10",
 	"productName": "Firestone",
 	"author": {
 		"name": "Sébastien Tromp",
@@ -108,10 +108,10 @@
 		"@firestone-hs/hs-replay-xml-parser": "^1.0.4",
 		"@firestone-hs/mailbox": "^1.0.29",
 		"@firestone-hs/official-leaderboards": "^0.0.1",
-		"@firestone-hs/reference-data": "^3.0.188",
+		"@firestone-hs/reference-data": "^3.0.189",
 		"@firestone-hs/replay-metadata": "^0.0.84",
 		"@firestone-hs/save-dungeon-loot-info": "^1.0.8",
-		"@firestone-hs/simulate-bgs-battle": "^1.1.705",
+		"@firestone-hs/simulate-bgs-battle": "^1.1.706",
 		"@firestone-hs/tavern-brawl-stats": "^1.0.31",
 		"@firestone-hs/trigger-process-mercenaries-review": "^1.0.10",
 		"@firestone-hs/twitch-presence": "^1.0.1",
@@ -245,7 +245,7 @@
 		"typescript": "~5.6.0"
 	},
 	"overrides": {
-		"@firestone-hs/reference-data": "^3.0.188",
+		"@firestone-hs/reference-data": "^3.0.189",
 		"@firestone-hs/hs-replay-xml-parser": "^1.0.4",
 		"@angular/common": "^19.0.0",
 		"@angular/core": "^19.0.0",
