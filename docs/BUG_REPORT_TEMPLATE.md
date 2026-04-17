@@ -133,3 +133,5 @@ When the assignee must **never touch the main checkout**:
 4. Report branch name `bug/<slug>` for review/merge.
 
 # Actual bug report below
+
+Please stop after building the red test (including the truncated power.log) so I can reproduce the issue myself in the UI
