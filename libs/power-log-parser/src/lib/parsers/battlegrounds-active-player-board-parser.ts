@@ -374,9 +374,9 @@ export class BattlegroundsActivePlayerBoardParser implements ActionParser {
 				GameTag.NUM_CARDS_PLAYED_THIS_TURN,
 				currentEntities,
 			);
-			const mrrgltonsPlayedThisGame = BattlegroundsPlayerBoardParser.GetPlayerEnchantmentValue(
+			const mrrgltonsPlayedThisGame = BattlegroundsPlayerBoardParser.GetPlayerTag(
 				playerId,
-				CardIds.MamaMrrglton_MeetTheMrrgltonsEnchantment_BG35_140e,
+				GameTag.BACON_MRRGLTON_PLAYED_THIS_GAME,
 				currentEntities,
 			);
 			const backToBackCastThisGame = BattlegroundsPlayerBoardParser.GetPlayerTag(
