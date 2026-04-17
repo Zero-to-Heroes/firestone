@@ -4,6 +4,7 @@ import { OwHotkeyHandlerService } from '@firestone/app/ow-native';
 import {
 	ChangeVisibleApplicationEvent,
 	MainWindowStateFacadeService,
+	MainWindowStoreService,
 	ShowMainWindowEvent,
 } from '@firestone/mainwindow/common';
 import {
@@ -19,7 +20,6 @@ import { FirestoneAchievementsChallengeService } from '../../js/services/achieve
 import { AdService } from '../../js/services/ad.service';
 import { LocalizationFacadeService } from '../../js/services/localization-facade.service';
 import { OutOfCardsService, OutOfCardsToken } from '../../js/services/mainwindow/out-of-cards.service';
-import { MainWindowStoreService } from '@firestone/mainwindow/common';
 
 @Injectable()
 export class AppStartupService {
@@ -94,34 +94,40 @@ export class AppStartupService {
 		this.startApp(false);
 		// TOOD: move this elsewhere
 		this.ow.addAppLaunchTriggeredListener(async (info) => {
-			if (
-				info?.origin === 'urlscheme' &&
-				decodeURIComponent(info.parameter).startsWith('firestoneapp://twitch/')
-			) {
-				const hash = decodeURIComponent(info.parameter).split('firestoneapp://twitch/')[1];
-				const hashAsObject: any = hash
-					?.substring(1)
-					.split('&')
-					.map((v) => v.split('='))
-					.reduce((pre, [key, value]) => ({ ...pre, [key]: value }), {});
-				console.log('hash is', hashAsObject);
-				this.twitchAuth.stateUpdater.next(hashAsObject);
-			} else if (
-				info?.origin === 'urlscheme' &&
-				decodeURIComponent(info.parameter).startsWith('firestoneapp://outofcards-callback')
-			) {
-				const codeCommponent = decodeURIComponent(info.parameter).split(
-					'firestoneapp://outofcards-callback/?',
-				)[1];
-				const code = codeCommponent.split('code=')[1];
-				console.debug('[oog] handling oog callback', info, code, decodeURIComponent(info.parameter));
-				const token: OutOfCardsToken = await generateToken(code, this.api);
-				console.debug('[oog] received token', token);
-				if (token) {
-					this.oocAuth.stateUpdater.next(token);
+			console.log('[app-startup] app launch triggered', info);
+			try {
+				if (
+					info?.origin === 'urlscheme' &&
+					decodeURIComponent(info.parameter).startsWith('firestoneapp://twitch/')
+				) {
+					console.log('[twitch-auth] app launch triggered', info);
+					const hash = decodeURIComponent(info.parameter).split('firestoneapp://twitch/')[1];
+					const hashAsObject: any = hash
+						?.substring(1)
+						.split('&')
+						.map((v) => v.split('='))
+						.reduce((pre, [key, value]) => ({ ...pre, [key]: value }), {});
+					console.log('[twitch-auth] hash is', hashAsObject);
+					this.twitchAuth.stateUpdater.next(hashAsObject);
+				} else if (
+					info?.origin === 'urlscheme' &&
+					decodeURIComponent(info.parameter).startsWith('firestoneapp://outofcards-callback')
+				) {
+					const codeCommponent = decodeURIComponent(info.parameter).split(
+						'firestoneapp://outofcards-callback/?',
+					)[1];
+					const code = codeCommponent.split('code=')[1];
+					console.debug('[oog] handling oog callback', info, code, decodeURIComponent(info.parameter));
+					const token: OutOfCardsToken = await generateToken(code, this.api);
+					console.debug('[oog] received token', token);
+					if (token) {
+						this.oocAuth.stateUpdater.next(token);
+					}
+				} else {
+					this.startApp(true);
 				}
-			} else {
-				this.startApp(true);
+			} catch (error) {
+				console.error('[app-startup] error', error);
 			}
 		});
 
