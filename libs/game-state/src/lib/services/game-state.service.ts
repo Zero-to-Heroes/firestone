@@ -371,6 +371,7 @@ export class GameStateService {
 		currentState = await this.secretsParser.parseSecrets(currentState, gameEvent, {
 			secretWillTrigger: this.secretWillTrigger!,
 			minionsWillDie: this.minionsWillDie,
+			timing: 'before',
 		});
 		const parsersForEvent = this.eventParsers[gameEvent.type] ?? [];
 		for (const parser of parsersForEvent) {
@@ -397,6 +398,11 @@ export class GameStateService {
 				console.log('[game-state] Exception while applying parser', parser.event(), e.message, e.stack, e);
 			}
 		}
+		currentState = await this.secretsParser.parseSecrets(currentState, gameEvent, {
+			secretWillTrigger: this.secretWillTrigger!,
+			minionsWillDie: this.minionsWillDie,
+			timing: 'after',
+		});
 
 		// We have processed the event for which the secret would trigger
 		if (

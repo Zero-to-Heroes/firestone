@@ -5,6 +5,7 @@ import { GameState } from '../../../../models/game-state';
 import { GameEvent } from '../../game-event';
 import { EventParser } from '../_event-parser';
 import { DeckManipulationHelper } from '../deck-manipulation-helper';
+import { TriggerAfterSpellPlaySecretsParser } from './trigger-after-spell-play-secrets-parser';
 import { TriggerOnAttackSecretsParser } from './trigger-on-attack-secrets-parser';
 import { TriggerOnCardPlaySecretsParser } from './trigger-on-card-play-secrets-parser';
 import { TriggerOnDamageSecretsParser } from './trigger-on-damage-secrets-parser';
@@ -21,7 +22,8 @@ import { TriggerOnWeaponPlaySecretsParser } from './trigger-on-weapon-play-secre
 
 @Injectable()
 export class SecretsParserService {
-	private secretParsers = this.buildSecretParsers();
+	private beforeSecretParsers = this.buildBeforeSecretParsers();
+	private afterSecretParsers = this.buildAfterSecretParsers();
 
 	constructor(
 		private readonly helper: DeckManipulationHelper,
@@ -48,14 +50,30 @@ export class SecretsParserService {
 				cardId: string;
 				entityId: number;
 			}[];
+			timing: 'before' | 'after';
 		},
 	): Promise<GameState> {
 		if (!gameState) {
 			return gameState;
 		}
 
-		if (!this.shouldIgnoreSecrets(gameState) && this.isSecretInPlayer(gameState)) {
-			for (const parser of this.secretParsers) {
+		if (
+			additionalInfo.timing === 'before' &&
+			!this.shouldIgnoreSecrets(gameState) &&
+			this.isSecretInPlayer(gameState)
+		) {
+			for (const parser of this.beforeSecretParsers) {
+				if (parser.applies(gameEvent, gameState)) {
+					gameState = await parser.parse(gameState, gameEvent, additionalInfo);
+				}
+			}
+		}
+		if (
+			additionalInfo.timing === 'after' &&
+			!this.shouldIgnoreSecrets(gameState) &&
+			this.isSecretInPlayer(gameState)
+		) {
+			for (const parser of this.afterSecretParsers) {
 				if (parser.applies(gameEvent, gameState)) {
 					gameState = await parser.parse(gameState, gameEvent, additionalInfo);
 				}
@@ -77,7 +95,7 @@ export class SecretsParserService {
 	}
 
 	// Ice block is never handled, because ruling it out means ending the game
-	private buildSecretParsers(): readonly EventParser[] {
+	private buildBeforeSecretParsers(): readonly EventParser[] {
 		return [
 			new TriggerOnAttackSecretsParser(this.helper, this.allCards),
 			new TriggerOnDamageSecretsParser(this.helper, this.allCards),
@@ -93,5 +111,8 @@ export class SecretsParserService {
 			new TriggerOnCardPlaySecretsParser(this.helper),
 			new TriggerOnWeaponPlaySecretsParser(this.helper, this.allCards),
 		];
+	}
+	private buildAfterSecretParsers(): readonly EventParser[] {
+		return [new TriggerAfterSpellPlaySecretsParser(this.helper, this.allCards)];
 	}
 }

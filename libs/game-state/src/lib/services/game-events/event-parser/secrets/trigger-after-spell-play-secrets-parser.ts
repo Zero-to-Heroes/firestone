@@ -8,26 +8,8 @@ import { GameEvent } from '../../game-event';
 import { EventParser } from '../_event-parser';
 import { DeckManipulationHelper } from '../deck-manipulation-helper';
 
-export class TriggerOnSpellPlaySecretsParser implements EventParser {
-	private secretsTriggeringOnSpellPlayed = [
-		CardIds.CatTrickCore,
-		CardIds.CatTrick,
-		CardIds.IceTrap,
-		CardIds.IceTrap_CORE_AV_226,
-		CardIds.BeaststalkerTavish_ImprovedIceTrapToken,
-		CardIds.CounterspellLegacy,
-		CardIds.CounterspellCore,
-		CardIds.CounterspellVanilla,
-		CardIds.NetherwindPortal,
-		CardIds.SpellbenderLegacy,
-		CardIds.SpellbenderVanilla,
-		CardIds.ManaBind,
-		CardIds.NeverSurrender,
-		CardIds.OhMyYogg,
-		CardIds.DirtyTricks,
-		CardIds.StickySituation,
-		CardIds.BargainBin_MIS_105,
-	];
+export class TriggerAfterSpellPlaySecretsParser implements EventParser {
+	private secretsTriggeringOnSpellPlayed = [CardIds.PressurePlate, CardIds.PressurePlate_CORE_ULD_152];
 
 	private secretWillTrigger?: {
 		cardId: string;
@@ -94,46 +76,12 @@ export class TriggerOnSpellPlaySecretsParser implements EventParser {
 
 		const secretsWeCantRuleOut: CardIds[] = [];
 
-		const targetCardId = gameEvent.additionalData.targetCardId;
-		if (!targetCardId) {
-			secretsWeCantRuleOut.push(CardIds.SpellbenderLegacy);
-			secretsWeCantRuleOut.push(CardIds.SpellbenderVanilla);
-		} else {
-			const targetCard = this.allCards.getCard(targetCardId);
-			if (
-				!targetCard ||
-				!targetCard.type ||
-				targetCard.type.toLowerCase() !== CardType[CardType.MINION].toLowerCase()
-			) {
-				secretsWeCantRuleOut.push(CardIds.SpellbenderVanilla);
-				secretsWeCantRuleOut.push(CardIds.SpellbenderLegacy);
-			}
-		}
-
 		// Might need to be a little more specific than this? E.g. with dormant minions?
 		// It's an edge case, so leaving it aside for a first implementation
 		const deckWithBoard = isSpellPlayedByPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		if (deckWithBoard.board.length === 0) {
-		}
-
-		const isBoardFull = deckWithSecretToCheck.board.length === 7;
-		if (isBoardFull) {
-			secretsWeCantRuleOut.push(CardIds.CatTrickCore);
-			secretsWeCantRuleOut.push(CardIds.CatTrick);
-			secretsWeCantRuleOut.push(CardIds.NetherwindPortal);
-			secretsWeCantRuleOut.push(CardIds.StickySituation);
-		}
-
-		const isBoardEmpty = deckWithSecretToCheck.board.length === 0;
-		if (isBoardEmpty) {
-			secretsWeCantRuleOut.push(CardIds.NeverSurrender);
-		}
-
-		// TODO: handle the case where the max hand size has been bumped to 12
-		const isHandFull = deckWithSecretToCheck.hand.length >= 10;
-		if (isHandFull) {
-			secretsWeCantRuleOut.push(CardIds.ManaBind);
-			secretsWeCantRuleOut.push(CardIds.BargainBin_MIS_105);
+			secretsWeCantRuleOut.push(CardIds.PressurePlate);
+			secretsWeCantRuleOut.push(CardIds.PressurePlate_CORE_ULD_152);
 		}
 
 		const optionsToFlagAsInvalid = this.secretsTriggeringOnSpellPlayed.filter(
