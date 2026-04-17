@@ -55,6 +55,9 @@ export class AppStartupService {
 		// Do it after the localization has been initialized
 		await this.store.init();
 
+		// Make sure the app protocol is registered
+		this.ow.repairUrlProtocol();
+
 		if (!this.loadingWindowShown) {
 			console.debug('[startup] initializing loading window');
 			const window = await this.ow.obtainDeclaredWindow('LoadingWindow');

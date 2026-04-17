@@ -915,6 +915,12 @@ export class OverwolfService
 			});
 		});
 	}
+
+	public repairUrlProtocol(): void {
+		overwolf.extensions.current.repairUrlProtocol((result) => {
+			console.log('[ow-service] repairUrlProtocol result', result);
+		});
+	}
 }
 
 export interface ListenObject {
