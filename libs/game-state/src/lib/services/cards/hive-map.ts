@@ -9,23 +9,46 @@ import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingC
 import { filterCards } from './utils';
 
 export const HiveMap: GeneratingCard & StaticGeneratingCard = {
-	cardIds: [CardIds.HiveMap_TLC_900],
+	cardIds: [CardIds.HiveMap_TLC_900, CardIds.HiveMap_HiveMapEnchantment_TLC_900e],
+	publicCreator: true,
 	dynamicPool: (input: StaticGeneratingCardInput) => {
-		return filterCards(
+		let result = filterCards(
 			HiveMap.cardIds[0],
 			input.allCards,
-			(c) => canBeDiscoveredByClass(c, input.inputOptions.currentClass) && hasCorrectSpellSchool(c, SpellSchool.FEL),
+			(c) =>
+				canBeDiscoveredByClass(c, input.inputOptions.currentClass) && hasCorrectSpellSchool(c, SpellSchool.FEL),
 			input.inputOptions,
 		);
+		if (result.length === 0) {
+			result = filterCards(
+				HiveMap.cardIds[0],
+				input.allCards,
+				(c) =>
+					canBeDiscoveredByClass(c, input.allCards.getCard(HiveMap.cardIds[0])?.classes?.[0]!) &&
+					hasCorrectSpellSchool(c, SpellSchool.FEL),
+				input.inputOptions,
+			);
+		}
+		return result;
 	},
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
 		const currentClass = input.deckState.hero?.classes?.[0] ? CardClass[input.deckState.hero?.classes?.[0]] : '';
-		const possibleCards = filterCards(
+		let possibleCards = filterCards(
 			HiveMap.cardIds[0],
 			input.allCards,
 			(c) => canBeDiscoveredByClass(c, currentClass) && hasCorrectSpellSchool(c, SpellSchool.FEL),
 			input.options,
 		);
+		if (possibleCards.length === 0) {
+			possibleCards = filterCards(
+				HiveMap.cardIds[0],
+				input.allCards,
+				(c) =>
+					canBeDiscoveredByClass(c, input.allCards.getCard(HiveMap.cardIds[0])?.classes?.[0]) &&
+					hasCorrectSpellSchool(c, SpellSchool.FEL),
+				input.options,
+			);
+		}
 		return {
 			cardType: CardType.SPELL,
 			possibleCards: possibleCards,

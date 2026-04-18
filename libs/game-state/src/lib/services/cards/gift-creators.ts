@@ -1061,7 +1061,6 @@ const internalGiftCreators = [
 	CardIds.Paleomancy_TLC_434,
 	CardIds.CryptMap_TLC_435,
 	CardIds.UnleashTheColossus_TLC_631,
-	CardIds.HiveMap_TLC_900,
 	CardIds.TheFoodChain_TLC_830,
 	CardIds.TheFoodChain_ShokkJungleTyrantToken_TLC_830t,
 	CardIds.OddMap_TLC_824,

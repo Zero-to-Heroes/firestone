@@ -964,7 +964,6 @@ const getDynamicFilters = (
 				hasCorrectType(c, CardType.SPELL) &&
 				canBeDiscoveredByClass(c, options.currentClass);
 		case CardIds.Scorchreaver_FIR_952:
-		case CardIds.HiveMap_TLC_900:
 		case CardIds.TasteOfChaos:
 			return (c) => canBeDiscoveredByClass(c, options.currentClass) && hasCorrectSpellSchool(c, SpellSchool.FEL);
 		case CardIds.SisterSvalna_VisionOfDarknessToken:
