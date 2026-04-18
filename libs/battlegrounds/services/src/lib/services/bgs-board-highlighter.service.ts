@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Injectable } from '@angular/core';
 import { CardIds, CardType, GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
+import { ExtendedBgsCompAdvice, ExtendedReferenceCard } from '@firestone/battlegrounds/core';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { arraysEqual, SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
@@ -22,6 +23,7 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 	public highlightedTiers$$: BehaviorSubject<readonly number[]>;
 	public highlightedMechanics$$: BehaviorSubject<readonly GameTag[]>;
 	public highlightedMinions$$: BehaviorSubject<readonly string[]>;
+	public highlightedComps$$: BehaviorSubject<readonly ExtendedBgsCompAdvice[]>;
 
 	private allCards: CardsFacadeService;
 	private ads: IAdsService;
@@ -38,6 +40,7 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 		this.highlightedTiers$$ = this.mainInstance.highlightedTiers$$;
 		this.highlightedMechanics$$ = this.mainInstance.highlightedMechanics$$;
 		this.highlightedMinions$$ = this.mainInstance.highlightedMinions$$;
+		this.highlightedComps$$ = this.mainInstance.highlightedComps$$;
 	}
 
 	protected async init() {
@@ -46,6 +49,7 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 		this.highlightedTiers$$ = new BehaviorSubject<readonly number[]>([]);
 		this.highlightedMechanics$$ = new BehaviorSubject<readonly GameTag[]>([]);
 		this.highlightedMinions$$ = new BehaviorSubject<readonly string[]>([]);
+		this.highlightedComps$$ = new BehaviorSubject<readonly ExtendedBgsCompAdvice[]>([]);
 
 		this.allCards = AppInjector.get(CardsFacadeService);
 		this.ads = AppInjector.get(ADS_SERVICE_TOKEN);
@@ -91,6 +95,9 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 		this.registerMainProcessMethod('toggleMinionsToHighlightInternal', (minionsToHighlight: readonly string[]) =>
 			this.toggleMinionsToHighlightInternal(minionsToHighlight),
 		);
+		this.registerMainProcessMethod('toggleCompToHighlightInternal', (comp: ExtendedBgsCompAdvice) =>
+			this.toggleCompToHighlightInternal(comp),
+		);
 		this.registerMainProcessMethod(
 			'toggleMechanicsToHighlightInternal',
 			(mechanicsToHighlight: readonly GameTag[]) => this.toggleMechanicsToHighlightInternal(mechanicsToHighlight),
@@ -114,6 +121,46 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 			highlightedMinions = highlightedMinions.filter((minion) => !minionsToHighlight.includes(minion));
 		}
 		this.highlightedMinions$$.next(highlightedMinions);
+	}
+
+	public toggleCompToHighlight(comp: ExtendedBgsCompAdvice) {
+		void this.callOnMainProcess('toggleCompToHighlightInternal', comp);
+	}
+	private toggleCompToHighlightInternal(comp: ExtendedBgsCompAdvice) {
+		let highlightedComps: readonly ExtendedBgsCompAdvice[] = this.highlightedComps$$.value;
+		// Comp is already highlighted, we remove it
+		const existingComp = highlightedComps.find((c) => c.compId === comp.compId);
+		const compCards = [
+			...getCardsByStatus(comp, 'CORE', this.allCards),
+			...getCardsByStatus(comp, 'ADDON', this.allCards),
+			...getCardsByStatus(comp, 'RECOMMENDED', this.allCards),
+		];
+		if (existingComp) {
+			highlightedComps = highlightedComps.filter((c) => c.compId !== comp.compId);
+			const allOtherCompCards = highlightedComps.flatMap((c) => [
+				...getCardsByStatus(c, 'CORE', this.allCards),
+				...getCardsByStatus(c, 'ADDON', this.allCards),
+				...getCardsByStatus(c, 'RECOMMENDED', this.allCards),
+			]);
+			// Unhighlight cards that were part of this comp but not part of other highlighted comps
+			let highlightedCards: readonly string[] = this.highlightedMinions$$.value;
+			for (const card of compCards) {
+				if (!allOtherCompCards.some((c) => c.id === card.id)) {
+					highlightedCards = highlightedCards.filter((c) => c !== card.id);
+				}
+			}
+			this.highlightedMinions$$.next(highlightedCards);
+		} else {
+			highlightedComps = [...highlightedComps, comp];
+			// Now highlight all the relevant cards
+			let highlightedCards: readonly string[] = [
+				...this.highlightedMinions$$.value,
+				...compCards.map((c) => c.id),
+			];
+			highlightedCards = highlightedCards.filter((card, index, self) => self.indexOf(card) === index);
+			this.highlightedMinions$$.next(highlightedCards);
+		}
+		this.highlightedComps$$.next(highlightedComps);
 	}
 
 	public toggleMechanicsToHighlight(mechanicsToHighlight: readonly GameTag[]) {
@@ -524,3 +571,23 @@ export interface ShopMinion {
 	readonly cardId: string;
 	readonly highlighted: boolean;
 }
+
+export const getCardsByStatus = (
+	comp: ExtendedBgsCompAdvice,
+	status: string,
+	allCards: CardsFacadeService,
+): readonly ExtendedReferenceCard[] => {
+	return comp.cards
+		.filter((c) => c.status === status)
+		.map((c) => {
+			const ref: ReferenceCard = allCards.getCard(c.cardId);
+			if (!ref.isBaconPool) {
+				return null;
+			}
+			const result: ExtendedReferenceCard = {
+				...ref,
+			};
+			return result;
+		})
+		.filter((c) => c !== null);
+};

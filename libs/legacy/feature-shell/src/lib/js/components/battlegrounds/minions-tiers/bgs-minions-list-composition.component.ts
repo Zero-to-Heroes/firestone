@@ -8,18 +8,12 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { BgsCompTip } from '@firestone-hs/content-craetor-input';
-import {
-	CardRules,
-	GameTag,
-	hasCorrectTribe,
-	normalizeMinionCardId,
-	Race,
-	ReferenceCard,
-} from '@firestone-hs/reference-data';
+import { CardRules, GameTag, hasCorrectTribe, normalizeMinionCardId, Race } from '@firestone-hs/reference-data';
 import { ExtendedBgsCompAdvice, ExtendedReferenceCard, isCardOrSubstitute } from '@firestone/battlegrounds/core';
 import {
 	BgsBoardHighlighterService,
 	BgsInGameCompositionsService,
+	getCardsByStatus,
 	InGameFinalBoard,
 } from '@firestone/battlegrounds/services';
 import { GameStateFacadeService } from '@firestone/game-state';
@@ -368,32 +362,20 @@ export class BgsMinionsListCompositionComponent extends AbstractSubscriptionComp
 	difficulty: string;
 	difficultyClass: string;
 
+	private comp: ExtendedBgsCompAdvice;
+
 	@Input() set composition(value: ExtendedBgsCompAdvice) {
+		this.comp = value;
 		this.compId$$.next(value.compId);
 		this.name = value.name;
 		this.powerLevel = value.powerLevel;
 		this.tips = value.tips;
-		const getCardsByStatus = (status: string): readonly ExtendedReferenceCard[] => {
-			return value.cards
-				.filter((c) => c.status === status)
-				.map((c) => {
-					const ref: ReferenceCard = this.allCards.getCard(c.cardId);
-					if (!ref.isBaconPool) {
-						return null;
-					}
-					const result: ExtendedReferenceCard = {
-						...ref,
-					};
-					return result;
-				})
-				.filter((c) => c !== null);
-		};
-		this.coreCards = getCardsByStatus('CORE');
-		this.recommendedCards = getCardsByStatus('RECOMMENDED');
-		this.addonCards = getCardsByStatus('ADDON');
-		this.cycleCards = getCardsByStatus('CYCLE');
-		this.trinkets = getCardsByStatus('TRINKET');
-		this.enablerCards = getCardsByStatus('ENABLER');
+		this.coreCards = getCardsByStatus(value, 'CORE', this.allCards);
+		this.recommendedCards = getCardsByStatus(value, 'RECOMMENDED', this.allCards);
+		this.addonCards = getCardsByStatus(value, 'ADDON', this.allCards);
+		this.cycleCards = getCardsByStatus(value, 'CYCLE', this.allCards);
+		this.trinkets = getCardsByStatus(value, 'TRINKET', this.allCards);
+		this.enablerCards = getCardsByStatus(value, 'ENABLER', this.allCards);
 		this.headerImages = [`https://static.zerotoheroes.com/hearthstone/cardart/256x/${value.minionIcon}.jpg`];
 		this.compCards$$.next([
 			...(this.coreCards ?? []),
@@ -526,11 +508,7 @@ export class BgsMinionsListCompositionComponent extends AbstractSubscriptionComp
 		if (!this.coreCards?.length && !this.addonCards?.length && !this.recommendedCards?.length) {
 			return;
 		}
-		this.highlighter.toggleMinionsToHighlight([
-			...this.coreCards.map((c) => c.id),
-			...this.addonCards.map((c) => c.id),
-			...this.recommendedCards.map((c) => c.id),
-		]);
+		this.highlighter.toggleCompToHighlight(this.comp);
 	}
 
 	toggleExampleBoards(event: MouseEvent) {
