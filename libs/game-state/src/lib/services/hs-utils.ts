@@ -522,6 +522,21 @@ export const CARDS_THAT_IMPROVE_WHEN_TRADED = [
 
 export const CREATES_PUBLIC_COPY_FROM_DECK = [CardIds.CraneGame_TOY_884, CardIds.TrialOfTheJormungars_WON_028];
 
+/**
+ * Same-controller deck→hand copies (e.g. Cultist Map second dredge pick): bidirectional
+ * `cardCopyLinks` can mirror a revealed token onto the hidden hand row. Some power.log lines omit
+ * `DREDGE` on the token or omit DeckCard attribution until later — match these creator /
+ * `lastAffectedBy` ids on the copy or hidden hand row so we still treat the flow as opponent
+ * self-dredge and skip linking. Extend when a similar incomplete-log leak appears.
+ */
+export const SELF_COPY_HAND_LEAK_INCOMPLETE_LOG_CARD_IDS: readonly CardIds[] = [
+	CardIds.CultistMap_TLC_515,
+	CardIds.CultistMap_CultistMapPlayerEnchantEnchantment_TLC_515e,
+];
+
+export const isSelfCopyHandLeakIncompleteLogCardId = (cardId: string | null | undefined): boolean =>
+	!!cardId && SELF_COPY_HAND_LEAK_INCOMPLETE_LOG_CARD_IDS.includes(cardId as CardIds);
+
 // These cards are added to the deck only for the Joust, but are not part of the initial deck
 export const FAKE_JOUST_CARDS = [CardIds.ProGamer_RoshamboEnchantment_MIS_916e];
 export const dontActuallyDestroyCardsInDeck = [

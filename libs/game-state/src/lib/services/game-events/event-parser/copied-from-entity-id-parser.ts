@@ -6,7 +6,7 @@ import { DeckState } from '../../../models/deck-state';
 import { GameState } from '../../../models/game-state';
 import { SecretOption } from '../../../models/secret-option';
 import { getProcessedCard } from '../../card-utils';
-import { CREATES_PUBLIC_COPY_FROM_DECK } from '../../hs-utils';
+import { CREATES_PUBLIC_COPY_FROM_DECK, isSelfCopyHandLeakIncompleteLogCardId } from '../../hs-utils';
 import { CopiedFromEntityIdGameEvent } from '../events/copied-from-entity-id-game-event';
 import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
@@ -97,8 +97,17 @@ export class CopiedFromEntityIdParser implements EventParser {
 			!!dredgerCardIdHint &&
 			(this.allCards.getCard(dredgerCardIdHint)?.mechanics?.includes('DREDGE') ?? false);
 		const copyDredgeFromLog = gameEvent.additionalData.copyDredgeTag === true;
+		// Incomplete-log self-copy (see `SELF_COPY_HAND_LEAK_INCOMPLETE_LOG_CARD_IDS`): omit DREDGE / late DeckCard fields.
+		const selfCopyHandLeakIncompleteLogToken =
+			copyAndSourceSameController &&
+			(isSelfCopyHandLeakIncompleteLogCardId(newCopy?.creatorCardId) ||
+				isSelfCopyHandLeakIncompleteLogCardId(newCopy?.lastAffectedByCardId) ||
+				isSelfCopyHandLeakIncompleteLogCardId(copiedCard?.lastAffectedByCardId));
 		const dredgeSignalForSelfCopy =
-			newCopy?.tags?.[GameTag.DREDGE] === 1 || copyDredgeFromLog || dredgeMechanicOnCreator;
+			newCopy?.tags?.[GameTag.DREDGE] === 1 ||
+			copyDredgeFromLog ||
+			dredgeMechanicOnCreator ||
+			selfCopyHandLeakIncompleteLogToken;
 		/** Opponent dredged their own deck: copy+source same controller; do not reveal dredge choice to local player. */
 		const isOpponentSelfDredge =
 			!isPlayer &&
@@ -301,12 +310,14 @@ export class CopiedFromEntityIdParser implements EventParser {
 
 		// Same-side hand copy + source (e.g. Malevolent Mutant): bidirectional cardCopyLinks so
 		// processCardLinks can mirror cardId when either the copy or the original is played first.
+		// Skip incomplete-log self-copy tokens: linking mirrors the revealed token onto the hidden hand row.
 		if (
 			copiedCardZone === Zone.HAND &&
 			isPlayer === isCopiedPlayer &&
 			copiedCardEntityId != null &&
 			entityId != null &&
-			copiedCardEntityId !== entityId
+			copiedCardEntityId !== entityId &&
+			!selfCopyHandLeakIncompleteLogToken
 		) {
 			const deckKey = isPlayer ? 'playerDeck' : 'opponentDeck';
 			const deckState = result[deckKey];
