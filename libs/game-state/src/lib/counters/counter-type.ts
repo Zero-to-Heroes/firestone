@@ -127,4 +127,5 @@ export type CounterType =
 	| 'felSpells'
 	| 'cardsDiscarded'
 	| 'friendlyAttacks'
-	| 'spellweaversBrilliance';
+	| 'spellweaversBrilliance'
+	| 'bgsMrrgltonPlayed';

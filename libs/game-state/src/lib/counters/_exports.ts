@@ -18,6 +18,7 @@ import { ElementalTavernBuffCounterDefinitionV2 } from './impl/battlegrounds/ele
 import { FodderRefreshCounterDefinitionV2 } from './impl/battlegrounds/fodder-refresh';
 import { FreeRefreshCounterDefinitionV2 } from './impl/battlegrounds/free-refresh';
 import { GoldNextTurnCounterDefinitionV2 } from './impl/battlegrounds/gold-next-turn';
+import { MrrgltonPlayedCounterDefinitionV2 } from './impl/battlegrounds/mrrglton-played';
 import { RightmostBuffCounterDefinitionV2 } from './impl/battlegrounds/rightmost-buff';
 import { SpellsPlayedCounterDefinitionV2 } from './impl/battlegrounds/spells-played';
 import { TavernBuffCounterDefinitionV2 } from './impl/battlegrounds/tavern-buff';
@@ -251,6 +252,7 @@ export const getAllCounters: (
 	new RightmostBuffCounterDefinitionV2(i18n, allCards),
 	new TavernBuffCounterDefinitionV2(i18n, allCards),
 	new FodderRefreshCounterDefinitionV2(i18n, allCards),
+	new MrrgltonPlayedCounterDefinitionV2(i18n, allCards),
 ];
 
 export type { CounterType } from './counter-type';
