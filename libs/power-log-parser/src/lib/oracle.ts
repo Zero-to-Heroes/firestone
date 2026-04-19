@@ -63,6 +63,29 @@ export class Oracle {
 		return creatorCardId;
 	}
 
+	/**
+	 * The GameState log stream often applies DISPLAYED_CREATOR / CREATOR before PowerTaskList closes the
+	 * same entity — and GS vs PTL use separate {@link GameState} maps, so read missing tags from
+	 * {@link StateFacade.GSState} when the PTL entity still has -1.
+	 */
+	private static creatorEntityTagWithGameStateStreamFallback(
+		gameState: GameState,
+		entity: FullEntity,
+		tag: GameTag,
+		stateFacade: StateFacade | null,
+	): number {
+		const local = entity.GetTag(tag);
+		if (local !== -1) {
+			return local;
+		}
+		const ptlMerged = gameState.CurrentEntities.get(entity.Id);
+		let v = ptlMerged?.GetTag(tag) ?? -1;
+		if (v === -1 && stateFacade?.GsState?.GameState) {
+			v = stateFacade.GsState.GameState.CurrentEntities.get(entity.Id)?.GetTag(tag) ?? -1;
+		}
+		return v;
+	}
+
 	static FindCardCreator(
 		gameState: GameState,
 		entity: FullEntity,
@@ -70,19 +93,31 @@ export class Oracle {
 		getLastInfluencedBy: boolean = true,
 		stateFacade: StateFacade | null = null,
 	): [string, number] | null {
+		const displayedCreatorEnt = Oracle.creatorEntityTagWithGameStateStreamFallback(
+			gameState,
+			entity,
+			GameTag.DISPLAYED_CREATOR,
+			stateFacade,
+		);
+		const creatorEnt = Oracle.creatorEntityTagWithGameStateStreamFallback(
+			gameState,
+			entity,
+			GameTag.CREATOR,
+			stateFacade,
+		);
 		if (
 			!getLastInfluencedBy &&
-			entity.GetTag(GameTag.CREATOR) === -1 &&
-			entity.GetTag(GameTag.DISPLAYED_CREATOR) === -1 &&
+			creatorEnt === -1 &&
+			displayedCreatorEnt === -1 &&
 			entity.GetTag(GameTag.CREATOR_DBID) === -1 &&
 			entity.GetTag(GameTag.ZONE) === (Zone.DECK as number)
 		) {
 			return null;
 		}
 
-		let creatorTuple = Oracle.FindCardCreatorCardId(gameState, entity.GetTag(GameTag.DISPLAYED_CREATOR), node);
+		let creatorTuple = Oracle.FindCardCreatorCardId(gameState, displayedCreatorEnt, node);
 		if (!creatorTuple?.[0]) {
-			creatorTuple = Oracle.FindCardCreatorCardId(gameState, entity.GetTag(GameTag.CREATOR), node);
+			creatorTuple = Oracle.FindCardCreatorCardId(gameState, creatorEnt, node);
 		}
 		if (creatorTuple?.[0] === CardIds.DarkGiftToken_EDR_102t) {
 			const futureEntity = stateFacade?.GsState?.GameState.CurrentEntities.get(entity.Id);
