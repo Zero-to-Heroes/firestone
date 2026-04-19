@@ -185,12 +185,18 @@ export class DeckState {
 	}
 
 	public getCurrentClass(): string | undefined {
-		return this.hero?.classes?.[0] ? CardClass[this.hero?.classes?.[0]] : undefined;
+		const currentClass = this.getCurrentClassEnum();
+		return currentClass ? CardClass[currentClass] : undefined;
 	}
 	public getCurrentClassEnum(): CardClass | undefined {
-		return this.getCurrentClass()
-			? CardClass[this.getCurrentClass()!.toUpperCase() as keyof typeof CardClass]
-			: undefined;
+		const currentClasses = this.hero?.classes?.[0] ?? [];
+		if (currentClasses[0] === CardClass.NEUTRAL) {
+			const previousClasses = this.hero?.initialClasses?.[0] ?? [];
+			if (previousClasses[0] !== CardClass.NEUTRAL) {
+				return previousClasses[0];
+			}
+		}
+		return currentClasses[0] ?? undefined;
 	}
 
 	public updateSpellsPlayedThisMatch(
