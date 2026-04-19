@@ -533,7 +533,9 @@ export class GameEvents {
 			case 'RECEIVE_CARD_IN_HAND':
 				this.doEventDispatch(
 					GameEvent.build(GameEvent.RECEIVE_CARD_IN_HAND, gameEvent, {
-						creatorCardId: gameEvent.Value.AdditionalProps?.CreatorCardId,
+						creatorCardId: gameEvent.Value.AdditionalProps?.CreatorCardId?.length
+							? gameEvent.Value.AdditionalProps.CreatorCardId
+							: undefined,
 						creatorEntityId: gameEvent.Value.AdditionalProps?.CreatorEntityId,
 						creatorZone: gameEvent.Value.AdditionalProps?.CreatorZone,
 						creatorTags: gameEvent.Value.AdditionalProps?.CreatorTags,
