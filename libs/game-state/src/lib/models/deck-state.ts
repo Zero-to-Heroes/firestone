@@ -189,14 +189,14 @@ export class DeckState {
 		return currentClass ? CardClass[currentClass] : undefined;
 	}
 	public getCurrentClassEnum(): CardClass | undefined {
-		const currentClasses = this.hero?.classes?.[0] ?? [];
-		if (currentClasses[0] === CardClass.NEUTRAL) {
-			const previousClasses = this.hero?.initialClasses?.[0] ?? [];
-			if (previousClasses[0] !== CardClass.NEUTRAL) {
-				return previousClasses[0];
+		const currentClass = this.hero?.classes?.[0];
+		if (currentClass === CardClass.NEUTRAL) {
+			const previousClass = this.hero?.initialClasses?.[0];
+			if (previousClass !== undefined && previousClass !== CardClass.NEUTRAL) {
+				return previousClass;
 			}
 		}
-		return currentClasses[0] ?? undefined;
+		return currentClass;
 	}
 
 	public updateSpellsPlayedThisMatch(
