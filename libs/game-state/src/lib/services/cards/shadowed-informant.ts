@@ -13,7 +13,8 @@ export const ShadowedInformant: GeneratingCard & StaticGeneratingCard = {
 	publicCreator: true,
 	dynamicPool: (input: StaticGeneratingCardInput) => {
 		const card = input.inputOptions.deckState.findCard(input.entityId)?.card;
-		const classTag: number | undefined = card?.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_1];
+		const classTag: number | undefined =
+			card?.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_1] || input.inputOptions.deckState.getCurrentClassEnum();
 		return filterCards(
 			ShadowedInformant.cardIds[0],
 			input.allCards,
@@ -24,7 +25,8 @@ export const ShadowedInformant: GeneratingCard & StaticGeneratingCard = {
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
 		const creatorEntityId = input.card?.creatorEntityId;
 		const creator = input.deckState.findCard(creatorEntityId)?.card;
-		const classTag: number | undefined = creator?.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_1];
+		const classTag: number | undefined =
+			creator?.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_1] || input.deckState.getCurrentClassEnum();
 		const possibleCards = filterCards(
 			ShadowedInformant.cardIds[0],
 			input.allCards,
