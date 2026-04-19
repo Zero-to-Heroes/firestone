@@ -75,6 +75,7 @@ const internalGiftCreators = [
 	CardIds.ArcaneWyrm,
 	CardIds.ArchdruidNaralex,
 	CardIds.ArchmageAntonidas,
+	CardIds.ArchmageAntonidas_CORE_EX1_559,
 	CardIds.ArchmageAntonidasLegacy,
 	CardIds.ArchmageAntonidasVanilla,
 	CardIds.ArchmageArugal,

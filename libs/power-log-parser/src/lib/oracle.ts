@@ -356,11 +356,8 @@ export class Oracle {
 				case CardIds.ArcaneWyrm:
 					return CardIds.ArcaneBolt;
 				case CardIds.ArchmageAntonidas:
-					return CardIds.FireballCore_CORE_CS2_029;
 				case CardIds.ArchmageAntonidas_CORE_EX1_559:
-					return CardIds.FireballCore_CORE_CS2_029;
 				case CardIds.ArchmageAntonidasLegacy:
-					return CardIds.FireballCore_CORE_CS2_029;
 				case CardIds.ArchmageAntonidasVanilla:
 					return CardIds.FireballCore_CORE_CS2_029;
 				case CardIds.ArchsporeMsshifn:
