@@ -709,6 +709,7 @@ const internalGiftCreators = [
 	CardIds.RangerGilly_VAC_413,
 	CardIds.RapidFire_DAL_373,
 	CardIds.RaptorHerald_CORE_EDR_004,
+	CardIds.RaptorHerald_CORE_EDR_004_2026,
 	CardIds.RatSensei_WON_013,
 	CardIds.RatsOfExtraordinarySize,
 	CardIds.Ravencaller,

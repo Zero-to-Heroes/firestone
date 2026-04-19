@@ -795,6 +795,7 @@ const getDynamicFilters = (
 		case CardIds.PeacefulPiper:
 		case CardIds.PeacefulPiper_HappyHippie:
 		case CardIds.RaptorHerald_CORE_EDR_004:
+		case CardIds.RaptorHerald_CORE_EDR_004_2026:
 			return (c) =>
 				hasCorrectType(c, CardType.MINION) &&
 				hasCorrectTribe(c, Race.BEAST) &&
