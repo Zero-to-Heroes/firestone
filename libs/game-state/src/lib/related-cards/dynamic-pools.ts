@@ -355,7 +355,12 @@ const getDynamicRelatedCardIdsInternal = (
 		// rules (switch-only or cache) are not overridden by the generator (see Hive Map + Winterspring Whelp).
 		const deckCardForCreator = inputOptions.deckState?.findCard(entityId)?.card;
 		const creatorCardIdForPool = deckCardForCreator?.creatorCardId;
-		if (creatorCardIdForPool) {
+		// If we get a known card without a pool, we don't want to show its parent's
+		// This fallback should be only used when we have "unknown cards" created in hand/deck, and we want to show
+		// the pool of the card that created it
+		// TODO: why do we event need this in the first place? If the card was created from a pool, we could
+		// (maybe already do?) store the list of possible cards in guessedInfo, and we could just show that?
+		if (!cardId?.length && creatorCardIdForPool) {
 			const creatorPoolImpl = cardsInfoCache[creatorCardIdForPool];
 			if (hasDynamicPool(creatorPoolImpl)) {
 				return creatorPoolImpl.dynamicPool({
