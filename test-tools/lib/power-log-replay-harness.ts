@@ -190,6 +190,7 @@ const LEGACY_ENV_BY_SLUG: Record<string, string> = {
 	'malevolent-mutant': 'POWER_LOG_MALEVOLENT_MUTANT_PATH',
 	'magmaw-attack': 'POWER_LOG_MAGMAW_ATTACK_PATH',
 	'agent-old-ones': 'POWER_LOG_AGENT_OLD_ONES_PATH',
+	'onyxia-herald': 'POWER_LOG_ONYXIA_HERALD_PATH',
 };
 
 /**
@@ -239,6 +240,7 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	'magmaw-attack': 'magmaw-attack/magmaw-attack.log',
 	'fyrakk-fire-secret': 'fyrakk-fire-secret/fyrakk-fire-secret.log',
 	'agent-old-ones': 'agent-old-ones/agent-old-ones.log',
+	'onyxia-herald': 'onyxia-herald/onyxia-herald.log',
 };
 
 /**
