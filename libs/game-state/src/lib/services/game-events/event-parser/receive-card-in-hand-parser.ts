@@ -133,11 +133,14 @@ export class ReceiveCardInHandParser implements EventParser {
 			((!!cardId && isCastWhenDrawn(cardId, this.allCards)) ||
 				publicCardCreators.includes(lastInfluencedByCardId as CardIds) ||
 				specialCasePublicCardCreators.includes(cardId as CardIds));
+		const refForPublicCheck = cardId ? this.allCards.getCard(cardId) : null;
 		const isCardInfoPublic =
 			isPlayer ||
 			// Because otherwise some cards like Libram of Wisdom who generate themselves are flagged
 			// with the dead entity as creator, and are never revealed
 			cardsConsideredPublic.includes(cardId as CardIds) ||
+			// The Coin (incl. cosmetic coins): not a secret — both players know who has the extra card.
+			(!!cardId && refForPublicCheck?.isCoin === true) ||
 			// There might be some edge cases where we don't want that, but for now it's a good approximation
 			(!!cardId &&
 				(this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.ECHO]) ||

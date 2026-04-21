@@ -192,6 +192,7 @@ const LEGACY_ENV_BY_SLUG: Record<string, string> = {
 	'agent-old-ones': 'POWER_LOG_AGENT_OLD_ONES_PATH',
 	'onyxia-herald': 'POWER_LOG_ONYXIA_HERALD_PATH',
 	'discover-zone-order': 'POWER_LOG_DISCOVER_ZONE_ORDER_PATH',
+	'opponent-coin-marker': 'POWER_LOG_OPPONENT_COIN_MARKER_PATH',
 };
 
 /**
@@ -243,6 +244,7 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	'agent-old-ones': 'agent-old-ones/agent-old-ones.log',
 	'onyxia-herald': 'onyxia-herald/onyxia-herald.log',
 	'discover-zone-order': 'discover-zone-order/discover-zone-order.log',
+	'opponent-coin-marker': 'opponent-coin-marker/opponent-coin-marker.log',
 };
 
 /**
