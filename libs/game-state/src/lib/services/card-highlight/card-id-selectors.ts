@@ -3678,6 +3678,7 @@ export const cardIdSelector = (
 		case CardIds.JimRaynor_Stimpack_SC_400p:
 			return and(side(inputSide), or(inHand, inDeck), terran, minion);
 		case CardIds.StitchedGiantCore_RLK_744:
+		case CardIds.StitchedGiant_LEG_RLK_744:
 			return and(side(inputSide), or(inDeck, inHand), spendCorpse);
 		case CardIds.StolenGoods:
 		case CardIds.StolenGoods_WON_110:
