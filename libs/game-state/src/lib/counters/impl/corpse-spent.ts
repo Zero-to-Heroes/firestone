@@ -12,7 +12,11 @@ export class CorpseSpentCounterDefinitionV2 extends CounterDefinitionV2<number> 
 	public override id: CounterType = 'corpseSpent';
 	public override image = CardIds.ClimacticNecroticExplosion;
 	public override type: 'hearthstone' | 'battlegrounds' = 'hearthstone';
-	public override cards: readonly CardIds[] = [CardIds.ClimacticNecroticExplosion, CardIds.StitchedGiantCore_RLK_744];
+	public override cards: readonly CardIds[] = [
+		CardIds.ClimacticNecroticExplosion,
+		CardIds.StitchedGiantCore_RLK_744,
+		CardIds.StitchedGiant_LEG_RLK_744,
+	];
 
 	readonly player = {
 		pref: 'playerCorpseSpentCounter' as const,
