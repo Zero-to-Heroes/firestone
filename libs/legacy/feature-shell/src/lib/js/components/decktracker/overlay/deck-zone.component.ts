@@ -300,8 +300,10 @@ export class DeckZoneComponent extends AbstractSubscriptionComponent implements 
 						internalEntityIds: cards.map((card) => card.internalEntityId),
 					});
 					return result;
-				})
-				.sort((a, b) => this.compare(a, b, showUpdatedCost, deckState));
+				});
+			if (!zone.preserveInputOrder) {
+				cards = cards.sort((a, b) => this.compare(a, b, showUpdatedCost, deckState));
+			}
 			if (section.sortingFunction) {
 				cards = [...cards].sort(section.sortingFunction);
 			}

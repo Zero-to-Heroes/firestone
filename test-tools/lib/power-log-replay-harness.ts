@@ -191,6 +191,7 @@ const LEGACY_ENV_BY_SLUG: Record<string, string> = {
 	'magmaw-attack': 'POWER_LOG_MAGMAW_ATTACK_PATH',
 	'agent-old-ones': 'POWER_LOG_AGENT_OLD_ONES_PATH',
 	'onyxia-herald': 'POWER_LOG_ONYXIA_HERALD_PATH',
+	'discover-zone-order': 'POWER_LOG_DISCOVER_ZONE_ORDER_PATH',
 };
 
 /**
@@ -241,6 +242,7 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	'fyrakk-fire-secret': 'fyrakk-fire-secret/fyrakk-fire-secret.log',
 	'agent-old-ones': 'agent-old-ones/agent-old-ones.log',
 	'onyxia-herald': 'onyxia-herald/onyxia-herald.log',
+	'discover-zone-order': 'discover-zone-order/discover-zone-order.log',
 };
 
 /**
@@ -301,6 +303,11 @@ export type PowerLogReplayResult = {
 
 export type ReplayPowerLogOptions = {
 	logPath: string;
+	/**
+	 * When set, replay these lines instead of reading and trimming {@link logPath}.
+	 * `logPath` must still exist for fixture checks.
+	 */
+	logLinesOverride?: readonly string[];
 	/** Passed to ReviewIdService mock (game-start parser). */
 	reviewId?: string;
 	/** Wait after last line so async parsers finish (default 8000). */
@@ -359,7 +366,7 @@ export function requirePowerLogReplayPrerequisites(cardsPath: string, logPath: s
  * Call from a single test file or reset TestBed between uses.
  */
 export async function replayPowerLogToGameState(options: ReplayPowerLogOptions): Promise<PowerLogReplayResult | null> {
-	const { logPath, reviewId = 'power-log-replay', settleMs = 8000 } = options;
+	const { logPath, logLinesOverride, reviewId = 'power-log-replay', settleMs = 8000 } = options;
 
 	const cardsRef = resolveCardsJsonPath();
 	if (!isCardsJsonRefAvailable(cardsRef)) {
@@ -538,8 +545,10 @@ export async function replayPowerLogToGameState(options: ReplayPowerLogOptions):
 	const gameStateService = TestBed.inject(GameStateService);
 	const gameEvents = TestBed.inject(GameEvents);
 
-	const raw = fs.readFileSync(logPath, 'utf8');
-	const lines = trimPowerLogLinesToLastGame(raw.split(/\r?\n/));
+	const lines =
+		logLinesOverride != null && logLinesOverride.length > 0
+			? [...logLinesOverride]
+			: trimPowerLogLinesToLastGame(fs.readFileSync(logPath, 'utf8').split(/\r?\n/));
 
 	for (const line of lines) {
 		if (line.length) {

@@ -10,6 +10,8 @@ export interface DeckZone {
 	readonly groupSameCardsTogether?: boolean;
 	readonly groupByName?: boolean;
 	readonly sortByZoneOrder?: boolean;
+	/** When true, deck-zone keeps card list order from {@link DeckZoneSection.cards} (skip cost/name sort). */
+	readonly preserveInputOrder?: boolean;
 }
 
 export interface DeckZoneSection {

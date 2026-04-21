@@ -475,6 +475,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 					null,
 					{
 						groupSameCardsTogether: groupSameCardsTogether,
+						preserveInputOrder: true,
 					},
 					'discovery',
 					this.i18n.translateString('decktracker.zones.discovery'),
@@ -595,6 +596,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 			groupByName?: boolean;
 			sortByZoneOrder?: boolean;
 			hideGifts?: boolean;
+			preserveInputOrder?: boolean;
 		},
 		highlight?: string,
 	): readonly VisualDeckCard[] {
@@ -625,6 +627,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 			groupByName?: boolean;
 			sortByZoneOrder?: boolean;
 			hideGifts?: boolean;
+			preserveInputOrder?: boolean;
 		},
 		id: string,
 		name: string,
@@ -659,6 +662,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 			groupSameCardsTogether: options.groupSameCardsTogether,
 			groupByName: options.groupByName,
 			sortByZoneOrder: options.sortByZoneOrder,
+			preserveInputOrder: options.preserveInputOrder,
 		};
 	}
 
