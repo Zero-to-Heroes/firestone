@@ -743,7 +743,12 @@ export class BattlegroundsPlayerBoardParser implements ActionParser {
 					);
 				if (createdEntity != null) {
 					const withEnchants = BattlegroundsPlayerBoardParser.AddEnchantments(
-						stateFacade.GsState!.GameState.CurrentEntities,
+						// Why use the GameState here? If we do, this means that we will get either:
+						// - Nothing, because the GS is already over and the enchantments are all removed from game
+						// - Too much, because we will also get enchantments that were added before the combat started
+						// I assume there must have been a reason for this, but it's not documented
+						// stateFacade.GsState!.GameState.CurrentEntities,
+						stateFacade.PtlState!.GameState.CurrentEntities,
 						createdEntity,
 					);
 					heroPower.Info = withEnchants;
@@ -1011,6 +1016,9 @@ export class BattlegroundsPlayerBoardParser implements ActionParser {
 			return [];
 		}
 
+		const debugEntities = [...currentEntities.values()].filter(
+			(entity) => entity.GetTag(GameTag.ATTACHED) === fullEntity.Id,
+		);
 		const enchantmentEntities = [...currentEntities.values()].filter(
 			(entity) =>
 				entity.GetTag(GameTag.ATTACHED) === fullEntity.Id &&
