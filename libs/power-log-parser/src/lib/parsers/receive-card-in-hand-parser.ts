@@ -284,10 +284,7 @@ export class ReceiveCardInHandParser implements ActionParser {
 						const controller = this.GameState.GetController(fullEntity.GetEffectiveController());
 						if (controller?.GetTag(GameTag.CURRENT_PLAYER) !== 1) {
 							cardId = 'GAME_005';
-							// Do not set creator to The Coin — starting coin is not a "created" card; CREATOR in
-							// the log may point at the game entity (id=1).
-							creatorCardId = null;
-							creatorEntityId = null;
+							creatorCardId = 'GAME_005';
 						}
 					}
 					if (
@@ -320,9 +317,6 @@ export class ReceiveCardInHandParser implements ActionParser {
 						creator?.[0] ?? null,
 						creator?.[1] ?? -1,
 					);
-					const creatorTagVal = fullEntity.GetTag(GameTag.CREATOR);
-					const isCoinEntity = fullEntity.GetTag(GameTag.COIN_CARD) === 1;
-					const inferCreatorFromTags = !isCoinEntity && creatorTagVal > 0;
 					return {
 						Type: 'RECEIVE_CARD_IN_HAND',
 						Value: {
@@ -332,8 +326,9 @@ export class ReceiveCardInHandParser implements ActionParser {
 							OpponentPlayer: this.StateFacade.OpponentPlayer,
 							EntityId: fullEntity.Id,
 							AdditionalProps: {
-								CreatorCardId: creatorCardId ?? (inferCreatorFromTags ? 'Unknown' : null),
-								CreatorEntityId: creatorEntityId ?? (inferCreatorFromTags ? creatorTagVal : null),
+								CreatorCardId:
+									creatorCardId ?? (fullEntity.GetTag(GameTag.CREATOR) > 0 ? 'Unknown' : null),
+								CreatorEntityId: creatorEntityId ?? fullEntity.GetTag(GameTag.CREATOR),
 								CreatorZone: creatorZone,
 								CreatedIndex: createdIndex,
 								CreatorTags: creatorTags,
