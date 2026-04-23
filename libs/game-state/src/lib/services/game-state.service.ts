@@ -18,6 +18,7 @@ import { GameEventsEmitterService } from './game-events/game-events-emitter.serv
 import { GameStateParsersService } from './game-events/state-parsers.service';
 import { DeckstringOverrideEvent } from './game-state-events/deckstring-override-event';
 import { GameStateEvent } from './game-state-events/game-state-event';
+import { PtlGameStateUpdateEvent } from './game-state-events/ptl-game-state-update-event';
 import { GameStateMetaInfoService } from './game-state-meta-info.service';
 import { OverlayDisplayService } from './overlay-display.service';
 import { getEntitiesInZone, getEntityTag, getHero } from './parser-entity-utils';
@@ -169,47 +170,55 @@ export class GameStateService {
 			this.processingQueue.enqueue(gameEvent);
 		});
 		this.gameEvents.ptlGameState$.subscribe((update) => {
+			console.debug(
+				'[debug] PTL state update',
+				`localPlayerId=${update.localPlayerId}`,
+				`opponentPlayerId=${update.opponentPlayerId}`,
+				update,
+			);
 			this.updateFromPtlState(update);
 		});
 	}
 
 	updateFromPtlState(update: PtlGameStateUpdate): void {
-		let currentState = this.state;
+		this.processingQueue.enqueue(new PtlGameStateUpdateEvent(update));
+	}
+
+	private applyPtlGameStateUpdate(currentState: GameState, update: PtlGameStateUpdate): GameState {
 		if (!currentState) {
-			return;
+			console.debug('[debug] No current state');
+			return currentState;
 		}
 
-		currentState = currentState.update({
+		let next = currentState.update({
 			parserState: update.gameState,
 			localPlayerId: update.localPlayerId,
 			opponentPlayerId: update.opponentPlayerId,
 		});
+		console.debug('[debug] Updated state', next);
 
-		if (currentState.playerDeck && currentState.opponentDeck) {
+		if (next.playerDeck && next.opponentDeck) {
 			const updatedPlayerDeck = this.updateDeckFromParserState(
-				currentState.playerDeck,
-				currentState,
+				next.playerDeck,
+				next,
 				update.localPlayerId,
 			);
 			const updatedOpponentDeck = this.updateDeckFromParserState(
-				currentState.opponentDeck,
-				currentState,
+				next.opponentDeck,
+				next,
 				update.opponentPlayerId,
 			);
 			const hasChanged =
-				updatedPlayerDeck !== currentState.playerDeck || updatedOpponentDeck !== currentState.opponentDeck;
+				updatedPlayerDeck !== next.playerDeck || updatedOpponentDeck !== next.opponentDeck;
 			if (hasChanged) {
-				currentState = currentState.update({
+				next = next.update({
 					playerDeck: updatedPlayerDeck as DeckState,
 					opponentDeck: updatedOpponentDeck as DeckState,
 				});
 			}
 		}
 
-		if (currentState !== this.state) {
-			this.state = currentState;
-			this.eventEmitters.forEach((emitter) => emitter(currentState));
-		}
+		return next;
 	}
 
 	private async processQueue(eventQueue: readonly (GameEvent | GameStateEvent)[]) {
@@ -272,6 +281,9 @@ export class GameStateService {
 
 				if (currentState && currentState !== this.state) {
 					this.state = currentState;
+					if (!currentState.localPlayerId || currentState.localPlayerId <= 0) {
+						console.debug('[debug] Emitting state processQueue', currentState, eventsToProcess);
+					}
 					this.eventEmitters.forEach((emitter) => emitter(currentState));
 				}
 			} catch (e) {
@@ -282,6 +294,9 @@ export class GameStateService {
 	}
 
 	private async processNonMatchEvent(currentState: GameState, event: GameStateEvent): Promise<GameState> {
+		if (event instanceof PtlGameStateUpdateEvent) {
+			return this.applyPtlGameStateUpdate(currentState, event.update);
+		}
 		if (event.type === 'TOGGLE_SECRET_HELPER') {
 			currentState = currentState.update({
 				opponentDeck: currentState.opponentDeck.update({
@@ -480,8 +495,7 @@ export class GameStateService {
 				gameEvent.cardId,
 				`entityId:${gameEvent.entityId}`,
 				(gameEvent as MinionsDiedEvent)?.additionalData?.deadMinions?.map((m) => `entityId:${m.EntityId}`),
-				currentState.opponentDeck.board.map((c) => c.relatedCardIds),
-				currentState.opponentDeck.board,
+				`localPlayerId=${currentState.localPlayerId}`,
 				currentState,
 				gameEvent,
 			);

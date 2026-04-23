@@ -1,26 +1,26 @@
 import { BlockType, GameType } from '@firestone-hs/reference-data';
 import { BehaviorSubject } from 'rxjs';
-import { HearthstoneReplay, Game, Node } from './models';
-import { CombinedState } from './state/combined-state';
-import { GameState } from './state/game-state';
-import { StateType, INodeParser } from './state/parser-state';
-import { StateFacade } from './state/state-facade';
-import { DataHandler } from './handlers/data-handler';
-import { PowerDataHandler } from './handlers/power-data-handler';
+import { EventQueueHandler } from './event-queue-handler';
+import { GameEvent, GameEventProvider } from './game-event';
+import { GameEventHandler } from './game-event-handler';
 import { ChoicesHandler } from './handlers/choices-handler';
+import { DataHandler } from './handlers/data-handler';
 import { EntityChosenHandler } from './handlers/entity-chosen-handler';
 import { OptionsHandler } from './handlers/options-handler';
+import { PowerDataHandler } from './handlers/power-data-handler';
 import { PowerProcessorHandler } from './handlers/power-processor-handler';
 import { Helper } from './helper';
-import { Regexes } from './regexes';
 import { Logger } from './logger';
-import { GameEventProvider, GameEvent } from './game-event';
-import { EventQueueHandler } from './event-queue-handler';
-import { GameEventHandler } from './game-event-handler';
+import { HearthstoneReplay, Node } from './models';
 import { NodeParser } from './node-parser';
+import { Regexes } from './regexes';
 import { RewindCardOracle, buildRewindCardOracle } from './rewind/card-oracle';
-import { RewindController, LogStream } from './rewind/rewind-controller';
+import { LogStream, RewindController } from './rewind/rewind-controller';
 import { ParserSnapshotMeta } from './rewind/snapshot';
+import { CombinedState } from './state/combined-state';
+import { GameState } from './state/game-state';
+import { INodeParser, StateType } from './state/parser-state';
+import { StateFacade } from './state/state-facade';
 
 export { GameEvent } from './game-event';
 export { RewindCardOracle, buildRewindCardOracle } from './rewind/card-oracle';
@@ -419,8 +419,22 @@ export class ReplayParser {
 				this.previousTimestamp = normalizedTimestamp;
 				break;
 			case 'GameState.DebugPrintOptions':
-				OptionsHandler.Handle(normalizedTimestamp, data, this.State.GSState, StateType.GameState, this.State.StateFacade, this.helper);
-				OptionsHandler.Handle(normalizedTimestamp, data, this.State.PTLState, StateType.PowerTaskList, this.State.StateFacade, this.helper);
+				OptionsHandler.Handle(
+					normalizedTimestamp,
+					data,
+					this.State.GSState,
+					StateType.GameState,
+					this.State.StateFacade,
+					this.helper,
+				);
+				OptionsHandler.Handle(
+					normalizedTimestamp,
+					data,
+					this.State.PTLState,
+					StateType.PowerTaskList,
+					this.State.StateFacade,
+					this.helper,
+				);
 				this.previousTimestamp = normalizedTimestamp;
 				break;
 			case 'PowerTaskList.DebugPrintPower':
@@ -447,7 +461,13 @@ export class ReplayParser {
 				this.previousTimestamp = normalizedTimestamp;
 				break;
 			case 'PowerProcessor.EndCurrentTaskList':
-				PowerProcessorHandler.Handle(normalizedTimestamp, data, this.State.GSState, StateType.PowerTaskList, this.State.StateFacade);
+				PowerProcessorHandler.Handle(
+					normalizedTimestamp,
+					data,
+					this.State.GSState,
+					StateType.PowerTaskList,
+					this.State.StateFacade,
+				);
 				this.previousTimestamp = normalizedTimestamp;
 				break;
 			default:

@@ -2,11 +2,7 @@ import { Injectable, NgZone } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { SceneService } from '@firestone/memory';
 import { GameEvent as ParserGameEvent, ReplayParser, buildRewindCardOracle } from '@firestone/power-log-parser';
-import {
-	GameStatusService,
-	GlobalErrorService,
-	PowerLogBufferService,
-} from '@firestone/shared/common/service';
+import { GameStatusService, GlobalErrorService, PowerLogBufferService } from '@firestone/shared/common/service';
 import { freeRegexp, sleep } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ProcessingQueue } from '@firestone/shared/framework/core';
 import Deque from 'double-ended-queue';
@@ -93,7 +89,6 @@ export class GameEvents {
 					}
 				});
 			});
-
 	}
 
 	private async processQueue(eventQueue: readonly string[]): Promise<readonly string[]> {
