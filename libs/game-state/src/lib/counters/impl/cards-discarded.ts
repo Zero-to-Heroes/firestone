@@ -1,6 +1,7 @@
-import { CardIds } from '@firestone-hs/reference-data';
+import { CardClass, CardIds } from '@firestone-hs/reference-data';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { GameState } from '../../models/game-state';
+import { hasOrHadHeroClass } from '../../models/hero-card';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
 import { CounterType } from '../_exports';
 
@@ -24,9 +25,9 @@ export class CardsDiscardedCounterDefinitionV2 extends CounterDefinitionV2<numbe
 	};
 	readonly opponent = {
 		pref: 'opponentCardsDiscardedCounter' as const,
-		display: (state: GameState): boolean => true,
+		display: (state: GameState): boolean => hasOrHadHeroClass(state.opponentDeck?.hero, [CardClass.WARLOCK]),
 		value: (state: GameState): number =>
-			state.opponentDeck.otherZone?.filter((c) => c.zone === 'DISCARD').length ?? 0,
+			state.opponentDeck.otherZone?.filter((c) => c.zone === 'DISCARD').length ?? null,
 		setting: {
 			label: (i18n: ILocalizationService): string =>
 				i18n.translateString('settings.decktracker.your-deck.counters.cards-discarded-label'),
