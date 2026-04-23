@@ -1,0 +1,2831 @@
+{
+  "bgState": {
+    "duoPendingBoards": [],
+    "panels": []
+  },
+  "currentTurn": 4,
+  "gameStarted": true,
+  "gameTagTurnNumber": 7,
+  "matchStartTimestamp": "<scrubbed>",
+  "metadata": {
+    "formatType": 1,
+    "gameType": 2,
+    "scenarioId": 2
+  },
+  "miscCardsDestroyed": [],
+  "mulliganOver": true,
+  "opponentDeck": {
+    "abyssalCurseHighestValue": 0,
+    "additionalKnownCardsInDeck": [],
+    "additionalKnownCardsInHand": [],
+    "anachronos": [],
+    "astralAutomatonsSummoned": 0,
+    "beastsSummoned": 2,
+    "board": [
+      {
+        "actualManaCost": 3,
+        "cardId": "TIME_003",
+        "cardName": "Portal Vanguard",
+        "countered": false,
+        "createdIndex": 5,
+        "creatorCardId": null,
+        "entityId": 55,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": [],
+        "metaInfo": {},
+        "playTiming": 159,
+        "rarity": "rare",
+        "refManaCost": 3,
+        "relatedCardIds": [],
+        "storedInformation": null,
+        "tags": {
+          "45": 2,
+          "47": 2,
+          "48": 3,
+          "49": 1,
+          "50": 2,
+          "53": 55,
+          "199": 12,
+          "200": 24,
+          "202": 4,
+          "203": 3,
+          "218": 1,
+          "261": 1,
+          "263": 1,
+          "273": 1,
+          "466": 3,
+          "478": 2,
+          "479": 2,
+          "1037": 0,
+          "1043": 1,
+          "1068": 0,
+          "1556": 1,
+          "1570": 6,
+          "2589": 1,
+          "2840": 1,
+          "3085": 2,
+          "3557": 7,
+          "3934": 1,
+          "4472": 2
+        },
+        "temporaryCard": false,
+        "zone": "PLAY"
+      }
+    ],
+    "bonelordFrostwhisperFirstTurnTrigger": null,
+    "burnedCards": [],
+    "cardDrawnThisGame": 5,
+    "cardsAddedToHand": [
+      {
+        "cardId": "GAME_005",
+        "entityId": 68,
+        "turn": 0
+      }
+    ],
+    "cardsCounteredThisTurn": 0,
+    "cardsDrawnByTurn": [
+      {
+        "turn": "mulligan",
+        "value": 4
+      },
+      {
+        "turn": 0,
+        "value": 3
+      },
+      {
+        "turn": 1,
+        "value": 1
+      },
+      {
+        "turn": 2,
+        "value": 1
+      },
+      {
+        "turn": 3,
+        "value": 3
+      }
+    ],
+    "cardsInStartingHand": [
+      {
+        "actualManaCost": null,
+        "createdIndex": 1,
+        "entityId": 42,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": [],
+        "metaInfo": {},
+        "rarity": null,
+        "refManaCost": null,
+        "relatedCardIds": [],
+        "tags": {
+          "49": 3,
+          "50": 2,
+          "53": 42,
+          "263": 2
+        },
+        "zone": "HAND"
+      },
+      {
+        "actualManaCost": null,
+        "createdIndex": 2,
+        "entityId": 57,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": [],
+        "metaInfo": {},
+        "rarity": null,
+        "refManaCost": null,
+        "relatedCardIds": [],
+        "tags": {
+          "49": 3,
+          "50": 2,
+          "53": 57,
+          "263": 3
+        },
+        "zone": "HAND"
+      },
+      {
+        "cardId": "GAME_005",
+        "cardName": "The Coin",
+        "createdIndex": null,
+        "creatorCardId": "GAME_005",
+        "creatorEntityId": -1,
+        "entityId": 68,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": [],
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": "<scrubbed>",
+          "turnAtWhichCardEnteredCurrentZone": 0,
+          "turnAtWhichCardEnteredHand": 0
+        },
+        "rarity": null,
+        "refManaCost": 0,
+        "relatedCardIds": [],
+        "tags": {
+          "49": 3,
+          "50": 2,
+          "53": 68,
+          "263": 4
+        },
+        "zone": "HAND"
+      },
+      {
+        "actualManaCost": null,
+        "createdIndex": 6,
+        "entityId": 38,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": [],
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": "<scrubbed>",
+          "turnAtWhichCardEnteredCurrentZone": 0,
+          "turnAtWhichCardEnteredHand": 0
+        },
+        "rarity": null,
+        "refManaCost": null,
+        "relatedCardIds": [],
+        "tags": {
+          "49": 3,
+          "50": 2,
+          "53": 38,
+          "263": 3
+        },
+        "zone": "HAND"
+      },
+      {
+        "actualManaCost": null,
+        "createdIndex": 0,
+        "entityId": 39,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": [],
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": "<scrubbed>",
+          "turnAtWhichCardEnteredCurrentZone": 0,
+          "turnAtWhichCardEnteredHand": 0
+        },
+        "rarity": null,
+        "refManaCost": null,
+        "relatedCardIds": [],
+        "tags": {
+          "49": 3,
+          "50": 2,
+          "53": 39,
+          "263": 1
+        },
+        "zone": "HAND"
+      }
+    ],
+    "cardsLeftInDeck": 30,
+    "cardsPlayedFromInitialDeck": [
+      {
+        "cardId": "EDR_456",
+        "entityId": 57
+      },
+      {
+        "cardId": "CORE_EDR_004_2026",
+        "entityId": 37
+      },
+      {
+        "cardId": "CORE_EDR_004_2026",
+        "entityId": 37
+      },
+      {
+        "cardId": "TIME_003",
+        "entityId": 55
+      },
+      {
+        "cardId": "TIME_003",
+        "entityId": 55
+      }
+    ],
+    "cardsPlayedLastTurn": [
+      "<cycle>",
+      {
+        "actualManaCost": 3,
+        "cardId": "TIME_003",
+        "cardName": "Portal Vanguard",
+        "countered": false,
+        "creatorCardId": null,
+        "entityId": 55,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": [],
+        "metaInfo": {},
+        "playTiming": 160,
+        "rarity": "rare",
+        "refManaCost": 3,
+        "relatedCardIds": [],
+        "storedInformation": null,
+        "tags": {
+          "45": 2,
+          "47": 2,
+          "48": 3,
+          "49": 1,
+          "50": 2,
+          "53": 55,
+          "199": 12,
+          "200": 24,
+          "202": 4,
+          "203": 3,
+          "218": 1,
+          "261": 1,
+          "263": 0,
+          "273": 1,
+          "466": 3,
+          "478": 2,
+          "479": 2,
+          "1037": 0,
+          "1043": 1,
+          "1068": 0,
+          "1556": 1,
+          "1570": 6,
+          "2589": 1,
+          "2840": 1,
+          "3085": 2,
+          "3557": 7,
+          "3934": 1,
+          "3945": 1,
+          "4384": 55,
+          "4385": 2,
+          "4472": 2
+        },
+        "temporaryCard": false,
+        "zone": "PLAY"
+      }
+    ],
+    "cardsPlayedThisMatch": [
+      {
+        "cardId": "EDR_456",
+        "entityId": 57,
+        "side": "opponent",
+        "timestamp": "<scrubbed>",
+        "turn": 1
+      },
+      {
+        "cardId": "GAME_005",
+        "entityId": 68,
+        "side": "opponent",
+        "timestamp": "<scrubbed>",
+        "turn": 2
+      },
+      {
+        "cardId": "CORE_EDR_004_2026",
+        "entityId": 37,
+        "side": "opponent",
+        "timestamp": "<scrubbed>",
+        "turn": 2
+      },
+      {
+        "cardId": "CORE_EDR_004_2026",
+        "entityId": 37,
+        "side": "opponent",
+        "timestamp": "<scrubbed>",
+        "turn": 2
+      },
+      {
+        "cardId": "TIME_003",
+        "entityId": 55,
+        "side": "opponent",
+        "timestamp": "<scrubbed>",
+        "turn": 3
+      },
+      {
+        "cardId": "TIME_003",
+        "entityId": 55,
+        "side": "opponent",
+        "timestamp": "<scrubbed>",
+        "turn": 3
+      }
+    ],
+    "cardsPlayedThisTurn": "<cycle>",
+    "cardsShuffledIntoDeck": 0,
+    "chaoticTendrilsPlayedThisMatch": 0,
+    "corpsesGainedThisGame": 2,
+    "corpsesSpent": 0,
+    "cthunAtk": 0,
+    "cthunHealth": 0,
+    "currentExcavateTier": 0,
+    "currentOptions": [],
+    "damageDealtThisTurn": [],
+    "damageTakenOnYourTurns": [],
+    "damageTakenThisTurn": 0,
+    "deck": [
+      {
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": [],
+        "metaInfo": {},
+        "relatedCardIds": [],
+        "tags": {}
+      },
+      {
+        "forged": 0,
+        "guessedInfo": "<cycle>",
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": "<cycle>",
+        "metaInfo": "<cycle>",
+        "relatedCardIds": "<cycle>",
+        "tags": "<cycle>"
+      },
+      {
+        "forged": 0,
+        "guessedInfo": "<cycle>",
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": "<cycle>",
+        "metaInfo": "<cycle>",
+        "relatedCardIds": "<cycle>",
+        "tags": "<cycle>"
+      },
+      {
+        "forged": 0,
+        "guessedInfo": "<cycle>",
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": "<cycle>",
+        "metaInfo": "<cycle>",
+        "relatedCardIds": "<cycle>",
+        "tags": "<cycle>"
+      },
+      {
+        "forged": 0,
+        "guessedInfo": "<cycle>",
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": "<cycle>",
+        "metaInfo": "<cycle>",
+        "relatedCardIds": "<cycle>",
+        "tags": "<cycle>"
+      },
+      {
+        "forged": 0,
+        "guessedInfo": "<cycle>",
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": "<cycle>",
+        "metaInfo": "<cycle>",
+        "relatedCardIds": "<cycle>",
+        "tags": "<cycle>"
+      },
+      {
+        "forged": 0,
+        "guessedInfo": "<cycle>",
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": "<cycle>",
+        "metaInfo": "<cycle>",
+        "relatedCardIds": "<cycle>",
+        "tags": "<cycle>"
+      },
+      {
+        "forged": 0,
+        "guessedInfo": "<cycle>",
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": "<cycle>",
+        "metaInfo": "<cycle>",
+        "relatedCardIds": "<cycle>",
+        "tags": "<cycle>"
+      },
+      {
+        "forged": 0,
+        "guessedInfo": "<cycle>",
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": "<cycle>",
+        "metaInfo": "<cycle>",
+        "relatedCardIds": "<cycle>",
+        "tags": "<cycle>"
+      },
+      {
+        "forged": 0,
+        "guessedInfo": "<cycle>",
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": "<cycle>",
+        "metaInfo": "<cycle>",
+        "relatedCardIds": "<cycle>",
+        "tags": "<cycle>"
+      },
+      {
+        "forged": 0,
+        "guessedInfo": "<cycle>",
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": "<cycle>",
+        "metaInfo": "<cycle>",
+        "relatedCardIds": "<cycle>",
+        "tags": "<cycle>"
+      },
+      {
+        "forged": 0,
+        "guessedInfo": "<cycle>",
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": "<cycle>",
+        "metaInfo": "<cycle>",
+        "relatedCardIds": "<cycle>",
+        "tags": "<cycle>"
+      },
+      {
+        "forged": 0,
+        "guessedInfo": "<cycle>",
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": "<cycle>",
+        "metaInfo": "<cycle>",
+        "relatedCardIds": "<cycle>",
+        "tags": "<cycle>"
+      },
+      {
+        "forged": 0,
+        "guessedInfo": "<cycle>",
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": "<cycle>",
+        "metaInfo": "<cycle>",
+        "relatedCardIds": "<cycle>",
+        "tags": "<cycle>"
+      },
+      {
+        "forged": 0,
+        "guessedInfo": "<cycle>",
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": "<cycle>",
+        "metaInfo": "<cycle>",
+        "relatedCardIds": "<cycle>",
+        "tags": "<cycle>"
+      },
+      {
+        "forged": 0,
+        "guessedInfo": "<cycle>",
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": "<cycle>",
+        "metaInfo": "<cycle>",
+        "relatedCardIds": "<cycle>",
+        "tags": "<cycle>"
+      },
+      {
+        "forged": 0,
+        "guessedInfo": "<cycle>",
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": "<cycle>",
+        "metaInfo": "<cycle>",
+        "relatedCardIds": "<cycle>",
+        "tags": "<cycle>"
+      },
+      {
+        "forged": 0,
+        "guessedInfo": "<cycle>",
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": "<cycle>",
+        "metaInfo": "<cycle>",
+        "relatedCardIds": "<cycle>",
+        "tags": "<cycle>"
+      },
+      {
+        "actualManaCost": null,
+        "createdIndex": 3,
+        "entityId": 51,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "lastAffectedByCardId": "",
+        "linkedEntityIds": [],
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": "<scrubbed>",
+          "turnAtWhichCardEnteredHand": 0
+        },
+        "rarity": null,
+        "refManaCost": null,
+        "relatedCardIds": [],
+        "tags": {
+          "49": 3,
+          "50": 2,
+          "53": 51,
+          "263": 1
+        },
+        "temporaryCard": false
+      },
+      {
+        "actualManaCost": null,
+        "createdIndex": 4,
+        "entityId": 36,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "lastAffectedByCardId": "",
+        "linkedEntityIds": [],
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": "<scrubbed>",
+          "turnAtWhichCardEnteredHand": 0
+        },
+        "rarity": null,
+        "refManaCost": null,
+        "relatedCardIds": [],
+        "tags": {
+          "49": 3,
+          "50": 2,
+          "53": 36,
+          "263": 2
+        },
+        "temporaryCard": false
+      },
+      {
+        "actualManaCost": null,
+        "createdIndex": 5,
+        "entityId": 46,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "lastAffectedByCardId": "",
+        "linkedEntityIds": [],
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": "<scrubbed>",
+          "turnAtWhichCardEnteredHand": 0
+        },
+        "rarity": null,
+        "refManaCost": null,
+        "relatedCardIds": [],
+        "tags": {
+          "49": 3,
+          "50": 2,
+          "53": 46,
+          "263": 3
+        },
+        "temporaryCard": false
+      }
+    ],
+    "deckList": [],
+    "destroyedCardsInDeck": [],
+    "discoversThisGame": 2,
+    "dragonsSummoned": 2,
+    "earthenGolemsSummoned": 0,
+    "elementalsPlayedLastTurn": 0,
+    "elementalsPlayedThisTurn": 0,
+    "elwynnBoarsDeadThisMatch": 0,
+    "enchantments": [],
+    "fatigue": 0,
+    "friendlyAttacksThisMatch": 1,
+    "galakrondInvokesCount": 0,
+    "globalEffects": [],
+    "hand": [
+      "<cycle>",
+      "<cycle>",
+      {
+        "actualManaCost": null,
+        "createdIndex": 1,
+        "entityId": 42,
+        "forged": 0,
+        "guessedInfo": "<cycle>",
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": "<cycle>",
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": "<scrubbed>",
+          "turnAtWhichCardEnteredCurrentZone": 1,
+          "turnAtWhichCardEnteredHand": 1
+        },
+        "rarity": null,
+        "refManaCost": null,
+        "relatedCardIds": "<cycle>",
+        "tags": "<cycle>",
+        "zone": "HAND"
+      },
+      {
+        "cardId": "",
+        "createdIndex": 0,
+        "creatorCardId": "EDR_456",
+        "creatorEntityId": 57,
+        "entityId": 89,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "lastAffectedByCardId": "EDR_102t",
+        "linkedEntityIds": [],
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": "<scrubbed>",
+          "turnAtWhichCardEnteredCurrentZone": 2,
+          "turnAtWhichCardEnteredHand": 2
+        },
+        "relatedCardIds": [],
+        "tags": {
+          "49": 6,
+          "50": 2,
+          "53": 89,
+          "263": 4,
+          "385": 57
+        },
+        "temporaryCard": true,
+        "zone": "HAND"
+      },
+      {
+        "actualManaCost": null,
+        "createdIndex": 4,
+        "entityId": 40,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": [],
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": "<scrubbed>",
+          "turnAtWhichCardEnteredCurrentZone": 2,
+          "turnAtWhichCardEnteredHand": 2
+        },
+        "rarity": null,
+        "refManaCost": null,
+        "relatedCardIds": [],
+        "tags": {
+          "49": 3,
+          "50": 2,
+          "53": 40,
+          "263": 5
+        },
+        "zone": "HAND"
+      },
+      {
+        "cardId": "",
+        "createdIndex": 0,
+        "creatorCardId": "CORE_EDR_004_2026",
+        "creatorEntityId": 37,
+        "entityId": 99,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": [],
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": "<scrubbed>",
+          "turnAtWhichCardEnteredCurrentZone": 2,
+          "turnAtWhichCardEnteredHand": 2
+        },
+        "relatedCardIds": [],
+        "tags": {
+          "49": 6,
+          "50": 2,
+          "53": 99,
+          "263": 6,
+          "385": 37
+        },
+        "temporaryCard": true,
+        "zone": "HAND"
+      },
+      {
+        "actualManaCost": null,
+        "createdIndex": 0,
+        "entityId": 44,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "lastAffectedByCardId": "TIME_003",
+        "lastAffectedByEntityId": 55,
+        "linkedEntityIds": [],
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": "<scrubbed>",
+          "turnAtWhichCardEnteredCurrentZone": 3,
+          "turnAtWhichCardEnteredHand": 3
+        },
+        "rarity": null,
+        "refManaCost": null,
+        "relatedCardIds": [],
+        "tags": {
+          "49": 3,
+          "50": 2,
+          "53": 44,
+          "263": 7
+        },
+        "zone": "HAND"
+      },
+      {
+        "actualManaCost": null,
+        "createdIndex": 0,
+        "entityId": 49,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "lastAffectedByCardId": "TIME_003",
+        "lastAffectedByEntityId": 55,
+        "linkedEntityIds": [],
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": "<scrubbed>",
+          "turnAtWhichCardEnteredCurrentZone": 3,
+          "turnAtWhichCardEnteredHand": 3
+        },
+        "rarity": null,
+        "refManaCost": null,
+        "relatedCardIds": [],
+        "tags": {
+          "49": 3,
+          "50": 2,
+          "53": 49,
+          "263": 7
+        },
+        "zone": "HAND"
+      }
+    ],
+    "heraldCountThisGame": 0,
+    "hero": {
+      "cardId": "HERO_01",
+      "classes": [
+        10
+      ],
+      "entityId": 66,
+      "initialClasses": [],
+      "maxHealth": 30,
+      "playerName": "DaedinTest"
+    },
+    "heroAttacksThisMatch": 0,
+    "heroDamageHitsThisTurn": 0,
+    "heroPower": {
+      "cardId": "HERO_01bp",
+      "cardName": "Armor Up!",
+      "entityId": 67,
+      "forged": 0,
+      "guessedInfo": {},
+      "internalEntityId": "<scrubbed>",
+      "linkedEntityIds": [],
+      "metaInfo": {},
+      "playTiming": 151,
+      "rarity": "Free",
+      "refManaCost": 2,
+      "relatedCardIds": [],
+      "tags": {},
+      "temporaryCard": false,
+      "zone": "PLAY"
+    },
+    "heroPowerDamageThisMatch": 0,
+    "heroPowerUsed": 0,
+    "isActivePlayer": false,
+    "isFirstPlayer": false,
+    "isOpponent": true,
+    "jadeGolemSize": 0,
+    "libramsPlayedThisMatch": 0,
+    "locationsUsed": 0,
+    "manaLeft": 0,
+    "manaSpentOnHolySpellsThisMatch": 0,
+    "manaSpentOnSpellsThisMatch": 0,
+    "manaUsedThisTurn": 3,
+    "maxExcavateTier": 3,
+    "minionsDeadSinceLastTurn": [],
+    "minionsDeadThisMatch": [
+      {
+        "cardId": "EDR_456",
+        "effectiveCost": 1,
+        "entityId": 57
+      },
+      {
+        "cardId": "CORE_EDR_004_2026",
+        "effectiveCost": 3,
+        "entityId": 37
+      }
+    ],
+    "minionsDeadThisTurn": [],
+    "otherZone": [
+      {
+        "cardId": "",
+        "entityId": 88,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "lastAffectedByCardId": "EDR_102t",
+        "linkedEntityIds": [],
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": null
+        },
+        "relatedCardIds": [],
+        "tags": {
+          "49": 6,
+          "50": 2,
+          "53": 88
+        },
+        "temporaryCard": true,
+        "zone": "SETASIDE"
+      },
+      {
+        "cardId": "",
+        "entityId": 90,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "lastAffectedByCardId": "EDR_102t",
+        "linkedEntityIds": [],
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": null
+        },
+        "relatedCardIds": [],
+        "tags": {
+          "49": 6,
+          "50": 2,
+          "53": 90
+        },
+        "temporaryCard": true,
+        "zone": "SETASIDE"
+      },
+      {
+        "cardId": "",
+        "entityId": 91,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "lastAffectedByCardId": "EDR_102t",
+        "linkedEntityIds": [],
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": null
+        },
+        "relatedCardIds": [],
+        "tags": {
+          "49": 6,
+          "50": 2,
+          "53": 91
+        },
+        "temporaryCard": true,
+        "zone": "SETASIDE"
+      },
+      {
+        "cardId": "",
+        "entityId": 93,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "lastAffectedByCardId": "EDR_102t",
+        "linkedEntityIds": [],
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": null
+        },
+        "relatedCardIds": [],
+        "tags": {
+          "49": 6,
+          "50": 2,
+          "53": 93
+        },
+        "temporaryCard": true,
+        "zone": "SETASIDE"
+      },
+      {
+        "cardId": "",
+        "entityId": 94,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "lastAffectedByCardId": "EDR_100t1",
+        "linkedEntityIds": [],
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": null
+        },
+        "relatedCardIds": [],
+        "tags": {
+          "49": 6,
+          "50": 2,
+          "53": 94
+        },
+        "temporaryCard": true,
+        "zone": "SETASIDE"
+      },
+      {
+        "actualManaCost": 1,
+        "cardId": "EDR_456",
+        "cardName": "Darkrider",
+        "countered": false,
+        "createdIndex": 2,
+        "creatorCardId": null,
+        "entityId": -57,
+        "forged": 0,
+        "guessedInfo": "<cycle>",
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": "<cycle>",
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": null
+        },
+        "playTiming": 153,
+        "rarity": "rare",
+        "refManaCost": 1,
+        "relatedCardIds": "<cycle>",
+        "storedInformation": null,
+        "tags": {
+          "12": 1,
+          "45": 1,
+          "47": 2,
+          "48": 1,
+          "49": 1,
+          "50": 2,
+          "53": 57,
+          "199": 10,
+          "200": 15,
+          "202": 4,
+          "203": 3,
+          "218": 1,
+          "261": 1,
+          "263": 1,
+          "273": 2,
+          "386": 1,
+          "415": 1,
+          "466": 1,
+          "478": 2,
+          "479": 2,
+          "1037": 0,
+          "1043": 1,
+          "1068": 0,
+          "1271": 0,
+          "1326": 0,
+          "1380": 0,
+          "1556": 1,
+          "2485": 0,
+          "2840": 1,
+          "3085": 1,
+          "3557": 3,
+          "3669": 0,
+          "3908": 0,
+          "4050": 1,
+          "4472": 2
+        },
+        "temporaryCard": false,
+        "zone": "GRAVEYARD"
+      },
+      {
+        "cardId": "GAME_005",
+        "cardName": "The Coin",
+        "countered": false,
+        "createdIndex": null,
+        "creatorCardId": "GAME_005",
+        "creatorEntityId": -1,
+        "entityId": 68,
+        "forged": 0,
+        "guessedInfo": "<cycle>",
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": "<cycle>",
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": null
+        },
+        "playTiming": null,
+        "refManaCost": 0,
+        "relatedCardIds": "<cycle>",
+        "storedInformation": null,
+        "tags": {
+          "49": 1,
+          "50": 2,
+          "53": 68,
+          "199": 12,
+          "202": 5,
+          "261": 1,
+          "263": 0,
+          "273": 4,
+          "313": 1,
+          "1068": 0,
+          "1107": 1,
+          "1556": 1,
+          "2088": 1,
+          "3557": 4
+        },
+        "temporaryCard": false,
+        "zone": null
+      },
+      {
+        "cardId": "",
+        "entityId": 100,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "lastAffectedByCardId": "EDR_102t",
+        "linkedEntityIds": [],
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": null
+        },
+        "relatedCardIds": [],
+        "tags": {
+          "49": 6,
+          "50": 2,
+          "53": 100
+        },
+        "temporaryCard": true,
+        "zone": "SETASIDE"
+      },
+      {
+        "cardId": "",
+        "entityId": 101,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "lastAffectedByCardId": "EDR_102t",
+        "linkedEntityIds": [],
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": null
+        },
+        "relatedCardIds": [],
+        "tags": {
+          "49": 6,
+          "50": 2,
+          "53": 101
+        },
+        "temporaryCard": true,
+        "zone": "SETASIDE"
+      },
+      {
+        "cardId": "",
+        "entityId": 103,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "lastAffectedByCardId": "EDR_102t",
+        "linkedEntityIds": [],
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": null
+        },
+        "relatedCardIds": [],
+        "tags": {
+          "49": 6,
+          "50": 2,
+          "53": 103
+        },
+        "temporaryCard": true,
+        "zone": "SETASIDE"
+      },
+      {
+        "cardId": "",
+        "entityId": 104,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "lastAffectedByCardId": "EDR_102t",
+        "linkedEntityIds": [],
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": null
+        },
+        "relatedCardIds": [],
+        "tags": {
+          "49": 6,
+          "50": 2,
+          "53": 104
+        },
+        "temporaryCard": true,
+        "zone": "SETASIDE"
+      },
+      {
+        "cardId": "",
+        "entityId": 105,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "lastAffectedByCardId": "EDR_100t5",
+        "linkedEntityIds": [],
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": null
+        },
+        "relatedCardIds": [],
+        "tags": {
+          "49": 6,
+          "50": 2,
+          "53": 105
+        },
+        "temporaryCard": true,
+        "zone": "SETASIDE"
+      },
+      {
+        "cardId": "",
+        "entityId": 106,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "lastAffectedByCardId": "CORE_EDR_004_2026",
+        "linkedEntityIds": [],
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": null
+        },
+        "relatedCardIds": [],
+        "tags": {
+          "49": 6,
+          "50": 2,
+          "53": 106
+        },
+        "temporaryCard": true,
+        "zone": "SETASIDE"
+      },
+      {
+        "cardId": "TIME_000tb",
+        "cardName": "Rewind Timeline",
+        "entityId": 107,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "lastAffectedByCardId": "CORE_EDR_004_2026",
+        "linkedEntityIds": [],
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": null
+        },
+        "refManaCost": 0,
+        "relatedCardIds": [],
+        "tags": {
+          "49": 6,
+          "50": 2,
+          "53": 107
+        },
+        "temporaryCard": true,
+        "zone": "SETASIDE"
+      },
+      {
+        "cardId": "TIME_000tb",
+        "cardName": "Rewind Timeline",
+        "countered": false,
+        "creatorCardId": "CORE_EDR_004_2026",
+        "creatorEntityId": 37,
+        "entityId": 108,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": [],
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": null
+        },
+        "playTiming": null,
+        "putIntoPlay": true,
+        "refManaCost": 0,
+        "relatedCardIds": [],
+        "tags": {
+          "2": 37,
+          "49": 1,
+          "50": 2,
+          "53": 108,
+          "199": 12,
+          "202": 5,
+          "313": 37,
+          "684": 1,
+          "1037": 2,
+          "1068": 0,
+          "1284": 131356,
+          "1556": 1,
+          "1715": 37,
+          "3934": 1
+        },
+        "temporaryCard": true,
+        "zone": null
+      },
+      {
+        "cardId": "",
+        "entityId": 109,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "lastAffectedByCardId": "TIME_003",
+        "linkedEntityIds": [],
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": null
+        },
+        "relatedCardIds": [],
+        "tags": {
+          "49": 6,
+          "50": 2,
+          "53": 109
+        },
+        "temporaryCard": true,
+        "zone": "SETASIDE"
+      },
+      {
+        "cardId": "",
+        "entityId": 110,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "lastAffectedByCardId": "TIME_003",
+        "linkedEntityIds": [],
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": null
+        },
+        "relatedCardIds": [],
+        "tags": {
+          "49": 6,
+          "50": 2,
+          "53": 110
+        },
+        "temporaryCard": true,
+        "zone": "SETASIDE"
+      },
+      {
+        "cardId": "TIME_000tb",
+        "cardName": "Rewind Timeline",
+        "entityId": 111,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "lastAffectedByCardId": "TIME_003",
+        "linkedEntityIds": [],
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": null
+        },
+        "refManaCost": 0,
+        "relatedCardIds": [],
+        "tags": {
+          "49": 6,
+          "50": 2,
+          "53": 111
+        },
+        "temporaryCard": true,
+        "zone": "SETASIDE"
+      },
+      {
+        "cardId": "TIME_000tb",
+        "cardName": "Rewind Timeline",
+        "countered": false,
+        "creatorCardId": "TIME_003",
+        "creatorEntityId": 55,
+        "entityId": 112,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": [],
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": null
+        },
+        "playTiming": null,
+        "putIntoPlay": true,
+        "refManaCost": 0,
+        "relatedCardIds": [],
+        "tags": {
+          "2": 55,
+          "49": 1,
+          "50": 2,
+          "53": 112,
+          "199": 12,
+          "202": 5,
+          "313": 55,
+          "684": 1,
+          "1037": 2,
+          "1068": 0,
+          "1284": 119314,
+          "1556": 1,
+          "1715": 55,
+          "3934": 1
+        },
+        "temporaryCard": true,
+        "zone": null
+      },
+      {
+        "actualManaCost": 3,
+        "cardId": "CORE_EDR_004_2026",
+        "cardName": "Raptor Herald",
+        "countered": false,
+        "createdIndex": 3,
+        "creatorCardId": null,
+        "entityId": -37,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": [],
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": null
+        },
+        "playTiming": 155,
+        "rarity": "epic",
+        "refManaCost": 3,
+        "relatedCardIds": [],
+        "storedInformation": null,
+        "tags": {
+          "45": 2,
+          "47": 4,
+          "48": 3,
+          "49": 1,
+          "50": 2,
+          "53": 37,
+          "199": 12,
+          "200": 20,
+          "202": 4,
+          "203": 4,
+          "218": 1,
+          "261": 1,
+          "263": 1,
+          "273": 3,
+          "415": 1,
+          "466": 3,
+          "478": 2,
+          "479": 4,
+          "858": 119798,
+          "1037": 0,
+          "1043": 1,
+          "1068": 0,
+          "1413": 119798,
+          "1556": 1,
+          "1570": 2,
+          "2840": 1,
+          "3085": 2,
+          "3557": 4,
+          "3934": 1,
+          "4028": 1,
+          "4050": 1,
+          "4472": 4
+        },
+        "temporaryCard": false,
+        "zone": "GRAVEYARD"
+      }
+    ],
+    "overloadedCrystals": 0,
+    "piratesSummoned": 0,
+    "plaguesShuffledIntoEnemyDeck": 0,
+    "pogoHopperSize": 0,
+    "relicsPlayedThisMatch": 0,
+    "secretHelperActive": true,
+    "secrets": [],
+    "secretsTriggeredThisMatch": [],
+    "spellsPlayedOnEnemyEntities": [],
+    "spellsPlayedOnFriendlyEntities": [],
+    "spellsPlayedOnFriendlyMinions": [],
+    "spellsPlayedThisMatch": [
+      "<cycle>"
+    ],
+    "starshipsLaunched": [],
+    "totalAttackOnBoard": {
+      "board": 2,
+      "hero": 2
+    },
+    "totalExcavates": 0,
+    "totemsSummoned": 0,
+    "treantsSummoned": 0,
+    "turnDuration": 75000,
+    "turnTimings": [
+      {
+        "endTimestamp": 1776873051047,
+        "startTimestamp": 1776873037489,
+        "turn": 1
+      },
+      {
+        "endTimestamp": 1776873107577,
+        "startTimestamp": 1776873058434,
+        "turn": 2
+      },
+      {
+        "endTimestamp": 1776873151344,
+        "startTimestamp": 1776873118548,
+        "turn": 3
+      }
+    ],
+    "uniqueSpellSchools": [],
+    "volatileSkeletonsDeadThisMatch": 0,
+    "watchpostsPlayedThisMatch": 0,
+    "weapon": {
+      "cardId": "REV_933",
+      "cardName": "Imbued Axe",
+      "creatorCardId": "TIME_034",
+      "entityId": 112,
+      "forged": 0,
+      "guessedInfo": {},
+      "internalEntityId": "<scrubbed>",
+      "linkedEntityIds": [],
+      "metaInfo": {
+        "timestampAtWhichCardEnteredHand": null
+      },
+      "playTiming": 166,
+      "rarity": "Common",
+      "refManaCost": 3,
+      "relatedCardIds": [],
+      "tags": {},
+      "temporaryCard": false,
+      "zone": "PLAY"
+    },
+    "weaponsEquippedThisGame": 2
+  },
+  "playerDeck": {
+    "abyssalCurseHighestValue": 0,
+    "additionalKnownCardsInDeck": [],
+    "additionalKnownCardsInHand": [],
+    "anachronos": [],
+    "astralAutomatonsSummoned": 0,
+    "beastsSummoned": 0,
+    "board": [
+      {
+        "actualManaCost": 2,
+        "cardId": "EDR_889",
+        "cardName": "Petal Peddler",
+        "countered": false,
+        "createdIndex": 3,
+        "creatorCardId": null,
+        "entityId": 7,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "lastAffectedByCardId": "",
+        "lastAffectedByEntityId": 2,
+        "linkedEntityIds": [],
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": "<scrubbed>",
+          "turnAtWhichCardEnteredHand": 1
+        },
+        "playTiming": 154,
+        "rarity": "common",
+        "refManaCost": 2,
+        "relatedCardIds": [],
+        "storedInformation": null,
+        "tags": {
+          "12": 1,
+          "32": 1,
+          "43": 1,
+          "45": 4,
+          "47": 1,
+          "48": 2,
+          "49": 1,
+          "50": 1,
+          "53": 7,
+          "199": 12,
+          "200": 24,
+          "202": 4,
+          "203": 1,
+          "261": 0,
+          "263": 1,
+          "271": 1,
+          "273": 3,
+          "466": 2,
+          "478": 1,
+          "479": 1,
+          "1037": 0,
+          "1043": 1,
+          "1068": 0,
+          "1196": 0,
+          "1556": 1,
+          "1570": 1,
+          "2840": 1,
+          "3085": 4,
+          "3557": 3,
+          "4472": 1
+        },
+        "temporaryCard": false,
+        "zone": "PLAY"
+      },
+      {
+        "actualManaCost": 4,
+        "cardId": "TIME_034",
+        "cardName": "Stadium Announcer",
+        "countered": false,
+        "createdIndex": 4,
+        "creatorCardId": "EDR_456",
+        "entityId": 79,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "lastAffectedByCardId": "",
+        "lastAffectedByEntityId": 2,
+        "linkedEntityIds": [],
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": "<scrubbed>",
+          "turnAtWhichCardEnteredHand": 2
+        },
+        "playTiming": 161,
+        "positionFromTop": -6,
+        "rarity": "rare",
+        "refManaCost": 4,
+        "relatedCardIds": [],
+        "storedInformation": null,
+        "tags": {
+          "12": 1,
+          "18": 82,
+          "43": 1,
+          "45": 8,
+          "47": 7,
+          "48": 4,
+          "49": 1,
+          "50": 1,
+          "53": 79,
+          "199": 10,
+          "200": 24,
+          "202": 4,
+          "203": 3,
+          "218": 1,
+          "261": 1,
+          "263": 2,
+          "273": 5,
+          "313": 78,
+          "385": 20,
+          "466": 4,
+          "479": 7,
+          "1037": 0,
+          "1068": 0,
+          "1196": 1,
+          "1284": 115323,
+          "1556": 1,
+          "1570": 3,
+          "1711": 1,
+          "2840": 1,
+          "3085": 8,
+          "3557": 3,
+          "3880": 1,
+          "3934": 1,
+          "3945": 1,
+          "4384": 79,
+          "4385": 2,
+          "4472": 7,
+          "4741": 1
+        },
+        "temporaryCard": false,
+        "zone": "PLAY"
+      }
+    ],
+    "bonelordFrostwhisperFirstTurnTrigger": null,
+    "burnedCards": [],
+    "cardDrawnThisGame": 4,
+    "cardsAddedToHand": [
+      {
+        "cardId": "EDR_457",
+        "entityId": 14,
+        "turn": 0
+      },
+      {
+        "cardId": "TLC_600",
+        "entityId": 19,
+        "turn": 0
+      },
+      {
+        "cardId": "FIR_939",
+        "entityId": 16,
+        "turn": 0
+      },
+      {
+        "cardId": "EDR_456",
+        "entityId": 20,
+        "turn": 0
+      },
+      {
+        "cardId": "TLC_600",
+        "entityId": 4,
+        "turn": 0
+      },
+      {
+        "cardId": "TIME_038",
+        "entityId": 18,
+        "turn": 0
+      },
+      {
+        "cardId": "EDR_889",
+        "entityId": 7,
+        "turn": 1
+      },
+      {
+        "cardId": "TIME_034",
+        "entityId": 79,
+        "turn": 1
+      },
+      {
+        "cardId": "TIME_034",
+        "entityId": 79,
+        "turn": 2
+      },
+      {
+        "cardId": "EDR_457",
+        "entityId": 14,
+        "turn": 3
+      },
+      {
+        "cardId": "DINO_401",
+        "entityId": 28,
+        "turn": 4
+      }
+    ],
+    "cardsCounteredThisTurn": 0,
+    "cardsDrawnByTurn": [
+      {
+        "turn": "mulligan",
+        "value": 3
+      },
+      {
+        "turn": 0,
+        "value": 3
+      },
+      {
+        "turn": 1,
+        "value": 1
+      },
+      {
+        "turn": 2,
+        "value": 1
+      },
+      {
+        "turn": 3,
+        "value": 1
+      },
+      {
+        "turn": 4,
+        "value": 1
+      }
+    ],
+    "cardsInStartingHand": [
+      {
+        "actualManaCost": 1,
+        "cardId": "EDR_456",
+        "cardName": "Darkrider",
+        "createdIndex": 0,
+        "creatorEntityId": null,
+        "entityId": 20,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "lastAffectedByCardId": "",
+        "lastAffectedByEntityId": 2,
+        "linkedEntityIds": [],
+        "metaInfo": {},
+        "refManaCost": 1,
+        "relatedCardIds": [],
+        "tags": {
+          "12": 1,
+          "43": 1,
+          "45": 1,
+          "47": 2,
+          "48": 1,
+          "49": 1,
+          "50": 1,
+          "53": 20,
+          "199": 10,
+          "200": 15,
+          "202": 4,
+          "203": 3,
+          "218": 1,
+          "261": 1,
+          "263": 1,
+          "273": 1,
+          "386": 0,
+          "415": 1,
+          "466": 1,
+          "478": 1,
+          "479": 2,
+          "1037": 0,
+          "1043": 1,
+          "1068": 0,
+          "1196": 1,
+          "1556": 1,
+          "2840": 1,
+          "3085": 1,
+          "3557": 1,
+          "4050": 1,
+          "4472": 2
+        },
+        "zone": "HAND"
+      },
+      {
+        "actualManaCost": 8,
+        "cardId": "TLC_600",
+        "cardName": "Windpeak Wyrm",
+        "createdIndex": 1,
+        "creatorEntityId": null,
+        "entityId": 4,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "lastAffectedByCardId": "",
+        "lastAffectedByEntityId": 2,
+        "linkedEntityIds": [],
+        "metaInfo": {},
+        "refManaCost": 8,
+        "relatedCardIds": [],
+        "tags": {
+          "12": 1,
+          "45": 6,
+          "47": 6,
+          "48": 8,
+          "49": 3,
+          "50": 1,
+          "53": 4,
+          "199": 10,
+          "200": 24,
+          "202": 4,
+          "203": 1,
+          "218": 1,
+          "263": 1,
+          "273": 1,
+          "466": 8,
+          "478": 1,
+          "479": 6,
+          "1037": 1,
+          "1043": 1,
+          "1068": 0,
+          "1556": 1,
+          "2840": 1,
+          "3085": 6,
+          "4028": 1,
+          "4472": 6
+        },
+        "zone": "HAND"
+      },
+      {
+        "actualManaCost": 8,
+        "cardId": "TIME_038",
+        "cardName": "Mister Clocksworth",
+        "createdIndex": 2,
+        "creatorEntityId": null,
+        "entityId": 18,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "lastAffectedByCardId": "",
+        "lastAffectedByEntityId": 2,
+        "linkedEntityIds": [],
+        "metaInfo": {},
+        "refManaCost": 8,
+        "relatedCardIds": [],
+        "tags": {
+          "45": 3,
+          "47": 3,
+          "48": 8,
+          "49": 3,
+          "50": 1,
+          "53": 18,
+          "114": 1,
+          "199": 12,
+          "200": 17,
+          "202": 4,
+          "203": 5,
+          "218": 1,
+          "263": 2,
+          "273": 1,
+          "466": 8,
+          "478": 1,
+          "479": 3,
+          "1037": 1,
+          "1043": 1,
+          "1068": 0,
+          "1556": 1,
+          "2589": 1,
+          "2840": 1,
+          "3085": 3,
+          "3934": 1,
+          "4472": 3
+        },
+        "zone": "HAND"
+      }
+    ],
+    "cardsLeftInDeck": 30,
+    "cardsPlayedFromInitialDeck": [],
+    "cardsPlayedLastTurn": [
+      {
+        "actualManaCost": 2,
+        "cardId": "EDR_457",
+        "cardName": "Brood Keeper",
+        "countered": false,
+        "createdIndex": 5,
+        "creatorCardId": null,
+        "entityId": 14,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "lastAffectedByCardId": "",
+        "lastAffectedByEntityId": 2,
+        "linkedEntityIds": [],
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": "<scrubbed>",
+          "turnAtWhichCardEnteredHand": 0
+        },
+        "playTiming": 157,
+        "rarity": "common",
+        "refManaCost": 2,
+        "relatedCardIds": [],
+        "storedInformation": null,
+        "tags": {
+          "12": 1,
+          "43": 1,
+          "45": 3,
+          "47": 2,
+          "48": 2,
+          "49": 1,
+          "50": 1,
+          "53": 14,
+          "199": 10,
+          "202": 4,
+          "203": 1,
+          "218": 1,
+          "261": 0,
+          "263": 2,
+          "271": 1,
+          "273": 1,
+          "386": 0,
+          "466": 2,
+          "478": 1,
+          "479": 2,
+          "1037": 0,
+          "1043": 1,
+          "1068": 0,
+          "1196": 0,
+          "1380": 1,
+          "1556": 1,
+          "1570": 5,
+          "2485": 0,
+          "2840": 1,
+          "3085": 3,
+          "3557": 4,
+          "3669": 0,
+          "3908": 0,
+          "4472": 2
+        },
+        "temporaryCard": false,
+        "zone": "PLAY"
+      }
+    ],
+    "cardsPlayedThisMatch": [
+      {
+        "cardId": "EDR_456",
+        "effectiveCost": 1,
+        "entityId": 20,
+        "side": "player",
+        "timestamp": "<scrubbed>",
+        "turn": 1
+      },
+      {
+        "cardId": "EDR_889",
+        "effectiveCost": 2,
+        "entityId": 7,
+        "side": "player",
+        "timestamp": "<scrubbed>",
+        "turn": 2
+      },
+      {
+        "cardId": "EDR_457",
+        "effectiveCost": 2,
+        "entityId": 14,
+        "side": "player",
+        "timestamp": "<scrubbed>",
+        "turn": 3
+      },
+      {
+        "cardId": "TIME_034",
+        "effectiveCost": 4,
+        "entityId": 79,
+        "side": "player",
+        "timestamp": "<scrubbed>",
+        "turn": 4
+      },
+      {
+        "cardId": "TIME_034",
+        "effectiveCost": 4,
+        "entityId": 79,
+        "side": "player",
+        "timestamp": "<scrubbed>",
+        "turn": 4
+      }
+    ],
+    "cardsPlayedThisTurn": [
+      "<cycle>",
+      {
+        "actualManaCost": 4,
+        "cardId": "TIME_034",
+        "cardName": "Stadium Announcer",
+        "countered": false,
+        "creatorCardId": "EDR_102t",
+        "entityId": 79,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": [],
+        "metaInfo": {},
+        "playTiming": 164,
+        "rarity": "rare",
+        "refManaCost": 4,
+        "relatedCardIds": [],
+        "storedInformation": null,
+        "tags": {
+          "12": 1,
+          "18": 82,
+          "43": 1,
+          "45": 8,
+          "47": 7,
+          "48": 4,
+          "49": 1,
+          "50": 1,
+          "53": 79,
+          "199": 10,
+          "200": 24,
+          "202": 4,
+          "203": 3,
+          "218": 1,
+          "261": 1,
+          "263": 2,
+          "273": 5,
+          "313": 78,
+          "385": 20,
+          "466": 4,
+          "479": 7,
+          "1037": 0,
+          "1068": 0,
+          "1196": 1,
+          "1284": 115323,
+          "1556": 1,
+          "1570": 3,
+          "1711": 1,
+          "2840": 1,
+          "3085": 8,
+          "3557": 3,
+          "3880": 1,
+          "3934": 1,
+          "4472": 7,
+          "4741": 1
+        },
+        "temporaryCard": false,
+        "zone": "PLAY"
+      }
+    ],
+    "cardsShuffledIntoDeck": 0,
+    "chaoticTendrilsPlayedThisMatch": 0,
+    "corpsesGainedThisGame": 2,
+    "corpsesSpent": 0,
+    "cthunAtk": 0,
+    "cthunHealth": 0,
+    "currentExcavateTier": 0,
+    "currentOptions": [],
+    "damageDealtThisTurn": [],
+    "damageTakenOnYourTurns": [],
+    "damageTakenThisTurn": 0,
+    "deck": [
+      {
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": [],
+        "metaInfo": {},
+        "relatedCardIds": [],
+        "tags": {}
+      },
+      {
+        "forged": 0,
+        "guessedInfo": "<cycle>",
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": "<cycle>",
+        "metaInfo": "<cycle>",
+        "relatedCardIds": "<cycle>",
+        "tags": "<cycle>"
+      },
+      {
+        "forged": 0,
+        "guessedInfo": "<cycle>",
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": "<cycle>",
+        "metaInfo": "<cycle>",
+        "relatedCardIds": "<cycle>",
+        "tags": "<cycle>"
+      },
+      {
+        "forged": 0,
+        "guessedInfo": "<cycle>",
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": "<cycle>",
+        "metaInfo": "<cycle>",
+        "relatedCardIds": "<cycle>",
+        "tags": "<cycle>"
+      },
+      {
+        "forged": 0,
+        "guessedInfo": "<cycle>",
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": "<cycle>",
+        "metaInfo": "<cycle>",
+        "relatedCardIds": "<cycle>",
+        "tags": "<cycle>"
+      },
+      {
+        "forged": 0,
+        "guessedInfo": "<cycle>",
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": "<cycle>",
+        "metaInfo": "<cycle>",
+        "relatedCardIds": "<cycle>",
+        "tags": "<cycle>"
+      },
+      {
+        "forged": 0,
+        "guessedInfo": "<cycle>",
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": "<cycle>",
+        "metaInfo": "<cycle>",
+        "relatedCardIds": "<cycle>",
+        "tags": "<cycle>"
+      },
+      {
+        "forged": 0,
+        "guessedInfo": "<cycle>",
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": "<cycle>",
+        "metaInfo": "<cycle>",
+        "relatedCardIds": "<cycle>",
+        "tags": "<cycle>"
+      },
+      {
+        "forged": 0,
+        "guessedInfo": "<cycle>",
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": "<cycle>",
+        "metaInfo": "<cycle>",
+        "relatedCardIds": "<cycle>",
+        "tags": "<cycle>"
+      },
+      {
+        "forged": 0,
+        "guessedInfo": "<cycle>",
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": "<cycle>",
+        "metaInfo": "<cycle>",
+        "relatedCardIds": "<cycle>",
+        "tags": "<cycle>"
+      },
+      {
+        "forged": 0,
+        "guessedInfo": "<cycle>",
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": "<cycle>",
+        "metaInfo": "<cycle>",
+        "relatedCardIds": "<cycle>",
+        "tags": "<cycle>"
+      },
+      {
+        "forged": 0,
+        "guessedInfo": "<cycle>",
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": "<cycle>",
+        "metaInfo": "<cycle>",
+        "relatedCardIds": "<cycle>",
+        "tags": "<cycle>"
+      },
+      {
+        "forged": 0,
+        "guessedInfo": "<cycle>",
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": "<cycle>",
+        "metaInfo": "<cycle>",
+        "relatedCardIds": "<cycle>",
+        "tags": "<cycle>"
+      },
+      {
+        "forged": 0,
+        "guessedInfo": "<cycle>",
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": "<cycle>",
+        "metaInfo": "<cycle>",
+        "relatedCardIds": "<cycle>",
+        "tags": "<cycle>"
+      },
+      {
+        "forged": 0,
+        "guessedInfo": "<cycle>",
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": "<cycle>",
+        "metaInfo": "<cycle>",
+        "relatedCardIds": "<cycle>",
+        "tags": "<cycle>"
+      },
+      {
+        "forged": 0,
+        "guessedInfo": "<cycle>",
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": "<cycle>",
+        "metaInfo": "<cycle>",
+        "relatedCardIds": "<cycle>",
+        "tags": "<cycle>"
+      },
+      {
+        "forged": 0,
+        "guessedInfo": "<cycle>",
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": "<cycle>",
+        "metaInfo": "<cycle>",
+        "relatedCardIds": "<cycle>",
+        "tags": "<cycle>"
+      },
+      {
+        "forged": 0,
+        "guessedInfo": "<cycle>",
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": "<cycle>",
+        "metaInfo": "<cycle>",
+        "relatedCardIds": "<cycle>",
+        "tags": "<cycle>"
+      },
+      {
+        "forged": 0,
+        "guessedInfo": "<cycle>",
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": "<cycle>",
+        "metaInfo": "<cycle>",
+        "relatedCardIds": "<cycle>",
+        "tags": "<cycle>"
+      },
+      {
+        "forged": 0,
+        "guessedInfo": "<cycle>",
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": "<cycle>",
+        "metaInfo": "<cycle>",
+        "relatedCardIds": "<cycle>",
+        "tags": "<cycle>"
+      },
+      {
+        "forged": 0,
+        "guessedInfo": "<cycle>",
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": "<cycle>",
+        "metaInfo": "<cycle>",
+        "relatedCardIds": "<cycle>",
+        "tags": "<cycle>"
+      },
+      {
+        "forged": 0,
+        "guessedInfo": "<cycle>",
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": "<cycle>",
+        "metaInfo": "<cycle>",
+        "relatedCardIds": "<cycle>",
+        "tags": "<cycle>"
+      },
+      {
+        "actualManaCost": 8,
+        "cardId": "TLC_600",
+        "cardName": "Windpeak Wyrm",
+        "createdIndex": 1,
+        "creatorEntityId": null,
+        "entityId": 19,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "lastAffectedByCardId": "",
+        "lastAffectedByEntityId": 1,
+        "linkedEntityIds": [],
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": "<scrubbed>",
+          "turnAtWhichCardEnteredHand": 0
+        },
+        "refManaCost": 8,
+        "relatedCardIds": [],
+        "tags": {
+          "12": 1,
+          "45": 6,
+          "47": 6,
+          "48": 8,
+          "49": 3,
+          "50": 1,
+          "53": 19,
+          "199": 10,
+          "200": 24,
+          "202": 4,
+          "203": 1,
+          "218": 1,
+          "263": 2,
+          "273": 1,
+          "466": 8,
+          "478": 1,
+          "479": 6,
+          "1043": 1,
+          "1068": 0,
+          "1556": 1,
+          "2840": 1,
+          "3085": 6,
+          "4028": 1,
+          "4472": 6
+        },
+        "temporaryCard": false
+      },
+      {
+        "actualManaCost": 2,
+        "cardId": "FIR_939",
+        "cardName": "Shadowflame Suffusion",
+        "createdIndex": 2,
+        "creatorEntityId": null,
+        "entityId": 16,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "lastAffectedByCardId": "",
+        "lastAffectedByEntityId": 1,
+        "linkedEntityIds": [],
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": "<scrubbed>",
+          "turnAtWhichCardEnteredHand": 0
+        },
+        "refManaCost": 2,
+        "relatedCardIds": [],
+        "tags": {
+          "12": 1,
+          "48": 2,
+          "49": 3,
+          "50": 1,
+          "53": 16,
+          "199": 10,
+          "202": 5,
+          "203": 1,
+          "263": 3,
+          "273": 1,
+          "415": 1,
+          "466": 2,
+          "478": 1,
+          "1043": 1,
+          "1068": 0,
+          "1556": 1,
+          "1635": 2,
+          "1824": 1,
+          "4050": 1
+        },
+        "temporaryCard": false
+      }
+    ],
+    "deckList": [],
+    "destroyedCardsInDeck": [],
+    "discoversThisGame": 1,
+    "dragonsSummoned": 3,
+    "earthenGolemsSummoned": 0,
+    "elementalsPlayedLastTurn": 0,
+    "elementalsPlayedThisTurn": 0,
+    "elwynnBoarsDeadThisMatch": 0,
+    "enchantments": [],
+    "fatigue": 0,
+    "friendlyAttacksThisMatch": 1,
+    "galakrondInvokesCount": 0,
+    "globalEffects": [],
+    "hand": [
+      {
+        "actualManaCost": 8,
+        "cardId": "TLC_600",
+        "cardName": "Windpeak Wyrm",
+        "createdIndex": 1,
+        "creatorEntityId": null,
+        "entityId": 4,
+        "forged": 0,
+        "guessedInfo": "<cycle>",
+        "internalEntityId": "<scrubbed>",
+        "lastAffectedByCardId": "",
+        "lastAffectedByEntityId": 2,
+        "linkedEntityIds": "<cycle>",
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": "<scrubbed>",
+          "turnAtWhichCardEnteredCurrentZone": 1,
+          "turnAtWhichCardEnteredHand": 1
+        },
+        "refManaCost": 8,
+        "relatedCardIds": "<cycle>",
+        "tags": "<cycle>",
+        "zone": "HAND"
+      },
+      {
+        "actualManaCost": 8,
+        "cardId": "TIME_038",
+        "cardName": "Mister Clocksworth",
+        "createdIndex": 2,
+        "creatorEntityId": null,
+        "entityId": 18,
+        "forged": 0,
+        "guessedInfo": "<cycle>",
+        "internalEntityId": "<scrubbed>",
+        "lastAffectedByCardId": "",
+        "lastAffectedByEntityId": 2,
+        "linkedEntityIds": "<cycle>",
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": "<scrubbed>",
+          "turnAtWhichCardEnteredCurrentZone": 1,
+          "turnAtWhichCardEnteredHand": 1
+        },
+        "refManaCost": 8,
+        "relatedCardIds": "<cycle>",
+        "tags": "<cycle>",
+        "zone": "HAND"
+      },
+      {
+        "actualManaCost": 8,
+        "cardId": "DINO_401",
+        "cardName": "The Great Dracorex",
+        "createdIndex": 6,
+        "creatorEntityId": null,
+        "entityId": 28,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "lastAffectedByCardId": "",
+        "lastAffectedByEntityId": 2,
+        "linkedEntityIds": [],
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": "<scrubbed>",
+          "turnAtWhichCardEnteredCurrentZone": 4,
+          "turnAtWhichCardEnteredHand": 4
+        },
+        "refManaCost": 8,
+        "relatedCardIds": [],
+        "tags": {
+          "12": 1,
+          "32": 1,
+          "45": 12,
+          "47": 5,
+          "48": 8,
+          "49": 3,
+          "50": 1,
+          "53": 28,
+          "114": 1,
+          "199": 10,
+          "200": 20,
+          "202": 4,
+          "203": 5,
+          "263": 3,
+          "273": 1,
+          "466": 8,
+          "478": 1,
+          "479": 5,
+          "791": 1,
+          "1037": 1,
+          "1043": 1,
+          "1068": 0,
+          "1556": 1,
+          "1570": 7,
+          "1824": 1,
+          "1932": 1,
+          "2523": 1,
+          "2840": 1,
+          "3085": 12,
+          "4128": 1,
+          "4472": 5
+        },
+        "zone": "HAND"
+      }
+    ],
+    "heraldCountThisGame": 0,
+    "hero": {
+      "cardId": "HERO_01h",
+      "classes": [
+        10
+      ],
+      "entityId": 64,
+      "initialClasses": [],
+      "maxHealth": 30,
+      "playerName": "Daedin"
+    },
+    "heroAttacksThisMatch": 0,
+    "heroDamageHitsThisTurn": 0,
+    "heroPower": {
+      "cardId": "HERO_01dbp",
+      "cardName": "Armor Up!",
+      "entityId": 65,
+      "forged": 0,
+      "guessedInfo": {},
+      "internalEntityId": "<scrubbed>",
+      "linkedEntityIds": [],
+      "metaInfo": {},
+      "playTiming": 150,
+      "rarity": "Free",
+      "refManaCost": 2,
+      "relatedCardIds": [],
+      "tags": {},
+      "temporaryCard": false,
+      "zone": "PLAY"
+    },
+    "heroPowerDamageThisMatch": 0,
+    "heroPowerUsed": 0,
+    "isActivePlayer": true,
+    "isFirstPlayer": true,
+    "jadeGolemSize": 0,
+    "libramsPlayedThisMatch": 0,
+    "locationsUsed": 0,
+    "manaLeft": 0,
+    "manaSpentOnHolySpellsThisMatch": 0,
+    "manaSpentOnSpellsThisMatch": 0,
+    "manaUsedThisTurn": 4,
+    "maxExcavateTier": 3,
+    "minionsDeadSinceLastTurn": [
+      {
+        "cardId": "EDR_457",
+        "effectiveCost": 2,
+        "entityId": 14
+      }
+    ],
+    "minionsDeadThisMatch": [
+      {
+        "cardId": "EDR_456",
+        "effectiveCost": 1,
+        "entityId": 20
+      },
+      {
+        "cardId": "EDR_457",
+        "effectiveCost": 2,
+        "entityId": 14
+      }
+    ],
+    "minionsDeadThisTurn": [],
+    "name": null,
+    "otherZone": [
+      {
+        "actualManaCost": 5,
+        "cardId": "TIME_720",
+        "cardName": "Soldier of the Bronze",
+        "entityId": 80,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "lastAffectedByCardId": "EDR_102t",
+        "linkedEntityIds": [],
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": null
+        },
+        "rarity": "Rare",
+        "refManaCost": 5,
+        "relatedCardIds": [],
+        "tags": {
+          "12": 1,
+          "45": 3,
+          "47": 5,
+          "48": 5,
+          "49": 6,
+          "50": 1,
+          "53": 80,
+          "190": 1,
+          "199": 12,
+          "200": 24,
+          "202": 4,
+          "203": 3,
+          "218": 1,
+          "313": 78,
+          "466": 5,
+          "479": 5,
+          "1037": 1,
+          "1284": 115323,
+          "1556": 1,
+          "2589": 1,
+          "2840": 1,
+          "3085": 3
+        },
+        "temporaryCard": true,
+        "zone": "SETASIDE"
+      },
+      {
+        "actualManaCost": 9,
+        "cardId": "TIME_024",
+        "cardName": "Murozond, Unbounded",
+        "entityId": 81,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "lastAffectedByCardId": "EDR_102t",
+        "linkedEntityIds": [],
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": null
+        },
+        "rarity": "Legendary",
+        "refManaCost": 9,
+        "relatedCardIds": [],
+        "tags": {
+          "12": 1,
+          "45": 8,
+          "47": 8,
+          "48": 9,
+          "49": 6,
+          "50": 1,
+          "53": 81,
+          "114": 1,
+          "199": 12,
+          "200": 24,
+          "202": 4,
+          "203": 5,
+          "218": 1,
+          "313": 78,
+          "466": 9,
+          "479": 8,
+          "1037": 1,
+          "1284": 115323,
+          "1556": 1,
+          "2589": 1,
+          "2840": 1,
+          "3085": 8
+        },
+        "temporaryCard": true,
+        "zone": "SETASIDE"
+      },
+      {
+        "actualManaCost": 1,
+        "cardId": "EDR_456",
+        "cardName": "Darkrider",
+        "countered": false,
+        "createdIndex": 0,
+        "creatorCardId": null,
+        "entityId": -20,
+        "forged": 0,
+        "guessedInfo": "<cycle>",
+        "internalEntityId": "<scrubbed>",
+        "lastAffectedByCardId": "",
+        "lastAffectedByEntityId": 2,
+        "linkedEntityIds": "<cycle>",
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": null
+        },
+        "playTiming": 152,
+        "rarity": "rare",
+        "refManaCost": 1,
+        "relatedCardIds": "<cycle>",
+        "storedInformation": null,
+        "tags": {
+          "12": 1,
+          "18": 57,
+          "38": 0,
+          "43": 0,
+          "44": 0,
+          "45": 1,
+          "47": 2,
+          "48": 1,
+          "49": 4,
+          "50": 1,
+          "53": 20,
+          "199": 10,
+          "200": 15,
+          "202": 4,
+          "203": 3,
+          "218": 1,
+          "261": 0,
+          "263": 1,
+          "267": 57,
+          "271": 2,
+          "273": 1,
+          "297": 1,
+          "318": 0,
+          "386": 0,
+          "415": 1,
+          "466": 1,
+          "478": 1,
+          "479": 2,
+          "1037": 0,
+          "1043": 1,
+          "1068": 0,
+          "1173": 0,
+          "1196": 0,
+          "1556": 1,
+          "1715": 20,
+          "2187": 0,
+          "2840": 1,
+          "3085": 1,
+          "3557": 1,
+          "4050": 1,
+          "4163": 1,
+          "4472": 2,
+          "4741": 1
+        },
+        "temporaryCard": false,
+        "zone": "GRAVEYARD"
+      },
+      {
+        "cardId": "EDR_457t",
+        "cardName": "Nightmare Slicer",
+        "creatorCardId": "EDR_457",
+        "entityId": 107,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": [],
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": null
+        },
+        "playTiming": 158,
+        "refManaCost": 2,
+        "relatedCardIds": [],
+        "tags": {},
+        "temporaryCard": false,
+        "zone": "PLAY"
+      },
+      {
+        "actualManaCost": 2,
+        "cardId": "EDR_457",
+        "cardName": "Brood Keeper",
+        "countered": false,
+        "createdIndex": 5,
+        "creatorCardId": null,
+        "entityId": -14,
+        "forged": 0,
+        "guessedInfo": "<cycle>",
+        "internalEntityId": "<scrubbed>",
+        "lastAffectedByCardId": "",
+        "lastAffectedByEntityId": 2,
+        "linkedEntityIds": "<cycle>",
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": null
+        },
+        "playTiming": 157,
+        "rarity": "common",
+        "refManaCost": 2,
+        "relatedCardIds": "<cycle>",
+        "storedInformation": null,
+        "tags": "<cycle>",
+        "temporaryCard": false,
+        "zone": "GRAVEYARD"
+      },
+      {
+        "cardId": "VAC_932",
+        "cardName": "Climbing Hook",
+        "creatorCardId": "TIME_034",
+        "entityId": 111,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": [],
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": null
+        },
+        "playTiming": 162,
+        "rarity": "Epic",
+        "refManaCost": 6,
+        "relatedCardIds": [],
+        "tags": {},
+        "temporaryCard": false,
+        "zone": "PLAY"
+      },
+      {
+        "actualManaCost": 0,
+        "cardId": "TIME_000ta",
+        "cardName": "Keep Timeline",
+        "entityId": 115,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "lastAffectedByCardId": "TIME_034",
+        "linkedEntityIds": [],
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": null
+        },
+        "refManaCost": 0,
+        "relatedCardIds": [],
+        "tags": {
+          "12": 1,
+          "49": 6,
+          "50": 1,
+          "53": 115,
+          "199": 12,
+          "202": 5,
+          "313": 79,
+          "684": 1,
+          "1037": 1,
+          "1284": 120503,
+          "1556": 1,
+          "4412": 1
+        },
+        "temporaryCard": true,
+        "zone": "SETASIDE"
+      },
+      {
+        "actualManaCost": 0,
+        "cardId": "TIME_000tb",
+        "cardName": "Rewind Timeline",
+        "entityId": 116,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "lastAffectedByCardId": "TIME_034",
+        "linkedEntityIds": [],
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": null
+        },
+        "refManaCost": 0,
+        "relatedCardIds": [],
+        "tags": {
+          "2": 79,
+          "3": 0,
+          "12": 1,
+          "49": 6,
+          "50": 1,
+          "53": 116,
+          "199": 12,
+          "202": 5,
+          "313": 79,
+          "684": 1,
+          "1037": 1,
+          "1284": 120503,
+          "1556": 1,
+          "3934": 1
+        },
+        "temporaryCard": true,
+        "zone": "SETASIDE"
+      },
+      {
+        "cardId": "TIME_000tb",
+        "cardName": "Rewind Timeline",
+        "countered": false,
+        "creatorCardId": "TIME_034",
+        "creatorEntityId": 79,
+        "entityId": 117,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": [],
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": null
+        },
+        "playTiming": null,
+        "putIntoPlay": true,
+        "refManaCost": 0,
+        "relatedCardIds": [],
+        "tags": {
+          "2": 79,
+          "12": 1,
+          "49": 6,
+          "50": 1,
+          "53": 117,
+          "199": 12,
+          "202": 5,
+          "313": 79,
+          "684": 1,
+          "1037": 1,
+          "1068": 0,
+          "1284": 120503,
+          "1556": 1,
+          "1715": 79,
+          "3934": 1
+        },
+        "temporaryCard": true,
+        "zone": null
+      }
+    ],
+    "overloadedCrystals": 0,
+    "piratesSummoned": 0,
+    "plaguesShuffledIntoEnemyDeck": 0,
+    "pogoHopperSize": 0,
+    "relicsPlayedThisMatch": 0,
+    "secretHelperActive": true,
+    "secrets": [],
+    "secretsTriggeredThisMatch": [],
+    "sideboards": null,
+    "spellsPlayedOnEnemyEntities": [],
+    "spellsPlayedOnFriendlyEntities": [],
+    "spellsPlayedOnFriendlyMinions": [],
+    "spellsPlayedThisMatch": [],
+    "starshipsLaunched": [],
+    "totalAttackOnBoard": {
+      "board": 1,
+      "hero": 4
+    },
+    "totalExcavates": 0,
+    "totemsSummoned": 0,
+    "treantsSummoned": 0,
+    "turnDuration": 75000,
+    "turnTimings": [
+      {
+        "endTimestamp": 1776873037489,
+        "startTimestamp": 1776873022861,
+        "turn": 1
+      },
+      {
+        "endTimestamp": 1776873058434,
+        "startTimestamp": 1776873051047,
+        "turn": 2
+      },
+      {
+        "endTimestamp": 1776873118548,
+        "startTimestamp": 1776873107577,
+        "turn": 3
+      },
+      {
+        "endTimestamp": 0,
+        "startTimestamp": 1776873151344,
+        "turn": 4
+      }
+    ],
+    "uniqueSpellSchools": [],
+    "volatileSkeletonsDeadThisMatch": 0,
+    "watchpostsPlayedThisMatch": 0,
+    "weapon": {
+      "cardId": "LOOT_506",
+      "cardName": "The Runespear",
+      "creatorCardId": "TIME_034",
+      "entityId": 111,
+      "forged": 0,
+      "guessedInfo": {},
+      "internalEntityId": "<scrubbed>",
+      "linkedEntityIds": [],
+      "metaInfo": {
+        "timestampAtWhichCardEnteredHand": null
+      },
+      "playTiming": 165,
+      "rarity": "Legendary",
+      "refManaCost": 8,
+      "relatedCardIds": [],
+      "tags": {},
+      "temporaryCard": false,
+      "zone": "PLAY"
+    },
+    "weaponsEquippedThisGame": 3
+  },
+  "region": 2,
+  "reviewId": "rewind-nonreg-rewind_player_first",
+  "spectating": false
+}

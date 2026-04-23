@@ -1,7 +1,7 @@
 import { Injectable, NgZone } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { SceneService } from '@firestone/memory';
-import { GameEvent as ParserGameEvent, ReplayParser } from '@firestone/power-log-parser';
+import { GameEvent as ParserGameEvent, ReplayParser, buildRewindCardOracle } from '@firestone/power-log-parser';
 import {
 	GameStatusService,
 	GlobalErrorService,
@@ -147,13 +147,33 @@ export class GameEvents {
 				this.gameEventsEmitter.onGameStart.next(event);
 				this.doEventDispatch(event);
 				break;
+			case 'REWIND_CAPABLE_ACTION_START':
+				// Snapshot hint from the parser: a rewind-capable action is about to start and
+				// consumers should stash their own GameState snapshot keyed by originEntityId
+				// so REWIND_STARTED can restore it later.
+				this.doEventDispatch(
+					GameEvent.build(GameEvent.REWIND_CAPABLE_ACTION_START, gameEvent, {
+						originEntityId: gameEvent.Value?.originEntityId,
+						originCardId: gameEvent.Value?.originCardId,
+						blockType: gameEvent.Value?.blockType,
+					}),
+				);
+				break;
 			case 'REWIND_STARTED':
 				console.log('[game-events]', gameEvent.Type + ' event', gameEvent);
-				this.doEventDispatch(GameEvent.build(GameEvent.REWIND_STARTED, gameEvent));
+				this.doEventDispatch(
+					GameEvent.build(GameEvent.REWIND_STARTED, gameEvent, {
+						originEntityId: gameEvent.Value?.originEntityId,
+					}),
+				);
 				break;
 			case 'REWIND_OVER':
 				console.log('[game-events]', gameEvent.Type + ' event', gameEvent);
-				this.doEventDispatch(GameEvent.build(GameEvent.REWIND_OVER, gameEvent));
+				this.doEventDispatch(
+					GameEvent.build(GameEvent.REWIND_OVER, gameEvent, {
+						originEntityId: gameEvent.Value?.originEntityId,
+					}),
+				);
 				break;
 			case 'GAME_SETTINGS':
 				console.log('[game-events]', gameEvent.Type + ' event', gameEvent);
@@ -1896,7 +1916,9 @@ export class GameEvents {
 
 	private initTsParser(): void {
 		console.log('[game-events] Initializing TypeScript parser');
-		this.tsParser = new ReplayParser();
+		// Wrap the app's CardsFacade so the parser can check `REWIND` mechanics on root-level
+		// BLOCK_START origins without taking a hard dep on the Angular DI surface.
+		this.tsParser = new ReplayParser(buildRewindCardOracle(this.allCards));
 		this.tsParserLineIndex = 0;
 		this.tsParserCurrentGameSeed = 0;
 		this.tsParser.onGameEvent = (event: ParserGameEvent) => {

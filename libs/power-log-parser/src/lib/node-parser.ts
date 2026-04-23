@@ -11,7 +11,6 @@ import {
 	ArmorChangeParser,
 	AttackOnBoardParser,
 	AttackParser,
-	AzalinaSoulthiefDisplayedCreatorParser,
 	BallerBuffChangedParser,
 	BattlegroundFreezeParser,
 	BattlegroundsActivePlayerBoardParser,
@@ -172,7 +171,6 @@ export class NodeParser implements INodeParser {
 	private Controller: ControlsManager;
 
 	private _parsers: ActionParser[] | null = null;
-	private _unfilteredParsers: ActionParser[] | null = null;
 	private get parsers(): ActionParser[] {
 		if (this._parsers != null) {
 			return this._parsers;
@@ -180,19 +178,15 @@ export class NodeParser implements INodeParser {
 		if (this.ParserState == null) {
 			return [];
 		}
-
-		if (this._unfilteredParsers == null) {
-			this._unfilteredParsers = this.BuildActionParsers(this.ParserState, this.StateType);
-		}
-
 		if (
 			this.StateFacade?.GsState?.CurrentGame?.GameType == null ||
+			this.ParserState == null ||
 			this.StateFacade?.GsState?.CurrentGame?.GameType === -1
 		) {
-			return this._unfilteredParsers;
+			return this.BuildActionParsers(this.ParserState, this.StateType);
 		}
-
-		this._parsers = this._unfilteredParsers.filter((p) => this.Controller.Applies(p));
+		const allParsers = this.BuildActionParsers(this.ParserState, this.StateType);
+		this._parsers = allParsers.filter((p) => this.Controller.Applies(p));
 		return this._parsers;
 	}
 
@@ -208,7 +202,6 @@ export class NodeParser implements INodeParser {
 		this.ParserState = parserState;
 		this.QueueHandler.Reset(helper);
 		this._parsers = null;
-		this._unfilteredParsers = null;
 	}
 
 	NewNode(node: Node, stateType: StateType): void {
@@ -216,17 +209,18 @@ export class NodeParser implements INodeParser {
 			return;
 		}
 		for (const parser of this.parsers) {
-			if (parser.AppliesOnNewNode(node, stateType)) {
-				try {
-					const providers = parser.CreateGameEventProviderFromNew(node);
-					if (providers != null) {
-						this.EnqueueGameEvent(providers);
-					}
-				} catch (e: any) {
-					Logger.Log('ERROR: Exception while parsing node', e?.message ?? e);
-					Logger.Log(node.CreationLogLine ?? '', '');
-					Logger.Log(e?.stack ?? '', '');
+			if (!parser.AppliesOnNewNode(node, stateType)) {
+				continue;
+			}
+			try {
+				const providers = parser.CreateGameEventProviderFromNew(node);
+				if (providers != null) {
+					this.EnqueueGameEvent(providers);
 				}
+			} catch (e: any) {
+				Logger.Log('ERROR: Exception while parsing node', e?.message ?? e);
+				Logger.Log(node.CreationLogLine ?? '', '');
+				Logger.Log(e?.stack ?? '', '');
 			}
 		}
 	}
@@ -429,7 +423,6 @@ export class NodeParser implements INodeParser {
 			new SpecialCardPowerParser(parserState, this.StateFacade),
 			new WheelOfDeathCounterParser(parserState, this.StateFacade),
 
-			new AzalinaSoulthiefDisplayedCreatorParser(parserState, this.StateFacade),
 			new CopiedFromEntityIdParser(parserState, this.StateFacade),
 			new SpecialTargetParser(parserState, this.StateFacade),
 		];

@@ -5,6 +5,13 @@ import { GameStateEvent } from '../game-state-events/game-state-event';
 export class GameEvent implements GameStateEvent {
 	public static readonly REWIND_STARTED = 'REWIND_STARTED';
 	public static readonly REWIND_OVER = 'REWIND_OVER';
+	/**
+	 * Fired by the parser every time it takes a RETAINED rewind snapshot (either eagerly when
+	 * the origin card's REWIND mechanic is already known, or late-promoted after a SHOW_ENTITY
+	 * reveal for an opponent card). Payload carries `originEntityId` / `originCardId` / `blockType`
+	 * so the consumer can capture its own matching GameState snapshot keyed by the same entity.
+	 */
+	public static readonly REWIND_CAPABLE_ACTION_START = 'REWIND_CAPABLE_ACTION_START';
 	public static readonly SCENE_CHANGED_MINDVISION = 'SCENE_CHANGED_MINDVISION'; // Not strictly a game event, but needed for requirements procesing
 	public static readonly MATCH_METADATA = 'MATCH_METADATA';
 	public static readonly REVIEW_ID = 'REVIEW_ID';

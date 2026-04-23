@@ -1,5 +1,6 @@
 export { SHATTER_HAND_PIECE_CREATOR_FALLBACK_CARD_IDS } from './lib/shatter-hand-piece-creator-fallback-card-ids';
 export { ReplayParser, GameEvent, PtlGameStateUpdate } from './lib/replay-parser';
+export { RewindCardOracle, buildRewindCardOracle, REWIND_MECHANIC_NAME } from './lib/rewind/card-oracle';
 export * from './lib/enums';
 export * from './lib/models';
 export * from './lib/state';

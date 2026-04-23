@@ -1,4 +1,4 @@
-import { GameType } from '@firestone-hs/reference-data';
+import { BlockType, GameType } from '@firestone-hs/reference-data';
 import { BehaviorSubject } from 'rxjs';
 import { HearthstoneReplay, Game, Node } from './models';
 import { CombinedState } from './state/combined-state';
@@ -18,13 +18,38 @@ import { GameEventProvider, GameEvent } from './game-event';
 import { EventQueueHandler } from './event-queue-handler';
 import { GameEventHandler } from './game-event-handler';
 import { NodeParser } from './node-parser';
+import { RewindCardOracle, buildRewindCardOracle } from './rewind/card-oracle';
+import { RewindController, LogStream } from './rewind/rewind-controller';
+import { ParserSnapshotMeta } from './rewind/snapshot';
 
 export { GameEvent } from './game-event';
+export { RewindCardOracle, buildRewindCardOracle } from './rewind/card-oracle';
 
 export interface PtlGameStateUpdate {
 	readonly gameState: GameState;
 	readonly localPlayerId: number;
 	readonly opponentPlayerId: number;
+}
+
+/**
+ * Classify the origin of a BLOCK_START from its raw `Entity=...` clause. Rewind only applies to
+ * *card* entities - TRIGGER blocks whose origin is `GameEntity` / a player / a bare number can
+ * never carry a REWIND mechanic, so we need to distinguish "this isn't a card" from "this is a
+ * card whose cardId hasn't been revealed yet".
+ *
+ *  - Returns `{ kind: 'card', cardId: 'XYZ_001' }` when the entity has a non-empty `cardId=`.
+ *  - Returns `{ kind: 'card', cardId: null }` when the entity has `cardId=` with an empty value
+ *    (typical for opponent's hand cards that haven't been revealed yet).
+ *  - Returns `null` otherwise (the entity is GameEntity / player / numeric-only; never rewind).
+ */
+function classifyBlockOrigin(rawEntity: string): { kind: 'card'; cardId: string | null } | null {
+	if (!rawEntity) return null;
+	// A card-like entity always has the `[... cardId=... ]` shape. GameEntity / UNKNOWN HUMAN
+	// PLAYER / bare numeric IDs will not match this.
+	const m = /cardId=([^\s\]]*)/.exec(rawEntity);
+	if (!m) return null;
+	const id = m[1].trim();
+	return { kind: 'card', cardId: id.length === 0 ? null : id };
 }
 
 export class ReplayParser {
@@ -39,11 +64,6 @@ export class ReplayParser {
 	private gameEventHandler: GameEventHandler;
 
 	private previousTimestamp: string = '';
-	// TODO: processedLines grows unbounded during a game (tens of thousands of
-	// strings in long BG matches). It is only consumed by the GAME_RESET/rewind
-	// path. Consider bounding it or storing it only when a rewind-capable game
-	// mode is detected.
-	private processedLines: string[] = [];
 	private CurrentGameSeed: number = 0;
 
 	private _onGameEvent: ((event: GameEvent) => void) | null = null;
@@ -55,23 +75,44 @@ export class ReplayParser {
 		this.gameEventHandler.onEvent = handler;
 	}
 
-	private resettingGame: boolean = false;
-	private currentResetBlockIndex: number = 0;
-	private resettingGames: { originEntity: number; alternatePlayIndexGS: number; alternatePlayIndexPTL: number }[] = [];
-	private ignoringAlternateTimelineGS: boolean = false;
-	private alternateTimelineBlockDepthGS: number = 0;
-	private ignoringAlternateTimelinePTL: boolean = false;
-	private alternateTimelineBlockDepthPTL: number = 0;
-	private inResetBlockGS: boolean = false;
-	private inResetBlockPTL: boolean = false;
+	/**
+	 * Reference-data lookup for the rewind machinery. When omitted (or null), the parser treats
+	 * every BLOCK_START as non-rewind-capable - existing callers that don't need rewind handling
+	 * (debug tooling, parity specs) can keep using `new ReplayParser()`.
+	 */
+	private readonly cardOracle: RewindCardOracle;
+	private readonly rewindController: RewindController;
 
-	constructor() {
+	// GAME_RESET block state per stream. When `insideGameResetX` is true we swallow every line
+	// on that stream until we see the matching BLOCK_END - the snapshot restore has already
+	// produced the desired state, so the FULL_ENTITY children inside the GAME_RESET block are
+	// redundant (and dispatching their events would be incorrect since consumers are already
+	// being reset via REWIND_STARTED).
+	private insideGameResetGS = false;
+	private insideGameResetPTL = false;
+	private rewindOriginGS: number | null = null;
+	private rewindOriginPTL: number | null = null;
+
+	/**
+	 * When we detect a GAME_RESET BLOCK_START but have no matching snapshot (unexpected: the
+	 * rewind-capable trigger was missed upstream), we fall back to the legacy behaviour:
+	 * GameResetParser's `PartialReset()` + normal FULL_ENTITY dispatch. In that case we do
+	 * NOT set `insideGameResetX` and instead let AddData flow through.
+	 */
+	private fallbackLegacyGameResetGS = false;
+	private fallbackLegacyGameResetPTL = false;
+
+	constructor(cardOracle: RewindCardOracle | null = null) {
 		this.gameEventHandler = new GameEventHandler();
 		this.State = new CombinedState(this.createNodeParser.bind(this));
 		this.helper = new Helper(this.State);
 		this.dataHandler = new DataHandler(this.helper);
 		this.powerDataHandler = new PowerDataHandler(this.helper);
 		this.previousTimestamp = '';
+		this.cardOracle = cardOracle ?? buildRewindCardOracle(null);
+		this.rewindController = new RewindController(this.State, this.cardOracle, {
+			onRewindCapableActionStart: (meta) => this.emitRewindCapableActionStart(meta),
+		});
 		ReplayParser.start = new Date().toISOString();
 		Logger.Log('ReplayParser constructor over', this.State.GSState == null);
 	}
@@ -119,6 +160,18 @@ export class ReplayParser {
 			this.CurrentGameSeed = gameSeed;
 		}
 
+		// A fresh CREATE_GAME wipes the rewind controller - nothing from a prior match should
+		// be reachable (retained snapshots, parked PTL halves, depth trackers).
+		if (line.includes('GameState') && line.includes('CREATE_GAME')) {
+			this.rewindController.reset();
+			this.insideGameResetGS = false;
+			this.insideGameResetPTL = false;
+			this.rewindOriginGS = null;
+			this.rewindOriginPTL = null;
+			this.fallbackLegacyGameResetGS = false;
+			this.fallbackLegacyGameResetPTL = false;
+		}
+
 		let timestamp: string | null = null;
 		let method: string | null = null;
 		let content: string | null = null;
@@ -138,127 +191,27 @@ export class ReplayParser {
 			}
 		}
 
-		if (!this.resettingGame && line.includes('GameState') && line.includes('CREATE_GAME')) {
-			Logger.Log(`Clearing ${this.processedLines.length} processed lines`, line);
-			this.processedLines.length = 0;
-		}
-
-		let resetStartMatch: RegExpExecArray | null = null;
-		if (line.includes('BLOCK_START')) {
-			resetStartMatch = Regexes.ResetStartMatchRegex.exec(line);
-		}
-
-		if (!this.resettingGame) {
-			if (resetStartMatch && line.includes('GameState.DebugPrintPower()')) {
-				const normalizedTimestamp = matchSuccess ? this.NormalizeTimestamp(timestamp!) : new Date().toISOString();
-				this.State.PTLState.NodeParser.EnqueueGameEvent([
-					GameEventProvider.Create(normalizedTimestamp, 'REWIND_STARTED', () => ({ Type: 'REWIND_STARTED' }), true, null),
-				]);
-				this.resettingGame = true;
-				this.currentResetBlockIndex = 0;
-				this.ignoringAlternateTimelineGS = false;
-				this.alternateTimelineBlockDepthGS = 0;
-				this.ignoringAlternateTimelinePTL = false;
-				this.alternateTimelineBlockDepthPTL = 0;
-				this.inResetBlockGS = false;
-				this.inResetBlockPTL = false;
-
-				const rawEntity = resetStartMatch![1];
-				const entityId = this.helper.ParseEntity(rawEntity);
-
-				let alternatePlayIndexGS = -1;
-				let alternatePlayIndexPTL = -1;
-				for (let i = this.processedLines.length - 1; i >= 0; i--) {
-					const prevLine = this.processedLines[i];
-					if (prevLine.includes('BLOCK_START BlockType=PLAY') && prevLine.includes(`id=${entityId} `)) {
-						if (prevLine.includes('GameState.') && alternatePlayIndexGS === -1) {
-							alternatePlayIndexGS = i;
-							break;
-						} else if (prevLine.includes('PowerTaskList.') && alternatePlayIndexPTL === -1) {
-							alternatePlayIndexPTL = i;
-						}
-					}
-				}
-
-				this.resettingGames.length = 0;
-				this.resettingGames.push({ originEntity: entityId, alternatePlayIndexGS, alternatePlayIndexPTL });
-				this.processedLines.push(line);
-				const linesCopy = [...this.processedLines];
-				this.processedLines.length = 0;
-				this.Read(linesCopy);
-				return;
-			}
-		}
-
 		const isGameState = line.includes('GameState.');
 		const isPowerTaskList = line.includes('PowerTaskList.');
+		const stream: LogStream | null = isGameState ? 'GS' : isPowerTaskList ? 'PTL' : null;
+		const normalizedTimestamp = matchSuccess ? this.NormalizeTimestamp(timestamp!) : new Date().toISOString();
 
-		if (resetStartMatch) {
-			if (isGameState) this.inResetBlockGS = true;
-			else if (isPowerTaskList) this.inResetBlockPTL = true;
+		// --- Rewind controller observers --------------------------------------------------
+		// All of these are cheap no-ops when the line isn't a block boundary / SHOW_ENTITY.
+		if (stream !== null) {
+			this.observeRewindEvents(stream, line, normalizedTimestamp);
 		}
 
-		if (this.resettingGame) {
-			const currentBlock = this.resettingGames[this.currentResetBlockIndex];
-
-			if (isGameState) {
-				const isAlternatePlayBlock = lineIndex === currentBlock.alternatePlayIndexGS;
-				if (isAlternatePlayBlock && line.includes('BLOCK_START BlockType=PLAY') &&
-					line.includes(`id=${currentBlock.originEntity} `) && !this.ignoringAlternateTimelineGS) {
-					this.ignoringAlternateTimelineGS = true;
-					this.alternateTimelineBlockDepthGS = 1;
-				} else if (this.ignoringAlternateTimelineGS && line.includes('BLOCK_START')) {
-					this.alternateTimelineBlockDepthGS++;
-				} else if (this.ignoringAlternateTimelineGS && line.includes('BLOCK_END')) {
-					this.alternateTimelineBlockDepthGS--;
-					if (this.alternateTimelineBlockDepthGS === 0) {
-						this.ignoringAlternateTimelineGS = false;
-					}
-				}
-
-				if (this.inResetBlockGS && line.includes('BLOCK_END')) {
-					this.inResetBlockGS = false;
-				}
-
-				if (this.ignoringAlternateTimelineGS || this.inResetBlockGS) {
-					return;
-				}
-			}
-
-			if (isPowerTaskList) {
-				const isAlternatePlayBlock = lineIndex === currentBlock.alternatePlayIndexPTL;
-				if (isAlternatePlayBlock && line.includes('BLOCK_START BlockType=PLAY') &&
-					line.includes(`id=${currentBlock.originEntity} `) && !this.ignoringAlternateTimelinePTL) {
-					this.ignoringAlternateTimelinePTL = true;
-					this.alternateTimelineBlockDepthPTL = 1;
-				} else if (this.ignoringAlternateTimelinePTL && line.includes('BLOCK_START')) {
-					this.alternateTimelineBlockDepthPTL++;
-				} else if (this.ignoringAlternateTimelinePTL && line.includes('BLOCK_END')) {
-					this.alternateTimelineBlockDepthPTL--;
-					if (this.alternateTimelineBlockDepthPTL === 0) {
-						this.ignoringAlternateTimelinePTL = false;
-					}
-				}
-
-				if (this.inResetBlockPTL && line.includes('BLOCK_END')) {
-					this.inResetBlockPTL = false;
-					this.currentResetBlockIndex++;
-					if (this.currentResetBlockIndex === this.resettingGames.length) {
-						this.resettingGame = false;
-						const normalizedTimestamp = matchSuccess ? this.NormalizeTimestamp(timestamp!) : new Date().toISOString();
-						this.State.PTLState.NodeParser.EnqueueGameEvent([
-							GameEventProvider.Create(normalizedTimestamp, 'REWIND_OVER', () => ({ Type: 'REWIND_OVER' }), true, null),
-						]);
-					}
-				}
-
-				if (this.ignoringAlternateTimelinePTL || this.inResetBlockPTL) {
-					return;
-				}
-			}
+		// --- Skip lines inside an actively-being-rewound GAME_RESET block -----------------
+		// We still want to forward the line to the normal parsing path if we're in legacy
+		// fallback mode (no snapshot was available, so GameResetParser must run).
+		if (stream === 'GS' && this.insideGameResetGS && !this.fallbackLegacyGameResetGS) {
+			return;
+		}
+		if (stream === 'PTL' && this.insideGameResetPTL && !this.fallbackLegacyGameResetPTL) {
+			return;
 		}
 
-		this.processedLines.push(line);
 		if (!matchSuccess) {
 			if (line.includes('End Spectator Mode') || (line.includes('Begin Spectating') && !line.includes('2nd'))) {
 				this.AddData('', 'Spectator', line, gameSeed);
@@ -271,13 +224,189 @@ export class ReplayParser {
 		this.AddData(timestamp!, method!, content!, gameSeed);
 	}
 
+	/**
+	 * Handle the structural events that drive the rewind snapshot/restore lifecycle. Split
+	 * out of ReadLine for readability - the line parsing / dispatch logic is orthogonal.
+	 */
+	private observeRewindEvents(stream: LogStream, line: string, normalizedTimestamp: string): void {
+		const hasBlockStart = line.includes('BLOCK_START');
+		const hasBlockEnd = !hasBlockStart && line.includes('BLOCK_END');
+
+		if (hasBlockStart) {
+			// Regex is anchored at end-of-line; game client tends to emit a trailing space
+			// after SubOption=..., so trim before matching.
+			const m = Regexes.ActionStartRegex.exec(line.trimEnd());
+			if (m != null) {
+				const blockType = m[1];
+				const rawEntity = m[2];
+				const entityId = this.helper.ParseEntity(rawEntity);
+
+				if (blockType === 'GAME_RESET' || blockType === (BlockType.GAME_RESET as unknown as string)) {
+					this.handleGameResetBlockStart(stream, entityId, normalizedTimestamp);
+				} else {
+					// Only cards can carry the REWIND mechanic; reject GameEntity/player/numeric
+					// origins upfront so we don't burn cycles deep-cloning on every TRIGGER.
+					const origin = classifyBlockOrigin(rawEntity);
+					const cardId = origin?.cardId ?? null;
+					const isCardOrigin = origin != null;
+					this.rewindController.onBlockStart(
+						stream,
+						entityId,
+						cardId,
+						blockType,
+						normalizedTimestamp,
+						isCardOrigin,
+					);
+				}
+			}
+			return;
+		}
+
+		if (hasBlockEnd) {
+			this.rewindController.onBlockEnd(stream);
+			this.handleBlockEndForGameReset(stream, normalizedTimestamp);
+			return;
+		}
+
+		if (line.includes('SHOW_ENTITY')) {
+			const m = Regexes.ActionShowEntityRegex.exec(line.trimEnd());
+			if (m != null) {
+				const rawEntity = m[1];
+				const cardId = m[2];
+				const entityId = this.helper.ParseEntity(rawEntity);
+				this.rewindController.onShowEntity(entityId, cardId && cardId.length > 0 ? cardId : null);
+			}
+		}
+	}
+
+	private handleGameResetBlockStart(stream: LogStream, originEntityId: number, normalizedTimestamp: string): void {
+		if (stream === 'GS') {
+			const meta = this.rewindController.onGsGameResetStart(originEntityId);
+			if (meta != null) {
+				this.insideGameResetGS = true;
+				this.rewindOriginGS = meta.originEntityId;
+				this.fallbackLegacyGameResetGS = false;
+				// Enqueue on the GS stream: ClearQueue() flushes GS before PTL, so any event
+				// that must be strictly ordered w.r.t. GS-stream parsers (e.g. ENTITY_CHOSEN,
+				// which lives on the GS NodeParser) MUST also be on the GS queue or it will
+				// always fire after all GS events - defeating the "rewind as if it never
+				// happened" semantics for state mutated by GS events.
+				this.State.GSState.NodeParser.EnqueueGameEvent([
+					GameEventProvider.Create(
+						normalizedTimestamp,
+						'REWIND_STARTED',
+						() => ({
+							Type: 'REWIND_STARTED',
+							Value: { originEntityId: meta.originEntityId },
+						}),
+						true,
+						null,
+					),
+				]);
+			} else {
+				// Legacy fallback: no snapshot captured (unexpected). Let the existing
+				// GameResetParser path run: PartialReset() + FULL_ENTITY dispatch. Emit a
+				// payload-less REWIND_STARTED so legacy consumers still work.
+				this.fallbackLegacyGameResetGS = true;
+				this.insideGameResetGS = false;
+				this.rewindOriginGS = originEntityId;
+				this.State.GSState.NodeParser.EnqueueGameEvent([
+					GameEventProvider.Create(
+						normalizedTimestamp,
+						'REWIND_STARTED',
+						() => ({ Type: 'REWIND_STARTED' }),
+						true,
+						null,
+					),
+				]);
+			}
+		} else {
+			// PTL side: apply the parked PTL snapshot half if we have one.
+			const meta = this.rewindController.onPtlGameResetStart(originEntityId);
+			if (meta != null) {
+				this.insideGameResetPTL = true;
+				this.rewindOriginPTL = meta.originEntityId;
+				this.fallbackLegacyGameResetPTL = false;
+			} else {
+				this.fallbackLegacyGameResetPTL = true;
+				this.insideGameResetPTL = false;
+				this.rewindOriginPTL = originEntityId;
+			}
+		}
+	}
+
+	private handleBlockEndForGameReset(stream: LogStream, normalizedTimestamp: string): void {
+		if (stream === 'GS' && (this.insideGameResetGS || this.fallbackLegacyGameResetGS)) {
+			const origin = this.rewindOriginGS;
+			this.insideGameResetGS = false;
+			this.fallbackLegacyGameResetGS = false;
+			this.rewindOriginGS = null;
+			// Pair with REWIND_STARTED on the same (GS) queue so consumer-side state that
+			// was mutated by GS-stream events (discoversThisGame, hand contents, etc.) rolls
+			// back cleanly before any post-rewind events are processed.
+			this.State.GSState.NodeParser.EnqueueGameEvent([
+				GameEventProvider.Create(
+					normalizedTimestamp,
+					'REWIND_OVER',
+					() => ({
+						Type: 'REWIND_OVER',
+						Value: origin != null ? { originEntityId: origin } : undefined,
+					}),
+					true,
+					null,
+				),
+			]);
+		}
+		if (stream === 'PTL' && (this.insideGameResetPTL || this.fallbackLegacyGameResetPTL)) {
+			this.insideGameResetPTL = false;
+			this.fallbackLegacyGameResetPTL = false;
+			this.rewindOriginPTL = null;
+		}
+	}
+
+	private emitRewindCapableActionStart(meta: ParserSnapshotMeta): void {
+		// IMPORTANT: must be enqueued on the GS stream, not PTL. Offline replay flushes the
+		// GS queue in full before the PTL queue, so a PTL-side snapshot event would fire
+		// AFTER every GS-stream event (including ENTITY_CHOSEN) - meaning the consumer would
+		// snapshot an already-mutated state and "rewind" to it, which is a no-op for fields
+		// like discoversThisGame, hand contents, etc.
+		this.State.GSState.NodeParser.EnqueueGameEvent([
+			GameEventProvider.Create(
+				meta.capturedAt,
+				'REWIND_CAPABLE_ACTION_START',
+				() => ({
+					Type: 'REWIND_CAPABLE_ACTION_START',
+					Value: {
+						originEntityId: meta.originEntityId,
+						originCardId: meta.originCardId,
+						blockType: meta.blockType,
+					},
+				}),
+				true,
+				null,
+			),
+		]);
+	}
+
 	private AddData(timestamp: string, method: string, data: string, gameSeed: number): void {
 		const normalizedTimestamp = this.NormalizeTimestamp(timestamp);
 		switch (method) {
 			case 'GameState.DebugPrintPower':
 			case 'GameState.DebugPrintGame':
 			case 'Spectator':
-				this.dataHandler.Handle(normalizedTimestamp, data, this.State.GSState, StateType.GameState, this.previousTimestamp, this.State.StateFacade, gameSeed, this.resettingGame);
+				// `resettingGame` on DataHandler is a legacy signal that only the old re-parse
+				// flow ever set to true (to suppress reconnect detection during replay). The
+				// snapshot-based flow never re-processes CREATE_GAME, so pass false.
+				this.dataHandler.Handle(
+					normalizedTimestamp,
+					data,
+					this.State.GSState,
+					StateType.GameState,
+					this.previousTimestamp,
+					this.State.StateFacade,
+					gameSeed,
+					false,
+				);
 				this.previousTimestamp = normalizedTimestamp;
 				this.State.StateFacade.LastProcessedGSLine = data;
 				break;
@@ -295,7 +424,16 @@ export class ReplayParser {
 				this.previousTimestamp = normalizedTimestamp;
 				break;
 			case 'PowerTaskList.DebugPrintPower':
-				this.dataHandler.Handle(normalizedTimestamp, data, this.State.PTLState, StateType.PowerTaskList, this.previousTimestamp, this.State.StateFacade, gameSeed, this.resettingGame);
+				this.dataHandler.Handle(
+					normalizedTimestamp,
+					data,
+					this.State.PTLState,
+					StateType.PowerTaskList,
+					this.previousTimestamp,
+					this.State.StateFacade,
+					gameSeed,
+					false,
+				);
 				this.powerDataHandler.Handle(normalizedTimestamp, data, this.State.PTLState);
 				if (this.State.StateFacade.ShouldUpdateToRoot(data)) {
 					Logger.Log('Update to root', data);
@@ -373,3 +511,7 @@ export class ReplayParser {
 		return isGameCreation ? -1 : 0;
 	}
 }
+
+// Silence unused-import guardrails: Node and HearthstoneReplay are only used in type
+// positions above. These `void` references are harmless and make the intent explicit.
+void Node;

@@ -13,6 +13,7 @@
 		"**/*.spec.ts",
 		"**/*.d.ts",
 		"../../test-tools/bugs/**/*.spec.ts",
+		"../../test-tools/non-reg/**/*.spec.ts",
 		"../../test-tools/lib/**/*.ts"
 	]
 }

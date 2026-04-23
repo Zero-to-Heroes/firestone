@@ -2,8 +2,11 @@
 export default {
 	displayName: 'game-state',
 	preset: '../../jest.preset.js',
-	/** Bug replay specs live under `test-tools/bugs/` (outside this lib folder). */
-	roots: ['<rootDir>', '<rootDir>/../../test-tools/bugs'],
+	/**
+	 * Bug replay specs live under `test-tools/bugs/` (outside this lib folder).
+	 * Non-regression suites (e.g. the rewind corpus) live under `test-tools/non-reg/`.
+	 */
+	roots: ['<rootDir>', '<rootDir>/../../test-tools/bugs', '<rootDir>/../../test-tools/non-reg'],
 	setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
 	globals: {
 		'ts-jest': {
@@ -24,5 +27,6 @@ export default {
 	testMatch: [
 		'<rootDir>/src/**/*.spec.ts',
 		'<rootDir>/../../test-tools/bugs/**/*.spec.ts',
+		'<rootDir>/../../test-tools/non-reg/**/*.spec.ts',
 	],
 };

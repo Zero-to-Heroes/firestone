@@ -85,6 +85,20 @@ describe('Golden event parity', () => {
 			parser.onGameEvent = (event) => actualEvents.push(event);
 			const lines = loadTestLog(scenario);
 			parser.FromString(lines);
+
+			const updateList = (process.env['UPDATE_PARSER_GOLDENS'] ?? '').trim();
+			const shouldUpdate =
+				updateList === '1' ||
+				updateList
+					.split(',')
+					.map((s) => s.trim())
+					.includes(scenario);
+			if (shouldUpdate) {
+				const goldenPath = path.join(TEST_DATA_DIR, `${scenario}.events.json`);
+				fs.writeFileSync(goldenPath, JSON.stringify(actualEvents, null, 2));
+				console.log(`[update-goldens] wrote ${scenario}.events.json (${actualEvents.length} events)`);
+				return;
+			}
 			const goldenEvents = loadGoldenEvents(scenario);
 
 			const goldenTypeCounts: Record<string, number> = {};

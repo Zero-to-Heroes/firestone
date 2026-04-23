@@ -54,6 +54,20 @@ export class GameStateService {
 		opponent: null,
 	};
 
+	/**
+	 * Bounded LIFO ring buffer of GameState snapshots, captured on every
+	 * {@link GameEvent.REWIND_CAPABLE_ACTION_START} the parser emits. On
+	 * {@link GameEvent.REWIND_STARTED} we look up the most recent entry whose
+	 * `originEntityId` matches and restore it wholesale, which is the consumer-side
+	 * mirror of what the parser does with its own `ParserState` snapshot.
+	 *
+	 * Why LIFO + match by entity: a single entity (e.g. Mister Clockwork) can rewind
+	 * repeatedly, so we want the most recent matching snapshot. Nested rewinds also
+	 * naturally resolve most-recent-first.
+	 */
+	private rewindSnapshots: { readonly originEntityId: number; readonly state: GameState }[] = [];
+	private static readonly REWIND_SNAPSHOT_BUFFER_SIZE = 8;
+
 	private showDecktrackerFromGameMode: boolean;
 
 	constructor(
@@ -350,11 +364,35 @@ export class GameStateService {
 					cardId: minion.CardId,
 				})),
 			];
+		} else if (gameEvent.type === GameEvent.REWIND_CAPABLE_ACTION_START) {
+			// Parser just snapshotted its ParserState; mirror that on the consumer side so a
+			// subsequent REWIND_STARTED can cheaply roll back `currentState` without replaying
+			// the entire game.
+			const originEntityId: number | null | undefined = gameEvent.additionalData?.originEntityId;
+			if (originEntityId != null) {
+				this.rewindSnapshots.push({ originEntityId, state: currentState });
+				if (this.rewindSnapshots.length > GameStateService.REWIND_SNAPSHOT_BUFFER_SIZE) {
+					this.rewindSnapshots.shift();
+				}
+			}
 		} else if (gameEvent.type === GameEvent.REWIND_STARTED) {
 			this.savedDeckstrings = {
 				player: currentState.playerDeck.deckstring,
 				opponent: currentState.opponentDeck.deckstring,
 			};
+			const originEntityId: number | null | undefined = gameEvent.additionalData?.originEntityId;
+			if (originEntityId != null) {
+				// LIFO lookup so repeat rewinds from the same entity pick the freshest snapshot.
+				for (let i = this.rewindSnapshots.length - 1; i >= 0; i--) {
+					if (this.rewindSnapshots[i].originEntityId === originEntityId) {
+						const snapshot = this.rewindSnapshots[i];
+						this.rewindSnapshots.splice(i, 1);
+						currentState = snapshot.state;
+						console.log('[game-state] restored rewind snapshot for originEntityId', originEntityId);
+						break;
+					}
+				}
+			}
 		} else if (gameEvent.type === GameEvent.REWIND_OVER) {
 			if (this.savedDeckstrings?.opponent) {
 				this.deckUpdater.next(
