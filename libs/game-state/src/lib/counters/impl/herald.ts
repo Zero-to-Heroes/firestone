@@ -24,8 +24,19 @@ const CATACLYSM_COLOSSAL_BY_CLASS: Partial<Record<CardClass, string>> = {
 
 const getColossalForSide = (gameState: GameState, side: 'player' | 'opponent'): string | undefined => {
 	const deck = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
-	const playerClass = deck?.hero?.classes?.[0];
-	return playerClass != null ? CATACLYSM_COLOSSAL_BY_CLASS[playerClass] : undefined;
+	const playerId = side === 'player' ? gameState.localPlayerId : gameState.opponentPlayerId;
+	const controllerEntity =
+		playerId != null
+			? getControllerEntity(
+					gameState.parserState?.CurrentEntities,
+					gameState.parserState?.ControllerEntityMap,
+					playerId,
+				)
+			: undefined;
+	const playerClass = getEntityTag(controllerEntity, GameTag.HERALD_COLOSSAL_CLASS);
+	const result = playerClass != null ? CATACLYSM_COLOSSAL_BY_CLASS[playerClass] : undefined;
+	console.debug('[debug] result', result, playerClass, controllerEntity, deck, playerId, gameState);
+	return result;
 };
 
 const getHeraldAmount = (gameState: GameState, side: 'player' | 'opponent'): number | null => {
@@ -35,9 +46,14 @@ const getHeraldAmount = (gameState: GameState, side: 'player' | 'opponent'): num
 	const deck = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
 	const eventCount = deck?.heraldCountThisGame ?? 0;
 	const playerId = side === 'player' ? gameState.localPlayerId : gameState.opponentPlayerId;
-	const controllerEntity = playerId != null
-		? getControllerEntity(gameState.parserState?.CurrentEntities, gameState.parserState?.ControllerEntityMap, playerId)
-		: undefined;
+	const controllerEntity =
+		playerId != null
+			? getControllerEntity(
+					gameState.parserState?.CurrentEntities,
+					gameState.parserState?.ControllerEntityMap,
+					playerId,
+				)
+			: undefined;
 	const fullStateCount = getEntityTag(controllerEntity, GameTag.HERALD_COLOSSAL_AMOUNT, 0);
 	// Prefer event-based count for real-time updates; fall back to fullGameState for replays/rewinds
 	const amount = eventCount > 0 ? eventCount : (fullStateCount ?? null);
