@@ -107,7 +107,6 @@ const revealRelatedCards = (deck: DeckState, card: DeckCard, allCards: CardsFaca
 			hasMechanic(refCard, GameTag.FABLED_PLUS) ||
 			hasMechanic(refCard, GameTag.IS_FABLED_BUNDLE_CARD))
 	) {
-		console.debug('[debug] reveal related cards', card.cardId, refCard, card, deck);
 		const fablePackage = fablePackages.find((p) => p.includes(card.cardId as CardIds));
 		if (!fablePackage) {
 			return deck;
@@ -164,9 +163,7 @@ export const revealCardInOpponentDeck = (
 			const enchantment = gameState.parserState?.CurrentEntities?.get(creatorEntityId);
 			// console.debug('[card-reveal] enchantment', enchantment);
 			if (enchantment) {
-				const suspiciousCard = otherDeck.findCard(
-					getEntityTag(enchantment, GameTag.CREATOR, 0),
-				)?.card;
+				const suspiciousCard = otherDeck.findCard(getEntityTag(enchantment, GameTag.CREATOR, 0))?.card;
 				// console.debug('[card-reveal] suspiciousCard', suspiciousCard);
 				if (!!suspiciousCard) {
 					return otherDeck.update({

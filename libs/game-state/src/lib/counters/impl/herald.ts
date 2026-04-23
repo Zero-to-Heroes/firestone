@@ -35,7 +35,6 @@ const getColossalForSide = (gameState: GameState, side: 'player' | 'opponent'): 
 			: undefined;
 	const playerClass = getEntityTag(controllerEntity, GameTag.HERALD_COLOSSAL_CLASS);
 	const result = playerClass != null ? CATACLYSM_COLOSSAL_BY_CLASS[playerClass] : undefined;
-	console.debug('[debug] result', result, playerClass, controllerEntity, deck, playerId, gameState);
 	return result;
 };
 

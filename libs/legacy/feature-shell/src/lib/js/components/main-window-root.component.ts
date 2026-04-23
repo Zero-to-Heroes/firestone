@@ -142,9 +142,7 @@ export class MainWindowRootComponent
 	}
 
 	async ngAfterContentInit() {
-		console.debug('[debug]Main Window Root Component ngAfterContentInit');
 		await waitForReady(this.nav);
-		console.debug('[debug]nav ready');
 		await waitForReady(this.ads);
 		console.debug('[debug]ads ready');
 		await waitForReady(this.mainWindowStateService);

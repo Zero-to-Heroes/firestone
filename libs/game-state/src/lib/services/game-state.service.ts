@@ -170,12 +170,6 @@ export class GameStateService {
 			this.processingQueue.enqueue(gameEvent);
 		});
 		this.gameEvents.ptlGameState$.subscribe((update) => {
-			console.debug(
-				'[debug] PTL state update',
-				`localPlayerId=${update.localPlayerId}`,
-				`opponentPlayerId=${update.opponentPlayerId}`,
-				update,
-			);
 			this.updateFromPtlState(update);
 		});
 	}
@@ -186,7 +180,6 @@ export class GameStateService {
 
 	private applyPtlGameStateUpdate(currentState: GameState, update: PtlGameStateUpdate): GameState {
 		if (!currentState) {
-			console.debug('[debug] No current state');
 			return currentState;
 		}
 
@@ -195,21 +188,15 @@ export class GameStateService {
 			localPlayerId: update.localPlayerId,
 			opponentPlayerId: update.opponentPlayerId,
 		});
-		console.debug('[debug] Updated state', next);
 
 		if (next.playerDeck && next.opponentDeck) {
-			const updatedPlayerDeck = this.updateDeckFromParserState(
-				next.playerDeck,
-				next,
-				update.localPlayerId,
-			);
+			const updatedPlayerDeck = this.updateDeckFromParserState(next.playerDeck, next, update.localPlayerId);
 			const updatedOpponentDeck = this.updateDeckFromParserState(
 				next.opponentDeck,
 				next,
 				update.opponentPlayerId,
 			);
-			const hasChanged =
-				updatedPlayerDeck !== next.playerDeck || updatedOpponentDeck !== next.opponentDeck;
+			const hasChanged = updatedPlayerDeck !== next.playerDeck || updatedOpponentDeck !== next.opponentDeck;
 			if (hasChanged) {
 				next = next.update({
 					playerDeck: updatedPlayerDeck as DeckState,
@@ -281,9 +268,6 @@ export class GameStateService {
 
 				if (currentState && currentState !== this.state) {
 					this.state = currentState;
-					if (!currentState.localPlayerId || currentState.localPlayerId <= 0) {
-						console.debug('[debug] Emitting state processQueue', currentState, eventsToProcess);
-					}
 					this.eventEmitters.forEach((emitter) => emitter(currentState));
 				}
 			} catch (e) {

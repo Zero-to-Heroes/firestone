@@ -289,7 +289,6 @@ const getDynamicRelatedCardIdsInternal = (
 			);
 		case CardIds.ScrappyScavenger_TLC_461:
 			const card = inputOptions.deckState.findCard(creatorEntityId)?.card;
-			console.debug('[debug] [dynamic-pools] Scrappy Scavenger', cardId, creatorEntityId, card);
 			const hasBeenPlayed = card?.storedInformation?.manaLeftWhenPlayed != null;
 			const targetCost = hasBeenPlayed
 				? card.storedInformation.manaLeftWhenPlayed!

@@ -464,14 +464,8 @@ export class BgsMinionsListCompositionComponent extends AbstractSubscriptionComp
 				if (!boards?.length) {
 					return [];
 				}
-				console.debug('[debug] all boardsboards', boards);
 				const validBoardsForLobby = boards.filter((b) =>
 					isValidBoardForLobby(b, tribesInGame, this.allCards, cardRules),
-				);
-				console.debug('[debug] valid boards for lobby', validBoardsForLobby);
-				console.debug(
-					'[debug] invalid boards for lobby',
-					boards.filter((b) => !isValidBoardForLobby(b, tribesInGame, this.allCards, cardRules)),
 				);
 				return validBoardsForLobby.slice(0, 10).map((b) => ({
 					mmr: Math.round(b.mmr / 500) * 500,
@@ -504,7 +498,6 @@ export class BgsMinionsListCompositionComponent extends AbstractSubscriptionComp
 	highlightComp(event: MouseEvent) {
 		event.preventDefault();
 		event.stopPropagation();
-		console.debug('[debug] highlightComp', this.coreCards, this.addonCards, this.recommendedCards);
 		if (!this.coreCards?.length && !this.addonCards?.length && !this.recommendedCards?.length) {
 			return;
 		}
