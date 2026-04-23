@@ -869,6 +869,8 @@ export class Oracle {
 				case CardIds.Pyros:
 					return CardIds.Pyros_PyrosToken_UNG_027t2;
 				case CardIds.Queldelar_ForgingQueldelarToken_LOOTA_842t:
+				case CardIds.Queldelar_ForgingQueldelarToken_VAC_464t31t:
+				case CardIds.BladeOfQueldelar_ForgingQueldelarTavernBrawl:
 					return CardIds.QueldelarTavernBrawl;
 				case CardIds.Queldelar_ForgingQueldelarToken_ONY_005tc7t:
 					return CardIds.Queldelar_ForgingQueldelarToken_ONY_005tc7t;

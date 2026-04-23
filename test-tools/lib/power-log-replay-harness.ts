@@ -238,6 +238,7 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	'cmap-second-draw': 'cmap-second-draw/cmap-second-draw.log',
 	meadowstrider: 'meadowstrider/meadowstrider.log',
 	qonzu: 'qonzu-top-deck/qonzu-top-deck.log',
+	queldelar: 'queldelar-opponent-hand/queldelar-opponent-hand.log',
 	'shatter-reveal': 'shatter-reveal/shatter-reveal.log',
 	'merch-seller': 'merch-seller/merch-seller.log',
 	'magmaw-attack': 'magmaw-attack/magmaw-attack.log',
