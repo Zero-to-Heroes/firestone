@@ -4,6 +4,7 @@ import { AbyssalCurseCounterDefinitionV2 } from './impl/abyssal-curse';
 import { AnachronosCounterDefinitionV2 } from './impl/anachronos';
 import { AstralAutomatonCounterDefinitionV2 } from './impl/astral-automaton';
 import { AvianaElunesChoseCounterDefinitionV2 } from './impl/aviana-elunes-chosen';
+import { BgsAncestralAutomatonCounterDefinitionV2 } from './impl/battlegrounds/ancestral-automaton';
 import { BallerBuffCounterDefinitionV2 } from './impl/battlegrounds/baller-buff';
 import { BeetlesBuffCounterDefinitionV2 } from './impl/battlegrounds/beetles-buff';
 import { BgsBloodGemCounterDefinitionV2 } from './impl/battlegrounds/bgs-blood-gem';
@@ -253,6 +254,7 @@ export const getAllCounters: (
 	new TavernBuffCounterDefinitionV2(i18n, allCards),
 	new FodderRefreshCounterDefinitionV2(i18n, allCards),
 	new MrrgltonPlayedCounterDefinitionV2(i18n, allCards),
+	new BgsAncestralAutomatonCounterDefinitionV2(i18n, allCards),
 ];
 
 export type { CounterType } from './counter-type';

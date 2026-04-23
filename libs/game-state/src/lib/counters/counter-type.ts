@@ -128,4 +128,5 @@ export type CounterType =
 	| 'cardsDiscarded'
 	| 'friendlyAttacks'
 	| 'spellweaversBrilliance'
-	| 'bgsMrrgltonPlayed';
+	| 'bgsMrrgltonPlayed'
+	| 'bgsAncestralAutomaton';

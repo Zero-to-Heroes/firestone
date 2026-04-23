@@ -573,6 +573,7 @@ export class Preferences implements IPreferences {
 	readonly playerBgsFodderRefreshCounter: boolean = true;
 	readonly playerBgsSpellsPlayedCounter: boolean = true;
 	readonly playerBgsMrrgltonPlayedCounter: boolean = true;
+	readonly playerBgsAncestralAutomatonCounter: boolean = true;
 	readonly playerBgsSouthseaCounter: boolean = true;
 	readonly playerBgsMagmalocCounter: boolean = true;
 	readonly playerBgsMajordomoCounter: boolean = true;

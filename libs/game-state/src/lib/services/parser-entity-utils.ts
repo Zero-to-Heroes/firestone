@@ -1,4 +1,5 @@
 import { CardType, GameTag, Zone } from '@firestone-hs/reference-data';
+import { FullEntity } from '@firestone/power-log-parser';
 
 export interface TagLike {
 	readonly Name: number;
@@ -27,6 +28,16 @@ export function hasTag(tags: readonly TagLike[] | undefined | null, tag: GameTag
 
 export function getEntityTag(entity: EntityLike | undefined | null, tag: GameTag | number, defaultValue = -1): number {
 	return getTag(entity?.Tags, tag, defaultValue);
+}
+
+export function getPlayerEnchantments(
+	currentEntities: Map<number, FullEntity> | undefined | null,
+	entity: FullEntity | undefined | null,
+	enchantment: string,
+): FullEntity[] {
+	if (!currentEntities || !entity) return [];
+	const enchantments = getEnchantmentsForEntity(currentEntities, entity.Id);
+	return enchantments.filter((e) => e.CardId === enchantment);
 }
 
 export function getEffectiveController(entity: EntityLike | undefined | null): number {
@@ -68,10 +79,7 @@ export function getEntitiesInZone(
 	);
 }
 
-export function getBoard(
-	currentEntities: Map<number, EntityLike> | undefined | null,
-	playerId: number,
-): EntityLike[] {
+export function getBoard(currentEntities: Map<number, EntityLike> | undefined | null, playerId: number): EntityLike[] {
 	if (!currentEntities) return [];
 	return [...currentEntities.values()]
 		.filter(
@@ -109,13 +117,12 @@ export function isMinionLike(entity: EntityLike | undefined | null): boolean {
 }
 
 export function getEnchantmentsForEntity(
-	currentEntities: Map<number, EntityLike> | undefined | null,
+	currentEntities: Map<number, FullEntity> | undefined | null,
 	entityId: number,
-): EntityLike[] {
+): FullEntity[] {
 	if (!currentEntities) return [];
 	return [...currentEntities.values()].filter(
 		(e) =>
-			getEntityTag(e, GameTag.ATTACHED) === entityId &&
-			getEntityTag(e, GameTag.ZONE) === (Zone.PLAY as number),
+			getEntityTag(e, GameTag.ATTACHED) === entityId && getEntityTag(e, GameTag.ZONE) === (Zone.PLAY as number),
 	);
 }
