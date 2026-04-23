@@ -6,6 +6,7 @@
   "currentTurn": 7,
   "gameStarted": true,
   "gameTagTurnNumber": 13,
+  "localPlayerId": 1,
   "matchStartTimestamp": "<scrubbed>",
   "metadata": {
     "formatType": 1,
@@ -238,7 +239,7 @@
         "zone": "HAND"
       }
     ],
-    "cardsLeftInDeck": 30,
+    "cardsLeftInDeck": 19,
     "cardsPlayedFromInitialDeck": [
       {
         "cardId": "EDR_456",
@@ -733,8 +734,8 @@
         "linkedEntityIds": [],
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": "<scrubbed>",
-          "turnAtWhichCardEnteredCurrentZone": 4,
-          "turnAtWhichCardEnteredHand": 4
+          "turnAtWhichCardEnteredCurrentZone": 5,
+          "turnAtWhichCardEnteredHand": 5
         },
         "relatedCardIds": [],
         "tags": {
@@ -757,8 +758,8 @@
         "linkedEntityIds": [],
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": "<scrubbed>",
-          "turnAtWhichCardEnteredCurrentZone": 6,
-          "turnAtWhichCardEnteredHand": 6
+          "turnAtWhichCardEnteredCurrentZone": 5,
+          "turnAtWhichCardEnteredHand": 5
         },
         "rarity": null,
         "refManaCost": null,
@@ -804,6 +805,7 @@
       ],
       "entityId": 66,
       "initialClasses": [],
+      "manaLeft": 0,
       "maxHealth": 30,
       "playerName": "DaedinTest"
     },
@@ -1765,7 +1767,7 @@
           "203": 4,
           "218": 1,
           "261": 1,
-          "263": 2,
+          "263": 1,
           "273": 3,
           "386": 0,
           "415": 1,
@@ -1892,33 +1894,33 @@
     "turnDuration": 75000,
     "turnTimings": [
       {
-        "endTimestamp": 1776873051047,
-        "startTimestamp": 1776873037489,
+        "endTimestamp": "<scrubbed>",
+        "startTimestamp": "<scrubbed>",
         "turn": 1
       },
       {
-        "endTimestamp": 1776873107577,
-        "startTimestamp": 1776873058434,
+        "endTimestamp": "<scrubbed>",
+        "startTimestamp": "<scrubbed>",
         "turn": 2
       },
       {
-        "endTimestamp": 1776873151344,
-        "startTimestamp": 1776873118548,
+        "endTimestamp": "<scrubbed>",
+        "startTimestamp": "<scrubbed>",
         "turn": 3
       },
       {
-        "endTimestamp": 1776873255676,
-        "startTimestamp": 1776873197868,
+        "endTimestamp": "<scrubbed>",
+        "startTimestamp": "<scrubbed>",
         "turn": 4
       },
       {
-        "endTimestamp": 1776873275285,
-        "startTimestamp": 1776873264796,
+        "endTimestamp": "<scrubbed>",
+        "startTimestamp": "<scrubbed>",
         "turn": 5
       },
       {
-        "endTimestamp": 1776873309933,
-        "startTimestamp": 1776873289756,
+        "endTimestamp": "<scrubbed>",
+        "startTimestamp": "<scrubbed>",
         "turn": 6
       }
     ],
@@ -1947,6 +1949,7 @@
     },
     "weaponsEquippedThisGame": 2
   },
+  "opponentPlayerId": 2,
   "playerDeck": {
     "abyssalCurseHighestValue": 0,
     "additionalKnownCardsInDeck": [],
@@ -2540,7 +2543,7 @@
         "zone": "HAND"
       }
     ],
-    "cardsLeftInDeck": 30,
+    "cardsLeftInDeck": 21,
     "cardsPlayedFromInitialDeck": [],
     "cardsPlayedLastTurn": [
       {
@@ -3118,6 +3121,7 @@
       ],
       "entityId": 64,
       "initialClasses": [],
+      "manaLeft": 0,
       "maxHealth": 30,
       "playerName": "Daedin"
     },
@@ -3576,7 +3580,7 @@
           "203": 1,
           "218": 1,
           "261": 0,
-          "263": 3,
+          "263": 4,
           "267": 99,
           "271": 2,
           "273": 1,
@@ -3736,38 +3740,38 @@
     "turnDuration": 75000,
     "turnTimings": [
       {
-        "endTimestamp": 1776873037489,
-        "startTimestamp": 1776873022861,
+        "endTimestamp": "<scrubbed>",
+        "startTimestamp": "<scrubbed>",
         "turn": 1
       },
       {
-        "endTimestamp": 1776873058434,
-        "startTimestamp": 1776873051047,
+        "endTimestamp": "<scrubbed>",
+        "startTimestamp": "<scrubbed>",
         "turn": 2
       },
       {
-        "endTimestamp": 1776873118548,
-        "startTimestamp": 1776873107577,
+        "endTimestamp": "<scrubbed>",
+        "startTimestamp": "<scrubbed>",
         "turn": 3
       },
       {
-        "endTimestamp": 1776873197868,
-        "startTimestamp": 1776873151344,
+        "endTimestamp": "<scrubbed>",
+        "startTimestamp": "<scrubbed>",
         "turn": 4
       },
       {
-        "endTimestamp": 1776873264796,
-        "startTimestamp": 1776873255676,
+        "endTimestamp": "<scrubbed>",
+        "startTimestamp": "<scrubbed>",
         "turn": 5
       },
       {
-        "endTimestamp": 1776873289756,
-        "startTimestamp": 1776873275285,
+        "endTimestamp": "<scrubbed>",
+        "startTimestamp": "<scrubbed>",
         "turn": 6
       },
       {
-        "endTimestamp": 0,
-        "startTimestamp": 1776873309933,
+        "endTimestamp": "<scrubbed>",
+        "startTimestamp": "<scrubbed>",
         "turn": 7
       }
     ],

@@ -6,6 +6,7 @@
   "currentTurn": 4,
   "gameStarted": true,
   "gameTagTurnNumber": 7,
+  "localPlayerId": 1,
   "matchStartTimestamp": "<scrubbed>",
   "metadata": {
     "formatType": 1,
@@ -224,7 +225,7 @@
         "zone": "HAND"
       }
     ],
-    "cardsLeftInDeck": 30,
+    "cardsLeftInDeck": 22,
     "cardsPlayedFromInitialDeck": [
       {
         "cardId": "EDR_456",
@@ -745,8 +746,8 @@
         "linkedEntityIds": [],
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": "<scrubbed>",
-          "turnAtWhichCardEnteredCurrentZone": 3,
-          "turnAtWhichCardEnteredHand": 3
+          "turnAtWhichCardEnteredCurrentZone": 4,
+          "turnAtWhichCardEnteredHand": 4
         },
         "rarity": null,
         "refManaCost": null,
@@ -768,6 +769,7 @@
       ],
       "entityId": 66,
       "initialClasses": [],
+      "manaLeft": 0,
       "maxHealth": 30,
       "playerName": "DaedinTest"
     },
@@ -1377,18 +1379,18 @@
     "turnDuration": 75000,
     "turnTimings": [
       {
-        "endTimestamp": 1776873051047,
-        "startTimestamp": 1776873037489,
+        "endTimestamp": "<scrubbed>",
+        "startTimestamp": "<scrubbed>",
         "turn": 1
       },
       {
-        "endTimestamp": 1776873107577,
-        "startTimestamp": 1776873058434,
+        "endTimestamp": "<scrubbed>",
+        "startTimestamp": "<scrubbed>",
         "turn": 2
       },
       {
-        "endTimestamp": 1776873151344,
-        "startTimestamp": 1776873118548,
+        "endTimestamp": "<scrubbed>",
+        "startTimestamp": "<scrubbed>",
         "turn": 3
       }
     ],
@@ -1417,6 +1419,7 @@
     },
     "weaponsEquippedThisGame": 2
   },
+  "opponentPlayerId": 2,
   "playerDeck": {
     "abyssalCurseHighestValue": 0,
     "additionalKnownCardsInDeck": [],
@@ -1782,7 +1785,7 @@
         "zone": "HAND"
       }
     ],
-    "cardsLeftInDeck": 30,
+    "cardsLeftInDeck": 24,
     "cardsPlayedFromInitialDeck": [],
     "cardsPlayedLastTurn": [
       {
@@ -2374,6 +2377,7 @@
       ],
       "entityId": 64,
       "initialClasses": [],
+      "manaLeft": 0,
       "maxHealth": 30,
       "playerName": "Daedin"
     },
@@ -2780,23 +2784,23 @@
     "turnDuration": 75000,
     "turnTimings": [
       {
-        "endTimestamp": 1776873037489,
-        "startTimestamp": 1776873022861,
+        "endTimestamp": "<scrubbed>",
+        "startTimestamp": "<scrubbed>",
         "turn": 1
       },
       {
-        "endTimestamp": 1776873058434,
-        "startTimestamp": 1776873051047,
+        "endTimestamp": "<scrubbed>",
+        "startTimestamp": "<scrubbed>",
         "turn": 2
       },
       {
-        "endTimestamp": 1776873118548,
-        "startTimestamp": 1776873107577,
+        "endTimestamp": "<scrubbed>",
+        "startTimestamp": "<scrubbed>",
         "turn": 3
       },
       {
-        "endTimestamp": 0,
-        "startTimestamp": 1776873151344,
+        "endTimestamp": "<scrubbed>",
+        "startTimestamp": "<scrubbed>",
         "turn": 4
       }
     ],

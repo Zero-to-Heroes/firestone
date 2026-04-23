@@ -28,6 +28,10 @@ const DEFAULT_SCRUB_KEYS: readonly string[] = [
 	// drifts between runs even when replaying the same log. The turn-granular info (turn,
 	// playTiming) is still asserted.
 	'timestamp',
+	// `turnTimings[]` entries use `Date.now()` captured at turn start/end during replay, so
+	// they drift by the elapsed wall-clock between runs. Scrub; the `turn` field is kept.
+	'startTimestamp',
+	'endTimestamp',
 	// `internalEntityId` is a per-run uuidShort() stamped on every DeckCard. It is stable
 	// within a run but differs across runs; for golden comparisons we treat it as opaque.
 	'internalEntityId',
