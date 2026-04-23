@@ -88,13 +88,17 @@ export class GoldNextTurnCounterDefinitionV2 extends CounterDefinitionV2<{
 		return goldDeltaStr;
 	}
 
-	private buildValue(deckState: GameState): {
+	private buildValue(gameState: GameState): {
 		overconfidences: number;
 		guaranteedGoldNextTurn: number;
 	} | null {
-		const controllerEntity = getControllerEntity(deckState.parserState?.CurrentEntities, deckState.parserState?.ControllerEntityMap, deckState.localPlayerId!);
+		const controllerEntity = getControllerEntity(
+			gameState.parserState?.CurrentEntities,
+			gameState.parserState?.ControllerEntityMap,
+			gameState.localPlayerId!,
+		);
 		const guaranteedGoldNextTurn = getEntityTag(controllerEntity, GameTag.BACON_PLAYER_EXTRA_GOLD_NEXT_TURN, 0);
-		const overconfidences = deckState.playerDeck.enchantments.filter(
+		const overconfidences = gameState.playerDeck.enchantments.filter(
 			(e) => e.cardId === CardIds.Overconfidence_OverconfidentDntEnchantment_BG28_884e,
 		).length;
 		const totalMaybe = guaranteedGoldNextTurn + 3 * overconfidences;
@@ -103,8 +107,8 @@ export class GoldNextTurnCounterDefinitionV2 extends CounterDefinitionV2<{
 		// 	totalMaybe,
 		// 	guaranteedGoldNextTurn,
 		// 	overconfidences,
-		// 	deckState?.fullGameState?.Player,
-		// 	deckState?.playerDeck,
+		// 	gameState?.playerDeck,
+		// 	gameState,
 		// );
 		if (totalMaybe === 0) {
 			return null;
@@ -131,6 +135,7 @@ export class GoldNextTurnCounterDefinitionV2 extends CounterDefinitionV2<{
 // 	}
 // };
 
+// Too complex to get it right because of Polarizing Beatboxer
 // const getGoldForMinion = (
 // 	enchantment: { cardId: string },
 // 	playerDeck: DeckState,
@@ -141,7 +146,6 @@ export class GoldNextTurnCounterDefinitionV2 extends CounterDefinitionV2<{
 // 		case CardIds.AccordOTron_AccordOTronEnchantment_BG26_147e:
 // 			return 1;
 // 		case CardIds.AccordOTron_BG26_147_G:
-// 		case CardIds.AccordOTron_AccordOTronEnchantment_BG26_147_Ge:
 // 			return 2;
 // 		case CardIds.RecordSmuggler_BG26_812:
 // 		case CardIds.RecordSmuggler_BG26_812_G:
