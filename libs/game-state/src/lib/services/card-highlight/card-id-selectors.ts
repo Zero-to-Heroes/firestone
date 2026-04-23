@@ -3931,6 +3931,9 @@ export const cardIdSelector = (
 		case CardIds.Thor_SC_414:
 		case CardIds.Thor_ThorExplosivePayloadToken_SC_414t:
 			return and(side(inputSide), or(inHand, inDeck), starshipExtended);
+		// Phoenix Egg: Dormant. Cast a Fire spell to revive Thori'belore!
+		case CardIds.Thoribelore_PhoenixEggToken_RLK_604t:
+		case CardIds.Thoribelore_PhoenixEggToken_RLK_604t2:
 		// Thori'belore: Rush. Deathrattle: Go Dormant. Cast a Fire spell to revive Thori'belore!
 		case CardIds.Thoribelore:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended, fire);
