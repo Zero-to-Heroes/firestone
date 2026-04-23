@@ -5,7 +5,10 @@ import { DeckCard } from '../../../models/deck-card';
 import { DeckState } from '../../../models/deck-state';
 import { GameState } from '../../../models/game-state';
 import { getProcessedCard } from '../../card-utils';
-import { forcedHiddenCardCreators } from '../../hs-utils';
+import {
+	forcedHiddenCardCreators,
+	forcedHiddenInfluencersWhenCardEntersLocalDeck,
+} from '../../hs-utils';
 import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
@@ -43,14 +46,33 @@ export class CardBackToDeckParser implements EventParser {
 		const [initialCardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 		const initialZone: string = gameEvent.additionalData.initialZone;
 		const isPlayer = controllerId === localPlayer.PlayerId;
-
-		// Hack
+		let deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
+		const rawInfluencedBy = gameEvent.additionalData.influencedByCardId as CardIds | undefined;
 		const cardId =
-			!isPlayer && forcedHiddenCardCreators.includes(gameEvent.additionalData.influencedByCardId)
+			!isPlayer && rawInfluencedBy && forcedHiddenCardCreators.includes(rawInfluencedBy)
 				? null
 				: initialCardId;
-		let deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
-		const card = this.findCard(initialZone, deck, cardId, entityId);
+		let card = this.findCard(initialZone, deck, cardId, entityId);
+		// Opponent Q'onzu: log may omit influencedBy; hand card still has creator (see forcedHiddenInfluencersWhenCardEntersLocalDeck).
+		if (
+			isPlayer &&
+			initialZone === 'HAND' &&
+			forcedHiddenInfluencersWhenCardEntersLocalDeck.some(
+				(x) => x === (card.creatorCardId as CardIds) || x === (card.lastAffectedByCardId as CardIds),
+			)
+		) {
+			card = card.update({
+				cardId: undefined,
+				cardName: undefined,
+				refManaCost: undefined,
+				actualManaCost: undefined,
+				rarity: undefined,
+			});
+		}
+		const effectiveInfluencedBy: CardIds | undefined =
+			rawInfluencedBy ??
+			(card.creatorCardId as CardIds | undefined) ??
+			(card.lastAffectedByCardId as CardIds | undefined);
 		// console.debug('[card-back-to-deck] found card', card, cardId, entityId, initialZone, deck);
 
 		// Hard-code for Wallow the Wretched
@@ -139,13 +161,13 @@ export class CardBackToDeckParser implements EventParser {
 		});
 		// console.debug('[card-back-to-deck] cardWithoutInfluence', cardWithoutInfluence, cardWithInfoReset);
 		const cardWithInfluenceBack = cardWithoutInfluence?.update({
-			lastAffectedByCardId: gameEvent.additionalData.influencedByCardId,
+			lastAffectedByCardId: effectiveInfluencedBy,
 		});
-		let cardWithPosition = CARD_SENDING_TO_BOTTOM.includes(gameEvent.additionalData.influencedByCardId)
+		let cardWithPosition = effectiveInfluencedBy && CARD_SENDING_TO_BOTTOM.includes(effectiveInfluencedBy)
 			? cardWithInfluenceBack.update({
 					positionFromBottom: DeckCard.deckIndexFromBottom++,
 				})
-			: CARD_SENDING_TO_TOP.includes(gameEvent.additionalData.influencedByCardId)
+			: effectiveInfluencedBy && CARD_SENDING_TO_TOP.includes(effectiveInfluencedBy)
 				? cardWithInfluenceBack.update({
 						positionFromTop: DeckCard.deckIndexFromTop--,
 					})

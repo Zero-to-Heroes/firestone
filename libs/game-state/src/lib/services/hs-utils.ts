@@ -425,6 +425,16 @@ export const forcedHiddenCardCreators = [
 	// CardIds.TheotarTheMadDuke,
 ];
 
+/**
+ * CARD_BACK_TO_DECK: the opponent's "influencer" put a card onto the local player's deck, but the
+ * power.log can still include the true CardID — clear it. This is the isPlayer (local deck) analogue
+ * of {@link forcedHiddenCardCreators}, which only runs for !isPlayer.
+ */
+export const forcedHiddenInfluencersWhenCardEntersLocalDeck: readonly CardIds[] = [
+	// Puts a discovered spell on the top of the opponent's deck; victim must not see the choice.
+	CardIds.Qonzu_EDR_517,
+];
+
 // These are used to prevent info leaks in hand because we might know too much information
 // But only when the player plays it
 export const hideInfoWhenPlayerPlaysIt = [
