@@ -1,4 +1,4 @@
-name: Bug replay tests (test-tools/bugs)
+name: Bug replay and rewind non-reg tests
 
 on:
     push:
@@ -9,7 +9,7 @@ on:
 jobs:
     bug-replay-specs:
         runs-on: ubuntu-latest
-        timeout-minutes: 30
+        timeout-minutes: 60
         steps:
             - name: Checkout code
               uses: actions/checkout@v4
@@ -27,6 +27,12 @@ jobs:
               # Bug specs use libs/game-state/jest.config.ts (see testMatch there). This Jest version expects
               # --testPathPattern (singular); Nx's testPathPatterns is not wired to it, so invoke Jest directly.
               run: npx jest --config libs/game-state/jest.config.ts --runInBand --ci --silent --passWithNoTests --testPathPattern=test-tools/bugs
+              env:
+                  HS_REFERENCE_CARDS_JSON_PATH: https://raw.githubusercontent.com/Zero-to-Heroes/hs-reference-data/master/src/cards_short.json
+                  NODE_OPTIONS: --max-old-space-size=8192
+
+            - name: Run test-tools/non-reg Jest specs (rewind goldens)
+              run: npx jest --config libs/game-state/jest.config.ts --runInBand --ci --silent --passWithNoTests --testPathPattern=test-tools/non-reg
               env:
                   HS_REFERENCE_CARDS_JSON_PATH: https://raw.githubusercontent.com/Zero-to-Heroes/hs-reference-data/master/src/cards_short.json
                   NODE_OPTIONS: --max-old-space-size=8192
