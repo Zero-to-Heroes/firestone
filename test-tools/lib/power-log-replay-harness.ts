@@ -59,16 +59,9 @@ import * as https from 'https';
 import * as path from 'path';
 import { BehaviorSubject } from 'rxjs';
 
-/** Wait until GameEvents' log line queue is empty (large replays enqueue faster than the 500ms batch). */
+/** Wait until GameEvents' log line queue is empty (batches every 500ms; large replays need this before reading final state). */
 async function waitForGameEventsQueueDrain(gameEvents: GameEvents, maxWaitMs: number): Promise<void> {
-	const queue = (gameEvents as unknown as { processingQueue?: { eventsPendingCount(): number } }).processingQueue;
-	if (!queue?.eventsPendingCount) {
-		return;
-	}
-	const start = Date.now();
-	while (queue.eventsPendingCount() > 0 && Date.now() - start < maxWaitMs) {
-		await new Promise((r) => setTimeout(r, 25));
-	}
+	await gameEvents.awaitProcessingQueueIdle(maxWaitMs);
 }
 
 /** Raw JSON for `cards_short.json` (use with `HS_REFERENCE_CARDS_JSON_PATH` or fetch in tooling). */

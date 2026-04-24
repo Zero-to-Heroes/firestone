@@ -7,6 +7,7 @@
  *   npx jest test-tools/bugs/fyrakk-fire-secret/power-log-fyrakk-fire-secret-replay.spec.ts --config=libs/game-state/jest.config.ts --runInBand
  */
 import { AllCardsService, SpellSchool } from '@firestone-hs/reference-data';
+import type { GameState } from '@firestone/game-state';
 import {
 	requirePowerLogFixtureExists,
 	requirePowerLogReplayPrerequisites,
@@ -16,8 +17,19 @@ import {
 	replayPowerLogToGameState,
 } from '../../lib/power-log-replay-harness';
 
-/** Entity id from trimmed fixture: hunter secret cast during Fyrakk battlecry (opponent). */
+/** Typical entity id in fyrakk-fire-secret.log: hunter secret from Fyrakk battlecry (opponent). May change if the fixture is re-captured. */
 const FYRAKK_CAST_SECRET_ENTITY_ID = 256;
+
+/**
+ * Fyrakk creates an **unknown** secret; prefer the known fixture entity id, else any unrevealed secret with a narrowed pool.
+ */
+function findFyrakkNarrowedSecretPool(state: GameState) {
+	const all = [...state.opponentDeck.secrets, ...state.playerDeck.secrets];
+	return (
+		all.find((s) => s.entityId === FYRAKK_CAST_SECRET_ENTITY_ID) ??
+		all.find((s) => s.cardId === '' && s.allPossibleOptions.length > 0)
+	);
+}
 
 function isFireSpellSchoolSecret(allCards: AllCardsService, cardId: string): boolean {
 	const ref = allCards.getCard(cardId);
@@ -37,17 +49,23 @@ describe('Power log replay → GameStateService (Fyrakk → Fire secrets only)',
 			const ctx = await replayPowerLogToGameState({
 				logPath,
 				reviewId: 'fyrakk-fire-secret-replay',
-				settleMs: 12_000,
+				settleMs: 20_000,
 			});
 			requirePowerLogReplayResult(ctx, cardsPath);
 
 			const { state, allCardsRef } = ctx;
 			const allCards = allCardsRef as AllCardsService;
 
-			const opponentSecrets = state.opponentDeck.secrets.filter((s) => s.entityId === FYRAKK_CAST_SECRET_ENTITY_ID);
-			const playerSecrets = state.playerDeck.secrets.filter((s) => s.entityId === FYRAKK_CAST_SECRET_ENTITY_ID);
-			const boardSecret = opponentSecrets[0] ?? playerSecrets[0];
-			expect(boardSecret).toBeDefined();
+			const boardSecret = findFyrakkNarrowedSecretPool(state);
+			if (boardSecret == null) {
+				const dump = (secrets: typeof state.opponentDeck.secrets) =>
+					JSON.stringify(secrets.map((s) => ({ e: s.entityId, card: s.cardId, n: s.allPossibleOptions.length })));
+				throw new Error(
+					`Fyrakk unknown secret missing — opponent: ${dump(state.opponentDeck.secrets)} player: ${dump(
+						state.playerDeck.secrets,
+					)}`,
+				);
+			}
 
 			const options = boardSecret!.allPossibleOptions;
 			expect(options.length).toBeGreaterThan(0);
