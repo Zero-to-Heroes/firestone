@@ -18,13 +18,21 @@ import { isCardCreated } from '../../models/deck-card';
 import { getCost, getProcessedCard } from '../card-utils';
 import { PLAGUES } from '../game-events/event-parser/special-cases/plagues-parser';
 import { Selector, SelectorInput } from './cards-highlight-common.service';
-export const CONCOCTION_GENERATORS = [
+export const CONCOCTION_GENERATORS: readonly CardIds[] = [
 	CardIds.PotionBelt,
 	CardIds.Concoctor,
 	CardIds.VileApothecary,
 	CardIds.PotionmasterPutricide,
 	CardIds.ContagionConcoctionTavernBrawl,
 ];
+export const CONCOCTIONS: readonly CardIds[] = [
+	CardIds.GhoulishAlchemist_SlimyConcoctionToken,
+	CardIds.GhoulishAlchemist_DreadfulConcoctionToken,
+	CardIds.GhoulishAlchemist_BubblingConcoctionToken,
+	CardIds.GhoulishAlchemist_HazyConcoctionToken,
+	CardIds.GhoulishAlchemist_GleamingConcoctionToken,
+];
+export const CONCOCTION_RELATED_CARDS: readonly CardIds[] = [...CONCOCTIONS, ...CONCOCTION_GENERATORS];
 
 export const CREWMATE_GENERATORS = [
 	CardIds.Headhunt_GDB_473,
@@ -242,6 +250,7 @@ export const cardIs =
 	(...cardIds: readonly CardIds[]) =>
 	(input: SelectorInput): boolean =>
 		!!cardIds?.length && cardIds.includes(input.card?.id as CardIds);
+export const isConcoctionRelated = cardIs(...CONCOCTION_RELATED_CARDS);
 
 // Fix issues where there are multiple entities with the same entityId, because the card got transformed
 export const entityIs =

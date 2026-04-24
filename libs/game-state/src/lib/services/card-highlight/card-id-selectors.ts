@@ -94,6 +94,7 @@ import {
 	inPlay,
 	inStartingHand,
 	infuse,
+	isConcoctionRelated,
 	isPlague,
 	isSi7,
 	kindred,
@@ -1642,22 +1643,7 @@ export const cardIdSelector = (
 		case CardIds.Ghost_SC_408:
 			return and(side(inputSide), or(inDeck, inHand), starshipExtended);
 		case CardIds.GhoulishAlchemist:
-			return and(
-				side(inputSide),
-				or(inDeck, inHand),
-				cardIs(
-					CardIds.GhoulishAlchemist_SlimyConcoctionToken,
-					CardIds.GhoulishAlchemist_DreadfulConcoctionToken,
-					CardIds.GhoulishAlchemist_BubblingConcoctionToken,
-					CardIds.GhoulishAlchemist_HazyConcoctionToken,
-					CardIds.GhoulishAlchemist_GleamingConcoctionToken,
-					CardIds.Concoctor,
-					CardIds.PotionBelt,
-					CardIds.VileApothecary,
-					CardIds.PotionmasterPutricide,
-					CardIds.ContagionConcoctionTavernBrawl,
-				),
-			);
+			return and(side(inputSide), or(inDeck, inHand), isConcoctionRelated);
 		case CardIds.GiantAnaconda:
 			return and(side(inputSide), or(inDeck, inHand), minion, attackGreaterThan(4));
 		case CardIds.Gigantotem:

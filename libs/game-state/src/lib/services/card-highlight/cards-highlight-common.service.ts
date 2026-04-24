@@ -28,6 +28,7 @@ import { cardIdSelectorSort } from './card-id-selector-sort';
 import { cardIdSelector } from './card-id-selectors';
 import {
 	and,
+	CONCOCTION_RELATED_CARDS,
 	barrelOfSludge,
 	cardIs,
 	CONCOCTION_GENERATORS,
@@ -599,6 +600,9 @@ export abstract class CardsHighlightCommonService {
 
 		if (CONCOCTION_GENERATORS.includes(cardId as CardIds)) {
 			selectors.push(and(side(inputSide), or(inHand, inDeck), cardIs(...CONCOCTION_GENERATORS)));
+		}
+		if (cardId !== CardIds.GhoulishAlchemist && CONCOCTION_RELATED_CARDS.includes(cardId as CardIds)) {
+			selectors.push(and(side(inputSide), or(inHand, inDeck), cardIs(CardIds.GhoulishAlchemist)));
 		}
 
 		if (CREWMATE_GENERATORS.includes(cardId as CardIds)) {
