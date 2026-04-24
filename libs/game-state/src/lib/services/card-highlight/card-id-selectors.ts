@@ -1416,7 +1416,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), minion, divineShield);
 		case CardIds.FandralStaghelm_CORE_OG_044:
 		case CardIds.FandralStaghelm_OG_044:
-			return and(side(inputSide), inDeck, chooseOne);
+			return and(side(inputSide), or(inDeck, inHand, inOther), chooseOne);
 		case CardIds.FangboundDruid:
 			return and(side(inputSide), or(inHand, inDeck), beast);
 		// Farseer Nobundo: Deathrattle: Open the Galaxy's Lens. It absorbs the power of the next spell you cast.
