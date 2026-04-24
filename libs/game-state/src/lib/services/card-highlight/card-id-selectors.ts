@@ -2539,7 +2539,7 @@ export const cardIdSelector = (
 		case CardIds.MeddlesomeServant_YOG_518:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
 		case CardIds.MedivhsTriumph_CATA_308:
-			return and(side(inputSide), or(inDeck, inHand, inPlay), legendary);
+			return and(side(inputSide), or(inDeck, inHand, inPlay), legendary, not(cardType(CardType.HERO)));
 		case CardIds.MedivhTheHallowed_TIME_890:
 			return and(
 				side(inputSide),
