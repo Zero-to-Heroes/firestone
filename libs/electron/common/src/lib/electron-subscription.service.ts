@@ -56,9 +56,10 @@ export class ElectronSubscriptionService extends AbstractFacadeService<ElectronS
 		});
 
 		await waitForReady(this.user);
-		this.user.user$$.pipe(debounceTime(500)).subscribe(() => {
-			console.log('[ads] [subscription] user changed, fetching new plan');
-			this.startCheckingForUpdates();
+		this.user.user$$.pipe(debounceTime(500)).subscribe((user) => {
+			console.log('[ads] [subscription] user changed, fetching new plan', user);
+			this.fetchCurrentPlan();
+			// this.startCheckingForUpdates();
 		});
 
 		setInterval(() => {

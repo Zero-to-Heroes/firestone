@@ -7,7 +7,7 @@ import {
 	UserService,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
-import { CurrentPlan } from './subscription.service';
+import { CurrentPlan, PremiumPlanId } from './subscription.service';
 import { TEBEX_PACKAGES_URL, TebexPackage, TebexService, TebexSub } from './tebex.service';
 
 const TEBEX_HEADLESS_SUBSCRIPTIONS_URL = 'https://mv7pyt4yrdeg2o26i6j5lljc2e0hnqti.lambda-url.us-west-2.on.aws/';
@@ -77,14 +77,43 @@ export class TebexHeadlessService extends AbstractFacadeService<TebexService> {
 			'[ads] [tebex-headless] calling tebex headless subscriptions url',
 			TEBEX_HEADLESS_SUBSCRIPTIONS_URL,
 		);
-		const tebexPlans = await this.api.callGetApi<readonly TebexSub[]>(TEBEX_HEADLESS_SUBSCRIPTIONS_URL, {
-			bearerToken: currentUser.userId,
-		});
+		const tebexPlans: readonly TebexSub[] = await this.api.callGetApi<readonly TebexSub[]>(
+			TEBEX_HEADLESS_SUBSCRIPTIONS_URL,
+			{
+				bearerToken: currentUser.userId,
+			},
+		);
 		console.log('[ads] [tebex-headless] tebexPlans', tebexPlans, currentUser.username, currentUser.userId);
 		if (!tebexPlans?.length) {
 			return null;
 		}
 
-		return null;
+		const tebexPlan = tebexPlans[0];
+		console.log('[ads] [tebex-headless] tebexPlan retrieved', tebexPlan);
+
+		const packages = await this.packages$$.getValueWithInit();
+		const tebexPackage = packages?.find((p) => p.id === tebexPlan.packageId);
+		console.debug('[ads] [tebex] tebexPackage', tebexPackage);
+		if (!tebexPackage) {
+			console.warn('[ads] [tebex] could not find package for sub', packages, tebexPlans);
+			return null;
+		}
+
+		const subDetails: any = null;
+		// await this.api.callGetApi<TebexSubDetails>(`${TEBEX_SUB_DETAILS_URL}/${tebexPackage.id}`, {
+		// 	bearerToken: owToken,
+		// });
+		console.debug('[ads] [tebex] sub details', subDetails);
+		const expiryDate = subDetails?.expiryDate;
+		const result = {
+			id: tebexPackage.name.toLowerCase() as PremiumPlanId,
+			expireAt: expiryDate ? new Date(expiryDate) : null,
+			active: tebexPlan.state !== 'EXPIRED' && tebexPlan.state !== 'CANCELLED',
+			autoRenews: tebexPlan.state === 'ACTIVE',
+			cancelled: tebexPlan.state === 'PENDING_CANCELLATION',
+			discordCode: tebexPlans[0].recurringPaymentId,
+		};
+		console.debug('[ads] [tebex] current plan', result);
+		return result;
 	}
 }
