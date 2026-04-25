@@ -7,11 +7,16 @@ import { ElectronGameWindowService } from '@firestone/electron/common';
 import { AllCardsService } from '@firestone-hs/reference-data';
 import { GameEvents } from '@firestone/game-state';
 import { DiskCacheService, LogListenerService } from '@firestone/shared/common/service';
-import { CardsFacadeStandaloneService, DATABASE_SERVICE_TOKEN } from '@firestone/shared/framework/core';
+import {
+	CardsFacadeStandaloneService,
+	DATABASE_SERVICE_TOKEN,
+	WINDOW_HANDLER_SERVICE_TOKEN,
+} from '@firestone/shared/framework/core';
 import { BrowserWindow, app as electronApp, globalShortcut, ipcMain, shell } from 'electron';
 import { appendFileSync, existsSync, mkdirSync, readdirSync, statSync, unlinkSync } from 'fs';
 import { appendFile } from 'fs/promises';
 import { join } from 'path';
+import { distinctUntilChanged, Subscription } from 'rxjs';
 import { uIOhook } from 'uiohook-napi';
 import { environment } from '../environments/environment';
 import { buildAppInjector } from './services/electron-app-injector-setup';
@@ -19,6 +24,9 @@ import { ElectronDiskCacheService } from './services/electron-disk-cache.service
 import { ElectronHotkeyHandlerService } from './services/electron-hotkey-handler.service';
 import { MindVisionElectronService } from './services/mind-vision-electron.service';
 import { OverlayService } from './services/overlay.service';
+import { appAccessUnlocked$$, initAppAccessPolicy, disposeAppAccessPolicy } from './services/app-access-policy';
+import { ElectronWindowHandlerService } from './services/electron-window-handler.service';
+import { showPremiumLockNotificationOnce } from './services/premium-lock-notification';
 import { destroySystemTray, initSystemTray } from './services/system-tray';
 
 // Auth callback data interface
@@ -38,6 +46,8 @@ export default class App {
 	static gameWindow: ElectronGameWindowService;
 	static flushRendererLogs: (() => Promise<void>) | null = null;
 	static rendererLogFlushTimer: NodeJS.Timeout | null = null;
+	/** Unsubscribed in onWillQuit. */
+	private static appAccessWindowCloseSub: Subscription | null = null;
 
 	// Auth callback listeners
 	private static authCallbackListeners: ((data: AuthCallbackData) => void)[] = [];
@@ -439,6 +449,9 @@ export default class App {
 	}
 
 	private static async onWillQuit() {
+		App.appAccessWindowCloseSub?.unsubscribe();
+		App.appAccessWindowCloseSub = null;
+		disposeAppAccessPolicy();
 		destroySystemTray();
 
 		// Unregister all global hotkeys and stop uiohook (Tab hold)
@@ -468,6 +481,10 @@ export default class App {
 		// initialization and is ready to create browser windows.
 		// Some APIs can only be used after this event occurs.
 
+		if (process.platform === 'win32') {
+			electronApp.setAppUserModelId('com.zerotoheroes.firestone.desktop');
+		}
+
 		// Skip main window creation for overlay-only mode
 		console.log('🚫 Skipping main window creation (overlay-only mode)');
 		// if (rendererAppName) {
@@ -477,6 +494,7 @@ export default class App {
 
 		// Initialize game detection
 		await App.initGameDetection();
+		showPremiumLockNotificationOnce();
 		initSystemTray();
 	}
 
@@ -540,6 +558,18 @@ export default class App {
 
 		// // Start monitoring (both process detection and ow-electron overlay)
 		// App.gameDetection.startMonitoring();
+
+		await initAppAccessPolicy();
+		const windowHandler = electronInjector.get(
+			WINDOW_HANDLER_SERVICE_TOKEN,
+		) as ElectronWindowHandlerService;
+		App.appAccessWindowCloseSub = appAccessUnlocked$$
+			.pipe(distinctUntilChanged())
+			.subscribe((unlocked) => {
+				if (!unlocked) {
+					windowHandler.closeAllWindowsForAppAccess();
+				}
+			});
 	}
 
 	private static onActivate() {

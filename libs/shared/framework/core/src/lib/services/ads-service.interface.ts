@@ -8,4 +8,9 @@ export interface IAdsService {
 
 	isReady(): Promise<void>;
 	goToPremium(): Promise<void>;
+	/**
+	 * SSO / deep-link may include `isPremium` before Tebex responds. Main window applies this so tray
+	 * and app access update immediately; `currentPlan` from Tebex still overwrites if it disagrees.
+	 */
+	applyAuthPremiumHint(isPremium: boolean): void;
 }

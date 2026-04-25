@@ -6,6 +6,8 @@ import {
 	AbstractFacadeService,
 	AppInjector,
 	IAdsService,
+	isElectronContext,
+	isMainProcess,
 	waitForReady,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
@@ -64,6 +66,16 @@ export class AdService extends AbstractFacadeService<AdService> implements IAdsS
 	protected override async initElectronMainProcess() {
 		this.registerMainProcessMethod('goToPremiumInternal', () => this.goToPremiumInternal());
 		this.registerMainProcessMethod('shouldDisplayAdsInternal', () => this.shouldDisplayAdsInternal());
+	}
+
+	public applyAuthPremiumHint(isPremium: boolean): void {
+		if (!isPremium) {
+			return;
+		}
+		if (isElectronContext() && !isMainProcess()) {
+			return;
+		}
+		this.hasPremiumSub$$.next(true);
 	}
 
 	public async goToPremium(): Promise<void> {

@@ -11,6 +11,7 @@ import {
 import { globalShortcut } from 'electron';
 import { BehaviorSubject } from 'rxjs';
 import { uIOhook, UiohookKey } from 'uiohook-napi';
+import { isAppAccessUnlocked } from './app-access-policy';
 
 /** Maps hotkey names (from OW manifest) to Electron accelerator strings. */
 const DEFAULT_ACCELERATORS: Record<string, string> = {
@@ -48,11 +49,17 @@ export class ElectronHotkeyHandlerService implements IHotkeyHandlerService {
 
 		// Register built-in hotkeys
 		this.registerBuiltInHotkey('battlegrounds', async () => {
+			if (!isAppAccessUnlocked()) {
+				return;
+			}
 			const prefs = await this.prefs.getPreferences();
 			this.windowHandler.toggleBattlegroundsWindow(prefs.bgsUseOverlay);
 		});
 		this.registerBuiltInHotkey('collection', async () => {
 			if (!this.isCollectionHotkeyActive) {
+				return;
+			}
+			if (!isAppAccessUnlocked()) {
 				return;
 			}
 			const prefs = await this.prefs.getPreferences();
@@ -74,6 +81,9 @@ export class ElectronHotkeyHandlerService implements IHotkeyHandlerService {
 		}
 		uIOhook.on('keydown', (e) => {
 			if (e.keycode === UiohookKey.Tab) {
+				if (!isAppAccessUnlocked()) {
+					return;
+				}
 				this.liveInfoKeyPressed$$.next(true);
 				this.holdCallbacks.get(accelerator)?.forEach(({ onDown }) => {
 					try {
@@ -86,6 +96,9 @@ export class ElectronHotkeyHandlerService implements IHotkeyHandlerService {
 		});
 		uIOhook.on('keyup', (e) => {
 			if (e.keycode === UiohookKey.Tab) {
+				if (!isAppAccessUnlocked()) {
+					return;
+				}
 				this.liveInfoKeyPressed$$.next(false);
 				this.holdCallbacks.get(accelerator)?.forEach(({ onUp }) => {
 					try {

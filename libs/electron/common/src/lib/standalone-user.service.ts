@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { buildOverwolfEndSessionUrl, DiskCacheService } from '@firestone/shared/common/service';
+import { buildOverwolfEndSessionUrl, DiskCacheService, SubscriptionService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject, uuid } from '@firestone/shared/framework/common';
 import {
 	AbstractFacadeService,
@@ -195,7 +195,16 @@ export class StandaloneUserService extends AbstractFacadeService<StandaloneUserS
 		};
 		this.user$$.next(user);
 
+		// Deep link already tells us isPremium; apply before Tebex so tray / app access unlock right away.
+		this.ads.applyAuthPremiumHint(authData.isPremium);
+
 		console.log('[user-service] User authenticated successfully:', user.username);
+
+		// Refresh Tebex in the background; currentPlan will correct any stale SSO hint.
+		const subscription = AppInjector.get(SubscriptionService);
+		void subscription.fetchCurrentPlan().catch((e) => {
+			console.error('[user-service] fetchCurrentPlan after auth failed', e);
+		});
 	}
 
 	/**

@@ -1,6 +1,7 @@
 ## Test accounts
 
 - sebTesterPaid / testerpaid@sebastien.tromp.fr / squall007
+- sebTesterFree / testerfree@sebastien.tromp.fr / squall007
 
 ## Electron
 

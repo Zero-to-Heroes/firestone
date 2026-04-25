@@ -32,6 +32,7 @@ import {
 	ArenaMulliganGuideService,
 	ArenaNavigationService,
 } from '@firestone/arena/common';
+import { ArenaRefService } from '@firestone/arena/data-access';
 import {
 	BgsBattleSimulationService,
 	BgsIntermediateResultsSimGuardianService,
@@ -571,6 +572,9 @@ export const buildAppInjector = () => {
 	const owUtils = new LowLevelUtilsElectronService();
 	electronInjector.register(OwUtilsService, owUtils as any as OwUtilsService);
 
+	const arenaRefService = new ArenaRefService(windowManager);
+	electronInjector.register(ArenaRefService, arenaRefService);
+
 	const gameEventsParser = new GameStateParsersService(
 		helper,
 		allCards,
@@ -591,7 +595,7 @@ export const buildAppInjector = () => {
 		gameId,
 		null, // BgsIntermediateResultsSimGuardianService
 		reviewId,
-		null, // ArenaRefService
+		arenaRefService,
 	);
 
 	const bgsMatchPlayers = new BgsMatchPlayersMmrService(windowManager);

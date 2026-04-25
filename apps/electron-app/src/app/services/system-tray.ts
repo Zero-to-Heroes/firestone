@@ -1,29 +1,43 @@
 import { StandaloneUserService } from '@firestone/electron/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AppInjector, waitForReady, WINDOW_HANDLER_SERVICE_TOKEN } from '@firestone/shared/framework/core';
-import { app, Menu, nativeImage, shell, Tray } from 'electron';
+import { app, Menu, MenuItemConstructorOptions, nativeImage, shell, Tray } from 'electron';
 import { join } from 'path';
+import { combineLatest } from 'rxjs';
 import App from '../app';
+import { appAccessUnlocked$$, isAppAccessUnlocked } from './app-access-policy';
 
 let tray: Tray | null = null;
 
-export const initSystemTray = async () => {
-	// Get the path to the tray icon
-	// In dev: __dirname is dist/apps/electron-app, assets are in dist/apps/electron-app/assets
-	// In packaged: assets are bundled in app.asar, so we need to use app.getAppPath()
-	const iconPath = app.isPackaged
-		? join(app.getAppPath(), 'assets', 'tray_icon.png')
-		: join(__dirname, 'assets', 'tray_icon.png');
+function getTrayIconPath(fileName: string): string {
+	return app.isPackaged
+		? join(app.getAppPath(), 'assets', fileName)
+		: join(__dirname, 'assets', fileName);
+}
 
-	// console.log('[SystemTray] Loading icon from:', iconPath);
-
-	const icon = nativeImage.createFromPath(iconPath);
-	if (icon.isEmpty()) {
-		console.error('[SystemTray] Failed to load tray icon from:', iconPath);
+/** Warning icon when the app is locked; falls back to the normal tray icon if missing. */
+function loadTrayNativeImage(warning: boolean) {
+	const primaryName = warning ? 'tray_icon_warning.png' : 'tray_icon.png';
+	const icon = nativeImage.createFromPath(getTrayIconPath(primaryName));
+	if (icon.isEmpty() && warning) {
+		return nativeImage.createFromPath(getTrayIconPath('tray_icon.png'));
 	}
+	if (icon.isEmpty()) {
+		console.error('[SystemTray] Failed to load tray icon:', getTrayIconPath(primaryName));
+	}
+	return icon;
+}
+
+export const initSystemTray = async () => {
+	const fullAppUnlocked = isAppAccessUnlocked();
+	const icon = loadTrayNativeImage(!fullAppUnlocked);
 
 	tray = new Tray(icon);
-	tray.setToolTip('Firestone');
+	tray.setToolTip(
+		fullAppUnlocked
+			? 'Firestone'
+			: 'Firestone — Premium account required. Log in from the menu.',
+	);
 
 	const userService = AppInjector.get(StandaloneUserService);
 
@@ -35,17 +49,27 @@ export const initSystemTray = async () => {
 
 	await waitForReady(userService);
 
-	userService.user$$.subscribe((currentUser) => {
-		// console.log('[SystemTray] User changed:', currentUser);
+	combineLatest([userService.user$$, appAccessUnlocked$$]).subscribe(([currentUser, fullAppUnlocked]) => {
 		const isLoggedIn = !!currentUser?.username;
+		if (tray) {
+			const img = loadTrayNativeImage(!fullAppUnlocked);
+			if (!img.isEmpty()) {
+				tray.setImage(img);
+			}
+			tray.setToolTip(
+				fullAppUnlocked
+					? 'Firestone'
+					: 'Firestone — Premium account required. Log in from the menu.',
+			);
+		}
 
 		const windowHandler = AppInjector.get(WINDOW_HANDLER_SERVICE_TOKEN);
 		const prefService = AppInjector.get(PreferencesService);
 
-		const contextMenu = Menu.buildFromTemplate([
+		const template: MenuItemConstructorOptions[] = [
 			isLoggedIn
 				? {
-						label: `Log out (${currentUser.username})`,
+						label: `Log out (${currentUser!.username!})`,
 						click: () => {
 							console.log('[SystemTray] Log out clicked');
 							userService.logout();
@@ -59,22 +83,39 @@ export const initSystemTray = async () => {
 						},
 					},
 			{ type: 'separator' },
-			{
-				label: 'Main Window',
-				click: async () => {
-					console.log('[SystemTray] Main Window clicked');
-					const prefs = await prefService.getPreferences();
-					windowHandler.showCollectionWindow(prefs.collectionUseOverlay);
+		];
+
+		if (fullAppUnlocked) {
+			template.push(
+				{
+					label: 'Main Window',
+					click: async () => {
+						console.log('[SystemTray] Main Window clicked');
+						const prefs = await prefService.getPreferences();
+						windowHandler.showCollectionWindow(prefs.collectionUseOverlay);
+					},
 				},
-			},
-			{
-				label: 'Settings',
-				click: async () => {
-					console.log('[SystemTray] Settings clicked');
-					const prefs = await prefService.getPreferences();
-					windowHandler.openSettingsWindow(prefs.collectionUseOverlay);
+				{
+					label: 'Settings',
+					click: async () => {
+						console.log('[SystemTray] Settings clicked');
+						const prefs = await prefService.getPreferences();
+						windowHandler.openSettingsWindow(prefs.collectionUseOverlay);
+					},
 				},
-			},
+			);
+		} else {
+			template.push({
+				label: 'Main window (requires Premium)',
+				enabled: false,
+			});
+			template.push({
+				label: 'Settings (requires Premium)',
+				enabled: false,
+			});
+		}
+
+		template.push(
 			{
 				label: 'Open log folder',
 				click: () => {
@@ -100,8 +141,9 @@ export const initSystemTray = async () => {
 					app.quit();
 				},
 			},
-		]);
+		);
 
+		const contextMenu = Menu.buildFromTemplate(template);
 		tray.setContextMenu(contextMenu);
 	});
 

@@ -190,3 +190,27 @@ export interface OwSub {
 
 export type PremiumPlanId = 'legacy' | 'premium' | 'premium-annual' | 'premium-six-months';
 export const premiumPlanIds = ['legacy', 'premium', 'premium-annual', 'premium-six-months'] as PremiumPlanId[];
+
+/**
+ * True when the user has an active premium plan. Tebex sets `CurrentPlan.id` from package
+ * product names (e.g. "Premium Annual" → "premium annual"), so we normalize and match
+ * against {@link premiumPlanIds} instead of using strict `includes(plan.id)` only.
+ */
+export function isActivePremiumPlan(plan: CurrentPlan | null | undefined): boolean {
+	if (plan == null || plan.active === false) {
+		return false;
+	}
+	if (premiumPlanIds.includes(plan.id as PremiumPlanId)) {
+		return true;
+	}
+	const raw = String(plan.id ?? '');
+	const n = raw.toLowerCase().replace(/[\s_]+/g, '-').replace(/-+/g, '-');
+	if (premiumPlanIds.includes(n as PremiumPlanId)) {
+		return true;
+	}
+	if (premiumPlanIds.some((p) => n === p || n.startsWith(p + '-'))) {
+		return true;
+	}
+	const segments = new Set(n.split('-').filter(Boolean));
+	return premiumPlanIds.some((p) => segments.has(p));
+}

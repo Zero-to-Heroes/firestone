@@ -35,4 +35,12 @@ export class ArenaRefService extends AbstractFacadeService<ArenaRefService> {
 			this.validDiscoveryPool$$.next(cardIds ?? []);
 		});
 	}
+
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.validDiscoveryPool$$ = new SubscriberAwareBehaviorSubject<readonly string[] | null>(null);
+	}
+
+	protected override initElectronSubjects(): void {
+		this.setupElectronSubject(this.validDiscoveryPool$$, 'ArenaRefService-validDiscoveryPool');
+	}
 }

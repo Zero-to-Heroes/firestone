@@ -5,6 +5,7 @@ import { app, BrowserWindow, nativeImage, screen } from 'electron';
 import { join } from 'path';
 import App from '../app';
 import { rendererAppPort } from '../constants';
+import { isAppAccessUnlocked } from './app-access-policy';
 import { OverlayService } from './overlay.service';
 
 const SETTINGS_WIDTH = 700;
@@ -44,6 +45,34 @@ export class ElectronWindowHandlerService implements IWindowHandlerService {
 	private settingsOverlayWindow: OverlayBrowserWindow | null = null;
 	private collectionWindow: BrowserWindow | null = null;
 	private collectionOverlayWindow: OverlayBrowserWindow | null = null;
+
+	/**
+	 * Close collection/settings windows when premium access is revoked (tray, overlay, and policy).
+	 */
+	public closeAllWindowsForAppAccess(): void {
+		if (this.collectionWindow && !this.collectionWindow.isDestroyed()) {
+			this.collectionWindow.close();
+		}
+		if (this.settingsWindow && !this.settingsWindow.isDestroyed()) {
+			this.settingsWindow.close();
+		}
+		if (this.collectionOverlayWindow) {
+			try {
+				if (!this.collectionOverlayWindow.window.isDestroyed()) {
+					this.collectionOverlayWindow.window.close();
+				}
+			} catch (_) {}
+			this.collectionOverlayWindow = null;
+		}
+		if (this.settingsOverlayWindow) {
+			try {
+				if (!this.settingsOverlayWindow.window.isDestroyed()) {
+					this.settingsOverlayWindow.window.close();
+				}
+			} catch (_) {}
+			this.settingsOverlayWindow = null;
+		}
+	}
 
 	public toggleCollectionWindow(useOverlay: boolean): void {
 		const gameWindowService = ElectronGameWindowService.getInstance();
@@ -85,6 +114,10 @@ export class ElectronWindowHandlerService implements IWindowHandlerService {
 	}
 
 	public showCollectionWindow(useOverlay: boolean): void {
+		if (!isAppAccessUnlocked()) {
+			console.log('[ElectronWindowHandler] Main window blocked — full app not unlocked');
+			return;
+		}
 		const gameWindowService = ElectronGameWindowService.getInstance();
 		const gameInfo = gameWindowService.getCurrentGameInfo();
 		const gameIsRunning = gameInfo != null;
@@ -168,6 +201,10 @@ export class ElectronWindowHandlerService implements IWindowHandlerService {
 	}
 
 	public openSettingsWindow(useOverlay: boolean): void {
+		if (!isAppAccessUnlocked()) {
+			console.log('[ElectronWindowHandler] Settings blocked — full app not unlocked');
+			return;
+		}
 		const gameWindowService = ElectronGameWindowService.getInstance();
 		const gameInfo = gameWindowService.getCurrentGameInfo();
 		const gameIsRunning = gameInfo != null;
@@ -247,6 +284,9 @@ export class ElectronWindowHandlerService implements IWindowHandlerService {
 	}
 
 	private async openSettingsAsOverlay(gameWidth: number, gameHeight: number): Promise<void> {
+		if (!isAppAccessUnlocked()) {
+			return;
+		}
 		// If we already have a normal settings window, close it
 		if (this.settingsWindow) {
 			try {

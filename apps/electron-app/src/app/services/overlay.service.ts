@@ -11,7 +11,9 @@ import {
 import { app as electronApp } from 'electron';
 import EventEmitter from 'events';
 import { join } from 'path';
+import { Subscription } from 'rxjs';
 import App from '../app';
+import { appAccessUnlocked$$, isAppAccessUnlocked } from './app-access-policy';
 
 const app = electronApp as overwolf.OverwolfApp;
 
@@ -20,6 +22,7 @@ export class OverlayService extends EventEmitter {
 	private isOverlayReady = false;
 	private overlayWindow: OverlayBrowserWindow | null = null;
 	private gameWindowService: ElectronGameWindowService;
+	private appAccessSubscription: Subscription | null = null;
 
 	public get overlayApi(): IOverwolfOverlayApi {
 		// Do not let the application access the overlay before it is ready
@@ -119,6 +122,9 @@ export class OverlayService extends EventEmitter {
 	 * Resize existing overlay window to match current game size
 	 */
 	private async resizeOverlayToGame(): Promise<void> {
+		if (!isAppAccessUnlocked()) {
+			return;
+		}
 		if (!this.overlayWindow) {
 			console.log('No overlay window to resize');
 			return;
@@ -151,6 +157,10 @@ export class OverlayService extends EventEmitter {
 	 * Create the Hello World overlay window
 	 */
 	private async createOverlayWindow(): Promise<void> {
+		if (!isAppAccessUnlocked()) {
+			console.log('[Overlay] Skipping overlay window — full app not unlocked (premium + login required)');
+			return;
+		}
 		// Get game window information from centralized service
 		const gameInfo = this.gameWindowService.getCurrentGameInfo();
 		console.debug(`Creating overlay - Game info from service:`, gameInfo);
@@ -370,7 +380,38 @@ export class OverlayService extends EventEmitter {
 		console.log(`Overlay package is ready: ${version}`);
 		this.registerOverlayEvents();
 		this.subscribeToGameInfoChanges();
+		this.setupAppAccessSubscription();
 		this.emit('ready');
+	}
+
+	private setupAppAccessSubscription(): void {
+		this.appAccessSubscription?.unsubscribe();
+		this.appAccessSubscription = appAccessUnlocked$$.subscribe((unlocked) => {
+			if (!unlocked) {
+				void this.destroyOverlay();
+			} else {
+				void this.tryCreateOverlayAfterUnlock();
+			}
+		});
+	}
+
+	/**
+	 * If the user was locked when HS started, we still injected; game-injected skipped window creation.
+	 * When access unlocks, create the overlay if a game is already running and we have no window yet.
+	 */
+	private async tryCreateOverlayAfterUnlock(): Promise<void> {
+		if (!isAppAccessUnlocked() || !this.shouldCreateOverlay()) {
+			return;
+		}
+		const gameInfo = this.gameWindowService.getCurrentGameInfo();
+		if (!gameInfo) {
+			console.log(
+				'[Overlay] App unlocked but no cached game window info yet — overlay will be created on Hearthstone focus or next injection flow',
+			);
+			return;
+		}
+		console.log('[Overlay] App unlocked with game already running — creating overlay window');
+		await this.createOverlayWindow();
 	}
 
 	/**
@@ -404,8 +445,6 @@ export class OverlayService extends EventEmitter {
 
 			// Check if this is Hearthstone (ID 9898)
 			if (Math.round(gameInfo.id / 10) === 9898) {
-				console.log('Hearthstone detected! Injecting first...');
-
 				// Check for elevation issues
 				if (gameInfo.processInfo.isElevated) {
 					console.error('Cannot inject to elevated game - app is not elevated');
@@ -416,6 +455,16 @@ export class OverlayService extends EventEmitter {
 						'game-injection-error',
 					);
 					return;
+				}
+
+				// Always inject when HS launches (ow-electron needs this for in-game compositing), even
+				// if the full app is still locked. We only skip creating the overlay window until unlock.
+				if (!isAppAccessUnlocked()) {
+					console.log(
+						'[Overlay] Hearthstone launched while full app locked — still calling inject; overlay window will be created when unlocked (or on focus)',
+					);
+				} else {
+					console.log('Hearthstone detected! Injecting first...');
 				}
 
 				// Try injecting FIRST, then create window in the injected event
@@ -437,6 +486,10 @@ export class OverlayService extends EventEmitter {
 
 		this.overlayApi.on('game-injected', async (gameInfo) => {
 			console.log('Game injected successfully!', gameInfo.name);
+			if (!isAppAccessUnlocked()) {
+				console.log('[Overlay] Skipping overlay after injection — full app not unlocked');
+				return;
+			}
 			if (!this.shouldCreateOverlay()) {
 				return;
 			}
@@ -460,6 +513,9 @@ export class OverlayService extends EventEmitter {
 
 		this.overlayApi.on('game-focus-changed', async (window, game, focus) => {
 			if (game.classId === 9898 && focus) {
+				if (!isAppAccessUnlocked()) {
+					return;
+				}
 				// Resizing is handled by subscribeToGameInfoChanges() callback
 				if (!this.shouldCreateOverlay()) {
 					return;
