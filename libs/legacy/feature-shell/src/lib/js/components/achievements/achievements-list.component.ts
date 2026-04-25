@@ -9,12 +9,16 @@ import {
 } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { AchievementsStateManagerService, VisualAchievement } from '@firestone/achievements/common';
-import { MainWindowNavigationService, MainWindowStateFacadeService } from '@firestone/mainwindow/common';
+import {
+	FilterOption,
+	MainWindowNavigationService,
+	MainWindowStateFacadeService,
+	findAchievements,
+} from '@firestone/mainwindow/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, sortByProperties } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
-import { findAchievements } from '@firestone/mainwindow/common';
 
 @Component({
 	standalone: false,
@@ -115,10 +119,10 @@ export class AchievementsListComponent extends AbstractSubscriptionComponent imp
 				`),
 			),
 		);
-		this.activeAchievements$ = combineLatest(achievements$, filterOption$).pipe(
+		this.activeAchievements$ = combineLatest([achievements$, filterOption$]).pipe(
 			this.mapData(([achievements, option]) =>
 				achievements
-					.filter(option.filterFunction)
+					.filter((achievement) => isValid(achievement, option))
 					.sort(sortByProperties((a) => [a.isFullyCompleted(), a.name])),
 			),
 		);
@@ -147,3 +151,16 @@ export class AchievementsListComponent extends AbstractSubscriptionComponent imp
 		return achievement.id;
 	}
 }
+
+const isValid = (achievement: VisualAchievement, option: FilterOption) => {
+	switch (option.value) {
+		case 'ALL_ACHIEVEMENTS':
+			return true;
+		case 'ONLY_MISSING':
+			return achievement.completionSteps.some((step) => step.numberOfCompletions === 0);
+		case 'ONLY_COMPLETED':
+			return achievement.completionSteps.every((step) => step.numberOfCompletions > 0);
+		default:
+			return false;
+	}
+};

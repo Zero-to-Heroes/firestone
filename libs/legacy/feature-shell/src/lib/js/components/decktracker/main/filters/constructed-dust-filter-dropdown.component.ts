@@ -1,11 +1,10 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { Preferences, PreferencesService } from '@firestone/shared/common/service';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { IOptionWithImage } from '@firestone/shared/common/view';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
-import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	standalone: false,
@@ -23,21 +22,17 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ConstructedDustFilterDropdownComponent
-	extends AbstractSubscriptionStoreComponent
-	implements AfterContentInit
-{
+export class ConstructedDustFilterDropdownComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	options: DustFilterOption[];
 
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly prefs: PreferencesService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
@@ -66,7 +61,7 @@ export class ConstructedDustFilterDropdownComponent
 			} as DustFilterOption,
 		];
 		this.filter$ = combineLatest([
-			this.listenForBasicPref$((prefs) => prefs.constructedMetaDecksDustFilter ?? 'all'),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.constructedMetaDecksDustFilter ?? 'all')),
 		]).pipe(
 			this.mapData(([filter]) => {
 				console.debug('dust filter', filter, this.options);
@@ -84,12 +79,7 @@ export class ConstructedDustFilterDropdownComponent
 	}
 
 	async onSelected(option: IOptionWithImage) {
-		const prefs = await this.prefs.getPreferences();
-		const newPrefs: Preferences = {
-			...prefs,
-			constructedMetaDecksDustFilter: option.value === 'all' ? 'all' : +option.value,
-		};
-		await this.prefs.savePreferences(newPrefs);
+		this.prefs.updatePrefs('constructedMetaDecksDustFilter', option.value === 'all' ? 'all' : +option.value);
 	}
 }
 

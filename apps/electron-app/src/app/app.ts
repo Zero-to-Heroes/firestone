@@ -19,13 +19,14 @@ import { join } from 'path';
 import { distinctUntilChanged, Subscription } from 'rxjs';
 import { uIOhook } from 'uiohook-napi';
 import { environment } from '../environments/environment';
+import { appStartup } from './app-startup';
+import { appAccessUnlocked$$, disposeAppAccessPolicy, initAppAccessPolicy } from './services/app-access-policy';
 import { buildAppInjector } from './services/electron-app-injector-setup';
 import { ElectronDiskCacheService } from './services/electron-disk-cache.service';
 import { ElectronHotkeyHandlerService } from './services/electron-hotkey-handler.service';
+import { ElectronWindowHandlerService } from './services/electron-window-handler.service';
 import { MindVisionElectronService } from './services/mind-vision-electron.service';
 import { OverlayService } from './services/overlay.service';
-import { appAccessUnlocked$$, initAppAccessPolicy, disposeAppAccessPolicy } from './services/app-access-policy';
-import { ElectronWindowHandlerService } from './services/electron-window-handler.service';
 import { showPremiumLockNotificationOnce } from './services/premium-lock-notification';
 import { destroySystemTray, initSystemTray } from './services/system-tray';
 
@@ -560,16 +561,14 @@ export default class App {
 		// App.gameDetection.startMonitoring();
 
 		await initAppAccessPolicy();
-		const windowHandler = electronInjector.get(
-			WINDOW_HANDLER_SERVICE_TOKEN,
-		) as ElectronWindowHandlerService;
-		App.appAccessWindowCloseSub = appAccessUnlocked$$
-			.pipe(distinctUntilChanged())
-			.subscribe((unlocked) => {
-				if (!unlocked) {
-					windowHandler.closeAllWindowsForAppAccess();
-				}
-			});
+		const windowHandler = electronInjector.get(WINDOW_HANDLER_SERVICE_TOKEN) as ElectronWindowHandlerService;
+		App.appAccessWindowCloseSub = appAccessUnlocked$$.pipe(distinctUntilChanged()).subscribe((unlocked) => {
+			if (!unlocked) {
+				windowHandler.closeAllWindowsForAppAccess();
+			}
+		});
+
+		await appStartup();
 	}
 
 	private static onActivate() {

@@ -41,8 +41,6 @@ import { GameStatsProviderService } from '@firestone/stats/services';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter, map, shareReplay, take, tap } from 'rxjs/operators';
 
-const eventName = 'decks-changed';
-
 @Injectable()
 export class DecksProviderService extends AbstractFacadeService<DecksProviderService> {
 	public decks$$: SubscriberAwareBehaviorSubject<readonly DeckSummary[]>;
@@ -200,19 +198,20 @@ export class DecksProviderService extends AbstractFacadeService<DecksProviderSer
 	public newCardSearch(search: readonly string[]) {
 		void this.callOnMainProcess('newCardSearchInternal', search);
 	}
-
 	private newCardSearchInternal(search: readonly string[]) {
 		this.cardSearch$$.next(search);
 	}
 
 	protected override async initElectronSubjects() {
-		console.log('[decks-provider] initElectronSubjects');
-		this.setupElectronSubject(this.decks$$, eventName);
+		this.setupElectronSubject(this.decks$$, 'DecksProviderService-decks');
+		this.setupElectronSubject(this.allCardsInDecks$$, 'DecksProviderService-allCardsInDecks');
+		this.setupElectronSubject(this.cardSearch$$, 'DecksProviderService-cardSearch');
 	}
 
 	protected override async createElectronProxy(ipcRenderer: any) {
-		console.log('[decks-provider] createElectronProxy');
 		this.decks$$ = new SubscriberAwareBehaviorSubject<readonly DeckSummary[] | null>(null);
+		this.allCardsInDecks$$ = new SubscriberAwareBehaviorSubject<readonly string[] | null>(null);
+		this.cardSearch$$ = new BehaviorSubject<readonly string[] | null>(null);
 	}
 
 	private buildState(

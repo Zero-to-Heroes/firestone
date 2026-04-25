@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { ArenaState } from '@firestone/arena/common';
+import { Preferences } from '@firestone/shared/common/service';
+import { ILocalizationService } from '@firestone/shared/framework/core';
 import {
 	AchievementsState,
+	buildAchievementsFilterOptions,
 	DecktrackerState,
 	MainWindowState,
 	StatsState,
 } from '../../model/_barrel';
-import { ILocalizationService } from '@firestone/shared/framework/core';
-import { Preferences } from '@firestone/shared/common/service';
 
 @Injectable()
 export class StoreBootstrapService {
@@ -17,7 +18,7 @@ export class StoreBootstrapService {
 		return MainWindowState.create({
 			showFtue: !prefs.ftue.hasSeenGlobalFtue,
 			achievements: AchievementsState.create({
-				filters: AchievementsState.buildFilterOptions(this.i18n),
+				filters: buildAchievementsFilterOptions(this.i18n),
 			}),
 			arena: ArenaState.create({
 				categories: [

@@ -1,13 +1,12 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { ConstructedNavigationService } from '@firestone/constructed/common';
-import { Preferences, PreferencesService } from '@firestone/shared/common/service';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { IOption } from '@firestone/shared/common/view';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
-import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	standalone: false,
@@ -26,7 +25,7 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConstructedArchetypeSampleSizeFilterDropdownComponent
-	extends AbstractSubscriptionStoreComponent
+	extends AbstractSubscriptionComponent
 	implements AfterContentInit
 {
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
@@ -36,23 +35,22 @@ export class ConstructedArchetypeSampleSizeFilterDropdownComponent
 	}));
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly prefs: PreferencesService,
 		private readonly nav: ConstructedNavigationService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.nav);
+		await waitForReady(this.nav, this.prefs);
 
 		this.filter$ = combineLatest([
-			this.listenForBasicPref$((prefs) => prefs.constructedMetaArchetypesSampleSizeFilter),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.constructedMetaArchetypesSampleSizeFilter)),
 			this.nav.currentView$$,
 		]).pipe(
-			filter(([filter, currentView]) => !!filter && !!currentView),
+			filter(([filter, currentView]) => !!filter && !!currentView && !!currentView),
 			this.mapData(([filter, currentView]) => {
 				return {
 					filter: '' + filter,
@@ -69,8 +67,6 @@ export class ConstructedArchetypeSampleSizeFilterDropdownComponent
 	}
 
 	async onSelected(option: IOption) {
-		const prefs = await this.prefs.getPreferences();
-		const newPrefs: Preferences = { ...prefs, constructedMetaArchetypesSampleSizeFilter: +option.value };
-		await this.prefs.savePreferences(newPrefs);
+		this.prefs.updatePrefs('constructedMetaArchetypesSampleSizeFilter', +option.value);
 	}
 }
