@@ -1,0 +1,15 @@
+// Frameless Electron collection window only (this route is not used by Overwolf).
+// Do not add these rules to main-window-root — that component is shared with Overwolf.
+
+:host ::ng-deep .menu-bar {
+	-webkit-app-region: drag;
+	pointer-events: auto;
+	user-select: none;
+	cursor: grab;
+}
+
+:host ::ng-deep .menu-bar .controls,
+:host ::ng-deep .menu-bar hotkey,
+:host ::ng-deep .menu-bar social-shares {
+	-webkit-app-region: no-drag;
+}
