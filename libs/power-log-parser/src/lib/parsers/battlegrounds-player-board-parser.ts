@@ -121,6 +121,9 @@ export interface TrinketEntity {
 	scriptDataNum1: number;
 	scriptDataNum2: number;
 	scriptDataNum6: number;
+	tags: {
+		[key in GameTag]?: number;
+	};
 }
 
 export interface Enchantment {
@@ -450,6 +453,13 @@ export class BattlegroundsPlayerBoardParser implements ActionParser {
 				scriptDataNum1: entity.GetTag(GameTag.TAG_SCRIPT_DATA_NUM_1, 0),
 				scriptDataNum2: entity.GetTag(GameTag.TAG_SCRIPT_DATA_NUM_2, 0),
 				scriptDataNum6: entity.GetTag(GameTag.TAG_SCRIPT_DATA_NUM_6, 0),
+				tags: entity.Tags.reduce(
+					(acc, tag) => {
+						acc[tag.Name] = tag.Value;
+						return acc;
+					},
+					{} as { [key in GameTag]?: number },
+				),
 			}))
 			.sort((a, b) => a.scriptDataNum6 - b.scriptDataNum6);
 	}
@@ -656,6 +666,9 @@ export class BattlegroundsPlayerBoardParser implements ActionParser {
 			currentEntities,
 		);
 
+		// This doesn't work, because it includes too many things.
+		// If you have a Choral Mrrrlgr and a Timewarped Mrrrlgr, it will include both in the enchantment,
+		// while we only want to have the info from the base version itself
 		const boardIds = board.map((b) => b.Id);
 		const choralEnchantments = currentEntitiesGs.filter(
 			(e) =>

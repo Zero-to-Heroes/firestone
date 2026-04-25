@@ -674,6 +674,13 @@ export class BgsPlayerBoardParser implements EventParser {
 			scriptDataNum1: entity.Tags?.find((t) => t.Name === GameTag.TAG_SCRIPT_DATA_NUM_1)?.Value!,
 			scriptDataNum2: entity.Tags?.find((t) => t.Name === GameTag.TAG_SCRIPT_DATA_NUM_2)?.Value!,
 			scriptDataNum6: entity.Tags?.find((t) => t.Name === GameTag.TAG_SCRIPT_DATA_NUM_6)?.Value,
+			tags: entity.Tags.reduce(
+				(acc, tag) => {
+					acc[tag.Name] = tag.Value;
+					return acc;
+				},
+				{} as { [key in GameTag]?: number },
+			),
 		};
 	}
 }
