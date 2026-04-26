@@ -372,7 +372,6 @@ import { ChoosingCardBgsTrinketOptionComponent } from '@components/overlays/trin
 import { ProfileMatchStatsClassInfoComponent } from '@components/stats/desktop/match-stats/profile-match-stats-class-info.component';
 import { ProfileMatchStatsModeOverviewComponent } from '@components/stats/desktop/match-stats/profile-match-stats-mode-overview.component';
 import { ProfileMatchStatsComponent } from '@components/stats/desktop/match-stats/profile-match-stats.component';
-import { AllCardsService } from '@firestone/replay/replay-parser';
 import {
 	AchievementsCommonModule,
 	FirestoneRemoteAchievementsLoaderService,
@@ -435,6 +434,7 @@ import { MemoryModule } from '@firestone/memory';
 import { MercenariesCommonModule, MercenariesMemoryCacheService } from '@firestone/mercenaries/common';
 import { ModsCommonModule } from '@firestone/mods/common';
 import { ReplayColiseumModule } from '@firestone/replay/coliseum';
+import { AllCardsService } from '@firestone/replay/replay-parser';
 import { SettingsViewModule } from '@firestone/settings/view';
 import { Events } from '@firestone/shared/common/service';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
@@ -577,7 +577,6 @@ import { BgsRunStatsEventHandlerService } from './js/services/battlegrounds/bgs-
 import { CardsInitService } from './js/services/cards-init.service';
 import { CardsMonitorEventHandlerService } from './js/services/collection/cards-monitor-event-handler.service';
 import { DebugService } from './js/services/debug.service';
-import { ConstructedConfigService } from './js/services/decktracker/constructed-config.service';
 import { DeckCardService } from './js/services/decktracker/deck-card.service';
 import { DynamicZoneHelperService } from './js/services/decktracker/dynamic-zone-helper.service';
 import { DecktrackerStateLoaderService } from './js/services/decktracker/main/decktracker-state-loader.service';
@@ -1350,7 +1349,6 @@ try {
 		FirestoneRemoteAchievementsLoaderService,
 
 		DecktrackerStateLoaderService,
-		ConstructedConfigService,
 
 		BgsGlobalStatsService,
 		BgsCustomSimulationService,

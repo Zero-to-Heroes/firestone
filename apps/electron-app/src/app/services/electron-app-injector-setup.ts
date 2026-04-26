@@ -69,6 +69,7 @@ import {
 	SetsManagerService,
 } from '@firestone/collection/services';
 import {
+	ConstructedConfigService,
 	ConstructedMetaDecksStateService,
 	ConstructedMulliganGuideGuardianService,
 	ConstructedMulliganGuideService,
@@ -1000,6 +1001,9 @@ export const buildAppInjector = () => {
 
 	const arenaMetaHeroStrategiesService = new ArenaMetaHeroStrategiesService(windowManager);
 	electronInjector.register(ArenaMetaHeroStrategiesService, arenaMetaHeroStrategiesService);
+
+	const constructedConfig = new ConstructedConfigService(windowManager);
+	electronInjector.register(ConstructedConfigService, constructedConfig);
 
 	electronInjector.ready = true;
 	return electronInjector;
