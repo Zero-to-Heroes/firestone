@@ -1,15 +1,13 @@
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { DeckSummary } from '@firestone/constructed/common';
-import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
-import { DeckSortType } from '@firestone/shared/common/service';
-import { PreferencesService } from '@firestone/shared/common/service';
+import { DecksProviderService } from '@firestone/decktracker/common';
+import { ConstructedNewDeckVersionEvent, MainWindowStateFacadeService } from '@firestone/mainwindow/common';
+import { DeckSortType, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, arraysEqual } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged } from 'rxjs';
-import { DecksProviderService } from '@firestone/decktracker/common';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { ConstructedNewDeckVersionEvent } from '@firestone/mainwindow/common';
 
 @Component({
 	standalone: false,
@@ -109,8 +107,7 @@ export class DecktrackerDecksComponent extends AbstractSubscriptionComponent {
 				const result = (decks?.filter((deck) => deck.totalGames > 0 || deck.isPersonalDeck) ?? [])
 					.filter(
 						(deck) =>
-							!playerClass?.length ||
-							this.classesInDeckRow(deck).some((c) => playerClass.includes(c)),
+							!playerClass?.length || this.classesInDeckRow(deck).some((c) => playerClass.includes(c)),
 					)
 					.filter(
 						(deck) =>
@@ -153,8 +150,7 @@ export class DecktrackerDecksComponent extends AbstractSubscriptionComponent {
 								isCurrentMergingTarget:
 									!!currentMergeSourceDeck && deck.deckstring === currentlyMousedOverDeck,
 								isValidMergingTarget:
-									!!currentMergeSourceDeck &&
-									currentMergeSourceDeck.deckstring !== deck.deckstring,
+									!!currentMergeSourceDeck && currentMergeSourceDeck.deckstring !== deck.deckstring,
 							}) as InternalDeckSummary,
 					);
 				},
@@ -216,7 +212,6 @@ export class DecktrackerDecksComponent extends AbstractSubscriptionComponent {
 			(deck) => deck.deckstring === this.currentlyMousedOverDeck.value,
 		);
 		const dragged: DeckSummary = event.item.data;
-		console.debug('dropping', dragged.deckstring, droppedOn.deckstring);
 		if (dragged.deckstring !== droppedOn.deckstring) {
 			this.mainWindowStateFacade.send(
 				new ConstructedNewDeckVersionEvent(dragged.deckstring, droppedOn.deckstring),

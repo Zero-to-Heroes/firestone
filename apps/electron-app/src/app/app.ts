@@ -486,13 +486,6 @@ export default class App {
 			electronApp.setAppUserModelId('com.zerotoheroes.firestone.desktop');
 		}
 
-		// Skip main window creation for overlay-only mode
-		console.log('🚫 Skipping main window creation (overlay-only mode)');
-		// if (rendererAppName) {
-		// 	App.initMainWindow();
-		// 	App.loadMainWindow();
-		// }
-
 		// Initialize game detection
 		await App.initGameDetection();
 		showPremiumLockNotificationOnce();

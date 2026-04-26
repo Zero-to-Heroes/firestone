@@ -30,6 +30,7 @@ import {
 	AppInjector,
 	CardsFacadeService,
 	WindowManagerService,
+	waitForReady,
 } from '@firestone/shared/framework/core';
 import {
 	GameStat,
@@ -39,7 +40,7 @@ import {
 } from '@firestone/stats/data-access';
 import { GameStatsProviderService } from '@firestone/stats/services';
 import { BehaviorSubject, combineLatest } from 'rxjs';
-import { distinctUntilChanged, filter, map, shareReplay, take, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, shareReplay, take } from 'rxjs/operators';
 
 @Injectable()
 export class DecksProviderService extends AbstractFacadeService<DecksProviderService> {
@@ -73,16 +74,12 @@ export class DecksProviderService extends AbstractFacadeService<DecksProviderSer
 		this.prefs = AppInjector.get(PreferencesService);
 		this.gameStats = AppInjector.get(GameStatsProviderService);
 
-		await this.patchesConfig.isReady();
-		await this.constructedPersonalDecks.isReady();
-		await this.prefs.isReady();
-		await this.gameStats.isReady();
+		await waitForReady(this.patchesConfig, this.constructedPersonalDecks, this.prefs, this.gameStats);
 
 		this.decks$$.onFirstSubscribe(() => {
 			const stats$ = this.gameStats.gameStats$$.pipe(
 				distinctUntilChanged((a, b) => a?.length === b?.length),
 				shareReplay(1),
-				tap((stats) => console.debug('[decks-provider] stats', stats)),
 			);
 			const filters$ = this.prefs.preferences$$.pipe(
 				map((prefs) => prefs?.desktopDeckFilters ?? new DeckFilters()),
@@ -238,14 +235,6 @@ export class DecksProviderService extends AbstractFacadeService<DecksProviderSer
 						: inputFilters.gameMode,
 		};
 
-		// console.debug(
-		// 	'[decks-provider] building state',
-		// 	stats?.length,
-		// 	filters,
-		// 	patch,
-		// 	personalDecks?.length,
-		// 	stats.filter((s) => s.gameMode === 'casual'),
-		// );
 		// TODO: move applying prefs to UI. We don't need to recompute all matchups for all decks whenever we finish one game
 		if (!stats || !stats?.length) {
 			return personalDecks;
