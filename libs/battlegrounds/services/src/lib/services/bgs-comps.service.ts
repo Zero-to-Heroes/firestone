@@ -27,6 +27,14 @@ export class BattlegroundsCompsService extends AbstractFacadeService<Battlegroun
 		await this.prefs.isReady();
 	}
 
+	protected override async initElectronSubjects() {
+		// Do nothing
+	}
+
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		// Do nothing
+	}
+
 	protected override async initElectronMainProcess() {
 		this.registerMainProcessMethod(
 			'loadCompStatsInternal',
@@ -41,7 +49,6 @@ export class BattlegroundsCompsService extends AbstractFacadeService<Battlegroun
 	): Promise<BgsCompStats | null> {
 		return this.callOnMainProcess<BgsCompStats | null>('loadCompStatsInternal', timeFilter, rankFilter);
 	}
-
 	private async loadCompStatsInternal(
 		timeFilter: BgsActiveTimeFilterType,
 		rankFilter: BgsRankFilterType,

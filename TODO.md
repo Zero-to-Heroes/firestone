@@ -1,0 +1,1 @@
+- HTML cache on electron main process

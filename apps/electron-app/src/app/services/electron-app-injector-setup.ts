@@ -41,6 +41,7 @@ import {
 import { BgsMetaHeroStatsAccessService, BgsPerfectGamesService } from '@firestone/battlegrounds/data-access';
 import {
 	BattlegroundsCardsService,
+	BattlegroundsCompsService,
 	BattlegroundsNavigationService,
 	BattlegroundsQuestsService,
 	BattlegroundsTrinketsService,
@@ -1004,6 +1005,9 @@ export const buildAppInjector = () => {
 
 	const constructedConfig = new ConstructedConfigService(windowManager);
 	electronInjector.register(ConstructedConfigService, constructedConfig);
+
+	const battlegroundsCompsService = new BattlegroundsCompsService(windowManager);
+	electronInjector.register(BattlegroundsCompsService, battlegroundsCompsService);
 
 	electronInjector.ready = true;
 	return electronInjector;
