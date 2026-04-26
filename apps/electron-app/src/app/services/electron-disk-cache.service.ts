@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { sleep } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
-import { app } from 'electron';
+import { app, session } from 'electron';
 import { promises as fsPromises } from 'fs';
 import { dirname, join } from 'path';
 import { distinctUntilChanged, map } from 'rxjs';
@@ -66,6 +66,7 @@ export class ElectronDiskCacheService {
 	}
 
 	public async clearCache() {
+		await this.clearHttpCache();
 		await this.waitForCacheDirectory();
 
 		if (!this.cacheDirectory) {
@@ -84,6 +85,15 @@ export class ElectronDiskCacheService {
 			console.log('[electron-disk-cache] Cleared cache');
 		} catch (e) {
 			console.error('[electron-disk-cache] Failed to clear cache', e);
+		}
+	}
+
+	private async clearHttpCache() {
+		try {
+			await session.defaultSession.clearCache();
+			console.log('[electron-disk-cache] Cleared HTTP cache');
+		} catch (e) {
+			console.error('[electron-disk-cache] Failed to clear HTTP cache', e);
 		}
 	}
 

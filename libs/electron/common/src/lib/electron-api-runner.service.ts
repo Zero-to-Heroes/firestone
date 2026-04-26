@@ -1,5 +1,12 @@
 import { Injectable } from '@angular/core';
+import { net } from 'electron';
 import { IApiRunner } from './electron-api-runner.interface';
+
+type ElectronApiRunnerRequestOptions = {
+	readonly method: 'GET' | 'POST';
+	readonly headers?: Record<string, string>;
+	readonly body?: string;
+};
 
 @Injectable()
 export class ElectronApiRunner implements IApiRunner {
@@ -32,90 +39,30 @@ export class ElectronApiRunner implements IApiRunner {
 		},
 		returnStatusCode = false,
 	): Promise<T | null> {
-		return new Promise<T | null>((resolve, reject) => {
-			// Use Node.js https/http modules for HTTP requests
-			const https = require('https');
-			const http = require('http');
-			const { URL } = require('url');
-			const zlib = require('zlib');
+		const postData = JSON.stringify(input);
+		const headers: Record<string, string> = {
+			'Content-Type': options?.contentType ?? 'application/json',
+			...(options?.userAgent && { 'User-Agent': options.userAgent }),
+			...(options?.bearerToken && { Authorization: `Bearer ${options.bearerToken}` }),
+		};
 
-			try {
-				const parsedUrl = new URL(url);
-				const isHttps = parsedUrl.protocol === 'https:';
-				const httpModule = isHttps ? https : http;
-
-				const postData = JSON.stringify(input);
-				const requestOptions = {
-					hostname: parsedUrl.hostname,
-					port: parsedUrl.port || (isHttps ? 443 : 80),
-					path: parsedUrl.pathname + parsedUrl.search,
-					method: 'POST',
-					headers: {
-						'Content-Type': options?.contentType ?? 'application/json',
-						'Content-Length': Buffer.byteLength(postData),
-						'Accept-Encoding': 'gzip, deflate',
-						...(options?.userAgent && { 'User-Agent': options.userAgent }),
-						...(options?.bearerToken && { Authorization: `Bearer ${options.bearerToken}` }),
-					},
-				};
-
-				console.debug('[electron-api-runner] calling POST', url);
-
-				const req = httpModule.request(requestOptions, (res: any) => {
-					const chunks: Buffer[] = [];
-					const contentEncoding = res.headers['content-encoding'];
-
-					res.on('data', (chunk: Buffer) => {
-						chunks.push(chunk);
-					});
-
-					res.on('end', () => {
-						try {
-							const buffer = Buffer.concat(chunks as any);
-							let decompressedData: string;
-
-							if (contentEncoding === 'gzip') {
-								decompressedData = zlib.gunzipSync(buffer).toString('utf8');
-							} else if (contentEncoding === 'deflate') {
-								decompressedData = zlib.inflateSync(buffer).toString('utf8');
-							} else {
-								decompressedData = buffer.toString('utf8');
-							}
-
-							const result = JSON.parse(decompressedData);
-							console.debug('[electron-api-runner] retrieved POST call', url, result);
-							resolve(result);
-						} catch (parseError) {
-							console.error('[electron-api-runner] Error parsing response', parseError);
-							if (returnStatusCode) {
-								reject(res.statusCode);
-							} else {
-								resolve(null);
-							}
-						}
-					});
-				});
-
-				req.on('error', (error: any) => {
-					if (returnStatusCode) {
-						reject(error.code || 500);
-					} else {
-						console.warn('[electron-api-runner] Could not execute POST call', url, input, error);
-						resolve(null);
-					}
-				});
-
-				req.write(postData);
-				req.end();
-			} catch (error) {
-				console.error('[electron-api-runner] Error setting up POST request', error);
-				if (returnStatusCode) {
-					reject(500);
-				} else {
-					resolve(null);
-				}
+		console.debug('[electron-api-runner] calling POST', url);
+		try {
+			const response = await this.executeRequest(url, {
+				method: 'POST',
+				headers: headers,
+				body: postData,
+			});
+			const result = await this.parseJsonResponse<T>(response);
+			console.debug('[electron-api-runner] retrieved POST call', url, result);
+			return result;
+		} catch (error) {
+			console.warn('[electron-api-runner] Could not execute POST call', url, input, error);
+			if (returnStatusCode) {
+				throw (error as any)?.statusCode ?? (error as any)?.code ?? 500;
 			}
-		});
+			return null;
+		}
 	}
 
 	// For JSON output
@@ -125,152 +72,57 @@ export class ElectronApiRunner implements IApiRunner {
 			bearerToken?: string;
 		},
 	): Promise<T | null> {
-		return new Promise<T | null>((resolve, reject) => {
-			// Use Node.js https/http modules for HTTP requests
-			const https = require('https');
-			const http = require('http');
-			const { URL } = require('url');
-			const zlib = require('zlib');
-
-			try {
-				const parsedUrl = new URL(url);
-				const isHttps = parsedUrl.protocol === 'https:';
-				const httpModule = isHttps ? https : http;
-
-				const requestOptions = {
-					hostname: parsedUrl.hostname,
-					port: parsedUrl.port || (isHttps ? 443 : 80),
-					path: parsedUrl.pathname + parsedUrl.search,
-					method: 'GET',
-					headers: {
-						'Accept-Encoding': 'gzip, deflate',
-						...(options?.bearerToken && { Authorization: `Bearer ${options.bearerToken}` }),
-					},
-				};
-
-				console.debug('[electron-api-runner] calling GET', url);
-
-				const req = httpModule.request(requestOptions, (res: any) => {
-					const chunks: Buffer[] = [];
-					const contentEncoding = res.headers['content-encoding'];
-
-					res.on('data', (chunk: Buffer) => {
-						chunks.push(chunk);
-					});
-
-					res.on('end', () => {
-						try {
-							const buffer = Buffer.concat(chunks as any);
-							let decompressedData: string;
-
-							if (contentEncoding === 'gzip') {
-								decompressedData = zlib.gunzipSync(buffer).toString('utf8');
-							} else if (contentEncoding === 'deflate') {
-								decompressedData = zlib.inflateSync(buffer).toString('utf8');
-							} else {
-								decompressedData = buffer.toString('utf8');
-							}
-
-							const result = JSON.parse(decompressedData);
-							console.debug('[electron-api-runner] retrieved GET call', url);
-							resolve(result);
-						} catch (parseError) {
-							console.warn('[electron-api-runner] Could not parse GET response', url, parseError);
-							resolve(null);
-						}
-					});
-				});
-
-				req.on('error', (error: any) => {
-					console.warn('[electron-api-runner] Could not execute GET call', url, error);
-					resolve(null);
-				});
-
-				req.end();
-			} catch (error) {
-				console.error('[electron-api-runner] Error setting up GET request', error);
-				resolve(null);
-			}
-		});
+		try {
+			console.debug('[electron-api-runner] calling GET', url);
+			const response = await this.executeRequest(url, {
+				method: 'GET',
+				headers: {
+					...(options?.bearerToken && { Authorization: `Bearer ${options.bearerToken}` }),
+				},
+			});
+			const result = await this.parseJsonResponse<T>(response);
+			console.debug('[electron-api-runner] retrieved GET call', url);
+			return result;
+		} catch (error) {
+			console.warn('[electron-api-runner] Could not execute GET call', url, error);
+			return null;
+		}
 	}
 
 	public async get(url: string, logError = true): Promise<string | undefined> {
-		return new Promise<string | undefined>((resolve, reject) => {
-			// Use Node.js https/http modules for HTTP requests
-			const https = require('https');
-			const http = require('http');
-			const { URL } = require('url');
-			const zlib = require('zlib');
-
-			try {
-				const parsedUrl = new URL(url);
-				const isHttps = parsedUrl.protocol === 'https:';
-				const httpModule = isHttps ? https : http;
-
-				const requestOptions = {
-					hostname: parsedUrl.hostname,
-					port: parsedUrl.port || (isHttps ? 443 : 80),
-					path: parsedUrl.pathname + parsedUrl.search,
-					method: 'GET',
-					headers: {
-						'Accept-Encoding': 'gzip, deflate',
-					},
-				};
-
-				console.debug('[electron-api-runner] calling GET', url);
-
-				const req = httpModule.request(requestOptions, (res: any) => {
-					const chunks: Buffer[] = [];
-					const contentEncoding = res.headers['content-encoding'];
-
-					res.on('data', (chunk: Buffer) => {
-						chunks.push(chunk);
-					});
-
-					res.on('end', () => {
-						try {
-							const buffer = Buffer.concat(chunks as any);
-							let decompressedData: string;
-
-							if (contentEncoding === 'gzip') {
-								decompressedData = zlib.gunzipSync(buffer).toString('utf8');
-							} else if (contentEncoding === 'deflate') {
-								decompressedData = zlib.inflateSync(buffer).toString('utf8');
-							} else {
-								decompressedData = buffer.toString('utf8');
-							}
-
-							console.debug('[electron-api-runner] retrieved GET call', url);
-							resolve(decompressedData);
-						} catch (decompressError) {
-							if (logError) {
-								console.warn(
-									'[electron-api-runner] Error decompressing response',
-									url,
-									decompressError,
-								);
-							}
-							// Fallback to raw buffer if decompression fails
-							resolve(Buffer.concat(chunks as any).toString('utf8'));
-						}
-					});
-				});
-
-				req.on('error', (error: any) => {
-					if (logError) {
-						console.warn('[electron-api-runner] Could not execute GET call', url, error);
-					}
-					resolve(undefined);
-				});
-
-				req.end();
-			} catch (error) {
-				if (logError) {
-					console.error('[electron-api-runner] Error setting up GET request', error);
-				}
-				resolve(undefined);
+		try {
+			console.debug('[electron-api-runner] calling GET', url);
+			const response = await this.executeRequest(url, { method: 'GET' });
+			const result = await response.text();
+			console.debug('[electron-api-runner] retrieved GET call', url);
+			return result;
+		} catch (error) {
+			if (logError) {
+				console.warn('[electron-api-runner] Could not execute GET call', url, error);
 			}
+			return undefined;
+		}
+	}
+
+	private async executeRequest(url: string, options: ElectronApiRunnerRequestOptions): Promise<Response> {
+		const response = await net.fetch(url, {
+			method: options.method,
+			headers: options.headers,
+			body: options.body,
+			cache: 'default',
 		});
+		if (!response.ok) {
+			throw Object.assign(new Error(`HTTP ${response.status} for ${url}`), { statusCode: response.status });
+		}
+		return response;
+	}
+
+	private async parseJsonResponse<T>(response: Response): Promise<T | null> {
+		const text = await response.text();
+		if (!text?.length) {
+			return null;
+		}
+		return JSON.parse(text) as T;
 	}
 
 	// Mock methods for future implementation
