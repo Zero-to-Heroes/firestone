@@ -7,21 +7,22 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { decode } from '@firestone-hs/deckstrings';
-import { BrawlInfo, DeckStat, StatForClass } from '@firestone-hs/tavern-brawl-stats';
+import { DeckStat } from '@firestone-hs/tavern-brawl-stats';
 import { CollectionManager } from '@firestone/collection/services';
 import { Card } from '@firestone/memory';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
-import { pickRandom } from '@legacy-import/src/lib/js/services/utils';
-import { LocalizationFacadeService } from '@services/localization-facade.service';
+import { CardsFacadeService, ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
+import { ExtendedBrawlInfo, TavernBrawlService, TavernStatWithCollection } from '@firestone/tavern-brawl/common';
 import { Observable, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { TavernBrawlService } from '../../services/tavern-brawl.service';
 
 @Component({
 	standalone: false,
 	selector: 'tavern-brawl-overview',
-	styleUrls: [`../../../../css/component/app-section.component.scss`, `./tavern-brawl-overview.component.scss`],
+	styleUrls: [
+		`../../../../../../shared/styles/src/lib/styles/app-section.component.scss`,
+		`./tavern-brawl-overview.component.scss`,
+	],
 	template: `
 		<div class="tavern-brawl-overview">
 			<div class="brawl-info" *ngIf="brawlInfo$ | async as brawlInfo">
@@ -35,12 +36,12 @@ import { TavernBrawlService } from '../../services/tavern-brawl.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TavernBrawlOverviewComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
-	brawlInfo$: Observable<ExtendedBrawlInfo>;
+	brawlInfo$: Observable<ExtendedBrawlInfo | null>;
 	stats$: Observable<readonly TavernStatWithCollection[]>;
 
 	constructor(
-		protected readonly cdr: ChangeDetectorRef,
-		private readonly i18n: LocalizationFacadeService,
+		protected override readonly cdr: ChangeDetectorRef,
+		private readonly i18n: ILocalizationService,
 		private readonly allCards: CardsFacadeService,
 		private readonly brawl: TavernBrawlService,
 		private readonly collectionManager: CollectionManager,
@@ -91,7 +92,7 @@ export class TavernBrawlOverviewComponent extends AbstractSubscriptionComponent 
 							}
 
 							const targetDecks = buildableDecks.slice(0, 3);
-							const buildableDeck: string = pickRandom(targetDecks)?.decklist;
+							const buildableDeck: string | undefined = pickRandom(targetDecks)?.decklist;
 							return {
 								...stat,
 								hasBuildableDecks: hasBuildableDecks,
@@ -136,18 +137,6 @@ export class TavernBrawlOverviewComponent extends AbstractSubscriptionComponent 
 					).fill(card.id);
 				})
 				.sort();
-			// if (deckDefinition.heroes.includes(getDefaultHeroDbfIdForClass('druid'))) {
-			// 	console.debug(
-			// 		'[tavern-brawl-meta] deck',
-			// 		deckDefinition,
-			// 		flatDeckCardIds,
-			// 		deckDefinition.cards
-			// 			.flatMap((pair) => new Array(pair[1]).fill(pair[0]))
-			// 			.map((dbfId) => this.allCards.getCard(dbfId).name)
-			// 			.sort(),
-			// 		cardsInCollection,
-			// 	);
-			// }
 			if (flatDeckCardIds.length !== cardsInCollection.length) {
 				return false;
 			}
@@ -158,17 +147,14 @@ export class TavernBrawlOverviewComponent extends AbstractSubscriptionComponent 
 			}
 			return true;
 		} catch (e) {
-			// console.warn('[tavern-brawl-meta] error', e);
 			return false;
 		}
 	}
 }
 
-export interface ExtendedBrawlInfo extends BrawlInfo {
-	readonly nameLabel: string;
-}
-
-export interface TavernStatWithCollection extends StatForClass {
-	readonly buildableDecklist: string;
-	readonly hasBuildableDecks: boolean;
-}
+const pickRandom = <T>(input: readonly T[]): T | null => {
+	if (!input?.length) {
+		return null;
+	}
+	return input[Math.floor(Math.random() * input.length)];
+};

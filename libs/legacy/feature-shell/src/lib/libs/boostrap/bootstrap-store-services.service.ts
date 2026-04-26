@@ -63,6 +63,7 @@ import {
 } from '@firestone/shared/common/service';
 import { CardRulesService, OwUtilsService } from '@firestone/shared/framework/core';
 import { GameStatsProviderService } from '@firestone/stats/services';
+import { TavernBrawlService } from '@firestone/tavern-brawl/common';
 import { AchievementsLiveProgressTrackingService } from '../../js/services/achievement/achievements-live-progress-tracking.service';
 import { AdService } from '../../js/services/ad.service';
 import { MainWindowStoreService } from '@firestone/mainwindow/common';
@@ -74,7 +75,6 @@ import { GameOverService } from '../../js/services/stats/game/game-over.service'
 import { GameStatsUpdaterService } from '../../js/services/stats/game/game-stats-updater.service';
 import { AppUiStoreService } from '../../js/services/ui-store/app-ui-store.service';
 import { MailsService } from '../mails/services/mails.service';
-import { TavernBrawlService } from '../tavern-brawl/services/tavern-brawl.service';
 
 @Injectable()
 export class BootstrapStoreServicesService {

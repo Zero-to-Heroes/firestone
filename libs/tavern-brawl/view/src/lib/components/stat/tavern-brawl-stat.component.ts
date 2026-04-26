@@ -1,27 +1,27 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { BrawlInfo, StatForClass } from '@firestone-hs/tavern-brawl-stats';
 import { formatClass } from '@firestone/game-state';
-import { OverwolfService } from '@firestone/shared/framework/core';
-import { LocalizationFacadeService } from '../../../../js/services/localization-facade.service';
+import { OverwolfService, ILocalizationService } from '@firestone/shared/framework/core';
+import { TavernStatWithCollection } from '@firestone/tavern-brawl/common';
 
 @Component({
 	standalone: false,
 	selector: 'tavern-brawl-stat',
-	styleUrls: [`../../../../css/component/app-section.component.scss`, `./tavern-brawl-stat.component.scss`],
+	styleUrls: [
+		`../../../../../../shared/styles/src/lib/styles/app-section.component.scss`,
+		`./tavern-brawl-stat.component.scss`,
+	],
 	template: `
 		<div
 			class="tavern-brawl-stat"
 			[ngClass]="{ clickable: buildableDeck != null }"
 			(click)="copyBuildableDeck()"
 			[helpTooltip]="copyBuildableDeckTooltip"
-			[growOnClick]="buildableDeck != null"
-			[growOnClickScale]="1.1"
 		>
 			<div
 				class="non-buildable-warning"
 				*ngIf="!hasBuildableDecks"
 				inlineSVG="assets/svg/attention.svg"
-				[helpTooltip]="'app.tavern-brawl.non-buildable-warning-tooltip' | owTranslate"
+				[helpTooltip]="'app.tavern-brawl.non-buildable-warning-tooltip' | fsTranslate"
 			></div>
 			<div class="hero-portrait">
 				<img class="player-class" [src]="playerClassImage" [helpTooltip]="playerClassTooltip" />
@@ -56,25 +56,19 @@ export class TavernBrawlStatComponent {
 	playerClassTooltip: string;
 	winrate: string;
 	matches: string;
-	buildableDeck: string;
-	copyBuildableDeckTooltip: string;
+	buildableDeck: string | undefined;
+	copyBuildableDeckTooltip: string | null;
 	hasBuildableDecks: boolean;
 
 	constructor(
-		private readonly i18n: LocalizationFacadeService,
+		private readonly i18n: ILocalizationService,
 		private readonly ow: OverwolfService,
 	) {}
 
 	copyBuildableDeck() {
+		if (!this.buildableDeck) {
+			return;
+		}
 		this.ow.placeOnClipboard(this.buildableDeck);
 	}
-}
-
-export interface ExtendedBrawlInfo extends BrawlInfo {
-	readonly nameLabel: string;
-}
-
-export interface TavernStatWithCollection extends StatForClass {
-	readonly buildableDecklist: string;
-	readonly hasBuildableDecks: boolean;
 }

@@ -1,5 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { DeckSummary } from '@firestone/constructed/common';
+import { DecksProviderService } from '@firestone/decktracker/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import {
@@ -8,7 +9,6 @@ import {
 	OverwolfService,
 	waitForReady,
 } from '@firestone/shared/framework/core';
-import { DecksProviderService } from '@firestone/decktracker/common';
 import { Observable, combineLatest } from 'rxjs';
 
 @Component({
@@ -29,8 +29,8 @@ import { Observable, combineLatest } from 'rxjs';
 							<use xlink:href="assets/svg/sprite.svg#empty_state_tracker" />
 						</svg>
 					</i>
-					<span class="title" [owTranslate]="'app.decktracker.decks.empty-state-title'"></span>
-					<span class="subtitle" [owTranslate]="'app.decktracker.decks.empty-state-subtitle'"></span>
+					<span class="title" [fsTranslate]="'app.decktracker.decks.empty-state-title'"></span>
+					<span class="subtitle" [fsTranslate]="'app.decktracker.decks.empty-state-subtitle'"></span>
 				</div>
 			</section>
 		</div>
@@ -41,7 +41,7 @@ export class TavernBrawlPersonalDecksComponent extends AbstractSubscriptionCompo
 	decks$: Observable<readonly DeckSummary[]>;
 
 	constructor(
-		protected readonly cdr: ChangeDetectorRef,
+		protected override readonly cdr: ChangeDetectorRef,
 		private readonly i18n: ILocalizationService,
 		private readonly deckService: DecksProviderService,
 		private readonly prefs: PreferencesService,

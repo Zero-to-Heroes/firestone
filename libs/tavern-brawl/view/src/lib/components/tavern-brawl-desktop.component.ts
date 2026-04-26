@@ -8,14 +8,16 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { ADS_SERVICE_TOKEN, IAdsService, waitForReady } from '@firestone/shared/framework/core';
-import { LocalizationFacadeService } from '@services/localization-facade.service';
+import { ADS_SERVICE_TOKEN, IAdsService, ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, from, Observable } from 'rxjs';
 
 @Component({
 	standalone: false,
 	selector: 'tavern-brawl-desktop',
-	styleUrls: [`../../../css/component/app-section.component.scss`, `./tavern-brawl-desktop.component.scss`],
+	styleUrls: [
+		`../../../../../shared/styles/src/lib/styles/app-section.component.scss`,
+		`./tavern-brawl-desktop.component.scss`,
+	],
 	template: `
 		<div class="app-section tavern-brawl" *ngIf="{ category: category$ | async } as value">
 			<section class="main divider">
@@ -50,8 +52,8 @@ export class TavernBrawlDesktopComponent extends AbstractSubscriptionComponent i
 	private category$$ = new BehaviorSubject<TavernBrawlCategoryType>('overview');
 
 	constructor(
-		protected readonly cdr: ChangeDetectorRef,
-		private readonly i18n: LocalizationFacadeService,
+		protected override readonly cdr: ChangeDetectorRef,
+		private readonly i18n: ILocalizationService,
 		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 	) {
 		super(cdr);

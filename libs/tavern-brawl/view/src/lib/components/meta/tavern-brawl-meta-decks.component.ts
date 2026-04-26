@@ -1,11 +1,9 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { EnhancedDeckStat } from '@components/decktracker/main/meta-decks-visualization.component';
-import { ExtendedDeckStats } from '@firestone/constructed/common';
+import { ExtendedDeckStats as ConstructedExtendedDeckStats } from '@firestone/constructed/common';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ILocalizationService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
+import { ExtendedBrawlInfo, ExtendedDeckStats, TavernBrawlService } from '@firestone/tavern-brawl/common';
 import { filter, Observable } from 'rxjs';
-import { TavernBrawlService } from '../../services/tavern-brawl.service';
-import { ExtendedBrawlInfo } from '../overview/tavern-brawl-overview.component';
 
 @Component({
 	standalone: false,
@@ -24,7 +22,7 @@ import { ExtendedBrawlInfo } from '../overview/tavern-brawl-overview.component';
 			<meta-decks-visualization
 				[metaDecks]="decks$ | async"
 				[cardSearch]="cardSearch$ | async"
-				(deckSelected)="onDeckSelected($event)"
+				(deckSelected)="onDeckSelected($any($event))"
 			>
 			</meta-decks-visualization>
 		</div>
@@ -32,12 +30,12 @@ import { ExtendedBrawlInfo } from '../overview/tavern-brawl-overview.component';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TavernBrawlMetaDecksComponent extends AbstractSubscriptionComponent implements AfterContentInit {
-	brawlInfo$: Observable<ExtendedBrawlInfo>;
-	decks$: Observable<ExtendedDeckStats>;
-	cardSearch$: Observable<readonly string[]>;
+	brawlInfo$: Observable<ExtendedBrawlInfo | null>;
+	decks$: Observable<ConstructedExtendedDeckStats>;
+	cardSearch$: Observable<readonly string[] | null>;
 
 	constructor(
-		protected readonly cdr: ChangeDetectorRef,
+		protected override readonly cdr: ChangeDetectorRef,
 		private readonly metaStats: TavernBrawlService,
 		private readonly i18n: ILocalizationService,
 		private readonly ow: OverwolfService,
@@ -49,16 +47,16 @@ export class TavernBrawlMetaDecksComponent extends AbstractSubscriptionComponent
 		await waitForReady(this.metaStats);
 
 		this.decks$ = this.metaStats.metaDecks$$.pipe(
-			filter((stats) => stats?.stats?.length > 0),
+			filter((stats): stats is ExtendedDeckStats => !!stats?.stats?.length),
 			this.mapData((stats) => {
-				const result: ExtendedDeckStats = {
+				const result = {
 					...stats,
 					lastUpdated: new Date(stats.lastUpdateDate),
 					dataPoints: stats.stats.reduce((a, b) => a + b.matches, 0),
 					rankBracket: null,
 					timePeriod: null,
 					format: null,
-				};
+				} as unknown as ConstructedExtendedDeckStats;
 				console.debug('[tavern-brawl-meta-decks] result', result);
 				return result;
 			}),
@@ -95,7 +93,7 @@ export class TavernBrawlMetaDecksComponent extends AbstractSubscriptionComponent
 		}
 	}
 
-	onDeckSelected(deck: EnhancedDeckStat) {
+	onDeckSelected(deck: { readonly decklist: string }) {
 		console.debug('copying deck', deck);
 		this.ow.placeOnClipboard(deck.decklist);
 	}

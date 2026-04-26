@@ -470,6 +470,8 @@ import {
 	GameStatsProviderService,
 	StatsServicesModule,
 } from '@firestone/stats/services';
+import { TavernBrawlCommonModule } from '@firestone/tavern-brawl/common';
+import { TavernBrawlViewModule } from '@firestone/tavern-brawl/view';
 import { TwitchCommonModule } from '@firestone/twitch/common';
 import { MailboxDesktopComponent } from '@mails/components/mailbox-desktop.component';
 import { MailboxMessageComponent } from '@mails/components/mailbox-message/mailbox-message.component';
@@ -483,9 +485,6 @@ import { PackStatTooltipComponent } from '@packs/components/pack-stat-tooltip.co
 import { PackStatComponent } from '@packs/components/pack-stat.component';
 import { CollectionPackStatsComponent } from '@packs/components/pack-stats.component';
 import { PackMonitor } from '@packs/services/pack-monitor.service';
-import { TavernBrawlStatComponent } from '@tavern-brawl/components/stat/tavern-brawl-stat.component';
-import { TavernBrawlDesktopComponent } from '@tavern-brawl/components/tavern-brawl-desktop.component';
-import { TavernBrawlService } from '@tavern-brawl/services/tavern-brawl.service';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { AdsComponent } from './js/components/ads/ads.component';
 import { BgsBattleSideComponent } from './js/components/battlegrounds/battles/bgs-battle-side.component';
@@ -612,9 +611,6 @@ import { AppStartupService } from './libs/boostrap/app-startup.service';
 import { BootstrapEssentialServicesService } from './libs/boostrap/bootstrap-essential-services.service';
 import { BootstrapOtherServicesService } from './libs/boostrap/bootstrap-other-services.service';
 import { BootstrapStoreServicesService } from './libs/boostrap/bootstrap-store-services.service';
-import { TavernBrawlMetaDecksComponent } from './libs/tavern-brawl/components/meta/tavern-brawl-meta-decks.component';
-import { TavernBrawlOverviewComponent } from './libs/tavern-brawl/components/overview/tavern-brawl-overview.component';
-import { TavernBrawlPersonalDecksComponent } from './libs/tavern-brawl/components/personal-decks/tavern-brawl-personal-decks.component';
 
 console.log('environment is ' + process.env['NODE_ENV']);
 
@@ -692,6 +688,8 @@ try {
 		ProfileCommonModule,
 		BattlegroundsServicesModule,
 		MainwindowViewModule,
+		TavernBrawlCommonModule,
+		TavernBrawlViewModule,
 
 		NgxChartsModule,
 		// NgChartsModule,
@@ -1150,12 +1148,6 @@ try {
 		MailboxComponent,
 		MailboxMessageComponent,
 
-		TavernBrawlDesktopComponent,
-		TavernBrawlMetaDecksComponent,
-		TavernBrawlOverviewComponent,
-		TavernBrawlStatComponent,
-		TavernBrawlPersonalDecksComponent,
-
 		StatsDesktopComponent,
 		StatsXpGraphComponent,
 		StatsFiltersComponent,
@@ -1374,7 +1366,6 @@ try {
 
 		ReplaysNotificationService,
 
-		TavernBrawlService,
 		MailsService,
 
 		ProfileUploaderService,

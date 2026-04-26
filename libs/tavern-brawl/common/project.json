@@ -1,0 +1,36 @@
+{
+	"name": "tavern-brawl/common",
+	"$schema": "../../../node_modules/nx/schemas/project-schema.json",
+	"sourceRoot": "libs/tavern-brawl/common/src",
+	"prefix": "firestone",
+	"projectType": "library",
+	"tags": [],
+	"targets": {
+		"build": {
+			"executor": "@nx/angular:package",
+			"outputs": ["{workspaceRoot}/dist/{projectRoot}"],
+			"options": {
+				"project": "libs/tavern-brawl/common/ng-package.json"
+			},
+			"configurations": {
+				"production": {
+					"tsConfig": "libs/tavern-brawl/common/tsconfig.lib.prod.json"
+				},
+				"development": {
+					"tsConfig": "libs/tavern-brawl/common/tsconfig.lib.json"
+				}
+			},
+			"defaultConfiguration": "production"
+		},
+		"test": {
+			"executor": "@nx/jest:jest",
+			"outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+			"options": {
+				"jestConfig": "libs/tavern-brawl/common/jest.config.ts"
+			}
+		},
+		"lint": {
+			"executor": "@nx/eslint:lint"
+		}
+	}
+}

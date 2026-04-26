@@ -77,10 +77,11 @@
 			"@packs/*": ["libs/legacy/feature-shell/src/lib/libs/packs/*"],
 			"@pipes/*": ["libs/legacy/feature-shell/src/lib/js/pipes/*"],
 			"@services/*": ["libs/legacy/feature-shell/src/lib/js/services/*"],
-			"@tavern-brawl/*": ["libs/legacy/feature-shell/src/lib/libs/tavern-brawl/*"],
 			"crypto": ["./node_modules/crypto-browserify"],
 			"stream": ["./node_modules/stream-browserify"],
-			"vm": ["./node_modules/vm-browserify"]
+			"vm": ["./node_modules/vm-browserify"],
+			"@firestone/tavern-brawl/common": ["libs/tavern-brawl/common/src/index.ts"],
+			"@firestone/tavern-brawl/view": ["libs/tavern-brawl/view/src/index.ts"]
 		},
 		"strict": false,
 		"noImplicitAny": false,
