@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { ALL_CLASSES } from '@firestone-hs/reference-data';
-import { ArenaRun, ArenaRunsService, isCorrectMode, isCorrectTime } from '@firestone/arena/common';
+import { ArenaRun, ArenaRunsService, getFirstMatchInRun, isCorrectMode, isCorrectTime } from '@firestone/arena/common';
 import { PatchesConfigService, PreferencesService } from '@firestone/shared/common/service';
 import {
 	AbstractSubscriptionComponent,
@@ -265,7 +265,7 @@ export class ArenaPersonalStatsComponent extends AbstractSubscriptionComponent i
 			this.mapData(
 				([runs, timeFilter, modeFilter, patch, seasonPatch]) =>
 					runs
-						?.filter((r) => !!r?.getFirstMatch())
+						?.filter((r) => !!getFirstMatchInRun(r))
 						.filter((match) => isCorrectTime(match, timeFilter, patch, seasonPatch))
 						.filter((run) => isCorrectMode(run, modeFilter))
 						.map((r) =>

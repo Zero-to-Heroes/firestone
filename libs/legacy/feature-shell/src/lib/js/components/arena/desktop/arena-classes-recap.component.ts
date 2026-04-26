@@ -1,6 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { CardClass, isArena } from '@firestone-hs/reference-data';
-import { ARENA_REVAMP_BUILD_NUMBER, ArenaRun } from '@firestone/arena/common';
+import { ARENA_REVAMP_BUILD_NUMBER, ArenaRun, getFirstMatchInRun } from '@firestone/arena/common';
 import { formatClass } from '@firestone/game-state';
 import {
 	ArenaClassFilterType,
@@ -145,7 +145,7 @@ export class ArenaClassesRecapComponent extends AbstractSubscriptionComponent im
 		]).pipe(
 			this.mapData(([stats, { timeFilter, heroFilter, mode }, patch, seasonPatch]) => {
 				const arenaMatches = stats?.filter((stat) => isArena(stat.gameMode));
-				if (!arenaMatches.length) {
+				if (!arenaMatches?.length) {
 					return null;
 				}
 
@@ -301,7 +301,9 @@ export class ArenaClassesRecapComponent extends AbstractSubscriptionComponent im
 	}
 
 	private isCorrectHero(run: ArenaRun, heroFilter: ArenaClassFilterType): boolean {
-		return !heroFilter || heroFilter === 'all' || run.getFirstMatch()?.playerClass?.toLowerCase() === heroFilter;
+		return (
+			!heroFilter || heroFilter === 'all' || getFirstMatchInRun(run)?.playerClass?.toLowerCase() === heroFilter
+		);
 	}
 
 	private isCorrectTime(
@@ -313,7 +315,7 @@ export class ArenaClassesRecapComponent extends AbstractSubscriptionComponent im
 		if (timeFilter === 'all-time') {
 			return true;
 		}
-		const firstMatch = run.getFirstMatch();
+		const firstMatch = getFirstMatchInRun(run);
 		if (!firstMatch) {
 			return false;
 		}

@@ -22,8 +22,8 @@ export class ArenaRun {
 	public static create(base: Partial<NonFunctionProperties<ArenaRun>>): ArenaRun {
 		return Object.assign(new ArenaRun(), base);
 	}
-
-	public getFirstMatch(): GameStat {
-		return this.steps.filter((step) => (step as GameStat).buildNumber).map((step) => step as GameStat)[0];
-	}
 }
+
+export const getFirstMatchInRun = (run: ArenaRun): GameStat => {
+	return run.steps.filter((step) => (step as GameStat).buildNumber).map((step) => step as GameStat)[0];
+};

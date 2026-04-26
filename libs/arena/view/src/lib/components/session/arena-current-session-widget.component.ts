@@ -3,7 +3,7 @@
 import { ComponentType } from '@angular/cdk/portal';
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { BnetRegion, GameType } from '@firestone-hs/reference-data';
-import { ArenaDraftManagerService, ArenaRun, ArenaRunsService } from '@firestone/arena/common';
+import { ArenaDraftManagerService, ArenaRun, ArenaRunsService, getFirstMatchInRun } from '@firestone/arena/common';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { AccountService } from '@firestone/profile/common';
 import {
@@ -192,7 +192,7 @@ export class ArenaCurrentSessionWidgetComponent extends AbstractSubscriptionComp
 		]).pipe(
 			this.mapData(([runs, gameType, sessionStartDate, region, timeFrame, seasonStart]) =>
 				runs
-					?.filter((r) => !!r?.getFirstMatch())
+					?.filter((r) => !!getFirstMatchInRun(r))
 					.filter((r) =>
 						gameType === GameType.GT_UNDERGROUND_ARENA
 							? r.gameMode === 'arena-underground'
@@ -297,7 +297,7 @@ export class ArenaCurrentSessionWidgetComponent extends AbstractSubscriptionComp
 }
 
 const isCorrectRegion = (run: ArenaRun, region: BnetRegion | null): boolean => {
-	return !region || run?.getFirstMatch()?.region === region;
+	return !region || getFirstMatchInRun(run)?.region === region;
 };
 
 const isRunInGroup = (run: ArenaRun, group: WinRange): boolean => {

@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { RewardType } from '@firestone-hs/reference-data';
-import { ArenaRun } from '@firestone/arena/common';
+import { ArenaRun, getFirstMatchInRun } from '@firestone/arena/common';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ILocalizationService } from '@firestone/shared/framework/core';
 import { extractTime } from '@firestone/stats/common';
@@ -43,7 +43,7 @@ export class ArenaPersonalStatsOverviewComponent extends AbstractSubscriptionCom
 	}
 
 	private buildStats(allRuns: readonly ArenaRun[] | undefined | null): readonly InternalStat[] {
-		const runs = allRuns?.filter((r) => !!r?.getFirstMatch()) ?? [];
+		const runs = allRuns?.filter((r) => !!getFirstMatchInRun(r)) ?? [];
 		const replays = runs.flatMap((r) => r.steps) ?? [];
 
 		const replaysFirst = replays.filter((replay) => replay.coinPlay === 'play') ?? [];

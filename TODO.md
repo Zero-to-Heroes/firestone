@@ -1,1 +1,2 @@
 - HTML cache on electron main process
+- lazy loading for services?

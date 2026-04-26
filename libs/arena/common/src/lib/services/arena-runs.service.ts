@@ -25,7 +25,7 @@ import { GAME_STATS_PROVIDER_SERVICE_TOKEN, IGameStatsProviderService } from '@f
 import { Observable, combineLatest, debounceTime, distinctUntilChanged, filter, map } from 'rxjs';
 import { ARENA_REVAMP_BUILD_NUMBER, ARENA_REVAMP_RELEASE_DATE } from '../models/arena-category';
 import { ExtendedDraftDeckStats } from '../models/arena-draft';
-import { ArenaRun } from '../models/arena-run';
+import { ArenaRun, getFirstMatchInRun } from '../models/arena-run';
 import { ArenaDeckStatsService } from './arena-deck-stats.service';
 import { ArenaRewardsService } from './arena-rewards.service';
 
@@ -139,6 +139,17 @@ export class ArenaRunsService extends AbstractFacadeService<ArenaRunsService> {
 		});
 	}
 
+	protected override async initElectronSubjects() {
+		this.setupElectronSubject(this.allRuns$$, 'ArenaRunsService-allRuns');
+		this.setupElectronSubject(this.runs$$, 'ArenaRunsService-runs');
+	}
+
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.allRuns$$ = new SubscriberAwareBehaviorSubject<readonly ArenaRun[] | null | undefined>(null);
+		this.runs$$ = new SubscriberAwareBehaviorSubject<readonly ArenaRun[] | null | undefined>(null);
+	}
+
+	/** Use only from a service / main process */
 	public getArenaRun$(runId: string): Observable<ArenaRun | null | undefined> {
 		return this.allRuns$$.pipe(map((runs) => runs?.find((run) => run.id === runId)));
 	}
@@ -227,38 +238,20 @@ export class ArenaRunsService extends AbstractFacadeService<ArenaRunsService> {
 			!heroFilter ||
 			heroFilter === 'all' ||
 			this.allCards.getCard(run.heroCardId).classes?.includes(heroFilter?.toUpperCase()) ||
-			run.getFirstMatch()?.playerClass?.toLowerCase() === heroFilter ||
+			getFirstMatchInRun(run)?.playerClass?.toLowerCase() === heroFilter ||
 			false
 		);
 	}
 }
 
 export const isCorrectRegion = (run: ArenaRun, region: BnetRegion | 'all'): boolean => {
-	// console.debug(
-	// 	'isCorrectRegion',
-	// 	region === 'all' || run.draftStat?.region === region || run.getFirstMatch()?.region === region,
-	// 	region === 'all',
-	// 	run.draftStat?.region === region,
-	// 	run.getFirstMatch()?.region === region,
-	// 	run,
-	// 	region,
-	// );
-	return region === 'all' || run.draftStat?.region === region || run.getFirstMatch()?.region === region;
+	return region === 'all' || run.draftStat?.region === region || getFirstMatchInRun(run)?.region === region;
 };
 
 export const isCorrectMode = (run: ArenaRun, modeFilter: ArenaModeFilterType): boolean => {
-	const buildNumber = run.getFirstMatch()?.buildNumber ?? 0;
-	const runDate = new Date(run.creationTimestamp ?? run.getFirstMatch()?.creationTimestamp ?? 0);
+	const buildNumber = getFirstMatchInRun(run)?.buildNumber ?? 0;
+	const runDate = new Date(run.creationTimestamp ?? getFirstMatchInRun(run)?.creationTimestamp ?? 0);
 	const gameMode = run.gameMode ?? run.draftStat?.gameMode;
-	// console.debug(
-	// 	'[arena-runs] isCorrectMode',
-	// 	run,
-	// 	modeFilter,
-	// 	buildNumber,
-	// 	runDate,
-	// 	buildNumber >= ARENA_REVAMP_BUILD_NUMBER,
-	// 	runDate >= ARENA_REVAMP_RELEASE_DATE,
-	// );
 	switch (modeFilter) {
 		case 'arena-legacy':
 			return (
@@ -288,7 +281,7 @@ export const isCorrectTime = (
 		return true;
 	}
 
-	const timestamp = run.creationTimestamp ?? run.getFirstMatch()?.creationTimestamp;
+	const timestamp = run.creationTimestamp ?? getFirstMatchInRun(run)?.creationTimestamp;
 	// Don't use the build number so we can more easily fit in ongoing drafts
 	// const buildNumber = run.getFirstMatch()?.buildNumber ?? 0;
 

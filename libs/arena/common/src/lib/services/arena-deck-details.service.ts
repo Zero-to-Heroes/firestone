@@ -124,6 +124,14 @@ export class ArenDeckDetailsService extends AbstractFacadeService<ArenDeckDetail
 		});
 	}
 
+	override async initElectronSubjects() {
+		this.setupElectronSubject(this.deckDetails$$, 'ArenDeckDetailsService-deckDetails');
+	}
+
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.deckDetails$$ = new SubscriberAwareBehaviorSubject<ArenaDeckDetails | null | undefined>(null);
+	}
+
 	private buildOverview(run: ArenaRun): ArenaDeckOverview {
 		const result: ArenaDeckOverview = {
 			wins: run.wins,

@@ -27,10 +27,14 @@ import {
 	ArenaClassStatsService,
 	ArenaDeckStatsService,
 	ArenaDraftManagerService,
+	ArenaHighWinsRunsService,
 	ArenaInfoService,
 	ArenaMetaHeroStrategiesService,
 	ArenaMulliganGuideService,
 	ArenaNavigationService,
+	ArenaRewardsService,
+	ArenaRunsService,
+	ArenDeckDetailsService,
 } from '@firestone/arena/common';
 import { ArenaRefService } from '@firestone/arena/data-access';
 import {
@@ -1008,6 +1012,18 @@ export const buildAppInjector = () => {
 
 	const battlegroundsCompsService = new BattlegroundsCompsService(windowManager);
 	electronInjector.register(BattlegroundsCompsService, battlegroundsCompsService);
+
+	const arenaRewardsService = new ArenaRewardsService(windowManager);
+	electronInjector.register(ArenaRewardsService, arenaRewardsService);
+
+	const arenaRunsService = new ArenaRunsService(windowManager);
+	electronInjector.register(ArenaRunsService, arenaRunsService);
+
+	const arenDeckDetailsService = new ArenDeckDetailsService(windowManager);
+	electronInjector.register(ArenDeckDetailsService, arenDeckDetailsService);
+
+	const renaHighWinsRunsService = new ArenaHighWinsRunsService(windowManager);
+	electronInjector.register(ArenaHighWinsRunsService, renaHighWinsRunsService);
 
 	electronInjector.ready = true;
 	return electronInjector;

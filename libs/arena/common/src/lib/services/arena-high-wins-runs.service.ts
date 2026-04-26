@@ -42,6 +42,24 @@ export class ArenaHighWinsRunsService extends AbstractFacadeService<ArenaHighWin
 		this.cardSearch$$ = this.mainInstance.cardSearch$$;
 	}
 
+	override async initElectronSubjects() {
+		this.setupElectronSubject(this.runs$$, 'ArenaHighWinsRunsService-runs');
+		this.setupElectronSubject(this.notableCards$$, 'ArenaHighWinsRunsService-notableCards');
+		this.setupElectronSubject(this.cardSearch$$, 'ArenaHighWinsRunsService-cardSearch');
+	}
+
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.runs$$ = new SubscriberAwareBehaviorSubject<ExtendedHighWinRunsInfo | null | undefined>(null);
+		this.notableCards$$ = new SubscriberAwareBehaviorSubject<readonly string[] | null | undefined>(null);
+		this.cardSearch$$ = new BehaviorSubject<readonly string[] | null | undefined>(null);
+	}
+
+	protected override async initElectronMainProcess() {
+		this.registerMainProcessMethod('newCardSearchInternal', (selected: readonly string[]) =>
+			this.newCardSearchInternal(selected),
+		);
+	}
+
 	protected async init() {
 		this.runs$$ = new SubscriberAwareBehaviorSubject<ExtendedHighWinRunsInfo | null | undefined>(null);
 		this.notableCards$$ = new SubscriberAwareBehaviorSubject<readonly string[] | null | undefined>(null);
@@ -102,20 +120,14 @@ export class ArenaHighWinsRunsService extends AbstractFacadeService<ArenaHighWin
 		});
 	}
 
+	/** Only use from a service / main process */
 	public getRun$(runId: number): Observable<ExtendedArenaRunInfo | null | undefined> {
 		return this.runs$$.pipe(map((runs) => runs?.runs?.find((run) => run.id === runId)));
-	}
-
-	protected override async initElectronMainProcess() {
-		this.registerMainProcessMethod('newCardSearchInternal', (selected: readonly string[]) =>
-			this.newCardSearchInternal(selected),
-		);
 	}
 
 	public newCardSearch(selected: readonly string[]): void {
 		void this.callOnMainProcess('newCardSearchInternal', selected);
 	}
-
 	private newCardSearchInternal(selected: readonly string[]): void {
 		this.cardSearch$$.next(selected);
 	}
