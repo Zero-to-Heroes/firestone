@@ -29,4 +29,12 @@ export class ConstructedConfigService extends AbstractFacadeService<ConstructedC
 			this.config$$.next(result);
 		});
 	}
+
+	protected override initElectronSubjects(): void {
+		this.config$$ = this.mainInstance.config$$;
+	}
+
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.config$$ = this.mainInstance.config$$;
+	}
 }
