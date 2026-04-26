@@ -2,13 +2,13 @@ import { Inject, Injectable } from '@angular/core';
 import { BgsBattleSimulationService, BgsIntermediateResultsSimGuardianService } from '@firestone/battlegrounds/core';
 import { MemoryInspectionService } from '@firestone/memory';
 import { BugReportService, LogsUploaderService, PreferencesService } from '@firestone/shared/common/service';
-import type { IAdsService } from '@firestone/shared/framework/core';
+import type { IAdsService, IOwUtilsService } from '@firestone/shared/framework/core';
 import {
 	ADS_SERVICE_TOKEN,
 	AppInjector,
 	CardsFacadeService,
 	ILocalizationService,
-	OwUtilsService,
+	OW_UTILS_SERVICE_TOKEN,
 } from '@firestone/shared/framework/core';
 
 import { ArenaRefService } from '@firestone/arena/data-access';
@@ -191,7 +191,7 @@ export class GameStateParsersService {
 		private readonly aiDecks: AiDeckService,
 		private readonly deckHandler: DeckHandlerService,
 		private readonly memory: MemoryInspectionService,
-		private readonly owUtils: OwUtilsService,
+		@Inject(OW_UTILS_SERVICE_TOKEN) private readonly owUtils: IOwUtilsService,
 		private readonly prefs: PreferencesService,
 		private readonly deckParser: DeckParserService,
 		private readonly secretsConfig: SecretConfigService,

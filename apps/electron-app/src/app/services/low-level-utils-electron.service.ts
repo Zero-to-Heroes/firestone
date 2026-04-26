@@ -1,19 +1,15 @@
 /* eslint-disable no-async-promise-executor */
 
-import * as fs from 'fs';
-import * as path from 'path';
-import * as https from 'https';
 import * as http from 'http';
+import * as https from 'https';
+import * as fs from 'fs';
 import * as os from 'os';
-import {
-	BrowserWindow,
-	Notification,
-	clipboard,
-	nativeImage,
-} from 'electron';
+import * as path from 'path';
+import type { IOwUtilsService } from '@firestone/shared/framework/core';
+import { BrowserWindow, Notification, clipboard, nativeImage } from 'electron';
 import extract from 'extract-zip';
 
-export class LowLevelUtilsElectronService {
+export class LowLevelUtilsElectronService implements IOwUtilsService {
 	public async deleteFileOrFolder(targetPath: string): Promise<void> {
 		try {
 			await fs.promises.rm(targetPath, { recursive: true, force: true });
@@ -51,7 +47,7 @@ export class LowLevelUtilsElectronService {
 	public async downloadFileTo(
 		fileUrl: string,
 		targetPath: string,
-		targetFileName: string
+		targetFileName: string,
 	): Promise<boolean> {
 		return new Promise<boolean>((resolve) => {
 			const destPath = path.join(targetPath, targetFileName);
@@ -63,17 +59,12 @@ export class LowLevelUtilsElectronService {
 						if (response.statusCode === 301 || response.statusCode === 302) {
 							const redirectUrl = response.headers.location;
 							if (redirectUrl) {
-								this.downloadFileTo(redirectUrl, targetPath, targetFileName).then(
-									resolve
-								);
+								this.downloadFileTo(redirectUrl, targetPath, targetFileName).then(resolve);
 								return;
 							}
 						}
 						if (response.statusCode !== 200) {
-							console.warn(
-								'[low-level-utils-electron] downloadFileTo failed',
-								response.statusCode
-							);
+							console.warn('[low-level-utils-electron] downloadFileTo failed', response.statusCode);
 							resolve(false);
 							return;
 						}
@@ -130,6 +121,8 @@ export class LowLevelUtilsElectronService {
 		const win = this.findWindowByTitle(windowName);
 		if (win) {
 			win.flashFrame(true);
+		} else {
+			console.warn('[low-level-utils-electron] flashWindow unsupported for non-Electron window', windowName);
 		}
 	}
 
@@ -139,10 +132,11 @@ export class LowLevelUtilsElectronService {
 
 	public async captureWindow(
 		windowName: string,
-		copyToClipboard = false
+		copyToClipboard = false,
 	): Promise<[string | null, unknown]> {
 		const win = this.findWindowByTitle(windowName);
 		if (!win || win.isDestroyed()) {
+			console.warn('[low-level-utils-electron] captureWindow unsupported for non-Electron window', windowName);
 			return [null, null];
 		}
 
@@ -162,6 +156,7 @@ export class LowLevelUtilsElectronService {
 	public async captureActiveWindow(): Promise<[string | null, unknown]> {
 		const win = BrowserWindow.getFocusedWindow();
 		if (!win || win.isDestroyed()) {
+			console.warn('[low-level-utils-electron] captureActiveWindow unsupported outside Electron windows');
 			return [null, null];
 		}
 
@@ -182,15 +177,13 @@ export class LowLevelUtilsElectronService {
 		}
 	}
 
-	public async get(): Promise<void> {
+	public async get(): Promise<unknown> {
 		// No-op for Electron: plugin initialization not needed
 		return Promise.resolve();
 	}
 
 	private findWindowByTitle(windowName: string): BrowserWindow | null {
 		const windows = BrowserWindow.getAllWindows();
-		return (
-			windows.find((w) => !w.isDestroyed() && w.getTitle()?.includes(windowName)) ?? null
-		);
+		return windows.find((w) => !w.isDestroyed() && w.getTitle()?.includes(windowName)) ?? null;
 	}
 }

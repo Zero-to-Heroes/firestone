@@ -29,6 +29,7 @@ export * from './lib/services/monitors-service.interface';
 export * from './lib/services/overwolf-screenshot-facade.service';
 export * from './lib/services/overwolf-window-controls-facade.service';
 export * from './lib/services/overwolf.service';
+export * from './lib/services/ow-utils-service.interface';
 export * from './lib/services/ow-utils.service';
 export * from './lib/services/processing-queue.service';
 export * from './lib/services/region-info-service.interface';

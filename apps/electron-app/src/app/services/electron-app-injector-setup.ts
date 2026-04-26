@@ -195,6 +195,7 @@ import {
 	LocalStorageService,
 	MONITORS_SERVICE_TOKEN,
 	OverwolfService,
+	OW_UTILS_SERVICE_TOKEN,
 	OwUtilsService,
 	REGION_INFO_SERVICE_TOKEN,
 	SCREENSHOT_SERVICE_TOKEN,
@@ -577,6 +578,7 @@ export const buildAppInjector = () => {
 	electronInjector.register(BgsBattleSimulationService, simulation);
 
 	const owUtils = new LowLevelUtilsElectronService();
+	electronInjector.register(OW_UTILS_SERVICE_TOKEN, owUtils);
 	electronInjector.register(OwUtilsService, owUtils as any as OwUtilsService);
 
 	const arenaRefService = new ArenaRefService(windowManager);
@@ -589,7 +591,7 @@ export const buildAppInjector = () => {
 		aiDecks,
 		deckHandler,
 		memoryInspection,
-		owUtils as any as OwUtilsService,
+		owUtils,
 		preferences,
 		deckParser,
 		secretsConfig,

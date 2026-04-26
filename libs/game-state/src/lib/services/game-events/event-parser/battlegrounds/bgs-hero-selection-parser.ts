@@ -1,7 +1,8 @@
 import { isBattlegrounds } from '@firestone-hs/reference-data';
 import { MemoryInspectionService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { ILocalizationService, OwUtilsService } from '@firestone/shared/framework/core';
+import type { IOwUtilsService } from '@firestone/shared/framework/core';
+import { ILocalizationService } from '@firestone/shared/framework/core';
 import { BattlegroundsState, BgsHeroSelectionOverviewPanel, BgsPanel } from '../../../../models/_barrel';
 import { GameState } from '../../../../models/game-state';
 import { GameStateEvent } from '../../../game-state-events/game-state-event';
@@ -12,7 +13,7 @@ import { EventParser } from '../_event-parser';
 export class BgsHeroSelectionParser implements EventParser {
 	constructor(
 		private readonly prefs: PreferencesService,
-		private readonly owUtils: OwUtilsService,
+		private readonly owUtils: IOwUtilsService,
 		private readonly i18n: ILocalizationService,
 		private readonly memoryService: MemoryInspectionService,
 	) {}

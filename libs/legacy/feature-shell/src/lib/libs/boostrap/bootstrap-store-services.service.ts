@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { AchievementsNavigationService } from '@firestone/achievements/common';
 import { GameNativeStateStoreService } from '@firestone/app/common';
 import {
@@ -61,7 +61,8 @@ import {
 	SubscriptionService,
 	TebexService,
 } from '@firestone/shared/common/service';
-import { CardRulesService, OwUtilsService } from '@firestone/shared/framework/core';
+import type { IOwUtilsService } from '@firestone/shared/framework/core';
+import { CardRulesService, OW_UTILS_SERVICE_TOKEN } from '@firestone/shared/framework/core';
 import { GameStatsProviderService } from '@firestone/stats/services';
 import { TavernBrawlService } from '@firestone/tavern-brawl/common';
 import { AchievementsLiveProgressTrackingService } from '../../js/services/achievement/achievements-live-progress-tracking.service';
@@ -80,7 +81,7 @@ import { MailsService } from '../mails/services/mails.service';
 export class BootstrapStoreServicesService {
 	// All the constructors are there to start bootstrapping / registering everything
 	constructor(
-		private readonly init_OWUtilsService: OwUtilsService, // WindowManager
+		@Inject(OW_UTILS_SERVICE_TOKEN) private readonly init_OWUtilsService: IOwUtilsService, // WindowManager
 		private readonly init_SettingsControllerService: SettingsControllerService,
 		private readonly init_AppNavigationService: AppNavigationService,
 		private readonly init_SubscriptionService: SubscriptionService,

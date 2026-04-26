@@ -1,12 +1,13 @@
-import { Injectable, Optional } from '@angular/core';
+import { Inject, Injectable, Optional } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { SceneService } from '@firestone/memory';
 import { GameStatusService, NotificationsService } from '@firestone/shared/common/service';
+import type { IOwUtilsService } from '@firestone/shared/framework/core';
 import {
 	ApiRunner,
 	ILocalizationService,
+	OW_UTILS_SERVICE_TOKEN,
 	OverwolfService,
-	OwUtilsService,
 	waitForReady,
 } from '@firestone/shared/framework/core';
 import { IN_GAME_REPLAY_ERROR_MESSAGES, InGameReplayService } from './in-game-replay.service';
@@ -25,7 +26,7 @@ export class ReplayProtocolHandlerService {
 		private readonly notifs: NotificationsService,
 		private readonly api: ApiRunner,
 		private readonly sceneService: SceneService,
-		private readonly owUtils: OwUtilsService,
+		@Inject(OW_UTILS_SERVICE_TOKEN) private readonly owUtils: IOwUtilsService,
 		@Optional() private readonly i18n: ILocalizationService,
 	) {
 		this.init();

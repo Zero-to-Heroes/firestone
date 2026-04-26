@@ -12,6 +12,7 @@ import { DATABASE_SERVICE_TOKEN } from './services/database-service.interface';
 import { IndexedDbService } from './services/indexeddb.service';
 import { LocalStorageService } from './services/local-storage';
 import { OverwolfService } from './services/overwolf.service';
+import { OW_UTILS_SERVICE_TOKEN } from './services/ow-utils-service.interface';
 import { OwUtilsService } from './services/ow-utils.service';
 import { UserService } from './services/user.service';
 import { WindowManagerService } from './services/window-manager.service';
@@ -31,6 +32,7 @@ const components = [FsTranslateDirective, FsTranslatePipe];
 		LocalizationStandaloneService,
 		UserService,
 		OwUtilsService,
+		{ provide: OW_UTILS_SERVICE_TOKEN, useExisting: OwUtilsService },
 		OverwolfService,
 		IndexedDbService,
 		{ provide: DATABASE_SERVICE_TOKEN, useExisting: IndexedDbService },

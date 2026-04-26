@@ -1,6 +1,7 @@
 import { isBattlegrounds, isMercenaries } from '@firestone-hs/reference-data';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { ILocalizationService, OwUtilsService } from '@firestone/shared/framework/core';
+import type { IOwUtilsService } from '@firestone/shared/framework/core';
+import { ILocalizationService } from '@firestone/shared/framework/core';
 import { BattlegroundsState, BgsNextOpponentOverviewPanel, BgsPanel } from '../../../models/_barrel';
 import { DeckCard } from '../../../models/deck-card';
 import { DamageDealt, TurnTiming } from '../../../models/deck-state';
@@ -10,7 +11,7 @@ import { EventParser } from './_event-parser';
 
 export class NewTurnParser implements EventParser {
 	constructor(
-		private readonly owUtils: OwUtilsService,
+		private readonly owUtils: IOwUtilsService,
 		private readonly prefs: PreferencesService,
 		private readonly i18n: ILocalizationService,
 	) {}

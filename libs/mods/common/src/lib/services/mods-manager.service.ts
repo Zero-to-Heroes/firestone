@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import type { LogFileBackend } from '@firestone/shared/common/service';
 import { GameStatusService, LOG_FILE_BACKEND, Preferences, PreferencesService } from '@firestone/shared/common/service';
+import type { IOwUtilsService } from '@firestone/shared/framework/core';
 import { Mutable, sortByProperties } from '@firestone/shared/framework/common';
 import {
 	AbstractFacadeService,
 	ApiRunner,
 	AppInjector,
-	OwUtilsService,
+	OW_UTILS_SERVICE_TOKEN,
 	waitForReady,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
@@ -47,7 +48,7 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 	private api: ApiRunner;
 	private prefs: PreferencesService;
 	private fileBackend: LogFileBackend;
-	private io: OwUtilsService;
+	private io: IOwUtilsService;
 
 	private modsConfig: { trustedMods: readonly ModData[] } | null = null;
 
@@ -67,7 +68,7 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 		this.api = AppInjector.get(ApiRunner);
 		this.prefs = AppInjector.get(PreferencesService);
 		this.fileBackend = AppInjector.get(LOG_FILE_BACKEND);
-		this.io = AppInjector.get(OwUtilsService);
+		this.io = AppInjector.get(OW_UTILS_SERVICE_TOKEN);
 
 		await waitForReady(this.prefs, this.gameStatus);
 

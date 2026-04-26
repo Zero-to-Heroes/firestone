@@ -44,12 +44,12 @@ import {
 	PreferencesService,
 } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
+import type { IOwUtilsService } from '@firestone/shared/framework/core';
 import {
 	ApiRunner,
 	CardsFacadeService,
 	CardsFacadeStandaloneService,
 	ILocalizationService,
-	OwUtilsService,
 	resetAppInjectorForTesting,
 	setAppInjector,
 } from '@firestone/shared/framework/core';
@@ -472,7 +472,7 @@ export async function replayPowerLogToGameState(options: ReplayPowerLogOptions):
 	const owUtilsReplayMock = {
 		flashWindow: () => undefined,
 		showWindowsNotification: () => undefined,
-	} as unknown as OwUtilsService;
+	} as unknown as IOwUtilsService;
 
 	const apiRunnerReplayMock = {
 		callGetApi: async <T>(url: string) => loadHttpUrlJson<T>(url),

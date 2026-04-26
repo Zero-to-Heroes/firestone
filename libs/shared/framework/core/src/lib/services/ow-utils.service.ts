@@ -1,6 +1,6 @@
 /* eslint-disable no-async-promise-executor */
 import { Injectable } from '@angular/core';
-import { sleep } from '@firestone/shared/framework/common';
+import type { IOwUtilsService } from './ow-utils-service.interface';
 import { OverwolfService } from './overwolf.service';
 import { WindowManagerService } from './window-manager.service';
 
@@ -8,21 +8,13 @@ declare let OverwolfPlugin: any;
 
 // TODO: use facade pattern, though it will only be used for the "capture window" method
 @Injectable()
-export class OwUtilsService {
+export class OwUtilsService implements IOwUtilsService {
 	private readonly serviceName = 'ow-utils';
 
 	private internalService: OwUtilsServiceInternal;
 
 	constructor(protected readonly windowManager: WindowManagerService) {
 		this.initFacade();
-
-		if (typeof window !== 'undefined') {
-			window['showWindowsNotification'] = async () => {
-				await sleep(1000);
-				console.debug('[ow-utils] showing test notification');
-				this.showWindowsNotification('Test', 'This is a test notification');
-			};
-		}
 	}
 
 	private async initFacade() {
@@ -51,11 +43,11 @@ export class OwUtilsService {
 		return this.internalService.showWindowsNotification(title, text);
 	}
 
-	public async captureWindow(windowName: string, copyToClipboard = false): Promise<[string | null, any]> {
+	public async captureWindow(windowName: string, copyToClipboard = false): Promise<[string | null, unknown]> {
 		return this.internalService.captureWindow(windowName, copyToClipboard);
 	}
 
-	public async captureActiveWindow(): Promise<[string | null, any]> {
+	public async captureActiveWindow(): Promise<[string | null, unknown]> {
 		return this.internalService.captureActiveWindow();
 	}
 
@@ -83,11 +75,11 @@ export class OwUtilsService {
 		return this.internalService.downloadAndUnzipFile(fileUrl, path);
 	}
 
-	public async downloadFileTo(fileUrl: string, path: string, targetFileName): Promise<boolean> {
+	public async downloadFileTo(fileUrl: string, path: string, targetFileName: string): Promise<boolean> {
 		return this.internalService.downloadFileTo(fileUrl, path, targetFileName);
 	}
 
-	public async get() {
+	public async get(): Promise<unknown> {
 		return this.internalService.get();
 	}
 }

@@ -18,11 +18,12 @@ import {
 } from '@firestone/game-state';
 import { ENABLE_MULTI_GRAPHS, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import type { IOwUtilsService } from '@firestone/shared/framework/core';
 import {
 	ADS_SERVICE_TOKEN,
 	CardsFacadeService,
 	IAdsService,
-	OwUtilsService,
+	OW_UTILS_SERVICE_TOKEN,
 	waitForReady,
 } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, filter, Observable } from 'rxjs';
@@ -180,7 +181,7 @@ export class BgsPostMatchStatsComponent extends AbstractSubscriptionComponent im
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
-		private readonly owUtils: OwUtilsService,
+		@Inject(OW_UTILS_SERVICE_TOKEN) private readonly owUtils: IOwUtilsService,
 		private readonly i18n: LocalizationFacadeService,
 		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 		private readonly prefs: PreferencesService,

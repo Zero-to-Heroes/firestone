@@ -4,6 +4,7 @@ import {
 	ChangeDetectorRef,
 	Component,
 	HostListener,
+	Inject,
 	Input,
 	OnDestroy,
 } from '@angular/core';
@@ -11,7 +12,8 @@ import { BattleResultHistory } from '@firestone-hs/hs-replay-xml-parser/dist/pub
 import { BgsFaceOffWithSimulation } from '@firestone/game-state';
 import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { AbstractSubscriptionComponent, sleep } from '@firestone/shared/framework/common';
-import { AnalyticsService, OwUtilsService } from '@firestone/shared/framework/core';
+import type { IOwUtilsService } from '@firestone/shared/framework/core';
+import { AnalyticsService, OW_UTILS_SERVICE_TOKEN } from '@firestone/shared/framework/core';
 import domtoimage from 'dom-to-image-more';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { BattlegroundsMainWindowSelectBattleEvent } from '@firestone/mainwindow/common';
@@ -94,7 +96,7 @@ export class BgsBattlesViewComponent extends AbstractSubscriptionComponent imple
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly analytics: AnalyticsService,
-		private readonly owUtils: OwUtilsService,
+		@Inject(OW_UTILS_SERVICE_TOKEN) private readonly owUtils: IOwUtilsService,
 		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
 	) {
 		super(cdr);
