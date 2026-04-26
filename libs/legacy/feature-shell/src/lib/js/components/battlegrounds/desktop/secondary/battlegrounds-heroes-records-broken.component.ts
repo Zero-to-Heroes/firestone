@@ -1,11 +1,10 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { BgsBestStat } from '@firestone-hs/user-bgs-post-match-stats';
 import { BgsBestUserStatsService } from '@firestone/game-state';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { groupByFunction } from '../../../../services/utils';
-import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 import { HeroStat } from './hero-stat';
 
 @Component({
@@ -30,17 +29,16 @@ import { HeroStat } from './hero-stat';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BattlegroundsHeroesRecordsBrokenComponent
-	extends AbstractSubscriptionStoreComponent
+	extends AbstractSubscriptionComponent
 	implements AfterContentInit
 {
 	stats$: Observable<readonly HeroStat[]>;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly bgsBgsUserStats: BgsBestUserStatsService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {

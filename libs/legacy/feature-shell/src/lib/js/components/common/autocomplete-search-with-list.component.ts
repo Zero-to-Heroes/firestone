@@ -10,10 +10,9 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, takeUntil } from 'rxjs/operators';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Component({
 	standalone: false,
@@ -50,7 +49,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AutocompleteSearchWithListComponent<T>
-	extends AbstractSubscriptionStoreComponent
+	extends AbstractSubscriptionComponent
 	implements AfterContentInit, OnDestroy
 {
 	@Output() itemClicked = new EventEmitter<T>();
@@ -75,8 +74,8 @@ export class AutocompleteSearchWithListComponent<T>
 
 	showSearchResults: boolean;
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
-		super(store, cdr);
+	constructor(protected readonly cdr: ChangeDetectorRef) {
+		super(cdr);
 	}
 
 	ngAfterContentInit() {

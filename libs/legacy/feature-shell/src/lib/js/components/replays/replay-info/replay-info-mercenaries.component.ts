@@ -1,14 +1,14 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ScenarioId } from '@firestone-hs/reference-data';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { getHeroRole, normalizeMercenariesCardId } from '@firestone/mercenaries/common';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { GameStat, StatGameModeType } from '@firestone/stats/data-access';
 import { combineLatest, Observable } from 'rxjs';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { getHeroRole, normalizeMercenariesCardId } from '@firestone/mercenaries/common';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { capitalizeEachWord } from '../../../services/utils';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 import { extractTime } from './replay-info-ranked.component';
 
 @Component({
@@ -75,7 +75,7 @@ import { extractTime } from './replay-info-ranked.component';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ReplayInfoMercenariesComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class ReplayInfoMercenariesComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	showMercDetails$: Observable<boolean>;
 
 	@Input() showStatsLabel = this.i18n.translateString('app.replays.replay-info.show-stats-button');
@@ -104,24 +104,30 @@ export class ReplayInfoMercenariesComponent extends AbstractSubscriptionStoreCom
 	replayDate: string;
 
 	constructor(
+		protected readonly cdr: ChangeDetectorRef,
 		private readonly sanitizer: DomSanitizer,
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
-		protected readonly store: AppUiStoreFacadeService,
-		protected readonly cdr: ChangeDetectorRef,
+		private readonly prefs: PreferencesService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
-	ngAfterContentInit() {
+	async ngAfterContentInit() {
+		await waitForReady(this.prefs);
+
 		this.showMercDetails$ = combineLatest(
-			this.listenForBasicPref$((prefs) => prefs.replaysActiveGameModeFilter),
-			this.listenForBasicPref$((prefs) => prefs.replaysShowMercDetails),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.replaysActiveGameModeFilter)),
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.replaysShowMercDetails)),
 		).pipe(
 			this.mapData(([gameModeFilter, showDetails]) => {
 				return showDetails && gameModeFilter?.startsWith('mercenaries');
 			}),
 		);
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.markForCheck();
+		}
 	}
 
 	capitalize(input: string): string {

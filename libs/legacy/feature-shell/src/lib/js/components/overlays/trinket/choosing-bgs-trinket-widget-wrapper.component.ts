@@ -24,7 +24,6 @@ import {
 	pairwise,
 	takeUntil,
 } from 'rxjs';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from '../_widget-wrapper.component';
 
 @Component({
@@ -80,7 +79,6 @@ export class ChoosingBgsTrinketWidgetWrapperComponent
 		protected readonly el: ElementRef,
 		protected readonly prefs: PreferencesService,
 		protected readonly renderer: Renderer2,
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly trinkets: BgsInGameTrinketsService,
 		private readonly guardian: BgsInGameTrinketsGuardianService,

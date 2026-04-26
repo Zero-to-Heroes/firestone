@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { CardRarity } from '@firestone-hs/reference-data';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { PersonalHeroStat } from './mercenaries-personal-hero-stats.component';
 
 @Component({
@@ -239,7 +238,6 @@ export class MercenariesPersonalHeroStatComponent {
 
 	constructor(
 		private readonly cdr: ChangeDetectorRef,
-		private readonly store: AppUiStoreFacadeService,
 		private readonly i18n: LocalizationFacadeService,
 	) {}
 

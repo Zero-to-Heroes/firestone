@@ -6,14 +6,13 @@ import {
 	Inject,
 	ViewRef,
 } from '@angular/core';
-import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { ConstructedMatchupInfo } from '@firestone-hs/constructed-deck-stats';
 import { ConstructedMetaDecksStateService, overrideDeckName } from '@firestone/constructed/common';
 import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ADS_SERVICE_TOKEN, CardsFacadeService, IAdsService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { ConstructedDeckDetails } from './constructed-meta-deck-details-view.component';
 
 @Component({
@@ -31,7 +30,7 @@ import { ConstructedDeckDetails } from './constructed-meta-deck-details-view.com
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConstructedMetaArchetypeDetailsComponent
-	extends AbstractSubscriptionStoreComponent
+	extends AbstractSubscriptionComponent
 	implements AfterContentInit
 {
 	deckDetails$: Observable<ConstructedDeckDetails>;
@@ -39,7 +38,6 @@ export class ConstructedMetaArchetypeDetailsComponent
 	showRelativeInfo$: Observable<boolean>;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly constructedMetaStats: ConstructedMetaDecksStateService,
@@ -47,7 +45,7 @@ export class ConstructedMetaArchetypeDetailsComponent
 		private readonly allCards: CardsFacadeService,
 		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {

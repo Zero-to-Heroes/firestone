@@ -6,15 +6,14 @@ import {
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
-import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { decode } from '@firestone-hs/deckstrings';
 import { BrawlInfo, DeckStat, StatForClass } from '@firestone-hs/tavern-brawl-stats';
 import { CollectionManager } from '@firestone/collection/services';
 import { Card } from '@firestone/memory';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { pickRandom } from '@legacy-import/src/lib/js/services/utils';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
 import { Observable, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { TavernBrawlService } from '../../services/tavern-brawl.service';
@@ -35,22 +34,18 @@ import { TavernBrawlService } from '../../services/tavern-brawl.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TavernBrawlOverviewComponent
-	extends AbstractSubscriptionStoreComponent
-	implements AfterContentInit, OnDestroy
-{
+export class TavernBrawlOverviewComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
 	brawlInfo$: Observable<ExtendedBrawlInfo>;
 	stats$: Observable<readonly TavernStatWithCollection[]>;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly allCards: CardsFacadeService,
 		private readonly brawl: TavernBrawlService,
 		private readonly collectionManager: CollectionManager,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {

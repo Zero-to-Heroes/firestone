@@ -6,7 +6,6 @@ import { SceneService } from '@firestone/memory';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { ADS_SERVICE_TOKEN, IAdsService } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, debounceTime, distinctUntilChanged, filter, map, take } from 'rxjs';
-import { AppUiStoreFacadeService } from '../../ui-store/app-ui-store-facade.service';
 import { equalProfileAchievementCategory } from '../profile-uploader.service';
 
 @Injectable()
@@ -14,7 +13,6 @@ export class InternalProfileAchievementsService {
 	public achievementCategories$$ = new SubscriberAwareBehaviorSubject<readonly ProfileAchievementCategory[]>([]);
 
 	constructor(
-		private readonly store: AppUiStoreFacadeService,
 		private readonly achievementsMonitor: AchievementsMemoryMonitor,
 		private readonly sceneService: SceneService,
 		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
@@ -23,7 +21,7 @@ export class InternalProfileAchievementsService {
 	}
 
 	private async init() {
-		await Promise.all([this.store.initComplete(), this.sceneService.isReady(), this.ads.isReady()]);
+		await Promise.all([this.sceneService.isReady(), this.ads.isReady()]);
 
 		this.achievementCategories$$.onFirstSubscribe(() => {
 			combineLatest([this.sceneService.currentScene$$, this.ads.enablePremiumFeatures$$])

@@ -7,12 +7,11 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { PresenceInfo } from '@firestone-hs/twitch-presence';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { StreamsCategoryType } from '@firestone/mainwindow/common';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { LiveStreamsService } from '../../../services/mainwindow/live-streams.service';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	standalone: false,
@@ -51,7 +50,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LiveStreamsComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit, OnDestroy {
+export class LiveStreamsComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
 	streams$: Observable<readonly PresenceInfo[]>;
 	loading$: Observable<boolean>;
 
@@ -60,12 +59,11 @@ export class LiveStreamsComponent extends AbstractSubscriptionStoreComponent imp
 	private infoToggle$$ = new BehaviorSubject<boolean>(false);
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly liveStreamsService: LiveStreamsService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {

@@ -9,11 +9,10 @@ import {
 } from '@angular/core';
 import { decode } from '@firestone-hs/deckstrings';
 import { CardClass, DkruneTypes } from '@firestone-hs/reference-data';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { groupByFunction } from '@legacy-import/src/lib/js/services/utils';
 import { BehaviorSubject, Observable, combineLatest, share } from 'rxjs';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	standalone: false,
@@ -35,7 +34,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DkRunesComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class DkRunesComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	dkRunes$: Observable<readonly DkRune[]>;
 	showRunes$: Observable<boolean>;
 
@@ -53,11 +52,10 @@ export class DkRunesComponent extends AbstractSubscriptionStoreComponent impleme
 	private showRunes$$ = new BehaviorSubject<boolean>(true);
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	ngAfterContentInit() {

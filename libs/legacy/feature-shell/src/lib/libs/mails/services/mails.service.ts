@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { MailboxMessagesInfo } from '@firestone-hs/mailbox';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { ApiRunner, waitForReady } from '@firestone/shared/framework/core';
-import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { distinctUntilChanged, map } from 'rxjs/operators';
 import { Mail, MailState } from '../mail-state';
@@ -17,7 +16,6 @@ export class MailsService {
 	private mailsInfo$$ = new BehaviorSubject<MailboxMessagesInfo>(null);
 
 	constructor(
-		private readonly store: AppUiStoreFacadeService,
 		private readonly api: ApiRunner,
 		private readonly prefs: PreferencesService,
 	) {
@@ -27,7 +25,6 @@ export class MailsService {
 	}
 
 	private async init() {
-		await this.store.initComplete();
 		await waitForReady(this.prefs);
 
 		setInterval(() => this.checkMails(), 10 * 60 * 1000);

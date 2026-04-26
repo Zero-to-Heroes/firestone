@@ -1,9 +1,8 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { isMercenaries } from '@firestone/mercenaries/common';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { GameStat, StatGameModeType } from '@firestone/stats/data-access';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 
 @Component({
 	standalone: false,
@@ -57,7 +56,7 @@ import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ReplayInfoComponent extends AbstractSubscriptionStoreComponent {
+export class ReplayInfoComponent extends AbstractSubscriptionComponent {
 	@Input() showStatsLabel = this.i18n.translateString('app.replays.replay-info.show-stats-button');
 	@Input() showReplayLabel = this.i18n.translateString('app.replays.replay-info.watch-replay-button');
 	@Input() displayCoin = true;
@@ -76,11 +75,10 @@ export class ReplayInfoComponent extends AbstractSubscriptionStoreComponent {
 	replayInfo: GameStat;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	private updateInfo() {

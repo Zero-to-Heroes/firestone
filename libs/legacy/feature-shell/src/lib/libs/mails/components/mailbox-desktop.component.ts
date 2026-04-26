@@ -1,7 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
-import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { AppUiStoreFacadeService } from '@services/ui-store/app-ui-store-facade.service';
 import { Observable } from 'rxjs';
 import { MailCategoryType } from '../mail-state';
 
@@ -31,18 +30,17 @@ import { MailCategoryType } from '../mail-state';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MailboxDesktopComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit, OnDestroy {
+export class MailboxDesktopComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
 	menuDisplayType$: Observable<string>;
 	category$: Observable<MailCategoryType>;
 	categories$: Observable<readonly MailCategoryType[]>;
 	showAds$: Observable<boolean>;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	ngAfterContentInit() {}

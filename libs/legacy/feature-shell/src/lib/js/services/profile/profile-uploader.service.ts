@@ -13,7 +13,6 @@ import { DiskCacheService, GameStatusService } from '@firestone/shared/common/se
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { ADS_SERVICE_TOKEN, ApiRunner, IAdsService, waitForReady } from '@firestone/shared/framework/core';
 import { combineLatest, distinctUntilChanged, filter, map, skip, take } from 'rxjs';
-import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 import { deepEqual } from '../utils';
 import { InternalProfileAchievementsService } from './internal/internal-profile-achievements.service';
 import { InternalProfileBattlegroundsService } from './internal/internal-profile-battlegrounds.service';
@@ -33,7 +32,6 @@ export class ProfileUploaderService {
 		private readonly internalProfileInfo: InternalProfileInfoService,
 		private readonly api: ApiRunner,
 		private readonly gameStatus: GameStatusService,
-		private readonly store: AppUiStoreFacadeService,
 		private readonly diskCache: DiskCacheService,
 		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 	) {
@@ -43,7 +41,6 @@ export class ProfileUploaderService {
 	}
 
 	private async init() {
-		await this.store.initComplete();
 		await waitForReady(this.ads);
 
 		const elligible$ = combineLatest([this.gameStatus.inGame$$, this.ads.hasPremiumSub$$]).pipe(

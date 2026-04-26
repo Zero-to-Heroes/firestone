@@ -1,8 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Component({
 	standalone: false,
@@ -17,7 +16,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SearchAutocompleteItemComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class SearchAutocompleteItemComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	value$: Observable<Value>;
 
 	@Input() set fullString(value: string) {
@@ -31,8 +30,8 @@ export class SearchAutocompleteItemComponent extends AbstractSubscriptionStoreCo
 	private fullString$$ = new BehaviorSubject<string>(null);
 	private searchString$$ = new BehaviorSubject<string>(null);
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
-		super(store, cdr);
+	constructor(protected readonly cdr: ChangeDetectorRef) {
+		super(cdr);
 	}
 
 	ngAfterContentInit() {

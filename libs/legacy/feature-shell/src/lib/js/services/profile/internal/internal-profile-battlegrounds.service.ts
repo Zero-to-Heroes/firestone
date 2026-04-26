@@ -8,7 +8,6 @@ import { SceneService } from '@firestone/memory';
 import { SubscriberAwareBehaviorSubject, groupByFunction } from '@firestone/shared/framework/common';
 import { CardsFacadeService, LocalStorageService } from '@firestone/shared/framework/core';
 import { combineLatest, debounceTime, distinctUntilChanged, filter, from, map, take } from 'rxjs';
-import { AppUiStoreFacadeService } from '../../ui-store/app-ui-store-facade.service';
 import { equalProfileBgHeroStat } from '../profile-uploader.service';
 
 @Injectable()
@@ -16,7 +15,6 @@ export class InternalProfileBattlegroundsService {
 	public bgFullTimeStatsByHero$$ = new SubscriberAwareBehaviorSubject<readonly ProfileBgHeroStat[]>([]);
 
 	constructor(
-		private readonly store: AppUiStoreFacadeService,
 		private readonly achievementsMonitor: AchievementsMemoryMonitor,
 		private readonly achievementsRefLoader: AchievementsRefLoaderService,
 		private readonly allCards: CardsFacadeService,
@@ -27,7 +25,6 @@ export class InternalProfileBattlegroundsService {
 	}
 
 	private async init() {
-		await this.store.initComplete();
 		await this.sceneService.isReady();
 
 		// Only sync info when going into a BG scene
