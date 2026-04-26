@@ -19,6 +19,7 @@ import { trimPowerLogLinesToLastGame } from '@firestone/power-log-parser';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { ApiRunner, CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
+import { decodeBgsFinalComp } from '@firestone/stats/services';
 import { sortByProperties } from '@services/utils';
 
 const RETRIEVE_REVIEW_URL = 'https://itkmxena7k2kkmkgpevc6skcie0tlwmk.lambda-url.us-west-2.on.aws/';
@@ -153,7 +154,7 @@ export class DevService {
 	private async bgCompTest(reviewId: string) {
 		console.debug('[bgComp] test', reviewId);
 		const review: GameStat = await this.api.callGetApi<any>(`${RETRIEVE_REVIEW_URL}/${reviewId}`);
-		const finalComp = GameStat.decodeBgsFinalComp(review.finalComp);
+		const finalComp = decodeBgsFinalComp(review.finalComp);
 		console.debug('[bgComp] final comp', finalComp, review);
 		const refComps = await this.strategies.strategies$$.getValueWithInit();
 		console.debug('[bgComp] ref comps', refComps);
@@ -189,7 +190,7 @@ export class DevService {
 
 		for (const game of games) {
 			const review: GameStat = await this.api.callGetApi<any>(`${RETRIEVE_REVIEW_URL}/${game.reviewId}`);
-			const finalComp = GameStat.decodeBgsFinalComp(review.finalComp);
+			const finalComp = decodeBgsFinalComp(review.finalComp);
 			const detecteds = this.compositionDetector.getPossibleCompositions(
 				{
 					board: finalComp.board.map((entity) => entity.cardID),

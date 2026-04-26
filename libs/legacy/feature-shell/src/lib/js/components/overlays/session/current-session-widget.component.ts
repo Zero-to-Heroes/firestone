@@ -304,7 +304,7 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionComponent
 		this.lastGame$ = combineLatest([lastGames$, playerGames$]).pipe(
 			this.mapData(([games, gamesForMode]) => {
 				const lastGame = games?.[0] ?? gamesForMode?.[0];
-				return !!lastGame ? lastGame.update({ playerRank: lastGame.newPlayerRank }) : null;
+				return !!lastGame ? ({ ...lastGame, playerRank: lastGame.newPlayerRank } as GameStat) : null;
 			}),
 		);
 		this.deltaRank$ = combineLatest([lastGames$, currentGameType$]).pipe(

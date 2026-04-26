@@ -94,6 +94,14 @@ export class GameStatsLoaderService extends AbstractFacadeService<GameStatsLoade
 		this.setupElectronSubject(this.gameStats$$, 'GameStatsLoaderService-gameStats');
 	}
 
+	protected override async initElectronMainProcess() {
+		this.registerMainProcessMethod('clearGamesInternal', () => this.clearGamesInternal());
+		this.registerMainProcessMethod('fullRefreshInternal', () => this.fullRefreshInternal());
+		this.registerMainProcessMethod('updatePowerLogAccessedInternal', (reviewId: string) =>
+			this.updatePowerLogAccessedInternal(reviewId),
+		);
+	}
+
 	public async addGame(game: GameStat) {
 		const currentStats: GameStats = await this.gameStats$$.getValueWithInit();
 		const newStats = currentStats?.update({
@@ -109,6 +117,9 @@ export class GameStatsLoaderService extends AbstractFacadeService<GameStatsLoade
 	}
 
 	public async updatePowerLogAccessed(reviewId: string) {
+		this.updatePowerLogAccessedInternal(reviewId);
+	}
+	private async updatePowerLogAccessedInternal(reviewId: string) {
 		const currentStats: GameStats = await this.gameStats$$.getValueWithInit();
 		if (!currentStats?.stats?.length) {
 			return;
@@ -149,11 +160,6 @@ export class GameStatsLoaderService extends AbstractFacadeService<GameStatsLoade
 			const stats = await this.refreshGameStats(false);
 			this.gameStats$$.next(stats);
 		}
-	}
-
-	protected override async initElectronMainProcess() {
-		this.registerMainProcessMethod('clearGamesInternal', () => this.clearGamesInternal());
-		this.registerMainProcessMethod('fullRefreshInternal', () => this.fullRefreshInternal());
 	}
 
 	public async clearGames() {

@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { ILocalizationService } from '@firestone/shared/framework/core';
 import { GameStat, buildRankText } from '@firestone/stats/data-access';
+import { buildPlayerRankImage } from '@firestone/stats/services';
 
 @Component({
 	standalone: false,
@@ -36,13 +37,9 @@ export class RankImageComponent {
 			return;
 		}
 
-		if (!value.buildPlayerRankImage) {
-			value = GameStat.create(value);
-		}
-
 		this.playerRank = value.playerRank;
 		this.isLegend = value.playerRank != null ? `${value.playerRank}`?.startsWith('legend') : false;
-		const rankImage = value.buildPlayerRankImage(this.i18n);
+		const rankImage = buildPlayerRankImage(value, this.i18n);
 		this.playerRankImage = rankImage.frameImage;
 		this.playerRankArt = rankImage.medalImage;
 		this.playerRankImageTooltip = rankImage.tooltip;

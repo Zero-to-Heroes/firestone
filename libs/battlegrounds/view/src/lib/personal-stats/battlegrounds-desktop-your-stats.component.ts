@@ -1,5 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { normalizeHeroCardId } from '@firestone-hs/reference-data';
+import { formatGameTypeReverse, isBattlegrounds, normalizeHeroCardId } from '@firestone-hs/reference-data';
 import type { BgsActiveTimeFilterType } from '@firestone/battlegrounds/data-access';
 import {
 	BgsRankFilterType,
@@ -8,13 +8,13 @@ import {
 	PreferencesService,
 } from '@firestone/shared/common/service';
 import { SimpleBarChartData } from '@firestone/shared/common/view';
+import type { SortCriteria } from '@firestone/shared/framework/common';
 import {
 	AbstractSubscriptionComponent,
 	groupByFunction,
 	invertDirection,
 	SortDirection,
 } from '@firestone/shared/framework/common';
-import type { SortCriteria } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { GameStat, GameStatsLoaderService } from '@firestone/stats/data-access';
 import { BehaviorSubject, combineLatest, distinctUntilChanged, Observable, shareReplay, takeUntil, tap } from 'rxjs';
@@ -155,7 +155,7 @@ export class BattlegroundsDesktopYourStatsComponent extends AbstractSubscription
 			this.mapData(
 				(stats) =>
 					stats?.stats
-						?.filter((stat) => stat.isBattlegrounds())
+						?.filter((stat) => isBattlegrounds(formatGameTypeReverse(stat.gameMode)))
 						.filter(
 							(stat) =>
 								!!stat.additionalResult?.length &&

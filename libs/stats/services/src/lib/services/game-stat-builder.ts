@@ -1,4 +1,5 @@
 import {
+	BgsBoard,
 	extractTotalDuration,
 	extractTotalTurns,
 	parseHsReplayString,
@@ -7,6 +8,7 @@ import { isBattlegrounds, isMercenaries } from '@firestone-hs/reference-data';
 import { ReplayUploadMetadata } from '@firestone-hs/replay-metadata';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { extractPlayerInfoFromDeckstring, GameStat } from '@firestone/stats/data-access';
+import { deflate, inflate } from 'pako';
 import { GameForUpload } from '../models/game-for-upload/game-for-upload';
 
 export const buildGameStat = (
@@ -74,7 +76,7 @@ export const buildGameStat = (
 		bgsAnomalies: game.bgsAnomalies,
 		bgsTrinkets: metadata.bgs?.trinkets?.map((t) => t.cardId) ?? [],
 		bgsCompArchetype: metadata.bgs?.compArchetype,
-		finalComp: GameStat.encodeBgsFinalComp(metadata.bgs?.finalComp),
+		finalComp: encodeBgsFinalComp(metadata.bgs?.finalComp),
 	});
 
 	if (!isMercenaries(game.gameMode)) {
@@ -82,4 +84,27 @@ export const buildGameStat = (
 	}
 
 	return firstGame;
+};
+
+// eslint-disable-next-line @typescript-eslint/member-ordering
+export const encodeBgsFinalComp = (finalComp: BgsBoard | null | undefined): string | undefined => {
+	if (!finalComp?.board?.length) {
+		return undefined;
+	}
+
+	console.debug('[game-stat] encoding finalComp', finalComp);
+	const compressedStats = deflate(JSON.stringify(finalComp));
+	const base64data = Buffer.from(compressedStats).toString('base64');
+	return base64data;
+};
+
+// eslint-disable-next-line @typescript-eslint/member-ordering
+export const decodeBgsFinalComp = (finalComp: string | null | undefined): BgsBoard | null => {
+	if (!finalComp?.length) {
+		return null;
+	}
+
+	const compressedStats = Buffer.from(finalComp, 'base64');
+	const stats = inflate(new Uint8Array(compressedStats), { to: 'string' });
+	return JSON.parse(stats);
 };

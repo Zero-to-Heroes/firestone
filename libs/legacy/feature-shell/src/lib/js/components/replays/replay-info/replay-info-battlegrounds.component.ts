@@ -1,13 +1,17 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { getReferenceTribeCardId, getTribeIcon, getTribeName } from '@firestone-hs/reference-data';
-import { Entity, EntityDefinition } from '@firestone/replay/replay-parser';
 import { MinionStat } from '@firestone/game-state';
-import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
+import {
+	MainWindowStateFacadeService,
+	ShowReplayEvent,
+	TriggerShowMatchStatsEvent,
+} from '@firestone/mainwindow/common';
+import { Entity, EntityDefinition } from '@firestone/replay/replay-parser';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameStat, StatGameModeType } from '@firestone/stats/data-access';
+import { decodeBgsFinalComp } from '@firestone/stats/services';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { ShowReplayEvent, TriggerShowMatchStatsEvent } from '@firestone/mainwindow/common';
 import { capitalizeEachWord } from '../../../services/utils';
 import { normalizeCardId } from '../../battlegrounds/post-match/card-utils';
 import { extractTime } from './replay-info-ranked.component';
@@ -283,7 +287,7 @@ export const buildFinalWarband = (replayInfo: GameStat, allCards: CardsFacadeSer
 		const bgsBoard = postMatch?.boardHistory[postMatch?.boardHistory.length - 1];
 		if (!bgsBoard) {
 			if (replayInfo.finalComp?.length) {
-				const decoded = GameStat.decodeBgsFinalComp(replayInfo.finalComp);
+				const decoded = decodeBgsFinalComp(replayInfo.finalComp);
 				return {
 					entities: decoded.board.map((entity) => Entity.create(new Entity(), entity)),
 					minionStats: [],

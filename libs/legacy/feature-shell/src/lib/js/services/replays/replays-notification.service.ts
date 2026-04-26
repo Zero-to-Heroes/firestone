@@ -1,16 +1,15 @@
 import { Injectable } from '@angular/core';
 import { GameStatusService, Message, NotificationsService, PreferencesService } from '@firestone/shared/common/service';
-import { GameStat, buildRankText } from '@firestone/stats/data-access';
-import { XpForGameInfo } from '@firestone/stats/services';
+import { buildRankText, GameStat } from '@firestone/stats/data-access';
+import { buildPlayerRankImage, XpForGameInfo } from '@firestone/stats/services';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { distinctUntilChanged, filter, map, skip, take } from 'rxjs';
 
 import { RewardMonitorService } from '@firestone/app/common';
 import { BgsInGameWindowNavigationService } from '@firestone/battlegrounds/services';
 import { isBattlegrounds } from '@firestone/game-state';
-import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
+import { MainWindowStateFacadeService, ShowReplayEvent } from '@firestone/mainwindow/common';
 import { GameStatsLoaderService } from '@firestone/stats/data-access';
-import { ShowReplayEvent } from '@firestone/mainwindow/common';
 
 @Injectable()
 export class ReplaysNotificationService {
@@ -96,7 +95,7 @@ export class ReplaysNotificationService {
 	}
 
 	private buildBgsNotificationTemplate(stat: GameStat): string {
-		const rankImage = stat.buildPlayerRankImage(this.i18n);
+		const rankImage = buildPlayerRankImage(stat, this.i18n);
 		const rankText = buildRankText(stat.playerRank, stat.gameMode, stat.additionalResult) ?? '';
 		const playerRankImage = rankImage.medalImage ? `<img class="art" src="${rankImage.medalImage}" />` : ``;
 		return `
@@ -123,7 +122,7 @@ export class ReplaysNotificationService {
 	}
 
 	private buildNotificationTemplate(stat: GameStat, xpForGame: XpForGameInfo): string {
-		const rankImage = stat.buildPlayerRankImage(this.i18n);
+		const rankImage = buildPlayerRankImage(stat, this.i18n);
 		const rankText = buildRankText(stat.playerRank, stat.gameMode, stat.additionalResult) ?? '';
 		const playerRankImage = rankImage.medalImage ? `<img class="art" src="${rankImage.medalImage}" />` : ``;
 		const bonusClass = xpForGame?.bonusXp ? 'bonus' : '';
