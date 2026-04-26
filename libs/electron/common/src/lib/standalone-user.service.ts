@@ -9,6 +9,7 @@ import {
 	CurrentUser,
 	IAdsService,
 	IUserService,
+	isMainProcess,
 	waitForReady,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
@@ -47,9 +48,11 @@ export class StandaloneUserService extends AbstractFacadeService<StandaloneUserS
 	private api: ApiRunner;
 	private ads: IAdsService;
 	private diskCache: DiskCacheService;
+	/** True after loadStoredUserData (main) finishes; do not use as sole signal in renderer. */
+	private storedUserDataLoaded = false;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
-		super(windowManager, 'UserService', () => !!this.user$$);
+		super(windowManager, 'UserService', () => this.isUserServiceReady());
 	}
 
 	protected override assignSubjects() {
@@ -211,25 +214,39 @@ export class StandaloneUserService extends AbstractFacadeService<StandaloneUserS
 	 * Load stored user data from disk on startup
 	 */
 	private async loadStoredUserData(): Promise<void> {
-		const storedData = await this.diskCache.getItem<StoredAuthData>(DiskCacheService.DISK_CACHE_KEYS.LOCAL_USER);
+		try {
+			const storedData = await this.diskCache.getItem<StoredAuthData>(DiskCacheService.DISK_CACHE_KEYS.LOCAL_USER);
 
-		if (storedData?.userId) {
-			const user: CurrentUser = {
-				userId: storedData.userId,
-				username: storedData.userName,
-				displayName: storedData.displayName,
-				avatar: storedData.avatar,
-			};
-			this.user$$.next(user);
-			console.log('[user-service] Loaded stored user:', user.username || '(not authenticated)');
-		} else {
-			// Create new local user ID
-			const userId = `fs-std-${uuid()}`;
-			const newUser: StoredAuthData = { userId };
-			await this.diskCache.storeItem(DiskCacheService.DISK_CACHE_KEYS.LOCAL_USER, newUser);
-			this.user$$.next({ userId });
-			console.log('[user-service] Created new local user:', userId);
+			if (storedData?.userId) {
+				const user: CurrentUser = {
+					userId: storedData.userId,
+					username: storedData.userName,
+					displayName: storedData.displayName,
+					avatar: storedData.avatar,
+				};
+				this.user$$.next(user);
+				console.log('[user-service] Loaded stored user:', user.username || '(not authenticated)');
+			} else {
+				// Create new local user ID
+				const userId = `fs-std-${uuid()}`;
+				const newUser: StoredAuthData = { userId };
+				await this.diskCache.storeItem(DiskCacheService.DISK_CACHE_KEYS.LOCAL_USER, newUser);
+				this.user$$.next({ userId });
+				console.log('[user-service] Created new local user:', userId);
+			}
+		} catch (e) {
+			console.error('[user-service] loadStoredUserData failed', e);
+		} finally {
+			this.storedUserDataLoaded = true;
 		}
+	}
+
+	private isUserServiceReady(): boolean {
+		// Renderer proxy never runs loadStoredUserData; main must wait for disk.
+		if (!isMainProcess()) {
+			return !!this.user$$;
+		}
+		return this.storedUserDataLoaded;
 	}
 
 	/**

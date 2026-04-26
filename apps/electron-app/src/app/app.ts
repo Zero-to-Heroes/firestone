@@ -6,8 +6,9 @@ import { ElectronGameWindowService } from '@firestone/electron/common';
 // import '@overwolf/types';
 import { AllCardsService } from '@firestone-hs/reference-data';
 import { GameEvents } from '@firestone/game-state';
-import { DiskCacheService, LogListenerService } from '@firestone/shared/common/service';
+import { DiskCacheService, LogListenerService, SubscriptionService } from '@firestone/shared/common/service';
 import {
+	AppInjector,
 	CardsFacadeStandaloneService,
 	DATABASE_SERVICE_TOKEN,
 	WINDOW_HANDLER_SERVICE_TOKEN,
@@ -488,6 +489,12 @@ export default class App {
 
 		// Initialize game detection
 		await App.initGameDetection();
+		try {
+			const subscription = AppInjector.get(SubscriptionService);
+			await subscription.fetchCurrentPlan();
+		} catch (e) {
+			console.error('[app] fetchCurrentPlan before premium notification failed', e);
+		}
 		showPremiumLockNotificationOnce();
 		initSystemTray();
 	}
