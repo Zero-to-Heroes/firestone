@@ -82,6 +82,7 @@ import {
 	ConstructedPersonalDecksService,
 } from '@firestone/constructed/common';
 import { DecksProviderService } from '@firestone/decktracker/common';
+import { TavernBrawlService } from '@firestone/tavern-brawl/common';
 import {
 	ElectronApiRunner,
 	ElectronStorageService,
@@ -1024,6 +1025,9 @@ export const buildAppInjector = () => {
 
 	const renaHighWinsRunsService = new ArenaHighWinsRunsService(windowManager);
 	electronInjector.register(ArenaHighWinsRunsService, renaHighWinsRunsService);
+
+	const avernBrawlService = new TavernBrawlService(windowManager);
+	electronInjector.register(TavernBrawlService, avernBrawlService);
 
 	electronInjector.ready = true;
 	return electronInjector;

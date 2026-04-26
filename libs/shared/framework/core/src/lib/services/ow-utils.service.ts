@@ -34,8 +34,12 @@ export class OwUtilsService {
 				window[this.serviceName] = this.internalService;
 			}
 		} else {
-			const mainWindow = await this.windowManager.getMainWindow();
-			this.internalService = mainWindow[this.serviceName];
+			try {
+				const mainWindow = await this.windowManager.getMainWindow();
+				this.internalService = mainWindow[this.serviceName];
+			} catch (e) {
+				console.error('[ow-utils] could not get main window', e);
+			}
 		}
 	}
 
