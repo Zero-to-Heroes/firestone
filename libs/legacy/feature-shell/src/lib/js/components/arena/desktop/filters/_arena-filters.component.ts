@@ -1,8 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { ArenaNavigationService } from '@firestone/arena/common';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { Observable } from 'rxjs';
-import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	standalone: false,
@@ -54,7 +53,7 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ArenaFiltersComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class ArenaFiltersComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	showRegionFilter$: Observable<boolean>;
 	showModeFilter$: Observable<boolean>;
 	showTimeFilter$: Observable<boolean>;
@@ -67,11 +66,10 @@ export class ArenaFiltersComponent extends AbstractSubscriptionStoreComponent im
 	showCardTypeFilter$: Observable<boolean>;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly nav: ArenaNavigationService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {

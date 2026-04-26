@@ -1,14 +1,10 @@
 import { Injectable } from '@angular/core';
 import { PrefsSelector } from '@firestone/shared/framework/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
-import { MailState } from '@mails/mail-state';
 import { Observable } from 'rxjs';
 
 import { ProfileBgHeroStat, ProfileClassProgress } from '@firestone-hs/api-user-profile';
-import { PackResult } from '@firestone-hs/user-packs';
-import { CardHistory, Coin } from '@firestone/collection/services';
 import { DeckSummary } from '@firestone/constructed/common';
-import { Card, CardBack } from '@firestone/memory';
 import { Preferences } from '@firestone/shared/common/service';
 import { AchievementsProgressTracking } from '../achievement/achievements-live-progress-tracking.service';
 import { sleep } from '../utils';
@@ -82,26 +78,6 @@ export class AppUiStoreFacadeService {
 		return this.store.decks$();
 	}
 
-	public mails$(): Observable<MailState> {
-		return this.store.mails$();
-	}
-
-	public bgHeroSkins$(): Observable<readonly number[]> {
-		return this.store.bgHeroSkins$();
-	}
-
-	public collection$(): Observable<readonly Card[]> {
-		return this.store.collection$();
-	}
-
-	public coins$(): Observable<readonly Coin[]> {
-		return this.store.coins$();
-	}
-
-	public cardBacks$(): Observable<readonly CardBack[]> {
-		return this.store.cardBacks$();
-	}
-
 	public achievementsProgressTracking$(): Observable<readonly AchievementsProgressTracking[]> {
 		return this.store.achievementsProgressTracking$();
 	}
@@ -112,14 +88,6 @@ export class AppUiStoreFacadeService {
 
 	public profileBgHeroStat$(): Observable<readonly ProfileBgHeroStat[]> {
 		return this.store.profileBgHeroStat$();
-	}
-
-	public packStats$(): Observable<readonly PackResult[]> {
-		return this.store.packStats$();
-	}
-
-	public cardHistory$(): Observable<readonly CardHistory[]> {
-		return this.store.cardHistory$();
 	}
 
 	private async waitForStoreInstance(): Promise<void> {

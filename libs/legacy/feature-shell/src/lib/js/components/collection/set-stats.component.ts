@@ -1,13 +1,14 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { boosterIdToSetId } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/user-packs';
 import { Set } from '@firestone/collection/common';
+import { CollectionBootstrapService } from '@firestone/collection/services';
 import { dustFor, dustToCraftFor, dustToCraftForPremium, getPackDustValue } from '@firestone/game-state';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 import { InputPieChartData } from '../common/chart/input-pie-chart-data';
 
 @Component({
@@ -62,7 +63,7 @@ import { InputPieChartData } from '../common/chart/input-pie-chart-data';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SetStatsComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class SetStatsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	stats$: Observable<readonly Stat[]>;
 	pieChartData$: Observable<readonly InputPieChartData[]>;
 	packsReceived$: Observable<number>;
@@ -79,16 +80,20 @@ export class SetStatsComponent extends AbstractSubscriptionStoreComponent implem
 	sets$$ = new BehaviorSubject<readonly Set[]>([]);
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly prefs: PreferencesService,
+		private readonly collection: CollectionBootstrapService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
-	ngAfterContentInit() {
-		const showGoldenStats$ = this.listenForBasicPref$((prefs) => prefs.collectionSetShowGoldenStats);
+	async ngAfterContentInit() {
+		await waitForReady(this.collection, this.prefs);
+
+		const showGoldenStats$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.collectionSetShowGoldenStats),
+		);
 		this.stats$ = combineLatest([this.sets$$.asObservable(), showGoldenStats$]).pipe(
 			this.mapData(([sets, showGoldenStats]) =>
 				showGoldenStats ? this.buildGoldenStats(sets) : this.buildStats(sets),
@@ -99,13 +104,13 @@ export class SetStatsComponent extends AbstractSubscriptionStoreComponent implem
 				showGoldenStats ? this.buildGoldenPieChartData(sets) : this.buildPieChartData(sets),
 			),
 		);
-		this.packsReceived$ = combineLatest([this.sets$$.asObservable(), this.store.packStats$()]).pipe(
+		this.packsReceived$ = combineLatest([this.sets$$.asObservable(), this.collection.packStats$$]).pipe(
 			this.mapData(
 				([sets, packs]) =>
-					packs.filter((pack) => sets.some((s) => boosterIdToSetId(pack.boosterId) === s.id))?.length ?? 0,
+					packs?.filter((pack) => sets.some((s) => boosterIdToSetId(pack.boosterId) === s.id))?.length ?? 0,
 			),
 		);
-		this.bestKnownPack$ = combineLatest([this.sets$$.asObservable(), this.store.packStats$()]).pipe(
+		this.bestKnownPack$ = combineLatest([this.sets$$.asObservable(), this.collection.packStats$$]).pipe(
 			this.mapData(([sets, packStats]) => {
 				const resultForSetId = packStats
 					.filter((pack) => sets.some((s) => boosterIdToSetId(pack.boosterId) === s.id))
@@ -121,6 +126,10 @@ export class SetStatsComponent extends AbstractSubscriptionStoreComponent implem
 		this.bestKnownPackDust$ = this.bestKnownPack$.pipe(
 			this.mapData((bestKnownPack) => (!!bestKnownPack ? getPackDustValue(bestKnownPack) : 0)),
 		);
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.markForCheck();
+		}
 	}
 
 	async toggleStatsView() {

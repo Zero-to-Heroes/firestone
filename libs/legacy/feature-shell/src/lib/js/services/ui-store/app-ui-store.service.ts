@@ -1,28 +1,21 @@
 import { Injectable } from '@angular/core';
 import { PrefsSelector, Store } from '@firestone/shared/framework/common';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import { MailState } from '@mails/mail-state';
-import { MailsService } from '@mails/services/mails.service';
 
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, shareReplay } from 'rxjs/operators';
 
 import { ProfileBgHeroStat, ProfileClassProgress } from '@firestone-hs/api-user-profile';
-import { PackResult } from '@firestone-hs/user-packs';
 import { DeckSummary } from '@firestone/constructed/common';
+import { DecksProviderService } from '@firestone/decktracker/common';
 import { BattlegroundsState, GameState, GameStateFacadeService } from '@firestone/game-state';
-import { Card, CardBack } from '@firestone/memory';
 import { PatchesConfigService, Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { CardHistory, Coin } from '@firestone/collection/services';
 import { MercenariesBattleState } from '../../models/mercenaries/mercenaries-battle-state';
 import { MercenariesOutOfCombatState } from '../../models/mercenaries/out-of-combat/mercenaries-out-of-combat-state';
 import {
 	AchievementsLiveProgressTrackingService,
 	AchievementsProgressTracking,
 } from '../achievement/achievements-live-progress-tracking.service';
-import { CollectionManager } from '@firestone/collection/services';
-import { DecksProviderService } from '@firestone/decktracker/common';
-import { CollectionBootstrapService } from '@firestone/collection/services';
 import { HighlightSelector } from '../mercenaries/highlights/mercenaries-synergies-highlight.service';
 import { arraysEqual } from '../utils';
 
@@ -40,14 +33,7 @@ export class AppUiStoreService extends Store<Preferences> {
 	private mercenariesSynergiesStore: BehaviorSubject<HighlightSelector>;
 
 	private decks: Observable<readonly DeckSummary[]>;
-	private mails: Observable<MailState>;
-	private cardBacks: Observable<readonly CardBack[]>;
-	private coins: Observable<readonly Coin[]>;
-	private collection: Observable<readonly Card[]>;
-	private bgHeroSkins: Observable<readonly number[]>;
 	private achievementsProgressTracking: Observable<readonly AchievementsProgressTracking[]>;
-	private packStats: Observable<readonly PackResult[]>;
-	private cardHistory: Observable<readonly CardHistory[]>;
 	private profileClassesProgress: Observable<readonly ProfileClassProgress[]>;
 	private profileBgHeroStat: Observable<readonly ProfileBgHeroStat[]>;
 
@@ -58,8 +44,6 @@ export class AppUiStoreService extends Store<Preferences> {
 		private readonly patchesConfig: PatchesConfigService,
 		private readonly prefsService: PreferencesService,
 		private readonly decksProvider: DecksProviderService,
-		private readonly collectionManager: CollectionManager,
-		private readonly collectionBootstrapService: CollectionBootstrapService,
 		private readonly gameStateFacade: GameStateFacadeService,
 	) {
 		super();
@@ -71,8 +55,6 @@ export class AppUiStoreService extends Store<Preferences> {
 	public async start() {
 		await this.prefsService.isReady();
 		await this.decksProvider.isReady();
-		await this.collectionManager.isReady();
-		await this.collectionBootstrapService.isReady();
 		await waitForReady(this.gameStateFacade);
 
 		this.prefs = this.prefsService.preferences$$;
@@ -151,26 +133,6 @@ export class AppUiStoreService extends Store<Preferences> {
 		) as Observable<{ [K in keyof S]: S[K] extends MercenariesHighlightsSelector<infer T> ? T : never }>;
 	}
 
-	public mails$(): Observable<MailState> {
-		return this.mails;
-	}
-
-	public cardBacks$(): Observable<readonly CardBack[]> {
-		return this.cardBacks;
-	}
-
-	public collection$(): Observable<readonly Card[]> {
-		return this.collection;
-	}
-
-	public coins$(): Observable<readonly Coin[]> {
-		return this.coins;
-	}
-
-	public bgHeroSkins$(): Observable<readonly number[]> {
-		return this.bgHeroSkins;
-	}
-
 	public decks$(): Observable<readonly DeckSummary[]> {
 		return this.decks;
 	}
@@ -187,14 +149,6 @@ export class AppUiStoreService extends Store<Preferences> {
 		return this.profileBgHeroStat;
 	}
 
-	public packStats$(): Observable<readonly PackResult[]> {
-		return this.packStats;
-	}
-
-	public cardHistory$(): Observable<readonly CardHistory[]> {
-		return this.cardHistory;
-	}
-
 	// TODO: this probably makes more sense in a facade. I'll move it when more methods like this
 	// start appearing
 	private async init() {
@@ -202,37 +156,10 @@ export class AppUiStoreService extends Store<Preferences> {
 
 		// The rest
 		this.initDecks();
-		this.initMails();
-		this.initCardBacks();
-		this.initCoins();
-		this.initCollection();
-		this.initBgHeroSkins();
 		this.initAchievementsProgressTracking();
 		this.initProfileClassProgress();
 		this.initProfileBgHeroStat();
-		this.initPackStats();
-		this.initCardsHistory();
 		this.initialized = true;
-	}
-
-	private initBgHeroSkins() {
-		this.bgHeroSkins = this.collectionManager.bgHeroSkins$$.asObservable();
-	}
-
-	private initCollection() {
-		this.collection = this.collectionManager.collection$$.asObservable();
-	}
-
-	private initCoins() {
-		this.coins = this.collectionManager.coins$$.asObservable();
-	}
-
-	private initCardBacks() {
-		this.cardBacks = this.collectionManager.cardBacks$$.asObservable();
-	}
-
-	private initMails() {
-		this.mails = (this.ow.getMainWindow().mailsProvider as MailsService).mails$;
 	}
 
 	private initAchievementsProgressTracking() {
@@ -251,14 +178,6 @@ export class AppUiStoreService extends Store<Preferences> {
 		this.profileBgHeroStat = this.ow.getMainWindow().profileBgHeroStat as BehaviorSubject<
 			readonly ProfileBgHeroStat[]
 		>;
-	}
-
-	private initPackStats() {
-		this.packStats = this.collectionBootstrapService.packStats$$;
-	}
-
-	private initCardsHistory() {
-		this.cardHistory = this.collectionBootstrapService.cardHistory$$;
 	}
 
 	private initDecks() {

@@ -45,12 +45,7 @@ export class MailboxDesktopComponent extends AbstractSubscriptionStoreComponent 
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
-		this.menuDisplayType$ = this.store.mails$().pipe(this.mapData((mailState) => mailState.menuDisplayType));
-		this.category$ = this.store.mails$().pipe(this.mapData((mailState) => mailState.selectedCategoryId));
-		this.categories$ = this.store.mails$().pipe(this.mapData((mailState) => mailState.categories));
-		// this.showAds$ = this.store.showAds$().pipe(this.mapData((info) => info));
-	}
+	ngAfterContentInit() {}
 
 	selectCategory(categoryId: MailCategoryType) {
 		// Do nothing, only one category

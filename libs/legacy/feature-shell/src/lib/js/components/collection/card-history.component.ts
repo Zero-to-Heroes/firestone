@@ -1,10 +1,9 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { Set } from '@firestone/collection/common';
+import { CardHistory, CollectionBootstrapService } from '@firestone/collection/services';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, filter } from 'rxjs';
-import { CardHistory } from '@firestone/collection/services';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 
 @Component({
 	standalone: false,
@@ -59,7 +58,7 @@ import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-sto
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CardHistoryComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class CardHistoryComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	private readonly MAX_RESULTS_DISPLAYED = 300;
 
 	showOnlyNewCards$: Observable<boolean>;
@@ -73,20 +72,22 @@ export class CardHistoryComponent extends AbstractSubscriptionStoreComponent imp
 	private sets$$ = new BehaviorSubject<readonly Set[]>([]);
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly prefs: PreferencesService,
+		private readonly collection: CollectionBootstrapService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	ngAfterContentInit() {
-		this.showOnlyNewCards$ = this.listenForBasicPref$((prefs) => prefs.collectionHistoryShowOnlyNewCards);
+		this.showOnlyNewCards$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.collectionHistoryShowOnlyNewCards),
+		);
 		const sets$ = this.sets$$.asObservable().pipe(
 			distinctUntilChanged(),
 			this.mapData((sets) => sets),
 		);
-		this.cardHistory$ = combineLatest([sets$, this.store.cardHistory$()]).pipe(
+		this.cardHistory$ = combineLatest([sets$, this.collection.cardHistory$$]).pipe(
 			filter(([currentSets, cardHistory]) => !!currentSets?.length && !!cardHistory?.length),
 			this.mapData(([currentSets, cardHistory]) => {
 				return cardHistory.filter(

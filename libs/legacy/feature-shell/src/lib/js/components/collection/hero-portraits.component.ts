@@ -7,8 +7,9 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { CardClass, ReferenceCard } from '@firestone-hs/reference-data';
+import { CollectionManager } from '@firestone/collection/services';
 import { formatClass, normalizeHeroCardId } from '@firestone/game-state';
-import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
+import { MainWindowStateFacadeService, ShowCardDetailsEvent } from '@firestone/mainwindow/common';
 import { Card, MemoryMercenary } from '@firestone/memory';
 import {
 	MercenariesMemoryCacheService,
@@ -17,15 +18,12 @@ import {
 	normalizeMercenariesCardId,
 } from '@firestone/mercenaries/common';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { groupByFunction2 } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent, groupByFunction2 } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, distinctUntilChanged } from 'rxjs';
 import { CollectionPortraitCategoryFilter, CollectionPortraitOwnedFilter } from '../../models/collection/filter-types';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
-import { ShowCardDetailsEvent } from '@firestone/mainwindow/common';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { sortByProperties } from '../../services/utils';
-import { AbstractSubscriptionStoreComponent } from '../abstract-subscription-store.component';
 import { CollectionReferenceCard } from './collection-reference-card';
 
 @Component({
@@ -83,7 +81,7 @@ import { CollectionReferenceCard } from './collection-reference-card';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HeroPortraitsComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit, OnDestroy {
+export class HeroPortraitsComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
 	readonly DEFAULT_CARD_WIDTH = 206;
 
 	total$: Observable<number>;
@@ -94,7 +92,6 @@ export class HeroPortraitsComponent extends AbstractSubscriptionStoreComponent i
 	scrollDebounceTime = 0;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly allCards: CardsFacadeService,
@@ -102,19 +99,25 @@ export class HeroPortraitsComponent extends AbstractSubscriptionStoreComponent i
 		private readonly mercenariesReferenceData: MercenariesReferenceDataService,
 		private readonly prefs: PreferencesService,
 		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
+		private readonly collectionManager: CollectionManager,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.mercenariesCollection, this.mercenariesReferenceData, this.prefs);
+		await waitForReady(
+			this.mercenariesCollection,
+			this.mercenariesReferenceData,
+			this.prefs,
+			this.collectionManager,
+		);
 
 		const mercenariesReferenceData$ = this.mercenariesReferenceData.referenceData$$.pipe(
 			this.mapData((mercs) => mercs?.mercenaries),
 		);
 		const relevantHeroes$ = combineLatest([
-			this.store.bgHeroSkins$(),
-			this.store.collection$(),
+			this.collectionManager.bgHeroSkins$$,
+			this.collectionManager.collection$$,
 			this.mercenariesCollection.memoryCollectionInfo$$,
 			mercenariesReferenceData$,
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.collectionActivePortraitCategoryFilter)),

@@ -6,18 +6,18 @@ import {
 	Inject,
 	ViewRef,
 } from '@angular/core';
-import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { ConstructedCardData, ConstructedMatchupInfo } from '@firestone-hs/constructed-deck-stats';
 import { Sideboard, decode } from '@firestone-hs/deckstrings';
 import { CardIds, getBaseCardId } from '@firestone-hs/reference-data';
+import { CollectionManager } from '@firestone/collection/services';
 import { ConstructedMetaDecksStateService, overrideDeckName } from '@firestone/constructed/common';
 import { buildArchetypeName } from '@firestone/game-state';
 import { Card } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ADS_SERVICE_TOKEN, CardsFacadeService, IAdsService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, debounceTime, filter } from 'rxjs';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { ConstructedDeckDetails, ExtendedConstructedCardData } from './constructed-meta-deck-details-view.component';
 
 @Component({
@@ -35,35 +35,32 @@ import { ConstructedDeckDetails, ExtendedConstructedCardData } from './construct
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ConstructedMetaDeckDetailsComponent
-	extends AbstractSubscriptionStoreComponent
-	implements AfterContentInit
-{
+export class ConstructedMetaDeckDetailsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	deckDetails$: Observable<ConstructedDeckDetails | null | undefined>;
 	collection$: Observable<readonly Card[]>;
 	hasPremiumAccess$: Observable<boolean>;
 	showRelativeInfo$: Observable<boolean>;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly constructedMetaStats: ConstructedMetaDecksStateService,
 		private readonly prefs: PreferencesService,
 		private readonly allCards: CardsFacadeService,
+		private readonly collectionManager: CollectionManager,
 		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.constructedMetaStats, this.prefs, this.ads);
+		await waitForReady(this.constructedMetaStats, this.prefs, this.ads, this.collectionManager);
 
 		this.hasPremiumAccess$ = this.ads.hasPremiumSub$$.pipe(this.mapData((hasPremium) => hasPremium));
 		this.showRelativeInfo$ = this.prefs.preferences$$.pipe(
 			this.mapData((prefs) => prefs.constructedMetaDecksShowRelativeInfo2),
 		);
-		this.collection$ = this.store.collection$().pipe(
+		this.collection$ = this.collectionManager.collection$$.pipe(
 			filter((collection) => !!collection),
 			debounceTime(500),
 			this.mapData((collection) => collection),

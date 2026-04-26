@@ -9,6 +9,7 @@ import {
 import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
 import { decode } from '@firestone-hs/deckstrings';
 import { BrawlInfo, DeckStat, StatForClass } from '@firestone-hs/tavern-brawl-stats';
+import { CollectionManager } from '@firestone/collection/services';
 import { Card } from '@firestone/memory';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { pickRandom } from '@legacy-import/src/lib/js/services/utils';
@@ -47,13 +48,13 @@ export class TavernBrawlOverviewComponent
 		private readonly i18n: LocalizationFacadeService,
 		private readonly allCards: CardsFacadeService,
 		private readonly brawl: TavernBrawlService,
+		private readonly collectionManager: CollectionManager,
 	) {
 		super(store, cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.brawl);
-		const debug = await this.brawl.tavernBrawl$$.getValueWithInit();
+		await waitForReady(this.brawl, this.collectionManager);
 
 		this.brawlInfo$ = this.brawl.tavernBrawl$$.pipe(
 			this.mapData((stats) => {
@@ -79,7 +80,7 @@ export class TavernBrawlOverviewComponent
 				};
 			}),
 		);
-		this.stats$ = combineLatest([this.brawl.tavernBrawl$$, this.store.collection$()]).pipe(
+		this.stats$ = combineLatest([this.brawl.tavernBrawl$$, this.collectionManager.collection$$]).pipe(
 			map(([stats, collection]) => ({ stats: stats, collection: collection })),
 			this.mapData((info) => {
 				return (

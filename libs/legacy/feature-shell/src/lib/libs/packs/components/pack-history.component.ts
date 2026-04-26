@@ -1,8 +1,9 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { PackResult } from '@firestone-hs/user-packs';
+import { CollectionBootstrapService } from '@firestone/collection/services';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
-import { AbstractSubscriptionStoreComponent } from '../../../js/components/abstract-subscription-store.component';
-import { AppUiStoreFacadeService } from '../../../js/services/ui-store/app-ui-store-facade.service';
 
 @Component({
 	standalone: false,
@@ -17,7 +18,7 @@ import { AppUiStoreFacadeService } from '../../../js/services/ui-store/app-ui-st
 				<ul
 					*ngIf="{
 						packHistory: packHistory$ | async,
-						totalHistoryLength: totalHistoryLength$ | async
+						totalHistoryLength: totalHistoryLength$ | async,
 					} as value"
 					scrollable
 				>
@@ -33,7 +34,7 @@ import { AppUiStoreFacadeService } from '../../../js/services/ui-store/app-ui-st
 							[owTranslate]="'app.collection.pack-history.you-have-viewed'"
 							[translateParams]="{
 								numberOfPacks: value.packHistory.length,
-								totalPacks: value.totalHistoryLength
+								totalPacks: value.totalHistoryLength,
 							}"
 						></span>
 						<button
@@ -57,26 +58,33 @@ import { AppUiStoreFacadeService } from '../../../js/services/ui-store/app-ui-st
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PackHistoryComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class PackHistoryComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	packHistory$: Observable<readonly PackResult[]>;
 	totalHistoryLength$: Observable<number>;
 
 	private displayedHistorySize = new BehaviorSubject<number>(50);
 
-	constructor(protected readonly store: AppUiStoreFacadeService, protected readonly cdr: ChangeDetectorRef) {
-		super(store, cdr);
+	constructor(
+		protected readonly cdr: ChangeDetectorRef,
+		private readonly collection: CollectionBootstrapService,
+	) {
+		super(cdr);
 	}
 
-	ngAfterContentInit() {
-		const filteredHistory$ = this.store
-			.packStats$()
-			.pipe(
-				this.mapData((packs) => (packs ?? []).filter((stat) => stat.boosterId != null || stat.setId != 'hof')),
-			);
+	async ngAfterContentInit() {
+		await waitForReady(this.collection);
+
+		const filteredHistory$ = this.collection.packStats$$.pipe(
+			this.mapData((packs) => (packs ?? []).filter((stat) => stat.boosterId != null || stat.setId != 'hof')),
+		);
 		this.packHistory$ = combineLatest(filteredHistory$, this.displayedHistorySize.asObservable()).pipe(
 			this.mapData(([packs, displayedHistorySize]) => packs.slice(0, displayedHistorySize)),
 		);
 		this.totalHistoryLength$ = filteredHistory$.pipe(this.mapData((packs) => packs.length));
+
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.markForCheck();
+		}
 	}
 
 	loadMore() {
