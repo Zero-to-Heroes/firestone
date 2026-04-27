@@ -3,12 +3,10 @@ import { BgsPostMatchStats as IBgsPostMatchStats } from '@firestone-hs/hs-replay
 import { BgsBestStat } from '@firestone-hs/user-bgs-post-match-stats';
 import { IBgsRunStatsEventHandler } from '@firestone/battlegrounds/services';
 import { BgsPostMatchStats, BgsPostMatchStatsForReview } from '@firestone/game-state';
-import {
-	BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent,
-	BgsPostMatchStatsComputedEvent,
-	MainWindowStateFacadeService,
-	ShowMatchStatsEvent,
-} from '@firestone/mainwindow/common';
+import { BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent } from './events/battlegrounds/bgs-personal-stats-select-hero-details-with-remote-info-event';
+import { BgsPostMatchStatsComputedEvent } from './events/battlegrounds/bgs-post-match-stats-computed-event';
+import { ShowMatchStatsEvent } from './events/replays/show-match-stats-event';
+import { MainWindowStateFacadeService } from './main-window-state-facade.service';
 
 @Injectable()
 export class BgsRunStatsEventHandlerService implements IBgsRunStatsEventHandler {

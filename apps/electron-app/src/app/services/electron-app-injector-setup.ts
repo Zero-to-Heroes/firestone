@@ -49,6 +49,7 @@ import {
 	BattlegroundsNavigationService,
 	BattlegroundsQuestsService,
 	BattlegroundsTrinketsService,
+	BGS_RUN_STATS_EVENT_HANDLER,
 	BgsBoardHighlighterService,
 	BgsInGameHeroSelectionGuardianService,
 	BgsInGameQuestsGuardianService,
@@ -82,7 +83,6 @@ import {
 	ConstructedPersonalDecksService,
 } from '@firestone/constructed/common';
 import { DecksProviderService } from '@firestone/decktracker/common';
-import { TavernBrawlService } from '@firestone/tavern-brawl/common';
 import {
 	ElectronApiRunner,
 	ElectronStorageService,
@@ -131,6 +131,7 @@ import {
 } from '@firestone/game-state';
 import { LotteryFacadeService, LotteryService, LotteryWidgetControllerService } from '@firestone/lottery/common';
 import {
+	BgsRunStatsEventHandlerService,
 	MAIN_WINDOW_STORE_SERVICE_TOKEN,
 	MainWindowNavigationService,
 	MainWindowStateFacadeService,
@@ -215,6 +216,7 @@ import {
 	MatchAnalysisService,
 	ReplayMetadataBuilderService,
 } from '@firestone/stats/services';
+import { TavernBrawlService } from '@firestone/tavern-brawl/common';
 import {
 	FakeMissingTranslationHandler,
 	TranslateDefaultParser,
@@ -863,12 +865,19 @@ export const buildAppInjector = () => {
 	const storeBootstrapService = new StoreBootstrapService(i18n);
 	electronInjector.register(StoreBootstrapService, storeBootstrapService);
 
+	const mainWindowStateService = new MainWindowStateFacadeService(windowManager);
+	electronInjector.register(MainWindowStateFacadeService, mainWindowStateService);
+
+	const bgsRunStatsEventHandlerService = new BgsRunStatsEventHandlerService(mainWindowStateService);
+	electronInjector.register(BgsRunStatsEventHandlerService, bgsRunStatsEventHandlerService);
+	electronInjector.register(BGS_RUN_STATS_EVENT_HANDLER, bgsRunStatsEventHandlerService);
 	const bgsRunStatsService = new BgsRunStatsService(
 		api as any as ApiRunner,
 		events,
 		userService,
 		gameStatsProviderService,
 		allCards,
+		bgsRunStatsEventHandlerService,
 	);
 	electronInjector.register(BgsRunStatsService, bgsRunStatsService);
 
@@ -997,9 +1006,6 @@ export const buildAppInjector = () => {
 	);
 	electronInjector.register(MainWindowStoreService, mainWindowStoreService);
 	electronInjector.register(MAIN_WINDOW_STORE_SERVICE_TOKEN, mainWindowStoreService);
-
-	const mainWindowStateService = new MainWindowStateFacadeService(windowManager);
-	electronInjector.register(MainWindowStateFacadeService, mainWindowStateService);
 
 	const collectionStorageService = new CollectionStorageService(localStorage, diskCache);
 	electronInjector.register(CollectionStorageService, collectionStorageService);

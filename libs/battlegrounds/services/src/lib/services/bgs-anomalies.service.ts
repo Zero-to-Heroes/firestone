@@ -36,6 +36,14 @@ export class BattlegroundsAnomaliesService extends AbstractFacadeService<Battleg
 		this.registerMainProcessMethod('loadAllAnomaliesInternal', () => this.loadAllAnomaliesInternal());
 	}
 
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		// Do nothing
+	}
+
+	protected override initElectronSubjects(): void {
+		// Do nothing
+	}
+
 	public async loadAllAnomalies(): Promise<readonly string[] | null> {
 		return this.callOnMainProcess<readonly string[] | null>('loadAllAnomaliesInternal');
 	}

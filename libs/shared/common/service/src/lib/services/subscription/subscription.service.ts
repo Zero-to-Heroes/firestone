@@ -84,6 +84,14 @@ export class SubscriptionService extends AbstractFacadeService<SubscriptionServi
 		this.registerMainProcessMethod('fetchCurrentPlanInternal', () => this.fetchCurrentPlanInternal());
 	}
 
+	protected override initElectronSubjects(): void {
+		this.setupElectronSubject(this.currentPlan$$, 'SubscriptionService-currentPlan');
+	}
+
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.currentPlan$$ = new SubscriberAwareBehaviorSubject<CurrentPlan | null>(null);
+	}
+
 	public async subscribe(planId: string) {
 		return this.callOnMainProcess('subscribeInternal', planId);
 	}
@@ -204,7 +212,10 @@ export function isActivePremiumPlan(plan: CurrentPlan | null | undefined): boole
 		return true;
 	}
 	const raw = String(plan.id ?? '');
-	const n = raw.toLowerCase().replace(/[\s_]+/g, '-').replace(/-+/g, '-');
+	const n = raw
+		.toLowerCase()
+		.replace(/[\s_]+/g, '-')
+		.replace(/-+/g, '-');
 	if (premiumPlanIds.includes(n as PremiumPlanId)) {
 		return true;
 	}

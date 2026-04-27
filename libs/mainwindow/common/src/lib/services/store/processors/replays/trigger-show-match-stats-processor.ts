@@ -1,9 +1,9 @@
-import { BgsPostMatchStatsPanel } from '@firestone/game-state';
-import { Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { ILocalizationService } from '@firestone/shared/framework/core';
-import { GameStatsLoaderService } from '@firestone/stats/data-access';
 import { BgsPerfectGamesService } from '@firestone/battlegrounds/data-access';
 import { BgsRunStatsService } from '@firestone/battlegrounds/services';
+import { BgsPostMatchStatsPanel } from '@firestone/game-state';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { ILocalizationService } from '@firestone/shared/framework/core';
+import { GameStatsLoaderService } from '@firestone/stats/data-access';
 import {
 	MainWindowNavigationService,
 	MainWindowState,
@@ -31,6 +31,7 @@ export class TriggerShowMatchStatsProcessor implements Processor {
 	): Promise<[MainWindowState | null, NavigationState | null]> {
 		// Figure out if we have already loaded the stats, or if we need a refresh
 		if (navigationState.navigationReplays.selectedReplay?.replayInfo?.reviewId === event.reviewId) {
+			console.log('[debug] already loaded the stats, returning');
 			return [
 				null,
 				navigationState.update({
@@ -42,7 +43,7 @@ export class TriggerShowMatchStatsProcessor implements Processor {
 			];
 		}
 
-		const prefs: Preferences = await this.prefs.getPreferences();
+		// const prefs: Preferences = await this.prefs.getPreferences();
 		this.bgsRunStats.retrieveReviewPostMatchStats(event.reviewId);
 		const selectedInfo =
 			(await this.gameStats.gameStats$$.getValueWithInit())?.stats?.find(

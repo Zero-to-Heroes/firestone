@@ -2,6 +2,7 @@ export * from './lib/mainwindow-common.module';
 export * from './lib/model/_barrel';
 export * from './lib/services/events';
 export * from './lib/services/main-window-navigation.service';
+export * from './lib/services/bgs-run-stats-event-handler.service';
 export * from './lib/services/main-window-state-facade.service';
 export * from './lib/services/main-window-store.interface';
 export * from './lib/services/main-window-store.service';

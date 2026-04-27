@@ -1,16 +1,16 @@
 import { Inject, Injectable, Optional } from '@angular/core';
 import type { BgsPostMatchStats as IBgsPostMatchStats } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { normalizeHeroCardId } from '@firestone-hs/reference-data';
-import { BgsBestStat, buildNewStats } from '@firestone-hs/user-bgs-post-match-stats';
 import type { Input as BgsComputeRunStatsInput } from '@firestone-hs/user-bgs-post-match-stats';
+import { BgsBestStat, buildNewStats } from '@firestone-hs/user-bgs-post-match-stats';
 import { BgsGame, BgsPostMatchStats, BgsPostMatchStatsForReview, RealTimeStatsState } from '@firestone/game-state';
 import { Events } from '@firestone/shared/common/service';
 import { sleep } from '@firestone/shared/framework/common';
 import { ApiRunner, CardsFacadeService, UserService } from '@firestone/shared/framework/core';
 import { GameForUpload, GameStatsProviderService } from '@firestone/stats/services';
-import { buildBgsRunStatsInput } from './bgs-run-stats-input-builder';
-import { BGS_RUN_STATS_EVENT_HANDLER } from './bgs-run-stats-event-handler.interface';
 import type { IBgsRunStatsEventHandler } from './bgs-run-stats-event-handler.interface';
+import { BGS_RUN_STATS_EVENT_HANDLER } from './bgs-run-stats-event-handler.interface';
+import { buildBgsRunStatsInput } from './bgs-run-stats-input-builder';
 
 @Injectable()
 export class BgsRunStatsService {
@@ -41,7 +41,7 @@ export class BgsRunStatsService {
 		const resultFromS3 = await this.apiRunner.callGetApi<IBgsPostMatchStats>(
 			`https://bgs-post-match-stats.firestoneapp.com/${reviewId}.gz.json`,
 		);
-		console.debug('[bgs-run-stats] post-match results for review', reviewId, resultFromS3);
+		console.log('[debug] [bgs-run-stats] post-match results for review', reviewId, resultFromS3);
 		if (!!resultFromS3) {
 			this.eventHandler?.onShowMatchStats(reviewId, resultFromS3);
 			return;
@@ -97,13 +97,7 @@ export class BgsRunStatsService {
 		if (!user) {
 			return;
 		}
-		const input = buildBgsRunStatsInput(
-			reviewId,
-			game,
-			currentGame,
-			user.userId ?? '',
-			user.username,
-		);
+		const input = buildBgsRunStatsInput(reviewId, game, currentGame, user.userId ?? '', user.username);
 
 		const mainPlayerId = currentGame.getMainPlayer(true)?.playerId ?? -1;
 		const [postMatchStats, newBestValues] = this.populateObject(

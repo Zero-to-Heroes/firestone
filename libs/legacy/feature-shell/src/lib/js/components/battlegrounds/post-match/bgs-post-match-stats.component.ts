@@ -7,15 +7,16 @@ import {
 	Input,
 	ViewRef,
 } from '@angular/core';
-import { Entity } from '@firestone/replay/replay-parser';
 import { QuestReward } from '@firestone/battlegrounds/core';
 import {
 	BgsFaceOffWithSimulation,
 	BgsGame,
+	BgsPlayer,
 	BgsPostMatchStatsPanel,
 	BgsStatsFilterId,
 	MinionStat,
 } from '@firestone/game-state';
+import { Entity } from '@firestone/replay/replay-parser';
 import { ENABLE_MULTI_GRAPHS, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import type { IOwUtilsService } from '@firestone/shared/framework/core';
@@ -39,7 +40,7 @@ import { normalizeCardId } from './card-utils';
 	],
 	template: `
 		<div class="container">
-			<div class="content empty-state" *ngIf="!_panel?.player && !mainPlayerId">
+			<div class="content empty-state" *ngIf="!_player && !mainPlayerId">
 				<i>
 					<svg>
 						<use xlink:href="assets/svg/sprite.svg#empty_state_tracker" />
@@ -48,13 +49,13 @@ import { normalizeCardId } from './card-utils';
 				<span class="title">{{ emptyTitle }}</span>
 				<span class="subtitle">{{ emptySubtitle }} </span>
 			</div>
-			<div class="content" *ngIf="_panel?.player || mainPlayerId">
+			<div class="content" *ngIf="_player || mainPlayerId">
 				<social-shares
 					*ngIf="showSocialShares"
 					class="social-shares"
 					[onSocialClick]="takeScreenshotFunction"
 				></social-shares>
-				<bgs-player-capsule [player]="_panel?.player" [rating]="mmr" class="opponent-overview">
+				<bgs-player-capsule [player]="_player" [rating]="mmr" class="opponent-overview">
 					<div class="main-info">
 						<bgs-board
 							*ngIf="boardMinions && boardMinions.length > 0"
@@ -95,8 +96,8 @@ import { normalizeCardId } from './card-utils';
 					</div> -->
 				</div>
 			</div>
-			<div class="left empty" *ngIf="!_panel?.player"></div>
-			<div class="left" *ngIf="_panel?.player && !(showAds$ | async)">
+			<div class="left empty" *ngIf="!_player"></div>
+			<div class="left" *ngIf="_player && !(showAds$ | async)">
 				<div class="title" [owTranslate]="'battlegrounds.post-match-stats.title'"></div>
 				<bgs-post-match-stats-recap
 					[stats]="_panel"
@@ -140,19 +141,24 @@ export class BgsPostMatchStatsComponent extends AbstractSubscriptionComponent im
 		if (!value?.player || value === this._panel) {
 			return;
 		}
+		let player = value.player;
+		if (!player.getDisplayCardId) {
+			player = BgsPlayer.create(player);
+		}
 		this._panel = value;
-		this.icon = this.i18n.getCardImage(value.player.getDisplayCardId(), { isBgs: true });
-		this.health = value.player.initialHealth + value.player.currentArmor - value.player.damageTaken;
-		this.maxHealth = value.player.initialHealth;
-		this.heroPowerCardId = value.player.getDisplayHeroPowerCardId(this.allCards);
-		this.name = value.player.name;
-		this.tavernTier = value.player.getCurrentTavernTier();
-		this.boardMinions = value.player.getLastKnownBoardStateAsReplayEntities();
+		this._player = player;
+		this.icon = this.i18n.getCardImage(player.getDisplayCardId(), { isBgs: true });
+		this.health = player.initialHealth + player.currentArmor - player.damageTaken;
+		this.maxHealth = player.initialHealth;
+		this.heroPowerCardId = player.getDisplayHeroPowerCardId(this.allCards);
+		this.name = player.name;
+		this.tavernTier = player.getCurrentTavernTier();
+		this.boardMinions = player.getLastKnownBoardStateAsReplayEntities();
 		if (!this.boardMinions || this.boardMinions.length === 0) {
-			console.warn('missing board minions in final board state', value.player.boardHistory?.length);
+			console.warn('missing board minions in final board state', player.boardHistory?.length);
 		}
 		this.addMinionStats();
-		this.questRewards = value.player.questRewards;
+		this.questRewards = player.questRewards;
 		this.allTabs$$.next(value.tabs);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.markForCheck();
@@ -160,6 +166,7 @@ export class BgsPostMatchStatsComponent extends AbstractSubscriptionComponent im
 	}
 
 	_panel: BgsPostMatchStatsPanel;
+	_player: BgsPlayer | undefined;
 	_game: BgsGame;
 
 	loadingElapsed = 0;

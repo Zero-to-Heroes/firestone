@@ -395,7 +395,7 @@ import {
 	BgsBattleSimulationMockExecutorService,
 } from '@firestone/battlegrounds/core';
 import { BattlegroundsDataAccessModule } from '@firestone/battlegrounds/data-access';
-import { BattlegroundsServicesModule, BGS_RUN_STATS_EVENT_HANDLER } from '@firestone/battlegrounds/services';
+import { BattlegroundsServicesModule } from '@firestone/battlegrounds/services';
 import {
 	BattlegroundsSimulatorModule,
 	BgsBattlePositioningExecutorService,
@@ -572,7 +572,6 @@ import { HearthArenaAnalyticsService } from './js/services/analytics/heartharena
 import { ArenaLastMatchService } from './js/services/arena/arena-last-match.service';
 import { BgsCustomSimulationService } from './js/services/battlegrounds/bgs-custom-simulation-service.service';
 import { BgsGlobalStatsService } from './js/services/battlegrounds/bgs-global-stats.service';
-import { BgsRunStatsEventHandlerService } from './js/services/battlegrounds/bgs-run-stats-event-handler.service';
 import { CardsInitService } from './js/services/cards-init.service';
 import { CardsMonitorEventHandlerService } from './js/services/collection/cards-monitor-event-handler.service';
 import { DebugService } from './js/services/debug.service';
@@ -1273,8 +1272,6 @@ try {
 			}),
 			deps: [MainWindowStateFacadeService],
 		},
-		{ provide: BGS_RUN_STATS_EVENT_HANDLER, useExisting: BgsRunStatsEventHandlerService },
-		BgsRunStatsEventHandlerService,
 		{ provide: CARDS_MONITOR_EVENT_HANDLER, useExisting: CardsMonitorEventHandlerService },
 		CardsMonitorEventHandlerService,
 		{ provide: COLLECTION_PACK_SERVICE_TOKEN, useExisting: PackStatsService },
