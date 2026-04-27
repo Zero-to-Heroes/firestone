@@ -7,6 +7,7 @@ import {
 	ElectronFileSystemUIFacadeService,
 	ElectronHotkeyHandlerFacadeService,
 	ElectronMonitorsFacadeService,
+	ElectronOwUtilsFacadeService,
 	ElectronRegionInfoFacadeService,
 	ElectronScreenshotFacadeService,
 	ElectronSystemInfoFacadeService,
@@ -28,6 +29,7 @@ import {
 	ILocalizationService,
 	LocalizationStandaloneService,
 	MONITORS_SERVICE_TOKEN,
+	OW_UTILS_SERVICE_TOKEN,
 	REGION_INFO_SERVICE_TOKEN,
 	SCREENSHOT_SERVICE_TOKEN,
 	SYSTEM_INFO_SERVICE_TOKEN,
@@ -68,6 +70,7 @@ import { ElectronSettingsComponent } from './overlay/electron-settings.component
 		{ provide: WINDOW_CONTROLS_SERVICE_TOKEN, useClass: ElectronWindowControlsFacadeService },
 		{ provide: SCREENSHOT_SERVICE_TOKEN, useClass: ElectronScreenshotFacadeService },
 		{ provide: HOTKEY_HANDLER_SERVICE_TOKEN, useClass: ElectronHotkeyHandlerFacadeService },
+		{ provide: OW_UTILS_SERVICE_TOKEN, useClass: ElectronOwUtilsFacadeService },
 		// Use HashLocationStrategy for file:// protocol compatibility
 		{ provide: LocationStrategy, useClass: HashLocationStrategy },
 	],

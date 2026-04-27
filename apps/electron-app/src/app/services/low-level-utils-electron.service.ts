@@ -1,15 +1,22 @@
 /* eslint-disable no-async-promise-executor */
 
+import { buildOwUtilsIpcChannel } from '@firestone/shared/framework/core';
+import type { IOwUtilsService } from '@firestone/shared/framework/core';
+import { BrowserWindow, Notification, clipboard, ipcMain, nativeImage } from 'electron';
+import extract from 'extract-zip';
+import * as fs from 'fs';
 import * as http from 'http';
 import * as https from 'https';
-import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
-import type { IOwUtilsService } from '@firestone/shared/framework/core';
-import { BrowserWindow, Notification, clipboard, nativeImage } from 'electron';
-import extract from 'extract-zip';
 
 export class LowLevelUtilsElectronService implements IOwUtilsService {
+	private static ipcHandlersRegistered = false;
+
+	constructor() {
+		this.registerIpcHandlers();
+	}
+
 	public async deleteFileOrFolder(targetPath: string): Promise<void> {
 		try {
 			await fs.promises.rm(targetPath, { recursive: true, force: true });
@@ -44,11 +51,7 @@ export class LowLevelUtilsElectronService implements IOwUtilsService {
 		await fs.promises.cp(sourceDirectory, destinationDirectory, { recursive: true });
 	}
 
-	public async downloadFileTo(
-		fileUrl: string,
-		targetPath: string,
-		targetFileName: string,
-	): Promise<boolean> {
+	public async downloadFileTo(fileUrl: string, targetPath: string, targetFileName: string): Promise<boolean> {
 		return new Promise<boolean>((resolve) => {
 			const destPath = path.join(targetPath, targetFileName);
 			fs.promises
@@ -130,10 +133,7 @@ export class LowLevelUtilsElectronService implements IOwUtilsService {
 		new Notification({ title, body: text }).show();
 	}
 
-	public async captureWindow(
-		windowName: string,
-		copyToClipboard = false,
-	): Promise<[string | null, unknown]> {
+	public async captureWindow(windowName: string, copyToClipboard = false): Promise<[string | null, unknown]> {
 		const win = this.findWindowByTitle(windowName);
 		if (!win || win.isDestroyed()) {
 			console.warn('[low-level-utils-electron] captureWindow unsupported for non-Electron window', windowName);
@@ -185,5 +185,36 @@ export class LowLevelUtilsElectronService implements IOwUtilsService {
 	private findWindowByTitle(windowName: string): BrowserWindow | null {
 		const windows = BrowserWindow.getAllWindows();
 		return windows.find((w) => !w.isDestroyed() && w.getTitle()?.includes(windowName)) ?? null;
+	}
+
+	private registerIpcHandlers(): void {
+		if (LowLevelUtilsElectronService.ipcHandlersRegistered) {
+			return;
+		}
+		LowLevelUtilsElectronService.ipcHandlersRegistered = true;
+
+		const methods: readonly (keyof IOwUtilsService)[] = [
+			'flashWindow',
+			'showWindowsNotification',
+			'captureWindow',
+			'captureActiveWindow',
+			'copyImageDataUrlToClipboard',
+			'deleteFileOrFolder',
+			'copyFile',
+			'renameFile',
+			'copyFiles',
+			'downloadAndUnzipFile',
+			'downloadFileTo',
+			'get',
+		];
+
+		for (const methodName of methods) {
+			const channel = buildOwUtilsIpcChannel(methodName);
+			ipcMain.removeHandler(channel);
+			ipcMain.handle(channel, (_event, ...args: unknown[]) => {
+				const handler = this[methodName] as (...args: unknown[]) => unknown;
+				return handler.apply(this, args);
+			});
+		}
 	}
 }

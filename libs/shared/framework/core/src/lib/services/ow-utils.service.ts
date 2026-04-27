@@ -1,7 +1,7 @@
 /* eslint-disable no-async-promise-executor */
 import { Injectable } from '@angular/core';
-import type { IOwUtilsService } from './ow-utils-service.interface';
 import { OverwolfService } from './overwolf.service';
+import type { IOwUtilsService } from './ow-utils-service.interface';
 import { WindowManagerService } from './window-manager.service';
 
 declare let OverwolfPlugin: any;

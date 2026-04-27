@@ -1,6 +1,8 @@
 import { InjectionToken } from '@angular/core';
 
 export const OW_UTILS_SERVICE_TOKEN = new InjectionToken<IOwUtilsService>('OwUtilsService');
+export const OW_UTILS_IPC_CHANNEL_PREFIX = 'electron-ow-utils';
+export const buildOwUtilsIpcChannel = (methodName: string): string => `${OW_UTILS_IPC_CHANNEL_PREFIX}:${methodName}`;
 
 export interface IOwUtilsService {
 	flashWindow(windowName?: string): Promise<void>;
