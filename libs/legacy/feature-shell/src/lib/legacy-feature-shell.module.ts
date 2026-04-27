@@ -452,6 +452,8 @@ import {
 	OverwolfScreenshotFacadeService,
 	OverwolfService,
 	OverwolfWindowControlsFacadeService,
+	OW_UTILS_SERVICE_TOKEN,
+	OwUtilsService,
 	PLAUSIBLE_DOMAIN,
 	REGION_INFO_SERVICE_TOKEN,
 	SCREENSHOT_SERVICE_TOKEN,
@@ -1285,6 +1287,7 @@ try {
 		OverwolfScreenshotFacadeService,
 		{ provide: MAIN_WINDOW_STORE_SERVICE_TOKEN, useExisting: MainWindowStoreService },
 		{ provide: PLAUSIBLE_DOMAIN, useValue: 'firestoneapp.gg-app' },
+		{ provide: OW_UTILS_SERVICE_TOKEN, useExisting: OwUtilsService },
 
 		DebugService,
 		Events,
