@@ -298,7 +298,7 @@ export class MainWindowStoreService implements IMainWindowStoreService {
 		console.debug('handling events', eventQueue);
 		const event = eventQueue[0];
 		const start = Date.now();
-		console.log('[MainWindowStoreService] processing event', event);
+		console.log('[MainWindowStoreService] processing event', event?.eventName);
 		const processor = this.processors.get(event.eventName);
 		if (!processor) {
 			console.error('[store] missing processor for event', event.eventName);
@@ -524,10 +524,7 @@ export class MainWindowStoreService implements IMainWindowStoreService {
 			[RestoreDeckSummaryEvent.eventName, new RestoreDeckSummaryProcessor(this.prefs)],
 			[ToggleShowHiddenDecksEvent.eventName, new ToggleShowHiddenDecksProcessor(this.prefs)],
 			[ConstructedDeckbuilderGoBackEvent.eventName, new ConstructedDeckbuilderGoBackProcessor()],
-			[
-				ConstructedDeckbuilderFormatSelectedEvent.eventName,
-				new ConstructedDeckbuilderFormatSelectedProcessor(),
-			],
+			[ConstructedDeckbuilderFormatSelectedEvent.eventName, new ConstructedDeckbuilderFormatSelectedProcessor()],
 			[ConstructedDeckbuilderClassSelectedEvent.eventName, new ConstructedDeckbuilderClassSelectedProcessor()],
 			[
 				ConstructedDeckbuilderSaveDeckEvent.eventName,

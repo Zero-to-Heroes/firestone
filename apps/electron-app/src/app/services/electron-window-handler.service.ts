@@ -141,12 +141,9 @@ export class ElectronWindowHandlerService implements IWindowHandlerService {
 			this.collectionOverlayWindow = null;
 		}
 
-		if (this.collectionWindow && !this.collectionWindow.isDestroyed()) {
-			if (this.collectionWindow.isMinimized()) {
-				this.collectionWindow.restore();
-			}
-			this.collectionWindow.show();
-			this.collectionWindow.focus();
+		const existingCollectionWindow = this.getExistingCollectionWindow();
+		if (existingCollectionWindow) {
+			this.showExistingCollectionWindow(existingCollectionWindow);
 			return;
 		}
 
@@ -193,6 +190,30 @@ export class ElectronWindowHandlerService implements IWindowHandlerService {
 		this.collectionWindow.loadURL(this.getCollectionLoadUrl()).catch((err) => {
 			console.error('[ElectronWindowHandler] Failed to load collection window:', err);
 		});
+	}
+
+	private getExistingCollectionWindow(): BrowserWindow | null {
+		if (this.collectionWindow && !this.collectionWindow.isDestroyed()) {
+			return this.collectionWindow;
+		}
+
+		const existingCollectionWindow = BrowserWindow.getAllWindows().find((window) => {
+			if (window.isDestroyed()) {
+				return false;
+			}
+
+			return window.webContents.getURL().includes('#/collection');
+		});
+		this.collectionWindow = existingCollectionWindow ?? null;
+		return this.collectionWindow;
+	}
+
+	private showExistingCollectionWindow(collectionWindow: BrowserWindow): void {
+		if (collectionWindow.isMinimized()) {
+			collectionWindow.restore();
+		}
+		collectionWindow.show();
+		collectionWindow.focus();
 	}
 
 	private openCollectionAsOverlay(gameWidth: number, gameHeight: number): void {

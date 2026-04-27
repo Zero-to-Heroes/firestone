@@ -968,9 +968,6 @@ export const buildAppInjector = () => {
 	const constructedNavigationService = new ConstructedNavigationService(windowManager);
 	electronInjector.register(ConstructedNavigationService, constructedNavigationService);
 
-	const windowHandlerService = new ElectronWindowHandlerService();
-	electronInjector.register(ElectronWindowHandlerService, windowHandlerService);
-
 	const mainWindowStoreService = new MainWindowStoreService(
 		allCards,
 		setsService,
@@ -1002,7 +999,7 @@ export const buildAppInjector = () => {
 		bgsSimulatorControllerService,
 		appNavigationService,
 		ngZone,
-		windowHandlerService,
+		electronWindowHandler,
 	);
 	electronInjector.register(MainWindowStoreService, mainWindowStoreService);
 	electronInjector.register(MAIN_WINDOW_STORE_SERVICE_TOKEN, mainWindowStoreService);
