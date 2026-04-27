@@ -1,16 +1,16 @@
 import { Inject, Injectable, NgZone } from '@angular/core';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
+import { chunk } from '@firestone/shared/framework/common';
 import {
 	BgsBattlePositioningExecutorService,
 	PermutationResult,
 	ProcessingStatus,
-} from '@firestone/battlegrounds/simulator';
+} from '../services/bgs-battle-positioning-executor.service';
 import {
 	CardsFacadeService,
 	ISystemInfoService,
 	SYSTEM_INFO_SERVICE_TOKEN,
 } from '@firestone/shared/framework/core';
-import { chunk } from '../../../../../libs/legacy/feature-shell/src/lib/js/services/utils';
 import { Chunk, InternalPermutationResult, Permutation } from './bgs-battle-positioning-worker.worker';
 
 @Injectable()
@@ -51,28 +51,25 @@ export class BgsBattlePositioningWorkerService extends BgsBattlePositioningExecu
 		console.log('cancelled process');
 	}
 
-	public findBestPositioning(battleInfo: BgsBattleInfo): AsyncIterator<[ProcessingStatus, PermutationResult]> {
-		const iterator: AsyncIterator<[ProcessingStatus, PermutationResult]> =
+	public findBestPositioning(battleInfo: BgsBattleInfo): AsyncIterator<[ProcessingStatus, PermutationResult | null]> {
+		const iterator: AsyncIterator<[ProcessingStatus, PermutationResult | null]> =
 			this.findBestPositioningInternal(battleInfo);
 		return iterator;
 	}
 
 	private async *findBestPositioningInternal(
 		battleInfo: BgsBattleInfo,
-	): AsyncIterator<[ProcessingStatus, PermutationResult]> {
+	): AsyncIterator<[ProcessingStatus, PermutationResult | null]> {
 		const start = Date.now();
 		this.cancelled = false;
-		// Initialize the data
 		const initialBoard = battleInfo.playerBoard.board;
 
-		// Build permutations of the main board
 		const permutations: Permutation[] = permutator(initialBoard);
 		if (this.cancelled) {
 			return [ProcessingStatus.CANCELLED, null];
 		}
 
 		yield [ProcessingStatus.FIRSTPASS, null];
-		// Build a rough estimation of the permutations
 		const sortedPermutations: InternalPermutationResult[] = await this.prunePermutations(
 			battleInfo,
 			permutations,
@@ -84,10 +81,7 @@ export class BgsBattlePositioningWorkerService extends BgsBattlePositioningExecu
 			return [ProcessingStatus.CANCELLED, null];
 		}
 
-		// this.maxSimulationsPerChunk = 1;
-		// this.maxWorkers = 1;
 		yield [ProcessingStatus.SECONDPASS, null];
-		// Do it again, with more sims
 		const sortedPermutations2: InternalPermutationResult[] = await this.prunePermutations(
 			battleInfo,
 			sortedPermutations.map((p) => p.permutation),
@@ -99,7 +93,6 @@ export class BgsBattlePositioningWorkerService extends BgsBattlePositioningExecu
 			return [ProcessingStatus.CANCELLED, null];
 		}
 
-		// Build a full simulation for each of the finalists and keep the best one
 		yield [ProcessingStatus.FINALRESULT, null];
 		const topPermutationsResults: InternalPermutationResult[] = await this.prunePermutations(
 			battleInfo,
@@ -134,10 +127,8 @@ export class BgsBattlePositioningWorkerService extends BgsBattlePositioningExecu
 		maxDuration: number,
 		minResultsToKeep: number,
 	): Promise<InternalPermutationResult[]> {
-		// Split it in chunks based on maxSimulationsPerChunk
 		const chunks: Chunk[] = chunk(permutations, this.maxSimulationsPerChunk);
 
-		// Process chunks in batches, respecting max worker count
 		const maxConcurrentWorkers = Math.min(this.cpuCount, this.maxWorkers);
 		const chunkResults: InternalPermutationResult[][] = await this.processChunksInBatches(
 			battleInfo,
@@ -148,7 +139,6 @@ export class BgsBattlePositioningWorkerService extends BgsBattlePositioningExecu
 		);
 		const permutationResults: InternalPermutationResult[] = chunkResults.reduce((a, b) => a.concat(b), []);
 
-		// Sort the permutations by winrate
 		const sortedPermutations = [...permutationResults].sort((a, b) => {
 			return (
 				b.result.wonPercent - a.result.wonPercent ||
@@ -158,12 +148,9 @@ export class BgsBattlePositioningWorkerService extends BgsBattlePositioningExecu
 			);
 		});
 
-		// Now decide which ones to keep
 		const result = sortedPermutations.splice(0, minResultsToKeep);
-		// Keep the ones that are at least as good
 		for (const permutation of sortedPermutations) {
 			if (permutation.result.wonPercent >= result[0].result.wonPercent) {
-				// When it's a case where you can't win, try to tie
 				if (
 					permutation.result.wonPercent !== 0 ||
 					permutation.result.tiedPercent >= result[0].result.tiedPercent
@@ -194,7 +181,9 @@ export class BgsBattlePositioningWorkerService extends BgsBattlePositioningExecu
 
 			const batch = chunks.slice(i, i + maxConcurrentWorkers);
 			const batchResults = await Promise.all(
-				batch.map((chunk) => this.buildRoughResults(battleInfo, chunk, numberOfSims, maxDuration)),
+				batch.map((boardChunk) =>
+					this.buildRoughResults(battleInfo, boardChunk, numberOfSims, maxDuration),
+				),
 			);
 			results.push(...batchResults);
 		}
@@ -204,13 +193,11 @@ export class BgsBattlePositioningWorkerService extends BgsBattlePositioningExecu
 
 	private async buildRoughResults(
 		battleInfo: BgsBattleInfo,
-		chunk: Chunk,
+		boardChunk: Chunk,
 		numberOfSims: number,
 		maxDuration: number,
 	): Promise<InternalPermutationResult[]> {
 		return new Promise<InternalPermutationResult[]>((resolve) => {
-			// Run worker operations outside Angular's zone to prevent
-			// Zone.js patching and unnecessary change detection triggers
 			this.ngZone.runOutsideAngular(() => {
 				const worker = new Worker(new URL('./bgs-battle-positioning-worker.worker', import.meta.url));
 				this.workers.push(worker);
@@ -218,10 +205,7 @@ export class BgsBattlePositioningWorkerService extends BgsBattlePositioningExecu
 				worker.onmessage = (ev: MessageEvent) => {
 					worker.terminate();
 					this.workers.splice(this.workers.indexOf(worker), 1);
-					// Parse JSON outside the zone - this is expensive!
 					const results = JSON.parse(ev.data);
-					// Resolve the promise - no need for zone re-entry here
-					// because the async iterator handles UI updates at yield points
 					resolve(results);
 				};
 
@@ -232,7 +216,7 @@ export class BgsBattlePositioningWorkerService extends BgsBattlePositioningExecu
 					resolve([]);
 				};
 
-				const battleMessages = chunk.map(
+				const battleMessages = boardChunk.map(
 					(permutation) =>
 						({
 							...battleInfo,

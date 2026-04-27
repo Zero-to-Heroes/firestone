@@ -1,11 +1,10 @@
 {
 	"extends": "../../tsconfig.base.json",
 	"compilerOptions": {
-		"outDir": "../../out-tsc/worker",
+		"outDir": "../../out-tsc/electron-frontend-worker",
 		"lib": ["es2018", "webworker"]
 	},
 	"include": [
-		"src/**/*.worker.ts",
 		"../../libs/battlegrounds/simulator/src/lib/workers/**/*.worker.ts"
 	]
 }

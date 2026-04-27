@@ -613,7 +613,7 @@ export class BgsSimulatorComponent extends AbstractSubscriptionComponent impleme
 		while (true) {
 			const value = await it.next();
 			const status: ProcessingStatus = value.value[0];
-			const result: PermutationResult = value.value[1];
+			const result: PermutationResult | null = value.value[1];
 			if (!!result) {
 				this.battleResult$$.next(
 					BgsFaceOffWithSimulation.create({

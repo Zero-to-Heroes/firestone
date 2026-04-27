@@ -6,7 +6,7 @@ import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulat
 export abstract class BgsBattlePositioningExecutorService {
 	public abstract findBestPositioning(
 		battleInfo: BgsBattleInfo,
-	): AsyncIterator<[ProcessingStatus, PermutationResult]>;
+	): AsyncIterator<[ProcessingStatus, PermutationResult | null]>;
 	public abstract cancel(): void;
 }
 

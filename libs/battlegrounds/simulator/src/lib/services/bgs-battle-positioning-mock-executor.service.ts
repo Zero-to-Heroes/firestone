@@ -4,7 +4,9 @@ import { PermutationResult, ProcessingStatus } from './bgs-battle-positioning-ex
 
 @Injectable()
 export class BgsBattlePositioningMockExecutorService {
-	public findBestPositioning(battleInfo: BgsBattleInfo): AsyncIterator<[ProcessingStatus, PermutationResult]> | null {
+	public findBestPositioning(
+		battleInfo: BgsBattleInfo,
+	): AsyncIterator<[ProcessingStatus, PermutationResult | null]> | null {
 		return null;
 	}
 	public cancel(): void {

@@ -10,7 +10,9 @@ import {
 export class BgsBattlePositioningService {
 	constructor(private readonly executor: BgsBattlePositioningExecutorService) {}
 
-	public findBestPositioning(battleInfo: BgsBattleInfo): AsyncIterator<[ProcessingStatus, PermutationResult]> {
+	public findBestPositioning(
+		battleInfo: BgsBattleInfo,
+	): AsyncIterator<[ProcessingStatus, PermutationResult | null]> {
 		return this.executor.findBestPositioning(battleInfo);
 	}
 

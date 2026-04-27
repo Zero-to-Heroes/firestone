@@ -16,7 +16,7 @@ import {
 } from '@firestone/electron/view';
 import { LegacyFeatureShellModule } from '@firestone/legacy/feature-shell';
 import { SettingsViewModule } from '@firestone/settings/view';
-import { StandaloneAdService } from '@firestone/shared/common/service';
+import { StandaloneAdService, SubscriptionService } from '@firestone/shared/common/service';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
 import {
 	ADS_SERVICE_TOKEN,
@@ -41,6 +41,12 @@ import { appRoutes } from './app.routes';
 import { ElectronCollectionComponent } from './overlay/electron-collection.component';
 import { ElectronOverlayComponent } from './overlay/electron-overlay.component';
 import { ElectronSettingsComponent } from './overlay/electron-settings.component';
+import { BgsBattleSimulationExecutorService } from '@firestone/battlegrounds/core';
+import {
+	BgsBattlePositioningExecutorService,
+	BgsBattlePositioningWorkerService,
+	BgsBattleSimulationWorkerService,
+} from '@firestone/battlegrounds/simulator';
 
 @NgModule({
 	imports: [
@@ -73,6 +79,8 @@ import { ElectronSettingsComponent } from './overlay/electron-settings.component
 		{ provide: OW_UTILS_SERVICE_TOKEN, useClass: ElectronOwUtilsFacadeService },
 		// Use HashLocationStrategy for file:// protocol compatibility
 		{ provide: LocationStrategy, useClass: HashLocationStrategy },
+		{ provide: BgsBattleSimulationExecutorService, useClass: BgsBattleSimulationWorkerService },
+		{ provide: BgsBattlePositioningExecutorService, useClass: BgsBattlePositioningWorkerService },
 	],
 	bootstrap: [AppComponent],
 })

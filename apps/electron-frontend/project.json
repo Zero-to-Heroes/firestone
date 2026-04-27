@@ -15,6 +15,7 @@
 				"main": "apps/electron-frontend/src/main.ts",
 				"polyfills": ["zone.js", "apps/electron-frontend/src/polyfills.ts"],
 				"tsConfig": "apps/electron-frontend/tsconfig.app.json",
+				"webWorkerTsConfig": "apps/electron-frontend/tsconfig.worker.json",
 				"inlineStyleLanguage": "scss",
 				"assets": [
 					{
