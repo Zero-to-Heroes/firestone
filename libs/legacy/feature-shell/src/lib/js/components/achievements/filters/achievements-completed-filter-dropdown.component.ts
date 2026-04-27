@@ -4,7 +4,7 @@ import { PreferencesService } from '@firestone/shared/common/service';
 import { IOption } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
-import { combineLatest, Observable } from 'rxjs';
+import { combineLatest, Observable, tap } from 'rxjs';
 
 @Component({
 	standalone: false,
@@ -55,11 +55,13 @@ export class AchievementsCompletedFilterDropdownComponent
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.achievementsCompletedActiveFilter)),
 			this.options$,
 		]).pipe(
-			this.mapData(([[filter], options]) => ({
+			tap((info) => console.debug('[debug] [achievements-completed-filter-dropdown] filter', info)),
+			this.mapData(([filter, options]) => ({
 				filter: filter,
 				placeholder: options.find((option) => option.value === filter)?.label,
 				visible: true,
 			})),
+			tap((info) => console.debug('[debug] [achievements-completed-filter-dropdown] after filter', info)),
 		);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {

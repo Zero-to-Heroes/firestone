@@ -26,7 +26,6 @@ export class AchievementCompletionStepComponent {
 	constructor(private domSanitizer: DomSanitizer) {}
 
 	@Input() set step(step: CompletionStep) {
-		console.debug('[achievement-completion-step] setting step', step.completedText, step);
 		this.completionStep = step;
 		this.completedTimes = step.numberOfCompletions;
 		this.tooltip = step.displayText ?? step.text?.(true) ?? '';

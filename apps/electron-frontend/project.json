@@ -35,6 +35,8 @@
 					"libs/shared/styles/src/lib/styles/decktracker-theme.scss",
 					"libs/shared/styles/src/lib/styles/decktracker-desktop-theme.scss",
 					"libs/shared/styles/src/lib/styles/replays-theme.scss",
+					"libs/shared/styles/src/lib/styles/achievements-theme.scss",
+					"libs/shared/styles/src/lib/styles/collection-theme.scss",
 					"libs/shared/styles/src/lib/styles/general-theme.scss",
 					"apps/electron-frontend/src/styles.scss"
 				],

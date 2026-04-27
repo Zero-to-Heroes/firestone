@@ -123,6 +123,7 @@ export class AchievementsListComponent extends AbstractSubscriptionComponent imp
 			this.mapData(([achievements, option]) =>
 				achievements
 					.filter((achievement) => isValid(achievement, option))
+					.map((achievement) => VisualAchievement.create(achievement))
 					.sort(sortByProperties((a) => [a.isFullyCompleted(), a.name])),
 			),
 		);

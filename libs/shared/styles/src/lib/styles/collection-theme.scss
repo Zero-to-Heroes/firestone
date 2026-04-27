@@ -1,0 +1,65 @@
+:host.collection-theme,
+.collection-theme {
+	--window-background-image-backup: radial-gradient(
+		340px at 50% 50%,
+		rgba(90, 17, 108, 1) 0%,
+		rgba(47, 13, 13, 1) 100%
+	);
+	--window-background-image: url('https://static.zerotoheroes.com/hearthstone/asset/firestone/images/backgrounds/main-screen_bg.png');
+	--color-1: #cca2b3;
+	--color-2: #785f6b;
+	--color-3: #785f6b;
+	--color-4: #513b48;
+	--color-5: #190505;
+	--color-6: #7d5a87;
+	--color-7: #2a1030;
+	--color-common-1: #d9c3ab;
+	--color-common-2: #ffb948;
+	--color-common-3: #c49257;
+
+	--ad-link-color: var(--color-3);
+	--on-ad-link-color-hover: var(--color-1);
+
+	--main-menu-background-color: var(--color-5);
+	--window-outline-color: #513b48;
+	--default-text-color: #d9c3ab;
+	--default-text-color-bright: #f3dcc3;
+	--default-title-color: #ffb948;
+	--secondary-text-color: #7d5a87;
+
+	--menu-selection-color: #785f6b;
+	--on-menu-selection-color: #ffb948;
+	--menu-bar-bottom-border-color: #513b48;
+
+	--tooltip-background-color: #7d5a87;
+	--tooltip-color: #190505;
+
+	--ads-background-color: #190505;
+	--ads-color: rgba(47, 13, 13, 0.8); //#2a1030;
+
+	--control-button-color: #cca2b3;
+	--on-control-button-background-color: #513b48;
+	--on-close-button-color: #2a1030;
+	--on-close-button-background-color: #cb9fd7;
+
+	--fs-scrollbar-thumb-color: #785f6b;
+	--on-fs-scrollbar-thumb-color: #cca2b3;
+
+	--confirmation-text-color: #cb9fd7;
+	--confirmation-backdrop-color: #190505;
+
+	--toggle-color-border: var(--color-1);
+	--toggle-color-knob: var(--color-1);
+
+	--confirmation-text-color: #cb9fd7;
+	--on-confirmation-button-background-color: rgba(255, 255, 255, 0.08);
+	--confirmation-ok-button-color: #1f2142;
+	--confirmation-ok-button-background-color: #767faf;
+	--on-confirmation-ok-button-background-color: #cb9fd7;
+	--confirmation-backdrop-color: #190505;
+
+	--card-highlight-color-1: rgba(255, 185, 72, 0.4);
+	--card-highlight-color-2: rgba(72, 255, 231, 0.4);
+	--card-highlight-color-3: rgba(255, 72, 157, 0.4);
+	--card-highlight-color-4: rgba(127, 72, 255, 0.4);
+}
