@@ -1,13 +1,12 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
+import { CollectionManager } from '@firestone/collection/services';
+import { MainWindowStateFacadeService, ShowCardBackDetailsEvent } from '@firestone/mainwindow/common';
 import { CardBack } from '@firestone/memory';
 import { PictureAnimatedToggleType, PreferencesService } from '@firestone/shared/common/service';
 import { IOption } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
-import { CollectionManager } from '@firestone/collection/services';
-import { ShowCardBackDetailsEvent } from '@firestone/mainwindow/common';
+import { BehaviorSubject, Observable, combineLatest, tap } from 'rxjs';
 import { InternalCardBack } from './internal-card-back';
 
 @Component({
@@ -79,7 +78,10 @@ export class CardBacksComponent extends AbstractSubscriptionComponent implements
 				this.cdr.markForCheck();
 			}
 		});
-		const cardBacks$ = this.collectionManager.cardBacks$$.pipe(this.mapData((cardBacks) => cardBacks));
+		const cardBacks$ = this.collectionManager.cardBacks$$.pipe(
+			tap((items) => console.debug('[debug] [card-backs] cardBacks', items)),
+			this.mapData((cardBacks) => cardBacks),
+		);
 		this.total$ = cardBacks$.pipe(this.mapData((cardBacks) => cardBacks?.length ?? 0));
 		this.unlocked$ = cardBacks$.pipe(
 			this.mapData((cardBacks) => cardBacks?.filter((item) => item.owned).length ?? 0),
