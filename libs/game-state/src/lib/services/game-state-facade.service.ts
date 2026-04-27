@@ -33,14 +33,16 @@ export class GameStateFacadeService extends AbstractFacadeService<GameStateFacad
 	}
 
 	protected override async initElectronSubjects() {
-		this.setupElectronSubject(this.gameState$$, eventName);
+		this.setupElectronSubject(this.gameState$$, eventName, (gameState: GameState) =>
+			this.transformValueForElectron(gameState),
+		);
 	}
 
 	protected override async createElectronProxy(ipcRenderer: any) {
 		this.gameState$$ = new BehaviorSubject<GameState>(new GameState());
 	}
 
-	protected override transformValueForElectron(value: GameState): GameState {
+	protected transformValueForElectron(value: GameState): GameState {
 		const bgState: BattlegroundsState | undefined = BattlegroundsState.createForElectron(value.bgState);
 		const result = GameState.create({
 			...value,

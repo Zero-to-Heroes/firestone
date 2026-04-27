@@ -125,7 +125,11 @@ export abstract class AbstractFacadeService<T extends AbstractFacadeService<T>> 
 		console.warn(this.constructor.name, 'initElectronSubjects not implemented');
 	}
 
-	protected setupElectronSubject<V>(obs: BehaviorSubject<V>, eventName: string) {
+	protected setupElectronSubject<V>(
+		obs: BehaviorSubject<V>,
+		eventName: string,
+		valueTransformer: (value: V) => V = (value: V) => value,
+	) {
 		if (!obs) {
 			throw new Error(`[${this.constructor.name}] setupElectronSubject: ${eventName} subject is undefined`);
 		}
@@ -149,7 +153,7 @@ export abstract class AbstractFacadeService<T extends AbstractFacadeService<T>> 
 				const updateChannel = `${eventName}-update`;
 				ipcMain.removeAllListeners(updateChannel);
 				ipcMain.on(updateChannel, (_, value: V) => {
-					const transformedValue = this.transformValueForElectron(value);
+					const transformedValue = valueTransformer(value);
 					// Apply the update to the main subject using the wrapped next(),
 					// which will broadcast to all renderers (including the sender)
 					obs.next(transformedValue);
@@ -165,7 +169,7 @@ export abstract class AbstractFacadeService<T extends AbstractFacadeService<T>> 
 
 				// Listen for updates from main process
 				ipcRenderer.on(eventName, (_, value: V) => {
-					const transformedValue = this.transformValueForElectron(value);
+					const transformedValue = valueTransformer(value);
 					// Mark that we're processing an IPC update to prevent sending it back
 					(obs as any)[isProcessingIpcUpdate] = true;
 					obs.next(transformedValue);
@@ -181,7 +185,7 @@ export abstract class AbstractFacadeService<T extends AbstractFacadeService<T>> 
 					originalNext(value);
 					// Only send to main if this is a local update (not from IPC)
 					if (!(obs as any)[isProcessingIpcUpdate]) {
-						const transformedValue = this.transformValueForElectron(value);
+						const transformedValue = valueTransformer(value);
 						ipcRenderer.send(updateChannel, transformedValue);
 					}
 				};
@@ -189,7 +193,7 @@ export abstract class AbstractFacadeService<T extends AbstractFacadeService<T>> 
 				try {
 					Promise.resolve(ipcRenderer.invoke(eventName))
 						.then((value: V) => {
-							const transformedValue = this.transformValueForElectron(value);
+							const transformedValue = valueTransformer(value);
 							// Mark as processing IPC update to prevent sending initial value back
 							(obs as any)[isProcessingIpcUpdate] = true;
 							obs.next(transformedValue);
@@ -208,10 +212,6 @@ export abstract class AbstractFacadeService<T extends AbstractFacadeService<T>> 
 				}
 			}
 		}
-	}
-
-	protected transformValueForElectron(value: any): any {
-		return value;
 	}
 
 	/**

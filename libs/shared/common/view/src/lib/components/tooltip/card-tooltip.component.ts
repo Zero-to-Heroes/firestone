@@ -16,7 +16,7 @@ import {
 } from '@angular/core';
 import { CardRarity, CardType, Race, SpellSchool } from '@firestone-hs/reference-data';
 import { isPreReleaseBuild } from '@firestone/game-state';
-import { PreferencesService } from '@firestone/shared/common/service';
+import { GameStatusService, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, groupByFunction } from '@firestone/shared/framework/common';
 import {
 	CardsFacadeService,
@@ -299,6 +299,7 @@ export class CardTooltipComponent
 		private readonly renderer: Renderer2,
 		private readonly ow: OverwolfService,
 		private readonly prefs: PreferencesService,
+		private readonly gameStatus: GameStatusService,
 	) {
 		super(cdr);
 		// FIXME: For some reason, lifecycle methods are not called systematically. I've noticed this
@@ -547,6 +548,10 @@ export class CardTooltipComponent
 	}
 
 	private async keepInBounds(top: number, left: number, height: number, width: number) {
+		const isInGame = await this.gameStatus.inGame$$.getValueWithInit();
+		if (!isInGame) {
+			return;
+		}
 		const gameInfo = await this.ow?.getRunningGameInfo();
 		const currentWindow = await this.ow?.getCurrentWindow();
 		const gameWidth = gameInfo?.width ?? currentWindow?.logicalBounds?.width;

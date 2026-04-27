@@ -86,7 +86,7 @@ export class SetsComponent extends AbstractSubscriptionComponent implements Afte
 							: activeFilter === 'twist'
 								? allSets.filter((set) => set.twist)
 								: allSets.filter((set) => !set.standard);
-				return sets.map((s) => Set.create(s)).sort(this.sortSets());
+				return [...sets].sort(this.sortSets());
 			}),
 		);
 

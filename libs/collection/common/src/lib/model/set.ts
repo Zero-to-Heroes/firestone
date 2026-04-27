@@ -15,7 +15,7 @@ export class Set {
 	public readonly ownedLimitCollectiblePremiumCards: number = 0;
 
 	public static create(base: Partial<NonFunctionProperties<Set>>): Set {
-		const result = Object.assign(new Set(), base);
+		const result = Object.assign(new Set(), base, { allCards: base.allCards?.map((card) => SetCard.create(card)) });
 		result.allCards.forEach((card) => (result.cardsCache[card.id] = card));
 		return result;
 	}
