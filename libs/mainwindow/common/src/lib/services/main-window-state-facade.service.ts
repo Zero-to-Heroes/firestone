@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { AbstractFacadeService, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
 import { MainWindowState } from '../model/main-window-state';
+import { StatsState } from '../model/stats/stats-state';
 import { MainWindowStoreEvent } from './events/main-window-store-event';
 import { IMainWindowStoreService, MAIN_WINDOW_STORE_SERVICE_TOKEN } from './main-window-store.interface';
 
@@ -37,7 +38,11 @@ export class MainWindowStateFacadeService extends AbstractFacadeService<MainWind
 	}
 
 	protected override async initElectronSubjects() {
-		this.setupElectronSubject(this.mainWindowState$$, 'MainWindowStateFacadeService-mainWindowState');
+		this.setupElectronSubject(
+			this.mainWindowState$$,
+			'MainWindowStateFacadeService-mainWindowState',
+			(value: MainWindowState | null) => this.transformMainWindowStateForElectron(value),
+		);
 	}
 
 	protected override async createElectronProxy(ipcRenderer: any) {
@@ -49,5 +54,15 @@ export class MainWindowStateFacadeService extends AbstractFacadeService<MainWind
 	}
 	private sendInternal(event: MainWindowStoreEvent) {
 		this.store.send(event);
+	}
+
+	private transformMainWindowStateForElectron(value: MainWindowState | null): MainWindowState | null {
+		if (!value) {
+			return null;
+		}
+		return MainWindowState.create({
+			...value,
+			stats: StatsState.create(value.stats),
+		});
 	}
 }
