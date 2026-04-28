@@ -364,11 +364,15 @@ export class ReceiveCardInHandParser implements EventParser {
 		lastInfluencedByCardId: string,
 	): readonly DeckCard[] {
 		switch (lastInfluencedByCardId) {
+			// Divergence: splits one in-hand minion into two tokens. They share creatorCardId + creatorEntityId
+			// (the played spell). Never pair via hand[positionIndex - 1]: at positionIndex 0, JS uses hand[-1]
+			// (last card) and links an unrelated card (e.g. Hellfire) to the split half.
+			case CardIds.Divergence_TIME_030:
+				return this.linkDivergenceSplitHandPartners(hand, entityId);
 			case CardIds.ElementaryReaction:
 			case CardIds.LadyDeathwhisper_RLK_713:
 			case CardIds.PuppetmasterDorian_MIS_026:
 			case CardIds.RangariScout_GDB_841:
-			case CardIds.Divergence_TIME_030:
 			case CardIds.DryscaleDeputy_DryscaleDeputyEnchantment_WW_383e:
 				// const sortedHand = [...hand].sort(
 				// 	(a, b) => (a.tags?.[GameTag.ZONE_POSITION] ?? 0) - (b.tags?.[GameTag.ZONE_POSITION] ?? 0),
@@ -406,6 +410,29 @@ export class ReceiveCardInHandParser implements EventParser {
 			default:
 				return hand;
 		}
+	}
+
+	/** Pair the two hand rows created by the same Divergence play (same spell entity id). */
+	private linkDivergenceSplitHandPartners(hand: readonly DeckCard[], entityId: number): readonly DeckCard[] {
+		const card = hand.find((c) => c.entityId === entityId);
+		const spellEntityId = card?.creatorEntityId;
+		if (!card || spellEntityId == null || card.creatorCardId !== CardIds.Divergence_TIME_030) {
+			return hand;
+		}
+		const partner = hand.find(
+			(c) =>
+				c.entityId !== entityId &&
+				c.creatorEntityId === spellEntityId &&
+				c.creatorCardId === CardIds.Divergence_TIME_030,
+		);
+		if (!partner) {
+			return hand;
+		}
+		const newCard = card.update({ cardCopyLinks: [partner.entityId] });
+		const newPartner = partner.update({ cardCopyLinks: [card.entityId] });
+		let next = this.helper.replaceCardInZone(hand, newCard);
+		next = this.helper.replaceCardInZone(next, newPartner);
+		return next;
 	}
 
 	event(): string {

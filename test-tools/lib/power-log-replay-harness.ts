@@ -187,6 +187,7 @@ const LEGACY_ENV_BY_SLUG: Record<string, string> = {
 	'discover-zone-order': 'POWER_LOG_DISCOVER_ZONE_ORDER_PATH',
 	'opponent-coin-marker': 'POWER_LOG_OPPONENT_COIN_MARKER_PATH',
 	'wrong-secrets': 'POWER_LOG_WRONG_SECRETS_PATH',
+	'divergence-hellfire': 'POWER_LOG_DIVERGENCE_HELLFIRE_PATH',
 };
 
 /**
@@ -242,6 +243,7 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	'opponent-coin-marker': 'opponent-coin-marker/opponent-coin-marker.log',
 	'wrong-secrets': 'wrong-secrets/wrong-secrets.log',
 	'rewind-opp-hand': 'rewind-opp-hand/rewind-opp-hand.log',
+	'divergence-hellfire': 'divergence-hellfire/divergence-hellfire.log',
 };
 
 /**
