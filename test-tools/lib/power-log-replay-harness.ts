@@ -186,6 +186,7 @@ const LEGACY_ENV_BY_SLUG: Record<string, string> = {
 	'onyxia-herald': 'POWER_LOG_ONYXIA_HERALD_PATH',
 	'discover-zone-order': 'POWER_LOG_DISCOVER_ZONE_ORDER_PATH',
 	'opponent-coin-marker': 'POWER_LOG_OPPONENT_COIN_MARKER_PATH',
+	'wrong-secrets': 'POWER_LOG_WRONG_SECRETS_PATH',
 };
 
 /**
@@ -239,6 +240,7 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	'onyxia-herald': 'onyxia-herald/onyxia-herald.log',
 	'discover-zone-order': 'discover-zone-order/discover-zone-order.log',
 	'opponent-coin-marker': 'opponent-coin-marker/opponent-coin-marker.log',
+	'wrong-secrets': 'wrong-secrets/wrong-secrets.log',
 };
 
 /**

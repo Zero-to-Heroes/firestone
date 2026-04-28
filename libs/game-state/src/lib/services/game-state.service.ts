@@ -69,6 +69,35 @@ export class GameStateService {
 	private rewindSnapshots: { readonly originEntityId: number; readonly state: GameState }[] = [];
 	private static readonly REWIND_SNAPSHOT_BUFFER_SIZE = 8;
 
+	/**
+	 * Latest GS-side `REWIND_STARTED` timestamp seen, or null. Used to filter rewound-branch
+	 * events that leak through after the consumer-side snapshot has been restored.
+	 *
+	 * Why this exists: the parser intentionally drives GameState (GS) and PowerTaskList (PTL)
+	 * on separate streams that can be out of sync. Within {@link processLogsWithTsParser}'s
+	 * end-of-batch flush, `GSState.NodeParser.ClearQueue()` runs before
+	 * `PTLState.NodeParser.ClearQueue()`, so when a single batch contains the rewind point,
+	 * `REWIND_STARTED` (GS) fires first and restores the consumer snapshot - but
+	 * pre-rewind `SECRET_CREATED_IN_GAME` events parked on the PTL queue (from the rewound
+	 * branch) then fire afterward, polluting the just-restored state. Concrete failure mode
+	 * (regression test `power-log-wrong-secrets-replay.spec.ts`): Sands-of-Time rewind, then
+	 * The Origin Stone re-fires post-rewind and re-binds entity 219 to `TLC_462` (Mage SPELL,
+	 * not a secret); without this filter, the stale pre-rewind `SECRET_CREATED_IN_GAME` for
+	 * 219 (Hunter SECRET) leaks past the restore and ends up in `opponentDeck.secrets`.
+	 *
+	 * The rule: any consumer event with a parser-side timestamp strictly less than the latest
+	 * `REWIND_STARTED` timestamp that arrives AFTER `REWIND_STARTED` belongs to the rewound
+	 * branch and must be dropped. Events from before the rewind point that were already
+	 * applied are no problem - the snapshot restore undid them. Events fired pre-rewind from
+	 * the legitimate (kept) branch are also fine, because they fire BEFORE `REWIND_STARTED`
+	 * within the same batch (their timestamps are before the cutoff but they don't reach this
+	 * filter). Only late-arriving rewound-branch events match `eventTs < cutoff`.
+	 *
+	 * Reset on `GAME_START` because timestamps wrap on a 24h cycle, so a stale cutoff from a
+	 * previous game would incorrectly drop early events of the next game.
+	 */
+	private rewindCutoffTimestamp: string | null = null;
+
 	private showDecktrackerFromGameMode: boolean;
 
 	constructor(
@@ -330,12 +359,41 @@ export class GameStateService {
 	private async processEvent(currentState: GameState, gameEvent: GameEvent, prefs: Preferences): Promise<GameState> {
 		const start = Date.now();
 		// console.debug('[game-state] processing event', gameEvent.type, gameEvent.cardId, gameEvent.entityId, gameEvent);
+
+		// Drop rewound-branch leaks before they touch state. See {@link rewindCutoffTimestamp}
+		// for the full rationale; in short, PTL events parked from before a rewind sometimes
+		// arrive AFTER `REWIND_STARTED` because the parser flushes GS and PTL queues
+		// independently. Today this is scoped to `SECRET_CREATED_IN_GAME` because that's the
+		// only leak with no natural undo (the post-rewind branch reuses the entityId for a
+		// different card and never re-emits SECRET_CREATED_IN_GAME for it). Add other event
+		// types here if similar leaks surface (e.g. CARD_DRAW_FROM_DECK on a rewound branch).
+		if (
+			this.rewindCutoffTimestamp != null &&
+			gameEvent.type === GameEvent.SECRET_CREATED_IN_GAME &&
+			gameEvent.debug?.Timestamp != null &&
+			gameEvent.debug.Timestamp.length > 0 &&
+			gameEvent.debug.Timestamp < this.rewindCutoffTimestamp
+		) {
+			console.log(
+				'[game-state] dropping stale rewound-branch SECRET_CREATED_IN_GAME',
+				'entityId',
+				gameEvent.entityId,
+				'eventTs',
+				gameEvent.debug.Timestamp,
+				'cutoff',
+				this.rewindCutoffTimestamp,
+			);
+			return currentState;
+		}
+
 		if (gameEvent.type === GameEvent.GAME_START) {
 			currentState = currentState?.update({
 				playerTrackerClosedByUser: false,
 				opponentTrackerClosedByUser: false,
 			});
 			this.minionsWillDie = [];
+			// Reset to avoid stale cutoff from a previous game; see field JSDoc.
+			this.rewindCutoffTimestamp = null;
 		} else if (gameEvent.type === GameEvent.GAME_END) {
 			this.savedDeckstrings = null;
 			this.minionsWillDie = [];
@@ -379,6 +437,18 @@ export class GameStateService {
 				player: currentState.playerDeck.deckstring,
 				opponent: currentState.opponentDeck.deckstring,
 			};
+			// Update the rewound-branch event cutoff (see {@link rewindCutoffTimestamp} JSDoc).
+			// Done unconditionally - even when no consumer snapshot matches the originEntityId,
+			// the parser still rewound on its side, so post-arrival PTL leaks must still be
+			// filtered out. Use max() so a nested earlier rewind whose `REWIND_STARTED` arrives
+			// later (rare) doesn't shrink the active cutoff.
+			const eventTs: string | null = gameEvent.debug?.Timestamp ?? null;
+			if (eventTs != null && eventTs.length > 0) {
+				this.rewindCutoffTimestamp =
+					this.rewindCutoffTimestamp == null || eventTs > this.rewindCutoffTimestamp
+						? eventTs
+						: this.rewindCutoffTimestamp;
+			}
 			const originEntityId: number | null | undefined = gameEvent.additionalData?.originEntityId;
 			if (originEntityId != null) {
 				// LIFO lookup so repeat rewinds from the same entity pick the freshest snapshot.
