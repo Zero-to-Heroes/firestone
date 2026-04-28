@@ -1,0 +1,8 @@
+# Rewind non-regression goldens are written by the test in update mode using LF
+# (see `test-tools/non-reg/rewind-nonreg.spec.ts`). Pin them to LF in the working
+# tree on every platform so `core.autocrlf=true` (Windows default) doesn't convert
+# them to CRLF on checkout - which would byte-mismatch the in-memory `serialized`
+# that the test produces, causing every line of the diff to fire and burying the
+# real semantic content. The test additionally normalizes line endings on read,
+# but having a single source of truth on disk avoids any ambiguity.
+*.state.json text eol=lf

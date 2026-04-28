@@ -51,7 +51,9 @@ describe('Rewind non-regression (GameState end-state goldens)', () => {
 
 				if (updateMode) {
 					ensureGoldensDir();
-					fs.writeFileSync(goldenPath, serialized);
+					// Normalize to LF on write so the round-trip stays byte-stable across
+					// platforms; goldens are checked in once and compared everywhere.
+					fs.writeFileSync(goldenPath, serialized.replace(/\r\n/g, '\n'));
 					return;
 				}
 
@@ -61,7 +63,12 @@ describe('Rewind non-regression (GameState end-state goldens)', () => {
 					);
 				}
 				const golden = fs.readFileSync(goldenPath, 'utf8');
-				expect(serialized).toEqual(golden);
+				// Normalize line endings on both sides. If the golden gets checked out as
+				// CRLF on Windows (e.g. via core.autocrlf=true) while the in-memory
+				// `serialized` always uses LF, a strict string compare would fire on every
+				// line - swamping the actual semantic diff. We don't care about line
+				// endings here, only state content.
+				expect(serialized.replace(/\r\n/g, '\n')).toEqual(golden.replace(/\r\n/g, '\n'));
 			},
 			300_000,
 		);
