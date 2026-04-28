@@ -21,7 +21,7 @@
     "additionalKnownCardsInHand": [],
     "anachronos": [],
     "astralAutomatonsSummoned": 0,
-    "beastsSummoned": 2,
+    "beastsSummoned": 1,
     "board": [
       {
         "actualManaCost": 3,
@@ -35,8 +35,11 @@
         "guessedInfo": {},
         "internalEntityId": "<scrubbed>",
         "linkedEntityIds": [],
-        "metaInfo": {},
-        "playTiming": 159,
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": "<scrubbed>",
+          "turnAtWhichCardEnteredHand": 3
+        },
+        "playTiming": 115,
         "rarity": "rare",
         "refManaCost": 3,
         "relatedCardIds": [],
@@ -54,7 +57,7 @@
           "203": 3,
           "218": 1,
           "261": 1,
-          "263": 1,
+          "263": 0,
           "273": 1,
           "466": 3,
           "478": 2,
@@ -69,6 +72,9 @@
           "3085": 2,
           "3557": 7,
           "3934": 1,
+          "3945": 1,
+          "4384": 55,
+          "4385": 2,
           "4472": 2
         },
         "temporaryCard": false,
@@ -77,7 +83,7 @@
     ],
     "bonelordFrostwhisperFirstTurnTrigger": null,
     "burnedCards": [],
-    "cardDrawnThisGame": 5,
+    "cardDrawnThisGame": 4,
     "cardsAddedToHand": [
       {
         "cardId": "GAME_005",
@@ -105,7 +111,7 @@
       },
       {
         "turn": 3,
-        "value": 3
+        "value": 2
       }
     ],
     "cardsInStartingHand": [
@@ -236,73 +242,12 @@
         "entityId": 37
       },
       {
-        "cardId": "CORE_EDR_004_2026",
-        "entityId": 37
-      },
-      {
-        "cardId": "TIME_003",
-        "entityId": 55
-      },
-      {
         "cardId": "TIME_003",
         "entityId": 55
       }
     ],
     "cardsPlayedLastTurn": [
-      "<cycle>",
-      {
-        "actualManaCost": 3,
-        "cardId": "TIME_003",
-        "cardName": "Portal Vanguard",
-        "countered": false,
-        "creatorCardId": null,
-        "entityId": 55,
-        "forged": 0,
-        "guessedInfo": {},
-        "internalEntityId": "<scrubbed>",
-        "linkedEntityIds": [],
-        "metaInfo": {},
-        "playTiming": 160,
-        "rarity": "rare",
-        "refManaCost": 3,
-        "relatedCardIds": [],
-        "storedInformation": null,
-        "tags": {
-          "45": 2,
-          "47": 2,
-          "48": 3,
-          "49": 1,
-          "50": 2,
-          "53": 55,
-          "199": 12,
-          "200": 24,
-          "202": 4,
-          "203": 3,
-          "218": 1,
-          "261": 1,
-          "263": 0,
-          "273": 1,
-          "466": 3,
-          "478": 2,
-          "479": 2,
-          "1037": 0,
-          "1043": 1,
-          "1068": 0,
-          "1556": 1,
-          "1570": 6,
-          "2589": 1,
-          "2840": 1,
-          "3085": 2,
-          "3557": 7,
-          "3934": 1,
-          "3945": 1,
-          "4384": 55,
-          "4385": 2,
-          "4472": 2
-        },
-        "temporaryCard": false,
-        "zone": "PLAY"
-      }
+      "<cycle>"
     ],
     "cardsPlayedThisMatch": [
       {
@@ -325,20 +270,6 @@
         "side": "opponent",
         "timestamp": "<scrubbed>",
         "turn": 2
-      },
-      {
-        "cardId": "CORE_EDR_004_2026",
-        "entityId": 37,
-        "side": "opponent",
-        "timestamp": "<scrubbed>",
-        "turn": 2
-      },
-      {
-        "cardId": "TIME_003",
-        "entityId": 55,
-        "side": "opponent",
-        "timestamp": "<scrubbed>",
-        "turn": 3
       },
       {
         "cardId": "TIME_003",
@@ -369,6 +300,15 @@
         "metaInfo": {},
         "relatedCardIds": [],
         "tags": {}
+      },
+      {
+        "forged": 0,
+        "guessedInfo": "<cycle>",
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": "<cycle>",
+        "metaInfo": "<cycle>",
+        "relatedCardIds": "<cycle>",
+        "tags": "<cycle>"
       },
       {
         "forged": 0,
@@ -599,7 +539,7 @@
     "deckList": [],
     "destroyedCardsInDeck": [],
     "discoversThisGame": 2,
-    "dragonsSummoned": 2,
+    "dragonsSummoned": 1,
     "earthenGolemsSummoned": 0,
     "elementalsPlayedLastTurn": 0,
     "elementalsPlayedThisTurn": 0,
@@ -691,11 +631,12 @@
         "forged": 0,
         "guessedInfo": {},
         "internalEntityId": "<scrubbed>",
+        "lastAffectedByCardId": "EDR_102t",
         "linkedEntityIds": [],
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": "<scrubbed>",
-          "turnAtWhichCardEnteredCurrentZone": 2,
-          "turnAtWhichCardEnteredHand": 2
+          "turnAtWhichCardEnteredCurrentZone": 3,
+          "turnAtWhichCardEnteredHand": 3
         },
         "relatedCardIds": [],
         "tags": {
@@ -706,32 +647,6 @@
           "385": 37
         },
         "temporaryCard": true,
-        "zone": "HAND"
-      },
-      {
-        "actualManaCost": null,
-        "createdIndex": 0,
-        "entityId": 44,
-        "forged": 0,
-        "guessedInfo": {},
-        "internalEntityId": "<scrubbed>",
-        "lastAffectedByCardId": "TIME_003",
-        "lastAffectedByEntityId": 55,
-        "linkedEntityIds": [],
-        "metaInfo": {
-          "timestampAtWhichCardEnteredHand": "<scrubbed>",
-          "turnAtWhichCardEnteredCurrentZone": 3,
-          "turnAtWhichCardEnteredHand": 3
-        },
-        "rarity": null,
-        "refManaCost": null,
-        "relatedCardIds": [],
-        "tags": {
-          "49": 3,
-          "50": 2,
-          "53": 44,
-          "263": 7
-        },
         "zone": "HAND"
       },
       {
@@ -784,7 +699,7 @@
       "internalEntityId": "<scrubbed>",
       "linkedEntityIds": [],
       "metaInfo": {},
-      "playTiming": 151,
+      "playTiming": 108,
       "rarity": "Free",
       "refManaCost": 2,
       "relatedCardIds": [],
@@ -935,7 +850,7 @@
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": null
         },
-        "playTiming": 153,
+        "playTiming": 110,
         "rarity": "rare",
         "refManaCost": 1,
         "relatedCardIds": "<cycle>",
@@ -1016,6 +931,43 @@
           "3557": 4
         },
         "temporaryCard": false,
+        "zone": null
+      },
+      {
+        "cardId": "TIME_000tb",
+        "cardName": "Rewind Timeline",
+        "countered": false,
+        "creatorCardId": "CORE_EDR_004_2026",
+        "creatorEntityId": 37,
+        "entityId": 108,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": [],
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": null
+        },
+        "playTiming": null,
+        "putIntoPlay": true,
+        "refManaCost": 0,
+        "relatedCardIds": [],
+        "tags": {
+          "2": 37,
+          "49": 1,
+          "50": 2,
+          "53": 108,
+          "199": 12,
+          "202": 5,
+          "313": 37,
+          "684": 1,
+          "1037": 2,
+          "1068": 0,
+          "1284": 131356,
+          "1556": 1,
+          "1715": 37,
+          "3934": 1
+        },
+        "temporaryCard": true,
         "zone": null
       },
       {
@@ -1104,7 +1056,7 @@
         "forged": 0,
         "guessedInfo": {},
         "internalEntityId": "<scrubbed>",
-        "lastAffectedByCardId": "EDR_100t5",
+        "lastAffectedByCardId": "EDR_100t3",
         "linkedEntityIds": [],
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": null
@@ -1114,147 +1066,6 @@
           "49": 6,
           "50": 2,
           "53": 105
-        },
-        "temporaryCard": true,
-        "zone": "SETASIDE"
-      },
-      {
-        "cardId": "",
-        "entityId": 106,
-        "forged": 0,
-        "guessedInfo": {},
-        "internalEntityId": "<scrubbed>",
-        "lastAffectedByCardId": "CORE_EDR_004_2026",
-        "linkedEntityIds": [],
-        "metaInfo": {
-          "timestampAtWhichCardEnteredHand": null
-        },
-        "relatedCardIds": [],
-        "tags": {
-          "49": 6,
-          "50": 2,
-          "53": 106
-        },
-        "temporaryCard": true,
-        "zone": "SETASIDE"
-      },
-      {
-        "cardId": "TIME_000tb",
-        "cardName": "Rewind Timeline",
-        "entityId": 107,
-        "forged": 0,
-        "guessedInfo": {},
-        "internalEntityId": "<scrubbed>",
-        "lastAffectedByCardId": "CORE_EDR_004_2026",
-        "linkedEntityIds": [],
-        "metaInfo": {
-          "timestampAtWhichCardEnteredHand": null
-        },
-        "refManaCost": 0,
-        "relatedCardIds": [],
-        "tags": {
-          "49": 6,
-          "50": 2,
-          "53": 107
-        },
-        "temporaryCard": true,
-        "zone": "SETASIDE"
-      },
-      {
-        "cardId": "TIME_000tb",
-        "cardName": "Rewind Timeline",
-        "countered": false,
-        "creatorCardId": "CORE_EDR_004_2026",
-        "creatorEntityId": 37,
-        "entityId": 108,
-        "forged": 0,
-        "guessedInfo": {},
-        "internalEntityId": "<scrubbed>",
-        "linkedEntityIds": [],
-        "metaInfo": {
-          "timestampAtWhichCardEnteredHand": null
-        },
-        "playTiming": null,
-        "putIntoPlay": true,
-        "refManaCost": 0,
-        "relatedCardIds": [],
-        "tags": {
-          "2": 37,
-          "49": 1,
-          "50": 2,
-          "53": 108,
-          "199": 12,
-          "202": 5,
-          "313": 37,
-          "684": 1,
-          "1037": 2,
-          "1068": 0,
-          "1284": 131356,
-          "1556": 1,
-          "1715": 37,
-          "3934": 1
-        },
-        "temporaryCard": true,
-        "zone": null
-      },
-      {
-        "cardId": "",
-        "entityId": 109,
-        "forged": 0,
-        "guessedInfo": {},
-        "internalEntityId": "<scrubbed>",
-        "lastAffectedByCardId": "TIME_003",
-        "linkedEntityIds": [],
-        "metaInfo": {
-          "timestampAtWhichCardEnteredHand": null
-        },
-        "relatedCardIds": [],
-        "tags": {
-          "49": 6,
-          "50": 2,
-          "53": 109
-        },
-        "temporaryCard": true,
-        "zone": "SETASIDE"
-      },
-      {
-        "cardId": "",
-        "entityId": 110,
-        "forged": 0,
-        "guessedInfo": {},
-        "internalEntityId": "<scrubbed>",
-        "lastAffectedByCardId": "TIME_003",
-        "linkedEntityIds": [],
-        "metaInfo": {
-          "timestampAtWhichCardEnteredHand": null
-        },
-        "relatedCardIds": [],
-        "tags": {
-          "49": 6,
-          "50": 2,
-          "53": 110
-        },
-        "temporaryCard": true,
-        "zone": "SETASIDE"
-      },
-      {
-        "cardId": "TIME_000tb",
-        "cardName": "Rewind Timeline",
-        "entityId": 111,
-        "forged": 0,
-        "guessedInfo": {},
-        "internalEntityId": "<scrubbed>",
-        "lastAffectedByCardId": "TIME_003",
-        "linkedEntityIds": [],
-        "metaInfo": {
-          "timestampAtWhichCardEnteredHand": null
-        },
-        "refManaCost": 0,
-        "relatedCardIds": [],
-        "tags": {
-          "49": 6,
-          "50": 2,
-          "53": 111
         },
         "temporaryCard": true,
         "zone": "SETASIDE"
@@ -1297,6 +1108,26 @@
         "zone": null
       },
       {
+        "cardId": "",
+        "entityId": 109,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "lastAffectedByCardId": "TIME_003",
+        "linkedEntityIds": [],
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": null
+        },
+        "relatedCardIds": [],
+        "tags": {
+          "49": 6,
+          "50": 2,
+          "53": 109
+        },
+        "temporaryCard": true,
+        "zone": "SETASIDE"
+      },
+      {
         "actualManaCost": 3,
         "cardId": "CORE_EDR_004_2026",
         "cardName": "Raptor Herald",
@@ -1311,7 +1142,7 @@
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": null
         },
-        "playTiming": 155,
+        "playTiming": 112,
         "rarity": "epic",
         "refManaCost": 3,
         "relatedCardIds": [],
@@ -1346,8 +1177,11 @@
           "3085": 2,
           "3557": 4,
           "3934": 1,
+          "3945": 1,
           "4028": 1,
           "4050": 1,
+          "4384": 37,
+          "4385": 1,
           "4472": 4
         },
         "temporaryCard": false,
@@ -1409,7 +1243,7 @@
       "metaInfo": {
         "timestampAtWhichCardEnteredHand": null
       },
-      "playTiming": 166,
+      "playTiming": 118,
       "rarity": "Common",
       "refManaCost": 3,
       "relatedCardIds": [],
@@ -1417,7 +1251,7 @@
       "temporaryCard": false,
       "zone": "PLAY"
     },
-    "weaponsEquippedThisGame": 2
+    "weaponsEquippedThisGame": 1
   },
   "opponentPlayerId": 2,
   "playerDeck": {
@@ -1446,7 +1280,7 @@
           "timestampAtWhichCardEnteredHand": "<scrubbed>",
           "turnAtWhichCardEnteredHand": 1
         },
-        "playTiming": 154,
+        "playTiming": 111,
         "rarity": "common",
         "refManaCost": 2,
         "relatedCardIds": [],
@@ -1466,7 +1300,7 @@
           "202": 4,
           "203": 1,
           "261": 0,
-          "263": 1,
+          "263": 2,
           "271": 1,
           "273": 3,
           "466": 2,
@@ -1504,7 +1338,7 @@
           "timestampAtWhichCardEnteredHand": "<scrubbed>",
           "turnAtWhichCardEnteredHand": 2
         },
-        "playTiming": 161,
+        "playTiming": 116,
         "positionFromTop": -6,
         "rarity": "rare",
         "refManaCost": 4,
@@ -1544,9 +1378,6 @@
           "3557": 3,
           "3880": 1,
           "3934": 1,
-          "3945": 1,
-          "4384": 79,
-          "4385": 2,
           "4472": 7,
           "4741": 1
         },
@@ -1806,7 +1637,7 @@
           "timestampAtWhichCardEnteredHand": "<scrubbed>",
           "turnAtWhichCardEnteredHand": 0
         },
-        "playTiming": 157,
+        "playTiming": 113,
         "rarity": "common",
         "refManaCost": 2,
         "relatedCardIds": [],
@@ -1883,75 +1714,10 @@
         "side": "player",
         "timestamp": "<scrubbed>",
         "turn": 4
-      },
-      {
-        "cardId": "TIME_034",
-        "effectiveCost": 4,
-        "entityId": 79,
-        "side": "player",
-        "timestamp": "<scrubbed>",
-        "turn": 4
       }
     ],
     "cardsPlayedThisTurn": [
-      "<cycle>",
-      {
-        "actualManaCost": 4,
-        "cardId": "TIME_034",
-        "cardName": "Stadium Announcer",
-        "countered": false,
-        "creatorCardId": "EDR_102t",
-        "entityId": 79,
-        "forged": 0,
-        "guessedInfo": {},
-        "internalEntityId": "<scrubbed>",
-        "linkedEntityIds": [],
-        "metaInfo": {},
-        "playTiming": 164,
-        "rarity": "rare",
-        "refManaCost": 4,
-        "relatedCardIds": [],
-        "storedInformation": null,
-        "tags": {
-          "12": 1,
-          "18": 82,
-          "43": 1,
-          "45": 8,
-          "47": 7,
-          "48": 4,
-          "49": 1,
-          "50": 1,
-          "53": 79,
-          "199": 10,
-          "200": 24,
-          "202": 4,
-          "203": 3,
-          "218": 1,
-          "261": 1,
-          "263": 2,
-          "273": 5,
-          "313": 78,
-          "385": 20,
-          "466": 4,
-          "479": 7,
-          "1037": 0,
-          "1068": 0,
-          "1196": 1,
-          "1284": 115323,
-          "1556": 1,
-          "1570": 3,
-          "1711": 1,
-          "2840": 1,
-          "3085": 8,
-          "3557": 3,
-          "3880": 1,
-          "3934": 1,
-          "4472": 7,
-          "4741": 1
-        },
-        "temporaryCard": false,
-        "zone": "PLAY"
-      }
+      "<cycle>"
     ],
     "cardsShuffledIntoDeck": 0,
     "chaoticTendrilsPlayedThisMatch": 0,
@@ -2256,7 +2022,7 @@
     "deckList": [],
     "destroyedCardsInDeck": [],
     "discoversThisGame": 1,
-    "dragonsSummoned": 3,
+    "dragonsSummoned": 2,
     "earthenGolemsSummoned": 0,
     "elementalsPlayedLastTurn": 0,
     "elementalsPlayedThisTurn": 0,
@@ -2392,7 +2158,7 @@
       "internalEntityId": "<scrubbed>",
       "linkedEntityIds": [],
       "metaInfo": {},
-      "playTiming": 150,
+      "playTiming": 107,
       "rarity": "Free",
       "refManaCost": 2,
       "relatedCardIds": [],
@@ -2537,7 +2303,7 @@
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": null
         },
-        "playTiming": 152,
+        "playTiming": 109,
         "rarity": "rare",
         "refManaCost": 1,
         "relatedCardIds": "<cycle>",
@@ -2602,7 +2368,7 @@
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": null
         },
-        "playTiming": 158,
+        "playTiming": 114,
         "refManaCost": 2,
         "relatedCardIds": [],
         "tags": {},
@@ -2626,7 +2392,7 @@
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": null
         },
-        "playTiming": 157,
+        "playTiming": 113,
         "rarity": "common",
         "refManaCost": 2,
         "relatedCardIds": "<cycle>",
@@ -2634,92 +2400,6 @@
         "tags": "<cycle>",
         "temporaryCard": false,
         "zone": "GRAVEYARD"
-      },
-      {
-        "cardId": "VAC_932",
-        "cardName": "Climbing Hook",
-        "creatorCardId": "TIME_034",
-        "entityId": 111,
-        "forged": 0,
-        "guessedInfo": {},
-        "internalEntityId": "<scrubbed>",
-        "linkedEntityIds": [],
-        "metaInfo": {
-          "timestampAtWhichCardEnteredHand": null
-        },
-        "playTiming": 162,
-        "rarity": "Epic",
-        "refManaCost": 6,
-        "relatedCardIds": [],
-        "tags": {},
-        "temporaryCard": false,
-        "zone": "PLAY"
-      },
-      {
-        "actualManaCost": 0,
-        "cardId": "TIME_000ta",
-        "cardName": "Keep Timeline",
-        "entityId": 115,
-        "forged": 0,
-        "guessedInfo": {},
-        "internalEntityId": "<scrubbed>",
-        "lastAffectedByCardId": "TIME_034",
-        "linkedEntityIds": [],
-        "metaInfo": {
-          "timestampAtWhichCardEnteredHand": null
-        },
-        "refManaCost": 0,
-        "relatedCardIds": [],
-        "tags": {
-          "12": 1,
-          "49": 6,
-          "50": 1,
-          "53": 115,
-          "199": 12,
-          "202": 5,
-          "313": 79,
-          "684": 1,
-          "1037": 1,
-          "1284": 120503,
-          "1556": 1,
-          "4412": 1
-        },
-        "temporaryCard": true,
-        "zone": "SETASIDE"
-      },
-      {
-        "actualManaCost": 0,
-        "cardId": "TIME_000tb",
-        "cardName": "Rewind Timeline",
-        "entityId": 116,
-        "forged": 0,
-        "guessedInfo": {},
-        "internalEntityId": "<scrubbed>",
-        "lastAffectedByCardId": "TIME_034",
-        "linkedEntityIds": [],
-        "metaInfo": {
-          "timestampAtWhichCardEnteredHand": null
-        },
-        "refManaCost": 0,
-        "relatedCardIds": [],
-        "tags": {
-          "2": 79,
-          "3": 0,
-          "12": 1,
-          "49": 6,
-          "50": 1,
-          "53": 116,
-          "199": 12,
-          "202": 5,
-          "313": 79,
-          "684": 1,
-          "1037": 1,
-          "1284": 120503,
-          "1556": 1,
-          "3934": 1
-        },
-        "temporaryCard": true,
-        "zone": "SETASIDE"
       },
       {
         "cardId": "TIME_000tb",
@@ -2758,6 +2438,26 @@
         },
         "temporaryCard": true,
         "zone": null
+      },
+      {
+        "cardId": "LOOT_506",
+        "cardName": "The Runespear",
+        "creatorCardId": "TIME_034",
+        "entityId": 111,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": [],
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": null
+        },
+        "playTiming": 117,
+        "rarity": "Legendary",
+        "refManaCost": 8,
+        "relatedCardIds": [],
+        "tags": {},
+        "temporaryCard": false,
+        "zone": "PLAY"
       }
     ],
     "overloadedCrystals": 0,
@@ -2807,27 +2507,8 @@
     "uniqueSpellSchools": [],
     "volatileSkeletonsDeadThisMatch": 0,
     "watchpostsPlayedThisMatch": 0,
-    "weapon": {
-      "cardId": "LOOT_506",
-      "cardName": "The Runespear",
-      "creatorCardId": "TIME_034",
-      "entityId": 111,
-      "forged": 0,
-      "guessedInfo": {},
-      "internalEntityId": "<scrubbed>",
-      "linkedEntityIds": [],
-      "metaInfo": {
-        "timestampAtWhichCardEnteredHand": null
-      },
-      "playTiming": 165,
-      "rarity": "Legendary",
-      "refManaCost": 8,
-      "relatedCardIds": [],
-      "tags": {},
-      "temporaryCard": false,
-      "zone": "PLAY"
-    },
-    "weaponsEquippedThisGame": 3
+    "weapon": "<cycle>",
+    "weaponsEquippedThisGame": 2
   },
   "region": 2,
   "reviewId": "rewind-nonreg-rewind_player_first",

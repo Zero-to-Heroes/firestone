@@ -241,6 +241,7 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	'discover-zone-order': 'discover-zone-order/discover-zone-order.log',
 	'opponent-coin-marker': 'opponent-coin-marker/opponent-coin-marker.log',
 	'wrong-secrets': 'wrong-secrets/wrong-secrets.log',
+	'rewind-opp-hand': 'rewind-opp-hand/rewind-opp-hand.log',
 };
 
 /**

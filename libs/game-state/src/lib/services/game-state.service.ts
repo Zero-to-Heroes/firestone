@@ -66,37 +66,60 @@ export class GameStateService {
 	 * repeatedly, so we want the most recent matching snapshot. Nested rewinds also
 	 * naturally resolve most-recent-first.
 	 */
-	private rewindSnapshots: { readonly originEntityId: number; readonly state: GameState }[] = [];
+	private rewindSnapshots: {
+		readonly originEntityId: number;
+		readonly state: GameState;
+		// Parser-side `BLOCK_START` timestamp at which the snapshot was retained (i.e. the
+		// rewound action's start time). Used as the lower bound of the rewound-branch
+		// filter window when this snapshot is later restored on `REWIND_STARTED`.
+		readonly capturedAt: string | null;
+	}[] = [];
 	private static readonly REWIND_SNAPSHOT_BUFFER_SIZE = 8;
 
 	/**
-	 * Latest GS-side `REWIND_STARTED` timestamp seen, or null. Used to filter rewound-branch
-	 * events that leak through after the consumer-side snapshot has been restored.
+	 * Latest GS-side `REWIND_STARTED` timestamp seen, or null. Used as the upper bound of
+	 * the rewound-branch event filter (events with `eventTs < cutoff` are dropped together
+	 * with `eventTs >= lowerBound` - see {@link rewindLowerBoundTimestamp}).
 	 *
 	 * Why this exists: the parser intentionally drives GameState (GS) and PowerTaskList (PTL)
 	 * on separate streams that can be out of sync. Within {@link processLogsWithTsParser}'s
 	 * end-of-batch flush, `GSState.NodeParser.ClearQueue()` runs before
 	 * `PTLState.NodeParser.ClearQueue()`, so when a single batch contains the rewind point,
-	 * `REWIND_STARTED` (GS) fires first and restores the consumer snapshot - but
-	 * pre-rewind `SECRET_CREATED_IN_GAME` events parked on the PTL queue (from the rewound
-	 * branch) then fire afterward, polluting the just-restored state. Concrete failure mode
-	 * (regression test `power-log-wrong-secrets-replay.spec.ts`): Sands-of-Time rewind, then
-	 * The Origin Stone re-fires post-rewind and re-binds entity 219 to `TLC_462` (Mage SPELL,
-	 * not a secret); without this filter, the stale pre-rewind `SECRET_CREATED_IN_GAME` for
-	 * 219 (Hunter SECRET) leaks past the restore and ends up in `opponentDeck.secrets`.
+	 * `REWIND_STARTED` (GS) fires first and restores the consumer snapshot - but PTL events
+	 * parked between the snapshot point and the rewind point (the rewound branch) then fire
+	 * afterward, polluting the just-restored state.
 	 *
-	 * The rule: any consumer event with a parser-side timestamp strictly less than the latest
-	 * `REWIND_STARTED` timestamp that arrives AFTER `REWIND_STARTED` belongs to the rewound
-	 * branch and must be dropped. Events from before the rewind point that were already
-	 * applied are no problem - the snapshot restore undid them. Events fired pre-rewind from
-	 * the legitimate (kept) branch are also fine, because they fire BEFORE `REWIND_STARTED`
-	 * within the same batch (their timestamps are before the cutoff but they don't reach this
-	 * filter). Only late-arriving rewound-branch events match `eventTs < cutoff`.
+	 * Two known failure modes have been observed:
+	 *  1. `SECRET_CREATED_IN_GAME` leak (`power-log-wrong-secrets-replay.spec.ts`):
+	 *     Sands-of-Time rewind, then The Origin Stone re-fires post-rewind and re-binds
+	 *     entity 219 to `TLC_462` (Mage SPELL, not a secret); without filtering, the stale
+	 *     pre-rewind `SECRET_CREATED_IN_GAME` for 219 (Hunter SECRET) leaks past the restore
+	 *     and ends up in `opponentDeck.secrets`.
+	 *  2. Hand overflow (`power-log-rewind-opp-hand-replay.spec.ts`):
+	 *     Sands-of-Time rewind, opponent had drawn / received cards on the rewound branch.
+	 *     Those rewound-branch PTL `RECEIVE_CARD_IN_HAND` / `CARD_DRAW_FROM_DECK` events
+	 *     fire after the snapshot restore and push `opponentDeck.hand.length` past the
+	 *     in-engine `MAXHANDSIZE=10` cap.
 	 *
-	 * Reset on `GAME_START` because timestamps wrap on a 24h cycle, so a stale cutoff from a
-	 * previous game would incorrectly drop early events of the next game.
+	 * The rule: any consumer event with a parser-side timestamp in the half-open window
+	 * `[lowerBound, cutoff)` that arrives AFTER `REWIND_STARTED` belongs to the rewound
+	 * branch and must be dropped. The lower bound (the rewound action's `BLOCK_START`
+	 * timestamp) is necessary so we don't also drop legitimate pre-action PTL events
+	 * (which the snapshot does NOT contain - PTL queue is flushed second, so the
+	 * consumer-side snapshot at REWIND_CAPABLE_ACTION_START time has zero PTL-stream
+	 * mutations applied yet, and those pre-action PTL events still need to fire to bring
+	 * the restored state up to "consistent at snapshot moment"). Reset on `GAME_START`
+	 * because timestamps wrap on a 24h cycle, so a stale cutoff from a previous game would
+	 * incorrectly drop early events of the next game.
 	 */
 	private rewindCutoffTimestamp: string | null = null;
+	/**
+	 * Lower bound (inclusive) of the rewound-branch event filter window, set from the
+	 * matching snapshot's `capturedAt` when `REWIND_STARTED` restores. See
+	 * {@link rewindCutoffTimestamp} for the full rationale. `null` means the filter is
+	 * inert.
+	 */
+	private rewindLowerBoundTimestamp: string | null = null;
 
 	private showDecktrackerFromGameMode: boolean;
 
@@ -361,26 +384,32 @@ export class GameStateService {
 		// console.debug('[game-state] processing event', gameEvent.type, gameEvent.cardId, gameEvent.entityId, gameEvent);
 
 		// Drop rewound-branch leaks before they touch state. See {@link rewindCutoffTimestamp}
-		// for the full rationale; in short, PTL events parked from before a rewind sometimes
-		// arrive AFTER `REWIND_STARTED` because the parser flushes GS and PTL queues
-		// independently. Today this is scoped to `SECRET_CREATED_IN_GAME` because that's the
-		// only leak with no natural undo (the post-rewind branch reuses the entityId for a
-		// different card and never re-emits SECRET_CREATED_IN_GAME for it). Add other event
-		// types here if similar leaks surface (e.g. CARD_DRAW_FROM_DECK on a rewound branch).
+		// for the full rationale; in short, PTL events parked between the rewound action's
+		// BLOCK_START (lower bound) and `REWIND_STARTED` (upper bound) sometimes arrive
+		// AFTER `REWIND_STARTED` because the parser flushes GS and PTL queues independently.
+		// Any event whose parser-side timestamp lands in the half-open window
+		// `[lowerBound, cutoff)` is therefore from the rewound branch and must be dropped -
+		// `RECEIVE_CARD_IN_HAND` / `CARD_DRAW_FROM_DECK` (hand overflow) or
+		// `SECRET_CREATED_IN_GAME` (stale secret on a re-bound entityId) are the concrete
+		// regressions covered, but the filter intentionally applies generically so future
+		// rewound-branch leaks are caught without case-by-case allowlisting.
 		if (
 			this.rewindCutoffTimestamp != null &&
-			gameEvent.type === GameEvent.SECRET_CREATED_IN_GAME &&
+			this.rewindLowerBoundTimestamp != null &&
 			gameEvent.debug?.Timestamp != null &&
 			gameEvent.debug.Timestamp.length > 0 &&
+			gameEvent.debug.Timestamp >= this.rewindLowerBoundTimestamp &&
 			gameEvent.debug.Timestamp < this.rewindCutoffTimestamp
 		) {
 			console.log(
-				'[game-state] dropping stale rewound-branch SECRET_CREATED_IN_GAME',
+				'[game-state] dropping stale rewound-branch event',
+				gameEvent.type,
 				'entityId',
 				gameEvent.entityId,
 				'eventTs',
 				gameEvent.debug.Timestamp,
-				'cutoff',
+				'window',
+				this.rewindLowerBoundTimestamp,
 				this.rewindCutoffTimestamp,
 			);
 			return currentState;
@@ -392,8 +421,9 @@ export class GameStateService {
 				opponentTrackerClosedByUser: false,
 			});
 			this.minionsWillDie = [];
-			// Reset to avoid stale cutoff from a previous game; see field JSDoc.
+			// Reset to avoid stale cutoff/lower-bound from a previous game; see field JSDocs.
 			this.rewindCutoffTimestamp = null;
+			this.rewindLowerBoundTimestamp = null;
 		} else if (gameEvent.type === GameEvent.GAME_END) {
 			this.savedDeckstrings = null;
 			this.minionsWillDie = [];
@@ -424,10 +454,13 @@ export class GameStateService {
 		} else if (gameEvent.type === GameEvent.REWIND_CAPABLE_ACTION_START) {
 			// Parser just snapshotted its ParserState; mirror that on the consumer side so a
 			// subsequent REWIND_STARTED can cheaply roll back `currentState` without replaying
-			// the entire game.
+			// the entire game. Record the parser-side `BLOCK_START` timestamp on the snapshot
+			// so the eventual REWIND_STARTED can set the rewound-branch filter's lower bound
+			// from it (see {@link rewindCutoffTimestamp} JSDoc).
 			const originEntityId: number | null | undefined = gameEvent.additionalData?.originEntityId;
 			if (originEntityId != null) {
-				this.rewindSnapshots.push({ originEntityId, state: currentState });
+				const capturedAt: string | null = gameEvent.debug?.Timestamp ?? null;
+				this.rewindSnapshots.push({ originEntityId, state: currentState, capturedAt });
 				if (this.rewindSnapshots.length > GameStateService.REWIND_SNAPSHOT_BUFFER_SIZE) {
 					this.rewindSnapshots.shift();
 				}
@@ -449,6 +482,11 @@ export class GameStateService {
 						? eventTs
 						: this.rewindCutoffTimestamp;
 			}
+			// Reset the rewound-branch filter's lower bound for THIS rewind. We'll set it
+			// below from the matching snapshot's `capturedAt` if one exists. Clearing first
+			// guarantees a stale lower bound from a prior unmatched rewind in the same game
+			// can't accidentally widen the next filter window.
+			this.rewindLowerBoundTimestamp = null;
 			const originEntityId: number | null | undefined = gameEvent.additionalData?.originEntityId;
 			if (originEntityId != null) {
 				// LIFO lookup so repeat rewinds from the same entity pick the freshest snapshot.
@@ -457,6 +495,9 @@ export class GameStateService {
 						const snapshot = this.rewindSnapshots[i];
 						this.rewindSnapshots.splice(i, 1);
 						currentState = snapshot.state;
+						if (snapshot.capturedAt != null && snapshot.capturedAt.length > 0) {
+							this.rewindLowerBoundTimestamp = snapshot.capturedAt;
+						}
 						console.log('[game-state] restored rewind snapshot for originEntityId', originEntityId);
 						break;
 					}

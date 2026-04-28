@@ -21,7 +21,7 @@
     "additionalKnownCardsInHand": [],
     "anachronos": [],
     "astralAutomatonsSummoned": 0,
-    "beastsSummoned": 2,
+    "beastsSummoned": 1,
     "board": [
       {
         "actualManaCost": 3,
@@ -74,8 +74,11 @@
           "3085": 2,
           "3557": 4,
           "3934": 1,
+          "3945": 1,
           "4028": 1,
           "4050": 1,
+          "4384": 37,
+          "4385": 1,
           "4472": 4
         },
         "temporaryCard": false,
@@ -237,10 +240,6 @@
       {
         "cardId": "CORE_EDR_004_2026",
         "entityId": 37
-      },
-      {
-        "cardId": "CORE_EDR_004_2026",
-        "entityId": 37
       }
     ],
     "cardsPlayedLastTurn": [
@@ -327,13 +326,6 @@
         "side": "opponent",
         "timestamp": "<scrubbed>",
         "turn": 2
-      },
-      {
-        "cardId": "CORE_EDR_004_2026",
-        "entityId": 37,
-        "side": "opponent",
-        "timestamp": "<scrubbed>",
-        "turn": 2
       }
     ],
     "cardsPlayedThisTurn": [
@@ -375,64 +367,7 @@
         "temporaryCard": false,
         "zone": null
       },
-      "<cycle>",
-      {
-        "actualManaCost": 3,
-        "cardId": "CORE_EDR_004_2026",
-        "cardName": "Raptor Herald",
-        "countered": false,
-        "creatorCardId": null,
-        "entityId": 37,
-        "forged": 0,
-        "guessedInfo": {},
-        "internalEntityId": "<scrubbed>",
-        "linkedEntityIds": [],
-        "metaInfo": {},
-        "playTiming": 6,
-        "rarity": "epic",
-        "refManaCost": 3,
-        "relatedCardIds": [],
-        "storedInformation": null,
-        "tags": {
-          "45": 2,
-          "47": 4,
-          "48": 3,
-          "49": 1,
-          "50": 2,
-          "53": 37,
-          "199": 12,
-          "200": 20,
-          "202": 4,
-          "203": 4,
-          "218": 1,
-          "261": 1,
-          "263": 0,
-          "273": 3,
-          "415": 1,
-          "466": 3,
-          "478": 2,
-          "479": 4,
-          "858": 119798,
-          "1037": 0,
-          "1043": 1,
-          "1068": 0,
-          "1413": 119798,
-          "1556": 1,
-          "1570": 2,
-          "2840": 1,
-          "3085": 2,
-          "3557": 4,
-          "3934": 1,
-          "3945": 1,
-          "4028": 1,
-          "4050": 1,
-          "4384": 37,
-          "4385": 1,
-          "4472": 4
-        },
-        "temporaryCard": false,
-        "zone": "PLAY"
-      }
+      "<cycle>"
     ],
     "cardsShuffledIntoDeck": 0,
     "chaoticTendrilsPlayedThisMatch": 0,
@@ -829,33 +764,6 @@
           "263": 5
         },
         "zone": "HAND"
-      },
-      {
-        "cardId": "",
-        "createdIndex": 0,
-        "creatorCardId": "CORE_EDR_004_2026",
-        "creatorEntityId": 37,
-        "entityId": 99,
-        "forged": 0,
-        "guessedInfo": {},
-        "internalEntityId": "<scrubbed>",
-        "lastAffectedByCardId": "EDR_102t",
-        "linkedEntityIds": [],
-        "metaInfo": {
-          "timestampAtWhichCardEnteredHand": "<scrubbed>",
-          "turnAtWhichCardEnteredCurrentZone": 2,
-          "turnAtWhichCardEnteredHand": 2
-        },
-        "relatedCardIds": [],
-        "tags": {
-          "49": 6,
-          "50": 2,
-          "53": 99,
-          "263": 6,
-          "385": 37
-        },
-        "temporaryCard": true,
-        "zone": "HAND"
       }
     ],
     "heraldCountThisGame": 0,
@@ -1044,148 +952,6 @@
       },
       "<cycle>",
       {
-        "cardId": "",
-        "entityId": 100,
-        "forged": 0,
-        "guessedInfo": {},
-        "internalEntityId": "<scrubbed>",
-        "lastAffectedByCardId": "EDR_102t",
-        "linkedEntityIds": [],
-        "metaInfo": {
-          "timestampAtWhichCardEnteredHand": null
-        },
-        "relatedCardIds": [],
-        "tags": {
-          "49": 6,
-          "50": 2,
-          "53": 100
-        },
-        "temporaryCard": true,
-        "zone": "SETASIDE"
-      },
-      {
-        "cardId": "",
-        "entityId": 101,
-        "forged": 0,
-        "guessedInfo": {},
-        "internalEntityId": "<scrubbed>",
-        "lastAffectedByCardId": "EDR_102t",
-        "linkedEntityIds": [],
-        "metaInfo": {
-          "timestampAtWhichCardEnteredHand": null
-        },
-        "relatedCardIds": [],
-        "tags": {
-          "49": 6,
-          "50": 2,
-          "53": 101
-        },
-        "temporaryCard": true,
-        "zone": "SETASIDE"
-      },
-      {
-        "cardId": "",
-        "entityId": 103,
-        "forged": 0,
-        "guessedInfo": {},
-        "internalEntityId": "<scrubbed>",
-        "lastAffectedByCardId": "EDR_102t",
-        "linkedEntityIds": [],
-        "metaInfo": {
-          "timestampAtWhichCardEnteredHand": null
-        },
-        "relatedCardIds": [],
-        "tags": {
-          "49": 6,
-          "50": 2,
-          "53": 103
-        },
-        "temporaryCard": true,
-        "zone": "SETASIDE"
-      },
-      {
-        "cardId": "",
-        "entityId": 104,
-        "forged": 0,
-        "guessedInfo": {},
-        "internalEntityId": "<scrubbed>",
-        "lastAffectedByCardId": "EDR_102t",
-        "linkedEntityIds": [],
-        "metaInfo": {
-          "timestampAtWhichCardEnteredHand": null
-        },
-        "relatedCardIds": [],
-        "tags": {
-          "49": 6,
-          "50": 2,
-          "53": 104
-        },
-        "temporaryCard": true,
-        "zone": "SETASIDE"
-      },
-      {
-        "cardId": "",
-        "entityId": 105,
-        "forged": 0,
-        "guessedInfo": {},
-        "internalEntityId": "<scrubbed>",
-        "lastAffectedByCardId": "EDR_100t5",
-        "linkedEntityIds": [],
-        "metaInfo": {
-          "timestampAtWhichCardEnteredHand": null
-        },
-        "relatedCardIds": [],
-        "tags": {
-          "49": 6,
-          "50": 2,
-          "53": 105
-        },
-        "temporaryCard": true,
-        "zone": "SETASIDE"
-      },
-      {
-        "cardId": "",
-        "entityId": 106,
-        "forged": 0,
-        "guessedInfo": {},
-        "internalEntityId": "<scrubbed>",
-        "lastAffectedByCardId": "CORE_EDR_004_2026",
-        "linkedEntityIds": [],
-        "metaInfo": {
-          "timestampAtWhichCardEnteredHand": null
-        },
-        "relatedCardIds": [],
-        "tags": {
-          "49": 6,
-          "50": 2,
-          "53": 106
-        },
-        "temporaryCard": true,
-        "zone": "SETASIDE"
-      },
-      {
-        "cardId": "TIME_000tb",
-        "cardName": "Rewind Timeline",
-        "entityId": 107,
-        "forged": 0,
-        "guessedInfo": {},
-        "internalEntityId": "<scrubbed>",
-        "lastAffectedByCardId": "CORE_EDR_004_2026",
-        "linkedEntityIds": [],
-        "metaInfo": {
-          "timestampAtWhichCardEnteredHand": null
-        },
-        "refManaCost": 0,
-        "relatedCardIds": [],
-        "tags": {
-          "49": 6,
-          "50": 2,
-          "53": 107
-        },
-        "temporaryCard": true,
-        "zone": "SETASIDE"
-      },
-      {
         "cardId": "TIME_000tb",
         "cardName": "Rewind Timeline",
         "countered": false,
@@ -1244,6 +1010,46 @@
       },
       {
         "cardId": "",
+        "entityId": 100,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "lastAffectedByCardId": "EDR_102t",
+        "linkedEntityIds": [],
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": null
+        },
+        "relatedCardIds": [],
+        "tags": {
+          "49": 6,
+          "50": 2,
+          "53": 100
+        },
+        "temporaryCard": true,
+        "zone": "SETASIDE"
+      },
+      {
+        "cardId": "",
+        "entityId": 101,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "lastAffectedByCardId": "EDR_102t",
+        "linkedEntityIds": [],
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": null
+        },
+        "relatedCardIds": [],
+        "tags": {
+          "49": 6,
+          "50": 2,
+          "53": 101
+        },
+        "temporaryCard": true,
+        "zone": "SETASIDE"
+      },
+      {
+        "cardId": "",
         "entityId": 102,
         "forged": 0,
         "guessedInfo": {},
@@ -1258,6 +1064,26 @@
           "49": 6,
           "50": 2,
           "53": 102
+        },
+        "temporaryCard": true,
+        "zone": "SETASIDE"
+      },
+      {
+        "cardId": "",
+        "entityId": 103,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "lastAffectedByCardId": "EDR_102t",
+        "linkedEntityIds": [],
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": null
+        },
+        "relatedCardIds": [],
+        "tags": {
+          "49": 6,
+          "50": 2,
+          "53": 103
         },
         "temporaryCard": true,
         "zone": "SETASIDE"
@@ -1350,7 +1176,7 @@
           "202": 4,
           "203": 1,
           "261": 0,
-          "263": 1,
+          "263": 2,
           "271": 1,
           "273": 3,
           "466": 2,
