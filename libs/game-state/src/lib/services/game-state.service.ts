@@ -552,6 +552,7 @@ export class GameStateService {
 			timing: 'after',
 		});
 
+
 		// We have processed the event for which the secret would trigger
 		if (
 			gameEvent.type !== GameEvent.SECRET_WILL_TRIGGER &&

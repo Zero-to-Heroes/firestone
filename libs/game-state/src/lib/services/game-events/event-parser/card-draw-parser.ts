@@ -257,18 +257,39 @@ export class CardDrawParser implements EventParser {
 		// eslint-disable-next-line prefer-const
 		// const removeFillerCard = !useTopOfDeckToIdentifyCard;
 		// console.debug('[card-draw] removeFillerCard', removeFillerCard, useTopOfDeckToIdentifyCard);
-		let [newDeck, removedCard] = isCardInfoPublic
+		// If the drawn entity matches a row we already track in the deck (typically a card we
+		// predicted via Oracle from a CREATE_CARD_IN_DECK / Start of Game effect, or a card we
+		// learned about through a tradeable / reshuffle), we must drop *that specific row*. The
+		// previous "filler removal" branch (cardId=null, entityId=-1) leaves the predicted row
+		// behind, so subsequent ENTITY_UPDATE / CARD_CREATOR_CHANGED events on the same entityId
+		// (e.g. Agent of the Old Ones turning the in-hand entity into a Coin) corrupt the stale
+		// deck row instead of being a no-op there.
+		const entityIsKnownInDeck =
+			!!entityId &&
+			previousDeck.some(
+				(c) => c.entityId != null && c.entityId !== 0 && Math.abs(c.entityId) === Math.abs(entityId),
+			);
+		let [newDeck, removedCard] = entityIsKnownInDeck
 			? this.helper.removeSingleCardFromZone(
 					previousDeck,
-					updatedCardId,
+					isCardInfoPublic ? updatedCardId : null,
 					entityId,
-					deck.deckList.length === 0,
+					false,
 					true,
-					{
-						cost: gameEvent.additionalData.cost,
-					},
+					isCardInfoPublic ? { cost: gameEvent.additionalData.cost } : null,
 				)
-			: this.helper.removeSingleCardFromZone(previousDeck, null, -1, deck.deckList.length === 0, true);
+			: isCardInfoPublic
+				? this.helper.removeSingleCardFromZone(
+						previousDeck,
+						updatedCardId,
+						entityId,
+						deck.deckList.length === 0,
+						true,
+						{
+							cost: gameEvent.additionalData.cost,
+						},
+					)
+				: this.helper.removeSingleCardFromZone(previousDeck, null, -1, deck.deckList.length === 0, true);
 		console.debug(
 			'[card-draw] newDeck 0',
 			newDeck,
