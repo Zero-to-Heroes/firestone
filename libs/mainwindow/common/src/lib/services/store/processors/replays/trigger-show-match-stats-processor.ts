@@ -31,7 +31,6 @@ export class TriggerShowMatchStatsProcessor implements Processor {
 	): Promise<[MainWindowState | null, NavigationState | null]> {
 		// Figure out if we have already loaded the stats, or if we need a refresh
 		if (navigationState.navigationReplays.selectedReplay?.replayInfo?.reviewId === event.reviewId) {
-			console.log('[debug] already loaded the stats, returning');
 			return [
 				null,
 				navigationState.update({

@@ -183,17 +183,7 @@ export class ConstructedDeckbuilderCardsComponent extends AbstractSubscriptionCo
 	}
 
 	async ngAfterContentInit() {
-		console.debug('[debug] constructed-deckbuilder-cards after content init');
-		await waitForReady(this.constructedConfig);
-		console.debug('[debug] constructedConfig ready');
-		await waitForReady(this.prefs);
-		console.debug('[debug] prefs ready');
-		await waitForReady(this.mainWindowStateFacade);
-		console.debug('[debug] mainWindowStateFacade ready');
-		await waitForReady(this.setsManager);
-		console.debug('[debug] setsManager ready');
 		await waitForReady(this.constructedConfig, this.prefs, this.mainWindowStateFacade, this.setsManager);
-		console.debug('[debug] constructed-deckbuilder-cards after content init 2');
 
 		// this.highRes$ = this.listenForBasicPref$((prefs) => prefs.collectionUseHighResImages);
 		this.showRelatedCards$ = this.prefs.preferences$$.pipe(

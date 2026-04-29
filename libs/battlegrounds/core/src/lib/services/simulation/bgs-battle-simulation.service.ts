@@ -206,7 +206,6 @@ export class BgsBattleSimulationService {
 		onResultReceived: (result: SimulationResult | null) => void,
 	): void {
 		try {
-			console.log('[debug] [bgs-simulation] simulating local battle', this.executor);
 			this.executor.simulateLocalBattle(battleInfo, prefs, includeOutcomeSamples, onResultReceived);
 		} catch (e: any) {
 			console.log('no-format', '[bgs-simulation] could not simulate battle', JSON.stringify(battleInfo));

@@ -41,7 +41,6 @@ export class BgsRunStatsService {
 		const resultFromS3 = await this.apiRunner.callGetApi<IBgsPostMatchStats>(
 			`https://bgs-post-match-stats.firestoneapp.com/${reviewId}.gz.json`,
 		);
-		console.log('[debug] [bgs-run-stats] post-match results for review', reviewId, resultFromS3);
 		if (!!resultFromS3) {
 			this.eventHandler?.onShowMatchStats(reviewId, resultFromS3);
 			return;
