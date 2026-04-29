@@ -265,6 +265,7 @@ export class GameStateService {
 		const shouldProcessGameEnd = gameEndEvent && eventQueue.length === 1;
 		const chunks = chunk(eventQueue, 50);
 		for (const subQueue of chunks) {
+			const batchStart = Date.now();
 			try {
 				const zonePositionChangedEvent = mergeZonePositionChangedEvents(
 					subQueue.filter((event) => event.type === GameEvent.ZONE_POSITION_CHANGED) as GameEvent[],
@@ -324,6 +325,25 @@ export class GameStateService {
 				}
 			} catch (e) {
 				console.error('Exception while processing event', e);
+			}
+			// Surface batches that visibly stall the renderer (>500ms covers any single
+			// frame > 30fps drop). Pairs with the per-parser `parser took too long` warn
+			// already in `processEvent` so a freeze can be attributed to either an
+			// individual parser or batch-level overhead (e.g. rewind deep-clone storms).
+			const batchElapsed = Date.now() - batchStart;
+			if (batchElapsed > 500) {
+				const sample = subQueue
+					.map((event) => event?.type)
+					.filter((t) => !!t)
+					.slice(0, 8);
+				console.warn(
+					'[game-state] slow processQueue batch',
+					`${batchElapsed}ms`,
+					'size',
+					subQueue.length,
+					'sample',
+					sample,
+				);
 			}
 		}
 		return shouldProcessGameEnd || !gameEndEvent ? [] : [gameEndEvent];
@@ -585,6 +605,10 @@ export class GameStateService {
 				// GameEvent.SUB_SPELL_END,
 			].includes(gameEvent.type)
 		) {
+			// Avoid dumping `currentState` / `gameEvent` here: in production with the
+			// Overwolf devtools console attached, serialising the full GameState graph on
+			// every event was a measurable freeze contributor. Keep the lightweight
+			// identifying fields - they're enough to reconstruct timelines from logs.
 			console.debug(
 				'[game-state] processed event',
 				gameEvent.type,
@@ -592,8 +616,6 @@ export class GameStateService {
 				`entityId:${gameEvent.entityId}`,
 				(gameEvent as MinionsDiedEvent)?.additionalData?.deadMinions?.map((m) => `entityId:${m.EntityId}`),
 				`localPlayerId=${currentState.localPlayerId}`,
-				currentState,
-				gameEvent,
 			);
 		}
 		return currentState;
