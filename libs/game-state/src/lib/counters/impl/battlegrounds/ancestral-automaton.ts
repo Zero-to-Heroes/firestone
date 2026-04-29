@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { CardIds, GameTag } from '@firestone-hs/reference-data';
-import { FullEntity } from '@firestone/power-log-parser';
+import { CardIds, GameTag, Zone } from '@firestone-hs/reference-data';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { BattlegroundsState } from '../../../models/_barrel';
 import { GameState } from '../../../models/game-state';
-import { getControllerEntity, getPlayerEnchantments } from '../../../services/parser-entity-utils';
+import { getControllerEntity, getEntityTag } from '../../../services/parser-entity-utils';
 import { CounterDefinitionV2 } from '../../_counter-definition-v2';
 import { CounterType } from '../../_exports';
+
+const TARGET_ENCHANT_ID = CardIds.AstralAutomatonPlayerEnchantDntEnchantment_BG_TTN_401pe;
 
 export class BgsAncestralAutomatonCounterDefinitionV2 extends CounterDefinitionV2<number> {
 	public override id: CounterType = 'bgsAncestralAutomaton';
@@ -18,23 +19,32 @@ export class BgsAncestralAutomatonCounterDefinitionV2 extends CounterDefinitionV
 		pref: 'playerBgsAncestralAutomatonCounter' as const,
 		display: (state: GameState, bgState: BattlegroundsState | null | undefined): boolean => true,
 		value: (state: GameState, bgState: BattlegroundsState | null | undefined) => {
+			// `display: () => true` means this counter's `value` runs on every counter
+			// re-evaluation. Iterate `CurrentEntities` *once* and sum
+			// `TAG_SCRIPT_DATA_NUM_1` for matching enchantments inline, instead of
+			// materialising two intermediate arrays via `getPlayerEnchantments` (which
+			// allocates `[...values()]` + filter + filter on every call). On a late-game
+			// BG board with hundreds of entities and active Astral Automaton triggers,
+			// this is the difference between a measurable per-frame allocation spike and
+			// a single-pass scan.
+			const entities = state.parserState?.CurrentEntities;
+			if (!entities) return null;
 			const controllerEntity = getControllerEntity(
-				state.parserState?.CurrentEntities,
+				entities,
 				state.parserState?.ControllerEntityMap,
 				state.localPlayerId!,
 			);
-			const enchants = getPlayerEnchantments(
-				state.parserState?.CurrentEntities,
-				controllerEntity as FullEntity,
-				CardIds.AstralAutomatonPlayerEnchantDntEnchantment_BG_TTN_401pe,
-			);
-			const value = enchants
-				.map((e) => e.Tags?.find((t) => t.Name === GameTag.TAG_SCRIPT_DATA_NUM_1)?.Value ?? 0)
-				.reduce((a, b) => a + b, 0);
-			if (value === 0) {
-				return null;
+			if (!controllerEntity) return null;
+			const controllerId = controllerEntity.Id;
+			let value = 0;
+			for (const e of entities.values()) {
+				if (e.CardId !== TARGET_ENCHANT_ID) continue;
+				if (getEntityTag(e, GameTag.ATTACHED) !== controllerId) continue;
+				if (getEntityTag(e, GameTag.ZONE) !== (Zone.PLAY as number)) continue;
+				const tag = e.Tags?.find((t) => t.Name === GameTag.TAG_SCRIPT_DATA_NUM_1);
+				value += tag?.Value ?? 0;
 			}
-			return value;
+			return value === 0 ? null : value;
 		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>
