@@ -153,11 +153,43 @@ export class RewindController {
 	 */
 	private perf = newPerfStats();
 
+	/**
+	 * Latched per-game decision: should we no-op every public observer because the current
+	 * game mode cannot host REWIND-capable cards? Battlegrounds (incl. Duos / Friendly) and
+	 * Mercenaries don't have the REWIND mechanic at all - running the depth tracker /
+	 * pending stash for those games is pure overhead.
+	 *
+	 *  - `null` while `GameType` is still unknown (the very first lines of a match before
+	 *    the metadata block is parsed). In that window we fall through to the regular path;
+	 *    in practice no root BLOCK_START arrives before metadata so this is essentially a
+	 *    one-line cost.
+	 *  - `true` once `IsBattlegrounds()` / `IsMercenaries()` returns true, latched for the
+	 *    whole match. Cleared on `reset()` (fresh CREATE_GAME).
+	 *  - `false` once we've confirmed the mode is Constructed / Tavern Brawl / etc., also
+	 *    latched.
+	 */
+	private skipForGameMode: boolean | null = null;
+
 	constructor(
 		private readonly state: CombinedState,
 		private readonly oracle: RewindCardOracle,
 		private readonly hooks: RewindControllerHooks = {},
 	) {}
+
+	/**
+	 * Lazy-and-latched mode gate. Re-checked on every observer call until we get a
+	 * definitive answer; once latched the rest of the match takes the cheap branch.
+	 */
+	private shouldSkipForGameMode(): boolean {
+		if (this.skipForGameMode != null) return this.skipForGameMode;
+		const gs = this.state.GSState;
+		// `IsBattlegrounds()` / `IsMercenaries()` both early-return false on `GameType=-1`
+		// (the pre-metadata window). We deliberately don't latch in that case so a real
+		// game mode signal can land later.
+		if (gs.CurrentGame.GameType === -1) return false;
+		this.skipForGameMode = gs.IsBattlegrounds() || gs.IsMercenaries();
+		return this.skipForGameMode;
+	}
 
 	// ---------------------------------------------------------------------------------------
 	// Line-level observers. ReplayParser.ReadLine invokes these in the order:
@@ -182,6 +214,7 @@ export class RewindController {
 		timestamp: string,
 		isCardOrigin: boolean,
 	): void {
+		if (this.shouldSkipForGameMode()) return;
 		const wasRoot = this.depthFor(stream) === 0;
 		this.incrementDepth(stream);
 
@@ -243,6 +276,7 @@ export class RewindController {
 	 * this controller.
 	 */
 	onShowEntity(entityId: number, cardId: string | null): void {
+		if (this.shouldSkipForGameMode()) return;
 		const pendingMeta = this.pending.get(entityId);
 		if (REWIND_DEBUG) console.log(`[rewind] onShowEntity entityId=${entityId} cardId=${cardId} pendingMeta=${pendingMeta != null}`);
 		if (pendingMeta == null) return;
@@ -276,6 +310,7 @@ export class RewindController {
 	 * revealed inside this block, e.g. a play that resolved without a card reveal).
 	 */
 	onBlockEnd(stream: LogStream): void {
+		if (this.shouldSkipForGameMode()) return;
 		this.decrementDepth(stream);
 		if (stream === 'GS' && this.depthFor('GS') === 0) {
 			if (this.gsRootOriginEntityId != null) {
@@ -297,6 +332,7 @@ export class RewindController {
 	 * (caller should fall back to legacy behaviour - e.g. `ParserState.PartialReset()`).
 	 */
 	onGsGameResetStart(originEntityId: number): ParserSnapshotMeta | null {
+		if (this.shouldSkipForGameMode()) return null;
 		if (REWIND_DEBUG) console.log(`[rewind] onGsGameResetStart entityId=${originEntityId} retained=${this.retained.length}`);
 		const idx = findLastIndex(this.retained, (s) => s.meta.originEntityId === originEntityId);
 		if (idx < 0) {
@@ -322,6 +358,7 @@ export class RewindController {
 	 * exists (meaning we never saw the GS-side GAME_RESET - shouldn't happen in practice).
 	 */
 	onPtlGameResetStart(originEntityId: number): ParserSnapshotMeta | null {
+		if (this.shouldSkipForGameMode()) return null;
 		const idx = findLastIndex(this.pendingPtlRestores, (e) => e.originEntityId === originEntityId);
 		if (idx < 0) {
 			Logger.Log(`No parked PTL snapshot for rewind origin entityId=${originEntityId}`, '');
@@ -432,6 +469,7 @@ export class RewindController {
 		this.ptlDepth = 0;
 		this.gsRootOriginEntityId = null;
 		this.perf = newPerfStats();
+		this.skipForGameMode = null;
 	}
 }
 
