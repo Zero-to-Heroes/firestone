@@ -312,6 +312,10 @@ export const cardIdSelector = (
 		// Arcane Artificer: Whenever you cast a spell, gain Armor equal to its Cost.
 		case CardIds.ArcaneArtificerCore:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
+		// Arcane Anomaly: After you cast a spell, give this minion +1 Health.
+		case CardIds.ArcaneAnomaly_KAR_036:
+		case CardIds.ArcaneAnomaly_CORE_KAR_036:
+			return and(side(inputSide), or(inDeck, inHand), spellExtended);
 		case CardIds.ArcaneBrilliance:
 			return and(
 				side(inputSide),
