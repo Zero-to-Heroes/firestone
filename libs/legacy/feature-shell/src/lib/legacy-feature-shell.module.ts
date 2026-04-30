@@ -589,7 +589,6 @@ import { HsClientConfigService } from './js/services/hs-client-config.service';
 import { LocalizationFacadeService } from './js/services/localization-facade.service';
 import { LocalizationService } from './js/services/localization.service';
 import { LogRegisterService } from './js/services/log-register.service';
-import { LiveStreamsService } from './js/services/mainwindow/live-streams.service';
 import { OutOfCardsService } from './js/services/mainwindow/out-of-cards.service';
 import { TwitchPresenceService } from './js/services/mainwindow/twitch-presence.service';
 import { MercenariesSynergiesHighlightService } from './js/services/mercenaries/highlights/mercenaries-synergies-highlight.service';
@@ -1303,7 +1302,6 @@ try {
 		TipService,
 		MainWindowStoreService,
 		StoreBootstrapService,
-		LiveStreamsService,
 		SystemTrayService,
 
 		HearthArenaAnalyticsService,

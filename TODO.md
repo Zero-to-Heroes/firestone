@@ -1,3 +1,4 @@
+Next: premium package page
 Next: remove AppUiStore
 
 - HTML cache on electron main process

@@ -9,10 +9,9 @@ import {
 import { PresenceInfo } from '@firestone-hs/twitch-presence';
 import { StreamsCategoryType } from '@firestone/mainwindow/common';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { LiveStreamsService } from '@firestone/twitch/common';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { LiveStreamsService } from '../../../services/mainwindow/live-streams.service';
-
 @Component({
 	standalone: false,
 	selector: 'live-streams',

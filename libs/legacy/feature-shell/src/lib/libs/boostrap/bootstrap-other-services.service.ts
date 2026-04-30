@@ -34,13 +34,12 @@ import {
 import { GameStatusService } from '@firestone/shared/common/service';
 import { HotkeyFacadeService } from '@firestone/shared/framework/core';
 import { GameStatsProviderService } from '@firestone/stats/services';
-import { TwitchAuthService } from '@firestone/twitch/common';
+import { LiveStreamsService, TwitchAuthService } from '@firestone/twitch/common';
 import { HearthArenaAnalyticsService } from '../../js/services/analytics/heartharena-analytics.service';
 import { DevService } from '../../js/services/dev.service';
 import { GlobalStatsService } from '../../js/services/global-stats/global-stats.service';
 import { HsClientConfigService } from '../../js/services/hs-client-config.service';
 import { LogRegisterService } from '../../js/services/log-register.service';
-import { LiveStreamsService } from '../../js/services/mainwindow/live-streams.service';
 import { OutOfCardsService } from '../../js/services/mainwindow/out-of-cards.service';
 import { TwitchPresenceService } from '../../js/services/mainwindow/twitch-presence.service';
 import { ReplaysNotificationService } from '../../js/services/replays/replays-notification.service';

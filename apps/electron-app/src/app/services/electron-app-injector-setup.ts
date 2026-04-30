@@ -218,6 +218,7 @@ import {
 	ReplayMetadataBuilderService,
 } from '@firestone/stats/services';
 import { TavernBrawlService } from '@firestone/tavern-brawl/common';
+import { LiveStreamsService } from '@firestone/twitch/common';
 import {
 	FakeMissingTranslationHandler,
 	TranslateDefaultParser,
@@ -1086,6 +1087,9 @@ export const buildAppInjector = () => {
 		ads,
 	);
 	electronInjector.register(ProfileUploaderService, profileUploaderService);
+
+	const liveStreamsService = new LiveStreamsService(windowManager);
+	electronInjector.register(LiveStreamsService, liveStreamsService);
 
 	electronInjector.ready = true;
 	return electronInjector;
