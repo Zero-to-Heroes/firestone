@@ -246,6 +246,7 @@ export const currentEffectsInternal = [
 	CardIds.UnlimitedPotential_PotentialUnboundEnchantment,
 	CardIds.UnstableMagic_UnstableMagicEnchantment_THD_043hpe,
 	CardIds.UnyieldingVindicator_UnyieldingVindicatorFutureBuffEnchantment_GDB_232e,
+	CardIds.WaveOfTar_StuckEnchantment_TLC_439e2,
 	CardIds.WaterTap_WaterTapEnchantment_Story_11_WaterTape,
 	CardIds.WaterTap_WaterTapEnchantment_Story_11_WaterTapee,
 	CardIds.WildernessPack_KnockOffPackEnchantment_MIS_104e,
