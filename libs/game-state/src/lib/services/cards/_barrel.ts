@@ -275,6 +275,7 @@ export { UnstablePortal } from './unstable-portal';
 export { UnstableSpellcaster } from './unstable-spellcaster';
 export { UnpopularHasBeen } from './unpopular-has-been';
 export { VarianKingOfStormwind } from './varian-king-of-stormwind';
+export { VioletHaze } from './violet-haze';
 export { VoodooTotem } from './voodoo-totem';
 export { VujaDe } from './vuja-de';
 export { Vulcanos } from './vulcanos';
