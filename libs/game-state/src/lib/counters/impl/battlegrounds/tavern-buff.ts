@@ -30,7 +30,7 @@ export class TavernBuffCounterDefinitionV2 extends CounterDefinitionV2<{ atk: nu
 				// 	.map((e) => e.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_1] ?? 0)
 				// 	.reduce((a, b) => a + b, 0),
 				health: relevantEnchantsSingle
-					.map((e) => e.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_1] ?? 0)
+					.map((e) => e.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_2] ?? 0)
 					.reduce((a, b) => a + b, 0),
 				// relevantEnchantsMulti
 				// 	.map((e) => e.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_2] ?? 0)
