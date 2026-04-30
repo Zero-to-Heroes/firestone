@@ -356,7 +356,7 @@
         "linkedEntityIds": [],
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": "<scrubbed>",
-          "turnAtWhichCardEnteredHand": 6
+          "turnAtWhichCardEnteredHand": 7
         },
         "playTiming": 71,
         "rarity": "common",
@@ -828,7 +828,7 @@
           "202": 5,
           "203": 4,
           "261": 1,
-          "263": 8,
+          "263": 0,
           "273": 1,
           "415": 1,
           "466": 1,
@@ -1333,43 +1333,6 @@
         "zone": null
       },
       {
-        "cardId": "TIME_000tb",
-        "cardName": "Rewind Timeline",
-        "countered": false,
-        "creatorCardId": "CORE_EDR_004_2026",
-        "creatorEntityId": 37,
-        "entityId": 108,
-        "forged": 0,
-        "guessedInfo": {},
-        "internalEntityId": "<scrubbed>",
-        "linkedEntityIds": [],
-        "metaInfo": {
-          "timestampAtWhichCardEnteredHand": null
-        },
-        "playTiming": null,
-        "putIntoPlay": true,
-        "refManaCost": 0,
-        "relatedCardIds": [],
-        "tags": {
-          "2": 37,
-          "49": 1,
-          "50": 2,
-          "53": 108,
-          "199": 12,
-          "202": 5,
-          "313": 37,
-          "684": 1,
-          "1037": 2,
-          "1068": 0,
-          "1284": 131356,
-          "1556": 1,
-          "1715": 37,
-          "3934": 1
-        },
-        "temporaryCard": true,
-        "zone": null
-      },
-      {
         "cardId": "",
         "entityId": 100,
         "forged": 0,
@@ -1450,43 +1413,6 @@
         "zone": "SETASIDE"
       },
       {
-        "cardId": "TIME_000tb",
-        "cardName": "Rewind Timeline",
-        "countered": false,
-        "creatorCardId": "TIME_003",
-        "creatorEntityId": 55,
-        "entityId": 112,
-        "forged": 0,
-        "guessedInfo": {},
-        "internalEntityId": "<scrubbed>",
-        "linkedEntityIds": [],
-        "metaInfo": {
-          "timestampAtWhichCardEnteredHand": null
-        },
-        "playTiming": null,
-        "putIntoPlay": true,
-        "refManaCost": 0,
-        "relatedCardIds": [],
-        "tags": {
-          "2": 55,
-          "49": 1,
-          "50": 2,
-          "53": 112,
-          "199": 12,
-          "202": 5,
-          "313": 55,
-          "684": 1,
-          "1037": 2,
-          "1068": 0,
-          "1284": 119314,
-          "1556": 1,
-          "1715": 55,
-          "3934": 1
-        },
-        "temporaryCard": true,
-        "zone": null
-      },
-      {
         "actualManaCost": 3,
         "cardId": "CORE_EDR_004_2026",
         "cardName": "Raptor Herald",
@@ -1547,78 +1473,44 @@
         "zone": "GRAVEYARD"
       },
       {
-        "cardId": "TIME_000tb",
-        "cardName": "Rewind Timeline",
-        "countered": false,
-        "creatorCardId": "TIME_EVENT_999",
-        "creatorEntityId": 48,
+        "cardId": "REV_933",
+        "cardName": "Imbued Axe",
+        "creatorCardId": "TIME_034",
+        "entityId": 112,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": [],
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": null
+        },
+        "playTiming": 62,
+        "rarity": "Common",
+        "refManaCost": 3,
+        "relatedCardIds": [],
+        "tags": {},
+        "temporaryCard": false,
+        "zone": "PLAY"
+      },
+      {
+        "cardId": "",
         "entityId": 121,
         "forged": 0,
         "guessedInfo": {},
         "internalEntityId": "<scrubbed>",
+        "lastAffectedByCardId": "EDR_102t",
         "linkedEntityIds": [],
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": null
         },
-        "playTiming": null,
-        "putIntoPlay": true,
-        "refManaCost": 0,
         "relatedCardIds": [],
         "tags": {
-          "2": 48,
-          "49": 1,
+          "49": 6,
           "50": 2,
-          "53": 121,
-          "199": 12,
-          "202": 5,
-          "313": 48,
-          "684": 1,
-          "1037": 2,
-          "1068": 0,
-          "1284": 121675,
-          "1556": 1,
-          "1715": 48,
-          "3934": 1
+          "53": 121
         },
         "temporaryCard": true,
-        "zone": null
-      },
-      {
-        "cardId": "TIME_000tb",
-        "cardName": "Rewind Timeline",
-        "countered": false,
-        "creatorCardId": "CORE_EDR_004_2026",
-        "creatorEntityId": 49,
-        "entityId": 130,
-        "forged": 0,
-        "guessedInfo": {},
-        "internalEntityId": "<scrubbed>",
-        "linkedEntityIds": [],
-        "metaInfo": {
-          "timestampAtWhichCardEnteredHand": null
-        },
-        "playTiming": null,
-        "putIntoPlay": true,
-        "refManaCost": 0,
-        "relatedCardIds": [],
-        "tags": {
-          "2": 49,
-          "49": 1,
-          "50": 2,
-          "53": 130,
-          "199": 12,
-          "202": 5,
-          "313": 49,
-          "684": 1,
-          "1037": 2,
-          "1068": 0,
-          "1284": 131356,
-          "1556": 1,
-          "1715": 49,
-          "3934": 1
-        },
-        "temporaryCard": true,
-        "zone": null
+        "zone": "SETASIDE"
       },
       {
         "cardId": "",
@@ -1733,7 +1625,7 @@
           "203": 3,
           "218": 1,
           "261": 1,
-          "263": 0,
+          "263": 2,
           "273": 1,
           "466": 3,
           "478": 2,
@@ -1931,7 +1823,7 @@
           "203": 1,
           "217": 1,
           "261": 1,
-          "263": 0,
+          "263": 1,
           "273": 9,
           "466": 6,
           "478": 2,
@@ -2120,26 +2012,7 @@
     "uniqueSpellSchools": [],
     "volatileSkeletonsDeadThisMatch": 0,
     "watchpostsPlayedThisMatch": 0,
-    "weapon": {
-      "cardId": "REV_933",
-      "cardName": "Imbued Axe",
-      "creatorCardId": "TIME_034",
-      "entityId": 112,
-      "forged": 0,
-      "guessedInfo": {},
-      "internalEntityId": "<scrubbed>",
-      "linkedEntityIds": [],
-      "metaInfo": {
-        "timestampAtWhichCardEnteredHand": null
-      },
-      "playTiming": 62,
-      "rarity": "Common",
-      "refManaCost": 3,
-      "relatedCardIds": [],
-      "tags": {},
-      "temporaryCard": false,
-      "zone": "PLAY"
-    },
+    "weapon": "<cycle>",
     "weaponsEquippedThisGame": 1
   },
   "opponentPlayerId": 2,
@@ -3610,44 +3483,6 @@
         "zone": "GRAVEYARD"
       },
       {
-        "cardId": "TIME_000tb",
-        "cardName": "Rewind Timeline",
-        "countered": false,
-        "creatorCardId": "TIME_034",
-        "creatorEntityId": 79,
-        "entityId": 117,
-        "forged": 0,
-        "guessedInfo": {},
-        "internalEntityId": "<scrubbed>",
-        "linkedEntityIds": [],
-        "metaInfo": {
-          "timestampAtWhichCardEnteredHand": null
-        },
-        "playTiming": null,
-        "putIntoPlay": true,
-        "refManaCost": 0,
-        "relatedCardIds": [],
-        "tags": {
-          "2": 79,
-          "12": 1,
-          "49": 6,
-          "50": 1,
-          "53": 117,
-          "199": 12,
-          "202": 5,
-          "313": 79,
-          "684": 1,
-          "1037": 1,
-          "1068": 0,
-          "1284": 120503,
-          "1556": 1,
-          "1715": 79,
-          "3934": 1
-        },
-        "temporaryCard": true,
-        "zone": null
-      },
-      {
         "cardId": "LOOT_506",
         "cardName": "The Runespear",
         "creatorCardId": "TIME_034",
@@ -4014,25 +3849,21 @@
         "zone": "GRAVEYARD"
       },
       {
-        "cardId": "TIME_000tb",
-        "cardName": "Rewind Timeline",
-        "countered": false,
-        "creatorCardId": "TIME_038t1",
-        "creatorEntityId": 18,
+        "actualManaCost": 0,
+        "cardId": "TIME_000ta",
+        "cardName": "Keep Timeline",
         "entityId": 154,
         "forged": 0,
         "guessedInfo": {},
         "internalEntityId": "<scrubbed>",
+        "lastAffectedByCardId": "TIME_038t2",
         "linkedEntityIds": [],
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": null
         },
-        "playTiming": null,
-        "putIntoPlay": true,
         "refManaCost": 0,
         "relatedCardIds": [],
         "tags": {
-          "2": 18,
           "49": 6,
           "50": 1,
           "53": 154,
@@ -4041,14 +3872,12 @@
           "313": 18,
           "684": 1,
           "1037": 1,
-          "1068": 0,
-          "1284": 120982,
+          "1284": 120983,
           "1556": 1,
-          "1715": 18,
-          "3934": 1
+          "4412": 1
         },
         "temporaryCard": true,
-        "zone": null
+        "zone": "SETASIDE"
       }
     ],
     "overloadedCrystals": 0,

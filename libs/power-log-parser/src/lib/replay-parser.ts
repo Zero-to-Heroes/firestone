@@ -102,6 +102,19 @@ export class ReplayParser {
 	private fallbackLegacyGameResetGS = false;
 	private fallbackLegacyGameResetPTL = false;
 
+	/**
+	 * Set on GS GAME_RESET BLOCK_START (when a matching snapshot is found and the GS-side
+	 * rewind has therefore taken effect), cleared on PTL GAME_RESET BLOCK_START. While true,
+	 * we drop every PTL line we read - the PTL stream is still rendering the rewound action's
+	 * tail (rewind-effect block, terminating tag changes on the rewound origin entity, ...)
+	 * and those events belong to the rewound branch even though their timestamps fall on or
+	 * after the GS-side REWIND_STARTED. The consumer-side cutoff filter is keyed on
+	 * REWIND_STARTED's timestamp and intentionally uses a half-open `[lower, cutoff)` window,
+	 * so it cannot catch the PTL tail (timestamp >= cutoff). Dropping these lines at the
+	 * parser is the only place where we still know "GS has rewound, PTL hasn't yet".
+	 */
+	private pendingPtlRewindFlush = false;
+
 	constructor(cardOracle: RewindCardOracle | null = null) {
 		this.gameEventHandler = new GameEventHandler();
 		this.State = new CombinedState(this.createNodeParser.bind(this));
@@ -170,6 +183,7 @@ export class ReplayParser {
 			this.rewindOriginPTL = null;
 			this.fallbackLegacyGameResetGS = false;
 			this.fallbackLegacyGameResetPTL = false;
+			this.pendingPtlRewindFlush = false;
 		}
 
 		let timestamp: string | null = null;
@@ -209,6 +223,23 @@ export class ReplayParser {
 			return;
 		}
 		if (stream === 'PTL' && this.insideGameResetPTL && !this.fallbackLegacyGameResetPTL) {
+			return;
+		}
+
+		// --- Skip the PTL tail of a rewind that has already fired on the GS stream --------
+		// See {@link pendingPtlRewindFlush}: PTL lags behind GS, so after we emit
+		// REWIND_STARTED + restore the GS snapshot, the PTL stream is still emitting events
+		// for the rewound action (rewind-effect BLOCK + terminating TAG_CHANGEs on the origin
+		// entity). Those rewind-tail events have timestamps that land on or after the GS-side
+		// cutoff (REWIND_STARTED's timestamp), so they slip past the consumer's `< cutoff`
+		// drop window and re-leak rewound-branch state (e.g. CARD_REVEALED for an entityId
+		// that the engine will later reuse for a different post-rewind card - the original
+		// reporter bug here, where a Rewind Timeline cardId persisted onto the entity that
+		// post-rewind became a Scrappy Scavenger Discover pick). Drop them at the parser:
+		// `observeRewindEvents` above has already advanced controller state for this line, so
+		// `onPtlGameResetStart` will still fire on the upcoming PTL GAME_RESET BLOCK_START
+		// (which clears the flag).
+		if (stream === 'PTL' && this.pendingPtlRewindFlush) {
 			return;
 		}
 
@@ -286,6 +317,11 @@ export class ReplayParser {
 				this.insideGameResetGS = true;
 				this.rewindOriginGS = meta.originEntityId;
 				this.fallbackLegacyGameResetGS = false;
+				// GS rewind has fired - mark PTL as having a pending rewind flush so any tail
+				// events on the PTL stream (rendered after this point until PTL GAME_RESET
+				// arrives) are dropped instead of leaking past the consumer cutoff filter.
+				// See {@link pendingPtlRewindFlush}.
+				this.pendingPtlRewindFlush = true;
 				// Enqueue on the GS stream: ClearQueue() flushes GS before PTL, so any event
 				// that must be strictly ordered w.r.t. GS-stream parsers (e.g. ENTITY_CHOSEN,
 				// which lives on the GS NodeParser) MUST also be on the GS queue or it will
@@ -323,6 +359,13 @@ export class ReplayParser {
 		} else {
 			// PTL side: apply the parked PTL snapshot half if we have one.
 			const meta = this.rewindController.onPtlGameResetStart(originEntityId);
+			// PTL has now caught up to the rewind: any tail events that were being skipped
+			// by `pendingPtlRewindFlush` are behind us. Clear the flag so post-rewind PTL
+			// lines (the GAME_RESET block contents are still skipped via insideGameResetPTL,
+			// then once it closes the stream resumes normally) flow through. Do this even on
+			// the legacy fallback path - if a stale flag from a prior un-paired GS reset
+			// somehow survived, the PTL GAME_RESET we just hit is the natural "consume" point.
+			this.pendingPtlRewindFlush = false;
 			if (meta != null) {
 				this.insideGameResetPTL = true;
 				this.rewindOriginPTL = meta.originEntityId;
