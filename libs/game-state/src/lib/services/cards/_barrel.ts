@@ -103,6 +103,7 @@ export { GorgonzormuDeliciousCheese } from './gorgonzormu-delicious-cheese';
 export { GravelsnoutKnight } from './gravelsnout-knight';
 export { Grillmaster } from './grillmaster';
 export { GrimestreetInformant } from './grimestreet-informant';
+export { GronnGiant } from './gronn-giant';
 export { GuitarSoloist } from './guitar-soloist';
 export { HagathaTheWitchBewitchHeroic } from './hagatha-the-witch-bewitch';
 export { HemetFoamMarksman } from './hemet-foam-marksman';
