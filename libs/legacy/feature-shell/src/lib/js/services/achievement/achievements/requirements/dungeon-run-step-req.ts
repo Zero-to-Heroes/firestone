@@ -4,7 +4,6 @@ import { Requirement } from './_requirement';
 
 export class DungeonRunStepReq implements Requirement {
 	private isCorrectStep = false;
-	private assignedStep: boolean;
 
 	constructor(private readonly targetStep: number) {}
 
@@ -17,12 +16,10 @@ export class DungeonRunStepReq implements Requirement {
 
 	reset(): void {
 		this.isCorrectStep = false;
-		this.assignedStep = false;
 	}
 
 	afterAchievementCompletionReset(): void {
 		this.isCorrectStep = false;
-		this.assignedStep = false;
 	}
 
 	isCompleted(): boolean {
@@ -30,9 +27,11 @@ export class DungeonRunStepReq implements Requirement {
 	}
 
 	test(gameEvent: GameEvent): void {
-		if (!this.assignedStep && gameEvent.type === GameEvent.DUNGEON_RUN_STEP) {
-			this.isCorrectStep = gameEvent.additionalData.step === this.targetStep;
-			this.assignedStep = true;
+		if (gameEvent.type !== GameEvent.DUNGEON_RUN_STEP) {
+			return;
+		}
+		if (gameEvent.additionalData.step === this.targetStep) {
+			this.isCorrectStep = true;
 		}
 	}
 }
