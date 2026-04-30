@@ -147,18 +147,18 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 	): void {
 		const debug = card.entityId == 139;
 		this.possibleCards = [];
-		console.debug('[opponent-card-info-id] buildInfo', card);
+		// console.debug('[opponent-card-info-id] buildInfo', card);
 		// Keep the || to handle empty card id
 		// CreatorCardId first because this feels like the most relevant?
 		const realCardId = this.normalizeEnchantment(card.cardId, card.creatorCardId || card.lastAffectedByCardId);
-		console.debug(
-			'[opponent-card-info-id] realCardId',
-			card.entityId,
-			card.cardId,
-			card.creatorCardId,
-			card.lastAffectedByCardId,
-			realCardId,
-		);
+		// console.debug(
+		// 	'[opponent-card-info-id] realCardId',
+		// 	card.entityId,
+		// 	card.cardId,
+		// 	card.creatorCardId,
+		// 	card.lastAffectedByCardId,
+		// 	realCardId,
+		// );
 		// Gift icon: explicit creator, or only lastAffectedBy (e.g. one SHATTERED half missing CREATOR in logs but Spark is lastAffectedBy)
 		this.createdBy =
 			!card.cardId &&
@@ -180,23 +180,23 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 			realCardId ||
 			(this.createdBy && (card.creatorCardId || card.lastAffectedByCardId)) ||
 			(this.drawnBy && card.lastAffectedByCardId);
-		console.debug(
-			'[opponent-card-info-id] cardId',
-			this.cardId,
-			card.entityId,
-			card.cardId,
-			card.creatorCardId,
-			card.lastAffectedByCardId,
-			realCardId,
-			this.createdBy,
-			this.drawnBy,
-			this.hasBuffs,
-			this.forged,
-		);
+		// console.debug(
+		// 	'[opponent-card-info-id] cardId',
+		// 	this.cardId,
+		// 	card.entityId,
+		// 	card.cardId,
+		// 	card.creatorCardId,
+		// 	card.lastAffectedByCardId,
+		// 	realCardId,
+		// 	this.createdBy,
+		// 	this.drawnBy,
+		// 	this.hasBuffs,
+		// 	this.forged,
+		// );
 		this.cardUrl = this.cardId
 			? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${this.cardId}.jpg`
 			: undefined;
-		console.debug('[opponent-card-info-id] cardUrl', card.entityId, this.cardUrl);
+		// console.debug('[opponent-card-info-id] cardUrl', card.entityId, this.cardUrl);
 		this.guessedInfo = isGuessedInfoEmpty(card.guessedInfo) ? null : card.guessedInfo;
 		if (card.guessedInfo?.possibleCards?.length) {
 			this.possibleCards = [...card.guessedInfo!.possibleCards];
@@ -299,25 +299,25 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 					this.allCards,
 					{ arena: validArenaPool },
 				);
-				console.debug(
-					'[opponent-card-info-id] possibleForgedCards 2',
-					card.entityId,
-					possibleForgedCards,
-					metadata,
-				);
+				// console.debug(
+				// 	'[opponent-card-info-id] possibleForgedCards 2',
+				// 	card.entityId,
+				// 	possibleForgedCards,
+				// 	metadata,
+				// );
 				// Interesct the pool of forged cards with the pool of possible cards
 				const before = [...this.possibleCards];
 				// Forged cards appear as their forged version, while in the data we have the base vresion
 				this.possibleCards = this.possibleCards.filter((cardId) =>
 					possibleForgedCards.some((c) => c.startsWith(cardId)),
 				);
-				console.debug(
-					'[opponent-card-info-id] possibleCards after filtering',
-					card.entityId,
-					this.possibleCards,
-					before,
-					possibleForgedCards,
-				);
+				// console.debug(
+				// 	'[opponent-card-info-id] possibleCards after filtering',
+				// 	card.entityId,
+				// 	this.possibleCards,
+				// 	before,
+				// 	possibleForgedCards,
+				// );
 			}
 		}
 
@@ -346,14 +346,14 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 
 		if (this.possibleCards?.length && !this.createdBy && !this.drawnBy) {
 			this.onlyKnownPossibleCards = true;
-			console.debug('[opponent-card-info-id] onlyKnownPossibleCards', card.entityId);
+			// console.debug('[opponent-card-info-id] onlyKnownPossibleCards', card.entityId);
 		}
 		if (!this.cardId && this.possibleCards?.length === 1) {
 			this.cardId = this.possibleCards[0];
 			this.cardUrl = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${this.cardId}.jpg`;
 			this.onlyKnownPossibleCards = false;
 			this.possibleCards = [];
-			console.debug('[opponent-card-info-id] cardId set to single card', card.entityId, this.cardId);
+			// console.debug('[opponent-card-info-id] cardId set to single card', card.entityId, this.cardId);
 		}
 
 		this._card = card.update({
