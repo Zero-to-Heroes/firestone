@@ -228,6 +228,7 @@ export class ChallengeBuilderService {
 				return DeckbuildingNumberOfMinionsReq.create(rawReq, this.cards);
 
 			// The global stat reqs
+			// GLOBAL_STAT achievements are stripped in RawAchievementsLoaderService (unsupported).
 			// case 'GLOBAL_STAT': return GlobalStatReq.create(rawReq);
 
 			case 'BATTLEGROUNDS_FINISH': return BattlegroundsFinishReq.create(rawReq);
@@ -237,7 +238,7 @@ export class ChallengeBuilderService {
 			default: 
 				console.error('No requirement provider found, providing no-op requirement instead', rawReq.type, rawReq);
 				return {
-					test: () => true,
+					test: () => false,
 					afterAchievementCompletionReset: () => true,
 					isCompleted: () => true,
 					reset: () => true,

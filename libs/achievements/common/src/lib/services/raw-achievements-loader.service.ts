@@ -23,9 +23,10 @@ export class RawAchievementsLoaderService {
 		console.log('[achievements-loader] Initializing achievements');
 		console.debug('[achievements-loader] loading all achievements', new Error().stack);
 		const rawAchievements: readonly RawAchievement[] = await this.loadAll();
-		this.rawAchievements$$.next(rawAchievements);
-		console.log('[achievements-loader] loaded all', rawAchievements.length);
-		return rawAchievements;
+		const supported = omitAchievementsWithGlobalStatRequirement(rawAchievements);
+		this.rawAchievements$$.next(supported);
+		console.log('[achievements-loader] loaded all', supported.length);
+		return supported;
 	}
 
 	private async loadAll(): Promise<readonly RawAchievement[]> {
@@ -57,4 +58,15 @@ export class RawAchievementsLoaderService {
 	private async loadAchievements(fileName: string): Promise<readonly RawAchievement[] | null> {
 		return this.api.callGetApi(`${ACHIEVEMENTS_URL}/${fileName}.json`);
 	}
+}
+
+/** Firestone no longer supports GLOBAL_STAT; drop those definitions so they never surface in UI or monitors. */
+function omitAchievementsWithGlobalStatRequirement(
+	achievements: readonly RawAchievement[],
+): readonly RawAchievement[] {
+	return achievements.filter((a) => !achievementHasGlobalStatRequirement(a));
+}
+
+function achievementHasGlobalStatRequirement(achievement: RawAchievement): boolean {
+	return achievement.requirements?.some((req) => req.type === 'GLOBAL_STAT') ?? false;
 }
