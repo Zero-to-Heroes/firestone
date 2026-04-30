@@ -32,7 +32,7 @@ export class ConstructedArchetypeService {
 
 export const buildArchetypeName = (archetypeSlug: string | null | undefined, i18n: ILocalizationService): string => {
 	if (!archetypeSlug?.length) {
-		return 'No archetype';
+		return i18n.translateString(`archetype.no-archetype`);
 	}
 	archetypeSlug = archetypeSlug.replace('std-', '');
 	return i18n.translateString(`archetype.${archetypeSlug}`) === `archetype.${archetypeSlug}`
