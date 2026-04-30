@@ -53,6 +53,7 @@ export class FirestoneAchievementsChallengeService {
 
 	private async init() {
 		await waitForReady(this.prefs, this.mainWindowStateFacade);
+		// return;
 
 		combineLatest([
 			this.gameStatus.inGame$$,
@@ -76,7 +77,6 @@ export class FirestoneAchievementsChallengeService {
 					this.challengeModules.forEach((c) => c.resetState());
 					this.resetDispatchAfterGameExit();
 				});
-				return;
 				this.gameEvents.allEvents.subscribe((gameEvent: GameEvent) => {
 					this.handleEvent(gameEvent);
 					if (gameEvent.type === GameEvent.SPECTATING) {
@@ -197,16 +197,22 @@ export class FirestoneAchievementsChallengeService {
 	}
 
 	private async sendUnlockEvent(challenge: Challenge) {
-		console.debug('[firestone-achievements] sending unlock event', challenge.achievementId);
-		return;
+		const storedPrimary = this.achievementsStorage.getAchievement(challenge.achievementId);
+		if ((storedPrimary?.numberOfCompletions ?? 0) >= 1) {
+			return;
+		}
+
 		const rawAchievements = await this.achievementsStateManager.rawAchievements$$.getValueWithInit();
 		const achievement: Achievement = getAchievement(rawAchievements, challenge.achievementId);
-		console.debug('[firestone-achievements] sending unlock event 2', challenge.achievementId, achievement?.id);
+		console.debug('[firestone-achievements] sending unlock event', challenge.achievementId, achievement?.id);
 		if (!achievement) {
 			console.warn(
 				'[firestone-achievements] trying to send unlock event for empty achievement',
 				challenge.achievementId,
 			);
+			return;
+		}
+		if ((achievement.numberOfCompletions ?? 0) >= 1) {
 			return;
 		}
 
@@ -228,7 +234,9 @@ export class FirestoneAchievementsChallengeService {
 		for (const achv of allAchievements) {
 			const existingAchievement: CompletedAchievement = this.achievementsStorage.getAchievement(achv.id);
 			console.debug('[firestone-achievements] considering', achv.id, existingAchievement?.numberOfCompletions);
-			if (existingAchievement.numberOfCompletions >= 1) {
+			const completionsFromStorage = existingAchievement.numberOfCompletions ?? 0;
+			const completionsFromDefinition = achv.numberOfCompletions ?? 0;
+			if (completionsFromStorage >= 1 || completionsFromDefinition >= 1) {
 				continue;
 			}
 			const completedAchievement = new CompletedAchievement(
