@@ -3847,6 +3847,9 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inHand, inDeck), notInInitialDeck);
 		case CardIds.TendingDragonkin_FIR_960:
 			return and(side(inputSide), or(inHand, inDeck), beast);
+		case CardIds.TimberWolfLegacy:
+		case CardIds.TimberWolfVanilla:
+			return and(side(inputSide), or(inHand, inDeck), beast);
 		case CardIds.TenGallonHat_WW_811:
 			return and(side(inputSide), inDeck, minion);
 		case CardIds.ToadOfTheWilds:
