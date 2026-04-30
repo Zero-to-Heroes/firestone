@@ -54,6 +54,18 @@ Once you're done, before assigning the PR to me for review, please mention @curs
 
 - If you need to add texts, please use the localization mechanism, and update the English reference string at ../firestone-translations/firestone/enUS.json
 
+# Commits
+
+Commit message should be of the following format:
+
+<type> (<module>): <message>
+
+Where <type> is either:
+
+- fix
+- improved
+- added
+
 # General Guidelines for working with Nx
 
 - For navigating/exploring the workspace, invoke the `nx-workspace` skill first - it has patterns for querying projects, targets, and dependencies
