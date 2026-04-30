@@ -203,6 +203,7 @@ export { SandsOfTime } from './sands-of-time';
 export { ScaleReplica } from './scale-replica';
 export { SemiStablePortal } from './semi-stable-portal';
 export { ServantOfYoggSaron } from './servant-of-yogg-saron';
+export { ShadowOil } from './shadow-oil';
 export { ShadowedInformant } from './shadowed-informant';
 export { ShakuTheCollector } from './shaku-the-collector';
 export { ShallowGravedigger } from './shallow-gravedigger';
