@@ -1,10 +1,14 @@
 import { GameTag, ScenarioId } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventProvider } from '../game-event';
-import { Action, Node, NodeType, TagChange } from '../models';
+import { Action, Node, NodeType } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
+import {
+	actionHasDungeonHealthPassiveOnHero,
+	lastHeroHealthTagChangeInAction,
+} from './pve-run-step-health-passive';
 
 const STARTING_HEALTH = 10;
 
@@ -26,15 +30,15 @@ export class MonsterRunStepParser implements ActionParser {
 	}
 
 	AppliesOnCloseNode(node: Node, stateType: StateType): boolean {
-		return (
-			stateType === StateType.PowerTaskList &&
-			node.Type === NodeType.Action &&
-			(node.Object as Action).Data
-				.filter((data) => data.constructor === TagChange)
-				.map((data) => data as unknown as TagChange)
-				.filter((tag) => tag.Name === (GameTag.HEALTH as number) && !!tag.DefChange?.trim())
-				.length > 0
-		);
+		if (stateType !== StateType.PowerTaskList || node.Type !== NodeType.Action) {
+			return false;
+		}
+		const action = node.Object as Action;
+		const heroEntityId = this.resolveLocalHeroEntityId();
+		if (heroEntityId == null) {
+			return false;
+		}
+		return actionHasDungeonHealthPassiveOnHero(action, heroEntityId);
 	}
 
 	CreateGameEventProviderFromNew(_node: Node): GameEventProvider[] | null {
@@ -51,13 +55,14 @@ export class MonsterRunStepParser implements ActionParser {
 						return null;
 					}
 					const action = node.Object as Action;
-					const heroEntityId = this.ParserState.GetEntity(this.StateFacade.LocalPlayer!.Id)!.GetTag(
-						GameTag.HERO_ENTITY,
-					);
-					const tagChange = action.Data.filter((data) => data.constructor === TagChange)
-						.map((data) => data as unknown as TagChange)
-						.filter((tag) => tag.Name === (GameTag.HEALTH as number) && !!tag.DefChange?.trim())
-						.find((tag) => tag.Entity === heroEntityId);
+					const heroEntityId = this.resolveLocalHeroEntityId();
+					if (heroEntityId == null) {
+						return null;
+					}
+					if (!actionHasDungeonHealthPassiveOnHero(action, heroEntityId)) {
+						return null;
+					}
+					const tagChange = lastHeroHealthTagChangeInAction(action, heroEntityId);
 					const healthChangeDef =
 						(tagChange != null
 							? tagChange.Value
@@ -72,5 +77,18 @@ export class MonsterRunStepParser implements ActionParser {
 				node,
 			),
 		];
+	}
+
+	private resolveLocalHeroEntityId(): number | null {
+		const localPlayerId = this.StateFacade.LocalPlayer?.Id;
+		if (localPlayerId == null) {
+			return null;
+		}
+		const playerEntity = this.ParserState.GetEntity(localPlayerId);
+		if (playerEntity == null) {
+			return null;
+		}
+		const heroEntityId = playerEntity.GetTag(GameTag.HERO_ENTITY);
+		return heroEntityId > 0 ? heroEntityId : null;
 	}
 }

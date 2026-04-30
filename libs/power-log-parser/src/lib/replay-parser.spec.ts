@@ -54,6 +54,19 @@ describe('ReplayParser', () => {
 	});
 });
 
+describe('Dungeon run step (LOOTA passive health enchant)', () => {
+	it('should emit DUNGEON_RUN_STEP when HEALTH TAG_CHANGE has no DEF CHANGE suffix', () => {
+		const parser = new ReplayParser();
+		const events: GameEvent[] = [];
+		parser.onGameEvent = (event) => events.push(event);
+		const lines = loadTestLog('dungeon_run_loota_health_passive');
+		parser.FromString(lines);
+		const dungeonSteps = events.filter((e) => e.Type === 'DUNGEON_RUN_STEP');
+		expect(dungeonSteps.length).toBeGreaterThanOrEqual(1);
+		expect(dungeonSteps.some((e) => e.Value === 3)).toBe(true);
+	});
+});
+
 describe('Golden event files are loadable', () => {
 	const scenarios = discoverScenarios();
 

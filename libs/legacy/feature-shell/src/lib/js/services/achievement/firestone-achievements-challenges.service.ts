@@ -1,6 +1,7 @@
 import { Injectable, NgZone } from '@angular/core';
 import {
 	Achievement,
+	AchievementsMemoryMonitor,
 	AchievementsStateManagerService,
 	AchievementsStorageService,
 	CompletedAchievement,
@@ -34,6 +35,7 @@ export class FirestoneAchievementsChallengeService {
 		private readonly prefs: PreferencesService,
 		private readonly achievementsStorage: AchievementsStorageService,
 		private readonly remoteAchievements: FirestoneRemoteAchievementsLoaderService,
+		private readonly achievementsMemoryMonitor: AchievementsMemoryMonitor,
 		private readonly events: Events,
 		private readonly achievementsStateManager: AchievementsStateManagerService,
 		private readonly challengeBuilder: ChallengeBuilderService,
@@ -109,8 +111,36 @@ export class FirestoneAchievementsChallengeService {
 		if (!raw.canBeCompletedOnlyOnce) {
 			return true;
 		}
+		const remoteDone =
+			(this.remoteAchievements.remoteAchievements$$.value ?? []).find((c) => c.id === raw.id)
+				?.numberOfCompletions ?? 0;
+		if (remoteDone >= 1) {
+			return false;
+		}
 		const existing = this.achievementsStorage.getAchievement(raw.id);
 		return (existing?.numberOfCompletions ?? 0) < 1;
+	}
+
+	/** Cross-session completions live in remote/disk cache + HS memory; session cache alone is not hydrated on startup. */
+	private async recordedCompletionCount(
+		achievementId: string,
+		hsAchievementId: number | undefined,
+	): Promise<number> {
+		const remoteList = this.remoteAchievements.remoteAchievements$$.value ?? [];
+		const remoteEntry = remoteList.find((c) => c.id === achievementId);
+		const remoteCount = remoteEntry?.numberOfCompletions ?? 0;
+		const storageCount = this.achievementsStorage.getAchievement(achievementId).numberOfCompletions ?? 0;
+
+		let hsCompletedCount = 0;
+		if (hsAchievementId != null && hsAchievementId > 0) {
+			const memoryAchievements = await this.achievementsMemoryMonitor.achievementsFromMemory$$.getValueWithInit();
+			const match = memoryAchievements?.find((a) => a.id === hsAchievementId);
+			if (match?.completed) {
+				hsCompletedCount = 1;
+			}
+		}
+
+		return Math.max(remoteCount, storageCount, hsCompletedCount);
 	}
 
 	private resetDispatchAfterGameExit() {
@@ -198,11 +228,6 @@ export class FirestoneAchievementsChallengeService {
 
 	private async sendUnlockEvent(challenge: Challenge) {
 		const achievementId = challenge.achievementId;
-		const storedPrimary = this.achievementsStorage.getAchievement(achievementId);
-		if ((storedPrimary?.numberOfCompletions ?? 0) >= 1) {
-			console.debug('[firestone-achievements] skip unlock (alreadyCompleteInStorage)', achievementId);
-			return;
-		}
 
 		const rawAchievements = await this.achievementsStateManager.rawAchievements$$.getValueWithInit();
 		const achievement: Achievement = getAchievement(rawAchievements, achievementId);
@@ -210,12 +235,10 @@ export class FirestoneAchievementsChallengeService {
 			console.warn('[firestone-achievements] skip unlock (noDefinition)', achievementId);
 			return;
 		}
-		if ((achievement.numberOfCompletions ?? 0) >= 1) {
-			console.debug(
-				'[firestone-achievements] skip unlock (alreadyCompleteInDefinition)',
-				achievementId,
-				achievement.numberOfCompletions,
-			);
+
+		const completions = await this.recordedCompletionCount(achievementId, achievement.hsAchievementId);
+		if (completions >= 1) {
+			console.debug('[firestone-achievements] skip unlock (alreadyCompleteRecorded)', achievementId, completions);
 			return;
 		}
 
@@ -241,16 +264,12 @@ export class FirestoneAchievementsChallengeService {
 
 		let enqueuedAny = false;
 		for (const achv of allAchievements) {
-			const existingAchievement: CompletedAchievement = this.achievementsStorage.getAchievement(achv.id);
-			const completionsFromStorage = existingAchievement.numberOfCompletions ?? 0;
-			const completionsFromDefinition = achv.numberOfCompletions ?? 0;
-			if (completionsFromStorage >= 1 || completionsFromDefinition >= 1) {
-				console.debug('[firestone-achievements] skip grant (already complete)', achv.id, {
-					completionsFromStorage,
-					completionsFromDefinition,
-				});
+			const recorded = await this.recordedCompletionCount(achv.id, achv.hsAchievementId);
+			if (recorded >= 1) {
+				console.debug('[firestone-achievements] skip grant (already complete)', achv.id, { recorded });
 				continue;
 			}
+			const existingAchievement: CompletedAchievement = this.achievementsStorage.getAchievement(achv.id);
 			const completedAchievement = new CompletedAchievement(
 				existingAchievement.id,
 				existingAchievement.numberOfCompletions + 1,
