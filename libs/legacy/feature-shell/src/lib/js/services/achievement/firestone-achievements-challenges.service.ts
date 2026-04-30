@@ -197,25 +197,29 @@ export class FirestoneAchievementsChallengeService {
 	}
 
 	private async sendUnlockEvent(challenge: Challenge) {
-		const storedPrimary = this.achievementsStorage.getAchievement(challenge.achievementId);
+		const achievementId = challenge.achievementId;
+		const storedPrimary = this.achievementsStorage.getAchievement(achievementId);
 		if ((storedPrimary?.numberOfCompletions ?? 0) >= 1) {
+			console.debug('[firestone-achievements] skip unlock (alreadyCompleteInStorage)', achievementId);
 			return;
 		}
 
 		const rawAchievements = await this.achievementsStateManager.rawAchievements$$.getValueWithInit();
-		const achievement: Achievement = getAchievement(rawAchievements, challenge.achievementId);
-		console.debug('[firestone-achievements] sending unlock event', challenge.achievementId, achievement?.id);
+		const achievement: Achievement = getAchievement(rawAchievements, achievementId);
 		if (!achievement) {
-			console.warn(
-				'[firestone-achievements] trying to send unlock event for empty achievement',
-				challenge.achievementId,
-			);
+			console.warn('[firestone-achievements] skip unlock (noDefinition)', achievementId);
 			return;
 		}
 		if ((achievement.numberOfCompletions ?? 0) >= 1) {
+			console.debug(
+				'[firestone-achievements] skip unlock (alreadyCompleteInDefinition)',
+				achievementId,
+				achievement.numberOfCompletions,
+			);
 			return;
 		}
 
+		console.debug('[firestone-achievements] processing unlock event', achievementId, achievement.type);
 		await this.sendUnlockEventFromAchievement(achievement);
 	}
 
@@ -229,32 +233,43 @@ export class FirestoneAchievementsChallengeService {
 		const autoGrantAchievements = getAchievements(rawAchievements, achievement.linkedAchievementIds);
 		const allAchievements =
 			autoGrantAchievements.length > 0 ? [achievement, ...autoGrantAchievements] : [achievement];
-		console.debug('[firestone-achievements] allAchievements count', allAchievements.length);
+		console.debug('[firestone-achievements] unlock persistence targets', {
+			primaryId: achievement.id,
+			count: allAchievements.length,
+			ids: allAchievements.map((a) => a.id),
+		});
 
+		let enqueuedAny = false;
 		for (const achv of allAchievements) {
 			const existingAchievement: CompletedAchievement = this.achievementsStorage.getAchievement(achv.id);
-			console.debug('[firestone-achievements] considering', achv.id, existingAchievement?.numberOfCompletions);
 			const completionsFromStorage = existingAchievement.numberOfCompletions ?? 0;
 			const completionsFromDefinition = achv.numberOfCompletions ?? 0;
 			if (completionsFromStorage >= 1 || completionsFromDefinition >= 1) {
+				console.debug('[firestone-achievements] skip grant (already complete)', achv.id, {
+					completionsFromStorage,
+					completionsFromDefinition,
+				});
 				continue;
 			}
 			const completedAchievement = new CompletedAchievement(
 				existingAchievement.id,
 				existingAchievement.numberOfCompletions + 1,
 			);
-			console.log('[firestone-achievements] starting process of completed achievement', achievement.id);
+			console.debug('[firestone-achievements] persisting completion', achv.id, achv.type);
 			const mergedAchievement = {
 				...achv,
 				numberOfCompletions: completedAchievement.numberOfCompletions,
 			} as Achievement;
 
 			this.achievementsStorage.save(completedAchievement);
-			console.log('[firestone-achievements] saved achievement', achievement.id);
-			this.remoteAchievements.publishRemoteAchievement(mergedAchievement);
-			console.log('[firestone-achievements] broadcasting event completion event', achievement.id);
+			await this.remoteAchievements.publishRemoteAchievement(mergedAchievement);
+			console.debug('[firestone-achievements] completion published to local stream + optional remote', achv.id);
 
 			this.processingQueue.enqueue({ achievement: mergedAchievement } as InternalEvent);
+			enqueuedAny = true;
+		}
+		if (!enqueuedAny) {
+			console.debug('[firestone-achievements] unlock had no grants (all targets already complete)', achievement.id);
 		}
 	}
 

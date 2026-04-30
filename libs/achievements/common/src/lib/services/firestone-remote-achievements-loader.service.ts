@@ -59,33 +59,38 @@ export class FirestoneRemoteAchievementsLoaderService implements IRemoteAchievem
 			this.userService.getCurrentUser(),
 			this.reviewIdService.reviewId$$,
 		]);
-		if (!currentUser) {
-			return;
+		if (currentUser) {
+			const statEvent = {
+				creationDate: new Date(),
+				reviewId: reviewId,
+				userId: currentUser.userId,
+				userMachineId: currentUser.machineId,
+				userName: currentUser.username,
+				achievementId: achievement.id,
+				name: achievement.name,
+				type: achievement.type,
+				cardId: achievement.displayCardId,
+				numberOfCompletions: achievement.numberOfCompletions,
+			};
+			this.api.callPostApi(ACHIEVEMENTS_UPDATE_URL, statEvent);
+		} else {
+			console.debug(
+				'[achievements] skip remote POST (no user); updating local completion stream only',
+				achievement.id,
+			);
 		}
-		const statEvent = {
-			creationDate: new Date(),
-			reviewId: reviewId,
-			userId: currentUser.userId,
-			userMachineId: currentUser.machineId,
-			userName: currentUser.username,
-			achievementId: achievement.id,
-			name: achievement.name,
-			type: achievement.type,
-			cardId: achievement.displayCardId,
-			numberOfCompletions: achievement.numberOfCompletions,
-		};
-		this.api.callPostApi(ACHIEVEMENTS_UPDATE_URL, statEvent);
 		this.updateCompletedAchievements(achievement);
 	}
 
 	private updateCompletedAchievements(achievement: Achievement) {
-		const newCompletedAchievements = [
-			CompletedAchievement.create({
-				id: achievement.id,
-				numberOfCompletions: 1,
-			}),
-			...(this.remoteAchievements$$.value ?? []),
-		];
+		const completions = achievement.numberOfCompletions ?? 1;
+		const entry = CompletedAchievement.create({
+			id: achievement.id,
+			numberOfCompletions: completions,
+		});
+		const previous = this.remoteAchievements$$.value ?? [];
+		const withoutSameId = previous.filter((c) => c.id !== achievement.id);
+		const newCompletedAchievements = [entry, ...withoutSameId];
 		this.remoteAchievements$$.next(newCompletedAchievements);
 		const newLocalResult: LocalRemoteAchievements = {
 			lastUpdateDate: new Date(),
