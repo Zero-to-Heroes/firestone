@@ -19,8 +19,10 @@ import { BehaviorSubject, Observable, combineLatest, share } from 'rxjs';
 	selector: 'dk-runes',
 	styleUrls: ['../../../../css/component/decktracker/overlay/dk-runes.component.scss'],
 	template: `
-		<ng-container *ngIf="{ showRunes: showRunes$ | async, runes: dkRunes$ | async } as value">
-			<div class="dk-runes" *ngIf="value.showRunes">
+		<ng-container
+			*ngIf="{ showRunes: showRunes$ | async, runes: dkRunes$ | async, hasRunes: hasRunes$ | async } as value"
+		>
+			<div class="dk-runes" *ngIf="value.showRunes && !!value.hasRunes">
 				<div
 					class="runes-label"
 					[owTranslate]="'app.duels.deckbuilder.dk-runes-text'"
@@ -37,6 +39,7 @@ import { BehaviorSubject, Observable, combineLatest, share } from 'rxjs';
 export class DkRunesComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	dkRunes$: Observable<readonly DkRune[]>;
 	showRunes$: Observable<boolean>;
+	hasRunes$: Observable<boolean>;
 
 	@Output() dkRunes = new EventEmitter<readonly DkRune[]>();
 
@@ -126,10 +129,12 @@ export class DkRunesComponent extends AbstractSubscriptionComponent implements A
 						image: `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/runes/emptyrune.png`,
 					});
 				}
+				console.debug('[dk-runes] runes', result, runes);
 				return result;
 			}),
 		);
 		this.dkRunes$.pipe(this.mapData((info) => info)).subscribe(this.dkRunes);
+		this.hasRunes$ = runesInDeck$.pipe(this.mapData((info) => !!info?.length));
 	}
 }
 
