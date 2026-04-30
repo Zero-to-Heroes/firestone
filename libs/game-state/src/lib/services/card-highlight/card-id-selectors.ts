@@ -1723,6 +1723,12 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), minion);
 		case CardIds.GreenThumbGardener:
 			return and(side(inputSide), or(inDeck, inHand), spell);
+		// Gadgetzan Auctioneer: Whenever you cast a spell, draw a card.
+		case CardIds.GadgetzanAuctioneerCore:
+		case CardIds.GadgetzanAuctioneerLegacy:
+		case CardIds.GadgetzanAuctioneerTavernBrawl:
+		case CardIds.GadgetzanAuctioneerVanilla:
+			return and(side(inputSide), or(inDeck, inHand), spellExtended);
 		// Grey Sage Parrot: Battlecry: Repeat the last spell you've cast that costs (6) or more.
 		case CardIds.GreySageParrot:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended, effectiveCostMore(5));
@@ -2626,6 +2632,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, minion, deathrattle);
 		case CardIds.NecriumBlade:
 			return and(side(inputSide), or(inHand, inDeck), deathrattle);
+		// Necrium Vial: Trigger a friendly minion's Deathrattle twice.
 		case CardIds.NecriumVial:
 			return and(side(inputSide), or(inHand, inDeck), deathrattle);
 		case CardIds.NecroticMortician:
@@ -3182,6 +3189,12 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), spell, dealsDamage);
 		case CardIds.RobesOfShrinkingTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), spell);
+		// Ruby Sanctum: Your next Healing effect this turn deals damage instead.
+		case CardIds.RubySanctum_CATA_301:
+			return highlightConditions(
+				and(side(inputSide), or(inDeck, inHand), restoreHealthStrict),
+				and(side(inputSide), or(inDeck, inHand), lifesteal),
+			);
 		case CardIds.RocketBackpacksTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), minion, not(rush));
 		case CardIds.RockMasterVoone_ETC_121:
