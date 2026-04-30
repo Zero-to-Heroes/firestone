@@ -132,13 +132,20 @@ export class Oracle {
 				}
 			}
 		}
-		if (!creatorTuple?.[0]) {
+		// Only attribute to a SHATTER source spell (Spark of Life / Sands of Time) when the entity is
+		// actually a shatter piece — either the SHATTERED tag is set, or the parser is currently inside
+		// the shatter sub-spell. Without this guard, any later draw with no CardId (e.g. Smoldering
+		// Grove drawing from the opponent deck) would inherit the spell still sitting in the graveyard.
+		const isShattered = entity.GetTag(GameTag.SHATTERED) === 1;
+		const isBeingShattered =
+			gameState.ParserState.CurrentSubSpell?.Prefab === 'CATAFX_Shattered_Combined_OverrideSpawn_Super';
+		if (!creatorTuple?.[0] && (isShattered || isBeingShattered)) {
 			const shatteredFallback = Oracle.FindShatteredPieceCreatorFromGraveyard(gameState, entity);
 			if (shatteredFallback) {
 				creatorTuple = shatteredFallback;
 			}
 		}
-		if (!creatorTuple?.[0] && entity.GetTag(GameTag.SHATTERED) === 1) {
+		if (!creatorTuple?.[0] && isShattered) {
 			const informantDiscover = Oracle.FindShatteredPieceCreatorFromDiscoverInformant(gameState, entity);
 			if (informantDiscover) {
 				creatorTuple = informantDiscover;
@@ -149,11 +156,8 @@ export class Oracle {
 		// card was drawn from deck (e.g. Dragonscale Armaments) and split by Shatter. Only use
 		// parent-chain inference when the entity is not SHATTERED — Spark/Sands still resolve via
 		// {@link FindShatteredPieceCreatorFromGraveyard} above.
-		if (!creatorTuple?.[0] && entity.GetTag(GameTag.SHATTERED) !== 1) {
-			// The SHATTERED tag isn't set, but we're in the process of shattering the card, so we assume it's a SHATTERED card
-			if (gameState.ParserState.CurrentSubSpell?.Prefab !== 'CATAFX_Shattered_Combined_OverrideSpawn_Super') {
-				creatorTuple = Oracle.FindParentEntity(gameState, node);
-			}
+		if (!creatorTuple?.[0] && !isShattered && !isBeingShattered) {
+			creatorTuple = Oracle.FindParentEntity(gameState, node);
 		}
 		return creatorTuple;
 	}

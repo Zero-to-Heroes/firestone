@@ -30,7 +30,13 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 	template: `
 		<div
 			class="opponent-card-info-id"
-			*ngIf="(hasBuffs && displayBuff) || (cardId && displayGuess) || forged || onlyKnownPossibleCards || (sequenceInfo != null && displaySequenceInfo)"
+			*ngIf="
+				(hasBuffs && displayBuff) ||
+				(cardId && displayGuess) ||
+				forged ||
+				onlyKnownPossibleCards ||
+				(sequenceInfo != null && displaySequenceInfo)
+			"
 			cardTooltip
 			[cardTooltipCard]="_card"
 			cardTooltipPosition="bottom-right"
@@ -145,12 +151,19 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 		// Keep the || to handle empty card id
 		// CreatorCardId first because this feels like the most relevant?
 		const realCardId = this.normalizeEnchantment(card.cardId, card.creatorCardId || card.lastAffectedByCardId);
+		console.debug(
+			'[opponent-card-info-id] realCardId',
+			card.entityId,
+			card.cardId,
+			card.creatorCardId,
+			card.lastAffectedByCardId,
+			realCardId,
+		);
 		// Gift icon: explicit creator, or only lastAffectedBy (e.g. one SHATTERED half missing CREATOR in logs but Spark is lastAffectedBy)
 		this.createdBy =
 			!card.cardId &&
 			(!!card.creatorCardId ||
-				(!!card.lastAffectedByCardId &&
-					giftCreators.includes(card.lastAffectedByCardId as CardIds)));
+				(!!card.lastAffectedByCardId && giftCreators.includes(card.lastAffectedByCardId as CardIds)));
 		this.drawnBy =
 			!card.cardId &&
 			!!card.lastAffectedByCardId &&
@@ -167,9 +180,23 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 			realCardId ||
 			(this.createdBy && (card.creatorCardId || card.lastAffectedByCardId)) ||
 			(this.drawnBy && card.lastAffectedByCardId);
+		console.debug(
+			'[opponent-card-info-id] cardId',
+			this.cardId,
+			card.entityId,
+			card.cardId,
+			card.creatorCardId,
+			card.lastAffectedByCardId,
+			realCardId,
+			this.createdBy,
+			this.drawnBy,
+			this.hasBuffs,
+			this.forged,
+		);
 		this.cardUrl = this.cardId
 			? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${this.cardId}.jpg`
 			: undefined;
+		console.debug('[opponent-card-info-id] cardUrl', card.entityId, this.cardUrl);
 		this.guessedInfo = isGuessedInfoEmpty(card.guessedInfo) ? null : card.guessedInfo;
 		if (card.guessedInfo?.possibleCards?.length) {
 			this.possibleCards = [...card.guessedInfo!.possibleCards];

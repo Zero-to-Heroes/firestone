@@ -174,6 +174,17 @@ export class CardDrawParser implements EventParser {
 			(!isCardDrawnBySecretPassage && isCastWhenDrawn(updatedCardId, this.allCards)) ||
 			(publicCardInfos.includes(lastInfluencedByCardId) &&
 				!hiddenWhenDrawFromDeck.includes(lastInfluencedByCardId));
+		console.debug(
+			`[card-draw] isCardInfoPublic=${isCardInfoPublic}`,
+			`isPlayer=${isPlayer}`,
+			`useTopOfDeckToIdentifyCard=${useTopOfDeckToIdentifyCard}`,
+			`useBottomOfDeckToIdentifyCard=${useBottomOfDeckToIdentifyCard}`,
+			`isCardDrawnBySecretPassage=${isCardDrawnBySecretPassage}`,
+			`isCastWhenDrawn=${isCastWhenDrawn(updatedCardId, this.allCards)}`,
+			`publicCardInfos.includes(lastInfluencedByCardId)=${publicCardInfos.includes(lastInfluencedByCardId)}`,
+			`hiddenWhenDrawFromDeck.includes(lastInfluencedByCardId)=${hiddenWhenDrawFromDeck.includes(lastInfluencedByCardId)}`,
+			`lastInfluencedByCardId=${lastInfluencedByCardId}`,
+		);
 		const isCreatorPublic =
 			isCardInfoPublic ||
 			// So that we prevent an info leak when a card traded back into the deck is drawn via a tutor

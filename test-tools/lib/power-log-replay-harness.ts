@@ -245,6 +245,7 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	'rewind-opp-hand': 'rewind-opp-hand/rewind-opp-hand.log',
 	'divergence-hellfire': 'divergence-hellfire/divergence-hellfire.log',
 	'coin-in-opp-deck': 'coin-in-opp-deck/coin-in-opp-deck.log',
+	'smoldering-grove': 'smoldering-grove/smoldering-grove.log',
 };
 
 /**
