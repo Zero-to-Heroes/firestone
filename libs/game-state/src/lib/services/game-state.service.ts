@@ -572,7 +572,6 @@ export class GameStateService {
 			timing: 'after',
 		});
 
-
 		// We have processed the event for which the secret would trigger
 		if (
 			gameEvent.type !== GameEvent.SECRET_WILL_TRIGGER &&
@@ -605,17 +604,16 @@ export class GameStateService {
 				// GameEvent.SUB_SPELL_END,
 			].includes(gameEvent.type)
 		) {
-			// Avoid dumping `currentState` / `gameEvent` here: in production with the
-			// Overwolf devtools console attached, serialising the full GameState graph on
-			// every event was a measurable freeze contributor. Keep the lightweight
-			// identifying fields - they're enough to reconstruct timelines from logs.
 			console.debug(
 				'[game-state] processed event',
 				gameEvent.type,
 				gameEvent.cardId,
 				`entityId:${gameEvent.entityId}`,
 				(gameEvent as MinionsDiedEvent)?.additionalData?.deadMinions?.map((m) => `entityId:${m.EntityId}`),
-				`localPlayerId=${currentState.localPlayerId}`,
+				currentState.opponentDeck.board.map((c) => c.relatedCardIds),
+				currentState.opponentDeck.board,
+				currentState,
+				gameEvent,
 			);
 		}
 		return currentState;

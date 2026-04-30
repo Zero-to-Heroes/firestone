@@ -759,6 +759,8 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 			cardName = card.cardName;
 		} else if (this._referenceCard?.name?.length) {
 			cardName = this._referenceCard.name;
+		} else if (card.guessedInfo?.possibleCards?.length === 1) {
+			cardName = this.cards.getCard(card.guessedInfo.possibleCards[0])?.name;
 		} else if (card.dredged && (card.lastAffectedByCardIds?.length || card.lastAffectedByCardId)) {
 			const dredgerId = card.lastAffectedByCardIds?.[0] ?? card.lastAffectedByCardId;
 			const dredgerName = this.cards.getCard(dredgerId)?.name;
@@ -780,6 +782,8 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 			cardName = creatorName?.length
 				? this.i18n.getLastAffectedByCardName(creatorName)
 				: this.i18n.getUnknownCardName();
+		} else if (!!card.guessedInfo?.mechanics?.length) {
+			cardName = this.i18n.getUnknownMechanicsName(card.guessedInfo.mechanics[0]);
 		} else {
 			cardName = this.i18n.getUnknownCardName();
 		}

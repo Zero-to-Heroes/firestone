@@ -1,3 +1,4 @@
+import { GameTag } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameState } from '../../../../models/game-state';
 import { getShatteredRecombinedPossibleCards } from '../../../card-utils';
@@ -55,6 +56,7 @@ export class ShatterRecombineParser implements ActionChainParser {
 		const updatedGuessedInfo = {
 			...cardInHand.guessedInfo,
 			possibleCards: possibleCards,
+			mechanics: [...(cardInHand.guessedInfo?.mechanics ?? []), GameTag.SHATTER],
 		};
 		const updatedCardInHand = cardInHand.update({
 			guessedInfo: updatedGuessedInfo,

@@ -9,7 +9,7 @@ import { DeckCard, DeckState, GameState, Metadata } from '@firestone/game-state'
 		<div class="opponent-card-info scalable" [style.left.vh]="leftVwOffset" [style.top.vh]="topVwOffset">
 			<opponent-card-turn-number *ngIf="displayTurnNumber" [card]="card"></opponent-card-turn-number>
 			<opponent-card-info-id
-				*ngIf="displayGuess || displayBuff"
+				*ngIf="displayGuess || displayBuff || displaySequenceInfo"
 				[displayGuess]="displayGuess"
 				[displayBuff]="displayBuff"
 				[displaySequenceInfo]="displaySequenceInfo"

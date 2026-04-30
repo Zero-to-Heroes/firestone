@@ -30,7 +30,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 	template: `
 		<div
 			class="opponent-card-info-id"
-			*ngIf="(hasBuffs && displayBuff) || (cardId && displayGuess) || forged || onlyKnownPossibleCards"
+			*ngIf="(hasBuffs && displayBuff) || (cardId && displayGuess) || forged || onlyKnownPossibleCards || (sequenceInfo != null && displaySequenceInfo)"
 			cardTooltip
 			[cardTooltipCard]="_card"
 			cardTooltipPosition="bottom-right"

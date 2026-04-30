@@ -215,9 +215,7 @@ export const getShatteredPossibleCards = (
 ): readonly string[] => {
 	const cardClasses: readonly CardClass[] = guessedInfo?.canBeAnyCardClass
 		? []
-		: guessedInfo?.cardClasses ?? [
-				deckState.getCurrentClassEnum() ?? CardClass.NEUTRAL,
-			];
+		: (guessedInfo?.cardClasses ?? [deckState.getCurrentClassEnum() ?? CardClass.NEUTRAL]);
 	// // console.debug('cardClasses', cardClasses);
 	// if (!cardClasses.length) {
 	// 	return [];
@@ -260,9 +258,7 @@ export const getShatteredRecombinedPossibleCards = (
 ): readonly string[] => {
 	const cardClasses: readonly CardClass[] = guessedInfo?.canBeAnyCardClass
 		? []
-		: guessedInfo?.cardClasses ?? [
-				deckState.getCurrentClassEnum() ?? CardClass.NEUTRAL,
-			];
+		: (guessedInfo?.cardClasses ?? [deckState.getCurrentClassEnum() ?? CardClass.NEUTRAL]);
 	// // console.debug('cardClasses', cardClasses);
 	// if (!cardClasses.length) {
 	// 	return [];
@@ -374,25 +370,19 @@ export const addGuessInfoToCard = (
 				useFirstHalf = card.createdIndex % 2 === 0;
 			} else {
 				const peers: DeckCard[] = [
-					...deckState.hand.filter(
-						(c) => c.tags?.[GameTag.SHATTERED] === 1 && !c.cardId?.length,
-					),
+					...deckState.hand.filter((c) => c.tags?.[GameTag.SHATTERED] === 1 && !c.cardId?.length),
 				];
 				if (!peers.some((c) => c.entityId === card.entityId)) {
 					peers.push(card);
 				}
-				peers.sort(
-					(a, b) =>
-						(a.tags?.[GameTag.ZONE_POSITION] ?? 0) - (b.tags?.[GameTag.ZONE_POSITION] ?? 0),
-				);
+				peers.sort((a, b) => (a.tags?.[GameTag.ZONE_POSITION] ?? 0) - (b.tags?.[GameTag.ZONE_POSITION] ?? 0));
 				const shardIdx = peers.findIndex((c) => c.entityId === card.entityId);
 				useFirstHalf = shardIdx >= 0 ? shardIdx % 2 === 0 : true;
 			}
 			newGuessedInfo = {
 				...newGuessedInfo,
-				possibleCards: possibleCards.filter((c, index) =>
-					useFirstHalf ? index % 2 === 0 : index % 2 === 1,
-				),
+				possibleCards: possibleCards.filter((c, index) => (useFirstHalf ? index % 2 === 0 : index % 2 === 1)),
+				mechanics: [...(newGuessedInfo?.mechanics ?? []), GameTag.SHATTERED],
 			};
 		}
 	}

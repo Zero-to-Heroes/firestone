@@ -3,6 +3,7 @@ import { GameTag } from '@firestone-hs/reference-data';
 import { CollectionCardType } from '@firestone-hs/user-packs';
 import { CARDS_VERSION, formatClass } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
+import { capitalizeFirstLetter } from '@firestone/shared/framework/common';
 import { FIRESTONE_STATIC_CARD_IMAGES_BASE, ImageLocalizationOptions } from '@firestone/shared/framework/core';
 import { TranslateService } from '@ngx-translate/core';
 import { distinctUntilChanged, map } from 'rxjs/operators';
@@ -117,9 +118,18 @@ export class LocalizationService {
 	}
 
 	public getUnknownMechanicsName(gameTag: GameTag): string {
-		const mechanics = this.translateString(`global.mechanics.${GameTag[gameTag].toLowerCase()}`);
+		const key = `global.mechanics.${GameTag[gameTag]?.toLowerCase()}`;
+		let mechanics = this.translateString(key);
+		if (mechanics === key) {
+			mechanics = capitalizeFirstLetter(GameTag[gameTag]?.toLocaleLowerCase().replaceAll('_', ' '));
+		}
+		if (!mechanics) {
+			mechanics = this.translateString('decktracker.unknown-mechanics-card', {
+				mechanics: gameTag,
+			});
+		}
 		return this.translateString('decktracker.unknown-mechanics-card', {
-			gameTag: mechanics,
+			mechanics: mechanics,
 		});
 	}
 
