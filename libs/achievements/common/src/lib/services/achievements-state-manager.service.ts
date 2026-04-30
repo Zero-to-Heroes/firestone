@@ -152,14 +152,10 @@ export class AchievementsStateManagerService extends AbstractFacadeService<Achie
 		);
 		const mergedAchievements = convertForDisplay(achievementsWithCompletion);
 		const categories = buildCategories(mergedAchievements, categoryConfiguration);
-		// console.debug(
-		// 	'[achievements-state] built categories',
-		// 	categories,
-		// 	'in',
-		// 	Date.now() - start,
-		// 	'ms',
-		// 	achievementsWithCompletion.filter((a) => a.hsRewardTrackXp),
-		// );
+		const elapsedMs = Date.now() - start;
+		if (elapsedMs > 500) {
+			console.debug('[achievements-state] slow buildGroupedAchievements', elapsedMs, 'ms');
+		}
 		return categories;
 	}
 
@@ -225,25 +221,35 @@ const addCompletionInfo = (
 	completedAchievements: readonly CompletedAchievement[],
 	achievementsFromMemory: readonly HsAchievementInfo[],
 ): readonly Achievement[] => {
-	const achievementsWithCompletion = allAchievements.map((ref: Achievement) => {
-		const completedAchievement = completedAchievements?.find((compl) => compl.id === ref.id);
-		const achievementFromMemory = achievementsFromMemory?.find((ach) => ach.id === ref.hsAchievementId);
+	const completedByAchievementId = new Map<string, CompletedAchievement>();
+	for (const compl of completedAchievements ?? []) {
+		if (compl?.id != null) {
+			completedByAchievementId.set(compl.id, compl);
+		}
+	}
+	const memoryByHsAchievementId = new Map<number, HsAchievementInfo>();
+	for (const ach of achievementsFromMemory ?? []) {
+		memoryByHsAchievementId.set(ach.id, ach);
+	}
+
+	return allAchievements.map((ref: Achievement) => {
+		const completedAchievement = completedByAchievementId.get(ref.id);
+		const achievementFromMemory = memoryByHsAchievementId.get(ref.hsAchievementId);
 		let numberOfCompletions = completedAchievement ? (completedAchievement.numberOfCompletions ?? 0) : 0;
 		numberOfCompletions = numberOfCompletions > 0 ? numberOfCompletions : achievementFromMemory?.completed ? 1 : 0;
-		const result = {
+		return {
 			...ref,
 			numberOfCompletions: numberOfCompletions,
 			progress: achievementFromMemory?.progress,
 		} as Achievement;
-		return result;
 	});
-	return achievementsWithCompletion;
 };
 
 const convertForDisplay = (achievementsWithCompletion: readonly Achievement[]): readonly VisualAchievement[] => {
+	const achievementsByType = groupAchievementsByType(achievementsWithCompletion);
 	const fullAchievements: VisualAchievement[] = achievementsWithCompletion
 		.filter((achievement) => isAchievementVisualRoot(achievement))
-		.map((achievement, index) => convertToVisual(achievement, index, achievementsWithCompletion))
+		.map((achievement, index) => convertToVisual(achievement, index, achievementsByType))
 		.map((obj) => obj.achievement)
 		.sort((a, b) => {
 			if (a.id < b.id) {
@@ -258,6 +264,24 @@ const convertForDisplay = (achievementsWithCompletion: readonly Achievement[]): 
 	return fullAchievements;
 };
 
+const groupAchievementsByType = (
+	achievements: readonly Achievement[],
+): ReadonlyMap<string, readonly Achievement[]> => {
+	const map = new Map<string, Achievement[]>();
+	for (const ach of achievements) {
+		let list = map.get(ach.type);
+		if (!list) {
+			list = [];
+			map.set(ach.type, list);
+		}
+		list.push(ach);
+	}
+	for (const [, list] of map) {
+		list.sort((a, b) => (a.priority ?? 0) - (b.priority ?? 0));
+	}
+	return map;
+};
+
 const isAchievementVisualRoot = (achievement: Achievement): boolean => {
 	return achievement.root ?? false;
 };
@@ -265,11 +289,9 @@ const isAchievementVisualRoot = (achievement: Achievement): boolean => {
 const convertToVisual = (
 	achievement: Achievement,
 	index: number,
-	allAchievements: readonly Achievement[],
+	achievementsByType: ReadonlyMap<string, readonly Achievement[]>,
 ): IndexedVisualAchievement => {
-	const achievementForCompletionSteps: Achievement[] = allAchievements
-		.filter((achv) => achv.type === achievement.type)
-		.sort((a, b) => (a.priority ?? 0) - (b.priority ?? 0));
+	const achievementForCompletionSteps = achievementsByType.get(achievement.type) ?? [];
 	let text = achievement.text || achievement.emptyText;
 	const [completionSteps, textFromStep] = buildCompletionSteps(achievementForCompletionSteps, achievement, text);
 	text = text || textFromStep;
