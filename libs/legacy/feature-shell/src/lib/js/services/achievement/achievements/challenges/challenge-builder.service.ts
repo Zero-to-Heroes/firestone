@@ -66,7 +66,11 @@ import { TotalMinionsSummonedReq } from '../requirements/total-minions-summoned-
 import { WinAgsinstClassInRankedStandardInLimitedTimeReq } from '../requirements/win-against-class-in-ranked-standard-in-limited-time-req';
 import { WinStreakReq } from '../requirements/win-streak-req';
 import { Challenge } from './challenge';
-import { GenericChallenge } from './generic-challenge';
+import { GenericChallenge, MatchFilters } from './generic-challenge';
+import {
+	ALL_GAME_EVENTS_TOKEN,
+	getInterestedGameEventsForRawRequirementType,
+} from './raw-requirement-game-event-interest';
 
 @Injectable()
 export class ChallengeBuilderService {
@@ -75,13 +79,72 @@ export class ChallengeBuilderService {
 		private readonly memoryInspection: MemoryInspectionService,
 	) {}
 
-	public buildChallenge(raw: RawAchievement): Challenge {
+	public buildChallenge(raw: RawAchievement): Challenge | null {
 		// The case for the HS achievements, which are not computed by Firestone
 		if (!raw?.requirements) {
 			return null;
 		}
 		const requirements: readonly Requirement[] = this.buildRequirements(raw.requirements);
-		return new GenericChallenge(raw.id, raw.resetEvents, requirements);
+		const { listensToAllGameEvents, interestedGameEventTypes } = this.computeChallengeDispatchInterest(
+			raw.resetEvents ?? [],
+			raw.requirements,
+		);
+		const matchFilters = this.parseMatchFilters(raw.requirements);
+		return new GenericChallenge(
+			raw.id,
+			raw.resetEvents,
+			requirements,
+			listensToAllGameEvents,
+			interestedGameEventTypes,
+			matchFilters,
+		);
+	}
+
+	private computeChallengeDispatchInterest(
+		resetEvents: readonly string[],
+		rawReqs: readonly RawRequirement[],
+	): { listensToAllGameEvents: boolean; interestedGameEventTypes: ReadonlySet<string> | null } {
+		const types = new Set<string>();
+		for (const ev of resetEvents ?? []) {
+			types.add(ev);
+		}
+		let listensToAll = false;
+		for (const rr of rawReqs ?? []) {
+			for (const ev of rr.individualRestEvents ?? []) {
+				types.add(ev);
+			}
+			const interest = getInterestedGameEventsForRawRequirementType(rr.type);
+			if (interest === ALL_GAME_EVENTS_TOKEN) {
+				listensToAll = true;
+			} else {
+				for (const t of interest) {
+					types.add(t);
+				}
+			}
+		}
+		if (listensToAll) {
+			return { listensToAllGameEvents: true, interestedGameEventTypes: null };
+		}
+		return { listensToAllGameEvents: false, interestedGameEventTypes: types };
+	}
+
+	private parseMatchFilters(rawReqs: readonly RawRequirement[]): MatchFilters | undefined {
+		let allowedGameTypes: number[] | undefined;
+		let allowedScenarioIds: number[] | undefined;
+		let excludedScenarioIds: number[] | undefined;
+		for (const r of rawReqs ?? []) {
+			if (r.type === 'GAME_TYPE' && r.values?.length) {
+				allowedGameTypes = r.values.map((v) => parseInt(v, 10));
+			} else if (r.type === 'SCENARIO_IDS' && r.values?.length) {
+				allowedScenarioIds = r.values.map((v) => parseInt(v, 10));
+			} else if (r.type === 'EXCLUDED_SCENARIO_IDS' && r.values?.length) {
+				excludedScenarioIds = r.values.map((v) => parseInt(v, 10));
+			}
+		}
+		if (!allowedGameTypes?.length && !allowedScenarioIds?.length && !excludedScenarioIds?.length) {
+			return undefined;
+		}
+		return { allowedGameTypes, allowedScenarioIds, excludedScenarioIds };
 	}
 
 	private buildRequirements(rawReqs: readonly RawRequirement[]): readonly Requirement[] {
