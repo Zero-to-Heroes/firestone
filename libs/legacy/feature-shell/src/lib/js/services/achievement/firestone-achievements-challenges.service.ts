@@ -5,6 +5,7 @@ import {
 	AchievementsStorageService,
 	CompletedAchievement,
 	FirestoneRemoteAchievementsLoaderService,
+	RawAchievement,
 } from '@firestone/achievements/common';
 import { GameEvent, GameEventsEmitterService } from '@firestone/game-state';
 import { AchievementCompletedEvent, MainWindowStateFacadeService } from '@firestone/mainwindow/common';
@@ -95,12 +96,21 @@ export class FirestoneAchievementsChallengeService {
 			)
 			.subscribe((rawAchievements) => {
 				const built = rawAchievements
+					.filter((raw) => this.shouldStillTrackAchievement(raw))
 					.map((rawAchievement) => this.challengeBuilder.buildChallenge(rawAchievement))
 					.filter((challenge): challenge is Challenge => !!challenge);
 				this.challengeModules = built;
 				this.resetDispatchAfterGameExit();
 				console.debug('[firestone-achievements] loaded challenges', built.length);
 			});
+	}
+
+	private shouldStillTrackAchievement(raw: RawAchievement): boolean {
+		if (!raw.canBeCompletedOnlyOnce) {
+			return true;
+		}
+		const existing = this.achievementsStorage.getAchievement(raw.id);
+		return (existing?.numberOfCompletions ?? 0) < 1;
 	}
 
 	private resetDispatchAfterGameExit() {
