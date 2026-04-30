@@ -48,9 +48,13 @@ import {
 	GameStateService,
 } from '@firestone/game-state';
 import { LotteryService, LotteryWidgetControllerService } from '@firestone/lottery/common';
-import { MainWindowNavigationService, MainWindowStateFacadeService } from '@firestone/mainwindow/common';
+import {
+	MainWindowNavigationService,
+	MainWindowStateFacadeService,
+	MainWindowStoreService,
+} from '@firestone/mainwindow/common';
 import { BgsSceneService, CardChoicesService, CardMousedOverService } from '@firestone/memory';
-import { AccountService } from '@firestone/profile/common';
+import { AccountService, ProfileServiceFacade, ProfileUploaderService } from '@firestone/profile/common';
 import { BootstrapSettingsService, SettingsControllerService } from '@firestone/settings/services';
 import {
 	AppNavigationService,
@@ -67,11 +71,9 @@ import { GameStatsProviderService } from '@firestone/stats/services';
 import { TavernBrawlService } from '@firestone/tavern-brawl/common';
 import { AchievementsLiveProgressTrackingService } from '../../js/services/achievement/achievements-live-progress-tracking.service';
 import { AdService } from '../../js/services/ad.service';
-import { MainWindowStoreService } from '@firestone/mainwindow/common';
 import { MercenariesSynergiesHighlightService } from '../../js/services/mercenaries/highlights/mercenaries-synergies-highlight.service';
 import { MercenariesStoreService } from '../../js/services/mercenaries/mercenaries-store.service';
 import { MercenariesOutOfCombatService } from '../../js/services/mercenaries/out-of-combat/mercenaries-out-of-combat.service';
-import { ProfileUploaderService } from '../../js/services/profile/profile-uploader.service';
 import { GameOverService } from '../../js/services/stats/game/game-over.service';
 import { GameStatsUpdaterService } from '../../js/services/stats/game/game-stats-updater.service';
 import { AppUiStoreService } from '../../js/services/ui-store/app-ui-store.service';
@@ -111,6 +113,7 @@ export class BootstrapStoreServicesService {
 		private readonly collectionBootstrapService: CollectionBootstrapService,
 		private readonly ini_LotteryWidgetControllerService: LotteryWidgetControllerService,
 		private readonly init_ProfileUploaderService: ProfileUploaderService,
+		private readonly init_ProfileServiceFacade: ProfileServiceFacade,
 		private readonly init_ConstructedMetaDecksStateService: ConstructedMetaDecksStateService,
 		private readonly init_BattlegroundsQuestsService: BattlegroundsQuestsService,
 		private readonly init_BattlegroundsAnomaliesService: BattlegroundsAnomaliesService,

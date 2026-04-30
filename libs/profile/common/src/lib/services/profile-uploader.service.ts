@@ -1,42 +1,38 @@
 import { Inject, Injectable } from '@angular/core';
-import {
-	CardsForSet,
-	Profile,
-	ProfileAchievementCategory,
-	ProfileBgHeroStat,
-	ProfileClassProgress,
-	ProfilePackStat,
-	ProfileSet,
-	ProfileWinsForMode,
-} from '@firestone-hs/api-user-profile';
+import { Profile } from '@firestone-hs/api-user-profile';
 import { DiskCacheService, GameStatusService } from '@firestone/shared/common/service';
-import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
+import { deepEqual, SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { ADS_SERVICE_TOKEN, ApiRunner, IAdsService, waitForReady } from '@firestone/shared/framework/core';
 import { combineLatest, distinctUntilChanged, filter, map, skip, take } from 'rxjs';
-import { deepEqual } from '../utils';
 import { InternalProfileAchievementsService } from './internal/internal-profile-achievements.service';
 import { InternalProfileBattlegroundsService } from './internal/internal-profile-battlegrounds.service';
 import { InternalProfileCollectionService } from './internal/internal-profile-collection.service';
 import { InternalProfileInfoService } from './internal/internal-profile-info.service';
+import {
+	equalProfileAchievementCategory,
+	equalProfileBgHeroStat,
+	equalProfileClassProgress,
+	equalProfilePackStat,
+	equalProfileSet,
+	equalProfileWinsForMode,
+} from './profile-equality.helpers';
 
 export const PROFILE_UPDATE_URL = 'https://7n2xgqrutsr3by2n2wncsi25ou0mttjp.lambda-url.us-west-2.on.aws/';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class ProfileUploaderService {
-	public profile$$ = new SubscriberAwareBehaviorSubject<Profile>(null);
+	public profile$$ = new SubscriberAwareBehaviorSubject<Profile | null>(null);
 
 	constructor(
-		private readonly internalCollection: InternalProfileCollectionService,
-		private readonly internalAchievements: InternalProfileAchievementsService,
-		private readonly internalBattlegrounds: InternalProfileBattlegroundsService,
-		private readonly internalProfileInfo: InternalProfileInfoService,
+		readonly internalCollection: InternalProfileCollectionService,
+		readonly internalAchievements: InternalProfileAchievementsService,
+		readonly internalBattlegrounds: InternalProfileBattlegroundsService,
+		readonly internalProfileInfo: InternalProfileInfoService,
 		private readonly api: ApiRunner,
 		private readonly gameStatus: GameStatusService,
 		private readonly diskCache: DiskCacheService,
 		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 	) {
-		window['profileClassesProgress'] = this.internalProfileInfo.classesProgress$$;
-		window['profileBgHeroStat'] = this.internalBattlegrounds.bgFullTimeStatsByHero$$;
 		this.init();
 	}
 
@@ -45,14 +41,14 @@ export class ProfileUploaderService {
 
 		const elligible$ = combineLatest([this.gameStatus.inGame$$, this.ads.hasPremiumSub$$]).pipe(
 			map(([inGame, hasPremium]) => inGame && hasPremium),
-			filter((elligible) => elligible),
+			filter((elligible) => !!elligible),
 			distinctUntilChanged(),
 		);
 
 		// Wait until we know the user is a premium user AND in game to subscribe
 		elligible$
 			.pipe(
-				filter((elligible) => elligible),
+				filter((elligible) => !!elligible),
 				take(1),
 			)
 			.subscribe(() => {
@@ -168,134 +164,3 @@ export class ProfileUploaderService {
 		// - solo adventure progress (dungeon runs & co: wins with each hero, maybe some more detailed info if it is available)
 	}
 }
-
-export const equalProfileAchievementCategory = (
-	a: ProfileAchievementCategory | null | undefined,
-	b: ProfileAchievementCategory | null | undefined,
-): boolean => {
-	if (!a && !b) {
-		return true;
-	}
-	if (!a || !b) {
-		return false;
-	}
-	if (a.id !== b.id) {
-		return false;
-	}
-	return (
-		a.availablePoints === b.availablePoints &&
-		a.completedAchievements === b.completedAchievements &&
-		a.id === b.id &&
-		a.points === b.points &&
-		a.totalAchievements === b.totalAchievements
-	);
-};
-export const equalProfileBgHeroStat = (
-	a: ProfileBgHeroStat | null | undefined,
-	b: ProfileBgHeroStat | null | undefined,
-): boolean => {
-	if (!a && !b) {
-		return true;
-	}
-	if (!a || !b) {
-		return false;
-	}
-	if (a.heroCardId !== b.heroCardId) {
-		return false;
-	}
-	return a.gamesPlayed === b.gamesPlayed && a.top1 === b.top1 && a.top4 === b.top4 && a.heroCardId === b.heroCardId;
-};
-export const equalProfileSet = (a: ProfileSet | null | undefined, b: ProfileSet | null | undefined): boolean => {
-	if (!a && !b) {
-		return true;
-	}
-	if (!a || !b) {
-		return false;
-	}
-	if (a.id !== b.id) {
-		return false;
-	}
-	return (
-		equalCardsForSet(a.global, b.global) &&
-		equalCardsForSet(a.vanilla, b.vanilla) &&
-		equalCardsForSet(a.golden, b.golden) &&
-		equalCardsForSet(a.diamond, b.diamond) &&
-		equalCardsForSet(a.signature, b.signature)
-	);
-};
-const equalCardsForSet = (a: CardsForSet | null | undefined, b: CardsForSet | null | undefined): boolean => {
-	if (!a && !b) {
-		return true;
-	}
-	if (!a || !b) {
-		return false;
-	}
-	return a.common === b.common && a.epic === b.epic && a.legendary === b.legendary && a.rare === b.rare;
-};
-export const equalProfilePackStat = (
-	a: ProfilePackStat | null | undefined,
-	b: ProfilePackStat | null | undefined,
-): boolean => {
-	if (!a && !b) {
-		return true;
-	}
-	if (!a || !b) {
-		return false;
-	}
-	if (a.id !== b.id) {
-		return false;
-	}
-	return a.totalObtained === b.totalObtained && a.id === b.id;
-};
-const equalProfileClassProgress = (
-	a: ProfileClassProgress | null | undefined,
-	b: ProfileClassProgress | null | undefined,
-): boolean => {
-	if (!a && !b) {
-		return true;
-	}
-	if (!a || !b) {
-		return false;
-	}
-	if (a.playerClass !== b.playerClass) {
-		return false;
-	}
-	return (
-		a.level === b.level &&
-		a.wins === b.wins &&
-		a.losses === b.losses &&
-		a.ties === b.ties &&
-		a.playerClass === b.playerClass &&
-		equalProfileWinsForMode(a.winsForModes, b.winsForModes)
-	);
-};
-const equalProfileWinsForMode = (
-	a: readonly ProfileWinsForMode[] | null | undefined,
-	b: readonly ProfileWinsForMode[] | null | undefined,
-): boolean => {
-	if (!a && !b) {
-		return true;
-	}
-	if (!a || !b) {
-		return false;
-	}
-	if (a.length !== b.length) {
-		return false;
-	}
-	return a.every((info, index) => equalProfileWinsForModeInfo(info, b[index]));
-};
-const equalProfileWinsForModeInfo = (
-	a: ProfileWinsForMode | null | undefined,
-	b: ProfileWinsForMode | null | undefined,
-): boolean => {
-	if (!a && !b) {
-		return true;
-	}
-	if (!a || !b) {
-		return false;
-	}
-	if (a.mode !== b.mode) {
-		return false;
-	}
-	return a.wins === b.wins && a.losses === b.losses && a.ties === b.ties && a.mode === b.mode;
-};

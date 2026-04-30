@@ -8,9 +8,9 @@ import { SceneService } from '@firestone/memory';
 import { SubscriberAwareBehaviorSubject, groupByFunction } from '@firestone/shared/framework/common';
 import { CardsFacadeService, LocalStorageService } from '@firestone/shared/framework/core';
 import { combineLatest, debounceTime, distinctUntilChanged, filter, from, map, take } from 'rxjs';
-import { equalProfileBgHeroStat } from '../profile-uploader.service';
+import { equalProfileBgHeroStat } from '../profile-equality.helpers';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class InternalProfileBattlegroundsService {
 	public bgFullTimeStatsByHero$$ = new SubscriberAwareBehaviorSubject<readonly ProfileBgHeroStat[]>([]);
 
@@ -34,7 +34,7 @@ export class InternalProfileBattlegroundsService {
 			// Don't require premium sub here, as the info is also used elsewhere (on the app's profile)
 			this.sceneService.currentScene$$
 				.pipe(
-					filter((scene) => [SceneMode.BACON, SceneMode.BACON_COLLECTION].includes(scene)),
+					filter((scene) => [SceneMode.BACON, SceneMode.BACON_COLLECTION].includes(scene as SceneMode)),
 					take(1),
 				)
 				.subscribe(() => {
@@ -73,9 +73,9 @@ export class InternalProfileBattlegroundsService {
 				return uniqueBgHeroes
 					.map((heroCardId) => {
 						const sectionId = getAchievementSectionIdFromHeroCardId(heroCardId);
-						const achievementsForSection = refData.achievements
-							.filter((ach) => ach.sectionId === sectionId)
-							.filter((ach) => ach.quota === 1);
+						const achievementsForSection = refData?.achievements
+							?.filter((ach) => ach.sectionId === sectionId)
+							?.filter((ach) => ach.quota === 1);
 						if (!achievementsForSection?.length) {
 							return null;
 						}
@@ -84,14 +84,14 @@ export class InternalProfileBattlegroundsService {
 						);
 						// They "should" be sorted by default. Sorting them manually is definitely possible, but
 						// bothersome enough that we can skip it for now
-						const placementAchievements: readonly HsRefAchievement[] = Object.values(
+						const placementAchievements: readonly HsRefAchievement[] | undefined = Object.values(
 							groupedBySortOrder,
-						).find((achs) => achs.length === 3);
+						)?.find((achs) => achs.length === 3);
 						return {
 							sectionId: sectionId,
 							heroCardId: heroCardId,
 							heroName: this.allCards.getCard(heroCardId).name,
-							steps: placementAchievements.map((a) => a.id),
+							steps: placementAchievements?.map((a) => a.id) ?? [],
 						};
 					})
 					.filter((data) => !!data);
@@ -104,7 +104,7 @@ export class InternalProfileBattlegroundsService {
 		]).pipe(
 			filter(
 				([achievementsData, nativeAchievements, currentScene]) =>
-					[SceneMode.BACON, SceneMode.BACON_COLLECTION].includes(currentScene) &&
+					[SceneMode.BACON, SceneMode.BACON_COLLECTION].includes(currentScene as SceneMode) &&
 					!!achievementsData?.length &&
 					!!nativeAchievements?.length,
 			),

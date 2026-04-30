@@ -6,9 +6,9 @@ import { SceneService } from '@firestone/memory';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { ADS_SERVICE_TOKEN, IAdsService } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, debounceTime, distinctUntilChanged, filter, map, take } from 'rxjs';
-import { equalProfileAchievementCategory } from '../profile-uploader.service';
+import { equalProfileAchievementCategory } from '../profile-equality.helpers';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class InternalProfileAchievementsService {
 	public achievementCategories$$ = new SubscriberAwareBehaviorSubject<readonly ProfileAchievementCategory[]>([]);
 
@@ -27,7 +27,7 @@ export class InternalProfileAchievementsService {
 			combineLatest([this.sceneService.currentScene$$, this.ads.enablePremiumFeatures$$])
 				.pipe(
 					// I don't have a good way to detect when the Journal is being opened
-					filter(([scene, premium]) => premium && [SceneMode.COLLECTIONMANAGER].includes(scene)),
+					filter(([scene, premium]) => premium && [SceneMode.COLLECTIONMANAGER].includes(scene as SceneMode)),
 					take(1),
 				)
 				.subscribe(() => {
@@ -41,7 +41,9 @@ export class InternalProfileAchievementsService {
 			this.achievementsMonitor.achievementCategories$$,
 			this.sceneService.currentScene$$,
 		]).pipe(
-			filter(([achievementCategories, currentScene]) => [SceneMode.COLLECTIONMANAGER].includes(currentScene)),
+			filter(([achievementCategories, currentScene]) =>
+				[SceneMode.COLLECTIONMANAGER].includes(currentScene as SceneMode),
+			),
 			debounceTime(2000),
 			map(([achievementCategories]) => {
 				return (

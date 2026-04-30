@@ -3,14 +3,14 @@ import { CardsForSet, ProfilePackStat, ProfileSet } from '@firestone-hs/api-user
 import { SceneMode } from '@firestone-hs/reference-data';
 import { CollectionCardType } from '@firestone-hs/user-packs';
 import { Set as CollectionSet } from '@firestone/collection/common';
+import { CollectionManager, SetsManagerService } from '@firestone/collection/services';
 import { SceneService } from '@firestone/memory';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { ADS_SERVICE_TOKEN, IAdsService, waitForReady } from '@firestone/shared/framework/core';
 import { combineLatest, debounceTime, distinctUntilChanged, filter, map, take } from 'rxjs';
-import { CollectionManager, SetsManagerService } from '@firestone/collection/services';
-import { equalProfilePackStat, equalProfileSet } from '../profile-uploader.service';
+import { equalProfilePackStat, equalProfileSet } from '../profile-equality.helpers';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class InternalProfileCollectionService {
 	public sets$$ = new SubscriberAwareBehaviorSubject<readonly ProfileSet[]>([]);
 	public packsAllTime$$ = new SubscriberAwareBehaviorSubject<readonly ProfilePackStat[]>([]);
@@ -31,7 +31,7 @@ export class InternalProfileCollectionService {
 			combineLatest([this.sceneService.currentScene$$, this.ads.enablePremiumFeatures$$])
 				.pipe(
 					// I don't have a good way to detect when the Journal is being opened
-					filter(([scene, premium]) => premium && [SceneMode.COLLECTIONMANAGER].includes(scene)),
+					filter(([scene, premium]) => premium && !!scene && [SceneMode.COLLECTIONMANAGER].includes(scene)),
 					take(1),
 				)
 				.subscribe(() => {
@@ -42,7 +42,7 @@ export class InternalProfileCollectionService {
 			combineLatest([this.sceneService.currentScene$$, this.ads.enablePremiumFeatures$$])
 				.pipe(
 					// I don't have a good way to detect when the Journal is being opened
-					filter(([scene, premium]) => premium && [SceneMode.COLLECTIONMANAGER].includes(scene)),
+					filter(([scene, premium]) => premium && !!scene && [SceneMode.COLLECTIONMANAGER].includes(scene)),
 					take(1),
 				)
 				.subscribe(() => {
@@ -82,7 +82,7 @@ export class InternalProfileCollectionService {
 			});
 	}
 
-	private buildCardsSetForPremium(set: CollectionSet, premium: CollectionCardType): CardsForSet {
+	private buildCardsSetForPremium(set: CollectionSet, premium: CollectionCardType | null): CardsForSet {
 		return {
 			common: set.ownedForRarity('Common', premium),
 			rare: set.ownedForRarity('Rare', premium),

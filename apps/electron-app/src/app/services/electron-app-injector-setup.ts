@@ -149,7 +149,7 @@ import {
 } from '@firestone/memory';
 import { MercenariesMemoryCacheService, MercenariesReferenceDataService } from '@firestone/mercenaries/common';
 import { InGameReplayService, ModsManagerService } from '@firestone/mods/common';
-import { AccountService } from '@firestone/profile/common';
+import { AccountService, ProfileServiceFacade, ProfileUploaderService } from '@firestone/profile/common';
 import { CustomAppearanceService, SettingsControllerService } from '@firestone/settings/services';
 import {
 	AppNavigationService,
@@ -176,6 +176,7 @@ import {
 	TebexService,
 } from '@firestone/shared/common/service';
 import {
+	ACCOUNT_SERVICE_TOKEN,
 	ADS_SERVICE_TOKEN,
 	ApiRunner,
 	CardRulesService,
@@ -224,6 +225,10 @@ import {
 	TranslateService,
 	TranslateStore,
 } from '@ngx-translate/core';
+import { InternalProfileAchievementsService } from 'libs/profile/common/src/lib/services/internal/internal-profile-achievements.service';
+import { InternalProfileBattlegroundsService } from 'libs/profile/common/src/lib/services/internal/internal-profile-battlegrounds.service';
+import { InternalProfileCollectionService } from 'libs/profile/common/src/lib/services/internal/internal-profile-collection.service';
+import { InternalProfileInfoService } from 'libs/profile/common/src/lib/services/internal/internal-profile-info.service';
 import { BgsBattleSimulationWorkerService } from './bgs-battle-simulation-worker.service';
 import { ElectronAngularInjector } from './electron-angular-injector';
 import { ElectronAppVersionService } from './electron-app-version.service';
@@ -667,6 +672,7 @@ export const buildAppInjector = () => {
 
 	const accountService = new AccountService(windowManager);
 	electronInjector.register(AccountService, accountService);
+	electronInjector.register(ACCOUNT_SERVICE_TOKEN, accountService);
 
 	const questService = new QuestsService(windowManager);
 	electronInjector.register(QuestsService, questService);
@@ -1031,8 +1037,55 @@ export const buildAppInjector = () => {
 	const renaHighWinsRunsService = new ArenaHighWinsRunsService(windowManager);
 	electronInjector.register(ArenaHighWinsRunsService, renaHighWinsRunsService);
 
-	const avernBrawlService = new TavernBrawlService(windowManager);
-	electronInjector.register(TavernBrawlService, avernBrawlService);
+	const tavernBrawlService = new TavernBrawlService(windowManager);
+	electronInjector.register(TavernBrawlService, tavernBrawlService);
+
+	const profileServiceFacade = new ProfileServiceFacade(windowManager);
+	electronInjector.register(ProfileServiceFacade, profileServiceFacade);
+
+	const internalProfileCollectionService = new InternalProfileCollectionService(
+		scene,
+		ads,
+		setsManagerService,
+		collectionManager,
+	);
+	electronInjector.register(InternalProfileCollectionService, internalProfileCollectionService);
+
+	const internalProfileAchievementsService = new InternalProfileAchievementsService(
+		achievementsMemoryMonitor,
+		scene,
+		ads,
+	);
+	electronInjector.register(InternalProfileAchievementsService, internalProfileAchievementsService);
+
+	const internalProfileBattlegroundsService = new InternalProfileBattlegroundsService(
+		achievementsMemoryMonitor,
+		achievementsRefLoaderService,
+		allCards,
+		localStorage,
+		scene,
+	);
+	electronInjector.register(InternalProfileBattlegroundsService, internalProfileBattlegroundsService);
+
+	const internalProfileInfoService = new InternalProfileInfoService(
+		gameEventsEmitter,
+		memoryInspection,
+		allCards,
+		localStorage,
+	);
+	electronInjector.register(InternalProfileInfoService, internalProfileInfoService);
+
+	const profileUploaderService = new ProfileUploaderService(
+		internalProfileCollectionService,
+		internalProfileAchievementsService,
+		internalProfileBattlegroundsService,
+		internalProfileInfoService,
+		api,
+		gameStatus,
+		diskCache,
+		ads,
+	);
+	electronInjector.register(ProfileUploaderService, profileUploaderService);
 
 	electronInjector.ready = true;
 	return electronInjector;

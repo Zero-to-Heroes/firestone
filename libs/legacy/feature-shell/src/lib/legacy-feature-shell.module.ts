@@ -8,7 +8,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { PieChartComponent } from '@components/common/chart/pie-chart.component';
 import { AllCardsService as RefCards } from '@firestone-hs/reference-data';
-import { ProfileCommonModule } from '@firestone/profile/common';
+import { AccountService, ProfileCommonModule } from '@firestone/profile/common';
 import { SelectModule } from '@sebastientromp/ng-select';
 import { NgxChartsModule } from '@sebastientromp/ngx-charts';
 import { VirtualScrollerModule } from '@sebastientromp/ngx-virtual-scroller';
@@ -440,6 +440,7 @@ import { Events } from '@firestone/shared/common/service';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
 import { CdkOverlayContainer, Store } from '@firestone/shared/framework/common';
 import {
+	ACCOUNT_SERVICE_TOKEN,
 	ADS_SERVICE_TOKEN,
 	CARDS_HIGHLIGHT_SERVICE_TOKEN,
 	CardsFacadeService,
@@ -594,11 +595,6 @@ import { TwitchPresenceService } from './js/services/mainwindow/twitch-presence.
 import { MercenariesSynergiesHighlightService } from './js/services/mercenaries/highlights/mercenaries-synergies-highlight.service';
 import { MercenariesStoreService } from './js/services/mercenaries/mercenaries-store.service';
 import { MercenariesOutOfCombatService } from './js/services/mercenaries/out-of-combat/mercenaries-out-of-combat.service';
-import { InternalProfileAchievementsService } from './js/services/profile/internal/internal-profile-achievements.service';
-import { InternalProfileBattlegroundsService } from './js/services/profile/internal/internal-profile-battlegrounds.service';
-import { InternalProfileCollectionService } from './js/services/profile/internal/internal-profile-collection.service';
-import { InternalProfileInfoService } from './js/services/profile/internal/internal-profile-info.service';
-import { ProfileUploaderService } from './js/services/profile/profile-uploader.service';
 import { ReplaysNotificationService } from './js/services/replays/replays-notification.service';
 import { GameOverService } from './js/services/stats/game/game-over.service';
 import { GameStatsUpdaterService } from './js/services/stats/game/game-stats-updater.service';
@@ -1288,6 +1284,7 @@ try {
 		{ provide: MAIN_WINDOW_STORE_SERVICE_TOKEN, useExisting: MainWindowStoreService },
 		{ provide: PLAUSIBLE_DOMAIN, useValue: 'firestoneapp.gg-app' },
 		{ provide: OW_UTILS_SERVICE_TOKEN, useExisting: OwUtilsService },
+		{ provide: ACCOUNT_SERVICE_TOKEN, useExisting: AccountService },
 
 		DebugService,
 		Events,
@@ -1367,12 +1364,6 @@ try {
 		ReplaysNotificationService,
 
 		MailsService,
-
-		ProfileUploaderService,
-		InternalProfileCollectionService,
-		InternalProfileAchievementsService,
-		InternalProfileBattlegroundsService,
-		InternalProfileInfoService,
 	],
 	exports: [
 		DaemonComponent,

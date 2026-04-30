@@ -42,7 +42,7 @@ export class Set {
 		return this.allCards.filter((card) => card.getMaxOwnedForPremium(premium) > 0);
 	}
 
-	ownedForRarity(rarity: RarityTYpe, premium?: CollectionCardType): number {
+	ownedForRarity(rarity: RarityTYpe, premium?: CollectionCardType | null): number {
 		const baseCards = !!premium ? this.getCardsForPremium(premium) : this.allCards;
 		return baseCards
 			.filter((card) => card.rarity?.toUpperCase() === rarity?.toUpperCase())

@@ -3,7 +3,6 @@ import { PrefsSelector } from '@firestone/shared/framework/common';
 import { OverwolfService } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 
-import { ProfileBgHeroStat, ProfileClassProgress } from '@firestone-hs/api-user-profile';
 import { DeckSummary } from '@firestone/constructed/common';
 import { Preferences } from '@firestone/shared/common/service';
 import { AchievementsProgressTracking } from '../achievement/achievements-live-progress-tracking.service';
@@ -80,14 +79,6 @@ export class AppUiStoreFacadeService {
 
 	public achievementsProgressTracking$(): Observable<readonly AchievementsProgressTracking[]> {
 		return this.store.achievementsProgressTracking$();
-	}
-
-	public profileClassesProgress$(): Observable<readonly ProfileClassProgress[]> {
-		return this.store.profileClassesProgress$();
-	}
-
-	public profileBgHeroStat$(): Observable<readonly ProfileBgHeroStat[]> {
-		return this.store.profileBgHeroStat$();
 	}
 
 	private async waitForStoreInstance(): Promise<void> {

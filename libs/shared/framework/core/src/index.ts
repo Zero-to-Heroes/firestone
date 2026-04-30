@@ -43,3 +43,4 @@ export * from './lib/services/window-handler.interface';
 export * from './lib/services/window-manager.service';
 export * from './lib/shared-framework-core.module';
 export * from './lib/temp-card-ids';
+export * from './lib/tokens/account-service.token';

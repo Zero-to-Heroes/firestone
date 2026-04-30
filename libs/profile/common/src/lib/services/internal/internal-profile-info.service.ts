@@ -59,7 +59,7 @@ class HeroSkinAchievements {
 // 	},
 // };
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class InternalProfileInfoService {
 	public winsForMode$$ = new BehaviorSubject<readonly ProfileWinsForMode[]>([]);
 	public classesProgress$$ = new BehaviorSubject<readonly ProfileClassProgress[]>([]);
@@ -115,25 +115,27 @@ export class InternalProfileInfoService {
 	private async updateProfileInfo() {
 		console.log('[profile-info] updating profile info');
 		const profileInfo = await this.memory.getProfileInfo();
-		const classProgress: readonly ProfileClassProgress[] = profileInfo?.PlayerClasses.map((playerClass) => {
-			const playerRecordsForClass = profileInfo.PlayerRecords.filter((r) => r.Data > 0).filter((r) =>
-				this.allCards
-					.getCard(r.Data)
-					.classes?.filter((c) => c !== CardClass[CardClass.NEUTRAL])
-					.map((c) => getDefaultHeroDbfIdForClass(c))
-					.includes(getDefaultHeroDbfIdForClass(CardClass[playerClass.TagClass])),
-			);
-			const winsForModes = this.buildWinsForModes(playerRecordsForClass);
-			const result: ProfileClassProgress = {
-				playerClass: playerClass.TagClass,
-				level: playerClass.Level,
-				wins: winsForModes.map((r) => r.wins).reduce((a, b) => a + b, 0),
-				losses: winsForModes.map((r) => r.losses).reduce((a, b) => a + b, 0),
-				ties: winsForModes.map((r) => r.ties).reduce((a, b) => a + b, 0),
-				winsForModes: winsForModes,
-			};
-			return result;
-		});
+		const classProgress: readonly ProfileClassProgress[] =
+			profileInfo?.PlayerClasses.map((playerClass) => {
+				const playerRecordsForClass =
+					profileInfo.PlayerRecords.filter((r) => r.Data > 0).filter((r) =>
+						this.allCards
+							.getCard(r.Data)
+							.classes?.filter((c) => c !== CardClass[CardClass.NEUTRAL])
+							.map((c) => getDefaultHeroDbfIdForClass(c))
+							.includes(getDefaultHeroDbfIdForClass(CardClass[playerClass.TagClass])),
+					) ?? [];
+				const winsForModes = this.buildWinsForModes(playerRecordsForClass);
+				const result: ProfileClassProgress = {
+					playerClass: playerClass.TagClass,
+					level: playerClass.Level,
+					wins: winsForModes.map((r) => r.wins).reduce((a, b) => a + b, 0),
+					losses: winsForModes.map((r) => r.losses).reduce((a, b) => a + b, 0),
+					ties: winsForModes.map((r) => r.ties).reduce((a, b) => a + b, 0),
+					winsForModes: winsForModes,
+				};
+				return result;
+			}) ?? [];
 		// console.debug('updating profile info', classProgress);
 		if (!!classProgress?.length) {
 			this.classesProgress$$.next(classProgress);
@@ -151,7 +153,7 @@ export class InternalProfileInfoService {
 					GameType.GT_PVPDR_PAID,
 				].includes(r.RecordType),
 			);
-		const winsForMode: readonly ProfileWinsForMode[] = this.buildWinsForModes(playerRecords);
+		const winsForMode: readonly ProfileWinsForMode[] = this.buildWinsForModes(playerRecords ?? []);
 		if (!!winsForMode?.length) {
 			this.winsForMode$$.next(winsForMode);
 		}
@@ -163,24 +165,22 @@ export class InternalProfileInfoService {
 			return [];
 		}
 
-		const winsForMode: readonly ProfileWinsForMode[] = ['constructed', 'arena'].map(
-			(mode: 'constructed' | 'arena') => {
-				const recordsForMode = playerRecords.filter((r) =>
-					mode === 'constructed'
-						? r.RecordType === GameType.GT_RANKED
-						: mode === 'arena'
-							? r.RecordType === GameType.GT_ARENA || r.RecordType === GameType.GT_UNDERGROUND_ARENA
-							: r.RecordType === GameType.GT_PVPDR || r.RecordType === GameType.GT_PVPDR_PAID,
-				);
-				const result: ProfileWinsForMode = {
-					mode: mode,
-					wins: recordsForMode.map((r) => r.Wins).reduce((a, b) => a + b, 0),
-					losses: recordsForMode.map((r) => r.Losses).reduce((a, b) => a + b, 0),
-					ties: recordsForMode.map((r) => r.Ties).reduce((a, b) => a + b, 0),
-				};
-				return result;
-			},
-		);
+		const winsForMode: readonly ProfileWinsForMode[] = ['constructed', 'arena'].map((mode: string) => {
+			const recordsForMode = playerRecords.filter((r) =>
+				mode === 'constructed'
+					? r.RecordType === GameType.GT_RANKED
+					: mode === 'arena'
+						? r.RecordType === GameType.GT_ARENA || r.RecordType === GameType.GT_UNDERGROUND_ARENA
+						: r.RecordType === GameType.GT_PVPDR || r.RecordType === GameType.GT_PVPDR_PAID,
+			);
+			const result: ProfileWinsForMode = {
+				mode: mode as 'constructed' | 'arena',
+				wins: recordsForMode.map((r) => r.Wins).reduce((a, b) => a + b, 0),
+				losses: recordsForMode.map((r) => r.Losses).reduce((a, b) => a + b, 0),
+				ties: recordsForMode.map((r) => r.Ties).reduce((a, b) => a + b, 0),
+			};
+			return result;
+		});
 		return winsForMode;
 	}
 }

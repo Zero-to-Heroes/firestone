@@ -6,13 +6,14 @@ import { sleep } from '@firestone/shared/framework/common';
 import {
 	AbstractFacadeService,
 	AppInjector,
+	IAccountFacadeForCollection,
 	waitForReady,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
 import { BehaviorSubject, distinctUntilChanged, filter } from 'rxjs';
 
 @Injectable()
-export class AccountService extends AbstractFacadeService<AccountService> {
+export class AccountService extends AbstractFacadeService<AccountService> implements IAccountFacadeForCollection {
 	public region$$: BehaviorSubject<BnetRegion | null>;
 
 	private memory: MemoryInspectionService;

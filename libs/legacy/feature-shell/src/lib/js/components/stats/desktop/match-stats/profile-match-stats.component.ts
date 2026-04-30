@@ -1,7 +1,8 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { CardClass } from '@firestone-hs/reference-data';
+import { ProfileServiceFacade } from '@firestone/profile/common';
 import { SortCriteria, SortDirection, invertDirection } from '@firestone/shared/framework/common';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@legacy-import/src/lib/js/services/localization-facade.service';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
@@ -134,16 +135,19 @@ export class ProfileMatchStatsComponent extends AbstractSubscriptionStoreCompone
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly allCards: CardsFacadeService,
+		private readonly profile: ProfileServiceFacade,
 	) {
 		super(store, cdr);
 	}
 
-	ngAfterContentInit() {
+	async ngAfterContentInit() {
+		await waitForReady(this.profile);
+
 		this.currentMode$ = this.currentMode$$.asObservable();
 		this.sortCriteria$ = this.sortCriteria$$.asObservable();
 		this.classInfos$ = combineLatest([
-			this.store.profileClassesProgress$(),
-			this.store.profileBgHeroStat$(),
+			this.profile.classesProgress$$,
+			this.profile.bgFullTimeStatsByHero$$,
 			this.currentMode$,
 			this.sortCriteria$$,
 		]).pipe(
@@ -195,8 +199,8 @@ export class ProfileMatchStatsComponent extends AbstractSubscriptionStoreCompone
 		);
 
 		this.modeOverviews$ = combineLatest([
-			this.store.profileClassesProgress$(),
-			this.store.profileBgHeroStat$(),
+			this.profile.classesProgress$$,
+			this.profile.bgFullTimeStatsByHero$$,
 		]).pipe(
 			this.mapData(([classProgress, bgHeroStat]) => {
 				const modes = ['constructed', 'arena'] as const;
@@ -267,6 +271,10 @@ export class ProfileMatchStatsComponent extends AbstractSubscriptionStoreCompone
 				}
 			}),
 		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.markForCheck();
+		}
 	}
 
 	selectMode(mode: 'constructed' | 'arena' | 'battlegrounds') {

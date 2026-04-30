@@ -3,9 +3,15 @@
 import { Injectable } from '@angular/core';
 import { BnetRegion } from '@firestone-hs/reference-data';
 import { Card } from '@firestone/memory';
-import { AccountService } from '@firestone/profile/common';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { AbstractFacadeService, ApiRunner, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
+import {
+	AbstractFacadeService,
+	ACCOUNT_SERVICE_TOKEN,
+	ApiRunner,
+	AppInjector,
+	IAccountFacadeForCollection,
+	WindowManagerService,
+} from '@firestone/shared/framework/core';
 import { debounceTime, distinctUntilChanged, filter, map, pairwise, take } from 'rxjs';
 import { COLLECTION_MANAGER_SERVICE_TOKEN, ICollectionManagerService } from '../collection-manager.interface';
 
@@ -28,12 +34,13 @@ function cardForHsGuruUpload(card: Card): HsGuruCardPayload {
 	return out as HsGuruCardPayload;
 }
 
+// TODO: move this to a "third party" lib
 @Injectable()
 export class HsGuruService extends AbstractFacadeService<HsGuruService> {
 	private collectionManager: ICollectionManagerService;
 	private api: ApiRunner;
 	private prefs: PreferencesService;
-	private account: AccountService;
+	private account: IAccountFacadeForCollection;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'HsGuruService', () => true);
@@ -48,7 +55,7 @@ export class HsGuruService extends AbstractFacadeService<HsGuruService> {
 		this.collectionManager = AppInjector.get(COLLECTION_MANAGER_SERVICE_TOKEN);
 		this.api = AppInjector.get(ApiRunner);
 		this.prefs = AppInjector.get(PreferencesService);
-		this.account = AppInjector.get(AccountService);
+		this.account = AppInjector.get(ACCOUNT_SERVICE_TOKEN);
 
 		this.prefs.preferences$$
 			.pipe(
