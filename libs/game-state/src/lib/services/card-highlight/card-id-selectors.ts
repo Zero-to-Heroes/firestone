@@ -2190,6 +2190,10 @@ export const cardIdSelector = (
 		// Khadgar's Scrying Orb: Passive Your spells cost (1) less.
 		case CardIds.KhadgarsScryingOrb:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
+		// Sorcerer's Apprentice: Your spells cost (1) less.
+		case CardIds.SorcerersApprenticeLegacy:
+		case CardIds.SorcerersApprenticeVanilla:
+			return and(side(inputSide), or(inDeck, inHand), spell);
 		case CardIds.KeeneyeSpotter:
 			return and(side(inputSide), or(inDeck, inHand), givesHeroAttack);
 		case CardIds.KeeperOfFlame_FIR_928:
