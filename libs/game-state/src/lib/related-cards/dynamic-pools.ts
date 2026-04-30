@@ -933,6 +933,7 @@ const getDynamicFilters = (
 		case CardIds.PlantedEvidence:
 		case CardIds.PocketDimension_GDB_133:
 		case CardIds.PrimordialGlyph_CORE_UNG_941:
+		case CardIds.PrimordialGlyph:
 		case CardIds.Qonzu_EDR_517:
 		case CardIds.RangerGeneralSylvanas_RangerCaptainAlleriaToken_TIME_609t1:
 		case CardIds.Renew_BT_252:
