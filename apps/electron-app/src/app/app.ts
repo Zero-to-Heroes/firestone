@@ -27,6 +27,7 @@ import { ElectronDiskCacheService } from './services/electron-disk-cache.service
 import { ElectronHotkeyHandlerService } from './services/electron-hotkey-handler.service';
 import { ElectronWindowHandlerService } from './services/electron-window-handler.service';
 import { MindVisionElectronService } from './services/mind-vision-electron.service';
+import { registerOpenExternalLinksForAllBrowserWindows } from './services/open-external-links-window-hook';
 import { OverlayService } from './services/overlay.service';
 import { showPremiumLockNotificationOnce } from './services/premium-lock-notification';
 import { destroySystemTray, initSystemTray } from './services/system-tray';
@@ -261,6 +262,8 @@ export default class App {
 
 		// App.BrowserWindow = browserWindow;
 		App.application = app;
+		// Plain <a href="https://..."> / target="_blank" → default browser (main process), no renderer changes
+		registerOpenExternalLinksForAllBrowserWindows(app);
 		// app.disableHardwareAcceleration();
 
 		// Register firestoneapp:// protocol for deep linking (SSO auth callbacks)
