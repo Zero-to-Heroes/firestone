@@ -2,16 +2,9 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, ViewRef } from '@angular/core';
 import { BnetRegion, CardSet } from '@firestone-hs/reference-data';
 import { AccountService } from '@firestone/profile/common';
-import {
-	CurrentPlan,
-	OwLegacyPremiumService,
-	PreferencesService,
-	PremiumPlanId,
-	SubscriptionService,
-	TebexService,
-} from '@firestone/shared/common/service';
+import { PreferencesService, TebexService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import type { IAdsService } from '@firestone/shared/framework/core';
+import type { CurrentPlan, IAdsService, PremiumPlanId } from '@firestone/shared/framework/core';
 import {
 	ADS_SERVICE_TOKEN,
 	AnalyticsService,
@@ -194,9 +187,7 @@ export class PremiumDesktopComponent extends AbstractSubscriptionComponent imple
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
-		private readonly subscriptionService: SubscriptionService,
 		private readonly tebex: TebexService,
-		private readonly owLegacyPremium: OwLegacyPremiumService,
 		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 		private readonly i18n: ILocalizationService,
 		private readonly analytics: AnalyticsService,
@@ -208,14 +199,16 @@ export class PremiumDesktopComponent extends AbstractSubscriptionComponent imple
 	}
 
 	async ngAfterViewInit() {
-		await waitForReady(
-			this.tebex,
-			this.owLegacyPremium,
-			this.ads,
-			this.subscriptionService,
-			this.account,
-			this.prefs,
-		);
+		console.log('[debug] waitForReady tebex', this.tebex);
+		await waitForReady(this.tebex);
+		console.log('[debug] waitForReady ads', this.ads);
+		await waitForReady(this.ads);
+		console.log('[debug] waitForReady account', this.account);
+		await waitForReady(this.account);
+		console.log('[debug] waitForReady prefs', this.prefs);
+		await waitForReady(this.prefs);
+		await waitForReady(this.tebex, this.ads, this.account, this.prefs);
+		console.log('[debug] waitForReady done');
 
 		this.showConfirmationPopUp$ = this.showConfirmationPopUp$$.asObservable();
 		this.showPreSubscribeModal$ = this.showPreSubscribeModal$$.asObservable();
@@ -264,11 +257,7 @@ export class PremiumDesktopComponent extends AbstractSubscriptionComponent imple
 					this.cdr.markForCheck();
 				}
 			});
-		this.plans$ = combineLatest([
-			this.tebex.packages$$,
-			this.billingPeriodicity$$,
-			this.subscriptionService.currentPlan$$,
-		]).pipe(
+		this.plans$ = combineLatest([this.tebex.packages$$, this.billingPeriodicity$$, this.ads.currentPlan$$]).pipe(
 			filter(([allPackages, billingPeriodicity, currentPlanSub]) => !!allPackages?.length),
 			this.mapData(([allPackages, billingPeriodicity, currentPlanSub]) => {
 				const plans =
@@ -340,7 +329,7 @@ export class PremiumDesktopComponent extends AbstractSubscriptionComponent imple
 		};
 		this.showConfirmationPopUp$$.next(newModel);
 		console.log('unsubscribing from plan', planId);
-		const result = await this.subscriptionService.unsubscribe(planId);
+		const result = await this.ads.unsubscribe(planId);
 		console.log('unsubscribed from plan result', planId, result);
 		this.showConfirmationPopUp$$.next(null);
 	}
@@ -366,7 +355,7 @@ export class PremiumDesktopComponent extends AbstractSubscriptionComponent imple
 
 	async onSubscribe(planId: string) {
 		this.analytics.trackEvent('premium', { type: 'subscribe', planId: planId });
-		const result = await this.subscriptionService.subscribe(planId);
+		const result = await this.ads.subscribe(planId);
 	}
 
 	onCancelSubscribe() {

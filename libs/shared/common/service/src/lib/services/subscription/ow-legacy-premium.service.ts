@@ -3,10 +3,12 @@ import {
 	AbstractFacadeService,
 	ApiRunner,
 	AppInjector,
+	CurrentPlan,
 	OverwolfService,
+	PremiumPlanId,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
-import { CurrentPlan, OwSub, PremiumPlanId } from './subscription.service';
+import { OwSub } from './subscription.service';
 
 const UNSUB_URL = 'https://56ogovbpuj3wqndoj6j3fv3qs40ustlm.lambda-url.us-west-2.on.aws/';
 const STATUS_URL = 'https://kb3ek7w47ofny2lhrnv7xlmxnq0ifkbj.lambda-url.us-west-2.on.aws/';

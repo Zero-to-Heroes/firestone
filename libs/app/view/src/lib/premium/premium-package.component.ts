@@ -11,9 +11,9 @@ import {
 	Output,
 	ViewRef,
 } from '@angular/core';
-import type { PremiumPlanId } from '@firestone/shared/common/service';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, sleep } from '@firestone/shared/framework/common';
+import type { PremiumPlanId } from '@firestone/shared/framework/core';
 import { ILocalizationService, OverwolfService, UserService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import type { PremiumPlan } from './premium-desktop.component';

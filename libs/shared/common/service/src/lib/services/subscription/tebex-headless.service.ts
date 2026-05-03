@@ -4,16 +4,17 @@ import {
 	AbstractFacadeService,
 	ApiRunner,
 	AppInjector,
+	CurrentPlan,
+	PremiumPlanId,
 	UserService,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
-import { CurrentPlan, PremiumPlanId } from './subscription.service';
-import { TEBEX_PACKAGES_URL, TebexPackage, TebexService, TebexSub } from './tebex.service';
+import { TEBEX_PACKAGES_URL, TebexPackage, TebexSub } from './tebex.service';
 
 const TEBEX_HEADLESS_SUBSCRIPTIONS_URL = 'https://mv7pyt4yrdeg2o26i6j5lljc2e0hnqti.lambda-url.us-west-2.on.aws/';
 
 @Injectable({ providedIn: 'root' })
-export class TebexHeadlessService extends AbstractFacadeService<TebexService> {
+export class TebexHeadlessService extends AbstractFacadeService<TebexHeadlessService> {
 	public packages$$: SubscriberAwareBehaviorSubject<readonly TebexPackage[] | null>;
 
 	protected api: ApiRunner;

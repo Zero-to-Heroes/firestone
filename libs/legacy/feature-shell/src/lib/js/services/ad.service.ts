@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
 import { isPreReleaseBuild } from '@firestone/game-state';
 import { LotteryWidgetControllerService } from '@firestone/lottery/common';
-import { AppNavigationService, premiumPlanIds, SubscriptionService } from '@firestone/shared/common/service';
+import { AppNavigationService, SubscriptionService } from '@firestone/shared/common/service';
 import {
 	AbstractFacadeService,
 	AppInjector,
+	CurrentPlan,
 	IAdsService,
 	isElectronContext,
 	isMainProcess,
+	premiumPlanIds,
 	waitForReady,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
@@ -17,6 +19,7 @@ import { BehaviorSubject, combineLatest, distinctUntilChanged } from 'rxjs';
 export class AdService extends AbstractFacadeService<AdService> implements IAdsService {
 	public hasPremiumSub$$: BehaviorSubject<boolean>;
 	public enablePremiumFeatures$$: BehaviorSubject<boolean>;
+	public currentPlan$$: BehaviorSubject<CurrentPlan | null>;
 
 	private subscriptions: SubscriptionService;
 	private appNavigation: AppNavigationService;
@@ -29,11 +32,13 @@ export class AdService extends AbstractFacadeService<AdService> implements IAdsS
 	protected override assignSubjects() {
 		this.enablePremiumFeatures$$ = this.mainInstance.enablePremiumFeatures$$;
 		this.hasPremiumSub$$ = this.mainInstance.hasPremiumSub$$;
+		this.currentPlan$$ = this.mainInstance.currentPlan$$;
 	}
 
 	protected async init() {
 		this.enablePremiumFeatures$$ = new BehaviorSubject<boolean>(false);
 		this.hasPremiumSub$$ = new BehaviorSubject<boolean>(false);
+		this.currentPlan$$ = new BehaviorSubject<CurrentPlan | null>(null);
 		this.subscriptions = AppInjector.get(SubscriptionService);
 		this.appNavigation = AppInjector.get(AppNavigationService);
 		this.lottery = AppInjector.get(LotteryWidgetControllerService);
@@ -42,6 +47,7 @@ export class AdService extends AbstractFacadeService<AdService> implements IAdsS
 		await waitForReady(this.subscriptions, this.lottery);
 
 		this.subscriptions.currentPlan$$.subscribe((plan) => {
+			this.currentPlan$$.next(plan);
 			if (isPreReleaseBuild) {
 				this.hasPremiumSub$$.next(true);
 				return;
@@ -63,9 +69,37 @@ export class AdService extends AbstractFacadeService<AdService> implements IAdsS
 		}
 	}
 
+	protected override async initElectronSubjects() {
+		this.setupElectronSubject(this.currentPlan$$, 'AdService-currentPlan');
+		this.setupElectronSubject(this.enablePremiumFeatures$$, 'AdService-enablePremiumFeatures');
+		this.setupElectronSubject(this.hasPremiumSub$$, 'AdService-hasPremiumSub');
+	}
+
+	protected override async createElectronProxy(ipcRenderer: any) {
+		this.currentPlan$$ = new BehaviorSubject<CurrentPlan | null>(null);
+		this.enablePremiumFeatures$$ = new BehaviorSubject<boolean>(false);
+		this.hasPremiumSub$$ = new BehaviorSubject<boolean>(false);
+	}
+
 	protected override async initElectronMainProcess() {
 		this.registerMainProcessMethod('goToPremiumInternal', () => this.goToPremiumInternal());
 		this.registerMainProcessMethod('shouldDisplayAdsInternal', () => this.shouldDisplayAdsInternal());
+		this.registerMainProcessMethod('unsubscribeInternal', (planId: string) => this.unsubscribeInternal(planId));
+		this.registerMainProcessMethod('subscribeInternal', (planId: string) => this.subscribeInternal(planId));
+	}
+
+	public subscribe(planId: string): void {
+		this.callOnMainProcess<void>('subscribeInternal', planId);
+	}
+	private async subscribeInternal(planId: string): Promise<void> {
+		this.subscriptions.subscribe(planId);
+	}
+
+	public unsubscribe(planId: string): void {
+		this.callOnMainProcess<void>('unsubscribeInternal', planId);
+	}
+	private async unsubscribeInternal(planId: string): Promise<void> {
+		this.subscriptions.unsubscribe(planId);
 	}
 
 	public applyAuthPremiumHint(isPremium: boolean): void {

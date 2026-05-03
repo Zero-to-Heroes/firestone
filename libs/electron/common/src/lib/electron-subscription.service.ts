@@ -1,10 +1,12 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { Injectable } from '@angular/core';
-import { CurrentPlan, equalCurrentPlan, TebexHeadlessService } from '@firestone/shared/common/service';
+import { TebexHeadlessService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import {
 	AbstractFacadeService,
 	AppInjector,
+	CurrentPlan,
+	equalCurrentPlan,
 	LocalStorageService,
 	UserService,
 	waitForReady,

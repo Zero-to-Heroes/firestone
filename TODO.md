@@ -7,3 +7,4 @@ Next: remove AppUiStore
 - AnalyticsService
 - subscriptionService: remove it from premium-desktop
 - hotkeys
+- lottery

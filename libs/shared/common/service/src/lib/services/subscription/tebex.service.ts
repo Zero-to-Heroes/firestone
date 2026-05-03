@@ -4,16 +4,17 @@ import {
 	AbstractFacadeService,
 	ApiRunner,
 	AppInjector,
+	CurrentPlan,
 	EXTENSION_ID,
 	EXTERNAL_URL_SERVICE_TOKEN,
 	IExternalUrlService,
 	OverwolfService,
+	PremiumPlanId,
 	UserService,
 	waitForReady,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
 import { PreferencesService } from '../preferences.service';
-import { CurrentPlan, PremiumPlanId } from './subscription.service';
 
 // const STORE_ID = 1564884;
 export const STORE_PUBLIC_TOKEN = 'xjh0-5ef1e6461f2aa381db4df635c3c0c5556aed5191';
