@@ -223,12 +223,18 @@ export abstract class CardsHighlightCommonService {
 			gameType !== metaData?.gameType
 				? ({ formatType: GameFormat.FT_WILD, gameType: gameType } as Metadata)
 				: metaData;
-		const existingRelatedCardIds =
-			card?.relatedCardIds ??
+		const fromReference =
 			this.allCards
 				.getCard(cardId)
-				?.relatedCardDbfIds?.map((dbfId) => this.allCards.getCardFromDbfId(dbfId)?.id) ??
-			[];
+				?.relatedCardDbfIds?.map((dbfId) => this.allCards.getCardFromDbfId(dbfId)?.id)
+				.filter((id): id is string => !!id) ?? [];
+		// DeckCard.relatedCardIds is runtime state (modules, discover chains, etc.), not the static
+		// per-card-module relatedCardIds field removed from game-state — merge with reference data.
+		const fromDeck = card?.relatedCardIds?.length ? card.relatedCardIds : [];
+		const existingRelatedCardIds = [
+			...fromDeck,
+			...fromReference.filter((id) => !fromDeck.includes(id)),
+		];
 		const relatedCardIds = buildContextRelatedCardIds(
 			cardId,
 			entityId,

@@ -129,4 +129,9 @@ export type CounterType =
 	| 'friendlyAttacks'
 	| 'spellweaversBrilliance'
 	| 'bgsMrrgltonPlayed'
-	| 'bgsAncestralAutomaton';
+	| 'bgsAncestralAutomaton'
+	| 'animalCompanionAura'
+	| 'leylineSpellCostDiscount'
+	| 'leylineSpellTriggers'
+	| 'silverHandRecruitAura'
+	| 'talyaEarthstriderGlobalAura';

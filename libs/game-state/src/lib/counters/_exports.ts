@@ -2,6 +2,7 @@ import { CardsFacadeService, ILocalizationService } from '@firestone/shared/fram
 import { CounterDefinitionV2 } from './_counter-definition-v2';
 import { AbyssalCurseCounterDefinitionV2 } from './impl/abyssal-curse';
 import { AnachronosCounterDefinitionV2 } from './impl/anachronos';
+import { AnimalCompanionAuraCounterDefinitionV2 } from './impl/animal-companion-aura-counter';
 import { AstralAutomatonCounterDefinitionV2 } from './impl/astral-automaton';
 import { AvianaElunesChoseCounterDefinitionV2 } from './impl/aviana-elunes-chosen';
 import { BgsAncestralAutomatonCounterDefinitionV2 } from './impl/battlegrounds/ancestral-automaton';
@@ -82,6 +83,8 @@ import { KiljaedenCounterDefinitionV2 } from './impl/kiljaeden';
 import { LibramPlayedCounterDefinitionV2 } from './impl/libram-played';
 import { LibramReductionCounterDefinitionV2 } from './impl/libram-reduction';
 import { LightrayCounterDefinitionV2 } from './impl/lightray';
+import { LeylineSpellCostDiscountCounterDefinitionV2 } from './impl/leyline-spell-cost-discount-counter';
+import { LeylineSpellTriggersCounterDefinitionV2 } from './impl/leyline-spell-triggers-counter';
 import { LocationsUsedCounterDefinitionV2 } from './impl/locations-used';
 import { MenagerieCounterDefinitionV2 } from './impl/menagerie';
 import { MinionsDeadThisGameCounterDefinitionV2 } from './impl/minions-dead-this-game';
@@ -108,11 +111,13 @@ import { SecretsPlayedCounterDefinitionV2 } from './impl/secrets-played';
 import { SecretsTriggeredCounterDefinitionV2 } from './impl/secrets-triggered';
 import { ShirvallahCounterDefinitionV2 } from './impl/shirvallah';
 import { ShockspitterCounterDefinitionV2 } from './impl/shockspitter';
+import { SilverHandRecruitAuraCounterDefinitionV2 } from './impl/silver-hand-recruit-aura-counter';
 import { SpellCastOnFriendlyCharacterCounterDefinitionV2 } from './impl/spell-cast-on-friendly-character';
 import { SpellsPlayedCounterDefinitionV2 as SpellsPlayedConstructedCounterDefinitionV2 } from './impl/spells-played';
 import { SpellweaversBrillianceCounterDefinitionV2 } from './impl/spellweavers-brilliance';
 import { StarshipsLaunchedCounterDefinitionV2 } from './impl/starships-launched';
 import { TableFlipCounterDefinitionV2 } from './impl/table-flip';
+import { TalyaEarthstriderGlobalAuraCounterDefinitionV2 } from './impl/talya-earthstrider-global-aura-counter';
 import { ThirstyDrifterCounterDefinitionV2 } from './impl/thirsty-drifter';
 import { TotemsSummonedCounterDefinitionV2 } from './impl/totems-summoned';
 import { TreantCounterDefinitionV2 } from './impl/treant';
@@ -255,6 +260,11 @@ export const getAllCounters: (
 	new FodderRefreshCounterDefinitionV2(i18n, allCards),
 	new MrrgltonPlayedCounterDefinitionV2(i18n, allCards),
 	new BgsAncestralAutomatonCounterDefinitionV2(i18n, allCards),
+	new LeylineSpellCostDiscountCounterDefinitionV2(i18n, allCards),
+	new LeylineSpellTriggersCounterDefinitionV2(i18n, allCards),
+	new AnimalCompanionAuraCounterDefinitionV2(i18n, allCards),
+	new SilverHandRecruitAuraCounterDefinitionV2(i18n, allCards),
+	new TalyaEarthstriderGlobalAuraCounterDefinitionV2(i18n, allCards),
 ];
 
 export type { CounterType } from './counter-type';

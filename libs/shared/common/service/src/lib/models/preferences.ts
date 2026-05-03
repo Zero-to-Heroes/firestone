@@ -551,6 +551,17 @@ export class Preferences implements IPreferences {
 	readonly opponentCardsDiscardedCounter: boolean = true;
 	readonly playerFriendlyAttacksCounter: boolean = true;
 
+	readonly playerLeylineSpellCostDiscountCounter: boolean = true;
+	readonly opponentLeylineSpellCostDiscountCounter: boolean = true;
+	readonly playerLeylineSpellTriggersCounter: boolean = true;
+	readonly opponentLeylineSpellTriggersCounter: boolean = true;
+	readonly playerAnimalCompanionAuraCounter: boolean = true;
+	readonly opponentAnimalCompanionAuraCounter: boolean = true;
+	readonly playerSilverHandRecruitAuraCounter: boolean = true;
+	readonly opponentSilverHandRecruitAuraCounter: boolean = true;
+	readonly playerTalyaEarthstriderGlobalAuraCounter: boolean = true;
+	readonly opponentTalyaEarthstriderGlobalAuraCounter: boolean = true;
+
 	readonly playerBgsPogoCounter: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerBgsPogoCounterWidgetPosition: { left: number; top: number };

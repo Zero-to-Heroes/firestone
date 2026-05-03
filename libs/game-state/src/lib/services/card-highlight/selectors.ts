@@ -8,16 +8,17 @@ import {
 	LIBRAM_IDS,
 	Race,
 	RarityTYpe,
+	ReferenceCard,
 	RELIC_IDS,
 	SetId,
 	SpellSchool,
 } from '@firestone-hs/reference-data';
-import { HighlightSide } from '@firestone/shared/framework/core';
+import { HighlightSide, TempCardIds } from '@firestone/shared/framework/core';
 import { EXTENDED_STARSHIP_CARDS } from '../../counters/impl/next-starship-launch';
 import { isCardCreated } from '../../models/deck-card';
 import { getCost, getProcessedCard } from '../card-utils';
 import { PLAGUES } from '../game-events/event-parser/special-cases/plagues-parser';
-import { Selector, SelectorInput } from './cards-highlight-common.service';
+import { Selector, SelectorInput, SelectorOutput } from './cards-highlight-common.service';
 export const CONCOCTION_GENERATORS: readonly CardIds[] = [
 	CardIds.PotionBelt,
 	CardIds.Concoctor,
@@ -685,3 +686,105 @@ export const effectiveCostOdd = (input: SelectorInput): boolean => {
 	const cost = getCost(input.deckCard, input.deckState, input.allCards);
 	return cost != null && cost % 2 !== 0;
 };
+
+/** Placeholder until ref data tags Leyline cards; TODO: remove when `mechanics` includes a real value. */
+export const PLACEHOLDER_MECHANIC_LEYLINE_FRANCHISE = 'LEYLINE' as any;
+
+/** Collectible Leyline franchise cards (TempCardIds until real {@link CardIds}). */
+export const LEYLINE_FRANCHISE_CARD_IDS: readonly string[] = [
+	TempCardIds.MageMend500BurstingLeyline,
+	TempCardIds.MageMend501LeyWalker,
+	TempCardIds.MageMend502CrystallizedLeyline,
+	TempCardIds.MageMend503SurgeNeedle,
+	TempCardIds.MageMend504LeylineNexus,
+	TempCardIds.MageMend505TheArcanomicon,
+	TempCardIds.MageMend506MysticRunesaber,
+];
+
+export const isLeylineFranchiseReferenceCard = (c: ReferenceCard | null | undefined, cardId?: string): boolean => {
+	if (!c && !cardId) {
+		return false;
+	}
+	const id = cardId ?? c?.id;
+	if (id && LEYLINE_FRANCHISE_CARD_IDS.includes(id)) {
+		return true;
+	}
+	if (c?.name?.includes('Leyline')) {
+		return true;
+	}
+	return !!(c?.mechanics as readonly string[] | undefined)?.includes(PLACEHOLDER_MECHANIC_LEYLINE_FRANCHISE);
+};
+
+export const animalCompanionSpellCardIds: readonly CardIds[] = [
+	CardIds.AnimalCompanionCore,
+	CardIds.AnimalCompanionLegacy,
+	CardIds.AnimalCompanionVanilla,
+	CardIds.CallOfTheWild,
+	CardIds.CallOfTheWild_CORE_OG_211,
+	CardIds.ToMySide,
+];
+
+export const animalCompanionTokenCardIds: readonly CardIds[] = [
+	CardIds.HufferLegacy,
+	CardIds.HufferVanilla,
+	CardIds.Huffer_TUTR_NEW1_034,
+	CardIds.MishaLegacy,
+	CardIds.MishaVanilla,
+	CardIds.LeokkLegacy,
+	CardIds.LeokkVanilla,
+];
+
+/** Until a single game tag covers replacement/synergy; TODO: trim when ref data supports it. */
+export const animalCompanionDeckHighlightCardIds: readonly string[] = [
+	...animalCompanionSpellCardIds,
+	...animalCompanionTokenCardIds,
+	TempCardIds.HunterMend300TamePet,
+	TempCardIds.HunterMend303MigratingElekk,
+	TempCardIds.HunterMend304TalyaEarthstrider,
+	TempCardIds.HunterMend307RoamFree,
+	TempCardIds.HunterMend301Spiritspeaker,
+];
+
+export const silverHandRecruitTokenIds: readonly CardIds[] = [
+	CardIds.SilverHandRecruitLegacyToken,
+	CardIds.SilverHandRecruitVanillaToken,
+	CardIds.SilverHandRecruitToken_CS2_101t2,
+	CardIds.SilverHandRecruitToken_CS2_101t3,
+	CardIds.SilverHandRecruitToken_CS2_101t4,
+	CardIds.SilverHandRecruitToken_CS2_101t5,
+	CardIds.SilverHandRecruitToken_CS2_101t6,
+	CardIds.SilverHandRecruitToken_CS2_101t7,
+	CardIds.SilverHandRecruitToken_CS2_101t8,
+];
+
+export const silverHandRecruitGeneratorCardIds: readonly string[] = [
+	TempCardIds.PaladinMend802Convalescence,
+	TempCardIds.PaladinMend900Teamwork,
+	TempCardIds.PaladinMend800BrashBattlemaster,
+	TempCardIds.PaladinMend801ResilientSavior,
+	TempCardIds.PaladinMend803EmboldeningBlade,
+	TempCardIds.PaladinMend804AratortheRedeemer,
+	CardIds.StandAgainstDarkness_OG_273,
+];
+
+export const silverHandDeckHighlightCardIds: readonly string[] = [
+	...silverHandRecruitTokenIds,
+	...silverHandRecruitGeneratorCardIds,
+];
+
+export const highlightSelectorCardIsAnyOfIds = (ids: readonly string[]): Selector =>
+	cardIs(...(ids as unknown as readonly CardIds[]));
+
+export const animalCompanionSynergyDeckSelector = (inputSide: HighlightSide): Selector =>
+	and(side(inputSide), or(inDeck, inHand), highlightSelectorCardIsAnyOfIds(animalCompanionDeckHighlightCardIds));
+
+export const leylineFranchiseSynergyDeckSelector = (inputSide: HighlightSide): Selector =>
+	and(
+		side(inputSide),
+		or(inDeck, inHand),
+		(input: SelectorInput): SelectorOutput =>
+			isLeylineFranchiseReferenceCard(input.card, input.cardId),
+	);
+
+export const silverHandRecruitSynergyDeckSelector = (inputSide: HighlightSide): Selector =>
+	and(side(inputSide), or(inDeck, inHand), highlightSelectorCardIsAnyOfIds(silverHandDeckHighlightCardIds));

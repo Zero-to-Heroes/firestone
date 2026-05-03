@@ -255,6 +255,8 @@
     "TheFoodChain_TLC_830",
     "ThornmantleMusician",
     "Thunderbringer_WW_440",
+    "TimberWolfLegacy",
+    "TimberWolfVanilla",
     "TundraRhinoLegacy",
     "TundraRhinoVanilla",
     "VirmenSensei_CFM_816",
@@ -302,6 +304,8 @@
     "AdvancedTargetingMonocle",
     "AncientKrakenbane",
     "AnimatedMoonwell_EDR_254",
+    "ArcaneAnomaly_CORE_KAR_036",
+    "ArcaneAnomaly_KAR_036",
     "ArcaneArtificer",
     "ArcaneArtificerCore",
     "ArcaneQuiver_RLK_817",
@@ -367,6 +371,7 @@
     "FarseerNobundo_GDB_447",
     "FarseerWo_TIME_013",
     "FelfireInTheHole",
+    "Felgorger_SW_043",
     "FelscaleEvoker",
     "Fetch_TOY_352",
     "Flamewaker",
@@ -374,6 +379,10 @@
     "Flowrider",
     "FragmentOfNothing_END_026",
     "FrostweaveDungeoneer",
+    "GadgetzanAuctioneerCore",
+    "GadgetzanAuctioneerLegacy",
+    "GadgetzanAuctioneerTavernBrawl",
+    "GadgetzanAuctioneerVanilla",
     "GlacialAdvance_RLK_512",
     "GlowflySwarm",
     "GolgannethTheThunderer",
@@ -488,6 +497,8 @@
     "SkulkingGeist_CORE_ICC_701",
     "SkulkingGeist_ICC_701",
     "SlitheringDeathscale",
+    "SorcerersApprenticeLegacy",
+    "SorcerersApprenticeVanilla",
     "SpectralTrainee",
     "Spellcoiler",
     "SpellweaversBrilliance_CATA_452",
@@ -533,6 +544,20 @@
     "YoggSaronHopesEnd_OG_134",
     "YoggSaronMasterOfFate",
     "YsielWindsinger"
+  ],
+  "HAS_MECHANIC_RUSH + MINION": [
+    "AkaliTheRhino",
+    "AthleticStudies_SCH_237",
+    "ClearTheWay",
+    "DivingGryphon",
+    "PotionOfSparkingTavernBrawl",
+    "RushTheStage",
+    "SpecialDeliveryTavernBrawl",
+    "SpiritOfTheRhino",
+    "StageDive",
+    "StageDive_StageDive",
+    "TownCrier_CORE_GIL_580",
+    "TownCrier_GIL_580"
   ],
   "MINION": [
     "AcherusVeteran_CORE_ICC_092",
@@ -743,6 +768,7 @@
     "RiskySkipper",
     "RunningWild",
     "RunningWild_RunningWild",
+    "SaloonBrewmaster_WW_423",
     "SeafloorSavior_TSC_083",
     "SearingReflection_FIR_941",
     "Seismopod_DINO_421",
@@ -781,6 +807,7 @@
     "TheBoomReaver",
     "TheBoomship",
     "TheDarkPortal_BT_302",
+    "TheEternalHold_TIME_446",
     "TheLichKing_ArmyOfTheFrozenThroneToken",
     "TogwagglesScheme",
     "TravelmasterDungar_WORK_043",
@@ -828,19 +855,6 @@
     "AfterlifeAttendant",
     "AfterlifeAttendant_CORE_MAW_031"
   ],
-  "HAS_MECHANIC_RUSH + MINION": [
-    "AkaliTheRhino",
-    "ClearTheWay",
-    "DivingGryphon",
-    "PotionOfSparkingTavernBrawl",
-    "RushTheStage",
-    "SpecialDeliveryTavernBrawl",
-    "SpiritOfTheRhino",
-    "StageDive",
-    "StageDive_StageDive",
-    "TownCrier_CORE_GIL_580",
-    "TownCrier_GIL_580"
-  ],
   "HAS_MECHANIC_CHARGE + MINION": [
     "AlakirTheWindsOfTime_WON_092h"
   ],
@@ -863,8 +877,7 @@
     "Funkfin",
     "NozdormuBronzeAspect_CATA_473",
     "PrismaticJewelKit",
-    "RighteousReservesTavernBrawl",
-    "TrinketArtist_TOY_882"
+    "RighteousReservesTavernBrawl"
   ],
   "HAS_MECHANIC_TAUNT + MINION": [
     "AlakirTheWindsOfTime_WON_092h",
@@ -1135,6 +1148,7 @@
     "CrystalStag",
     "DeathMetalKnight",
     "DeathMetalKnight_CORE_ETC_523",
+    "RubySanctum_CATA_301",
     "ShadowtouchedKvaldir_YOG_300",
     "TheBlackBlood_CATA_300",
     "Xyrella_BAR_735"
@@ -1142,6 +1156,8 @@
   "HAS_MECHANIC_GENERATES_SPELL": [
     "AncientKrakenbane",
     "AnimatedMoonwell_EDR_254",
+    "ArcaneAnomaly_CORE_KAR_036",
+    "ArcaneAnomaly_KAR_036",
     "ArcaneArtificer",
     "ArcaneArtificerCore",
     "ArchmageAntonidas",
@@ -1177,6 +1193,10 @@
     "Flamewaker",
     "Flamewaker_TUTR_BRM_002",
     "FragmentOfNothing_END_026",
+    "GadgetzanAuctioneerCore",
+    "GadgetzanAuctioneerLegacy",
+    "GadgetzanAuctioneerTavernBrawl",
+    "GadgetzanAuctioneerVanilla",
     "GlacialAdvance_RLK_512",
     "GolgannethTheThunderer",
     "GuidingFigure_GDB_106",
@@ -1449,6 +1469,7 @@
     "CrystalStag",
     "DeathMetalKnight",
     "DeathMetalKnight_CORE_ETC_523",
+    "RubySanctum_CATA_301",
     "ShadowtouchedKvaldir_YOG_300",
     "TheBlackBlood_CATA_300",
     "Xyrella_BAR_735"
@@ -1754,7 +1775,8 @@
     "Falric_CORE_EDR_003",
     "Foamrender_MIS_101",
     "ReanimateTheTerror_TLC_433",
-    "StitchedGiantCore_RLK_744"
+    "StitchedGiantCore_RLK_744",
+    "StitchedGiant_LEG_RLK_744"
   ],
   "HAS_MECHANIC_PALADIN_AURA": [
     "CardboardGolem_TOY_809",
@@ -2052,6 +2074,8 @@
     "SteamGuardian",
     "SunfuryChampion",
     "Thoribelore",
+    "Thoribelore_PhoenixEggToken_RLK_604t",
+    "Thoribelore_PhoenixEggToken_RLK_604t2",
     "VolcanicThrasher_TLC_223",
     "WrathspineEnchanter"
   ],
@@ -2072,7 +2096,6 @@
   "FEL + SPELL": [
     "FelfireBlaze_FIR_904",
     "FelfireInTheHole",
-    "Felgorger_SW_043",
     "FossilFanatic",
     "GraveDefiler",
     "HeraldOfChaos",
@@ -2120,7 +2143,9 @@
     "MechanizedMagma_TLC_224",
     "RadianceOfAzshara_TSC_635",
     "SunfuryChampion",
-    "Thoribelore"
+    "Thoribelore",
+    "Thoribelore_PhoenixEggToken_RLK_604t",
+    "Thoribelore_PhoenixEggToken_RLK_604t2"
   ],
   "COST_MORE_7": [
     "FlamesOfTheFirelord_FIR_923"
@@ -2184,6 +2209,9 @@
   "COST_EQUAL_1 + HAS_MECHANIC_GENERATES_SPELL": [
     "Gazlowe",
     "NiriOfTheCrater_TLC_836"
+  ],
+  "CARD_IS_ISCONCOCTIONRELATED": [
+    "GhoulishAlchemist"
   ],
   "FROST + HAS_MECHANIC_GENERATES_SPELL": [
     "GlacialDownpourTavernBrawl",

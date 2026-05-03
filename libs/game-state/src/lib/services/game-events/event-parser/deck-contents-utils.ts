@@ -1,5 +1,5 @@
 import { CardClass, CardIds, CardType, GameTag, LIBRAM_IDS, Race, ReferenceCard } from '@firestone-hs/reference-data';
-import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
+import { CardsFacadeService, ILocalizationService, TempCardIds } from '@firestone/shared/framework/core';
 import { DeckCard } from '../../../models/deck-card';
 import { DeckState } from '../../../models/deck-state';
 import { broxigarFablePackage, kingLlaneFablePackage } from '../../card-utils';
@@ -137,6 +137,9 @@ export const modifyDeckForSpecialCardEffects = (
 			return handleBroxigar(deckState, allCards, i18n);
 		case CardIds.GaronaHalforcen_KingLlaneToken_TIME_875t:
 			return handleKingLlane(deckState, allCards, i18n);
+		// TODO(patch-35.4): Dragon Soul, Shattered — replace deck card with 6 Essences in opening hand; needs log confirmation
+		case TempCardIds.NeutralCataEvent110DragonSoulShattered:
+			return deckState;
 		default:
 			return deckState;
 	}

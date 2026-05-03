@@ -5,7 +5,7 @@
  */
 
 import { CardIds } from '@firestone-hs/reference-data';
-import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
+import { CardsFacadeService, HighlightSide, TempCardIds } from '@firestone/shared/framework/core';
 import { Selector } from '../cards-highlight-common.service';
 import { and, or, side, inDeck, inHand, cardIs } from '../selectors';
 
@@ -351,7 +351,7 @@ export const reverseMinionSelector = (
 		);
 	}
 
-	// HAS_MECHANIC_GIVES_DIVINE_SHIELD + MINION (9 cards)
+	// HAS_MECHANIC_GIVES_DIVINE_SHIELD + MINION (8 cards)
 	if (refCard.mechanics?.includes('GIVES_DIVINE_SHIELD') && refCard.type?.toUpperCase() === 'MINION') {
 		matchingCardIds.push(
 			CardIds.AlakirTheWindsOfTime_WON_092h,
@@ -361,8 +361,7 @@ export const reverseMinionSelector = (
 			CardIds.Funkfin,
 			CardIds.NozdormuBronzeAspect_CATA_473,
 			CardIds.PrismaticJewelKit,
-			CardIds.RighteousReservesTavernBrawl,
-			CardIds.TrinketArtist_TOY_882
+			CardIds.RighteousReservesTavernBrawl
 		);
 	}
 
@@ -381,10 +380,11 @@ export const reverseMinionSelector = (
 		);
 	}
 
-	// HAS_MECHANIC_RUSH + MINION (11 cards)
+	// HAS_MECHANIC_RUSH + MINION (12 cards)
 	if (refCard.mechanics?.includes('RUSH') && refCard.type?.toUpperCase() === 'MINION') {
 		matchingCardIds.push(
 			CardIds.AkaliTheRhino,
+			CardIds.AthleticStudies_SCH_237,
 			CardIds.ClearTheWay,
 			CardIds.DivingGryphon,
 			CardIds.PotionOfSparkingTavernBrawl,
@@ -571,7 +571,7 @@ export const reverseMinionSelector = (
 		);
 	}
 
-	// BEAST (81 cards)
+	// BEAST (83 cards)
 	if (refCard.races?.map(r => r.toUpperCase()).includes('BEAST')) {
 		matchingCardIds.push(
 			CardIds.AddledGrizzly,
@@ -648,6 +648,8 @@ export const reverseMinionSelector = (
 			CardIds.TheFoodChain_TLC_830,
 			CardIds.ThornmantleMusician,
 			CardIds.Thunderbringer_WW_440,
+			CardIds.TimberWolfLegacy,
+			CardIds.TimberWolfVanilla,
 			CardIds.TundraRhinoLegacy,
 			CardIds.TundraRhinoVanilla,
 			CardIds.VirmenSensei_CFM_816,
@@ -1100,7 +1102,7 @@ export const reverseMinionSelector = (
 		);
 	}
 
-	// MINION (259 cards)
+	// MINION (261 cards)
 	if (refCard.type?.toUpperCase() === 'MINION') {
 		matchingCardIds.push(
 			CardIds.AcherusVeteran_CORE_ICC_092,
@@ -1303,6 +1305,7 @@ export const reverseMinionSelector = (
 			CardIds.RiskySkipper,
 			CardIds.RunningWild,
 			CardIds.RunningWild_RunningWild,
+			CardIds.SaloonBrewmaster_WW_423,
 			CardIds.SeafloorSavior_TSC_083,
 			CardIds.SearingReflection_FIR_941,
 			CardIds.Seismopod_DINO_421,
@@ -1340,6 +1343,7 @@ export const reverseMinionSelector = (
 			CardIds.TheBoomReaver,
 			CardIds.TheBoomship,
 			CardIds.TheDarkPortal_BT_302,
+			CardIds.TheEternalHold_TIME_446,
 			CardIds.TheLichKing_ArmyOfTheFrozenThroneToken,
 			CardIds.TogwagglesScheme,
 			CardIds.TravelmasterDungar_WORK_043,
@@ -1362,6 +1366,25 @@ export const reverseMinionSelector = (
 			CardIds.YouthfulBrewmasterVanilla,
 			CardIds.YshaarjRageUnbound,
 			CardIds.ZereksCloningGallery
+		);
+	}
+
+
+	// Animal Companion tokens ↔ Spiritspeaker (TempCardIds until reference-data merge)
+	const animalCompanionTokenIds: readonly CardIds[] = [
+		CardIds.HufferLegacy,
+		CardIds.HufferVanilla,
+		CardIds.Huffer_TUTR_NEW1_034,
+		CardIds.MishaLegacy,
+		CardIds.MishaVanilla,
+		CardIds.LeokkLegacy,
+		CardIds.LeokkVanilla,
+	];
+	if (animalCompanionTokenIds.includes(cardId as CardIds)) {
+		return and(
+			side(inputSide),
+			or(inDeck, inHand),
+			cardIs(TempCardIds.HunterMend301Spiritspeaker as unknown as CardIds),
 		);
 	}
 

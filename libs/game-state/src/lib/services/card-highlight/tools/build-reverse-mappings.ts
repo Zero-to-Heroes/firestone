@@ -898,7 +898,7 @@ function generateMinionFile(flatMappings: { [condition: string]: string[] }): st
 	lines.push(' */');
 	lines.push('');
 	lines.push("import { CardIds } from '@firestone-hs/reference-data';");
-	lines.push("import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';");
+	lines.push("import { CardsFacadeService, HighlightSide, TempCardIds } from '@firestone/shared/framework/core';");
 	lines.push("import { Selector } from '../cards-highlight-common.service';");
 	lines.push("import { and, or, side, inDeck, inHand, cardIs } from '../selectors';");
 	lines.push('');
@@ -991,6 +991,26 @@ function generateMinionFile(flatMappings: { [condition: string]: string[] }): st
 			}
 		}
 	}
+
+	lines.push('');
+	lines.push('	// Animal Companion tokens ↔ Spiritspeaker (TempCardIds until reference-data merge)');
+	lines.push('	const animalCompanionTokenIds: readonly CardIds[] = [');
+	lines.push('		CardIds.HufferLegacy,');
+	lines.push('		CardIds.HufferVanilla,');
+	lines.push('		CardIds.Huffer_TUTR_NEW1_034,');
+	lines.push('		CardIds.MishaLegacy,');
+	lines.push('		CardIds.MishaVanilla,');
+	lines.push('		CardIds.LeokkLegacy,');
+	lines.push('		CardIds.LeokkVanilla,');
+	lines.push('	];');
+	lines.push('	if (animalCompanionTokenIds.includes(cardId as CardIds)) {');
+	lines.push('		return and(');
+	lines.push('			side(inputSide),');
+	lines.push('			or(inDeck, inHand),');
+	lines.push('			cardIs(TempCardIds.HunterMend301Spiritspeaker as unknown as CardIds),');
+	lines.push('		);');
+	lines.push('	}');
+	lines.push('');
 
 	lines.push('	// Return combined selector if any matches found');
 	lines.push('	if (matchingCardIds.length > 0) {');

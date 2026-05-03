@@ -2,7 +2,7 @@
 
 import { CardClass, CardIds, CardType, GameTag, Race, SpellSchool } from '@firestone-hs/reference-data';
 import { pickLast, sortByProperties } from '@firestone/shared/framework/common';
-import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
+import { CardsFacadeService, HighlightSide, TempCardIds } from '@firestone/shared/framework/core';
 import { DeckCard } from '../../models/deck-card';
 import { DeckState } from '../../models/deck-state';
 import { ShortCard } from '../../models/game-state';
@@ -162,6 +162,9 @@ import {
 	whelp,
 	windfury,
 	zerg,
+	animalCompanionSynergyDeckSelector,
+	leylineFranchiseSynergyDeckSelector,
+	silverHandRecruitSynergyDeckSelector,
 } from './selectors';
 
 export const cardIdSelector = (
@@ -4497,6 +4500,32 @@ export const cardIdSelector = (
 		case CardIds.MrSmite_DED_006:
 		case CardIds.PirateAdmiralHooktusk:
 			return and(side(inputSide), or(inHand, inDeck), pirate);
+
+		// Patch TempCardIds — TODO: alias to real {@link CardIds} when reference-data updates
+		case TempCardIds.DruidMend044TranquilClearing:
+			return and(side(inputSide), or(inHand, inDeck), minion);
+		case TempCardIds.HunterMend300TamePet:
+		case TempCardIds.HunterMend301Spiritspeaker:
+		case TempCardIds.HunterMend303MigratingElekk:
+		case TempCardIds.HunterMend304TalyaEarthstrider:
+			return animalCompanionSynergyDeckSelector(inputSide);
+		case TempCardIds.HunterMend305NurturingNature:
+			return and(side(inputSide), or(inHand, inDeck), beast);
+		case TempCardIds.HunterMend307RoamFree:
+			return animalCompanionSynergyDeckSelector(inputSide);
+		case TempCardIds.MageMend501LeyWalker:
+		case TempCardIds.MageMend503SurgeNeedle:
+		case TempCardIds.MageMend506MysticRunesaber:
+			return leylineFranchiseSynergyDeckSelector(inputSide);
+		case TempCardIds.NeutralCataEvent110t3BlueAspectEssence:
+			return and(side(inputSide), inDeck, spell);
+		case TempCardIds.PaladinMend800BrashBattlemaster:
+		case TempCardIds.PaladinMend801ResilientSavior:
+		case TempCardIds.PaladinMend803EmboldeningBlade:
+		case TempCardIds.PaladinMend804AratortheRedeemer:
+			return silverHandRecruitSynergyDeckSelector(inputSide);
+		case TempCardIds.PaladinMend805Charity:
+			return and(side(inputSide), or(inHand, inDeck), minion);
 	}
 	return null;
 };

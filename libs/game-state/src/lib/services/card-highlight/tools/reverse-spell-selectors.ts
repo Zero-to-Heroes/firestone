@@ -176,12 +176,11 @@ export const reverseSpellSelector = (
 		);
 	}
 
-	// FEL + SPELL (16 cards)
+	// FEL + SPELL (15 cards)
 	if (refCard.spellSchool?.toUpperCase() === 'FEL' && refCard.type?.toUpperCase() === 'SPELL') {
 		matchingCardIds.push(
 			CardIds.FelfireBlaze_FIR_904,
 			CardIds.FelfireInTheHole,
-			CardIds.Felgorger_SW_043,
 			CardIds.FossilFanatic,
 			CardIds.GraveDefiler,
 			CardIds.HeraldOfChaos,
@@ -198,7 +197,7 @@ export const reverseSpellSelector = (
 		);
 	}
 
-	// FIRE + HAS_MECHANIC_GENERATES_SPELL (11 cards)
+	// FIRE + HAS_MECHANIC_GENERATES_SPELL (13 cards)
 	if (refCard.spellSchool?.toUpperCase() === 'FIRE' && refCard.mechanics?.includes('GENERATES_SPELL')) {
 		matchingCardIds.push(
 			CardIds.FirekeepersIdolTavernBrawl,
@@ -211,11 +210,13 @@ export const reverseSpellSelector = (
 			CardIds.MechanizedMagma_TLC_224,
 			CardIds.RadianceOfAzshara_TSC_635,
 			CardIds.SunfuryChampion,
-			CardIds.Thoribelore
+			CardIds.Thoribelore,
+			CardIds.Thoribelore_PhoenixEggToken_RLK_604t,
+			CardIds.Thoribelore_PhoenixEggToken_RLK_604t2
 		);
 	}
 
-	// FIRE + SPELL (18 cards)
+	// FIRE + SPELL (20 cards)
 	if (refCard.spellSchool?.toUpperCase() === 'FIRE' && refCard.type?.toUpperCase() === 'SPELL') {
 		matchingCardIds.push(
 			CardIds.EruptingVolcano_CATA_584,
@@ -234,6 +235,8 @@ export const reverseSpellSelector = (
 			CardIds.SteamGuardian,
 			CardIds.SunfuryChampion,
 			CardIds.Thoribelore,
+			CardIds.Thoribelore_PhoenixEggToken_RLK_604t,
+			CardIds.Thoribelore_PhoenixEggToken_RLK_604t2,
 			CardIds.VolcanicThrasher_TLC_223,
 			CardIds.WrathspineEnchanter
 		);
@@ -515,11 +518,13 @@ export const reverseSpellSelector = (
 		);
 	}
 
-	// HAS_MECHANIC_GENERATES_SPELL (128 cards)
+	// HAS_MECHANIC_GENERATES_SPELL (134 cards)
 	if (refCard.mechanics?.includes('GENERATES_SPELL')) {
 		matchingCardIds.push(
 			CardIds.AncientKrakenbane,
 			CardIds.AnimatedMoonwell_EDR_254,
+			CardIds.ArcaneAnomaly_CORE_KAR_036,
+			CardIds.ArcaneAnomaly_KAR_036,
 			CardIds.ArcaneArtificer,
 			CardIds.ArcaneArtificerCore,
 			CardIds.ArchmageAntonidas,
@@ -555,6 +560,10 @@ export const reverseSpellSelector = (
 			CardIds.Flamewaker,
 			CardIds.Flamewaker_TUTR_BRM_002,
 			CardIds.FragmentOfNothing_END_026,
+			CardIds.GadgetzanAuctioneerCore,
+			CardIds.GadgetzanAuctioneerLegacy,
+			CardIds.GadgetzanAuctioneerTavernBrawl,
+			CardIds.GadgetzanAuctioneerVanilla,
 			CardIds.GlacialAdvance_RLK_512,
 			CardIds.GolgannethTheThunderer,
 			CardIds.GuidingFigure_GDB_106,
@@ -724,7 +733,7 @@ export const reverseSpellSelector = (
 		);
 	}
 
-	// SPELL (90 cards)
+	// SPELL (93 cards)
 	if (refCard.type?.toUpperCase() === 'SPELL') {
 		matchingCardIds.push(
 			CardIds.AdvancedTargetingMonocle,
@@ -755,6 +764,7 @@ export const reverseSpellSelector = (
 			CardIds.DryscaleDeputy_WW_383,
 			CardIds.ElementalAllies,
 			CardIds.EnergyShaper,
+			CardIds.Felgorger_SW_043,
 			CardIds.Fetch_TOY_352,
 			CardIds.Flowrider,
 			CardIds.GlowflySwarm,
@@ -800,6 +810,8 @@ export const reverseSpellSelector = (
 			CardIds.ShiveringSorceress,
 			CardIds.SkulkingGeist_CORE_ICC_701,
 			CardIds.SkulkingGeist_ICC_701,
+			CardIds.SorcerersApprenticeLegacy,
+			CardIds.SorcerersApprenticeVanilla,
 			CardIds.SpitefulSummoner,
 			CardIds.Starscryer,
 			CardIds.Surfalopod_VAC_443,

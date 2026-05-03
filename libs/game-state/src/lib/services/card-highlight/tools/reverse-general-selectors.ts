@@ -335,7 +335,7 @@ export const reverseGeneralSelector = (
 		);
 	}
 
-	// FIRE + HAS_MECHANIC_GENERATES_SPELL (11 cards)
+	// FIRE + HAS_MECHANIC_GENERATES_SPELL (13 cards)
 	if (refCard.spellSchool?.toUpperCase() === 'FIRE' && refCard.mechanics?.includes('GENERATES_SPELL')) {
 		matchingCardIds.push(
 			CardIds.FirekeepersIdolTavernBrawl,
@@ -348,7 +348,9 @@ export const reverseGeneralSelector = (
 			CardIds.MechanizedMagma_TLC_224,
 			CardIds.RadianceOfAzshara_TSC_635,
 			CardIds.SunfuryChampion,
-			CardIds.Thoribelore
+			CardIds.Thoribelore,
+			CardIds.Thoribelore_PhoenixEggToken_RLK_604t,
+			CardIds.Thoribelore_PhoenixEggToken_RLK_604t2
 		);
 	}
 
@@ -572,7 +574,7 @@ export const reverseGeneralSelector = (
 		);
 	}
 
-	// HAS_MECHANIC_GIVES_DIVINE_SHIELD + MINION (9 cards)
+	// HAS_MECHANIC_GIVES_DIVINE_SHIELD + MINION (8 cards)
 	if (refCard.mechanics?.includes('GIVES_DIVINE_SHIELD') && refCard.type?.toUpperCase() === 'MINION') {
 		matchingCardIds.push(
 			CardIds.AlakirTheWindsOfTime_WON_092h,
@@ -582,8 +584,7 @@ export const reverseGeneralSelector = (
 			CardIds.Funkfin,
 			CardIds.NozdormuBronzeAspect_CATA_473,
 			CardIds.PrismaticJewelKit,
-			CardIds.RighteousReservesTavernBrawl,
-			CardIds.TrinketArtist_TOY_882
+			CardIds.RighteousReservesTavernBrawl
 		);
 	}
 
@@ -614,10 +615,11 @@ export const reverseGeneralSelector = (
 		);
 	}
 
-	// HAS_MECHANIC_RUSH + MINION (11 cards)
+	// HAS_MECHANIC_RUSH + MINION (12 cards)
 	if (refCard.mechanics?.includes('RUSH') && refCard.type?.toUpperCase() === 'MINION') {
 		matchingCardIds.push(
 			CardIds.AkaliTheRhino,
+			CardIds.AthleticStudies_SCH_237,
 			CardIds.ClearTheWay,
 			CardIds.DivingGryphon,
 			CardIds.PotionOfSparkingTavernBrawl,
@@ -1059,11 +1061,13 @@ export const reverseGeneralSelector = (
 		);
 	}
 
-	// HAS_MECHANIC_GENERATES_SPELL (128 cards)
+	// HAS_MECHANIC_GENERATES_SPELL (134 cards)
 	if (refCard.mechanics?.includes('GENERATES_SPELL')) {
 		matchingCardIds.push(
 			CardIds.AncientKrakenbane,
 			CardIds.AnimatedMoonwell_EDR_254,
+			CardIds.ArcaneAnomaly_CORE_KAR_036,
+			CardIds.ArcaneAnomaly_KAR_036,
 			CardIds.ArcaneArtificer,
 			CardIds.ArcaneArtificerCore,
 			CardIds.ArchmageAntonidas,
@@ -1099,6 +1103,10 @@ export const reverseGeneralSelector = (
 			CardIds.Flamewaker,
 			CardIds.Flamewaker_TUTR_BRM_002,
 			CardIds.FragmentOfNothing_END_026,
+			CardIds.GadgetzanAuctioneerCore,
+			CardIds.GadgetzanAuctioneerLegacy,
+			CardIds.GadgetzanAuctioneerTavernBrawl,
+			CardIds.GadgetzanAuctioneerVanilla,
 			CardIds.GlacialAdvance_RLK_512,
 			CardIds.GolgannethTheThunderer,
 			CardIds.GuidingFigure_GDB_106,
@@ -1260,7 +1268,7 @@ export const reverseGeneralSelector = (
 		);
 	}
 
-	// HAS_MECHANIC_LIFESTEAL (13 cards)
+	// HAS_MECHANIC_LIFESTEAL (14 cards)
 	if (refCard.mechanics?.includes('LIFESTEAL')) {
 		matchingCardIds.push(
 			CardIds.AuchenaiPhantasm,
@@ -1273,6 +1281,7 @@ export const reverseGeneralSelector = (
 			CardIds.CrystalStag,
 			CardIds.DeathMetalKnight,
 			CardIds.DeathMetalKnight_CORE_ETC_523,
+			CardIds.RubySanctum_CATA_301,
 			CardIds.ShadowtouchedKvaldir_YOG_300,
 			CardIds.TheBlackBlood_CATA_300,
 			CardIds.Xyrella_BAR_735
@@ -1408,7 +1417,7 @@ export const reverseGeneralSelector = (
 		);
 	}
 
-	// HAS_MECHANIC_SPEND_CORPSE (6 cards)
+	// HAS_MECHANIC_SPEND_CORPSE (7 cards)
 	if (refCard.mechanics?.includes('SPEND_CORPSE')) {
 		matchingCardIds.push(
 			CardIds.CadaverCollectorTavernBrawl,
@@ -1416,7 +1425,8 @@ export const reverseGeneralSelector = (
 			CardIds.Falric_CORE_EDR_003,
 			CardIds.Foamrender_MIS_101,
 			CardIds.ReanimateTheTerror_TLC_433,
-			CardIds.StitchedGiantCore_RLK_744
+			CardIds.StitchedGiantCore_RLK_744,
+			CardIds.StitchedGiant_LEG_RLK_744
 		);
 	}
 

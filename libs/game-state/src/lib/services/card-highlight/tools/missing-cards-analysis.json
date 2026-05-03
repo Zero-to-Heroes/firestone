@@ -1,6 +1,6 @@
 {
-  "totalOriginal": 1783,
-  "totalProcessed": 1661,
+  "totalOriginal": 1801,
+  "totalProcessed": 1679,
   "totalMissing": 119,
   "missingCards": [
     "AbyssalDepths",
@@ -58,7 +58,6 @@
     "FateSplitter",
     "FiremancerFlurgl",
     "GennCursedKing_CATA_615",
-    "GhoulishAlchemist",
     "GrandArchivist",
     "GrandMagisterRommath",
     "Grillmaster_VAC_917",
@@ -80,6 +79,7 @@
     "MassResurrection_DAL_724",
     "MedivhTheHallowed_TIME_890",
     "Mixtape",
+    "NerubarWeblord",
     "NightmareFuel_EDR_528",
     "OnyxBishop",
     "OnyxBishop_WON_057",
@@ -123,5 +123,5 @@
     "Zuljin_WarriorsOfAmani_THD_010p",
     "WildSpirits"
   ],
-  "analysisDate": "2026-04-07T07:12:21.307Z"
+  "analysisDate": "2026-05-03T15:55:35.077Z"
 }
