@@ -309,6 +309,8 @@ export const addGuessInfoToCard = (
 		metadata?: Metadata;
 		validArenaPool: readonly string[];
 		creatorTags?: readonly { Name: GameTag; Value: number }[];
+		currentClass?: string;
+		initialDecklist?: readonly string[];
 	},
 ): DeckCard => {
 	if (card.cardId) {
@@ -336,6 +338,11 @@ export const addGuessInfoToCard = (
 		default:
 			const cardImpl = cardsInfoCache[creatorCardId];
 			if (hasGeneratingCard(cardImpl)) {
+				const optionsWithDeckContext = {
+					...options,
+					currentClass: options.currentClass ?? deckState.getCurrentClass(),
+					initialDecklist: options.initialDecklist ?? deckState.deckList?.map((c) => c.cardId) ?? [],
+				};
 				const guessedInfo = cardImpl.guessInfo?.({
 					card,
 					deckState,
@@ -343,7 +350,7 @@ export const addGuessInfoToCard = (
 					gameState: gameState,
 					allCards: allCards.getService(),
 					creatorEntityId,
-					options,
+					options: optionsWithDeckContext,
 				});
 				newGuessedInfo = {
 					...card.guessedInfo,

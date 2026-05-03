@@ -40,6 +40,9 @@ export interface GuessInfoInput {
 		metadata?: Metadata;
 		validArenaPool: readonly string[];
 		creatorTags?: readonly { Name: GameTag; Value: number }[];
+		/** Same derivation as dynamic pools (`getDynamicRelatedCardIdsInternal`); callers may override. */
+		currentClass?: string;
+		initialDecklist?: readonly string[];
 	};
 }
 export interface GuessCardIdInput {
