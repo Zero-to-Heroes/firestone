@@ -33,5 +33,4 @@ Once you're done, before assigning the PR to me for review, please mention @curs
 ## Global bugs
 
 - The app's main repo is this one
-- The log parser is at ..\hs-game-converter-csharp-port
 - The reference cards are at ..\hs-reference-data\src\cards_short.json
