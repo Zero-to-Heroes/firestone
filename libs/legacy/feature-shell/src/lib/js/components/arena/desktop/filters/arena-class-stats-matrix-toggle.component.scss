@@ -1,0 +1,12 @@
+.arena-class-stats-matrix-toggle {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	::ng-deep {
+		.preference-toggle .settings-p {
+			color: var(--color-1);
+			width: 160px;
+		}
+	}
+}

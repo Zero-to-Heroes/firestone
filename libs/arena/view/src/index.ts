@@ -7,6 +7,7 @@ export * from './lib/components/card-stats/arena-card-stats.component';
 export * from './lib/components/card-stats/arena-card-type-filter-dropdown.component';
 export * from './lib/components/card-stats/arena-class-filter-dropdown.component';
 export * from './lib/components/class-info/arena-class-info.component';
+export * from './lib/components/class-info/arena-class-stats-matrix.component';
 export * from './lib/components/class-info/arena-class-tier-list-tier.component';
 export * from './lib/components/class-info/arena-class-tier-list.component';
 export * from './lib/components/class-info/arena-tip-popup.component';

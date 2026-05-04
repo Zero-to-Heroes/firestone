@@ -1,8 +1,13 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { ArenaClassStat, WinsDistribution } from '@firestone-hs/arena-stats';
+import { ArenaClassStat, ArenaClassStats, WinsDistribution } from '@firestone-hs/arena-stats';
 import { ArenaHeroAdvice } from '@firestone-hs/content-craetor-input';
 import { ArenaClassInfoTip, ArenaClassStatsService, ArenaMetaHeroStrategiesService } from '@firestone/arena/common';
-import { PatchesConfig, PatchesConfigService } from '@firestone/shared/common/service';
+import {
+	FORCE_SHOW_ARENA_CLASS_STATS_MATRIX_TOGGLE,
+	PatchesConfig,
+	PatchesConfigService,
+	PreferencesService,
+} from '@firestone/shared/common/service';
 import {
 	AbstractSubscriptionComponent,
 	getStandardDeviation,
@@ -21,7 +26,7 @@ import { ArenaClassInfo, ArenaClassTier } from './model';
 			<section
 				class="arena-class-tier-list"
 				[attr.aria-label]="'Arena class tier list'"
-				*ngIf="{ tiers: tiers$ | async } as value"
+				*ngIf="{ tiers: tiers$ | async, showMatrix: showMatrix$ | async, rawStats: rawStats$ | async } as value"
 			>
 				<div class="data-info">
 					<div class="label" [fsTranslate]="'app.decktracker.meta.last-updated'"></div>
@@ -30,24 +35,31 @@ import { ArenaClassInfo, ArenaClassTier } from './model';
 					<div class="label" [fsTranslate]="'app.decktracker.meta.total-games'"></div>
 					<div class="value">{{ totalGames$ | async }}</div>
 				</div>
-				<div class="header">
-					<div class="cell portrait"></div>
-					<div class="cell class-details" [fsTranslate]="'app.arena.class-tier-list.header-hero-name'"></div>
-					<div class="cell winrate" [fsTranslate]="'app.arena.class-tier-list.header-winrate'"></div>
-					<div
-						class="cell placement"
-						[fsTranslate]="'app.arena.class-tier-list.header-placement-distribution'"
-						[helpTooltip]="'app.arena.class-tier-list.header-placement-distribution-tooltip' | fsTranslate"
-					></div>
-					<div class="cell tip" [fsTranslate]="'app.arena.class-tier-list.header-tip'"></div>
-				</div>
-				<div class="heroes-list" role="list" scrollable>
-					<arena-class-tier-list-tier
-						*ngFor="let tier of value.tiers; trackBy: trackByFn"
-						role="listitem"
-						[tier]="tier"
-					></arena-class-tier-list-tier>
-				</div>
+
+				<arena-class-stats-matrix *ngIf="value.showMatrix" [stats]="value.rawStats"></arena-class-stats-matrix>
+
+				<ng-container *ngIf="!value.showMatrix">
+					<div class="header">
+						<div class="cell portrait"></div>
+						<div class="cell class-details" [fsTranslate]="'app.arena.class-tier-list.header-hero-name'"></div>
+						<div class="cell winrate" [fsTranslate]="'app.arena.class-tier-list.header-winrate'"></div>
+						<div
+							class="cell placement"
+							[fsTranslate]="'app.arena.class-tier-list.header-placement-distribution'"
+							[helpTooltip]="
+								'app.arena.class-tier-list.header-placement-distribution-tooltip' | fsTranslate
+							"
+						></div>
+						<div class="cell tip" [fsTranslate]="'app.arena.class-tier-list.header-tip'"></div>
+					</div>
+					<div class="heroes-list" role="list" scrollable>
+						<arena-class-tier-list-tier
+							*ngFor="let tier of value.tiers; trackBy: trackByFn"
+							role="listitem"
+							[tier]="tier"
+						></arena-class-tier-list-tier>
+					</div>
+				</ng-container>
 			</section>
 		</with-loading>
 	`,
@@ -59,6 +71,8 @@ export class ArenaClassTierListComponent extends AbstractSubscriptionComponent i
 	lastUpdate$: Observable<string | null>;
 	lastUpdateFull$: Observable<string | null>;
 	totalGames$: Observable<string>;
+	showMatrix$: Observable<boolean>;
+	rawStats$: Observable<ArenaClassStats | null | undefined>;
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
@@ -66,12 +80,13 @@ export class ArenaClassTierListComponent extends AbstractSubscriptionComponent i
 		private readonly i18n: ILocalizationService,
 		private readonly arenaMetaHeroStrategies: ArenaMetaHeroStrategiesService,
 		private readonly patches: PatchesConfigService,
+		private readonly prefs: PreferencesService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.arenaClassStats, this.arenaMetaHeroStrategies, this.patches);
+		await waitForReady(this.arenaClassStats, this.arenaMetaHeroStrategies, this.patches, this.prefs);
 
 		console.debug('[arena-class-tier-list] after content init');
 		this.tiers$ = combineLatest([
@@ -148,6 +163,16 @@ export class ArenaClassTierListComponent extends AbstractSubscriptionComponent i
 				});
 			}),
 		);
+		this.rawStats$ = this.arenaClassStats.classStatsRaw$$;
+		this.showMatrix$ = combineLatest([
+			this.arenaClassStats.classStatsRaw$$,
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.arenaClassStatsMatrixEnabled)),
+		]).pipe(
+			this.mapData(
+				([raw, enabled]) =>
+					!!enabled && (FORCE_SHOW_ARENA_CLASS_STATS_MATRIX_TOGGLE || hasMultipleHeroPowersPerClass(raw)),
+			),
+		);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.markForCheck();
@@ -182,6 +207,29 @@ export class ArenaClassTierListComponent extends AbstractSubscriptionComponent i
 		return result;
 	}
 }
+
+const hasMultipleHeroPowersPerClass = (raw: ArenaClassStats | null | undefined): boolean => {
+	if (!raw?.stats?.length) {
+		return false;
+	}
+	const heroPowersByClass = new Map<string, Set<string>>();
+	for (const stat of raw.stats) {
+		const classKey = stat.playerClass?.toUpperCase();
+		if (!classKey) {
+			continue;
+		}
+		if (!heroPowersByClass.has(classKey)) {
+			heroPowersByClass.set(classKey, new Set());
+		}
+		heroPowersByClass.get(classKey)!.add(stat.playerHeroPower ?? '');
+	}
+	for (const heroPowers of heroPowersByClass.values()) {
+		if (heroPowers.size > 1) {
+			return true;
+		}
+	}
+	return false;
+};
 
 export const buildArenaClassInfoTiers = (
 	stats: readonly ArenaClassStat[] | null | undefined,

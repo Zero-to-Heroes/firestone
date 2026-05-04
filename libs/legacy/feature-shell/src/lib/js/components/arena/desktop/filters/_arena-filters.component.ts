@@ -1,7 +1,10 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { ArenaNavigationService } from '@firestone/arena/common';
+import { ArenaClassStats } from '@firestone-hs/arena-stats';
+import { ArenaClassStatsService, ArenaNavigationService } from '@firestone/arena/common';
+import { FORCE_SHOW_ARENA_CLASS_STATS_MATRIX_TOGGLE } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { Observable } from 'rxjs';
+import { waitForReady } from '@firestone/shared/framework/core';
+import { Observable, combineLatest } from 'rxjs';
 
 @Component({
 	standalone: false,
@@ -47,7 +50,11 @@ import { Observable } from 'rxjs';
 				field="arenaShowAdvancedCardStats"
 				[label]="'app.arena.filters.show-advanced-card-stats' | owTranslate"
 			></preference-toggle>
-			<replays-icon-toggle class="class-icons" *ngIf="showClassIconToggle$"></replays-icon-toggle>
+			<replays-icon-toggle class="class-icons" *ngIf="showClassIconToggle$ | async"></replays-icon-toggle>
+			<arena-class-stats-matrix-toggle
+				class="filter show-class-stats-matrix"
+				*ngIf="showClassStatsMatrixToggle$ | async"
+			></arena-class-stats-matrix-toggle>
 			<arena-card-search class="filter card-search" *ngIf="showArenaCardSearch$ | async"></arena-card-search>
 		</div>
 	`,
@@ -61,6 +68,7 @@ export class ArenaFiltersComponent extends AbstractSubscriptionComponent impleme
 	showArenaHighWinsCardSearch$: Observable<boolean>;
 	showAdvancedCardStats$: Observable<boolean>;
 	showClassIconToggle$: Observable<boolean>;
+	showClassStatsMatrixToggle$: Observable<boolean>;
 	showClassFilter$: Observable<boolean>;
 	showCardClassFilter$: Observable<boolean>;
 	showCardTypeFilter$: Observable<boolean>;
@@ -68,12 +76,14 @@ export class ArenaFiltersComponent extends AbstractSubscriptionComponent impleme
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly nav: ArenaNavigationService,
+		private readonly arenaClassStats: ArenaClassStatsService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
 		await this.nav.isReady();
+		await waitForReady(this.arenaClassStats);
 
 		this.showRegionFilter$ = this.nav.selectedCategoryId$$.pipe(
 			this.mapData((currentView) => ['arena-runs', 'arena-stats'].includes(currentView)),
@@ -97,8 +107,18 @@ export class ArenaFiltersComponent extends AbstractSubscriptionComponent impleme
 		this.showArenaHighWinsCardSearch$ = this.nav.selectedCategoryId$$.pipe(
 			this.mapData((currentView) => ['arena-high-wins-runs'].includes(currentView)),
 		);
+		this.showClassStatsMatrixToggle$ = combineLatest([
+			this.nav.selectedCategoryId$$,
+			this.arenaClassStats.classStatsRaw$$,
+		]).pipe(
+			this.mapData(
+				([currentView, raw]) =>
+					currentView === 'class-tier-list' &&
+					(FORCE_SHOW_ARENA_CLASS_STATS_MATRIX_TOGGLE || hasMultipleHeroPowersPerClass(raw)),
+			),
+		);
 		this.showClassIconToggle$ = this.nav.selectedCategoryId$$.pipe(
-			this.mapData((currentView) => !['arena-high-wins-runs'].includes(currentView)),
+			this.mapData((currentView) => ['class-tier-list'].includes(currentView)),
 		);
 		this.showClassFilter$ = this.nav.selectedCategoryId$$.pipe(
 			this.mapData((currentView) => ['arena-runs', 'card-stats', 'arena-high-wins-runs'].includes(currentView)),
@@ -115,3 +135,26 @@ export class ArenaFiltersComponent extends AbstractSubscriptionComponent impleme
 		}
 	}
 }
+
+const hasMultipleHeroPowersPerClass = (raw: ArenaClassStats | null | undefined): boolean => {
+	if (!raw?.stats?.length) {
+		return false;
+	}
+	const heroPowersByClass = new Map<string, Set<string>>();
+	for (const stat of raw.stats) {
+		const classKey = stat.playerClass?.toUpperCase();
+		if (!classKey) {
+			continue;
+		}
+		if (!heroPowersByClass.has(classKey)) {
+			heroPowersByClass.set(classKey, new Set());
+		}
+		heroPowersByClass.get(classKey)!.add(stat.playerHeroPower ?? '');
+	}
+	for (const heroPowers of heroPowersByClass.values()) {
+		if (heroPowers.size > 1) {
+			return true;
+		}
+	}
+	return false;
+};

@@ -17,9 +17,12 @@ const ARENA_CLASS_STATS_URL = `https://static.zerotoheroes.com/api/arena/stats/c
 @Injectable()
 export class ArenaClassStatsService extends AbstractFacadeService<ArenaClassStatsService> {
 	public classStats$$: SubscriberAwareBehaviorSubject<ArenaClassStats | null | undefined>;
+	public classStatsRaw$$: SubscriberAwareBehaviorSubject<ArenaClassStats | null | undefined>;
 
 	private api: ApiRunner;
 	private prefs: PreferencesService;
+
+	private internalSub$$ = new SubscriberAwareBehaviorSubject<null>(null);
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'arenaClassStats', () => !!this.classStats$$);
@@ -27,14 +30,23 @@ export class ArenaClassStatsService extends AbstractFacadeService<ArenaClassStat
 
 	protected override assignSubjects() {
 		this.classStats$$ = this.mainInstance.classStats$$;
+		this.classStatsRaw$$ = this.mainInstance.classStatsRaw$$;
 	}
 
 	protected async init() {
 		this.classStats$$ = new SubscriberAwareBehaviorSubject<ArenaClassStats | null | undefined>(null);
+		this.classStatsRaw$$ = new SubscriberAwareBehaviorSubject<ArenaClassStats | null | undefined>(null);
 		this.api = AppInjector.get(ApiRunner);
 		this.prefs = AppInjector.get(PreferencesService);
 
-		this.classStats$$.onFirstSubscribe(async () => {
+		this.classStats$$.onFirstSubscribe(() => {
+			this.internalSub$$.subscribe();
+		});
+		this.classStatsRaw$$.onFirstSubscribe(() => {
+			this.internalSub$$.subscribe();
+		});
+
+		this.internalSub$$.onFirstSubscribe(async () => {
 			await waitForReady(this.prefs);
 
 			combineLatest([
@@ -55,19 +67,22 @@ export class ArenaClassStatsService extends AbstractFacadeService<ArenaClassStat
 							: timeFilter === 'past-three'
 								? 'past-3'
 								: timeFilter;
-				const result: ArenaClassStats | null = await this.buildClassStats(timePeriod, modeFilter);
-				console.debug('[arena-class-stats] loaded class stats', result);
-				this.classStats$$.next(result);
+				const rawResult: ArenaClassStats | null = await this.buildClassStats(timePeriod, modeFilter);
+				console.debug('[arena-class-stats] loaded class stats', rawResult);
+				this.classStatsRaw$$.next(rawResult);
+				this.classStats$$.next(consolidateByPlayerClass(rawResult));
 			});
 		});
 	}
 
 	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
 		this.classStats$$ = new SubscriberAwareBehaviorSubject<ArenaClassStats | null | undefined>(null);
+		this.classStatsRaw$$ = new SubscriberAwareBehaviorSubject<ArenaClassStats | null | undefined>(null);
 	}
 
 	protected override async initElectronSubjects() {
 		this.setupElectronSubject(this.classStats$$, 'ArenaClassStatsService-classStats');
+		this.setupElectronSubject(this.classStatsRaw$$, 'ArenaClassStatsService-classStatsRaw');
 	}
 
 	public async buildClassStats(timePeriod: string, modeFilter: ArenaModeFilterType): Promise<ArenaClassStats | null> {
@@ -88,24 +103,34 @@ export class ArenaClassStatsService extends AbstractFacadeService<ArenaClassStat
 		if (!result?.stats?.length) {
 			return null;
 		}
-
-		const consolidatedByPlayerClass: ArenaClassStat[] = [];
-		for (const playerClass of ALL_CLASSES) {
-			const playerClassStats: readonly ArenaClassStat[] =
-				result.stats.filter((s) => s.playerClass?.toUpperCase() === playerClass.toUpperCase()) ?? [];
-			if (!playerClassStats.length) {
-				continue;
-			}
-
-			const mergedStats = mergeForPlayerClass(playerClassStats);
-			consolidatedByPlayerClass.push(mergedStats);
-		}
-		return {
-			...result,
-			stats: consolidatedByPlayerClass,
-		};
+		return result;
 	}
 }
+
+const consolidateByPlayerClass = (raw: ArenaClassStats | null | undefined): ArenaClassStats | null | undefined => {
+	if (!raw) {
+		return raw;
+	}
+	if (!raw.stats?.length) {
+		return null;
+	}
+
+	const consolidatedByPlayerClass: ArenaClassStat[] = [];
+	for (const playerClass of ALL_CLASSES) {
+		const playerClassStats: readonly ArenaClassStat[] =
+			raw.stats.filter((s) => s.playerClass?.toUpperCase() === playerClass.toUpperCase()) ?? [];
+		if (!playerClassStats.length) {
+			continue;
+		}
+
+		const mergedStats = mergeForPlayerClass(playerClassStats);
+		consolidatedByPlayerClass.push(mergedStats);
+	}
+	return {
+		...raw,
+		stats: consolidatedByPlayerClass,
+	};
+};
 
 const mergeForPlayerClass = (playerClassStats: readonly ArenaClassStat[]): ArenaClassStat => {
 	const ref = playerClassStats[0];
