@@ -12,15 +12,17 @@ import {
 	forcedHiddenCardCreators,
 	isCastWhenDrawn,
 	publicCardCreators,
-	specialCasePublicCardCreators,
 	SHATTER_HAND_PIECE_CREATOR_FALLBACK_CARD_IDS,
+	specialCasePublicCardCreators,
 } from '../../hs-utils';
 import { revealCardInOpponentDeck } from '../card-reveal';
 import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 
-const CREATOR_STEALS = [CardIds.NightmareFuel_EDR_528];
+const CREATOR_STEALS: readonly CardIds[] = [
+	// CardIds.NightmareFuel_EDR_528
+];
 
 /**
  * Cosmetic set coins (e.g. TLC_COIN2) may appear in logs before reference data includes them, or may
@@ -88,9 +90,7 @@ export class ReceiveCardInHandParser implements EventParser {
 					.find(
 						(c) =>
 							c.cardId != null &&
-							(SHATTER_HAND_PIECE_CREATOR_FALLBACK_CARD_IDS as readonly string[]).includes(
-								c.cardId,
-							),
+							(SHATTER_HAND_PIECE_CREATOR_FALLBACK_CARD_IDS as readonly string[]).includes(c.cardId),
 					);
 				if (sourcePlayed) {
 					creatorCardId = sourcePlayed.cardId as CardIds;
