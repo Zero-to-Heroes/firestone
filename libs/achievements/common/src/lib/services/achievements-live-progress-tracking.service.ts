@@ -6,7 +6,6 @@ import {
 } from '@firestone/achievements/common';
 import { AchievementsRefLoaderService, HsRefAchievement } from '@firestone/achievements/data-access';
 import { GameEvent, GameEventsEmitterService } from '@firestone/game-state';
-import { AchievementsRemovePinnedAchievementsEvent, MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import {
 	equalHsAchievementInfo,
 	HsAchievementInfo,
@@ -23,6 +22,7 @@ export class AchievementsLiveProgressTrackingService {
 	public achievementsProgressTracking$$ = new SubscriberAwareBehaviorSubject<readonly AchievementsProgressTracking[]>(
 		[],
 	);
+	public pinnedAchievementIds$$ = new BehaviorSubject<readonly number[]>([]);
 
 	private achievementQuotas: { [achievementId: number]: number };
 	private refAchievements: readonly HsRefAchievement[];
@@ -40,7 +40,6 @@ export class AchievementsLiveProgressTrackingService {
 		private readonly ow: OverwolfService,
 		private readonly gameStatus: GameStatusService,
 		private readonly prefs: PreferencesService,
-		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
 	) {
 		this.init();
 	}
@@ -48,7 +47,7 @@ export class AchievementsLiveProgressTrackingService {
 	private init() {
 		this.achievementsProgressTracking$$.onFirstSubscribe(async () => {
 			console.debug('[achievements-live-progress-tracking] init');
-			await waitForReady(this.prefs, this.mainWindowStateFacade);
+			await waitForReady(this.prefs);
 
 			combineLatest([
 				this.gameStatus.inGame$$,
@@ -112,16 +111,13 @@ export class AchievementsLiveProgressTrackingService {
 									achievement: HsRefAchievement;
 								}[];
 							const completedAchievements = mappedAchiements.filter((a) => !a.achievement);
-							// console.debug(
-							// 	'[achievements-live-progress-tracking] completedAchievements',
-							// 	completedAchievements,
-							// 	mappedAchiements,
-							// 	pinnedAchievementIds,
-							// 	achievementsOnGameStart,
-							// );
-							this.mainWindowStateFacade.send(
-								new AchievementsRemovePinnedAchievementsEvent(completedAchievements.map((a) => a.id)),
+							const completedAchievementIds = completedAchievements.map((a) => a.id);
+							const prefs = await this.prefs.getPreferences();
+							const existingPinnedAchievements = prefs.pinnedAchievementIds || [];
+							const newPinnedAchievements = existingPinnedAchievements.filter(
+								(id) => !completedAchievementIds.includes(id),
 							);
+							this.prefs.updatePrefs('pinnedAchievementIds', newPinnedAchievements);
 
 							// When pinning an achievement, we get the first step of the achievements chain
 							// We actually want to pin the most recent uncompleted step
