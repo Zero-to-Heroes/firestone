@@ -118,7 +118,7 @@ export class ArenaFiltersComponent extends AbstractSubscriptionComponent impleme
 			),
 		);
 		this.showClassIconToggle$ = this.nav.selectedCategoryId$$.pipe(
-			this.mapData((currentView) => ['class-tier-list'].includes(currentView)),
+			this.mapData((currentView) => !['class-tier-list'].includes(currentView)),
 		);
 		this.showClassFilter$ = this.nav.selectedCategoryId$$.pipe(
 			this.mapData((currentView) => ['arena-runs', 'card-stats', 'arena-high-wins-runs'].includes(currentView)),
