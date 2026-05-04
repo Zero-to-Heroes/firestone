@@ -6,7 +6,7 @@ import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { StatsDataAccessModule } from '@firestone/stats/data-access';
 import { GameStatsProviderService } from './services/game-stats-provider.service';
 import { MatchAnalysisService } from './services/match-analysis.service';
-import { ReplayMetadataBuilderService } from './services/replay-metadata-bulder.service';
+import { ReplayMetadataBuilderService } from './services/replay-metadata-builder.service';
 
 @NgModule({
 	imports: [

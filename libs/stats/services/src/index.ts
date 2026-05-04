@@ -4,5 +4,5 @@ export * from './lib/services/game-stat-utils';
 export * from './lib/services/game-stats-provider.interface';
 export * from './lib/services/game-stats-provider.service';
 export * from './lib/services/match-analysis.service';
-export * from './lib/services/replay-metadata-bulder.service';
+export * from './lib/services/replay-metadata-builder.service';
 export * from './lib/stats-services.module';

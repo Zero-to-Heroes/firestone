@@ -112,10 +112,12 @@ export class ReplayMetadataBuilderService {
 
 				mainPlayerName: replay.mainPlayerName,
 				mainPlayerCardId: replay.mainPlayerCardId,
+				mainPlayerStartingHeroPowerCardId: replay.mainPlayerHeroPowerCardId,
 				mainPlayerId: game.replay.mainPlayerId,
 				opponentPlayerName: replay.opponentPlayerName,
 				forceOpponentName: game.forceOpponentName as string,
 				opponentPlayerCardId: replay.opponentPlayerCardId,
+				opponentStartingHeroPowerCardId: replay.opponentPlayerHeroPowerCardId,
 				opponentPlayerId: game.replay.opponentPlayerId,
 				result: replay.result,
 				playCoin: replay.playCoin,
