@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { ArenaClassStats } from '@firestone-hs/arena-stats';
+import { ArenaClassMatchup, ArenaClassStat, ArenaClassStats, WinsDistribution } from '@firestone-hs/arena-stats';
+import { ALL_CLASSES } from '@firestone-hs/reference-data';
 import { ArenaModeFilterType, PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import {
@@ -83,6 +84,64 @@ export class ArenaClassStatsService extends AbstractFacadeService<ArenaClassStat
 			modeFilterCorrected,
 		);
 		const result: ArenaClassStats | null = await this.api.callGetApi(url);
-		return result;
+		console.debug('[arena-class-stats] loaded class stats from url', url, result);
+		if (!result?.stats?.length) {
+			return null;
+		}
+
+		const consolidatedByPlayerClass: ArenaClassStat[] = [];
+		for (const playerClass of ALL_CLASSES) {
+			const playerClassStats: readonly ArenaClassStat[] =
+				result.stats.filter((s) => s.playerClass?.toUpperCase() === playerClass.toUpperCase()) ?? [];
+			if (!playerClassStats.length) {
+				continue;
+			}
+
+			const mergedStats = mergeForPlayerClass(playerClassStats);
+			consolidatedByPlayerClass.push(mergedStats);
+		}
+		return {
+			...result,
+			stats: consolidatedByPlayerClass,
+		};
 	}
 }
+
+const mergeForPlayerClass = (playerClassStats: readonly ArenaClassStat[]): ArenaClassStat => {
+	const ref = playerClassStats[0];
+	const mergedStats: ArenaClassStat = {
+		playerClass: ref.playerClass,
+		totalGames: playerClassStats.reduce((acc, curr) => acc + curr.totalGames, 0),
+		totalsWins: playerClassStats.reduce((acc, curr) => acc + curr.totalsWins, 0),
+		winsDistribution: mergeWinsDistribution(playerClassStats.flatMap((s) => s.winsDistribution)),
+		matchups: mergeMatchups(playerClassStats.flatMap((s) => s.matchups)),
+	};
+	return mergedStats;
+};
+
+const mergeWinsDistribution = (winsDistributions: readonly WinsDistribution[]): WinsDistribution[] => {
+	const result: WinsDistribution[] = [];
+	for (const winsDistribution of winsDistributions) {
+		const existing = result.find((r) => r.wins === winsDistribution.wins);
+		if (existing) {
+			existing.total += winsDistribution.total;
+		} else {
+			result.push(winsDistribution);
+		}
+	}
+	return result;
+};
+
+const mergeMatchups = (matchups: readonly ArenaClassMatchup[]): ArenaClassMatchup[] => {
+	const result: ArenaClassMatchup[] = [];
+	for (const matchup of matchups) {
+		const existing = result.find((r) => r.opponentClass === matchup.opponentClass);
+		if (existing) {
+			existing.totalGames += matchup.totalGames;
+			existing.totalsWins += matchup.totalsWins;
+		} else {
+			result.push(matchup);
+		}
+	}
+	return result;
+};
