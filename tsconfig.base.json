@@ -54,6 +54,7 @@
 			"@firestone/mercenaries/common": ["libs/mercenaries/common/src/index.ts"],
 			"@firestone/mods/common": ["libs/mods/common/src/index.ts"],
 			"@firestone/profile/common": ["libs/profile/common/src/index.ts"],
+			"@firestone/profile/services": ["libs/profile/services/src/index.ts"],
 			"@firestone/profile/data-access": ["libs/profile/data-access/src/index.ts"],
 			"@firestone/replay/coliseum": ["libs/replay/coliseum/src/index.ts"],
 			"@firestone/replay/replay-parser": ["libs/replay/replay-parser/src/index.ts"],

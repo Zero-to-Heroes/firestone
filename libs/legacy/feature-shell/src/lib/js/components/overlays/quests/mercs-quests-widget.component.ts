@@ -8,23 +8,22 @@ import {
 } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { MemoryVisitor, SceneService } from '@firestone/memory';
-import { PreferencesService } from '@firestone/shared/common/service';
-import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
-import { distinctUntilChanged, filter, startWith } from 'rxjs/operators';
 import {
 	BattleAbility,
 	BattleEquipment,
 	BattleMercenary,
-	MercenariesBattleTeam,
-} from '../../../models/mercenaries/mercenaries-battle-state';
-import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { MercenariesMemoryCacheService } from '@firestone/mercenaries/common';
-import {
 	getHeroRole,
+	MercenariesBattleStateFacadeService,
+	MercenariesBattleTeam,
+	MercenariesMemoryCacheService,
 	MercenariesReferenceData,
 	MercenariesReferenceDataService,
 } from '@firestone/mercenaries/common';
+import { PreferencesService } from '@firestone/shared/common/service';
+import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { distinctUntilChanged, filter, startWith } from 'rxjs/operators';
+import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { buildMercenariesTasksList } from '../../../services/ui-store/mercenaries-ui-helper';
 import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
@@ -57,7 +56,7 @@ import { Task } from '../../mercenaries/overlay/teams/mercenaries-team-root..com
 				[ngClass]="{
 					visible: showTaskList$ | async,
 					right: showRight$ | async,
-					bottom: showBottom$ | async
+					bottom: showBottom$ | async,
 				}"
 				[tasks]="tasks$ | async"
 			></mercs-tasks-list>
@@ -82,31 +81,35 @@ export class MercsQuestsWidgetComponent extends AbstractSubscriptionStoreCompone
 		private readonly el: ElementRef,
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
-		private readonly mercenariesCollection: MercenariesMemoryCacheService,
-		private readonly mercenariesReferenceData: MercenariesReferenceDataService,
 		private readonly scene: SceneService,
 		private readonly prefs: PreferencesService,
+		private readonly mercenariesCollection: MercenariesMemoryCacheService,
+		private readonly mercenariesReferenceData: MercenariesReferenceDataService,
+		private readonly mercenariesBattleStateFacade: MercenariesBattleStateFacadeService,
 	) {
 		super(store, cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.mercenariesCollection, this.mercenariesReferenceData, this.scene, this.prefs);
+		await waitForReady(
+			this.mercenariesCollection,
+			this.mercenariesReferenceData,
+			this.scene,
+			this.prefs,
+			this.mercenariesBattleStateFacade,
+		);
 
-		const team$ = this.store
-			.listenMercenaries$(([battleState, prefs]) => battleState)
-			.pipe(
-				filter(([battleState]) => !!battleState),
-				this.mapData(([battleState]) =>
-					battleState.playerTeam.update({
-						...battleState.playerTeam,
-						mercenaries:
-							battleState.playerTeam.mercenaries?.filter((merc) => !merc.isDead || !merc.creatorCardId) ??
-							[],
-					}),
-				),
-				startWith(null),
-			);
+		const team$ = this.mercenariesBattleStateFacade.store$$.pipe(
+			filter((battleState) => !!battleState),
+			this.mapData((battleState) =>
+				battleState.playerTeam.update({
+					...battleState.playerTeam,
+					mercenaries:
+						battleState.playerTeam.mercenaries?.filter((merc) => !merc.isDead || !merc.creatorCardId) ?? [],
+				}),
+			),
+			startWith(null),
+		);
 		const oocTeam$ = combineLatest([
 			this.scene.currentScene$$,
 			this.mercenariesReferenceData.referenceData$$,

@@ -1,11 +1,14 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import {
+	MercenariesBattleState,
+	MercenariesBattleStateFacadeService,
+	MercenariesBattleTeam,
+} from '@firestone/mercenaries/common';
 import { Preferences } from '@firestone/shared/common/service';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
-import { debounceTime, filter, map } from 'rxjs/operators';
-import { MercenariesBattleState, MercenariesBattleTeam } from '../../../../models/mercenaries/mercenaries-battle-state';
-import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	standalone: false,
@@ -21,7 +24,7 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MercenariesOpponentTeamComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class MercenariesOpponentTeamComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	@Input() tooltipPosition: CardTooltipPositionType = 'left';
 
 	teamExtractor = (state: MercenariesBattleState) => state.opponentTeam;
@@ -30,25 +33,27 @@ export class MercenariesOpponentTeamComponent extends AbstractSubscriptionStoreC
 	team$: Observable<MercenariesBattleTeam>;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly mercenariesBattleStateFacade: MercenariesBattleStateFacadeService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
-	ngAfterContentInit() {
-		this.team$ = this.store
-			.listenMercenaries$(([battleState, prefs]) => battleState)
-			.pipe(
-				debounceTime(250),
-				filter(([battleState]) => !!battleState),
-				map(([battleState]) => battleState.opponentTeam),
-				this.mapData((team) =>
-					team.update({
-						...team,
-						mercenaries: team.mercenaries?.filter((merc) => !merc.isDead || !merc.creatorCardId) ?? [],
-					}),
-				),
-			);
+	async ngAfterContentInit() {
+		await waitForReady(this.mercenariesBattleStateFacade);
+
+		this.team$ = this.mercenariesBattleStateFacade.store$$.pipe(
+			this.mapData((state) =>
+				state?.opponentTeam.update({
+					...state.opponentTeam,
+					mercenaries:
+						state.opponentTeam.mercenaries?.filter((merc) => !merc.isDead || !merc.creatorCardId) ?? [],
+				}),
+			),
+		);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.markForCheck();
+		}
 	}
 }

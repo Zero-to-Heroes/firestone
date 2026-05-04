@@ -9,11 +9,11 @@ import {
 } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { SceneService } from '@firestone/memory';
+import { MercenariesOutOfCombatFacadeService } from '@firestone/mercenaries/common';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, distinctUntilChanged } from 'rxjs';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
 @Component({
@@ -60,15 +60,15 @@ export class MercsOutOfCombatPlayerTeamWidgetWrapperComponent
 		protected readonly el: ElementRef,
 		protected readonly prefs: PreferencesService,
 		protected readonly renderer: Renderer2,
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly scene: SceneService,
+		private readonly mercenariesOutOfCombatFacade: MercenariesOutOfCombatFacadeService,
 	) {
 		super(ow, el, prefs, renderer, cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.scene, this.prefs);
+		await waitForReady(this.scene, this.prefs, this.mercenariesOutOfCombatFacade);
 
 		this.showWidget$ = combineLatest([
 			this.scene.currentScene$$,
@@ -83,9 +83,9 @@ export class MercsOutOfCombatPlayerTeamWidgetWrapperComponent
 						a.displayFromPrefsVillage === b.displayFromPrefsVillage,
 				),
 			),
-			this.store.listenMercenariesOutOfCombat$(([state, prefs]) => !!state),
+			this.mercenariesOutOfCombatFacade.store$$.pipe(this.mapData((state) => !!state)),
 		]).pipe(
-			this.mapData(([currentScene, { displayFromPrefs, displayFromPrefsVillage }, [hasState]]) => {
+			this.mapData(([currentScene, { displayFromPrefs, displayFromPrefsVillage }, hasState]) => {
 				const scenes = [];
 				if (displayFromPrefs) {
 					scenes.push(SceneMode.LETTUCE_MAP);

@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { BattleSpeedModifier } from '@firestone/mercenaries/common';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { BattleSpeedModifier } from '../../../../models/mercenaries/mercenaries-battle-state';
 
 @Component({
 	standalone: false,
@@ -95,18 +95,18 @@ export class MercenariesTeamAbilityComponent {
 							...(value.speedModifier?.influences ?? []),
 							...(value.heroSpeedModifier?.influences ?? []),
 						],
-				  }
+					}
 				: null;
 		this.baseSpeed = abilityCard.cost ?? 0;
 		this.speed =
 			value.speed == null
 				? null
 				: // The speed has been directly modified because of a COST tag change
-				value.speed !== this.baseSpeed
-				? value.speed
-				: // It can happen that the ability hasn't been modified by a COST tag change, but that
-				  // we know some modifiers apply to the hero. In this case, we show it
-				  value.speed + (this.speedModifier?.value ?? 0);
+					value.speed !== this.baseSpeed
+					? value.speed
+					: // It can happen that the ability hasn't been modified by a COST tag change, but that
+						// we know some modifiers apply to the hero. In this case, we show it
+						value.speed + (this.speedModifier?.value ?? 0);
 		this.speedForDisplay = this.speed == null ? null : Math.max(0, this.speed);
 		const influences = (this.speedModifier?.influences ?? [])
 			.map((influence) => `${this.allCards.getCard(influence.cardId).name}: ${influence.value}`)
@@ -119,10 +119,10 @@ export class MercenariesTeamAbilityComponent {
 			? this.speed > this.baseSpeed
 				? this.i18n.translateString('mercenaries.team-widget.speed-debuff', {
 						value: Math.abs(this.speed - this.baseSpeed),
-				  })
+					})
 				: this.i18n.translateString('mercenaries.team-widget.speed-buff', {
 						value: Math.abs(this.speed - this.baseSpeed),
-				  })
+					})
 			: null;
 		this.speedModifierTooltip = speedModifierBaseText ? `${speedModifierBaseText}. ${influenceText}` : null;
 	}
@@ -142,7 +142,10 @@ export class MercenariesTeamAbilityComponent {
 	speedModifier: BattleSpeedModifier;
 	speedModifierTooltip: string;
 
-	constructor(private readonly allCards: CardsFacadeService, private readonly i18n: LocalizationFacadeService) {}
+	constructor(
+		private readonly allCards: CardsFacadeService,
+		private readonly i18n: LocalizationFacadeService,
+	) {}
 
 	buildAbilityArtUrl(cardId: string): string {
 		return `https://static.zerotoheroes.com/hearthstone/cardart/256x/${cardId}.jpg`;

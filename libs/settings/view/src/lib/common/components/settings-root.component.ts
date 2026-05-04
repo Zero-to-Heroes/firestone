@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { ArenaRewardsService } from '@firestone/arena/common';
 import { COLLECTION_PACK_SERVICE_TOKEN, ICollectionPackService } from '@firestone/collection/common';
-import { AccountService } from '@firestone/profile/common';
+import { AccountService } from '@firestone/profile/services';
 import { SettingContext, SettingNode, SettingsControllerService } from '@firestone/settings/services';
 import { DiskCacheService, Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';

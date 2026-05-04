@@ -5,29 +5,27 @@ import {
 	VillageVisitorType,
 } from '@firestone-hs/reference-data';
 import { MemoryVisitor } from '@firestone/memory';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { GameStat } from '@firestone/stats/data-access';
-import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { BountyForMerc } from '../../components/mercenaries/desktop/mercenaries-personal-hero-stats.component';
-import { Task } from '../../components/mercenaries/overlay/teams/mercenaries-team-root..component';
-import {
-	MercenariesHeroLevelFilterType,
-	MercenariesModeFilterType,
-	MercenariesPveDifficultyFilterType,
-	MercenariesPvpMmrFilterType,
-	MercenariesRoleFilterType,
-	MercenariesStarterFilterType,
-} from '../../models/mercenaries/mercenaries-filter-types';
 import {
 	getHeroRole,
 	getShortMercHeroName,
 	isMercenariesPvE,
 	isMercenariesPvP,
 	MercenariesComposition,
+	MercenariesHeroLevelFilterType,
 	MercenariesHeroStat,
+	MercenariesModeFilterType,
+	MercenariesPveDifficultyFilterType,
+	MercenariesPvpMmrFilterType,
 	MercenariesReferenceData,
+	MercenariesRoleFilterType,
+	MercenariesStarterFilterType,
 	normalizeMercenariesCardId,
 } from '@firestone/mercenaries/common';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { GameStat } from '@firestone/stats/data-access';
+import { LocalizationFacadeService } from '@services/localization-facade.service';
+import { BountyForMerc } from '../../components/mercenaries/desktop/mercenaries-personal-hero-stats.component';
+import { Task } from '../../components/mercenaries/overlay/teams/mercenaries-team-root..component';
 
 export const filterMercenariesHeroStats = (
 	heroStats: readonly MercenariesHeroStat[],
@@ -231,7 +229,7 @@ export const buildMercenariesTasksList = (
 					: i18n.translateString('mercenaries.team-widget.task-title', {
 							taskNumber: visitor.TaskChainProgress + 1,
 							taskTitle: title,
-					  }),
+						}),
 				description: description,
 				progress: visitor.TaskProgress,
 				quota: task.quota,

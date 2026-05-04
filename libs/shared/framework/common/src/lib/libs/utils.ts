@@ -72,6 +72,23 @@ export const shuffleArray = <T>(array: T[]): T[] => {
 	return shuffledArray;
 };
 
+export const updateFirstElementWithoutProp = <T>(
+	array: readonly T[],
+	propSelector: (entity: T) => any,
+	base: T | Partial<T> | NonFunctionProperties<T> | Partial<NonFunctionProperties<T>>,
+): readonly T[] => {
+	if (!array?.length) {
+		return [];
+	}
+	const withoutPropertyElements = array.filter((e) => !propSelector(e));
+	if (!withoutPropertyElements.length) {
+		// console.warn('could not find any element without property', propSelector, array);
+		return array;
+	}
+	const indexWithoutProperty = array.indexOf(withoutPropertyElements[0]);
+	return replaceInArray(array, indexWithoutProperty, base as T);
+};
+
 export const replaceInArray = <T>(array: readonly T[], index: number, element: T): T[] => {
 	const ret = array.slice(0);
 	ret[index] = element;

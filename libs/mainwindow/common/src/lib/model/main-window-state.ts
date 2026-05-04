@@ -1,6 +1,5 @@
 import { GlobalStats } from '@firestone-hs/build-global-stats/dist/model/global-stats';
 import { ArenaState } from '@firestone/arena/common';
-import { MercenariesState } from '@firestone/mercenaries/common';
 import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { AchievementsState } from './achievements-state';
 import { BattlegroundsAppState } from './battlegrounds/battlegrounds-app-state';
@@ -16,7 +15,6 @@ export class MainWindowState {
 	readonly decktracker: DecktrackerState = new DecktrackerState();
 	readonly battlegrounds: BattlegroundsAppState = new BattlegroundsAppState();
 	readonly arena: ArenaState = new ArenaState();
-	readonly mercenaries: MercenariesState = new MercenariesState();
 	readonly stats: StatsState = new StatsState();
 	readonly streams: StreamsState = new StreamsState();
 	readonly globalStats: GlobalStats | undefined = undefined;

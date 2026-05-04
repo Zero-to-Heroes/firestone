@@ -11,7 +11,7 @@ import { SceneMode } from '@firestone-hs/reference-data';
 import { AbstractWidgetWrapperComponent } from '@firestone/app/view';
 import { GameStateFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
-import { AccountService } from '@firestone/profile/common';
+import { AccountService } from '@firestone/profile/services';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';

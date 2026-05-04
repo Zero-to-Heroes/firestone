@@ -8,7 +8,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { PieChartComponent } from '@components/common/chart/pie-chart.component';
 import { AllCardsService as RefCards } from '@firestone-hs/reference-data';
-import { AccountService, ProfileCommonModule } from '@firestone/profile/common';
+import { ProfileCommonModule } from '@firestone/profile/common';
+import { AccountService, ProfileServicesModule } from '@firestone/profile/services';
 import { SelectModule } from '@sebastientromp/ng-select';
 import { NgxChartsModule } from '@sebastientromp/ngx-charts';
 import { VirtualScrollerModule } from '@sebastientromp/ngx-virtual-scroller';
@@ -432,7 +433,7 @@ import {
 } from '@firestone/mainwindow/common';
 import { MainwindowViewModule } from '@firestone/mainwindow/view';
 import { MemoryModule } from '@firestone/memory';
-import { MercenariesCommonModule, MercenariesMemoryCacheService } from '@firestone/mercenaries/common';
+import { MercenariesCommonModule } from '@firestone/mercenaries/common';
 import { ModsCommonModule } from '@firestone/mods/common';
 import { ReplayColiseumModule } from '@firestone/replay/coliseum';
 import { AllCardsService } from '@firestone/replay/replay-parser';
@@ -591,9 +592,6 @@ import { LocalizationService } from './js/services/localization.service';
 import { LogRegisterService } from './js/services/log-register.service';
 import { OutOfCardsService } from './js/services/mainwindow/out-of-cards.service';
 import { TwitchPresenceService } from './js/services/mainwindow/twitch-presence.service';
-import { MercenariesSynergiesHighlightService } from './js/services/mercenaries/highlights/mercenaries-synergies-highlight.service';
-import { MercenariesStoreService } from './js/services/mercenaries/mercenaries-store.service';
-import { MercenariesOutOfCombatService } from './js/services/mercenaries/out-of-combat/mercenaries-out-of-combat.service';
 import { ReplaysNotificationService } from './js/services/replays/replays-notification.service';
 import { GameOverService } from './js/services/stats/game/game-over.service';
 import { GameStatsUpdaterService } from './js/services/stats/game/game-stats-updater.service';
@@ -682,6 +680,7 @@ try {
 		TwitchCommonModule,
 		ModsCommonModule,
 		ProfileCommonModule,
+		ProfileServicesModule,
 		BattlegroundsServicesModule,
 		MainwindowViewModule,
 		TavernBrawlCommonModule,
@@ -1340,11 +1339,6 @@ try {
 		BgsGlobalStatsService,
 		BgsCustomSimulationService,
 		BgsOverlayHeroOverviewService,
-
-		MercenariesMemoryCacheService,
-		MercenariesStoreService,
-		MercenariesOutOfCombatService,
-		MercenariesSynergiesHighlightService,
 
 		GameStatsUpdaterService,
 		GameOverService,

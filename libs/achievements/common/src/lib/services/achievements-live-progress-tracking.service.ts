@@ -1,9 +1,4 @@
 import { Injectable } from '@angular/core';
-import {
-	AchievementsMemoryMonitor,
-	AchievementsStateManagerService,
-	buildAchievementHierarchy,
-} from '@firestone/achievements/common';
 import { AchievementsRefLoaderService, HsRefAchievement } from '@firestone/achievements/data-access';
 import { GameEvent, GameEventsEmitterService } from '@firestone/game-state';
 import {
@@ -16,6 +11,9 @@ import { GameStatusService, PreferencesService } from '@firestone/shared/common/
 import { arraysEqual, SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { HEARTHSTONE_GAME_ID, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, distinctUntilChanged, filter, map, skipWhile, take, tap } from 'rxjs';
+import { buildAchievementHierarchy } from './achievement-utils';
+import { AchievementsMemoryMonitor } from './achievements-memory-monitor.service';
+import { AchievementsStateManagerService } from './achievements-state-manager.service';
 
 @Injectable({ providedIn: 'root' })
 export class AchievementsLiveProgressTrackingService {

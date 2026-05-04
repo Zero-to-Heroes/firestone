@@ -2,11 +2,8 @@
  * Store public API - use @firestone/mainwindow/common to import.
  * Kept separate from main package to avoid circular dependencies.
  */
-export * from './store-bootstrap.service';
-export * from './processors/processor';
 export * from './processors/achievements/achievement-completed-processor';
 export * from './processors/achievements/achievements-full-refresh-processor';
-export * from './processors/achievements/achievements-remove-pinned-achievements';
 export * from './processors/achievements/achievements-track-random-achievements';
 export * from './processors/achievements/change-visible-achievement-processor';
 export * from './processors/achievements/filter-shown-achievements-processor';
@@ -63,10 +60,10 @@ export * from './processors/ftue/previous-ftue-processor';
 export * from './processors/ftue/skip-ftue-processor';
 export * from './processors/generic-preferences-update-processor';
 export * from './processors/mercenaries/mercenaries-add-merc-to-backup-team-processor';
-export * from './processors/mercenaries/mercenaries-hero-level-filter-selected-processor';
-export * from './processors/mercenaries/mercenaries-hero-selected-processor';
+// export * from './processors/mercenaries/mercenaries-hero-level-filter-selected-processor';
+// export * from './processors/mercenaries/mercenaries-hero-selected-processor';
 export * from './processors/mercenaries/mercenaries-hide-team-summary-processor';
-export * from './processors/mercenaries/mercenaries-mode-filter-selected-processor';
+// export * from './processors/mercenaries/mercenaries-mode-filter-selected-processor';
 export * from './processors/mercenaries/mercenaries-personal-heroes-sort-processor';
 export * from './processors/mercenaries/mercenaries-pve-difficulty-filter-selected-processor';
 export * from './processors/mercenaries/mercenaries-remove-merc-to-backup-team-processor';
@@ -77,6 +74,7 @@ export * from './processors/mercenaries/mercenaries-starter-filter-selected-proc
 export * from './processors/mercenaries/mercenaries-toggle-show-hidden-teams-processor';
 export * from './processors/navigation/navigation-back-processor';
 export * from './processors/navigation/navigation-next-processor';
+export * from './processors/processor';
 export * from './processors/replays/show-match-stats-processor';
 export * from './processors/replays/show-replay-processor';
 export * from './processors/replays/show-replays-processor';
@@ -88,3 +86,4 @@ export * from './processors/stats/profile-select-category';
 export * from './processors/stats/recompute-game-stats-processor';
 export * from './processors/stats/stats-xp-graph-filter-selected-processor';
 export * from './processors/store-init-processor';
+export * from './store-bootstrap.service';

@@ -157,6 +157,7 @@ export const replaceInArray = <T>(array: readonly T[], index: number, element: T
 	return ret;
 };
 
+/** @deprecated */
 export const updateFirstElementWithoutProp = <T>(
 	array: readonly T[],
 	propSelector: (entity: T) => any,

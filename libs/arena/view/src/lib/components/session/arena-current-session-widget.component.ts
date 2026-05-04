@@ -5,7 +5,7 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { BnetRegion, GameType } from '@firestone-hs/reference-data';
 import { ArenaDraftManagerService, ArenaRun, ArenaRunsService, getFirstMatchInRun } from '@firestone/arena/common';
 import { GameStateFacadeService } from '@firestone/game-state';
-import { AccountService } from '@firestone/profile/common';
+import { AccountService } from '@firestone/profile/services';
 import {
 	ArenaSessionWidgetTimeFrame,
 	PatchesConfigService,

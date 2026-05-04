@@ -20,7 +20,7 @@ import {
 	GameStateFacadeService,
 	StatsRecap,
 } from '@firestone/game-state';
-import { AccountService } from '@firestone/profile/common';
+import { AccountService } from '@firestone/profile/services';
 import { PatchesConfigService, Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';

@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { ConstructedCommonModule } from '@firestone/constructed/common';
 import { GameStateModule } from '@firestone/game-state';
 import { MemoryModule } from '@firestone/memory';
-import { ProfileCommonModule } from '@firestone/profile/common';
+import { ProfileServicesModule } from '@firestone/profile/services';
 import { SharedCommonServiceModule } from '@firestone/shared/common/service';
 import { SharedFrameworkCommonModule } from '@firestone/shared/framework/common';
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
@@ -33,7 +33,7 @@ import { ArenaRunsService } from './services/arena-runs.service';
 		SharedCommonServiceModule,
 		MemoryModule,
 		GameStateModule,
-		ProfileCommonModule,
+		ProfileServicesModule,
 	],
 	providers: [
 		ArenaClassStatsService,

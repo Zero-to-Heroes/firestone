@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DraftDeckStats } from '@firestone-hs/arena-draft-pick';
-import { AccountService } from '@firestone/profile/common';
+import { AccountService } from '@firestone/profile/services';
 import { DiskCacheService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import {

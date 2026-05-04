@@ -1,20 +1,21 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { MercenariesMapType, SceneMode } from '@firestone-hs/reference-data';
 import { SceneService } from '@firestone/memory';
-import { Preferences } from '@firestone/shared/common/service';
-import { CardTooltipPositionType } from '@firestone/shared/common/view';
-import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { MercenariesMemoryCacheService } from '@firestone/mercenaries/common';
-import { getHeroRole, MercenariesReferenceDataService } from '@firestone/mercenaries/common';
-import { Observable, combineLatest } from 'rxjs';
-import { filter } from 'rxjs/operators';
 import {
 	BattleAbility,
 	BattleEquipment,
 	BattleMercenary,
+	getHeroRole,
 	MercenariesBattleTeam,
-} from '../../../../models/mercenaries/mercenaries-battle-state';
+	MercenariesMemoryCacheService,
+	MercenariesReferenceDataService,
+} from '@firestone/mercenaries/common';
+import { Preferences } from '@firestone/shared/common/service';
+import { CardTooltipPositionType } from '@firestone/shared/common/view';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { combineLatest, Observable } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
 @Component({
 	standalone: false,
@@ -80,7 +81,7 @@ export class MercenariesOutOfCombatPlayerTeamComponent
 									...playerTeamInfo.Abilities.map((ability) => {
 										const mythicModifier =
 											refMapInfo.Map.MapType === MercenariesMapType.TYPE_BOSS_RUSH
-												? ability.MythicModifier ?? 0
+												? (ability.MythicModifier ?? 0)
 												: 0;
 										return BattleAbility.create({
 											cardId: ability.CardId,
@@ -107,7 +108,7 @@ export class MercenariesOutOfCombatPlayerTeamComponent
 										const refTier = refEquipment.tiers.find((t) => t.tier === equip.Tier);
 										const mythicModifier =
 											refMapInfo.Map.MapType === MercenariesMapType.TYPE_BOSS_RUSH
-												? equip.MythicModifier ?? 0
+												? (equip.MythicModifier ?? 0)
 												: 0;
 										return BattleEquipment.create({
 											cardId: this.allCards.getCard(refTier?.cardDbfId)?.id,

@@ -9,12 +9,11 @@ import {
 	Metadata,
 } from '@firestone/game-state';
 import { ArenaInfo, MatchInfo, MemoryMercenariesInfo, Rank } from '@firestone/memory';
+import { BattleMercenary, isMercenaries, MercenariesBattleStateFacadeService } from '@firestone/mercenaries/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { ApiRunner, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { combineLatest } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, startWith } from 'rxjs/operators';
-import { BattleMercenary } from '../../models/mercenaries/mercenaries-battle-state';
-import { isMercenaries } from '@firestone/mercenaries/common';
 import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 import { arraysEqual, deepEqual } from '../utils';
 
@@ -33,13 +32,15 @@ export class TwitchPresenceService {
 		private readonly arenaInfo: ArenaInfoService,
 		private readonly prefs: PreferencesService,
 		private readonly gameState: GameStateFacadeService,
+		private readonly mercenariesBattleStateFacade: MercenariesBattleStateFacadeService,
 	) {
 		this.init();
 	}
 
 	private async init() {
 		await this.store.initComplete();
-		await waitForReady(this.prefs, this.gameState);
+
+		await waitForReady(this.prefs, this.gameState, this.mercenariesBattleStateFacade);
 
 		const matchInfo$ = this.gameEvents.allEvents.asObservable().pipe(
 			filter((event) => event.type === GameEvent.MATCH_INFO),
@@ -174,22 +175,20 @@ export class TwitchPresenceService {
 			});
 
 		combineLatest([
-			this.store.listenMercenaries$(
-				([state]) => state?.gameMode,
-				([state]) => state?.playerTeam?.mercenaries,
-			),
+			this.mercenariesBattleStateFacade.store$$.pipe(map((state) => state?.gameMode)),
+			this.mercenariesBattleStateFacade.store$$.pipe(map((state) => state?.playerTeam?.mercenaries)),
 			mercsInfo$,
 		])
 			.pipe(
 				debounceTime(1000),
 				filter(
-					([[gameMode, mercenaries], mercsInfo]) =>
+					([gameMode, mercenaries, mercsInfo]) =>
 						!!gameMode &&
 						!!mercenaries?.length &&
 						(gameMode !== GameType.GT_MERCENARIES_PVP || !!mercsInfo?.PvpRating),
 				),
 				distinctUntilChanged((a, b) => arraysEqual(a, b)),
-				map(([[gameMode, mercenaries], mercsInfo]) => {
+				map(([gameMode, mercenaries, mercsInfo]) => {
 					return {
 						gameMode: gameMode,
 						mercenaries: mercenaries,

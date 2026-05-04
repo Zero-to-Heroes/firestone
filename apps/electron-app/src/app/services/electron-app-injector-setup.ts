@@ -149,7 +149,8 @@ import {
 } from '@firestone/memory';
 import { MercenariesMemoryCacheService, MercenariesReferenceDataService } from '@firestone/mercenaries/common';
 import { InGameReplayService, ModsManagerService } from '@firestone/mods/common';
-import { AccountService, ProfileServiceFacade, ProfileUploaderService } from '@firestone/profile/common';
+import { ProfileServiceFacade, ProfileUploaderService } from '@firestone/profile/common';
+import { AccountService } from '@firestone/profile/services';
 import { CustomAppearanceService, SettingsControllerService } from '@firestone/settings/services';
 import {
 	AppNavigationService,

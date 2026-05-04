@@ -7,6 +7,7 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
+import { MercenariesOutOfCombatFacadeService } from '@firestone/mercenaries/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { GameInfoService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
@@ -49,20 +50,21 @@ export class MercsTreasureSelectionWidgetWrapperComponent
 		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly gameInfoService: GameInfoService,
+		private readonly mercenariesOutOfCombatFacade: MercenariesOutOfCombatFacadeService,
 	) {
 		super(ow, el, prefs, renderer, cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.prefs);
+		await waitForReady(this.prefs, this.mercenariesOutOfCombatFacade);
 
 		this.showWidget$ = combineLatest([
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.mercenariesHighlightSynergies)),
-			this.store.listenMercenariesOutOfCombat$(
-				([state, prefs]) => !!state?.treasureSelection?.treasureIds?.length,
+			this.mercenariesOutOfCombatFacade.store$$.pipe(
+				this.mapData((state) => !!state?.treasureSelection?.treasureIds?.length),
 			),
 		]).pipe(
-			this.mapData(([displayFromPrefs, [hasTreasures]]) => {
+			this.mapData(([displayFromPrefs, hasTreasures]) => {
 				return displayFromPrefs && hasTreasures;
 			}),
 			this.handleReposition(),

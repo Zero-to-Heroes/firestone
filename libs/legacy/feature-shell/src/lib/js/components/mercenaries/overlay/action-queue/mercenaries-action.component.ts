@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { MercenariesAction } from '@firestone/mercenaries/common';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { MercenariesAction } from '../../../../models/mercenaries/mercenaries-battle-state';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 
 @Component({
@@ -66,5 +66,8 @@ export class MercenariesActionComponent {
 	frameUrl: string;
 	side: 'player' | 'opponent';
 
-	constructor(private readonly allCards: CardsFacadeService, private readonly i18n: LocalizationFacadeService) {}
+	constructor(
+		private readonly allCards: CardsFacadeService,
+		private readonly i18n: LocalizationFacadeService,
+	) {}
 }

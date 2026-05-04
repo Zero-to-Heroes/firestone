@@ -9,14 +9,8 @@ import {
 	OnDestroy,
 	Renderer2,
 } from '@angular/core';
-import { Preferences } from '@firestone/shared/common/service';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { Subscription } from 'rxjs';
-import { distinctUntilChanged, filter, map, takeUntil } from 'rxjs/operators';
-import {
-	HighlightSelector,
-	MercenariesSynergiesHighlightService,
-} from '../../../../services/mercenaries/highlights/mercenaries-synergies-highlight.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
@@ -32,7 +26,7 @@ export class MercenariesHighlightDirective
 	@Input('mercenariesHighlight') cardId = undefined;
 
 	private highlightElement;
-	private highlightService: MercenariesSynergiesHighlightService;
+	// private highlightService: MercenariesSynergiesHighlightService;
 
 	private subscription$$: Subscription;
 
@@ -45,22 +39,22 @@ export class MercenariesHighlightDirective
 		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(store, cdr);
-		this.highlightService = this.ow.getMainWindow().mercenariesSynergiesHighlightService;
+		// this.highlightService = this.ow.getMainWindow().mercenariesSynergiesHighlightService;
 	}
 
 	ngAfterContentInit() {
-		this.subscription$$ = this.store
-			.listenMercenariesHighlights$(([selector, prefs]) => [selector, prefs] as [HighlightSelector, Preferences])
-			.pipe(
-				filter(([[selector, prefs]]) => !!selector && !!prefs),
-				map(
-					([[selector, prefs]]) =>
-						prefs.mercenariesHighlightSynergies && selector(this.allCards.getCard(this.cardId)),
-				),
-				distinctUntilChanged(),
-				takeUntil(this.destroyed$),
-			)
-			.subscribe((highlighted) => this.highlight(highlighted));
+		// this.subscription$$ = this.store
+		// 	.listenMercenariesHighlights$(([selector, prefs]) => [selector, prefs] as [HighlightSelector, Preferences])
+		// 	.pipe(
+		// 		filter(([[selector, prefs]]) => !!selector && !!prefs),
+		// 		map(
+		// 			([[selector, prefs]]) =>
+		// 				prefs.mercenariesHighlightSynergies && selector(this.allCards.getCard(this.cardId)),
+		// 		),
+		// 		distinctUntilChanged(),
+		// 		takeUntil(this.destroyed$),
+		// 	)
+		// 	.subscribe((highlighted) => this.highlight(highlighted));
 	}
 
 	ngAfterViewInit() {
@@ -77,12 +71,12 @@ export class MercenariesHighlightDirective
 
 	@HostListener('mouseenter')
 	mouseEnterAbility() {
-		this.highlightService?.selectCardId(this.cardId);
+		// this.highlightService?.selectCardId(this.cardId);
 	}
 
 	@HostListener('mouseleave')
 	mouseLeaveAbility() {
-		this.highlightService?.unselectCardId();
+		// this.highlightService?.unselectCardId();
 	}
 
 	private highlight(shouldHighlight: boolean) {

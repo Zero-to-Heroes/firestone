@@ -8,13 +8,17 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { MercenarySelector, RarityTYpe, RewardItemType, TaskStatus } from '@firestone-hs/reference-data';
-import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
+import { MainWindowStateFacadeService, MercenariesPersonalHeroesSortEvent } from '@firestone/mainwindow/common';
 import { MemoryMercenary, MemoryVisitor } from '@firestone/memory';
 import {
 	getHeroRole,
 	isPassiveMercsTreasure,
+	MercenariesFullyUpgradedFilterType,
 	MercenariesMemoryCacheService,
 	MercenariesNavigationService,
+	MercenariesOwnedFilterType,
+	MercenariesPersonalHeroesSortCriteria,
+	MercenariesPersonalHeroesSortCriteriaType,
 	MercenariesReferenceData,
 	MercenariesReferenceDataService,
 } from '@firestone/mercenaries/common';
@@ -24,15 +28,6 @@ import { ADS_SERVICE_TOKEN, CardsFacadeService, IAdsService } from '@firestone/s
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, filter } from 'rxjs/operators';
-import {
-	MercenariesFullyUpgradedFilterType,
-	MercenariesOwnedFilterType,
-} from '../../../models/mercenaries/mercenaries-filter-types';
-import {
-	MercenariesPersonalHeroesSortCriteria,
-	MercenariesPersonalHeroesSortCriteriaType,
-} from '../../../models/mercenaries/personal-heroes-sort-criteria.type';
-import { MercenariesPersonalHeroesSortEvent } from '@firestone/mainwindow/common';
 import { applySearchStringFilter, buildBounties } from '../../../services/ui-store/mercenaries-ui-helper';
 import { arraysEqual, sortByProperties, sumOnArray } from '../../../services/utils';
 

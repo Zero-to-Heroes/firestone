@@ -7,11 +7,10 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
+import { isMercenariesPvE, isMercenariesPvP, MercenariesBattleStateFacadeService } from '@firestone/mercenaries/common';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import { Observable, combineLatest, distinctUntilChanged } from 'rxjs';
-import { isMercenariesPvE, isMercenariesPvP } from '@firestone/mercenaries/common';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
+import { combineLatest, distinctUntilChanged, Observable } from 'rxjs';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
 @Component({
@@ -52,14 +51,14 @@ export class MercsActionQueueWidgetWrapperComponent extends AbstractWidgetWrappe
 		protected readonly el: ElementRef,
 		protected readonly prefs: PreferencesService,
 		protected readonly renderer: Renderer2,
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly mercenariesBattleStateFacade: MercenariesBattleStateFacadeService,
 	) {
 		super(ow, el, prefs, renderer, cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.prefs);
+		await waitForReady(this.prefs, this.mercenariesBattleStateFacade);
 
 		this.showWidget$ = combineLatest([
 			this.prefs.preferences$$.pipe(
@@ -73,9 +72,9 @@ export class MercsActionQueueWidgetWrapperComponent extends AbstractWidgetWrappe
 						a.displayFromPrefsPvP === b.displayFromPrefsPvP,
 				),
 			),
-			this.store.listenMercenaries$(([state, prefs]) => state?.gameMode),
+			this.mercenariesBattleStateFacade.store$$.pipe(this.mapData((state) => state?.gameMode)),
 		]).pipe(
-			this.mapData(([{ displayFromPrefsPvE, displayFromPrefsPvP }, [gameMode]]) => {
+			this.mapData(([{ displayFromPrefsPvE, displayFromPrefsPvP }, gameMode]) => {
 				return (
 					(displayFromPrefsPvE && isMercenariesPvE(gameMode)) ||
 					(displayFromPrefsPvP && isMercenariesPvP(gameMode))

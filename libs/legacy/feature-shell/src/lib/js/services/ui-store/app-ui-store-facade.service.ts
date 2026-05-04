@@ -6,13 +6,7 @@ import { Observable } from 'rxjs';
 import { DeckSummary } from '@firestone/constructed/common';
 import { Preferences } from '@firestone/shared/common/service';
 import { sleep } from '../utils';
-import {
-	AppUiStoreService,
-	GameStateSelector,
-	MercenariesHighlightsSelector,
-	MercenariesOutOfCombatStateSelector,
-	MercenariesStateSelector,
-} from './app-ui-store.service';
+import { AppUiStoreService, GameStateSelector } from './app-ui-store.service';
 
 // To be used in the UI, so that we only have a single service instantiated
 @Injectable()
@@ -51,24 +45,6 @@ export class AppUiStoreFacadeService {
 		...selectors: S
 	): Observable<{ [K in keyof S]: S[K] extends GameStateSelector<infer T> ? T : never }> {
 		return this.store.listenDeckState$(...selectors);
-	}
-
-	public listenMercenaries$<S extends MercenariesStateSelector<any>[]>(
-		...selectors: S
-	): Observable<{ [K in keyof S]: S[K] extends MercenariesStateSelector<infer T> ? T : never }> {
-		return this.store.listenMercenaries$(...selectors);
-	}
-
-	public listenMercenariesOutOfCombat$<S extends MercenariesOutOfCombatStateSelector<any>[]>(
-		...selectors: S
-	): Observable<{ [K in keyof S]: S[K] extends MercenariesOutOfCombatStateSelector<infer T> ? T : never }> {
-		return this.store.listenMercenariesOutOfCombat$(...selectors);
-	}
-
-	public listenMercenariesHighlights$<S extends MercenariesHighlightsSelector<any>[]>(
-		...selectors: S
-	): Observable<{ [K in keyof S]: S[K] extends MercenariesHighlightsSelector<infer T> ? T : never }> {
-		return this.store.listenMercenariesHighlights$(...selectors);
 	}
 
 	/** @deprecated */

@@ -21,7 +21,7 @@ import {
 	MemoryUpdatesService,
 	SceneService,
 } from '@firestone/memory';
-import { AccountService } from '@firestone/profile/common';
+import { AccountService } from '@firestone/profile/services';
 import { ArenaClassFilterType, Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { arraysEqual, SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import {

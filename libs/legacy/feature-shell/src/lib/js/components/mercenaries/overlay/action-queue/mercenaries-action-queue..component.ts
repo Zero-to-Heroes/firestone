@@ -9,13 +9,12 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
+import { MercenariesAction, MercenariesBattleStateFacadeService } from '@firestone/mercenaries/common';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable, Subscription } from 'rxjs';
-import { debounceTime, distinctUntilChanged, filter, map, takeUntil } from 'rxjs/operators';
-import { MercenariesAction } from '../../../../models/mercenaries/mercenaries-battle-state';
-import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
+import { debounceTime, distinctUntilChanged, filter, takeUntil } from 'rxjs/operators';
 
 @Component({
 	standalone: false,
@@ -45,7 +44,7 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MercenariesActionsQueueComponent
-	extends AbstractSubscriptionStoreComponent
+	extends AbstractSubscriptionComponent
 	implements AfterContentInit, OnDestroy
 {
 	actions$: Observable<readonly MercenariesAction[]>;
@@ -56,32 +55,30 @@ export class MercenariesActionsQueueComponent
 	private scale: Subscription;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly el: ElementRef,
 		private readonly renderer: Renderer2,
 		private readonly prefs: PreferencesService,
+		private readonly mercenariesBattleStateFacade: MercenariesBattleStateFacadeService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.prefs);
+		await waitForReady(this.prefs, this.mercenariesBattleStateFacade);
 
-		this.actions$ = this.store
-			.listenMercenaries$(([state]) => state?.actionQueue)
-			.pipe(
-				filter(([actionQueue]) => !!actionQueue?.length),
-				map(([actionQueue]) => actionQueue),
-				distinctUntilChanged(),
-				this.mapData((actionQueue) => {
-					// const speeds = actionQueue.map((action) => action.speed);
-					return actionQueue.map((action, index) => ({
-						...action,
-						actionOrder: index + 1,
-					}));
-				}),
-			);
+		this.actions$ = this.mercenariesBattleStateFacade.store$$.pipe(
+			this.mapData((state) => state?.actionQueue),
+			filter((actionQueue) => !!actionQueue?.length),
+			distinctUntilChanged(),
+			this.mapData((actionQueue) => {
+				// const speeds = actionQueue.map((action) => action.speed);
+				return actionQueue.map((action, index) => ({
+					...action,
+					actionOrder: index + 1,
+				}));
+			}),
+		);
 		this.scale = this.prefs.preferences$$
 			.pipe(
 				this.mapData((prefs) => (!!this.scaleExtractor ? this.scaleExtractor(prefs) : null)),

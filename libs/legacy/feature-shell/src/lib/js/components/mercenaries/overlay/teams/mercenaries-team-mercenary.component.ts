@@ -1,10 +1,9 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { TagRole, Zone } from '@firestone-hs/reference-data';
+import { BattleMercenary, isPassiveMercsTreasure } from '@firestone/mercenaries/common';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { BattleMercenary } from '../../../../models/mercenaries/mercenaries-battle-state';
-import { isPassiveMercsTreasure } from '@firestone/mercenaries/common';
 import { Ability } from './mercenaries-team-ability.component';
 
 @Component({
@@ -66,7 +65,7 @@ export class MercenariesTeamMercenaryComponent {
 				? `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_icon_golden_neutral.png`
 				: `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_icon_golden_${value.role?.toLowerCase()}.png`;
 		this.name = value.cardId
-			? refMercenaryCard.name ?? this.i18n.translateString('mercenaries.team-widget.unrecognized-mercenary')
+			? (refMercenaryCard.name ?? this.i18n.translateString('mercenaries.team-widget.unrecognized-mercenary'))
 			: this.i18n.translateString('mercenaries.team-widget.unknown-mercenary');
 		this.level = value.level;
 		this.abilities = (value.abilities ?? []).map((ability) => {
@@ -80,7 +79,7 @@ export class MercenariesTeamMercenaryComponent {
 				name: abilityCard.name?.replace('{0}', '' + ability.nameData1),
 				speed: isPassiveMercsTreasure(ability.cardId, this.allCards)
 					? null
-					: ability.speed ?? abilityCard.cost ?? 0,
+					: (ability.speed ?? abilityCard.cost ?? 0),
 				cooldown: ability.cooldown ?? abilityCard.mercenaryAbilityCooldown,
 				cooldownLeft: ability.cooldownLeft,
 				isTreasure: ability.isTreasure,
@@ -97,7 +96,7 @@ export class MercenariesTeamMercenaryComponent {
 					name: this.allCards
 						.getCard(value.equipment.cardId)
 						.name?.replace('{0}', '' + value.equipment.nameData1),
-			  } as Ability)
+				} as Ability)
 			: null;
 		this.isDead = value.isDead;
 		this.isBench = value.zone === Zone.SETASIDE;

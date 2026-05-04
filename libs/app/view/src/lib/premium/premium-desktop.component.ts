@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, ViewRef } from '@angular/core';
 import { BnetRegion, CardSet } from '@firestone-hs/reference-data';
-import { AccountService } from '@firestone/profile/common';
+import { AccountService } from '@firestone/profile/services';
 import { PreferencesService, TebexService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import type { CurrentPlan, IAdsService, PremiumPlanId } from '@firestone/shared/framework/core';

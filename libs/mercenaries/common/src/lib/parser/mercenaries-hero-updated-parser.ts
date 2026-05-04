@@ -1,0 +1,107 @@
+import { GameEvent } from '@firestone/game-state';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
+import {
+	BattleAbility,
+	BattleEquipment,
+	BattleMercenary,
+	MercenariesBattleState,
+} from '../services/mercenaries-battle-state';
+import { MercenariesReferenceDataService } from '../services/mercenaries-reference-data.service';
+import {
+	getHeroRole,
+	getMercCardLevel,
+	getMercLevelFromExperience,
+	normalizeMercenariesCardId,
+} from '../services/mercenaries-utils';
+import { MercenariesParser } from './_mercenaries-parser';
+
+export class MercenariesHeroUpdatedParser implements MercenariesParser {
+	constructor(
+		private readonly allCards: CardsFacadeService,
+		private readonly mercenariesReferenceData: MercenariesReferenceDataService,
+	) {}
+
+	public eventType = () => GameEvent.ENTITY_UPDATE;
+
+	public applies = (battleState: MercenariesBattleState) => battleState != null;
+
+	public async parse(battleState: MercenariesBattleState, event: GameEvent): Promise<MercenariesBattleState> {
+		const [cardId, controllerId, localPlayer, entityId] = event.parse();
+		if (!localPlayer) {
+			console.error('[merc-hero-revealed-parser] no local player present', event);
+			return battleState;
+		}
+		if (!cardId) {
+			return battleState;
+		}
+
+		const normalizedCardId = normalizeMercenariesCardId(cardId);
+		const refData = await this.mercenariesReferenceData.referenceData$$.getValueWithInit();
+
+		// Sometimes the spawns are not referenced in the data (like for Ahune's Ice Shards),
+		// so it's possible that this doesn't return anything
+		const refMerc = refData?.mercenaries?.find(
+			(merc) =>
+				normalizeMercenariesCardId(this.allCards.getCardFromDbfId(merc.cardDbfId).id) === normalizedCardId,
+		);
+
+		const refMercCard = this.allCards.getCard(normalizedCardId!);
+		const refMercEquipment = this.allCards.getCardFromDbfId(event.additionalData?.mercenariesEquipmentId);
+		const isPlayer = controllerId === localPlayer.PlayerId;
+		const team = isPlayer ? battleState.playerTeam : battleState.opponentTeam;
+		const turnsElapsed = Math.max(0, battleState.currentTurn - 1);
+
+		const existingMerc = team.getMercenary(entityId);
+		if (!existingMerc) {
+			console.warn('[merc-hero-updated] trying to update non-existing merc', entityId, cardId);
+			return battleState;
+		}
+
+		const newTeam = team.updateMercenary(
+			entityId,
+			BattleMercenary.create({
+				mercenaryId: refMerc?.id,
+				cardId: refMercCard.id,
+				zone: event.additionalData.zone,
+				zonePosition: event.additionalData.zonePosition,
+				abilities:
+					refMerc?.abilities
+						.map((refAbility) => {
+							const refTier = [...refAbility.tiers].sort((a, b) => a.tier - b.tier).pop();
+							if (!refTier) {
+								console.warn(
+									'could not find refTier',
+									refAbility?.tiers,
+									refAbility.abilityId,
+									refAbility,
+								);
+								return null;
+							}
+							const refCard = this.allCards.getCardFromDbfId(refTier.cardDbfId);
+							return BattleAbility.create({
+								entityId: undefined,
+								cardId: refCard.id,
+								level: refTier.tier,
+								cooldown: refCard.mercenaryAbilityCooldown ?? 0,
+								cooldownLeft: Math.max(0, (refCard.mercenaryAbilityCooldown ?? 0) - turnsElapsed),
+								speed: refCard.cost ?? 0,
+								totalUsed: undefined,
+								isTreasure: false,
+							});
+						})
+						.filter((ability) => !!ability) ?? existingMerc.abilities,
+				level: getMercLevelFromExperience(event.additionalData.mercenariesExperience, refData ?? undefined),
+				role: getHeroRole(refMercCard.mercenaryRole),
+				equipment: BattleEquipment.create({
+					entityId: undefined,
+					cardId: refMercEquipment.id,
+					level: getMercCardLevel(refMercEquipment.id),
+				}),
+			}),
+		);
+		return battleState.update({
+			playerTeam: isPlayer ? newTeam : battleState.playerTeam,
+			opponentTeam: isPlayer ? battleState.opponentTeam : newTeam,
+		} as MercenariesBattleState);
+	}
+}

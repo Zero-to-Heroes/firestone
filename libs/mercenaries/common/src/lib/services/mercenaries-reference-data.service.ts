@@ -22,7 +22,7 @@ export class MercenariesReferenceDataService extends AbstractFacadeService<Merce
 	private prefs: PreferencesService;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
-		super(windowManager, 'mercenariesReferenceData', () => !!this.referenceData$$);
+		super(windowManager, 'MercenariesReferenceDataService', () => !!this.referenceData$$);
 	}
 
 	protected override assignSubjects() {

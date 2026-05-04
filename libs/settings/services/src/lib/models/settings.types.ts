@@ -1,6 +1,6 @@
 import { ArenaRewardsService } from '@firestone/arena/common';
 import { ICollectionPackService } from '@firestone/collection/common';
-import { AccountService } from '@firestone/profile/common';
+import { AccountService } from '@firestone/profile/services';
 import { DiskCacheService, Preferences, PreferencesService } from '@firestone/shared/common/service';
 import {
 	AnalyticsService,

@@ -1,13 +1,12 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
-import { PreferencesService } from '@firestone/shared/common/service';
+import { MercenariesFullyUpgradedFilterType, PreferencesService } from '@firestone/shared/common/service';
 import { IOption } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { combineLatest, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { MercenariesFullyUpgradedFilterType } from '../../../../models/mercenaries/mercenaries-filter-types';
 
 @Component({
 	standalone: false,

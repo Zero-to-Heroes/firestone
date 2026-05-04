@@ -17,4 +17,12 @@ export class MercenariesNavigationService extends AbstractFacadeService<Mercenar
 	protected async init() {
 		this.heroSearchString$$ = new BehaviorSubject<string | null>(null);
 	}
+
+	protected override initElectronSubjects(): void {
+		this.setupElectronSubject(this.heroSearchString$$, 'MercenariesNavigationService-heroSearchString');
+	}
+
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.heroSearchString$$ = new BehaviorSubject<string | null>(null);
+	}
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BnetRegion } from '@firestone-hs/reference-data';
 import { GameConnectionService, GameEventsFacadeService, GameStateFacadeService } from '@firestone/game-state';
-import { AccountService } from '@firestone/profile/common';
+import { AccountService } from '@firestone/profile/services';
 import { NotificationsService, PreferencesService } from '@firestone/shared/common/service';
 import {
 	AbstractFacadeService,

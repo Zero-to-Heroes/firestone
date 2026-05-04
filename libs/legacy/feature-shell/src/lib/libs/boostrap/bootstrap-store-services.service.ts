@@ -54,7 +54,14 @@ import {
 	MainWindowStoreService,
 } from '@firestone/mainwindow/common';
 import { BgsSceneService, CardChoicesService, CardMousedOverService } from '@firestone/memory';
-import { AccountService, ProfileServiceFacade, ProfileUploaderService } from '@firestone/profile/common';
+import {
+	MercenariesBattleStateFacadeService,
+	MercenariesBattleStateService,
+	MercenariesOutOfCombatFacadeService,
+	MercenariesOutOfCombatService,
+} from '@firestone/mercenaries/common';
+import { ProfileServiceFacade, ProfileUploaderService } from '@firestone/profile/common';
+import { AccountService } from '@firestone/profile/services';
 import { BootstrapSettingsService, SettingsControllerService } from '@firestone/settings/services';
 import {
 	AppNavigationService,
@@ -70,9 +77,6 @@ import { CardRulesService, OW_UTILS_SERVICE_TOKEN } from '@firestone/shared/fram
 import { GameStatsProviderService } from '@firestone/stats/services';
 import { TavernBrawlService } from '@firestone/tavern-brawl/common';
 import { AdService } from '../../js/services/ad.service';
-import { MercenariesSynergiesHighlightService } from '../../js/services/mercenaries/highlights/mercenaries-synergies-highlight.service';
-import { MercenariesStoreService } from '../../js/services/mercenaries/mercenaries-store.service';
-import { MercenariesOutOfCombatService } from '../../js/services/mercenaries/out-of-combat/mercenaries-out-of-combat.service';
 import { GameOverService } from '../../js/services/stats/game/game-over.service';
 import { GameStatsUpdaterService } from '../../js/services/stats/game/game-stats-updater.service';
 import { AppUiStoreService } from '../../js/services/ui-store/app-ui-store.service';
@@ -101,9 +105,11 @@ export class BootstrapStoreServicesService {
 		private readonly gameState: GameStateService,
 		private readonly init_GameOverService: GameOverService,
 		private readonly gameNativeState: GameNativeStateStoreService,
-		private readonly mercenariesStore: MercenariesStoreService,
+		private readonly mercenariesBattleStore: MercenariesBattleStateService,
+		private readonly mercenariesStoreFacade: MercenariesBattleStateFacadeService,
 		private readonly mercenariesOutOfCombatStore: MercenariesOutOfCombatService,
-		private readonly mercenariesSynergiesStore: MercenariesSynergiesHighlightService,
+		private readonly mercenariesOutOfCombatFacade: MercenariesOutOfCombatFacadeService,
+		// private readonly mercenariesSynergiesStore: MercenariesSynergiesHighlightService,
 		private readonly mails: MailsService,
 		private readonly decksProviderService: DecksProviderService,
 		private readonly gameStatsProviderService: GameStatsProviderService,

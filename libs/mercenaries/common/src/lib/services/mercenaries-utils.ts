@@ -39,7 +39,10 @@ export const getMercCardLevel = (cardId: string): number => {
 	return 0;
 };
 
-export const getMercLevelFromExperience = (totalXp: number, referenceData: MercenariesReferenceData): number => {
+export const getMercLevelFromExperience = (
+	totalXp: number,
+	referenceData: MercenariesReferenceData | undefined,
+): number => {
 	if (!referenceData?.mercenaryLevels?.length) {
 		return 0;
 	}
@@ -220,7 +223,7 @@ export const getShortMercHeroName = (cardId: string | number, allCards: CardsFac
 	}
 };
 
-export const getHeroRole = (roleFromEnum: string): 'caster' | 'fighter' | 'protector' | null => {
+export const getHeroRole = (roleFromEnum: string | undefined): 'caster' | 'fighter' | 'protector' | undefined => {
 	switch (roleFromEnum?.toUpperCase()) {
 		case TagRole[TagRole.CASTER]:
 			return 'caster';
@@ -232,10 +235,10 @@ export const getHeroRole = (roleFromEnum: string): 'caster' | 'fighter' | 'prote
 		case TagRole[TagRole.INVALID]:
 		case undefined:
 		case null:
-			return null;
+			return undefined;
 		default:
 			console.error('Invalid role passed', roleFromEnum);
-			return null;
+			return undefined;
 	}
 };
 
@@ -379,4 +382,3 @@ export const DEBUFF_SPEED_MODIFIER_ENCHANTMENTS = [
 	// CardIds.ThreeMovesAheadLettuceEnchantment,
 	CardIds.VaingloriousRebukeLettuceEnchantment,
 ];
-

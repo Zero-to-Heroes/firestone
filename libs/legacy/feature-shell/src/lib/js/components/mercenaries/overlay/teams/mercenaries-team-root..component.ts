@@ -16,14 +16,20 @@ import { MercenariesTeamDefinition, MercenaryDefinition, encodeMercs } from '@fi
 import { VillageVisitorType } from '@firestone-hs/reference-data';
 import { MercenariesReferenceData } from '@firestone-hs/trigger-process-mercenaries-review/dist/process-mercenaries-review';
 import { MemoryMercenariesCollectionInfo } from '@firestone/memory';
+import {
+	MercenariesBattleStateFacadeService,
+	MercenariesBattleTeam,
+	MercenariesMemoryCacheService,
+	MercenariesReferenceDataService,
+	getShortMercHeroName,
+	isMercenariesPvP,
+} from '@firestone/mercenaries/common';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import { MercenariesMemoryCacheService } from '@firestone/mercenaries/common';
-import { getShortMercHeroName, isMercenariesPvP, MercenariesReferenceDataService } from '@firestone/mercenaries/common';
 import { BehaviorSubject, Observable, Subscription, combineLatest } from 'rxjs';
 import { debounceTime, filter, takeUntil } from 'rxjs/operators';
-import { MercenariesBattleTeam } from '../../../../models/mercenaries/mercenaries-battle-state';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
@@ -82,10 +88,7 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MercenariesTeamRootComponent
-	extends AbstractSubscriptionStoreComponent
-	implements AfterContentInit, OnDestroy
-{
+export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
 	@Input() side: 'player' | 'opponent' | 'out-of-combat-player';
 	@Input() scaleExtractor: (prefs: Preferences) => number;
 
@@ -116,19 +119,19 @@ export class MercenariesTeamRootComponent
 	private showTurnCounter$$ = new BehaviorSubject<boolean>(false);
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly el: ElementRef,
 		private readonly renderer: Renderer2,
 		private readonly i18n: LocalizationFacadeService,
-		private readonly mercenariesMemoryCache: MercenariesMemoryCacheService,
 		private readonly prefs: PreferencesService,
+		private readonly mercenariesMemoryCache: MercenariesMemoryCacheService,
+		private readonly mercenariesBattleStateFacade: MercenariesBattleStateFacadeService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.mercenariesMemoryCache, this.prefs);
+		await waitForReady(this.mercenariesMemoryCache, this.prefs, this.mercenariesBattleStateFacade);
 
 		this.scale = this.prefs.preferences$$
 			.pipe(
@@ -150,12 +153,12 @@ export class MercenariesTeamRootComponent
 				}
 			});
 		this.showTurnCounter$ = this.showTurnCounter$$.asObservable().pipe(this.mapData((info) => info));
-		this.showMapTurnCounter$ = this.store
-			.listenMercenaries$(([state]) => state?.gameMode)
-			.pipe(this.mapData(([gameMode]) => !isMercenariesPvP(gameMode)));
-		this.currentBattleTurn$ = this.store
-			.listenMercenaries$(([state, prefs]) => state?.currentTurn)
-			.pipe(this.mapData(([currentTurn]) => currentTurn));
+		this.showMapTurnCounter$ = this.mercenariesBattleStateFacade.store$$.pipe(
+			this.mapData((state) => !isMercenariesPvP(state?.gameMode)),
+		);
+		this.currentBattleTurn$ = this.mercenariesBattleStateFacade.store$$.pipe(
+			this.mapData((state) => state?.currentTurn),
+		);
 		this.totalMapTurns$ = combineLatest([
 			this.currentBattleTurn$,
 			this.mercenariesMemoryCache.memoryMapInfo$$,

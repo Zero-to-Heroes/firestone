@@ -6,13 +6,16 @@ import {
 	Inject,
 	ViewRef,
 } from '@angular/core';
-import { MainWindowNavigationService, MainWindowStateFacadeService } from '@firestone/mainwindow/common';
+import {
+	MainWindowNavigationService,
+	MainWindowStateFacadeService,
+	MercenariesSelectCategoryEvent,
+} from '@firestone/mainwindow/common';
 import { MercenariesCategoryId } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ADS_SERVICE_TOKEN, IAdsService, waitForReady } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
-import { Observable } from 'rxjs';
-import { MercenariesSelectCategoryEvent } from '@firestone/mainwindow/common';
+import { Observable, of } from 'rxjs';
 
 @Component({
 	standalone: false,
@@ -73,18 +76,14 @@ export class MercenariesDesktopComponent extends AbstractSubscriptionComponent i
 	async ngAfterContentInit() {
 		await waitForReady(this.ads, this.navigationService, this.mainWindowStateFacade);
 
-		this.loading$ = this.mainWindowStateFacade.mainWindowState$$.pipe(
-			this.mapData((state) => state.mercenaries.loading),
-		);
+		this.loading$ = of(false);
 		this.menuDisplayType$ = this.navigationService.navigationState$$.pipe(
 			this.mapData((state) => state.navigationMercenaries.menuDisplayType),
 		);
 		this.selectedCategoryId$ = this.navigationService.navigationState$$.pipe(
 			this.mapData((state) => state.navigationMercenaries.selectedCategoryId),
 		);
-		this.categories$ = this.mainWindowStateFacade.mainWindowState$$.pipe(
-			this.mapData((state) => state.mercenaries.categoryIds),
-		);
+		this.categories$ = of(['mercenaries-personal-hero-stats']);
 		this.showAds$ = this.ads.hasPremiumSub$$.pipe(this.mapData((info) => !info));
 
 		if (!(this.cdr as ViewRef)?.destroyed) {

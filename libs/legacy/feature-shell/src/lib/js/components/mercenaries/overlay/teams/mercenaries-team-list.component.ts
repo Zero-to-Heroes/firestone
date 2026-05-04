@@ -11,13 +11,13 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { Zone } from '@firestone-hs/reference-data';
+import { BattleMercenary, MercenariesBattleTeam } from '@firestone/mercenaries/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { Subscription } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
-import { BattleMercenary, MercenariesBattleTeam } from '../../../../models/mercenaries/mercenaries-battle-state';
 
 @Component({
 	standalone: false,

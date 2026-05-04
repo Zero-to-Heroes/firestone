@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { GameEvent } from '@firestone/game-state';
-import { OverwolfService } from '@firestone/shared/framework/core';
-import { BehaviorSubject } from 'rxjs';
+import { MercenariesBattleStateFacadeService } from '@firestone/mercenaries/common';
+import { waitForReady } from '@firestone/shared/framework/core';
 
 @Component({
 	standalone: false,
@@ -21,18 +21,22 @@ import { BehaviorSubject } from 'rxjs';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MercenariesTeamControlBarComponent {
+export class MercenariesTeamControlBarComponent implements AfterContentInit {
 	@Input() side: 'player' | 'opponent' | 'out-of-combat-player';
 
 	closeHandler: () => void;
 
-	private battleStateUpdater: BehaviorSubject<GameEvent>;
+	constructor(
+		private readonly mercenariesStoreFacade: MercenariesBattleStateFacadeService,
+		private readonly cdr: ChangeDetectorRef,
+	) {}
 
-	constructor(private readonly ow: OverwolfService) {
-		this.battleStateUpdater = this.ow.getMainWindow().battleStateUpdater;
+	async ngAfterContentInit() {
+		await waitForReady(this.mercenariesStoreFacade);
+
 		this.closeHandler = () => {
 			if (this.side !== 'out-of-combat-player') {
-				this.battleStateUpdater.next(
+				this.mercenariesStoreFacade.addBattleEvent(
 					Object.assign(new GameEvent(), {
 						type:
 							this.side === 'player'
@@ -40,9 +44,11 @@ export class MercenariesTeamControlBarComponent {
 								: 'MANUAL_TEAM_OPPONENT_WIDGET_CLOSE',
 					} as GameEvent),
 				);
-			} else {
-				// this.ow.closeWindow(this.windowId);
 			}
 		};
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.markForCheck();
+		}
 	}
 }

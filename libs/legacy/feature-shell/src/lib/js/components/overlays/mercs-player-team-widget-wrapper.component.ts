@@ -7,11 +7,11 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
+import { MercenariesBattleStateFacadeService } from '@firestone/mercenaries/common';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
 @Component({
@@ -55,23 +55,23 @@ export class MercsPlayerTeamWidgetWrapperComponent extends AbstractWidgetWrapper
 		protected readonly el: ElementRef,
 		protected readonly prefs: PreferencesService,
 		protected readonly renderer: Renderer2,
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly mercenariesBattleStateFacade: MercenariesBattleStateFacadeService,
 	) {
 		super(ow, el, prefs, renderer, cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.prefs);
+		await waitForReady(this.prefs, this.mercenariesBattleStateFacade);
 
 		this.showWidget$ = combineLatest([
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.mercenariesEnablePlayerTeamWidget)),
-			this.store.listenMercenaries$(
-				([state, prefs]) => state?.playerClosedManually,
-				([state, prefs]) => !!state?.playerTeam?.mercenaries?.length,
+			this.mercenariesBattleStateFacade.store$$.pipe(this.mapData((state) => state?.playerClosedManually)),
+			this.mercenariesBattleStateFacade.store$$.pipe(
+				this.mapData((state) => !!state?.playerTeam?.mercenaries?.length),
 			),
 		]).pipe(
-			this.mapData(([displayFromPrefs, [playerClosedManually, hasTeamMercs]]) => {
+			this.mapData(([displayFromPrefs, playerClosedManually, hasTeamMercs]) => {
 				return displayFromPrefs && !playerClosedManually && hasTeamMercs;
 			}),
 			this.handleReposition(),

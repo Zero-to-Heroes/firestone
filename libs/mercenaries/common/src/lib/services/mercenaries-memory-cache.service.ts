@@ -6,7 +6,7 @@ import {
 	MemoryMercenariesInfo,
 	SceneService,
 } from '@firestone/memory';
-import { Events, GameStatusService } from '@firestone/shared/common/service';
+import { GameStatusService } from '@firestone/shared/common/service';
 import { sleep, SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import {
 	AbstractFacadeService,
@@ -52,13 +52,16 @@ export class MercenariesMemoryCacheService extends AbstractFacadeService<Mercena
 	private triggerMemoryReading$$ = new BehaviorSubject<boolean>(false);
 
 	private memoryService: MemoryInspectionService;
-	private events: Events;
 	private localStorageService: LocalStorageService;
 	private gameStatus: GameStatusService;
 	private scene: SceneService;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
-		super(windowManager, 'mercenariesMemoryCache', () => !!this.memoryCollectionInfo$$ && !!this.memoryMapInfo$$);
+		super(
+			windowManager,
+			'MercenariesMemoryCacheService',
+			() => !!this.memoryCollectionInfo$$ && !!this.memoryMapInfo$$,
+		);
 	}
 
 	protected override assignSubjects() {
@@ -71,7 +74,6 @@ export class MercenariesMemoryCacheService extends AbstractFacadeService<Mercena
 		this.memoryMapInfo$$ = new SubscriberAwareBehaviorSubject<MemoryMercenariesInfo | null>(null);
 		this.internalSubscriber$$ = new SubscriberAwareBehaviorSubject<null>(null);
 		this.memoryService = AppInjector.get(MemoryInspectionService);
-		this.events = AppInjector.get(Events);
 		this.localStorageService = AppInjector.get(LocalStorageService);
 		this.gameStatus = AppInjector.get(GameStatusService);
 		this.scene = AppInjector.get(SceneService);
@@ -97,6 +99,16 @@ export class MercenariesMemoryCacheService extends AbstractFacadeService<Mercena
 					await this.readMercenariesMemoryInfo();
 				});
 		});
+	}
+
+	protected override initElectronSubjects(): void {
+		this.setupElectronSubject(this.memoryCollectionInfo$$, 'mercenariesMemoryCache-memoryCollectionInfo');
+		this.setupElectronSubject(this.memoryMapInfo$$, 'mercenariesMemoryCache-memoryMapInfo');
+	}
+
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.memoryCollectionInfo$$ = new SubscriberAwareBehaviorSubject<MemoryMercenariesCollectionInfo | null>(null);
+		this.memoryMapInfo$$ = new SubscriberAwareBehaviorSubject<MemoryMercenariesInfo | null>(null);
 	}
 
 	private async initMemoryUpdateListener() {
@@ -188,16 +200,6 @@ export class MercenariesMemoryCacheService extends AbstractFacadeService<Mercena
 		}
 		this.localStorageService.setItem(LocalStorageService.LOCAL_STORAGE_MERCENARIES_COLLECTION, newMercenariesInfo);
 		return;
-	}
-
-	protected override initElectronSubjects(): void {
-		this.setupElectronSubject(this.memoryCollectionInfo$$, 'mercenariesMemoryCache-memoryCollectionInfo');
-		this.setupElectronSubject(this.memoryMapInfo$$, 'mercenariesMemoryCache-memoryMapInfo');
-	}
-
-	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
-		this.memoryCollectionInfo$$ = new SubscriberAwareBehaviorSubject<MemoryMercenariesCollectionInfo | null>(null);
-		this.memoryMapInfo$$ = new SubscriberAwareBehaviorSubject<MemoryMercenariesInfo | null>(null);
 	}
 
 	private async loadLocalMercenariesCollectionInfo(): Promise<MemoryMercenariesCollectionInfo | null> {
