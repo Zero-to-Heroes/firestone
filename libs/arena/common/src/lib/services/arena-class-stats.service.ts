@@ -111,6 +111,7 @@ const mergeForPlayerClass = (playerClassStats: readonly ArenaClassStat[]): Arena
 	const ref = playerClassStats[0];
 	const mergedStats: ArenaClassStat = {
 		playerClass: ref.playerClass,
+		playerHeroPower: ref.playerHeroPower,
 		totalGames: playerClassStats.reduce((acc, curr) => acc + curr.totalGames, 0),
 		totalsWins: playerClassStats.reduce((acc, curr) => acc + curr.totalsWins, 0),
 		winsDistribution: mergeWinsDistribution(playerClassStats.flatMap((s) => s.winsDistribution)),
