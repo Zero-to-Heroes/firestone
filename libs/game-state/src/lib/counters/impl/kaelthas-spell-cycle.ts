@@ -10,7 +10,7 @@ import { BattlegroundsState } from '../../models/_barrel';
 import { DeckCard } from '../../models/deck-card';
 import { GameState } from '../../models/game-state';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
-import { CounterType } from '../_exports';
+import { CounterType } from '../counter-type';
 
 /** Position in the 3-spell cycle (0 = none / start of turn), shown as `p/3`. */
 export function formatKaelthasSpellCycleLabel(spellCountThisTurn: number): string {

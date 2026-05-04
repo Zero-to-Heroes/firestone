@@ -2,7 +2,7 @@ import { CardIds, GameTag } from '@firestone-hs/reference-data';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { GameState } from '../../models/game-state';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
-import { CounterType } from '../_exports';
+import { CounterType } from '../counter-type';
 
 const reductionCards = [
 	CardIds.Artanis_SC_754,

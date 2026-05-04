@@ -5,7 +5,7 @@ import { CardsFacadeService, ILocalizationService } from '@firestone/shared/fram
 import { GameState } from '../../models/game-state';
 import { initialHeroClassIs } from '../../models/hero-card';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
-import { CounterType } from '../_exports';
+import { CounterType } from '../counter-type';
 
 export class HolySpellsCounterDefinitionV2 extends CounterDefinitionV2<number> {
 	public override id: CounterType = 'holySpells';

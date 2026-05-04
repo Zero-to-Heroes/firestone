@@ -6,7 +6,7 @@ import { BattlegroundsState } from '../../models/_barrel';
 import { DeckState } from '../../models/deck-state';
 import { GameState } from '../../models/game-state';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
-import { CounterType } from '../_exports';
+import { CounterType } from '../counter-type';
 
 /*
  * Ysondre (EDR_465): Taunt. Deathrattle: Summon a random Dragon for each time Ysondre has died this game.

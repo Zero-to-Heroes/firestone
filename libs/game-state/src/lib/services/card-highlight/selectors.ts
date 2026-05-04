@@ -14,7 +14,7 @@ import {
 	SpellSchool,
 } from '@firestone-hs/reference-data';
 import { HighlightSide, TempCardIds } from '@firestone/shared/framework/core';
-import { EXTENDED_STARSHIP_CARDS } from '../../counters/impl/next-starship-launch';
+import { EXTENDED_STARSHIP_CARDS } from '../../counters/impl/extended-starship-cards';
 import { isCardCreated } from '../../models/deck-card';
 import { getCost, getProcessedCard } from '../card-utils';
 import { PLAGUES } from '../game-events/event-parser/special-cases/plagues-parser';

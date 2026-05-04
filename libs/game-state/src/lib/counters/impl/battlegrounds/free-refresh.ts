@@ -4,7 +4,7 @@ import { BattlegroundsState } from '../../../models/_barrel';
 import { GameState } from '../../../models/game-state';
 import { getControllerEntity, getEnchantmentsForEntity, getEntityTag } from '../../../services/parser-entity-utils';
 import { CounterDefinitionV2 } from '../../_counter-definition-v2';
-import { CounterType } from '../../_exports';
+import { CounterType } from '../../counter-type';
 
 export class FreeRefreshCounterDefinitionV2 extends CounterDefinitionV2<number> {
 	public override id: CounterType = 'freeRefresh';

@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { CardClass, CardIds, GameTag } from '@firestone-hs/reference-data';
+import { CardClass, CardIds } from '@firestone-hs/reference-data';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { GameState } from '../../models/game-state';
 import { initialHeroClassIs } from '../../models/hero-card';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
-import { CounterType } from '../_exports';
+import { CounterType } from '../counter-type';
+import { getStarshipsLaunchedCardIds } from './get-starships-launched-card-ids';
 
 export class StarshipsLaunchedCounterDefinitionV2 extends CounterDefinitionV2<number> {
 	public override id: CounterType = 'starshipsLaunched';
@@ -52,28 +53,4 @@ export class StarshipsLaunchedCounterDefinitionV2 extends CounterDefinitionV2<nu
 	}
 }
 
-export const getStarshipsLaunchedCardIds = (
-	side: 'player' | 'opponent',
-	gameState: GameState,
-	allCards: CardsFacadeService,
-): readonly string[] => {
-	const deckState = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
-	const otherDeckState = side === 'player' ? gameState.opponentDeck : gameState.playerDeck;
-	const starshipsOwn = deckState
-		.getAllCardsInDeckWithoutOptions()
-		.filter((c) => !c.stolenFromOpponent)
-		.filter((c) => allCards.getCard(c.cardId)?.mechanics?.includes(GameTag[GameTag.STARSHIP]))
-		.filter((c) => c.tags[GameTag.LAUNCHPAD] !== 1);
-	const starshipsStolen = otherDeckState
-		.getAllCardsInDeckWithoutOptions()
-		.filter((c) => c.stolenFromOpponent)
-		.filter((c) => allCards.getCard(c.cardId)?.mechanics?.includes(GameTag[GameTag.STARSHIP]))
-		.filter((c) => c.tags[GameTag.LAUNCHPAD] !== 1);
-	const cardIds = [...starshipsOwn, ...starshipsStolen].flatMap((c) => [
-		c.cardId,
-		...(c.storedInformation?.cards
-			?.filter((c) => allCards.getCard(c?.cardId).mechanics?.includes(GameTag[GameTag.STARSHIP_PIECE]))
-			?.map((c) => c.cardId) ?? []),
-	]);
-	return cardIds;
-};
+export { getStarshipsLaunchedCardIds } from './get-starships-launched-card-ids';

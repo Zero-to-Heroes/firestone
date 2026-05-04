@@ -4,7 +4,7 @@ import { CardIds } from '@firestone-hs/reference-data';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { GameState, ShortCard } from '../../models/game-state';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
-import { CounterType } from '../_exports';
+import { CounterType } from '../counter-type';
 
 export class NagaGiantCounterDefinitionV2 extends CounterDefinitionV2<{
 	spellsPlayedThisMatch: readonly ShortCard[];

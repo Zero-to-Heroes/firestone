@@ -5,7 +5,7 @@ import { TurnDamage } from '../../models/deck-state';
 import { GameState } from '../../models/game-state';
 import { initialHeroClassIs } from '../../models/hero-card';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
-import { CounterType } from '../_exports';
+import { CounterType } from '../counter-type';
 
 const opponentClasses = [CardClass.PRIEST, CardClass.WARLOCK, CardClass.DEMONHUNTER, CardClass.ROGUE];
 

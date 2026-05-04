@@ -4,17 +4,11 @@ import { CardsFacadeService, ILocalizationService } from '@firestone/shared/fram
 import { GameState } from '../../models/game-state';
 import { HeroCard } from '../../models/hero-card';
 import { getControllerEntity, getEntityTag } from '../../services/parser-entity-utils';
+import { EXTENDED_STARSHIP_CARDS } from './extended-starship-cards';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
-import { CounterType } from '../_exports';
+import { CounterType } from '../counter-type';
 
-export const EXTENDED_STARSHIP_CARDS = [
-	CardIds.Starport_SC_403,
-	CardIds.StarshipSchematic_GDB_102,
-	CardIds.ScroungingShipwright_GDB_876,
-	CardIds.SalvageTheBunker_SC_404,
-	CardIds.LiftOff_SC_410,
-	CardIds.WaywardProbe_SC_500,
-];
+export { EXTENDED_STARSHIP_CARDS } from './extended-starship-cards';
 
 const STARSHIP_COST_REDUCTION_CARDS = [
 	CardIds.SalvageTheBunker_SC_404,

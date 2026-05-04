@@ -1,6 +1,6 @@
 import { CardIds } from '@firestone-hs/reference-data';
 import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
-import { getStarshipsLaunchedCardIds } from '../../../counters/impl/starships-launched';
+import { getStarshipsLaunchedCardIds } from '../../../counters/impl/get-starships-launched-card-ids';
 import { GameState } from '../../../models/game-state';
 import { GlobalHighlightCard } from './_registers';
 

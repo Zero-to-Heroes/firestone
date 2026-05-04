@@ -7,7 +7,7 @@ import { DeckState } from '../../models/deck-state';
 import { GameState } from '../../models/game-state';
 import { timeRafaamFablePackage } from '../../services/card-utils';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
-import { CounterType } from '../_exports';
+import { CounterType } from '../counter-type';
 
 export class RafaamTimeCounterDefinitionV2 extends CounterDefinitionV2<{
 	uniqueRafaams: number;

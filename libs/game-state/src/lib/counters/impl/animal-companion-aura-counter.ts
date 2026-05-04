@@ -8,7 +8,7 @@ import { CardsFacadeService, ILocalizationService, TempCardIds } from '@fireston
 import { GameState } from '../../models/game-state';
 import { PLACEHOLDER_ANIMAL_COMPANION_PLAYER_ENCHANT } from './deck-tracker-enchant-placeholders';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
-import { CounterType } from '../_exports';
+import { CounterType } from '../counter-type';
 
 export class AnimalCompanionAuraCounterDefinitionV2 extends CounterDefinitionV2<number> {
 	public override id: CounterType = 'animalCompanionAura';

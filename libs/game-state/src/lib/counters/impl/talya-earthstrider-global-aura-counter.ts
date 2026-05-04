@@ -8,7 +8,7 @@ import { CardsFacadeService, ILocalizationService, TempCardIds } from '@fireston
 import { GameState } from '../../models/game-state';
 import { PLACEHOLDER_TALYA_EARTHSTRIDER_GLOBAL_ENCHANT } from './deck-tracker-enchant-placeholders';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
-import { CounterType } from '../_exports';
+import { CounterType } from '../counter-type';
 
 export class TalyaEarthstriderGlobalAuraCounterDefinitionV2 extends CounterDefinitionV2<number> {
 	public override id: CounterType = 'talyaEarthstriderGlobalAura';

@@ -5,7 +5,7 @@ import { BattlegroundsState } from '../../../models/_barrel';
 import { GameState } from '../../../models/game-state';
 import { getControllerEntity, getEntityTag } from '../../../services/parser-entity-utils';
 import { CounterDefinitionV2 } from '../../_counter-definition-v2';
-import { CounterType } from '../../_exports';
+import { CounterType } from '../../counter-type';
 
 export class TavernSpellsBuffCounterDefinitionV2 extends CounterDefinitionV2<{ atk: number; health: number }> {
 	public override id: CounterType = 'tavernSpellsBuff';

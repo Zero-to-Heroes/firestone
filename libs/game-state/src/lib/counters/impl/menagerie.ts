@@ -6,7 +6,7 @@ import { BattlegroundsState } from '../../models/_barrel';
 import { GameState, ShortCard } from '../../models/game-state';
 import { extractUniqueTribes } from '../../utils/tribe-utils';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
-import { CounterType } from '../_exports';
+import { CounterType } from '../counter-type';
 
 export class MenagerieCounterDefinitionV2 extends CounterDefinitionV2<readonly ShortCard[]> {
 	public override id: CounterType = 'menagerie';

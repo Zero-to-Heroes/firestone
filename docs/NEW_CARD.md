@@ -39,6 +39,8 @@ This doc is a **short playbook** for game-state / deck tracker work. **Always fo
 
 ## 5. Deck tracker counters and enchantments
 
+- In **new** counter files under `libs/game-state/src/lib/counters/impl/`, import **`CounterType`** from **`counter-type.ts`** (`../counter-type` or `../../counter-type` in `battlegrounds/`). **Do not** import `CounterType` from `_exports.ts`; that re-enters the counter registry while `_counter-definition-v2` is still loading and can cause a runtime `Cannot access 'CounterDefinitionV2' before initialization` / circular dependency.
+- **Card modules pulled in via `cards/_mapping` / `_barrel`** must not import files that load **`CounterDefinitionV2`** (e.g. a full counter impl). Example failure mode: **`global/jim-raynor.ts`** imported **`starships-launched.ts`**, which extended the base class → while **`_counter-definition-v2`** was still initializing after **`card-utils` → `_mapping`**. Put shared helpers/constants in sidecar modules (see `get-starships-launched-card-ids.ts`, `extended-starship-cards.ts`).
 - If a counter sums **`GameTag.TAG_SCRIPT_DATA_NUM_1`** (or similar) on **deck enchantments**, **inline** the `filter` + `reduce` in that counter file. Avoid shared mini-helpers unless several counters truly share identical semantics.
 
 ## 6. Deck highlight selectors (`card-id-selectors`)

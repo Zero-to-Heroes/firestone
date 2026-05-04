@@ -7,7 +7,7 @@ import { DeckState } from '../../models/deck-state';
 import { GameState } from '../../models/game-state';
 import { windrunnerSistersFablePackage } from '../../services/card-utils';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
-import { CounterType } from '../_exports';
+import { CounterType } from '../counter-type';
 
 export class WindrunnerSistersCounterDefinitionV2 extends CounterDefinitionV2<readonly CardIds[]> {
 	public override id: CounterType = 'windrunnerSisters';

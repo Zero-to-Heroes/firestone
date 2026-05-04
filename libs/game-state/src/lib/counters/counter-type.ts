@@ -1,4 +1,7 @@
-// Extracted to break circular dependency: _counter-definition-v2 -> _exports -> _counter-definition-v2
+// Extracted to break circular dependency — never import CounterType from _exports.ts in impl/*.ts:
+// _counter-definition-v2 → card-utils → cards/_mapping → global card modules must not import counter classes
+// (was: jim-raynor → starships-launched.ts → _counter-definition-v2 TDZ). Use sidecar modules (e.g. get-starships-launched-card-ids, extended-starship-cards).
+// Always: import { CounterType } from '../counter-type' or '../../counter-type'.
 // Use camelCase because it uses conventions to get the pref property names
 export type CounterType =
 	| '__fatigue'
