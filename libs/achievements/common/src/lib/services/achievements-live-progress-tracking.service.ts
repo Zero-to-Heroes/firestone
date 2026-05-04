@@ -14,12 +14,11 @@ import {
 	MemoryInspectionService,
 } from '@firestone/memory';
 import { GameStatusService, PreferencesService } from '@firestone/shared/common/service';
-import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
+import { arraysEqual, SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { HEARTHSTONE_GAME_ID, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, distinctUntilChanged, filter, map, skipWhile, take, tap } from 'rxjs';
-import { arraysEqual } from '../utils';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class AchievementsLiveProgressTrackingService {
 	public achievementsProgressTracking$$ = new SubscriberAwareBehaviorSubject<readonly AchievementsProgressTracking[]>(
 		[],
@@ -43,7 +42,6 @@ export class AchievementsLiveProgressTrackingService {
 		private readonly prefs: PreferencesService,
 		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
 	) {
-		window['achievementsMonitor'] = this;
 		this.init();
 	}
 
@@ -61,7 +59,7 @@ export class AchievementsLiveProgressTrackingService {
 			])
 				.pipe(
 					tap((info) => console.debug('[achievements-live-progress-tracking] will track?', info)),
-					filter(([inGame, showLottery]) => inGame && showLottery),
+					filter(([inGame, showLottery]) => !!inGame && !!showLottery),
 					tap((info) => console.debug('[achievements-live-progress-tracking] will track 2', info)),
 					take(1),
 				)
@@ -109,7 +107,10 @@ export class AchievementsLiveProgressTrackingService {
 										);
 										return { id: id, achievement: achievementToTrack };
 									})
-									.filter((a) => !!a.id && !isNaN(a.id));
+									.filter((a) => !!a.id && !isNaN(a.id) && !!a.achievement) as readonly {
+									id: number;
+									achievement: HsRefAchievement;
+								}[];
 							const completedAchievements = mappedAchiements.filter((a) => !a.achievement);
 							// console.debug(
 							// 	'[achievements-live-progress-tracking] completedAchievements',
@@ -162,7 +163,7 @@ export class AchievementsLiveProgressTrackingService {
 		id: number,
 		refAchievements: readonly HsRefAchievement[],
 		achievementsOnGameStart: readonly HsAchievementInfo[],
-	): HsRefAchievement {
+	): HsRefAchievement | null {
 		let currentAchievement = refAchievements.find((a) => a.id === id);
 		if (!currentAchievement) {
 			console.warn(
@@ -176,9 +177,9 @@ export class AchievementsLiveProgressTrackingService {
 
 		let currentCompletion = achievementsOnGameStart.find((a) => a.id === id)?.progress ?? 0;
 		//console.debug('[achievements-live-progress-tracking] currentAchievement', currentAchievement, currentCompletion);
-		while (currentCompletion > 0 && currentCompletion >= currentAchievement.quota) {
-			const nextStepId = currentAchievement.nextTierId;
-			currentAchievement = !!nextStepId ? refAchievements.find((a) => a.id === nextStepId) : null;
+		while (currentCompletion > 0 && currentCompletion >= (currentAchievement?.quota ?? 0)) {
+			const nextStepId = currentAchievement?.nextTierId;
+			currentAchievement = !!nextStepId ? refAchievements.find((a) => a.id === nextStepId) : undefined;
 			currentCompletion = !!nextStepId
 				? (achievementsOnGameStart.find((a) => a.id === nextStepId)?.progress ?? 0)
 				: 0;
@@ -188,7 +189,7 @@ export class AchievementsLiveProgressTrackingService {
 				currentCompletion,
 			);
 		}
-		return currentAchievement;
+		return currentAchievement ?? null;
 	}
 
 	private async buildAchievementsProgressTracking(
@@ -204,11 +205,11 @@ export class AchievementsLiveProgressTrackingService {
 				const previousAchievement = achievementsOnGameStart?.find((a) => a.id === id);
 				const refAchievement = this.refAchievements.find((a) => a.id === id);
 				const quota = this.achievementQuotas[id];
-				const refLocale = refAchievement.locales?.find((l) => l.locale === locale);
+				const refLocale = refAchievement?.locales?.find((l) => l.locale === locale);
 				const result: AchievementsProgressTracking = {
 					id: id,
 					name: refLocale?.name ?? refAchievement?.name ?? 'Unknown achievement',
-					text: (refLocale ?? refAchievement)?.description?.replaceAll('$q', '' + quota),
+					text: (refLocale ?? refAchievement)?.description?.replaceAll('$q', '' + quota) ?? '',
 					quota: quota,
 					progressThisGame: !!currentProgress
 						? currentProgress.progress - (previousAchievement?.progress ?? 0)
@@ -216,8 +217,8 @@ export class AchievementsLiveProgressTrackingService {
 					progressTotal: !!currentProgress
 						? currentProgress.progress
 						: (achievementsOnGameStart.find((a) => a.id === id)?.progress ?? 0),
-					rewardTrackXp: refAchievement?.rewardTrackXp,
-					hierarchy: buildAchievementHierarchy(id, groupedAchievements)?.categories?.map((c) => c.name),
+					rewardTrackXp: refAchievement?.rewardTrackXp ?? 0,
+					hierarchy: buildAchievementHierarchy(id, groupedAchievements)?.categories?.map((c) => c.name) ?? [],
 				};
 				// console.debug(
 				// 	'[achievements-live-progress-tracking] built progress',
@@ -244,7 +245,7 @@ export class AchievementsLiveProgressTrackingService {
 
 		const startTime = performance.now();
 		const currentProgressIds = this.currentAchievementsProgress$$.value.map((a) => a.id) ?? [];
-		let currentAchievementProgress: HsAchievementsInfo = null;
+		let currentAchievementProgress: HsAchievementsInfo | null = null;
 		const useIndexDetection = this.achievementIdsToTrack$$.value.every((id) => currentProgressIds.includes(id));
 		// console.debug(
 		// 	'[achievements-live-progress-tracking] using index detection?',
@@ -258,7 +259,9 @@ export class AchievementsLiveProgressTrackingService {
 				this.achievementIdsToTrack$$.value,
 			);
 		} else {
-			const indexes = this.currentAchievementsProgress$$.value.map((a) => a.index);
+			const indexes: readonly number[] = this.currentAchievementsProgress$$.value
+				.map((a) => a.index ?? 0)
+				.filter((index) => !!index);
 			currentAchievementProgress = await this.memory.getInGameAchievementsProgressInfoByIndex(indexes);
 			// Check if we got the right achievements
 			// This means that the achievements returned have the same ids as the achievementIdsToTrack

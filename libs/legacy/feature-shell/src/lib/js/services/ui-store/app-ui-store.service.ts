@@ -12,10 +12,6 @@ import { ProfileServiceFacade } from '@firestone/profile/common';
 import { PatchesConfigService, Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { MercenariesBattleState } from '../../models/mercenaries/mercenaries-battle-state';
 import { MercenariesOutOfCombatState } from '../../models/mercenaries/out-of-combat/mercenaries-out-of-combat-state';
-import {
-	AchievementsLiveProgressTrackingService,
-	AchievementsProgressTracking,
-} from '../achievement/achievements-live-progress-tracking.service';
 import { HighlightSelector } from '../mercenaries/highlights/mercenaries-synergies-highlight.service';
 import { arraysEqual } from '../utils';
 
@@ -33,7 +29,6 @@ export class AppUiStoreService extends Store<Preferences> {
 	private mercenariesSynergiesStore: BehaviorSubject<HighlightSelector>;
 
 	private decks: Observable<readonly DeckSummary[]>;
-	private achievementsProgressTracking: Observable<readonly AchievementsProgressTracking[]>;
 
 	private initialized = false;
 
@@ -136,10 +131,6 @@ export class AppUiStoreService extends Store<Preferences> {
 		return this.decks;
 	}
 
-	public achievementsProgressTracking$(): Observable<readonly AchievementsProgressTracking[]> {
-		return this.achievementsProgressTracking;
-	}
-
 	// TODO: this probably makes more sense in a facade. I'll move it when more methods like this
 	// start appearing
 	private async init() {
@@ -147,14 +138,7 @@ export class AppUiStoreService extends Store<Preferences> {
 
 		// The rest
 		this.initDecks();
-		this.initAchievementsProgressTracking();
 		this.initialized = true;
-	}
-
-	private initAchievementsProgressTracking() {
-		this.achievementsProgressTracking = (
-			this.ow.getMainWindow().achievementsMonitor as AchievementsLiveProgressTrackingService
-		).achievementsProgressTracking$$;
 	}
 
 	private initDecks() {

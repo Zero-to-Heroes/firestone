@@ -9,6 +9,7 @@
 	"include": [
 		"**/*.ts",
 		"../../profile/common/src/lib/services/profile-uploader.service.ts",
-		"../../twitch/common/src/lib/services/live-streams.service.ts"
+		"../../twitch/common/src/lib/services/live-streams.service.ts",
+		"../../achievements/common/src/lib/services/achievements-live-progress-tracking.service.ts"
 	]
 }

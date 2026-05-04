@@ -3,6 +3,8 @@ export * from './lib/models/_barrel';
 export * from './lib/services/achievement-history-storage.service';
 export * from './lib/services/achievement-utils';
 export * from './lib/services/achievements-history.service';
+export * from './lib/services/achievements-live-progress-tracking.service';
+export * from './lib/services/achievements-live-tracking-facade.service';
 export * from './lib/services/achievements-memory-monitor.service';
 export * from './lib/services/achievements-navigation.service';
 export * from './lib/services/achievements-notification.service';

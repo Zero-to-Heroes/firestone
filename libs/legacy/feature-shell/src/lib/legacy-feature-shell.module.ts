@@ -568,7 +568,6 @@ import { OwTranslatePipe } from './js/directives/ow-translate.pipe';
 import { PulseDirective } from './js/directives/pulse.directive';
 import { RippleOnClickDirective } from './js/directives/ripple-on-click.directive';
 import { RotateOnMouseOverDirective } from './js/directives/rotate-on-mouse-over.directive';
-import { AchievementsLiveProgressTrackingService } from './js/services/achievement/achievements-live-progress-tracking.service';
 import { ChallengeBuilderService } from './js/services/achievement/achievements/challenges/challenge-builder.service';
 import { FirestoneAchievementsChallengeService } from './js/services/achievement/firestone-achievements-challenges.service';
 import { AdService } from './js/services/ad.service';
@@ -1333,7 +1332,6 @@ try {
 		PackMonitor,
 		PackStatsService,
 
-		AchievementsLiveProgressTrackingService,
 		FirestoneAchievementsChallengeService,
 		FirestoneRemoteAchievementsLoaderService,
 

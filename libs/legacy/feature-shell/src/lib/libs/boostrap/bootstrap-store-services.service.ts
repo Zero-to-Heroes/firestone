@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { AchievementsNavigationService } from '@firestone/achievements/common';
+import { AchievementsLiveTrackingFacadeService, AchievementsNavigationService } from '@firestone/achievements/common';
 import { GameNativeStateStoreService } from '@firestone/app/common';
 import {
 	ArenDeckDetailsService,
@@ -69,7 +69,6 @@ import type { IOwUtilsService } from '@firestone/shared/framework/core';
 import { CardRulesService, OW_UTILS_SERVICE_TOKEN } from '@firestone/shared/framework/core';
 import { GameStatsProviderService } from '@firestone/stats/services';
 import { TavernBrawlService } from '@firestone/tavern-brawl/common';
-import { AchievementsLiveProgressTrackingService } from '../../js/services/achievement/achievements-live-progress-tracking.service';
 import { AdService } from '../../js/services/ad.service';
 import { MercenariesSynergiesHighlightService } from '../../js/services/mercenaries/highlights/mercenaries-synergies-highlight.service';
 import { MercenariesStoreService } from '../../js/services/mercenaries/mercenaries-store.service';
@@ -109,7 +108,7 @@ export class BootstrapStoreServicesService {
 		private readonly decksProviderService: DecksProviderService,
 		private readonly gameStatsProviderService: GameStatsProviderService,
 		private readonly ini_LotterService: LotteryService,
-		private readonly achievementsMonitor: AchievementsLiveProgressTrackingService,
+		private readonly achievementsMonitor: AchievementsLiveTrackingFacadeService,
 		private readonly collectionBootstrapService: CollectionBootstrapService,
 		private readonly ini_LotteryWidgetControllerService: LotteryWidgetControllerService,
 		private readonly init_ProfileUploaderService: ProfileUploaderService,

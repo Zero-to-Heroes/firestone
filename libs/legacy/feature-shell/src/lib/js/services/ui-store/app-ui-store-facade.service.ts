@@ -5,7 +5,6 @@ import { Observable } from 'rxjs';
 
 import { DeckSummary } from '@firestone/constructed/common';
 import { Preferences } from '@firestone/shared/common/service';
-import { AchievementsProgressTracking } from '../achievement/achievements-live-progress-tracking.service';
 import { sleep } from '../utils';
 import {
 	AppUiStoreService,
@@ -75,10 +74,6 @@ export class AppUiStoreFacadeService {
 	/** @deprecated */
 	public decks$(): Observable<readonly DeckSummary[]> {
 		return this.store.decks$();
-	}
-
-	public achievementsProgressTracking$(): Observable<readonly AchievementsProgressTracking[]> {
-		return this.store.achievementsProgressTracking$();
 	}
 
 	private async waitForStoreInstance(): Promise<void> {

@@ -1,11 +1,10 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { AbstractSubscriptionStoreComponent } from '@components/abstract-subscription-store.component';
+import { AchievementsLiveTrackingFacadeService, AchievementsProgressTracking } from '@firestone/achievements/common';
 import { AchievementsTrackRandomAchievementsEvent, MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { GameStatusService, Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { sortByProperties } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent, sortByProperties } from '@firestone/shared/framework/common';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable, tap } from 'rxjs';
-import { AchievementsProgressTracking } from '../../services/achievement/achievements-live-progress-tracking.service';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 
 @Component({
 	standalone: false,
@@ -61,25 +60,25 @@ import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-fa
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LotteryAchievementsWidgetComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class LotteryAchievementsWidgetComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	achievements$: Observable<readonly AchievementsProgressTracking[]>;
 	inGame$: Observable<boolean>;
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly prefs: PreferencesService,
 		private readonly gameStatus: GameStatusService,
 		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
+		private readonly achievementsLiveTrackingFacade: AchievementsLiveTrackingFacadeService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await this.gameStatus.isReady();
+		await waitForReady(this.gameStatus, this.achievementsLiveTrackingFacade);
 
 		this.inGame$ = this.gameStatus.inGame$$.pipe(this.mapData((inGame) => inGame));
-		this.achievements$ = this.store.achievementsProgressTracking$().pipe(
+		this.achievements$ = this.achievementsLiveTrackingFacade.achievementsProgressTracking$$.pipe(
 			tap((tracking) => console.debug('[lottery-achievements] received tracking', tracking)),
 			this.mapData((tracking) =>
 				!tracking?.length
