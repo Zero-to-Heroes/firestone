@@ -136,5 +136,6 @@ export type CounterType =
 	| 'animalCompanionAura'
 	| 'leylineSpellCostDiscount'
 	| 'leylineSpellTriggers'
+	| 'leylineSpellEffectStrength'
 	| 'silverHandRecruitAura'
 	| 'talyaEarthstriderGlobalAura';

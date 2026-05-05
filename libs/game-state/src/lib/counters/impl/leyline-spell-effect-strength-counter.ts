@@ -5,47 +5,45 @@ import { GameState } from '../../models/game-state';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
 import { CounterType } from '../counter-type';
 
-export class LeylineSpellTriggersCounterDefinitionV2 extends CounterDefinitionV2<number> {
-	public override id: CounterType = 'leylineSpellTriggers';
-	public override image = CardIds.SurgeNeedle_MEND_503;
+export class LeylineSpellEffectStrengthCounterDefinitionV2 extends CounterDefinitionV2<number> {
+	public override id: CounterType = 'leylineSpellEffectStrength';
+	public override image = CardIds.MysticRunesaber_MEND_506;
 	public override type: 'hearthstone' | 'battlegrounds' = 'hearthstone';
 	public override cards: readonly CardIds[] = [];
 
 	readonly player = {
-		pref: 'playerLeylineSpellTriggersCounter' as const,
+		pref: 'playerLeylineSpellEffectStrengthCounter' as const,
 		display: (state: GameState): boolean => (this.player.value(state) ?? 0) > 0,
 		value: (state: GameState): number | null => {
-			const v = state.playerDeck.powerTriggeredThisMatch.filter(
-				(p) =>
-					p.cardId === CardIds.SurgeNeedle_MEND_503 ||
-					p.cardId === CardIds.TheArcanomicon_EnergizeToken_MEND_505t,
-			).length;
+			const triggered = state.playerDeck.powerTriggeredThisMatch;
+			const v =
+				triggered.filter((p) => p.cardId === CardIds.MysticRunesaber_MEND_506).length +
+				2 * triggered.filter((p) => p.cardId === CardIds.TheArcanomicon_EmpowerToken_MEND_505t3).length;
 			return v > 0 ? v : null;
 		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>
-				i18n.translateString('settings.decktracker.your-deck.counters.leyline-spell-triggers-label'),
+				i18n.translateString('settings.decktracker.your-deck.counters.leyline-spell-effect-strength-label'),
 			tooltip: (i18n: ILocalizationService): string =>
-				i18n.translateString('settings.decktracker.your-deck.counters.leyline-spell-triggers-tooltip'),
+				i18n.translateString('settings.decktracker.your-deck.counters.leyline-spell-effect-strength-tooltip'),
 		},
 	};
 
 	readonly opponent = {
-		pref: 'opponentLeylineSpellTriggersCounter' as const,
+		pref: 'opponentLeylineSpellEffectStrengthCounter' as const,
 		display: (state: GameState): boolean => (this.opponent.value(state) ?? 0) > 0,
 		value: (state: GameState): number | null => {
-			const v = state.opponentDeck.powerTriggeredThisMatch.filter(
-				(p) =>
-					p.cardId === CardIds.SurgeNeedle_MEND_503 ||
-					p.cardId === CardIds.TheArcanomicon_EnergizeToken_MEND_505t,
-			).length;
+			const triggered = state.opponentDeck.powerTriggeredThisMatch;
+			const v =
+				triggered.filter((p) => p.cardId === CardIds.MysticRunesaber_MEND_506).length +
+				2 * triggered.filter((p) => p.cardId === CardIds.TheArcanomicon_EmpowerToken_MEND_505t3).length;
 			return v > 0 ? v : null;
 		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>
-				i18n.translateString('settings.decktracker.your-deck.counters.leyline-spell-triggers-label'),
+				i18n.translateString('settings.decktracker.your-deck.counters.leyline-spell-effect-strength-label'),
 			tooltip: (i18n: ILocalizationService): string =>
-				i18n.translateString('settings.decktracker.your-deck.counters.leyline-spell-triggers-tooltip'),
+				i18n.translateString('settings.decktracker.your-deck.counters.leyline-spell-effect-strength-tooltip'),
 		},
 	};
 
@@ -58,6 +56,6 @@ export class LeylineSpellTriggersCounterDefinitionV2 extends CounterDefinitionV2
 
 	protected override tooltip(side: 'player' | 'opponent', gameState: GameState): string | null {
 		const value = this[side]!.value(gameState) ?? 0;
-		return this.i18n.translateString(`counters.leyline-spell-triggers.${side}`, { value });
+		return this.i18n.translateString(`counters.leyline-spell-effect-strength.${side}`, { value });
 	}
 }

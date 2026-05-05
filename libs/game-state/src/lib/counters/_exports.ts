@@ -80,11 +80,12 @@ import { ImbueCounterDefinitionV2 } from './impl/imbue';
 import { JadeGolemCounterDefinitionV2 } from './impl/jade-golem';
 import { KaelthasSunstriderSpellCycleCounterDefinitionV2 } from './impl/kaelthas-spell-cycle';
 import { KiljaedenCounterDefinitionV2 } from './impl/kiljaeden';
+import { LeylineSpellCostDiscountCounterDefinitionV2 } from './impl/leyline-spell-cost-discount-counter';
+import { LeylineSpellEffectStrengthCounterDefinitionV2 } from './impl/leyline-spell-effect-strength-counter';
+import { LeylineSpellTriggersCounterDefinitionV2 } from './impl/leyline-spell-triggers-counter';
 import { LibramPlayedCounterDefinitionV2 } from './impl/libram-played';
 import { LibramReductionCounterDefinitionV2 } from './impl/libram-reduction';
 import { LightrayCounterDefinitionV2 } from './impl/lightray';
-import { LeylineSpellCostDiscountCounterDefinitionV2 } from './impl/leyline-spell-cost-discount-counter';
-import { LeylineSpellTriggersCounterDefinitionV2 } from './impl/leyline-spell-triggers-counter';
 import { LocationsUsedCounterDefinitionV2 } from './impl/locations-used';
 import { MenagerieCounterDefinitionV2 } from './impl/menagerie';
 import { MinionsDeadThisGameCounterDefinitionV2 } from './impl/minions-dead-this-game';
@@ -262,6 +263,7 @@ export const getAllCounters: (
 	new BgsAncestralAutomatonCounterDefinitionV2(i18n, allCards),
 	new LeylineSpellCostDiscountCounterDefinitionV2(i18n, allCards),
 	new LeylineSpellTriggersCounterDefinitionV2(i18n, allCards),
+	new LeylineSpellEffectStrengthCounterDefinitionV2(i18n, allCards),
 	new AnimalCompanionAuraCounterDefinitionV2(i18n, allCards),
 	new SilverHandRecruitAuraCounterDefinitionV2(i18n, allCards),
 	new TalyaEarthstriderGlobalAuraCounterDefinitionV2(i18n, allCards),

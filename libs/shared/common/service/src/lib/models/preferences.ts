@@ -556,6 +556,8 @@ export class Preferences implements IPreferences {
 	readonly opponentLeylineSpellCostDiscountCounter: boolean = true;
 	readonly playerLeylineSpellTriggersCounter: boolean = true;
 	readonly opponentLeylineSpellTriggersCounter: boolean = true;
+	readonly playerLeylineSpellEffectStrengthCounter: boolean = true;
+	readonly opponentLeylineSpellEffectStrengthCounter: boolean = true;
 	readonly playerAnimalCompanionAuraCounter: boolean = true;
 	readonly opponentAnimalCompanionAuraCounter: boolean = true;
 	readonly playerSilverHandRecruitAuraCounter: boolean = true;

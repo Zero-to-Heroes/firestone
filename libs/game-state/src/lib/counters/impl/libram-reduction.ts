@@ -52,7 +52,6 @@ export class LibramReductionCounterDefinitionV2 extends CounterDefinitionV2<numb
 					state.opponentDeck.enchantments.filter(
 						(e) => e.cardId === CardIds.AldorTruthseeker_AldorTruthseekerEnchantment,
 					).length;
-			console.debug('[libram-reduction] opponent value', result, state.opponentDeck.enchantments);
 			return result;
 		},
 		setting: {
