@@ -11,6 +11,7 @@ import { getEntityTag } from '../parser-entity-utils';
 import { Selector, SelectorInput, SelectorOutput } from './cards-highlight-common.service';
 import {
 	and,
+	animalCompanionSynergyDeckSelector,
 	arcane,
 	attackGreaterThan,
 	attackIs,
@@ -100,6 +101,7 @@ import {
 	kindred,
 	lastAffectedByCardId,
 	legendary,
+	leylineFranchiseSynergyDeckSelector,
 	libram,
 	libramDiscount,
 	lifesteal,
@@ -139,6 +141,7 @@ import {
 	shadow,
 	shufflesCardIntoDeck,
 	side,
+	silverHandRecruitSynergyDeckSelector,
 	spell,
 	spellDamage,
 	spellExtended,
@@ -162,9 +165,6 @@ import {
 	whelp,
 	windfury,
 	zerg,
-	animalCompanionSynergyDeckSelector,
-	leylineFranchiseSynergyDeckSelector,
-	silverHandRecruitSynergyDeckSelector,
 } from './selectors';
 
 export const cardIdSelector = (
@@ -4452,7 +4452,6 @@ export const cardIdSelector = (
 		case CardIds.Duskbreaker_LOOT_410:
 		case CardIds.MoltenBreath:
 		case CardIds.CrazedNetherwing:
-		case CardIds.DragonfirePotion:
 		case CardIds.FyeTheSettingSun_WW_825:
 		case CardIds.Chronobreaker:
 		case CardIds.AlexstraszasChampion:
@@ -4461,6 +4460,8 @@ export const cardIdSelector = (
 		case CardIds.LightningBreath:
 		case CardIds.CandleBreath:
 			return and(side(inputSide), or(inHand, inDeck), dragon);
+		case CardIds.DragonfirePotion:
+			return and(side(inputSide), or(inHand, inDeck, inPlay), dragon);
 		case CardIds.DraconicHerald:
 			return and(side(inputSide), or(inDeck, inHand), dragon);
 		case CardIds.GrimscaleOracleLegacy:
