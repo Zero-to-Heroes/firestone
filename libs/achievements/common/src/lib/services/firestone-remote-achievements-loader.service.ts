@@ -55,10 +55,8 @@ export class FirestoneRemoteAchievementsLoaderService implements IRemoteAchievem
 	}
 
 	public async publishRemoteAchievement(achievement: Achievement): Promise<void> {
-		const [currentUser, reviewId] = await Promise.all([
-			this.userService.getCurrentUser(),
-			this.reviewIdService.reviewId$$,
-		]);
+		const currentUser = await this.userService.getCurrentUser();
+		const reviewId = this.reviewIdService.reviewId$$.value;
 		if (currentUser) {
 			const statEvent = {
 				creationDate: new Date(),
