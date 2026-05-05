@@ -30,7 +30,7 @@ export class RewardMonitorService {
 	}
 
 	private async init() {
-		await waitForReady(this.gameStatus);
+		await waitForReady(this.gameStatus, this.memoryUpdates);
 
 		this.gameStatus.inGame$$
 			.pipe(

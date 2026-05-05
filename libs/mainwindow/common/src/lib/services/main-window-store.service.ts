@@ -231,6 +231,8 @@ export class MainWindowStoreService implements IMainWindowStoreService {
 	}
 
 	public async init() {
+		await waitForReady(this.mainNavigation);
+
 		console.log('building initial window state');
 		this.navigationState$$.subscribe((state) => {
 			this.mainNavigation.navigationState$$.next(state);

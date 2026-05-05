@@ -3,24 +3,18 @@ import { BoosterType, boosterIdToSetId } from '@firestone-hs/reference-data';
 import { CollectionCardType } from '@firestone-hs/user-packs';
 import { InternalCardInfo } from '@firestone/collection/data-access';
 import { CATCH_UP_PACK_IDS } from '@firestone/collection/view';
-import {
-	CardPackInfo,
-	MemoryInspectionService,
-	MemoryUpdate,
-	MemoryUpdatesService,
-	PackInfo,
-} from '@firestone/memory';
+import { CardPackInfo, MemoryInspectionService, MemoryUpdatesService, PackInfo } from '@firestone/memory';
 import { MercenariesReferenceData, MercenariesReferenceDataService } from '@firestone/mercenaries/common';
 import { Events, PreferencesService } from '@firestone/shared/common/service';
-import { groupByFunction, sleep } from '@firestone/shared/framework/common';
-import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { groupByFunction } from '@firestone/shared/framework/common';
+import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject } from 'rxjs';
 import { debounceTime, filter, tap } from 'rxjs/operators';
-import { dustFor } from './collection-utils';
-import { CARDS_MONITOR_EVENT_HANDLER } from './cards-monitor-event-handler.interface';
-import type { ICardsMonitorEventHandler } from './cards-monitor-event-handler.interface';
 import { CardNotificationsService } from './card-notifications.service';
+import type { ICardsMonitorEventHandler } from './cards-monitor-event-handler.interface';
+import { CARDS_MONITOR_EVENT_HANDLER } from './cards-monitor-event-handler.interface';
 import { CollectionManager } from './collection-manager.service';
+import { dustFor } from './collection-utils';
 
 @Injectable()
 export class CardsMonitorService {
@@ -42,7 +36,8 @@ export class CardsMonitorService {
 	}
 
 	private async init() {
-		await sleep(1);
+		await waitForReady(this.memoryUpdates);
+
 		this.memoryUpdates.memoryUpdates$$.subscribe(async (changes) => {
 			if (changes.IsOpeningPack) {
 				this.packNotificationQueue.next(true);
@@ -74,17 +69,14 @@ export class CardsMonitorService {
 			).flat();
 			const totalDustValues = allCards
 				.filter((card) => !card.isNew && !card.isSecondCopy)
-				.map((card) =>
-					dustFor(this.cards.getCard(card.cardId)?.rarity ?? '', card.cardType),
-				);
+				.map((card) => dustFor(this.cards.getCard(card.cardId)?.rarity ?? '', card.cardType));
 			const totalDust = totalDustValues.reduce((a, b) => a + b, 0);
 			const newCards = allCards
 				.filter((card) => card.isNew || card.isSecondCopy)
 				.filter(
 					(card) =>
-						['legendary', 'epic'].includes(
-							(this.cards.getCard(card.cardId)?.rarity ?? '').toLowerCase(),
-						) || card.cardType !== 'NORMAL',
+						['legendary', 'epic'].includes((this.cards.getCard(card.cardId)?.rarity ?? '').toLowerCase()) ||
+						card.cardType !== 'NORMAL',
 				);
 			this.notifications.createDustToast(totalDust, totalDustValues.length);
 			for (const card of newCards) {
@@ -113,7 +105,7 @@ export class CardsMonitorService {
 		const packCards: readonly InternalCardInfo[] = pack.Cards.map((card) => {
 			if (boosterId === BoosterType.MERCENARIES) {
 				return {
-					cardId: mercRefData ? this.getLettuceCardId(card, mercRefData) ?? '' : '',
+					cardId: mercRefData ? (this.getLettuceCardId(card, mercRefData) ?? '') : '',
 					cardType: cardPremiumToCardType(card.Premium),
 					currencyAmount: card.CurrencyAmount,
 					mercenaryCardId: mercRefData ? this.getMercenaryCardId(card.MercenaryId, mercRefData) : undefined,
@@ -147,9 +139,8 @@ export class CardsMonitorService {
 				.filter((card) => card.isNew || card.isSecondCopy)
 				.filter(
 					(card) =>
-						['legendary', 'epic'].includes(
-							this.cards.getCard(card.cardId)?.rarity?.toLowerCase() ?? '',
-						) || card.cardType !== 'NORMAL',
+						['legendary', 'epic'].includes(this.cards.getCard(card.cardId)?.rarity?.toLowerCase() ?? '') ||
+						card.cardType !== 'NORMAL',
 				);
 			this.notifications.createDustToast(totalDust, totalDustValues.length);
 			for (const card of newCards) {
@@ -160,10 +151,7 @@ export class CardsMonitorService {
 		return packCards;
 	}
 
-	private getMercenaryCardId(
-		mercenaryId: number,
-		referenceData: MercenariesReferenceData,
-	): string | null {
+	private getMercenaryCardId(mercenaryId: number, referenceData: MercenariesReferenceData): string | null {
 		if (!referenceData) return null;
 		const cardDbfId = referenceData.mercenaries
 			.find((merc) => merc.id === mercenaryId)
@@ -171,10 +159,7 @@ export class CardsMonitorService {
 		return cardDbfId != null ? this.allCards.getCardFromDbfId(cardDbfId).id : null;
 	}
 
-	private getLettuceCardId(
-		card: CardPackInfo,
-		referenceData: MercenariesReferenceData,
-	): string | null {
+	private getLettuceCardId(card: CardPackInfo, referenceData: MercenariesReferenceData): string | null {
 		if (!referenceData) return null;
 		const cardDbfId = referenceData.mercenaries
 			.find((merc) => merc.id === card.MercenaryId)
@@ -199,12 +184,7 @@ export class CardsMonitorService {
 		}
 	}
 
-	private async handleNotification(
-		cardId: string,
-		type: CollectionCardType,
-		newCount: number,
-		showNotifs = true,
-	) {
+	private async handleNotification(cardId: string, type: CollectionCardType, newCount: number, showNotifs = true) {
 		const prefs = await this.prefs.getPreferences();
 		const isDust = this.hasReachedMaxCollectibleOf(cardId, newCount);
 		if (prefs.showCardsOutsideOfPacks && showNotifs) {

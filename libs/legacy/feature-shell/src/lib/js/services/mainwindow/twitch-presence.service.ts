@@ -52,10 +52,10 @@ export class TwitchPresenceService {
 
 		// "Normal" Hearthstone mode infos
 		const hearthstoneInfo$ = combineLatest([
-			this.gameState.gameState$$.pipe(map((state) => state.playerDeck.hero.cardId)),
-			this.gameState.gameState$$.pipe(map((state) => state.playerDeck.hero.classes)),
-			this.gameState.gameState$$.pipe(map((state) => state.opponentDeck.hero.cardId)),
-			this.gameState.gameState$$.pipe(map((state) => state.opponentDeck.hero.classes)),
+			this.gameState.gameState$$.pipe(map((state) => state.playerDeck.hero?.cardId)),
+			this.gameState.gameState$$.pipe(map((state) => state.playerDeck.hero?.classes)),
+			this.gameState.gameState$$.pipe(map((state) => state.opponentDeck.hero?.cardId)),
+			this.gameState.gameState$$.pipe(map((state) => state.opponentDeck.hero?.classes)),
 			this.gameState.gameState$$.pipe(map((state) => state.metadata)),
 			this.gameState.gameState$$.pipe(map((state) => state.gameStarted)),
 			this.prefs.preferences$$.pipe(

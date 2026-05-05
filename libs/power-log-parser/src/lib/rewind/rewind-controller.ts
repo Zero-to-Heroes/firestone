@@ -36,16 +36,11 @@
  * per-state ActionParser contract.
  */
 import { BlockType } from '@firestone-hs/reference-data';
+import { Logger } from '../logger';
 import { CombinedState } from '../state/combined-state';
 import { ParserState } from '../state/parser-state';
-import { Logger } from '../logger';
 import { RewindCardOracle } from './card-oracle';
-import {
-	ParserSnapshot,
-	ParserSnapshotMeta,
-	captureParserSnapshot,
-	restoreParserSnapshot,
-} from './snapshot';
+import { ParserSnapshot, ParserSnapshotMeta, captureParserSnapshot, restoreParserSnapshot } from './snapshot';
 
 /** Stream a log line belongs to. Determines which ParserState the line routes to. */
 export type LogStream = 'GS' | 'PTL';
@@ -67,12 +62,7 @@ const MAX_RETAINED_SNAPSHOTS = 16;
  *
  * If a new REWIND-capable block type ever appears, extend this allow-list.
  */
-const REWIND_ELIGIBLE_BLOCK_TYPES: ReadonlySet<string> = new Set([
-	'PLAY',
-	'POWER',
-	'TRIGGER',
-	'ATTACK',
-]);
+const REWIND_ELIGIBLE_BLOCK_TYPES: ReadonlySet<string> = new Set(['PLAY', 'POWER', 'TRIGGER', 'ATTACK']);
 
 /**
  * Blocks for which we accept an UNKNOWN cardId at BLOCK_START and defer the rewind decision
@@ -186,7 +176,7 @@ export class RewindController {
 		// `IsBattlegrounds()` / `IsMercenaries()` both early-return false on `GameType=-1`
 		// (the pre-metadata window). We deliberately don't latch in that case so a real
 		// game mode signal can land later.
-		if (gs.CurrentGame.GameType === -1) return false;
+		if (gs.CurrentGame?.GameType == null || gs.CurrentGame.GameType === -1) return false;
 		this.skipForGameMode = gs.IsBattlegrounds() || gs.IsMercenaries();
 		return this.skipForGameMode;
 	}
@@ -278,7 +268,10 @@ export class RewindController {
 	onShowEntity(entityId: number, cardId: string | null): void {
 		if (this.shouldSkipForGameMode()) return;
 		const pendingMeta = this.pending.get(entityId);
-		if (REWIND_DEBUG) console.log(`[rewind] onShowEntity entityId=${entityId} cardId=${cardId} pendingMeta=${pendingMeta != null}`);
+		if (REWIND_DEBUG)
+			console.log(
+				`[rewind] onShowEntity entityId=${entityId} cardId=${cardId} pendingMeta=${pendingMeta != null}`,
+			);
 		if (pendingMeta == null) return;
 
 		const isRewind = this.oracle.hasRewindMechanic(cardId);
@@ -333,7 +326,8 @@ export class RewindController {
 	 */
 	onGsGameResetStart(originEntityId: number): ParserSnapshotMeta | null {
 		if (this.shouldSkipForGameMode()) return null;
-		if (REWIND_DEBUG) console.log(`[rewind] onGsGameResetStart entityId=${originEntityId} retained=${this.retained.length}`);
+		if (REWIND_DEBUG)
+			console.log(`[rewind] onGsGameResetStart entityId=${originEntityId} retained=${this.retained.length}`);
 		const idx = findLastIndex(this.retained, (s) => s.meta.originEntityId === originEntityId);
 		if (idx < 0) {
 			Logger.Log(`No retained snapshot for rewind origin entityId=${originEntityId}`, '');
