@@ -9,7 +9,11 @@ export class DamageTakenThisTurnCounterDefinitionV2 extends CounterDefinitionV2<
 	public override image = CardIds.NethersoulBuster;
 	public override type: 'hearthstone' | 'battlegrounds' = 'hearthstone';
 	// Nethersoul Buster: Battlecry: Gain +1 Attack for each damage your hero has taken this turn.
-	public override cards: readonly CardIds[] = [CardIds.NethersoulBuster];
+	public override cards: readonly CardIds[] = [
+		CardIds.NethersoulBuster,
+		CardIds.Healthstone_GDB_125,
+		CardIds.FearlessFlamejuggler_VAC_942,
+	];
 
 	readonly player = {
 		pref: 'playerDamageTakenThisTurnCounter' as const,
