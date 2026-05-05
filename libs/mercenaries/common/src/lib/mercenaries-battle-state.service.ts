@@ -32,7 +32,7 @@ import { MercenariesReferenceDataService } from './services/mercenaries-referenc
 
 @Injectable({ providedIn: 'root' })
 export class MercenariesBattleStateService {
-	public battleState$$ = new BehaviorSubject<MercenariesBattleState | null>(null);
+	public battleState$$ = new BehaviorSubject<MercenariesBattleState | null>(new MercenariesBattleState());
 	// public staticState$$ = new BehaviorSubject<MercenariesState | null>(null);
 
 	internalEventSubject$ = new BehaviorSubject<GameEvent | null>(null);
@@ -72,7 +72,6 @@ export class MercenariesBattleStateService {
 			}
 			if (state !== battleState) {
 				this.battleState$$.next(state);
-				// console.debug('[mercenaries-store] emitting new state', event.type, state);
 			}
 		} catch (e) {
 			console.error('[mercenaries-store] could not process event', event.type, event, e);
@@ -92,6 +91,7 @@ export class MercenariesBattleStateService {
 
 		const prefs = await this.prefs.getPreferences();
 		if (!prefs.mercenariesEnabled) {
+			console.log('[mercenaries-store] mercenaries not enabled');
 			return;
 		}
 

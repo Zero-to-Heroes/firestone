@@ -106,7 +106,7 @@ export class BootstrapStoreServicesService {
 		private readonly init_GameOverService: GameOverService,
 		private readonly gameNativeState: GameNativeStateStoreService,
 		private readonly mercenariesBattleStore: MercenariesBattleStateService,
-		private readonly mercenariesStoreFacade: MercenariesBattleStateFacadeService,
+		private readonly mercenariesBattleStateFacade: MercenariesBattleStateFacadeService,
 		private readonly mercenariesOutOfCombatStore: MercenariesOutOfCombatService,
 		private readonly mercenariesOutOfCombatFacade: MercenariesOutOfCombatFacadeService,
 		// private readonly mercenariesSynergiesStore: MercenariesSynergiesHighlightService,

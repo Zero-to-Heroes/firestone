@@ -12,7 +12,7 @@ export class MercenariesBattleStateFacadeService extends AbstractFacadeService<M
 	private service: MercenariesBattleStateService;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
-		super(windowManager, 'MercenariesStoreFacadeService', () => !!this.store$$);
+		super(windowManager, 'MercenariesBattleStateFacadeService', () => !!this.store$$);
 	}
 
 	protected override assignSubjects() {
@@ -24,6 +24,7 @@ export class MercenariesBattleStateFacadeService extends AbstractFacadeService<M
 		this.service = AppInjector.get(MercenariesBattleStateService);
 
 		this.store$$.onFirstSubscribe(() => {
+			console.debug('[mercenaries-battle-state-facade] onFirstSubscribe');
 			this.service.battleState$$.subscribe(this.store$$);
 		});
 	}
@@ -35,7 +36,7 @@ export class MercenariesBattleStateFacadeService extends AbstractFacadeService<M
 	}
 
 	protected override async initElectronSubjects() {
-		this.setupElectronSubject(this.store$$, 'MercenariesStoreFacadeService-store');
+		this.setupElectronSubject(this.store$$, 'MercenariesBattleStateFacadeService-store');
 	}
 
 	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {

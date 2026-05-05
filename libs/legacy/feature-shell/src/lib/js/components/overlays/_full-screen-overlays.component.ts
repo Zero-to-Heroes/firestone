@@ -75,7 +75,7 @@ import { DebugService } from '../../services/debug.service';
 						<choosing-card-widget-wrapper></choosing-card-widget-wrapper>
 
 						<!-- Need to implement proper mouse-over support, will add this when I get a report -->
-						<!-- <mercs-treasure-selection-widget-wrapper></mercs-treasure-selection-widget-wrapper> -->
+						<mercs-treasure-selection-widget-wrapper></mercs-treasure-selection-widget-wrapper>
 
 						<arena-hero-selection-widget-wrapper></arena-hero-selection-widget-wrapper>
 						<arena-hero-selected-widget-wrapper></arena-hero-selected-widget-wrapper>
@@ -118,10 +118,10 @@ import { DebugService } from '../../services/debug.service';
 				<bgs-full-anomaly-widget-wrapper></bgs-full-anomaly-widget-wrapper>
 
 				<!-- Mercs -->
-				<!-- <mercs-player-team-widget-wrapper></mercs-player-team-widget-wrapper>
+				<mercs-player-team-widget-wrapper></mercs-player-team-widget-wrapper>
 				<mercs-opponent-team-widget-wrapper></mercs-opponent-team-widget-wrapper>
 				<mercs-out-of-combat-player-team-widget-wrapper></mercs-out-of-combat-player-team-widget-wrapper>
-				<mercs-action-queue-widget-wrapper></mercs-action-queue-widget-wrapper> -->
+				<mercs-action-queue-widget-wrapper></mercs-action-queue-widget-wrapper>
 
 				<!-- Arena -->
 				<arena-decktracker-ooc-widget-wrapper></arena-decktracker-ooc-widget-wrapper>
