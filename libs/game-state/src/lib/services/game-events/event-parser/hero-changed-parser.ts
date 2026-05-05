@@ -20,6 +20,7 @@ export class HeroChangedParser implements EventParser {
 		const dbCard = getProcessedCard(cardId, entityId, deck, this.allCards);
 		const newHero = deck.hero?.update({
 			cardId: cardId,
+			entityId: entityId,
 			initialClasses: !!deck.hero.initialClasses?.length
 				? deck.hero.initialClasses
 				: !!deck.hero.classes?.length
