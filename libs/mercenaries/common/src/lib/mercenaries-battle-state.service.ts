@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { isMercenaries } from '@firestone-hs/reference-data';
 import { GameEvent, GameEventsEmitterService } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
@@ -57,6 +58,9 @@ export class MercenariesBattleStateService {
 
 		try {
 			const battleState = this.battleState$$.value!;
+			if (!isMercenaries(battleState.gameMode) && event.type !== GameEvent.MATCH_METADATA) {
+				return;
+			}
 
 			// TODO: have a way to delay some parsers, without causing the whole parser chain to get
 			// stuck; Hve getParserFor return two lists, one for immediate processing and the other
