@@ -85,8 +85,9 @@ export class MercenariesMemoryCacheService extends AbstractFacadeService<Mercena
 			this.internalSubscriber$$.subscribe();
 		});
 		this.internalSubscriber$$.onFirstSubscribe(async () => {
-			console.log('[mercenaries-memory-cache] reading local collection info');
+			// console.log('[mercenaries-memory-cache] reading local collection info');
 			const localMercenariesInfo = await this.loadLocalMercenariesCollectionInfo();
+			// console.debug('[mercenaries-memory-cache] loaded local collection info', localMercenariesInfo);
 			this.memoryCollectionInfo$$.next(localMercenariesInfo);
 
 			this.initMemoryUpdateListener();
@@ -145,8 +146,9 @@ export class MercenariesMemoryCacheService extends AbstractFacadeService<Mercena
 	}
 
 	private async readMercenariesMemoryInfo() {
-		console.log('[mercenaries-memory-cache] reading memory info');
+		// console.log('[mercenaries-memory-cache] reading memory info');
 		const newMercenariesCollectionInfo = await this.getMercenariesMergedCollectionInfo(true);
+		// console.debug('[mercenaries-memory-cache] got newMercenariesCollectionInfo', newMercenariesCollectionInfo);
 		if (newMercenariesCollectionInfo) {
 			this.memoryCollectionInfo$$.next(newMercenariesCollectionInfo);
 		}
@@ -156,13 +158,13 @@ export class MercenariesMemoryCacheService extends AbstractFacadeService<Mercena
 		while (!mapInfo?.Map?.PlayerTeam?.length && retiesLeft >= 0) {
 			await sleep(200);
 			mapInfo = await this.memoryService.getMercenariesInfo(1);
-			console.debug('[mercenaries-memory-cache] retrying to get mapInfo', mapInfo, retiesLeft);
+			// console.debug('[mercenaries-memory-cache] retrying to get mapInfo', mapInfo, retiesLeft);
 			retiesLeft--;
 		}
 
-		console.debug('[mercenaries-memory-cache] got mapInfo', mapInfo);
+		// console.debug('[mercenaries-memory-cache] got mapInfo', mapInfo);
 		this.memoryMapInfo$$.next(mapInfo);
-		console.log('[mercenaries-memory-cache] updated memory info');
+		// console.log('[mercenaries-memory-cache] updated memory info');
 	}
 
 	private shouldFetchMercenariesMemoryInfo(newScene: SceneMode | null): boolean {

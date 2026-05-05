@@ -60,7 +60,7 @@ export class DiskCacheService {
 	}
 
 	public async storeItem(key: string, value: any, timeout = 5000) {
-		console.debug('[disk-cache] storing item', key, this.cacheDisabled);
+		console.debug('[disk-cache] storing item', key, 'with cache=', this.cacheDisabled ? 'disabled' : 'enabled');
 		if (this.cacheDisabled) {
 			return true;
 		}
@@ -92,7 +92,7 @@ export class DiskCacheService {
 
 	public async getItem<T>(key: string): Promise<T | null> {
 		// const saveInfo = this.localStorage.getItem(LocalStorageService.LOCAL_DISK_CACHE_SHOULD_REBUILD) ?? {};
-		console.debug('[disk-cache] getting item', key, this.cacheDisabled);
+		console.debug('[disk-cache] getting item', key, 'with cache=', this.cacheDisabled ? 'disabled' : 'enabled');
 		if (this.cacheDisabled) {
 			return null;
 		}
