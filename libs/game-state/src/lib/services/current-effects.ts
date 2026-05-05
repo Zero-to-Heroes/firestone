@@ -131,6 +131,7 @@ export const currentEffectsInternal = [
 	CardIds.LunarEclipse_LunarEmpowermentEnchantment_DMF_057e,
 	CardIds.LunarEclipse_LunarEmpowermentEnchantment_DMF_057o,
 	CardIds.LunarwingMessenger_FleetingMagicEnchantment_EDR_449e,
+	CardIds.ManaBurn_ManaBurnedEnchantment,
 	CardIds.MagtheridonUnreleased_WorkingOvertimeEnchantment_TOY_647e3,
 	CardIds.MarvelousMycelium_MarvelousSporesTavernBrawlEnchantment,
 	CardIds.MillhouseManastorm_KillMillhouseLegacyEnchantmentToken,
