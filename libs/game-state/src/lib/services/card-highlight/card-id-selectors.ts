@@ -3423,6 +3423,9 @@ export const cardIdSelector = (
 		// Sha'tari Cloakfield: Elusive. Your first spell each turn costs (1) less. Starship Piece
 		case CardIds.ShatariCloakfield_GDB_103:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
+		// Shellnado: Spend up to 5 Armor. For each spent, deal 1 damage to all minions.
+		case CardIds.Shellnado_TLC_601:
+			return and(side(inputSide), or(inHand, inDeck), givesArmor);
 		// Shield Battery: Gain 6 Armor. Your next Protoss spell costs (2) less.
 		case CardIds.ShieldBattery_SC_759:
 			return and(side(inputSide), or(inHand, inDeck), protoss, spellExtended);
