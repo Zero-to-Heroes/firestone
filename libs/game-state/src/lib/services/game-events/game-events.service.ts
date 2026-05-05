@@ -301,6 +301,9 @@ export class GameEvents {
 					}),
 				);
 				break;
+			case 'POWER_TRIGGERED':
+				this.doEventDispatch(GameEvent.build(GameEvent.POWER_TRIGGERED, gameEvent));
+				break;
 			case 'SHUFFLE_DECK':
 				this.doEventDispatch(
 					GameEvent.build(GameEvent.SHUFFLE_DECK, gameEvent, {

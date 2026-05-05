@@ -1,12 +1,9 @@
-import { Node } from './models';
-import { GameEventProvider } from './game-event';
-import { EventQueueHandler } from './event-queue-handler';
-import { ControlsManager } from './controls/controls-manager';
-import { Logger } from './logger';
 import type { ActionParser } from './action-parser';
-import type { StateFacade } from './state/state-facade';
-import type { ParserState } from './state/parser-state';
-import { StateType, INodeParser } from './state/parser-state';
+import { ControlsManager } from './controls/controls-manager';
+import { EventQueueHandler } from './event-queue-handler';
+import { GameEventProvider } from './game-event';
+import { Logger } from './logger';
+import { Node } from './models';
 import {
 	ArmorChangeParser,
 	AttackOnBoardParser,
@@ -131,6 +128,7 @@ import {
 	OverloadedCrystalsParser,
 	ParentCardChangedParser,
 	PassiveBuffParser,
+	PowerTriggeredParser,
 	QuestCompletedParser,
 	ReceiveCardInHandParser,
 	RecruitParser,
@@ -145,9 +143,9 @@ import {
 	SecretWillTriggeredParser,
 	ShowEntityParser,
 	ShuffleDeckParser,
+	SpawnTimeCountChangedParser,
 	SpecialCardPowerParser,
 	SpecialTargetParser,
-	SpawnTimeCountChangedParser,
 	StarshipLaunchedParser,
 	StartOfGameTriggerParser,
 	TotalMagnetizeChangedParser,
@@ -163,6 +161,9 @@ import {
 	ZoneChangeParser,
 	ZonePositionChangedParser,
 } from './parsers';
+import type { ParserState } from './state/parser-state';
+import { INodeParser, StateType } from './state/parser-state';
+import type { StateFacade } from './state/state-facade';
 
 export class NodeParser implements INodeParser {
 	private QueueHandler: EventQueueHandler;
@@ -355,6 +356,7 @@ export class NodeParser implements INodeParser {
 			new LocationDestroyedParser(parserState, this.StateFacade),
 			new HeroEnchantmentAttachedParser(parserState, this.StateFacade),
 			new HeroEnchantmentDetachedParser(parserState, this.StateFacade),
+			new PowerTriggeredParser(parserState, this.StateFacade),
 			new CardsShuffledIntoDeckParser(parserState, this.StateFacade),
 
 			new BattlegroundsPlayerTechLevelUpdatedParser(parserState, this.StateFacade),
