@@ -1,28 +1,29 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import { CardIds, ReferenceCard } from '@firestone-hs/reference-data';
-import { TempCardIds } from '@firestone/shared/framework/core';
+import { CardIds, GameTag, hasMechanic, ReferenceCard } from '@firestone-hs/reference-data';
 import { GuessedInfo } from '../../models/deck-card';
-import { isLeylineFranchiseReferenceCard, LEYLINE_FRANCHISE_CARD_IDS } from '../card-highlight/selectors';
 import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
 
 export const LeyWalker: GeneratingCard & StaticGeneratingCard = {
-	cardIds: [TempCardIds.MageMend501LeyWalker as unknown as CardIds],
+	cardIds: [CardIds.LeyWalker_MEND_501],
 	publicCreator: true,
 	dynamicPool: (input: StaticGeneratingCardInput) =>
 		filterCards(
-			TempCardIds.MageMend501LeyWalker,
+			CardIds.LeyWalker_MEND_501,
 			input.allCards,
-			(c: ReferenceCard) => LEYLINE_FRANCHISE_CARD_IDS.includes(c.id) || isLeylineFranchiseReferenceCard(c),
+			(c: ReferenceCard) => hasMechanic(c, GameTag.LEYLINE),
 			input.inputOptions,
 		),
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
 		const possibleCards = filterCards(
-			TempCardIds.MageMend501LeyWalker,
+			CardIds.LeyWalker_MEND_501,
 			input.allCards,
-			(c: ReferenceCard) => LEYLINE_FRANCHISE_CARD_IDS.includes(c.id) || isLeylineFranchiseReferenceCard(c),
+			(c: ReferenceCard) => hasMechanic(c, GameTag.LEYLINE),
 			input.options,
 		);
-		return { possibleCards };
+		return {
+			possibleCards,
+			mechanics: [GameTag.LEYLINE],
+		};
 	},
 };

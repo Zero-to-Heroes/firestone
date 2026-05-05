@@ -1,6 +1,6 @@
 import { BoosterType, CardClass, CardIds, GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { CollectionCardType, PackResult } from '@firestone-hs/user-packs';
-import { CardsFacadeService, ILocalizationService, TempCardIds } from '@firestone/shared/framework/core';
+import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { bwonsamdiBoonsEnchantments } from '../related-cards/dynamic-pools';
 import { tutors } from './cards/card-tutors';
 import { giftCreators } from './cards/gift-creators';
@@ -10,7 +10,7 @@ import { currentEffectsInternal } from './current-effects';
 export { SHATTER_HAND_PIECE_CREATOR_FALLBACK_CARD_IDS } from '@firestone/power-log-parser';
 
 // Used for cache purposes, only in dev
-export const CARDS_VERSION = '35.2.2-b';
+export const CARDS_VERSION = '35.4';
 export const isPreReleaseBuild = false;
 
 /** @deprecated use ALL_CLASSES */
@@ -192,7 +192,7 @@ export const startOfGameGlobalEffectCards = [
 	CardIds.HamuulRunetotem_EDR_845,
 	CardIds.PrinceRenathal,
 	CardIds.PrinceRenathal_CORE_REV_018,
-	TempCardIds.NeutralCataEvent110DragonSoulShattered as unknown as CardIds, // TODO: real CardIds when live
+	CardIds.DragonSoulShattered_CATA_EVENT_110,
 ];
 
 export const globalEffectCardsPlayed = [
@@ -505,8 +505,6 @@ export const publicTutors = [
 	CardIds.SouthseaScoundrel_BAR_081, // the copy for the opponent is the original card, the copy for the player is created
 	CardIds.SouthseaScoundrel_Story_11_SouthseaPuzzle, // the copy for the opponent is the original card, the copy for the player is created
 	CardIds.Mimicry_EDR_522,
-	TempCardIds.MageMend504LeylineNexus as unknown as CardIds,
-	TempCardIds.NeutralCataEvent110t3BlueAspectEssence as unknown as CardIds,
 ];
 
 export const allowDirectFlaggingOfCardInOpponentHand = [CardIds.RoyalInformant_TIME_036];

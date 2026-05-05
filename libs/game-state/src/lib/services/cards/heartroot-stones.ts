@@ -1,6 +1,5 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { CardIds, CardType } from '@firestone-hs/reference-data';
-import { TempCardIds } from '@firestone/shared/framework/core';
 import { WillBeActiveCard, WillBeActiveInput } from './_card.type';
 
 const playedMinionLastTurn = (input: WillBeActiveInput): boolean =>
@@ -10,6 +9,6 @@ const playedMinionLastTurn = (input: WillBeActiveInput): boolean =>
 	});
 
 export const HeartrootStones: WillBeActiveCard = {
-	cardIds: [TempCardIds.DruidMend043HeartrootStones as unknown as CardIds],
+	cardIds: [CardIds.HeartrootStones_MEND_043],
 	willBeActive: (input: WillBeActiveInput) => !playedMinionLastTurn(input),
 };

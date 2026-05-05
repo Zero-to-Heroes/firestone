@@ -13,7 +13,7 @@ import {
 	SetId,
 	SpellSchool,
 } from '@firestone-hs/reference-data';
-import { HighlightSide, TempCardIds } from '@firestone/shared/framework/core';
+import { HighlightSide } from '@firestone/shared/framework/core';
 import { EXTENDED_STARSHIP_CARDS } from '../../counters/impl/extended-starship-cards';
 import { isCardCreated } from '../../models/deck-card';
 import { getCost, getProcessedCard } from '../card-utils';
@@ -691,15 +691,14 @@ export const effectiveCostOdd = (input: SelectorInput): boolean => {
 /** Placeholder until ref data tags Leyline cards; TODO: remove when `mechanics` includes a real value. */
 export const PLACEHOLDER_MECHANIC_LEYLINE_FRANCHISE = 'LEYLINE' as any;
 
-/** Collectible Leyline franchise cards (TempCardIds until real {@link CardIds}). */
 export const LEYLINE_FRANCHISE_CARD_IDS: readonly string[] = [
-	TempCardIds.MageMend500BurstingLeyline,
-	TempCardIds.MageMend501LeyWalker,
-	TempCardIds.MageMend502CrystallizedLeyline,
-	TempCardIds.MageMend503SurgeNeedle,
-	TempCardIds.MageMend504LeylineNexus,
-	TempCardIds.MageMend505TheArcanomicon,
-	TempCardIds.MageMend506MysticRunesaber,
+	CardIds.BurstingLeyline_MEND_500,
+	CardIds.LeyWalker_MEND_501,
+	CardIds.CrystallizedLeyline_MEND_502,
+	CardIds.SurgeNeedle_MEND_503,
+	CardIds.LeylineNexus_MEND_504,
+	CardIds.TheArcanomicon_MEND_505,
+	CardIds.MysticRunesaber_MEND_506,
 ];
 
 export const isLeylineFranchiseReferenceCard = (c: ReferenceCard | null | undefined, cardId?: string): boolean => {
@@ -727,12 +726,8 @@ export const animalCompanionSpellCardIds: readonly CardIds[] = [
 
 export const animalCompanionTokenCardIds: readonly CardIds[] = [
 	CardIds.HufferLegacy,
-	CardIds.HufferVanilla,
-	CardIds.Huffer_TUTR_NEW1_034,
 	CardIds.MishaLegacy,
-	CardIds.MishaVanilla,
 	CardIds.LeokkLegacy,
-	CardIds.LeokkVanilla,
 ];
 
 /** Until a single game tag covers replacement/synergy; TODO: trim when ref data supports it. */

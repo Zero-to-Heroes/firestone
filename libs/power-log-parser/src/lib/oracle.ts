@@ -545,6 +545,8 @@ export class Oracle {
 					return CardIds.CthunTheShattered;
 				case CardIds.CthunTheShattered_MawOfCthunToken:
 					return CardIds.CthunTheShattered;
+				case CardIds.CultivatingSprite_MEND_100:
+					return CardIds.CultivatingSprite_BloomingBulbToken_MEND_100t;
 				case CardIds.CurseOfAgony:
 					return CardIds.CurseOfAgony_AgonyToken;
 				case CardIds.CurseOfRafaam:
@@ -1055,6 +1057,8 @@ export class Oracle {
 					return CardIds.TalanjiOfTheGraves_BwonsamdiToken_TIME_619t;
 				case CardIds.Talgath_GDB_472:
 					return CardIds.BackstabCore;
+				case CardIds.Teamwork_MEND_900:
+					return CardIds.SilverHandRecruitLegacyToken;
 				case CardIds.TentacleGrip_YOG_526:
 					return CardIds.ChaoticTendril_YOG_514;
 				case CardIds.TentacleTender_YOG_517:

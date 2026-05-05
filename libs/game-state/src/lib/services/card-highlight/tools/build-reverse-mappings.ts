@@ -484,7 +484,10 @@ function resolveInlinePart(expr: string, visitedFunctions: Set<string>): string[
 	return [];
 }
 
-export function analyzeSelectorFunction(functionName: string, visitedFunctions: Set<string> = new Set()): string[] | null {
+export function analyzeSelectorFunction(
+	functionName: string,
+	visitedFunctions: Set<string> = new Set(),
+): string[] | null {
 	// Prevent infinite recursion
 	if (visitedFunctions.has(functionName)) {
 		return null;
@@ -551,13 +554,18 @@ export function analyzeSelectorFunction(functionName: string, visitedFunctions: 
 		/\(\s*input\s*:\s*SelectorInput\s*\)\s*:\s*boolean\s*=>\s*\{?\s*([\s\S]*?)\s*\}?\s*$/,
 	);
 	if (arrowBodyMatch) {
-		const body = arrowBodyMatch[1].replace(/return\s+/g, '').replace(/;\s*$/g, '').trim();
+		const body = arrowBodyMatch[1]
+			.replace(/return\s+/g, '')
+			.replace(/;\s*$/g, '')
+			.trim();
 
 		if (body === 'false') {
 			return null;
 		}
 
-		const mechanicInclude = body.match(/input\.card\?\.(mechanics|referencedTags)\?\.includes\(GameTag\[GameTag\.([A-Z_]+)\]\)/);
+		const mechanicInclude = body.match(
+			/input\.card\?\.(mechanics|referencedTags)\?\.includes\(GameTag\[GameTag\.([A-Z_]+)\]\)/,
+		);
 		if (mechanicInclude) {
 			const prefix = mechanicInclude[1] === 'mechanics' ? 'HAS_MECHANIC' : 'HAS_REF_TAG';
 			return [`${prefix}_${mechanicInclude[2]}`];
@@ -898,7 +906,7 @@ function generateMinionFile(flatMappings: { [condition: string]: string[] }): st
 	lines.push(' */');
 	lines.push('');
 	lines.push("import { CardIds } from '@firestone-hs/reference-data';");
-	lines.push("import { CardsFacadeService, HighlightSide, TempCardIds } from '@firestone/shared/framework/core';");
+	lines.push("import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';");
 	lines.push("import { Selector } from '../cards-highlight-common.service';");
 	lines.push("import { and, or, side, inDeck, inHand, cardIs } from '../selectors';");
 	lines.push('');
@@ -993,7 +1001,7 @@ function generateMinionFile(flatMappings: { [condition: string]: string[] }): st
 	}
 
 	lines.push('');
-	lines.push('	// Animal Companion tokens ↔ Spiritspeaker (TempCardIds until reference-data merge)');
+	lines.push('	// Animal Companion tokens ↔ Spiritspeaker');
 	lines.push('	const animalCompanionTokenIds: readonly CardIds[] = [');
 	lines.push('		CardIds.HufferLegacy,');
 	lines.push('		CardIds.HufferVanilla,');
@@ -1007,7 +1015,7 @@ function generateMinionFile(flatMappings: { [condition: string]: string[] }): st
 	lines.push('		return and(');
 	lines.push('			side(inputSide),');
 	lines.push('			or(inDeck, inHand),');
-	lines.push('			cardIs(TempCardIds.HunterMend301Spiritspeaker as unknown as CardIds),');
+	lines.push('			cardIs(CardIds.Spiritspeaker_MEND_301 as unknown as CardIds),');
 	lines.push('		);');
 	lines.push('	}');
 	lines.push('');

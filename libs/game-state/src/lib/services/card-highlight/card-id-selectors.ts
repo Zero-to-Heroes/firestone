@@ -2,7 +2,7 @@
 
 import { CardClass, CardIds, CardType, GameTag, Race, SpellSchool } from '@firestone-hs/reference-data';
 import { pickLast, sortByProperties } from '@firestone/shared/framework/common';
-import { CardsFacadeService, HighlightSide, TempCardIds } from '@firestone/shared/framework/core';
+import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
 import { DeckCard } from '../../models/deck-card';
 import { DeckState } from '../../models/deck-state';
 import { ShortCard } from '../../models/game-state';
@@ -4502,30 +4502,29 @@ export const cardIdSelector = (
 		case CardIds.PirateAdmiralHooktusk:
 			return and(side(inputSide), or(inHand, inDeck), pirate);
 
-		// Patch TempCardIds — TODO: alias to real {@link CardIds} when reference-data updates
-		case TempCardIds.DruidMend044TranquilClearing:
+		case CardIds.TranquilClearing_MEND_044:
 			return and(side(inputSide), or(inHand, inDeck), minion);
-		case TempCardIds.HunterMend300TamePet:
-		case TempCardIds.HunterMend301Spiritspeaker:
-		case TempCardIds.HunterMend303MigratingElekk:
-		case TempCardIds.HunterMend304TalyaEarthstrider:
+		case CardIds.TamePet_MEND_300:
+		case CardIds.Spiritspeaker_MEND_301:
+		case CardIds.MigratingElekk_MEND_303:
+		case CardIds.TalyaEarthstrider_MEND_304:
 			return animalCompanionSynergyDeckSelector(inputSide);
-		case TempCardIds.HunterMend305NurturingNature:
+		case CardIds.NurturingNature_MEND_305:
 			return and(side(inputSide), or(inHand, inDeck), beast);
-		case TempCardIds.HunterMend307RoamFree:
+		case CardIds.RoamFree_MEND_307:
 			return animalCompanionSynergyDeckSelector(inputSide);
-		case TempCardIds.MageMend501LeyWalker:
-		case TempCardIds.MageMend503SurgeNeedle:
-		case TempCardIds.MageMend506MysticRunesaber:
+		case CardIds.LeyWalker_MEND_501:
+		case CardIds.SurgeNeedle_MEND_503:
+		case CardIds.MysticRunesaber_MEND_506:
 			return leylineFranchiseSynergyDeckSelector(inputSide);
-		case TempCardIds.NeutralCataEvent110t3BlueAspectEssence:
+		case CardIds.DragonSoulShattered_BlueAspectEssenceToken_CATA_EVENT_110t3:
 			return and(side(inputSide), inDeck, spell);
-		case TempCardIds.PaladinMend800BrashBattlemaster:
-		case TempCardIds.PaladinMend801ResilientSavior:
-		case TempCardIds.PaladinMend803EmboldeningBlade:
-		case TempCardIds.PaladinMend804AratortheRedeemer:
+		case CardIds.BrashBattlemaster_MEND_800:
+		case CardIds.ResilientSavior_MEND_801:
+		case CardIds.EmboldeningBlade_MEND_803:
+		case CardIds.AratorTheRedeemer_MEND_804:
 			return silverHandRecruitSynergyDeckSelector(inputSide);
-		case TempCardIds.PaladinMend805Charity:
+		case CardIds.Charity_MEND_805:
 			return and(side(inputSide), or(inHand, inDeck), minion);
 	}
 	return null;
