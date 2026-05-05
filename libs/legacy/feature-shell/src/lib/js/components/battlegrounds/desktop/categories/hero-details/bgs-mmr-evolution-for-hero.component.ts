@@ -1,6 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { BattlegroundsNavigationService } from '@firestone/battlegrounds/services';
-import { isBattlegrounds } from '@firestone/game-state';
+import { currentBgHeroId, isBattlegrounds } from '@firestone/game-state';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
@@ -9,7 +9,6 @@ import { ChartData } from 'chart.js';
 import { combineLatest } from 'rxjs';
 import { Observable } from 'rxjs/internal/Observable';
 import { LocalizationFacadeService } from '../../../../../services/localization-facade.service';
-import { currentBgHeroId } from '../../../../../services/ui-store/app-ui-store.service';
 
 @Component({
 	standalone: false,

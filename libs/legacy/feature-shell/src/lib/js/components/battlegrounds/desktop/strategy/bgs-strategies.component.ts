@@ -1,8 +1,8 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { BattlegroundsNavigationService } from '@firestone/battlegrounds/services';
+import { currentBgHeroId } from '@firestone/game-state';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
-import { currentBgHeroId } from '@legacy-import/src/lib/js/services/ui-store/app-ui-store.service';
 import { Observable } from 'rxjs';
 
 @Component({

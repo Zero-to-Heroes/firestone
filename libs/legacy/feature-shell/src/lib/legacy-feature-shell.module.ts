@@ -440,7 +440,7 @@ import { AllCardsService } from '@firestone/replay/replay-parser';
 import { SettingsViewModule } from '@firestone/settings/view';
 import { Events } from '@firestone/shared/common/service';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
-import { CdkOverlayContainer, Store } from '@firestone/shared/framework/common';
+import { CdkOverlayContainer } from '@firestone/shared/framework/common';
 import {
 	ACCOUNT_SERVICE_TOKEN,
 	ADS_SERVICE_TOKEN,
@@ -598,8 +598,6 @@ import { GameStatsUpdaterService } from './js/services/stats/game/game-stats-upd
 import { MatchStatsService } from './js/services/stats/match-stats.service';
 import { SystemTrayService } from './js/services/system-tray.service';
 import { TipService } from './js/services/tip.service';
-import { AppUiStoreFacadeService } from './js/services/ui-store/app-ui-store-facade.service';
-import { AppUiStoreService } from './js/services/ui-store/app-ui-store.service';
 import { AppBootstrapService } from './libs/boostrap/app-bootstrap.service';
 import { AppStartupService } from './libs/boostrap/app-startup.service';
 import { BootstrapEssentialServicesService } from './libs/boostrap/bootstrap-essential-services.service';
@@ -1306,10 +1304,6 @@ try {
 
 		HearthArenaAnalyticsService,
 
-		AppUiStoreService,
-		// Not sure that this is needed, but I don't want to replace all instances of the facade by the interface
-		{ provide: Store, useClass: AppUiStoreFacadeService },
-		AppUiStoreFacadeService,
 		{ provide: ILocalizationService, useClass: LocalizationFacadeService },
 		LocalizationFacadeService,
 

@@ -1,11 +1,11 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { BgsMetaHeroStatTierItem } from '@firestone/battlegrounds/data-access';
 import { BattlegroundsNavigationService, BgsPlayerHeroStatsService } from '@firestone/battlegrounds/services';
+import { currentBgHeroId } from '@firestone/game-state';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { currentBgHeroId } from '../../../../../services/ui-store/app-ui-store.service';
 
 @Component({
 	standalone: false,

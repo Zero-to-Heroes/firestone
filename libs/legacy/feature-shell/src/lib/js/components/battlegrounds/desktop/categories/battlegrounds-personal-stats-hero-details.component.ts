@@ -5,14 +5,13 @@ import {
 	BgsHeroStatsFilterId,
 	BgsPlayerHeroStatsService,
 } from '@firestone/battlegrounds/services';
-import { BgsPlayer } from '@firestone/game-state';
+import { BgsPlayer, currentBgHeroId } from '@firestone/game-state';
 import { MainWindowNavigationService } from '@firestone/mainwindow/common';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
-import { currentBgHeroId } from '../../../../services/ui-store/app-ui-store.service';
 
 @Component({
 	standalone: false,

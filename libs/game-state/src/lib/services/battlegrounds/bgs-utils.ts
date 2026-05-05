@@ -456,3 +456,9 @@ export const isBattlegroundsScene = (scene: SceneMode): boolean => {
 export const isMinionGolden = (card: ReferenceCard): boolean => {
 	return !!card.premium;
 };
+
+export const currentBgHeroId = (selectedCategoryId: string): string | null => {
+	return selectedCategoryId?.includes('bgs-category-personal-hero-details-')
+		? selectedCategoryId.split('bgs-category-personal-hero-details-')[1]
+		: null;
+};

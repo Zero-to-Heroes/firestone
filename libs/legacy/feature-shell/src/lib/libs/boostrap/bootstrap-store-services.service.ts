@@ -79,7 +79,6 @@ import { TavernBrawlService } from '@firestone/tavern-brawl/common';
 import { AdService } from '../../js/services/ad.service';
 import { GameOverService } from '../../js/services/stats/game/game-over.service';
 import { GameStatsUpdaterService } from '../../js/services/stats/game/game-stats-updater.service';
-import { AppUiStoreService } from '../../js/services/ui-store/app-ui-store.service';
 import { MailsService } from '../mails/services/mails.service';
 
 @Injectable()
@@ -94,7 +93,6 @@ export class BootstrapStoreServicesService {
 		private readonly init_TebexService: TebexService,
 		private readonly init_OwLegacyPremiumService: OwLegacyPremiumService,
 		private readonly init_AdsService: AdService,
-		private readonly store: AppUiStoreService,
 		// TODO: this has a lot of dependencies, it should be refactored to limit the impact
 		// and let the store be started up as soon as possible
 		private readonly init_BgsSceneService: BgsSceneService,
@@ -167,11 +165,6 @@ export class BootstrapStoreServicesService {
 	) {}
 
 	public async bootstrapServices(): Promise<void> {
-		await this.initStore();
-	}
-
-	private async initStore() {
-		await this.store.start();
-		await this.store.initComplete();
+		// Nothing here
 	}
 }
