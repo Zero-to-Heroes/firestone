@@ -214,6 +214,7 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	ysondre: 'ysondre/ysondre.log',
 	'secret-passage-draw-counter': 'secret-passage-draw-counter/secret-passage-draw-counter.log',
 	'kaelthas-spell-cycle': 'kaelthas-spell-cycle/kaelthas.log',
+	shadeleaf: 'bottled-shadeleaf/bottled-shadeleaf.log',
 	'body-wrapper': 'body-wrapper/body-wrapper.log',
 	'frostbite-current-effects': 'frostbite-current-effects/frostbite-current-effects.log',
 	'oh-my-yogg-secret': 'oh-my-yogg-secret/oh-my-yogg-secret.log',

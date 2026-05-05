@@ -483,11 +483,18 @@ export const addAdditionalAttribuesInHand = (
 					})
 				: card;
 		case CardIds.Torch_CATA_585:
-		case CardIds.InvasiveShadeleaf_BottledShadeleafToken_WW_393t:
-		case CardIds.HolySpringwater_BottledSpringwaterToken_WW_395t:
 		case CardIds.BlackwingExperiment_DragonBreathToken_CATA_464t: {
 			const storedAmount = gameEvent.additionalData?.storedAmount;
 			return storedAmount != null && storedAmount > 0 ? card.update({ mainAttributeChange: storedAmount }) : card;
+		}
+		case CardIds.InvasiveShadeleaf_BottledShadeleafToken_WW_393t:
+		case CardIds.HolySpringwater_BottledSpringwaterToken_WW_395t: {
+			const fromTags = gameEvent.additionalData?.tags?.find(
+				(t) => t.Name === (GameTag.TAG_SCRIPT_DATA_NUM_1 as number),
+			)?.Value;
+			const storedAmount = gameEvent.additionalData?.storedAmount;
+			const n = fromTags != null && fromTags > 0 ? fromTags : storedAmount;
+			return n != null && n > 0 ? card.update({ mainAttributeChange: n }) : card;
 		}
 	}
 	return card;

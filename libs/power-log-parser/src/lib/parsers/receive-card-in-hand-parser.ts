@@ -104,6 +104,11 @@ export class ReceiveCardInHandParser implements ActionParser {
 		const position = entity.GetZonePosition();
 
 		const excessAmount = this.getExcessAmountFromCreatorBlock(node, creator?.[0] ?? null, creator?.[1] ?? -1);
+		const storedAmount = this.storedAmountPreferringPerEntityScript(
+			entity,
+			creator?.[0] ?? null,
+			excessAmount,
+		);
 
 		return [
 			GameEventProvider.Create(
@@ -126,7 +131,7 @@ export class ReceiveCardInHandParser implements ActionParser {
 						Position: position,
 						GuessedTags: guessedTags,
 						Tags: entity.GetTagsCopy(),
-						StoredAmount: excessAmount,
+						StoredAmount: storedAmount,
 					},
 				),
 				true,
@@ -174,6 +179,7 @@ export class ReceiveCardInHandParser implements ActionParser {
 		const lastInfluencedBy = Oracle.FindParentEntity(this.GameState, node);
 		const lastInfluencedByCardId = lastInfluencedBy != null ? lastInfluencedBy?.[0] : (creator?.[0] ?? null);
 		const excessAmount = this.getExcessAmountFromCreatorBlock(node, creator?.[0] ?? null, creator?.[1] ?? -1);
+		const storedAmount = this.storedAmountPreferringPerEntityScript(entity, creator?.[0] ?? null, excessAmount);
 		return [
 			GameEventProvider.Create(
 				showEntity.TimeStamp,
@@ -196,7 +202,7 @@ export class ReceiveCardInHandParser implements ActionParser {
 						DataNum2: dataNum2,
 						Position: position,
 						Tags: entity.GetTagsCopy(),
-						StoredAmount: excessAmount,
+						StoredAmount: storedAmount,
 					},
 				),
 				true,
@@ -317,6 +323,12 @@ export class ReceiveCardInHandParser implements ActionParser {
 						creator?.[0] ?? null,
 						creator?.[1] ?? -1,
 					);
+					const liveEntity = this.GameState.CurrentEntities.get(fullEntity.Id) ?? fullEntity;
+					const storedAmount = this.storedAmountPreferringPerEntityScript(
+						liveEntity,
+						creator?.[0] ?? null,
+						excessAmount,
+					);
 					return {
 						Type: 'RECEIVE_CARD_IN_HAND',
 						Value: {
@@ -342,7 +354,7 @@ export class ReceiveCardInHandParser implements ActionParser {
 								Position: position,
 								ReferencedCardIds: referencedCardIds,
 								GuessedTags: tags,
-								StoredAmount: excessAmount,
+								StoredAmount: storedAmount,
 							},
 						},
 					};
@@ -351,6 +363,30 @@ export class ReceiveCardInHandParser implements ActionParser {
 				node,
 			),
 		];
+	}
+
+	/**
+	 * Invasive Shadeleaf / Holy Springwater can create multiple tokens in one cast; each token’s
+	 * TAG_SCRIPT_DATA_NUM_1 is authoritative. {@link getExcessAmountFromCreatorBlock} only sees the
+	 * first spell meta line, so all bottles would share one wrong StoredAmount.
+	 */
+	private storedAmountPreferringPerEntityScript(
+		entity: FullEntity,
+		creatorCardId: string | null,
+		excessFromSpellBlock: number | null,
+	): number | null {
+		const script = entity.GetTag(GameTag.TAG_SCRIPT_DATA_NUM_1);
+		if (script > 0) {
+			if (
+				creatorCardId === CardIds.InvasiveShadeleaf_WW_393 ||
+				creatorCardId === CardIds.HolySpringwater_WW_395 ||
+				entity.CardId === CardIds.InvasiveShadeleaf_BottledShadeleafToken_WW_393t ||
+				entity.CardId === CardIds.HolySpringwater_BottledSpringwaterToken_WW_395t
+			) {
+				return script;
+			}
+		}
+		return excessFromSpellBlock;
 	}
 
 	private getExcessAmountFromCreatorBlock(
