@@ -1,36 +1,34 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-/**
- * TODO(35.4): Replace {@link PLACEHOLDER_ANIMAL_COMPANION_PLAYER_ENCHANT} with the real aura
- * enchant for Animal Companion replacement (Tame Pet line).
- */
-import { CardIds, GameTag } from '@firestone-hs/reference-data';
-import { CardsFacadeService, ILocalizationService, TempCardIds } from '@firestone/shared/framework/core';
+import { CardIds } from '@firestone-hs/reference-data';
+import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
+import { BattlegroundsState } from '../../models/_barrel';
 import { GameState } from '../../models/game-state';
-import { PLACEHOLDER_ANIMAL_COMPANION_PLAYER_ENCHANT } from './deck-tracker-enchant-placeholders';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
 import { CounterType } from '../counter-type';
 
-export class AnimalCompanionAuraCounterDefinitionV2 extends CounterDefinitionV2<number> {
+export class AnimalCompanionAuraCounterDefinitionV2 extends CounterDefinitionV2<{
+	cost: number;
+	cardIds: readonly CardIds[];
+}> {
 	public override id: CounterType = 'animalCompanionAura';
-	public override image = TempCardIds.HunterMend300TamePet;
+	public override image = CardIds.TamePet_MEND_300;
 	public override type: 'hearthstone' | 'battlegrounds' = 'hearthstone';
 	public override cards: readonly CardIds[] = [
-		TempCardIds.HunterMend300TamePet as unknown as CardIds,
-		TempCardIds.HunterMend303MigratingElekk as unknown as CardIds,
-		TempCardIds.HunterMend307RoamFree as unknown as CardIds,
+		CardIds.TamePet_MEND_300,
+		CardIds.MigratingElekk_MEND_303,
+		CardIds.RoamFree_MEND_307,
 	];
 
 	readonly player = {
 		pref: 'playerAnimalCompanionAuraCounter' as const,
-		display: (state: GameState): boolean =>
-			state.playerDeck.enchantments
-				.filter((e) => e.cardId === PLACEHOLDER_ANIMAL_COMPANION_PLAYER_ENCHANT)
-				.reduce((acc, e) => acc + (e.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_1] ?? 0), 0) > 0,
-		value: (state: GameState): number | null => {
-			const v = state.playerDeck.enchantments
-				.filter((e) => e.cardId === PLACEHOLDER_ANIMAL_COMPANION_PLAYER_ENCHANT)
-				.reduce((acc, e) => acc + (e.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_1] ?? 0), 0);
-			return v > 0 ? v : null;
+		display: (state: GameState): boolean => state.playerDeck.newAnimalCompanions.length > 0,
+		value: (state: GameState) => {
+			const newAnimalCompanions = state.playerDeck.newAnimalCompanions;
+			const newCost = this.allCards.getCard(newAnimalCompanions[0]).cost ?? 0;
+			return {
+				cost: newCost,
+				cardIds: newAnimalCompanions as readonly CardIds[],
+			};
 		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>
@@ -42,21 +40,20 @@ export class AnimalCompanionAuraCounterDefinitionV2 extends CounterDefinitionV2<
 
 	readonly opponent = {
 		pref: 'opponentAnimalCompanionAuraCounter' as const,
-		display: (state: GameState): boolean =>
-			state.opponentDeck.enchantments
-				.filter((e) => e.cardId === PLACEHOLDER_ANIMAL_COMPANION_PLAYER_ENCHANT)
-				.reduce((acc, e) => acc + (e.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_1] ?? 0), 0) > 0,
-		value: (state: GameState): number | null => {
-			const v = state.opponentDeck.enchantments
-				.filter((e) => e.cardId === PLACEHOLDER_ANIMAL_COMPANION_PLAYER_ENCHANT)
-				.reduce((acc, e) => acc + (e.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_1] ?? 0), 0);
-			return v > 0 ? v : null;
+		display: (state: GameState): boolean => state.opponentDeck.newAnimalCompanions.length > 0,
+		value: (state: GameState) => {
+			const newAnimalCompanions = state.opponentDeck.newAnimalCompanions;
+			const newCost = this.allCards.getCard(newAnimalCompanions[0]).cost ?? 0;
+			return {
+				cost: newCost,
+				cardIds: newAnimalCompanions as readonly CardIds[],
+			};
 		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>
-				i18n.translateString('settings.decktracker.opponent-deck.counters.animal-companion-aura-label'),
+				i18n.translateString('settings.decktracker.your-deck.counters.animal-companion-aura-label'),
 			tooltip: (i18n: ILocalizationService): string =>
-				i18n.translateString('settings.decktracker.opponent-deck.counters.animal-companion-aura-tooltip'),
+				i18n.translateString('settings.decktracker.your-deck.counters.animal-companion-aura-tooltip'),
 		},
 	};
 
@@ -67,8 +64,23 @@ export class AnimalCompanionAuraCounterDefinitionV2 extends CounterDefinitionV2<
 		super(allCards);
 	}
 
+	protected override formatValue(
+		value: { cost: number; cardIds: readonly CardIds[] } | null | undefined,
+	): null | undefined | number | string {
+		return value?.cost;
+	}
+
 	protected override tooltip(side: 'player' | 'opponent', gameState: GameState): string | null {
-		const value = this[side]!.value(gameState) ?? 0;
+		const value = this[side]!.value(gameState)?.cost ?? 0;
 		return this.i18n.translateString(`counters.animal-companion-aura.${side}`, { value });
+	}
+
+	protected override cardTooltip(
+		side: 'player' | 'opponent',
+		gameState: GameState,
+		bgState: BattlegroundsState,
+		value: { cost: number; cardIds: readonly CardIds[] } | null | undefined,
+	): readonly string[] | undefined {
+		return value?.cardIds;
 	}
 }

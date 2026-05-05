@@ -175,6 +175,7 @@ export class DeckState {
 	readonly cardsAddedToHand: readonly ShortCardWithTurn[] = [];
 	readonly weaponsEquippedThisGame: number = 0;
 	readonly starshipsLaunched: readonly number[] = [];
+	readonly newAnimalCompanions: readonly string[] = [];
 
 	public static create(value: Partial<NonFunctionProperties<DeckState>>): DeckState {
 		return Object.assign(new DeckState(), value);

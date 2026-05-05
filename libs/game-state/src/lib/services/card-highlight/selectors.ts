@@ -17,6 +17,7 @@ import { HighlightSide, TempCardIds } from '@firestone/shared/framework/core';
 import { EXTENDED_STARSHIP_CARDS } from '../../counters/impl/extended-starship-cards';
 import { isCardCreated } from '../../models/deck-card';
 import { getCost, getProcessedCard } from '../card-utils';
+import { animalCompanionBuffsCardIds } from '../cards/animal-companion-buffs';
 import { PLAGUES } from '../game-events/event-parser/special-cases/plagues-parser';
 import { Selector, SelectorInput, SelectorOutput } from './cards-highlight-common.service';
 export const CONCOCTION_GENERATORS: readonly CardIds[] = [
@@ -735,14 +736,13 @@ export const animalCompanionTokenCardIds: readonly CardIds[] = [
 ];
 
 /** Until a single game tag covers replacement/synergy; TODO: trim when ref data supports it. */
-export const animalCompanionDeckHighlightCardIds: readonly string[] = [
+export const animalCompanionDeckHighlightCardIds: readonly CardIds[] = [
 	...animalCompanionSpellCardIds,
 	...animalCompanionTokenCardIds,
-	TempCardIds.HunterMend300TamePet,
-	TempCardIds.HunterMend303MigratingElekk,
-	TempCardIds.HunterMend304TalyaEarthstrider,
-	TempCardIds.HunterMend307RoamFree,
-	TempCardIds.HunterMend301Spiritspeaker,
+	...animalCompanionBuffsCardIds,
+	CardIds.TalyaEarthstrider_MEND_304,
+	CardIds.Spiritspeaker_MEND_301,
+	CardIds.BrollBearmantle_EDR_853,
 ];
 
 export const silverHandRecruitTokenIds: readonly CardIds[] = [
@@ -757,34 +757,30 @@ export const silverHandRecruitTokenIds: readonly CardIds[] = [
 	CardIds.SilverHandRecruitToken_CS2_101t8,
 ];
 
-export const silverHandRecruitGeneratorCardIds: readonly string[] = [
-	TempCardIds.PaladinMend802Convalescence,
-	TempCardIds.PaladinMend900Teamwork,
-	TempCardIds.PaladinMend800BrashBattlemaster,
-	TempCardIds.PaladinMend801ResilientSavior,
-	TempCardIds.PaladinMend803EmboldeningBlade,
-	TempCardIds.PaladinMend804AratortheRedeemer,
+export const silverHandRecruitGeneratorCardIds: readonly CardIds[] = [
+	CardIds.Convalescence_MEND_802,
+	CardIds.Teamwork_MEND_900,
+	CardIds.BrashBattlemaster_MEND_800,
+	CardIds.ResilientSavior_MEND_801,
+	CardIds.EmboldeningBlade_MEND_803,
+	CardIds.AratorTheRedeemer_MEND_804,
 	CardIds.StandAgainstDarkness_OG_273,
 ];
 
-export const silverHandDeckHighlightCardIds: readonly string[] = [
+export const silverHandDeckHighlightCardIds: readonly CardIds[] = [
 	...silverHandRecruitTokenIds,
 	...silverHandRecruitGeneratorCardIds,
 ];
 
-export const highlightSelectorCardIsAnyOfIds = (ids: readonly string[]): Selector =>
-	cardIs(...(ids as unknown as readonly CardIds[]));
-
 export const animalCompanionSynergyDeckSelector = (inputSide: HighlightSide): Selector =>
-	and(side(inputSide), or(inDeck, inHand), highlightSelectorCardIsAnyOfIds(animalCompanionDeckHighlightCardIds));
+	and(side(inputSide), or(inDeck, inHand), cardIs(...animalCompanionDeckHighlightCardIds));
 
 export const leylineFranchiseSynergyDeckSelector = (inputSide: HighlightSide): Selector =>
 	and(
 		side(inputSide),
 		or(inDeck, inHand),
-		(input: SelectorInput): SelectorOutput =>
-			isLeylineFranchiseReferenceCard(input.card, input.cardId),
+		(input: SelectorInput): SelectorOutput => isLeylineFranchiseReferenceCard(input.card, input.cardId),
 	);
 
 export const silverHandRecruitSynergyDeckSelector = (inputSide: HighlightSide): Selector =>
-	and(side(inputSide), or(inDeck, inHand), highlightSelectorCardIsAnyOfIds(silverHandDeckHighlightCardIds));
+	and(side(inputSide), or(inDeck, inHand), cardIs(...silverHandDeckHighlightCardIds));
