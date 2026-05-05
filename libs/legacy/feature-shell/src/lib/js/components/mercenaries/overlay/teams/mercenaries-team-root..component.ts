@@ -31,8 +31,6 @@ import { CardsFacadeService, OverwolfService, waitForReady } from '@firestone/sh
 import { BehaviorSubject, Observable, Subscription, combineLatest } from 'rxjs';
 import { debounceTime, filter, takeUntil } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
-import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Component({
 	standalone: false,
@@ -238,7 +236,7 @@ export class MercenariesTeamRootComponent extends AbstractSubscriptionComponent 
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MercsTasksListComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class MercsTasksListComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	@Output() tasksListUpdated = new EventEmitter<void>();
 
 	tasks$: Observable<readonly Task[]>;
@@ -255,7 +253,6 @@ export class MercsTasksListComponent extends AbstractSubscriptionStoreComponent 
 	private tasks$$ = new BehaviorSubject<readonly Task[]>(null);
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
 		private readonly i18n: LocalizationFacadeService,
@@ -264,7 +261,7 @@ export class MercsTasksListComponent extends AbstractSubscriptionStoreComponent 
 		private readonly mercenariesReferenceData: MercenariesReferenceDataService,
 		private readonly prefs: PreferencesService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {

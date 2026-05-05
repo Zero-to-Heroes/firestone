@@ -9,10 +9,9 @@ import {
 	OnDestroy,
 	Renderer2,
 } from '@angular/core';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { Subscription } from 'rxjs';
-import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 
 @Directive({
 	standalone: false,
@@ -20,7 +19,7 @@ import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscripti
 })
 // See https://blog.angularindepth.com/building-tooltips-for-angular-3cdaac16d138
 export class MercenariesHighlightDirective
-	extends AbstractSubscriptionStoreComponent
+	extends AbstractSubscriptionComponent
 	implements AfterContentInit, AfterViewInit, OnDestroy
 {
 	@Input('mercenariesHighlight') cardId = undefined;
@@ -35,10 +34,9 @@ export class MercenariesHighlightDirective
 		private readonly allCards: CardsFacadeService,
 		private readonly el: ElementRef,
 		private readonly renderer: Renderer2,
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 	) {
-		super(store, cdr);
+		super(cdr);
 		// this.highlightService = this.ow.getMainWindow().mercenariesSynergiesHighlightService;
 	}
 

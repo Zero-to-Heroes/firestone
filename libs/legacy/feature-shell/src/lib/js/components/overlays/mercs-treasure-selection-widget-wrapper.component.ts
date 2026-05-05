@@ -11,7 +11,6 @@ import { MercenariesOutOfCombatFacadeService } from '@firestone/mercenaries/comm
 import { PreferencesService } from '@firestone/shared/common/service';
 import { GameInfoService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
-import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
 @Component({
@@ -47,7 +46,6 @@ export class MercsTreasureSelectionWidgetWrapperComponent
 		protected readonly el: ElementRef,
 		protected readonly prefs: PreferencesService,
 		protected readonly renderer: Renderer2,
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly gameInfoService: GameInfoService,
 		private readonly mercenariesOutOfCombatFacade: MercenariesOutOfCombatFacadeService,

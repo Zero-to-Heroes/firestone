@@ -14,7 +14,6 @@ import { PreferencesService } from '@firestone/shared/common/service';
 import { ApiRunner, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { combineLatest } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, startWith } from 'rxjs/operators';
-import { AppUiStoreFacadeService } from '../ui-store/app-ui-store-facade.service';
 import { arraysEqual, deepEqual } from '../utils';
 
 const UPDATE_URL = 'https://7c53s3nacfjcv5yyqueduh3vxa0sycat.lambda-url.us-west-2.on.aws/';
@@ -25,7 +24,6 @@ export class TwitchPresenceService {
 	private twitchLoginName: string;
 
 	constructor(
-		private readonly store: AppUiStoreFacadeService,
 		private readonly api: ApiRunner,
 		private readonly ow: OverwolfService,
 		private readonly gameEvents: GameEventsEmitterService,
@@ -38,8 +36,6 @@ export class TwitchPresenceService {
 	}
 
 	private async init() {
-		await this.store.initComplete();
-
 		await waitForReady(this.prefs, this.gameState, this.mercenariesBattleStateFacade);
 
 		const matchInfo$ = this.gameEvents.allEvents.asObservable().pipe(
@@ -56,14 +52,12 @@ export class TwitchPresenceService {
 
 		// "Normal" Hearthstone mode infos
 		const hearthstoneInfo$ = combineLatest([
-			this.store.listenDeckState$(
-				(state) => state?.playerDeck?.hero?.cardId,
-				(state) => state?.playerDeck?.hero?.classes,
-				(state) => state?.opponentDeck?.hero?.cardId,
-				(state) => state?.opponentDeck?.hero?.classes,
-				(state) => state?.metadata,
-				(state) => state?.gameStarted,
-			),
+			this.gameState.gameState$$.pipe(map((state) => state.playerDeck.hero.cardId)),
+			this.gameState.gameState$$.pipe(map((state) => state.playerDeck.hero.classes)),
+			this.gameState.gameState$$.pipe(map((state) => state.opponentDeck.hero.cardId)),
+			this.gameState.gameState$$.pipe(map((state) => state.opponentDeck.hero.classes)),
+			this.gameState.gameState$$.pipe(map((state) => state.metadata)),
+			this.gameState.gameState$$.pipe(map((state) => state.gameStarted)),
 			this.prefs.preferences$$.pipe(
 				map((prefs) => prefs.appearOnLiveStreams),
 				distinctUntilChanged(),
@@ -72,7 +66,12 @@ export class TwitchPresenceService {
 			debounceTime(1000),
 			filter(
 				([
-					[playerCardId, playerClasses, opponentCardId, opponentClasses, metadata, gameStarted],
+					playerCardId,
+					playerClasses,
+					opponentCardId,
+					opponentClasses,
+					metadata,
+					gameStarted,
 					appearOnLiveStreams,
 				]) =>
 					gameStarted &&
@@ -87,7 +86,12 @@ export class TwitchPresenceService {
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			map(
 				([
-					[playerCardId, playerClasses, opponentCardId, opponentClasses, metadata, gameStarted],
+					playerCardId,
+					playerClasses,
+					opponentCardId,
+					opponentClasses,
+					metadata,
+					gameStarted,
 					appearOnLiveStreams,
 				]) => ({
 					playerCardId: playerCardId,
@@ -200,11 +204,10 @@ export class TwitchPresenceService {
 			.subscribe((event) => {
 				this.sendNewMercsGameEvent(event.gameMode, event.mercenaries, event.PvpRating);
 			});
-		this.store
-			.listenDeckState$(
-				(state) => state.gameEnded,
-				(state) => state?.gameStarted,
-			)
+		combineLatest([
+			this.gameState.gameState$$.pipe(map((state) => state.gameEnded)),
+			this.gameState.gameState$$.pipe(map((state) => state.gameStarted)),
+		])
 			.pipe(
 				debounceTime(1000),
 				// distinctUntilChanged(),

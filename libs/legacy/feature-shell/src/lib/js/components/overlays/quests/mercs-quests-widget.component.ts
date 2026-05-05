@@ -20,13 +20,12 @@ import {
 	MercenariesReferenceDataService,
 } from '@firestone/mercenaries/common';
 import { PreferencesService } from '@firestone/shared/common/service';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, filter, startWith } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { buildMercenariesTasksList } from '../../../services/ui-store/mercenaries-ui-helper';
-import { AbstractSubscriptionStoreComponent } from '../../abstract-subscription-store.component';
 import { Task } from '../../mercenaries/overlay/teams/mercenaries-team-root..component';
 
 @Component({
@@ -64,7 +63,7 @@ import { Task } from '../../mercenaries/overlay/teams/mercenaries-team-root..com
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MercsQuestsWidgetComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class MercsQuestsWidgetComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	tasks$: Observable<readonly Task[]>;
 	showQuests$: Observable<boolean>;
 	showRight$: Observable<boolean>;
@@ -76,7 +75,6 @@ export class MercsQuestsWidgetComponent extends AbstractSubscriptionStoreCompone
 	private showBottom$$ = new BehaviorSubject<boolean>(false);
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly el: ElementRef,
 		private readonly allCards: CardsFacadeService,
@@ -87,7 +85,7 @@ export class MercsQuestsWidgetComponent extends AbstractSubscriptionStoreCompone
 		private readonly mercenariesReferenceData: MercenariesReferenceDataService,
 		private readonly mercenariesBattleStateFacade: MercenariesBattleStateFacadeService,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {

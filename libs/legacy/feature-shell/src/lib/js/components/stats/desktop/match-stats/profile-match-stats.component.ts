@@ -1,12 +1,15 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { CardClass } from '@firestone-hs/reference-data';
 import { ProfileServiceFacade } from '@firestone/profile/common';
-import { SortCriteria, SortDirection, invertDirection } from '@firestone/shared/framework/common';
+import {
+	AbstractSubscriptionComponent,
+	SortCriteria,
+	SortDirection,
+	invertDirection,
+} from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@legacy-import/src/lib/js/services/localization-facade.service';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
-import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
-import { AbstractSubscriptionStoreComponent } from '../../../abstract-subscription-store.component';
 import { ClassInfo, ModeOverview } from './profile-match-stats.model';
 
 @Component({
@@ -117,7 +120,7 @@ import { ClassInfo, ModeOverview } from './profile-match-stats.model';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 // TODO-arena
-export class ProfileMatchStatsComponent extends AbstractSubscriptionStoreComponent implements AfterContentInit {
+export class ProfileMatchStatsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	modeOverviews$: Observable<readonly ModeOverview[]>;
 	currentMode$: Observable<'constructed' | 'arena' | 'battlegrounds'>;
 	classInfos$: Observable<readonly ClassInfo[]>;
@@ -131,13 +134,12 @@ export class ProfileMatchStatsComponent extends AbstractSubscriptionStoreCompone
 	});
 
 	constructor(
-		protected readonly store: AppUiStoreFacadeService,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly allCards: CardsFacadeService,
 		private readonly profile: ProfileServiceFacade,
 	) {
-		super(store, cdr);
+		super(cdr);
 	}
 
 	async ngAfterContentInit() {
