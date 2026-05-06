@@ -19,7 +19,7 @@ const SUPPORTED_EFFECTS = [
 	...HARDCODED_EFFECTS,
 	...Object.values(cardsInfoCache)
 		.filter(hasCustomEffect)
-		.flatMap((card) => card.cardIds.map((cardId) => ({ cardId, effect: card.effect }))),
+		.flatMap((card) => card.cardIds.flatMap((cardId) => card.effects.map((effect) => ({ cardId, effect })))),
 ];
 
 export class CustomEffects2Parser implements EventParser {

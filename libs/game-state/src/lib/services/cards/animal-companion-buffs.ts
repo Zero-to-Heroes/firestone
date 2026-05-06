@@ -9,7 +9,7 @@ export const animalCompanionBuffsCardIds: readonly CardIds[] = [
 
 export const AnimalCompanionBuffs: CustomEffectCard = {
 	cardIds: animalCompanionBuffsCardIds,
-	effect: 'CATAFX_TamePet_Reveal_Fadeout_Super',
+	effects: ['CATAFX_TamePet_Reveal_Fadeout_Super', 'CATAFX_TamePet_Reveal_Super'],
 	customEffect: ({ currentState, gameEvent, allCards }) => {
 		const [, controllerId, localPlayer] = gameEvent.parse();
 		const cardId = gameEvent.additionalData?.sourceCardId;

@@ -5,7 +5,7 @@ import { CustomEffectCard } from './_card.type';
 
 export const WarmasterBlackhorn: CustomEffectCard = {
 	cardIds: [CardIds.WarmasterBlackhorn_CATA_720],
-	effect: 'ReuseFX_Generic_DeckAE_DeckBurn_SourceSide_Super',
+	effects: ['ReuseFX_Generic_DeckAE_DeckBurn_SourceSide_Super'],
 	customEffect: ({ currentState, allCards }) => {
 		return currentState.update({
 			playerDeck: removeLowCostCards(currentState.playerDeck, allCards),

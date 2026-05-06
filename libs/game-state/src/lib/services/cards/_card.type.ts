@@ -132,7 +132,7 @@ export interface OnCardPlayedWhileInHandInput {
 }
 
 export interface CustomEffectCard extends Card {
-	effect: string;
+	effects: readonly string[];
 	customEffect: (input: CustomEffectInput) => GameState;
 }
 export const hasCustomEffect = (card: Card): card is CustomEffectCard =>
