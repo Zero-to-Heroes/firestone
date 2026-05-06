@@ -1,4 +1,5 @@
-import { CardIds, GameTag } from '@firestone-hs/reference-data';
+import { AllCardsService, CardIds, GameTag } from '@firestone-hs/reference-data';
+import { DeckCard } from '../../models/deck-card';
 import { CustomEffectCard } from './_card.type';
 
 export const animalCompanionBuffsCardIds: readonly CardIds[] = [
@@ -20,17 +21,17 @@ export const AnimalCompanionBuffs: CustomEffectCard = {
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const entityId = gameEvent.additionalData?.sourceEntityId;
-		const entity = deck.findCard(entityId)?.card;
-		console.debug('[debug] animal companion buffs', entity, gameEvent, currentState);
+		// const entity = deck.findCard(entityId)?.card;
+		// console.debug('[debug] animal companion buffs', entity, gameEvent, currentState);
 		const newDeck = deck.update({
-			newAnimalCompanions: [
-				allCards.getCard(entity!.tags[GameTag.TAG_SCRIPT_DATA_NUM_4]!).id,
-				allCards.getCard(entity!.tags[GameTag.TAG_SCRIPT_DATA_NUM_5]!).id,
-				allCards.getCard(entity!.tags[GameTag.TAG_SCRIPT_DATA_NUM_6]!).id,
-			],
+			animalCompanionBufferEntityId: entityId,
 		});
 		return currentState.update({
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newDeck,
 		});
 	},
+};
+
+const companion = (entity: DeckCard, tag: GameTag, fallback: GameTag, allCards: AllCardsService) => {
+	return allCards.getCard(entity!.tags[tag]!).id ?? allCards.getCard(entity!.tags[fallback]!).id;
 };

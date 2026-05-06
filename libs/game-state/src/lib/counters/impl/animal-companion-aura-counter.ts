@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { CardIds } from '@firestone-hs/reference-data';
+import { CardIds, GameTag } from '@firestone-hs/reference-data';
+import { FullEntity } from '@firestone/power-log-parser';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { BattlegroundsState } from '../../models/_barrel';
 import { GameState } from '../../models/game-state';
@@ -25,14 +26,26 @@ export class AnimalCompanionAuraCounterDefinitionV2 extends CounterDefinitionV2<
 	readonly player = {
 		pref: 'playerAnimalCompanionAuraCounter' as const,
 		display: (state: GameState): boolean =>
-			state.playerDeck.newAnimalCompanions.length > 0 ||
+			!!state.playerDeck.animalCompanionBufferEntityId ||
 			state.playerDeck.hasRelevantCard(animalCompanionBuffsCardIds),
 		value: (state: GameState) => {
-			const newAnimalCompanions = state.playerDeck.newAnimalCompanions;
-			const newCost = this.allCards.getCard(newAnimalCompanions[0]).cost ?? 3;
+			const bufferEntity = state.parserState?.CurrentEntities.get(
+				state.playerDeck.animalCompanionBufferEntityId!,
+			);
+
+			const newAnimalCompanions = [
+				getTagWithHistory(bufferEntity, GameTag.TAG_SCRIPT_DATA_NUM_4),
+				getTagWithHistory(bufferEntity, GameTag.TAG_SCRIPT_DATA_NUM_5),
+				getTagWithHistory(bufferEntity, GameTag.TAG_SCRIPT_DATA_NUM_6),
+			].filter((c) => !!c);
+			console.debug('[debug] animal companion aura counter', bufferEntity, newAnimalCompanions);
+			if (newAnimalCompanions.length === 0) {
+				return null;
+			}
+			const newCost = this.allCards.getCard(newAnimalCompanions[0]!).cost ?? 3;
 			return {
 				cost: newCost,
-				cardIds: newAnimalCompanions as readonly CardIds[],
+				cardIds: newAnimalCompanions.map((c) => this.allCards.getCard(c!).id as CardIds),
 			};
 		},
 		setting: {
@@ -46,14 +59,24 @@ export class AnimalCompanionAuraCounterDefinitionV2 extends CounterDefinitionV2<
 	readonly opponent = {
 		pref: 'opponentAnimalCompanionAuraCounter' as const,
 		display: (state: GameState): boolean =>
-			state.opponentDeck.newAnimalCompanions.length > 0 ||
+			!!state.opponentDeck.animalCompanionBufferEntityId ||
 			state.opponentDeck.hasRelevantCard(animalCompanionBuffsCardIds),
 		value: (state: GameState) => {
-			const newAnimalCompanions = state.opponentDeck.newAnimalCompanions;
-			const newCost = this.allCards.getCard(newAnimalCompanions[0]).cost ?? 3;
+			const bufferEntity = state.parserState?.CurrentEntities.get(
+				state.opponentDeck.animalCompanionBufferEntityId!,
+			);
+			const newAnimalCompanions = [
+				getTagWithHistory(bufferEntity, GameTag.TAG_SCRIPT_DATA_NUM_4),
+				getTagWithHistory(bufferEntity, GameTag.TAG_SCRIPT_DATA_NUM_5),
+				getTagWithHistory(bufferEntity, GameTag.TAG_SCRIPT_DATA_NUM_6),
+			].filter((c) => !!c);
+			if (newAnimalCompanions.length === 0) {
+				return null;
+			}
+			const newCost = this.allCards.getCard(newAnimalCompanions[0]!).cost ?? 3;
 			return {
 				cost: newCost,
-				cardIds: newAnimalCompanions as readonly CardIds[],
+				cardIds: newAnimalCompanions.map((c) => this.allCards.getCard(c!).id as CardIds),
 			};
 		},
 		setting: {
@@ -91,3 +114,19 @@ export class AnimalCompanionAuraCounterDefinitionV2 extends CounterDefinitionV2<
 		return value?.cardIds?.length ? value.cardIds : animalCompanionTokenCardIds;
 	}
 }
+
+const getTagWithHistory = (entity: FullEntity | undefined | null, tag: GameTag | number): number | null => {
+	if (!entity) {
+		return null;
+	}
+
+	const result = entity.Tags?.find((t) => t.Name === tag)?.Value;
+	if (!!result) {
+		return result;
+	}
+
+	// Can happen if the entity got transformed, then we look into the past
+	// Pick the last one
+	const history = entity.TagsHistory.filter((t) => t.Name === tag).pop()?.Value;
+	return history ?? null;
+};

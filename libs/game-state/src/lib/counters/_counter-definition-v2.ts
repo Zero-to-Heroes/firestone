@@ -339,11 +339,11 @@ export interface PlayerImplementation<T> {
 	pref: keyof Preferences;
 	display: (state: GameState, bgState: BattlegroundsState | null | undefined) => boolean;
 	value: (state: GameState, bgState: BattlegroundsState | null | undefined) => T | null | undefined;
-	savedValue?: T | null | undefined;
-	savedInstance?: CounterInstance<T>;
 	setting: {
 		label: (i18n: ILocalizationService) => string;
 		tooltip: (i18n: ILocalizationService, allCards: CardsFacadeService) => string;
 	};
+	savedValue?: T | null | undefined;
+	savedInstance?: CounterInstance<T>;
 	cachedValue?: T | null | undefined;
 }
