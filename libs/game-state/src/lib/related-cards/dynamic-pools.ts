@@ -102,12 +102,20 @@ const getDynamicRelatedCardIdsInternal = (
 
 	const dynamicPoolImpl = cardsInfoCache[cardId];
 	if (hasDynamicPool(dynamicPoolImpl)) {
-		return dynamicPoolImpl.dynamicPool({
+		const result = dynamicPoolImpl.dynamicPool({
 			cardId,
 			entityId,
 			allCards,
 			inputOptions: options,
 		});
+		if (dynamicPoolImpl.overrideDefaultDynamicPool) {
+			return {
+				override: true,
+				cards: result,
+			};
+		} else {
+			return result;
+		}
 	}
 
 	const refCard = allCards.getCard(cardId);

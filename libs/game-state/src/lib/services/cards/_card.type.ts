@@ -67,6 +67,7 @@ export const hasSelector = (card: Card): card is SelectorCard => (card as Select
 export interface StaticGeneratingCard extends Card {
 	publicCreator?: boolean;
 	summonInPlay?: boolean;
+	overrideDefaultDynamicPool?: boolean;
 	dynamicPool: (input: StaticGeneratingCardInput) => readonly string[];
 }
 export const hasDynamicPool = (card: Card): card is StaticGeneratingCard =>
