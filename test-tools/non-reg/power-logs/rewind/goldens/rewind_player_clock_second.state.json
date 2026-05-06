@@ -55,7 +55,7 @@
           "202": 39,
           "203": 3,
           "261": 1,
-          "263": 1,
+          "263": 3,
           "273": 1,
           "466": 1,
           "478": 2,
@@ -828,7 +828,7 @@
           "202": 5,
           "203": 4,
           "261": 1,
-          "263": 0,
+          "263": 8,
           "273": 1,
           "415": 1,
           "466": 1,
@@ -932,13 +932,13 @@
         "guessedInfo": {
           "cardType": 4,
           "possibleCards": [
-            "BRM_004",
-            "NX2_050",
             "END_022",
             "CATA_484",
             "VAC_958",
             "TOY_386",
+            "NX2_050",
             "WON_065",
+            "BRM_004",
             "EX1_189",
             "NEW1_023",
             "TSC_069",
@@ -946,21 +946,18 @@
             "CORE_EX1_189",
             "WW_819",
             "EDR_889",
+            "WW_344",
             "CATA_464",
             "CATA_614",
-            "WW_344",
             "TIME_025",
-            "RLK_915",
             "YOP_025",
             "DRG_254",
             "GIL_683",
             "GIL_681",
             "DRG_229",
             "DAL_146",
-            "RLK_527",
-            "TTN_924",
-            "TTN_718",
             "EDR_890",
+            "RLK_915",
             "TLC_888",
             "CATA_111",
             "EDR_571",
@@ -971,6 +968,9 @@
             "TIME_045",
             "FIR_927",
             "END_018",
+            "RLK_527",
+            "TTN_924",
+            "TTN_718",
             "END_021"
           ],
           "races": [
@@ -1153,6 +1153,7 @@
         "entityId": 147
       }
     ],
+    "newAnimalCompanions": [],
     "otherZone": [
       {
         "cardId": "",
@@ -1625,7 +1626,7 @@
           "203": 3,
           "218": 1,
           "261": 1,
-          "263": 2,
+          "263": 1,
           "273": 1,
           "466": 3,
           "478": 2,
@@ -1950,6 +1951,118 @@
     "piratesSummoned": 0,
     "plaguesShuffledIntoEnemyDeck": 0,
     "pogoHopperSize": 0,
+    "powerTriggeredThisMatch": [
+      {
+        "cardId": "EDR_456",
+        "entityId": 57,
+        "turn": 1
+      },
+      {
+        "cardId": "EDR_102t",
+        "entityId": 87,
+        "turn": 1
+      },
+      {
+        "cardId": "EDR_100t1",
+        "entityId": 92,
+        "turn": 1
+      },
+      {
+        "cardId": "GAME_005",
+        "entityId": 68,
+        "turn": 2
+      },
+      {
+        "cardId": "CORE_EDR_004_2026",
+        "entityId": 37,
+        "turn": 2
+      },
+      {
+        "cardId": "EDR_102t",
+        "entityId": 98,
+        "turn": 2
+      },
+      {
+        "cardId": "EDR_100t3",
+        "entityId": 102,
+        "turn": 2
+      },
+      {
+        "cardId": "CORE_EDR_004_2026",
+        "entityId": 37,
+        "turn": 2
+      },
+      {
+        "cardId": "CORE_EDR_004_2026",
+        "entityId": 37,
+        "turn": 2
+      },
+      {
+        "cardId": "TIME_003",
+        "entityId": 55,
+        "turn": 3
+      },
+      {
+        "cardId": "TIME_003",
+        "entityId": 55,
+        "turn": 3
+      },
+      {
+        "cardId": "CORE_EDR_004_2026",
+        "entityId": 49,
+        "turn": 4
+      },
+      {
+        "cardId": "EDR_102t",
+        "entityId": 120,
+        "turn": 4
+      },
+      {
+        "cardId": "EDR_100t13",
+        "entityId": 125,
+        "turn": 4
+      },
+      {
+        "cardId": "CORE_EDR_004_2026",
+        "entityId": 49,
+        "turn": 4
+      },
+      {
+        "cardId": "CORE_EDR_004_2026",
+        "entityId": 49,
+        "turn": 4
+      },
+      {
+        "cardId": "REV_251",
+        "entityId": 99,
+        "turn": 5
+      },
+      {
+        "cardId": "TIME_035",
+        "entityId": 40,
+        "turn": 6
+      },
+      {
+        "cardId": "CATA_556",
+        "entityId": 89,
+        "turn": 7
+      },
+      {
+        "cardId": "TIME_045",
+        "entityId": 41,
+        "turn": 7
+      },
+      {
+        "cardId": "TIME_750",
+        "entityId": 42,
+        "turn": 7
+      },
+      {
+        "cardId": "CORE_REV_990",
+        "entityId": 59,
+        "turn": 7
+      }
+    ],
     "relicsPlayedThisMatch": 0,
     "secretHelperActive": true,
     "secrets": [],
@@ -2514,7 +2627,7 @@
           "203": 1,
           "218": 1,
           "261": 0,
-          "263": 2,
+          "263": 3,
           "267": 147,
           "271": 2,
           "273": 1,
@@ -3245,6 +3358,7 @@
       }
     ],
     "name": null,
+    "newAnimalCompanions": [],
     "otherZone": [
       {
         "actualManaCost": 5,
@@ -3799,7 +3913,7 @@
           "203": 1,
           "218": 1,
           "261": 0,
-          "263": 1,
+          "263": 2,
           "271": 2,
           "273": 1,
           "386": 0,
@@ -3884,6 +3998,88 @@
     "piratesSummoned": 0,
     "plaguesShuffledIntoEnemyDeck": 0,
     "pogoHopperSize": 0,
+    "powerTriggeredThisMatch": [
+      {
+        "cardId": "EDR_456",
+        "entityId": 20,
+        "turn": 1
+      },
+      {
+        "cardId": "EDR_102t",
+        "entityId": 78,
+        "turn": 1
+      },
+      {
+        "cardId": "EDR_100t8",
+        "entityId": 82,
+        "turn": 1
+      },
+      {
+        "cardId": "EDR_889",
+        "entityId": 7,
+        "turn": 2
+      },
+      {
+        "cardId": "EDR_457",
+        "entityId": 14,
+        "turn": 3
+      },
+      {
+        "cardId": "TIME_034",
+        "entityId": 79,
+        "turn": 4
+      },
+      {
+        "cardId": "TIME_034",
+        "entityId": 79,
+        "turn": 4
+      },
+      {
+        "cardId": "TLC_600",
+        "entityId": 19,
+        "turn": 5
+      },
+      {
+        "cardId": "TLC_600",
+        "entityId": 19,
+        "turn": 5
+      },
+      {
+        "cardId": "TLC_600",
+        "entityId": 4,
+        "turn": 6
+      },
+      {
+        "cardId": "TLC_600",
+        "entityId": 4,
+        "turn": 6
+      },
+      {
+        "cardId": "TOY_386",
+        "entityId": 12,
+        "turn": 6
+      },
+      {
+        "cardId": "TIME_002",
+        "entityId": 13,
+        "turn": 7
+      },
+      {
+        "cardId": "TIME_002",
+        "entityId": 13,
+        "turn": 7
+      },
+      {
+        "cardId": "TIME_038t2",
+        "entityId": 18,
+        "turn": 8
+      },
+      {
+        "cardId": "TIME_038t2",
+        "entityId": 18,
+        "turn": 8
+      }
+    ],
     "relicsPlayedThisMatch": 0,
     "secretHelperActive": true,
     "secrets": [],

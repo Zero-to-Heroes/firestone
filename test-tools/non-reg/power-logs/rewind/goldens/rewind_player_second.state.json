@@ -633,7 +633,7 @@
           "202": 5,
           "203": 4,
           "261": 1,
-          "263": 0,
+          "263": 8,
           "273": 1,
           "415": 1,
           "466": 1,
@@ -805,6 +805,7 @@
       }
     ],
     "minionsDeadThisTurn": [],
+    "newAnimalCompanions": [],
     "otherZone": [
       {
         "cardId": "",
@@ -1297,7 +1298,7 @@
           "203": 3,
           "218": 1,
           "261": 1,
-          "263": 2,
+          "263": 1,
           "273": 1,
           "466": 3,
           "478": 2,
@@ -1466,6 +1467,98 @@
     "piratesSummoned": 0,
     "plaguesShuffledIntoEnemyDeck": 0,
     "pogoHopperSize": 0,
+    "powerTriggeredThisMatch": [
+      {
+        "cardId": "EDR_456",
+        "entityId": 57,
+        "turn": 1
+      },
+      {
+        "cardId": "EDR_102t",
+        "entityId": 87,
+        "turn": 1
+      },
+      {
+        "cardId": "EDR_100t1",
+        "entityId": 92,
+        "turn": 1
+      },
+      {
+        "cardId": "GAME_005",
+        "entityId": 68,
+        "turn": 2
+      },
+      {
+        "cardId": "CORE_EDR_004_2026",
+        "entityId": 37,
+        "turn": 2
+      },
+      {
+        "cardId": "EDR_102t",
+        "entityId": 98,
+        "turn": 2
+      },
+      {
+        "cardId": "EDR_100t3",
+        "entityId": 102,
+        "turn": 2
+      },
+      {
+        "cardId": "CORE_EDR_004_2026",
+        "entityId": 37,
+        "turn": 2
+      },
+      {
+        "cardId": "CORE_EDR_004_2026",
+        "entityId": 37,
+        "turn": 2
+      },
+      {
+        "cardId": "TIME_003",
+        "entityId": 55,
+        "turn": 3
+      },
+      {
+        "cardId": "TIME_003",
+        "entityId": 55,
+        "turn": 3
+      },
+      {
+        "cardId": "CORE_EDR_004_2026",
+        "entityId": 49,
+        "turn": 4
+      },
+      {
+        "cardId": "EDR_102t",
+        "entityId": 120,
+        "turn": 4
+      },
+      {
+        "cardId": "EDR_100t13",
+        "entityId": 125,
+        "turn": 4
+      },
+      {
+        "cardId": "CORE_EDR_004_2026",
+        "entityId": 49,
+        "turn": 4
+      },
+      {
+        "cardId": "CORE_EDR_004_2026",
+        "entityId": 49,
+        "turn": 4
+      },
+      {
+        "cardId": "REV_251",
+        "entityId": 99,
+        "turn": 5
+      },
+      {
+        "cardId": "TIME_035",
+        "entityId": 40,
+        "turn": 6
+      }
+    ],
     "relicsPlayedThisMatch": 0,
     "secretHelperActive": true,
     "secrets": [],
@@ -2672,6 +2765,7 @@
     ],
     "minionsDeadThisTurn": [],
     "name": null,
+    "newAnimalCompanions": [],
     "otherZone": [
       {
         "actualManaCost": 5,
@@ -3011,6 +3105,78 @@
     "piratesSummoned": 0,
     "plaguesShuffledIntoEnemyDeck": 0,
     "pogoHopperSize": 0,
+    "powerTriggeredThisMatch": [
+      {
+        "cardId": "EDR_456",
+        "entityId": 20,
+        "turn": 1
+      },
+      {
+        "cardId": "EDR_102t",
+        "entityId": 78,
+        "turn": 1
+      },
+      {
+        "cardId": "EDR_100t8",
+        "entityId": 82,
+        "turn": 1
+      },
+      {
+        "cardId": "EDR_889",
+        "entityId": 7,
+        "turn": 2
+      },
+      {
+        "cardId": "EDR_457",
+        "entityId": 14,
+        "turn": 3
+      },
+      {
+        "cardId": "TIME_034",
+        "entityId": 79,
+        "turn": 4
+      },
+      {
+        "cardId": "TIME_034",
+        "entityId": 79,
+        "turn": 4
+      },
+      {
+        "cardId": "TLC_600",
+        "entityId": 19,
+        "turn": 5
+      },
+      {
+        "cardId": "TLC_600",
+        "entityId": 19,
+        "turn": 5
+      },
+      {
+        "cardId": "TLC_600",
+        "entityId": 4,
+        "turn": 6
+      },
+      {
+        "cardId": "TLC_600",
+        "entityId": 4,
+        "turn": 6
+      },
+      {
+        "cardId": "TOY_386",
+        "entityId": 12,
+        "turn": 6
+      },
+      {
+        "cardId": "TIME_002",
+        "entityId": 13,
+        "turn": 7
+      },
+      {
+        "cardId": "TIME_002",
+        "entityId": 13,
+        "turn": 7
+      }
+    ],
     "relicsPlayedThisMatch": 0,
     "secretHelperActive": true,
     "secrets": [],
