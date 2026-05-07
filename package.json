@@ -1,6 +1,6 @@
 {
 	"name": "firestone",
-	"version": "18.4.8",
+	"version": "18.4.9",
 	"productName": "Firestone",
 	"author": {
 		"name": "Sébastien Tromp",
@@ -105,7 +105,7 @@
 		"@firestone-hs/constructed-deck-stats": "^0.0.17",
 		"@firestone-hs/content-craetor-input": "^0.0.15",
 		"@firestone-hs/deckstrings": "^2.2.8",
-		"@firestone-hs/hs-replay-xml-parser": "^1.0.4",
+		"@firestone-hs/hs-replay-xml-parser": "^1.0.5",
 		"@firestone-hs/mailbox": "^1.0.29",
 		"@firestone-hs/official-leaderboards": "^0.0.1",
 		"@firestone-hs/reference-data": "^3.0.192",
@@ -246,7 +246,7 @@
 	},
 	"overrides": {
 		"@firestone-hs/reference-data": "^3.0.192",
-		"@firestone-hs/hs-replay-xml-parser": "^1.0.4",
+		"@firestone-hs/hs-replay-xml-parser": "^1.0.5",
 		"@angular/common": "^19.0.0",
 		"@angular/core": "^19.0.0",
 		"rxjs": "^7.8.0",
