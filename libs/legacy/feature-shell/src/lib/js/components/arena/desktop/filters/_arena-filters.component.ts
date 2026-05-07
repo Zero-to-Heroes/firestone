@@ -1,7 +1,10 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { ArenaClassStats } from '@firestone-hs/arena-stats';
 import { ArenaClassStatsService, ArenaNavigationService } from '@firestone/arena/common';
-import { FORCE_SHOW_ARENA_CLASS_STATS_MATRIX_TOGGLE } from '@firestone/shared/common/service';
+import {
+	FORCE_DISABLE_SHOW_ARENA_CLASS_STATS_MATRIX_TOGGLE,
+	FORCE_SHOW_ARENA_CLASS_STATS_MATRIX_TOGGLE,
+} from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
@@ -114,6 +117,7 @@ export class ArenaFiltersComponent extends AbstractSubscriptionComponent impleme
 			this.mapData(
 				([currentView, raw]) =>
 					currentView === 'class-tier-list' &&
+					!FORCE_DISABLE_SHOW_ARENA_CLASS_STATS_MATRIX_TOGGLE &&
 					(FORCE_SHOW_ARENA_CLASS_STATS_MATRIX_TOGGLE || hasMultipleHeroPowersPerClass(raw)),
 			),
 		);

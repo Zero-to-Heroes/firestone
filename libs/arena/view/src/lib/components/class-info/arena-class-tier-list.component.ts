@@ -3,6 +3,7 @@ import { ArenaClassStat, ArenaClassStats, WinsDistribution } from '@firestone-hs
 import { ArenaHeroAdvice } from '@firestone-hs/content-craetor-input';
 import { ArenaClassInfoTip, ArenaClassStatsService, ArenaMetaHeroStrategiesService } from '@firestone/arena/common';
 import {
+	FORCE_DISABLE_SHOW_ARENA_CLASS_STATS_MATRIX_TOGGLE,
 	FORCE_SHOW_ARENA_CLASS_STATS_MATRIX_TOGGLE,
 	PatchesConfig,
 	PatchesConfigService,
@@ -41,7 +42,10 @@ import { ArenaClassInfo, ArenaClassTier } from './model';
 				<ng-container *ngIf="!value.showMatrix">
 					<div class="header">
 						<div class="cell portrait"></div>
-						<div class="cell class-details" [fsTranslate]="'app.arena.class-tier-list.header-hero-name'"></div>
+						<div
+							class="cell class-details"
+							[fsTranslate]="'app.arena.class-tier-list.header-hero-name'"
+						></div>
 						<div class="cell winrate" [fsTranslate]="'app.arena.class-tier-list.header-winrate'"></div>
 						<div
 							class="cell placement"
@@ -88,20 +92,15 @@ export class ArenaClassTierListComponent extends AbstractSubscriptionComponent i
 	async ngAfterContentInit() {
 		await waitForReady(this.arenaClassStats, this.arenaMetaHeroStrategies, this.patches, this.prefs);
 
-		console.debug('[arena-class-tier-list] after content init');
 		this.tiers$ = combineLatest([
 			this.arenaClassStats.classStats$$,
 			this.arenaMetaHeroStrategies.strategies$$,
 			this.patches.config$$,
 		]).pipe(
+			tap((info) => console.debug('[arena-class-tier-list] received info a', info)),
 			filter(([stats, strategies, config]) => !!stats?.stats && !!strategies?.heroes && !!config),
 			this.mapData(([stats, strategies, patchesConfig]) => {
 				const averageWinsDistribution = this.buildAverageWinsDistribution(stats?.stats);
-				console.debug(
-					'averageWinsDistribution',
-					averageWinsDistribution,
-					averageWinsDistribution.map((d) => d.total).reduce((a, b) => a + b, 0),
-				);
 				return buildArenaClassInfoTiers(
 					stats?.stats,
 					strategies?.heroes,
@@ -170,7 +169,9 @@ export class ArenaClassTierListComponent extends AbstractSubscriptionComponent i
 		]).pipe(
 			this.mapData(
 				([raw, enabled]) =>
-					!!enabled && (FORCE_SHOW_ARENA_CLASS_STATS_MATRIX_TOGGLE || hasMultipleHeroPowersPerClass(raw)),
+					!FORCE_DISABLE_SHOW_ARENA_CLASS_STATS_MATRIX_TOGGLE &&
+					!!enabled &&
+					(FORCE_SHOW_ARENA_CLASS_STATS_MATRIX_TOGGLE || hasMultipleHeroPowersPerClass(raw)),
 			),
 		);
 

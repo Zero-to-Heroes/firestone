@@ -5,6 +5,7 @@ export const HEARTHPWN_SYNC = true;
 export const ENABLE_IN_GAME_REPLAY = true;
 export const ENABLE_IN_GAME_REPLAY_FOR_ALL = false;
 export const FORCE_SHOW_ARENA_CLASS_STATS_MATRIX_TOGGLE = false;
+export const FORCE_DISABLE_SHOW_ARENA_CLASS_STATS_MATRIX_TOGGLE = true;
 
 // Shelved for now
 export const ENABLE_MULTI_GRAPHS = false;
