@@ -79,6 +79,7 @@ export { DiscipleOfTheDove } from './disciple-of-the-dove';
 export { DiscoveryOfMagic } from './discovery-of-magic';
 export { DisposableAcolytes } from './disposable-acolytes';
 export { DraconicHerald } from './draconic-herald';
+export { DragonSoulShattered } from './dragon-soul-shattered';
 export { DragonsHoard } from './dragons-hoard';
 export { DragonscaleArmaments } from './dragonscale-armament';
 export { DrakeadonMongrel } from './drakeadon-mongrel';

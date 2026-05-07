@@ -37,7 +37,10 @@ export class CreateCardInDeckParser implements EventParser {
 		// There is the risk that, if C'Thun is enchanted and that enchantment creates a card in deck, this
 		// hack will discard it. For now it's supposed to be enough of a fringe case to not matter vs
 		// properly flagging the cards created by C'Thun
-		if (gameEvent.additionalData.creatorCardId === CardIds.CthunTheShattered) {
+		if (
+			gameEvent.additionalData.creatorCardId === CardIds.CthunTheShattered ||
+			gameEvent.additionalData.creatorCardId === CardIds.DragonSoulShattered_CATA_EVENT_110
+		) {
 			return currentState;
 		}
 
@@ -80,9 +83,7 @@ export class CreateCardInDeckParser implements EventParser {
 		const hideKiljaedenPortalDeck =
 			gameEvent.additionalData.creatorCardId === CardIds.Kiljaeden_KiljaedensPortalEnchantment_GDB_145e;
 		const cardData =
-			!hideKiljaedenPortalDeck && cardId?.length
-				? getProcessedCard(cardId, entityId, deck, this.allCards)
-				: null;
+			!hideKiljaedenPortalDeck && cardId?.length ? getProcessedCard(cardId, entityId, deck, this.allCards) : null;
 		const positionFromBottom = buildPositionFromBottom(
 			deck,
 			gameEvent.additionalData.creatorCardId ?? gameEvent.additionalData.influencedByCardId,
@@ -134,15 +135,15 @@ export class CreateCardInDeckParser implements EventParser {
 				cardName:
 					(hideKiljaedenPortalDeck
 						? this.buildCardName(null, CardIds.Kiljaeden_KiljaedensPortalEnchantment_GDB_145e)
-						: this.buildCardName(cardData!, gameEvent.additionalData.creatorCardId) ?? card?.cardName) ??
+						: (this.buildCardName(cardData!, gameEvent.additionalData.creatorCardId) ?? card?.cardName)) ??
 					'',
 				refManaCost: hideKiljaedenPortalDeck ? undefined : cardData?.cost,
 				actualManaCost: hideKiljaedenPortalDeck
 					? undefined
-					: this.buildKnownUpdatedManaCost(gameEvent.additionalData.creatorCardId) ??
+					: (this.buildKnownUpdatedManaCost(gameEvent.additionalData.creatorCardId) ??
 						// If we discover a card, modify its cost and put it back in the deck, we want the updated mana cost
 						card?.actualManaCost ??
-						cardData?.cost,
+						cardData?.cost),
 				rarity: hideKiljaedenPortalDeck ? undefined : cardData?.rarity?.toLowerCase(),
 				creatorCardId: hideKiljaedenPortalDeck
 					? CardIds.Kiljaeden_KiljaedensPortalEnchantment_GDB_145e
