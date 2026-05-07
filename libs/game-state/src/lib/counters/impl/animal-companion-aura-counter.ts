@@ -17,6 +17,7 @@ const animalCompanionBuffsCardIds: readonly CardIds[] = [
 export class AnimalCompanionAuraCounterDefinitionV2 extends CounterDefinitionV2<{
 	cost: number;
 	cardIds: readonly CardIds[];
+	isPlayer: boolean;
 }> {
 	public override id: CounterType = 'animalCompanionAura';
 	public override image = CardIds.TamePet_MEND_300;
@@ -46,6 +47,7 @@ export class AnimalCompanionAuraCounterDefinitionV2 extends CounterDefinitionV2<
 			return {
 				cost: newCost,
 				cardIds: newAnimalCompanions.map((c) => this.allCards.getCard(c!).id as CardIds),
+				isPlayer: true,
 			};
 		},
 		setting: {
@@ -77,6 +79,7 @@ export class AnimalCompanionAuraCounterDefinitionV2 extends CounterDefinitionV2<
 			return {
 				cost: newCost,
 				cardIds: newAnimalCompanions.map((c) => this.allCards.getCard(c!).id as CardIds),
+				isPlayer: false,
 			};
 		},
 		setting: {
@@ -109,8 +112,11 @@ export class AnimalCompanionAuraCounterDefinitionV2 extends CounterDefinitionV2<
 		side: 'player' | 'opponent',
 		gameState: GameState,
 		bgState: BattlegroundsState,
-		value: { cost: number; cardIds: readonly CardIds[] } | null | undefined,
+		value: { cost: number; cardIds: readonly CardIds[]; isPlayer: boolean } | null | undefined,
 	): readonly string[] | undefined {
+		if (!value?.isPlayer) {
+			return undefined;
+		}
 		return value?.cardIds?.length ? value.cardIds : animalCompanionTokenCardIds;
 	}
 }
