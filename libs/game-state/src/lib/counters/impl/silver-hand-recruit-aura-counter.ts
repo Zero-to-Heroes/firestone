@@ -22,11 +22,15 @@ export class SilverHandRecruitAuraCounterDefinitionV2 extends CounterDefinitionV
 			const enchs = state.playerDeck.enchantments;
 			const attack =
 				enchs.filter((e) => e.cardId === CardIds.BrashBattlemaster_RecruitsMightEnchantment_MEND_800e).length +
-				enchs.filter((e) => e.cardId === CardIds.EmboldeningBlade_EmboldenedEnchantment_MEND_803e).length;
+				enchs.filter((e) => e.cardId === CardIds.EmboldeningBlade_EmboldenedEnchantment_MEND_803e).length +
+				2 * enchs.filter((e) => e.cardId === CardIds.LightbornCariel_LightsStrengthEnchantment).length +
+				enchs.filter((e) => e.cardId === CardIds.PursuitOfJustice_PursuitOfJusticeCoreEnchantment_CS3_029e)
+					.length;
 			const health =
 				enchs.filter((e) => e.cardId === CardIds.ResilientSavior_RecruitsResilienceEnchantment_MEND_801e)
 					.length +
-				enchs.filter((e) => e.cardId === CardIds.EmboldeningBlade_EmboldenedEnchantment_MEND_803e).length;
+				enchs.filter((e) => e.cardId === CardIds.EmboldeningBlade_EmboldenedEnchantment_MEND_803e).length +
+				2 * enchs.filter((e) => e.cardId === CardIds.LightbornCariel_LightsStrengthEnchantment).length;
 			if (attack === 0 && health === 0) {
 				return null;
 			}
