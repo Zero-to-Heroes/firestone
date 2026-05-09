@@ -604,17 +604,16 @@ export class GameStateService {
 				// GameEvent.SUB_SPELL_END,
 			].includes(gameEvent.type)
 		) {
-			// console.debug(
-			// 	'[game-state] processed event',
-			// 	gameEvent.type,
-			// 	gameEvent.cardId,
-			// 	`entityId:${gameEvent.entityId}`,
-			// 	(gameEvent as MinionsDiedEvent)?.additionalData?.deadMinions?.map((m) => `entityId:${m.EntityId}`),
-			// 	currentState.opponentDeck.board.map((c) => c.relatedCardIds),
-			// 	currentState.opponentDeck.board,
-			// 	currentState,
-			// 	gameEvent,
-			// );
+			console.debug(
+				'[game-state] processed event',
+				gameEvent.type,
+				gameEvent.cardId,
+				`entityId:${gameEvent.entityId}`,
+				(gameEvent as MinionsDiedEvent)?.additionalData?.deadMinions?.map((m) => `entityId:${m.EntityId}`),
+				currentState.opponentDeck.enchantments,
+				currentState,
+				gameEvent,
+			);
 		}
 		return currentState;
 	}

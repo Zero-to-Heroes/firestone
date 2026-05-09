@@ -25,15 +25,17 @@ import { ArenaCardTypeFilterDropdownComponent } from './components/card-stats/ar
 import { ArenaClassFilterDropdownComponent } from './components/card-stats/arena-class-filter-dropdown.component';
 import { ArenaClassInfoComponent } from './components/class-info/arena-class-info.component';
 import { ArenaClassStatsMatrixComponent } from './components/class-info/arena-class-stats-matrix.component';
-import { ArenaTipPopupComponent } from './components/class-info/arena-tip-popup.component';
 import { ArenaClassTierListTierComponent } from './components/class-info/arena-class-tier-list-tier.component';
 import { ArenaClassTierListComponent } from './components/class-info/arena-class-tier-list.component';
+import { ArenaTipPopupComponent } from './components/class-info/arena-tip-popup.component';
 import { ArenaHighWinsCardSearchComponent } from './components/filters/arena-high-wins-card-search.component';
 import { ArenaHighWinsRunsComponent } from './components/high-wins-runs/arena-high-wins-runs.component';
 import { ArenaCardOptionViewComponent } from './components/overlays/arena-card-option-view.component';
 import { ArenaCardOptionComponent } from './components/overlays/arena-card-option.component';
 import { ArenaCardSelectionComponent } from './components/overlays/arena-card-selection.component';
 import { ArenaHeroOptionComponent } from './components/overlays/arena-hero-option.component';
+import { ArenaHeroPowerOptionComponent } from './components/overlays/arena-hero-power-option.component';
+import { ArenaHeroPowerSelectionComponent } from './components/overlays/arena-hero-power-selection.component';
 import { ArenaHeroSelectionComponent } from './components/overlays/arena-hero-selection.component';
 import { ArenaOptionInfoPremiumComponent } from './components/overlays/arena-option-info-premium.component';
 import { ArenaPackageCardSelectionWidgetWrapperComponent } from './components/overlays/arena-package-card-selection-widget-wrapper.component';
@@ -61,7 +63,9 @@ const components = [
 	ArenaCardClassFilterDropdownComponent,
 	ArenaCardTypeFilterDropdownComponent,
 	ArenaHeroSelectionComponent,
+	ArenaHeroPowerSelectionComponent,
 	ArenaHeroOptionComponent,
+	ArenaHeroPowerOptionComponent,
 	ArenaCardSelectionComponent,
 	ArenaCardOptionComponent,
 	ArenaCardOptionViewComponent,

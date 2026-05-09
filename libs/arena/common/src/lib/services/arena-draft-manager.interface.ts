@@ -12,6 +12,7 @@ export interface IArenaDraftManagerService {
 
 	currentStep$$: SubscriberAwareBehaviorSubject<DraftSlotType | null>;
 	heroOptions$$: SubscriberAwareBehaviorSubject<readonly string[] | null>;
+	heroPowerOptions$$: SubscriberAwareBehaviorSubject<readonly string[] | null>;
 	cardOptions$$: SubscriberAwareBehaviorSubject<readonly ArenaCardOption[] | null>;
 	currentDeck$$: SubscriberAwareBehaviorSubject<DeckInfoFromMemory | null>;
 	currentMode$$: BehaviorSubject<GameType | null>;

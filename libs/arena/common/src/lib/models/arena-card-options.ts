@@ -15,6 +15,7 @@ export interface ArenaCardOption {
 	readonly pickRateDelta: number | null | undefined;
 	readonly pickRateHighWins: number | null | undefined;
 	readonly dataPoints: number | null | undefined;
+	splitClasses?: ArenaCardOption[];
 }
 
 export interface ArenaClassInfoTip {

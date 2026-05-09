@@ -33,6 +33,7 @@ export interface MemoryUpdate {
 	readonly ArenaDraftStep: DraftSlotType;
 	readonly ArenaRewards: readonly Reward[];
 	readonly ArenaHeroOptions: readonly string[];
+	readonly ArenaHeroPowerOptions: readonly string[];
 	readonly ArenaCardOptions: readonly ArenaCardOption[];
 	readonly ArenaPackageCardOptions: readonly string[];
 	readonly ArenaCurrentCardsInDeck: number;

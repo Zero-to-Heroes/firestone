@@ -7,6 +7,7 @@ import {
 	AbstractFacadeService,
 	ApiRunner,
 	AppInjector,
+	CardsFacadeService,
 	waitForReady,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
@@ -107,7 +108,9 @@ export class ArenaClassStatsService extends AbstractFacadeService<ArenaClassStat
 	}
 }
 
-const consolidateByPlayerClass = (raw: ArenaClassStats | null | undefined): ArenaClassStats | null | undefined => {
+export const consolidateByPlayerClass = (
+	raw: ArenaClassStats | null | undefined,
+): ArenaClassStats | null | undefined => {
 	if (!raw) {
 		return raw;
 	}
@@ -123,8 +126,12 @@ const consolidateByPlayerClass = (raw: ArenaClassStats | null | undefined): Aren
 			continue;
 		}
 
-		const mergedStats = mergeForPlayerClass(playerClassStats);
-		consolidatedByPlayerClass.push(mergedStats);
+		const mergedStats = mergeClassStatGroup(playerClassStats);
+		const updated = {
+			...mergedStats,
+			playerClass: playerClass,
+		};
+		consolidatedByPlayerClass.push(updated);
 	}
 	return {
 		...raw,
@@ -132,16 +139,48 @@ const consolidateByPlayerClass = (raw: ArenaClassStats | null | undefined): Aren
 	};
 };
 
-const mergeForPlayerClass = (playerClassStats: readonly ArenaClassStat[]): ArenaClassStat => {
-	const ref = playerClassStats[0];
-	const mergedStats: ArenaClassStat = {
-		playerClass: ref.playerClass,
-		playerHeroPower: ref.playerHeroPower,
-		totalGames: playerClassStats.reduce((acc, curr) => acc + curr.totalGames, 0),
-		totalsWins: playerClassStats.reduce((acc, curr) => acc + curr.totalsWins, 0),
-		winsDistribution: mergeWinsDistribution(playerClassStats.flatMap((s) => s.winsDistribution)),
-		matchups: mergeMatchups(playerClassStats.flatMap((s) => s.matchups)),
+export const consolidateByHeroPower = (
+	raw: ArenaClassStats | null | undefined,
+	allCards: CardsFacadeService,
+): ArenaClassStats | null | undefined => {
+	if (!raw) {
+		return raw;
+	}
+	if (!raw.stats?.length) {
+		return null;
+	}
+
+	const heroPowerKeys = [...new Set(raw.stats.map((s) => s.playerHeroPower).filter(Boolean))].sort();
+	const consolidatedByHeroPower: ArenaClassStat[] = [];
+	for (const heroPower of heroPowerKeys) {
+		const group: readonly ArenaClassStat[] = raw.stats.filter((s) => s.playerHeroPower === heroPower);
+		if (!group.length) {
+			continue;
+		}
+		const mergedStats = mergeClassStatGroup(group);
+		const updated = {
+			...mergedStats,
+			playerHeroPower: heroPower,
+			playerClass: allCards.getCard(heroPower)?.playerClass?.toLowerCase() ?? 'neutral',
+		};
+		consolidatedByHeroPower.push(updated);
+	}
+	return {
+		...raw,
+		stats: consolidatedByHeroPower,
 	};
+};
+
+const mergeClassStatGroup = (group: readonly ArenaClassStat[]): ArenaClassStat => {
+	const ref = group[0];
+	const mergedStats: ArenaClassStat = {
+		// playerClass: ref.playerClass,
+		// playerHeroPower: ref.playerHeroPower,
+		totalGames: group.reduce((acc, curr) => acc + curr.totalGames, 0),
+		totalsWins: group.reduce((acc, curr) => acc + curr.totalsWins, 0),
+		winsDistribution: mergeWinsDistribution(group.flatMap((s) => s.winsDistribution)),
+		matchups: mergeMatchups(group.flatMap((s) => s.matchups)),
+	} as ArenaClassStat;
 	return mergedStats;
 };
 

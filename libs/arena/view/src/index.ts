@@ -17,6 +17,8 @@ export * from './lib/components/overlays/arena-card-option-view.component';
 export * from './lib/components/overlays/arena-card-option.component';
 export * from './lib/components/overlays/arena-card-selection.component';
 export * from './lib/components/overlays/arena-hero-option.component';
+export * from './lib/components/overlays/arena-hero-power-option.component';
+export * from './lib/components/overlays/arena-hero-power-selection.component';
 export * from './lib/components/overlays/arena-hero-selection.component';
 export * from './lib/components/overlays/arena-option-info-premium.component';
 export * from './lib/components/overlays/arena-package-card-selection-widget-wrapper.component';

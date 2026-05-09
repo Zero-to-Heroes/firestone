@@ -67,6 +67,7 @@ export class ArenaDraftManagerService
 {
 	public currentStep$$: SubscriberAwareBehaviorSubject<DraftSlotType | null>;
 	public heroOptions$$: SubscriberAwareBehaviorSubject<readonly string[] | null>;
+	public heroPowerOptions$$: SubscriberAwareBehaviorSubject<readonly string[] | null>;
 	public cardOptions$$: SubscriberAwareBehaviorSubject<readonly ArenaCardOption[] | null>;
 	public cardPackageOptions$$: SubscriberAwareBehaviorSubject<readonly string[] | null>;
 	public currentDeck$$: SubscriberAwareBehaviorSubject<DeckInfoFromMemory | null>;
@@ -106,13 +107,19 @@ export class ArenaDraftManagerService
 		super(
 			windowManager,
 			'ArenaDraftManagerService',
-			() => !!this.currentStep$$ && !!this.heroOptions$$ && !!this.cardOptions$$ && !!this.currentDeck$$,
+			() =>
+				!!this.currentStep$$ &&
+				!!this.heroOptions$$ &&
+				!!this.heroPowerOptions$$ &&
+				!!this.cardOptions$$ &&
+				!!this.currentDeck$$,
 		);
 	}
 
 	protected override assignSubjects() {
 		this.currentStep$$ = this.mainInstance.currentStep$$;
 		this.heroOptions$$ = this.mainInstance.heroOptions$$;
+		this.heroPowerOptions$$ = this.mainInstance.heroPowerOptions$$;
 		this.cardOptions$$ = this.mainInstance.cardOptions$$;
 		this.cardPackageOptions$$ = this.mainInstance.cardPackageOptions$$;
 		this.currentDeck$$ = this.mainInstance.currentDeck$$;
@@ -128,6 +135,7 @@ export class ArenaDraftManagerService
 	protected async init() {
 		this.currentStep$$ = new SubscriberAwareBehaviorSubject<DraftSlotType | null>(null);
 		this.heroOptions$$ = new SubscriberAwareBehaviorSubject<readonly string[] | null>(null);
+		this.heroPowerOptions$$ = new SubscriberAwareBehaviorSubject<readonly string[] | null>(null);
 		this.cardOptions$$ = new SubscriberAwareBehaviorSubject<readonly ArenaCardOption[] | null>(null);
 		this.cardPackageOptions$$ = new SubscriberAwareBehaviorSubject<readonly string[] | null>(null);
 		this.currentDeck$$ = new SubscriberAwareBehaviorSubject<DeckInfoFromMemory | null>(null);
@@ -155,6 +163,12 @@ export class ArenaDraftManagerService
 		});
 		this.heroOptions$$.onFirstSubscribe(async () => {
 			this.internalSubscriber$$.subscribe();
+		});
+		this.heroPowerOptions$$.onFirstSubscribe(async () => {
+			this.internalSubscriber$$.subscribe();
+			this.heroPowerOptions$$.subscribe((options) => {
+				console.debug('[arena-draft-manager] hero power options', options);
+			});
 		});
 		this.cardOptions$$.onFirstSubscribe(async () => {
 			this.internalSubscriber$$.subscribe();
@@ -191,47 +205,6 @@ export class ArenaDraftManagerService
 				console.debug('[arena-draft-manager] received arena session state', changes.ArenaSessionState);
 				this.sessionState$$.next(changes.ArenaSessionState);
 			}
-			// if (changes.ArenaLatestCardPick != null) {
-			// 	if (
-			// 		changes.ArenaLatestCardPick.PickNumber !== this.lastPick$$?.value?.PickNumber &&
-			// 		!arraysEqual(changes.ArenaLatestCardPick.Options, this.lastPick$$?.value?.Options)
-			// 	) {
-			// 		if (changes.ArenaLatestCardPick.PickNumber !== 0) {
-			// 			console.log('[arena-draft-manager] received latest card pick', changes.ArenaLatestCardPick);
-			// 			this.lastPick$$.next(changes.ArenaLatestCardPick);
-			// 		}
-			// 	} else {
-			// 		console.log(
-			// 			'[arena-draft-manager] received latest card pick, but it is the same as the last one, ignoring',
-			// 			changes.ArenaLatestCardPick,
-			// 			this.lastPick$$.value,
-			// 		);
-			// 	}
-			// }
-			// if (changes.ArenaUndergroundLatestCardPick != null) {
-			// 	if (
-			// 		changes.ArenaUndergroundLatestCardPick.PickNumber !== this.lastPick$$?.value?.PickNumber &&
-			// 		!arraysEqual(
-			// 			changes.ArenaUndergroundLatestCardPick.Options?.map((o) => o.CardId),
-			// 			this.lastPick$$?.value?.Options?.map((o) => o.CardId),
-			// 		)
-			// 	) {
-			// 		if (changes.ArenaUndergroundLatestCardPick.PickNumber !== 0) {
-			// 			console.log(
-			// 				'[arena-draft-manager] received latest underground card pick',
-			// 				changes.ArenaUndergroundLatestCardPick,
-			// 				this.lastPick$$?.value,
-			// 			);
-			// 			this.lastPick$$.next(changes.ArenaUndergroundLatestCardPick);
-			// 		}
-			// 	} else {
-			// 		console.log(
-			// 			'[arena-draft-manager] received latest underground card pick, but it is the same as the last one, ignoring',
-			// 			changes.ArenaUndergroundLatestCardPick,
-			// 			this.lastPick$$.value,
-			// 		);
-			// 	}
-			// }
 		});
 
 		await waitForReady(this.account);
@@ -246,6 +219,7 @@ export class ArenaDraftManagerService
 				this.currentDeck$$.next(null);
 				this.currentStep$$.next(null);
 				this.heroOptions$$.next(null);
+				this.heroPowerOptions$$.next(null);
 				this.cardOptions$$.next(null);
 				this.draftScreenHidden$$.next(null);
 				this.currentMode$$.next(null);
@@ -262,6 +236,13 @@ export class ArenaDraftManagerService
 
 					if (changes.ArenaDraftStep != null && changes.ArenaDraftStep !== DraftSlotType.DRAFT_SLOT_HERO) {
 						this.heroOptions$$.next(null);
+					}
+					if (
+						changes.ArenaDraftStep != null &&
+						changes.ArenaDraftStep !== DraftSlotType.DRAFT_SLOT_HERO_POWER
+					) {
+						console.debug('[arena-draft-manager] received draft step, resetting hero power options');
+						this.heroPowerOptions$$.next(null);
 					}
 					if (changes.ArenaDraftStep != null && changes.ArenaDraftStep !== DraftSlotType.DRAFT_SLOT_CARD) {
 						this.cardOptions$$.next(null);
@@ -282,13 +263,28 @@ export class ArenaDraftManagerService
 						'[arena-draft-manager] received hero options',
 						changes.ArenaHeroOptions,
 						this.heroOptions$$.getValue(),
+						this.heroPowerOptions$$.getValue(),
 						this.cardOptions$$.getValue(),
 					);
 					this.cardOptions$$.next(null);
+					console.debug('[arena-draft-manager] received hero options, resetting hero power options');
+					this.heroPowerOptions$$.next(null);
 					this.heroOptions$$.next(changes.ArenaHeroOptions);
 				}
+				if (!!changes.ArenaHeroPowerOptions?.length) {
+					console.debug(
+						'[arena-draft-manager] received hero power options',
+						changes.ArenaHeroPowerOptions,
+						this.heroPowerOptions$$.getValue(),
+					);
+					this.heroOptions$$.next(null);
+					this.heroPowerOptions$$.next(changes.ArenaHeroPowerOptions);
+				}
 				if (!!changes.ArenaCardOptions?.length) {
-					if (changes.ArenaCardOptions.every((c) => this.allCards.getCard(c.CardId).type === 'Hero')) {
+					if (
+						changes.ArenaCardOptions.every((c) => this.allCards.getCard(c.CardId).type === 'Hero') ||
+						changes.ArenaCardOptions.every((c) => this.allCards.getCard(c.CardId).type === 'Hero_power')
+					) {
 						console.debug(
 							'[arena-draft-manager] received hero options as cards, ignoring',
 							changes.ArenaCardOptions,
@@ -300,6 +296,12 @@ export class ArenaDraftManagerService
 							this.choicesForCardPicks.toArray(),
 						);
 						this.heroOptions$$.next(null);
+						console.debug(
+							'[arena-draft-manager] received card options, resetting hero power options',
+							changes.ArenaCardOptions,
+							changes,
+						);
+						this.heroPowerOptions$$.next(null);
 						this.cardOptions$$.next(changes.ArenaCardOptions);
 					}
 				}
@@ -584,6 +586,7 @@ export class ArenaDraftManagerService
 	protected override async initElectronSubjects() {
 		this.setupElectronSubject(this.currentStep$$, 'arena-draft-manager-current-step');
 		this.setupElectronSubject(this.heroOptions$$, 'arena-draft-manager-hero-options');
+		this.setupElectronSubject(this.heroPowerOptions$$, 'arena-draft-manager-hero-power-options');
 		this.setupElectronSubject(this.cardOptions$$, 'arena-draft-manager-card-options');
 		this.setupElectronSubject(this.cardPackageOptions$$, 'arena-draft-manager-card-package-options');
 		this.setupElectronSubject(this.currentDeck$$, 'arena-draft-manager-current-deck');
@@ -597,6 +600,7 @@ export class ArenaDraftManagerService
 	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
 		this.currentStep$$ = new SubscriberAwareBehaviorSubject<DraftSlotType | null>(null);
 		this.heroOptions$$ = new SubscriberAwareBehaviorSubject<readonly string[] | null>(null);
+		this.heroPowerOptions$$ = new SubscriberAwareBehaviorSubject<readonly string[] | null>(null);
 		this.cardOptions$$ = new SubscriberAwareBehaviorSubject<readonly ArenaCardOption[] | null>(null);
 		this.cardPackageOptions$$ = new SubscriberAwareBehaviorSubject<readonly string[] | null>(null);
 		this.currentDeck$$ = new SubscriberAwareBehaviorSubject<DeckInfoFromMemory | null>(null);

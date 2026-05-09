@@ -344,6 +344,7 @@ import { LotteryWidgetComponent } from '@components/lottery/lottery.component';
 import { MainWindowComponent } from '@components/main-window.component';
 import { ArenaCardSelectionWidgetWrapperComponent } from '@components/overlays/arena-card-selection-widget-wrapper.component';
 import { ArenaDecktrackerOocWidgetWrapperComponent } from '@components/overlays/arena-decktracker-ooc-widget-wrapper.component';
+import { ArenaHeroPowerSelectionWidgetWrapperComponent } from '@components/overlays/arena-hero-power-selection-widget-wrapper.component';
 import { ArenaHeroSelectedWidgetWrapperComponent } from '@components/overlays/arena-hero-selected-widget-wrapper.component';
 import { ArenaHeroSelectionWidgetWrapperComponent } from '@components/overlays/arena-hero-selection-widget-wrapper.component';
 import { ArenaMulliganDeckWidgetWrapperComponent } from '@components/overlays/arena-mulligan-deck-widget-wrapper.component';
@@ -1183,6 +1184,7 @@ try {
 		ChoosingCardBgsTimewarpedOptionComponent,
 
 		ArenaHeroSelectionWidgetWrapperComponent,
+		ArenaHeroPowerSelectionWidgetWrapperComponent,
 		ArenaHeroSelectedWidgetWrapperComponent,
 		ArenaCardSelectionWidgetWrapperComponent,
 		ArenaDecktrackerOocWidgetWrapperComponent,

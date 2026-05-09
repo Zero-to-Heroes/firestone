@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
-import { GameType, ReferenceCard } from '@firestone-hs/reference-data';
+import { ArenaClassStats } from '@firestone-hs/arena-stats';
+import { GameType, normalizeHeroPower, ReferenceCard } from '@firestone-hs/reference-data';
+import { ArenaCardOption as MemoryArenaCardOption } from '@firestone/memory';
 import { PatchesConfigService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
-import { combineLatest, distinctUntilChanged, filter, map, shareReplay, switchMap } from 'rxjs';
+import { combineLatest, filter, map, shareReplay, switchMap } from 'rxjs';
 import { ArenaCardOption } from '../models/arena-card-options';
-import { ArenaCombinedCardStat } from '../models/arena-combined-card-stat';
+import { ArenaCombinedCardStat, ArenaCombinedCardStats } from '../models/arena-combined-card-stat';
 import { ArenaCardStatsService } from './arena-card-stats.service';
 import { ArenaClassStatsService } from './arena-class-stats.service';
 import { ArenaDraftManagerService } from './arena-draft-manager.service';
@@ -32,6 +34,13 @@ export class ArenaOverlayDraftStatsService {
 		// Only show stats for Underground, as it's the most relevant ones
 		const gameMode$ = this.draftManager.currentMode$$.pipe(map((mode) => GameType.GT_UNDERGROUND_ARENA));
 		const currentHero$ = this.draftManager.currentDeck$$.pipe(map((deck) => deck?.HeroCardId));
+		const currentHeroPower$ = this.draftManager.currentDeck$$.pipe(
+			map((deck) =>
+				!!deck?.HeroPowerCardId
+					? normalizeHeroPower(deck?.HeroPowerCardId, this.allCards.getService())
+					: undefined,
+			),
+		);
 		const timeFrame$ = this.patches.currentArenaMetaPatch$$.pipe(
 			filter((patch) => !!patch),
 			map((patch) => {
@@ -48,61 +57,72 @@ export class ArenaOverlayDraftStatsService {
 				),
 			),
 		);
-		const currentHeroWinrate$ = combineLatest([currentHero$, classStats$]).pipe(
-			map(([currentHero, stats]) => {
-				const heroStats = stats?.stats.find(
-					(s) =>
-						s.playerClass?.toUpperCase() ===
-						this.allCards.getCard(currentHero!)?.playerClass?.toUpperCase(),
-				);
-				return !heroStats?.totalGames ? null : (heroStats?.totalsWins ?? 0) / heroStats.totalGames;
-			}),
-			distinctUntilChanged(),
-		);
-		const cardStats$ = combineLatest([currentHero$, gameMode$, timeFrame$]).pipe(
-			switchMap(([currentHero, gameMode, timeFrame]) =>
-				this.arenaCardStats.buildCardStats(
+		// const currentHeroWinrate$ = combineLatest([currentHero$, currentHeroPower$, classStats$]).pipe(
+		// 	map(([currentHero, currentHeroPower, stats]) => {
+		// 		const isDualClass =
+		// 			this.allCards.getCard(currentHero!)?.playerClass?.toUpperCase() !==
+		// 			this.allCards.getCard(currentHeroPower!)?.playerClass?.toUpperCase();
+		// 		console.debug('[arena-overlay-draft-stats] isDualClass', isDualClass);
+		// 		const heroStats = stats?.stats.find(
+		// 			(s) =>
+		// 				s.playerClass?.toUpperCase() ===
+		// 				this.allCards.getCard(currentHero!)?.playerClass?.toUpperCase(),
+		// 		);
+		// 		return !heroStats?.totalGames ? null : (heroStats?.totalsWins ?? 0) / heroStats.totalGames;
+		// 	}),
+		// 	distinctUntilChanged(),
+		// );
+		const cardStats$ = combineLatest([currentHero$, currentHeroPower$, gameMode$, timeFrame$]).pipe(
+			switchMap(([currentHero, currentHeroPower, gameMode, timeFrame]) => {
+				const isDualClass =
+					currentHero &&
+					currentHeroPower &&
+					this.allCards.getCard(currentHero)?.playerClass?.toUpperCase() !==
+						this.allCards.getCard(currentHeroPower)?.playerClass?.toUpperCase();
+				const heroStats = this.arenaCardStats.buildCardStats(
 					currentHero ? this.allCards.getCard(currentHero)?.playerClass?.toLowerCase() : 'global',
 					timeFrame,
-					// gameMode === GameType.GT_ARENA ? 'arena' : 'arena-underground',
 					'arena-underground',
-				),
-			),
+				);
+				const heroPowerStats = !isDualClass
+					? null
+					: this.arenaCardStats.buildCardStats(
+							currentHeroPower
+								? this.allCards.getCard(currentHeroPower)?.playerClass?.toLowerCase()
+								: 'global',
+							timeFrame,
+							'arena-underground',
+						);
+				const combinedStats = !isDualClass
+					? null
+					: this.arenaCardStats.buildCardStats(
+							`${currentHero}-${currentHeroPower}`,
+							timeFrame,
+							'arena-underground',
+						);
+				return Promise.all([heroStats, heroPowerStats, combinedStats]);
+			}),
+			map(([heroStats, heroPowerStats, combinedStats]) => {
+				return {
+					heroStats: heroStats,
+					heroPowerStats: heroPowerStats,
+					combinedStats: combinedStats,
+				};
+			}),
 		);
-		const options$ = combineLatest([this.draftManager.cardOptions$$, cardStats$, currentHeroWinrate$]).pipe(
-			filter(([options, stats, currentHeroWinrate]) => !!options?.length && !!stats && !!currentHeroWinrate),
-			map(
-				([options, stats, currentHeroWinrate]) =>
-					options?.flatMap((option) => {
-						const result: ArenaCardOption[] = [];
-						const stat = stats?.stats?.find(
-							(s) => this.allCards.getRootCardId(s.cardId) === this.allCards.getRootCardId(option.CardId),
-						);
-						const cardStat = this.buildOptionDraftStat(
-							this.allCards.getCard(option.CardId)!,
-							stat!,
-							currentHeroWinrate!,
-						);
-						result.push(cardStat);
-						if (option.PackageCardIds?.length) {
-							for (const packageCardId of option.PackageCardIds) {
-								const packageCard = this.allCards.getCard(packageCardId);
-								const packageCardStat = stats?.stats?.find(
-									(s) =>
-										this.allCards.getRootCardId(s.cardId) ===
-										this.allCards.getRootCardId(packageCardId),
-								);
-								const packageCardResult = this.buildOptionDraftStat(
-									packageCard,
-									packageCardStat!,
-									currentHeroWinrate!,
-								);
-								packageCardResult.isPackageCard = true;
-								result.push(packageCardResult);
-							}
-						}
-						return result;
-					}) ?? [],
+		const options$ = combineLatest([
+			this.draftManager.cardOptions$$,
+			cardStats$,
+			currentHero$,
+			currentHeroPower$,
+			classStats$,
+		]).pipe(
+			filter(
+				([options, stats, currentHero, currentHeroPower, classStats]) =>
+					!!options?.length && !!stats && !!classStats?.stats?.length,
+			),
+			map(([options, stats, currentHero, currentHeroPower, classStats]) =>
+				this.buildOptions(options!, stats!, currentHero, currentHeroPower, classStats!),
 			),
 			shareReplay(1),
 		);
@@ -113,6 +133,89 @@ export class ArenaOverlayDraftStatsService {
 				console.log('[arena-overlay-draft-stats] options', options);
 			});
 		});
+	}
+
+	private buildOptions(
+		options: readonly MemoryArenaCardOption[],
+		cardStats: {
+			heroStats: ArenaCombinedCardStats | null;
+			heroPowerStats: ArenaCombinedCardStats | null;
+			combinedStats: ArenaCombinedCardStats | null;
+		},
+		currentHero: string | undefined,
+		currentHeroPower: string | undefined,
+		classStats: ArenaClassStats,
+	): readonly ArenaCardOption[] {
+		const isDualClass =
+			currentHero &&
+			currentHeroPower &&
+			this.allCards.getCard(currentHero)?.playerClass?.toUpperCase() !==
+				this.allCards.getCard(currentHeroPower)?.playerClass?.toUpperCase();
+		console.debug('[arena-overlay-draft-stats] isDualClass', isDualClass, currentHero, currentHeroPower);
+		// The exact combo
+		const mainHeroStats = classStats?.stats.find(
+			(s) =>
+				s.playerClass?.toUpperCase() === this.allCards.getCard(currentHero!)?.playerClass?.toUpperCase() &&
+				(!isDualClass
+					? true
+					: this.allCards.getCard(s.playerHeroPower!).playerClass?.toUpperCase() ===
+						this.allCards.getCard(currentHeroPower!)?.playerClass?.toUpperCase()),
+		);
+		const mainHeroWinrate = !mainHeroStats?.totalGames
+			? null
+			: (mainHeroStats?.totalsWins ?? 0) / mainHeroStats.totalGames;
+
+		return (
+			options?.flatMap((option) => {
+				const result: ArenaCardOption[] = [];
+				const stat = cardStats?.combinedStats?.stats?.find(
+					(s) => this.allCards.getRootCardId(s.cardId) === this.allCards.getRootCardId(option.CardId),
+				);
+				const cardStat = this.buildOptionDraftStat(
+					this.allCards.getCard(option.CardId)!,
+					stat!,
+					mainHeroWinrate!,
+				);
+				if (isDualClass) {
+					cardStat.splitClasses = [];
+					const classStat1 = cardStats?.heroStats?.stats?.find(
+						(s) => this.allCards.getRootCardId(s.cardId) === this.allCards.getRootCardId(option.CardId),
+					);
+					const cardStat1 = this.buildOptionDraftStat(
+						this.allCards.getCard(option.CardId)!,
+						classStat1!,
+						mainHeroWinrate!,
+					);
+					cardStat.splitClasses.push(cardStat1);
+					const classStat2 = cardStats?.heroPowerStats?.stats?.find(
+						(s) => this.allCards.getRootCardId(s.cardId) === this.allCards.getRootCardId(option.CardId),
+					);
+					const cardStat2 = this.buildOptionDraftStat(
+						this.allCards.getCard(option.CardId)!,
+						classStat2!,
+						mainHeroWinrate!,
+					);
+					cardStat.splitClasses.push(cardStat2);
+				}
+				result.push(cardStat);
+				if (option.PackageCardIds?.length) {
+					for (const packageCardId of option.PackageCardIds) {
+						const packageCard = this.allCards.getCard(packageCardId);
+						const packageCardStat = cardStats?.combinedStats?.stats?.find(
+							(s) => this.allCards.getRootCardId(s.cardId) === this.allCards.getRootCardId(packageCardId),
+						);
+						const packageCardResult = this.buildOptionDraftStat(
+							packageCard,
+							packageCardStat!,
+							mainHeroWinrate!,
+						);
+						packageCardResult.isPackageCard = true;
+						result.push(packageCardResult);
+					}
+				}
+				return result;
+			}) ?? []
+		);
 	}
 
 	private buildOptionDraftStat(
