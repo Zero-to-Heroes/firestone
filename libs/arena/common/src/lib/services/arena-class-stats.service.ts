@@ -12,7 +12,7 @@ import {
 } from '@firestone/shared/framework/core';
 import { combineLatest, distinctUntilChanged, map } from 'rxjs';
 
-const ARENA_CLASS_STATS_URL = `https://static.zerotoheroes.com/api/arena/stats/classes/%modeFilter%/%timePeriod%/overview.gz.json`;
+const ARENA_CLASS_STATS_URL = `https://static.zerotoheroes.com/api/arena/stats/classes/%modeFilter%/%timePeriod%/overview.gz.json?v=4`;
 
 @Injectable()
 export class ArenaClassStatsService extends AbstractFacadeService<ArenaClassStatsService> {
@@ -25,7 +25,7 @@ export class ArenaClassStatsService extends AbstractFacadeService<ArenaClassStat
 	private internalSub$$ = new SubscriberAwareBehaviorSubject<null>(null);
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
-		super(windowManager, 'arenaClassStats', () => !!this.classStats$$);
+		super(windowManager, 'ArenaClassStatsService', () => !!this.classStats$$);
 	}
 
 	protected override assignSubjects() {

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { ArenaClassStat, ArenaClassStats } from '@firestone-hs/arena-stats';
-import { ALL_CLASSES } from '@firestone-hs/reference-data';
+import { ALL_CLASSES, normalizeHeroPower } from '@firestone-hs/reference-data';
 import { buildColor } from '@firestone/constructed/view';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 
@@ -59,11 +59,7 @@ interface MatrixColumn {
 					*ngFor="let row of rows; trackBy: trackByRow"
 					[ngClass]="{ global: row.isGlobal }"
 				>
-					<div
-						class="cell row-header"
-						[ngClass]="{ global: row.isGlobal }"
-						[helpTooltip]="row.label"
-					>
+					<div class="cell row-header" [ngClass]="{ global: row.isGlobal }" [helpTooltip]="row.label">
 						<img class="class-icon" *ngIf="row.icon" [src]="row.icon" />
 						<span class="row-label" *ngIf="row.isGlobal">{{ row.label }}</span>
 					</div>
@@ -120,7 +116,7 @@ export class ArenaClassStatsMatrixComponent {
 	}
 
 	private buildMatrix() {
-		const rawStats = this._stats?.stats;
+		const rawStats = this._stats?.stats.filter((s) => s.playerHeroPower && s.playerClass);
 		if (!rawStats?.length) {
 			this.columns = [];
 			this.rows = [];
@@ -142,7 +138,12 @@ export class ArenaClassStatsMatrixComponent {
 
 		const rows: MatrixRow[] = classes.map((playerClass) => {
 			const cells = heroPowers.map((heroPowerId) =>
-				this.buildCell(rawStats, (s) => this.matchesClass(s, playerClass) && s.playerHeroPower === heroPowerId),
+				this.buildCell(
+					rawStats,
+					(s) =>
+						this.matchesClass(s, playerClass) &&
+						normalizeHeroPower(s.playerHeroPower, this.allCards.getService()) === heroPowerId,
+				),
 			);
 			const globalCell = this.buildCell(rawStats, (s) => this.matchesClass(s, playerClass));
 			return {
@@ -175,12 +176,16 @@ export class ArenaClassStatsMatrixComponent {
 		const heroPowers = new Set<string>();
 		for (const stat of stats) {
 			if (stat.playerHeroPower) {
-				heroPowers.add(stat.playerHeroPower);
+				heroPowers.add(normalizeHeroPower(stat.playerHeroPower, this.allCards.getService()));
 			}
 		}
 		return Array.from(heroPowers).sort((a, b) => {
-			const nameA = this.allCards.getCard(a)?.name ?? a;
-			const nameB = this.allCards.getCard(b)?.name ?? b;
+			const nameA = this.i18n.translateString(
+				`global.class.${this.allCards.getCard(a)?.classes?.[0]?.toLowerCase()}`,
+			);
+			const nameB = this.i18n.translateString(
+				`global.class.${this.allCards.getCard(b)?.classes?.[0]?.toLowerCase()}`,
+			);
 			return nameA.localeCompare(nameB);
 		});
 	}
@@ -199,10 +204,7 @@ export class ArenaClassStatsMatrixComponent {
 		return stat.playerClass?.toLowerCase() === playerClass.toLowerCase();
 	}
 
-	private buildCell(
-		stats: readonly ArenaClassStat[],
-		predicate: (stat: ArenaClassStat) => boolean,
-	): MatrixCell {
+	private buildCell(stats: readonly ArenaClassStat[], predicate: (stat: ArenaClassStat) => boolean): MatrixCell {
 		const matching = stats.filter(predicate);
 		const totalGames = matching.reduce((acc, curr) => acc + (curr.totalGames ?? 0), 0);
 		const totalWins = matching.reduce((acc, curr) => acc + (curr.totalsWins ?? 0), 0);
