@@ -26,6 +26,12 @@
 		// margin-left: auto;
 	}
 
+	.show-class-stats-matrix {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
 	::ng-deep ng-select {
 		margin-right: 0;
 	}
