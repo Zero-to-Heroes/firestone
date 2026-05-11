@@ -114,8 +114,15 @@ export class DeckCard {
 		return !this.cardId && !this.entityId && !this.creatorCardId && !this.cardName;
 	}
 
-	public getEffectiveManaCost(): number {
-		return this.actualManaCost ?? this.refManaCost ?? null;
+	public getEffectiveManaCost(): number | null {
+		const costFromData = this.actualManaCost ?? this.refManaCost ?? null;
+		if (costFromData != null) {
+			return costFromData;
+		}
+		if (this.guessedInfo?.cost && typeof this.guessedInfo.cost === 'number') {
+			return this.guessedInfo.cost;
+		}
+		return null;
 	}
 
 	public getCardType(allCards?: CardsFacadeService): CardType | null {

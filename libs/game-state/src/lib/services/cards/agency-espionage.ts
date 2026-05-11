@@ -21,6 +21,7 @@ export const AgencyEspionage: GeneratingCard & StaticGeneratingCard = {
 		);
 		return {
 			possibleCards: possibleCards,
+			cost: 1,
 		};
 	},
 	dynamicPool: (input: StaticGeneratingCardInput) => {

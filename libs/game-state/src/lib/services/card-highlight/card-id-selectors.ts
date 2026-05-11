@@ -808,7 +808,8 @@ export const cardIdSelector = (
 			return (input: SelectorInput): SelectorOutput => {
 				const sorted = [...input.deckState.deck]
 					.filter((e) => e.cardId !== CardIds.Chronogor_TIME_032)
-					.sort((a, b) => b.getEffectiveManaCost() - a.getEffectiveManaCost());
+					.filter((e) => e.getEffectiveManaCost() != null)
+					.sort((a, b) => b.getEffectiveManaCost()! - a.getEffectiveManaCost()!);
 
 				const highestCostMinion = sorted[0];
 				const highestMinionCost = highestCostMinion?.getEffectiveManaCost() ?? 0;
