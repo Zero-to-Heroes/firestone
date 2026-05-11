@@ -15,6 +15,7 @@ import {
 	ArenaSessionState,
 	DraftMode,
 	GameType,
+	normalizeHeroPower,
 	ReferenceCard,
 } from '@firestone-hs/reference-data';
 import {
@@ -292,6 +293,9 @@ export class ArenaDecktrackerOocComponent extends AbstractSubscriptionComponent 
 		const currentClass$ = this.draftManager.currentDeck$$.pipe(
 			this.mapData((deck) => this.allCards.getCard(deck?.HeroCardId).classes?.[0]?.toLowerCase() ?? null),
 		);
+		const currentHeroPower$ = this.draftManager.currentDeck$$.pipe(
+			this.mapData((deck) => normalizeHeroPower(deck?.HeroPowerCardId, this.allCards.getService())),
+		);
 		const currentMode$ = this.draftManager.currentMode$$.pipe(
 			this.mapData(
 				(mode) => 'arena-underground' as const,
@@ -312,8 +316,11 @@ export class ArenaDecktrackerOocComponent extends AbstractSubscriptionComponent 
 				return isPatchTooRecent ? 'past-3' : 'last-patch';
 			}),
 		);
-		const cardStats$ = combineLatest([currentClass$, currentMode$, timeFrame$]).pipe(
-			switchMap(([playerClass, mode, timeFrame]) => this.cardStats.buildCardStats(playerClass, timeFrame, mode)),
+		const cardStats$ = combineLatest([currentClass$, currentHeroPower$, currentMode$, timeFrame$]).pipe(
+			switchMap(([playerClass, heroPower, mode, timeFrame]) => {
+				const context = heroPower ? `${playerClass}-${heroPower}` : playerClass;
+				return this.cardStats.buildCardStats(context, timeFrame, mode);
+			}),
 		);
 		const cardsWithStats$ = combineLatest([cardsList$, cardStats$, classStat$]).pipe(
 			filter(([cards, cardStats, classStat]) => !!cards?.length && !!cardStats?.stats?.length && !!classStat),

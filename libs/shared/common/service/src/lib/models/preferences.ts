@@ -5,6 +5,7 @@ import 'reflect-metadata';
 import {
 	AchievementsCompletedFilterType,
 	ArenaCardClassFilterType,
+	ArenaCardHeroPowerFilterType,
 	ArenaCardTypeFilterType,
 	ArenaClassFilterType,
 	ArenaTimeFilterType,
@@ -794,6 +795,7 @@ export class Preferences implements IPreferences {
 	readonly arenaActiveClassFilter: ArenaClassFilterType = 'all';
 	readonly arenaActiveTimeFilter: ArenaTimeFilterType = 'last-patch';
 	readonly arenaActiveCardClassFilter: ArenaCardClassFilterType = 'all';
+	readonly arenaActiveCardHeroPowerFilter: ArenaCardHeroPowerFilterType = 'all';
 	readonly arenaActiveCardTypeFilter: ArenaCardTypeFilterType = 'all';
 	readonly arenaActiveWinsFilter: number = 10;
 	// TODO: add settings

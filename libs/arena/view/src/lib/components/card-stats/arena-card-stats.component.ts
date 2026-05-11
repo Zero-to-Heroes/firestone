@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { CardClass, CardIds } from '@firestone-hs/reference-data';
+import { CardClass } from '@firestone-hs/reference-data';
 import {
 	ARENA_DRAFT_CARD_HIGH_WINS_THRESHOLD,
 	ArenaCardStatsService,
@@ -29,7 +29,6 @@ import {
 	shareReplay,
 	startWith,
 	takeUntil,
-	tap,
 } from 'rxjs';
 import { ArenaCardStatInfo } from './model';
 
@@ -266,28 +265,9 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 			),
 		]).pipe(
 			debounceTime(100),
-			// tap((info) => console.debug('[arena-card-stats] received info', info)),
-			tap(([stats, info]) =>
-				console.debug(
-					'[arena-card-stats] SylvanasWindrunnerLegacy',
-					stats?.stats?.find((c) => c.cardId === CardIds.SylvanasWindrunnerLegacy),
-				),
-			),
 			this.mapData(([stats, searchString, sortCriteria, { cardType, cardClass }]) =>
 				this.buildCardStats(stats?.stats, cardType, cardClass, searchString, sortCriteria),
 			),
-			tap((stats) =>
-				console.debug(
-					'[arena-card-stats] SylvanasWindrunnerLegacy 2',
-					stats?.find((c) => c.cardId === CardIds.SylvanasWindrunnerLegacy),
-				),
-			),
-			// tap((stats) =>
-			// 	console.debug(
-			// 		'[arena-card-stats] Sylvanas 2',
-			// 		stats?.find((c) => c.cardId === CardIds.SylvanasTheAccused),
-			// 	),
-			// ),
 			shareReplay(1),
 			this.mapData((stats) => stats),
 		);
@@ -378,12 +358,7 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 		searchString: string | undefined,
 		sortCriteria: SortCriteria<ColumnSortType>,
 	): ArenaCardStatInfo[] {
-		// console.debug(
-		// 	'[arena-card-stats] building card stats',
-		// 	stats?.filter((s) => s.cardId === 'WW_406'),
-		// 	searchString,
-		// 	sortCriteria,
-		// );
+		console.debug('[arena-card-stats] building card stats', stats, cardType, cardClass, searchString, sortCriteria);
 		searchString = searchString?.trim()?.toLowerCase();
 		const searchTokens = !searchString?.length
 			? []

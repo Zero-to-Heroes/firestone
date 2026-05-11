@@ -1,6 +1,7 @@
 export * from './lib/arena-view.module';
 export * from './lib/components/arena-reward.component';
 export * from './lib/components/card-stats/arena-card-class-filter-dropdown.component';
+export * from './lib/components/card-stats/arena-card-hero-power-filter-dropdown.component';
 export * from './lib/components/card-stats/arena-card-search.component';
 export * from './lib/components/card-stats/arena-card-stat-item.component';
 export * from './lib/components/card-stats/arena-card-stats.component';

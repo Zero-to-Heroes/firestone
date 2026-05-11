@@ -18,6 +18,7 @@ import { InlineSVGModule } from 'ng-inline-svg-2';
 
 import { ArenaRewardComponent } from './components/arena-reward.component';
 import { ArenaCardClassFilterDropdownComponent } from './components/card-stats/arena-card-class-filter-dropdown.component';
+import { ArenaCardHeroPowerFilterDropdownComponent } from './components/card-stats/arena-card-hero-power-filter-dropdown.component';
 import { ArenaCardSearchComponent } from './components/card-stats/arena-card-search.component';
 import { ArenaCardStatItemComponent } from './components/card-stats/arena-card-stat-item.component';
 import { ArenaCardStatsComponent } from './components/card-stats/arena-card-stats.component';
@@ -61,6 +62,7 @@ const components = [
 	ArenaCardSearchComponent,
 	ArenaClassFilterDropdownComponent,
 	ArenaCardClassFilterDropdownComponent,
+	ArenaCardHeroPowerFilterDropdownComponent,
 	ArenaCardTypeFilterDropdownComponent,
 	ArenaHeroSelectionComponent,
 	ArenaHeroPowerSelectionComponent,

@@ -3,21 +3,14 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
-	ElementRef,
 	Inject,
 	Input,
-	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import {
-	ARENA_DRAFT_CARD_HIGH_WINS_THRESHOLD,
-	ArenaCardOption,
-	ArenaDraftGuardianService,
-	ArenaDraftManagerService,
-} from '@firestone/arena/common';
+import { ArenaCardOption, ArenaDraftGuardianService, ArenaDraftManagerService } from '@firestone/arena/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { ADS_SERVICE_TOKEN, IAdsService, ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
+import { ADS_SERVICE_TOKEN, IAdsService, waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest, debounceTime, shareReplay, takeUntil } from 'rxjs';
 
 @Component({
@@ -51,32 +44,11 @@ export class ArenaCardOptionComponent extends AbstractSubscriptionComponent impl
 		this.pickNumber$$.next(value);
 	}
 
-	drawnWinrate: string;
-	deckWinrate: string;
-	drawImpact: string;
-	deckImpact: string;
-	drawWinrateClass: string;
-	deckWinrateClass: string;
-	pickrate: string;
-	pickRateHighWins: string;
-	drawnImpactTooltip: string | null;
-	deckImpactTooltip: string | null;
-
-	pickRateHighWinsLabel = this.i18n.translateString(`app.arena.card-stats.header-pickrate-high-wins-short`, {
-		value: ARENA_DRAFT_CARD_HIGH_WINS_THRESHOLD,
-	});
-	pickRateImpactTooltip = this.i18n.translateString(`app.arena.card-stats.header-pickrate-high-wins-tooltip`, {
-		value: ARENA_DRAFT_CARD_HIGH_WINS_THRESHOLD,
-	});
-
 	private pickNumber$$ = new BehaviorSubject<number>(0);
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
-		private readonly i18n: ILocalizationService,
 		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
-		private readonly el: ElementRef,
-		private readonly renderer: Renderer2,
 		private readonly prefs: PreferencesService,
 		private readonly guardian: ArenaDraftGuardianService,
 		private readonly draftManager: ArenaDraftManagerService,

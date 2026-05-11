@@ -28,6 +28,10 @@ import { Observable, combineLatest } from 'rxjs';
 				class="filter time-filter"
 				*ngIf="showTimeFilter$ | async"
 			></arena-time-filter-dropdown>
+			<arena-card-hero-power-filter-dropdown
+				class="filter card-class-filter"
+				*ngIf="showCardHeroPowerFilter$ | async"
+			></arena-card-hero-power-filter-dropdown>
 			<arena-class-filter-dropdown
 				class="filter class-filter"
 				*ngIf="showClassFilter$ | async"
@@ -74,6 +78,7 @@ export class ArenaFiltersComponent extends AbstractSubscriptionComponent impleme
 	showClassStatsMatrixToggle$: Observable<boolean>;
 	showClassFilter$: Observable<boolean>;
 	showCardClassFilter$: Observable<boolean>;
+	showCardHeroPowerFilter$: Observable<boolean>;
 	showCardTypeFilter$: Observable<boolean>;
 
 	constructor(
@@ -128,6 +133,9 @@ export class ArenaFiltersComponent extends AbstractSubscriptionComponent impleme
 			this.mapData((currentView) => ['arena-runs', 'card-stats', 'arena-high-wins-runs'].includes(currentView)),
 		);
 		this.showCardClassFilter$ = this.nav.selectedCategoryId$$.pipe(
+			this.mapData((currentView) => ['card-stats'].includes(currentView)),
+		);
+		this.showCardHeroPowerFilter$ = this.nav.selectedCategoryId$$.pipe(
 			this.mapData((currentView) => ['card-stats'].includes(currentView)),
 		);
 		this.showCardTypeFilter$ = this.nav.selectedCategoryId$$.pipe(

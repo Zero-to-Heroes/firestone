@@ -57,21 +57,6 @@ export class ArenaOverlayDraftStatsService {
 				),
 			),
 		);
-		// const currentHeroWinrate$ = combineLatest([currentHero$, currentHeroPower$, classStats$]).pipe(
-		// 	map(([currentHero, currentHeroPower, stats]) => {
-		// 		const isDualClass =
-		// 			this.allCards.getCard(currentHero!)?.playerClass?.toUpperCase() !==
-		// 			this.allCards.getCard(currentHeroPower!)?.playerClass?.toUpperCase();
-		// 		console.debug('[arena-overlay-draft-stats] isDualClass', isDualClass);
-		// 		const heroStats = stats?.stats.find(
-		// 			(s) =>
-		// 				s.playerClass?.toUpperCase() ===
-		// 				this.allCards.getCard(currentHero!)?.playerClass?.toUpperCase(),
-		// 		);
-		// 		return !heroStats?.totalGames ? null : (heroStats?.totalsWins ?? 0) / heroStats.totalGames;
-		// 	}),
-		// 	distinctUntilChanged(),
-		// );
 		const cardStats$ = combineLatest([currentHero$, currentHeroPower$, gameMode$, timeFrame$]).pipe(
 			switchMap(([currentHero, currentHeroPower, gameMode, timeFrame]) => {
 				const isDualClass =
@@ -79,11 +64,13 @@ export class ArenaOverlayDraftStatsService {
 					currentHeroPower &&
 					this.allCards.getCard(currentHero)?.playerClass?.toUpperCase() !==
 						this.allCards.getCard(currentHeroPower)?.playerClass?.toUpperCase();
+				console.debug('[debug] isDualClass', isDualClass, currentHero, currentHeroPower);
 				const heroStats = this.arenaCardStats.buildCardStats(
 					currentHero ? this.allCards.getCard(currentHero)?.playerClass?.toLowerCase() : 'global',
 					timeFrame,
 					'arena-underground',
 				);
+				console.debug('[debug] heroStats', heroStats);
 				const heroPowerStats = !isDualClass
 					? null
 					: this.arenaCardStats.buildCardStats(
@@ -93,13 +80,15 @@ export class ArenaOverlayDraftStatsService {
 							timeFrame,
 							'arena-underground',
 						);
+				console.debug('[debug] heroPowerStats', heroPowerStats);
 				const combinedStats = !isDualClass
 					? null
 					: this.arenaCardStats.buildCardStats(
-							`${currentHero}-${currentHeroPower}`,
+							`${this.allCards.getCard(currentHero)?.playerClass?.toLowerCase()}-${currentHeroPower}`,
 							timeFrame,
 							'arena-underground',
 						);
+				console.debug('[debug] combinedStats', combinedStats);
 				return Promise.all([heroStats, heroPowerStats, combinedStats]);
 			}),
 			map(([heroStats, heroPowerStats, combinedStats]) => {
@@ -151,7 +140,7 @@ export class ArenaOverlayDraftStatsService {
 			currentHeroPower &&
 			this.allCards.getCard(currentHero)?.playerClass?.toUpperCase() !==
 				this.allCards.getCard(currentHeroPower)?.playerClass?.toUpperCase();
-		console.debug('[arena-overlay-draft-stats] isDualClass', isDualClass, currentHero, currentHeroPower);
+		console.debug('[debug] isDualClass', isDualClass, currentHero, currentHeroPower);
 		// The exact combo
 		const mainHeroStats = classStats?.stats.find(
 			(s) =>
@@ -161,9 +150,11 @@ export class ArenaOverlayDraftStatsService {
 					: this.allCards.getCard(s.playerHeroPower!).playerClass?.toUpperCase() ===
 						this.allCards.getCard(currentHeroPower!)?.playerClass?.toUpperCase()),
 		);
+		console.debug('[debug] mainHeroStats', mainHeroStats);
 		const mainHeroWinrate = !mainHeroStats?.totalGames
 			? null
 			: (mainHeroStats?.totalsWins ?? 0) / mainHeroStats.totalGames;
+		console.debug('[debug] mainHeroWinrate', mainHeroWinrate);
 
 		return (
 			options?.flatMap((option) => {
@@ -171,6 +162,7 @@ export class ArenaOverlayDraftStatsService {
 				const stat = cardStats?.combinedStats?.stats?.find(
 					(s) => this.allCards.getRootCardId(s.cardId) === this.allCards.getRootCardId(option.CardId),
 				);
+				console.debug('[debug] stat', stat);
 				const cardStat = this.buildOptionDraftStat(
 					this.allCards.getCard(option.CardId)!,
 					stat!,

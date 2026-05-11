@@ -137,6 +137,7 @@ export type ArenaClassFilterType =
 	| 'warrior'
 	| 'warlock';
 export type ArenaCardClassFilterType = ArenaClassFilterType | 'neutral' | 'no-neutral';
+export type ArenaCardHeroPowerFilterType = 'all' | string;
 export type ArenaTimeFilterType = 'all-time' | 'past-three' | 'past-seven' | 'last-patch' | 'current-season';
 export type ArenaCardTypeFilterType = 'all' | 'legendary' | 'taverns_of_time' | 'treasure' | 'other';
 export type StatsXpGraphSeasonFilterType =

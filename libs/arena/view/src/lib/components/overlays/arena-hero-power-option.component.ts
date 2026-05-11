@@ -60,12 +60,12 @@ export class ArenaHeroPowerOptionComponent extends AbstractSubscriptionComponent
 			return;
 		}
 		this.tier = value.tier;
-		this.winrate = (100 * value.winrate).toFixed(1) + '%';
+		this.winrate = (100 * (value.winrate ?? 0)).toFixed(1) + '%';
 		this.setTip(value.tip);
 	}
 
-	tier: string | null;
-	winrate: string | null;
+	tier: string | null | undefined;
+	winrate: string | null | undefined;
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,

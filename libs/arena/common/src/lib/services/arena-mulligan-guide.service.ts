@@ -187,15 +187,24 @@ export class ArenaMulliganGuideService extends AbstractFacadeService<ArenaMullig
 			distinctUntilChanged(),
 			tap((playerClass) => console.debug('[mulligan-arena-guide] playerClass', playerClass)),
 		);
-		const cardStats$ = combineLatest([showWidget$, playerClass$, timeFrame$, gameMode$]).pipe(
+		const heroPower$ = this.gameState.gameState$$.pipe(
+			map((gameState) => gameState?.playerDeck.heroPower?.cardId),
+			filter((heroPower) => !!heroPower),
+			distinctUntilChanged(),
+			tap((heroPower) => console.debug('[mulligan-arena-guide] heroPower', heroPower)),
+		);
+		const cardStats$ = combineLatest([showWidget$, playerClass$, heroPower$, timeFrame$, gameMode$]).pipe(
 			filter(([showWidget, _]) => showWidget),
-			switchMap(([showWidget, playerClass, timeFrame, gameMode]) =>
-				this.cardStats.buildCardStats(
-					!!playerClass ? CardClass[playerClass].toLowerCase() : 'global',
+			switchMap(([showWidget, playerClass, heroPowerFilter, timeFrame, gameMode]) => {
+				const heroPowerFilterContext =
+					heroPowerFilter === 'all' || heroPowerFilter == null ? '' : `-${heroPowerFilter}`;
+				return this.cardStats.buildCardStats(
+					`${playerClass}${heroPowerFilterContext}`,
+					// !!playerClass ? CardClass[playerClass].toLowerCase() : 'global',
 					timeFrame,
 					gameMode as ArenaModeFilterType,
-				),
-			),
+				);
+			}),
 			tap((stats) => console.debug('[mulligan-arena-guide] card stats', stats)),
 		);
 		const classStats$ = combineLatest([showWidget$, timeFrame$, gameMode$]).pipe(
