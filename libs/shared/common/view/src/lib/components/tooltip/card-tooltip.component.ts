@@ -14,10 +14,14 @@ import {
 	ViewChild,
 	ViewRef,
 } from '@angular/core';
-import { CardRarity, CardType, Race, SpellSchool } from '@firestone-hs/reference-data';
+import { CardRarity, CardType, GameTag, Race, SpellSchool } from '@firestone-hs/reference-data';
 import { isPreReleaseBuild } from '@firestone/game-state';
 import { GameStatusService, PreferencesService } from '@firestone/shared/common/service';
-import { AbstractSubscriptionComponent, groupByFunction } from '@firestone/shared/framework/common';
+import {
+	AbstractSubscriptionComponent,
+	capitalizeFirstLetter,
+	groupByFunction,
+} from '@firestone/shared/framework/common';
 import {
 	CardsFacadeService,
 	ILocalizationService,
@@ -147,6 +151,13 @@ function buildTooltipCardImages(usualUrl: string | null): {
 						>
 							<div class="label" [fsTranslate]="'decktracker.guessed-info.spell-schools'"></div>
 							<div class="value">{{ formatSpellSchools(info.spellSchools) }}</div>
+						</div>
+						<div
+							class="info-item mechanics"
+							*ngIf="info.mechanics !== null && info.mechanics !== undefined && info.mechanics.length > 0"
+						>
+							<div class="label" [fsTranslate]="'decktracker.guessed-info.spell-schools'"></div>
+							<div class="value">{{ formatMechanics(info.mechanics) }}</div>
 						</div>
 					</div>
 				</div>
@@ -532,6 +543,17 @@ export class CardTooltipComponent
 			.join(', ');
 	}
 
+	formatMechanics(mechanics: readonly GameTag[]): string {
+		return mechanics
+			.map((mechanic) => {
+				const key = `global.mechanic.${GameTag[mechanic].toLowerCase()}`;
+				return this.i18n.translateString(key) === key
+					? capitalizeFirstLetter(GameTag[mechanic])
+					: this.i18n.translateString(key);
+			})
+			.join(', ');
+	}
+
 	formatCost(cost: number | { cost: number; comparison: '==' | '>=' | '<=' | '>' | '<' }): string {
 		if (typeof cost === 'number') {
 			return cost.toString();
@@ -610,6 +632,7 @@ export interface CardTooltipAdditionalInfo {
 	readonly cardType?: CardType | null;
 	readonly possibleCards?: readonly string[] | null;
 	readonly spellSchools?: readonly SpellSchool[] | null;
+	readonly mechanics?: readonly GameTag[] | null;
 	readonly races?: readonly Race[] | null;
 	readonly rarity?: CardRarity | null;
 	readonly attackBuff?: number | null;
@@ -622,6 +645,7 @@ export const isGuessedInfoEmpty = (info: CardTooltipAdditionalInfo | null) => {
 		!info?.cardType &&
 		// !info?.possibleCards?.length &&
 		!info?.spellSchools?.length &&
+		!info?.mechanics?.length &&
 		!info?.races?.length &&
 		!info?.rarity &&
 		info?.attackBuff == null &&
