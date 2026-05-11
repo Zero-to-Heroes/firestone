@@ -1364,6 +1364,7 @@ const BAN_LIST = [
 	CardIds.Magtheridon_BT_850,
 	CardIds.TheDarkness_LOOT_526,
 	CardIds.ZilliaxDeluxe3000_TOY_330,
+	CardIds.DragonSoulShattered_CATA_EVENT_110,
 ];
 
 const BAN_LIST_ARENA = [
