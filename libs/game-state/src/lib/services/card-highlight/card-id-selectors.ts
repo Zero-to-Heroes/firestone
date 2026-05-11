@@ -2652,6 +2652,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), undead);
 		case CardIds.NespirahEnthralled_CATA_527:
 			return and(side(inputSide), or(inHand, inDeck), spell, fel);
+		case CardIds.NespirahEnthralled_NespirahUnshackledToken_CATA_527t2:
+			return and(side(inputSide), or(inHand, inDeck), spell, fel);
 		case CardIds.NetherBreath_DRG_205:
 			return and(side(inputSide), or(inDeck, inHand), dragon);
 		case CardIds.NightbaneTemplar:
