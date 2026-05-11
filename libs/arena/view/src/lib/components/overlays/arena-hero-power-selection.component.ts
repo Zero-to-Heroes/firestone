@@ -17,7 +17,7 @@ import {
 import { PatchesConfigService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
-import { combineLatest, Observable, shareReplay, tap } from 'rxjs';
+import { combineLatest, Observable, shareReplay } from 'rxjs';
 import { buildArenaClassInfoTiers } from '../class-info/arena-class-tier-list.component';
 
 @Component({
@@ -78,7 +78,6 @@ export class ArenaHeroPowerSelectionComponent extends AbstractSubscriptionCompon
 						} as ArenaHeroOption;
 					}) ?? [],
 			),
-			tap((info) => console.debug('[arena-hero-power-selection] received info b', info)),
 		);
 		this.showing$ = this.options$.pipe(this.mapData((options) => options.length > 0));
 

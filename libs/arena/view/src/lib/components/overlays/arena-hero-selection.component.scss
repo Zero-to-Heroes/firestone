@@ -1,20 +1,9 @@
 .root {
-	// display: grid;
-	// grid-template-columns: repeat(3, minmax(0, 1fr));
-	// width: 80vh;
-	// height: 38vh;
-	// position: absolute;
-	// top: 19vh;
-	// left: 13vh;
-
 	display: grid;
 	grid-template-columns: repeat(3, minmax(0, 1fr));
-	width: 76vh;
+	width: 87vh;
 	height: 5vh;
 	position: absolute;
-	top: 56.5vh;
-	left: 16vh;
-}
-
-.arena-hero-selection {
+	top: 52.5vh;
+	left: 11vh;
 }

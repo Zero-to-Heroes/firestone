@@ -10,6 +10,7 @@ export interface ArenaClassTier {
 
 export interface ArenaClassInfo {
 	readonly playerClass: string;
+	readonly heroPower: string | null | undefined;
 	readonly dataPoints: number;
 	readonly winrate: number;
 	readonly placementDistribution: readonly WinsDistribution[];

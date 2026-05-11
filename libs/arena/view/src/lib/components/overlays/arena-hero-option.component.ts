@@ -30,9 +30,8 @@ import { ArenaTipPopupComponent } from '../class-info/arena-tip-popup.component'
 					<span class="label" [fsTranslate]="'app.arena.draft.hero-winrate'"></span>
 					<span class="value">{{ winrate }}</span>
 				</div>
-				<div class="tip-info">
+				<div class="tip-info" *ngIf="tipPopupInput">
 					<div
-						*ngIf="tipPopupInput"
 						class="tip-info-icon"
 						componentTooltip
 						[componentType]="tipPopupComponentType"
@@ -60,12 +59,12 @@ export class ArenaHeroOptionComponent extends AbstractSubscriptionComponent impl
 			return;
 		}
 		this.tier = value.tier;
-		this.winrate = (100 * value.winrate).toFixed(1) + '%';
+		this.winrate = (100 * (value.winrate ?? 0)).toFixed(1) + '%';
 		this.setTip(value.tip);
 	}
 
-	tier: string | null;
-	winrate: string | null;
+	tier: string | null | undefined;
+	winrate: string | null | undefined;
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,

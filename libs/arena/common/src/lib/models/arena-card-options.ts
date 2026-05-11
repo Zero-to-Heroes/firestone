@@ -1,8 +1,12 @@
 export interface ArenaHeroOption {
 	readonly cardId: string;
-	readonly tier: string;
-	readonly winrate: number;
-	readonly tip: ArenaClassInfoTip | null;
+	readonly tier: string | null | undefined;
+	readonly winrate: number | null | undefined;
+	readonly tip: ArenaClassInfoTip | null | undefined;
+	// Used to show the hero power + hero combination
+	readonly contextCardIds: readonly string[];
+	// Used to show average hero stats across all hero powers
+	readonly averageHeroStat: ArenaHeroOption | null;
 }
 export interface ArenaCardOption {
 	readonly cardId: string;

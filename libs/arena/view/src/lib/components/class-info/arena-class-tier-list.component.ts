@@ -265,7 +265,6 @@ const buildClassInfos = (
 		const strategy = strategies?.find((s) => s.heroClass === stat.playerClass);
 		const strategyTip = strategy?.tips[0];
 		const patch = patchesConfig?.patches.find((p) => p.number === strategyTip?.patchNumber)?.name;
-		console.debug('patch', patch, strategyTip, patchesConfig);
 		const tip: ArenaClassInfoTip | null = strategyTip
 			? {
 					tip: strategyTip.tip,
@@ -277,6 +276,7 @@ const buildClassInfos = (
 			: null;
 		const result: ArenaClassInfo = {
 			playerClass: stat.playerClass,
+			heroPower: stat.playerHeroPower,
 			dataPoints: stat.totalGames,
 			winrate: stat.totalsWins / stat.totalGames,
 			placementDistribution: buildPlacementDistribution(stat.winsDistribution, averageWinsDistribution),

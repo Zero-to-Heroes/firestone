@@ -118,6 +118,8 @@ export class ArenaHeroSelectedWidgetWrapperComponent
 							winrate: classStat?.winrate,
 							tier: tier?.id,
 							tip: classStat?.tip,
+							contextCardIds: [],
+							averageHeroStat: null,
 						};
 						return result;
 					}),
