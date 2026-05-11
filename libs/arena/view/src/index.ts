@@ -12,6 +12,7 @@ export * from './lib/components/class-info/arena-class-stats-matrix.component';
 export * from './lib/components/class-info/arena-class-tier-list-tier.component';
 export * from './lib/components/class-info/arena-class-tier-list.component';
 export * from './lib/components/class-info/arena-tip-popup.component';
+export * from './lib/components/filters/arena-class-stats-matrix-toggle.component';
 export * from './lib/components/filters/arena-high-wins-card-search.component';
 export * from './lib/components/high-wins-runs/arena-high-wins-runs.component';
 export * from './lib/components/overlays/arena-card-option-view.component';

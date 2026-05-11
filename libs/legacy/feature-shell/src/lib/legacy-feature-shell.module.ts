@@ -271,7 +271,6 @@ import { DaemonComponent } from './libs/boostrap/daemon.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { AdTipComponent } from '@components/ads/ad-tip.component';
 import { SingleAdComponent } from '@components/ads/single-ad.component';
-import { ArenaClassStatsMatrixToggleComponent } from '@components/arena/desktop/filters/arena-class-stats-matrix-toggle.component';
 import { ArenaHighWinRunsWinsFilterDropdownComponent } from '@components/arena/desktop/filters/arena-high-win-runs-wins-filter-dropdown.component';
 import { ArenaModeFilterDropdownComponent } from '@components/arena/desktop/filters/arena-mode-filter-dropdown.component';
 import { BattlegroundsMetaStatsHeroesComponent } from '@components/battlegrounds/desktop/categories/meta/battlegrounds-meta-stats-heroes.component';

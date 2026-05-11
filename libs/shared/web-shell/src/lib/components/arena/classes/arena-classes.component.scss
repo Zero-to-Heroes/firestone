@@ -11,6 +11,18 @@
 			overflow: hidden;
 		}
 	}
+
+	::ng-deep web-arena-filters {
+		.preference-toggle {
+			margin: 0;
+			height: 30px;
+			position: relative;
+
+			label {
+				height: 100%;
+			}
+		}
+	}
 }
 
 @media (max-width: 660px) {

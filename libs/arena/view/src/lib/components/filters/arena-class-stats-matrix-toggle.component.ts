@@ -8,8 +8,8 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 		<preference-toggle
 			class="arena-class-stats-matrix-toggle"
 			field="arenaClassStatsMatrixEnabled"
-			[label]="'app.arena.filters.class-stats-matrix.label' | owTranslate"
-			[helpTooltip]="'app.arena.filters.class-stats-matrix.tooltip' | owTranslate"
+			[label]="'app.arena.filters.class-stats-matrix.label' | fsTranslate"
+			[helpTooltip]="'app.arena.filters.class-stats-matrix.tooltip' | fsTranslate"
 		></preference-toggle>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
