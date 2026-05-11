@@ -164,7 +164,7 @@ const handleCelestialAlignment = (
 const handleQuasar = (deckState: DeckState, allCards: CardsFacadeService, i18n: ILocalizationService): DeckState => {
 	return updateCostInDeck(
 		(card, refCard) => refCard?.cost != null,
-		(card) => Math.max(0, card.getEffectiveManaCost() - 3),
+		(card) => Math.max(0, (card.getEffectiveManaCost() ?? 0) - 3),
 		deckState,
 		allCards,
 	);
@@ -174,9 +174,9 @@ const handleEmbiggen = (deckState: DeckState, allCards: CardsFacadeService, i18n
 	return updateCostInDeck(
 		(card, refCard) => refCard?.type === 'Minion' || card?.cardType === 'Minion',
 		(card) =>
-			card.getEffectiveManaCost() <= 10
-				? Math.min(10, card.getEffectiveManaCost() + 1)
-				: card.getEffectiveManaCost() + 1,
+			(card.getEffectiveManaCost() ?? 0) <= 10
+				? Math.min(10, (card.getEffectiveManaCost() ?? 0) + 1)
+				: (card.getEffectiveManaCost() ?? 0) + 1,
 		deckState,
 		allCards,
 	);
@@ -189,7 +189,7 @@ const handleRottenRodent = (
 ): DeckState => {
 	return updateCostInDeck(
 		(card, refCard) => refCard?.mechanics?.includes(GameTag[GameTag.DEATHRATTLE]) ?? false,
-		(card) => Math.min(0, card.getEffectiveManaCost() - 1),
+		(card) => Math.min(0, (card.getEffectiveManaCost() ?? 0) - 1),
 		deckState,
 		allCards,
 	);
@@ -203,7 +203,7 @@ const handleLibram = (
 ): DeckState => {
 	return updateCostInDeck(
 		(card, refCard) => LIBRAM_IDS.includes(refCard?.id as CardIds),
-		(card) => Math.max(0, card.getEffectiveManaCost() - costReduction),
+		(card) => Math.max(0, (card.getEffectiveManaCost() ?? 0) - costReduction),
 		deckState,
 		allCards,
 	);
@@ -216,7 +216,7 @@ const handleIncantersFlow = (
 ): DeckState => {
 	return updateCostInDeck(
 		(card, refCard) => refCard?.type === 'Spell' || card?.cardType === 'Spell',
-		(card) => Math.max(0, card.getEffectiveManaCost() - 1),
+		(card) => Math.max(0, (card.getEffectiveManaCost() ?? 0) - 1),
 		deckState,
 		allCards,
 	);
@@ -263,7 +263,7 @@ const handleVanndarStormpike = (
 ): DeckState => {
 	return updateCostInDeck(
 		(card, refCard) => refCard?.type === 'Minion' || card?.cardType === 'Minion',
-		(card) => Math.max(0, card.getEffectiveManaCost() - 3),
+		(card) => Math.max(0, (card.getEffectiveManaCost() ?? 0) - 3),
 		deckState,
 		allCards,
 	);
@@ -276,7 +276,7 @@ const handleFrizzKindleroost = (
 ): DeckState => {
 	return updateCostInDeck(
 		(card, refCard) => hasRace(refCard, Race.DRAGON),
-		(card) => Math.max(0, card.getEffectiveManaCost() - 2),
+		(card) => Math.max(0, (card.getEffectiveManaCost() ?? 0) - 2),
 		deckState,
 		allCards,
 	);
@@ -302,7 +302,7 @@ const handleScepterOfSummoning = (
 ): DeckState => {
 	return updateCostInDeck(
 		(card, refCard) =>
-			(refCard?.type === 'Minion' || card?.cardType === 'Minion') && card?.getEffectiveManaCost() >= 5,
+			(refCard?.type === 'Minion' || card?.cardType === 'Minion') && (card?.getEffectiveManaCost() ?? 0) >= 5,
 		(card) => 5,
 		deckState,
 		allCards,
@@ -316,7 +316,7 @@ const handleUpgradedPackMule = (
 ): DeckState => {
 	return updateCostInDeck(
 		(card, refCard) => refCard?.type === 'Spell' || card?.cardType === 'Spell',
-		(card) => Math.max(0, card.getEffectiveManaCost() - 1),
+		(card) => Math.max(0, (card.getEffectiveManaCost() ?? 0) - 1),
 		deckState,
 		allCards,
 	);
@@ -339,7 +339,7 @@ const handleWyrmrestPurifier = (
 				refManaCost: undefined,
 				actualManaCost: undefined,
 				relatedCardIds: undefined,
-				cardMatchCondition: (other: ReferenceCard) => other.cost === card.getEffectiveManaCost() + 3,
+				cardMatchCondition: (other: ReferenceCard) => other.cost === (card.getEffectiveManaCost() ?? 0) + 3,
 			} as unknown as DeckCard),
 		deckState,
 		allCards,
@@ -424,14 +424,14 @@ const handleDeckOfLunacy = (
 		(card) =>
 			card.update({
 				cardId: undefined,
-				cardName: i18n.getUnknownManaSpellName(Math.min(10, card.getEffectiveManaCost() + 3)),
+				cardName: i18n.getUnknownManaSpellName(Math.min(10, (card.getEffectiveManaCost() ?? 0) + 3)),
 				creatorCardId: CardIds.DeckOfLunacy,
-				actualManaCost: Math.min(10, card.getEffectiveManaCost() + 3) - 3,
+				actualManaCost: Math.min(10, (card.getEffectiveManaCost() ?? 0) + 3) - 3,
 				rarity: 'unknown',
 				cardType: 'Spell',
 				relatedCardIds: undefined,
 				cardMatchCondition: (other: ReferenceCard) =>
-					(!other.type || other.type === 'Spell') && other.cost === card.getEffectiveManaCost() + 3,
+					(!other.type || other.type === 'Spell') && other.cost === (card.getEffectiveManaCost() ?? 0) + 3,
 			} as unknown as DeckCard),
 		deckState,
 		allCards,
@@ -451,14 +451,14 @@ const handleTheAzeriteMurloc = (
 		(card) =>
 			card.update({
 				cardId: undefined,
-				cardName: i18n.getUnknownManaMinionName(Math.min(10, card.getEffectiveManaCost() + 3)),
+				cardName: i18n.getUnknownManaMinionName(Math.min(10, (card.getEffectiveManaCost() ?? 0) + 3)),
 				creatorCardId: CardIds.TheAzeriteMurlocToken_DEEP_999t5,
-				actualManaCost: Math.min(10, card.getEffectiveManaCost() + 3) - 3,
+				actualManaCost: Math.min(10, (card.getEffectiveManaCost() ?? 0) + 3) - 3,
 				rarity: 'unknown',
 				cardType: 'Minion',
 				relatedCardIds: undefined,
 				cardMatchCondition: (other: ReferenceCard) =>
-					(!other.type || other.type === 'Minion') && other.cost === card.getEffectiveManaCost() + 3,
+					(!other.type || other.type === 'Minion') && other.cost === (card.getEffectiveManaCost() ?? 0) + 3,
 			} as unknown as DeckCard),
 		deckState,
 		allCards,
@@ -593,7 +593,7 @@ const handleOoopsAllSpells = (
 	);
 	return updateCostInDeck(
 		(card, refCard) => refCard?.type === 'Spell' || card?.cardType === 'Spell',
-		(card) => Math.max(0, card.getEffectiveManaCost() - 1),
+		(card) => Math.max(0, (card.getEffectiveManaCost() ?? 0) - 1),
 		stateWithoutSpells,
 		allCards,
 	);

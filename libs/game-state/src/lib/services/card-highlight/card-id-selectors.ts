@@ -183,7 +183,7 @@ export const cardIdSelector = (
 			return (input: SelectorInput): SelectorOutput => {
 				const cheapestMinions = input.deckState.deck
 					.filter((c) => allCards.getCard(c.cardId).type === 'Minion')
-					.sort((a, b) => a.getEffectiveManaCost() - b.getEffectiveManaCost())
+					.sort((a, b) => (a.getEffectiveManaCost() ?? 0) - (b.getEffectiveManaCost() ?? 0))
 					.slice(0, 2);
 				const secondCheapestMinionCost =
 					(cheapestMinions[1] ?? cheapestMinions[0])?.getEffectiveManaCost() ?? 0;
@@ -689,7 +689,7 @@ export const cardIdSelector = (
 			return (input: SelectorInput): SelectorOutput => {
 				const cheapestMinion = input.deckState.deck
 					.filter((c) => allCards.getCard(c.cardId).type === 'Minion')
-					.sort((a, b) => a.getEffectiveManaCost() - b.getEffectiveManaCost())[0];
+					.sort((a, b) => (a.getEffectiveManaCost() ?? 0) - (b.getEffectiveManaCost() ?? 0))[0];
 				const cheapestMinionCost = cheapestMinion?.getEffectiveManaCost() ?? 0;
 				return highlightConditions(
 					and(side(inputSide), inDeck, minion, effectiveCostEqual(cheapestMinionCost)),
@@ -712,7 +712,7 @@ export const cardIdSelector = (
 		case CardIds.CaptureColdtoothMine:
 			return (input: SelectorInput): SelectorOutput => {
 				const allCardsOrderedByCost = [...input.deckState.deck].sort(
-					(a, b) => b.getEffectiveManaCost() - a.getEffectiveManaCost(),
+					(a, b) => (b.getEffectiveManaCost() ?? 0) - (a.getEffectiveManaCost() ?? 0),
 				);
 				const highestCostCard = allCardsOrderedByCost[0];
 				const highestCardCost = highestCostCard?.getEffectiveManaCost() ?? 0;
@@ -1276,7 +1276,9 @@ export const cardIdSelector = (
 		case CardIds.DredgerStaff_CORE_REV_338:
 			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.Drekthar_AV_100:
-			return !card ? null : and(side(inputSide), inDeck, minion, effectiveCostLess(card.getEffectiveManaCost()));
+			return !card
+				? null
+				: and(side(inputSide), inDeck, minion, effectiveCostLess(card.getEffectiveManaCost() ?? 0));
 		case CardIds.DrocomurchanicasTavernBrawlToken:
 			return and(side(inputSide), inDeck, minion, or(dragon, murloc, mech));
 		case CardIds.DryscaleDeputy_WW_383:
@@ -3392,7 +3394,7 @@ export const cardIdSelector = (
 		case CardIds.ShadyDealer:
 			return and(side(inputSide), or(inHand, inDeck), pirate);
 		case CardIds.Shaladrassil_EDR_846:
-			return !card ? null : and(side(inputSide), or(inHand, inDeck), costMore(card.getEffectiveManaCost()));
+			return !card ? null : and(side(inputSide), or(inHand, inDeck), costMore(card.getEffectiveManaCost() ?? 0));
 		case CardIds.ShaleSpider_DEEP_034:
 			return and(side(inputSide), or(inHand, inDeck), elemental);
 		case CardIds.ShallowGrave:
@@ -3648,7 +3650,7 @@ export const cardIdSelector = (
 				}
 				const numberToResurrect = cardId === CardIds.StaffOfRenewal ? 7 : 5;
 				const mostExpensiveMinions = deadMinions
-					.sort((a, b) => a.getEffectiveManaCost() - b.getEffectiveManaCost())
+					.sort((a, b) => (a.getEffectiveManaCost() ?? 0) - (b.getEffectiveManaCost() ?? 0))
 					.reverse()
 					.slice(0, numberToResurrect);
 				const lastMinion = mostExpensiveMinions[mostExpensiveMinions.length - 1];
@@ -3656,7 +3658,7 @@ export const cardIdSelector = (
 					side(inputSide)(input) &&
 					minion(input) &&
 					inGraveyard(input) &&
-					input.deckCard?.getEffectiveManaCost() >= lastMinion?.getEffectiveManaCost()
+					(input.deckCard?.getEffectiveManaCost() ?? 0) >= (lastMinion?.getEffectiveManaCost() ?? 0)
 				);
 			};
 		case CardIds.StageDive:
@@ -3813,7 +3815,7 @@ export const cardIdSelector = (
 			return (input: SelectorInput): SelectorOutput => {
 				const highestCostMinion = input.deckState.deck
 					.filter((c) => allCards.getCard(c.cardId).type === 'Minion')
-					.sort((a, b) => b.getEffectiveManaCost() - a.getEffectiveManaCost())[0];
+					.sort((a, b) => (b.getEffectiveManaCost() ?? 0) - (a.getEffectiveManaCost() ?? 0))[0];
 				const highestMinionCost = highestCostMinion?.getEffectiveManaCost() ?? 0;
 				return highlightConditions(
 					and(side(inputSide), inDeck, minion, effectiveCostEqual(highestMinionCost)),
@@ -3826,7 +3828,7 @@ export const cardIdSelector = (
 			return (input: SelectorInput): SelectorOutput => {
 				const highestCostMinion = input.deckState.deck
 					.filter((c) => allCards.getCard(c.cardId).type === 'Minion')
-					.sort((a, b) => b.getEffectiveManaCost() - a.getEffectiveManaCost())[0];
+					.sort((a, b) => (b.getEffectiveManaCost() ?? 0) - (a.getEffectiveManaCost() ?? 0))[0];
 				const highestMinionCost = highestCostMinion?.getEffectiveManaCost() ?? 0;
 				return highlightConditions(
 					and(side(inputSide), inDeck, minion, effectiveCostEqual(highestMinionCost)),
@@ -3879,13 +3881,13 @@ export const cardIdSelector = (
 		case CardIds.The8HandsFromBeyond_GDB_477:
 			return (input: SelectorInput): SelectorOutput => {
 				const orderedByCost = [...input.deckState.deck].sort(
-					(a, b) => b.getEffectiveManaCost() - a.getEffectiveManaCost(),
+					(a, b) => (b.getEffectiveManaCost() ?? 0) - (a.getEffectiveManaCost() ?? 0),
 				);
 				const highest8th =
 					orderedByCost.length < 8 ? orderedByCost[orderedByCost.length - 1] : orderedByCost[7];
 				const highest8thCost = highest8th?.getEffectiveManaCost() ?? 0;
 				const candidates = orderedByCost
-					.filter((c) => c.getEffectiveManaCost() >= highest8thCost)
+					.filter((c) => (c.getEffectiveManaCost() ?? 0) >= highest8thCost)
 					.map((c) => c.cardId as CardIds);
 				return and(side(inputSide), inDeck, cardIs(...candidates))(input);
 			};
@@ -4174,7 +4176,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, minion, taunt);
 		case CardIds.VanndarStormpike_AV_223:
 			return !!card
-				? and(side(inputSide), inDeck, minion, effectiveCostLess(card.getEffectiveManaCost() + 1))
+				? and(side(inputSide), inDeck, minion, effectiveCostLess((card.getEffectiveManaCost() ?? 0) + 1))
 				: null;
 		case CardIds.VarianKingOfStormwind:
 			return highlightConditions(

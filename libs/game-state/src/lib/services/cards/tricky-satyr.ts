@@ -12,8 +12,8 @@ export const TrickySatyr: GeneratingCard = {
 			const refCard = input.allCards.getCard(card.cardId);
 			return card.getEffectiveManaCost() ?? refCard.cost;
 		};
-		const lowestCost = opponentHand.sort((a, b) => getCost(a) - getCost(b))[0];
-		const lowestCostCards = opponentHand.filter((c) => getCost(c) === getCost(lowestCost));
+		const lowestCost = opponentHand.sort((a, b) => (getCost(a) ?? 0) - (getCost(b) ?? 0))[0];
+		const lowestCostCards = opponentHand.filter((c) => (getCost(c) ?? 0) === (getCost(lowestCost) ?? 0));
 		return {
 			possibleCards: lowestCostCards.map((c) => c.cardId),
 		};

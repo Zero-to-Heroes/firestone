@@ -200,7 +200,7 @@ export class LinkedEntityParser implements EventParser {
 				true,
 				// For Lady Prestor + Dredge interaction
 				{
-					cost: updatedCard.getEffectiveManaCost(),
+					cost: updatedCard.getEffectiveManaCost() ?? 0,
 				},
 			)[0];
 			const newDeck = this.helper.addSingleCardToZone(intermediaryDeck, updatedCard);

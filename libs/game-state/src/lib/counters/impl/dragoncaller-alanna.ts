@@ -16,7 +16,9 @@ export class DragoncallerAlannaCounterDefinitionV2 extends CounterDefinitionV2<n
 		pref: 'playerDragoncallerAlannaCounter' as const,
 		display: (state: GameState): boolean => true,
 		value: (state: GameState) => {
-			return state.playerDeck.spellsPlayedThisMatch?.filter((c) => c.getEffectiveManaCost() >= 5)?.length ?? 0;
+			return (
+				state.playerDeck.spellsPlayedThisMatch?.filter((c) => (c.getEffectiveManaCost() ?? 0) >= 5)?.length ?? 0
+			);
 		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>

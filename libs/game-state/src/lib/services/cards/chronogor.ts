@@ -9,10 +9,10 @@ export const Chronogor: GeneratingCard = {
 	hasSequenceInfo: false, // We actually don't need to show the sequence info in hand
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
 		const lowestCost = [...input.opponentDeckState.deck].sort(
-			(a, b) => a.getEffectiveManaCost() - b.getEffectiveManaCost(),
+			(a, b) => (a.getEffectiveManaCost() ?? 0) - (b.getEffectiveManaCost() ?? 0),
 		)[0];
 		const lowestCostCards = [...input.opponentDeckState.deck].filter(
-			(c) => c.getEffectiveManaCost() === lowestCost.getEffectiveManaCost(),
+			(c) => (c.getEffectiveManaCost() ?? 0) === (lowestCost.getEffectiveManaCost() ?? 0),
 		);
 		if (input.card.createdIndex === 2) {
 			return {
@@ -30,8 +30,8 @@ export const Chronogor: GeneratingCard = {
 				};
 			} else {
 				const secondLowestCost = input.opponentDeckState.deck
-					.filter((c) => c.getEffectiveManaCost() !== lowestCost.getEffectiveManaCost())
-					.sort((a, b) => a.getEffectiveManaCost() - b.getEffectiveManaCost())[0];
+					.filter((c) => (c.getEffectiveManaCost() ?? 0) !== (lowestCost.getEffectiveManaCost() ?? 0))
+					.sort((a, b) => (a.getEffectiveManaCost() ?? 0) - (b.getEffectiveManaCost() ?? 0))[0];
 				const secondLowestCostCards = input.opponentDeckState.deck.filter(
 					(c) => c.getEffectiveManaCost() === secondLowestCost.getEffectiveManaCost(),
 				);

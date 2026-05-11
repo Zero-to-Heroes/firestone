@@ -86,12 +86,12 @@ export class CardDredgedParser implements EventParser {
 			case CardIds.ExcavationSpecialist_TSC_911:
 			case CardIds.ExcavationSpecialist_Story_11_ExcavationPuzzle:
 				return card.update({
-					actualManaCost: card.getEffectiveManaCost() - 1,
+					actualManaCost: (card.getEffectiveManaCost() ?? 0) - 1,
 				});
 			case CardIds.HarpoonGun:
 				return hasRace(this.allCards.getCard(card.cardId), Race.BEAST)
 					? card.update({
-							actualManaCost: Math.max(0, card.getEffectiveManaCost() - 3),
+							actualManaCost: Math.max(0, (card.getEffectiveManaCost() ?? 0) - 3),
 						})
 					: card;
 		}
