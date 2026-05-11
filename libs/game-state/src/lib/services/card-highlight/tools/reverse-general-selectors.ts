@@ -366,13 +366,14 @@ export const reverseGeneralSelector = (
 		);
 	}
 
-	// HAS_MECHANIC_BATTLECRY + MINION (7 cards)
+	// HAS_MECHANIC_BATTLECRY + MINION (8 cards)
 	if (refCard.mechanics?.includes('BATTLECRY') && refCard.type?.toUpperCase() === 'MINION') {
 		matchingCardIds.push(
 			CardIds.AuctionhouseGavel,
 			CardIds.BrannBronzebeard_BrannsSaddle_THD_042p,
 			CardIds.FairyTaleForest_TOY_507,
 			CardIds.Murmur_GDB_448,
+			CardIds.NerubarWeblord,
 			CardIds.ParrotSanctuary_VAC_409,
 			CardIds.Snapdragon,
 			CardIds.Turbulus_WORK_013
@@ -1201,11 +1202,12 @@ export const reverseGeneralSelector = (
 		);
 	}
 
-	// HAS_MECHANIC_GIVES_ARMOR (5 cards)
+	// HAS_MECHANIC_GIVES_ARMOR (6 cards)
 	if (refCard.mechanics?.includes('GIVES_ARMOR')) {
 		matchingCardIds.push(
 			CardIds.BarricadeBasher_DINO_400,
 			CardIds.LabPatron_TOY_651,
+			CardIds.Shellnado_TLC_601,
 			CardIds.ShieldSlamCore,
 			CardIds.ShieldSlamLegacy,
 			CardIds.ShieldSlamVanilla

@@ -549,6 +549,17 @@ export function analyzeSelectorFunction(
 		}
 	}
 
+	// Curried spell-school calls: `spellSchoolStrict(SpellSchool.X)` and `spellSchool(SpellSchool.X)`
+	// e.g. `export const felStrict = spellSchoolStrict(SpellSchool.FEL);`
+	const spellSchoolStrictMatch = definition.match(/^spellSchoolStrict\(SpellSchool\.([A-Z_]+)\)$/);
+	if (spellSchoolStrictMatch) {
+		return [spellSchoolStrictMatch[1]];
+	}
+	const spellSchoolMatch = definition.match(/^spellSchool\(SpellSchool\.([A-Z_]+)\)$/);
+	if (spellSchoolMatch) {
+		return [spellSchoolMatch[1]];
+	}
+
 	// Arrow functions: (input: SelectorInput): boolean => { ... }
 	const arrowBodyMatch = definition.match(
 		/\(\s*input\s*:\s*SelectorInput\s*\)\s*:\s*boolean\s*=>\s*\{?\s*([\s\S]*?)\s*\}?\s*$/,

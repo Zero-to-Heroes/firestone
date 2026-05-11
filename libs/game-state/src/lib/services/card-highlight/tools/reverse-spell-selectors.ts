@@ -176,11 +176,12 @@ export const reverseSpellSelector = (
 		);
 	}
 
-	// FEL + SPELL (15 cards)
+	// FEL + SPELL (17 cards)
 	if (refCard.spellSchool?.toUpperCase() === 'FEL' && refCard.type?.toUpperCase() === 'SPELL') {
 		matchingCardIds.push(
 			CardIds.FelfireBlaze_FIR_904,
 			CardIds.FelfireInTheHole,
+			CardIds.Felgorger_SW_043,
 			CardIds.FossilFanatic,
 			CardIds.GraveDefiler,
 			CardIds.HeraldOfChaos,
@@ -190,6 +191,7 @@ export const reverseSpellSelector = (
 			CardIds.LoadTheChamber_WW_409,
 			CardIds.MalevolentMutant_CATA_697,
 			CardIds.NespirahEnthralled_CATA_527,
+			CardIds.NespirahEnthralled_NespirahUnshackledToken_CATA_527t2,
 			CardIds.PopgarThePutrid_WW_091,
 			CardIds.RavenousFelfisher_CATA_529,
 			CardIds.Scorchreaver_FIR_952,
@@ -760,11 +762,11 @@ export const reverseSpellSelector = (
 			CardIds.DeepwaterEvoker,
 			CardIds.DoorOfShadows,
 			CardIds.DoorOfShadows_DoorOfShadowsToken,
+			CardIds.DragonSoulShattered_BlueAspectEssenceToken_CATA_EVENT_110t3,
 			CardIds.DragonsFury,
 			CardIds.DryscaleDeputy_WW_383,
 			CardIds.ElementalAllies,
 			CardIds.EnergyShaper,
-			CardIds.Felgorger_SW_043,
 			CardIds.Fetch_TOY_352,
 			CardIds.Flowrider,
 			CardIds.GlowflySwarm,

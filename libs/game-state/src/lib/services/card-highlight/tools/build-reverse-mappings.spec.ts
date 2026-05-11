@@ -253,13 +253,41 @@ describe('analyzeSelectorFunction', () => {
 		});
 	});
 
-	describe('selectors with spell schools (known limitations)', () => {
-		it('arcane -> null (spellSchool(SpellSchool.ARCANE) is parameterized, not resolvable)', () => {
-			expect(analyzeSelectorFunction('arcane')).toBeNull();
+	describe('selectors with spell schools', () => {
+		it('arcane -> ["ARCANE"] via spellSchool(SpellSchool.ARCANE) recognition', () => {
+			expect(analyzeSelectorFunction('arcane')).toEqual(['ARCANE']);
 		});
 
-		it('holy -> null (same reason)', () => {
-			expect(analyzeSelectorFunction('holy')).toBeNull();
+		it('holy -> ["HOLY"] via spellSchool(SpellSchool.HOLY) recognition', () => {
+			expect(analyzeSelectorFunction('holy')).toEqual(['HOLY']);
+		});
+
+		it('felStrict -> ["FEL"] via spellSchoolStrict(SpellSchool.FEL) recognition', () => {
+			expect(analyzeSelectorFunction('felStrict')).toEqual(['FEL']);
+		});
+
+		it('arcaneStrict -> ["ARCANE"]', () => {
+			expect(analyzeSelectorFunction('arcaneStrict')).toEqual(['ARCANE']);
+		});
+
+		it('fireStrict -> ["FIRE"]', () => {
+			expect(analyzeSelectorFunction('fireStrict')).toEqual(['FIRE']);
+		});
+
+		it('frostStrict -> ["FROST"]', () => {
+			expect(analyzeSelectorFunction('frostStrict')).toEqual(['FROST']);
+		});
+
+		it('holyStrict -> ["HOLY"]', () => {
+			expect(analyzeSelectorFunction('holyStrict')).toEqual(['HOLY']);
+		});
+
+		it('natureStrict -> ["NATURE"]', () => {
+			expect(analyzeSelectorFunction('natureStrict')).toEqual(['NATURE']);
+		});
+
+		it('shadowStrict -> ["SHADOW"]', () => {
+			expect(analyzeSelectorFunction('shadowStrict')).toEqual(['SHADOW']);
 		});
 	});
 
@@ -502,6 +530,13 @@ describe('extractCardConditions (full pipeline)', () => {
 			const card = mappings.find((m) => m.cardId === 'DeviateDreadfang');
 			expect(card).toBeDefined();
 			expect(card!.conditions).toContain('NATURE + SPELL');
+		});
+
+		it('Felgorger_SW_043 (uses felStrict) -> FEL + SPELL, not bare SPELL', () => {
+			const card = mappings.find((m) => m.cardId === 'Felgorger_SW_043');
+			expect(card).toBeDefined();
+			expect(card!.conditions).toContain('FEL + SPELL');
+			expect(card!.conditions).not.toContain('SPELL');
 		});
 	});
 
