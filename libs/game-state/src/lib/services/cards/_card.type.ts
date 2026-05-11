@@ -22,7 +22,9 @@ export type GeneratingCard = Card & {
 		| { guessInfo?: GuessInfoFunction; guessCardId?: GuessCardIdFunction }
 	);
 export const hasGeneratingCard = (card: Card): card is GeneratingCard =>
-	(card as GeneratingCard)?.guessInfo !== undefined || (card as GeneratingCard)?.guessCardId !== undefined;
+	(card as GeneratingCard)?.guessInfo !== undefined ||
+	(card as GeneratingCard)?.guessCardId !== undefined ||
+	!!(card as GeneratingCard)?.publicCreator;
 // export type GameEventCard = Card & {
 // }
 
