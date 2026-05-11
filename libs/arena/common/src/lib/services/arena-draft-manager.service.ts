@@ -11,6 +11,7 @@ import {
 	DraftMode,
 	DraftSlotType,
 	GameType,
+	normalizeHeroPower,
 	SceneMode,
 } from '@firestone-hs/reference-data';
 import { buildDeckDefinition } from '@firestone/game-state';
@@ -479,6 +480,9 @@ export class ArenaDraftManagerService
 							options: optionsOffered ?? [],
 							pick: cardAdded,
 							playerClass: this.allCards.getCard(currentDeck!.HeroCardId)?.playerClass?.toUpperCase(),
+							playerStartingHeroPower: currentDeck!.HeroPowerCardId
+								? normalizeHeroPower(currentDeck!.HeroPowerCardId, this.allCards.getService())
+								: null,
 						};
 						console.log(
 							'[arena-draft-manager] got pick alternative',

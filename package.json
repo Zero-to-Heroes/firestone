@@ -95,7 +95,7 @@
 		"@firestone-hs/api-arena-rewards": "^1.0.3",
 		"@firestone-hs/api-auth": "^0.0.1",
 		"@firestone-hs/api-user-profile": "^0.0.7",
-		"@firestone-hs/arena-draft-pick": "^1.0.9",
+		"@firestone-hs/arena-draft-pick": "^1.0.11",
 		"@firestone-hs/arena-high-win-runs": "^0.0.1",
 		"@firestone-hs/arena-stats": "^0.0.7",
 		"@firestone-hs/assign-constructed-archetype": "^0.0.3",
@@ -108,7 +108,7 @@
 		"@firestone-hs/hs-replay-xml-parser": "^1.0.5",
 		"@firestone-hs/mailbox": "^1.0.29",
 		"@firestone-hs/official-leaderboards": "^0.0.1",
-		"@firestone-hs/reference-data": "^3.0.193",
+		"@firestone-hs/reference-data": "^3.0.194",
 		"@firestone-hs/replay-metadata": "^0.0.85",
 		"@firestone-hs/save-dungeon-loot-info": "^1.0.8",
 		"@firestone-hs/simulate-bgs-battle": "^1.1.711",
@@ -245,7 +245,7 @@
 		"typescript": "~5.6.0"
 	},
 	"overrides": {
-		"@firestone-hs/reference-data": "^3.0.193",
+		"@firestone-hs/reference-data": "^3.0.194",
 		"@firestone-hs/hs-replay-xml-parser": "^1.0.5",
 		"@angular/common": "^19.0.0",
 		"@angular/core": "^19.0.0",
