@@ -54,46 +54,57 @@ type MatrixSortState =
 				></div>
 				<div
 					class="cell column-header sortable"
-					*ngFor="let colId of displayColumnIds; trackBy: trackByColId"
+					*ngFor="let colId of displayHeroPowerColumnIds; trackBy: trackByColId"
 					[class.active-sort]="isActiveColumnSort(colId)"
-					[class.global]="colId === GLOBAL_COLUMN_ID"
 					[helpTooltip]="columnHeaderTooltip(colId)"
 					(click)="onColumnHeaderClick(colId); $event.stopPropagation()"
 				>
-					<img
-						class="hero-power-icon"
-						*ngIf="colId !== GLOBAL_COLUMN_ID"
-						[src]="heroPowerIconUrl(colId)"
-					/>
-					<span class="global-label" *ngIf="colId === GLOBAL_COLUMN_ID">{{ globalLabel }}</span>
+					<img class="hero-power-icon" [src]="heroPowerIconUrl(colId)" />
+				</div>
+				<div class="cell matrix-gutter-col" aria-hidden="true"></div>
+				<div
+					class="cell column-header sortable global"
+					[class.active-sort]="isActiveColumnSort(GLOBAL_COLUMN_ID)"
+					[helpTooltip]="columnHeaderTooltip(GLOBAL_COLUMN_ID)"
+					(click)="onColumnHeaderClick(GLOBAL_COLUMN_ID); $event.stopPropagation()"
+				>
+					<span class="global-label">{{ globalLabel }}</span>
 				</div>
 			</div>
 			<div class="body" scrollable>
-				<div
-					class="data-row"
-					*ngFor="let row of displayRows; trackBy: trackByRow"
-					[ngClass]="{ global: row.isGlobal }"
-				>
-					<div
-						class="cell row-header sortable"
-						[class.active-sort]="isActiveRowSort(row.id)"
-						[ngClass]="{ global: row.isGlobal }"
-						[helpTooltip]="row.label"
-						(click)="onRowHeaderClick(row.id); $event.stopPropagation()"
-					>
-						<img class="class-icon" *ngIf="row.icon" [src]="row.icon" />
-						<span class="row-label" *ngIf="row.isGlobal">{{ row.label }}</span>
+				<ng-container *ngFor="let row of displayRows; trackBy: trackByRow">
+					<div class="matrix-gutter-row" *ngIf="row.isGlobal" aria-hidden="true"></div>
+					<div class="data-row" [ngClass]="{ global: row.isGlobal }">
+						<div
+							class="cell row-header sortable"
+							[class.active-sort]="isActiveRowSort(row.id)"
+							[ngClass]="{ global: row.isGlobal }"
+							[helpTooltip]="row.label"
+							(click)="onRowHeaderClick(row.id); $event.stopPropagation()"
+						>
+							<img class="class-icon" *ngIf="row.icon" [src]="row.icon" />
+							<span class="row-label" *ngIf="row.isGlobal">{{ row.label }}</span>
+						</div>
+						<div
+							class="cell value"
+							*ngFor="let colId of displayHeroPowerColumnIds; trackBy: trackByColId"
+							[class.empty]="!cellAt(row, colId).hasData"
+							[style.color]="cellAt(row, colId).color"
+							[helpTooltip]="cellAt(row, colId).tooltip"
+						>
+							{{ cellAt(row, colId).winrateStr }}
+						</div>
+						<div class="cell matrix-gutter-col" aria-hidden="true"></div>
+						<div
+							class="cell value global"
+							[class.empty]="!cellAt(row, GLOBAL_COLUMN_ID).hasData"
+							[style.color]="cellAt(row, GLOBAL_COLUMN_ID).color"
+							[helpTooltip]="cellAt(row, GLOBAL_COLUMN_ID).tooltip"
+						>
+							{{ cellAt(row, GLOBAL_COLUMN_ID).winrateStr }}
+						</div>
 					</div>
-					<div
-						class="cell value"
-						*ngFor="let colId of displayColumnIds; trackBy: trackByColId"
-						[ngClass]="{ empty: !cellAt(row, colId).hasData, global: colId === GLOBAL_COLUMN_ID }"
-						[style.color]="cellAt(row, colId).color"
-						[helpTooltip]="cellAt(row, colId).tooltip"
-					>
-						{{ cellAt(row, colId).winrateStr }}
-					</div>
-				</div>
+				</ng-container>
 			</div>
 		</div>
 	`,
@@ -148,6 +159,11 @@ export class ArenaClassStatsMatrixComponent {
 			state.direction,
 		);
 		return [...sortedHeroPowers, GLOBAL_COLUMN_ID];
+	}
+
+	/** Hero-power columns in display order (excludes synthetic Global column id). */
+	get displayHeroPowerColumnIds(): readonly string[] {
+		return this.displayColumnIds.filter((id) => id !== GLOBAL_COLUMN_ID);
 	}
 
 	get displayRows(): readonly MatrixRow[] {
