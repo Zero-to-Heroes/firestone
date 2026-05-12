@@ -20,6 +20,7 @@
     "additionalKnownCardsInDeck": [],
     "additionalKnownCardsInHand": [],
     "anachronos": [],
+    "animalCompanionBufferEntityId": null,
     "astralAutomatonsSummoned": 0,
     "beastsSummoned": 1,
     "board": [
@@ -825,7 +826,6 @@
       }
     ],
     "minionsDeadThisTurn": [],
-    "newAnimalCompanions": [],
     "otherZone": [
       {
         "cardId": "",
@@ -1131,6 +1131,7 @@
     "additionalKnownCardsInDeck": [],
     "additionalKnownCardsInHand": [],
     "anachronos": [],
+    "animalCompanionBufferEntityId": null,
     "astralAutomatonsSummoned": 0,
     "beastsSummoned": 0,
     "board": [
@@ -1958,7 +1959,6 @@
     ],
     "minionsDeadThisTurn": [],
     "name": null,
-    "newAnimalCompanions": [],
     "otherZone": [
       {
         "actualManaCost": 5,
