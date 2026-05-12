@@ -199,7 +199,7 @@ export class ArenaMulliganGuideService extends AbstractFacadeService<ArenaMullig
 				const heroPowerFilterContext =
 					heroPowerFilter === 'all' || heroPowerFilter == null ? '' : `-${heroPowerFilter}`;
 				return this.cardStats.buildCardStats(
-					`${playerClass}${heroPowerFilterContext}`,
+					`${CardClass[playerClass].toLowerCase()}${heroPowerFilterContext}`,
 					// !!playerClass ? CardClass[playerClass].toLowerCase() : 'global',
 					timeFrame,
 					gameMode as ArenaModeFilterType,
