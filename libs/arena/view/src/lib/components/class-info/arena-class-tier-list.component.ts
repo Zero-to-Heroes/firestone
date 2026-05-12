@@ -14,7 +14,7 @@ import {
 	getStandardDeviation,
 	sortByProperties,
 } from '@firestone/shared/framework/common';
-import { ILocalizationService, getDateAgo, waitForReady } from '@firestone/shared/framework/core';
+import { CardsFacadeService, ILocalizationService, getDateAgo, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, filter, shareReplay, startWith, takeUntil, tap } from 'rxjs';
 import { ArenaClassInfo, ArenaClassTier } from './model';
 
@@ -85,6 +85,7 @@ export class ArenaClassTierListComponent extends AbstractSubscriptionComponent i
 		private readonly arenaMetaHeroStrategies: ArenaMetaHeroStrategiesService,
 		private readonly patches: PatchesConfigService,
 		private readonly prefs: PreferencesService,
+		private readonly allCards: CardsFacadeService,
 	) {
 		super(cdr);
 	}
@@ -162,7 +163,7 @@ export class ArenaClassTierListComponent extends AbstractSubscriptionComponent i
 				});
 			}),
 		);
-		this.rawStats$ = this.arenaClassStats.classStatsRaw$$;
+		this.rawStats$ = this.arenaClassStats.classStatsRaw$$.pipe(this.mapData((stats) => stats));
 		this.showMatrix$ = combineLatest([
 			this.arenaClassStats.classStatsRaw$$,
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.arenaClassStatsMatrixEnabled)),

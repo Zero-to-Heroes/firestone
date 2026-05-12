@@ -22,6 +22,7 @@ export class ArenaClassStatsService extends AbstractFacadeService<ArenaClassStat
 
 	private api: ApiRunner;
 	private prefs: PreferencesService;
+	private allCards: CardsFacadeService;
 
 	private internalSub$$ = new SubscriberAwareBehaviorSubject<null>(null);
 
@@ -39,6 +40,7 @@ export class ArenaClassStatsService extends AbstractFacadeService<ArenaClassStat
 		this.classStatsRaw$$ = new SubscriberAwareBehaviorSubject<ArenaClassStats | null | undefined>(null);
 		this.api = AppInjector.get(ApiRunner);
 		this.prefs = AppInjector.get(PreferencesService);
+		this.allCards = AppInjector.get(CardsFacadeService);
 
 		this.classStats$$.onFirstSubscribe(() => {
 			this.internalSub$$.subscribe();
@@ -70,7 +72,19 @@ export class ArenaClassStatsService extends AbstractFacadeService<ArenaClassStat
 								: timeFilter;
 				const rawResult: ArenaClassStats | null = await this.buildClassStats(timePeriod, modeFilter);
 				console.debug('[arena-class-stats] loaded class stats', rawResult);
-				this.classStatsRaw$$.next(rawResult);
+
+				const fixedResult = !rawResult?.stats?.length
+					? null
+					: {
+							...rawResult,
+							// Clear corrupt data
+							stats: rawResult.stats.filter(
+								(s) =>
+									s.playerClass?.toLowerCase() !==
+									this.allCards.getCard(s.playerHeroPower)?.playerClass?.toLowerCase(),
+							),
+						};
+				this.classStatsRaw$$.next(fixedResult);
 				this.classStats$$.next(consolidateByPlayerClass(rawResult));
 			});
 		});
