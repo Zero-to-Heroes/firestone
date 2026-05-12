@@ -423,6 +423,8 @@ export const forcedHiddenCardCreators = [
 	// CardIds.PsychicConjurerLegacy,
 	CardIds.SpymastersGambitTavernBrawlToken,
 	CardIds.EnergyShaper,
+	// Fast Forward: opponent draws/reduces hidden cards — logs expose CardID; treat like Hooktusk until revealed.
+	CardIds.FastForward_TIME_770,
 	// CardIds.TheotarTheMadDuke,
 ];
 

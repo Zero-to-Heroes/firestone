@@ -1108,7 +1108,6 @@ try {
 		ArenaTimeFilterDropdownComponent,
 		ArenaModeFilterDropdownComponent,
 		ArenaHighWinRunsWinsFilterDropdownComponent,
-		ArenaClassStatsMatrixToggleComponent,
 
 		MercenariesOpponentTeamComponent,
 		MercenariesTeamRootComponent,

@@ -6,7 +6,7 @@ import { DeckState } from '../../../models/deck-state';
 import { GameState } from '../../../models/game-state';
 import { SecretOption } from '../../../models/secret-option';
 import { getProcessedCard } from '../../card-utils';
-import { CREATES_PUBLIC_COPY_FROM_DECK, isSelfCopyHandLeakIncompleteLogCardId } from '../../hs-utils';
+import { CREATES_PUBLIC_COPY_FROM_DECK, forcedHiddenCardCreators, isSelfCopyHandLeakIncompleteLogCardId } from '../../hs-utils';
 import { CopiedFromEntityIdGameEvent } from '../events/copied-from-entity-id-game-event';
 import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
@@ -114,6 +114,15 @@ export class CopiedFromEntityIdParser implements EventParser {
 			copyAndSourceSameController &&
 			(copiedCardZone === Zone.DECK || copiedCardZone === Zone.HAND) &&
 			dredgeSignalForSelfCopy;
+		/** Opponent effect reveals a linked/setaside token in logs; the source hand row stays hidden in-game (e.g. Fast Forward + Naralex Herald). */
+		const hideOpponentSameControllerHandLinkedReveal =
+			!isPlayer &&
+			copyAndSourceSameController &&
+			copiedCardZone === Zone.HAND &&
+			!copiedCard?.cardId?.length &&
+			!!newCopy &&
+			(forcedHiddenCardCreators.includes(newCopy.creatorCardId as CardIds) ||
+				forcedHiddenCardCreators.includes(newCopy.lastAffectedByCardId as CardIds));
 		const shouldObfuscate =
 			// Copy + source same controller (e.g. Malevolent Mutant): not "opponent discovered our card" — allow cardId sync.
 			!copyAndSourceSameController &&
@@ -144,7 +153,8 @@ export class CopiedFromEntityIdParser implements EventParser {
 			shouldObfuscate ||
 			// Works for all "Suspicious" cards
 			(isPlayer && newCopy?.lastAffectedByCardId == CardIds.SuspiciousAlchemist_AMysteryEnchantment) ||
-			isOpponentSelfDredge
+			isOpponentSelfDredge ||
+			hideOpponentSameControllerHandLinkedReveal
 				? copiedCard?.cardId
 				: updatedCardId;
 		console.debug(

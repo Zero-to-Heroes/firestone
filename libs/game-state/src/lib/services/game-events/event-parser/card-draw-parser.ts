@@ -9,6 +9,7 @@ import { tutors } from '../../cards/card-tutors';
 import {
 	doesNotCountTowardCardsDrawnThisTurn,
 	forceHideInfoWhenDrawnInfluencers,
+	forcedHiddenCardCreators,
 	hiddenWhenDrawFromDeck,
 	isCastWhenDrawn,
 	isSummonedWhenDrawn,
@@ -160,6 +161,8 @@ export class CardDrawParser implements EventParser {
 		const isCardDrawnBySecretPassage = forceHideInfoWhenDrawnInfluencers.includes(
 			gameEvent.additionalData?.lastInfluencedByCardId,
 		);
+		const hideOpponentCastWhenDrawnReveal =
+			!isPlayer && forcedHiddenCardCreators.includes(drawnByCardId as CardIds);
 		const isCardInfoPublic =
 			// Also includes a publicCardCreator so that cards drawn from deck when we know what they are (eg
 			// Southsea Scoundrel) are flagged
@@ -171,7 +174,9 @@ export class CardDrawParser implements EventParser {
 			isPlayer ||
 			useTopOfDeckToIdentifyCard ||
 			useBottomOfDeckToIdentifyCard ||
-			(!isCardDrawnBySecretPassage && isCastWhenDrawn(updatedCardId, this.allCards)) ||
+			(!isCardDrawnBySecretPassage &&
+				isCastWhenDrawn(updatedCardId, this.allCards) &&
+				!hideOpponentCastWhenDrawnReveal) ||
 			(publicCardInfos.includes(lastInfluencedByCardId) &&
 				!hiddenWhenDrawFromDeck.includes(lastInfluencedByCardId));
 		console.debug(

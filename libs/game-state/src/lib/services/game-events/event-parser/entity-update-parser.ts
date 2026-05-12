@@ -5,7 +5,7 @@ import { DeckCard } from '../../../models/deck-card';
 import { DeckState } from '../../../models/deck-state';
 import { GameState } from '../../../models/game-state';
 import { getProcessedCard } from '../../card-utils';
-import { publicCardCreators, shouldKeepOriginalCost } from '../../hs-utils';
+import { forcedHiddenCardCreators, publicCardCreators, shouldKeepOriginalCost } from '../../hs-utils';
 import { revealCard } from '../card-reveal';
 import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
@@ -47,6 +47,14 @@ export class EntityUpdateParser implements EventParser {
 				: cardId;
 		// console.debug('[entity-update] cardInOther', cardInOther, obfsucatedCardId);
 
+		const opponentHandCreatorLooksPublic =
+			!!cardInHand?.creatorCardId &&
+			publicCardCreators.includes(cardInHand.creatorCardId as CardIds) &&
+			!forcedHiddenCardCreators.includes(cardInHand.creatorCardId as CardIds);
+		const opponentHandLastAffectedLooksPublic =
+			!!cardInHand?.lastAffectedByCardId &&
+			publicCardCreators.includes(cardInHand.lastAffectedByCardId as CardIds) &&
+			!forcedHiddenCardCreators.includes(cardInHand.lastAffectedByCardId as CardIds);
 		const shouldShowCardIdInHand =
 			// If we don't restrict it to the current player, we create some info leaks in the opponent's hand (eg with Baku)
 			cardInHand &&
@@ -55,7 +63,8 @@ export class EntityUpdateParser implements EventParser {
 			// cardInHand.cardId !== cardId &&
 			// Introduced for Lorewalker Cho
 			(isPlayer ||
-				publicCardCreators.includes(cardInHand.creatorCardId as CardIds) ||
+				opponentHandCreatorLooksPublic ||
+				opponentHandLastAffectedLooksPublic ||
 				// Jotun, the Eternal: when the opponent draws their first spell, it's revealed via SHOW_ENTITY (REVEALED=1)
 				// before we get the cardId. The card is added to hand first (RECEIVE_CARD_IN_HAND/CARD_DRAW_FROM_DECK)
 				// without cardId, then ENTITY_UPDATE reveals it. We must show it when revealed=true.
