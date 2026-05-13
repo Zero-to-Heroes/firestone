@@ -130,6 +130,12 @@ export class ArenaClassStatsMatrixComponent {
 
 	sortState: MatrixSortState = { kind: 'none' };
 
+	/**
+	 * Data-row ids in last `byColumn` display order (global row excluded).
+	 * Used so switching to `byRow` (column sort by row) keeps the same row order.
+	 */
+	private rowOrderFromLastColumnSort: readonly string[] | null = null;
+
 	private _stats: ArenaClassStats | null | undefined;
 
 	constructor(
@@ -168,17 +174,38 @@ export class ArenaClassStatsMatrixComponent {
 
 	get displayRows(): readonly MatrixRow[] {
 		const state = this.sortState;
-		if (state.kind !== 'byColumn') {
-			return this.baseRows;
-		}
-		const dataRows = this.baseRows.filter((r) => !r.isGlobal);
 		const globalRows = this.baseRows.filter((r) => r.isGlobal);
-		const sortedData = sortRowsByWinrate(
-			dataRows,
-			(row) => this.cellWinrate(row, state.columnKey),
-			state.direction,
-		);
-		return [...sortedData, ...globalRows];
+
+		if (state.kind === 'byColumn') {
+			const dataRows = this.baseRows.filter((r) => !r.isGlobal);
+			const sortedData = sortRowsByWinrate(
+				dataRows,
+				(row) => this.cellWinrate(row, state.columnKey),
+				state.direction,
+			);
+			return [...sortedData, ...globalRows];
+		}
+
+		if (state.kind === 'byRow' && this.rowOrderFromLastColumnSort?.length) {
+			const dataById = new Map(this.baseRows.filter((r) => !r.isGlobal).map((r) => [r.id, r]));
+			const ordered: MatrixRow[] = [];
+			const seen = new Set<string>();
+			for (const id of this.rowOrderFromLastColumnSort) {
+				const row = dataById.get(id);
+				if (row) {
+					ordered.push(row);
+					seen.add(id);
+				}
+			}
+			for (const row of this.baseRows) {
+				if (!row.isGlobal && !seen.has(row.id)) {
+					ordered.push(row);
+				}
+			}
+			return [...ordered, ...globalRows];
+		}
+
+		return this.baseRows;
 	}
 
 	trackByRow(index: number, row: MatrixRow) {
@@ -191,6 +218,7 @@ export class ArenaClassStatsMatrixComponent {
 
 	onCornerClick() {
 		this.sortState = { kind: 'none' };
+		this.rowOrderFromLastColumnSort = null;
 		this.cdr.markForCheck();
 	}
 
@@ -204,6 +232,7 @@ export class ArenaClassStatsMatrixComponent {
 		} else {
 			this.sortState = { kind: 'byColumn', columnKey, direction: 'desc' };
 		}
+		this.captureRowOrderFromColumnSort();
 		this.cdr.markForCheck();
 	}
 
@@ -259,6 +288,7 @@ export class ArenaClassStatsMatrixComponent {
 			this.columns = [];
 			this.columnByHeroPowerId.clear();
 			this.sortState = { kind: 'none' };
+			this.rowOrderFromLastColumnSort = null;
 			this.cdr.markForCheck();
 			return;
 		}
@@ -318,7 +348,22 @@ export class ArenaClassStatsMatrixComponent {
 
 		this.baseRows = [...rows, globalRow];
 		this.sortState = { kind: 'none' };
+		this.rowOrderFromLastColumnSort = null;
 		this.cdr.markForCheck();
+	}
+
+	private captureRowOrderFromColumnSort() {
+		if (this.sortState.kind !== 'byColumn') {
+			return;
+		}
+		const { columnKey, direction } = this.sortState;
+		const dataRows = this.baseRows.filter((r) => !r.isGlobal);
+		const sorted = sortRowsByWinrate(
+			dataRows,
+			(row) => this.cellWinrate(row, columnKey),
+			direction,
+		);
+		this.rowOrderFromLastColumnSort = sorted.map((r) => r.id);
 	}
 
 	private collectHeroPowers(stats: readonly ArenaClassStat[]): readonly string[] {
