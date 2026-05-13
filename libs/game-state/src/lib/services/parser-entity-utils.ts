@@ -22,6 +22,22 @@ export function getTag(tags: readonly TagLike[] | undefined | null, tag: GameTag
 	return match == null ? defaultValue : match.Value;
 }
 
+export const getTagWithHistory = (entity: FullEntity | undefined | null, tag: GameTag | number): number | null => {
+	if (!entity) {
+		return null;
+	}
+
+	const result = entity.Tags?.find((t) => t.Name === tag)?.Value;
+	if (!!result) {
+		return result;
+	}
+
+	// Can happen if the entity got transformed, then we look into the past
+	// Pick the last one
+	const history = entity.TagsHistory.filter((t) => t.Name === tag).pop()?.Value;
+	return history ?? null;
+};
+
 export function hasTag(tags: readonly TagLike[] | undefined | null, tag: GameTag | number): boolean {
 	return getTag(tags, tag) > 0;
 }

@@ -570,7 +570,7 @@ export class CardTooltipComponent
 	}
 
 	private async keepInBounds(top: number, left: number, height: number, width: number) {
-		const isInGame = await this.gameStatus.inGame$$.getValueWithInit();
+		const isInGame = await this.gameStatus.inGame();
 		if (!isInGame) {
 			return;
 		}

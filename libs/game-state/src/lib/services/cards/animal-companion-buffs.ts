@@ -1,6 +1,8 @@
-import { AllCardsService, CardIds, GameTag } from '@firestone-hs/reference-data';
-import { DeckCard } from '../../models/deck-card';
-import { CustomEffectCard } from './_card.type';
+import { CardIds, CardType, GameTag, hasCorrectTribe, Race } from '@firestone-hs/reference-data';
+import { hasCorrectType } from '../../related-cards/dynamic-pools';
+import { getTagWithHistory } from '../parser-entity-utils';
+import { CustomEffectCard, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
+import { filterCards } from './utils';
 
 export const animalCompanionBuffsCardIds: readonly CardIds[] = [
 	CardIds.TamePet_MEND_300,
@@ -8,7 +10,7 @@ export const animalCompanionBuffsCardIds: readonly CardIds[] = [
 	CardIds.RoamFree_MEND_307,
 ];
 
-export const AnimalCompanionBuffs: CustomEffectCard = {
+export const AnimalCompanionBuffs: CustomEffectCard & StaticGeneratingCard = {
 	cardIds: animalCompanionBuffsCardIds,
 	effects: ['CATAFX_TamePet_Reveal_Fadeout_Super', 'CATAFX_TamePet_Reveal_Super'],
 	customEffect: ({ currentState, gameEvent, allCards }) => {
@@ -30,8 +32,21 @@ export const AnimalCompanionBuffs: CustomEffectCard = {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newDeck,
 		});
 	},
-};
+	dynamicPool: (input: StaticGeneratingCardInput) => {
+		const bufferEntity = input.inputOptions.gameState.parserState?.CurrentEntities.get(
+			input.inputOptions.deckState.animalCompanionBufferEntityId!,
+		);
 
-const companion = (entity: DeckCard, tag: GameTag, fallback: GameTag, allCards: AllCardsService) => {
-	return allCards.getCard(entity!.tags[tag]!).id ?? allCards.getCard(entity!.tags[fallback]!).id;
+		const currentCompanionSample = getTagWithHistory(bufferEntity, GameTag.TAG_SCRIPT_DATA_NUM_4);
+		const currentCompanionCost = input.allCards.getCard(currentCompanionSample!).cost ?? 3;
+		const costBuff =
+			input.cardId === CardIds.RoamFree_MEND_307 ? currentCompanionCost + 2 : currentCompanionCost + 1;
+		const possibleCards = filterCards(
+			input.cardId,
+			input.allCards,
+			(c) => c.cost === costBuff && hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.BEAST),
+			input.inputOptions,
+		);
+		return possibleCards;
+	},
 };

@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { CardIds, GameTag } from '@firestone-hs/reference-data';
-import { FullEntity } from '@firestone/power-log-parser';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { BattlegroundsState } from '../../models/_barrel';
 import { GameState } from '../../models/game-state';
 import { animalCompanionTokenCardIds } from '../../services/card-highlight/selectors';
+import { getTagWithHistory } from '../../services/parser-entity-utils';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
 import { CounterType } from '../counter-type';
 
@@ -120,19 +120,3 @@ export class AnimalCompanionAuraCounterDefinitionV2 extends CounterDefinitionV2<
 		return value?.cardIds?.length ? value.cardIds : animalCompanionTokenCardIds;
 	}
 }
-
-const getTagWithHistory = (entity: FullEntity | undefined | null, tag: GameTag | number): number | null => {
-	if (!entity) {
-		return null;
-	}
-
-	const result = entity.Tags?.find((t) => t.Name === tag)?.Value;
-	if (!!result) {
-		return result;
-	}
-
-	// Can happen if the entity got transformed, then we look into the past
-	// Pick the last one
-	const history = entity.TagsHistory.filter((t) => t.Name === tag).pop()?.Value;
-	return history ?? null;
-};
