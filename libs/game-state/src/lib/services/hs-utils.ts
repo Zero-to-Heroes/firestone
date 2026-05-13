@@ -492,6 +492,7 @@ const publicCardGiftCreators = giftCreators;
 export const cardTutors = tutors;
 
 // You know the exact card drawn
+// Only cards with explicitly known drawn identity belong here (not just known constraints like card type).
 export const publicTutors = [
 	CardIds.ConquerorsBanner,
 	CardIds.FelLordBetrug_DAL_607, // don't know if you're talking about the card in hand or the minion summoned

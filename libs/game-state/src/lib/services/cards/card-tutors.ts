@@ -357,6 +357,7 @@ const internalTutors = [
 	CardIds.TimelineWitness,
 	CardIds.NightmareLordXavius_EDR_856,
 	CardIds.Finality_END_003,
+	CardIds.LeylineNexus_MEND_504,
 	CardIds.TimelineAccelerator_WON_139,
 	CardIds.SplendiferousWhizbang_QuestAcceptedToken_TOY_700t14,
 	CardIds.PebblyPage_WON_090,
