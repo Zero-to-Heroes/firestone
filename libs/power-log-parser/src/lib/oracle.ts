@@ -1095,6 +1095,8 @@ export class Oracle {
 					return CardIds.TheMarshQueen_QueenCarnassaToken;
 				case CardIds.TheRyecleaver_VAC_525:
 					return CardIds.TheRyecleaver_SliceOfBreadToken_VAC_525t1;
+				case CardIds.TheSkeletonKnight:
+					return CardIds.TheSkeletonKnight;
 				case CardIds.ThrowGlaive:
 					return CardIds.ThrowGlaive;
 				case CardIds.Thunderquake_TIME_215:
