@@ -183,6 +183,7 @@ const LEGACY_ENV_BY_SLUG: Record<string, string> = {
 	'malevolent-mutant': 'POWER_LOG_MALEVOLENT_MUTANT_PATH',
 	'magmaw-attack': 'POWER_LOG_MAGMAW_ATTACK_PATH',
 	'agent-old-ones': 'POWER_LOG_AGENT_OLD_ONES_PATH',
+	'blooming-bulb': 'POWER_LOG_BLOOMING_BULB_PATH',
 	'onyxia-herald': 'POWER_LOG_ONYXIA_HERALD_PATH',
 	'discover-zone-order': 'POWER_LOG_DISCOVER_ZONE_ORDER_PATH',
 	'opponent-coin-marker': 'POWER_LOG_OPPONENT_COIN_MARKER_PATH',
@@ -248,6 +249,7 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	'coin-in-opp-deck': 'coin-in-opp-deck/coin-in-opp-deck.log',
 	'smoldering-grove': 'smoldering-grove/smoldering-grove.log',
 	'fast-forward-naralex': 'fast-forward-naralex/fast-forward-naralex.log',
+	'blooming-bulb': 'blooming-bulb/blooming-bulb.log',
 };
 
 /**
