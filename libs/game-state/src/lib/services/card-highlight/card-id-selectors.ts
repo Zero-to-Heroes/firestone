@@ -1400,6 +1400,8 @@ export const cardIdSelector = (
 				and(side(inputSide), or(inHand, inDeck), spellExtended, damage),
 				and(side(inputSide), inDeck, spell),
 			);
+		case CardIds.EtherealPeddler:
+			return and(side(inputSide), or(inHand, inDeck), fromAnotherClass);
 		case CardIds.Eureka:
 			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.EvolutionChamber_SC_021:
