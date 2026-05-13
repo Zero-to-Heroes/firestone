@@ -188,18 +188,18 @@ export abstract class CounterDefinitionV2<T> {
 		} else if (side === 'opponent') {
 			this.debug &&
 				console.debug(
-					'checking opponent',
+					'[debug] checking opponent',
 					this.id,
 					side,
 					this.opponent?.pref,
 					prefs[this.opponent?.pref ?? ''],
 				);
 			if (!this.opponent?.pref || !prefs[this.opponent.pref]) {
-				this.debug && console.debug('hiding for pref', this.id, side);
+				this.debug && console.debug('[debug] hiding for pref', this.id, side);
 				return false;
 			}
 			if (prefs[this.opponent.pref] === 'always-on') {
-				this.debug && console.debug('showing as always-on', this.id, side);
+				this.debug && console.debug('[debug] showing as always-on', this.id, side);
 				this.opponent.cachedValue = this.opponent.value(gameState, bgState);
 				return true;
 			}
@@ -210,7 +210,7 @@ export abstract class CounterDefinitionV2<T> {
 			) {
 				this.debug &&
 					console.debug(
-						'hasRelevantCard',
+						'[debug] hasRelevantCard',
 						this.id,
 						side,
 						gameState.opponentDeck?.hasRelevantCard(this.cards),
@@ -232,14 +232,16 @@ export abstract class CounterDefinitionV2<T> {
 				return false;
 			}
 			if (!this.opponent.display(gameState, bgState)) {
-				this.debug && console.debug('no display', this.id, side, this.opponent.display(gameState, bgState));
+				this.debug &&
+					console.debug('[debug] no display', this.id, side, this.opponent.display(gameState, bgState));
 				return false;
 			}
-			if (!(this.opponent.cachedValue = this.opponent.value(gameState, bgState))) {
-				this.debug && console.debug('value', this.id, side, this.opponent.cachedValue);
+			if ((this.opponent.cachedValue = this.opponent.value(gameState, bgState)) == null) {
+				this.debug &&
+					console.debug('[debug] value null, not showing', this.id, side, this.opponent.cachedValue);
 				return false;
 			}
-			this.debug && console.debug('returning true', this.id, side, this);
+			this.debug && console.debug('[debug] returning true', this.id, side, this);
 			return true;
 		}
 		this.debug && console.debug('[debug] not active for unknown reason', this.id, side);

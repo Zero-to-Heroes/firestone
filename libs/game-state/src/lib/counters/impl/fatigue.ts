@@ -18,10 +18,10 @@ export class FatigueCounterDefinitionV2 extends CounterDefinitionV2<number> {
 	readonly player = {
 		pref: 'playerFatigueCounter' as const,
 		display: (state: GameState): boolean => {
-			return state.playerDeck.hasRelevantCard(cards) || this.player.value(state) > 0;
+			return state.playerDeck.hasRelevantCard(cards) || !!this.player.value(state);
 		},
 		value: (state: GameState) => {
-			return state.playerDeck.fatigue ? state.playerDeck.fatigue + 1 : 0;
+			return state.playerDeck.fatigue ? state.playerDeck.fatigue + 1 : null;
 		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>
@@ -34,7 +34,7 @@ export class FatigueCounterDefinitionV2 extends CounterDefinitionV2<number> {
 		pref: 'opponentFatigueCounter' as const,
 		display: (state: GameState): boolean => true,
 		value: (state: GameState) => {
-			return state.opponentDeck.fatigue ? state.opponentDeck.fatigue + 1 : 0;
+			return state.opponentDeck.fatigue ? state.opponentDeck.fatigue + 1 : null;
 		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>

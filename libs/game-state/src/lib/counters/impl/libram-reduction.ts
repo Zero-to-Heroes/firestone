@@ -20,16 +20,16 @@ export class LibramReductionCounterDefinitionV2 extends CounterDefinitionV2<numb
 	readonly player = {
 		pref: 'playerLibramReductionCounter' as const,
 		display: (state: GameState): boolean => true,
-		value: (state: GameState): number =>
+		value: (state: GameState) =>
 			state.playerDeck.enchantments.filter(
 				(e) =>
 					e.cardId === CardIds.InterstellarStarslicer_InterstellarLibramEnchantment_GDB_726e ||
 					e.cardId === CardIds.AldorAttendant_AldorAttendantEnchantment,
 			).length +
-			2 *
-				state.playerDeck.enchantments.filter(
-					(e) => e.cardId === CardIds.AldorTruthseeker_AldorTruthseekerEnchantment,
-				).length,
+				2 *
+					state.playerDeck.enchantments.filter(
+						(e) => e.cardId === CardIds.AldorTruthseeker_AldorTruthseekerEnchantment,
+					).length || null,
 		setting: {
 			label: (i18n: ILocalizationService): string =>
 				i18n.translateString('settings.decktracker.your-deck.counters.libram-reduction-label'),
@@ -41,7 +41,7 @@ export class LibramReductionCounterDefinitionV2 extends CounterDefinitionV2<numb
 	readonly opponent = {
 		pref: 'opponentLibramReductionCounter' as const,
 		display: (state: GameState): boolean => true,
-		value: (state: GameState): number => {
+		value: (state: GameState) => {
 			const result =
 				state.opponentDeck.enchantments.filter(
 					(e) =>
@@ -52,7 +52,7 @@ export class LibramReductionCounterDefinitionV2 extends CounterDefinitionV2<numb
 					state.opponentDeck.enchantments.filter(
 						(e) => e.cardId === CardIds.AldorTruthseeker_AldorTruthseekerEnchantment,
 					).length;
-			return result;
+			return result || null;
 		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>

@@ -40,13 +40,16 @@ export class TyrandeCounterDefinitionV2 extends CounterDefinitionV2<number> {
 			const enchantments = state.opponentDeck.enchantments.filter(
 				(e) => e.cardId === CardIds.Tyrande_PullOfTheMoonEnchantment_EDR_464e2,
 			);
+			console.debug('[debug] enchantments', enchantments);
 			if (enchantments.length === 0) {
 				return null;
 			}
 
-			return enchantments
+			const result = enchantments
 				.flatMap((e) => e?.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_1] ?? 0)
 				.reduce((a, b) => a + b, 0);
+			console.debug('[debug] result', result);
+			return result;
 		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>
