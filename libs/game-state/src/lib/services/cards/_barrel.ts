@@ -202,6 +202,7 @@ export { RehgarEarthfury } from './rehgar-earthfury';
 export { RelicMiner } from './relic-miner';
 export { Reminisce } from './reminisce';
 export { RenoLoneRangerNatureBullet } from './reno-lone-ranger-nature-bullet';
+export { ReplicatingSpore } from './replicating-spore';
 export { ReplicatorInator } from './replicator-inator';
 export { ResortValet } from './resort-valet';
 export { Rhokdelar } from './rhokdelar';
