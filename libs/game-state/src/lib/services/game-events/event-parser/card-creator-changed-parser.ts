@@ -50,6 +50,7 @@ export class CardCreatorChangedParser implements EventParser {
 				inInitialDeck: isCardChanged ? false : cardInHand.inInitialDeck,
 				forged: isCardChanged ? undefined : cardInHand.forged,
 				relatedCardIds: isCardChanged ? undefined : cardInHand.relatedCardIds,
+				mainAttributeChange: isCardChanged ? undefined : cardInHand.mainAttributeChange,
 
 				// To avoid info leaks from Mask of Mimicry
 				creatorCardId: isCardInfoPublic ? gameEvent.additionalData.creatorCardId : cardInHand.creatorCardId,
