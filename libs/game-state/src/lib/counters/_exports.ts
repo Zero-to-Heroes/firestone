@@ -5,6 +5,7 @@ import { AnachronosCounterDefinitionV2 } from './impl/anachronos';
 import { AnimalCompanionAuraCounterDefinitionV2 } from './impl/animal-companion-aura-counter';
 import { AstralAutomatonCounterDefinitionV2 } from './impl/astral-automaton';
 import { AvianaElunesChoseCounterDefinitionV2 } from './impl/aviana-elunes-chosen';
+import { BashanaCounterDefinitionV2 } from './impl/bashana';
 import { BgsAncestralAutomatonCounterDefinitionV2 } from './impl/battlegrounds/ancestral-automaton';
 import { BallerBuffCounterDefinitionV2 } from './impl/battlegrounds/baller-buff';
 import { BeetlesBuffCounterDefinitionV2 } from './impl/battlegrounds/beetles-buff';
@@ -153,6 +154,7 @@ export const getAllCounters: (
 	new NextStarshipLaunchCounterDefinitionV2(i18n, allCards),
 	new CardsPlayedThisTurnCounterDefinitionV2(i18n, allCards),
 	new MinionsDeadThisGameCounterDefinitionV2(i18n, allCards),
+	new BashanaCounterDefinitionV2(i18n, allCards),
 	new StarshipsLaunchedCounterDefinitionV2(i18n, allCards),
 	new SpellsPlayedConstructedCounterDefinitionV2(i18n, allCards),
 	new LibramPlayedCounterDefinitionV2(i18n, allCards),

@@ -1164,6 +1164,7 @@ const internalGiftCreators = [
 	CardIds.Torch_CATA_585,
 	CardIds.RitualOfPower_CATA_561,
 	CardIds.BlackwingExperiment_CATA_464,
+	CardIds.BashanaRunetotem_MEND_046,
 ];
 for (const cardId of Object.keys(cardsInfoCache)) {
 	const card = cardsInfoCache[cardId];

@@ -451,6 +451,8 @@ export class Oracle {
 					return CardIds.BarrelOfMonkeys_BarrelOfMonkeysToken_ETC_207t2;
 				case CardIds.BarrelOfMonkeys:
 					return CardIds.BarrelOfMonkeys_BarrelOfMonkeysToken_ETC_207t;
+				case CardIds.BashanaRunetotem_MEND_046:
+					return CardIds.BashanaRunetotem_TreantToken_MEND_046t;
 				case CardIds.BaubleOfBeetles_ULDA_307:
 					return CardIds.BaubleOfBeetles_ULDA_307ts;
 				case CardIds.BeneathTheGrounds:

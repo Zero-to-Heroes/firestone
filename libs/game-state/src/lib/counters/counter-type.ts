@@ -8,6 +8,7 @@ export type CounterType =
 	| '_ceaselessExpanse'
 	| 'cardsDrawnThisTurn'
 	| 'outcast'
+	| 'bashana'
 	| 'dragoncallerAlanna'
 	| 'diveTheGolakkaDepths'
 	| 'rafaamTime'
