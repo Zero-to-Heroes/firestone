@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { CardIds, GameTag } from '@firestone-hs/reference-data';
+import { CardIds } from '@firestone-hs/reference-data';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { GameState } from '../../models/game-state';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
@@ -32,9 +32,9 @@ export class LeylineSpellCostDiscountCounterDefinitionV2 extends CounterDefiniti
 		pref: 'opponentLeylineSpellCostDiscountCounter' as const,
 		display: (state: GameState): boolean => (this.opponent.value(state) ?? 0) > 0,
 		value: (state: GameState): number | null => {
-			const v = state.opponentDeck.enchantments
-				.filter((e) => e.cardId === CardIds.UnblockLeylineEnchantment_MEND_501t2e)
-				.reduce((acc, e) => acc + (e.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_1] ?? 0), 0);
+			const v = state.opponentDeck.enchantments.filter(
+				(e) => e.cardId === CardIds.UnblockLeylineEnchantment_MEND_501t2e,
+			).length;
 			return v > 0 ? v : null;
 		},
 		setting: {
