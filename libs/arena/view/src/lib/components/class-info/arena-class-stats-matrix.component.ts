@@ -79,7 +79,7 @@ type MatrixSortState =
 							class="cell row-header sortable"
 							[class.active-sort]="isActiveRowSort(row.id)"
 							[ngClass]="{ global: row.isGlobal }"
-							[helpTooltip]="row.label"
+							[helpTooltip]="rowHeaderTooltip(row)"
 							(click)="onRowHeaderClick(row.id); $event.stopPropagation()"
 						>
 							<img class="class-icon" *ngIf="row.icon" [src]="row.icon" />
@@ -125,6 +125,7 @@ export class ArenaClassStatsMatrixComponent {
 
 	columns: readonly MatrixColumn[] = [];
 	globalLabel: string;
+	globalColumnTooltip: string | null;
 	globalRowTooltip: string | null;
 	resetSortCornerAria = '';
 
@@ -144,6 +145,9 @@ export class ArenaClassStatsMatrixComponent {
 		private readonly cdr: ChangeDetectorRef,
 	) {
 		this.globalLabel = this.i18n.translateString('app.arena.class-tier-list.matrix.global') ?? 'Global';
+		this.globalColumnTooltip = this.i18n.translateString(
+			'app.arena.class-tier-list.matrix.global-column-tooltip',
+		);
 		this.globalRowTooltip = this.i18n.translateString('app.arena.class-tier-list.matrix.global-row-tooltip');
 		this.resetSortCornerAria =
 			this.i18n.translateString('app.arena.class-tier-list.matrix.reset-sort-corner') ?? '';
@@ -259,9 +263,16 @@ export class ArenaClassStatsMatrixComponent {
 
 	columnHeaderTooltip(colId: string): string | null {
 		if (colId === GLOBAL_COLUMN_ID) {
-			return this.globalRowTooltip;
+			return this.globalColumnTooltip;
 		}
 		return this.columnByHeroPowerId.get(colId)?.tooltip ?? null;
+	}
+
+	rowHeaderTooltip(row: MatrixRow): string {
+		if (row.isGlobal) {
+			return this.globalRowTooltip ?? row.label;
+		}
+		return row.label;
 	}
 
 	heroPowerIconUrl(colId: string): string {
