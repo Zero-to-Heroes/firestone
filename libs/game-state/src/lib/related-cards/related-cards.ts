@@ -33,7 +33,7 @@ export const buildContextRelatedCardIds = (
 			return (
 				deckState.cardsInStartingHand
 					?.map((c) => c.cardId ?? deckState.findCard(c.entityId)?.card?.cardId)
-					.filter((c) => c !== cardId) ?? []
+					.filter((c) => c !== cardId && !allCards.getCard(c).isCoin) ?? []
 			);
 		default:
 			const dynamicCards = getDynamicRelatedCardIds(cardId, entityId, allCards.getService(), {
