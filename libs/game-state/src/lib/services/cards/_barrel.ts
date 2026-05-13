@@ -69,6 +69,7 @@ export { CultivatingSprite } from './cultivating-sprite';
 export { DaUndatakah } from './da-undatakah';
 export { DarkPeddler } from './dark-peddler';
 export { DeathsAdvance } from './deaths-advance';
+export { DeathwingWorldbreaker } from './deathwing-worldbreaker';
 export { DeepSpaceCurator } from './deep-space-curator';
 export { DejaVu } from './deja-vu';
 export { DrBoomMadGeniusDeliveryDrone } from './delivery-drone';
