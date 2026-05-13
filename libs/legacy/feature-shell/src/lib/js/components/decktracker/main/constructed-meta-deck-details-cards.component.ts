@@ -35,8 +35,7 @@ import { ConstructedDeckDetails } from './constructed-meta-deck-details-view.com
 					></span>
 					<span class="details">{{ removedCardsHeaderDetails }}</span>
 				</div>
-				<deck-list-static class="cards" [cards]="removedCards" [collection]="value.collection">
-				</deck-list-static>
+				<deck-list-static class="cards" [cards]="removedCards"> </deck-list-static>
 			</div>
 			<div class="container added">
 				<div class="title">
@@ -88,6 +87,7 @@ export class ConstructedMetaDeckDetailsCardsComponent
 	}
 
 	ngAfterContentInit() {
+		this.collection$ = this.collection$$.pipe(this.mapData((collection) => collection));
 		this.deck$$.pipe(this.mapData((deck) => deck)).subscribe((deck) => {
 			this.archetypeCoreCards = buildCardVariations(
 				deck.archetypeCoreCards,
@@ -102,21 +102,21 @@ export class ConstructedMetaDeckDetailsCardsComponent
 				archetypeCoreCardsNumber > 0
 					? this.i18n.translateString('app.decktracker.meta.deck.cards-header-details', {
 							value: archetypeCoreCardsNumber,
-					  })
+						})
 					: null;
 			const removedCardsNumber = this.removedCards.map((c) => c.quantity).reduce((a, b) => a + b, 0);
 			this.removedCardsHeaderDetails =
 				removedCardsNumber > 0
 					? this.i18n.translateString('app.decktracker.meta.deck.cards-header-details', {
 							value: removedCardsNumber,
-					  })
+						})
 					: null;
 			const addedCardsNumber = this.addedCards.map((c) => c.quantity).reduce((a, b) => a + b, 0);
 			this.addedCardsHeaderDetails =
 				addedCardsNumber > 0
 					? this.i18n.translateString('app.decktracker.meta.deck.cards-header-details', {
 							value: addedCardsNumber,
-					  })
+						})
 					: null;
 		});
 	}

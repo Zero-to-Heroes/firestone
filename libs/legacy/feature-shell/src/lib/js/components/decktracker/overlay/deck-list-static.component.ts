@@ -22,17 +22,7 @@ import {
 	uuidShort,
 } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
-import {
-	BehaviorSubject,
-	Observable,
-	combineLatest,
-	distinctUntilChanged,
-	filter,
-	map,
-	take,
-	takeUntil,
-	tap,
-} from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, distinctUntilChanged, filter, map, take, takeUntil } from 'rxjs';
 
 @Component({
 	standalone: false,
@@ -154,7 +144,6 @@ export class DeckListStaticComponent extends AbstractSubscriptionComponent imple
 			.pipe(
 				filter((deckstring) => !!deckstring?.length),
 				this.mapData((deckstring) => buildCardsFromDeckstring(deckstring, this.allCards)),
-				tap((cards) => console.debug('[deck-list-static] built cards', cards)),
 			)
 			.subscribe(this.cards$$);
 		this.deckstring$$
