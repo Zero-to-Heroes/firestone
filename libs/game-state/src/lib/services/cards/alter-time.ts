@@ -3,7 +3,7 @@ import { CardIds, CardType, hasSpellSchool, SpellSchool } from '@firestone-hs/re
 import { GuessedInfo } from '../../models/deck-card';
 import { canBeDiscoveredByClass, hasCorrectType } from '../../related-cards/dynamic-pools';
 import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
-import { filterCards, filterCardsFromThePast } from './utils';
+import { filterCardsFromThePast } from './utils';
 
 export const AlterTime: GeneratingCard & StaticGeneratingCard = {
 	cardIds: [CardIds.AlterTime_TIME_857],
@@ -25,13 +25,13 @@ export const AlterTime: GeneratingCard & StaticGeneratingCard = {
 		};
 	},
 	dynamicPool: (input: StaticGeneratingCardInput) => {
-		return filterCards(
+		return filterCardsFromThePast(
 			AlterTime.cardIds[0],
 			input.allCards,
 			(c) =>
 				hasCorrectType(c, CardType.SPELL) &&
 				hasSpellSchool(c, SpellSchool.ARCANE) &&
-				canBeDiscoveredByClass(c, input.inputOptions.currentClass),
+				canBeDiscoveredByClass(c, input.inputOptions.deckState.getCurrentClass()),
 			input.inputOptions,
 		);
 	},
