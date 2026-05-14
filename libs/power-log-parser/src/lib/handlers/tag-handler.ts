@@ -1,6 +1,5 @@
 import { GameTag } from '@firestone-hs/reference-data';
 import type { Helper } from '../helper';
-import { Logger } from '../logger';
 import { ChangeEntity, FullEntity, Game, GameEntity, NodeType, PlayerEntity, ShowEntity, Tag } from '../models';
 import { Regexes } from '../regexes';
 import type { ParserState } from '../state/parser-state';
@@ -23,7 +22,7 @@ export class TagHandler {
 			try {
 				tag = helper.ParseTag(tagName, value);
 			} catch (e: any) {
-				Logger.Log('Warning when parsing Tag: ' + tagName + ' with value ' + value, e.message);
+				console.debug('Warning when parsing Tag: ' + tagName + ' with value ' + value, e.message);
 				return false;
 			}
 
@@ -46,7 +45,7 @@ export class TagHandler {
 				(state.Node!.Object as ChangeEntity).Tags.push(tag);
 				state.GameState.Tag(tag, (state.Node!.Object as ChangeEntity).Entity);
 			} else {
-				Logger.Log('Invalid node ' + state.Node!.Type, data);
+				console.debug('Invalid node ' + state.Node!.Type, data);
 			}
 			return true;
 		}

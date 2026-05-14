@@ -2,7 +2,6 @@ import { GameTag, Step, Zone } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventProvider } from '../game-event';
 import { FullEntity, GameEntity, Node, NodeType, TagChange } from '../models';
-import { Logger } from '../logger';
 import { Utility } from '../utility';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
@@ -89,7 +88,7 @@ export class TurnStartParser implements ActionParser {
 		if (this.StateFacade.IsBattlegrounds()) {
 			const visualBoardState = this.GameState.GetGameEntity()?.GetTag(GameTag.BOARD_VISUAL_STATE);
 			if (newTurnValue % 2 === 0) {
-				Logger.Log('Prep BATTLEGROUNDS_COMBAT_START', '');
+				console.debug('Prep BATTLEGROUNDS_COMBAT_START', '');
 				this.GameState.BattleResultSent = false;
 				const heroes = this.BuildHeroes(this.GameState);
 				result.push(
@@ -109,7 +108,7 @@ export class TurnStartParser implements ActionParser {
 					),
 				);
 			} else {
-				Logger.Log('Prep BATTLEGROUNDS_RECRUIT_PHASE', '');
+				console.debug('Prep BATTLEGROUNDS_RECRUIT_PHASE', '');
 				const heroes = this.BuildHeroes(this.GameState);
 				result.push(
 					GameEventProvider.Create(

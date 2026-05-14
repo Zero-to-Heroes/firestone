@@ -2,7 +2,6 @@ import { GameTag, Zone } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventProvider, GameEventHelper } from '../game-event';
 import { Action, Node, NodeType, TagChange } from '../models';
-import { Logger } from '../logger';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -73,7 +72,7 @@ export class CardRemovedFromBoardParser implements ActionParser {
 			return gameEventProviders;
 		} else {
 			if (!this.GameState.CurrentEntities.has(tagChange.Entity)) {
-				Logger.Log('Could not find card to remove from board', node.CreationLogLine);
+				console.debug('Could not find card to remove from board', node.CreationLogLine);
 				return null;
 			}
 			const entity = this.GameState.CurrentEntities.get(tagChange.Entity)!;

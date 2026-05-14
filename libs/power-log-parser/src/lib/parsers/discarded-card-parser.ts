@@ -1,7 +1,6 @@
 import { GameTag, Zone } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventHelper, GameEventProvider } from '../game-event';
-import { Logger } from '../logger';
 import { Action, FullEntity, Node, NodeType, ShowEntity, TagChange } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
@@ -62,7 +61,7 @@ export class DiscardedCardParser implements ActionParser {
 		const showEntity = node.Object as ShowEntity;
 		const entity = this.GameState.CurrentEntities.get(showEntity.Entity);
 		if (entity == null) {
-			Logger.Log('Could not find entity while looking for discard', showEntity.Entity);
+			console.debug('Could not find entity while looking for discard', showEntity.Entity);
 		}
 		const cardId =
 			entity?.CardId != null && entity.CardId.length > 0 ? entity.CardId : showEntity.CardId;

@@ -1,7 +1,6 @@
 import { CardType, GameTag, Zone } from '@firestone-hs/reference-data';
 import type { Helper } from '../helper';
 import { GameEventProvider } from '../game-event';
-import { Logger } from '../logger';
 import { Game, Node, NodeType } from '../models';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -23,7 +22,7 @@ export class NewGameHandler {
 		if (data === 'CREATE_GAME') {
 			(state.NodeParser as any).ClearQueue?.();
 
-			Logger.Log('Handling create game', '');
+			console.debug('Handling create game', '');
 			const isReconnecting = !resettingGame
 				&& (stateType === StateType.GameState
 					? state.IsReconnecting(currentGameSeed)
@@ -33,7 +32,7 @@ export class NewGameHandler {
 					entity.SetTag(GameTag.ZONE, Zone.REMOVEDFROMGAME as number);
 				}
 				if (stateType === StateType.GameState) {
-					Logger.Log(
+					console.debug(
 						`Probable reconnect detected ${stateType} ${timestamp} // ${previousTimestamp} // ${state.Ended} // ${state.NumberOfCreates} // ${state.Spectating} // ${stateType} // ${data}`,
 						'',
 					);
@@ -93,7 +92,7 @@ export class NewGameHandler {
 			const newNode = new Node(NodeType.Game, state.CurrentGame, 0, null, data);
 			state.CreateNewNode(newNode);
 			state.Node = newNode;
-			Logger.Log('Created a new game', stateType + ' ' + timestamp + ',' + previousTimestamp);
+			console.debug('Created a new game', stateType + ' ' + timestamp + ',' + previousTimestamp);
 			return true;
 		}
 		return false;

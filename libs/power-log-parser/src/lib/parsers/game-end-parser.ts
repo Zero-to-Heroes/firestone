@@ -2,7 +2,6 @@ import { GameTag } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventProvider } from '../game-event';
 import { Node, NodeType, TagChange } from '../models';
-import { Logger } from '../logger';
 import { xmlFromReplay } from '../replay-converter';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
@@ -41,7 +40,7 @@ export class GameEndParser implements ActionParser {
 	}
 
 	CreateGameEventProviderFromNew(node: Node): GameEventProvider[] | null {
-		Logger.Log('Parsing end game', node.CreationLogLine);
+		console.debug('Parsing end game', node.CreationLogLine);
 		const tagChange = node.Object as TagChange;
 		if (tagChange.Name === (GameTag.TAG_PLAYER_CONCEDED_OR_DISCONNECTED as number)) {
 			const isPlayer = tagChange.Entity === this.StateFacade.LocalPlayer?.Id;
@@ -56,18 +55,18 @@ export class GameEndParser implements ActionParser {
 		}
 
 		const gameStateReport = this.GameState.BuildGameStateReport(this.StateFacade);
-		Logger.Log('gameStateReport built', '');
+		console.debug('gameStateReport built', '');
 
 		let replayXml: string | null = null;
 		try {
-			Logger.Log('Will convert to xml', '');
+			console.debug('Will convert to xml', '');
 			replayXml = xmlFromReplay(this.StateFacade.GSReplay);
-			Logger.Log('XML converted', '');
+			console.debug('XML converted', '');
 		} catch (ex) {
-			Logger.Log('Could not convert replay to xml', `${ex}`);
+			console.debug('Could not convert replay to xml', `${ex}`);
 		}
 
-		Logger.Log('Enqueuing GAME_END event', '');
+		console.debug('Enqueuing GAME_END event', '');
 		this.ParserState.EndCurrentGame();
 		return [
 			GameEventProvider.Create(

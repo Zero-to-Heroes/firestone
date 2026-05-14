@@ -36,7 +36,6 @@
  * per-state ActionParser contract.
  */
 import { BlockType } from '@firestone-hs/reference-data';
-import { Logger } from '../logger';
 import { CombinedState } from '../state/combined-state';
 import { ParserState } from '../state/parser-state';
 import { RewindCardOracle } from './card-oracle';
@@ -330,7 +329,7 @@ export class RewindController {
 			console.log(`[rewind] onGsGameResetStart entityId=${originEntityId} retained=${this.retained.length}`);
 		const idx = findLastIndex(this.retained, (s) => s.meta.originEntityId === originEntityId);
 		if (idx < 0) {
-			Logger.Log(`No retained snapshot for rewind origin entityId=${originEntityId}`, '');
+			console.debug(`No retained snapshot for rewind origin entityId=${originEntityId}`, '');
 			return null;
 		}
 		const snapshot = this.retained[idx];
@@ -355,7 +354,7 @@ export class RewindController {
 		if (this.shouldSkipForGameMode()) return null;
 		const idx = findLastIndex(this.pendingPtlRestores, (e) => e.originEntityId === originEntityId);
 		if (idx < 0) {
-			Logger.Log(`No parked PTL snapshot for rewind origin entityId=${originEntityId}`, '');
+			console.debug(`No parked PTL snapshot for rewind origin entityId=${originEntityId}`, '');
 			return null;
 		}
 		const entry = this.pendingPtlRestores[idx];

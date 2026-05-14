@@ -2,7 +2,6 @@ import { GameTag } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventProvider } from '../game-event';
 import { Node, NodeType, TagChange } from '../models';
-import { Logger } from '../logger';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
 
@@ -31,7 +30,7 @@ export class GameCleanupParser implements ActionParser {
 	}
 
 	CreateGameEventProviderFromNew(node: Node): GameEventProvider[] | null {
-		Logger.Log('Ending current game in GS', node.CreationLogLine);
+		console.debug('Ending current game in GS', node.CreationLogLine);
 		this.ParserState.EndCurrentGame();
 		return null;
 	}

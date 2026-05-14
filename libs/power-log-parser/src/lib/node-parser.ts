@@ -2,7 +2,6 @@ import type { ActionParser } from './action-parser';
 import { ControlsManager } from './controls/controls-manager';
 import { EventQueueHandler } from './event-queue-handler';
 import { GameEventProvider } from './game-event';
-import { Logger } from './logger';
 import { Node } from './models';
 import {
 	ArmorChangeParser,
@@ -220,9 +219,9 @@ export class NodeParser implements INodeParser {
 					this.EnqueueGameEvent(providers);
 				}
 			} catch (e: any) {
-				Logger.Log('ERROR: Exception while parsing node', e?.message ?? e);
-				Logger.Log(node.CreationLogLine ?? '', '');
-				Logger.Log(e?.stack ?? '', '');
+				console.debug('ERROR: Exception while parsing node', e?.message ?? e);
+				console.debug(node.CreationLogLine ?? '', '');
+				console.debug(e?.stack ?? '', '');
 			}
 		}
 	}
@@ -239,9 +238,9 @@ export class NodeParser implements INodeParser {
 						this.EnqueueGameEvent(providers);
 					}
 				} catch (e: any) {
-					Logger.Log('ERROR: Exception while parsing node', e?.message ?? e);
-					Logger.Log(node.CreationLogLine ?? '', '');
-					Logger.Log(e?.stack ?? '', '');
+					console.debug('ERROR: Exception while parsing node', e?.message ?? e);
+					console.debug(node.CreationLogLine ?? '', '');
+					console.debug(e?.stack ?? '', '');
 				}
 			}
 		}

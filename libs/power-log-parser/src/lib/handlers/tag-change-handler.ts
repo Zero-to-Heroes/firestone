@@ -2,7 +2,6 @@ import { GameTag, PlayState } from '@firestone-hs/reference-data';
 import type { Helper } from '../helper';
 import { innkeeperNames, bobTavernNames } from '../helper';
 import { GameEventProvider } from '../game-event';
-import { Logger } from '../logger';
 import { Action, FullEntity, Game, Node, NodeType, PlayerEntity, Tag, TagChange } from '../models';
 import { Regexes } from '../regexes';
 import { ParserState, StateType } from '../state/parser-state';
@@ -31,7 +30,7 @@ export class TagChangeHandler {
 			try {
 				tag = helper.ParseTag(tagName, value);
 			} catch (e: any) {
-				Logger.Log('Warning when parsing TagChange: ' + tagName + ' with value ' + value, e.message);
+				console.debug('Warning when parsing TagChange: ' + tagName + ' with value ' + value, e.message);
 				return false;
 			}
 			state.GameState.UpdateEntityName(rawEntity);

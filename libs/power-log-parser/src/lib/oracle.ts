@@ -6,7 +6,6 @@ import { RazaTheResealed } from './cards/raza-the-resealed';
 import { RunicAdornment } from './cards/runic-adornment';
 import { Triangulate } from './cards/triangulate';
 import { MetaDataType } from './enums';
-import { Logger } from './logger';
 import { Action, ShowEntity } from './models/action';
 import { FullEntity } from './models/entity';
 import { GameData } from './models/game-data';
@@ -1732,7 +1731,7 @@ export class Oracle {
 						.flatMap((m) => m.MetaInfo)
 						.map((info) => info.Entity);
 					if (candidateEntityIds.length !== 1) {
-						Logger.Log(
+						console.debug(
 							"WARN: could not determine with full accuracy Ice Trap's target",
 							candidateEntityIds.length,
 						);
@@ -1754,7 +1753,7 @@ export class Oracle {
 						.flatMap((m) => m.MetaInfo)
 						.map((info) => info.Entity);
 					if (candidateEntityIds.length !== 1) {
-						Logger.Log(
+						console.debug(
 							"WARN: could not determine with full accuracy Getaway Kodo's target",
 							candidateEntityIds.length,
 						);
@@ -1780,7 +1779,7 @@ export class Oracle {
 						.filter((e) => e.IsMinionLike())
 						.map((e) => e.Entity);
 					if (candidateEntityIds.length !== 1) {
-						Logger.Log(
+						console.debug(
 							"WARN: could not determine with full accuracy Flesh Behemoth's target",
 							candidateEntityIds.length,
 						);

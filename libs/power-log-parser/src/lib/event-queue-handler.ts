@@ -1,5 +1,4 @@
 import { GameEvent, GameEventProvider, GameEventDebug } from './game-event';
-import { Logger } from './logger';
 import type { StateFacade } from './state/state-facade';
 
 export class EventQueueHandler {

@@ -2,7 +2,6 @@ import { CardIds, CardType, GameTag, Zone } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { TimewarpedNelliesShip } from '../cards/timewarped-nellies-ship';
 import { GameEventProvider } from '../game-event';
-import { Logger } from '../logger';
 import { FullEntity, Node, NodeType, ShowEntity, Tag } from '../models';
 import { TagChange } from '../models/tag';
 import { GameState } from '../state/game-state';
@@ -174,7 +173,7 @@ export class BattlegroundsPlayerBoardParser implements ActionParser {
 	CreateGameEventProviderFromNew(node: Node): GameEventProvider[] | null {
 		BattlegroundsPlayerBoardParser.IsPTLReadyForBattle = false;
 		BattlegroundsPlayerBoardParser.IsGSReadyForBattle = false;
-		Logger.Log('Starting to build player boards', node.CreationLogLine);
+		console.debug('Starting to build player boards', node.CreationLogLine);
 		const tagChange = node.Object as TagChange;
 		const opponent = this.StateFacade.OpponentPlayer!;
 		const player = this.StateFacade.LocalPlayer!;
@@ -197,14 +196,14 @@ export class BattlegroundsPlayerBoardParser implements ActionParser {
 		);
 
 		this.GameState.BgsHasSentNextOpponent = false;
-		Logger.Log('Player boards built', '');
+		console.debug('Player boards built', '');
 
 		return [
 			GameEventProvider.Create(
 				tagChange.TimeStamp,
 				'BATTLEGROUNDS_PLAYER_BOARD',
 				() => {
-					Logger.Log(
+					console.debug(
 						'Providing player board events ' + tagChange.TimeStamp + ' ' + node.CreationLogLine,
 						`player: ${playerBoard?.Board?.map((e) => e.CardId).join("'") ?? ''} ` +
 							`opponent: ${opponentBoard?.Board?.map((e) => e.CardId).join("'") ?? ''}`,
@@ -236,7 +235,7 @@ export class BattlegroundsPlayerBoardParser implements ActionParser {
 		stateFacade: StateFacade,
 	): PlayerBoard | null {
 		if (isOpponent) {
-			Logger.Log(
+			console.debug(
 				`Building opponent board for playerPlayerId=${playerPlayerId}, playerEntityId=${playerEntityId}`,
 				'',
 			);
@@ -338,7 +337,7 @@ export class BattlegroundsPlayerBoardParser implements ActionParser {
 				BattlegroundsPlayerBoardParser.AddEnchantments(gameState.CurrentEntities, entity),
 			);
 			if (finalBoard.length > 7) {
-				Logger.Log('Too many entities on board', '');
+				console.debug('Too many entities on board', '');
 			}
 
 			const questRewardRawEntities = currentEntities
@@ -390,7 +389,7 @@ export class BattlegroundsPlayerBoardParser implements ActionParser {
 				)
 				.map((entity) => entity.Clone());
 			if (heroPowerEntities.length === 0) {
-				Logger.Log('WARNING: could not find hero power', '');
+				console.debug('WARNING: could not find hero power', '');
 			}
 
 			const heroPowers: BgsHeroPower[] = heroPowerEntities.map((hp) => ({

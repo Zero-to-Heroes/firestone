@@ -1,7 +1,6 @@
 import { CardIds, CardType, GameTag, Step, Zone } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventProvider } from '../game-event';
-import { Logger } from '../logger';
 import { FullEntity, Node, NodeType, Player } from '../models';
 import { TagChange } from '../models/tag';
 import { GameState } from '../state/game-state';
@@ -181,7 +180,7 @@ export class BattlegroundsActivePlayerBoardParser implements ActionParser {
 					.filter((entity) => entity.GetTag(GameTag.CARDTYPE) === (CardType.HERO_POWER as number))
 					.map((entity) => entity.Clone())[0] ?? null;
 			if (heroPower == null) {
-				Logger.Log('WARNING: could not find hero power', '');
+				console.debug('WARNING: could not find hero power', '');
 			}
 			const heroPowerUsed = heroPower?.GetTag(GameTag.BACON_HERO_POWER_ACTIVATED) === 1;
 			const heroPowerCreatedEntity: string | null = null;
@@ -189,7 +188,7 @@ export class BattlegroundsActivePlayerBoardParser implements ActionParser {
 				BattlegroundsPlayerBoardParser.AddEnchantments(gameState.CurrentEntities, entity),
 			);
 			if (finalBoard.length > 7) {
-				Logger.Log('Too many entities on board', '');
+				console.debug('Too many entities on board', '');
 			}
 
 			const questRewardRawEntities = currentEntities

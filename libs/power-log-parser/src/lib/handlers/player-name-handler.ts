@@ -1,5 +1,4 @@
 import { innkeeperNames, bobTavernNames } from '../helper';
-import { Logger } from '../logger';
 import { Regexes } from '../regexes';
 import type { ParserState, StateType } from '../state/parser-state';
 
@@ -27,9 +26,9 @@ export class PlayerNameHandler {
 					state.OpponentPlayer.Name = playerName;
 				}
 				state.TryAssignLocalPlayer(timestamp, data);
-				Logger.Log('Tried to assign player name', data);
+				console.debug('Tried to assign player name', data);
 			} catch (e: any) {
-				Logger.Log('Exception while assigning player name', data);
+				console.debug('Exception while assigning player name', data);
 				return false;
 			}
 			return true;

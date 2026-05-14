@@ -1,5 +1,4 @@
 import { GameEventProvider } from '../game-event';
-import { Logger } from '../logger';
 import { Node, NodeType } from '../models';
 import type { ParserState } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -12,7 +11,7 @@ export class SpectatorHandler {
 		stateFacade: StateFacade,
 	): boolean {
 		if (data.includes('Begin Spectating') && !data.includes('2nd')) {
-			Logger.Log('Will handle spectate log', data);
+			console.debug('Will handle spectate log', data);
 			state.Reset(stateFacade);
 			state.Spectating = true;
 			state.NodeParser.EnqueueGameEvent([
@@ -34,7 +33,7 @@ export class SpectatorHandler {
 			]);
 		}
 		if (data.includes('End Spectator Mode')) {
-			Logger.Log('Will handle end of spectate', data);
+			console.debug('Will handle end of spectate', data);
 			if (stateFacade?.LocalPlayer == null) {
 				return false;
 			}

@@ -3,7 +3,6 @@ import { ActionParser } from '../action-parser';
 import { GameEventProvider, GameEventHelper } from '../game-event';
 import { Action, Node, NodeType, TagChange } from '../models';
 import { GameState } from '../state/game-state';
-import { Logger } from '../logger';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
 
@@ -50,7 +49,7 @@ export class AttackParser implements ActionParser {
 		const defenderId = tagChange.Entity;
 
 		if (!this.GameState.CurrentEntities.has(attackerId) || !this.GameState.CurrentEntities.has(defenderId)) {
-			Logger.Log(
+			console.debug(
 				'Could not find entity or target',
 				attackerId + ' // ' + defenderId + ' // ' + node.CreationLogLine,
 			);

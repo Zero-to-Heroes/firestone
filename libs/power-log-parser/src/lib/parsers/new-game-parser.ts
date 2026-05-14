@@ -1,7 +1,6 @@
 import { ActionParser } from '../action-parser';
 import { GameEventProvider } from '../game-event';
 import { Game, Node, NodeType } from '../models';
-import { Logger } from '../logger';
 import { Utility } from '../utility';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -26,7 +25,7 @@ export class NewGameParser implements ActionParser {
 	}
 
 	CreateGameEventProviderFromNew(node: Node): GameEventProvider[] | null {
-		Logger.Log('will emit NEW_GAME event', node.CreationLogLine);
+		console.debug('will emit NEW_GAME event', node.CreationLogLine);
 		return [
 			GameEventProvider.Create(
 				(node.Object as Game).TimeStamp,

@@ -8,7 +8,6 @@ import {
 	Tag,
 	TagChange,
 } from '../models';
-import { Logger } from '../logger';
 import { Regexes } from '../regexes';
 import { GameMetaData } from './game-meta-data';
 import { GameStateReport } from './game-state-report';
@@ -61,7 +60,7 @@ export class GameState {
 	GameEntity(entity: GameEntity): void {
 		if (this.CurrentEntities.has(entity.Id)) {
 			if (!this.ParserState.ReconnectionOngoing) {
-				Logger.Log('error while parsing GameEntity, playerEntity already present in memory', '' + entity.Id);
+				console.debug('error while parsing GameEntity, playerEntity already present in memory', '' + entity.Id);
 			}
 			return;
 		}
@@ -99,7 +98,7 @@ export class GameState {
 	PlayerEntity(entity: PlayerEntity): void {
 		if (this.CurrentEntities.has(entity.Id)) {
 			if (!this.ParserState.ReconnectionOngoing) {
-				Logger.Log('error while parsing, playerEntity already present in memory', '' + entity.Id);
+				console.debug('error while parsing, playerEntity already present in memory', '' + entity.Id);
 			}
 			return;
 		}
@@ -153,7 +152,7 @@ export class GameState {
 
 	ShowEntity(entity: ShowEntity): void {
 		if (!this.CurrentEntities.has(entity.Entity)) {
-			Logger.Log("error while parsing, showentity doesn't have an entity in memory yet", '' + entity.Entity);
+			console.debug("error while parsing, showentity doesn't have an entity in memory yet", '' + entity.Entity);
 			return;
 		}
 
@@ -245,7 +244,7 @@ export class GameState {
 
 	ChangeEntity(entity: ChangeEntity): void {
 		if (!this.CurrentEntities.has(entity.Entity)) {
-			Logger.Log("error while parsing, changeEntity doesn't have an entity in memory yet", '' + entity.Entity);
+			console.debug("error while parsing, changeEntity doesn't have an entity in memory yet", '' + entity.Entity);
 			return;
 		}
 
@@ -295,7 +294,7 @@ export class GameState {
 
 	Tag(tag: Tag, entityId: number): void {
 		if (!this.CurrentEntities.has(entityId)) {
-			Logger.Log("error while parsing, tag doesn't have an entity in memory yet", '' + entityId);
+			console.debug("error while parsing, tag doesn't have an entity in memory yet", '' + entityId);
 			return;
 		}
 

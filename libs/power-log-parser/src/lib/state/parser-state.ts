@@ -22,7 +22,6 @@ import {
 	Tag,
 } from '../models';
 import { GameEventProvider } from '../game-event';
-import { Logger } from '../logger';
 import { GameState } from './game-state';
 import type { StateFacade } from './state-facade';
 
@@ -110,7 +109,7 @@ export class ParserState {
 	}
 
 	constructor(type: StateType, nodeParser: INodeParser, stateFacade: StateFacade) {
-		Logger.Log('Calling reset from ParserState constructor', type);
+		console.debug('Calling reset from ParserState constructor', type);
 		this.StateType = type;
 		this.StateFacade = stateFacade;
 		this.NodeParser = nodeParser;
@@ -188,7 +187,7 @@ export class ParserState {
 		this.Ended = false;
 		this.ReconnectionOngoing = false;
 		this.NumberOfCreates = 0;
-		Logger.Log(`resetting game state, ended is now Ended=${this.Ended}`, this.StateType);
+		console.debug(`resetting game state, ended is now Ended=${this.Ended}`, this.StateType);
 
 		this._isBattlegrounds = null;
 		this._cachedPlayers = [];
@@ -222,7 +221,7 @@ export class ParserState {
 
 	EndCurrentGame(): void {
 		this.Ended = true;
-		Logger.Log(`Game Ended in type=${this.StateType}`, `Ended=${this.Ended}`);
+		console.debug(`Game Ended in type=${this.StateType}`, `Ended=${this.Ended}`);
 	}
 
 	UpdateCurrentNode(...types: NodeType[]): void {
@@ -331,7 +330,7 @@ export class ParserState {
 			.filter((d) => d.GetZone() === (Zone.HAND as number));
 
 		if (showEntities.length === 0) {
-			Logger.Log('No show entity, fallback to fullentity in hand', '');
+			console.debug('No show entity, fallback to fullentity in hand', '');
 			showEntities = this.CurrentGame
 				.FilterGameData(FullEntity)
 				.filter((d): d is FullEntity => d instanceof FullEntity)
@@ -339,7 +338,7 @@ export class ParserState {
 				.filter((d) => d.GetTag(GameTag.CREATOR) !== this.GameState.GetGameEntity()?.Id);
 
 			if (showEntities.length === 0) {
-				Logger.Log('No full entity in hand, fallback to fullentity', '');
+				console.debug('No full entity in hand, fallback to fullentity', '');
 				showEntities = this.CurrentGame.FilterGameData(FullEntity) as unknown as IEntityData[];
 			}
 		}
@@ -389,7 +388,7 @@ export class ParserState {
 		}
 
 		if (this._localPlayer == null && this._opponentPlayer == null) {
-			Logger.Log(
+			console.debug(
 				'ERROR TO LOG: Could not assign local player ' + data,
 				this.getPlayers()
 					?.map((player) => player.Name)
@@ -458,7 +457,7 @@ export class ParserState {
 	}
 
 	IsReconnecting(gameSeedForCurrentLogs: number): boolean {
-		Logger.Log(
+		console.debug(
 			'Is reconnecting?',
 			`statType=${this.StateType}, ended=${this.Ended}, creates=${this.NumberOfCreates}, spectating=${this.Spectating}, gameSeed=${this.CurrentGame?.GameSeed}, currentGameSeed=${gameSeedForCurrentLogs}`,
 		);

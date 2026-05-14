@@ -1,5 +1,4 @@
 import { GameEvent } from './game-event';
-import { Logger } from './logger';
 
 export class GameEventHandler {
 	onEvent: ((event: GameEvent) => void) | null = null;
@@ -12,7 +11,7 @@ export class GameEventHandler {
 			if (gameEvent != null) {
 				this.queuedEvents.push(gameEvent);
 			}
-			Logger.Log('Sending queued events', '');
+			console.debug('Sending queued events', '');
 			if (this.onEventsAll) {
 				this.onEventsAll(this.queuedEvents);
 			}

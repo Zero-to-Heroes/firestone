@@ -10,7 +10,6 @@ import { OptionsHandler } from './handlers/options-handler';
 import { PowerDataHandler } from './handlers/power-data-handler';
 import { PowerProcessorHandler } from './handlers/power-processor-handler';
 import { Helper } from './helper';
-import { Logger } from './logger';
 import { HearthstoneReplay, Node } from './models';
 import { NodeParser } from './node-parser';
 import { Regexes } from './regexes';
@@ -127,7 +126,7 @@ export class ReplayParser {
 			onRewindCapableActionStart: (meta) => this.emitRewindCapableActionStart(meta),
 		});
 		ReplayParser.start = new Date().toISOString();
-		Logger.Log('ReplayParser constructor over', this.State.GSState == null);
+		console.debug('ReplayParser constructor over', this.State.GSState == null);
 	}
 
 	private createNodeParser(stateFacade: StateFacade, stateType: StateType): INodeParser {
@@ -151,7 +150,7 @@ export class ReplayParser {
 	Read(lines: string[]): void {
 		this.Init();
 		const gameSeed = this.ExtractGameSeed(lines);
-		Logger.Log(`Extracted game seed = ${gameSeed}`, '');
+		console.debug(`Extracted game seed = ${gameSeed}`, '');
 		if (gameSeed > 0) {
 			this.CurrentGameSeed = gameSeed;
 		}
@@ -164,7 +163,7 @@ export class ReplayParser {
 	}
 
 	Init(): void {
-		Logger.Log('Calling reset from ReplayParser.init()', '');
+		console.debug('Calling reset from ReplayParser.init()', '');
 		this.previousTimestamp = '';
 	}
 
@@ -247,7 +246,7 @@ export class ReplayParser {
 			if (line.includes('End Spectator Mode') || (line.includes('Begin Spectating') && !line.includes('2nd'))) {
 				this.AddData('', 'Spectator', line, gameSeed);
 			} else if (line != null && line.trim().length > 0) {
-				Logger.Log('No match', line);
+				console.debug('No match', line);
 			}
 			return;
 		}
@@ -493,7 +492,7 @@ export class ReplayParser {
 				);
 				this.powerDataHandler.Handle(normalizedTimestamp, data, this.State.PTLState);
 				if (this.State.StateFacade.ShouldUpdateToRoot(data)) {
-					Logger.Log('Update to root', data);
+					console.debug('Update to root', data);
 					this.State.StateFacade.UpdatePTLToRoot();
 				}
 				this.previousTimestamp = normalizedTimestamp;
@@ -563,13 +562,13 @@ export class ReplayParser {
 				}
 				if (valueEnd > valueStart) {
 					const seedValue = line.substring(valueStart, valueEnd);
-					Logger.Log('Extracted seed', seedValue);
+					console.debug('Extracted seed', seedValue);
 					return parseInt(seedValue, 10);
 				}
 			}
 		}
 		if (isGameCreation) {
-			Logger.Log('CREATE_GAME without seed', lines[lines.length - 1]);
+			console.debug('CREATE_GAME without seed', lines[lines.length - 1]);
 		}
 		return isGameCreation ? -1 : 0;
 	}
