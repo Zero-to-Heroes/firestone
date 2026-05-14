@@ -31,7 +31,7 @@ export class CardsDiscardedCounterDefinitionV2 extends CounterDefinitionV2<numbe
 		pref: 'opponentCardsDiscardedCounter' as const,
 		display: (state: GameState): boolean => hasOrHadHeroClass(state.opponentDeck?.hero, [CardClass.WARLOCK]),
 		value: (state: GameState): number =>
-			state.opponentDeck.otherZone?.filter((c) => c.zone === 'DISCARD').length ?? null,
+			state.opponentDeck.otherZone?.filter((c) => c.zone === 'DISCARD').length ?? 0,
 		setting: {
 			label: (i18n: ILocalizationService): string =>
 				i18n.translateString('settings.decktracker.your-deck.counters.cards-discarded-label'),

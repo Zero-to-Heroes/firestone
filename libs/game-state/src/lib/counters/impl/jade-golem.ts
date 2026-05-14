@@ -32,7 +32,8 @@ export class JadeGolemCounterDefinitionV2 extends CounterDefinitionV2<number> {
 		pref: 'opponentJadeGolemCounter' as const,
 		display: (state: GameState): boolean => true,
 		value: (state: GameState) => {
-			return state.opponentDeck.jadeGolemSize ?? 0;
+			const n = state.opponentDeck.jadeGolemSize ?? 0;
+			return n > 0 ? n : null;
 		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>

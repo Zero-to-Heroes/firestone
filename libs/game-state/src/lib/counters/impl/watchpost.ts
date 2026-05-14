@@ -29,7 +29,8 @@ export class WatchpostCounterDefinitionV2 extends CounterDefinitionV2<number> {
 		pref: 'opponentWatchpostCounter' as const,
 		display: (state: GameState): boolean => true,
 		value: (state: GameState) => {
-			return state.opponentDeck.watchpostsPlayedThisMatch ?? 0;
+			const n = state.opponentDeck.watchpostsPlayedThisMatch ?? 0;
+			return n > 0 ? n : null;
 		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>

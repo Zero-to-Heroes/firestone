@@ -43,7 +43,8 @@ export class SpellsPlayedCounterDefinitionV2 extends CounterDefinitionV2<number>
 		pref: 'opponentSpellCounter' as const,
 		display: (state: GameState): boolean => true,
 		value: (state: GameState) => {
-			return state.opponentDeck.spellsPlayedThisMatch?.length ?? 0;
+			const n = state.opponentDeck.spellsPlayedThisMatch?.length ?? 0;
+			return n > 0 ? n : null;
 		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>
@@ -61,7 +62,7 @@ export class SpellsPlayedCounterDefinitionV2 extends CounterDefinitionV2<number>
 	}
 
 	protected override tooltip(side: 'player' | 'opponent', gameState: GameState): string {
-		const value = this[side].value(gameState)!;
+		const value = this[side]?.value(gameState) ?? 0;
 		return this.i18n.translateString(`counters.spell.${side}`, { value: value });
 	}
 }

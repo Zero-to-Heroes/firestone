@@ -29,7 +29,8 @@ export class ElwynnBoarCounterDefinitionV2 extends CounterDefinitionV2<number> {
 		pref: 'opponentElwynnBoarCounter' as const,
 		display: (state: GameState): boolean => true,
 		value: (state: GameState) => {
-			return state.opponentDeck.elwynnBoarsDeadThisMatch ?? 0;
+			const n = state.opponentDeck.elwynnBoarsDeadThisMatch ?? 0;
+			return n > 0 ? n : null;
 		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>

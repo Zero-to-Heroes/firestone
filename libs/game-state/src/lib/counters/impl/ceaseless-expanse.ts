@@ -25,7 +25,10 @@ export class CeaselessExpanseCounterDefinitionV2 extends CounterDefinitionV2<num
 	readonly opponent = {
 		pref: 'opponentCeaselessExpanseCounter' as const,
 		display: (state: GameState): boolean => true,
-		value: (state: GameState): number => this.getValue(state),
+		value: (state: GameState): number | null => {
+			const v = this.getValue(state);
+			return v > 0 ? v : null;
+		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>
 				i18n.translateString('settings.decktracker.your-deck.counters.ceaseless-expanse-label'),

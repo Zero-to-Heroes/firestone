@@ -33,7 +33,8 @@ export class EarthenGolemCounterDefinitionV2 extends CounterDefinitionV2<number>
 		pref: 'opponentEarthenGolemCounter' as const,
 		display: (state: GameState): boolean => true,
 		value: (state: GameState) => {
-			return state.opponentDeck.earthenGolemsSummoned ?? 0;
+			const n = state.opponentDeck.earthenGolemsSummoned ?? 0;
+			return n > 0 ? n : null;
 		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>
@@ -51,7 +52,7 @@ export class EarthenGolemCounterDefinitionV2 extends CounterDefinitionV2<number>
 	}
 
 	protected override tooltip(side: 'player' | 'opponent', gameState: GameState): string {
-		const value = this[side].value(gameState)!;
+		const value = this[side]?.value(gameState) ?? 0;
 		return this.i18n.translateString(`counters.specific-summons.${side}`, {
 			value: value,
 			cardName: this.allCards.getCard(CardIds.StoneheartKing_EarthenGolemToken).name,

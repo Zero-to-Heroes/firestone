@@ -31,7 +31,8 @@ export class WheelOfDeathCounterDefinitionV2 extends CounterDefinitionV2<number>
 		pref: 'opponentWheelOfDeathCounter' as const,
 		display: (state: GameState): boolean => state.playerDeck?.wheelOfDeathCounter != null,
 		value: (state: GameState) => {
-			return state.playerDeck.wheelOfDeathCounter ?? 0;
+			const c = state.playerDeck.wheelOfDeathCounter;
+			return c ?? null;
 		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>

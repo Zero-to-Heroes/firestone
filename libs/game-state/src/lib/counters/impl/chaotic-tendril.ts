@@ -29,7 +29,8 @@ export class ChaoticTendrilCounterDefinitionV2 extends CounterDefinitionV2<numbe
 		pref: 'opponentChaoticTendrilCounter' as const,
 		display: (state: GameState): boolean => true,
 		value: (state: GameState) => {
-			return state.opponentDeck.chaoticTendrilsPlayedThisMatch ?? 0;
+			const n = state.opponentDeck.chaoticTendrilsPlayedThisMatch ?? 0;
+			return n > 0 ? n : null;
 		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>

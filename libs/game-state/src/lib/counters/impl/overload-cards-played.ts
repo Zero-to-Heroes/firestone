@@ -28,10 +28,13 @@ export class OverloadCardsPlayedCounterDefinitionV2 extends CounterDefinitionV2<
 	readonly opponent = {
 		pref: 'opponentOverloadCardsPlayedCounter' as const,
 		display: (state: GameState): boolean => true,
-		value: (state: GameState): number =>
-			state.opponentDeck.cardsPlayedThisMatch?.filter((c) =>
-				this.allCards.getCard(c.cardId).mechanics?.includes(GameTag[GameTag.OVERLOAD]),
-			)?.length ?? null,
+		value: (state: GameState): number | null => {
+			const n =
+				state.opponentDeck.cardsPlayedThisMatch?.filter((c) =>
+					this.allCards.getCard(c.cardId).mechanics?.includes(GameTag[GameTag.OVERLOAD]),
+				)?.length ?? 0;
+			return n > 0 ? n : null;
+		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>
 				i18n.translateString('settings.decktracker.your-deck.counters.overload-cards-played-label'),

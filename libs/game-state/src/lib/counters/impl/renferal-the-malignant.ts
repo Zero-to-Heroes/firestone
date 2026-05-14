@@ -33,11 +33,11 @@ export class RenferalTheMalignantCounterDefinitionV2 extends CounterDefinitionV2
 	readonly opponent = {
 		pref: 'opponentRenferalTheMalignantCounter' as const,
 		display: (state: GameState): boolean => true,
-		value: (state: GameState) => {
-			return (
-				state.opponentDeck.cardsPlayedThisMatch.filter((c) => c.cardId === CardIds.RenferalTheMalignant_EDR_526)
-					.length ?? 0
-			);
+		value: (state: GameState): number | null => {
+			const n = state.opponentDeck.cardsPlayedThisMatch.filter(
+				(c) => c.cardId === CardIds.RenferalTheMalignant_EDR_526,
+			).length;
+			return n > 0 ? n : null;
 		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>
