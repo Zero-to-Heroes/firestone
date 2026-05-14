@@ -83,7 +83,7 @@ export class DevService {
 			this.scene.currentScene$$.next(SceneMode.GAMEPLAY);
 			// Do it everytime to reset its memory
 			// await this.gameEvents['initPlugin']();
-			const logsLocation = `E:\\Source\\zerotoheroes\\firestone\\test-tools\\${fileName ?? 'game.log'}`;
+			const logsLocation = `D:\\sources\\firestone\\firestone\\test-tools\\${fileName ?? 'game.log'}`;
 			const logContents = await this.ow.readTextFile(logsLocation);
 			console.log('logContents', logContents, fileName);
 			// Match power-log-replay-harness: CRLF-safe split + last game only (multi-match exports otherwise skew state).
