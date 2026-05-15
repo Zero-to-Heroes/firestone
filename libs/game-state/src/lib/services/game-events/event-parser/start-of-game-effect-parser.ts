@@ -36,7 +36,6 @@ export class StartOfGameEffectParser implements EventParser {
 			return currentState.update({
 				[isPlayer ? 'playerDeck' : 'opponentDeck']: deckAfterSpecialCaseUpdate,
 			} as any);
-			return currentState;
 		}
 
 		const refCard = this.allCards.getCard(cardId);

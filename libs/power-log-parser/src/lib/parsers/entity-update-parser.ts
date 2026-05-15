@@ -1,6 +1,6 @@
 import { BlockType, CardIds, GameTag, Zone } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
-import { GameEventProvider, GameEventHelper } from '../game-event';
+import { GameEventHelper, GameEventProvider } from '../game-event';
 import { Action, Node, NodeType, ShowEntity } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
@@ -40,8 +40,7 @@ export class EntityUpdateParser implements ActionParser {
 		if (
 			showEntity.GetTag(GameTag.LAST_AFFECTED_BY) !== -1 &&
 			this.GameState.CurrentEntities.has(showEntity.GetTag(GameTag.LAST_AFFECTED_BY)) &&
-			this.GameState.CurrentEntities.get(showEntity.GetTag(GameTag.LAST_AFFECTED_BY))!.CardId ===
-				CardIds.OhMyYogg
+			this.GameState.CurrentEntities.get(showEntity.GetTag(GameTag.LAST_AFFECTED_BY))!.CardId === CardIds.OhMyYogg
 		) {
 			return null;
 		}
@@ -87,12 +86,16 @@ export class EntityUpdateParser implements ActionParser {
 				: 'ENTITY_UPDATE';
 		let zone = showEntity.GetZone();
 		const blockAction = node.Parent?.Object as Action | null;
+		const debug = showEntity.Entity == 41;
+		const gsEntity = this.StateFacade.GsState?.GameState.CurrentEntities.get(showEntity.Entity);
 		const revealed =
 			(showEntity.GetTag(GameTag.REVEALED) === 1 &&
-				showEntity.GetTag(GameTag.START_OF_GAME_KEYWORD) !== 1) ||
-			(blockAction != null &&
-				blockAction.Type === (BlockType.PLAY as number) &&
-				zone === (Zone.PLAY as number));
+				showEntity.GetTag(GameTag.START_OF_GAME_KEYWORD) !== 1 &&
+				// In some cases (like Start of Game effects that trigger while the card is in hand), the card
+				// is revealed, then hidden right away. In this case, we consider that the card is not revealed.
+				this.StateFacade.GsState?.GameState.CurrentEntities.get(showEntity.Entity)?.GetTag(GameTag.REVEALED) ===
+					1) ||
+			(blockAction != null && blockAction.Type === (BlockType.PLAY as number) && zone === (Zone.PLAY as number));
 		if (zone === -1) {
 			zone = this.GameState.CurrentEntities.get(showEntity.Entity)?.GetZone() ?? -1;
 		}
@@ -100,26 +103,19 @@ export class EntityUpdateParser implements ActionParser {
 			GameEventProvider.Create(
 				showEntity.TimeStamp,
 				eventName,
-				GameEventHelper.CreateProvider(
-					eventName,
-					cardId,
-					controllerId,
-					showEntity.Entity,
-					this.StateFacade,
-					{
-						MercenariesExperience: mercXp,
-						MercenariesEquipmentId: mercEquipmentId,
-						AbilityOwnerEntityId: abilityOwner,
-						AbilityCooldownConfig: abilityCooldownConfig === -1 ? null : abilityCooldownConfig,
-						AbilityCurrentCooldown: abilityCurrentCooldown === -1 ? null : abilityCurrentCooldown,
-						AbilitySpeed: abilitySpeed === -1 ? null : abilitySpeed,
-						ZonePosition: zonePosition,
-						Zone: zone,
-						Revealed: revealed,
-						DataNum1: dataNum1,
-						DataNum2: dataNum2,
-					},
-				),
+				GameEventHelper.CreateProvider(eventName, cardId, controllerId, showEntity.Entity, this.StateFacade, {
+					MercenariesExperience: mercXp,
+					MercenariesEquipmentId: mercEquipmentId,
+					AbilityOwnerEntityId: abilityOwner,
+					AbilityCooldownConfig: abilityCooldownConfig === -1 ? null : abilityCooldownConfig,
+					AbilityCurrentCooldown: abilityCurrentCooldown === -1 ? null : abilityCurrentCooldown,
+					AbilitySpeed: abilitySpeed === -1 ? null : abilitySpeed,
+					ZonePosition: zonePosition,
+					Zone: zone,
+					Revealed: revealed,
+					DataNum1: dataNum1,
+					DataNum2: dataNum2,
+				}),
 				true,
 				node,
 				{ Mindrender: true },
