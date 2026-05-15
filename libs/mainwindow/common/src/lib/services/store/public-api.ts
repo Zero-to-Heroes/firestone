@@ -64,7 +64,6 @@ export * from './processors/mercenaries/mercenaries-add-merc-to-backup-team-proc
 // export * from './processors/mercenaries/mercenaries-hero-selected-processor';
 export * from './processors/mercenaries/mercenaries-hide-team-summary-processor';
 // export * from './processors/mercenaries/mercenaries-mode-filter-selected-processor';
-export * from './processors/mercenaries/mercenaries-personal-heroes-sort-processor';
 export * from './processors/mercenaries/mercenaries-pve-difficulty-filter-selected-processor';
 export * from './processors/mercenaries/mercenaries-remove-merc-to-backup-team-processor';
 export * from './processors/mercenaries/mercenaries-restore-team-summary-processor';

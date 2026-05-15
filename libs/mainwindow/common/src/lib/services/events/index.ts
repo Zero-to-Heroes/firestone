@@ -59,7 +59,6 @@ export * from './mercenaries/mercenaries-hero-level-filter-selected-event';
 export * from './mercenaries/mercenaries-hero-selected-event';
 export * from './mercenaries/mercenaries-hide-team-summary-event';
 // export * from './mercenaries/mercenaries-mode-filter-selected-event';
-export * from './mercenaries/mercenaries-personal-heroes-sort-event';
 export * from './mercenaries/mercenaries-pve-difficulty-filter-selected-event';
 export * from './mercenaries/mercenaries-remove-merc-to-backup-team-event';
 export * from './mercenaries/mercenaries-restore-team-summary-event';

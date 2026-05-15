@@ -578,7 +578,6 @@ export class MainWindowStoreService implements IMainWindowStoreService {
 			// ],
 			// [MercenariesHeroSelectedEvent.eventName, new MercenariesHeroSelectedProcessor(this.cards)],
 			// [MercenariesSelectCategoryEvent.eventName, new MercenariesSelectCategoryProcessor()],
-			// [MercenariesPersonalHeroesSortEvent.eventName, new MercenariesPersonalHeroesSortProcessor(this.prefs)],
 			// [MercenariesHideTeamSummaryEvent.eventName, new MercenariesHideTeamSummaryProcessor(this.prefs)],
 			// [MercenariesRestoreTeamSummaryEvent.eventName, new MercenariesRestoreTeamSummaryProcessor(this.prefs)],
 			// [

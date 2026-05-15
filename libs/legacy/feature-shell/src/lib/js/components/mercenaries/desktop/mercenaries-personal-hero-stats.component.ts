@@ -8,7 +8,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { MercenarySelector, RarityTYpe, RewardItemType, TaskStatus } from '@firestone-hs/reference-data';
-import { MainWindowStateFacadeService, MercenariesPersonalHeroesSortEvent } from '@firestone/mainwindow/common';
+import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { MemoryMercenary, MemoryVisitor } from '@firestone/memory';
 import {
 	getHeroRole,
@@ -23,7 +23,7 @@ import {
 	MercenariesReferenceDataService,
 } from '@firestone/mercenaries/common';
 import { PreferencesService } from '@firestone/shared/common/service';
-import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { AbstractSubscriptionComponent, invertDirection } from '@firestone/shared/framework/common';
 import { ADS_SERVICE_TOKEN, CardsFacadeService, IAdsService } from '@firestone/shared/framework/core';
 import { LocalizationFacadeService } from '@services/localization-facade.service';
 import { combineLatest, Observable } from 'rxjs';
@@ -602,13 +602,24 @@ export class SortableLabelComponent {
 	constructor(
 		private readonly cdr: ChangeDetectorRef,
 		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
+		private readonly prefs: PreferencesService,
 	) {}
 
-	startSort() {
+	async startSort() {
 		if (!this._isSortable) {
 			return;
 		}
-		this.mainWindowStateFacade.send(new MercenariesPersonalHeroesSortEvent(this._criteria));
+
+		const prefs = await this.prefs.getPreferences();
+		const existingCriterion = prefs.mercenariesPersonalHeroesSortCriterion;
+		const existingDirection = existingCriterion?.direction;
+		const newCriteria: MercenariesPersonalHeroesSortCriteria = {
+			criteria: this._criteria,
+			// Sort descending by default, as it seems to be the most frequent use case, except for the name
+			direction:
+				existingDirection === null && this._criteria === 'name' ? 'asc' : invertDirection(existingDirection),
+		};
+		this.prefs.updateMercenariesPersonalHeroesSortCriteria(newCriteria);
 	}
 }
 
