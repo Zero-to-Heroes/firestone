@@ -41,7 +41,8 @@ export class CardPlayedFromEffectParser implements ActionParser {
 			node.Type === NodeType.Action &&
 			(action = node.Object as Action).Type === (BlockType.TRIGGER as number) &&
 			(action.TriggerKeyword === (GameTag.CASTS_WHEN_DRAWN as number) ||
-				action.TriggerKeyword === (GameTag.TOPDECK as number));
+				action.TriggerKeyword === (GameTag.TOPDECK as number) ||
+				action.TriggerKeyword === (GameTag.SUMMONED_WHEN_DRAWN as number));
 		return stateType === StateType.PowerTaskList && ((isPowerPhase && cardPlayed) || castWhenDrawn);
 	}
 
@@ -129,15 +130,15 @@ export class CardPlayedFromEffectParser implements ActionParser {
 	private CreateGameEventProviderFromCastsWhenDrawnAction(node: Node): GameEventProvider[] | null {
 		const action = node.Object as Action;
 		const entity = this.GameState.CurrentEntities.get(action.Entity);
-		if (entity?.IsMinion()) {
+		if (!entity?.CardId?.length) {
 			return null;
 		}
-		const cardId = entity?.CardId ?? null;
-		const controllerId = entity!.GetEffectiveController();
+		const cardId = entity.CardId;
+		const controllerId = entity.GetEffectiveController();
 		const targetId = action?.Target ?? 0;
 		const targetCardId =
 			targetId > 0 ? this.GameState.CurrentEntities.get(targetId)?.CardId ?? null : null;
-		const creator = entity!.GetTag(GameTag.CREATOR);
+		const creator = entity.GetTag(GameTag.CREATOR);
 		const creatorCardId =
 			creator !== -1 && this.GameState.CurrentEntities.has(creator)
 				? this.GameState.CurrentEntities.get(creator)!.CardId
@@ -155,7 +156,7 @@ export class CardPlayedFromEffectParser implements ActionParser {
 					'CARD_PLAYED_BY_EFFECT',
 					cardId as any,
 					controllerId,
-					entity!.Entity,
+					entity.Entity,
 					this.StateFacade,
 					{
 						TargetEntityId: targetId,
@@ -163,7 +164,7 @@ export class CardPlayedFromEffectParser implements ActionParser {
 						CreatorCardId: creatorCardId,
 						CreatorEntityId: creatorEntityId,
 						CastWhenDrawn: true,
-						Tags: entity!.GetTagsCopy(),
+						Tags: entity.GetTagsCopy(),
 					},
 				),
 				true,
