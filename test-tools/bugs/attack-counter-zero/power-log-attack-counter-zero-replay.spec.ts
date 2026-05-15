@@ -1,14 +1,22 @@
 /**
- * Regression: attack overlay (totalAttackOnBoard) must not read 0 when the local player has a
- * lethal board (support report: "attack counter showed 0 last turn").
+ * Regression: attack overlay (totalAttackOnBoard) must reflect potential face damage, not raw
+ * board attack. At the truncation snapshot below the active player has just summoned a board of
+ * fresh RUSH minions (Onyxia, Al'Akir, three Onyxian Whelps) plus two `JUST_PLAYED` Charged Hands
+ * of Al'Akir; the player hero has 0 attack and no weapon.
  *
- * Fixture: last game from support `power.log` (trimmed with `trimPowerLogLinesToLastGame`), then
+ * Game options for every minion include `error=REQ_MINION_TARGET` against both heroes
+ * (cannot attack hero on the summon turn) and the hero option reports `REQ_ATTACK_GREATER_THAN_0`,
+ * so the correct face-damage total is exactly 0.
+ *
+ * This snapshot is the negative case for the fresh-rush rule in
+ * `libs/power-log-parser/src/lib/parsers/attack-on-board-summoning.ts`. To verify red/green: revert
+ * `hasSummoningSicknessForAttackOnBoard` to a version that does not treat fresh-summon RUSH /
+ * COLOSSAL_LIMB minions as sick (e.g. `if (RUSH || COLOSSAL_LIMB) return false;`) and this test
+ * should fail with a non-zero `Received`.
+ *
+ * Fixture: last game from support `power.log` (trimmed with `trimPowerLogLinesToLastGame`),
  * truncated to **23539 lines** — the last line is immediately before the next `FULL_ENTITY` block
- * in the Onyxia / Al'Akir lethal turn (`acz-last-game.log` line 23540). At this snapshot the old
- * summoning-sickness formula yields **0** total attack; the fixed parser counts Rush / Colossal limbs.
- * To verify red/green: temporarily restore the pre-fix `hasSummoningSicknessForAttackOnBoard` in
- * `attack-on-board-summoning.ts` (`exhausted || ATTACKABLE_BY_RUSH`, no Rush/Colossal exclusion)
- * and this test should fail with `Received: 0`.
+ * in the Onyxia / Al'Akir lethal turn (`acz-last-game.log` line 23540).
  *
  * Run:
  *   export HS_REFERENCE_CARDS_JSON_PATH=https://raw.githubusercontent.com/Zero-to-Heroes/hs-reference-data/master/src/cards_short.json
@@ -24,7 +32,7 @@ import {
 } from '../../lib/power-log-replay-harness';
 
 describe('Power log replay → GameStateService (attack counter)', () => {
-	it('player totalAttackOnBoard is non-zero at lethal-board snapshot (support power.log)', async () => {
+	it('player totalAttackOnBoard is zero when every minion was just summoned with rush', async () => {
 		const logPath = resolvePowerLogPathForSlug('attack-counter-zero');
 		const cardsPath = resolveCardsJsonPath();
 		requirePowerLogFixtureExists(logPath);
@@ -38,6 +46,6 @@ describe('Power log replay → GameStateService (attack counter)', () => {
 
 		const ta = ctx.state.playerDeck.totalAttackOnBoard;
 		const sum = (ta?.board ?? 0) + (ta?.hero ?? 0);
-		expect(sum).toBeGreaterThan(0);
+		expect(sum).toBe(0);
 	}, 120_000);
 });

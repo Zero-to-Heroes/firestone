@@ -1,8 +1,7 @@
 import { CardType, GameTag, Zone } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
-import { GameEventProvider, GameEventHelper } from '../game-event';
-import { Action, Node, NodeType, TagChange } from '../models';
-import { FullEntity } from '../models';
+import { GameEventHelper, GameEventProvider } from '../game-event';
+import { Action, FullEntity, Node, NodeType, TagChange } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -99,16 +98,9 @@ export class AttackOnBoardParser implements ActionParser {
 			GameEventProvider.Create(
 				action.TimeStamp,
 				'TOTAL_ATTACK_ON_BOARD',
-				GameEventHelper.CreateProvider(
-					'TOTAL_ATTACK_ON_BOARD',
-					null as any,
-					-1,
-					-1,
-					this.StateFacade,
-					{
-						AttackOnBoard: attackOnBoard,
-					},
-				),
+				GameEventHelper.CreateProvider('TOTAL_ATTACK_ON_BOARD', null as any, -1, -1, this.StateFacade, {
+					AttackOnBoard: attackOnBoard,
+				}),
 				true,
 				node,
 			),
@@ -140,12 +132,8 @@ export class AttackOnBoardParser implements ActionParser {
 		playerEntity: FullEntity | undefined,
 		allEntities: FullEntity[],
 	): AttackOnBoardForPlayer {
-		const entitiesForPlayer = allEntities.filter(
-			(e) => e.IsInPlay() && e.GetEffectiveController() === playerId,
-		);
-		const hero = entitiesForPlayer.find(
-			(entity) => entity.GetTag(GameTag.CARDTYPE) === (CardType.HERO as number),
-		);
+		const entitiesForPlayer = allEntities.filter((e) => e.IsInPlay() && e.GetEffectiveController() === playerId);
+		const hero = entitiesForPlayer.find((entity) => entity.GetTag(GameTag.CARDTYPE) === (CardType.HERO as number));
 		const isActivePlayer = playerEntity?.GetTag(GameTag.CURRENT_PLAYER) === 1;
 
 		const entitiesOnBoardThatCanAttack = entitiesForPlayer.filter(
@@ -174,9 +162,7 @@ export class AttackOnBoardParser implements ActionParser {
 					maxAttacks -
 					hero.GetTag(GameTag.NUM_ATTACKS_THIS_TURN, 0) +
 					hero.GetTag(GameTag.EXTRA_ATTACKS_THIS_TURN, 0);
-				const attacksLeft = isActivePlayer
-					? Math.min(maxAttacks, rawAttacksLeft)
-					: windfuryMultiplier;
+				const attacksLeft = isActivePlayer ? Math.min(maxAttacks, rawAttacksLeft) : windfuryMultiplier;
 				heroAttack = this.canAttack(hero, isActivePlayer, true) ? attacksLeft * baseHeroAttack : 0;
 			}
 		}
