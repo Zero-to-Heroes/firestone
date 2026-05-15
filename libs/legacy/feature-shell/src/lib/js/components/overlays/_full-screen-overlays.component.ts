@@ -75,7 +75,9 @@ import { DebugService } from '../../services/debug.service';
 						<choosing-card-widget-wrapper></choosing-card-widget-wrapper>
 
 						<!-- Need to implement proper mouse-over support, will add this when I get a report -->
-						<mercs-treasure-selection-widget-wrapper></mercs-treasure-selection-widget-wrapper>
+						<!-- This in fact doesn't work anymore, as I would need a pass-through window to handle it
+						  this way -->
+						<!-- <mercs-treasure-selection-widget-wrapper></mercs-treasure-selection-widget-wrapper> -->
 
 						<arena-hero-power-selection-widget-wrapper></arena-hero-power-selection-widget-wrapper>
 						<arena-hero-selection-widget-wrapper></arena-hero-selection-widget-wrapper>
