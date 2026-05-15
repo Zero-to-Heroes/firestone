@@ -11,7 +11,7 @@ import {
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
-import { GameType, SceneMode } from '@firestone-hs/reference-data';
+import { GameType, isMercenaries, SceneMode } from '@firestone-hs/reference-data';
 import { ArenaRefService } from '@firestone/arena/data-access';
 import {
 	CardsHighlightFacadeService,
@@ -258,6 +258,9 @@ export class FullScreenOverlaysComponent
 			auditTime(500),
 			filter(([gameState, prefs]) => !!gameState && !!prefs),
 			this.mapData(([gameState, prefs]) => {
+				if (isMercenaries(gameState?.metadata?.gameType)) {
+					return [];
+				}
 				// TODO: find a way to not recompute the data everytime. For instance, have each counter register which properties it listens to,
 				// and make a diff on these properties and only recompute the new value if one of these properties changed
 				const result = allCounters
@@ -275,6 +278,9 @@ export class FullScreenOverlaysComponent
 			auditTime(500),
 			filter(([gameState, prefs]) => !!gameState && !!prefs),
 			this.mapData(([gameState, prefs]) => {
+				if (isMercenaries(gameState?.metadata?.gameType)) {
+					return [];
+				}
 				return allCounters
 					.filter((c) => c.isActive('opponent', gameState, gameState.bgState, prefs))
 					.map((c) =>

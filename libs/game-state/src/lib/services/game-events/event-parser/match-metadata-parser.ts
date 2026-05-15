@@ -44,13 +44,6 @@ export class MatchMetadataParser implements EventParser {
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		console.log('[match-metadata-parser] parse');
-		// Because Mercs is too weird, we don't want to have to take into account all the edge cases
-		// in the standard game state.
-		// Also, everything should be handled inside the MercenariesState anyway
-		if (isMercenaries(gameEvent.additionalData.metaData.GameType)) {
-			console.log('[match-metadata-parser] mercs');
-			return currentState;
-		}
 
 		// All the meta data should already be in the existing state
 		if (currentState.reconnectOngoing) {
@@ -68,6 +61,15 @@ export class MatchMetadataParser implements EventParser {
 		const stateWithMetaData = currentState.update({
 			metadata: metaData,
 		} as GameState);
+
+		// Because Mercs is too weird, we don't want to have to take into account all the edge cases
+		// in the standard game state.
+		// Also, everything should be handled inside the MercenariesState anyway
+		// Update 2026-05-15: we still need the metadata, because that's what drives some widgets
+		if (isMercenaries(gameEvent.additionalData.metaData.GameType)) {
+			console.log('[match-metadata-parser] mercs');
+			return stateWithMetaData;
+		}
 
 		const prefs = await this.prefs.getPreferences();
 
