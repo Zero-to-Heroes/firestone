@@ -73,8 +73,7 @@ export class CardDrawFromDeckParser implements ActionParser {
 		const dataTag1 = entity.GetTag(GameTag.TAG_SCRIPT_DATA_NUM_1, 0);
 		const cost = entity.GetCost();
 
-		const parentAction =
-			node.Parent?.Object?.constructor === Action ? (node.Parent.Object as Action) : null;
+		const parentAction = node.Parent?.Object?.constructor === Action ? (node.Parent.Object as Action) : null;
 		let drawnByCardId: string | null = null;
 		let drawnByEntityId: number | null = null;
 		let isTrade = false;
@@ -105,61 +104,67 @@ export class CardDrawFromDeckParser implements ActionParser {
 			}
 		}
 		const revealed = entity.GetTag(GameTag.REVEALED) === 1;
+
+		// Start section: moved outside of event provider
+		// 2026-05-14: this was probably moved inside the event provider
+		// so that we have more information when processing the event (eg the nodes have been completed)
+		// The idea now is rather to use chains of events in that case, so that we don't rely on
+		// timings that can be unreliable
+		const creator = wasInDeck ? null : Oracle.FindCardCreator(this.GameState, entity, node, false);
+		const lastInfluencedByCard = Oracle.FindCardCreator(this.GameState, entity, node);
+		let lastInfluencedByCardId =
+			isTrade || isCastsWhenDrawnReplacementDraw ? null : (lastInfluencedByCard?.[0] ?? null);
+		let predictedCardId = Oracle.PredictCardId(this.GameState, creator?.[0], -1, node, cardId, this.StateFacade);
+		let forcedOracle = false;
+		if (SHOULD_USE_ORACLE_TO_IDENTIFY_DRAWN_CARD.includes(drawnByCardId!)) {
+			predictedCardId =
+				predictedCardId ??
+				Oracle.PredictCardId(
+					this.GameState,
+					drawnByCardId,
+					drawnByEntityId ?? -1,
+					node,
+					cardId,
+					this.StateFacade,
+					entityId,
+				);
+			forcedOracle = true;
+		}
+		if (SHOULD_USE_ADVANCED_PREDICTION_FOR_CARD_DRAW.includes(lastInfluencedByCardId!)) {
+			predictedCardId =
+				predictedCardId ??
+				Oracle.PredictCardId(
+					this.GameState,
+					lastInfluencedByCardId,
+					lastInfluencedByCard?.[1] ?? -1,
+					node,
+					cardId,
+					this.StateFacade,
+					entityId,
+				);
+			forcedOracle = true;
+		}
+		this.GameState.OnCardDrawn(entity.Entity);
+		const finalCardId = cardId != null && cardId.length > 0 ? cardId : predictedCardId;
+		const shouldObfuscate =
+			!forcedOracle &&
+			Obfuscator.shouldObfuscateCardDraw(
+				entity,
+				this.GameState,
+				node,
+				controllerId === this.StateFacade.LocalPlayer?.PlayerId,
+				revealed,
+			);
+		// End section
 		return [
 			GameEventProvider.Create(
 				tagChange.TimeStamp,
 				'CARD_DRAW_FROM_DECK',
 				() => {
-					const creator = wasInDeck ? null : Oracle.FindCardCreator(this.GameState, entity, node, false);
-					const lastInfluencedByCard = Oracle.FindCardCreator(this.GameState, entity, node);
-					let lastInfluencedByCardId =
-						isTrade || isCastsWhenDrawnReplacementDraw ? null : lastInfluencedByCard?.[0] ?? null;
-					let predictedCardId = Oracle.PredictCardId(
-						this.GameState,
-						creator?.[0],
-						-1,
-						node,
-						cardId,
-						this.StateFacade,
-					);
-					if (SHOULD_USE_ORACLE_TO_IDENTIFY_DRAWN_CARD.includes(drawnByCardId!)) {
-						predictedCardId =
-							predictedCardId ??
-							Oracle.PredictCardId(
-								this.GameState,
-								drawnByCardId,
-								drawnByEntityId ?? -1,
-								node,
-								cardId,
-								this.StateFacade,
-								entityId,
-							);
-					}
-					if (SHOULD_USE_ADVANCED_PREDICTION_FOR_CARD_DRAW.includes(lastInfluencedByCardId!)) {
-						predictedCardId =
-							predictedCardId ??
-							Oracle.PredictCardId(
-								this.GameState,
-								lastInfluencedByCardId,
-								lastInfluencedByCard?.[1] ?? -1,
-								node,
-								cardId,
-								this.StateFacade,
-								entityId,
-							);
-					}
-					this.GameState.OnCardDrawn(entity.Entity);
-					const finalCardId = cardId != null && cardId.length > 0 ? cardId : predictedCardId;
-					const shouldObfuscate = Obfuscator.shouldObfuscateCardDraw(
-						entity,
-						this.GameState,
-						node,
-						controllerId === this.StateFacade.LocalPlayer?.PlayerId,
-						revealed,
-					);
 					return {
 						Type: 'CARD_DRAW_FROM_DECK',
 						Value: {
+							// Try using the prediceted card id in this case, as it's not read directly from the logs
 							CardId: shouldObfuscate ? null : finalCardId,
 							ControllerId: controllerId,
 							LocalPlayer: this.StateFacade.LocalPlayer,
@@ -167,8 +172,8 @@ export class CardDrawFromDeckParser implements ActionParser {
 							EntityId: entity.Id,
 							AdditionalProps: {
 								IsPremium: shouldObfuscate ? false : entity.GetTag(GameTag.PREMIUM) === 1,
-								CreatorCardId: shouldObfuscate ? null : creator?.[0] ?? null,
-								CreatorEntityId: shouldObfuscate ? null : creator?.[1] ?? null,
+								CreatorCardId: shouldObfuscate ? null : (creator?.[0] ?? null),
+								CreatorEntityId: shouldObfuscate ? null : (creator?.[1] ?? null),
 								CreatedIndex: createdIndex,
 								LastInfluencedByCardId: shouldObfuscate ? null : lastInfluencedByCardId,
 								DataTag1: shouldObfuscate ? 0 : dataTag1,
@@ -204,8 +209,7 @@ export class CardDrawFromDeckParser implements ActionParser {
 
 		const dataTag1 = entity.GetTag(GameTag.TAG_SCRIPT_DATA_NUM_1, 0);
 		const cost = showEntity.GetCost();
-		const parentAction =
-			node.Parent?.Object?.constructor === Action ? (node.Parent.Object as Action) : null;
+		const parentAction = node.Parent?.Object?.constructor === Action ? (node.Parent.Object as Action) : null;
 		let drawnByCardId: string | null = null;
 		let drawnByEntityId: number | null = null;
 		let isCastsWhenDrawnReplacementDraw = false;
@@ -245,10 +249,10 @@ export class CardDrawFromDeckParser implements ActionParser {
 					}
 					const creatorCardId = wasInDeck
 						? null
-					: Oracle.FindCardCreatorFromShowEntity(this.GameState, showEntity, node);
-				const lastInfluencedByCardId = isCastsWhenDrawnReplacementDraw
-					? null
-					: Oracle.FindCardCreatorFromShowEntity(this.GameState, showEntity, node);
+						: Oracle.FindCardCreatorFromShowEntity(this.GameState, showEntity, node);
+					const lastInfluencedByCardId = isCastsWhenDrawnReplacementDraw
+						? null
+						: Oracle.FindCardCreatorFromShowEntity(this.GameState, showEntity, node);
 					this.GameState.OnCardDrawn(showEntity.Entity);
 					return {
 						Type: 'CARD_DRAW_FROM_DECK',
@@ -260,8 +264,7 @@ export class CardDrawFromDeckParser implements ActionParser {
 							EntityId: showEntity.Entity,
 							AdditionalProps: {
 								IsPremium:
-									entity.GetTag(GameTag.PREMIUM) === 1 ||
-									showEntity.GetTag(GameTag.PREMIUM) === 1,
+									entity.GetTag(GameTag.PREMIUM) === 1 || showEntity.GetTag(GameTag.PREMIUM) === 1,
 								CreatorCardId: creatorCardId?.[0] ?? null,
 								CreatorEntityId: creatorCardId?.[1] ?? null,
 								CreatedIndex: createdIndex,
@@ -292,8 +295,7 @@ export class CardDrawFromDeckParser implements ActionParser {
 
 		const dataTag1 = fullEntity.GetTag(GameTag.TAG_SCRIPT_DATA_NUM_1, 0);
 		const cost = fullEntity.GetCost();
-		const parentAction =
-			node.Parent?.Object?.constructor === Action ? (node.Parent.Object as Action) : null;
+		const parentAction = node.Parent?.Object?.constructor === Action ? (node.Parent.Object as Action) : null;
 		let drawnByCardId: string | null = null;
 		let drawnByEntityId: number | null = null;
 		let isCastsWhenDrawnReplacementDraw = false;
@@ -324,9 +326,7 @@ export class CardDrawFromDeckParser implements ActionParser {
 				fullEntity.TimeStamp,
 				'CARD_DRAW_FROM_DECK',
 				() => {
-					const creator = wasInDeck
-						? null
-						: Oracle.FindCardCreator(this.GameState, fullEntity, node, false);
+					const creator = wasInDeck ? null : Oracle.FindCardCreator(this.GameState, fullEntity, node, false);
 					const lastInfluencedByCardId = isCastsWhenDrawnReplacementDraw
 						? null
 						: (Oracle.FindCardCreator(this.GameState, fullEntity, node)?.[0] ?? null);

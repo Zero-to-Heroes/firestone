@@ -25,11 +25,13 @@ export class Obfuscator {
 			}
 		}
 
+		// This is here to prevent info leaks.
+		// However, it overrides any other logic we can have - for instance, mimicry should let you
+		// know what is what
 		if (
 			!isPlayer &&
-			entity.AllPreviousTags.find(
-				(t) => t.Name === (GameTag.IS_USING_TRADE_OPTION as number) && t.Value === 1,
-			) != null
+			entity.AllPreviousTags.find((t) => t.Name === (GameTag.IS_USING_TRADE_OPTION as number) && t.Value === 1) !=
+				null
 		) {
 			return true;
 		}
