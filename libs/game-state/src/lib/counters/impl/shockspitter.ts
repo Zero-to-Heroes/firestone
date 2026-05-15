@@ -32,7 +32,7 @@ export class ShockspitterCounterDefinitionV2 extends CounterDefinitionV2<number>
 			state?.metadata?.formatType === GameFormat.FT_WILD &&
 			initialHeroClassIs(state.opponentDeck.hero, [CardClass.HUNTER]),
 		value: (state: GameState) => {
-			return state.opponentDeck.heroAttacksThisMatch ?? 0;
+			return state.opponentDeck.heroAttacksThisMatch || null;
 		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>
