@@ -577,7 +577,12 @@ export const currentClass = (input: SelectorInput): boolean =>
 // 	!input.card?.classes?.includes(CardClass[CardClass.DREAM]) &&
 // 	!!input.deckState?.hero?.classes?.length &&
 // 	input.card?.classes?.some((cardClass) => !input.deckState.hero.classes.includes(CardClass[cardClass]));
-export const fromAnotherClassStrict = and(not(currentClass), not(neutral), not(dream));
+export const fromAnotherClassStrict = (input: SelectorInput): SelectorOutput => {
+	if (!input.card?.classes?.length) {
+		return false;
+	}
+	return and(not(currentClass), not(neutral), not(dream))(input);
+};
 
 // and(not(currentClass), not(neutral), not(dream));
 export const fromAnotherClass = or(fromAnotherClassStrict, createsCardFromAnotherClass);
