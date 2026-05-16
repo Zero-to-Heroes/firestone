@@ -270,6 +270,7 @@ export class ArenaDecktrackerOocComponent extends AbstractSubscriptionComponent 
 			distinctUntilChanged((a, b) => arraysEqual(a?.DeckList, b?.DeckList)),
 			this.mapData((deck) => {
 				const cardIds = (deck?.DeckList as readonly string[]) ?? [];
+				console.log('[arena-decktracker-ooc] initial cardsList', cardIds);
 				const groupedByCardId = groupByFunction2(cardIds, (cardId: string) =>
 					this.allCards.getRootCardId(cardId),
 				);
@@ -287,6 +288,10 @@ export class ArenaDecktrackerOocComponent extends AbstractSubscriptionComponent 
 					});
 					return card;
 				});
+				console.log(
+					'[arena-decktracker-ooc] final cardsList',
+					cards.map((c) => c.cardId),
+				);
 				return cards;
 			}),
 		);
@@ -325,6 +330,10 @@ export class ArenaDecktrackerOocComponent extends AbstractSubscriptionComponent 
 		const cardsWithStats$ = combineLatest([cardsList$, cardStats$, classStat$]).pipe(
 			filter(([cards, cardStats, classStat]) => !!cards?.length && !!cardStats?.stats?.length && !!classStat),
 			this.mapData(([cards, cardStats, classStat]) => {
+				console.log(
+					'[arena-decktracker-ooc] cards',
+					cards.map((c) => c.cardId),
+				);
 				const cardsWithStats: CardInfo[] = [];
 				const classWinrate = classStat.totalsWins / classStat.totalGames;
 				for (const card of cards) {
@@ -346,6 +355,7 @@ export class ArenaDecktrackerOocComponent extends AbstractSubscriptionComponent 
 					};
 					cardsWithStats.push(cardInfo);
 				}
+				console.log('[arena-decktracker-ooc] cardsWithStats', cardsWithStats.length);
 				return cardsWithStats;
 			}),
 		);
@@ -393,7 +403,12 @@ export class ArenaDecktrackerOocComponent extends AbstractSubscriptionComponent 
 				}
 				return cardsWithStats;
 			}),
-			tap((options) => console.log('[arena-decktracker-ooc] options', options)),
+			tap((options) =>
+				console.log(
+					'[arena-decktracker-ooc] options',
+					options?.map((o) => o.card.cardId),
+				),
+			),
 			takeUntil(this.destroyed$),
 		);
 

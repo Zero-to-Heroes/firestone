@@ -119,7 +119,10 @@ export class ArenaOverlayDraftStatsService {
 		this.optionDraftStats$$.onFirstSubscribe(async () => {
 			options$.subscribe((options) => {
 				this.optionDraftStats$$.next(options);
-				console.log('[arena-overlay-draft-stats] options', options);
+				console.log(
+					'[arena-overlay-draft-stats] options',
+					options?.map((o) => o.cardId),
+				);
 			});
 		});
 	}
