@@ -8,7 +8,7 @@ import {
 	Output,
 } from '@angular/core';
 import { decode } from '@firestone-hs/deckstrings';
-import { CardClass, DkruneTypes } from '@firestone-hs/reference-data';
+import { CardClass, DkruneTypes, normalizeHeroPower } from '@firestone-hs/reference-data';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { groupByFunction } from '@legacy-import/src/lib/js/services/utils';
@@ -47,12 +47,17 @@ export class DkRunesComponent extends AbstractSubscriptionComponent implements A
 		this.deckstring$$.next(value);
 	}
 
+	@Input() set heroPower(value: string) {
+		this.heroPower$$.next(value);
+	}
+
 	@Input() set showRunes(value: boolean) {
 		this.showRunes$$.next(value);
 	}
 
 	private deckstring$$ = new BehaviorSubject<string>(null);
 	private showRunes$$ = new BehaviorSubject<boolean>(true);
+	private heroPower$$ = new BehaviorSubject<string>(null);
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
@@ -71,20 +76,23 @@ export class DkRunesComponent extends AbstractSubscriptionComponent implements A
 			}),
 			share(),
 		);
-		this.showRunes$ = combineLatest([deckDefinition$, this.showRunes$$.asObservable()]).pipe(
-			this.mapData(([deckDefinition, showRunes]) => {
+		this.showRunes$ = combineLatest([deckDefinition$, this.showRunes$$, this.heroPower$$]).pipe(
+			this.mapData(([deckDefinition, showRunes, heroPower]) => {
 				if (!deckDefinition) {
 					return false;
 				}
 
 				const result =
-					showRunes &&
-					(deckDefinition.heroes.some((h) =>
-						this.allCards.getCard(h).classes?.includes(CardClass[CardClass.DEATHKNIGHT]),
-					) ||
-						deckDefinition.cards.some((pair) =>
-							this.allCards.getCard(pair[0]).touristFor?.includes(CardClass[CardClass.DEATHKNIGHT]),
-						));
+					(showRunes &&
+						(deckDefinition.heroes.some((h) =>
+							this.allCards.getCard(h).classes?.includes(CardClass[CardClass.DEATHKNIGHT]),
+						) ||
+							deckDefinition.cards.some((pair) =>
+								this.allCards.getCard(pair[0]).touristFor?.includes(CardClass[CardClass.DEATHKNIGHT]),
+							))) ||
+					this.allCards
+						.getCard(normalizeHeroPower(heroPower, this.allCards.getService()))
+						.classes?.includes(CardClass[CardClass.DEATHKNIGHT]);
 				return result;
 			}),
 		);

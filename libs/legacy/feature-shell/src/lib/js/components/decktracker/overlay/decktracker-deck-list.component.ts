@@ -95,6 +95,7 @@ import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 })
 export class DeckTrackerDeckListComponent extends AbstractSubscriptionComponent implements AfterContentInit, OnDestroy {
 	deckstring$: Observable<string>;
+	heroPower$: Observable<string>;
 	deckState$: Observable<DeckState>;
 
 	@Output() cardClicked: EventEmitter<VisualDeckCard> = new EventEmitter<VisualDeckCard>();
@@ -155,8 +156,9 @@ export class DeckTrackerDeckListComponent extends AbstractSubscriptionComponent 
 		this.sub$$ = this.prefs.preferences$$
 			.pipe(this.mapData((prefs) => prefs.decktrackerScale))
 			.subscribe((scale) => this.refreshScroll());
-		this.deckState$ = this.deckState$$.asObservable();
-		this.deckstring$ = this.deckState$$.asObservable().pipe(
+		this.deckState$ = this.deckState$$.pipe(this.mapData((deckState) => deckState));
+		this.heroPower$ = this.deckState$$.pipe(this.mapData((deckState) => deckState?.heroPower?.cardId));
+		this.deckstring$ = this.deckState$$.pipe(
 			this.mapData((deckState) => {
 				if (deckState.deckstring) {
 					return deckState.deckstring;
