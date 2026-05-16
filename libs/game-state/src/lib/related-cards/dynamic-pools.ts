@@ -132,11 +132,6 @@ const getDynamicRelatedCardIdsInternal = (
 
 	const creatorEntityId = inputOptions.deckState.findCard(entityId)?.card?.creatorEntityId;
 	switch (cardId) {
-		// Show static list of related card ids as possible options
-		case CardIds.HopefulDryad_EDR_001:
-		case CardIds.CostumeMerchant_DINO_427:
-			return allCards.getCard(cardId).relatedCardDbfIds?.map((dbfId) => allCards.getCard(dbfId).id) ?? [];
-
 		case CardIds.BitterbloomKnight_EDR_852:
 		case CardIds.FlutterwingGuardian_EDR_800:
 			return {
