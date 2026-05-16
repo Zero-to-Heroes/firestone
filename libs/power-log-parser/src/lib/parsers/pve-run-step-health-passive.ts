@@ -1,9 +1,10 @@
-import { GameTag } from '@firestone-hs/reference-data';
+import { BlockType, GameTag } from '@firestone-hs/reference-data';
 import { Action, ShowEntity, TagChange } from '../models';
 
 /**
  * True when `action` applies a dungeon-run-style max-health enchant (SHOW_ENTITY with ATTACHED =
- * hero) and contains a HEALTH TAG_CHANGE on that hero. Used instead of obsolete TAG_CHANGE … DEF CHANGE lines.
+ * hero) and contains a HEALTH TAG_CHANGE on that hero. Matches Kobolds and Monster Hunt log shapes;
+ * modern Rumble often omits this and uses HEALTH `DEF CHANGE` lines instead (`actionQualifiesForRumbleRunStepAction`).
  *
  * When `passiveCardIds` is non-empty, CardId must be listed (e.g. Kobolds `LOOTA_Health`).
  * When empty/undefined, CardId must end with `_Health` (Monster Hunt / Rumble analogues).
@@ -31,10 +32,43 @@ export function actionHasDungeonHealthPassiveOnHero(
 	}
 	if (!hasPassive) return false;
 	return recursive.some(
-		(d) =>
-			d instanceof TagChange &&
-			d.Name === (GameTag.HEALTH as number) &&
-			d.Entity === heroEntityId,
+		(d) => d instanceof TagChange && d.Name === (GameTag.HEALTH as number) && d.Entity === heroEntityId,
+	);
+}
+
+/**
+ * Rumble Run mirrors dungeon-style shrine scaling but newer logs apply max health via HEALTH lines that
+ * include the engine `DEF CHANGE` suffix, rather than attaching a Kobolds-style `_Health` enchantment in the
+ * same PowerTaskList. Narrow to GameEntity TRIGGER blocks so random mid-game max-health buffs don't map to run steps.
+ */
+export function actionHasGameEntityTriggeredHeroHealthDefChange(
+	action: Action,
+	heroEntityId: number,
+	gameEntityId: number,
+): boolean {
+	if (gameEntityId <= 0) return false;
+	if (action.Type !== (BlockType.TRIGGER as number) || action.Entity !== gameEntityId) {
+		return false;
+	}
+	return action
+		.GetDataRecursive()
+		.some(
+			(d) =>
+				d instanceof TagChange &&
+				d.Name === (GameTag.HEALTH as number) &&
+				d.Entity === heroEntityId &&
+				d.DefChange.trim().length > 0,
+		);
+}
+
+export function actionQualifiesForRumbleRunStepAction(
+	action: Action,
+	heroEntityId: number,
+	gameEntityId: number,
+): boolean {
+	return (
+		actionHasDungeonHealthPassiveOnHero(action, heroEntityId) ||
+		actionHasGameEntityTriggeredHeroHealthDefChange(action, heroEntityId, gameEntityId)
 	);
 }
 
@@ -42,9 +76,7 @@ export function lastHeroHealthTagChangeInAction(action: Action, heroEntityId: nu
 	const recursive = action.GetDataRecursive();
 	const matches = recursive.filter(
 		(d): d is TagChange =>
-			d instanceof TagChange &&
-			d.Name === (GameTag.HEALTH as number) &&
-			d.Entity === heroEntityId,
+			d instanceof TagChange && d.Name === (GameTag.HEALTH as number) && d.Entity === heroEntityId,
 	);
 	return matches.length ? matches[matches.length - 1] : undefined;
 }

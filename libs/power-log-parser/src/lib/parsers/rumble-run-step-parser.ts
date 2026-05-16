@@ -5,10 +5,7 @@ import { Action, Node, NodeType } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
-import {
-	actionHasDungeonHealthPassiveOnHero,
-	lastHeroHealthTagChangeInAction,
-} from './pve-run-step-health-passive';
+import { actionQualifiesForRumbleRunStepAction, lastHeroHealthTagChangeInAction } from './pve-run-step-health-passive';
 
 const STARTING_HEALTH = 20;
 
@@ -38,7 +35,7 @@ export class RumbleRunStepParser implements ActionParser {
 		if (heroEntityId == null) {
 			return false;
 		}
-		return actionHasDungeonHealthPassiveOnHero(action, heroEntityId);
+		return actionQualifiesForRumbleRunStepAction(action, heroEntityId, this.ParserState.GameState.GameEntityId);
 	}
 
 	CreateGameEventProviderFromNew(_node: Node): GameEventProvider[] | null {
@@ -59,7 +56,13 @@ export class RumbleRunStepParser implements ActionParser {
 					if (heroEntityId == null) {
 						return null;
 					}
-					if (!actionHasDungeonHealthPassiveOnHero(action, heroEntityId)) {
+					if (
+						!actionQualifiesForRumbleRunStepAction(
+							action,
+							heroEntityId,
+							this.ParserState.GameState.GameEntityId,
+						)
+					) {
 						return null;
 					}
 					const tagChange = lastHeroHealthTagChangeInAction(action, heroEntityId);

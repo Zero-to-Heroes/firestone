@@ -67,6 +67,19 @@ describe('Dungeon run step (LOOTA passive health enchant)', () => {
 	});
 });
 
+describe('Rumble Run step (modern DEF CHANGE hero bootstrap)', () => {
+	it('should emit RUMBLE_RUN_STEP without _Health SHOW_ENTITY in the PowerTaskList', () => {
+		const parser = new ReplayParser();
+		const events: GameEvent[] = [];
+		parser.onGameEvent = (event) => events.push(event);
+		const lines = loadTestLog('rumble_run_trla_dungeon');
+		parser.FromString(lines);
+		const rumbleSteps = events.filter((e) => e.Type === 'RUMBLE_RUN_STEP');
+		expect(rumbleSteps.length).toBeGreaterThanOrEqual(1);
+		expect(rumbleSteps.some((e) => e.Value === 3)).toBe(true);
+	});
+});
+
 describe('Golden event files are loadable', () => {
 	const scenarios = discoverScenarios();
 
