@@ -1843,6 +1843,7 @@ const doesSummonInPlay = (sourceCardId: string): boolean => {
 		case CardIds.GravedawnVoidbulb_TLC_815:
 		case CardIds.HarbingerOfTheBlighted_EDR_781:
 		case CardIds.HiddenMeaning:
+		case CardIds.HuddleUp_WORK_012:
 		case CardIds.InfernoHerald_FIR_913: // Summons Elementals
 		case CardIds.InFormation: // Summons Taunt minions
 		case CardIds.IronforgePortal_WON_337:
