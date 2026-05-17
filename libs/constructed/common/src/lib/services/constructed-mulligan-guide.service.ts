@@ -236,7 +236,8 @@ export class ConstructedMulliganGuideService extends AbstractFacadeService<Const
 		const opponentActualClass$ = this.gameState.gameState$$.pipe(
 			debounceTime(500),
 			map((gameState) =>
-				CardClass[gameState?.opponentDeck?.hero?.classes?.[0] ?? CardClass.NEUTRAL].toLowerCase(),
+				CardClass[gameState?.opponentDeck?.hero?.classes?.[0] ?? CardClass.NEUTRAL]?.toLowerCase() ??
+				'neutral',
 			),
 			distinctUntilChanged(),
 		);

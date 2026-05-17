@@ -110,7 +110,8 @@ export class ArenaMulliganGuideService extends AbstractFacadeService<ArenaMullig
 
 		const opponentActualClass$ = this.gameState.gameState$$.pipe(
 			map((gameState) =>
-				CardClass[gameState?.opponentDeck?.hero?.classes?.[0] ?? CardClass.NEUTRAL].toLowerCase(),
+				CardClass[gameState?.opponentDeck?.hero?.classes?.[0] ?? CardClass.NEUTRAL]?.toLowerCase() ??
+				'neutral',
 			),
 			distinctUntilChanged(),
 		);
@@ -194,13 +195,14 @@ export class ArenaMulliganGuideService extends AbstractFacadeService<ArenaMullig
 			tap((heroPower) => console.debug('[mulligan-arena-guide] heroPower', heroPower)),
 		);
 		const cardStats$ = combineLatest([showWidget$, playerClass$, heroPower$, timeFrame$, gameMode$]).pipe(
-			filter(([showWidget, _]) => showWidget),
+			filter(([showWidget, playerClass]) => showWidget),
 			switchMap(([showWidget, playerClass, heroPowerFilter, timeFrame, gameMode]) => {
 				const heroPowerFilterContext =
 					heroPowerFilter === 'all' || heroPowerFilter == null ? '' : `-${heroPowerFilter}`;
 				return this.cardStats.buildCardStats(
-					`${CardClass[playerClass].toLowerCase()}${heroPowerFilterContext}`,
-					// !!playerClass ? CardClass[playerClass].toLowerCase() : 'global',
+					!!playerClass
+						? `${CardClass[playerClass]?.toLowerCase() ?? 'neutral'}${heroPowerFilterContext}`
+						: 'global',
 					timeFrame,
 					gameMode as ArenaModeFilterType,
 				);
@@ -217,7 +219,9 @@ export class ArenaMulliganGuideService extends AbstractFacadeService<ArenaMullig
 			),
 			map(([classStats, playerClass]) =>
 				classStats?.stats?.find(
-					(stat) => stat.playerClass === CardClass[playerClass ?? CardClass.INVALID].toLowerCase(),
+					(stat) =>
+						stat.playerClass ===
+						(CardClass[playerClass ?? CardClass.INVALID]?.toLowerCase() ?? 'invalid'),
 				),
 			),
 			tap((stats) => console.debug('[mulligan-arena-guide] class stats', stats)),

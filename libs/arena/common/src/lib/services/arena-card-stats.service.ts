@@ -174,7 +174,7 @@ export class ArenaCardStatsService extends AbstractFacadeService<ArenaCardStatsS
 		timePeriod: string,
 		modeFilter: ArenaModeFilterType,
 	): Promise<ArenaCombinedCardStats | null> {
-		context = context.toLowerCase();
+		context = context?.toLowerCase?.() ?? 'global';
 		const key = `${context}-${timePeriod}-${modeFilter}`;
 		if (this.cachedStatsByContext[key]) {
 			return this.cachedStatsByContext[key];

@@ -269,7 +269,8 @@ export class ConstructedMulliganDeckComponent
 			.pipe(
 				auditTime(500),
 				this.mapData((gameState) =>
-					CardClass[gameState?.opponentDeck?.hero?.classes?.[0] ?? CardClass.NEUTRAL].toLowerCase(),
+					CardClass[gameState?.opponentDeck?.hero?.classes?.[0] ?? CardClass.NEUTRAL]?.toLowerCase() ??
+					'neutral',
 				),
 			)
 			.subscribe(this.opponentActualClass$$);

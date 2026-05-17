@@ -159,7 +159,8 @@ export class ArenaMulliganDeckComponent extends AbstractSubscriptionComponent im
 		this.gameState.gameState$$
 			.pipe(
 				this.mapData((gameState) =>
-					CardClass[gameState?.opponentDeck?.hero?.classes?.[0] ?? CardClass.NEUTRAL].toLowerCase(),
+					CardClass[gameState?.opponentDeck?.hero?.classes?.[0] ?? CardClass.NEUTRAL]?.toLowerCase() ??
+					'neutral',
 				),
 			)
 			.subscribe(this.opponentActualClass$$);
