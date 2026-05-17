@@ -55,6 +55,10 @@ Once you're done, before assigning the PR to me for review, please mention @curs
 - If you need to add texts, please use the localization mechanism, and update the English reference string at ../firestone-translations/firestone/enUS.json
 - Never update the texts in other non-English languages unless I explicitly request for it
 
+## Before committing
+
+- Run prettier / auto-formatting, so that the new code matches the standard for the repo (see .prettierrc and .eslintrc.json)
+
 # Commits
 
 Commit message should be of the following format:
