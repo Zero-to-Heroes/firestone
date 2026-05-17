@@ -286,7 +286,7 @@ export class ArenaDraftManagerService
 						changes.ArenaCardOptions.every((c) => this.allCards.getCard(c.CardId).type === 'Hero') ||
 						changes.ArenaCardOptions.every((c) => this.allCards.getCard(c.CardId).type === 'Hero_power')
 					) {
-						console.debug(
+						console.log(
 							'[arena-draft-manager] received hero options as cards, ignoring',
 							changes.ArenaCardOptions,
 						);
@@ -314,7 +314,14 @@ export class ArenaDraftManagerService
 				);
 				// If cards change, or if we are on DRAFT scene + DRAFT_SLOT_CARD, we get the current state of the arena deck
 				if (changes.ArenaCurrentCardsInDeck || (scene === SceneMode.DRAFT && isDraftingCards)) {
+					console.log(
+						'[arena-draft-manager] received arena current cards in deck',
+						changes.ArenaCurrentCardsInDeck,
+						scene,
+						isDraftingCards,
+					);
 					const arenaDeck = await this.memory.getArenaDeck();
+					console.log('[arena-draft-manager] received arena deck', arenaDeck?.DeckList?.length);
 					// console.debug('[arena-draft-manager] received arena deck', arenaDeck);
 					// Force a reemit of options for the initial state
 					if (
