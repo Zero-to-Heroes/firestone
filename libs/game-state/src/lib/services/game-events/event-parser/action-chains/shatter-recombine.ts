@@ -48,6 +48,7 @@ export class ShatterRecombineParser implements ActionChainParser {
 			currentState.opponentDeck,
 			this.allCards.getService(),
 			cardInHand.guessedInfo,
+			currentState.metadata?.scenarioId,
 		);
 		if (!possibleCards.length) {
 			return currentState;

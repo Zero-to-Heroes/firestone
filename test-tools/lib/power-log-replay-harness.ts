@@ -251,6 +251,7 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	'fast-forward-naralex': 'fast-forward-naralex/fast-forward-naralex.log',
 	'blooming-bulb': 'blooming-bulb/blooming-bulb.log',
 	'frost-tyrant': '../power.log',
+	'dual-class-shatter-draw': '../power.log',
 };
 
 /**

@@ -22,7 +22,7 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DeckCard, GuessedInfo, StoredInformation } from '../models/deck-card';
 import { DeckState } from '../models/deck-state';
 import { GameState } from '../models/game-state';
-import { Metadata } from '../models/metadata';
+import { DUAL_CLASS_ARENA_SCENARIO_ID, Metadata } from '../models/metadata';
 import { hasCorrectClass } from '../related-cards/dynamic-pools';
 import { hasGeneratingCard } from './cards/_card.type';
 import { cardsInfoCache } from './cards/_mapping';
@@ -202,6 +202,71 @@ export const storeInformationOnCardPlayed = (
 	return result;
 };
 
+const refCardIdToNonNeutralClasses = (allCards: AllCardsService, cardId: string | null | undefined): CardClass[] => {
+	if (!cardId?.length) {
+		return [];
+	}
+	const ref = allCards.getCard(cardId);
+	if (!ref?.id) {
+		return [];
+	}
+	const raw: string[] = ref.classes?.length
+		? (ref.classes as string[])
+		: ref.cardClass
+			? [String(ref.cardClass)]
+			: [];
+	const out: CardClass[] = [];
+	for (const s of raw) {
+		const cc = CardClass[s.toUpperCase() as keyof typeof CardClass];
+		if (typeof cc === 'number' && cc !== CardClass.NEUTRAL) {
+			out.push(cc);
+		}
+	}
+	return out;
+};
+
+/**
+ * Default SHATTER / SHATTERED class guess: {@link DeckState.getCurrentClassEnum}, and in dual-class
+ * Arena ({@link DUAL_CLASS_ARENA_SCENARIO_ID}) also non-neutral classes from the hero power card.
+ */
+const collectDeckStateCardClassesForShatter = (
+	deckState: DeckState,
+	allCards: AllCardsService,
+	scenarioId: number | undefined,
+): CardClass[] => {
+	const out: CardClass[] = [];
+	const primary = deckState.getCurrentClassEnum();
+	if (primary != null && primary !== CardClass.NEUTRAL) {
+		out.push(primary);
+	}
+	if (scenarioId === DUAL_CLASS_ARENA_SCENARIO_ID && deckState.heroPower?.cardId) {
+		for (const cc of refCardIdToNonNeutralClasses(allCards, deckState.heroPower.cardId)) {
+			if (!out.includes(cc)) {
+				out.push(cc);
+			}
+		}
+	}
+	if (out.length) {
+		return out;
+	}
+	return [primary ?? CardClass.NEUTRAL];
+};
+
+const resolveShatterGuessCardClasses = (
+	deckState: DeckState,
+	allCards: AllCardsService,
+	guessedInfo: GuessedInfo,
+	scenarioId: number | undefined,
+): readonly CardClass[] => {
+	if (guessedInfo?.canBeAnyCardClass) {
+		return [];
+	}
+	if (guessedInfo?.cardClasses?.length) {
+		return guessedInfo.cardClasses;
+	}
+	return collectDeckStateCardClassesForShatter(deckState, allCards, scenarioId);
+};
+
 /**
  * When the opponent draws a SHATTER card, it splits into two SHATTERED cards in their hand.
  * These cards have the SHATTERED tag but no cardId (hidden). This allows showing the list of
@@ -212,10 +277,9 @@ export const getShatteredPossibleCards = (
 	deckState: DeckState,
 	allCards: AllCardsService,
 	guessedInfo: GuessedInfo,
+	scenarioId?: number,
 ): readonly string[] => {
-	const cardClasses: readonly CardClass[] = guessedInfo?.canBeAnyCardClass
-		? []
-		: (guessedInfo?.cardClasses ?? [deckState.getCurrentClassEnum() ?? CardClass.NEUTRAL]);
+	const cardClasses = resolveShatterGuessCardClasses(deckState, allCards, guessedInfo, scenarioId);
 	// // console.debug('cardClasses', cardClasses);
 	// if (!cardClasses.length) {
 	// 	return [];
@@ -255,10 +319,9 @@ export const getShatteredRecombinedPossibleCards = (
 	deckState: DeckState,
 	allCards: AllCardsService,
 	guessedInfo: GuessedInfo,
+	scenarioId?: number,
 ): readonly string[] => {
-	const cardClasses: readonly CardClass[] = guessedInfo?.canBeAnyCardClass
-		? []
-		: (guessedInfo?.cardClasses ?? [deckState.getCurrentClassEnum() ?? CardClass.NEUTRAL]);
+	const cardClasses = resolveShatterGuessCardClasses(deckState, allCards, guessedInfo, scenarioId);
 	// // console.debug('cardClasses', cardClasses);
 	// if (!cardClasses.length) {
 	// 	return [];
@@ -360,12 +423,19 @@ export const addGuessInfoToCard = (
 	}
 
 	// SHATTERED cards: hidden hand pieces after a SHATTER; class filter uses deck class unless the
-	// creator's GeneratingCard.guessInfo already set cardClasses (see Spark of Life).
+	// creator's GeneratingCard.guessInfo already set cardClasses (see Spark of Life). Dual-class
+	// Arena adds the hero power's class when scenario is {@link DUAL_CLASS_ARENA_SCENARIO_ID}.
 	const hasShatteredTag =
 		options?.tags?.some((t) => t.Name === GameTag.SHATTERED && t.Value === 1) ||
 		card.tags?.[GameTag.SHATTERED] === 1;
 	if (hasShatteredTag) {
-		const possibleCards = getShatteredPossibleCards(deckState, allCards.getService(), newGuessedInfo ?? {});
+		const scenarioId = gameState.metadata?.scenarioId ?? options?.metadata?.scenarioId;
+		const possibleCards = getShatteredPossibleCards(
+			deckState,
+			allCards.getService(),
+			newGuessedInfo ?? {},
+			scenarioId,
+		);
 		if (possibleCards.length > 0) {
 			// Even/odd halves of the global SHATTERED list. createdIndex sequences all spawns from the
 			// source (e.g. Spark of Life may use 0–1 for setaside tokens before hand pieces get 2 and 3).
