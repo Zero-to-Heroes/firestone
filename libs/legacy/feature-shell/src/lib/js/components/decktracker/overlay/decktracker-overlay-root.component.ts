@@ -279,9 +279,9 @@ export class DeckTrackerOverlayRootComponent
 		const gamesForRegion$ = combineLatest([this.gameStats.gameStats$$, this.region.region$$]).pipe(
 			filter(([gameStats, region]) => !!gameStats?.length),
 			this.mapData(
-				([gameStats, region]) =>
-					// If no games for the current region, return all games
-					(!region ? gameStats : gameStats.filter((s) => s.region === region)) || gameStats,
+				([gameStats, region]) => gameStats,
+				// If no games for the current region, return all games
+				// (!region ? gameStats : gameStats.filter((s) => s.region === region)) || gameStats,
 			),
 		);
 		const gamesForDeck$ = combineLatest([
