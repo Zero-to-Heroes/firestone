@@ -10,7 +10,7 @@ export const CrystallizedLeyline: StaticGeneratingCard = {
 	summonInPlay: true,
 	dynamicPool: (input: StaticGeneratingCardInput) => {
 		const card = input.inputOptions.deckState.findCard(input.entityId)?.card;
-		const cost = card?.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_1] ?? 6;
+		const cost = card?.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_1] ?? 5;
 		return filterCards(
 			CardIds.CrystallizedLeyline_MEND_502,
 			input.allCards,
