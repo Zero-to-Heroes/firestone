@@ -13,7 +13,11 @@ export const PandarenImporter: GeneratingCard & StaticGeneratingCard = {
 	publicCreator: true,
 	dynamicPool: (input: StaticGeneratingCardInput) => {
 		const currentClass = input.inputOptions.currentClass;
-		const initialDecklist = input.inputOptions.initialDecklist ?? [];
+		const initialDecklist = input.inputOptions.initialDecklist?.length
+			? input.inputOptions.initialDecklist
+			: input.inputOptions.deckState.getAllCardsFromStarterDeck()?.length
+				? input.inputOptions.deckState.getAllCardsFromStarterDeck()?.map((c) => c.cardId)
+				: [];
 		return filterCards(
 			PandarenImporter.cardIds[0],
 			input.allCards,
@@ -26,7 +30,12 @@ export const PandarenImporter: GeneratingCard & StaticGeneratingCard = {
 	},
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
 		const currentClass = input.deckState.getCurrentClass();
-		const initialDecklist = input.deckState.deckList?.map((c) => c.cardId) ?? [];
+		const initialDecklist = input.deckState.deckList?.length
+			? input.deckState.deckList?.map((c) => c.cardId)
+			: input.deckState.getAllCardsFromStarterDeck()?.length
+				? input.deckState.getAllCardsFromStarterDeck()?.map((c) => c.cardId)
+				: [];
+
 		const possibleCards = filterCards(
 			PandarenImporter.cardIds[0],
 			input.allCards,
