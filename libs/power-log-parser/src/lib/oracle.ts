@@ -17,6 +17,10 @@ import { SHATTER_HAND_PIECE_CREATOR_FALLBACK_CARD_IDS } from './shatter-hand-pie
 import type { GameState } from './state/game-state';
 import type { StateFacade } from './state/state-facade';
 
+const IGNORED_CREATORS = [
+	// It's simply a swap, so they shouldn't be flagged as "created by"
+	CardIds.TheFinsBeyondTime_BeyondTimeEnchantment_TIME_706e3,
+];
 export class Oracle {
 	private static PLAGUES: string[] = [
 		CardIds.DistressedKvaldir_UnholyPlagueToken,
@@ -157,6 +161,10 @@ export class Oracle {
 		// {@link FindShatteredPieceCreatorFromGraveyard} above.
 		if (!creatorTuple?.[0] && !isShattered && !isBeingShattered) {
 			creatorTuple = Oracle.FindParentEntity(gameState, node);
+		}
+
+		if (creatorTuple?.[0] && IGNORED_CREATORS.includes(creatorTuple?.[0] as CardIds)) {
+			return null;
 		}
 		return creatorTuple;
 	}
