@@ -156,7 +156,7 @@ function buildTooltipCardImages(usualUrl: string | null): {
 							class="info-item mechanics"
 							*ngIf="info.mechanics !== null && info.mechanics !== undefined && info.mechanics.length > 0"
 						>
-							<div class="label" [fsTranslate]="'decktracker.guessed-info.spell-schools'"></div>
+							<div class="label" [fsTranslate]="'decktracker.guessed-info.mechanics'"></div>
 							<div class="value">{{ formatMechanics(info.mechanics) }}</div>
 						</div>
 					</div>
