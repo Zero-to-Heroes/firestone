@@ -32,6 +32,7 @@ import { InventorBoom } from './inventor-boom';
 import { JimRaynor } from './jim-raynor';
 import { KragwaTheFrog } from './kragwa-the-frog';
 import { LadyDarkvein } from './lady-darkvein';
+import { LesserDiamondSpellstone } from './lesser-diamond-spellstone';
 import { MagisterDawngrasp } from './magister-dawngrasp';
 import { MemoriamManifest } from './memoriam-manifest';
 import { Merithra } from './merithra';
@@ -108,6 +109,7 @@ const cards = [
 	FerociousFelbat,
 	ArchdruidOfThorns,
 	KragwaTheFrog,
+	LesserDiamondSpellstone,
 	GreySageParrot,
 	LadyDarkvein,
 	ParrotMascot,
