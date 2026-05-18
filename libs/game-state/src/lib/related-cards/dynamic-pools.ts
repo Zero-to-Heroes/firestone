@@ -1856,6 +1856,7 @@ const doesSummonInPlay = (sourceCardId: string): boolean => {
 		case CardIds.MazeGuide:
 		case CardIds.MedivhTheHallowed_KarazhanTheSanctumToken_TIME_890t2:
 		case CardIds.MoongladePortal_KAR_075:
+		case CardIds.Nebula_GDB_479:
 		case CardIds.PaltryFlutterwing_TIME_058:
 		case CardIds.PastConflux_FutureConfluxToken_TIME_436t2:
 		case CardIds.PastConflux_PresentConfluxToken_TIME_436t1:
