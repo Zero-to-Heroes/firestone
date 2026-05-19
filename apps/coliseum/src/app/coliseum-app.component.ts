@@ -32,6 +32,7 @@ export class ColiseumAppComponent implements AfterContentInit, AfterViewInit {
 
 	private bgsSimulationId: string;
 	private bgsSimulationString: string;
+	private loadedReplay: Awaited<ReturnType<ReplayLoadService['loadReplayXml']>>;
 
 	constructor(
 		private readonly cdr: ChangeDetectorRef,
@@ -45,9 +46,21 @@ export class ColiseumAppComponent implements AfterContentInit, AfterViewInit {
 	async ngAfterContentInit() {
 		this.ready$ = this.ready$$.asObservable();
 
-		console.debug('loading cards', this.allCards);
-		await this.allCards.init(new AllCardsService(), 'enUS');
-		await this.allCards.waitForReady();
+		const reviewId = this.getSearchParam('reviewId');
+		const debug = this.getSearchParam('debug');
+		if (debug) {
+			this.debugService.active = true;
+		}
+
+		const cardsInit = this.allCards.init(new AllCardsService(), 'enUS').then(() => this.allCards.waitForReady());
+		const replayLoad =
+			reviewId != null
+				? this.replayLoad.loadReplayXml(reviewId, this.debugService.active).then((loaded) => {
+						this.loadedReplay = loaded;
+					})
+				: Promise.resolve();
+
+		await Promise.all([cardsInit, replayLoad]);
 		this.ready$$.next(true);
 
 		if (!(this.cdr as ViewRef).destroyed) {
@@ -87,8 +100,8 @@ export class ColiseumAppComponent implements AfterContentInit, AfterViewInit {
 		}
 
 		if (reviewId) {
-			const loaded = await this.replayLoad.loadReplayXml(reviewId, this.debugService.active);
 			this.analytics.trackEvent('reviewId');
+			const loaded = this.loadedReplay ?? (await this.replayLoad.loadReplayXml(reviewId, this.debugService.active));
 			if (!loaded?.replayXml) {
 				console.error('[game-replay] could not load replay xml', reviewId);
 				return;

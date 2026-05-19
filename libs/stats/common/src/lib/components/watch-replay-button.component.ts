@@ -9,6 +9,7 @@ import {
 	Optional,
 } from '@angular/core';
 import { IN_GAME_REPLAY_ERROR_MESSAGES, InGameReplayService } from '@firestone/mods/common';
+import { ReplayLoadService } from '@firestone/replay/replay-parser';
 import { ENABLE_IN_GAME_REPLAY } from '@firestone/shared/common/service';
 import {
 	ADS_SERVICE_TOKEN,
@@ -126,6 +127,7 @@ export class WatchReplayButtonComponent {
 		private readonly cdr: ChangeDetectorRef,
 		private readonly analytics: AnalyticsService,
 		private readonly gameStatsLoader: GameStatsLoaderService,
+		private readonly replayLoad: ReplayLoadService,
 		@Optional() private readonly ow: OverwolfService,
 		@Inject(EXTERNAL_URL_SERVICE_TOKEN) private readonly externalUrl: IExternalUrlService,
 		@Optional() @Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
@@ -144,6 +146,9 @@ export class WatchReplayButtonComponent {
 		event.preventDefault();
 		event.stopPropagation();
 		this.showWatchMenu = !this.showWatchMenu;
+		if (this.showWatchMenu && this.reviewId) {
+			this.replayLoad.prefetchReplayXml(this.reviewId);
+		}
 		this.cdr.detectChanges();
 	}
 
@@ -151,6 +156,9 @@ export class WatchReplayButtonComponent {
 		event.preventDefault();
 		event.stopPropagation();
 		this.showWatchMenu = false;
+		if (this.reviewId) {
+			this.replayLoad.prefetchReplayXml(this.reviewId);
+		}
 		this.showReplayEvent?.(this.reviewId);
 		this.cdr.detectChanges();
 	}
