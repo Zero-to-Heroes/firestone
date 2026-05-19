@@ -412,7 +412,6 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 	}
 
 	private async populateInfo(complete = true) {
-		this.game = this.gameParser.ensureTurnParsed(this.game, this.currentTurn);
 		this.gameConf.updateConfig(this.game);
 		if (
 			!this.game ||
