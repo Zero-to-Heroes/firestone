@@ -1,6 +1,6 @@
 /// <reference lib="webworker" />
 
-import { buildReplayIndex } from './replay-index-builder';
+import { buildReplayIndex } from '../services/replay-index-builder';
 
 addEventListener('message', ({ data }) => {
 	try {

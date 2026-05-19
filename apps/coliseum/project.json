@@ -29,7 +29,8 @@
 					"libs/shared/styles/src/lib/styles/battlegrounds-theme.scss",
 					"libs/shared/styles/src/lib/styles/decktracker-theme.scss"
 				],
-				"scripts": []
+				"scripts": [],
+				"webWorkerTsConfig": "apps/coliseum/tsconfig.worker.json"
 			},
 			"configurations": {
 				"production": {
