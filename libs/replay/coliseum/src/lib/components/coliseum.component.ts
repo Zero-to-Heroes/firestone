@@ -24,8 +24,8 @@ import {
 	LocationActivatedAction,
 	MinionDeathAction,
 	PowerTargetAction,
-	ReplayParserWorkerService,
 } from '@firestone/replay/replay-parser';
+import { ReplayParserWorkerService } from '@firestone/replay/replay-parser/worker';
 import type { GameSample } from '@firestone-hs/simulate-bgs-battle/dist/simulation/spectator/game-sample';
 import { groupByFunction2 } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
