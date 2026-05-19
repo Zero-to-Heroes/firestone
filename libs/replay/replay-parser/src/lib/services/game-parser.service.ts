@@ -17,10 +17,11 @@ import { NarratorService } from './gamepipeline/narrator.service';
 import { TargetsParserService } from './gamepipeline/targets-parser.service';
 import { TurnParserService } from './gamepipeline/turn-parser.service';
 import { ImagePreloaderService } from './image-preloader.service';
+import { ReplayPerfService } from './replay-perf.service';
 import { StateProcessorService } from './state-processor.service';
 import { XmlParserService } from './xml-parser.service';
 
-const SMALL_PAUSE = 15;
+const DEFAULT_YIELD_MS = 15;
 
 @Injectable({
 	providedIn: 'root',
@@ -41,6 +42,7 @@ export class GameParserService {
 		private endGameParser: EndGameParserService,
 		private narrator: NarratorService,
 		private stateProcessor: StateProcessorService,
+		private replayPerf: ReplayPerfService,
 	) {}
 	private cancelled: boolean;
 	private processingTimeout;
@@ -57,9 +59,13 @@ export class GameParserService {
 			this.processingTimeout = undefined;
 		}
 
+		this.replayPerf.markXmlSize(replayAsString?.length ?? 0);
+		this.replayPerf.startParse();
+
 		if (!this.allCards.getCards()?.length) {
+			const cardsStart = Date.now();
 			await this.allCards.initializeCardsDb();
-			this.logPerf('Retrieved cards DB, parsing replay', start);
+			this.replayPerf.markCardsDbMs(Date.now() - cardsStart);
 		}
 
 		const iterator: IterableIterator<[Game, number, string]> = this.createGamePipeline(
@@ -79,10 +85,15 @@ export class GameParserService {
 	}
 
 	private buildObservableFunction(observer, iterator: IterableIterator<[Game, number, string]>) {
-		// // console.log('calling next iteration');
 		try {
 			const itValue = iterator.next();
-			// // console.log('calling next obersable', itValue, itValue.value);
+			const game: Game = itValue.value[0];
+			if (itValue.done && game) {
+				this.replayPerf.markTurnCount(game.turns?.size ?? 0);
+				this.replayPerf.markFullParse();
+			} else if (game?.turns?.size > 0) {
+				this.replayPerf.markFirstTurn();
+			}
 			observer.next([itValue.value[0], itValue.value[2], itValue.done]);
 			if (!itValue.done && !this.cancelled) {
 				this.processingTimeout = setTimeout(
@@ -101,11 +112,13 @@ export class GameParserService {
 		options: TechnicalParsingOptions,
 		config: ActionParserConfig,
 	): IterableIterator<[Game, number, string]> {
+		const yieldMs = options?.shouldYield ?? DEFAULT_YIELD_MS;
+
 		if (!replayAsString || replayAsString.length == 0) {
-			return [null, SMALL_PAUSE, 'Invalid XML replay'];
+			return [null, yieldMs, 'Invalid XML replay'];
 		}
 
-		// console.log('[game-parser] preparing entity / acrd ID mapping');
+		this.replayPerf.startEntityMapping();
 		let entityCardId: Map<number, string> = Map([]);
 		const fullEntityIdCardIdMatcher = new RegExp(/id="(.*?)" cardID="(.*?)"/g);
 		const fullEntityMatchResult = replayAsString.match(fullEntityIdCardIdMatcher);
@@ -125,7 +138,7 @@ export class GameParserService {
 				entityCardId = entityCardId.set(parseInt(result[2]), result[1]);
 			}
 		}
-		// console.log('[game-parser] mapping done', entityCardId.size);
+		this.replayPerf.endEntityMapping();
 
 		// Do the parsing turn by turn
 		// let history: readonly HistoryItem[];
@@ -158,7 +171,7 @@ export class GameParserService {
 			// Battlegrounds tutorial
 			if (game.scenarioID === 3539) {
 				// console.log('[game-parser] Battlegrounds tutorial not supported, returning');
-				return [null, SMALL_PAUSE, 'Batllegrounds tutorial is not supported'];
+				return [null, yieldMs, 'Batllegrounds tutorial is not supported'];
 			}
 
 			// Preload the images we'll need early on
@@ -256,7 +269,7 @@ export class GameParserService {
 				// 	);
 				// }
 
-				yield [game, SMALL_PAUSE, 'Parsed turn ' + counter++];
+				yield [game, yieldMs, 'Parsed turn ' + counter++];
 			} else {
 				// if (counter++ === 3) {
 				// 	counter++;
@@ -267,12 +280,7 @@ export class GameParserService {
 			}
 		}
 		// console.log('parsing done, returning');
-		return [game, SMALL_PAUSE, 'Rendering game state'];
-	}
-
-	private logPerf<T>(what: string, start: number, result?: T): T {
-		// console.log('[perf] ', what, 'done after ', Date.now() - start, 'ms');
-		return result;
+		return [game, yieldMs, 'Rendering game state'];
 	}
 }
 
