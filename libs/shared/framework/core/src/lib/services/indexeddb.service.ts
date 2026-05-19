@@ -17,6 +17,7 @@ export const COLLECTION_CARDS = 'collectionCards';
 export const COLLECTION_PACK_STATS = 'collectionPacks';
 export const COLLECTION_CARD_HISTORY = 'collectionCardHistory';
 export const MATCH_HISTORY = 'matchHistory';
+export const REPLAY_XML = 'replayXml';
 export const ARENA_REWARDS = 'arenaRewards2';
 
 const dbName = 'FirestoneDB';
@@ -29,6 +30,14 @@ class IndexedDbTableWrapper<T, K = string> implements IDatabaseTable<T, K> {
 
 	async toArray(): Promise<readonly T[]> {
 		return await this.dexieTable.toArray();
+	}
+
+	async get(key: K): Promise<T | undefined> {
+		return await this.dexieTable.get(key);
+	}
+
+	async delete(key: K): Promise<void> {
+		await this.dexieTable.delete(key);
 	}
 
 	async add(record: T): Promise<K> {
@@ -146,6 +155,9 @@ export class IndexedDbService implements IDatabaseService {
 			[ARENA_CURRENT_DECK_PICKS]: '[runId+pickNumber], runId',
 			// ArenaRewardInfo
 			[ARENA_REWARDS]: '[runId+rewardType], runId',
+		});
+		this.dexie.version(3).stores({
+			[REPLAY_XML]: 'reviewId, fetchedAt',
 		});
 
 		await this.dexie.open();

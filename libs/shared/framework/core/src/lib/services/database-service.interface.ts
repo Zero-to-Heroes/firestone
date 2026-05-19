@@ -32,6 +32,16 @@ export interface IDatabaseService {
  */
 export interface IDatabaseTable<T, K = string> {
 	/**
+	 * Get a single record by primary key
+	 */
+	get(key: K): Promise<T | undefined>;
+
+	/**
+	 * Delete a single record by primary key
+	 */
+	delete(key: K): Promise<void>;
+
+	/**
 	 * Get all records as an array
 	 */
 	toArray(): Promise<readonly T[]>;

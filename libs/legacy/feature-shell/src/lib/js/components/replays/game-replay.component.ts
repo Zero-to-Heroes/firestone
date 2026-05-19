@@ -1,11 +1,6 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { MatchDetail } from '@firestone/mainwindow/common';
-import { ApiRunner } from '@firestone/shared/framework/core';
-import { loadAsync } from 'jszip';
-
-const RETRIEVE_REVIEW_URL = 'https://itkmxena7k2kkmkgpevc6skcie0tlwmk.lambda-url.us-west-2.on.aws/';
-const REPLAY_API = 'https://xml.firestoneapp.com/';
+import { ReplayLoadService } from '@firestone/replay/replay-parser';
 
 @Component({
 	standalone: false,
@@ -30,8 +25,7 @@ export class GameReplayComponent {
 
 	constructor(
 		private readonly cdr: ChangeDetectorRef,
-		private readonly api: ApiRunner,
-		private readonly http: HttpClient,
+		private readonly replayLoad: ReplayLoadService,
 	) {}
 
 	@Input() set replay(value: MatchDetail) {
@@ -50,48 +44,18 @@ export class GameReplayComponent {
 	}
 
 	private async loadReview(reviewId: string) {
-		const replayXml = await this.getReplayXml(reviewId);
-		if (!replayXml) {
+		const loaded = await this.replayLoad.loadReplayXml(reviewId);
+		if (!loaded?.replayXml) {
 			console.error('[game-replay] could not load replay xml', reviewId);
 			return;
 		}
-		this._replayXml = replayXml;
+		this._replayXml = loaded.replayXml;
 		this.reviewId = reviewId;
+		if (!this.decklist && loaded.playerDecklist) {
+			this.decklist = loaded.playerDecklist;
+		}
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.markForCheck();
-		}
-	}
-
-	private async getReplayXml(reviewId: string): Promise<string> {
-		// window['coliseum'].zone.run(() => {
-		// 	window['coliseum'].component.updateStatus('Downloading replay file');
-		// });
-		const review: any = await this.api.callGetApi<any>(`${RETRIEVE_REVIEW_URL}/${reviewId}`);
-		if (!review) {
-			return null;
-		}
-		const replay = await this.loadReplay(review.replayKey);
-		console.log('loaded replay');
-		return replay;
-	}
-
-	private async loadReplay(replayKey: string): Promise<string> {
-		if (replayKey?.endsWith('.zip')) {
-			const headers = new HttpHeaders({ 'Content-Type': 'application/zip' }).set('Accept', 'application/zip');
-			const zippedReplay = await this.http
-				.get(REPLAY_API + replayKey, { headers: headers, responseType: 'blob' })
-				.toPromise();
-			const zipContent = await loadAsync(zippedReplay as any);
-			const file = Object.keys(zipContent.files)[0];
-
-			const replay = await zipContent.file(file).async('string');
-			return replay;
-		} else {
-			const headers = new HttpHeaders({ 'Content-Type': 'text/xml' }).set('Accept', 'text/xml');
-			const replay = await this.http
-				.get(REPLAY_API + replayKey, { headers: headers, responseType: 'text' })
-				.toPromise();
-			return replay;
 		}
 	}
 }
