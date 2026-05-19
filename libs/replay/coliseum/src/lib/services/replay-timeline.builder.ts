@@ -149,8 +149,12 @@ function buildBattlegroundsMarkers(game: TimelineGame, totalDuration: number): R
 				return;
 			}
 
+			const kind = getBattlegroundsPhaseKind(action.newState);
+			if (!kind) {
+				return;
+			}
+
 			const displayTurnNumber = getBattlegroundsDisplayTurnNumber(turnNumber, action.newState);
-			const kind: TimelineMarkerKind = action.newState === 1 ? 'bg_recruit' : 'bg_combat';
 			markers.push(
 				createMarker({
 					turnIndex: turnNumber,
@@ -169,6 +173,9 @@ function buildBattlegroundsMarkers(game: TimelineGame, totalDuration: number): R
 	return markers.sort((a, b) => a.timestamp - b.timestamp);
 }
 
+/** Ensures a segment exists when the next marker shares the same timestamp/position. */
+const MIN_COLLAPSED_SEGMENT_PERCENT = 0.15;
+
 function buildSegments(markers: ReplayTimelineMarker[]): ReplayTimelineSegment[] {
 	if (!markers.length) {
 		return [];
@@ -177,35 +184,50 @@ function buildSegments(markers: ReplayTimelineMarker[]): ReplayTimelineSegment[]
 	const segments: ReplayTimelineSegment[] = [];
 
 	if (markers[0].positionPercent > 0) {
-		segments.push({
-			startPercent: 0,
-			endPercent: markers[0].positionPercent,
-			kind: markers[0].kind,
-			isLocalPlayer: markers[0].isLocalPlayer,
-			label: markers[0].label,
-		});
+		segments.push(segmentFromMarker(markers[0], 0, markers[0].positionPercent));
 	}
 
 	for (let i = 0; i < markers.length; i++) {
 		const marker = markers[i];
-		const endPercent = i + 1 < markers.length ? markers[i + 1].positionPercent : 100;
+		let endPercent = i + 1 < markers.length ? markers[i + 1].positionPercent : 100;
 		if (endPercent <= marker.positionPercent) {
-			continue;
+			endPercent = Math.min(marker.positionPercent + MIN_COLLAPSED_SEGMENT_PERCENT, 100);
 		}
-		segments.push({
-			startPercent: marker.positionPercent,
-			endPercent,
-			kind: marker.kind,
-			isLocalPlayer: marker.isLocalPlayer,
-			label: marker.label,
-		});
+		segments.push(segmentFromMarker(marker, marker.positionPercent, endPercent));
 	}
 
 	return segments;
 }
 
+function segmentFromMarker(
+	marker: ReplayTimelineMarker,
+	startPercent: number,
+	endPercent: number,
+): ReplayTimelineSegment {
+	return {
+		startPercent,
+		endPercent,
+		kind: marker.kind,
+		turnIndex: marker.turnIndex,
+		actionIndex: marker.actionIndex,
+		isLocalPlayer: marker.isLocalPlayer,
+		label: marker.label,
+	};
+}
+
 function isBaconBoardVisualStateAction(action: TimelineGameAction): action is TimelineGameAction & { newState: number } {
 	return action.newState != null;
+}
+
+function getBattlegroundsPhaseKind(newState: number): TimelineMarkerKind | null {
+	if (newState === 1) {
+		return 'bg_recruit';
+	}
+	// Combat is usually 2; some logs briefly use -1 during combat resolution.
+	if (newState === 2 || newState === -1) {
+		return 'bg_combat';
+	}
+	return null;
 }
 
 function createMarker(options: {

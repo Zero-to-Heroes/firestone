@@ -61,6 +61,53 @@ describe('replay-timeline.builder', () => {
 		expect(timeline.markers.some((m) => m.kind === 'bg_combat')).toBe(true);
 	});
 
+	it('builds battlegrounds segments for recruit and combat phases', () => {
+		const timeline = buildReplayTimeline(createBattlegroundsGame(), 10000);
+		const recruitSegment = timeline.segments.find((s) => s.kind === 'bg_recruit');
+		const combatSegment = timeline.segments.find((s) => s.kind === 'bg_combat');
+
+		expect(recruitSegment).toBeDefined();
+		expect(combatSegment).toBeDefined();
+		expect(recruitSegment!.endPercent).toBe(combatSegment!.startPercent);
+	});
+
+	it('creates combat segment when next marker shares the same position', () => {
+		const timeline = buildReplayTimeline(
+			{
+				gameType: GameType.GT_BATTLEGROUNDS as number,
+				players: [{ playerId: 1, name: 'Player' }],
+				turns: Map([
+					[0, { actions: [{ timestamp: 0, textRaw: 'Hero' }] }],
+					[2, { actions: [{ timestamp: 2000, newState: 1, textRaw: 'Recruit' }] }],
+					[3, { actions: [{ timestamp: 5000, newState: 2, textRaw: 'Combat' }] }],
+					[4, { actions: [{ timestamp: 5000, newState: 1, textRaw: 'Recruit' }] }],
+				]),
+			},
+			10000,
+		);
+
+		const combatSegments = timeline.segments.filter((s) => s.kind === 'bg_combat');
+		expect(combatSegments.length).toBe(1);
+		expect(combatSegments[0].endPercent).toBeGreaterThan(combatSegments[0].startPercent);
+	});
+
+	it('ignores unknown board visual states', () => {
+		const timeline = buildReplayTimeline(
+			{
+				gameType: GameType.GT_BATTLEGROUNDS as number,
+				players: [{ playerId: 1, name: 'Player' }],
+				turns: Map([
+					[2, { actions: [{ timestamp: 2000, newState: 0, textRaw: 'Unknown' }] }],
+					[3, { actions: [{ timestamp: 5000, newState: 2, textRaw: 'Combat' }] }],
+				]),
+			},
+			10000,
+		);
+
+		expect(timeline.markers.some((m) => m.kind === 'bg_combat')).toBe(true);
+		expect(timeline.markers.length).toBe(1);
+	});
+
 	it('applies battlegrounds display turn hack for combat on turn 3', () => {
 		expect(getBattlegroundsDisplayTurnNumber(3, 2)).toBe(1);
 	});

@@ -32,7 +32,7 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { ColiseumDebugService } from '../services/coliseum-debug.service';
 import { GameConfService } from '../services/game-conf.service';
-import { ReplayTimeline } from '../services/replay-timeline.model';
+import { ReplayTimeline, ReplayTimelineMode } from '../services/replay-timeline.model';
 import { ReplayTimelineService } from '../services/replay-timeline.service';
 
 const NON_COARSE_ACTIONS = [
@@ -109,8 +109,10 @@ const isSkippedAction = (action: Action): boolean => {
 				[segments]="timeline?.segments ?? []"
 				[markers]="timeline?.markers ?? []"
 				[showTurnRail]="showTurnRail"
+				[timelineMode]="timelineMode"
 				[active]="isInteractive"
 				(seek)="onSeek($event)"
+				(seekToAction)="onSeekToAction($event)"
 			>
 			</seeker>
 			<turn-narrator
@@ -172,6 +174,7 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 	// turnString: string | undefined;
 	showHiddenCards = true;
 	showTurnRail = false;
+	timelineMode: ReplayTimelineMode = 'constructed';
 	totalTime: number;
 	currentTime = 0;
 	timeline: ReplayTimeline | null = null;
@@ -376,6 +379,20 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 		}
 	}
 
+	onSeekToAction(location: { turn: number; action: number }) {
+		if (!this.game) {
+			return;
+		}
+		const action = this.game.turns.get(location.turn)?.actions[location.action];
+		this.updateCurrentAction(location);
+		if (action?.timestamp != null) {
+			this.currentTime = action.timestamp;
+		}
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.markForCheck();
+		}
+	}
+
 	onSeek(targetTimestamp: number) {
 		if (!this.game) {
 			console.warn('[app] game not present, not performing operation', 'onSeek');
@@ -507,8 +524,9 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 			this.showTurnRail = false;
 			return;
 		}
-		this.showTurnRail = !isBattlegrounds(this.game.gameType);
+		this.timelineMode = isBattlegrounds(this.game.gameType) ? 'battlegrounds' : 'constructed';
 		this.timeline = this.replayTimelineService.build(this.game, this.totalTime);
+		this.showTurnRail = !!this.timeline.segments.length;
 	}
 
 	private computeCurrentTime(): number {

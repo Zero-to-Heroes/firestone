@@ -106,12 +106,20 @@ $light-foreground-forth: $gray168;
 	justify-content: center;
 	overflow: hidden;
 
-	&.player {
+	&.player,
+	&.combat {
 		background: var(--color-2, #767faf);
 	}
 
+	&.combat {
+		min-width: 12px;
+		z-index: 2;
+	}
+
 	&.opponent,
-	&.mulligan {
+	&.mulligan,
+	&.recruit,
+	&.hero-selection {
 		background: var(--color-5, #1f2142);
 	}
 
@@ -130,12 +138,15 @@ $light-foreground-forth: $gray168;
 	user-select: none;
 }
 
-.turn-segment.player .turn-segment-label {
+.turn-segment.player .turn-segment-label,
+.turn-segment.combat .turn-segment-label {
 	color: var(--color-7, #07081f);
 }
 
 .turn-segment.opponent .turn-segment-label,
-.turn-segment.mulligan .turn-segment-label {
+.turn-segment.mulligan .turn-segment-label,
+.turn-segment.recruit .turn-segment-label,
+.turn-segment.hero-selection .turn-segment-label {
 	color: var(--color-1, #9fb6d7);
 }
 

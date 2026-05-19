@@ -1,3 +1,5 @@
+export type ReplayTimelineMode = 'constructed' | 'battlegrounds';
+
 export type TimelineMarkerKind =
 	| 'mulligan'
 	| 'player_turn'
@@ -20,6 +22,8 @@ export interface ReplayTimelineSegment {
 	startPercent: number;
 	endPercent: number;
 	kind: TimelineMarkerKind;
+	turnIndex: number;
+	actionIndex: number;
 	isLocalPlayer?: boolean;
 	label?: string;
 }
