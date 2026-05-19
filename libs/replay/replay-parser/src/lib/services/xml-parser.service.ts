@@ -1,4 +1,5 @@
 import { GameTag, MetaTags, Mulligan, Step, Zone } from '@firestone-hs/reference-data';
+import { Map } from 'immutable';
 import { SaxesParser, SaxesTagPlain } from 'saxes';
 import { ActionHistoryItem } from '../models/history/action-history-item';
 import { ChangeEntityHistoryItem } from '../models/history/change-entity-history-item';
@@ -30,6 +31,7 @@ export class XmlParserService {
 	private index: number;
 	private initialTimestamp: number;
 	private history: HistoryItem[];
+	private entityCardId: Map<number, string> = Map([]);
 	private entityDefinition: EntityDefinition;
 	private accountHi: string;
 	private accountLo: string;
@@ -45,6 +47,10 @@ export class XmlParserService {
 	private scenarioID: number;
 
 	constructor() {}
+
+	public getEntityCardIdMap(): Map<number, string> {
+		return this.entityCardId;
+	}
 
 	public *parseXml(xmlAsString: string): IterableIterator<readonly HistoryItem[]> {
 		this.reset();
@@ -161,6 +167,7 @@ export class XmlParserService {
 					playerID: parseInt(node.attributes.playerID),
 				};
 				Object.assign(this.entityDefinition, newAttributes);
+				this.trackEntityCardId(newAttributes.id, newAttributes.cardID);
 				break;
 			case 'TagChange':
 				const tag: EntityTag = {
@@ -219,6 +226,7 @@ export class XmlParserService {
 					parentIndex: this.stack[this.stack.length - 2].index,
 				};
 				Object.assign(this.entityDefinition, newAttributes);
+				this.trackEntityCardId(newAttributes.id, newAttributes.cardID);
 
 				if (node.name === 'ShowEntity') {
 					let showEntities: EntityDefinition[] = this.stack[this.stack.length - 2].showEntities || [];
@@ -521,6 +529,7 @@ export class XmlParserService {
 		this.index = 0;
 		this.initialTimestamp = undefined;
 		this.history = [];
+		this.entityCardId = Map([]);
 		this.entityDefinition = {
 			tags: {},
 		};
@@ -528,6 +537,12 @@ export class XmlParserService {
 		this.chosen = undefined;
 		this.metaData = undefined;
 		this.timestamp = undefined;
+	}
+
+	private trackEntityCardId(entityId: number, cardID: string | undefined): void {
+		if (entityId != null && !Number.isNaN(entityId) && cardID) {
+			this.entityCardId = this.entityCardId.set(entityId, cardID);
+		}
 	}
 
 	private tsToSeconds(ts: string): number {

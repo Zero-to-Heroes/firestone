@@ -119,42 +119,27 @@ export class GameParserService {
 		}
 
 		this.replayPerf.startEntityMapping();
-		let entityCardId: Map<number, string> = Map([]);
-		const fullEntityIdCardIdMatcher = new RegExp(/id="(.*?)" cardID="(.*?)"/g);
-		const fullEntityMatchResult = replayAsString.match(fullEntityIdCardIdMatcher);
-		for (let match of fullEntityMatchResult) {
-			const result = new RegExp(/id="(.*?)" cardID="(.*?)"/g).exec(match);
-			if (result) {
-				entityCardId = entityCardId.set(parseInt(result[1]), result[2]);
-			}
-		}
-		const showEntityIdCardIdMatcher = new RegExp(/cardID="(.*?)" entity="(.*?)"/g);
-		const showEntityMatchResult = replayAsString.match(showEntityIdCardIdMatcher);
-		for (let match of showEntityMatchResult) {
-			// // console.log("updating with show', result", copy);
-			const result = new RegExp(/cardID="(.*?)" entity="(.*?)"/g).exec(match);
-			if (result) {
-				// // console.log('result', result);
-				entityCardId = entityCardId.set(parseInt(result[2]), result[1]);
-			}
-		}
-		this.replayPerf.endEntityMapping();
 
-		// Do the parsing turn by turn
-		// let history: readonly HistoryItem[];
-		const xmlParsingIterator: IterableIterator<readonly HistoryItem[]> = new XmlParserService().parseXml(
-			replayAsString,
-		);
+		const xmlParser = new XmlParserService();
+		const xmlParsingIterator: IterableIterator<readonly HistoryItem[]> = xmlParser.parseXml(replayAsString);
+		let entityCardId: Map<number, string> = Map([]);
 		let game: Game = Game.createGame({} as Game);
 		let counter = 0;
+		const actionParsers = this.actionParser.createParsers(config);
 		while (true) {
 			const itValue = xmlParsingIterator.next();
 			const history: readonly HistoryItem[] = itValue.value;
-			// console.debug('[game-parser] parsing for', counter, 'with history length', history.length);
 
 			if (!history || itValue.done) {
-				// console.debug('[game-parser] history parsing over', itValue);
+				entityCardId = xmlParser.getEntityCardIdMap();
+				this.replayPerf.endEntityMapping();
 				break;
+			}
+
+			if (entityCardId.size === 0) {
+				entityCardId = xmlParser.getEntityCardIdMap();
+			} else if (counter === 0) {
+				this.replayPerf.endEntityMapping();
 			}
 
 			if (history[0] instanceof GameHistoryItem) {
@@ -195,7 +180,7 @@ export class GameParserService {
 
 			game = this.turnParser.createTurns(game, history);
 			// // console.log('game after turn creation', game.turns.size);
-			game = this.actionParser.parseActions(game, entities, history, config);
+			game = this.actionParser.parseActions(game, entities, history, config, false, actionParsers);
 			// // console.log(
 			// 	'entity 150 parseActions',
 			// 	game.getLatestParsedState().get(150) &&
@@ -241,10 +226,12 @@ export class GameParserService {
 				}
 				// // console.log('game after affectMulligan', game, game.turns.toJS());
 				game = this.endGameParser.parseEndGame(game);
-				// // console.log('game after parseEndGame', game, game.turns.toJS());
-				game = this.narrator.populateActionTextForLastTurn(game);
-				// // console.log('game after populateActionText', game, game.turns.toJS());
-				game = this.narrator.createGameStoryForLastTurn(game);
+				if (!options?.deferNarrator) {
+					game = this.narrator.populateActionTextForLastTurn(game);
+				}
+				if (!options?.deferStory) {
+					game = this.narrator.createGameStoryForLastTurn(game);
+				}
 				// // console.log(
 				// 	'entity 150 createGameStoryForLastTurn',
 				// 	game.getLatestParsedState().get(150) &&
@@ -279,7 +266,11 @@ export class GameParserService {
 				// counter++;
 			}
 		}
-		// console.log('parsing done, returning');
+		if (options?.deferStory && game?.turns?.size > 0) {
+			game = this.narrator.buildFullStory(game);
+		} else if (options?.deferNarrator && game?.turns?.size > 0) {
+			game = this.narrator.enrichAllActionText(game);
+		}
 		return [game, yieldMs, 'Rendering game state'];
 	}
 }
@@ -290,6 +281,8 @@ export interface GameProcessingStep {
 }
 
 export interface TechnicalParsingOptions {
-	readonly shouldYield: number;
-	readonly skipUi: boolean;
+	readonly shouldYield?: number;
+	readonly skipUi?: boolean;
+	readonly deferNarrator?: boolean;
+	readonly deferStory?: boolean;
 }

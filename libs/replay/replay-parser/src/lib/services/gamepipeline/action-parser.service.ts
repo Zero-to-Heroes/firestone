@@ -82,20 +82,24 @@ export class ActionParserService {
 		];
 	}
 
+	public createParsers(config: ActionParserConfig = new ActionParserConfig()): Parser[] {
+		return this.registerActionParsers(config);
+	}
+
 	public parseActions(
 		game: Game,
 		entities: Map<number, Entity>,
 		history: readonly HistoryItem[],
 		config: ActionParserConfig = new ActionParserConfig(),
 		debug = false,
+		actionParsers?: Parser[],
 	): Game {
 		// Because mulligan is effectively index -1; since there is a 0 turn after that
 		const currentTurn = game.turns.size - 1;
 		let previousStateEntities: Map<number, Entity> = entities;
 		let previousProcessedItem: HistoryItem = history[0];
 		let actionsForTurn: readonly Action[] = [];
-		// Recreating this every time lets the parsers store state and emit the action only when necessary
-		const actionParsers: Parser[] = this.registerActionParsers(config);
+		const parsers = actionParsers ?? this.registerActionParsers(config);
 		for (const item of history) {
 			const entitiesBeforeAction = previousStateEntities;
 			previousStateEntities = this.stateProcessorService.applyHistoryItem(previousStateEntities, item);
@@ -103,7 +107,7 @@ export class ActionParserService {
 			actionsForTurn = this.updateActionsForTurn(
 				item,
 				actionsForTurn,
-				actionParsers,
+				parsers,
 				entitiesBeforeAction,
 				previousStateEntities,
 				history,
@@ -126,7 +130,7 @@ export class ActionParserService {
 		// Give an opportunity to each parser to combine the actions it produced by merging them
 		// For instance, if we two card draws in a row, we might want to display them as a single
 		// action that draws two cards
-		actionsForTurn = this.reduceActions(actionParsers, actionsForTurn);
+		actionsForTurn = this.reduceActions(parsers, actionsForTurn);
 		actionsForTurn = this.addDamageToEntities(actionsForTurn, previousStateEntities);
 		try {
 			if (currentTurn < 0) {

@@ -228,7 +228,7 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 			this.cdr.markForCheck();
 		}
 
-		const gameObs = await this.gameParser.parse(replayXml);
+		const gameObs = await this.gameParser.parse(replayXml, { deferStory: true, shouldYield: 15 });
 		this.gameSub = gameObs.subscribe(
 			([game, status, complete]: [Game, string, boolean]) => {
 				if (game) {
