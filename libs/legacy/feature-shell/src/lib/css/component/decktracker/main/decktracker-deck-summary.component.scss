@@ -20,8 +20,6 @@
 		gap: 4px;
 		margin-bottom: 10px;
 		position: relative;
-		/* Above .buttons so rename / title receive clicks (buttons are later in DOM and would cover) */
-		z-index: 2;
 	}
 
 	.deck-name {
@@ -47,29 +45,12 @@
 		flex: 0 1 auto;
 	}
 
-	.rename-group-button {
-		flex-shrink: 0;
-		width: 22px;
-		height: 22px;
-		padding: 0;
-		background: transparent;
-		border: none;
-		cursor: pointer;
-		color: var(--color-1);
-		--icon-color: var(--color-1);
-		&:hover {
-			color: var(--color-1);
-			--icon-color: var(--color-1);
-		}
-	}
-
 	.group-name-edit-wrap {
 		width: 100%;
 		margin-bottom: 10px;
 		padding: 0 4px;
 		box-sizing: border-box;
 		position: relative;
-		z-index: 2;
 	}
 
 	.group-name-input {
@@ -172,6 +153,23 @@
 		}
 	}
 
+	.rename-group-button {
+		width: 30px;
+		height: 30px;
+		padding: 0;
+		background: transparent;
+		border: none;
+		cursor: pointer;
+		color: var(--control-button-color);
+		--icon-color: var(--control-button-color);
+
+		&:hover {
+			background: var(--on-control-button-background-color);
+			color: var(--control-button-color);
+			--icon-color: var(--control-button-color);
+		}
+	}
+
 	.copy-button {
 		width: 30px;
 		height: 30px;
@@ -209,10 +207,6 @@
 			text-overflow: unset;
 			max-height: 3.75em;
 			text-align: center;
-		}
-
-		.rename-group-button {
-			flex-shrink: 0;
 		}
 
 		.stats {

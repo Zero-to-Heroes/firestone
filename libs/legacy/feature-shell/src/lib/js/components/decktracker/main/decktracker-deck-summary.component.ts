@@ -44,14 +44,6 @@ import {
 		>
 			<div class="deck-title-row" *ngIf="!editingGroupName; else groupNameEditTpl">
 				<div class="deck-name" [helpTooltip]="deckNameTooltip">{{ deckName }}</div>
-				<button
-					*ngIf="showGroupNameEdit"
-					type="button"
-					class="rename-group-button"
-					inlineSVG="assets/svg/rename.svg"
-					[helpTooltip]="'app.decktracker.decks.group-name-edit-tooltip' | fsTranslate"
-					(click)="startGroupNameEdit($event)"
-				></button>
 			</div>
 			<ng-template #groupNameEditTpl>
 				<div class="group-name-edit-wrap" (click)="$event.stopPropagation()">
@@ -115,6 +107,14 @@ import {
 						<use xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="assets/svg/sprite.svg#move"></use>
 					</svg>
 				</button>
+				<button
+					*ngIf="showGroupNameEdit"
+					type="button"
+					class="rename-group-button"
+					inlineSVG="assets/svg/rename.svg"
+					[helpTooltip]="'app.decktracker.decks.group-name-edit-tooltip' | fsTranslate"
+					(click)="startGroupNameEdit($event)"
+				></button>
 				<copy-deckstring
 					class="copy-button"
 					[copyText]="'decktracker.deck-name.copy-deckstring-label' | fsTranslate"
