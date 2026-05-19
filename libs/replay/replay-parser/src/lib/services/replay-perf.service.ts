@@ -14,11 +14,15 @@ export interface ReplayPerfTimings {
 	readonly xmlSizeBytes?: number;
 }
 
+type MutableReplayPerfTimings = {
+	-readonly [K in keyof ReplayPerfTimings]: ReplayPerfTimings[K];
+};
+
 @Injectable({
 	providedIn: 'root',
 })
 export class ReplayPerfService {
-	private current: Partial<ReplayPerfTimings> = {};
+	private current: MutableReplayPerfTimings = {};
 	private parseStartMs: number;
 	private entityMappingStartMs: number;
 	private firstTurnRecorded: boolean;

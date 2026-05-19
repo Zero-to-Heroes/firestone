@@ -1,19 +1,19 @@
 import { Injectable } from '@angular/core';
-import { Map } from 'immutable';
+import { Map as ImmutableMap } from 'immutable';
 import { Game } from '../models/game/game';
 import { Entity } from '../models/game/entity';
 
 export interface TurnCacheEntry {
 	readonly chunkIndex: number;
 	readonly turnCount: number;
-	readonly endState: Map<number, Entity>;
+	readonly endState: ImmutableMap<number, Entity>;
 }
 
 @Injectable({
 	providedIn: 'root',
 })
 export class ReplayTurnCacheService {
-	private readonly cache = new Map<string, TurnCacheEntry>();
+	private readonly cache = new globalThis.Map<string, TurnCacheEntry>();
 	private currentReviewKey: string | null = null;
 	private lastProcessedChunk = -1;
 
