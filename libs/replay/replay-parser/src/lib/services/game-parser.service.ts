@@ -19,9 +19,10 @@ import { TurnParserService } from './gamepipeline/turn-parser.service';
 import { ImagePreloaderService } from './image-preloader.service';
 import { ReplayPerfService } from './replay-perf.service';
 import { StateProcessorService } from './state-processor.service';
-import { ReplayIndexService } from './replay-index.service';
+import { ReplayIndex, ReplayIndexMeta } from '../models/replay-index';
+import { extractMeta, finalizeReplayIndex } from './replay-index-builder';
 import { ReplayTurnCacheService } from './replay-turn-cache.service';
-import { ReplayIndex } from '../models/replay-index';
+import { XmlParserService } from './xml-parser.service';
 
 const DEFAULT_YIELD_MS = 15;
 
@@ -45,7 +46,6 @@ export class GameParserService {
 		private narrator: NarratorService,
 		private stateProcessor: StateProcessorService,
 		private replayPerf: ReplayPerfService,
-		private replayIndexService: ReplayIndexService,
 		private turnCache: ReplayTurnCacheService,
 	) {}
 	private cancelled: boolean;
@@ -69,17 +69,27 @@ export class GameParserService {
 		this.replayPerf.markXmlSize(replayAsString?.length ?? 0);
 		this.replayPerf.startParse();
 
-		if (!this.allCards.getCards()?.length) {
-			const cardsStart = Date.now();
-			await this.allCards.initializeCardsDb();
-			this.replayPerf.markCardsDbMs(Date.now() - cardsStart);
-		}
+		const indexPromise =
+			options?.prebuiltIndex != null
+				? Promise.resolve(options.prebuiltIndex)
+				: (options?.prebuiltIndexPromise ?? Promise.resolve(null));
+
+		const cardsPromise = !this.allCards.getCards()?.length
+			? (async () => {
+					const cardsStart = Date.now();
+					await this.allCards.initializeCardsDb();
+					this.replayPerf.markCardsDbMs(Date.now() - cardsStart);
+				})()
+			: Promise.resolve();
+
+		const [prebuiltIndex] = await Promise.all([indexPromise, cardsPromise]);
 
 		const iterator: IterableIterator<[Game, number, string]> = this.createGamePipeline(
 			replayAsString,
 			start,
 			options,
 			config,
+			prebuiltIndex,
 		);
 		return Observable.create(observer => {
 			this.buildObservableFunction(observer, iterator);
@@ -130,6 +140,12 @@ export class GameParserService {
 	private buildObservableFunction(observer, iterator: IterableIterator<[Game, number, string]>) {
 		try {
 			const itValue = iterator.next();
+			if (!itValue.value) {
+				if (itValue.done) {
+					observer.next([null, DEFAULT_YIELD_MS, '']);
+				}
+				return;
+			}
 			const game: Game = itValue.value[0];
 			if (itValue.done && game) {
 				this.replayPerf.markTurnCount(game.turns?.size ?? 0);
@@ -154,6 +170,7 @@ export class GameParserService {
 		start: number,
 		options: TechnicalParsingOptions,
 		config: ActionParserConfig,
+		prebuiltIndex: ReplayIndex | null = null,
 	): IterableIterator<[Game, number, string]> {
 		const yieldMs = options?.shouldYield ?? DEFAULT_YIELD_MS;
 
@@ -161,14 +178,99 @@ export class GameParserService {
 			return [null, yieldMs, 'Invalid XML replay'];
 		}
 
-		this.replayPerf.startEntityMapping();
-		const index = this.replayIndexService.buildIndex(replayAsString);
-		this.replayPerf.endEntityMapping();
-		this.activeIndex = index;
-		this.turnCache.reset(`${replayAsString.length}-${index.turnChunks.length}`);
 		this.activeConfig = config;
 		this.activeActionParsers = this.actionParser.createParsers(config);
 
+		if (prebuiltIndex) {
+			return yield* this.processIndexedReplay(replayAsString, prebuiltIndex, options, config, yieldMs);
+		}
+
+		return yield* this.processReplayWithStreamingIndex(replayAsString, options, config, yieldMs);
+	}
+
+	private *processIndexedReplay(
+		replayAsString: string,
+		index: ReplayIndex,
+		options: TechnicalParsingOptions,
+		config: ActionParserConfig,
+		yieldMs: number,
+	): IterableIterator<[Game, number, string]> {
+		this.replayPerf.startEntityMapping();
+		this.replayPerf.endEntityMapping();
+		this.activeIndex = index;
+		this.turnCache.reset(`${replayAsString.length}-${index.turnChunks.length}`);
+
+		yield* this.processTurnChunks(index, options, config, yieldMs);
+	}
+
+	private *processReplayWithStreamingIndex(
+		replayAsString: string,
+		options: TechnicalParsingOptions,
+		config: ActionParserConfig,
+		yieldMs: number,
+	): IterableIterator<[Game, number, string]> {
+		this.replayPerf.startEntityMapping();
+		const xmlParser = new XmlParserService();
+		const turnChunks: HistoryItem[][] = [];
+		let meta: ReplayIndexMeta | null = null;
+		let game: Game = Game.createGame({} as Game);
+		let counter = 0;
+		const batchSize = options?.batchTurns ?? 1;
+		let turnsSinceYield = 0;
+
+		for (const chunk of xmlParser.parseXml(replayAsString)) {
+			if (!chunk?.length) {
+				continue;
+			}
+			meta = meta ?? extractMeta(chunk);
+			turnChunks.push([...chunk]);
+			const index = finalizeReplayIndex(turnChunks, meta, xmlParser.getEntityCardIdMap());
+			this.activeIndex = index;
+			this.turnCache.reset(`${replayAsString.length}-${index.turnChunks.length}`);
+
+			if (index.meta && game.scenarioID == null) {
+				game = Object.assign(game, index.meta as Game);
+			}
+			if (game.scenarioID === 3539) {
+				this.replayPerf.endEntityMapping();
+				return [null, yieldMs, 'Batllegrounds tutorial is not supported'];
+			}
+
+			const chunkIndex = turnChunks.length - 1;
+			game = this.processHistoryChunk(game, chunk, index, config, options);
+			if (game.turns.size > 0) {
+				this.turnCache.markChunkProcessed(chunkIndex, game);
+				turnsSinceYield++;
+				if (turnsSinceYield >= batchSize) {
+					turnsSinceYield = 0;
+					yield [game, yieldMs, 'Parsed turn ' + counter++];
+				}
+			}
+		}
+
+		this.replayPerf.endEntityMapping();
+
+		if (!this.activeIndex) {
+			return [null, yieldMs, 'Invalid XML replay'];
+		}
+
+		if (turnsSinceYield > 0) {
+			yield [game, yieldMs, 'Parsed turn ' + counter++];
+		}
+		if (options?.deferStory && game?.turns?.size > 0) {
+			game = this.narrator.buildFullStory(game);
+		} else if (options?.deferNarrator && game?.turns?.size > 0) {
+			game = this.narrator.enrichAllActionText(game);
+		}
+		return [game, yieldMs, 'Rendering game state'];
+	}
+
+	private *processTurnChunks(
+		index: ReplayIndex,
+		options: TechnicalParsingOptions,
+		config: ActionParserConfig,
+		yieldMs: number,
+	): IterableIterator<[Game, number, string]> {
 		let game: Game = Game.createGame({} as Game);
 		if (index.meta) {
 			game = Object.assign(game, index.meta as Game);
@@ -256,5 +358,8 @@ export interface TechnicalParsingOptions {
 	readonly deferNarrator?: boolean;
 	readonly deferStory?: boolean;
 	readonly batchTurns?: number;
-	readonly useWorker?: boolean;
+	/** When set (e.g. from a Web Worker in the app), skips main-thread XML indexing. */
+	readonly prebuiltIndex?: ReplayIndex;
+	/** Resolve index off the main thread; awaited at parse start (can overlap with cards DB init). */
+	readonly prebuiltIndexPromise?: Promise<ReplayIndex | null>;
 }

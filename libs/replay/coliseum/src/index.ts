@@ -4,3 +4,7 @@ export * from './lib/components/game/card/card-stats.component';
 export * from './lib/components/game/card/tavern-level-icon.component';
 export * from './lib/replay-coliseum.module';
 export * from './lib/services/coliseum-debug.service';
+export {
+	REPLAY_INDEX_WORKER,
+	type ReplayIndexWorker,
+} from './lib/services/replay-index-worker.token';

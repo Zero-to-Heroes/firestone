@@ -1,3 +1,4 @@
+import { Map } from 'immutable';
 import { ReplayIndex, ReplayIndexMeta } from '../models/replay-index';
 import { GameHistoryItem } from '../models/models';
 import { HistoryItem } from '../models/history/history-item';
@@ -12,25 +13,38 @@ export function buildReplayIndex(replayAsString: string): ReplayIndex {
 		if (!chunk?.length) {
 			continue;
 		}
-		if (!meta && chunk[0] instanceof GameHistoryItem) {
-			const gameHistory = chunk[0] as GameHistoryItem;
-			meta = {
-				buildNumber: gameHistory.buildNumber,
-				formatType: gameHistory.formatType,
-				gameType: gameHistory.gameType,
-				scenarioID: gameHistory.scenarioID,
-			};
-		}
+		meta = meta ?? extractMeta(chunk);
 		turnChunks.push([...chunk]);
 	}
 
+	return finalizeReplayIndex(turnChunks, meta, xmlParser.getEntityCardIdMap());
+}
+
+export function extractMeta(chunk: readonly HistoryItem[]): ReplayIndexMeta | null {
+	if (!(chunk[0] instanceof GameHistoryItem)) {
+		return null;
+	}
+	const gameHistory = chunk[0] as GameHistoryItem;
+	return {
+		buildNumber: gameHistory.buildNumber,
+		formatType: gameHistory.formatType,
+		gameType: gameHistory.gameType,
+		scenarioID: gameHistory.scenarioID,
+	};
+}
+
+export function finalizeReplayIndex(
+	turnChunks: readonly (readonly HistoryItem[])[],
+	meta: ReplayIndexMeta | null,
+	entityCardId: Map<number, string>,
+): ReplayIndex {
 	const turnTimestamps = turnChunks.map((chunk) => getLastTimestamp(chunk));
 	const totalDuration = turnTimestamps.length ? turnTimestamps[turnTimestamps.length - 1] : 0;
 
 	return {
 		meta,
 		turnChunks,
-		entityCardId: xmlParser.getEntityCardIdMap(),
+		entityCardId,
 		turnTimestamps,
 		totalDuration,
 	};

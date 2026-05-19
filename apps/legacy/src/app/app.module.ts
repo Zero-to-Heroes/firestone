@@ -8,6 +8,7 @@ import {
 	BgsBattlePositioningWorkerService,
 	BgsBattleSimulationWorkerService,
 } from '@firestone/battlegrounds/simulator';
+import { REPLAY_INDEX_WORKER } from '@firestone/replay/coliseum';
 import { LegacyFeatureShellModule } from '@firestone/legacy/feature-shell';
 import {
 	LOG_FILE_BACKEND,
@@ -17,6 +18,7 @@ import {
 import { CardsFacadeService, SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { AppBoostrapperComponent } from './app-bootstrap.component';
 import { OwAppVersionService } from './impl/ow-app-version.service';
+import { ReplayIndexWorkerHostService } from './replay-index-worker-host.service';
 
 @NgModule({
 	declarations: [AppBoostrapperComponent],
@@ -36,6 +38,7 @@ import { OwAppVersionService } from './impl/ow-app-version.service';
 			useClass: OverwolfLogFileBackendService,
 		},
 		{ provide: APP_VERSION_SERVICE_TOKEN, useClass: OwAppVersionService },
+		{ provide: REPLAY_INDEX_WORKER, useExisting: ReplayIndexWorkerHostService },
 	],
 	bootstrap: [AppBoostrapperComponent],
 })

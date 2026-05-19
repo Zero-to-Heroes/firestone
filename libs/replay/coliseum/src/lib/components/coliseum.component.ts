@@ -5,8 +5,10 @@ import {
 	ChangeDetectorRef,
 	Component,
 	EventEmitter,
+	Inject,
 	Input,
 	OnDestroy,
+	Optional,
 	Output,
 	ViewRef,
 } from '@angular/core';
@@ -24,8 +26,8 @@ import {
 	LocationActivatedAction,
 	MinionDeathAction,
 	PowerTargetAction,
-	ReplayIndexService,
 } from '@firestone/replay/replay-parser';
+import { REPLAY_INDEX_WORKER, ReplayIndexWorker } from '../services/replay-index-worker.token';
 import type { GameSample } from '@firestone-hs/simulate-bgs-battle/dist/simulation/spectator/game-sample';
 import { groupByFunction2 } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
@@ -199,7 +201,7 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 
 	constructor(
 		private readonly gameParser: GameParserService,
-		private readonly replayIndex: ReplayIndexService,
+		@Optional() @Inject(REPLAY_INDEX_WORKER) private readonly replayIndexWorker: ReplayIndexWorker | null,
 		private readonly gameConf: GameConfService,
 		private readonly bgsSimulationParser: BattlegroundsSimulationParserService,
 		private readonly cdr: ChangeDetectorRef,
@@ -228,24 +230,16 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 		}
 	}
 
-	/** Builds a lightweight index off the critical path (no Web Worker — avoids bad chunk URLs in Overwolf prod). */
-	private scheduleReplayIndexPreview(replayXml: string): void {
-		setTimeout(() => {
-			try {
-				const index = this.replayIndex.buildIndex(replayXml);
-				if (!index?.totalDuration) {
-					return;
-				}
-				this.indexTotalDuration = index.totalDuration;
-				this.totalTime = this.buildTotalTime();
-				this.updateTimeline();
-				if (!(this.cdr as ViewRef).destroyed) {
-					this.cdr.markForCheck();
-				}
-			} catch {
-				// Full parse will populate duration if the preview index fails.
-			}
-		});
+	private applyIndexPreview(index: { totalDuration: number } | null): void {
+		if (!index?.totalDuration) {
+			return;
+		}
+		this.indexTotalDuration = index.totalDuration;
+		this.totalTime = this.buildTotalTime();
+		this.updateTimeline();
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.markForCheck();
+		}
 	}
 
 	private async setReplay(replayXml: string) {
@@ -259,12 +253,16 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 		this.backgroundParseStatus = null;
 		this.indexTotalDuration = null;
 		this.status = 'Parsing replay file';
-		this.scheduleReplayIndexPreview(replayXml);
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.markForCheck();
 		}
 
+		const prebuiltIndexPromise =
+			this.replayIndexWorker?.buildFullIndexInWorker(replayXml) ?? Promise.resolve(null);
+		void prebuiltIndexPromise.then((index) => this.applyIndexPreview(index));
+
 		const gameObs = await this.gameParser.parse(replayXml, {
+			prebuiltIndexPromise,
 			deferStory: true,
 			shouldYield: 5,
 			batchTurns: 2,

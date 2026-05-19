@@ -4,7 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { ReplayColiseumModule } from '@firestone/replay/coliseum';
+import { REPLAY_INDEX_WORKER, ReplayColiseumModule } from '@firestone/replay/coliseum';
 import { CdkOverlayContainer } from '@firestone/shared/framework/common';
 import {
 	BrowserClipboardService,
@@ -22,6 +22,7 @@ import {
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { ColiseumAppComponent } from './coliseum-app.component';
+import { ReplayIndexWorkerHostService } from './replay-index-worker-host.service';
 
 const httpLoaderFactory: (http: HttpClient) => TranslateHttpLoader = (http: HttpClient) => {
 	const currentDate = new Date();
@@ -59,6 +60,7 @@ const httpLoaderFactory: (http: HttpClient) => TranslateHttpLoader = (http: Http
 		{ provide: PLAUSIBLE_DOMAIN, useValue: 'replays.firestoneapp.com' },
 		{ provide: CLIPBOARD_SERVICE_TOKEN, useClass: BrowserClipboardService },
 		{ provide: MONITORS_SERVICE_TOKEN, useClass: BrowserMonitorsService },
+		{ provide: REPLAY_INDEX_WORKER, useExisting: ReplayIndexWorkerHostService },
 	],
 	bootstrap: [ColiseumAppComponent],
 })

@@ -1,31 +1,14 @@
 import { Injectable, NgZone } from '@angular/core';
-import { ReplayIndex } from '../models/replay-index';
-import { deserializeReplayIndex, SerializedReplayIndex } from '../services/replay-index-transfer';
+import { ReplayIndex } from '@firestone/replay/replay-parser';
+import {
+	deserializeReplayIndex,
+	SerializedReplayIndex,
+} from '../../../../libs/replay/replay-parser/src/lib/services/replay-index-transfer';
+import { ReplayIndexWorker } from '@firestone/replay/coliseum';
 
-export interface ReplayIndexWorkerResult {
-	readonly turnCount: number;
-	readonly totalDuration: number;
-	readonly turnTimestamps: readonly number[];
-}
-
-@Injectable({
-	providedIn: 'root',
-})
-export class ReplayParserWorkerService {
+@Injectable({ providedIn: 'root' })
+export class ReplayIndexWorkerHostService implements ReplayIndexWorker {
 	constructor(private readonly ngZone: NgZone) {}
-
-	public buildIndexInWorker(xml: string): Promise<ReplayIndexWorkerResult | null> {
-		return this.buildFullIndexInWorker(xml).then((index) => {
-			if (!index) {
-				return null;
-			}
-			return {
-				turnCount: index.turnChunks.length,
-				totalDuration: index.totalDuration,
-				turnTimestamps: index.turnTimestamps,
-			};
-		});
-	}
 
 	public buildFullIndexInWorker(xml: string): Promise<ReplayIndex | null> {
 		if (typeof Worker === 'undefined') {
@@ -36,7 +19,7 @@ export class ReplayParserWorkerService {
 			() =>
 				new Promise((resolve) => {
 					try {
-						const worker = new Worker(new URL('./replay-index.worker', import.meta.url));
+						const worker = new Worker(new URL('../replay-index.worker', import.meta.url));
 						const timeout = setTimeout(() => {
 							worker.terminate();
 							resolve(null);
