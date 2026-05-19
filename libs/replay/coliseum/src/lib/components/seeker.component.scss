@@ -28,6 +28,9 @@ $gray240: rgb(240, 240, 240);
 $gray246: rgb(246, 246, 246);
 $gray255: rgb(255, 255, 255);
 
+// Match events-log.component.scss: .player uses --color-2 / --color-7;
+// non-player turns use --color-1 on --color-5.
+
 // light theme
 $light-background-main: $gray246;
 $light-background-secondary: $gray222;
@@ -38,30 +41,6 @@ $light-foreground-main: $gray019;
 $light-foreground-secondary: $gray079;
 $light-foreground-third: $gray130;
 $light-foreground-forth: $gray168;
-
-// dark theme
-$dark-background-main: $gray019;
-$dark-background-secondary: $gray039;
-$dark-background-third: $gray051;
-$dark-background-forth: $gray079;
-
-$dark-foreground-main: $gray222;
-$dark-foreground-secondary: $gray182;
-$dark-foreground-third: $gray168;
-$dark-foreground-forth: $gray130;
-
-// borders
-$transparent-border: rgba(white, 0.1);
-
-// gaps
-$grid-gap: 20px;
-
-// transparent buttons
-$transparent-btn-background-hover: rgba(white, 0.1);
-$transparent-btn-background-selected: rgba(white, 0.2);
-
-$transparent-btn-foreground: rgba(white, 0.4);
-$transparent-btn-foreground-selected: rgba(white, 0.9);
 
 .light-theme {
 	--main-color: white;
@@ -74,31 +53,6 @@ $transparent-btn-foreground-selected: rgba(white, 0.9);
 	--foreground-secondary: #{$light-foreground-secondary};
 	--foreground-third: #{$light-foreground-third};
 	--foreground-forth: #{$light-foreground-forth};
-}
-
-// dark theme
-.dark-theme {
-	--main-color: black;
-	--background-main: #{$dark-background-main};
-	--background-secondary: #{$dark-background-secondary};
-	--background-third: #{$dark-background-third};
-	--background-forth: #{$dark-background-forth};
-
-	--foreground-main: #{$dark-foreground-main};
-	--foreground-secondary: #{$dark-foreground-secondary};
-	--foreground-third: #{$dark-foreground-third};
-	--foreground-forth: #{$dark-foreground-forth};
-}
-
-// transparent theme
-.transparent-theme {
-	--main-color: transparent;
-	--background-main: transparent;
-	--background-main-hover: #{$dark-background-secondary};
-	--background-third: #{$dark-background-third};
-	--background-forth: #{$dark-background-forth};
-
-	--text-main: #{rgba(white, 0.6)};
 }
 
 [type='range'] {
@@ -116,9 +70,100 @@ $transparent-btn-foreground-selected: rgba(white, 0.9);
 
 .player-seeker-container {
 	position: relative;
-	height: 20px;
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
 	color: $red01;
-	margin-top: -10px;
+	margin-top: 0;
+	min-height: 24px;
+
+	&.has-turn-rail {
+		min-height: 54px;
+		padding-top: 4px;
+	}
+}
+
+.turn-rail {
+	position: relative;
+	height: 28px;
+	width: 100%;
+	background: var(--color-6, #101530);
+	border-radius: 4px;
+	border: 1px solid var(--color-4, #303352);
+	cursor: pointer;
+	overflow: hidden;
+}
+
+.turn-segment {
+	position: absolute;
+	top: 0;
+	height: 100%;
+	min-width: 3px;
+	box-sizing: border-box;
+	border-right: 1px solid rgba(0, 0, 0, 0.35);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	overflow: hidden;
+
+	&.player {
+		background: var(--color-2, #767faf);
+	}
+
+	&.opponent,
+	&.mulligan {
+		background: var(--color-5, #1f2142);
+	}
+
+	&:last-child {
+		border-right: none;
+	}
+}
+
+.turn-segment-label {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 11px;
+	font-weight: 700;
+	white-space: nowrap;
+	padding: 0 4px;
+	pointer-events: none;
+	user-select: none;
+}
+
+.turn-segment.player .turn-segment-label {
+	color: var(--color-7, #07081f);
+}
+
+.turn-segment.opponent .turn-segment-label,
+.turn-segment.mulligan .turn-segment-label {
+	color: var(--color-1, #9fb6d7);
+}
+
+.seeker-tooltip {
+	position: absolute;
+	transform: translateX(-50%);
+	z-index: 20;
+	max-width: min(360px, 90vw);
+	padding: 6px 10px;
+	border-radius: 4px;
+	background: $gray019;
+	color: $gray255;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 12px;
+	font-weight: 600;
+	line-height: 1.35;
+	text-align: center;
+	white-space: normal;
+	pointer-events: none;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+
+	bottom: 28px;
+}
+
+.scrubber-row {
+	position: relative;
+	height: 20px;
+	flex-shrink: 0;
 }
 
 .player-seeker {
@@ -129,6 +174,8 @@ $transparent-btn-foreground-selected: rgba(white, 0.9);
 	right: 0;
 	width: 100%;
 	margin: 0;
+	z-index: 2;
+	cursor: pointer;
 
 	&::-webkit-slider-runnable-track,
 	&::-moz-range-track {
@@ -149,9 +196,11 @@ $transparent-btn-foreground-selected: rgba(white, 0.9);
 	align-items: center;
 	justify-content: center;
 	width: 100%;
-	height: 3px;
+	height: 4px;
 	pointer-events: none;
 	transition: inherit;
+	z-index: 1;
+	border-radius: 2px;
 }
 
 .player-seeker-thumb {
@@ -177,11 +226,8 @@ $transparent-btn-foreground-selected: rgba(white, 0.9);
 }
 
 .player-seeker-container:hover {
-	.player-seeker-track {
-	}
-
 	.player-seeker-thumb:before {
-		width: 9px;
-		height: 9px;
+		width: 11px;
+		height: 11px;
 	}
 }

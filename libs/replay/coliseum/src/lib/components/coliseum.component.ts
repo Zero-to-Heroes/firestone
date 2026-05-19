@@ -25,7 +25,6 @@ import {
 	MinionDeathAction,
 	PowerTargetAction,
 	ReplayParserWorkerService,
-	Turn,
 } from '@firestone/replay/replay-parser';
 import type { GameSample } from '@firestone-hs/simulate-bgs-battle/dist/simulation/spectator/game-sample';
 import { groupByFunction2 } from '@firestone/shared/framework/common';
@@ -33,6 +32,8 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { ColiseumDebugService } from '../services/coliseum-debug.service';
 import { GameConfService } from '../services/game-conf.service';
+import { ReplayTimeline } from '../services/replay-timeline.model';
+import { ReplayTimelineService } from '../services/replay-timeline.service';
 
 const NON_COARSE_ACTIONS = [
 	BaconBoardVisualStateAction,
@@ -91,6 +92,7 @@ const isSkippedAction = (action: Action): boolean => {
 								[decklist]="decklist"
 								[opponentDecklist]="opponentDecklist"
 								[game]="game"
+								[totalDuration]="totalTime"
 								[currentTurn]="currentTurn"
 								[currentActionInTurn]="currentActionInTurn"
 								(updateCurrentAction)="updateCurrentAction($event)"
@@ -104,6 +106,9 @@ const isSkippedAction = (action: Action): boolean => {
 				class="ignored-wrapper"
 				[totalTime]="totalTime"
 				[currentTime]="currentTime"
+				[segments]="timeline?.segments ?? []"
+				[markers]="timeline?.markers ?? []"
+				[showTurnRail]="showTurnRail"
 				[active]="isInteractive"
 				(seek)="onSeek($event)"
 			>
@@ -166,8 +171,10 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 	// text: string | undefined;
 	// turnString: string | undefined;
 	showHiddenCards = true;
+	showTurnRail = false;
 	totalTime: number;
 	currentTime = 0;
+	timeline: ReplayTimeline | null = null;
 	showPreloader = true;
 	backgroundParseStatus: string | null = null;
 	parsingComplete = false;
@@ -195,6 +202,7 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 		private readonly cdr: ChangeDetectorRef,
 		private readonly debugService: ColiseumDebugService,
 		private readonly cards: CardsFacadeService,
+		private readonly replayTimelineService: ReplayTimelineService,
 	) {}
 
 	ngAfterContentInit() {
@@ -232,6 +240,7 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 			if (indexResult?.totalDuration) {
 				this.indexTotalDuration = indexResult.totalDuration;
 				this.totalTime = this.buildTotalTime();
+				this.updateTimeline();
 				if (!(this.cdr as ViewRef).destroyed) {
 					this.cdr.markForCheck();
 				}
@@ -251,6 +260,7 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 				if (game) {
 					this.game = game;
 					this.totalTime = this.buildTotalTime();
+					this.updateTimeline();
 					this.hidePreloaderIfPlayable(game);
 
 					if (
@@ -306,6 +316,8 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 		const turn = 0;
 		const action = 0;
 		this.game = game;
+		this.totalTime = this.buildTotalTime();
+		this.updateTimeline();
 		this.currentTurn = turn <= 0 ? 0 : turn >= this.game.turns.size ? this.game.turns.size - 1 : turn;
 		this.currentActionInTurn =
 			action <= 0
@@ -486,17 +498,17 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 		if (!this.parsingComplete && (index?.totalDuration || this.indexTotalDuration)) {
 			return index?.totalDuration ?? this.indexTotalDuration ?? 0;
 		}
-		const lastTurn: Turn | undefined = this.game.turns.get(this.game.turns.size - 1);
-		if (!lastTurn) {
-			return 0;
+		return this.replayTimelineService.computeTotalDuration(this.game);
+	}
+
+	private updateTimeline() {
+		if (!this.game || !this.totalTime) {
+			this.timeline = null;
+			this.showTurnRail = false;
+			return;
 		}
-		for (let i = lastTurn.actions.length - 1; i >= 0; i--) {
-			const lastAction = lastTurn.actions[i];
-			if (lastAction.timestamp) {
-				return lastAction.timestamp;
-			}
-		}
-		return 0;
+		this.showTurnRail = !isBattlegrounds(this.game.gameType);
+		this.timeline = this.replayTimelineService.build(this.game, this.totalTime);
 	}
 
 	private computeCurrentTime(): number {

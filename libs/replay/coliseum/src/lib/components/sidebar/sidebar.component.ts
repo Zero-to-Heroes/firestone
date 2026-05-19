@@ -33,6 +33,7 @@ import { Game } from '@firestone/replay/replay-parser';
 			class="events"
 			*ngIf="selectedMenu === 'events'"
 			[game]="game"
+			[totalDuration]="totalDuration"
 			[currentTurn]="currentTurn"
 			[currentActionInTurn]="currentActionInTurn"
 			(updateCurrentAction)="updateCurrentAction.emit($event)"
@@ -47,6 +48,7 @@ export class SidebarComponent {
 	@Input() decklist: string | null;
 	@Input() opponentDecklist: string | null;
 	@Input() game: Game;
+	@Input() totalDuration: number;
 	@Input() currentTurn: number;
 	@Input() currentActionInTurn: number;
 
