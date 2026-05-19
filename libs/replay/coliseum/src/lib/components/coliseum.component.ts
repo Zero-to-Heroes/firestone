@@ -73,8 +73,10 @@ const isSkippedAction = (action: Action): boolean => {
 								>
 								</game>
 							</ng-container>
-							<div class="status" *ngIf="status">
-								Game is loading. The viewing experience will be optimal once loading is complete.
+							<div class="status background-parse" *ngIf="backgroundParseStatus">
+								{{ backgroundParseStatus }}
+							</div>
+							<div class="status" *ngIf="status && showPreloader">
 								{{ status }}...
 							</div>
 							<preloader
@@ -101,19 +103,19 @@ const isSkippedAction = (action: Action): boolean => {
 				class="ignored-wrapper"
 				[totalTime]="totalTime"
 				[currentTime]="currentTime"
-				[active]="!!game && !showPreloader"
+				[active]="isInteractive"
 				(seek)="onSeek($event)"
 			>
 			</seeker>
 			<turn-narrator
 				class="ignored-wrapper"
 				[text]="text$ | async"
-				[active]="!!game && !showPreloader"
+				[active]="isInteractive"
 			></turn-narrator>
 			<controls
 				class="ignored-wrapper"
 				[reviewId]="reviewId"
-				[active]="!!game && !showPreloader"
+				[active]="isInteractive"
 				(nextActionDetailed)="onNextAction()"
 				(nextAction)="onNextActionCoarse()"
 				(nextTurn)="onNextTurn()"
@@ -166,6 +168,12 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 	totalTime: number;
 	currentTime = 0;
 	showPreloader = true;
+	backgroundParseStatus: string | null = null;
+	parsingComplete = false;
+
+	get isInteractive(): boolean {
+		return this.isGamePlayable(this.game);
+	}
 
 	game: Game;
 
@@ -192,74 +200,73 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 		this.currentAction$ = this.currentAction$$.asObservable();
 	}
 
+	private isGamePlayable(game: Game | undefined): boolean {
+		if (!game?.turns?.size) {
+			return false;
+		}
+		const firstTurn = game.turns.get(0);
+		return !!firstTurn?.actions?.length;
+	}
+
+	private hidePreloaderIfPlayable(game: Game): void {
+		if (this.isGamePlayable(game)) {
+			this.showPreloader = false;
+		}
+	}
+
 	private async setReplay(replayXml: string) {
 		this.gameParser.cancelProcessing();
 		if (this.gameSub) {
 			this.gameSub.unsubscribe();
 		}
 
+		this.showPreloader = true;
+		this.parsingComplete = false;
+		this.backgroundParseStatus = null;
 		this.status = 'Parsing replay file';
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.markForCheck();
 		}
 
 		const gameObs = await this.gameParser.parse(replayXml);
-		// console.log('gameObs', gameObs);
 		this.gameSub = gameObs.subscribe(
 			([game, status, complete]: [Game, string, boolean]) => {
-				this.status = status || this.status;
-				if (!(this.cdr as ViewRef).destroyed) {
-					this.cdr.markForCheck();
-				}
 				if (game) {
-					// Since the user can already navigate before the game is fully loaded, we want
-					// to restore the navigation to where the user currently is
-					const turn = this.currentTurn ?? 0;
-					const action = this.currentActionInTurn ?? 0;
 					this.game = game;
 					this.totalTime = this.buildTotalTime();
+					this.hidePreloaderIfPlayable(game);
+
 					if (
 						this.currentTurn < this.game.turns.size &&
 						this.currentActionInTurn < (this.game.turns?.get(this.currentTurn)?.actions?.length ?? 0)
 					) {
-						// this.currentTurn = turn <= 0 ? 0 : turn >= this.game.turns.size ? this.game.turns.size - 1 : turn;
-						// this.currentActionInTurn =
-						// 	action <= 0
-						// 		? 0
-						// 		: action >= (this.game?.turns?.get(this.currentTurn)?.actions?.length ?? 0)
-						// 		? (this.game?.turns?.get(this.currentTurn)?.actions?.length ?? 1) - 1
-						// 		: action;
 						this.populateInfo(complete);
-					}
-					if (!(this.cdr as ViewRef).destroyed) {
-						this.cdr.markForCheck();
 					}
 
 					if (complete) {
+						this.parsingComplete = true;
+						this.backgroundParseStatus = null;
 						this.status = null;
 						console.log('[app] Received complete game', game.turns.size);
-						console.log('[app] Events log', game.fullStoryRaw);
+					} else if (this.isGamePlayable(game)) {
+						this.backgroundParseStatus = status || 'Parsing remaining turns';
+					} else {
+						this.status = status || this.status;
 					}
 
-					// We do this so that the initial drawing is already done when hiding the preloader
-					setTimeout(() => {
-						this.showPreloader = false;
-						if (!game || !game.turns || (game.turns.size === 0 && complete)) {
-							console.log('showing error status because no turns');
-							this.status = 'error';
-							this.showPreloader = true;
-						}
-						if (!(this.cdr as ViewRef).destroyed) {
-							this.cdr.markForCheck();
-						}
-					}, 1500);
-				} else {
+					if (!game.turns || (game.turns.size === 0 && complete)) {
+						console.log('showing error status because no turns');
+						this.status = 'error';
+						this.showPreloader = true;
+					}
+				} else if (complete) {
 					console.log('showing error status because no game');
 					this.showPreloader = true;
 					this.status = 'error';
-					if (!(this.cdr as ViewRef).destroyed) {
-						this.cdr.markForCheck();
-					}
+				}
+
+				if (!(this.cdr as ViewRef).destroyed) {
+					this.cdr.markForCheck();
 				}
 			},
 			(error) => {
@@ -306,7 +313,7 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 	// }
 
 	ngOnDestroy() {
-		this.gameSub.unsubscribe();
+		this.gameSub?.unsubscribe();
 	}
 
 	onNextAction() {

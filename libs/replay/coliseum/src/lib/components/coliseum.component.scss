@@ -89,4 +89,12 @@
 	color: rgb(168, 168, 168);
 	padding: 5px;
 	font-size: 10px;
+
+	&.background-parse {
+		bottom: auto;
+		top: 2%;
+		right: 13%;
+		background: rgba(19, 19, 19, 0.85);
+		pointer-events: none;
+	}
 }
