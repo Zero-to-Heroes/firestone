@@ -24,6 +24,7 @@ import {
 	LocationActivatedAction,
 	MinionDeathAction,
 	PowerTargetAction,
+	ReplayParserWorkerService,
 	Turn,
 } from '@firestone/replay/replay-parser';
 import type { GameSample } from '@firestone-hs/simulate-bgs-battle/dist/simulation/spectator/game-sample';
@@ -170,6 +171,7 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 	showPreloader = true;
 	backgroundParseStatus: string | null = null;
 	parsingComplete = false;
+	indexTotalDuration: number | null = null;
 
 	get isInteractive(): boolean {
 		return this.isGamePlayable(this.game);
@@ -187,6 +189,7 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 
 	constructor(
 		private readonly gameParser: GameParserService,
+		private readonly replayParserWorker: ReplayParserWorkerService,
 		private readonly gameConf: GameConfService,
 		private readonly bgsSimulationParser: BattlegroundsSimulationParserService,
 		private readonly cdr: ChangeDetectorRef,
@@ -223,12 +226,26 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 		this.showPreloader = true;
 		this.parsingComplete = false;
 		this.backgroundParseStatus = null;
+		this.indexTotalDuration = null;
 		this.status = 'Parsing replay file';
+		void this.replayParserWorker.buildIndexInWorker(replayXml).then((indexResult) => {
+			if (indexResult?.totalDuration) {
+				this.indexTotalDuration = indexResult.totalDuration;
+				this.totalTime = this.buildTotalTime();
+				if (!(this.cdr as ViewRef).destroyed) {
+					this.cdr.markForCheck();
+				}
+			}
+		});
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.markForCheck();
 		}
 
-		const gameObs = await this.gameParser.parse(replayXml, { deferStory: true, shouldYield: 15 });
+		const gameObs = await this.gameParser.parse(replayXml, {
+			deferStory: true,
+			shouldYield: 5,
+			batchTurns: 2,
+		});
 		this.gameSub = gameObs.subscribe(
 			([game, status, complete]: [Game, string, boolean]) => {
 				if (game) {
@@ -395,6 +412,7 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 	}
 
 	private async populateInfo(complete = true) {
+		this.game = this.gameParser.ensureTurnParsed(this.game, this.currentTurn);
 		this.gameConf.updateConfig(this.game);
 		if (
 			!this.game ||
@@ -464,6 +482,10 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 	private buildTotalTime() {
 		if (!this.game) {
 			return 0;
+		}
+		const index = this.gameParser.getReplayIndex();
+		if (!this.parsingComplete && (index?.totalDuration || this.indexTotalDuration)) {
+			return index?.totalDuration ?? this.indexTotalDuration ?? 0;
 		}
 		const lastTurn: Turn | undefined = this.game.turns.get(this.game.turns.size - 1);
 		if (!lastTurn) {

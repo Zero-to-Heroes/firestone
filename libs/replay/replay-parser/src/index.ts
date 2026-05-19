@@ -4,5 +4,9 @@ export * from './lib/services/battlegrounds-simulation/battlegrounds-simulation-
 export * from './lib/services/game-parser.service';
 export * from './lib/services/replay-parser.module';
 export * from './lib/services/replay-load.service';
+export * from './lib/services/replay-index.service';
+export * from './lib/services/replay-turn-cache.service';
+export * from './lib/workers/replay-parser-worker.service';
+export * from './lib/models/replay-index';
 export * from './lib/services/replay-xml-cache.service';
 export * from './lib/services/replay-perf.service';

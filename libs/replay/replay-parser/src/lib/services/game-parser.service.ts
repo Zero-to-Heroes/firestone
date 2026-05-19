@@ -19,7 +19,9 @@ import { TurnParserService } from './gamepipeline/turn-parser.service';
 import { ImagePreloaderService } from './image-preloader.service';
 import { ReplayPerfService } from './replay-perf.service';
 import { StateProcessorService } from './state-processor.service';
-import { XmlParserService } from './xml-parser.service';
+import { ReplayIndexService } from './replay-index.service';
+import { ReplayTurnCacheService } from './replay-turn-cache.service';
+import { ReplayIndex } from '../models/replay-index';
 
 const DEFAULT_YIELD_MS = 15;
 
@@ -43,9 +45,14 @@ export class GameParserService {
 		private narrator: NarratorService,
 		private stateProcessor: StateProcessorService,
 		private replayPerf: ReplayPerfService,
+		private replayIndexService: ReplayIndexService,
+		private turnCache: ReplayTurnCacheService,
 	) {}
 	private cancelled: boolean;
 	private processingTimeout;
+	private activeIndex: ReplayIndex | null = null;
+	private activeConfig: ActionParserConfig = new ActionParserConfig();
+	private activeActionParsers: ReturnType<ActionParserService['createParsers']> | null = null;
 
 	public async parse(
 		replayAsString: string,
@@ -82,6 +89,42 @@ export class GameParserService {
 	public cancelProcessing(): void {
 		this.cancelled = true;
 		clearTimeout(this.processingTimeout);
+		this.activeIndex = null;
+	}
+
+	public getReplayIndex(): ReplayIndex | null {
+		return this.activeIndex;
+	}
+
+	public ensureTurnParsed(game: Game, targetTurn: number): Game {
+		if (!this.activeIndex || targetTurn < 0) {
+			return game;
+		}
+		if (game.turns.has(targetTurn) && (game.turns.get(targetTurn)?.actions?.length ?? 0) > 0) {
+			return game;
+		}
+
+		let parsedGame = game;
+		const startChunk = this.turnCache.getLastProcessedChunk() + 1;
+		for (let chunkIndex = startChunk; chunkIndex < this.activeIndex.turnChunks.length; chunkIndex++) {
+			const history = this.activeIndex.turnChunks[chunkIndex];
+			if (!history?.length) {
+				continue;
+			}
+			parsedGame = this.processHistoryChunk(parsedGame, history, this.activeIndex, this.activeConfig, {
+				deferStory: true,
+			});
+			if (parsedGame.turns.size > 0) {
+				this.turnCache.markChunkProcessed(chunkIndex, parsedGame);
+			}
+			if (
+				parsedGame.turns.has(targetTurn) &&
+				(parsedGame.turns.get(targetTurn)?.actions?.length ?? 0) > 0
+			) {
+				break;
+			}
+		}
+		return parsedGame;
 	}
 
 	private buildObservableFunction(observer, iterator: IterableIterator<[Game, number, string]>) {
@@ -119,152 +162,42 @@ export class GameParserService {
 		}
 
 		this.replayPerf.startEntityMapping();
+		const index = this.replayIndexService.buildIndex(replayAsString);
+		this.replayPerf.endEntityMapping();
+		this.activeIndex = index;
+		this.turnCache.reset(`${replayAsString.length}-${index.turnChunks.length}`);
+		this.activeConfig = config;
+		this.activeActionParsers = this.actionParser.createParsers(config);
 
-		const xmlParser = new XmlParserService();
-		const xmlParsingIterator: IterableIterator<readonly HistoryItem[]> = xmlParser.parseXml(replayAsString);
-		let entityCardId: Map<number, string> = Map([]);
 		let game: Game = Game.createGame({} as Game);
+		if (index.meta) {
+			game = Object.assign(game, index.meta as Game);
+		}
+		if (game.scenarioID === 3539) {
+			return [null, yieldMs, 'Batllegrounds tutorial is not supported'];
+		}
+
 		let counter = 0;
-		const actionParsers = this.actionParser.createParsers(config);
-		while (true) {
-			const itValue = xmlParsingIterator.next();
-			const history: readonly HistoryItem[] = itValue.value;
+		const batchSize = options?.batchTurns ?? 1;
+		let turnsSinceYield = 0;
 
-			if (!history || itValue.done) {
-				entityCardId = xmlParser.getEntityCardIdMap();
-				this.replayPerf.endEntityMapping();
-				break;
+		for (let chunkIndex = 0; chunkIndex < index.turnChunks.length; chunkIndex++) {
+			const history = index.turnChunks[chunkIndex];
+			if (!history?.length) {
+				continue;
 			}
-
-			if (entityCardId.size === 0) {
-				entityCardId = xmlParser.getEntityCardIdMap();
-			} else if (counter === 0) {
-				this.replayPerf.endEntityMapping();
-			}
-
-			if (history[0] instanceof GameHistoryItem) {
-				const gameHistory: GameHistoryItem = history[0] as GameHistoryItem;
-				game = Object.assign(game, {
-					buildNumber: gameHistory.buildNumber,
-					formatType: gameHistory.formatType,
-					gameType: gameHistory.gameType,
-					scenarioID: gameHistory.scenarioID,
-				} as Game);
-				// console.log('[game-parser] assign meta data to game', game);
-			}
-
-			// Battlegrounds tutorial
-			if (game.scenarioID === 3539) {
-				// console.log('[game-parser] Battlegrounds tutorial not supported, returning');
-				return [null, yieldMs, 'Batllegrounds tutorial is not supported'];
-			}
-
-			// Preload the images we'll need early on
-			// const preloadIterator = this.imagePreloader.preloadImages(history);
-			// while (true) {
-			// 	const itValue = preloadIterator.next();
-			// 	if (itValue.done) {
-			// 		break;
-			// 	}
-			// }
-
-			// console.log('[game-parser] will initNewEntities', game, history, entityCardId.toJS());
-			let entities = this.gamePopulationService.initNewEntities(game, history, entityCardId);
-			// console.log('[game-parser] initNewEntities', entities.size);
-			if (game.turns.size === 0) {
-				game = this.gameInitializer.initializePlayers(game, entities);
-				game = this.gameStateParser.updateEntitiesUntilMulliganState(game, entities, history);
-				entities = game.entitiesBeforeMulligan;
-				// // console.log('game after populateEntitiesUntilMulliganState', game, game.turns.toJS());
-			}
-
-			game = this.turnParser.createTurns(game, history);
-			// // console.log('game after turn creation', game.turns.size);
-			game = this.actionParser.parseActions(game, entities, history, config, false, actionParsers);
-			// // console.log(
-			// 	'entity 150 parseActions',
-			// 	game.getLatestParsedState().get(150) &&
-			// 		game
-			// 			.getLatestParsedState()
-			// 			.get(150)
-			// 			.tags.toJS(),
-			// );
-			// // console.log('game after action pasring', game.getLatestParsedState().toJS());
+			game = this.processHistoryChunk(game, history, index, config, options);
 			if (game.turns.size > 0) {
-				game = this.activePlayerParser.parseActivePlayerForLastTurn(game);
-				// // console.log(
-				// 	'entity 150 parseActivePlayerForLastTurn',
-				// 	game.getLatestParsedState().get(150) &&
-				// 		game
-				// 			.getLatestParsedState()
-				// 			.get(150)
-				// 			.tags.toJS(),
-				// );
-				// // console.log('game after parseActivePlayer', game, game.turns.toJS());
-				game = this.activeSpellParser.parseActiveSpellForLastTurn(game);
-				// // console.log(
-				// 	'entity 150 parseActiveSpellForLastTurn',
-				// 	game.getLatestParsedState().get(150) &&
-				// 		game
-				// 			.getLatestParsedState()
-				// 			.get(150)
-				// 			.tags.toJS(),
-				// );
-				// // console.log('game after parseActiveSpell', game, game.turns.toJS());
-				game = this.targetsParser.parseTargetsForLastTurn(game);
-				// // console.log(
-				// 	'entity 150 parseTargetsForLastTurn',
-				// 	game.getLatestParsedState().get(150) &&
-				// 		game
-				// 			.getLatestParsedState()
-				// 			.get(150)
-				// 			.tags.toJS(),
-				// );
-				// // console.log('game after parseTargets', game, game.turns.toJS());
-				if (game.turns.size === 1) {
-					game = this.mulliganParser.affectMulligan(game);
+				this.turnCache.markChunkProcessed(chunkIndex, game);
+				turnsSinceYield++;
+				if (turnsSinceYield >= batchSize) {
+					turnsSinceYield = 0;
+					yield [game, yieldMs, 'Parsed turn ' + counter++];
 				}
-				// // console.log('game after affectMulligan', game, game.turns.toJS());
-				game = this.endGameParser.parseEndGame(game);
-				if (!options?.deferNarrator) {
-					game = this.narrator.populateActionTextForLastTurn(game);
-				}
-				if (!options?.deferStory) {
-					game = this.narrator.createGameStoryForLastTurn(game);
-				}
-				// // console.log(
-				// 	'entity 150 createGameStoryForLastTurn',
-				// 	game.getLatestParsedState().get(150) &&
-				// 		game
-				// 			.getLatestParsedState()
-				// 			.get(150)
-				// 			.tags.toJS(),
-				// );
-				// // console.log('game after createGameStory', game, game.turns.toJS());
-				// if (counter === 4) {
-				// 	counter++;
-				// 	// console.log('returning', counter);
-				// 	return [game, SMALL_PAUSE, 'Rendering game state'];
-				// }
-				// counter++;
-				// // console.log('moving on', counter);
-				// if (game.turns.size === 33) {
-				// 	// console.log(
-				// 		'entities at end of turn',
-				// 		game.getLatestParsedState().toJS(),
-				// 		game.getLatestParsedState().get(507),
-				// 	);
-				// }
-
-				yield [game, yieldMs, 'Parsed turn ' + counter++];
-			} else {
-				// if (counter++ === 3) {
-				// 	counter++;
-				// 	// // console.log('returning', counter, game.entities.get(73), game.entities.get(74));
-				// 	return [game, SMALL_PAUSE, 'Rendering game state'];
-				// }
-				// counter++;
 			}
+		}
+		if (turnsSinceYield > 0) {
+			yield [game, yieldMs, 'Parsed turn ' + counter++];
 		}
 		if (options?.deferStory && game?.turns?.size > 0) {
 			game = this.narrator.buildFullStory(game);
@@ -272,6 +205,43 @@ export class GameParserService {
 			game = this.narrator.enrichAllActionText(game);
 		}
 		return [game, yieldMs, 'Rendering game state'];
+	}
+
+	private processHistoryChunk(
+		game: Game,
+		history: readonly HistoryItem[],
+		index: ReplayIndex,
+		config: ActionParserConfig,
+		options: TechnicalParsingOptions,
+	): Game {
+		const actionParsers = this.activeActionParsers ?? this.actionParser.createParsers(config);
+		let entities = this.gamePopulationService.initNewEntities(game, history, index.entityCardId);
+		if (game.turns.size === 0) {
+			game = this.gameInitializer.initializePlayers(game, entities);
+			game = this.gameStateParser.updateEntitiesUntilMulliganState(game, entities, history);
+			entities = game.entitiesBeforeMulligan;
+		}
+
+		game = this.turnParser.createTurns(game, history);
+		game = this.actionParser.parseActions(game, entities, history, config, false, actionParsers);
+		if (game.turns.size === 0) {
+			return game;
+		}
+
+		game = this.activePlayerParser.parseActivePlayerForLastTurn(game);
+		game = this.activeSpellParser.parseActiveSpellForLastTurn(game);
+		game = this.targetsParser.parseTargetsForLastTurn(game);
+		if (game.turns.size === 1) {
+			game = this.mulliganParser.affectMulligan(game);
+		}
+		game = this.endGameParser.parseEndGame(game);
+		if (!options?.deferNarrator) {
+			game = this.narrator.populateActionTextForLastTurn(game);
+		}
+		if (!options?.deferStory) {
+			game = this.narrator.createGameStoryForLastTurn(game);
+		}
+		return game;
 	}
 }
 
@@ -285,4 +255,6 @@ export interface TechnicalParsingOptions {
 	readonly skipUi?: boolean;
 	readonly deferNarrator?: boolean;
 	readonly deferStory?: boolean;
+	readonly batchTurns?: number;
+	readonly useWorker?: boolean;
 }
