@@ -24,8 +24,8 @@ import {
 	LocationActivatedAction,
 	MinionDeathAction,
 	PowerTargetAction,
+	ReplayIndexService,
 } from '@firestone/replay/replay-parser';
-import { ReplayParserWorkerService } from '@firestone/replay/replay-parser/worker';
 import type { GameSample } from '@firestone-hs/simulate-bgs-battle/dist/simulation/spectator/game-sample';
 import { groupByFunction2 } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
@@ -199,7 +199,7 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 
 	constructor(
 		private readonly gameParser: GameParserService,
-		private readonly replayParserWorker: ReplayParserWorkerService,
+		private readonly replayIndex: ReplayIndexService,
 		private readonly gameConf: GameConfService,
 		private readonly bgsSimulationParser: BattlegroundsSimulationParserService,
 		private readonly cdr: ChangeDetectorRef,
@@ -228,6 +228,26 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 		}
 	}
 
+	/** Builds a lightweight index off the critical path (no Web Worker — avoids bad chunk URLs in Overwolf prod). */
+	private scheduleReplayIndexPreview(replayXml: string): void {
+		setTimeout(() => {
+			try {
+				const index = this.replayIndex.buildIndex(replayXml);
+				if (!index?.totalDuration) {
+					return;
+				}
+				this.indexTotalDuration = index.totalDuration;
+				this.totalTime = this.buildTotalTime();
+				this.updateTimeline();
+				if (!(this.cdr as ViewRef).destroyed) {
+					this.cdr.markForCheck();
+				}
+			} catch {
+				// Full parse will populate duration if the preview index fails.
+			}
+		});
+	}
+
 	private async setReplay(replayXml: string) {
 		this.gameParser.cancelProcessing();
 		if (this.gameSub) {
@@ -239,16 +259,7 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 		this.backgroundParseStatus = null;
 		this.indexTotalDuration = null;
 		this.status = 'Parsing replay file';
-		void this.replayParserWorker.buildIndexInWorker(replayXml).then((indexResult) => {
-			if (indexResult?.totalDuration) {
-				this.indexTotalDuration = indexResult.totalDuration;
-				this.totalTime = this.buildTotalTime();
-				this.updateTimeline();
-				if (!(this.cdr as ViewRef).destroyed) {
-					this.cdr.markForCheck();
-				}
-			}
-		});
+		this.scheduleReplayIndexPreview(replayXml);
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.markForCheck();
 		}

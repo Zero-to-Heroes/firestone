@@ -6,10 +6,6 @@
 	},
 	"include": [
 		"src/**/*.worker.ts",
-		"../../libs/battlegrounds/simulator/src/lib/workers/**/*.worker.ts",
-		"../../libs/replay/replay-parser/src/lib/workers/**/*.worker.ts",
-		"../../libs/replay/replay-parser/src/lib/services/replay-index-builder.ts",
-		"../../libs/replay/replay-parser/src/lib/services/xml-parser.service.ts",
-		"../../libs/replay/replay-parser/src/lib/models/**/*.ts"
+		"../../libs/battlegrounds/simulator/src/lib/workers/**/*.worker.ts"
 	]
 }
