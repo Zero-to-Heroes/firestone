@@ -302,13 +302,16 @@ export class FullScreenOverlaysComponent
 
 	async ngAfterViewInit() {
 		console.debug('full screen ngAfterViewInit');
-		this.windowId = (await this.ow.getCurrentWindow())?.id;
-		this.gameInfoUpdatedListener = this.ow.addGameInfoUpdatedListener(async (res) => {
-			if (Math.floor(res?.gameInfo?.id / 10) === HEARTHSTONE_GAME_ID && res?.resolutionChanged) {
-				await this.changeWindowSize();
-			}
-		});
-		await this.changeWindowSize();
+		// Size is handled from the main controller in electron
+		if (this.ow.isOwEnabled()) {
+			this.windowId = (await this.ow.getCurrentWindow())?.id;
+			this.gameInfoUpdatedListener = this.ow.addGameInfoUpdatedListener(async (res) => {
+				if (Math.floor(res?.gameInfo?.id / 10) === HEARTHSTONE_GAME_ID && res?.resolutionChanged) {
+					await this.changeWindowSize();
+				}
+			});
+			await this.changeWindowSize();
+		}
 		window.dispatchEvent(new Event('window-resize'));
 	}
 
