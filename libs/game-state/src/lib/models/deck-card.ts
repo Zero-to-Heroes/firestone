@@ -99,6 +99,11 @@ export class DeckCard {
 		);
 	}
 
+	public static createForElectron(base: Partial<DeckCard>): DeckCard {
+		const { cardMatchCondition: _, ...rest } = base;
+		return DeckCard.create(rest);
+	}
+
 	protected constructor() {
 		// Protected to force call to static factory
 	}

@@ -147,7 +147,7 @@ export abstract class AbstractFacadeService<T extends AbstractFacadeService<T>> 
 				const originalNext = obs.next.bind(obs);
 				obs.next = (value: V) => {
 					originalNext(value);
-					this.broadcastToRenderers(eventName, value);
+					this.broadcastToRenderers(eventName, valueTransformer(value));
 				};
 				// Listen for updates from renderer processes
 				const updateChannel = `${eventName}-update`;

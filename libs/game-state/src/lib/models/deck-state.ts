@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { CardClass, CardIds, CardType, GameTag, SpellSchool } from '@firestone-hs/reference-data';
-import { NonFunctionProperties } from '@firestone/shared/framework/common';
+import { Mutable, NonFunctionProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { ChoosingOptionsGameEvent } from '../services/game-events/events/choosing-options-game-event';
 import { AttackOnBoard } from './attack-on-board';
@@ -180,6 +180,39 @@ export class DeckState {
 
 	public static create(value: Partial<NonFunctionProperties<DeckState>>): DeckState {
 		return Object.assign(new DeckState(), value);
+	}
+
+	private static readonly DECK_CARD_ARRAY_FIELDS: readonly (keyof DeckState)[] = [
+		'deckList',
+		'cardsInStartingHand',
+		'spellsPlayedThisMatch',
+		'spellsPlayedOnFriendlyEntities',
+		'spellsPlayedOnFriendlyMinions',
+		'spellsPlayedOnEnemyEntities',
+		'hand',
+		'deck',
+		'board',
+		'otherZone',
+		'globalEffects',
+		'cardsPlayedLastTurn',
+		'cardsPlayedThisTurn',
+	];
+
+	public static createForElectron(value: Partial<NonFunctionProperties<DeckState>>): DeckState {
+		const sanitized: Partial<NonFunctionProperties<DeckState>> = { ...value };
+		for (const field of DeckState.DECK_CARD_ARRAY_FIELDS) {
+			const cards = sanitized[field] as readonly DeckCard[] | undefined;
+			if (cards?.length) {
+				(sanitized as Record<string, unknown>)[field] = cards.map((card) => DeckCard.createForElectron(card));
+			}
+		}
+		if (sanitized.heroPower) {
+			(sanitized as Mutable<DeckState>).heroPower = DeckCard.createForElectron(sanitized.heroPower);
+		}
+		if (sanitized.weapon) {
+			(sanitized as Mutable<DeckState>).weapon = DeckCard.createForElectron(sanitized.weapon);
+		}
+		return DeckState.create(sanitized);
 	}
 
 	public update(value: Partial<NonFunctionProperties<DeckState>>): DeckState {

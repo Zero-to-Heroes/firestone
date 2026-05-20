@@ -40,4 +40,12 @@ export class BgsSceneService extends AbstractFacadeService<BgsSceneService> {
 			});
 		});
 	}
+
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.currentMode$$ = new SubscriberAwareBehaviorSubject<'solo' | 'duos' | null>(null);
+	}
+
+	protected override initElectronSubjects(): void {
+		this.setupElectronSubject(this.currentMode$$, 'BgsSceneService-currentMode');
+	}
 }

@@ -139,6 +139,7 @@ import {
 	StoreBootstrapService,
 } from '@firestone/mainwindow/common';
 import {
+	BgsSceneService,
 	CardChoicesService,
 	CardMousedOverService,
 	MemoryInspectionService,
@@ -147,7 +148,14 @@ import {
 	MindVisionStateMachineService,
 	SceneService,
 } from '@firestone/memory';
-import { MercenariesMemoryCacheService, MercenariesReferenceDataService } from '@firestone/mercenaries/common';
+import {
+	MercenariesBattleStateFacadeService,
+	MercenariesBattleStateService,
+	MercenariesMemoryCacheService,
+	MercenariesOutOfCombatFacadeService,
+	MercenariesOutOfCombatService,
+	MercenariesReferenceDataService,
+} from '@firestone/mercenaries/common';
 import { InGameReplayService, ModsManagerService } from '@firestone/mods/common';
 import { ProfileServiceFacade, ProfileUploaderService } from '@firestone/profile/common';
 import { AccountService } from '@firestone/profile/services';
@@ -739,6 +747,24 @@ export const buildAppInjector = () => {
 	const mercsMemoryCache = new MercenariesMemoryCacheService(windowManager);
 	electronInjector.register(MercenariesMemoryCacheService, mercsMemoryCache);
 
+	const mercenariesBattleStateService = new MercenariesBattleStateService(
+		gameEventsEmitter,
+		allCards,
+		mercsMemoryCache,
+		mercenariesReferenceDataService,
+		preferences,
+	);
+	electronInjector.register(MercenariesBattleStateService, mercenariesBattleStateService);
+
+	const mercenariesBattleStateFacadeService = new MercenariesBattleStateFacadeService(windowManager);
+	electronInjector.register(MercenariesBattleStateFacadeService, mercenariesBattleStateFacadeService);
+
+	const mercenariesOutOfCombatService = new MercenariesOutOfCombatService(memoryUpdates, scene, preferences);
+	electronInjector.register(MercenariesOutOfCombatService, mercenariesOutOfCombatService);
+
+	const mercenariesOutOfCombatFacadeService = new MercenariesOutOfCombatFacadeService(windowManager);
+	electronInjector.register(MercenariesOutOfCombatFacadeService, mercenariesOutOfCombatFacadeService);
+
 	const rewards = new RewardMonitorService(gameEventsEmitter, gameStatus, memoryUpdates);
 	electronInjector.register(RewardMonitorService, rewards);
 
@@ -793,6 +819,9 @@ export const buildAppInjector = () => {
 
 	const windowHandlerFacade = new WindowHandlerFacadeService(windowManager);
 	electronInjector.register(WindowHandlerFacadeService, windowHandlerFacade);
+
+	const bgsSceneService = new BgsSceneService(windowManager);
+	electronInjector.register(BgsSceneService, bgsSceneService);
 
 	const bgsInGameTimewarpedService = new BgsInGameTimewarpedService(windowManager);
 	electronInjector.register(BgsInGameTimewarpedService, bgsInGameTimewarpedService);

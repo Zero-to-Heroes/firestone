@@ -19,6 +19,26 @@ try {
 
 const dbName = 'FirestoneDB';
 
+const TABLE_PRIMARY_KEY_COLUMNS: Record<string, readonly string[]> = {
+	achievementsCompleted: ['id'],
+	achievementsHistory: ['achievementId'],
+	collectionCards: ['id'],
+	collectionPacks: ['id'],
+	matchHistory: ['reviewId'],
+	arenaDeckStats2: ['runId'],
+	arenaCurrentDeckPicks: ['runId', 'pickNumber'],
+	arenaRewards2: ['runId', 'rewardType'],
+	replayXml: ['reviewId'],
+};
+
+function extractRecordKey(record: unknown): unknown {
+	if (!record || typeof record !== 'object') {
+		return undefined;
+	}
+	const data = record as Record<string, unknown>;
+	return data.id ?? data.reviewId ?? data.runId ?? data.achievementId;
+}
+
 /**
  * SQLite implementation of IDatabaseService for Electron main process
  */
@@ -128,6 +148,11 @@ export class SqliteDatabaseService implements IDatabaseService {
 				PRIMARY KEY (runId, rewardType)
 			);
 			CREATE INDEX IF NOT EXISTS idx_arenaRewards2_runId ON arenaRewards2(runId);
+
+			CREATE TABLE IF NOT EXISTS replayXml (
+				reviewId TEXT PRIMARY KEY,
+				data TEXT
+			);
 		`);
 	}
 
@@ -173,6 +198,61 @@ class SqliteTableWrapper<T, K = string> implements IDatabaseTable<T, K> {
 		private db: any,
 		private tableName: string,
 	) {}
+
+	async get(key: K): Promise<T | undefined> {
+		const pkColumns = TABLE_PRIMARY_KEY_COLUMNS[this.tableName];
+		if (pkColumns?.length === 1) {
+			const row = this.db
+				.prepare(`SELECT data FROM ${this.tableName} WHERE ${pkColumns[0]} = ?`)
+				.get(key);
+			if (row) {
+				return JSON.parse((row as { data: string }).data);
+			}
+		} else if (pkColumns?.length === 2) {
+			const keyParts = key as unknown as [unknown, unknown];
+			const row = this.db
+				.prepare(
+					`SELECT data FROM ${this.tableName} WHERE ${pkColumns[0]} = ? AND ${pkColumns[1]} = ?`,
+				)
+				.get(keyParts[0], keyParts[1]);
+			if (row) {
+				return JSON.parse((row as { data: string }).data);
+			}
+		}
+
+		const rows = this.db.prepare(`SELECT data FROM ${this.tableName}`).all();
+		for (const row of rows) {
+			const data = JSON.parse((row as { data: string }).data) as T;
+			if (extractRecordKey(data) === key) {
+				return data;
+			}
+		}
+		return undefined;
+	}
+
+	async delete(key: K): Promise<void> {
+		const pkColumns = TABLE_PRIMARY_KEY_COLUMNS[this.tableName];
+		if (pkColumns?.length === 1) {
+			this.db.prepare(`DELETE FROM ${this.tableName} WHERE ${pkColumns[0]} = ?`).run(key);
+			return;
+		}
+		if (pkColumns?.length === 2) {
+			const keyParts = key as unknown as [unknown, unknown];
+			this.db
+				.prepare(`DELETE FROM ${this.tableName} WHERE ${pkColumns[0]} = ? AND ${pkColumns[1]} = ?`)
+				.run(keyParts[0], keyParts[1]);
+			return;
+		}
+
+		const rows = this.db.prepare(`SELECT rowid, data FROM ${this.tableName}`).all();
+		for (const row of rows) {
+			const data = JSON.parse((row as { data: string }).data);
+			if (extractRecordKey(data) === key) {
+				this.db.prepare(`DELETE FROM ${this.tableName} WHERE rowid = ?`).run((row as { rowid: number }).rowid);
+				return;
+			}
+		}
+	}
 
 	async toArray(): Promise<readonly T[]> {
 		const rows = this.db.prepare(`SELECT data FROM ${this.tableName}`).all();

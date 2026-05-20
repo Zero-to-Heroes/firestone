@@ -270,11 +270,11 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionComponent
 		);
 
 		const playerGames$ = combineLatest([currentGameType$, this.gameStats.gameStats$$]).pipe(
-			this.mapData(([gameType, stats]) => stats?.filter((stat) => this.gameModeFilter(stat, gameType))),
+			this.mapData(([gameType, stats]) => stats?.filter((stat) => this.gameModeFilter(stat, gameType)) ?? []),
 			shareReplay(1),
 			takeUntil(this.destroyed$),
 		);
-		playerGames$.pipe(this.mapData((games) => games.length)).subscribe((totalGames) => {
+		playerGames$.pipe(this.mapData((games) => games?.length ?? 0)).subscribe((totalGames) => {
 			console.log('[bg-session-widget] totalGames', totalGames);
 		});
 		const lastGames$: Observable<readonly GameStat[]> = combineLatest([

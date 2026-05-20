@@ -44,12 +44,12 @@ export class GameStateFacadeService extends AbstractFacadeService<GameStateFacad
 
 	protected transformValueForElectron(value: GameState): GameState {
 		const bgState: BattlegroundsState | undefined = BattlegroundsState.createForElectron(value.bgState);
-		const result = GameState.create({
+		return GameState.create({
 			...value,
-			playerDeck: DeckState.create(value.playerDeck),
-			opponentDeck: DeckState.create(value.opponentDeck),
+			parserState: undefined,
+			playerDeck: DeckState.createForElectron(value.playerDeck),
+			opponentDeck: DeckState.createForElectron(value.opponentDeck),
 			bgState: bgState,
 		});
-		return result;
 	}
 }
