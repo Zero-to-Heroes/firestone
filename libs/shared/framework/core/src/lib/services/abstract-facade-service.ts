@@ -138,11 +138,12 @@ export abstract class AbstractFacadeService<T extends AbstractFacadeService<T>> 
 			if (typeof ipcMain !== 'undefined') {
 				ipcMain.removeHandler(eventName);
 				ipcMain.handle(eventName, async () => {
-					if (obs instanceof SubscriberAwareBehaviorSubject) {
-						return await obs.getValueWithInit();
-					} else {
-						return await obs.getValue();
-					}
+					const value =
+						obs instanceof SubscriberAwareBehaviorSubject
+							? await obs.getValueWithInit()
+							: await obs.getValue();
+					// Must transform before IPC: structured clone runs on the main→renderer return value.
+					return valueTransformer(value);
 				});
 				const originalNext = obs.next.bind(obs);
 				obs.next = (value: V) => {

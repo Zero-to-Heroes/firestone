@@ -85,13 +85,6 @@ export class ArenaCardStatsService extends AbstractFacadeService<ArenaCardStatsS
 						timePeriod,
 						modeFilter,
 					);
-					console.debug(
-						'[debug] built card stats',
-						result,
-						`${context}${heroPowerFilterContext}`,
-						timePeriod,
-						modeFilter,
-					);
 					this.cardStats$$.next(result);
 				});
 		});

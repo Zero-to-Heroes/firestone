@@ -129,7 +129,6 @@ export class GameEvents {
 		const start = Date.now();
 		switch (gameEvent.Type) {
 			case 'NEW_GAME':
-				console.log('[game-events]', gameEvent.Type + ' event');
 				this.powerLogBuffer.confirmNewGame();
 				// this.hasSentToS3 = false;
 				const event = Object.assign(new GameEvent(), {

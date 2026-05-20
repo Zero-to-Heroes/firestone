@@ -23,7 +23,6 @@ export const areCardsValidInCurrentGame = (
 	},
 	debug = false,
 ): boolean => {
-	debug && console.debug('[debug] areCardsValidInCurrentGame', cards, metadata);
 	return cards.some((cardId) =>
 		isCardValidForGame(allCards.getCard(cardId), metadata.formatType, metadata.gameType, curatedPools),
 	);

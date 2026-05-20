@@ -33,7 +33,6 @@ export class GameStartParser implements EventParser {
 
 	async sideEffects(gameEvent: GameEvent | GameStateEvent, eventsEmtter: GameEventsEmitterService) {
 		const reviewId = this.reviewIdService.reviewId$$.value;
-		console.log('[game-start-parser] reviewId', reviewId);
 		eventsEmtter.allEvents.next({
 			type: GameEvent.REVIEW_ID,
 			additionalData: { reviewId },

@@ -64,13 +64,11 @@ export class ArenaOverlayDraftStatsService {
 					currentHeroPower &&
 					this.allCards.getCard(currentHero)?.playerClass?.toUpperCase() !==
 						this.allCards.getCard(currentHeroPower)?.playerClass?.toUpperCase();
-				console.debug('[debug] isDualClass', isDualClass, currentHero, currentHeroPower);
 				const heroStats = this.arenaCardStats.buildCardStats(
 					currentHero ? this.allCards.getCard(currentHero)?.playerClass?.toLowerCase() : 'global',
 					timeFrame,
 					'arena-underground',
 				);
-				console.debug('[debug] heroStats', heroStats);
 				const heroPowerStats = !isDualClass
 					? null
 					: this.arenaCardStats.buildCardStats(
@@ -80,7 +78,6 @@ export class ArenaOverlayDraftStatsService {
 							timeFrame,
 							'arena-underground',
 						);
-				console.debug('[debug] heroPowerStats', heroPowerStats);
 				const combinedStats = !isDualClass
 					? null
 					: this.arenaCardStats.buildCardStats(
@@ -88,7 +85,6 @@ export class ArenaOverlayDraftStatsService {
 							timeFrame,
 							'arena-underground',
 						);
-				console.debug('[debug] combinedStats', combinedStats);
 				return Promise.all([heroStats, heroPowerStats, combinedStats]);
 			}),
 			map(([heroStats, heroPowerStats, combinedStats]) => {
@@ -143,7 +139,6 @@ export class ArenaOverlayDraftStatsService {
 			currentHeroPower &&
 			this.allCards.getCard(currentHero)?.playerClass?.toUpperCase() !==
 				this.allCards.getCard(currentHeroPower)?.playerClass?.toUpperCase();
-		console.debug('[debug] isDualClass', isDualClass, currentHero, currentHeroPower);
 		// The exact combo
 		const mainHeroStats = classStats?.stats.find(
 			(s) =>
@@ -153,11 +148,9 @@ export class ArenaOverlayDraftStatsService {
 					: this.allCards.getCard(s.playerHeroPower!).playerClass?.toUpperCase() ===
 						this.allCards.getCard(currentHeroPower!)?.playerClass?.toUpperCase()),
 		);
-		console.debug('[debug] mainHeroStats', mainHeroStats);
 		const mainHeroWinrate = !mainHeroStats?.totalGames
 			? null
 			: (mainHeroStats?.totalsWins ?? 0) / mainHeroStats.totalGames;
-		console.debug('[debug] mainHeroWinrate', mainHeroWinrate);
 
 		return (
 			options?.flatMap((option) => {
@@ -165,7 +158,6 @@ export class ArenaOverlayDraftStatsService {
 				const stat = cardStats?.combinedStats?.stats?.find(
 					(s) => this.allCards.getRootCardId(s.cardId) === this.allCards.getRootCardId(option.CardId),
 				);
-				console.debug('[debug] stat', stat);
 				const cardStat = this.buildOptionDraftStat(
 					this.allCards.getCard(option.CardId)!,
 					stat!,

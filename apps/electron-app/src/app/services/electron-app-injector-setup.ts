@@ -466,6 +466,9 @@ export const buildAppInjector = () => {
 
 	const globalError = new GlobalErrorService(notifications, i18n, gameStatus, externalUrlService);
 
+	const powerLogBuffer = new PowerLogBufferService();
+	electronInjector.register(PowerLogBufferService, powerLogBuffer);
+
 	const gameEvents = new GameEvents(
 		gameEventsEmitter,
 		scene,
@@ -475,7 +478,7 @@ export const buildAppInjector = () => {
 		gameId,
 		gameEventsFacade,
 		globalError,
-		null,
+		powerLogBuffer,
 		zone,
 	);
 	electronInjector.register(GameEvents, gameEvents);
@@ -710,9 +713,6 @@ export const buildAppInjector = () => {
 		ads,
 	);
 	electronInjector.register(ReplayMetadataBuilderService, replayMetadataBuilder);
-
-	const powerLogBuffer = new PowerLogBufferService();
-	electronInjector.register(PowerLogBufferService, powerLogBuffer);
 
 	const replayUploadService = new ReplayUploadService(
 		preferences,
