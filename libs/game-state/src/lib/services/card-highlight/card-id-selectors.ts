@@ -3022,7 +3022,7 @@ export const cardIdSelector = (
 		case CardIds.RangariScout_GDB_841:
 			return and(side(inputSide), or(inDeck, inHand), discover);
 		case CardIds.RangerGeneralSylvanas_RangerInitiateVereesaToken_TIME_609t2:
-			return and(side(inputSide), or(inDeck, inHand), minion);
+			return and(side(inputSide), inDeck, minion);
 		case CardIds.RatchetPrivateer:
 			return and(side(inputSide), or(inDeck, inHand), weapon);
 		case CardIds.ForestWardenOmu_RapidGrowth_THD_007p:
