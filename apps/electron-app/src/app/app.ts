@@ -23,6 +23,7 @@ import { environment } from '../environments/environment';
 import { appStartup } from './app-startup';
 import { appAccessUnlocked$$, disposeAppAccessPolicy, initAppAccessPolicy } from './services/app-access-policy';
 import { buildAppInjector } from './services/electron-app-injector-setup';
+import { registerElectronDiskCacheIpcHandlers } from './services/electron-disk-cache-ipc';
 import { ElectronDiskCacheService } from './services/electron-disk-cache.service';
 import { ElectronHotkeyHandlerService } from './services/electron-hotkey-handler.service';
 import { ElectronWindowHandlerService } from './services/electron-window-handler.service';
@@ -508,6 +509,7 @@ export default class App {
 
 		const diskCache = electronInjector.get(DiskCacheService) as any as ElectronDiskCacheService;
 		await diskCache.init();
+		registerElectronDiskCacheIpcHandlers(diskCache);
 		console.log('[app] diskCache initialized');
 
 		// Initialize MindVision service for memory reading

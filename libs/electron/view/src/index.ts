@@ -1,5 +1,6 @@
 export * from './lib/components/electron-window-wrapper.component';
 export * from './lib/electron-clipboard-facade.service';
+export * from './lib/electron-disk-cache-renderer.service';
 export * from './lib/electron-external-url-renderer.service';
 export * from './lib/electron-file-system-ui-facade.service';
 export * from './lib/electron-monitors-facade.service';

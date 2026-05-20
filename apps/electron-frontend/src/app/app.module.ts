@@ -9,6 +9,7 @@ import {
 } from '@firestone/battlegrounds/simulator';
 import {
 	ElectronClipboardFacadeService,
+	ElectronRendererDiskCacheService,
 	ElectronExternalUrlRendererService,
 	ElectronFileSystemUIFacadeService,
 	ElectronHotkeyHandlerFacadeService,
@@ -22,7 +23,12 @@ import {
 } from '@firestone/electron/view';
 import { LegacyFeatureShellModule } from '@firestone/legacy/feature-shell';
 import { SettingsViewModule } from '@firestone/settings/view';
-import { StandaloneAdService, TebexHeadlessService, TebexService } from '@firestone/shared/common/service';
+import {
+	DiskCacheService,
+	StandaloneAdService,
+	TebexHeadlessService,
+	TebexService,
+} from '@firestone/shared/common/service';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
 import {
 	ADS_SERVICE_TOKEN,
@@ -61,6 +67,7 @@ import { ElectronSettingsComponent } from './overlay/electron-settings.component
 	],
 	declarations: [AppComponent, ElectronOverlayComponent, ElectronSettingsComponent, ElectronCollectionComponent],
 	providers: [
+		{ provide: DiskCacheService, useExisting: ElectronRendererDiskCacheService },
 		{ provide: CardsFacadeService, useExisting: CardsFacadeStandaloneService },
 		{ provide: ILocalizationService, useExisting: LocalizationStandaloneService },
 		{ provide: LocalizationFacadeService, useExisting: LocalizationStandaloneService },
