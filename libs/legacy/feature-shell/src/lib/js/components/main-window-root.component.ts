@@ -175,6 +175,15 @@ export class MainWindowRootComponent
 	async ngAfterViewInit() {
 		const currentWindow = await this.windowControls.getCurrentWindow();
 		this.windowId = currentWindow.id;
+		console.warn(
+			'[window-resize-debug]',
+			JSON.stringify({
+				context: 'main-window-root-view-init',
+				innerWidth: window.innerWidth,
+				innerHeight: window.innerHeight,
+				windowId: this.windowId,
+			}),
+		);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.markForCheck();
