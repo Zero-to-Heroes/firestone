@@ -23,7 +23,7 @@ import { waitForReady } from '@firestone/shared/framework/core';
 					<ng-content></ng-content>
 				</div>
 
-				<!-- <version></version> -->
+				<electron-version></electron-version>
 				<div class="screen-capture-effect" *ngIf="screenCaptureOn" [@screenCapture]></div>
 			</div>
 

@@ -4,7 +4,7 @@ import { OverwolfService } from '@firestone/shared/framework/core';
 @Component({
 	standalone: false,
 	selector: 'version',
-	styleUrls: [`../../css/component/version.component.scss`],
+	styleUrls: [`./version.component.scss`],
 	template: `
 		<div class="version-info">v.{{ version }}</div>
 		<div

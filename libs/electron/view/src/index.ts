@@ -1,3 +1,4 @@
+export * from './lib/components/electron-version.component';
 export * from './lib/components/electron-window-wrapper.component';
 export * from './lib/electron-clipboard-facade.service';
 export * from './lib/electron-disk-cache-renderer.service';
