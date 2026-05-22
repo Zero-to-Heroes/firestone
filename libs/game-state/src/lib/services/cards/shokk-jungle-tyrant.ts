@@ -2,13 +2,25 @@
 import { CardIds, CardType, hasCorrectTribe, Race } from '@firestone-hs/reference-data';
 import { GuessedInfo } from '../../models/deck-card';
 import { hasCorrectType } from '../../related-cards/dynamic-pools';
-import { GeneratingCard, GuessInfoInput } from './_card.type';
+import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
 
-export const ShokkJungleTyrant: GeneratingCard = {
+export const ShokkJungleTyrant: GeneratingCard & StaticGeneratingCard = {
 	cardIds: [CardIds.TheFoodChain_ShokkJungleTyrantToken_TLC_830t],
 	hasSequenceInfo: true,
 	publicCreator: true,
+	dynamicPool: (input: StaticGeneratingCardInput) => {
+		const result: string[] = filterCards(
+			ShokkJungleTyrant.cardIds[0],
+			input.allCards,
+			(c) =>
+				hasCorrectType(c, CardType.MINION) &&
+				hasCorrectTribe(c, Race.BEAST) &&
+				(c.attack === 8 || c.attack === 6 || c.attack === 4),
+			input.inputOptions,
+		) as string[];
+		return result.sort((a, b) => input.allCards.getCard(a).attack! - input.allCards.getCard(b).attack!);
+	},
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
 		if (input.card.createdIndex === 0) {
 			return {

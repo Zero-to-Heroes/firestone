@@ -733,11 +733,6 @@ const getDynamicFilters = (
 		case CardIds.Ankylodon_DINO_422:
 		case CardIds.Wormhole_TIME_602:
 			return (c) => hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.BEAST) && hasCost(c, '==', 3);
-		case CardIds.TheFoodChain_ShokkJungleTyrantToken_TLC_830t:
-			return (c) =>
-				hasCorrectType(c, CardType.MINION) &&
-				hasCorrectTribe(c, Race.BEAST) &&
-				(c.attack === 8 || c.attack === 6 || c.attack === 4);
 		case CardIds.OddMap_TLC_824:
 			return (c) =>
 				hasCorrectType(c, CardType.MINION) &&
