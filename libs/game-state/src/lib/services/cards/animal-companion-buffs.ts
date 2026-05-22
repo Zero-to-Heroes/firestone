@@ -1,4 +1,4 @@
-import { CardIds, CardType, GameTag, hasCorrectTribe, Race } from '@firestone-hs/reference-data';
+import { CardIds, CardType, GameTag, hasCorrectTribe, hasMechanic, Race } from '@firestone-hs/reference-data';
 import { hasCorrectType } from '../../related-cards/dynamic-pools';
 import { getTagWithHistory } from '../parser-entity-utils';
 import { CustomEffectCard, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
@@ -42,7 +42,11 @@ export const AnimalCompanionBuffs: CustomEffectCard & StaticGeneratingCard = {
 		const possibleCards = filterCards(
 			input.cardId,
 			input.allCards,
-			(c) => c.cost === costBuff && hasCorrectType(c, CardType.MINION) && hasCorrectTribe(c, Race.BEAST),
+			(c) =>
+				c.cost === costBuff &&
+				hasCorrectType(c, CardType.MINION) &&
+				hasCorrectTribe(c, Race.BEAST) &&
+				!hasMechanic(c, GameTag.COLOSSAL),
 			input.inputOptions,
 		);
 		return possibleCards;
