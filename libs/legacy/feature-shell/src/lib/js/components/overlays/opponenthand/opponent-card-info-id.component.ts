@@ -16,6 +16,7 @@ import {
 	hasOverride,
 	Metadata,
 	publicCardCreators,
+	resolveShatterGuessCardClasses,
 } from '@firestone/game-state';
 import { isGuessedInfoEmpty } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
@@ -275,14 +276,13 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 			// 	(value, index, self) => self.indexOf(value) === index,
 			// );
 			if (!this.possibleCards?.length) {
-				// Maestra is less important now, so we go back to simply using the hero class
-				let allClasses: readonly CardClass[] =
-					context.hero?.initialClasses && context.hero.initialClasses.length > 0
-						? context.hero.initialClasses
-						: context.hero?.classes || [];
-				if (card.guessedInfo?.canBeAnyCardClass) {
-					allClasses = [];
-				}
+				// Same logic betweeen Shattered and Forged
+				let allClasses = resolveShatterGuessCardClasses(
+					context,
+					this.allCards.getService(),
+					card.guessedInfo,
+					metadata.scenarioId,
+				);
 				allClasses = [...allClasses, CardClass.NEUTRAL];
 				const possibleForgedCards = getPossibleForgedCards(
 					metadata.formatType,

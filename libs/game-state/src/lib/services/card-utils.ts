@@ -252,7 +252,7 @@ const collectDeckStateCardClassesForShatter = (
 	return [primary ?? CardClass.NEUTRAL];
 };
 
-const resolveShatterGuessCardClasses = (
+export const resolveShatterGuessCardClasses = (
 	deckState: DeckState,
 	allCards: AllCardsService,
 	guessedInfo: GuessedInfo,
