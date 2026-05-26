@@ -12,3 +12,4 @@
 - Includes support for the loading window
 - Update the dow
 - Add other OAuth providers
+- bug report
