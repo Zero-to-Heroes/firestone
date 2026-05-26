@@ -1,4 +1,6 @@
 // Frameless Electron battlegrounds window only (this route is not used by Overwolf).
+// Do not add these rules to battlegrounds-root — that component is shared with Overwolf.
+
 :host ::ng-deep .menu-bar {
 	-webkit-app-region: drag;
 	pointer-events: auto;

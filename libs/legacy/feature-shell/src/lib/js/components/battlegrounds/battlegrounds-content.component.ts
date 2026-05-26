@@ -13,7 +13,7 @@ import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ADS_SERVICE_TOKEN, AnalyticsService, IAdsService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
-import { auditTime, filter, startWith, tap } from 'rxjs/operators';
+import { auditTime, filter } from 'rxjs/operators';
 
 @Component({
 	standalone: false,
@@ -114,11 +114,7 @@ export class BattlegroundsContentComponent
 			auditTime(1000),
 			this.mapData((gameState) => gameState?.bgState?.currentGame?.faceOffs),
 		);
-		this.showAds$ = this.ads.hasPremiumSub$$.pipe(
-			this.mapData((showAds) => !showAds),
-			tap((showAds) => console.log('[debug] showAds', showAds)),
-			startWith(true),
-		);
+		this.showAds$ = this.ads.hasPremiumSub$$.pipe(this.mapData((showAds) => !showAds));
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.markForCheck();
