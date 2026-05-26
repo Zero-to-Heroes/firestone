@@ -14,7 +14,10 @@ export class ImbueCounterDefinitionV2 extends CounterDefinitionV2<number> {
 	public override id: CounterType = 'imbue';
 	public override image = (gameState: GameState, side: 'player' | 'opponent'): string => {
 		const deck = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
-		const playerClass = deck?.hero?.classes?.[0];
+		const playerClass =
+			deck?.heroPower?.cardId && this.allCards.getCard(deck?.heroPower?.cardId)?.classes?.[0]
+				? CardClass[this.allCards.getCard(deck?.heroPower?.cardId)?.classes?.[0] as keyof typeof CardClass]
+				: deck?.hero?.classes?.[0];
 		switch (playerClass) {
 			case CardClass.DRUID:
 				return CardIds.DreamboundDisciple_BlessingOfTheGolem_EDR_847p;
@@ -26,6 +29,8 @@ export class ImbueCounterDefinitionV2 extends CounterDefinitionV2<number> {
 				return CardIds.BlessingOfTheWisp_EDR_851p;
 			case CardClass.PALADIN:
 				return CardIds.BlessingOfTheDragon_EDR_445p;
+			case CardClass.ROGUE:
+				return CardIds.Eventuality_BlessingOfTheBronze_END_000p;
 			default:
 				return CardIds.MalorneTheWaywatcher_EDR_888;
 		}
@@ -46,7 +51,11 @@ export class ImbueCounterDefinitionV2 extends CounterDefinitionV2<number> {
 			return false;
 		},
 		value: (state: GameState) => {
-			const controllerEntity = getControllerEntity(state.parserState?.CurrentEntities, state.parserState?.ControllerEntityMap, state.localPlayerId!);
+			const controllerEntity = getControllerEntity(
+				state.parserState?.CurrentEntities,
+				state.parserState?.ControllerEntityMap,
+				state.localPlayerId!,
+			);
 			const tagValue = getEntityTag(controllerEntity, GameTag.IMBUES_THIS_GAME);
 			return tagValue >= 0 ? tagValue : undefined;
 		},
@@ -70,7 +79,11 @@ export class ImbueCounterDefinitionV2 extends CounterDefinitionV2<number> {
 			return false;
 		},
 		value: (state: GameState) => {
-			const controllerEntity = getControllerEntity(state.parserState?.CurrentEntities, state.parserState?.ControllerEntityMap, state.opponentPlayerId!);
+			const controllerEntity = getControllerEntity(
+				state.parserState?.CurrentEntities,
+				state.parserState?.ControllerEntityMap,
+				state.opponentPlayerId!,
+			);
 			const tagValue = getEntityTag(controllerEntity, GameTag.IMBUES_THIS_GAME);
 			return tagValue >= 0 ? tagValue : undefined;
 		},
