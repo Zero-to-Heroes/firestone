@@ -6,6 +6,8 @@ import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
 
+// const INCORRECT_CAST_WHEN_DRAWN = [CardIds.TimeLostProtodrake];
+
 export class CardPlayedFromEffectParser implements ActionParser {
 	readonly ParserName = 'CardPlayedFromEffectParser';
 
@@ -40,7 +42,11 @@ export class CardPlayedFromEffectParser implements ActionParser {
 		const castWhenDrawn =
 			node.Type === NodeType.Action &&
 			(action = node.Object as Action).Type === (BlockType.TRIGGER as number) &&
-			(action.TriggerKeyword === (GameTag.CASTS_WHEN_DRAWN as number) ||
+			// Some cards as flagged as CASTS_WHEN_DRAWN not because they are auto-cast spells, but because they are
+			// cards that have an effect when drawn, like Time-Lost Protodrake
+			// If we start getting some spells that do this, I will revert back to using the manually curated list of incorrect casts when drawn
+			((action.TriggerKeyword === (GameTag.CASTS_WHEN_DRAWN as number) &&
+				this.GameState.CurrentEntities.get(action.Entity)?.GetTag(GameTag.CARDTYPE) === CardType.SPELL) ||
 				action.TriggerKeyword === (GameTag.TOPDECK as number) ||
 				action.TriggerKeyword === (GameTag.SUMMONED_WHEN_DRAWN as number));
 		return stateType === StateType.PowerTaskList && ((isPowerPhase && cardPlayed) || castWhenDrawn);
@@ -84,8 +90,7 @@ export class CardPlayedFromEffectParser implements ActionParser {
 
 		const action = node.Parent?.Object as Action | undefined;
 		const targetId = action?.Target ?? 0;
-		const targetCardId =
-			targetId > 0 ? this.GameState.CurrentEntities.get(targetId)?.CardId ?? null : null;
+		const targetCardId = targetId > 0 ? (this.GameState.CurrentEntities.get(targetId)?.CardId ?? null) : null;
 		const creator = entity.GetTag(GameTag.CREATOR);
 		const creatorCardId =
 			creator !== -1 && this.GameState.CurrentEntities.has(creator)
@@ -136,8 +141,7 @@ export class CardPlayedFromEffectParser implements ActionParser {
 		const cardId = entity.CardId;
 		const controllerId = entity.GetEffectiveController();
 		const targetId = action?.Target ?? 0;
-		const targetCardId =
-			targetId > 0 ? this.GameState.CurrentEntities.get(targetId)?.CardId ?? null : null;
+		const targetCardId = targetId > 0 ? (this.GameState.CurrentEntities.get(targetId)?.CardId ?? null) : null;
 		const creator = entity.GetTag(GameTag.CREATOR);
 		const creatorCardId =
 			creator !== -1 && this.GameState.CurrentEntities.has(creator)
@@ -188,8 +192,7 @@ export class CardPlayedFromEffectParser implements ActionParser {
 
 		const action = node.Parent?.Object as Action | undefined;
 		const targetId = action?.Target ?? 0;
-		const targetCardId =
-			targetId > 0 ? this.GameState.CurrentEntities.get(targetId)?.CardId ?? null : null;
+		const targetCardId = targetId > 0 ? (this.GameState.CurrentEntities.get(targetId)?.CardId ?? null) : null;
 		const creator = entity.GetTag(GameTag.CREATOR);
 		const creatorCardId =
 			creator !== -1 && this.GameState.CurrentEntities.has(creator)
