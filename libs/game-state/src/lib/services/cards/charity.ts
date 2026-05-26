@@ -14,12 +14,11 @@ export const Charity: GeneratingCard & StaticGeneratingCard = {
 	publicCreator: true,
 	dynamicPool: (input: StaticGeneratingCardInput) => {
 		const ids = input.inputOptions.deckState.minionsDeadThisTurn.map((m) => m.cardId).filter(Boolean);
-		return [...new Set(ids)];
+		return ids;
 	},
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
 		const dead = input.deckState.minionsDeadThisTurn.map((m) => m.cardId).filter(Boolean);
-		const unique = [...new Set(dead)];
-		return { cardType: CardType.MINION, possibleCards: unique.length ? unique : null };
+		return { cardType: CardType.MINION, possibleCards: dead.length ? dead : null };
 	},
 	guessCardId: (input: GuessCardIdInput): string | null => {
 		const dead = input.deckState.minionsDeadThisTurn;
