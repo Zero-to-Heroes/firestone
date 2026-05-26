@@ -1,13 +1,18 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { CardIds, CardType, GameTag } from '@firestone-hs/reference-data';
+import { GuessedInfo } from '../../models/deck-card';
 import { hasCorrectType } from '../../related-cards/dynamic-pools';
 import { getEntityTag } from '../../services/parser-entity-utils';
-import { StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
+import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
 
-export const Amirdrassil: StaticGeneratingCard = {
+export const Amirdrassil: StaticGeneratingCard & GeneratingCard = {
 	cardIds: [CardIds.Amirdrassil_FIR_907],
-	publicCreator: true,
+	publicCreator: false,
+	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
+		const possibleCards = [];
+		return { possibleCards };
+	},
 	dynamicPool: (input: StaticGeneratingCardInput) => {
 		const entity = input.entityId
 			? input.inputOptions.gameState.parserState?.CurrentEntities.get(input.entityId)

@@ -37,6 +37,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 				onlyKnownPossibleCards ||
 				(sequenceInfo != null && displaySequenceInfo)
 			"
+			[attr.data-entity-id]="_card.entityId"
 			cardTooltip
 			[cardTooltipCard]="_card"
 			cardTooltipPosition="bottom-right"
