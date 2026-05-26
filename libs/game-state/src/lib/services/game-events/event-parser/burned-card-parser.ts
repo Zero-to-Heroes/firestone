@@ -1,6 +1,7 @@
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DeckCard } from '../../../models/deck-card';
 import { GameState } from '../../../models/game-state';
+import { revealCard } from '../card-reveal';
 import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
@@ -51,8 +52,15 @@ export class BurnedCardParser implements EventParser {
 			burnedCards: [...deck.burnedCards, { cardId, entityId }],
 			additionalKnownCardsInDeck: additionalKnownCardsInDeck,
 		});
+
+		const playerDeckAfterReveal = isPlayer ? newPlayerDeck : currentState.playerDeck;
+		const opponentDeckAfterReveal = isPlayer
+			? currentState.opponentDeck
+			: revealCard(newPlayerDeck, cardWithZone, this.allCards);
+
 		return Object.assign(new GameState(), currentState, {
-			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
+			playerDeck: playerDeckAfterReveal,
+			opponentDeck: opponentDeckAfterReveal,
 		});
 	}
 
