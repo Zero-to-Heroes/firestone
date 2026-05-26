@@ -14,7 +14,6 @@ import {
 	CurrentUser,
 	DATABASE_SERVICE_TOKEN,
 	IDatabaseService,
-	OverwolfService,
 	UserService,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
@@ -32,7 +31,6 @@ export class ArenaRewardsService extends AbstractFacadeService<ArenaRewardsServi
 	private userService: UserService;
 	private memoryUpdates: MemoryUpdatesService;
 	private arenaInfoService: ArenaInfoService;
-	private ow: OverwolfService;
 	private diskCache: DiskCacheService;
 	private indexedDb: IDatabaseService;
 
@@ -51,7 +49,6 @@ export class ArenaRewardsService extends AbstractFacadeService<ArenaRewardsServi
 		this.memoryUpdates = AppInjector.get(MemoryUpdatesService);
 		this.arenaInfoService = AppInjector.get(ArenaInfoService);
 		this.indexedDb = AppInjector.get(DATABASE_SERVICE_TOKEN);
-		this.ow = AppInjector.get(OverwolfService);
 		this.diskCache = AppInjector.get(DiskCacheService);
 
 		this.arenaRewards$$.onFirstSubscribe(async () => {
@@ -124,7 +121,11 @@ export class ArenaRewardsService extends AbstractFacadeService<ArenaRewardsServi
 	}
 
 	private async handleRewards(rewards: readonly Reward[], arenaInfo: ArenaInfo) {
-		const user = await this.ow.getCurrentUser();
+		const user = await this.userService.getCurrentUser();
+		if (!user) {
+			console.log('[arena-rewards] no user found');
+			return;
+		}
 		const groupedByType = groupByFunction2(rewards, (r) => r.Type);
 		const groupedRewards: readonly Reward[] = Object.values(groupedByType).map((rewards) =>
 			rewards.reduce((a, b) => ({ ...a, Amount: a.Amount + b.Amount })),
