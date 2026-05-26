@@ -29,10 +29,6 @@ export class BgsInGameWindowNavigationService extends AbstractFacadeService<BgsI
 		this.forcedStatus$$ = this.mainInstance.forcedStatus$$;
 	}
 
-	public async toggleWindow() {
-		this.forcedStatus$$.next(this.forcedStatus$$.value === 'open' ? 'closed' : 'open');
-	}
-
 	protected async init() {
 		this.currentPanelId$$ = new BehaviorSubject<BgsPanelId>('bgs-hero-selection-overview');
 		this.forcedStatus$$ = new BehaviorSubject<'open' | 'closed' | null>(null);
@@ -88,5 +84,26 @@ export class BgsInGameWindowNavigationService extends AbstractFacadeService<BgsI
 					this.currentPanelId$$.next('bgs-next-opponent-overview');
 				}
 			});
+	}
+
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.currentPanelId$$ = new BehaviorSubject<BgsPanelId>('bgs-hero-selection-overview');
+		this.forcedStatus$$ = new BehaviorSubject<'open' | 'closed' | null>(null);
+	}
+
+	protected override initElectronSubjects(): void {
+		this.setupElectronSubject(this.currentPanelId$$, 'bgs-in-game-window-navigation-current-panel-id');
+		this.setupElectronSubject(this.forcedStatus$$, 'bgs-in-game-window-navigation-forced-status');
+	}
+
+	protected override async initElectronMainProcess() {
+		this.registerMainProcessMethod('toggleWindowInternal', () => this.toggleWindowInternal());
+	}
+
+	public async toggleWindow() {
+		this.callOnMainProcess('toggleWindowInternal');
+	}
+	private toggleWindowInternal() {
+		this.forcedStatus$$.next(this.forcedStatus$$.value === 'open' ? 'closed' : 'open');
 	}
 }

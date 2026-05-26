@@ -1,6 +1,5 @@
 import {
 	AfterContentInit,
-	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
@@ -12,15 +11,9 @@ import { BgsInGameWindowNavigationService } from '@firestone/battlegrounds/servi
 import { BgsFaceOffWithSimulation, BgsPanel, GameStateFacadeService } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import {
-	ADS_SERVICE_TOKEN,
-	AnalyticsService,
-	IAdsService,
-	OverwolfService,
-	waitForReady,
-} from '@firestone/shared/framework/core';
+import { ADS_SERVICE_TOKEN, AnalyticsService, IAdsService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
-import { auditTime, filter, startWith } from 'rxjs/operators';
+import { auditTime, filter, startWith, tap } from 'rxjs/operators';
 
 @Component({
 	standalone: false,
@@ -58,7 +51,7 @@ import { auditTime, filter, startWith } from 'rxjs/operators';
 })
 export class BattlegroundsContentComponent
 	extends AbstractSubscriptionComponent
-	implements AfterContentInit, AfterViewInit, OnDestroy
+	implements AfterContentInit, OnDestroy
 {
 	showTitle$: Observable<boolean>;
 	currentPanelId$: Observable<string>;
@@ -70,11 +63,8 @@ export class BattlegroundsContentComponent
 	faceOffs$: Observable<readonly BgsFaceOffWithSimulation[]>;
 	showAds$: Observable<boolean>;
 
-	windowId: string;
-
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
-		private readonly ow: OverwolfService,
 		private readonly analytics: AnalyticsService,
 		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 		private readonly nav: BgsInGameWindowNavigationService,
@@ -126,15 +116,12 @@ export class BattlegroundsContentComponent
 		);
 		this.showAds$ = this.ads.hasPremiumSub$$.pipe(
 			this.mapData((showAds) => !showAds),
+			tap((showAds) => console.log('[debug] showAds', showAds)),
 			startWith(true),
 		);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.markForCheck();
 		}
-	}
-
-	async ngAfterViewInit() {
-		this.windowId = (await this.ow.getCurrentWindow()).id;
 	}
 }

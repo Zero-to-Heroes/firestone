@@ -1,13 +1,5 @@
 import { ComponentType } from '@angular/cdk/portal';
-import {
-	AfterContentInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	ElementRef,
-	Renderer2,
-	ViewRef,
-} from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { CurrentSessionBgsBoardTooltipComponent } from '@components/overlays/session/current-session-bgs-board-tooltip.component';
 import {
 	KnownBoard,
@@ -212,8 +204,6 @@ export class CurrentSessionWidgetComponent extends AbstractSubscriptionComponent
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
 		private readonly allCards: CardsFacadeService,
-		private readonly el: ElementRef,
-		private readonly renderer: Renderer2,
 		private readonly scene: SceneService,
 		private readonly bgsScene: BgsSceneService,
 		private readonly prefs: PreferencesService,

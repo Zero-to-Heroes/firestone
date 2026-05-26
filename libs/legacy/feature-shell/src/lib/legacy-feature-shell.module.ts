@@ -273,6 +273,7 @@ import { AdTipComponent } from '@components/ads/ad-tip.component';
 import { SingleAdComponent } from '@components/ads/single-ad.component';
 import { ArenaHighWinRunsWinsFilterDropdownComponent } from '@components/arena/desktop/filters/arena-high-win-runs-wins-filter-dropdown.component';
 import { ArenaModeFilterDropdownComponent } from '@components/arena/desktop/filters/arena-mode-filter-dropdown.component';
+import { BattlegroundsRootComponent } from '@components/battlegrounds/battlegrounds-root.component';
 import { BattlegroundsMetaStatsHeroesComponent } from '@components/battlegrounds/desktop/categories/meta/battlegrounds-meta-stats-heroes.component';
 import { BattlegroundsAnomaliesFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-anomalies-filter-dropdown.component';
 import { BattlegroundsCardTierFilterDropdownComponent } from '@components/battlegrounds/desktop/filters/battlegrounds-card-tier-filter-dropdown.component';
@@ -867,6 +868,7 @@ try {
 		LoadingComponent,
 		NotificationsComponent,
 		BattlegroundsComponent,
+		BattlegroundsRootComponent,
 		FullScreenOverlaysComponent,
 		BattlegroundsMinionsTiersOverlayComponent,
 		BattlegroundsOverlayButtonComponent,
@@ -1357,6 +1359,7 @@ try {
 		NotificationsComponent,
 		SettingsComponent,
 		BattlegroundsComponent,
+		BattlegroundsRootComponent,
 		OutOfCardsCallbackComponent,
 		FullScreenOverlaysComponent,
 		LotteryWindowComponent,

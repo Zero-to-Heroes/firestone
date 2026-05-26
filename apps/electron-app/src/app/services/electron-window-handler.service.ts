@@ -12,6 +12,8 @@ const SETTINGS_WIDTH = 700;
 const SETTINGS_HEIGHT = 620;
 const COLLECTION_WIDTH = 1440;
 const COLLECTION_HEIGHT = 790;
+const BATTLEGROUNDS_WIDTH = 1360;
+const BATTLEGROUNDS_HEIGHT = 790;
 
 function getAppIconPath(): string {
 	return app.isPackaged
@@ -45,6 +47,8 @@ export class ElectronWindowHandlerService implements IWindowHandlerService {
 	private settingsOverlayWindow: OverlayBrowserWindow | null = null;
 	private collectionWindow: BrowserWindow | null = null;
 	private collectionOverlayWindow: OverlayBrowserWindow | null = null;
+	private battlegroundsWindow: BrowserWindow | null = null;
+	private battlegroundsOverlayWindow: OverlayBrowserWindow | null = null;
 
 	/**
 	 * Close collection/settings windows when premium access is revoked (tray, overlay, and policy).
@@ -71,6 +75,17 @@ export class ElectronWindowHandlerService implements IWindowHandlerService {
 				}
 			} catch (_) {}
 			this.settingsOverlayWindow = null;
+		}
+		if (this.battlegroundsWindow && !this.battlegroundsWindow.isDestroyed()) {
+			this.battlegroundsWindow.close();
+		}
+		if (this.battlegroundsOverlayWindow) {
+			try {
+				if (!this.battlegroundsOverlayWindow.window.isDestroyed()) {
+					this.battlegroundsOverlayWindow.window.close();
+				}
+			} catch (_) {}
+			this.battlegroundsOverlayWindow = null;
 		}
 	}
 
@@ -108,9 +123,320 @@ export class ElectronWindowHandlerService implements IWindowHandlerService {
 		}
 	}
 
-	public toggleBattlegroundsWindow(_useOverlay: boolean, _options?: IWindowOptions) {
-		// To be implemented later
-		console.warn('toggleBattlegroundsWindow is not implemented');
+	public toggleBattlegroundsWindow(useOverlay: boolean, options?: IWindowOptions): void {
+		const forcedStatus = options?.forced ?? null;
+		const canBringUpFromMinimized = options?.canBringUpFromMinimized ?? true;
+
+		const gameWindowService = ElectronGameWindowService.getInstance();
+		const gameInfo = gameWindowService.getCurrentGameInfo();
+		const gameIsRunning = gameInfo != null;
+		const effectiveUseOverlay = useOverlay && gameIsRunning;
+
+		if (effectiveUseOverlay) {
+			this.toggleBattlegroundsOverlayWindow(forcedStatus, canBringUpFromMinimized, gameInfo!.width, gameInfo!.height);
+		} else {
+			this.toggleBattlegroundsNormalWindow(forcedStatus, canBringUpFromMinimized, useOverlay);
+		}
+	}
+
+	private toggleBattlegroundsNormalWindow(
+		forcedStatus: 'open' | 'closed' | null,
+		canBringUpFromMinimized: boolean,
+		useOverlay: boolean,
+	): void {
+		if (this.battlegroundsOverlayWindow) {
+			try {
+				if (!this.battlegroundsOverlayWindow.window.isDestroyed()) {
+					this.battlegroundsOverlayWindow.window.close();
+				}
+			} catch (_) {}
+			this.battlegroundsOverlayWindow = null;
+		}
+
+		const existingWindow = this.getExistingBattlegroundsWindow();
+
+		if (forcedStatus === 'open') {
+			if (!isAppAccessUnlocked()) {
+				console.log('[ElectronWindowHandler] Battlegrounds window blocked — full app not unlocked');
+				return;
+			}
+			if (existingWindow) {
+				if (!canBringUpFromMinimized && existingWindow.isMinimized()) {
+					return;
+				}
+				this.showExistingBattlegroundsWindow(existingWindow);
+			} else {
+				this.showBattlegroundsWindow(useOverlay);
+			}
+			return;
+		}
+
+		if (forcedStatus === 'closed') {
+			if (existingWindow && !existingWindow.isDestroyed()) {
+				existingWindow.close();
+			}
+			return;
+		}
+
+		if (existingWindow) {
+			if (existingWindow.isVisible()) {
+				existingWindow.close();
+			} else {
+				if (!canBringUpFromMinimized && existingWindow.isMinimized()) {
+					return;
+				}
+				if (!isAppAccessUnlocked()) {
+					console.log('[ElectronWindowHandler] Battlegrounds window blocked — full app not unlocked');
+					return;
+				}
+				this.showExistingBattlegroundsWindow(existingWindow);
+			}
+		} else {
+			this.showBattlegroundsWindow(useOverlay);
+		}
+	}
+
+	private toggleBattlegroundsOverlayWindow(
+		forcedStatus: 'open' | 'closed' | null,
+		canBringUpFromMinimized: boolean,
+		gameWidth: number,
+		gameHeight: number,
+	): void {
+		if (this.battlegroundsWindow) {
+			try {
+				if (!this.battlegroundsWindow.isDestroyed()) {
+					this.battlegroundsWindow.close();
+				}
+			} catch (_) {}
+			this.battlegroundsWindow = null;
+		}
+
+		const existingOverlay = this.battlegroundsOverlayWindow;
+		const overlayExists = existingOverlay && !existingOverlay.window.isDestroyed();
+
+		if (forcedStatus === 'open') {
+			if (!isAppAccessUnlocked()) {
+				console.log('[ElectronWindowHandler] Battlegrounds window blocked — full app not unlocked');
+				return;
+			}
+			if (overlayExists) {
+				if (!canBringUpFromMinimized && existingOverlay!.window.isMinimized()) {
+					return;
+				}
+				if (existingOverlay!.window.isMinimized()) {
+					existingOverlay!.window.restore();
+				}
+				existingOverlay!.window.show();
+				existingOverlay!.window.focus();
+			} else {
+				void this.openBattlegroundsAsOverlay(gameWidth, gameHeight);
+			}
+			return;
+		}
+
+		if (forcedStatus === 'closed') {
+			if (overlayExists) {
+				existingOverlay!.window.close();
+				this.battlegroundsOverlayWindow = null;
+			}
+			return;
+		}
+
+		if (overlayExists) {
+			existingOverlay!.window.close();
+			this.battlegroundsOverlayWindow = null;
+		} else {
+			this.showBattlegroundsWindow(true);
+		}
+	}
+
+	public showBattlegroundsWindow(useOverlay: boolean): void {
+		if (!isAppAccessUnlocked()) {
+			console.log('[ElectronWindowHandler] Battlegrounds window blocked — full app not unlocked');
+			return;
+		}
+		const gameWindowService = ElectronGameWindowService.getInstance();
+		const gameInfo = gameWindowService.getCurrentGameInfo();
+		const gameIsRunning = gameInfo != null;
+		const effectiveUseOverlay = useOverlay && gameIsRunning;
+
+		if (effectiveUseOverlay) {
+			void this.openBattlegroundsAsOverlay(gameInfo!.width, gameInfo!.height);
+		} else {
+			this.openBattlegroundsAsNormalWindow();
+		}
+	}
+
+	private openBattlegroundsAsNormalWindow(): void {
+		if (this.battlegroundsOverlayWindow) {
+			try {
+				if (!this.battlegroundsOverlayWindow.window.isDestroyed()) {
+					this.battlegroundsOverlayWindow.window.close();
+				}
+			} catch (_) {}
+			this.battlegroundsOverlayWindow = null;
+		}
+
+		const existingBattlegroundsWindow = this.getExistingBattlegroundsWindow();
+		if (existingBattlegroundsWindow) {
+			this.showExistingBattlegroundsWindow(existingBattlegroundsWindow);
+			return;
+		}
+
+		const preloadPath = join(__dirname, 'main.preload.js');
+		const windowIcon = nativeImage.createFromPath(getAppIconPath());
+
+		this.battlegroundsWindow = new BrowserWindow({
+			width: BATTLEGROUNDS_WIDTH,
+			height: BATTLEGROUNDS_HEIGHT,
+			minWidth: BATTLEGROUNDS_WIDTH,
+			minHeight: BATTLEGROUNDS_HEIGHT,
+			resizable: true,
+			show: false,
+			frame: false,
+			title: 'Firestone Battlegrounds',
+			icon: windowIcon.isEmpty() ? undefined : windowIcon,
+			transparent: true,
+			webPreferences: {
+				nodeIntegration: true,
+				contextIsolation: false,
+				preload: preloadPath,
+			},
+		});
+
+		this.battlegroundsWindow.setMenu(null);
+		this.battlegroundsWindow.center();
+
+		this.battlegroundsWindow.once('closed', () => {
+			this.battlegroundsWindow = null;
+		});
+
+		this.battlegroundsWindow.once('ready-to-show', () => {
+			this.battlegroundsWindow?.show();
+			this.battlegroundsWindow?.focus();
+		});
+
+		if (App.isDevelopmentMode()) {
+			setDevToolsWindowIcon(this.battlegroundsWindow.webContents);
+			this.battlegroundsWindow.webContents.once('did-finish-load', () => {
+				if (
+					!this.battlegroundsWindow?.isDestroyed() &&
+					!this.battlegroundsWindow.webContents.isDevToolsOpened()
+				) {
+					this.battlegroundsWindow.webContents.openDevTools({ mode: 'detach', activate: true });
+				}
+			});
+		}
+
+		this.battlegroundsWindow.loadURL(this.getBattlegroundsLoadUrl()).catch((err) => {
+			console.error('[ElectronWindowHandler] Failed to load battlegrounds window:', err);
+		});
+	}
+
+	private getExistingBattlegroundsWindow(): BrowserWindow | null {
+		if (this.battlegroundsWindow && !this.battlegroundsWindow.isDestroyed()) {
+			return this.battlegroundsWindow;
+		}
+
+		const existingBattlegroundsWindow = BrowserWindow.getAllWindows().find((window) => {
+			if (window.isDestroyed()) {
+				return false;
+			}
+
+			return window.webContents.getURL().includes('#/battlegrounds');
+		});
+		this.battlegroundsWindow = existingBattlegroundsWindow ?? null;
+		return this.battlegroundsWindow;
+	}
+
+	private showExistingBattlegroundsWindow(battlegroundsWindow: BrowserWindow): void {
+		if (battlegroundsWindow.isMinimized()) {
+			battlegroundsWindow.restore();
+		}
+		battlegroundsWindow.show();
+		battlegroundsWindow.focus();
+	}
+
+	private async openBattlegroundsAsOverlay(gameWidth: number, gameHeight: number): Promise<void> {
+		if (!isAppAccessUnlocked()) {
+			return;
+		}
+		if (this.battlegroundsWindow) {
+			try {
+				if (!this.battlegroundsWindow.isDestroyed()) {
+					this.battlegroundsWindow.close();
+				}
+			} catch (_) {}
+			this.battlegroundsWindow = null;
+		}
+
+		if (this.battlegroundsOverlayWindow && !this.battlegroundsOverlayWindow.window.isDestroyed()) {
+			if (this.battlegroundsOverlayWindow.window.isMinimized()) {
+				this.battlegroundsOverlayWindow.window.restore();
+			}
+			this.battlegroundsOverlayWindow.window.show();
+			this.battlegroundsOverlayWindow.window.focus();
+			return;
+		}
+
+		const overlayService = OverlayService.getInstance();
+		const overlayApi = overlayService.overlayApi;
+		if (!overlayApi) {
+			console.warn('[ElectronWindowHandler] Overlay API not ready, opening Battlegrounds as normal window');
+			this.openBattlegroundsAsNormalWindow();
+			return;
+		}
+
+		const x = Math.max(0, Math.floor(gameWidth / 2 - BATTLEGROUNDS_WIDTH / 2));
+		const y = Math.max(0, Math.floor(gameHeight / 2 - BATTLEGROUNDS_HEIGHT / 2));
+
+		const preloadPath = join(__dirname, 'main.preload.js');
+		const options: OverlayWindowOptions & { dpiAware?: boolean } = {
+			name: 'firestone-battlegrounds-' + Math.floor(Math.random() * 1000),
+			width: BATTLEGROUNDS_WIDTH,
+			height: BATTLEGROUNDS_HEIGHT,
+			x,
+			y,
+			show: false,
+			transparent: true,
+			frame: false,
+			resizable: true,
+			roundedCorners: true,
+			dpiAware: true,
+			webPreferences: {
+				nodeIntegration: true,
+				contextIsolation: false,
+				preload: preloadPath,
+			},
+		};
+
+		this.battlegroundsOverlayWindow = await overlayApi.createWindow(options);
+
+		this.battlegroundsOverlayWindow.window.once('closed', () => {
+			this.battlegroundsOverlayWindow = null;
+		});
+
+		this.battlegroundsOverlayWindow.window.once('ready-to-show', () => {
+			this.battlegroundsOverlayWindow?.window.show();
+			this.battlegroundsOverlayWindow?.window.focus();
+		});
+
+		if (App.isDevelopmentMode()) {
+			setDevToolsWindowIcon(this.battlegroundsOverlayWindow.window.webContents);
+			this.battlegroundsOverlayWindow.window.webContents.once('did-finish-load', () => {
+				if (
+					this.battlegroundsOverlayWindow &&
+					!this.battlegroundsOverlayWindow.window.isDestroyed() &&
+					!this.battlegroundsOverlayWindow.window.webContents.isDevToolsOpened()
+				) {
+					this.battlegroundsOverlayWindow.window.webContents.openDevTools({ mode: 'detach', activate: true });
+				}
+			});
+		}
+
+		this.battlegroundsOverlayWindow.window.loadURL(this.getBattlegroundsLoadUrl()).catch((err) => {
+			console.error('[ElectronWindowHandler] Failed to load Battlegrounds overlay:', err);
+		});
 	}
 
 	public showCollectionWindow(useOverlay: boolean): void {
@@ -389,8 +715,8 @@ export class ElectronWindowHandlerService implements IWindowHandlerService {
 	}
 
 	public reloadWindows(): void {
-		const browserWindows = [this.settingsWindow];
-		const overlayWindows = [this.settingsOverlayWindow];
+		const browserWindows = [this.settingsWindow, this.battlegroundsWindow];
+		const overlayWindows = [this.settingsOverlayWindow, this.battlegroundsOverlayWindow];
 		for (const window of browserWindows) {
 			if (window && !window.isDestroyed()) {
 				window.reload();
@@ -472,5 +798,23 @@ export class ElectronWindowHandlerService implements IWindowHandlerService {
 		}
 		// Hash is required: electron-frontend uses HashLocationStrategy, so path must be in the hash
 		return `http://localhost:${rendererAppPort}/#/settings`;
+	}
+
+	private getBattlegroundsLoadUrl(): string {
+		if (app.isPackaged) {
+			const frontendDir = join(process.resourcesPath, 'electron-frontend');
+			const frontendPath = join(frontendDir, 'index.html');
+			const fs = require('fs');
+			if (!fs.existsSync(frontendPath)) {
+				console.error('[ElectronWindowHandler] Frontend not found at:', frontendPath);
+			}
+			let normalizedPath = frontendPath.replace(/\\/g, '/');
+			normalizedPath = normalizedPath.replace(
+				/^([a-z]):/i,
+				(_: string, drive: string) => drive.toUpperCase() + ':',
+			);
+			return `file:///${normalizedPath}#/battlegrounds`;
+		}
+		return `http://localhost:${rendererAppPort}/#/battlegrounds`;
 	}
 }

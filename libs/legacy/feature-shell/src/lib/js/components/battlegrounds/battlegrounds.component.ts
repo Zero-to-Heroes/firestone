@@ -1,12 +1,4 @@
-import {
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	HostListener,
-	ViewEncapsulation,
-} from '@angular/core';
-import { BgsInGameWindowNavigationService } from '@firestone/battlegrounds/services';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener } from '@angular/core';
 import { PreferencesService, ScalingService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { GameInfoService, OverwolfService } from '@firestone/shared/framework/core';
@@ -15,36 +7,10 @@ import { DebugService } from '../../services/debug.service';
 @Component({
 	standalone: false,
 	selector: 'battlegrounds',
-	styleUrls: [
-		`../../../../../../../shared/styles/src/lib/styles/ngx-tooltips.scss`,
-		`../../../css/component/battlegrounds/battlegrounds.component.scss`,
-	],
-	encapsulation: ViewEncapsulation.None, // FIXME: not sure that's needed
+	styleUrls: [],
 	template: `
 		<window-wrapper [activeTheme]="'battlegrounds'" [allowResize]="true" [avoidGameOverlap]="true">
-			<section class="menu-bar">
-				<div class="first">
-					<div class="navigation">
-						<i class="i-117X33 gold-theme logo">
-							<svg class="svg-icon-fill">
-								<use xlink:href="assets/svg/sprite.svg#logo" />
-							</svg>
-						</i>
-						<menu-selection-bgs></menu-selection-bgs>
-					</div>
-				</div>
-				<hotkey class="exclude-dbclick" [hotkeyName]="'battlegrounds'"></hotkey>
-				<div class="controls exclude-dbclick">
-					<control-bug></control-bug>
-					<control-settings [settingsApp]="'battlegrounds'"></control-settings>
-					<control-discord></control-discord>
-					<!-- <control-website></control-website> -->
-					<control-minimize></control-minimize>
-					<control-maximize></control-maximize>
-					<control-close [closeAll]="true"></control-close>
-				</div>
-			</section>
-			<battlegrounds-content> </battlegrounds-content>
+			<battlegrounds-root></battlegrounds-root>
 		</window-wrapper>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -52,16 +18,13 @@ import { DebugService } from '../../services/debug.service';
 export class BattlegroundsComponent extends AbstractSubscriptionComponent implements AfterViewInit {
 	windowId: string;
 
-	private hotkey;
-
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
-		private readonly debug: DebugService,
 		private readonly prefs: PreferencesService,
 		private readonly ow: OverwolfService,
 		private readonly gameInfo: GameInfoService,
+		private readonly init_Debug: DebugService,
 		private readonly init_ScalingService: ScalingService,
-		private readonly nav: BgsInGameWindowNavigationService,
 	) {
 		super(cdr);
 		this.init();
@@ -74,33 +37,7 @@ export class BattlegroundsComponent extends AbstractSubscriptionComponent implem
 
 	async ngAfterViewInit() {
 		this.windowId = (await this.ow.getCurrentWindow()).id;
-		this.hotkey = await this.ow.getHotKey('battlegrounds');
 		this.positionWindowOnSecondScreen();
-	}
-
-	@HostListener('window:keydown', ['$event'])
-	async onKeyDown(e: KeyboardEvent) {
-		if (!this.hotkey || this.hotkey.IsUnassigned) {
-			return;
-		}
-
-		const isAltKey = [1, 3, 5, 7].indexOf(this.hotkey.modifierKeys) !== -1;
-		const isCtrlKey = [2, 3, 6, 7].indexOf(this.hotkey.modifierKeys) !== -1;
-		const isShiftKey = [4, 5, 6, 7].indexOf(this.hotkey.modifierKeys) !== -1;
-
-		if (
-			e.shiftKey === isShiftKey &&
-			e.altKey === isAltKey &&
-			e.ctrlKey === isCtrlKey &&
-			e.keyCode == this.hotkey.virtualKeycode
-		) {
-			const currentWindow = await this.ow.getCurrentWindow();
-			if (currentWindow.id.includes('Overlay')) {
-				return;
-			}
-
-			this.nav.toggleWindow();
-		}
 	}
 
 	@HostListener('mousedown', ['$event'])
@@ -132,8 +69,8 @@ export class BattlegroundsComponent extends AbstractSubscriptionComponent implem
 		const mainMonitor = gameInfo?.monitorHandle?.value ?? -1;
 		if (mainMonitor !== -1) {
 			const secondMonitor = monitorsList.displays.filter(
-			(monitor) => (monitor.handle?.value ?? monitor.id) !== mainMonitor,
-		)[0];
+				(monitor) => (monitor.handle?.value ?? monitor.id) !== mainMonitor,
+			)[0];
 			this.ow.changeWindowPosition(this.windowId, secondMonitor.x + 100, secondMonitor.y + 100);
 		}
 	}

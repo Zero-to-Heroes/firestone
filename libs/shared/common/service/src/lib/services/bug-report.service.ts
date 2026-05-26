@@ -1,8 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
-import { ApiRunner, USER_SERVICE_TOKEN } from '@firestone/shared/framework/core';
-import type { IUserService } from '@firestone/shared/framework/core';
+import type { IAdsService, IUserService } from '@firestone/shared/framework/core';
+import { ADS_SERVICE_TOKEN, ApiRunner, USER_SERVICE_TOKEN } from '@firestone/shared/framework/core';
 import { LogsUploaderService } from './logs-uploader.service';
-import { SubscriptionService } from './subscription/subscription.service';
 
 const FEEDBACK_ENDPOINT_POST = 'https://pimeswfluvdckrzixlrn3ohkby0bxpra.lambda-url.us-west-2.on.aws/';
 
@@ -12,7 +11,7 @@ export class BugReportService {
 		private readonly logService: LogsUploaderService,
 		@Inject(USER_SERVICE_TOKEN) private readonly userService: IUserService,
 		private readonly api: ApiRunner,
-		private readonly subs: SubscriptionService,
+		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 	) {}
 
 	public submitAutomatedReport(input: { type: string; info: string }) {
@@ -27,7 +26,7 @@ export class BugReportService {
 			this.logService.uploadAppLogs(),
 			this.logService.uploadGameLogs(),
 			this.userService.getCurrentUser(),
-			this.subs.currentPlan$$.getValueWithInit(),
+			this.ads.currentPlan$$.getValue(),
 		]);
 		const submission = {
 			email: input.email,

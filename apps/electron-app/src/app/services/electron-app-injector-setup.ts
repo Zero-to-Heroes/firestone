@@ -58,6 +58,7 @@ import {
 	BgsInGameTimewarpedService,
 	BgsInGameTrinketsGuardianService,
 	BgsInGameTrinketsService,
+	BgsInGameWindowNavigationService,
 	BgsMetaCompositionStrategiesService,
 	BgsMetaHeroStatsDuoService,
 	BgsMetaHeroStatsService,
@@ -574,12 +575,7 @@ export const buildAppInjector = () => {
 	electronInjector.register(UserService, userService);
 	electronInjector.register(USER_SERVICE_TOKEN, userService);
 
-	const bugReportService = new BugReportService(
-		logsUploader,
-		userService,
-		api as any as ApiRunner,
-		subscriptionService as any as SubscriptionService,
-	);
+	const bugReportService = new BugReportService(logsUploader, userService, api as any as ApiRunner, ads);
 	electronInjector.register(BugReportService, bugReportService);
 
 	const bgsOfficialLeaderboard = new BattlegroundsOfficialLeaderboardService(windowManager);
@@ -917,6 +913,9 @@ export const buildAppInjector = () => {
 		bgsRunStatsEventHandlerService,
 	);
 	electronInjector.register(BgsRunStatsService, bgsRunStatsService);
+
+	const bgsInGameWindowNavigationService = new BgsInGameWindowNavigationService(windowManager);
+	electronInjector.register(BgsInGameWindowNavigationService, bgsInGameWindowNavigationService);
 
 	const packStatsService = new PackStatsService(
 		events,

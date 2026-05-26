@@ -1,0 +1,13 @@
+// Frameless Electron battlegrounds window only (this route is not used by Overwolf).
+:host ::ng-deep .menu-bar {
+	-webkit-app-region: drag;
+	pointer-events: auto;
+	user-select: none;
+	cursor: grab;
+}
+
+:host ::ng-deep .menu-bar .controls,
+:host ::ng-deep .menu-bar hotkey,
+:host ::ng-deep .menu-bar .exclude-dbclick {
+	-webkit-app-region: no-drag;
+}

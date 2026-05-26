@@ -21,11 +21,8 @@ declare let OwAd: any;
 
 @Component({
 	standalone: false,
-
 	selector: 'single-ad',
-
 	styleUrls: [`./single-ad.component.scss`],
-
 	template: `
 		<div class="ad-container" [ngClass]="{ 'overlay-ad': overlayAd }">
 			<div class="no-ads-placeholder">
@@ -72,6 +69,7 @@ export class SingleAdComponent extends AbstractSubscriptionComponent implements 
 	private hadVideoPlayerLoaded = false;
 
 	private displayAdTipRestoreTimeout: ReturnType<typeof setTimeout> | null = null;
+	private visibilityCheckInterval: ReturnType<typeof setInterval> | null = null;
 
 	private videoImpressionListener: (message: any) => void;
 	private playerLoadedListener: (message: any) => void;
@@ -110,6 +108,10 @@ export class SingleAdComponent extends AbstractSubscriptionComponent implements 
 		this.adRef?.removeEventListener(this.adsReadyListener);
 		this.adRef?.removeEventListener(this.highImpactAdLoadedListener);
 		this.adRef?.removeEventListener(this.highImpactAdRemovedListener);
+		if (this.visibilityCheckInterval) {
+			clearInterval(this.visibilityCheckInterval);
+			this.visibilityCheckInterval = null;
+		}
 	}
 
 	private async initializeAds() {
@@ -288,9 +290,8 @@ export class SingleAdComponent extends AbstractSubscriptionComponent implements 
 	}
 
 	private async initializeVisibilityCheck() {
-		setInterval(async () => {
+		this.visibilityCheckInterval = setInterval(async () => {
 			const visibility = await this.ow.isWindowVisibleToUser();
-
 			this.adVisibility.next(visibility);
 		}, 500);
 	}

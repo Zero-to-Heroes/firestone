@@ -50,6 +50,7 @@ import {
 import { LocalizationFacadeService } from '@legacy-import/src/lib/js/services/localization-facade.service';
 import { AppComponent } from './app.component';
 import { appRoutes } from './app.routes';
+import { ElectronBattlegroundsComponent } from './overlay/electron-battlegrounds.component';
 import { ElectronCollectionComponent } from './overlay/electron-collection.component';
 import { ElectronOverlayComponent } from './overlay/electron-overlay.component';
 import { ElectronSettingsComponent } from './overlay/electron-settings.component';
@@ -65,7 +66,13 @@ import { ElectronSettingsComponent } from './overlay/electron-settings.component
 
 		RouterModule.forRoot(appRoutes),
 	],
-	declarations: [AppComponent, ElectronOverlayComponent, ElectronSettingsComponent, ElectronCollectionComponent],
+	declarations: [
+		AppComponent,
+		ElectronOverlayComponent,
+		ElectronSettingsComponent,
+		ElectronCollectionComponent,
+		ElectronBattlegroundsComponent,
+	],
 	providers: [
 		{ provide: DiskCacheService, useExisting: ElectronRendererDiskCacheService },
 		{ provide: CardsFacadeService, useExisting: CardsFacadeStandaloneService },
