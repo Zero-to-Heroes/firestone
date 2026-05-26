@@ -232,6 +232,7 @@ export { SirenSong } from './siren-song';
 export { SkyMotherAviana } from './sky-mother-aviana';
 export { SkyRaider } from './sky-raider';
 export { Skyfin } from './skyfin';
+export { SnakeEyes } from './snake-eyes';
 export { SneedsOldShredder } from './sneeds-old-shredder';
 export { SoldierOfOnyxia } from './soldier-of-onyxia';
 export { SoldierOfSinestra } from './soldier-of-sinestra';

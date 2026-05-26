@@ -24,6 +24,7 @@ export class ActionsChainParser implements EventParser {
 		GameEvent.CHOOSING_OPTIONS,
 		GameEvent.COPIED_FROM_ENTITY_ID,
 		GameEvent.ENTITY_CHOSEN,
+		GameEvent.ENTITY_UPDATE,
 		GameEvent.GAME_END,
 		GameEvent.GAME_START,
 		GameEvent.LINKED_ENTITY,
