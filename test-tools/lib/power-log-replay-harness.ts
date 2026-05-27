@@ -149,7 +149,16 @@ async function loadHttpUrlJson<T>(url: string): Promise<T | null> {
 	}
 }
 
-async function loadCardsShortJsonText(ref: string): Promise<string | null> {
+/**
+ * Load the `cards_short.json` body from `ref` (a filesystem path or an HTTP(S) URL).
+ * Caches successful HTTP responses for the process lifetime so multiple specs in the
+ * same Jest run don't re-fetch GitHub.
+ *
+ * Exposed for diagnostic specs that need to build an `AllCardsService` without going through
+ * the full TestBed harness in {@link replayPowerLogToGameState}. See
+ * {@link buildAllCardsServiceForReplay}.
+ */
+export async function loadCardsShortJsonText(ref: string): Promise<string | null> {
 	const fetchable = normalizeCardsJsonRefForFetch(ref);
 	if (/^https?:\/\//i.test(fetchable)) {
 		if (cachedRemoteCardsJson?.url === fetchable) {
@@ -252,6 +261,7 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	'blooming-bulb': 'blooming-bulb/blooming-bulb.log',
 	'frost-tyrant': '../power.log',
 	'dual-class-shatter-draw': 'dual-class-shatter-draw/dual-class-shatter-draw.log',
+	'amalgam-atk': 'amalgam-atk/amalgam-atk.log',
 };
 
 /**
@@ -303,11 +313,36 @@ export function collectAllDeckCards(state: GameState): DeckCard[] {
 	return [...allZones(state.playerDeck), ...allZones(state.opponentDeck)];
 }
 
+/**
+ * Build an {@link AllCardsService} from `cards_short.json` (filesystem path or HTTP URL).
+ * Used by ReplayParser-only diagnostic specs that need a {@link RewindCardOracle} without
+ * spinning up the full TestBed-backed harness.
+ *
+ * Returns `null` if the cards source cannot be loaded - callers should fail their test
+ * explicitly (per harness convention; do not silently skip).
+ */
+export async function buildAllCardsServiceForReplay(cardsRef: string): Promise<AllCardsService | null> {
+	const text = await loadCardsShortJsonText(cardsRef);
+	if (text == null) {
+		return null;
+	}
+	const allCards = new AllCardsService();
+	allCards.initializeCardsDbFromCards(JSON.parse(text));
+	return allCards;
+}
+
 export type PowerLogReplayResult = {
 	readonly allCardsRef: AllCardsService;
 	readonly state: GameState;
 	readonly gameStateService: GameStateService;
 	readonly secretConfigService: SecretConfigService;
+	/**
+	 * Drop any pending lines from {@link GameEvents}' internal `ProcessingQueue` and stop its
+	 * 500ms interval timer. Important for bug-replay specs where a parser throw causes the
+	 * queue to retry forever - without this, Jest sees a lingering `setInterval` and cannot
+	 * exit cleanly after the test asserts. Safe to call multiple times.
+	 */
+	readonly cleanup: () => void;
 };
 
 export type ReplayPowerLogOptions = {
@@ -321,6 +356,13 @@ export type ReplayPowerLogOptions = {
 	reviewId?: string;
 	/** Wait after last line so async parsers finish (default 8000). */
 	settleMs?: number;
+	/**
+	 * Max time to wait for the {@link GameEvents} processing queue to drain (default 600_000).
+	 * Lower this for red regression tests where a parser throw causes infinite retry: the
+	 * queue will never drain, and the default 10-minute wait would dominate test runtime.
+	 * The bug is observable on `state` even when the queue never drains.
+	 */
+	processingQueueIdleTimeoutMs?: number;
 };
 
 /**
@@ -375,7 +417,13 @@ export function requirePowerLogReplayPrerequisites(cardsPath: string, logPath: s
  * Call from a single test file or reset TestBed between uses.
  */
 export async function replayPowerLogToGameState(options: ReplayPowerLogOptions): Promise<PowerLogReplayResult | null> {
-	const { logPath, logLinesOverride, reviewId = 'power-log-replay', settleMs = 8000 } = options;
+	const {
+		logPath,
+		logLinesOverride,
+		reviewId = 'power-log-replay',
+		settleMs = 8000,
+		processingQueueIdleTimeoutMs = 600_000,
+	} = options;
 
 	const cardsRef = resolveCardsJsonPath();
 	if (!isCardsJsonRefAvailable(cardsRef)) {
@@ -565,13 +613,26 @@ export async function replayPowerLogToGameState(options: ReplayPowerLogOptions):
 		}
 	}
 
-	await waitForGameEventsQueueDrain(gameEvents, 600_000);
+	await waitForGameEventsQueueDrain(gameEvents, processingQueueIdleTimeoutMs);
 	await new Promise((r) => setTimeout(r, settleMs));
+
+	const cleanup = () => {
+		// `truncated` is the existing public signal {@link GameEvents.receiveLogLine} accepts to
+		// drop the pending queue and stop the interval; piggy-back on it so we don't need a
+		// new public method.
+		try {
+			gameEvents.receiveLogLine('truncated');
+		} catch {
+			// Best-effort: if internals changed and this throws, we still want callers to
+			// proceed with their teardown.
+		}
+	};
 
 	return {
 		allCardsRef,
 		state: gameStateService.state,
 		gameStateService,
 		secretConfigService,
+		cleanup,
 	};
 }

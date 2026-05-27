@@ -40,7 +40,7 @@
           "timestampAtWhichCardEnteredHand": "<scrubbed>",
           "turnAtWhichCardEnteredHand": 1
         },
-        "playTiming": 11,
+        "playTiming": 38,
         "rarity": "epic",
         "refManaCost": 3,
         "relatedCardIds": [],
@@ -260,7 +260,7 @@
           "timestampAtWhichCardEnteredHand": "<scrubbed>",
           "turnAtWhichCardEnteredHand": 1
         },
-        "playTiming": 9,
+        "playTiming": 36,
         "rarity": "rare",
         "refManaCost": 1,
         "relatedCardIds": "<cycle>",
@@ -790,7 +790,7 @@
       "internalEntityId": "<scrubbed>",
       "linkedEntityIds": [],
       "metaInfo": {},
-      "playTiming": 7,
+      "playTiming": 34,
       "rarity": "Free",
       "refManaCost": 2,
       "relatedCardIds": [],
@@ -942,7 +942,7 @@
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": null
         },
-        "playTiming": 9,
+        "playTiming": 36,
         "rarity": "rare",
         "refManaCost": 1,
         "relatedCardIds": "<cycle>",
@@ -1153,7 +1153,7 @@
           "timestampAtWhichCardEnteredHand": "<scrubbed>",
           "turnAtWhichCardEnteredHand": 1
         },
-        "playTiming": 10,
+        "playTiming": 37,
         "rarity": "common",
         "refManaCost": 2,
         "relatedCardIds": [],
@@ -1929,7 +1929,7 @@
       "internalEntityId": "<scrubbed>",
       "linkedEntityIds": [],
       "metaInfo": {},
-      "playTiming": 6,
+      "playTiming": 33,
       "rarity": "Free",
       "refManaCost": 2,
       "relatedCardIds": [],
@@ -2063,7 +2063,7 @@
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": null
         },
-        "playTiming": 8,
+        "playTiming": 35,
         "rarity": "rare",
         "refManaCost": 1,
         "relatedCardIds": "<cycle>",

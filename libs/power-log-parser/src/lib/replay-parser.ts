@@ -304,7 +304,11 @@ export class ReplayParser {
 				const rawEntity = m[1];
 				const cardId = m[2];
 				const entityId = this.helper.ParseEntity(rawEntity);
-				this.rewindController.onShowEntity(entityId, cardId && cardId.length > 0 ? cardId : null);
+				this.rewindController.onShowEntity(
+					stream,
+					entityId,
+					cardId && cardId.length > 0 ? cardId : null,
+				);
 			}
 		}
 	}

@@ -1,39 +1,39 @@
 /**
  * Parser-side rewind controller.
  *
- * Owns the snapshot/restore lifecycle around root-level BLOCK_STARTs:
- *  - Every root-level BLOCK_START on the GameState stream is a *candidate* rewind anchor.
- *    Why "root-level" only? REWIND is always the top-level intent of whatever the player did
- *    (PLAY / POWER / TRIGGER / ATTACK); inner blocks are effects and can never be rewound
- *    independently.
- *  - Why the GS stream specifically? GameState logs emit before PowerTaskList for the same
- *    action, so GS root BLOCK_START is the last moment where both states are simultaneously
- *    "pre-action". Taking the snapshot at PTL BLOCK_START would be too late for GSState.
- *  - If the origin entity's `cardId` is already known (our own card, or an opponent card that
- *    was revealed earlier), we decide immediately via the {@link RewindCardOracle} whether
- *    this card statically carries the REWIND mechanic. Only then do we deep-clone.
- *  - If the `cardId` is unknown at BLOCK_START (typical for opponent cards played from hand
- *    - logged as `UNKNOWN HUMAN PLAYER` / `cardId=""`), we **defer**: only the meta is
- *    stashed PENDING (no clone). A later `SHOW_ENTITY` inside the block either promotes the
- *    pending to a RETAINED *captured-now* snapshot (REWIND mechanic confirmed) or the
- *    pending is silently dropped (zero clone work).
+ * Owns the snapshot/restore lifecycle around root-level BLOCK_STARTs, with one fully
+ * independent snapshot pipeline per log stream (GS and PTL):
+ *  - Each stream observes its own root-level BLOCK_START / SHOW_ENTITY / BLOCK_END /
+ *    GAME_RESET events, consults the same {@link RewindCardOracle}, and captures /
+ *    restores its own `ParserState` half against its own LIFO stack.
+ *  - The two halves are NEVER cloned at the same wall-clock moment. They're each cloned
+ *    at the moment their own stream first reaches "action about to start", so neither
+ *    half is captured while its stream is still lagging behind the other (the eager-path
+ *    bug for `END_000p` / Adaptive Amalgam was exactly this: cloning PTL at GS BLOCK_START
+ *    captured a stale PTL state missing entities the still-in-flight Flashback PTL block
+ *    would register seconds later).
+ *  - Capture mode per BLOCK_START on a given stream:
+ *      - cardId known + REWIND-capable -> deep-clone now, push to that stream's stack.
+ *      - cardId known + non-REWIND     -> nothing.
+ *      - cardId unknown (PLAY only)    -> stash meta only (O(1)); decide at SHOW_ENTITY.
+ *  - On SHOW_ENTITY for an entity with a deferred pending meta on the same stream, the
+ *    oracle reveals REWIND-capability and either deep-clones now or drops the meta.
  *
- *    The deferred capture trades a little correctness slack for a huge perf win: in a typical
- *    Hearthstone match, opponents play 10-30 cards, of which essentially zero are REWIND-
- *    capable, so eagerly cloning at BLOCK_START burned the deep-clone cost on every play just
- *    to throw it away on SHOW_ENTITY. The slack: capturing at SHOW_ENTITY time means the
- *    snapshot has the action's preceding `TAG_CHANGE` lines (typically just the played
- *    entity's ZONE flip from HAND to PLAY) already applied. The post-rewind GAME_RESET block
- *    re-emits authoritative `FULL_ENTITY` lines that overwrite this small drift, which the
- *    rewind golden suite (`test-tools/non-reg/rewind-nonreg.spec.ts`) verifies end-to-end.
- *  - On `GAME_RESET` close (PTL stream only), we look up the RETAINED snapshot for the block's
- *    origin entity and restore. Matching is LIFO over originEntityId because a single entity
- *    (e.g. Mister Clockwork) can rewind multiple times in a game and we can't trust
- *    USED_REWIND to mark individual slots as consumed.
+ *    The deferred capture is the central perf optimisation: opponents play 10-30 cards
+ *    per match, essentially zero of which are REWIND-capable, so eagerly cloning on every
+ *    opponent PLAY would burn dominant cost just to throw it away. Each stream pays the
+ *    clone cost only on confirmed REWIND-capable cards.
+ *  - Restore is symmetric: GS GAME_RESET BLOCK_START pops from `gsRetained` and restores
+ *    `GSState`; PTL GAME_RESET BLOCK_START pops from `ptlRetained` and restores `PTLState`.
+ *    There is no cross-stream parking - each stream owns its own restore artefact.
+ *  - The `onRewindCapableActionStart` consumer hook fires from GS-side captures only.
+ *    Because PTL trails GS for the same action, GS is always the first capture per
+ *    rewind, so this is "fire exactly once per rewind-capable action" - the symmetric PTL
+ *    capture is intentionally silent on the hook to avoid duplicate consumer snapshots.
  *
- * The controller is a plain class owned by {@link ReplayParser}; it is NOT plugged into the
- * ActionParser chain - snapshot semantics are cross-state (GS + PTL) and don't fit the
- * per-state ActionParser contract.
+ * The controller is a plain class owned by {@link ReplayParser}; it is NOT plugged into
+ * the ActionParser chain - snapshot semantics are cross-state (GS + PTL) and don't fit
+ * the per-state ActionParser contract.
  */
 import { BlockType } from '@firestone-hs/reference-data';
 import { CombinedState } from '../state/combined-state';
@@ -44,14 +44,14 @@ import { ParserSnapshot, ParserSnapshotMeta, captureParserSnapshot, restoreParse
 /** Stream a log line belongs to. Determines which ParserState the line routes to. */
 export type LogStream = 'GS' | 'PTL';
 
-/** A captured snapshot of both ParserStates, plus the meta we need to match on restore. */
-export interface CombinedSnapshot {
+/** Per-stream snapshot entry stored in `gsRetained` / `ptlRetained`. */
+interface GsRetainedEntry {
 	readonly meta: ParserSnapshotMeta;
-	readonly gs: ParserSnapshot;
-	readonly ptl: ParserSnapshot;
+	readonly snapshot: ParserSnapshot;
 }
+type PtlRetainedEntry = GsRetainedEntry;
 
-/** Hard cap on retained snapshots. Rewinds happen at most a few per match; 16 is plenty. */
+/** Hard cap on retained snapshots per stream. Rewinds are rare; 16 per stream is plenty. */
 const MAX_RETAINED_SNAPSHOTS = 16;
 
 /**
@@ -75,53 +75,53 @@ const REWIND_DEBUG = process.env['REWIND_DEBUG'] === '1';
 
 export interface RewindControllerHooks {
 	/**
-	 * Invoked when the controller has just taken a RETAINED snapshot (either eagerly because
-	 * the REWIND mechanic was known at BLOCK_START, or after a SHOW_ENTITY late-promotion).
-	 * Consumers use this signal to stash their own consumer-level GameState snapshot keyed
-	 * by the same originEntityId.
+	 * Invoked when the controller takes its FIRST snapshot for a rewind-capable action
+	 * (always the GS-side capture, since PTL trails for the same action). Consumers use
+	 * this signal to stash their own consumer-level GameState snapshot keyed by the same
+	 * originEntityId. The symmetric PTL-side capture that follows is intentionally silent
+	 * on this hook to avoid a duplicate consumer-snapshot for the same action.
 	 */
 	onRewindCapableActionStart?(meta: ParserSnapshotMeta): void;
 
 	/**
-	 * Invoked right after a RETAINED snapshot has been restored into the live ParserStates.
-	 * At this point consumers should roll back their GameState snapshot matching the same
-	 * originEntityId. The subsequent FULL_ENTITY lines inside the GAME_RESET block are the
-	 * server's authoritative post-rewind state; they'll flow through the parser normally but
-	 * we suppress their consumer-visible events (see parser-silence-reset-block).
+	 * Invoked right after a RETAINED snapshot has been restored into `GSState`. At this
+	 * point consumers should roll back their GameState snapshot matching the same
+	 * originEntityId. The subsequent FULL_ENTITY lines inside the GAME_RESET block are
+	 * skipped at the parser level (the snapshot is self-sufficient); see
+	 * `replay-parser.ts#insideGameResetGS`.
+	 *
+	 * Note: only the GS-side restore fires this hook. The matching PTL restore happens
+	 * later when PTL reaches its own GAME_RESET BLOCK_START; consumers don't need a second
+	 * signal at that point.
 	 */
 	onRewindRestored?(meta: ParserSnapshotMeta): void;
 }
 
 export class RewindController {
 	/**
-	 * Pending *meta-only* records for entities whose REWIND status can't be decided at
-	 * BLOCK_START (typically opponent cards with an UNKNOWN cardId). Keyed by originEntityId.
+	 * Pending meta-only records on the GS stream for entities whose REWIND status can't be
+	 * decided at BLOCK_START. Keyed by originEntityId. Each entry is evicted by a GS-side
+	 * SHOW_ENTITY late-promotion (deep-clone iff revealed cardId is rewind-capable) or by
+	 * the matching GS root BLOCK_END (silent drop).
 	 *
-	 * Critically, these are **not** snapshots - storing the meta alone is O(1) and avoids the
-	 * deep-clone cost of {@link captureCombined} for the >99% of opponent plays that turn
-	 * out to be non-rewind on SHOW_ENTITY reveal. Each entry is evicted either by a
-	 * SHOW_ENTITY late-promotion (where we deep-clone *iff* the revealed cardId is rewind-
-	 * capable) or by the root BLOCK_END (silent drop).
+	 * NEVER snapshots - storing the meta alone is O(1) and avoids the deep-clone cost for
+	 * the >99% of opponent plays that turn out to be non-rewind.
 	 */
-	private readonly pending = new Map<number, ParserSnapshotMeta>();
+	private readonly gsPending = new Map<number, ParserSnapshotMeta>();
+	/** Symmetric PTL counterpart of {@link gsPending}. */
+	private readonly ptlPending = new Map<number, ParserSnapshotMeta>();
+
 	/**
-	 * LIFO stack of retained snapshots, one per rewind-capable action whose GAME_RESET hasn't
-	 * yet arrived. LIFO matches Hearthstone's observed behaviour: nested rewinds (rare) and
-	 * self-rewinding entities (e.g. Mister Clockwork firing multiple times) both want the
-	 * most recent snapshot first.
+	 * LIFO stack of GS-side snapshots awaiting GS GAME_RESET. LIFO mirrors Hearthstone's
+	 * observed behaviour: nested rewinds (rare) and self-rewinding entities (e.g. Mister
+	 * Clockwork firing multiple times) both want the most recent snapshot first.
 	 */
-	private readonly retained: CombinedSnapshot[] = [];
+	private readonly gsRetained: GsRetainedEntry[] = [];
 	/**
-	 * PTL snapshot halves parked between GS-side GAME_RESET (which restores GSState and moves
-	 * entries here) and PTL-side GAME_RESET (which consumes them). The two GAME_RESET blocks
-	 * for the same rewind arrive on different streams at different times, so we can't restore
-	 * both states simultaneously.
+	 * LIFO stack of PTL-side snapshots awaiting PTL GAME_RESET. Independent of `gsRetained`
+	 * - each stream pops from its own stack at its own GAME_RESET. No cross-stream parking.
 	 */
-	private readonly pendingPtlRestores: Array<{
-		originEntityId: number;
-		ptlSnapshot: ParserSnapshot;
-		meta: ParserSnapshotMeta;
-	}> = [];
+	private readonly ptlRetained: PtlRetainedEntry[] = [];
 
 	/** Depth of open blocks per stream, so we can identify root-level boundaries. */
 	private gsDepth = 0;
@@ -129,14 +129,15 @@ export class RewindController {
 
 	/**
 	 * originEntityId of the currently-open root block on each stream. Populated on root
-	 * BLOCK_START, cleared on matching root BLOCK_END, used when discarding pending snapshots.
+	 * BLOCK_START, cleared on matching root BLOCK_END, used when discarding pending metas.
 	 */
 	private gsRootOriginEntityId: number | null = null;
+	private ptlRootOriginEntityId: number | null = null;
 
 	/**
 	 * Per-game instrumentation. Reset on `reset()` (CREATE_GAME) and dumped via a single
-	 * `[rewind] perf` line on the next reset. The deep-clone in `captureCombined` is the
-	 * known dominant cost on this code path - tracking how many we take, how many we throw
+	 * `[rewind] perf` line on the next reset. The deep-clone in `captureFor` is the known
+	 * dominant cost on this code path - tracking how many we take, how many we throw
 	 * away, and how long each one takes is what lets us correlate user-reported freezes /
 	 * crashes with rewind activity in production logs.
 	 */
@@ -182,18 +183,22 @@ export class RewindController {
 
 	// ---------------------------------------------------------------------------------------
 	// Line-level observers. ReplayParser.ReadLine invokes these in the order:
-	//   1. observeBeforeParse(line, stream)
-	//   2. (actual parsing / AddData)
+	//   1. observeRewindEvents(stream, line) -> dispatches to onBlockStart / onBlockEnd /
+	//      onShowEntity per the line's structural type
+	//   2. handleGameResetBlockStart / handleBlockEndForGameReset
+	//   3. (actual parsing / AddData)
 	// We intentionally don't do the actual parsing here - the controller just records
-	// structural events (block boundaries, entity reveals) and manages the snapshot store.
+	// structural events and manages the per-stream snapshot stores.
 	// ---------------------------------------------------------------------------------------
 
 	/**
-	 * Call at the top of ReadLine, before any dispatch. The controller uses this to detect
-	 * root-level BLOCK_START on the GS stream and to take snapshots.
+	 * Per-stream BLOCK_START observer. Symmetric for GS and PTL: each stream tracks its
+	 * own root depth, its own pending metas, and captures its own snapshot half against
+	 * its own retained stack.
 	 *
-	 * `entityId` / `cardId` / `blockType` are parsed upstream from {@link Regexes.ActionStartRegex}.
-	 * Passing them in keeps detection logic out of the controller and avoids re-parsing.
+	 * `entityId` / `cardId` / `blockType` are parsed upstream from
+	 * {@link Regexes.ActionStartRegex}. Passing them in keeps detection logic out of the
+	 * controller and avoids re-parsing.
 	 */
 	onBlockStart(
 		stream: LogStream,
@@ -206,18 +211,11 @@ export class RewindController {
 		if (this.shouldSkipForGameMode()) return;
 		const wasRoot = this.depthFor(stream) === 0;
 		this.incrementDepth(stream);
-
 		if (!wasRoot) return;
-		if (stream !== 'GS') {
-			// PTL root blocks arrive after GS root blocks for the same action; taking a snapshot
-			// here would be too late for the GS side (GS has already applied the action). We
-			// still record origin so BLOCK_END depth bookkeeping works.
-			return;
-		}
 
-		this.gsRootOriginEntityId = entityId;
+		this.setRootOrigin(stream, entityId);
 
-		// Skip GAME_RESET blocks themselves - they're the restoration event, not the trigger.
+		// GAME_RESET is the restoration event, not a candidate.
 		if (blockType === (BlockType.GAME_RESET as unknown as string) || blockType === 'GAME_RESET') {
 			return;
 		}
@@ -236,47 +234,52 @@ export class RewindController {
 		const known = meta.originCardId != null;
 		if (known) {
 			if (this.oracle.hasRewindMechanic(meta.originCardId)) {
-				if (REWIND_DEBUG) console.log(`[rewind] retain known cardId=${meta.originCardId} entityId=${entityId}`);
-				this.retainSnapshot(meta);
+				if (REWIND_DEBUG)
+					console.log(
+						`[rewind] retain known ${stream} cardId=${meta.originCardId} entityId=${entityId}`,
+					);
+				this.captureFor(stream, meta);
 			}
 			// cardId known but NOT rewind-capable: don't snapshot at all.
 			return;
 		}
 
 		// cardId unknown at BLOCK_START - typical for opponent PLAY blocks. Stash *only the
-		// meta* (no deep clone) and defer the snapshot decision to SHOW_ENTITY: by then the
-		// cardId is known, so we either capture-on-promote (rare, rewind-capable card) or
-		// drop the meta (the overwhelmingly common case). We only do this for PLAY because
-		// that's the only block type where the origin card might be unrevealed (others
-		// always have a known board/hero card).
+		// meta* (no deep clone) and defer the snapshot decision to SHOW_ENTITY. We only do
+		// this for PLAY because that's the only block type where the origin card might be
+		// unrevealed.
 		if (!PENDING_ELIGIBLE_BLOCK_TYPES.has(blockType)) return;
-		if (REWIND_DEBUG) console.log(`[rewind] stash pending meta entityId=${entityId} blockType=${blockType}`);
-		this.stashPendingMeta(meta);
+		if (REWIND_DEBUG)
+			console.log(`[rewind] stash pending ${stream} entityId=${entityId} blockType=${blockType}`);
+		this.stashPendingFor(stream, meta);
 	}
 
 	/**
-	 * Call when a SHOW_ENTITY line is parsed and the entity's `cardId` is now known. If we
-	 * have a deferred pending meta for this entity, decide now: capture-and-retain when the
-	 * revealed card is rewind-capable, or silently drop the meta otherwise.
+	 * Per-stream SHOW_ENTITY observer. If we have a deferred pending meta for this entity
+	 * on this stream, decide now: capture-and-retain when the revealed card is rewind-
+	 * capable, or silently drop the meta otherwise.
 	 *
-	 * The capture happens *here*, not at BLOCK_START: deep-cloning the parser graph is the
+	 * The capture happens here, not at BLOCK_START: deep-cloning the parser graph is the
 	 * dominant cost, so paying it only on confirmed rewind cards (a handful per match at
 	 * most) instead of on every opponent PLAY (10-30 per match) is the central perf win of
 	 * this controller.
 	 */
-	onShowEntity(entityId: number, cardId: string | null): void {
+	onShowEntity(stream: LogStream, entityId: number, cardId: string | null): void {
 		if (this.shouldSkipForGameMode()) return;
-		const pendingMeta = this.pending.get(entityId);
+		const pending = this.pendingMapFor(stream);
+		const pendingMeta = pending.get(entityId);
 		if (REWIND_DEBUG)
 			console.log(
-				`[rewind] onShowEntity entityId=${entityId} cardId=${cardId} pendingMeta=${pendingMeta != null}`,
+				`[rewind] onShowEntity ${stream} entityId=${entityId} cardId=${cardId} pendingMeta=${
+					pendingMeta != null
+				}`,
 			);
 		if (pendingMeta == null) return;
 
 		const isRewind = this.oracle.hasRewindMechanic(cardId);
-		this.pending.delete(entityId);
+		pending.delete(entityId);
 
-		if (REWIND_DEBUG) console.log(`[rewind] promote decision: isRewind=${isRewind}`);
+		if (REWIND_DEBUG) console.log(`[rewind] promote decision ${stream}: isRewind=${isRewind}`);
 		if (!isRewind) {
 			this.perf.pendingDiscarded++;
 			return;
@@ -284,83 +287,83 @@ export class RewindController {
 		this.perf.pendingPromoted++;
 
 		// Re-stamp the meta with the revealed cardId so downstream consumers see the real
-		// card, then deep-clone *now*: this is the deferred capture point. Note that the
-		// captured state has the BLOCK_START line and any intervening TAG_CHANGE lines (most
-		// commonly the played entity's ZONE flip from HAND to PLAY) already applied. The
-		// post-rewind GAME_RESET block re-emits authoritative FULL_ENTITY lines that
-		// overwrite that minor drift; the rewind goldens cover this end-to-end.
+		// card, then deep-clone *now* on this stream.
 		const resolvedMeta: ParserSnapshotMeta = { ...pendingMeta, originCardId: cardId ?? null };
-		const captured = this.captureCombined(resolvedMeta);
-		this.retained.push(captured);
-		this.trimRetained();
-		this.hooks.onRewindCapableActionStart?.(resolvedMeta);
+		this.captureFor(stream, resolvedMeta);
 	}
 
 	/**
-	 * Call when a BLOCK_END is parsed. Decrements depth; on root-level close, discards any
-	 * pending meta whose origin matches (no SHOW_ENTITY ever resolved it → card wasn't
-	 * revealed inside this block, e.g. a play that resolved without a card reveal).
+	 * Per-stream BLOCK_END observer. Decrements depth; on root-level close, discards any
+	 * pending meta on the same stream whose origin matches (no SHOW_ENTITY ever resolved
+	 * it - e.g. a play that resolved without a card reveal).
 	 */
 	onBlockEnd(stream: LogStream): void {
 		if (this.shouldSkipForGameMode()) return;
 		this.decrementDepth(stream);
-		if (stream === 'GS' && this.depthFor('GS') === 0) {
-			if (this.gsRootOriginEntityId != null) {
-				if (this.pending.delete(this.gsRootOriginEntityId)) {
-					// Meta dropped at root close without ever capturing - the cheap path.
-					// Counts as a discard for perf purposes (a candidate that didn't snapshot).
-					this.perf.pendingDiscarded++;
-				}
-				this.gsRootOriginEntityId = null;
-			}
+		if (this.depthFor(stream) !== 0) return;
+		const origin = this.rootOriginFor(stream);
+		if (origin == null) return;
+		const pending = this.pendingMapFor(stream);
+		if (pending.delete(origin)) {
+			// Meta dropped at root close without ever capturing - the cheap path.
+			// Counts as a discard for perf purposes (a candidate that didn't snapshot).
+			this.perf.pendingDiscarded++;
 		}
+		this.setRootOrigin(stream, null);
 	}
 
 	/**
-	 * GameState-stream GAME_RESET has started for `originEntityId`. Restore GSState immediately
-	 * and stash the PTL half so PTL's matching GAME_RESET can apply it later (PTL logs lag
-	 * behind GS for the same action). Returns the snapshot meta so the caller can emit the
-	 * REWIND_STARTED event with `originEntityId`. Returns null if no retained snapshot matches
-	 * (caller should fall back to legacy behaviour - e.g. `ParserState.PartialReset()`).
+	 * GameState-stream GAME_RESET has started for `originEntityId`. Pop the matching entry
+	 * from `gsRetained`, restore GSState in place, and return the snapshot meta so the
+	 * caller can emit the REWIND_STARTED event. Returns null if no entry matches (caller
+	 * should fall back to legacy behaviour - e.g. `ParserState.PartialReset()`).
+	 *
+	 * Does NOT touch `ptlRetained` - the PTL-side restore lives in
+	 * {@link onPtlGameResetStart}, which independently pops from its own stack when the
+	 * PTL stream emits its matching GAME_RESET BLOCK_START some time later.
 	 */
 	onGsGameResetStart(originEntityId: number): ParserSnapshotMeta | null {
 		if (this.shouldSkipForGameMode()) return null;
 		if (REWIND_DEBUG)
-			console.log(`[rewind] onGsGameResetStart entityId=${originEntityId} retained=${this.retained.length}`);
-		const idx = findLastIndex(this.retained, (s) => s.meta.originEntityId === originEntityId);
+			console.log(
+				`[rewind] onGsGameResetStart entityId=${originEntityId} gsRetained=${this.gsRetained.length}`,
+			);
+		const idx = findLastIndex(this.gsRetained, (s) => s.meta.originEntityId === originEntityId);
 		if (idx < 0) {
-			console.debug(`No retained snapshot for rewind origin entityId=${originEntityId}`, '');
+			console.debug(`No GS retained snapshot for rewind origin entityId=${originEntityId}`, '');
 			return null;
 		}
-		const snapshot = this.retained[idx];
-		this.retained.splice(idx, 1);
+		const entry = this.gsRetained[idx];
+		this.gsRetained.splice(idx, 1);
 
-		restoreParserSnapshot(this.state.GSState, snapshot.gs);
-		this.pendingPtlRestores.push({
-			originEntityId,
-			ptlSnapshot: snapshot.ptl,
-			meta: snapshot.meta,
-		});
-		this.hooks.onRewindRestored?.(snapshot.meta);
-		return snapshot.meta;
+		restoreParserSnapshot(this.state.GSState, entry.snapshot);
+		this.hooks.onRewindRestored?.(entry.meta);
+		return entry.meta;
 	}
 
 	/**
-	 * PowerTaskList-stream GAME_RESET has started for `originEntityId`. Restore PTLState from
-	 * the snapshot half parked by {@link onGsGameResetStart}. Returns null if no matching entry
-	 * exists (meaning we never saw the GS-side GAME_RESET - shouldn't happen in practice).
+	 * PowerTaskList-stream GAME_RESET has started for `originEntityId`. Pop the matching
+	 * entry from `ptlRetained` and restore PTLState in place. Returns the snapshot meta on
+	 * success, null when no entry matches (caller falls back to legacy GameResetParser).
+	 *
+	 * Symmetric to {@link onGsGameResetStart} - PTL owns its own restore lifecycle, no
+	 * cross-stream parking.
 	 */
 	onPtlGameResetStart(originEntityId: number): ParserSnapshotMeta | null {
 		if (this.shouldSkipForGameMode()) return null;
-		const idx = findLastIndex(this.pendingPtlRestores, (e) => e.originEntityId === originEntityId);
+		if (REWIND_DEBUG)
+			console.log(
+				`[rewind] onPtlGameResetStart entityId=${originEntityId} ptlRetained=${this.ptlRetained.length}`,
+			);
+		const idx = findLastIndex(this.ptlRetained, (s) => s.meta.originEntityId === originEntityId);
 		if (idx < 0) {
-			console.debug(`No parked PTL snapshot for rewind origin entityId=${originEntityId}`, '');
+			console.debug(`No PTL retained snapshot for rewind origin entityId=${originEntityId}`, '');
 			return null;
 		}
-		const entry = this.pendingPtlRestores[idx];
-		this.pendingPtlRestores.splice(idx, 1);
+		const entry = this.ptlRetained[idx];
+		this.ptlRetained.splice(idx, 1);
 
-		restoreParserSnapshot(this.state.PTLState, entry.ptlSnapshot);
+		restoreParserSnapshot(this.state.PTLState, entry.snapshot);
 		return entry.meta;
 	}
 
@@ -368,36 +371,48 @@ export class RewindController {
 	// Internals
 	// ---------------------------------------------------------------------------------------
 
-	private retainSnapshot(meta: ParserSnapshotMeta): void {
-		const combined = this.captureCombined(meta);
-		this.perf.retainedSnapshotsTaken++;
-		this.retained.push(combined);
-		this.trimRetained();
-		this.hooks.onRewindCapableActionStart?.(meta);
+	/**
+	 * Capture the snapshot half for the given stream and push onto its retained stack.
+	 *
+	 * The consumer hook fires from GS captures only - GS is always the first capture for
+	 * a given action (PTL trails the same action by O(ms..s) of stream lag), so this is
+	 * "fire exactly once per rewind-capable action". The symmetric PTL capture is
+	 * intentionally silent on the hook to avoid a duplicate consumer snapshot for the
+	 * same action.
+	 */
+	private captureFor(stream: LogStream, meta: ParserSnapshotMeta): void {
+		const t0 = Date.now();
+		if (stream === 'GS') {
+			const gs = captureParserSnapshot(this.state.GSState, meta);
+			this.recordSnapshotMs(Date.now() - t0, meta, 'GS-half');
+			this.gsRetained.push({ meta, snapshot: gs });
+			this.trimStack(this.gsRetained);
+			this.perf.retainedSnapshotsTaken++;
+			this.hooks.onRewindCapableActionStart?.(meta);
+		} else {
+			const ptl = captureParserSnapshot(this.state.PTLState, meta);
+			this.recordSnapshotMs(Date.now() - t0, meta, 'PTL-half');
+			this.ptlRetained.push({ meta, snapshot: ptl });
+			this.trimStack(this.ptlRetained);
+			this.perf.retainedSnapshotsTaken++;
+		}
 	}
 
-	private stashPendingMeta(meta: ParserSnapshotMeta): void {
+	private stashPendingFor(stream: LogStream, meta: ParserSnapshotMeta): void {
 		this.perf.pendingTracked++;
 		this.perf.lastBlockType = meta.blockType;
-		this.pending.set(meta.originEntityId, meta);
+		this.pendingMapFor(stream).set(meta.originEntityId, meta);
 	}
 
-	private captureCombined(meta: ParserSnapshotMeta): CombinedSnapshot {
-		const t0 = Date.now();
-		const result: CombinedSnapshot = {
-			meta,
-			gs: captureParserSnapshot(this.state.GSState, meta),
-			ptl: captureParserSnapshot(this.state.PTLState, meta),
-		};
-		const dt = Date.now() - t0;
+	private recordSnapshotMs(dt: number, meta: ParserSnapshotMeta, label: 'GS-half' | 'PTL-half'): void {
 		this.perf.totalSnapshotMs += dt;
 		if (dt > this.perf.maxSnapshotMs) this.perf.maxSnapshotMs = dt;
-		// One-shot warn for genuinely user-visible single-snapshot stalls. 50ms is the rough
+		// One-shot warn for genuinely user-visible single-clone stalls. 50ms is the rough
 		// boundary above which a clone is itself measurable as a UI freeze on the renderer
 		// thread; below that the per-game summary on reset() is enough signal.
 		if (dt > 50) {
 			console.warn(
-				`[rewind] slow captureCombined ${dt}ms`,
+				`[rewind] slow ${label} capture ${dt}ms`,
 				'blockType',
 				meta.blockType,
 				'originEntityId',
@@ -406,12 +421,11 @@ export class RewindController {
 				meta.originCardId,
 			);
 		}
-		return result;
 	}
 
-	private trimRetained(): void {
-		while (this.retained.length > MAX_RETAINED_SNAPSHOTS) {
-			this.retained.shift();
+	private trimStack(stack: { length: number; shift(): unknown }): void {
+		while (stack.length > MAX_RETAINED_SNAPSHOTS) {
+			stack.shift();
 		}
 	}
 
@@ -432,12 +446,42 @@ export class RewindController {
 		}
 	}
 
-	/** Visible for tests / diagnostics. */
-	_pendingSize(): number {
-		return this.pending.size;
+	private pendingMapFor(stream: LogStream): Map<number, ParserSnapshotMeta> {
+		return stream === 'GS' ? this.gsPending : this.ptlPending;
 	}
+
+	private rootOriginFor(stream: LogStream): number | null {
+		return stream === 'GS' ? this.gsRootOriginEntityId : this.ptlRootOriginEntityId;
+	}
+
+	private setRootOrigin(stream: LogStream, value: number | null): void {
+		if (stream === 'GS') this.gsRootOriginEntityId = value;
+		else this.ptlRootOriginEntityId = value;
+	}
+
+	// ---------------------------------------------------------------------------------------
+	// Visible for tests / diagnostics
+	// ---------------------------------------------------------------------------------------
+
+	/** Total pending metas across both streams. Kept for legacy mode-gate tests. */
+	_pendingSize(): number {
+		return this.gsPending.size + this.ptlPending.size;
+	}
+	/** Total retained snapshots across both streams. Kept for legacy mode-gate tests. */
 	_retainedSize(): number {
-		return this.retained.length;
+		return this.gsRetained.length + this.ptlRetained.length;
+	}
+	_gsPendingSize(): number {
+		return this.gsPending.size;
+	}
+	_ptlPendingSize(): number {
+		return this.ptlPending.size;
+	}
+	_gsRetainedSize(): number {
+		return this.gsRetained.length;
+	}
+	_ptlRetainedSize(): number {
+		return this.ptlRetained.length;
 	}
 
 	/** Reset all controller state. Called when ReplayParser sees a fresh CREATE_GAME. */
@@ -455,12 +499,14 @@ export class RewindController {
 				lastBlockType: this.perf.lastBlockType,
 			});
 		}
-		this.pending.clear();
-		this.retained.length = 0;
-		this.pendingPtlRestores.length = 0;
+		this.gsPending.clear();
+		this.ptlPending.clear();
+		this.gsRetained.length = 0;
+		this.ptlRetained.length = 0;
 		this.gsDepth = 0;
 		this.ptlDepth = 0;
 		this.gsRootOriginEntityId = null;
+		this.ptlRootOriginEntityId = null;
 		this.perf = newPerfStats();
 		this.skipForGameMode = null;
 	}
@@ -473,7 +519,7 @@ interface RewindPerfStats {
 	pendingDiscarded: number;
 	/** Pending metas promoted to a captured snapshot at SHOW_ENTITY (rare, REWIND-card). */
 	pendingPromoted: number;
-	/** Eagerly-captured snapshots (cardId already known to be REWIND-capable at BLOCK_START). */
+	/** Per-stream-half captures pushed onto either retained stack. */
 	retainedSnapshotsTaken: number;
 	totalSnapshotMs: number;
 	maxSnapshotMs: number;

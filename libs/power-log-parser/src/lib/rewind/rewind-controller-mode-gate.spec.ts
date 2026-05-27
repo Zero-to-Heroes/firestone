@@ -51,7 +51,7 @@ describe('RewindController game-mode gate', () => {
 		const controller = new RewindController(makeStub(mock), NEVER_REWIND_ORACLE);
 
 		controller.onBlockStart('GS', 99, null, 'PLAY', '00:00:00.000', true);
-		controller.onShowEntity(99, 'EX1_001');
+		controller.onShowEntity('GS', 99, 'EX1_001');
 		controller.onBlockEnd('GS');
 
 		expect(controller._pendingSize()).toBe(0);
@@ -105,7 +105,7 @@ describe('RewindController game-mode gate', () => {
 		// call should latch skip=true and stop touching state from this point on.
 		mock.gameType = GameType.GT_BATTLEGROUNDS as number;
 		mock.isBg = true;
-		controller.onShowEntity(7, 'EX1_001');
+		controller.onShowEntity('GS', 7, 'EX1_001');
 		// Pre-existing pending entry stays untouched (the gate stops *new* work, it does not
 		// retroactively clean up anything captured before the latch). That's fine: BG games
 		// don't restore from rewind so the entry is harmless and is GC'd on `reset()`.
