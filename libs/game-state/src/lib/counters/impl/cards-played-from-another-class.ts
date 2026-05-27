@@ -64,7 +64,7 @@ export class CardsPlayedFromAnotherClassCounterDefinitionV2 extends CounterDefin
 								this.allCards.getCard(c.cardId).classes?.map((c) => CardClass[c]) ?? [],
 								state.opponentDeck.hero?.classes ?? [],
 							),
-					).length ?? 0
+					).length || null
 			);
 		},
 		setting: {

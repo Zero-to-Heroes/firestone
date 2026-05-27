@@ -35,7 +35,7 @@ export class ProtossSpellsCounterDefinitionV2 extends CounterDefinitionV2<number
 		value: (state: GameState): number | null =>
 			state.opponentDeck?.spellsPlayedThisMatch?.filter((s) =>
 				this.allCards.getCard(s.cardId).mechanics?.includes(GameTag[GameTag.PROTOSS]),
-			)?.length ?? 0,
+			)?.length || null,
 		setting: {
 			label: (i18n: ILocalizationService): string =>
 				i18n.translateString('settings.decktracker.your-deck.counters.colossus-damage-label'),
