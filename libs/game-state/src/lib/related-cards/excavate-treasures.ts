@@ -9,6 +9,7 @@ import {
 	EXCAVATE_TREASURE_2_IDS,
 	EXCAVATE_TREASURE_3_IDS,
 } from '@firestone-hs/reference-data';
+import { DeckState } from '../models/deck-state';
 
 /**
  * Returns the excavate treasures for a given tier.
@@ -54,4 +55,18 @@ export const getTier4ExcavateTreasure = (playerClass: CardClass): string | undef
 		default:
 			return undefined;
 	}
+};
+
+export const getCurrentExcavateTreasuresPool = (
+	deckState: DeckState | undefined,
+	playerClasses: readonly CardClass[],
+): readonly string[] => {
+	if (!deckState) {
+		return [];
+	}
+
+	const maxTier = deckState.maxExcavateTier + 1;
+	// The next tier the player will excavate to (1-indexed)
+	const nextTier = deckState.currentExcavateTier % maxTier;
+	return buildExcavateTreasures(nextTier, playerClasses);
 };

@@ -10,6 +10,7 @@ import {
 	GameFormat,
 	GameTag,
 	GameType,
+	hasMechanic,
 	ReferenceCard,
 	SetId,
 	standardSets,
@@ -24,6 +25,7 @@ import { DeckState } from '../models/deck-state';
 import { GameState } from '../models/game-state';
 import { DUAL_CLASS_ARENA_SCENARIO_ID, Metadata } from '../models/metadata';
 import { hasCorrectClass } from '../related-cards/dynamic-pools';
+import { getCurrentExcavateTreasuresPool } from '../related-cards/excavate-treasures';
 import { hasGeneratingCard } from './cards/_card.type';
 import { cardsInfoCache } from './cards/_mapping';
 import { EntityLike, hasTag } from './parser-entity-utils';
@@ -460,6 +462,17 @@ export const addGuessInfoToCard = (
 				...newGuessedInfo,
 				possibleCards: possibleCards.filter((c, index) => (useFirstHalf ? index % 2 === 0 : index % 2 === 1)),
 				mechanics: [...(newGuessedInfo?.mechanics ?? []), GameTag.SHATTERED],
+			};
+		}
+	}
+
+	const isCreatedByExcavate = hasMechanic(allCards.getCard(creatorCardId), GameTag.EXCAVATE);
+	if (isCreatedByExcavate) {
+		const excavateTreasures = getCurrentExcavateTreasuresPool(deckState, deckState?.hero?.classes ?? []);
+		if (excavateTreasures.length > 0) {
+			newGuessedInfo = {
+				...newGuessedInfo,
+				possibleCards: excavateTreasures,
 			};
 		}
 	}
