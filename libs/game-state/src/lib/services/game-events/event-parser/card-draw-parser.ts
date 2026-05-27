@@ -287,27 +287,18 @@ export class CardDrawParser implements EventParser {
 			previousDeck.some(
 				(c) => c.entityId != null && c.entityId !== 0 && Math.abs(c.entityId) === Math.abs(entityId),
 			);
-		let [newDeck, removedCard] = entityIsKnownInDeck
+		let [newDeck, removedCard] = isCardInfoPublic
 			? this.helper.removeSingleCardFromZone(
 					previousDeck,
-					isCardInfoPublic ? updatedCardId : null,
+					updatedCardId,
 					entityId,
-					false,
+					deck.deckList.length === 0,
 					true,
-					isCardInfoPublic ? { cost: gameEvent.additionalData.cost } : null,
+					{
+						cost: gameEvent.additionalData.cost,
+					},
 				)
-			: isCardInfoPublic
-				? this.helper.removeSingleCardFromZone(
-						previousDeck,
-						updatedCardId,
-						entityId,
-						deck.deckList.length === 0,
-						true,
-						{
-							cost: gameEvent.additionalData.cost,
-						},
-					)
-				: this.helper.removeSingleCardFromZone(previousDeck, null, -1, deck.deckList.length === 0, true);
+			: this.helper.removeSingleCardFromZone(previousDeck, null, -1, deck.deckList.length === 0, true);
 		console.debug(
 			'[card-draw] newDeck 0',
 			newDeck,

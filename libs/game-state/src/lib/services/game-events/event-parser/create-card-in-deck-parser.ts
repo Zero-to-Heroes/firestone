@@ -130,8 +130,16 @@ export class CreateCardInDeckParser implements EventParser {
 				cardId: newCardId,
 				// Don't store the entityId for the cards created in the opponent's deck, so that we don't know
 				// what they are
-				// Update: see ...
-				entityId: entityId,
+				// UPDATE: we don't do it here, do that when the card is drawn, so that we still have the entityId
+				// to differentiate the cards (e.g. when discovering copies of the same card)
+				// UPDATE 2026-05-27: doing this can lead to some weird situations:
+				// - opp has entityId = 76 in deck, and we know it is King Llane
+				// - opp draws entityId = 76. However, we don't want to say it's King Lane to avoid info leaks
+				// - this means we now have two cards with entityId = 76, one in deck, and one in hand
+				// I would like to try again to hide the entityId in opponent's deck, and better document the case
+				// where it causes an issue
+				entityId: isPlayer ? entityId : undefined,
+				trueEntityId: entityId,
 				cardName:
 					(hideKiljaedenPortalDeck
 						? this.buildCardName(null, CardIds.Kiljaeden_KiljaedensPortalEnchantment_GDB_145e)

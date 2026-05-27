@@ -18,6 +18,8 @@ export class DeckCard {
 	readonly cardId: string;
 	readonly internalEntityId: string;
 	readonly entityId: number;
+	// Store the real entityId, without any regards for whether it is public or not
+	readonly trueEntityId: number;
 	readonly cardName: string;
 	// The reference mana cost of the card, as it is in the reference data
 	readonly refManaCost: number;

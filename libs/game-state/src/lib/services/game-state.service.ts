@@ -610,7 +610,11 @@ export class GameStateService {
 				gameEvent.cardId,
 				`entityId:${gameEvent.entityId}`,
 				(gameEvent as MinionsDiedEvent)?.additionalData?.deadMinions?.map((m) => `entityId:${m.EntityId}`),
-				currentState.opponentDeck.enchantments,
+				`found?=${currentState.opponentDeck.deck.filter((e) => e.entityId === 76).length}&${currentState.opponentDeck.hand.filter((e) => e.entityId === 76).length}`,
+				currentState.opponentDeck.deck.find((e) => e.entityId === 76)?.cardName,
+				currentState.opponentDeck.hand.find((e) => e.entityId === 76)?.cardName,
+				currentState.opponentDeck.deck.find((e) => e.entityId === 76),
+				currentState.opponentDeck.hand.find((e) => e.entityId === 76),
 				currentState,
 				gameEvent,
 			);
