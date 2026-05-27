@@ -1259,7 +1259,6 @@
         "forged": 0,
         "guessedInfo": {},
         "internalEntityId": "<scrubbed>",
-        "lastAffectedByCardId": "",
         "lastAffectedByEntityId": 2,
         "linkedEntityIds": [],
         "metaInfo": {
@@ -1317,7 +1316,7 @@
         "forged": 0,
         "guessedInfo": {},
         "internalEntityId": "<scrubbed>",
-        "lastAffectedByCardId": "",
+        "lastAffectedByCardId": "EDR_456",
         "lastAffectedByEntityId": 2,
         "linkedEntityIds": [],
         "metaInfo": {
@@ -1469,7 +1468,6 @@
         "forged": 0,
         "guessedInfo": {},
         "internalEntityId": "<scrubbed>",
-        "lastAffectedByCardId": "",
         "lastAffectedByEntityId": 2,
         "linkedEntityIds": [],
         "metaInfo": {},
@@ -1520,7 +1518,6 @@
         "forged": 0,
         "guessedInfo": {},
         "internalEntityId": "<scrubbed>",
-        "lastAffectedByCardId": "",
         "lastAffectedByEntityId": 2,
         "linkedEntityIds": [],
         "metaInfo": {},
@@ -1565,7 +1562,6 @@
         "forged": 0,
         "guessedInfo": {},
         "internalEntityId": "<scrubbed>",
-        "lastAffectedByCardId": "",
         "lastAffectedByEntityId": 2,
         "linkedEntityIds": [],
         "metaInfo": {},
@@ -2029,7 +2025,6 @@
         "forged": 0,
         "guessedInfo": "<cycle>",
         "internalEntityId": "<scrubbed>",
-        "lastAffectedByCardId": "",
         "lastAffectedByEntityId": 2,
         "linkedEntityIds": "<cycle>",
         "metaInfo": {
@@ -2052,7 +2047,6 @@
         "forged": 0,
         "guessedInfo": "<cycle>",
         "internalEntityId": "<scrubbed>",
-        "lastAffectedByCardId": "",
         "lastAffectedByEntityId": 2,
         "linkedEntityIds": "<cycle>",
         "metaInfo": {
@@ -2075,7 +2069,6 @@
         "forged": 0,
         "guessedInfo": {},
         "internalEntityId": "<scrubbed>",
-        "lastAffectedByCardId": "",
         "lastAffectedByEntityId": 2,
         "linkedEntityIds": [],
         "metaInfo": {
@@ -2283,7 +2276,6 @@
         "forged": 0,
         "guessedInfo": "<cycle>",
         "internalEntityId": "<scrubbed>",
-        "lastAffectedByCardId": "",
         "lastAffectedByEntityId": 2,
         "linkedEntityIds": "<cycle>",
         "metaInfo": {

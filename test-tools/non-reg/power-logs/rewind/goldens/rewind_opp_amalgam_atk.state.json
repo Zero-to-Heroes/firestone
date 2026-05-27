@@ -1469,7 +1469,6 @@
         "createdByJoust": false,
         "creatorCardId": null,
         "creatorEntityId": null,
-        "entityId": 181,
         "forged": 0,
         "guessedInfo": {},
         "internalEntityId": "<scrubbed>",
@@ -1480,7 +1479,8 @@
         "refManaCost": 1,
         "relatedCardIds": [],
         "tags": {},
-        "temporaryCard": false
+        "temporaryCard": false,
+        "trueEntityId": 181
       }
     ],
     "deckList": [],
@@ -3836,7 +3836,6 @@
         "forged": 0,
         "guessedInfo": {},
         "internalEntityId": "<scrubbed>",
-        "lastAffectedByCardId": "",
         "lastAffectedByEntityId": 3,
         "linkedEntityIds": [],
         "metaInfo": {
@@ -4249,7 +4248,6 @@
         "forged": 0,
         "guessedInfo": {},
         "internalEntityId": "<scrubbed>",
-        "lastAffectedByCardId": "",
         "lastAffectedByEntityId": 1,
         "linkedEntityIds": [],
         "metaInfo": {
@@ -4296,7 +4294,6 @@
         "forged": 0,
         "guessedInfo": {},
         "internalEntityId": "<scrubbed>",
-        "lastAffectedByCardId": "",
         "lastAffectedByEntityId": 1,
         "linkedEntityIds": [],
         "metaInfo": {
@@ -4345,7 +4342,6 @@
         "forged": 0,
         "guessedInfo": {},
         "internalEntityId": "<scrubbed>",
-        "lastAffectedByCardId": "",
         "lastAffectedByEntityId": 1,
         "linkedEntityIds": [],
         "metaInfo": {
@@ -4396,7 +4392,6 @@
         "forged": 0,
         "guessedInfo": "<cycle>",
         "internalEntityId": "<scrubbed>",
-        "lastAffectedByCardId": "",
         "lastAffectedByEntityId": 3,
         "linkedEntityIds": "<cycle>",
         "metaInfo": {},
@@ -4818,7 +4813,6 @@
         "forged": 0,
         "guessedInfo": {},
         "internalEntityId": "<scrubbed>",
-        "lastAffectedByCardId": "",
         "lastAffectedByEntityId": 3,
         "linkedEntityIds": [],
         "metaInfo": {
@@ -5014,7 +5008,7 @@
         "forged": 0,
         "guessedInfo": {},
         "internalEntityId": "<scrubbed>",
-        "lastAffectedByCardId": "",
+        "lastAffectedByCardId": "TIME_875t",
         "lastAffectedByEntityId": 3,
         "linkedEntityIds": [],
         "metaInfo": {
@@ -5060,6 +5054,7 @@
           "4741": 1
         },
         "temporaryCard": false,
+        "trueEntityId": 72,
         "zone": "HAND"
       },
       {
@@ -5113,7 +5108,6 @@
         "forged": 0,
         "guessedInfo": {},
         "internalEntityId": "<scrubbed>",
-        "lastAffectedByCardId": "",
         "lastAffectedByEntityId": 3,
         "linkedEntityIds": [],
         "metaInfo": {
@@ -5222,7 +5216,6 @@
         "forged": 0,
         "guessedInfo": "<cycle>",
         "internalEntityId": "<scrubbed>",
-        "lastAffectedByCardId": "",
         "lastAffectedByEntityId": 1,
         "linkedEntityIds": "<cycle>",
         "metaInfo": {
@@ -5288,7 +5281,6 @@
         "forged": 0,
         "guessedInfo": "<cycle>",
         "internalEntityId": "<scrubbed>",
-        "lastAffectedByCardId": "",
         "lastAffectedByEntityId": 1,
         "linkedEntityIds": "<cycle>",
         "metaInfo": {
@@ -5351,7 +5343,6 @@
         "forged": 0,
         "guessedInfo": {},
         "internalEntityId": "<scrubbed>",
-        "lastAffectedByCardId": "",
         "lastAffectedByEntityId": 3,
         "linkedEntityIds": [],
         "metaInfo": {
@@ -5559,7 +5550,6 @@
         "forged": 0,
         "guessedInfo": {},
         "internalEntityId": "<scrubbed>",
-        "lastAffectedByCardId": "",
         "lastAffectedByEntityId": 1,
         "linkedEntityIds": "<cycle>",
         "metaInfo": {
@@ -5739,7 +5729,6 @@
         "forged": 0,
         "guessedInfo": {},
         "internalEntityId": "<scrubbed>",
-        "lastAffectedByCardId": "",
         "lastAffectedByEntityId": 3,
         "linkedEntityIds": [],
         "metaInfo": {
@@ -5806,7 +5795,6 @@
         "forged": 0,
         "guessedInfo": {},
         "internalEntityId": "<scrubbed>",
-        "lastAffectedByCardId": "",
         "lastAffectedByEntityId": 3,
         "linkedEntityIds": [],
         "metaInfo": {
@@ -5859,7 +5847,6 @@
         "forged": 0,
         "guessedInfo": {},
         "internalEntityId": "<scrubbed>",
-        "lastAffectedByCardId": "",
         "lastAffectedByEntityId": 3,
         "linkedEntityIds": [],
         "metaInfo": {
@@ -6118,7 +6105,6 @@
         "forged": 0,
         "guessedInfo": "<cycle>",
         "internalEntityId": "<scrubbed>",
-        "lastAffectedByCardId": "",
         "lastAffectedByEntityId": 1,
         "linkedEntityIds": "<cycle>",
         "metaInfo": "<cycle>",

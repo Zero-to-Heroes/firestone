@@ -14,6 +14,7 @@
 import * as fs from 'fs';
 import { CardIds } from '@firestone-hs/reference-data';
 import { trimPowerLogLinesToLastGame } from '../../lib/trim-power-log-last-game';
+import { DeckCard } from '@firestone/game-state';
 import {
 	collectAllDeckCards,
 	replayPowerLogToGameState,
@@ -89,12 +90,13 @@ describe('Power log replay → Triangulate + Valeera SpawnToDeck deck copies', (
 			});
 			requirePowerLogReplayResult(ctx, cardsPath);
 
-			const playerDeckCards = collectAllDeckCards(ctx.state).filter((c) =>
-				SHUFFLED_COPY_ENTITY_IDS.includes(c.entityId as (typeof SHUFFLED_COPY_ENTITY_IDS)[number]),
+			const deckEntityId = (c: DeckCard) => c.entityId ?? c.trueEntityId;
+			const shuffledCopyCards = collectAllDeckCards(ctx.state).filter((c) =>
+				SHUFFLED_COPY_ENTITY_IDS.includes(deckEntityId(c) as (typeof SHUFFLED_COPY_ENTITY_IDS)[number]),
 			);
-			expect(playerDeckCards.length).toBe(SHUFFLED_COPY_ENTITY_IDS.length);
+			expect(shuffledCopyCards.length).toBe(SHUFFLED_COPY_ENTITY_IDS.length);
 
-			for (const c of playerDeckCards) {
+			for (const c of shuffledCopyCards) {
 				expect(c.creatorCardId).toBe(TRIANGULATE_CREATOR);
 				expect(c.cardId).toBe(expectedSpellCardId);
 			}

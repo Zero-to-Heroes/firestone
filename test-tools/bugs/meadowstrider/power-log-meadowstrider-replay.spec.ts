@@ -55,7 +55,7 @@ describe('Power log replay → GameStateService (Meadowstrider bottom of deck)',
 			const all = collectAllDeckCards(ctx.state);
 			const copy = all.find(
 				(c) =>
-					c.entityId === MEADOWSTRIDER_DECK_COPY_ENTITY_ID &&
+					(c.entityId ?? c.trueEntityId) === MEADOWSTRIDER_DECK_COPY_ENTITY_ID &&
 					c.cardId === CardIds.Meadowstrider_EDR_978,
 			) as DeckCard | undefined;
 			expect(copy).toBeTruthy();
