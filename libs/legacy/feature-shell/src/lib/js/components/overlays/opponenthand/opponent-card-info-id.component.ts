@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { AfterContentInit, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
-import { CardClass, CardIds, GameTag, GameType } from '@firestone-hs/reference-data';
+import { CardClass, CardIds, GameTag, GameType, hasMechanic } from '@firestone-hs/reference-data';
 import { ArenaRefService } from '@firestone/arena/data-access';
 import {
 	cardsMapping,
@@ -68,6 +68,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 					<use xlink:href="assets/svg/sprite.svg#created_by" />
 				</svg>
 			</div>
+			<div *ngIf="dredgedBy" class="drawn" inlineSVG="assets/svg/dredged_inside_circle.svg"></div>
 			<div *ngIf="createdBy" class="created-by" inlineSVG="assets/svg/gift_inside_circle.svg"></div>
 			<div *ngIf="sequenceInfo && displaySequenceInfo" class="sequence-info">{{ sequenceInfo }}</div>
 		</div>
@@ -78,6 +79,7 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 	cardUrl: string;
 	createdBy: boolean;
 	drawnBy: boolean;
+	dredgedBy: boolean;
 	forged: boolean;
 	hasBuffs: boolean;
 	onlyKnownPossibleCards: boolean;
@@ -174,7 +176,14 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 			// !value.creatorCardId &&
 			// This might reduce the risk of this issue appearing
 			!this.createdBy &&
+			!card.dredged &&
 			publicCardCreators.includes(card.lastAffectedByCardId as CardIds);
+		this.dredgedBy =
+			!card.cardId &&
+			!!card.lastAffectedByCardId &&
+			!!card.dredged &&
+			!this.createdBy &&
+			hasMechanic(this.allCards.getCard(card.lastAffectedByCardId), GameTag.DREDGE);
 		this.hasBuffs = card.buffCardIds?.length > 0;
 		this.forged = card.forged > 0;
 

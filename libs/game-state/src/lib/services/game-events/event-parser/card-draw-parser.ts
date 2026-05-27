@@ -46,7 +46,7 @@ export class CardDrawParser implements EventParser {
 		let deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const opponentDeck = isPlayer ? currentState.opponentDeck : currentState.playerDeck;
 
-		let drawnByCardId: string = gameEvent.additionalData.drawnByCardId;
+		let drawnByCardId: string = gameEvent.additionalData.drawnByCardId || null;
 
 		// If the card is drawn by a public tutor, we don't know anymore what is at the top of the deck
 		// so we clear the info to avoid confusion
@@ -226,13 +226,15 @@ export class CardDrawParser implements EventParser {
 			creatorEntityId: isCreatorPublic ? gameEvent.additionalData.creatorEntityId : undefined,
 			cardId: isCardInfoPublic ? card!.cardId : undefined,
 			cardName: isCardInfoPublic ? (refCard.name ?? card?.cardName) : undefined,
-			lastAffectedByCardId: isCreatorPublic
-				? // Use drawnByCardId first to remove info leak when drawing a card that was created by a public tutor
-					// (eg draw a card with a public tutor that was created by Queen Carnassa)
-					(drawnByCardId ?? lastInfluencedByCardId ?? card!.lastAffectedByCardId)
-				: isDrawnByCardIdPublic
-					? drawnByCardId
-					: undefined,
+			lastAffectedByCardId:
+				// If card was dredged, we want to keep the info about the dredger
+				isCreatorPublic
+					? // Use drawnByCardId first to remove info leak when drawing a card that was created by a public tutor
+						// (eg draw a card with a public tutor that was created by Queen Carnassa)
+						(drawnByCardId ?? lastInfluencedByCardId ?? card!.lastAffectedByCardId)
+					: isDrawnByCardIdPublic
+						? drawnByCardId
+						: undefined,
 			lastAffectedByEntityId: isCreatorPublic
 				? (gameEvent.additionalData.drawnByEntityId ?? card!.lastAffectedByEntityId)
 				: isDrawnByCardIdPublic
