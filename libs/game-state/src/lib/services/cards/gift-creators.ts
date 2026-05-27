@@ -266,7 +266,6 @@ const internalGiftCreators = [
 	CardIds.DevourMind_ICC_207,
 	CardIds.DevouringSwarm,
 	CardIds.DevoutBlessingsTavernBrawlToken,
-	CardIds.DigForTreasure_TOY_510,
 	CardIds.DiligentNotetaker,
 	CardIds.DinoTrackingTavernBrawl,
 	CardIds.DiscJockey,

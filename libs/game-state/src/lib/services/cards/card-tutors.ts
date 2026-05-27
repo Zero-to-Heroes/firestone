@@ -80,6 +80,7 @@ const internalTutors = [
 	CardIds.DeadRinger,
 	CardIds.DeathBlossomWhomper,
 	CardIds.DeepwaterEvoker,
+	CardIds.DigForTreasure_TOY_510,
 	CardIds.DirdraRebelCaptain_GDB_117,
 	CardIds.DivingGryphon,
 	CardIds.DoorOfShadows_DoorOfShadowsToken,
