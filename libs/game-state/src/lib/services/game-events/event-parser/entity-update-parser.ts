@@ -13,6 +13,8 @@ import { WHIZBANG_DECK_CARD_IDS } from './card-revealed-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { addAdditionalAttribuesInHand } from './receive-card-in-hand-parser';
 
+export const FORCE_OBFUSCATION_CARD_IDS = [CardIds.Triangulate_GDB_451];
+
 export class EntityUpdateParser implements EventParser {
 	constructor(
 		private readonly helper: DeckManipulationHelper,
@@ -35,7 +37,7 @@ export class EntityUpdateParser implements EventParser {
 
 		// Some cards discovered by the opponent from their deck leak info in the logs
 		// This will probably cause some existing info to disappear, and will have to be removed once the logs are fixed
-		const obfsucatedCardId =
+		let obfsucatedCardId =
 			!isPlayer &&
 			cardInOther &&
 			!cardInOther.cardId &&
@@ -45,7 +47,21 @@ export class EntityUpdateParser implements EventParser {
 			!gameEvent.additionalData?.revealed
 				? null
 				: cardId;
-		// console.debug('[entity-update] cardInOther', cardInOther, obfsucatedCardId);
+		// Info leaks in the logs, force obfuscation
+		const forceObfuscation =
+			!isPlayer &&
+			!gameEvent.additionalData?.revealed &&
+			FORCE_OBFUSCATION_CARD_IDS.includes(cardInOther?.lastAffectedByCardId as CardIds);
+		if (forceObfuscation) {
+			obfsucatedCardId = null;
+		}
+		// console.debug(
+		// 	'[entity-update] [debug] obfsucatedCardId',
+		// 	cardInOther,
+		// 	obfsucatedCardId,
+		// 	gameEvent,
+		// 	currentState,
+		// );
 
 		const opponentHandCreatorLooksPublic =
 			!!cardInHand?.creatorCardId &&

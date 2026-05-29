@@ -8,25 +8,16 @@ import type { StateFacade } from '../state/state-facade';
  * Discover reveal for Triangulate: nested under PLAY → POWER; deck SpawnToDeck FullEntity closes in a
  * different branch than `node.Parent.Parent === PLAY`, so we walk ancestors for the PLAY block.
  */
-function findTriangulateDiscoverShowEntity(
-	triggerAction: Action,
-	creatorEntityId: number,
-): ShowEntity | null {
+function findTriangulateDiscoverShowEntity(triggerAction: Action, creatorEntityId: number): ShowEntity | null {
 	const data = triggerAction.GetDataRecursive();
 	const linked = data.find(
 		(d): d is ShowEntity =>
-			d instanceof ShowEntity &&
-			!!d.CardId?.length &&
-			d.GetTag(GameTag.CREATOR as number) === creatorEntityId,
+			d instanceof ShowEntity && !!d.CardId?.length && d.GetTag(GameTag.CREATOR as number) === creatorEntityId,
 	);
 	if (linked) {
 		return linked;
 	}
-	return (
-		data.find(
-			(d): d is ShowEntity => d instanceof ShowEntity && !!d.CardId?.length,
-		) ?? null
-	);
+	return data.find((d): d is ShowEntity => d instanceof ShowEntity && !!d.CardId?.length) ?? null;
 }
 
 export class Triangulate {
@@ -67,21 +58,14 @@ export class Triangulate {
 		}
 
 		const canReveal =
-			showEntity.GetTag(GameTag.CASTS_WHEN_DRAWN) === 1 ||
-			showEntity.GetTag(GameTag.SUMMONED_WHEN_DRAWN) === 1;
-		const lp = stateFacade?.LocalPlayer;
+			showEntity.GetTag(GameTag.CASTS_WHEN_DRAWN) === 1 || showEntity.GetTag(GameTag.SUMMONED_WHEN_DRAWN) === 1;
+		const localPlayer = stateFacade?.LocalPlayer;
 		const triCaster =
 			stateFacade?.GsState?.GameState.CurrentEntities.get(creatorEntityId) ??
 			gameState.CurrentEntities.get(creatorEntityId);
 		const casterController = triCaster?.GetEffectiveController() ?? -1;
-		// Spectator logs: hide opponent discover. Ladder / own power.log: LocalPlayer heuristics can mismatch
-		// the real account; do not gate on LocalPlayer there (see triangulate-created-by replay spec).
-		if (
-			stateFacade?.Spectating &&
-			lp != null &&
-			casterController !== lp.PlayerId &&
-			!canReveal
-		) {
+		// Hide opponent discover.
+		if (localPlayer != null && casterController !== localPlayer.PlayerId && !canReveal) {
 			return null;
 		}
 
