@@ -664,6 +664,16 @@ export const reconcileCardInHandWithDeck = (input: {
 		);
 	}
 	if (!removedCard?.cardId && cardId) {
+		console.debug(
+			'[card-played] reconcileCardInHandWithDeck',
+			removedCard?.cardName,
+			removedCard?.lastAffectedByCardId,
+			removedCard,
+			cardId,
+			entityId,
+			deckCards,
+			opponentDeck,
+		);
 		if (removedCard?.stolenFromOpponent) {
 			const [newDeckAfterReveal, removedCardFromDeck] = helper.removeSingleCardFromZone(
 				opponentDeck.deck,
@@ -683,9 +693,21 @@ export const reconcileCardInHandWithDeck = (input: {
 				cardId,
 				entityId,
 				false,
+				false,
+				null,
+				true,
+			);
+			console.debug(
+				'[card-played] reconcileCardInHandWithDeck removedCardFromDeck',
+				removedCardFromDeck?.cardName,
+				removedCardFromDeck?.lastAffectedByCardId,
+				removedCardFromDeck,
+				newDeckAfterReveal,
 			);
 			if (removedCardFromDeck) {
-				removedCard = removedCardFromDeck;
+				if (!removedCard) {
+					removedCard = removedCardFromDeck;
+				}
 				deckCards = newDeckAfterReveal;
 			}
 		}

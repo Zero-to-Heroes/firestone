@@ -1,4 +1,4 @@
-import { CardType, GameTag, Zone } from '@firestone-hs/reference-data';
+import { CardIds, CardType, GameTag, Zone } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventProvider } from '../game-event';
 import { FullEntity, Node, NodeType } from '../models';
@@ -53,15 +53,19 @@ export class CreateCardInGraveyardParser implements ActionParser {
 				'CREATE_CARD_IN_GRAVEYARD',
 				() => {
 					const creator = Oracle.FindCardCreator(this.GameState, fullEntity, node);
-				let creatorCardId: string | null = creator?.[0] ?? null;
-				let cardId = Oracle.PredictCardId(
-					this.GameState,
-					creatorCardId ?? '',
-					creator?.[1] ?? -1,
-					node,
-					fullEntity.CardId,
-				);
-					if (cardId == null && this.GameState.CurrentTurn === 1 && fullEntity.GetTag(GameTag.ZONE_POSITION) === 5) {
+					let creatorCardId: string | null = creator?.[0] ?? null;
+					let cardId = Oracle.PredictCardId(
+						this.GameState,
+						creatorCardId ?? '',
+						creator?.[1] ?? -1,
+						node,
+						fullEntity.CardId,
+					);
+					if (
+						cardId == null &&
+						this.GameState.CurrentTurn === 1 &&
+						fullEntity.GetTag(GameTag.ZONE_POSITION) === 5
+					) {
 						const controller = this.GameState.GetController(fullEntity.GetEffectiveController());
 						if (controller && controller.GetTag(GameTag.CURRENT_PLAYER) !== 1) {
 							cardId = 'GAME_005';
@@ -73,12 +77,19 @@ export class CreateCardInGraveyardParser implements ActionParser {
 					let lastAffectedByEntity: FullEntity | null = null;
 					if (
 						fullEntity.GetTag(GameTag.LAST_AFFECTED_BY) > 0 &&
-						this.StateFacade.GsState?.GameState.CurrentEntities.has(fullEntity.GetTag(GameTag.LAST_AFFECTED_BY))
+						this.StateFacade.GsState?.GameState.CurrentEntities.has(
+							fullEntity.GetTag(GameTag.LAST_AFFECTED_BY),
+						)
 					) {
 						lastAffectedByEntity =
-							this.StateFacade.GsState.GameState.CurrentEntities.get(fullEntity.GetTag(GameTag.LAST_AFFECTED_BY)) ??
-							null;
-						shouldRemoveFromInitialDeck = true;
+							this.StateFacade.GsState.GameState.CurrentEntities.get(
+								fullEntity.GetTag(GameTag.LAST_AFFECTED_BY),
+							) ?? null;
+						// The Scythe words in a weird way, and creates the cards directly in the graveyard, instead of
+						// first creating them in deck, then moving them
+						if (lastAffectedByEntity?.CardId === CardIds.SouleatersScythe) {
+							shouldRemoveFromInitialDeck = true;
+						}
 					}
 
 					return {
