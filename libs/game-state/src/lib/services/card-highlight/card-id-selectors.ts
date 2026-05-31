@@ -529,6 +529,9 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), pirate);
 		case CardIds.ArchVillainRafaam_BeholdMyStuff_THD_032p:
 			return and(side(inputSide), or(inDeck, inHand), legendary);
+		case CardIds.ArchwitchWillow:
+		case CardIds.ArchwitchWillow_CORE_SCH_181:
+			return and(side(inputSide), or(inDeck, inHand), demon);
 		case CardIds.BenevolentBanker_WW_384:
 			return and(inDeck, spell);
 		case CardIds.HagathaTheWitch_BewitchHeroic:
