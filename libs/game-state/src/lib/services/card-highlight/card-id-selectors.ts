@@ -462,6 +462,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand, inOther), excavate);
 		case CardIds.BadOmen_GDB_124:
 			return and(side(inputSide), or(inDeck, inHand, inOther), starshipExtended);
+		case CardIds.BalefulBlazer_CATA_EVENT_002:
+			return and(side(inputSide), or(inHand, inDeck), spell, fire);
 		case CardIds.BalindaStonehearth:
 			return and(side(inputSide), inDeck, spell);
 		case CardIds.BandOfBeesTavernBrawl:
