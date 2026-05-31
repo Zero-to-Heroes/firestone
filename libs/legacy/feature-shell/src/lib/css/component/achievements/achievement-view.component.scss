@@ -29,6 +29,15 @@
 	.achievement-text {
 		@extend %achievement-text;
 		margin-top: 7px;
+
+		::ng-deep i {
+			color: currentColor;
+			background-color: transparent;
+			width: auto;
+			height: auto;
+			display: inline;
+			font-style: italic;
+		}
 	}
 
 	.completion-date {
