@@ -7,9 +7,9 @@ export const TheArcanomicon: GeneratingCard = {
 	hasSequenceInfo: true,
 	guessCardId: (input: GuessCardIdInput) => {
 		return input.createdIndex === 0
-			? CardIds.TheArcanomicon_EnergizeToken_MEND_505t
+			? CardIds.BurstingLeyline_MEND_500
 			: input.createdIndex === 1
-				? CardIds.TheArcanomicon_UnblockToken_MEND_505t2
-				: CardIds.TheArcanomicon_EmpowerToken_MEND_505t3;
+				? CardIds.CrystallizedLeyline_MEND_502
+				: CardIds.LeylineNexus_MEND_504;
 	},
 };
