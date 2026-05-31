@@ -46,7 +46,6 @@ export class SecretPlayedFromHandParser implements EventParser {
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const card = this.helper.findCardInZone(deck.hand, cardId, entityId);
-		// console.debug('[secret-played-from-hand] card', entityId, cardId, card, deck.hand);
 		const secretClass: string = gameEvent.additionalData.playerClass;
 		const creatorCardId = gameEvent.additionalData ? gameEvent.additionalData.creatorCardId : null;
 
@@ -98,9 +97,7 @@ export class SecretPlayedFromHandParser implements EventParser {
 		// do not use {} as a known secret. Passing a non-secret spell into getValidSecrets narrows the
 		// pool via card-info-filters (cost / spell school) — often to a single wrong card.
 		const isResolvedSecretCard =
-			!!knownCardId &&
-			!!knownRef?.id &&
-			!!knownRef.mechanics?.includes(GameTag[GameTag.SECRET]);
+			!knownCardId || (!!knownRef?.id && !!knownRef.mechanics?.includes(GameTag[GameTag.SECRET]));
 		const cardForSecretPool = isResolvedSecretCard ? card : null;
 
 		// console.debug('getting valid secrets', card.cardName, card, creatorCardId, card.creatorCardId);

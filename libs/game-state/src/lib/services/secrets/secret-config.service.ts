@@ -63,7 +63,7 @@ export class SecretConfigService {
 		creatorCardId?: string,
 		creatorEntityId?: number,
 	): Promise<readonly string[]> {
-		const debug = card?.entityId === 132;
+		const debug = card?.entityId === 155;
 		if (!this.secretConfigs || this.secretConfigs.length === 0) {
 			await this.init();
 		}
@@ -71,10 +71,9 @@ export class SecretConfigService {
 		if (card?.guessedInfo?.possibleCards?.length) {
 			const restrictedList = card.guessedInfo.possibleCards.filter((c) => {
 				const ref = this.allCards.getCard(c);
-				return (
-					ref.mechanics?.includes(GameTag[GameTag.SECRET])
-				);
+				return ref.mechanics?.includes(GameTag[GameTag.SECRET]);
 			});
+			// debug && console.debug('[secret-config] restrictedList', card?.entityId, card, restrictedList);
 			// If we have a secret and the list is empty, something went wrong
 			if (!!restrictedList.length) {
 				return restrictedList;
@@ -83,6 +82,7 @@ export class SecretConfigService {
 		}
 
 		const staticList = this.getStaticSecrets(creatorCardId, metadata, playerClass);
+		// debug && console.debug('[secret-config] staticList', card?.entityId, card, staticList);
 		if (staticList?.length) {
 			return staticList;
 		}
@@ -115,13 +115,23 @@ export class SecretConfigService {
 				}
 				return true;
 			});
-
-		let staticSecretsFromCreator: readonly string[] | null = null;
+		// debug && console.debug('[secret-config] staticSecrets', card?.entityId, card, staticSecrets);
 
 		const result = staticSecrets!
 			.filter((secret) => this.canBeSpecificSecret(secret, card!))
 			.filter((secret) => this.canBeCreatedBy(secret, creatorCardId))
 			.filter((secret) => this.canBeCreatedByDynamic(secret, creatorCardId, creatorEntityId, gameState));
+		// debug &&
+		// 	console.debug(
+		// 		'[secret-config] result',
+		// 		card?.entityId,
+		// 		card,
+		// 		result,
+		// 		staticSecrets!.filter((secret) => this.canBeSpecificSecret(secret, card!)),
+		// 		staticSecrets!
+		// 			.filter((secret) => this.canBeSpecificSecret(secret, card!))
+		// 			.filter((secret) => this.canBeCreatedBy(secret, creatorCardId)),
+		// 	);
 		return result ?? [];
 	}
 
