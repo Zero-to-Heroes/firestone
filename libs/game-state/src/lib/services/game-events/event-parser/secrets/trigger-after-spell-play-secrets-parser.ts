@@ -1,8 +1,10 @@
 import { CardIds, CardType } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { hasCorrectType } from 'libs/game-state/src/lib/related-cards/dynamic-pools';
 import { BoardSecret } from '../../../../models/board-secret';
 import { DeckState } from '../../../../models/deck-state';
 import { GameState } from '../../../../models/game-state';
+import { isDormant } from '../../../card-utils';
 import { COUNTERSPELLS } from '../../../hs-utils';
 import { GameEvent } from '../../game-event';
 import { EventParser } from '../_event-parser';
@@ -79,7 +81,12 @@ export class TriggerAfterSpellPlaySecretsParser implements EventParser {
 		// Might need to be a little more specific than this? E.g. with dormant minions?
 		// It's an edge case, so leaving it aside for a first implementation
 		const deckWithBoard = isSpellPlayedByPlayer ? currentState.playerDeck : currentState.opponentDeck;
-		if (deckWithBoard.board.length === 0) {
+		const board = deckWithBoard.board.filter(
+			(c) =>
+				hasCorrectType(this.allCards.getCard(c.cardId), CardType.MINION) &&
+				!isDormant(c, currentState.parserState?.CurrentEntities),
+		);
+		if (board.length === 0) {
 			secretsWeCantRuleOut.push(CardIds.PressurePlate);
 			secretsWeCantRuleOut.push(CardIds.PressurePlate_CORE_ULD_152);
 		}
