@@ -55,13 +55,6 @@ export class EntityUpdateParser implements EventParser {
 		if (forceObfuscation) {
 			obfsucatedCardId = null;
 		}
-		// console.debug(
-		// 	'[entity-update] [debug] obfsucatedCardId',
-		// 	cardInOther,
-		// 	obfsucatedCardId,
-		// 	gameEvent,
-		// 	currentState,
-		// );
 
 		const opponentHandCreatorLooksPublic =
 			!!cardInHand?.creatorCardId &&

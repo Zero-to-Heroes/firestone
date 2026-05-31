@@ -199,16 +199,7 @@ export class PremiumDesktopComponent extends AbstractSubscriptionComponent imple
 	}
 
 	async ngAfterViewInit() {
-		console.log('[debug] waitForReady tebex', this.tebex);
-		await waitForReady(this.tebex);
-		console.log('[debug] waitForReady ads', this.ads);
-		await waitForReady(this.ads);
-		console.log('[debug] waitForReady account', this.account);
-		await waitForReady(this.account);
-		console.log('[debug] waitForReady prefs', this.prefs);
-		await waitForReady(this.prefs);
 		await waitForReady(this.tebex, this.ads, this.account, this.prefs);
-		console.log('[debug] waitForReady done');
 
 		this.showConfirmationPopUp$ = this.showConfirmationPopUp$$.asObservable();
 		this.showPreSubscribeModal$ = this.showPreSubscribeModal$$.asObservable();
