@@ -37,10 +37,12 @@ export class VisualAchievement {
 		} as VisualAchievement);
 	}
 
+	/** @deprecated */
 	public isFullyCompleted(): boolean {
 		return this.completionSteps.every((step) => step.numberOfCompletions > 0);
 	}
 
+	/** @deprecated */
 	public achievementStatus(): AchievementStatus {
 		if (this.completionSteps.every((step) => step.numberOfCompletions > 0)) {
 			return 'completed';
@@ -50,10 +52,12 @@ export class VisualAchievement {
 		return 'missing';
 	}
 
+	/** @deprecated */
 	public getFirstMissingStep(): CompletionStep | undefined {
 		return this.completionSteps.find((step) => !step.numberOfCompletions);
 	}
 
+	/** @deprecated */
 	private updateCompletionSteps(value: Achievement): readonly CompletionStep[] {
 		return this.completionSteps.map((step) => {
 			if (step.id !== value.id) {
@@ -67,6 +71,10 @@ export class VisualAchievement {
 		});
 	}
 }
+
+export const getAchievementFirstMissingStep = (achievement: VisualAchievement): CompletionStep | undefined => {
+	return achievement.completionSteps.find((step) => !step.numberOfCompletions);
+};
 
 export interface CompletionStep {
 	readonly id: string;

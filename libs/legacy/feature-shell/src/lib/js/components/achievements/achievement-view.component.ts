@@ -2,11 +2,16 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { StatContext } from '@firestone-hs/build-global-stats/dist/model/context.type';
 import { GlobalStatKey } from '@firestone-hs/build-global-stats/dist/model/global-stat-key.type';
 import { GlobalStats } from '@firestone-hs/build-global-stats/dist/model/global-stats';
-import { AchievementStatus, CompletionStep, VisualAchievement } from '@firestone/achievements/common';
+import {
+	AchievementStatus,
+	CompletionStep,
+	getAchievementFirstMissingStep,
+	VisualAchievement,
+} from '@firestone/achievements/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
-import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { GlobalStatsService } from '../../services/global-stats/global-stats.service';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 
@@ -102,8 +107,19 @@ export class AchievementViewComponent extends AbstractSubscriptionComponent impl
 				this.buildAchievementText(achievement.text, achievement.getFirstMissingStep(), globalStats),
 			),
 		);
-		this.canPin$ = this.achievement$.pipe(
-			this.mapData((achievement) => !!achievement.hsAchievementId && !achievement.isFullyCompleted()),
+		this.canPin$ = combineLatest([
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.pinnedAchievementIds)),
+			this.achievement$,
+		]).pipe(
+			this.mapData(
+				([pinnedAchievementIds, achievement]) =>
+					(pinnedAchievementIds.includes(achievement.hsAchievementId) ||
+						pinnedAchievementIds.includes(
+							getAchievementFirstMissingStep(achievement)?.hsAchievementId ?? -1,
+						)) &&
+					!!achievement.hsAchievementId &&
+					!achievement.isFullyCompleted(),
+			),
 		);
 		this.isPinned$ = combineLatest([this.achievement$, this.pinnedAchievements$$]).pipe(
 			this.mapData(([achievement, pinnedAchievements]) =>
