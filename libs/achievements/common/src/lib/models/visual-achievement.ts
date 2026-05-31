@@ -1,5 +1,3 @@
-import { buildCompletionSteps } from '../services/achievements-state-manager.service';
-import { Achievement } from './achievement';
 import { AchievementStatus } from './achievement-status.type';
 
 export class VisualAchievement {
@@ -19,61 +17,54 @@ export class VisualAchievement {
 		return Object.assign(new VisualAchievement(), value);
 	}
 
-	public update(value: Achievement): VisualAchievement {
-		if (value.id !== this.id && this.completionSteps.map((step) => step.id).indexOf(value.id) === -1) {
-			return this;
-		}
+	// public update(value: Achievement): VisualAchievement {
+	// 	if (value.id !== this.id && this.completionSteps.map((step) => step.id).indexOf(value.id) === -1) {
+	// 		return this;
+	// 	}
 
-		const completionStepsWithNewCompletions = this.updateCompletionSteps(value);
+	// 	const completionStepsWithNewCompletions = this.updateCompletionSteps(value);
 
-		// 	'[ach] [visual-achievement] completionStepsWithNewCompletions',
-		// 	completionStepsWithNewCompletions,
-		// );
-		const [completionSteps, text] = buildCompletionSteps(completionStepsWithNewCompletions, value, this.text);
+	// 	// 	'[ach] [visual-achievement] completionStepsWithNewCompletions',
+	// 	// 	completionStepsWithNewCompletions,
+	// 	// );
+	// 	const [completionSteps, text] = buildCompletionSteps(completionStepsWithNewCompletions, value, this.text);
 
-		return Object.assign(new VisualAchievement(), this, {
-			completionSteps: completionSteps, //this.updateCompletionSteps(value),
-			text: text,
-		} as VisualAchievement);
-	}
+	// 	return Object.assign(new VisualAchievement(), this, {
+	// 		completionSteps: completionSteps, //this.updateCompletionSteps(value),
+	// 		text: text,
+	// 	} as VisualAchievement);
+	// }
 
-	/** @deprecated */
-	public isFullyCompleted(): boolean {
-		return this.completionSteps.every((step) => step.numberOfCompletions > 0);
-	}
+	// /** @deprecated */
+	// private updateCompletionSteps(value: Achievement): readonly CompletionStep[] {
+	// 	return this.completionSteps.map((step) => {
+	// 		if (step.id !== value.id) {
+	// 			return step;
+	// 		}
 
-	/** @deprecated */
-	public achievementStatus(): AchievementStatus {
-		if (this.completionSteps.every((step) => step.numberOfCompletions > 0)) {
-			return 'completed';
-		} else if (this.completionSteps.some((step) => step.numberOfCompletions > 0)) {
-			return 'partially-completed';
-		}
-		return 'missing';
-	}
-
-	/** @deprecated */
-	public getFirstMissingStep(): CompletionStep | undefined {
-		return this.completionSteps.find((step) => !step.numberOfCompletions);
-	}
-
-	/** @deprecated */
-	private updateCompletionSteps(value: Achievement): readonly CompletionStep[] {
-		return this.completionSteps.map((step) => {
-			if (step.id !== value.id) {
-				return step;
-			}
-
-			return Object.assign(step, {
-				numberOfCompletions: value.numberOfCompletions || step.numberOfCompletions,
-				progress: value.progress || step.progress,
-			} as CompletionStep);
-		});
-	}
+	// 		return Object.assign(step, {
+	// 			numberOfCompletions: value.numberOfCompletions || step.numberOfCompletions,
+	// 			progress: value.progress || step.progress,
+	// 		} as CompletionStep);
+	// 	});
+	// }
 }
 
 export const getAchievementFirstMissingStep = (achievement: VisualAchievement): CompletionStep | undefined => {
 	return achievement.completionSteps.find((step) => !step.numberOfCompletions);
+};
+
+export const isAchievementFullyCompleted = (achievement: VisualAchievement): boolean => {
+	return achievement.completionSteps.every((step) => step.numberOfCompletions > 0);
+};
+
+export const getAchievementStatus = (achievement: VisualAchievement): AchievementStatus => {
+	if (achievement.completionSteps.every((step) => step.numberOfCompletions > 0)) {
+		return 'completed';
+	} else if (achievement.completionSteps.some((step) => step.numberOfCompletions > 0)) {
+		return 'partially-completed';
+	}
+	return 'missing';
 };
 
 export interface CompletionStep {

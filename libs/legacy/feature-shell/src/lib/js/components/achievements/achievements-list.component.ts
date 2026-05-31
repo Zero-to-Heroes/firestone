@@ -8,7 +8,11 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { AchievementsStateManagerService, VisualAchievement } from '@firestone/achievements/common';
+import {
+	AchievementsStateManagerService,
+	VisualAchievement,
+	isAchievementFullyCompleted,
+} from '@firestone/achievements/common';
 import {
 	FilterOption,
 	MainWindowNavigationService,
@@ -124,7 +128,7 @@ export class AchievementsListComponent extends AbstractSubscriptionComponent imp
 				achievements
 					.filter((achievement) => isValid(achievement, option))
 					.map((achievement) => VisualAchievement.create(achievement))
-					.sort(sortByProperties((a) => [a.isFullyCompleted(), a.name])),
+					.sort(sortByProperties((a) => [isAchievementFullyCompleted(a), a.name])),
 			),
 		);
 		this.mainWindowNavigation.navigationState$$

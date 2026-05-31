@@ -6,6 +6,8 @@ import {
 	AchievementStatus,
 	CompletionStep,
 	getAchievementFirstMissingStep,
+	getAchievementStatus,
+	isAchievementFullyCompleted,
 	VisualAchievement,
 } from '@firestone/achievements/common';
 import { PreferencesService } from '@firestone/shared/common/service';
@@ -100,11 +102,11 @@ export class AchievementViewComponent extends AbstractSubscriptionComponent impl
 
 		this.achievement$ = this.achievement$$.asObservable();
 		this.achievementStatus$ = this.achievement$.pipe(
-			this.mapData((achievement) => achievement.achievementStatus()),
+			this.mapData((achievement) => getAchievementStatus(achievement)),
 		);
 		this.achievementText$ = combineLatest([this.achievement$, this.globalStatsService.globalStats$$]).pipe(
 			this.mapData(([achievement, globalStats]) =>
-				this.buildAchievementText(achievement.text, achievement.getFirstMissingStep(), globalStats),
+				this.buildAchievementText(achievement.text, getAchievementFirstMissingStep(achievement), globalStats),
 			),
 		);
 		this.canPin$ = combineLatest([
@@ -118,7 +120,7 @@ export class AchievementViewComponent extends AbstractSubscriptionComponent impl
 							getAchievementFirstMissingStep(achievement)?.hsAchievementId ?? -1,
 						)) &&
 					!!achievement.hsAchievementId &&
-					!achievement.isFullyCompleted(),
+					!isAchievementFullyCompleted(achievement),
 			),
 		);
 		this.isPinned$ = combineLatest([this.achievement$, this.pinnedAchievements$$]).pipe(
