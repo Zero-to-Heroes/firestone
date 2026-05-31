@@ -133,9 +133,15 @@ export class ArenaClassStatsMatrixComponent {
 
 	/**
 	 * Data-row ids in last `byColumn` display order (global row excluded).
-	 * Used so switching to `byRow` (column sort by row) keeps the same row order.
+	 * Used so switching to `byRow` keeps the same row order.
 	 */
 	private rowOrderFromLastColumnSort: readonly string[] | null = null;
+
+	/**
+	 * Hero-power column ids in last `byRow` display order.
+	 * Used so switching to `byColumn` keeps the same column order.
+	 */
+	private columnOrderFromLastRowSort: readonly string[] | null = null;
 
 	private _stats: ArenaClassStats | null | undefined;
 
@@ -156,19 +162,38 @@ export class ArenaClassStatsMatrixComponent {
 	get displayColumnIds(): readonly string[] {
 		const full = [...this.baseColumnIds, GLOBAL_COLUMN_ID];
 		const state = this.sortState;
-		if (state.kind !== 'byRow') {
-			return full;
+
+		if (state.kind === 'byRow') {
+			const row = this.baseRows.find((r) => r.id === state.rowKey);
+			if (!row) {
+				return full;
+			}
+			const sortedHeroPowers = sortIdsByWinrate(
+				[...this.baseColumnIds],
+				(colId) => this.cellWinrate(row, colId),
+				state.direction,
+			);
+			return [...sortedHeroPowers, GLOBAL_COLUMN_ID];
 		}
-		const row = this.baseRows.find((r) => r.id === state.rowKey);
-		if (!row) {
-			return full;
+
+		if (state.kind === 'byColumn' && this.columnOrderFromLastRowSort?.length) {
+			const seen = new Set<string>();
+			const ordered: string[] = [];
+			for (const id of this.columnOrderFromLastRowSort) {
+				if (this.baseColumnIds.includes(id)) {
+					ordered.push(id);
+					seen.add(id);
+				}
+			}
+			for (const id of this.baseColumnIds) {
+				if (!seen.has(id)) {
+					ordered.push(id);
+				}
+			}
+			return [...ordered, GLOBAL_COLUMN_ID];
 		}
-		const sortedHeroPowers = sortIdsByWinrate(
-			[...this.baseColumnIds],
-			(colId) => this.cellWinrate(row, colId),
-			state.direction,
-		);
-		return [...sortedHeroPowers, GLOBAL_COLUMN_ID];
+
+		return full;
 	}
 
 	/** Hero-power columns in display order (excludes synthetic Global column id). */
@@ -223,6 +248,7 @@ export class ArenaClassStatsMatrixComponent {
 	onCornerClick() {
 		this.sortState = { kind: 'none' };
 		this.rowOrderFromLastColumnSort = null;
+		this.columnOrderFromLastRowSort = null;
 		this.cdr.markForCheck();
 	}
 
@@ -250,6 +276,7 @@ export class ArenaClassStatsMatrixComponent {
 		} else {
 			this.sortState = { kind: 'byRow', rowKey, direction: 'desc' };
 		}
+		this.captureColumnOrderFromRowSort();
 		this.cdr.markForCheck();
 	}
 
@@ -300,6 +327,7 @@ export class ArenaClassStatsMatrixComponent {
 			this.columnByHeroPowerId.clear();
 			this.sortState = { kind: 'none' };
 			this.rowOrderFromLastColumnSort = null;
+			this.columnOrderFromLastRowSort = null;
 			this.cdr.markForCheck();
 			return;
 		}
@@ -360,7 +388,25 @@ export class ArenaClassStatsMatrixComponent {
 		this.baseRows = [...rows, globalRow];
 		this.sortState = { kind: 'none' };
 		this.rowOrderFromLastColumnSort = null;
+		this.columnOrderFromLastRowSort = null;
 		this.cdr.markForCheck();
+	}
+
+	private captureColumnOrderFromRowSort() {
+		if (this.sortState.kind !== 'byRow') {
+			return;
+		}
+		const { rowKey, direction } = this.sortState;
+		const row = this.baseRows.find((r) => r.id === rowKey);
+		if (!row) {
+			return;
+		}
+		const sorted = sortIdsByWinrate(
+			[...this.baseColumnIds],
+			(colId) => this.cellWinrate(row, colId),
+			direction,
+		);
+		this.columnOrderFromLastRowSort = sorted;
 	}
 
 	private captureRowOrderFromColumnSort() {
