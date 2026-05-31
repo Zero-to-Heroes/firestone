@@ -1,6 +1,7 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { decode } from '@firestone-hs/deckstrings';
 import { GameType } from '@firestone-hs/reference-data';
+import { DecksProviderService } from '@firestone/decktracker/common';
 import { CardsHighlightFacadeService, DeckParserFacadeService, Metadata, StatsRecap } from '@firestone/game-state';
 import { PatchesConfigService, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
@@ -8,7 +9,6 @@ import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/co
 import { toFormatType } from '@firestone/stats/data-access';
 import { GameStatsProviderService } from '@firestone/stats/services';
 import { combineLatest, debounceTime, distinctUntilChanged, filter, Observable, tap } from 'rxjs';
-import { DecksProviderService } from '@firestone/decktracker/common';
 
 @Component({
 	standalone: false,
@@ -62,6 +62,8 @@ export class ConstructedDecktrackerOocComponent extends AbstractSubscriptionComp
 
 	async ngAfterContentInit() {
 		await waitForReady(this.deck, this.prefs, this.patchesConfig, this.gameStats, this.decksProvider);
+
+		await this.cardsHighlight.initForSingle();
 
 		this.deckstring$ = this.deck.currentDeck$$.pipe(
 			tap((deck) => console.debug('[constructed-decktracker-ooc] new deck', deck)),
@@ -150,8 +152,6 @@ export class ConstructedDecktrackerOocComponent extends AbstractSubscriptionComp
 			this.mapData((gameStats) => StatsRecap.from(gameStats)),
 			tap((stats) => console.debug('[constructed-decktracker-ooc] new stats', stats)),
 		);
-
-		this.cardsHighlight.initForSingle();
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.markForCheck();

@@ -231,6 +231,9 @@ export class ArenaDecktrackerOocComponent extends AbstractSubscriptionComponent 
 	async ngAfterContentInit() {
 		await waitForReady(this.draftManager, this.prefs, this.cardStats, this.classStats, this.patches);
 
+		// Await to avoid a race condition
+		await this.cardsHighlight.initForSingle();
+
 		this.sortCriteria$ = this.sortCriteria$$.asObservable().pipe(this.mapData((sort) => sort));
 		this.colorManaCost$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.overlayShowRarityColors));
 		const isRedraft$ = combineLatest([this.draftManager.clientStateType$$, this.draftManager.sessionState$$]).pipe(
@@ -296,7 +299,21 @@ export class ArenaDecktrackerOocComponent extends AbstractSubscriptionComponent 
 			}),
 		);
 		const currentClass$ = this.draftManager.currentDeck$$.pipe(
-			this.mapData((deck) => this.allCards.getCard(deck?.HeroCardId).classes?.[0]?.toLowerCase() ?? null),
+			this.mapData((deck) => {
+				// console.log(
+				// 	'[debug] currentClass',
+				// 	deck?.HeroCardId,
+				// 	// this.allCards.getCard(deck?.HeroCardId),
+				// 	this.allCards.getCard(deck?.HeroCardId).classes?.[0]?.toLowerCase(),
+				// 	deck?.HeroPowerCardId,
+				// 	deck?.Id,
+				// 	deck?.DeckList?.length,
+				// 	deck?.Wins,
+				// 	deck?.Losses,
+				// 	// deck,
+				// );
+				return this.allCards.getCard(deck?.HeroCardId).classes?.[0]?.toLowerCase() ?? null;
+			}),
 		);
 		const currentHeroPower$ = this.draftManager.currentDeck$$.pipe(
 			this.mapData((deck) => normalizeHeroPower(deck?.HeroPowerCardId, this.allCards.getService())),
@@ -427,7 +444,6 @@ export class ArenaDecktrackerOocComponent extends AbstractSubscriptionComponent 
 				}
 			});
 
-		this.cardsHighlight.initForSingle();
 		this.draftManager.currentDeck$$.pipe(this.mapData((deck) => deck?.HeroCardId)).subscribe((heroCardId) => {
 			this.cardsHighlight.forceHeroCardId(heroCardId);
 			console.log('[arena-decktracker-ooc] forceHeroCardId', heroCardId);

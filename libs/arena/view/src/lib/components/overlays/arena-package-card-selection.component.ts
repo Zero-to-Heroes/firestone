@@ -78,7 +78,7 @@ export class ArenaPackageCardSelectionComponent extends AbstractSubscriptionComp
 			),
 		);
 
-		this.cardsHighlightService.initForSingle();
+		// this.cardsHighlightService.initForSingle();
 
 		this.mouseOverService.mousedOverCard$$
 			.pipe(
