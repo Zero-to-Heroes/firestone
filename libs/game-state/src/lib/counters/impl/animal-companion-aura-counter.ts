@@ -1,9 +1,20 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { CardIds, GameTag } from '@firestone-hs/reference-data';
+import {
+	CardIds,
+	CardType,
+	GameFormat,
+	GameTag,
+	GameType,
+	hasCorrectTribe,
+	hasMechanic,
+	Race,
+} from '@firestone-hs/reference-data';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { BattlegroundsState } from '../../models/_barrel';
 import { GameState } from '../../models/game-state';
+import { hasCorrectType } from '../../related-cards/dynamic-pools';
 import { animalCompanionTokenCardIds } from '../../services/card-highlight/selectors';
+import { filterCards } from '../../services/cards/utils';
 import { getTagWithHistory } from '../../services/parser-entity-utils';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
 import { CounterType } from '../counter-type';
@@ -75,9 +86,27 @@ export class AnimalCompanionAuraCounterDefinitionV2 extends CounterDefinitionV2<
 				return null;
 			}
 			const newCost = this.allCards.getCard(newAnimalCompanions[0]!).cost ?? 3;
+			// const realCompanions = newAnimalCompanions.map((c) => this.allCards.getCard(c!).id as CardIds);
+			const cardIds = filterCards(
+				CardIds.AnimalCompanionCore,
+				this.allCards.getService(),
+				(c) =>
+					c.cost === newCost &&
+					hasCorrectType(c, CardType.MINION) &&
+					hasCorrectTribe(c, Race.BEAST) &&
+					!hasMechanic(c, GameTag.COLOSSAL),
+				{
+					format: state.metadata?.formatType ?? GameFormat.FT_STANDARD,
+					gameType: state.metadata?.gameType ?? GameType.GT_RANKED,
+					scenarioId: state.metadata?.scenarioId ?? 0,
+					validArenaPool: [],
+					currentClass: state.opponentDeck.getCurrentClass()!,
+					initialDecklist: state.opponentDeck.deckList?.map((c) => c.cardId) ?? undefined,
+				},
+			);
 			return {
 				cost: newCost,
-				cardIds: newAnimalCompanions.map((c) => this.allCards.getCard(c!).id as CardIds),
+				cardIds: cardIds as readonly CardIds[],
 				isPlayer: false,
 			};
 		},
@@ -103,7 +132,7 @@ export class AnimalCompanionAuraCounterDefinitionV2 extends CounterDefinitionV2<
 	}
 
 	protected override tooltip(side: 'player' | 'opponent', gameState: GameState): string | null {
-		const value = this[side]!.value(gameState)?.cost ?? 0;
+		const value = this[side]!.value(gameState)?.cost ?? 3;
 		return this.i18n.translateString(`counters.animal-companion-aura.${side}`, { value });
 	}
 
@@ -113,9 +142,6 @@ export class AnimalCompanionAuraCounterDefinitionV2 extends CounterDefinitionV2<
 		bgState: BattlegroundsState,
 		value: { cost: number; cardIds: readonly CardIds[]; isPlayer: boolean } | null | undefined,
 	): readonly string[] | undefined {
-		if (!value?.isPlayer) {
-			return undefined;
-		}
 		return value?.cardIds?.length ? value.cardIds : animalCompanionTokenCardIds;
 	}
 }
