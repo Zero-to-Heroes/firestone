@@ -436,6 +436,7 @@ export const forcedHiddenCardCreators = [
 export const forcedHiddenInfluencersWhenCardEntersLocalDeck: readonly CardIds[] = [
 	// Puts a discovered spell on the top of the opponent's deck; victim must not see the choice.
 	CardIds.Qonzu_EDR_517,
+	CardIds.EyesInTheSky_TLC_521,
 ];
 
 // These are used to prevent info leaks in hand because we might know too much information

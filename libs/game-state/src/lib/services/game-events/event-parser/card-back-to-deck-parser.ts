@@ -5,10 +5,7 @@ import { DeckCard } from '../../../models/deck-card';
 import { DeckState } from '../../../models/deck-state';
 import { GameState } from '../../../models/game-state';
 import { getProcessedCard } from '../../card-utils';
-import {
-	forcedHiddenCardCreators,
-	forcedHiddenInfluencersWhenCardEntersLocalDeck,
-} from '../../hs-utils';
+import { forcedHiddenCardCreators, forcedHiddenInfluencersWhenCardEntersLocalDeck } from '../../hs-utils';
 import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
@@ -24,6 +21,7 @@ const CARD_SENDING_TO_TOP = [
 	CardIds.EnvoyOfProsperity_WORK_031,
 	CardIds.Doommaiden_DoomInterrogationEnchantment_GDB_129e,
 	CardIds.Qonzu_EDR_517,
+	CardIds.EyesInTheSky_TLC_521,
 	// Technically it's an effect that causes the card to go to the top, but since there's only one of them we can
 	// take the lazy approach and use the base card
 	CardIds.DarkGiftToken_EDR_102t,
@@ -49,9 +47,7 @@ export class CardBackToDeckParser implements EventParser {
 		let deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const rawInfluencedBy = gameEvent.additionalData.influencedByCardId as CardIds | undefined;
 		const cardId =
-			!isPlayer && rawInfluencedBy && forcedHiddenCardCreators.includes(rawInfluencedBy)
-				? null
-				: initialCardId;
+			!isPlayer && rawInfluencedBy && forcedHiddenCardCreators.includes(rawInfluencedBy) ? null : initialCardId;
 		let card = this.findCard(initialZone, deck, cardId, entityId);
 		// Opponent Q'onzu: log may omit influencedBy; hand card still has creator (see forcedHiddenInfluencersWhenCardEntersLocalDeck).
 		if (
@@ -163,15 +159,16 @@ export class CardBackToDeckParser implements EventParser {
 		const cardWithInfluenceBack = cardWithoutInfluence?.update({
 			lastAffectedByCardId: effectiveInfluencedBy,
 		});
-		let cardWithPosition = effectiveInfluencedBy && CARD_SENDING_TO_BOTTOM.includes(effectiveInfluencedBy)
-			? cardWithInfluenceBack.update({
-					positionFromBottom: DeckCard.deckIndexFromBottom++,
-				})
-			: effectiveInfluencedBy && CARD_SENDING_TO_TOP.includes(effectiveInfluencedBy)
+		let cardWithPosition =
+			effectiveInfluencedBy && CARD_SENDING_TO_BOTTOM.includes(effectiveInfluencedBy)
 				? cardWithInfluenceBack.update({
-						positionFromTop: DeckCard.deckIndexFromTop--,
+						positionFromBottom: DeckCard.deckIndexFromBottom++,
 					})
-				: cardWithInfluenceBack;
+				: effectiveInfluencedBy && CARD_SENDING_TO_TOP.includes(effectiveInfluencedBy)
+					? cardWithInfluenceBack.update({
+							positionFromTop: DeckCard.deckIndexFromTop--,
+						})
+					: cardWithInfluenceBack;
 		if (gameEvent.additionalData.influencedByCardId === CardIds.Kiljaeden_KiljaedensPortalEnchantment_GDB_145e) {
 			const portalId = CardIds.Kiljaeden_KiljaedensPortalEnchantment_GDB_145e;
 			cardWithPosition = cardWithPosition.update({
