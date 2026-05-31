@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { ArenaClassStat, ArenaClassStats } from '@firestone-hs/arena-stats';
-import { ALL_CLASSES, normalizeHeroPower } from '@firestone-hs/reference-data';
+import { ALL_CLASSES, CardClass, normalizeHeroPower } from '@firestone-hs/reference-data';
 import { buildColor } from '@firestone/constructed/view';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 
@@ -151,9 +151,7 @@ export class ArenaClassStatsMatrixComponent {
 		private readonly cdr: ChangeDetectorRef,
 	) {
 		this.globalLabel = this.i18n.translateString('app.arena.class-tier-list.matrix.global') ?? 'Global';
-		this.globalColumnTooltip = this.i18n.translateString(
-			'app.arena.class-tier-list.matrix.global-column-tooltip',
-		);
+		this.globalColumnTooltip = this.i18n.translateString('app.arena.class-tier-list.matrix.global-column-tooltip');
 		this.globalRowTooltip = this.i18n.translateString('app.arena.class-tier-list.matrix.global-row-tooltip');
 		this.resetSortCornerAria =
 			this.i18n.translateString('app.arena.class-tier-list.matrix.reset-sort-corner') ?? '';
@@ -401,11 +399,7 @@ export class ArenaClassStatsMatrixComponent {
 		if (!row) {
 			return;
 		}
-		const sorted = sortIdsByWinrate(
-			[...this.baseColumnIds],
-			(colId) => this.cellWinrate(row, colId),
-			direction,
-		);
+		const sorted = sortIdsByWinrate([...this.baseColumnIds], (colId) => this.cellWinrate(row, colId), direction);
 		this.columnOrderFromLastRowSort = sorted;
 	}
 
@@ -415,11 +409,7 @@ export class ArenaClassStatsMatrixComponent {
 		}
 		const { columnKey, direction } = this.sortState;
 		const dataRows = this.baseRows.filter((r) => !r.isGlobal);
-		const sorted = sortRowsByWinrate(
-			dataRows,
-			(row) => this.cellWinrate(row, columnKey),
-			direction,
-		);
+		const sorted = sortRowsByWinrate(dataRows, (row) => this.cellWinrate(row, columnKey), direction);
 		this.rowOrderFromLastColumnSort = sorted.map((r) => r.id);
 	}
 
@@ -430,15 +420,17 @@ export class ArenaClassStatsMatrixComponent {
 				heroPowers.add(normalizeHeroPower(stat.playerHeroPower, this.allCards.getService()));
 			}
 		}
-		return Array.from(heroPowers).sort((a, b) => {
-			const nameA = this.i18n.translateString(
-				`global.class.${this.allCards.getCard(a)?.classes?.[0]?.toLowerCase()}`,
-			);
-			const nameB = this.i18n.translateString(
-				`global.class.${this.allCards.getCard(b)?.classes?.[0]?.toLowerCase()}`,
-			);
-			return nameA.localeCompare(nameB);
-		});
+		return Array.from(heroPowers)
+			.filter((e) => !this.allCards.getCard(e)?.classes?.includes(CardClass[CardClass.NEUTRAL]))
+			.sort((a, b) => {
+				const nameA = this.i18n.translateString(
+					`global.class.${this.allCards.getCard(a)?.classes?.[0]?.toLowerCase()}`,
+				);
+				const nameB = this.i18n.translateString(
+					`global.class.${this.allCards.getCard(b)?.classes?.[0]?.toLowerCase()}`,
+				);
+				return nameA.localeCompare(nameB);
+			});
 	}
 
 	private collectClasses(stats: readonly ArenaClassStat[]): readonly string[] {
