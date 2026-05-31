@@ -138,7 +138,7 @@ export class CreateCardInDeckParser implements EventParser {
 				// - this means we now have two cards with entityId = 76, one in deck, and one in hand
 				// I would like to try again to hide the entityId in opponent's deck, and better document the case
 				// where it causes an issue
-				entityId: isPlayer ? entityId : undefined,
+				entityId: isPlayer || positionFromTop != null || positionFromBottom != null ? entityId : undefined,
 				trueEntityId: entityId,
 				cardName:
 					(hideKiljaedenPortalDeck
