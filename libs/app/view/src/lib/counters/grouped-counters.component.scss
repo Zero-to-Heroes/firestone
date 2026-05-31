@@ -8,6 +8,7 @@
 	border-radius: 10px;
 
 	&.scalable {
+		transform-origin: top left;
 		transform: scale(var(--grouped-counters-scale, 1));
 	}
 
