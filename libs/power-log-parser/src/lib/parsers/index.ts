@@ -113,7 +113,7 @@ export { MinionGoDormantParser } from './minion-go-dormant-parser';
 export { MinionOnBoardAttackUpdatedParser } from './minion-on-board-attack-updated-parser';
 export { MinionSummonedParser } from './minion-summoned-parser';
 export { MinionsWillDieParser } from './minions-will-die-parser';
-export { MonsterRunStepParser } from './monster-run-step-parser';
+export { MonsterRunStepParser } from './monster-hunt-step-parser';
 export { MulliganDealingParser } from './mulligan-dealing-parser';
 export { MulliganDoneParser } from './mulligan-done-parser';
 export { MulliganInputParser } from './mulligan-input-parser';

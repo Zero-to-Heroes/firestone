@@ -1,14 +1,11 @@
 import { GameTag, ScenarioId } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventProvider } from '../game-event';
-import { Action, Node, NodeType } from '../models';
+import { Action, Node, NodeType, TagChange } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
-import {
-	actionHasDungeonHealthPassiveOnHero,
-	lastHeroHealthTagChangeInAction,
-} from './pve-run-step-health-passive';
+import { lastHeroHealthTagChangeInAction } from './pve-run-step-health-passive';
 
 const STARTING_HEALTH = 10;
 
@@ -34,11 +31,9 @@ export class MonsterRunStepParser implements ActionParser {
 			return false;
 		}
 		const action = node.Object as Action;
-		const heroEntityId = this.resolveLocalHeroEntityId();
-		if (heroEntityId == null) {
-			return false;
-		}
-		return actionHasDungeonHealthPassiveOnHero(action, heroEntityId);
+		return action.Data.filter((d): d is TagChange => d instanceof TagChange).some(
+			(t) => t.Name === GameTag.HEALTH && !!t.DefChange?.trim().length,
+		);
 	}
 
 	CreateGameEventProviderFromNew(_node: Node): GameEventProvider[] | null {
@@ -57,9 +52,6 @@ export class MonsterRunStepParser implements ActionParser {
 					const action = node.Object as Action;
 					const heroEntityId = this.resolveLocalHeroEntityId();
 					if (heroEntityId == null) {
-						return null;
-					}
-					if (!actionHasDungeonHealthPassiveOnHero(action, heroEntityId)) {
 						return null;
 					}
 					const tagChange = lastHeroHealthTagChangeInAction(action, heroEntityId);
