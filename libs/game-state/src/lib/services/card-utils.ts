@@ -407,6 +407,7 @@ export const addGuessInfoToCard = (
 					...options,
 					currentClass: options.currentClass ?? deckState.getCurrentClass(),
 					initialDecklist: options.initialDecklist ?? deckState.deckList?.map((c) => c.cardId) ?? [],
+					metadata: options.metadata ?? gameState.metadata,
 				};
 				const guessedInfo = cardImpl.guessInfo?.({
 					card,
