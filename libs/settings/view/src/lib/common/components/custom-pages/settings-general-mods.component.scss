@@ -198,4 +198,22 @@
 .warning {
 	padding: 5px;
 	border: 1px solid;
+	position: relative;
+}
+
+.warning-netease {
+	padding-top: 15px;
+
+	.close-button {
+		position: absolute;
+		right: 0;
+		top: 0;
+		width: 30px;
+		height: 30px;
+
+		&:hover {
+			--icon-color: var(--color-7);
+			background: #c21913;
+		}
+	}
 }

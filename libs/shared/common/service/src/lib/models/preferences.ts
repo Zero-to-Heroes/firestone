@@ -64,6 +64,7 @@ export class Preferences implements IPreferences {
 
 	readonly modsEnabled: boolean;
 	readonly modsAutoUpdate: boolean = true;
+	readonly modsDismissedNetEaseWarning: boolean = false;
 	readonly disableLocalCache: boolean;
 
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)

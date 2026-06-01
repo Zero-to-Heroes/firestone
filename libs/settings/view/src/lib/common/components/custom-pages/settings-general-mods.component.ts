@@ -1,9 +1,11 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { BnetRegion } from '@firestone-hs/reference-data';
 import { ModData, ModsManagerService } from '@firestone/mods/common';
+import { AccountService } from '@firestone/profile/services';
 import { GameStatusService, Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
-import { Observable, filter } from 'rxjs';
+import { Observable, combineLatest, filter } from 'rxjs';
 
 @Component({
 	standalone: false,
@@ -17,116 +19,129 @@ import { Observable, filter } from 'rxjs';
 		<div class="general-mods" scrollable>
 			<h2 class="title" [fsTranslate]="'settings.general.mods.title'"></h2>
 			<p class="warning" [fsTranslate]="'settings.general.mods.warning'"></p>
-			<p class="instructions" [innerHTML]="instructions | safe"></p>
-
-			<div class="section">
-				<h3 class="section-title" [fsTranslate]="'settings.general.mods.check-mods-title'"></h3>
-				<p class="description" [fsTranslate]="'settings.general.mods.check-mods-description'"></p>
-				<div class="button-group">
-					<input
-						class="game-location"
-						[(ngModel)]="gameLocation"
-						(mousedown)="preventDrag($event)"
-						[placeholder]="'settings.general.mods.game-location-placeholder' | fsTranslate"
-					/>
-					<button (mousedown)="checkMods()" [fsTranslate]="'settings.general.mods.check-mods'"></button>
-				</div>
+			<div class="warning warning-netease" *ngIf="showNetEaseWarning$ | async">
+				<div
+					class="close-button"
+					helpTooltip="忽略警告并启用模组。"
+					(click)="closeNetEaseWarning()"
+					inlineSVG="assets/svg/close.svg"
+				></div>
+				<p class="text">网易已正式禁止使用MOD。如果您仍希望使用MOD，请忽略此消息，并自行承担风险。</p>
 			</div>
+			<ng-container *ngIf="modsAllowed$ | async">
+				<p class="instructions" [innerHTML]="instructions | safe"></p>
 
-			<div class="section" [ngClass]="{ disabled: !modsChecked }">
-				<h3 class="section-title" [fsTranslate]="'settings.general.mods.enable-mods-title'"></h3>
-				<p
-					class="description"
-					[fsTranslate]="'settings.general.mods.enable-mods-description'"
-					*ngIf="!areModsInstalled"
-				></p>
-				<p
-					class="description"
-					[fsTranslate]="'settings.general.mods.disable-mods-description'"
-					*ngIf="areModsInstalled"
-				></p>
-				<div
-					class="game-running-error"
-					[fsTranslate]="'settings.general.mods.game-running-error'"
-					*ngIf="showGameRunningError"
-				></div>
-				<div
-					class="mods-install-status"
-					*ngIf="modsInstallStatus$ | async as status"
-					[fsTranslate]="status"
-				></div>
-				<div class="button-group" [ngClass]="{ pending: installOngoing }">
-					<button
+				<div class="section">
+					<h3 class="section-title" [fsTranslate]="'settings.general.mods.check-mods-title'"></h3>
+					<p class="description" [fsTranslate]="'settings.general.mods.check-mods-description'"></p>
+					<div class="button-group">
+						<input
+							class="game-location"
+							[(ngModel)]="gameLocation"
+							(mousedown)="preventDrag($event)"
+							[placeholder]="'settings.general.mods.game-location-placeholder' | fsTranslate"
+						/>
+						<button (mousedown)="checkMods()" [fsTranslate]="'settings.general.mods.check-mods'"></button>
+					</div>
+				</div>
+
+				<div class="section" [ngClass]="{ disabled: !modsChecked }">
+					<h3 class="section-title" [fsTranslate]="'settings.general.mods.enable-mods-title'"></h3>
+					<p
+						class="description"
+						[fsTranslate]="'settings.general.mods.enable-mods-description'"
 						*ngIf="!areModsInstalled"
-						(mousedown)="enableMods()"
-						[fsTranslate]="'settings.general.mods.enable-mods'"
-					></button>
-					<!-- <button
+					></p>
+					<p
+						class="description"
+						[fsTranslate]="'settings.general.mods.disable-mods-description'"
+						*ngIf="areModsInstalled"
+					></p>
+					<div
+						class="game-running-error"
+						[fsTranslate]="'settings.general.mods.game-running-error'"
+						*ngIf="showGameRunningError"
+					></div>
+					<div
+						class="mods-install-status"
+						*ngIf="modsInstallStatus$ | async as status"
+						[fsTranslate]="status"
+					></div>
+					<div class="button-group" [ngClass]="{ pending: installOngoing }">
+						<button
+							*ngIf="!areModsInstalled"
+							(mousedown)="enableMods()"
+							[fsTranslate]="'settings.general.mods.enable-mods'"
+						></button>
+						<!-- <button
 						*ngIf="areModsInstalled"
 						(mousedown)="refreshEngine()"
 						[helpTooltip]="'settings.general.mods.refresh-engine-tooltip' | fsTranslate"
 					>
 						{{ refreshEngineTitle }}
 					</button> -->
-					<button
-						*ngIf="areModsInstalled"
-						(mousedown)="disableMods()"
-						[fsTranslate]="'settings.general.mods.disable-mods'"
-					></button>
-				</div>
-			</div>
-			<ng-container *ngIf="{ inGame: inGame$ | async } as value">
-				<div class="section" [ngClass]="{ disabled: !modsChecked || !areModsInstalled || value.inGame }">
-					<h3 class="section-title" [fsTranslate]="'settings.general.mods.add-mods-title'"></h3>
-					<p class="warning" *ngIf="value.inGame" [innerHTML]="needToCloseGameWarning | safe"></p>
-					<p class="description" [innerHTML]="addModsDescriptions | safe"></p>
-					<p class="description" [innerHTML]="installedModsDescription | safe"></p>
-
-					<button
-						class="check-updates-button"
-						*ngIf="areModsInstalled && !!installedMods?.length"
-						[ngClass]="{ disabled: checkForUpdatesButtonDisabled }"
-						(mousedown)="checkForUpdates()"
-						[helpTooltip]="'settings.general.mods.check-for-updates-tooltip' | fsTranslate"
-					>
-						{{ checkForUpdatesLabel }}
-					</button>
-
-					<preference-toggle
-						*ngIf="areModsInstalled"
-						class="auto-update-toggle"
-						[field]="'modsAutoUpdate'"
-						[label]="'settings.general.mods.auto-update-label' | fsTranslate"
-						[tooltip]="'settings.general.mods.auto-update-tooltip' | fsTranslate"
-					></preference-toggle>
-
-					<div class="installed-mods">
-						<div class="mod" *ngFor="let mod of installedMods; trackBy: trackByMod">
-							<div
-								class="update-available"
-								*ngIf="!!mod.updateAvailableVersion"
-								inlineSVG="assets/svg/restore.svg"
-								[helpTooltip]="'settings.general.mods.update-available' | fsTranslate"
-								(click)="updateMod(mod)"
-							></div>
-							<div class="mod-name" *ngIf="!mod.DownloadLink" [helpTooltip]="mod.Description">{{ mod.Name }}</div>
-							<a
-								class="mod-name"
-								*ngIf="mod.DownloadLink"
-								href="{{ mod.DownloadLink }}"
-								target="_blank"
-								[helpTooltip]="mod.Description"
-								>{{ mod.Name }}</a
-							>
-							<div class="mod-version" *ngIf="mod.Version">v{{ mod.Version }}</div>
-							<fs-toggle-view
-								class="toggle-button"
-								[value]="mod.Registered"
-								[toggleFunction]="toggleMod(mod)"
-							></fs-toggle-view>
-						</div>
+						<button
+							*ngIf="areModsInstalled"
+							(mousedown)="disableMods()"
+							[fsTranslate]="'settings.general.mods.disable-mods'"
+						></button>
 					</div>
 				</div>
+				<ng-container *ngIf="{ inGame: inGame$ | async } as value">
+					<div class="section" [ngClass]="{ disabled: !modsChecked || !areModsInstalled || value.inGame }">
+						<h3 class="section-title" [fsTranslate]="'settings.general.mods.add-mods-title'"></h3>
+						<p class="warning" *ngIf="value.inGame" [innerHTML]="needToCloseGameWarning | safe"></p>
+						<p class="description" [innerHTML]="addModsDescriptions | safe"></p>
+						<p class="description" [innerHTML]="installedModsDescription | safe"></p>
+
+						<button
+							class="check-updates-button"
+							*ngIf="areModsInstalled && !!installedMods?.length"
+							[ngClass]="{ disabled: checkForUpdatesButtonDisabled }"
+							(mousedown)="checkForUpdates()"
+							[helpTooltip]="'settings.general.mods.check-for-updates-tooltip' | fsTranslate"
+						>
+							{{ checkForUpdatesLabel }}
+						</button>
+
+						<preference-toggle
+							*ngIf="areModsInstalled"
+							class="auto-update-toggle"
+							[field]="'modsAutoUpdate'"
+							[label]="'settings.general.mods.auto-update-label' | fsTranslate"
+							[tooltip]="'settings.general.mods.auto-update-tooltip' | fsTranslate"
+						></preference-toggle>
+
+						<div class="installed-mods">
+							<div class="mod" *ngFor="let mod of installedMods; trackBy: trackByMod">
+								<div
+									class="update-available"
+									*ngIf="!!mod.updateAvailableVersion"
+									inlineSVG="assets/svg/restore.svg"
+									[helpTooltip]="'settings.general.mods.update-available' | fsTranslate"
+									(click)="updateMod(mod)"
+								></div>
+								<div class="mod-name" *ngIf="!mod.DownloadLink" [helpTooltip]="mod.Description">
+									{{ mod.Name }}
+								</div>
+								<a
+									class="mod-name"
+									*ngIf="mod.DownloadLink"
+									href="{{ mod.DownloadLink }}"
+									target="_blank"
+									[helpTooltip]="mod.Description"
+									>{{ mod.Name }}</a
+								>
+								<div class="mod-version" *ngIf="mod.Version">v{{ mod.Version }}</div>
+								<fs-toggle-view
+									class="toggle-button"
+									[value]="mod.Registered"
+									[toggleFunction]="toggleMod(mod)"
+								></fs-toggle-view>
+							</div>
+						</div>
+					</div>
+				</ng-container>
 			</ng-container>
 		</div>
 	`,
@@ -136,6 +151,8 @@ import { Observable, filter } from 'rxjs';
 export class SettingsGeneralModsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	modsInstallStatus$: Observable<string | null>;
 	inGame$: Observable<boolean>;
+	showNetEaseWarning$: Observable<boolean>;
+	modsAllowed$: Observable<boolean>;
 
 	gameLocation: string;
 	status: string;
@@ -170,14 +187,20 @@ export class SettingsGeneralModsComponent extends AbstractSubscriptionComponent 
 		private readonly gameStatus: GameStatusService,
 		// private readonly modsConfig: ModsConfigService,
 		private readonly modsManager: ModsManagerService,
+		private readonly accountService: AccountService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.modsManager, this.gameStatus, this.prefs);
+		await waitForReady(this.modsManager, this.gameStatus, this.prefs, this.accountService);
 
 		this.inGame$ = this.gameStatus.inGame$$.asObservable().pipe(this.mapData((info) => info ?? false));
+		this.showNetEaseWarning$ = combineLatest([
+			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.modsDismissedNetEaseWarning)),
+			this.accountService.region$$,
+		]).pipe(this.mapData(([dismissedWarning, region]) => !dismissedWarning && region === BnetRegion.REGION_CN));
+		this.modsAllowed$ = this.showNetEaseWarning$.pipe(this.mapData((show) => !show));
 		this.modsManager.modsData$$
 			.asObservable()
 			.pipe(
@@ -325,6 +348,12 @@ export class SettingsGeneralModsComponent extends AbstractSubscriptionComponent 
 
 	async updateMod(mod: ModData): Promise<void> {
 		await this.modsManager.updateMod(mod);
+	}
+
+	async closeNetEaseWarning() {
+		const prefs = await this.prefs.getPreferences();
+		const newPrefs: Preferences = { ...prefs, modsDismissedNetEaseWarning: true };
+		await this.prefs.savePreferences(newPrefs);
 	}
 
 	preventDrag(event: MouseEvent) {
