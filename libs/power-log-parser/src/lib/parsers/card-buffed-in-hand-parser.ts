@@ -1,7 +1,7 @@
 import { BlockType, CardIds, GameTag, MetaTags, Zone } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventHelper, GameEventProvider } from '../game-event';
-import { Action, FullEntity, MetaData, Node, NodeType, SubSpell, TagChange } from '../models';
+import { Action, MetaData, Node, NodeType, SubSpell, TagChange } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -54,6 +54,7 @@ export class CardBuffedInHandParser implements ActionParser {
 		CardIds.GalakrondTheUnbreakable_GalakrondAzerothsEndToken,
 		CardIds.GalakrondTheUnbreakable_GalakrondTheApocalypseToken,
 		CardIds.GalakrondTheUnbreakable,
+		CardIds.GemstoneHoarder_CATA_897,
 		CardIds.GrimestreetEnforcer,
 		CardIds.GrimestreetEnforcer_WON_046,
 		CardIds.GrimestreetOutfitter,
@@ -120,15 +121,9 @@ export class CardBuffedInHandParser implements ActionParser {
 		CardIds.WilfredFizzlebang,
 	];
 
-	private validHoldWhenDrawnBuffers: string[] = [
-		CardIds.SkullOfGuldan_BT_601,
-		CardIds.SkullOfGuldanTavernBrawl,
-	];
+	private validHoldWhenDrawnBuffers: string[] = [CardIds.SkullOfGuldan_BT_601, CardIds.SkullOfGuldanTavernBrawl];
 
-	private validSubSpellBuffers: string[] = [
-		CardIds.AegwynnTheGuardianCore,
-		CardIds.EfficientOctoBot,
-	];
+	private validSubSpellBuffers: string[] = [CardIds.AegwynnTheGuardianCore, CardIds.EfficientOctoBot];
 
 	private validTriggerBuffers: string[] = [
 		CardIds.FarWatchPost,
@@ -175,9 +170,16 @@ export class CardBuffedInHandParser implements ActionParser {
 		[CardIds.FreezingTrapCore, [CardIds.FreezingTrap_TrappedLegacyEnchantment]],
 		[CardIds.FreezingTrapLegacy, [CardIds.FreezingTrap_TrappedLegacyEnchantment]],
 		[CardIds.FreezingTrapVanilla, [CardIds.FreezingTrap_TrappedLegacyEnchantment]],
-		[CardIds.GalakrondTheUnbreakable_GalakrondAzerothsEndToken, [CardIds.GalakrondTheUnbreakable_GalakrondsStrengthEnchantment_DRG_650e3]],
-		[CardIds.GalakrondTheUnbreakable_GalakrondTheApocalypseToken, [CardIds.GalakrondTheUnbreakable_GalakrondsStrengthEnchantment_DRG_650e2]],
+		[
+			CardIds.GalakrondTheUnbreakable_GalakrondAzerothsEndToken,
+			[CardIds.GalakrondTheUnbreakable_GalakrondsStrengthEnchantment_DRG_650e3],
+		],
+		[
+			CardIds.GalakrondTheUnbreakable_GalakrondTheApocalypseToken,
+			[CardIds.GalakrondTheUnbreakable_GalakrondsStrengthEnchantment_DRG_650e2],
+		],
 		[CardIds.GalakrondTheUnbreakable, [CardIds.GalakrondTheUnbreakable_GalakrondsStrengthEnchantment_DRG_650e]],
+		[CardIds.GemstoneHoarder_CATA_897, [CardIds.GemstoneHoarder_HoardedGemstoneEnchantment_CATA_897e3]],
 		[CardIds.GrimestreetEnforcer, [CardIds.GrimestreetEnforcer_SmugglingEnchantment]],
 		[CardIds.GrimestreetEnforcer_WON_046, [CardIds.GrimestreetEnforcer_SmugglingEnchantment_WON_046e]],
 		[CardIds.GrimestreetOutfitter, [CardIds.GrimestreetOutfitter_SmugglingEnchantment]],
@@ -199,25 +201,49 @@ export class CardBuffedInHandParser implements ActionParser {
 		[CardIds.KoboldMiner_AzeriteChunkToken_WW_001t9, [CardIds.AzeriteGem_AzeriteGlowEnchantment_WW_001t14e]],
 		[CardIds.KoboldMiner_AzeriteGemToken_WW_001t14, [CardIds.AzeriteGem_AzeriteGlowEnchantment_WW_001t14e]],
 		[CardIds.KoboldMiner_TheAzeriteHawkToken_WW_001t24, [CardIds.TidestoneOfGolganneth_ReducedEnchantment]],
-		[CardIds.KoboldMiner_TheAzeriteScorpionToken_WW_001t23, [CardIds.TheAzeriteScorpion_ScorpionsStingEnchantment_WW_001t23e]],
+		[
+			CardIds.KoboldMiner_TheAzeriteScorpionToken_WW_001t23,
+			[CardIds.TheAzeriteScorpion_ScorpionsStingEnchantment_WW_001t23e],
+		],
 		[CardIds.TheCountess_LegendaryInvitationToken, [CardIds.TheCountess_GuestOfHonorEnchantment]],
 		[CardIds.LegendaryLootTavernBrawl, [CardIds.LegendaryLoot_LootedTavernBrawlEnchantment]],
-		[CardIds.LegendaryLoot_LegendaryLootTavernBrawlEnchantment, [CardIds.LegendaryLoot_LootedTavernBrawlEnchantment]],
-		[CardIds.MesaduneTheFractured_WW_429, [CardIds.AzeriteVein_FracturedEnchantment_WW_422e, CardIds.AzeriteVein_FracturedEnchantment_WW_422e2]],
+		[
+			CardIds.LegendaryLoot_LegendaryLootTavernBrawlEnchantment,
+			[CardIds.LegendaryLoot_LootedTavernBrawlEnchantment],
+		],
+		[
+			CardIds.MesaduneTheFractured_WW_429,
+			[CardIds.AzeriteVein_FracturedEnchantment_WW_422e, CardIds.AzeriteVein_FracturedEnchantment_WW_422e2],
+		],
 		[CardIds.NightmareDragonkin_EDR_890, [CardIds.Cost2LegacyEnchantment_GBL_002e]],
-		[CardIds.OrbOfRevelationTavernBrawl, [CardIds.OrbOfRevelation_OrbOfRevelationTavernBrawlEnchantment_PVPDR_BAR_Passive08e1]],
-		[CardIds.OrbOfRevelation_OrbOfRevelationTavernBrawlEnchantment_PVPDR_BAR_Passive08e1, [CardIds.OrbOfRevelation_OrbOfRevelationTavernBrawlEnchantment_PVPDR_BAR_Passive08e2]],
+		[
+			CardIds.OrbOfRevelationTavernBrawl,
+			[CardIds.OrbOfRevelation_OrbOfRevelationTavernBrawlEnchantment_PVPDR_BAR_Passive08e1],
+		],
+		[
+			CardIds.OrbOfRevelation_OrbOfRevelationTavernBrawlEnchantment_PVPDR_BAR_Passive08e1,
+			[CardIds.OrbOfRevelation_OrbOfRevelationTavernBrawlEnchantment_PVPDR_BAR_Passive08e2],
+		],
 		[CardIds.PredatoryInstincts, [CardIds.PredatoryInstincts_PredatoryInstinctsEnchantment]],
 		[CardIds.RelicOfDimensions, [CardIds.RelicOfDimensions_DimensionalEnchantment]],
 		[CardIds.Rheastrasza_PurifiedDragonNestToken_WW_824t, [CardIds.Rheastrasza_HappilyHatchedEnchantment_WW_824e]],
-		[CardIds.RingOfPhaseshifting_RingOfPhaseshiftingTavernBrawlEnchantment, [CardIds.RingOfPhaseshifting_PhaseshiftedTavernBrawlEnchantment]],
-		[CardIds.RuniTimeExplorer_RuinsOfKoruneToken_WON_053t6, [CardIds.RuinsOfKorune_KorunesBlessingEnchantment_WON_053t6e]],
+		[
+			CardIds.RingOfPhaseshifting_RingOfPhaseshiftingTavernBrawlEnchantment,
+			[CardIds.RingOfPhaseshifting_PhaseshiftedTavernBrawlEnchantment],
+		],
+		[
+			CardIds.RuniTimeExplorer_RuinsOfKoruneToken_WON_053t6,
+			[CardIds.RuinsOfKorune_KorunesBlessingEnchantment_WON_053t6e],
+		],
 		[CardIds.SaloonBrewmaster_WW_423, [CardIds.SaloonBrewmaster_OrderUpEnchantment_WW_423e]],
 		[CardIds.ScavengersIngenuity, [CardIds.ScavengersIngenuity_PackTacticsEnchantment]],
 		[CardIds.ScourgeIllusionist, [CardIds.ScourgeIllusionist_IllusionEnchantment]],
 		[CardIds.SesselieOfTheFaeCourt_REV_319, [CardIds.SesselieOfTheFaeCourt_SesseliesBlessingEnchantment]],
 		[CardIds.Shadowcaster, [CardIds.Shadowcaster_FlickeringDarknessEnchantment]],
-		[CardIds.Shadowcasting101_Shadowcasting101TavernBrawlEnchantment_PVPDR_AV_Passive04e1, [CardIds.Shadowcasting101_Shadowcasting101TavernBrawlEnchantment_PVPDR_AV_Passive04e2]],
+		[
+			CardIds.Shadowcasting101_Shadowcasting101TavernBrawlEnchantment_PVPDR_AV_Passive04e1,
+			[CardIds.Shadowcasting101_Shadowcasting101TavernBrawlEnchantment_PVPDR_AV_Passive04e2],
+		],
 		[CardIds.Shadowfiend_WON_061, [CardIds.Shadowfiend_ShadowfiendedEnchantment_WON_061e]],
 		[CardIds.Shadowfiend, [CardIds.Shadowfiend_ShadowfiendedEnchantment]],
 		[CardIds.ShadowstepCore, [CardIds.CheatDeath_CloseCallEnchantment]],
@@ -240,7 +266,10 @@ export class CardBuffedInHandParser implements ActionParser {
 		[CardIds.TheDarkPortal_BT_302, [CardIds.TheDarkPortal_DarkPortalEnchantment]],
 		[CardIds.TroggBeastrager, [CardIds.TroggBeastrager_SmugglingEnchantment]],
 		[CardIds.Valanyr, [CardIds.Valanyr_ValanyrReequipEffectDummy]],
-		[CardIds.VelarokWindblade_VelarokTheDeceiverToken_WW_364t, [CardIds.VelarokTheDeceiver_VelarokTheDeceiverEnchantment_WW_364te]],
+		[
+			CardIds.VelarokWindblade_VelarokTheDeceiverToken_WW_364t,
+			[CardIds.VelarokTheDeceiver_VelarokTheDeceiverEnchantment_WW_364te],
+		],
 		[CardIds.WagglePick, [CardIds.CheatDeath_CloseCallEnchantment]],
 		[CardIds.WaywardSage, [CardIds.WaywardSage_FoundTheWrongWayEnchantment]],
 		[CardIds.WilfredFizzlebang, [CardIds.WilfredFizzlebang_MasterSummonerEnchantment]],
@@ -296,7 +325,11 @@ export class CardBuffedInHandParser implements ActionParser {
 		}
 
 		const bufferCardId = this.buildSource(subSpell);
-		if (!bufferCardId || !this.validBuffers.includes(bufferCardId) || !this.validSubSpellBuffers.includes(bufferCardId)) {
+		if (
+			!bufferCardId ||
+			!this.validBuffers.includes(bufferCardId) ||
+			!this.validSubSpellBuffers.includes(bufferCardId)
+		) {
 			return null;
 		}
 
@@ -400,16 +433,16 @@ export class CardBuffedInHandParser implements ActionParser {
 
 		const meta = node.Object as MetaData;
 		const metaType = meta.Meta;
-		if (metaType === (MetaTags.HOLD_DRAWN_CARD as number) && !this.validHoldWhenDrawnBuffers.includes(bufferCardId)) {
+		if (
+			metaType === (MetaTags.HOLD_DRAWN_CARD as number) &&
+			!this.validHoldWhenDrawnBuffers.includes(bufferCardId)
+		) {
 			return null;
 		}
 
-		const entitiesBuffedInHand = meta.MetaInfo
-			.map((info) =>
-				this.GameState.CurrentEntities.has(info.Entity)
-					? this.GameState.CurrentEntities.get(info.Entity)!
-					: null,
-			)
+		const entitiesBuffedInHand = meta.MetaInfo.map((info) =>
+			this.GameState.CurrentEntities.has(info.Entity) ? this.GameState.CurrentEntities.get(info.Entity)! : null,
+		)
 			.filter((entity) => entity != null)
 			.filter((entity) => entity!.GetTag(GameTag.ZONE) === (Zone.HAND as number));
 
