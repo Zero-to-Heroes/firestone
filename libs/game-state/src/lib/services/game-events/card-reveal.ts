@@ -103,6 +103,8 @@ const revealRelatedCards = (deck: DeckState, card: DeckCard, allCards: CardsFaca
 
 	if (
 		!card.stolenFromOpponent &&
+		!card.creatorCardId &&
+		!card.creatorEntityId &&
 		(hasMechanic(refCard, GameTag.FABLED) ||
 			hasMechanic(refCard, GameTag.FABLED_PLUS) ||
 			hasMechanic(refCard, GameTag.IS_FABLED_BUNDLE_CARD))
