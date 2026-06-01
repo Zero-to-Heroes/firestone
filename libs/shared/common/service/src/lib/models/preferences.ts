@@ -84,6 +84,7 @@ export class Preferences implements IPreferences {
 
 	readonly showLottery: boolean | null = null;
 	readonly lotteryOverlay: boolean | null = null;
+	readonly lotteryHideAccountName: boolean | null = null;
 	readonly lotteryCurrentModule: LotteryTabType = 'lottery';
 	readonly lotteryShowHiddenWindowNotification: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)

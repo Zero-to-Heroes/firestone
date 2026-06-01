@@ -1,5 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { LotteryConfigResourceStatType, LotteryFacadeService, LotteryState } from '@firestone/lottery/common';
+import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { OverwolfService, UserService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest, filter, shareReplay } from 'rxjs';
@@ -19,7 +20,7 @@ import { LocalizationFacadeService } from '../../services/localization-facade.se
 					<div class="value">{{ totalPoints$ | async }}</div>
 					<div class="text" [owTranslate]="'app.lottery.lottery.points-text'"></div>
 				</div>
-				<div class="account">
+				<div class="account" *ngIf="showAccountName$ | async">
 					<ng-container [ngSwitch]="loggedIn$ | async">
 						<div class="sign-in" *ngSwitchCase="false">
 							<button
@@ -76,6 +77,7 @@ export class LotteryLotteryWidgetComponent extends AbstractSubscriptionComponent
 	loggedIn$: Observable<boolean>;
 
 	totalPoints$: Observable<string>;
+	showAccountName$: Observable<boolean>;
 
 	resourcesValue$: Observable<string>;
 	resourcesLabel$: Observable<string>;
@@ -95,12 +97,13 @@ export class LotteryLotteryWidgetComponent extends AbstractSubscriptionComponent
 		private readonly ow: OverwolfService,
 		private readonly userService: UserService,
 		private readonly lottery: LotteryFacadeService,
+		private readonly prefs: PreferencesService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.userService, this.lottery);
+		await waitForReady(this.userService, this.lottery, this.prefs);
 
 		this.userName$ = this.userService.user$$.pipe(this.mapData((currentUser) => currentUser?.username));
 		this.loggedIn$ = this.userName$.pipe(this.mapData((userName) => !!userName));
@@ -111,6 +114,8 @@ export class LotteryLotteryWidgetComponent extends AbstractSubscriptionComponent
 					'https://static.zerotoheroes.com/hearthstone/asset/firestone/images/social-share-login.png',
 			),
 		);
+
+		this.showAccountName$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => !prefs.lotteryHideAccountName));
 
 		const lottery$ = this.lottery.lottery$$.pipe(
 			filter((lottery) => !!lottery),
