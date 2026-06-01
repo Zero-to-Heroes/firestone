@@ -1,5 +1,5 @@
-import { ArenaRefService } from '@firestone/arena/data-access';
 import { GameTag } from '@firestone-hs/reference-data';
+import { ArenaRefService } from '@firestone/arena/data-access';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BoardSecret } from '../../../models/board-secret';
 import { DeckCard } from '../../../models/deck-card';
@@ -77,10 +77,9 @@ export class SecretCreatedInGameParser implements EventParser {
 			: this.helper.replaceCardInZone(previousOtherZone, cardWithGuessedInfo);
 		// console.debug('[secret-created] newOtherZone', newOtherZone);
 		const knownRef = cardId ? this.cards.getCard(cardId) : null;
+		const knownCardId = cardWithGuessedInfo.cardId || cardId;
 		const isResolvedSecretCard =
-			!!cardId &&
-			!!knownRef?.id &&
-			!!knownRef.mechanics?.includes(GameTag[GameTag.SECRET]);
+			!knownCardId || (!!knownRef?.id && !!knownRef.mechanics?.includes(GameTag[GameTag.SECRET]));
 		const cardForSecretPool = isResolvedSecretCard ? cardWithGuessedInfo : null;
 		const secretsConfig = await this.secretConfig.getValidSecrets(
 			currentState.metadata,
@@ -93,7 +92,10 @@ export class SecretCreatedInGameParser implements EventParser {
 		const boardSecretCardId = isResolvedSecretCard ? cardId : '';
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			otherZone: newOtherZone,
-			secrets: [...deck.secrets, BoardSecret.create(entityId, boardSecretCardId, secretsConfig)] as readonly BoardSecret[],
+			secrets: [
+				...deck.secrets,
+				BoardSecret.create(entityId, boardSecretCardId, secretsConfig),
+			] as readonly BoardSecret[],
 		} as DeckState);
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
