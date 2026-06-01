@@ -49,10 +49,12 @@ export const buildContextRelatedCardIds = (
 			if (hasOverride(dynamicCards)) {
 				return (dynamicCards as { cards: readonly string[] }).cards;
 			}
+			// Don't show the static cards if they are also part of the dynamic pool (can happen for Heralds)
+			let dedupedExistingRelatedCardIds = existingRelatedCardIds?.filter((c) => !dynamicCards?.includes(c));
 			// When the pool is too big, show it last
-			if (dynamicCards?.length >= 16 && existingRelatedCardIds?.length < 16) {
-				return [...(existingRelatedCardIds ?? []), ...(dynamicCards ?? [])];
+			if (dynamicCards?.length >= 16 && dedupedExistingRelatedCardIds?.length < 16) {
+				return [...(dedupedExistingRelatedCardIds ?? []), ...(dynamicCards ?? [])];
 			}
-			return [...(dynamicCards ?? []), ...(existingRelatedCardIds ?? [])];
+			return [...(dynamicCards ?? []), ...(dedupedExistingRelatedCardIds ?? [])];
 	}
 };
