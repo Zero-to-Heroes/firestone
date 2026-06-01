@@ -294,6 +294,7 @@ export { UnpopularHasBeen } from './unpopular-has-been';
 export { UnstablePortal } from './unstable-portal';
 export { UnstableSpellcaster } from './unstable-spellcaster';
 export { VarianKingOfStormwind } from './varian-king-of-stormwind';
+export { VelarokTheDeceiver } from './velarok-the-deceiver';
 export { VioletHaze } from './violet-haze';
 export { VoodooTotem } from './voodoo-totem';
 export { VujaDe } from './vuja-de';
