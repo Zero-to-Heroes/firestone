@@ -13,8 +13,8 @@ import {
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { waitForReady } from '@firestone/shared/framework/core';
+import { GlobalStatsService } from '@firestone/stats/services';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { GlobalStatsService } from '../../services/global-stats/global-stats.service';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 
 @Component({
@@ -115,12 +115,12 @@ export class AchievementViewComponent extends AbstractSubscriptionComponent impl
 		]).pipe(
 			this.mapData(
 				([pinnedAchievementIds, achievement]) =>
-					(pinnedAchievementIds.includes(achievement.hsAchievementId) ||
+					!!achievement.hsAchievementId &&
+					(!isAchievementFullyCompleted(achievement) ||
+						pinnedAchievementIds.includes(achievement.hsAchievementId) ||
 						pinnedAchievementIds.includes(
 							getAchievementFirstMissingStep(achievement)?.hsAchievementId ?? -1,
-						)) &&
-					!!achievement.hsAchievementId &&
-					!isAchievementFullyCompleted(achievement),
+						)),
 			),
 		);
 		this.isPinned$ = combineLatest([this.achievement$, this.pinnedAchievements$$]).pipe(
