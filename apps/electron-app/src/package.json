@@ -1,8 +1,8 @@
 {
-	"name": "firestone-desktop",
-	"productName": "Firestone Desktop",
+	"name": "firestone-standalone",
+	"productName": "Firestone Standalone",
 	"version": "@app-version@",
-	"description": "Firestone Desktop - Hearthstone companion app",
+	"description": "Firestone Standalone - Hearthstone companion app",
 	"main": "main.js",
 	"author": {
 		"name": "Sébastien Tromp",

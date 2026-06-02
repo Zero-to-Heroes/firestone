@@ -245,7 +245,7 @@ export default class App {
 
 		// Log startup info
 		console.log('='.repeat(80));
-		console.log('Firestone Desktop starting...');
+		console.log('Firestone Standalone starting...');
 		console.log(`Log file: ${logFilePath}`);
 		console.log(`App version: ${electronApp.getVersion()}`);
 		console.log(`Electron version: ${process.versions.electron}`);
