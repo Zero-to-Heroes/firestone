@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { GlobalStats } from '@firestone-hs/build-global-stats/dist/model/global-stats';
 import { ReviewMessage } from '@firestone-hs/build-global-stats/dist/review-message';
 import { extractStatsForGame, mergeStats } from '@firestone-hs/build-global-stats/dist/stats-builder';
-import { ManastormInfo } from '@firestone/app/common';
 import { Events } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import {
@@ -14,13 +13,20 @@ import {
 	UserService,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
-import { GameForUpload } from '@firestone/stats/services';
+import { GameForUpload } from '../models/game-for-upload/game-for-upload';
 
 const GLOBAL_STATS_ENDPOINT = 'https://quoneyok3sw7yewueok67w7cju0pzmeb.lambda-url.us-west-2.on.aws/';
 
+interface ReviewFinalizedInfo {
+	readonly type: string;
+	readonly reviewId: string;
+	readonly game: GameForUpload;
+	readonly xml: string;
+}
+
 @Injectable({ providedIn: 'root' })
 export class GlobalStatsService extends AbstractFacadeService<GlobalStatsService> {
-	public globalStats$$: SubscriberAwareBehaviorSubject<GlobalStats>;
+	public globalStats$$: SubscriberAwareBehaviorSubject<GlobalStats | null>;
 
 	private api: ApiRunner;
 	private localStorage: LocalStorageService;
@@ -37,7 +43,7 @@ export class GlobalStatsService extends AbstractFacadeService<GlobalStatsService
 	}
 
 	protected async init() {
-		this.globalStats$$ = new SubscriberAwareBehaviorSubject<GlobalStats>(null);
+		this.globalStats$$ = new SubscriberAwareBehaviorSubject<GlobalStats | null>(null);
 		this.api = AppInjector.get(ApiRunner);
 		this.localStorage = AppInjector.get(LocalStorageService);
 		this.user = AppInjector.get(UserService);
@@ -52,6 +58,9 @@ export class GlobalStatsService extends AbstractFacadeService<GlobalStatsService
 			}
 
 			const currentUser = await this.user.getCurrentUser();
+			if (!currentUser) {
+				return;
+			}
 			const remoteData = await this.api.callPostApi<{ result: GlobalStats }>(GLOBAL_STATS_ENDPOINT, {
 				userName: currentUser.username,
 				userId: currentUser.userId,
@@ -65,7 +74,7 @@ export class GlobalStatsService extends AbstractFacadeService<GlobalStatsService
 
 		this.events.on(Events.REVIEW_FINALIZED).subscribe(async (event) => {
 			console.debug('[global-stats] Replay created, received info');
-			const info: ManastormInfo = event.data[0];
+			const info: ReviewFinalizedInfo = event.data[0];
 			if (info && info.type === 'new-review') {
 				this.updateGlobalStats(info.reviewId, info.game, info.xml);
 			}
@@ -77,10 +86,10 @@ export class GlobalStatsService extends AbstractFacadeService<GlobalStatsService
 	}
 
 	protected override async createElectronProxy(ipcRenderer: any) {
-		this.globalStats$$ = new SubscriberAwareBehaviorSubject<GlobalStats>(null);
+		this.globalStats$$ = new SubscriberAwareBehaviorSubject<GlobalStats | null>(null);
 	}
 
-	private async updateGlobalStats(reviewId: string, game: GameForUpload, xml: string) {
+	private async updateGlobalStats(reviewId: string, game: GameForUpload, xml: string): Promise<GlobalStats | null | undefined> {
 		const currentGlobalStats = this.globalStats$$.getValue();
 		if (game.gameMode?.startsWith('mercenaries')) {
 			return currentGlobalStats;
@@ -88,9 +97,9 @@ export class GlobalStatsService extends AbstractFacadeService<GlobalStatsService
 		const message: ReviewMessage = {
 			reviewId: reviewId,
 			gameMode: game.gameMode,
-			replayKey: undefined,
+			replayKey: '',
 			playerRank: game.playerRank,
-			uploaderToken: undefined,
+			uploaderToken: '',
 		};
 		const statsFromGame = await extractStatsForGame(message, xml, this.allCards.getService());
 		if (!statsFromGame?.stats) {
@@ -101,5 +110,6 @@ export class GlobalStatsService extends AbstractFacadeService<GlobalStatsService
 		}
 		const mergedStats: GlobalStats = mergeStats(currentGlobalStats, statsFromGame);
 		this.localStorage.setItem(LocalStorageService.USER_GLOBAL_STATS, mergedStats);
+		return mergedStats;
 	}
 }

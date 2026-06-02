@@ -474,6 +474,7 @@ import { StatsDataAccessModule } from '@firestone/stats/data-access';
 import {
 	GAME_STATS_PROVIDER_SERVICE_TOKEN,
 	GameStatsProviderService,
+	GlobalStatsService,
 	StatsServicesModule,
 } from '@firestone/stats/services';
 import { TavernBrawlCommonModule } from '@firestone/tavern-brawl/common';
@@ -585,7 +586,6 @@ import { DynamicZoneHelperService } from './js/services/decktracker/dynamic-zone
 import { DecktrackerStateLoaderService } from './js/services/decktracker/main/decktracker-state-loader.service';
 import { ZoneOrderingService } from './js/services/decktracker/zone-ordering.service';
 import { DevService } from './js/services/dev.service';
-import { GlobalStatsService } from './js/services/global-stats/global-stats.service';
 import { HotkeyService } from './js/services/hotkey.service';
 import { HsClientConfigService } from './js/services/hs-client-config.service';
 import { LocalizationFacadeService } from './js/services/localization-facade.service';

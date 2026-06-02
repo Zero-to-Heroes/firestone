@@ -226,6 +226,7 @@ import { GameStatsLoaderService } from '@firestone/stats/data-access';
 import {
 	GAME_STATS_PROVIDER_SERVICE_TOKEN,
 	GameStatsProviderService,
+	GlobalStatsService,
 	MatchAnalysisService,
 	ReplayMetadataBuilderService,
 } from '@firestone/stats/services';
@@ -880,6 +881,9 @@ export const buildAppInjector = () => {
 	const gameStatsProviderService = new GameStatsProviderService(windowManager);
 	electronInjector.register(GameStatsProviderService, gameStatsProviderService);
 	electronInjector.register(GAME_STATS_PROVIDER_SERVICE_TOKEN, gameStatsProviderService);
+
+	const globalStatsService = new GlobalStatsService(windowManager);
+	electronInjector.register(GlobalStatsService, globalStatsService);
 
 	const expertContributors = new ExpertContributorsService(windowManager);
 	electronInjector.register(ExpertContributorsService, expertContributors);
