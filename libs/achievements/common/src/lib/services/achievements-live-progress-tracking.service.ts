@@ -9,7 +9,7 @@ import {
 } from '@firestone/memory';
 import { GameStatusService, PreferencesService } from '@firestone/shared/common/service';
 import { arraysEqual, SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
-import { HEARTHSTONE_GAME_ID, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
+import { waitForReady } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, distinctUntilChanged, filter, map, skipWhile, take, tap } from 'rxjs';
 import { buildAchievementHierarchy } from './achievement-utils';
 import { AchievementsMemoryMonitor } from './achievements-memory-monitor.service';
@@ -35,7 +35,6 @@ export class AchievementsLiveProgressTrackingService {
 		private readonly achievementsMemoryMonitor: AchievementsMemoryMonitor,
 		private readonly stateManager: AchievementsStateManagerService,
 		private readonly memory: MemoryInspectionService,
-		private readonly ow: OverwolfService,
 		private readonly gameStatus: GameStatusService,
 		private readonly prefs: PreferencesService,
 	) {
@@ -306,18 +305,12 @@ export class AchievementsLiveProgressTrackingService {
 	}
 
 	private async initAchievementsOnGameStart() {
-		if (await this.ow.inGame()) {
+		if (await this.gameStatus.inGame()) {
 			await this.assignAchievementsOnGameStart();
 		}
-		this.ow.addGameInfoUpdatedListener(async (res: any) => {
-			if (Math.floor(res?.gameInfo?.id / 10) === HEARTHSTONE_GAME_ID) {
-				if (this.ow.exitGame(res)) {
-					// this.achievementsOnGameStart$$.next([]);
-				} else if ((await this.ow.inGame()) && res.gameChanged) {
-					if (!this.achievementsOnGameStart$$.value.length) {
-						await this.assignAchievementsOnGameStart();
-					}
-				}
+		this.gameStatus.onGameStart(() => {
+			if (!this.achievementsOnGameStart$$.value.length) {
+				this.assignAchievementsOnGameStart();
 			}
 		});
 		this.gameEvents.allEvents.subscribe((gameEvent: GameEvent) => {

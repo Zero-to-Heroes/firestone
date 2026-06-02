@@ -2,6 +2,8 @@ import { NgZone } from '@angular/core';
 import {
 	AchievementHistoryService,
 	AchievementHistoryStorageService,
+	AchievementsLiveProgressTrackingService,
+	AchievementsLiveTrackingFacadeService,
 	AchievementsMemoryMonitor,
 	AchievementsNavigationService,
 	AchievementsNotificationService,
@@ -1119,6 +1121,20 @@ export const buildAppInjector = () => {
 
 	const liveStreamsService = new LiveStreamsService(windowManager);
 	electronInjector.register(LiveStreamsService, liveStreamsService);
+
+	const achievementsLiveProgressTrackingService = new AchievementsLiveProgressTrackingService(
+		gameEventsEmitter,
+		achievementsRefLoaderService,
+		achievementsMemoryMonitor,
+		achievementsStateManager,
+		memoryInspection,
+		gameStatus,
+		preferences,
+	);
+	electronInjector.register(AchievementsLiveProgressTrackingService, achievementsLiveProgressTrackingService);
+
+	const achievementsLiveTrackingFacadeService = new AchievementsLiveTrackingFacadeService(windowManager);
+	electronInjector.register(AchievementsLiveTrackingFacadeService, achievementsLiveTrackingFacadeService);
 
 	electronInjector.ready = true;
 	return electronInjector;
