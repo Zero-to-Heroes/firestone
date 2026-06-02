@@ -14,6 +14,8 @@ const COLLECTION_WIDTH = 1440;
 const COLLECTION_HEIGHT = 790;
 const BATTLEGROUNDS_WIDTH = 1360;
 const BATTLEGROUNDS_HEIGHT = 790;
+const LOTTERY_WIDTH = 400;
+const LOTTERY_HEIGHT = 400;
 
 function getAppIconPath(): string {
 	return app.isPackaged
@@ -49,6 +51,7 @@ export class ElectronWindowHandlerService implements IWindowHandlerService {
 	private collectionOverlayWindow: OverlayBrowserWindow | null = null;
 	private battlegroundsWindow: BrowserWindow | null = null;
 	private battlegroundsOverlayWindow: OverlayBrowserWindow | null = null;
+	private lotteryWindow: BrowserWindow | null = null;
 
 	/**
 	 * Close collection/settings windows when premium access is revoked (tray, overlay, and policy).
@@ -86,6 +89,9 @@ export class ElectronWindowHandlerService implements IWindowHandlerService {
 				}
 			} catch (_) {}
 			this.battlegroundsOverlayWindow = null;
+		}
+		if (this.lotteryWindow && !this.lotteryWindow.isDestroyed()) {
+			this.lotteryWindow.close();
 		}
 	}
 
@@ -133,7 +139,12 @@ export class ElectronWindowHandlerService implements IWindowHandlerService {
 		const effectiveUseOverlay = useOverlay && gameIsRunning;
 
 		if (effectiveUseOverlay) {
-			this.toggleBattlegroundsOverlayWindow(forcedStatus, canBringUpFromMinimized, gameInfo!.width, gameInfo!.height);
+			this.toggleBattlegroundsOverlayWindow(
+				forcedStatus,
+				canBringUpFromMinimized,
+				gameInfo!.width,
+				gameInfo!.height,
+			);
 		} else {
 			this.toggleBattlegroundsNormalWindow(forcedStatus, canBringUpFromMinimized, useOverlay);
 		}
@@ -714,8 +725,95 @@ export class ElectronWindowHandlerService implements IWindowHandlerService {
 		});
 	}
 
+	public showLotteryWindow(): void {
+		const existingLotteryWindow = this.getExistingLotteryWindow();
+		if (existingLotteryWindow) {
+			this.showExistingLotteryWindow(existingLotteryWindow);
+			return;
+		}
+
+		const preloadPath = join(__dirname, 'main.preload.js');
+		const windowIcon = nativeImage.createFromPath(getAppIconPath());
+
+		this.lotteryWindow = new BrowserWindow({
+			width: LOTTERY_WIDTH,
+			height: LOTTERY_HEIGHT,
+			minWidth: LOTTERY_WIDTH,
+			minHeight: LOTTERY_HEIGHT,
+			maxWidth: LOTTERY_WIDTH,
+			maxHeight: LOTTERY_HEIGHT,
+			resizable: false,
+			show: false,
+			frame: false,
+			title: 'Firestone Lottery',
+			icon: windowIcon.isEmpty() ? undefined : windowIcon,
+			transparent: true,
+			webPreferences: {
+				nodeIntegration: true,
+				contextIsolation: false,
+				preload: preloadPath,
+			},
+		});
+
+		this.lotteryWindow.setMenu(null);
+		this.lotteryWindow.center();
+
+		this.lotteryWindow.once('closed', () => {
+			this.lotteryWindow = null;
+		});
+
+		this.lotteryWindow.once('ready-to-show', () => {
+			this.lotteryWindow?.show();
+			this.lotteryWindow?.focus();
+		});
+
+		if (App.isDevelopmentMode()) {
+			setDevToolsWindowIcon(this.lotteryWindow.webContents);
+			this.lotteryWindow.webContents.once('did-finish-load', () => {
+				if (!this.lotteryWindow?.isDestroyed() && !this.lotteryWindow.webContents.isDevToolsOpened()) {
+					this.lotteryWindow.webContents.openDevTools({ mode: 'detach', activate: true });
+				}
+			});
+		}
+
+		this.lotteryWindow.loadURL(this.getLotteryLoadUrl()).catch((err) => {
+			console.error('[ElectronWindowHandler] Failed to load lottery window:', err);
+		});
+	}
+
+	public closeLotteryWindow(): void {
+		if (this.lotteryWindow && !this.lotteryWindow.isDestroyed()) {
+			this.lotteryWindow.close();
+		}
+		this.lotteryWindow = null;
+	}
+
+	private getExistingLotteryWindow(): BrowserWindow | null {
+		if (this.lotteryWindow && !this.lotteryWindow.isDestroyed()) {
+			return this.lotteryWindow;
+		}
+
+		const existingLotteryWindow = BrowserWindow.getAllWindows().find((window) => {
+			if (window.isDestroyed()) {
+				return false;
+			}
+
+			return window.webContents.getURL().includes('#/lottery');
+		});
+		this.lotteryWindow = existingLotteryWindow ?? null;
+		return this.lotteryWindow;
+	}
+
+	private showExistingLotteryWindow(lotteryWindow: BrowserWindow): void {
+		if (lotteryWindow.isMinimized()) {
+			lotteryWindow.restore();
+		}
+		lotteryWindow.show();
+		lotteryWindow.focus();
+	}
+
 	public reloadWindows(): void {
-		const browserWindows = [this.settingsWindow, this.battlegroundsWindow];
+		const browserWindows = [this.settingsWindow, this.battlegroundsWindow, this.lotteryWindow];
 		const overlayWindows = [this.settingsOverlayWindow, this.battlegroundsOverlayWindow];
 		for (const window of browserWindows) {
 			if (window && !window.isDestroyed()) {
@@ -816,5 +914,23 @@ export class ElectronWindowHandlerService implements IWindowHandlerService {
 			return `file:///${normalizedPath}#/battlegrounds`;
 		}
 		return `http://localhost:${rendererAppPort}/#/battlegrounds`;
+	}
+
+	private getLotteryLoadUrl(): string {
+		if (app.isPackaged) {
+			const frontendDir = join(process.resourcesPath, 'electron-frontend');
+			const frontendPath = join(frontendDir, 'index.html');
+			const fs = require('fs');
+			if (!fs.existsSync(frontendPath)) {
+				console.error('[ElectronWindowHandler] Frontend not found at:', frontendPath);
+			}
+			let normalizedPath = frontendPath.replace(/\\/g, '/');
+			normalizedPath = normalizedPath.replace(
+				/^([a-z]):/i,
+				(_: string, drive: string) => drive.toUpperCase() + ':',
+			);
+			return `file:///${normalizedPath}#/lottery`;
+		}
+		return `http://localhost:${rendererAppPort}/#/lottery`;
 	}
 }

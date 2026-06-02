@@ -1,0 +1,19 @@
+// Frameless Electron lottery window only (this route is not used by Overwolf).
+// Do not add these rules to lottery — that component is shared with Overwolf.
+
+:host ::ng-deep .lottery-container .title-bar {
+	width: 100%;
+	-webkit-app-region: drag;
+	user-select: none;
+	cursor: grab;
+}
+
+// Let empty space in the title bar receive drag; keep buttons/toggles clickable.
+:host ::ng-deep .lottery-container .title-bar .controls {
+	pointer-events: none;
+}
+
+:host ::ng-deep .lottery-container .title-bar .controls > * {
+	pointer-events: auto;
+	-webkit-app-region: no-drag;
+}

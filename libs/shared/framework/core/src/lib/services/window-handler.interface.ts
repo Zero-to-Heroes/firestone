@@ -17,6 +17,8 @@ export interface IWindowHandlerService {
 	toggleCollectionWindow(useOverlay: boolean): void | Promise<void>;
 	showCollectionWindow(useOverlay: boolean): void | Promise<void>;
 	openSettingsWindow(userOverlay: boolean): void | Promise<void>;
+	showLotteryWindow(): void | Promise<void>;
+	closeLotteryWindow(): void | Promise<void>;
 	reloadWindows(): void | Promise<void>;
 	relaunchApp(): void | Promise<void>;
 }

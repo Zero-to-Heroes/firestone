@@ -1372,6 +1372,7 @@ try {
 		// For electron
 		ConstructedDecktrackerOocWidgetWrapperComponent,
 		DecktrackerPlayerWidgetWrapperComponent,
+		LotteryWidgetComponent,
 	],
 })
 export class LegacyFeatureShellModule {

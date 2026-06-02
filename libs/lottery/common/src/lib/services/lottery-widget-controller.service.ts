@@ -6,8 +6,9 @@ import {
 	ADS_SERVICE_TOKEN,
 	AppInjector,
 	IAdsService,
-	OverwolfService,
+	IWindowHandlerService,
 	waitForReady,
+	WINDOW_HANDLER_SERVICE_TOKEN,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, filter, map, startWith } from 'rxjs';
@@ -23,6 +24,7 @@ export class LotteryWidgetControllerService extends AbstractFacadeService<Lotter
 	private notifications: NotificationsService;
 	private prefs: PreferencesService;
 	private ads: IAdsService;
+	private windowHandler: IWindowHandlerService;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'LotteryWidgetControllerService', () => !!this.events$$);
@@ -42,6 +44,7 @@ export class LotteryWidgetControllerService extends AbstractFacadeService<Lotter
 		this.notifications = AppInjector.get(NotificationsService);
 		this.prefs = AppInjector.get(PreferencesService);
 		this.ads = AppInjector.get(ADS_SERVICE_TOKEN);
+		this.windowHandler = AppInjector.get(WINDOW_HANDLER_SERVICE_TOKEN);
 
 		await waitForReady(this.prefs, this.ads);
 
@@ -85,14 +88,10 @@ export class LotteryWidgetControllerService extends AbstractFacadeService<Lotter
 		])
 			.pipe(distinctUntilChanged((a, b) => arraysEqual(a, b)))
 			.subscribe(async ([lotteryOverlay, visible]) => {
-				if (lotteryOverlay) {
-					await this.windowManager.closeWindow(OverwolfService.LOTTERY_WINDOW);
-				}
-
-				if (visible && !lotteryOverlay) {
-					await this.windowManager.restoreWindow(OverwolfService.LOTTERY_WINDOW, true);
+				if (lotteryOverlay || !visible) {
+					await this.windowHandler.closeLotteryWindow();
 				} else {
-					await this.windowManager.closeWindow(OverwolfService.LOTTERY_WINDOW);
+					await this.windowHandler.showLotteryWindow();
 				}
 			});
 

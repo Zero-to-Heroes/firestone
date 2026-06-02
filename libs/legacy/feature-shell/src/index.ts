@@ -3,6 +3,7 @@ export * from './lib/js/components/battlegrounds/battlegrounds.component';
 export * from './lib/js/components/decktracker/overlay/twitch/decktracker-overlay-container.component.ts';
 export * from './lib/js/components/loading/loading.component';
 export * from './lib/js/components/lottery/lottery-window.component';
+export * from './lib/js/components/lottery/lottery.component';
 export * from './lib/js/components/main-window-root.component';
 export * from './lib/js/components/main-window.component';
 export * from './lib/js/components/notifications.component';

@@ -86,6 +86,16 @@ export class OwWindowHandlerService implements IWindowHandlerService {
 		}
 	}
 
+	public async showLotteryWindow(): Promise<void> {
+		const lotteryWindow = await this.ow.obtainDeclaredWindow(OverwolfService.LOTTERY_WINDOW);
+		await this.ow.restoreWindow(lotteryWindow.id);
+		this.ow.bringToFront(lotteryWindow.id);
+	}
+
+	public async closeLotteryWindow(): Promise<void> {
+		await this.ow.closeWindow(OverwolfService.LOTTERY_WINDOW);
+	}
+
 	public reloadWindows(): void {
 		this.ow.getMainWindow().reloadWindows();
 	}
