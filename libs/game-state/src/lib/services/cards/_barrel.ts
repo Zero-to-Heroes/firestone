@@ -293,6 +293,7 @@ export { UndercityHuckster } from './undercity-huckster';
 export { UnpopularHasBeen } from './unpopular-has-been';
 export { UnstablePortal } from './unstable-portal';
 export { UnstableSpellcaster } from './unstable-spellcaster';
+export { VanessaTheRingleader } from './vanessa-the-ringleader';
 export { VarianKingOfStormwind } from './varian-king-of-stormwind';
 export { VelarokTheDeceiver } from './velarok-the-deceiver';
 export { VioletHaze } from './violet-haze';
