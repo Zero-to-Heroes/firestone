@@ -51,7 +51,7 @@ export class ElectronSubscriptionService extends AbstractFacadeService<ElectronS
 			}
 
 			this.currentPlan$$.pipe(distinctUntilChanged((a, b) => equalCurrentPlan(a, b))).subscribe((plan) => {
-				console.log('[ads] [subscription] new plan', plan);
+				console.log('[ads] [subscription] new plan', JSON.stringify(plan));
 			});
 
 			await this.fetchCurrentPlan();
@@ -95,7 +95,6 @@ export class ElectronSubscriptionService extends AbstractFacadeService<ElectronS
 	}
 
 	public async fetchCurrentPlan(): Promise<CurrentPlan | null> {
-		console.log('[ads] [subscription] fetching current plan');
 		return this.callOnMainProcess<CurrentPlan | null>('fetchCurrentPlanInternal');
 	}
 
@@ -110,9 +109,8 @@ export class ElectronSubscriptionService extends AbstractFacadeService<ElectronS
 	}
 
 	private async fetchCurrentPlanInternal(): Promise<CurrentPlan | null> {
-		console.log('[ads] [subscription] fetching current plan internal');
 		const currentPlan = await this.getCurrentPlanInternal();
-		console.debug('[ads] [subscription] current plan', currentPlan);
+		console.debug('[ads] [subscription] current plan', JSON.stringify(currentPlan));
 		// Once it is initialized, it should not be null, otherwise the getValueWithInit() will hang indefinitely
 		const existingPlan = await this.currentPlan$$.getValueWithInit();
 		if (equalCurrentPlan(existingPlan, currentPlan)) {
@@ -132,9 +130,8 @@ export class ElectronSubscriptionService extends AbstractFacadeService<ElectronS
 	}
 
 	private async getCurrentPlanInternal(): Promise<CurrentPlan | null> {
-		console.log('[ads] [subscription] getting current plan internal');
 		const tebexPlan = await this.tebex.getSubscriptionStatus();
-		console.log('[ads] [subscription] tebex plan', tebexPlan);
+		console.log('[ads] [subscription] tebex plan', JSON.stringify(tebexPlan));
 		return tebexPlan;
 	}
 

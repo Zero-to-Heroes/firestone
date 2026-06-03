@@ -66,18 +66,17 @@ export class TebexHeadlessService extends AbstractFacadeService<TebexHeadlessSer
 		return this.callOnMainProcess<CurrentPlan | null>('getSubscriptionStatusInternal');
 	}
 	protected async getSubscriptionStatusInternal(): Promise<CurrentPlan | null> {
-		console.log('[ads] [tebex-headless] getting subscription status internal');
 		const currentUser = await this.user.getCurrentUser();
-		console.log('[ads] [tebex-headless] current user', currentUser);
+		console.log('[ads] [tebex-headless] current user', JSON.stringify(currentUser));
 		// Only work with logged in users
 		if (!currentUser?.username) {
 			return null;
 		}
 
-		console.log(
-			'[ads] [tebex-headless] calling tebex headless subscriptions url',
-			TEBEX_HEADLESS_SUBSCRIPTIONS_URL,
-		);
+		// console.log(
+		// 	'[ads] [tebex-headless] calling tebex headless subscriptions url',
+		// 	TEBEX_HEADLESS_SUBSCRIPTIONS_URL,
+		// );
 		const tebexPlans: readonly TebexSub[] = await this.api.callGetApi<readonly TebexSub[]>(
 			TEBEX_HEADLESS_SUBSCRIPTIONS_URL,
 			{

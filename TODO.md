@@ -1,3 +1,4 @@
+- login buttons in app still use the OW openLoginDialog flow
 - casual games don't get tracked with standalone version
 - lazy loading for services?
 - OwUtils: use common paradigm to use it from a non-main window + make it work in electron context (so maybe reimplemnet it completely)

@@ -65,7 +65,7 @@ export class DecksProviderService extends AbstractFacadeService<DecksProviderSer
 	}
 
 	protected async init() {
-		this.decks$$ = new SubscriberAwareBehaviorSubject<readonly DeckSummary[] | null>(null);
+		this.decks$$ = new SubscriberAwareBehaviorSubject<readonly DeckSummary[] | null>([]);
 		this.allCardsInDecks$$ = new SubscriberAwareBehaviorSubject<readonly string[] | null>(null);
 		this.cardSearch$$ = new BehaviorSubject<readonly string[] | null>(null);
 		this.allCards = AppInjector.get(CardsFacadeService);
@@ -152,7 +152,7 @@ export class DecksProviderService extends AbstractFacadeService<DecksProviderSer
 			this.decks$$
 				.pipe(
 					map((decks) => {
-						const allDecks = decks.flatMap((d) => d.allVersions.flatMap((v) => v.deckstring));
+						const allDecks = decks?.flatMap((d) => d.allVersions?.flatMap((v) => v.deckstring)) ?? [];
 						const allCards = allDecks.flatMap((d) =>
 							decode(d).cards.map((c) => this.allCards.getCard(c[0]).id),
 						);

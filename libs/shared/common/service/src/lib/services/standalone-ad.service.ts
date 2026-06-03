@@ -44,7 +44,7 @@ export class StandaloneAdService extends AbstractFacadeService<StandaloneAdServi
 		await waitForReady(this.subscriptions, this.appNavigation);
 
 		this.subscriptions.currentPlan$$.subscribe((plan) => {
-			console.log('[ads] current plan', plan);
+			console.log('[ads] current plan', JSON.stringify(plan));
 			const hasPremiumSub = isActivePremiumPlan(plan);
 			this.hasPremiumSub$$.next(hasPremiumSub);
 			this.currentPlan$$.next(plan);
