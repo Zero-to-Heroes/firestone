@@ -1,4 +1,5 @@
 import { contextBridge, ipcRenderer } from 'electron';
+import { formatLogArg } from '../format-log-arg';
 
 // Store original console methods before overriding
 const originalConsoleLog = console.log.bind(console);
@@ -33,17 +34,10 @@ const flushLogs = () => {
 
 // Helper function to serialize error objects properly
 const serializeError = (arg: any): string => {
-	if (arg instanceof Error) {
-		return `${arg.name}: ${arg.message}\n${arg.stack || ''}`;
+	if (typeof arg === 'object' && arg !== null && !(arg instanceof Error)) {
+		return formatLogArg(arg, Object.getOwnPropertyNames(arg));
 	}
-	if (typeof arg === 'object' && arg !== null) {
-		try {
-			return JSON.stringify(arg, Object.getOwnPropertyNames(arg), 2);
-		} catch (e) {
-			return String(arg);
-		}
-	}
-	return String(arg);
+	return formatLogArg(arg);
 };
 
 // Helper function to send log to main process (batched)

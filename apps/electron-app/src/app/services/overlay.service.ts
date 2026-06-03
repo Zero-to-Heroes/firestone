@@ -13,6 +13,7 @@ import EventEmitter from 'events';
 import { join } from 'path';
 import { Subscription } from 'rxjs';
 import App from '../app';
+import { formatLogArg } from '../format-log-arg';
 import { appAccessUnlocked$$, isAppAccessUnlocked } from './app-access-policy';
 
 const app = electronApp as overwolf.OverwolfApp;
@@ -202,7 +203,7 @@ export class OverlayService extends EventEmitter {
 			y: 0,
 		};
 
-		console.debug('Overlay window options:', JSON.stringify(options, null, 2));
+		console.debug('Overlay window options:', formatLogArg(options));
 
 		this.overlayWindow = await this.overlayApi.createWindow(options);
 

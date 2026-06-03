@@ -21,6 +21,7 @@ import { distinctUntilChanged, Subscription } from 'rxjs';
 import { uIOhook } from 'uiohook-napi';
 import { environment } from '../environments/environment';
 import { appStartup } from './app-startup';
+import { formatLogArg } from './format-log-arg';
 import { appAccessUnlocked$$, disposeAppAccessPolicy, initAppAccessPolicy } from './services/app-access-policy';
 import { buildAppInjector } from './services/electron-app-injector-setup';
 import { registerElectronDiskCacheIpcHandlers } from './services/electron-disk-cache-ipc';
@@ -193,9 +194,7 @@ export default class App {
 		// Helper function to write to log file
 		const writeToLogFile = (level: string, ...args: any[]) => {
 			try {
-				const message = args
-					.map((arg) => (typeof arg === 'object' ? JSON.stringify(arg, null, 2) : String(arg)))
-					.join(' ');
+				const message = args.map((arg) => formatLogArg(arg)).join(' ');
 				appendFileSync(logFilePath, `${message}\n`);
 			} catch (e) {
 				// Ignore file write errors
@@ -218,21 +217,21 @@ export default class App {
 		// Override console.log to add timestamp and write to file
 		console.log = (...args: any[]) => {
 			const timestamp = getTimestamp();
-			originalLog(`[${timestamp}]`, ...args);
+			originalLog(`[${timestamp}]`, ...args.map((arg) => formatLogArg(arg)));
 			writeToLogFile('INFO', `[${timestamp}] [INFO]`, ...args);
 		};
 
 		// Override console.warn to add timestamp and write to file
 		console.warn = (...args: any[]) => {
 			const timestamp = getTimestamp();
-			originalWarn(`[${timestamp}]`, ...args);
+			originalWarn(`[${timestamp}]`, ...args.map((arg) => formatLogArg(arg)));
 			writeToLogFile('WARN', `[${timestamp}] [WARN]`, ...args);
 		};
 
 		// Override console.error to add timestamp and write to file
 		console.error = (...args: any[]) => {
 			const timestamp = getTimestamp();
-			originalError(`[${timestamp}]`, ...args);
+			originalError(`[${timestamp}]`, ...args.map((arg) => formatLogArg(arg)));
 			writeToLogFile('ERROR', `[${timestamp}] [ERROR]`, ...args);
 		};
 
@@ -364,9 +363,7 @@ export default class App {
 		ipcMain.on('renderer-log-batch', async (event, logs: Array<{ level: string; args: any[] }>) => {
 			try {
 				for (const { level, args } of logs) {
-					const message = args
-						.map((arg) => (typeof arg === 'object' ? JSON.stringify(arg, null, 2) : String(arg)))
-						.join(' ');
+					const message = args.map((arg) => formatLogArg(arg)).join(' ');
 					const timestamp = getTimestamp();
 					const logMessage = `[${timestamp}] [${level.toUpperCase()}] [RENDERER] ${message}\n`;
 
@@ -374,7 +371,7 @@ export default class App {
 					rendererLogQueue.push(logMessage);
 
 					// Also log to console with prefix (synchronous, but console is fast)
-					originalLog(`[RENDERER] [${level.toUpperCase()}]`, ...args);
+					originalLog(`[RENDERER] [${level.toUpperCase()}]`, ...args.map((arg) => formatLogArg(arg)));
 				}
 
 				// Flush if batch size reached
