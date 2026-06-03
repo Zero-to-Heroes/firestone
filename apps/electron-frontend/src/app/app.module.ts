@@ -9,19 +9,20 @@ import {
 } from '@firestone/battlegrounds/simulator';
 import {
 	ElectronClipboardFacadeService,
-	ElectronRendererDiskCacheService,
 	ElectronExternalUrlRendererService,
 	ElectronFileSystemUIFacadeService,
 	ElectronHotkeyHandlerFacadeService,
 	ElectronMonitorsFacadeService,
 	ElectronOwUtilsFacadeService,
 	ElectronRegionInfoFacadeService,
+	ElectronRendererDiskCacheService,
 	ElectronScreenshotFacadeService,
 	ElectronSystemInfoFacadeService,
 	ElectronViewModule,
 	ElectronWindowControlsFacadeService,
 } from '@firestone/electron/view';
 import { LegacyFeatureShellModule } from '@firestone/legacy/feature-shell';
+import { AccountService } from '@firestone/profile/services';
 import { SettingsViewModule } from '@firestone/settings/view';
 import {
 	DiskCacheService,
@@ -31,6 +32,7 @@ import {
 } from '@firestone/shared/common/service';
 import { SharedCommonViewModule } from '@firestone/shared/common/view';
 import {
+	ACCOUNT_SERVICE_TOKEN,
 	ADS_SERVICE_TOKEN,
 	CardsFacadeService,
 	CardsFacadeStandaloneService,
@@ -93,6 +95,7 @@ import { ElectronSettingsComponent } from './overlay/electron-settings.component
 		{ provide: SCREENSHOT_SERVICE_TOKEN, useExisting: ElectronScreenshotFacadeService },
 		{ provide: HOTKEY_HANDLER_SERVICE_TOKEN, useExisting: ElectronHotkeyHandlerFacadeService },
 		{ provide: OW_UTILS_SERVICE_TOKEN, useExisting: ElectronOwUtilsFacadeService },
+		{ provide: ACCOUNT_SERVICE_TOKEN, useExisting: AccountService },
 		// Use HashLocationStrategy for file:// protocol compatibility
 		{ provide: LocationStrategy, useClass: HashLocationStrategy },
 		{ provide: BgsBattleSimulationExecutorService, useClass: BgsBattleSimulationWorkerService },

@@ -8,8 +8,8 @@ import {
 	AppInjector,
 	CurrentUser,
 	IAdsService,
-	IUserService,
 	isMainProcess,
+	IUserService,
 	waitForReady,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
@@ -122,7 +122,6 @@ export class StandaloneUserService extends AbstractFacadeService<StandaloneUserS
 	public async logout(): Promise<void> {
 		await this.callOnMainProcess('logoutInternal');
 	}
-
 	protected async logoutInternal(): Promise<void> {
 		console.log('[user-service] Logging out...');
 
@@ -210,12 +209,26 @@ export class StandaloneUserService extends AbstractFacadeService<StandaloneUserS
 		});
 	}
 
+	public async interfaceLoginButton(): Promise<void> {
+		// If user is logged in, logout
+		const currentUser = await this.getCurrentUser();
+		if (currentUser) {
+			await this.logout();
+		}
+		// Otherwise, open the login page
+		else {
+			await this.login();
+		}
+	}
+
 	/**
 	 * Load stored user data from disk on startup
 	 */
 	private async loadStoredUserData(): Promise<void> {
 		try {
-			const storedData = await this.diskCache.getItem<StoredAuthData>(DiskCacheService.DISK_CACHE_KEYS.LOCAL_USER);
+			const storedData = await this.diskCache.getItem<StoredAuthData>(
+				DiskCacheService.DISK_CACHE_KEYS.LOCAL_USER,
+			);
 
 			if (storedData?.userId) {
 				const user: CurrentUser = {

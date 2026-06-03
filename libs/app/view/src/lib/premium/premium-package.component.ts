@@ -7,14 +7,20 @@ import {
 	Component,
 	ElementRef,
 	EventEmitter,
+	Inject,
 	Input,
 	Output,
 	ViewRef,
 } from '@angular/core';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, sleep } from '@firestone/shared/framework/common';
-import type { PremiumPlanId } from '@firestone/shared/framework/core';
-import { ILocalizationService, OverwolfService, UserService, waitForReady } from '@firestone/shared/framework/core';
+import type { IAccountFacadeForCollection, PremiumPlanId } from '@firestone/shared/framework/core';
+import {
+	ACCOUNT_SERVICE_TOKEN,
+	ILocalizationService,
+	UserService,
+	waitForReady,
+} from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import type { PremiumPlan } from './premium-desktop.component';
 
@@ -231,9 +237,9 @@ export class PremiumPackageComponent extends AbstractSubscriptionComponent imple
 		protected override readonly cdr: ChangeDetectorRef,
 		private readonly i18n: ILocalizationService,
 		private readonly user: UserService,
-		private readonly ow: OverwolfService,
 		private readonly el: ElementRef,
 		private readonly prefs: PreferencesService,
+		@Inject(ACCOUNT_SERVICE_TOKEN) private readonly accountService: IAccountFacadeForCollection,
 	) {
 		super(cdr);
 	}
@@ -289,7 +295,7 @@ export class PremiumPackageComponent extends AbstractSubscriptionComponent imple
 	}
 
 	login() {
-		this.ow.openLoginDialog();
+		this.accountService.interfaceLoginButton();
 	}
 
 	// copyDiscordCode() {

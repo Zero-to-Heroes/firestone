@@ -8,19 +8,20 @@ import {
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
-import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
+import { ChangeVisibleApplicationEvent, MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { CurrentAppType, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import {
+	ACCOUNT_SERVICE_TOKEN,
 	ADS_SERVICE_TOKEN,
 	AnalyticsService,
+	IAccountFacadeForCollection,
 	IAdsService,
-	OverwolfService,
-	UserService,
+	IUserService,
+	USER_SERVICE_TOKEN,
 	waitForReady,
 } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
-import { ChangeVisibleApplicationEvent } from '@firestone/mainwindow/common';
 
 @Component({
 	standalone: false,
@@ -242,18 +243,18 @@ export class MenuSelectionComponent extends AbstractSubscriptionComponent implem
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
-		private ow: OverwolfService,
 		private readonly analytics: AnalyticsService,
-		private readonly userService: UserService,
-		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 		private readonly prefs: PreferencesService,
 		private readonly mainWindowStateFacade: MainWindowStateFacadeService,
+		@Inject(USER_SERVICE_TOKEN) private readonly userService: IUserService,
+		@Inject(ACCOUNT_SERVICE_TOKEN) private readonly accountService: IAccountFacadeForCollection,
+		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
 	) {
 		super(cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.userService, this.ads, this.prefs, this.mainWindowStateFacade);
+		await waitForReady(this.userService, this.ads, this.prefs, this.mainWindowStateFacade, this.accountService);
 
 		this.userName$ = this.userService.user$$.pipe(this.mapData((currentUser) => currentUser?.username));
 		this.avatarUrl$ = this.userService.user$$.pipe(
@@ -278,7 +279,7 @@ export class MenuSelectionComponent extends AbstractSubscriptionComponent implem
 	}
 
 	login() {
-		this.ow.openLoginDialog();
+		this.accountService.interfaceLoginButton();
 	}
 
 	goPremium() {

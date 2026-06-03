@@ -71,6 +71,10 @@ export class UserService extends AbstractFacadeService<UserService> implements I
 		return await this.user$$.getValueWithInit();
 	}
 
+	public async interfaceLoginButton(): Promise<void> {
+		this.ow.openLoginDialog();
+	}
+
 	private async retrieveUserInfo() {
 		let user = await this.ow.getCurrentUser();
 		// console.log('[user-service] retrieved user info', user);

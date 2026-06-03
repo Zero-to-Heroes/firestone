@@ -1,8 +1,20 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	Inject,
+	ViewRef,
+} from '@angular/core';
 import { LotteryConfigResourceStatType, LotteryFacadeService, LotteryState } from '@firestone/lottery/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { OverwolfService, UserService, waitForReady } from '@firestone/shared/framework/core';
+import {
+	ACCOUNT_SERVICE_TOKEN,
+	IAccountFacadeForCollection,
+	UserService,
+	waitForReady,
+} from '@firestone/shared/framework/core';
 import { Observable, combineLatest, filter, shareReplay } from 'rxjs';
 import { LocalizationFacadeService } from '../../services/localization-facade.service';
 
@@ -94,10 +106,10 @@ export class LotteryLotteryWidgetComponent extends AbstractSubscriptionComponent
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly i18n: LocalizationFacadeService,
-		private readonly ow: OverwolfService,
 		private readonly userService: UserService,
 		private readonly lottery: LotteryFacadeService,
 		private readonly prefs: PreferencesService,
+		@Inject(ACCOUNT_SERVICE_TOKEN) private readonly accountService: IAccountFacadeForCollection,
 	) {
 		super(cdr);
 	}
@@ -151,7 +163,7 @@ export class LotteryLotteryWidgetComponent extends AbstractSubscriptionComponent
 	}
 
 	login() {
-		this.ow.openLoginDialog();
+		this.accountService.interfaceLoginButton();
 	}
 
 	private lotteryInfo(

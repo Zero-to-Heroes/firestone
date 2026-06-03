@@ -7,6 +7,8 @@ import {
 	AbstractFacadeService,
 	AppInjector,
 	IAccountFacadeForCollection,
+	IUserService,
+	USER_SERVICE_TOKEN,
 	waitForReady,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
@@ -19,6 +21,7 @@ export class AccountService extends AbstractFacadeService<AccountService> implem
 	private memory: MemoryInspectionService;
 	private gameStatus: GameStatusService;
 	private prefs: PreferencesService;
+	private userService: IUserService;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'AccountService', () => !!this.region$$);
@@ -34,6 +37,7 @@ export class AccountService extends AbstractFacadeService<AccountService> implem
 		this.memory = AppInjector.get(MemoryInspectionService);
 		this.gameStatus = AppInjector.get(GameStatusService);
 		this.prefs = AppInjector.get(PreferencesService);
+		this.userService = AppInjector.get(USER_SERVICE_TOKEN);
 		console.log('[account-service] ready');
 
 		await sleep(1000);
@@ -80,11 +84,22 @@ export class AccountService extends AbstractFacadeService<AccountService> implem
 		this.region$$ = new BehaviorSubject<BnetRegion | null>(null);
 	}
 
+	protected override async initElectronMainProcess() {
+		this.registerMainProcessMethod('interfaceLoginButtonInternal', () => this.interfaceLoginButtonInternal());
+	}
+
 	public async getRegion(): Promise<BnetRegion | null> {
 		return this.memory.getRegion();
 	}
 
 	public async getAccountInfo(): Promise<AccountInfo | null> {
 		return this.memory.getAccountInfo();
+	}
+
+	public async interfaceLoginButton(): Promise<void> {
+		this.callOnMainProcess('interfaceLoginButtonInternal');
+	}
+	private async interfaceLoginButtonInternal(): Promise<void> {
+		await this.userService.interfaceLoginButton();
 	}
 }

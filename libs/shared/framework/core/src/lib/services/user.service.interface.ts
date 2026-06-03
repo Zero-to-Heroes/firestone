@@ -1,9 +1,13 @@
 import { InjectionToken } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 export const USER_SERVICE_TOKEN = new InjectionToken<IUserService>('UserService');
 export interface IUserService {
+	user$$: BehaviorSubject<CurrentUser | null>;
+
 	getCurrentUser(): Promise<CurrentUser | null>;
 	isReady(): Promise<void>;
+	interfaceLoginButton(): Promise<void>;
 }
 
 export interface CurrentUser {
