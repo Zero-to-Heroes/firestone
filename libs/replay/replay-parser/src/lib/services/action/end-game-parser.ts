@@ -1,6 +1,7 @@
 import { GameTag, PlayState } from '@firestone-hs/reference-data';
 import { Map } from 'immutable';
 import { Action } from '../../models/action/action';
+import { DiscoverAction } from '../../models/action/discover-action';
 import { EndGameAction } from '../../models/action/end-game-action';
 import { Entity } from '../../models/game/entity';
 import { PlayerEntity } from '../../models/game/player-entity';
@@ -52,8 +53,8 @@ export class EndGameParser implements Parser {
 	}
 
 	private shouldMergeActions(previous: Action, current: Action): boolean {
-		// Absorbs all actions after the end game
-		return previous instanceof EndGameAction;
+		// Absorbs all actions after the end game (but keep discover overlay steps visible)
+		return previous instanceof EndGameAction && !(current instanceof DiscoverAction);
 	}
 
 	private mergeActions(previousAction: EndGameAction, currentAction: EndGameAction): EndGameAction {

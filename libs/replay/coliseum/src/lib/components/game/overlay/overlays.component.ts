@@ -51,7 +51,13 @@ import { Map } from 'immutable';
 			</opponents-reveal>
 			<end-game *ngIf="_isEndGame" [status]="_endGameStatus" [entities]="_entities" [playerId]="_playerId">
 			</end-game>
-			<discover *ngIf="_discovers" [entities]="_entities" [choices]="_discovers" [chosen]="_chosen"> </discover>
+			<discover
+				*ngIf="_discovers && _discovers.length > 0"
+				[entities]="_entities"
+				[choices]="_discovers!"
+				[chosen]="_chosen"
+			>
+			</discover>
 			<burn *ngIf="_burned" [entities]="_entities" [burned]="_burned"> </burn>
 			<fatigue *ngIf="_fatigue" [fatigue]="_fatigue"></fatigue>
 			<visual-board-state-change

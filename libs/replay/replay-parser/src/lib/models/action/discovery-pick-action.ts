@@ -6,6 +6,9 @@ import { Action } from './action';
 export class DiscoveryPickAction extends Action {
 	readonly owner: number;
 	readonly choice: number;
+	/** Set when parsed from ChosenEntities following a GENERAL Choices block (hero-power discover, etc.). */
+	readonly discoverOriginId?: number;
+	readonly discoverChoices?: readonly number[];
 
 	constructor(allCards: AllCardsService) {
 		super(allCards);
