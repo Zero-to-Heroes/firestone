@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
 	brawlSets,
+	CardClass,
 	CardIds,
 	formatFormat,
 	GameFormat,
@@ -15,6 +16,7 @@ import { ApiRunner, CardsFacadeService } from '@firestone/shared/framework/core'
 import { DeckCard } from '../../models/deck-card';
 import { GameState } from '../../models/game-state';
 import { Metadata } from '../../models/metadata';
+import { hasCorrectClass } from '../../related-cards/dynamic-pools';
 import { cardsMapping, hasGetRelatedCards } from '../cards/global/_registers';
 import { ALL_HANDS } from '../game-events/event-parser/special-cases/stonebrew/stonebrew';
 import { getCardInfoFilters } from './card-info-filters';
@@ -68,10 +70,12 @@ export class SecretConfigService {
 			await this.init();
 		}
 
+		// Maybe this list should server as a basis for staticSecrets, so that we still apply all the additional filters
+		// like cost
 		if (card?.guessedInfo?.possibleCards?.length) {
 			const restrictedList = card.guessedInfo.possibleCards.filter((c) => {
 				const ref = this.allCards.getCard(c);
-				return ref.mechanics?.includes(GameTag[GameTag.SECRET]);
+				return hasCorrectClass(ref, CardClass[playerClass]) && ref.mechanics?.includes(GameTag[GameTag.SECRET]);
 			});
 			// debug && console.debug('[secret-config] restrictedList', card?.entityId, card, restrictedList);
 			// If we have a secret and the list is empty, something went wrong
