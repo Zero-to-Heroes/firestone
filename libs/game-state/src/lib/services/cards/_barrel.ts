@@ -1,5 +1,6 @@
 export type { GeneratingCard } from './_card.type';
 export { ALightInTheDarkness } from './a-light-in-the-darkness';
+export { AbominableBowman } from './abominable-bowman';
 export { AeonWizard } from './aeon-wizard';
 export { AgencyEspionage } from './agency-espionage';
 export { AlakirLordOfStorms } from './alakir-lord-of-storms';
