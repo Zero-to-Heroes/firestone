@@ -25,6 +25,11 @@ import { TargetsParserService } from '../../../libs/replay/replay-parser/src/lib
 import { TurnParserService } from '../../../libs/replay/replay-parser/src/lib/services/gamepipeline/turn-parser.service';
 import { StateProcessorService } from '../../../libs/replay/replay-parser/src/lib/services/state-processor.service';
 import { XmlParserService } from '../../../libs/replay/replay-parser/src/lib/services/xml-parser.service';
+import {
+	loadCardsShortJsonText,
+	requireCardsJsonResolvableForReplay,
+	resolveCardsJsonPath,
+} from '../../lib/power-log-replay-harness';
 
 const BLESSING_OF_THE_MOON_ENTITY_ID = 85;
 const FIXTURE_PATH = path.join(__dirname, 'replay.xml');
@@ -140,19 +145,18 @@ describe('Blessing of the Moon discover replay (9389796e)', () => {
 	let narrator: NarratorService;
 
 	beforeAll(async () => {
+		const cardsJsonPath = resolveCardsJsonPath();
+		requireCardsJsonResolvableForReplay(cardsJsonPath);
+		const cardsText = await loadCardsShortJsonText(cardsJsonPath);
+		if (cardsText == null) {
+			throw new Error(
+				`[blessing-moon-discover-replay] could not load cards_short.json from ${cardsJsonPath}; ` +
+					'set HS_REFERENCE_CARDS_JSON_PATH to a reachable file path or raw GitHub URL.',
+			);
+		}
+
 		allCards = new AllCardsService();
-		const cardsJsonPath = path.join(
-			__dirname,
-			'..',
-			'..',
-			'..',
-			'..',
-			'hs-reference-data',
-			'src',
-			'cards_short.json',
-		);
-		const cardsJson = JSON.parse(fs.readFileSync(cardsJsonPath, 'utf8'));
-		allCards.service.initializeCardsDbFromCards(cardsJson);
+		allCards.service.initializeCardsDbFromCards(JSON.parse(cardsText));
 
 		const stateProcessor = new StateProcessorService();
 		actionParser = new ActionParserService(allCards, stateProcessor);

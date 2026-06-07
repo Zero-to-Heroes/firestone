@@ -284,7 +284,11 @@ export function resolveCardsJsonPath(): string {
 	if (fs.existsSync(sibling)) {
 		return sibling;
 	}
-	return path.join(process.cwd(), '..', 'hs-reference-data', 'src', 'cards_short.json');
+	const cwdSibling = path.join(process.cwd(), '..', 'hs-reference-data', 'src', 'cards_short.json');
+	if (fs.existsSync(cwdSibling)) {
+		return cwdSibling;
+	}
+	return HS_REFERENCE_CARDS_SHORT_RAW_URL;
 }
 
 /**
