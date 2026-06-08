@@ -59,7 +59,8 @@
 		max-height: 100%;
 		min-height: 0;
 		width: 100%;
-		max-width: 100%;
+		max-width: min(100%, calc((100vh - 180px) * 16 / 9));
+		margin: 0 auto;
 	}
 
 	.replay-chrome {
@@ -117,6 +118,10 @@
 
 @container coliseum (min-width: 1100px) {
 	.coliseum {
+		.replay-layout-column {
+			max-width: min(100%, calc((100vh - 180px) * 16 / 9 + 292px));
+		}
+
 		.replay-stage {
 			display: flex;
 			gap: 12px;
@@ -246,7 +251,7 @@
 }
 
 .manastorm-player-wrapper {
-	background-color: black;
+	background-color: transparent;
 }
 
 .manastorm-player {

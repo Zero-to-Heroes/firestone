@@ -27,15 +27,18 @@
 		.player-seeker-container {
 			width: 100%;
 		}
-		// .manastorm-player-wrapper {
-		// 	flex-grow: 1;
-		// 	grid-row: 1;
-		// }
+		.manastorm-player-wrapper {
+			background: transparent;
+		}
+
+		.replay-layout-column {
+			width: 100%;
+			max-width: 100%;
+		}
 
 		.manastorm-player {
-			// Because the controls and other window elements take space
-			max-width: calc((100vh - 150px) * 16 / 12);
-			// max-width: unset;
+			width: 100%;
+			max-width: 100%;
 		}
 		controls {
 			.discuss,
