@@ -123,7 +123,12 @@ export class ReplayParser {
 		this.previousTimestamp = '';
 		this.cardOracle = cardOracle ?? buildRewindCardOracle(null);
 		this.rewindController = new RewindController(this.State, this.cardOracle, {
-			onRewindCapableActionStart: (meta) => this.emitRewindCapableActionStart(meta),
+			// The consumer's GameState snapshot is driven by the PTL-side capture: the
+			// deck-tracker zones (board / hand / deck / otherZone / secrets) are built from
+			// PTL-stream events, so the snapshot must be taken at PTL action-start, after any
+			// PTL board mutation preceding the rewound action is applied. See
+			// `docs/rewind-architecture.md`.
+			onRewindCapablePtlActionStart: (meta) => this.emitRewindCapableActionStart(meta),
 		});
 		ReplayParser.start = new Date().toISOString();
 		console.debug('ReplayParser constructor over', this.State.GSState == null);
@@ -325,39 +330,21 @@ export class ReplayParser {
 				// arrives) are dropped instead of leaking past the consumer cutoff filter.
 				// See {@link pendingPtlRewindFlush}.
 				this.pendingPtlRewindFlush = true;
-				// Enqueue on the GS stream: ClearQueue() flushes GS before PTL, so any event
-				// that must be strictly ordered w.r.t. GS-stream parsers (e.g. ENTITY_CHOSEN,
-				// which lives on the GS NodeParser) MUST also be on the GS queue or it will
-				// always fire after all GS events - defeating the "rewind as if it never
-				// happened" semantics for state mutated by GS events.
-				this.State.GSState.NodeParser.EnqueueGameEvent([
-					GameEventProvider.Create(
-						normalizedTimestamp,
-						'REWIND_STARTED',
-						() => ({
-							Type: 'REWIND_STARTED',
-							Value: { originEntityId: meta.originEntityId },
-						}),
-						true,
-						null,
-					),
-				]);
+				// NOTE: the consumer REWIND_STARTED is emitted on the PTL stream (see the PTL
+				// branch below), NOT here. The deck-tracker zones the rewind rolls back are
+				// PTL-stream state, so the restore must be PTL-timed: restoring on the GS
+				// GAME_RESET (which fires while PTL is still mid-rewound-action) would roll the
+				// board back to a stale, pre-PTL-mutation snapshot. The trade-off is that
+				// GS-only state (discoversThisGame / ENTITY_CHOSEN) mutated strictly between the
+				// GS and PTL resets is not rolled back - an accepted edge case. See
+				// `docs/rewind-architecture.md`.
 			} else {
 				// Legacy fallback: no snapshot captured (unexpected). Let the existing
-				// GameResetParser path run: PartialReset() + FULL_ENTITY dispatch. Emit a
-				// payload-less REWIND_STARTED so legacy consumers still work.
+				// GameResetParser path run: PartialReset() + FULL_ENTITY dispatch. The
+				// consumer-facing REWIND_STARTED is still emitted from the PTL branch.
 				this.fallbackLegacyGameResetGS = true;
 				this.insideGameResetGS = false;
 				this.rewindOriginGS = originEntityId;
-				this.State.GSState.NodeParser.EnqueueGameEvent([
-					GameEventProvider.Create(
-						normalizedTimestamp,
-						'REWIND_STARTED',
-						() => ({ Type: 'REWIND_STARTED' }),
-						true,
-						null,
-					),
-				]);
 			}
 		} else {
 			// PTL side: apply the parked PTL snapshot half if we have one.
@@ -373,24 +360,58 @@ export class ReplayParser {
 				this.insideGameResetPTL = true;
 				this.rewindOriginPTL = meta.originEntityId;
 				this.fallbackLegacyGameResetPTL = false;
+				// Drive the consumer rewind restore from the PTL stream: the snapshot the
+				// consumer rolls back to was captured at PTL action-start (see
+				// emitRewindCapableActionStart), so the restore must be triggered on the PTL
+				// queue too. See `docs/rewind-architecture.md`.
+				this.State.PTLState.NodeParser.EnqueueGameEvent([
+					GameEventProvider.Create(
+						normalizedTimestamp,
+						'REWIND_STARTED',
+						() => ({
+							Type: 'REWIND_STARTED',
+							Value: { originEntityId: meta.originEntityId },
+						}),
+						true,
+						null,
+					),
+				]);
 			} else {
 				this.fallbackLegacyGameResetPTL = true;
 				this.insideGameResetPTL = false;
 				this.rewindOriginPTL = originEntityId;
+				// Legacy fallback: emit a payload-less REWIND_STARTED so legacy consumers still
+				// work (PTL stream, mirroring the snapshot-backed path above).
+				this.State.PTLState.NodeParser.EnqueueGameEvent([
+					GameEventProvider.Create(
+						normalizedTimestamp,
+						'REWIND_STARTED',
+						() => ({ Type: 'REWIND_STARTED' }),
+						true,
+						null,
+					),
+				]);
 			}
 		}
 	}
 
 	private handleBlockEndForGameReset(stream: LogStream, normalizedTimestamp: string): void {
 		if (stream === 'GS' && (this.insideGameResetGS || this.fallbackLegacyGameResetGS)) {
-			const origin = this.rewindOriginGS;
 			this.insideGameResetGS = false;
 			this.fallbackLegacyGameResetGS = false;
 			this.rewindOriginGS = null;
-			// Pair with REWIND_STARTED on the same (GS) queue so consumer-side state that
-			// was mutated by GS-stream events (discoversThisGame, hand contents, etc.) rolls
-			// back cleanly before any post-rewind events are processed.
-			this.State.GSState.NodeParser.EnqueueGameEvent([
+			// REWIND_OVER is emitted on the PTL stream (see below) to pair with the PTL-side
+			// REWIND_STARTED, so the consumer's deckstring rollback brackets the same restore.
+		}
+		if (stream === 'PTL' && (this.insideGameResetPTL || this.fallbackLegacyGameResetPTL)) {
+			const origin = this.rewindOriginPTL;
+			this.insideGameResetPTL = false;
+			this.fallbackLegacyGameResetPTL = false;
+			this.rewindOriginPTL = null;
+			// Pair with the PTL-side REWIND_STARTED on the same (PTL) queue so consumer-side
+			// state rolled back by the rewind (deck-tracker zones, deckstrings) is bracketed
+			// cleanly before any post-rewind events are processed.
+			this.State.PTLState.NodeParser.EnqueueGameEvent([
 				GameEventProvider.Create(
 					normalizedTimestamp,
 					'REWIND_OVER',
@@ -403,20 +424,17 @@ export class ReplayParser {
 				),
 			]);
 		}
-		if (stream === 'PTL' && (this.insideGameResetPTL || this.fallbackLegacyGameResetPTL)) {
-			this.insideGameResetPTL = false;
-			this.fallbackLegacyGameResetPTL = false;
-			this.rewindOriginPTL = null;
-		}
 	}
 
 	private emitRewindCapableActionStart(meta: ParserSnapshotMeta): void {
-		// IMPORTANT: must be enqueued on the GS stream, not PTL. Offline replay flushes the
-		// GS queue in full before the PTL queue, so a PTL-side snapshot event would fire
-		// AFTER every GS-stream event (including ENTITY_CHOSEN) - meaning the consumer would
-		// snapshot an already-mutated state and "rewind" to it, which is a no-op for fields
-		// like discoversThisGame, hand contents, etc.
-		this.State.GSState.NodeParser.EnqueueGameEvent([
+		// IMPORTANT: enqueued on the PTL stream (driven by the PTL-side capture hook). The
+		// deck-tracker zones rolled back by a rewind are PTL-stream state, and within a flush
+		// the PTL queue is sorted by timestamp - so the consumer snapshot is taken with every
+		// PTL board mutation that precedes the rewound action already applied (e.g. a board
+		// clear killing minions right before a Mister Clocksworth Rewind). Capturing on the GS
+		// stream instead would snapshot a pre-PTL-mutation board and resurrect those minions on
+		// restore. See `docs/rewind-architecture.md`.
+		this.State.PTLState.NodeParser.EnqueueGameEvent([
 			GameEventProvider.Create(
 				meta.capturedAt,
 				'REWIND_CAPABLE_ACTION_START',

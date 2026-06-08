@@ -256,6 +256,7 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	'rewind-opp-hand': 'rewind-opp-hand/rewind-opp-hand.log',
 	'divergence-hellfire': 'divergence-hellfire/divergence-hellfire.log',
 	'coin-in-opp-deck': 'coin-in-opp-deck/coin-in-opp-deck.log',
+	'clocksworth-rewind': 'clocksworth-rewind/clocksworth-rewind.log',
 	'smoldering-grove': 'smoldering-grove/smoldering-grove.log',
 	'fast-forward-naralex': 'fast-forward-naralex/fast-forward-naralex.log',
 	'blooming-bulb': 'blooming-bulb/blooming-bulb.log',

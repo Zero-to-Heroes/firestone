@@ -40,7 +40,7 @@
           "timestampAtWhichCardEnteredHand": "<scrubbed>",
           "turnAtWhichCardEnteredHand": 1
         },
-        "playTiming": 32,
+        "playTiming": 37,
         "prepared": 0,
         "rarity": "epic",
         "refManaCost": 3,
@@ -266,7 +266,7 @@
           "timestampAtWhichCardEnteredHand": "<scrubbed>",
           "turnAtWhichCardEnteredHand": 1
         },
-        "playTiming": 30,
+        "playTiming": 34,
         "prepared": 0,
         "rarity": "rare",
         "refManaCost": 1,
@@ -385,43 +385,7 @@
     "cthunAtk": 0,
     "cthunHealth": 0,
     "currentExcavateTier": 0,
-    "currentOptions": [
-      {
-        "cardId": "",
-        "context": {
-          "DataNum1": -1
-        },
-        "entityId": 100,
-        "questDifficulty": -1,
-        "questReward": {
-          "EntityId": -1
-        },
-        "source": "CORE_EDR_004_2026",
-        "willBeActive": false
-      },
-      {
-        "cardId": "",
-        "context": "<cycle>",
-        "entityId": 99,
-        "questDifficulty": -1,
-        "questReward": {
-          "EntityId": -1
-        },
-        "source": "CORE_EDR_004_2026",
-        "willBeActive": false
-      },
-      {
-        "cardId": "",
-        "context": "<cycle>",
-        "entityId": 101,
-        "questDifficulty": -1,
-        "questReward": {
-          "EntityId": -1
-        },
-        "source": "CORE_EDR_004_2026",
-        "willBeActive": false
-      }
-    ],
+    "currentOptions": [],
     "damageDealtThisTurn": [],
     "damageTakenOnYourTurns": [],
     "damageTakenThisTurn": 0,
@@ -825,7 +789,7 @@
       "internalEntityId": "<scrubbed>",
       "linkedEntityIds": [],
       "metaInfo": {},
-      "playTiming": 28,
+      "playTiming": 32,
       "prepared": 0,
       "rarity": "Free",
       "refManaCost": 2,
@@ -983,7 +947,7 @@
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": null
         },
-        "playTiming": 30,
+        "playTiming": 34,
         "prepared": 0,
         "rarity": "rare",
         "refManaCost": 1,
@@ -1199,7 +1163,7 @@
           "timestampAtWhichCardEnteredHand": "<scrubbed>",
           "turnAtWhichCardEnteredHand": 1
         },
-        "playTiming": 31,
+        "playTiming": 35,
         "prepared": 0,
         "rarity": "common",
         "refManaCost": 2,
@@ -2003,7 +1967,7 @@
       "internalEntityId": "<scrubbed>",
       "linkedEntityIds": [],
       "metaInfo": {},
-      "playTiming": 27,
+      "playTiming": 31,
       "prepared": 0,
       "rarity": "Free",
       "refManaCost": 2,
@@ -2139,7 +2103,7 @@
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": null
         },
-        "playTiming": 29,
+        "playTiming": 33,
         "prepared": 0,
         "rarity": "rare",
         "refManaCost": 1,

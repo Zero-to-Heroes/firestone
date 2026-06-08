@@ -26,10 +26,11 @@
  *  - Restore is symmetric: GS GAME_RESET BLOCK_START pops from `gsRetained` and restores
  *    `GSState`; PTL GAME_RESET BLOCK_START pops from `ptlRetained` and restores `PTLState`.
  *    There is no cross-stream parking - each stream owns its own restore artefact.
- *  - The `onRewindCapableActionStart` consumer hook fires from GS-side captures only.
- *    Because PTL trails GS for the same action, GS is always the first capture per
- *    rewind, so this is "fire exactly once per rewind-capable action" - the symmetric PTL
- *    capture is intentionally silent on the hook to avoid duplicate consumer snapshots.
+ *  - Consumer hooks: `onRewindCapableActionStart` fires from GS-side captures (retained for
+ *    instrumentation/tests), and `onRewindCapablePtlActionStart` fires from PTL-side captures.
+ *    The consumer's own GameState snapshot is driven by the PTL hook, because the deck-tracker
+ *    zones are PTL-stream-driven and must be snapshotted at PTL action-start (after any PTL
+ *    board mutation preceding the rewound action). See `docs/rewind-architecture.md`.
  *
  * The controller is a plain class owned by {@link ReplayParser}; it is NOT plugged into
  * the ActionParser chain - snapshot semantics are cross-state (GS + PTL) and don't fit
@@ -75,13 +76,28 @@ const REWIND_DEBUG = process.env['REWIND_DEBUG'] === '1';
 
 export interface RewindControllerHooks {
 	/**
-	 * Invoked when the controller takes its FIRST snapshot for a rewind-capable action
-	 * (always the GS-side capture, since PTL trails for the same action). Consumers use
-	 * this signal to stash their own consumer-level GameState snapshot keyed by the same
-	 * originEntityId. The symmetric PTL-side capture that follows is intentionally silent
-	 * on this hook to avoid a duplicate consumer-snapshot for the same action.
+	 * Invoked when the controller takes its GS-side snapshot for a rewind-capable action
+	 * (always the FIRST capture, since PTL trails for the same action).
+	 *
+	 * NOTE: the consumer-level GameState snapshot is driven by {@link onRewindCapablePtlActionStart}
+	 * (the PTL-side capture), NOT this hook - see that hook's doc and `docs/rewind-architecture.md`.
+	 * This GS hook is retained for instrumentation / tests that assert the GS capture fires
+	 * exactly once per rewind-capable action.
 	 */
 	onRewindCapableActionStart?(meta: ParserSnapshotMeta): void;
+
+	/**
+	 * Invoked when the controller takes its PTL-side snapshot for a rewind-capable action.
+	 *
+	 * This is the signal the consumer uses to stash its own GameState snapshot keyed by
+	 * `originEntityId`: the deck-tracker zones (board / hand / deck / otherZone / secrets) are
+	 * built exclusively from PTL-stream events, so the consumer snapshot must be taken at the
+	 * PTL action-start - by which point any PTL board mutation that precedes the rewound action
+	 * (e.g. a board clear killing minions right before a Mister Clocksworth Rewind) is already
+	 * applied. Capturing on the GS side instead would snapshot a pre-PTL-mutation board and
+	 * resurrect those minions on restore. See `docs/rewind-architecture.md`.
+	 */
+	onRewindCapablePtlActionStart?(meta: ParserSnapshotMeta): void;
 
 	/**
 	 * Invoked right after a RETAINED snapshot has been restored into `GSState`. At this
@@ -374,11 +390,10 @@ export class RewindController {
 	/**
 	 * Capture the snapshot half for the given stream and push onto its retained stack.
 	 *
-	 * The consumer hook fires from GS captures only - GS is always the first capture for
-	 * a given action (PTL trails the same action by O(ms..s) of stream lag), so this is
-	 * "fire exactly once per rewind-capable action". The symmetric PTL capture is
-	 * intentionally silent on the hook to avoid a duplicate consumer snapshot for the
-	 * same action.
+	 * Both streams fire a consumer hook: GS via `onRewindCapableActionStart` (retained for
+	 * instrumentation/tests) and PTL via `onRewindCapablePtlActionStart`. The consumer's own
+	 * GameState snapshot is driven by the PTL hook only - see the hook docs and
+	 * `docs/rewind-architecture.md`.
 	 */
 	private captureFor(stream: LogStream, meta: ParserSnapshotMeta): void {
 		const t0 = Date.now();
@@ -395,6 +410,7 @@ export class RewindController {
 			this.ptlRetained.push({ meta, snapshot: ptl });
 			this.trimStack(this.ptlRetained);
 			this.perf.retainedSnapshotsTaken++;
+			this.hooks.onRewindCapablePtlActionStart?.(meta);
 		}
 	}
 

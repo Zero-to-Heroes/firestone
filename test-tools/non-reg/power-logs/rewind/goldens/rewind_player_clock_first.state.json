@@ -40,7 +40,7 @@
           "timestampAtWhichCardEnteredHand": "<scrubbed>",
           "turnAtWhichCardEnteredHand": 7
         },
-        "playTiming": 73,
+        "playTiming": 92,
         "prepared": 0,
         "rarity": "rare",
         "refManaCost": 1,
@@ -57,7 +57,7 @@
           "202": 39,
           "203": 3,
           "261": 1,
-          "263": 3,
+          "263": 1,
           "273": 1,
           "466": 1,
           "478": 2,
@@ -261,6 +261,10 @@
         "entityId": 55
       },
       {
+        "cardId": "TIME_EVENT_999",
+        "entityId": 48
+      },
+      {
         "cardId": "CORE_EDR_004_2026",
         "entityId": 49
       },
@@ -300,7 +304,7 @@
           "timestampAtWhichCardEnteredHand": "<scrubbed>",
           "turnAtWhichCardEnteredHand": 2
         },
-        "playTiming": 71,
+        "playTiming": 90,
         "prepared": 0,
         "rarity": "common",
         "refManaCost": 1,
@@ -366,7 +370,7 @@
           "timestampAtWhichCardEnteredHand": "<scrubbed>",
           "turnAtWhichCardEnteredHand": 7
         },
-        "playTiming": 72,
+        "playTiming": 91,
         "prepared": 0,
         "rarity": "common",
         "refManaCost": 3,
@@ -487,6 +491,13 @@
         "side": "opponent",
         "timestamp": "<scrubbed>",
         "turn": 3
+      },
+      {
+        "cardId": "TIME_EVENT_999",
+        "entityId": 48,
+        "side": "opponent",
+        "timestamp": "<scrubbed>",
+        "turn": 4
       },
       {
         "cardId": "CORE_EDR_004_2026",
@@ -831,9 +842,11 @@
       "<cycle>",
       "<cycle>",
       {
-        "actualManaCost": null,
-        "createdIndex": 6,
-        "entityId": 48,
+        "cardId": "",
+        "createdIndex": 0,
+        "creatorCardId": "TIME_EVENT_999",
+        "creatorEntityId": 48,
+        "entityId": 117,
         "forged": 0,
         "guessedInfo": {},
         "internalEntityId": "<scrubbed>",
@@ -844,33 +857,14 @@
           "turnAtWhichCardEnteredHand": 4
         },
         "prepared": 0,
-        "rarity": null,
-        "refManaCost": null,
         "relatedCardIds": [],
         "tags": {
-          "48": 1,
-          "49": 1,
+          "49": 6,
           "50": 2,
-          "53": 48,
-          "199": 12,
-          "202": 5,
-          "203": 4,
-          "261": 1,
-          "263": 8,
-          "273": 1,
-          "415": 1,
-          "466": 1,
-          "478": 2,
-          "1037": 0,
-          "1043": 1,
-          "1068": 0,
-          "1342": 1,
-          "1556": 1,
-          "1570": 8,
-          "2589": 1,
-          "3557": 8,
-          "3934": 1
+          "53": 117,
+          "263": 3
         },
+        "temporaryCard": true,
         "zone": "HAND"
       },
       {
@@ -1078,7 +1072,7 @@
       "internalEntityId": "<scrubbed>",
       "linkedEntityIds": [],
       "metaInfo": {},
-      "playTiming": 53,
+      "playTiming": 65,
       "prepared": 0,
       "rarity": "Free",
       "refManaCost": 2,
@@ -1287,7 +1281,7 @@
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": null
         },
-        "playTiming": 55,
+        "playTiming": 67,
         "prepared": 0,
         "rarity": "rare",
         "refManaCost": 1,
@@ -1471,7 +1465,7 @@
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": null
         },
-        "playTiming": 57,
+        "playTiming": 70,
         "prepared": 0,
         "rarity": "epic",
         "refManaCost": 3,
@@ -1529,7 +1523,7 @@
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": null
         },
-        "playTiming": 63,
+        "playTiming": 80,
         "prepared": 0,
         "rarity": "Common",
         "refManaCost": 3,
@@ -1537,6 +1531,102 @@
         "tags": {},
         "temporaryCard": false,
         "zone": "PLAY"
+      },
+      {
+        "actualManaCost": 1,
+        "cardId": "TIME_EVENT_999",
+        "cardName": "Sands of Time",
+        "countered": false,
+        "createdIndex": 6,
+        "creatorCardId": null,
+        "entityId": 48,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": [],
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": null
+        },
+        "playTiming": null,
+        "prepared": 0,
+        "rarity": "epic",
+        "refManaCost": 1,
+        "relatedCardIds": [],
+        "storedInformation": null,
+        "tags": {
+          "48": 1,
+          "49": 1,
+          "50": 2,
+          "53": 48,
+          "199": 12,
+          "202": 5,
+          "203": 4,
+          "261": 1,
+          "263": 0,
+          "273": 1,
+          "415": 1,
+          "466": 1,
+          "478": 2,
+          "1037": 0,
+          "1043": 1,
+          "1068": 0,
+          "1342": 1,
+          "1556": 1,
+          "1570": 8,
+          "2589": 1,
+          "3557": 8,
+          "3934": 1,
+          "3945": 1,
+          "4384": 48
+        },
+        "temporaryCard": false,
+        "zone": null
+      },
+      {
+        "cardId": "UNG_927",
+        "cardName": "Sudden Genesis",
+        "entityId": 116,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "lastAffectedByCardId": "TIME_EVENT_999",
+        "linkedEntityIds": [],
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": null
+        },
+        "prepared": 0,
+        "refManaCost": 4,
+        "relatedCardIds": [],
+        "tags": {
+          "49": 6,
+          "50": 2,
+          "53": 116
+        },
+        "temporaryCard": true,
+        "zone": "SETASIDE"
+      },
+      {
+        "cardId": "UNG_922",
+        "cardName": "Explore Un'Goro",
+        "entityId": 118,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "lastAffectedByCardId": "TIME_EVENT_999",
+        "linkedEntityIds": [],
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": null
+        },
+        "prepared": 0,
+        "refManaCost": 2,
+        "relatedCardIds": [],
+        "tags": {
+          "49": 6,
+          "50": 2,
+          "53": 118
+        },
+        "temporaryCard": true,
+        "zone": "SETASIDE"
       },
       {
         "cardId": "",
@@ -1658,7 +1748,7 @@
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": null
         },
-        "playTiming": 60,
+        "playTiming": 74,
         "prepared": 0,
         "rarity": "rare",
         "refManaCost": 3,
@@ -1717,7 +1807,7 @@
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": null
         },
-        "playTiming": 64,
+        "playTiming": 82,
         "prepared": 0,
         "rarity": "epic",
         "refManaCost": 3,
@@ -1792,7 +1882,7 @@
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": null
         },
-        "playTiming": 66,
+        "playTiming": 84,
         "prepared": 0,
         "rarity": "common",
         "refManaCost": 5,
@@ -1858,7 +1948,7 @@
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": null
         },
-        "playTiming": 69,
+        "playTiming": 87,
         "prepared": 0,
         "rarity": "common",
         "refManaCost": 6,
@@ -1912,7 +2002,7 @@
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": null
         },
-        "playTiming": 72,
+        "playTiming": 91,
         "prepared": 0,
         "rarity": "common",
         "refManaCost": 3,
@@ -1939,7 +2029,7 @@
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": null
         },
-        "playTiming": 71,
+        "playTiming": 90,
         "prepared": 0,
         "rarity": "common",
         "refManaCost": 1,
@@ -1963,7 +2053,7 @@
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": null
         },
-        "playTiming": 74,
+        "playTiming": 93,
         "prepared": 0,
         "putIntoPlay": true,
         "rarity": "common",
@@ -2065,6 +2155,16 @@
         "turn": 3
       },
       {
+        "cardId": "TIME_EVENT_999",
+        "entityId": 48,
+        "turn": 4
+      },
+      {
+        "cardId": "TIME_EVENT_999",
+        "entityId": 48,
+        "turn": 4
+      },
+      {
         "cardId": "CORE_EDR_004_2026",
         "entityId": 49,
         "turn": 4
@@ -2130,6 +2230,7 @@
     "spellsPlayedOnFriendlyEntities": [],
     "spellsPlayedOnFriendlyMinions": [],
     "spellsPlayedThisMatch": [
+      "<cycle>",
       "<cycle>",
       "<cycle>"
     ],
@@ -2213,7 +2314,7 @@
           "timestampAtWhichCardEnteredHand": null
         },
         "milled": true,
-        "playTiming": 75,
+        "playTiming": 97,
         "prepared": 0,
         "rarity": "legendary",
         "refManaCost": 8,
@@ -2273,7 +2374,7 @@
         "internalEntityId": "<scrubbed>",
         "linkedEntityIds": [],
         "metaInfo": {},
-        "playTiming": 76,
+        "playTiming": 98,
         "prepared": 0,
         "putIntoPlay": true,
         "rarity": "legendary",
@@ -2320,7 +2421,7 @@
         "internalEntityId": "<scrubbed>",
         "linkedEntityIds": [],
         "metaInfo": {},
-        "playTiming": 77,
+        "playTiming": 99,
         "prepared": 0,
         "putIntoPlay": true,
         "rarity": "legendary",
@@ -2659,7 +2760,7 @@
           "timestampAtWhichCardEnteredHand": "<scrubbed>",
           "turnAtWhichCardEnteredHand": 7
         },
-        "playTiming": 70,
+        "playTiming": 89,
         "prepared": 0,
         "rarity": "common",
         "refManaCost": 5,
@@ -2798,32 +2899,7 @@
     "cthunAtk": 0,
     "cthunHealth": 0,
     "currentExcavateTier": 0,
-    "currentOptions": [
-      {
-        "cardId": "TIME_000ta",
-        "context": {
-          "DataNum1": -1
-        },
-        "entityId": 152,
-        "questDifficulty": -1,
-        "questReward": {
-          "EntityId": -1
-        },
-        "source": "TIME_038t1",
-        "willBeActive": false
-      },
-      {
-        "cardId": "TIME_000tb",
-        "context": "<cycle>",
-        "entityId": 153,
-        "questDifficulty": -1,
-        "questReward": {
-          "EntityId": -1
-        },
-        "source": "TIME_038t1",
-        "willBeActive": false
-      }
-    ],
+    "currentOptions": [],
     "damageDealtThisTurn": [
       {
         "damage": 6,
@@ -3327,7 +3403,7 @@
       "internalEntityId": "<scrubbed>",
       "linkedEntityIds": [],
       "metaInfo": {},
-      "playTiming": 52,
+      "playTiming": 64,
       "prepared": 0,
       "rarity": "Free",
       "refManaCost": 2,
@@ -3545,7 +3621,7 @@
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": null
         },
-        "playTiming": 54,
+        "playTiming": 66,
         "prepared": 0,
         "rarity": "rare",
         "refManaCost": 1,
@@ -3611,7 +3687,7 @@
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": null
         },
-        "playTiming": 59,
+        "playTiming": 72,
         "prepared": 0,
         "refManaCost": 2,
         "relatedCardIds": [],
@@ -3636,7 +3712,7 @@
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": null
         },
-        "playTiming": 58,
+        "playTiming": 71,
         "prepared": 0,
         "rarity": "common",
         "refManaCost": 2,
@@ -3693,7 +3769,7 @@
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": null
         },
-        "playTiming": 62,
+        "playTiming": 79,
         "prepared": 0,
         "rarity": "Legendary",
         "refManaCost": 8,
@@ -3719,7 +3795,7 @@
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": null
         },
-        "playTiming": 65,
+        "playTiming": 83,
         "prepared": 0,
         "rarity": "common",
         "refManaCost": 8,
@@ -3797,7 +3873,7 @@
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": null
         },
-        "playTiming": 61,
+        "playTiming": 78,
         "prepared": 0,
         "rarity": "rare",
         "refManaCost": 4,
@@ -3860,7 +3936,7 @@
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": null
         },
-        "playTiming": 67,
+        "playTiming": 85,
         "prepared": 0,
         "rarity": "common",
         "refManaCost": 8,
@@ -3923,7 +3999,7 @@
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": null
         },
-        "playTiming": 56,
+        "playTiming": 68,
         "prepared": 0,
         "rarity": "common",
         "refManaCost": 2,
@@ -3980,7 +4056,7 @@
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": null
         },
-        "playTiming": 68,
+        "playTiming": 86,
         "prepared": 0,
         "rarity": "common",
         "refManaCost": 1,
@@ -4040,7 +4116,7 @@
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": null
         },
-        "playTiming": 70,
+        "playTiming": 89,
         "prepared": 0,
         "rarity": "common",
         "refManaCost": 5,
