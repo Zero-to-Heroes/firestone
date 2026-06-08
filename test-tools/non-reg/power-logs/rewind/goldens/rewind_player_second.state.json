@@ -41,6 +41,7 @@
           "turnAtWhichCardEnteredHand": 2
         },
         "playTiming": 163,
+        "prepared": 0,
         "rarity": "common",
         "refManaCost": 6,
         "relatedCardIds": [],
@@ -133,6 +134,7 @@
         "internalEntityId": "<scrubbed>",
         "linkedEntityIds": [],
         "metaInfo": {},
+        "prepared": 0,
         "rarity": null,
         "refManaCost": null,
         "relatedCardIds": [],
@@ -153,6 +155,7 @@
         "internalEntityId": "<scrubbed>",
         "linkedEntityIds": [],
         "metaInfo": {},
+        "prepared": 0,
         "rarity": null,
         "refManaCost": null,
         "relatedCardIds": [],
@@ -180,6 +183,7 @@
           "turnAtWhichCardEnteredCurrentZone": 0,
           "turnAtWhichCardEnteredHand": 0
         },
+        "prepared": 0,
         "rarity": null,
         "refManaCost": 0,
         "relatedCardIds": [],
@@ -204,6 +208,7 @@
           "turnAtWhichCardEnteredCurrentZone": 0,
           "turnAtWhichCardEnteredHand": 0
         },
+        "prepared": 0,
         "rarity": null,
         "refManaCost": null,
         "relatedCardIds": [],
@@ -228,6 +233,7 @@
           "turnAtWhichCardEnteredCurrentZone": 0,
           "turnAtWhichCardEnteredHand": 0
         },
+        "prepared": 0,
         "rarity": null,
         "refManaCost": null,
         "relatedCardIds": [],
@@ -336,6 +342,7 @@
         "internalEntityId": "<scrubbed>",
         "linkedEntityIds": [],
         "metaInfo": {},
+        "prepared": 0,
         "relatedCardIds": [],
         "tags": {}
       },
@@ -345,6 +352,7 @@
         "internalEntityId": "<scrubbed>",
         "linkedEntityIds": "<cycle>",
         "metaInfo": "<cycle>",
+        "prepared": 0,
         "relatedCardIds": "<cycle>",
         "tags": "<cycle>"
       },
@@ -354,6 +362,7 @@
         "internalEntityId": "<scrubbed>",
         "linkedEntityIds": "<cycle>",
         "metaInfo": "<cycle>",
+        "prepared": 0,
         "relatedCardIds": "<cycle>",
         "tags": "<cycle>"
       },
@@ -363,6 +372,7 @@
         "internalEntityId": "<scrubbed>",
         "linkedEntityIds": "<cycle>",
         "metaInfo": "<cycle>",
+        "prepared": 0,
         "relatedCardIds": "<cycle>",
         "tags": "<cycle>"
       },
@@ -372,6 +382,7 @@
         "internalEntityId": "<scrubbed>",
         "linkedEntityIds": "<cycle>",
         "metaInfo": "<cycle>",
+        "prepared": 0,
         "relatedCardIds": "<cycle>",
         "tags": "<cycle>"
       },
@@ -381,6 +392,7 @@
         "internalEntityId": "<scrubbed>",
         "linkedEntityIds": "<cycle>",
         "metaInfo": "<cycle>",
+        "prepared": 0,
         "relatedCardIds": "<cycle>",
         "tags": "<cycle>"
       },
@@ -390,6 +402,7 @@
         "internalEntityId": "<scrubbed>",
         "linkedEntityIds": "<cycle>",
         "metaInfo": "<cycle>",
+        "prepared": 0,
         "relatedCardIds": "<cycle>",
         "tags": "<cycle>"
       },
@@ -399,6 +412,7 @@
         "internalEntityId": "<scrubbed>",
         "linkedEntityIds": "<cycle>",
         "metaInfo": "<cycle>",
+        "prepared": 0,
         "relatedCardIds": "<cycle>",
         "tags": "<cycle>"
       },
@@ -408,6 +422,7 @@
         "internalEntityId": "<scrubbed>",
         "linkedEntityIds": "<cycle>",
         "metaInfo": "<cycle>",
+        "prepared": 0,
         "relatedCardIds": "<cycle>",
         "tags": "<cycle>"
       },
@@ -417,6 +432,7 @@
         "internalEntityId": "<scrubbed>",
         "linkedEntityIds": "<cycle>",
         "metaInfo": "<cycle>",
+        "prepared": 0,
         "relatedCardIds": "<cycle>",
         "tags": "<cycle>"
       },
@@ -426,6 +442,7 @@
         "internalEntityId": "<scrubbed>",
         "linkedEntityIds": "<cycle>",
         "metaInfo": "<cycle>",
+        "prepared": 0,
         "relatedCardIds": "<cycle>",
         "tags": "<cycle>"
       },
@@ -435,6 +452,7 @@
         "internalEntityId": "<scrubbed>",
         "linkedEntityIds": "<cycle>",
         "metaInfo": "<cycle>",
+        "prepared": 0,
         "relatedCardIds": "<cycle>",
         "tags": "<cycle>"
       },
@@ -444,6 +462,7 @@
         "internalEntityId": "<scrubbed>",
         "linkedEntityIds": "<cycle>",
         "metaInfo": "<cycle>",
+        "prepared": 0,
         "relatedCardIds": "<cycle>",
         "tags": "<cycle>"
       },
@@ -453,6 +472,7 @@
         "internalEntityId": "<scrubbed>",
         "linkedEntityIds": "<cycle>",
         "metaInfo": "<cycle>",
+        "prepared": 0,
         "relatedCardIds": "<cycle>",
         "tags": "<cycle>"
       },
@@ -462,6 +482,7 @@
         "internalEntityId": "<scrubbed>",
         "linkedEntityIds": "<cycle>",
         "metaInfo": "<cycle>",
+        "prepared": 0,
         "relatedCardIds": "<cycle>",
         "tags": "<cycle>"
       },
@@ -471,6 +492,7 @@
         "internalEntityId": "<scrubbed>",
         "linkedEntityIds": "<cycle>",
         "metaInfo": "<cycle>",
+        "prepared": 0,
         "relatedCardIds": "<cycle>",
         "tags": "<cycle>"
       },
@@ -487,6 +509,7 @@
           "timestampAtWhichCardEnteredHand": "<scrubbed>",
           "turnAtWhichCardEnteredHand": 0
         },
+        "prepared": 0,
         "rarity": null,
         "refManaCost": null,
         "relatedCardIds": [],
@@ -511,6 +534,7 @@
           "timestampAtWhichCardEnteredHand": "<scrubbed>",
           "turnAtWhichCardEnteredHand": 0
         },
+        "prepared": 0,
         "rarity": null,
         "refManaCost": null,
         "relatedCardIds": [],
@@ -535,6 +559,7 @@
           "timestampAtWhichCardEnteredHand": "<scrubbed>",
           "turnAtWhichCardEnteredHand": 0
         },
+        "prepared": 0,
         "rarity": null,
         "refManaCost": null,
         "relatedCardIds": [],
@@ -576,6 +601,7 @@
           "turnAtWhichCardEnteredCurrentZone": 1,
           "turnAtWhichCardEnteredHand": 1
         },
+        "prepared": 0,
         "rarity": null,
         "refManaCost": null,
         "relatedCardIds": "<cycle>",
@@ -598,6 +624,7 @@
           "turnAtWhichCardEnteredCurrentZone": 2,
           "turnAtWhichCardEnteredHand": 2
         },
+        "prepared": 0,
         "relatedCardIds": [],
         "tags": {
           "49": 6,
@@ -622,6 +649,7 @@
           "turnAtWhichCardEnteredCurrentZone": 4,
           "turnAtWhichCardEnteredHand": 4
         },
+        "prepared": 0,
         "rarity": null,
         "refManaCost": null,
         "relatedCardIds": [],
@@ -667,6 +695,7 @@
           "turnAtWhichCardEnteredCurrentZone": 5,
           "turnAtWhichCardEnteredHand": 5
         },
+        "prepared": 0,
         "relatedCardIds": [],
         "tags": {
           "49": 6,
@@ -691,6 +720,7 @@
           "turnAtWhichCardEnteredCurrentZone": 5,
           "turnAtWhichCardEnteredHand": 5
         },
+        "prepared": 0,
         "rarity": null,
         "refManaCost": null,
         "relatedCardIds": [],
@@ -715,6 +745,7 @@
           "turnAtWhichCardEnteredCurrentZone": 7,
           "turnAtWhichCardEnteredHand": 7
         },
+        "prepared": 0,
         "rarity": null,
         "refManaCost": null,
         "relatedCardIds": [],
@@ -751,6 +782,7 @@
       "linkedEntityIds": [],
       "metaInfo": {},
       "playTiming": 147,
+      "prepared": 0,
       "rarity": "Free",
       "refManaCost": 2,
       "relatedCardIds": [],
@@ -818,6 +850,7 @@
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": null
         },
+        "prepared": 0,
         "relatedCardIds": [],
         "tags": {
           "49": 6,
@@ -838,6 +871,7 @@
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": null
         },
+        "prepared": 0,
         "relatedCardIds": [],
         "tags": {
           "49": 6,
@@ -858,6 +892,7 @@
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": null
         },
+        "prepared": 0,
         "relatedCardIds": [],
         "tags": {
           "49": 6,
@@ -878,6 +913,7 @@
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": null
         },
+        "prepared": 0,
         "relatedCardIds": [],
         "tags": {
           "49": 6,
@@ -898,6 +934,7 @@
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": null
         },
+        "prepared": 0,
         "relatedCardIds": [],
         "tags": {
           "49": 6,
@@ -923,6 +960,7 @@
           "timestampAtWhichCardEnteredHand": null
         },
         "playTiming": 149,
+        "prepared": 0,
         "rarity": "rare",
         "refManaCost": 1,
         "relatedCardIds": "<cycle>",
@@ -983,6 +1021,7 @@
           "timestampAtWhichCardEnteredHand": null
         },
         "playTiming": null,
+        "prepared": 0,
         "refManaCost": 0,
         "relatedCardIds": "<cycle>",
         "storedInformation": null,
@@ -1016,6 +1055,7 @@
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": null
         },
+        "prepared": 0,
         "relatedCardIds": [],
         "tags": {
           "49": 6,
@@ -1036,6 +1076,7 @@
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": null
         },
+        "prepared": 0,
         "relatedCardIds": [],
         "tags": {
           "49": 6,
@@ -1056,6 +1097,7 @@
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": null
         },
+        "prepared": 0,
         "relatedCardIds": [],
         "tags": {
           "49": 6,
@@ -1076,6 +1118,7 @@
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": null
         },
+        "prepared": 0,
         "relatedCardIds": [],
         "tags": {
           "49": 6,
@@ -1101,6 +1144,7 @@
           "timestampAtWhichCardEnteredHand": null
         },
         "playTiming": 151,
+        "prepared": 0,
         "rarity": "epic",
         "refManaCost": 3,
         "relatedCardIds": [],
@@ -1158,6 +1202,7 @@
           "timestampAtWhichCardEnteredHand": null
         },
         "playTiming": 157,
+        "prepared": 0,
         "rarity": "Common",
         "refManaCost": 3,
         "relatedCardIds": [],
@@ -1176,6 +1221,7 @@
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": null
         },
+        "prepared": 0,
         "relatedCardIds": [],
         "tags": {
           "49": 6,
@@ -1196,6 +1242,7 @@
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": null
         },
+        "prepared": 0,
         "relatedCardIds": [],
         "tags": {
           "49": 6,
@@ -1216,6 +1263,7 @@
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": null
         },
+        "prepared": 0,
         "relatedCardIds": [],
         "tags": {
           "49": 6,
@@ -1236,6 +1284,7 @@
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": null
         },
+        "prepared": 0,
         "relatedCardIds": [],
         "tags": {
           "49": 6,
@@ -1256,6 +1305,7 @@
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": null
         },
+        "prepared": 0,
         "relatedCardIds": [],
         "tags": {
           "49": 6,
@@ -1281,6 +1331,7 @@
           "timestampAtWhichCardEnteredHand": null
         },
         "playTiming": 154,
+        "prepared": 0,
         "rarity": "rare",
         "refManaCost": 3,
         "relatedCardIds": [],
@@ -1339,6 +1390,7 @@
           "timestampAtWhichCardEnteredHand": null
         },
         "playTiming": 158,
+        "prepared": 0,
         "rarity": "epic",
         "refManaCost": 3,
         "relatedCardIds": [],
@@ -1413,6 +1465,7 @@
           "timestampAtWhichCardEnteredHand": null
         },
         "playTiming": 160,
+        "prepared": 0,
         "rarity": "common",
         "refManaCost": 5,
         "relatedCardIds": [],
@@ -1644,6 +1697,7 @@
           "turnAtWhichCardEnteredHand": 1
         },
         "playTiming": 150,
+        "prepared": 0,
         "rarity": "common",
         "refManaCost": 2,
         "relatedCardIds": [],
@@ -1703,6 +1757,7 @@
         },
         "playTiming": 155,
         "positionFromTop": -7,
+        "prepared": 0,
         "rarity": "rare",
         "refManaCost": 4,
         "relatedCardIds": [],
@@ -1766,6 +1821,7 @@
           "turnAtWhichCardEnteredHand": 1
         },
         "playTiming": 161,
+        "prepared": 0,
         "rarity": "common",
         "refManaCost": 8,
         "relatedCardIds": [],
@@ -1829,6 +1885,7 @@
           "turnAtWhichCardEnteredHand": 6
         },
         "playTiming": 162,
+        "prepared": 0,
         "rarity": "common",
         "refManaCost": 1,
         "relatedCardIds": [],
@@ -1889,6 +1946,7 @@
           "turnAtWhichCardEnteredHand": 7
         },
         "playTiming": 164,
+        "prepared": 0,
         "rarity": "common",
         "refManaCost": 5,
         "relatedCardIds": [],
@@ -2065,6 +2123,7 @@
         "lastAffectedByEntityId": 2,
         "linkedEntityIds": [],
         "metaInfo": {},
+        "prepared": 0,
         "refManaCost": 1,
         "relatedCardIds": [],
         "tags": {
@@ -2115,6 +2174,7 @@
         "lastAffectedByEntityId": 2,
         "linkedEntityIds": "<cycle>",
         "metaInfo": {},
+        "prepared": 0,
         "refManaCost": 8,
         "relatedCardIds": "<cycle>",
         "tags": {
@@ -2159,6 +2219,7 @@
         "lastAffectedByEntityId": 2,
         "linkedEntityIds": [],
         "metaInfo": {},
+        "prepared": 0,
         "refManaCost": 8,
         "relatedCardIds": [],
         "tags": {
@@ -2210,6 +2271,7 @@
         "linkedEntityIds": "<cycle>",
         "metaInfo": "<cycle>",
         "playTiming": 161,
+        "prepared": 0,
         "rarity": "common",
         "refManaCost": 8,
         "relatedCardIds": "<cycle>",
@@ -2307,6 +2369,7 @@
         "internalEntityId": "<scrubbed>",
         "linkedEntityIds": [],
         "metaInfo": {},
+        "prepared": 0,
         "relatedCardIds": [],
         "tags": {}
       },
@@ -2316,6 +2379,7 @@
         "internalEntityId": "<scrubbed>",
         "linkedEntityIds": "<cycle>",
         "metaInfo": "<cycle>",
+        "prepared": 0,
         "relatedCardIds": "<cycle>",
         "tags": "<cycle>"
       },
@@ -2325,6 +2389,7 @@
         "internalEntityId": "<scrubbed>",
         "linkedEntityIds": "<cycle>",
         "metaInfo": "<cycle>",
+        "prepared": 0,
         "relatedCardIds": "<cycle>",
         "tags": "<cycle>"
       },
@@ -2334,6 +2399,7 @@
         "internalEntityId": "<scrubbed>",
         "linkedEntityIds": "<cycle>",
         "metaInfo": "<cycle>",
+        "prepared": 0,
         "relatedCardIds": "<cycle>",
         "tags": "<cycle>"
       },
@@ -2343,6 +2409,7 @@
         "internalEntityId": "<scrubbed>",
         "linkedEntityIds": "<cycle>",
         "metaInfo": "<cycle>",
+        "prepared": 0,
         "relatedCardIds": "<cycle>",
         "tags": "<cycle>"
       },
@@ -2352,6 +2419,7 @@
         "internalEntityId": "<scrubbed>",
         "linkedEntityIds": "<cycle>",
         "metaInfo": "<cycle>",
+        "prepared": 0,
         "relatedCardIds": "<cycle>",
         "tags": "<cycle>"
       },
@@ -2361,6 +2429,7 @@
         "internalEntityId": "<scrubbed>",
         "linkedEntityIds": "<cycle>",
         "metaInfo": "<cycle>",
+        "prepared": 0,
         "relatedCardIds": "<cycle>",
         "tags": "<cycle>"
       },
@@ -2370,6 +2439,7 @@
         "internalEntityId": "<scrubbed>",
         "linkedEntityIds": "<cycle>",
         "metaInfo": "<cycle>",
+        "prepared": 0,
         "relatedCardIds": "<cycle>",
         "tags": "<cycle>"
       },
@@ -2379,6 +2449,7 @@
         "internalEntityId": "<scrubbed>",
         "linkedEntityIds": "<cycle>",
         "metaInfo": "<cycle>",
+        "prepared": 0,
         "relatedCardIds": "<cycle>",
         "tags": "<cycle>"
       },
@@ -2388,6 +2459,7 @@
         "internalEntityId": "<scrubbed>",
         "linkedEntityIds": "<cycle>",
         "metaInfo": "<cycle>",
+        "prepared": 0,
         "relatedCardIds": "<cycle>",
         "tags": "<cycle>"
       },
@@ -2397,6 +2469,7 @@
         "internalEntityId": "<scrubbed>",
         "linkedEntityIds": "<cycle>",
         "metaInfo": "<cycle>",
+        "prepared": 0,
         "relatedCardIds": "<cycle>",
         "tags": "<cycle>"
       },
@@ -2406,6 +2479,7 @@
         "internalEntityId": "<scrubbed>",
         "linkedEntityIds": "<cycle>",
         "metaInfo": "<cycle>",
+        "prepared": 0,
         "relatedCardIds": "<cycle>",
         "tags": "<cycle>"
       },
@@ -2415,6 +2489,7 @@
         "internalEntityId": "<scrubbed>",
         "linkedEntityIds": "<cycle>",
         "metaInfo": "<cycle>",
+        "prepared": 0,
         "relatedCardIds": "<cycle>",
         "tags": "<cycle>"
       },
@@ -2424,6 +2499,7 @@
         "internalEntityId": "<scrubbed>",
         "linkedEntityIds": "<cycle>",
         "metaInfo": "<cycle>",
+        "prepared": 0,
         "relatedCardIds": "<cycle>",
         "tags": "<cycle>"
       },
@@ -2433,6 +2509,7 @@
         "internalEntityId": "<scrubbed>",
         "linkedEntityIds": "<cycle>",
         "metaInfo": "<cycle>",
+        "prepared": 0,
         "relatedCardIds": "<cycle>",
         "tags": "<cycle>"
       },
@@ -2442,6 +2519,7 @@
         "internalEntityId": "<scrubbed>",
         "linkedEntityIds": "<cycle>",
         "metaInfo": "<cycle>",
+        "prepared": 0,
         "relatedCardIds": "<cycle>",
         "tags": "<cycle>"
       },
@@ -2451,6 +2529,7 @@
         "internalEntityId": "<scrubbed>",
         "linkedEntityIds": "<cycle>",
         "metaInfo": "<cycle>",
+        "prepared": 0,
         "relatedCardIds": "<cycle>",
         "tags": "<cycle>"
       },
@@ -2460,6 +2539,7 @@
         "internalEntityId": "<scrubbed>",
         "linkedEntityIds": "<cycle>",
         "metaInfo": "<cycle>",
+        "prepared": 0,
         "relatedCardIds": "<cycle>",
         "tags": "<cycle>"
       },
@@ -2469,6 +2549,7 @@
         "internalEntityId": "<scrubbed>",
         "linkedEntityIds": "<cycle>",
         "metaInfo": "<cycle>",
+        "prepared": 0,
         "relatedCardIds": "<cycle>",
         "tags": "<cycle>"
       },
@@ -2478,6 +2559,7 @@
         "internalEntityId": "<scrubbed>",
         "linkedEntityIds": "<cycle>",
         "metaInfo": "<cycle>",
+        "prepared": 0,
         "relatedCardIds": "<cycle>",
         "tags": "<cycle>"
       },
@@ -2498,6 +2580,7 @@
           "timestampAtWhichCardEnteredHand": "<scrubbed>",
           "turnAtWhichCardEnteredHand": 0
         },
+        "prepared": 0,
         "refManaCost": 2,
         "relatedCardIds": [],
         "tags": {
@@ -2555,6 +2638,7 @@
           "turnAtWhichCardEnteredCurrentZone": 1,
           "turnAtWhichCardEnteredHand": 1
         },
+        "prepared": 0,
         "refManaCost": 8,
         "relatedCardIds": "<cycle>",
         "tags": "<cycle>",
@@ -2577,6 +2661,7 @@
           "turnAtWhichCardEnteredCurrentZone": 4,
           "turnAtWhichCardEnteredHand": 4
         },
+        "prepared": 0,
         "refManaCost": 8,
         "relatedCardIds": [],
         "tags": {
@@ -2630,6 +2715,7 @@
           "turnAtWhichCardEnteredCurrentZone": 7,
           "turnAtWhichCardEnteredHand": 7
         },
+        "prepared": 0,
         "rarity": "common",
         "refManaCost": 1,
         "relatedCardIds": [],
@@ -2668,6 +2754,7 @@
           "turnAtWhichCardEnteredCurrentZone": 7,
           "turnAtWhichCardEnteredHand": 7
         },
+        "prepared": 0,
         "rarity": "rare",
         "refManaCost": 1,
         "relatedCardIds": [],
@@ -2717,6 +2804,7 @@
       "linkedEntityIds": [],
       "metaInfo": {},
       "playTiming": 146,
+      "prepared": 0,
       "rarity": "Free",
       "refManaCost": 2,
       "relatedCardIds": [],
@@ -2770,6 +2858,7 @@
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": null
         },
+        "prepared": 0,
         "rarity": "Rare",
         "refManaCost": 5,
         "relatedCardIds": [],
@@ -2813,6 +2902,7 @@
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": null
         },
+        "prepared": 0,
         "rarity": "Legendary",
         "refManaCost": 9,
         "relatedCardIds": [],
@@ -2860,6 +2950,7 @@
           "timestampAtWhichCardEnteredHand": null
         },
         "playTiming": 148,
+        "prepared": 0,
         "rarity": "rare",
         "refManaCost": 1,
         "relatedCardIds": "<cycle>",
@@ -2925,6 +3016,7 @@
           "timestampAtWhichCardEnteredHand": null
         },
         "playTiming": 153,
+        "prepared": 0,
         "refManaCost": 2,
         "relatedCardIds": [],
         "tags": {},
@@ -2949,6 +3041,7 @@
           "timestampAtWhichCardEnteredHand": null
         },
         "playTiming": 152,
+        "prepared": 0,
         "rarity": "common",
         "refManaCost": 2,
         "relatedCardIds": [],
@@ -3005,6 +3098,7 @@
           "timestampAtWhichCardEnteredHand": null
         },
         "playTiming": 156,
+        "prepared": 0,
         "rarity": "Legendary",
         "refManaCost": 8,
         "relatedCardIds": [],
@@ -3030,6 +3124,7 @@
           "timestampAtWhichCardEnteredHand": null
         },
         "playTiming": 159,
+        "prepared": 0,
         "rarity": "common",
         "refManaCost": 8,
         "relatedCardIds": [],
