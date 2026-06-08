@@ -65,7 +65,6 @@ const internalGiftCreators = [
 	CardIds.AnduinsGift_GIFT_12,
 	CardIds.ApexisSmuggler,
 	CardIds.ApocalypseTavernBrawlToken,
-	CardIds.ApothecaryHelbrim,
 	CardIds.ArcaneBreath,
 	CardIds.ArcaneBrilliance,
 	CardIds.ArcaneFlux_ArcaneFluxTavernBrawlEnchantment,
