@@ -1500,6 +1500,16 @@ export class Oracle {
 					}
 					return null;
 			}
+		} else {
+			switch (creatorCardId) {
+				case CardIds.UnidentifiedElixir_ElixirOfHopeToken:
+					if (node.Parent?.Type === NodeType.Action) {
+						const act = node.Parent.Object as Action;
+						const existingEntity = gameState.CurrentEntities.get(act.Entity);
+						return existingEntity?.CardId ?? null;
+					}
+					return null;
+			}
 		}
 
 		if (node.Parent != null && node.Parent.Type === NodeType.Action) {

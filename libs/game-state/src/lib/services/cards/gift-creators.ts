@@ -310,6 +310,8 @@ const internalGiftCreators = [
 	CardIds.EliteTaurenChampion,
 	CardIds.EliteTaurenChieftainLegacy,
 	CardIds.EliteTaurenChieftainVanilla,
+	CardIds.UnidentifiedElixir_ElixirOfHopeToken,
+	CardIds.ElixirOfHope_HopefulEnchantment,
 	CardIds.EmberscarredWhelp_FIR_927,
 	CardIds.EmbraceOfNature_EmbraceOfNatureToken,
 	CardIds.EmbraceOfNature,

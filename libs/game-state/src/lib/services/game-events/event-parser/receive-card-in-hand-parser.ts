@@ -70,16 +70,19 @@ export class ReceiveCardInHandParser implements EventParser {
 			return currentState;
 		}
 
+		const debug = cardIdOrDbfId === 'EX1_067';
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const opponentDeck = isPlayer ? currentState.opponentDeck : currentState.playerDeck;
 
 		const cardId = resolveCardIdForReceiveInHand(cardIdOrDbfId, gameEvent.additionalData.tags, this.allCards);
+		debug && console.debug('[debug] cardId', cardId);
 		let { creatorCardId, creatorEntityId } = denormalizeCreatorCardId(
 			gameEvent.additionalData.creatorCardId,
 			gameEvent.additionalData.creatorEntityId,
 			deck,
 		);
+		debug && console.debug('[debug] creatorCardId', creatorCardId, creatorEntityId);
 		// Shatter hand pieces may omit CREATOR in the log; infer Spark of Life or Sands of Time from cards played this match (most recent wins).
 		if (!creatorCardId && !isPlayer) {
 			const tags = gameEvent.additionalData?.tags ?? [];
@@ -117,6 +120,8 @@ export class ReceiveCardInHandParser implements EventParser {
 		) as CardIds;
 		const buffingEntityCardId = gameEvent.additionalData.buffingEntityCardId;
 		const buffCardId = gameEvent.additionalData.buffCardId;
+		debug &&
+			console.debug('[debug] lastInfluencedByCardId', lastInfluencedByCardId, rawLastInfluencedBy, creatorCardId);
 		const isSpecialCasePublicWhenOpponentDraws =
 			// This is starting to become one of the worst tangle of special cases in the app
 			//The idea is this:
@@ -132,7 +137,17 @@ export class ReceiveCardInHandParser implements EventParser {
 			// || (isPlayer && !hideInfoWhenPlayerPlaysIt.includes(lastInfluencedByCardId as CardIds))
 			((!!cardId && isCastWhenDrawn(cardId, this.allCards)) ||
 				publicCardCreators.includes(lastInfluencedByCardId as CardIds) ||
+				publicCardCreators.includes(creatorCardId as CardIds) ||
 				specialCasePublicCardCreators.includes(cardId as CardIds));
+		debug &&
+			console.debug(
+				'[debug] isSpecialCasePublicWhenOpponentDraws',
+				isSpecialCasePublicWhenOpponentDraws,
+				lastInfluencedByCardId,
+				cardId,
+				publicCardCreators.includes(lastInfluencedByCardId as CardIds),
+				specialCasePublicCardCreators.includes(cardId as CardIds),
+			);
 		const refForPublicCheck = cardId ? this.allCards.getCard(cardId) : null;
 		const isCardInfoPublic =
 			isPlayer ||
@@ -146,14 +161,15 @@ export class ReceiveCardInHandParser implements EventParser {
 				(this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.ECHO]) ||
 					this.allCards.getCard(cardId).mechanics?.includes(GameTag[GameTag.NON_KEYWORD_ECHO]))) ||
 			isSpecialCasePublicWhenOpponentDraws;
-		console.debug(
-			'[receive-card-in-hand] isCardInfoPublic',
-			isCardInfoPublic,
-			isPlayer,
-			cardId,
-			publicCardCreators.includes(lastInfluencedByCardId as CardIds),
-			lastInfluencedByCardId,
-		);
+		debug &&
+			console.debug(
+				'[debug] [receive-card-in-hand] isCardInfoPublic',
+				isCardInfoPublic,
+				isPlayer,
+				cardId,
+				publicCardCreators.includes(lastInfluencedByCardId as CardIds),
+				lastInfluencedByCardId,
+			);
 
 		// First try and see if this card doesn't come from the board or from the other zone (in case of discovers)
 		const boardCard = this.helper.findCardInZone(deck.board, null, entityId);
