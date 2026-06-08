@@ -1731,7 +1731,7 @@ export const cardIdSelector = (
 		case CardIds.GrandMagusAntonidas:
 			return and(side(inputSide), or(inHand, inDeck), spellExtended, fire);
 		case CardIds.GraveDefiler:
-			return and(side(inputSide), inDeck, spell, fel);
+			return and(side(inputSide), or(inDeck, inHand), spell, fel);
 		case CardIds.GraveDigging:
 			return and(side(inputSide), or(inDeck, inHand), undead);
 		case CardIds.GreedyPartner_WW_901:
