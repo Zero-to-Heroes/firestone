@@ -5,8 +5,12 @@
 }
 
 .coliseum-container {
-	height: 100%;
+	height: 100vh;
+	height: 100dvh;
 	width: 100%;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
 	background: var(--color-7);
 	color: var(--color-1);
 }
@@ -16,6 +20,7 @@
 	justify-content: center;
 	padding: 8px;
 	background: rgba(0, 0, 0, 0.2);
+	flex-shrink: 0;
 }
 
 .open-in-firestone-content {
@@ -49,17 +54,39 @@
 
 .external-player {
 	position: relative;
-	width: 75%;
-	margin: auto;
-	// overflow: hidden;
-	padding-right: 5px;
-	display: block;
+	flex: 1 1 auto;
+	min-height: 0;
+	width: 100%;
+	max-width: min(1920px, calc(100vw - 24px));
+	margin: 0 auto;
+	padding: 0 12px;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+}
+
+fs-coliseum {
+	display: flex;
+	flex-direction: column;
+	flex: 1 1 auto;
+	min-height: 0;
+	width: 100%;
 }
 
 fs-coliseum ::ng-deep {
+	.coliseum {
+		flex: 1 1 auto;
+		min-height: 0;
+	}
+
 	.manastorm-player-wrapper {
 		background: transparent;
 	}
+
+	.player-seeker-container {
+		width: 100%;
+	}
+
 	// Hide the "view online" button
 	.player-controls-content.player-controls-content-left {
 		opacity: 0;
@@ -75,5 +102,24 @@ fs-coliseum ::ng-deep {
 	}
 	.player-seeker-container {
 		color: var(--default-title-color, red);
+	}
+
+	turn-narrator,
+	.player-controls-content,
+	.player-control-element {
+		color: var(--color-1);
+		--icon-color: var(--color-1);
+		background-color: transparent;
+	}
+	.player-control-element:hover,
+	.player-controls-content.player-controls-content a:hover {
+		color: var(--color-1);
+		--icon-color: var(--color-1);
+		background-color: var(--on-control-button-background-color);
+	}
+	.player-control-element.toggled {
+		color: var(--color-4);
+		--icon-color: var(--color-4);
+		background-color: var(--color-1);
 	}
 }

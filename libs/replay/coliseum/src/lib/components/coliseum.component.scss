@@ -1,9 +1,23 @@
+:host {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	min-height: 0;
+}
+
 .coliseum {
 	position: relative;
 	display: flex;
 	flex-direction: column;
+	flex: 1 1 auto;
+	height: 100%;
+	min-height: 0;
+	max-height: 100%;
+	overflow: hidden;
 	user-select: none;
 	-moz-user-select: none;
+	container-type: inline-size;
+	container-name: coliseum;
 
 	game {
 		position: absolute;
@@ -27,6 +41,57 @@
 		display: flex;
 		align-items: flex-start;
 		justify-content: center;
+		flex-shrink: 0;
+	}
+
+	.manastorm-player-wrapper {
+		flex: 1 1 auto;
+		min-height: 0;
+		overflow: hidden;
+		display: flex;
+		justify-content: center;
+	}
+
+	.replay-layout-column {
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+		max-height: 100%;
+		min-height: 0;
+		width: 100%;
+		max-width: 100%;
+	}
+
+	.replay-chrome {
+		flex-shrink: 0;
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+
+		::ng-deep .player-seeker-container,
+		::ng-deep .turn-narrator,
+		::ng-deep .player-controls {
+			flex-shrink: 0;
+			width: 100%;
+		}
+	}
+
+	.replay-stage {
+		position: relative;
+		width: 100%;
+		height: 100%;
+		min-height: 0;
+	}
+
+	.game-column {
+		container-type: size;
+		container-name: game-column;
+		width: 100%;
+		height: 100%;
+		min-height: 0;
+		min-width: 0;
+		display: grid;
+		place-items: center;
 	}
 
 	.sidebar {
@@ -35,12 +100,10 @@
 		right: 0;
 		width: 11%;
 		height: 100%;
+		z-index: 1;
 	}
 
 	&.wide {
-		&::before {
-			padding-top: 56%;
-		}
 		::ng-deep tooltips tooltip {
 			width: 15%;
 		}
@@ -52,12 +115,126 @@
 	}
 }
 
+@container coliseum (min-width: 1100px) {
+	.coliseum {
+		.replay-stage {
+			display: flex;
+			gap: 12px;
+			align-items: stretch;
+		}
+
+		.game-column {
+			flex: 1 1 auto;
+			min-width: 0;
+			width: auto;
+			height: 100%;
+		}
+
+		.sidebar {
+			position: relative;
+			top: auto;
+			right: auto;
+			width: min(280px, 24%);
+			flex-shrink: 0;
+			height: 100%;
+			max-height: 100%;
+			align-self: auto;
+			min-height: 0;
+			overflow: hidden;
+			z-index: auto;
+
+			::ng-deep .decks,
+			::ng-deep .events {
+				flex: 1 1 auto;
+				min-height: 0;
+				overflow: hidden;
+			}
+
+			::ng-deep {
+				.menu {
+					flex-shrink: 0;
+					font-size: 14px;
+					gap: 5px;
+					padding-bottom: 10px;
+
+					.menu-item {
+						padding: 5px 10px;
+					}
+				}
+
+				.player-decks .section .title {
+					font-size: 14px;
+					height: auto;
+					min-height: 28px;
+				}
+
+				.player-decks .no-list {
+					font-size: 14px;
+					padding: 12px;
+				}
+
+				.player-decks .deck-list .card .deck-card {
+					height: 26px;
+
+					.mana-cost span {
+						font-size: 14px;
+					}
+
+					.card-name span {
+						font-size: 13px;
+					}
+
+					.number-of-copies span,
+					.position-from-bottom span,
+					.position-from-top span,
+					.legendary-symbol span,
+					.icon-symbol span,
+					.gift-symbol span {
+						font-size: 13px;
+					}
+				}
+
+				.events-log {
+					font-size: 14px;
+
+					.log.turn {
+						margin-top: 5px;
+						padding-top: 5px;
+					}
+				}
+			}
+		}
+
+		.status.background-parse {
+			right: 2%;
+		}
+
+		&.wide ::ng-deep tooltips tooltip {
+			width: 12%;
+		}
+	}
+}
+
 .aspect-ratio-wrapper {
 	position: relative;
+	width: 100%;
 }
 
 .aspect-ratio-wrapper.ar-16x9 {
-	padding-bottom: 56.25%;
+	aspect-ratio: 16 / 9;
+	width: 100%;
+	max-width: 100%;
+	max-height: 100%;
+	height: auto;
+	padding-bottom: 0;
+	margin: 0;
+}
+
+// When the game column has a definite size, pick whichever 16:9 dimension fits (width- or height-limited).
+@container game-column (min-height: 1px) {
+	.aspect-ratio-wrapper.ar-16x9 {
+		width: min(100cqw, calc(100cqh * 16 / 9));
+	}
 }
 
 .aspect-ratio-inner {
@@ -75,10 +252,12 @@
 .manastorm-player {
 	margin: 0 auto;
 	width: 100%;
-	max-width: calc((100vh - 150px) * 16 / 9);
+	flex: 1 1 auto;
+	min-height: 0;
+	max-height: 100%;
+	max-width: 100%;
 	display: flex;
 	flex-direction: column;
-	// overflow: hidden;
 }
 
 .status {

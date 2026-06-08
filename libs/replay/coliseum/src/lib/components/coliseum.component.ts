@@ -60,35 +60,40 @@ const isSkippedAction = (action: Action): boolean => {
 	template: `
 		<div class="coliseum wide">
 			<section class="manastorm-player-wrapper">
-				<div class="manastorm-player">
-					<div class="aspect-ratio-wrapper ar-16x9">
-						<div class="aspect-ratio-inner">
-							<ng-container *ngIf="{ currentAction: currentAction$ | async } as value">
-								<!-- Allow for an override by the action, for BG sims -->
-								<game
-									*ngIf="game"
-									[gameMode]="gameMode$ | async"
-									[playerId]="value.currentAction?.playerId ?? game.players[0].playerId"
-									[opponentId]="value.currentAction?.opponentId ?? game.players[1].playerId"
-									[playerName]="game.players[0].name"
-									[opponentName]="game.players[1].name"
-									[currentAction]="value.currentAction"
-									[showHiddenCards]="showHiddenCards"
-								>
-								</game>
-							</ng-container>
-							<div class="status background-parse" *ngIf="backgroundParseStatus">
-								{{ backgroundParseStatus }}
+				<div class="replay-layout-column">
+					<div class="manastorm-player">
+						<div class="replay-stage">
+							<div class="game-column">
+								<div class="aspect-ratio-wrapper ar-16x9">
+									<div class="aspect-ratio-inner">
+										<ng-container *ngIf="{ currentAction: currentAction$ | async } as value">
+											<!-- Allow for an override by the action, for BG sims -->
+											<game
+												*ngIf="game"
+												[gameMode]="gameMode$ | async"
+												[playerId]="value.currentAction?.playerId ?? game.players[0].playerId"
+												[opponentId]="value.currentAction?.opponentId ?? game.players[1].playerId"
+												[playerName]="game.players[0].name"
+												[opponentName]="game.players[1].name"
+												[currentAction]="value.currentAction"
+												[showHiddenCards]="showHiddenCards"
+											>
+											</game>
+										</ng-container>
+										<div class="status background-parse" *ngIf="backgroundParseStatus">
+											{{ backgroundParseStatus }}
+										</div>
+										<div class="status" *ngIf="status && showPreloader">
+											{{ status }}...
+										</div>
+										<preloader
+											class="dark-theme"
+											[ngClass]="{ active: showPreloader }"
+											[status]="status"
+										></preloader>
+									</div>
+								</div>
 							</div>
-							<div class="status" *ngIf="status && showPreloader">
-								{{ status }}...
-							</div>
-							<preloader
-								class="dark-theme"
-								[ngClass]="{ active: showPreloader }"
-								[status]="status"
-							></preloader>
-
 							<sidebar
 								class="sidebar"
 								[decklist]="decklist"
@@ -102,39 +107,41 @@ const isSkippedAction = (action: Action): boolean => {
 							</sidebar>
 						</div>
 					</div>
+					<div class="replay-chrome">
+						<seeker
+							class="ignored-wrapper"
+							[totalTime]="totalTime"
+							[currentTime]="currentTime"
+							[segments]="timeline?.segments ?? []"
+							[markers]="timeline?.markers ?? []"
+							[showTurnRail]="showTurnRail"
+							[timelineMode]="timelineMode"
+							[active]="isInteractive"
+							(seek)="onSeek($event)"
+							(seekToAction)="onSeekToAction($event)"
+						>
+						</seeker>
+						<turn-narrator
+							class="ignored-wrapper"
+							[text]="text$ | async"
+							[active]="isInteractive"
+						></turn-narrator>
+						<controls
+							class="ignored-wrapper"
+							[reviewId]="reviewId"
+							[active]="isInteractive"
+							(nextActionDetailed)="onNextAction()"
+							(nextAction)="onNextActionCoarse()"
+							(nextTurn)="onNextTurn()"
+							(previousActionDetailed)="onPreviousAction()"
+							(previousAction)="onPreviousActionCoarse()"
+							(previousTurn)="onPreviousTurn()"
+							(showHiddenCards)="onShowHiddenCards($event)"
+						>
+						</controls>
+					</div>
 				</div>
 			</section>
-			<seeker
-				class="ignored-wrapper"
-				[totalTime]="totalTime"
-				[currentTime]="currentTime"
-				[segments]="timeline?.segments ?? []"
-				[markers]="timeline?.markers ?? []"
-				[showTurnRail]="showTurnRail"
-				[timelineMode]="timelineMode"
-				[active]="isInteractive"
-				(seek)="onSeek($event)"
-				(seekToAction)="onSeekToAction($event)"
-			>
-			</seeker>
-			<turn-narrator
-				class="ignored-wrapper"
-				[text]="text$ | async"
-				[active]="isInteractive"
-			></turn-narrator>
-			<controls
-				class="ignored-wrapper"
-				[reviewId]="reviewId"
-				[active]="isInteractive"
-				(nextActionDetailed)="onNextAction()"
-				(nextAction)="onNextActionCoarse()"
-				(nextTurn)="onNextTurn()"
-				(previousActionDetailed)="onPreviousAction()"
-				(previousAction)="onPreviousActionCoarse()"
-				(previousTurn)="onPreviousTurn()"
-				(showHiddenCards)="onShowHiddenCards($event)"
-			>
-			</controls>
 			<tooltips></tooltips>
 		</div>
 	`,
