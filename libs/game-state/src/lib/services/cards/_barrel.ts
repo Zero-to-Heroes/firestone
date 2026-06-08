@@ -36,6 +36,7 @@ export { BlessingOfTheMoon } from './blessing-of-the-moon';
 export { Blingtron3000 } from './blingtron-3000';
 export { BlinkFox } from './blink-fox';
 export { BloodDraw } from './blood-draw';
+export { BloodscalpStrategist } from './bloodscalp-strategist';
 export { BloomingBulb } from './blooming-bulb';
 export { BlueAspectEssence } from './blue-aspect-essence';
 export { BoneDrake } from './bone-drake';
