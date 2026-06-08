@@ -645,7 +645,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		this.cardId = card.cardId || displayIdFromSingleGuess;
 		this.entityId = card.entityId;
 		this._referenceCard = this.cardId ? this.cards.getCard(this.cardId) : null;
-		this.cardImage = `https://static.zerotoheroes.com/hearthstone/cardart/tiles/${card.cardId}.png`;
+		this.cardImage = `https://static.zerotoheroes.com/hearthstone/cardart/tiles/${this.cardId}.png`;
 		// We can't use the reference card cost, because of cards like Zilliax. So we need to make sure that the manaCost field
 		// is a strict reflection of the "raw" cost, and the actualManaCost is what gets updated after discounts
 		this.manaCost = showUpdatedCost ? card.getEffectiveManaCost() : card.refManaCost;
