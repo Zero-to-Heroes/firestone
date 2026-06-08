@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import type { LogFileBackend } from '@firestone/shared/common/service';
 import { GameStatusService, LOG_FILE_BACKEND, Preferences, PreferencesService } from '@firestone/shared/common/service';
-import type { IOwUtilsService } from '@firestone/shared/framework/core';
 import { Mutable, sortByProperties } from '@firestone/shared/framework/common';
+import type { IOwUtilsService } from '@firestone/shared/framework/core';
 import {
 	AbstractFacadeService,
 	ApiRunner,
@@ -430,6 +430,20 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 		// Refresh the mods
 		const installedMods = await this.refreshModsInternal(installPath);
 		this.modsData$$.next(installedMods);
+	}
+
+	public async hasReplayViewer(): Promise<boolean> {
+		return this.callOnMainProcess<boolean>('hasReplayViewerInternal');
+	}
+	private async hasReplayViewerInternal(): Promise<boolean> {
+		const prefs = await this.prefs.getPreferences();
+		const installPath = prefs.gameInstallPath;
+		if (!installPath) {
+			console.warn('[mods-manager] No install path found');
+			return false;
+		}
+		const mods = await this.installedMods(installPath);
+		return mods.some((m) => m.AssemblyName === 'com.firestoneapp.mods.bepinex.ReplayViewer');
 	}
 
 	public async deactivateMods(modNames: readonly string[]) {

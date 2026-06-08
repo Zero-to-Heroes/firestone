@@ -3,6 +3,7 @@ import { BgsCompAdvice } from '@firestone-hs/content-craetor-input';
 import { BnetRegion } from '@firestone-hs/reference-data';
 import { ReplayUploadMetadata } from '@firestone-hs/replay-metadata';
 import { Input as BgsComputeRunStatsInput } from '@firestone-hs/user-bgs-post-match-stats';
+import { ModsManagerService } from '@firestone/mods/common';
 import {
 	ENABLE_IN_GAME_REPLAY_FOR_ALL,
 	PowerLogBufferService,
@@ -26,6 +27,7 @@ export class ReplayUploadService {
 		private readonly userService: UserService,
 		private readonly metadataBuilder: ReplayMetadataBuilderService,
 		private readonly powerLogBuffer: PowerLogBufferService,
+		private readonly modsManager: ModsManagerService,
 	) {}
 
 	public async uploadGame(
@@ -97,7 +99,7 @@ export class ReplayUploadService {
 				? 'premium'
 				: 'loggedIn';
 		const currentRegion = fullMetaData.meta.region;
-		const shouldUploadFromRegion = currentRegion !== BnetRegion.REGION_CN;
+		const shouldUploadFromRegion = currentRegion !== BnetRegion.REGION_CN || this.modsManager.hasReplayViewer();
 		const shouldUploadPowerLog =
 			shouldUploadFromRegion && (fullMetaData.user.isPremium || ENABLE_IN_GAME_REPLAY_FOR_ALL);
 
