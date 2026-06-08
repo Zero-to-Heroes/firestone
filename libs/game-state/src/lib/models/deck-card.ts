@@ -75,6 +75,7 @@ export class DeckCard {
 	readonly positionFromTop?: number;
 	readonly dredged?: boolean;
 	readonly forged: number = 0;
+	readonly prepared: number = 0;
 	readonly createdByJoust?: boolean;
 	readonly linkedEntityIds: readonly number[] = [];
 	readonly relatedCardIds: readonly string[] = [];

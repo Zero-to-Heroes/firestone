@@ -35,6 +35,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 				(hasBuffs && displayBuff) ||
 				(cardId && displayGuess) ||
 				forged ||
+				prepared ||
 				onlyKnownPossibleCards ||
 				(sequenceInfo != null && displaySequenceInfo)
 			"
@@ -55,7 +56,13 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 				src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/tracker/forged.webp"
 				class="card-image forged"
 			/>
-			<div *ngIf="hasBuffs && !forged && !cardUrl" class="only-buff">
+			<img
+				*ngIf="prepared && !cardUrl"
+				[helpTooltip]="preparedTooltip"
+				src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/tracker/prepared.webp"
+				class="card-image prepared"
+			/>
+			<div *ngIf="hasBuffs && !forged && !prepared && !cardUrl" class="only-buff">
 				<svg>
 					<use xlink:href="assets/svg/sprite.svg#card_only_buff" />
 				</svg>
@@ -63,6 +70,16 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 			<div *ngIf="onlyKnownPossibleCards" class="question-mark" inlineSVG="assets/svg/question_mark.svg"></div>
 
 			<div *ngIf="forged && cardUrl" class="card-image forged icon" inlineSVG="assets/svg/forged.svg"></div>
+			<div
+				*ngIf="prepared && cardUrl"
+				class="card-image prepared icon"
+				[helpTooltip]="preparedTooltip"
+				inlineSVG="assets/svg/prepared.svg"
+			></div>
+			<div class="prepared-amount" *ngIf="prepared && !cardUrl" [helpTooltip]="preparedTooltip">
+				{{ prepared }}
+			</div>
+			<!-- TODO: add prepared amount + tooltip -->
 			<div *ngIf="drawnBy" class="drawn">
 				<svg>
 					<use xlink:href="assets/svg/sprite.svg#created_by" />
@@ -81,6 +98,8 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 	drawnBy: boolean;
 	dredgedBy: boolean;
 	forged: boolean;
+	prepared: number | null;
+	preparedTooltip: string | null;
 	hasBuffs: boolean;
 	onlyKnownPossibleCards: boolean;
 	guessedInfo: GuessedInfo;
@@ -186,6 +205,10 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 			hasMechanic(this.allCards.getCard(card.lastAffectedByCardId), GameTag.DREDGE);
 		this.hasBuffs = card.buffCardIds?.length > 0;
 		this.forged = card.forged > 0;
+		this.prepared = card.prepared || null;
+		this.preparedTooltip = this.prepared
+			? this.i18n.translateString('decktracker.prepared-tooltip', { value: this.prepared })
+			: null;
 
 		this.cardId =
 			realCardId ||

@@ -160,6 +160,7 @@ import {
 	ZoneChangeParser,
 	ZonePositionChangedParser,
 } from './parsers';
+import { CardPreparedParser } from './parsers/card-prepared-parser';
 import type { ParserState } from './state/parser-state';
 import { INodeParser, StateType } from './state/parser-state';
 import type { StateFacade } from './state/state-facade';
@@ -419,6 +420,7 @@ export class NodeParser implements INodeParser {
 			new StarshipLaunchedParser(parserState, this.StateFacade),
 
 			new CardForgedParser(parserState, this.StateFacade),
+			new CardPreparedParser(parserState, this.StateFacade),
 			new LocationUsedParser(parserState, this.StateFacade),
 			new CreateCardInGraveyardParser(parserState, this.StateFacade),
 			new MindrenderIlluciaParser(parserState, this.StateFacade),

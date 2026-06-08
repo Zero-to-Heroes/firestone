@@ -72,6 +72,7 @@ import { CardForgedParser } from './event-parser/card-forged-parser';
 import { CardOnBoardAtGameStart } from './event-parser/card-on-board-at-game-start-parser';
 import { CardPlayedByEffectParser } from './event-parser/card-played-by-effect';
 import { CardPlayedFromHandParser } from './event-parser/card-played-from-hand-parser';
+import { CardPreparedParser } from './event-parser/card-prepared-parser';
 import { CardRecruitedParser } from './event-parser/card-recruited-parser';
 import { CardRemovedFromBoardParser } from './event-parser/card-removed-from-board-parser';
 import { CardRemovedFromDeckParser } from './event-parser/card-removed-from-deck-parser';
@@ -296,6 +297,7 @@ export class GameStateParsersService {
 				new SpecificSummonsParser(this.allCards),
 				new ListCardsPlayedFromInitialDeckParser(this.helper, this.allCards),
 			],
+			[GameEvent.CARD_PREPARED]: [new CardPreparedParser(this.helper)],
 			[GameEvent.CARD_REMOVED_FROM_BOARD]: [new CardRemovedFromBoardParser(this.helper, this.allCards)],
 			[GameEvent.CARD_REMOVED_FROM_DECK]: [new CardRemovedFromDeckParser(this.helper, this.allCards)],
 			[GameEvent.CARD_REMOVED_FROM_HAND]: [new CardRemovedFromHandParser(this.helper, this.allCards)],

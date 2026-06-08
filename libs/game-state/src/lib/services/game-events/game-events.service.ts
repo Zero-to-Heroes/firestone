@@ -465,6 +465,13 @@ export class GameEvents {
 			case 'CARD_FORGED':
 				this.doEventDispatch(GameEvent.build(GameEvent.CARD_FORGED, gameEvent));
 				break;
+			case 'CARD_PREPARED':
+				this.doEventDispatch(
+					GameEvent.build(GameEvent.CARD_PREPARED, gameEvent, {
+						prepareValue: gameEvent.Value.AdditionalProps.PrepareValue,
+					}),
+				);
+				break;
 			case 'STARSHIP_LAUNCHED':
 				this.doEventDispatch(
 					GameEvent.build(GameEvent.STARSHIP_LAUNCHED, gameEvent, {

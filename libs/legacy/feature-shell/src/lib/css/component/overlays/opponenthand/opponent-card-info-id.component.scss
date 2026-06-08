@@ -55,6 +55,17 @@
 		max-height: 25px;
 	}
 
+	.prepared.icon {
+		position: absolute;
+		width: 17px;
+		top: 14px;
+		left: -7px;
+		--icon-secondary-color: var(--color-7);
+		--icon-color: var(--color-1);
+		max-width: 25px;
+		max-height: 25px;
+	}
+
 	.sequence-info {
 		display: flex;
 		align-items: center;
@@ -88,4 +99,30 @@
 		max-width: 25px;
 		max-height: 25px;
 	}
+
+	&.prepared {
+		width: 185%;
+		position: relative;
+		left: -7%;
+		max-width: 25px;
+		max-height: 25px;
+	}
+
+}
+
+.prepared-amount {
+	position: absolute;
+	left: 85%;
+	background: #07081f;
+	padding: 5px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 50%;
+	border: 2px solid #9fb6d7;
+	overflow: hidden;
+	z-index: 1;
+	color: var(--color-1);
+	width: 80%;
+	height: 80%;
 }
