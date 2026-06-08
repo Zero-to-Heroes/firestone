@@ -96,6 +96,9 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 	@Input() set allPlayerCardIds(value: readonly string[]) {
 		this.allPlayerCardIds$$.next(value ?? []);
 	}
+	@Input() set heroPowerCardIds(value: readonly string[]) {
+		this.heroPowerCardIds$$.next(value ?? []);
+	}
 	@Input() set showMechanicsTiers(value: boolean) {
 		this.showMechanicsTiers$$.next(value);
 	}
@@ -153,6 +156,7 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 	private anomalies$$ = new BehaviorSubject<readonly string[]>([]);
 	private playerCardId$$ = new BehaviorSubject<string>(null);
 	private allPlayerCardIds$$ = new BehaviorSubject<readonly string[]>([]);
+	private heroPowerCardIds$$ = new BehaviorSubject<readonly string[]>([]);
 	private playerTrinkets$$ = new BehaviorSubject<readonly string[]>([]);
 	private questRewards$$ = new BehaviorSubject<readonly QuestReward[]>([]);
 	private showMechanicsTiers$$ = new BehaviorSubject<boolean>(false);
@@ -196,6 +200,7 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 			this.hasTimewarped$$,
 			this.playerCardId$$,
 			this.allPlayerCardIds$$,
+			this.heroPowerCardIds$$,
 			this.showMechanicsTiers$$,
 			this.showTribeTiers$$,
 			this.showTierSeven$$,
@@ -222,6 +227,7 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 					hasTimewarped,
 					playerCardId,
 					allPlayersCardIds,
+					heroPowerCardIds,
 					showMechanicsTiers,
 					showTribeTiers,
 					showTierSeven,
@@ -249,11 +255,12 @@ export class BattlegroundsMinionsTiersTwitchOverlayComponent
 						races,
 						{ hasTimewarped, hasSpells, hasTrinkets, hasDarkmoonPrizes: hasPrizes },
 						gameMode,
+						anomalies,
 						playerCardId,
+						heroPowerCardIds,
 						this.allCards,
 						cardRules,
 					);
-					console.debug('card rules', cardRules);
 					const cardsToIncludes = !!ownBuddy ? [...cardsInGame, ownBuddy] : cardsInGame;
 					const buildTierOptions: BuildTierOptions = {
 						showAllMechanics: showAllMechanics,

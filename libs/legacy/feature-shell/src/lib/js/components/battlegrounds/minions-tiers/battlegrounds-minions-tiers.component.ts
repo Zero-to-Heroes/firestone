@@ -9,7 +9,6 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { CardIds, GameTag, Race, getBuddy, getHeroPower, normalizeHeroCardId } from '@firestone-hs/reference-data';
-import { Entity } from '@firestone/replay/replay-parser';
 import {
 	BuildTierGameState,
 	BuildTierOptions,
@@ -31,6 +30,7 @@ import {
 	InGameFinalBoard,
 } from '@firestone/battlegrounds/services';
 import { GameStateFacadeService } from '@firestone/game-state';
+import { Entity } from '@firestone/replay/replay-parser';
 import { ExpertContributorsService, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, arraysEqual } from '@firestone/shared/framework/common';
 import { CardRulesService, CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
@@ -45,6 +45,7 @@ import {
 	shareReplay,
 	startWith,
 	takeUntil,
+	tap,
 } from 'rxjs';
 import { DebugService } from '../../../services/debug.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
@@ -227,22 +228,42 @@ export class BattlegroundsMinionsTiersOverlayComponent
 			shareReplay(1),
 			takeUntil(this.destroyed$),
 		);
+		const heroPowerCardIds$ = this.gameState.gameState$$.pipe(
+			auditTime(1000),
+			this.mapData((state) => [state.bgState.currentGame?.getMainPlayer()?.heroPowerCardId]),
+			tap((info) => console.debug('[debug] [heroPowerCardIds] info', info)),
+			distinctUntilChanged(),
+			shareReplay(1),
+			takeUntil(this.destroyed$),
+		);
 		const staticTiers$ = combineLatest([
 			prefs$,
 			currentGameInfo$,
 			playerCardIds$,
+			heroPowerCardIds$,
 			gameMode$,
 			playerTrinkets$,
 			questRewards$,
 		]).pipe(
-			map(([prefs, currentGameInfo, playerCardIds, gameMode, playerTrinkets, questRewards]) => ({
-				...prefs,
-				...currentGameInfo,
-				...playerCardIds,
-				gameMode: gameMode,
-				playerTrinkets: [playerTrinkets?.lesser, playerTrinkets?.greater].filter((trinket) => !!trinket),
-				questRewards: questRewards,
-			})),
+			map(
+				([
+					prefs,
+					currentGameInfo,
+					playerCardIds,
+					heroPowerCardIds,
+					gameMode,
+					playerTrinkets,
+					questRewards,
+				]) => ({
+					...prefs,
+					...currentGameInfo,
+					...playerCardIds,
+					heroPowerCardIds: heroPowerCardIds,
+					gameMode: gameMode,
+					playerTrinkets: [playerTrinkets?.lesser, playerTrinkets?.greater].filter((trinket) => !!trinket),
+					questRewards: questRewards,
+				}),
+			),
 			this.mapData(
 				({
 					showMechanicsTiers,
@@ -267,6 +288,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 					showTrinkets,
 					playerCardId,
 					allPlayersCardIds,
+					heroPowerCardIds,
 					playerTrinkets,
 					questRewards,
 				}) => {
@@ -288,11 +310,13 @@ export class BattlegroundsMinionsTiersOverlayComponent
 							hasDarkmoonPrizes: hasPrizes,
 						},
 						gameMode,
+						anomalies,
 						playerCardId,
+						heroPowerCardIds,
 						this.allCards,
 						cardRules,
 					);
-					const cardsToIncludes = !!ownBuddy ? [...cardsInGame, ownBuddy] : cardsInGame;
+					const cardsToInclude = !!ownBuddy ? [...cardsInGame, ownBuddy] : cardsInGame;
 					const buildTierOptions: BuildTierOptions = {
 						showAllMechanics: showAllMechanics,
 						groupMinionsIntoTheirTribeGroup: bgsGroupMinionsIntoTheirTribeGroup,
@@ -321,7 +345,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 						hasTrinkets: hasTrinkets,
 					};
 					const result = buildTiers(
-						cardsToIncludes,
+						cardsToInclude,
 						buildTierOptions,
 						buildTierGameState,
 						cardRules,

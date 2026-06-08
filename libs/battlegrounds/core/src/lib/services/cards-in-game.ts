@@ -23,7 +23,9 @@ export const getAllCardsInGame = (
 		hasDarkmoonPrizes: boolean;
 	},
 	gameMode: GameType,
+	anomalies: readonly string[],
 	playerCardId: string,
+	heroPowerCardIds: readonly string[],
 	allCards: CardsFacadeService,
 	cardRules: CardRules | null,
 ): readonly ReferenceCard[] => {
@@ -41,7 +43,13 @@ export const getAllCardsInGame = (
 				: !card.mechanics?.includes(GameTag[GameTag.BG_DUO_EXCLUSIVE]),
 		)
 		.filter((card) => !card.mechanics?.includes(GameTag[GameTag.BACON_BUDDY]))
-		.filter((card) => gameSettings.hasTimewarped || !card.mechanics?.includes(GameTag[GameTag.BACON_TIMEWARPED]))
+		.filter(
+			(card) =>
+				gameSettings.hasTimewarped ||
+				heroPowerCardIds.some((hp) => heroPowerAllowsTimewarped(hp)) ||
+				anomalies.some((anomaly) => anomalyAllowsTimewarped(anomaly)) ||
+				!card.mechanics?.includes(GameTag[GameTag.BACON_TIMEWARPED]),
+		)
 		.filter(
 			(card) => gameSettings.hasDarkmoonPrizes || !card.mechanics?.includes(GameTag[GameTag.IS_DARKMOON_PRIZE]),
 		)
@@ -72,6 +80,22 @@ export const getAllCardsInGame = (
 		})
 		.filter((card) => !card.premium); // Ignore golden
 	return result;
+};
+
+export const anomalyAllowsTimewarped = (anomaly: string): boolean => {
+	return [
+		CardIds.AnomalousConflux_BG35_Anomaly_004,
+		CardIds.AnomalousTimeline_BG35_Anomaly_005,
+		CardIds.OathstonesSummoning_BG34_Anomaly_805,
+		CardIds.UnforeseenPortal_BG34_Anomaly_809,
+	].includes(anomaly as CardIds);
+};
+
+export const heroPowerAllowsTimewarped = (heroPowerCardId: string): boolean => {
+	return [
+		CardIds.MurozondUnbounded_AlternateTimeline_BG34_HERO_000p,
+		CardIds.Morchie_WarpedConflux_BG34_HERO_004p,
+	].includes(heroPowerCardId as CardIds);
 };
 
 const isValidTribe = (validTribes: readonly Race[], race: string): boolean => {

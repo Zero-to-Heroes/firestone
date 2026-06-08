@@ -2,6 +2,7 @@
 import { CardIds, CardRules, Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { QuestReward } from '../models/quests';
+import { anomalyAllowsTimewarped, heroPowerAllowsTimewarped } from './cards-in-game';
 import { filterCardsToInclude } from './tiers-builder/cards-to-include';
 import { buildMechanicsTiers } from './tiers-builder/mechanics-tiers-builder';
 import { buildStandardTiers } from './tiers-builder/standard-tiers-builder';
@@ -60,9 +61,14 @@ export const buildTiers = (
 		[CardIds.MarinTheManager_FantasticTreasure_BG30_HERO_304p].includes(gameState.heroPowerCardId as CardIds) ||
 		anomalies?.includes(CardIds.MarinsTreasureBox_BG31_Anomaly_106);
 
+	const heroPowerCardIds = [gameState.heroPowerCardId];
 	const showSpells = gameState.hasSpells;
-	const showTimewarped = gameState.hasTimewarped && options.showTimewarped;
-
+	const showTimewarped =
+		options.showTimewarped &&
+		(gameState.hasTimewarped ||
+			anomalies.some((anomaly) => anomalyAllowsTimewarped(anomaly)) ||
+			heroPowerCardIds.some((hp) => heroPowerAllowsTimewarped(hp)));
+	console.debug('[debug] [showTimewarped] showTimewarped', showTimewarped);
 	const config: TierBuilderConfig = {
 		showAllMechanics: options.showAllMechanics,
 		spells: showSpells,

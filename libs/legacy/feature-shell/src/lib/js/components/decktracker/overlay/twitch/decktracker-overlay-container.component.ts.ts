@@ -90,6 +90,7 @@ import { TwitchLocalizationManagerService } from './twitch-localization-manager.
 					[hasTimewarped]="bgsState.config?.hasTimewarped"
 					[anomalies]="bgsState.config?.anomalies"
 					[playerCardId]="getMainPlayerCardId(bgsState)"
+					[heroPowerCardIds]="getMainPlayerHeroPowerCardIds(bgsState)"
 					[playerTrinkets]="getMainPlayerTrinkets(bgsState)"
 					[showMechanicsTiers]="showMechanicsTiers$ | async"
 					[showTribeTiers]="showTribeTiers$ | async"
@@ -284,6 +285,10 @@ export class DeckTrackerOverlayContainerComponent
 
 	getMainPlayerCardId(bgsState: TwitchBgsState): string {
 		return bgsState.leaderboard?.find((p) => p.isMainPlayer)?.cardId;
+	}
+
+	getMainPlayerHeroPowerCardIds(bgsState: TwitchBgsState): readonly string[] {
+		return [bgsState.leaderboard?.find((p) => p.isMainPlayer)?.heroPowerCardId];
 	}
 
 	getMainPlayerTrinkets(bgsState: TwitchBgsState): readonly string[] {
