@@ -4360,8 +4360,6 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);
 		case CardIds.WishUponAStar_TOY_877:
 			return and(side(inputSide), or(inDeck, inHand), minion);
-		case CardIds.WitchingHour:
-			return and(side(inputSide), inGraveyard, beast);
 		// Wither the Weak: Passive After you cast your first Fel spell in a turn, deal 1 damage to the lowest-Health enemy.
 		case CardIds.WitherTheWeakTavernBrawl:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended, fel);
