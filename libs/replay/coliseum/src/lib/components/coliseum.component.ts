@@ -252,6 +252,7 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 		this.parsingComplete = false;
 		this.backgroundParseStatus = null;
 		this.indexTotalDuration = null;
+		this.opponentDecklist = null;
 		this.status = 'Parsing replay file';
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.markForCheck();
@@ -286,6 +287,7 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 						this.parsingComplete = true;
 						this.backgroundParseStatus = null;
 						this.status = null;
+						this.updateOpponentDecklist();
 						console.log('[app] Received complete game', game.turns.size);
 					} else if (this.isGamePlayable(game)) {
 						this.backgroundParseStatus = status || 'Parsing remaining turns';
@@ -474,45 +476,55 @@ export class ColiseumComponent implements OnDestroy, AfterContentInit {
 		const gameMode = this.computeGameMode();
 		this.gameMode$$.next(gameMode);
 
+		this.updateOpponentDecklist();
+
 		// This avoid truncating the query string because we don't have all the info yet
 		if (complete) {
 			this.currentTime = this.computeCurrentTime();
 			this.updateUrlQueryString();
+		}
+	}
 
-			if (gameMode !== 'battlegrounds') {
-				const opponentHeroEntity = this.game.players[1].getTag(GameTag.HERO_ENTITY);
-				const opponentCards = this.game
-					.getLatestParsedState()
-					.valueSeq()
-					.filter(
-						(entity) =>
-							entity.getTag(GameTag.CONTROLLER) === this.game.players[1].playerId &&
-							entity.id !== opponentHeroEntity &&
-							entity.cardID &&
-							!entity.getTag(GameTag.CREATOR) &&
-							!entity.getTag(GameTag.CREATOR_DBID),
-					)
-					.toArray();
-				const cardIds = opponentCards.map((e) => e.cardID);
-				const groupedByCardId = groupByFunction2(cardIds, (cardId) => cardId);
-				// Tokens / new cards / missing DB entries have no dbfId; encode() throws "Invalid card undefined".
-				const cards: [number, number][] = Object.values(groupedByCardId)
-					.map((group) => {
-						const dbfId = this.cards.getCard(group[0])?.dbfId;
-						return [dbfId, group.length] as [number | undefined, number];
-					})
-					.filter((pair): pair is [number, number] => pair[0] != null && Number.isFinite(pair[0]));
-				const deckDefinition: DeckDefinition = {
-					heroes: [7],
-					format: GameFormat.FT_WILD,
-					cards,
-				};
-				const deckstring = encode(deckDefinition);
-				this.opponentDecklist = deckstring;
-				if (!(this.cdr as ViewRef).destroyed) {
-					this.cdr.markForCheck();
-				}
-			}
+	private updateOpponentDecklist(): void {
+		if (!this.game || this.computeGameMode() === 'battlegrounds') {
+			return;
+		}
+
+		const entityState =
+			this.game.latestChunkEndState?.size > 0
+				? this.game.latestChunkEndState
+				: this.game.getLatestParsedState();
+
+		const opponentHeroEntity = this.game.players[1].getTag(GameTag.HERO_ENTITY);
+		const opponentCards = entityState
+			.valueSeq()
+			.filter(
+				(entity) =>
+					entity.getTag(GameTag.CONTROLLER) === this.game.players[1].playerId &&
+					entity.id !== opponentHeroEntity &&
+					entity.cardID &&
+					!entity.getTag(GameTag.CREATOR) &&
+					!entity.getTag(GameTag.CREATOR_DBID),
+			)
+			.toArray();
+		const cardIds = opponentCards.map((e) => e.cardID);
+		const groupedByCardId = groupByFunction2(cardIds, (cardId) => cardId);
+		// Tokens / new cards / missing DB entries have no dbfId; encode() throws "Invalid card undefined".
+		const cards: [number, number][] = Object.values(groupedByCardId)
+			.map((group) => {
+				const dbfId = this.cards.getCard(group[0])?.dbfId;
+				return [dbfId, group.length] as [number | undefined, number];
+			})
+			.filter((pair): pair is [number, number] => pair[0] != null && Number.isFinite(pair[0]));
+		const deckDefinition: DeckDefinition = {
+			heroes: [7],
+			format: GameFormat.FT_WILD,
+			cards,
+		};
+		const deckstring = encode(deckDefinition);
+		this.opponentDecklist = deckstring;
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.markForCheck();
 		}
 	}
 
