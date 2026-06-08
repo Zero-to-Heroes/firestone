@@ -37,8 +37,12 @@ export const AnimalCompanionBuffs: CustomEffectCard & StaticGeneratingCard = {
 
 		const currentCompanionSample = getTagWithHistory(bufferEntity, GameTag.TAG_SCRIPT_DATA_NUM_4);
 		const currentCompanionCost = input.allCards.getCard(currentCompanionSample!).cost ?? 3;
-		const costBuff =
-			input.cardId === CardIds.RoamFree_MEND_307 ? currentCompanionCost + 2 : currentCompanionCost + 1;
+		const costBuff = input.inputOptions.deckState.isOpponent
+			? 0
+			: // Show the current pool for opponent
+				input.cardId === CardIds.RoamFree_MEND_307
+				? currentCompanionCost + 2
+				: currentCompanionCost + 1;
 		const possibleCards = filterCards(
 			input.cardId,
 			input.allCards,
