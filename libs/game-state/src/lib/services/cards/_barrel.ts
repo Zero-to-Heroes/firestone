@@ -50,6 +50,7 @@ export { CabalistsTome } from './cabalists-tome';
 export { CaliaMenethil } from './calia-menethil';
 export { CarrierWhelp } from './carrier-whelp';
 export { CavernDreamer } from './cavern-dreamer';
+export { CavernShinyfinder } from './cavern-shinyfinder';
 export { CeremonialClash } from './ceremonial-clash';
 export { ChampionsOfAzeroth } from './champions-of-azeroth';
 export { ChargedCall } from './charged-call';

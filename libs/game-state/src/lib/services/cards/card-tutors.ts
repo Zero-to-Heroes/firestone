@@ -52,7 +52,6 @@ const internalTutors = [
 	CardIds.CardGrader_TOY_054,
 	CardIds.CaricatureArtist_TOY_391,
 	CardIds.CattleRustler_WW_351,
-	CardIds.CavernShinyfinder,
 	CardIds.ChalkArtist_TOY_388,
 	CardIds.CheatDeath,
 	CardIds.CheatDeathCore,
