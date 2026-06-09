@@ -25,4 +25,5 @@ export const PARTNER_LINKS: Record<string, string> = {
 	moyi: 'https://download.overwolf.com/install/Download?ExtensionId=lnknbakkpommmjjdnelmfbjjdbocfpnpbkijjnob&utm_source=influencer&utm_medium=owaa&utm_campaign=2B6h6k5',
 	thefishou:
 		'https://www.overwolf.com/app/sebastien_tromp-firestone?utm_source=influencer&utm_medium=owaa&utm_campaign=a0nqFZZ',
+	dmoney: 'https://www.overwolf.com/app/sebastien_tromp-firestone?utm_source=app&utm_medium=owaa&utm_campaign=Nrumxlm',
 };
