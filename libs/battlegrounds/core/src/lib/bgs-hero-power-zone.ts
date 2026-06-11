@@ -1,4 +1,5 @@
-import { CardType, GameTag, Zone } from '@firestone-hs/reference-data';
+import { CardType, GameTag, TrinketSlot, Zone } from '@firestone-hs/reference-data';
+import type { BgsHeroPower, BgsPlayerEntity } from '@firestone-hs/simulate-bgs-battle/dist/bgs-player-entity';
 
 export interface BgsHeroPowerEntityLike {
 	getTag(tag: GameTag): number;
@@ -100,4 +101,76 @@ export const mergeBgsHeroPowerCardIds = (
 		}
 	}
 	return result;
+};
+
+export const buildBgsHeroPower = (cardId: string, info = 0): BgsHeroPower => ({
+	cardId,
+	entityId: 0,
+	used: false,
+	info,
+	info2: 0,
+	info3: 0,
+	info4: 0,
+	info5: 0,
+	info6: 0,
+});
+
+export const getSimulatorHeroPowerCardIds = (
+	player: Pick<BgsPlayerEntity, 'heroPowerId' | 'heroPowers' | 'trinkets'> | null | undefined,
+): readonly string[] => {
+	if (!player) {
+		return [];
+	}
+
+	const trinketHeroPower = player.trinkets?.find((trinket) => trinket.scriptDataNum6 === TrinketSlot.HERO_POWER)?.cardId;
+	if (trinketHeroPower) {
+		return [trinketHeroPower];
+	}
+
+	const heroPowerCardIds = player.heroPowers?.map((heroPower) => heroPower.cardId).filter((cardId): cardId is string => !!cardId) ?? [];
+	if (heroPowerCardIds.length >= 2) {
+		return heroPowerCardIds.slice(0, 2);
+	}
+
+	return mergeBgsHeroPowerCardIds(player.heroPowerId, heroPowerCardIds);
+};
+
+export const applySimulatorHeroPowerUpdate = (
+	player: BgsPlayerEntity,
+	heroPowerIndex: number,
+	heroPowerCardId: string | null,
+	heroPowerInfo: number,
+): BgsPlayerEntity => {
+	if (heroPowerIndex === 0) {
+		return {
+			...player,
+			heroPowerId: heroPowerCardId,
+			heroPowerInfo: heroPowerInfo,
+		};
+	}
+
+	const heroPowers = [...(player.heroPowers ?? [])];
+	if (!heroPowerCardId) {
+		return {
+			...player,
+			heroPowerInfo2: 0,
+			heroPowers: heroPowers.length > 1 ? [heroPowers[0]] : [],
+		};
+	}
+
+	const updatedSecondary = buildBgsHeroPower(heroPowerCardId, heroPowerInfo);
+	if (heroPowers.length < 2) {
+		if (heroPowers.length === 0 && player.heroPowerId) {
+			heroPowers.push(buildBgsHeroPower(player.heroPowerId, +(player.heroPowerInfo ?? 0)));
+		}
+		heroPowers.push(updatedSecondary);
+	} else {
+		heroPowers[1] = updatedSecondary;
+	}
+
+	return {
+		...player,
+		heroPowerInfo2: heroPowerInfo,
+		heroPowers,
+	};
 };

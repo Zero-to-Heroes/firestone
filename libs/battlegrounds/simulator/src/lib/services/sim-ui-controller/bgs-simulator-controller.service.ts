@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { EventEmitter, Injectable } from '@angular/core';
 import { CardIds, TrinketSlot } from '@firestone-hs/reference-data';
+import { getSimulatorHeroPowerCardIds } from '@firestone/battlegrounds/core';
 import { BgsPlayerGlobalInfo, BoardTrinket } from '@firestone-hs/simulate-bgs-battle/dist/bgs-player-entity';
 import type { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { BgsFaceOffWithSimulation } from '@firestone/game-state';
@@ -78,8 +79,8 @@ export class BgsSimulatorControllerService extends AbstractFacadeService<BgsSimu
 		);
 		this.registerMainProcessMethod(
 			'updateHeroPowerInternal',
-			(side: Side, heroPowerCardId: string | null, heroPowerInfo: number) =>
-				this.updateHeroPowerInternal(side, heroPowerCardId, heroPowerInfo),
+			(side: Side, heroPowerIndex: number, heroPowerCardId: string | null, heroPowerInfo: number) =>
+				this.updateHeroPowerInternal(side, heroPowerIndex, heroPowerCardId, heroPowerInfo),
 		);
 		this.registerMainProcessMethod('updateGlobalInfoInternal', (side: Side, globalInfo: BgsPlayerGlobalInfo | null) =>
 			this.updateGlobalInfoInternal(side, globalInfo),
@@ -158,18 +159,32 @@ export class BgsSimulatorControllerService extends AbstractFacadeService<BgsSimu
 		this.faceOff$$.next(faceOff);
 	}
 
-	public requestHeroPowerChange(side: Side) {
+	public requestHeroPowerChange(side: Side, heroPowerIndex = 0) {
+		const player = this.getSide(side)?.player;
+		const heroPowerCardIds = getSimulatorHeroPowerCardIds(player);
 		this.heroPowerChangeRequested.next({
 			side: side,
-			heroPowerCardId: this.getSide(side)?.player.heroPowerId ?? null,
-			heroPowerInfo: +(this.getSide(side)?.player.heroPowerInfo ?? 0),
+			heroPowerIndex,
+			heroPowerCardId: heroPowerCardIds[heroPowerIndex] ?? null,
+			heroPowerInfo: +(heroPowerIndex === 1 ? player?.heroPowerInfo2 ?? 0 : player?.heroPowerInfo ?? 0),
 		});
 	}
-	public updateHeroPower(side: Side, heroPowerCardId: string | null, heroPowerInfo: number) {
-		void this.callOnMainProcess('updateHeroPowerInternal', side, heroPowerCardId, heroPowerInfo);
+	public updateHeroPower(side: Side, heroPowerIndex: number, heroPowerCardId: string | null, heroPowerInfo: number) {
+		void this.callOnMainProcess('updateHeroPowerInternal', side, heroPowerIndex, heroPowerCardId, heroPowerInfo);
 	}
-	private updateHeroPowerInternal(side: Side, heroPowerCardId: string | null, heroPowerInfo: number) {
-		const faceOff = this.stateManager.updateHeroPower(this.faceOff$$.value!, side, heroPowerCardId, heroPowerInfo);
+	private updateHeroPowerInternal(
+		side: Side,
+		heroPowerIndex: number,
+		heroPowerCardId: string | null,
+		heroPowerInfo: number,
+	) {
+		const faceOff = this.stateManager.updateHeroPower(
+			this.faceOff$$.value!,
+			side,
+			heroPowerIndex,
+			heroPowerCardId,
+			heroPowerInfo,
+		);
 		this.faceOff$$.next(faceOff);
 	}
 
@@ -326,6 +341,7 @@ export interface GlobalInfoChangeRequest {
 }
 export interface HeroPowerChangeRequest {
 	side: Side;
+	heroPowerIndex: number;
 	heroPowerCardId: string | null;
 	heroPowerInfo: number;
 }

@@ -5,7 +5,7 @@ import { Entity } from '@firestone/replay/replay-parser';
 import type { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
 import type { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { BgsCardTooltipComponent } from '@firestone/battlegrounds/common';
-import { mergeBgsHeroPowerCardIds } from '@firestone/battlegrounds/core';
+import { getSimulatorHeroPowerCardIds } from '@firestone/battlegrounds/core';
 import { buildEntityFromBoardEntity } from '@firestone/battlegrounds/core';
 import { BgsBoard, BgsPlayer } from '@firestone/game-state';
 import type { CardTooltipPositionType } from '@firestone/shared/common/view';
@@ -270,11 +270,7 @@ export class BgsSimulatorSideComponent {
 		}
 
 		this.heroCardId = this._player.player?.cardId;
-		this.heroPowerCardIds = mergeBgsHeroPowerCardIds(
-			this._player.player?.trinkets?.find((t) => t.scriptDataNum6 === TrinketSlot.HERO_POWER)?.cardId,
-			this._player.player?.heroPowerId,
-			this._player.player?.heroPowers?.map((heroPower) => heroPower.cardId),
-		);
+		this.heroPowerCardIds = getSimulatorHeroPowerCardIds(this._player.player);
 		this.questRewardCardId = !!this._player.player?.questRewards?.length
 			? this._player.player?.questRewards[0]
 			: null;

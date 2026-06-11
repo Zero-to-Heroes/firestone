@@ -1,6 +1,8 @@
 import { CardType, GameTag, Zone } from '@firestone-hs/reference-data';
 import {
+	applySimulatorHeroPowerUpdate,
 	BgsHeroPowerEntityLike,
+	getSimulatorHeroPowerCardIds,
 	isBgsQuestRewardEntity,
 	resolveBgsHeroPowerEntities,
 } from './bgs-hero-power-zone';
@@ -107,5 +109,29 @@ describe('bgs-hero-power-zone', () => {
 		});
 
 		expect(isBgsQuestRewardEntity(questReward)).toBe(true);
+	});
+
+	it('returns both simulator hero powers from heroPowerId and heroPowers', () => {
+		const cardIds = getSimulatorHeroPowerCardIds({
+			heroPowerId: 'HP_PRIMARY',
+			heroPowers: [{ cardId: 'HP_SECONDARY' } as any],
+			trinkets: [],
+		});
+
+		expect(cardIds).toEqual(['HP_PRIMARY', 'HP_SECONDARY']);
+	});
+
+	it('stores a second simulator hero power at index 1', () => {
+		const updated = applySimulatorHeroPowerUpdate(
+			{
+				heroPowerId: 'HP_PRIMARY',
+				heroPowers: [],
+			} as any,
+			1,
+			'HP_SECONDARY',
+			0,
+		);
+
+		expect(getSimulatorHeroPowerCardIds(updated)).toEqual(['HP_PRIMARY', 'HP_SECONDARY']);
 	});
 });

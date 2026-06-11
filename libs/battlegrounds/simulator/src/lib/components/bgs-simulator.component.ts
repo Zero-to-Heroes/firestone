@@ -385,7 +385,7 @@ export class BgsSimulatorComponent extends AbstractSubscriptionComponent impleme
 		modalRef.instance.heroPowerData = request.heroPowerInfo;
 		modalRef.instance.applyHandler = (newHeroPowerCardId: string | null, heroPowerInfo: number) => {
 			this.overlayRef.detach();
-			this.controller.updateHeroPower(request.side, newHeroPowerCardId, heroPowerInfo);
+			this.controller.updateHeroPower(request.side, request.heroPowerIndex, newHeroPowerCardId, heroPowerInfo);
 		};
 	}
 

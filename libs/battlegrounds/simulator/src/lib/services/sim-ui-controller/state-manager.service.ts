@@ -3,6 +3,7 @@
 import { Injectable } from '@angular/core';
 import { CardIds, defaultStartingHp, GameTag, GameType, getHeroPower, TrinketSlot } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone/replay/replay-parser';
+import { applySimulatorHeroPowerUpdate } from '@firestone/battlegrounds/core';
 import { BgsPlayerGlobalInfo, BoardTrinket } from '@firestone-hs/simulate-bgs-battle/dist/bgs-player-entity';
 import type { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { BgsFaceOffWithSimulation } from '@firestone/game-state';
@@ -90,6 +91,8 @@ export class StateManagerService {
 								...value.battleInfo.playerBoard.player,
 								cardId: heroCardId,
 								heroPowerId: getHeroPower(heroCardId, this.allCards.getService()),
+								heroPowers: [],
+								heroPowerInfo2: 0,
 							},
 						},
 					},
@@ -104,6 +107,8 @@ export class StateManagerService {
 								...value.battleInfo.opponentBoard.player,
 								cardId: heroCardId,
 								heroPowerId: getHeroPower(heroCardId, this.allCards.getService()),
+								heroPowers: [],
+								heroPowerInfo2: 0,
 							},
 						},
 					},
@@ -149,6 +154,7 @@ export class StateManagerService {
 	public updateHeroPower(
 		value: BgsFaceOffWithSimulation,
 		side: Side,
+		heroPowerIndex: number,
 		heroPowerCardId: string | null,
 		heroPowerInfo: number,
 	): BgsFaceOffWithSimulation {
@@ -162,11 +168,12 @@ export class StateManagerService {
 						...value.battleInfo,
 						playerBoard: {
 							...value.battleInfo.playerBoard,
-							player: {
-								...value.battleInfo.playerBoard.player,
-								heroPowerId: heroPowerCardId,
-								heroPowerInfo: heroPowerInfo,
-							},
+							player: applySimulatorHeroPowerUpdate(
+								value.battleInfo.playerBoard.player,
+								heroPowerIndex,
+								heroPowerCardId,
+								heroPowerInfo,
+							),
 						},
 					},
 			  })
@@ -175,11 +182,12 @@ export class StateManagerService {
 						...value.battleInfo,
 						opponentBoard: {
 							...value.battleInfo.opponentBoard,
-							player: {
-								...value.battleInfo.opponentBoard.player,
-								heroPowerId: heroPowerCardId,
-								heroPowerInfo: heroPowerInfo,
-							},
+							player: applySimulatorHeroPowerUpdate(
+								value.battleInfo.opponentBoard.player,
+								heroPowerIndex,
+								heroPowerCardId,
+								heroPowerInfo,
+							),
 						},
 					},
 			  });

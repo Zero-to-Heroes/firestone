@@ -8,12 +8,12 @@ import {
 	Output,
 	ViewRef,
 } from '@angular/core';
-import { CardIds, CardType, GameTag, GameType, TrinketSlot, Zone, defaultStartingHp } from '@firestone-hs/reference-data';
+import { CardIds, CardType, GameTag, GameType, Zone, defaultStartingHp } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone/replay/replay-parser';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { BgsCardTooltipComponent } from '@firestone/battlegrounds/common';
-import { buildEntityFromBoardEntity, mergeBgsHeroPowerCardIds } from '@firestone/battlegrounds/core';
+import { buildEntityFromBoardEntity, getSimulatorHeroPowerCardIds } from '@firestone/battlegrounds/core';
 import { BgsBoard, BgsPlayer } from '@firestone/game-state';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
@@ -309,11 +309,7 @@ export class BgsBattleSideComponent {
 		}
 
 		this.heroCardId = this._player.player?.cardId;
-		this.heroPowerCardIds = mergeBgsHeroPowerCardIds(
-			this._player.player?.trinkets?.find((t) => t.scriptDataNum6 === TrinketSlot.HERO_POWER)?.cardId,
-			this._player.player?.heroPowerId,
-			this._player.player?.heroPowers?.map((heroPower) => heroPower.cardId),
-		);
+		this.heroPowerCardIds = getSimulatorHeroPowerCardIds(this._player.player);
 		this.questRewardCardId = !!this._player.player?.questRewards?.length
 			? this._player.player?.questRewards[0]
 			: null;
