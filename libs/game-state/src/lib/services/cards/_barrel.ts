@@ -153,6 +153,7 @@ export { Lifeweaver } from './lifeweaver';
 export { LilianVoss } from './lilian-voss';
 export { LockAndLoad } from './lock-and-load';
 export { LotusAgents } from './lotus-agents';
+export { LynessaSunsorrow } from './lynessa-sunsorrow';
 export { MadameLazul } from './madame-lazul';
 export { MagicTrick } from './magic-trick';
 export { Magicfin } from './magicfin';
