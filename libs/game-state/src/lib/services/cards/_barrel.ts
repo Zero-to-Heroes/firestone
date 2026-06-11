@@ -17,6 +17,7 @@ export { AmuletOfTrackingPhony } from './amulet-of-tracking-phony';
 export { AmuletOfUndying } from './amulet-of-undying';
 export { AnimalCompanion } from './animal-companion';
 export { AnimalCompanionBuffs } from './animal-companion-buffs';
+export { AnnoyOHorn } from './annoy-o-horn';
 export { ApothecaryHelbrim } from './apothecary-helbrim';
 export { ArcaneBrilliance } from './arcane-brilliance';
 export { ArcaneKeysmith } from './arcane-keysmith';
