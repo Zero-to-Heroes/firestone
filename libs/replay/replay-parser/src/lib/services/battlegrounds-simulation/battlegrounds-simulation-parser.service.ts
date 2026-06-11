@@ -23,6 +23,7 @@ import {
 import { AllCardsService } from '../all-cards.service';
 import { NarratorService } from '../gamepipeline/narrator.service';
 import { ExtendedGameSample } from './extended-game-sample';
+import { getSimulationActionHeroPowerEntries } from './simulation-hero-power';
 
 @Injectable({
 	providedIn: 'root',
@@ -257,17 +258,37 @@ export class BattlegroundsSimulationParserService {
 			action.opponentEntityId,
 			action.opponentCardId,
 		);
-		const playerHeroPowerEntity = this.buildGenericHeroPowerEntity(
+		const playerHeroPowerEntities = getSimulationActionHeroPowerEntries(
 			action.playerHeroPowerCardId,
 			action.playerHeroPowerEntityId,
 			action.playerHeroPowerUsed,
-			playerEntity.playerId,
+			action.playerHeroPowers,
+			100000002,
+			100000003,
+		).map((heroPower) =>
+			this.buildGenericHeroPowerEntity(
+				heroPower.cardId,
+				heroPower.entityId,
+				heroPower.used,
+				playerEntity.playerId,
+				heroPower.additionalHeroPowerIndex,
+			),
 		);
-		const opponentHeroPowerEntity = this.buildGenericHeroPowerEntity(
+		const opponentHeroPowerEntities = getSimulationActionHeroPowerEntries(
 			action.opponentHeroPowerCardId,
 			action.opponentHeroPowerEntityId,
 			action.opponentHeroPowerUsed,
-			opponentEntity.playerId,
+			action.opponentHeroPowers,
+			200000002,
+			200000003,
+		).map((heroPower) =>
+			this.buildGenericHeroPowerEntity(
+				heroPower.cardId,
+				heroPower.entityId,
+				heroPower.used,
+				opponentEntity.playerId,
+				heroPower.additionalHeroPowerIndex,
+			),
 		);
 		const anomalyEntities = (anomalies ?? []).map((anomaly) => this.buildAnomalyEntity(anomaly));
 		const allSourceEntities = [
@@ -326,8 +347,8 @@ export class BattlegroundsSimulationParserService {
 				damageForThisAction:
 					damages && damages.get(opponentEntity.id) ? damages.get(opponentEntity.id) : undefined,
 			} as PlayerEntity),
-			playerHeroPowerEntity,
-			opponentHeroPowerEntity,
+			...playerHeroPowerEntities,
+			...opponentHeroPowerEntities,
 			playerRewardEntity,
 			opponentRewardEntity,
 			...anomalyEntities,
@@ -452,7 +473,13 @@ export class BattlegroundsSimulationParserService {
 		);
 	}
 
-	private buildGenericHeroPowerEntity(cardId: string, entityId: number, used: boolean, playerId: number): Entity {
+	private buildGenericHeroPowerEntity(
+		cardId: string,
+		entityId: number,
+		used: boolean,
+		playerId: number,
+		additionalHeroPowerIndex = 0,
+	): Entity {
 		if (!cardId) {
 			return null;
 		}
@@ -464,6 +491,9 @@ export class BattlegroundsSimulationParserService {
 			[GameTag[GameTag.ENTITY_ID]]: Zone.PLAY,
 			[GameTag[GameTag.EXHAUSTED]]: used ? 1 : 0,
 		};
+		if (additionalHeroPowerIndex > 0) {
+			tags[GameTag[GameTag.ADDITIONAL_HERO_POWER_INDEX]] = additionalHeroPowerIndex;
+		}
 		return Entity.create({
 			id: entityId,
 			cardID: cardId,
@@ -489,9 +519,8 @@ export class BattlegroundsSimulationParserService {
 	}
 
 	private buildPlayerRewardEntity(action: GameAction, playerEntity: PlayerEntity): Entity {
-		const cardId = action.playerRewardCardId ?? action.playerHeroPowers?.[1]?.cardId;
-		const entityId = action.playerRewardEntityId ?? action.playerHeroPowers?.[1]?.entityId;
-		console.debug('player quest reward card id', cardId);
+		const cardId = action.playerRewardCardId;
+		const entityId = action.playerRewardEntityId;
 		if (!cardId) {
 			return null;
 		}
@@ -503,7 +532,6 @@ export class BattlegroundsSimulationParserService {
 			[GameTag[GameTag.ENTITY_ID]]: entityId,
 			[GameTag[GameTag.TAG_SCRIPT_DATA_NUM_1]]: action.playerRewardData,
 		};
-		console.debug('player quest reward tags', tags);
 		return Entity.create({
 			id: entityId,
 			cardID: cardId,
@@ -512,8 +540,8 @@ export class BattlegroundsSimulationParserService {
 	}
 
 	private buildOpponentRewardEntity(action: GameAction, playerEntity: PlayerEntity): Entity {
-		const cardId = action.opponentRewardCardId ?? action.opponentHeroPowers?.[1]?.cardId;
-		const entityId = action.opponentRewardEntityId ?? action.opponentHeroPowers?.[1]?.entityId;
+		const cardId = action.opponentRewardCardId;
+		const entityId = action.opponentRewardEntityId;
 		if (!cardId) {
 			return null;
 		}

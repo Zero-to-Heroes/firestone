@@ -1,7 +1,8 @@
-import { CardType, GameTag, Zone } from '@firestone-hs/reference-data';
+import { CardType, GameTag, TrinketSlot, Zone } from '@firestone-hs/reference-data';
 import {
 	applySimulatorHeroPowerUpdate,
 	BgsHeroPowerEntityLike,
+	getSimulationActionHeroPowerEntries,
 	getSimulatorHeroPowerCardIds,
 	isBgsQuestRewardEntity,
 	resolveBgsHeroPowerEntities,
@@ -80,13 +81,52 @@ describe('bgs-hero-power-zone', () => {
 		expect(isBgsQuestRewardEntity(secondHeroPower)).toBe(false);
 	});
 
+	it('ignores a mis-tagged portrait trinket in hero-power slot when it is already a regular trinket', () => {
+		const portraitLesser = buildEntity({
+			cardId: 'BG35_MagicItem_924',
+			cardType: CardType.BATTLEGROUND_TRINKET,
+			controller: playerId,
+			zone: Zone.PLAY,
+			tags: { [GameTag.TAG_SCRIPT_DATA_NUM_6]: TrinketSlot.LESSER },
+		});
+		const portraitHeroPowerSlot = buildEntity({
+			cardId: 'BG35_MagicItem_924',
+			cardType: CardType.BATTLEGROUND_TRINKET,
+			controller: playerId,
+			zone: Zone.PLAY,
+			tags: {
+				[GameTag.TAG_SCRIPT_DATA_NUM_6]: TrinketSlot.HERO_POWER,
+				[GameTag.ADDITIONAL_HERO_POWER_INDEX]: 1,
+			},
+		});
+		const primaryHeroPower = buildEntity({
+			cardId: 'BG34_HERO_002p',
+			cardType: CardType.HERO_POWER,
+			controller: playerId,
+			zone: Zone.PLAY,
+		});
+		const secondaryHeroPower = buildEntity({
+			cardId: 'BG35_Anomaly_008t',
+			cardType: CardType.HERO_POWER,
+			controller: playerId,
+			zone: Zone.PLAY,
+			tags: { [GameTag.ADDITIONAL_HERO_POWER_INDEX]: 1 },
+		});
+
+		const result = resolveBgsHeroPowerEntities(
+			[portraitLesser, portraitHeroPowerSlot, secondaryHeroPower, primaryHeroPower],
+			playerId,
+		);
+		expect(result.map((entity) => entity.cardID)).toEqual(['BG34_HERO_002p', 'BG35_Anomaly_008t']);
+	});
+
 	it('returns only the trinket-as-hero-power when slot 3 is occupied', () => {
 		const trinketHeroPower = buildEntity({
 			cardId: 'TRINKET_HP',
 			cardType: CardType.BATTLEGROUND_TRINKET,
 			controller: playerId,
 			zone: Zone.PLAY,
-			tags: { [GameTag.TAG_SCRIPT_DATA_NUM_6]: 3 },
+			tags: { [GameTag.TAG_SCRIPT_DATA_NUM_6]: TrinketSlot.HERO_POWER },
 		});
 		const regularHeroPower = buildEntity({
 			cardId: 'HP_PRIMARY',
@@ -119,6 +159,32 @@ describe('bgs-hero-power-zone', () => {
 		});
 
 		expect(cardIds).toEqual(['HP_PRIMARY', 'HP_SECONDARY']);
+	});
+
+	it('extracts primary and secondary hero powers from simulation game actions', () => {
+		const entries = getSimulationActionHeroPowerEntries(
+			'HP_PRIMARY',
+			100000002,
+			false,
+			[
+				{ cardId: 'HP_PRIMARY', entityId: 100000002, used: false },
+				{ cardId: 'HP_SECONDARY', entityId: 100000003, used: true },
+			],
+			100000002,
+			100000003,
+		);
+
+		expect(entries).toEqual([
+			{ cardId: 'HP_PRIMARY', entityId: 100000002, used: false, additionalHeroPowerIndex: 0 },
+			{ cardId: 'HP_SECONDARY', entityId: 100000003, used: true, additionalHeroPowerIndex: 1 },
+		]);
+	});
+
+	it('does not treat secondary hero powers as quest rewards in simulation actions', () => {
+		const entries = getSimulationActionHeroPowerEntries('HP_PRIMARY', 100000002, false, [{ cardId: 'HP_PRIMARY' }, { cardId: 'HP_SECONDARY' }] as any, 100000002, 100000003);
+
+		expect(entries.filter((entry) => entry.additionalHeroPowerIndex > 0)).toHaveLength(1);
+		expect(entries[1].cardId).toBe('HP_SECONDARY');
 	});
 
 	it('stores a second simulator hero power at index 1', () => {
