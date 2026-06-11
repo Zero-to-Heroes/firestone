@@ -195,6 +195,7 @@ export { PilotedSkyGolem } from './piloted-sky-golem';
 export { PrimalDungeoneer } from './primal-dungeoneer';
 export { PrimalfinLookout } from './primalfin-lookout';
 export { PrimordialLord } from './primordial-lord';
+export { PrinceMalchezaar } from './prince-malchezaar';
 export { PrismaticLens } from './prismatic-lens';
 export { PsychicConjurer } from './psychic-conjurer';
 export { QuestAccepted } from './quest-accepted';
