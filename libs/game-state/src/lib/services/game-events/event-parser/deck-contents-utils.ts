@@ -672,18 +672,10 @@ const handlePrinceLiam = (
 	);
 };
 
-const applyCostUpdate = (card: DeckCard, newCost: number) => {
-	// Only sync entity tags when the card already carries a COST tag (e.g. after draw/mulligan).
-	// Spreading tags onto the shared empty `{}` used by most deck cards would materialize
-	// per-card tag objects and change serialized GameState shape.
-	if (card.tags?.[GameTag.COST] != null) {
-		return {
-			actualManaCost: newCost,
-			tags: { ...card.tags, [GameTag.COST]: newCost },
-		};
-	}
-	return { actualManaCost: newCost };
-};
+const applyCostUpdate = (card: DeckCard, newCost: number) => ({
+	actualManaCost: newCost,
+	tags: { ...card.tags, [GameTag.COST]: newCost },
+});
 
 const updateCostInDeck = (
 	cardSelector: (card: DeckCard, refCard: ReferenceCard | null) => boolean,

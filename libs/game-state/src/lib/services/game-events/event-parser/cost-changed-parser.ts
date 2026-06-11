@@ -1,4 +1,4 @@
-import { CardIds } from '@firestone-hs/reference-data';
+import { CardIds, GameTag } from '@firestone-hs/reference-data';
 
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameState } from '../../../models/game-state';
@@ -41,6 +41,7 @@ export class CostChangedParser implements EventParser {
 
 		const updatedCard = card.update({
 			actualManaCost: newCost,
+			tags: { ...card.tags, [GameTag.COST]: newCost },
 		});
 		// console.debug('found card', zone, card, deck, updatedCard);
 		let newDeck = deck;
