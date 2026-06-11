@@ -263,6 +263,12 @@ export class BattlegroundsSimulationParserService {
 			action.playerHeroPowerEntityId,
 			action.playerHeroPowerUsed,
 			action.playerHeroPowers,
+			action.playerTrinkets,
+			this.resolveQuestRewardHeroPowerCardId(
+				action.playerHeroPowerCardId,
+				action.playerHeroPowers,
+				action.playerTrinkets,
+			),
 			100000002,
 			100000003,
 		).map((heroPower) =>
@@ -279,6 +285,12 @@ export class BattlegroundsSimulationParserService {
 			action.opponentHeroPowerEntityId,
 			action.opponentHeroPowerUsed,
 			action.opponentHeroPowers,
+			action.opponentTrinkets,
+			this.resolveQuestRewardHeroPowerCardId(
+				action.opponentHeroPowerCardId,
+				action.opponentHeroPowers,
+				action.opponentTrinkets,
+			),
 			200000002,
 			200000003,
 		).map((heroPower) =>
@@ -440,13 +452,32 @@ export class BattlegroundsSimulationParserService {
 		} as Entity);
 	}
 
+	private resolveQuestRewardHeroPowerCardId(
+		heroPowerCardId: string | null | undefined,
+		heroPowers: GameAction['playerHeroPowers'],
+		trinkets: GameAction['playerTrinkets'],
+	): string | null {
+		if (!heroPowerCardId) {
+			return null;
+		}
+		if (heroPowers?.some((heroPower) => heroPower.cardId === heroPowerCardId)) {
+			return null;
+		}
+		const slot3CardId = trinkets?.find((trinket) => trinket.scriptDataNum6 === 3)?.cardId;
+		if (slot3CardId === heroPowerCardId) {
+			return null;
+		}
+		return heroPowerCardId;
+	}
+
 	private buildTrinketEntity(boardEntity: BoardSecret, playerEntity: PlayerEntity, index: number): Entity {
 		const refCard = this.allCards.getCard(boardEntity.cardId);
+		const scriptDataNum6 = (boardEntity as { scriptDataNum6?: number }).scriptDataNum6 ?? index + 1;
 		const tags: { [tagName: string]: number } = {
 			[GameTag[GameTag.CONTROLLER]]: playerEntity.playerId,
 			[GameTag[GameTag.CARDTYPE]]: CardType.BATTLEGROUND_TRINKET,
 			[GameTag[GameTag.ZONE]]: Zone.PLAY,
-			[GameTag[GameTag.TAG_SCRIPT_DATA_NUM_6]]: index + 1,
+			[GameTag[GameTag.TAG_SCRIPT_DATA_NUM_6]]: scriptDataNum6,
 		};
 		return Entity.create({
 			id: boardEntity.entityId,

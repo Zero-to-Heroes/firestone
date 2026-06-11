@@ -11,6 +11,81 @@ export interface BgsHeroPowerEntityLike {
 
 const getEntityCardId = (entity: BgsHeroPowerEntityLike): string => entity.getCardId?.() ?? entity.cardID ?? '';
 
+export interface BgsTrinketLike {
+	readonly cardId?: string;
+	readonly entityId?: number;
+	readonly scriptDataNum6?: number;
+	readonly tags?: Partial<Record<GameTag, number>> | Record<string, number>;
+}
+
+const getTrinketAdditionalHeroPowerIndex = (trinket: BgsTrinketLike): number =>
+	trinket.tags?.[GameTag.ADDITIONAL_HERO_POWER_INDEX] ?? -1;
+
+export const resolveTrinketHeroPowerCardId = (
+	trinkets: readonly BgsTrinketLike[] | null | undefined,
+): string | null => {
+	if (!trinkets?.length) {
+		return null;
+	}
+
+	const regularTrinketCardIds = new Set(
+		trinkets
+			.filter((trinket) => trinket.scriptDataNum6 !== TrinketSlot.HERO_POWER && !!trinket.cardId)
+			.map((trinket) => trinket.cardId as string),
+	);
+	const slot3Trinket = trinkets.find((trinket) => trinket.scriptDataNum6 === TrinketSlot.HERO_POWER);
+	if (!slot3Trinket?.cardId) {
+		return null;
+	}
+	if (getTrinketAdditionalHeroPowerIndex(slot3Trinket) === 1) {
+		return null;
+	}
+	if (regularTrinketCardIds.has(slot3Trinket.cardId)) {
+		return null;
+	}
+	return slot3Trinket.cardId;
+};
+
+const isValidTrinketHeroPowerEntity = (
+	entity: BgsHeroPowerEntityLike,
+	regularTrinketCardIds: ReadonlySet<string>,
+): boolean => {
+	if (entity.getCardType() !== CardType.BATTLEGROUND_TRINKET) {
+		return false;
+	}
+	if (entity.getTag(GameTag.TAG_SCRIPT_DATA_NUM_6) !== TrinketSlot.HERO_POWER) {
+		return false;
+	}
+	if (entity.getTag(GameTag.ADDITIONAL_HERO_POWER_INDEX) === 1) {
+		return false;
+	}
+	const cardId = getEntityCardId(entity);
+	return !!cardId && !regularTrinketCardIds.has(cardId);
+};
+
+export const resolveSimulationHeroPowerCardIds = (input: {
+	readonly heroPowers?: readonly Pick<BgsHeroPower, 'cardId'>[] | null;
+	readonly trinkets?: readonly BgsTrinketLike[] | null;
+	readonly heroPowerId?: string | null;
+	readonly questRewardHeroPowerCardId?: string | null;
+}): readonly string[] => {
+	const trinketHeroPower = resolveTrinketHeroPowerCardId(input.trinkets);
+	if (trinketHeroPower) {
+		return [trinketHeroPower];
+	}
+	if (input.questRewardHeroPowerCardId) {
+		return [input.questRewardHeroPowerCardId];
+	}
+
+	const heroPowerCardIds =
+		input.heroPowers?.map((heroPower) => heroPower.cardId).filter((cardId): cardId is string => !!cardId) ?? [];
+	if (heroPowerCardIds.length >= 2) {
+		return heroPowerCardIds.slice(0, 2);
+	}
+
+	return mergeBgsHeroPowerCardIds(input.heroPowerId, heroPowerCardIds);
+};
+
 export const adaptReplayHeroPowerEntity = (entity: {
 	cardID: string;
 	getTag(tag: GameTag): number;
@@ -56,21 +131,9 @@ export const resolveBgsHeroPowerEntities = <T extends BgsHeroPowerEntityLike>(
 			.map((entity) => getEntityCardId(entity))
 			.filter((cardId): cardId is string => !!cardId),
 	);
-	const trinketHeroPower = playerPlayEntities.find((entity) => {
-		if (entity.getCardType() !== CardType.BATTLEGROUND_TRINKET) {
-			return false;
-		}
-		if (entity.getTag(GameTag.TAG_SCRIPT_DATA_NUM_6) !== TrinketSlot.HERO_POWER) {
-			return false;
-		}
-		// Trinkets mis-tagged as a second hero power should not replace the hero power zone.
-		if (entity.getTag(GameTag.ADDITIONAL_HERO_POWER_INDEX) === 1) {
-			return false;
-		}
-		const cardId = getEntityCardId(entity);
-		// Same card already shown as a lesser/greater trinket is not a hero-power replacement.
-		return !!cardId && !regularTrinketCardIds.has(cardId);
-	});
+	const trinketHeroPower = playerPlayEntities.find((entity) =>
+		isValidTrinketHeroPowerEntity(entity, regularTrinketCardIds),
+	);
 	if (trinketHeroPower) {
 		return [trinketHeroPower];
 	}
@@ -142,17 +205,11 @@ export const getSimulatorHeroPowerCardIds = (
 		return [];
 	}
 
-	const trinketHeroPower = player.trinkets?.find((trinket) => trinket.scriptDataNum6 === TrinketSlot.HERO_POWER)?.cardId;
-	if (trinketHeroPower) {
-		return [trinketHeroPower];
-	}
-
-	const heroPowerCardIds = player.heroPowers?.map((heroPower) => heroPower.cardId).filter((cardId): cardId is string => !!cardId) ?? [];
-	if (heroPowerCardIds.length >= 2) {
-		return heroPowerCardIds.slice(0, 2);
-	}
-
-	return mergeBgsHeroPowerCardIds(player.heroPowerId, heroPowerCardIds);
+	return resolveSimulationHeroPowerCardIds({
+		heroPowers: player.heroPowers,
+		trinkets: player.trinkets,
+		heroPowerId: player.heroPowerId,
+	});
 };
 
 // Also duplicated in replay-parser/simulation-hero-power.ts to avoid a circular dependency with battlegrounds/core.
@@ -168,32 +225,32 @@ export const getSimulationActionHeroPowerEntries = (
 	heroPowerEntityId: number | null | undefined,
 	heroPowerUsed: boolean | null | undefined,
 	heroPowers: readonly Pick<BgsHeroPower, 'cardId' | 'entityId' | 'used'>[] | null | undefined,
+	trinkets: readonly BgsTrinketLike[] | null | undefined,
+	questRewardHeroPowerCardId: string | null | undefined,
 	defaultPrimaryEntityId: number,
 	defaultAdditionalEntityIdStart: number,
 ): readonly SimulationActionHeroPowerEntry[] => {
-	const result: SimulationActionHeroPowerEntry[] = [];
-	if (heroPowerCardId) {
-		result.push({
-			cardId: heroPowerCardId,
-			entityId: heroPowerEntityId ?? defaultPrimaryEntityId,
-			used: heroPowerUsed ?? false,
-			additionalHeroPowerIndex: 0,
-		});
-	}
+	const cardIds = resolveSimulationHeroPowerCardIds({
+		heroPowers,
+		trinkets,
+		questRewardHeroPowerCardId,
+	});
 
-	for (const [index, heroPower] of (heroPowers ?? []).slice(1).entries()) {
-		if (!heroPower?.cardId) {
-			continue;
-		}
-		result.push({
-			cardId: heroPower.cardId,
-			entityId: heroPower.entityId || defaultAdditionalEntityIdStart + index,
-			used: heroPower.used ?? false,
-			additionalHeroPowerIndex: index + 1,
-		});
-	}
-
-	return result;
+	return cardIds.map((cardId, index) => {
+		const trinketMatch = trinkets?.find(
+			(trinket) => trinket.cardId === cardId && trinket.scriptDataNum6 === TrinketSlot.HERO_POWER,
+		);
+		const heroPowerMatch = heroPowers?.find((heroPower) => heroPower.cardId === cardId);
+		return {
+			cardId,
+			entityId:
+				trinketMatch?.entityId ??
+				heroPowerMatch?.entityId ??
+				(index === 0 ? defaultPrimaryEntityId : defaultAdditionalEntityIdStart + index - 1),
+			used: heroPowerMatch?.used ?? (index === 0 ? heroPowerUsed ?? false : false),
+			additionalHeroPowerIndex: index,
+		};
+	});
 };
 
 export const applySimulatorHeroPowerUpdate = (

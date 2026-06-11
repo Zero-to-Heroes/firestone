@@ -6,6 +6,7 @@ import {
 	getSimulatorHeroPowerCardIds,
 	isBgsQuestRewardEntity,
 	resolveBgsHeroPowerEntities,
+	resolveTrinketHeroPowerCardId,
 } from './bgs-hero-power-zone';
 
 const buildEntity = (
@@ -161,6 +162,46 @@ describe('bgs-hero-power-zone', () => {
 		expect(cardIds).toEqual(['HP_PRIMARY', 'HP_SECONDARY']);
 	});
 
+	it('returns null for duplicate portrait trinket in hero-power slot', () => {
+		expect(
+			resolveTrinketHeroPowerCardId([
+				{ cardId: 'BG35_MagicItem_924', scriptDataNum6: TrinketSlot.LESSER },
+				{
+					cardId: 'BG35_MagicItem_924',
+					scriptDataNum6: TrinketSlot.HERO_POWER,
+					tags: { [GameTag.ADDITIONAL_HERO_POWER_INDEX]: 1 },
+				},
+			]),
+		).toBeNull();
+	});
+
+	it('uses real hero powers for encoded simulation when slot-3 trinket is a duplicate portrait', () => {
+		const trinkets = [
+			{ cardId: 'BG35_MagicItem_731', scriptDataNum6: TrinketSlot.GREATER },
+			{
+				cardId: 'BG35_MagicItem_731',
+				entityId: 282,
+				scriptDataNum6: TrinketSlot.HERO_POWER,
+				tags: { [GameTag.ADDITIONAL_HERO_POWER_INDEX]: 1 },
+			},
+		];
+		const heroPowers = [{ cardId: 'BG34_HERO_002p', entityId: 231, used: false }];
+
+		expect(getSimulatorHeroPowerCardIds({ heroPowers, trinkets } as any)).toEqual(['BG34_HERO_002p']);
+		expect(
+			getSimulationActionHeroPowerEntries(
+				'BG35_MagicItem_731',
+				100000002,
+				false,
+				heroPowers,
+				trinkets,
+				null,
+				100000002,
+				100000003,
+			).map((entry) => entry.cardId),
+		).toEqual(['BG34_HERO_002p']);
+	});
+
 	it('extracts primary and secondary hero powers from simulation game actions', () => {
 		const entries = getSimulationActionHeroPowerEntries(
 			'HP_PRIMARY',
@@ -170,6 +211,8 @@ describe('bgs-hero-power-zone', () => {
 				{ cardId: 'HP_PRIMARY', entityId: 100000002, used: false },
 				{ cardId: 'HP_SECONDARY', entityId: 100000003, used: true },
 			],
+			[],
+			null,
 			100000002,
 			100000003,
 		);
@@ -181,7 +224,16 @@ describe('bgs-hero-power-zone', () => {
 	});
 
 	it('does not treat secondary hero powers as quest rewards in simulation actions', () => {
-		const entries = getSimulationActionHeroPowerEntries('HP_PRIMARY', 100000002, false, [{ cardId: 'HP_PRIMARY' }, { cardId: 'HP_SECONDARY' }] as any, 100000002, 100000003);
+		const entries = getSimulationActionHeroPowerEntries(
+			'HP_PRIMARY',
+			100000002,
+			false,
+			[{ cardId: 'HP_PRIMARY' }, { cardId: 'HP_SECONDARY' }] as any,
+			[],
+			null,
+			100000002,
+			100000003,
+		);
 
 		expect(entries.filter((entry) => entry.additionalHeroPowerIndex > 0)).toHaveLength(1);
 		expect(entries[1].cardId).toBe('HP_SECONDARY');
