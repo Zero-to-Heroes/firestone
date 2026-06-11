@@ -123,10 +123,16 @@ export class DeckCard {
 	}
 
 	public getEffectiveManaCost(): number | null {
+		const costFromTags = this.tags?.[GameTag.COST];
+		if (costFromTags != null) {
+			return costFromTags;
+		}
+
 		const costFromData = this.actualManaCost ?? this.refManaCost ?? null;
 		if (costFromData != null) {
 			return costFromData;
 		}
+
 		if (this.guessedInfo?.cost && typeof this.guessedInfo.cost === 'number') {
 			return this.guessedInfo.cost;
 		}
@@ -165,6 +171,21 @@ export const isCardCreated = (card: DeckCard | undefined): boolean => {
 		// Forged cards are not created cards, and are not resurrected by Ra-Den
 		(!!card.tags?.[GameTag.TRANSFORMED_FROM_CARD] && !card.tags?.[GameTag.FORGED] && !card.forged)
 	);
+};
+
+export const getEffectiveManaCost = (card: DeckCard): number | null => {
+	const costFromTags = card.tags?.[GameTag.COST];
+	if (costFromTags != null) {
+		return costFromTags;
+	}
+	const costFromData = card.actualManaCost ?? card.refManaCost ?? null;
+	if (costFromData != null) {
+		return costFromData;
+	}
+	if (card.guessedInfo?.cost && typeof card.guessedInfo.cost === 'number') {
+		return card.guessedInfo.cost;
+	}
+	return null;
 };
 
 export interface StoredInformation {

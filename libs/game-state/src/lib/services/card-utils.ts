@@ -20,7 +20,7 @@ import {
 } from '@firestone-hs/reference-data';
 import { Mutable } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { DeckCard, GuessedInfo, StoredInformation } from '../models/deck-card';
+import { DeckCard, getEffectiveManaCost, GuessedInfo, StoredInformation } from '../models/deck-card';
 import { DeckState } from '../models/deck-state';
 import { GameState } from '../models/game-state';
 import { DUAL_CLASS_ARENA_SCENARIO_ID, Metadata } from '../models/metadata';
@@ -106,7 +106,7 @@ export const getCost = (card: DeckCard, deckState: DeckState, allCards: CardsFac
 		const cost = pieces.reduce((a, b) => a + (b.cost ?? 0), 0);
 		return cost;
 	}
-	return card?.getEffectiveManaCost?.() ?? card?.actualManaCost ?? card?.refManaCost ?? refCard.cost ?? 0;
+	return getEffectiveManaCost(card) ?? card?.actualManaCost ?? card?.refManaCost ?? refCard.cost ?? 0;
 };
 
 export const getCardType = (
