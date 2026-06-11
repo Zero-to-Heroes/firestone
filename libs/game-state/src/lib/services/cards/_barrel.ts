@@ -304,6 +304,7 @@ export { UnstableSpellcaster } from './unstable-spellcaster';
 export { VanessaTheRingleader } from './vanessa-the-ringleader';
 export { VarianKingOfStormwind } from './varian-king-of-stormwind';
 export { VelarokTheDeceiver } from './velarok-the-deceiver';
+export { VictorNefarius } from './victor-nefarius';
 export { VioletHaze } from './violet-haze';
 export { VoodooTotem } from './voodoo-totem';
 export { VujaDe } from './vuja-de';
