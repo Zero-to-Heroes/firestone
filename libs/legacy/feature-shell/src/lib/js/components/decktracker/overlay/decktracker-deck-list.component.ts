@@ -30,7 +30,11 @@ import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 		'../../../../css/component/decktracker/overlay/decktracker-deck-list.component.scss',
 	],
 	template: `
-		<dk-runes [deckstring]="deckstring$ | async" [showRunes]="showDkRunes"></dk-runes>
+		<dk-runes
+			[deckstring]="deckstring$ | async"
+			[showRunes]="showDkRunes"
+			[heroPower]="heroPower$ | async"
+		></dk-runes>
 		<ng-scrollbar class="deck-list" [ngClass]="{ active: isScroll }" [disableSensor]="false" scrollable>
 			<ng-container [ngSwitch]="displayMode">
 				<!-- <div class="list-background"></div> -->

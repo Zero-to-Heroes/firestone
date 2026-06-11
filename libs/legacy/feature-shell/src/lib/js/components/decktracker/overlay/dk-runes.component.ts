@@ -82,14 +82,19 @@ export class DkRunesComponent extends AbstractSubscriptionComponent implements A
 					return false;
 				}
 
+				if (!showRunes) {
+					return false;
+				}
+
+				const deckHasDeathKnight =
+					deckDefinition.heroes.some((h) =>
+						this.allCards.getCard(h).classes?.includes(CardClass[CardClass.DEATHKNIGHT]),
+					) ||
+					deckDefinition.cards.some((pair) =>
+						this.allCards.getCard(pair[0]).touristFor?.includes(CardClass[CardClass.DEATHKNIGHT]),
+					);
 				const result =
-					(showRunes &&
-						(deckDefinition.heroes.some((h) =>
-							this.allCards.getCard(h).classes?.includes(CardClass[CardClass.DEATHKNIGHT]),
-						) ||
-							deckDefinition.cards.some((pair) =>
-								this.allCards.getCard(pair[0]).touristFor?.includes(CardClass[CardClass.DEATHKNIGHT]),
-							))) ||
+					deckHasDeathKnight ||
 					this.allCards
 						.getCard(normalizeHeroPower(heroPower, this.allCards.getService()))
 						.classes?.includes(CardClass[CardClass.DEATHKNIGHT]);
