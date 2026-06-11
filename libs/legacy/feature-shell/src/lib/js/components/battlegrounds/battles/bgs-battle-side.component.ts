@@ -8,12 +8,12 @@ import {
 	Output,
 	ViewRef,
 } from '@angular/core';
-import { CardIds, CardType, GameTag, GameType, Zone, defaultStartingHp } from '@firestone-hs/reference-data';
+import { CardIds, CardType, GameTag, GameType, TrinketSlot, Zone, defaultStartingHp } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone/replay/replay-parser';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { BgsCardTooltipComponent } from '@firestone/battlegrounds/common';
-import { buildEntityFromBoardEntity } from '@firestone/battlegrounds/core';
+import { buildEntityFromBoardEntity, mergeBgsHeroPowerCardIds } from '@firestone/battlegrounds/core';
 import { BgsBoard, BgsPlayer } from '@firestone/game-state';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
@@ -48,7 +48,7 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 				<bgs-hero-portrait-simulator
 					class="portrait"
 					[heroCardId]="heroCardId"
-					[heroPowerCardId]="heroPowerCardId"
+					[heroPowerCardIds]="heroPowerCardIds"
 					[questRewardCardId]="questRewardCardId"
 					[health]="health"
 					[maxHealth]="maxHealth"
@@ -180,7 +180,7 @@ export class BgsBattleSideComponent {
 	teammateShownInfo: BgsPlayer;
 
 	heroCardId: string;
-	heroPowerCardId: string;
+	heroPowerCardIds: readonly string[] = [];
 	questRewardCardId: string;
 	health: number;
 	maxHealth: number;
@@ -309,7 +309,11 @@ export class BgsBattleSideComponent {
 		}
 
 		this.heroCardId = this._player.player?.cardId;
-		this.heroPowerCardId = this._player.player?.heroPowerId;
+		this.heroPowerCardIds = mergeBgsHeroPowerCardIds(
+			this._player.player?.trinkets?.find((t) => t.scriptDataNum6 === TrinketSlot.HERO_POWER)?.cardId,
+			this._player.player?.heroPowerId,
+			this._player.player?.heroPowers?.map((heroPower) => heroPower.cardId),
+		);
 		this.questRewardCardId = !!this._player.player?.questRewards?.length
 			? this._player.player?.questRewards[0]
 			: null;

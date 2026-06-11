@@ -78,6 +78,23 @@
 
 	.hero-power {
 		justify-self: center;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 4%;
+
+		&.multiple {
+			.hero-power-item {
+				height: 60%;
+			}
+		}
+
+		.hero-power-item {
+			position: relative;
+			height: 100%;
+			aspect-ratio: 1;
+			min-height: 0;
+		}
 
 		.change-icon {
 			top: 7%;

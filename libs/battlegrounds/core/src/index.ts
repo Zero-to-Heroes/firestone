@@ -1,3 +1,4 @@
+export * from './lib/bgs-hero-power-zone';
 export * from './lib/battlegrounds-core.module';
 export * from './lib/models/_barrel';
 export * from './lib/services/card-rules/board-types';

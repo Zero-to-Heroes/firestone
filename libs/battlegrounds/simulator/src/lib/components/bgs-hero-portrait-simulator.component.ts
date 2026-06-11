@@ -83,26 +83,28 @@ import type { Side } from '../services/sim-ui-controller/bgs-simulator-controlle
 				></bgs-plus-button>
 				<tavern-level-icon *ngIf="_tavernTier" [level]="_tavernTier" class="tavern"></tavern-level-icon>
 			</div>
-			<div class="hero-power">
-				<!-- TODO: support for multiple hero powers -->
-				<div
-					class="item-container"
-					[cardTooltip]="_heroPowerCardId"
-					[cardTooltipPosition]="tooltipPosition"
-					[cardTooltipBgs]="isHeroPowerBgs"
-				>
-					<img [src]="heroPowerIcon" class="image" *ngIf="!!heroPowerIcon" />
-					<div class="image empty-icon" *ngIf="!heroPowerIcon"></div>
-					<img
-						src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/bgs_hero_power_frame.png"
-						class="frame"
-					/>
+			<div class="hero-power" [class.multiple]="heroPowerDisplays.length > 1">
+				<div class="hero-power-item" *ngFor="let heroPower of heroPowerDisplays; let i = index">
+					<div
+						class="item-container"
+						[cardTooltip]="heroPower.cardId"
+						[cardTooltipPosition]="tooltipPosition"
+						[cardTooltipBgs]="heroPower.isBgs"
+					>
+						<img [src]="heroPower.icon" class="image" *ngIf="!!heroPower.icon" />
+						<div class="image empty-icon" *ngIf="!heroPower.icon"></div>
+						<img
+							src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/bgs_hero_power_frame.png"
+							class="frame"
+						/>
+					</div>
+					<bgs-plus-button
+						*ngIf="i === 0"
+						class="change-icon"
+						(click)="onHeroPowerClick()"
+						[useUpdateIcon]="!defaultHero"
+					></bgs-plus-button>
 				</div>
-				<bgs-plus-button
-					class="change-icon"
-					(click)="onHeroPowerClick()"
-					[useUpdateIcon]="!defaultHero"
-				></bgs-plus-button>
 			</div>
 			<div
 				class="global-info"
@@ -138,12 +140,14 @@ export class BgsHeroPortraitSimulatorComponent {
 		this._tavernTier = value;
 	}
 
-	@Input() set heroPowerCardId(value: string | null | undefined) {
-		this._heroPowerCardId = value;
-		this.heroPowerIcon = !!value ? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value}.jpg` : null;
-		this.isHeroPowerBgs = !value
-			? false
-			: this.allCards.getCard(value).type?.toUpperCase() === CardType[CardType.BATTLEGROUND_TRINKET];
+	@Input() set heroPowerCardIds(value: readonly string[] | null | undefined) {
+		this.heroPowerDisplays = (value ?? [])
+			.filter((cardId) => !!cardId)
+			.map((cardId) => ({
+				cardId,
+				icon: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${cardId}.jpg`,
+				isBgs: this.allCards.getCard(cardId).type?.toUpperCase() === CardType[CardType.BATTLEGROUND_TRINKET],
+			}));
 	}
 
 	@Input() set questRewardCardId(value: string | null | undefined) {
@@ -165,13 +169,11 @@ export class BgsHeroPortraitSimulatorComponent {
 			: null;
 	}
 
-	heroPowerIcon: string | null;
+	heroPowerDisplays: readonly { cardId: string; icon: string; isBgs: boolean }[] = [];
 	questRewardIcon: string | null;
 	greaterTrinketIcon: string | null;
 	lesserTrinketIcon: string | null;
 	_heroCardId: string;
-	_heroPowerCardId: string | null | undefined;
-	isHeroPowerBgs: boolean;
 	_questRewardCardId: string | null | undefined;
 	_greaterTrinketCardId: string | null | undefined;
 	_lesserTrinketCardId: string | null | undefined;

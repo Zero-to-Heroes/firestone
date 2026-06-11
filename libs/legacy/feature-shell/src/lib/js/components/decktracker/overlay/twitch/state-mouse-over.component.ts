@@ -8,6 +8,7 @@ import {
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
+import { adaptParserHeroPowerEntity, resolveBgsHeroPowerCardIds } from '@firestone/battlegrounds/core';
 import { GameState, getDeckTrackerEffectiveHandSize } from '@firestone/game-state';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
@@ -59,8 +60,12 @@ import { TwitchCardsHighlightFacadeService } from './twitch-cards-highlight-faca
 						<div class="hero">
 							<empty-card [cardId]="topHeroCard" [cardTooltipPosition]="'right'"></empty-card>
 						</div>
-						<div class="hero-power">
-							<empty-card [cardId]="topHeroPowerCard" [cardTooltipPosition]="'right'"></empty-card>
+						<div class="hero-power" [class.multiple]="topHeroPowerCards?.length > 1">
+							<empty-card
+								*ngFor="let cardId of topHeroPowerCards"
+								[cardId]="cardId"
+								[cardTooltipPosition]="'right'"
+							></empty-card>
 						</div>
 					</ul>
 					<ul class="board">
@@ -117,13 +122,14 @@ import { TwitchCardsHighlightFacadeService } from './twitch-cards-highlight-faca
 						<div class="hero">
 							<empty-card [cardId]="bottomHeroCard" [cardTooltipPosition]="'right'"></empty-card>
 						</div>
-						<div class="hero-power">
+						<div class="hero-power" [class.multiple]="bottomHeroPowerCards?.length > 1">
 							<empty-card
-								[cardId]="bottomHeroPowerCard"
+								*ngFor="let cardId of bottomHeroPowerCards"
+								[cardId]="cardId"
 								[cardTooltipPosition]="'right'"
 								[cardTooltipBgs]="isBgs"
-								(mouseenter)="onBottomCardMouseEnter(bottomHeroPowerCard, null)"
-								(mouseleave)="onBottomCardMouseLeave(bottomHeroPowerCard)"
+								(mouseenter)="onBottomCardMouseEnter(cardId, null)"
+								(mouseleave)="onBottomCardMouseLeave(cardId)"
 							></empty-card>
 						</div>
 					</ul>
@@ -225,7 +231,7 @@ export class StateMouseOverComponent extends AbstractSubscriptionComponent imple
 	_bgsState: TwitchBgsState;
 	horizontalOffset = 0;
 
-	topHeroPowerCard: string;
+	topHeroPowerCards: readonly string[] = [];
 	topWeaponCard: string;
 	topBoardCards: readonly string[];
 	topSecretCards: readonly string[];
@@ -233,7 +239,7 @@ export class StateMouseOverComponent extends AbstractSubscriptionComponent imple
 	topHeroLesserTrinketCard: string;
 	topHeroGreaterTrinketCard: string;
 	bottomBoardCards: readonly string[];
-	bottomHeroPowerCard: string;
+	bottomHeroPowerCards: readonly string[] = [];
 	bottomWeaponCard: string;
 	bottomSecretCards: readonly string[];
 	bottomHandCards: readonly string[];
@@ -316,7 +322,7 @@ export class StateMouseOverComponent extends AbstractSubscriptionComponent imple
 						gameState.opponentDeck,
 					);
 
-				this.topHeroPowerCard = this._gameState?.opponentDeck?.heroPower?.cardId;
+				this.topHeroPowerCards = this.buildHeroPowerCards(this._gameState, this._bgsState, false);
 				this.topWeaponCard = this._gameState?.opponentDeck?.weapon?.cardId;
 				this.topBoardCards = this._gameState?.opponentDeck?.board.map((card) => card.cardId);
 				this.topSecretCards = this._gameState?.opponentDeck?.otherZone
@@ -326,7 +332,7 @@ export class StateMouseOverComponent extends AbstractSubscriptionComponent imple
 				this.topHeroLesserTrinketCard = currentOpponentBgsInfo?.lesserTrinket;
 				this.topHeroGreaterTrinketCard = currentOpponentBgsInfo?.greaterTrinket;
 				this.bottomBoardCards = this._gameState?.playerDeck?.board.map((card) => card.cardId);
-				this.bottomHeroPowerCard = this.buildBottomHeroPowerCards(this._gameState, this._bgsState);
+				this.bottomHeroPowerCards = this.buildHeroPowerCards(this._gameState, this._bgsState, true);
 				this.bottomWeaponCard = this.buildBottomWeaponCards(this._gameState, this._bgsState);
 				this.bottomSecretCards = this.buildBottomSecretCards(this._gameState, this._bgsState);
 				this.bottomHandCards = this._gameState?.playerDeck?.hand.map((card) => card.cardId);
@@ -646,14 +652,34 @@ export class StateMouseOverComponent extends AbstractSubscriptionComponent imple
 		);
 	}
 
-	private buildBottomHeroPowerCards(gameState: GameState, bgsState: TwitchBgsState): string {
-		const bgsMainPlayer = bgsState?.leaderboard?.find((player) => player.isMainPlayer);
-		const completedRewards =
-			bgsMainPlayer?.questRewards?.filter((r) => r.completed && r.isHeroPower).map((r) => r.cardId) ?? [];
-		if (!completedRewards.length) {
-			return gameState?.playerDeck?.heroPower?.cardId;
+	private buildHeroPowerCards(
+		gameState: GameState,
+		bgsState: TwitchBgsState,
+		isMainPlayer: boolean,
+	): readonly string[] {
+		const playerId = isMainPlayer ? gameState?.localPlayerId : gameState?.opponentPlayerId;
+		const parserEntities = gameState?.parserState?.CurrentEntities;
+		if (parserEntities && playerId) {
+			const fromParser = resolveBgsHeroPowerCardIds(
+				[...parserEntities.values()].map((entity) => adaptParserHeroPowerEntity(entity)),
+				playerId,
+			);
+			if (fromParser.length) {
+				return fromParser;
+			}
 		}
-		return `${completedRewards.join(',')}`;
+
+		if (isMainPlayer) {
+			const bgsMainPlayer = bgsState?.leaderboard?.find((player) => player.isMainPlayer);
+			const completedRewards =
+				bgsMainPlayer?.questRewards?.filter((r) => r.completed && r.isHeroPower).map((r) => r.cardId) ?? [];
+			if (completedRewards.length) {
+				return completedRewards;
+			}
+		}
+
+		const deck = isMainPlayer ? gameState?.playerDeck : gameState?.opponentDeck;
+		return deck?.heroPower?.cardId ? [deck.heroPower.cardId] : [];
 	}
 
 	private buildBottomWeaponCards(gameState: GameState, bgsState: TwitchBgsState): string {

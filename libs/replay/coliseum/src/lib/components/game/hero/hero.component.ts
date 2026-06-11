@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { isBgsQuestRewardEntity, resolveBgsHeroPowerEntities } from '@firestone/battlegrounds/core';
 import { CardType, GameTag, Zone } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone/replay/replay-parser';
 import { Map } from 'immutable';
@@ -16,7 +17,13 @@ import { GameHelper } from '../../../services/game-helper';
 			<bgs-quest-reward [reward]="_reward" *ngIf="_reward"></bgs-quest-reward>
 			<hero-card [hero]="_hero" [playerEntity]="playerEntity" [secrets]="_secrets" [option]="isOption(_hero)">
 			</hero-card>
-			<hero-power [heroPower]="_heroPower" [option]="isOption(_heroPower)"></hero-power>
+			<div class="hero-powers" [class.multiple]="_heroPowers.length > 1">
+				<hero-power
+					*ngFor="let heroPower of _heroPowers"
+					[heroPower]="heroPower"
+					[option]="isOption(heroPower)"
+				></hero-power>
+			</div>
 			<tavern-level-icon *ngIf="tavernLevel > 0" [level]="tavernLevel"></tavern-level-icon>
 			<tavern-button
 				class="tavern-upgrade"
@@ -48,7 +55,7 @@ export class HeroComponent {
 	_playerId: number;
 
 	_hero: Entity | undefined;
-	_heroPower: Entity | undefined;
+	_heroPowers: readonly Entity[] = [];
 	_weapon: Entity | undefined;
 	_reward: Entity | undefined;
 	_options: readonly number[];
@@ -114,7 +121,7 @@ export class HeroComponent {
 			  )
 			: undefined;
 		this._hero = this.getHeroEntity(this._entities, this.playerEntity);
-		this._heroPower = this.getHeroPowerEntity(this._entities, this._playerId);
+		this._heroPowers = this.getHeroPowerEntities(this._entities, this._playerId);
 		this._weapon = this.getWeaponEntity(this._entities, this._playerId);
 		this._reward = this.getBgsQuestRewardEntity(this._entities, this._playerId);
 		this._secrets = this.getSecretEntities(this._entities, this._playerId);
@@ -139,7 +146,7 @@ export class HeroComponent {
 		this.heroOptions = GameHelper.getOptions(
 			[
 				this._hero as Entity,
-				this._heroPower as Entity,
+				...this._heroPowers,
 				this._weapon as Entity,
 				this.tavernUpgradeEntity as Entity,
 				this.tavernRerollEntity as Entity,
@@ -165,33 +172,11 @@ export class HeroComponent {
 			: undefined;
 	}
 
-	private getHeroPowerEntity(entities: Map<number, Entity>, playerId: number): Entity | undefined {
+	private getHeroPowerEntities(entities: Map<number, Entity>, playerId: number): readonly Entity[] {
 		if (!entities || !playerId) {
-			return undefined;
+			return [];
 		}
-		const heroPower =
-			// First try to get the trinket
-			entities
-				.valueSeq()
-				.toArray()
-				.filter((entity) => entity.getTag(GameTag.CONTROLLER) === playerId)
-				.filter((entity) => entity.getTag(GameTag.ZONE) === Zone.PLAY)
-				.filter((entity) => entity.getCardType() === CardType.BATTLEGROUND_TRINKET)
-				.find((entity) => entity.getTag(GameTag.TAG_SCRIPT_DATA_NUM_6) === 3) ??
-			entities
-				.valueSeq()
-				.toArray()
-				.filter((entity) => entity.getTag(GameTag.CARDTYPE) === CardType.BATTLEGROUND_QUEST_REWARD)
-				.filter((entity) => entity.getTag(GameTag.BACON_IS_HEROPOWER_QUESTREWARD) === 1)
-				.filter((entity) => entity.getTag(GameTag.ZONE) === Zone.PLAY)
-				.filter((entity) => entity.getTag(GameTag.CONTROLLER) === playerId)[0] ??
-			entities
-				.valueSeq()
-				.toArray()
-				.filter((entity) => entity.getTag(GameTag.CARDTYPE) === CardType.HERO_POWER)
-				.filter((entity) => entity.getTag(GameTag.ZONE) === Zone.PLAY)
-				.filter((entity) => entity.getTag(GameTag.CONTROLLER) === playerId)[0];
-		return heroPower;
+		return resolveBgsHeroPowerEntities(entities.valueSeq().toArray(), playerId);
 	}
 
 	private getWeaponEntity(entities: Map<number, Entity>, playerId: number): Entity | undefined {
@@ -213,14 +198,9 @@ export class HeroComponent {
 		return entities
 			.valueSeq()
 			.toArray()
-			.filter(
-				(entity) =>
-					entity.getTag(GameTag.CARDTYPE) === CardType.BATTLEGROUND_QUEST_REWARD ||
-					entity.getTag(GameTag.ADDITIONAL_HERO_POWER_INDEX) === 1,
-			)
-			.filter((entity) => entity.getTag(GameTag.BACON_IS_HEROPOWER_QUESTREWARD) !== 1)
+			.filter((entity) => entity.getTag(GameTag.CONTROLLER) === playerId)
 			.filter((entity) => entity.getTag(GameTag.ZONE) === Zone.PLAY)
-			.filter((entity) => entity.getTag(GameTag.CONTROLLER) === playerId)[0];
+			.filter((entity) => isBgsQuestRewardEntity(entity))[0];
 	}
 
 	private getSecretEntities(entities: Map<number, Entity>, playerId: number): readonly Entity[] {

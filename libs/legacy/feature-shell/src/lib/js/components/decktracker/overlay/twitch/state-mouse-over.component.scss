@@ -94,6 +94,18 @@
 			width: 15vh;
 			height: 69%;
 			left: 55%;
+			display: flex;
+			align-items: center;
+
+			&.multiple {
+				width: 22vh;
+
+				empty-card {
+					flex: 1;
+					min-width: 0;
+					height: 100%;
+				}
+			}
 		}
 
 		.hero {

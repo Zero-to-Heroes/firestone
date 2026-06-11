@@ -11,12 +11,27 @@
 		height: 100%;
 	}
 
-	hero-power {
+	.hero-powers {
 		position: absolute;
 		height: 100%;
 		top: 10%;
 		left: 55%;
 		width: 7%;
+
+		&.multiple {
+			display: flex;
+			width: 14%;
+
+			hero-power {
+				position: relative;
+				top: 0;
+				left: 0;
+				flex: 1;
+				min-width: 0;
+				width: auto;
+				height: 100%;
+			}
+		}
 	}
 
 	weapon {
