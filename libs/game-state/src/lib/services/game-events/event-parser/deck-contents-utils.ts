@@ -684,8 +684,13 @@ const updateCostInDeck = (
 		if (!cardSelector(card, refCard)) {
 			return card;
 		}
+		const newCost = costUpdator(card);
 		return card.update({
-			actualManaCost: costUpdator(card),
+			actualManaCost: newCost,
+			tags: {
+				...card.tags,
+				[GameTag.COST]: newCost,
+			},
 		});
 	});
 	return deckState.update({
@@ -705,8 +710,13 @@ const updateCostInHand = (
 		if (!cardSelector(card, refCard)) {
 			return card;
 		}
+		const newCost = costUpdator(card);
 		return card.update({
-			actualManaCost: costUpdator(card),
+			actualManaCost: newCost,
+			tags: {
+				...card.tags,
+				[GameTag.COST]: newCost,
+			},
 		});
 	});
 	return deckState.update({
