@@ -4,7 +4,7 @@ import { GameState } from '../../../models/game-state';
 import { revealCard } from '../card-reveal';
 import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
-import { DeckManipulationHelper } from './deck-manipulation-helper';
+import { DeckManipulationHelper, resolveFallbackCreatorCardIdForDeckRemoval } from './deck-manipulation-helper';
 
 export class BurnedCardParser implements EventParser {
 	constructor(
@@ -28,11 +28,18 @@ export class BurnedCardParser implements EventParser {
 		const card = this.helper.findCardInZone(deck.deck, cardId, entityId)!;
 		const previousDeck = deck.deck;
 		const refCard = this.allCards.getCard(card.cardId);
+		const fallbackCreatorCardId = resolveFallbackCreatorCardIdForDeckRemoval({
+			handOrRemovedCard: card,
+		});
 		const newDeck: readonly DeckCard[] = this.helper.removeSingleCardFromZone(
 			previousDeck,
 			cardId,
 			entityId,
 			deck.deckList.length === 0,
+			true,
+			null,
+			false,
+			{ fallbackCreatorCardId },
 		)[0];
 		const cardWithZone = card.update({
 			zone: 'BURNED',

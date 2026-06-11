@@ -8,7 +8,37 @@ import { DeckCard } from '../../../models/deck-card';
 import { DeckState } from '../../../models/deck-state';
 import { GameState } from '../../../models/game-state';
 import { SecretOption } from '../../../models/secret-option';
+import { giftCreators } from '../../cards/gift-creators';
 import { GameEvent } from '../game-event';
+
+export type RemoveSingleCardFromZoneOptions = {
+	/** When entityId/cardId/filler removal fails, drop the first row with this creatorCardId. */
+	readonly fallbackCreatorCardId?: string | null;
+};
+
+/** Creators the opponent deck tracker already surfaces as "Created by …" ({@link giftCreators}). */
+const isPublicCreatorForDeckRemoval = (creatorId: string | null | undefined): creatorId is string =>
+	!!creatorId && giftCreators.includes(creatorId as CardIds);
+
+/**
+ * Resolve creator provenance for deck-row removal when entityId is hidden on opponent deck rows.
+ * Does not use trueEntityId — only event and hand/removed-card signals.
+ */
+export function resolveFallbackCreatorCardIdForDeckRemoval(input: {
+	readonly gameEventCreatorCardId?: string | null;
+	readonly handOrRemovedCard?: DeckCard | null;
+}): string | undefined {
+	const fromEvent = input.gameEventCreatorCardId;
+	if (isPublicCreatorForDeckRemoval(fromEvent)) {
+		return fromEvent;
+	}
+	const fromHand =
+		input.handOrRemovedCard?.creatorCardId ?? input.handOrRemovedCard?.lastAffectedByCardId ?? undefined;
+	if (fromHand) {
+		return fromHand;
+	}
+	return undefined;
+}
 
 @Injectable()
 export class DeckManipulationHelper {
@@ -25,8 +55,12 @@ export class DeckManipulationHelper {
 		normalizeUpgradedCards = true,
 		cardInfos: { cost?: number } | null = null,
 		debug = false,
+		options?: RemoveSingleCardFromZoneOptions,
 	): readonly [readonly DeckCard[], DeckCard | undefined] {
 		const normalizedCardId = this.normalizeCardId(cardId, normalizeUpgradedCards);
+		// When we know the creating card (e.g. Prince Malchezaar on opponent deck), prefer that over
+		// anonymous filler removal — filler rows are deckstring padding, not created-in-deck tokens.
+		const allowFillerRemoval = removeFillerCard && !options?.fallbackCreatorCardId;
 
 		// We have the entityId, so we just remove it
 		if (!!entityId && zone.some((card) => Math.abs(card.entityId ?? 0) === Math.abs(entityId))) {
@@ -56,10 +90,14 @@ export class DeckManipulationHelper {
 
 		if (!normalizedCardId) {
 			debug && console.debug('[card-draw] removing card with no cardId', normalizedCardId, zone);
+			const creatorFallback = this.tryRemoveByCreatorCardIdFallback(zone, options?.fallbackCreatorCardId);
+			if (creatorFallback[1]) {
+				return creatorFallback;
+			}
 			// If there are some "filler" cards (ie cards that exist only so that the deck has the right amount
 			// of cards), we remove one
 			if (
-				removeFillerCard &&
+				allowFillerRemoval &&
 				zone.some((card) => !card.entityId && !card.cardId && !card.cardName && !card.creatorCardId)
 			) {
 				debug && console.debug('[card-draw] removing filler card', zone);
@@ -168,7 +206,7 @@ export class DeckManipulationHelper {
 			}
 		}
 
-		if (!removedCard && removeFillerCard) {
+		if (!removedCard && allowFillerRemoval) {
 			debug && console.debug('[card-draw] removing filler card', zone);
 			if (zone.some((card) => !card.entityId && !card.cardId && !card.cardName && !card.creatorCardId)) {
 				let hasRemovedOnce = false;
@@ -195,7 +233,31 @@ export class DeckManipulationHelper {
 			// console.debug('could not find card to remove', cardId, entityId, cardInfos, zone);
 			// console.warn('could not find card to remove', cardId, entityId, cardInfos);
 		}
+		if (!removedCard) {
+			return this.tryRemoveByCreatorCardIdFallback(zone, options?.fallbackCreatorCardId);
+		}
 		return [result, removedCard];
+	}
+
+	private tryRemoveByCreatorCardIdFallback(
+		zone: readonly DeckCard[],
+		fallbackCreatorCardId: string | null | undefined,
+	): readonly [readonly DeckCard[], DeckCard | undefined] {
+		if (!fallbackCreatorCardId) {
+			return [zone, undefined];
+		}
+		let hasRemovedOnce = false;
+		let removedCard: DeckCard | undefined;
+		const result: DeckCard[] = [];
+		for (const card of zone) {
+			if (!hasRemovedOnce && card.creatorCardId === fallbackCreatorCardId) {
+				hasRemovedOnce = true;
+				removedCard = card;
+				continue;
+			}
+			result.push(card);
+		}
+		return removedCard ? [result, removedCard] : [zone, undefined];
 	}
 
 	public empiricReplaceCardInOtherZone(
@@ -688,6 +750,9 @@ export const reconcileCardInHandWithDeck = (input: {
 				});
 			}
 		} else {
+			const fallbackCreatorCardId = resolveFallbackCreatorCardIdForDeckRemoval({
+				handOrRemovedCard: removedCard,
+			});
 			const [newDeckAfterReveal, removedCardFromDeck] = helper.removeSingleCardFromZone(
 				deckCards,
 				cardId,
@@ -696,6 +761,7 @@ export const reconcileCardInHandWithDeck = (input: {
 				false,
 				null,
 				true,
+				{ fallbackCreatorCardId },
 			);
 			console.debug(
 				'[card-played] reconcileCardInHandWithDeck removedCardFromDeck',

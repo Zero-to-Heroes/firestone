@@ -6,7 +6,7 @@ import { GameState } from '../../../models/game-state';
 import { getProcessedCard } from '../../card-utils';
 import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
-import { DeckManipulationHelper } from './deck-manipulation-helper';
+import { DeckManipulationHelper, resolveFallbackCreatorCardIdForDeckRemoval } from './deck-manipulation-helper';
 
 export class MinionSummonedFromHandParser implements EventParser {
 	constructor(
@@ -39,11 +39,18 @@ export class MinionSummonedFromHandParser implements EventParser {
 		// (to avoid info leaks). When they play it we won't find it in the "hand" zone, so we try
 		// and see if it is somewhere in the deck
 		if (!removedCard?.cardId && cardId) {
+			const fallbackCreatorCardId = resolveFallbackCreatorCardIdForDeckRemoval({
+				handOrRemovedCard: removedCard ?? card,
+			});
 			const [newDeckAfterReveal, removedCardFromDeck] = this.helper.removeSingleCardFromZone(
 				newDeck,
 				cardId,
 				entityId,
 				deck.deckList.length === 0,
+				true,
+				null,
+				false,
+				{ fallbackCreatorCardId },
 			);
 
 			if (removedCardFromDeck) {

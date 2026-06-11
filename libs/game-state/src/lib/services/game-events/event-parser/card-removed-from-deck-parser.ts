@@ -7,7 +7,7 @@ import { getProcessedCard } from '../../card-utils';
 import { dontActuallyDestroyCardsInDeck, FAKE_JOUST_CARDS } from '../../hs-utils';
 import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
-import { DeckManipulationHelper } from './deck-manipulation-helper';
+import { DeckManipulationHelper, resolveFallbackCreatorCardIdForDeckRemoval } from './deck-manipulation-helper';
 
 const DONT_REVEAL_REMOVED_CARDS = [CardIds.PirateAdmiralHooktusk_TakeTheirSuppliesToken];
 const SILENTLY_REMOVES_FROM_DECK = [CardIds.GaronaHalforcen_KingLlaneToken_TIME_875t];
@@ -53,6 +53,9 @@ export class CardRemovedFromDeckParser implements EventParser {
 		const card = this.helper.findCardInZone(deck.deck, cardId, entityId, true);
 		// console.debug('[card-removed] found card', card, cardId, entityId, deck.deck);
 		const previousDeck = deck.deck;
+		const fallbackCreatorCardId = resolveFallbackCreatorCardIdForDeckRemoval({
+			handOrRemovedCard: card,
+		});
 		let [newDeck, removedCard] = this.helper.removeSingleCardFromZone(
 			previousDeck,
 			cardId,
@@ -62,6 +65,8 @@ export class CardRemovedFromDeckParser implements EventParser {
 			{
 				cost: gameEvent.additionalData.cost,
 			},
+			false,
+			{ fallbackCreatorCardId },
 		);
 		let additionalKnownCardsInDeck = deck.additionalKnownCardsInDeck;
 		if (!removedCard?.cardId) {

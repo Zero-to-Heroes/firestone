@@ -48,4 +48,22 @@ export class Obfuscator {
 
 		return false;
 	}
+
+	/**
+	 * When card identity is obfuscated, still pass creator provenance if the entity came from deck.
+	 * Game-state gates what is safe to use ({@link publicCardGiftCreators}, isCreatorPublic, etc.).
+	 */
+	static creatorCardIdForDrawEvent(
+		shouldObfuscate: boolean,
+		wasInDeck: boolean,
+		creatorCardId: string | null | undefined,
+	): string | null {
+		if (!creatorCardId) {
+			return null;
+		}
+		if (!shouldObfuscate) {
+			return creatorCardId;
+		}
+		return wasInDeck ? creatorCardId : null;
+	}
 }

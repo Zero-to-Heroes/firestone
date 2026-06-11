@@ -1,6 +1,6 @@
-import { CardIds } from '@firestone-hs/reference-data';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { DeckCard } from '../../../models/deck-card';
+import { CardIds } from '@firestone-hs/reference-data';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 
 describe('DeckManipulationHelper.removeSingleCardFromZone', () => {
@@ -61,5 +61,20 @@ describe('DeckManipulationHelper.removeSingleCardFromZone', () => {
 		expect(removed?.entityId).toBe(102);
 		expect(newZone.length).toBe(1);
 		expect(newZone[0].entityId).toBe(101);
+	});
+
+	it('removes first creatorCardId row when entityId is hidden on opponent deck rows', () => {
+		const malchezaar = CardIds.PrinceMalchezaar_KAR_096;
+		const zone = [
+			DeckCard.create({ creatorCardId: malchezaar, trueEntityId: 80 }),
+			DeckCard.create({ creatorCardId: malchezaar, trueEntityId: 81 }),
+		];
+		const [newZone, removed] = helper.removeSingleCardFromZone(zone, null, -1, true, true, null, false, {
+			fallbackCreatorCardId: malchezaar,
+		});
+		expect(removed?.creatorCardId).toBe(malchezaar);
+		expect(removed?.trueEntityId).toBe(80);
+		expect(newZone.length).toBe(1);
+		expect(newZone[0].trueEntityId).toBe(81);
 	});
 });

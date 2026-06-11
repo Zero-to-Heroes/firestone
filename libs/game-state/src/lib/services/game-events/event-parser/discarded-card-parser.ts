@@ -7,7 +7,7 @@ import { GameState } from '../../../models/game-state';
 import { getProcessedCard } from '../../card-utils';
 import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
-import { DeckManipulationHelper } from './deck-manipulation-helper';
+import { DeckManipulationHelper, resolveFallbackCreatorCardIdForDeckRemoval } from './deck-manipulation-helper';
 
 export class DiscardedCardParser implements EventParser {
 	constructor(
@@ -34,11 +34,18 @@ export class DiscardedCardParser implements EventParser {
 
 		// See card-played-from-hand
 		if (!removedCard?.cardId && cardId && !gameEvent.additionalData?.transientCard) {
+			const fallbackCreatorCardId = resolveFallbackCreatorCardIdForDeckRemoval({
+				handOrRemovedCard: removedCard ?? card,
+			});
 			const [newDeckAfterReveal, removedCardFromDeck] = this.helper.removeSingleCardFromZone(
 				newDeck,
 				cardId,
 				entityId,
 				deck.deckList.length === 0,
+				true,
+				null,
+				false,
+				{ fallbackCreatorCardId },
 			);
 			// console.debug('[discarded-card] removedCardFromDeck', removedCardFromDeck);
 

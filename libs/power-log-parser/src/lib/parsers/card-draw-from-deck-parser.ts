@@ -110,7 +110,7 @@ export class CardDrawFromDeckParser implements ActionParser {
 		// so that we have more information when processing the event (eg the nodes have been completed)
 		// The idea now is rather to use chains of events in that case, so that we don't rely on
 		// timings that can be unreliable
-		const creator = wasInDeck ? null : Oracle.FindCardCreator(this.GameState, entity, node, false);
+		const creator = Oracle.FindCardCreator(this.GameState, entity, node, false);
 		const lastInfluencedByCard = Oracle.FindCardCreator(this.GameState, entity, node);
 		let lastInfluencedByCardId =
 			isTrade || isCastsWhenDrawnReplacementDraw ? null : (lastInfluencedByCard?.[0] ?? null);
@@ -172,10 +172,18 @@ export class CardDrawFromDeckParser implements ActionParser {
 							EntityId: entity.Id,
 							AdditionalProps: {
 								IsPremium: shouldObfuscate ? false : entity.GetTag(GameTag.PREMIUM) === 1,
-								CreatorCardId: shouldObfuscate ? null : (creator?.[0] ?? null),
+								CreatorCardId: Obfuscator.creatorCardIdForDrawEvent(
+									shouldObfuscate,
+									wasInDeck,
+									creator?.[0] ?? null,
+								),
 								CreatorEntityId: shouldObfuscate ? null : (creator?.[1] ?? null),
 								CreatedIndex: createdIndex,
-								LastInfluencedByCardId: shouldObfuscate ? null : lastInfluencedByCardId,
+								LastInfluencedByCardId: Obfuscator.creatorCardIdForDrawEvent(
+									shouldObfuscate,
+									wasInDeck,
+									lastInfluencedByCardId,
+								),
 								DataTag1: shouldObfuscate ? 0 : dataTag1,
 								Cost: shouldObfuscate ? 0 : cost,
 								DrawnByCardId: drawnByCardId,
@@ -247,9 +255,7 @@ export class CardDrawFromDeckParser implements ActionParser {
 					) {
 						return null;
 					}
-					const creatorCardId = wasInDeck
-						? null
-						: Oracle.FindCardCreatorFromShowEntity(this.GameState, showEntity, node);
+					const creatorCardId = Oracle.FindCardCreatorFromShowEntity(this.GameState, showEntity, node);
 					const lastInfluencedByCardId = isCastsWhenDrawnReplacementDraw
 						? null
 						: Oracle.FindCardCreatorFromShowEntity(this.GameState, showEntity, node);
@@ -326,7 +332,7 @@ export class CardDrawFromDeckParser implements ActionParser {
 				fullEntity.TimeStamp,
 				'CARD_DRAW_FROM_DECK',
 				() => {
-					const creator = wasInDeck ? null : Oracle.FindCardCreator(this.GameState, fullEntity, node, false);
+					const creator = Oracle.FindCardCreator(this.GameState, fullEntity, node, false);
 					const lastInfluencedByCardId = isCastsWhenDrawnReplacementDraw
 						? null
 						: (Oracle.FindCardCreator(this.GameState, fullEntity, node)?.[0] ?? null);

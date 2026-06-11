@@ -263,6 +263,7 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	'frost-tyrant': '../power.log',
 	'dual-class-shatter-draw': 'dual-class-shatter-draw/dual-class-shatter-draw.log',
 	'amalgam-atk': 'amalgam-atk/amalgam-atk.log',
+	malchezaar: 'malchezaar/malchezaar.log',
 };
 
 /**

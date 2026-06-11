@@ -19,7 +19,7 @@ import {
 } from '../../hs-utils';
 import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
-import { DeckManipulationHelper } from './deck-manipulation-helper';
+import { DeckManipulationHelper, resolveFallbackCreatorCardIdForDeckRemoval } from './deck-manipulation-helper';
 
 const NOT_REAL_DRAW = [CardIds.SirFinleySeaGuide];
 const DRAW_KNOWN_CARDS_FROM_DECK = [
@@ -282,11 +282,12 @@ export class CardDrawParser implements EventParser {
 		// behind, so subsequent ENTITY_UPDATE / CARD_CREATOR_CHANGED events on the same entityId
 		// (e.g. Agent of the Old Ones turning the in-hand entity into a Coin) corrupt the stale
 		// deck row instead of being a no-op there.
-		const entityIsKnownInDeck =
-			!!entityId &&
-			previousDeck.some(
-				(c) => c.entityId != null && c.entityId !== 0 && Math.abs(c.entityId) === Math.abs(entityId),
-			);
+		const fallbackCreatorCardId = resolveFallbackCreatorCardIdForDeckRemoval({
+			gameEventCreatorCardId:
+				gameEvent.additionalData?.creatorCardId ?? gameEvent.additionalData?.lastInfluencedByCardId,
+			handOrRemovedCard: card,
+		});
+		const deckRemovalOptions = { fallbackCreatorCardId };
 		let [newDeck, removedCard] = isCardInfoPublic
 			? this.helper.removeSingleCardFromZone(
 					previousDeck,
@@ -297,8 +298,19 @@ export class CardDrawParser implements EventParser {
 					{
 						cost: gameEvent.additionalData.cost,
 					},
+					false,
+					deckRemovalOptions,
 				)
-			: this.helper.removeSingleCardFromZone(previousDeck, null, -1, deck.deckList.length === 0, true);
+			: this.helper.removeSingleCardFromZone(
+					previousDeck,
+					null,
+					-1,
+					deck.deckList.length === 0,
+					true,
+					null,
+					false,
+					deckRemovalOptions,
+				);
 		console.debug(
 			'[card-draw] newDeck 0',
 			newDeck,
