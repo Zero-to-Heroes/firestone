@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CardType, GameTag, GameType, Zone } from '@firestone-hs/reference-data';
+import { CardType, GameTag, GameType, TrinketSlot, Zone } from '@firestone-hs/reference-data';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { BoardSecret } from '@firestone-hs/simulate-bgs-battle/dist/board-secret';
 import { Damage, GameAction } from '@firestone-hs/simulate-bgs-battle/dist/simulation/spectator/game-action';
@@ -343,12 +343,12 @@ export class BattlegroundsSimulationParserService {
 		const opponentSecretEntities: readonly Entity[] = (action.opponentSecrets || []).map((entity, index) =>
 			this.buildSecretEntity(entity, index, opponentEntity, damages),
 		);
-		const playerTrinketEntities: readonly Entity[] = (action.playerTrinkets || []).map((entity, index) =>
-			this.buildTrinketEntity(entity, playerEntity, index),
-		);
-		const opponentTrinketEntities: readonly Entity[] = (action.opponentTrinkets || []).map((entity, index) =>
-			this.buildTrinketEntity(entity, opponentEntity, index),
-		);
+		const playerTrinketEntities: readonly Entity[] = (action.playerTrinkets || [])
+			.filter((entity) => entity.scriptDataNum6 !== TrinketSlot.HERO_POWER)
+			.map((entity, index) => this.buildTrinketEntity(entity, playerEntity, index));
+		const opponentTrinketEntities: readonly Entity[] = (action.opponentTrinkets || [])
+			.filter((entity) => entity.scriptDataNum6 !== TrinketSlot.HERO_POWER)
+			.map((entity, index) => this.buildTrinketEntity(entity, opponentEntity, index));
 
 		// // console.log('split entities', friendlyEntities, opponentEntities);
 		const allEntities: readonly Entity[] = [
@@ -463,8 +463,7 @@ export class BattlegroundsSimulationParserService {
 		if (heroPowers?.some((heroPower) => heroPower.cardId === heroPowerCardId)) {
 			return null;
 		}
-		const slot3CardId = trinkets?.find((trinket) => trinket.scriptDataNum6 === 3)?.cardId;
-		if (slot3CardId === heroPowerCardId) {
+		if (trinkets?.some((trinket) => trinket.cardId === heroPowerCardId)) {
 			return null;
 		}
 		return heroPowerCardId;
@@ -473,12 +472,17 @@ export class BattlegroundsSimulationParserService {
 	private buildTrinketEntity(boardEntity: BoardSecret, playerEntity: PlayerEntity, index: number): Entity {
 		const refCard = this.allCards.getCard(boardEntity.cardId);
 		const scriptDataNum6 = (boardEntity as { scriptDataNum6?: number }).scriptDataNum6 ?? index + 1;
+		const sourceTags = (boardEntity as { tags?: Record<string, number> }).tags ?? {};
 		const tags: { [tagName: string]: number } = {
 			[GameTag[GameTag.CONTROLLER]]: playerEntity.playerId,
 			[GameTag[GameTag.CARDTYPE]]: CardType.BATTLEGROUND_TRINKET,
 			[GameTag[GameTag.ZONE]]: Zone.PLAY,
 			[GameTag[GameTag.TAG_SCRIPT_DATA_NUM_6]]: scriptDataNum6,
 		};
+		const additionalHeroPowerIndex = sourceTags[GameTag.ADDITIONAL_HERO_POWER_INDEX];
+		if (additionalHeroPowerIndex != null) {
+			tags[GameTag[GameTag.ADDITIONAL_HERO_POWER_INDEX]] = additionalHeroPowerIndex;
+		}
 		return Entity.create({
 			id: boardEntity.entityId,
 			cardID: boardEntity.cardId,

@@ -175,7 +175,20 @@ describe('bgs-hero-power-zone', () => {
 		).toBeNull();
 	});
 
-	it('uses real hero powers for encoded simulation when slot-3 trinket is a duplicate portrait', () => {
+	it('shows anomaly second hero power when encoded trinkets have no tags', () => {
+		const trinkets = [
+			{ cardId: 'BG35_MagicItem_731', scriptDataNum6: TrinketSlot.GREATER },
+			{ cardId: 'BG35_MagicItem_731', entityId: 282, scriptDataNum6: TrinketSlot.HERO_POWER },
+		];
+		const heroPowers = [{ cardId: 'BG34_HERO_002p', entityId: 231, used: false }];
+
+		expect(getSimulatorHeroPowerCardIds({ heroPowers, trinkets } as any)).toEqual([
+			'BG34_HERO_002p',
+			'BG35_MagicItem_731',
+		]);
+	});
+
+	it('shows anomaly second hero power when slot-3 trinket matches a shop trinket', () => {
 		const trinkets = [
 			{ cardId: 'BG35_MagicItem_731', scriptDataNum6: TrinketSlot.GREATER },
 			{
@@ -187,10 +200,13 @@ describe('bgs-hero-power-zone', () => {
 		];
 		const heroPowers = [{ cardId: 'BG34_HERO_002p', entityId: 231, used: false }];
 
-		expect(getSimulatorHeroPowerCardIds({ heroPowers, trinkets } as any)).toEqual(['BG34_HERO_002p']);
+		expect(getSimulatorHeroPowerCardIds({ heroPowers, trinkets } as any)).toEqual([
+			'BG34_HERO_002p',
+			'BG35_MagicItem_731',
+		]);
 		expect(
 			getSimulationActionHeroPowerEntries(
-				'BG35_MagicItem_731',
+				'BG34_HERO_002p',
 				100000002,
 				false,
 				heroPowers,
@@ -199,7 +215,39 @@ describe('bgs-hero-power-zone', () => {
 				100000002,
 				100000003,
 			).map((entry) => entry.cardId),
-		).toEqual(['BG34_HERO_002p']);
+		).toEqual(['BG34_HERO_002p', 'BG35_MagicItem_731']);
+	});
+
+	it('includes slot-3 trinket as second hero power in replay when no secondary hero power exists', () => {
+		const portraitGreater = buildEntity({
+			cardId: 'BG35_MagicItem_731',
+			cardType: CardType.BATTLEGROUND_TRINKET,
+			controller: playerId,
+			zone: Zone.PLAY,
+			tags: { [GameTag.TAG_SCRIPT_DATA_NUM_6]: TrinketSlot.GREATER },
+		});
+		const portraitAdditionalHeroPower = buildEntity({
+			cardId: 'BG35_MagicItem_731',
+			cardType: CardType.BATTLEGROUND_TRINKET,
+			controller: playerId,
+			zone: Zone.PLAY,
+			tags: {
+				[GameTag.TAG_SCRIPT_DATA_NUM_6]: TrinketSlot.HERO_POWER,
+				[GameTag.ADDITIONAL_HERO_POWER_INDEX]: 1,
+			},
+		});
+		const primaryHeroPower = buildEntity({
+			cardId: 'BG34_HERO_002p',
+			cardType: CardType.HERO_POWER,
+			controller: playerId,
+			zone: Zone.PLAY,
+		});
+
+		const result = resolveBgsHeroPowerEntities(
+			[portraitGreater, portraitAdditionalHeroPower, primaryHeroPower],
+			playerId,
+		);
+		expect(result.map((entity) => entity.cardID)).toEqual(['BG34_HERO_002p', 'BG35_MagicItem_731']);
 	});
 
 	it('extracts primary and secondary hero powers from simulation game actions', () => {

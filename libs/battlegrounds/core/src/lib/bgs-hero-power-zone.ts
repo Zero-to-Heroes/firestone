@@ -46,6 +46,34 @@ export const resolveTrinketHeroPowerCardId = (
 	return slot3Trinket.cardId;
 };
 
+export const resolveAdditionalTrinketHeroPowerCardId = (
+	trinkets: readonly BgsTrinketLike[] | null | undefined,
+): string | null => {
+	if (!trinkets?.length) {
+		return null;
+	}
+
+	const slot3Trinket = trinkets.find((trinket) => trinket.scriptDataNum6 === TrinketSlot.HERO_POWER);
+	if (!slot3Trinket?.cardId) {
+		return null;
+	}
+	if (getTrinketAdditionalHeroPowerIndex(slot3Trinket) === 1) {
+		return slot3Trinket.cardId;
+	}
+
+	// Encoded simulations strip trinket tags; a duplicate in a regular slot + hero-power slot is the anomaly copy.
+	const regularTrinketCardIds = new Set(
+		trinkets
+			.filter((trinket) => trinket.scriptDataNum6 !== TrinketSlot.HERO_POWER && !!trinket.cardId)
+			.map((trinket) => trinket.cardId as string),
+	);
+	if (regularTrinketCardIds.has(slot3Trinket.cardId)) {
+		return slot3Trinket.cardId;
+	}
+
+	return null;
+};
+
 const isValidTrinketHeroPowerEntity = (
 	entity: BgsHeroPowerEntityLike,
 	regularTrinketCardIds: ReadonlySet<string>,
@@ -73,14 +101,24 @@ export const resolveSimulationHeroPowerCardIds = (input: {
 	if (trinketHeroPower) {
 		return [trinketHeroPower];
 	}
-	if (input.questRewardHeroPowerCardId) {
-		return [input.questRewardHeroPowerCardId];
-	}
 
 	const heroPowerCardIds =
 		input.heroPowers?.map((heroPower) => heroPower.cardId).filter((cardId): cardId is string => !!cardId) ?? [];
 	if (heroPowerCardIds.length >= 2) {
 		return heroPowerCardIds.slice(0, 2);
+	}
+
+	const additionalTrinketHeroPower = resolveAdditionalTrinketHeroPowerCardId(input.trinkets);
+	if (additionalTrinketHeroPower) {
+		return mergeBgsHeroPowerCardIds(heroPowerCardIds, additionalTrinketHeroPower);
+	}
+
+	if (heroPowerCardIds.length >= 1) {
+		return mergeBgsHeroPowerCardIds(input.heroPowerId, heroPowerCardIds);
+	}
+
+	if (input.questRewardHeroPowerCardId) {
+		return [input.questRewardHeroPowerCardId];
 	}
 
 	return mergeBgsHeroPowerCardIds(input.heroPowerId, heroPowerCardIds);
@@ -147,13 +185,34 @@ export const resolveBgsHeroPowerEntities = <T extends BgsHeroPowerEntityLike>(
 		return questHeroPowerRewards;
 	}
 
-	return playerPlayEntities
+	const heroPowerEntities = playerPlayEntities
 		.filter((entity) => entity.getCardType() === CardType.HERO_POWER)
 		.sort(
 			(a, b) =>
 				(a.getTag(GameTag.ADDITIONAL_HERO_POWER_INDEX) || 0) -
 				(b.getTag(GameTag.ADDITIONAL_HERO_POWER_INDEX) || 0),
 		);
+	const hasSecondaryHeroPower = heroPowerEntities.some(
+		(entity) => (entity.getTag(GameTag.ADDITIONAL_HERO_POWER_INDEX) || 0) >= 1,
+	);
+	if (!hasSecondaryHeroPower) {
+		const additionalTrinketHeroPower = playerPlayEntities.find(
+			(entity) =>
+				entity.getCardType() === CardType.BATTLEGROUND_TRINKET &&
+				entity.getTag(GameTag.TAG_SCRIPT_DATA_NUM_6) === TrinketSlot.HERO_POWER &&
+				entity.getTag(GameTag.ADDITIONAL_HERO_POWER_INDEX) === 1 &&
+				!!getEntityCardId(entity),
+		);
+		if (additionalTrinketHeroPower) {
+			return [...heroPowerEntities, additionalTrinketHeroPower].sort(
+				(a, b) =>
+					(a.getTag(GameTag.ADDITIONAL_HERO_POWER_INDEX) || 0) -
+					(b.getTag(GameTag.ADDITIONAL_HERO_POWER_INDEX) || 0),
+			);
+		}
+	}
+
+	return heroPowerEntities;
 };
 
 export const resolveBgsHeroPowerCardIds = (

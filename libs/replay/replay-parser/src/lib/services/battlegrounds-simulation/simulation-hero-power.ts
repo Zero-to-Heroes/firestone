@@ -60,6 +60,33 @@ const resolveTrinketHeroPowerCardId = (trinkets: readonly BgsTrinketLike[] | nul
 	return slot3Trinket.cardId;
 };
 
+const resolveAdditionalTrinketHeroPowerCardId = (
+	trinkets: readonly BgsTrinketLike[] | null | undefined,
+): string | null => {
+	if (!trinkets?.length) {
+		return null;
+	}
+
+	const slot3Trinket = trinkets.find((trinket) => trinket.scriptDataNum6 === TrinketSlot.HERO_POWER);
+	if (!slot3Trinket?.cardId) {
+		return null;
+	}
+	if (getTrinketAdditionalHeroPowerIndex(slot3Trinket) === 1) {
+		return slot3Trinket.cardId;
+	}
+
+	const regularTrinketCardIds = new Set(
+		trinkets
+			.filter((trinket) => trinket.scriptDataNum6 !== TrinketSlot.HERO_POWER && !!trinket.cardId)
+			.map((trinket) => trinket.cardId as string),
+	);
+	if (regularTrinketCardIds.has(slot3Trinket.cardId)) {
+		return slot3Trinket.cardId;
+	}
+
+	return null;
+};
+
 const resolveSimulationHeroPowerCardIds = (input: {
 	readonly heroPowers?: readonly Pick<BgsHeroPower, 'cardId'>[] | null;
 	readonly trinkets?: readonly BgsTrinketLike[] | null;
@@ -70,14 +97,24 @@ const resolveSimulationHeroPowerCardIds = (input: {
 	if (trinketHeroPower) {
 		return [trinketHeroPower];
 	}
-	if (input.questRewardHeroPowerCardId) {
-		return [input.questRewardHeroPowerCardId];
-	}
 
 	const heroPowerCardIds =
 		input.heroPowers?.map((heroPower) => heroPower.cardId).filter((cardId): cardId is string => !!cardId) ?? [];
 	if (heroPowerCardIds.length >= 2) {
 		return heroPowerCardIds.slice(0, 2);
+	}
+
+	const additionalTrinketHeroPower = resolveAdditionalTrinketHeroPowerCardId(input.trinkets);
+	if (additionalTrinketHeroPower) {
+		return mergeBgsHeroPowerCardIds(heroPowerCardIds, additionalTrinketHeroPower);
+	}
+
+	if (heroPowerCardIds.length >= 1) {
+		return mergeBgsHeroPowerCardIds(input.heroPowerId, heroPowerCardIds);
+	}
+
+	if (input.questRewardHeroPowerCardId) {
+		return [input.questRewardHeroPowerCardId];
 	}
 
 	return mergeBgsHeroPowerCardIds(input.heroPowerId, heroPowerCardIds);
