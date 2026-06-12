@@ -1705,6 +1705,7 @@
         "countered": false,
         "createdIndex": 4,
         "creatorCardId": "EDR_456",
+        "creatorEntityId": 20,
         "entityId": 79,
         "forged": 0,
         "guessedInfo": {},

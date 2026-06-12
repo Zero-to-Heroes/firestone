@@ -1915,7 +1915,7 @@
         "cardName": "Stadium Announcer",
         "createdIndex": 4,
         "creatorCardId": "EDR_456",
-        "creatorEntityId": null,
+        "creatorEntityId": 20,
         "entityId": 79,
         "forged": 0,
         "guessedInfo": {},
