@@ -11,6 +11,7 @@ import { filterCards } from './utils';
 export const AgencyEspionage: GeneratingCard & StaticGeneratingCard = {
 	cardIds: [CardIds.AgencyEspionage_WORK_004],
 	publicCreator: true,
+	publicTutor: true,
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
 		const currentClass = input.deckState.getCurrentClass();
 		const possibleCards = filterCards(
