@@ -57,8 +57,7 @@
 	flex: 1 1 auto;
 	min-height: 0;
 	width: 100%;
-	max-width: min(1920px, calc(100vw - 24px));
-	margin: 0 auto;
+	max-width: calc(100vw - 24px);
 	padding: 0 12px;
 	display: flex;
 	flex-direction: column;
@@ -81,6 +80,16 @@ fs-coliseum ::ng-deep {
 
 	.manastorm-player-wrapper {
 		background: transparent;
+	}
+
+	.replay-layout-column {
+		width: 100%;
+		max-width: 100%;
+	}
+
+	.manastorm-player {
+		width: 100%;
+		max-width: 100%;
 	}
 
 	.player-seeker-container {
