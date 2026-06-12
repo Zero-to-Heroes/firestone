@@ -365,6 +365,8 @@ const internalTutors = [
 	CardIds.Morchok_CATA_570,
 	CardIds.Morchok_WorldbreakEnchantment_CATA_570e,
 	CardIds.CommanderGeddon_CATA_591,
+	// Barren - the ongoing enchant that, at the start of your turns, discovers a card from your deck to play.
+	CardIds.CommanderGeddon_BarrenEnchantment_CATA_591e,
 	CardIds.HarbingerOfWinterCore_RLK_511,
 	CardIds.SummerFlowerchild,
 	CardIds.ChiaDrake_ChiaDrakeToken_TOY_801t,

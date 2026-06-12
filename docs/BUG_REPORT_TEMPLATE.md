@@ -1,5 +1,3 @@
-IMPORTANT! Please make sure you work in a worktree, as per the instructions below! This should be the first thing you do
-
 Thoroughly read the following instructions:
 
 # Bug report playbook (deck tracker / game-state)
@@ -16,7 +14,9 @@ Use this when investigating a **decktracker or parser** bug backed by a **power.
 
 ---
 
-## 1. Isolate work (parallel agents), if asked
+## 1. Isolate work (parallel agents), ONLY IF ASKED
+
+If asked, this should be the first thing you do
 
 1. Use a **git worktree** so you do not clash with other agents:
     - From repo root:  

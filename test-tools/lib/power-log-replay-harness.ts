@@ -264,6 +264,7 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	'dual-class-shatter-draw': 'dual-class-shatter-draw/dual-class-shatter-draw.log',
 	'amalgam-atk': 'amalgam-atk/amalgam-atk.log',
 	malchezaar: 'malchezaar/malchezaar.log',
+	'geddon-discover': 'geddon-discover/geddon-discover.log',
 };
 
 /**

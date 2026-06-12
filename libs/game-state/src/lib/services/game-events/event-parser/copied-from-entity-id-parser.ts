@@ -19,6 +19,22 @@ const COPY_KNOW_EXACT_CARD_IN_OPPONENT_HAND = [
 	CardIds.SketchArtist_TOY_916,
 ];
 
+/**
+ * Effects where the opponent discovers a card from their OWN deck and immediately draws/plays that very
+ * card (no persistent copy is left in the deck). The discover preview is a SETASIDE token whose
+ * COPIED_FROM_ENTITY_ID points back at the still-in-deck source entity. Because the copy and source share
+ * the same controller, the generic obfuscation below is skipped and we would otherwise reveal the source
+ * card in the opponent's deck (info leak) and create a duplicate row once it is drawn to hand. For these
+ * effects we treat the COPIED_FROM event as a no-op: we learn nothing legitimate and the regular draw
+ * removes a filler from the deck + flags the drawn card.
+ *
+ * NOTE: this must NOT include effects that shuffle real copies into the deck (e.g. Triangulate). Those
+ * rely on the preview reveal to later identify the shuffled copies, so they keep the default behaviour.
+ */
+const OPPONENT_SELF_DISCOVER_FROM_DECK_NO_COPY_CREATORS: readonly CardIds[] = [
+	CardIds.CommanderGeddon_BarrenEnchantment_CATA_591e,
+];
+
 export class CopiedFromEntityIdParser implements EventParser {
 	constructor(
 		private readonly helper: DeckManipulationHelper,
@@ -123,6 +139,30 @@ export class CopiedFromEntityIdParser implements EventParser {
 			!!newCopy &&
 			(forcedHiddenCardCreators.includes(newCopy.creatorCardId as CardIds) ||
 				forcedHiddenCardCreators.includes(newCopy.lastAffectedByCardId as CardIds));
+		// Commander Geddon (Barren) and similar: opponent discovers from their own deck and draws the picked
+		// card. The discover preview's COPIED_FROM points at the still-in-deck source; revealing it here both
+		// leaks the card and leaves a duplicate row once it is drawn. We learn nothing legitimate, so ignore
+		// the event entirely and let the subsequent CARD_DRAW_FROM_DECK handle removing a filler + flagging
+		// the drawn card. Gated to a curated creator list so effects that shuffle real copies into the deck
+		// (e.g. Triangulate) keep their default reveal behaviour.
+		const newCopyCreator = (newCopy?.creatorCardId ?? newCopy?.lastAffectedByCardId) as CardIds;
+		const isOpponentSelfDiscoverFromDeckNoCopy =
+			!isPlayer &&
+			copyAndSourceSameController &&
+			copiedCardZone === Zone.DECK &&
+			!isOpponentSelfDredge &&
+			!copiedCard?.cardId &&
+			OPPONENT_SELF_DISCOVER_FROM_DECK_NO_COPY_CREATORS.includes(newCopyCreator);
+		if (isOpponentSelfDiscoverFromDeckNoCopy) {
+			console.debug(
+				'[copied-from-entity] opponent self-discover from own deck (no copy), ignoring to avoid leak',
+				entityId,
+				copiedCardEntityId,
+				newCopyCreator,
+			);
+			return currentState;
+		}
+
 		const shouldObfuscate =
 			// Copy + source same controller (e.g. Malevolent Mutant): not "opponent discovered our card" — allow cardId sync.
 			!copyAndSourceSameController &&
