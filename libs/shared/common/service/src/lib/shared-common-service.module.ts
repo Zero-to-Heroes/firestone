@@ -17,6 +17,7 @@ import { SimpleIOService } from './services/plugins/simple-io.service';
 import { PreferencesStorageService } from './services/preferences-storage.service';
 import { PreferencesService } from './services/preferences.service';
 import { S3FileUploadService } from './services/s3-file-upload.service';
+import { MembershipIntegrityService } from './services/subscription/membership-integrity.service';
 import { OwLegacyPremiumService } from './services/subscription/ow-legacy-premium.service';
 import { SubscriptionService } from './services/subscription/subscription.service';
 import { PremiumDeeplinkService } from './services/subscription/tebex-deeplink.service';
@@ -42,6 +43,7 @@ const components = [AdvancedSettingDirective];
 		SubscriptionService,
 		TebexService,
 		OwLegacyPremiumService,
+		MembershipIntegrityService,
 		PremiumDeeplinkService,
 		AppNavigationService,
 		LogListenerService,

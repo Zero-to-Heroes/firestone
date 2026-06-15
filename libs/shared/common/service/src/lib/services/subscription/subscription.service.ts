@@ -3,9 +3,11 @@ import { Injectable } from '@angular/core';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import {
 	AbstractFacadeService,
+	ACCOUNT_SERVICE_TOKEN,
 	AppInjector,
 	CurrentPlan,
 	equalCurrentPlan,
+	IAccountFacadeForCollection,
 	LocalStorageService,
 	OverwolfService,
 	UserService,
@@ -25,6 +27,7 @@ export class SubscriptionService extends AbstractFacadeService<SubscriptionServi
 	private localStorage: LocalStorageService;
 	private ow: OverwolfService;
 	private user: UserService;
+	private account: IAccountFacadeForCollection;
 
 	// Do this to avoid spamming the server with subscription status check messages
 	private shouldCheckForUpdates = false;
@@ -44,6 +47,7 @@ export class SubscriptionService extends AbstractFacadeService<SubscriptionServi
 		this.localStorage = AppInjector.get(LocalStorageService);
 		this.ow = AppInjector.get(OverwolfService);
 		this.user = AppInjector.get(UserService);
+		this.account = AppInjector.get(ACCOUNT_SERVICE_TOKEN);
 
 		this.currentPlan$$.onFirstSubscribe(async () => {
 			const localPlan = this.localStorage.getItem<CurrentPlan>(LocalStorageService.CURRENT_SUB_PLAN);

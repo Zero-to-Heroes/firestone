@@ -46,6 +46,7 @@ import {
 	BootstrapGameStateService,
 	DeckParserFacadeService,
 	GameStateService,
+	isPreReleaseBuild,
 } from '@firestone/game-state';
 import { LotteryService, LotteryWidgetControllerService } from '@firestone/lottery/common';
 import {
@@ -66,6 +67,7 @@ import { BootstrapSettingsService, SettingsControllerService } from '@firestone/
 import {
 	AppNavigationService,
 	ExpertContributorsService,
+	MembershipIntegrityService,
 	OwLegacyPremiumService,
 	PreferencesService,
 	PremiumDeeplinkService,
@@ -162,7 +164,12 @@ export class BootstrapStoreServicesService {
 		private readonly init_DeckParserFacadeService: DeckParserFacadeService,
 		private readonly init_AccountService: AccountService,
 		private readonly init_GameStatsUpdaterService: GameStatsUpdaterService,
-	) {}
+		private readonly init_MembershipIntegrityService: MembershipIntegrityService,
+	) {
+		// Pass the build flag in from here: the service lives in shared/common/service, which cannot
+		// import @firestone/game-state without creating a dependency cycle.
+		this.init_MembershipIntegrityService.preReleaseBuild = isPreReleaseBuild;
+	}
 
 	public async bootstrapServices(): Promise<void> {
 		// Nothing here
