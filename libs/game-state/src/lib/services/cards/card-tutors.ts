@@ -11,7 +11,7 @@ const internalTutors = [
 	CardIds.AllYouCanEat_VAC_528,
 	CardIds.Ancharrr,
 	CardIds.AncientMysteries,
-	CardIds.AquaticForm_TSC_654,
+	// CardIds.AquaticForm_TSC_654,
 	// The Right Tool - Discover a card from your deck.
 	CardIds.ArannaStarseeker_TheRightTool,
 	CardIds.ArcaneFletcher,
