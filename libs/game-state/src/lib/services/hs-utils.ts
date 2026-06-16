@@ -134,7 +134,7 @@ export const battlecryGlobalEffectCards = [
 	CardIds.InfiniteMurloc,
 	CardIds.Inzah,
 	CardIds.IronweaveBloodletterTavernBrawl,
-	CardIds.JotunTheEternal,
+	// CardIds.JotunTheEternal,
 	CardIds.JungleGiants_BarnabusTheStomperToken,
 	CardIds.LadyInWhite,
 	CardIds.LadyPrestor_SW_078,
@@ -242,6 +242,7 @@ const globalEffectEnchantments = [
 	CardIds.AlexstraszaGuardianOfLife_CleansedOfCorruptionEnchantment_CATA_307e,
 	CardIds.CommanderGeddon_BarrenEnchantment_CATA_591e,
 	CardIds.CleansingCleric_FreeFromCorruptionEnchantment_CATA_216e,
+	CardIds.JotunTheEternal_JotunsSwiftnessEnchantmentToken,
 	// CardIds.CityChiefEsho_KinEnchantment_TLC_110e, // The enchantment is applied to each card, so we don't have a global thing
 ];
 
