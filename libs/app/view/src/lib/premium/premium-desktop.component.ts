@@ -58,12 +58,7 @@ import { BehaviorSubject, Observable, combineLatest, filter, shareReplay, takeUn
 						</div>
 					</div>
 				</div>
-				<!-- <div class="alipay-in-china" *ngIf="possibleChineseUser$ | async">
-					致中国大陆用户：支付宝终于恢复正常使用啦！您现在可以使用全新的 Tebex 订阅系统订阅 Firestone Premium
-					服务。
-					为庆祝此次更新，我们限时推出所有订阅套餐八折优惠！请在结账时使用下方优惠码即可享受订阅折扣！（仅限首期订阅，可随时取消）。
-				</div> -->
-				<!-- <div class="discount-banner">
+				<div class="discount-banner">
 					{{ discountBannerTextYearly }}
 					<pre
 						class="code"
@@ -72,7 +67,7 @@ import { BehaviorSubject, Observable, combineLatest, filter, shareReplay, takeUn
 					>
 						<div class="copy-icon" inlineSVG="assets/svg/copy.svg"></div><span>{{couponCode}}</span>
 					</pre>
-				</div> -->
+				</div>
 				<!-- <div
 					class="discount-banner"
 					*ngIf="(possibleChineseUser$ | async) === false && (billingPeriodicity$ | async) === 'yearly'"
@@ -170,15 +165,16 @@ export class PremiumDesktopComponent extends AbstractSubscriptionComponent imple
 
 	yearlySubtext: string;
 	sixMonthSubtext: string;
-	couponCode = 'CRB7-KVVR-96Q9';
-	discountBannerTextYearly = this.i18n.translateString('app.premium.billing.yearly-coupon-text', {
-		reduction: '20%',
-		endDate: new Date('2026-01-02').toLocaleDateString(this.i18n.formatCurrentLocale()!),
+	couponCode = 'GQPK-FEH3-4WCR';
+	discountBannerTextYearly = this.i18n.translateString('app.premium.billing.coupon-text', {
+		reduction: '15%',
+		endDate: new Date('2026-07-21').toLocaleDateString(this.i18n.formatCurrentLocale()!),
+		expansionName: this.i18n.translateString(`global.set.${CardSet[CardSet.VIOLET_HOLD].toLowerCase()}`),
 	});
-	discountBannerTextSixMonths = this.i18n.translateString('app.premium.billing.yearly-coupon-text-2', {
-		reduction: '10%',
-		expansionName: this.i18n.translateString(`global.set.${CardSet[CardSet.ACROSS_THE_TIMEWAYS].toLowerCase()}`),
-	});
+	// discountBannerTextSixMonths = this.i18n.translateString('app.premium.billing.yearly-coupon-text-2', {
+	// 	reduction: '10%',
+	// 	expansionName: this.i18n.translateString(`global.set.${CardSet[CardSet.ACROSS_THE_TIMEWAYS].toLowerCase()}`),
+	// });
 	paymentHistoryLink: string;
 
 	private showConfirmationPopUp$$ = new BehaviorSubject<UnsubscribeModel | null>(null);

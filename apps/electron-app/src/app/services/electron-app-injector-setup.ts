@@ -713,11 +713,15 @@ export const buildAppInjector = () => {
 	);
 	electronInjector.register(ReplayMetadataBuilderService, replayMetadataBuilder);
 
+	const modsManager = new ModsManagerService(windowManager);
+	electronInjector.register(ModsManagerService, modsManager);
+
 	const replayUploadService = new ReplayUploadService(
 		preferences,
 		userService,
 		replayMetadataBuilder,
 		powerLogBuffer,
+		modsManager,
 	);
 	electronInjector.register(ReplayUploadService, replayUploadService);
 
@@ -977,9 +981,6 @@ export const buildAppInjector = () => {
 
 	const stateManagerService = new StateManagerService(allCards);
 	electronInjector.register(StateManagerService, stateManagerService);
-
-	const modsManager = new ModsManagerService(windowManager);
-	electronInjector.register(ModsManagerService, modsManager);
 
 	const achievementHistoryService = new AchievementHistoryService(windowManager);
 	electronInjector.register(AchievementHistoryService, achievementHistoryService);
