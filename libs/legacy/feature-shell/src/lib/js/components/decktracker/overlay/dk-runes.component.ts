@@ -142,7 +142,6 @@ export class DkRunesComponent extends AbstractSubscriptionComponent implements A
 						image: `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/runes/emptyrune.png`,
 					});
 				}
-				console.debug('[dk-runes] runes', result, runes);
 				return result;
 			}),
 		);

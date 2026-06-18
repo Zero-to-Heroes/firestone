@@ -1,6 +1,6 @@
 import { BnetRegion, GameType } from '@firestone-hs/reference-data';
 import { MatchInfo } from '@firestone/memory';
-import { GameState as ParserGameState } from '@firestone/power-log-parser';
+import { ParserGameStateLite } from '@firestone/power-log-parser';
 import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { BattlegroundsState } from './_barrel';
 import { DeckState } from './deck-state';
@@ -36,7 +36,7 @@ export class GameState {
 
 	readonly bgState: BattlegroundsState = new BattlegroundsState();
 
-	readonly parserState?: ParserGameState;
+	readonly parserState?: ParserGameStateLite;
 	readonly localPlayerId?: number;
 	readonly opponentPlayerId?: number;
 

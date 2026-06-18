@@ -1,24 +1,20 @@
 import { CardIds, CardType, GameTag, Zone } from '@firestone-hs/reference-data';
-import {
-	ChangeEntity,
-	FullEntity,
-	GameEntity,
-	PlayerEntity,
-	ShowEntity,
-	Tag,
-	TagChange,
-} from '../models';
+import { ChangeEntity, FullEntity, GameEntity, PlayerEntity, ShowEntity, Tag, TagChange } from '../models';
 import { Regexes } from '../regexes';
 import { GameMetaData } from './game-meta-data';
 import { GameStateReport } from './game-state-report';
-import { PlayerReport } from './player-report';
 import type { ParserState } from './parser-state';
+import { PlayerReport } from './player-report';
 import type { StateFacade } from './state-facade';
 
-export class GameState {
+export class ParserGameStateLite {
+	CurrentEntities: Map<number, FullEntity> = new Map();
+	ControllerEntityMap: Map<number, number> = new Map();
+}
+
+export class GameState extends ParserGameStateLite {
 	ParserState!: ParserState;
 
-	CurrentEntities: Map<number, FullEntity> = new Map();
 	EntityNames: Map<string, number> = new Map();
 	CurrentTurn: number = 0;
 	MetaData: GameMetaData | null = null;
@@ -35,7 +31,6 @@ export class GameState {
 	EntityIdsOnBoardWhenPlayingPotionOfIllusion: Map<number, FullEntity[]> | null = null;
 
 	GameEntityId: number = -1;
-	ControllerEntityMap: Map<number, number> = new Map();
 
 	Reset(state: ParserState): void {
 		this.ParserState = state;
@@ -134,10 +129,8 @@ export class GameState {
 		const existingEntity = this.CurrentEntities.get(entity.Id);
 		const fullEntity = new FullEntity();
 		fullEntity.CardId =
-			entity.CardId != null && entity.CardId.length > 0
-				? entity.CardId
-				: existingEntity?.CardId ?? '';
-		fullEntity.Id = entity.Id > 0 ? entity.Id : existingEntity?.Id ?? entity.Id;
+			entity.CardId != null && entity.CardId.length > 0 ? entity.CardId : (existingEntity?.CardId ?? '');
+		fullEntity.Id = entity.Id > 0 ? entity.Id : (existingEntity?.Id ?? entity.Id);
 		fullEntity.TimeStamp = entity.TimeStamp;
 		fullEntity.Tags = newTags;
 		fullEntity.TagsHistory = newTags.map((tag) => {
@@ -179,14 +172,12 @@ export class GameState {
 		currentEntity.TagsHistory.push(showEndTag);
 
 		const newTagIds = entity.Tags.map((tag) => tag.Name);
-		const oldTagsToKeep = currentEntity.Tags
-			.filter((tag) => !newTagIds.includes(tag.Name))
-			.map((tag) => {
-				const t = new Tag();
-				t.Name = tag.Name;
-				t.Value = tag.Value;
-				return t;
-			});
+		const oldTagsToKeep = currentEntity.Tags.filter((tag) => !newTagIds.includes(tag.Name)).map((tag) => {
+			const t = new Tag();
+			t.Name = tag.Name;
+			t.Value = tag.Value;
+			return t;
+		});
 		const newTags: Tag[] = [];
 		for (const oldTag of entity.Tags) {
 			const t = new Tag();
@@ -251,14 +242,12 @@ export class GameState {
 		const currentEntity = this.CurrentEntities.get(entity.Entity)!;
 		currentEntity.CardId = entity.CardId;
 		const newTagIds = entity.Tags.map((tag) => tag.Name);
-		const oldTagsToKeep = currentEntity.Tags
-			.filter((tag) => !newTagIds.includes(tag.Name))
-			.map((tag) => {
-				const t = new Tag();
-				t.Name = tag.Name;
-				t.Value = tag.Value;
-				return t;
-			});
+		const oldTagsToKeep = currentEntity.Tags.filter((tag) => !newTagIds.includes(tag.Name)).map((tag) => {
+			const t = new Tag();
+			t.Name = tag.Name;
+			t.Value = tag.Value;
+			return t;
+		});
 		const newTags: Tag[] = [];
 		for (const oldTag of entity.Tags) {
 			const t = new Tag();
@@ -308,9 +297,7 @@ export class GameState {
 			let playerId = [...this.CurrentEntities.values()]
 				.filter(
 					(e) =>
-						e.Tags.find(
-							(x) => x.Name === (GameTag.HERO_ENTITY as number) && x.Value === entityId,
-						) != null,
+						e.Tags.find((x) => x.Name === (GameTag.HERO_ENTITY as number) && x.Value === entityId) != null,
 				)
 				.map((e) => e.Id)
 				.find(() => true);
@@ -327,10 +314,7 @@ export class GameState {
 
 	GetActivePlayerId(): number {
 		const activePlayer = [...this.CurrentEntities.values()].find(
-			(e) =>
-				e.Tags.find(
-					(x) => x.Name === (GameTag.CURRENT_PLAYER as number) && x.Value === 1,
-				) != null,
+			(e) => e.Tags.find((x) => x.Name === (GameTag.CURRENT_PLAYER as number) && x.Value === 1) != null,
 		);
 		const activePlayerEntityId = activePlayer?.Id;
 		for (const data of this.ParserState.CurrentGame.Data) {
@@ -370,9 +354,7 @@ export class GameState {
 				cardInHand.PlayedWhileInHand.push(playedEntity.Entity);
 			}
 
-			const plagiarizes = currentEntitiesCopy.filter(
-				(e) => e.GetTag(GameTag.ZONE) === (Zone.SECRET as number),
-			);
+			const plagiarizes = currentEntitiesCopy.filter((e) => e.GetTag(GameTag.ZONE) === (Zone.SECRET as number));
 			if (plagiarizes.length > 0 && playedEntity.GetTag(GameTag.CANT_PLAY) !== 1) {
 				plagiarizes.forEach((plagia) => plagia.KnownEntityIds.push(entityId));
 			}
@@ -433,8 +415,6 @@ export class GameState {
 		if (!this.CurrentEntities.has(entity)) {
 			return [];
 		}
-		return [...this.CurrentEntities.values()].filter(
-			(e) => e.GetTag(GameTag.ATTACHED) === entity,
-		);
+		return [...this.CurrentEntities.values()].filter((e) => e.GetTag(GameTag.ATTACHED) === entity);
 	}
 }

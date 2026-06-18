@@ -46,8 +46,10 @@ export class GameStateFacadeService extends AbstractFacadeService<GameStateFacad
 		const bgState: BattlegroundsState | undefined = BattlegroundsState.createForElectron(value.bgState);
 		return GameState.create({
 			...value,
-			// TODO: might need to find a way, like maybe simply serialize the entities?
-			parserState: undefined,
+			parserState: {
+				CurrentEntities: value.parserState?.CurrentEntities ?? new Map(),
+				ControllerEntityMap: value.parserState?.ControllerEntityMap ?? new Map(),
+			},
 			playerDeck: DeckState.createForElectron(value.playerDeck),
 			opponentDeck: DeckState.createForElectron(value.opponentDeck),
 			bgState: bgState,

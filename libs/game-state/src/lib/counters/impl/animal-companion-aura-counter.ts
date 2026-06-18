@@ -82,11 +82,6 @@ export class AnimalCompanionAuraCounterDefinitionV2 extends CounterDefinitionV2<
 				getTagWithHistory(bufferEntity, GameTag.TAG_SCRIPT_DATA_NUM_5),
 				getTagWithHistory(bufferEntity, GameTag.TAG_SCRIPT_DATA_NUM_6),
 			].filter((c) => !!c);
-			console.debug(
-				'[debug] [animal-companion-aura-counter] newAnimalCompanions',
-				newAnimalCompanions,
-				bufferEntity,
-			);
 			if (newAnimalCompanions.length === 0) {
 				return null;
 			}

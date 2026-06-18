@@ -10,7 +10,7 @@ import {
 	RELIC_IDS,
 	SpellSchool,
 } from '@firestone-hs/reference-data';
-import { GameState as ParserGameState } from '@firestone/power-log-parser';
+import { ParserGameStateLite } from '@firestone/power-log-parser';
 import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
 import { DeckCard } from '../../models/deck-card';
@@ -28,10 +28,10 @@ import { cardIdSelectorSort } from './card-id-selector-sort';
 import { cardIdSelector } from './card-id-selectors';
 import {
 	and,
-	CONCOCTION_RELATED_CARDS,
 	barrelOfSludge,
 	cardIs,
 	CONCOCTION_GENERATORS,
+	CONCOCTION_RELATED_CARDS,
 	CREWMATE_GENERATORS,
 	damage,
 	excavate,
@@ -231,10 +231,7 @@ export abstract class CardsHighlightCommonService {
 		// DeckCard.relatedCardIds is runtime state (modules, discover chains, etc.), not the static
 		// per-card-module relatedCardIds field removed from game-state — merge with reference data.
 		const fromDeck = card?.relatedCardIds?.length ? card.relatedCardIds : [];
-		const existingRelatedCardIds = [
-			...fromDeck,
-			...fromReference.filter((id) => !fromDeck.includes(id)),
-		];
+		const existingRelatedCardIds = [...fromDeck, ...fromReference.filter((id) => !fromDeck.includes(id))];
 		const relatedCardIds = buildContextRelatedCardIds(
 			cardId,
 			entityId,
@@ -310,7 +307,7 @@ export abstract class CardsHighlightCommonService {
 		card: DeckCard | null | undefined,
 		playerDeckProvider: () => DeckState,
 		opponentDeckProvider: () => DeckState | null,
-		parserState: ParserGameState | undefined,
+		parserState: ParserGameStateLite | undefined,
 		localPlayerId: number | undefined,
 		opponentPlayerId: number | undefined,
 		context?: 'discover',
@@ -375,7 +372,7 @@ export abstract class CardsHighlightCommonService {
 	private getAllCards(
 		deckState: DeckState | null,
 		side: HighlightSide,
-		parserState: ParserGameState | undefined,
+		parserState: ParserGameStateLite | undefined,
 		localPlayerId: number | undefined,
 		opponentPlayerId: number | undefined,
 	): readonly SelectorInput[] {
@@ -650,7 +647,7 @@ export interface SelectorInput {
 	deckState: DeckState;
 	deckCard: DeckCard;
 	allCards: CardsFacadeService;
-	parserState?: ParserGameState;
+	parserState?: ParserGameStateLite;
 	localPlayerId?: number;
 	opponentPlayerId?: number;
 	highlight?: SelectorOutput;

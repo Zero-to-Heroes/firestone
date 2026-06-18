@@ -1,6 +1,6 @@
-- casual games don't get tracked with standalone version
-    - counters not showing up in casual
-    - animal companion: not correct cards show up
+- counters not showing up in casual
+- animal companion: not correct cards show up
+- Exception while getting current window window
 - AnalyticsService
 - hotkeys
 - Twitch login not working yet
