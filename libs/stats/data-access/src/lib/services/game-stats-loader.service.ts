@@ -167,7 +167,7 @@ export class GameStatsLoaderService extends AbstractFacadeService<GameStatsLoade
 	}
 	private async clearGamesInternal() {
 		console.log('[game-stats-loader] clearing games');
-		await this.saveLocalStats([]);
+		this.indexedDb.table<GameStat, string>(MATCH_HISTORY).clear();
 		const stats = await this.refreshGameStats(false);
 		this.gameStats$$.next(stats);
 	}
