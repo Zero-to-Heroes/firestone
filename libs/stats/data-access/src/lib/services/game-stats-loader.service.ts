@@ -214,17 +214,22 @@ export class GameStatsLoaderService extends AbstractFacadeService<GameStatsLoade
 				} catch (e) {
 					console.warn('[game-stats-loader] error extracting player info from deckstring', e);
 				}
-				return GameStat.create({
-					...stat,
-					playerDecklist: isMercenaries(stat.gameMode)
-						? stat.playerDecklist
-						: this.allCards.normalizeDeckList(stat.playerDecklist),
-					// Because old stats are corrupted
-					runId: stat.creationTimestamp < new Date('2020-12-14').getTime() ? null : stat.runId,
-					postMatchStats: postMatchStats,
-					playerClass: stat.playerClass ?? playerInfoFromDeckstring?.playerClass,
-					playerCardId: stat.playerCardId ?? playerInfoFromDeckstring?.playerCardId,
-				});
+				try {
+					return GameStat.create({
+						...stat,
+						playerDecklist: isMercenaries(stat.gameMode)
+							? stat.playerDecklist
+							: this.allCards.normalizeDeckList(stat.playerDecklist),
+						// Because old stats are corrupted
+						runId: stat.creationTimestamp < new Date('2020-12-14').getTime() ? null : stat.runId,
+						postMatchStats: postMatchStats,
+						playerClass: stat.playerClass ?? playerInfoFromDeckstring?.playerClass,
+						playerCardId: stat.playerCardId ?? playerInfoFromDeckstring?.playerCardId,
+					});
+				} catch (e) {
+					console.warn('[game-stats-loader] error creating game stat', e, stat);
+					return null;
+				}
 			})
 			.filter((stat) => !!stat)
 			.filter((stat) => this.isCorrectPeriod(stat, prefs.replaysLoadPeriod))

@@ -76,6 +76,14 @@ export class ArenaRewardsService extends AbstractFacadeService<ArenaRewardsServi
 			});
 	}
 
+	protected override initElectronSubjects() {
+		this.setupElectronSubject(this.arenaRewards$$, 'ArenaRewardsService-arenaRewards');
+	}
+
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.arenaRewards$$ = new SubscriberAwareBehaviorSubject<readonly ArenaRewardInfo[] | null>(null);
+	}
+
 	protected override async initElectronMainProcess() {
 		this.registerMainProcessMethod('addRewardsInternal', (rewards: Input) => this.addRewardsInternal(rewards));
 	}

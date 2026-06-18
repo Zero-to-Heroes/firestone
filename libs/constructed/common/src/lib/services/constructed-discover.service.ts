@@ -38,6 +38,14 @@ export class ConstructedDiscoverService extends AbstractFacadeService<Constructe
 		);
 	}
 
+	protected override initElectronSubjects() {
+		// Do nothing
+	}
+
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		// Do nothing
+	}
+
 	public async getStatsFor(
 		deckstring: string,
 		cardId: string,

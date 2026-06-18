@@ -1,11 +1,13 @@
 - casual games don't get tracked with standalone version
+    - counters not showing up in casual
+    - animal companion: not correct cards show up
 - AnalyticsService
-- ow installer
 - hotkeys
 - Twitch login not working yet
 - bug report
 - lazy loading for services?
 - OwUtils: use common paradigm to use it from a non-main window + make it work in electron context (so maybe reimplemnet it completely)
+- ow installer
 - support for non-premium users
     - ads
     - link other account

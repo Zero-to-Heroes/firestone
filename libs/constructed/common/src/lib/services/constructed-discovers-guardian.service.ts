@@ -43,6 +43,14 @@ export class ConstructedDiscoversGuardianService extends AbstractFacadeService<C
 		this.useCountUpdater$$.pipe(debounceTime(500)).subscribe(() => this.updateUseCount());
 	}
 
+	protected override initElectronSubjects() {
+		this.setupElectronSubject(this.freeUsesLeft$$, 'ConstructedDiscoversGuardianService-freeUsesLeft');
+	}
+
+	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.freeUsesLeft$$ = new BehaviorSubject<number>(CONSTRUCTED_DISCOVERS_DAILY_FREE_USES);
+	}
+
 	protected override async initElectronMainProcess() {
 		this.registerMainProcessMethod('acknowledgeDiscoverStatsSeenInternal', () =>
 			this.acknowledgeDiscoverStatsSeenInternal(),
