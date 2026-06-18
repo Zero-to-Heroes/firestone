@@ -10,7 +10,7 @@ import { filterCards } from './utils';
 
 export const DeathwingWorldbreaker: GeneratingCard & StaticGeneratingCard = {
 	cardIds: [CardIds.DeathwingWorldbreaker_CATA_190h],
-	publicCreator: true,
+	// publicCreator: true,
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
 		const possibleCards = filterCards(
 			DeathwingWorldbreaker.cardIds[0],

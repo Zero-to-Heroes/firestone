@@ -12,6 +12,7 @@ export class Obfuscator {
 		isPlayer: boolean,
 		revealed = false,
 	): boolean {
+		const debug = entity.Entity === 158;
 		if (node?.Parent?.Type === NodeType.Action) {
 			const action = node.Parent.Object as Action;
 			const actionEntityId = action.Entity;
@@ -38,6 +39,10 @@ export class Obfuscator {
 
 		if (
 			!isPlayer &&
+			// Always obfuscate for the opponent if the card is not marked as being revealed
+			// For instance, Deathwing creates cards in the opponent's deck, and they are barebones, without any
+			// additional tag. So Hidden is false in that case, as well as revealed.
+			// UPDATE 2026-06-18: not needed right now, but I think we'll have to comment it at some point
 			entity.Hidden &&
 			!revealed &&
 			entity.GetTag(GameTag.CASTS_WHEN_DRAWN) !== 1 &&
