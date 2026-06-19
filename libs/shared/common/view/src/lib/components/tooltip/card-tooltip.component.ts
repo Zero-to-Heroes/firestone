@@ -574,6 +574,9 @@ export class CardTooltipComponent
 		if (!isInGame) {
 			return;
 		}
+		if (!this.ow.isOwEnabled()) {
+			return;
+		}
 		const gameInfo = await this.ow?.getRunningGameInfo();
 		const currentWindow = await this.ow?.getCurrentWindow();
 		const gameWidth = gameInfo?.width ?? currentWindow?.logicalBounds?.width;

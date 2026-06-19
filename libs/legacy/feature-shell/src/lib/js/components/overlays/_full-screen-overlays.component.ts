@@ -271,6 +271,7 @@ export class FullScreenOverlaysComponent
 						c.emit('player', gameState, gameState.bgState, this.allCards, prefs.countersUseExpandedView),
 					)
 					.filter((c) => c);
+				console.debug('[full-screen-overlays] playerCounters', result, allCounters.length);
 				return result;
 			}),
 			distinctUntilChanged((a, b) => a.length === b.length && a.every((c, i) => equalCounterInstance(c, b[i]))),

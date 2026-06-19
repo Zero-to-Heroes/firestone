@@ -1,7 +1,3 @@
-- grouped counters don't appear without a refresh in BG
-- Exception while getting current window window
-- AnalyticsService
-- hotkeys
 - Twitch login not working yet
 - bug report
 - lazy loading for services?
