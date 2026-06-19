@@ -1,4 +1,4 @@
-import { StandaloneUserService } from '@firestone/electron/common';
+import { StandaloneUserService, handleTwitchOAuthCallback } from '@firestone/electron/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AppInjector, waitForReady, WINDOW_HANDLER_SERVICE_TOKEN } from '@firestone/shared/framework/core';
 import { app, Menu, MenuItemConstructorOptions, nativeImage, shell, Tray } from 'electron';
@@ -45,6 +45,12 @@ export const initSystemTray = async () => {
 	App.onAuthCallback((authData) => {
 		console.log('[SystemTray] Received auth callback, forwarding to user service');
 		userService.handleAuthCallback(authData);
+	});
+
+	const prefs = AppInjector.get(PreferencesService);
+	App.onTwitchCallback(async ({ accessToken }) => {
+		console.log('[SystemTray] Received Twitch OAuth callback, saving token');
+		await handleTwitchOAuthCallback(accessToken, prefs);
 	});
 
 	await waitForReady(userService);

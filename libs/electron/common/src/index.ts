@@ -5,3 +5,4 @@ export * from './lib/electron-game-window.service';
 export * from './lib/electron-storage.service';
 export * from './lib/electron-subscription.service';
 export * from './lib/standalone-user.service';
+export * from './lib/electron-twitch-auth-handler';

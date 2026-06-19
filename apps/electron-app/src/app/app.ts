@@ -45,6 +45,12 @@ export interface AuthCallbackData {
 	internalUserName: string;
 }
 
+export interface TwitchCallbackData {
+	accessToken: string;
+	scope?: string;
+	tokenType?: string;
+}
+
 export default class App {
 	static application: Electron.App;
 	static overlay: OverlayService;
@@ -56,6 +62,7 @@ export default class App {
 
 	// Auth callback listeners
 	private static authCallbackListeners: ((data: AuthCallbackData) => void)[] = [];
+	private static twitchCallbackListeners: ((data: TwitchCallbackData) => void)[] = [];
 
 	/**
 	 * Register a listener for auth callbacks from deep links
@@ -72,7 +79,20 @@ export default class App {
 	}
 
 	/**
-	 * Parse and handle deep link URL (auth or replay)
+	 * Register a listener for Twitch OAuth callbacks from deep links
+	 */
+	public static onTwitchCallback(listener: (data: TwitchCallbackData) => void): () => void {
+		App.twitchCallbackListeners.push(listener);
+		return () => {
+			const index = App.twitchCallbackListeners.indexOf(listener);
+			if (index > -1) {
+				App.twitchCallbackListeners.splice(index, 1);
+			}
+		};
+	}
+
+	/**
+	 * Parse and handle deep link URL (auth, twitch, or replay)
 	 */
 	private static handleDeepLink(url: string): void {
 		console.log('[DeepLink] Received:', url);
@@ -95,9 +115,15 @@ export default class App {
 				return;
 			}
 
+			// Handle Twitch OAuth callback: firestoneapp://twitch/#access_token=...
+			if (urlObj.hostname === 'twitch') {
+				App.handleTwitchDeepLink(url);
+				return;
+			}
+
 			// Handle auth callback
 			if (urlObj.hostname !== 'auth') {
-				console.log('[DeepLink] Not auth or replay, ignoring');
+				console.log('[DeepLink] Not auth, twitch, or replay, ignoring');
 				return;
 			}
 
@@ -148,6 +174,42 @@ export default class App {
 			// StandaloneUserService will read it on next startup or can be notified via App.onAuthCallback
 		} catch (err) {
 			console.error('[Auth] Failed to parse deep link URL:', err);
+		}
+	}
+
+	/**
+	 * Parse and handle Twitch OAuth callback from deep link URL
+	 */
+	private static handleTwitchDeepLink(url: string): void {
+		console.log('[Twitch] Received Twitch OAuth deep link');
+
+		try {
+			const urlObj = new URL(url);
+			const params = new URLSearchParams(urlObj.hash.startsWith('#') ? urlObj.hash.substring(1) : urlObj.hash);
+			const accessToken = params.get('access_token');
+
+			if (!accessToken) {
+				console.error('[Twitch] No access_token in Twitch callback');
+				return;
+			}
+
+			const twitchData: TwitchCallbackData = {
+				accessToken,
+				scope: params.get('scope') || undefined,
+				tokenType: params.get('token_type') || undefined,
+			};
+
+			console.log('[Twitch] Parsed Twitch OAuth callback');
+
+			App.twitchCallbackListeners.forEach((listener) => {
+				try {
+					listener(twitchData);
+				} catch (err) {
+					console.error('[Twitch] Error in Twitch callback listener:', err);
+				}
+			});
+		} catch (err) {
+			console.error('[Twitch] Failed to parse deep link URL:', err);
 		}
 	}
 
