@@ -190,6 +190,7 @@ import {
 import {
 	ACCOUNT_SERVICE_TOKEN,
 	ADS_SERVICE_TOKEN,
+	AnalyticsService,
 	ApiRunner,
 	CardRulesService,
 	CardsFacadeService,
@@ -211,6 +212,7 @@ import {
 	OverwolfService,
 	OW_UTILS_SERVICE_TOKEN,
 	OwUtilsService,
+	PLAUSIBLE_DOMAIN,
 	REGION_INFO_SERVICE_TOKEN,
 	SCREENSHOT_SERVICE_TOKEN,
 	setAppInjector,
@@ -1140,6 +1142,10 @@ export const buildAppInjector = () => {
 
 	const achievementsLiveTrackingFacadeService = new AchievementsLiveTrackingFacadeService(windowManager);
 	electronInjector.register(AchievementsLiveTrackingFacadeService, achievementsLiveTrackingFacadeService);
+
+	const analyticsService = new AnalyticsService(windowManager);
+	electronInjector.register(AnalyticsService, analyticsService);
+	electronInjector.register(PLAUSIBLE_DOMAIN, 'firestoneapp.com-app-standalone');
 
 	electronInjector.ready = true;
 	return electronInjector;

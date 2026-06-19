@@ -1,5 +1,4 @@
-- counters not showing up in casual
-- animal companion: not correct cards show up
+- grouped counters don't appear without a refresh in BG
 - Exception while getting current window window
 - AnalyticsService
 - hotkeys
