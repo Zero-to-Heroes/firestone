@@ -278,7 +278,7 @@ export abstract class AbstractFacadeService<T extends AbstractFacadeService<T>> 
 	 * @returns Promise that resolves with the method's return value
 	 */
 	protected async callOnMainProcess<T>(methodName: string, ...args: any[]): Promise<T> {
-		if (this.isElectronContext && !isMainProcess()) {
+		if (isElectronContext() && !isMainProcess()) {
 			// In Electron renderer process, use IPC
 			const { ipcRenderer } = (window as any).require('electron');
 			if (typeof ipcRenderer !== 'undefined') {

@@ -65,9 +65,9 @@ export class ApiRunner {
 				},
 				(error) => {
 					if (error.status === 404) {
-						console.warn('Could not execute POST call', url, input);
+						console.warn('Could not execute POST call', url, input, error);
 					} else {
-						console.warn('Could not execute POST call', url, input);
+						console.warn('Could not execute POST call', url, input, error);
 					}
 					if (returnStatusCode) {
 						reject(error.status);

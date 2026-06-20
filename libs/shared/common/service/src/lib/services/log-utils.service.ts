@@ -57,11 +57,13 @@ export const getLogsDir = async (
 	}
 	const adapter = backend as LogFileBackend;
 	const gameBaseDir = await getGameBaseDir(adapter, gameInfo, prefs);
+	console.log('[log-utils] game base dir', gameBaseDir);
 	if (!gameBaseDir) {
 		return null;
 	}
 	const logsBaseDir = gameBaseDir + 'Logs';
 	const filesInLogsDir = (await adapter.listFilesInDirectory(logsBaseDir))?.data ?? [];
+	console.log('[log-utils] files in logs dir', filesInLogsDir);
 
 	let latestDir: string | undefined;
 	let latestTimestamp: number | undefined;

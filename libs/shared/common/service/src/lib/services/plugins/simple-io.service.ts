@@ -1,6 +1,13 @@
 import { Injectable } from '@angular/core';
 import { groupByFunction } from '@firestone/shared/framework/common';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import {
+	AbstractFacadeService,
+	AppInjector,
+	isElectronContext,
+	isMainProcess,
+	OverwolfService,
+	WindowManagerService,
+} from '@firestone/shared/framework/core';
 import * as JSZip from 'jszip';
 
 // All the old files that we don't want to include in the logs
@@ -21,15 +28,45 @@ const EXCLUDED_FILES = [
 	'MercenariesPlayerTeamWindow',
 	'SecretsHelperWindow',
 ];
+
 @Injectable()
-export class SimpleIOService {
-	constructor(private readonly ow: OverwolfService) {}
+export class SimpleIOService extends AbstractFacadeService<SimpleIOService> {
+	constructor(protected override readonly windowManager: WindowManagerService) {
+		super(windowManager, 'SimpleIOService', () => true);
+	}
+
+	protected override assignSubjects(): void {}
+
+	protected async init(): Promise<void> {}
+
+	protected override createElectronProxy(_ipcRenderer: unknown): void {}
+
+	protected override initElectronSubjects(): void {}
+
+	protected override async initElectronMainProcess(): Promise<void> {
+		this.registerMainProcessMethod('zipAppLogFolder', (appName: string) => this.doZipAppLogFolder(appName));
+	}
 
 	public async zipAppLogFolder(appName: string): Promise<Blob> {
+		if (isElectronContext() && !isMainProcess()) {
+			return this.callOnMainProcess('zipAppLogFolder', appName);
+		}
+		return this.doZipAppLogFolder(appName);
+	}
+
+	private async doZipAppLogFolder(appName: string): Promise<Blob> {
+		if (isElectronContext()) {
+			return this.doZipAppLogFolderElectron();
+		}
+		return this.doZipAppLogFolderOverwolf(appName);
+	}
+
+	private async doZipAppLogFolderOverwolf(appName: string): Promise<Blob> {
+		const ow = AppInjector.get(OverwolfService);
 		const fileContents: { fileName: string; contents: string }[] = [];
 
 		// Firestone logs
-		const dirListingResult = await this.ow.listFilesInAppDirectory('Firestone');
+		const dirListingResult = await ow.listFilesInAppDirectory(appName);
 		const path = dirListingResult.path;
 		// It should be a flat structure for us
 		const files = (dirListingResult.data ?? []).filter((d) => d.type === 'file').map((file) => file.name);
@@ -41,7 +78,7 @@ export class SimpleIOService {
 			const allFiles = Object.values(groupedFiles[fileRoot]);
 			const filesToUpload = allFiles.sort().reverse().slice(0, 5);
 			for (const file of filesToUpload) {
-				const contents = await this.ow.readTextFile(path + '/' + file);
+				const contents = await ow.readTextFile(path + '/' + file);
 				fileContents.push({
 					fileName: file,
 					contents: contents,
@@ -50,7 +87,7 @@ export class SimpleIOService {
 		}
 
 		// Overwolf logs
-		const owResult = await this.ow.listFilesInOverwolfDirectory();
+		const owResult = await ow.listFilesInOverwolfDirectory();
 		const owPath = owResult.path;
 		const owFiles = (owResult.data ?? []).filter((d) => d.type === 'file').map((file) => file.name);
 		const getOwFileRoot = (fileName: string) => {
@@ -68,7 +105,7 @@ export class SimpleIOService {
 				const allFiles = Object.values(owGroupedFiles[fileRoot]);
 				const filesToUpload = allFiles.sort().reverse().slice(0, 2);
 				for (const file of filesToUpload) {
-					const contents = await this.ow.readTextFile(owPath + '/' + file);
+					const contents = await ow.readTextFile(owPath + '/' + file);
 					fileContents.push({
 						fileName: file,
 						contents: contents,
@@ -79,13 +116,60 @@ export class SimpleIOService {
 
 		const jszip = new JSZip();
 		fileContents.forEach((file) => jszip.file(file.fileName, file.contents));
-		const content: Blob = await jszip.generateAsync({
+		return jszip.generateAsync({
 			type: 'blob',
 			compression: 'DEFLATE',
 			compressionOptions: {
 				level: 9,
 			},
 		});
-		return content;
+	}
+
+	private async doZipAppLogFolderElectron(): Promise<Blob> {
+		const { app } = eval('require')('electron');
+		const { promises: fsPromises } = eval('require')('fs');
+		const { join } = eval('require')('path');
+		const logsDir = join(app.getPath('userData'), 'logs');
+		console.log('[simple-io] zipping electron app logs from', logsDir);
+		const jszip = new JSZip();
+
+		const fileCount = await this.addDirectoryToZip(jszip, logsDir, '', fsPromises, join);
+		console.log('[simple-io] added files to zip', fileCount);
+
+		return jszip.generateAsync({
+			type: 'blob',
+			compression: 'DEFLATE',
+			compressionOptions: {
+				level: 9,
+			},
+		});
+	}
+
+	private async addDirectoryToZip(
+		jszip: JSZip,
+		dirPath: string,
+		zipPath: string,
+		fsPromises: { readdir: Function; readFile: Function },
+		join: (...paths: string[]) => string,
+	): Promise<number> {
+		let fileCount = 0;
+		try {
+			const entries = await fsPromises.readdir(dirPath, { withFileTypes: true });
+			for (const entry of entries) {
+				const fullPath = join(dirPath, entry.name);
+				const entryZipPath = zipPath ? `${zipPath}/${entry.name}` : entry.name;
+
+				if (entry.isDirectory()) {
+					fileCount += await this.addDirectoryToZip(jszip, fullPath, entryZipPath, fsPromises, join);
+				} else if (entry.isFile()) {
+					const content = await fsPromises.readFile(fullPath, { encoding: 'utf8' });
+					jszip.file(entryZipPath, content);
+					fileCount++;
+				}
+			}
+		} catch (e) {
+			console.warn('[simple-io] Could not read directory', dirPath, e);
+		}
+		return fileCount;
 	}
 }

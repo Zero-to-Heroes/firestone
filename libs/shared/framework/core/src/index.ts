@@ -9,6 +9,7 @@ export * from './lib/services/ads-service.interface';
 export * from './lib/services/analytics/analytics.service';
 export * from './lib/services/api-runner';
 export * from './lib/services/app-injector';
+export * from './lib/services/app-version.interface';
 export * from './lib/services/browser-clipboard.service';
 export * from './lib/services/browser-monitors.service';
 export * from './lib/services/card-rules.service';

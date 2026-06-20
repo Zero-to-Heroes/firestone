@@ -28,6 +28,10 @@ export class AnalyticsService extends AbstractFacadeService<AnalyticsService> {
 		this.plausible = {} as ReturnType<typeof Plausible>;
 	}
 
+	protected override initElectronSubjects(): void {
+		// Do nothing
+	}
+
 	protected override async init() {
 		this.domain = AppInjector.get(PLAUSIBLE_DOMAIN);
 		console.log('[analytics] domain', this.domain);

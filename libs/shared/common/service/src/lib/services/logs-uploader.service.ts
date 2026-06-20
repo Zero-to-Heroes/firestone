@@ -1,28 +1,77 @@
 import { Injectable } from '@angular/core';
-import { OverwolfService } from '@firestone/shared/framework/core';
+import {
+	AbstractFacadeService,
+	AppInjector,
+	isElectronContext,
+	isMainProcess,
+	WindowManagerService,
+} from '@firestone/shared/framework/core';
 import * as JSZip from 'jszip';
 import { getLogsDir } from './log-utils.service';
+import { LOG_FILE_BACKEND, type LogFileBackend } from './logs/log-file-backend';
 import { SimpleIOService } from './plugins/simple-io.service';
 import { PreferencesService } from './preferences.service';
 import { S3FileUploadService } from './s3-file-upload.service';
 
 @Injectable()
-export class LogsUploaderService {
-	constructor(
-		private readonly io: SimpleIOService,
-		private readonly ow: OverwolfService,
-		private readonly s3: S3FileUploadService,
-		private readonly prefs: PreferencesService,
-	) {}
+export class LogsUploaderService extends AbstractFacadeService<LogsUploaderService> {
+	constructor(protected override readonly windowManager: WindowManagerService) {
+		super(windowManager, 'LogsUploaderService', () => true);
+	}
+
+	protected override assignSubjects(): void {}
+
+	protected async init(): Promise<void> {}
+
+	protected override createElectronProxy(_ipcRenderer: unknown): void {}
+
+	protected override initElectronSubjects(): void {}
+
+	protected override async initElectronMainProcess(): Promise<void> {
+		this.registerMainProcessMethod('uploadGameLogs', () => this.doUploadGameLogs());
+		this.registerMainProcessMethod('uploadAppLogs', () => this.doUploadAppLogs());
+	}
 
 	public async uploadGameLogs(): Promise<string | null> {
+		if (isElectronContext() && !isMainProcess()) {
+			console.log('[logs-uploader] delegating uploadGameLogs to main process');
+			return this.callOnMainProcess('uploadGameLogs');
+		}
+		return this.doUploadGameLogs();
+	}
+
+	public async uploadAppLogs(): Promise<string | null> {
+		if (isElectronContext() && !isMainProcess()) {
+			console.log('[logs-uploader] delegating uploadAppLogs to main process');
+			return this.callOnMainProcess('uploadAppLogs');
+		}
+		return this.doUploadAppLogs();
+	}
+
+	private async doUploadGameLogs(): Promise<string | null> {
 		try {
-			// Get the HS Power.log file
-			const res = await this.ow.getRunningGameInfo();
-			const prefs = await this.prefs.getPreferences();
-			const logsDir = await getLogsDir(this.ow, res, prefs);
+			console.log('[logs-uploader] uploading game logs');
+			const logBackend = AppInjector.get(LOG_FILE_BACKEND) as LogFileBackend;
+			const prefs = AppInjector.get(PreferencesService);
+			const s3 = AppInjector.get(S3FileUploadService);
+
+			const gameInfo = await logBackend.getRunningGameInfo();
+			// if (!logBackend.gameRunning(gameInfo)) {
+			// 	console.log('[logs-uploader] game is not running, skipping game logs');
+			// 	return null;
+			// }
+			const logsDir = await getLogsDir(logBackend, gameInfo, await prefs.getPreferences());
+			if (!logsDir) {
+				console.log('[logs-uploader] logs dir is null');
+				return null;
+			}
 			const logsLocation = `${logsDir}\\Power.log`;
-			const logLines = await this.ow.readTextFile(logsLocation);
+			console.log('[logs-uploader] reading power log from', logsLocation);
+			const logLines = await logBackend.readTextFile(logsLocation);
+			if (!logLines) {
+				console.log('[logs-uploader] log lines are null');
+				return null;
+			}
 
 			const jszip = new JSZip();
 			jszip.file('power.log', logLines);
@@ -35,22 +84,29 @@ export class LogsUploaderService {
 				},
 			});
 
-			const s3LogFileKey = await this.s3.postBlob(content, '.power.zip');
-
-			return s3LogFileKey;
+			console.log('[logs-uploader] uploading game logs to S3, size', content.size);
+			const result = await s3.postBlob(content, '.power.zip');
+			console.log('[logs-uploader] game logs uploaded to S3', result);
+			return result;
 		} catch (e) {
-			console.warn('Exception while uploading logs for troubleshooting', e);
+			console.warn('[logs-uploader] Exception while uploading game logs', e);
 			return null;
 		}
 	}
 
-	public async uploadAppLogs(): Promise<string | null> {
+	private async doUploadAppLogs(): Promise<string | null> {
 		try {
-			const firestoneLogs: Blob = await this.io.zipAppLogFolder('Firestone');
-			const firestoneLogKey = await this.s3.postBlob(firestoneLogs, '.app.zip');
-			return firestoneLogKey;
+			console.log('[logs-uploader] uploading app logs');
+			const io = AppInjector.get(SimpleIOService);
+			const s3 = AppInjector.get(S3FileUploadService);
+
+			const firestoneLogs: Blob = await io.zipAppLogFolder('Firestone');
+			console.log('[logs-uploader] app logs zip ready, size', firestoneLogs.size);
+			const result = await s3.postBlob(firestoneLogs, '.app.zip');
+			console.log('[logs-uploader] app logs uploaded to S3', result);
+			return result;
 		} catch (e) {
-			console.warn('Exception while uploading logs for troubleshooting', e);
+			console.warn('[logs-uploader] Exception while uploading app logs', e);
 			return null;
 		}
 	}

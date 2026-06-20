@@ -10,6 +10,7 @@ const BUCKET = 'com.zerotoheroes.support';
 export class S3FileUploadService {
 	public async postBlob(blob: Blob, extension?: string, bucket?: string): Promise<string | null> {
 		const fileKey = uuid() + (extension || '');
+		console.log('[s3-upload] uploading blob', { fileKey, size: blob.size, extension, bucket: bucket || BUCKET });
 		AWS.config.region = 'us-west-2';
 		AWS.config.httpOptions!.timeout = 3600 * 1000 * 10;
 		const s3 = new S3();
@@ -22,11 +23,11 @@ export class S3FileUploadService {
 
 		return new Promise<string | null>((resolve) => {
 			s3.makeUnauthenticatedRequest('putObject', params, (err, data2) => {
-				// There Was An Error With Your S3 Config
 				if (err) {
-					console.warn('An error during upload', err);
+					console.warn('[s3-upload] error during upload', fileKey, err);
 					resolve(null);
 				} else {
+					console.log('[s3-upload] upload successful', fileKey);
 					resolve(fileKey);
 				}
 			});

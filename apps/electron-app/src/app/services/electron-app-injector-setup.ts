@@ -182,6 +182,7 @@ import {
 	PreferencesService,
 	PreferencesStorageService,
 	S3FileUploadService,
+	SimpleIOService,
 	StandaloneAdService,
 	SubscriptionService,
 	TebexHeadlessService,
@@ -252,7 +253,6 @@ import { ElectronDiskCacheService } from './electron-disk-cache.service';
 import { ElectronExternalUrlService } from './electron-external-url.service';
 import { ElectronHotkeyHandlerService } from './electron-hotkey-handler.service';
 import { ElectronLogFileBackendService } from './electron-log-file-backend.service';
-import { ElectronLogsUploaderService } from './electron-logs-uploader.service';
 import { ElectronWindowHandlerService } from './electron-window-handler.service';
 import { LowLevelUtilsElectronService } from './low-level-utils-electron.service';
 import { MindVisionElectronService } from './mind-vision-electron.service';
@@ -342,12 +342,10 @@ export const buildAppInjector = () => {
 	const s3FileUpload = new S3FileUploadService();
 	electronInjector.register(S3FileUploadService, s3FileUpload);
 
-	const logsUploader = new ElectronLogsUploaderService(
-		logFileBackend,
-		diskCache as any as ElectronDiskCacheService,
-		s3FileUpload,
-		preferences,
-	) as any as LogsUploaderService;
+	const simpleIO = new SimpleIOService(windowManager);
+	electronInjector.register(SimpleIOService, simpleIO);
+
+	const logsUploader = new LogsUploaderService(windowManager);
 	electronInjector.register(LogsUploaderService, logsUploader);
 
 	const logUtils = new LogUtilsService(logFileBackend, preferences, gameStatus);
@@ -580,7 +578,7 @@ export const buildAppInjector = () => {
 	electronInjector.register(UserService, userService);
 	electronInjector.register(USER_SERVICE_TOKEN, userService);
 
-	const bugReportService = new BugReportService(logsUploader, userService, api as any as ApiRunner, ads);
+	const bugReportService = new BugReportService(windowManager);
 	electronInjector.register(BugReportService, bugReportService);
 
 	const bgsOfficialLeaderboard = new BattlegroundsOfficialLeaderboardService(windowManager);
