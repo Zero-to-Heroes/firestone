@@ -154,6 +154,7 @@
 		"immutable": "^4.3.0",
 		"jsonwebtoken": "^9.0.0",
 		"jszip": "^3.10.1",
+		"koffi": "^3.0.2",
 		"marked": "^15.0.0",
 		"ng-inline-svg-2": "^19.0.0",
 		"ng2-charts": "^6.0.1",

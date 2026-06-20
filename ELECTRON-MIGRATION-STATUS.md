@@ -1,6 +1,6 @@
 # Electron Migration Status — Firestone
 
-> Last updated: 2026-03-01
+> Last updated: 2026-06-20
 
 This document tracks the remaining work to make the Electron (ow-electron) version of Firestone feature-complete and iso-functional with the Overwolf version.
 
@@ -83,9 +83,9 @@ Every method in `LowLevelUtilsElectronService` is implemented:
 
 | Method | Status | Electron Approach |
 |--------|--------|-------------------|
-| `flashWindow()` | ✅ | `BrowserWindow.flashFrame(true)` |
+| `flashWindow()` | ✅ | Own windows: `BrowserWindow.flashFrame(true)`. External windows (the default `'Hearthstone'` target): Win32 `EnumWindows` + `FlashWindowEx` via `koffi` FFI to `user32.dll` (`win32-window-utils.ts`) |
 | `showWindowsNotification()` | ✅ | Electron `Notification` API |
-| `captureWindow()` | ✅ | `webContents.capturePage()` |
+| `captureWindow()` | ✅ | `webContents.capturePage()` — returns `[dataUrl, dataUrl]` (Overwolf returns `[filePath, base64]`) |
 | `captureActiveWindow()` | ✅ | Same as above |
 | `copyImageDataUrlToClipboard()` | ✅ | `clipboard.writeImage(nativeImage.createFromDataURL())` |
 | `deleteFileOrFolder()` | ✅ | `fs.rm()` with recursive/force |
@@ -102,6 +102,12 @@ Every method in `LowLevelUtilsElectronService` is implemented:
 - [x] **Implement Windows notifications** — Electron's `Notification` API for OS-level toasts.
 - [x] **Implement screen capture** — `webContents.capturePage()` for screenshot functionality.
 - [x] **Implement clipboard image copy** — `electron.clipboard.writeImage()`.
+- [x] **Flash the external Hearthstone window** — `BrowserWindow.flashFrame()` can only target the app's own windows. Flashing the game window's taskbar (used by `flashWindowOnYourTurn`) is done with the Win32 `EnumWindows` + `FlashWindowEx` calls via `koffi` FFI to `user32.dll`, replicating the legacy C# `FlashWindow.cs`. See `apps/electron-app/src/app/services/win32-window-utils.ts`.
+
+### Notes / nuances
+
+- **`flashWindow` is platform-aware**: it first tries Firestone's own Electron windows (`flashFrame`), then falls back to the Win32 path for external windows. `koffi` is wired like the other native modules: declared in `apps/electron-app/src/package.json`, added to `externalDependencies` in `apps/electron-app/project.json`, and unpacked from asar in `electron-builder.yml` (its prebuilt binary ships in `node_modules/@koromix/koffi-win32-x64`). It uses N-API, so no `electron-rebuild` step is needed.
+- **`captureWindow` return shape differs from Overwolf**: Electron returns `[dataUrl, dataUrl]` (a PNG data URL in both slots) instead of Overwolf's `[savedFilePath, base64]`. The `NativeImage` is intentionally not returned because it is not structured-clone serializable across IPC. Current share consumers (clipboard share + the "both slots must be truthy" guard in `social-share-button.component.ts`) work with this. If Twitter/Reddit upload sharing is implemented for Electron later, it will need a real file path / raw bytes rather than the data URL.
 
 ---
 

@@ -9,6 +9,7 @@ import * as http from 'http';
 import * as https from 'https';
 import * as os from 'os';
 import * as path from 'path';
+import { flashExternalWindowByTitle } from './win32-window-utils';
 
 export class LowLevelUtilsElectronService implements IOwUtilsService {
 	private static ipcHandlersRegistered = false;
@@ -121,11 +122,18 @@ export class LowLevelUtilsElectronService implements IOwUtilsService {
 	}
 
 	public async flashWindow(windowName = 'Hearthstone'): Promise<void> {
+		// Firestone's own windows can be flashed directly through Electron.
 		const win = this.findWindowByTitle(windowName);
 		if (win) {
 			win.flashFrame(true);
-		} else {
-			console.warn('[low-level-utils-electron] flashWindow unsupported for non-Electron window', windowName);
+			return;
+		}
+		// External windows (e.g. the Hearthstone game window, which is the default target) are not
+		// Electron windows, so we flash their taskbar button via Win32, mirroring the legacy
+		// ow-utils C# plugin (EnumWindows + FlashWindowEx).
+		const flashed = flashExternalWindowByTitle(windowName);
+		if (!flashed) {
+			console.warn('[low-level-utils-electron] flashWindow: no matching window found to flash', windowName);
 		}
 	}
 
@@ -146,7 +154,10 @@ export class LowLevelUtilsElectronService implements IOwUtilsService {
 			if (copyToClipboard) {
 				clipboard.writeImage(image);
 			}
-			return [dataUrl, image];
+			// Return the data URL for both tuple slots: the NativeImage is not structured-clone
+			// serializable, so it cannot cross the IPC boundary. Overwolf returns [filePath, base64];
+			// here both consumers (clipboard share / "both must be truthy" guard) work with the data URL.
+			return [dataUrl, dataUrl];
 		} catch (e) {
 			console.warn('[low-level-utils-electron] could not captureWindow', windowName, e);
 			return [null, null];
@@ -163,7 +174,9 @@ export class LowLevelUtilsElectronService implements IOwUtilsService {
 		try {
 			const image = await win.webContents.capturePage();
 			const dataUrl = image.toDataURL();
-			return [dataUrl, null];
+			// Both slots carry the data URL so the value survives IPC and the share-flow guard
+			// (which requires both tuple elements to be truthy) passes. See captureWindow above.
+			return [dataUrl, dataUrl];
 		} catch (e) {
 			console.warn('[low-level-utils-electron] could not captureActiveWindow', e);
 			return [null, null];

@@ -23,12 +23,7 @@
 				"outputPath": "dist/apps/electron-app",
 				"main": "apps/electron-app/src/main.ts",
 				"tsConfig": "apps/electron-app/tsconfig.app.json",
-				"externalDependencies": [
-					"better-sqlite3",
-					"electron-edge-js",
-					"electron",
-					"uiohook-napi"
-				],
+				"externalDependencies": ["better-sqlite3", "electron-edge-js", "electron", "koffi", "uiohook-napi"],
 				"assets": [
 					"apps/electron-app/src/assets",
 					{

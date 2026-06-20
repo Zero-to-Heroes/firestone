@@ -16,6 +16,7 @@
 	"dependencies": {
 		"better-sqlite3": "^12.4.6",
 		"electron-edge-js": "^37.0.0",
+		"koffi": "^3.0.2",
 		"uiohook-napi": "^1.5.4"
 	}
 }
