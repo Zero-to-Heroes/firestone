@@ -113,6 +113,10 @@ export class MembershipIntegrityService {
 		try {
 			const currentUser = await this.userService.getCurrentUser();
 			const localPlan = this.localStorage.getItem<CurrentPlan>(LocalStorageService.CURRENT_SUB_PLAN);
+			const [tebexPlan, legacyPlan] = await Promise.all([
+				this.tebex.getSubscriptionStatus(),
+				this.legacy.getSubscriptionStatus(),
+			]);
 			const remoteDebugging = await this.probeRemoteDebugging();
 			const payload = {
 				clientDate: new Date().toISOString(),
@@ -121,6 +125,7 @@ export class MembershipIntegrityService {
 				machineId: currentUser?.machineId,
 				appVersion: process.env['APP_VERSION'],
 				claimedPlanId: this.ads.currentPlan$$.value?.id,
+				planIds: [tebexPlan?.id, legacyPlan?.id],
 				localPlanId: localPlan?.id,
 				serverHasPremium: false,
 				enablePremiumFeatures: this.ads.enablePremiumFeatures$$.value,
