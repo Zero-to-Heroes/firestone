@@ -1,7 +1,8 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-// Agency Espionage (WORK_004)
-// 4-Cost Rogue Spell
-// "Shuffle a card from each other class into your deck. They cost (1). Draw one."
+/**
+ * Vanessa the Ringleader (JAIL_407)
+ * Prepare. After you play a card, get a random Battlecry minion. It costs (2) less.
+ */
 import { CardIds, CardType, GameTag, hasMechanic } from '@firestone-hs/reference-data';
 import { GuessedInfo } from '../../models/deck-card';
 import { hasCorrectType } from '../../related-cards/dynamic-pools';

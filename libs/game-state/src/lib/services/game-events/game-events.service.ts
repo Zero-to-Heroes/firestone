@@ -388,6 +388,7 @@ export class GameEvents {
 				this.doEventDispatch(
 					GameEvent.build(GameEvent.DISCARD_CARD, gameEvent, {
 						originEntityId: gameEvent.Value.AdditionalProps?.OriginEntityId,
+						discardedByEntityId: gameEvent.Value.AdditionalProps?.DiscardedByEntityId,
 						tags: gameEvent.Value.AdditionalProps?.Tags,
 					}),
 				);

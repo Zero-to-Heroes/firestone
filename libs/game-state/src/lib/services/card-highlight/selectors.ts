@@ -13,7 +13,7 @@ import {
 	SetId,
 	SpellSchool,
 } from '@firestone-hs/reference-data';
-import { HighlightSide } from '@firestone/shared/framework/core';
+import { HighlightSide, TempCardIds } from '@firestone/shared/framework/core';
 import { EXTENDED_STARSHIP_CARDS } from '../../counters/impl/extended-starship-cards';
 import { isCardCreated } from '../../models/deck-card';
 import { getCost, getProcessedCard } from '../card-utils';
@@ -179,6 +179,8 @@ export const baseCostLessThan =
 
 export const inInitialDeck = (input: SelectorInput): boolean => !isCardCreated(input.deckCard);
 export const notInInitialDeck = (input: SelectorInput): boolean => isCardCreated(input.deckCard);
+// TODO
+export const copiedFromOpponent = (input: SelectorInput): boolean => false;
 
 export const inStartingHand = (input: SelectorInput): boolean =>
 	input.deckState.cardsInStartingHand?.some(
@@ -396,6 +398,7 @@ export const lifesteal = hasMechanic(GameTag.LIFESTEAL);
 export const magnetic = hasMechanic(GameTag.MODULAR);
 export const outcast = hasMechanic(GameTag.OUTCAST);
 export const overload = hasMechanic(GameTag.OVERLOAD);
+export const prepare = hasMechanic(GameTag.PREPARE);
 export const quickdraw = hasMechanic(GameTag.QUICKDRAW);
 export const reborn = hasMechanic(GameTag.REBORN);
 export const rewind = hasMechanic(GameTag.REWIND);
@@ -417,6 +420,8 @@ export const summonsTreant = (input: SelectorInput): boolean =>
 	input.card?.relatedCardDbfIds?.some((c) => input.allCards.getCard(c)?.isTreant) ?? false;
 export const isTreant = (input: SelectorInput): boolean => input.card?.isTreant ?? false;
 export const treant = or(summonsTreant, isTreant);
+
+export const summonsDemon = (input: SelectorInput): boolean => false;
 
 export const relic = cardIs(...RELIC_IDS);
 
@@ -480,6 +485,17 @@ export const spell = and(cardType(CardType.SPELL), not(passive));
 export const spellExtended = or(spell, and(hasMechanicStr('GENERATES_SPELL'), not(passive)));
 export const givesWeapon = hasMechanicStr('EQUIPS_WEAPON');
 export const weapon = or(cardType(CardType.WEAPON), givesWeapon);
+
+export const coin = (input: SelectorInput): boolean =>
+	input.card?.isCoin ||
+	cardIs(
+		TempCardIds.JadeCoin_JAIL_504t as unknown as CardIds,
+		TempCardIds.GrimyCoin_JAIL_504t2 as unknown as CardIds,
+		TempCardIds.KabalCoin_JAIL_504t3 as unknown as CardIds,
+	)(input) ||
+	false;
+export const generatesCoin = cardIs();
+export const coinExtended = or(coin, generatesCoin);
 
 export const createLocation = cardIs(
 	CardIds.Sancazel_VAC_923,

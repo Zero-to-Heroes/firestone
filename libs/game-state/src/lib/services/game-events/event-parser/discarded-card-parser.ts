@@ -76,6 +76,7 @@ export class DiscardedCardParser implements EventParser {
 		const cardWithZone = card!.update({
 			zone: 'DISCARD',
 			refManaCost: card!.refManaCost ?? refCard.cost ?? removedCard?.tags?.[GameTag.COST],
+			lastAffectedByEntityId: gameEvent.additionalData?.discardedByEntityId,
 		} as DeckCard);
 		const newOther: readonly DeckCard[] = this.helper.addSingleCardToOtherZone(
 			deck.otherZone,

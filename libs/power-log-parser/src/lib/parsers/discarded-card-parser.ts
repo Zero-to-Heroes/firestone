@@ -46,11 +46,18 @@ export class DiscardedCardParser implements ActionParser {
 		const controllerId = entity.GetEffectiveController();
 		entity.PlayedWhileInHand.length = 0;
 		this.GameState.OnCardDiscarded(entity.Id, entity.CardId, null);
+		let parentEntity: FullEntity | undefined;
+		if (node.Parent?.Object instanceof Action) {
+			const parentAction = node.Parent.Object as Action;
+			parentEntity = this.GameState.CurrentEntities.get(parentAction.Entity);
+		}
 		return [
 			GameEventProvider.Create(
 				tagChange.TimeStamp,
 				'DISCARD_CARD',
-				GameEventHelper.CreateProvider('DISCARD_CARD', cardId, controllerId, entity.Id, this.StateFacade),
+				GameEventHelper.CreateProvider('DISCARD_CARD', cardId, controllerId, entity.Id, this.StateFacade, {
+					DiscardedByEntityId: parentEntity?.Id ?? null,
+				}),
 				true,
 				node,
 			),
@@ -63,8 +70,7 @@ export class DiscardedCardParser implements ActionParser {
 		if (entity == null) {
 			console.debug('Could not find entity while looking for discard', showEntity.Entity);
 		}
-		const cardId =
-			entity?.CardId != null && entity.CardId.length > 0 ? entity.CardId : showEntity.CardId;
+		const cardId = entity?.CardId != null && entity.CardId.length > 0 ? entity.CardId : showEntity.CardId;
 		const controllerId = entity != null ? entity.GetEffectiveController() : -1;
 		entity?.PlayedWhileInHand.splice(0);
 
@@ -86,6 +92,7 @@ export class DiscardedCardParser implements ActionParser {
 					this.StateFacade,
 					{
 						OriginEntityId: parentEntity?.Id ?? null,
+						DiscardedByEntityId: parentEntity?.Id ?? null,
 					},
 				),
 				true,

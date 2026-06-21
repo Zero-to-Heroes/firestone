@@ -18,7 +18,8 @@ Once you're done, before assigning the PR to me for review, please mention @curs
 ### Card highlight requests
 
 - First check the requested cards at https://github.com/Zero-to-Heroes/hs-reference-data/blob/master/src/cards_short.json and decides whether the request makes sense based on what the card does
-- Selectors are defined in https://github.com/Zero-to-Heroes/firestone/blob/master/libs/legacy/feature-shell/src/lib/js/services/decktracker/card-highlight/card-id-selectors.ts
+- Selectors should now be implemented as a card (see https://github.com/Zero-to-Heroes/firestone/blob/master/libs/game-state/src/lib/services/cards/_card.type.ts) that extends SelectorCard
+    - Previously selectors were defined in https://github.com/Zero-to-Heroes/firestone/blob/master/libs/legacy/feature-shell/src/lib/js/services/decktracker/card-highlight/card-id-selectors.ts, which can be used to understand how to build them
 - If the required selectors are missing (in https://github.com/Zero-to-Heroes/firestone/blob/master/libs/legacy/feature-shell/src/lib/js/services/decktracker/card-highlight/selectors.ts), don't implement them yourself, and ask for guidance
 - When highlights concern a whole category of cards (eg Protoss), don't add highlights to every single card of that category, but look at what is done in https://github.com/Zero-to-Heroes/firestone/blob/master/libs/legacy/feature-shell/src/lib/js/services/decktracker/card-highlight/cards-highlight-common.service.ts
 - Don't add unit tests for highlights

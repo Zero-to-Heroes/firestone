@@ -15,7 +15,6 @@ import {
 	GameStateService,
 } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
-import { trimPowerLogLinesToLastGame } from '@firestone/power-log-parser';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { ApiRunner, CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
@@ -83,12 +82,13 @@ export class DevService {
 			this.scene.currentScene$$.next(SceneMode.GAMEPLAY);
 			// Do it everytime to reset its memory
 			// await this.gameEvents['initPlugin']();
-			const logsLocation = `D:\\sources\\firestone\\firestone\\test-tools\\${fileName ?? 'game.log'}`;
+			const logsLocation = `E:\\Source\\zerotoheroes\\firestone\\test-tools\\${fileName ?? 'game.log'}`;
 			const logContents = await this.ow.readTextFile(logsLocation);
 			console.log('logContents', logContents, fileName);
 			// Match power-log-replay-harness: CRLF-safe split + last game only (multi-match exports otherwise skew state).
-			const logLines = trimPowerLogLinesToLastGame(logContents.split(/\r?\n/));
-			console.log('logLines', logLines?.length);
+			const logLines = logContents.split(/\r?\n/);
+			console.log('logLines', logLines?.length, logLines.slice(0, 20));
+			console.log('allowReconnects', allowReconnects);
 			await sleep(2000);
 			let currentIndex = 0;
 			for (let line of logLines) {

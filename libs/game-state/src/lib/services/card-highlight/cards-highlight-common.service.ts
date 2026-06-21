@@ -22,6 +22,7 @@ import { Metadata } from '../../models/metadata';
 import { VisualDeckCard } from '../../models/visual-deck-card';
 import { buildContextRelatedCardIds } from '../../related-cards/related-cards';
 import { hasSelector } from '../cards/_card.type';
+import { getCardImpl } from '../cards/get-card-impl';
 import { cardsMapping, hasGetRelatedCards } from '../cards/global/_registers';
 import { getSelectorsForArenaDraft } from './arena-draft';
 import { cardIdSelectorSort } from './card-id-selector-sort';
@@ -464,8 +465,8 @@ export abstract class CardsHighlightCommonService {
 		// Mechanic-specific highlights
 		const selectors: Selector[] = [];
 
-		const cardImpl = cardsMapping[cardId];
-		if (hasSelector(cardImpl)) {
+		const cardImpl = getCardImpl(cardId);
+		if (cardImpl && hasSelector(cardImpl)) {
 			selectors.push(cardImpl.selector(inputSide));
 		} else {
 			// Forward synergies - what does this card want?
