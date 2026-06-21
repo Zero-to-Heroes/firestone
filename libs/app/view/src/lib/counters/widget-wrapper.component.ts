@@ -61,7 +61,7 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 			switchMap(async (visible: boolean) => {
 				if (visible) {
 					// console.debug('repositioning 2', this);
-					const repositioned = await this.reposition();
+					await this.reposition();
 				}
 				return visible;
 			}),
@@ -70,46 +70,51 @@ export abstract class AbstractWidgetWrapperComponent extends AbstractSubscriptio
 	}
 
 	protected async reposition(cleanup?: () => void): Promise<{ left: number; top: number } | null> {
-		if (this.repositioning) {
-			return null;
-		}
-		this.repositioning = true;
-		const gameInfo = await this.gameInfoService.getRunningGameInfo();
-		if (!gameInfo) {
-			console.warn(this.constructor.name, 'missing game info', gameInfo);
-			this.repositioning = false;
-			return null;
-		}
-		const gameWidth = gameInfo.width;
-		const gameHeight = gameInfo.height;
-		const dpi = gameInfo.logicalWidth / gameInfo.width;
-
-		// First position the widget based on the prefs
-		// For static widgets, we can decide to not use javascript positioning and do everything with CSS
-		let positionFromPrefs = this.positionExtractor ? await this.positionExtractor() : null;
-		if (!positionFromPrefs && this.defaultPositionLeftProvider && this.defaultPositionTopProvider) {
-			positionFromPrefs = {
-				left: this.defaultPositionLeftProvider(gameWidth, gameHeight, dpi),
-				top: this.defaultPositionTopProvider(gameWidth, gameHeight, dpi),
-			};
-		}
-		if (positionFromPrefs) {
-			this.renderer.setStyle(this.el.nativeElement, 'left', positionFromPrefs.left + 'px');
-			this.renderer.setStyle(this.el.nativeElement, 'top', positionFromPrefs.top + 'px');
-
-			// Then make sure it fits inside the bounds
-			// Don't await it to avoid blocking the process (since the first time the widget doesn't exist)
-			if (this.forceKeepInBounds) {
-				this.keepInBounds(gameWidth, gameHeight, positionFromPrefs);
+		try {
+			if (this.repositioning) {
+				return null;
 			}
-		}
+			this.repositioning = true;
+			const gameInfo = await this.gameInfoService.getRunningGameInfo();
+			if (!gameInfo) {
+				console.warn(this.constructor.name, 'missing game info', gameInfo);
+				this.repositioning = false;
+				return null;
+			}
+			const gameWidth = gameInfo.width;
+			const gameHeight = gameInfo.height;
+			const dpi = gameInfo.logicalWidth / gameInfo.width;
 
-		if (cleanup) {
-			cleanup();
-		}
+			// First position the widget based on the prefs
+			// For static widgets, we can decide to not use javascript positioning and do everything with CSS
+			let positionFromPrefs = this.positionExtractor ? await this.positionExtractor() : null;
+			if (!positionFromPrefs && this.defaultPositionLeftProvider && this.defaultPositionTopProvider) {
+				positionFromPrefs = {
+					left: this.defaultPositionLeftProvider(gameWidth, gameHeight, dpi),
+					top: this.defaultPositionTopProvider(gameWidth, gameHeight, dpi),
+				};
+			}
+			if (positionFromPrefs) {
+				this.renderer.setStyle(this.el.nativeElement, 'left', positionFromPrefs.left + 'px');
+				this.renderer.setStyle(this.el.nativeElement, 'top', positionFromPrefs.top + 'px');
 
-		this.repositioning = false;
-		return positionFromPrefs;
+				// Then make sure it fits inside the bounds
+				// Don't await it to avoid blocking the process (since the first time the widget doesn't exist)
+				if (this.forceKeepInBounds) {
+					this.keepInBounds(gameWidth, gameHeight, positionFromPrefs);
+				}
+			}
+
+			if (cleanup) {
+				cleanup();
+			}
+
+			this.repositioning = false;
+			return positionFromPrefs;
+		} catch (e) {
+			console.error('error repositioning', e);
+			return null;
+		}
 	}
 
 	private async keepInBounds(
