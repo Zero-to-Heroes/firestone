@@ -6,7 +6,11 @@ import { DeckState } from '../../../models/deck-state';
 import { GameState } from '../../../models/game-state';
 import { SecretOption } from '../../../models/secret-option';
 import { getProcessedCard } from '../../card-utils';
-import { CREATES_PUBLIC_COPY_FROM_DECK, forcedHiddenCardCreators, isSelfCopyHandLeakIncompleteLogCardId } from '../../hs-utils';
+import {
+	CREATES_PUBLIC_COPY_FROM_DECK,
+	forcedHiddenCardCreators,
+	isSelfCopyHandLeakIncompleteLogCardId,
+} from '../../hs-utils';
 import { CopiedFromEntityIdGameEvent } from '../events/copied-from-entity-id-game-event';
 import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
@@ -64,6 +68,7 @@ export class CopiedFromEntityIdParser implements EventParser {
 		let copiedCard: DeckCard | undefined = copiedDeck.findCard(copiedCardEntityId)?.card;
 		console.debug(
 			'[copied-from-entity] copiedCard',
+			`entityId:${entityId}__`,
 			isPlayer,
 			copiedCard,
 			copiedCardZone,
@@ -83,7 +88,13 @@ export class CopiedFromEntityIdParser implements EventParser {
 					(card) =>
 						card.cardId === copyCardId && card.positionFromBottom == null && card.positionFromTop == null,
 				) ?? copiedDeck.deck.find((card) => card.cardId === copyCardId);
-			console.debug('[copied-from-entity] copiedCard not found', copiedCard, copyCardId, copiedDeck.deck);
+			console.debug(
+				'[copied-from-entity] copiedCard not found',
+				`entityId:${entityId}__`,
+				copiedCard,
+				copyCardId,
+				copiedDeck.deck,
+			);
 		}
 
 		// Avoid info leaks
@@ -110,8 +121,7 @@ export class CopiedFromEntityIdParser implements EventParser {
 		const copyAndSourceSameController = copiedCardControllerId === controllerId;
 		const dredgerCardIdHint = newCopy?.creatorCardId ?? newCopy?.lastAffectedByCardId;
 		const dredgeMechanicOnCreator =
-			!!dredgerCardIdHint &&
-			(this.allCards.getCard(dredgerCardIdHint)?.mechanics?.includes('DREDGE') ?? false);
+			!!dredgerCardIdHint && (this.allCards.getCard(dredgerCardIdHint)?.mechanics?.includes('DREDGE') ?? false);
 		const copyDredgeFromLog = gameEvent.additionalData.copyDredgeTag === true;
 		// Incomplete-log self-copy (see `SELF_COPY_HAND_LEAK_INCOMPLETE_LOG_CARD_IDS`): omit DREDGE / late DeckCard fields.
 		const selfCopyHandLeakIncompleteLogToken =
@@ -207,22 +217,22 @@ export class CopiedFromEntityIdParser implements EventParser {
 			copiedCard,
 		);
 		// We don't add the initial cards in the deck, so if no card is found, we create it
-		const updatedCopiedCard = (copiedCard ?? DeckCard.create({})).update({
-			cardId: obfuscatedCardId,
-			cardName: obfuscatedCardId?.length
-				? this.allCards.getCard(obfuscatedCardId).name
-				: copiedCard?.cardName ?? null,
-			refManaCost:
-				(isCopiedPlayer ? newCopy?.refManaCost : null) ??
-				(obfuscatedCardId?.length
-					? getProcessedCard(obfuscatedCardId, copiedCardEntityId, copiedDeck, this.allCards)?.cost
-					: copiedCard?.refManaCost),
-			// DECK: keep entityId when not obfuscating (discover / deck updates; avoid leaking opponent deck ids).
-			// Non-deck + local source (`isCopiedPlayer`): `updateCardInDeck` must get the source entity id so
-			// `updateCardInZone` can match the hand/board row; otherwise entityId stays null and the update no-ops
-			// (e.g. Sigil of Cinder copy in hand — wrong deck-tracker hand count).
-			entityId:
-				isOpponentSelfDredge
+		const updatedCopiedCard = (copiedCard ?? DeckCard.create({}))
+			.update({
+				cardId: obfuscatedCardId,
+				cardName: obfuscatedCardId?.length
+					? this.allCards.getCard(obfuscatedCardId).name
+					: (copiedCard?.cardName ?? null),
+				refManaCost:
+					(isCopiedPlayer ? newCopy?.refManaCost : null) ??
+					(obfuscatedCardId?.length
+						? getProcessedCard(obfuscatedCardId, copiedCardEntityId, copiedDeck, this.allCards)?.cost
+						: copiedCard?.refManaCost),
+				// DECK: keep entityId when not obfuscating (discover / deck updates; avoid leaking opponent deck ids).
+				// Non-deck + local source (`isCopiedPlayer`): `updateCardInDeck` must get the source entity id so
+				// `updateCardInZone` can match the hand/board row; otherwise entityId stays null and the update no-ops
+				// (e.g. Sigil of Cinder copy in hand — wrong deck-tracker hand count).
+				entityId: isOpponentSelfDredge
 					? copiedCardEntityId
 					: copiedCardZone === Zone.DECK && !shouldObfuscate
 						? copiedCardEntityId
@@ -231,20 +241,21 @@ export class CopiedFromEntityIdParser implements EventParser {
 							  (isCopiedPlayer || copyAndSourceSameController)
 							? copiedCardEntityId
 							: null,
-			positionFromTop: isOpponentSelfDredge
-				? 0
-				: shouldObfuscate
+				positionFromTop: isOpponentSelfDredge ? 0 : shouldObfuscate ? null : copiedCard?.positionFromTop,
+				positionFromBottom: isOpponentSelfDredge
 					? null
-					: copiedCard?.positionFromTop,
-			positionFromBottom: isOpponentSelfDredge ? null : shouldObfuscate ? null : copiedCard?.positionFromBottom,
-		} as DeckCard).update(
-			isOpponentSelfDredge
-				? {
-						dredged: true,
-						lastAffectedByCardId: newCopy?.creatorCardId ?? newCopy?.lastAffectedByCardId,
-					}
-				: {},
-		);
+					: shouldObfuscate
+						? null
+						: copiedCard?.positionFromBottom,
+			} as DeckCard)
+			.update(
+				isOpponentSelfDredge
+					? {
+							dredged: true,
+							lastAffectedByCardId: newCopy?.creatorCardId ?? newCopy?.lastAffectedByCardId,
+						}
+					: {},
+			);
 		const updatedCopiedCardWithPosition = updatedCopiedCard.update({
 			positionFromTop:
 				newCopy?.creatorCardId === CardIds.Plagiarizarrr && !isOpponentSelfDredge

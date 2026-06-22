@@ -60,8 +60,9 @@ export class EntityUpdateParser implements ActionParser {
 		) {
 			cardId = '';
 		}
+		let parentAction: Action | null = null;
 		if (node.Parent?.Object instanceof Action) {
-			const parentAction = node.Parent.Object as Action;
+			parentAction = node.Parent.Object as Action;
 			const parentEntity = this.GameState.CurrentEntities.get(parentAction.Entity);
 			if (parentEntity?.CardId === CardIds.Kiljaeden_KiljaedensPortalEnchantment_GDB_145e) {
 				cardId = '';
@@ -88,14 +89,20 @@ export class EntityUpdateParser implements ActionParser {
 		const blockAction = node.Parent?.Object as Action | null;
 		const debug = showEntity.Entity == 41;
 		const gsEntity = this.StateFacade.GsState?.GameState.CurrentEntities.get(showEntity.Entity);
+		const isStartOfGameEffect =
+			showEntity.GetTag(GameTag.START_OF_GAME_KEYWORD) === 1 &&
+			parentAction?.Type === BlockType.TRIGGER &&
+			parentAction.Entity === showEntity.Entity;
+		const isPlay =
+			blockAction != null && blockAction.Type === (BlockType.PLAY as number) && zone === (Zone.PLAY as number);
 		const revealed =
 			(showEntity.GetTag(GameTag.REVEALED) === 1 &&
-				showEntity.GetTag(GameTag.START_OF_GAME_KEYWORD) !== 1 &&
+				!isStartOfGameEffect &&
 				// In some cases (like Start of Game effects that trigger while the card is in hand), the card
 				// is revealed, then hidden right away. In this case, we consider that the card is not revealed.
 				this.StateFacade.GsState?.GameState.CurrentEntities.get(showEntity.Entity)?.GetTag(GameTag.REVEALED) ===
 					1) ||
-			(blockAction != null && blockAction.Type === (BlockType.PLAY as number) && zone === (Zone.PLAY as number));
+			isPlay;
 		if (zone === -1) {
 			zone = this.GameState.CurrentEntities.get(showEntity.Entity)?.GetZone() ?? -1;
 		}

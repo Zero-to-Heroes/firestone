@@ -17,7 +17,7 @@ export class CardRemovedFromHandParser implements EventParser {
 	constructor(
 		private readonly helper: DeckManipulationHelper,
 		private readonly allCards: CardsFacadeService,
-	) { }
+	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return !!state;
@@ -30,9 +30,11 @@ export class CardRemovedFromHandParser implements EventParser {
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		let opponentDeck = !isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const card = this.helper.findCardInZone(deck.hand, cardId, entityId);
+		console.debug('[card-removed-from-hand] card', `entityId:${entityId}__`, card);
 
 		const previousHand = deck.hand;
 		const [newHand, handRemovedCard] = this.helper.removeSingleCardFromZone(previousHand, cardId, entityId);
+		console.debug('[card-removed-from-hand] handRemovedCard', `entityId:${entityId}__`, handRemovedCard);
 
 		const reconciled = reconcileCardInHandWithDeck({
 			removedCard: handRemovedCard,
@@ -43,7 +45,7 @@ export class CardRemovedFromHandParser implements EventParser {
 			opponentDeck,
 			helper: this.helper,
 		});
-		let { removedCard } = reconciled;
+		console.debug('[card-removed-from-hand] reconciled', `entityId:${entityId}__`, reconciled);
 		const { additionalKnownCardsInDeck, deckCards: newDeck } = reconciled;
 		opponentDeck = reconciled.opponentDeck;
 
@@ -87,11 +89,7 @@ export class CardRemovedFromHandParser implements EventParser {
 		});
 	}
 
-	private updateDevourerRelatedCards(
-		opponentDeck: DeckState,
-		gameEvent: GameEvent,
-		eatenCardId: string,
-	): DeckState {
+	private updateDevourerRelatedCards(opponentDeck: DeckState, gameEvent: GameEvent, eatenCardId: string): DeckState {
 		const removedByCardId = gameEvent.additionalData.removedByCardId;
 		const removedByEntityId = gameEvent.additionalData.removedByEntityId;
 		if (!DEVOUR_CARDS.includes(removedByCardId as CardIds) || !eatenCardId) {

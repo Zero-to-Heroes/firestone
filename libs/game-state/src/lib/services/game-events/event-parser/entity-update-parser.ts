@@ -118,7 +118,7 @@ export class EntityUpdateParser implements EventParser {
 			gameEvent,
 			this.allCards,
 		);
-		// console.debug('[entity-update] newCardInDeck', newCardInDeck);
+		console.debug('[entity-update] newCardInDeck', `entityId:${entityId}__`, newCardInDeck, cardInDeck);
 		const newCardInOther =
 			cardInOther && cardInOther.cardId !== obfsucatedCardId
 				? cardInOther.update({
@@ -138,11 +138,26 @@ export class EntityUpdateParser implements EventParser {
 		// 	gameEvent.additionalData?.revealed,
 		// );
 
+		// Card is revealed in hand, and we now know that it is not in deck, so we can remove it from deck
+		let deckCards = deck.deck;
+		if (!!newCardInHand && !newCardInDeck && gameEvent.additionalData?.revealed) {
+			let maybeCardInDeck = deckCards.find((c) => c.cardId === cardId && !c.entityId);
+			// For now only apply this in King Llane special case, and we'll see if this needs to be extended later on
+			// We do this to limit the risk of regressions
+			const shouldDoProcess = cardId === CardIds.GaronaHalforcen_KingLlaneToken_TIME_875t;
+			if (shouldDoProcess) {
+				// Remove the first occurrence of that card from the deck
+				if (!!maybeCardInDeck) {
+					deckCards = deckCards.filter((c) => c !== maybeCardInDeck);
+				}
+			}
+		}
+
 		const newHand = newCardInHand ? this.helper.replaceCardInZone(deck.hand, newCardInHand) : deck.hand;
 		const newDeck =
 			newCardInDeck && newCardInDeck !== cardInDeck
-				? this.helper.replaceCardInZone(deck.deck, newCardInDeck)
-				: deck.deck;
+				? this.helper.replaceCardInZone(deckCards, newCardInDeck)
+				: deckCards;
 		const newOther = newCardInOther
 			? this.helper.replaceCardInOtherZone(deck.otherZone, newCardInOther, this.allCards)
 			: deck.otherZone;

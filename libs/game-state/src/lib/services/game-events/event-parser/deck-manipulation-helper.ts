@@ -728,6 +728,7 @@ export const reconcileCardInHandWithDeck = (input: {
 	if (!removedCard?.cardId && cardId) {
 		console.debug(
 			'[card-played] reconcileCardInHandWithDeck',
+			`entityId:${entityId}__`,
 			removedCard?.cardName,
 			removedCard?.lastAffectedByCardId,
 			removedCard,
@@ -742,6 +743,14 @@ export const reconcileCardInHandWithDeck = (input: {
 				cardId,
 				entityId,
 				false,
+			);
+			console.debug(
+				'[card-played] reconcileCardInHandWithDeck removedCardFromDeck',
+				`entityId:${entityId}__`,
+				removedCardFromDeck?.cardName,
+				removedCardFromDeck?.lastAffectedByCardId,
+				removedCardFromDeck,
+				newDeckAfterReveal,
 			);
 			if (removedCardFromDeck) {
 				removedCard = removedCardFromDeck;
@@ -765,6 +774,7 @@ export const reconcileCardInHandWithDeck = (input: {
 			);
 			console.debug(
 				'[card-played] reconcileCardInHandWithDeck removedCardFromDeck',
+				`entityId:${entityId}__`,
 				removedCardFromDeck?.cardName,
 				removedCardFromDeck?.lastAffectedByCardId,
 				removedCardFromDeck,
