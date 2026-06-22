@@ -341,6 +341,14 @@ export class ArenaDecktrackerOocComponent extends AbstractSubscriptionComponent 
 		const cardStats$ = combineLatest([currentClass$, currentHeroPower$, currentMode$, timeFrame$]).pipe(
 			switchMap(([playerClass, heroPower, mode, timeFrame]) => {
 				const context = heroPower ? `${playerClass}-${heroPower}` : playerClass;
+				console.log(
+					'[arena-decktracker-ooc] building card stats for context',
+					context,
+					timeFrame,
+					mode,
+					playerClass,
+					heroPower,
+				);
 				return this.cardStats.buildCardStats(context, timeFrame, mode);
 			}),
 		);
@@ -372,7 +380,15 @@ export class ArenaDecktrackerOocComponent extends AbstractSubscriptionComponent 
 					};
 					cardsWithStats.push(cardInfo);
 				}
-				console.log('[arena-decktracker-ooc] cardsWithStats', cardsWithStats.length);
+				console.log(
+					'[arena-decktracker-ooc] cardsWithStats',
+					cardsWithStats.map((c) => ({
+						cardId: c.card.cardId,
+						cardName: this.allCards.getCard(c.card.cardId)?.name ?? c.card.cardName,
+						deckWinrateImpact: c.deckWinrateImpact,
+						pickrate: c.pickrate,
+					})),
+				);
 				return cardsWithStats;
 			}),
 		);
