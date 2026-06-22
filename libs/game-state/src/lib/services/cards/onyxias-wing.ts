@@ -4,23 +4,96 @@
  * Text: When summoned, get a random 2-Cost minion. It costs Health this turn. Herald twice to upgrade.
  * The random minion mana band is stored in {@link GameTag.TAG_SCRIPT_DATA_NUM_1} (upgrades with Herald).
  */
-import { CardIds, CardType } from '@firestone-hs/reference-data';
+import { CardClass, CardIds, CardType, GameTag } from '@firestone-hs/reference-data';
+import { GuessedInfo } from '../../models/deck-card';
+import { GameState } from '../../models/game-state';
 import { hasCorrectType } from '../../related-cards/dynamic-pools';
-import { StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
-import { resolveStoredRandomMinionCost } from './stored-random-minion-cost';
+import { getControllerEntity, getEntityTag } from '../parser-entity-utils';
+import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
 
-export const OnyxiasWing: StaticGeneratingCard = {
+const CATACLYSM_COLOSSAL_BY_CLASS: Partial<Record<CardClass, string>> = {
+	[CardClass.DEATHKNIGHT]: CardIds.ArisenOnyxia_CATA_155,
+	[CardClass.DEMONHUNTER]: CardIds.AzsharaOceanLord_CATA_151,
+	[CardClass.DRUID]: CardIds.Wickerfang_CATA_139,
+	[CardClass.MAGE]: CardIds.ArchmageKalec_CATA_458,
+	[CardClass.HUNTER]: CardIds.Magmaw_CATA_550,
+	[CardClass.PALADIN]: CardIds.Chromatus_CATA_432,
+	[CardClass.PRIEST]: CardIds.TheBlackBlood_CATA_300,
+	[CardClass.ROGUE]: CardIds.Sinestra_CATA_154,
+	[CardClass.SHAMAN]: CardIds.AlakirLordOfStorms_CATA_153,
+	[CardClass.WARLOCK]: CardIds.ChogallMastermind_CATA_726,
+	[CardClass.WARRIOR]: CardIds.RagnarosTheGreatFire_CATA_150,
+};
+
+export const OnyxiasWing: StaticGeneratingCard & GeneratingCard = {
 	cardIds: [CardIds.ArisenOnyxia_OnyxiasWingToken_CATA_155t, CardIds.ArisenOnyxia_OnyxiasWingToken_CATA_155t1],
+	publicCreator: true,
+	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
+		const heraldAmount = getHeraldAmount(input.gameState, input.deckState.isOpponent ? 'opponent' : 'player') ?? 0;
+		const actualCost = heraldAmount >= 4 ? 8 : heraldAmount >= 2 ? 4 : 2;
+		// console.debug('[debug] OnyxiasWing guessInfo', input, heraldAmount);
+		return {
+			cardType: CardType.MINION,
+			cost: actualCost,
+			possibleCards: filterCards(
+				OnyxiasWing.cardIds[0],
+				input.allCards,
+				(c) => c.cost === actualCost && hasCorrectType(c, CardType.MINION),
+				input.options,
+			),
+		};
+	},
 	dynamicPool: (input: StaticGeneratingCardInput) => {
-		const cost = resolveStoredRandomMinionCost(input, input.cardId, {
-			useCreatorEntityFallback: false,
-		});
+		const heraldAmount =
+			getHeraldAmount(
+				input.inputOptions.gameState,
+				input.inputOptions.deckState.isOpponent ? 'opponent' : 'player',
+			) ?? 0;
+		const actualCost = heraldAmount >= 4 ? 8 : heraldAmount >= 2 ? 4 : 2;
+		// console.debug('[debug] OnyxiasWing dynamicPool', input, heraldAmount);
 		return filterCards(
 			OnyxiasWing.cardIds[0],
 			input.allCards,
-			(c) => c.cost === cost && hasCorrectType(c, CardType.MINION),
+			(c) => c.cost === actualCost && hasCorrectType(c, CardType.MINION),
 			input.inputOptions,
 		);
 	},
+};
+
+export const getHeraldAmount = (gameState: GameState, side: 'player' | 'opponent'): number | null => {
+	if (!getColossalForSide(gameState, side)) {
+		return null;
+	}
+	const deck = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
+	const eventCount = deck?.heraldCountThisGame ?? 0;
+	const playerId = side === 'player' ? gameState.localPlayerId : gameState.opponentPlayerId;
+	const controllerEntity =
+		playerId != null
+			? getControllerEntity(
+					gameState.parserState?.CurrentEntities,
+					gameState.parserState?.ControllerEntityMap,
+					playerId,
+				)
+			: undefined;
+	const fullStateCount = getEntityTag(controllerEntity, GameTag.HERALD_COLOSSAL_AMOUNT, 0);
+	// Prefer event-based count for real-time updates; fall back to fullGameState for replays/rewinds
+	const amount = eventCount > 0 ? eventCount : (fullStateCount ?? null);
+	return amount != null && amount > 0 ? amount : null;
+};
+
+export const getColossalForSide = (gameState: GameState, side: 'player' | 'opponent'): string | undefined => {
+	const deck = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
+	const playerId = side === 'player' ? gameState.localPlayerId : gameState.opponentPlayerId;
+	const controllerEntity =
+		playerId != null
+			? getControllerEntity(
+					gameState.parserState?.CurrentEntities,
+					gameState.parserState?.ControllerEntityMap,
+					playerId,
+				)
+			: undefined;
+	const playerClass = getEntityTag(controllerEntity, GameTag.HERALD_COLOSSAL_CLASS);
+	const result = playerClass != null ? CATACLYSM_COLOSSAL_BY_CLASS[playerClass] : undefined;
+	return result;
 };

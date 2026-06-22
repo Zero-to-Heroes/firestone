@@ -1,63 +1,12 @@
 /* eslint-disable @typescript-eslint/member-ordering */
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { CardClass, CardIds, GameTag } from '@firestone-hs/reference-data';
+import { CardIds } from '@firestone-hs/reference-data';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { GameState } from '../../models/game-state';
-import { getControllerEntity, getEntityTag } from '../../services/parser-entity-utils';
+import { getColossalForSide, getHeraldAmount } from '../../services/cards/onyxias-wing';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
 import { CounterType } from '../counter-type';
-
-const CATACLYSM_COLOSSAL_BY_CLASS: Partial<Record<CardClass, string>> = {
-	[CardClass.DEATHKNIGHT]: CardIds.ArisenOnyxia_CATA_155,
-	[CardClass.DEMONHUNTER]: CardIds.AzsharaOceanLord_CATA_151,
-	[CardClass.DRUID]: CardIds.Wickerfang_CATA_139,
-	[CardClass.MAGE]: CardIds.ArchmageKalec_CATA_458,
-	[CardClass.HUNTER]: CardIds.Magmaw_CATA_550,
-	[CardClass.PALADIN]: CardIds.Chromatus_CATA_432,
-	[CardClass.PRIEST]: CardIds.TheBlackBlood_CATA_300,
-	[CardClass.ROGUE]: CardIds.Sinestra_CATA_154,
-	[CardClass.SHAMAN]: CardIds.AlakirLordOfStorms_CATA_153,
-	[CardClass.WARLOCK]: CardIds.ChogallMastermind_CATA_726,
-	[CardClass.WARRIOR]: CardIds.RagnarosTheGreatFire_CATA_150,
-};
-
-const getColossalForSide = (gameState: GameState, side: 'player' | 'opponent'): string | undefined => {
-	const deck = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
-	const playerId = side === 'player' ? gameState.localPlayerId : gameState.opponentPlayerId;
-	const controllerEntity =
-		playerId != null
-			? getControllerEntity(
-					gameState.parserState?.CurrentEntities,
-					gameState.parserState?.ControllerEntityMap,
-					playerId,
-				)
-			: undefined;
-	const playerClass = getEntityTag(controllerEntity, GameTag.HERALD_COLOSSAL_CLASS);
-	const result = playerClass != null ? CATACLYSM_COLOSSAL_BY_CLASS[playerClass] : undefined;
-	return result;
-};
-
-const getHeraldAmount = (gameState: GameState, side: 'player' | 'opponent'): number | null => {
-	if (!getColossalForSide(gameState, side)) {
-		return null;
-	}
-	const deck = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
-	const eventCount = deck?.heraldCountThisGame ?? 0;
-	const playerId = side === 'player' ? gameState.localPlayerId : gameState.opponentPlayerId;
-	const controllerEntity =
-		playerId != null
-			? getControllerEntity(
-					gameState.parserState?.CurrentEntities,
-					gameState.parserState?.ControllerEntityMap,
-					playerId,
-				)
-			: undefined;
-	const fullStateCount = getEntityTag(controllerEntity, GameTag.HERALD_COLOSSAL_AMOUNT, 0);
-	// Prefer event-based count for real-time updates; fall back to fullGameState for replays/rewinds
-	const amount = eventCount > 0 ? eventCount : (fullStateCount ?? null);
-	return amount != null && amount > 0 ? amount : null;
-};
 
 // Cataclysm Herald counter: tracks how many times each player has Heralded their class Colossal.
 // Image shows the class-specific Cataclysm Colossal.
