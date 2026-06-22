@@ -271,8 +271,14 @@ export class CardDrawFromDeckParser implements ActionParser {
 							AdditionalProps: {
 								IsPremium:
 									entity.GetTag(GameTag.PREMIUM) === 1 || showEntity.GetTag(GameTag.PREMIUM) === 1,
-								CreatorCardId: creatorCardId?.[0] ?? null,
-								CreatorEntityId: creatorCardId?.[1] ?? null,
+								CreatorCardId:
+									creatorCardId?.[0] && creatorCardId?.[0] !== drawnByCardId
+										? creatorCardId?.[0]
+										: null,
+								CreatorEntityId:
+									creatorCardId?.[1] && creatorCardId?.[1] !== drawnByEntityId
+										? creatorCardId?.[1]
+										: null,
 								CreatedIndex: createdIndex,
 								LastInfluencedByCardId: lastInfluencedByCardId?.[0] ?? null,
 								DataTag1: dataTag1,
