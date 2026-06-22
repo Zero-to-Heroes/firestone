@@ -71,27 +71,24 @@ export class HearthpwnService extends AbstractFacadeService<HearthpwnService> {
 			});
 
 		// Sync on collection changes only when on COLLECTIONMANAGER scene
-		combineLatest([
-			this.prefs.preferences$$.pipe(map((prefs) => prefs.hearthpwnSync)),
-			this.scene.currentScene$$,
-		])
+		combineLatest([this.prefs.preferences$$.pipe(map((prefs) => prefs.hearthpwnSync)), this.scene.currentScene$$])
 			.pipe(
 				filter(([shouldSync, scene]) => shouldSync && scene === SceneMode.COLLECTIONMANAGER),
-				switchMap(() =>
-					this.collectionManager.collection$$.pipe(
-						debounceTime(10000),
-					),
-				),
-				distinctUntilChanged(
-					(a, b) => {
-						console.debug('[hearthpwn] comparing collections',
-							a?.length, b?.length,
-							a?.map((c) => cardCount(c)).reduce((a, b) => a + b, 0), b?.map((c) => cardCount(c)).reduce((a, b) => a + b, 0));
-						return a?.length === b?.length &&
-							a.map((c) => cardCount(c)).reduce((a, b) => a + b, 0) ===
+				switchMap(() => this.collectionManager.collection$$.pipe(debounceTime(10000))),
+				distinctUntilChanged((a, b) => {
+					console.debug(
+						'[hearthpwn] comparing collections',
+						a?.length,
+						b?.length,
+						a?.map((c) => cardCount(c)).reduce((a, b) => a + b, 0),
+						b?.map((c) => cardCount(c)).reduce((a, b) => a + b, 0),
+					);
+					return (
+						a?.length === b?.length &&
+						a.map((c) => cardCount(c)).reduce((a, b) => a + b, 0) ===
 							b.map((c) => cardCount(c)).reduce((a, b) => a + b, 0)
-					},
-				),
+					);
+				}),
 			)
 			.subscribe((collection) => this.syncCollection(collection));
 	}
@@ -107,7 +104,14 @@ export class HearthpwnService extends AbstractFacadeService<HearthpwnService> {
 			return;
 		}
 
-		console.debug('[hearthpwn] will sync collection', collection, 'size changed from', lastSyncedSize, 'to', currentSize);
+		console.debug(
+			'[hearthpwn] will sync collection',
+			collection,
+			'size changed from',
+			lastSyncedSize,
+			'to',
+			currentSize,
+		);
 		const uploadData: UploadData = await this.transformCollection(collection);
 		console.debug('[hearthpwn] uploadData', uploadData, JSON.stringify(uploadData.User));
 		const encryptedUser = await this.encrypt(JSON.stringify(uploadData.User));
@@ -117,8 +121,10 @@ export class HearthpwnService extends AbstractFacadeService<HearthpwnService> {
 			user: encryptedUser!,
 			data: encryptedData!,
 		};
+		console.log('[hearthpwn uploading data');
 		console.debug('[hearthpwn] upload data', payload);
 		const encoded = encodeDictionaryAsForm(payload);
+		console.log('[hearthpwn] encoded data');
 		console.debug('[hearthpwn] encoded data', encoded);
 
 		try {
@@ -142,6 +148,7 @@ export class HearthpwnService extends AbstractFacadeService<HearthpwnService> {
 						}),
 					),
 			);
+			console.log('[hearthpwn] upload result', uploadResult, currentSize);
 			console.debug('[hearthpwn] upload result', uploadResult);
 			// Update the stored collection size after successful sync
 			await this.prefs.updatePrefs('hearthpwnLastSyncedCollectionSize', currentSize);
@@ -241,9 +248,9 @@ interface UploadCard {
 	readonly IsPremium: boolean;
 }
 
-interface UploadProfile { }
-interface UploadRank { }
-interface UploadDeck { }
+interface UploadProfile {}
+interface UploadRank {}
+interface UploadDeck {}
 
 declare let OverwolfPlugin: any;
 
@@ -303,7 +310,7 @@ class StringCipherBridge {
 				}
 				console.log('[hearthpwn] Plugin ' + this.plugin.get()._PluginName_ + ' was loaded!');
 				this.plugin.get().onGlobalEvent.addListener((first: string, second: string) => {
-					console.log('[hearthpwn] received global event', first, second);
+					console.log('[hearthpwn] received global event', first);
 				});
 				this.initialized = true;
 			});
