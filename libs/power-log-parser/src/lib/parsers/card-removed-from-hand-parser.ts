@@ -1,6 +1,6 @@
-import { GameTag, Zone } from '@firestone-hs/reference-data';
+import { CardIds, GameTag, Zone } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
-import { GameEventProvider, GameEventHelper } from '../game-event';
+import { GameEventHelper, GameEventProvider } from '../game-event';
 import { Action, Node, NodeType, TagChange } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
@@ -35,6 +35,7 @@ export class CardRemovedFromHandParser implements ActionParser {
 	CreateGameEventProviderFromNew(node: Node): GameEventProvider[] | null {
 		const tagChange = node.Object as TagChange;
 		const entity = this.GameState.CurrentEntities.get(tagChange.Entity)!;
+		const debug = entity.Entity === 306;
 		const zoneInt = entity.GetTag(GameTag.ZONE) === -1 ? 0 : entity.GetTag(GameTag.ZONE);
 		if (zoneInt !== (Zone.HAND as number)) {
 			return null;
@@ -54,7 +55,13 @@ export class CardRemovedFromHandParser implements ActionParser {
 			cardId = null;
 		}
 
-		if (entity.GetTag(GameTag.CASTS_WHEN_DRAWN) === 1 || entity.GetTag(GameTag.SUMMONED_WHEN_DRAWN) === 1) {
+		if (
+			// In the case of Frost Tyrant, this doesn't work: it gets removed from hand, but then another one is summoned
+			// This means that it never gets removed from the hand, since the "play by effect" actually targets another entity
+			// For now limit this to Frost Tyrant, and see if this needs to be extended to other cards in the future
+			(entity.GetTag(GameTag.CASTS_WHEN_DRAWN) === 1 || entity.GetTag(GameTag.SUMMONED_WHEN_DRAWN) === 1) &&
+			entity.CardId !== CardIds.SonOfHodir_FrostTyrantToken
+		) {
 			return null;
 		}
 
