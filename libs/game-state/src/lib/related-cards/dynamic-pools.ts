@@ -1880,6 +1880,7 @@ const doesSummonInPlay = (sourceCardId: string): boolean => {
 		case CardIds.UnknownVoyager_TIME_055:
 		case CardIds.WardOfEarth_EDR_060:
 		case CardIds.Wormhole_TIME_602:
+		case CardIds.FreeFromAmber:
 			return true;
 
 		default:
