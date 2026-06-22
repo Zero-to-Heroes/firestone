@@ -327,9 +327,15 @@ export class ArenaDecktrackerOocComponent extends AbstractSubscriptionComponent 
 		const classStats$ = currentMode$.pipe(
 			switchMap((mode) => this.classStats.buildClassStats('last-patch', mode as ArenaModeFilterType)),
 		);
-		const classStat$ = combineLatest([currentClass$, classStats$]).pipe(
-			filter(([playerClass, classStats]) => !!playerClass && !!classStats),
-			this.mapData(([playerClass, classStats]) => classStats?.stats?.find((s) => s.playerClass === playerClass)),
+		const classStat$ = combineLatest([currentClass$, currentHeroPower$, classStats$]).pipe(
+			filter(([playerClass, heroPower, classStats]) => !!playerClass && !!classStats),
+			this.mapData(([playerClass, heroPower, classStats]) => {
+				const result = classStats?.stats?.find(
+					(s) => s.playerClass === playerClass && s.playerHeroPower === heroPower,
+				);
+				console.log('[arena-decktracker-ooc] classStat', playerClass, heroPower, result);
+				return result;
+			}),
 		);
 		const timeFrame$ = this.patches.currentArenaMetaPatch$$.pipe(
 			filter((patch) => !!patch),
