@@ -152,6 +152,12 @@ import { interval, Observable, Subscription } from 'rxjs';
 					field="hearthpwnSync"
 					[label]="hearthpwn.toggleLabel"
 				></preference-toggle>
+				<preference-toggle
+					*ngIf="value.hearthpwnLoginUrl && value.hearthpwnLoggedIn"
+					class="collection-sync-notif"
+					field="hearthpwnShowNotifOnSync"
+					[label]="hearthpwn.toggleLabelCollection"
+				></preference-toggle>
 			</section>
 		</div>
 	`,
@@ -200,6 +206,9 @@ export class SettingsGeneralThirdPartyComponent
 		}),
 		whatNext: this.i18n.translateString('settings.general.third-party.hearthpwn.next'),
 		toggleLabel: this.i18n.translateString('settings.general.third-party.hearthpwn.toggle-label'),
+		toggleLabelCollection: this.i18n.translateString(
+			'settings.general.third-party.hearthpwn.toggle-label-collection',
+		),
 	};
 	d0nkey = {
 		title: 'hsguru.com',

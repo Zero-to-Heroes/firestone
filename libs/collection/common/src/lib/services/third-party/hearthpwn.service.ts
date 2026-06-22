@@ -5,8 +5,13 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { Card, SceneService } from '@firestone/memory';
-import { HEARTHPWN_SYNC, PreferencesService } from '@firestone/shared/common/service';
-import { AbstractFacadeService, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
+import { HEARTHPWN_SYNC, NotificationsService, PreferencesService } from '@firestone/shared/common/service';
+import {
+	AbstractFacadeService,
+	AppInjector,
+	ILocalizationService,
+	WindowManagerService,
+} from '@firestone/shared/framework/core';
 import {
 	catchError,
 	combineLatest,
@@ -32,6 +37,8 @@ export class HearthpwnService extends AbstractFacadeService<HearthpwnService> {
 	private scene: SceneService;
 
 	private cipherBridge: StringCipherBridge;
+	private i18n: ILocalizationService;
+	private notifs: NotificationsService;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'HearthpwnService', () => true);
@@ -50,6 +57,8 @@ export class HearthpwnService extends AbstractFacadeService<HearthpwnService> {
 		this.http = AppInjector.get(HttpClient);
 		this.prefs = AppInjector.get(PreferencesService);
 		this.scene = AppInjector.get(SceneService);
+		this.i18n = AppInjector.get(ILocalizationService);
+		this.notifs = AppInjector.get(NotificationsService);
 		this.cipherBridge = new StringCipherBridge();
 		this.cipherBridge.initialize();
 		console.debug('[hearthpwn] init done');
@@ -137,10 +146,10 @@ export class HearthpwnService extends AbstractFacadeService<HearthpwnService> {
 						responseType: 'text',
 					})
 					.pipe(
-						timeout(120000),
+						timeout(60000),
 						catchError((error) => {
 							if (error.name === 'TimeoutError') {
-								console.error('[hearthpwn] Upload timeout after 120 seconds');
+								console.error('[hearthpwn] Upload timeout');
 							} else {
 								console.error('[hearthpwn] Upload error', error);
 							}
@@ -153,6 +162,36 @@ export class HearthpwnService extends AbstractFacadeService<HearthpwnService> {
 			// Update the stored collection size after successful sync
 			await this.prefs.updatePrefs('hearthpwnLastSyncedCollectionSize', currentSize);
 			console.debug('[hearthpwn] updated last synced collection size to', currentSize);
+
+			const prefs = await this.prefs.getPreferences();
+			if (prefs.hearthpwnShowNotifOnSync) {
+				console.log('[hearthpwn] showing notification');
+				const title = this.i18n.translateString('settings.general.third-party.hearthpwn.title');
+				const msg = this.i18n.translateString('settings.general.third-party.hearthpwn.collection-synchronized');
+				this.notifs.emitNewNotification({
+					content: `
+					<div class="general-message-container general-theme">
+						<div class="firestone-icon">
+							<svg class="svg-icon-fill">
+								<use xlink:href="assets/svg/sprite.svg#ad_placeholder" />
+							</svg>
+						</div>
+						<div class="message">
+							<div class="title">
+								<span>${title}</span>
+							</div>
+							<span class="text">${msg}</span>
+						</div>
+						<button class="i-30 close-button">
+							<svg class="svg-icon-fill">
+								<use xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="assets/svg/sprite.svg#window-control_close"></use>
+							</svg>
+						</button>
+					</div>`,
+					notificationId: `hearthpwn-collection-synchronized`,
+					timeout: 2000,
+				});
+			}
 		} catch (error) {
 			console.error('[hearthpwn] Failed to upload collection', error);
 		}
