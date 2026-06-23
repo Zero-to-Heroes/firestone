@@ -172,61 +172,111 @@ function collectSharedRefs(state: ParserState): WeakSet<object> {
  *  - Handles cycles via a WeakMap.
  *  - Returns preserved objects (from `preserve`) by reference without cloning.
  *  - Skips function/symbol values.
+ *
+ * Iterative (NOT recursive) on purpose: the cloned graph here is the live parser state
+ * (GameState entity map, `CurrentGame.Data`, and the in-flight `Node` tree whose `Parent`
+ * back-edges form a chain as deep as the current block nesting). In long games that chain
+ * - and the entity graph reachable from it - can get deep enough that a recursive clone
+ * blows the JS call stack with `RangeError: Maximum call stack size exceeded`. That throw
+ * surfaces as a `[ProcessingQueue] Error during queue processing` that the queue then
+ * retries forever (the failing batch is never cleared), spamming the log every ~500ms.
+ * The depth at which it trips depends on runtime stack headroom, which is why it can fire
+ * in the Overwolf/Chromium app yet never reproduce under Node/Jest. An explicit work
+ * queue removes the call-stack ceiling entirely - clone depth is now bounded only by heap.
  */
-function deepClone<T>(value: T, seen: WeakMap<object, unknown>, preserve: WeakSet<object>): T {
-	if (value == null) return value;
-	const t = typeof value;
-	if (t !== 'object' && t !== 'function') return value;
-	if (t === 'function') return value;
-
-	const obj = value as unknown as object;
-	if (preserve.has(obj)) return value;
-	const already = seen.get(obj);
-	if (already !== undefined) return already as T;
-
-	if (obj instanceof Map) {
-		const copy = new Map();
-		seen.set(obj, copy);
-		for (const [k, v] of obj.entries()) {
-			copy.set(deepClone(k, seen, preserve), deepClone(v, seen, preserve));
-		}
-		return copy as unknown as T;
-	}
-	if (obj instanceof Set) {
-		const copy = new Set();
-		seen.set(obj, copy);
-		for (const v of obj.values()) {
-			copy.add(deepClone(v, seen, preserve));
-		}
-		return copy as unknown as T;
-	}
-	if (Array.isArray(obj)) {
-		const copy: unknown[] = [];
-		seen.set(obj, copy);
-		for (let i = 0; i < obj.length; i++) {
-			copy[i] = deepClone((obj as unknown[])[i], seen, preserve);
-		}
-		return copy as unknown as T;
-	}
-	if (obj instanceof Date) {
-		return new Date(obj.getTime()) as unknown as T;
-	}
-	if (obj instanceof RegExp) {
-		return new RegExp(obj.source, obj.flags) as unknown as T;
-	}
-
+function deepClone<T>(rootValue: T, seen: WeakMap<object, unknown>, preserve: WeakSet<object>): T {
 	// Special case: HearthstoneReplay.Games is the only mutable bit - the replay itself is
-	// lightweight, so fall through to the generic object path below.
-	// (Explicit check here only to document intent; the generic path handles it.)
+	// lightweight, so it falls through to the generic object path in `cloneShell`.
+	// (References retained only to document intent; the generic path handles them.)
 	void HearthstoneReplay;
 	void GameState;
 
-	const proto = Object.getPrototypeOf(obj);
-	const copy = Object.create(proto) as Record<string | symbol, unknown>;
-	seen.set(obj, copy);
-	for (const key of Object.keys(obj)) {
-		const v = (obj as Record<string, unknown>)[key];
-		copy[key] = deepClone(v, seen, preserve);
+	// Source containers whose clone shell exists and is registered in `seen`, but whose
+	// children have not been copied across yet. Drained by the loop below.
+	const pending: object[] = [];
+
+	// Return the clone of `value`, creating its shell (and scheduling its fill) on first
+	// encounter. Leaves are returned directly. This never recurses, so an arbitrarily deep
+	// source graph cannot overflow the call stack.
+	const cloneShell = (value: unknown): unknown => {
+		if (value == null) return value;
+		const t = typeof value;
+		if (t !== 'object' && t !== 'function') return value;
+		if (t === 'function') return value;
+
+		const obj = value as object;
+		if (preserve.has(obj)) return value;
+		const already = seen.get(obj);
+		if (already !== undefined) return already;
+
+		// Leaves: fully cloned now, no children to schedule.
+		if (obj instanceof Date) {
+			const copy = new Date(obj.getTime());
+			seen.set(obj, copy);
+			return copy;
+		}
+		if (obj instanceof RegExp) {
+			const copy = new RegExp(obj.source, obj.flags);
+			seen.set(obj, copy);
+			return copy;
+		}
+
+		// Containers: register an empty shell immediately (so cycles resolve to it), then
+		// defer copying children to the work loop.
+		if (obj instanceof Map) {
+			const copy = new Map();
+			seen.set(obj, copy);
+			pending.push(obj);
+			return copy;
+		}
+		if (obj instanceof Set) {
+			const copy = new Set();
+			seen.set(obj, copy);
+			pending.push(obj);
+			return copy;
+		}
+		if (Array.isArray(obj)) {
+			const copy: unknown[] = new Array(obj.length);
+			seen.set(obj, copy);
+			pending.push(obj);
+			return copy;
+		}
+		const proto = Object.getPrototypeOf(obj);
+		const copy = Object.create(proto) as Record<string, unknown>;
+		seen.set(obj, copy);
+		pending.push(obj);
+		return copy;
+	};
+
+	const root = cloneShell(rootValue);
+
+	while (pending.length > 0) {
+		const src = pending.pop()!;
+		const dst = seen.get(src)!;
+		if (src instanceof Map) {
+			const target = dst as Map<unknown, unknown>;
+			for (const [k, v] of src.entries()) {
+				target.set(cloneShell(k), cloneShell(v));
+			}
+		} else if (src instanceof Set) {
+			const target = dst as Set<unknown>;
+			for (const v of src.values()) {
+				target.add(cloneShell(v));
+			}
+		} else if (Array.isArray(src)) {
+			const target = dst as unknown[];
+			const srcArr = src as unknown[];
+			for (let i = 0; i < srcArr.length; i++) {
+				target[i] = cloneShell(srcArr[i]);
+			}
+		} else {
+			const target = dst as Record<string, unknown>;
+			const srcObj = src as Record<string, unknown>;
+			for (const key of Object.keys(srcObj)) {
+				target[key] = cloneShell(srcObj[key]);
+			}
+		}
 	}
-	return copy as unknown as T;
+
+	return root as T;
 }
