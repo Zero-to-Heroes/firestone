@@ -1,4 +1,4 @@
-import { CardIds, GameTag, Zone } from '@firestone-hs/reference-data';
+import { CardIds, GameTag, Zone, getBaseCardId } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BoardSecret } from '../../../models/board-secret';
 import { DeckCard } from '../../../models/deck-card';
@@ -173,6 +173,18 @@ export class CopiedFromEntityIdParser implements EventParser {
 			return currentState;
 		}
 
+		// Cross-player copy of a card still in the other player's deck (e.g. Ashamane copying a ritual):
+		// must not write the source entity id / imbue token into the local player's deck rows.
+		if (copiedCardZone === Zone.DECK && isPlayer && isCopiedPlayer && !copyAndSourceSameController) {
+			console.debug(
+				'[copied-from-entity] cross-player deck copy would corrupt local deck, ignoring',
+				entityId,
+				copiedCardEntityId,
+				cardId,
+			);
+			return currentState;
+		}
+
 		const shouldObfuscate =
 			// Copy + source same controller (e.g. Malevolent Mutant): not "opponent discovered our card" — allow cardId sync.
 			!copyAndSourceSameController &&
@@ -216,17 +228,21 @@ export class CopiedFromEntityIdParser implements EventParser {
 			newCopy,
 			copiedCard,
 		);
+		const deckTrackingCardId =
+			copiedCardZone === Zone.DECK && obfuscatedCardId
+				? getBaseCardId(obfuscatedCardId, this.allCards.getService())
+				: obfuscatedCardId;
 		// We don't add the initial cards in the deck, so if no card is found, we create it
 		const updatedCopiedCard = (copiedCard ?? DeckCard.create({}))
 			.update({
-				cardId: obfuscatedCardId,
-				cardName: obfuscatedCardId?.length
-					? this.allCards.getCard(obfuscatedCardId).name
+				cardId: deckTrackingCardId,
+				cardName: deckTrackingCardId?.length
+					? this.allCards.getCard(deckTrackingCardId).name
 					: (copiedCard?.cardName ?? null),
 				refManaCost:
 					(isCopiedPlayer ? newCopy?.refManaCost : null) ??
-					(obfuscatedCardId?.length
-						? getProcessedCard(obfuscatedCardId, copiedCardEntityId, copiedDeck, this.allCards)?.cost
+					(deckTrackingCardId?.length
+						? getProcessedCard(deckTrackingCardId, copiedCardEntityId, copiedDeck, this.allCards)?.cost
 						: copiedCard?.refManaCost),
 				// DECK: keep entityId when not obfuscating (discover / deck updates; avoid leaking opponent deck ids).
 				// Non-deck + local source (`isCopiedPlayer`): `updateCardInDeck` must get the source entity id so

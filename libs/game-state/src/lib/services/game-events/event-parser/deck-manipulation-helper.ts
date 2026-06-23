@@ -702,6 +702,25 @@ const isInvalidForOther = (cardId: string): boolean => {
 	return cardId?.startsWith(CardIds.DarkGiftToken_EDR_102t) || cardId?.startsWith(CardIds.WakingTerrorToken_EDR_100t);
 };
 
+/** Cards generated/copied in hand are not drawn from the initial deck — skip deck reconciliation on play. */
+const shouldSkipDeckReconciliationForPlayedCard = (input: {
+	readonly removedCard: DeckCard | undefined;
+	readonly cardId: string;
+	readonly gameEventCreatorCardId?: string | null;
+	readonly transientCard?: boolean;
+}): boolean => {
+	if (input.transientCard) {
+		return true;
+	}
+	if (input.gameEventCreatorCardId) {
+		return true;
+	}
+	if (input.removedCard?.creatorCardId || input.removedCard?.lastAffectedByCardId) {
+		return true;
+	}
+	return false;
+};
+
 export const reconcileCardInHandWithDeck = (input: {
 	removedCard: DeckCard | undefined;
 	cardId: string;
@@ -710,6 +729,8 @@ export const reconcileCardInHandWithDeck = (input: {
 	deckCards: readonly DeckCard[];
 	opponentDeck: DeckState;
 	helper: DeckManipulationHelper;
+	gameEventCreatorCardId?: string | null;
+	transientCard?: boolean;
 }): {
 	removedCard: DeckCard | undefined;
 	additionalKnownCardsInDeck: readonly string[];
@@ -718,6 +739,10 @@ export const reconcileCardInHandWithDeck = (input: {
 } => {
 	let { removedCard, deckCards, opponentDeck } = input;
 	const { cardId, entityId, deck, helper } = input;
+
+	if (shouldSkipDeckReconciliationForPlayedCard(input)) {
+		return { removedCard, additionalKnownCardsInDeck: deck.additionalKnownCardsInDeck, deckCards, opponentDeck };
+	}
 
 	let additionalKnownCardsInDeck = deck.additionalKnownCardsInDeck;
 	if (!removedCard?.cardId) {

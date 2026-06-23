@@ -86,6 +86,8 @@ export class CardPlayedFromHandParser implements EventParser {
 					deckCards: deck.deck,
 					opponentDeck,
 					helper: this.helper,
+					gameEventCreatorCardId: gameEvent.additionalData.creatorCardId,
+					transientCard: gameEvent.additionalData.transientCard,
 				})
 			: {
 					removedCard,

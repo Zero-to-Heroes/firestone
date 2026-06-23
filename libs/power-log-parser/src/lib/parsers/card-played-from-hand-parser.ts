@@ -178,11 +178,12 @@ export class CardPlayedFromHandParser implements ActionParser {
 
 			const fullEntity = FullEntity.FromShowEntity(showEntity);
 			this.GameState.OnCardPlayed(showEntity.Entity, targetId, fullEntity);
+			const copiedFromEntityId = showEntity.GetTag(GameTag.COPIED_FROM_ENTITY_ID);
 			const additionalProps = {
 				TargetEntityId: targetId,
 				TargetCardId: targetCardId,
 				CreatorCardId: creatorCardId,
-				TransientCard: isOhMyYogg,
+				TransientCard: isOhMyYogg || copiedFromEntityId > 0 || creator !== -1,
 				Immune: showEntity.GetTag(GameTag.IMMUNE) === 1,
 				Magnetized: magnetized,
 				Tags: showEntity.Tags,
