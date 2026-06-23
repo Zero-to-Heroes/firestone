@@ -444,6 +444,10 @@ export async function replayPowerLogToGameState(options: ReplayPowerLogOptions):
 
 	TestBed.resetTestingModule();
 	resetAppInjectorForTesting();
+	// Static counters on GameState / DeckCard leak across Jest examples in the same process.
+	GameState.playTiming = 0;
+	DeckCard.deckIndexFromBottom = 0;
+	DeckCard.deckIndexFromTop = 0;
 
 	const cardsText = await loadCardsShortJsonText(cardsRef);
 	if (cardsText == null) {
