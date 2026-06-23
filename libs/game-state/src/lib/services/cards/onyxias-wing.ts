@@ -10,6 +10,7 @@ import { GameState } from '../../models/game-state';
 import { hasCorrectType } from '../../related-cards/dynamic-pools';
 import { getControllerEntity, getEntityTag } from '../parser-entity-utils';
 import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
+import { resolveStoredRandomMinionCost } from './stored-random-minion-cost';
 import { filterCards } from './utils';
 
 const CATACLYSM_COLOSSAL_BY_CLASS: Partial<Record<CardClass, string>> = {
@@ -30,35 +31,63 @@ export const OnyxiasWing: StaticGeneratingCard & GeneratingCard = {
 	cardIds: [CardIds.ArisenOnyxia_OnyxiasWingToken_CATA_155t, CardIds.ArisenOnyxia_OnyxiasWingToken_CATA_155t1],
 	publicCreator: true,
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
-		const heraldAmount = getHeraldAmount(input.gameState, input.deckState.isOpponent ? 'opponent' : 'player') ?? 0;
-		const actualCost = heraldAmount >= 4 ? 8 : heraldAmount >= 2 ? 4 : 2;
-		// console.debug('[debug] OnyxiasWing guessInfo', input, heraldAmount);
+		const wingEntityId = input.creatorEntityId ?? input.card.creatorEntityId ?? input.card.entityId;
+		const cost = resolveWingPoolCost(wingEntityId, input.card.cardId ?? OnyxiasWing.cardIds[0], input);
 		return {
 			cardType: CardType.MINION,
-			cost: actualCost,
+			cost,
 			possibleCards: filterCards(
 				OnyxiasWing.cardIds[0],
 				input.allCards,
-				(c) => c.cost === actualCost && hasCorrectType(c, CardType.MINION),
+				(c) => c.cost === cost && hasCorrectType(c, CardType.MINION),
 				input.options,
 			),
 		};
 	},
 	dynamicPool: (input: StaticGeneratingCardInput) => {
-		const heraldAmount =
-			getHeraldAmount(
-				input.inputOptions.gameState,
-				input.inputOptions.deckState.isOpponent ? 'opponent' : 'player',
-			) ?? 0;
-		const actualCost = heraldAmount >= 4 ? 8 : heraldAmount >= 2 ? 4 : 2;
-		// console.debug('[debug] OnyxiasWing dynamicPool', input, heraldAmount);
+		const cost = resolveWingPoolCost(input.entityId, input.cardId, input);
 		return filterCards(
 			OnyxiasWing.cardIds[0],
 			input.allCards,
-			(c) => c.cost === actualCost && hasCorrectType(c, CardType.MINION),
+			(c) => c.cost === cost && hasCorrectType(c, CardType.MINION),
 			input.inputOptions,
 		);
 	},
+};
+
+const resolveWingPoolCost = (
+	entityId: number | null | undefined,
+	referenceCardId: string,
+	input: GuessInfoInput | StaticGeneratingCardInput,
+): number => {
+	const storedInput: StaticGeneratingCardInput =
+		'inputOptions' in input
+			? input
+			: {
+					entityId: entityId ?? input.card.entityId,
+					cardId: referenceCardId,
+					allCards: input.allCards,
+					inputOptions: {
+						format: input.gameState.metadata.formatType,
+						gameType: input.gameState.metadata.gameType,
+						scenarioId: input.gameState.metadata.scenarioId,
+						currentClass: input.options.currentClass ?? '',
+						deckState: input.deckState,
+						opponentDeckState: input.opponentDeckState,
+						gameState: input.gameState,
+						validArenaPool: input.options.validArenaPool,
+						initialDecklist: input.options.initialDecklist ?? [],
+					},
+				};
+	const fromScript = resolveStoredRandomMinionCost(storedInput, OnyxiasWing.cardIds[0], {
+		useCreatorEntityFallback: false,
+	});
+	if (fromScript > 2) {
+		return fromScript;
+	}
+	const side = storedInput.inputOptions.deckState.isOpponent ? 'opponent' : 'player';
+	const heraldAmount = getHeraldAmount(storedInput.inputOptions.gameState, side) ?? 0;
+	return heraldAmount >= 4 ? 8 : heraldAmount >= 2 ? 4 : fromScript;
 };
 
 export const getHeraldAmount = (gameState: GameState, side: 'player' | 'opponent'): number | null => {
