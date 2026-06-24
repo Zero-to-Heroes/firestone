@@ -894,7 +894,6 @@ const internalGiftCreators = [
 	CardIds.SuspiciousPeddler,
 	CardIds.SuspiciousPirate,
 	CardIds.SuspiciousUsher,
-	CardIds.SwampDragonEgg,
 	CardIds.SwarmOfLightbugs_WW_052,
 	CardIds.Swashburglar,
 	CardIds.SwashburglarCore,
