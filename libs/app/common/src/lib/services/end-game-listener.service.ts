@@ -38,6 +38,7 @@ import { RewardMonitorService } from './rewards-monitor.service';
 @Injectable({ providedIn: 'root' })
 export class EndGameListenerService {
 	private uploadStarted$$ = new BehaviorSubject<boolean>(false);
+	private readonly uploadedUniqueIds = new Set<string>();
 
 	constructor(
 		private readonly gameEvents: GameEventsEmitterService,
@@ -327,6 +328,14 @@ export class EndGameListenerService {
 			console.log('[manastorm-bridge] replay is ongoing, skipping upload');
 			return;
 		}
+		if (info.uniqueId && this.uploadedUniqueIds.has(info.uniqueId)) {
+			console.log(
+				'[manastorm-bridge] game already uploaded, skipping duplicate',
+				info.reviewId,
+				info.uniqueId,
+			);
+			return;
+		}
 		// Get the memory info first, because parsing the XML can take some time and make the
 		// info in memory stale / unavailable
 		console.log('[manastorm-bridge] preparing to upload');
@@ -373,6 +382,9 @@ export class EndGameListenerService {
 
 		const appVersion = await this.appVersionService.getAppVersion();
 		await this.endGameUploader.upload2(augmentedInfo, appVersion);
+		if (info.uniqueId) {
+			this.uploadedUniqueIds.add(info.uniqueId);
+		}
 	}
 
 	private async getBattlegroundsEndGame(): Promise<BattlegroundsInfo | null> {
