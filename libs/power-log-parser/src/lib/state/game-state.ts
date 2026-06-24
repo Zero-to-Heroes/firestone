@@ -30,6 +30,8 @@ export class GameState extends ParserGameStateLite {
 
 	EntityIdsOnBoardWhenPlayingPotionOfIllusion: Map<number, FullEntity[]> | null = null;
 
+	NextBoardPlayTiming: number = 0;
+
 	GameEntityId: number = -1;
 
 	Reset(state: ParserState): void {
@@ -48,8 +50,29 @@ export class GameState extends ParserGameStateLite {
 		this.BgsCurrentBattleOpponentPlayerId = 0;
 		this.BgsHasSentNextOpponent = false;
 		this.EntityIdsOnBoardWhenPlayingPotionOfIllusion = null;
+		this.NextBoardPlayTiming = 0;
 		this.GameEntityId = -1;
 		this.ControllerEntityMap = new Map();
+	}
+
+	private RecordBoardPlayTiming(entity: FullEntity, previousZone: number): void {
+		if (
+			previousZone !== (Zone.PLAY as number) &&
+			entity.GetTag(GameTag.ZONE) === (Zone.PLAY as number) &&
+			entity.GetTag(GameTag.CARDTYPE) === (CardType.MINION as number)
+		) {
+			entity.BoardPlayTiming = ++this.NextBoardPlayTiming;
+		}
+	}
+
+	static SortMinionsByBoardPlayOrder(minions: FullEntity[]): FullEntity[] {
+		return [...minions].sort((a, b) => {
+			const timingDiff = a.BoardPlayTiming - b.BoardPlayTiming;
+			if (timingDiff !== 0) {
+				return timingDiff;
+			}
+			return a.GetTag(GameTag.ZONE_POSITION) - b.GetTag(GameTag.ZONE_POSITION);
+		});
 	}
 
 	GameEntity(entity: GameEntity): void {
@@ -139,8 +162,10 @@ export class GameState extends ParserGameStateLite {
 			t.Value = tag.Value;
 			return t;
 		});
+		const previousZone = existingEntity?.GetTag(GameTag.ZONE) ?? -1;
 		this.CurrentEntities.delete(entity.Id);
 		this.CurrentEntities.set(entity.Id, fullEntity);
+		this.RecordBoardPlayTiming(fullEntity, previousZone);
 	}
 
 	ShowEntity(entity: ShowEntity): void {
@@ -150,6 +175,7 @@ export class GameState extends ParserGameStateLite {
 		}
 
 		const currentEntity = this.CurrentEntities.get(entity.Entity)!;
+		const previousZone = currentEntity.GetTag(GameTag.ZONE);
 		currentEntity.CardId = entity.CardId;
 
 		const showStartTag = new Tag();
@@ -187,6 +213,7 @@ export class GameState extends ParserGameStateLite {
 		}
 		oldTagsToKeep.push(...newTags);
 		currentEntity.Tags = oldTagsToKeep;
+		this.RecordBoardPlayTiming(currentEntity, previousZone);
 	}
 
 	GetCardIdForEntity(id: number): string | null {
@@ -266,6 +293,10 @@ export class GameState extends ParserGameStateLite {
 		}
 
 		const existingTag = fullEntity.Tags.find((tag) => tag.Name === tagChange.Name);
+		const previousZone =
+			tagChange.Name === (GameTag.ZONE as number)
+				? (existingTag?.Value ?? fullEntity.GetTag(GameTag.ZONE))
+				: fullEntity.GetTag(GameTag.ZONE);
 		fullEntity.SetTag(tagChange.Name, tagChange.Value);
 
 		const historyTag = new Tag();
@@ -278,6 +309,10 @@ export class GameState extends ParserGameStateLite {
 			prevTag.Name = existingTag.Name;
 			prevTag.Value = existingTag.Value;
 			fullEntity.AllPreviousTags.push(prevTag);
+		}
+
+		if (tagChange.Name === (GameTag.ZONE as number)) {
+			this.RecordBoardPlayTiming(fullEntity, previousZone);
 		}
 	}
 
@@ -360,10 +395,11 @@ export class GameState extends ParserGameStateLite {
 			}
 
 			if (playedEntity.CardId === CardIds.PotionOfIllusion) {
-				const grouped = currentEntitiesCopy
-					.filter((e) => e.GetTag(GameTag.ZONE) === (Zone.PLAY as number))
-					.filter((e) => e.GetTag(GameTag.CARDTYPE) === (CardType.MINION as number))
-					.sort((a, b) => a.GetTag(GameTag.ZONE_POSITION) - b.GetTag(GameTag.ZONE_POSITION));
+				const grouped = GameState.SortMinionsByBoardPlayOrder(
+					currentEntitiesCopy
+						.filter((e) => e.GetTag(GameTag.ZONE) === (Zone.PLAY as number))
+						.filter((e) => e.GetTag(GameTag.CARDTYPE) === (CardType.MINION as number)),
+				);
 				this.EntityIdsOnBoardWhenPlayingPotionOfIllusion = new Map();
 				for (const e of grouped) {
 					const controller = e.GetEffectiveController();

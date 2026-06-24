@@ -137,6 +137,8 @@ export class FullEntity extends BaseEntity {
 	CardIdsToCreate: string[] = [];
 	DynamicInfo: any[] = [];
 	CreatedIndex: number = 0;
+	/** Order in which this minion last entered the PLAY zone (1-based). 0 if never on board. */
+	BoardPlayTiming: number = 0;
 	SubSpellInEffect: SubSpell | null = null;
 
 	Clone(): FullEntity {
@@ -169,6 +171,7 @@ export class FullEntity extends BaseEntity {
 		clone.CardIdsToCreate = [...this.CardIdsToCreate];
 		clone.DynamicInfo = [...this.DynamicInfo];
 		clone.CreatedIndex = this.CreatedIndex;
+		clone.BoardPlayTiming = this.BoardPlayTiming;
 		clone.SubSpellInEffect = this.SubSpellInEffect;
 		return clone;
 	}

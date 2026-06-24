@@ -15,6 +15,7 @@ export const ZuramattheObliterator: Card & StaticGeneratingCard = {
 		const discardedCards = input.inputOptions.deckState.otherZone.filter(
 			(c) => c.zone === 'DISCARD' && c.lastAffectedByEntityId === prisonEntityId,
 		);
+		// TODO: need to find all cards that have been played by Zuramat to remove them from the list
 		return discardedCards.map((c) => c.cardId);
 	},
 };
