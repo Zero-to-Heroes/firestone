@@ -13,7 +13,7 @@ import { CounterInstance, GameStateFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import { auditTime, combineLatest, Observable, takeUntil, tap } from 'rxjs';
+import { auditTime, combineLatest, Observable, takeUntil } from 'rxjs';
 import { AbstractWidgetWrapperComponent } from './widget-wrapper.component';
 
 @Component({
@@ -50,7 +50,6 @@ export class GroupedCountersWrapperComponent extends AbstractWidgetWrapperCompon
 		this.prefs.updatePrefs('groupedCountersPosition', { left, top });
 	protected positionExtractor = async () => {
 		const prefs = await this.prefs.getPreferences();
-		console.debug('groupedCountersPosition', prefs.groupedCountersPosition);
 		return prefs.groupedCountersPosition;
 	};
 	protected getRect = () => this.el.nativeElement.querySelector('.widget')?.getBoundingClientRect();
@@ -71,7 +70,6 @@ export class GroupedCountersWrapperComponent extends AbstractWidgetWrapperCompon
 		await waitForReady(this.prefs, this.scene, this.gameState);
 
 		this.showWidget$ = combineLatest([this.scene.currentScene$$, this.gameState.gameState$$]).pipe(
-			tap((info) => console.debug('[grouped-counters-wrapper] showWidget 0', info)),
 			auditTime(1000),
 			this.mapData(
 				([scene, gameState]) =>
@@ -79,7 +77,6 @@ export class GroupedCountersWrapperComponent extends AbstractWidgetWrapperCompon
 			),
 			takeUntil(this.destroyed$),
 			this.handleReposition(),
-			tap((info) => console.debug('[grouped-counters-wrapper] showWidget', info)),
 		);
 		this.opacity$ = this.prefs.preferences$$.pipe(
 			this.mapData((prefs) => (prefs.globalWidgetOpacity ?? 100) / 100),
