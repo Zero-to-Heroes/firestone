@@ -265,6 +265,7 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	'amalgam-atk': 'amalgam-atk/amalgam-atk.log',
 	malchezaar: 'malchezaar/malchezaar.log',
 	'geddon-discover': 'geddon-discover/geddon-discover.log',
+	'ritual-full-moon': 'ritual-full-moon/ritual-full-moon.log',
 };
 
 /**
