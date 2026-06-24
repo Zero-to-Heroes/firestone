@@ -1,8 +1,8 @@
 # electron-builder.yml
 # Configuration for ow-electron-builder to create optimized builds
 
-appId: com.firestoneapp.desktop
-productName: Firestone Desktop
+appId: com.firestoneapp.standalone
+productName: Firestone Standalone
 copyright: Copyright © 2024 Sébastien Tromp
 
 # Directories

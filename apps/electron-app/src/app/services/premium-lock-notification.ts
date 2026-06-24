@@ -23,6 +23,6 @@ export function showPremiumLockNotificationOnce(): void {
 	premiumLockNotificationShown = true;
 	new Notification({
 		title: 'Firestone',
-		body: 'Log in with a premium Firestone account to use the desktop app and overlay.',
+		body: 'Log in with a premium Firestone account to use the standalone app and overlay.',
 	}).show();
 }

@@ -547,7 +547,7 @@ export default class App {
 		// Some APIs can only be used after this event occurs.
 
 		if (process.platform === 'win32') {
-			electronApp.setAppUserModelId('com.zerotoheroes.firestone.desktop');
+			electronApp.setAppUserModelId('com.zerotoheroes.firestone.standalone');
 		}
 
 		// Initialize game detection
