@@ -83,9 +83,10 @@ export class NotificationsService extends AbstractFacadeService<NotificationsSer
 		});
 	}
 
-	public notifyInfo(title: string | null, text: string | null, code: string) {
-		this.emitNewNotification({
-			content: `
+	public notifyInfo(title: string | null, text: string | null, code: string, bypassPrefs = false) {
+		this.emitNewNotification(
+			{
+				content: `
 				<div class="general-message-container general-theme">
 					<div class="firestone-icon">
 						<svg class="svg-icon-fill">
@@ -104,8 +105,10 @@ export class NotificationsService extends AbstractFacadeService<NotificationsSer
 						</svg>
 					</button>
 				</div>`,
-			notificationId: `${code}`,
-		});
+				notificationId: `${code}`,
+			},
+			bypassPrefs,
+		);
 	}
 
 	public notifyError(title: string, text: string, code: string, onClick?: () => void | Promise<void>) {

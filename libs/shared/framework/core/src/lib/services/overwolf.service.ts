@@ -710,6 +710,31 @@ export class OverwolfService
 		});
 	}
 
+	public async readBinaryFileHead(filePathOnDisk: string, length: number): Promise<Uint8Array | null> {
+		return new Promise<Uint8Array | null>((resolve) => {
+			if (typeof overwolf.io.readBinaryFile !== 'function') {
+				console.warn('[overwolf] readBinaryFile not available, cannot read PE header');
+				resolve(null);
+				return;
+			}
+			overwolf.io.readBinaryFile(
+				filePathOnDisk,
+				{
+					encoding: overwolf.io.enums.eEncoding.UTF8,
+					maxBytesToRead: length,
+					offset: 0,
+				},
+				(res) => {
+					if (!res?.success || !res.content) {
+						resolve(null);
+						return;
+					}
+					resolve(new Uint8Array(res.content));
+				},
+			);
+		});
+	}
+
 	public async storeAppFile(fileName: string, content: string): Promise<boolean> {
 		return new Promise<boolean>((resolve) => {
 			overwolf.extensions.io.writeTextFile(
@@ -895,6 +920,10 @@ export class OverwolfService
 	}
 
 	public async isWindowVisibleToUser(): Promise<'hidden' | 'full' | 'partial'> {
+		if (!this.isOwEnabled()) {
+			// Standalone / Electron: no Overwolf window API; treat the current window as fully visible.
+			return 'full';
+		}
 		return new Promise<'hidden' | 'full' | 'partial'>((resolve) => {
 			overwolf.windows.isWindowVisibleToUser((result) => {
 				resolve(result.visible);

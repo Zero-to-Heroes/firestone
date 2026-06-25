@@ -1,12 +1,19 @@
 import { Injectable } from '@angular/core';
 import type { LogFileBackend } from '@firestone/shared/common/service';
-import { GameStatusService, LOG_FILE_BACKEND, Preferences, PreferencesService } from '@firestone/shared/common/service';
+import {
+	GameStatusService,
+	LOG_FILE_BACKEND,
+	NotificationsService,
+	Preferences,
+	PreferencesService,
+} from '@firestone/shared/common/service';
 import { Mutable, sortByProperties } from '@firestone/shared/framework/common';
 import type { IOwUtilsService } from '@firestone/shared/framework/core';
 import {
 	AbstractFacadeService,
 	ApiRunner,
 	AppInjector,
+	ILocalizationService,
 	OW_UTILS_SERVICE_TOKEN,
 	waitForReady,
 	WindowManagerService,
@@ -19,23 +26,23 @@ import {
 	createInitialConfigFile,
 	updateModeVersionInBepInExConfig,
 } from './bepin-config';
+import {
+	DEFAULT_MODS_ENGINE_CONFIG,
+	DOORSTOP_CONFIG_INI,
+	ModsEngineArch,
+	ModsEngineConfig,
+	ModsRemoteConfig,
+} from '../model/mods-engine-config';
+import { getPeMachineArchFromBuffer, PeMachineArch } from '../utils/pe-machine-type';
 
-const BEPINEX_ZIP_INSTALL = 'https://static.zerotoheroes.com/mods/BepInEx_win_x86_5.4.23.3.zip';
-// const MODS_MANAGER_PLUGIN_URL =
-// 	'https://github.com/Zero-to-Heroes/firestone-bepinex-mods-manager/releases/latest/download/com.firestoneapp.mods.bepinex.ModsManager.dll';
-// const GAME_CONNECTOR_MOD_URL =
-// 	'https://github.com/Zero-to-Heroes/firestone-melon-game-state-connector/releases/latest/download/GameEventsConnector.dll';
-// const GAME_CONNECTOR_FLECK_URL =
-// 	'https://github.com/Zero-to-Heroes/firestone-melon-game-state-connector/releases/download/0.0.1/Fleck.dll';
-const DOORSTOP_CONFIG_URL = 'https://static.zerotoheroes.com/mods/doorstop_config.ini';
-const UNSTRIPPED_LIBS_BASE_URL = 'https://static.zerotoheroes.com/mods/unstripped_corlibs';
-const UNSTRIPPED_LIBS = ['mscorlib.dll', 'Mono.Security.dll', 'System.Core.dll', 'System.dll', 'UniTask.dll'];
 // Built in mods-backend lambda
 // Bump ?v= when trustedMods schema changes (e.g. optional Description on entries).
-const MODS_CONFIG_URL = 'https://static.zerotoheroes.com/mods/mods-config.json?v=5';
+const MODS_CONFIG_URL = 'https://static.zerotoheroes.com/mods/mods-config.json?v=7';
 
 const modsLocation = 'BepInEx\\plugins';
 export const configLocation = 'BepInEx\\config';
+
+export type ModsCheckStatus = 'wrong-path' | 'installed' | 'not-installed' | 'engine-mismatch';
 
 @Injectable()
 export class ModsManagerService extends AbstractFacadeService<ModsManagerService> {
@@ -49,8 +56,12 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 	private prefs: PreferencesService;
 	private fileBackend: LogFileBackend;
 	private io: IOwUtilsService;
+	private notifications: NotificationsService;
+	private i18n: ILocalizationService;
 
-	private modsConfig: { trustedMods: readonly ModData[] } | null = null;
+	private modsConfig: ModsRemoteConfig | null = null;
+	private migrationInProgress = false;
+	private pendingEngineMigration = false;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'ModsManagerService', () => !!this.modsData$$);
@@ -69,10 +80,16 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 		this.prefs = AppInjector.get(PreferencesService);
 		this.fileBackend = AppInjector.get(LOG_FILE_BACKEND);
 		this.io = AppInjector.get(OW_UTILS_SERVICE_TOKEN);
+		this.notifications = AppInjector.get(NotificationsService);
+		this.i18n = AppInjector.get(ILocalizationService);
 
 		await waitForReady(this.prefs, this.gameStatus);
 
-		this.modsConfig = await this.api.callGetApi<{ trustedMods: readonly ModData[] }>(MODS_CONFIG_URL);
+		const remoteConfig = await this.api.callGetApi<Partial<ModsRemoteConfig>>(MODS_CONFIG_URL);
+		this.modsConfig = {
+			engine: remoteConfig?.engine ?? DEFAULT_MODS_ENGINE_CONFIG,
+			trustedMods: remoteConfig?.trustedMods ?? [],
+		};
 		console.debug('[mods-manager] modsConfig', this.modsConfig);
 
 		// this.gameStatus.inGame$$.pipe(distinctUntilChanged()).subscribe(async (inGame) => {
@@ -95,6 +112,8 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 			.subscribe(async (installPath) => {
 				const refreshedMods = await this.refreshModsInternal(installPath);
 				this.modsData$$.next(refreshedMods);
+				await this.maybeAutoMigrateEngine(installPath);
+				await this.maybeRepairMissingCorlibs(installPath);
 			});
 
 		// Auto-update mods when game exits or when app launches and game is not running
@@ -106,8 +125,18 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 			.subscribe(async (inGame) => {
 				if (!inGame) {
 					await this.autoUpdateModsIfNeeded();
+					const prefs = await this.prefs.getPreferences();
+					if (prefs.modsEnabled && prefs.gameInstallPath && this.pendingEngineMigration) {
+						await this.maybeAutoMigrateEngine(prefs.gameInstallPath);
+					}
 				}
 			});
+
+		const prefs = await this.prefs.getPreferences();
+		if (prefs.gameInstallPath && prefs.modsEnabled) {
+			await this.maybeAutoMigrateEngine(prefs.gameInstallPath);
+			await this.maybeRepairMissingCorlibs(prefs.gameInstallPath);
+		}
 
 		console.debug('[mods-manager] initialized');
 	}
@@ -135,10 +164,10 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 		this.registerMainProcessMethod('hasUpdatesInternal', (mod: ModData) => this.hasUpdatesInternal(mod));
 	}
 
-	public async checkMods(installPath: string): Promise<'wrong-path' | 'installed' | 'not-installed'> {
-		return this.callOnMainProcess<'wrong-path' | 'installed' | 'not-installed'>('checkModsInternal', installPath);
+	public async checkMods(installPath: string): Promise<ModsCheckStatus> {
+		return this.callOnMainProcess<ModsCheckStatus>('checkModsInternal', installPath);
 	}
-	private async checkModsInternal(installPath: string): Promise<'wrong-path' | 'installed' | 'not-installed'> {
+	private async checkModsInternal(installPath: string): Promise<ModsCheckStatus> {
 		const files = await this.fileBackend.listFilesInDirectory(installPath);
 		if (!files?.data?.some((f) => f.type === 'file' && f.name === 'Hearthstone.exe')) {
 			console.warn('Not a Hearthstone directory, missing Hearthstone.exe', installPath, files);
@@ -146,16 +175,28 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 		}
 		await this.updateInstallPath(installPath);
 		console.debug('files in HS dir', files);
-		let modsEnabled =
-			files?.data?.some((f) => f.type === 'dir' && f.name === 'BepInEx') &&
-			files?.data?.some((f) => f.type === 'file' && f.name === 'winhttp.dll');
-		// Also check if the unstripped libs are present
-		const unstrippedLibs = await this.fileBackend.listFilesInDirectory(
-			`${installPath}\\BepInEx\\unstripped_corlib`,
-		);
-		modsEnabled = modsEnabled && unstrippedLibs?.data?.length === UNSTRIPPED_LIBS.length;
-		console.debug('mods enabled?', modsEnabled);
-		return modsEnabled ? 'installed' : 'not-installed';
+		const hasBepInEx = files?.data?.some((f) => f.type === 'dir' && f.name === 'BepInEx');
+		const hasWinhttp = files?.data?.some((f) => f.type === 'file' && f.name === 'winhttp.dll');
+		if (!hasBepInEx || !hasWinhttp) {
+			console.debug('mods not installed', hasBepInEx, hasWinhttp);
+			return 'not-installed';
+		}
+
+		const hasCorlibs = await this.hasUnstrippedCorlibs(installPath);
+		if (!hasCorlibs) {
+			console.debug('mods missing unstripped corlibs');
+			return 'not-installed';
+		}
+
+		const requiredArch = await this.getRequiredEngineArch(installPath);
+		const installedArch = await this.getInstalledEngineArch(installPath);
+		if (requiredArch && installedArch && requiredArch !== installedArch) {
+			console.warn('[mods-manager] engine architecture mismatch', requiredArch, installedArch);
+			return 'engine-mismatch';
+		}
+
+		console.debug('mods enabled?', true);
+		return 'installed';
 	}
 
 	public async installedMods(installPath: string): Promise<readonly ModData[]> {
@@ -241,15 +282,15 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 
 	public async enableMods(
 		installPath: string,
-	): Promise<'game-running' | 'wrong-path' | 'installed' | 'not-installed'> {
-		return this.callOnMainProcess<'game-running' | 'wrong-path' | 'installed' | 'not-installed'>(
+	): Promise<'game-running' | 'wrong-path' | 'installed' | 'not-installed' | 'engine-mismatch'> {
+		return this.callOnMainProcess<'game-running' | 'wrong-path' | 'installed' | 'not-installed' | 'engine-mismatch'>(
 			'enableModsInternal',
 			installPath,
 		);
 	}
 	private async enableModsInternal(
 		installPath: string,
-	): Promise<'game-running' | 'wrong-path' | 'installed' | 'not-installed'> {
+	): Promise<'game-running' | 'wrong-path' | 'installed' | 'not-installed' | 'engine-mismatch'> {
 		this.currentModsStatus$$.next('settings.general.mods.enabling-mods');
 		const isGameRunning = await this.gameStatus.inGame();
 		if (isGameRunning) {
@@ -263,20 +304,22 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 			this.currentModsStatus$$.next('settings.general.mods.wrong-path-error');
 			return 'wrong-path';
 		}
-		const modsEnabled = await this.checkMods(installPath);
-		if (modsEnabled === 'installed') {
+		const modsStatus = await this.checkModsInternal(installPath);
+		if (modsStatus === 'engine-mismatch') {
+			const migrated = await this.migrateEngineInternal(installPath);
+			return migrated ? 'installed' : 'engine-mismatch';
+		}
+		if (modsStatus === 'installed') {
 			console.warn('Trying to enable mods but they are already enabled', installPath);
 			return 'installed';
 		}
-		this.currentModsStatus$$.next('settings.general.mods.downloading-mod-engine');
-		await this.io.downloadAndUnzipFile(BEPINEX_ZIP_INSTALL, installPath);
-		this.currentModsStatus$$.next('settings.general.mods.creating-config');
-		await this.createBepInExConfig(installPath);
-		await this.installBaseMods(installPath);
-
-		// Copy the Managed libs
-		this.currentModsStatus$$.next('settings.general.mods.refreshing-engine');
-		await this.installUnstrippedLibs(installPath);
+		const requiredArch = await this.getRequiredEngineArch(installPath);
+		if (!requiredArch) {
+			console.warn('[mods-manager] could not detect game architecture', installPath);
+			this.currentModsStatus$$.next('settings.general.mods.wrong-path-error');
+			return 'wrong-path';
+		}
+		await this.installEngine(installPath, requiredArch);
 		this.currentModsStatus$$.next('settings.general.mods.mods-ready');
 
 		return 'installed';
@@ -364,8 +407,8 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 			console.warn('Trying to delete inside a path that does not contain Hearthstone, too risky', installPath);
 			return 'wrong-path';
 		}
-		const modsEnabled = await this.checkMods(installPath);
-		if (!modsEnabled) {
+		const modsEnabled = await this.checkModsInternal(installPath);
+		if (modsEnabled === 'not-installed' || modsEnabled === 'wrong-path') {
 			console.warn('Trying to disable mods but they are not enabled', installPath);
 			return 'not-installed';
 		}
@@ -516,8 +559,8 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 			return;
 		}
 
-		const modsStatus = await this.checkMods(installPath);
-		if (modsStatus !== 'installed') {
+		const modsStatus = await this.checkModsInternal(installPath);
+		if (modsStatus !== 'installed' && modsStatus !== 'engine-mismatch') {
 			return;
 		}
 
@@ -534,15 +577,186 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 		console.log('[mods-manager] auto-update check complete');
 	}
 
-	private async installUnstrippedLibs(installPath: string) {
-		for (const lib of UNSTRIPPED_LIBS) {
-			await this.io.downloadFileTo(
-				`${UNSTRIPPED_LIBS_BASE_URL}/${lib}`,
-				`${installPath}\\BepInEx\\unstripped_corlib`,
-				lib,
-			);
+	private async installUnstrippedLibs(installPath: string, baseUrl: string) {
+		const engineConfig = this.getEngineConfig();
+		for (const lib of engineConfig.unstrippedLibs) {
+			await this.io.downloadFileTo(`${baseUrl}/${lib}`, `${installPath}\\BepInEx\\unstripped_corlib`, lib);
 		}
-		await this.io.downloadFileTo(DOORSTOP_CONFIG_URL, `${installPath}`, 'doorstop_config.ini');
+		await this.writeDoorstopConfig(installPath);
+	}
+
+	private async writeDoorstopConfig(installPath: string): Promise<void> {
+		await this.fileBackend.writeFileContents(`${installPath}\\doorstop_config.ini`, DOORSTOP_CONFIG_INI);
+	}
+
+	private async hasUnstrippedCorlibs(installPath: string): Promise<boolean> {
+		const engineConfig = this.getEngineConfig();
+		const unstrippedLibs = await this.fileBackend.listFilesInDirectory(
+			`${installPath}\\BepInEx\\unstripped_corlib`,
+		);
+		const present = new Set(unstrippedLibs?.data?.map((f) => f.name.toLowerCase()) ?? []);
+		return engineConfig.unstrippedLibs.every((lib) => present.has(lib.toLowerCase()));
+	}
+
+	private async maybeRepairMissingCorlibs(installPath: string): Promise<void> {
+		const prefs = await this.prefs.getPreferences();
+		if (!prefs.modsEnabled || !installPath || this.migrationInProgress) {
+			return;
+		}
+		const files = await this.fileBackend.listFilesInDirectory(installPath);
+		const hasBepInEx = files?.data?.some((f) => f.type === 'dir' && f.name === 'BepInEx');
+		const hasWinhttp = files?.data?.some((f) => f.type === 'file' && f.name === 'winhttp.dll');
+		if (!hasBepInEx || !hasWinhttp || (await this.hasUnstrippedCorlibs(installPath))) {
+			return;
+		}
+		const requiredArch = await this.getRequiredEngineArch(installPath);
+		const installedArch = await this.getInstalledEngineArch(installPath);
+		if (!requiredArch || !installedArch || requiredArch !== installedArch) {
+			return;
+		}
+		console.log('[mods-manager] repairing missing unstripped corlibs');
+		const archConfig = this.getEngineConfig()[requiredArch];
+		await this.installUnstrippedLibs(installPath, archConfig.unstrippedCorlibsBaseUrl);
+	}
+
+	private getEngineConfig(): ModsEngineConfig {
+		return this.modsConfig?.engine ?? DEFAULT_MODS_ENGINE_CONFIG;
+	}
+
+	private async getPeArchFromFile(filePath: string): Promise<PeMachineArch | null> {
+		const head = await this.fileBackend.readBinaryFileHead(filePath, 512);
+		if (!head?.length) {
+			return null;
+		}
+		return getPeMachineArchFromBuffer(head);
+	}
+
+	private async getRequiredEngineArch(installPath: string): Promise<ModsEngineArch | null> {
+		return this.getPeArchFromFile(`${installPath}\\Hearthstone.exe`);
+	}
+
+	private async getInstalledEngineArch(installPath: string): Promise<ModsEngineArch | null> {
+		const winhttpPath = `${installPath}\\winhttp.dll`;
+		if (await this.fileBackend.fileExists(winhttpPath)) {
+			const arch = await this.getPeArchFromFile(winhttpPath);
+			if (arch) {
+				return arch;
+			}
+		}
+		return this.getPeArchFromFile(`${installPath}\\BepInEx\\core\\BepInEx.Preloader.dll`);
+	}
+
+	private async maybeAutoMigrateEngine(installPath: string): Promise<void> {
+		const prefs = await this.prefs.getPreferences();
+		if (!prefs.modsEnabled || !installPath) {
+			return;
+		}
+		const status = await this.checkModsInternal(installPath);
+		if (status !== 'engine-mismatch') {
+			this.pendingEngineMigration = false;
+			return;
+		}
+		await this.migrateEngineInternal(installPath);
+	}
+
+	private async migrateEngineInternal(installPath: string): Promise<boolean> {
+		if (this.migrationInProgress) {
+			console.debug('[mods-manager] engine migration already in progress');
+			return false;
+		}
+		const requiredArch = await this.getRequiredEngineArch(installPath);
+		if (!requiredArch) {
+			console.warn('[mods-manager] cannot migrate engine, unknown game architecture');
+			return false;
+		}
+
+		this.migrationInProgress = true;
+		this.pendingEngineMigration = false;
+		await this.notifyEngineMigrationStart();
+
+		try {
+			this.currentModsStatus$$.next('settings.general.mods.migrating-engine');
+			const installedMods = await this.installedModsInternal(installPath);
+			const removed = await this.removeEngineFiles(installPath);
+			if (!removed) {
+				this.pendingEngineMigration = true;
+				await this.notifyEngineMigrationRetry();
+				return false;
+			}
+
+			await this.installEngine(installPath, requiredArch);
+
+			this.currentModsStatus$$.next('settings.general.mods.reinstalling-mods');
+			for (const mod of installedMods) {
+				if (!mod.DownloadLink) {
+					continue;
+				}
+				await this.updateModInternal({ ...mod, Registered: mod.Registered });
+			}
+
+			const refreshedMods = await this.refreshModsInternal(installPath);
+			this.modsData$$.next(refreshedMods);
+			this.currentModsStatus$$.next('settings.general.mods.mods-ready');
+			await this.notifyEngineMigrationDone();
+			return true;
+		} catch (e) {
+			console.error('[mods-manager] engine migration failed', e);
+			this.pendingEngineMigration = true;
+			await this.notifyEngineMigrationRetry();
+			return false;
+		} finally {
+			this.migrationInProgress = false;
+		}
+	}
+
+	private async installEngine(installPath: string, arch: ModsEngineArch): Promise<void> {
+		const engineConfig = this.getEngineConfig();
+		const archConfig = engineConfig[arch];
+		this.currentModsStatus$$.next('settings.general.mods.downloading-mod-engine');
+		await this.io.downloadAndUnzipFile(archConfig.bepInExZip, installPath);
+		this.currentModsStatus$$.next('settings.general.mods.creating-config');
+		await this.createBepInExConfig(installPath);
+		await this.installBaseMods(installPath);
+		this.currentModsStatus$$.next('settings.general.mods.refreshing-engine');
+		await this.installUnstrippedLibs(installPath, archConfig.unstrippedCorlibsBaseUrl);
+	}
+
+	private async removeEngineFiles(installPath: string): Promise<boolean> {
+		try {
+			await this.io.deleteFileOrFolder(`${installPath}\\winhttp.dll`);
+			await this.io.deleteFileOrFolder(`${installPath}\\doorstop_config.ini`);
+			await this.io.deleteFileOrFolder(`${installPath}\\changelog.txt`);
+			await this.io.deleteFileOrFolder(`${installPath}\\.doorstop_version`);
+			await this.io.deleteFileOrFolder(`${installPath}\\BepInEx`);
+			const stillHasBepInEx = await this.fileBackend.fileExists(`${installPath}\\BepInEx`);
+			const stillHasWinhttp = await this.fileBackend.fileExists(`${installPath}\\winhttp.dll`);
+			if (stillHasBepInEx || stillHasWinhttp) {
+				console.warn('[mods-manager] engine files still present after delete', stillHasBepInEx, stillHasWinhttp);
+				return false;
+			}
+			return true;
+		} catch (e) {
+			console.warn('[mods-manager] could not remove engine files', e);
+			return false;
+		}
+	}
+
+	private async notifyEngineMigrationStart(): Promise<void> {
+		const title = this.i18n.translateString('settings.general.mods.engine-migration-start-title');
+		const text = this.i18n.translateString('settings.general.mods.engine-migration-start-message');
+		this.notifications.notifyInfo(title, text, 'mods-engine-migration-start', true);
+	}
+
+	private async notifyEngineMigrationDone(): Promise<void> {
+		const title = this.i18n.translateString('settings.general.mods.engine-migration-done-title');
+		const text = this.i18n.translateString('settings.general.mods.engine-migration-done-message');
+		this.notifications.notifyInfo(title, text, 'mods-engine-migration-done', true);
+	}
+
+	private async notifyEngineMigrationRetry(): Promise<void> {
+		const title = this.i18n.translateString('settings.general.mods.engine-migration-retry-title');
+		const text = this.i18n.translateString('settings.general.mods.engine-migration-retry-message');
+		this.notifications.notifyInfo(title, text, 'mods-engine-migration-retry', true);
 	}
 
 	private async updateInstallPath(installPath: string) {

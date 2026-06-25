@@ -31,6 +31,8 @@ export interface LogFileBackend {
 	fileExists(filePathOnDisk: string): Promise<boolean>;
 	writeFileContents(filePathOnDisk: string, content: string): Promise<boolean>;
 	readTextFile(filePathOnDisk: string): Promise<string>;
+	/** Reads the first `length` bytes of a file (for PE header inspection). */
+	readBinaryFileHead(filePathOnDisk: string, length: number): Promise<Uint8Array | null>;
 	listFilesInDirectory(directory: string): Promise<LogDirectoryResult | null>;
 	getGameDbInfo(): Promise<any | null>;
 	deleteAppFile(fileName: string): Promise<boolean>;

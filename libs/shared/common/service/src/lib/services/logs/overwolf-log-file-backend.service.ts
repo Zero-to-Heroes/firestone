@@ -39,6 +39,10 @@ export class OverwolfLogFileBackendService implements LogFileBackend {
 		return this.overwolfService.readTextFile(filePathOnDisk);
 	}
 
+	async readBinaryFileHead(filePathOnDisk: string, length: number): Promise<Uint8Array | null> {
+		return this.overwolfService.readBinaryFileHead(filePathOnDisk, length);
+	}
+
 	async listFilesInDirectory(directory: string): Promise<LogDirectoryResult | null> {
 		return this.overwolfService.listFilesInDirectory(directory);
 	}
