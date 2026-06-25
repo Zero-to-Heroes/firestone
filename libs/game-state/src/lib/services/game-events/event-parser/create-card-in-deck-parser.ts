@@ -5,6 +5,8 @@ import { DeckCard } from '../../../models/deck-card';
 import { DeckState } from '../../../models/deck-state';
 import { GameState } from '../../../models/game-state';
 import { addGuessInfoToCard, getProcessedCard } from '../../card-utils';
+import { hasGeneratingCard } from '../../cards/_card.type';
+import { cardsInfoCache } from '../../cards/_mapping';
 import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 import { reverseIfNeeded } from './card-dredged-parser';
@@ -49,6 +51,7 @@ export class CreateCardInDeckParser implements EventParser {
 
 		// Because we have to infer a lot of info here, we have a separate process. Not sure that it's the best
 		// way though
+		// TODO: move this to its own card
 		if (gameEvent.additionalData.creatorCardId?.startsWith(CardIds.ZilliaxDeluxe3000_TOY_330)) {
 			const initialZilliax = deck.otherZone.find((c) => c.entityId === gameEvent.additionalData.creatorEntityId);
 			if (!initialZilliax) {
@@ -80,10 +83,27 @@ export class CreateCardInDeckParser implements EventParser {
 			});
 		}
 
+		const cardImpl = cardsInfoCache[gameEvent.additionalData.creatorCardId];
+		const guessedCardId = hasGeneratingCard(cardImpl)
+			? cardImpl.guessCardId?.({
+					cardId: cardId,
+					deckState: deck,
+					opponentDeckState: opponentDeck,
+					gameState: currentState,
+					creatorCardId: gameEvent.additionalData.creatorCardId,
+					creatorEntityId: gameEvent.additionalData.creatorEntityId,
+					createdIndex: 0,
+					allCards: this.allCards.getService(),
+				})
+			: undefined;
+		const cardIdWithOracle = cardId || guessedCardId;
+
 		const hideKiljaedenPortalDeck =
 			gameEvent.additionalData.creatorCardId === CardIds.Kiljaeden_KiljaedensPortalEnchantment_GDB_145e;
 		const cardData =
-			!hideKiljaedenPortalDeck && cardId?.length ? getProcessedCard(cardId, entityId, deck, this.allCards) : null;
+			!hideKiljaedenPortalDeck && cardIdWithOracle?.length
+				? getProcessedCard(cardIdWithOracle, entityId, deck, this.allCards)
+				: null;
 		const positionFromBottom = buildPositionFromBottom(
 			deck,
 			gameEvent.additionalData.creatorCardId ?? gameEvent.additionalData.influencedByCardId,
@@ -123,7 +143,7 @@ export class CreateCardInDeckParser implements EventParser {
 		let { zone, card } = deck.findCard(entityId) ?? { zone: null, card: null };
 		// console.debug('[create-card-in-deck]', 'card added', card, zone, gameEvent, deck);
 		// Sometimes a CARD_REVEALED event occurs first, so we need to
-		const newCardId = hideKiljaedenPortalDeck ? undefined : (cardId ?? card?.cardId);
+		const newCardId = hideKiljaedenPortalDeck ? undefined : cardIdWithOracle || card?.cardId || undefined;
 		const newCardIdForAttrs = newCardId ?? '';
 		card = (card ?? DeckCard.create())
 			.update({

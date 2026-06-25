@@ -6,9 +6,15 @@
 import { CardIds } from '@firestone-hs/reference-data';
 import { and, effectiveCostLess, inDeck, minion, side } from '../card-highlight/selectors';
 
-import { Card, SelectorCard } from './_card.type';
+import { GeneratingCard, GuessCardIdInput, SelectorCard } from './_card.type';
 
-export const CommanderBeatrix: SelectorCard = {
+export const CommanderBeatrix: SelectorCard & GeneratingCard = {
 	cardIds: [CardIds.CommanderBeatrix_JAIL_397],
 	selector: (inputSide) => and(side(inputSide), inDeck, minion, effectiveCostLess(3)),
+	guessCardId: (input: GuessCardIdInput) => {
+		const result =
+			input.deckState.sideboards?.find((s) => s.keyCardId === CardIds.CommanderBeatrix_JAIL_397)?.cards?.[0] ??
+			null;
+		return result;
+	},
 };
