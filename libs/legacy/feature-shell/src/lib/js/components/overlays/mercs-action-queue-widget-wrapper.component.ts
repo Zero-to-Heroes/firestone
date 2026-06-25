@@ -7,6 +7,8 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
+import { SceneMode } from '@firestone-hs/reference-data';
+import { SceneService } from '@firestone/memory';
 import { isMercenariesPvE, isMercenariesPvP, MercenariesBattleStateFacadeService } from '@firestone/mercenaries/common';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
@@ -53,12 +55,13 @@ export class MercsActionQueueWidgetWrapperComponent extends AbstractWidgetWrappe
 		protected readonly renderer: Renderer2,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly mercenariesBattleStateFacade: MercenariesBattleStateFacadeService,
+		private readonly scene: SceneService,
 	) {
 		super(ow, el, prefs, renderer, cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.prefs, this.mercenariesBattleStateFacade);
+		await waitForReady(this.prefs, this.mercenariesBattleStateFacade, this.scene);
 
 		this.showWidget$ = combineLatest([
 			this.prefs.preferences$$.pipe(
@@ -73,8 +76,12 @@ export class MercsActionQueueWidgetWrapperComponent extends AbstractWidgetWrappe
 				),
 			),
 			this.mercenariesBattleStateFacade.store$$.pipe(this.mapData((state) => state?.gameMode)),
+			this.scene.currentScene$$.pipe(this.mapData((scene) => scene)),
 		]).pipe(
-			this.mapData(([{ displayFromPrefsPvE, displayFromPrefsPvP }, gameMode]) => {
+			this.mapData(([{ displayFromPrefsPvE, displayFromPrefsPvP }, gameMode, currentScene]) => {
+				if (currentScene !== SceneMode.GAMEPLAY) {
+					return false;
+				}
 				return (
 					(displayFromPrefsPvE && isMercenariesPvE(gameMode)) ||
 					(displayFromPrefsPvP && isMercenariesPvP(gameMode))

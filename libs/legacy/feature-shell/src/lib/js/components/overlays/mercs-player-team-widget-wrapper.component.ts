@@ -7,6 +7,8 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
+import { SceneMode } from '@firestone-hs/reference-data';
+import { SceneService } from '@firestone/memory';
 import { MercenariesBattleStateFacadeService } from '@firestone/mercenaries/common';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
@@ -57,12 +59,13 @@ export class MercsPlayerTeamWidgetWrapperComponent extends AbstractWidgetWrapper
 		protected readonly renderer: Renderer2,
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly mercenariesBattleStateFacade: MercenariesBattleStateFacadeService,
+		private readonly scene: SceneService,
 	) {
 		super(ow, el, prefs, renderer, cdr);
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.prefs, this.mercenariesBattleStateFacade);
+		await waitForReady(this.prefs, this.mercenariesBattleStateFacade, this.scene);
 
 		this.showWidget$ = combineLatest([
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.mercenariesEnablePlayerTeamWidget)),
@@ -70,8 +73,12 @@ export class MercsPlayerTeamWidgetWrapperComponent extends AbstractWidgetWrapper
 			this.mercenariesBattleStateFacade.store$$.pipe(
 				this.mapData((state) => !!state?.playerTeam?.mercenaries?.length),
 			),
+			this.scene.currentScene$$.pipe(this.mapData((scene) => scene)),
 		]).pipe(
-			this.mapData(([displayFromPrefs, playerClosedManually, hasTeamMercs]) => {
+			this.mapData(([displayFromPrefs, playerClosedManually, hasTeamMercs, currentScene]) => {
+				if (![SceneMode.GAMEPLAY].includes(currentScene)) {
+					return false;
+				}
 				return displayFromPrefs && !playerClosedManually && hasTeamMercs;
 			}),
 			this.handleReposition(),
