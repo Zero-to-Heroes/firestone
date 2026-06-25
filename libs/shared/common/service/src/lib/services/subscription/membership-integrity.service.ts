@@ -125,7 +125,7 @@ export class MembershipIntegrityService {
 				machineId: currentUser?.machineId,
 				appVersion: process.env['APP_VERSION'],
 				claimedPlanId: this.ads.currentPlan$$.value?.id,
-				planIds: [tebexPlan?.id, legacyPlan?.id],
+				planIds: [tebexPlan?.id, legacyPlan?.id, tebexPlan?.discordCode],
 				localPlanId: localPlan?.id,
 				serverHasPremium: false,
 				enablePremiumFeatures: this.ads.enablePremiumFeatures$$.value,
