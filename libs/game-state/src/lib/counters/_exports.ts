@@ -72,6 +72,7 @@ import { FriendlyMinionsDeadThisTurnCounterDefinitionV2 } from './impl/friendly-
 import { FrostSpellsCounterDefinitionV2 } from './impl/frost-spells';
 import { GalakrondCounterDefinitionV2 } from './impl/galakrond';
 import { GardensGraceCounterDefinitionV2 } from './impl/gardens-grace';
+import { GodfreyTheBetrayerCounterDefinitionV2 } from './impl/godfrey-the-betrayer';
 import { HeraldCounterDefinitionV2 } from './impl/herald';
 import { HeroDamageInstancesThisTurnCounterDefinitionV2 } from './impl/hero-damage-instances-this-turn';
 import { HeroPowerDamageCounterDefinitionV2 } from './impl/hero-power-damage';
@@ -238,6 +239,8 @@ export const getAllCounters: (
 	new CardsDiscardedCounterDefinitionV2(i18n, allCards),
 	new FriendlyAttacksCounterDefinitionV2(i18n, allCards),
 	new SpellweaversBrillianceCounterDefinitionV2(i18n, allCards),
+	new GodfreyTheBetrayerCounterDefinitionV2(i18n, allCards),
+
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n, allCards),
 	new BallerBuffCounterDefinitionV2(i18n, allCards),

@@ -194,7 +194,6 @@ export const startOfGameGlobalEffectCards = [
 	CardIds.PrinceRenathal_CORE_REV_018,
 	CardIds.DragonSoulShattered_CATA_EVENT_110,
 	CardIds.AyaLotusKingpin_JAIL_504,
-	CardIds.GodfreytheBetrayer_JAIL_509,
 	CardIds.ChefNethrek_JAIL_860,
 ];
 
@@ -304,6 +303,10 @@ export const globalEffectTriggers: { effectPrefab: string; cardId: string; force
 	{
 		effectPrefab: 'CATAFX_ArchmageKalec_Hand_AE_Super',
 		cardId: CardIds.ArchmageKalec_CATA_458,
+	},
+	{
+		effectPrefab: 'JAILFX_Godfrey_StartOfGame_FX',
+		cardId: CardIds.GodfreytheBetrayer_JAIL_509,
 	},
 	// {
 	// 	effectPrefab: 'EDRFX_AvianaElunesChosen_StartOfTurnComplete',

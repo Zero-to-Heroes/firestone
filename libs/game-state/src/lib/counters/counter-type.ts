@@ -6,6 +6,7 @@
 export type CounterType =
 	| '__fatigue'
 	| '_ceaselessExpanse'
+	| 'godfreyTheBetrayer'
 	| 'cardsDrawnThisTurn'
 	| 'outcast'
 	| 'bashana'
