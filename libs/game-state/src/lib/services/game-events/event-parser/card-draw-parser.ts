@@ -289,29 +289,40 @@ export class CardDrawParser implements EventParser {
 			handOrRemovedCard: card,
 		});
 		const deckRemovalOptions = { fallbackCreatorCardId };
-		let [newDeck, removedCard] = isCardInfoPublic
-			? this.helper.removeSingleCardFromZone(
-					previousDeck,
-					updatedCardId,
-					entityId,
-					deck.deckList.length === 0,
-					true,
-					{
-						cost: gameEvent.additionalData.cost,
-					},
-					false,
-					deckRemovalOptions,
-				)
-			: this.helper.removeSingleCardFromZone(
-					previousDeck,
-					null,
-					-1,
-					deck.deckList.length === 0,
-					true,
-					null,
-					false,
-					deckRemovalOptions,
-				);
+		// Opponent dredge-style draw (e.g. Cultist Map second pick): deck row may already be identified
+		// (Psychic Conjurer, etc.) with positionFromTop + entityId, but drawnByCardId is a tutor so we skip
+		// useTopOfDeckToIdentifyCard and isCardInfoPublic stays false — still remove that exact deck row by entityId.
+		const removeOpponentMarkedTopByEntityId =
+			!isCardInfoPublic &&
+			!isPlayer &&
+			entityId != null &&
+			previousDeck.some((c) => c.positionFromTop != null && c.entityId === entityId);
+		let [newDeck, removedCard] =
+			isCardInfoPublic || removeOpponentMarkedTopByEntityId
+				? this.helper.removeSingleCardFromZone(
+						previousDeck,
+						isCardInfoPublic ? updatedCardId : null,
+						entityId,
+						deck.deckList.length === 0,
+						true,
+						isCardInfoPublic
+							? {
+									cost: gameEvent.additionalData.cost,
+								}
+							: null,
+						false,
+						deckRemovalOptions,
+					)
+				: this.helper.removeSingleCardFromZone(
+						previousDeck,
+						null,
+						-1,
+						deck.deckList.length === 0,
+						true,
+						null,
+						false,
+						deckRemovalOptions,
+					);
 		console.debug(
 			'[card-draw] newDeck 0',
 			newDeck,
@@ -326,8 +337,15 @@ export class CardDrawParser implements EventParser {
 		if (drawFromTop && !removedCard) {
 			const topCard = newDeck.filter((c) => c.positionFromTop != null).sort((c) => c.positionFromTop!)[0];
 			const isTopCardUnknown = !topCard?.cardId?.length;
-			console.debug('[card-draw] removing top card from deck?', isTopCardUnknown, topCard, newDeck);
-			if (!!topCard && isTopCardUnknown) {
+			const topCardMatchesDrawEntity = entityId != null && topCard?.entityId === entityId;
+			console.debug(
+				'[card-draw] removing top card from deck?',
+				isTopCardUnknown,
+				topCardMatchesDrawEntity,
+				topCard,
+				newDeck,
+			);
+			if (!!topCard && (isTopCardUnknown || topCardMatchesDrawEntity)) {
 				console.debug('[card-draw] removing top card from deck', topCard, newDeck);
 				newDeck = newDeck.filter((c) => c.positionFromTop !== topCard.positionFromTop);
 				console.debug('[card-draw] after removing top card from deck', topCard, newDeck);

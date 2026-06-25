@@ -242,6 +242,8 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	'dredge-info-leak': 'dredge-info-leak/dredge-info-leak.log',
 	'cultist-map': 'cultist-map/cultist-map.log',
 	'cmap-second-draw': 'cmap-second-draw/cmap-second-draw.log',
+	'epoch-dredge': 'epoch-dredge/epoch-dredge.log',
+	'deja-vu-cultist': 'deja-vu-cultist/deja-vu-cultist.log',
 	meadowstrider: 'meadowstrider/meadowstrider.log',
 	qonzu: 'qonzu-top-deck/qonzu-top-deck.log',
 	'shatter-reveal': 'shatter-reveal/shatter-reveal.log',
