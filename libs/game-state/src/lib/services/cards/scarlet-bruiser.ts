@@ -5,7 +5,7 @@
  */
 import { CardClass, CardIds } from '@firestone-hs/reference-data';
 import { and, inDeck, neutral, side } from '../card-highlight/selectors';
-import { TempCardIds } from '@firestone/shared/framework/core';
+
 import { GuessedInfo } from '../../models/deck-card';
 import { hasCorrectClass } from '../../related-cards/dynamic-pools';
 import {
@@ -20,12 +20,12 @@ import { filterCards } from './utils';
 const paladinCardFilter = (c: Parameters<typeof hasCorrectClass>[0]) => hasCorrectClass(c, CardClass.PALADIN);
 
 export const ScarletBruiser: GeneratingCard & StaticGeneratingCard & SelectorCard = {
-	cardIds: [TempCardIds.ScarletBruiser_JAIL_328 as unknown as CardIds],
+	cardIds: [CardIds.ScarletBruiser_JAIL_328],
 	publicCreator: true,
 	selector: (inputSide) => and(side(inputSide), inDeck, neutral),
 	dynamicPool: (input: StaticGeneratingCardInput) =>
 		filterCards(
-			TempCardIds.ScarletBruiser_JAIL_328 as unknown as CardIds,
+			CardIds.ScarletBruiser_JAIL_328,
 			input.allCards,
 			paladinCardFilter,
 			input.inputOptions,
@@ -33,7 +33,7 @@ export const ScarletBruiser: GeneratingCard & StaticGeneratingCard & SelectorCar
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => ({
 		cardClasses: [CardClass.PALADIN],
 		possibleCards: filterCards(
-			TempCardIds.ScarletBruiser_JAIL_328 as unknown as CardIds,
+			CardIds.ScarletBruiser_JAIL_328,
 			input.allCards,
 			paladinCardFilter,
 			input.options,

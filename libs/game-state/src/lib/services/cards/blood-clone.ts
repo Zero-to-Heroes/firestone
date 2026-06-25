@@ -4,19 +4,19 @@
  * Discover a 5-Cost minion. Spend 5 Corpses to summon a copy of it.
  */
 import { CardIds, CardType } from '@firestone-hs/reference-data';
-import { TempCardIds } from '@firestone/shared/framework/core';
+
 import { GuessedInfo } from '../../models/deck-card';
 import { canBeDiscoveredByClass, hasCorrectType, hasCost } from '../../related-cards/dynamic-pools';
 import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
 
 export const BloodClone: GeneratingCard & StaticGeneratingCard = {
-	cardIds: [TempCardIds.BloodClone_JAIL_451 as unknown as CardIds],
+	cardIds: [CardIds.BloodClone_JAIL_451],
 	publicCreator: true,
 	summonInPlay: true,
 	dynamicPool: (input: StaticGeneratingCardInput) =>
 		filterCards(
-			TempCardIds.BloodClone_JAIL_451 as unknown as CardIds,
+			CardIds.BloodClone_JAIL_451,
 			input.allCards,
 			(c) =>
 				hasCorrectType(c, CardType.MINION) &&
@@ -27,7 +27,7 @@ export const BloodClone: GeneratingCard & StaticGeneratingCard = {
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => ({
 		cardType: CardType.MINION,
 		possibleCards: filterCards(
-			TempCardIds.BloodClone_JAIL_451 as unknown as CardIds,
+			CardIds.BloodClone_JAIL_451,
 			input.allCards,
 			(c) =>
 				hasCorrectType(c, CardType.MINION) &&

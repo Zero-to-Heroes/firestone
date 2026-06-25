@@ -5,10 +5,10 @@
  */
 import { CardIds } from '@firestone-hs/reference-data';
 import { and, effectiveCostLess, inDeck, minion, side } from '../card-highlight/selectors';
-import { TempCardIds } from '@firestone/shared/framework/core';
+
 import { Card, SelectorCard } from './_card.type';
 
 export const CommanderBeatrix: SelectorCard = {
-	cardIds: [TempCardIds.CommanderBeatrix_JAIL_397 as unknown as CardIds],
+	cardIds: [CardIds.CommanderBeatrix_JAIL_397],
 	selector: (inputSide) => and(side(inputSide), inDeck, minion, effectiveCostLess(3)),
 };

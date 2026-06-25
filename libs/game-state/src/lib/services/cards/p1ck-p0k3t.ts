@@ -5,10 +5,10 @@
  */
 import { CardIds } from '@firestone-hs/reference-data';
 import { and, inDeck, side } from '../card-highlight/selectors';
-import { TempCardIds } from '@firestone/shared/framework/core';
+
 import { Card, SelectorCard } from './_card.type';
 
 export const P1CKP0K3T: SelectorCard = {
-	cardIds: [TempCardIds.P1CKP0K3T_JAIL_456 as unknown as CardIds],
+	cardIds: [CardIds.P1CKP0K3T_JAIL_456],
 	selector: (inputSide) => and(side(inputSide), inDeck),
 };

@@ -5,7 +5,7 @@
  */
 import { CardIds, CardType } from '@firestone-hs/reference-data';
 import { and, effectiveCostLess, inDeck, minion, side } from '../card-highlight/selectors';
-import { TempCardIds } from '@firestone/shared/framework/core';
+
 import { GuessedInfo } from '../../models/deck-card';
 import { hasCorrectType } from '../../related-cards/dynamic-pools';
 import { GeneratingCard, SelectorCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
@@ -13,7 +13,7 @@ import { GeneratingCard, SelectorCard, GuessInfoInput, StaticGeneratingCard, Sta
 const maxCost = 2;
 
 export const ScarletRecruiter: GeneratingCard & StaticGeneratingCard & SelectorCard = {
-	cardIds: [TempCardIds.ScarletRecruiter_JAIL_516 as unknown as CardIds],
+	cardIds: [CardIds.ScarletRecruiter_JAIL_516],
 	publicCreator: true,
 	summonInPlay: true,
 	dynamicPool: (input: StaticGeneratingCardInput) => {

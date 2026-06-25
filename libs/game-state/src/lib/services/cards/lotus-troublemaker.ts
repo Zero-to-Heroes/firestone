@@ -5,10 +5,10 @@
  */
 import { CardIds } from '@firestone-hs/reference-data';
 import { and, effectiveCostEqual, inDeck, inHand, or, side } from '../card-highlight/selectors';
-import { TempCardIds } from '@firestone/shared/framework/core';
+
 import { SelectorCard } from './_card.type';
 
 export const LotusTroublemaker: SelectorCard = {
-	cardIds: [TempCardIds.LotusTroublemaker_JAIL_470 as unknown as CardIds],
+	cardIds: [CardIds.LotusTroublemaker_JAIL_470],
 	selector: (inputSide) => and(side(inputSide), or(inHand, inDeck), effectiveCostEqual(2)),
 };

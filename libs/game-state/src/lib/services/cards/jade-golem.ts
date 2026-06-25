@@ -4,14 +4,14 @@
  * Art variations of the same token — no rules text.
  */
 import { CardIds } from '@firestone-hs/reference-data';
-import { TempCardIds } from '@firestone/shared/framework/core';
+
 import { Card } from './_card.type';
 
 export const JadeGolem: Card = {
 	cardIds: [
-		TempCardIds.JadeGolem_JAIL_504tt01 as unknown as CardIds,
-		TempCardIds.JadeGolem_JAIL_504tt04 as unknown as CardIds,
-		TempCardIds.JadeGolem_JAIL_504tt07 as unknown as CardIds,
-		TempCardIds.JadeGolem_JAIL_504tt20 as unknown as CardIds,
+		CardIds.JadeGolem_JAIL_504tt01,
+		CardIds.JadeGolem_JAIL_504tt04,
+		CardIds.JadeGolem_JAIL_504tt07,
+		CardIds.JadeGolem_JAIL_504tt20,
 	],
 };

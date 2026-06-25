@@ -4,18 +4,18 @@
  * Battlecry: Discover a spell that costs (5) or more. It casts twice when played.
  */
 import { CardIds, CardType } from '@firestone-hs/reference-data';
-import { TempCardIds } from '@firestone/shared/framework/core';
+
 import { GuessedInfo } from '../../models/deck-card';
 import { canBeDiscoveredByClass, hasCorrectType, hasCost } from '../../related-cards/dynamic-pools';
 import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
 
 export const BreakoutArchitect: GeneratingCard & StaticGeneratingCard = {
-	cardIds: [TempCardIds.BreakoutArchitect_JAIL_123 as unknown as CardIds],
+	cardIds: [CardIds.BreakoutArchitect_JAIL_123],
 	publicCreator: true,
 	dynamicPool: (input: StaticGeneratingCardInput) =>
 		filterCards(
-			TempCardIds.BreakoutArchitect_JAIL_123 as unknown as CardIds,
+			CardIds.BreakoutArchitect_JAIL_123,
 			input.allCards,
 			(c) =>
 				hasCorrectType(c, CardType.SPELL) &&
@@ -27,7 +27,7 @@ export const BreakoutArchitect: GeneratingCard & StaticGeneratingCard = {
 		cardType: CardType.SPELL,
 		cost: { cost: 5, comparison: '>=' },
 		possibleCards: filterCards(
-			TempCardIds.BreakoutArchitect_JAIL_123 as unknown as CardIds,
+			CardIds.BreakoutArchitect_JAIL_123,
 			input.allCards,
 			(c) =>
 				hasCorrectType(c, CardType.SPELL) &&

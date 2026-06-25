@@ -5,10 +5,10 @@
  */
 import { CardIds } from '@firestone-hs/reference-data';
 import { and, inPlay, minion, side } from '../card-highlight/selectors';
-import { TempCardIds } from '@firestone/shared/framework/core';
+
 import { Card, SelectorCard } from './_card.type';
 
 export const DisguisedWatchman: SelectorCard = {
-	cardIds: [TempCardIds.DisguisedWatchman_JAIL_455 as unknown as CardIds],
+	cardIds: [CardIds.DisguisedWatchman_JAIL_455],
 	selector: (inputSide) => and(side(inputSide), inPlay, minion),
 };

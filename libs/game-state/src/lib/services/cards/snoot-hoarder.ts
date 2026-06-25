@@ -4,9 +4,9 @@
  * Deathrattle: Draw a card.
  */
 import { CardIds } from '@firestone-hs/reference-data';
-import { TempCardIds } from '@firestone/shared/framework/core';
+
 import { Card } from './_card.type';
 
 export const SnootHoarder: Card = {
-	cardIds: [TempCardIds.SnootHoarder_JAIL_877t as unknown as CardIds],
+	cardIds: [CardIds.SnootHoarder_JAIL_877t],
 };

@@ -1,5 +1,5 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { CardsFacadeService, ILocalizationService, TempCardIds } from '@firestone/shared/framework/core';
+import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { GameState } from '../../models/game-state';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
 import { CounterType } from '../counter-type';
@@ -29,7 +29,7 @@ export class CardsPlayedThisTurnCounterDefinitionV2 extends CounterDefinitionV2<
 		CardIds.SinstoneGraveyard_CORE_REV_750,
 		// Everburning Phoenix: Costs (1) less for each card you've played this turn. Deathrattle: At end of turn, get another Phoenix.
 		CardIds.EverburningPhoenix_FIR_919,
-		TempCardIds.DefiasWannabe_JAIL_909 as unknown as CardIds,
+		CardIds.DefiasWannabe_JAIL_909,
 	];
 
 	readonly player = {

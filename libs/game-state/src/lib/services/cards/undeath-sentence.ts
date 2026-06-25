@@ -4,12 +4,12 @@
  * Trigger the Deathrattle of a random friendly minion that died this game.
  */
 import { CardIds, CardType, GameTag, hasMechanic } from '@firestone-hs/reference-data';
-import { TempCardIds } from '@firestone/shared/framework/core';
+
 import { hasCorrectType } from '../../related-cards/dynamic-pools';
 import { Card, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 
 export const UndeathSentence: Card & StaticGeneratingCard = {
-	cardIds: [TempCardIds.UndeathSentence_JAIL_940 as unknown as CardIds],
+	cardIds: [CardIds.UndeathSentence_JAIL_940],
 	dynamicPool: (input: StaticGeneratingCardInput) => {
 		return input.inputOptions.deckState.minionsDeadThisMatch
 			.filter((c) => {

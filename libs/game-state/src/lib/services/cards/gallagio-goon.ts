@@ -5,10 +5,10 @@
  */
 import { CardIds } from '@firestone-hs/reference-data';
 import { and, battlecry, inDeck, inHand, minion, or, side } from '../card-highlight/selectors';
-import { TempCardIds } from '@firestone/shared/framework/core';
+
 import { Card, SelectorCard } from './_card.type';
 
 export const GallagioGoon: Card & SelectorCard = {
-	cardIds: [TempCardIds.GallagioGoon_JAIL_802 as unknown as CardIds],
+	cardIds: [CardIds.GallagioGoon_JAIL_802],
 	selector: (inputSide) => and(side(inputSide), or(inHand, inDeck), battlecry, minion),
 };

@@ -4,11 +4,11 @@
  * Start of Game: Overdrawn cards return to your hand when you have space. They cost (1) less.
  */
 import { CardIds } from '@firestone-hs/reference-data';
-import { TempCardIds } from '@firestone/shared/framework/core';
+
 import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 
 export const GodfreytheBetrayer: StaticGeneratingCard & GeneratingCard = {
-	cardIds: [TempCardIds.GodfreytheBetrayer_JAIL_509 as unknown as CardIds],
+	cardIds: [CardIds.GodfreytheBetrayer_JAIL_509],
 	publicCreator: true,
 	dynamicPool: (input: StaticGeneratingCardInput) => {
 		const overdrawnCards = input.inputOptions.deckState.burnedCards;

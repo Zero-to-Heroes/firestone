@@ -4,7 +4,7 @@
  * Get two random 8-Cost minions. They cost (1) less for each card you played for 2 Mana this game.
  */
 import { CardIds, CardType, ReferenceCard } from '@firestone-hs/reference-data';
-import { TempCardIds } from '@firestone/shared/framework/core';
+
 import { GuessedInfo } from '../../models/deck-card';
 import { hasCorrectType, hasCost } from '../../related-cards/dynamic-pools';
 import { and, effectiveCostEqual, inDeck, inHand, or, side } from '../card-highlight/selectors';
@@ -20,11 +20,11 @@ import { filterCards } from './utils';
 const minionFilter = (c: ReferenceCard) => hasCorrectType(c, CardType.MINION) && hasCost(c, '==', 8);
 
 export const JadeGuardians: GeneratingCard & StaticGeneratingCard & SelectorCard = {
-	cardIds: [TempCardIds.JadeGuardians_JAIL_474 as unknown as CardIds],
+	cardIds: [CardIds.JadeGuardians_JAIL_474],
 	publicCreator: true,
 	dynamicPool: (input: StaticGeneratingCardInput) =>
 		filterCards(
-			TempCardIds.JadeGuardians_JAIL_474 as unknown as CardIds,
+			CardIds.JadeGuardians_JAIL_474,
 			input.allCards,
 			minionFilter,
 			input.inputOptions,
@@ -33,7 +33,7 @@ export const JadeGuardians: GeneratingCard & StaticGeneratingCard & SelectorCard
 		cardType: CardType.MINION,
 		cost: { cost: 8, comparison: '==' },
 		possibleCards: filterCards(
-			TempCardIds.JadeGuardians_JAIL_474 as unknown as CardIds,
+			CardIds.JadeGuardians_JAIL_474,
 			input.allCards,
 			minionFilter,
 			input.options,

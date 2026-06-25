@@ -5,10 +5,10 @@
  */
 import { CardIds } from '@firestone-hs/reference-data';
 import { and, inDeck, notInInitialDeck, side, spell } from '../card-highlight/selectors';
-import { TempCardIds } from '@firestone/shared/framework/core';
+
 import { Card, SelectorCard } from './_card.type';
 
 export const SmuggledShovel: Card & SelectorCard = {
-	cardIds: [TempCardIds.SmuggledShovel_JAIL_380 as unknown as CardIds],
+	cardIds: [CardIds.SmuggledShovel_JAIL_380],
 	selector: (inputSide) => and(side(inputSide), inDeck, spell, notInInitialDeck),
 };

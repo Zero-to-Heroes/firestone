@@ -3,3 +3,10 @@
 - support for non-premium users
     - ads
     - link other account
+
+- Lists for new cards:
+    - Shaman: AAECAaoIDKufBMODB/SqB9C/B4fHB/bJB4LUB5vUB4zZB9DbB4rdB9/lBwnTngbt5ga1wAfJwAfJ2wej3Qfa3wfI5Qfm/QcAAA==
+    - DH: AAECAea5AwjDgwe0lweKqgeSqgeTqgensQeD2geO2gcL4fgFtpcHobEHv7EHlb8HxN0Hxt0Hx90HyN0HteEHt+EHAAA=
+    - Warlock: AAECAf0GBKutB8eyB6nJB63ZBw2OgwePhAeEmQftpweirQeqrQfgvge21wfd1wew2QeN3Afa4ge16AcAAA==
+    - Pally: AAECAZ8FCOjFB5bUB4zZB6HcB4zdB5jdB5vdB53dBwuU9QXkxQflxQfmxQfnxQei2AeZ3Qe83QfX4gfD4we16AcAAQGa3wed3QcAAA==
+    - Warrior: AAECAQcG1JcH5KcH69YHstgHodwHjN0HDJ+fBI2gBJ2ZB56ZB9WmB57CB6LYB47ZB4XdB4bdB5ziB7XoBwAA

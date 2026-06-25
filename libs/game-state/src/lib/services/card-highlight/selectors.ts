@@ -13,7 +13,7 @@ import {
 	SetId,
 	SpellSchool,
 } from '@firestone-hs/reference-data';
-import { HighlightSide, TempCardIds } from '@firestone/shared/framework/core';
+import { HighlightSide } from '@firestone/shared/framework/core';
 import { EXTENDED_STARSHIP_CARDS } from '../../counters/impl/extended-starship-cards';
 import { isCardCreated } from '../../models/deck-card';
 import { getCost, getProcessedCard } from '../card-utils';
@@ -489,9 +489,9 @@ export const weapon = or(cardType(CardType.WEAPON), givesWeapon);
 export const coin = (input: SelectorInput): boolean =>
 	input.card?.isCoin ||
 	cardIs(
-		TempCardIds.JadeCoin_JAIL_504t as unknown as CardIds,
-		TempCardIds.GrimyCoin_JAIL_504t2 as unknown as CardIds,
-		TempCardIds.KabalCoin_JAIL_504t3 as unknown as CardIds,
+		CardIds.JadeCoin_JAIL_504t,
+		CardIds.GrimyCoin_JAIL_504t2,
+		CardIds.KabalCoin_JAIL_504t3,
 	)(input) ||
 	false;
 export const generatesCoin = cardIs();

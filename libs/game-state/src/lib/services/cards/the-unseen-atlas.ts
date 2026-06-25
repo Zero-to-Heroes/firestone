@@ -5,10 +5,10 @@
  */
 import { CardIds } from '@firestone-hs/reference-data';
 import { and, inHand, side } from '../card-highlight/selectors';
-import { TempCardIds } from '@firestone/shared/framework/core';
+
 import { Card, SelectorCard } from './_card.type';
 
 export const TheUnseenAtlas: SelectorCard = {
-	cardIds: [TempCardIds.TheUnseenAtlas_JAIL_514 as unknown as CardIds],
+	cardIds: [CardIds.TheUnseenAtlas_JAIL_514],
 	selector: (inputSide) => and(side(inputSide), inHand),
 };

@@ -5,10 +5,10 @@
  */
 import { CardIds } from '@firestone-hs/reference-data';
 import { and, inDeck, side } from '../card-highlight/selectors';
-import { TempCardIds } from '@firestone/shared/framework/core';
+
 import { Card, SelectorCard } from './_card.type';
 
 export const CrowdControl: SelectorCard = {
-	cardIds: [TempCardIds.CrowdControl_JAIL_307 as unknown as CardIds],
+	cardIds: [CardIds.CrowdControl_JAIL_307],
 	selector: (inputSide) => and(side(inputSide), inDeck),
 };

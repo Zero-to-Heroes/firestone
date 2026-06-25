@@ -5,10 +5,10 @@
  */
 import { CardIds } from '@firestone-hs/reference-data';
 import { and, deathrattle, inDeck, inHand, inPlay, minion, or, side } from '../card-highlight/selectors';
-import { TempCardIds } from '@firestone/shared/framework/core';
+
 import { Card, SelectorCard } from './_card.type';
 
 export const SewerSwimmer: Card & SelectorCard = {
-	cardIds: [TempCardIds.SewerSwimmer_JAIL_395 as unknown as CardIds],
+	cardIds: [CardIds.SewerSwimmer_JAIL_395],
 	selector: (inputSide) => and(side(inputSide), or(inHand, inDeck, inPlay), deathrattle, minion),
 };

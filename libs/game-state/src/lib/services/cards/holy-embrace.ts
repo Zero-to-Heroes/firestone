@@ -4,11 +4,11 @@
  * Restore 4 Health. Get a 'Dark Embrace' that deals 4 damage.
  */
 import { CardIds } from '@firestone-hs/reference-data';
-import { TempCardIds } from '@firestone/shared/framework/core';
+
 import { GeneratingCard, GuessCardIdInput } from './_card.type';
 
 export const HolyEmbrace: GeneratingCard = {
-	cardIds: [TempCardIds.HolyEmbrace_JAIL_941 as unknown as CardIds],
+	cardIds: [CardIds.HolyEmbrace_JAIL_941],
 	publicCreator: true,
-	guessCardId: (_input: GuessCardIdInput) => TempCardIds.DarkEmbrace_JAIL_941t as unknown as CardIds,
+	guessCardId: (_input: GuessCardIdInput) => CardIds.DarkEmbrace_JAIL_941t,
 };

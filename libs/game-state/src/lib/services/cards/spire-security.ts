@@ -5,10 +5,10 @@
  */
 import { CardIds } from '@firestone-hs/reference-data';
 import { and, effectiveCostMore, inDeck, side, spell } from '../card-highlight/selectors';
-import { TempCardIds } from '@firestone/shared/framework/core';
+
 import { Card, SelectorCard } from './_card.type';
 
 export const SpireSecurity: Card & SelectorCard = {
-	cardIds: [TempCardIds.SpireSecurity_JAIL_379 as unknown as CardIds],
+	cardIds: [CardIds.SpireSecurity_JAIL_379],
 	selector: (inputSide) => and(side(inputSide), inDeck, spell, effectiveCostMore(4)),
 };

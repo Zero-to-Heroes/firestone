@@ -4,13 +4,13 @@
  * Battlecry: Summon a 2-Cost Taunt minion. If you have 10 or more Mana, summon a 6-Cost instead.
  */
 import { CardIds, CardType, GameTag, hasMechanic } from '@firestone-hs/reference-data';
-import { TempCardIds } from '@firestone/shared/framework/core';
+
 import { hasCorrectType, hasCost } from '../../related-cards/dynamic-pools';
 import { StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
 
 export const SpitefulChef: StaticGeneratingCard = {
-	cardIds: [TempCardIds.SpitefulChef_JAIL_507 as unknown as CardIds],
+	cardIds: [CardIds.SpitefulChef_JAIL_507],
 	publicCreator: true,
 	summonInPlay: true,
 	dynamicPool: (input: StaticGeneratingCardInput) => {

@@ -1,6 +1,6 @@
 import { BoosterType, CardClass, CardIds, GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { CollectionCardType, PackResult } from '@firestone-hs/user-packs';
-import { CardsFacadeService, ILocalizationService, TempCardIds } from '@firestone/shared/framework/core';
+import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { bwonsamdiBoonsEnchantments } from '../related-cards/dynamic-pools';
 import { tutors } from './cards/card-tutors';
 import { giftCreators } from './cards/gift-creators';
@@ -193,9 +193,9 @@ export const startOfGameGlobalEffectCards = [
 	CardIds.PrinceRenathal,
 	CardIds.PrinceRenathal_CORE_REV_018,
 	CardIds.DragonSoulShattered_CATA_EVENT_110,
-	TempCardIds.AyaLotusKingpin_JAIL_504,
-	TempCardIds.GodfreytheBetrayer_JAIL_509,
-	TempCardIds.ChefNethrek_JAIL_860,
+	CardIds.AyaLotusKingpin_JAIL_504,
+	CardIds.GodfreytheBetrayer_JAIL_509,
+	CardIds.ChefNethrek_JAIL_860,
 ];
 
 export const globalEffectCardsPlayed = [

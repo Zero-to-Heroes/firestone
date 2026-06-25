@@ -5,10 +5,10 @@
  */
 import { CardIds } from '@firestone-hs/reference-data';
 import { and, inDeck, side } from '../card-highlight/selectors';
-import { TempCardIds } from '@firestone/shared/framework/core';
+
 import { Card, SelectorCard } from './_card.type';
 
 export const ScrappyDefender: SelectorCard = {
-	cardIds: [TempCardIds.ScrappyDefender_JAIL_311 as unknown as CardIds],
+	cardIds: [CardIds.ScrappyDefender_JAIL_311],
 	selector: (inputSide) => and(side(inputSide), inDeck),
 };

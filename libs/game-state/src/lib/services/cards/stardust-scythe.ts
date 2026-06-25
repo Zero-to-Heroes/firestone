@@ -4,11 +4,11 @@
  * After your hero attacks, get a Void Soul.
  */
 import { CardIds } from '@firestone-hs/reference-data';
-import { TempCardIds } from '@firestone/shared/framework/core';
+
 import { GeneratingCard, GuessCardIdInput } from './_card.type';
 
 export const StardustScythe: GeneratingCard = {
-	cardIds: [TempCardIds.StardustScythe_JAIL_730 as unknown as CardIds],
+	cardIds: [CardIds.StardustScythe_JAIL_730],
 	publicCreator: true,
-	guessCardId: (_input: GuessCardIdInput) => TempCardIds.VoidSoul_JAIL_732 as unknown as CardIds,
+	guessCardId: (_input: GuessCardIdInput) => CardIds.VoidSoul_JAIL_732,
 };

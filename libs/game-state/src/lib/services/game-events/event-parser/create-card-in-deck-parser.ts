@@ -1,6 +1,6 @@
 import { CardIds, ReferenceCard } from '@firestone-hs/reference-data';
 import { ArenaRefService } from '@firestone/arena/data-access';
-import { CardsFacadeService, ILocalizationService, TempCardIds } from '@firestone/shared/framework/core';
+import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { DeckCard } from '../../../models/deck-card';
 import { DeckState } from '../../../models/deck-state';
 import { GameState } from '../../../models/game-state';
@@ -287,7 +287,7 @@ export const buildPositionFromBottom = (deck: DeckState, creatorCardId: string):
 		case CardIds.Meadowstrider_EDR_978:
 		case CardIds.KaldoreiCultivator_TIME_730:
 		case CardIds.Waveshaping_TIME_701: // Not sure that this is how it will work
-		case TempCardIds.ImpGangStooge_JAIL_399: // Not sure that this is how it will work
+		case CardIds.ImpGangStooge_JAIL_399: // Not sure that this is how it will work
 			return DeckCard.deckIndexFromBottom++;
 	}
 	return undefined;

@@ -4,9 +4,9 @@
  * Start of Game: If your deck only has cards that cost (3) or less, set your Mana to 10 after five turns!
  */
 import { CardIds } from '@firestone-hs/reference-data';
-import { TempCardIds } from '@firestone/shared/framework/core';
+
 import { Card } from './_card.type';
 
 export const ChefNethrek: Card = {
-	cardIds: [TempCardIds.ChefNethrek_JAIL_860 as unknown as CardIds],
+	cardIds: [CardIds.ChefNethrek_JAIL_860],
 };

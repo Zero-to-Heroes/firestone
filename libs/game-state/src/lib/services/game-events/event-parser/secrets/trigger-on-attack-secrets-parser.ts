@@ -1,5 +1,5 @@
 import { CardIds, CardType, GameTag } from '@firestone-hs/reference-data';
-import { CardsFacadeService, TempCardIds } from '@firestone/shared/framework/core';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BoardSecret, DeckState } from '../../../../models/_barrel';
 import { GameState } from '../../../../models/game-state';
 import { GameEvent } from '../../game-event';
@@ -22,7 +22,7 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 		CardIds.ExplosiveTrapLegacy_EX1_610,
 		CardIds.ExplosiveTrapCore,
 		CardIds.ExplosiveTrapVanilla,
-		TempCardIds.MysticMisdirection_JAIL_315 as unknown as CardIds,
+		CardIds.MysticMisdirection_JAIL_315,
 		CardIds.BeaststalkerTavish_ImprovedFreezingTrapToken,
 		CardIds.FreezingTrapLegacy,
 		CardIds.FreezingTrapCore,
@@ -184,7 +184,7 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 			secretsWeCantRuleOut.push(CardIds.ExplosiveTrapLegacy_EX1_610);
 			secretsWeCantRuleOut.push(CardIds.ExplosiveTrapCore);
 			secretsWeCantRuleOut.push(CardIds.ExplosiveTrapVanilla);
-			secretsWeCantRuleOut.push(TempCardIds.MysticMisdirection_JAIL_315 as unknown as CardIds);
+			secretsWeCantRuleOut.push(CardIds.MysticMisdirection_JAIL_315);
 			secretsWeCantRuleOut.push(CardIds.WanderingMonsterCore);
 			secretsWeCantRuleOut.push(CardIds.WanderingMonster);
 			secretsWeCantRuleOut.push(CardIds.FlameWard);

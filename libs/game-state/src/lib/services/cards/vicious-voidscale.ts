@@ -4,11 +4,11 @@
  * Taunt. Deathrattle: Get a Void Soul.
  */
 import { CardIds } from '@firestone-hs/reference-data';
-import { TempCardIds } from '@firestone/shared/framework/core';
+
 import { GeneratingCard, GuessCardIdInput } from './_card.type';
 
 export const ViciousVoidscale: GeneratingCard = {
-	cardIds: [TempCardIds.ViciousVoidscale_JAIL_733 as unknown as CardIds],
+	cardIds: [CardIds.ViciousVoidscale_JAIL_733],
 	publicCreator: true,
-	guessCardId: (_input: GuessCardIdInput) => TempCardIds.VoidSoul_JAIL_732 as unknown as CardIds,
+	guessCardId: (_input: GuessCardIdInput) => CardIds.VoidSoul_JAIL_732,
 };

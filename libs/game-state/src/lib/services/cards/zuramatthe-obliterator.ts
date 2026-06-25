@@ -4,11 +4,11 @@
  * At the end of your turn, play a card discarded by Zuramat's Prison.
  */
 import { CardIds } from '@firestone-hs/reference-data';
-import { TempCardIds } from '@firestone/shared/framework/core';
+
 import { Card, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 
 export const ZuramattheObliterator: Card & StaticGeneratingCard = {
-	cardIds: [TempCardIds.ZuramattheObliterator_JAIL_887t2 as unknown as CardIds],
+	cardIds: [CardIds.ZuramattheObliterator_JAIL_887t2],
 	dynamicPool: (input: StaticGeneratingCardInput) => {
 		const prisonEntityId = input.inputOptions.deckState.findCard(input.entityId)?.card?.creatorEntityId;
 		// Find all cards discarded by the prison

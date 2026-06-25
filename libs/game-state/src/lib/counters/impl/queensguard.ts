@@ -1,7 +1,7 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { CardIds, CardType } from '@firestone-hs/reference-data';
-import { CardsFacadeService, ILocalizationService, TempCardIds } from '@firestone/shared/framework/core';
+import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { GameState } from '../../models/game-state';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
 import { CounterType } from '../counter-type';
@@ -16,7 +16,7 @@ export class QueensguardCounterDefinitionV2 extends CounterDefinitionV2<number> 
 		CardIds.PriestessValishj,
 		// Mana Cyclone: Battlecry: For each spell you've cast this turn, add a random Mage spell to your hand.
 		CardIds.ManaCyclone,
-		TempCardIds.CodeViolet_JAIL_735 as unknown as CardIds,
+		CardIds.CodeViolet_JAIL_735,
 	];
 
 	readonly player = {

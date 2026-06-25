@@ -4,11 +4,11 @@
  * Deal 3 damage to a minion. If it dies, get a Void Soul.
  */
 import { CardIds } from '@firestone-hs/reference-data';
-import { TempCardIds } from '@firestone/shared/framework/core';
+
 import { GeneratingCard, GuessCardIdInput } from './_card.type';
 
 export const VoidBlast: GeneratingCard = {
-	cardIds: [TempCardIds.VoidBlast_JAIL_891 as unknown as CardIds],
+	cardIds: [CardIds.VoidBlast_JAIL_891],
 	publicCreator: true,
-	guessCardId: (_input: GuessCardIdInput) => TempCardIds.VoidSoul_JAIL_732 as unknown as CardIds,
+	guessCardId: (_input: GuessCardIdInput) => CardIds.VoidSoul_JAIL_732,
 };

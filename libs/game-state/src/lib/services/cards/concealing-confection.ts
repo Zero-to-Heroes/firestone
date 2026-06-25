@@ -4,7 +4,7 @@
  * Deathrattle: Get a random weapon.
  */
 import { CardIds, CardType, ReferenceCard } from '@firestone-hs/reference-data';
-import { TempCardIds } from '@firestone/shared/framework/core';
+
 import { GuessedInfo } from '../../models/deck-card';
 import { hasCorrectType } from '../../related-cards/dynamic-pools';
 import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
@@ -13,11 +13,11 @@ import { filterCards } from './utils';
 const weaponFilter = (c: ReferenceCard) => hasCorrectType(c, CardType.WEAPON);
 
 export const ConcealingConfection: GeneratingCard & StaticGeneratingCard = {
-	cardIds: [TempCardIds.ConcealingConfection_JAIL_460 as unknown as CardIds],
+	cardIds: [CardIds.ConcealingConfection_JAIL_460],
 	publicCreator: true,
 	dynamicPool: (input: StaticGeneratingCardInput) =>
 		filterCards(
-			TempCardIds.ConcealingConfection_JAIL_460 as unknown as CardIds,
+			CardIds.ConcealingConfection_JAIL_460,
 			input.allCards,
 			weaponFilter,
 			input.inputOptions,
@@ -25,7 +25,7 @@ export const ConcealingConfection: GeneratingCard & StaticGeneratingCard = {
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => ({
 		cardType: CardType.WEAPON,
 		possibleCards: filterCards(
-			TempCardIds.ConcealingConfection_JAIL_460 as unknown as CardIds,
+			CardIds.ConcealingConfection_JAIL_460,
 			input.allCards,
 			weaponFilter,
 			input.options,

@@ -4,11 +4,11 @@
  * Taunt. Deathrattle: Put a 9/9 Demon with Taunt and Lifesteal on the bottom of your deck.
  */
 import { CardIds } from '@firestone-hs/reference-data';
-import { TempCardIds } from '@firestone/shared/framework/core';
+
 import { GeneratingCard, GuessCardIdInput } from './_card.type';
 
 export const ImpGangStooge: GeneratingCard = {
-	cardIds: [TempCardIds.ImpGangStooge_JAIL_399 as unknown as CardIds],
+	cardIds: [CardIds.ImpGangStooge_JAIL_399],
 	publicCreator: true,
-	guessCardId: (_input: GuessCardIdInput) => TempCardIds.GrandmotherImp_JAIL_399t1 as unknown as CardIds,
+	guessCardId: (_input: GuessCardIdInput) => CardIds.GrandmotherImp_JAIL_399t1,
 };

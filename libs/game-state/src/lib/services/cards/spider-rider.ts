@@ -4,9 +4,9 @@
  * After your hero attacks, draw a card.
  */
 import { CardIds } from '@firestone-hs/reference-data';
-import { TempCardIds } from '@firestone/shared/framework/core';
+
 import { Card } from './_card.type';
 
 export const SpiderRider: Card = {
-	cardIds: [TempCardIds.SpiderRider_JAIL_872 as unknown as CardIds],
+	cardIds: [CardIds.SpiderRider_JAIL_872],
 };

@@ -4,9 +4,9 @@
  * Battlecry: Deal 4 damage.
  */
 import { CardIds } from '@firestone-hs/reference-data';
-import { TempCardIds } from '@firestone/shared/framework/core';
+
 import { Card } from './_card.type';
 
 export const MoltenGoldElemental: Card = {
-	cardIds: [TempCardIds.MoltenGoldElemental_JAIL_801t as unknown as CardIds],
+	cardIds: [CardIds.MoltenGoldElemental_JAIL_801t],
 };

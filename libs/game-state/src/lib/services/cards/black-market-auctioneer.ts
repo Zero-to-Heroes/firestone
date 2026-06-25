@@ -5,10 +5,10 @@
  */
 import { CardIds } from '@firestone-hs/reference-data';
 import { and, inDeck, inHand, or, side, spell } from '../card-highlight/selectors';
-import { TempCardIds } from '@firestone/shared/framework/core';
+
 import { Card, SelectorCard } from './_card.type';
 
 export const BlackMarketAuctioneer: Card & SelectorCard = {
-	cardIds: [TempCardIds.BlackMarketAuctioneer_JAIL_718 as unknown as CardIds],
+	cardIds: [CardIds.BlackMarketAuctioneer_JAIL_718],
 	selector: (inputSide) => and(side(inputSide), or(inHand, inDeck), spell),
 };

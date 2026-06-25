@@ -5,10 +5,10 @@
  */
 import { CardIds } from '@firestone-hs/reference-data';
 import { and, demon, inDeck, minion, side } from '../card-highlight/selectors';
-import { TempCardIds } from '@firestone/shared/framework/core';
+
 import { Card, SelectorCard } from './_card.type';
 
 export const Annihilation: Card & SelectorCard = {
-	cardIds: [TempCardIds.Annihilation_JAIL_510 as unknown as CardIds],
+	cardIds: [CardIds.Annihilation_JAIL_510],
 	selector: (inputSide) => and(side(inputSide), inDeck, demon, minion),
 };

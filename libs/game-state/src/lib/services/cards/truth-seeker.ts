@@ -4,7 +4,7 @@
  * After your hero attacks, give your Paladin minions +2/+2.
  */
 import { CardIds } from '@firestone-hs/reference-data';
-import { TempCardIds } from '@firestone/shared/framework/core';
+
 import {
 	and,
 	givesHeroAttack,
@@ -20,7 +20,7 @@ import {
 import { Card, SelectorCard } from './_card.type';
 
 export const TruthSeeker: Card & SelectorCard = {
-	cardIds: [TempCardIds.TruthSeeker_JAIL_329 as unknown as CardIds],
+	cardIds: [CardIds.TruthSeeker_JAIL_329],
 	selector: (inputSide) =>
 		highlightConditions(
 			and(side(inputSide), or(inHand, inDeck, inPlay), paladin, minion),

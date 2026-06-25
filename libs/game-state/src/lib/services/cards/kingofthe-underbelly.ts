@@ -4,7 +4,7 @@
  * While building your deck, pick 3 contraband Beasts. Battlecry: Discover one. It costs (3) less.
  */
 import { CardClass, CardIds, CardType, hasCorrectTribe, Race } from '@firestone-hs/reference-data';
-import { TempCardIds } from '@firestone/shared/framework/core';
+
 import { GuessedInfo } from '../../models/deck-card';
 import { canBeDiscoveredByClass, hasCorrectClass, hasCorrectType } from '../../related-cards/dynamic-pools';
 import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
@@ -19,11 +19,11 @@ const beastDiscoverFilter = (
 	(!currentClass || !hasCorrectClass(c, CardClass[currentClass]));
 
 export const KingoftheUnderbelly: GeneratingCard & StaticGeneratingCard = {
-	cardIds: [TempCardIds.KingoftheUnderbelly_JAIL_831 as unknown as CardIds],
+	cardIds: [CardIds.KingoftheUnderbelly_JAIL_831],
 	publicCreator: true,
 	dynamicPool: (input: StaticGeneratingCardInput) =>
 		filterCards(
-			TempCardIds.KingoftheUnderbelly_JAIL_831 as unknown as CardIds,
+			CardIds.KingoftheUnderbelly_JAIL_831,
 			input.allCards,
 			(c) => beastDiscoverFilter(c, input.inputOptions.deckState.getCurrentClass()),
 			input.inputOptions,
@@ -32,7 +32,7 @@ export const KingoftheUnderbelly: GeneratingCard & StaticGeneratingCard = {
 		cardType: CardType.MINION,
 		races: [Race.BEAST],
 		possibleCards: filterCards(
-			TempCardIds.KingoftheUnderbelly_JAIL_831 as unknown as CardIds,
+			CardIds.KingoftheUnderbelly_JAIL_831,
 			input.allCards,
 			(c) => beastDiscoverFilter(c, input.deckState.getCurrentClass()),
 			input.options,

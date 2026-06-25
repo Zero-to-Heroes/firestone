@@ -5,16 +5,16 @@
  */
 import { CardIds } from '@firestone-hs/reference-data';
 import { and, cardIs, inDeck, legendary, not, side } from '../card-highlight/selectors';
-import { TempCardIds } from '@firestone/shared/framework/core';
+
 import { Card, SelectorCard } from './_card.type';
 
 export const ChainbreakerHogger: Card & SelectorCard = {
-	cardIds: [TempCardIds.ChainbreakerHogger_JAIL_384 as unknown as CardIds],
+	cardIds: [CardIds.ChainbreakerHogger_JAIL_384],
 	selector: (inputSide) =>
 		and(
 			side(inputSide),
 			inDeck,
 			legendary,
-			not(cardIs(TempCardIds.ChainbreakerHogger_JAIL_384 as unknown as CardIds)),
+			not(cardIs(CardIds.ChainbreakerHogger_JAIL_384)),
 		),
 };
