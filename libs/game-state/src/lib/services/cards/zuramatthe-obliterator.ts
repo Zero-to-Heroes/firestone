@@ -5,17 +5,43 @@
  */
 import { CardIds } from '@firestone-hs/reference-data';
 
-import { Card, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
+import { DeckState } from '../../models/deck-state';
+import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 
-export const ZuramattheObliterator: Card & StaticGeneratingCard = {
+const getRemainingDiscardedCards = (deckState: DeckState, zuramatEntityId: number | undefined | null): string[] => {
+	if (!zuramatEntityId) {
+		return [];
+	}
+	const prisonEntityId = deckState.findCard(zuramatEntityId)?.card?.creatorEntityId;
+	if (!prisonEntityId) {
+		return [];
+	}
+
+	const candidates = deckState.otherZone
+		.filter((c) => c.zone === 'DISCARD' && c.lastAffectedByEntityId === prisonEntityId)
+		.map((c) => c.cardId);
+
+	const replayedCards = deckState
+		.getAllCardsInDeckWithoutOptions()
+		.map((c) => deckState.findCard(c.entityId)?.card)
+		.filter((c) => !!c?.cardId && c.creatorEntityId === zuramatEntityId);
+
+	for (const card of replayedCards) {
+		const index = candidates.indexOf(card!.cardId);
+		if (index !== -1) {
+			candidates.splice(index, 1);
+		}
+	}
+
+	return candidates;
+};
+
+export const ZuramattheObliterator: StaticGeneratingCard & GeneratingCard = {
 	cardIds: [CardIds.ZuramattheObliterator_JAIL_887t2],
-	dynamicPool: (input: StaticGeneratingCardInput) => {
-		const prisonEntityId = input.inputOptions.deckState.findCard(input.entityId)?.card?.creatorEntityId;
-		// Find all cards discarded by the prison
-		const discardedCards = input.inputOptions.deckState.otherZone.filter(
-			(c) => c.zone === 'DISCARD' && c.lastAffectedByEntityId === prisonEntityId,
-		);
-		// TODO: need to find all cards that have been played by Zuramat to remove them from the list
-		return discardedCards.map((c) => c.cardId);
-	},
+	publicCreator: true,
+	dynamicPool: (input: StaticGeneratingCardInput) =>
+		getRemainingDiscardedCards(input.inputOptions.deckState, input.entityId),
+	guessInfo: (input: GuessInfoInput) => ({
+		possibleCards: getRemainingDiscardedCards(input.deckState, input.creatorEntityId),
+	}),
 };
