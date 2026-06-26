@@ -41,7 +41,7 @@ export class CardDrawParser implements EventParser {
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
-		console.debug('[card-draw] drawing from deck', cardId, gameEvent);
+		console.debug('[card-draw] drawing from deck', `entityId:${entityId}__`, cardId, gameEvent);
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		let deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const opponentDeck = isPlayer ? currentState.opponentDeck : currentState.playerDeck;
@@ -71,7 +71,7 @@ export class CardDrawParser implements EventParser {
 							: true,
 					)
 			: [];
-		console.debug('[card-draw] cards with matching card id', cardsWithMatchingCardId);
+		console.debug('[card-draw] cards with matching card id', `entityId:${entityId}__`, cardsWithMatchingCardId);
 		// So that we don't remove the "card from bottom" when the user doesn't know about it, e.g.
 		// if a tutor effect draws the entity ID that is at the bottom and we aren't supposed to know
 		// about it. This could change (via a whitelist?) if there are cards that start drawing from
@@ -84,9 +84,19 @@ export class CardDrawParser implements EventParser {
 			(!cardId ||
 				cardsWithMatchingCardId.length === 1 ||
 				cardsWithMatchingCardId.every((e) => e.positionFromBottom == null && e.positionFromTop == null));
+		// 2026-06-26 ISSUE: we have entityId=22 in deck (maybe it was shuffled back somehow), with no additional
+		// info. Then we draw entityId=22. Since we don't use the entityId to identify the card, we are now left with
+		// an entityId=22 in deck, in addition to the one in hand.
 		const shouldUseEntityIdForOpponent = !isPlayer && DRAW_KNOWN_CARDS_FROM_DECK.includes(drawnByCardId as CardIds);
 		const shouldUseEntityId = shouldUseEntityIdForPlayer || shouldUseEntityIdForOpponent;
-		console.debug('[card-draw] shouldUseEntityId', shouldUseEntityId, cardId, cardsWithMatchingCardId, deck.deck);
+		console.debug(
+			'[card-draw] shouldUseEntityId',
+			`entityId:${entityId}__`,
+			shouldUseEntityId,
+			cardId,
+			cardsWithMatchingCardId,
+			deck.deck,
+		);
 		const isTutoring = tutors.includes(drawnByCardId as CardIds);
 
 		const useTopOfDeckToIdentifyCard = !isTutoring && !isPlayer && deck.deck.some((c) => c.positionFromTop != null);
@@ -100,6 +110,7 @@ export class CardDrawParser implements EventParser {
 			deck.deck.some((c) => c.positionFromBottom != null && c.lastAffectedByCardId !== drawnByCardId);
 		console.debug(
 			'[card-draw] useTopOfDeckToIdentifyCard',
+			`entityId:${entityId}__`,
 			useTopOfDeckToIdentifyCard,
 			useBottomOfDeckToIdentifyCard,
 			isPlayer,
@@ -122,6 +133,7 @@ export class CardDrawParser implements EventParser {
 				: this.helper.findCardInZone(deckToDrawnFromTop, cardId, shouldUseEntityId ? entityId : null, true);
 		console.debug(
 			'[card-draw] found card in zone 0',
+			`entityId:${entityId}__`,
 			card,
 			deck,
 			cardId,
@@ -142,6 +154,7 @@ export class CardDrawParser implements EventParser {
 
 		console.debug(
 			'[card-draw] drawing card',
+			`entityId:${entityId}__`,
 			isPlayer,
 			card,
 			deck,
@@ -181,6 +194,7 @@ export class CardDrawParser implements EventParser {
 				!hiddenWhenDrawFromDeck.includes(lastInfluencedByCardId));
 		console.debug(
 			`[card-draw] isCardInfoPublic=${isCardInfoPublic}`,
+			`entityId:${entityId}__`,
 			`isPlayer=${isPlayer}`,
 			`useTopOfDeckToIdentifyCard=${useTopOfDeckToIdentifyCard}`,
 			`useBottomOfDeckToIdentifyCard=${useBottomOfDeckToIdentifyCard}`,
@@ -205,6 +219,7 @@ export class CardDrawParser implements EventParser {
 				!hiddenWhenDrawFromDeck.includes(lastInfluencedByCardId));
 		console.debug(
 			'[card-draw] found card in zone',
+			`entityId:${entityId}__`,
 			card,
 			deck,
 			updatedCardId,
@@ -253,7 +268,15 @@ export class CardDrawParser implements EventParser {
 			// 	timestampAtWhichCardEnteredHand: new Date().getTime(),
 			// },
 		} as DeckCard);
-		console.debug('[card-draw] card with creator', cardWithCreator, isPlayer, isCardInfoPublic, card, refCard);
+		console.debug(
+			'[card-draw] card with creator',
+			`entityId:${entityId}__`,
+			cardWithCreator,
+			isPlayer,
+			isCardInfoPublic,
+			card,
+			refCard,
+		);
 		const cardWithGuessInfo = addGuessInfoToCard(
 			cardWithCreator,
 			drawnByCardId,
@@ -266,20 +289,26 @@ export class CardDrawParser implements EventParser {
 				validArenaPool: this.arenaRefService.validDiscoveryPool$$.value ?? [],
 			},
 		);
-		console.debug('[card-draw] cardWithGuessInfo', cardWithGuessInfo, gameEvent);
+		console.debug('[card-draw] cardWithGuessInfo', `entityId:${entityId}__`, cardWithGuessInfo, gameEvent);
 		const previousDeck = deck.deck;
 
 		// We didn't use the top of deck to identify the card, but we still need to remove the card at the top of the deck
 		// This happens when the top card is not identified, eg when the opponent plays Disarming Elemental
 		const drawFromTop = !useTopOfDeckToIdentifyCard && previousDeck.filter((c) => c.positionFromTop != null);
-		console.debug('[card-draw] drawFromTop', drawFromTop, previousDeck, useTopOfDeckToIdentifyCard);
+		console.debug(
+			'[card-draw] drawFromTop',
+			`entityId:${entityId}__`,
+			drawFromTop,
+			previousDeck,
+			useTopOfDeckToIdentifyCard,
+		);
 		// eslint-disable-next-line prefer-const
 		// const removeFillerCard = !useTopOfDeckToIdentifyCard;
 		// console.debug('[card-draw] removeFillerCard', removeFillerCard, useTopOfDeckToIdentifyCard);
 		// If the drawn entity matches a row we already track in the deck (typically a card we
 		// predicted via Oracle from a CREATE_CARD_IN_DECK / Start of Game effect, or a card we
 		// learned about through a tradeable / reshuffle), we must drop *that specific row*. The
-		// previous "filler removal" branch (cardId=null, entityId=-1) leaves the predicted row
+		// previous "filler removal" branch (cardId=null, entityId:-1) leaves the predicted row
 		// behind, so subsequent ENTITY_UPDATE / CARD_CREATOR_CHANGED events on the same entityId
 		// (e.g. Agent of the Old Ones turning the in-hand entity into a Coin) corrupt the stale
 		// deck row instead of being a no-op there.
@@ -325,6 +354,7 @@ export class CardDrawParser implements EventParser {
 					);
 		console.debug(
 			'[card-draw] newDeck 0',
+			`entityId:${entityId}__`,
 			newDeck,
 			isCardInfoPublic,
 			updatedCardId,
@@ -340,24 +370,39 @@ export class CardDrawParser implements EventParser {
 			const topCardMatchesDrawEntity = entityId != null && topCard?.entityId === entityId;
 			console.debug(
 				'[card-draw] removing top card from deck?',
+				`entityId:${entityId}__`,
 				isTopCardUnknown,
 				topCardMatchesDrawEntity,
 				topCard,
 				newDeck,
 			);
 			if (!!topCard && (isTopCardUnknown || topCardMatchesDrawEntity)) {
-				console.debug('[card-draw] removing top card from deck', topCard, newDeck);
+				console.debug('[card-draw] removing top card from deck', `entityId:${entityId}__`, topCard, newDeck);
 				newDeck = newDeck.filter((c) => c.positionFromTop !== topCard.positionFromTop);
-				console.debug('[card-draw] after removing top card from deck', topCard, newDeck);
+				console.debug(
+					'[card-draw] after removing top card from deck',
+					`entityId:${entityId}__`,
+					topCard,
+					newDeck,
+				);
 			}
 		}
+
+		// Make sure we don't have any more cards in the deck with the same entityId
+		// See the comment above about having an entityId=22 in both deck and hand after it's drawn and not removed
+		// But I agree, this feels very hacky
+		if (newDeck.some((c) => c.entityId === entityId)) {
+			newDeck = newDeck.map((c) => (c.entityId === entityId ? c.update({ entityId: undefined }) : c));
+			console.debug('[card-draw] removed duplicate entityId from deck', `entityId:${entityId}__`, newDeck);
+		}
+
 		let additionalKnownCardsInDeck = deck.additionalKnownCardsInDeck;
 		if (!removedCard?.cardId) {
 			additionalKnownCardsInDeck = additionalKnownCardsInDeck.filter(
 				(c, i) => c !== cardWithGuessInfo.cardId || deck.additionalKnownCardsInDeck.indexOf(c) !== i,
 			);
 		}
-		console.debug('[card-draw] newDeck', newDeck, isCardInfoPublic, previousDeck);
+		console.debug('[card-draw] newDeck', `entityId:${entityId}__`, newDeck, isCardInfoPublic, previousDeck);
 		const previousHand = deck.hand;
 		// Summoned when Drawn cards behave a bit weirdly - in the case of Illusions for instance, the card is drawn,
 		// then a minion with another entityId is summoned, which means it never gets removed from hand

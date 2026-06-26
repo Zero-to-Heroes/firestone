@@ -1,5 +1,5 @@
 import { EventEmitter, Injectable, NgZone, Optional } from '@angular/core';
-import { GameTag, Zone } from '@firestone-hs/reference-data';
+import { CardIds, GameTag, Zone } from '@firestone-hs/reference-data';
 import { PtlGameStateUpdate } from '@firestone/power-log-parser';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { chunk } from '@firestone/shared/framework/common';
@@ -610,8 +610,8 @@ export class GameStateService {
 				gameEvent.cardId,
 				`entityId:${gameEvent.entityId}_`,
 				(gameEvent as MinionsDiedEvent)?.additionalData?.deadMinions?.map((m) => `entityId:${m.EntityId}_`),
-				`found?=${currentState.opponentDeck.board.filter((e) => e.entityId === 42).length}`,
-				currentState.opponentDeck.board,
+				`found?=${currentState.opponentDeck.deck.filter((e) => e.cardId === CardIds.BakingSodaVolcano_TOY_500).length}`,
+				currentState.opponentDeck.deck.filter((e) => e.cardId === CardIds.BakingSodaVolcano_TOY_500),
 				currentState,
 				gameEvent,
 			);

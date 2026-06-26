@@ -268,6 +268,7 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	malchezaar: 'malchezaar/malchezaar.log',
 	'geddon-discover': 'geddon-discover/geddon-discover.log',
 	'ritual-full-moon': 'ritual-full-moon/ritual-full-moon.log',
+	'baking-soda-triangulate': '../power.log',
 };
 
 /**
