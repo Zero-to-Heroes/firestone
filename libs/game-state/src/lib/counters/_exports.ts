@@ -32,6 +32,7 @@ import { WhelpBuffCounterDefinitionV2 } from './impl/battlegrounds/whelp-buff';
 import { BeastsSummonedCounterDefinitionV2 } from './impl/beasts-summoned';
 import { BolnerHammerbeakCounterDefinitionV2 } from './impl/bolner-hammerbeak';
 import { BonelordFrostwhisperCounterDefinitionV2 } from './impl/bonelord-frostwhisper';
+import { CapturedArchmageCounterDefinitionV2 } from './impl/captured-archmage';
 import { CardsDiscardedCounterDefinitionV2 } from './impl/cards-discarded';
 import { CardsDrawnCounterDefinitionV2 } from './impl/cards-drawn';
 import { CardsDrawnThisTurnCounterDefinitionV2 } from './impl/cards-drawn-this-turn';
@@ -242,6 +243,7 @@ export const getAllCounters: (
 	new SpellweaversBrillianceCounterDefinitionV2(i18n, allCards),
 	new GodfreyTheBetrayerCounterDefinitionV2(i18n, allCards),
 	new VoidSoulsCounterDefinitionV2(i18n, allCards),
+	new CapturedArchmageCounterDefinitionV2(i18n, allCards),
 
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n, allCards),

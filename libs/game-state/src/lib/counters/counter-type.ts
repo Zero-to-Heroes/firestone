@@ -9,6 +9,7 @@ export type CounterType =
 	| 'cardsDrawnThisTurn'
 	| 'godfreyTheBetrayer'
 	| 'voidSoul'
+	| 'capturedArchmage'
 	| 'outcast'
 	| 'bashana'
 	| 'dragoncallerAlanna'
