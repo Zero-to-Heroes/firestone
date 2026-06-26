@@ -27,7 +27,10 @@ export class PowerTriggeredParser implements ActionParser {
 	}
 
 	AppliesOnCloseNode(node: Node, stateType: StateType): boolean {
-		return false;
+		if (stateType !== StateType.PowerTaskList) {
+			return false;
+		}
+		return node.Type === NodeType.Action && (node.Object as Action).Type === (BlockType.POWER as number);
 	}
 
 	CreateGameEventProviderFromNew(node: Node): GameEventProvider[] | null {
@@ -47,6 +50,34 @@ export class PowerTriggeredParser implements ActionParser {
 	}
 
 	CreateGameEventProviderFromClose(node: Node): GameEventProvider[] | null {
-		return null;
+		const action = node.Object as Action;
+		const entity = this.GameState.CurrentEntities.get(action.Entity)!;
+		const cardId = entity.CardId;
+		const controllerId = entity.GetEffectiveController();
+		const data = action.Data;
+		const lastData = data[data.length - 1];
+		// So that it correctly shows up after all the elements of the action
+		const timestamp = lastData?.TimeStamp ?? action.TimeStamp;
+		// All the elements can have the same timestamp, and by default we use the node's index - meaning the opening action
+		// tag
+		// We need to find the index of the last processed element instead
+		const index = Node.currentIndex++;
+
+		return [
+			GameEventProvider.Create(
+				timestamp,
+				'POWER_TRIGGERED_END',
+				GameEventHelper.CreateProvider(
+					'POWER_TRIGGERED_END',
+					cardId,
+					controllerId,
+					entity.Id,
+					this.StateFacade,
+				),
+				true,
+				node,
+				{ forceIndex: index },
+			),
+		];
 	}
 }

@@ -145,3 +145,13 @@ export interface CustomEffectInput {
 	gameEvent: GameEvent;
 	allCards: AllCardsService;
 }
+
+export interface PowerEndCard extends Card {
+	powerEnd: (input: PowerEndInput) => GameState;
+}
+export const hasPowerEnd = (card: Card): card is PowerEndCard => (card as PowerEndCard)?.powerEnd !== undefined;
+export interface PowerEndInput {
+	currentState: GameState;
+	gameEvent: GameEvent;
+	allCards: AllCardsService;
+}

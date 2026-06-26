@@ -141,6 +141,7 @@ export class DeckState {
 	readonly board: readonly DeckCard[] = [];
 	readonly otherZone: readonly DeckCard[] = [];
 	readonly globalEffects: readonly DeckCard[] = [];
+	readonly voidZone: readonly DeckCard[] = [];
 	// readonly dynamicZones: readonly DynamicZone[] = [];
 
 	readonly currentOptions: readonly CardOption[] = [];

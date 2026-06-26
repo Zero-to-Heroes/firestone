@@ -81,7 +81,7 @@ export class GameEventProvider {
 		eventProvider: () => GameEvent | null,
 		needMetaData: boolean,
 		node: Node | null,
-		props: any = null,
+		props: any & { forceIndex?: number } = null,
 		waitFor: number = 0,
 	): GameEventProvider {
 		return GameEventProvider.CreateWithDuplicate(
@@ -103,12 +103,12 @@ export class GameEventProvider {
 		isDuplicatePredicate: (queued: GameEventProvider) => boolean,
 		needMetaData: boolean,
 		node: Node | null,
-		props: any = null,
+		props: any & { forceIndex?: number } = null,
 		waitFor: number = 0,
 	): GameEventProvider {
 		const result = new GameEventProvider();
 		result.Timestamp = timestamp;
-		result.Index = node?.Index ?? 0;
+		result.Index = props?.forceIndex ?? node?.Index ?? 0;
 		result.EventName = eventName;
 		result.SupplyGameEvent = eventProvider;
 		result.IsDuplicatePredicate = isDuplicatePredicate;

@@ -308,6 +308,10 @@ export const globalEffectTriggers: { effectPrefab: string; cardId: string; force
 		effectPrefab: 'JAILFX_Godfrey_StartOfGame_FX',
 		cardId: CardIds.GodfreytheBetrayer_JAIL_509,
 	},
+	{
+		effectPrefab: 'JAIL_719_IridaSinseeker_FAB_DeckAE_Super',
+		cardId: CardIds.IridaSinseeker_JAIL_719,
+	},
 	// {
 	// 	effectPrefab: 'EDRFX_AvianaElunesChosen_StartOfTurnComplete',
 	// 	cardId: CardIds.AvianaElunesChosen_MoonCycleEnchantmentToken_EDR_895t,
@@ -568,6 +572,7 @@ export const dontActuallyDestroyCardsInDeck = [
 	CardIds.AdaptiveAmalgam_VAC_958,
 	CardIds.Kiljaeden_GDB_145,
 	CardIds.Broxigar_TIME_020,
+	CardIds.IridaSinseeker_JAIL_719,
 ];
 
 export const supportedAdditionalData = [

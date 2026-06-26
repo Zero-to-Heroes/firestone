@@ -19,7 +19,7 @@ export enum NodeType {
 }
 
 export class Node {
-	private static currentIndex: number = 0;
+	public static currentIndex: number = 0;
 
 	Type: NodeType;
 	Object: any;

@@ -141,6 +141,7 @@ import { ParentCardChangedParser } from './event-parser/parent-card-changed-pars
 import { PassiveTriggeredParser } from './event-parser/passive-triggered-parser';
 import { PlayerDeckInfoParser } from './event-parser/player-deck-info-parser';
 import { PlayersInfoParser } from './event-parser/players-info-parser';
+import { PowerTriggeredEndParser } from './event-parser/power-triggred-end-parser';
 import { PowerTriggeredParser } from './event-parser/power-triggred-parser';
 import { QuestCompletedParser } from './event-parser/quest-completed-parser';
 import { QuestCreatedInGameParser } from './event-parser/quest-created-in-game-parser';
@@ -414,6 +415,7 @@ export class GameStateParsersService {
 				),
 			],
 			[GameEvent.POWER_TRIGGERED]: [new PowerTriggeredParser(this.helper, this.allCards)],
+			[GameEvent.POWER_TRIGGERED_END]: [new PowerTriggeredEndParser(this.helper, this.allCards)],
 			[GameEvent.QUEST_COMPLETED]: [new QuestCompletedParser(this.helper, this.allCards)],
 			[GameEvent.QUEST_CREATED_IN_GAME]: [new QuestCreatedInGameParser(this.helper, this.allCards)],
 			[GameEvent.QUEST_DESTROYED]: [new QuestDestroyedParser(this.helper, this.allCards)],

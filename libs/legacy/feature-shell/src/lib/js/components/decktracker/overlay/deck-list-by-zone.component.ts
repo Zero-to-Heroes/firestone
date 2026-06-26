@@ -21,6 +21,7 @@ import {
 } from '@firestone/game-state';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
+import { isInTheVoidPredicate } from 'libs/game-state/src/lib/services/cards/irida-sinseeker';
 import { BehaviorSubject, combineLatest, filter, Observable, startWith, takeUntil } from 'rxjs';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
@@ -333,6 +334,25 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 			}
 		}
 
+		// The Void
+		const showTheVoid = deckState.globalEffects.some((c) => c.cardId === CardIds.IridaSinseeker_JAIL_719);
+		if (showTheVoid) {
+			const cardsInVoid = deckState.voidZone;
+			zones.push(
+				this.buildZone(
+					cardsInVoid,
+					null,
+					{
+						groupSameCardsTogether: groupSameCardsTogether,
+					},
+					'void',
+					this.i18n.translateString('decktracker.zones.void'),
+					null,
+					null,
+				),
+			);
+		}
+
 		// Deck
 		const deckSections: InternalDeckZoneSection[] = [];
 		let cardsInDeckZone = deckState.deck;
@@ -343,6 +363,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 				this.allCards,
 			);
 		}
+
 		if (showTopCardsSeparately && deckState.deck.filter((c) => c.positionFromTop != undefined).length) {
 			deckSections.push({
 				header: this.i18n.translateString('decktracker.zones.top-of-deck'),
@@ -508,7 +529,11 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 				.filter((c) => (c.cardType ?? this.allCards.getCard(c.cardId).type)?.toLowerCase() !== 'enchantment')
 				.filter((c) => !c.temporaryCard),
 			...(showBoardCardsInSeparateZone ? [] : deckState.board),
-		].filter((c) => (showGeneratedCardsInSeparateZone ? !c.creatorCardId?.length && !c.stolenFromOpponent : true));
+		]
+			.filter((c) =>
+				showGeneratedCardsInSeparateZone ? !c.creatorCardId?.length && !c.stolenFromOpponent : true,
+			)
+			.filter((c) => !showTheVoid || !isInTheVoidPredicate(c));
 		zones.push(
 			this.buildZone(
 				otherZone,

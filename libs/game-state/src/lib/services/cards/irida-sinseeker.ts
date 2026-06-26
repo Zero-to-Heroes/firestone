@@ -5,19 +5,70 @@
  */
 import { CardIds } from '@firestone-hs/reference-data';
 
-import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
+import { DeckCard } from '../../models/deck-card';
+import { PowerEndCard, PowerEndInput } from './_card.type';
 
-// TODO: maybe add a hook when the power is triggered to store the current deck?
-export const IridaSinseeker: StaticGeneratingCard & GeneratingCard = {
+export const IridaSinseeker: PowerEndCard & {
+	cardReceivedFromTheVoid: (card: DeckCard, existingVoidZone: readonly DeckCard[]) => readonly DeckCard[];
+} = {
 	cardIds: [CardIds.IridaSinseeker_JAIL_719],
-	publicCreator: true,
-	dynamicPool: (input: StaticGeneratingCardInput) => {
-		// Get the list of cards sent to the Void
-		// Get the list of these cards that have been played (or that we know have left the Void)
-		// Return the list of cards that are left in the Void
-		return [];
+	powerEnd: (input: PowerEndInput) => {
+		const { currentState, gameEvent, allCards } = input;
+		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
+		const isPlayer = controllerId === localPlayer.PlayerId;
+		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
+
+		// Find all cards sent to the Void
+		const cardsInVoid = deck.otherZone.filter(isInTheVoidPredicate);
+		const newDeck = deck.update({
+			voidZone: cardsInVoid,
+		});
+		console.debug(
+			'[debug] IridaSinseeker.powerEnd',
+			cardId,
+			isPlayer,
+			cardsInVoid,
+			newDeck,
+			currentState,
+			gameEvent,
+		);
+
+		return currentState.update({
+			[isPlayer ? 'playerDeck' : 'opponentDeck']: newDeck,
+		});
 	},
-	guessInfo: (input: GuessInfoInput) => {
-		return null;
+	cardReceivedFromTheVoid: (card: DeckCard, existingVoidZone: readonly DeckCard[]): readonly DeckCard[] => {
+		let existingCardInZone = !!card.entityId ? existingVoidZone.find((c) => c.entityId === card.entityId) : null;
+		if (!existingCardInZone) {
+			existingCardInZone = !!card.cardId
+				? existingVoidZone.find((c) => c.cardId === card.cardId && !c.entityId)
+				: null;
+		}
+		if (!existingCardInZone) {
+			existingCardInZone =
+				existingVoidZone.find((c) => !c.cardId && !c.entityId) ?? existingVoidZone.find((c) => !c.cardId);
+		}
+		if (!existingCardInZone) {
+			console.warn(
+				'Could not find card in void zone',
+				card.cardId,
+				card.entityId,
+				existingVoidZone.map((c) => `${c.cardId}__${c.entityId}`),
+			);
+		}
+		const newVoidZone = existingCardInZone
+			? existingVoidZone.filter((c) => c !== existingCardInZone)
+			: existingVoidZone;
+		console.debug(
+			'[debug] IridaSinseeker.cardReceivedFromTheVoid',
+			card.cardId,
+			card.entityId,
+			existingCardInZone,
+			newVoidZone,
+		);
+		return newVoidZone;
 	},
 };
+
+export const isInTheVoidPredicate = (c: DeckCard) =>
+	c.zone === 'SETASIDE' && c.lastAffectedByCardId === CardIds.IridaSinseeker_JAIL_719;

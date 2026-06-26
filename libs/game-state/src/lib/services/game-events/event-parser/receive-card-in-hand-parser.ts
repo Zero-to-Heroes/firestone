@@ -7,6 +7,7 @@ import { GameState } from '../../../models/game-state';
 import { addGuessInfoToCard, getProcessedCard } from '../../card-utils';
 import { hasGeneratingCard } from '../../cards/_card.type';
 import { cardsInfoCache } from '../../cards/_mapping';
+import { IridaSinseeker } from '../../cards/irida-sinseeker';
 import {
 	cardsConsideredPublic,
 	forcedHiddenCardCreators,
@@ -345,10 +346,16 @@ export class ReceiveCardInHandParser implements EventParser {
 				]
 			: deck.cardsAddedToHand;
 
+		const newVoid =
+			creatorCardId === CardIds.IridaSinseeker_TheVoidEnchantment_JAIL_719e2
+				? IridaSinseeker.cardReceivedFromTheVoid(cardWithZone, deck.voidZone)
+				: undefined;
+
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			hand: handAfterCardInference,
 			board: newBoard,
 			otherZone: newOther,
+			voidZone: newVoid,
 			cardsAddedToHand: newCardsAddedToHand,
 			abyssalCurseHighestValue:
 				cardWithAdditionalAttributes.cardId === CardIds.SirakessCultist_AbyssalCurseToken
