@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { CardIds } from '@firestone-hs/reference-data';
+import { CardIds, GameTag } from '@firestone-hs/reference-data';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { GameState } from '../../models/game-state';
+import { getControllerEntity, getEntityTag } from '../../services/parser-entity-utils';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
 import { CounterType } from '../counter-type';
 
@@ -19,18 +20,17 @@ export class SilverHandRecruitAuraCounterDefinitionV2 extends CounterDefinitionV
 		pref: 'playerSilverHandRecruitAuraCounter' as const,
 		display: (state: GameState): boolean => this.player.value(state) !== null,
 		value: (state: GameState): { attack: number; health: number } | null => {
-			const enchs = state.playerDeck.enchantments;
-			const attack =
-				enchs.filter((e) => e.cardId === CardIds.BrashBattlemaster_RecruitsMightEnchantment_MEND_800e).length +
-				enchs.filter((e) => e.cardId === CardIds.EmboldeningBlade_EmboldenedEnchantment_MEND_803e).length +
-				2 * enchs.filter((e) => e.cardId === CardIds.LightbornCariel_LightsStrengthEnchantment).length +
-				enchs.filter((e) => e.cardId === CardIds.PursuitOfJustice_PursuitOfJusticeCoreEnchantment_CS3_029e)
-					.length;
-			const health =
-				enchs.filter((e) => e.cardId === CardIds.ResilientSavior_RecruitsResilienceEnchantment_MEND_801e)
-					.length +
-				enchs.filter((e) => e.cardId === CardIds.EmboldeningBlade_EmboldenedEnchantment_MEND_803e).length +
-				2 * enchs.filter((e) => e.cardId === CardIds.LightbornCariel_LightsStrengthEnchantment).length;
+			const controllerEntity = getControllerEntity(
+				state.parserState?.CurrentEntities,
+				state.parserState?.ControllerEntityMap,
+				state.localPlayerId!,
+			);
+			if (!controllerEntity) {
+				return null;
+			}
+
+			const attack = getEntityTag(controllerEntity, GameTag.SILVER_HAND_RECRUIT_ATK_BUFF, 0);
+			const health = getEntityTag(controllerEntity, GameTag.SILVER_HAND_RECRUIT_HP_BUFF, 0);
 			if (attack === 0 && health === 0) {
 				return null;
 			}
@@ -38,6 +38,26 @@ export class SilverHandRecruitAuraCounterDefinitionV2 extends CounterDefinitionV
 				attack,
 				health,
 			};
+
+			// const enchs = state.playerDeck.enchantments;
+			// const attack =
+			// 	enchs.filter((e) => e.cardId === CardIds.BrashBattlemaster_RecruitsMightEnchantment_MEND_800e).length +
+			// 	enchs.filter((e) => e.cardId === CardIds.EmboldeningBlade_EmboldenedEnchantment_MEND_803e).length +
+			// 	2 * enchs.filter((e) => e.cardId === CardIds.LightbornCariel_LightsStrengthEnchantment).length +
+			// 	enchs.filter((e) => e.cardId === CardIds.PursuitOfJustice_PursuitOfJusticeCoreEnchantment_CS3_029e)
+			// 		.length;
+			// const health =
+			// 	enchs.filter((e) => e.cardId === CardIds.ResilientSavior_RecruitsResilienceEnchantment_MEND_801e)
+			// 		.length +
+			// 	enchs.filter((e) => e.cardId === CardIds.EmboldeningBlade_EmboldenedEnchantment_MEND_803e).length +
+			// 	2 * enchs.filter((e) => e.cardId === CardIds.LightbornCariel_LightsStrengthEnchantment).length;
+			// if (attack === 0 && health === 0) {
+			// 	return null;
+			// }
+			// return {
+			// 	attack,
+			// 	health,
+			// };
 		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>
