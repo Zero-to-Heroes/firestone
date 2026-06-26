@@ -25,7 +25,6 @@ import {
 import {
 	CardsFacadeService,
 	ILocalizationService,
-	OverwolfService,
 	toPreReleaseFirestoneCardImageUrl,
 } from '@firestone/shared/framework/core';
 import {
@@ -308,7 +307,6 @@ export class CardTooltipComponent
 		private readonly allCards: CardsFacadeService,
 		private readonly el: ElementRef,
 		private readonly renderer: Renderer2,
-		private readonly ow: OverwolfService,
 		private readonly prefs: PreferencesService,
 		private readonly gameStatus: GameStatusService,
 	) {
@@ -574,39 +572,46 @@ export class CardTooltipComponent
 		if (!isInGame) {
 			return;
 		}
-		if (!this.ow.isOwEnabled()) {
-			return;
-		}
-		const gameInfo = await this.ow?.getRunningGameInfo();
-		const currentWindow = await this.ow?.getCurrentWindow();
-		const gameWidth = gameInfo?.width ?? currentWindow?.logicalBounds?.width;
-		const gameHeight = gameInfo?.height ?? currentWindow?.logicalBounds?.height;
-		if (!gameWidth || !gameHeight) {
-			console.warn('missing game info', gameInfo, currentWindow);
+
+		// The overlay container is window-sized (see CdkOverlayContainer), so the viewport is the
+		// correct bound in every flavor (Overwolf and standalone/Electron) and is in the same
+		// coordinate space as the getBoundingClientRect() measurements.
+		const viewportWidth = window.innerWidth;
+		const viewportHeight = window.innerHeight;
+		if (!viewportWidth || !viewportHeight) {
 			return;
 		}
 
+		const margin = 10;
+
 		const currentTopOffset = parseInt(this.el.nativeElement.style.top?.replace('px', '')) || 0;
 		const currentLeftOffset = parseInt(this.el.nativeElement.style.left?.replace('px', '')) || 0;
-		const newTopOffset = top < 0 ? -top : top + height > gameHeight ? gameHeight - top - height : 0;
-		const newLeftOffset = left < 0 ? -left : left + width > gameWidth ? gameWidth - left - width : 0;
-		if (newTopOffset !== 0 || newLeftOffset === 0) {
+
+		// Reposition vertically so the whole tooltip fits, preferring to start higher when it
+		// overflows the bottom. Clamping guarantees the top is never pushed off-screen.
+		const maxTop = Math.max(margin, viewportHeight - margin - height);
+		const clampedTop = Math.min(Math.max(top, margin), maxTop);
+		const newTopOffset = clampedTop - top;
+		const newLeftOffset = left < 0 ? -left : left + width > viewportWidth ? viewportWidth - left - width : 0;
+		if (newTopOffset !== 0 || newLeftOffset !== 0) {
 			const topOffset = currentTopOffset + newTopOffset;
 			const leftOffset = currentLeftOffset + newLeftOffset;
 			this.renderer.setStyle(this.el.nativeElement, 'left', leftOffset + 'px');
 			this.renderer.setStyle(this.el.nativeElement, 'top', topOffset + 'px');
-			// console.debug('set tooltip position', leftOffset, topOffset, gameInfo);
-			// console.debug(
-			// 	'set tooltip position 2',
-			// 	topOffset,
-			// 	currentTopOffset,
-			// 	newTopOffset,
-			// 	widgetRect.top,
-			// 	widgetRect.height,
-			// 	gameHeight,
-			// );
 		}
-		// console.debug('showing tooltip');
+
+		// Last resort: when the tooltip is taller than the viewport (large related-cards pools or
+		// small screens), cap the scrollable grid so it scrolls instead of spilling off-screen. The
+		// grid lives inside the .scalable `zoom` wrapper, so convert from rendered px to local px.
+		const available = viewportHeight - 2 * margin;
+		const gridEl = this.relatedCards?.nativeElement;
+		if (gridEl && height > available) {
+			const zoom =
+				parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--card-tooltip-scale')) || 1;
+			const overflow = height - available;
+			const newRendered = Math.max(200, gridEl.getBoundingClientRect().height - overflow);
+			this.renderer.setStyle(gridEl, 'max-height', newRendered / zoom + 'px');
+		}
 
 		const element = this.relatedCards?.nativeElement;
 		this.hasScrollbar = !!element && element.scrollHeight > element.clientHeight;
