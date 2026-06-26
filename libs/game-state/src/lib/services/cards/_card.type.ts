@@ -24,7 +24,8 @@ export type GeneratingCard = Card & {
 export const hasGeneratingCard = (card: Card): card is GeneratingCard =>
 	(card as GeneratingCard)?.guessInfo !== undefined ||
 	(card as GeneratingCard)?.guessCardId !== undefined ||
-	!!(card as GeneratingCard)?.publicCreator;
+	!!(card as GeneratingCard)?.publicCreator ||
+	!!(card as GeneratingCard)?.publicTutor;
 // export type GameEventCard = Card & {
 // }
 

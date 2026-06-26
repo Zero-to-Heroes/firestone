@@ -155,7 +155,7 @@ export class CardDrawParser implements EventParser {
 		// from the state in the app.
 		// So we use this flag to know whether we should display something
 		const isDrawnByCardIdPublic = tutors.includes(drawnByCardId as CardIds);
-		console.debug('isDrawnByCardIdPublic', isDrawnByCardIdPublic, drawnByCardId);
+		console.debug('isDrawnByCardIdPublic', `entityId:${entityId}_`, isDrawnByCardIdPublic, drawnByCardId, tutors);
 		const lastInfluencedByCardId = gameEvent.additionalData.lastInfluencedByCardId ?? card!.lastAffectedByCardId;
 
 		const isCardDrawnBySecretPassage = forceHideInfoWhenDrawnInfluencers.includes(
