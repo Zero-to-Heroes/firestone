@@ -320,6 +320,7 @@ export class Preferences implements IPreferences {
 	readonly overlayShowGlobalEffects: boolean = true;
 	readonly overlayShowCurrentEffects: boolean = true;
 	readonly overlayShowDiscoveryZone: boolean = true;
+	readonly overlayShowSpecialZones: boolean = true;
 	readonly overlayHideGeneratedCardsInOtherZone: boolean = false;
 	readonly overlaySortByManaInOtherZone: boolean = false;
 	readonly overlayShowTopCardsSeparately: boolean = true;
@@ -345,6 +346,7 @@ export class Preferences implements IPreferences {
 	readonly opponentOverlayShowTopCardsSeparately: boolean = true;
 	readonly opponentOverlayShowDkRunes: boolean = true;
 	readonly opponentOverlayDarkenUsedCards: boolean = true;
+	readonly opponentOverlayShowSpecialZones: boolean = true;
 	readonly hideOpponentDecktrackerWhenFriendsListIsOpen: boolean = true;
 	readonly opponentTracker: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
@@ -501,8 +503,9 @@ export class Preferences implements IPreferences {
 	readonly opponentRafaamTimeCounter: boolean = true;
 	readonly playerWindrunnerSistersCounter: boolean = true;
 	readonly opponentWindrunnerSistersCounter: boolean = true;
-	readonly playerGodfreyTheBetrayerCounter: boolean = true;
-	readonly opponentGodfreyTheBetrayerCounter: boolean = true;
+	// Use the deck zone instead
+	readonly playerGodfreyTheBetrayerCounter: boolean = false;
+	readonly opponentGodfreyTheBetrayerCounter: boolean = false;
 
 	readonly showPlayerMaxResourcesWidget: boolean = true;
 	readonly playerMaxResourcesWidgetPosition: { left: number; top: number };

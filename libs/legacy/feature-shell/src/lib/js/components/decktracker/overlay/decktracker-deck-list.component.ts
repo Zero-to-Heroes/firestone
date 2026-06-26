@@ -15,6 +15,7 @@ import { DeckDefinition, encode } from '@firestone-hs/deckstrings';
 import { CardClass, GameFormat } from '@firestone-hs/reference-data';
 import { SetCard } from '@firestone/collection/common';
 import { DeckCard, DeckState, getDefaultHeroDbfIdForClass, VisualDeckCard } from '@firestone/game-state';
+import { ParserGameStateLite } from '@firestone/power-log-parser';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, groupByFunction } from '@firestone/shared/framework/common';
 import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
@@ -41,6 +42,7 @@ import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 				<deck-list-by-zone
 					*ngSwitchCase="'DISPLAY_MODE_ZONE'"
 					[deckState]="deckState$ | async"
+					[parserState]="parserState"
 					[colorManaCost]="colorManaCost"
 					[showRelatedCards]="showRelatedCards"
 					[showTransformedInto]="showTransformedInto"
@@ -50,6 +52,7 @@ import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 					[showCurrentEffectsZone]="showCurrentEffectsZone"
 					[currentEffectUseEnchantmentName]="currentEffectUseEnchantmentName"
 					[showDiscoveryZone]="showDiscoveryZone"
+					[showSpecialZones]="showSpecialZones"
 					[showGiftsSeparately]="showGiftsSeparately"
 					[hideGifts]="hideGifts"
 					[groupSameCardsTogether]="groupSameCardsTogether"
@@ -134,6 +137,8 @@ export class DeckTrackerDeckListComponent extends AbstractSubscriptionComponent 
 	@Input() side: HighlightSide;
 	@Input() collection: readonly SetCard[];
 	@Input() sortHandByZoneOrder: boolean;
+	@Input() showSpecialZones: boolean;
+	@Input() parserState: ParserGameStateLite;
 
 	@Input() set deckState(deckState: DeckState) {
 		this.deckState$$.next(deckState);

@@ -19,6 +19,7 @@ import {
 	PLAGUES,
 	VisualDeckCard,
 } from '@firestone/game-state';
+import { ParserGameStateLite } from '@firestone/power-log-parser';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
 import { isInTheVoidPredicate } from 'libs/game-state/src/lib/services/cards/irida-sinseeker';
@@ -138,6 +139,14 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 		this.deckState$$.next(value);
 	}
 
+	@Input() set parserState(value: ParserGameStateLite) {
+		this.parserState$$.next(value);
+	}
+
+	@Input() set showSpecialZones(value: boolean) {
+		this.showSpecialZones$$.next(value);
+	}
+
 	@Input() darkenUsedCards: boolean;
 
 	_darkenUsedCards = true;
@@ -158,6 +167,8 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 	private groupSameCardsTogether$$ = new BehaviorSubject<boolean>(false);
 	private hideGifts$$ = new BehaviorSubject<boolean>(false);
 	private deckState$$ = new BehaviorSubject<DeckState>(null);
+	private parserState$$ = new BehaviorSubject<ParserGameStateLite>(null);
+	private showSpecialZones$$ = new BehaviorSubject<boolean>(false);
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
@@ -179,6 +190,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 		this.deckState$ = this.deckState$$.asObservable().pipe(this.mapData((info) => info));
 		this.zones$ = combineLatest([
 			this.deckState$$,
+			this.parserState$$,
 			this.showGlobalEffectsZone$$,
 			this.showCurrentEffectsZone$$,
 			this.currentEffectUseEnchantmentName$$,
@@ -193,6 +205,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 			this.groupSameCardsTogether$$,
 			this.sortHandByZoneOrder$$,
 			this.showDiscoveryZone$$,
+			this.showSpecialZones$$,
 			this.hideGifts$$,
 		]).pipe(
 			filter(([deckState, _]) => !!deckState),
@@ -200,6 +213,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 			this.mapData(
 				([
 					deckState,
+					parserState,
 					showGlobalEffectsZone,
 					showCurrentEffectsZone,
 					currentEffectUseEnchantmentName,
@@ -214,6 +228,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 					groupSameCardsTogether,
 					sortHandByZoneOrder,
 					showDiscoveryZone,
+					showSpecialZones,
 					hideGifts,
 				]) =>
 					this.buildZones(
@@ -229,9 +244,11 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 						showHeroPowerInBoardZone,
 						showPlaguesOnTop,
 						showDiscoveryZone,
+						showSpecialZones,
 						groupSameCardsTogether,
 						sortHandByZoneOrder,
 						deckState,
+						parserState,
 						hideGifts,
 					),
 			),
@@ -252,9 +269,11 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 		showHeroPowerInBoardZone: boolean,
 		showPlaguesOnTop: boolean,
 		showDiscoveryZone: boolean,
+		showSpecialZones: boolean,
 		groupSameCardsTogether: boolean,
 		sortHandByZoneOrder: boolean,
 		deckState: DeckState,
+		parserState: ParserGameStateLite,
 		hideGifts: boolean,
 	): readonly DeckZone[] {
 		if (!deckState) {
@@ -335,7 +354,8 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 		}
 
 		// The Void
-		const showTheVoid = deckState.globalEffects.some((c) => c.cardId === CardIds.IridaSinseeker_JAIL_719);
+		const showTheVoid =
+			showSpecialZones && deckState.globalEffects.some((c) => c.cardId === CardIds.IridaSinseeker_JAIL_719);
 		if (showTheVoid) {
 			const cardsInVoid = deckState.voidZone;
 			zones.push(
@@ -347,6 +367,40 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 					},
 					'void',
 					this.i18n.translateString('decktracker.zones.void'),
+					null,
+					null,
+				),
+			);
+		}
+
+		// Godfrey
+		const showGodfrey =
+			showSpecialZones && deckState.globalEffects.some((c) => c.cardId === CardIds.GodfreytheBetrayer_JAIL_509);
+		if (showGodfrey) {
+			const allBurned = deckState.burnedCards;
+			const returnedCards = deckState
+				.getAllCardsInDeckWithoutOptions()
+				.filter((c) => c.creatorCardId === CardIds.GodfreyTheBetrayer_GodfreysAtlasEnchantment_JAIL_509e);
+			const originalReturnedEntityIds = returnedCards.map(
+				(r) =>
+					parserState?.CurrentEntities?.get(r.entityId)?.Tags?.find(
+						(t) => t.Name === GameTag.COPIED_FROM_ENTITY_ID,
+					)?.Value,
+			);
+			const godfreyCards: readonly DeckCard[] = allBurned
+				// Remove returned
+				.filter((c) => !originalReturnedEntityIds.includes(c.entityId))
+				.map((c) => deckState.findCard(c.entityId)?.card)
+				.filter((c) => !!c);
+			zones.push(
+				this.buildZone(
+					godfreyCards,
+					null,
+					{
+						groupSameCardsTogether: groupSameCardsTogether,
+					},
+					'godfrey',
+					this.allCards.getCard(CardIds.GodfreytheBetrayer_JAIL_509)?.name,
 					null,
 					null,
 				),

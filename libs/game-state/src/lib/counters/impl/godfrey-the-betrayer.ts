@@ -108,13 +108,23 @@ export class GodfreyTheBetrayerCounterDefinitionV2 extends CounterDefinitionV2<
 				value: value?.filter((c) => !c.returned).length ?? 0,
 			}),
 			cards:
-				value?.map((c) => {
-					return {
-						cardId: c.cardId,
-						checked: c.returned,
-						quantity: 1,
-					};
-				}) ?? [],
+				value
+					?.map((c) => {
+						return {
+							cardId: c.cardId,
+							checked: c.returned,
+							quantity: 1,
+						};
+					})
+					.sort(
+						(a, b) =>
+							((this.allCards.getCard(a.cardId)?.cost ?? 0) -
+								(this.allCards.getCard(b.cardId)?.cost ?? 0) ||
+								this.allCards
+									.getCard(a.cardId)
+									?.name.localeCompare(this.allCards.getCard(b.cardId)?.name ?? '')) ??
+							0,
+					) ?? [],
 		};
 		return config;
 	}

@@ -20,6 +20,7 @@ import {
 	GameStateFacadeService,
 	StatsRecap,
 } from '@firestone/game-state';
+import { ParserGameStateLite } from '@firestone/power-log-parser';
 import { AccountService } from '@firestone/profile/services';
 import { PatchesConfigService, Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent, deepEqual } from '@firestone/shared/framework/common';
@@ -75,6 +76,7 @@ import { combineLatest, debounceTime, distinctUntilChanged, filter, Observable, 
 							></decktracker-title-bar>
 							<decktracker-deck-list
 								[deckState]="value.deck"
+								[parserState]="parserState$ | async"
 								[displayMode]="displayMode$ | async"
 								[colorManaCost]="colorManaCost$ | async"
 								[showRelatedCards]="showRelatedCards$ | async"
@@ -85,6 +87,7 @@ import { combineLatest, debounceTime, distinctUntilChanged, filter, Observable, 
 								[showCurrentEffectsZone]="showCurrentEffectsZone$ | async"
 								[currentEffectUseEnchantmentName]="currentEffectUseEnchantmentName$ | async"
 								[showDiscoveryZone]="showDiscoveryZone$ | async"
+								[showSpecialZones]="showSpecialZones$ | async"
 								[showGiftsSeparately]="showGiftsSeparately$ | async"
 								[hideGifts]="hideGifts$ | async"
 								[groupSameCardsTogether]="groupSameCardsTogether$ | async"
@@ -127,6 +130,7 @@ export class DeckTrackerOverlayRootComponent
 	@Input() showGlobalEffectsExtractor: (prefs: Preferences) => boolean;
 	@Input() showCurrentEffectsExtractor: (prefs: Preferences) => boolean;
 	@Input() showDiscoveryExtractor: (prefs: Preferences) => boolean;
+	@Input() showSpecialZonesExtractor: (prefs: Preferences) => boolean;
 	@Input() darkenUsedCardsExtractor: (prefs: Preferences) => boolean;
 	@Input() hideGeneratedCardsInOtherZoneExtractor: (prefs: Preferences) => boolean;
 	@Input() sortCardsByManaCostInOtherZoneExtractor: (prefs: Preferences) => boolean;
@@ -145,6 +149,7 @@ export class DeckTrackerOverlayRootComponent
 	@Input() player: 'player' | 'opponent';
 
 	deck$: Observable<DeckState>;
+	parserState$: Observable<ParserGameStateLite>;
 	matchupStatsRecap$: Observable<StatsRecap>;
 	deckStatsRecap$: Observable<StatsRecap>;
 
@@ -170,6 +175,7 @@ export class DeckTrackerOverlayRootComponent
 	showCurrentEffectsZone$: Observable<boolean>;
 	currentEffectUseEnchantmentName$: Observable<boolean>;
 	showDiscoveryZone$: Observable<boolean>;
+	showSpecialZones$: Observable<boolean>;
 	showDeckWinrate$: Observable<boolean>;
 	showMatchupWinrate$: Observable<boolean>;
 	darkenUsedCards$: Observable<boolean>;
@@ -247,6 +253,7 @@ export class DeckTrackerOverlayRootComponent
 			shareReplay(1),
 			takeUntil(this.destroyed$),
 		);
+		this.parserState$ = this.gameState.gameState$$.pipe(this.mapData((gameState) => gameState?.parserState));
 		this.deck$ = this.gameState.gameState$$.pipe(
 			// auditTime(500),
 			this.mapData((gameState) => {
@@ -448,6 +455,9 @@ export class DeckTrackerOverlayRootComponent
 		);
 		this.showDiscoveryZone$ = this.prefs.preferences$$.pipe(
 			this.mapData((preferences) => this.showDiscoveryExtractor(preferences)),
+		);
+		this.showSpecialZones$ = this.prefs.preferences$$.pipe(
+			this.mapData((preferences) => this.showSpecialZonesExtractor(preferences)),
 		);
 		this.darkenUsedCards$ = this.prefs.preferences$$.pipe(
 			this.mapData((preferences) => this.darkenUsedCardsExtractor(preferences)),

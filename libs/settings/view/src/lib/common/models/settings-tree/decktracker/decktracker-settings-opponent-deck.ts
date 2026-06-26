@@ -66,6 +66,13 @@ export const decktrackerOpponentDeckSettings = (context: SettingContext): Settin
 					},
 					{
 						type: 'toggle',
+						field: 'opponentOverlayShowSpecialZones',
+						label: context.i18n.translateString('settings.decktracker.your-deck.special-zones-label'),
+						tooltip: context.i18n.translateString('settings.decktracker.your-deck.special-zones-tooltip'),
+						disabledIf: (prefs: Preferences) => !prefs.opponentTracker || !prefs.opponentOverlayGroupByZone,
+					},
+					{
+						type: 'toggle',
 						field: 'opponentOverlayShowGlobalEffects',
 						label: context.i18n.translateString('settings.decktracker.opponent-deck.global-effects-label'),
 						tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.global-effects-tooltip'),

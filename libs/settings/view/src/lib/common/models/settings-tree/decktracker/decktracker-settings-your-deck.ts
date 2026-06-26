@@ -74,6 +74,13 @@ export const decktrackerYourDeckSettings = (context: SettingContext): SettingNod
 					},
 					{
 						type: 'toggle',
+						field: 'overlayShowSpecialZones',
+						label: context.i18n.translateString('settings.decktracker.your-deck.special-zones-label'),
+						tooltip: context.i18n.translateString('settings.decktracker.your-deck.special-zones-tooltip'),
+						disabledIf: (prefs: Preferences) => !prefs.overlayGroupByZone,
+					},
+					{
+						type: 'toggle',
 						field: 'overlaySortByManaInOtherZone',
 						label: context.i18n.translateString('settings.decktracker.opponent-deck.sort-by-mana-cost-label'),
 						tooltip: context.i18n.translateString('settings.decktracker.opponent-deck.sort-by-mana-cost-tooltip'),
