@@ -421,7 +421,7 @@ export const summonsTreant = (input: SelectorInput): boolean =>
 export const isTreant = (input: SelectorInput): boolean => input.card?.isTreant ?? false;
 export const treant = or(summonsTreant, isTreant);
 
-export const summonsDemon = (input: SelectorInput): boolean => false;
+export const summonsDemon = hasMechanicStr('SUMMONS_DEMON');
 
 export const relic = cardIs(...RELIC_IDS);
 
@@ -488,11 +488,7 @@ export const weapon = or(cardType(CardType.WEAPON), givesWeapon);
 
 export const coin = (input: SelectorInput): boolean =>
 	input.card?.isCoin ||
-	cardIs(
-		CardIds.JadeCoin_JAIL_504t,
-		CardIds.GrimyCoin_JAIL_504t2,
-		CardIds.KabalCoin_JAIL_504t3,
-	)(input) ||
+	cardIs(CardIds.JadeCoin_JAIL_504t, CardIds.GrimyCoin_JAIL_504t2, CardIds.KabalCoin_JAIL_504t3)(input) ||
 	false;
 export const generatesCoin = cardIs();
 export const coinExtended = or(coin, generatesCoin);
