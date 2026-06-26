@@ -506,6 +506,8 @@ export class Preferences implements IPreferences {
 	// Use the deck zone instead
 	readonly playerGodfreyTheBetrayerCounter: boolean = false;
 	readonly opponentGodfreyTheBetrayerCounter: boolean = false;
+	readonly playerVoidSoulCounter: boolean = true;
+	readonly opponentVoidSoulCounter: boolean = true;
 
 	readonly showPlayerMaxResourcesWidget: boolean = true;
 	readonly playerMaxResourcesWidgetPosition: { left: number; top: number };

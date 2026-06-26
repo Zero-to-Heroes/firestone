@@ -126,6 +126,7 @@ import { TotemsSummonedCounterDefinitionV2 } from './impl/totems-summoned';
 import { TreantCounterDefinitionV2 } from './impl/treant';
 import { TreantDeadCounterDefinitionV2 } from './impl/treant-dead';
 import { TyrandeCounterDefinitionV2 } from './impl/tyrande';
+import { VoidSoulsCounterDefinitionV2 } from './impl/void-souls';
 import { VolatileSkeletonCounterDefinitionV2 } from './impl/volatile-skeleton';
 import { WatchpostCounterDefinitionV2 } from './impl/watchpost';
 import { WeaponsEquippedCounterDefinitionV2 } from './impl/weapons-equipped';
@@ -240,6 +241,7 @@ export const getAllCounters: (
 	new FriendlyAttacksCounterDefinitionV2(i18n, allCards),
 	new SpellweaversBrillianceCounterDefinitionV2(i18n, allCards),
 	new GodfreyTheBetrayerCounterDefinitionV2(i18n, allCards),
+	new VoidSoulsCounterDefinitionV2(i18n, allCards),
 
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n, allCards),
