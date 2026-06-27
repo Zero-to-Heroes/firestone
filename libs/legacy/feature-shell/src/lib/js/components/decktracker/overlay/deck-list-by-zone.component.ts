@@ -15,6 +15,7 @@ import {
 	DeckZoneSection,
 	getCardForCurrentEffect,
 	getProcessedCard,
+	isInTheVoidPredicate,
 	mergeHandCardsForDeckTrackerDisplay,
 	PLAGUES,
 	VisualDeckCard,
@@ -22,7 +23,6 @@ import {
 import { ParserGameStateLite } from '@firestone/power-log-parser';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, HighlightSide } from '@firestone/shared/framework/core';
-import { isInTheVoidPredicate } from 'libs/game-state/src/lib/services/cards/irida-sinseeker';
 import { BehaviorSubject, combineLatest, filter, Observable, startWith, takeUntil } from 'rxjs';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 

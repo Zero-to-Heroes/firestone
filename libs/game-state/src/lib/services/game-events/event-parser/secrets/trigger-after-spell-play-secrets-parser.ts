@@ -1,6 +1,6 @@
 import { CardIds, CardType } from '@firestone-hs/reference-data';
+import { hasCorrectType } from '../../../../related-cards/dynamic-pools';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { hasCorrectType } from 'libs/game-state/src/lib/related-cards/dynamic-pools';
 import { BoardSecret } from '../../../../models/board-secret';
 import { DeckState } from '../../../../models/deck-state';
 import { GameState } from '../../../../models/game-state';

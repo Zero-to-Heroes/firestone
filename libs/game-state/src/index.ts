@@ -1,14 +1,14 @@
 export * from './lib/counters/_counter-definition-v2';
 export * from './lib/counters/_exports';
-export { YsondreCounterDefinitionV2 } from './lib/counters/impl/ysondre';
+export * from './lib/counters/impl/cthun';
 export {
-	formatKaelthasSpellCycleLabel,
 	countSpellsPlayedThisTurnFromDeckCards,
+	formatKaelthasSpellCycleLabel,
 	KaelthasSunstriderSpellCycleCounterDefinitionV2,
 } from './lib/counters/impl/kaelthas-spell-cycle';
-export * from './lib/counters/impl/cthun';
 export * from './lib/counters/impl/next-starship-launch';
 export * from './lib/counters/impl/starships-launched';
+export { YsondreCounterDefinitionV2 } from './lib/counters/impl/ysondre';
 export * from './lib/game-state.module';
 export * from './lib/models/_barrel';
 export * from './lib/models/stats-recap';
@@ -28,10 +28,11 @@ export * from './lib/services/cards/_barrel';
 export * from './lib/services/cards/_card.type';
 export * from './lib/services/cards/_mapping';
 export * from './lib/services/cards/global/_registers';
+export * from './lib/services/cards/irida-sinseeker';
 export * from './lib/services/creation-sequence-info';
 export * from './lib/services/deck-handler.service';
-export * from './lib/services/deck-utils';
 export * from './lib/services/deck-tracker-hand-display';
+export * from './lib/services/deck-utils';
 export * from './lib/services/deck/ai-deck-service.service';
 export * from './lib/services/deck/constructed-archetype-orchestrator.service';
 export * from './lib/services/deck/constructed-archetype.service';
@@ -56,10 +57,10 @@ export * from './lib/services/game-state-events/game-state-event';
 export * from './lib/services/game-state-facade.service';
 export * from './lib/services/game-state-meta-info.service';
 export * from './lib/services/game-state.service';
-export * from './lib/services/parser-entity-utils';
 export * from './lib/services/game-unique-id.service';
 export * from './lib/services/hs-utils';
 export * from './lib/services/overlay-display.service';
+export * from './lib/services/parser-entity-utils';
 export * from './lib/services/real-time-stats/real-time-stats-parsers.service';
 export * from './lib/services/real-time-stats/real-time-stats.service';
 export * from './lib/services/review-id.interface';

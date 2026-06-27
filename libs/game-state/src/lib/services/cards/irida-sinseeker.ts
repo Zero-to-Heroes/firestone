@@ -4,7 +4,6 @@
  * Lifesteal. Battlecry: Send your deck to the Void. At the start of your turns, get two cards from the Void.
  */
 import { CardIds } from '@firestone-hs/reference-data';
-
 import { DeckCard } from '../../models/deck-card';
 import { PowerEndCard, PowerEndInput } from './_card.type';
 
