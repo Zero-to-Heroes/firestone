@@ -106,7 +106,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 				</div>
 				<div
 					class="gift-symbol overlay-icon"
-					*ngIf="creatorCardIds && creatorCardIds.length > 0"
+					*ngIf="!!creatorCardIds?.length || !!creatorEntityIds?.length"
 					[helpTooltip]="giftTooltip"
 				>
 					<div class="inner-border">
@@ -286,6 +286,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 	_isMissing: boolean;
 	cardClass: string;
 	creatorCardIds: readonly string[];
+	creatorEntityIds: readonly number[];
 	relatedCardIds: readonly string[];
 	giftTooltip: string;
 	isBurned: boolean;
@@ -666,6 +667,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		this.positionFromTop = card.positionFromTop;
 		this.rarity = card.rarity?.toLowerCase() ?? this.cards.getCard(this.cardId)?.rarity?.toLowerCase();
 		this.creatorCardIds = card.creatorCardIds;
+		this.creatorEntityIds = card.creatorEntityId ? [card.creatorEntityId] : [];
 		this.giftTooltip = null;
 		this.updateGiftTooltip();
 		this.highlight = card.highlight;
@@ -729,7 +731,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 		if (this.rarity === 'legendary') {
 			this.mouseOverRight += 25;
 		}
-		if (this.creatorCardIds && this.creatorCardIds.length > 0) {
+		if (!!this.creatorCardIds?.length || !!this.creatorEntityIds?.length) {
 			this.mouseOverRight += 25;
 		}
 		if (this.isBurned) {
@@ -767,7 +769,7 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 			cardName = dredgerName?.length
 				? this.i18n.getDredgedByCardName(dredgerName)
 				: this.i18n.getUnknownCardName();
-		} else if (!!card.creatorCardIds?.length) {
+		} else if (!!card.creatorCardIds?.length || card.creatorEntityId) {
 			const creatorCardId = card.creatorCardIds[0];
 			const creatorName = this.cards.getCard(creatorCardId)?.name;
 			cardName = creatorName?.length
