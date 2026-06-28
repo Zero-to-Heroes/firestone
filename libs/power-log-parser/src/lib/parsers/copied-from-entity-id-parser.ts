@@ -49,19 +49,33 @@ export class CopiedFromEntityIdParser implements ActionParser {
 		const copiedEntity = this.GameState.CurrentEntities.get(tagChange.Value)!;
 		const copiedCardEntityId = tagChange.Value;
 		const copiedCardControllerId = copiedEntity.GetController();
+
+		const debug = tagChange.Entity === 131;
+		// Update both entities with card Id of the known cards
+		if (!copiedEntity.CardId?.length && cardId?.length) {
+			copiedEntity.CardId = cardId;
+		}
+
 		return [
 			GameEventProvider.Create(
 				tagChange.TimeStamp,
 				'COPIED_FROM_ENTITY_ID',
-				GameEventHelper.CreateProvider('COPIED_FROM_ENTITY_ID', cardId, controllerId, entity.Id, this.StateFacade, {
-					CopiedCardControllerId: copiedCardControllerId,
-					CopiedCardEntityId: copiedCardEntityId,
-					CopiedCardZone: copiedEntity.GetZone(),
-					CopiedCardCost: copiedEntity.GetTag(GameTag.COST),
-					CopiedCardAttack: copiedEntity.GetTag(GameTag.ATK),
-					CopiedCardHealth: copiedEntity.GetTag(GameTag.HEALTH),
-					CopyDredgeTag: entity.GetTag(GameTag.DREDGE) === 1,
-				}),
+				GameEventHelper.CreateProvider(
+					'COPIED_FROM_ENTITY_ID',
+					cardId,
+					controllerId,
+					entity.Id,
+					this.StateFacade,
+					{
+						CopiedCardControllerId: copiedCardControllerId,
+						CopiedCardEntityId: copiedCardEntityId,
+						CopiedCardZone: copiedEntity.GetZone(),
+						CopiedCardCost: copiedEntity.GetTag(GameTag.COST),
+						CopiedCardAttack: copiedEntity.GetTag(GameTag.ATK),
+						CopiedCardHealth: copiedEntity.GetTag(GameTag.HEALTH),
+						CopyDredgeTag: entity.GetTag(GameTag.DREDGE) === 1,
+					},
+				),
 				true,
 				node,
 			),
@@ -70,7 +84,10 @@ export class CopiedFromEntityIdParser implements ActionParser {
 
 	CreateGameEventProviderFromClose(node: Node): GameEventProvider[] | null {
 		const showEntity = node.Object as ShowEntity;
-		if (this.GameState.CurrentEntities.get(showEntity.Entity)!.GetTag(GameTag.CARDTYPE) === (CardType.ENCHANTMENT as number)) {
+		if (
+			this.GameState.CurrentEntities.get(showEntity.Entity)!.GetTag(GameTag.CARDTYPE) ===
+			(CardType.ENCHANTMENT as number)
+		) {
 			return null;
 		}
 
