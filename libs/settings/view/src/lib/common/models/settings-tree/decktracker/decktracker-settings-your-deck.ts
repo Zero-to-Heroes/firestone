@@ -282,7 +282,10 @@ const disableAllCounters = (context: SettingContext) => {
 	context.prefs.savePreferences(newPrefs);
 };
 
-const counters = (context: SettingContext): readonly CounterSetting[] => rawCounters(context).sort((a, b) => a.label.localeCompare(b.label));
+const counters = (context: SettingContext): readonly CounterSetting[] =>
+	rawCounters(context)
+		.filter((a) => !!a?.label)
+		.sort((a, b) => a.label.localeCompare(b.label));
 const rawCounters = (context: SettingContext): CounterSetting[] => [
 	{
 		id: 'attack-on-board',
