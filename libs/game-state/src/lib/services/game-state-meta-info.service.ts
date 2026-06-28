@@ -31,6 +31,11 @@ export class GameStateMetaInfoService {
 	// If the card goes back to deck / board, we want to reset the counter, as it doesn't
 	// provide any meaningful info anymore
 	private cleanZone(zone: readonly DeckCard[], removeBottomInfo: boolean): readonly DeckCard[] {
+		// Cheap precheck: avoid allocating a new array (.map) when there's nothing to clean. This
+		// keeps the per-event stamping pass allocation-free on the common no-op path.
+		if (!zone.some((card) => card.metaInfo.turnAtWhichCardEnteredCurrentZone !== undefined)) {
+			return zone;
+		}
 		const newZone = zone.map((card) =>
 			card.metaInfo.turnAtWhichCardEnteredCurrentZone === undefined
 				? card
@@ -55,6 +60,17 @@ export class GameStateMetaInfoService {
 		currentTurn: number | 'mulligan',
 		removeBottomInfo: boolean,
 	): readonly DeckCard[] {
+		// Cheap precheck: avoid allocating a new array (.map) when every hand card is already
+		// stamped. This keeps the per-event stamping pass allocation-free on the common no-op path.
+		if (
+			!hand.some(
+				(card) =>
+					card.metaInfo?.turnAtWhichCardEnteredHand === undefined ||
+					card.metaInfo?.turnAtWhichCardEnteredCurrentZone === undefined,
+			)
+		) {
+			return hand;
+		}
 		const newHand = hand.map((card) => this.updateCardInHand(deckState, card, currentTurn, removeBottomInfo));
 		return arraysEqual(newHand, hand) ? hand : newHand;
 	}

@@ -262,13 +262,11 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	'smoldering-grove': 'smoldering-grove/smoldering-grove.log',
 	'fast-forward-naralex': 'fast-forward-naralex/fast-forward-naralex.log',
 	'blooming-bulb': 'blooming-bulb/blooming-bulb.log',
-	'frost-tyrant': '../power.log',
 	'dual-class-shatter-draw': 'dual-class-shatter-draw/dual-class-shatter-draw.log',
 	'amalgam-atk': 'amalgam-atk/amalgam-atk.log',
 	malchezaar: 'malchezaar/malchezaar.log',
 	'geddon-discover': 'geddon-discover/geddon-discover.log',
 	'ritual-full-moon': 'ritual-full-moon/ritual-full-moon.log',
-	'baking-soda-triangulate': '../power.log',
 	'triangulate-baking-soda-play': 'triangulate-baking-soda-play/triangulate-baking-soda-play.log',
 };
 

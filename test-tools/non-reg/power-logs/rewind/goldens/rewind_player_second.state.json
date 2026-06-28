@@ -127,34 +127,17 @@
     "cardsInStartingHand": [
       {
         "actualManaCost": null,
-        "createdIndex": 1,
-        "entityId": 42,
-        "forged": 0,
-        "guessedInfo": {},
-        "internalEntityId": "<scrubbed>",
-        "linkedEntityIds": [],
-        "metaInfo": {},
-        "prepared": 0,
-        "rarity": null,
-        "refManaCost": null,
-        "relatedCardIds": [],
-        "tags": {
-          "49": 3,
-          "50": 2,
-          "53": 42,
-          "263": 2
-        },
-        "zone": "HAND"
-      },
-      {
-        "actualManaCost": null,
         "createdIndex": 2,
         "entityId": 57,
         "forged": 0,
         "guessedInfo": {},
         "internalEntityId": "<scrubbed>",
         "linkedEntityIds": [],
-        "metaInfo": {},
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": "<scrubbed>",
+          "turnAtWhichCardEnteredCurrentZone": 0,
+          "turnAtWhichCardEnteredHand": 0
+        },
         "prepared": 0,
         "rarity": null,
         "refManaCost": null,
@@ -180,8 +163,8 @@
         "linkedEntityIds": [],
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": "<scrubbed>",
-          "turnAtWhichCardEnteredCurrentZone": 0,
-          "turnAtWhichCardEnteredHand": 0
+          "turnAtWhichCardEnteredCurrentZone": "mulligan",
+          "turnAtWhichCardEnteredHand": "mulligan"
         },
         "prepared": 0,
         "rarity": null,
@@ -205,8 +188,8 @@
         "linkedEntityIds": [],
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": "<scrubbed>",
-          "turnAtWhichCardEnteredCurrentZone": 0,
-          "turnAtWhichCardEnteredHand": 0
+          "turnAtWhichCardEnteredCurrentZone": "mulligan",
+          "turnAtWhichCardEnteredHand": "mulligan"
         },
         "prepared": 0,
         "rarity": null,
@@ -242,6 +225,31 @@
           "50": 2,
           "53": 39,
           "263": 1
+        },
+        "zone": "HAND"
+      },
+      {
+        "actualManaCost": null,
+        "createdIndex": 1,
+        "entityId": 42,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "linkedEntityIds": [],
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": "<scrubbed>",
+          "turnAtWhichCardEnteredCurrentZone": 0,
+          "turnAtWhichCardEnteredHand": 0
+        },
+        "prepared": 0,
+        "rarity": null,
+        "refManaCost": null,
+        "relatedCardIds": [],
+        "tags": {
+          "49": 3,
+          "50": 2,
+          "53": 42,
+          "263": 2
         },
         "zone": "HAND"
       }
@@ -518,7 +526,7 @@
         "linkedEntityIds": [],
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": "<scrubbed>",
-          "turnAtWhichCardEnteredHand": 0
+          "turnAtWhichCardEnteredHand": "mulligan"
         },
         "prepared": 0,
         "rarity": null,
@@ -543,7 +551,7 @@
         "linkedEntityIds": [],
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": "<scrubbed>",
-          "turnAtWhichCardEnteredHand": 0
+          "turnAtWhichCardEnteredHand": "mulligan"
         },
         "prepared": 0,
         "rarity": null,
@@ -568,7 +576,7 @@
         "linkedEntityIds": [],
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": "<scrubbed>",
-          "turnAtWhichCardEnteredHand": 0
+          "turnAtWhichCardEnteredHand": "mulligan"
         },
         "prepared": 0,
         "rarity": null,
@@ -599,26 +607,7 @@
     "hand": [
       "<cycle>",
       "<cycle>",
-      {
-        "actualManaCost": null,
-        "createdIndex": 1,
-        "entityId": 42,
-        "forged": 0,
-        "guessedInfo": "<cycle>",
-        "internalEntityId": "<scrubbed>",
-        "linkedEntityIds": "<cycle>",
-        "metaInfo": {
-          "timestampAtWhichCardEnteredHand": "<scrubbed>",
-          "turnAtWhichCardEnteredCurrentZone": 1,
-          "turnAtWhichCardEnteredHand": 1
-        },
-        "prepared": 0,
-        "rarity": null,
-        "refManaCost": null,
-        "relatedCardIds": "<cycle>",
-        "tags": "<cycle>",
-        "zone": "HAND"
-      },
+      "<cycle>",
       {
         "cardId": "",
         "createdIndex": 0,
@@ -632,8 +621,8 @@
         "linkedEntityIds": [],
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": "<scrubbed>",
-          "turnAtWhichCardEnteredCurrentZone": 2,
-          "turnAtWhichCardEnteredHand": 2
+          "turnAtWhichCardEnteredCurrentZone": 1,
+          "turnAtWhichCardEnteredHand": 1
         },
         "prepared": 0,
         "relatedCardIds": [],
@@ -686,8 +675,8 @@
         "linkedEntityIds": [],
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": "<scrubbed>",
-          "turnAtWhichCardEnteredCurrentZone": 5,
-          "turnAtWhichCardEnteredHand": 5
+          "turnAtWhichCardEnteredCurrentZone": 4,
+          "turnAtWhichCardEnteredHand": 4
         },
         "prepared": 0,
         "relatedCardIds": [],
@@ -736,8 +725,8 @@
         "linkedEntityIds": [],
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": "<scrubbed>",
-          "turnAtWhichCardEnteredCurrentZone": 7,
-          "turnAtWhichCardEnteredHand": 7
+          "turnAtWhichCardEnteredCurrentZone": 6,
+          "turnAtWhichCardEnteredHand": 6
         },
         "prepared": 0,
         "rarity": null,
@@ -1855,7 +1844,7 @@
         "linkedEntityIds": [],
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": "<scrubbed>",
-          "turnAtWhichCardEnteredHand": 2
+          "turnAtWhichCardEnteredHand": 1
         },
         "playTiming": 14,
         "positionFromTop": 0,
@@ -1920,7 +1909,7 @@
         "linkedEntityIds": [],
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": "<scrubbed>",
-          "turnAtWhichCardEnteredHand": 1
+          "turnAtWhichCardEnteredHand": 0
         },
         "playTiming": 21,
         "prepared": 0,
@@ -2223,7 +2212,11 @@
         "internalEntityId": "<scrubbed>",
         "lastAffectedByEntityId": 2,
         "linkedEntityIds": [],
-        "metaInfo": {},
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": "<scrubbed>",
+          "turnAtWhichCardEnteredCurrentZone": 0,
+          "turnAtWhichCardEnteredHand": 0
+        },
         "prepared": 0,
         "refManaCost": 1,
         "relatedCardIds": [],
@@ -2273,7 +2266,11 @@
         "internalEntityId": "<scrubbed>",
         "lastAffectedByEntityId": 2,
         "linkedEntityIds": "<cycle>",
-        "metaInfo": {},
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": "<scrubbed>",
+          "turnAtWhichCardEnteredCurrentZone": 0,
+          "turnAtWhichCardEnteredHand": 0
+        },
         "prepared": 0,
         "refManaCost": 8,
         "relatedCardIds": "<cycle>",
@@ -2317,7 +2314,11 @@
         "internalEntityId": "<scrubbed>",
         "lastAffectedByEntityId": 2,
         "linkedEntityIds": [],
-        "metaInfo": {},
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": "<scrubbed>",
+          "turnAtWhichCardEnteredCurrentZone": 0,
+          "turnAtWhichCardEnteredHand": 0
+        },
         "prepared": 0,
         "refManaCost": 8,
         "relatedCardIds": [],
@@ -2710,7 +2711,7 @@
         "linkedEntityIds": [],
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": "<scrubbed>",
-          "turnAtWhichCardEnteredHand": 0
+          "turnAtWhichCardEnteredHand": "mulligan"
         },
         "prepared": 0,
         "refManaCost": 2,
@@ -2764,11 +2765,7 @@
         "internalEntityId": "<scrubbed>",
         "lastAffectedByEntityId": 2,
         "linkedEntityIds": "<cycle>",
-        "metaInfo": {
-          "timestampAtWhichCardEnteredHand": "<scrubbed>",
-          "turnAtWhichCardEnteredCurrentZone": 1,
-          "turnAtWhichCardEnteredHand": 1
-        },
+        "metaInfo": "<cycle>",
         "prepared": 0,
         "refManaCost": 8,
         "relatedCardIds": "<cycle>",

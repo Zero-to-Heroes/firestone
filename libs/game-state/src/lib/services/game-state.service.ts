@@ -296,27 +296,12 @@ export class GameStateService {
 							eventsToProcess[i] as GameStateEvent,
 						);
 					}
-				}
-
-				// TODO: completely remove this step
-				if (currentState && currentState !== this.state) {
-					const updatedPlayerDeck = this.gameStateMetaInfos.updateDeck(
-						currentState.playerDeck,
-						currentState.currentTurn,
-					);
-					const udpatedOpponentDeck = this.gameStateMetaInfos.updateDeck(
-						currentState.opponentDeck,
-						currentState.currentTurn,
-					);
-					const hasChanged =
-						updatedPlayerDeck !== currentState.playerDeck ||
-						udpatedOpponentDeck !== currentState.opponentDeck;
-					currentState = hasChanged
-						? currentState.update({
-								playerDeck: updatedPlayerDeck,
-								opponentDeck: udpatedOpponentDeck,
-							})
-						: currentState;
+					// Stamp the zone-transition turn metadata right after each event, so the captured
+					// turn reflects the moment the card actually changed zone (entered hand). Doing this
+					// per-event instead of once per batch makes the value independent of how events are
+					// grouped into chunks - otherwise the stamp uses the end-of-chunk turn, which shifts
+					// whenever the event count changes (see the rewind non-reg goldens).
+					currentState = this.stampMetaInfo(currentState);
 				}
 
 				if (currentState && currentState !== this.state) {
@@ -347,6 +332,27 @@ export class GameStateService {
 			}
 		}
 		return shouldProcessGameEnd || !gameEndEvent ? [] : [gameEndEvent];
+	}
+
+	// Re-stamp the per-card zone-transition turn metadata. Cheap on the no-op path thanks to the
+	// `.some()` prechecks in GameStateMetaInfoService, so it's safe to call after every event.
+	private stampMetaInfo(currentState: GameState): GameState {
+		if (!currentState) {
+			return currentState;
+		}
+		const updatedPlayerDeck = this.gameStateMetaInfos.updateDeck(currentState.playerDeck, currentState.currentTurn);
+		const updatedOpponentDeck = this.gameStateMetaInfos.updateDeck(
+			currentState.opponentDeck,
+			currentState.currentTurn,
+		);
+		const hasChanged =
+			updatedPlayerDeck !== currentState.playerDeck || updatedOpponentDeck !== currentState.opponentDeck;
+		return hasChanged
+			? currentState.update({
+					playerDeck: updatedPlayerDeck,
+					opponentDeck: updatedOpponentDeck,
+				})
+			: currentState;
 	}
 
 	private async processNonMatchEvent(currentState: GameState, event: GameStateEvent): Promise<GameState> {
