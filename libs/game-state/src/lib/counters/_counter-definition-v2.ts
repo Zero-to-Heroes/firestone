@@ -27,7 +27,7 @@ export abstract class CounterDefinitionV2<T> {
 	// Ceaseless expanse which tracks things game-wide, instead of per-player
 	protected singleton = false;
 
-	private curatedPools: {
+	protected curatedPools: {
 		arena: readonly string[];
 	};
 

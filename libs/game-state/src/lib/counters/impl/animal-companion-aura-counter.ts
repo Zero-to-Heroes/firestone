@@ -86,7 +86,6 @@ export class AnimalCompanionAuraCounterDefinitionV2 extends CounterDefinitionV2<
 				return null;
 			}
 			const newCost = this.allCards.getCard(newAnimalCompanions[0]!).cost ?? 3;
-			// const realCompanions = newAnimalCompanions.map((c) => this.allCards.getCard(c!).id as CardIds);
 			const cardIds = filterCards(
 				CardIds.AnimalCompanionCore,
 				this.allCards.getService(),
@@ -99,7 +98,7 @@ export class AnimalCompanionAuraCounterDefinitionV2 extends CounterDefinitionV2<
 					format: state.metadata?.formatType ?? GameFormat.FT_STANDARD,
 					gameType: state.metadata?.gameType ?? GameType.GT_RANKED,
 					scenarioId: state.metadata?.scenarioId ?? 0,
-					validArenaPool: [],
+					validArenaPool: this.curatedPools?.arena ?? [],
 					currentClass: state.opponentDeck.getCurrentClass()!,
 					initialDecklist: state.opponentDeck.deckList?.map((c) => c.cardId) ?? undefined,
 				},
