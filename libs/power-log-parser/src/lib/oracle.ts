@@ -1296,8 +1296,8 @@ export class Oracle {
 				case CardIds.PatchworkPals_TOY_353:
 					return Oracle.AddMultipleKnownCards(gameState, node, [
 						CardIds.HufferLegacy,
-						CardIds.MishaLegacy,
 						CardIds.LeokkLegacy,
+						CardIds.MishaLegacy,
 					]);
 				case CardIds.RivendareWarrider:
 					return Oracle.AddMultipleKnownCards(gameState, node, [
