@@ -1385,7 +1385,7 @@ export interface FilterCardsOptions {
 export const filterCards = (
 	allCards: AllCardsService,
 	options: FilterCardsOptions,
-	sourceCardId: string,
+	sourceCardId: string | null,
 	...filters: ((ref: ReferenceCard) => boolean | undefined)[]
 ) => {
 	let format = options.format;
@@ -1435,7 +1435,7 @@ export const filterCards = (
 	return baseCardsExtended.filter((c) => filters.every((f) => f(c))).map((c) => c.id);
 };
 
-const getBaseCards = (sourceCardId: string, allCards: AllCardsService): readonly ReferenceCard[] => {
+const getBaseCards = (sourceCardId: string | null, allCards: AllCardsService): readonly ReferenceCard[] => {
 	if (uncollectibleCards.length === 0) {
 		uncollectibleCards = allCards
 			.getCards()
@@ -1803,7 +1803,10 @@ const hasFactionInDecklist = (
 	return false;
 };
 
-const doesSummonInPlay = (sourceCardId: string): boolean => {
+const doesSummonInPlay = (sourceCardId: string | null): boolean => {
+	if (!sourceCardId) {
+		return false;
+	}
 	const dynamicPoolImpl = cardsInfoCache[sourceCardId];
 	if (hasDynamicPool(dynamicPoolImpl)) {
 		if (dynamicPoolImpl.summonInPlay != null) {
@@ -1888,7 +1891,7 @@ const doesSummonInPlay = (sourceCardId: string): boolean => {
 	}
 };
 
-const wantsColossalMinions = (sourceCardId: string): boolean => {
+const wantsColossalMinions = (sourceCardId: string | null): boolean => {
 	switch (sourceCardId) {
 		case CardIds.ClashOfTheColossals:
 			return true;

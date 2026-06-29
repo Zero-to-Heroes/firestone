@@ -298,7 +298,7 @@ export class GameStateParsersService {
 				new SpecificSummonsParser(this.allCards),
 				new ListCardsPlayedFromInitialDeckParser(this.helper, this.allCards),
 			],
-			[GameEvent.CARD_PREPARED]: [new CardPreparedParser(this.helper)],
+			[GameEvent.CARD_PREPARED]: [new CardPreparedParser(this.helper, this.allCards)],
 			[GameEvent.CARD_REMOVED_FROM_BOARD]: [new CardRemovedFromBoardParser(this.helper, this.allCards)],
 			[GameEvent.CARD_REMOVED_FROM_DECK]: [new CardRemovedFromDeckParser(this.helper, this.allCards)],
 			[GameEvent.CARD_REMOVED_FROM_HAND]: [new CardRemovedFromHandParser(this.helper, this.allCards)],

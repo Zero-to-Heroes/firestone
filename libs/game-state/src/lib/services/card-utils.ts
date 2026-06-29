@@ -28,6 +28,7 @@ import { hasCorrectClass } from '../related-cards/dynamic-pools';
 import { getCurrentExcavateTreasuresPool } from '../related-cards/excavate-treasures';
 import { hasGeneratingCard } from './cards/_card.type';
 import { cardsInfoCache } from './cards/_mapping';
+import { filterCards } from './cards/utils';
 import { EntityLike, hasTag } from './parser-entity-utils';
 
 export const getProcessedCard = (
@@ -361,7 +362,7 @@ export const getShatteredRecombinedPossibleCards = (
 
 export const addGuessInfoToCard = (
 	card: DeckCard,
-	creatorCardId: string,
+	creatorCardId: string | null,
 	creatorEntityId: number | null,
 	deckState: DeckState,
 	opponentDeckState: DeckState,
@@ -401,8 +402,8 @@ export const addGuessInfoToCard = (
 		// 		},
 		// 	});
 		default:
-			const cardImpl = cardsInfoCache[creatorCardId];
-			if (hasGeneratingCard(cardImpl)) {
+			const cardImpl = creatorCardId ? cardsInfoCache[creatorCardId] : null;
+			if (cardImpl && hasGeneratingCard(cardImpl)) {
 				const optionsWithDeckContext = {
 					...options,
 					currentClass: options.currentClass ?? deckState.getCurrentClass(),
@@ -467,7 +468,40 @@ export const addGuessInfoToCard = (
 		}
 	}
 
-	const isCreatedByExcavate = hasMechanic(allCards.getCard(creatorCardId), GameTag.EXCAVATE);
+	const hasPreparedTag =
+		options?.tags?.some((t) => t.Name === GameTag.PREPARED && t.Value === 1) || card.tags?.[GameTag.PREPARED] === 1;
+	if (hasPreparedTag && !!card.prepared) {
+		console.debug('[addGuessInfoToCard] hasPreparedTag', `entityId:${card.entityId}__`, card);
+		const possibleCards = filterCards(
+			null,
+			allCards.getService(),
+			(c) =>
+				(!!c.mechanics?.includes(GameTag[GameTag.PREPARE]) ||
+					// Temp until the cards DB is updated
+					c.text?.toLowerCase()?.includes('<b>prepare</b>')) &&
+				!!c.cost &&
+				c.cost >= card.prepared,
+		);
+		const finalPossibleCards = newGuessedInfo?.possibleCards?.length
+			? newGuessedInfo.possibleCards.filter((c) => possibleCards.includes(c))
+			: possibleCards;
+		console.debug(
+			'[addGuessInfoToCard] finalPossibleCards',
+			`entityId:${card.entityId}__`,
+			finalPossibleCards,
+			possibleCards,
+			allCards.getCards().filter((c) => c.text?.toLowerCase()?.includes('<b>prepare</b>') && !!c.cost),
+		);
+		newGuessedInfo = {
+			...newGuessedInfo,
+			mechanics: [...(newGuessedInfo?.mechanics ?? []), GameTag.PREPARED].filter(
+				(c, index, self) => self.indexOf(c) === index,
+			),
+			possibleCards: finalPossibleCards,
+		};
+	}
+
+	const isCreatedByExcavate = hasMechanic(allCards.getCard(creatorCardId ?? ''), GameTag.EXCAVATE);
 	if (isCreatedByExcavate) {
 		const excavateTreasures = getCurrentExcavateTreasuresPool(deckState, deckState?.hero?.classes ?? []);
 		if (excavateTreasures.length > 0) {

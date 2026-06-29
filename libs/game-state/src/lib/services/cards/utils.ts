@@ -5,7 +5,7 @@ import { isCardValidForGame } from '../card-utils';
 import { StaticGeneratingCardInput } from './_card.type';
 
 export const filterCards = (
-	sourceCardId: string,
+	sourceCardId: string | null,
 	allCards: AllCardsService,
 	filter: (c: ReferenceCard) => boolean,
 	options?: FilterCardsInput | StaticGeneratingCardInput['inputOptions'],
