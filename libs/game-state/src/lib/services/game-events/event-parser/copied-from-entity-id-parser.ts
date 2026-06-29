@@ -11,6 +11,7 @@ import {
 	forcedHiddenCardCreators,
 	isSelfCopyHandLeakIncompleteLogCardId,
 } from '../../hs-utils';
+import { revealCard } from '../card-reveal';
 import { CopiedFromEntityIdGameEvent } from '../events/copied-from-entity-id-game-event';
 import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
@@ -304,11 +305,14 @@ export class CopiedFromEntityIdParser implements EventParser {
 					})
 				: copiedDeck.deck;
 		console.debug('[copied-from-entity] newCopiedDeck', newCopiedDeck, copiedDeck);
-		const newCopiedPlayer =
+		const newCopiedPlayerBeforeReveal =
 			copiedCardZone === Zone.DECK
 				? copiedDeck.update({ deck: newCopiedDeck })
 				: this.helper.updateCardInDeck(copiedDeck, updatedCopiedCardWithPosition, isCopiedPlayer);
-		console.debug('[copied-from-entity] newCopiedPlayer', newCopiedPlayer);
+		console.debug('[copied-from-entity] newCopiedPlayer', newCopiedPlayerBeforeReveal);
+
+		// We learned something about the copied deck, so maybe we have information we can show, like Fabled package cards
+		const newCopiedPlayer = revealCard(newCopiedPlayerBeforeReveal, updatedCopiedCardWithPosition, this.allCards);
 
 		// Also update the secrets
 		const copiedDeckWithSecrets: DeckState = this.updateSecrets(

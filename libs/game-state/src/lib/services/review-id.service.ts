@@ -15,8 +15,8 @@ export class ReviewIdService implements IReviewIdService {
 	private init() {
 		// TODO: merge both subscriptions into one
 		this.gameEvents.onGameStart.subscribe((event) => {
-			console.log('[game-state] game start event received, resetting currentReviewId');
 			this.reviewId$$.next(uuid());
+			console.log('[game-state] game start event received, resetting currentReviewId', this.reviewId$$.value);
 		});
 	}
 }
