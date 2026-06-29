@@ -267,19 +267,6 @@ const getDynamicRelatedCardIdsInternal = (
 					!isCardValidForGame(c, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
 					hasCorrectRarity(c, CardRarity.LEGENDARY),
 			);
-		case CardIds.HighborneMentor_TIME_704:
-		case CardIds.HighborneMentor_HighbornePupilToken_TIME_704t:
-			return filterCards(
-				allCards,
-				// So that we don't get cards from the arena-specific pool instead
-				{ ...options, format: GameFormat.FT_WILD, gameType: GameType.GT_RANKED },
-				cardId,
-				(c) =>
-					!isCardValidForGame(c, GameFormat.FT_STANDARD, GameType.GT_RANKED) &&
-					hasCorrectType(c, CardType.SPELL) &&
-					hasCost(c, '>=', 7) &&
-					canBeDiscoveredByClass(c, options.currentClass),
-			);
 
 		// We do it here so we don't recompute the data for every card
 		case CardIds.JungleJammer:

@@ -616,7 +616,7 @@ export class GameStateService {
 				gameEvent.cardId,
 				`entityId:${gameEvent.entityId}_`,
 				(gameEvent as MinionsDiedEvent)?.additionalData?.deadMinions?.map((m) => `entityId:${m.EntityId}_`),
-				`found?=${currentState.opponentDeck.deck.filter((e) => e.cardId === CardIds.TalanjiOfTheGraves_BwonsamdiToken_TIME_619t).length}`,
+				`found?=${currentState.opponentDeck.deck.filter((e) => e.cardId === CardIds.DukeOfBelow_CATA_493).length}`,
 				currentState,
 				gameEvent,
 			);

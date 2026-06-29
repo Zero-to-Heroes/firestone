@@ -195,6 +195,7 @@ export { Hellraiser } from './hellraiser';
 export { HemetFoamMarksman } from './hemet-foam-marksman';
 export { Hexmarshal } from './hexmarshal';
 export { HiHoSilverwing } from './hi-ho-silverwing';
+export { HighborneMentor } from './highborne-mentor';
 export { HijackedSecuritybot } from './hijacked-securitybot';
 export { Hipster } from './hipster';
 export { HiveMap } from './hive-map';
