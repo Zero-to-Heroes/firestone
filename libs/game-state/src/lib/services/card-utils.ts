@@ -383,6 +383,13 @@ export const addGuessInfoToCard = (
 		return card;
 	}
 	let newGuessedInfo: GuessedInfo | null = card.guessedInfo;
+	const optionsWithDeckContext = {
+		...options,
+		currentClass: options.currentClass ?? deckState.getCurrentClass(),
+		initialDecklist: options.initialDecklist ?? deckState.deckList?.map((c) => c.cardId) ?? [],
+		metadata: options.metadata ?? gameState.metadata,
+	};
+
 	switch (creatorCardId) {
 		case CardIds.HarthStonebrew_CORE_GIFT_01:
 		case CardIds.HarthStonebrew_GIFT_01:
@@ -404,12 +411,6 @@ export const addGuessInfoToCard = (
 		default:
 			const cardImpl = creatorCardId ? cardsInfoCache[creatorCardId] : null;
 			if (cardImpl && hasGeneratingCard(cardImpl)) {
-				const optionsWithDeckContext = {
-					...options,
-					currentClass: options.currentClass ?? deckState.getCurrentClass(),
-					initialDecklist: options.initialDecklist ?? deckState.deckList?.map((c) => c.cardId) ?? [],
-					metadata: options.metadata ?? gameState.metadata,
-				};
 				const guessedInfo = cardImpl.guessInfo?.({
 					card,
 					deckState,
@@ -471,8 +472,21 @@ export const addGuessInfoToCard = (
 	const hasPreparedTag =
 		options?.tags?.some((t) => t.Name === GameTag.PREPARED && t.Value === 1) || card.tags?.[GameTag.PREPARED] === 1;
 	if (hasPreparedTag && !!card.prepared) {
-		console.debug('[addGuessInfoToCard] hasPreparedTag', `entityId:${card.entityId}__`, card);
-		const possibleCards = filterCards(
+		console.debug(
+			'[addGuessInfoToCard] hasPreparedTag',
+			`entityId:${card.entityId}__`,
+			card,
+			optionsWithDeckContext,
+		);
+		const possibleClasses: readonly CardClass[] = card.guessedInfo?.cardClasses?.length
+			? card.guessedInfo.cardClasses
+			: ([
+					deckState.getCurrentClassEnum(),
+					...(allCards.getCard(deckState.heroPower?.cardId ?? '')?.classes ?? []).map((c) => CardClass[c]),
+					CardClass.NEUTRAL,
+				].filter((c) => c !== undefined) as readonly CardClass[]);
+		console.debug('[addGuessInfoToCard] possibleClasses', `entityId:${card.entityId}__`, possibleClasses);
+		const possibleCardsBase = filterCards(
 			null,
 			allCards.getService(),
 			(c) =>
@@ -481,6 +495,10 @@ export const addGuessInfoToCard = (
 					c.text?.toLowerCase()?.includes('<b>prepare</b>')) &&
 				!!c.cost &&
 				c.cost >= card.prepared,
+			optionsWithDeckContext,
+		);
+		const possibleCards = possibleCardsBase.filter((c) =>
+			possibleClasses.some((cc) => hasCorrectClass(allCards.getCard(c), cc)),
 		);
 		const finalPossibleCards = newGuessedInfo?.possibleCards?.length
 			? newGuessedInfo.possibleCards.filter((c) => possibleCards.includes(c))
