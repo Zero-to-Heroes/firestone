@@ -60,15 +60,8 @@ export class BgsOverlayHeroOverviewService {
 			map((prefs) => prefs.bgsEnableOpponentBoardMouseOver),
 			distinctUntilChanged(),
 		);
-		combineLatest([
-			pref$,
-			players$,
-			lastOpponentPlayerId$,
-			currentTurn$,
-			config$,
-			this.mouseOver.mousedOverCard$$,
-			componentClass$,
-		])
+		const mousedOverCard$ = this.mouseOver.mousedOverCard$$.pipe(distinctUntilChanged());
+		combineLatest([pref$, players$, lastOpponentPlayerId$, currentTurn$, config$, mousedOverCard$, componentClass$])
 			.pipe(
 				map(([pref, players, lastOpponentPlayerId, currentTurn, config, card, componentClass]) => {
 					if (!players || !card || !pref) {
