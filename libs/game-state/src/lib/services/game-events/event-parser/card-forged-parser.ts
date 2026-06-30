@@ -1,3 +1,4 @@
+import { GameTag } from '@firestone-hs/reference-data';
 import { GameState } from '../../../models/game-state';
 import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
@@ -27,6 +28,14 @@ export class CardForgedParser implements EventParser {
 
 		const newCard = card.update({
 			forged: card.forged + 1,
+			guessedInfo: {
+				...(card.guessedInfo ?? {}),
+				// TODO: move here the card pool detection? Having it on demand (in the UI) lets us refresh the info
+				// when new information is available (eg we better know the opponent's classes), but maybe it's not worth it
+				mechanics: [...(card.guessedInfo?.mechanics ?? []), GameTag.FORGED].filter(
+					(m, index, self) => self.indexOf(m) === index,
+				),
+			},
 		});
 		const newHand = deck.hand.map((c) => (c.entityId === entityId ? newCard : c));
 		const newDeck = deck.update({
