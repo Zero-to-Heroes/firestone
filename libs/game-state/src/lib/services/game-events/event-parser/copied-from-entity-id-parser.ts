@@ -79,6 +79,15 @@ export class CopiedFromEntityIdParser implements EventParser {
 			gameEvent,
 			deck,
 		);
+		// The two halves of a SHATTERED cards are flagged as copies of each other, while it is not the case
+		if (copiedCard?.tags?.[GameTag.SHATTERED] === 1) {
+			console.debug(
+				'[copied-from-entity] copiedCard is shattered, ignoring',
+				`entityId:${entityId}__`,
+				copiedCard,
+			);
+			return currentState;
+		}
 
 		// Typically happens when the opponent copies a card in our deck. Their copy is known (we know entityId + cardId)
 		// but it references an entityId on our side that we don't know of (if it's in the deck)
