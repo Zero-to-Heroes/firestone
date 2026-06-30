@@ -483,6 +483,7 @@ export const forceHideInfoWhenDrawnInfluencers = [
 	// From what I've tested, Glide / Plot Twist seem to behave properly (cast when drawn
 	// effects apply)
 	CardIds.SecretPassage,
+	CardIds.SecretPassage_SecretEntranceEnchantment,
 	// Cards that discover a card in your deck do count as drawing but cards that discover a copy do not.
 	CardIds.ShadowVisions,
 ];

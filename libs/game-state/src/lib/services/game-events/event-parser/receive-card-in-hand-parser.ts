@@ -630,6 +630,8 @@ export const denormalizeCreatorCardId = (
 	deck: DeckState,
 ): { creatorCardId: string; creatorEntityId: number } => {
 	switch (creatorCardId) {
+		case CardIds.SecretPassage_SecretEntranceEnchantment:
+			return { creatorCardId: CardIds.SecretPassage, creatorEntityId };
 		case CardIds.DarkGiftToken_EDR_102t:
 		case CardIds.SweetDreamsToken_EDR_100t8:
 		case CardIds.WakingTerrorToken_EDR_100t:
