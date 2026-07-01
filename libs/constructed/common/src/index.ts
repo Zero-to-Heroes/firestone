@@ -1,5 +1,7 @@
 export * from './lib/constructed-common.module';
 export * from './lib/models/deck-summary';
+export * from './lib/models/meta-deck-card-variations';
+export * from './lib/models/meta-deck-stat';
 export * from './lib/models/mulligan-advice';
 export * from './lib/services/constructed-config.service';
 export * from './lib/services/constructed-discover.service';

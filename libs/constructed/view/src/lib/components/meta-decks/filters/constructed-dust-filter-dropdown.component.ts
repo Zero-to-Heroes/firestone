@@ -2,14 +2,12 @@ import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component
 import { PreferencesService } from '@firestone/shared/common/service';
 import { IOptionWithImage } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { waitForReady } from '@firestone/shared/framework/core';
+import { ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
-import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 
 @Component({
 	standalone: false,
 	selector: 'constructed-dust-filter-dropdown',
-	styleUrls: [],
 	template: `
 		<filter-dropdown
 			*ngIf="filter$ | async as value"
@@ -28,8 +26,8 @@ export class ConstructedDustFilterDropdownComponent extends AbstractSubscription
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
 
 	constructor(
-		protected readonly cdr: ChangeDetectorRef,
-		private readonly i18n: LocalizationFacadeService,
+		protected override readonly cdr: ChangeDetectorRef,
+		private readonly i18n: ILocalizationService,
 		private readonly prefs: PreferencesService,
 	) {
 		super(cdr);
@@ -63,17 +61,16 @@ export class ConstructedDustFilterDropdownComponent extends AbstractSubscription
 		this.filter$ = combineLatest([
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.constructedMetaDecksDustFilter ?? 'all')),
 		]).pipe(
-			this.mapData(([filter]) => {
-				console.debug('dust filter', filter, this.options);
+			this.mapData(([dustFilter]) => {
 				return {
-					filter: '' + filter,
-					placeholder: this.options.find((option) => option.value === '' + filter)?.label,
+					filter: '' + dustFilter,
+					placeholder: this.options.find((option) => option.value === '' + dustFilter)?.label ?? '',
 					visible: true,
 				};
 			}),
 		);
 
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.markForCheck();
 		}
 	}
@@ -84,5 +81,5 @@ export class ConstructedDustFilterDropdownComponent extends AbstractSubscription
 }
 
 interface DustFilterOption extends IOptionWithImage {
-	value: string /*ConstructedMetaDecksDustFilterType*/;
+	value: string;
 }

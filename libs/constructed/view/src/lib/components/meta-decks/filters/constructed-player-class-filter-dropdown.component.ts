@@ -3,16 +3,13 @@ import { ALL_CLASSES } from '@firestone-hs/reference-data';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { MultiselectOption } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { waitForReady } from '@firestone/shared/framework/core';
+import { ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
-import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 
 @Component({
 	standalone: false,
 	selector: 'constructed-player-class-filter-dropdown',
-	styleUrls: [
-		`../../../../../css/component/decktracker/main/filters/constructed-player-class-filter-dropdown.component.scss`,
-	],
+	styleUrls: ['./constructed-player-class-filter-dropdown.component.scss'],
 	template: `
 		<filter-dropdown-multiselect
 			*ngIf="filter$ | async as value"
@@ -34,8 +31,8 @@ export class ConstructedPlayerClassFilterDropdownComponent
 	filter$: Observable<{ selected: readonly string[]; placeholder: string; visible: boolean }>;
 
 	constructor(
-		protected readonly cdr: ChangeDetectorRef,
-		private readonly i18n: LocalizationFacadeService,
+		protected override readonly cdr: ChangeDetectorRef,
+		private readonly i18n: ILocalizationService,
 		private readonly prefs: PreferencesService,
 	) {
 		super(cdr);
@@ -59,9 +56,9 @@ export class ConstructedPlayerClassFilterDropdownComponent
 				placeholder: this.i18n.translateString(`global.class.all`),
 				visible: true,
 			})),
-		) as any;
+		);
 
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.markForCheck();
 		}
 	}

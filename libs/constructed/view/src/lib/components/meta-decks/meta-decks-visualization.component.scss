@@ -1,0 +1,63 @@
+:host {
+	height: 100%;
+	display: flex;
+	color: var(--default-text-color);
+	font-size: 13px;
+	flex-grow: 1;
+}
+
+with-loading {
+	display: flex;
+	flex-direction: column;
+}
+
+.constructed-meta-decks {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+
+	.header {
+		display: flex;
+		margin-bottom: 10px;
+	}
+
+	.decks-list {
+		display: flex;
+		flex-direction: column;
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		flex-grow: 1;
+		overflow-y: scroll;
+
+		.deck {
+			margin-bottom: 5px;
+
+			::ng-deep .constructed-meta-deck-summary {
+				height: 80px;
+			}
+		}
+	}
+}
+
+.data-info {
+	display: flex;
+	margin-bottom: 20px;
+	align-items: center;
+	justify-content: flex-end;
+	padding-right: 10px;
+
+	.label {
+		color: var(--color-2);
+		margin-right: 5px;
+	}
+
+	.value {
+		color: var(--color-1);
+	}
+
+	.separator {
+		margin: 0 5px;
+		color: var(--color-1);
+	}
+}

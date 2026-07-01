@@ -1,16 +1,14 @@
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { IOption } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
-import { waitForReady } from '@firestone/shared/framework/core';
+import { ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
 import { Observable, combineLatest } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { LocalizationFacadeService } from '../../../../services/localization-facade.service';
 
 @Component({
 	standalone: false,
 	selector: 'constructed-sample-size-filter-dropdown',
-	styleUrls: [],
 	template: `
 		<filter-dropdown
 			*ngIf="filter$ | async as value"
@@ -28,14 +26,13 @@ export class ConstructedSampleSizeFilterDropdownComponent
 	implements AfterContentInit
 {
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
-	options: IOption[] = [50, 100, 200, 500, 1000, 2000, 4000].map((value) => ({
-		value: '' + value,
-		label: this.i18n.translateString('app.decktracker.filters.sample-size-filter', { value: value }),
-	}));
+	options: IOption[];
+
+	@Input() allowVerySmallSamples: boolean = false;
 
 	constructor(
-		protected readonly cdr: ChangeDetectorRef,
-		private readonly i18n: LocalizationFacadeService,
+		protected override readonly cdr: ChangeDetectorRef,
+		private readonly i18n: ILocalizationService,
 		private readonly prefs: PreferencesService,
 	) {
 		super(cdr);
@@ -44,21 +41,28 @@ export class ConstructedSampleSizeFilterDropdownComponent
 	async ngAfterContentInit() {
 		await waitForReady(this.prefs);
 
+		const baseOptions = [50, 100, 200, 500, 1000, 2000, 4000];
+		if (this.allowVerySmallSamples) {
+			baseOptions.unshift(15);
+		}
+		this.options = baseOptions.map((value) => ({
+			value: '' + value,
+			label: this.i18n.translateString('app.decktracker.filters.sample-size-filter', { value: value }),
+		}));
 		this.filter$ = combineLatest([
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.constructedMetaDecksSampleSizeFilter)),
 		]).pipe(
-			filter(([filter]) => !!filter),
-			this.mapData(([filter]) => {
+			filter(([sampleSize]) => sampleSize != null),
+			this.mapData(([sampleSize]) => {
 				return {
-					filter: '' + filter,
-					options: this.options,
-					placeholder: this.options.find((option) => +option.value === filter)?.label,
+					filter: '' + sampleSize,
+					placeholder: this.options.find((option) => +option.value === sampleSize)?.label ?? '',
 					visible: true,
 				};
 			}),
 		);
 
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.markForCheck();
 		}
 	}

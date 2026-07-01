@@ -126,7 +126,7 @@ export class TavernBrawlService extends AbstractFacadeService<TavernBrawlService
 				})
 				.filter((deck) => deck.allCardsInDeck.length > 0),
 		};
-		console.debug('[tavern-brawl-meta-decks] done building stats');
+		console.debug('[tavern-brawl-meta-decks] done building stats', result);
 		return result;
 	}
 

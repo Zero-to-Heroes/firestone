@@ -9,10 +9,10 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { DeckStat } from '@firestone-hs/constructed-deck-stats';
-import { Sideboard, decode } from '@firestone-hs/deckstrings';
+import { decode } from '@firestone-hs/deckstrings';
 import { CardIds } from '@firestone-hs/reference-data';
 import { CollectionManager, dustToCraftFor, getOwnedForDeckBuilding } from '@firestone/collection/services';
-import { ExtendedDeckStats } from '@firestone/constructed/common';
+import { ColumnSortType, EnhancedDeckStat, ExtendedDeckStats, formatGamesCount } from '@firestone/constructed/common';
 import { Card } from '@firestone/memory';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import {
@@ -23,18 +23,14 @@ import {
 	groupByFunction2,
 	invertDirection,
 } from '@firestone/shared/framework/common';
-import { CardsFacadeService, getDateAgo } from '@firestone/shared/framework/core';
+import { CardsFacadeService, ILocalizationService, getDateAgo } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, shareReplay, startWith, takeUntil } from 'rxjs/operators';
-import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
 @Component({
 	standalone: false,
 	selector: 'meta-decks-visualization',
-	styleUrls: [
-		`../../../../css/component/decktracker/main/constructed-meta-decks-columns.scss`,
-		`../../../../css/component/decktracker/main/meta-decks-visualization.component.scss`,
-	],
+	styleUrls: ['./constructed-meta-decks-columns.scss', './meta-decks-visualization.component.scss'],
 	template: `
 		<ng-container
 			*ngIf="{
@@ -57,7 +53,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 					<div class="header" *ngIf="sortCriteria$ | async as sort">
 						<sortable-table-label
 							class="cell player-class"
-							[name]="'app.decktracker.meta.class-header' | owTranslate"
+							[name]="'app.decktracker.meta.class-header' | fsTranslate"
 							[sort]="sort"
 							[criteria]="'player-class'"
 							(sortClick)="onSortClick($event)"
@@ -65,7 +61,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 						</sortable-table-label>
 						<sortable-table-label
 							class="cell name"
-							[name]="'app.decktracker.meta.archetype-header' | owTranslate"
+							[name]="'app.decktracker.meta.archetype-header' | fsTranslate"
 							[sort]="sort"
 							[criteria]="'archetype'"
 							(sortClick)="onSortClick($event)"
@@ -73,7 +69,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 						</sortable-table-label>
 						<sortable-table-label
 							class="cell winrate"
-							[name]="'app.decktracker.meta.winrate-header' | owTranslate"
+							[name]="'app.decktracker.meta.winrate-header' | fsTranslate"
 							[sort]="sort"
 							[criteria]="'winrate'"
 							(sortClick)="onSortClick($event)"
@@ -81,7 +77,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 						</sortable-table-label>
 						<sortable-table-label
 							class="cell games"
-							[name]="'app.decktracker.meta.games-header' | owTranslate"
+							[name]="'app.decktracker.meta.games-header' | fsTranslate"
 							[sort]="sort"
 							[criteria]="'games'"
 							(sortClick)="onSortClick($event)"
@@ -89,7 +85,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 						</sortable-table-label>
 						<sortable-table-label
 							class="cell dust"
-							[name]="'app.decktracker.meta.cost-header' | owTranslate"
+							[name]="'app.decktracker.meta.cost-header' | fsTranslate"
 							[sort]="sort"
 							[criteria]="'cost'"
 							(sortClick)="onSortClick($event)"
@@ -98,15 +94,15 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 						<div class="cell decklist"></div>
 						<div class="cell cards">
 							<span
-								[owTranslate]="'app.decktracker.meta.cards-header'"
-								[helpTooltip]="'app.decktracker.meta.core-cards-header-tooltip' | owTranslate"
+								[fsTranslate]="'app.decktracker.meta.cards-header'"
+								[helpTooltip]="'app.decktracker.meta.core-cards-header-tooltip' | fsTranslate"
 							></span>
 						</div>
 					</div>
 					<virtual-scroller
 						#scroll
 						class="decks-list"
-						[items]="value.decks"
+						[items]="value.decks ?? []"
 						[bufferAmount]="15"
 						[attr.aria-label]="'Meta deck stats'"
 						role="list"
@@ -117,7 +113,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 							class="deck"
 							role="listitem"
 							[deck]="deck"
-							[showStandardDeviation]="value.showStandardDeviation"
+							[showStandardDeviation]="!!value.showStandardDeviation"
 							(deckSelected)="onDeckSelected($event)"
 						></constructed-meta-deck-summary>
 					</virtual-scroller>
@@ -130,23 +126,23 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 export class MetaDecksVisualizationComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	@Output() deckSelected = new EventEmitter<EnhancedDeckStat>();
 
-	decks$: Observable<DeckStat[]>;
+	decks$: Observable<EnhancedDeckStat[] | undefined>;
 	collection$: Observable<readonly Card[]>;
 	sortCriteria$: Observable<SortCriteria<ColumnSortType>>;
 	showStandardDeviation$: Observable<boolean>;
-	lastUpdate$: Observable<string>;
-	lastUpdateFull$: Observable<string>;
+	lastUpdate$: Observable<string | null>;
+	lastUpdateFull$: Observable<string | null>;
 	totalGames$: Observable<string>;
 
-	@Input() set metaDecks(decks: ExtendedDeckStats) {
+	@Input() set metaDecks(decks: ExtendedDeckStats | null) {
 		this.metaDecks$$.next(decks);
 	}
 
-	@Input() set cardSearch(cardSearch: readonly string[]) {
-		this.cardSearch$$.next(cardSearch);
+	@Input() set cardSearch(cardSearch: readonly string[] | null) {
+		this.cardSearch$$.next(cardSearch ?? []);
 	}
 
-	private metaDecks$$ = new BehaviorSubject<ExtendedDeckStats>(null);
+	private metaDecks$$ = new BehaviorSubject<ExtendedDeckStats | null>(null);
 	private cardSearch$$ = new BehaviorSubject<readonly string[]>([]);
 	private sortCriteria$$ = new BehaviorSubject<SortCriteria<ColumnSortType>>({
 		criteria: 'games',
@@ -154,9 +150,9 @@ export class MetaDecksVisualizationComponent extends AbstractSubscriptionCompone
 	});
 
 	constructor(
-		protected readonly cdr: ChangeDetectorRef,
+		protected override readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
-		private readonly i18n: LocalizationFacadeService,
+		private readonly i18n: ILocalizationService,
 		private readonly collectionManager: CollectionManager,
 		private readonly prefs: PreferencesService,
 	) {
@@ -187,7 +183,7 @@ export class MetaDecksVisualizationComponent extends AbstractSubscriptionCompone
 				return result;
 			}),
 		);
-		collectionCache$.subscribe((cache) => {
+		collectionCache$.subscribe(() => {
 			ownedCardIdsCache = {};
 		});
 		this.decks$ = combineLatest([
@@ -222,8 +218,14 @@ export class MetaDecksVisualizationComponent extends AbstractSubscriptionCompone
 					collection,
 					{ conservativeEstimate, sampleSize, dust, playerClasses, archetypes },
 				]) => {
-					// let enhancedCounter = 0;
-					// console.debug('filtering decks', dust, stats);
+					console.debug(
+						'[debug] base decks',
+						stats?.deckStats?.length,
+						sampleSize,
+						dust,
+						playerClasses,
+						archetypes,
+					);
 					const enhanced = stats?.deckStats
 						.filter((stat) => stat.totalGames >= sampleSize)
 						.filter((stat) => !playerClasses?.length || playerClasses.includes(stat.playerClass))
@@ -233,11 +235,27 @@ export class MetaDecksVisualizationComponent extends AbstractSubscriptionCompone
 								!cardSearch?.length || cardSearch.every((card) => stat.allCardsInDeck.includes(card)),
 						)
 						.map((stat) => {
-							// enhancedCounter++;
-							// console.debug('enhancedCounter', enhancedCounter);
 							return this.enhanceStat(stat, ownedCardIdsCache, collection, conservativeEstimate);
 						})
 						.filter((stat) => dust === 'all' || dust == null || stat.dustCost <= +dust);
+					console.debug(
+						'[debug] enhanced decks',
+						enhanced?.length,
+						stats?.deckStats.filter((stat) => stat.totalGames >= sampleSize).length,
+						stats?.deckStats
+							.filter((stat) => stat.totalGames >= sampleSize)
+							.filter((stat) => !playerClasses?.length || playerClasses.includes(stat.playerClass))
+							.length,
+						stats?.deckStats
+							.filter((stat) => stat.totalGames >= sampleSize)
+							.filter((stat) => !playerClasses?.length || playerClasses.includes(stat.playerClass))
+							.filter((stat) => !archetypes?.length || archetypes.includes(stat.archetypeId))
+							.filter(
+								(stat) =>
+									!cardSearch?.length ||
+									cardSearch.every((card) => stat.allCardsInDeck.includes(card)),
+							).length,
+					);
 					return enhanced?.sort((a, b) => this.sortDecks(a, b, sortCriteria));
 				},
 			),
@@ -253,8 +271,6 @@ export class MetaDecksVisualizationComponent extends AbstractSubscriptionCompone
 				if (!stats?.lastUpdated) {
 					return null;
 				}
-				// Show the date as a relative date, unless it's more than 1 week old
-				// E.g. "2 hours ago", "3 days ago", "1 week ago", "on 12/12/2020"
 				const date = new Date(stats.lastUpdated);
 				const now = new Date();
 				const diff = now.getTime() - date.getTime();
@@ -342,25 +358,15 @@ export class MetaDecksVisualizationComponent extends AbstractSubscriptionCompone
 				quantity: cards.map((c) => c.quantity).reduce((a, b) => a + b, 0),
 				cardId: cards[0].card.id,
 			}))
-			// So that we filter out Fabled cards, or other kind of token cards that are in the main deck
 			.filter((c) => !!this.allCards.getCard(c.cardId)?.collectible)
 			.map((card) => {
 				let owned = ownedByCardId[card.cardId];
-				// owned = 0;
-				// Cache not populated yet
 				if (owned == null) {
 					owned = getOwnedForDeckBuilding(card.cardId, collection, this.allCards) ?? 0;
-					// console.debug(
-					// 	'recomputing cache for',
-					// 	card.cardId,
-					// 	owned,
-					// 	Object.keys(ownedByCardId).length,
-					// 	owned,
-					// );
 					ownedByCardId[card.cardId] = owned;
 				}
 				const missingQuantity = Math.max(0, card.quantity - owned);
-				const rarity = this.allCards.getCard(card.cardId)?.rarity;
+				const rarity = this.allCards.getCard(card.cardId)?.rarity ?? '';
 				return dustToCraftFor(rarity) * missingQuantity;
 			})
 			.reduce((a, b) => a + b, 0);
@@ -377,7 +383,7 @@ export class MetaDecksVisualizationComponent extends AbstractSubscriptionCompone
 			standardDeviation: standardDeviation,
 			conservativeWinrate: conservativeWinrate,
 			winrate: winrateToUse,
-			sideboards: deckDefinition.sideboards,
+			sideboards: deckDefinition.sideboards ?? [],
 		};
 	}
 
@@ -422,25 +428,3 @@ export class MetaDecksVisualizationComponent extends AbstractSubscriptionCompone
 		return direction === 'asc' ? a.dustCost - b.dustCost : b.dustCost - a.dustCost;
 	}
 }
-
-export type ColumnSortType = 'player-class' | 'archetype' | 'winrate' | 'games' | 'cost';
-
-export interface EnhancedDeckStat extends DeckStat {
-	readonly dustCost: number;
-	readonly rawWinrate: number;
-	readonly heroCardClass: string;
-	readonly standardDeviation: number;
-	readonly conservativeWinrate: number;
-	readonly sideboards: readonly Sideboard[];
-}
-
-export const formatGamesCount = (value: number): number => {
-	if (value >= 1000) {
-		return 1000 * Math.round(value / 1000);
-	} else if (value >= 100) {
-		return 100 * Math.round(value / 100);
-	} else if (value >= 10) {
-		return 10 * Math.round(value / 10);
-	}
-	return value;
-};

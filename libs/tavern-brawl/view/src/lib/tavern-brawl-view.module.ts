@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CollectionServicesModule } from '@firestone/collection/services';
 import { ConstructedCommonModule } from '@firestone/constructed/common';
+import { ConstructedViewModule } from '@firestone/constructed/view';
 import { DecktrackerCommonModule } from '@firestone/decktracker/common';
 import { GameStateModule } from '@firestone/game-state';
 import { MemoryModule } from '@firestone/memory';
@@ -34,6 +35,7 @@ const components = [
 		SharedCommonViewModule,
 		SharedCommonServiceModule,
 		ConstructedCommonModule,
+		ConstructedViewModule,
 		DecktrackerCommonModule,
 		CollectionServicesModule,
 		MemoryModule,

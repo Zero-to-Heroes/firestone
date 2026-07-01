@@ -103,7 +103,6 @@ import { TheCoinsComponent } from './js/components/collection/the-coins.componen
 import { SearchAutocompleteItemComponent } from './js/components/common/autocomplete-search-with-list-item.component';
 import { AutocompleteSearchWithListComponent } from './js/components/common/autocomplete-search-with-list.component';
 import { DecktrackerComponent } from './js/components/decktracker/decktracker.component';
-import { ConstructedMetaDeckSummaryComponent } from './js/components/decktracker/main/constructed-meta-deck-summary.component';
 import { ConstructedMetaDecksComponent } from './js/components/decktracker/main/constructed-meta-decks.component';
 import { DeckManaCurveBarComponent } from './js/components/decktracker/main/deck-mana-curve-bar.component';
 import { DeckManaCurveComponent } from './js/components/decktracker/main/deck-mana-curve.component';
@@ -319,10 +318,7 @@ import { ConstructedMetaDeckCardSearchComponent } from '@components/decktracker/
 import { ConstructedPersonalDeckCardSearchComponent } from '@components/decktracker/main/filters/constructed-personal-deck-card-search.component';
 import { ConstructedPlayCoinFilterDropdownComponent } from '@components/decktracker/main/filters/constructed-play-coin-filter-dropdown.component';
 import { ConstructedPlayerArchetypeFilterDropdownComponent } from '@components/decktracker/main/filters/constructed-player-archetype-filter-dropdown.component';
-import { ConstructedPlayerClassFilterDropdownComponent } from '@components/decktracker/main/filters/constructed-player-class-filter-dropdown.component';
-import { ConstructedSampleSizeFilterDropdownComponent } from '@components/decktracker/main/filters/constructed-sample-size-filter-dropdown.component';
 import { DecktrackerPlayerClassFilterDropdownComponent } from '@components/decktracker/main/filters/decktracker-player-class-filter-dropdown.component';
-import { MetaDecksVisualizationComponent } from '@components/decktracker/main/meta-decks-visualization.component';
 import { DeckListStaticComponent } from '@components/decktracker/overlay/deck-list-static.component';
 import { DkRunesComponent } from '@components/decktracker/overlay/dk-runes.component';
 import { BattlegroundsMinionsTiersTwitchOverlayComponent } from '@components/decktracker/overlay/twitch/battlegrounds-minions-tiers-twitch.component';
@@ -533,7 +529,6 @@ import { ControlMinimizeComponent } from './js/components/controls/control-minim
 import { ControlSettingsComponent } from './js/components/controls/control-settings.component';
 import { ControlShareComponent } from './js/components/controls/control-share.component';
 import { ImportDeckstringComponent } from './js/components/decktracker/import-deckstring.component';
-import { ConstructedDustFilterDropdownComponent } from './js/components/decktracker/main/filters/constructed-dust-filter-dropdown.component';
 import { DeckCardComponent } from './js/components/decktracker/overlay/deck-card.component';
 import { DeckListByZoneComponent } from './js/components/decktracker/overlay/deck-list-by-zone.component';
 import { DeckListComponent } from './js/components/decktracker/overlay/deck-list.component';
@@ -991,8 +986,6 @@ try {
 		DecktrackerDeckSummaryComponent,
 		DecktrackerDeckDetailsComponent,
 		ConstructedMetaDecksComponent,
-		MetaDecksVisualizationComponent,
-		ConstructedMetaDeckSummaryComponent,
 		ConstructedMetaDeckDetailsComponent,
 		ConstructedMetaDeckDetailsViewComponent,
 		ConstructedMetaDeckDetailsCardStatsComponent,
@@ -1017,8 +1010,6 @@ try {
 		DecktrackerRatingGraphComponent,
 		DecktrackerFiltersComponent,
 		DecktrackerFormatFilterDropdownComponent,
-		ConstructedSampleSizeFilterDropdownComponent,
-		ConstructedDustFilterDropdownComponent,
 		ConstructedPlayCoinFilterDropdownComponent,
 		ConstructedArchetypeSampleSizeFilterDropdownComponent,
 		DecktrackerTimeFilterDropdownComponent,
@@ -1035,7 +1026,6 @@ try {
 		ConstructedFormatFilterDropdownComponent,
 		ConstructedTimeFilterDropdownComponent,
 		ConstructedMyDecksSearchComponent,
-		ConstructedPlayerClassFilterDropdownComponent,
 		DecktrackerPlayerClassFilterDropdownComponent,
 		ConstructedPlayerArchetypeFilterDropdownComponent,
 		ConstructedMetaDeckCardSearchComponent,

@@ -1,6 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { ArchetypeStat } from '@firestone-hs/constructed-deck-stats';
-import { ConstructedMetaDecksStateService } from '@firestone/constructed/common';
+import { ConstructedMetaDecksStateService, formatGamesCount } from '@firestone/constructed/common';
 import { buildArchetypeName } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import {
@@ -14,7 +14,6 @@ import { getDateAgo } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter, takeUntil } from 'rxjs/operators';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { formatGamesCount } from './meta-decks-visualization.component';
 
 @Component({
 	standalone: false,

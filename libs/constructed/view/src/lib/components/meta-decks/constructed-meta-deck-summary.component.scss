@@ -1,0 +1,127 @@
+:host {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	color: var(--default-text-color);
+}
+
+.constructed-meta-deck-summary {
+	display: flex;
+	align-items: center;
+	height: 100%;
+	width: 100%;
+	background: rgba(255, 255, 255, 0.08);
+	position: relative;
+	padding: 0;
+
+	.player-class {
+		.icon {
+			height: 80%;
+			max-height: 50px;
+			clip-path: circle(45% at 50% 50%);
+		}
+	}
+
+	.name {
+		display: flex;
+		flex-direction: column;
+
+		.deck-name {
+			align-items: center;
+			justify-content: flex-start;
+		}
+	}
+
+	.winrate {
+		justify-content: center;
+		display: flex;
+
+		.deviation {
+			margin-left: 3px;
+			font-size: 11px;
+			color: var(--color-2);
+		}
+	}
+
+	.games {
+		justify-content: center;
+		display: flex;
+	}
+
+	.cards {
+		height: 100%;
+		overflow: hidden;
+		display: flex;
+		justify-content: flex-start;
+		flex-wrap: wrap;
+
+		.removed-cards,
+		.added-cards {
+			display: flex;
+			justify-content: flex-start;
+		}
+
+		.card {
+			position: relative;
+			display: flex;
+			width: 35px;
+			height: 35px;
+
+			&:not(:first-child) {
+				margin-left: -7px;
+			}
+
+			.icon-container {
+				border: 2px solid;
+				border-radius: 50%;
+				overflow: hidden;
+				position: relative;
+				display: flex;
+				aspect-ratio: 1;
+			}
+
+			.icon {
+				height: 160%;
+				position: relative;
+				left: -25%;
+				top: -25%;
+			}
+
+			.quantity {
+				position: absolute;
+				bottom: 0;
+				right: 5px;
+				color: white;
+				text-shadow: -2px -2px 0 #000, 0px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 0px 2px 0 #000,
+					2px 2px 0 #000;
+			}
+
+			.legendary-icon {
+				z-index: 1;
+				position: absolute;
+				right: 2px;
+				bottom: 2px;
+				width: 15px;
+				height: 15px;
+				pointer-events: none;
+			}
+		}
+
+		.removed-cards {
+			margin-right: 20px;
+
+			.icon-container {
+				border-color: #ff4747;
+			}
+		}
+		.added-cards {
+			.icon-container {
+				border-color: #61ff47;
+			}
+		}
+	}
+
+	&:hover {
+		background: rgba(255, 255, 255, 0.12);
+	}
+}

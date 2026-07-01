@@ -248,7 +248,7 @@ export class FullScreenOverlaysComponent
 		);
 
 		const arenaCards = (await this.arenaRef.validDiscoveryPool$$.getValueWithInit()) ?? [];
-		console.debug('[full-screen-overlays] arenaCards', arenaCards);
+		// console.debug('[full-screen-overlays] arenaCards', arenaCards);
 		const allCounters = getAllCounters(this.i18n, this.allCards).sort((a, b) => a.id.localeCompare(b.id));
 		allCounters.forEach((c) => {
 			c.init({
@@ -271,7 +271,7 @@ export class FullScreenOverlaysComponent
 						c.emit('player', gameState, gameState.bgState, this.allCards, prefs.countersUseExpandedView),
 					)
 					.filter((c) => c);
-				console.debug('[full-screen-overlays] playerCounters', result, allCounters.length);
+				// console.debug('[full-screen-overlays] playerCounters', result, allCounters.length);
 				return result;
 			}),
 			distinctUntilChanged((a, b) => a.length === b.length && a.every((c, i) => equalCounterInstance(c, b[i]))),

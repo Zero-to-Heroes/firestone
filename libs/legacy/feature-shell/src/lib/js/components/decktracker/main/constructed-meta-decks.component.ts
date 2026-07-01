@@ -1,10 +1,9 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { ConstructedMetaDecksStateService, ExtendedDeckStats } from '@firestone/constructed/common';
+import { ConstructedMetaDecksStateService, EnhancedDeckStat, ExtendedDeckStats } from '@firestone/constructed/common';
 import { ConstructedMetaDeckDetailsShowEvent, MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { AnalyticsService } from '@firestone/shared/framework/core';
 import { Observable } from 'rxjs';
-import { EnhancedDeckStat } from './meta-decks-visualization.component';
 
 @Component({
 	standalone: false,

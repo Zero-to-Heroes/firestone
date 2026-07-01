@@ -7,30 +7,30 @@ import {
 	Input,
 	Output,
 } from '@angular/core';
-import { Sideboard } from '@firestone-hs/deckstrings';
-import { overrideClassIcon, overrideDeckName } from '@firestone/constructed/common';
+import {
+	EnhancedDeckStat,
+	buildCardVariations,
+	CardVariation,
+	MinimalCard,
+	overrideClassIcon,
+	overrideDeckName,
+} from '@firestone/constructed/common';
 import { buildArchetypeName } from '@firestone/game-state';
-import { AbstractSubscriptionComponent, groupByFunction, sortByProperties } from '@firestone/shared/framework/common';
-import { CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
+import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { BehaviorSubject, Observable, filter } from 'rxjs';
-import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import { MinimalCard } from '../overlay/deck-list-static.component';
-import { EnhancedDeckStat } from './meta-decks-visualization.component';
 
 @Component({
 	standalone: false,
 	selector: 'constructed-meta-deck-summary',
-	styleUrls: [
-		`../../../../css/component/decktracker/main/constructed-meta-decks-columns.scss`,
-		`../../../../css/component/decktracker/main/constructed-meta-deck-summary.component.scss`,
-	],
+	styleUrls: ['./constructed-meta-decks-columns.scss', './constructed-meta-deck-summary.component.scss'],
 	template: `
 		<div class="constructed-meta-deck-summary" (click)="viewDetails($event)">
 			<div class="player-class cell">
 				<img class="icon" [src]="classIcon" [helpTooltip]="classTooltip" />
 			</div>
 			<div class="name cell">
-				<div class="deck-name" [helpTooltip]="'app.decktracker.meta.view-details-cta' | owTranslate">
+				<div class="deck-name" [helpTooltip]="'app.decktracker.meta.view-details-cta' | fsTranslate">
 					{{ deckName }}
 				</div>
 			</div>
@@ -39,7 +39,7 @@ import { EnhancedDeckStat } from './meta-decks-visualization.component';
 				<span
 					class="deviation"
 					*ngIf="showStandardDeviation"
-					[helpTooltip]="'app.decktracker.meta.deck.deviation-tooltip' | owTranslate"
+					[helpTooltip]="'app.decktracker.meta.deck.deviation-tooltip' | fsTranslate"
 					>{{ standardDeviation }}</span
 				>
 			</div>
@@ -115,13 +115,12 @@ export class ConstructedMetaDeckSummaryComponent extends AbstractSubscriptionCom
 
 	defaultCopyText = this.i18n.translateString('app.duels.deckbuilder.export-deckcode-tooltip');
 
-	private deck$$ = new BehaviorSubject<EnhancedDeckStat>(null);
+	private deck$$ = new BehaviorSubject<EnhancedDeckStat | null>(null);
 
 	constructor(
-		protected readonly cdr: ChangeDetectorRef,
+		protected override readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
-		private readonly i18n: LocalizationFacadeService,
-		private readonly ow: OverwolfService,
+		private readonly i18n: ILocalizationService,
 	) {
 		super(cdr);
 	}
@@ -129,8 +128,7 @@ export class ConstructedMetaDeckSummaryComponent extends AbstractSubscriptionCom
 	ngAfterContentInit() {
 		this.deck$$
 			.pipe(
-				filter((deck) => !!deck?.decklist?.length),
-				this.mapData((deck) => deck),
+				filter((deck): deck is EnhancedDeckStat => !!deck?.decklist?.length),
 			)
 			.subscribe((deck) => {
 				this.classIcon =
@@ -168,53 +166,10 @@ export class ConstructedMetaDeckSummaryComponent extends AbstractSubscriptionCom
 	}
 
 	viewDetails(event: MouseEvent) {
-		// Don't trigger if we clicked on the decklist button
 		if ((event.target as HTMLElement).closest('.decklist-button')) {
 			return;
 		}
 		console.debug('viewing details', this.deck$$.value);
-		this.deckSelected.emit(this.deck$$.value);
+		this.deckSelected.emit(this.deck$$.value!);
 	}
 }
-
-export interface CardVariation extends MinimalCard {
-	cardName: string;
-	cardImage: string;
-	isLegendary?: boolean;
-	manaCost: number;
-}
-
-export const buildCardVariations = (
-	cardIds: readonly string[],
-	sideboards: readonly Sideboard[],
-	allCards: CardsFacadeService,
-): readonly CardVariation[] => {
-	const groupedByCard = groupByFunction((cardId: string) => cardId)(cardIds);
-	return Object.keys(groupedByCard)
-		.map((cardId) => buildCardVariation(cardId, groupedByCard[cardId].length, sideboards, allCards))
-		.sort(sortByProperties((c) => [c.isLegendary ? 0 : 1, c.manaCost, c.cardName]));
-};
-
-export const buildCardVariation = (
-	cardId: string,
-	quantity: number,
-	sideboards: readonly Sideboard[],
-	allCards: CardsFacadeService,
-): CardVariation => {
-	const card = allCards.getCard(cardId);
-	const sideboardCards = sideboards
-		.find((s) => s.keyCardDbfId === card.dbfId)
-		?.cards?.map((pair) => ({
-			quantity: pair[1],
-			card: allCards.getCard(pair[0]),
-		}));
-	return {
-		cardId: card.id,
-		cardImage: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${card.id}.jpg`,
-		quantity: quantity,
-		isLegendary: card.rarity?.toLowerCase() === 'legendary',
-		manaCost: card.cost,
-		cardName: card.name,
-		sideboard: sideboardCards?.map((c) => buildCardVariation(c.card.id, c.quantity, [], allCards)),
-	};
-};

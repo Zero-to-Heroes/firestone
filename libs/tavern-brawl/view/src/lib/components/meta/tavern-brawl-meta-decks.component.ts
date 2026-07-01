@@ -3,7 +3,7 @@ import { ExtendedDeckStats as ConstructedExtendedDeckStats } from '@firestone/co
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ILocalizationService, OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { ExtendedBrawlInfo, ExtendedDeckStats, TavernBrawlService } from '@firestone/tavern-brawl/common';
-import { filter, Observable } from 'rxjs';
+import { filter, Observable, tap } from 'rxjs';
 
 @Component({
 	standalone: false,
@@ -16,7 +16,10 @@ import { filter, Observable } from 'rxjs';
 			</div>
 			<div class="filters">
 				<constructed-player-class-filter-dropdown class="filter"></constructed-player-class-filter-dropdown>
-				<constructed-sample-size-filter-dropdown class="filter"></constructed-sample-size-filter-dropdown>
+				<constructed-sample-size-filter-dropdown
+					class="filter"
+					[allowVerySmallSamples]="true"
+				></constructed-sample-size-filter-dropdown>
 				<constructed-dust-filter-dropdown class="filter"></constructed-dust-filter-dropdown>
 			</div>
 			<meta-decks-visualization
@@ -47,6 +50,7 @@ export class TavernBrawlMetaDecksComponent extends AbstractSubscriptionComponent
 		await waitForReady(this.metaStats);
 
 		this.decks$ = this.metaStats.metaDecks$$.pipe(
+			tap((stats) => console.debug('[tavern-brawl-meta-decks] stats', stats)),
 			filter((stats): stats is ExtendedDeckStats => !!stats?.stats?.length),
 			this.mapData((stats) => {
 				const result = {
