@@ -26,9 +26,9 @@ export const AnimalCompanion: StaticGeneratingCard = {
 			input.inputOptions.deckState.animalCompanionBufferEntityId!,
 		);
 		const newAnimalCompanions = [
-			getTagWithHistory(bufferEntity, GameTag.TAG_SCRIPT_DATA_NUM_4),
-			getTagWithHistory(bufferEntity, GameTag.TAG_SCRIPT_DATA_NUM_5),
-			getTagWithHistory(bufferEntity, GameTag.TAG_SCRIPT_DATA_NUM_6),
+			getTagWithHistory(bufferEntity, GameTag.HIDDEN_SCRIPT_DATA_4),
+			getTagWithHistory(bufferEntity, GameTag.HIDDEN_SCRIPT_DATA_5),
+			getTagWithHistory(bufferEntity, GameTag.HIDDEN_SCRIPT_DATA_6),
 		].filter((c) => !!c);
 		if (!input.inputOptions.deckState.isOpponent) {
 			return newAnimalCompanions.map((c) => input.allCards.getCard(c!).id as CardIds);

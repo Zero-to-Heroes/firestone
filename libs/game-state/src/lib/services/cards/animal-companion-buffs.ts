@@ -35,7 +35,7 @@ export const AnimalCompanionBuffs: CustomEffectCard & StaticGeneratingCard = {
 			input.inputOptions.deckState.animalCompanionBufferEntityId!,
 		);
 
-		const currentCompanionSample = getTagWithHistory(bufferEntity, GameTag.TAG_SCRIPT_DATA_NUM_4);
+		const currentCompanionSample = getTagWithHistory(bufferEntity, GameTag.HIDDEN_SCRIPT_DATA_4);
 		const currentCompanionCost = input.allCards.getCard(currentCompanionSample!).cost || 3;
 		const costBuff = input.inputOptions.deckState.isOpponent
 			? currentCompanionCost

@@ -46,9 +46,9 @@ export class AnimalCompanionAuraCounterDefinitionV2 extends CounterDefinitionV2<
 			);
 
 			const newAnimalCompanions = [
-				getTagWithHistory(bufferEntity, GameTag.TAG_SCRIPT_DATA_NUM_4),
-				getTagWithHistory(bufferEntity, GameTag.TAG_SCRIPT_DATA_NUM_5),
-				getTagWithHistory(bufferEntity, GameTag.TAG_SCRIPT_DATA_NUM_6),
+				getTagWithHistory(bufferEntity, GameTag.HIDDEN_SCRIPT_DATA_4),
+				getTagWithHistory(bufferEntity, GameTag.HIDDEN_SCRIPT_DATA_5),
+				getTagWithHistory(bufferEntity, GameTag.HIDDEN_SCRIPT_DATA_6),
 			].filter((c) => !!c);
 			if (newAnimalCompanions.length === 0) {
 				return null;
@@ -78,9 +78,9 @@ export class AnimalCompanionAuraCounterDefinitionV2 extends CounterDefinitionV2<
 				state.opponentDeck.animalCompanionBufferEntityId!,
 			);
 			const newAnimalCompanions = [
-				getTagWithHistory(bufferEntity, GameTag.TAG_SCRIPT_DATA_NUM_4),
-				getTagWithHistory(bufferEntity, GameTag.TAG_SCRIPT_DATA_NUM_5),
-				getTagWithHistory(bufferEntity, GameTag.TAG_SCRIPT_DATA_NUM_6),
+				getTagWithHistory(bufferEntity, GameTag.HIDDEN_SCRIPT_DATA_4),
+				getTagWithHistory(bufferEntity, GameTag.HIDDEN_SCRIPT_DATA_5),
+				getTagWithHistory(bufferEntity, GameTag.HIDDEN_SCRIPT_DATA_6),
 			].filter((c) => !!c);
 			if (newAnimalCompanions.length === 0) {
 				return null;
