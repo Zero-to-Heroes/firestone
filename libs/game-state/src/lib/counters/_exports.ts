@@ -81,6 +81,7 @@ import { HeroPowerUseCounterDefinitionV2 } from './impl/hero-power-used';
 import { HolySpellsCounterDefinitionV2 } from './impl/holy-spells';
 import { ImbueCounterDefinitionV2 } from './impl/imbue';
 import { JadeGolemCounterDefinitionV2 } from './impl/jade-golem';
+import { JadeGuardiansCounterDefinitionV2 } from './impl/jade-guardians';
 import { KaelthasSunstriderSpellCycleCounterDefinitionV2 } from './impl/kaelthas-spell-cycle';
 import { KiljaedenCounterDefinitionV2 } from './impl/kiljaeden';
 import { LeylineSpellCostDiscountCounterDefinitionV2 } from './impl/leyline-spell-cost-discount-counter';
@@ -244,6 +245,7 @@ export const getAllCounters: (
 	new GodfreyTheBetrayerCounterDefinitionV2(i18n, allCards),
 	new VoidSoulsCounterDefinitionV2(i18n, allCards),
 	new CapturedArchmageCounterDefinitionV2(i18n, allCards),
+	new JadeGuardiansCounterDefinitionV2(i18n, allCards),
 
 	// BG
 	new BeetlesBuffCounterDefinitionV2(i18n, allCards),

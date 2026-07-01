@@ -10,6 +10,7 @@ export type CounterType =
 	| 'godfreyTheBetrayer'
 	| 'voidSoul'
 	| 'capturedArchmage'
+	| 'jadeGuardians'
 	| 'outcast'
 	| 'bashana'
 	| 'dragoncallerAlanna'
