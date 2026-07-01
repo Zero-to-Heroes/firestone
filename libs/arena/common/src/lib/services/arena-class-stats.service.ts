@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ArenaClassMatchup, ArenaClassStat, ArenaClassStats, WinsDistribution } from '@firestone-hs/arena-stats';
 import { ALL_CLASSES } from '@firestone-hs/reference-data';
+import { isDualClassArena } from '@firestone/game-state';
 import { ArenaModeFilterType, PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import {
@@ -78,11 +79,17 @@ export class ArenaClassStatsService extends AbstractFacadeService<ArenaClassStat
 					: {
 							...rawResult,
 							// Clear corrupt data
-							stats: rawResult.stats.filter(
-								(s) =>
-									s.playerClass?.toLowerCase() !==
-									this.allCards.getCard(s.playerHeroPower)?.playerClass?.toLowerCase(),
-							),
+							stats: isDualClassArena
+								? rawResult.stats.filter(
+										(s) =>
+											s.playerClass?.toLowerCase() !==
+											this.allCards.getCard(s.playerHeroPower)?.playerClass?.toLowerCase(),
+									)
+								: rawResult.stats.filter(
+										(s) =>
+											s.playerClass?.toLowerCase() ===
+											this.allCards.getCard(s.playerHeroPower)?.playerClass?.toLowerCase(),
+									),
 						};
 				this.classStatsRaw$$.next(fixedResult);
 				this.classStats$$.next(consolidateByPlayerClass(rawResult));

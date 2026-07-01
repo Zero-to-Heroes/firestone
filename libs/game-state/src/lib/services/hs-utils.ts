@@ -12,6 +12,7 @@ export { SHATTER_HAND_PIECE_CREATOR_FALLBACK_CARD_IDS } from '@firestone/power-l
 // Used for cache purposes, only in dev
 export const CARDS_VERSION = '36.0.0';
 export const isPreReleaseBuild = false;
+export const isDualClassArena = false;
 
 /** @deprecated use ALL_CLASSES */
 export const classes = [
