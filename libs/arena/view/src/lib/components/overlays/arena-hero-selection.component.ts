@@ -15,6 +15,7 @@ import {
 	consolidateByPlayerClass,
 	IArenaDraftManagerService,
 } from '@firestone/arena/common';
+import { isDualClassArena } from '@firestone/game-state';
 import { PatchesConfigService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
@@ -58,14 +59,14 @@ export class ArenaHeroSelectionComponent extends AbstractSubscriptionComponent i
 			shareReplay(1),
 			takeUntil(this.destroyed$),
 		);
-		const isDualClass$ = this.draftManager.currentDeck$$.pipe(
-			this.mapData((deck) => !!deck?.HeroPowerCardId),
-			shareReplay(1),
-			takeUntil(this.destroyed$),
-		);
+		// const isDualClass$ = this.draftManager.currentDeck$$.pipe(
+		// 	this.mapData((deck) => !!deck?.HeroPowerCardId),
+		// 	shareReplay(1),
+		// 	takeUntil(this.destroyed$),
+		// );
 
 		const tiers$ = combineLatest([
-			isDualClass$,
+			// isDualClass$,
 			this.draftManager.currentDeck$$,
 			this.arenaClassStats.classStatsRaw$$,
 			consolidatedStats$,
@@ -73,8 +74,8 @@ export class ArenaHeroSelectionComponent extends AbstractSubscriptionComponent i
 			this.patches.config$$,
 		]).pipe(
 			tap((info) => console.debug('[arena-class-tier-list] received info a', info)),
-			this.mapData(([isDualClass, currentDeck, stats, consolidatedStats, strategies, config]) => {
-				const baseStats = isDualClass
+			this.mapData(([currentDeck, stats, consolidatedStats, strategies, config]) => {
+				const baseStats = isDualClassArena
 					? stats?.stats.filter(
 							(s) =>
 								s.playerHeroPower ===
@@ -82,7 +83,7 @@ export class ArenaHeroSelectionComponent extends AbstractSubscriptionComponent i
 						)
 					: consolidatedStats?.stats;
 				const result = buildArenaClassInfoTiers(baseStats, strategies?.heroes, null, config, this.i18n);
-				console.debug('[arena-class-tier-list] result', isDualClass, result, baseStats, currentDeck);
+				console.debug('[arena-class-tier-list] result', isDualClassArena, result, baseStats, currentDeck);
 				return result;
 			}),
 			shareReplay(1),
@@ -90,19 +91,19 @@ export class ArenaHeroSelectionComponent extends AbstractSubscriptionComponent i
 			this.mapData((tiers) => tiers),
 		);
 		// TODO: show more detailed options (average hero stat across all hero powers, if relevant)
-		this.options$ = combineLatest([this.draftManager.heroOptions$$, tiers$, isDualClass$, consolidatedStats$]).pipe(
+		this.options$ = combineLatest([this.draftManager.heroOptions$$, tiers$, consolidatedStats$]).pipe(
 			tap((info) => console.debug('[arena-class-tier-list] received info b', info)),
 			this.mapData(
-				([options, tiers, isDualClass, consolidatedStats]) =>
+				([options, tiers, consolidatedStats]) =>
 					options?.map((option) => {
 						const heroClass = this.allCards.getCard(option)?.classes?.[0]?.toLowerCase() ?? 'neutral';
 						const classStat = tiers?.flatMap((tier) => tier.items).find((i) => i.playerClass === heroClass);
 						const tier = !!classStat ? tiers?.find((tier) => tier.items.includes(classStat)) : null;
-						const averageHeroStat = isDualClass
+						const averageHeroStat = isDualClassArena
 							? consolidatedStats?.stats.find((s) => s.playerClass === heroClass)
 							: null;
-						const contexts = isDualClass ? [option, classStat?.heroPower ?? null] : [option];
-						const additionalStat: ArenaHeroOption | null = !isDualClass
+						const contexts = isDualClassArena ? [option, classStat?.heroPower ?? null] : [option];
+						const additionalStat: ArenaHeroOption | null = !isDualClassArena
 							? null
 							: {
 									cardId: option,

@@ -2,6 +2,7 @@
 import { Injectable } from '@angular/core';
 import { DraftCardCombinedStat, DraftStatsByContext } from '@firestone-hs/arena-draft-pick';
 import { ArenaCardStat, ArenaCardStats, PlayerClass } from '@firestone-hs/arena-stats';
+import { isDualClassArena } from '@firestone/game-state';
 import { ArenaModeFilterType, PreferencesService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import {
@@ -14,8 +15,8 @@ import {
 import { BehaviorSubject, distinctUntilChanged, map } from 'rxjs';
 import { ArenaCombinedCardStat, ArenaCombinedCardStats, ArenaDraftCardStat } from '../models/arena-combined-card-stat';
 
-const ARENA_CARD_DRAFT_STATS_URL = `https://static.zerotoheroes.com/api/arena/stats/draft/%modeFilter%/%timePeriod%/%context%.gz.json?v=4`;
-const ARENA_CARD_MATCH_STATS_URL = `https://static.zerotoheroes.com/api/arena/stats/cards/%modeFilter%/%timePeriod%/%context%.gz.json?v=4`;
+const ARENA_CARD_DRAFT_STATS_URL = `https://static.zerotoheroes.com/api/arena/stats/draft/%modeFilter%/%timePeriod%/%context%.gz.json?v=6`;
+const ARENA_CARD_MATCH_STATS_URL = `https://static.zerotoheroes.com/api/arena/stats/cards/%modeFilter%/%timePeriod%/%context%.gz.json?v=6`;
 
 export const ARENA_DRAFT_CARD_HIGH_WINS_THRESHOLD = 6;
 // For normal arena
@@ -168,6 +169,9 @@ export class ArenaCardStatsService extends AbstractFacadeService<ArenaCardStatsS
 		modeFilter: ArenaModeFilterType,
 	): Promise<ArenaCombinedCardStats | null> {
 		context = context?.toLowerCase?.() ?? 'global';
+		if (!isDualClassArena && context.includes('-')) {
+			context = context.split('-')[0];
+		}
 		const key = `${context}-${timePeriod}-${modeFilter}`;
 		if (this.cachedStatsByContext[key]) {
 			return this.cachedStatsByContext[key];

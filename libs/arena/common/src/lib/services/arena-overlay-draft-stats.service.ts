@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { ArenaClassStats } from '@firestone-hs/arena-stats';
 import { GameType, normalizeHeroPower, ReferenceCard } from '@firestone-hs/reference-data';
+import { isDualClassArena } from '@firestone/game-state';
 import { ArenaCardOption as MemoryArenaCardOption } from '@firestone/memory';
 import { PatchesConfigService } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
 import { CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
-import { combineLatest, filter, map, shareReplay, switchMap } from 'rxjs';
+import { combineLatest, filter, map, shareReplay, switchMap, tap } from 'rxjs';
 import { ArenaCardOption } from '../models/arena-card-options';
 import { ArenaCombinedCardStat, ArenaCombinedCardStats } from '../models/arena-combined-card-stat';
 import { ArenaCardStatsService } from './arena-card-stats.service';
@@ -33,7 +34,10 @@ export class ArenaOverlayDraftStatsService {
 
 		// Only show stats for Underground, as it's the most relevant ones
 		const gameMode$ = this.draftManager.currentMode$$.pipe(map((mode) => GameType.GT_UNDERGROUND_ARENA));
-		const currentHero$ = this.draftManager.currentDeck$$.pipe(map((deck) => deck?.HeroCardId));
+		const currentHero$ = this.draftManager.currentDeck$$.pipe(
+			tap((deck) => console.debug('[debug] currentHero', deck)),
+			map((deck) => deck?.HeroCardId),
+		);
 		const currentHeroPower$ = this.draftManager.currentDeck$$.pipe(
 			map((deck) =>
 				!!deck?.HeroPowerCardId
@@ -59,17 +63,17 @@ export class ArenaOverlayDraftStatsService {
 		);
 		const cardStats$ = combineLatest([currentHero$, currentHeroPower$, gameMode$, timeFrame$]).pipe(
 			switchMap(([currentHero, currentHeroPower, gameMode, timeFrame]) => {
-				const isDualClass =
-					currentHero &&
-					currentHeroPower &&
-					this.allCards.getCard(currentHero)?.playerClass?.toUpperCase() !==
-						this.allCards.getCard(currentHeroPower)?.playerClass?.toUpperCase();
+				// const isDualClass =
+				// 	currentHero &&
+				// 	currentHeroPower &&
+				// 	this.allCards.getCard(currentHero)?.playerClass?.toUpperCase() !==
+				// 		this.allCards.getCard(currentHeroPower)?.playerClass?.toUpperCase();
 				const heroStats = this.arenaCardStats.buildCardStats(
 					currentHero ? this.allCards.getCard(currentHero)?.playerClass?.toLowerCase() : 'global',
 					timeFrame,
 					'arena-underground',
 				);
-				const heroPowerStats = !isDualClass
+				const heroPowerStats = !isDualClassArena
 					? null
 					: this.arenaCardStats.buildCardStats(
 							currentHeroPower
@@ -78,16 +82,21 @@ export class ArenaOverlayDraftStatsService {
 							timeFrame,
 							'arena-underground',
 						);
-				const combinedStats = !isDualClass
-					? null
+				const combinedStats = !isDualClassArena
+					? this.arenaCardStats.buildCardStats(
+							`${this.allCards.getCard(currentHero!)?.playerClass?.toLowerCase()}`,
+							timeFrame,
+							'arena-underground',
+						)
 					: this.arenaCardStats.buildCardStats(
-							`${this.allCards.getCard(currentHero)?.playerClass?.toLowerCase()}-${currentHeroPower}`,
+							`${this.allCards.getCard(currentHero!)?.playerClass?.toLowerCase()}-${currentHeroPower}`,
 							timeFrame,
 							'arena-underground',
 						);
 				return Promise.all([heroStats, heroPowerStats, combinedStats]);
 			}),
 			map(([heroStats, heroPowerStats, combinedStats]) => {
+				console.debug('[debug] stats', isDualClassArena, heroStats, heroPowerStats, combinedStats);
 				return {
 					heroStats: heroStats,
 					heroPowerStats: heroPowerStats,
@@ -134,16 +143,17 @@ export class ArenaOverlayDraftStatsService {
 		currentHeroPower: string | undefined,
 		classStats: ArenaClassStats,
 	): readonly ArenaCardOption[] {
-		const isDualClass =
-			currentHero &&
-			currentHeroPower &&
-			this.allCards.getCard(currentHero)?.playerClass?.toUpperCase() !==
-				this.allCards.getCard(currentHeroPower)?.playerClass?.toUpperCase();
+		// const isDualClass =
+		// 	currentHero &&
+		// 	currentHeroPower &&
+		// 	this.allCards.getCard(currentHero)?.playerClass?.toUpperCase() !==
+		// 		this.allCards.getCard(currentHeroPower)?.playerClass?.toUpperCase();
 		// The exact combo
+		console.debug('[debug] buildOptions', isDualClassArena, currentHero, currentHeroPower, classStats);
 		const mainHeroStats = classStats?.stats.find(
 			(s) =>
 				s.playerClass?.toUpperCase() === this.allCards.getCard(currentHero!)?.playerClass?.toUpperCase() &&
-				(!isDualClass
+				(!isDualClassArena
 					? true
 					: this.allCards.getCard(s.playerHeroPower!).playerClass?.toUpperCase() ===
 						this.allCards.getCard(currentHeroPower!)?.playerClass?.toUpperCase()),
@@ -151,6 +161,7 @@ export class ArenaOverlayDraftStatsService {
 		const mainHeroWinrate = !mainHeroStats?.totalGames
 			? null
 			: (mainHeroStats?.totalsWins ?? 0) / mainHeroStats.totalGames;
+		console.debug('[debug] mainHeroWinrate', mainHeroWinrate, mainHeroStats);
 
 		return (
 			options?.flatMap((option) => {
@@ -163,7 +174,7 @@ export class ArenaOverlayDraftStatsService {
 					stat!,
 					mainHeroWinrate!,
 				);
-				if (isDualClass) {
+				if (isDualClassArena) {
 					cardStat.splitClasses = [];
 					const classStat1 = cardStats?.heroStats?.stats?.find(
 						(s) => this.allCards.getRootCardId(s.cardId) === this.allCards.getRootCardId(option.CardId),
@@ -184,6 +195,7 @@ export class ArenaOverlayDraftStatsService {
 					);
 					cardStat.splitClasses.push(cardStat2);
 				}
+				console.debug('[debug] cardStat', cardStat);
 				result.push(cardStat);
 				if (option.PackageCardIds?.length) {
 					for (const packageCardId of option.PackageCardIds) {
