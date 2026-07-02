@@ -3,7 +3,7 @@ import { sleep } from '@firestone/shared/framework/common';
 import Plausible from 'plausible-tracker';
 import { AppInjector } from '../../..';
 import { AbstractFacadeService } from '../abstract-facade-service';
-import { isMainProcess } from '../electron-utils';
+import { isElectronContext, isMainProcess } from '../electron-utils';
 import { WindowManagerService } from '../window-manager.service';
 
 export const PLAUSIBLE_DOMAIN = new InjectionToken<string>('plausible.domain');
@@ -65,6 +65,9 @@ export class AnalyticsService extends AbstractFacadeService<AnalyticsService> {
 	}
 
 	public async trackEvent(eventName: string, options?: EventOptions) {
+		if (!isElectronContext()) {
+			return this.trackEventInternal(eventName, options);
+		}
 		return this.callOnMainProcess('trackEventInternal', eventName, options);
 	}
 
@@ -80,6 +83,9 @@ export class AnalyticsService extends AbstractFacadeService<AnalyticsService> {
 	}
 
 	public async trackPageView(page: string | null) {
+		if (!isElectronContext()) {
+			return this.trackPageViewInternal(page);
+		}
 		return this.callOnMainProcess('trackPageViewInternal', page);
 	}
 

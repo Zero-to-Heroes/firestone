@@ -1,11 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { AfterContentInit, Component, Injector } from '@angular/core';
+import { AfterContentInit, Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { AllCardsService } from '@firestone-hs/reference-data';
 import { sleep } from '@firestone/shared/framework/common';
-import { CardsFacadeStandaloneService, ILocalizationService, setAppInjector } from '@firestone/shared/framework/core';
+import { CardsFacadeStandaloneService, ILocalizationService } from '@firestone/shared/framework/core';
 import { TranslateModule } from '@ngx-translate/core';
-import { AnalyticsService } from '../../../../libs/shared/framework/core/src';
 
 @Component({
 	standalone: true,
@@ -21,12 +20,8 @@ export class AppComponent implements AfterContentInit {
 
 	constructor(
 		private readonly allCards: CardsFacadeStandaloneService,
-		private readonly injector: Injector,
 		private readonly i18n: ILocalizationService,
-		private readonly analytics: AnalyticsService,
-	) {
-		setAppInjector(injector);
-	}
+	) {}
 
 	async ngAfterContentInit() {
 		await this.allCards.init(new AllCardsService(), 'enUS');

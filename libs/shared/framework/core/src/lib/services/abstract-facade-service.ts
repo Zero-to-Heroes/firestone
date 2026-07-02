@@ -29,7 +29,7 @@ export abstract class AbstractFacadeService<T extends AbstractFacadeService<T>> 
 
 	private async initFacade() {
 		// Make sure the injector is registered
-		await AppInjector.awaitReady?.();
+		await AppInjector?.awaitReady?.();
 		const isMainWindow = await this.windowManager.isMainWindow();
 		this.isElectronContext = isElectronContext();
 		// Check if the service is already initialized, which is useful for single-window apps, like
