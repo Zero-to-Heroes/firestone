@@ -489,12 +489,7 @@ export const addGuessInfoToCard = (
 		const possibleCardsBase = filterCards(
 			null,
 			allCards.getService(),
-			(c) =>
-				(!!c.mechanics?.includes(GameTag[GameTag.PREPARE]) ||
-					// Temp until the cards DB is updated
-					c.text?.toLowerCase()?.includes('<b>prepare</b>')) &&
-				!!c.cost &&
-				c.cost >= card.prepared,
+			(c) => !!c.mechanics?.includes(GameTag[GameTag.PREPARE]) && !!c.cost && c.cost >= card.prepared,
 			optionsWithDeckContext,
 		);
 		const possibleCards = possibleCardsBase.filter((c) =>
