@@ -1344,6 +1344,7 @@ const BAN_LIST = [
 	CardIds.ZilliaxDeluxe3000_TOY_330,
 	CardIds.DragonSoulShattered_CATA_EVENT_110,
 	CardIds.KingoftheUnderbelly_JAIL_831,
+	CardIds.SliceandDice_JAIL_500,
 ];
 
 const BAN_LIST_ARENA = [
@@ -1873,6 +1874,7 @@ const doesSummonInPlay = (sourceCardId: string | null): boolean => {
 		case CardIds.Wormhole_TIME_602:
 		case CardIds.FreeFromAmber:
 		case CardIds.Ysondre_EDR_465:
+		case CardIds.MisterClocksworth_TIME_038:
 			return true;
 
 		default:
