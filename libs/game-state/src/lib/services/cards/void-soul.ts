@@ -18,7 +18,9 @@ export const VoidSoul: GeneratingCard & StaticGeneratingCard = {
 	publicCreator: true,
 	summonInPlay: true,
 	dynamicPool: (input: StaticGeneratingCardInput) => {
-		const currentVoidSoul = 0;
+		const currentVoidSoul = input.inputOptions.deckState.powerTriggeredThisMatch.filter(
+			(c) => c.cardId === CardIds.VoidSoul_JAIL_732,
+		).length;
 		return filterCards(
 			CardIds.VoidSoul_JAIL_732,
 			input.allCards,
@@ -27,10 +29,12 @@ export const VoidSoul: GeneratingCard & StaticGeneratingCard = {
 		);
 	},
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
-		const currentVoidSoul = 0;
+		const currentVoidSoul = input.deckState.powerTriggeredThisMatch.filter(
+			(c) => c.cardId === CardIds.VoidSoul_JAIL_732,
+		).length;
 		return {
 			cardType: CardType.MINION,
-			cost: { cost: 1, comparison: '==' },
+			cost: { cost: currentVoidSoul + 1, comparison: '==' },
 			races: [Race.DEMON],
 			possibleCards: filterCards(
 				CardIds.VoidSoul_JAIL_732,

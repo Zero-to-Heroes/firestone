@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { CardIds, isBattlegrounds } from '@firestone-hs/reference-data';
+import { CardIds, GameFormat, GameType, isBattlegrounds, ReferenceCard } from '@firestone-hs/reference-data';
 import { Preferences } from '@firestone/shared/common/service';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { BattlegroundsState } from '../models/_barrel';
 import { GameState } from '../models/game-state';
+import { filterCards } from '../services/cards/utils';
 import { CounterType } from './counter-type';
 import { areCardsValidInCurrentGame } from './utils';
 
@@ -287,6 +288,23 @@ export abstract class CounterDefinitionV2<T> {
 			sideObj.savedInstance = result;
 		}
 		return result;
+	}
+
+	protected filterCards(
+		sourceCardId: CardIds,
+		filter: (c: ReferenceCard) => boolean,
+		gameState: GameState,
+		side: 'player' | 'opponent',
+	): readonly string[] | undefined {
+		const deck = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
+		return filterCards(sourceCardId, this.allCards.getService(), (c) => filter(c), {
+			format: gameState.metadata?.formatType ?? GameFormat.FT_STANDARD,
+			gameType: gameState.metadata?.gameType ?? GameType.GT_RANKED,
+			scenarioId: gameState.metadata?.scenarioId ?? 0,
+			validArenaPool: this.curatedPools?.arena ?? [],
+			currentClass: deck.getCurrentClass()!,
+			initialDecklist: deck.deckList?.map((c) => c.cardId) ?? undefined,
+		});
 	}
 }
 

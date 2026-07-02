@@ -3,6 +3,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { CardIds } from '@firestone-hs/reference-data';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
+import { BattlegroundsState } from '../../models/_barrel';
 import { GameState } from '../../models/game-state';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
 import { CounterType } from '../counter-type';
@@ -48,6 +49,15 @@ export class VoidSoulsCounterDefinitionV2 extends CounterDefinitionV2<number> {
 		protected override readonly allCards: CardsFacadeService,
 	) {
 		super(allCards);
+	}
+
+	protected override cardTooltip(
+		side: 'player' | 'opponent',
+		gameState: GameState,
+		bgState: BattlegroundsState,
+		value: number | null | undefined,
+	): readonly string[] | undefined {
+		return this.filterCards(CardIds.VoidSoul_JAIL_732, (c) => c.cost === value, gameState, side);
 	}
 
 	protected override tooltip(side: 'player' | 'opponent', gameState: GameState): string | null {
