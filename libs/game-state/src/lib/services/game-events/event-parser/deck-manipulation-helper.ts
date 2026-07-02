@@ -706,10 +706,25 @@ const isInvalidForOther = (cardId: string): boolean => {
 const shouldSkipDeckReconciliationForPlayedCard = (input: {
 	readonly removedCard: DeckCard | undefined;
 	readonly cardId: string;
+	readonly entityId: number;
+	readonly deckCards: readonly DeckCard[];
 	readonly gameEventCreatorCardId?: string | null;
 	readonly transientCard?: boolean;
 }): boolean => {
 	if (input.transientCard) {
+		return true;
+	}
+	// reconciliation removes a Triangulate deck copy via creator fallback
+	// when the played card has no cardId in hand. Skipping reconciliation when the
+	// hand card was removed by entityId and that entity isn't still in the deck.
+	const removedFromHandByEntityId =
+		input.removedCard?.entityId != null && Math.abs(input.removedCard.entityId) === Math.abs(input.entityId);
+	const sameEntityStillInDeck = input.deckCards.some(
+		(c) => Math.abs(c.entityId ?? c.trueEntityId ?? 0) === Math.abs(input.entityId),
+	);
+	// Played from hand by entity id and that entity is not still tracked in deck (e.g. Triangulate
+	// discover draw is a separate entity from shuffled deck copies).
+	if (removedFromHandByEntityId && !sameEntityStillInDeck) {
 		return true;
 	}
 	if (
@@ -740,7 +755,7 @@ export const reconcileCardInHandWithDeck = (input: {
 	const { cardId, entityId, deck, helper } = input;
 	console.debug('[card-played] reconcileCardInHandWithDeck input', `entityId:${entityId}__`, input);
 
-	if (shouldSkipDeckReconciliationForPlayedCard(input)) {
+	if (shouldSkipDeckReconciliationForPlayedCard({ ...input, entityId, deckCards })) {
 		console.debug(
 			'[card-played] reconcileCardInHandWithDeck skipping deck reconciliation',
 			`entityId:${entityId}__`,
