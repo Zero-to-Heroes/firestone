@@ -712,10 +712,9 @@ const shouldSkipDeckReconciliationForPlayedCard = (input: {
 	if (input.transientCard) {
 		return true;
 	}
-	if (input.gameEventCreatorCardId) {
-		return true;
-	}
-	if (input.removedCard?.creatorCardId || input.removedCard?.lastAffectedByCardId) {
+	if (
+		input.gameEventCreatorCardId === (input.removedCard?.creatorCardId || input.removedCard?.lastAffectedByCardId)
+	) {
 		return true;
 	}
 	return false;
@@ -739,8 +738,14 @@ export const reconcileCardInHandWithDeck = (input: {
 } => {
 	let { removedCard, deckCards, opponentDeck } = input;
 	const { cardId, entityId, deck, helper } = input;
+	console.debug('[card-played] reconcileCardInHandWithDeck input', `entityId:${entityId}__`, input);
 
 	if (shouldSkipDeckReconciliationForPlayedCard(input)) {
+		console.debug(
+			'[card-played] reconcileCardInHandWithDeck skipping deck reconciliation',
+			`entityId:${entityId}__`,
+			input,
+		);
 		return { removedCard, additionalKnownCardsInDeck: deck.additionalKnownCardsInDeck, deckCards, opponentDeck };
 	}
 

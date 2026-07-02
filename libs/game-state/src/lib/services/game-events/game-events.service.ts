@@ -353,6 +353,7 @@ export class GameEvents {
 									targetEntityId: gameEvent.Value.AdditionalProps.TargetEntityId,
 									targetCardId: gameEvent.Value.AdditionalProps.TargetCardId,
 									creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
+									creatorEntityId: gameEvent.Value.AdditionalProps.CreatorEntityId,
 									transientCard: gameEvent.Value.AdditionalProps.TransientCard,
 									immune: gameEvent.Value.AdditionalProps.Immune,
 									dormant: gameEvent.Value.AdditionalProps.Dormant,

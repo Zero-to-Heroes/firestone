@@ -77,22 +77,19 @@ export class CardPlayedFromHandParser implements ActionParser {
 			if (node.Parent!.Type === NodeType.Action) {
 				const action = node.Parent!.Object as Action;
 				targetId = action.Target;
-				targetCardId = targetId > 0 ? this.GameState.CurrentEntities.get(targetId)?.CardId ?? null : null;
+				targetCardId = targetId > 0 ? (this.GameState.CurrentEntities.get(targetId)?.CardId ?? null) : null;
 			}
 			const creator = entity.GetTag(GameTag.CREATOR);
 			const creatorCardId =
 				creator !== -1 && this.GameState.CurrentEntities.has(creator)
 					? this.GameState.CurrentEntities.get(creator)!.CardId
 					: null;
+			const creatorEntityId = creator === -1 ? null : creator;
 
 			const gsEntities = this.StateFacade.GsState!.GameState.CurrentEntities;
 			const magnetizedTo = [...gsEntities.values()]
 				.reverse()
-				.find(
-					(e) =>
-						e.GetTag(GameTag.CREATOR) === tagChange.Entity &&
-						e.GetTag(GameTag.MAGNETIC) === 1,
-				);
+				.find((e) => e.GetTag(GameTag.CREATOR) === tagChange.Entity && e.GetTag(GameTag.MAGNETIC) === 1);
 			const magnetized = magnetizedTo != null;
 
 			this.GameState.OnCardPlayed(tagChange.Entity, targetId);
@@ -104,6 +101,7 @@ export class CardPlayedFromHandParser implements ActionParser {
 				Attack: entity.GetTag(GameTag.ATK, 0),
 				Health: entity.GetTag(GameTag.HEALTH, 0),
 				CreatorCardId: creatorCardId,
+				CreatorEntityId: creatorEntityId,
 				Immune: entity.GetTag(GameTag.IMMUNE) === 1,
 				Dormant: dormant,
 				Cost: entity.GetTag(GameTag.COST, 0),
@@ -147,33 +145,24 @@ export class CardPlayedFromHandParser implements ActionParser {
 			this.GameState.CurrentEntities.get(showEntity.GetTag(GameTag.LAST_AFFECTED_BY))!.CardId ===
 				CardIds.OhMyYogg;
 		const isSigil =
-			showEntity.GetTag(GameTag.ZONE) === (Zone.SECRET as number) &&
-			showEntity.GetTag(GameTag.SIGIL) === 1;
-		if (
-			showEntity.GetTag(GameTag.ZONE) === (Zone.PLAY as number) ||
-			isSigil ||
-			isOhMyYogg
-		) {
+			showEntity.GetTag(GameTag.ZONE) === (Zone.SECRET as number) && showEntity.GetTag(GameTag.SIGIL) === 1;
+		if (showEntity.GetTag(GameTag.ZONE) === (Zone.PLAY as number) || isSigil || isOhMyYogg) {
 			const parentAction = node.Parent!.Object as Action;
 			const cardId = showEntity.CardId;
 			const controllerId = showEntity.GetEffectiveController();
 			const targetId = parentAction.Target;
-			const targetCardId =
-				targetId > 0 ? this.GameState.CurrentEntities.get(targetId)?.CardId ?? null : null;
+			const targetCardId = targetId > 0 ? (this.GameState.CurrentEntities.get(targetId)?.CardId ?? null) : null;
 			const creator = showEntity.GetTag(GameTag.CREATOR);
 			const creatorCardId =
 				creator !== -1 && this.GameState.CurrentEntities.has(creator)
 					? this.GameState.CurrentEntities.get(creator)!.CardId
 					: null;
+			const creatorEntityId = creator === -1 ? null : creator;
 
 			const gsEntities = this.StateFacade.GsState!.GameState.CurrentEntities;
 			const magnetizedTo = [...gsEntities.values()]
 				.reverse()
-				.find(
-					(e) =>
-						e.GetTag(GameTag.CREATOR) === showEntity.Entity &&
-						e.GetTag(GameTag.MAGNETIC) === 1,
-				);
+				.find((e) => e.GetTag(GameTag.CREATOR) === showEntity.Entity && e.GetTag(GameTag.MAGNETIC) === 1);
 			const magnetized = magnetizedTo != null;
 
 			const fullEntity = FullEntity.FromShowEntity(showEntity);
@@ -183,7 +172,12 @@ export class CardPlayedFromHandParser implements ActionParser {
 				TargetEntityId: targetId,
 				TargetCardId: targetCardId,
 				CreatorCardId: creatorCardId,
-				TransientCard: isOhMyYogg || copiedFromEntityId > 0 || creator !== -1,
+				CreatorEntityId: creatorEntityId,
+				// No idea why this being a copied card would make it transient
+				// If the opponent draws a card created by Commander Beatrix, then play it, it has a creator
+				// When they play it, if there is a "created by Commander Beatrix" card in the hand or deck, we want to
+				// remove it
+				TransientCard: isOhMyYogg, // || copiedFromEntityId > 0 || creator !== -1,
 				Immune: showEntity.GetTag(GameTag.IMMUNE) === 1,
 				Magnetized: magnetized,
 				Tags: showEntity.Tags,

@@ -22,6 +22,15 @@ export const revealCard = (deck: DeckState, card: DeckCard | null | undefined, a
 const revealCardFromCreator = (deck: DeckState, card: DeckCard) => {
 	const creatorEntityId = card.creatorEntityId || card.lastAffectedByEntityId;
 	const creatorCardId = card.creatorCardId || card.lastAffectedByCardId;
+	console.debug(
+		'[debug] revealCardFromCreator',
+		`entityId:${card.entityId}__`,
+		card.cardName,
+		creatorEntityId,
+		creatorCardId,
+		deck,
+		card,
+	);
 	if (!creatorEntityId || !creatorCardId) {
 		return deck;
 	}
@@ -34,6 +43,7 @@ const revealCardFromCreator = (deck: DeckState, card: DeckCard) => {
 		case CardIds.BronzeSignet_BronzeSignetTavernBrawlEnchantment:
 		case CardIds.BronzeSignetTavernBrawl:
 		case CardIds.CheerfulSpirit:
+		case CardIds.CommanderBeatrix_JAIL_397:
 		case CardIds.DollmasterDorian:
 		case CardIds.DoorOfShadows_DoorOfShadowsToken:
 		case CardIds.DryscaleDeputy_WW_383:
@@ -180,6 +190,7 @@ export const revealCardInOpponentDeck = (
 };
 
 const updateCardsInDeckAsCopies = (deck: DeckState, card: DeckCard, creatorEntityId: number, creatorCardId: string) => {
+	console.debug('[debug] updateCardsInDeckAsCopies', card.cardName, creatorEntityId, creatorCardId, deck, card);
 	return deck.update({
 		deck: updateCardsInZoneAsCopies(deck.deck, card, creatorEntityId, creatorCardId),
 		hand: updateCardsInZoneAsCopies(deck.hand, card, creatorEntityId, creatorCardId),

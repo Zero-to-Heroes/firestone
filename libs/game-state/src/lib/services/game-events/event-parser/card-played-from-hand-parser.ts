@@ -12,7 +12,6 @@ import { DeckCard, toTagsObject } from '../../../models/deck-card';
 import { DeckState } from '../../../models/deck-state';
 import { GameState, ShortCardWithTurn } from '../../../models/game-state';
 import { getProcessedCard, storeInformationOnCardPlayed } from '../../card-utils';
-import { getEntityTag } from '../../parser-entity-utils';
 import { hasOnCardPlayedWhileInHand } from '../../cards/_card.type';
 import { cardsInfoCache } from '../../cards/_mapping';
 import {
@@ -23,6 +22,7 @@ import {
 	globalEffectCardsPlayed,
 	hasRace,
 } from '../../hs-utils';
+import { getEntityTag } from '../../parser-entity-utils';
 import { revealCard } from '../card-reveal';
 import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
@@ -72,7 +72,7 @@ export class CardPlayedFromHandParser implements EventParser {
 			entityId,
 			deck.deckList.length === 0 && !gameEvent.additionalData.transientCard,
 		);
-		// console.debug('[card-played] newHand', newHand, removedCard, card, deck.hand, deck);
+		console.debug('[card-played] newHand', `entityId:${entityId}__`, newHand, removedCard, card, deck.hand, deck);
 
 		// This happens when we create a card in the deck, then leave it there when the opponent draws it
 		// (to avoid info leaks). When they play it we won't find it in the "hand" zone, so we try
@@ -144,7 +144,7 @@ export class CardPlayedFromHandParser implements EventParser {
 				playTiming: isOnBoard ? GameState.playTiming++ : null,
 				countered: isCardCountered,
 			} as DeckCard);
-		// console.debug('[card-played] cardWithZone', cardWithZone, card, refCard);
+		// console.debug('[card-played] cardWithZone', `entityId:${cardWithZone.entityId}__`, cardWithZone, card, refCard);
 		const cardWithInfo = cardWithZone.update({
 			// When dealing with the opponent, the creator card id is hidden / removed when put in deck / drawn to
 			// avoid info leaks, so if the info is present in the event, we add it
@@ -159,7 +159,7 @@ export class CardPlayedFromHandParser implements EventParser {
 			}),
 			tags: toTagsObject(gameEvent.additionalData.tags),
 		});
-		// console.debug('cardWithInfo', cardWithInfo, gameEvent);
+		console.debug('cardWithInfo', `entityId:${cardWithInfo.entityId}__`, cardWithInfo, gameEvent);
 		const cardToAdd =
 			isCardCountered && additionalInfo?.secretWillTrigger?.cardId === CardIds.OhMyYogg
 				? // Since Yogg transforms the card
@@ -325,7 +325,7 @@ export class CardPlayedFromHandParser implements EventParser {
 		const playerDeckAfterReveal = isPlayer ? finalPlayerDeckAfterShiftingTop : opponentDeckAfterSpecialCaseUpdate;
 		const opponentDeckAfterReveal = isPlayer
 			? opponentDeckAfterSpecialCaseUpdate
-			: revealCard(finalPlayerDeckAfterShiftingTop, cardWithZone, this.allCards);
+			: revealCard(finalPlayerDeckAfterShiftingTop, cardWithInfo, this.allCards);
 
 		return currentState.update({
 			playerDeck: playerDeckAfterReveal,
@@ -503,16 +503,13 @@ const updateMistahVistah = (
 
 	const mistahEntityId = Math.abs(mistahVistah.entityId);
 	const scenicVistaCandidates = deck.otherZone.filter(
-		(c) =>
-			c.cardId === CardIds.MistahVistah_ScenicVistaToken_VAC_519t3 && c.zone !== 'REMOVEDFROMGAME',
+		(c) => c.cardId === CardIds.MistahVistah_ScenicVistaToken_VAC_519t3 && c.zone !== 'REMOVEDFROMGAME',
 	);
 	const scenicVista =
 		scenicVistaCandidates.find(
 			(c) => c.creatorEntityId != null && Math.abs(+c.creatorEntityId) === mistahEntityId,
 		) ??
-		scenicVistaCandidates.find(
-			(c) => c.creatorCardId === CardIds.MistahVistah_VAC_519,
-		) ??
+		scenicVistaCandidates.find((c) => c.creatorCardId === CardIds.MistahVistah_VAC_519) ??
 		(scenicVistaCandidates.length === 1 ? scenicVistaCandidates[0] : undefined);
 	if (!scenicVista) {
 		return deck;
