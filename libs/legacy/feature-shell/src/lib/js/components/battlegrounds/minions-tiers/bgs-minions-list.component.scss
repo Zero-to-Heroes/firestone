@@ -63,8 +63,8 @@
 }
 
 .group-header {
-	background: var(--color-9);
-	color: var(--color-1);
+	background: var(--bgs-minions-tier-header-background, var(--color-9));
+	color: var(--bgs-minions-tier-header-color, var(--color-1));
 	width: 100%;
 	height: 30px;
 	flex-shrink: 0;

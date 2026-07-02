@@ -21,14 +21,14 @@
 	}
 
 	.turn-number {
-		background: #07081f;
+		background: var(--color-7);
 		width: 25px;
 		height: 25px;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		border-radius: 50%;
-		border: 2px solid #9fb6d7;
+		border: 2px solid var(--color-1);
 		align-items: center;
 		justify-content: center;
 		position: relative;
@@ -41,7 +41,7 @@
 		font-weight: bold;
 		line-height: normal;
 		font-size: 15px;
-		color: #9fb6d7;
+		color: var(--color-1);
 		padding-bottom: 3px;
 	}
 }

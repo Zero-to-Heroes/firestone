@@ -2,7 +2,7 @@
 	height: 30px;
 	display: flex;
 	align-items: center;
-	background: #07081f;
+	background: var(--color-7);
 
 	.logo {
 		width: 73px;
@@ -21,7 +21,7 @@
 			&:hover {
 				--icon-color: #101530;
 				color: #101530;
-				background: #9fb6d7;
+				background: var(--color-1);
 			}
 		}
 	}

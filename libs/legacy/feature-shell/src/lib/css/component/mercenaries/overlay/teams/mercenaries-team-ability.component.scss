@@ -103,7 +103,7 @@
 		width: 18px;
 		height: 19px;
 		background: #131010;
-		border: 1px solid #9fb6d7;
+		border: 1px solid var(--color-1);
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -117,7 +117,7 @@
 			font-weight: bold;
 			line-height: normal;
 			font-size: 15px;
-			color: #9fb6d7;
+			color: var(--color-1);
 		}
 
 		i {

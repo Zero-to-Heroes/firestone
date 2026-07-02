@@ -1,0 +1,9 @@
+// Aggregates every builtin overlay appearance theme. Loaded once by the in-game overlay host
+// (`_full-screen-overlays.component.ts`). Custom / user-saved themes have no SCSS: their palette
+// is applied at runtime by the OverlayAppearanceService.
+//
+// To add a builtin theme: create `<id>.scss` next to this file and add a `@use` below.
+@use 'firestone';
+@use 'deck-tracker';
+@use 'dark';
+@use 'firestone-dark';

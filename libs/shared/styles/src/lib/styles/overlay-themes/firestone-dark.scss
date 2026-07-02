@@ -1,0 +1,42 @@
+// "Firestone Dark" theme — keeps the Firestone identity (blue/purple constructed, magenta
+// battlegrounds) but with deeper, less saturated backgrounds. The palette differs per game mode,
+// so we nest the game-mode class (the overlay host carries both the attribute and the class).
+[data-overlay-appearance='firestone-dark'] {
+	&.decktracker-theme {
+		--ov-color-1: #9fb6d7;
+		--ov-color-2: #7e8bb0;
+		--ov-color-3: #565b78;
+		--ov-color-4: #26283a;
+		--ov-color-5: #15161f;
+		--ov-color-6: #0c0d13;
+		--ov-color-7: #050609;
+		--ov-color-9: #0a0b10;
+		--ov-color-common-1: #d9c3ab;
+		--ov-color-common-2: #ffb948;
+
+		--ov-default-text-color: #d9c3ab;
+		--ov-default-title-color: #ffb948;
+		--ov-secondary-text-color: #9fb6d7;
+	}
+
+	&.battlegrounds-theme {
+		--ov-color-1: #dfb3d3;
+		--ov-color-2: #c07aa8;
+		--ov-color-3: #6e1354;
+		--ov-color-4: #3c0a2d;
+		--ov-color-5: #24041a;
+		--ov-color-6: #6a5f54;
+		--ov-color-7: #0c0209;
+		--ov-color-8: #cb9fd7;
+		--ov-color-9: #1c0a16;
+		--ov-color-common-1: #d9c3ab;
+		--ov-color-common-2: #ffb948;
+
+		--ov-default-text-color: #d9c3ab;
+		--ov-default-title-color: #ffb948;
+		--ov-secondary-text-color: #c07aa8;
+
+		--ov-bgs-widget-background-color-start: rgba(48, 8, 36, 0.82);
+		--ov-bgs-widget-background-color-end: rgba(10, 2, 7, 0.97);
+	}
+}

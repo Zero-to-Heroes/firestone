@@ -24,8 +24,12 @@ import {
 import { CurrentAppType } from '@firestone/mainwindow/common';
 import { SceneService } from '@firestone/memory';
 import { InGameReplayService } from '@firestone/mods/common';
-import { CustomAppearanceService } from '@firestone/settings/services';
-import { PreferencesService, ScalingService } from '@firestone/shared/common/service';
+import { OverlayAppearanceService } from '@firestone/settings/services';
+import {
+	OverlayAppearanceThemeSelection,
+	PreferencesService,
+	ScalingService,
+} from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import {
 	CardsFacadeService,
@@ -50,6 +54,7 @@ import { DebugService } from '../../services/debug.service';
 		`../../../css/themes/decktracker-desktop-theme.scss`,
 		`../../../css/themes/replays-theme.scss`,
 		`../../../css/themes/general-theme.scss`,
+		`../../../../../../../shared/styles/src/lib/styles/overlay-themes/_index.scss`,
 		'./_full-screen-overlays.component.scss',
 	],
 	template: `
@@ -58,6 +63,7 @@ import { DebugService } from '../../services/debug.service';
 			tabindex="0"
 			class="full-screen-overlays drag-boundary overlay-container-parent"
 			[activeTheme]="activeTheme$ | async"
+			[overlayAppearanceTheme]="overlayAppearanceTheme$ | async"
 		>
 			<in-game-replay-widget-wrapper></in-game-replay-widget-wrapper>
 			<ng-container *ngIf="allowOverlays$ | async">
@@ -185,6 +191,7 @@ export class FullScreenOverlaysComponent
 	allowOverlays$: Observable<boolean>;
 
 	activeTheme$: Observable<CurrentAppType>;
+	overlayAppearanceTheme$: Observable<OverlayAppearanceThemeSelection>;
 	useGroupedCounters$: Observable<boolean>;
 	playerCounters$: Observable<readonly CounterInstance<any>[]>;
 	opponentCounters$: Observable<readonly CounterInstance<any>[]>;
@@ -201,7 +208,7 @@ export class FullScreenOverlaysComponent
 		private readonly scene: SceneService,
 		private readonly gameState: GameStateFacadeService,
 		private readonly prefs: PreferencesService,
-		private readonly customStyles: CustomAppearanceService,
+		private readonly overlayAppearance: OverlayAppearanceService,
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: ILocalizationService,
 		private readonly init_ScalingService: ScalingService,
@@ -213,10 +220,13 @@ export class FullScreenOverlaysComponent
 	}
 
 	async ngAfterContentInit() {
-		await waitForReady(this.scene, this.gameState, this.customStyles, this.prefs, this.inGameReplayService);
+		await waitForReady(this.scene, this.gameState, this.overlayAppearance, this.prefs, this.inGameReplayService);
 
 		this.allowOverlays$ = this.inGameReplayService.isReplayOngoing$$.pipe(this.mapData((isOngoing) => !isOngoing));
 		this.useGroupedCounters$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.useGroupedCounters));
+		this.overlayAppearanceTheme$ = this.prefs.preferences$$.pipe(
+			this.mapData((prefs) => prefs.overlayAppearanceTheme),
+		);
 		this.activeTheme$ = combineLatest([
 			this.scene.currentScene$$,
 			this.scene.lastNonGamePlayScene$$,
@@ -294,7 +304,6 @@ export class FullScreenOverlaysComponent
 			distinctUntilChanged((a, b) => a.length === b.length && a.every((c, i) => equalCounterInstance(c, b[i]))),
 			takeUntil(this.destroyed$),
 		);
-		this.customStyles.register();
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.markForCheck();
@@ -303,6 +312,8 @@ export class FullScreenOverlaysComponent
 
 	async ngAfterViewInit() {
 		console.debug('full screen ngAfterViewInit');
+		await waitForReady(this.overlayAppearance);
+		this.overlayAppearance.register(this.container?.nativeElement);
 		// Size is handled from the main controller in electron
 		if (this.ow.isOwEnabled()) {
 			this.windowId = (await this.ow.getCurrentWindow())?.id;

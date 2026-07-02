@@ -6,8 +6,8 @@
 	width: 100%;
 
 	.header {
-		background: var(--color-5);
-		color: var(--color-1);
+		background: var(--bgs-minions-group-header-background, var(--color-5));
+		color: var(--bgs-minions-group-header-color, var(--color-1));
 		width: 100%;
 		height: 26px;
 		display: flex;

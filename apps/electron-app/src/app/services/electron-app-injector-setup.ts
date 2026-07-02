@@ -162,7 +162,7 @@ import {
 import { InGameReplayService, ModsManagerService } from '@firestone/mods/common';
 import { ProfileServiceFacade, ProfileUploaderService } from '@firestone/profile/common';
 import { AccountService } from '@firestone/profile/services';
-import { CustomAppearanceService, SettingsControllerService } from '@firestone/settings/services';
+import { OverlayAppearanceService, SettingsControllerService } from '@firestone/settings/services';
 import {
 	AppNavigationService,
 	BugReportService,
@@ -814,8 +814,8 @@ export const buildAppInjector = () => {
 	);
 	electronInjector.register(EndGameListenerService, endGameListener);
 
-	const customAppearance = new CustomAppearanceService(windowManager);
-	electronInjector.register(CustomAppearanceService, customAppearance);
+	const overlayAppearance = new OverlayAppearanceService(windowManager);
+	electronInjector.register(OverlayAppearanceService, overlayAppearance);
 
 	const settingsController = new SettingsControllerService(windowManager);
 	electronInjector.register(SettingsControllerService, settingsController);

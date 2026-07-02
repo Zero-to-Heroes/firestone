@@ -1,6 +1,6 @@
 .attack-counter {
-	--counter-border-color: #9fb6d7;
-	--counter-value-color: #9fb6d7;
+	--counter-border-color: var(--color-1);
+	--counter-value-color: var(--color-1);
 	width: 50px;
 	height: 50px;
 

@@ -98,7 +98,7 @@
 
 		.minion {
 			&.controlled ::ng-deep .minion {
-				outline: 2px solid var(--bgs-color-8);
+				outline: 2px solid var(--color-8);
 			}
 			&.inShop ::ng-deep .minion {
 				outline: 2px solid var(--default-title-color);

@@ -4,27 +4,28 @@
 	--window-background-image:
 		radial-gradient(30vw at 50% 50%, rgba(94, 11, 70, 0.7) 0%, rgba(30, 1, 22, 1) 100%),
 		url('https://static.zerotoheroes.com/hearthstone/asset/firestone/images/backgrounds/battlegrounds.jpg');
-	--color-1: var(--bgs-color-1, #dfb3d3);
-	--color-2: var(--bgs-color-2, #ce73b4);
-	--color-3: var(--bgs-color-3, #841063); // rgba(132, 16, 99, 1)
-	--color-4: var(--bgs-color-4, #5f0b47);
-	--color-5: var(--bgs-color-5, #40032e);
-	--color-6: var(--bgs-color-6, #a89782);
-	--color-7: var(--bgs-color-7, #1e0116); // rgba(30, 1, 22, 1)
-	--color-8: var(--bgs-color-8, #cb9fd7);
-	--color-9: var(--bgs-color-9, #39122e);
-	--color-common-1: #d9c3ab;
-	--color-common-2: #ffb948;
+	// Overlay appearance themes override the --ov-* tokens (see overlay-themes/_contract.scss).
+	--color-1: var(--ov-color-1, #dfb3d3);
+	--color-2: var(--ov-color-2, #ce73b4);
+	--color-3: var(--ov-color-3, #841063); // rgba(132, 16, 99, 1)
+	--color-4: var(--ov-color-4, #5f0b47);
+	--color-5: var(--ov-color-5, #40032e);
+	--color-6: var(--ov-color-6, #a89782);
+	--color-7: var(--ov-color-7, #1e0116); // rgba(30, 1, 22, 1)
+	--color-8: var(--ov-color-8, #cb9fd7);
+	--color-9: var(--ov-color-9, #39122e);
+	--color-common-1: var(--ov-color-common-1, #d9c3ab);
+	--color-common-2: var(--ov-color-common-2, #ffb948);
 
 	--ad-link-color: var(--color-2);
 	--on-ad-link-color-hover: var(--color-1);
 
 	--main-menu-background-color: var(--color-7);
-	--window-outline-color: #5f0b47;
-	--default-text-color: #d9c3ab;
+	--window-outline-color: var(--color-4);
+	--default-text-color: var(--ov-default-text-color, #d9c3ab);
 	--default-text-color-bright: #f3dcc3;
-	--default-title-color: var(--color-common-2);
-	--secondary-text-color: var(--color-3);
+	--default-title-color: var(--ov-default-title-color, var(--color-common-2));
+	--secondary-text-color: var(--ov-secondary-text-color, var(--color-3));
 
 	--menu-selection-color: var(--color-3);
 	--on-menu-selection-color: var(--color-common-2);
@@ -64,13 +65,29 @@
 	--card-highlight-color-3: rgba(255, 72, 157, 0.4);
 	--card-highlight-color-4: rgba(127, 72, 255, 0.4);
 
+	// The widget backgrounds are computed from the start/end tokens, so a theme (or the custom
+	// color pickers) only need to set --ov-bgs-widget-background-color-start / -end.
+	--bgs-widget-background-color-start: var(--ov-bgs-widget-background-color-start, rgba(94, 11, 70, 0.7));
+	--bgs-widget-background-color-end: var(--ov-bgs-widget-background-color-end, rgba(30, 1, 22, 1));
 	--bgs-simulation-widget-background-image:
-		radial-gradient(30vw at 50% 50%, rgba(94, 11, 70, 0.7) 0%, rgba(30, 1, 22, 1) 100%),
+		radial-gradient(
+			30vw at 50% 50%,
+			var(--bgs-widget-background-color-start) 0%,
+			var(--bgs-widget-background-color-end) 100%
+		),
 		url('https://static.zerotoheroes.com/hearthstone/asset/firestone/images/backgrounds/battlegrounds.jpg');
 	--bgs-session-widget-background-image:
-		radial-gradient(30vw at 50% 50%, rgba(94, 11, 70, 0.7) 0%, rgba(30, 1, 22, 1) 100%),
+		radial-gradient(
+			30vw at 50% 50%,
+			var(--bgs-widget-background-color-start) 0%,
+			var(--bgs-widget-background-color-end) 100%
+		),
 		url('https://static.zerotoheroes.com/hearthstone/asset/firestone/images/backgrounds/battlegrounds.jpg');
 	--bgs-minions-list-widget-background-image:
-		radial-gradient(50% 50% at 50% 50%, rgba(94, 11, 70, 0.7) 0%, rgba(30, 1, 22, 1) 100%),
+		radial-gradient(
+			50% 50% at 50% 50%,
+			var(--bgs-widget-background-color-start) 0%,
+			var(--bgs-widget-background-color-end) 100%
+		),
 		url('https://static.zerotoheroes.com/hearthstone/asset/firestone/images/backgrounds/bg_tier_list.png');
 }

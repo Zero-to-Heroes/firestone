@@ -41,6 +41,10 @@ import {
 	StatGameFormatType,
 	StatsXpGraphSeasonFilterType,
 } from './pref-model';
+import {
+	DEFAULT_OVERLAY_APPEARANCE_THEME,
+	OverlayAppearanceThemeSelection,
+} from './overlay-appearance-themes';
 import type { OutOfCardsToken } from './unfit-pref-model';
 
 export const FORCE_LOCAL_PROP = 'forceLocalProp';
@@ -77,6 +81,10 @@ export class Preferences implements IPreferences {
 	readonly cardTooltipScale: number = 100;
 	readonly cardTooltipNumberOfRelatedCards: number = 100;
 	readonly useNewCardTileStyle: boolean = true;
+
+	// The look & feel of the in-game overlays. Either a builtin theme id, 'custom', or 'user:{uuid}'.
+	readonly overlayAppearanceTheme: OverlayAppearanceThemeSelection = DEFAULT_OVERLAY_APPEARANCE_THEME;
+
 	readonly useGroupedCounters: boolean = true;
 	readonly groupedCountersScale: number = 100;
 	readonly countersWidgetsScale: number = 100;

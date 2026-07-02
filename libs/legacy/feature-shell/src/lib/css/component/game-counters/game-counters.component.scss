@@ -2,7 +2,7 @@
 
 .root {
 	margin-top: -30px;
-	--counter-border-color: #9fb6d7;
+	--counter-border-color: var(--color-1);
 	--counter-value-color: #303352;
 
 	&.isBgs {

@@ -4,7 +4,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		background: #07081f;
+		background: var(--color-7);
 		position: relative;
 
 		.zone-name {
@@ -13,7 +13,7 @@
 			font-weight: normal;
 			line-height: normal;
 			font-size: 15px;
-			color: #9fb6d7;
+			color: var(--color-1);
 			flex-grow: 1;
 			display: flex;
 			justify-content: center;
@@ -26,8 +26,8 @@
 			width: 17px;
 			position: absolute;
 			left: 7px;
-			color: #9fb6d7;
-			--icon-color: #9fb6d7;
+			color: var(--color-1);
+			--icon-color: var(--color-1);
 
 			svg {
 				color: transparent;
@@ -37,7 +37,7 @@
 	}
 
 	.collapse-caret {
-		--icon-color: #9fb6d7;
+		--icon-color: var(--color-1);
 		width: 12px;
 		height: 6px;
 		margin-right: 8px;
@@ -57,7 +57,7 @@
 			display: flex;
 			align-items: center;
 			justify-content: flex-start;
-			background: #07081f;
+			background: var(--color-7);
 			position: relative;
 			padding-left: 10px;
 
@@ -66,7 +66,7 @@
 			font-weight: normal;
 			line-height: normal;
 			font-size: 15px;
-			color: #9fb6d7;
+			color: var(--color-1);
 		}
 	}
 

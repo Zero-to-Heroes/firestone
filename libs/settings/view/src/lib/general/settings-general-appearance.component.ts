@@ -1,9 +1,9 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { CustomAppearanceService } from '@firestone/settings/services';
+import { OverlayAppearanceService } from '@firestone/settings/services';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
 
-// Deprecated?
+// Deprecated: superseded by AppearanceCustomizationPageComponent (overlay themes).
 @Component({
 	standalone: false,
 	selector: 'settings-general-appearance',
@@ -12,8 +12,8 @@ import { ILocalizationService, waitForReady } from '@firestone/shared/framework/
 		<div class="title" [fsTranslate]="'settings.general.appearance.battlegrounds.title'"></div>
 		<div class="settings-group battlegrounds">
 			<custom-color-picker
-				[label]="'settings.general.appearance.battlegrounds.widget-background-color' | fsTranslate"
-				key="--bgs-widget-background-color-start"
+				[label]="'settings.general.appearance.overlay-theme.color.bgs-background-start' | fsTranslate"
+				key="--ov-bgs-widget-background-color-start"
 			></custom-color-picker>
 		</div>
 		<div class="buttons">
@@ -30,13 +30,11 @@ export class SettingsGeneralAppearanceComponent extends AbstractSubscriptionComp
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
 		private readonly i18n: ILocalizationService,
-		private readonly appearance: CustomAppearanceService,
+		private readonly appearance: OverlayAppearanceService,
 	) {
 		super(cdr);
 	}
 
-	// TODO: later on, would be great to model the full color settings (and later, the full settings tree) to allow for
-	// easier search
 	async ngAfterContentInit() {
 		await waitForReady(this.appearance);
 
@@ -46,6 +44,6 @@ export class SettingsGeneralAppearanceComponent extends AbstractSubscriptionComp
 	}
 
 	resetAll() {
-		this.appearance.resetAll();
+		this.appearance.resetCustomPalette();
 	}
 }

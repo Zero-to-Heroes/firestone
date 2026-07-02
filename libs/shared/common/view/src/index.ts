@@ -33,6 +33,7 @@ export * from './lib/components/tooltip/confirmation.component';
 export * from './lib/components/tooltip/help-tooltip.component';
 export * from './lib/components/tooltip/help-tooltip.directive';
 export * from './lib/directives/active-theme.directive';
+export * from './lib/directives/overlay-appearance-theme.directive';
 export * from './lib/directives/premium-setting.directive';
 export * from './lib/pipes/safe-html.pipe';
 export * from './lib/pipes/short-date.pipe';

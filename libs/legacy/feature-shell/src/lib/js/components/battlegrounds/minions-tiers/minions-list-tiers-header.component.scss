@@ -9,7 +9,10 @@
 	background-image: var(--bgs-minions-list-widget-background-image);
 	border-width: 2px;
 	border-style: solid;
-	border-image-source: linear-gradient(to right, rgba(255, 185, 72, 1) 0%, rgba(255, 185, 72, 0) 100%);
+	border-image-source: var(
+		--bgs-minions-tiers-header-border-image,
+		linear-gradient(to right, rgba(255, 185, 72, 1) 0%, rgba(255, 185, 72, 0) 100%)
+	);
 	border-image-slice: 1;
 }
 

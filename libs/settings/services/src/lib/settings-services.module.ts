@@ -8,7 +8,7 @@ import { SharedFrameworkCommonModule } from '@firestone/shared/framework/common'
 import { SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
 import { StatsDataAccessModule } from '@firestone/stats/data-access';
 import { BootstrapSettingsService } from './services/bootstrap-settings.service';
-import { CustomAppearanceService } from './services/custom-appearance.service';
+import { OverlayAppearanceService } from './services/overlay-appearance.service';
 import { SettingsControllerService } from './services/settings-controller.service';
 
 const components = [];
@@ -24,7 +24,7 @@ const components = [];
 		ProfileCommonModule,
 		StatsDataAccessModule,
 	],
-	providers: [BootstrapSettingsService, CustomAppearanceService, SettingsControllerService],
+	providers: [BootstrapSettingsService, OverlayAppearanceService, SettingsControllerService],
 	declarations: components,
 	exports: components,
 })

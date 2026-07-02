@@ -1,0 +1,32 @@
+// Overlay appearance color contract.
+//
+// These `--ov-*` tokens are the override layer for the in-game overlays. The base themes
+// (`decktracker-theme` / `battlegrounds-theme`) read every palette/semantic value through them,
+// e.g. `--color-1: var(--ov-color-1, #9fb6d7)`. A builtin overlay theme only needs to set the
+// tokens it wants to change under `[data-overlay-appearance='<id>']`; everything else falls back
+// to the Firestone defaults.
+//
+// This file is documentation only (no CSS is emitted). It must stay in sync with
+// `libs/shared/common/service/src/lib/models/overlay-appearance-color-contract.ts`.
+//
+// Palette (both game modes unless noted):
+//   --ov-color-1               lightest palette color (text / borders / icons)
+//   --ov-color-2
+//   --ov-color-3
+//   --ov-color-4
+//   --ov-color-5
+//   --ov-color-6
+//   --ov-color-7               darkest palette color (widget backgrounds)
+//   --ov-color-8               battlegrounds only
+//   --ov-color-9               background image edge color
+//   --ov-color-common-1        neutral light text color
+//   --ov-color-common-2        accent (gold) color
+//
+// Text / titles:
+//   --ov-default-text-color
+//   --ov-default-title-color
+//   --ov-secondary-text-color
+//
+// Battlegrounds widget backgrounds (used to compute the radial gradients):
+//   --ov-bgs-widget-background-color-start
+//   --ov-bgs-widget-background-color-end

@@ -43,6 +43,8 @@ export class LocalStorageService {
 	public static LOCAL_STORAGE_BGS_IN_GAME_HERO_SELECTION_STATS_SEEN =
 		'LOCAL_STORAGE_BGS_IN_GAME_HERO_SELECTION_STATS_SEEN';
 	public static LOCAL_STORAGE_CUSTOM_APPEARANCE = 'CUSTOM_APPEARANCE';
+	public static LOCAL_STORAGE_OVERLAY_CUSTOM_PALETTE = 'OVERLAY_CUSTOM_PALETTE';
+	public static LOCAL_STORAGE_OVERLAY_USER_THEMES = 'OVERLAY_USER_THEMES';
 	public static CURRENT_SUB_PLAN = 'CURRENT_SUB_PLAN';
 
 	// Optional so that there is no conflict with the Electron implementation

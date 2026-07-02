@@ -1,0 +1,21 @@
+// "Dark" theme — neutral near-black / gray with minimal color. Same palette for both game modes.
+[data-overlay-appearance='dark'] {
+	--ov-color-1: #d6d6d6;
+	--ov-color-2: #a3a3a3;
+	--ov-color-3: #707070;
+	--ov-color-4: #3d3d3d;
+	--ov-color-5: #292929;
+	--ov-color-6: #1c1c1c;
+	--ov-color-7: #131313;
+	--ov-color-8: #c4c4c4;
+	--ov-color-9: #0e0e0e;
+	--ov-color-common-1: #d6d6d6;
+	--ov-color-common-2: #cfcfcf; // muted (no gold) to keep the theme colorless
+
+	--ov-default-text-color: #eaeaea;
+	--ov-default-title-color: #d8d8d8;
+	--ov-secondary-text-color: #9a9a9a;
+
+	--ov-bgs-widget-background-color-start: rgba(28, 28, 28, 0.9);
+	--ov-bgs-widget-background-color-end: rgba(10, 10, 10, 0.97);
+}

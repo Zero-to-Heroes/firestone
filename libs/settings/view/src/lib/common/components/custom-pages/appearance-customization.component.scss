@@ -10,3 +10,103 @@
 	padding: 10px 25px;
 	font-size: 13px;
 }
+
+.overlay-theme-settings {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+
+	.text {
+		opacity: 0.8;
+		margin-bottom: 5px;
+	}
+
+	.theme-selector {
+		display: flex;
+		flex-direction: column;
+		gap: 5px;
+		margin-bottom: 10px;
+
+		.theme-dropdown {
+			max-width: 300px;
+		}
+	}
+
+	.subtitle {
+		font-weight: bold;
+		margin: 10px 0 5px 0;
+	}
+
+	.builtin-hint {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 8px;
+		margin: 5px 0;
+	}
+
+	.buttons {
+		display: flex;
+		flex-direction: row;
+		gap: 10px;
+		margin-top: 10px;
+	}
+
+	.save-theme {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		gap: 10px;
+		margin-top: 10px;
+
+		.theme-name-input {
+			padding: 8px 10px;
+			font-size: 13px;
+			min-width: 200px;
+		}
+	}
+
+	.saved-themes {
+		display: flex;
+		flex-direction: column;
+		gap: 5px;
+
+		.saved-theme {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			justify-content: space-between;
+			gap: 10px;
+
+			.theme-name {
+				flex: 1;
+			}
+
+			.theme-actions {
+				display: flex;
+				flex-direction: row;
+				gap: 5px;
+
+				.button {
+					padding: 6px 12px;
+				}
+			}
+		}
+	}
+
+	.import-export {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		gap: 10px;
+		margin-top: 10px;
+
+		.hidden-file-input {
+			display: none;
+		}
+
+		.error {
+			color: var(--color-common-2-dark, #882609);
+		}
+	}
+}

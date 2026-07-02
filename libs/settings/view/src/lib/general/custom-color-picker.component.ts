@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
-import { CustomAppearanceService, CustomStyleKey, defaultStyleKeys } from '@firestone/settings/services';
+import { OverlayAppearanceService, getDefaultOverlayPalette } from '@firestone/settings/services';
+import { OverlayAppearanceColorKey } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { ILocalizationService, waitForReady } from '@firestone/shared/framework/core';
 
@@ -19,6 +20,7 @@ import { ILocalizationService, waitForReady } from '@firestone/shared/framework/
 				[cpPresetColors]="[defaultColor]"
 				[cpDisableInput]="true"
 				[cpCancelButton]="true"
+				[cpAlphaChannel]="'always'"
 				[value]="color"
 				(colorPickerSelect)="onColorSelected()"
 				(colorPickerChange)="onColorChanged()"
@@ -29,7 +31,7 @@ import { ILocalizationService, waitForReady } from '@firestone/shared/framework/
 })
 export class CustomColorPickerComponent extends AbstractSubscriptionComponent implements AfterContentInit {
 	@Input() label: string;
-	@Input() key: CustomStyleKey = '--bgs-widget-background-color-start';
+	@Input() key: OverlayAppearanceColorKey = '--ov-color-1';
 
 	defaultColor: string;
 	color: string;
@@ -38,7 +40,7 @@ export class CustomColorPickerComponent extends AbstractSubscriptionComponent im
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
 		private readonly i18n: ILocalizationService,
-		private readonly appearance: CustomAppearanceService,
+		private readonly appearance: OverlayAppearanceService,
 	) {
 		super(cdr);
 	}
@@ -46,12 +48,12 @@ export class CustomColorPickerComponent extends AbstractSubscriptionComponent im
 	async ngAfterContentInit() {
 		await waitForReady(this.appearance);
 
-		const defaultStyles = await defaultStyleKeys();
-		this.defaultColor = defaultStyles[this.key];
-		this.color = defaultStyles[this.key];
+		const defaults = getDefaultOverlayPalette();
+		this.defaultColor = defaults[this.key] ?? '';
+		this.color = this.defaultColor;
 
-		this.appearance.colors$$
-			.pipe(this.mapData((colors) => colors?.[this.key] ?? this.defaultColor))
+		this.appearance.customPalette$$
+			.pipe(this.mapData((palette) => palette?.[this.key] ?? this.defaultColor))
 			.subscribe((color) => {
 				this.color = color;
 				if (!(this.cdr as ViewRef).destroyed) {

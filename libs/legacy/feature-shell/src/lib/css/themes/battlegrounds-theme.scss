@@ -8,27 +8,28 @@
 	);
 	--window-background-image: radial-gradient(340px at 50% 50%, rgba(94, 11, 70, 0.7) 0%, rgba(43, 24, 39, 0.7) 100%),
 		url('https://static.zerotoheroes.com/hearthstone/asset/firestone/images/backgrounds/battlegrounds.jpg');
-	--color-1: #dfb3d3;
-	--color-2: #ce73b4;
-	--color-3: #841063;
-	--color-4: #5f0b47;
-	--color-5: #40032e;
-	--color-6: #a89782;
-	--color-7: #1e0116;
-	--color-8: #cb9fd7;
-	--color-9: #39122e;
-	--color-common-1: #d9c3ab;
-	--color-common-2: #ffb948;
+	// Overlay appearance themes override the --ov-* tokens (see overlay-themes/_contract.scss).
+	--color-1: var(--ov-color-1, #dfb3d3);
+	--color-2: var(--ov-color-2, #ce73b4);
+	--color-3: var(--ov-color-3, #841063);
+	--color-4: var(--ov-color-4, #5f0b47);
+	--color-5: var(--ov-color-5, #40032e);
+	--color-6: var(--ov-color-6, #a89782);
+	--color-7: var(--ov-color-7, #1e0116);
+	--color-8: var(--ov-color-8, #cb9fd7);
+	--color-9: var(--ov-color-9, #39122e);
+	--color-common-1: var(--ov-color-common-1, #d9c3ab);
+	--color-common-2: var(--ov-color-common-2, #ffb948);
 
 	--ad-link-color: var(--color-2);
 	--on-ad-link-color-hover: var(--color-1);
 
 	--main-menu-background-color: var(--color-7);
-	--window-outline-color: #5f0b47;
-	--default-text-color: #d9c3ab;
+	--window-outline-color: var(--color-4);
+	--default-text-color: var(--ov-default-text-color, #d9c3ab);
 	--default-text-color-bright: #f3dcc3;
-	--default-title-color: var(--color-common-2);
-	--secondary-text-color: var(--color-3);
+	--default-title-color: var(--ov-default-title-color, var(--color-common-2));
+	--secondary-text-color: var(--ov-secondary-text-color, var(--color-3));
 
 	--menu-selection-color: var(--color-3);
 	--on-menu-selection-color: var(--color-common-2);

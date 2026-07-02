@@ -1,0 +1,35 @@
+// "Deck Tracker" theme — inspired by the modern Hearthstone Deck Tracker overlay (v1.53+):
+// flat, dark charcoal panels, white text, gold accents. Applies the same neutral dark palette to
+// both constructed and battlegrounds overlays (HDT uses the dark card bars everywhere).
+[data-overlay-appearance='deck-tracker'] {
+	--ov-color-1: #e6e6e6;
+	--ov-color-2: #b9b9b9;
+	--ov-color-3: #8a8a8a;
+	--ov-color-4: #4a4a4a;
+	--ov-color-5: #2c2c2c;
+	--ov-color-6: #202020;
+	--ov-color-7: #171717;
+	--ov-color-8: #d6d6d6;
+	--ov-color-9: #121212;
+	--ov-color-common-1: #e6e6e6;
+	--ov-color-common-2: #f0c348; // HDT gold (count color)
+
+	--ov-default-text-color: #f2f2f2;
+	--ov-default-title-color: #f0c348;
+	--ov-secondary-text-color: #a9b7c9;
+
+	--ov-bgs-widget-background-color-start: rgba(38, 38, 38, 0.85);
+	--ov-bgs-widget-background-color-end: rgba(18, 18, 18, 0.95);
+
+	// HDT renders the Battlegrounds minions list with flat navy-blue tribe/tier headers
+	// and warm cream minion names over near-black rows, rather than the flat charcoal
+	// bars (and gold accent border) used by the rest of the theme. These are theme-internal
+	// indirection vars (not part of the customizable --ov-* contract) read by the
+	// minions-list components. Keep them flat (solid colors, no gradient) to match HDT.
+	--bgs-minions-group-header-background: #2f4f75;
+	--bgs-minions-group-header-color: #f2ead6;
+	--bgs-minions-tier-header-background: #223a56;
+	--bgs-minions-tier-header-color: #f2ead6;
+	// Replace HDT's out-of-place gold accent border with a flat, subtle navy edge.
+	--bgs-minions-tiers-header-border-image: linear-gradient(#2f4f75, #2f4f75);
+}

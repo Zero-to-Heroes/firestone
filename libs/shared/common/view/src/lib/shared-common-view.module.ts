@@ -43,6 +43,7 @@ import { ConfirmationComponent } from './components/tooltip/confirmation.compone
 import { HelpTooltipComponent } from './components/tooltip/help-tooltip.component';
 import { HelpTooltipDirective } from './components/tooltip/help-tooltip.directive';
 import { ActiveThemeDirective } from './directives/active-theme.directive';
+import { OverlayAppearanceThemeDirective } from './directives/overlay-appearance-theme.directive';
 import { PremiumSettingDirective } from './directives/premium-setting.directive';
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 import { ShortDatePipe } from './pipes/short-date.pipe';
@@ -58,6 +59,7 @@ const components = [
 	ComponentTooltipDirective,
 	CachedComponentTooltipDirective,
 	ActiveThemeDirective,
+	OverlayAppearanceThemeDirective,
 	CardTileComponent,
 	CopyDesckstringComponent,
 	DeckListBasicComponent,
