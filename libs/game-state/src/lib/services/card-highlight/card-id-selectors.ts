@@ -3252,6 +3252,8 @@ export const cardIdSelector = (
 		case CardIds.RuneforgingCore:
 		case CardIds.Runeforging_LEG_RLK_715:
 			return and(side(inputSide), inDeck, weapon);
+		case CardIds.RuniTemporalGuardian_TIME_EVENT_998:
+			return and(side(inputSide), or(inHand, inDeck), minion);
 		case CardIds.RunningWild:
 		case CardIds.RunningWild_RunningWild:
 			return and(side(inputSide), inDeck, minion);
