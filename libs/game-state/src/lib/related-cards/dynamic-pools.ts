@@ -1343,6 +1343,7 @@ const BAN_LIST = [
 	CardIds.TheDarkness_LOOT_526,
 	CardIds.ZilliaxDeluxe3000_TOY_330,
 	CardIds.DragonSoulShattered_CATA_EVENT_110,
+	CardIds.KingoftheUnderbelly_JAIL_831,
 ];
 
 const BAN_LIST_ARENA = [
