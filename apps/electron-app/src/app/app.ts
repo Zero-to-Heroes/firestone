@@ -23,6 +23,7 @@ import { environment } from '../environments/environment';
 import { appStartup } from './app-startup';
 import { formatLogArg } from './format-log-arg';
 import { appAccessUnlocked$$, disposeAppAccessPolicy, initAppAccessPolicy } from './services/app-access-policy';
+import { maybeShowConsentOnStartup } from './services/cmp';
 import { buildAppInjector } from './services/electron-app-injector-setup';
 import { registerElectronDiskCacheIpcHandlers } from './services/electron-disk-cache-ipc';
 import { ElectronDiskCacheService } from './services/electron-disk-cache.service';
@@ -549,6 +550,9 @@ export default class App {
 		if (process.platform === 'win32') {
 			electronApp.setAppUserModelId('com.zerotoheroes.firestone.standalone');
 		}
+
+		// Free (ad-supported) build only: inform the user about / collect consent via the built-in CMP.
+		await maybeShowConsentOnStartup();
 
 		// Initialize game detection
 		await App.initGameDetection();

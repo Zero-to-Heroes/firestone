@@ -77,6 +77,27 @@
 					],
 					"outputHashing": "all"
 				},
+				"production-premium": {
+					"budgets": [
+						{
+							"type": "initial",
+							"maximumWarning": "5000kb",
+							"maximumError": "20mb"
+						},
+						{
+							"type": "anyComponentStyle",
+							"maximumWarning": "20kb",
+							"maximumError": "20mb"
+						}
+					],
+					"outputHashing": "all",
+					"fileReplacements": [
+						{
+							"replace": "apps/electron-frontend/src/app/ads/ow-electron-ads.ts",
+							"with": "apps/electron-frontend/src/app/ads/ow-electron-ads.stub.ts"
+						}
+					]
+				},
 				"development": {
 					"optimization": false,
 					"extractLicenses": false,

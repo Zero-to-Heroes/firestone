@@ -2,6 +2,7 @@
 	"name": "firestone-standalone",
 	"productName": "Firestone Standalone",
 	"version": "@app-version@",
+	"firestoneFlavor": "@app-flavor@",
 	"description": "Firestone Standalone - Hearthstone companion app",
 	"main": "main.js",
 	"author": {

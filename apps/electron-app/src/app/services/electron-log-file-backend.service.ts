@@ -76,6 +76,22 @@ export class ElectronLogFileBackendService implements LogFileBackend {
 		}
 	}
 
+	async readBinaryFileHead(filePathOnDisk: string, length: number): Promise<Uint8Array | null> {
+		try {
+			const handle = await fsPromises.open(filePathOnDisk, 'r');
+			try {
+				const buffer = Buffer.alloc(length);
+				const { bytesRead } = await handle.read(buffer, 0, length, 0);
+				return new Uint8Array(buffer.subarray(0, bytesRead));
+			} finally {
+				await handle.close();
+			}
+		} catch (e) {
+			console.warn('[electron-log-backend] error reading binary file head', filePathOnDisk, e);
+			return null;
+		}
+	}
+
 	async listFilesInDirectory(directory: string): Promise<LogDirectoryResult | null> {
 		try {
 			const dirents = await fsPromises.readdir(directory, { withFileTypes: true });

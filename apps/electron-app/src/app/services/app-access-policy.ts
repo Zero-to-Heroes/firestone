@@ -7,13 +7,16 @@ import {
 	waitForReady,
 } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, distinctUntilChanged, map, Subscription } from 'rxjs';
+import { isPremiumFlavor } from './flavor';
 
 /**
  * When true, the full app is enabled (windows, overlay injection, hotkeys that open UI).
  * Sources of truth: IUserService (logged in) + IAdsService (enablePremiumFeatures$$).
- * Flip REQUIRE_PREMIUM_FOR_FULL_APP to false to let non-premium users use the app in the future.
+ *
+ * Derived from the build flavor: the premium-only build (`standalone-premium`) requires premium,
+ * while the free/ad-supported build (`standalone`) lets non-premium users use the app.
  */
-export const REQUIRE_PREMIUM_FOR_FULL_APP = true;
+export const REQUIRE_PREMIUM_FOR_FULL_APP = true || isPremiumFlavor();
 
 /** Emits whether the app should allow all UI. Subscribe from tray, or call isAppAccessUnlocked() synchronously. */
 export const appAccessUnlocked$$ = new BehaviorSubject<boolean>(false);

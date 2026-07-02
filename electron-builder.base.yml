@@ -1,15 +1,15 @@
-# electron-builder.yml
-# Configuration for ow-electron-builder to create optimized builds
+# electron-builder.base.yml
+# Shared configuration for ow-electron-builder, extended by the per-flavor configs:
+#   - electron-builder.standalone.yml          (free, ad-supported)
+#   - electron-builder.standalone-premium.yml  (premium-only, ad-free)
+# Do not build with this file directly; always pass one of the flavor configs via --config.
 
-appId: com.firestoneapp.standalone
-productName: Firestone Standalone
 copyright: Copyright © 2024 Sébastien Tromp
 
 # Directories
 directories:
     # The built app location (contains package.json with deps)
     app: dist/apps/electron-app
-    output: dist/executables
     buildResources: overwolf
 
 # Files to include in the app (relative to directories.app)
@@ -50,7 +50,7 @@ win:
               - x64
     icon: overwolf/launcher_icon.ico
 
-# NSIS installer configuration
+# NSIS installer configuration (minimal, plain installer - no Overwolf installer integration)
 nsis:
     oneClick: false
     allowToChangeInstallationDirectory: true
@@ -69,35 +69,3 @@ electronLanguages:
 
 # Post-pack optimization hook (removes non-Windows binaries)
 afterPack: './build-tools/electron-afterpack.js'
-
-# Auto-update configuration
-# electron-updater will automatically check for updates from the configured provider
-# Uncomment and configure one of the options below based on your update server:
-
-# Option 1: Generic HTTP/HTTPS server (using existing S3 static website)
-# This works with your existing www.firestoneapp.com S3 bucket
-publish:
-    provider: generic
-    url: https://www.firestoneapp.com/updates
-# Option 2: GitHub Releases
-# publish:
-#   provider: github
-#   owner: your-username
-#   repo: your-repo-name
-
-# Option 3: Amazon S3 (using existing bucket)
-# Using your existing www.firestoneapp.com bucket with /updates path
-# publish:
-#   provider: s3
-#   bucket: www.firestoneapp.com
-#   region: us-west-2
-#   path: /updates
-#   # Optional: Use CloudFront URL for faster downloads
-#   # channel: latest
-
-# Option 4: DigitalOcean Spaces
-# publish:
-#   provider: spaces
-#   name: your-space-name
-#   region: nyc3
-#   path: /updates

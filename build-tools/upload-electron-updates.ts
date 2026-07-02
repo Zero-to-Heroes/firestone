@@ -4,8 +4,19 @@ import * as mime from 'mime-types';
 import * as path from 'path';
 
 const BUCKET_NAME = 'www.firestoneapp.com';
-const UPDATES_PATH = 'updates';
-const EXECUTABLES_DIR = 'dist/executables';
+
+// Per-flavor upload mapping. The flavor is read from the FIRESTONE_FLAVOR env var (or the first CLI arg),
+// defaulting to the free build:
+//   - standalone          -> dist/executables/standalone           uploaded to  updates/
+//   - standalone-premium  -> dist/executables/standalone-premium   uploaded to  updates/premium/
+type Flavor = 'standalone' | 'standalone-premium';
+const FLAVOR: Flavor =
+    process.env.FIRESTONE_FLAVOR === 'standalone-premium' || process.argv[2] === 'standalone-premium'
+        ? 'standalone-premium'
+        : 'standalone';
+const UPDATES_PATH = FLAVOR === 'standalone-premium' ? 'updates/premium' : 'updates';
+const EXECUTABLES_DIR = `dist/executables/${FLAVOR}`;
+
 const CLOUDFRONT_DISTRIBUTION_ID = process.env.CLOUDFRONT_DISTRIBUTION_ID;
 const CLOUDFLARE_ZONE_ID = process.env.CLOUDFLARE_ZONE_ID;
 const CLOUDFLARE_API_TOKEN = process.env.CLOUDFLARE_API_TOKEN;
@@ -299,6 +310,7 @@ async function invalidateCloudflareCache(): Promise<void> {
 async function main(): Promise<void> {
     try {
         console.log(`🚀 Starting upload of Electron update files to S3`);
+        console.log(`🏷️  Flavor: ${FLAVOR}`);
         console.log(`📁 Executables directory: ${EXECUTABLES_DIR}`);
         console.log(`📦 S3 bucket: ${BUCKET_NAME}`);
         console.log(`📂 S3 path: ${UPDATES_PATH}/`);

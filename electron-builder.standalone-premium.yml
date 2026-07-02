@@ -1,0 +1,16 @@
+# electron-builder.standalone-premium.yml
+# PREMIUM-only (ad-free) standalone build.
+# New identity and dedicated update feed, distributed as a separate installer.
+
+extends: ./electron-builder.base.yml
+
+appId: com.firestoneapp.standalone.premium
+productName: Firestone Standalone Premium
+
+directories:
+    output: dist/executables/standalone-premium
+
+# Dedicated auto-update feed so premium installs never cross-update with the free build
+publish:
+    provider: generic
+    url: https://www.firestoneapp.com/updates/premium

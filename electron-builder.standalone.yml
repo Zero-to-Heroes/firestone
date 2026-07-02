@@ -1,0 +1,17 @@
+# electron-builder.standalone.yml
+# FREE (ad-supported) standalone build.
+# Keeps the existing identity and update feed so current installs upgrade in place onto this build.
+# This is the build whose app uid is registered with Overwolf for ad inventory.
+
+extends: ./electron-builder.base.yml
+
+appId: com.firestoneapp.standalone
+productName: Firestone Standalone
+
+directories:
+    output: dist/executables/standalone
+
+# Auto-update feed (the existing feed; served by the www.firestoneapp.com S3 bucket)
+publish:
+    provider: generic
+    url: https://www.firestoneapp.com/updates

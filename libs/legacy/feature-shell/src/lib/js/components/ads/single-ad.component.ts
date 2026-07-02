@@ -90,7 +90,10 @@ export class SingleAdComponent extends AbstractSubscriptionComponent implements 
 
 	async ngAfterViewInit() {
 		this.initializeAds();
-		this.initializeVisibilityCheck();
+		// Overwolf-only: pause/resume ads based on window occlusion. ow-electron `<owadview>` is self-managed.
+		if (this.ow.isOwEnabled()) {
+			this.initializeVisibilityCheck();
+		}
 	}
 
 	@HostListener('window:beforeunload')
