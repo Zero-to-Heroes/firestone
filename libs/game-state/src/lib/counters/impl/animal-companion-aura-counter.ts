@@ -71,21 +71,10 @@ export class AnimalCompanionAuraCounterDefinitionV2 extends CounterDefinitionV2<
 	readonly opponent = {
 		pref: 'opponentAnimalCompanionAuraCounter' as const,
 		display: (state: GameState): boolean =>
-			!!state.opponentDeck.animalCompanionBufferEntityId ||
+			state.opponentDeck.animalCompanionBuffAmount > 0 ||
 			state.opponentDeck.hasRelevantCard(animalCompanionBuffsCardIds),
 		value: (state: GameState) => {
-			const bufferEntity = state.parserState?.CurrentEntities.get(
-				state.opponentDeck.animalCompanionBufferEntityId!,
-			);
-			const newAnimalCompanions = [
-				getTagWithHistory(bufferEntity, GameTag.HIDDEN_SCRIPT_DATA_4),
-				getTagWithHistory(bufferEntity, GameTag.HIDDEN_SCRIPT_DATA_5),
-				getTagWithHistory(bufferEntity, GameTag.HIDDEN_SCRIPT_DATA_6),
-			].filter((c) => !!c);
-			if (newAnimalCompanions.length === 0) {
-				return null;
-			}
-			const newCost = this.allCards.getCard(newAnimalCompanions[0]!).cost ?? 3;
+			const newCost = Math.min(10, state.opponentDeck.animalCompanionBuffAmount + 3);
 			const cardIds = filterCards(
 				CardIds.AnimalCompanionCore,
 				this.allCards.getService(),

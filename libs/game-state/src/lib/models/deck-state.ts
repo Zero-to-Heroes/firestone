@@ -178,6 +178,8 @@ export class DeckState {
 	readonly weaponsEquippedThisGame: number = 0;
 	readonly starshipsLaunched: readonly number[] = [];
 	readonly animalCompanionBufferEntityId: number | null = null;
+	// Info is now hidden for opponent
+	readonly animalCompanionBuffAmount: number = 0;
 
 	public static create(value: Partial<NonFunctionProperties<DeckState>>): DeckState {
 		return Object.assign(new DeckState(), value);

@@ -23,8 +23,10 @@ export const AnimalCompanionBuffs: CustomEffectCard & StaticGeneratingCard = {
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const entityId = gameEvent.additionalData?.sourceEntityId;
+		const amount = cardId === CardIds.RoamFree_MEND_307 ? 2 : 1;
 		const newDeck = deck.update({
 			animalCompanionBufferEntityId: entityId,
+			animalCompanionBuffAmount: deck.animalCompanionBuffAmount + amount,
 		});
 		return currentState.update({
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newDeck,
