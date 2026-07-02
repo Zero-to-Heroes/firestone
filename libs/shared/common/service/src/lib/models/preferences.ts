@@ -510,6 +510,8 @@ export class Preferences implements IPreferences {
 	readonly opponentVoidSoulCounter: boolean = true;
 	readonly playerCapturedArchmageCounter: boolean = true;
 	readonly opponentCapturedArchmageCounter: boolean = true;
+	readonly playerJadeGuardiansCounter: boolean = true;
+	readonly opponentJadeGuardiansCounter: boolean = true;
 
 	readonly showPlayerMaxResourcesWidget: boolean = true;
 	readonly playerMaxResourcesWidgetPosition: { left: number; top: number };
