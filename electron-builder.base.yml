@@ -6,6 +6,12 @@
 
 copyright: Copyright © 2024 Sébastien Tromp
 
+# Deep links (SSO auth callbacks, Twitch, replays, etc.)
+protocols:
+    - name: Firestone
+      schemes:
+          - firestoneapp
+
 # Directories
 directories:
     # The built app location (contains package.json with deps)

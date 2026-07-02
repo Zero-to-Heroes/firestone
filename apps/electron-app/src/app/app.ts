@@ -64,12 +64,24 @@ export default class App {
 	// Auth callback listeners
 	private static authCallbackListeners: ((data: AuthCallbackData) => void)[] = [];
 	private static twitchCallbackListeners: ((data: TwitchCallbackData) => void)[] = [];
+	/** Auth deep link received before initSystemTray registers listeners (cold start). */
+	private static pendingAuthCallback: AuthCallbackData | null = null;
+	private static pendingTwitchCallback: TwitchCallbackData | null = null;
 
 	/**
 	 * Register a listener for auth callbacks from deep links
 	 */
 	public static onAuthCallback(listener: (data: AuthCallbackData) => void): () => void {
 		App.authCallbackListeners.push(listener);
+		if (App.pendingAuthCallback) {
+			const pending = App.pendingAuthCallback;
+			App.pendingAuthCallback = null;
+			try {
+				listener(pending);
+			} catch (err) {
+				console.error('[Auth] Error in auth callback listener (pending):', err);
+			}
+		}
 		// Return unsubscribe function
 		return () => {
 			const index = App.authCallbackListeners.indexOf(listener);
@@ -84,6 +96,15 @@ export default class App {
 	 */
 	public static onTwitchCallback(listener: (data: TwitchCallbackData) => void): () => void {
 		App.twitchCallbackListeners.push(listener);
+		if (App.pendingTwitchCallback) {
+			const pending = App.pendingTwitchCallback;
+			App.pendingTwitchCallback = null;
+			try {
+				listener(pending);
+			} catch (err) {
+				console.error('[Twitch] Error in Twitch callback listener (pending):', err);
+			}
+		}
 		return () => {
 			const index = App.twitchCallbackListeners.indexOf(listener);
 			if (index > -1) {
@@ -162,17 +183,7 @@ export default class App {
 
 			console.log('[Auth] Parsed auth data for user:', authData.userName);
 
-			// Notify all listeners
-			App.authCallbackListeners.forEach((listener) => {
-				try {
-					listener(authData);
-				} catch (err) {
-					console.error('[Auth] Error in auth callback listener:', err);
-				}
-			});
-
-			// Auth data will be persisted to disk by the listener
-			// StandaloneUserService will read it on next startup or can be notified via App.onAuthCallback
+			App.dispatchAuthCallback(authData);
 		} catch (err) {
 			console.error('[Auth] Failed to parse deep link URL:', err);
 		}
@@ -202,16 +213,57 @@ export default class App {
 
 			console.log('[Twitch] Parsed Twitch OAuth callback');
 
-			App.twitchCallbackListeners.forEach((listener) => {
-				try {
-					listener(twitchData);
-				} catch (err) {
-					console.error('[Twitch] Error in Twitch callback listener:', err);
-				}
-			});
+			App.dispatchTwitchCallback(twitchData);
 		} catch (err) {
 			console.error('[Twitch] Failed to parse deep link URL:', err);
 		}
+	}
+
+	private static dispatchAuthCallback(authData: AuthCallbackData): void {
+		if (App.authCallbackListeners.length === 0) {
+			console.log('[Auth] No listeners yet; queuing auth callback for user:', authData.userName);
+			App.pendingAuthCallback = authData;
+			return;
+		}
+		App.authCallbackListeners.forEach((listener) => {
+			try {
+				listener(authData);
+			} catch (err) {
+				console.error('[Auth] Error in auth callback listener:', err);
+			}
+		});
+	}
+
+	private static dispatchTwitchCallback(twitchData: TwitchCallbackData): void {
+		if (App.twitchCallbackListeners.length === 0) {
+			console.log('[Twitch] No listeners yet; queuing Twitch callback');
+			App.pendingTwitchCallback = twitchData;
+			return;
+		}
+		App.twitchCallbackListeners.forEach((listener) => {
+			try {
+				listener(twitchData);
+			} catch (err) {
+				console.error('[Twitch] Error in Twitch callback listener:', err);
+			}
+		});
+	}
+
+	/** App root folder — must match how ow-electron launches the app (directory, not main.js). */
+	private static resolveAppRootForProtocolRegistration(): string | null {
+		const path = require('path');
+		if (process.argv.length < 2) {
+			return null;
+		}
+		const argvPath = path.resolve(process.argv[1]);
+		if (existsSync(path.join(argvPath, 'package.json'))) {
+			return argvPath;
+		}
+		const parent = path.dirname(argvPath);
+		if (existsSync(path.join(parent, 'package.json'))) {
+			return parent;
+		}
+		return argvPath;
 	}
 
 	public static main(app: Electron.App, browserWindow: typeof BrowserWindow) {
@@ -334,32 +386,39 @@ export default class App {
 		app.removeAsDefaultProtocolClient('firestone');
 		app.removeAsDefaultProtocolClient('firestoneapp');
 
+		let protocolRegistered = false;
 		if (process.defaultApp) {
-			// Development mode - need to pass the script path with absolute path
-			if (process.argv.length >= 2) {
-				const scriptPath = require('path').resolve(process.argv[1]);
-				console.log('[Auth] Registering protocol with script path:', scriptPath);
-				app.setAsDefaultProtocolClient('firestoneapp', process.execPath, [scriptPath]);
+			// Development: register with the same app-folder arg ow-electron uses (not main.js).
+			const appRoot = App.resolveAppRootForProtocolRegistration();
+			if (appRoot) {
+				console.log('[Auth] Registering protocol with execPath:', process.execPath, 'appRoot:', appRoot);
+				protocolRegistered = app.setAsDefaultProtocolClient('firestoneapp', process.execPath, [appRoot]);
 			}
 		} else {
-			// Production mode
-			app.setAsDefaultProtocolClient('firestoneapp');
+			protocolRegistered = app.setAsDefaultProtocolClient('firestoneapp');
 		}
-		console.log('[Auth] Registered firestoneapp:// protocol handler');
+		if (protocolRegistered) {
+			console.log('[Auth] Registered firestoneapp:// protocol handler');
+		} else {
+			console.warn(
+				'[Auth] Could not register firestoneapp:// as default protocol handler (another app may own it). ' +
+					'Login still works if the user clicks "Open Firestone" on the auth-callback page.',
+			);
+		}
 
 		// Handle deep link when app is already running (Windows/Linux)
 		// Make this instance the single instance
 		const gotTheLock = app.requestSingleInstanceLock();
 		if (!gotTheLock) {
-			// Another instance is already running, quit this one
+			console.log('[Auth] Another instance is already running; exiting this one (deep link forwarded).');
 			app.quit();
 			return;
 		}
+		console.log('[Auth] Acquired single-instance lock');
 
-		app.on('second-instance', (event, commandLine, workingDirectory) => {
+		app.on('second-instance', (event, commandLine) => {
 			console.log('[Auth] second-instance event, commandLine:', commandLine);
 
-			// Find the deep link URL in command line args
 			const deepLinkUrl = commandLine.find((arg) => arg.startsWith('firestoneapp://'));
 			if (deepLinkUrl) {
 				App.handleDeepLink(deepLinkUrl);

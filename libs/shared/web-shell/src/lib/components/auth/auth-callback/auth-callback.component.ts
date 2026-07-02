@@ -15,6 +15,8 @@ type CallbackState = 'loading' | 'success' | 'error';
 export class AuthCallbackComponent implements OnInit {
 	state: CallbackState = 'loading';
 	errorMessage = 'Something went wrong. Please try again.';
+	/** Set on success; opened via user click (browsers block automatic custom-protocol redirects). */
+	deepLinkUrl: string | null = null;
 
 	// Backend endpoint that handles token exchange with Overwolf
 	// Per https://dev.overwolf.com/ow-native/reference/overwolf-oidc/ow-oidc/
@@ -114,15 +116,9 @@ export class AuthCallbackComponent implements OnInit {
 				provider: 'overwolf',
 			});
 
-			const deepLinkUrl = 'firestoneapp://auth?' + deepLinkParams.toString();
-
-			// Show success state
+			this.deepLinkUrl = 'firestoneapp://auth?' + deepLinkParams.toString();
 			this.state = 'success';
-
-			// Redirect to the Electron app via deep link after a short delay
-			setTimeout(() => {
-				window.location.href = deepLinkUrl;
-			}, 500);
+			this.tryOpenAppAutomatically(this.deepLinkUrl);
 		} catch (err) {
 			console.error('Auth callback error:', err);
 			this.showError('Failed to complete sign in. Please try again.');
@@ -143,5 +139,12 @@ export class AuthCallbackComponent implements OnInit {
 	retryLogin(): void {
 		this.clearPkceStorage();
 		this.router.navigate(['/login']);
+	}
+
+	/** Browsers often block this; the success page still shows a manual fallback link. */
+	private tryOpenAppAutomatically(deepLinkUrl: string): void {
+		setTimeout(() => {
+			window.location.href = deepLinkUrl;
+		}, 500);
 	}
 }

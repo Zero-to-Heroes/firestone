@@ -18,7 +18,13 @@
 					</svg>
 				</div>
 				<h2>Success!</h2>
-				<p>You can now return to the Firestone app</p>
+				<p>Returning you to the Firestone app&hellip;</p>
+				@if (deepLinkUrl) {
+					<p class="fallback">
+						If nothing happens, <a class="open-app-link" [href]="deepLinkUrl">click here to open Firestone</a>.
+					</p>
+				}
+				<p class="hint">Your browser may ask to open the Firestone app — choose Allow or Open.</p>
 			</div>
 		}
 
