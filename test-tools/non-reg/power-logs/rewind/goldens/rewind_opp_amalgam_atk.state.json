@@ -26,6 +26,7 @@
       ""
     ],
     "anachronos": [],
+    "animalCompanionBuffAmount": 0,
     "animalCompanionBufferEntityId": null,
     "astralAutomatonsSummoned": 0,
     "beastsSummoned": 2,
@@ -4295,6 +4296,7 @@
     ],
     "additionalKnownCardsInHand": [],
     "anachronos": [],
+    "animalCompanionBuffAmount": 0,
     "animalCompanionBufferEntityId": null,
     "astralAutomatonsSummoned": 0,
     "beastsSummoned": 1,
