@@ -1,5 +1,4 @@
 import { Inject, Injectable } from '@angular/core';
-import { sleep } from '@firestone/shared/framework/common';
 import {
 	ADS_SERVICE_TOKEN,
 	ApiRunner,
@@ -18,18 +17,21 @@ import { TebexService } from './tebex.service';
 // Filled in after deploying the api-log-membership-bypass lambda (npm run full-deploy)
 const LOG_ENDPOINT = 'https://73ybnsv6auhl6x2hv5tvdoppcq0oecmq.lambda-url.us-west-2.on.aws/';
 
-const CHECK_INTERVAL = 5 * 60 * 1000;
-// Delay before re-checking a mismatch, to avoid false positives from the SSO premium hint
-// (applyAuthPremiumHint) or Tebex latency between setting hasPremiumSub and the server answering.
-const RECHECK_DELAY = 15 * 1000;
+const CHECK_INTERVAL = 30 * 1000;
+// Consecutive confirmed mismatches (premium claimed AND server says no-sub) required before we
+// degrade to non-premium. Gates out SSO-hint / Tebex-latency races and transient network errors,
+// since a single good/errored reply resets the counter. ~DEGRADE_THRESHOLD * CHECK_INTERVAL ≈ 2 min,
+// which is fine given HS games / sessions run several minutes.
+const DEGRADE_THRESHOLD = 4;
 // CDP / Overwolf CEF remote-debugging ports the tool relies on. 9222 is the default.
 const REMOTE_DEBUG_CANDIDATE_PORTS = [9222, 9223, 9229];
 
 /**
  * Detects when the app grants premium ({@link IAdsService.hasPremiumSub$$} is true) while a fresh,
  * authoritative server subscription check (Tebex + legacy) says the user is NOT premium - the
- * signature of the CDP-injection membership bypass. When detected, it reports the user's
- * identity (plus environment evidence) to a logging endpoint. It never changes app behavior.
+ * signature of the CDP-injection membership bypass. It reports the user's identity (plus environment
+ * evidence) on the first confirmed mismatch, and after {@link DEGRADE_THRESHOLD} consecutive
+ * confirmed mismatches it degrades the app to non-premium via {@link IAdsService.forceNonPremium}.
  */
 @Injectable()
 export class MembershipIntegrityService {
@@ -38,6 +40,9 @@ export class MembershipIntegrityService {
 	public preReleaseBuild = false;
 
 	private alreadyReported = false;
+	private consecutiveMismatches = 0;
+	private degraded = false;
+	private verifying = false;
 
 	constructor(
 		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
@@ -65,33 +70,62 @@ export class MembershipIntegrityService {
 
 	private async verify(): Promise<void> {
 		const debug = true;
-		if (this.alreadyReported) {
+		// Guard against overlapping runs (the hasPremiumSub subscription and the interval can both
+		// trigger verify around the same time), which would otherwise double-count mismatches.
+		if (this.degraded || this.verifying) {
 			return;
 		}
-		if (this.ads.hasPremiumSub$$.value !== true) {
-			debug && console.debug('[membership-integrity] hasPremiumSub is false');
-			return;
-		}
-		if (await this.serverHasPremium()) {
-			debug && console.debug('[membership-integrity] server has premium');
-			return;
-		}
+		this.verifying = true;
+		try {
+			if (this.ads.hasPremiumSub$$.value !== true) {
+				debug && console.debug('[membership-integrity] hasPremiumSub is false');
+				this.consecutiveMismatches = 0;
+				return;
+			}
+			// serverHasPremium() returns true on any network/error, so errors reset the counter and
+			// never count as a mismatch.
+			if (await this.serverHasPremium()) {
+				debug && console.debug('[membership-integrity] server has premium');
+				this.consecutiveMismatches = 0;
+				return;
+			}
+			// Re-read after the await in case premium legitimately arrived (Tebex latency / SSO hint).
+			if (this.ads.hasPremiumSub$$.value !== true) {
+				this.consecutiveMismatches = 0;
+				return;
+			}
 
-		// Mismatch candidate. Wait and re-check to rule out the premium-hint race / Tebex latency.
-		await sleep(RECHECK_DELAY);
-		if (this.alreadyReported) {
-			return;
+			this.consecutiveMismatches++;
+			debug &&
+				console.debug(
+					'[membership-integrity] confirmed mismatch',
+					this.consecutiveMismatches,
+					'/',
+					DEGRADE_THRESHOLD,
+				);
+			// Report early (first confirmed mismatch) so telemetry fires well before we degrade.
+			if (!this.alreadyReported) {
+				await this.report();
+			}
+			if (this.consecutiveMismatches >= DEGRADE_THRESHOLD) {
+				this.degrade();
+			}
+		} finally {
+			this.verifying = false;
 		}
-		if (this.ads.hasPremiumSub$$.value !== true) {
-			debug && console.debug('[membership-integrity] hasPremiumSub is false');
-			return;
-		}
-		if (await this.serverHasPremium()) {
-			debug && console.debug('[membership-integrity] server has premium');
-			return;
-		}
+	}
 
-		await this.report();
+	private degrade(): void {
+		if (this.degraded) {
+			return;
+		}
+		this.degraded = true;
+		console.warn(
+			'[membership-integrity] degrading to non-premium after',
+			this.consecutiveMismatches,
+			'confirmed mismatches',
+		);
+		this.ads.forceNonPremium('membership-integrity');
 	}
 
 	private async serverHasPremium(): Promise<boolean> {

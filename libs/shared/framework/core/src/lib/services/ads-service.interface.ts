@@ -6,6 +6,12 @@ export interface IAdsService {
 	enablePremiumFeatures$$: BehaviorSubject<boolean>;
 	hasPremiumSub$$: BehaviorSubject<boolean>;
 	currentPlan$$: BehaviorSubject<CurrentPlan | null>;
+	/**
+	 * Latched to `true` once {@link forceNonPremium} confirms a membership bypass. While set, the
+	 * premium gates are pinned to non-premium and re-asserted, so a re-flip of the public subjects
+	 * (as done by the CDP-injection crack) is undone. Anti-tamper speed bump, not a security boundary.
+	 */
+	bypassDetected$$: BehaviorSubject<boolean>;
 
 	isReady(): Promise<void>;
 	goToPremium(): Promise<void>;
@@ -14,6 +20,12 @@ export interface IAdsService {
 	 * and app access update immediately; `currentPlan` from Tebex still overwrites if it disagrees.
 	 */
 	applyAuthPremiumHint(isPremium: boolean): void;
+	/**
+	 * Called when the membership-integrity check has confirmed (over several consecutive polls) that
+	 * the client claims premium while the server reports no subscription - the signature of the
+	 * CDP-injection bypass. Latches premium off and re-asserts it. Speed bump, not a boundary.
+	 */
+	forceNonPremium(reason: string): void;
 	subscribe(planId: string): void;
 	unsubscribe(planId: string): void;
 }

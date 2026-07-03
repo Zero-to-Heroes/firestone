@@ -15,11 +15,16 @@ import {
 } from '@firestone/shared/framework/core';
 import { BehaviorSubject, combineLatest, distinctUntilChanged } from 'rxjs';
 
+// Anti-tamper speed bump: how often we re-derive the premium gates from server truth (currentPlan /
+// bypass latch), so a direct .next(true) on the public subjects (the crack's move) is reverted.
+const REASSERT_INTERVAL = 5 * 1000;
+
 @Injectable()
 export class AdService extends AbstractFacadeService<AdService> implements IAdsService {
 	public hasPremiumSub$$: BehaviorSubject<boolean>;
 	public enablePremiumFeatures$$: BehaviorSubject<boolean>;
 	public currentPlan$$: BehaviorSubject<CurrentPlan | null>;
+	public bypassDetected$$: BehaviorSubject<boolean>;
 
 	private subscriptions: SubscriptionService;
 	private appNavigation: AppNavigationService;
@@ -33,12 +38,14 @@ export class AdService extends AbstractFacadeService<AdService> implements IAdsS
 		this.enablePremiumFeatures$$ = this.mainInstance.enablePremiumFeatures$$;
 		this.hasPremiumSub$$ = this.mainInstance.hasPremiumSub$$;
 		this.currentPlan$$ = this.mainInstance.currentPlan$$;
+		this.bypassDetected$$ = this.mainInstance.bypassDetected$$;
 	}
 
 	protected async init() {
 		this.enablePremiumFeatures$$ = new BehaviorSubject<boolean>(false);
 		this.hasPremiumSub$$ = new BehaviorSubject<boolean>(false);
 		this.currentPlan$$ = new BehaviorSubject<CurrentPlan | null>(null);
+		this.bypassDetected$$ = new BehaviorSubject<boolean>(false);
 		this.subscriptions = AppInjector.get(SubscriptionService);
 		this.appNavigation = AppInjector.get(AppNavigationService);
 		this.lottery = AppInjector.get(LotteryWidgetControllerService);
@@ -46,39 +53,46 @@ export class AdService extends AbstractFacadeService<AdService> implements IAdsS
 
 		await waitForReady(this.subscriptions, this.lottery);
 
-		this.subscriptions.currentPlan$$.subscribe((plan) => {
+		combineLatest([this.subscriptions.currentPlan$$, this.bypassDetected$$]).subscribe(([plan, bypassDetected]) => {
 			this.currentPlan$$.next(plan);
-			if (isPreReleaseBuild) {
-				this.hasPremiumSub$$.next(true);
-				return;
-			}
-			console.log('[ads] current plan', plan);
-			const hasPremiumSub = premiumPlanIds.includes(plan?.id);
-			this.hasPremiumSub$$.next(hasPremiumSub);
+			this.hasPremiumSub$$.next(this.computeHasPremiumSub(plan, bypassDetected));
 		});
-		combineLatest([this.hasPremiumSub$$, this.lottery.shouldTrack$$]).subscribe(([isPremium, shouldTrack]) => {
-			console.debug('[ads] isPremium', isPremium, 'show ads?', shouldTrack);
-			this.enablePremiumFeatures$$.next(isPremium || shouldTrack);
-		});
+		combineLatest([this.hasPremiumSub$$, this.lottery.shouldTrack$$, this.bypassDetected$$]).subscribe(
+			([isPremium, shouldTrack, bypassDetected]) => {
+				console.debug('[ads] isPremium', isPremium, 'show ads?', shouldTrack);
+				this.enablePremiumFeatures$$.next(!bypassDetected && (isPremium || shouldTrack));
+			},
+		);
 		this.hasPremiumSub$$.pipe(distinctUntilChanged()).subscribe((hasPremiumSub) => {
 			console.debug('[ads] hasPremiumSub?', hasPremiumSub);
 		});
-		if (isPreReleaseBuild) {
-			this.hasPremiumSub$$.next(true);
-			return;
+		this.startTamperResistance();
+	}
+
+	// Server truth (currentPlan) gated by the bypass latch. isPreReleaseBuild forces premium for
+	// internal builds, but is ignored once a bypass is confirmed.
+	private computeHasPremiumSub(plan: CurrentPlan | null, bypassDetected: boolean): boolean {
+		if (bypassDetected) {
+			return false;
 		}
+		if (isPreReleaseBuild) {
+			return true;
+		}
+		return premiumPlanIds.includes(plan?.id);
 	}
 
 	protected override async initElectronSubjects() {
 		this.setupElectronSubject(this.currentPlan$$, 'AdService-currentPlan');
 		this.setupElectronSubject(this.enablePremiumFeatures$$, 'AdService-enablePremiumFeatures');
 		this.setupElectronSubject(this.hasPremiumSub$$, 'AdService-hasPremiumSub');
+		this.setupElectronSubject(this.bypassDetected$$, 'AdService-bypassDetected');
 	}
 
 	protected override async createElectronProxy(ipcRenderer: any) {
 		this.currentPlan$$ = new BehaviorSubject<CurrentPlan | null>(null);
 		this.enablePremiumFeatures$$ = new BehaviorSubject<boolean>(false);
 		this.hasPremiumSub$$ = new BehaviorSubject<boolean>(false);
+		this.bypassDetected$$ = new BehaviorSubject<boolean>(false);
 	}
 
 	protected override async initElectronMainProcess() {
@@ -86,6 +100,9 @@ export class AdService extends AbstractFacadeService<AdService> implements IAdsS
 		this.registerMainProcessMethod('shouldDisplayAdsInternal', () => this.shouldDisplayAdsInternal());
 		this.registerMainProcessMethod('unsubscribeInternal', (planId: string) => this.unsubscribeInternal(planId));
 		this.registerMainProcessMethod('subscribeInternal', (planId: string) => this.subscribeInternal(planId));
+		this.registerMainProcessMethod('forceNonPremiumInternal', (reason: string) =>
+			this.forceNonPremiumInternal(reason),
+		);
 	}
 
 	public subscribe(planId: string): void {
@@ -110,6 +127,42 @@ export class AdService extends AbstractFacadeService<AdService> implements IAdsS
 			return;
 		}
 		this.hasPremiumSub$$.next(true);
+	}
+
+	public forceNonPremium(reason: string): void {
+		// The subjects are owned by the main process (Electron) / main instance (Overwolf); route there.
+		if (isElectronContext() && !isMainProcess()) {
+			this.callOnMainProcess<void>('forceNonPremiumInternal', reason);
+			return;
+		}
+		this.forceNonPremiumInternal(reason);
+	}
+
+	private async forceNonPremiumInternal(reason: string): Promise<void> {
+		if (this.bypassDetected$$.value) {
+			return;
+		}
+		console.warn('[ads] membership tamper confirmed, forcing non-premium', reason);
+		this.bypassDetected$$.next(true);
+		this.hasPremiumSub$$.next(false);
+		this.enablePremiumFeatures$$.next(false);
+	}
+
+	// Anti-tamper speed bump (not a security boundary): periodically re-derive the gates from server
+	// truth so a bare .next(true) on the public subjects - the CDP-injection crack's move - is reverted.
+	private startTamperResistance(): void {
+		setInterval(() => {
+			const plan = this.currentPlan$$.value;
+			const bypassDetected = this.bypassDetected$$.value;
+			const expectedHasPremium = this.computeHasPremiumSub(plan, bypassDetected);
+			if (this.hasPremiumSub$$.value !== expectedHasPremium) {
+				this.hasPremiumSub$$.next(expectedHasPremium);
+			}
+			const expectedEnable = !bypassDetected && (expectedHasPremium || this.lottery.shouldTrack$$.value);
+			if (this.enablePremiumFeatures$$.value !== expectedEnable) {
+				this.enablePremiumFeatures$$.next(expectedEnable);
+			}
+		}, REASSERT_INTERVAL);
 	}
 
 	public async goToPremium(): Promise<void> {
