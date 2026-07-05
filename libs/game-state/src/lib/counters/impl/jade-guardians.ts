@@ -18,7 +18,7 @@ export class JadeGuardiansCounterDefinitionV2 extends CounterDefinitionV2<number
 			state.playerDeck?.cardsPlayedThisMatch
 				.map((c) => state.playerDeck.findCard(c.entityId)?.card)
 				.filter((c) => c != null)
-				.map((c) => getCost(c, state.playerDeck, this.allCards)).length || null,
+				.map((c) => getCost(c, state.playerDeck, this.allCards) == 2).length || null,
 		setting: {
 			label: (i18n: ILocalizationService): string => this.allCards.getCard(CardIds.JadeGuardians_JAIL_474)?.name,
 			tooltip: (i18n: ILocalizationService, allCards: CardsFacadeService): string =>
@@ -35,7 +35,7 @@ export class JadeGuardiansCounterDefinitionV2 extends CounterDefinitionV2<number
 			state.opponentDeck?.cardsPlayedThisMatch
 				.map((c) => state.opponentDeck.findCard(c.entityId)?.card)
 				.filter((c) => c != null)
-				.map((c) => getCost(c, state.opponentDeck, this.allCards)).length || null,
+				.map((c) => getCost(c, state.opponentDeck, this.allCards) == 2).length || null,
 		setting: {
 			label: (i18n: ILocalizationService): string => this.allCards.getCard(CardIds.JadeGuardians_JAIL_474)?.name,
 			tooltip: (i18n: ILocalizationService, allCards: CardsFacadeService): string =>
