@@ -5,8 +5,11 @@
  */
 import { CardIds } from '@firestone-hs/reference-data';
 
-import { Card } from './_card.type';
+import { HighlightSide } from '@firestone/shared/framework/core';
+import { and, inDeck, inHand, or, side, spell } from '../card-highlight/selectors';
+import { Card, SelectorCard } from './_card.type';
 
-export const MoltenGold: Card = {
+export const MoltenGold: Card & SelectorCard = {
 	cardIds: [CardIds.MoltenGold_JAIL_801],
+	selector: (inputSide: HighlightSide) => and(side(inputSide), or(inHand, inDeck), spell),
 };
