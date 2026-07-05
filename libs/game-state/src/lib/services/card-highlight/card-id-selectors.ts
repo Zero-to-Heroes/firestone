@@ -1723,6 +1723,8 @@ export const cardIdSelector = (
 			);
 		case CardIds.GorlocRavager:
 			return and(side(inputSide), inDeck, murloc);
+		case CardIds.GoruTheMightree:
+			return and(side(inputSide), or(inDeck, inHand), treant);
 		case CardIds.GraniteForgeborn:
 			return and(side(inputSide), or(inDeck, inHand), elemental);
 		case CardIds.GrandArchivist:
