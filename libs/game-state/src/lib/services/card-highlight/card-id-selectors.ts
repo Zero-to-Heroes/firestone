@@ -1192,6 +1192,8 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand, inPlay), beast);
 		case CardIds.DirgeOfDespair:
 			return and(side(inputSide), inDeck, demon, minion);
+		case CardIds.DiscipleOfDemise_TIME_EVENT_301:
+			return and(side(inputSide), or(inDeck, inHand), dragon);
 		case CardIds.DiscipleOfEonar:
 			return and(side(inputSide), or(inDeck, inHand), chooseOne);
 		case CardIds.DiscipleOfGolganneth:
