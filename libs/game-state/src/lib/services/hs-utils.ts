@@ -246,6 +246,7 @@ const globalEffectEnchantments = [
 	CardIds.CommanderGeddon_BarrenEnchantment_CATA_591e,
 	CardIds.CleansingCleric_FreeFromCorruptionEnchantment_CATA_216e,
 	CardIds.JotunTheEternal_JotunsSwiftnessEnchantmentToken,
+	CardIds.JailhouseManastorm_ManastormSummoningEnchantment_JAIL_122e5,
 	// CardIds.CityChiefEsho_KinEnchantment_TLC_110e, // The enchantment is applied to each card, so we don't have a global thing
 ];
 
@@ -365,12 +366,14 @@ export const getCardForGlobalEffect = (cardId: CardIds): string => {
 			return CardIds.LieInWait_MasterDuskToken_TLC_513t;
 		case CardIds.JotunTheEternal_JotunsSwiftnessEnchantmentToken:
 			return CardIds.JotunTheEternal;
+		case CardIds.JailhouseManastorm_ManastormSummoningEnchantment_JAIL_122e5:
+			return CardIds.JailhouseManastorm_JAIL_122;
 		default:
 			if (cardId.endsWith('e')) {
 				// This is a global effect enchantment, so we return the card id without the "e" at the end
 				return cardId.slice(0, -1);
 			}
-			if (cardId.endsWith('e1')) {
+			if (cardId.endsWith('e1') || cardId.endsWith('e(')) {
 				// This is a global effect enchantment, so we return the card id without the "e" at the end
 				return cardId.slice(0, -2);
 			}
