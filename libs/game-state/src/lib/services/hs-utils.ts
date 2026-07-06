@@ -313,6 +313,10 @@ export const globalEffectTriggers: { effectPrefab: string; cardId: string; force
 		effectPrefab: 'JAIL_719_IridaSinseeker_FAB_DeckAE_Super',
 		cardId: CardIds.IridaSinseeker_JAIL_719,
 	},
+	{
+		effectPrefab: 'JAIL_430_AzalinaSoulsever_FAB_StartOfGame_FX',
+		cardId: CardIds.AzalinaSoulsever_JAIL_430,
+	},
 	// {
 	// 	effectPrefab: 'EDRFX_AvianaElunesChosen_StartOfTurnComplete',
 	// 	cardId: CardIds.AvianaElunesChosen_MoonCycleEnchantmentToken_EDR_895t,
