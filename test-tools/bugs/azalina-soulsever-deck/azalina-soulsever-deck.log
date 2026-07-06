@@ -1,4 +1,3 @@
-D 11:59:16.4657518 GameState.DebugPrintPowerList() - Count=207
 D 11:59:16.4657518 GameState.DebugPrintPower() - CREATE_GAME
 D 11:59:16.4657518 GameState.DebugPrintPower() -     GameEntity EntityID=1
 D 11:59:16.4657518 GameState.DebugPrintPower() -         tag=CARDTYPE value=GAME

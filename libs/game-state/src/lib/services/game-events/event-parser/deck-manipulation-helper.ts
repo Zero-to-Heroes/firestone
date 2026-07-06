@@ -702,6 +702,16 @@ const isInvalidForOther = (cardId: string): boolean => {
 	return cardId?.startsWith(CardIds.DarkGiftToken_EDR_102t) || cardId?.startsWith(CardIds.WakingTerrorToken_EDR_100t);
 };
 
+/**
+ * After a hidden opponent draw, card-draw may keep a deck row but clear entityId (anti info-leak).
+ * That row still matches the played card's creator and must be removed on play.
+ */
+const hasStrippedDeckRowForCreator = (
+	deckCards: readonly DeckCard[],
+	fallbackCreatorCardId: string | undefined,
+): boolean =>
+	!!fallbackCreatorCardId && deckCards.some((c) => !c.entityId && c.creatorCardId === fallbackCreatorCardId);
+
 /** Cards generated/copied in hand are not drawn from the initial deck — skip deck reconciliation on play. */
 const shouldSkipDeckReconciliationForPlayedCard = (input: {
 	readonly removedCard: DeckCard | undefined;
@@ -765,6 +775,11 @@ export const reconcileCardInHandWithDeck = (input: {
 	}
 
 	let additionalKnownCardsInDeck = deck.additionalKnownCardsInDeck;
+	// No need to add a guard here, as we already guard the input parameters
+	// This lets us pass a creatorCardId that is not in the public gifts, which is the case when a
+	// card is played / removed and the creator is revealed by the game
+	const fallbackCreatorCardId = input.gameEventCreatorCardId ?? removedCard?.creatorCardId;
+	const strippedDeckGhostForCreator = hasStrippedDeckRowForCreator(deckCards, fallbackCreatorCardId);
 	if (!removedCard?.cardId) {
 		additionalKnownCardsInDeck = additionalKnownCardsInDeck.filter(
 			(c, i) => c !== cardId || deck.additionalKnownCardsInDeck.indexOf(c) !== i,
@@ -803,10 +818,7 @@ export const reconcileCardInHandWithDeck = (input: {
 					deck: newDeckAfterReveal,
 				});
 			}
-		} else {
-			const fallbackCreatorCardId = resolveFallbackCreatorCardIdForDeckRemoval({
-				handOrRemovedCard: removedCard,
-			});
+		} else if (strippedDeckGhostForCreator && fallbackCreatorCardId) {
 			const [newDeckAfterReveal, removedCardFromDeck] = helper.removeSingleCardFromZone(
 				deckCards,
 				cardId,
@@ -823,6 +835,7 @@ export const reconcileCardInHandWithDeck = (input: {
 				removedCardFromDeck?.cardName,
 				removedCardFromDeck?.lastAffectedByCardId,
 				removedCardFromDeck,
+				fallbackCreatorCardId,
 				newDeckAfterReveal,
 			);
 			if (removedCardFromDeck) {

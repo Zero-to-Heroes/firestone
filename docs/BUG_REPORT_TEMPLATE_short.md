@@ -74,7 +74,11 @@ Propose the fix (or failing assertion) **before** large refactors; keep changes 
 
 ---
 
-## 5. PR / review
+## 5. Do the fix
+
+-
+
+## 6. PR / review
 
 - Follow **AGENTS.md** (Firestone + `.github/AGENTS.md` if linked): cards from reference data, no edits to auto-generated files, etc.
 
