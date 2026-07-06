@@ -20,7 +20,7 @@ export class GlobalMinionEffectParser implements EventParser {
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
-		const [inputCardId, controllerId, localPlayer] = gameEvent.parse();
+		const [inputCardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 
 		let cardId = inputCardId;
 		const isPlayer = controllerId === localPlayer.PlayerId;
@@ -62,7 +62,23 @@ export class GlobalMinionEffectParser implements EventParser {
 			this.allCards,
 			this.i18n,
 		);
+		let newDeckContents = deck.deck;
+		// See start-of-game-effect-parser
+		// Azalina Soulsever for instance works as a Start of Game effect, but isn't flagged as such
+		if (
+			!deck.deckList?.length &&
+			!deck.deckstring &&
+			!deck.deck.some((e) => e.entityId === entityId || e.trueEntityId === entityId)
+		) {
+			const fillerCard = deck.deck.find(
+				(card) => !card.entityId && !card.cardId && !card.cardName && !card.creatorCardId,
+			);
+			newDeckContents = newDeckContents.filter((e) => e !== fillerCard);
+			newDeckContents = this.helper.addSingleCardToZone(newDeckContents, card);
+			// newDeckContents = this.helper.empiricReplaceCardInZone(deck.deck, card, true);
+		}
 		const newPlayerDeck: DeckState = deckAfterSpecialCaseUpdate.update({
+			deck: newDeckContents,
 			globalEffects: newGlobalEffects,
 		} as DeckState);
 		return currentState.update({
