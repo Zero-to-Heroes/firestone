@@ -40,6 +40,7 @@ const revealCardFromCreator = (deck: DeckState, card: DeckCard) => {
 		// case CardIds.BobTheBartender_FindATripleToken_BG31_BOBt4:
 		case CardIds.ArchmageArugal:
 		case CardIds.BobTheBartender_BG31_BOB:
+		case CardIds.BloodClone_JAIL_451:
 		case CardIds.BronzeSignet_BronzeSignetTavernBrawlEnchantment:
 		case CardIds.BronzeSignetTavernBrawl:
 		case CardIds.CheerfulSpirit:

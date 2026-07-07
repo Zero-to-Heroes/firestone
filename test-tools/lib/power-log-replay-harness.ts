@@ -269,6 +269,7 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	'ritual-full-moon': 'ritual-full-moon/ritual-full-moon.log',
 	'triangulate-baking-soda-play': 'triangulate-baking-soda-play/triangulate-baking-soda-play.log',
 	'azalina-soulsever-deck': 'azalina-soulsever-deck/azalina-soulsever-deck.log',
+	'blood-clone': 'blood-clone/blood-clone.log',
 };
 
 /**
