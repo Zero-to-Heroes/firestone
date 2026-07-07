@@ -22,15 +22,15 @@ export const IridaSinseeker: PowerEndCard & {
 		const newDeck = deck.update({
 			voidZone: cardsInVoid,
 		});
-		console.debug(
-			'[debug] IridaSinseeker.powerEnd',
-			cardId,
-			isPlayer,
-			cardsInVoid,
-			newDeck,
-			currentState,
-			gameEvent,
-		);
+		// console.debug(
+		// 	'IridaSinseeker.powerEnd',
+		// 	cardId,
+		// 	isPlayer,
+		// 	cardsInVoid,
+		// 	newDeck,
+		// 	currentState,
+		// 	gameEvent,
+		// );
 
 		return currentState.update({
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newDeck,
@@ -58,13 +58,13 @@ export const IridaSinseeker: PowerEndCard & {
 		const newVoidZone = existingCardInZone
 			? existingVoidZone.filter((c) => c !== existingCardInZone)
 			: existingVoidZone;
-		console.debug(
-			'[debug] IridaSinseeker.cardReceivedFromTheVoid',
-			card.cardId,
-			card.entityId,
-			existingCardInZone,
-			newVoidZone,
-		);
+		// console.debug(
+		// 	'IridaSinseeker.cardReceivedFromTheVoid',
+		// 	card.cardId,
+		// 	card.entityId,
+		// 	existingCardInZone,
+		// 	newVoidZone,
+		// );
 		return newVoidZone;
 	},
 };

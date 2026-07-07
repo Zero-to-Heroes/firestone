@@ -22,7 +22,7 @@ export const GetawayHogdriver: SelectorCard & GeneratingCard & CustomEffectCard 
 
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
-		console.debug('[debug] GetawayHogdriver.customEffect', isPlayer, deck.hand, gameEvent, currentState);
+		// console.debug('GetawayHogdriver.customEffect', isPlayer, deck.hand, gameEvent, currentState);
 		const newHand = deck.hand.map((c) => {
 			if (c.lastAffectedByEntityId === gameEvent.additionalData.sourceEntityId) {
 				return c.update({

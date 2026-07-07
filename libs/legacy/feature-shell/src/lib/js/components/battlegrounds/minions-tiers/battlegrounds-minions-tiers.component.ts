@@ -45,7 +45,6 @@ import {
 	shareReplay,
 	startWith,
 	takeUntil,
-	tap,
 } from 'rxjs';
 import { DebugService } from '../../../services/debug.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
@@ -231,7 +230,6 @@ export class BattlegroundsMinionsTiersOverlayComponent
 		const heroPowerCardIds$ = this.gameState.gameState$$.pipe(
 			auditTime(1000),
 			this.mapData((state) => [state.bgState.currentGame?.getMainPlayer()?.heroPowerCardId]),
-			tap((info) => console.debug('[debug] [heroPowerCardIds] info', info)),
 			distinctUntilChanged(),
 			shareReplay(1),
 			takeUntil(this.destroyed$),

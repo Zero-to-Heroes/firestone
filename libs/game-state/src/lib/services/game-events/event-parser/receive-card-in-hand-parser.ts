@@ -77,13 +77,13 @@ export class ReceiveCardInHandParser implements EventParser {
 		const opponentDeck = isPlayer ? currentState.opponentDeck : currentState.playerDeck;
 
 		const cardId = resolveCardIdForReceiveInHand(cardIdOrDbfId, gameEvent.additionalData.tags, this.allCards);
-		debug && console.debug('[debug] cardId', cardId);
+		debug && console.debug('cardId', cardId);
 		let { creatorCardId, creatorEntityId } = denormalizeCreatorCardId(
 			gameEvent.additionalData.creatorCardId,
 			gameEvent.additionalData.creatorEntityId,
 			deck,
 		);
-		debug && console.debug('[debug] creatorCardId', creatorCardId, creatorEntityId);
+		debug && console.debug('creatorCardId', creatorCardId, creatorEntityId);
 		// Shatter hand pieces may omit CREATOR in the log; infer Spark of Life or Sands of Time from cards played this match (most recent wins).
 		if (!creatorCardId && !isPlayer) {
 			const tags = gameEvent.additionalData?.tags ?? [];
@@ -121,8 +121,7 @@ export class ReceiveCardInHandParser implements EventParser {
 		) as CardIds;
 		const buffingEntityCardId = gameEvent.additionalData.buffingEntityCardId;
 		const buffCardId = gameEvent.additionalData.buffCardId;
-		debug &&
-			console.debug('[debug] lastInfluencedByCardId', lastInfluencedByCardId, rawLastInfluencedBy, creatorCardId);
+		debug && console.debug('lastInfluencedByCardId', lastInfluencedByCardId, rawLastInfluencedBy, creatorCardId);
 		const isSpecialCasePublicWhenOpponentDraws =
 			// This is starting to become one of the worst tangle of special cases in the app
 			//The idea is this:
@@ -142,7 +141,7 @@ export class ReceiveCardInHandParser implements EventParser {
 				specialCasePublicCardCreators.includes(cardId as CardIds));
 		debug &&
 			console.debug(
-				'[debug] isSpecialCasePublicWhenOpponentDraws',
+				'isSpecialCasePublicWhenOpponentDraws',
 				isSpecialCasePublicWhenOpponentDraws,
 				lastInfluencedByCardId,
 				cardId,
@@ -164,7 +163,7 @@ export class ReceiveCardInHandParser implements EventParser {
 			isSpecialCasePublicWhenOpponentDraws;
 		debug &&
 			console.debug(
-				'[debug] [receive-card-in-hand] isCardInfoPublic',
+				'[receive-card-in-hand] isCardInfoPublic',
 				isCardInfoPublic,
 				isPlayer,
 				cardId,

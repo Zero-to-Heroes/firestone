@@ -68,7 +68,6 @@ export const buildTiers = (
 		(gameState.hasTimewarped ||
 			anomalies.some((anomaly) => anomalyAllowsTimewarped(anomaly)) ||
 			heroPowerCardIds.some((hp) => heroPowerAllowsTimewarped(hp)));
-	console.debug('[debug] [showTimewarped] showTimewarped', showTimewarped);
 	const config: TierBuilderConfig = {
 		showAllMechanics: options.showAllMechanics,
 		spells: showSpells,

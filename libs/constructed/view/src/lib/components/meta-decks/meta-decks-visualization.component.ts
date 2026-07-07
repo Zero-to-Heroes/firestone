@@ -218,14 +218,14 @@ export class MetaDecksVisualizationComponent extends AbstractSubscriptionCompone
 					collection,
 					{ conservativeEstimate, sampleSize, dust, playerClasses, archetypes },
 				]) => {
-					console.debug(
-						'[debug] base decks',
-						stats?.deckStats?.length,
-						sampleSize,
-						dust,
-						playerClasses,
-						archetypes,
-					);
+					// console.debug(
+					// 	'base decks',
+					// 	stats?.deckStats?.length,
+					// 	sampleSize,
+					// 	dust,
+					// 	playerClasses,
+					// 	archetypes,
+					// );
 					const enhanced = stats?.deckStats
 						.filter((stat) => stat.totalGames >= sampleSize)
 						.filter((stat) => !playerClasses?.length || playerClasses.includes(stat.playerClass))
@@ -238,24 +238,24 @@ export class MetaDecksVisualizationComponent extends AbstractSubscriptionCompone
 							return this.enhanceStat(stat, ownedCardIdsCache, collection, conservativeEstimate);
 						})
 						.filter((stat) => dust === 'all' || dust == null || stat.dustCost <= +dust);
-					console.debug(
-						'[debug] enhanced decks',
-						enhanced?.length,
-						stats?.deckStats.filter((stat) => stat.totalGames >= sampleSize).length,
-						stats?.deckStats
-							.filter((stat) => stat.totalGames >= sampleSize)
-							.filter((stat) => !playerClasses?.length || playerClasses.includes(stat.playerClass))
-							.length,
-						stats?.deckStats
-							.filter((stat) => stat.totalGames >= sampleSize)
-							.filter((stat) => !playerClasses?.length || playerClasses.includes(stat.playerClass))
-							.filter((stat) => !archetypes?.length || archetypes.includes(stat.archetypeId))
-							.filter(
-								(stat) =>
-									!cardSearch?.length ||
-									cardSearch.every((card) => stat.allCardsInDeck.includes(card)),
-							).length,
-					);
+					// console.debug(
+					// 	'enhanced decks',
+					// 	enhanced?.length,
+					// 	stats?.deckStats.filter((stat) => stat.totalGames >= sampleSize).length,
+					// 	stats?.deckStats
+					// 		.filter((stat) => stat.totalGames >= sampleSize)
+					// 		.filter((stat) => !playerClasses?.length || playerClasses.includes(stat.playerClass))
+					// 		.length,
+					// 	stats?.deckStats
+					// 		.filter((stat) => stat.totalGames >= sampleSize)
+					// 		.filter((stat) => !playerClasses?.length || playerClasses.includes(stat.playerClass))
+					// 		.filter((stat) => !archetypes?.length || archetypes.includes(stat.archetypeId))
+					// 		.filter(
+					// 			(stat) =>
+					// 				!cardSearch?.length ||
+					// 				cardSearch.every((card) => stat.allCardsInDeck.includes(card)),
+					// 		).length,
+					// );
 					return enhanced?.sort((a, b) => this.sortDecks(a, b, sortCriteria));
 				},
 			),
