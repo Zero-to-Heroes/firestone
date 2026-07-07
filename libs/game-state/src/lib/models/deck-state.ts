@@ -296,6 +296,9 @@ export class DeckState {
 
 	public findCard(
 		entityId: number | null | undefined,
+		options?: {
+			includeTrueEntityId?: boolean;
+		},
 	): { zone: 'hand' | 'deck' | 'board' | 'other'; card: DeckCard } | null {
 		if (entityId == null) {
 			return null;
@@ -307,7 +310,12 @@ export class DeckState {
 			{ id: 'other', cards: this.otherZone },
 		];
 		for (const zone of zones) {
-			const result = zone.cards.find((card) => Math.abs(card.entityId) === Math.abs(entityId));
+			const result = zone.cards.find((card) =>
+				options?.includeTrueEntityId
+					? Math.abs(card.entityId) === Math.abs(entityId) ||
+						Math.abs(card.trueEntityId) === Math.abs(entityId)
+					: Math.abs(card.entityId) === Math.abs(entityId),
+			);
 			if (!!result) {
 				return { zone: zone.id, card: result };
 			}

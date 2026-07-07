@@ -92,6 +92,7 @@ export interface StaticGeneratingCardInput {
 	};
 }
 
+/** @deprecated */
 export interface SpecialCaseParserCard extends Card {
 	specialCaseParser: (deck: DeckState) => DeckState;
 }
@@ -152,6 +153,20 @@ export interface PowerEndCard extends Card {
 }
 export const hasPowerEnd = (card: Card): card is PowerEndCard => (card as PowerEndCard)?.powerEnd !== undefined;
 export interface PowerEndInput {
+	currentState: GameState;
+	gameEvent: GameEvent;
+	allCards: AllCardsService;
+}
+
+/** @deprecated */
+// The timing for this doesn't work, because the entityChosen is is emitted by the GameState log
+// so we don't have all the information to handle this event
+export interface OnChosenEntityCard extends Card {
+	onChosenEntity: (input: OnChosenEntityInput) => GameState;
+}
+export const hasOnChosenEntity = (card: Card): card is OnChosenEntityCard =>
+	(card as OnChosenEntityCard)?.onChosenEntity !== undefined;
+export interface OnChosenEntityInput {
 	currentState: GameState;
 	gameEvent: GameEvent;
 	allCards: AllCardsService;
