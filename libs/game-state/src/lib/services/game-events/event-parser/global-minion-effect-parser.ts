@@ -68,7 +68,8 @@ export class GlobalMinionEffectParser implements EventParser {
 		if (
 			!deck.deckList?.length &&
 			!deck.deckstring &&
-			!deck.deck.some((e) => e.entityId === entityId || e.trueEntityId === entityId)
+			// If the card we try to add has already been played, it's not in the deck
+			!deck.findCard(entityId, { includeTrueEntityId: true })?.card
 		) {
 			const fillerCard = deck.deck.find(
 				(card) => !card.entityId && !card.cardId && !card.cardName && !card.creatorCardId,
