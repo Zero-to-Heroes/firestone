@@ -19,6 +19,7 @@ Use this when investigating a **decktracker or parser** bug backed by a **power.
 1. Save under the bug folder (spec + log live together):  
    **`test-tools/bugs/<bug-id>/<name>.log`** (e.g. `test-tools/bugs/blackwing/blackwing.log`)  
    Map the slug to this path in `DEFAULT_BUG_LOG_BY_SLUG` inside `test-tools/lib/power-log-replay-harness.ts`, or use `<slug>/<slug>.log` under `test-tools/bugs/` and pass that slug to `resolvePowerLogPathForSlug`.
+2. Use the power.log file as provdided - don't truncate or modify it
 
 ---
 

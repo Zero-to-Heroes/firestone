@@ -5,6 +5,7 @@
  */
 import { Injector, NgZone } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { decode } from '@firestone-hs/deckstrings';
 import { AllCardsService, SceneMode } from '@firestone-hs/reference-data';
 import { ArenaRefService } from '@firestone/arena/data-access';
 import { BgsBattleSimulationService, BgsIntermediateResultsSimGuardianService } from '@firestone/battlegrounds/core';
@@ -14,6 +15,7 @@ import {
 	ConstructedArchetypeServiceOrchestrator,
 	DeckCard,
 	DeckHandlerService,
+	DeckInfo,
 	DeckManipulationHelper,
 	DeckParserService,
 	DeckState,
@@ -270,6 +272,7 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	'triangulate-baking-soda-play': 'triangulate-baking-soda-play/triangulate-baking-soda-play.log',
 	'azalina-soulsever-deck': 'azalina-soulsever-deck/azalina-soulsever-deck.log',
 	'blood-clone': 'blood-clone/blood-clone.log',
+	'chainbreaker-hogger': '../power.log',
 };
 
 /**
@@ -375,6 +378,8 @@ export type ReplayPowerLogOptions = {
 	 * The bug is observable on `state` even when the queue never drains.
 	 */
 	processingQueueIdleTimeoutMs?: number;
+	/** When set, match-metadata loads this deckstring as the local player's deck (mirrors dev fakeGame). */
+	playerDeckstring?: string;
 };
 
 /**
@@ -435,6 +440,7 @@ export async function replayPowerLogToGameState(options: ReplayPowerLogOptions):
 		reviewId = 'power-log-replay',
 		settleMs = 8000,
 		processingQueueIdleTimeoutMs = 600_000,
+		playerDeckstring,
 	} = options;
 
 	const cardsRef = resolveCardsJsonPath();
@@ -539,7 +545,19 @@ export async function replayPowerLogToGameState(options: ReplayPowerLogOptions):
 	const deckParserReplayMock = {
 		getOpenDecklist: async () => null as string | null,
 		getTemplateDeck: async () => null,
-		retrieveCurrentDeck: async () => null,
+		retrieveCurrentDeck: async (_usePreviousDeckIfSameScenarioId: boolean, metadata: { scenarioId: number; gameType: number }) => {
+			if (!playerDeckstring) {
+				return null;
+			}
+			return {
+				deckstring: playerDeckstring,
+				name: 'Replay Deck',
+				scenarioId: metadata.scenarioId,
+				gameType: metadata.gameType,
+				deck: decode(playerDeckstring),
+			} as DeckInfo;
+		},
+		forcedDeckstring: playerDeckstring,
 	} as unknown as DeckParserService;
 
 	const aiDeckReplayMock = {

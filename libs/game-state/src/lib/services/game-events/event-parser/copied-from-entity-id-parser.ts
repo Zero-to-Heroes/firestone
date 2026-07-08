@@ -64,6 +64,7 @@ export class CopiedFromEntityIdParser implements EventParser {
 		const copiedDeck = isCopiedPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
 		const newCopy: DeckCard | undefined = deck.findCard(entityId)?.card;
+		const revealedCopyCardId = newCopy?.cardId ?? cardId;
 		// The issue when using only the entityId is that we can't find the card in deck, as
 		// the entityId is not stored there
 		let copiedCard: DeckCard | undefined = copiedDeck.findCard(copiedCardEntityId)?.card;
@@ -90,21 +91,32 @@ export class CopiedFromEntityIdParser implements EventParser {
 		}
 
 		// Typically happens when the opponent copies a card in our deck. Their copy is known (we know entityId + cardId)
-		// but it references an entityId on our side that we don't know of (if it's in the deck)
-		if (!copiedCard && copiedCardZone === Zone.DECK && !!newCopy?.cardId) {
-			const copyCardId = newCopy.cardId;
-			copiedCard =
-				copiedDeck.deck.find(
-					(card) =>
-						card.cardId === copyCardId && card.positionFromBottom == null && card.positionFromTop == null,
-				) ?? copiedDeck.deck.find((card) => card.cardId === copyCardId);
+		// but it references an entityId on our side that we don't know of (if it's in the deck).
+		// Use the game-event cardId when the opponent copy is not tracked in deck yet (e.g. PowerTaskList replay).
+		if (!copiedCard && copiedCardZone === Zone.DECK && revealedCopyCardId?.length) {
+			copiedCard = this.findUnlinkedDeckRowByCardId(copiedDeck, revealedCopyCardId);
 			console.debug(
 				'[copied-from-entity] copiedCard not found',
 				`entityId:${entityId}__`,
 				copiedCard,
-				copyCardId,
+				revealedCopyCardId,
 				copiedDeck.deck,
 			);
+		}
+
+		// Orphan deck row (entityId from CREATE_CARD_IN_DECK, no cardId yet): prefer the deckstring row.
+		if (
+			copiedCard &&
+			!copiedCard.cardId?.length &&
+			copiedCardZone === Zone.DECK &&
+			isCopiedPlayer &&
+			!isPlayer &&
+			revealedCopyCardId?.length
+		) {
+			const deckstringRow = this.findUnlinkedDeckRowByCardId(copiedDeck, revealedCopyCardId);
+			if (deckstringRow) {
+				copiedCard = deckstringRow;
+			}
 		}
 
 		// Avoid info leaks
@@ -126,7 +138,7 @@ export class CopiedFromEntityIdParser implements EventParser {
 		// the card might be inside their deck (though we don't want to store the entityId, because that would leak to
 		// info leaks)
 
-		const updatedCardId = newCopy?.cardId ?? copiedCard?.cardId;
+		const updatedCardId = newCopy?.cardId ?? copiedCard?.cardId ?? cardId;
 		/** Copy and source are the same player (e.g. Malevolent Mutant); local may still be the opponent in replay. */
 		const copyAndSourceSameController = copiedCardControllerId === controllerId;
 		const dredgerCardIdHint = newCopy?.creatorCardId ?? newCopy?.lastAffectedByCardId;
@@ -188,7 +200,7 @@ export class CopiedFromEntityIdParser implements EventParser {
 		if (copiedCardZone === Zone.DECK && isPlayer && isCopiedPlayer && !copyAndSourceSameController) {
 			console.debug(
 				'[copied-from-entity] cross-player deck copy would corrupt local deck, ignoring',
-				entityId,
+				`entityId:${entityId}__`,
 				copiedCardEntityId,
 				cardId,
 			);
@@ -208,7 +220,14 @@ export class CopiedFromEntityIdParser implements EventParser {
 			!copiedCard?.cardId &&
 			// Cards that summon copies of card in the deck into play
 			!CREATES_PUBLIC_COPY_FROM_DECK.includes(newCopy?.creatorCardId as CardIds);
-		console.debug('[copied-from-entity] shouldObfuscate', shouldObfuscate, isPlayer, isCopiedPlayer, copiedCard);
+		console.debug(
+			'[copied-from-entity] shouldObfuscate',
+			`entityId:${entityId}__`,
+			shouldObfuscate,
+			isPlayer,
+			isCopiedPlayer,
+			copiedCard,
+		);
 		// Otherwise cards revealed by Coilfang Constrictor are flagged in hand very precisely, while we shouldn't have this
 		// kind of granular information
 		// Also, simply hiding the information in the hand markers and showing it on the decklist isn't good enough, because when
@@ -231,6 +250,7 @@ export class CopiedFromEntityIdParser implements EventParser {
 				: updatedCardId;
 		console.debug(
 			'[copied-from-entity] obfuscatedCardId',
+			`entityId:${entityId}__`,
 			obfuscatedCardId,
 			shouldObfuscate,
 			isPlayer,
@@ -290,6 +310,7 @@ export class CopiedFromEntityIdParser implements EventParser {
 		});
 		console.debug(
 			'[copied-from-entity] updatedCopiedCardWithPosition',
+			`entityId:${entityId}__`,
 			updatedCopiedCardWithPosition,
 			updatedCopiedCard,
 			copiedCard,
@@ -304,21 +325,28 @@ export class CopiedFromEntityIdParser implements EventParser {
 			isCopiedPlayer &&
 			!isPlayer &&
 			DREDGE_IN_OPPONENT_DECK_CARD_IDS.includes(newCopy?.lastAffectedByCardId as CardIds);
-		console.debug('[copied-from-entity] isCardMovedAroundInPlayerDeck', isCardMovedAroundInPlayerDeck);
+		console.debug(
+			'[copied-from-entity] isCardMovedAroundInPlayerDeck',
+			`entityId:${entityId}__`,
+			isCardMovedAroundInPlayerDeck,
+		);
 
 		const newCopiedDeck =
 			// Sometimes the card already exists in the deck (eg if it has a start of combat effect)
 			copiedCardZone === Zone.DECK && !isCardMovedAroundInPlayerDeck
-				? this.helper.empiricReplaceCardInZone(copiedDeck.deck, updatedCopiedCardWithPosition, true, {
-						cost: updatedCopiedCardWithPosition.refManaCost, // Not totally sure about ref vs actual
-					})
+				? this.dedupePlayerDeckAfterCopiedFromLink(
+						this.helper.empiricReplaceCardInZone(copiedDeck.deck, updatedCopiedCardWithPosition, true, {
+							cost: updatedCopiedCardWithPosition.refManaCost, // Not totally sure about ref vs actual
+						}),
+						updatedCopiedCardWithPosition,
+					)
 				: copiedDeck.deck;
-		console.debug('[copied-from-entity] newCopiedDeck', newCopiedDeck, copiedDeck);
+		console.debug('[copied-from-entity] newCopiedDeck', `entityId:${entityId}__`, newCopiedDeck, copiedDeck);
 		const newCopiedPlayerBeforeReveal =
 			copiedCardZone === Zone.DECK
 				? copiedDeck.update({ deck: newCopiedDeck })
 				: this.helper.updateCardInDeck(copiedDeck, updatedCopiedCardWithPosition, isCopiedPlayer);
-		console.debug('[copied-from-entity] newCopiedPlayer', newCopiedPlayerBeforeReveal);
+		console.debug('[copied-from-entity] newCopiedPlayer', `entityId:${entityId}__`, newCopiedPlayerBeforeReveal);
 
 		// We learned something about the copied deck, so maybe we have information we can show, like Fabled package cards
 		const newCopiedPlayer = revealCard(newCopiedPlayerBeforeReveal, updatedCopiedCardWithPosition, this.allCards);
@@ -329,7 +357,7 @@ export class CopiedFromEntityIdParser implements EventParser {
 			updatedCopiedCardWithPosition.cardId,
 			copiedCardEntityId,
 		);
-		console.debug('[copied-from-entity] copiedDeckWithSecrets', copiedDeckWithSecrets);
+		console.debug('[copied-from-entity] copiedDeckWithSecrets', `entityId:${entityId}__`, copiedDeckWithSecrets);
 
 		let copiedDeckWithKnownCardsInHand = copiedDeckWithSecrets;
 		if (copiedCardZone === Zone.HAND && !isCopiedPlayer) {
@@ -337,6 +365,7 @@ export class CopiedFromEntityIdParser implements EventParser {
 			if (!!newCopy && shouldFlagExactCardInOpponentHand(newCopy)) {
 				console.debug(
 					'[copied-from-entity] know exact card in opponent hand',
+					`entityId:${entityId}__`,
 					newCopy.creatorCardId,
 					copiedDeckWithSecrets.hand,
 					newCopy,
@@ -351,7 +380,7 @@ export class CopiedFromEntityIdParser implements EventParser {
 							})
 						: card,
 				);
-				console.debug('[copied-from-entity] newHand', newHand);
+				console.debug('[copied-from-entity] newHand', `entityId:${entityId}__`, newHand);
 				copiedDeckWithKnownCardsInHand = copiedDeckWithSecrets.update({
 					hand: newHand,
 				});
@@ -418,6 +447,68 @@ export class CopiedFromEntityIdParser implements EventParser {
 		}
 
 		return result;
+	}
+
+	/** Deckstring row for cardId without entityId (initial deck padding). */
+	private findUnlinkedDeckRowByCardId(deck: DeckState, cardId: string): DeckCard | undefined {
+		const baseCardId = getBaseCardId(cardId, this.allCards.getService());
+		return (
+			deck.deck.find(
+				(card) =>
+					getBaseCardId(card.cardId, this.allCards.getService()) === baseCardId &&
+					card.positionFromBottom == null &&
+					card.positionFromTop == null &&
+					!card.entityId &&
+					!card.creatorCardId,
+			) ?? deck.deck.find(
+				(card) =>
+					getBaseCardId(card.cardId, this.allCards.getService()) === baseCardId &&
+					!card.entityId &&
+					!card.creatorCardId,
+			)
+		);
+	}
+
+	/**
+	 * After linking entityId + cardId, drop orphan rows (entityId-only ghosts) and one unlinked deckstring
+	 * duplicate of the same card (empiricReplace may remove the ghost but leave the old padding row).
+	 */
+	private dedupePlayerDeckAfterCopiedFromLink(
+		deck: readonly DeckCard[],
+		linked: DeckCard,
+	): readonly DeckCard[] {
+		if (!linked.cardId?.length || linked.entityId == null) {
+			return deck;
+		}
+		const baseCardId = getBaseCardId(linked.cardId, this.allCards.getService());
+		let removedUnlinkedDuplicate = false;
+		let keptLinkedRow = false;
+		return deck.filter((card) => {
+			const cardEntityId = card.entityId ?? card.trueEntityId;
+			const isLinkedRow =
+				cardEntityId === linked.entityId &&
+				getBaseCardId(card.cardId, this.allCards.getService()) === baseCardId;
+			if (isLinkedRow) {
+				if (keptLinkedRow) {
+					return false;
+				}
+				keptLinkedRow = true;
+				return true;
+			}
+			if (cardEntityId === linked.entityId && !card.cardId?.length) {
+				return false;
+			}
+			if (
+				!removedUnlinkedDuplicate &&
+				getBaseCardId(card.cardId, this.allCards.getService()) === baseCardId &&
+				!card.entityId &&
+				!card.creatorCardId
+			) {
+				removedUnlinkedDuplicate = true;
+				return false;
+			}
+			return true;
+		});
 	}
 
 	/** Merge entity id into cardCopyLinks for both ends of a copy pair (hand/deck/board/other). */
