@@ -20,6 +20,16 @@ export class CardRevealedParser implements ActionParser {
 	}
 
 	AppliesOnNewNode(_node: Node, _stateType: StateType): boolean {
+		// TODO: use the CARD_REVEALED BlockType to indicate that a card reveals another
+		/*
+		D 13:08:38.8841980 GameState.DebugPrintPower() -     BLOCK_START BlockType=POWER Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=18 zone=HAND zonePos=3 cardId= player=1] EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=0 Target=0 SubOption=-1 
+		D 13:08:38.8841980 GameState.DebugPrintPower() -         FULL_ENTITY - Creating ID=101 CardID=
+		D 13:08:38.8841980 GameState.DebugPrintPower() -             tag=ZONE value=DECK
+		D 13:08:38.8841980 GameState.DebugPrintPower() -             tag=CONTROLLER value=1
+		D 13:08:38.8841980 GameState.DebugPrintPower() -             tag=ENTITY_ID value=101
+		D 13:08:38.8841980 GameState.DebugPrintPower() -         BLOCK_START BlockType=REVEAL_CARD Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=18 zone=HAND zonePos=3 cardId= player=1] EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=0 Target=101 SubOption=-1 
+		*/
+		// Might need a different event altogether, as for now the CARD_REVEALED event creates in the other zone directly
 		return false;
 	}
 
@@ -67,8 +77,7 @@ export class CardRevealedParser implements ActionParser {
 			const parentAction = node.Parent.Object as Action;
 			const parentEntity = this.GameState.CurrentEntities.get(parentAction.Entity);
 			const totalOptions = parentAction.Data.filter((data) => data instanceof FullEntity).length;
-			indexInBlock = parentAction.Data
-				.filter((data): data is FullEntity => data instanceof FullEntity)
+			indexInBlock = parentAction.Data.filter((data): data is FullEntity => data instanceof FullEntity)
 				.map((e) => e.Entity)
 				.indexOf(fullEntity.Id);
 			if (parentEntity?.HasDredge() ?? false) {
@@ -83,23 +92,16 @@ export class CardRevealedParser implements ActionParser {
 			GameEventProvider.Create(
 				fullEntity.TimeStamp,
 				'CARD_REVEALED',
-				GameEventHelper.CreateProvider(
-					'CARD_REVEALED',
-					cardId,
-					controllerId,
-					fullEntity.Id,
-					this.StateFacade,
-					{
-						CreatorCardId: creatorEntityCardId,
-						OriginEntityCardId: originEntityCardId,
-						MercenariesExperience: mercXp,
-						MercenariesEquipmentId: mercEquipmentId,
-						RevealedFromBlock: revealedFromBlock,
-						IndexInBlock: indexInBlock,
-						Cost: fullEntity.GetCost(),
-						Tags: fullEntity.GetTagsCopy(),
-					},
-				),
+				GameEventHelper.CreateProvider('CARD_REVEALED', cardId, controllerId, fullEntity.Id, this.StateFacade, {
+					CreatorCardId: creatorEntityCardId,
+					OriginEntityCardId: originEntityCardId,
+					MercenariesExperience: mercXp,
+					MercenariesEquipmentId: mercEquipmentId,
+					RevealedFromBlock: revealedFromBlock,
+					IndexInBlock: indexInBlock,
+					Cost: fullEntity.GetCost(),
+					Tags: fullEntity.GetTagsCopy(),
+				}),
 				true,
 				node,
 			),
