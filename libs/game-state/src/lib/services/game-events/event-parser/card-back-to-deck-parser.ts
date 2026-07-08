@@ -1,4 +1,4 @@
-import { CardIds, ReferenceCard } from '@firestone-hs/reference-data';
+import { CardIds, GameTag, ReferenceCard } from '@firestone-hs/reference-data';
 
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { DeckCard } from '../../../models/deck-card';
@@ -133,8 +133,20 @@ export class CardBackToDeckParser implements EventParser {
 			entityId: Math.abs(card.entityId),
 			// For tidepool pupil / Sivara / etc. Once a a card is moved back to the deck, its info is reset
 			relatedCardIds: [],
-			// linkedEntityIds: [],
+			tags: {
+				...card.tags,
+				[GameTag.COST]: refCard?.cost ?? card?.refManaCost,
+			},
 		});
+		console.debug(
+			'[card-back-to-deck] cardWithInfoReset',
+			`entityId:${entityId}__`,
+			cardWithInfoReset,
+			card.cardId,
+			card.entityId,
+			deck,
+			card,
+		);
 		// This is to avoid the scenario where a card is drawn by a public influence (eg Thistle Tea) and
 		// put back in the deck, then drawn again. If we don't reset the lastInfluencedBy, we
 		// could possibly have an info leak
@@ -155,7 +167,12 @@ export class CardBackToDeckParser implements EventParser {
 			temporaryCard: false,
 			zone: undefined,
 		});
-		// console.debug('[card-back-to-deck] cardWithoutInfluence', cardWithoutInfluence, cardWithInfoReset);
+		console.debug(
+			'[card-back-to-deck] cardWithoutInfluence',
+			`entityId:${entityId}__`,
+			cardWithoutInfluence,
+			cardWithInfoReset,
+		);
 		const cardWithInfluenceBack = cardWithoutInfluence?.update({
 			lastAffectedByCardId: effectiveInfluencedBy,
 		});
