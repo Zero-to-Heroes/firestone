@@ -5224,25 +5224,18 @@
         "tags": {}
       },
       {
-        "actualManaCost": 4,
         "cardId": "CORE_EX1_197",
         "cardName": "Shadow Word: Ruin",
-        "createdIndex": 5,
         "entityId": 55,
         "forged": 0,
-        "guessedInfo": "<cycle>",
+        "guessedInfo": {},
         "internalEntityId": "<scrubbed>",
-        "lastAffectedByCardId": "",
-        "lastAffectedByEntityId": 1,
-        "linkedEntityIds": "<cycle>",
-        "metaInfo": {
-          "timestampAtWhichCardEnteredHand": "<scrubbed>",
-          "turnAtWhichCardEnteredHand": "mulligan"
-        },
+        "linkedEntityIds": [],
+        "metaInfo": {},
         "prepared": 0,
         "refManaCost": 4,
-        "relatedCardIds": "<cycle>",
-        "tags": "<cycle>"
+        "relatedCardIds": [],
+        "tags": {}
       },
       {
         "cardId": "TIME_432",
