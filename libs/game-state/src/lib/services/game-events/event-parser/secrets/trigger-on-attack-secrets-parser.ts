@@ -184,7 +184,6 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 			secretsWeCantRuleOut.push(CardIds.ExplosiveTrapLegacy_EX1_610);
 			secretsWeCantRuleOut.push(CardIds.ExplosiveTrapCore);
 			secretsWeCantRuleOut.push(CardIds.ExplosiveTrapVanilla);
-			secretsWeCantRuleOut.push(CardIds.MysticMisdirection_JAIL_315);
 			secretsWeCantRuleOut.push(CardIds.WanderingMonsterCore);
 			secretsWeCantRuleOut.push(CardIds.WanderingMonster);
 			secretsWeCantRuleOut.push(CardIds.FlameWard);
