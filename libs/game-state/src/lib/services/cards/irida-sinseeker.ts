@@ -21,6 +21,7 @@ export const IridaSinseeker: PowerEndCard & {
 		const cardsInVoid = deck.otherZone.filter(isInTheVoidPredicate);
 		const newDeck = deck.update({
 			voidZone: cardsInVoid,
+			deck: [],
 		});
 		// console.debug(
 		// 	'IridaSinseeker.powerEnd',
