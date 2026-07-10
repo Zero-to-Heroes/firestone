@@ -16,6 +16,11 @@ import { Regexes } from './regexes';
 import { RewindCardOracle, buildRewindCardOracle } from './rewind/card-oracle';
 import { LogStream, RewindController } from './rewind/rewind-controller';
 import { ParserSnapshotMeta } from './rewind/snapshot';
+import {
+	hasUnclosedSquareBrackets,
+	isEntityNameContinuationLine,
+	joinWrappedPowerLogLines,
+} from './join-wrapped-power-log-lines';
 import { CombinedState } from './state/combined-state';
 import { GameState } from './state/game-state';
 import { INodeParser, StateType } from './state/parser-state';
@@ -64,6 +69,8 @@ export class ReplayParser {
 
 	private previousTimestamp: string = '';
 	private CurrentGameSeed: number = 0;
+	/** Buffered log line waiting for a wrapped entityName continuation (streaming ReadLine). */
+	private partialLogLine: string | null = null;
 
 	private _onGameEvent: ((event: GameEvent) => void) | null = null;
 	get onGameEvent(): ((event: GameEvent) => void) | null {
@@ -160,8 +167,9 @@ export class ReplayParser {
 			this.CurrentGameSeed = gameSeed;
 		}
 
-		for (let i = 0; i < lines.length; i++) {
-			this.ReadLine(lines[i], this.CurrentGameSeed, i);
+		const normalizedLines = joinWrappedPowerLogLines(lines);
+		for (let i = 0; i < normalizedLines.length; i++) {
+			this.ReadLine(normalizedLines[i], this.CurrentGameSeed, i);
 		}
 		this.State.GSState.NodeParser.ClearQueue();
 		this.State.PTLState.NodeParser.ClearQueue();
@@ -170,9 +178,16 @@ export class ReplayParser {
 	Init(): void {
 		console.debug('Calling reset from ReplayParser.init()', '');
 		this.previousTimestamp = '';
+		this.partialLogLine = null;
 	}
 
 	ReadLine(line: string, gameSeed: number, lineIndex: number): void {
+		const resolvedLine = this.resolveWrappedLogLine(line);
+		if (resolvedLine == null) {
+			return;
+		}
+		line = resolvedLine;
+
 		if (gameSeed !== 0) {
 			this.CurrentGameSeed = gameSeed;
 		}
@@ -181,6 +196,7 @@ export class ReplayParser {
 		// be reachable (retained snapshots, parked PTL halves, depth trackers).
 		if (line.includes('GameState') && line.includes('CREATE_GAME')) {
 			this.rewindController.reset();
+			this.partialLogLine = null;
 			this.insideGameResetGS = false;
 			this.insideGameResetPTL = false;
 			this.rewindOriginGS = null;
@@ -593,6 +609,38 @@ export class ReplayParser {
 			console.debug('CREATE_GAME without seed', lines[lines.length - 1]);
 		}
 		return isGameCreation ? -1 : 0;
+	}
+
+	/**
+	 * When the client wraps a long entityName across physical lines, buffer the first fragment
+	 * until the continuation arrives (streaming {@link ReadLine} path).
+	 */
+	private resolveWrappedLogLine(line: string): string | null {
+		const trimmed = line.trim();
+		if (!trimmed.length) {
+			return null;
+		}
+
+		let resolved: string;
+		if (this.partialLogLine != null) {
+			if (!isEntityNameContinuationLine(trimmed)) {
+				this.partialLogLine = null;
+				return null;
+			}
+			resolved = `${this.partialLogLine} ${trimmed}`;
+			this.partialLogLine = null;
+		} else if (!/^D \d/.test(trimmed)) {
+			return null;
+		} else {
+			resolved = trimmed;
+		}
+
+		if (hasUnclosedSquareBrackets(resolved)) {
+			this.partialLogLine = resolved;
+			return null;
+		}
+
+		return resolved;
 	}
 }
 

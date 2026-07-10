@@ -19,3 +19,9 @@ export {
 	trimPowerLogFileContentToLastGame,
 	trimPowerLogLinesToLastGame,
 } from './lib/trim-power-log-last-game';
+export {
+	hasUnclosedSquareBrackets,
+	isEntityNameContinuationLine,
+	joinWrappedPowerLogLines,
+	shouldJoinWrappedPowerLogLine,
+} from './lib/join-wrapped-power-log-lines';
