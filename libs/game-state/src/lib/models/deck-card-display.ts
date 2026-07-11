@@ -1,3 +1,4 @@
+import { CardIds } from '@firestone-hs/reference-data';
 import { DeckCard } from './deck-card';
 
 /**
@@ -6,6 +7,10 @@ import { DeckCard } from './deck-card';
  */
 export function getDisplayCardIdWhenGuessedPoolIsSingleCard(card: DeckCard): string | null {
 	if (card.cardId) {
+		return null;
+	}
+	// Godfrey returns are random among burned cards — never reveal the identity in opponent hand.
+	if (card.creatorCardId === CardIds.GodfreyTheBetrayer_GodfreysAtlasEnchantment_JAIL_509e) {
 		return null;
 	}
 	const pool = card.guessedInfo?.possibleCards;

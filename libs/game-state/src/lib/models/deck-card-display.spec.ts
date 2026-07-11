@@ -37,4 +37,17 @@ describe('getDisplayCardIdWhenGuessedPoolIsSingleCard', () => {
 			),
 		).toBeNull();
 	});
+
+	it('returns null for Godfrey-returned cards even when the burned pool has one card left', () => {
+		expect(
+			getDisplayCardIdWhenGuessedPoolIsSingleCard(
+				DeckCard.create({
+					cardId: '',
+					entityId: 136,
+					creatorCardId: CardIds.GodfreyTheBetrayer_GodfreysAtlasEnchantment_JAIL_509e,
+					guessedInfo: { possibleCards: [CardIds.LotusBookie_JAIL_720] },
+				}),
+			),
+		).toBeNull();
+	});
 });

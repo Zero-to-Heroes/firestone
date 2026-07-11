@@ -273,6 +273,7 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	'azalina-soulsever-deck': 'azalina-soulsever-deck/azalina-soulsever-deck.log',
 	'blood-clone': 'blood-clone/blood-clone.log',
 	'chainbreaker-hogger': 'chainbreaker-hogger/chainbreaker-hogger.log',
+	godfrey: 'godfrey/godfrey.log',
 };
 
 /**

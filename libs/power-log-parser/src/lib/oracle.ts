@@ -154,6 +154,12 @@ export class Oracle {
 				creatorTuple = informantDiscover;
 			}
 		}
+		if (!creatorTuple?.[0] && !entity.CardId?.length) {
+			const godfreyReturn = Oracle.FindGodfreyReturnedCardCreator(gameState, entity, node);
+			if (godfreyReturn) {
+				creatorTuple = godfreyReturn;
+			}
+		}
 		// Shattered hand pieces often omit CREATOR / DISPLAYED_CREATOR; inferring the parent block
 		// would incorrectly attribute the enclosing minion PLAY (e.g. Violet Treasuregill) while the
 		// card was drawn from deck (e.g. Dragonscale Armaments) and split by Shatter. Only use
@@ -167,6 +173,39 @@ export class Oracle {
 			return null;
 		}
 		return creatorTuple;
+	}
+
+	/**
+	 * Godfrey the Betrayer: overdrawn cards return via SETASIDE tokens moved to HAND inside
+	 * JAILFX_Godfrey_CardsInHand_OverrideSpawn with no CREATOR / SHOW_ENTITY. Attribute to Godfrey's Atlas (JAIL_509e).
+	 */
+	private static FindGodfreyReturnedCardCreator(
+		gameState: GameState,
+		entity: FullEntity,
+		node: Node,
+	): [string, number] | null {
+		const subSpell = Oracle.GetActiveSubSpellFromNode(gameState, node);
+		if (subSpell?.Prefab !== 'JAILFX_Godfrey_CardsInHand_OverrideSpawn') {
+			return null;
+		}
+		const controller = entity.GetEffectiveController();
+		const atlasCardId = CardIds.GodfreyTheBetrayer_GodfreysAtlasEnchantment_JAIL_509e;
+		for (const e of gameState.CurrentEntities.values()) {
+			if (e.GetEffectiveController() !== controller) {
+				continue;
+			}
+			if (e.CardId === atlasCardId) {
+				return [atlasCardId, e.Entity];
+			}
+		}
+		return null;
+	}
+
+	private static GetActiveSubSpellFromNode(gameState: GameState, node: Node): SubSpell | null {
+		if (node.Object instanceof TagChange) {
+			return node.Object.SubSpellInEffect;
+		}
+		return gameState.ParserState.CurrentSubSpell?.GetActiveSubSpell() ?? null;
 	}
 
 	/** When shatter pieces omit CREATOR / DISPLAYED_CREATOR, tie them to a known source spell in the graveyard (same controller). */

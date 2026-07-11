@@ -8,7 +8,10 @@ import { CardIds } from '@firestone-hs/reference-data';
 import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 
 export const GodfreytheBetrayer: StaticGeneratingCard & GeneratingCard = {
-	cardIds: [CardIds.GodfreytheBetrayer_JAIL_509],
+	cardIds: [
+		CardIds.GodfreytheBetrayer_JAIL_509,
+		CardIds.GodfreyTheBetrayer_GodfreysAtlasEnchantment_JAIL_509e,
+	],
 	publicCreator: true,
 	dynamicPool: (input: StaticGeneratingCardInput) => {
 		const overdrawnCards = input.inputOptions.deckState.burnedCards;

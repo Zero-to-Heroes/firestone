@@ -761,7 +761,11 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 			cardName = card.cardName;
 		} else if (this._referenceCard?.name?.length) {
 			cardName = this._referenceCard.name;
-		} else if (card.guessedInfo?.possibleCards?.length === 1) {
+		} else if (
+			card.guessedInfo?.possibleCards?.length === 1 &&
+			card.creatorCardId !== CardIds.GodfreyTheBetrayer_GodfreysAtlasEnchantment_JAIL_509e &&
+			!card.creatorCardIds?.includes(CardIds.GodfreyTheBetrayer_GodfreysAtlasEnchantment_JAIL_509e)
+		) {
 			cardName = this.cards.getCard(card.guessedInfo.possibleCards[0])?.name;
 		} else if (card.dredged && (card.lastAffectedByCardIds?.length || card.lastAffectedByCardId)) {
 			const dredgerId = card.lastAffectedByCardIds?.[0] ?? card.lastAffectedByCardId;
