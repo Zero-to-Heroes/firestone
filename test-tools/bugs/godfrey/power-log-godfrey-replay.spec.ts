@@ -95,7 +95,8 @@ describe('Power log replay → GameStateService (Godfrey returned cards pool)', 
 				expect(card.creatorCardId).toBe(GODFREY_ATLAS_CREATOR);
 				expect(getDisplayCardIdWhenGuessedPoolIsSingleCard(card)).toBeNull();
 				const pool = card.guessedInfo?.possibleCards ?? [];
-				expect(pool.length).toBeGreaterThan(0);
+				expect(pool.length).toBe(burnedCardIds.length);
+				expect(pool.sort()).toEqual([...burnedCardIds].sort());
 				const wrongPool = pool.filter((id) => !burnedCardIds.includes(id));
 				expect(wrongPool).toEqual([]);
 			}

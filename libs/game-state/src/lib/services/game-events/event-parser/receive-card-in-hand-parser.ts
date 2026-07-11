@@ -280,7 +280,7 @@ export class ReceiveCardInHandParser implements EventParser {
 		const cardWithGuessedInfo = addGuessInfoToCard(
 			otherCardWithBuffs,
 			creatorCardId,
-			null,
+			creatorEntityId,
 			deck,
 			opponentDeck,
 			currentState,

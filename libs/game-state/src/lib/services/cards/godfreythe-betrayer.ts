@@ -18,7 +18,11 @@ export const GodfreytheBetrayer: StaticGeneratingCard & GeneratingCard = {
 		const deckState = input.inputOptions.deckState;
 		const returnedCardsThatHaveBeenPlayed = deckState.cardsPlayedThisMatch
 			.map((c) => deckState.findCard(c.entityId)?.card)
-			.filter((c) => !!c?.cardId && c.creatorEntityId === input.entityId);
+			.filter(
+				(c) =>
+					!!c?.cardId &&
+					c.creatorCardId === CardIds.GodfreyTheBetrayer_GodfreysAtlasEnchantment_JAIL_509e,
+			);
 
 		// Remove cards that we know have been returned already. Take care of duplicates - if the card has been burned twice,
 		// and the returnedPlayed has been played once, we should still send back the card once.
@@ -38,7 +42,11 @@ export const GodfreytheBetrayer: StaticGeneratingCard & GeneratingCard = {
 		const deckState = input.deckState;
 		const returnedCardsThatHaveBeenPlayed = deckState.cardsPlayedThisMatch
 			.map((c) => deckState.findCard(c.entityId)?.card)
-			.filter((c) => !!c?.cardId && c.creatorEntityId === input.creatorEntityId);
+			.filter(
+				(c) =>
+					!!c?.cardId &&
+					c.creatorCardId === CardIds.GodfreyTheBetrayer_GodfreysAtlasEnchantment_JAIL_509e,
+			);
 
 		// Remove cards that we know have been returned already. Take care of duplicates - if the card has been burned twice,
 		// and the returnedPlayed has been played once, we should still send back the card once.
