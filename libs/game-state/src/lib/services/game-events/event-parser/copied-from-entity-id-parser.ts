@@ -394,6 +394,12 @@ export class CopiedFromEntityIdParser implements EventParser {
 						cardIdToAdd,
 					],
 				});
+				console.debug(
+					'[copied-from-entity] copiedDeckWithKnownCardsInHand',
+					`entityId:${entityId}__`,
+					copiedDeckWithKnownCardsInHand,
+					cardIdToAdd,
+				);
 			}
 		}
 
@@ -422,6 +428,7 @@ export class CopiedFromEntityIdParser implements EventParser {
 						})
 					: card,
 			);
+			console.debug('[copied-from-entity] newOppHand', `entityId:${entityId}__`, newOppHand);
 			result = Object.assign(new GameState(), result, {
 				opponentDeck: opp.update({ hand: newOppHand }),
 			});
@@ -441,6 +448,7 @@ export class CopiedFromEntityIdParser implements EventParser {
 			const deckKey = isPlayer ? 'playerDeck' : 'opponentDeck';
 			const deckState = result[deckKey];
 			const linked = this.linkBidirectionalCopyPair(deckState, entityId, copiedCardEntityId);
+			console.debug('[copied-from-entity] linked', `entityId:${entityId}__`, linked);
 			result = Object.assign(new GameState(), result, {
 				[deckKey]: linked,
 			});
@@ -460,7 +468,8 @@ export class CopiedFromEntityIdParser implements EventParser {
 					card.positionFromTop == null &&
 					!card.entityId &&
 					!card.creatorCardId,
-			) ?? deck.deck.find(
+			) ??
+			deck.deck.find(
 				(card) =>
 					getBaseCardId(card.cardId, this.allCards.getService()) === baseCardId &&
 					!card.entityId &&
@@ -473,10 +482,7 @@ export class CopiedFromEntityIdParser implements EventParser {
 	 * After linking entityId + cardId, drop orphan rows (entityId-only ghosts) and one unlinked deckstring
 	 * duplicate of the same card (empiricReplace may remove the ghost but leave the old padding row).
 	 */
-	private dedupePlayerDeckAfterCopiedFromLink(
-		deck: readonly DeckCard[],
-		linked: DeckCard,
-	): readonly DeckCard[] {
+	private dedupePlayerDeckAfterCopiedFromLink(deck: readonly DeckCard[], linked: DeckCard): readonly DeckCard[] {
 		if (!linked.cardId?.length || linked.entityId == null) {
 			return deck;
 		}
