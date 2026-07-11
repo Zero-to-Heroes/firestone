@@ -272,7 +272,7 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	'triangulate-baking-soda-play': 'triangulate-baking-soda-play/triangulate-baking-soda-play.log',
 	'azalina-soulsever-deck': 'azalina-soulsever-deck/azalina-soulsever-deck.log',
 	'blood-clone': 'blood-clone/blood-clone.log',
-	'chainbreaker-hogger': '../power.log',
+	'chainbreaker-hogger': 'chainbreaker-hogger/chainbreaker-hogger.log',
 };
 
 /**

@@ -4,13 +4,13 @@
  * Fixture: Chmielinho#2928 (player 1). Entity 12 is Chainbreaker Hogger in the initial deck;
  * it is created as FULL_ENTITY with empty CardID, then revealed via SHOW_ENTITY at start of game.
  *
- * Replay uses `test-tools/power.log` as provided (no truncation).
+ * Replay uses `chainbreaker-hogger.log` in this folder (no truncation).
  */
 
 import * as path from 'path';
 import { CardIds } from '@firestone-hs/reference-data';
 
-export const CHAINBREAKER_HOGGER_POWER_LOG_PATH = path.join(__dirname, '..', '..', 'power.log');
+export const CHAINBREAKER_HOGGER_POWER_LOG_PATH = path.join(__dirname, 'chainbreaker-hogger.log');
 
 export const CHAINBREAKER_HOGGER_ENTITY_ID = 12;
 export const CHAINBREAKER_HOGGER_CARD_ID = CardIds.ChainbreakerHogger_JAIL_384;

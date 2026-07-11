@@ -1,6 +1,6 @@
 /**
  * Regression: Entity 12 (Chainbreaker Hogger) must stay linked to JAIL_384 in the player deck
- * after replaying the reporter's full `test-tools/power.log`.
+ * after replaying `chainbreaker-hogger.log`.
  *
  * Bug trigger: `COPIED_FROM_ENTITY_ID` on entity 64 (JAIL_384, opponent deck),
  * copiedCardEntityId=12 — handled by `copied-from-entity-id-parser.ts`.
@@ -29,7 +29,7 @@ import {
 } from './chainbreaker-hogger-power-log-helpers';
 
 describe('Power log replay → Chainbreaker Hogger deck identity (entity 12)', () => {
-	it('fixture: test-tools/power.log contains SHOW_ENTITY revealing entity 12 as JAIL_384', () => {
+	it('fixture: chainbreaker-hogger.log contains SHOW_ENTITY revealing entity 12 as JAIL_384', () => {
 		const logPath = resolvePowerLogPathForSlug('chainbreaker-hogger');
 		expect(logPath).toBe(CHAINBREAKER_HOGGER_POWER_LOG_PATH);
 		requirePowerLogFixtureExists(logPath);
@@ -55,7 +55,7 @@ describe('Power log replay → Chainbreaker Hogger deck identity (entity 12)', (
 	});
 
 	it(
-		"replays test-tools/power.log with deckstring; player deck has no cards without a cardId",
+		'replays chainbreaker-hogger.log with deckstring; player deck has no cards without a cardId',
 		async () => {
 			const logPath = resolvePowerLogPathForSlug('chainbreaker-hogger');
 			const cardsPath = resolveCardsJsonPath();
