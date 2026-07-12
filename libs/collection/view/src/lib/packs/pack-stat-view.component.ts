@@ -32,7 +32,7 @@ export class PackStatViewComponent {
 		// visible icon without the user being able to do anything about it, which is
 		// more annoying than just having an incorrect value of the counter
 		this.nextLegendaryComingSoon = false; //value.nextLegendary <= 10;
-		this.icon = `https://static.firestoneapp.com/cardPacks/256/${value.packType}.png?v=2`;
+		this.icon = `https://static.firestoneapp.com/cardPacks/256/${value.packType}.png?v=3`;
 	}
 
 	_pack: InternalPackInfo;
