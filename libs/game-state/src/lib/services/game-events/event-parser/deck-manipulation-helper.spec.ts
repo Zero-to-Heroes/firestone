@@ -1,7 +1,8 @@
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { DeckCard } from '../../../models/deck-card';
+import { DeckState } from '../../../models/deck-state';
 import { CardIds } from '@firestone-hs/reference-data';
-import { DeckManipulationHelper } from './deck-manipulation-helper';
+import { DeckManipulationHelper, reconcileCardInHandWithDeck } from './deck-manipulation-helper';
 
 describe('DeckManipulationHelper.removeSingleCardFromZone', () => {
 	const testCardId = CardIds.MurlocRaiderLegacy;
@@ -76,5 +77,58 @@ describe('DeckManipulationHelper.removeSingleCardFromZone', () => {
 		expect(removed?.trueEntityId).toBe(80);
 		expect(newZone.length).toBe(1);
 		expect(newZone[0].trueEntityId).toBe(81);
+	});
+});
+
+describe('reconcileCardInHandWithDeck', () => {
+	const allCards = {
+		getCard: (id: string) =>
+			({
+				id,
+				name: 'TestCard',
+				cost: 1,
+				mechanics: [],
+				type: 'Minion',
+				rarity: 'Free',
+			}) as ReturnType<CardsFacadeService['getCard']>,
+		getService: () => allCards as unknown as CardsFacadeService,
+	} as unknown as CardsFacadeService;
+
+	const i18n = { translateString: (key: string) => key } as ILocalizationService;
+	let helper: DeckManipulationHelper;
+
+	beforeEach(() => {
+		helper = new DeckManipulationHelper(allCards, i18n);
+	});
+
+	it('removes known opponent deck copy by cardId on play after hidden draw (trade reveal)', () => {
+		const tradedCardId = CardIds.RustrotViperCore;
+		const tradedEntityId = 21;
+		const opponentDeck = DeckState.create({
+			deck: [
+				DeckCard.create({
+					cardId: tradedCardId,
+					cardName: 'Rustrot Viper',
+					refManaCost: 3,
+				}),
+			],
+			hand: [],
+		});
+		const removedFromHand = DeckCard.create({
+			entityId: tradedEntityId,
+		});
+
+		const result = reconcileCardInHandWithDeck({
+			removedCard: removedFromHand,
+			cardId: tradedCardId,
+			entityId: tradedEntityId,
+			deck: opponentDeck,
+			deckCards: opponentDeck.deck,
+			opponentDeck: DeckState.create({}),
+			helper,
+		});
+
+		expect(result.deckCards.some((c) => c.cardId === tradedCardId)).toBe(false);
+		expect(result.deckCards).toEqual([]);
 	});
 });

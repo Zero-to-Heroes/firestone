@@ -292,12 +292,14 @@ export class CardPlayedFromHandParser implements EventParser {
 					]
 				: playerDeckAfterSpecialCaseUpdate.anachronos;
 		const finalPlayerDeck = playerDeckAfterSpecialCaseUpdate.update({
-			cardsPlayedThisMatch: isCardCountered
-				? playerDeckAfterSpecialCaseUpdate.cardsPlayedThisMatch
-				: ([
-						...playerDeckAfterSpecialCaseUpdate.cardsPlayedThisMatch,
-						newCardPlayedThisMatch,
-					] as readonly ShortCardWithTurn[]),
+			// Not sure the DISGUISED tag will be set - we need some logs to investigate
+			cardsPlayedThisMatch:
+				isCardCountered || cardToAdd.tags?.[GameTag.DISGUISED] === 1
+					? playerDeckAfterSpecialCaseUpdate.cardsPlayedThisMatch
+					: ([
+							...playerDeckAfterSpecialCaseUpdate.cardsPlayedThisMatch,
+							newCardPlayedThisMatch,
+						] as readonly ShortCardWithTurn[]),
 			anachronos: newAnachronos,
 			additionalKnownCardsInHand: playerDeckAfterSpecialCaseUpdate.additionalKnownCardsInHand.filter(
 				(c, i) =>

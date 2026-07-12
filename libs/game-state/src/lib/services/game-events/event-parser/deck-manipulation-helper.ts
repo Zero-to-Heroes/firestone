@@ -765,7 +765,16 @@ export const reconcileCardInHandWithDeck = (input: {
 	const { cardId, entityId, deck, helper } = input;
 	console.debug('[card-played] reconcileCardInHandWithDeck input', `entityId:${entityId}__`, input);
 
-	if (shouldSkipDeckReconciliationForPlayedCard({ ...input, entityId, deckCards })) {
+	// Tradeable cards revealed on trade stay in deck through a hidden re-draw; remove by cardId on play only.
+	const shouldReconcileKnownDeckCopyOnPlay =
+		!removedCard?.cardId &&
+		!!cardId &&
+		deckCards.some((c) => c.cardId === cardId);
+
+	if (
+		shouldSkipDeckReconciliationForPlayedCard({ ...input, entityId, deckCards }) &&
+		!shouldReconcileKnownDeckCopyOnPlay
+	) {
 		console.debug(
 			'[card-played] reconcileCardInHandWithDeck skipping deck reconciliation',
 			`entityId:${entityId}__`,
@@ -836,6 +845,25 @@ export const reconcileCardInHandWithDeck = (input: {
 				removedCardFromDeck?.lastAffectedByCardId,
 				removedCardFromDeck,
 				fallbackCreatorCardId,
+				newDeckAfterReveal,
+			);
+			if (removedCardFromDeck) {
+				if (!removedCard) {
+					removedCard = removedCardFromDeck;
+				}
+				deckCards = newDeckAfterReveal;
+			}
+		} else if (shouldReconcileKnownDeckCopyOnPlay) {
+			const [newDeckAfterReveal, removedCardFromDeck] = helper.removeSingleCardFromZone(
+				deckCards,
+				cardId,
+				null,
+				false,
+			);
+			console.debug(
+				'[card-played] reconcileCardInHandWithDeck removedKnownDeckCopyOnPlay',
+				`entityId:${entityId}__`,
+				removedCardFromDeck,
 				newDeckAfterReveal,
 			);
 			if (removedCardFromDeck) {
