@@ -179,8 +179,6 @@ export const baseCostLessThan =
 
 export const inInitialDeck = (input: SelectorInput): boolean => !isCardCreated(input.deckCard);
 export const notInInitialDeck = (input: SelectorInput): boolean => isCardCreated(input.deckCard);
-// TODO
-export const copiedFromOpponent = (input: SelectorInput): boolean => false;
 
 export const inStartingHand = (input: SelectorInput): boolean =>
 	input.deckState.cardsInStartingHand?.some(
@@ -344,6 +342,7 @@ export const chooseOne = and(
 	not(hasMechanicStr('CHOOSE_THRICE')),
 );
 export const combo = hasMechanic(GameTag.COMBO);
+export const copiedFromOpponent = hasMechanicStr('COPIES_FROM_OPPONENT');
 export const corrupt = hasMechanic(GameTag.CORRUPT);
 export const corrupted = hasMechanic(GameTag.CORRUPTED);
 export const deathrattle = hasMechanic(GameTag.DEATHRATTLE);
