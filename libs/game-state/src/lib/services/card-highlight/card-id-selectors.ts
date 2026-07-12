@@ -32,6 +32,7 @@ import {
 	charge,
 	chooseOne,
 	combo,
+	copiedFromOpponent,
 	corrupt,
 	corrupted,
 	costHealth,
@@ -1882,6 +1883,9 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, beast);
 		case CardIds.HarrowingOx_WW_356:
 			return and(side(inputSide), or(inDeck, inHand, inOther), excavate);
+		case CardIds.TheHarvesterOfEnvy:
+		case CardIds.TheHarvesterOfEnvy_CORE_REV_011:
+			return and(side(inputSide), or(inDeck, inHand), copiedFromOpponent);
 		case CardIds.HatcheryHelper_TLC_233:
 			return and(side(inputSide), or(inDeck, inHand, inPlay), minion, attackLessThan(3));
 		case CardIds.HatchingCeremony_DINO_405:
