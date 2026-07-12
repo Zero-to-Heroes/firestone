@@ -765,11 +765,19 @@ export const reconcileCardInHandWithDeck = (input: {
 	const { cardId, entityId, deck, helper } = input;
 	console.debug('[card-played] reconcileCardInHandWithDeck input', `entityId:${entityId}__`, input);
 
-	// Tradeable cards revealed on trade stay in deck through a hidden re-draw; remove by cardId on play only.
+	// Tradeable cards revealed on trade stay in deck through a hidden re-draw; the leftover deck row
+	// describes the very card being played, so their creator info must match (both absent counts as
+	// a match). Without the creator check, playing an unrelated generated card would remove a known
+	// deck copy that shares its cardId (the generated card never came from the deck).
+	const playedCardCreatorEntityId = removedCard?.creatorEntityId;
+	const playedCardCreatorCardId = input.gameEventCreatorCardId ?? removedCard?.creatorCardId ?? null;
+	const isSameCreatorAsPlayedCard = (c: DeckCard): boolean =>
+		c.creatorEntityId != null && playedCardCreatorEntityId != null
+			? c.creatorEntityId === playedCardCreatorEntityId
+			: (c.creatorCardId ?? null) === playedCardCreatorCardId;
+	const isKnownDeckCopyOfPlayedCard = (c: DeckCard): boolean => c.cardId === cardId && isSameCreatorAsPlayedCard(c);
 	const shouldReconcileKnownDeckCopyOnPlay =
-		!removedCard?.cardId &&
-		!!cardId &&
-		deckCards.some((c) => c.cardId === cardId);
+		!removedCard?.cardId && !!cardId && deckCards.some(isKnownDeckCopyOfPlayedCard);
 
 	if (
 		shouldSkipDeckReconciliationForPlayedCard({ ...input, entityId, deckCards }) &&
@@ -854,12 +862,11 @@ export const reconcileCardInHandWithDeck = (input: {
 				deckCards = newDeckAfterReveal;
 			}
 		} else if (shouldReconcileKnownDeckCopyOnPlay) {
-			const [newDeckAfterReveal, removedCardFromDeck] = helper.removeSingleCardFromZone(
-				deckCards,
-				cardId,
-				null,
-				false,
-			);
+			// Remove the exact row that matched the heuristic (same cardId AND same creator), so we
+			// never match on one row and remove another.
+			const matchIndex = deckCards.findIndex(isKnownDeckCopyOfPlayedCard);
+			const removedCardFromDeck = matchIndex >= 0 ? deckCards[matchIndex] : undefined;
+			const newDeckAfterReveal = deckCards.filter((_, i) => i !== matchIndex);
 			console.debug(
 				'[card-played] reconcileCardInHandWithDeck removedKnownDeckCopyOnPlay',
 				`entityId:${entityId}__`,

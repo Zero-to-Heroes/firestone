@@ -131,4 +131,71 @@ describe('reconcileCardInHandWithDeck', () => {
 		expect(result.deckCards.some((c) => c.cardId === tradedCardId)).toBe(false);
 		expect(result.deckCards).toEqual([]);
 	});
+
+	it('keeps a known deck copy when an unrelated generated card with the same cardId is played', () => {
+		// Amalgam rewind non-reg scenario: entity 29 is a known Nightmare Fuel copy in the deck
+		// (revealed via COPIED_FROM_ENTITY_ID), while the played card is a *generated* Nightmare Fuel
+		// (created into hand, never came from the deck). The deck row must stay.
+		const sharedCardId = 'EDR_528';
+		const knownDeckCopy = DeckCard.create({
+			cardId: sharedCardId,
+			cardName: 'Nightmare Fuel',
+			entityId: 29,
+			refManaCost: 1,
+		});
+		const opponentDeck = DeckState.create({
+			deck: [knownDeckCopy],
+			hand: [],
+		});
+		const generatedCardInHand = DeckCard.create({
+			entityId: 162,
+			creatorCardId: 'SOME_CREATOR',
+			creatorEntityId: 25,
+		});
+
+		const result = reconcileCardInHandWithDeck({
+			removedCard: generatedCardInHand,
+			cardId: sharedCardId,
+			entityId: 162,
+			deck: opponentDeck,
+			deckCards: opponentDeck.deck,
+			opponentDeck: DeckState.create({}),
+			helper,
+		});
+
+		expect(result.deckCards.some((c) => c.cardId === sharedCardId)).toBe(true);
+		expect(result.deckCards.length).toBe(1);
+	});
+
+	it('removes the known deck copy when the played card shares the same creator (generated then traded back)', () => {
+		const sharedCardId = CardIds.RustrotViperCore;
+		const creatorCardId = 'SOME_GENERATOR';
+		const knownDeckCopy = DeckCard.create({
+			cardId: sharedCardId,
+			cardName: 'Rustrot Viper',
+			creatorCardId: creatorCardId,
+			refManaCost: 3,
+		});
+		const opponentDeck = DeckState.create({
+			deck: [knownDeckCopy],
+			hand: [],
+		});
+		const removedFromHand = DeckCard.create({
+			entityId: 21,
+			creatorCardId: creatorCardId,
+		});
+
+		const result = reconcileCardInHandWithDeck({
+			removedCard: removedFromHand,
+			cardId: sharedCardId,
+			entityId: 21,
+			deck: opponentDeck,
+			deckCards: opponentDeck.deck,
+			opponentDeck: DeckState.create({}),
+			helper,
+		});
+
+		expect(result.deckCards.some((c) => c.cardId === sharedCardId)).toBe(false);
+		expect(result.deckCards).toEqual([]);
+	});
 });
