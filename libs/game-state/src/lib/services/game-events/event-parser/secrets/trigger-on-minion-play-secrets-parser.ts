@@ -110,6 +110,16 @@ export class TriggerOnMinionPlaySecretsParser implements EventParser {
 			secretsWeCantRuleOut.push(CardIds.Zombeeees_ImprovedZombeeeesToken);
 		}
 
+		if (
+			additionalInfo?.minionsWillDie
+				?.map((minion) => minion.entityId)
+				?.includes(additionalInfo?.secretWillTrigger?.reactingToEntityId ?? 0)
+		) {
+			secretsWeCantRuleOut.push(CardIds.MirrorEntity);
+			secretsWeCantRuleOut.push(CardIds.MirrorEntityLegacy);
+			secretsWeCantRuleOut.push(CardIds.MirrorEntityVanilla);
+		}
+
 		const enemyBoard = (isMinionPlayedByPlayer ? currentState.playerDeck : currentState.opponentDeck).board;
 		if (enemyBoard.length < 3) {
 			secretsWeCantRuleOut.push(CardIds.SacredTrial);
