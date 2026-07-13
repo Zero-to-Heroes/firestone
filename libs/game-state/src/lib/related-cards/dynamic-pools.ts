@@ -103,7 +103,6 @@ const getDynamicRelatedCardIdsInternal = (
 	};
 
 	const dynamicPoolImpl = cardsInfoCache[cardId];
-	console.debug('[debug] dynamicPoolImpl', cardId, dynamicPoolImpl, inputOptions);
 	if (hasDynamicPool(dynamicPoolImpl)) {
 		const result = dynamicPoolImpl.dynamicPool({
 			cardId,
