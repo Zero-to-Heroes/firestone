@@ -1,6 +1,6 @@
 import { AllCardsService, CardIds, GameFormat, GameTag, GameType, Zone } from '@firestone-hs/reference-data';
 import { HighlightSide } from '@firestone/shared/framework/core';
-import { DeckCard, GuessedInfo } from '../../models/deck-card';
+import { DeckCard, GuessedInfo, StoredInformation } from '../../models/deck-card';
 import { DeckState } from '../../models/deck-state';
 import { GameState } from '../../models/game-state';
 import { Metadata } from '../../models/metadata';
@@ -171,4 +171,16 @@ export interface OnChosenEntityInput {
 	currentState: GameState;
 	gameEvent: GameEvent;
 	allCards: AllCardsService;
+}
+
+export interface OnCardPlayedCard extends Card {
+	onCardPlayed: (input: OnCardPlayedInput) => StoredInformation | null;
+}
+export const hasOnCardPlayed = (card: Card): card is OnCardPlayedCard =>
+	(card as OnCardPlayedCard)?.onCardPlayed !== undefined;
+export interface OnCardPlayedInput {
+	card: DeckCard;
+	deckState: DeckState;
+	opponentDeckState: DeckState;
+	gameState: GameState;
 }

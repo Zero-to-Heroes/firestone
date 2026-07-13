@@ -148,18 +148,22 @@ export class CardPlayedFromHandParser implements EventParser {
 		const cardWithInfo = cardWithZone.update({
 			// When dealing with the opponent, the creator card id is hidden / removed when put in deck / drawn to
 			// avoid info leaks, so if the info is present in the event, we add it
+			trueEntityId: cardWithZone?.trueEntityId ?? entityId,
 			creatorCardId: cardWithZone?.creatorCardId ?? gameEvent.additionalData.creatorCardId,
 			creatorEntityId: cardWithZone?.creatorEntityId ?? gameEvent.additionalData.creatorEntityId,
 			storedInformation: storeInformationOnCardPlayed(cardWithZone.cardId, gameEvent.additionalData.tags, {
 				manaLeft: deck.manaLeft,
+				card: cardWithZone,
 				deckState: deck,
+				opponentDeckState: opponentDeck,
+				gameState: currentState,
 				gameTagTurnNumber: currentState.gameTagTurnNumber,
 				targetCardId: gameEvent.additionalData.targetCardId,
 				targetEntityId: gameEvent.additionalData.targetEntityId,
 			}),
 			tags: toTagsObject(gameEvent.additionalData.tags),
 		});
-		console.debug('cardWithInfo', `entityId:${cardWithInfo.entityId}__`, cardWithInfo, gameEvent);
+		// console.debug('cardWithInfo', `entityId:${cardWithInfo.entityId}__`, cardWithInfo, gameEvent);
 		const cardToAdd =
 			isCardCountered && additionalInfo?.secretWillTrigger?.cardId === CardIds.OhMyYogg
 				? // Since Yogg transforms the card

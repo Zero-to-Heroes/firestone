@@ -26,7 +26,7 @@ import { GameState } from '../models/game-state';
 import { DUAL_CLASS_ARENA_SCENARIO_ID, Metadata } from '../models/metadata';
 import { hasCorrectClass } from '../related-cards/dynamic-pools';
 import { getCurrentExcavateTreasuresPool } from '../related-cards/excavate-treasures';
-import { hasGeneratingCard } from './cards/_card.type';
+import { hasGeneratingCard, hasOnCardPlayed } from './cards/_card.type';
 import { cardsInfoCache } from './cards/_mapping';
 import { filterCards } from './cards/utils';
 import { EntityLike, hasTag } from './parser-entity-utils';
@@ -159,12 +159,15 @@ export const getCardId = (
 export const storeInformationOnCardPlayed = (
 	cardId: string,
 	tags: readonly { Name: GameTag; Value: number }[],
-	options?: {
-		manaLeft?: number | null;
-		deckState?: DeckState;
-		gameTagTurnNumber?: number;
-		targetCardId?: string | null;
-		targetEntityId?: number | null;
+	options: {
+		card: DeckCard;
+		deckState: DeckState;
+		opponentDeckState: DeckState;
+		gameState: GameState;
+		manaLeft: number | null;
+		gameTagTurnNumber: number;
+		targetCardId: string | null;
+		targetEntityId: number | null;
 	},
 ): StoredInformation | null => {
 	let result: StoredInformation | null = null;
@@ -189,6 +192,16 @@ export const storeInformationOnCardPlayed = (
 				gameTagTurnNumberPlayed: options?.gameTagTurnNumber,
 			};
 			break;
+		default:
+			const cardImpl = cardsInfoCache[cardId];
+			if (cardImpl && hasOnCardPlayed(cardImpl) && !!options) {
+				result = cardImpl.onCardPlayed?.({
+					card: options.card,
+					deckState: options.deckState,
+					opponentDeckState: options.opponentDeckState,
+					gameState: options.gameState,
+				});
+			}
 	}
 
 	const hasTargetInfo = !!options?.targetCardId || (options?.targetEntityId != null && options.targetEntityId > 0);

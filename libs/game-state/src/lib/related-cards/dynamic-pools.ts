@@ -67,7 +67,6 @@ export const getDynamicRelatedCardIds = (
 		validArenaPool: readonly string[];
 	},
 ): readonly string[] | { override: true; cards: readonly string[] } => {
-	console.debug('[debug] building related card ids 3');
 	const result = getDynamicRelatedCardIdsInternal(cardId, entityId, allCards, inputOptions);
 
 	const refCard = allCards.getCard(cardId);
@@ -98,7 +97,6 @@ const getDynamicRelatedCardIdsInternal = (
 		validArenaPool: readonly string[];
 	},
 ): readonly string[] | { override: true; cards: readonly string[] } => {
-	console.debug('[debug] building related card ids 4');
 	const options = {
 		...inputOptions,
 		initialDecklist: inputOptions.deckState?.deckList?.map((c) => c.cardId) ?? [],

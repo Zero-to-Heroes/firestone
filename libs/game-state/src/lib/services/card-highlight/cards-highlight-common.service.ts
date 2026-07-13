@@ -234,18 +234,6 @@ export abstract class CardsHighlightCommonService {
 		// per-card-module relatedCardIds field removed from game-state — merge with reference data.
 		const fromDeck = card?.relatedCardIds?.length ? card.relatedCardIds : [];
 		const existingRelatedCardIds = [...fromDeck, ...fromReference.filter((id) => !fromDeck.includes(id))];
-		console.debug(
-			'[debug] building related card ids',
-			cardId,
-			entityId,
-			card?.trueEntityId,
-			existingRelatedCardIds,
-			deck,
-			updatedMetadata,
-			this.allCards,
-			gameState,
-			validArenaPool,
-		);
 		const relatedCardIds = buildContextRelatedCardIds(
 			cardId,
 			entityId,

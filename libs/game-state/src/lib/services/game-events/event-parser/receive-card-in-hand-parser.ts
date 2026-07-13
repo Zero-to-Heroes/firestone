@@ -538,19 +538,6 @@ const guessCardId = (
 	}
 
 	switch (creatorCardId) {
-		case CardIds.Repackage_RepackagedBoxToken_TOY_879t:
-			if (true) {
-				const existingBox: DeckCard | undefined = deckState.otherZone.find(
-					(c) => Math.abs(c.entityId) === creatorEntityId,
-				);
-				const guessedCardId = existingBox?.relatedCardIds?.[0];
-				if (guessedCardId) {
-					// FIXME: didn't want to have to handle a full DeckState return for this
-					(existingBox as any).relatedCardIds = existingBox.relatedCardIds.slice(1);
-					return guessedCardId;
-				}
-			}
-			break;
 		case CardIds.AstralVigilant_GDB_461:
 			return deckState.cardsPlayedThisMatch
 				.map((c) => getProcessedCard(c.cardId, c.entityId, deckState, allCards))

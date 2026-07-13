@@ -37,7 +37,6 @@ export const buildContextRelatedCardIds = (
 					.filter((c) => c !== cardId && !allCards.getCard(c).isCoin) ?? []
 			);
 		default:
-			console.debug('[debug] building related card ids 2');
 			const dynamicCards = getDynamicRelatedCardIds(cardId, entityId, allCards.getService(), {
 				trueEntityId: trueEntityId,
 				format: metaData.formatType,
@@ -45,7 +44,7 @@ export const buildContextRelatedCardIds = (
 				scenarioId: metaData.scenarioId,
 				currentClass: heroClass ? CardClass[heroClass] : '',
 				deckState: deckState,
-				opponentDeckState: deckState.isOpponent ? deckState : gameState.opponentDeck,
+				opponentDeckState: deckState === gameState.opponentDeck ? gameState.playerDeck : gameState.opponentDeck,
 				gameState: gameState,
 				validArenaPool: validArenaPool,
 			});

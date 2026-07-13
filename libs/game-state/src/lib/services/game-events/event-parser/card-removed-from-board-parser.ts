@@ -1,8 +1,5 @@
-import { CardIds } from '@firestone-hs/reference-data';
-
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DeckCard } from '../../../models/deck-card';
-import { DeckState } from '../../../models/deck-state';
 import { GameState } from '../../../models/game-state';
 import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
@@ -51,68 +48,10 @@ export class CardRemovedFromBoardParser implements EventParser {
 		const newState = currentState.update({
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
 		});
-		const enhancedState = enhanceCardInDeck(
-			cardId,
-			entityId,
-			gameEvent.additionalData.removedByCardId,
-			gameEvent.additionalData.removedByEntityId,
-			newState,
-		);
-		// console.debug('returning enhanced state', enhancedState);
-		return enhancedState;
+		return newState;
 	}
 
 	event(): string {
 		return GameEvent.CARD_REMOVED_FROM_BOARD;
 	}
 }
-
-const enhanceCardInDeck = (
-	cardId: string,
-	entityId: number,
-	removedByCardId: string,
-	removedByEntityId: number,
-	currentState: GameState,
-): GameState => {
-	const isRemovedByPlayer = currentState.playerDeck.otherZone.some((c) => Math.abs(c.entityId) === removedByEntityId);
-	// console.debug('removal source', isRemovedByPlayer, removedByCardId, removedByEntityId);
-	switch (removedByCardId) {
-		// case CardIds.Repackage_TOY_879:
-		// 	const newDeck = enhanceCardInDeckWithRepackage(
-		// 		// We create the card in the opponent's deck
-		// 		isRemovedByPlayer ? currentState.opponentDeck : currentState.playerDeck,
-		// 		cardId,
-		// 		entityId,
-		// 		removedByCardId,
-		// 		removedByEntityId,
-		// 	);
-		// 	// console.debug('enhanced deck', newDeck);
-		// 	return currentState.update({
-		// 		[isRemovedByPlayer ? 'opponentDeck' : 'playerDeck']: newDeck,
-		// 	});
-		default:
-			return currentState;
-	}
-};
-
-const enhanceCardInDeckWithRepackage = (
-	deck: DeckState,
-	cardId: string,
-	entityId: number,
-	removedByCardId: string,
-	removedByEntityId: number,
-): DeckState => {
-	const repackageBox = deck.deck
-		.filter((card) => card.cardId === CardIds.Repackage_RepackagedBoxToken_TOY_879t)
-		.sort((a, b) => b.entityId - a.entityId)[0];
-	if (repackageBox) {
-		const updatedBox = repackageBox.update({
-			relatedCardIds: [...(repackageBox.relatedCardIds || []), cardId],
-		});
-		const newDeck = deck.deck.map((card) => (card.entityId === repackageBox.entityId ? updatedBox : card));
-		return deck.update({
-			deck: newDeck,
-		});
-	}
-	return deck;
-};

@@ -739,7 +739,6 @@ const internalGiftCreators = [
 	CardIds.Renew_BT_252,
 	CardIds.RenoLoneRanger_NatureBullet_WW_0700p5,
 	CardIds.RenounceDarkness,
-	CardIds.Repackage_RepackagedBoxToken_TOY_879t,
 	CardIds.ResizingPouch,
 	CardIds.ResortValet_VAC_432,
 	CardIds.ReturnPolicy_MIS_102,
