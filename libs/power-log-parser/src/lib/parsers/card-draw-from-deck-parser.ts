@@ -10,7 +10,6 @@ import type { StateFacade } from '../state/state-facade';
 
 const SHOULD_USE_ADVANCED_PREDICTION_FOR_CARD_DRAW: string[] = [
 	CardIds.SuspiciousAlchemist_AMysteryEnchantment,
-	CardIds.DeathBlossomWhomper,
 	CardIds.Mimicry_EDR_522,
 ];
 

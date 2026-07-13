@@ -1113,8 +1113,6 @@ export const cardIdSelector = (
 			return and(side(inputSide), inDeck, minion, deathrattle);
 		case CardIds.DealWithADevil:
 			return and(side(inputSide), inDeck, minion);
-		case CardIds.DeathBlossomWhomper:
-			return and(side(inputSide), inDeck, minion, deathrattle);
 		case CardIds.Deathchiller_RLK_083:
 		// Deathchiller: After you cast a spell, deal 1 damage to two random enemies.
 		case CardIds.Deathchiller_CORE_RLK_083:

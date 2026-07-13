@@ -1595,8 +1595,7 @@ export class Oracle {
 				} else if (
 					action.TriggerKeyword === (GameTag.DEATHRATTLE as number) &&
 					actionEntity != null &&
-					(actionEntity.CardId === CardIds.DeathBlossomWhomper ||
-						actionEntity.CardId === CardIds.GemstoneHoarder_CATA_897)
+					actionEntity.CardId === CardIds.GemstoneHoarder_CATA_897
 				) {
 					return Oracle.predictGemstoneHoarderOrDeathBlossomLinkedCardId(gameState, actionEntity);
 				} else if (actionEntity?.CardId === CardIds.TwistReality_ChaoticShuffleCopyEnchantment_TTN_002t21e) {
@@ -2077,10 +2076,7 @@ export class Oracle {
 						const pickedEntity = gameState.CurrentEntities.get(lastJoust.Data);
 						return pickedEntity?.CardId ?? null;
 					}
-				} else if (
-					actionEntity.CardId === CardIds.DeathBlossomWhomper ||
-					actionEntity.CardId === CardIds.GemstoneHoarder_CATA_897
-				) {
+				} else if (actionEntity.CardId === CardIds.GemstoneHoarder_CATA_897) {
 					return Oracle.predictGemstoneHoarderOrDeathBlossomLinkedCardId(gameState, actionEntity);
 				}
 			}

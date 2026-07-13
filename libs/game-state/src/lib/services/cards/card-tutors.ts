@@ -77,7 +77,6 @@ const internalTutors = [
 	CardIds.Darkbomb,
 	CardIds.DaydreamingPixie_EDR_530,
 	CardIds.DeadRinger,
-	CardIds.DeathBlossomWhomper,
 	CardIds.DeepwaterEvoker,
 	CardIds.DigForTreasure_TOY_510,
 	CardIds.DirdraRebelCaptain_GDB_117,

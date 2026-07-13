@@ -61,6 +61,7 @@ export class CardRevealedParser implements ActionParser {
 		}
 		const creatorEntityCardId = creatorEntity?.CardId ?? null;
 		const originEntityCardId = originEntity?.CardId ?? null;
+		const originEntityEntityId = originEntity?.Id ?? null;
 
 		if (
 			fullEntity.GetZone() === (Zone.REMOVEDFROMGAME as number) &&
@@ -95,6 +96,7 @@ export class CardRevealedParser implements ActionParser {
 				GameEventHelper.CreateProvider('CARD_REVEALED', cardId, controllerId, fullEntity.Id, this.StateFacade, {
 					CreatorCardId: creatorEntityCardId,
 					OriginEntityCardId: originEntityCardId,
+					OriginEntityEntityId: originEntityEntityId,
 					MercenariesExperience: mercXp,
 					MercenariesEquipmentId: mercEquipmentId,
 					RevealedFromBlock: revealedFromBlock,

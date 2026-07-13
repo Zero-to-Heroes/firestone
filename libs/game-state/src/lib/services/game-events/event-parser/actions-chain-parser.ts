@@ -29,6 +29,7 @@ export class ActionsChainParser implements EventParser {
 		GameEvent.GAME_START,
 		GameEvent.LINKED_ENTITY,
 		GameEvent.MINION_ON_BOARD_ATTACK_UPDATED,
+		GameEvent.POWER_TRIGGERED_END,
 		GameEvent.RECEIVE_CARD_IN_HAND,
 		GameEvent.SPECIAL_TARGET,
 		GameEvent.SUB_SPELL_END,
@@ -82,7 +83,7 @@ export class ActionsChainParser implements EventParser {
 		const chainParsers = this.chainParser[gameEvent.type] ?? [];
 		let newState = currentState;
 		for (const chainParser of chainParsers) {
-			console.debug('[lady-azshara] chainParser', chainParser);
+			console.debug('[debug] chainParser', chainParser);
 			newState = await chainParser.parse(newState, this.events);
 		}
 		return newState;

@@ -109,6 +109,7 @@ export { DalaranChampion } from './dalaran-champion';
 export { DarkBribe } from './dark-bribe';
 export { DarkEmbrace } from './dark-embrace';
 export { DarkPeddler } from './dark-peddler';
+export { DeathBlossomWhomper } from './death-blossom-whompers';
 export { DeathsAdvance } from './deaths-advance';
 export { DeathwingWorldbreaker } from './deathwing-worldbreaker';
 export { DeepSpaceCurator } from './deep-space-curator';

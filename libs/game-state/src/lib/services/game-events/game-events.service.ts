@@ -528,6 +528,7 @@ export class GameEvents {
 					GameEvent.build(GameEvent.CARD_REVEALED, gameEvent, {
 						creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
 						originEntityCardId: gameEvent.Value.AdditionalProps.OriginEntityCardId,
+						originEntityEntityId: gameEvent.Value.AdditionalProps.OriginEntityEntityId,
 						revealedFromBlock: gameEvent.Value.AdditionalProps.RevealedFromBlock,
 						indexInBlock: gameEvent.Value.AdditionalProps.IndexInBlock,
 						cost: gameEvent.Value.AdditionalProps.Cost,
