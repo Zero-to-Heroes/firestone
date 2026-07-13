@@ -35,6 +35,7 @@ export { AssemblyLine } from './assembly-line';
 export { AyaLotusKingpin } from './aya-lotus-kingpin';
 export { AzalinaSoulsever } from './azalina-soulsever';
 export { AzsharasTriumph } from './azshara-triumph';
+export { BackupTuningFork } from './backup-tuning-fork';
 export { BalefulBlazer } from './baleful-blazer';
 export { BallandChain } from './balland-chain';
 export { BarakKodobane } from './barak-kodobane';
