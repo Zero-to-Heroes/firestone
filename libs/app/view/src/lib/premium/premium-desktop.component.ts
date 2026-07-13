@@ -58,7 +58,7 @@ import { BehaviorSubject, Observable, combineLatest, filter, shareReplay, takeUn
 						</div>
 					</div>
 				</div>
-				<div class="discount-banner">
+				<!-- <div class="discount-banner">
 					{{ discountBannerTextYearly }}
 					<pre
 						class="code"
@@ -67,7 +67,7 @@ import { BehaviorSubject, Observable, combineLatest, filter, shareReplay, takeUn
 					>
 						<div class="copy-icon" inlineSVG="assets/svg/copy.svg"></div><span>{{couponCode}}</span>
 					</pre>
-				</div>
+				</div> -->
 				<!-- <div
 					class="discount-banner"
 					*ngIf="(possibleChineseUser$ | async) === false && (billingPeriodicity$ | async) === 'yearly'"
