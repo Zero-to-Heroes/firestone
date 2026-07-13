@@ -27,7 +27,6 @@ class DeathBlossomWhomperChainParser implements ActionChainParser {
 			return currentState;
 		}
 
-		console.debug('[debug] lastEvent', lastEvent, new Error().stack);
 		const [cardId, controllerId, localPlayer, entityId] = lastEvent!.parse();
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		if (isPlayer) {
@@ -37,7 +36,6 @@ class DeathBlossomWhomperChainParser implements ActionChainParser {
 		const cardRevealedEvent = reversedEvents.find(
 			(e) => e.type === GameEvent.CARD_REVEALED && e.additionalData?.originEntityEntityId === entityId,
 		);
-		console.debug('[debug] cardRevealedEvent', cardRevealedEvent);
 		if (!cardRevealedEvent) {
 			return currentState;
 		}
@@ -49,14 +47,12 @@ class DeathBlossomWhomperChainParser implements ActionChainParser {
 				e.entityId === cardRevealedEntityId &&
 				e.additionalData.revealed === true,
 		);
-		console.debug('[debug] entityUpdateEvent', entityUpdateEvent);
 		if (!entityUpdateEvent) {
 			return currentState;
 		}
 
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const drawnCard = deck.hand.find((e) => e.lastAffectedByEntityId === entityId);
-		console.debug('[debug] drawnCard', drawnCard);
 		if (!drawnCard) {
 			return currentState;
 		}
@@ -66,7 +62,6 @@ class DeathBlossomWhomperChainParser implements ActionChainParser {
 			cardName: this.allCards.getCard(entityUpdateEvent.cardId)?.name,
 			refManaCost: this.allCards.getCard(entityUpdateEvent.cardId)?.cost,
 		});
-		console.debug('[debug] newCard', newCard);
 		const newHand = deck.hand.map((e) => (e.entityId === newCard.entityId ? newCard : e));
 
 		const newDeck = deck.update({ hand: newHand });

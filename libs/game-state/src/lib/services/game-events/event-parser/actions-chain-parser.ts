@@ -83,7 +83,6 @@ export class ActionsChainParser implements EventParser {
 		const chainParsers = this.chainParser[gameEvent.type] ?? [];
 		let newState = currentState;
 		for (const chainParser of chainParsers) {
-			console.debug('[debug] chainParser', chainParser);
 			newState = await chainParser.parse(newState, this.events);
 		}
 		return newState;

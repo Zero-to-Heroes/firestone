@@ -276,6 +276,7 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	'chronogor-stolen-minion': 'chronogor-stolen-minion/chronogor-stolen-minion.log',
 	godfrey: 'godfrey/godfrey.log',
 	'blood-doctor-thalena': 'blood-doctor-thalena/blood-doctor-thalena.log',
+	'repackage-box': 'repackage-box/repackage-box.log',
 };
 
 /**

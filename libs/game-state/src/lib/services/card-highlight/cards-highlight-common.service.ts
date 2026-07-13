@@ -23,7 +23,7 @@ import { VisualDeckCard } from '../../models/visual-deck-card';
 import { buildContextRelatedCardIds } from '../../related-cards/related-cards';
 import { hasSelector } from '../cards/_card.type';
 import { getCardImpl } from '../cards/get-card-impl';
-import { cardsMapping, hasGetRelatedCards } from '../cards/global/_registers';
+import { cardsMapping, GlobalHighlightCardOptions, hasGetRelatedCards } from '../cards/global/_registers';
 import { getSelectorsForArenaDraft } from './arena-draft';
 import { cardIdSelectorSort } from './card-id-selector-sort';
 import { cardIdSelector } from './card-id-selectors';
@@ -158,6 +158,7 @@ export abstract class CardsHighlightCommonService {
 		cardId: string,
 		side: HighlightSide,
 		gameTypeOverride: GameType | null = null,
+		options: GlobalHighlightCardOptions,
 		curatedPools?: {
 			readonly arena: readonly string[];
 		},
@@ -172,7 +173,7 @@ export abstract class CardsHighlightCommonService {
 		if (side === 'player' || side === 'opponent') {
 			const cardImpl = cardsMapping[cardId];
 			if (hasGetRelatedCards(cardImpl)) {
-				const result = cardImpl.getRelatedCards(entityId, side, gameState, this.allCards);
+				const result = cardImpl.getRelatedCards(entityId, side, gameState, this.allCards, options);
 				if (result != null) {
 					// If it's a string[], return it directly
 					if (Array.isArray(result) && typeof result[0] === 'string') {
@@ -233,9 +234,22 @@ export abstract class CardsHighlightCommonService {
 		// per-card-module relatedCardIds field removed from game-state — merge with reference data.
 		const fromDeck = card?.relatedCardIds?.length ? card.relatedCardIds : [];
 		const existingRelatedCardIds = [...fromDeck, ...fromReference.filter((id) => !fromDeck.includes(id))];
+		console.debug(
+			'[debug] building related card ids',
+			cardId,
+			entityId,
+			card?.trueEntityId,
+			existingRelatedCardIds,
+			deck,
+			updatedMetadata,
+			this.allCards,
+			gameState,
+			validArenaPool,
+		);
 		const relatedCardIds = buildContextRelatedCardIds(
 			cardId,
 			entityId,
+			card?.trueEntityId,
 			existingRelatedCardIds,
 			deck,
 			updatedMetadata,

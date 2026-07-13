@@ -80,6 +80,7 @@ export interface StaticGeneratingCardInput {
 	entityId: number;
 	allCards: AllCardsService;
 	inputOptions: {
+		trueEntityId: number | null | undefined;
 		format: GameFormat;
 		gameType: GameType;
 		scenarioId: number;

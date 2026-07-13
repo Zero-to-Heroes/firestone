@@ -68,6 +68,7 @@ const resolveWingPoolCost = (
 					cardId: referenceCardId,
 					allCards: input.allCards,
 					inputOptions: {
+						trueEntityId: input.card.trueEntityId,
 						format: input.gameState.metadata.formatType,
 						gameType: input.gameState.metadata.gameType,
 						scenarioId: input.gameState.metadata.scenarioId,

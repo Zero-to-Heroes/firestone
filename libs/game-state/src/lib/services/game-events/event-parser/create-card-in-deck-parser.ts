@@ -213,6 +213,7 @@ export class CreateCardInDeckParser implements EventParser {
 				validArenaPool: this.arenaRefService.validDiscoveryPool$$.value ?? [],
 			},
 		);
+		console.debug('[debug] cardWithGuessInfo', `entityId:${card.entityId}__`, cardWithGuessInfo, gameEvent);
 
 		// console.debug('[create-card-in-deck]', 'adding card', card, gameEvent);
 

@@ -3,6 +3,7 @@ import { HighlightSide, ICardsHighlightService } from '@firestone/shared/framewo
 
 import { GameType } from '@firestone-hs/reference-data';
 import { DeckCard } from '../../models/deck-card';
+import { GlobalHighlightCardOptions } from '../cards/global/_registers';
 import { Handler, SelectorOptions } from './cards-highlight-common.service';
 import { CardsHighlightService } from './cards-highlight.service';
 
@@ -63,15 +64,16 @@ export class CardsHighlightFacadeService implements ICardsHighlightService {
 	}
 
 	getGlobalRelatedCards(
-		entityId,
+		entityId: number,
 		cardId: string,
 		side: HighlightSide,
 		gameTypeOverride: GameType | null = null,
+		options: GlobalHighlightCardOptions,
 		curatedPools?: {
 			readonly arena: readonly string[];
 		},
 	): readonly string[] {
-		return this.service.getGlobalRelatedCards(entityId, cardId, side, gameTypeOverride, curatedPools);
+		return this.service.getGlobalRelatedCards(entityId, cardId, side, gameTypeOverride, options, curatedPools);
 	}
 
 	onMouseLeave(cardId: string) {

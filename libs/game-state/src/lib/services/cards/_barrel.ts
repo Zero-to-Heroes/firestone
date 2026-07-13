@@ -324,6 +324,7 @@ export { ReleasetheBeasts } from './releasethe-beasts';
 export { RelicMiner } from './relic-miner';
 export { Reminisce } from './reminisce';
 export { RenoLoneRangerNatureBullet } from './reno-lone-ranger-nature-bullet';
+export { Repackage, RepackagedBox } from './repackage';
 export { ReplicatingSpore } from './replicating-spore';
 export { ReplicatorInator } from './replicator-inator';
 export { ResortValet } from './resort-valet';

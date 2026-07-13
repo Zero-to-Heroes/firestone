@@ -493,9 +493,10 @@ export class DeckCardComponent extends AbstractSubscriptionComponent implements 
 			this.cardId,
 			this._side,
 			this.gameTypeOverride,
+			{ trueEntityId: this.card$$.value.trueEntityId },
 			{ arena: validArenaPool },
 		);
-		// console.debug('globalHighlights', this.cardId, globalHighlights);
+		console.debug('[debug] globalHighlights', this.cardId, globalHighlights, this.card$$.value);
 		if (!!globalHighlights?.length) {
 			const sort = relatedCardIdsSelectorSort(this.cardId, this.cards);
 			this.relatedCardIds = sort == null ? globalHighlights : [...globalHighlights].sort(sort);

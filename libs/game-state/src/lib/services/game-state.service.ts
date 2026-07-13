@@ -616,7 +616,10 @@ export class GameStateService {
 				gameEvent.cardId,
 				`entityId:${gameEvent.entityId}_`,
 				(gameEvent as MinionsDiedEvent)?.additionalData?.deadMinions?.map((m) => `entityId:${m.EntityId}_`),
-				`found?=${currentState.opponentDeck.deck.filter((e) => e.cardId === CardIds.DukeOfBelow_CATA_493).length}`,
+				`found?=${currentState.opponentDeck.deck.filter((e) => e.cardId === CardIds.Repackage_RepackagedBoxToken_TOY_879t).length}`,
+				currentState.opponentDeck.deck.filter(
+					(e) => e.cardId === CardIds.Repackage_RepackagedBoxToken_TOY_879t,
+				),
 				currentState,
 				gameEvent,
 			);

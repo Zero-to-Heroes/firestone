@@ -77,19 +77,19 @@ const enhanceCardInDeck = (
 	const isRemovedByPlayer = currentState.playerDeck.otherZone.some((c) => Math.abs(c.entityId) === removedByEntityId);
 	// console.debug('removal source', isRemovedByPlayer, removedByCardId, removedByEntityId);
 	switch (removedByCardId) {
-		case CardIds.Repackage_TOY_879:
-			const newDeck = enhanceCardInDeckWithRepackage(
-				// We create the card in the opponent's deck
-				isRemovedByPlayer ? currentState.opponentDeck : currentState.playerDeck,
-				cardId,
-				entityId,
-				removedByCardId,
-				removedByEntityId,
-			);
-			// console.debug('enhanced deck', newDeck);
-			return currentState.update({
-				[isRemovedByPlayer ? 'opponentDeck' : 'playerDeck']: newDeck,
-			});
+		// case CardIds.Repackage_TOY_879:
+		// 	const newDeck = enhanceCardInDeckWithRepackage(
+		// 		// We create the card in the opponent's deck
+		// 		isRemovedByPlayer ? currentState.opponentDeck : currentState.playerDeck,
+		// 		cardId,
+		// 		entityId,
+		// 		removedByCardId,
+		// 		removedByEntityId,
+		// 	);
+		// 	// console.debug('enhanced deck', newDeck);
+		// 	return currentState.update({
+		// 		[isRemovedByPlayer ? 'opponentDeck' : 'playerDeck']: newDeck,
+		// 	});
 		default:
 			return currentState;
 	}

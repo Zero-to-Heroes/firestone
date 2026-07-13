@@ -9,6 +9,7 @@ import { getDynamicRelatedCardIds, hasOverride } from './dynamic-pools';
 export const buildContextRelatedCardIds = (
 	cardId: string,
 	entityId: number,
+	trueEntityId: number | null | undefined,
 	existingRelatedCardIds: readonly string[],
 	deckState: DeckState,
 	metaData: Metadata,
@@ -36,7 +37,9 @@ export const buildContextRelatedCardIds = (
 					.filter((c) => c !== cardId && !allCards.getCard(c).isCoin) ?? []
 			);
 		default:
+			console.debug('[debug] building related card ids 2');
 			const dynamicCards = getDynamicRelatedCardIds(cardId, entityId, allCards.getService(), {
+				trueEntityId: trueEntityId,
 				format: metaData.formatType,
 				gameType: metaData.gameType,
 				scenarioId: metaData.scenarioId,

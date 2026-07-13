@@ -88,6 +88,7 @@ export class CustomEffectsParser implements EventParser {
 			entityId,
 			this.allCards.getService(),
 			{
+				trueEntityId: entityId,
 				format: currentState.metadata.formatType,
 				gameType: currentState.metadata.gameType,
 				scenarioId: currentState.metadata.scenarioId,

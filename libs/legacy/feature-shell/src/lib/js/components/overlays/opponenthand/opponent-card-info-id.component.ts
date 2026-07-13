@@ -250,6 +250,7 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 		}
 		if (!this.possibleCards?.length) {
 			const dynamicPool = getDynamicRelatedCardIds(this.cardId, card?.entityId, this.allCards.getService(), {
+				trueEntityId: card?.trueEntityId,
 				format: metadata.formatType,
 				gameType: metadata.gameType,
 				scenarioId: metadata.scenarioId,

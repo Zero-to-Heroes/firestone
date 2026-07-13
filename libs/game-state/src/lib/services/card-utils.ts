@@ -379,9 +379,6 @@ export const addGuessInfoToCard = (
 		initialDecklist?: readonly string[];
 	},
 ): DeckCard => {
-	if (card.cardId) {
-		return card;
-	}
 	let newGuessedInfo: GuessedInfo | null = card.guessedInfo;
 	const optionsWithDeckContext = {
 		...options,
@@ -396,18 +393,6 @@ export const addGuessInfoToCard = (
 			return card.update({
 				creatorAdditionalInfo: options?.positionInHand,
 			});
-		// Disable this, as if one card isn't drawn (eg no 7-cost card in deck), we have no way to know
-		// and would display incorrect info
-		// case CardIds.Robocaller_WORK_006:
-		// 	const tagScripts = deckState.findCard(creatorEntityId)?.card?.storedInformation?.tagScriptValues;
-		// 	// WARNING: mutable data
-		// 	const nextCost = tagScripts?.shift();
-		// 	return card.update({
-		// 		guessedInfo: {
-		// 			...card.guessedInfo,
-		// 			cost: nextCost,
-		// 		},
-		// 	});
 		default:
 			const cardImpl = creatorCardId ? cardsInfoCache[creatorCardId] : null;
 			if (cardImpl && hasGeneratingCard(cardImpl)) {
@@ -425,6 +410,16 @@ export const addGuessInfoToCard = (
 					...guessedInfo,
 				};
 			}
+	}
+
+	// Not returning early (ie at the start of the function) lets us add some more information to the card
+	if (card.cardId) {
+		if (newGuessedInfo !== card.guessedInfo) {
+			return card.update({
+				guessedInfo: newGuessedInfo,
+			});
+		}
+		return card;
 	}
 
 	// SHATTERED cards: hidden hand pieces after a SHATTER; class filter uses deck class unless the

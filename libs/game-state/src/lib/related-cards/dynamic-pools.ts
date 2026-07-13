@@ -56,6 +56,7 @@ export const getDynamicRelatedCardIds = (
 	entityId: number,
 	allCards: AllCardsService,
 	inputOptions: {
+		trueEntityId: number | null | undefined;
 		format: GameFormat;
 		gameType: GameType;
 		scenarioId: number;
@@ -66,6 +67,7 @@ export const getDynamicRelatedCardIds = (
 		validArenaPool: readonly string[];
 	},
 ): readonly string[] | { override: true; cards: readonly string[] } => {
+	console.debug('[debug] building related card ids 3');
 	const result = getDynamicRelatedCardIdsInternal(cardId, entityId, allCards, inputOptions);
 
 	const refCard = allCards.getCard(cardId);
@@ -85,6 +87,7 @@ const getDynamicRelatedCardIdsInternal = (
 	entityId: number,
 	allCards: AllCardsService,
 	inputOptions: {
+		trueEntityId: number | null | undefined;
 		format: GameFormat;
 		gameType: GameType;
 		scenarioId: number;
@@ -95,12 +98,14 @@ const getDynamicRelatedCardIdsInternal = (
 		validArenaPool: readonly string[];
 	},
 ): readonly string[] | { override: true; cards: readonly string[] } => {
+	console.debug('[debug] building related card ids 4');
 	const options = {
 		...inputOptions,
 		initialDecklist: inputOptions.deckState?.deckList?.map((c) => c.cardId) ?? [],
 	};
 
 	const dynamicPoolImpl = cardsInfoCache[cardId];
+	console.debug('[debug] dynamicPoolImpl', cardId, dynamicPoolImpl, inputOptions);
 	if (hasDynamicPool(dynamicPoolImpl)) {
 		const result = dynamicPoolImpl.dynamicPool({
 			cardId,

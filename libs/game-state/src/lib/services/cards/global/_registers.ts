@@ -156,4 +156,5 @@ export const hasGetRelatedCards = (card: Card): card is GlobalHighlightCard =>
 	(card as GlobalHighlightCard)?.getRelatedCards !== undefined;
 export interface GlobalHighlightCardOptions {
 	sourceCard?: DeckCard;
+	trueEntityId: number | null | undefined;
 }
