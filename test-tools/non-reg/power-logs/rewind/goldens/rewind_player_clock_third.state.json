@@ -17,6 +17,7 @@
   "mulliganOver": true,
   "opponentDeck": {
     "abyssalCurseHighestValue": 0,
+    "additionalHeroPowers": [],
     "additionalKnownCardsInDeck": [],
     "additionalKnownCardsInHand": [],
     "anachronos": [],
@@ -2311,6 +2312,7 @@
   "opponentPlayerId": 2,
   "playerDeck": {
     "abyssalCurseHighestValue": 0,
+    "additionalHeroPowers": [],
     "additionalKnownCardsInDeck": [],
     "additionalKnownCardsInHand": [],
     "anachronos": [],

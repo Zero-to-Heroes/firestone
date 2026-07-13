@@ -19,6 +19,7 @@
   "mulliganOver": true,
   "opponentDeck": {
     "abyssalCurseHighestValue": 0,
+    "additionalHeroPowers": [],
     "additionalKnownCardsInDeck": [
       "TIME_875"
     ],
@@ -4290,6 +4291,7 @@
   "opponentPlayerId": 1,
   "playerDeck": {
     "abyssalCurseHighestValue": 0,
+    "additionalHeroPowers": [],
     "additionalKnownCardsInDeck": [
       "TIME_890t2",
       "TIME_890t"
