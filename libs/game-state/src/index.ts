@@ -28,6 +28,7 @@ export * from './lib/services/cards/_barrel';
 export * from './lib/services/cards/_card.type';
 export * from './lib/services/cards/_mapping';
 export * from './lib/services/cards/global/_registers';
+export * from './lib/services/cards/godfreythe-betrayer';
 export * from './lib/services/cards/irida-sinseeker';
 export * from './lib/services/creation-sequence-info';
 export * from './lib/services/deck-handler.service';

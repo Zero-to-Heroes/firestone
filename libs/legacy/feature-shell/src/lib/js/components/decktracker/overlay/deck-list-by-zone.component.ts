@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { CardIds, CardType, GameTag, ReferenceCard } from '@firestone-hs/reference-data';
 import {
+	buildGofreyCards,
 	CURRENT_EFFECTS_WHITELIST,
 	DeckCard,
 	DeckState,
@@ -377,21 +378,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 		const showGodfrey =
 			showSpecialZones && deckState.globalEffects.some((c) => c.cardId === CardIds.GodfreytheBetrayer_JAIL_509);
 		if (showGodfrey) {
-			const allBurned = deckState.burnedCards;
-			const returnedCards = deckState
-				.getAllCardsInDeckWithoutOptions()
-				.filter((c) => c.creatorCardId === CardIds.GodfreyTheBetrayer_GodfreysAtlasEnchantment_JAIL_509e);
-			const originalReturnedEntityIds = returnedCards.map(
-				(r) =>
-					parserState?.CurrentEntities?.get(r.entityId)?.Tags?.find(
-						(t) => t.Name === GameTag.COPIED_FROM_ENTITY_ID,
-					)?.Value,
-			);
-			const godfreyCards: readonly DeckCard[] = allBurned
-				// Remove returned
-				.filter((c) => !originalReturnedEntityIds.includes(c.entityId))
-				.map((c) => deckState.findCard(c.entityId)?.card)
-				.filter((c) => !!c);
+			const godfreyCards = buildGofreyCards(deckState, parserState);
 			zones.push(
 				this.buildZone(
 					godfreyCards,
@@ -514,9 +501,7 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 				...deckState.board,
 				...secrets,
 				deckState.weapon,
-				...(showHeroPowerInBoardZone
-					? [deckState.heroPower, ...deckState.additionalHeroPowers]
-					: []),
+				...(showHeroPowerInBoardZone ? [deckState.heroPower, ...deckState.additionalHeroPowers] : []),
 			].filter((c) => !!c);
 			zones.push(
 				this.buildZone(
