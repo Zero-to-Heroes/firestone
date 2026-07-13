@@ -23,6 +23,7 @@ import { DeckManipulationHelper, resolveFallbackCreatorCardIdForDeckRemoval } fr
 
 const NOT_REAL_DRAW = [CardIds.SirFinleySeaGuide];
 const DRAW_KNOWN_CARDS_FROM_DECK = [
+	CardIds.MoonlitGuidance_PathOfTheMoonEnchantment,
 	// The card is stolen, the drawn right away, so we need to pick up the exact card (with stolenFromOpponent flag)
 	CardIds.Chronogor_TIME_032,
 	CardIds.ThiefOfFutures,
@@ -190,6 +191,10 @@ export class CardDrawParser implements EventParser {
 			(!isCardDrawnBySecretPassage &&
 				isCastWhenDrawn(updatedCardId, this.allCards) &&
 				!hideOpponentCastWhenDrawnReveal) ||
+			//WARNNG: this might cause info leaks
+			// It has been introduced for Moonlit Guidance so that we reveal the card that was
+			// drawn after playing the original
+			(!isPlayer && isDrawnByCardIdPublic && !!card?.cardId?.length) ||
 			(publicCardInfos.includes(lastInfluencedByCardId) &&
 				!hiddenWhenDrawFromDeck.includes(lastInfluencedByCardId));
 		console.debug(

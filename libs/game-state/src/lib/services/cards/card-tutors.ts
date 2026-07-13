@@ -175,6 +175,7 @@ const internalTutors = [
 	CardIds.MessengerBuzzard_WW_807,
 	CardIds.Mimicry_EDR_522,
 	CardIds.MoonlitGuidance_DED_002, // falls in both cases
+	CardIds.MoonlitGuidance_PathOfTheMoonEnchantment,
 	CardIds.MoonlitGuidance_Story_11_MoonlitGuidance, // falls in both cases
 	CardIds.MurlocTastyfin,
 	CardIds.NecriumApothecary,
