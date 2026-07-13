@@ -292,6 +292,7 @@ export { NightmareFuel } from './nightmare-fuel';
 export { NorthernNavigation } from './northern-navigation';
 export { NoxiousBribe } from './noxious-bribe';
 export { OnyxiasWing } from './onyxias-wing';
+export { OrionMansionManager } from './orion-mansion-manager';
 export { P1CKP0K3T } from './p1ck-p0k3t';
 export { PandarenImporter } from './pandaren-importer';
 export { PartnerAssignment } from './partner-assignment';

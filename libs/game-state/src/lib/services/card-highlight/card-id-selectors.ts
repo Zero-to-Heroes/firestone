@@ -4432,7 +4432,6 @@ export const cardIdSelector = (
 		case CardIds.CommanderRhyssa:
 		case CardIds.SparkjoyCheat:
 		case CardIds.Halkias:
-		case CardIds.OrionMansionManager:
 		case CardIds.ProfessorPutricide_ICC_204:
 		case CardIds.ProfessorPutricide_CORE_ICC_204:
 		case CardIds.SaygeSeerOfDarkmoon:
