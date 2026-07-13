@@ -8,6 +8,10 @@ on:
 jobs:
     build:
         runs-on: ubuntu-latest
+        env:
+            # ow-electron postinstall downloads platform binaries from Overwolf's CDN; Linux
+            # artifacts are not published there. CI only compiles the Overwolf app.
+            ELECTRON_SKIP_BINARY_DOWNLOAD: 1
         steps:
             - name: Checkout code
               uses: actions/checkout@v4

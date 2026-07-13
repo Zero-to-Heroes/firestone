@@ -10,6 +10,8 @@ jobs:
     bug-replay-specs:
         runs-on: ubuntu-latest
         timeout-minutes: 60
+        env:
+            ELECTRON_SKIP_BINARY_DOWNLOAD: 1
         steps:
             - name: Checkout code
               uses: actions/checkout@v4
