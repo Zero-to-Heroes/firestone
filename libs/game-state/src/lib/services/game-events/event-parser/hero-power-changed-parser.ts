@@ -1,6 +1,5 @@
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DeckCard } from '../../../models/deck-card';
-import { DeckState } from '../../../models/deck-state';
 import { GameState } from '../../../models/game-state';
 import { getProcessedCard } from '../../card-utils';
 import { GameEvent } from '../game-event';
@@ -40,16 +39,13 @@ export class HeroPowerChangedParser implements EventParser {
 						heroPower: card,
 					};
 
-		const newPlayerDeck = Object.assign(new DeckState(), deck, deckUpdate as DeckState);
+		const newPlayerDeck = deck.update(deckUpdate);
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
 		});
 	}
 
-	private upsertAdditionalHeroPower(
-		additionalHeroPowers: readonly DeckCard[],
-		card: DeckCard,
-	): readonly DeckCard[] {
+	private upsertAdditionalHeroPower(additionalHeroPowers: readonly DeckCard[], card: DeckCard): readonly DeckCard[] {
 		const withoutEntity = additionalHeroPowers.filter((heroPower) => heroPower.entityId !== card.entityId);
 		return [...withoutEntity, card];
 	}
