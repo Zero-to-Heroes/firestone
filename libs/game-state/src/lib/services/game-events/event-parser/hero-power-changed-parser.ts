@@ -30,14 +30,28 @@ export class HeroPowerChangedParser implements EventParser {
 			playTiming: GameState.playTiming++,
 		} as DeckCard);
 
-		// Used for Twitch
+		const additionalHeroPowerIndex = gameEvent.additionalData?.additionalHeroPowerIndex ?? 0;
+		const deckUpdate =
+			additionalHeroPowerIndex > 0
+				? {
+						additionalHeroPowers: this.upsertAdditionalHeroPower(deck.additionalHeroPowers, card),
+					}
+				: {
+						heroPower: card,
+					};
 
-		const newPlayerDeck = Object.assign(new DeckState(), deck, {
-			heroPower: card,
-		} as DeckState);
+		const newPlayerDeck = Object.assign(new DeckState(), deck, deckUpdate as DeckState);
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
 		});
+	}
+
+	private upsertAdditionalHeroPower(
+		additionalHeroPowers: readonly DeckCard[],
+		card: DeckCard,
+	): readonly DeckCard[] {
+		const withoutEntity = additionalHeroPowers.filter((heroPower) => heroPower.entityId !== card.entityId);
+		return [...withoutEntity, card];
 	}
 
 	event(): string {

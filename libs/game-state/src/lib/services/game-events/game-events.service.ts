@@ -509,6 +509,7 @@ export class GameEvents {
 				this.doEventDispatch(
 					GameEvent.build(GameEvent.HERO_POWER_CHANGED, gameEvent, {
 						creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
+						additionalHeroPowerIndex: gameEvent.Value.AdditionalProps.AdditionalHeroPowerIndex,
 					}),
 				);
 				break;

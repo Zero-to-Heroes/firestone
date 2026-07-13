@@ -53,6 +53,7 @@ export class DeckState {
 	readonly name?: string;
 	readonly hero?: HeroCard;
 	readonly heroPower: DeckCard | null;
+	readonly additionalHeroPowers: readonly DeckCard[] = [];
 	readonly weapon: DeckCard | null;
 	// Initial list, won't be modified during the game
 	readonly deckList: readonly DeckCard[] = [];
@@ -197,6 +198,7 @@ export class DeckState {
 		'board',
 		'otherZone',
 		'globalEffects',
+		'additionalHeroPowers',
 		'cardsPlayedLastTurn',
 		'cardsPlayedThisTurn',
 	];
@@ -220,6 +222,16 @@ export class DeckState {
 
 	public update(value: Partial<NonFunctionProperties<DeckState>>): DeckState {
 		return Object.assign(new DeckState(), this, value);
+	}
+
+	public isHeroPowerEntity(entityId: number | null | undefined): boolean {
+		if (entityId == null) {
+			return false;
+		}
+		if (this.heroPower?.entityId === entityId) {
+			return true;
+		}
+		return this.additionalHeroPowers.some((heroPower) => heroPower.entityId === entityId);
 	}
 
 	public getCurrentClass(): string | undefined {

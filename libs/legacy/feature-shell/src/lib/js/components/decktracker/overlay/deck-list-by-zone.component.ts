@@ -514,7 +514,9 @@ export class DeckListByZoneComponent extends AbstractSubscriptionComponent imple
 				...deckState.board,
 				...secrets,
 				deckState.weapon,
-				showHeroPowerInBoardZone ? deckState.heroPower : null,
+				...(showHeroPowerInBoardZone
+					? [deckState.heroPower, ...deckState.additionalHeroPowers]
+					: []),
 			].filter((c) => !!c);
 			zones.push(
 				this.buildZone(

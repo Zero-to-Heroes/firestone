@@ -32,11 +32,11 @@ export class EnchantmentAttachedParser implements EventParser {
 		const attachedToPlayerSide =
 			attachedToEntityId === localPlayer.Id ||
 			attachedToEntityId === playerDeck.hero?.entityId ||
-			attachedToEntityId === playerDeck.heroPower?.entityId;
+			playerDeck.isHeroPowerEntity(attachedToEntityId);
 		const attachedToOpponentSide =
 			attachedToEntityId === opponentPlayer.Id ||
 			attachedToEntityId === opponentDeck.hero?.entityId ||
-			attachedToEntityId === opponentDeck.heroPower?.entityId;
+			opponentDeck.isHeroPowerEntity(attachedToEntityId);
 
 		if (!attachedToPlayerSide && !attachedToOpponentSide) {
 			return currentState;

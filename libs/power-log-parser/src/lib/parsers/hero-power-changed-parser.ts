@@ -58,12 +58,14 @@ export class HeroPowerChangedParser implements ActionParser {
 		const creatorEntityCardId = this.GameState.CurrentEntities.has(creatorEntityId)
 			? this.GameState.CurrentEntities.get(creatorEntityId)!.CardId
 			: null;
+		const additionalHeroPowerIndex = fullEntity.GetTag(GameTag.ADDITIONAL_HERO_POWER_INDEX);
 		return [
 			GameEventProvider.Create(
 				fullEntity.TimeStamp,
 				'HERO_POWER_CHANGED',
 				GameEventHelper.CreateProvider('HERO_POWER_CHANGED', cardId, controllerId, fullEntity.Id, this.StateFacade, {
 					CreatorCardId: creatorEntityCardId,
+					AdditionalHeroPowerIndex: additionalHeroPowerIndex,
 				}),
 				true,
 				node,
@@ -79,6 +81,7 @@ export class HeroPowerChangedParser implements ActionParser {
 		const creatorEntityCardId = this.GameState.CurrentEntities.has(creatorEntityId)
 			? this.GameState.CurrentEntities.get(creatorEntityId)!.CardId
 			: null;
+		const additionalHeroPowerIndex = showEntity.GetTag(GameTag.ADDITIONAL_HERO_POWER_INDEX);
 		return [
 			GameEventProvider.Create(
 				showEntity.TimeStamp,
@@ -91,6 +94,7 @@ export class HeroPowerChangedParser implements ActionParser {
 					this.StateFacade,
 					{
 						CreatorCardId: creatorEntityCardId,
+						AdditionalHeroPowerIndex: additionalHeroPowerIndex,
 					},
 				),
 				true,
