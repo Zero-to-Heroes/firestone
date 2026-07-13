@@ -26,6 +26,11 @@ export const BackupTuningFork: GeneratingCard & StaticGeneratingCard = {
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => ({
 		cardType: CardType.MINION,
 		mechanics: [GameTag.TAUNT],
-		possibleCards: filterCards(CardIds.ADashofThat_JAIL_201b, input.allCards, tauntMinionFilter, input.options),
+		possibleCards: filterCards(
+			CardIds.RemixedTuningFork_BackupTuningForkToken,
+			input.allCards,
+			tauntMinionFilter,
+			input.options,
+		),
 	}),
 };
