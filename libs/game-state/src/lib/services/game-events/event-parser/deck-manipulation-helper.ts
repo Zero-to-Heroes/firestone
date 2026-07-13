@@ -712,6 +712,39 @@ const hasStrippedDeckRowForCreator = (
 ): boolean =>
 	!!fallbackCreatorCardId && deckCards.some((c) => !c.entityId && c.creatorCardId === fallbackCreatorCardId);
 
+/**
+ * Opponent played a card stolen/drawn from our deck while hidden (no entity link on our deck row).
+ * On play the cardId is revealed in hand; remove one matching natural deck row from the other player's deck.
+ */
+const shouldReconcileStolenFromOppositeDeckOnPlay = (input: {
+	readonly removedCard: DeckCard | undefined;
+	readonly cardId: string;
+	readonly entityId: number;
+	readonly deckCards: readonly DeckCard[];
+	readonly oppositeDeckCards: readonly DeckCard[];
+}): boolean => {
+	const { removedCard, cardId, entityId, deckCards, oppositeDeckCards } = input;
+	if (!cardId || !removedCard || removedCard.cardId) {
+		return false;
+	}
+	const removedFromHandByEntityId =
+		removedCard.entityId != null && Math.abs(removedCard.entityId) === Math.abs(entityId);
+	const sameEntityStillInPlayingDeck = deckCards.some(
+		(c) => Math.abs(c.entityId ?? c.trueEntityId ?? 0) === Math.abs(entityId),
+	);
+	if (!removedFromHandByEntityId || sameEntityStillInPlayingDeck) {
+		return false;
+	}
+	// Generated/in-hand copies reconcile on the playing player's deck, not the opposite deck.
+	if ((removedCard.creatorCardId || removedCard.lastAffectedByCardId) && !removedCard.stolenFromOpponent) {
+		return false;
+	}
+	if (oppositeDeckCards.some((c) => Math.abs(c.entityId ?? c.trueEntityId ?? 0) === Math.abs(entityId))) {
+		return false;
+	}
+	return oppositeDeckCards.some((c) => c.cardId === cardId && !c.creatorCardId);
+};
+
 /** Cards generated/copied in hand are not drawn from the initial deck — skip deck reconciliation on play. */
 const shouldSkipDeckReconciliationForPlayedCard = (input: {
 	readonly removedCard: DeckCard | undefined;
@@ -778,10 +811,21 @@ export const reconcileCardInHandWithDeck = (input: {
 	const isKnownDeckCopyOfPlayedCard = (c: DeckCard): boolean => c.cardId === cardId && isSameCreatorAsPlayedCard(c);
 	const shouldReconcileKnownDeckCopyOnPlay =
 		!removedCard?.cardId && !!cardId && deckCards.some(isKnownDeckCopyOfPlayedCard);
+	const shouldReconcileOppositeDeckOnPlay = shouldReconcileStolenFromOppositeDeckOnPlay({
+		removedCard,
+		cardId,
+		entityId,
+		deckCards,
+		oppositeDeckCards: opponentDeck.deck,
+	});
+	const shouldReconcileStolenFromOpponentDeckOnPlay =
+		!!removedCard?.stolenFromOpponent && !removedCard?.cardId && !!cardId;
 
 	if (
 		shouldSkipDeckReconciliationForPlayedCard({ ...input, entityId, deckCards }) &&
-		!shouldReconcileKnownDeckCopyOnPlay
+		!shouldReconcileKnownDeckCopyOnPlay &&
+		!shouldReconcileOppositeDeckOnPlay &&
+		!shouldReconcileStolenFromOpponentDeckOnPlay
 	) {
 		console.debug(
 			'[card-played] reconcileCardInHandWithDeck skipping deck reconciliation',
@@ -878,6 +922,24 @@ export const reconcileCardInHandWithDeck = (input: {
 					removedCard = removedCardFromDeck;
 				}
 				deckCards = newDeckAfterReveal;
+			}
+		} else if (shouldReconcileOppositeDeckOnPlay) {
+			const [newOppositeDeck, removedCardFromOppositeDeck] = helper.removeSingleCardFromZone(
+				opponentDeck.deck,
+				cardId,
+				entityId,
+				false,
+			);
+			console.debug(
+				'[card-played] reconcileCardInHandWithDeck removedStolenFromOppositeDeckOnPlay',
+				`entityId:${entityId}__`,
+				removedCardFromOppositeDeck,
+				newOppositeDeck,
+			);
+			if (removedCardFromOppositeDeck) {
+				opponentDeck = opponentDeck.update({
+					deck: newOppositeDeck,
+				});
 			}
 		}
 	}

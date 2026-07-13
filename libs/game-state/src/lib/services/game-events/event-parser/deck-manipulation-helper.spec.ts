@@ -198,4 +198,80 @@ describe('reconcileCardInHandWithDeck', () => {
 		expect(result.deckCards.some((c) => c.cardId === sharedCardId)).toBe(false);
 		expect(result.deckCards).toEqual([]);
 	});
+
+	it('removes a natural deck copy from the opposite deck when opponent plays a stolen hidden card revealed on play', () => {
+		const stolenCardId = CardIds.ConcealingConfection_JAIL_460;
+		const stolenEntityId = 32;
+		const localDeck = DeckState.create({
+			deck: [
+				DeckCard.create({
+					cardId: stolenCardId,
+					cardName: 'Concealing Confection',
+					refManaCost: 1,
+				}),
+			],
+			hand: [],
+		});
+		const opponentPlayingDeck = DeckState.create({
+			deck: [],
+			hand: [
+				DeckCard.create({
+					entityId: stolenEntityId,
+					cardId: stolenCardId,
+					cardName: 'Concealing Confection',
+					refManaCost: 1,
+				}),
+			],
+		});
+		const removedFromHand = DeckCard.create({
+			entityId: stolenEntityId,
+		});
+
+		const result = reconcileCardInHandWithDeck({
+			removedCard: removedFromHand,
+			cardId: stolenCardId,
+			entityId: stolenEntityId,
+			deck: opponentPlayingDeck,
+			deckCards: opponentPlayingDeck.deck,
+			opponentDeck: localDeck,
+			helper,
+		});
+
+		expect(result.opponentDeck.deck.some((c) => c.cardId === stolenCardId)).toBe(false);
+		expect(result.opponentDeck.deck).toEqual([]);
+	});
+
+	it('removes from opposite deck on play when hand card has stolenFromOpponent (Chronogor)', () => {
+		const stolenCardId = CardIds.ConcealingConfection_JAIL_460;
+		const stolenEntityId = 32;
+		const localDeck = DeckState.create({
+			deck: [
+				DeckCard.create({
+					cardId: stolenCardId,
+					cardName: 'Concealing Confection',
+					refManaCost: 1,
+				}),
+			],
+			hand: [],
+		});
+		const opponentPlayingDeck = DeckState.create({ deck: [], hand: [] });
+		const removedFromHand = DeckCard.create({
+			entityId: stolenEntityId,
+			stolenFromOpponent: true,
+			creatorCardId: CardIds.Chronogor_TIME_032,
+		});
+
+		const result = reconcileCardInHandWithDeck({
+			removedCard: removedFromHand,
+			cardId: stolenCardId,
+			entityId: stolenEntityId,
+			deck: opponentPlayingDeck,
+			deckCards: opponentPlayingDeck.deck,
+			opponentDeck: localDeck,
+			helper,
+		});
+
+		expect(result.opponentDeck.deck.some((c) => c.cardId === stolenCardId)).toBe(false);
+		expect(result.opponentDeck.deck).toEqual([]);
+	});
 });
