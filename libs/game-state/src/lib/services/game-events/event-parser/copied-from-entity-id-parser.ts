@@ -361,8 +361,13 @@ export class CopiedFromEntityIdParser implements EventParser {
 
 		let copiedDeckWithKnownCardsInHand = copiedDeckWithSecrets;
 		if (copiedCardZone === Zone.HAND && !isCopiedPlayer) {
+			const resolvedRevealCardId = cardId || newCopy?.cardId;
+			const shouldRevealOpponentHandFromCrossPlayerCopy = isPlayer && !!resolvedRevealCardId?.length;
 			// In this case we know exactly what card is what
-			if (!!newCopy && shouldFlagExactCardInOpponentHand(newCopy)) {
+			if (
+				!!newCopy &&
+				(shouldFlagExactCardInOpponentHand(newCopy) || shouldRevealOpponentHandFromCrossPlayerCopy)
+			) {
 				console.debug(
 					'[copied-from-entity] know exact card in opponent hand',
 					`entityId:${entityId}__`,
@@ -371,12 +376,14 @@ export class CopiedFromEntityIdParser implements EventParser {
 					newCopy,
 					copiedCard,
 				);
+				const refCard = this.allCards.getCard(resolvedRevealCardId!);
+				const sourceEntityId = copiedCard?.entityId ?? copiedCardEntityId;
 				const newHand = copiedDeckWithSecrets.hand.map((card) =>
-					card.entityId === copiedCard?.entityId
+					card.entityId === sourceEntityId
 						? card.update({
-								cardId: cardId || newCopy.cardId,
-								cardName: this.allCards.getCard(cardId).name,
-								refManaCost: this.allCards.getCard(cardId).cost,
+								cardId: resolvedRevealCardId,
+								cardName: refCard.name,
+								refManaCost: refCard.cost,
 							})
 						: card,
 				);

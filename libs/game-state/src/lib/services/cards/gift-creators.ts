@@ -522,6 +522,7 @@ const internalGiftCreators = [
 	CardIds.KazakusGolemShaper,
 	CardIds.KeywardenIvory,
 	CardIds.KeymasterAlabaster_CORE_SCH_717,
+	CardIds.KeymasterAlabaster,
 	CardIds.Kidnap_KidnappersSackToken,
 	CardIds.Kiljaeden_KiljaedensPortalEnchantment_GDB_145e,
 	CardIds.KingMukla_CORE_EX1_014,

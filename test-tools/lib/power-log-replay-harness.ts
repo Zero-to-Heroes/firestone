@@ -279,6 +279,7 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	'blood-doctor-thalena': 'blood-doctor-thalena/blood-doctor-thalena.log',
 	'repackage-box': 'repackage-box/repackage-box.log',
 	'moonlit-guidance': 'moonlit-guidance/moonlit-guidance.log',
+	'keymaster-alabaster': 'keymaster-alabaster/keymaster-alabaster.log',
 };
 
 /**

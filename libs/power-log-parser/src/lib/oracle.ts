@@ -1692,7 +1692,8 @@ export class Oracle {
 				if (
 					actionEntity != null &&
 					gameState.LastCardDrawnEntityId > 0 &&
-					actionEntity.CardId === CardIds.KeymasterAlabaster
+					(actionEntity.CardId === CardIds.KeymasterAlabaster ||
+						actionEntity.CardId === CardIds.KeymasterAlabaster_CORE_SCH_717)
 				) {
 					const lastDrawnEntity = gameState.CurrentEntities.get(gameState.LastCardDrawnEntityId);
 					return lastDrawnEntity?.CardId ?? null;
