@@ -83,6 +83,7 @@
           "4472": 2
         },
         "temporaryCard": false,
+        "trueEntityId": 55,
         "zone": "PLAY"
       }
     ],
@@ -930,6 +931,7 @@
           "4472": 2
         },
         "temporaryCard": false,
+        "trueEntityId": 57,
         "zone": "GRAVEYARD"
       },
       {
@@ -969,6 +971,7 @@
           "3557": 4
         },
         "temporaryCard": false,
+        "trueEntityId": 68,
         "zone": null
       },
       {
@@ -1157,6 +1160,7 @@
           "4472": 4
         },
         "temporaryCard": false,
+        "trueEntityId": 37,
         "zone": "GRAVEYARD"
       },
       {
@@ -1353,6 +1357,7 @@
           "4472": 1
         },
         "temporaryCard": false,
+        "trueEntityId": 7,
         "zone": "PLAY"
       },
       {
@@ -1419,6 +1424,7 @@
           "4741": 1
         },
         "temporaryCard": false,
+        "trueEntityId": 79,
         "zone": "PLAY"
       }
     ],
@@ -1727,6 +1733,7 @@
           "4472": 2
         },
         "temporaryCard": false,
+        "trueEntityId": 14,
         "zone": "PLAY"
       }
     ],
@@ -2443,6 +2450,7 @@
           "4741": 1
         },
         "temporaryCard": false,
+        "trueEntityId": 20,
         "zone": "GRAVEYARD"
       },
       {
@@ -2491,6 +2499,7 @@
         "storedInformation": null,
         "tags": "<cycle>",
         "temporaryCard": false,
+        "trueEntityId": 14,
         "zone": "GRAVEYARD"
       },
       {

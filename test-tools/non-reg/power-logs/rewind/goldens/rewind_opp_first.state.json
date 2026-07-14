@@ -87,6 +87,7 @@
           "4472": 4
         },
         "temporaryCard": false,
+        "trueEntityId": 37,
         "zone": "PLAY"
       }
     ],
@@ -322,6 +323,7 @@
           "4472": 2
         },
         "temporaryCard": false,
+        "trueEntityId": 57,
         "zone": "PLAY"
       }
     ],
@@ -386,6 +388,7 @@
           "3557": 4
         },
         "temporaryCard": false,
+        "trueEntityId": 68,
         "zone": null
       },
       "<cycle>"
@@ -952,6 +955,7 @@
         "storedInformation": null,
         "tags": "<cycle>",
         "temporaryCard": false,
+        "trueEntityId": 57,
         "zone": "GRAVEYARD"
       },
       "<cycle>",
@@ -1202,6 +1206,7 @@
           "4472": 1
         },
         "temporaryCard": false,
+        "trueEntityId": 7,
         "zone": "PLAY"
       }
     ],
@@ -2178,6 +2183,7 @@
           "4741": 1
         },
         "temporaryCard": false,
+        "trueEntityId": 20,
         "zone": "GRAVEYARD"
       }
     ],
