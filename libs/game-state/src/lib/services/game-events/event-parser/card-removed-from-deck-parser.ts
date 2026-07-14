@@ -31,7 +31,10 @@ export class CardRemovedFromDeckParser implements EventParser {
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
 		// We don't create / remove them, simply add them to guessed cards
-		if (removedByCardId === CardIds.DragonSoulShattered_CATA_EVENT_110) {
+		if (
+			removedByCardId === CardIds.DragonSoulShattered_CATA_EVENT_110 &&
+			cardId !== CardIds.DragonSoulShattered_CATA_EVENT_110
+		) {
 			return currentState;
 		}
 
