@@ -486,40 +486,54 @@ export const addGuessInfoToCard = (
 			card,
 			optionsWithDeckContext,
 		);
-		const possibleClasses: readonly CardClass[] = card.guessedInfo?.cardClasses?.length
-			? card.guessedInfo.cardClasses
-			: ([
-					deckState.getCurrentClassEnum(),
-					...(allCards.getCard(deckState.heroPower?.cardId ?? '')?.classes ?? []).map((c) => CardClass[c]),
-					CardClass.NEUTRAL,
-				].filter((c) => c !== undefined) as readonly CardClass[]);
-		console.debug('[addGuessInfoToCard] possibleClasses', `entityId:${card.entityId}__`, possibleClasses);
-		const possibleCardsBase = filterCards(
-			null,
-			allCards.getService(),
-			(c) => !!c.mechanics?.includes(GameTag[GameTag.PREPARE]) && !!c.cost && c.cost >= card.prepared,
-			optionsWithDeckContext,
-		);
-		const possibleCards = possibleCardsBase.filter((c) =>
-			possibleClasses.some((cc) => hasCorrectClass(allCards.getCard(c), cc)),
-		);
-		const finalPossibleCards = newGuessedInfo?.possibleCards?.length
-			? newGuessedInfo.possibleCards.filter((c) => possibleCards.includes(c))
-			: possibleCards;
-		console.debug(
-			'[addGuessInfoToCard] finalPossibleCards',
-			`entityId:${card.entityId}__`,
-			finalPossibleCards,
-			possibleCards,
-			allCards.getCards().filter((c) => c.text?.toLowerCase()?.includes('<b>prepare</b>') && !!c.cost),
-		);
-		newGuessedInfo = {
-			...newGuessedInfo,
-			mechanics: [...(newGuessedInfo?.mechanics ?? []), GameTag.PREPARED].filter(
-				(c, index, self) => self.indexOf(c) === index,
-			),
-			possibleCards: finalPossibleCards,
-		};
+		if (newGuessedInfo?.possibleCards?.length) {
+			const possibleCards = newGuessedInfo?.possibleCards?.filter((c) =>
+				allCards.getCard(c)?.mechanics?.includes(GameTag[GameTag.PREPARE]),
+			);
+			console.debug('[addGuessInfoToCard] possibleCards', `entityId:${card.entityId}__`, possibleCards);
+			newGuessedInfo = {
+				...newGuessedInfo,
+				mechanics: [...(newGuessedInfo?.mechanics ?? []), GameTag.PREPARED].filter(
+					(c, index, self) => self.indexOf(c) === index,
+				),
+				possibleCards: possibleCards,
+			};
+			console.debug('[addGuessInfoToCard] newGuessedInfo', `entityId:${card.entityId}__`, newGuessedInfo);
+		} else {
+			const possibleClasses: readonly CardClass[] = card.guessedInfo?.cardClasses?.length
+				? card.guessedInfo.cardClasses
+				: ([
+						deckState.getCurrentClassEnum(),
+						...(allCards.getCard(deckState.heroPower?.cardId ?? '')?.classes ?? []).map(
+							(c) => CardClass[c],
+						),
+						CardClass.NEUTRAL,
+					].filter((c) => c !== undefined) as readonly CardClass[]);
+			console.debug('[addGuessInfoToCard] possibleClasses', `entityId:${card.entityId}__`, possibleClasses);
+			const possibleCardsBase = filterCards(
+				null,
+				allCards.getService(),
+				(c) => !!c.mechanics?.includes(GameTag[GameTag.PREPARE]) && !!c.cost && c.cost >= card.prepared,
+				optionsWithDeckContext,
+			);
+			const possibleCards = possibleCardsBase.filter((c) =>
+				possibleClasses.some((cc) => hasCorrectClass(allCards.getCard(c), cc)),
+			);
+			console.debug(
+				'[addGuessInfoToCard] finalPossibleCards',
+				`entityId:${card.entityId}__`,
+				possibleCards,
+				possibleCards,
+				allCards.getCards().filter((c) => c.text?.toLowerCase()?.includes('<b>prepare</b>') && !!c.cost),
+			);
+			newGuessedInfo = {
+				...newGuessedInfo,
+				mechanics: [...(newGuessedInfo?.mechanics ?? []), GameTag.PREPARED].filter(
+					(c, index, self) => self.indexOf(c) === index,
+				),
+				possibleCards: possibleCards,
+			};
+		}
 	}
 
 	const isCreatedByExcavate = hasMechanic(allCards.getCard(creatorCardId ?? ''), GameTag.EXCAVATE);
