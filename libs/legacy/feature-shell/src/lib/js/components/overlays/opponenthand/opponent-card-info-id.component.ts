@@ -15,13 +15,13 @@ import {
 	hasGetRelatedCards,
 	hasOverride,
 	Metadata,
+	onlyShowCreatedByIconForCreations,
 	publicCardCreators,
 	resolveShatterGuessCardClasses,
 } from '@firestone/game-state';
 import { isGuessedInfoEmpty } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { onlyShowCreatedByIconForCreations } from 'libs/game-state/src/lib/services/cards/gift-creators';
 import { BehaviorSubject, combineLatest, filter } from 'rxjs';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
