@@ -224,6 +224,7 @@ export const currentEffectsInternal = [
 	CardIds.SpringySpriggan_SpringySprigganEnchantment_BG32_171_Ge2,
 	CardIds.SpringySpriggan_SpringySprigganEnchantment_BG32_171e2,
 	CardIds.StarlightWanderer_StarlightWandererFutureBuffEnchantment_GDB_720e,
+	CardIds.StewartTheSteward_OpenPositionEnchantment,
 	CardIds.StrandedSpaceman_StrandedSpacemanFutureBuffEnchantment_GDB_861e,
 	CardIds.SubmergedSpacerock_SubmergedEnchantment,
 	CardIds.Surfalopod_RideTheWaveEnchantment_VAC_443e,
