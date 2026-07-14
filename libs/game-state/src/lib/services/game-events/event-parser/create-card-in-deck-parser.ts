@@ -140,7 +140,7 @@ export class CreateCardInDeckParser implements EventParser {
 		// );
 		// Because of Tome Tampering
 		// eslint-disable-next-line prefer-const
-		let { zone, card } = deck.findCard(entityId) ?? { zone: null, card: null };
+		let { zone, card } = deck.findCard(entityId, { includeTrueEntityId: true }) ?? { zone: null, card: null };
 		// console.debug('[create-card-in-deck]', 'card added', card, zone, gameEvent, deck);
 		// Sometimes a CARD_REVEALED event occurs first, so we need to
 		const newCardId = hideKiljaedenPortalDeck ? undefined : cardIdWithOracle || card?.cardId || undefined;

@@ -115,7 +115,8 @@ const trackFizzle = (
 			const updatedSnapshot = snapshot.update({
 				relatedCardIds: snapshot.relatedCardIds.map((id) => (id === `${entityId}` ? cardId : id)),
 			});
-			updatedDeck = helper.replaceCardInZone(updatedDeck, updatedSnapshot);
+			const index = updatedDeck.indexOf(snapshot);
+			updatedDeck = updatedDeck.map((c, i) => (i === index ? updatedSnapshot : c));
 		}
 	}
 	return deckState.update({
