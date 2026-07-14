@@ -2,6 +2,7 @@ import {
 	CardIds,
 	CardType,
 	GameTag,
+	getBaseCardId,
 	LIBRAM_IDS,
 	Race,
 	ReferenceCard,
@@ -15,10 +16,10 @@ import { getProcessedCard, storeInformationOnCardPlayed } from '../../card-utils
 import { hasOnCardPlayedWhileInHand } from '../../cards/_card.type';
 import { cardsInfoCache } from '../../cards/_mapping';
 import {
+	battlecryGlobalEffectCards,
 	CARDS_IDS_THAT_REMEMBER_SPELLS_PLAYED,
 	CARDS_THAT_REMEMBER_SPELLS_PLAYED,
 	COUNTERSPELLS,
-	battlecryGlobalEffectCards,
 	globalEffectCardsPlayed,
 	hasRace,
 } from '../../hs-utils';
@@ -211,12 +212,17 @@ export class CardPlayedFromHandParser implements EventParser {
 
 		const isElemental = refCard?.type === 'Minion' && hasRace(refCard, Race.ELEMENTAL);
 
+		const baseCardId = (cardId: string) => getBaseCardId(cardId, this.allCards.getService());
+		const newAdditionalKnownCardsInHand = deck.additionalKnownCardsInHand.filter(
+			(c, i) =>
+				baseCardId(c) !== baseCardId(cardId) ||
+				deck.additionalKnownCardsInHand.map((c) => baseCardId(c)).indexOf(baseCardId(cardId)) !== i,
+		);
 		const newPlayerDeck1 = deck
 			.update({
 				hand: hardAfterGuessedInfo,
-				additionalKnownCardsInHand: deck.additionalKnownCardsInHand.filter(
-					(c, i) => c !== cardId || deck.additionalKnownCardsInHand.indexOf(c) !== i,
-				),
+				// In case the opponent adds a Forgeable card in hand, then plays the forged version
+				additionalKnownCardsInHand: newAdditionalKnownCardsInHand,
 				additionalKnownCardsInDeck: additionalKnownCardsInDeck,
 				board: newBoard,
 				deck: newDeck,

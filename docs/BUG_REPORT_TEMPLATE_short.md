@@ -77,7 +77,8 @@ Propose the fix (or failing assertion) **before** large refactors; keep changes 
 
 ## 5. Do the fix
 
--
+- Keep the fix as small as possible - do not add code that is not strictly needed
+- Don't over-specify the fix - the mechanism should be generic and not dependant on a single card
 
 ## 6. PR / review
 

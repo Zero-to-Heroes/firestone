@@ -616,7 +616,7 @@ export class GameStateService {
 				gameEvent.cardId,
 				`entityId:${gameEvent.entityId}_`,
 				(gameEvent as MinionsDiedEvent)?.additionalData?.deadMinions?.map((m) => `entityId:${m.EntityId}_`),
-				`found?=${currentState.playerDeck.deck.filter((e) => e.cardId === CardIds.Repackage_RepackagedBoxToken_TOY_879t).length}&${currentState.opponentDeck.deck.filter((e) => e.cardId === CardIds.Repackage_RepackagedBoxToken_TOY_879t).length}`,
+				`found?=${currentState.opponentDeck.additionalKnownCardsInHand.filter((e) => e.startsWith(CardIds.CleanTheScene)).length}&${currentState.opponentDeck.hand.filter((e) => e.cardId?.startsWith(CardIds.CleanTheScene)).length}`,
 				// currentState.opponentDeck.deck.filter(
 				// 	(e) => e.cardId === CardIds.Repackage_RepackagedBoxToken_TOY_879t,
 				// ),
