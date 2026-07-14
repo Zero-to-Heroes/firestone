@@ -1171,3 +1171,6 @@ for (const cardId of Object.keys(cardsInfoCache)) {
 	}
 }
 export const giftCreators = internalGiftCreators;
+
+// Because otherwise we have a "drawn by" icon in the opponent's hand
+export const onlyShowCreatedByIconForCreations = [CardIds.NostalgicGnome_TOY_312];

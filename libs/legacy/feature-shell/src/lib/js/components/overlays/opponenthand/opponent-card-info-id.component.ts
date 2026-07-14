@@ -21,6 +21,7 @@ import {
 import { isGuessedInfoEmpty } from '@firestone/shared/common/view';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
+import { onlyShowCreatedByIconForCreations } from 'libs/game-state/src/lib/services/cards/gift-creators';
 import { BehaviorSubject, combineLatest, filter } from 'rxjs';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
@@ -173,7 +174,11 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 		// console.debug('[opponent-card-info-id] buildInfo', card);
 		// Keep the || to handle empty card id
 		// CreatorCardId first because this feels like the most relevant?
-		const realCardId = this.normalizeEnchantment(card.cardId, card.creatorCardId || card.lastAffectedByCardId);
+		const forceHide = onlyShowCreatedByIconForCreations.includes(card.lastAffectedByCardId as CardIds);
+		const realCardId = this.normalizeEnchantment(
+			card.cardId,
+			forceHide ? null : card.creatorCardId || card.lastAffectedByCardId,
+		);
 		// console.debug(
 		// 	'[opponent-card-info-id] realCardId',
 		// 	card.entityId,
@@ -186,7 +191,9 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 		this.createdBy =
 			!card.cardId &&
 			(!!card.creatorCardId ||
-				(!!card.lastAffectedByCardId && giftCreators.includes(card.lastAffectedByCardId as CardIds)));
+				(!!card.lastAffectedByCardId &&
+					giftCreators.includes(card.lastAffectedByCardId as CardIds) &&
+					!forceHide));
 		this.drawnBy =
 			!card.cardId &&
 			!!card.lastAffectedByCardId &&
@@ -196,7 +203,8 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 			// This might reduce the risk of this issue appearing
 			!this.createdBy &&
 			!card.dredged &&
-			publicCardCreators.includes(card.lastAffectedByCardId as CardIds);
+			publicCardCreators.includes(card.lastAffectedByCardId as CardIds) &&
+			!forceHide;
 		this.dredgedBy =
 			!card.cardId &&
 			!!card.lastAffectedByCardId &&
@@ -214,19 +222,20 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 			realCardId ||
 			(this.createdBy && (card.creatorCardId || card.lastAffectedByCardId)) ||
 			(this.drawnBy && card.lastAffectedByCardId);
-		// console.debug(
-		// 	'[opponent-card-info-id] cardId',
-		// 	this.cardId,
-		// 	card.entityId,
-		// 	card.cardId,
-		// 	card.creatorCardId,
-		// 	card.lastAffectedByCardId,
-		// 	realCardId,
-		// 	this.createdBy,
-		// 	this.drawnBy,
-		// 	this.hasBuffs,
-		// 	this.forged,
-		// );
+		console.debug(
+			'[opponent-card-info-id] cardId',
+			this.cardId,
+			card.entityId,
+			card.cardId,
+			card.creatorCardId,
+			card.lastAffectedByCardId,
+			realCardId,
+			this.createdBy,
+			this.drawnBy,
+			this.hasBuffs,
+			this.forged,
+			card,
+		);
 		this.cardUrl = this.cardId
 			? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${this.cardId}.jpg`
 			: undefined;
