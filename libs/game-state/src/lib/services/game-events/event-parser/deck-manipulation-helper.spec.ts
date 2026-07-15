@@ -199,6 +199,41 @@ describe('reconcileCardInHandWithDeck', () => {
 		expect(result.deckCards).toEqual([]);
 	});
 
+	it('does not remove a local deck copy when opponent plays a hidden card with the same cardId (not stolen)', () => {
+		const sharedCardId = CardIds.HexCore;
+		const opponentEntityId = 58;
+		const localDeck = DeckState.create({
+			deck: [
+				DeckCard.create({
+					cardId: sharedCardId,
+					cardName: 'Hex',
+					refManaCost: 3,
+				}),
+			],
+			hand: [],
+		});
+		const opponentPlayingDeck = DeckState.create({
+			deck: [],
+			hand: [],
+		});
+		const removedFromHand = DeckCard.create({
+			entityId: opponentEntityId,
+		});
+
+		const result = reconcileCardInHandWithDeck({
+			removedCard: removedFromHand,
+			cardId: sharedCardId,
+			entityId: opponentEntityId,
+			deck: opponentPlayingDeck,
+			deckCards: opponentPlayingDeck.deck,
+			opponentDeck: localDeck,
+			helper,
+		});
+
+		expect(result.opponentDeck.deck.some((c) => c.cardId === sharedCardId)).toBe(true);
+		expect(result.opponentDeck.deck).toHaveLength(1);
+	});
+
 	it('removes a natural deck copy from the opposite deck when opponent plays a stolen hidden card revealed on play', () => {
 		const stolenCardId = CardIds.ConcealingConfection_JAIL_460;
 		const stolenEntityId = 32;
@@ -225,6 +260,7 @@ describe('reconcileCardInHandWithDeck', () => {
 		});
 		const removedFromHand = DeckCard.create({
 			entityId: stolenEntityId,
+			stolenFromOpponent: true,
 		});
 
 		const result = reconcileCardInHandWithDeck({

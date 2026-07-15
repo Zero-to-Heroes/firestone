@@ -742,7 +742,12 @@ const shouldReconcileStolenFromOppositeDeckOnPlay = (input: {
 	if (oppositeDeckCards.some((c) => Math.abs(c.entityId ?? c.trueEntityId ?? 0) === Math.abs(entityId))) {
 		return false;
 	}
-	return oppositeDeckCards.some((c) => c.cardId === cardId && !c.creatorCardId);
+	// Require explicit steal tracking — matching cardId alone is not enough (both players can
+	// naturally run the same card, e.g. Hex). Actual steals are reconciled via removedCard.stolenFromOpponent.
+	return (
+		!!removedCard.stolenFromOpponent &&
+		oppositeDeckCards.some((c) => c.cardId === cardId && !c.creatorCardId)
+	);
 };
 
 /** Cards generated/copied in hand are not drawn from the initial deck — skip deck reconciliation on play. */
