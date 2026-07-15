@@ -1,3 +1,4 @@
+import { OverlayModule } from '@angular/cdk/overlay';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
@@ -11,6 +12,7 @@ import { StatsDataAccessModule } from '@firestone/stats/data-access';
 import { InlineSVGModule } from 'ng-inline-svg-2';
 import { MarkdownModule } from 'ngx-markdown';
 import { NewVersionNotificationComponent } from './components/new-version-notification.component';
+import { ReleaseNotesContentComponent } from './components/release-notes-content.component';
 import { CheckOffCardsListComponent } from './counters/check-off-cards-list.component';
 import { CounterWrapperComponent } from './counters/counter-wrapper.component';
 import { CountersPositionerComponent } from './counters/counters-positioner.component';
@@ -32,6 +34,7 @@ const components = [
 	GroupedCountersElementComponent,
 	CheckOffCardsListComponent,
 	NewVersionNotificationComponent,
+	ReleaseNotesContentComponent,
 	PremiumDesktopComponent,
 	PremiumPackageComponent,
 ];
@@ -39,6 +42,7 @@ const components = [
 @NgModule({
 	imports: [
 		CommonModule,
+		OverlayModule,
 		DragDropModule,
 		FormsModule,
 		ReactiveFormsModule,

@@ -1,0 +1,11 @@
+:host {
+	display: block;
+}
+
+.release-notes-card {
+	color: var(--color-1, #ffb948);
+	cursor: help;
+	text-decoration: underline;
+	text-decoration-style: dotted;
+	text-underline-offset: 2px;
+}

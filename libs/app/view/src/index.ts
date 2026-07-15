@@ -1,5 +1,6 @@
 export * from './lib/app-view.module';
 export * from './lib/components/new-version-notification.component';
+export * from './lib/components/release-notes-content.component';
 export * from './lib/counters/check-off-cards-list.component';
 export * from './lib/counters/counter-wrapper.component';
 export * from './lib/counters/counters-positioner.component';

@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import {
 	AfterContentInit,
 	ChangeDetectionStrategy,
@@ -11,11 +10,19 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { isVersionBefore } from '@firestone/app/common';
+import { isVersionBefore, ReleaseNotesService } from '@firestone/app/common';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
+import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { MarkdownService } from 'ngx-markdown';
-import { BehaviorSubject, debounceTime, distinctUntilChanged, firstValueFrom, Observable, Subscription } from 'rxjs';
+import {
+	BehaviorSubject,
+	debounceTime,
+	distinctUntilChanged,
+	map,
+	Observable,
+	Subscription,
+} from 'rxjs';
 import { AppVersion } from '../model/app-version';
 
 const versions: readonly AppVersion[] = [
@@ -196,10 +203,9 @@ const versions: readonly AppVersion[] = [
 							></a>
 						</div>
 						<div class="update-text">
-							<div
-								class="parsed-text"
-								[innerHTML]="selectedVersion.textHtml | highlighter: (searchString$ | async)"
-							></div>
+							<release-notes-content
+								[html]="selectedVersion.textHtml | highlighter: (searchString$ | async)"
+							></release-notes-content>
 						</div>
 					</section>
 				</div>
@@ -266,14 +272,18 @@ export class NewVersionNotificationComponent
 	private versions: readonly AppVersion[];
 	private searchStringSub$$: Subscription;
 	private searchString$$ = new BehaviorSubject<string | null>(null);
+	private locale: string;
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
 		private readonly prefs: PreferencesService,
-		private readonly http: HttpClient,
 		private readonly markdownService: MarkdownService,
+		private readonly releaseNotes: ReleaseNotesService,
+		private readonly i18n: ILocalizationService,
+		private readonly cardsFacade: CardsFacadeService,
 	) {
 		super(cdr);
+		this.locale = this.i18n.locale;
 	}
 
 	async ngAfterContentInit() {
@@ -298,6 +308,19 @@ export class NewVersionNotificationComponent
 				);
 			}),
 		);
+
+		this.prefs.preferences$$
+			.pipe(
+				map((prefs) => prefs?.locale),
+				distinctUntilChanged(),
+			)
+			.subscribe((locale) => {
+				if (!locale || locale === this.locale) {
+					return;
+				}
+				this.locale = locale;
+				this.onLocaleChanged();
+			});
 
 		this.updateInfo();
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -328,10 +351,17 @@ export class NewVersionNotificationComponent
 	}
 
 	async selectVersion(version: AppVersion) {
-		if (version.versionDetails && !version.textHtml) {
-			const parsed = this.markdownService.parse(version.versionDetails);
-			version.textHtml = typeof parsed === 'string' ? parsed : await parsed;
+		if (!version.versionDetails) {
+			version.versionDetails = await this.releaseNotes.loadReleaseNotes(version.version, this.locale);
 		}
+		try {
+			await this.cardsFacade.waitForReady();
+		} catch {
+			// cards not available; placeholders will remain unresolved
+		}
+		const processed = this.releaseNotes.processCardPlaceholders(version.versionDetails ?? '');
+		const parsed = this.markdownService.parse(processed);
+		version.textHtml = typeof parsed === 'string' ? parsed : await parsed;
 		this.selectedVersion = version;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.markForCheck();
@@ -347,7 +377,7 @@ export class NewVersionNotificationComponent
 	}
 
 	getReleaseNotesUrl(version: string): string {
-		return `https://github.com/Zero-to-Heroes/firestone/blob/master/libs/shared/assets/src/assets/app-versions/${version}.md`;
+		return this.releaseNotes.getReleaseNotesUrl(version, this.locale);
 	}
 
 	private async updateInfo() {
@@ -380,13 +410,31 @@ export class NewVersionNotificationComponent
 
 	private async loadVersions(): Promise<readonly AppVersion[]> {
 		for (const v of versions) {
-			v.versionDetails = await this.loadTextDetail(v.version);
+			v.versionDetails = await this.releaseNotes.loadReleaseNotes(v.version, this.locale);
 		}
 		return versions;
 	}
 
-	// Load the contents of the `${version}.md` file from the assets folder
-	private async loadTextDetail(version: string): Promise<string | undefined> {
-		return firstValueFrom(this.http.get(`assets/app-versions/${version}.md`, { responseType: 'text' }));
+	private async onLocaleChanged(): Promise<void> {
+		for (const version of this.versions) {
+			version.versionDetails = undefined;
+			version.textHtml = undefined;
+		}
+
+		for (const version of this.versions) {
+			version.versionDetails = await this.releaseNotes.loadReleaseNotes(version.version, this.locale);
+		}
+
+		const currentVersion = this.selectedVersion?.version;
+		if (currentVersion) {
+			const version = this.versions.find((v) => v.version === currentVersion);
+			if (version) {
+				await this.selectVersion(version);
+			}
+		}
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.markForCheck();
+		}
 	}
 }
