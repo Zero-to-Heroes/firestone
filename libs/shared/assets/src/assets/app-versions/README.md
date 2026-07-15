@@ -22,7 +22,7 @@
 
 - Card IDs are in [card-ids.ts](https://github.com/Zero-to-Heroes/hs-reference-data/blob/master/src/card-ids.ts).
 
-- At display time, placeholders are replaced with the localized card name from the cards database. Hovering a card name shows its card image tooltip.
+- At display time, placeholders are replaced with the localized card name from the cards database, colored by card rarity. Hovering a card name shows its card image tooltip.
 
 - Example: `Cards discarded by {{JAIL_509}} now appear in a new section`
 

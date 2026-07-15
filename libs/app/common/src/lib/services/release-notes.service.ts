@@ -27,7 +27,11 @@ export class ReleaseNotesService {
 
 	public processCardPlaceholders(markdown: string): string {
 		return replaceReleaseNotesCardPlaceholders(markdown, (cardId) => {
-			return this.cardsFacade.getCard(cardId, false)?.name;
+			const card = this.cardsFacade.getCard(cardId, false);
+			if (!card) {
+				return undefined;
+			}
+			return { name: card.name, rarity: card.rarity };
 		});
 	}
 

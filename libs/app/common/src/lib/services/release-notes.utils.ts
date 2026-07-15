@@ -1,15 +1,36 @@
 const CARD_PLACEHOLDER_REGEX = /\{\{([A-Za-z][A-Za-z0-9_]*)\}\}/g;
 
+export interface ReleaseNotesCardInfo {
+	readonly name: string;
+	readonly rarity?: string;
+}
+
+export const getReleaseNotesCardRarityClass = (rarity?: string): string => {
+	switch (rarity?.toLowerCase()) {
+		case 'legendary':
+			return 'rarity-legendary';
+		case 'epic':
+			return 'rarity-epic';
+		case 'rare':
+			return 'rarity-rare';
+		case 'common':
+		case 'free':
+		default:
+			return 'rarity-common';
+	}
+};
+
 export const replaceReleaseNotesCardPlaceholders = (
 	markdown: string,
-	getCardName: (cardId: string) => string | undefined,
+	getCard: (cardId: string) => ReleaseNotesCardInfo | undefined,
 ): string => {
 	return markdown.replace(CARD_PLACEHOLDER_REGEX, (match, cardId: string) => {
-		const cardName = getCardName(cardId);
-		if (!cardName) {
+		const card = getCard(cardId);
+		if (!card) {
 			return match;
 		}
-		return `<span class="release-notes-card" data-card-id="${cardId}">${cardName}</span>`;
+		const rarityClass = getReleaseNotesCardRarityClass(card.rarity);
+		return `<span class="release-notes-card ${rarityClass}" data-card-id="${cardId}">${card.name}</span>`;
 	});
 };
 

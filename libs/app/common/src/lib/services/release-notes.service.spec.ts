@@ -1,5 +1,6 @@
 import {
 	getReleaseNotesAssetPath,
+	getReleaseNotesCardRarityClass,
 	getReleaseNotesGithubUrl,
 	replaceReleaseNotesCardPlaceholders,
 } from './release-notes.utils';
@@ -16,13 +17,23 @@ describe('release-notes utils', () => {
 		expect(getReleaseNotesGithubUrl('18.10.1', 'enUS')).not.toContain('/enUS/');
 	});
 
-	it('replaces card placeholders with localized names', () => {
+	it('maps card rarities to css classes', () => {
+		expect(getReleaseNotesCardRarityClass('Legendary')).toBe('rarity-legendary');
+		expect(getReleaseNotesCardRarityClass('Epic')).toBe('rarity-epic');
+		expect(getReleaseNotesCardRarityClass('Rare')).toBe('rarity-rare');
+		expect(getReleaseNotesCardRarityClass('Common')).toBe('rarity-common');
+		expect(getReleaseNotesCardRarityClass(undefined)).toBe('rarity-common');
+	});
+
+	it('replaces card placeholders with localized names and rarity classes', () => {
 		const result = replaceReleaseNotesCardPlaceholders('Discarded by {{JAIL_509}}', (cardId) => {
-			return cardId === 'JAIL_509' ? 'Godfrey the Betrayer' : undefined;
+			return cardId === 'JAIL_509'
+				? { name: 'Godfrey the Betrayer', rarity: 'Legendary' }
+				: undefined;
 		});
 
 		expect(result).toBe(
-			'Discarded by <span class="release-notes-card" data-card-id="JAIL_509">Godfrey the Betrayer</span>',
+			'Discarded by <span class="release-notes-card rarity-legendary" data-card-id="JAIL_509">Godfrey the Betrayer</span>',
 		);
 	});
 

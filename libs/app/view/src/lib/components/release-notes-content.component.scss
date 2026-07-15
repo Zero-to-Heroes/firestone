@@ -3,11 +3,27 @@
 }
 
 ::ng-deep .release-notes-card {
-	color: var(--color-1, #ffb948);
 	cursor: help;
+	font-weight: 600;
 	text-decoration: underline;
 	text-decoration-style: dotted;
 	text-underline-offset: 2px;
+
+	&.rarity-common {
+		color: #d9c3ab;
+	}
+
+	&.rarity-rare {
+		color: #6eb0ff;
+	}
+
+	&.rarity-epic {
+		color: #c78cff;
+	}
+
+	&.rarity-legendary {
+		color: #ffb948;
+	}
 }
 
 .card-tooltip-container {
