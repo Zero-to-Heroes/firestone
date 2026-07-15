@@ -4,25 +4,49 @@
 
 ::ng-deep .release-notes-card {
 	cursor: help;
-	font-weight: 600;
-	text-decoration: underline;
-	text-decoration-style: dotted;
+	font-weight: inherit;
+	text-decoration: underline dotted;
 	text-underline-offset: 2px;
+	text-decoration-thickness: 1px;
 
 	&.rarity-common {
-		color: #d9c3ab;
+		color: #c9b59c;
+		text-decoration-color: rgb(201 181 156 / 55%);
 	}
 
 	&.rarity-rare {
-		color: #6eb0ff;
+		color: #82b0e8;
+		text-decoration-color: rgb(130 176 232 / 55%);
 	}
 
 	&.rarity-epic {
-		color: #c78cff;
+		color: #b890e0;
+		text-decoration-color: rgb(184 144 224 / 55%);
 	}
 
 	&.rarity-legendary {
-		color: #ffb948;
+		color: #d4a060;
+		text-decoration-color: rgb(212 160 96 / 55%);
+	}
+
+	&:hover {
+		text-decoration-color: currentColor;
+
+		&.rarity-common {
+			color: #d9c3ab;
+		}
+
+		&.rarity-rare {
+			color: #6eb0ff;
+		}
+
+		&.rarity-epic {
+			color: #c78cff;
+		}
+
+		&.rarity-legendary {
+			color: #eeb050;
+		}
 	}
 }
 
