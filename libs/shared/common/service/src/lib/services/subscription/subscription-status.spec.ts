@@ -24,6 +24,19 @@ describe('resolveNewPlan', () => {
 		expect(result.shouldUpdate).toBe(false);
 	});
 
+	it('grants premium when the legacy provider returns an ow-confirmed plan and none was cached', () => {
+		const owConfirmedPlan: CurrentPlan = {
+			id: 'legacy',
+			expireAt: new Date('2026-07-23T00:35:59.000Z'),
+			active: true,
+			autoRenews: true,
+			cancelled: false,
+		};
+		const result = resolveNewPlan(owConfirmedPlan, null);
+		expect(result.plan).toBe(owConfirmedPlan);
+		expect(result.shouldUpdate).toBe(true);
+	});
+
 	it('clears the plan when the server definitively answers "no subscription"', () => {
 		const result = resolveNewPlan(null, legacyPlan);
 		expect(result.plan).toBeNull();

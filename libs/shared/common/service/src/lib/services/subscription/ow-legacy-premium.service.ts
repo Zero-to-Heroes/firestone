@@ -3,10 +3,12 @@ import {
 	AbstractFacadeService,
 	ApiRunner,
 	AppInjector,
+	LEGACY_OW_SUBSCRIPTION_PLAN_ID,
 	OverwolfService,
 	PremiumPlanId,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
+import { buildLegacyPlanFromOwDetailedPlan } from './ow-legacy-plan.mapper';
 import { SUB_STATUS_ERROR, SubStatusResult } from './subscription-status';
 import { OwSub } from './subscription.service';
 
@@ -75,9 +77,21 @@ export class OwLegacyPremiumService extends AbstractFacadeService<OwLegacyPremiu
 				true,
 			);
 		} catch (e) {
+			console.warn(
+				'[ads] [ow-legacy-premium] could not fetch sub status, using Overwolf plan',
+				e,
+				e?.status,
+				e?.message,
+			);
+			const detailedPlans = await this.ow.getDetailedActiveSubscriptionPlans();
+			const owLegacyPlan = detailedPlans?.plans?.find((plan) => plan.planId === LEGACY_OW_SUBSCRIPTION_PLAN_ID);
+			const owFallbackPlan = owLegacyPlan ? buildLegacyPlanFromOwDetailedPlan(owLegacyPlan) : null;
+			if (owFallbackPlan) {
+				console.debug('[ads] [ow-legacy-premium] return ow detailed legacy plan', owFallbackPlan);
+				return owFallbackPlan;
+			}
 			// Overwolf says the user owns a plan, but we couldn't confirm it with the server (eg 502):
 			// don't treat this as "no subscription"
-			console.warn('[ads] [ow-legacy-premium] could not fetch sub status', e);
 			return SUB_STATUS_ERROR;
 		}
 		console.log('[ads] [ow-legacy-premium] sub status', legacyPlan);

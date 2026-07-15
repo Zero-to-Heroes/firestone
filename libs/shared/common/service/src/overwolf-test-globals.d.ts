@@ -37,6 +37,7 @@ declare namespace overwolf {
 		export type GetCurrentUserResult = any;
 		export namespace subscriptions {
 			export type GetActivePlansResult = any;
+			export type GetDetailedActivePlansResult = any;
 			export type SubscriptionChangedEvent = any;
 		}
 	}

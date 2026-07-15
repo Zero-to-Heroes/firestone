@@ -9,7 +9,7 @@ import { ISystemInfoService, SystemInfo } from './system-info-service.interface'
 
 export const EXTENSION_ID = 'lnknbakkpommmjjdnelmfbjjdbocfpnpbkijjnob';
 export const HEARTHSTONE_GAME_ID = 9898;
-const NO_AD_PLAN = 13;
+export const LEGACY_OW_SUBSCRIPTION_PLAN_ID = 13;
 
 // TODO: move types
 type Preferences = any;
@@ -638,6 +638,20 @@ export class OverwolfService
 		});
 	}
 
+	public async getDetailedActiveSubscriptionPlans(): Promise<overwolf.profile.subscriptions.GetDetailedActivePlansResult> {
+		return new Promise<overwolf.profile.subscriptions.GetDetailedActivePlansResult>((resolve) => {
+			if (!overwolf.profile.subscriptions) {
+				resolve({} as overwolf.profile.subscriptions.GetDetailedActivePlansResult);
+				return;
+			}
+			overwolf.profile.subscriptions.getDetailedActivePlans(
+				(res: overwolf.profile.subscriptions.GetDetailedActivePlansResult) => {
+					resolve(res);
+				},
+			);
+		});
+	}
+
 	public async onSubscriptionChanged(
 		listener: (event: overwolf.profile.subscriptions.SubscriptionChangedEvent) => void,
 	) {
@@ -658,7 +672,10 @@ export class OverwolfService
 			}
 			overwolf.profile.subscriptions.getActivePlans(
 				(activePlans: overwolf.profile.subscriptions.GetActivePlansResult) => {
-					const hideAds = activePlans && activePlans.plans && activePlans.plans.includes(NO_AD_PLAN);
+					const hideAds =
+						activePlans &&
+						activePlans.plans &&
+						activePlans.plans.includes(LEGACY_OW_SUBSCRIPTION_PLAN_ID);
 					console.log('[ads] active plans', activePlans);
 					resolve(!hideAds);
 				},
