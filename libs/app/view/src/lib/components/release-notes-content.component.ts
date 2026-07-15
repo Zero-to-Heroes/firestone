@@ -18,6 +18,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 			[innerHTML]="safeHtml"
 			(mouseover)="onMouseOver($event)"
 			(mouseout)="onMouseOut($event)"
+			(mouseleave)="hideTooltip()"
 		></div>
 		<div class="card-tooltip-container" *ngIf="activeCardId" [ngStyle]="tooltipStyle">
 			<card-tooltip
@@ -44,23 +45,19 @@ export class ReleaseNotesContentComponent implements OnDestroy {
 	tooltipStyle: Record<string, string> = {};
 	tooltipPosition: 'left' | 'right' = 'right';
 
-	private hideTimeout: ReturnType<typeof setTimeout> | null;
-
 	constructor(
 		private readonly sanitizer: DomSanitizer,
 		private readonly cdr: ChangeDetectorRef,
 	) {}
 
 	ngOnDestroy(): void {
-		this.clearHideTimeout();
+		this.hideTooltip();
 	}
 
 	onMouseOver(event: MouseEvent): void {
 		if (event.shiftKey) {
 			return;
 		}
-
-		this.clearHideTimeout();
 
 		const cardElement = this.findCardElement(event.target);
 		if (!cardElement) {
@@ -85,13 +82,16 @@ export class ReleaseNotesContentComponent implements OnDestroy {
 		}
 
 		const fromCard = this.findCardElement(event.target);
-		const toCard = this.findCardElement(event.relatedTarget);
-		if (fromCard && fromCard === toCard) {
+		if (!fromCard) {
 			return;
 		}
 
-		this.clearHideTimeout();
-		this.hideTimeout = setTimeout(() => this.hideTooltip(), 50);
+		const toCard = this.findCardElement(event.relatedTarget);
+		if (toCard) {
+			return;
+		}
+
+		this.hideTooltip();
 	}
 
 	private showTooltip(cardElement: HTMLElement, cardId: string): void {
@@ -109,17 +109,10 @@ export class ReleaseNotesContentComponent implements OnDestroy {
 		}
 	}
 
-	private hideTooltip(): void {
+	hideTooltip(): void {
 		this.activeCardId = null;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.markForCheck();
-		}
-	}
-
-	private clearHideTimeout(): void {
-		if (this.hideTimeout) {
-			clearTimeout(this.hideTimeout);
-			this.hideTimeout = null;
 		}
 	}
 
