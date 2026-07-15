@@ -351,6 +351,9 @@ export class NewVersionNotificationComponent
 	}
 
 	async selectVersion(version: AppVersion) {
+		if (!version) {
+			return;
+		}
 		if (!version.versionDetails) {
 			version.versionDetails = await this.releaseNotes.loadReleaseNotes(version.version, this.locale);
 		}
@@ -381,14 +384,14 @@ export class NewVersionNotificationComponent
 	}
 
 	private async updateInfo() {
-		if (!this.versions) {
+		if (!this.versions?.length) {
 			return;
 		}
 
 		const prefs: Preferences = await this.prefs.getPreferences();
 		const lastSeenReleaseNotes: string = prefs.lastSeenReleaseNotes;
 		const lastUpdate = this.versions[0];
-		this.selectVersion(lastUpdate);
+		await this.selectVersion(lastUpdate);
 		this.dontShowAgain = prefs.dontShowNewVersionNotif;
 		if (!this._forceOpen && prefs.dontShowNewVersionNotif && !lastUpdate.force) {
 			return;
@@ -397,7 +400,7 @@ export class NewVersionNotificationComponent
 		if (
 			this._forceOpen ||
 			!lastSeenReleaseNotes ||
-			isVersionBefore(lastSeenReleaseNotes, this.selectedVersion.version)
+			(this.selectedVersion && isVersionBefore(lastSeenReleaseNotes, this.selectedVersion.version))
 		) {
 			this.showNewVersion = true;
 		}
@@ -416,6 +419,9 @@ export class NewVersionNotificationComponent
 	}
 
 	private async onLocaleChanged(): Promise<void> {
+		if (!this.versions?.length) {
+			return;
+		}
 		for (const version of this.versions) {
 			version.versionDetails = undefined;
 			version.textHtml = undefined;
