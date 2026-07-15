@@ -1,4 +1,5 @@
 import {
+	buildDiscordReleaseNotes,
 	getReleaseNotesAssetPath,
 	getReleaseNotesCardRarityClass,
 	getReleaseNotesGithubUrl,
@@ -45,5 +46,17 @@ describe('release-notes utils', () => {
 
 	it('falls back to English asset path when locale is enUS', () => {
 		expect(getReleaseNotesAssetPath('18.10.1', 'enUS')).not.toContain('/enUS/');
+	});
+
+	it('builds Discord release notes with resolved card names and section headers', () => {
+		const result = buildDiscordReleaseNotes(
+			'## Decktracker\n\n- Counter updates {{JAIL_474}}\n\n- Another item',
+			'18.11.0',
+			(cardId) => (cardId === 'JAIL_474' ? { name: 'Jade Guardians' } : undefined),
+		);
+
+		expect(result).toBe(
+			'**Firestone 18.11.0 — Release notes**\n\n**Decktracker**\n- Counter updates Jade Guardians\n- Another item\n',
+		);
 	});
 });

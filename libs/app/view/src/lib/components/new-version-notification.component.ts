@@ -15,17 +15,11 @@ import { Preferences, PreferencesService } from '@firestone/shared/common/servic
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { MarkdownService } from 'ngx-markdown';
-import {
-	BehaviorSubject,
-	debounceTime,
-	distinctUntilChanged,
-	map,
-	Observable,
-	Subscription,
-} from 'rxjs';
+import { BehaviorSubject, debounceTime, distinctUntilChanged, map, Observable, Subscription } from 'rxjs';
 import { AppVersion } from '../model/app-version';
 
 const versions: readonly AppVersion[] = [
+	{ version: '18.11.0', date: '2026-07-15', force: true },
 	{ version: '18.10.1', date: '2026-06-30' },
 	{ version: '18.9.0', date: '2026-06-24' },
 	{ version: '18.8.1', date: '2026-06-11' },

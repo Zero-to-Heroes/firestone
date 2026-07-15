@@ -31,3 +31,13 @@
 - Highlights, pools, and oracles should each be on their separate lines. Bugs and new additions for these categories should be condensed in a single line
 
 - Bugs and meaningful additions / changes should however each have their own line
+
+### Discord copy
+
+- After the English release notes are finalized, run `npm run generate-discord-release-notes` (defaults to the version in `package.json`).
+
+- This writes a copy-paste-ready file to `discord/{version}.txt` with card placeholders resolved to English card names and section headers formatted for Discord.
+
+- The same command runs automatically as part of `release:phase1` and `release:all`.
+
+- Use `npm run generate-discord-release-notes -- --all` to regenerate every English release notes file.

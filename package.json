@@ -1,6 +1,6 @@
 {
 	"name": "firestone",
-	"version": "18.10.13",
+	"version": "18.11.0",
 	"productName": "Firestone",
 	"author": {
 		"name": "Sébastien Tromp",
@@ -24,6 +24,7 @@
 		"build-dist": "npm run pre-build && cross-env NODE_ENV=production NODE_OPTIONS=--max-old-space-size=12288 nx build --configuration=production && npm run replace-version ",
 		"build-local": "npm run pre-build && cross-env NODE_ENV=production NODE_OPTIONS=--max-old-space-size=12288 nx build --configuration=production && npm run replace-version && npx tsx ./build-tools/opk-pipeline-no-upload.ts",
 		"replace-version": "npx tsx ./build-tools/replace-version.ts",
+		"generate-discord-release-notes": "npx tsx ./build-tools/generate-discord-release-notes.ts",
 		"opk-pipeline": "npx tsx ./build-tools/opk-pipeline.ts",
 		"c1-1": "=============== Development Tools =================",
 		"build:reverse-synergies": "npx tsx ./libs/game-state/src/lib/services/card-highlight/tools/build-reverse-mappings.ts",
@@ -65,8 +66,8 @@
 		"c6-4": "=============== Combined releases (single root version) =================",
 		"full-build:ow-electron": "npm run full-build:standalone",
 		"full-publish:ow-electron": "npm run full-publish:standalone",
-		"release:phase1": "npm run build && npm run full-publish:standalone",
-		"release:all": "npm run build && npm run full-publish:standalone && npm run full-publish:standalone-premium",
+		"release:phase1": "npm run generate-discord-release-notes && npm run build && npm run full-publish:standalone",
+		"release:all": "npm run generate-discord-release-notes && npm run build && npm run full-publish:standalone && npm run full-publish:standalone-premium",
 		"c6-1": "=============== MindVision Edge.js =================",
 		"build:mindvision:rebuild": "electron-rebuild --only=electron-edge-js --force",
 		"build:mindvision:copy": "nx build electron-app",
