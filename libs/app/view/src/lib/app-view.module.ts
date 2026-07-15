@@ -1,4 +1,3 @@
-import { OverlayModule } from '@angular/cdk/overlay';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
@@ -42,7 +41,6 @@ const components = [
 @NgModule({
 	imports: [
 		CommonModule,
-		OverlayModule,
 		DragDropModule,
 		FormsModule,
 		ReactiveFormsModule,

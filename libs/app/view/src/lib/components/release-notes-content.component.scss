@@ -2,10 +2,16 @@
 	display: block;
 }
 
-.release-notes-card {
+::ng-deep .release-notes-card {
 	color: var(--color-1, #ffb948);
 	cursor: help;
 	text-decoration: underline;
 	text-decoration-style: dotted;
 	text-underline-offset: 2px;
+}
+
+.card-tooltip-container {
+	position: fixed;
+	z-index: 1000000000000000;
+	pointer-events: none;
 }

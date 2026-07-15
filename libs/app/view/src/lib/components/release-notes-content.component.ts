@@ -1,57 +1,66 @@
-import { Overlay, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
-import { ComponentPortal } from '@angular/cdk/portal';
 import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
-	ComponentRef,
-	HostListener,
 	Input,
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { CardTooltipComponent } from '@firestone/shared/common/view';
-import { sleep } from '@firestone/shared/framework/common';
 
 @Component({
 	standalone: false,
 	selector: 'release-notes-content',
 	styleUrls: ['./release-notes-content.component.scss'],
-	template: ` <div class="parsed-text" [innerHTML]="safeHtml"></div> `,
+	template: `
+		<div
+			class="parsed-text"
+			[innerHTML]="safeHtml"
+			(mouseover)="onMouseOver($event)"
+			(mouseout)="onMouseOut($event)"
+		></div>
+		<div class="card-tooltip-container" *ngIf="activeCardId" [ngStyle]="tooltipStyle">
+			<card-tooltip
+				[cardId]="activeCardId"
+				[localized]="true"
+				[relativePosition]="tooltipPosition"
+			></card-tooltip>
+		</div>
+	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReleaseNotesContentComponent implements OnDestroy {
 	@Input() set html(value: unknown) {
 		const text = typeof value === 'string' ? value : '';
 		this.safeHtml = this.sanitizer.bypassSecurityTrustHtml(text);
+		this.hideTooltip();
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.markForCheck();
 		}
 	}
 
 	safeHtml: SafeHtml = '';
+	activeCardId: string | null;
+	tooltipStyle: Record<string, string> = {};
+	tooltipPosition: 'left' | 'right' = 'right';
 
-	private overlayRef: OverlayRef | null;
-	private tooltipRef: ComponentRef<CardTooltipComponent> | null;
-	private currentCardId: string | null;
+	private hideTimeout: ReturnType<typeof setTimeout> | null;
 
 	constructor(
 		private readonly sanitizer: DomSanitizer,
-		private readonly overlay: Overlay,
-		private readonly overlayPositionBuilder: OverlayPositionBuilder,
 		private readonly cdr: ChangeDetectorRef,
 	) {}
 
 	ngOnDestroy(): void {
-		this.hideTooltip();
+		this.clearHideTimeout();
 	}
 
-	@HostListener('mouseover', ['$event'])
 	onMouseOver(event: MouseEvent): void {
 		if (event.shiftKey) {
 			return;
 		}
+
+		this.clearHideTimeout();
 
 		const cardElement = this.findCardElement(event.target);
 		if (!cardElement) {
@@ -59,26 +68,59 @@ export class ReleaseNotesContentComponent implements OnDestroy {
 		}
 
 		const cardId = cardElement.getAttribute('data-card-id');
-		if (!cardId || cardId === this.currentCardId) {
+		if (!cardId) {
+			return;
+		}
+
+		if (cardId === this.activeCardId) {
 			return;
 		}
 
 		this.showTooltip(cardElement, cardId);
 	}
 
-	@HostListener('mouseout', ['$event'])
 	onMouseOut(event: MouseEvent): void {
 		if (event.shiftKey) {
 			return;
 		}
 
-		const cardElement = this.findCardElement(event.target);
-		const relatedCardElement = this.findCardElement(event.relatedTarget);
-		if (cardElement && cardElement === relatedCardElement) {
+		const fromCard = this.findCardElement(event.target);
+		const toCard = this.findCardElement(event.relatedTarget);
+		if (fromCard && fromCard === toCard) {
 			return;
 		}
 
-		this.hideTooltip();
+		this.clearHideTimeout();
+		this.hideTimeout = setTimeout(() => this.hideTooltip(), 50);
+	}
+
+	private showTooltip(cardElement: HTMLElement, cardId: string): void {
+		const rect = cardElement.getBoundingClientRect();
+		const showOnRight = rect.left < window.innerWidth / 2;
+		this.tooltipPosition = showOnRight ? 'right' : 'left';
+		this.tooltipStyle = {
+			top: `${rect.top + rect.height / 2}px`,
+			left: showOnRight ? `${rect.right + 8}px` : `${rect.left - 8}px`,
+			transform: 'translateY(-50%)',
+		};
+		this.activeCardId = cardId;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.markForCheck();
+		}
+	}
+
+	private hideTooltip(): void {
+		this.activeCardId = null;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.markForCheck();
+		}
+	}
+
+	private clearHideTimeout(): void {
+		if (this.hideTimeout) {
+			clearTimeout(this.hideTimeout);
+			this.hideTimeout = null;
+		}
 	}
 
 	private findCardElement(target: EventTarget | null): HTMLElement | null {
@@ -86,80 +128,5 @@ export class ReleaseNotesContentComponent implements OnDestroy {
 			return null;
 		}
 		return target.closest('.release-notes-card') as HTMLElement | null;
-	}
-
-	private async showTooltip(cardElement: HTMLElement, cardId: string): Promise<void> {
-		this.hideTooltip();
-		this.currentCardId = cardId;
-
-		const positionStrategy = this.overlayPositionBuilder
-			.flexibleConnectedTo(cardElement)
-			.withPositions([
-				{
-					originX: 'start',
-					originY: 'center',
-					overlayX: 'end',
-					overlayY: 'center',
-				},
-				{
-					originX: 'end',
-					originY: 'center',
-					overlayX: 'start',
-					overlayY: 'center',
-				},
-			]);
-
-		this.overlayRef = this.overlay.create({ positionStrategy });
-		this.tooltipRef = this.overlayRef.attach(new ComponentPortal(CardTooltipComponent));
-		this.tooltipRef.instance.cardId = cardId;
-		this.tooltipRef.instance.localized = true;
-		this.tooltipRef.instance.displayBuffs = false;
-
-		positionStrategy.apply();
-		await this.repositionTooltip(cardElement);
-	}
-
-	private async repositionTooltip(cardElement: HTMLElement): Promise<void> {
-		await sleep(5);
-		let positionUpdated = true;
-		let previousLeft = 0;
-		let previousTop = 0;
-
-		while (positionUpdated && this.tooltipRef) {
-			const tooltipRect = this.tooltipRef.location.nativeElement.getBoundingClientRect();
-			const targetRect = cardElement.getBoundingClientRect();
-			this.tooltipRef.instance.relativePosition = tooltipRect.x < targetRect.x ? 'left' : 'right';
-			this.overlayRef?.updatePosition();
-
-			positionUpdated = previousLeft !== tooltipRect.left || previousTop !== tooltipRect.top;
-			previousLeft = tooltipRect.left;
-			previousTop = tooltipRect.top;
-			await sleep(5);
-		}
-	}
-
-	private hideTooltip(): void {
-		this.currentCardId = null;
-
-		if (this.tooltipRef) {
-			try {
-				this.tooltipRef.destroy();
-			} catch {
-				// already destroyed
-			}
-			this.tooltipRef = null;
-		}
-
-		if (this.overlayRef) {
-			try {
-				if (this.overlayRef.hasAttached()) {
-					this.overlayRef.detach();
-				}
-				this.overlayRef.dispose();
-			} catch {
-				// already disposed
-			}
-			this.overlayRef = null;
-		}
 	}
 }

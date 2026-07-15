@@ -359,9 +359,9 @@ export class NewVersionNotificationComponent
 		} catch {
 			// cards not available; placeholders will remain unresolved
 		}
-		const processed = this.releaseNotes.processCardPlaceholders(version.versionDetails ?? '');
-		const parsed = this.markdownService.parse(processed);
-		version.textHtml = typeof parsed === 'string' ? parsed : await parsed;
+		const parsed = this.markdownService.parse(version.versionDetails ?? '');
+		const html = typeof parsed === 'string' ? parsed : await parsed;
+		version.textHtml = this.releaseNotes.processCardPlaceholders(html);
 		this.selectedVersion = version;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.markForCheck();

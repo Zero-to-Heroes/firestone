@@ -1,23 +1,33 @@
-## When creating a new version
-
-- Use 18.3.0 as a model for sections, groupings, icons, etc.
-- Only include user-facing modifications (typically this excludes all the "chore" and "DEV" commits)
-
-### Localization
-
-- **English (default)**: `{version}.md` at the root of this folder (e.g. `18.10.1.md`).
-- **Other locales**: `{locale}/{version}.md` in a subfolder named after the Firestone locale code (`frFR`, `deDE`, `zhCN`, etc.).
-- If a localized file does not exist, the English root file is shown instead.
-- Supported locale codes match the app language settings: `deDE`, `enUS`, `esES`, `esMX`, `frFR`, `itIT`, `jaJP`, `koKR`, `plPL`, `ptBR`, `ruRU`, `thTH`, `zhCN`, `zhTW`.
-
-### Card names
-
-- Reference cards with `{{CARD_ID}}` placeholders instead of plain English names.
-- Card IDs are in [card-ids.ts](https://github.com/Zero-to-Heroes/hs-reference-data/blob/master/src/card-ids.ts).
-- At display time, placeholders are replaced with the localized card name from the cards database. Hovering a card name shows its card image tooltip.
-- Example: `Cards discarded by {{JAIL_509}} now appear in a new section`
-
-### Decktracker
-
-- Highlights, pools, and oracles should each be on their separate lines. Bugs and new additions for these categories should be condensed in a single line
-- Bugs and meaningful additions / changes should however each have their own line
+## When creating a new version
+
+- Use 18.3.0 as a model for sections, groupings, icons, etc.
+
+- Only include user-facing modifications (typically this excludes all the "chore" and "DEV" commits)
+
+- Don't build localized versions yet - wait until the default (English) version has been approved, then localize the release notes
+
+### Localization
+
+- **English (default)**: `{version}.md` at the root of this folder (e.g. `18.10.1.md`).
+
+- **Other locales**: `{locale}/{version}.md` in a subfolder named after the Firestone locale code (`frFR`, `deDE`, `zhCN`, etc.).
+
+- If a localized file does not exist, the English root file is shown instead.
+
+- Supported locale codes match the app language settings: `deDE`, `enUS`, `esES`, `esMX`, `frFR`, `itIT`, `jaJP`, `koKR`, `plPL`, `ptBR`, `ruRU`, `thTH`, `zhCN`, `zhTW`.
+
+### Card names
+
+- Reference cards with `{{CARD_ID}}` placeholders instead of plain English names.
+
+- Card IDs are in [card-ids.ts](https://github.com/Zero-to-Heroes/hs-reference-data/blob/master/src/card-ids.ts).
+
+- At display time, placeholders are replaced with the localized card name from the cards database. Hovering a card name shows its card image tooltip.
+
+- Example: `Cards discarded by {{JAIL_509}} now appear in a new section`
+
+### Decktracker
+
+- Highlights, pools, and oracles should each be on their separate lines. Bugs and new additions for these categories should be condensed in a single line
+
+- Bugs and meaningful additions / changes should however each have their own line
