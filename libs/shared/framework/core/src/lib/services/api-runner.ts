@@ -85,6 +85,7 @@ export class ApiRunner {
 		options?: {
 			bearerToken?: string;
 		},
+		returnStatusCode = false,
 	): Promise<T | null> {
 		return new Promise<T | null>((resolve, reject) => {
 			let headers = new HttpHeaders({});
@@ -103,7 +104,11 @@ export class ApiRunner {
 					// We still log an error though, because it can be useful when debugging other things
 					// UPDATE: we don't log an error anymore, because it's too noisy
 					console.warn('Could not execute GET call', url);
-					resolve(null);
+					if (returnStatusCode) {
+						reject(error.status);
+					} else {
+						resolve(null);
+					}
 				},
 			);
 		});

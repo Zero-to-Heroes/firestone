@@ -12,12 +12,13 @@ import {
 } from '@firestone/shared/framework/core';
 import { distinctUntilChanged } from 'rxjs';
 import { OwLegacyPremiumService } from './ow-legacy-premium.service';
+import { SUB_STATUS_ERROR } from './subscription-status';
 import { TebexService } from './tebex.service';
 
 // Filled in after deploying the api-log-membership-bypass lambda (npm run full-deploy)
 const LOG_ENDPOINT = 'https://73ybnsv6auhl6x2hv5tvdoppcq0oecmq.lambda-url.us-west-2.on.aws/';
 
-const CHECK_INTERVAL = 30 * 1000;
+const CHECK_INTERVAL = 2 * 60 * 1000;
 // Consecutive confirmed mismatches (premium claimed AND server says no-sub) required before we
 // degrade to non-premium. Gates out SSO-hint / Tebex-latency races and transient network errors,
 // since a single good/errored reply resets the counter. ~DEGRADE_THRESHOLD * CHECK_INTERVAL ≈ 2 min,
@@ -134,6 +135,12 @@ export class MembershipIntegrityService {
 				this.tebex.getSubscriptionStatus(),
 				this.legacy.getSubscriptionStatus(),
 			]);
+			// The status services signal an error when they couldn't get a definitive answer from the
+			// server (eg 502). Assume premium in that case to avoid false positives.
+			if (tebexPlan === SUB_STATUS_ERROR || legacyPlan === SUB_STATUS_ERROR) {
+				console.warn('[membership-integrity] could not verify server subscription status');
+				return true;
+			}
 			return isActivePremiumPlan(tebexPlan) || isActivePremiumPlan(legacyPlan);
 		} catch (e) {
 			// On error, assume premium to avoid false positives (e.g. transient network issues).
@@ -147,10 +154,12 @@ export class MembershipIntegrityService {
 		try {
 			const currentUser = await this.userService.getCurrentUser();
 			const localPlan = this.localStorage.getItem<CurrentPlan>(LocalStorageService.CURRENT_SUB_PLAN);
-			const [tebexPlan, legacyPlan] = await Promise.all([
+			const [tebexResult, legacyResult] = await Promise.all([
 				this.tebex.getSubscriptionStatus(),
 				this.legacy.getSubscriptionStatus(),
 			]);
+			const tebexPlan = tebexResult === SUB_STATUS_ERROR ? null : tebexResult;
+			const legacyPlan = legacyResult === SUB_STATUS_ERROR ? null : legacyResult;
 			const remoteDebugging = await this.probeRemoteDebugging();
 			const payload = {
 				clientDate: new Date().toISOString(),

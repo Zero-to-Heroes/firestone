@@ -33,6 +33,7 @@ export * from './lib/services/scaling.service';
 export * from './lib/services/standalone-ad.service';
 export * from './lib/services/subscription/membership-integrity.service';
 export * from './lib/services/subscription/ow-legacy-premium.service';
+export * from './lib/services/subscription/subscription-status';
 export * from './lib/services/subscription/subscription.service';
 export * from './lib/services/subscription/tebex-deeplink.service';
 export * from './lib/services/subscription/tebex-headless.service';

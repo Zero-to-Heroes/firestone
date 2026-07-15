@@ -16,6 +16,7 @@ import {
 } from '@firestone/shared/framework/core';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { OwLegacyPremiumService } from './ow-legacy-premium.service';
+import { resolveNewPlan, SUB_STATUS_ERROR, SubStatusResult } from './subscription-status';
 import { TebexService } from './tebex.service';
 
 @Injectable()
@@ -129,37 +130,49 @@ export class SubscriptionService extends AbstractFacadeService<SubscriptionServi
 	}
 
 	private async fetchCurrentPlanInternal(): Promise<CurrentPlan | null> {
-		const currentPlan = await this.getCurrentPlanInternal();
-		console.debug('[ads] [subscription] current plan', currentPlan);
+		const fetchResult = await this.getCurrentPlanInternal();
+		console.debug('[ads] [subscription] current plan', fetchResult);
 		// Once it is initialized, it should not be null, otherwise the getValueWithInit() will hang indefinitely
 		const existingPlan = await this.currentPlan$$.getValueWithInit();
-		if (equalCurrentPlan(existingPlan, currentPlan)) {
-			return existingPlan;
+		const { plan, shouldUpdate } = resolveNewPlan(fetchResult, existingPlan);
+		if (!shouldUpdate) {
+			if (fetchResult === SUB_STATUS_ERROR) {
+				console.warn(
+					'[ads] [subscription] could not get a definitive subscription status, keeping last-known plan',
+					plan,
+				);
+			}
+			return plan;
 		}
 
 		this.currentPlan$$.next(
-			currentPlan
+			plan
 				? {
-						...currentPlan,
-						expireAt: currentPlan.expireAt ? new Date(currentPlan.expireAt) : null,
+						...plan,
+						expireAt: plan.expireAt ? new Date(plan.expireAt) : null,
 					}
 				: null,
 		);
-		this.localStorage.setItem(LocalStorageService.CURRENT_SUB_PLAN, currentPlan);
-		return currentPlan;
+		this.localStorage.setItem(LocalStorageService.CURRENT_SUB_PLAN, plan);
+		return plan;
 	}
 
-	private async getCurrentPlanInternal(): Promise<CurrentPlan | null> {
+	private async getCurrentPlanInternal(): Promise<SubStatusResult> {
 		const tebexPlan = await this.tebex.getSubscriptionStatus();
 		console.log('[ads] [subscription] tebex plan', tebexPlan);
-		if (tebexPlan != null) {
+		if (tebexPlan != null && tebexPlan !== SUB_STATUS_ERROR) {
 			return tebexPlan;
 		}
 
 		const legacyPlan = await this.legacy.getSubscriptionStatus();
 		console.log('[ads] [subscription] legacy plan', legacyPlan);
-		if (legacyPlan != null) {
+		if (legacyPlan != null && legacyPlan !== SUB_STATUS_ERROR) {
 			return legacyPlan;
+		}
+
+		// If any source errored out, we don't have a definitive "no subscription" answer
+		if (tebexPlan === SUB_STATUS_ERROR || legacyPlan === SUB_STATUS_ERROR) {
+			return SUB_STATUS_ERROR;
 		}
 		return null;
 	}

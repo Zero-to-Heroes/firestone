@@ -4,7 +4,6 @@ import {
 	AbstractFacadeService,
 	ApiRunner,
 	AppInjector,
-	CurrentPlan,
 	EXTENSION_ID,
 	EXTERNAL_URL_SERVICE_TOKEN,
 	IExternalUrlService,
@@ -15,6 +14,7 @@ import {
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
 import { PreferencesService } from '../preferences.service';
+import { SUB_STATUS_ERROR, SubStatusResult } from './subscription-status';
 
 // const STORE_ID = 1564884;
 export const STORE_PUBLIC_TOKEN = 'xjh0-5ef1e6461f2aa381db4df635c3c0c5556aed5191';
@@ -87,11 +87,11 @@ export class TebexService extends AbstractFacadeService<TebexService> {
 		this.externalUrl.openUrlInDefaultBrowser(paymentHistoryLink);
 	}
 
-	public async getSubscriptionStatus(): Promise<CurrentPlan | null> {
-		return this.callOnMainProcess<CurrentPlan | null>('getSubscriptionStatusInternal');
+	public async getSubscriptionStatus(): Promise<SubStatusResult> {
+		return this.callOnMainProcess<SubStatusResult>('getSubscriptionStatusInternal');
 	}
 
-	protected async getSubscriptionStatusInternal(): Promise<CurrentPlan | null> {
+	protected async getSubscriptionStatusInternal(): Promise<SubStatusResult> {
 		await waitForReady(this.user);
 		console.log('[ads] [tebex] getting subscription status internal parent');
 		const currentUser = await this.user.getCurrentUser();
@@ -100,9 +100,20 @@ export class TebexService extends AbstractFacadeService<TebexService> {
 		}
 
 		const owToken = await this.ow.generateSessionToken();
-		const tebexPlans = await this.api.callGetApi<readonly TebexSub[]>(TEBEX_SUBSCRIPTIONS_URL, {
-			bearerToken: owToken,
-		});
+		let tebexPlans: readonly TebexSub[] | null;
+		try {
+			tebexPlans = await this.api.callGetApi<readonly TebexSub[]>(
+				TEBEX_SUBSCRIPTIONS_URL,
+				{
+					bearerToken: owToken,
+				},
+				true,
+			);
+		} catch (e) {
+			// We couldn't get a definitive answer from the server: don't treat this as "no subscription"
+			console.warn('[ads] [tebex] could not fetch subscriptions', e);
+			return SUB_STATUS_ERROR;
+		}
 		console.log('[ads] [tebex] tebexPlans', tebexPlans, owToken);
 		if (!tebexPlans?.length) {
 			return null;
@@ -113,8 +124,10 @@ export class TebexService extends AbstractFacadeService<TebexService> {
 		const tebexPackage = packages?.find((p) => p.id === tebexPlan.packageId);
 		console.debug('[ads] [tebex] tebexPackage', tebexPackage);
 		if (!tebexPackage) {
+			// The user has a subscription, but we couldn't map it to a package (eg the packages list
+			// failed to load): don't treat this as "no subscription"
 			console.warn('[ads] [tebex] could not find package for sub', packages, tebexPlans);
-			return null;
+			return SUB_STATUS_ERROR;
 		}
 
 		const subDetails: any = null;

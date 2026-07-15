@@ -3,11 +3,11 @@ import {
 	AbstractFacadeService,
 	ApiRunner,
 	AppInjector,
-	CurrentPlan,
 	OverwolfService,
 	PremiumPlanId,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
+import { SUB_STATUS_ERROR, SubStatusResult } from './subscription-status';
 import { OwSub } from './subscription.service';
 
 const UNSUB_URL = 'https://56ogovbpuj3wqndoj6j3fv3qs40ustlm.lambda-url.us-west-2.on.aws/';
@@ -40,8 +40,8 @@ export class OwLegacyPremiumService extends AbstractFacadeService<OwLegacyPremiu
 		this.registerMainProcessMethod('unsubscribeInternal', () => this.unsubscribeInternal());
 	}
 
-	public async getSubscriptionStatus(): Promise<CurrentPlan | null> {
-		return this.callOnMainProcess<CurrentPlan | null>('getSubscriptionStatusInternal');
+	public async getSubscriptionStatus(): Promise<SubStatusResult> {
+		return this.callOnMainProcess<SubStatusResult>('getSubscriptionStatusInternal');
 	}
 
 	public async subscribe() {
@@ -56,7 +56,7 @@ export class OwLegacyPremiumService extends AbstractFacadeService<OwLegacyPremiu
 		return this.callOnMainProcess('unsubscribeInternal');
 	}
 
-	private async getSubscriptionStatusInternal(): Promise<CurrentPlan | null> {
+	private async getSubscriptionStatusInternal(): Promise<SubStatusResult> {
 		const legacyPlans = await this.ow.getActiveSubscriptionPlans();
 		console.debug('[ads] [ow-legacy-premium] legacy plans', legacyPlans);
 		if (!legacyPlans?.plans?.length) {
@@ -64,9 +64,22 @@ export class OwLegacyPremiumService extends AbstractFacadeService<OwLegacyPremiu
 		}
 		// User has a plan, and we use this endpoint to get the expiry date
 		const owToken = await this.ow.generateSessionToken();
-		const legacyPlan = await this.api.callPostApi<OwSub>(STATUS_URL, {
-			owToken: owToken,
-		});
+		let legacyPlan: OwSub | null;
+		try {
+			legacyPlan = await this.api.callPostApi<OwSub>(
+				STATUS_URL,
+				{
+					owToken: owToken,
+				},
+				undefined,
+				true,
+			);
+		} catch (e) {
+			// Overwolf says the user owns a plan, but we couldn't confirm it with the server (eg 502):
+			// don't treat this as "no subscription"
+			console.warn('[ads] [ow-legacy-premium] could not fetch sub status', e);
+			return SUB_STATUS_ERROR;
+		}
 		console.log('[ads] [ow-legacy-premium] sub status', legacyPlan);
 		if (legacyPlan?.state === 0 || (legacyPlan?.state === 1 && new Date(legacyPlan.expireAt) >= new Date())) {
 			const result = {
