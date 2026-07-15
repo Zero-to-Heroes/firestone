@@ -6,6 +6,7 @@ import {
 	arenaSets,
 	CardClass,
 	CardIds,
+	CardRarity,
 	CardType,
 	GameFormat,
 	GameTag,
@@ -28,7 +29,7 @@ import { hasCorrectClass } from '../related-cards/dynamic-pools';
 import { getCurrentExcavateTreasuresPool } from '../related-cards/excavate-treasures';
 import { hasGeneratingCard, hasOnCardPlayed } from './cards/_card.type';
 import { cardsInfoCache } from './cards/_mapping';
-import { filterCards } from './cards/utils';
+import { filterCards, FilterCardsInput } from './cards/utils';
 import { EntityLike, hasTag } from './parser-entity-utils';
 
 export const getProcessedCard = (
@@ -373,6 +374,7 @@ export const getShatteredRecombinedPossibleCards = (
 	return result;
 };
 
+// TODO: need to find a more generic mechanism to handle tags
 export const addGuessInfoToCard = (
 	card: DeckCard,
 	creatorCardId: string | null,
@@ -442,98 +444,27 @@ export const addGuessInfoToCard = (
 		options?.tags?.some((t) => t.Name === GameTag.SHATTERED && t.Value === 1) ||
 		card.tags?.[GameTag.SHATTERED] === 1;
 	if (hasShatteredTag) {
-		const scenarioId = gameState.metadata?.scenarioId ?? options?.metadata?.scenarioId;
-		const possibleCards = getShatteredPossibleCards(
+		newGuessedInfo = updateGuessedInfoWithShattered(
+			card,
+			newGuessedInfo,
 			deckState,
-			allCards.getService(),
-			newGuessedInfo ?? {},
-			scenarioId,
+			allCards,
+			gameState,
+			optionsWithDeckContext,
 		);
-		if (possibleCards.length > 0) {
-			// Even/odd halves of the global SHATTERED list. createdIndex sequences all spawns from the
-			// source (e.g. Spark of Life may use 0–1 for setaside tokens before hand pieces get 2 and 3).
-			// When createdIndex is missing for both hand pieces (common for Tigress Plushy / generic shatter),
-			// defaulting to "first half" for both made both markers show the same art — use hand order
-			// among SHATTERED entities (including this card before it is appended to deckState.hand).
-			let useFirstHalf: boolean;
-			if (card.createdIndex != null && card.createdIndex >= 0) {
-				useFirstHalf = card.createdIndex % 2 === 0;
-			} else {
-				const peers: DeckCard[] = [
-					...deckState.hand.filter((c) => c.tags?.[GameTag.SHATTERED] === 1 && !c.cardId?.length),
-				];
-				if (!peers.some((c) => c.entityId === card.entityId)) {
-					peers.push(card);
-				}
-				peers.sort((a, b) => (a.tags?.[GameTag.ZONE_POSITION] ?? 0) - (b.tags?.[GameTag.ZONE_POSITION] ?? 0));
-				const shardIdx = peers.findIndex((c) => c.entityId === card.entityId);
-				useFirstHalf = shardIdx >= 0 ? shardIdx % 2 === 0 : true;
-			}
-			newGuessedInfo = {
-				...newGuessedInfo,
-				possibleCards: possibleCards.filter((c, index) => (useFirstHalf ? index % 2 === 0 : index % 2 === 1)),
-				mechanics: [...(newGuessedInfo?.mechanics ?? []), GameTag.SHATTERED],
-			};
-		}
 	}
 
 	const hasPreparedTag =
 		options?.tags?.some((t) => t.Name === GameTag.PREPARED && t.Value === 1) || card.tags?.[GameTag.PREPARED] === 1;
 	if (hasPreparedTag && !!card.prepared) {
-		console.debug(
-			'[addGuessInfoToCard] hasPreparedTag',
-			`entityId:${card.entityId}__`,
+		newGuessedInfo = updateGuessedInfoWithPrepared(
 			card,
+			newGuessedInfo,
+			deckState,
+			allCards,
+			gameState,
 			optionsWithDeckContext,
 		);
-		if (newGuessedInfo?.possibleCards?.length) {
-			const possibleCards = newGuessedInfo?.possibleCards?.filter((c) =>
-				allCards.getCard(c)?.mechanics?.includes(GameTag[GameTag.PREPARE]),
-			);
-			console.debug('[addGuessInfoToCard] possibleCards', `entityId:${card.entityId}__`, possibleCards);
-			newGuessedInfo = {
-				...newGuessedInfo,
-				mechanics: [...(newGuessedInfo?.mechanics ?? []), GameTag.PREPARED].filter(
-					(c, index, self) => self.indexOf(c) === index,
-				),
-				possibleCards: possibleCards,
-			};
-			console.debug('[addGuessInfoToCard] newGuessedInfo', `entityId:${card.entityId}__`, newGuessedInfo);
-		} else {
-			const possibleClasses: readonly CardClass[] = card.guessedInfo?.cardClasses?.length
-				? card.guessedInfo.cardClasses
-				: ([
-						deckState.getCurrentClassEnum(),
-						...(allCards.getCard(deckState.heroPower?.cardId ?? '')?.classes ?? []).map(
-							(c) => CardClass[c],
-						),
-						CardClass.NEUTRAL,
-					].filter((c) => c !== undefined) as readonly CardClass[]);
-			console.debug('[addGuessInfoToCard] possibleClasses', `entityId:${card.entityId}__`, possibleClasses);
-			const possibleCardsBase = filterCards(
-				null,
-				allCards.getService(),
-				(c) => !!c.mechanics?.includes(GameTag[GameTag.PREPARE]) && !!c.cost && c.cost >= card.prepared,
-				optionsWithDeckContext,
-			);
-			const possibleCards = possibleCardsBase.filter((c) =>
-				possibleClasses.some((cc) => hasCorrectClass(allCards.getCard(c), cc)),
-			);
-			console.debug(
-				'[addGuessInfoToCard] finalPossibleCards',
-				`entityId:${card.entityId}__`,
-				possibleCards,
-				possibleCards,
-				allCards.getCards().filter((c) => c.text?.toLowerCase()?.includes('<b>prepare</b>') && !!c.cost),
-			);
-			newGuessedInfo = {
-				...newGuessedInfo,
-				mechanics: [...(newGuessedInfo?.mechanics ?? []), GameTag.PREPARED].filter(
-					(c, index, self) => self.indexOf(c) === index,
-				),
-				possibleCards: possibleCards,
-			};
-		}
 	}
 
 	const isCreatedByExcavate = hasMechanic(allCards.getCard(creatorCardId ?? ''), GameTag.EXCAVATE);
@@ -550,6 +481,122 @@ export const addGuessInfoToCard = (
 	return card.update({
 		guessedInfo: newGuessedInfo,
 	});
+};
+
+const updateGuessedInfoWithPrepared = (
+	card: DeckCard,
+	newGuessedInfo: GuessedInfo,
+	deckState: DeckState,
+	allCards: CardsFacadeService,
+	gameState: GameState,
+	options: FilterCardsInput,
+): GuessedInfo => {
+	console.debug('[addGuessInfoToCard] hasPreparedTag', `entityId:${card.entityId}__`, card, options);
+	const possibleClasses: readonly CardClass[] = card.guessedInfo?.cardClasses?.length
+		? card.guessedInfo.cardClasses
+		: ([
+				deckState.getCurrentClassEnum(),
+				...(allCards.getCard(deckState.heroPower?.cardId ?? '')?.classes ?? []).map((c) => CardClass[c]),
+				CardClass.NEUTRAL,
+			].filter((c) => c !== undefined) as readonly CardClass[]);
+	console.debug('[addGuessInfoToCard] possibleClasses', `entityId:${card.entityId}__`, possibleClasses);
+	const possibleCardsBase = filterCards(
+		null,
+		allCards.getService(),
+		(c) => !!c.mechanics?.includes(GameTag[GameTag.PREPARE]) && !!c.cost && c.cost >= card.prepared,
+		options,
+	);
+
+	if (newGuessedInfo?.possibleCards?.length) {
+		const possibleCards = newGuessedInfo?.possibleCards?.filter((c) =>
+			allCards.getCard(c)?.mechanics?.includes(GameTag[GameTag.PREPARE]),
+		);
+		console.debug('[addGuessInfoToCard] possibleCards', `entityId:${card.entityId}__`, possibleCards);
+		newGuessedInfo = {
+			...newGuessedInfo,
+			mechanics: [...(newGuessedInfo?.mechanics ?? []), GameTag.PREPARED].filter(
+				(c, index, self) => self.indexOf(c) === index,
+			),
+			possibleCards: possibleCards,
+		};
+		console.debug('[addGuessInfoToCard] newGuessedInfo', `entityId:${card.entityId}__`, newGuessedInfo);
+	} else {
+		const possibleCards = possibleCardsBase
+			.filter((c) => possibleClasses.some((cc) => hasCorrectClass(allCards.getCard(c), cc)))
+			.filter((c) => {
+				if (!newGuessedInfo?.mechanics?.length) {
+					return true;
+				}
+				const ref = allCards.getCard(c);
+				return (
+					!!ref?.mechanics?.length &&
+					newGuessedInfo.mechanics!.every((m) => ref.mechanics?.includes(GameTag[m]))
+				);
+			})
+			.filter((c) => {
+				if (!newGuessedInfo?.rarity) {
+					return true;
+				}
+				const ref = allCards.getCard(c);
+				return ref?.rarity?.toUpperCase() === CardRarity[newGuessedInfo.rarity];
+			});
+		console.debug(
+			'[addGuessInfoToCard] finalPossibleCards',
+			`entityId:${card.entityId}__`,
+			possibleCards,
+			allCards.getCards().filter((c) => c.text?.toLowerCase()?.includes('<b>prepare</b>') && !!c.cost),
+		);
+		newGuessedInfo = {
+			...newGuessedInfo,
+			mechanics: [...(newGuessedInfo?.mechanics ?? []), GameTag.PREPARED].filter(
+				(c, index, self) => self.indexOf(c) === index,
+			),
+			possibleCards: possibleCards,
+		};
+	}
+	return newGuessedInfo;
+};
+
+const updateGuessedInfoWithShattered = (
+	card: DeckCard,
+	newGuessedInfo: GuessedInfo,
+	deckState: DeckState,
+	allCards: CardsFacadeService,
+	gameState: GameState,
+	options: {
+		metadata?: Metadata;
+		scenarioId?: number;
+	},
+): GuessedInfo => {
+	const scenarioId = gameState.metadata?.scenarioId ?? options?.metadata?.scenarioId;
+	const possibleCards = getShatteredPossibleCards(deckState, allCards.getService(), newGuessedInfo ?? {}, scenarioId);
+	if (possibleCards.length > 0) {
+		// Even/odd halves of the global SHATTERED list. createdIndex sequences all spawns from the
+		// source (e.g. Spark of Life may use 0–1 for setaside tokens before hand pieces get 2 and 3).
+		// When createdIndex is missing for both hand pieces (common for Tigress Plushy / generic shatter),
+		// defaulting to "first half" for both made both markers show the same art — use hand order
+		// among SHATTERED entities (including this card before it is appended to deckState.hand).
+		let useFirstHalf: boolean;
+		if (card.createdIndex != null && card.createdIndex >= 0) {
+			useFirstHalf = card.createdIndex % 2 === 0;
+		} else {
+			const peers: DeckCard[] = [
+				...deckState.hand.filter((c) => c.tags?.[GameTag.SHATTERED] === 1 && !c.cardId?.length),
+			];
+			if (!peers.some((c) => c.entityId === card.entityId)) {
+				peers.push(card);
+			}
+			peers.sort((a, b) => (a.tags?.[GameTag.ZONE_POSITION] ?? 0) - (b.tags?.[GameTag.ZONE_POSITION] ?? 0));
+			const shardIdx = peers.findIndex((c) => c.entityId === card.entityId);
+			useFirstHalf = shardIdx >= 0 ? shardIdx % 2 === 0 : true;
+		}
+		newGuessedInfo = {
+			...newGuessedInfo,
+			possibleCards: possibleCards.filter((c, index) => (useFirstHalf ? index % 2 === 0 : index % 2 === 1)),
+			mechanics: [...(newGuessedInfo?.mechanics ?? []), GameTag.SHATTERED],
+		};
+	}
+	return newGuessedInfo;
 };
 
 export const getPossibleForgedCards = (

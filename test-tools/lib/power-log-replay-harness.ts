@@ -247,6 +247,7 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	'epoch-dredge': 'epoch-dredge/epoch-dredge.log',
 	'deja-vu-cultist': 'deja-vu-cultist/deja-vu-cultist.log',
 	meadowstrider: 'meadowstrider/meadowstrider.log',
+	'hex-opposite-play': 'hex-opposite-play/hex-opposite-play.log',
 	qonzu: 'qonzu-top-deck/qonzu-top-deck.log',
 	'shatter-reveal': 'shatter-reveal/shatter-reveal.log',
 	'merch-seller': 'merch-seller/merch-seller.log',

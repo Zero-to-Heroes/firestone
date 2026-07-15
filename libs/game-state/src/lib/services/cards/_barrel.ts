@@ -412,6 +412,7 @@ export { TheArcanomicon } from './the-arcanomicon';
 export { TheCurator } from './the-curator';
 export { TheEternalHold } from './the-eternal-hold';
 export { TheGalacticProjectionOrb } from './the-galactic-projection-orb';
+export { TheKingslayers } from './the-kingslayer';
 export { TheLivingPlague } from './the-living-plague';
 export { TheNighthold } from './the-nighthold';
 export { TheScourge } from './the-scourge';
