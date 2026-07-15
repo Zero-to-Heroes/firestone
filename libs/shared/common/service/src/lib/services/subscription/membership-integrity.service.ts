@@ -165,6 +165,7 @@ export class MembershipIntegrityService {
 				clientDate: new Date().toISOString(),
 				userId: currentUser?.userId,
 				username: currentUser?.username,
+				uuid: currentUser?.uuid,
 				machineId: currentUser?.machineId,
 				appVersion: process.env['APP_VERSION'],
 				claimedPlanId: this.ads.currentPlan$$.value?.id,
