@@ -1,45 +1,58 @@
-import { ChangeDetectorRef, Directive, ElementRef, HostBinding, HostListener, ViewRef } from '@angular/core';
-import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
+import { AfterViewInit, Directive, ElementRef, NgZone, OnDestroy, Renderer2 } from '@angular/core';
 
+// Purely visual effect: all mouse listeners run outside the Angular zone and mutate the style
+// directly, so that moving the mouse over a card doesn't trigger any change detection
 @Directive({
 	standalone: false,
 	selector: '[rotateOnMouseOver]',
 })
-export class RotateOnMouseOverDirective {
-	@HostBinding('style.transform') styleTransform: SafeStyle = 'scale3d(0.8, 0.8, 0.8)';
-	@HostBinding('style.width.%') styleWidth: SafeStyle = '125';
-	@HostBinding('style.height.%') styleHeight: SafeStyle = '125';
-
+export class RotateOnMouseOverDirective implements AfterViewInit, OnDestroy {
 	private imageWidth: number;
 	private imageHeight: number;
 	private isMouseOver: boolean;
 
+	private removeListeners: (() => void)[] = [];
+
 	constructor(
 		private readonly el: ElementRef,
-		private readonly sanitizer: DomSanitizer,
-		private readonly cdr: ChangeDetectorRef,
+		private readonly renderer: Renderer2,
+		private readonly ngZone: NgZone,
 	) {}
 
-	@HostListener('mouseover', ['$event'])
-	onMouseOver(event: MouseEvent) {
+	ngAfterViewInit() {
+		this.setStyles('scale3d(0.8, 0.8, 0.8)');
+		this.ngZone.runOutsideAngular(() => {
+			this.removeListeners = [
+				this.renderer.listen(this.el.nativeElement, 'mouseover', (event: MouseEvent) =>
+					this.onMouseOver(event),
+				),
+				this.renderer.listen(this.el.nativeElement, 'mouseleave', (event: MouseEvent) =>
+					this.onMouseLeave(event),
+				),
+				this.renderer.listen(this.el.nativeElement, 'mousemove', (event: MouseEvent) =>
+					this.onMouseMove(event),
+				),
+			];
+		});
+	}
+
+	ngOnDestroy() {
+		this.removeListeners.forEach((remove) => remove());
+		this.removeListeners = [];
+	}
+
+	private onMouseOver(event: MouseEvent) {
 		this.isMouseOver = true;
 		this.imageWidth = this.el.nativeElement.getBoundingClientRect()?.width;
 		this.imageHeight = this.el.nativeElement.getBoundingClientRect()?.height;
 	}
 
-	@HostListener('mouseleave', ['$event'])
-	onMouseLeave(event: MouseEvent) {
+	private onMouseLeave(event: MouseEvent) {
 		this.isMouseOver = false;
-		this.styleTransform = this.sanitizer.bypassSecurityTrustStyle(
-			`perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(0.8, 0.8, 0.8)`,
-		);
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
+		this.setStyles(`perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(0.8, 0.8, 0.8)`);
 	}
 
-	@HostListener('mousemove', ['$event'])
-	onMouseMove(event: MouseEvent) {
+	private onMouseMove(event: MouseEvent) {
 		if (!this.isMouseOver) {
 			return;
 		}
@@ -49,11 +62,13 @@ export class RotateOnMouseOverDirective {
 		const styleAmplifier = 2;
 		const yRotation = -Math.min(30, styleAmplifier * (xRatio * 16 - 8));
 		const xRotation = Math.min(30, styleAmplifier * (yRatio * 16 - 8));
-		this.styleTransform = this.sanitizer.bypassSecurityTrustStyle(
-			`perspective(1000px) rotateX(${xRotation}deg) rotateY(${yRotation}deg) scale3d(1, 1, 1)`,
-		);
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
+		this.setStyles(`perspective(1000px) rotateX(${xRotation}deg) rotateY(${yRotation}deg) scale3d(1, 1, 1)`);
+	}
+
+	private setStyles(transform: string) {
+		const element = this.el.nativeElement;
+		this.renderer.setStyle(element, 'transform', transform);
+		this.renderer.setStyle(element, 'width', '125%');
+		this.renderer.setStyle(element, 'height', '125%');
 	}
 }
