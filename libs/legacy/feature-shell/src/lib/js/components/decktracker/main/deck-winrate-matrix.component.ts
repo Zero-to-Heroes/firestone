@@ -4,10 +4,7 @@ import { classesForPieChart, colorForClass, formatClass } from '@firestone/game-
 import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { buildDefaultMatchupStats } from '@firestone/decktracker/common';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
-import {
-	DecktrackerDeleteDeckEvent,
-	DecktrackerResetDeckStatsEvent,
-} from '@firestone/mainwindow/common';
+import { DecktrackerDeleteDeckEvent, DecktrackerResetDeckStatsEvent } from '@firestone/mainwindow/common';
 import { InputPieChartData, InputPieChartOptions } from '../../common/chart/input-pie-chart-data';
 
 @Component({
@@ -49,7 +46,7 @@ import { InputPieChartData, InputPieChartOptions } from '../../common/chart/inpu
 				></div>
 			</div>
 			<deck-matchup-info
-				*ngFor="let matchup of matchups"
+				*ngFor="let matchup of matchups; trackBy: trackByMatchup"
 				[matchup]="matchup"
 				[showMatchupAsPercentages]="_showMatchupAsPercentagesValue"
 				[ngClass]="{ 'no-data': !matchup.totalGames }"
@@ -142,6 +139,10 @@ export class DeckWinrateMatrixComponent {
 	deleteDeck() {
 		console.log('deleting deck', this._deck.deckstring);
 		this.mainWindowStateFacade.send(new DecktrackerDeleteDeckEvent(this._deck.deckstring));
+	}
+
+	trackByMatchup(index: number, matchup: MatchupStat) {
+		return matchup.opponentClass;
 	}
 
 	private updateValues() {

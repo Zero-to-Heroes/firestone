@@ -10,7 +10,7 @@ import { GroupedReplays } from '@firestone/mainwindow/common';
 		<div class="grouped-replays">
 			<div class="header">{{ header }}</div>
 			<ul class="replays">
-				<li *ngFor="let replay of _replays">
+				<li *ngFor="let replay of _replays; trackBy: trackByReplay">
 					<replay-info [replay]="replay"></replay-info>
 				</li>
 			</ul>
@@ -26,4 +26,8 @@ export class GroupedReplaysComponent {
 
 	header: string;
 	_replays: readonly GameStat[];
+
+	trackByReplay(index: number, replay: GameStat) {
+		return replay.reviewId ?? index;
+	}
 }

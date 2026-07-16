@@ -45,12 +45,12 @@ import { groupByFunction } from '../../../services/utils';
 					</div>
 					<div class="cell total" [owTranslate]="'app.decktracker.ladder-stats.total'"></div>
 				</div>
-				<div class="row" *ngFor="let row of rows$ | async">
+				<div class="row" *ngFor="let row of rows$ | async; trackBy: trackByRow">
 					<div class="cell label">
 						<img class="icon" [src]="row.icon" [helpTooltip]="row.tooltip" *ngIf="row.icon" />
 						<div class="text" *ngIf="!row.icon" [owTranslate]="'app.decktracker.ladder-stats.total'"></div>
 					</div>
-					<ng-container *ngFor="let matchup of row.matchups">
+					<ng-container *ngFor="let matchup of row.matchups; trackBy: trackByMatchup">
 						<div
 							class="cell winrate number"
 							[ngClass]="{ empty: matchup.wins === 0 && matchup.losses === 0 }"
@@ -71,7 +71,7 @@ import { groupByFunction } from '../../../services/utils';
 							}"
 							*ngIf="value.showPercentages"
 						>
-							{{ buildValue(matchup.winrate) }}
+							{{ matchup.winrateText }}
 						</div>
 					</ng-container>
 				</div>
@@ -179,8 +179,12 @@ export class DecktrackerLadderStatsMatchupsComponent extends AbstractSubscriptio
 		await this.prefs.savePreferences(newPrefs);
 	};
 
-	buildValue(value: number): string {
-		return value == null ? '-' : value.toFixed(0) + '%';
+	trackByRow(index: number, row: MatchupRow) {
+		return row.playerClass;
+	}
+
+	trackByMatchup(index: number, matchup: Matchup) {
+		return matchup.opponentClass;
 	}
 
 	private buildMatchupStatsForPlayerClass(
@@ -193,6 +197,7 @@ export class DecktrackerLadderStatsMatchupsComponent extends AbstractSubscriptio
 			this.buildMatchup(playerClass, opponentClass, replaysForPlayerClass, showFirst, showSecond),
 		);
 		return {
+			playerClass: playerClass,
 			tooltip: this.i18n.translateString('app.decktracker.ladder-stats.player-class-tooltip', {
 				className: formatClass(playerClass, this.i18n),
 			}),
@@ -217,18 +222,21 @@ export class DecktrackerLadderStatsMatchupsComponent extends AbstractSubscriptio
 			.filter((stat) => (showFirst ? stat.coinPlay === 'play' : showSecond ? stat.coinPlay === 'coin' : true));
 		const wins = replays.filter((stat) => stat.result === 'won').length;
 		const losses = replays.filter((stat) => stat.result === 'lost').length;
+		const winrate = wins + losses === 0 ? null : 100 * (wins / (wins + losses));
 		return {
 			playerClass: playerClass,
 			opponentClass: opponentClass,
 			wins: wins,
 			losses: losses,
 			ties: replays.filter((stat) => stat.result === 'tied').length,
-			winrate: wins + losses === 0 ? null : 100 * (wins / (wins + losses)),
+			winrate: winrate,
+			winrateText: winrate == null ? '-' : winrate.toFixed(0) + '%',
 		};
 	}
 }
 
 interface MatchupRow {
+	readonly playerClass: string;
 	readonly icon: string;
 	readonly tooltip: string;
 	readonly matchups: readonly Matchup[];
@@ -241,4 +249,5 @@ interface Matchup {
 	readonly losses: number;
 	readonly ties: number;
 	readonly winrate: number;
+	readonly winrateText: string;
 }

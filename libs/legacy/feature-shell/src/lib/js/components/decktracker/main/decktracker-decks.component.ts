@@ -125,7 +125,7 @@ export class DecktrackerDecksComponent extends AbstractSubscriptionComponent {
 
 		const currentMergeSourceDeck$: Observable<DeckSummary> = combineLatest(
 			deckSource$,
-			this.currentlyDraggedDeck.asObservable(),
+			this.currentlyDraggedDeck.asObservable().pipe(distinctUntilChanged()),
 		).pipe(
 			this.mapData(
 				([decks, currentlyDraggedDeck]) => {
@@ -138,10 +138,15 @@ export class DecktrackerDecksComponent extends AbstractSubscriptionComponent {
 		this.decks$ = combineLatest([
 			deckSource$,
 			currentMergeSourceDeck$,
-			this.currentlyMousedOverDeck.asObservable(),
+			this.currentlyMousedOverDeck.asObservable().pipe(distinctUntilChanged()),
 		]).pipe(
 			this.mapData(
 				([decks, currentMergeSourceDeck, currentlyMousedOverDeck]) => {
+					// No drag in progress: return the source array untouched so that OnPush children
+					// don't see new row objects on every hover
+					if (!currentMergeSourceDeck) {
+						return decks as readonly InternalDeckSummary[];
+					}
 					return decks.map(
 						(deck) =>
 							({

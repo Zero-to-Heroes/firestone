@@ -13,16 +13,20 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 		<div class="constructed-meta-deck-details-matchups">
 			<div class="header">
 				<div class="name"></div>
-				<div class="cell opponent-class" *ngFor="let opponent of opponents" [helpTooltip]="opponent.name">
+				<div
+					class="cell opponent-class"
+					*ngFor="let opponent of opponents; trackBy: trackByOpponentInfo"
+					[helpTooltip]="opponent.name"
+				>
 					<img [src]="opponent.icon" class="icon" />
 				</div>
 			</div>
 			<div class="content">
-				<div class="matchup-row" *ngFor="let matchup of matchups">
+				<div class="matchup-row" *ngFor="let matchup of matchups; trackBy: trackByMatchup">
 					<div class="name">{{ matchup.name }}</div>
 					<div
 						class="cell opponent {{ opponent.winrateCss }}"
-						*ngFor="let opponent of matchup.opponents"
+						*ngFor="let opponent of matchup.opponents; trackBy: trackByOpponent"
 						[helpTooltip]="opponent.tooltip"
 					>
 						{{ opponent.winrate }}
@@ -53,6 +57,18 @@ export class ConstructedMetaDeckDetailsMatchupsComponent {
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: LocalizationFacadeService,
 	) {}
+
+	trackByOpponentInfo(index: number, opponent: OpponentInfo) {
+		return opponent.className;
+	}
+
+	trackByMatchup(index: number, matchup: InternalMatchupDetails) {
+		return matchup.name;
+	}
+
+	trackByOpponent(index: number, opponent: InternalMatchupInfo) {
+		return opponent.opponentClass;
+	}
 
 	private buildMatchups(matchups: readonly ConstructedMatchupDetails[]): readonly InternalMatchupDetails[] {
 		return matchups.map((matchup) => this.buildMatchup(matchup));
@@ -105,6 +121,7 @@ interface InternalMatchupInfo {
 }
 
 interface OpponentInfo {
+	readonly className: string;
 	readonly name: string;
 	readonly icon: string;
 }
