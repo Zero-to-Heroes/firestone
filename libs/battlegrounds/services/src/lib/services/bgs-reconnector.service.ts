@@ -68,7 +68,13 @@ export class BgsReconnectorService extends AbstractFacadeService<BgsReconnectorS
 				region === BnetRegion.REGION_CN &&
 				prefs.bgsReconnectorAutoReconnect &&
 				!prefs.bgsReconnectorAutoReconnectWaitAfterBoards;
-			console.debug('[bgs-reconnector] should reconnect?', shouldReconnect, inCombat, prefs);
+			// Don't log the full prefs object: it contains secrets (eg twitch access token)
+			// and logs are uploaded with bug reports
+			console.debug('[bgs-reconnector] should reconnect?', shouldReconnect, inCombat, {
+				bgsReconnectorEnabled: prefs.bgsReconnectorEnabled,
+				bgsReconnectorAutoReconnect: prefs.bgsReconnectorAutoReconnect,
+				bgsReconnectorAutoReconnectWaitAfterBoards: prefs.bgsReconnectorAutoReconnectWaitAfterBoards,
+			});
 			if (shouldReconnect) {
 				console.log('[bgs-reconnector] reconnecting');
 				const result = await this.reconnect();
@@ -100,7 +106,11 @@ export class BgsReconnectorService extends AbstractFacadeService<BgsReconnectorS
 				region === BnetRegion.REGION_CN &&
 				prefs.bgsReconnectorAutoReconnect &&
 				prefs.bgsReconnectorAutoReconnectWaitAfterBoards;
-			console.debug('[bgs-reconnector] should reconnect after boards?', shouldReconnect, inCombat, prefs);
+			console.debug('[bgs-reconnector] should reconnect after boards?', shouldReconnect, inCombat, {
+				bgsReconnectorEnabled: prefs.bgsReconnectorEnabled,
+				bgsReconnectorAutoReconnect: prefs.bgsReconnectorAutoReconnect,
+				bgsReconnectorAutoReconnectWaitAfterBoards: prefs.bgsReconnectorAutoReconnectWaitAfterBoards,
+			});
 			if (shouldReconnect) {
 				console.log('[bgs-reconnector] reconnecting after boards');
 				const result = await this.reconnect();

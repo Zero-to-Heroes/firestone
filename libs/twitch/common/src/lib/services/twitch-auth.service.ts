@@ -403,8 +403,9 @@ export class TwitchAuthService {
 					if (!skipBugReport) {
 						this.bugReport.submitAutomatedReport({
 							type: 'twitch-ebs-error',
+							// Never include the access token in bug reports: they end up in
+							// logs uploaded to S3
 							info: JSON.stringify({
-								token: prefs.twitchAccessToken,
 								error: error,
 								event: newEvent,
 							}),

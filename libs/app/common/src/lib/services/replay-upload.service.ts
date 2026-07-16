@@ -211,7 +211,9 @@ export class ReplayUploadService {
 			const params = {
 				Bucket: BUCKET_METADATA,
 				Key: fileKey,
-				ACL: 'public-read-write',
+				// Anonymous uploads are owned by the "anonymous" S3 user; without this ACL
+				// the bucket owner (and the lambdas reading the metadata) could not read the object
+				ACL: 'bucket-owner-full-control',
 				Body: body,
 				ContentType: 'application/zip',
 			};

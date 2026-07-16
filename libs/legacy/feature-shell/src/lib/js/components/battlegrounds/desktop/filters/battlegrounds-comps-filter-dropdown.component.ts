@@ -61,7 +61,7 @@ export class BattlegroundsCompsFilterDropdownComponent
 			),
 		);
 		this.filter$ = this.prefs.preferences$$.pipe(
-			tap((prefs) => console.debug('[bgs-comps-filter] prefs', prefs)),
+			tap((prefs) => console.debug('[bgs-comps-filter] prefs', prefs.bgsActiveCompsFilter)),
 			this.mapData((prefs) => ({
 				selected: prefs.bgsActiveCompsFilter?.map((a) => '' + a) ?? [],
 				placeholder: this.i18n.translateString(`app.battlegrounds.filters.comps.all-comps`),

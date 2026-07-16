@@ -332,7 +332,7 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 		const prefs = await this.prefs.getPreferences();
 		const installPath = prefs.gameInstallPath;
 		if (!installPath) {
-			console.warn('[mods-manager] No install path found', prefs);
+			console.warn('[mods-manager] No install path found', prefs.gameInstallPath);
 			return null;
 		}
 		console.debug('[mods-manager] updating mod', mod, installPath);
@@ -443,7 +443,7 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 		const prefs = await this.prefs.getPreferences();
 		const installPath = prefs.gameInstallPath;
 		if (!installPath) {
-			console.warn('[mods-manager] No install path found', prefs);
+			console.warn('[mods-manager] No install path found', prefs.gameInstallPath);
 			return;
 		}
 		// Rename the DLL from .dll to .dll.disabled

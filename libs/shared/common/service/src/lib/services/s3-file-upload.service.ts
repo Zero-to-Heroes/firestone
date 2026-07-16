@@ -17,7 +17,9 @@ export class S3FileUploadService {
 		const params = {
 			Bucket: bucket || BUCKET,
 			Key: fileKey,
-			ACL: 'public-read-write',
+			// Anonymous uploads are owned by the "anonymous" S3 user; without this ACL
+			// the bucket owner (and support tooling) would not be able to read the object
+			ACL: 'bucket-owner-full-control',
 			Body: blob,
 		};
 
