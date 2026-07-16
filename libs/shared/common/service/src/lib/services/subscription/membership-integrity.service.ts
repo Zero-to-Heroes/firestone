@@ -18,7 +18,7 @@ import { TebexService } from './tebex.service';
 // Filled in after deploying the api-log-membership-bypass lambda (npm run full-deploy)
 const LOG_ENDPOINT = 'https://73ybnsv6auhl6x2hv5tvdoppcq0oecmq.lambda-url.us-west-2.on.aws/';
 
-const CHECK_INTERVAL = 2 * 60 * 1000;
+const CHECK_INTERVAL = 5 * 60 * 1000;
 // Consecutive confirmed mismatches (premium claimed AND server says no-sub) required before we
 // degrade to non-premium. Gates out SSO-hint / Tebex-latency races and transient network errors,
 // since a single good/errored reply resets the counter. ~DEGRADE_THRESHOLD * CHECK_INTERVAL ≈ 2 min,
