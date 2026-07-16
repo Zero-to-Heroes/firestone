@@ -6,6 +6,7 @@ import {
 	EventEmitter,
 	HostListener,
 	Input,
+	NgZone,
 	OnDestroy,
 	Output,
 	ViewRef,
@@ -84,6 +85,7 @@ export class SingleAdComponent extends AbstractSubscriptionComponent implements 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
+		private readonly ngZone: NgZone,
 	) {
 		super(cdr);
 	}
@@ -293,10 +295,18 @@ export class SingleAdComponent extends AbstractSubscriptionComponent implements 
 	}
 
 	private async initializeVisibilityCheck() {
-		this.visibilityCheckInterval = setInterval(async () => {
-			const visibility = await this.ow.isWindowVisibleToUser();
-			this.adVisibility.next(visibility);
-		}, 500);
+		// Poll outside the Angular zone, and only emit (re-entering the zone) when the visibility
+		// actually changes, so this 500ms timer doesn't trigger app-wide change detection on every tick
+		let lastVisibility: 'hidden' | 'partial' | 'full' | null = null;
+		this.ngZone.runOutsideAngular(() => {
+			this.visibilityCheckInterval = setInterval(async () => {
+				const visibility = await this.ow.isWindowVisibleToUser();
+				if (visibility !== lastVisibility) {
+					lastVisibility = visibility;
+					this.ngZone.run(() => this.adVisibility.next(visibility));
+				}
+			}, 500);
+		});
 	}
 
 	private onAdPlaybackEnded(): void {

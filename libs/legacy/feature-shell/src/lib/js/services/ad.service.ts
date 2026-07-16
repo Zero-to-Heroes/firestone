@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { isPreReleaseBuild } from '@firestone/game-state';
 import { LotteryWidgetControllerService } from '@firestone/lottery/common';
 import { AppNavigationService, SubscriptionService } from '@firestone/shared/common/service';
@@ -150,19 +150,40 @@ export class AdService extends AbstractFacadeService<AdService> implements IAdsS
 
 	// Anti-tamper speed bump (not a security boundary): periodically re-derive the gates from server
 	// truth so a bare .next(true) on the public subjects - the CDP-injection crack's move - is reverted.
+	// The interval runs outside the Angular zone so the periodic no-op checks don't wake change
+	// detection; we only re-enter the zone when a gate actually needs reverting.
 	private startTamperResistance(): void {
-		setInterval(() => {
+		const ngZone = AppInjector?.get(NgZone, null);
+		const reassertGates = () => {
 			const plan = this.currentPlan$$.value;
 			const bypassDetected = this.bypassDetected$$.value;
 			const expectedHasPremium = this.computeHasPremiumSub(plan, bypassDetected);
-			if (this.hasPremiumSub$$.value !== expectedHasPremium) {
-				this.hasPremiumSub$$.next(expectedHasPremium);
-			}
 			const expectedEnable = !bypassDetected && (expectedHasPremium || this.lottery.shouldTrack$$.value);
-			if (this.enablePremiumFeatures$$.value !== expectedEnable) {
-				this.enablePremiumFeatures$$.next(expectedEnable);
+			if (
+				this.hasPremiumSub$$.value === expectedHasPremium &&
+				this.enablePremiumFeatures$$.value === expectedEnable
+			) {
+				return;
 			}
-		}, REASSERT_INTERVAL);
+			const apply = () => {
+				if (this.hasPremiumSub$$.value !== expectedHasPremium) {
+					this.hasPremiumSub$$.next(expectedHasPremium);
+				}
+				if (this.enablePremiumFeatures$$.value !== expectedEnable) {
+					this.enablePremiumFeatures$$.next(expectedEnable);
+				}
+			};
+			if (ngZone) {
+				ngZone.run(apply);
+			} else {
+				apply();
+			}
+		};
+		if (ngZone) {
+			ngZone.runOutsideAngular(() => setInterval(reassertGates, REASSERT_INTERVAL));
+		} else {
+			setInterval(reassertGates, REASSERT_INTERVAL);
+		}
 	}
 
 	public async goToPremium(): Promise<void> {
