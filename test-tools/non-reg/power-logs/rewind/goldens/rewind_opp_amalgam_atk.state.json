@@ -2106,7 +2106,9 @@
         "createdIndex": 0,
         "entityId": 19,
         "forged": 0,
-        "guessedInfo": {},
+        "guessedInfo": {
+          "rarity": 5
+        },
         "internalEntityId": "<scrubbed>",
         "lastAffectedByCardId": "TIME_875t1",
         "lastAffectedByEntityId": 18,
@@ -5486,7 +5488,9 @@
         "createdIndex": 1,
         "entityId": 53,
         "forged": 0,
-        "guessedInfo": {},
+        "guessedInfo": {
+          "rarity": 5
+        },
         "internalEntityId": "<scrubbed>",
         "lastAffectedByCardId": "TIME_875t1",
         "lastAffectedByEntityId": 18,
