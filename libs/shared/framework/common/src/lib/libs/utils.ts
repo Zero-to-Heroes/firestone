@@ -55,6 +55,39 @@ export const arraysEqual = (a: readonly any[] | any, b: readonly any[] | any): b
 	);
 };
 
+const isPlainObject = (value: any): boolean => {
+	if (value == null || typeof value !== 'object') {
+		return false;
+	}
+	const proto = Object.getPrototypeOf(value);
+	return proto === Object.prototype || proto === null;
+};
+
+/**
+ * Default equality used to deduplicate stream emissions: `===` for primitives and class instances,
+ * `arraysEqual` for arrays, and a shallow key-by-key comparison for plain object literals (the
+ * common case of extracting `{ a: x.a, b: x.b }` slices from a bigger state object, where each
+ * extraction creates a fresh - but often identical - object).
+ */
+export const shallowEqual = (a: any, b: any): boolean => {
+	if (a === b) {
+		return true;
+	}
+	if (Array.isArray(a) || Array.isArray(b)) {
+		return arraysEqual(a, b);
+	}
+	if (!isPlainObject(a) || !isPlainObject(b)) {
+		// Also handles null/undefined combinations (a === b already returned for both null)
+		return a == null && b == null;
+	}
+	const aKeys = Object.keys(a);
+	const bKeys = Object.keys(b);
+	if (aKeys.length !== bKeys.length) {
+		return false;
+	}
+	return aKeys.every((key) => (Array.isArray(a[key]) ? arraysEqual(a[key], b[key]) : a[key] === b[key]));
+};
+
 export const sumOnArray = <T>(array: readonly T[], prop: (item: T) => number): number => {
 	return array?.map((item) => prop(item)).reduce((a, b) => a + b, 0) ?? 0;
 };
