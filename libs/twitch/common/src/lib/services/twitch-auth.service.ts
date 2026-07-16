@@ -369,21 +369,20 @@ export class TwitchAuthService {
 				// Do nothing
 				if (!this.hasLoggedInfoOnce && data.statusCode === 422) {
 					this.hasLoggedInfoOnce = true;
-					console.log('no-format', '[twitch] message', data, JSON.stringify(newEvent), newEvent);
+					// console.log('no-format', '[twitch] message', data, JSON.stringify(newEvent), newEvent);
 					console.debug(
 						'[twitch] message debug',
 						deflate(JSON.stringify(newEvent)).byteLength,
-						deflate(JSON.stringify(newEvent)).byteLength,
-						JSON.stringify(newEvent),
+						// JSON.stringify(newEvent),
 					);
 					console.error(
 						'no-format',
 						'[twitch] Message sent to Twitch is too large',
-						JSON.stringify(newEvent),
+						// JSON.stringify(newEvent),
 					);
 				}
 				if (data.statusCode === 422) {
-					console.debug('ERROR', 'Twitch message too large', newEvent);
+					console.debug('ERROR', 'Twitch message too large');
 				}
 			},
 			error: (error) => {
@@ -398,8 +397,8 @@ export class TwitchAuthService {
 						'no-format',
 						'[twitch-auth] Could not send deck event to EBS',
 						error,
-						JSON.stringify(newEvent),
-						newEvent,
+						// JSON.stringify(newEvent),
+						// newEvent,
 					);
 					if (!skipBugReport) {
 						this.bugReport.submitAutomatedReport({
@@ -592,12 +591,12 @@ export class TwitchAuthService {
 			const httpHeaders: HttpHeaders = new HttpHeaders().set('Authorization', `OAuth ${accessToken}`);
 			this.http.get(TWITCH_VALIDATE_URL, { headers: httpHeaders }).subscribe(
 				(data: any) => {
-					console.log('[twitch-auth] valid token', data);
+					console.log('[twitch-auth] valid token');
 					// this.twitchUserId = data.user_id;
 					resolve(true);
 				},
 				() => {
-					console.log('[twitch-auth] invalid token', accessToken);
+					console.log('[twitch-auth] invalid token');
 					resolve(false);
 				},
 			);
@@ -626,7 +625,7 @@ export class TwitchAuthService {
 
 	private async saveAccessToken(accessToken: string) {
 		const valid = await this.validateToken(accessToken);
-		console.log('[twitch-auth] saving access token', valid);
+		console.log('[twitch-auth] saving access token');
 		await this.prefs.setTwitchAccessToken(accessToken);
 		await this.retrieveUserName(accessToken);
 	}
