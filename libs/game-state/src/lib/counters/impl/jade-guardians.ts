@@ -14,10 +14,13 @@ export class JadeGuardiansCounterDefinitionV2 extends CounterDefinitionV2<number
 	readonly player = {
 		pref: 'playerJadeGuardiansCounter' as const,
 		display: (state: GameState): boolean => true,
-		value: (state: GameState): number | null =>
-			state.playerDeck?.cardsPlayedThisMatch
-				.map((c) => state.playerDeck.findCard(c.entityId)?.card)
-				.filter((c) => c != null && getCost(c, state.playerDeck, this.allCards) == 2).length || null,
+		value: (state: GameState): number | null => {
+			return (
+				state.playerDeck?.cardsPlayedThisMatch
+					.map((c) => state.playerDeck.findCard(c.entityId)?.card)
+					.filter((c) => c != null && c.costWhenPlayed == 2).length || null
+			);
+		},
 		setting: {
 			label: (i18n: ILocalizationService): string => this.allCards.getCard(CardIds.JadeGuardians_JAIL_474)?.name,
 			tooltip: (i18n: ILocalizationService, allCards: CardsFacadeService): string =>
@@ -33,7 +36,7 @@ export class JadeGuardiansCounterDefinitionV2 extends CounterDefinitionV2<number
 		value: (state: GameState): number | null =>
 			state.opponentDeck?.cardsPlayedThisMatch
 				.map((c) => state.opponentDeck.findCard(c.entityId)?.card)
-				.filter((c) => c != null && getCost(c, state.opponentDeck, this.allCards) == 2).length || null,
+				.filter((c) => c != null && c.costWhenPlayed == 2).length || null,
 		setting: {
 			label: (i18n: ILocalizationService): string => this.allCards.getCard(CardIds.JadeGuardians_JAIL_474)?.name,
 			tooltip: (i18n: ILocalizationService, allCards: CardsFacadeService): string =>

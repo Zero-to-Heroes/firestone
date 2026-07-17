@@ -122,21 +122,33 @@ export class CardPlayedFromHandParser implements EventParser {
 		const isOnBoard = !isCardCountered && refCard && (refCard.type === 'Minion' || refCard.type === 'Location');
 		// console.debug('[card-played] isOnBoard', isOnBoard, refCard, card);
 		const costFromTags = gameEvent.additionalData.tags?.find((t) => t.Name === GameTag.COST)?.Value;
+		console.debug(
+			'[card-played] costFromTags',
+			`entityId:${entityId}__`,
+			costFromTags,
+			gameEvent.additionalData.tags,
+		);
 		const cardWithZone =
 			card?.update({
 				zone: isOnBoard ? 'PLAY' : null,
 				refManaCost: refCard?.cost,
 				actualManaCost: costFromTags ?? card.actualManaCost,
+				costWhenPlayed: costFromTags ?? card.actualManaCost,
 				cardName: card.cardName || refCard?.name,
 				rarity: card.rarity?.toLowerCase() ?? refCard?.rarity?.toLowerCase(),
 				temporaryCard: false,
 				playTiming: isOnBoard ? GameState.playTiming++ : null,
 				countered: isCardCountered,
+				tags: {
+					...card.tags,
+					[GameTag.COST]: costFromTags ?? card.tags?.[GameTag.COST],
+				},
 			} as DeckCard) ||
 			DeckCard.create({
 				entityId: entityId,
 				refManaCost: refCard?.cost,
 				actualManaCost: costFromTags ?? card!.actualManaCost,
+				costWhenPlayed: costFromTags ?? card!.actualManaCost,
 				zone: isOnBoard ? 'PLAY' : null,
 				cardId: cardId,
 				cardName: refCard.name,
@@ -144,8 +156,11 @@ export class CardPlayedFromHandParser implements EventParser {
 				temporaryCard: false,
 				playTiming: isOnBoard ? GameState.playTiming++ : null,
 				countered: isCardCountered,
+				tags: {
+					[GameTag.COST]: costFromTags ?? refCard?.tags?.[GameTag.COST],
+				},
 			} as DeckCard);
-		// console.debug('[card-played] cardWithZone', `entityId:${cardWithZone.entityId}__`, cardWithZone, card, refCard);
+		console.debug('[card-played] cardWithZone', `entityId:${cardWithZone.entityId}__`, cardWithZone, card, refCard);
 		const cardWithInfo = cardWithZone.update({
 			// When dealing with the opponent, the creator card id is hidden / removed when put in deck / drawn to
 			// avoid info leaks, so if the info is present in the event, we add it
@@ -164,7 +179,7 @@ export class CardPlayedFromHandParser implements EventParser {
 			}),
 			tags: toTagsObject(gameEvent.additionalData.tags),
 		});
-		// console.debug('cardWithInfo', `entityId:${cardWithInfo.entityId}__`, cardWithInfo, gameEvent);
+		console.debug('cardWithInfo', `entityId:${cardWithInfo.entityId}__`, cardWithInfo, gameEvent);
 		const cardToAdd =
 			isCardCountered && additionalInfo?.secretWillTrigger?.cardId === CardIds.OhMyYogg
 				? // Since Yogg transforms the card

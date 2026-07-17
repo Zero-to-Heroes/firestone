@@ -26,6 +26,10 @@ export class DeckCard {
 	// Some cards change the cost of a card, this field will reflect it
 	// For now still only implementing a few effects, like Incanter's Flow
 	readonly actualManaCost: number;
+	// Remember the cost of the card when it was played. Keeping track of its actual cost
+	// doesn't work, because a card with a temporary reduction gets its cost bounced up after
+	// it is played
+	readonly costWhenPlayed: number;
 	// So that when only the type of the card is known (like after Deck of Lunacy)
 	// we can still apply type-specific effects on it
 	readonly cardType: string;

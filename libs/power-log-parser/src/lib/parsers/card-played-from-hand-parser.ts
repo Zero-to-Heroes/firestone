@@ -106,7 +106,7 @@ export class CardPlayedFromHandParser implements ActionParser {
 				Dormant: dormant,
 				Cost: entity.GetTag(GameTag.COST, 0),
 				Magnetized: magnetized,
-				Tags: entity.Tags,
+				Tags: entity.GetTagsCopy(),
 			};
 			return [
 				GameEventProvider.Create(
