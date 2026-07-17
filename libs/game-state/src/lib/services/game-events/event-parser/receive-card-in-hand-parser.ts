@@ -358,7 +358,7 @@ export class ReceiveCardInHandParser implements EventParser {
 		const newVoid =
 			creatorCardId === CardIds.IridaSinseeker_TheVoidEnchantment_JAIL_719e2
 				? IridaSinseeker.cardReceivedFromTheVoid(cardWithZone, deck.voidZone)
-				: undefined;
+				: deck.voidZone;
 
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			hand: handAfterCardInference,
