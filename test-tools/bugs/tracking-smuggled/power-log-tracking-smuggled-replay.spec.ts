@@ -49,21 +49,6 @@ describe('Power log replay → GameStateService (Tracking discover-from-deck pre
 			const countInDeck = (cardId: string): number =>
 				ctx.state.playerDeck.deck.filter((c) => c.cardId === cardId).length;
 
-			// TEMP diagnostic: inspect the resulting rows for the 3 previewed cards.
-			console.warn(
-				'[tracking-diag] rows',
-				JSON.stringify(
-					ctx.state.playerDeck.deck
-						.filter((c) => [SMUGGLED_SHOVEL, CONFRONT_THE_TOLVIR, NIRI_OF_THE_CRATER].includes(c.cardId as string))
-						.map((c) => ({
-							cardId: c.cardId,
-							entityId: c.entityId,
-							creatorCardId: c.creatorCardId,
-							lastAffectedByCardId: c.lastAffectedByCardId,
-						})),
-				),
-			);
-
 		expect(countInDeck(SMUGGLED_SHOVEL)).toBe(2);
 		expect(countInDeck(CONFRONT_THE_TOLVIR)).toBe(2);
 		expect(countInDeck(NIRI_OF_THE_CRATER)).toBe(1);

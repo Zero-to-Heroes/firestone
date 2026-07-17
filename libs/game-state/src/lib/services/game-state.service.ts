@@ -616,7 +616,8 @@ export class GameStateService {
 				gameEvent.cardId,
 				`entityId:${gameEvent.entityId}_`,
 				(gameEvent as MinionsDiedEvent)?.additionalData?.deadMinions?.map((m) => `entityId:${m.EntityId}_`),
-				`found?=${currentState.playerDeck.deck.filter((e) => e.cardId?.startsWith(CardIds.SmuggledShovel_JAIL_380)).length}`,
+				`found?=${currentState.opponentDeck.deck.filter((e) => e.cardId?.startsWith(CardIds.RangerGeneralSylvanas_RangerInitiateVereesaToken_TIME_609t2)).length}`,
+				`found2?=${currentState.opponentDeck.additionalKnownCardsInDeck.filter((e) => e.startsWith(CardIds.RangerGeneralSylvanas_RangerInitiateVereesaToken_TIME_609t2)).length}`,
 				currentState,
 				gameEvent,
 			);

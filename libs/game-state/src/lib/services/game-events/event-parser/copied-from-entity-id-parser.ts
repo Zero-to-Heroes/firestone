@@ -38,6 +38,9 @@ const COPY_KNOW_EXACT_CARD_IN_OPPONENT_HAND = [
  */
 const OPPONENT_SELF_DISCOVER_FROM_DECK_NO_COPY_CREATORS: readonly CardIds[] = [
 	CardIds.CommanderGeddon_BarrenEnchantment_CATA_591e,
+	CardIds.TrackingCore,
+	CardIds.TrackingLegacy,
+	CardIds.TrackingVanilla,
 ];
 
 export class CopiedFromEntityIdParser implements EventParser {
