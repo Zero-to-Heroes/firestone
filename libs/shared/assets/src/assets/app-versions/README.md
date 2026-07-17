@@ -16,6 +16,8 @@
 
 - Supported locale codes match the app language settings: `deDE`, `enUS`, `esES`, `esMX`, `frFR`, `itIT`, `jaJP`, `koKR`, `plPL`, `ptBR`, `ruRU`, `thTH`, `zhCN`, `zhTW`.
 
+- When building a localized version using auto-translate (ie for all non-English release notes), add a warning at the top that the translations are auto-generated
+
 ### Card names
 
 - Reference cards with `{{CARD_ID}}` placeholders instead of plain English names.

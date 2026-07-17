@@ -1,7 +1,9 @@
 import {
 	buildDiscordReleaseNotes,
+	getReleaseNotesAppLanguageLabel,
 	getReleaseNotesAssetPath,
 	getReleaseNotesCardRarityClass,
+	getReleaseNotesDisplayLocale,
 	getReleaseNotesGithubUrl,
 	replaceReleaseNotesCardPlaceholders,
 } from './release-notes.utils';
@@ -46,6 +48,18 @@ describe('release-notes utils', () => {
 
 	it('falls back to English asset path when locale is enUS', () => {
 		expect(getReleaseNotesAssetPath('18.10.1', 'enUS')).not.toContain('/enUS/');
+	});
+
+	it('resolves the display locale from app locale and English preference', () => {
+		expect(getReleaseNotesDisplayLocale('frFR', false)).toBe('frFR');
+		expect(getReleaseNotesDisplayLocale('frFR', true)).toBe('enUS');
+		expect(getReleaseNotesDisplayLocale('enUS', false)).toBe('enUS');
+	});
+
+	it('returns native app language labels for release notes links', () => {
+		expect(getReleaseNotesAppLanguageLabel('frFR')).toBe('Français');
+		expect(getReleaseNotesAppLanguageLabel('deDE')).toBe('Deutsch');
+		expect(getReleaseNotesAppLanguageLabel('unknown')).toBe('unknown');
 	});
 
 	it('builds Discord release notes with resolved card names and section headers', () => {

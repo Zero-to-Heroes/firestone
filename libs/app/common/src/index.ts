@@ -10,6 +10,7 @@ export * from './lib/services/manastorm-info';
 export * from './lib/services/notifications-utils';
 export * from './lib/services/quests.service';
 export * from './lib/services/release-notes.service';
+export * from './lib/services/release-notes.utils';
 export * from './lib/services/replay-upload.service';
 export * from './lib/services/rewards-monitor.service';
 

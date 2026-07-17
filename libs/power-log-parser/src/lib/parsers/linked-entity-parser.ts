@@ -1,7 +1,7 @@
 import { GameTag } from '@firestone-hs/reference-data';
 import { ActionParser } from '../action-parser';
 import { GameEventProvider, GameEventHelper } from '../game-event';
-import { Node, NodeType, TagChange } from '../models';
+import { FullEntity, Node, NodeType, ShowEntity, TagChange } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
@@ -27,7 +27,17 @@ export class LinkedEntityParser implements ActionParser {
 		);
 	}
 
-	AppliesOnCloseNode(_node: Node, _stateType: StateType): boolean {
+	AppliesOnCloseNode(node: Node, stateType: StateType): boolean {
+		if (stateType !== StateType.PowerTaskList) {
+			return false;
+		}
+		// ShowEntity / FullEntity may embed LINKED_ENTITY (reconnect / mid-game Discover snapshots).
+		if (node.Type === NodeType.ShowEntity) {
+			return (node.Object as ShowEntity).GetTag(GameTag.LINKED_ENTITY) > 0;
+		}
+		if (node.Type === NodeType.FullEntity) {
+			return (node.Object as FullEntity).GetTag(GameTag.LINKED_ENTITY) > 0;
+		}
 		return false;
 	}
 
@@ -61,7 +71,41 @@ export class LinkedEntityParser implements ActionParser {
 		];
 	}
 
-	CreateGameEventProviderFromClose(_node: Node): GameEventProvider[] | null {
-		return null;
+	CreateGameEventProviderFromClose(node: Node): GameEventProvider[] | null {
+		const source = node.Object as ShowEntity | FullEntity;
+		const linkedEntityId = source.GetTag(GameTag.LINKED_ENTITY);
+		if (!this.GameState.CurrentEntities.has(linkedEntityId)) {
+			return null;
+		}
+
+		const linkedEntity = this.GameState.CurrentEntities.get(linkedEntityId)!;
+		if (linkedEntity.Id === source.Entity) {
+			return null;
+		}
+
+		// Same as COPIED_FROM: FullEntity Creating closes before CurrentEntities registration.
+		const cardId = source.CardId;
+		const controllerId = source.GetEffectiveController();
+		// Opponent ShowEntity/FullEntity often embeds LINKED_ENTITY on dredge/discover previews.
+		// Emitting LINKED_ENTITY here writes the revealed cardId onto the linked deck row and
+		// bypasses CopiedFrom's dredge obfuscation (info leak). Keep TagChange LINKED as-is;
+		// only emit close events for the local player's own links (e.g. Tracking Discover).
+		if (controllerId !== this.StateFacade.LocalPlayer?.PlayerId) {
+			return null;
+		}
+		return [
+			GameEventProvider.Create(
+				source.TimeStamp,
+				'LINKED_ENTITY',
+				GameEventHelper.CreateProvider('LINKED_ENTITY', cardId, controllerId, source.Entity, this.StateFacade, {
+					LinkedEntityId: linkedEntityId,
+					LinkedEntityControllerId: linkedEntity.GetEffectiveController(),
+					LinkedEntityZone: linkedEntity.GetZone(),
+					LinkedEntityCost: linkedEntity.GetCost(),
+				}),
+				true,
+				node,
+			),
+		];
 	}
 }

@@ -10,7 +10,12 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { isVersionBefore, ReleaseNotesService } from '@firestone/app/common';
+import {
+	getReleaseNotesAppLanguageLabel,
+	getReleaseNotesDisplayLocale,
+	isVersionBefore,
+	ReleaseNotesService,
+} from '@firestone/app/common';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
@@ -191,9 +196,16 @@ const versions: readonly AppVersion[] = [
 							></div>
 							<a
 								class="view-online"
-								[href]="getReleaseNotesUrl(selectedVersion.version)"
-								target="_blank"
-								[fsTranslate]="'new-version.view-online'"
+								*ngIf="showReleaseNotesLanguageToggle && !releaseNotesPreferEnglish"
+								(click)="toggleReleaseNotesLanguage($event)"
+								[fsTranslate]="'new-version.view-in-english'"
+							></a>
+							<a
+								class="view-online"
+								*ngIf="showReleaseNotesLanguageToggle && releaseNotesPreferEnglish"
+								(click)="toggleReleaseNotesLanguage($event)"
+								[fsTranslate]="'new-version.view-in-app-language'"
+								[fsTranslateParams]="releaseNotesLanguageLinkParams"
 							></a>
 						</div>
 						<div class="update-text">
@@ -262,11 +274,21 @@ export class NewVersionNotificationComponent
 	_forceOpen: boolean;
 
 	selectedVersion: AppVersion;
+	releaseNotesPreferEnglish = false;
+	selectedVersionHasLocalizedNotes = false;
+
+	get showReleaseNotesLanguageToggle(): boolean {
+		return this.appLocale !== 'enUS' && this.selectedVersionHasLocalizedNotes;
+	}
+
+	get releaseNotesLanguageLinkParams(): { language: string } {
+		return { language: getReleaseNotesAppLanguageLabel(this.appLocale) };
+	}
 
 	private versions: readonly AppVersion[];
 	private searchStringSub$$: Subscription;
 	private searchString$$ = new BehaviorSubject<string | null>(null);
-	private locale: string;
+	private appLocale: string;
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
@@ -277,10 +299,13 @@ export class NewVersionNotificationComponent
 		private readonly cardsFacade: CardsFacadeService,
 	) {
 		super(cdr);
-		this.locale = this.i18n.locale;
+		this.appLocale = this.i18n.locale;
 	}
 
 	async ngAfterContentInit() {
+		const prefs = await this.prefs.getPreferences();
+		this.releaseNotesPreferEnglish = prefs.releaseNotesPreferEnglish;
+		this.appLocale = prefs.locale ?? this.i18n.locale;
 		this.versions = await this.loadVersions();
 
 		this.searchString$ = this.searchString$$.asObservable();
@@ -309,10 +334,10 @@ export class NewVersionNotificationComponent
 				distinctUntilChanged(),
 			)
 			.subscribe((locale) => {
-				if (!locale || locale === this.locale) {
+				if (!locale || locale === this.appLocale) {
 					return;
 				}
-				this.locale = locale;
+				this.appLocale = locale;
 				this.onLocaleChanged();
 			});
 
@@ -348,8 +373,9 @@ export class NewVersionNotificationComponent
 		if (!version) {
 			return;
 		}
+		const displayLocale = this.getDisplayLocale();
 		if (!version.versionDetails) {
-			version.versionDetails = await this.releaseNotes.loadReleaseNotes(version.version, this.locale);
+			version.versionDetails = await this.releaseNotes.loadReleaseNotes(version.version, displayLocale);
 		}
 		try {
 			await this.cardsFacade.waitForReady();
@@ -359,10 +385,21 @@ export class NewVersionNotificationComponent
 		const parsed = this.markdownService.parse(version.versionDetails ?? '');
 		const html = typeof parsed === 'string' ? parsed : await parsed;
 		version.textHtml = this.releaseNotes.processCardPlaceholders(html);
+		this.selectedVersionHasLocalizedNotes = await this.releaseNotes.hasLocalizedReleaseNotes(
+			version.version,
+			this.appLocale,
+		);
 		this.selectedVersion = version;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.markForCheck();
 		}
+	}
+
+	async toggleReleaseNotesLanguage(event: Event) {
+		event.preventDefault();
+		this.releaseNotesPreferEnglish = !this.releaseNotesPreferEnglish;
+		await this.prefs.setReleaseNotesPreferEnglish(this.releaseNotesPreferEnglish);
+		await this.reloadReleaseNotes();
 	}
 
 	onSearchStringUpdated(newSearch: string | null) {
@@ -373,8 +410,36 @@ export class NewVersionNotificationComponent
 		event.stopPropagation();
 	}
 
-	getReleaseNotesUrl(version: string): string {
-		return this.releaseNotes.getReleaseNotesUrl(version, this.locale);
+	private getDisplayLocale(): string {
+		return getReleaseNotesDisplayLocale(this.appLocale, this.releaseNotesPreferEnglish);
+	}
+
+	private async reloadReleaseNotes(): Promise<void> {
+		if (!this.versions?.length) {
+			return;
+		}
+
+		const displayLocale = this.getDisplayLocale();
+		for (const version of this.versions) {
+			version.versionDetails = undefined;
+			version.textHtml = undefined;
+		}
+
+		for (const version of this.versions) {
+			version.versionDetails = await this.releaseNotes.loadReleaseNotes(version.version, displayLocale);
+		}
+
+		const currentVersion = this.selectedVersion?.version;
+		if (currentVersion) {
+			const version = this.versions.find((v) => v.version === currentVersion);
+			if (version) {
+				await this.selectVersion(version);
+			}
+		}
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.markForCheck();
+		}
 	}
 
 	private async updateInfo() {
@@ -406,8 +471,9 @@ export class NewVersionNotificationComponent
 	}
 
 	private async loadVersions(): Promise<readonly AppVersion[]> {
+		const displayLocale = this.getDisplayLocale();
 		for (const v of versions) {
-			v.versionDetails = await this.releaseNotes.loadReleaseNotes(v.version, this.locale);
+			v.versionDetails = await this.releaseNotes.loadReleaseNotes(v.version, displayLocale);
 		}
 		return versions;
 	}
@@ -421,8 +487,9 @@ export class NewVersionNotificationComponent
 			version.textHtml = undefined;
 		}
 
+		const displayLocale = this.getDisplayLocale();
 		for (const version of this.versions) {
-			version.versionDetails = await this.releaseNotes.loadReleaseNotes(version.version, this.locale);
+			version.versionDetails = await this.releaseNotes.loadReleaseNotes(version.version, displayLocale);
 		}
 
 		const currentVersion = this.selectedVersion?.version;

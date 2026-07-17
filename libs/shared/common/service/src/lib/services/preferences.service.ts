@@ -185,6 +185,12 @@ export class PreferencesService extends AbstractFacadeService<PreferencesService
 		await this.savePreferences(newPrefs);
 	}
 
+	public async setReleaseNotesPreferEnglish(value: boolean) {
+		const prefs = await this.getPreferences();
+		const newPrefs: Preferences = { ...prefs, releaseNotesPreferEnglish: value };
+		await this.savePreferences(newPrefs);
+	}
+
 	public async setMainVisibleSection(value: CurrentAppType) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, currentMainVisibleSection: value };

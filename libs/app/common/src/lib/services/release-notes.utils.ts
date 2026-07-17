@@ -110,6 +110,34 @@ export const buildDiscordReleaseNotes = (
 	return convertReleaseNotesMarkdownToDiscord(withCardNames, version);
 };
 
+const RELEASE_NOTES_APP_LANGUAGE_LABELS: Record<string, string> = {
+	deDE: 'Deutsch',
+	enUS: 'English',
+	esES: 'Espa\u00f1ol (EU)',
+	esMX: 'Espa\u00f1ol (AL)',
+	frFR: 'Fran\u00e7ais',
+	itIT: 'Italiano',
+	jaJP: '\u65e5\u672c\u8a9e',
+	koKR: '\ud55c\uad6d\uc5b4',
+	plPL: 'Polski',
+	ptBR: 'Portugu\u00eas (BR)',
+	ruRU: '\u0420\u0443\u0441\u0441\u043a\u0438\u0439',
+	thTH: '\u0e44\u0e17\u0e22',
+	zhCN: '\u7b80\u4f53\u4e2d\u6587',
+	zhTW: '\u7e41\u9ad4\u4e2d\u6587',
+};
+
+export const getReleaseNotesDisplayLocale = (appLocale: string, preferEnglish: boolean): string => {
+	if (preferEnglish || !appLocale || appLocale === 'enUS') {
+		return 'enUS';
+	}
+	return appLocale;
+};
+
+export const getReleaseNotesAppLanguageLabel = (locale: string): string => {
+	return RELEASE_NOTES_APP_LANGUAGE_LABELS[locale] ?? locale;
+};
+
 export const getReleaseNotesAssetPath = (version: string, locale: string): string => {
 	if (locale && locale !== 'enUS') {
 		return `assets/app-versions/${locale}/${version}.md`;

@@ -10,10 +10,28 @@ import {
 
 @Injectable({ providedIn: 'root' })
 export class ReleaseNotesService {
+	private readonly localizedReleaseNotesCache = new Map<string, boolean>();
+
 	constructor(
 		private readonly http: HttpClient,
 		private readonly cardsFacade: CardsFacadeService,
 	) {}
+
+	public async hasLocalizedReleaseNotes(version: string, locale: string): Promise<boolean> {
+		if (!locale || locale === 'enUS') {
+			return false;
+		}
+
+		const cacheKey = `${locale}/${version}`;
+		if (this.localizedReleaseNotesCache.has(cacheKey)) {
+			return this.localizedReleaseNotesCache.get(cacheKey)!;
+		}
+
+		const localized = await this.tryLoadReleaseNotes(getReleaseNotesAssetPath(version, locale));
+		const hasLocalized = localized !== undefined;
+		this.localizedReleaseNotesCache.set(cacheKey, hasLocalized);
+		return hasLocalized;
+	}
 
 	public async loadReleaseNotes(version: string, locale: string): Promise<string | undefined> {
 		if (locale && locale !== 'enUS') {
