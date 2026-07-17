@@ -5,7 +5,7 @@
  */
 import { CardIds } from '@firestone-hs/reference-data';
 import { DeckCard } from '../../models/deck-card';
-import { PowerEndCard, PowerEndInput } from './_card.type';
+import { GeneratingCard, PowerEndCard, PowerEndInput } from './_card.type';
 
 export const IridaSinseeker: PowerEndCard & {
 	cardReceivedFromTheVoid: (card: DeckCard, existingVoidZone: readonly DeckCard[]) => readonly DeckCard[];
@@ -59,15 +59,21 @@ export const IridaSinseeker: PowerEndCard & {
 		const newVoidZone = existingCardInZone
 			? existingVoidZone.filter((c) => c !== existingCardInZone)
 			: existingVoidZone;
-		// console.debug(
-		// 	'IridaSinseeker.cardReceivedFromTheVoid',
-		// 	card.cardId,
-		// 	card.entityId,
-		// 	existingCardInZone,
-		// 	newVoidZone,
-		// );
+		console.debug(
+			'IridaSinseeker.cardReceivedFromTheVoid',
+			card.cardId,
+			card.entityId,
+			existingCardInZone,
+			newVoidZone,
+			card,
+		);
 		return newVoidZone;
 	},
+};
+
+export const IridaSinseekerEnchantment: GeneratingCard = {
+	cardIds: [CardIds.IridaSinseeker_TheVoidEnchantment_JAIL_719e2],
+	publicTutor: true,
 };
 
 export const isInTheVoidPredicate = (c: DeckCard) =>

@@ -217,7 +217,7 @@ export { InfiniteAmalgam } from './infinite-amalgam';
 export { InspectorMurlocHolmes } from './inspector-murloc-holmes';
 export { InterstellarResearcher } from './interstellar-researcher';
 export { IntertwinedFate } from './intertwined-fate';
-export { IridaSinseeker } from './irida-sinseeker';
+export { IridaSinseeker, IridaSinseekerEnchantment } from './irida-sinseeker';
 export { IvoryKnight } from './ivory-knight';
 export { IvoryRook } from './ivory-rook';
 export { Jackpot } from './jackpot';

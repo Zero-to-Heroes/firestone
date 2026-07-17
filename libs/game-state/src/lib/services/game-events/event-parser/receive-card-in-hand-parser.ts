@@ -71,19 +71,19 @@ export class ReceiveCardInHandParser implements EventParser {
 			return currentState;
 		}
 
-		const debug = cardIdOrDbfId === 'EX1_067';
+		const debug = entityId === 27;
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const opponentDeck = isPlayer ? currentState.opponentDeck : currentState.playerDeck;
 
 		const cardId = resolveCardIdForReceiveInHand(cardIdOrDbfId, gameEvent.additionalData.tags, this.allCards);
-		debug && console.debug('cardId', cardId);
+		debug && console.debug('cardId', `entityId:${entityId}__`, cardId);
 		let { creatorCardId, creatorEntityId } = denormalizeCreatorCardId(
 			gameEvent.additionalData.creatorCardId,
 			gameEvent.additionalData.creatorEntityId,
 			deck,
 		);
-		debug && console.debug('creatorCardId', creatorCardId, creatorEntityId);
+		debug && console.debug('creatorCardId', `entityId:${entityId}__`, creatorCardId, creatorEntityId);
 		// Shatter hand pieces may omit CREATOR in the log; infer Spark of Life or Sands of Time from cards played this match (most recent wins).
 		if (!creatorCardId && !isPlayer) {
 			const tags = gameEvent.additionalData?.tags ?? [];
@@ -102,14 +102,15 @@ export class ReceiveCardInHandParser implements EventParser {
 				}
 			}
 		}
-		// console.debug(
-		// 	'creatorCardId',
-		// 	creatorCardId,
-		// 	creatorEntityId,
-		// 	gameEvent,
-		// 	deck,
-		// 	deck.findCard(gameEvent.additionalData.creatorEntityId),
-		// );
+		console.debug(
+			'creatorCardId',
+			`entityId:${entityId}__`,
+			creatorCardId,
+			creatorEntityId,
+			gameEvent,
+			deck,
+			deck.findCard(gameEvent.additionalData.creatorEntityId),
+		);
 
 		// Some buffs are deduced from the creator card information, instead of being explicitly set
 		// by the game
@@ -121,7 +122,14 @@ export class ReceiveCardInHandParser implements EventParser {
 		) as CardIds;
 		const buffingEntityCardId = gameEvent.additionalData.buffingEntityCardId;
 		const buffCardId = gameEvent.additionalData.buffCardId;
-		debug && console.debug('lastInfluencedByCardId', lastInfluencedByCardId, rawLastInfluencedBy, creatorCardId);
+		debug &&
+			console.debug(
+				'lastInfluencedByCardId',
+				`entityId:${entityId}__`,
+				lastInfluencedByCardId,
+				rawLastInfluencedBy,
+				creatorCardId,
+			);
 		const isSpecialCasePublicWhenOpponentDraws =
 			// This is starting to become one of the worst tangle of special cases in the app
 			//The idea is this:
@@ -142,6 +150,7 @@ export class ReceiveCardInHandParser implements EventParser {
 		debug &&
 			console.debug(
 				'isSpecialCasePublicWhenOpponentDraws',
+				`entityId:${entityId}__`,
 				isSpecialCasePublicWhenOpponentDraws,
 				lastInfluencedByCardId,
 				cardId,
@@ -164,6 +173,7 @@ export class ReceiveCardInHandParser implements EventParser {
 		debug &&
 			console.debug(
 				'[receive-card-in-hand] isCardInfoPublic',
+				`entityId:${entityId}__`,
 				isCardInfoPublic,
 				isPlayer,
 				cardId,
