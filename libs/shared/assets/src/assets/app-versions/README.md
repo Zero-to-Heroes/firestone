@@ -18,6 +18,8 @@
 
 - When building a localized version using auto-translate (ie for all non-English release notes), add a warning at the top that the translations are auto-generated
 
+- When building localized release notes, also include the Discord release notes
+
 ### Card names
 
 - Reference cards with `{{CARD_ID}}` placeholders instead of plain English names.

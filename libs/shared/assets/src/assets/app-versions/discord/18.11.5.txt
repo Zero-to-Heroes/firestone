@@ -1,0 +1,22 @@
+**Firestone 18.11.5 — Release notes**
+
+**Message from the dev**
+
+After mentioning that Firestone got pirated, I got an overwhelming number of support message from the community - especially people from China, some of them even offering me to help make Firestone better. That was heartwarming, and I was moved by such support.
+
+The initial author of the hack also contacted me, apologized and took down their server. I must admit that I didn't expect that, and I have a deep respect for this kind of very humane and humble behiavor. Again, thank you from the bottom of my heart.
+
+I want to thank once again all the users who use Firestone, and especially the subscribers from all over the world. It's thanks to you that Firestone exists.
+
+**General**
+- ✨ Release notes can now be viewed in English or in the app's current language
+- ✨ Improved app responsiveness, especially in stats lists, collection card hovers, and background updates
+- 🐞 Premium status is no longer removed when the membership service is temporarily unreachable
+
+**Decktracker**
+- ✨ Improved handling of PREPARE card pools and cards with known mechanics or rarity
+- ✨ Cards drawn by The Kingslayers are now correctly identified as Legendary
+- 🐞 Playing a copied card no longer incorrectly removes the original card from the deck
+- 🐞 Preview cards offered by Tracking no longer make the original cards disappear from the deck
+- 🐞 Tracking no longer reveals the opponent's chosen card
+- 🐞 The Jade Guardians counter now uses the actual cost paid for each card
