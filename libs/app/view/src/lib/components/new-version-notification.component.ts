@@ -385,7 +385,7 @@ export class NewVersionNotificationComponent
 		}
 		const parsed = this.markdownService.parse(version.versionDetails ?? '');
 		const html = typeof parsed === 'string' ? parsed : await parsed;
-		version.textHtml = this.releaseNotes.processCardPlaceholders(html);
+		version.textHtml = await this.releaseNotes.processCardPlaceholders(html, displayLocale, this.appLocale);
 		this.selectedVersionHasLocalizedNotes = await this.releaseNotes.hasLocalizedReleaseNotes(
 			version.version,
 			this.appLocale,
