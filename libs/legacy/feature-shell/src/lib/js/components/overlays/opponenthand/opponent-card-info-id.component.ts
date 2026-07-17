@@ -222,20 +222,20 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 			realCardId ||
 			(this.createdBy && (card.creatorCardId || card.lastAffectedByCardId)) ||
 			(this.drawnBy && card.lastAffectedByCardId);
-		console.debug(
-			'[opponent-card-info-id] cardId',
-			this.cardId,
-			card.entityId,
-			card.cardId,
-			card.creatorCardId,
-			card.lastAffectedByCardId,
-			realCardId,
-			this.createdBy,
-			this.drawnBy,
-			this.hasBuffs,
-			this.forged,
-			card,
-		);
+		// console.debug(
+		// 	'[opponent-card-info-id] cardId',
+		// 	this.cardId,
+		// 	card.entityId,
+		// 	card.cardId,
+		// 	card.creatorCardId,
+		// 	card.lastAffectedByCardId,
+		// 	realCardId,
+		// 	this.createdBy,
+		// 	this.drawnBy,
+		// 	this.hasBuffs,
+		// 	this.forged,
+		// 	card,
+		// );
 		this.cardUrl = this.cardId
 			? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${this.cardId}.jpg`
 			: undefined;
