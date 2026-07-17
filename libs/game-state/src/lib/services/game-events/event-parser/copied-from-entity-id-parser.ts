@@ -334,12 +334,7 @@ export class CopiedFromEntityIdParser implements EventParser {
 		const newCopiedDeck =
 			// Sometimes the card already exists in the deck (eg if it has a start of combat effect)
 			copiedCardZone === Zone.DECK && !isCardMovedAroundInPlayerDeck
-				? this.dedupePlayerDeckAfterCopiedFromLink(
-						this.helper.empiricReplaceCardInZone(copiedDeck.deck, updatedCopiedCardWithPosition, true, {
-							cost: updatedCopiedCardWithPosition.refManaCost, // Not totally sure about ref vs actual
-						}),
-						updatedCopiedCardWithPosition,
-					)
+				? this.linkCopiedCardIntoDeck(copiedDeck.deck, updatedCopiedCardWithPosition)
 				: copiedDeck.deck;
 		console.debug('[copied-from-entity] newCopiedDeck', `entityId:${entityId}__`, newCopiedDeck, copiedDeck);
 		const newCopiedPlayerBeforeReveal =
@@ -486,10 +481,54 @@ export class CopiedFromEntityIdParser implements EventParser {
 	}
 
 	/**
-	 * After linking entityId + cardId, drop orphan rows (entityId-only ghosts) and one unlinked deckstring
-	 * duplicate of the same card (empiricReplace may remove the ghost but leave the old padding row).
+	 * Link a discovered/copied card (cardId + entityId) back into the deck zone.
+	 *
+	 * `empiricReplaceCardInZone` removes a single matching row then re-adds the linked row, so the deck
+	 * count is already preserved. We must only additionally collapse a leftover unlinked deckstring
+	 * duplicate when the row we consumed was an entityId-only ghost: revealing that ghost's identity can
+	 * expose it as a real deckstring copy we already track (e.g. Chainbreaker Hogger), leaving a spurious
+	 * extra row. When we instead replaced a real deckstring copy - which is what happens for a
+	 * self-discover-from-deck preview like Tracking, where the deck legitimately holds several copies of
+	 * the previewed card - collapsing another copy would wrongly drop a card from the deck.
 	 */
-	private dedupePlayerDeckAfterCopiedFromLink(deck: readonly DeckCard[], linked: DeckCard): readonly DeckCard[] {
+	private linkCopiedCardIntoDeck(deck: readonly DeckCard[], linked: DeckCard): readonly DeckCard[] {
+		const [afterRemoval, removedCard] = this.helper.removeSingleCardFromZone(
+			deck,
+			linked.cardId,
+			linked.entityId,
+			true,
+			false,
+			{ cost: linked.refManaCost }, // Not totally sure about ref vs actual
+		);
+		console.debug(
+			'[copied-from-entity] linkCopiedCardIntoDeck afterRemoval',
+			`entityId:${linked.entityId}__`,
+			afterRemoval,
+			removedCard,
+			linked,
+		);
+		const withLinked = this.helper.addSingleCardToZone(afterRemoval, linked);
+		const consumedGhostRow = !!removedCard && !removedCard.cardId?.length;
+		console.debug(
+			'[copied-from-entity] linkCopiedCardIntoDeck withLinked',
+			`entityId:${linked.entityId}__`,
+			withLinked,
+			consumedGhostRow,
+		);
+		return this.dedupePlayerDeckAfterCopiedFromLink(withLinked, linked, consumedGhostRow);
+	}
+
+	/**
+	 * After linking entityId + cardId, drop orphan rows (entityId-only ghosts) and duplicate linked rows.
+	 * When `collapseUnlinkedDuplicate` is set (a ghost row was consumed while linking), also drop one
+	 * unlinked deckstring duplicate of the same card (empiricReplace may remove the ghost but leave the
+	 * old padding row). See {@link linkCopiedCardIntoDeck} for why this must stay conditional.
+	 */
+	private dedupePlayerDeckAfterCopiedFromLink(
+		deck: readonly DeckCard[],
+		linked: DeckCard,
+		collapseUnlinkedDuplicate: boolean,
+	): readonly DeckCard[] {
 		if (!linked.cardId?.length || linked.entityId == null) {
 			return deck;
 		}
@@ -512,6 +551,7 @@ export class CopiedFromEntityIdParser implements EventParser {
 				return false;
 			}
 			if (
+				collapseUnlinkedDuplicate &&
 				!removedUnlinkedDuplicate &&
 				getBaseCardId(card.cardId, this.allCards.getService()) === baseCardId &&
 				!card.entityId &&

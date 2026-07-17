@@ -616,10 +616,7 @@ export class GameStateService {
 				gameEvent.cardId,
 				`entityId:${gameEvent.entityId}_`,
 				(gameEvent as MinionsDiedEvent)?.additionalData?.deadMinions?.map((m) => `entityId:${m.EntityId}_`),
-				`found?=${currentState.opponentDeck.deck.filter((e) => e.cardId?.startsWith(CardIds.PhotographerFizzle_FizzlesSnapshotToken)).length}`,
-				currentState.opponentDeck.deck.filter((e) =>
-					e.cardId?.startsWith(CardIds.PhotographerFizzle_FizzlesSnapshotToken),
-				),
+				`found?=${currentState.playerDeck.deck.filter((e) => e.cardId?.startsWith(CardIds.SmuggledShovel_JAIL_380)).length}`,
 				currentState,
 				gameEvent,
 			);
