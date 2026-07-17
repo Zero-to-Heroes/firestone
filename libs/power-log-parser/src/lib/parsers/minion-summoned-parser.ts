@@ -61,10 +61,11 @@ export class MinionSummonedParser implements ActionParser {
 		const entity = this.GameState.CurrentEntities.get(tagChange.Entity)!;
 		const cardId = entity.CardId;
 		const controllerId = entity.GetEffectiveController();
-		const creatorEntityId = entity.GetTag(GameTag.CREATOR);
-		const creatorEntityCardId = this.GameState.CurrentEntities.has(creatorEntityId)
-			? this.GameState.CurrentEntities.get(creatorEntityId)!.CardId
-			: null;
+		const creatorEntityId = !!entity.GetTag(GameTag.CREATOR, 0) ? entity.GetTag(GameTag.CREATOR, 0) : null;
+		const creatorEntityCardId =
+			creatorEntityId !== null && this.GameState.CurrentEntities.has(creatorEntityId)
+				? this.GameState.CurrentEntities.get(creatorEntityId)!.CardId
+				: null;
 		const eventName =
 			entity.GetTag(GameTag.ZONE) === (Zone.HAND as number) ? 'MINION_SUMMONED_FROM_HAND' : 'MINION_SUMMONED';
 		return [
@@ -109,10 +110,11 @@ export class MinionSummonedParser implements ActionParser {
 		const fullEntity = node.Object as FullEntity;
 		const cardId = fullEntity.CardId;
 		const controllerId = fullEntity.GetEffectiveController();
-		const creatorEntityId = fullEntity.GetTag(GameTag.CREATOR);
-		const creatorEntityCardId = this.GameState.CurrentEntities.has(creatorEntityId)
-			? this.GameState.CurrentEntities.get(creatorEntityId)!.CardId
-			: null;
+		const creatorEntityId = !!fullEntity.GetTag(GameTag.CREATOR, 0) ? fullEntity.GetTag(GameTag.CREATOR, 0) : null;
+		const creatorEntityCardId =
+			creatorEntityId !== null && this.GameState.CurrentEntities.has(creatorEntityId)
+				? this.GameState.CurrentEntities.get(creatorEntityId)!.CardId
+				: null;
 		return [
 			GameEventProvider.Create(
 				fullEntity.TimeStamp,
@@ -139,28 +141,22 @@ export class MinionSummonedParser implements ActionParser {
 		const showEntity = node.Object as ShowEntity;
 		const cardId = showEntity.CardId;
 		const controllerId = showEntity.GetEffectiveController();
-		const creatorEntityId = showEntity.GetTag(GameTag.CREATOR);
-		const creatorEntityCardId = this.GameState.CurrentEntities.has(creatorEntityId)
-			? this.GameState.CurrentEntities.get(creatorEntityId)!.CardId
-			: null;
+		const creatorEntityId = !!showEntity.GetTag(GameTag.CREATOR, 0) ? showEntity.GetTag(GameTag.CREATOR, 0) : null;
+		const creatorEntityCardId =
+			creatorEntityId !== null && this.GameState.CurrentEntities.has(creatorEntityId)
+				? this.GameState.CurrentEntities.get(creatorEntityId)!.CardId
+				: null;
 		const previousZone = this.GameState.CurrentEntities.get(showEntity.Entity)!.GetTag(GameTag.ZONE);
 		const eventName = previousZone === (Zone.HAND as number) ? 'MINION_SUMMONED_FROM_HAND' : 'MINION_SUMMONED';
 		return [
 			GameEventProvider.Create(
 				showEntity.TimeStamp,
 				eventName,
-				GameEventHelper.CreateProvider(
-					eventName,
-					cardId,
-					controllerId,
-					showEntity.Entity,
-					this.StateFacade,
-					{
-						CreatorCardId: creatorEntityCardId,
-						CreatorEntityId: creatorEntityId,
-						Tags: showEntity.Tags,
-					},
-				),
+				GameEventHelper.CreateProvider(eventName, cardId, controllerId, showEntity.Entity, this.StateFacade, {
+					CreatorCardId: creatorEntityCardId,
+					CreatorEntityId: creatorEntityId,
+					Tags: showEntity.Tags,
+				}),
 				true,
 				node,
 			),
