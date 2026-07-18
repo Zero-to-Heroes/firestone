@@ -1,4 +1,4 @@
-import { CardIds, Zone } from '@firestone-hs/reference-data';
+import { CardIds, GameTag, Zone, getBaseCardId } from '@firestone-hs/reference-data';
 
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { DeckCard } from '../../../models/deck-card';
@@ -161,14 +161,36 @@ export class LinkedEntityParser implements EventParser {
 			}
 			// When linking to a card in the opponent's hand, we need to be extra careful to limit info leaks
 			else {
+				const baseCardId = getBaseCardId(cardId, this.allCards.getService());
+				const originalBaseCardId = getBaseCardId(originalCard.cardId, this.allCards.getService());
+				const handAlreadyHasExactCard = !!baseCardId && originalBaseCardId === baseCardId;
+				const displayedCreatorEntityId = originalCard.tags?.[GameTag.DISPLAYED_CREATOR];
+				// Custom-effect deck rows are created from SUB_SPELL events whose source entity can be 0,
+				// while the physical card's DISPLAYED_CREATOR still points at the real creator entity.
+				const matchingVirtualDeckRowIndex =
+					handAlreadyHasExactCard && displayedCreatorEntityId != null && displayedCreatorEntityId > 0
+						? deckInWhichToModifyTheCard.deck.findIndex(
+								(card) =>
+									card.entityId == null &&
+									card.trueEntityId == null &&
+									(card.creatorEntityId === displayedCreatorEntityId || card.creatorEntityId === 0) &&
+									getBaseCardId(card.cardId, this.allCards.getService()) === baseCardId,
+							)
+						: -1;
+				const newDeck =
+					matchingVirtualDeckRowIndex >= 0
+						? deckInWhichToModifyTheCard.deck.filter((_, index) => index !== matchingVirtualDeckRowIndex)
+						: deckInWhichToModifyTheCard.deck;
+				const knownCardsInHandWithoutOneMatchingMarker =
+					deckInWhichToModifyTheCard.additionalKnownCardsInHand.filter(
+						(c, i) =>
+							c !== cardId || deckInWhichToModifyTheCard.additionalKnownCardsInHand.indexOf(c) !== i,
+					);
 				newPlayerDeck = deckInWhichToModifyTheCard.update({
-					additionalKnownCardsInHand: [
-						...deckInWhichToModifyTheCard.additionalKnownCardsInHand.filter(
-							(c, i) =>
-								c !== cardId || deckInWhichToModifyTheCard.additionalKnownCardsInHand.indexOf(c) !== i,
-						),
-						cardId,
-					],
+					deck: newDeck,
+					additionalKnownCardsInHand: handAlreadyHasExactCard
+						? knownCardsInHandWithoutOneMatchingMarker
+						: [...knownCardsInHandWithoutOneMatchingMarker, cardId],
 					additionalKnownCardsInDeck: deckInWhichToModifyTheCard.additionalKnownCardsInDeck.filter(
 						(c, i) =>
 							c !== cardId || deckInWhichToModifyTheCard.additionalKnownCardsInDeck.indexOf(c) !== i,

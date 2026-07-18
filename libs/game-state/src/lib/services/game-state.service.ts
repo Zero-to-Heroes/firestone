@@ -616,8 +616,8 @@ export class GameStateService {
 				gameEvent.cardId,
 				`entityId:${gameEvent.entityId}_`,
 				(gameEvent as MinionsDiedEvent)?.additionalData?.deadMinions?.map((m) => `entityId:${m.EntityId}_`),
-				`found?=${currentState.opponentDeck.deck.filter((e) => e.cardId?.startsWith(CardIds.RangerGeneralSylvanas_RangerInitiateVereesaToken_TIME_609t2)).length}`,
-				`found2?=${currentState.opponentDeck.additionalKnownCardsInDeck.filter((e) => e.startsWith(CardIds.RangerGeneralSylvanas_RangerInitiateVereesaToken_TIME_609t2)).length}`,
+				`found?=${currentState.opponentDeck.deck.filter((e) => e.cardId?.startsWith(CardIds.DragonSoulShattered_GreenAspectEssenceToken_CATA_EVENT_110t6)).length}`,
+				`found2?=${currentState.opponentDeck.additionalKnownCardsInHand.filter((e) => e.startsWith(CardIds.DragonSoulShattered_GreenAspectEssenceToken_CATA_EVENT_110t6)).length}`,
 				currentState,
 				gameEvent,
 			);
