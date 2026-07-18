@@ -180,6 +180,8 @@ export const currentEffectsInternal = [
 	CardIds.ReroutePower_ReroutePowerPlayerEnchantment,
 	CardIds.RottenApple_FractureEnchantment_EDR_482e,
 	CardIds.RunicHelm_RunicHelmTavernBrawlEnchantment,
+	CardIds.RuniTemporalGuardian_TemporalTraversalEnchantment_TIME_EVENT_998e1,
+	CardIds.RuniTemporalGuardian_WhenAmIquestionEnchantment_TIME_EVENT_998e2,
 	CardIds.RustingAwayEnchantment,
 	CardIds.SandboxScoundrel_OnSaleEnchantment_TOY_521e,
 	CardIds.SandboxScoundrel_OnSaleEnchantment_TOY_521e,
