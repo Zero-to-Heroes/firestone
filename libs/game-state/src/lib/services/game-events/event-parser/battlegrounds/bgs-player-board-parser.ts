@@ -584,9 +584,9 @@ export class BgsPlayerBoardParser implements EventParser {
 			(playerBoard.hero.Tags?.find((tag) => tag.Name === GameTag.ARMOR)?.Value ?? 0);
 		const damage = playerBoard.hero?.Tags?.find((tag) => tag.Name === GameTag.DAMAGE)?.Value ?? 0;
 		const hpLeft = health - damage;
-		if (hpLeft <= 0 || isNaN(hpLeft)) {
-			console.warn('hp is 0', health, damage, playerBoard.hero.Tags, playerBoard.hero);
-		}
+		// if (hpLeft <= 0 || isNaN(hpLeft)) {
+		// 	console.warn('hp is 0', health, damage, playerBoard.hero.Tags, playerBoard.hero);
+		// }
 		return {
 			player: {
 				tavernTier: tavernTier,
