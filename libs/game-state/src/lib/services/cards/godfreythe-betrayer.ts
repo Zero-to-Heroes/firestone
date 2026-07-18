@@ -33,7 +33,7 @@ export const buildGofreyCards = (deckState: DeckState, parserState: ParserGameSt
 	const originalReturnedEntityIds = returnedCards.map(
 		(r) =>
 			parserState?.CurrentEntities?.get(r.entityId)?.Tags?.find((t) => t.Name === GameTag.COPIED_FROM_ENTITY_ID)
-				?.Value,
+				?.Value ?? r.tags?.[GameTag.COPIED_FROM_ENTITY_ID],
 	);
 	const godfreyCards: readonly DeckCard[] = allBurned
 		// Remove returned
