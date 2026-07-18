@@ -165,6 +165,10 @@ export class LinkedEntityParser implements EventParser {
 				const originalBaseCardId = getBaseCardId(originalCard.cardId, this.allCards.getService());
 				const handAlreadyHasExactCard = !!baseCardId && originalBaseCardId === baseCardId;
 				const displayedCreatorEntityId = originalCard.tags?.[GameTag.DISPLAYED_CREATOR];
+				const displayedCreatorCardId =
+					displayedCreatorEntityId != null
+						? deckInWhichToModifyTheCard.findCard(displayedCreatorEntityId)?.card.cardId
+						: undefined;
 				// Custom-effect deck rows are created from SUB_SPELL events whose source entity can be 0,
 				// while the physical card's DISPLAYED_CREATOR still points at the real creator entity.
 				const matchingVirtualDeckRowIndex =
@@ -177,9 +181,25 @@ export class LinkedEntityParser implements EventParser {
 									getBaseCardId(card.cardId, this.allCards.getService()) === baseCardId,
 							)
 						: -1;
+				// The SUB_SPELL can also expose a short-lived entity in DECK before moving it to SETASIDE.
+				// CARD_CHANGED_IN_DECK materializes that preview as a second row, so consume one matching
+				// creator-card row as well as the custom-effect placeholder.
+				const matchingMaterializedDeckRowIndex =
+					handAlreadyHasExactCard && !!displayedCreatorCardId
+						? deckInWhichToModifyTheCard.deck.findIndex(
+								(card) =>
+									getBaseCardId(card.cardId, this.allCards.getService()) === baseCardId &&
+									card.creatorCardId === displayedCreatorCardId,
+							)
+						: -1;
+				const matchingGeneratedDeckRowIndexes = new Set(
+					[matchingVirtualDeckRowIndex, matchingMaterializedDeckRowIndex].filter((index) => index >= 0),
+				);
 				const newDeck =
-					matchingVirtualDeckRowIndex >= 0
-						? deckInWhichToModifyTheCard.deck.filter((_, index) => index !== matchingVirtualDeckRowIndex)
+					matchingGeneratedDeckRowIndexes.size > 0
+						? deckInWhichToModifyTheCard.deck.filter(
+								(_, index) => !matchingGeneratedDeckRowIndexes.has(index),
+							)
 						: deckInWhichToModifyTheCard.deck;
 				const knownCardsInHandWithoutOneMatchingMarker =
 					deckInWhichToModifyTheCard.additionalKnownCardsInHand.filter(
