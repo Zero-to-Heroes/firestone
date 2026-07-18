@@ -23,7 +23,12 @@ export class CardChangedInDeckParser implements EventParser {
 		const isPlayer = reverseIfNeeded(controllerId === localPlayer.PlayerId, gameEvent.additionalData.creatorCardId);
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
-		//console.debug('changing card in deck', gameEvent, currentState);
+		console.debug(
+			'[card-changed-in-deck-parser] changing card in deck',
+			`entityId:${entityId}__`,
+			gameEvent,
+			currentState,
+		);
 		const previousDeck = deck.deck;
 		const [newDeck, theCard] = this.helper.removeSingleCardFromZone(
 			previousDeck,
@@ -32,6 +37,7 @@ export class CardChangedInDeckParser implements EventParser {
 			deck.deckList.length === 0,
 			true,
 		);
+		console.debug('[card-changed-in-deck-parser] newDeck, theCard', `entityId:${entityId}__`, newDeck, theCard);
 		if (!theCard) {
 			const additionalKnownCardsInDeck = deck.additionalKnownCardsInDeck.filter(
 				(c, i) => c !== cardId || deck.additionalKnownCardsInDeck.indexOf(c) !== i,
@@ -39,6 +45,7 @@ export class CardChangedInDeckParser implements EventParser {
 			const newPlayerDeck = deck.update({
 				additionalKnownCardsInDeck: additionalKnownCardsInDeck,
 			});
+			console.debug('[card-changed-in-deck-parser] newPlayerDeck', `entityId:${entityId}__`, newPlayerDeck);
 			return Object.assign(new GameState(), currentState, {
 				[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
 			});
@@ -64,6 +71,7 @@ export class CardChangedInDeckParser implements EventParser {
 			lastAffectedByCardId: gameEvent.additionalData.lastInfluencedByCardId ?? theCard.lastAffectedByCardId,
 			temporaryCard: false,
 		} as DeckCard);
+		console.debug('[card-changed-in-deck-parser] newCard', `entityId:${entityId}__`, newCard);
 		const deckWithNewCard: readonly DeckCard[] = this.helper.addSingleCardToZone(newDeck, newCard);
 
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {

@@ -63,6 +63,7 @@ import { TimewarpTavernStartedParser } from './event-parser/battlegrounds/timewa
 import { BurnedCardParser } from './event-parser/burned-card-parser';
 import { CardBackToDeckParser } from './event-parser/card-back-to-deck-parser';
 import { CardBuffedInHandParser } from './event-parser/card-buffed-in-hand-parser';
+import { CardChangedInDeckParser } from './event-parser/card-changed-in-deck-parser';
 import { CardChangedInHandParser } from './event-parser/card-changed-in-hand-parser';
 import { CardChangedOnBoardParser } from './event-parser/card-changed-on-board-parser';
 import { CardCreatorChangedParser } from './event-parser/card-creator-changed-parser';
@@ -281,6 +282,7 @@ export class GameStateParsersService {
 			[GameEvent.BURNED_CARD]: [new BurnedCardParser(this.helper, this.allCards)],
 			[GameEvent.CARD_BACK_TO_DECK]: [new CardBackToDeckParser(this.helper, this.allCards, this.i18n)],
 			[GameEvent.CARD_BUFFED_IN_HAND]: [new CardBuffedInHandParser(this.helper)],
+			[GameEvent.CARD_CHANGED_IN_DECK]: [new CardChangedInDeckParser(this.helper, this.allCards)],
 			[GameEvent.CARD_CHANGED_IN_HAND]: [new CardChangedInHandParser(this.helper, this.allCards)],
 			[GameEvent.CARD_CHANGED_ON_BOARD]: [new CardChangedOnBoardParser(this.helper, this.allCards)],
 			[GameEvent.CARD_CREATOR_CHANGED]: [new CardCreatorChangedParser(this.helper, this.allCards)],
