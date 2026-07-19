@@ -143,14 +143,14 @@ export class WindowWrapperComponent extends AbstractSubscriptionComponent implem
 						currentWindow,
 					);
 				}
-				console.warn(
-					'[window-resize-debug]',
-					JSON.stringify({
-						context: 'globalZoomLevel-change',
-						globalZoomLevel: zoom,
-						normalizedZoom: this.zoom,
-					}),
-				);
+				// console.warn(
+				// 	'[window-resize-debug]',
+				// 	JSON.stringify({
+				// 		context: 'globalZoomLevel-change',
+				// 		globalZoomLevel: zoom,
+				// 		normalizedZoom: this.zoom,
+				// 	}),
+				// );
 				// 0 is the unzoomed value
 				// It behaves a bit strangely. When values are > 1, the zoom behaves as expected
 				// If values are between 0 and 1, it looks like
