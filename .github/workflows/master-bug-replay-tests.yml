@@ -28,13 +28,15 @@ jobs:
             - name: Run test-tools/bugs Jest specs
               # Bug specs use libs/game-state/jest.config.ts (see testMatch there). This Jest version expects
               # --testPathPattern (singular); Nx's testPathPatterns is not wired to it, so invoke Jest directly.
-              run: npx jest --config libs/game-state/jest.config.ts --runInBand --ci --silent --passWithNoTests --testPathPattern=test-tools/bugs
+              # Workers are separate processes (safe for GameState/DeckCard statics). 4 fits ubuntu-latest;
+              # each replay resets TestBed and reuses a per-worker cached cards DB.
+              run: npx jest --config libs/game-state/jest.config.ts --maxWorkers=4 --ci --silent --passWithNoTests --testPathPattern=test-tools/bugs
               env:
                   HS_REFERENCE_CARDS_JSON_PATH: https://raw.githubusercontent.com/Zero-to-Heroes/hs-reference-data/master/src/cards_short.json
                   NODE_OPTIONS: --max-old-space-size=8192
 
             - name: Run test-tools/non-reg Jest specs (rewind goldens)
-              run: npx jest --config libs/game-state/jest.config.ts --runInBand --ci --silent --passWithNoTests --testPathPattern=test-tools/non-reg
+              run: npx jest --config libs/game-state/jest.config.ts --maxWorkers=4 --ci --silent --passWithNoTests --testPathPattern=test-tools/non-reg
               env:
                   HS_REFERENCE_CARDS_JSON_PATH: https://raw.githubusercontent.com/Zero-to-Heroes/hs-reference-data/master/src/cards_short.json
                   NODE_OPTIONS: --max-old-space-size=8192
