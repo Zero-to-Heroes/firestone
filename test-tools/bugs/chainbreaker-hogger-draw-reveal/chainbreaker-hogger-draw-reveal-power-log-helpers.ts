@@ -8,7 +8,9 @@
 import { CardIds } from '@firestone-hs/reference-data';
 import * as path from 'path';
 
-export const CHAINBREAKER_HOGGER_DRAW_REVEAL_LOG_PATH = path.resolve(__dirname, '../../power.log');
+// Pinned copy of the original repro log. `test-tools/power.log` is a scratch drop zone that
+// gets overwritten with whatever game is being investigated, so specs must never point at it.
+export const CHAINBREAKER_HOGGER_DRAW_REVEAL_LOG_PATH = path.resolve(__dirname, 'chainbreaker-hogger-draw-reveal.log');
 
 export const HOGGER_CONTROLLER_ID = 1;
 export const CHAINBREAKER_HOGGER_ENTITY_ID = 27;
