@@ -125,8 +125,10 @@ export class BgsBattleSimulationService {
 			const resultForLog = !!result ? { ...result } : null;
 			if (!!resultForLog) {
 				delete resultForLog.outcomeSamples;
+				delete (resultForLog as any).damageLosts;
+				delete (resultForLog as any).damageWons;
 			}
-			// console.log('[bgs-simulation] battle simulation result', resultForLog);
+			console.log('[bgs-simulation] battle simulation result', resultForLog);
 			this.battleInfo$$.next({
 				battleId: battleId,
 				result: result,
