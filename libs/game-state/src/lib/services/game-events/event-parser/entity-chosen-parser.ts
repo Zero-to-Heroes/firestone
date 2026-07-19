@@ -61,10 +61,12 @@ export class EntityChosenParser implements EventParser {
 		if (CARDS_THAT_PUT_ON_TOP.includes(originCreatorCardId)) {
 			const result = this.handleCardOnTop(currentState, gameEvent);
 			return result;
-		} else if (originCreatorCardId === CardIds.NellieTheGreatThresher) {
-			// console.debug('handling nellie pirate crew');
-			return this.handleNelliePirateCrew(currentState, gameEvent);
-		} else if (
+		}
+		// else if (originCreatorCardId === CardIds.NellieTheGreatThresher) {
+		// 	// console.debug('handling nellie pirate crew');
+		// 	return this.handleNelliePirateCrew(currentState, gameEvent);
+		// }
+		else if (
 			originCreatorCardId === CardIds.SphereOfSapience &&
 			gameEvent.cardId === CardIds.SphereOfSapience_ANewFateToken
 		) {
@@ -100,32 +102,32 @@ export class EntityChosenParser implements EventParser {
 		});
 	}
 
-	private handleNelliePirateCrew(currentState: GameState, gameEvent: GameEvent): GameState {
-		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
-		const isPlayer = controllerId === localPlayer.PlayerId;
-		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
-		// console.debug('deck', deck, isPlayer);
-		// TODO: probably won't work if there are two pirates ships on the board at the same time
-		const pirateShipEntity = this.helper.findCardInZone(
-			deck.board,
-			CardIds.NellieTheGreatThresher_NelliesPirateShipToken,
-			null,
-		);
-		// console.debug('pirateShipEntity', pirateShipEntity);
-		const updatedShip = pirateShipEntity!.update({
-			relatedCardIds: [...pirateShipEntity!.relatedCardIds!, cardId],
-		});
-		// console.debug('updatedShip', updatedShip);
-		const updatedBoard = this.helper.empiricReplaceCardInZone(deck.board, updatedShip, false);
-		// console.debug('updatedBoard', updatedBoard);
-		const newPlayerDeck = deck.update({
-			board: updatedBoard,
-		});
-		// console.debug('newPlayerDeck', newPlayerDeck);
-		return currentState.update({
-			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
-		});
-	}
+	// private handleNelliePirateCrew(currentState: GameState, gameEvent: GameEvent): GameState {
+	// 	const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
+	// 	const isPlayer = controllerId === localPlayer.PlayerId;
+	// 	const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
+	// 	// console.debug('deck', deck, isPlayer);
+	// 	// TODO: probably won't work if there are two pirates ships on the board at the same time
+	// 	const pirateShipEntity = this.helper.findCardInZone(
+	// 		deck.board,
+	// 		CardIds.NellieTheGreatThresher_NelliesPirateShipToken,
+	// 		null,
+	// 	);
+	// 	// console.debug('pirateShipEntity', pirateShipEntity);
+	// 	const updatedShip = pirateShipEntity!.update({
+	// 		relatedCardIds: [...pirateShipEntity!.relatedCardIds!, cardId],
+	// 	});
+	// 	// console.debug('updatedShip', updatedShip);
+	// 	const updatedBoard = this.helper.empiricReplaceCardInZone(deck.board, updatedShip, false);
+	// 	// console.debug('updatedBoard', updatedBoard);
+	// 	const newPlayerDeck = deck.update({
+	// 		board: updatedBoard,
+	// 	});
+	// 	// console.debug('newPlayerDeck', newPlayerDeck);
+	// 	return currentState.update({
+	// 		[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
+	// 	});
+	// }
 
 	private handleCardOnTop(currentState: GameState, gameEvent: GameEvent): GameState {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();

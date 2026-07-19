@@ -1749,31 +1749,31 @@ export class Oracle {
 				}
 
 				// Nellie
-				if (
-					actionEntity != null &&
-					actionEntity.CardId === CardIds.NellieTheGreatThresher_NelliesPirateShipToken &&
-					action.TriggerKeyword === (GameTag.DEATHRATTLE as number)
-				) {
-					const pirateShipEntity = gameState.CurrentEntities.get(creatorEntityId);
-					const nellieEntity = gameState.CurrentEntities.get(pirateShipEntity?.GetTag(GameTag.CREATOR) ?? -1);
-					if (pirateShipEntity && pirateShipEntity.KnownEntityIds.length === 0) {
-						const crewmates = Array.from(gameState.CurrentEntities.values())
-							.filter((entity) => entity.GetTag(GameTag.CREATOR) === nellieEntity?.Entity)
-							.filter(
-								(entity) => entity.CardId !== CardIds.NellieTheGreatThresher_NelliesPirateShipToken,
-							);
-						pirateShipEntity.KnownEntityIds = crewmates.map((entity) => entity.Entity);
-					}
-					if (pirateShipEntity && pirateShipEntity.KnownEntityIds.length > 0) {
-						const entities = pirateShipEntity.KnownEntityIds.map((entityId) =>
-							gameState.CurrentEntities.get(entityId),
-						);
-						const nextCard = entities[0]?.CardId ?? null;
-						pirateShipEntity.KnownEntityIds.splice(0, 1);
-						return nextCard;
-					}
-					return null;
-				}
+				// if (
+				// 	actionEntity != null &&
+				// 	actionEntity.CardId === CardIds.NellieTheGreatThresher_NelliesPirateShipToken &&
+				// 	action.TriggerKeyword === (GameTag.DEATHRATTLE as number)
+				// ) {
+				// 	const pirateShipEntity = gameState.CurrentEntities.get(creatorEntityId);
+				// 	const nellieEntity = gameState.CurrentEntities.get(pirateShipEntity?.GetTag(GameTag.CREATOR) ?? -1);
+				// 	if (pirateShipEntity && pirateShipEntity.KnownEntityIds.length === 0) {
+				// 		const crewmates = Array.from(gameState.CurrentEntities.values())
+				// 			.filter((entity) => entity.GetTag(GameTag.CREATOR) === nellieEntity?.Entity)
+				// 			.filter(
+				// 				(entity) => entity.CardId !== CardIds.NellieTheGreatThresher_NelliesPirateShipToken,
+				// 			);
+				// 		pirateShipEntity.KnownEntityIds = crewmates.map((entity) => entity.Entity);
+				// 	}
+				// 	if (pirateShipEntity && pirateShipEntity.KnownEntityIds.length > 0) {
+				// 		const entities = pirateShipEntity.KnownEntityIds.map((entityId) =>
+				// 			gameState.CurrentEntities.get(entityId),
+				// 		);
+				// 		const nextCard = entities[0]?.CardId ?? null;
+				// 		pirateShipEntity.KnownEntityIds.splice(0, 1);
+				// 		return nextCard;
+				// 	}
+				// 	return null;
+				// }
 
 				// Ice Trap
 				if (
