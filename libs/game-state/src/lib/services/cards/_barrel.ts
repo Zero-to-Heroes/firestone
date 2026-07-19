@@ -286,6 +286,7 @@ export { Nab } from './nab';
 export { NaturalTalent } from './natural-talent';
 export { Necronurse } from './necronurse';
 export { Nefarian } from './nefarian';
+export { NelliesPirateShip } from './nellies-pirate-ship';
 export { NeonInnovation } from './neon-innovation';
 export { Neptulon } from './neptulon';
 export { NespirahUnshackled } from './nespirah-unshackled';
