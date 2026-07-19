@@ -22,6 +22,9 @@ const COPY_KNOW_EXACT_CARD_IN_OPPONENT_HAND = [
 	CardIds.AzalinaSoulthief,
 	CardIds.MindrenderIllucia,
 	CardIds.SketchArtist_TOY_916,
+	// Opponent just drew this exact entity; the copy in our hand is a 1:1 reveal of that hand row.
+	CardIds.KeymasterAlabaster,
+	CardIds.KeymasterAlabaster_CORE_SCH_717,
 ];
 
 /**
@@ -360,12 +363,10 @@ export class CopiedFromEntityIdParser implements EventParser {
 		let copiedDeckWithKnownCardsInHand = copiedDeckWithSecrets;
 		if (copiedCardZone === Zone.HAND && !isCopiedPlayer) {
 			const resolvedRevealCardId = cardId || newCopy?.cardId;
-			const shouldRevealOpponentHandFromCrossPlayerCopy = isPlayer && !!resolvedRevealCardId?.length;
-			// In this case we know exactly what card is what
-			if (
-				!!newCopy &&
-				(shouldFlagExactCardInOpponentHand(newCopy) || shouldRevealOpponentHandFromCrossPlayerCopy)
-			) {
+			// Only a curated whitelist (Azalina / Illucia / Sketch Artist) may stamp cardId onto a
+			// specific opponent hand entity. Discover-from-hand effects (e.g. Deja Vu) only learn that
+			// the card is somewhere in hand — use additionalKnownCardsInHand.
+			if (!!newCopy && shouldFlagExactCardInOpponentHand(newCopy) && !!resolvedRevealCardId?.length) {
 				console.debug(
 					'[copied-from-entity] know exact card in opponent hand',
 					`entityId:${entityId}__`,
@@ -374,7 +375,7 @@ export class CopiedFromEntityIdParser implements EventParser {
 					newCopy,
 					copiedCard,
 				);
-				const refCard = this.allCards.getCard(resolvedRevealCardId!);
+				const refCard = this.allCards.getCard(resolvedRevealCardId);
 				const sourceEntityId = copiedCard?.entityId ?? copiedCardEntityId;
 				const newHand = copiedDeckWithSecrets.hand.map((card) =>
 					card.entityId === sourceEntityId
@@ -389,10 +390,8 @@ export class CopiedFromEntityIdParser implements EventParser {
 				copiedDeckWithKnownCardsInHand = copiedDeckWithSecrets.update({
 					hand: newHand,
 				});
-			} else {
-				// Be cautious in case of leaks
-				// Maybe we'll need to add a whitelist. FromDeOtherSide should be there
-				const cardIdToAdd = cardId;
+			} else if (resolvedRevealCardId?.length) {
+				const cardIdToAdd = resolvedRevealCardId;
 				copiedDeckWithKnownCardsInHand = copiedDeckWithSecrets.update({
 					additionalKnownCardsInHand: [
 						...copiedDeckWithSecrets.additionalKnownCardsInHand.filter((c) => c !== cardIdToAdd),

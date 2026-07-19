@@ -169,10 +169,16 @@ export class LinkedEntityParser implements EventParser {
 					displayedCreatorEntityId != null
 						? deckInWhichToModifyTheCard.findCard(displayedCreatorEntityId)?.card.cardId
 						: undefined;
+				// Consume matching generated deck rows whenever we learn the card is in hand (exact entity
+				// stamp OR additionalKnownCardsInHand). DISPLAYED_CREATOR provenance avoids deleting a
+				// legitimate second copy still in the deck.
+				const shouldConsumeMatchingGeneratedDeckRow = !!baseCardId;
 				// Custom-effect deck rows are created from SUB_SPELL events whose source entity can be 0,
 				// while the physical card's DISPLAYED_CREATOR still points at the real creator entity.
 				const matchingVirtualDeckRowIndex =
-					handAlreadyHasExactCard && displayedCreatorEntityId != null && displayedCreatorEntityId > 0
+					shouldConsumeMatchingGeneratedDeckRow &&
+					displayedCreatorEntityId != null &&
+					displayedCreatorEntityId > 0
 						? deckInWhichToModifyTheCard.deck.findIndex(
 								(card) =>
 									card.entityId == null &&
@@ -185,7 +191,7 @@ export class LinkedEntityParser implements EventParser {
 				// CARD_CHANGED_IN_DECK materializes that preview as a second row, so consume one matching
 				// creator-card row as well as the custom-effect placeholder.
 				const matchingMaterializedDeckRowIndex =
-					handAlreadyHasExactCard && !!displayedCreatorCardId
+					shouldConsumeMatchingGeneratedDeckRow && !!displayedCreatorCardId
 						? deckInWhichToModifyTheCard.deck.findIndex(
 								(card) =>
 									getBaseCardId(card.cardId, this.allCards.getService()) === baseCardId &&

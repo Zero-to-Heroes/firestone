@@ -23,9 +23,7 @@
     "additionalKnownCardsInDeck": [
       "TIME_875"
     ],
-    "additionalKnownCardsInHand": [
-      ""
-    ],
+    "additionalKnownCardsInHand": [],
     "anachronos": [],
     "animalCompanionBuffAmount": 0,
     "animalCompanionBufferEntityId": null,

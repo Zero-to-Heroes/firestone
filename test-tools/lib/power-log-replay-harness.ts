@@ -286,6 +286,7 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	'cmap-second-draw': 'cmap-second-draw/cmap-second-draw.log',
 	'epoch-dredge': 'epoch-dredge/epoch-dredge.log',
 	'deja-vu-cultist': 'deja-vu-cultist/deja-vu-cultist.log',
+	'deja-vu-hand': 'deja-vu-hand/deja-vu-hand.log',
 	meadowstrider: 'meadowstrider/meadowstrider.log',
 	'hex-opposite-play': 'hex-opposite-play/hex-opposite-play.log',
 	qonzu: 'qonzu-top-deck/qonzu-top-deck.log',
