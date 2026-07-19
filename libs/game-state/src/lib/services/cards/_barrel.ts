@@ -456,6 +456,7 @@ export { TrippedBeastTripwire } from './tripped-beast-tripwire';
 export { TrustFall } from './trust-fall';
 export { TruthSeeker } from './truth-seeker';
 export { TwilightMender } from './twilight-mender';
+export { TwilightsCall } from './twilights-call';
 export { TwistedWebweaver } from './twisted-webweaver';
 export { UluuTheEverdrifter } from './uluu-the-everdrifter';
 export { UmpireGrasp } from './umpire-grasp';
