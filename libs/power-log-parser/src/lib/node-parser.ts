@@ -210,7 +210,12 @@ export class NodeParser implements INodeParser {
 		if (node == null) {
 			return;
 		}
-		for (const parser of this.parsers) {
+		// Indexed loop on purpose: this runs ~150 parsers for every node of the game (hundreds
+		// of thousands of nodes in a long BG game), and the for..of iterator protocol alone
+		// shows up in CPU profiles at that call volume.
+		const parsers = this.parsers;
+		for (let i = 0; i < parsers.length; i++) {
+			const parser = parsers[i];
 			if (!parser.AppliesOnNewNode(node, stateType)) {
 				continue;
 			}
@@ -228,10 +233,16 @@ export class NodeParser implements INodeParser {
 	}
 
 	CloseNode(node: Node, stateType: StateType): void {
-		if (node == null) {
+		if (node == null || node.Closed) {
+			if (node != null) {
+				node.Closed = true;
+			}
 			return;
 		}
-		for (const parser of this.parsers) {
+		const parsers = this.parsers;
+		for (let i = 0; i < parsers.length; i++) {
+			const parser = parsers[i];
+			// Re-check Closed each iteration: a parser could (via reentrancy) close the node mid-loop.
 			if (!node.Closed && parser.AppliesOnCloseNode(node, stateType)) {
 				try {
 					const providers = parser.CreateGameEventProviderFromClose(node);

@@ -134,10 +134,11 @@ export class GameStateService {
 	 * Read with {@link getPerfStats}, reset with {@link resetPerfStats}.
 	 *
 	 * Evaluated at construction time (not module load) so test harnesses can set the env
-	 * var programmatically before building the service.
+	 * var programmatically before building the service. Can also be toggled at runtime with
+	 * {@link setPerfTraceEnabled} (used by the dev commands in the live app, where env vars
+	 * aren't practical).
 	 */
-	private readonly perfTraceEnabled: boolean =
-		typeof process !== 'undefined' && process?.env?.['FS_PERF_TRACE'] === '1';
+	private perfTraceEnabled: boolean = typeof process !== 'undefined' && process?.env?.['FS_PERF_TRACE'] === '1';
 	private perfStats: { [bucket: string]: { totalMs: number; calls: number } } = {};
 
 	constructor(
@@ -268,6 +269,10 @@ export class GameStateService {
 		this.perfStats = {};
 	}
 
+	public setPerfTraceEnabled(enabled: boolean): void {
+		this.perfTraceEnabled = enabled;
+	}
+
 	private perfRecord(bucket: string, elapsedMs: number): void {
 		const entry = this.perfStats[bucket] ?? (this.perfStats[bucket] = { totalMs: 0, calls: 0 });
 		entry.totalMs += elapsedMs;
@@ -315,6 +320,29 @@ export class GameStateService {
 	}
 
 	private async processQueue(eventQueue: readonly (GameEvent | GameStateEvent)[]) {
+		// Collapse runs of ADJACENT PTL updates, keeping only the last of each run. They all
+		// reference the SAME live ParserState object (the parser mutates it in place and
+		// re-emits a pointer after each of its batches), so back-to-back updates with no other
+		// event in between are strictly redundant - and each costs a full CurrentEntities scan
+		// (see getHeroesAndDeckCounts). Live play sees at most one per batch (no-op); bulk
+		// replays (fakeGame / perf harness) can queue many. NOTE: only adjacent ones can be
+		// dropped - event parsers BETWEEN two updates read the values the earlier update
+		// applied (verified by the rewind non-reg goldens, which fail with a global dedupe).
+		if (eventQueue.length > 1) {
+			const filtered: (GameEvent | GameStateEvent)[] = [];
+			for (const event of eventQueue) {
+				if (
+					filtered.length > 0 &&
+					event instanceof PtlGameStateUpdateEvent &&
+					filtered[filtered.length - 1] instanceof PtlGameStateUpdateEvent
+				) {
+					filtered[filtered.length - 1] = event;
+				} else {
+					filtered.push(event);
+				}
+			}
+			eventQueue = filtered;
+		}
 		const gameEndEvent = eventQueue.find((event) => event.type === GameEvent.GAME_END);
 		const shouldProcessGameEnd = gameEndEvent && eventQueue.length === 1;
 		const chunks = chunk(eventQueue, 50);
@@ -606,14 +634,23 @@ export class GameStateService {
 			this.savedDeckstrings = null;
 		}
 
-		const secretsBeforeStart = this.perfTraceEnabled ? performance.now() : 0;
-		currentState = await this.secretsParser.parseSecrets(currentState, gameEvent, {
-			secretWillTrigger: this.secretWillTrigger!,
-			minionsWillDie: this.minionsWillDie,
-			timing: 'before',
-		});
-		if (this.perfTraceEnabled) {
-			this.perfRecord('secrets:before', performance.now() - secretsBeforeStart);
+		// Fast-path: parseSecrets is a no-op unless a secret is in play (it checks this
+		// internally, but by then we've already paid an `await` - and under zone.js in the
+		// live app each await costs real time through the patched-promise machinery, ~4 s
+		// per full BG game across the ~27k parseSecrets awaits).
+		const anySecretInPlay =
+			(currentState.playerDeck?.secrets?.length ?? 0) > 0 ||
+			(currentState.opponentDeck?.secrets?.length ?? 0) > 0;
+		if (anySecretInPlay) {
+			const secretsBeforeStart = this.perfTraceEnabled ? performance.now() : 0;
+			currentState = await this.secretsParser.parseSecrets(currentState, gameEvent, {
+				secretWillTrigger: this.secretWillTrigger!,
+				minionsWillDie: this.minionsWillDie,
+				timing: 'before',
+			});
+			if (this.perfTraceEnabled) {
+				this.perfRecord('secrets:before', performance.now() - secretsBeforeStart);
+			}
 		}
 		const parsersForEvent = this.eventParsers[gameEvent.type] ?? [];
 		for (const parser of parsersForEvent) {
@@ -647,14 +684,20 @@ export class GameStateService {
 				console.log('[game-state] Exception while applying parser', parser.event(), e.message, e.stack, e);
 			}
 		}
-		const secretsAfterStart = this.perfTraceEnabled ? performance.now() : 0;
-		currentState = await this.secretsParser.parseSecrets(currentState, gameEvent, {
-			secretWillTrigger: this.secretWillTrigger!,
-			minionsWillDie: this.minionsWillDie,
-			timing: 'after',
-		});
-		if (this.perfTraceEnabled) {
-			this.perfRecord('secrets:after', performance.now() - secretsAfterStart);
+		// Recompute: the event parsers above may have added/removed secrets.
+		const anySecretInPlayAfter =
+			(currentState.playerDeck?.secrets?.length ?? 0) > 0 ||
+			(currentState.opponentDeck?.secrets?.length ?? 0) > 0;
+		if (anySecretInPlayAfter) {
+			const secretsAfterStart = this.perfTraceEnabled ? performance.now() : 0;
+			currentState = await this.secretsParser.parseSecrets(currentState, gameEvent, {
+				secretWillTrigger: this.secretWillTrigger!,
+				minionsWillDie: this.minionsWillDie,
+				timing: 'after',
+			});
+			if (this.perfTraceEnabled) {
+				this.perfRecord('secrets:after', performance.now() - secretsAfterStart);
+			}
 		}
 
 		// We have processed the event for which the secret would trigger

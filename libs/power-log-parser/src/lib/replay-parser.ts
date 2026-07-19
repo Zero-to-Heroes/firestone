@@ -567,8 +567,17 @@ export class ReplayParser {
 		});
 	}
 
+	// Consecutive log lines very often share the exact same timestamp (and this runs twice per
+	// line: once in ReadLine, once in AddData), so a single-entry memo removes most of the
+	// regex + parse work (~1s over a 1M-line BG log).
+	private lastRawTimestamp: string | null = null;
+	private lastNormalizedTimestamp = '';
+
 	private NormalizeTimestamp(timestamp: string): string {
 		if (!timestamp) return '';
+		if (timestamp === this.lastRawTimestamp) {
+			return this.lastNormalizedTimestamp;
+		}
 		const match = timestamp.match(/^(\d+):(\d+):(\d+)\.(\d+)$/);
 		if (!match) return timestamp;
 
@@ -577,10 +586,13 @@ export class ReplayParser {
 		const seconds = match[3];
 		const fraction = match[4].slice(0, 6).padEnd(6, '0');
 
-		return hours.toString().padStart(2, '0') + ':' + minutes + ':' + seconds + '.' + fraction;
+		const normalized = hours.toString().padStart(2, '0') + ':' + minutes + ':' + seconds + '.' + fraction;
+		this.lastRawTimestamp = timestamp;
+		this.lastNormalizedTimestamp = normalized;
+		return normalized;
 	}
 
-	ExtractGameSeed(lines: string[]): number {
+	ExtractGameSeed(lines: readonly string[]): number {
 		let isGameCreation = false;
 		for (let i = 0; i < lines.length; i++) {
 			const line = lines[i];

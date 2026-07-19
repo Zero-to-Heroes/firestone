@@ -92,26 +92,43 @@ export class GameEvents {
 	}
 
 	private async processQueue(eventQueue: readonly string[]): Promise<readonly string[]> {
-		if (eventQueue.some((data) => data.includes('CREATE_GAME'))) {
+		// Scan the batch ONCE for the markers the various stages need. These used to be
+		// re-computed with `.some(includes(...))` at each stage (plus a full-array spread for
+		// ExtractGameSeed), which added several full scans of every log line per batch.
+		let hasCreateGame = false;
+		let hasGameSeed = false;
+		for (const data of eventQueue) {
+			if (!hasCreateGame && data.includes('CREATE_GAME')) {
+				hasCreateGame = true;
+			}
+			if (!hasGameSeed && data.includes('GAME_SEED')) {
+				hasGameSeed = true;
+			}
+			if (hasCreateGame && hasGameSeed) {
+				break;
+			}
+		}
+		if (hasCreateGame) {
 			console.log(
 				'[game-events] preparing log lines that include game creation to feed to the plugin',
 				eventQueue.length,
 			);
 		}
-		const hasProcessed = await this.processLogs(eventQueue);
+		const hasProcessed = await this.processLogs(eventQueue, hasCreateGame, hasGameSeed);
 		return hasProcessed ? [] : eventQueue;
 	}
 
-	private async processLogs(eventQueue: readonly string[]): Promise<boolean> {
-		if (
-			eventQueue.some((data) => data.includes('CREATE_GAME')) &&
-			!eventQueue.some((data) => data.includes('GAME_SEED'))
-		) {
+	private async processLogs(
+		eventQueue: readonly string[],
+		hasCreateGame: boolean,
+		hasGameSeed: boolean,
+	): Promise<boolean> {
+		if (hasCreateGame && !hasGameSeed) {
 			console.warn("[game-events] can't process logs without a game seed", eventQueue[eventQueue.length - 1]);
 			return false;
 		}
 
-		return this.processLogsWithTsParser(eventQueue);
+		return this.processLogsWithTsParser(eventQueue, hasCreateGame, hasGameSeed);
 	}
 
 	private doEventDispatch(event: GameEvent) {
@@ -1743,11 +1760,15 @@ export class GameEvents {
 			this.globalError.notifyCriticalError('truncated-logs');
 			return;
 		}
-		if (data.includes('Begin Spectating') || data.includes('Start Spectator')) {
-			console.log('[game-events]', 'begin spectating', data);
-		}
-		if (data.includes('End Spectator')) {
-			console.log('[game-events]', 'end spectating', data);
+		// Single cheap gate for the three spectator markers (each `includes` is a full scan of
+		// the line, and this method runs for every single log line).
+		if (data.includes('Spectat')) {
+			if (data.includes('Begin Spectating') || data.includes('Start Spectator')) {
+				console.log('[game-events]', 'begin spectating', data);
+			}
+			if (data.includes('End Spectator')) {
+				console.log('[game-events]', 'end spectating', data);
+			}
 		}
 
 		if (data.indexOf('CREATE_GAME') !== -1) {
@@ -1940,17 +1961,19 @@ export class GameEvents {
 		});
 	}
 
-	private processLogsWithTsParser(eventQueue: readonly string[]): boolean {
+	private processLogsWithTsParser(eventQueue: readonly string[], hasCreateGame: boolean, hasGameSeed: boolean): boolean {
 		if (!this.tsParser) {
 			this.initTsParser();
 		}
 
-		const gameSeed = this.tsParser!.ExtractGameSeed([...eventQueue]);
-		if (gameSeed > 0) {
-			this.tsParserCurrentGameSeed = gameSeed;
+		if (hasGameSeed || hasCreateGame) {
+			const gameSeed = this.tsParser!.ExtractGameSeed(eventQueue);
+			if (gameSeed > 0) {
+				this.tsParserCurrentGameSeed = gameSeed;
+			}
 		}
 
-		if (eventQueue.some((data) => data.includes('CREATE_GAME'))) {
+		if (hasCreateGame) {
 			console.log('[game-events] [ts-parser] Processing CREATE_GAME, resetting line index');
 			this.tsParserLineIndex = 0;
 		}

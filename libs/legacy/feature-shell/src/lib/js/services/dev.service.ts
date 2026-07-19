@@ -62,7 +62,13 @@ export class DevService {
 				isBg?: boolean;
 				allowReconnects?: boolean;
 				deckstring?: string;
-				/** Pause every N lines while feeding the log (default 500ms). */
+				/**
+				 * Pause every 2000 lines while feeding the log. Default 0 = just yield to the
+				 * event loop so the processing queues can interleave (a 1M-line BG log used to
+				 * accumulate ~4 min of pure sleep with the old 500ms default, dwarfing the
+				 * actual parsing time in the reported total). Set >0 to simulate slow log
+				 * arrival (e.g. real-time stats testing).
+				 */
 				waitTime?: number;
 				/** After the last line: wait for the game-events queue + this delay so GameState catches up (default 8000, same as power-log-replay-harness). */
 				settleMs?: number;
@@ -84,12 +90,17 @@ export class DevService {
 			// await this.gameEvents['initPlugin']();
 			const logsLocation = `E:\\Source\\zerotoheroes\\firestone\\test-tools\\${fileName ?? 'game.log'}`;
 			const logContents = await this.ow.readTextFile(logsLocation);
-			console.log('logContents', logContents, fileName);
+			// Don't console.log the raw contents: dumping a 100MB+ string into devtools is slow
+			// and skews the measured total.
+			console.log('logContents length', logContents?.length, fileName);
+			const start = Date.now();
+			console.warn('starting to parse log', start);
 			// Match power-log-replay-harness: CRLF-safe split + last game only (multi-match exports otherwise skew state).
 			const logLines = logContents.split(/\r?\n/);
 			console.log('logLines', logLines?.length, logLines.slice(0, 20));
 			console.log('allowReconnects', allowReconnects);
 			await sleep(2000);
+			const feedStart = Date.now();
 			let currentIndex = 0;
 			for (let line of logLines) {
 				if (!allowReconnects && line.includes('tag=GAME_SEED')) {
@@ -100,15 +111,49 @@ export class DevService {
 
 				currentIndex++;
 				if (currentIndex % 2000 === 0) {
-					console.log('[game-events] processed', currentIndex, 'lines out of', logLines.length);
-					await sleep(options?.waitTime ?? 500);
+					await sleep(options?.waitTime ?? 0);
 				}
 			}
+			const feedDone = Date.now();
 			await this.gameEvents.awaitProcessingQueueIdle();
+			const queueIdle = Date.now();
+			await this.gameState.awaitQueueIdle();
+			const gsIdle = Date.now();
 			await sleep(options?.settleMs ?? 8000);
 			sub.unsubscribe();
 			console.log('game-events', events.join(','));
 			console.log('time spent in event dispatch: ', this.gameEvents.totalTime);
+			const timings = {
+				lines: logLines.length,
+				events: events.length,
+				feedMs: feedDone - feedStart,
+				gameEventsDrainMs: queueIdle - feedDone,
+				gameStateDrainMs: gsIdle - queueIdle,
+				eventDispatchMs: this.gameEvents.totalTime,
+				totalMs: Date.now() - start,
+			};
+			console.warn('[fakeGame] timings', JSON.stringify(timings));
+			// Returned (JSON-friendly) so remote tooling (CDP Runtime.evaluate with
+			// awaitPromise) can benchmark the live app programmatically.
+			return timings;
+		};
+		// --- Perf helpers for remote benchmarking (CDP) ---------------------------------
+		window['gsPerfEnable'] = (enabled = true) => {
+			this.gameState.setPerfTraceEnabled(enabled);
+			return enabled;
+		};
+		window['gsPerfReset'] = () => {
+			this.gameState.resetPerfStats();
+			this.gameEvents.totalTime = 0;
+			return true;
+		};
+		window['gsPerfStats'] = (top = 30) => {
+			const stats = this.gameState.getPerfStats();
+			const sorted = Object.entries(stats)
+				.sort(([, a], [, b]) => b.totalMs - a.totalMs)
+				.slice(0, top)
+				.map(([bucket, v]) => ({ bucket, totalMs: Math.round(v.totalMs * 10) / 10, calls: v.calls }));
+			return { buckets: sorted, eventDispatchMs: this.gameEvents.totalTime };
 		};
 		window['processedEvents'] = () => {
 			// console.log('processedEvents', this.gameState.processedEvents.join(','));

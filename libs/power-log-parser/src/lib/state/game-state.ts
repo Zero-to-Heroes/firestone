@@ -95,6 +95,11 @@ export class GameState extends ParserGameStateLite {
 	}
 
 	UpdateEntityName(rawEntity: string): void {
+		// Most callers pass plain entity ids / "GameEntity" / player names; only the bracketed
+		// descriptor form can match, so skip the (backtracking-prone) regex otherwise.
+		if (!rawEntity || rawEntity.charCodeAt(0) !== 91 /* '[' */) {
+			return;
+		}
 		const match = Regexes.EntityWithNameAndId.exec(rawEntity);
 		if (match) {
 			const entityName = match[1];
