@@ -4301,6 +4301,7 @@
       "SHADOW",
       "FIRE"
     ],
+    "voidZone": [],
     "volatileSkeletonsDeadThisMatch": 0,
     "watchpostsPlayedThisMatch": 0,
     "weapon": {
@@ -6819,6 +6820,7 @@
       "SHADOW",
       "HOLY"
     ],
+    "voidZone": [],
     "volatileSkeletonsDeadThisMatch": 0,
     "watchpostsPlayedThisMatch": 0,
     "weaponsEquippedThisGame": 0

@@ -2331,6 +2331,7 @@
       }
     ],
     "uniqueSpellSchools": [],
+    "voidZone": [],
     "volatileSkeletonsDeadThisMatch": 0,
     "watchpostsPlayedThisMatch": 0,
     "weapon": "<cycle>",
@@ -4373,6 +4374,7 @@
       }
     ],
     "uniqueSpellSchools": [],
+    "voidZone": [],
     "volatileSkeletonsDeadThisMatch": 0,
     "watchpostsPlayedThisMatch": 0,
     "weapon": "<cycle>",

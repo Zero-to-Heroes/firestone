@@ -105,7 +105,6 @@ const updateDataScriptInfoUnsafe = (
 			}
 			enchant.tags[GameTag.TAG_SCRIPT_DATA_NUM_1] = dataNum1;
 			enchant.tags[GameTag.TAG_SCRIPT_DATA_NUM_2] = dataNum2;
-			console.debug('updating deck enchantment', enchant, deck);
 		}
 		return;
 	}

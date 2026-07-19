@@ -1136,6 +1136,7 @@
       }
     ],
     "uniqueSpellSchools": [],
+    "voidZone": [],
     "volatileSkeletonsDeadThisMatch": 0,
     "watchpostsPlayedThisMatch": 0,
     "weaponsEquippedThisGame": 0
@@ -1932,7 +1933,7 @@
         },
         "positionFromTop": 0,
         "prepared": 0,
-        "rarity": "Rare",
+        "rarity": "rare",
         "refManaCost": 4,
         "relatedCardIds": [],
         "tags": {
@@ -2232,6 +2233,7 @@
       }
     ],
     "uniqueSpellSchools": [],
+    "voidZone": [],
     "volatileSkeletonsDeadThisMatch": 0,
     "watchpostsPlayedThisMatch": 0,
     "weaponsEquippedThisGame": 0
