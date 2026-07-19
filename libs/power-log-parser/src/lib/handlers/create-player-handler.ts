@@ -27,6 +27,7 @@ export class CreatePlayerHandler {
 
 			state.UpdateCurrentNode(NodeType.Game);
 			state.CurrentGame.AddData(pEntity);
+			state.RegisterEntityForIndex(pEntity);
 
 			const newNode = new Node(NodeType.PlayerEntity, pEntity, indentLevel, state.Node, data);
 			state.CreateNewNode(newNode);

@@ -30,6 +30,12 @@ export class RumbleRunStepParser implements ActionParser {
 		if (stateType !== StateType.PowerTaskList || node.Type !== NodeType.Action) {
 			return false;
 		}
+		// Cheap scenario gate first: resolveLocalHeroEntityId -> GetEntity is expensive, and
+		// running it on every closed Action in non-Rumble-Run games (the supplier below
+		// null-guards on the same scenario anyway) made parsing long games quadratic.
+		if (this.StateFacade.ScenarioID !== (ScenarioId.TRLA_DUNGEON as number)) {
+			return false;
+		}
 		const action = node.Object as Action;
 		const heroEntityId = this.resolveLocalHeroEntityId();
 		if (heroEntityId == null) {

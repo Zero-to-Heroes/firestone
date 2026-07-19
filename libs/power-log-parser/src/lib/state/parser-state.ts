@@ -132,12 +132,12 @@ export class ParserState {
 						Type: 'LOCAL_PLAYER',
 						Value: localPlayer,
 					}),
-				false,
-				new Node(NodeType.Placeholder, null, 0, null, data),
-			),
-		]);
+					false,
+					new Node(NodeType.Placeholder, null, 0, null, data),
+				),
+			]);
+		}
 	}
-}
 
 	SetOpponentPlayer(value: Player, timestamp: string, data: string, sendEvent: boolean): void {
 		this._opponentPlayer = value;
@@ -191,6 +191,7 @@ export class ParserState {
 
 		this._isBattlegrounds = null;
 		this._cachedPlayers = [];
+		this._entityIndex = new Map();
 	}
 
 	PartialReset(): void {
@@ -236,11 +237,16 @@ export class ParserState {
 			return this._cachedPlayers;
 		}
 		const players: PlayerEntity[] = [];
-		const dataCopy = [...this.CurrentGame.Data];
-		for (const x of dataCopy) {
+		for (const x of this.CurrentGame.Data) {
 			if (x instanceof PlayerEntity) {
 				players.push(x);
 			}
+		}
+		// Only cache once both players have been registered - caching earlier would freeze
+		// an incomplete list for the rest of the game. Invalidated in Reset() and restored
+		// via the rewind snapshot.
+		if (players.length >= 2) {
+			this._cachedPlayers = players;
 		}
 		return players;
 	}
@@ -274,9 +280,9 @@ export class ParserState {
 				localPlayerPlayerId = this.getPlayers()[2].PlayerId;
 				opponentPlayerPlayerId = this.getPlayers()[1].PlayerId;
 			} else {
-				const allFullEntities = this.CurrentGame
-					.FilterGameData(FullEntity)
-					.filter((d): d is FullEntity => d instanceof FullEntity);
+				const allFullEntities = this.CurrentGame.FilterGameData(FullEntity).filter(
+					(d): d is FullEntity => d instanceof FullEntity,
+				);
 
 				const localMerc = allFullEntities.find(
 					(d) => d.GetTag(GameTag.LETTUCE_MERCENARY) === 1 && (d.CardId?.length ?? 0) > 0,
@@ -324,15 +330,13 @@ export class ParserState {
 			}
 		}
 
-		let showEntities: IEntityData[] = this.CurrentGame
-			.FilterGameData(ShowEntity)
+		let showEntities: IEntityData[] = this.CurrentGame.FilterGameData(ShowEntity)
 			.filter((d): d is ShowEntity => d instanceof ShowEntity)
 			.filter((d) => d.GetZone() === (Zone.HAND as number));
 
 		if (showEntities.length === 0) {
 			console.debug('No show entity, fallback to fullentity in hand', '');
-			showEntities = this.CurrentGame
-				.FilterGameData(FullEntity)
+			showEntities = this.CurrentGame.FilterGameData(FullEntity)
 				.filter((d): d is FullEntity => d instanceof FullEntity)
 				.filter((d) => d.GetZone() === (Zone.HAND as number))
 				.filter((d) => d.GetTag(GameTag.CREATOR) !== this.GameState.GetGameEntity()?.Id);
@@ -357,9 +361,7 @@ export class ParserState {
 				for (const player of this.getPlayers()) {
 					if (player.GetEffectiveController() === controllerId) {
 						const newPlayer = Player.from(player);
-						const playerEntityIdTag = player.Tags.find(
-							(t) => t.Name === (GameTag.HERO_ENTITY as number),
-						)!;
+						const playerEntityIdTag = player.Tags.find((t) => t.Name === (GameTag.HERO_ENTITY as number))!;
 						const playerEntity = this.CurrentGame.Data.filter(
 							(d): d is FullEntity => d instanceof FullEntity,
 						).find((e) => e.Id === playerEntityIdTag.Value)!;
@@ -373,9 +375,7 @@ export class ParserState {
 							continue;
 						}
 						const newPlayer = Player.from(player);
-						const playerEntityIdTag = player.Tags.find(
-							(t) => t.Name === (GameTag.HERO_ENTITY as number),
-						)!;
+						const playerEntityIdTag = player.Tags.find((t) => t.Name === (GameTag.HERO_ENTITY as number))!;
 						const playerEntity = this.CurrentGame.Data.filter(
 							(d): d is FullEntity => d instanceof FullEntity,
 						).find((e) => e.Id === playerEntityIdTag.Value)!;
@@ -402,11 +402,27 @@ export class ParserState {
 		return ret == null ? -1 : ret.Value;
 	}
 
+	/**
+	 * Index over the FullEntity / PlayerEntity objects present in `CurrentGame.Data`,
+	 * first occurrence wins (mirroring the document-order `.find` this replaces).
+	 * Registered incrementally by the FULL_ENTITY / player-creation handlers - scanning
+	 * the whole accumulated game history per lookup made long games quadratic to parse.
+	 */
+	private _entityIndex: Map<number, BaseEntity> = new Map();
+
+	RegisterEntityForIndex(entity: BaseEntity): void {
+		if (!this._entityIndex.has(entity.Id)) {
+			this._entityIndex.set(entity.Id, entity);
+		}
+		// A new player entity invalidates the players cache (Mercenaries games register a
+		// third player, and getPlayers() can be called while players are still registering).
+		if (entity instanceof PlayerEntity) {
+			this._cachedPlayers = [];
+		}
+	}
+
 	GetEntity(id: number): BaseEntity | undefined {
-		return this.CurrentGame
-			.FilterGameData(FullEntity, PlayerEntity)
-			.filter((data): data is BaseEntity => data instanceof BaseEntity)
-			.find((e) => e.Id === id);
+		return this._entityIndex.get(id);
 	}
 
 	private _isBattlegrounds: boolean | null = null;
@@ -441,10 +457,7 @@ export class ParserState {
 	}
 
 	IsMercenaries(): boolean {
-		return (
-			this.IsMercenariesPvE() ||
-			[GameType.GT_MERCENARIES_PVP as number].includes(this.CurrentGame.GameType)
-		);
+		return this.IsMercenariesPvE() || [GameType.GT_MERCENARIES_PVP as number].includes(this.CurrentGame.GameType);
 	}
 
 	IsMercenariesPvE(): boolean {

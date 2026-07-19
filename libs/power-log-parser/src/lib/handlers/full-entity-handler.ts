@@ -4,13 +4,7 @@ import { Regexes } from '../regexes';
 import type { ParserState } from '../state/parser-state';
 
 export class FullEntityHandler {
-	static Handle(
-		timestamp: string,
-		data: string,
-		state: ParserState,
-		indentLevel: number,
-		helper: Helper,
-	): boolean {
+	static Handle(timestamp: string, data: string, state: ParserState, indentLevel: number, helper: Helper): boolean {
 		let match = Regexes.ActionFullEntityUpdatingRegex.exec(data);
 		if (!match) {
 			match = Regexes.ActionFullEntityCreatingRegex.exec(data);
@@ -38,6 +32,7 @@ export class FullEntityHandler {
 			} else {
 				throw new Error('Invalid node ' + state.Node!.Type);
 			}
+			state.RegisterEntityForIndex(fullEntity);
 			state.CreateNewNode(newNode);
 			state.Node = newNode;
 			return true;

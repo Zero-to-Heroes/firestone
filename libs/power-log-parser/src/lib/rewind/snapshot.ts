@@ -55,6 +55,9 @@ const PARSER_STATE_FIELDS = [
 	// Perf caches - snapshot & restore so we don't return stale cached values post-rewind.
 	'_cachedPlayers',
 	'_isBattlegrounds',
+	// Entity index over CurrentGame.Data - must be cloned with the same `seen` map as
+	// CurrentGame so post-restore lookups resolve to the restored entity objects.
+	'_entityIndex',
 ] as const;
 
 export interface ParserSnapshotMeta {

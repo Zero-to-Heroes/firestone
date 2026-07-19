@@ -5,10 +5,7 @@ import { Action, Node, NodeType } from '../models';
 import { GameState } from '../state/game-state';
 import { ParserState, StateType } from '../state/parser-state';
 import type { StateFacade } from '../state/state-facade';
-import {
-	actionHasDungeonHealthPassiveOnHero,
-	lastHeroHealthTagChangeInAction,
-} from './pve-run-step-health-passive';
+import { actionHasDungeonHealthPassiveOnHero, lastHeroHealthTagChangeInAction } from './pve-run-step-health-passive';
 
 const STARTING_HEALTH = 15;
 const LOOTA_HEALTH_PASSIVE_CARD_ID = 'LOOTA_Health';
@@ -32,6 +29,12 @@ export class DungeonRunStepParser implements ActionParser {
 
 	AppliesOnCloseNode(node: Node, stateType: StateType): boolean {
 		if (stateType !== StateType.PowerTaskList || node.Type !== NodeType.Action) {
+			return false;
+		}
+		// Cheap scenario gate first: resolveLocalHeroEntityId -> GetEntity is expensive, and
+		// running it on every closed Action in non-Dungeon-Run games (the supplier below
+		// null-guards on the same scenario anyway) made parsing long games quadratic.
+		if (this.StateFacade.ScenarioID !== (ScenarioId.LOOTA_DUNGEON as number)) {
 			return false;
 		}
 		const action = node.Object as Action;
