@@ -1,8 +1,8 @@
 import { EventEmitter, Injectable, NgZone, Optional } from '@angular/core';
-import { CardIds, GameTag, Zone } from '@firestone-hs/reference-data';
+import { GameTag } from '@firestone-hs/reference-data';
 import { PtlGameStateUpdate } from '@firestone/power-log-parser';
 import { Preferences, PreferencesService } from '@firestone/shared/common/service';
-import { chunk } from '@firestone/shared/framework/common';
+import { chunk, sleep } from '@firestone/shared/framework/common';
 import { OverwolfService, ProcessingQueue, waitForReady } from '@firestone/shared/framework/core';
 // import { TwitchAuthService } from '@firestone/twitch/common';
 import { BgsBattleSimulationService } from '@firestone/battlegrounds/core';
@@ -21,7 +21,7 @@ import { GameStateEvent } from './game-state-events/game-state-event';
 import { PtlGameStateUpdateEvent } from './game-state-events/ptl-game-state-update-event';
 import { GameStateMetaInfoService } from './game-state-meta-info.service';
 import { OverlayDisplayService } from './overlay-display.service';
-import { getEntitiesInZone, getEntityTag, getHero } from './parser-entity-utils';
+import { EntityLike, getEntityTag, getHeroesAndDeckCounts } from './parser-entity-utils';
 import { RealTimeStatsService } from './real-time-stats/real-time-stats.service';
 
 @Injectable({ providedIn: 'root' })
@@ -122,6 +122,23 @@ export class GameStateService {
 	private rewindLowerBoundTimestamp: string | null = null;
 
 	private showDecktrackerFromGameMode: boolean;
+
+	/**
+	 * Perf tracing (opt-in via `FS_PERF_TRACE=1`). When disabled (the default), the only
+	 * overhead is a single boolean check per instrumented site. When enabled, cumulative
+	 * wall-clock ms + call counts are accumulated per bucket:
+	 *  - `event:<TYPE>`: whole processEvent() call for that event type
+	 *  - `parser:<TYPE>:<ParserClass>`: individual event parser `parse()` calls
+	 *  - `secrets:before` / `secrets:after`: the SecretsParserService passes
+	 *  - `stampMetaInfo`: the per-event zone-transition stamping
+	 * Read with {@link getPerfStats}, reset with {@link resetPerfStats}.
+	 *
+	 * Evaluated at construction time (not module load) so test harnesses can set the env
+	 * var programmatically before building the service.
+	 */
+	private readonly perfTraceEnabled: boolean =
+		typeof process !== 'undefined' && process?.env?.['FS_PERF_TRACE'] === '1';
+	private perfStats: { [bucket: string]: { totalMs: number; calls: number } } = {};
 
 	constructor(
 		private readonly gameEvents: GameEventsEmitterService,
@@ -230,6 +247,33 @@ export class GameStateService {
 		this.processingQueue.enqueue(new PtlGameStateUpdateEvent(update));
 	}
 
+	/**
+	 * Wait until the game-state processing queue is empty (batches run every 250ms).
+	 * Mirror of `GameEvents.awaitProcessingQueueIdle`; used by dev tooling / perf specs to
+	 * measure end-to-end per-turn processing time. No behavior change for the app.
+	 */
+	public async awaitQueueIdle(maxWaitMs = 600_000): Promise<void> {
+		const start = Date.now();
+		while (this.processingQueue.eventsPendingCount() > 0 && Date.now() - start < maxWaitMs) {
+			await sleep(25);
+		}
+	}
+
+	/** Snapshot of the perf-trace counters (see {@link perfTraceEnabled}). Empty unless `FS_PERF_TRACE=1`. */
+	public getPerfStats(): { [bucket: string]: { totalMs: number; calls: number } } {
+		return this.perfStats;
+	}
+
+	public resetPerfStats(): void {
+		this.perfStats = {};
+	}
+
+	private perfRecord(bucket: string, elapsedMs: number): void {
+		const entry = this.perfStats[bucket] ?? (this.perfStats[bucket] = { totalMs: 0, calls: 0 });
+		entry.totalMs += elapsedMs;
+		entry.calls++;
+	}
+
 	private applyPtlGameStateUpdate(currentState: GameState, update: PtlGameStateUpdate): GameState {
 		if (!currentState) {
 			return currentState;
@@ -242,11 +286,21 @@ export class GameStateService {
 		});
 
 		if (next.playerDeck && next.opponentDeck) {
-			const updatedPlayerDeck = this.updateDeckFromParserState(next.playerDeck, next, update.localPlayerId);
+			// Single pass over CurrentEntities for both players: this runs on every PTL update
+			// and the entities map holds every entity ever created (thousands late-game in BG).
+			const perPlayerInfo = next.parserState?.CurrentEntities
+				? getHeroesAndDeckCounts(next.parserState.CurrentEntities, [
+						update.localPlayerId,
+						update.opponentPlayerId,
+					])
+				: null;
+			const updatedPlayerDeck = this.updateDeckFromParserState(
+				next.playerDeck,
+				perPlayerInfo?.get(update.localPlayerId),
+			);
 			const updatedOpponentDeck = this.updateDeckFromParserState(
 				next.opponentDeck,
-				next,
-				update.opponentPlayerId,
+				perPlayerInfo?.get(update.opponentPlayerId),
 			);
 			const hasChanged = updatedPlayerDeck !== next.playerDeck || updatedOpponentDeck !== next.opponentDeck;
 			if (hasChanged) {
@@ -301,7 +355,11 @@ export class GameStateService {
 					// per-event instead of once per batch makes the value independent of how events are
 					// grouped into chunks - otherwise the stamp uses the end-of-chunk turn, which shifts
 					// whenever the event count changes (see the rewind non-reg goldens).
+					const stampStart = this.perfTraceEnabled ? performance.now() : 0;
 					currentState = this.stampMetaInfo(currentState);
+					if (this.perfTraceEnabled) {
+						this.perfRecord('stampMetaInfo', performance.now() - stampStart);
+					}
 				}
 
 				if (currentState && currentState !== this.state) {
@@ -357,7 +415,12 @@ export class GameStateService {
 
 	private async processNonMatchEvent(currentState: GameState, event: GameStateEvent): Promise<GameState> {
 		if (event instanceof PtlGameStateUpdateEvent) {
-			return this.applyPtlGameStateUpdate(currentState, event.update);
+			const ptlPerfStart = this.perfTraceEnabled ? performance.now() : 0;
+			const next = this.applyPtlGameStateUpdate(currentState, event.update);
+			if (this.perfTraceEnabled) {
+				this.perfRecord('ptlGameStateUpdate', performance.now() - ptlPerfStart);
+			}
+			return next;
 		}
 		if (event.type === 'TOGGLE_SECRET_HELPER') {
 			currentState = currentState.update({
@@ -407,6 +470,7 @@ export class GameStateService {
 	// public processedEvents = [];
 	private async processEvent(currentState: GameState, gameEvent: GameEvent, prefs: Preferences): Promise<GameState> {
 		const start = Date.now();
+		const eventPerfStart = this.perfTraceEnabled ? performance.now() : 0;
 		// console.debug('[game-state] processing event', gameEvent.type, gameEvent.cardId, gameEvent.entityId, gameEvent);
 
 		// Drop rewound-branch leaks before they touch state. See {@link rewindCutoffTimestamp}
@@ -542,20 +606,31 @@ export class GameStateService {
 			this.savedDeckstrings = null;
 		}
 
+		const secretsBeforeStart = this.perfTraceEnabled ? performance.now() : 0;
 		currentState = await this.secretsParser.parseSecrets(currentState, gameEvent, {
 			secretWillTrigger: this.secretWillTrigger!,
 			minionsWillDie: this.minionsWillDie,
 			timing: 'before',
 		});
+		if (this.perfTraceEnabled) {
+			this.perfRecord('secrets:before', performance.now() - secretsBeforeStart);
+		}
 		const parsersForEvent = this.eventParsers[gameEvent.type] ?? [];
 		for (const parser of parsersForEvent) {
 			try {
 				if (parser.applies(gameEvent, currentState, prefs)) {
 					const start = Date.now();
+					const parserPerfStart = this.perfTraceEnabled ? performance.now() : 0;
 					currentState = await parser.parse(currentState, gameEvent, {
 						secretWillTrigger: this.secretWillTrigger,
 						minionsWillDie: this.minionsWillDie,
 					});
+					if (this.perfTraceEnabled) {
+						this.perfRecord(
+							`parser:${gameEvent.type}:${parser.constructor?.name ?? 'unknown'}`,
+							performance.now() - parserPerfStart,
+						);
+					}
 					const elapsed = Date.now() - start;
 					if (elapsed > 1000) {
 						console.warn('[game-state] parser took too long', elapsed, gameEvent.type);
@@ -572,11 +647,15 @@ export class GameStateService {
 				console.log('[game-state] Exception while applying parser', parser.event(), e.message, e.stack, e);
 			}
 		}
+		const secretsAfterStart = this.perfTraceEnabled ? performance.now() : 0;
 		currentState = await this.secretsParser.parseSecrets(currentState, gameEvent, {
 			secretWillTrigger: this.secretWillTrigger!,
 			minionsWillDie: this.minionsWillDie,
 			timing: 'after',
 		});
+		if (this.perfTraceEnabled) {
+			this.perfRecord('secrets:after', performance.now() - secretsAfterStart);
+		}
 
 		// We have processed the event for which the secret would trigger
 		if (
@@ -616,36 +695,33 @@ export class GameStateService {
 				gameEvent.cardId,
 				`entityId:${gameEvent.entityId}_`,
 				(gameEvent as MinionsDiedEvent)?.additionalData?.deadMinions?.map((m) => `entityId:${m.EntityId}_`),
-				`found?=${currentState.opponentDeck.deck.filter((e) => e.cardId?.startsWith(CardIds.DragonSoulShattered_GreenAspectEssenceToken_CATA_EVENT_110t6)).length}`,
-				`found2?=${currentState.opponentDeck.additionalKnownCardsInHand.filter((e) => e.startsWith(CardIds.DragonSoulShattered_GreenAspectEssenceToken_CATA_EVENT_110t6)).length}`,
 				currentState,
 				gameEvent,
 			);
+		}
+		if (this.perfTraceEnabled) {
+			this.perfRecord(`event:${gameEvent.type}`, performance.now() - eventPerfStart);
 		}
 		return currentState;
 	}
 
 	private updateDeckFromParserState(
 		deck: DeckState | undefined,
-		gameState: GameState,
-		playerId: number,
+		// From getHeroesAndDeckCounts; null/undefined when the parser state has no entities yet
+		parserInfo: { hero: EntityLike | undefined; cardsInDeck: number } | null | undefined,
 	): DeckState | undefined {
-		if (!deck) {
-			return deck;
-		}
-		const entities = gameState.parserState?.CurrentEntities;
-		if (!entities) {
+		if (!deck || !parserInfo) {
 			return deck;
 		}
 
-		const hero = getHero(entities, playerId);
+		const hero = parserInfo.hero;
 		const maxMana = hero ? getEntityTag(hero, GameTag.RESOURCES, 0) : 0;
 		const manaSpent = hero ? getEntityTag(hero, GameTag.RESOURCES_USED, 0) : 0;
 		const manaLeft = maxMana - manaSpent;
 		const newHero: HeroCard | undefined =
 			deck.hero && manaLeft != deck.hero.manaLeft ? deck.hero.update({ manaLeft: manaLeft }) : deck.hero;
 
-		const cardsLeftInDeck = getEntitiesInZone(entities, playerId, Zone.DECK).length;
+		const cardsLeftInDeck = parserInfo.cardsInDeck;
 
 		const hasChanged = newHero !== deck.hero || cardsLeftInDeck !== deck.cardsLeftInDeck;
 

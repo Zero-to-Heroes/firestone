@@ -5,8 +5,14 @@ export default {
 	/**
 	 * Bug replay specs live under `test-tools/bugs/` (outside this lib folder).
 	 * Non-regression suites (e.g. the rewind corpus) live under `test-tools/non-reg/`.
+	 * Performance investigation specs live under `test-tools/perf/`.
 	 */
-	roots: ['<rootDir>', '<rootDir>/../../test-tools/bugs', '<rootDir>/../../test-tools/non-reg'],
+	roots: [
+		'<rootDir>',
+		'<rootDir>/../../test-tools/bugs',
+		'<rootDir>/../../test-tools/non-reg',
+		'<rootDir>/../../test-tools/perf',
+	],
 	setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
 	globals: {
 		'ts-jest': {
@@ -28,5 +34,6 @@ export default {
 		'<rootDir>/src/**/*.spec.ts',
 		'<rootDir>/../../test-tools/bugs/**/*.spec.ts',
 		'<rootDir>/../../test-tools/non-reg/**/*.spec.ts',
+		'<rootDir>/../../test-tools/perf/**/*.spec.ts',
 	],
 };

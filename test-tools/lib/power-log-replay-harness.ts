@@ -358,6 +358,7 @@ export type PowerLogReplayResult = {
 	readonly allCardsRef: AllCardsService;
 	readonly state: GameState;
 	readonly gameStateService: GameStateService;
+	readonly gameEvents: GameEvents;
 	readonly secretConfigService: SecretConfigService;
 	/**
 	 * Drop any pending lines from {@link GameEvents}' internal `ProcessingQueue` and stop its
@@ -388,6 +389,12 @@ export type ReplayPowerLogOptions = {
 	processingQueueIdleTimeoutMs?: number;
 	/** When set, match-metadata loads this deckstring as the local player's deck (mirrors dev fakeGame). */
 	playerDeckstring?: string;
+	/**
+	 * When false, build the whole TestBed but do NOT feed the log lines (nor wait for queues).
+	 * The caller drives `gameEvents.receiveLogLine` itself — used by perf specs that feed
+	 * turn-by-turn and measure queue-drain time per turn. Default true.
+	 */
+	feedLines?: boolean;
 };
 
 /**
@@ -449,6 +456,7 @@ export async function replayPowerLogToGameState(options: ReplayPowerLogOptions):
 		settleMs = 8000,
 		processingQueueIdleTimeoutMs = 600_000,
 		playerDeckstring,
+		feedLines = true,
 	} = options;
 
 	const cardsRef = resolveCardsJsonPath();
@@ -524,6 +532,8 @@ export async function replayPowerLogToGameState(options: ReplayPowerLogOptions):
 		getGameUniqueId: async () => null,
 		getCurrentSceneFromMindVision: async () => null,
 		getCurrentBoard: async () => null,
+		// Battlegrounds logs: BgsHeroSelectionParser.sideEffects polls the MMR at match start.
+		getBattlegroundsInfo: async () => null,
 	};
 
 	const arenaRefMock = {
@@ -553,7 +563,10 @@ export async function replayPowerLogToGameState(options: ReplayPowerLogOptions):
 	const deckParserReplayMock = {
 		getOpenDecklist: async () => null as string | null,
 		getTemplateDeck: async () => null,
-		retrieveCurrentDeck: async (_usePreviousDeckIfSameScenarioId: boolean, metadata: { scenarioId: number; gameType: number }) => {
+		retrieveCurrentDeck: async (
+			_usePreviousDeckIfSameScenarioId: boolean,
+			metadata: { scenarioId: number; gameType: number },
+		) => {
 			if (!playerDeckstring) {
 				return null;
 			}
@@ -644,19 +657,21 @@ export async function replayPowerLogToGameState(options: ReplayPowerLogOptions):
 	const gameStateService = TestBed.inject(GameStateService);
 	const gameEvents = TestBed.inject(GameEvents);
 
-	const lines =
-		logLinesOverride != null && logLinesOverride.length > 0
-			? [...logLinesOverride]
-			: trimPowerLogLinesToLastGame(fs.readFileSync(logPath, 'utf8').split(/\r?\n/));
+	if (feedLines) {
+		const lines =
+			logLinesOverride != null && logLinesOverride.length > 0
+				? [...logLinesOverride]
+				: trimPowerLogLinesToLastGame(fs.readFileSync(logPath, 'utf8').split(/\r?\n/));
 
-	for (const line of lines) {
-		if (line.length) {
-			gameEvents.receiveLogLine(line);
+		for (const line of lines) {
+			if (line.length) {
+				gameEvents.receiveLogLine(line);
+			}
 		}
-	}
 
-	await waitForGameEventsQueueDrain(gameEvents, processingQueueIdleTimeoutMs);
-	await new Promise((r) => setTimeout(r, settleMs));
+		await waitForGameEventsQueueDrain(gameEvents, processingQueueIdleTimeoutMs);
+		await new Promise((r) => setTimeout(r, settleMs));
+	}
 
 	const cleanup = () => {
 		// `truncated` is the existing public signal {@link GameEvents.receiveLogLine} accepts to
@@ -674,6 +689,7 @@ export async function replayPowerLogToGameState(options: ReplayPowerLogOptions):
 		allCardsRef,
 		state: gameStateService.state,
 		gameStateService,
+		gameEvents,
 		secretConfigService,
 		cleanup,
 	};

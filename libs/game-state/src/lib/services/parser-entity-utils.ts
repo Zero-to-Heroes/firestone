@@ -107,6 +107,94 @@ export function getBoard(currentEntities: Map<number, EntityLike> | undefined | 
 		.sort((a, b) => getEntityTag(a, GameTag.ZONE_POSITION) - getEntityTag(b, GameTag.ZONE_POSITION));
 }
 
+// Hoisted enum values for the getHeroesAndDeckCounts hot loop: `case GameTag.ZONE:` compiles
+// to a module-namespace property access per tag per case, which dominated the loop when left
+// inline (measured on the full-pipeline perf harness).
+const TAG_ZONE: number = GameTag.ZONE;
+const TAG_CARDTYPE: number = GameTag.CARDTYPE;
+const TAG_CONTROLLER: number = GameTag.CONTROLLER;
+const TAG_LETTUCE_CONTROLLER: number = GameTag.LETTUCE_CONTROLLER;
+const TAG_ZONE_POSITION: number = GameTag.ZONE_POSITION;
+const ZONE_DECK: number = Zone.DECK;
+const ZONE_PLAY: number = Zone.PLAY;
+const CARD_TYPE_HERO: number = CardType.HERO;
+
+/**
+ * Single pass over `currentEntities` computing, for each requested playerId, the in-play hero
+ * entity (same selection as {@link getHero}: CARDTYPE=HERO, ZONE=PLAY, lowest ZONE_POSITION,
+ * ties by iteration order) and the number of entities in their DECK zone (same as
+ * `getEntitiesInZone(..., Zone.DECK).length`).
+ *
+ * Exists because this runs on every PTL game-state update: `CurrentEntities` holds every
+ * entity ever created (thousands late-game in BG), and calling `getHero` +
+ * `getEntitiesInZone` per player spread the map and rescanned each entity's Tags array
+ * multiple times. Here each entity's Tags are scanned once, for all players at once.
+ */
+export function getHeroesAndDeckCounts(
+	currentEntities: Map<number, EntityLike> | undefined | null,
+	playerIds: readonly number[],
+): Map<number, { hero: EntityLike | undefined; cardsInDeck: number }> {
+	const result = new Map<number, { hero: EntityLike | undefined; cardsInDeck: number }>();
+	const bestHeroZonePosition = new Map<number, number>();
+	for (const playerId of playerIds) {
+		result.set(playerId, { hero: undefined, cardsInDeck: 0 });
+	}
+	if (!currentEntities) {
+		return result;
+	}
+	for (const entity of currentEntities.values()) {
+		// First tag wins for each Name, like getTag's `.find`
+		let zone = -1,
+			cardType = -1,
+			controller = -1,
+			lettuceController = -1,
+			zonePosition = -1;
+		const tags = entity.Tags;
+		if (tags) {
+			for (let i = 0; i < tags.length; i++) {
+				const name = tags[i].Name;
+				if (name === TAG_ZONE) {
+					if (zone === -1) {
+						zone = tags[i].Value;
+					}
+				} else if (name === TAG_CARDTYPE) {
+					if (cardType === -1) {
+						cardType = tags[i].Value;
+					}
+				} else if (name === TAG_CONTROLLER) {
+					if (controller === -1) {
+						controller = tags[i].Value;
+					}
+				} else if (name === TAG_LETTUCE_CONTROLLER) {
+					if (lettuceController === -1) {
+						lettuceController = tags[i].Value;
+					}
+				} else if (name === TAG_ZONE_POSITION) {
+					if (zonePosition === -1) {
+						zonePosition = tags[i].Value;
+					}
+				}
+			}
+		}
+		const effectiveController = lettuceController !== -1 ? lettuceController : controller;
+		const entry = result.get(effectiveController);
+		if (!entry) {
+			continue;
+		}
+		if (zone === ZONE_DECK) {
+			entry.cardsInDeck++;
+		}
+		if (cardType === CARD_TYPE_HERO && zone === ZONE_PLAY) {
+			const best = bestHeroZonePosition.get(effectiveController);
+			if (best === undefined || zonePosition < best) {
+				entry.hero = entity;
+				bestHeroZonePosition.set(effectiveController, zonePosition);
+			}
+		}
+	}
+	return result;
+}
+
 export function getHero(
 	currentEntities: Map<number, EntityLike> | undefined | null,
 	playerId: number,
