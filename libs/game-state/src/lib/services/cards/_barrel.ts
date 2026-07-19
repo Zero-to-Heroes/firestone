@@ -157,6 +157,7 @@ export { Enthrall } from './enthrall';
 export { EnthralledShade } from './enthralled-shade';
 export { EruptingVolcano } from './erupting-volcano';
 export { EscapeArtist } from './escape-artist';
+export { EtcBandManager } from './etc-band-manager';
 export { EternalToil } from './eternal-toil';
 export { EtherealConjurer } from './ethereal-conjurer';
 export { EudorasTreasureHunt } from './eudoras-treasure-hunt';

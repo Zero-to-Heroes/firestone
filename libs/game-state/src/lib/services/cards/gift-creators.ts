@@ -317,7 +317,6 @@ const internalGiftCreators = [
 	CardIds.EmeraldExplorer_DRG_313,
 	CardIds.EncumberedPackMule,
 	CardIds.ErodedSediment_WW_428,
-	CardIds.ETCBandManager_ETC_080,
 	CardIds.ETCBandManager_SignANewArtist,
 	CardIds.EtherealConjurer_CORE_LOE_003,
 	CardIds.EtherealConjurer_LOE_003,
