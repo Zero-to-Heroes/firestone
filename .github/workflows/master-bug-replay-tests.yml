@@ -11,7 +11,11 @@ jobs:
         runs-on: ubuntu-latest
         timeout-minutes: 60
         env:
+            # ow-electron postinstall is skipped via npm ci --ignore-scripts below.
             ELECTRON_SKIP_BINARY_DOWNLOAD: 1
+            # Downloaded once before Jest (see "Download cards reference JSON").
+            HS_REFERENCE_CARDS_JSON_PATH: ${{ github.workspace }}/.ci-cache/cards_short.json
+            NODE_OPTIONS: --max-old-space-size=8192
         steps:
             - name: Checkout code
               uses: actions/checkout@v4
@@ -23,7 +27,16 @@ jobs:
                   cache: 'npm'
 
             - name: Install dependencies
-              run: npm ci
+              # Bug/non-reg Jest does not need native Overwolf modules. Skipping postinstall
+              # avoids electron-builder install-app-deps + electron-rebuild (~40s+) on every run.
+              run: npm ci --ignore-scripts
+
+            - name: Download cards reference JSON
+              # One local file shared by all Jest workers (avoids per-worker HTTP fetch of ~12MB).
+              run: |
+                  mkdir -p .ci-cache
+                  curl -fsSL -o .ci-cache/cards_short.json \
+                    https://raw.githubusercontent.com/Zero-to-Heroes/hs-reference-data/master/src/cards_short.json
 
             - name: Run test-tools/bugs Jest specs
               # Bug specs use libs/game-state/jest.config.ts (see testMatch there). This Jest version expects
@@ -31,12 +44,6 @@ jobs:
               # Workers are separate processes (safe for GameState/DeckCard statics). 4 fits ubuntu-latest;
               # each replay resets TestBed and reuses a per-worker cached cards DB.
               run: npx jest --config libs/game-state/jest.config.ts --maxWorkers=4 --ci --silent --passWithNoTests --testPathPattern=test-tools/bugs
-              env:
-                  HS_REFERENCE_CARDS_JSON_PATH: https://raw.githubusercontent.com/Zero-to-Heroes/hs-reference-data/master/src/cards_short.json
-                  NODE_OPTIONS: --max-old-space-size=8192
 
             - name: Run test-tools/non-reg Jest specs (rewind goldens)
               run: npx jest --config libs/game-state/jest.config.ts --maxWorkers=4 --ci --silent --passWithNoTests --testPathPattern=test-tools/non-reg
-              env:
-                  HS_REFERENCE_CARDS_JSON_PATH: https://raw.githubusercontent.com/Zero-to-Heroes/hs-reference-data/master/src/cards_short.json
-                  NODE_OPTIONS: --max-old-space-size=8192

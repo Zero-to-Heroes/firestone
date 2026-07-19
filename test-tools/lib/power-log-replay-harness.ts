@@ -75,6 +75,34 @@ async function waitForGameStateQueueDrain(gameStateService: GameStateService, ma
 	await gameStateService.awaitQueueIdle(maxWaitMs);
 }
 
+/**
+ * Drain both queues, then flush `setTimeout(0)` parser sideEffects (e.g. GAME_START → REVIEW_ID)
+ * which can enqueue more work after the queues first look idle. Repeat until a macrotick
+ * produces no new pending work, or the deadline is hit.
+ */
+async function waitForReplayFullySettled(
+	gameEvents: GameEvents,
+	gameStateService: GameStateService,
+	maxWaitMs: number,
+): Promise<void> {
+	const deadline = Date.now() + maxWaitMs;
+	const remaining = () => Math.max(0, deadline - Date.now());
+	// GameState parsers defer sideEffects via setTimeout(0). One idle check is not enough:
+	// the queue can go empty, then a deferred sideEffect enqueues REVIEW_ID (etc.).
+	for (let round = 0; round < 20 && remaining() > 0; round++) {
+		await waitForGameEventsQueueDrain(gameEvents, remaining());
+		await waitForGameStateQueueDrain(gameStateService, remaining());
+		await new Promise((r) => setTimeout(r, 0));
+		const drainStart = Date.now();
+		await waitForGameEventsQueueDrain(gameEvents, remaining());
+		await waitForGameStateQueueDrain(gameStateService, remaining());
+		// If both drains returned immediately, nothing was pending after the macrotask.
+		if (Date.now() - drainStart < 40) {
+			return;
+		}
+	}
+}
+
 /** Raw JSON for `cards_short.json` (use with `HS_REFERENCE_CARDS_JSON_PATH` or fetch in tooling). */
 export const HS_REFERENCE_CARDS_SHORT_RAW_URL =
 	'https://raw.githubusercontent.com/Zero-to-Heroes/hs-reference-data/master/src/cards_short.json';
@@ -690,8 +718,7 @@ export async function replayPowerLogToGameState(options: ReplayPowerLogOptions):
 			}
 		}
 
-		await waitForGameEventsQueueDrain(gameEvents, processingQueueIdleTimeoutMs);
-		await waitForGameStateQueueDrain(gameStateService, processingQueueIdleTimeoutMs);
+		await waitForReplayFullySettled(gameEvents, gameStateService, processingQueueIdleTimeoutMs);
 		if (settleMs > 0) {
 			await new Promise((r) => setTimeout(r, settleMs));
 		}
