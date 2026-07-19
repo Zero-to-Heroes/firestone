@@ -80,7 +80,6 @@ describe('Power log replay → Triangulate + Deathwing deck copies', () => {
 			const ctx = await replayPowerLogToGameState({
 				logPath,
 				reviewId: 'triangulate-deathwing-power-log-replay',
-				settleMs: 90_000,
 			});
 			requirePowerLogReplayResult(ctx, cardsPath);
 

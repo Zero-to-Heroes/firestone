@@ -58,7 +58,6 @@ describe('Power log replay → GameStateService (Moonlit Guidance discover-from-
 		const ctx = await replayPowerLogToGameState({
 			logPath,
 			reviewId: 'moonlit-guidance-power-log-replay',
-			settleMs: 90_000,
 		});
 		requirePowerLogReplayResult(ctx, cardsPath);
 

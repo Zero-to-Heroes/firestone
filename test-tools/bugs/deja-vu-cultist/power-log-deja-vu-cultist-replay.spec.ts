@@ -47,7 +47,6 @@ describe('Power log replay → Cultist Map + Deja Vu (no sticky Deja Vu topdeck)
 			const ctx = await replayPowerLogToGameState({
 				logPath,
 				reviewId: 'deja-vu-cultist-replay',
-				settleMs: 12_000,
 			});
 			requirePowerLogReplayResult(ctx, cardsPath);
 

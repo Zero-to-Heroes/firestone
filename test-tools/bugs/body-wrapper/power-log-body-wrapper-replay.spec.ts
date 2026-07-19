@@ -38,7 +38,6 @@ describe('Power log replay → GameStateService (Body Wrapper shuffle identity)'
 			const ctx = await replayPowerLogToGameState({
 				logPath,
 				reviewId: 'body-wrapper-replay',
-				settleMs: 12000,
 			});
 			requirePowerLogReplayResult(ctx, cardsPath);
 

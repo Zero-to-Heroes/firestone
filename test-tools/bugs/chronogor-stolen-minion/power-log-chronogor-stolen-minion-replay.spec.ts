@@ -46,7 +46,6 @@ describe('Power log replay → Chronogor stolen Concealing Confection removed fr
 				logPath,
 				playerDeckstring: PLAYER_DECKSTRING,
 				reviewId: 'chronogor-stolen-minion-replay',
-				settleMs: 90_000,
 			});
 			requirePowerLogReplayResult(ctx, cardsPath);
 

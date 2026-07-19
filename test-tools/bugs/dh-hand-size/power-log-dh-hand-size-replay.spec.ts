@@ -50,7 +50,6 @@ describe('Power log replay → GameStateService (DH hand count vs power.log)', (
 			const ctx = await replayPowerLogToGameState({
 				logPath: truncatedLogPath,
 				reviewId: 'dh-hand-size-hand-count-at-10',
-				settleMs: 12_000,
 			});
 			requirePowerLogReplayResult(ctx, cardsPath);
 
@@ -92,7 +91,6 @@ describe('Power log replay → GameStateService (DH hand count vs power.log)', (
 			const ctx = await replayPowerLogToGameState({
 				logPath: zugarsReporterLogPath,
 				reviewId: 'dh-hand-size-zugars-reporter',
-				settleMs: 12_000,
 			});
 			requirePowerLogReplayResult(ctx, cardsPath);
 

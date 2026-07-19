@@ -34,7 +34,6 @@ describe('Power log replay → opponent dredge (no deck identity leak)', () => {
 			const ctx = await replayPowerLogToGameState({
 				logPath,
 				reviewId: 'dredge-info-leak-replay',
-				settleMs: 12_000,
 			});
 			requirePowerLogReplayResult(ctx, cardsPath);
 

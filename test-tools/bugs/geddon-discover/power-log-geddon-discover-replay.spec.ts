@@ -64,7 +64,6 @@ describe('Power log replay → GameStateService (Commander Geddon discover-from-
 		const ctx = await replayPowerLogToGameState({
 			logPath,
 			reviewId: 'geddon-discover-power-log-replay',
-			settleMs: 90_000,
 		});
 		requirePowerLogReplayResult(ctx, cardsPath);
 

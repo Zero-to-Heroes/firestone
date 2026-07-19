@@ -32,7 +32,6 @@ describe('Power log replay → GameStateService (cosmetic coin id revealed as Th
 		const ctx = await replayPowerLogToGameState({
 			logPath,
 			reviewId: 'coin-not-revealed-replay',
-			settleMs: 12_000,
 		});
 		requirePowerLogReplayResult(ctx, cardsPath);
 

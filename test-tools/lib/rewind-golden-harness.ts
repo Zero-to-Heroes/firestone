@@ -63,9 +63,6 @@ export async function runRewindReplay(logFile: string): Promise<RewindGoldenRunR
 	const ctx = await replayPowerLogToGameState({
 		logPath,
 		reviewId: `rewind-nonreg-${path.basename(logFile, path.extname(logFile))}`,
-		// Rewind logs are large (up to ~4MB, 9 rewinds). Give the event queue comfortable
-		// headroom to drain before we snapshot the final state.
-		settleMs: 20_000,
 	});
 	requirePowerLogReplayResult(ctx, cardsPath);
 

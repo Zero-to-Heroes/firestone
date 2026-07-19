@@ -83,12 +83,8 @@ describe('Power log replay → GameStateService (Prince Malchezaar created-in-de
 
 		const ctx = await replayPowerLogToGameState({
 			logPath,
-
 			reviewId: 'malchezaar-power-log-replay',
-
-			settleMs: 60_000,
 		});
-
 		requirePowerLogReplayResult(ctx, cardsPath);
 
 		// Malchezaar is on the opponent, not the local player.

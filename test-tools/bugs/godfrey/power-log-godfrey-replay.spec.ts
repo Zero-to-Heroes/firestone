@@ -68,7 +68,6 @@ describe('Power log replay → GameStateService (Godfrey returned cards pool)', 
 			const ctx = await replayPowerLogToGameState({
 				logPath,
 				reviewId: 'godfrey-power-log-replay',
-				settleMs: 90_000,
 			});
 			requirePowerLogReplayResult(ctx, cardsPath);
 

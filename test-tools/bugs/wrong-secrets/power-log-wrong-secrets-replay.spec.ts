@@ -66,7 +66,6 @@ describe('Power log replay → GameStateService (Sands of Time rewind invalidate
 			const ctx = await replayPowerLogToGameState({
 				logPath,
 				reviewId: 'wrong-secrets-power-log-replay',
-				settleMs: 8000,
 			});
 			requirePowerLogReplayResult(ctx, cardsPath);
 			const stillThere = ctx.state.opponentDeck.secrets.filter((s) => s.entityId === REWOUND_SECRET_ENTITY_ID);

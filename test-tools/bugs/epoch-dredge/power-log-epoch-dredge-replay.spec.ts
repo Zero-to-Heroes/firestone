@@ -46,7 +46,6 @@ describe('Power log replay → Cultist Map dredge (epoch-dredge, no duplicate de
 			const ctx = await replayPowerLogToGameState({
 				logPath,
 				reviewId: 'epoch-dredge-replay',
-				settleMs: 12_000,
 			});
 			requirePowerLogReplayResult(ctx, cardsPath);
 

@@ -58,7 +58,6 @@ describe('Power log replay → Triangulate + Baking Soda Volcano play', () => {
 				logPath,
 				logLinesOverride: replayLines,
 				reviewId: 'triangulate-baking-soda-play-replay',
-				settleMs: 90_000,
 			});
 			requirePowerLogReplayResult(ctx, cardsPath);
 

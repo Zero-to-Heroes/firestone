@@ -56,7 +56,6 @@ describe('Power log replay → GameStateService (Keymaster Alabaster opponent ha
 			const ctx = await replayPowerLogToGameState({
 				logPath,
 				reviewId: 'keymaster-alabaster-power-log-replay',
-				settleMs: 90_000,
 			});
 			requirePowerLogReplayResult(ctx, cardsPath);
 

@@ -65,7 +65,6 @@ describe('Power log replay → Chainbreaker Hogger deck identity (entity 12)', (
 				logPath,
 				playerDeckstring: PLAYER_DECKSTRING,
 				reviewId: 'chainbreaker-hogger-power-log-replay',
-				settleMs: 60_000,
 			});
 			requirePowerLogReplayResult(ctx, cardsPath);
 

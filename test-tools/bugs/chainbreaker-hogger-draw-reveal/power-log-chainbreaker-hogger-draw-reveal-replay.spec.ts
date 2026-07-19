@@ -51,7 +51,6 @@ describe('Power log replay → Chainbreaker Hogger generated-card draw remains h
 			// Supplying every raw line bypasses the harness's automatic last-game trimming.
 			logLinesOverride: lines,
 			reviewId: 'chainbreaker-hogger-draw-reveal',
-			settleMs: 20_000,
 		});
 		requirePowerLogReplayResult(ctx, cardsPath);
 

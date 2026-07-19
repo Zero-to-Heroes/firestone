@@ -48,7 +48,6 @@ describe('Power log replay → Azalina Soulsever deck copy count after opponent 
 		const ctx = await replayPowerLogToGameState({
 			logPath,
 			reviewId: 'azalina-soulsever-deck-replay',
-			settleMs: 90_000,
 		});
 		requirePowerLogReplayResult(ctx, cardsPath);
 

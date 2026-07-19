@@ -36,8 +36,6 @@ describe('Power log replay → GameStateService (rewind / opponent hand size)', 
 			const ctx = await replayPowerLogToGameState({
 				logPath,
 				reviewId: 'rewind-opp-hand-replay',
-				// Long log (~35k lines, one mid-game rewind). Give the event queue room to drain.
-				settleMs: 20_000,
 			});
 			requirePowerLogReplayResult(ctx, cardsPath);
 

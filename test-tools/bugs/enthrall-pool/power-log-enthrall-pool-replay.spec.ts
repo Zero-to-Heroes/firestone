@@ -48,7 +48,6 @@ describe('Power log replay → Enthrall deck pool (dynamic related cards)', () =
 			const ctx = await replayPowerLogToGameState({
 				logPath,
 				reviewId: 'enthrall-pool-power-log-replay',
-				settleMs: 90_000,
 			});
 			requirePowerLogReplayResult(ctx, cardsPath);
 

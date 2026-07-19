@@ -91,7 +91,6 @@ describe('Power log replay → opponent Triangulate + Thrall SpawnToDeck deck co
 			const ctx = await replayPowerLogToGameState({
 				logPath,
 				reviewId: 'triangulate-created-by-power-log-replay',
-				settleMs: 90_000,
 			});
 			requirePowerLogReplayResult(ctx, cardsPath);
 

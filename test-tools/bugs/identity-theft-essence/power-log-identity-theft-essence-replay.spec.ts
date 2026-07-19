@@ -58,7 +58,6 @@ describe('Power log replay → GameStateService (Identity Theft Green Aspect zon
 		const ctx = await replayPowerLogToGameState({
 			logPath,
 			reviewId: 'identity-theft-essence-power-log-replay',
-			settleMs: 20_000,
 		});
 		requirePowerLogReplayResult(ctx, cardsPath);
 

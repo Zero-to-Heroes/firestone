@@ -29,7 +29,6 @@ describe('Power log replay → GameStateService (Fabled package on QUEST_PLAYED)
 			const ctx = await replayPowerLogToGameState({
 				logPath,
 				reviewId: 'fabled-package-power-log-replay',
-				settleMs: 12_000,
 			});
 			requirePowerLogReplayResult(ctx, cardsPath);
 

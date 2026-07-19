@@ -37,7 +37,6 @@ describe('Power log replay → Qonzu on local deck (no spell identity leak)', ()
 			const ctx = await replayPowerLogToGameState({
 				logPath,
 				reviewId: 'qonzu-top-deck-replay',
-				settleMs: 12_000,
 			});
 			requirePowerLogReplayResult(ctx, cardsPath);
 

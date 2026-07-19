@@ -67,7 +67,6 @@ describe('Frostbite current-effects whitelist (reporter power.log)', () => {
 			const ctx = await replayPowerLogToGameState({
 				logPath,
 				reviewId: 'frostbite-current-effects-replay-cutoff',
-				settleMs: 8000,
 			});
 			requirePowerLogReplayResult(ctx, cardsPath);
 

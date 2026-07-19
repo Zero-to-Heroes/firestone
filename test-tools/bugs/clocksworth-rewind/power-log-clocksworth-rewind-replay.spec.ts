@@ -54,8 +54,6 @@ describe('Power log replay → GameStateService (Clocksworth rewind / dead minio
 			const ctx = await replayPowerLogToGameState({
 				logPath,
 				reviewId: 'clocksworth-rewind-replay',
-				// ~34k lines with two back-to-back rewinds; give the event queue room to drain.
-				settleMs: 20_000,
 			});
 			requirePowerLogReplayResult(ctx, cardsPath);
 

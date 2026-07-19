@@ -45,8 +45,6 @@ describe('Power log replay → GameStateService (Coin must not appear in opponen
 			const ctx = await replayPowerLogToGameState({
 				logPath,
 				reviewId: 'coin-in-opp-deck-replay',
-				// ~42.6k lines incl. two rewinds; give the GS+PTL queues room to drain.
-				settleMs: 20_000,
 			});
 			requirePowerLogReplayResult(ctx, cardsPath);
 

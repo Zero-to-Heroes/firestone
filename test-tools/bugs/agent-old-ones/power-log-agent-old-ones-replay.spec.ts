@@ -41,7 +41,6 @@ describe('Power log replay → GameStateService (Agent of the Old Ones oracle)',
 			const ctx = await replayPowerLogToGameState({
 				logPath,
 				reviewId: 'agent-old-ones-power-log-replay',
-				settleMs: 12_000,
 			});
 			requirePowerLogReplayResult(ctx, cardsPath);
 

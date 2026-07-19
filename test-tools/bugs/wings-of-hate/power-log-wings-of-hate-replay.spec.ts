@@ -32,7 +32,6 @@ describe('Power log replay → GameStateService (Wings of Hate deck vs hand)', (
 		const ctx = await replayPowerLogToGameState({
 			logPath,
 			reviewId: 'wings-of-hate-power-log-replay',
-			settleMs: 20_000,
 		});
 		requirePowerLogReplayResult(ctx, cardsPath);
 

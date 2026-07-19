@@ -56,7 +56,6 @@ describe('Power log replay → GameStateService (Rustrot Viper must not remain i
 			const ctx = await replayPowerLogToGameState({
 				logPath,
 				reviewId: 'rustrot-viper-replay',
-				settleMs: 20_000,
 			});
 			requirePowerLogReplayResult(ctx, cardsPath);
 

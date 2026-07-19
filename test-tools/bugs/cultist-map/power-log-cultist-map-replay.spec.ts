@@ -33,7 +33,6 @@ describe('Power log replay → Cultist Map second draw (no hand identity leak)',
 			const ctx = await replayPowerLogToGameState({
 				logPath,
 				reviewId: 'cultist-map-replay',
-				settleMs: 12_000,
 			});
 			requirePowerLogReplayResult(ctx, cardsPath);
 

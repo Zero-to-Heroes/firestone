@@ -2,6 +2,10 @@
  * Shared setup for integration tests that replay a power.log through GameEvents + GameStateService.
  *
  * Fixtures live under `test-tools/bugs/<bug-id>/` (see {@link resolvePowerLogPathForSlug}).
+ *
+ * After feeding log lines, the harness awaits both the GameEvents queue and the GameState
+ * queue (`awaitQueueIdle`) before returning. Do not pass multi-second `settleMs` unless a
+ * non-queue async side effect requires an extra post-idle margin (default is 0).
  */
 import { Injector, NgZone } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
@@ -66,6 +70,11 @@ async function waitForGameEventsQueueDrain(gameEvents: GameEvents, maxWaitMs: nu
 	await gameEvents.awaitProcessingQueueIdle(maxWaitMs);
 }
 
+/** Wait until GameState's event queue is empty (batches every 250ms). */
+async function waitForGameStateQueueDrain(gameStateService: GameStateService, maxWaitMs: number): Promise<void> {
+	await gameStateService.awaitQueueIdle(maxWaitMs);
+}
+
 /** Raw JSON for `cards_short.json` (use with `HS_REFERENCE_CARDS_JSON_PATH` or fetch in tooling). */
 export const HS_REFERENCE_CARDS_SHORT_RAW_URL =
 	'https://raw.githubusercontent.com/Zero-to-Heroes/hs-reference-data/master/src/cards_short.json';
@@ -90,6 +99,9 @@ export function normalizeCardsJsonRefForFetch(ref: string): string {
 }
 
 let cachedRemoteCardsJson: { readonly url: string; readonly text: string } | null = null;
+
+/** Process-lifetime cache of the parsed cards DB (avoids re-JSON.parse of ~12MB per replay). */
+let cachedParsedCardsDb: { readonly ref: string; readonly allCards: AllCardsService } | null = null;
 
 /** When `fetch` is missing (e.g. some Jest/Node setups), load JSON over HTTP(S) with Node builtins. */
 function loadHttpUrlTextWithNode(url: string): Promise<string | null> {
@@ -341,16 +353,24 @@ export function collectAllDeckCards(state: GameState): DeckCard[] {
  * Used by ReplayParser-only diagnostic specs that need a {@link RewindCardOracle} without
  * spinning up the full TestBed-backed harness.
  *
+ * Reuses a process-lifetime parsed DB for the same `cardsRef` so suites don't re-parse
+ * ~12MB JSON on every call.
+ *
  * Returns `null` if the cards source cannot be loaded - callers should fail their test
  * explicitly (per harness convention; do not silently skip).
  */
 export async function buildAllCardsServiceForReplay(cardsRef: string): Promise<AllCardsService | null> {
+	const normalizedRef = normalizeCardsJsonRefForFetch(cardsRef);
+	if (cachedParsedCardsDb?.ref === normalizedRef) {
+		return cachedParsedCardsDb.allCards;
+	}
 	const text = await loadCardsShortJsonText(cardsRef);
 	if (text == null) {
 		return null;
 	}
 	const allCards = new AllCardsService();
 	allCards.initializeCardsDbFromCards(JSON.parse(text));
+	cachedParsedCardsDb = { ref: normalizedRef, allCards };
 	return allCards;
 }
 
@@ -378,13 +398,17 @@ export type ReplayPowerLogOptions = {
 	logLinesOverride?: readonly string[];
 	/** Passed to ReviewIdService mock (game-start parser). */
 	reviewId?: string;
-	/** Wait after last line so async parsers finish (default 8000). */
+	/**
+	 * Optional extra wait (ms) after both GameEvents and GameState queues are idle.
+	 * Default 0 — prefer queue idle awaits over multi-second blind sleeps. Only set this
+	 * for rare non-queue async side effects.
+	 */
 	settleMs?: number;
 	/**
-	 * Max time to wait for the {@link GameEvents} processing queue to drain (default 600_000).
-	 * Lower this for red regression tests where a parser throw causes infinite retry: the
-	 * queue will never drain, and the default 10-minute wait would dominate test runtime.
-	 * The bug is observable on `state` even when the queue never drains.
+	 * Max time to wait for the {@link GameEvents} / GameState processing queues to drain
+	 * (default 600_000). Lower this for red regression tests where a parser throw causes
+	 * infinite retry: the queue will never drain, and the default 10-minute wait would
+	 * dominate test runtime. The bug is observable on `state` even when the queue never drains.
 	 */
 	processingQueueIdleTimeoutMs?: number;
 	/** When set, match-metadata loads this deckstring as the local player's deck (mirrors dev fakeGame). */
@@ -453,7 +477,7 @@ export async function replayPowerLogToGameState(options: ReplayPowerLogOptions):
 		logPath,
 		logLinesOverride,
 		reviewId = 'power-log-replay',
-		settleMs = 8000,
+		settleMs = 0,
 		processingQueueIdleTimeoutMs = 600_000,
 		playerDeckstring,
 		feedLines = true,
@@ -476,14 +500,11 @@ export async function replayPowerLogToGameState(options: ReplayPowerLogOptions):
 	DeckCard.deckIndexFromBottom = 0;
 	DeckCard.deckIndexFromTop = 0;
 
-	const cardsText = await loadCardsShortJsonText(cardsRef);
-	if (cardsText == null) {
+	const allCardsRef = await buildAllCardsServiceForReplay(cardsRef);
+	if (allCardsRef == null) {
 		console.warn('[power-log-replay] Skip: could not load cards JSON from', cardsRef);
 		return null;
 	}
-
-	const allCardsRef = new AllCardsService();
-	allCardsRef.initializeCardsDbFromCards(JSON.parse(cardsText));
 
 	const cardsFacade = new CardsFacadeStandaloneService();
 	(cardsFacade as unknown as { service: AllCardsService }).service = allCardsRef;
@@ -670,7 +691,10 @@ export async function replayPowerLogToGameState(options: ReplayPowerLogOptions):
 		}
 
 		await waitForGameEventsQueueDrain(gameEvents, processingQueueIdleTimeoutMs);
-		await new Promise((r) => setTimeout(r, settleMs));
+		await waitForGameStateQueueDrain(gameStateService, processingQueueIdleTimeoutMs);
+		if (settleMs > 0) {
+			await new Promise((r) => setTimeout(r, settleMs));
+		}
 	}
 
 	const cleanup = () => {

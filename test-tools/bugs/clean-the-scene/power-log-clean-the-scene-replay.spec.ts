@@ -76,7 +76,6 @@ describe('Power log replay → GameStateService (Clean the Scene opponent hand g
 				logPath,
 				logLinesOverride: logLines,
 				reviewId: 'clean-the-scene-power-log-replay',
-				settleMs: 90_000,
 			});
 			requirePowerLogReplayResult(ctx, cardsPath);
 

@@ -49,7 +49,6 @@ describe('Power log replay → GameStateService (Fyrakk → Fire secrets only)',
 			const ctx = await replayPowerLogToGameState({
 				logPath,
 				reviewId: 'fyrakk-fire-secret-replay',
-				settleMs: 20_000,
 			});
 			requirePowerLogReplayResult(ctx, cardsPath);
 

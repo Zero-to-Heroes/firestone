@@ -42,7 +42,6 @@ describe('Power log replay → GameStateService (Tracking discover-from-deck pre
 			logPath,
 			playerDeckstring: PLAYER_DECKSTRING,
 			reviewId: 'tracking-smuggled-power-log-replay',
-			settleMs: 60_000,
 		});
 		requirePowerLogReplayResult(ctx, cardsPath);
 

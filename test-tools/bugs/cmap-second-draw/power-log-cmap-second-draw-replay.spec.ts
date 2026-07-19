@@ -40,7 +40,6 @@ describe('Power log replay → Cultist Map second draw (cmap-second-draw, no han
 			const ctx = await replayPowerLogToGameState({
 				logPath,
 				reviewId: 'cmap-second-draw-replay',
-				settleMs: 12_000,
 			});
 			requirePowerLogReplayResult(ctx, cardsPath);
 

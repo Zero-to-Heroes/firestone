@@ -37,7 +37,6 @@ describe('Power log replay → GameStateService (opponent coin marker at game st
 		const ctx = await replayPowerLogToGameState({
 			logPath,
 			reviewId: 'opponent-coin-marker-replay',
-			settleMs: 15_000,
 		});
 		requirePowerLogReplayResult(ctx, cardsPath);
 

@@ -41,7 +41,6 @@ describe('Power log replay → GameStateService (Smoldering Grove draw attributi
 			const ctx = await replayPowerLogToGameState({
 				logPath,
 				reviewId: 'smoldering-grove-replay',
-				settleMs: 10_000,
 			});
 			requirePowerLogReplayResult(ctx, cardsPath);
 

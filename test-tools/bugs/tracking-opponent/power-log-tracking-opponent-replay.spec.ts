@@ -44,7 +44,6 @@ describe('Power log replay → GameStateService (opponent Tracking choice remain
 		const ctx = await replayPowerLogToGameState({
 			logPath,
 			reviewId: 'tracking-opponent-power-log-replay',
-			settleMs: 60_000,
 		});
 		requirePowerLogReplayResult(ctx, cardsPath);
 

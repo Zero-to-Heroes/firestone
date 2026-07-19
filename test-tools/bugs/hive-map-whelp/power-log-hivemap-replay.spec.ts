@@ -52,7 +52,6 @@ describe('Power log replay → GameStateService (Hive Map pool vs Winterspring W
 			const ctx = await replayPowerLogToGameState({
 				logPath,
 				reviewId: 'hivemap-power-log-replay',
-				settleMs: 15_000,
 			});
 			requirePowerLogReplayResult(ctx, cardsPath);
 

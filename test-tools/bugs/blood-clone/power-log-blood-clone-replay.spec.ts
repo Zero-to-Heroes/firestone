@@ -71,7 +71,6 @@ describe('Power log replay → opponent Blood Clone hand copy identity', () => {
 			const ctx = await replayPowerLogToGameState({
 				logPath,
 				reviewId: 'blood-clone-power-log-replay',
-				settleMs: 90_000,
 			});
 			requirePowerLogReplayResult(ctx, cardsPath);
 

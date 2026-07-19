@@ -34,7 +34,6 @@ describe('Power log replay → Fast Forward must not leak Naralex on opponent ha
 			const ctx = await replayPowerLogToGameState({
 				logPath,
 				reviewId: 'fast-forward-naralex-replay',
-				settleMs: 15_000,
 			});
 			requirePowerLogReplayResult(ctx, cardsPath);
 

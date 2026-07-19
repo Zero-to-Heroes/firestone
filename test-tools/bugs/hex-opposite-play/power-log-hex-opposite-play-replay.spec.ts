@@ -60,7 +60,6 @@ describe('Power log replay → Hex opposite-play deck tracker', () => {
 				logLinesOverride: fixtureLines,
 				playerDeckstring: PLAYER_DECKSTRING,
 				reviewId: 'hex-opposite-play-after-opponent-hex',
-				settleMs: 90_000,
 			});
 			requirePowerLogReplayResult(ctx, cardsPath);
 
@@ -87,7 +86,6 @@ describe('Power log replay → Hex opposite-play deck tracker', () => {
 				logLinesOverride: beforeLines,
 				playerDeckstring: PLAYER_DECKSTRING,
 				reviewId: 'hex-opposite-play-before-opponent-hex',
-				settleMs: 90_000,
 			});
 			requirePowerLogReplayResult(beforeCtx, cardsPath);
 
@@ -96,7 +94,6 @@ describe('Power log replay → Hex opposite-play deck tracker', () => {
 				logLinesOverride: afterLines,
 				playerDeckstring: PLAYER_DECKSTRING,
 				reviewId: 'hex-opposite-play-after-opponent-hex-boundary',
-				settleMs: 90_000,
 			});
 			requirePowerLogReplayResult(afterCtx, cardsPath);
 

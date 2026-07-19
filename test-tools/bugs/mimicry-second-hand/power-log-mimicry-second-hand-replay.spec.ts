@@ -48,7 +48,6 @@ describe('Power log replay → GameStateService (Mimicry opponent hand, both slo
 				logPath,
 				logLinesOverride: logLines,
 				reviewId: 'mimicry-second-hand-replay',
-				settleMs: 20_000,
 			});
 			requirePowerLogReplayResult(ctx, cardsPath);
 
