@@ -1,5 +1,13 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import {
+	AfterContentInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	ElementRef,
+	ViewChild,
+	ViewRef,
+} from '@angular/core';
 import { CardClass } from '@firestone-hs/reference-data';
 import {
 	ARENA_DRAFT_CARD_HIGH_WINS_THRESHOLD,
@@ -56,140 +64,138 @@ const MIN_STATS_THRESHOLD_DRAFT = 500;
 					<div class="label" [fsTranslate]="'app.arena.card-stats.total-cards-drafted'"></div>
 					<div class="value">{{ totalCardsDrafted$ | async }}</div>
 				</div>
-				<div class="header" *ngIf="sortCriteria$ | async as sort">
-					<sortable-table-label
-						class="cell card-details"
-						[name]="'app.arena.card-stats.header-card-name' | fsTranslate"
-						[sort]="sort"
-						[criteria]="'name'"
-						(sortClick)="onSortClick($event)"
-					>
-					</sortable-table-label>
-					<sortable-table-label
-						class="cell deck-winrate"
-						[name]="'app.arena.card-stats.header-deck-winrate' | fsTranslate"
-						[helpTooltip]="'app.arena.card-stats.header-deck-winrate-tooltip' | fsTranslate"
-						[sort]="sort"
-						[criteria]="'deck-winrate'"
-						(sortClick)="onSortClick($event)"
-					>
-					</sortable-table-label>
-					<sortable-table-label
-						class="cell drawn-winrate"
-						[name]="'app.arena.card-stats.header-drawn-winrate' | fsTranslate"
-						[helpTooltip]="'app.arena.card-stats.header-drawn-winrate-tooltip' | fsTranslate"
-						[sort]="sort"
-						[criteria]="'drawn-winrate'"
-						(sortClick)="onSortClick($event)"
-					>
-					</sortable-table-label>
-					<sortable-table-label
-						class="cell pickrate-high-wins"
-						[name]="headerPickrateHighWins"
-						[helpTooltip]="headerPickrateHighWinsTooltip"
-						[sort]="sort"
-						[criteria]="'pickrate-high-wins'"
-						(sortClick)="onSortClick($event)"
-					>
-					</sortable-table-label>
-					<sortable-table-label
-						class="cell mulligan-winrate"
-						[name]="'app.arena.card-stats.header-mulligan-winrate' | fsTranslate"
-						[helpTooltip]="'app.arena.card-stats.header-mulligan-winrate-tooltip' | fsTranslate"
-						[sort]="sort"
-						[criteria]="'mulligan-winrate'"
-						(sortClick)="onSortClick($event)"
-					>
-					</sortable-table-label>
-					<sortable-table-label
-						class="cell mulligan-kept"
-						[name]="'decktracker.overlay.mulligan.mulligan-keep-rate' | fsTranslate"
-						[helpTooltip]="'decktracker.overlay.mulligan.mulligan-keep-rate-tooltip' | fsTranslate"
-						[sort]="sort"
-						[criteria]="'mulligan-kept'"
-						(sortClick)="onSortClick($event)"
-					>
-					</sortable-table-label>
-
-					<ng-container *ngIf="value.showAdvancedStats">
+				<div class="header-scroll" #headerScroll (scroll)="onHeaderScroll()">
+					<div class="header" *ngIf="sortCriteria$ | async as sort">
 						<sortable-table-label
-							class="cell deck-total"
-							[name]="'app.arena.card-stats.header-deck-total' | fsTranslate"
-							[helpTooltip]="'app.arena.card-stats.header-deck-total-tooltip' | fsTranslate"
+							class="cell card-details"
+							[name]="'app.arena.card-stats.header-card-name' | fsTranslate"
 							[sort]="sort"
-							[criteria]="'deck-total'"
+							[criteria]="'name'"
 							(sortClick)="onSortClick($event)"
 						>
 						</sortable-table-label>
 						<sortable-table-label
-							class="cell offered-total"
-							[name]="'app.arena.card-stats.header-offered-total' | fsTranslate"
+							class="cell deck-winrate"
+							[name]="'app.arena.card-stats.header-deck-winrate' | fsTranslate"
+							[helpTooltip]="'app.arena.card-stats.header-deck-winrate-tooltip' | fsTranslate"
 							[sort]="sort"
-							[criteria]="'offered-total'"
+							[criteria]="'deck-winrate'"
+							(sortClick)="onSortClick($event)"
+						>
+						</sortable-table-label>
+						<sortable-table-label
+							class="cell drawn-winrate"
+							[name]="'app.arena.card-stats.header-drawn-winrate' | fsTranslate"
+							[helpTooltip]="'app.arena.card-stats.header-drawn-winrate-tooltip' | fsTranslate"
+							[sort]="sort"
+							[criteria]="'drawn-winrate'"
+							(sortClick)="onSortClick($event)"
+						>
+						</sortable-table-label>
+						<sortable-table-label
+							class="cell pickrate-high-wins"
+							[name]="headerPickrateHighWins"
+							[helpTooltip]="headerPickrateHighWinsTooltip"
+							[sort]="sort"
+							[criteria]="'pickrate-high-wins'"
+							(sortClick)="onSortClick($event)"
+						>
+						</sortable-table-label>
+						<sortable-table-label
+							class="cell mulligan-winrate"
+							[name]="'app.arena.card-stats.header-mulligan-winrate' | fsTranslate"
+							[helpTooltip]="'app.arena.card-stats.header-mulligan-winrate-tooltip' | fsTranslate"
+							[sort]="sort"
+							[criteria]="'mulligan-winrate'"
+							(sortClick)="onSortClick($event)"
+						>
+						</sortable-table-label>
+						<sortable-table-label
+							class="cell mulligan-kept"
+							[name]="'decktracker.overlay.mulligan.mulligan-keep-rate' | fsTranslate"
+							[helpTooltip]="'decktracker.overlay.mulligan.mulligan-keep-rate-tooltip' | fsTranslate"
+							[sort]="sort"
+							[criteria]="'mulligan-kept'"
 							(sortClick)="onSortClick($event)"
 						>
 						</sortable-table-label>
 
-						<sortable-table-label
-							class="cell pickrate"
-							[name]="'app.arena.card-stats.header-pickrate' | fsTranslate"
-							[helpTooltip]="'app.arena.card-stats.header-pickrate-tooltip' | fsTranslate"
-							[sort]="sort"
-							[criteria]="'pickrate'"
-							(sortClick)="onSortClick($event)"
-						>
-						</sortable-table-label>
-						<sortable-table-label
-							class="cell play-on-curve-winrate"
-							[name]="'app.arena.card-stats.header-play-on-curve-winrate' | fsTranslate"
-							[helpTooltip]="'app.arena.card-stats.header-play-on-curve-winrate-tooltip' | fsTranslate"
-							[sort]="sort"
-							[criteria]="'play-on-curve-winrate'"
-							(sortClick)="onSortClick($event)"
-						>
-						</sortable-table-label>
-						<sortable-table-label
-							class="cell drawn-total"
-							[name]="'app.arena.card-stats.header-drawn-total' | fsTranslate"
-							[sort]="sort"
-							[criteria]="'drawn-total'"
-							(sortClick)="onSortClick($event)"
-						>
-						</sortable-table-label>
-						<sortable-table-label
-							class="cell play-on-curve-total"
-							[name]="'app.arena.card-stats.header-play-on-curve-total' | fsTranslate"
-							[sort]="sort"
-							[criteria]="'play-on-curve-total'"
-							(sortClick)="onSortClick($event)"
-						>
-						</sortable-table-label>
-						<sortable-table-label
-							class="cell pickrate-impact"
-							[name]="'app.arena.card-stats.header-pickrate-impact' | fsTranslate"
-							[helpTooltip]="headerPickrateSkillTooltip"
-							[sort]="sort"
-							[criteria]="'pickrate-impact'"
-							(sortClick)="onSortClick($event)"
-						>
-						</sortable-table-label>
-						<!-- <sortable-table-label
-						class="cell offered-total-high-wins"
-						[name]="'app.arena.card-stats.header-offered-total-high-wins' | fsTranslate"
-						[sort]="sort"
-						[criteria]="'offered-high-wins'"
-						(sortClick)="onSortClick($event)"
-					>
-					</sortable-table-label> -->
-					</ng-container>
+						<ng-container *ngIf="value.showAdvancedStats">
+							<sortable-table-label
+								class="cell deck-total"
+								[name]="'app.arena.card-stats.header-deck-total' | fsTranslate"
+								[helpTooltip]="'app.arena.card-stats.header-deck-total-tooltip' | fsTranslate"
+								[sort]="sort"
+								[criteria]="'deck-total'"
+								(sortClick)="onSortClick($event)"
+							>
+							</sortable-table-label>
+							<sortable-table-label
+								class="cell offered-total"
+								[name]="'app.arena.card-stats.header-offered-total' | fsTranslate"
+								[sort]="sort"
+								[criteria]="'offered-total'"
+								(sortClick)="onSortClick($event)"
+							>
+							</sortable-table-label>
+
+							<sortable-table-label
+								class="cell pickrate"
+								[name]="'app.arena.card-stats.header-pickrate' | fsTranslate"
+								[helpTooltip]="'app.arena.card-stats.header-pickrate-tooltip' | fsTranslate"
+								[sort]="sort"
+								[criteria]="'pickrate'"
+								(sortClick)="onSortClick($event)"
+							>
+							</sortable-table-label>
+							<sortable-table-label
+								class="cell play-on-curve-winrate"
+								[name]="'app.arena.card-stats.header-play-on-curve-winrate' | fsTranslate"
+								[helpTooltip]="
+									'app.arena.card-stats.header-play-on-curve-winrate-tooltip' | fsTranslate
+								"
+								[sort]="sort"
+								[criteria]="'play-on-curve-winrate'"
+								(sortClick)="onSortClick($event)"
+							>
+							</sortable-table-label>
+							<sortable-table-label
+								class="cell drawn-total"
+								[name]="'app.arena.card-stats.header-drawn-total' | fsTranslate"
+								[sort]="sort"
+								[criteria]="'drawn-total'"
+								(sortClick)="onSortClick($event)"
+							>
+							</sortable-table-label>
+							<sortable-table-label
+								class="cell play-on-curve-total"
+								[name]="'app.arena.card-stats.header-play-on-curve-total' | fsTranslate"
+								[sort]="sort"
+								[criteria]="'play-on-curve-total'"
+								(sortClick)="onSortClick($event)"
+							>
+							</sortable-table-label>
+							<sortable-table-label
+								class="cell pickrate-impact"
+								[name]="'app.arena.card-stats.header-pickrate-impact' | fsTranslate"
+								[helpTooltip]="headerPickrateSkillTooltip"
+								[sort]="sort"
+								[criteria]="'pickrate-impact'"
+								(sortClick)="onSortClick($event)"
+							>
+							</sortable-table-label>
+						</ng-container>
+					</div>
 				</div>
 				<virtual-scroller
 					#scroll
 					[items]="value.cards!"
 					[bufferAmount]="25"
+					[useMarginInsteadOfTranslate]="true"
 					role="list"
 					class="cards-list"
 					scrollable
+					(scroll)="onBodyScroll()"
 				>
 					<arena-card-stat-item
 						*ngFor="let card of scroll.viewPortItems; trackBy: trackByFn"
@@ -205,6 +211,9 @@ const MIN_STATS_THRESHOLD_DRAFT = 500;
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ArenaCardStatsComponent extends AbstractSubscriptionComponent implements AfterContentInit {
+	@ViewChild('headerScroll') headerScroll: ElementRef<HTMLElement>;
+	@ViewChild('scroll', { read: ElementRef }) bodyScroll: ElementRef<HTMLElement>;
+
 	loading$: Observable<boolean>;
 	cards$: Observable<ArenaCardStatInfo[]>;
 	sortCriteria$: Observable<SortCriteria<ColumnSortType>>;
@@ -232,6 +241,7 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 		criteria: 'deck-winrate',
 		direction: 'desc',
 	});
+	private syncingScroll = false;
 
 	constructor(
 		protected override readonly cdr: ChangeDetectorRef,
@@ -242,6 +252,23 @@ export class ArenaCardStatsComponent extends AbstractSubscriptionComponent imple
 		private readonly prefs: PreferencesService,
 	) {
 		super(cdr);
+	}
+
+	onBodyScroll() {
+		this.syncScrollLeft(this.bodyScroll?.nativeElement, this.headerScroll?.nativeElement);
+	}
+
+	onHeaderScroll() {
+		this.syncScrollLeft(this.headerScroll?.nativeElement, this.bodyScroll?.nativeElement);
+	}
+
+	private syncScrollLeft(source: HTMLElement | undefined, target: HTMLElement | undefined) {
+		if (this.syncingScroll || !source || !target) {
+			return;
+		}
+		this.syncingScroll = true;
+		target.scrollLeft = source.scrollLeft;
+		this.syncingScroll = false;
 	}
 
 	async ngAfterContentInit() {

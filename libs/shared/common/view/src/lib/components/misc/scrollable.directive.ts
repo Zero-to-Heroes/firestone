@@ -11,16 +11,20 @@ export class ScrollableDirective {
 
 	@HostListener('mousedown', ['$event'])
 	onHistoryClick(event: MouseEvent) {
-		const scrollbarWidth = 25;
-		const scrollableEl = this.elementRef.nativeElement;
-		if (scrollableEl) {
-			const rect = scrollableEl.getBoundingClientRect();
-			const clickX = event.clientX - rect.left;
-			if (clickX >= rect.width - scrollbarWidth) {
-				event.stopPropagation();
-				this.scrolling.next(true);
-				return;
-			}
+		const scrollbarSize = 25;
+		const scrollableEl = this.elementRef.nativeElement as HTMLElement | undefined;
+		if (!scrollableEl) {
+			return;
+		}
+
+		const rect = scrollableEl.getBoundingClientRect();
+		const clickX = event.clientX - rect.left;
+		const clickY = event.clientY - rect.top;
+		const onVerticalScrollbar = clickX >= rect.width - scrollbarSize;
+		const onHorizontalScrollbar = clickY >= rect.height - scrollbarSize;
+		if (onVerticalScrollbar || onHorizontalScrollbar) {
+			event.stopPropagation();
+			this.scrolling.next(true);
 		}
 	}
 

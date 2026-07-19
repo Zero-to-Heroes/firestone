@@ -9,30 +9,89 @@
 	flex-direction: column;
 	align-content: flex-start;
 	height: 100%;
-	// padding-top: 15px;
+	min-width: 0;
+
+	.header-scroll {
+		flex-shrink: 0;
+		overflow-x: auto;
+		overflow-y: hidden;
+		scrollbar-width: none;
+
+		&::-webkit-scrollbar {
+			height: 0;
+			display: none;
+		}
+	}
 
 	.header {
 		display: flex;
 		font-size: 14px;
-		// margin-bottom: 10px;
-		flex-wrap: wrap;
-		overflow: hidden;
+		flex-wrap: nowrap;
+		overflow: visible;
 		height: 35px;
 		flex-shrink: 0;
-		flex-wrap: nowrap;
+		width: max-content;
+		min-width: 100%;
+		box-sizing: border-box;
+		background-color: var(--color-5);
+
+		.card-details {
+			z-index: 3;
+			background-color: var(--color-5);
+		}
 	}
 
 	.cards-list {
-		overflow-y: scroll;
+		overflow-x: auto !important;
+		overflow-y: scroll !important;
 		min-height: 0;
 		flex-grow: 1;
+
+		// Match app scrollbar styling (see scrollbar-general.scss), with horizontal bar visible
+		&::-webkit-scrollbar {
+			width: 10px;
+			height: 10px;
+		}
+
+		&::-webkit-scrollbar-track {
+			display: none;
+		}
+
+		&::-webkit-scrollbar-thumb {
+			background: var(--fs-scrollbar-thumb-color, #a89782);
+		}
+
+		&::-webkit-scrollbar-thumb:hover {
+			background: var(--on-fs-scrollbar-thumb-color, #d9c3ab);
+		}
+
+		&::-webkit-scrollbar-button {
+			display: none;
+		}
+
+		&::-webkit-scrollbar-track-piece {
+			display: none;
+		}
+
+		::ng-deep .scrollable-content {
+			max-width: none;
+			width: max-content;
+			min-width: 100%;
+		}
 
 		.card-info {
 			margin-bottom: 3px;
 			display: flex;
+			width: max-content;
+			min-width: 100%;
+			box-sizing: border-box;
 
 			&:nth-child(odd) {
 				background: rgba(255, 255, 255, 0.08);
+
+				::ng-deep .card-details {
+					background: linear-gradient(rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.08)), var(--color-5);
+				}
 			}
 		}
 	}
