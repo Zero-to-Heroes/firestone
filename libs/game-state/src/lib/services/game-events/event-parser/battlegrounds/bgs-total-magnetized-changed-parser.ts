@@ -9,6 +9,7 @@ export class BgsTotalMagnetizedChangedParser implements EventParser {
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
+		console.debug('[bgs-total-magnetized-changed-parser] total magnetized changed', gameEvent);
 		return currentState.update({
 			bgState: currentState.bgState.update({
 				currentGame: currentState.bgState.currentGame!.update({

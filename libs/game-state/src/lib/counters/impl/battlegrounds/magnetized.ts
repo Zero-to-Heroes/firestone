@@ -14,7 +14,10 @@ export class MagnetizedCounterDefinitionV2 extends CounterDefinitionV2<number> {
 	readonly player = {
 		pref: 'playerBgsMagnetizedCounter' as const,
 		display: (state: GameState, bgState: BattlegroundsState | null | undefined): boolean => true,
-		value: (state: GameState, bgState: BattlegroundsState | null | undefined) => bgState?.currentGame?.magnetized,
+		value: (state: GameState, bgState: BattlegroundsState | null | undefined) => {
+			console.debug('[magnetized-counter] value', state?.bgState?.currentGame?.magnetized, state, bgState);
+			return state?.bgState?.currentGame?.magnetized;
+		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>
 				i18n.translateString('settings.battlegrounds.overlay.counter-magnetized-label'),

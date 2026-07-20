@@ -33,10 +33,7 @@ export class TotalMagnetizeChangedParser implements ActionParser {
 
 	CreateGameEventProviderFromNew(node: Node): GameEventProvider[] | null {
 		const tagChange = node.Object as TagChange;
-		const entity = this.GameState.CurrentEntities.get(tagChange.Entity);
-
-		const controller = entity!.GetController();
-		if (controller !== this.StateFacade.LocalPlayer!.PlayerId) {
+		if (tagChange.Entity !== this.StateFacade.LocalPlayer!.Id) {
 			return null;
 		}
 
@@ -48,8 +45,8 @@ export class TotalMagnetizeChangedParser implements ActionParser {
 				GameEventHelper.CreateProvider(
 					'TOTAL_MAGNETIZE_CHANGED',
 					null as any,
-					entity!.GetEffectiveController(),
-					entity!.Id,
+					this.StateFacade.LocalPlayer!.PlayerId,
+					this.StateFacade.LocalPlayer!.Id,
 					this.StateFacade,
 					{
 						NewValue: newValue,
