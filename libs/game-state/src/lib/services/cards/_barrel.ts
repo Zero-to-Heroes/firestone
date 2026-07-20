@@ -196,6 +196,7 @@ export { GullibleGuard } from './gullible-guard';
 export { HagathaTheWitchBewitchHeroic } from './hagatha-the-witch-bewitch';
 export { DissonantDisco, HarmonicDisco } from './harmonic-disco';
 export { HarmonicaSoloist } from './harmonica-soloist';
+export { HeadhuntersHatchet } from './headhunters-hatchet';
 export { HeartrootStones } from './heartroot-stones';
 export { Hellraiser } from './hellraiser';
 export { HemetFoamMarksman } from './hemet-foam-marksman';
