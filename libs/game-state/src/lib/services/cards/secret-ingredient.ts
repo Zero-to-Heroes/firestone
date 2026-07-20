@@ -16,19 +16,9 @@ export const SecretIngredient: GeneratingCard & StaticGeneratingCard = {
 	cardIds: [CardIds.SecretIngredient_JAIL_201],
 	publicCreator: true,
 	dynamicPool: (input: StaticGeneratingCardInput) =>
-		filterCards(
-			CardIds.ADashofThat_JAIL_201b,
-			input.allCards,
-			druidCardFilter,
-			input.inputOptions,
-		),
+		filterCards(CardIds.SecretIngredient_JAIL_201, input.allCards, druidCardFilter, input.inputOptions),
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => ({
 		cardClasses: [CardClass.DRUID],
-		possibleCards: filterCards(
-			CardIds.ADashofThat_JAIL_201b,
-			input.allCards,
-			druidCardFilter,
-			input.options,
-		),
+		possibleCards: filterCards(CardIds.SecretIngredient_JAIL_201, input.allCards, druidCardFilter, input.options),
 	}),
 };
