@@ -31,6 +31,19 @@ import { MaxResources } from './model';
 				<div class="value">{{ maxResources.mana }}</div>
 			</div>
 			<div
+				class="info corpses"
+				*ngIf="maxResources.corpses"
+				[helpTooltip]="'widgets.max-resources.current-corpses-tooltip' | fsTranslate"
+			>
+				<div class="icon-container">
+					<img
+						class="icon"
+						src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/GenFX_Gem_Corpse.png?v=2"
+					/>
+				</div>
+				<div class="value">{{ maxResources.corpses }}</div>
+			</div>
+			<div
 				class="info coins"
 				*ngIf="maxResources.coins"
 				[helpTooltip]="'widgets.max-resources.max-coins-tooltip' | fsTranslate"

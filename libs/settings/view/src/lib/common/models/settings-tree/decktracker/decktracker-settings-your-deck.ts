@@ -243,6 +243,12 @@ export const decktrackerYourDeckSettings = (context: SettingContext): SettingNod
 					},
 					{
 						type: 'toggle',
+						field: 'playerMaxResourcesWidgetShowCorpses',
+						label: context.i18n.translateString('settings.decktracker.max-resources-widget.show-corpses'),
+						tooltip: context.i18n.translateString('settings.decktracker.max-resources-widget.show-corpses-tooltip'),
+					},
+					{
+						type: 'toggle',
 						field: 'maxResourcesWidgetShowHorizontally',
 						label: context.i18n.translateString('settings.decktracker.max-resources-widget.show-horizontally'),
 						tooltip: context.i18n.translateString('settings.decktracker.max-resources-widget.show-horizontally-tooltip'),

@@ -7,7 +7,14 @@ import { Preferences, PreferencesService } from '@firestone/shared/common/servic
 import { sleep } from '@firestone/shared/framework/common';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
 import { combineLatest, debounceTime, distinctUntilChanged, filter, Observable, switchMap, takeUntil } from 'rxjs';
-import { isDefault, MaxResources, nullIfDefaultCoins, nullIfDefaultHealth, nullIfDefaultMana } from './model';
+import {
+	isDefault,
+	MaxResources,
+	nullIfDefaultCoins,
+	nullIfDefaultCorpses,
+	nullIfDefaultHealth,
+	nullIfDefaultMana,
+} from './model';
 
 // https://stackoverflow.com/questions/62222979/angular-9-decorators-on-abstract-base-class
 @Directive()
@@ -17,6 +24,7 @@ export abstract class AbstractMaxResourcesWidgetWrapperComponent
 {
 	protected abstract prefName: keyof Preferences;
 	protected abstract alwaysOnPrefName: keyof Preferences;
+	protected abstract showCorpsesPrefName: keyof Preferences;
 	protected abstract positionPrefName: keyof Preferences;
 	protected abstract positionPrefNameBgs: keyof Preferences;
 	protected abstract scalePrefName: keyof Preferences;
@@ -112,18 +120,27 @@ export abstract class AbstractMaxResourcesWidgetWrapperComponent
 			this.mapData((prefs) => prefs.maxResourcesWidgetShowHorizontally),
 		);
 		const alwaysOn$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs[this.alwaysOnPrefName]));
-		const maxResources$ = this.gameState.gameState$$.pipe(
+		const showCorpses$ = this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs[this.showCorpsesPrefName]));
+		const maxResources$ = combineLatest([this.gameState.gameState$$, showCorpses$]).pipe(
 			debounceTime(500),
-			this.mapData((gameState) => {
+			this.mapData(([gameState, showCorpses]) => {
 				const isBg = isBattlegrounds(gameState?.metadata?.gameType);
 				const result: MaxResources = {
 					health: isBg ? null : (this.deckExtractor(gameState).hero?.maxHealth ?? 30),
 					mana: isBg ? null : (this.deckExtractor(gameState).hero?.maxMana ?? 10),
+					corpses:
+						isBg || !showCorpses
+							? null
+							: (this.deckExtractor(gameState).corpsesGainedThisGame ?? 0) -
+								(this.deckExtractor(gameState).corpsesSpent ?? 0),
 					coins: isBg ? (this.deckExtractor(gameState).hero?.maxCoins ?? 10) : null,
 				};
+				console.debug('[max-resources] max resources', result);
 				return result;
 			}),
-			distinctUntilChanged((a, b) => a.health === b.health && a.mana === b.mana && a.coins === b.coins),
+			distinctUntilChanged(
+				(a, b) => a.health === b.health && a.mana === b.mana && a.coins === b.coins && a.corpses === b.corpses,
+			),
 			takeUntil(this.destroyed$),
 		);
 		this.maxResources$ = combineLatest([maxResources$, alwaysOn$]).pipe(
@@ -138,6 +155,7 @@ export abstract class AbstractMaxResourcesWidgetWrapperComponent
 					health: nullIfDefaultHealth(maxResources.health),
 					mana: nullIfDefaultMana(maxResources.mana),
 					coins: nullIfDefaultCoins(maxResources.coins),
+					corpses: nullIfDefaultCorpses(maxResources.corpses),
 				};
 				return result;
 			}),
