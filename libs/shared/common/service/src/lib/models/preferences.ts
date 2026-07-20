@@ -2,6 +2,7 @@ import { GameFormat, RankBracket, TimePeriod } from '@firestone-hs/constructed-d
 import { BnetRegion, GameFormat as GameFormatEnum, Race } from '@firestone-hs/reference-data';
 import { IPreferences } from '@firestone/shared/framework/common';
 import 'reflect-metadata';
+import { DEFAULT_OVERLAY_APPEARANCE_THEME, OverlayAppearanceThemeSelection } from './overlay-appearance-themes';
 import {
 	AchievementsCompletedFilterType,
 	ArenaCardClassFilterType,
@@ -41,10 +42,6 @@ import {
 	StatGameFormatType,
 	StatsXpGraphSeasonFilterType,
 } from './pref-model';
-import {
-	DEFAULT_OVERLAY_APPEARANCE_THEME,
-	OverlayAppearanceThemeSelection,
-} from './overlay-appearance-themes';
 import type { OutOfCardsToken } from './unfit-pref-model';
 
 export const FORCE_LOCAL_PROP = 'forceLocalProp';
@@ -576,6 +573,7 @@ export class Preferences implements IPreferences {
 	readonly playerSpellweaversBrillianceCounter: boolean = true;
 	readonly opponentCardsDiscardedCounter: boolean = true;
 	readonly playerFriendlyAttacksCounter: boolean = true;
+	readonly opponentFriendlyAttacksCounter: boolean = false;
 
 	readonly playerLeylineSpellCostDiscountCounter: boolean = true;
 	readonly opponentLeylineSpellCostDiscountCounter: boolean = true;

@@ -21,7 +21,17 @@ export class FriendlyAttacksCounterDefinitionV2 extends CounterDefinitionV2<numb
 				i18n.translateString('settings.decktracker.your-deck.counters.friendly-attacks-tooltip'),
 		},
 	};
-	readonly opponent = undefined;
+	readonly opponent = {
+		pref: 'opponentFriendlyAttacksCounter' as const,
+		display: (state: GameState): boolean => true,
+		value: (state: GameState): number => state.opponentDeck.friendlyAttacksThisMatch ?? 0,
+		setting: {
+			label: (i18n: ILocalizationService): string =>
+				i18n.translateString('settings.decktracker.your-deck.counters.friendly-attacks-label'),
+			tooltip: (i18n: ILocalizationService): string =>
+				i18n.translateString('settings.decktracker.your-deck.counters.friendly-attacks-tooltip'),
+		},
+	};
 
 	constructor(
 		private readonly i18n: ILocalizationService,
