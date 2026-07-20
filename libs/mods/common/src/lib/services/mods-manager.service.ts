@@ -21,12 +21,6 @@ import {
 import { BehaviorSubject } from 'rxjs';
 import { distinctUntilChanged, filter, map } from 'rxjs/operators';
 import {
-	BepInExConfig,
-	buildBepInExConfig,
-	createInitialConfigFile,
-	updateModeVersionInBepInExConfig,
-} from './bepin-config';
-import {
 	DEFAULT_MODS_ENGINE_CONFIG,
 	DOORSTOP_CONFIG_INI,
 	ModsEngineArch,
@@ -34,10 +28,16 @@ import {
 	ModsRemoteConfig,
 } from '../model/mods-engine-config';
 import { getPeMachineArchFromBuffer, PeMachineArch } from '../utils/pe-machine-type';
+import {
+	BepInExConfig,
+	buildBepInExConfig,
+	createInitialConfigFile,
+	updateModeVersionInBepInExConfig,
+} from './bepin-config';
 
 // Built in mods-backend lambda
 // Bump ?v= when trustedMods schema changes (e.g. optional Description on entries).
-const MODS_CONFIG_URL = 'https://static.zerotoheroes.com/mods/mods-config.json?v=7';
+const MODS_CONFIG_URL = 'https://static.zerotoheroes.com/mods/mods-config.json?v=8';
 
 const modsLocation = 'BepInEx\\plugins';
 export const configLocation = 'BepInEx\\config';
@@ -283,10 +283,9 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 	public async enableMods(
 		installPath: string,
 	): Promise<'game-running' | 'wrong-path' | 'installed' | 'not-installed' | 'engine-mismatch'> {
-		return this.callOnMainProcess<'game-running' | 'wrong-path' | 'installed' | 'not-installed' | 'engine-mismatch'>(
-			'enableModsInternal',
-			installPath,
-		);
+		return this.callOnMainProcess<
+			'game-running' | 'wrong-path' | 'installed' | 'not-installed' | 'engine-mismatch'
+		>('enableModsInternal', installPath);
 	}
 	private async enableModsInternal(
 		installPath: string,
@@ -731,7 +730,11 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 			const stillHasBepInEx = await this.fileBackend.fileExists(`${installPath}\\BepInEx`);
 			const stillHasWinhttp = await this.fileBackend.fileExists(`${installPath}\\winhttp.dll`);
 			if (stillHasBepInEx || stillHasWinhttp) {
-				console.warn('[mods-manager] engine files still present after delete', stillHasBepInEx, stillHasWinhttp);
+				console.warn(
+					'[mods-manager] engine files still present after delete',
+					stillHasBepInEx,
+					stillHasWinhttp,
+				);
 				return false;
 			}
 			return true;
@@ -891,6 +894,7 @@ const isVersionBefore = (appVersion: string, reference: string): boolean => {
 };
 
 const buildAppValue = (appVersion: string): number => {
+	appVersion = appVersion.replace('v', '');
 	const [major, minor, patch] = appVersion.split('.').map((info) => parseInt(info));
 	return 1000 * major + 100 * minor + patch;
 };
