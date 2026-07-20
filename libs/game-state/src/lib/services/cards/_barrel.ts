@@ -169,6 +169,7 @@ export { FiddlefireImp } from './fiddlefire-imp';
 export { FindersKeepers } from './finders-keepers';
 export { Fishflinger } from './fishflinger';
 export { FlameBehemoth } from './flame-behemoth';
+export { FontOfPower } from './font-of-power';
 export { FoolsGold } from './fools-gold';
 export { ForgottenMillenium } from './forgotten-millenium';
 export { FoundGear } from './found-gear';
