@@ -8,7 +8,9 @@ export const TheFinsBeyondTime: GlobalHighlightCard = {
 	getRelatedCards: (entityId: number, side: HighlightSide, gameState: GameState, allCards: CardsFacadeService) => {
 		const deckState = side === 'player' ? gameState.playerDeck : gameState.opponentDeck;
 		return (
-			deckState.cardsInStartingHand?.map((c) => c.cardId ?? deckState.findCard(c.entityId)?.card?.cardId) ?? []
+			deckState.cardsInStartingHand
+				?.map((c) => c.cardId ?? deckState.findCard(c.entityId)?.card?.cardId)
+				.filter((c) => !allCards.getCard(c).isCoin) ?? []
 		);
 	},
 };
