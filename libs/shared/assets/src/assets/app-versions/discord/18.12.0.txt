@@ -1,0 +1,29 @@
+**Firestone 18.12.0 — Release notes**
+
+**General**
+- ✨ Improved performance when parsing long games
+- 🐞 Card names in the release notes update correctly after switching languages
+
+**Twitch**
+- ✨ Re-authenticating now lets you use the !deck command in chat
+
+**Battlegrounds**
+- ✨ Added Magnetized counter
+
+**Decktracker**
+- ✨ Max Resources widget can show your current corpses (off by default)
+- ✨ Opponent Friendly Attacks counter (off by default)
+- ✨ Updated current effects (Runi, Temporal Guardian)
+- ✨ Updated dynamic pools (Harmonic Disco; Dissonant Disco; Twilight's Call; Nellie's Pirate Ship; King of the Underbelly and E.T.C., Band Manager in Arena)
+- ✨ Cards received from The Void (Irida Sinseeker) are marked as created by The Void
+- 🐞 The Coin is no longer included in The Fins Beyond Time's pool
+- 🐞 Confront the Tol'vir's pool now uses the cards' base cost
+- 🐞 Fixed an info leak after playing Deja Vu / Murloc Holmes that could reveal exact card positions in the opponent's hand
+- 🐞 Fixed an info leak for cards copied by Chainbreaker Hogger
+- 🐞 Fix an issue where cards drawn by Godfrey the Betrayer would sometimes not get removed from its section in the deck
+- 🐞 Azalina Soulsever is correctly added to the opponent's deck on reveal
+- 🐞 Fixed cards being duplicated in the opponent's hand and deck in some cases
+- 🐞 Fixed a crash when The Void zone is empty
+
+**Arena**
+- ✨ Card stats screen supports horizontal scrolling

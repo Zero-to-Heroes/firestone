@@ -24,6 +24,7 @@ import { BehaviorSubject, debounceTime, distinctUntilChanged, map, Observable, S
 import { AppVersion } from '../model/app-version';
 
 const versions: readonly AppVersion[] = [
+	{ version: '18.12.0', date: '2026-07-20', force: true },
 	{ version: '18.11.5', date: '2026-07-17', force: true },
 	{ version: '18.11.0', date: '2026-07-15', force: true },
 	{ version: '18.10.1', date: '2026-06-30' },
