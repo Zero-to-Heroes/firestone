@@ -41,8 +41,10 @@ import { TwitchBgsBoard, TwitchBgsBoardEntity, TwitchBgsPlayer, TwitchBgsState }
 
 const CLIENT_ID = 'jbmhw349lqbus9j8tx4wac18nsja9u';
 const REDIRECT_URI = 'https://www.firestoneapp.com/twitch-login.html';
-const SCOPES = 'channel_read';
-export const TWITCH_LOGIN_URL = `https://id.twitch.tv/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=token&scope=${SCOPES}`;
+/** channel:bot lets the Firestone chat bot reply to !deck without /mod */
+const REQUIRED_SCOPES = ['channel_read', 'channel:bot'] as const;
+const SCOPES = REQUIRED_SCOPES.join(' ');
+export const TWITCH_LOGIN_URL = `https://id.twitch.tv/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=token&scope=${encodeURIComponent(SCOPES)}`;
 
 const EBS_URL = 'https://twitch-ebs.firestoneapp.com/deck/event';
 const EBS_REQUEST_TIMEOUT_MS = 30000;
@@ -64,6 +66,7 @@ export class TwitchAuthService {
 
 	private hasLoggedInfoOnce = false;
 	private hasLoggedExpiredTokenInfoOnce = false;
+	private hasLoggedMissingScopesInfoOnce = false;
 
 	constructor(
 		private readonly prefs: PreferencesService,
@@ -92,6 +95,11 @@ export class TwitchAuthService {
 			console.log('[twitch-auth] received access token', !!twitchInfo);
 			this.saveAccessToken(twitchInfo.access_token);
 		});
+
+		const prefs = await this.prefs.getPreferences();
+		if (prefs.twitchAccessToken) {
+			await this.validateToken(prefs.twitchAccessToken);
+		}
 
 		this.twitchDelay$ = this.prefs.preferences$$.pipe(
 			map((prefs) => prefs.twitchDelay),
@@ -549,6 +557,27 @@ export class TwitchAuthService {
 		console.log('[twitch-auth] Sending expired token notification');
 		const title = this.i18n.translateString('twitch.could-not-log-error-title');
 		const text = this.i18n.translateString('twitch.could-not-log-error-text');
+		this.emitTwitchNotification('expired-token-notif', title, text);
+		this.hasLoggedExpiredTokenInfoOnce = true;
+	}
+
+	public async sendMissingScopesTwitchNotification() {
+		if (this.hasLoggedMissingScopesInfoOnce) {
+			return;
+		}
+
+		while (!this.gameStatus.inGame$$.value) {
+			await sleep(1000);
+		}
+
+		console.log('[twitch-auth] Sending missing scopes notification');
+		const title = this.i18n.translateString('twitch.reconnect-for-chat-title');
+		const text = this.i18n.translateString('twitch.reconnect-for-chat-text');
+		this.emitTwitchNotification('missing-scopes-notif', title, text);
+		this.hasLoggedMissingScopesInfoOnce = true;
+	}
+
+	private emitTwitchNotification(type: string, title: string, text: string) {
 		const content = `
 			<div class="general-message-container general-theme">
 				<div class="message">
@@ -566,12 +595,11 @@ export class TwitchAuthService {
 				</button>
 			</div>`;
 		this.notificationService.emitNewNotification({
-			notificationId: 'expired-token-notif-' + new Date().getTime(),
+			notificationId: `${type}-${new Date().getTime()}`,
 			content: content,
-			type: 'expired-token-notif',
+			type: type,
 			timeout: 120000,
 		} as Message);
-		this.hasLoggedExpiredTokenInfoOnce = true;
 	}
 
 	public async isLoggedIn(): Promise<boolean> {
@@ -591,9 +619,14 @@ export class TwitchAuthService {
 		return new Promise<boolean>((resolve) => {
 			const httpHeaders: HttpHeaders = new HttpHeaders().set('Authorization', `OAuth ${accessToken}`);
 			this.http.get(TWITCH_VALIDATE_URL, { headers: httpHeaders }).subscribe(
-				(data: any) => {
+				(data: { user_id?: string; scopes?: string[] }) => {
 					console.log('[twitch-auth] valid token');
-					// this.twitchUserId = data.user_id;
+					const scopes = data?.scopes ?? [];
+					const missingScopes = REQUIRED_SCOPES.filter((scope) => !scopes.includes(scope));
+					if (missingScopes.length) {
+						console.log('[twitch-auth] token missing scopes', missingScopes);
+						this.sendMissingScopesTwitchNotification();
+					}
 					resolve(true);
 				},
 				() => {
