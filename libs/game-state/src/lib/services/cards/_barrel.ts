@@ -128,6 +128,7 @@ export { DetectivesClothes } from './detectives-clothes';
 export { DevourMind } from './devour-mind';
 export { DigforFreedom } from './digfor-freedom';
 export { DirdraRebelCaptain } from './dirdra-rebel-captain';
+export { DiscJockey } from './disc-jockey';
 export { DiscipleOfTheDove } from './disciple-of-the-dove';
 export { DiscoveryOfMagic } from './discovery-of-magic';
 export { Disguised442b } from './disguised-442b';
