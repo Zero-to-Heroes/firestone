@@ -32,28 +32,9 @@ export class SilverHandRecruitAuraCounterDefinitionV2 extends CounterDefinitionV
 			const attack = getEntityTag(controllerEntity, GameTag.SILVER_HAND_RECRUIT_ATK_BUFF, 0);
 			const health = getEntityTag(controllerEntity, GameTag.SILVER_HAND_RECRUIT_HP_BUFF, 0);
 			if (attack === 0 && health === 0) {
-				// Legacy, to be removed after 36.0
-				const enchs = state.playerDeck.enchantments;
-				const attack =
-					enchs.filter((e) => e.cardId === CardIds.BrashBattlemaster_RecruitsMightEnchantment_MEND_800e)
-						.length +
-					enchs.filter((e) => e.cardId === CardIds.EmboldeningBlade_EmboldenedEnchantment_MEND_803e).length +
-					2 * enchs.filter((e) => e.cardId === CardIds.LightbornCariel_LightsStrengthEnchantment).length +
-					enchs.filter((e) => e.cardId === CardIds.PursuitOfJustice_PursuitOfJusticeCoreEnchantment_CS3_029e)
-						.length;
-				const health =
-					enchs.filter((e) => e.cardId === CardIds.ResilientSavior_RecruitsResilienceEnchantment_MEND_801e)
-						.length +
-					enchs.filter((e) => e.cardId === CardIds.EmboldeningBlade_EmboldenedEnchantment_MEND_803e).length +
-					2 * enchs.filter((e) => e.cardId === CardIds.LightbornCariel_LightsStrengthEnchantment).length;
-				if (attack === 0 && health === 0) {
-					return null;
-				}
-				return {
-					attack,
-					health,
-				};
+				return null;
 			}
+
 			return {
 				attack,
 				health,
@@ -71,17 +52,21 @@ export class SilverHandRecruitAuraCounterDefinitionV2 extends CounterDefinitionV
 		pref: 'opponentSilverHandRecruitAuraCounter' as const,
 		display: (state: GameState): boolean => this.opponent.value(state) !== null,
 		value: (state: GameState): { attack: number; health: number } | null => {
-			const enchs = state.opponentDeck.enchantments;
-			const attack =
-				enchs.filter((e) => e.cardId === CardIds.BrashBattlemaster_RecruitsMightEnchantment_MEND_800e).length +
-				enchs.filter((e) => e.cardId === CardIds.EmboldeningBlade_EmboldenedEnchantment_MEND_803e).length;
-			const health =
-				enchs.filter((e) => e.cardId === CardIds.ResilientSavior_RecruitsResilienceEnchantment_MEND_801e)
-					.length +
-				enchs.filter((e) => e.cardId === CardIds.EmboldeningBlade_EmboldenedEnchantment_MEND_803e).length;
+			const controllerEntity = getControllerEntity(
+				state.parserState?.CurrentEntities,
+				state.parserState?.ControllerEntityMap,
+				state.opponentPlayerId!,
+			);
+			if (!controllerEntity) {
+				return null;
+			}
+
+			const attack = getEntityTag(controllerEntity, GameTag.SILVER_HAND_RECRUIT_ATK_BUFF, 0);
+			const health = getEntityTag(controllerEntity, GameTag.SILVER_HAND_RECRUIT_HP_BUFF, 0);
 			if (attack === 0 && health === 0) {
 				return null;
 			}
+
 			return {
 				attack,
 				health,
