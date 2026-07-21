@@ -17,7 +17,7 @@
 	"dependencies": {
 		"@koromix/koffi-win32-x64": "3.0.2",
 		"better-sqlite3": "^12.4.6",
-		"electron-edge-js": "^37.0.0",
+		"electron-edge-js": "^39.0.1",
 		"koffi": "^3.0.2",
 		"uiohook-napi": "^1.5.4"
 	}

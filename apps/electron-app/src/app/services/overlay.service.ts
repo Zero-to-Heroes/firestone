@@ -1,7 +1,7 @@
+/// <reference types="@overwolf/ow-electron/mix" />
 import { ElectronGameWindowService } from '@firestone/electron/common';
 import { NotificationsService } from '@firestone/shared/common/service';
 import { AppInjector, ILocalizationService } from '@firestone/shared/framework/core';
-import { overwolf } from '@overwolf/ow-electron';
 import {
 	GamesFilter,
 	IOverwolfOverlayApi,
@@ -16,7 +16,8 @@ import App from '../app';
 import { formatLogArg } from '../format-log-arg';
 import { appAccessUnlocked$$, isAppAccessUnlocked } from './app-access-policy';
 
-const app = electronApp as overwolf.OverwolfApp;
+// Electron.App is augmented by @overwolf/ow-electron/mix (app.overwolf).
+const app = electronApp;
 
 export class OverlayService extends EventEmitter {
 	private static instance: OverlayService;

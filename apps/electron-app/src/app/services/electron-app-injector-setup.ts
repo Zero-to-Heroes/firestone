@@ -1109,6 +1109,8 @@ export const buildAppInjector = () => {
 		memoryInspection,
 		allCards,
 		localStorage,
+		gameStatus,
+		accountService,
 	);
 	electronInjector.register(InternalProfileInfoService, internalProfileInfoService);
 
