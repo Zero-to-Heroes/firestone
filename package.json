@@ -1,6 +1,6 @@
 {
 	"name": "firestone",
-	"version": "18.12.0",
+	"version": "18.12.1",
 	"productName": "Firestone",
 	"author": {
 		"name": "Sébastien Tromp",
@@ -56,7 +56,7 @@
 		"upload-electron-updates": "npx tsx ./build-tools/upload-electron-updates.ts",
 		"install-electron-app-deps": "npm install --prefix dist/apps/electron-app --omit=dev",
 		"rebuild-electron-native-deps": "npm run install-electron-app-deps && npx tsx ./build-tools/rebuild-electron-native-deps.ts",
-		"c6-2": "=============== Standalone FREE build (ad-supported, flavor=standalone) =================",
+		"c6-2": "=============== USE THIS FOR NOW ---> Standalone FREE build (ad-supported, flavor=standalone) =================",
 		"build:ow-electron": "cross-env FIRESTONE_FLAVOR=standalone npm run replace-version && npm run install-electron-app-deps && ow-electron-builder --config electron-builder.standalone.yml --publish=never",
 		"full-build:standalone": "nx build electron-frontend --configuration=production && nx build electron-app && cross-env FIRESTONE_FLAVOR=standalone npm run replace-version && npm run install-electron-app-deps && ow-electron-builder --config electron-builder.standalone.yml --publish=never",
 		"full-publish:standalone": "npm run full-build:standalone && cross-env FIRESTONE_FLAVOR=standalone npm run upload-electron-updates",
