@@ -1,10 +1,18 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { ProfileClassProgress, ProfileWinsForMode } from '@firestone-hs/api-user-profile';
 import { CardClass, GameType, getDefaultHeroDbfIdForClass } from '@firestone-hs/reference-data';
 import { GameEvent, GameEventsEmitterService } from '@firestone/game-state';
 import { MemoryInspectionService, MemoryPlayerRecord } from '@firestone/memory';
-import { CardsFacadeService, LocalStorageService } from '@firestone/shared/framework/core';
-import { BehaviorSubject, combineLatest, debounceTime, filter } from 'rxjs';
+import { GameStatusService } from '@firestone/shared/common/service';
+import { sleep } from '@firestone/shared/framework/common';
+import {
+	ACCOUNT_SERVICE_TOKEN,
+	CardsFacadeService,
+	IAccountFacadeForCollection,
+	LocalStorageService,
+	waitForReady,
+} from '@firestone/shared/framework/core';
+import { BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, filter } from 'rxjs';
 
 class HeroSkinAchievements {
 	readonly Golden500Win: number;
@@ -71,6 +79,8 @@ export class InternalProfileInfoService {
 		private readonly memory: MemoryInspectionService,
 		private readonly allCards: CardsFacadeService,
 		private readonly localStorage: LocalStorageService,
+		private readonly gameStatus: GameStatusService,
+		@Inject(ACCOUNT_SERVICE_TOKEN) private readonly account: IAccountFacadeForCollection,
 	) {
 		this.init();
 	}
@@ -82,7 +92,7 @@ export class InternalProfileInfoService {
 
 	private initLocalCache() {
 		this.classesProgress$$.subscribe((classProgress) => {
-			// console.debug('[profile-info] will update local cache', classProgress);
+			console.debug('[profile-info] will update local cache', classProgress);
 			if (!!classProgress?.length) {
 				this.localStorage.setItem(LocalStorageService.LOCAL_STORAGE_CLASSES_PROCESS, classProgress);
 			}
@@ -95,11 +105,7 @@ export class InternalProfileInfoService {
 		}
 	}
 
-	private initProfileInfo() {
-		this.gameEvents.allEvents
-			.pipe(filter((e) => e.type === GameEvent.GAME_END))
-			.subscribe(() => this.shouldTrigger$$.next(true));
-
+	private async initProfileInfo() {
 		// We only update the data after a game is over
 		combineLatest([this.shouldTrigger$$.asObservable()])
 			.pipe(
@@ -109,12 +115,34 @@ export class InternalProfileInfoService {
 			.subscribe(([shouldTrigger]) => {
 				this.updateProfileInfo();
 			});
-		// this.shouldTrigger$$.next(true);
+
+		await waitForReady(this.account);
+
+		this.gameEvents.allEvents
+			.pipe(filter((e) => e.type === GameEvent.GAME_END))
+			.subscribe(() => this.shouldTrigger$$.next(true));
+		this.account.region$$.pipe(distinctUntilChanged()).subscribe((_) => {
+			this.shouldTrigger$$.next(true);
+		});
+		this.gameStatus.onGameStart(() => {
+			this.shouldTrigger$$.next(true);
+		});
 	}
 
 	private async updateProfileInfo() {
+		const isInGame = await this.gameStatus.inGame();
+		if (!isInGame) {
+			return;
+		}
+
 		console.log('[profile-info] updating profile info');
-		const profileInfo = await this.memory.getProfileInfo();
+		let profileInfo = await this.memory.getProfileInfo();
+		while (!profileInfo?.PlayerRecords?.some((r) => r.Losses > 0 || r.Wins > 0)) {
+			await sleep(2000);
+			profileInfo = await this.memory.getProfileInfo();
+			console.debug('[profile-info] still no profile info', profileInfo);
+		}
+
 		const classProgress: readonly ProfileClassProgress[] =
 			profileInfo?.PlayerClasses.map((playerClass) => {
 				const playerRecordsForClass =
@@ -154,6 +182,7 @@ export class InternalProfileInfoService {
 				].includes(r.RecordType),
 			);
 		const winsForMode: readonly ProfileWinsForMode[] = this.buildWinsForModes(playerRecords ?? []);
+		console.debug('[profile-info] updated profile info', winsForMode, classProgress, profileInfo);
 		if (!!winsForMode?.length) {
 			this.winsForMode$$.next(winsForMode);
 		}

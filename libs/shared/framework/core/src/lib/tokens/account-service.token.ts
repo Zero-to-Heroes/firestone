@@ -1,5 +1,6 @@
 import { InjectionToken } from '@angular/core';
 import { BnetRegion } from '@firestone-hs/reference-data';
+import { BehaviorSubject } from 'rxjs';
 
 /**
  * Subset of account/main-window account wiring used outside `@firestone/profile/common`
@@ -7,6 +8,7 @@ import { BnetRegion } from '@firestone-hs/reference-data';
  * Implemented by {@link AccountService} from `@firestone/profile/common`.
  */
 export interface IAccountFacadeForCollection {
+	region$$: BehaviorSubject<BnetRegion | null>;
 	isReady(): Promise<void>;
 	getRegion(): Promise<BnetRegion | null>;
 	getAccountInfo(): Promise<{ BattleTag?: string } | null>;
