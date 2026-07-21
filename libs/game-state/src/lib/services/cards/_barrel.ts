@@ -32,6 +32,7 @@ export { ArcaneTripwire } from './arcane-tripwire';
 export { ArchVillainRafaam } from './arch-villain-rafaam';
 export { Ashamane } from './ashamane';
 export { AssemblyLine } from './assembly-line';
+export { AvatarOfHearthstone } from './avatar-of-hearthstone';
 export { AyaLotusKingpin } from './aya-lotus-kingpin';
 export { AzalinaSoulsever } from './azalina-soulsever';
 export { AzsharasTriumph } from './azshara-triumph';
