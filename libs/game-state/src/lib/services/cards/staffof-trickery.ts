@@ -6,12 +6,9 @@
 import { CardClass, CardIds } from '@firestone-hs/reference-data';
 
 import { GuessedInfo } from '../../models/deck-card';
-import { canBeDiscoveredByClass, hasCorrectClass } from '../../related-cards/dynamic-pools';
+import { hasCorrectClass } from '../../related-cards/dynamic-pools';
 import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
-
-const druidDiscoverFilter = (c: Parameters<typeof hasCorrectClass>[0], currentClass: string | undefined) =>
-	hasCorrectClass(c, CardClass.DRUID) && canBeDiscoveredByClass(c, currentClass);
 
 export const StaffofTrickery: GeneratingCard & StaticGeneratingCard = {
 	cardIds: [CardIds.StaffofTrickery_JAIL_875],
@@ -20,7 +17,7 @@ export const StaffofTrickery: GeneratingCard & StaticGeneratingCard = {
 		filterCards(
 			CardIds.StaffofTrickery_JAIL_875,
 			input.allCards,
-			(c) => druidDiscoverFilter(c, input.inputOptions.deckState.getCurrentClass()),
+			(c) => hasCorrectClass(c, CardClass.DRUID),
 			input.inputOptions,
 		),
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => ({
@@ -28,7 +25,7 @@ export const StaffofTrickery: GeneratingCard & StaticGeneratingCard = {
 		possibleCards: filterCards(
 			CardIds.StaffofTrickery_JAIL_875,
 			input.allCards,
-			(c) => druidDiscoverFilter(c, input.deckState.getCurrentClass()),
+			(c) => hasCorrectClass(c, CardClass.DRUID),
 			input.options,
 		),
 	}),
