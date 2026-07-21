@@ -1,4 +1,4 @@
-import { DeckState } from '../../../models/deck-state';
+import { CardIds } from '@firestone-hs/reference-data';
 import { GameState } from '../../../models/game-state';
 import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
@@ -12,12 +12,24 @@ export class FirstPlayerParser implements EventParser {
 		const [, , localPlayer, entityId] = gameEvent.parse();
 		const isPlayer = entityId === localPlayer.Id;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
-		const newDeck = Object.assign(new DeckState(), deck, {
+		const newDeck = deck.update({
 			isFirstPlayer: true,
-		} as DeckState);
+		});
+
+		let opponentDeck = isPlayer ? currentState.opponentDeck : currentState.playerDeck;
+		// if we have Aya, Lotus Kingpin in our starting deck, but we end up going first, that means the opponent must have it in their deck as well
+		if (isPlayer && newDeck.deckList.some((c) => c.cardId === CardIds.AyaLotusKingpin_JAIL_504)) {
+			opponentDeck = opponentDeck.update({
+				additionalKnownCardsInDeck: [
+					...opponentDeck.additionalKnownCardsInDeck,
+					CardIds.AyaLotusKingpin_JAIL_504,
+				],
+			});
+		}
 
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newDeck,
+			[isPlayer ? 'opponentDeck' : 'playerDeck']: opponentDeck,
 		});
 	}
 
