@@ -148,7 +148,10 @@ export class AttackOnBoardParser implements ActionParser {
 			const weapon = entitiesForPlayer.find(
 				(entity) => entity.GetTag(GameTag.CARDTYPE) === (CardType.WEAPON as number),
 			);
-			if (weapon == null || weapon.GetTag(GameTag.CANNOT_ATTACK_HEROES) !== 1) {
+			const canAttackHeroes =
+				(weapon == null || weapon.GetTag(GameTag.CANNOT_ATTACK_HEROES) !== 1) &&
+				hero.GetTag(GameTag.CANNOT_ATTACK_HEROES) !== 1;
+			if (canAttackHeroes) {
 				const baseHeroAttack = isActivePlayer
 					? hero.GetTag(GameTag.ATK, 0)
 					: (weapon?.GetTag(GameTag.ATK, 0) ?? 0);
