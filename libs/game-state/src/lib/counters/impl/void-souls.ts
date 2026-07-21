@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/member-ordering */
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { CardIds } from '@firestone-hs/reference-data';
+import { CardIds, hasCorrectTribe, Race } from '@firestone-hs/reference-data';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { BattlegroundsState } from '../../models/_barrel';
 import { GameState } from '../../models/game-state';
@@ -57,7 +57,13 @@ export class VoidSoulsCounterDefinitionV2 extends CounterDefinitionV2<number> {
 		bgState: BattlegroundsState,
 		value: number | null | undefined,
 	): readonly string[] | undefined {
-		return this.filterCards(CardIds.VoidSoul_JAIL_732, (c) => c.cost === value, gameState, side);
+		const clampedValue = Math.min(10, value ?? 0);
+		return this.filterCards(
+			CardIds.VoidSoul_JAIL_732,
+			(c) => c.cost === clampedValue && hasCorrectTribe(c, Race.DEMON),
+			gameState,
+			side,
+		);
 	}
 
 	protected override tooltip(side: 'player' | 'opponent', gameState: GameState): string | null {
