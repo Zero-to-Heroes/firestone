@@ -14,7 +14,6 @@ import { CarryOnSuitcase } from './carry-on-suitcase';
 import { CatrinaMuerte } from './catrina-muerte';
 import { ChattyMacaw } from './chatty-macaw';
 import { Chromie } from './chromie';
-import { ChronoLordEpoch } from './chrono-lord-epoch';
 import { CreatureOfTheSacredCave } from './creature-of-the-sacred-cave';
 import { DrStitchensew } from './dr-stitchensew';
 import { EndbringerUmbra } from './endbringer-umbra';
@@ -92,7 +91,6 @@ const cards = [
 	NzothGodOfTheDeep,
 	ImpKingRafaam,
 	NZothTheCorruptor,
-	ChronoLordEpoch,
 	EndbringerUmbra,
 	Zuljin,
 	PetParrot,

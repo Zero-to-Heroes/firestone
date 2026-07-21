@@ -88,6 +88,7 @@ export { Chromie } from './chromie';
 export { ChromieBronzeEmissary } from './chromie-bronze-emissary';
 export { ChromieEscapeFromDurnholde } from './chromie-escape-from-durnholde';
 export { ChromieOpeningTheDarkPortal } from './chromie-opening-the-dark-portal';
+export { ChronoLordEpoch } from './chrono-lord-epoch';
 export { Chronogor } from './chronogor';
 export { ClashOfTheColossals } from './clash-of-the-colossals';
 export { CodeViolet } from './code-violet';

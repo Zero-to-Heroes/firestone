@@ -325,6 +325,7 @@ export abstract class CardsHighlightCommonService {
 
 		const allPlayerCards = this.getAllCards(
 			!!playerDeckProvider ? playerDeckProvider() : null,
+			!!opponentDeckProvider ? opponentDeckProvider() : null,
 			side === 'single' || side === 'arena-draft' ? side : 'player',
 			parserState,
 			localPlayerId,
@@ -343,6 +344,7 @@ export abstract class CardsHighlightCommonService {
 
 		const allOpponentCards = this.getAllCards(
 			!!opponentDeckProvider ? opponentDeckProvider() : null,
+			!!playerDeckProvider ? playerDeckProvider() : null,
 			side === 'single' || side === 'arena-draft' ? side : 'opponent',
 			parserState,
 			localPlayerId,
@@ -374,6 +376,7 @@ export abstract class CardsHighlightCommonService {
 
 	private getAllCards(
 		deckState: DeckState | null,
+		opponentDeckState: DeckState | null,
 		side: HighlightSide,
 		parserState: ParserGameStateLite | undefined,
 		localPlayerId: number | undefined,
@@ -385,6 +388,7 @@ export abstract class CardsHighlightCommonService {
 		const shared = {
 			side,
 			deckState,
+			opponentDeckState,
 			allCards: this.allCards,
 			parserState,
 			localPlayerId,
@@ -648,6 +652,7 @@ export interface SelectorInput {
 	zone: string;
 	card: ReferenceCard | null;
 	deckState: DeckState;
+	opponentDeckState: DeckState | null;
 	deckCard: DeckCard;
 	allCards: CardsFacadeService;
 	parserState?: ParserGameStateLite;
