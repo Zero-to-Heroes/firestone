@@ -305,6 +305,7 @@ export { OrionMansionManager } from './orion-mansion-manager';
 export { P1CKP0K3T } from './p1ck-p0k3t';
 export { PandarenImporter } from './pandaren-importer';
 export { PartnerAssignment } from './partner-assignment';
+export { Perjury } from './perjury';
 export { Photosynthesis } from './photosynthesis';
 export { Picklock } from './picklock';
 export { PilotedShredder } from './piloted-shredder';
