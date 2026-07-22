@@ -39,6 +39,15 @@ import { CardsFacadeService, ILocalizationService } from '@firestone/shared/fram
 				>
 				</fs-numeric-input-with-arrows>
 				<fs-numeric-input-with-arrows
+					class="input undead-army-health"
+					[label]="'battlegrounds.sim.undead-army-health' | fsTranslate"
+					[helpTooltip]="'battlegrounds.sim.undead-army-health-tooltip' | fsTranslate"
+					[value]="undeadHealthBonus"
+					[minValue]="0"
+					(fsModelUpdate)="onUndeadHealthBonusChanged($event)"
+				>
+				</fs-numeric-input-with-arrows>
+				<fs-numeric-input-with-arrows
 					class="input haunted-carapace-attack"
 					[label]="'battlegrounds.sim.haunted-carapace-attack' | fsTranslate"
 					[helpTooltip]="'battlegrounds.sim.haunted-carapace-attack-tooltip' | fsTranslate"
@@ -344,6 +353,7 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 		this.inputGlobalInfo = value;
 		this.eternalKnightsDeadThisGame = value?.EternalKnightsDeadThisGame ?? 0;
 		this.undeadAttackBonus = value?.UndeadAttackBonus ?? 0;
+		this.undeadHealthBonus = value?.UndeadHealthBonus ?? 0;
 		this.hauntedCarapaceAttackBonus = value?.HauntedCarapaceAttackBonus ?? 0;
 		this.hauntedCarapaceHealthBonus = value?.HauntedCarapaceHealthBonus ?? 0;
 		this.deepBluesPlayed = value?.DeepBluesPlayed ?? 0;
@@ -384,6 +394,7 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 
 	eternalKnightsDeadThisGame: number;
 	undeadAttackBonus: number;
+	undeadHealthBonus: number;
 	hauntedCarapaceAttackBonus: number;
 	hauntedCarapaceHealthBonus: number;
 	deepBluesPlayed: number;
@@ -432,6 +443,10 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 
 	onUndeadAttackBonusChanged(value: number) {
 		this.undeadAttackBonus = value;
+	}
+
+	onUndeadHealthBonusChanged(value: number) {
+		this.undeadHealthBonus = value;
 	}
 
 	onHauntedCarapaceAttackBonusChanged(value: number) {
@@ -516,6 +531,7 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 			...(this.inputGlobalInfo ?? {}),
 			EternalKnightsDeadThisGame: this.eternalKnightsDeadThisGame,
 			UndeadAttackBonus: this.undeadAttackBonus,
+			UndeadHealthBonus: this.undeadHealthBonus,
 			HauntedCarapaceAttackBonus: this.hauntedCarapaceAttackBonus,
 			HauntedCarapaceHealthBonus: this.hauntedCarapaceHealthBonus,
 			DeepBluesPlayed: this.deepBluesPlayed,

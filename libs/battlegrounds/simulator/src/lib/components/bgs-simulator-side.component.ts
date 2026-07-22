@@ -170,6 +170,7 @@ export class BgsSimulatorSideComponent {
 	entities: readonly Entity[];
 
 	undeadArmy: number;
+	undeadHealthBonus: number;
 	eternalLegion: number;
 	hauntedCarapaceAttackBonus: number;
 	hauntedCarapaceHealthBonus: number;
@@ -285,6 +286,7 @@ export class BgsSimulatorSideComponent {
 		this.maxHealth = defaultStartingHp(GameType.GT_BATTLEGROUNDS, this._player.player?.cardId, this.allCards);
 		this.tavernTier = this._player.player.tavernTier;
 		this.undeadArmy = this._player.player?.globalInfo?.UndeadAttackBonus ?? 0;
+		this.undeadHealthBonus = this._player.player?.globalInfo?.UndeadHealthBonus ?? 0;
 		this.hauntedCarapaceAttackBonus = this._player.player?.globalInfo?.HauntedCarapaceAttackBonus ?? 0;
 		this.hauntedCarapaceHealthBonus = this._player.player?.globalInfo?.HauntedCarapaceHealthBonus ?? 0;
 		this.deepBluesPlayed = this._player.player?.globalInfo?.DeepBluesPlayed ?? 0;

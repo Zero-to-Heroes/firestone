@@ -67,6 +67,7 @@ export interface BgsPlayerGlobalInfo {
 	PiratesSummonedThisGame: number;
 	BeastsSummonedThisGame: number;
 	UndeadAttackBonus: number;
+	UndeadHealthBonus: number;
 	HauntedCarapaceAttackBonus: number;
 	HauntedCarapaceHealthBonus: number;
 	FrostlingBonus: number;
@@ -492,6 +493,12 @@ export class BattlegroundsPlayerBoardParser implements ActionParser {
 			CardIds.UndeadBonusAttackPlayerEnchantDntEnchantment,
 			currentEntities,
 		);
+		const undeadHealthBonus = BattlegroundsPlayerBoardParser.GetPlayerEnchantmentValue(
+			playerId,
+			CardIds.UndeadBonusAttackPlayerEnchantDntEnchantment,
+			currentEntities,
+			GameTag.TAG_SCRIPT_DATA_NUM_2,
+		);
 		const hauntedCarapaceAttackBonus = BattlegroundsPlayerBoardParser.GetPlayerEnchantmentValue(
 			playerId,
 			CardIds.HauntedCarapacePlayerEnchantDntEnchantment_BG33_112pe,
@@ -688,6 +695,7 @@ export class BattlegroundsPlayerBoardParser implements ActionParser {
 			EternalKnightsDeadThisGame: eternalKnightBonus,
 			TavernSpellsCastThisGame: tavernSpellsCastThisGame,
 			UndeadAttackBonus: undeadAttackBonus,
+			UndeadHealthBonus: undeadHealthBonus,
 			HauntedCarapaceAttackBonus: hauntedCarapaceAttackBonus,
 			HauntedCarapaceHealthBonus: hauntedCarapaceHealthBonus,
 			FrostlingBonus: frostlingBonus,

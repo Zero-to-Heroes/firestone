@@ -7,7 +7,7 @@ import { GameState } from '../../../models/game-state';
 import { CounterDefinitionV2 } from '../../_counter-definition-v2';
 import { CounterType } from '../../counter-type';
 
-export class UndeadArmyCounterDefinitionV2 extends CounterDefinitionV2<number> {
+export class UndeadArmyCounterDefinitionV2 extends CounterDefinitionV2<{ atk: number; health: number }> {
 	public override id: CounterType = 'bgsUndeadArmy';
 	public override image = CardIds.AnubarakNerubianKing_BG25_007;
 	public override type: 'hearthstone' | 'battlegrounds' = 'battlegrounds';
@@ -23,8 +23,14 @@ export class UndeadArmyCounterDefinitionV2 extends CounterDefinitionV2<number> {
 			const enchantments = state.playerDeck.enchantments.filter(
 				(e) => e.cardId === CardIds.UndeadBonusAttackPlayerEnchantDntEnchantment,
 			);
-			const result = enchantments.reduce((a, b) => a + (b.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_1] ?? 0), 0);
-			return result > 0 ? result : null;
+			const value = {
+				atk: enchantments.reduce((a, b) => a + (b.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_1] ?? 0), 0),
+				health: enchantments.reduce((a, b) => a + (b.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_2] ?? 0), 0),
+			};
+			if (value.atk === 0 && value.health === 0) {
+				return null;
+			}
+			return value;
 		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>
@@ -42,8 +48,10 @@ export class UndeadArmyCounterDefinitionV2 extends CounterDefinitionV2<number> {
 		super(allCards);
 	}
 
-	protected override formatValue(value: number | null | undefined): null | undefined | number | string {
-		return value ? `+${value}` : null;
+	protected override formatValue(
+		value: { atk: number; health: number } | null | undefined,
+	): null | undefined | number | string {
+		return value ? `+${value.atk}/+${value.health}` : null;
 	}
 
 	protected override tooltip(
@@ -52,9 +60,10 @@ export class UndeadArmyCounterDefinitionV2 extends CounterDefinitionV2<number> {
 		allCards: CardsFacadeService,
 		bgState: BattlegroundsState,
 	): string {
-		const value = this.player.value(gameState, bgState)!;
+		const { atk, health } = this.player.value(gameState, bgState)!;
 		return this.i18n.translateString(`counters.bgs-undead-army.${side}`, {
-			value: value,
+			atk: atk,
+			health: health,
 		});
 	}
 }

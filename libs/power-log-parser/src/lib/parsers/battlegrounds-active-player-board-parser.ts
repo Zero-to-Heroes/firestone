@@ -229,6 +229,12 @@ export class BattlegroundsActivePlayerBoardParser implements ActionParser {
 				CardIds.UndeadBonusAttackPlayerEnchantDntEnchantment,
 				gameState,
 			);
+			const undeadHealthBonus = BattlegroundsActivePlayerBoardParser.GetPlayerEnchantmentValue(
+				player.PlayerId,
+				CardIds.UndeadBonusAttackPlayerEnchantDntEnchantment,
+				gameState,
+				GameTag.TAG_SCRIPT_DATA_NUM_2,
+			);
 			const hauntedCarapaceAttackBonus = BattlegroundsActivePlayerBoardParser.GetPlayerEnchantmentValue(
 				player.PlayerId,
 				CardIds.HauntedCarapacePlayerEnchantDntEnchantment_BG33_112pe,
@@ -429,6 +435,7 @@ export class BattlegroundsActivePlayerBoardParser implements ActionParser {
 					EternalKnightsDeadThisGame: eternalKnightBonus,
 					TavernSpellsCastThisGame: tavernSpellsCastThisGame,
 					UndeadAttackBonus: undeadAttackBonus,
+					UndeadHealthBonus: undeadHealthBonus,
 					HauntedCarapaceAttackBonus: hauntedCarapaceAttackBonus,
 					HauntedCarapaceHealthBonus: hauntedCarapaceHealthBonus,
 					FrostlingBonus: frostlingBonus,

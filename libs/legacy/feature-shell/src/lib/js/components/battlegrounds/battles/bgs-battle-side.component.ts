@@ -127,6 +127,16 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 				>
 				</fs-numeric-input-with-arrows>
 				<fs-numeric-input-with-arrows
+					class="input undead-army-health"
+					[label]="'battlegrounds.sim.undead-army-health' | owTranslate"
+					[helpTooltip]="'battlegrounds.sim.undead-army-health-tooltip' | owTranslate"
+					[value]="undeadHealthBonus"
+					[minValue]="0"
+					[debounceTime]="200"
+					(fsModelUpdate)="onUndeadArmyHealthChanged($event)"
+				>
+				</fs-numeric-input-with-arrows>
+				<fs-numeric-input-with-arrows
 					class="input eternal-legion"
 					[label]="eternalLegionLabel"
 					[helpTooltip]="'battlegrounds.sim.eternal-legion-tooltip' | owTranslate"
@@ -155,6 +165,7 @@ export class BgsBattleSideComponent {
 	@Output() questRewardChangeRequested: EventEmitter<void> = new EventEmitter<void>();
 	@Output() eternalLegionChanged = new EventEmitter<number>();
 	@Output() undeadArmyChanged = new EventEmitter<number>();
+	@Output() undeadArmyHealthChanged = new EventEmitter<number>();
 
 	@Input() set player(value: BgsBoardInfo) {
 		this._player = value;
@@ -186,6 +197,7 @@ export class BgsBattleSideComponent {
 	maxHealth: number;
 	tavernTier: number;
 	undeadArmy: number;
+	undeadHealthBonus: number;
 	hauntedCarapaceAttackBonus: number;
 	hauntedCarapaceHealthBonus: number;
 	deepBluesPlayed: number;
@@ -255,6 +267,10 @@ export class BgsBattleSideComponent {
 		this.undeadArmyChanged.next(value);
 	}
 
+	onUndeadArmyHealthChanged(value: number) {
+		this.undeadArmyHealthChanged.next(value);
+	}
+
 	onEternalLegionChanged(value: number) {
 		this.eternalLegionChanged.next(value);
 	}
@@ -317,6 +333,7 @@ export class BgsBattleSideComponent {
 		this.maxHealth = defaultStartingHp(GameType.GT_BATTLEGROUNDS, this._player.player?.cardId, this.allCards);
 		this.tavernTier = this._player.player.tavernTier;
 		this.undeadArmy = this._player.player?.globalInfo?.UndeadAttackBonus ?? 0;
+		this.undeadHealthBonus = this._player.player?.globalInfo?.UndeadHealthBonus ?? 0;
 		this.hauntedCarapaceAttackBonus = this._player.player?.globalInfo?.HauntedCarapaceAttackBonus ?? 0;
 		this.hauntedCarapaceHealthBonus = this._player.player?.globalInfo?.HauntedCarapaceHealthBonus ?? 0;
 		this.deepBluesPlayed = this._player.player?.globalInfo?.DeepBluesPlayed ?? 0;
