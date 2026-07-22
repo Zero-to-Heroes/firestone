@@ -57,7 +57,7 @@ export class VoidSoulsCounterDefinitionV2 extends CounterDefinitionV2<number> {
 		bgState: BattlegroundsState,
 		value: number | null | undefined,
 	): readonly string[] | undefined {
-		const clampedValue = Math.min(10, value ?? 0);
+		const clampedValue = Math.min(10, (value ?? 0) + 1);
 		return this.filterCards(
 			CardIds.VoidSoul_JAIL_732,
 			(c) => c.cost === clampedValue && hasCorrectTribe(c, Race.DEMON),

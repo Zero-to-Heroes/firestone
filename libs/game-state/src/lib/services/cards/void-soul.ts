@@ -21,25 +21,22 @@ export const VoidSoul: GeneratingCard & StaticGeneratingCard = {
 		const currentVoidSoul = input.inputOptions.deckState.powerTriggeredThisMatch.filter(
 			(c) => c.cardId === CardIds.VoidSoul_JAIL_732,
 		).length;
-		return filterCards(
-			CardIds.VoidSoul_JAIL_732,
-			input.allCards,
-			demonFilter(currentVoidSoul + 1),
-			input.inputOptions,
-		);
+		const clampedCost = Math.min(10, currentVoidSoul + 1);
+		return filterCards(CardIds.VoidSoul_JAIL_732, input.allCards, demonFilter(clampedCost), input.inputOptions);
 	},
 	guessInfo: (input: GuessInfoInput): GuessedInfo | null => {
 		const currentVoidSoul = input.deckState.powerTriggeredThisMatch.filter(
 			(c) => c.cardId === CardIds.VoidSoul_JAIL_732,
 		).length;
+		const clampedCost = Math.min(10, currentVoidSoul + 1);
 		return {
 			cardType: CardType.MINION,
-			cost: { cost: currentVoidSoul + 1, comparison: '==' },
+			cost: { cost: clampedCost, comparison: '==' },
 			races: [Race.DEMON],
 			possibleCards: filterCards(
 				CardIds.VoidSoul_JAIL_732,
 				input.allCards,
-				demonFilter(currentVoidSoul + 1),
+				demonFilter(clampedCost),
 				input.options,
 			),
 		};
