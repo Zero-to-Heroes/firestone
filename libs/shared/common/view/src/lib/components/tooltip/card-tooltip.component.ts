@@ -16,7 +16,7 @@ import {
 } from '@angular/core';
 import { CardRarity, CardType, GameTag, Race, SpellSchool } from '@firestone-hs/reference-data';
 import { isPreReleaseBuild } from '@firestone/game-state';
-import { GameStatusService, PreferencesService } from '@firestone/shared/common/service';
+import { PreferencesService } from '@firestone/shared/common/service';
 import {
 	AbstractSubscriptionComponent,
 	capitalizeFirstLetter,
@@ -291,8 +291,8 @@ export class CardTooltipComponent
 	private buffs$$ = new BehaviorSubject<readonly { bufferCardId: string; buffCardId: string; count: number }[]>([]);
 	private additionalInfo$$ = new BehaviorSubject<CardTooltipAdditionalInfo | null>(null);
 
-	private keepInBound$$ = new BehaviorSubject<number | null>(1);
 	private resizeObserver: ResizeObserver;
+	private keepInBoundsScheduled: ReturnType<typeof setTimeout>[] = [];
 
 	private timeout;
 	private lifecycleHookDone: boolean;
@@ -308,7 +308,6 @@ export class CardTooltipComponent
 		private readonly el: ElementRef,
 		private readonly renderer: Renderer2,
 		private readonly prefs: PreferencesService,
-		private readonly gameStatus: GameStatusService,
 	) {
 		super(cdr);
 		// FIXME: For some reason, lifecycle methods are not called systematically. I've noticed this
@@ -342,12 +341,18 @@ export class CardTooltipComponent
 		await this.prefs.isReady();
 
 		if (!this.resizeObserver) {
-			let i = 0;
-			this.resizeObserver = new ResizeObserver((entries) => {
-				this.keepInBound$$.next(++i);
+			this.resizeObserver = new ResizeObserver(() => {
+				this.scheduleKeepInBounds();
 			});
 			this.resizeObserver.observe(this.el.nativeElement);
+			// Related cards (and their images) load after open and grow the panel; observe the
+			// container too so we re-clamp when that late content appears.
+			const container = this.el.nativeElement.querySelector('.container');
+			if (container) {
+				this.resizeObserver.observe(container);
+			}
 			setTimeout(() => (this.isShowing = true), 500);
+			this.scheduleKeepInBounds();
 		}
 
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -360,6 +365,7 @@ export class CardTooltipComponent
 		if (this.timeout) {
 			clearTimeout(this.timeout);
 		}
+		this.clearKeepInBoundsSchedules();
 		if (this.resizeObserver) {
 			this.resizeObserver.disconnect();
 		}
@@ -381,29 +387,6 @@ export class CardTooltipComponent
 
 		this.relativePosition$ = this.relativePosition$$;
 		this.displayBuffs$ = this.displayBuffs$$;
-		this.keepInBound$$
-			.pipe(
-				filter((trigger) => !!trigger),
-				this.mapData(
-					(info) => {
-						const widgetRect = this.getRect();
-						// console.debug('widgetRect', widgetRect);
-						return {
-							height: widgetRect?.height,
-							width: widgetRect?.width,
-							top: widgetRect?.top,
-							left: widgetRect?.left,
-						};
-					},
-					null,
-					0,
-				),
-				distinctUntilChanged((a, b) => {
-					// console.debug('comparing', a, b);
-					return a.height === b.height && a.width === b.width && a.top === b.top && a.left === b.left;
-				}),
-			)
-			.subscribe((bounds) => this.keepInBounds(bounds.top, bounds.left, bounds.height, bounds.width));
 		const highRes$ = this.prefs.preferences$$.pipe(
 			map((prefs) => {
 				return prefs.collectionUseHighResImages || prefs.cardTooltipScale > 100;
@@ -453,7 +436,16 @@ export class CardTooltipComponent
 				);
 			}),
 			takeUntil(this.destroyed$),
+			shareReplay({ bufferSize: 1, refCount: true }),
 		);
+		// Related cards (and image loads) often appear after the tooltip is already positioned.
+		// Re-clamp whenever the list changes, not only on host resize.
+		this.relatedCards$.pipe(takeUntil(this.destroyed$)).subscribe(() => {
+			this.scheduleKeepInBounds();
+		});
+		this.relativePosition$$.pipe(takeUntil(this.destroyed$), distinctUntilChanged()).subscribe(() => {
+			this.scheduleKeepInBounds();
+		});
 		this.cards$ = combineLatest([
 			this.cardIds$$,
 			this.localized$$,
@@ -567,15 +559,42 @@ export class CardTooltipComponent
 		return this.i18n.translateString(`app.collection.card-details.rarities.${CardRarity[rarity].toLowerCase()}`);
 	}
 
-	private async keepInBounds(top: number, left: number, height: number, width: number) {
-		const isInGame = await this.gameStatus.inGame();
-		if (!isInGame) {
+	private scheduleKeepInBounds() {
+		// Run after the current change-detection / layout pass so related-cards DOM exists, then
+		// retry as card images load (height:auto) and grow the panel.
+		const run = () => this.keepInBounds();
+		requestAnimationFrame(() => {
+			run();
+			requestAnimationFrame(run);
+		});
+		this.clearKeepInBoundsSchedules();
+		for (const delay of [50, 150, 400]) {
+			this.keepInBoundsScheduled.push(setTimeout(run, delay));
+		}
+	}
+
+	private clearKeepInBoundsSchedules() {
+		for (const handle of this.keepInBoundsScheduled) {
+			clearTimeout(handle);
+		}
+		this.keepInBoundsScheduled = [];
+	}
+
+	private keepInBounds() {
+		const host = this.el.nativeElement as HTMLElement;
+		const container = host.querySelector('.container') as HTMLElement | null;
+		if (!container) {
 			return;
 		}
 
-		// The overlay container is window-sized (see CdkOverlayContainer), so the viewport is the
-		// correct bound in every flavor (Overwolf and standalone/Electron) and is in the same
-		// coordinate space as the getBoundingClientRect() measurements.
+		// Start observing the container once it exists (it may not be ready in ngAfterViewInit
+		// when lifecycle hooks are forced early).
+		if (this.resizeObserver) {
+			this.resizeObserver.observe(container);
+		}
+
+		// Viewport is the correct bound in every flavor (Overwolf and standalone/Electron) and is in
+		// the same coordinate space as getBoundingClientRect().
 		const viewportWidth = window.innerWidth;
 		const viewportHeight = window.innerHeight;
 		if (!viewportWidth || !viewportHeight) {
@@ -584,33 +603,59 @@ export class CardTooltipComponent
 
 		const margin = 10;
 
-		const currentTopOffset = parseInt(this.el.nativeElement.style.top?.replace('px', '')) || 0;
-		const currentLeftOffset = parseInt(this.el.nativeElement.style.left?.replace('px', '')) || 0;
-
-		// Reposition vertically so the whole tooltip fits, preferring to start higher when it
-		// overflows the bottom. Clamping guarantees the top is never pushed off-screen.
-		const maxTop = Math.max(margin, viewportHeight - margin - height);
-		const clampedTop = Math.min(Math.max(top, margin), maxTop);
-		const newTopOffset = clampedTop - top;
-		const newLeftOffset = left < 0 ? -left : left + width > viewportWidth ? viewportWidth - left - width : 0;
-		if (newTopOffset !== 0 || newLeftOffset !== 0) {
-			const topOffset = currentTopOffset + newTopOffset;
-			const leftOffset = currentLeftOffset + newLeftOffset;
-			this.renderer.setStyle(this.el.nativeElement, 'left', leftOffset + 'px');
-			this.renderer.setStyle(this.el.nativeElement, 'top', topOffset + 'px');
+		// Reset previous shift so we measure the natural CDK position, then apply an absolute
+		// transform on the host (survives CDK updatePosition; not affected by pane flex layout).
+		host.style.top = '';
+		host.style.left = '';
+		host.style.transform = '';
+		const pane = host.closest('.cdk-overlay-pane') as HTMLElement | null;
+		const boundingBox = host.closest('.cdk-overlay-connected-position-bounding-box') as HTMLElement | null;
+		if (pane) {
+			pane.style.marginTop = '';
+			pane.style.marginLeft = '';
+			// CDK flexible positioning often caps the pane to the remaining space below the origin
+			// (e.g. ~608px when the card is low on screen). That squeezes .container while the
+			// related-cards grid (max-height: 800px) still paints outside — so container.bottom
+			// looks "in bounds" while the grid overflows the viewport. Lift that cap.
+			pane.style.maxHeight = `${viewportHeight - 2 * margin}px`;
+			pane.style.overflow = 'visible';
+		}
+		if (boundingBox) {
+			boundingBox.style.maxHeight = `${viewportHeight - 2 * margin}px`;
+			boundingBox.style.overflow = 'visible';
 		}
 
-		// Last resort: when the tooltip is taller than the viewport (large related-cards pools or
-		// small screens), cap the scrollable grid so it scrolls instead of spilling off-screen. The
-		// grid lives inside the .scalable `zoom` wrapper, so convert from rendered px to local px.
-		const available = viewportHeight - 2 * margin;
-		const gridEl = this.relatedCards?.nativeElement;
-		if (gridEl && height > available) {
-			const zoom =
-				parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--card-tooltip-scale')) || 1;
-			const overflow = height - available;
-			const newRendered = Math.max(200, gridEl.getBoundingClientRect().height - overflow);
-			this.renderer.setStyle(gridEl, 'max-height', newRendered / zoom + 'px');
+		// Cap the related-cards grid first so the tooltip can fit when shifted up. The grid lives
+		// inside the .scalable `zoom` wrapper, so convert visual px to local px.
+		this.capRelatedCardsHeight(container, viewportHeight, margin);
+		this.bindRelatedCardsImageLoads();
+
+		// Use the union of container + related-cards panel. The grid can be taller than the
+		// (CDK-constrained) container box and still paint on screen.
+		const rect = this.getOverlayContentBounds(container);
+
+		let shiftY = 0;
+		if (rect.top < margin) {
+			shiftY = margin - rect.top;
+		} else if (rect.bottom > viewportHeight - margin) {
+			shiftY = viewportHeight - margin - rect.bottom;
+			if (rect.top + shiftY < margin) {
+				shiftY = margin - rect.top;
+			}
+		}
+
+		let shiftX = 0;
+		if (rect.left < margin) {
+			shiftX = margin - rect.left;
+		} else if (rect.right > viewportWidth - margin) {
+			shiftX = viewportWidth - margin - rect.right;
+			if (rect.left + shiftX < margin) {
+				shiftX = margin - rect.left;
+			}
+		}
+
+		if (shiftX !== 0 || shiftY !== 0) {
+			host.style.transform = `translate(${shiftX}px, ${shiftY}px)`;
 		}
 
 		const element = this.relatedCards?.nativeElement;
@@ -621,7 +666,71 @@ export class CardTooltipComponent
 		}
 	}
 
-	private getRect = () => this.el.nativeElement.querySelector('.container')?.getBoundingClientRect();
+	/** Bounding box of the tooltip content, including related-cards that overflow the container. */
+	private getOverlayContentBounds(container: HTMLElement): DOMRect {
+		const rects: DOMRect[] = [container.getBoundingClientRect()];
+		const related =
+			(container.querySelector('.related-cards-container') as HTMLElement | null) ??
+			(this.relatedCards?.nativeElement as HTMLElement | undefined);
+		if (related) {
+			rects.push(related.getBoundingClientRect());
+		}
+		const top = Math.min(...rects.map((r) => r.top));
+		const bottom = Math.max(...rects.map((r) => r.bottom));
+		const left = Math.min(...rects.map((r) => r.left));
+		const right = Math.max(...rects.map((r) => r.right));
+		return {
+			top,
+			bottom,
+			left,
+			right,
+			width: right - left,
+			height: bottom - top,
+			x: left,
+			y: top,
+			toJSON() {
+				return this;
+			},
+		} as DOMRect;
+	}
+
+	private capRelatedCardsHeight(container: HTMLElement, viewportHeight: number, margin: number) {
+		const gridEl = this.relatedCards?.nativeElement as HTMLElement | undefined;
+		if (!gridEl) {
+			return;
+		}
+
+		const zoom =
+			parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--card-tooltip-scale')) || 1;
+		const relatedContainer = container.querySelector('.related-cards-container') as HTMLElement | null;
+		const relatedRect = relatedContainer?.getBoundingClientRect();
+		const gridRect = gridEl.getBoundingClientRect();
+		// Chrome above the grid (pool-size header, scrollbar text, padding) — prefer measuring the
+		// related panel rather than the CDK-squeezed .container (which can be shorter than the grid).
+		const nonGridHeight = relatedRect ? Math.max(0, relatedRect.height - gridRect.height) : 40;
+		const maxGridVisual = Math.max(150, viewportHeight - 2 * margin - nonGridHeight);
+
+		if (gridRect.height > maxGridVisual) {
+			this.renderer.setStyle(gridEl, 'max-height', maxGridVisual / zoom + 'px');
+		}
+	}
+
+	private bindRelatedCardsImageLoads() {
+		const gridEl = this.relatedCards?.nativeElement as HTMLElement | undefined;
+		if (!gridEl) {
+			return;
+		}
+		const images = gridEl.querySelectorAll('img');
+		images.forEach((img: HTMLImageElement) => {
+			if (img.dataset['fsBoundsBound'] === '1') {
+				return;
+			}
+			img.dataset['fsBoundsBound'] = '1';
+			if (!img.complete) {
+				img.addEventListener('load', () => this.scheduleKeepInBounds(), { once: true });
+			}
+		});
+	}
 
 	private forceLifecycleHooks() {
 		setTimeout(() => {
