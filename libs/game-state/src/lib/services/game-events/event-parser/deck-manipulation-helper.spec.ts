@@ -78,6 +78,31 @@ describe('DeckManipulationHelper.removeSingleCardFromZone', () => {
 		expect(newZone.length).toBe(1);
 		expect(newZone[0].trueEntityId).toBe(81);
 	});
+
+	it('does not remove by trueEntityId (entityId must stay opaque for opponent gifts)', () => {
+		const hogger = CardIds.ChainbreakerHogger_JAIL_384;
+		const zone = [
+			DeckCard.create({ creatorCardId: hogger, trueEntityId: 70 }),
+			DeckCard.create({ creatorCardId: hogger, trueEntityId: 72 }),
+		];
+		const [newZone, removed] = helper.removeSingleCardFromZone(zone, null, 70);
+		expect(removed).toBeUndefined();
+		expect(newZone).toBe(zone);
+	});
+
+	it('removes opponent gift row via creator fallback without using trueEntityId', () => {
+		const hogger = CardIds.ChainbreakerHogger_JAIL_384;
+		const zone = [
+			DeckCard.create({ creatorCardId: hogger, trueEntityId: 70 }),
+			DeckCard.create({ creatorCardId: hogger, trueEntityId: 72 }),
+		];
+		const [newZone, removed] = helper.removeSingleCardFromZone(zone, null, -1, true, true, null, false, {
+			fallbackCreatorCardId: hogger,
+		});
+		expect(removed?.creatorCardId).toBe(hogger);
+		expect(newZone.length).toBe(1);
+		expect(newZone[0].trueEntityId).toBe(72);
+	});
 });
 
 describe('reconcileCardInHandWithDeck', () => {

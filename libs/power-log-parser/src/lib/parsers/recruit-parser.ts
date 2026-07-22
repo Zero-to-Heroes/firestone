@@ -47,12 +47,15 @@ export class RecruitParser implements ActionParser {
 			this.GameState.CurrentEntities.get(tagChange.Entity)!.GetTag(GameTag.CARDTYPE) !==
 			(CardType.ENCHANTMENT as number)
 		) {
+			const { creatorEntityId, creatorCardId } = this.resolveCreator(entity.GetTag(GameTag.CREATOR, 0));
 			return [
 				GameEventProvider.Create(
 					tagChange.TimeStamp,
 					'RECRUIT_CARD',
 					GameEventHelper.CreateProvider('RECRUIT_CARD', cardId, controllerId, entity.Id, this.StateFacade, {
 						Tags: entity.Tags,
+						CreatorCardId: creatorCardId,
+						CreatorEntityId: creatorEntityId,
 					}),
 					true,
 					node,
@@ -66,16 +69,38 @@ export class RecruitParser implements ActionParser {
 		const showEntity = node.Object as ShowEntity;
 		const cardId = showEntity.CardId;
 		const controllerId = showEntity.GetEffectiveController();
+		const { creatorEntityId, creatorCardId } = this.resolveCreator(showEntity.GetTag(GameTag.CREATOR, 0));
 		return [
 			GameEventProvider.Create(
 				showEntity.TimeStamp,
 				'RECRUIT_CARD',
-				GameEventHelper.CreateProvider('RECRUIT_CARD', cardId, controllerId, showEntity.Entity, this.StateFacade, {
-					Tags: showEntity.Tags,
-				}),
+				GameEventHelper.CreateProvider(
+					'RECRUIT_CARD',
+					cardId,
+					controllerId,
+					showEntity.Entity,
+					this.StateFacade,
+					{
+						Tags: showEntity.Tags,
+						CreatorCardId: creatorCardId,
+						CreatorEntityId: creatorEntityId,
+					},
+				),
 				true,
 				node,
 			),
 		];
+	}
+
+	private resolveCreator(creatorEntityIdRaw: number): {
+		creatorEntityId: number | null;
+		creatorCardId: string | null;
+	} {
+		const creatorEntityId = creatorEntityIdRaw ? creatorEntityIdRaw : null;
+		const creatorCardId =
+			creatorEntityId !== null && this.GameState.CurrentEntities.has(creatorEntityId)
+				? this.GameState.CurrentEntities.get(creatorEntityId)!.CardId
+				: null;
+		return { creatorEntityId, creatorCardId };
 	}
 }

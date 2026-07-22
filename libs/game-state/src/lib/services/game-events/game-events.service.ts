@@ -425,6 +425,8 @@ export class GameEvents {
 				this.doEventDispatch(
 					GameEvent.build(GameEvent.RECRUIT_CARD, gameEvent, {
 						tags: gameEvent.Value.AdditionalProps.Tags,
+						creatorCardId: gameEvent.Value.AdditionalProps?.CreatorCardId,
+						creatorEntityId: gameEvent.Value.AdditionalProps?.CreatorEntityId,
 					}),
 				);
 				break;
@@ -1961,7 +1963,11 @@ export class GameEvents {
 		});
 	}
 
-	private processLogsWithTsParser(eventQueue: readonly string[], hasCreateGame: boolean, hasGameSeed: boolean): boolean {
+	private processLogsWithTsParser(
+		eventQueue: readonly string[],
+		hasCreateGame: boolean,
+		hasGameSeed: boolean,
+	): boolean {
 		if (!this.tsParser) {
 			this.initTsParser();
 		}

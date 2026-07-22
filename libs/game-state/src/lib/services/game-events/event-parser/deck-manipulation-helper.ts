@@ -62,7 +62,9 @@ export class DeckManipulationHelper {
 		// anonymous filler removal — filler rows are deckstring padding, not created-in-deck tokens.
 		const allowFillerRemoval = removeFillerCard && !options?.fallbackCreatorCardId;
 
-		// We have the entityId, so we just remove it
+		// We have the entityId, so we just remove it.
+		// Do NOT match trueEntityId here — that field exists specifically so opponent deck gifts can
+		// keep an internal id without being removable/identifiable via the public entityId path.
 		if (!!entityId && zone.some((card) => Math.abs(card.entityId ?? 0) === Math.abs(entityId))) {
 			debug && console.debug('[card-draw] removing card with entityId', entityId, zone);
 			return [
@@ -744,10 +746,7 @@ const shouldReconcileStolenFromOppositeDeckOnPlay = (input: {
 	}
 	// Require explicit steal tracking — matching cardId alone is not enough (both players can
 	// naturally run the same card, e.g. Hex). Actual steals are reconciled via removedCard.stolenFromOpponent.
-	return (
-		!!removedCard.stolenFromOpponent &&
-		oppositeDeckCards.some((c) => c.cardId === cardId && !c.creatorCardId)
-	);
+	return !!removedCard.stolenFromOpponent && oppositeDeckCards.some((c) => c.cardId === cardId && !c.creatorCardId);
 };
 
 /** Cards generated/copied in hand are not drawn from the initial deck — skip deck reconciliation on play. */

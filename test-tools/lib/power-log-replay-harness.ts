@@ -316,6 +316,8 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	'blood-clone': 'blood-clone/blood-clone.log',
 	'clean-the-scene': 'clean-the-scene/clean-the-scene.log',
 	'chainbreaker-hogger': 'chainbreaker-hogger/chainbreaker-hogger.log',
+	'chainbreaker-hogger-summon-from-deck':
+		'chainbreaker-hogger-summon-from-deck/chainbreaker-hogger-summon-from-deck.log',
 	'chronogor-stolen-minion': 'chronogor-stolen-minion/chronogor-stolen-minion.log',
 	godfrey: 'godfrey/godfrey.log',
 	'blood-doctor-thalena': 'blood-doctor-thalena/blood-doctor-thalena.log',

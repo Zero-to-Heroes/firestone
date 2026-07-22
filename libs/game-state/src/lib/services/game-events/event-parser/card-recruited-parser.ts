@@ -6,7 +6,7 @@ import { GameState } from '../../../models/game-state';
 import { getProcessedCard } from '../../card-utils';
 import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
-import { DeckManipulationHelper } from './deck-manipulation-helper';
+import { DeckManipulationHelper, resolveFallbackCreatorCardIdForDeckRemoval } from './deck-manipulation-helper';
 
 export class CardRecruitedParser implements EventParser {
 	constructor(
@@ -33,11 +33,27 @@ export class CardRecruitedParser implements EventParser {
 		}
 
 		const costFromTags = gameEvent.additionalData.tags?.find((t) => t.Name === GameTag.COST)?.Value;
+		// RECRUIT_CARD reveals CREATOR on SHOW_ENTITY. Trust that for gift-row removal (do not use
+		// trueEntityId — opponent gifts intentionally hide entityId to prevent identity leaks).
+		const eventCreatorCardId = gameEvent.additionalData?.creatorCardId;
+		const fallbackCreatorCardId =
+			eventCreatorCardId ||
+			resolveFallbackCreatorCardIdForDeckRemoval({
+				gameEventCreatorCardId: eventCreatorCardId,
+				handOrRemovedCard: card,
+			});
+		// When recruiting a created gift, skip cardId removal so we don't drop an unrelated
+		// deckstring copy of the revealed card — remove via creator fallback instead.
+		const removeCardId = eventCreatorCardId ? null : cardId;
 		const [newDeck, removedCard] = this.helper.removeSingleCardFromZone(
 			deck.deck,
-			cardId,
-			entityId,
+			removeCardId,
+			eventCreatorCardId ? -1 : entityId,
 			deck.deckList.length === 0,
+			true,
+			null,
+			false,
+			{ fallbackCreatorCardId },
 		);
 		let additionalKnownCardsInDeck = deck.additionalKnownCardsInDeck;
 		if (!removedCard?.cardId) {
@@ -45,16 +61,19 @@ export class CardRecruitedParser implements EventParser {
 				(c, i) => c !== cardId || deck.additionalKnownCardsInDeck.indexOf(c) !== i,
 			);
 		}
-		const cardWithZone = card!.update({
+		const baseCard = removedCard ?? card ?? DeckCard.create();
+		const cardWithZone = baseCard.update({
 			cardId: cardId,
 			entityId: entityId,
 			cardName: dbCard.name,
-			refManaCost: card!.refManaCost ?? dbCard.cost,
+			refManaCost: baseCard.refManaCost ?? dbCard.cost,
 			actualManaCost: costFromTags ?? dbCard.cost,
 			zone: 'PLAY',
 			temporaryCard: false,
-			rarity: card!.rarity ?? dbCard.rarity?.toLowerCase(),
+			rarity: baseCard.rarity ?? dbCard.rarity?.toLowerCase(),
 			playTiming: GameState.playTiming++,
+			creatorCardId: baseCard.creatorCardId ?? eventCreatorCardId,
+			creatorEntityId: baseCard.creatorEntityId ?? gameEvent.additionalData?.creatorEntityId,
 		} as DeckCard);
 
 		const newBoard: readonly DeckCard[] = this.helper.addSingleCardToZone(deck.board, cardWithZone);
