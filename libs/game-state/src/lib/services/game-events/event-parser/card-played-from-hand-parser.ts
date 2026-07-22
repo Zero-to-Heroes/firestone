@@ -121,7 +121,8 @@ export class CardPlayedFromHandParser implements EventParser {
 		// Only minions end up on the board
 		const isOnBoard = !isCardCountered && refCard && (refCard.type === 'Minion' || refCard.type === 'Location');
 		// console.debug('[card-played] isOnBoard', isOnBoard, refCard, card);
-		const costFromTags = gameEvent.additionalData.tags?.find((t) => t.Name === GameTag.COST)?.Value;
+		const costFromTags =
+			gameEvent.additionalData.tags?.find((t) => t.Name === GameTag.COST)?.Value ?? gameEvent.additionalData.cost;
 		console.debug(
 			'[card-played] costFromTags',
 			`entityId:${entityId}__`,
@@ -133,7 +134,6 @@ export class CardPlayedFromHandParser implements EventParser {
 				zone: isOnBoard ? 'PLAY' : null,
 				refManaCost: refCard?.cost,
 				actualManaCost: costFromTags ?? card.actualManaCost,
-				costWhenPlayed: costFromTags ?? card.actualManaCost,
 				cardName: card.cardName || refCard?.name,
 				rarity: card.rarity?.toLowerCase() ?? refCard?.rarity?.toLowerCase(),
 				temporaryCard: false,
@@ -148,7 +148,6 @@ export class CardPlayedFromHandParser implements EventParser {
 				entityId: entityId,
 				refManaCost: refCard?.cost,
 				actualManaCost: costFromTags ?? card!.actualManaCost,
-				costWhenPlayed: costFromTags ?? card!.actualManaCost,
 				zone: isOnBoard ? 'PLAY' : null,
 				cardId: cardId,
 				cardName: refCard.name,
@@ -274,7 +273,7 @@ export class CardPlayedFromHandParser implements EventParser {
 			side: isPlayer ? 'player' : 'opponent',
 			turn: +currentState.currentTurn,
 			timestamp: new Date().getTime(),
-			effectiveCost: gameEvent.additionalData.cost,
+			effectiveCost: costFromTags,
 		};
 		const [playerDeckAfterSpecialCaseUpdate, opponentDeckAfterSpecialCaseUpdate] = modifyDecksForSpecialCards(
 			cardToAdd.cardId,
