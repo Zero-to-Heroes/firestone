@@ -50,8 +50,13 @@ export class CopiedFromEntityIdParser implements ActionParser {
 		const copiedCardEntityId = tagChange.Value;
 		const copiedCardControllerId = copiedEntity.GetController();
 
-		const debug = tagChange.Entity === 131;
-		// Update both entities with card Id of the known cards
+		// Do NOT write the copy's CardId back onto the source entity. The source may be a hidden
+		// card (e.g. an opponent deck entity previewed by a discover like Intertwined Fate); the
+		// parser-level stamp survives Rewind re-dumps and leaks through the next CARD_DRAW_FROM_DECK.
+		// The COPIED_FROM_ENTITY_ID game event already carries CopiedCardEntityId + the copy's CardId,
+		// and the game-state layer owns the decision of what becomes public.
+		// UPDATE: 2026-07-22: the issue arises because the logs leak a COPIED_FROM_ENTITY_ID + the full
+		// list of cards being discovered by the opponent's Intertwined Fate
 		if (!copiedEntity.CardId?.length && cardId?.length) {
 			copiedEntity.CardId = cardId;
 		}
