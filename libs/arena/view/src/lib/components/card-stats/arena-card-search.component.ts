@@ -3,6 +3,8 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
+	ElementRef,
+	HostListener,
 	OnDestroy,
 	Optional,
 } from '@angular/core';
@@ -33,6 +35,7 @@ export class ArenaCardSearchComponent implements AfterViewInit, OnDestroy {
 	constructor(
 		private readonly cardsService: ArenaCardStatsService,
 		private readonly cdr: ChangeDetectorRef,
+		private readonly el: ElementRef,
 		@Optional() private readonly route: ActivatedRoute,
 		@Optional() private readonly router: Router,
 	) {}
@@ -43,11 +46,18 @@ export class ArenaCardSearchComponent implements AfterViewInit, OnDestroy {
 
 		// Set up URL parameter synchronization
 		this.setupUrlParamSync();
+
+		this.focusSearch();
 	}
 
 	ngOnDestroy() {
 		this.destroyed$.next();
 		this.destroyed$.complete();
+	}
+
+	@HostListener('window:focus')
+	onWindowFocus() {
+		this.focusSearch();
 	}
 
 	onTextChanged(newText: string | null) {
@@ -57,6 +67,12 @@ export class ArenaCardSearchComponent implements AfterViewInit, OnDestroy {
 		}
 		this.cardsService.newSearchString(newText);
 		this.searchSubject$.next(newText);
+	}
+
+	private focusSearch(): void {
+		window.setTimeout(() => {
+			this.el.nativeElement.querySelector('input')?.focus();
+		});
 	}
 
 	private initializeFromUrlParams(): void {
