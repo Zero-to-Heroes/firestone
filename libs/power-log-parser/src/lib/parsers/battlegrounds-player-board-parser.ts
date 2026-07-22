@@ -604,17 +604,28 @@ export class BattlegroundsPlayerBoardParser implements ActionParser {
 			GameTag.BACON_GOLD_SPENT_THIS_GAME,
 			currentEntities,
 		);
-		const bloodGemEnchant =
-			currentEntities
-				.filter(
-					(entity) =>
-						entity.GetEffectiveController() === playerId &&
-						entity.GetTag(GameTag.ZONE) === (Zone.PLAY as number) &&
-						entity.CardId === CardIds.BloodGemPlayerEnchantEnchantment,
-				)
-				.pop() ?? null;
-		const bloodGemAttackBonus = bloodGemEnchant?.GetTag(GameTag.TAG_SCRIPT_DATA_NUM_1, 0) ?? 0;
-		const bloodGemHealthBonus = bloodGemEnchant?.GetTag(GameTag.TAG_SCRIPT_DATA_NUM_2, 0) ?? 0;
+		// const bloodGemEnchant =
+		// 	currentEntities
+		// 		.filter(
+		// 			(entity) =>
+		// 				entity.GetEffectiveController() === playerId &&
+		// 				entity.GetTag(GameTag.ZONE) === (Zone.PLAY as number) &&
+		// 				entity.CardId === CardIds.BloodGemPlayerEnchantEnchantment,
+		// 		)
+		// 		.pop() ?? null;
+		// const bloodGemAttackBonus = bloodGemEnchant?.GetTag(GameTag.TAG_SCRIPT_DATA_NUM_1, 0) ?? 0;
+		// const bloodGemHealthBonus = bloodGemEnchant?.GetTag(GameTag.TAG_SCRIPT_DATA_NUM_2, 0) ?? 0;
+		const bloodGemAttackBonus = BattlegroundsPlayerBoardParser.GetPlayerTag(
+			playerEntityId,
+			GameTag.BACON_BLOODGEMBUFFATKVALUE,
+			currentEntities,
+		);
+		const bloodGemHealthBonus = BattlegroundsPlayerBoardParser.GetPlayerTag(
+			playerEntityId,
+			GameTag.BACON_BLOODGEMBUFFHEALTHVALUE,
+			currentEntities,
+		);
+		const debug = playerEntityId === 15539 || playerId === 15539;
 		const battlecriesTriggeredThisGame = BattlegroundsPlayerBoardParser.GetPlayerTag(
 			playerEntityId,
 			GameTag.BATTLECRIES_TRIGGERED_THIS_GAME,

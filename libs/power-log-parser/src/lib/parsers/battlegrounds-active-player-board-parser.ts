@@ -287,13 +287,16 @@ export class BattlegroundsActivePlayerBoardParser implements ActionParser {
 				CardIds.AstralAutomatonPlayerEnchantDntEnchantment_BG_TTN_401pe,
 				gameState,
 			);
-			const bloodGemEnchant =
-				currentEntities
-					.filter((entity) => entity.GetEffectiveController() === player.PlayerId)
-					.filter((entity) => entity.GetTag(GameTag.ZONE) === (Zone.PLAY as number))
-					.filter((entity) => entity.CardId === CardIds.BloodGemPlayerEnchantEnchantment)[0] ?? null;
-			const bloodGemAttackBonus = bloodGemEnchant?.GetTag(GameTag.TAG_SCRIPT_DATA_NUM_1, 0) ?? 0;
-			const bloodGemHealthBonus = bloodGemEnchant?.GetTag(GameTag.TAG_SCRIPT_DATA_NUM_2, 0) ?? 0;
+			const bloodGemAttackBonus = BattlegroundsActivePlayerBoardParser.GetPlayerTag(
+				player.Id,
+				GameTag.BACON_BLOODGEMBUFFATKVALUE,
+				gameState,
+			);
+			const bloodGemHealthBonus = BattlegroundsActivePlayerBoardParser.GetPlayerTag(
+				player.Id,
+				GameTag.BACON_BLOODGEMBUFFHEALTHVALUE,
+				gameState,
+			);
 			const choralEnchantments = [...(stateFacade.GsState?.GameState?.CurrentEntities?.values() ?? [])]
 				.filter((e) => e.CardId === CardIds.ChoralMrrrglr_ChorusEnchantment)
 				.filter((e) => board.map((b) => b.Id).includes(e.GetTag(GameTag.ATTACHED)));
