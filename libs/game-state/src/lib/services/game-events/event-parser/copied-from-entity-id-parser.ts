@@ -273,8 +273,14 @@ export class CopiedFromEntityIdParser implements EventParser {
 				? getBaseCardId(obfuscatedCardId, this.allCards.getService())
 				: obfuscatedCardId;
 		// We don't add the initial cards in the deck, so if no card is found, we create it
+		// Only gifted opponent-deck rows stay opaque. Initial-deck discovers (e.g. Triangulate
+		// revealing Baking Soda) must promote public entityId so later draw/play can remove the row.
 		const keepOpponentDeckEntityOpaque =
-			copiedCardZone === Zone.DECK && !isCopiedPlayer && !!copiedCard && !copiedCard.entityId;
+			copiedCardZone === Zone.DECK &&
+			!isCopiedPlayer &&
+			!!copiedCard &&
+			!copiedCard.entityId &&
+			!!copiedCard.creatorCardId;
 		const updatedCopiedCard = (copiedCard ?? DeckCard.create({}))
 			.update({
 				cardId: deckTrackingCardId,
@@ -302,7 +308,9 @@ export class CopiedFromEntityIdParser implements EventParser {
 								  (isCopiedPlayer || copyAndSourceSameController)
 								? copiedCardEntityId
 								: null,
-				trueEntityId: copiedCard?.trueEntityId ?? copiedCardEntityId ?? undefined,
+				// Only keep an existing trueEntityId (opaque gifts). Do not invent one on empty
+				// create paths — that leaves undrawable ghosts (e.g. Triangulate Baking Soda).
+				trueEntityId: copiedCard?.trueEntityId,
 				positionFromTop: isOpponentSelfDredge ? 0 : shouldObfuscate ? null : copiedCard?.positionFromTop,
 				positionFromBottom: isOpponentSelfDredge
 					? null
@@ -504,14 +512,31 @@ export class CopiedFromEntityIdParser implements EventParser {
 	 * the previewed card - collapsing another copy would wrongly drop a card from the deck.
 	 */
 	private linkCopiedCardIntoDeck(deck: readonly DeckCard[], linked: DeckCard): readonly DeckCard[] {
-		const [afterRemoval, removedCard] = this.helper.removeSingleCardFromZone(
-			deck,
-			linked.cardId,
-			linked.entityId,
-			true,
-			false,
-			{ cost: linked.refManaCost }, // Not totally sure about ref vs actual
-		);
+		// Opponent deck rows are often opaque (trueEntityId only). removeSingleCardFromZone ignores
+		// trueEntityId, so when linking/promoting such a row we must remove it explicitly or a ghost
+		// stays in the deck after draw (e.g. Triangulate discover of Baking Soda entity 22).
+		let afterRemoval = deck;
+		let removedCard: DeckCard | undefined;
+		if (linked.trueEntityId != null) {
+			const trueId = Math.abs(linked.trueEntityId);
+			const idx = afterRemoval.findIndex(
+				(c) => Math.abs(c.trueEntityId ?? 0) === trueId && (c.entityId == null || c.entityId === 0),
+			);
+			if (idx >= 0) {
+				removedCard = afterRemoval[idx];
+				afterRemoval = afterRemoval.filter((_, i) => i !== idx);
+			}
+		}
+		if (!removedCard) {
+			[afterRemoval, removedCard] = this.helper.removeSingleCardFromZone(
+				afterRemoval,
+				linked.cardId,
+				linked.entityId,
+				true,
+				false,
+				{ cost: linked.refManaCost }, // Not totally sure about ref vs actual
+			);
+		}
 		console.debug(
 			'[copied-from-entity] linkCopiedCardIntoDeck afterRemoval',
 			`entityId:${linked.entityId}__`,
@@ -519,15 +544,21 @@ export class CopiedFromEntityIdParser implements EventParser {
 			removedCard,
 			linked,
 		);
-		const withLinked = this.helper.addSingleCardToZone(afterRemoval, linked);
+		// Preserve gift metadata when the remove+re-add path consumed an existing row.
+		const toAdd = linked.update({
+			creatorCardId: linked.creatorCardId ?? removedCard?.creatorCardId,
+			creatorEntityId: linked.creatorEntityId ?? removedCard?.creatorEntityId,
+			trueEntityId: linked.trueEntityId ?? removedCard?.trueEntityId,
+		} as DeckCard);
+		const withLinked = this.helper.addSingleCardToZone(afterRemoval, toAdd);
 		const consumedGhostRow = !!removedCard && !removedCard.cardId?.length;
 		console.debug(
 			'[copied-from-entity] linkCopiedCardIntoDeck withLinked',
-			`entityId:${linked.entityId}__`,
+			`entityId:${toAdd.entityId}__`,
 			withLinked,
 			consumedGhostRow,
 		);
-		return this.dedupePlayerDeckAfterCopiedFromLink(withLinked, linked, consumedGhostRow);
+		return this.dedupePlayerDeckAfterCopiedFromLink(withLinked, toAdd, consumedGhostRow);
 	}
 
 	/**
