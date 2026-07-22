@@ -73,7 +73,11 @@ export class CopiedFromEntityIdParser implements EventParser {
 		const revealedCopyCardId = newCopy?.cardId ?? cardId;
 		// The issue when using only the entityId is that we can't find the card in deck, as
 		// the entityId is not stored there
-		let copiedCard: DeckCard | undefined = copiedDeck.findCard(copiedCardEntityId)?.card;
+		// Opponent deck gifts store only trueEntityId (public entityId stays opaque). Include it so
+		// COPIED_FROM can find and preserve creator metadata instead of replacing the gift row.
+		let copiedCard: DeckCard | undefined = copiedDeck.findCard(copiedCardEntityId, {
+			includeTrueEntityId: true,
+		})?.card;
 		console.debug(
 			'[copied-from-entity] copiedCard',
 			`entityId:${entityId}__`,
@@ -269,6 +273,8 @@ export class CopiedFromEntityIdParser implements EventParser {
 				? getBaseCardId(obfuscatedCardId, this.allCards.getService())
 				: obfuscatedCardId;
 		// We don't add the initial cards in the deck, so if no card is found, we create it
+		const keepOpponentDeckEntityOpaque =
+			copiedCardZone === Zone.DECK && !isCopiedPlayer && !!copiedCard && !copiedCard.entityId;
 		const updatedCopiedCard = (copiedCard ?? DeckCard.create({}))
 			.update({
 				cardId: deckTrackingCardId,
@@ -284,15 +290,19 @@ export class CopiedFromEntityIdParser implements EventParser {
 				// Non-deck + local source (`isCopiedPlayer`): `updateCardInDeck` must get the source entity id so
 				// `updateCardInZone` can match the hand/board row; otherwise entityId stays null and the update no-ops
 				// (e.g. Sigil of Cinder copy in hand — wrong deck-tracker hand count).
+				// Opponent deck gifts already store only trueEntityId — do not promote the public entityId.
 				entityId: isOpponentSelfDredge
 					? copiedCardEntityId
-					: copiedCardZone === Zone.DECK && !shouldObfuscate
-						? copiedCardEntityId
-						: copiedCardZone !== Zone.DECK &&
-							  copiedCardEntityId != null &&
-							  (isCopiedPlayer || copyAndSourceSameController)
+					: keepOpponentDeckEntityOpaque
+						? undefined
+						: copiedCardZone === Zone.DECK && !shouldObfuscate
 							? copiedCardEntityId
-							: null,
+							: copiedCardZone !== Zone.DECK &&
+								  copiedCardEntityId != null &&
+								  (isCopiedPlayer || copyAndSourceSameController)
+								? copiedCardEntityId
+								: null,
+				trueEntityId: copiedCard?.trueEntityId ?? copiedCardEntityId ?? undefined,
 				positionFromTop: isOpponentSelfDredge ? 0 : shouldObfuscate ? null : copiedCard?.positionFromTop,
 				positionFromBottom: isOpponentSelfDredge
 					? null
