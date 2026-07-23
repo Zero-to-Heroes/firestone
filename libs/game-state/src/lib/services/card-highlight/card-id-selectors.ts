@@ -1034,6 +1034,7 @@ export const cardIdSelector = (
 		case CardIds.Cryosleep_TLC_440:
 			return and(side(inputSide), or(inHand, inDeck), elemental);
 		case CardIds.CrystalsmithCultist:
+		case CardIds.CrystalsmithCultist_CORE_RLK_814:
 			return and(side(inputSide), or(inDeck, inHand), shadow);
 		case CardIds.Crystology:
 			return and(side(inputSide), inDeck, minion, attackLessThan(2), attackGreaterThan(0));
