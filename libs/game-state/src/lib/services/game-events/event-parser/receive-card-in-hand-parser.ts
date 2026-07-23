@@ -71,7 +71,7 @@ export class ReceiveCardInHandParser implements EventParser {
 			return currentState;
 		}
 
-		const debug = entityId === 27;
+		const debug = entityId === 315;
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const opponentDeck = isPlayer ? currentState.opponentDeck : currentState.playerDeck;
@@ -203,6 +203,7 @@ export class ReceiveCardInHandParser implements EventParser {
 						lastAffectedByEntityId: undefined,
 						createdIndex: undefined,
 					});
+		console.debug('otherCardWithObfuscation', `entityId:${entityId}__`, otherCardWithObfuscation);
 
 		const newBoard = boardCard
 			? this.helper.removeSingleCardFromZone(deck.board, null, entityId, deck.deckList.length === 0)[0]
@@ -228,34 +229,37 @@ export class ReceiveCardInHandParser implements EventParser {
 			} as DeckCard);
 		// Because sometiomes we don't know the cardId when the card is revealed, but we can guess it when it is
 		// moved to hand (e.g. Suspicious Pirate)
-		// console.debug(
-		// 	'[receive-card-in-hand] cardWithDefault',
-		// 	cardWithDefault,
-		// 	cardId,
-		// 	creatorCardId,
-		// 	otherCardWithObfuscation,
-		// );
-		const newCardId =
-			(isCardInfoPublic
-				? guessCardId(
-						cardId,
-						deck,
-						opponentDeck,
-						currentState,
-						creatorCardId,
-						creatorEntityId,
-						createdIndex,
-						this.allCards,
-					)
-				: null) ?? cardWithDefault.cardId;
+		console.debug(
+			'[receive-card-in-hand] cardWithDefault',
+			`entityId:${entityId}__`,
+			cardWithDefault,
+			cardId,
+			creatorCardId,
+			otherCardWithObfuscation,
+		);
+		const newCardId = isCardInfoPublic
+			? guessCardId(
+					cardId,
+					deck,
+					opponentDeck,
+					currentState,
+					creatorCardId,
+					creatorEntityId,
+					createdIndex,
+					this.allCards,
+					cardWithDefault.cardId,
+				)
+			: // Not sure why we don't simply force to null if it's not public
+				cardWithDefault.cardId;
+		console.debug('newCardId', `entityId:${entityId}__`, newCardId, cardWithDefault.cardId);
 		const cardWithKnownInfo =
 			newCardId === cardWithDefault.cardId
 				? cardWithDefault
 				: cardWithDefault.update({
 						cardId: newCardId,
-						cardName: this.allCards.getCard(newCardId).name,
-						refManaCost: this.allCards.getCard(newCardId).cost,
-						rarity: this.allCards.getCard(newCardId).rarity?.toLowerCase(),
+						cardName: this.allCards.getCard(newCardId!).name,
+						refManaCost: this.allCards.getCard(newCardId!).cost,
+						rarity: this.allCards.getCard(newCardId!).rarity?.toLowerCase(),
 					});
 		const cardWithZone = cardWithKnownInfo.update({
 			zone: 'HAND',
@@ -304,6 +308,7 @@ export class ReceiveCardInHandParser implements EventParser {
 				creatorTags: gameEvent.additionalData.creatorTags,
 			},
 		);
+		console.debug('cardWithGuessedInfo', `entityId:${entityId}__`, cardWithGuessedInfo);
 		const cardWithAdditionalAttributes = addAdditionalAttribuesInHand(
 			cardWithGuessedInfo,
 			deck,
@@ -312,6 +317,7 @@ export class ReceiveCardInHandParser implements EventParser {
 			gameEvent,
 			this.allCards,
 		);
+		console.debug('cardWithAdditionalAttributes', `entityId:${entityId}__`, cardWithAdditionalAttributes);
 
 		// console.debug(
 		// 	'[receive-card-in-hand] cardWithAdditionalAttributes',
@@ -346,7 +352,7 @@ export class ReceiveCardInHandParser implements EventParser {
 			entityId,
 			lastInfluencedByCardId,
 		);
-		// console.debug('[receive-card-in-hand] new hand', handAfterCardInference);
+		console.debug('handAfterCardInference', `entityId:${entityId}__`, handAfterCardInference);
 
 		const newCardsAddedToHand = cardId
 			? [
@@ -541,6 +547,7 @@ const guessCardId = (
 	creatorEntityId: number,
 	createdIndex: number,
 	allCards: CardsFacadeService,
+	fallbackCardId: string | undefined,
 ): string | undefined => {
 	// console.debug('[receive-card-in-hand] guessing cardId', cardId, deckState, gameEvent);
 	if (!!cardId?.length) {
@@ -564,8 +571,8 @@ const guessCardId = (
 				.pop()?.cardId;
 		default:
 			const cardImpl = cardsInfoCache[creatorCardId];
-			if (hasGeneratingCard(cardImpl)) {
-				const guessedCardId = cardImpl.guessCardId?.({
+			if (hasGeneratingCard(cardImpl) && !!cardImpl.guessCardId) {
+				const guessedCardId = cardImpl.guessCardId({
 					cardId: cardId,
 					deckState: deckState,
 					opponentDeckState: opponentDeckState,
@@ -575,9 +582,10 @@ const guessCardId = (
 					createdIndex: createdIndex,
 					allCards: allCards.getService(),
 				});
-				if (guessedCardId) {
-					return guessedCardId;
-				}
+				// Let cards specifically override the card id to null
+				// if (guessedCardId) {
+				return guessedCardId ?? undefined;
+				// }
 			}
 			break;
 	}
@@ -617,7 +625,7 @@ const guessCardId = (
 			return tentativeGiganticCard.id;
 		}
 	}
-	return cardId;
+	return cardId || fallbackCardId;
 };
 
 export const denormalizeCreatorCardId = (

@@ -8,7 +8,13 @@ import { CardIds, GameTag } from '@firestone-hs/reference-data';
 import { ParserGameStateLite } from '@firestone/power-log-parser';
 import { DeckCard } from '../../models/deck-card';
 import { DeckState } from '../../models/deck-state';
-import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
+import {
+	GeneratingCard,
+	GuessCardIdInput,
+	GuessInfoInput,
+	StaticGeneratingCard,
+	StaticGeneratingCardInput,
+} from './_card.type';
 
 export const GodfreytheBetrayer: StaticGeneratingCard & GeneratingCard = {
 	cardIds: [CardIds.GodfreytheBetrayer_JAIL_509, CardIds.GodfreyTheBetrayer_GodfreysAtlasEnchantment_JAIL_509e],
@@ -22,6 +28,10 @@ export const GodfreytheBetrayer: StaticGeneratingCard & GeneratingCard = {
 		return {
 			possibleCards: godfreyCards.map((c) => c.cardId),
 		};
+	},
+	// Force to null to avoid info leaks
+	guessCardId: (input: GuessCardIdInput) => {
+		return null;
 	},
 };
 
