@@ -4106,7 +4106,7 @@ export const cardIdSelector = (
 		case CardIds.TwilightGuardian:
 			return and(side(inputSide), or(inDeck, inHand), dragon);
 		case CardIds.TwilightsCall:
-			return and(side(inputSide), inGraveyard, minion, deathrattle);
+			return and(side(inputSide), or(inDeck, inHand, inGraveyard), minion, deathrattle);
 		// Twinbow Terrorcoil: Battlecry: If you've cast a spell while holding this, your next spell casts twice.
 		case CardIds.TwinbowTerrorcoil:
 			return and(side(inputSide), or(inHand, inDeck), spellExtended);
