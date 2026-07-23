@@ -43,12 +43,17 @@ export class RuniTemporalGuardianCounterDefinitionV2 extends CounterDefinitionV2
 			}
 
 			const delta = state.gameTagTurnNumber - lastRuni.storedInformation!.gameTagTurnNumberPlayed!;
+			const turn = 2 - Math.ceil(delta / 2);
+			if (turn <= 0) {
+				return null;
+			}
+
 			return {
 				cards: lastRuni
 					.storedInformation!.cards!.map((c) => c.cardId)
 					.filter((c) => c !== CardIds.RuniTemporalGuardian_TIME_EVENT_998)
 					.filter((c) => this.allCards.getCard(c).type?.toUpperCase() === CardType[CardType.MINION]),
-				turn: 2 - Math.ceil(delta / 2),
+				turn: turn,
 			};
 		},
 		setting: {
