@@ -6,6 +6,7 @@ import {
 	convertToConditionString,
 	buildReverseCondition,
 	extractCardConditions,
+	extractSelectorCardConditions,
 	ConditionMapping,
 } from './build-reverse-mappings';
 
@@ -590,5 +591,64 @@ describe('extractCardConditions (full pipeline)', () => {
 			expect(card).toBeDefined();
 			expect(card!.conditions).toContain('LOCATION');
 		});
+	});
+});
+
+// ─── 7. extractSelectorCardConditions (SelectorCard implementations) ────────
+
+describe('extractSelectorCardConditions (SelectorCard implementations)', () => {
+	let mappings: ConditionMapping[];
+
+	beforeAll(() => {
+		const origLog = console.log;
+		console.log = () => {};
+		try {
+			mappings = extractSelectorCardConditions();
+		} finally {
+			console.log = origLog;
+		}
+	});
+
+	it('produces a substantial number of mappings', () => {
+		expect(mappings.length).toBeGreaterThan(30);
+	});
+
+	it('VigilantSentry_JAIL_035 -> NEUTRAL', () => {
+		const card = mappings.find((m) => m.cardId === 'VigilantSentry_JAIL_035');
+		expect(card).toBeDefined();
+		expect(card!.conditions).toContain('NEUTRAL');
+	});
+
+	it('SewerSwimmer_JAIL_395 -> HAS_MECHANIC_DEATHRATTLE + MINION', () => {
+		const card = mappings.find((m) => m.cardId === 'SewerSwimmer_JAIL_395');
+		expect(card).toBeDefined();
+		expect(card!.conditions).toContain('HAS_MECHANIC_DEATHRATTLE + MINION');
+	});
+
+	it('HeadhuntersHatchet (typed param, multiple cardIds) -> BEAST for both ids', () => {
+		const core = mappings.find((m) => m.cardId === 'HeadhuntersHatchet_CORE_TRL_111');
+		const classic = mappings.find((m) => m.cardId === 'HeadhuntersHatchet_TRL_111');
+		expect(core).toBeDefined();
+		expect(classic).toBeDefined();
+		expect(core!.conditions).toContain('BEAST');
+		expect(classic!.conditions).toContain('BEAST');
+	});
+
+	it('SpireSecurity_JAIL_379 (highlightConditions) -> multiple OR branches', () => {
+		const card = mappings.find((m) => m.cardId === 'SpireSecurity_JAIL_379');
+		expect(card).toBeDefined();
+		expect(card!.conditions).toContain('SPELL');
+		expect(card!.conditions).toContain('COST_MORE_4 + SPELL');
+	});
+
+	it('BloodscalpStrategist (differently named side param) -> WEAPON', () => {
+		const card = mappings.find((m) => m.cardId === 'BloodscalpStrategist');
+		expect(card).toBeDefined();
+		expect(card!.conditions).toContain('WEAPON');
+	});
+
+	it('ChronoLordEpoch_TIME_714 (complex block-bodied selector) -> skipped', () => {
+		const card = mappings.find((m) => m.cardId === 'ChronoLordEpoch_TIME_714');
+		expect(card).toBeUndefined();
 	});
 });

@@ -271,6 +271,128 @@ export function extractCardConditions(): ConditionMapping[] {
 	return mappings;
 }
 
+/**
+ * Extracts the body of an arrow function starting at `startIdx` (right after the `=>`).
+ * Stops at the first `,`, `;` or `}` found at depth 0, which marks the end of the
+ * property value inside the card object literal.
+ */
+export function extractArrowFunctionBody(content: string, startIdx: number): string {
+	let depth = 0;
+	let i = startIdx;
+
+	while (i < content.length) {
+		const ch = content[i];
+		if (ch === '(' || ch === '{' || ch === '[') {
+			depth++;
+		} else if (ch === ')' || ch === ']') {
+			depth--;
+		} else if (ch === '}') {
+			if (depth === 0) {
+				break;
+			}
+			depth--;
+		} else if ((ch === ',' || ch === ';') && depth === 0) {
+			break;
+		}
+		i++;
+	}
+
+	return content.slice(startIdx, i).trim();
+}
+
+/**
+ * Extracts conditions from cards implementing the SelectorCard interface
+ * (files in libs/game-state/src/lib/services/cards/ with a `selector:` property).
+ * These use the same selector DSL as card-id-selectors.ts, so the expressions
+ * go through the same expansion pipeline.
+ */
+export function extractSelectorCardConditions(): ConditionMapping[] {
+	const cardsDir = path.join(__dirname, '..', '..', 'cards');
+	const files = fs
+		.readdirSync(cardsDir)
+		.filter((f) => f.endsWith('.ts') && !f.startsWith('_') && !f.endsWith('.spec.ts'))
+		.filter((f) => fs.statSync(path.join(cardsDir, f)).isFile());
+
+	const mappings: ConditionMapping[] = [];
+	let totalSelectors = 0;
+	let skippedComplex = 0;
+
+	for (const file of files) {
+		const content = fs.readFileSync(path.join(cardsDir, file), 'utf8');
+		const selectorRegex = /selector:\s*\(([^)]*)\)(?:\s*:\s*[A-Za-z<>[\]| ]+)?\s*=>/g;
+		let match: RegExpExecArray | null;
+
+		while ((match = selectorRegex.exec(content)) !== null) {
+			totalSelectors++;
+			// The param may be typed (`inputSide: HighlightSide`) or named differently (`input`)
+			const paramName = match[1].split(':')[0].trim();
+			const rawBody = extractArrowFunctionBody(content, match.index + match[0].length);
+
+			// Skip complex selectors (block bodies / raw SelectorInput functions),
+			// consistent with the switch-case extraction
+			if (rawBody.startsWith('{') || rawBody.includes('input:') || rawBody.includes('(input: SelectorInput)')) {
+				skippedComplex++;
+				continue;
+			}
+
+			let selectorCode = rawBody.replace(/\s+/g, ' ').trim();
+			if (selectorCode.length > 800) {
+				skippedComplex++;
+				continue;
+			}
+
+			// Normalize the side parameter name so the generic `side(inputSide)` stripping applies
+			if (paramName && paramName !== 'inputSide') {
+				const escapedParam = paramName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+				selectorCode = selectorCode.replace(new RegExp(`side\\(${escapedParam}\\)`, 'g'), 'side(inputSide)');
+			}
+
+			// Find the cardIds property of the same card object (nearest one before the selector)
+			const cardIdsIdx = content.lastIndexOf('cardIds:', match.index);
+			if (cardIdsIdx === -1) {
+				continue;
+			}
+			const arrayMatch = content.slice(cardIdsIdx).match(/cardIds:\s*\[([\s\S]*?)\]/);
+			if (!arrayMatch) {
+				continue;
+			}
+			const cardIds = [...arrayMatch[1].matchAll(/CardIds\.([a-zA-Z0-9_]+)/g)].map((m) => m[1]);
+			if (cardIds.length === 0) {
+				continue;
+			}
+
+			// Handle highlightConditions(...) as OR branches, like the switch-case extraction
+			let conditions: string[];
+			const highlightMatch = selectorCode.match(/highlightConditions\(([\s\S]*)\)/);
+			if (highlightMatch) {
+				conditions = [];
+				const individualConditions = smartSplit(highlightMatch[1], ',');
+				for (const individualCondition of individualConditions) {
+					conditions.push(...expandSelectorConditions(individualCondition.trim()));
+				}
+			} else {
+				conditions = expandSelectorConditions(selectorCode);
+			}
+
+			if (conditions.length === 0) {
+				continue;
+			}
+			for (const cardId of cardIds) {
+				mappings.push({
+					cardId: cardId,
+					conditions: conditions,
+				});
+			}
+		}
+	}
+
+	console.log(
+		`📊 SelectorCard stats: ${totalSelectors} selectors found, ${skippedComplex} skipped (complex), ${mappings.length} mappings extracted`,
+	);
+
+	return mappings;
+}
+
 export function expandSelectorConditions(selectorCode: string): string[] {
 	// Remove generic selectors that we don't care about for reverse mapping
 	const genericSelectors = [
@@ -1554,8 +1676,14 @@ function analyzeMissingReasons(missingCards: string[]): void {
 // Main execution
 async function main() {
 	console.log('🔍 Step 1: Extracting card conditions...');
-	const conditionMappings = extractCardConditions();
-	console.log(`📊 Extracted conditions for ${conditionMappings.length} cards`);
+	const switchMappings = extractCardConditions();
+	console.log(`📊 Extracted conditions for ${switchMappings.length} cards from card-id-selectors.ts`);
+
+	console.log('\n🔍 Step 1b: Extracting SelectorCard conditions...');
+	const selectorCardMappings = extractSelectorCardConditions();
+	console.log(`📊 Extracted conditions for ${selectorCardMappings.length} cards from SelectorCard implementations`);
+
+	const conditionMappings = [...switchMappings, ...selectorCardMappings];
 
 	// Debug: show first few examples
 	console.log('\n🔍 Debug: First 5 extracted conditions:');

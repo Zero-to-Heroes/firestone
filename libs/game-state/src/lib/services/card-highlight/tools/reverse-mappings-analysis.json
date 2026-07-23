@@ -1,1049 +1,864 @@
 {
-  "races": {
-    "undead": [
-      "AcolyteOfDeath_CORE_RLK_121",
-      "AmateurPuppeteer_AmateurPuppeteerToken_TOY_828t",
-      "ArmsDealer_RLK_824",
-      "Banshee_RLK_957",
-      "BoneFlinger",
-      "Bonecaller",
-      "DeadAir",
-      "DrakkariEmbalmer_RLK_119",
-      "ElderNadox",
-      "FleshBehemoth_RLK_Prologue_RLK_830",
-      "GluthSicleTavernBrawl",
-      "GluthTavernBrawl_PVPDR_Sai_T1",
-      "GraveDigging",
-      "Invincible",
-      "LesserSpinelSpellstone_GreaterSpinelSpellstoneToken_TOY_825t2",
-      "NecroticMortician_CORE_RLK_116",
-      "NerubianVizier",
-      "NoxiousInfiltrator",
-      "PoisonBreath_CORE_EDR_002",
-      "RottingNecromancer",
-      "ShadowWordUndeath",
-      "SicklyGrimewalker_YOG_512",
-      "SkeletalSidekickCore_RLK_958",
-      "SoulburnerVaria_YOG_520",
-      "TwistedTether",
-      "UndyingAllies",
-      "UnlivingChampion",
-      "Wither"
-    ],
-    "beast": [
-      "AddledGrizzly_WON_009",
-      "AzsharanSaber_SunkenSaberToken",
-      "BigDreams",
-      "BunnyStomper_WW_435",
-      "ButchTavernBrawl",
-      "CallPet_GVG_017",
-      "CastleKennels_REV_790",
-      "CattleRustler_WW_351",
-      "CowerInFear_TLC_823",
-      "Dinositter_TLC_822",
-      "ExoticHoundmaster_EDR_226",
-      "FaithfulCompanions",
-      "FangboundDruid",
-      "Goldrinn_EDR_480",
-      "HarpoonGun",
-      "HemetFoamMarksman_TOY_355",
-      "HerbivoreAssistant_DINO_419",
-      "JungleGym_TOY_359",
-      "KathrenaWinterwisp",
-      "KingOfBeasts_WON_162",
-      "KnightOfTheWild_WON_003",
-      "LivingSeedRank1_LivingSeedRank3Token",
-      "Malorne_WON_011",
-      "MenagerieWarden_WON_305",
-      "MessengerBuzzard_WW_807",
-      "MysteryEgg_MysteryEggToken_TOY_351t",
-      "Oondasta",
-      "PaintedCanvasaur_TOY_350",
-      "PeacefulPiper",
-      "PeacefulPiper_FriendlyFace",
-      "PossessedAnimancer_DINO_131",
-      "PredatoryInstincts",
-      "RamkahenWildtamer",
-      "RoostingGargoyle_CORE_REV_351",
-      "ScavengersIngenuity",
-      "ScrapShot",
-      "SelectiveBreederCore",
-      "Serpentbloom",
-      "Shadehound",
-      "ShandoWildclaw_Transfiguration",
-      "StarvingTavernBrawl",
-      "StormpikeBattleRam",
-      "SupremeDinomancy_TLC_828",
-      "TavishStormpike_BAR_038",
-      "TendingDragonkin_FIR_960",
-      "ThornmantleMusician",
-      "Thunderbringer_WW_440",
-      "VirmenSensei_WON_300",
-      "WarsongWrangler",
-      "WingCommanderIchman_AV_336",
-      "WitchingHour"
-    ],
-    "pirate": [
-      "AdrenalineFiend_VAC_927",
-      "Ancharrr",
-      "BeckoningBicornTavernBrawl",
-      "CannonBarrage",
-      "CaptainsParrotVanilla",
-      "CutlassCourier",
-      "HarborScamp",
-      "HozenRoughhouser_VAC_938",
-      "PatchesThePirate_CFM_637",
-      "PatchesThePirate_LockedAndLoaded_THD_025p",
-      "PirateAdmiralHooktusk",
-      "SailboatCaptain_VAC_937",
-      "ShadyDealer",
-      "SharkPuncher_WON_138",
-      "ShipsCannon",
-      "ShoplifterGoldbeard_TOY_511",
-      "Swordfish",
-      "TreasureDistributor_TOY_518"
-    ],
-    "demon": [
-      "AllShallServeTavernBrawl",
-      "BlackHole_GDB_126",
-      "BloodreaverGuldan_ICC_831",
-      "CariaFelsoul",
-      "CraneGame_TOY_884",
-      "Demonfuse_DarkFusionEnchantment",
-      "Felosophy",
-      "GameMasterNemsy_TOY_524",
-      "InfernalStratagem_GDB_122",
-      "Malganis_GVG_021",
-      "PitCommander",
-      "RagingFelscreamer_BT_416",
-      "SenseDemonsVanilla_VAN_EX1_317",
-      "SigilOfReckoning",
-      "TabletopRoleplayer_TOY_915",
-      "UmpiresGrasp_TOY_641",
-      "VoidcallerCore"
-    ],
-    "dragon": [
-      "AmberWhelp",
-      "BlackwingCorruptor_WON_329",
-      "BreathOfDreams",
-      "BroodKeeper_EDR_457",
-      "CandleBreath",
-      "Chillmaw_CORE_AT_123",
-      "CloudSerpent_TLC_888",
-      "ClutchOfCorruption_EDR_454",
-      "DaringDrake",
-      "Darkrider_EDR_456",
-      "DesertNestmatron_WW_826",
-      "DraconicDreamTavernBrawl",
-      "DragonAffinityTavernBrawl",
-      "DragonBreeder",
-      "DragonConsort",
-      "DragonGolem_WW_822",
-      "DragonbloodTavernBrawl",
-      "DragonboneRitualTavernBrawl",
-      "Dragoncaster",
-      "DrakonidOperativeCore",
-      "FlyOffTheShelves_TOY_714",
-      "FrizzKindleroost",
-      "FutureEmissary_WON_140",
-      "GiftwrappedWhelp_TOY_386",
-      "HeraldOfFlame_TRLA_176",
-      "HornOfWrathion",
-      "Kazakusan_ONY_005",
-      "MalygosAspectOfMagic",
-      "NaralexHeraldOfTheFlights_EDR_844",
-      "NetherBreath_DRG_205",
-      "OnyxianWarder",
-      "PetalPeddler_EDR_889",
-      "RedscaleDragontamer_CORE_DMF_194",
-      "ScaleReplica_TOY_387",
-      "Scalerider",
-      "Scaleworm",
-      "Skyfin",
-      "Soridormi_WON_146",
-      "SpinetailDrake_WW_820",
-      "SplishSplashWhelp_WW_819",
-      "Stormhammer",
-      "SuccumbToMadness_EDR_455",
-      "TakeToTheSkies_WW_816",
-      "TastyFlyfish",
-      "Timewarden",
-      "TimewinderZarimi_TOY_385",
-      "TormentedDreadwing_EDR_572",
-      "TwilightGuardian",
-      "WingCommander"
-    ],
-    "elemental": [
-      "AnimatedAvalanche",
-      "AquaArchivist",
-      "AridStormer",
-      "AzeriteGiant_WW_025",
-      "Blazecaller",
-      "BralmaSearstone_TLC_228",
-      "DangBlastedElemental_WW_397",
-      "ElementalEvocation",
-      "ElementaryReaction",
-      "ErodedSediment_WW_428",
-      "FireBreath_DINO_406",
-      "FirePlumeHarbinger",
-      "FlameRevenant",
-      "FrostLichJaina_CORE_ICC_833",
-      "FrostfinChomper",
-      "GraniteForgeborn",
-      "Gyreworm",
-      "KalimosPrimalLord_Core_UNG_211",
-      "KindlingElemental",
-      "Lamplighter_VAC_442",
-      "LilypadLurker",
-      "LivingPrairie_WW_024",
-      "MesaduneTheFractured_WW_429",
-      "MinecartCruiser_WW_326",
-      "OverflowSurger_WW_424",
-      "Sandbinder",
-      "ShaleSpider_DEEP_034",
-      "SkarrTheCatastrophe_WW_026",
-      "SolarFlare_GDB_305",
-      "SpontaneousCombustion_GDB_456",
-      "SteamSurger",
-      "StoneSentinel",
-      "TaintedRemnant_YOG_519",
-      "Therazane_DEEP_036",
-      "UnchainedGladiator",
-      "WailingVapor_CORE_WC_042",
-      "WindsweptPageturner_TLC_220"
-    ],
-    "murloc": [
-      "AzsharanScavenger_SunkenScavengerToken",
-      "Braingill_GDB_878",
-      "CookiesLadleTavernBrawl",
-      "DiveTheGolakkaDepths_TLC_426",
-      "FinjaTheFlyingStar_CORE_CFM_344",
-      "FiremancerFlurgl",
-      "GorlocRavager",
-      "HotSpringGlider_TLC_428",
-      "IceFishing_ICC_089",
-      "ItsRainingFin",
-      "LushwaterScout",
-      "SirFinleyMrrgglton_ScalesOfJustice_THD_044p",
-      "TidelostBurrower",
-      "TinyfinsCaravan",
-      "UnderbellyAngler"
-    ],
-    "naga": [
-      "BarbedNets",
-      "CoilCastingTavernBrawl",
-      "NagasPride",
-      "OasisOutlaws_WW_404",
-      "Predation",
-      "SeaweedStrike",
-      "SerpentWig_TSC_215"
-    ],
-    "mech": [
-      "Bubblebot_TSC_059",
-      "ClickClocker",
-      "ClockworkKnight",
-      "DrBoomMadGenius",
-      "DrBoom_BoomBarrage_THD_034p",
-      "DynOMaticCore",
-      "FrequencyOscillator",
-      "GaiaTheTechtonic_TSC_029",
-      "GoboglideTech",
-      "IniStormcoil_TSC_649",
-      "InventorsAura",
-      "KangorsEndlessArmy",
-      "MechaShark_TSC_054",
-      "MimironTheMastermind",
-      "PitStop",
-      "RadarDetector_TSC_079",
-      "SeafloorGateway_TSC_055",
-      "SeascoutOperator_TSC_646",
-      "SecurityAutomaton_TSC_928",
-      "SootSpewer_WON_033",
-      "TimelineAccelerator_WON_139",
-      "TinyWorldbreaker_YOG_527",
-      "TramOperator",
-      "TrenchSurveyor_TSC_642",
-      "Ursatron",
-      "WreckemAndDeckem_TOY_603"
-    ],
-    "totem": [
-      "DraeneiTotemcarver_CORE_AT_047",
-      "Gigantotem",
-      "SplittingAxe",
-      "TheStonewright",
-      "ThingFromBelowCore"
-    ]
-  },
-  "spellSchools": {},
-  "cardTypes": {
-    "location": [
-      "DispossessedSoul_CORE_REV_901"
-    ]
-  },
-  "mechanics": {},
-  "costs": {},
-  "attacks": {},
-  "healths": {},
-  "others": {},
-  "compounds": {
-    "tribe:beast+type:minion": {
-      "cards": [
-        "AbsorbentParasite",
-        "Banjosaur",
-        "TheCurator_CORE_KAR_061"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.races?.map(r => r.toUpperCase()).includes('BEAST')"
-    },
-    "type:minion+mechanics:rush": {
-      "cards": [
-        "AkaliTheRhino",
-        "ClearTheWay",
-        "DivingGryphon",
-        "PotionOfSparkingTavernBrawl",
-        "RocketBackpacksTavernBrawl",
-        "RushTheStage",
-        "SpecialDeliveryTavernBrawl",
-        "StageDive_StageDive",
-        "TownCrier_CORE_GIL_580"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.mechanics?.includes('RUSH')"
-    },
-    "mechanics:battlecry+cost:more:2": {
-      "cards": [
-        "AllTogetherNowTavernBrawl"
-      ],
-      "condition": "refCard.cost > 2 && refCard.mechanics?.includes('BATTLECRY')"
-    },
-    "type:minion+other:tribeless": {
-      "cards": [
-        "AllYouCanEat_VAC_528",
-        "AmalgamOfTheDeep",
-        "FlightOfTheFirehawk_TLC_222",
-        "MenagerieMug_CORE_WON_141",
-        "PartyAnimal",
-        "RoaringApplause",
-        "RockMasterVoone_ETC_121",
-        "SpiritOfTheMountain_TLC_229",
-        "ThePurator",
-        "TortollanStoryteller_TLC_254",
-        "TrustyCompanion_WW_027"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'MINION' && !refCard.races || refCard.races.length === 0"
-    },
-    "tribe:undead+type:minion": {
-      "cards": [
-        "AmorphousSlime",
-        "SinisterSoulcage_YOG_513"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.races?.map(r => r.toUpperCase()).includes('UNDEAD')"
-    },
-    "type:minion+mechanics:deathrattle": {
-      "cards": [
-        "AmuletOfUndying",
-        "ArchdruidOfThorns_EDR_491",
-        "AwakenTheMakers",
-        "BrittleboneBuccaneer_VAC_436",
-        "CarrionStudies",
-        "DeadRinger",
-        "DeathBlossomWhomper",
-        "DeathGrowl",
-        "DeathlyDeathTavernBrawl",
-        "DeathstriderTavernBrawl",
-        "DevoutBlessingsTavernBrawlToken",
-        "ExpeditedBurialTavernBrawl",
-        "FelfireBonfire_VAC_952",
-        "ForsakenLieutenant_AV_601",
-        "HedgeMaze_REV_792",
-        "HighCultistHerenn_TLC_810",
-        "JewelOfNzoth",
-        "MummyMagic",
-        "NecriumApothecary",
-        "NineLives",
-        "NzothTheCorruptor",
-        "NzothTheCorruptor_DarkMachinations_THD_039p",
-        "PrincessTavernBrawl",
-        "RavenousFelhunter_EDR_891",
-        "ScourgeIllusionist",
-        "Shattershambler",
-        "TamsinsPhylactery",
-        "TerrorscaleStalker_CORE_UNG_800",
-        "TombLurker_ICC_098",
-        "Tuskpiercer_CORE_BAR_330",
-        "TwilightsCall",
-        "UnearthedRaptor",
-        "VengefulSpirit_BAR_328",
-        "XyrellaTheDevout",
-        "YellingYodeler"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.mechanics?.includes('DEATHRATTLE')"
-    },
-    "mechanics:secret": {
-      "cards": [
-        "AncientMysteries",
-        "AnonymousInformant_CORE_REV_841",
-        "Arcanologist",
-        "ArcanologistCore",
-        "ChattyBartender",
-        "CostumedSinger",
-        "DunBaldarBunker",
-        "EaglehornBowVanilla",
-        "GhastlyGravedigger",
-        "KabalCrystalRunner_WON_308",
-        "MadScientist",
-        "MysteriousChallenger_WON_334",
-        "PrivateEye",
-        "ScuttlebuttGhoul_CORE_REV_900",
-        "SecretStudiesTavernBrawl",
-        "SpringTheTrap",
-        "Zuljin_WarriorsOfAmani_THD_010p"
-      ],
-      "condition": "refCard.mechanics?.includes('SECRET')"
-    },
-    "type:minion+cost:less:4": {
-      "cards": [
-        "AnimateDead"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.cost < 4"
-    },
-    "type:minion+cost:equal:1": {
-      "cards": [
-        "ApothecarysCaravan",
-        "BoogieDown",
-        "K90tron",
-        "SonyaWaterdancer_TOY_515",
-        "TrustyFishingRod_VAC_960"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.cost === 1"
-    },
-    "type:spell+cost:equal:7": {
-      "cards": [
-        "ArcaneBrilliance"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'SPELL' && refCard.cost === 7"
-    },
-    "tribe:demon+other:notInInitialDeck": {
-      "cards": [
-        "Archimonde_GDB_128",
-        "ForebodingFlame_GDB_121"
-      ],
-      "condition": "refCard.races?.map(r => r.toUpperCase()).includes('DEMON')"
-    },
-    "type:spell+cost:more:4": {
-      "cards": [
-        "AshleafPixie_FIR_961",
-        "Groundskeeper",
-        "HagathaTheFabled_TOY_504"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'SPELL' && refCard.cost > 4"
-    },
-    "type:minion+mechanics:battlecry": {
-      "cards": [
-        "AuctionhouseGavel",
-        "BrannBronzebeard_BrannsSaddle_THD_042p",
-        "FairyTaleForest_TOY_507",
-        "Murmur_GDB_448",
-        "ParrotSanctuary_VAC_409",
-        "Snapdragon",
-        "Turbulus_WORK_013"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.mechanics?.includes('BATTLECRY')"
-    },
-    "type:minion+cost:less:3": {
-      "cards": [
-        "BandOfBeesTavernBrawl",
-        "CallToArms",
-        "OracleOfElune"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.cost < 3"
-    },
-    "type:spell+cost:equal:1": {
-      "cards": [
-        "BarakKodobane_CORE_BAR_551",
-        "Gazlowe",
-        "TrinketTracker"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'SPELL' && refCard.cost === 1"
-    },
-    "mechanics:deathrattle": {
-      "cards": [
-        "BaronRivendare_CORE_FP1_031",
-        "BarrensTrapper",
-        "NecriumBlade",
-        "NecriumVial",
-        "PlayDead_CORE_ICC_052",
-        "ReturnPolicy_MIS_102",
-        "RollTheBones_CORE_ICC_201",
-        "RottenRodent",
-        "ShallowGrave",
-        "Smokescreen",
-        "SummonerDarkmarrow_VAC_503",
-        "TotemOfTheDead_LOOTA_845"
-      ],
-      "condition": "refCard.mechanics?.includes('DEATHRATTLE')"
-    },
-    "type:minion+mechanics:taunt": {
-      "cards": [
-        "Battlepickaxe_WW_347",
-        "Bolster",
-        "BulkUp",
-        "DetonationJuggernaut_WW_329",
-        "EnduranceTrainingTavernBrawl",
-        "FirePlumesHeart",
-        "IntoTheFray",
-        "QualityAssurance_TOY_605",
-        "RazormaneBattleguard",
-        "TortollanTraveler_VAC_518",
-        "UnluckyPowderman_WW_367",
-        "ValstannStaghelm_WON_345"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.mechanics?.includes('TAUNT')"
-    },
-    "mechanics:battlecry": {
-      "cards": [
-        "BattleTotem_LOOTA_846",
-        "BrannBronzebeard_LOE_077",
-        "BrilliantMacaw",
-        "CorruptTheWaters",
-        "MurmuringElemental",
-        "RallyTheTroopsTavernBrawl",
-        "Shudderblock_ShudderblockToken_TOY_501t"
-      ],
-      "condition": "refCard.mechanics?.includes('BATTLECRY')"
-    },
-    "mechanics:legendary+other:legendary": {
-      "cards": [
-        "ArchVillainRafaam_BeholdMyStuff_THD_032p"
-      ],
-      "condition": "refCard.rarity?.toUpperCase() === 'LEGENDARY'"
-    },
-    "school:frost+other:dealsDamage": {
-      "cards": [
-        "BitterColdTavernBrawl"
-      ],
-      "condition": "refCard.spellSchool?.toUpperCase() === 'FROST' && refCard.type?.toUpperCase() === 'SPELL'"
-    },
-    "tribe:mech+mechanics:deathrattle": {
-      "cards": [
-        "BoomWrench_BoomWrenchToken_TOY_604t"
-      ],
-      "condition": "refCard.races?.map(r => r.toUpperCase()).includes('MECH') && refCard.mechanics?.includes('DEATHRATTLE')"
-    },
-    "mechanics:excavate,legendary,quickdraw,tradeable+other:legendary": {
-      "cards": [
-        "BountyBoard_WW_003"
-      ],
-      "condition": "refCard.rarity?.toUpperCase() === 'LEGENDARY'"
-    },
-    "mechanics:lifesteal+other:restoreHealth": {
-      "cards": [
-        "BrittleboneDestroyer"
-      ],
-      "condition": "refCard.mechanics?.includes('LIFESTEAL')"
-    },
-    "type:spell+cost:costMore:4": {
-      "cards": [
-        "BumblingBellhop_VAC_521",
-        "FaeTrickster_EDR_571",
-        "WeaverOfTheCycle_EDR_472"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'SPELL'"
-    },
-    "type:minion+attack:equal:1": {
-      "cards": [
-        "BusyBot_WORK_002"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.attack === 1"
-    },
-    "type:minion+cost:more:4": {
-      "cards": [
-        "CaricatureArtist_TOY_391"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.cost > 4"
-    },
-    "school:holy+type:spell": {
-      "cards": [
-        "CarielRoame_BAR_902",
-        "FlickeringLightbot_FlickeringLightbotToken_MIS_918t",
-        "GuardianLightTavernBrawl",
-        "HeraldOfLight",
-        "HiHoSilverwing_WW_344",
-        "HolyCowboy_WW_335",
-        "HolyGlowsticks_MIS_709",
-        "InvigoratingLightTavernBrawl",
-        "KnightOfAnointment",
-        "KureTheLightBeyond_GDB_442",
-        "ReachEquilibrium_CleanseTheShadowToken_TLC_817t",
-        "ShimmeringSunfish",
-        "StarlightGroove",
-        "TheGardensGrace",
-        "VeteranWarmedic"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'SPELL' && refCard.spellSchool?.toUpperCase() === 'HOLY'"
-    },
-    "type:minion+attack:greater:4": {
-      "cards": [
-        "ClimbingHook_VAC_932",
-        "GiantAnaconda"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.attack > 4"
-    },
-    "tribe:dragon+type:minion": {
-      "cards": [
-        "CollectorsIreTavernBrawlToken",
-        "DrocomurchanicasTavernBrawlToken"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.races?.map(r => r.toUpperCase()).includes('DRAGON')"
-    },
-    "tribe:naga+type:spell": {
-      "cards": [
-        "ConchsCall"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'SPELL' && refCard.races?.map(r => r.toUpperCase()).includes('NAGA')"
-    },
-    "type:minion+attack:greater:0,less:2": {
-      "cards": [
-        "Crystology"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.attack > 0 && refCard.attack < 2"
-    },
-    "type:minion+mechanics:deathrattle+cost:less:6": {
-      "cards": [
-        "DeathSpeakerBlackthorn_BAR_329"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.cost < 6 && refCard.mechanics?.includes('DEATHRATTLE')"
-    },
-    "school:nature+type:spell": {
-      "cards": [
-        "DeviateDreadfang",
-        "GroveShaper_EDR_271",
-        "GuffRunetotem_BAR_720",
-        "HeraldOfNature",
-        "IronRootsTavernBrawl",
-        "LadyAnacondra_WC_006",
-        "MendingPoolsTavernBrawl",
-        "SpreadingSaplingsTavernBrawl",
-        "ToadOfTheWilds",
-        "TopiorTheShrubbagazzor",
-        "WidowbloomSeedsman"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'SPELL' && refCard.spellSchool?.toUpperCase() === 'NATURE'"
-    },
-    "tribe:demon+type:minion": {
-      "cards": [
-        "DirgeOfDespair",
-        "KanrethadEbonlocke_KanrethadPrimeToken"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.races?.map(r => r.toUpperCase()).includes('DEMON')"
-    },
-    "type:minion+mechanics:legendary+other:legendary": {
-      "cards": [
-        "DisksOfLegendTavernBrawl",
-        "InspiringPresenceTavernBrawl",
-        "RingOfPhaseshiftingTavernBrawl",
-        "RoyalGreatswordTavernBrawlToken"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.rarity?.toUpperCase() === 'LEGENDARY'"
-    },
-    "type:minion+mechanics:deathrattle+cost:less:4": {
-      "cards": [
-        "DreadRaptor_TLC_432",
-        "Razorboar"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.cost < 4 && refCard.mechanics?.includes('DEATHRATTLE')"
-    },
-    "school:shadow+type:spell": {
-      "cards": [
-        "EerieStoneTavernBrawl",
-        "HeraldOfShadows",
-        "KaraTheDarkStar_GDB_127",
-        "LadyDarkvein_CORE_REV_373",
-        "ReachEquilibrium_CorruptTheLightToken_TLC_817t2",
-        "Shadowborn",
-        "ShadowclothNeedle",
-        "SketchArtist_TOY_916",
-        "StaffOfPainTavernBrawl",
-        "TwilightDeceptor"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'SPELL' && refCard.spellSchool?.toUpperCase() === 'SHADOW'"
-    },
-    "tribe:elemental+mechanics:legendary+other:legendary": {
-      "cards": [
-        "AlakirTheWindlord_ElementalEvocation_THD_026p"
-      ],
-      "condition": "refCard.races?.map(r => r.toUpperCase()).includes('ELEMENTAL') && refCard.rarity?.toUpperCase() === 'LEGENDARY'"
-    },
-    "type:minion+mechanics:divineShield": {
-      "cards": [
-        "FancyPackaging_TOY_881",
-        "Funkfin",
-        "RighteousReservesTavernBrawl"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.mechanics?.includes('DIVINE_SHIELD')"
-    },
-    "school:fel+type:spell": {
-      "cards": [
-        "FelfireBlaze_FIR_904",
-        "Felgorger_SW_043",
-        "FossilFanatic",
-        "GraveDefiler",
-        "HeraldOfChaos",
-        "IllidanStormrage_FelInside_THD_004p",
-        "ImpCredibleTrousersTavernBrawl",
-        "PopgarThePutrid_WW_091",
-        "Scorchreaver_FIR_952",
-        "WitherTheWeakTavernBrawl"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'SPELL' && refCard.spellSchool?.toUpperCase() === 'FEL'"
-    },
-    "type:minion+mechanics:deathrattle+cost:more:4": {
-      "cards": [
-        "FerociousFelbat_EDR_892"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.cost > 4 && refCard.mechanics?.includes('DEATHRATTLE')"
-    },
-    "mechanics:battlecry,combo": {
-      "cards": [
-        "FieldContact"
-      ],
-      "condition": "refCard.mechanics?.includes('BATTLECRY')"
-    },
-    "school:fire+type:spell": {
-      "cards": [
-        "FirekeepersIdolTavernBrawl",
-        "FlameWavesTavernBrawl",
-        "FlamesOfTheKirinTorTavernBrawl",
-        "HotStreak",
-        "InfernoHerald_FIR_913",
-        "LivingFlame_FIR_929",
-        "MechanizedMagma_TLC_224",
-        "ScorchingWinds_FIR_910",
-        "SunfuryChampion",
-        "Thoribelore",
-        "VolcanicThrasher_TLC_223"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'SPELL' && refCard.spellSchool?.toUpperCase() === 'FIRE'"
-    },
-    "cost:more:7": {
-      "cards": [
-        "FlamesOfTheFirelord_FIR_923"
-      ],
-      "condition": "refCard.cost > 7"
-    },
-    "school:frost+type:spell": {
-      "cards": [
-        "GlacialDownpourTavernBrawl",
-        "HarbingerOfWinterCore_RLK_511",
-        "HeraldOfLokholar",
-        "IceRevenant",
-        "LadyDeathwhisper_RLK_713",
-        "RambunctiousStuffy_TOY_821",
-        "Rimetongue",
-        "WatercolorArtist_TOY_376"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'SPELL' && refCard.spellSchool?.toUpperCase() === 'FROST'"
-    },
-    "tribe:mech+type:minion": {
-      "cards": [
-        "GorillabotA3Core"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.races?.map(r => r.toUpperCase()).includes('MECH')"
-    },
-    "cost:equal:2": {
-      "cards": [
-        "GreedyPartner_WW_901"
-      ],
-      "condition": "refCard.cost === 2"
-    },
-    "type:spell+cost:more:5": {
-      "cards": [
-        "GreySageParrot"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'SPELL' && refCard.cost > 5"
-    },
-    "type:minion+cost:less:5": {
-      "cards": [
-        "GrizzledGuardian",
-        "OakenSummons_CORE_LOOT_309"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.cost < 5"
-    },
-    "tribe:beast+cost:less:6": {
-      "cards": [
-        "GuardianAnimals",
-        "PetCollector"
-      ],
-      "condition": "refCard.races?.map(r => r.toUpperCase()).includes('BEAST') && refCard.cost < 6"
-    },
-    "school:arcane+type:spell": {
-      "cards": [
-        "HalduronBrightwing",
-        "MagistersApprentice",
-        "SilvermoonFarstrider_RLK_826",
-        "Stargazing_WW_425",
-        "StarlightReactor_GDB_108",
-        "UnstableMagicTavernBrawl",
-        "Vexallus"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'SPELL' && refCard.spellSchool?.toUpperCase() === 'ARCANE'"
-    },
-    "type:minion+attack:less:3": {
-      "cards": [
-        "HatcheryHelper_TLC_233"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.attack < 3"
-    },
-    "cost:more:3": {
-      "cards": [
-        "HemetJungleHunter"
-      ],
-      "condition": "refCard.cost > 3"
-    },
-    "mechanics:taunt": {
-      "cards": [
-        "HoldTheLineTavernBrawl",
-        "LastStand",
-        "StolenGoods_WON_110"
-      ],
-      "condition": "refCard.mechanics?.includes('TAUNT')"
-    },
-    "type:minion+attack:equal:0": {
-      "cards": [
-        "HolyEggbearer_DINO_411"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.attack === 0"
-    },
-    "type:minion+cost:less:5,more:0": {
-      "cards": [
-        "Hybridization_TLC_236"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.cost > 0 && refCard.cost < 5"
-    },
-    "type:spell+other:hasSpellSchool": {
-      "cards": [
-        "MagisterDawngrasp_AV_200",
-        "RazzleDazzler_VAC_301"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'SPELL' && !!refCard.spellSchool"
-    },
-    "type:spell+mechanics:chooseOne": {
-      "cards": [
-        "JerryRigCarpenter"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'SPELL'"
-    },
-    "mechanics:divineShield": {
-      "cards": [
-        "Jitterbug",
-        "TorethTheUnbreaking_EDR_258"
-      ],
-      "condition": "refCard.mechanics?.includes('DIVINE_SHIELD')"
-    },
-    "type:minion+cost:equal:7": {
-      "cards": [
-        "JuicyPsychmelon"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.cost === 7"
-    },
-    "school:fire+type:spell+other:dealsDamage": {
-      "cards": [
-        "KindlingFlameTavernBrawl"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'SPELL' && refCard.spellSchool?.toUpperCase() === 'FIRE'"
-    },
-    "type:minion+attack:less:4": {
-      "cards": [
-        "LeadDancer",
-        "WarsongCommanderVanilla"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.attack < 4"
-    },
-    "cost:equal:3": {
-      "cards": [
-        "LinedancePartner_WW_433"
-      ],
-      "condition": "refCard.cost === 3"
-    },
-    "type:minion+mechanics:combo": {
-      "cards": [
-        "LuckyComet_GDB_873"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'MINION'"
-    },
-    "type:minion+cost:costMore:7": {
-      "cards": [
-        "Merithra_EDR_238"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'MINION'"
-    },
-    "type:minion+other:neutral": {
-      "cards": [
-        "MeekMasteryTavernBrawl",
-        "MulchMadnessTavernBrawl"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.classes?.includes('NEUTRAL')"
-    },
-    "school:nature+type:spell+other:dealsDamage": {
-      "cards": [
-        "NaturalForceTavernBrawl"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'SPELL' && refCard.spellSchool?.toUpperCase() === 'NATURE'"
-    },
-    "tribe:mech+mechanics:magnetic": {
-      "cards": [
-        "OptimizedPolarityTavernBrawl"
-      ],
-      "condition": "refCard.races?.map(r => r.toUpperCase()).includes('MECH')"
-    },
-    "type:spell+mechanics:discover+cost:more:2": {
-      "cards": [
-        "OrbOfRevelationTavernBrawl"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'SPELL' && refCard.cost > 2"
-    },
-    "cost:equal:1": {
-      "cards": [
-        "PipThePotent_WW_394",
-        "PrinceLiam",
-        "RollingStone",
-        "ThirstyDrifter_WW_387"
-      ],
-      "condition": "refCard.cost === 1"
-    },
-    "type:spell+cost:more:1": {
-      "cards": [
-        "PlaguebringerTavernBrawl"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'SPELL' && refCard.cost > 1"
-    },
-    "mechanics:rush": {
-      "cards": [
-        "PluckyPaintfin_TOY_517"
-      ],
-      "condition": "refCard.mechanics?.includes('RUSH')"
-    },
-    "type:minion+cost:less:4,more:0": {
-      "cards": [
-        "Rally"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.cost > 0 && refCard.cost < 4"
-    },
-    "type:minion+mechanics:deathrattle+cost:less:5": {
-      "cards": [
-        "RazorfenBeastmaster"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.cost < 5 && refCard.mechanics?.includes('DEATHRATTLE')"
-    },
-    "type:minion+cost:costMore:6": {
-      "cards": [
-        "RotheartDryad_EDR_485"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'MINION'"
-    },
-    "cost:equal:4": {
-      "cards": [
-        "RowdyPartner_WW_906"
-      ],
-      "condition": "refCard.cost === 4"
-    },
-    "type:minion+health:less:2": {
-      "cards": [
-        "SalhetsPride",
-        "StewardOfDarkshire_WON_310"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.health < 2"
-    },
-    "type:minion+cost:more:5": {
-      "cards": [
-        "ScepterOfSummoning"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.cost > 5"
-    },
-    "type:minion+cost:equal:8": {
-      "cards": [
-        "SilverVanguard"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.cost === 8"
-    },
-    "mechanics:deathrattle+cost:less:5": {
-      "cards": [
-        "SketchyInformation"
-      ],
-      "condition": "refCard.cost < 5 && refCard.mechanics?.includes('DEATHRATTLE')"
-    },
-    "type:spell+cost:baseEqual:1": {
-      "cards": [
-        "SkulkingGeist_ICC_701"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'SPELL' && refCard.cost === 1"
-    },
-    "type:spell+mechanics:secret": {
-      "cards": [
-        "SecretkeeperLegacy",
-        "SrTombDiverTavernBrawl",
-        "SwordOfTheFallen"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'SPELL' && refCard.mechanics?.includes('SECRET')"
-    },
-    "type:spell+cost:less:4": {
-      "cards": [
-        "StonehearthVindicator"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'SPELL' && refCard.cost < 4"
-    },
-    "cost:more:5": {
-      "cards": [
-        "SummerFlowerchild"
-      ],
-      "condition": "refCard.cost > 5"
-    },
-    "type:spell+cost:less:3": {
-      "cards": [
-        "SunsapperLynessa_VAC_507",
-        "VioletTreasuregill_TLC_438"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'SPELL' && refCard.cost < 3"
-    },
-    "cost:more:1+other:notInInitialDeck": {
-      "cards": [
-        "TaethelanBloodwatcher_WW_430"
-      ],
-      "condition": "refCard.cost > 1"
-    },
-    "school:shadow+type:spell+cost:more:0": {
-      "cards": [
-        "TamsinRoame_BAR_918"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'SPELL' && refCard.spellSchool?.toUpperCase() === 'SHADOW' && refCard.cost > 0"
-    },
-    "cost:more:4": {
-      "cards": [
-        "TimberTambourine"
-      ],
-      "condition": "refCard.cost > 4"
-    },
-    "tribe:totem+type:minion": {
-      "cards": [
-        "TotemicSurge"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.races?.map(r => r.toUpperCase()).includes('TOTEM')"
-    },
-    "tribe:beast+cost:less:4": {
-      "cards": [
-        "TrialOfTheJormungars_WON_028"
-      ],
-      "condition": "refCard.races?.map(r => r.toUpperCase()).includes('BEAST') && refCard.cost < 4"
-    },
-    "type:minion+health:biggerThanAttack": {
-      "cards": [
-        "UnlockedPotential"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.health > refCard.attack"
-    },
-    "type:minion+cost:less:4+other:neutral": {
-      "cards": [
-        "WarCommandsTavernBrawl"
-      ],
-      "condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.cost < 4 && refCard.classes?.includes('NEUTRAL')"
-    }
-  }
+	"races": {
+		"undead": [
+			"AcolyteOfDeath_CORE_RLK_121",
+			"AmateurPuppeteer_AmateurPuppeteerToken_TOY_828t",
+			"ArmsDealer_RLK_824",
+			"Banshee_RLK_957",
+			"BoneFlinger",
+			"Bonecaller",
+			"DeadAir",
+			"DrakkariEmbalmer_RLK_119",
+			"ElderNadox",
+			"FleshBehemoth_RLK_Prologue_RLK_830",
+			"GluthSicleTavernBrawl",
+			"GluthTavernBrawl_PVPDR_Sai_T1",
+			"GraveDigging",
+			"Invincible",
+			"LesserSpinelSpellstone_GreaterSpinelSpellstoneToken_TOY_825t2",
+			"NecroticMortician_CORE_RLK_116",
+			"NerubianVizier",
+			"NoxiousInfiltrator",
+			"PoisonBreath_CORE_EDR_002",
+			"RottingNecromancer",
+			"ShadowWordUndeath",
+			"SicklyGrimewalker_YOG_512",
+			"SkeletalSidekickCore_RLK_958",
+			"SoulburnerVaria_YOG_520",
+			"TwistedTether",
+			"UndyingAllies",
+			"UnlivingChampion",
+			"Wither"
+		],
+		"beast": [
+			"AddledGrizzly_WON_009",
+			"AzsharanSaber_SunkenSaberToken",
+			"BigDreams",
+			"BunnyStomper_WW_435",
+			"ButchTavernBrawl",
+			"CallPet_GVG_017",
+			"CastleKennels_REV_790",
+			"CattleRustler_WW_351",
+			"CowerInFear_TLC_823",
+			"Dinositter_TLC_822",
+			"ExoticHoundmaster_EDR_226",
+			"FaithfulCompanions",
+			"FangboundDruid",
+			"Goldrinn_EDR_480",
+			"HarpoonGun",
+			"HemetFoamMarksman_TOY_355",
+			"HerbivoreAssistant_DINO_419",
+			"JungleGym_TOY_359",
+			"KathrenaWinterwisp",
+			"KingOfBeasts_WON_162",
+			"KnightOfTheWild_WON_003",
+			"LivingSeedRank1_LivingSeedRank3Token",
+			"Malorne_WON_011",
+			"MenagerieWarden_WON_305",
+			"MessengerBuzzard_WW_807",
+			"MysteryEgg_MysteryEggToken_TOY_351t",
+			"Oondasta",
+			"PaintedCanvasaur_TOY_350",
+			"PeacefulPiper",
+			"PeacefulPiper_FriendlyFace",
+			"PossessedAnimancer_DINO_131",
+			"PredatoryInstincts",
+			"RamkahenWildtamer",
+			"RoostingGargoyle_CORE_REV_351",
+			"ScavengersIngenuity",
+			"ScrapShot",
+			"SelectiveBreederCore",
+			"Serpentbloom",
+			"Shadehound",
+			"ShandoWildclaw_Transfiguration",
+			"StarvingTavernBrawl",
+			"StormpikeBattleRam",
+			"SupremeDinomancy_TLC_828",
+			"TavishStormpike_BAR_038",
+			"TendingDragonkin_FIR_960",
+			"ThornmantleMusician",
+			"Thunderbringer_WW_440",
+			"VirmenSensei_WON_300",
+			"WarsongWrangler",
+			"WingCommanderIchman_AV_336",
+			"WitchingHour"
+		],
+		"pirate": [
+			"AdrenalineFiend_VAC_927",
+			"Ancharrr",
+			"BeckoningBicornTavernBrawl",
+			"CannonBarrage",
+			"CaptainsParrotVanilla",
+			"CutlassCourier",
+			"HarborScamp",
+			"HozenRoughhouser_VAC_938",
+			"PatchesThePirate_CFM_637",
+			"PatchesThePirate_LockedAndLoaded_THD_025p",
+			"PirateAdmiralHooktusk",
+			"SailboatCaptain_VAC_937",
+			"ShadyDealer",
+			"SharkPuncher_WON_138",
+			"ShipsCannon",
+			"ShoplifterGoldbeard_TOY_511",
+			"Swordfish",
+			"TreasureDistributor_TOY_518"
+		],
+		"demon": [
+			"AllShallServeTavernBrawl",
+			"BlackHole_GDB_126",
+			"BloodreaverGuldan_ICC_831",
+			"CariaFelsoul",
+			"CraneGame_TOY_884",
+			"Demonfuse_DarkFusionEnchantment",
+			"Felosophy",
+			"GameMasterNemsy_TOY_524",
+			"InfernalStratagem_GDB_122",
+			"Malganis_GVG_021",
+			"PitCommander",
+			"RagingFelscreamer_BT_416",
+			"SenseDemonsVanilla_VAN_EX1_317",
+			"SigilOfReckoning",
+			"TabletopRoleplayer_TOY_915",
+			"UmpiresGrasp_TOY_641",
+			"VoidcallerCore"
+		],
+		"dragon": [
+			"AmberWhelp",
+			"BlackwingCorruptor_WON_329",
+			"BreathOfDreams",
+			"BroodKeeper_EDR_457",
+			"CandleBreath",
+			"Chillmaw_CORE_AT_123",
+			"CloudSerpent_TLC_888",
+			"ClutchOfCorruption_EDR_454",
+			"DaringDrake",
+			"Darkrider_EDR_456",
+			"DesertNestmatron_WW_826",
+			"DraconicDreamTavernBrawl",
+			"DragonAffinityTavernBrawl",
+			"DragonBreeder",
+			"DragonConsort",
+			"DragonGolem_WW_822",
+			"DragonbloodTavernBrawl",
+			"DragonboneRitualTavernBrawl",
+			"Dragoncaster",
+			"DrakonidOperativeCore",
+			"FlyOffTheShelves_TOY_714",
+			"FrizzKindleroost",
+			"FutureEmissary_WON_140",
+			"GiftwrappedWhelp_TOY_386",
+			"HeraldOfFlame_TRLA_176",
+			"HornOfWrathion",
+			"Kazakusan_ONY_005",
+			"MalygosAspectOfMagic",
+			"NaralexHeraldOfTheFlights_EDR_844",
+			"NetherBreath_DRG_205",
+			"OnyxianWarder",
+			"PetalPeddler_EDR_889",
+			"RedscaleDragontamer_CORE_DMF_194",
+			"ScaleReplica_TOY_387",
+			"Scalerider",
+			"Scaleworm",
+			"Skyfin",
+			"Soridormi_WON_146",
+			"SpinetailDrake_WW_820",
+			"SplishSplashWhelp_WW_819",
+			"Stormhammer",
+			"SuccumbToMadness_EDR_455",
+			"TakeToTheSkies_WW_816",
+			"TastyFlyfish",
+			"Timewarden",
+			"TimewinderZarimi_TOY_385",
+			"TormentedDreadwing_EDR_572",
+			"TwilightGuardian",
+			"WingCommander"
+		],
+		"elemental": [
+			"AnimatedAvalanche",
+			"AquaArchivist",
+			"AridStormer",
+			"AzeriteGiant_WW_025",
+			"Blazecaller",
+			"BralmaSearstone_TLC_228",
+			"DangBlastedElemental_WW_397",
+			"ElementalEvocation",
+			"ElementaryReaction",
+			"ErodedSediment_WW_428",
+			"FireBreath_DINO_406",
+			"FirePlumeHarbinger",
+			"FlameRevenant",
+			"FrostLichJaina_CORE_ICC_833",
+			"FrostfinChomper",
+			"GraniteForgeborn",
+			"Gyreworm",
+			"KalimosPrimalLord_Core_UNG_211",
+			"KindlingElemental",
+			"Lamplighter_VAC_442",
+			"LilypadLurker",
+			"LivingPrairie_WW_024",
+			"MesaduneTheFractured_WW_429",
+			"MinecartCruiser_WW_326",
+			"OverflowSurger_WW_424",
+			"Sandbinder",
+			"ShaleSpider_DEEP_034",
+			"SkarrTheCatastrophe_WW_026",
+			"SolarFlare_GDB_305",
+			"SpontaneousCombustion_GDB_456",
+			"SteamSurger",
+			"StoneSentinel",
+			"TaintedRemnant_YOG_519",
+			"Therazane_DEEP_036",
+			"UnchainedGladiator",
+			"WailingVapor_CORE_WC_042",
+			"WindsweptPageturner_TLC_220"
+		],
+		"murloc": [
+			"AzsharanScavenger_SunkenScavengerToken",
+			"Braingill_GDB_878",
+			"CookiesLadleTavernBrawl",
+			"DiveTheGolakkaDepths_TLC_426",
+			"FinjaTheFlyingStar_CORE_CFM_344",
+			"FiremancerFlurgl",
+			"GorlocRavager",
+			"HotSpringGlider_TLC_428",
+			"IceFishing_ICC_089",
+			"ItsRainingFin",
+			"LushwaterScout",
+			"SirFinleyMrrgglton_ScalesOfJustice_THD_044p",
+			"TidelostBurrower",
+			"TinyfinsCaravan",
+			"UnderbellyAngler"
+		],
+		"naga": [
+			"BarbedNets",
+			"CoilCastingTavernBrawl",
+			"NagasPride",
+			"OasisOutlaws_WW_404",
+			"Predation",
+			"SeaweedStrike",
+			"SerpentWig_TSC_215"
+		],
+		"mech": [
+			"Bubblebot_TSC_059",
+			"ClickClocker",
+			"ClockworkKnight",
+			"DrBoomMadGenius",
+			"DrBoom_BoomBarrage_THD_034p",
+			"DynOMaticCore",
+			"FrequencyOscillator",
+			"GaiaTheTechtonic_TSC_029",
+			"GoboglideTech",
+			"IniStormcoil_TSC_649",
+			"InventorsAura",
+			"KangorsEndlessArmy",
+			"MechaShark_TSC_054",
+			"MimironTheMastermind",
+			"PitStop",
+			"RadarDetector_TSC_079",
+			"SeafloorGateway_TSC_055",
+			"SeascoutOperator_TSC_646",
+			"SecurityAutomaton_TSC_928",
+			"SootSpewer_WON_033",
+			"TimelineAccelerator_WON_139",
+			"TinyWorldbreaker_YOG_527",
+			"TramOperator",
+			"TrenchSurveyor_TSC_642",
+			"Ursatron",
+			"WreckemAndDeckem_TOY_603"
+		],
+		"totem": [
+			"DraeneiTotemcarver_CORE_AT_047",
+			"Gigantotem",
+			"SplittingAxe",
+			"TheStonewright",
+			"ThingFromBelowCore"
+		]
+	},
+	"spellSchools": {},
+	"cardTypes": {
+		"location": ["DispossessedSoul_CORE_REV_901"]
+	},
+	"mechanics": {},
+	"costs": {},
+	"attacks": {},
+	"healths": {},
+	"others": {},
+	"compounds": {
+		"tribe:beast+type:minion": {
+			"cards": ["AbsorbentParasite", "Banjosaur", "TheCurator_CORE_KAR_061"],
+			"condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.races?.map(r => r.toUpperCase()).includes('BEAST')"
+		},
+		"type:minion+mechanics:rush": {
+			"cards": [
+				"AkaliTheRhino",
+				"ClearTheWay",
+				"DivingGryphon",
+				"PotionOfSparkingTavernBrawl",
+				"RocketBackpacksTavernBrawl",
+				"RushTheStage",
+				"SpecialDeliveryTavernBrawl",
+				"StageDive_StageDive",
+				"TownCrier_CORE_GIL_580"
+			],
+			"condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.mechanics?.includes('RUSH')"
+		},
+		"mechanics:battlecry+cost:more:2": {
+			"cards": ["AllTogetherNowTavernBrawl"],
+			"condition": "refCard.cost > 2 && refCard.mechanics?.includes('BATTLECRY')"
+		},
+		"type:minion+other:tribeless": {
+			"cards": [
+				"AllYouCanEat_VAC_528",
+				"AmalgamOfTheDeep",
+				"FlightOfTheFirehawk_TLC_222",
+				"MenagerieMug_CORE_WON_141",
+				"PartyAnimal",
+				"RoaringApplause",
+				"RockMasterVoone_ETC_121",
+				"SpiritOfTheMountain_TLC_229",
+				"ThePurator",
+				"TortollanStoryteller_TLC_254",
+				"TrustyCompanion_WW_027"
+			],
+			"condition": "refCard.type?.toUpperCase() === 'MINION' && !refCard.races || refCard.races.length === 0"
+		},
+		"tribe:undead+type:minion": {
+			"cards": ["AmorphousSlime", "SinisterSoulcage_YOG_513"],
+			"condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.races?.map(r => r.toUpperCase()).includes('UNDEAD')"
+		},
+		"type:minion+mechanics:deathrattle": {
+			"cards": [
+				"AmuletOfUndying",
+				"ArchdruidOfThorns_EDR_491",
+				"AwakenTheMakers",
+				"BrittleboneBuccaneer_VAC_436",
+				"CarrionStudies",
+				"DeadRinger",
+				"DeathBlossomWhomper",
+				"DeathGrowl",
+				"DeathlyDeathTavernBrawl",
+				"DeathstriderTavernBrawl",
+				"DevoutBlessingsTavernBrawlToken",
+				"ExpeditedBurialTavernBrawl",
+				"FelfireBonfire_VAC_952",
+				"ForsakenLieutenant_AV_601",
+				"HedgeMaze_REV_792",
+				"HighCultistHerenn_TLC_810",
+				"JewelOfNzoth",
+				"MummyMagic",
+				"NecriumApothecary",
+				"NineLives",
+				"NzothTheCorruptor",
+				"NzothTheCorruptor_DarkMachinations_THD_039p",
+				"PrincessTavernBrawl",
+				"RavenousFelhunter_EDR_891",
+				"ScourgeIllusionist",
+				"Shattershambler",
+				"TamsinsPhylactery",
+				"TerrorscaleStalker_CORE_UNG_800",
+				"TombLurker_ICC_098",
+				"Tuskpiercer_CORE_BAR_330",
+				"TwilightsCall",
+				"UnearthedRaptor",
+				"VengefulSpirit_BAR_328",
+				"XyrellaTheDevout",
+				"YellingYodeler"
+			],
+			"condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.mechanics?.includes('DEATHRATTLE')"
+		},
+		"mechanics:secret": {
+			"cards": [
+				"AncientMysteries",
+				"AnonymousInformant_CORE_REV_841",
+				"Arcanologist",
+				"ArcanologistCore",
+				"ChattyBartender",
+				"CostumedSinger",
+				"DunBaldarBunker",
+				"EaglehornBowVanilla",
+				"GhastlyGravedigger",
+				"KabalCrystalRunner_WON_308",
+				"MadScientist",
+				"MysteriousChallenger_WON_334",
+				"PrivateEye",
+				"ScuttlebuttGhoul_CORE_REV_900",
+				"SecretStudiesTavernBrawl",
+				"SpringTheTrap",
+				"Zuljin_WarriorsOfAmani_THD_010p"
+			],
+			"condition": "refCard.mechanics?.includes('SECRET')"
+		},
+		"type:minion+cost:less:4": {
+			"cards": ["AnimateDead"],
+			"condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.cost < 4"
+		},
+		"type:minion+cost:equal:1": {
+			"cards": [
+				"ApothecarysCaravan",
+				"BoogieDown",
+				"K90tron",
+				"SonyaWaterdancer_TOY_515",
+				"TrustyFishingRod_VAC_960"
+			],
+			"condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.cost === 1"
+		},
+		"type:spell+cost:equal:7": {
+			"cards": ["ArcaneBrilliance"],
+			"condition": "refCard.type?.toUpperCase() === 'SPELL' && refCard.cost === 7"
+		},
+		"tribe:demon+other:notInInitialDeck": {
+			"cards": ["Archimonde_GDB_128", "ForebodingFlame_GDB_121"],
+			"condition": "refCard.races?.map(r => r.toUpperCase()).includes('DEMON')"
+		},
+		"type:spell+cost:more:4": {
+			"cards": ["AshleafPixie_FIR_961", "Groundskeeper", "HagathaTheFabled_TOY_504"],
+			"condition": "refCard.type?.toUpperCase() === 'SPELL' && refCard.cost > 4"
+		},
+		"type:minion+mechanics:battlecry": {
+			"cards": [
+				"AuctionhouseGavel",
+				"BrannBronzebeard_BrannsSaddle_THD_042p",
+				"FairyTaleForest_TOY_507",
+				"Murmur_GDB_448",
+				"ParrotSanctuary_VAC_409",
+				"Snapdragon",
+				"Turbulus_WORK_013"
+			],
+			"condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.mechanics?.includes('BATTLECRY')"
+		},
+		"type:minion+cost:less:3": {
+			"cards": ["BandOfBeesTavernBrawl", "CallToArms", "OracleOfElune"],
+			"condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.cost < 3"
+		},
+		"type:spell+cost:equal:1": {
+			"cards": ["BarakKodobane_CORE_BAR_551", "Gazlowe", "TrinketTracker"],
+			"condition": "refCard.type?.toUpperCase() === 'SPELL' && refCard.cost === 1"
+		},
+		"mechanics:deathrattle": {
+			"cards": [
+				"BaronRivendare_CORE_FP1_031",
+				"BarrensTrapper",
+				"NecriumBlade",
+				"NecriumVial",
+				"PlayDead_CORE_ICC_052",
+				"ReturnPolicy_MIS_102",
+				"RollTheBones_CORE_ICC_201",
+				"RottenRodent",
+				"ShallowGrave",
+				"Smokescreen",
+				"SummonerDarkmarrow_VAC_503",
+				"TotemOfTheDead_LOOTA_845"
+			],
+			"condition": "refCard.mechanics?.includes('DEATHRATTLE')"
+		},
+		"type:minion+mechanics:taunt": {
+			"cards": [
+				"Battlepickaxe_WW_347",
+				"Bolster",
+				"BulkUp",
+				"DetonationJuggernaut_WW_329",
+				"EnduranceTrainingTavernBrawl",
+				"FirePlumesHeart",
+				"IntoTheFray",
+				"QualityAssurance_TOY_605",
+				"RazormaneBattleguard",
+				"TortollanTraveler_VAC_518",
+				"UnluckyPowderman_WW_367",
+				"ValstannStaghelm_WON_345"
+			],
+			"condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.mechanics?.includes('TAUNT')"
+		},
+		"mechanics:battlecry": {
+			"cards": [
+				"BattleTotem_LOOTA_846",
+				"BrannBronzebeard_LOE_077",
+				"BrilliantMacaw",
+				"CorruptTheWaters",
+				"MurmuringElemental",
+				"RallyTheTroopsTavernBrawl",
+				"Shudderblock_ShudderblockToken_TOY_501t"
+			],
+			"condition": "refCard.mechanics?.includes('BATTLECRY')"
+		},
+		"mechanics:legendary+other:legendary": {
+			"cards": ["ArchVillainRafaam_BeholdMyStuff_THD_032p"],
+			"condition": "refCard.rarity?.toUpperCase() === 'LEGENDARY'"
+		},
+		"school:frost+other:dealsDamage": {
+			"cards": ["BitterColdTavernBrawl"],
+			"condition": "refCard.spellSchool?.toUpperCase() === 'FROST' && refCard.type?.toUpperCase() === 'SPELL'"
+		},
+		"tribe:mech+mechanics:deathrattle": {
+			"cards": ["BoomWrench_BoomWrenchToken_TOY_604t"],
+			"condition": "refCard.races?.map(r => r.toUpperCase()).includes('MECH') && refCard.mechanics?.includes('DEATHRATTLE')"
+		},
+		"mechanics:excavate,legendary,quickdraw,tradeable+other:legendary": {
+			"cards": ["BountyBoard_WW_003"],
+			"condition": "refCard.rarity?.toUpperCase() === 'LEGENDARY'"
+		},
+		"mechanics:lifesteal+other:restoreHealth": {
+			"cards": ["BrittleboneDestroyer"],
+			"condition": "refCard.mechanics?.includes('LIFESTEAL')"
+		},
+		"type:spell+cost:costMore:4": {
+			"cards": ["BumblingBellhop_VAC_521", "FaeTrickster_EDR_571", "WeaverOfTheCycle_EDR_472"],
+			"condition": "refCard.type?.toUpperCase() === 'SPELL'"
+		},
+		"type:minion+attack:equal:1": {
+			"cards": ["BusyBot_WORK_002"],
+			"condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.attack === 1"
+		},
+		"type:minion+cost:more:4": {
+			"cards": ["CaricatureArtist_TOY_391"],
+			"condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.cost > 4"
+		},
+		"school:holy+type:spell": {
+			"cards": [
+				"CarielRoame_BAR_902",
+				"FlickeringLightbot_FlickeringLightbotToken_MIS_918t",
+				"GuardianLightTavernBrawl",
+				"HeraldOfLight",
+				"HiHoSilverwing_WW_344",
+				"HolyCowboy_WW_335",
+				"HolyGlowsticks_MIS_709",
+				"InvigoratingLightTavernBrawl",
+				"KnightOfAnointment",
+				"KureTheLightBeyond_GDB_442",
+				"ReachEquilibrium_CleanseTheShadowToken_TLC_817t",
+				"ShimmeringSunfish",
+				"StarlightGroove",
+				"TheGardensGrace",
+				"VeteranWarmedic"
+			],
+			"condition": "refCard.type?.toUpperCase() === 'SPELL' && refCard.spellSchool?.toUpperCase() === 'HOLY'"
+		},
+		"type:minion+attack:greater:4": {
+			"cards": ["ClimbingHook_VAC_932", "GiantAnaconda"],
+			"condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.attack > 4"
+		},
+		"tribe:dragon+type:minion": {
+			"cards": ["CollectorsIreTavernBrawlToken", "DrocomurchanicasTavernBrawlToken"],
+			"condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.races?.map(r => r.toUpperCase()).includes('DRAGON')"
+		},
+		"tribe:naga+type:spell": {
+			"cards": ["ConchsCall"],
+			"condition": "refCard.type?.toUpperCase() === 'SPELL' && refCard.races?.map(r => r.toUpperCase()).includes('NAGA')"
+		},
+		"type:minion+attack:greater:0,less:2": {
+			"cards": ["Crystology"],
+			"condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.attack > 0 && refCard.attack < 2"
+		},
+		"type:minion+mechanics:deathrattle+cost:less:6": {
+			"cards": ["DeathSpeakerBlackthorn_BAR_329"],
+			"condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.cost < 6 && refCard.mechanics?.includes('DEATHRATTLE')"
+		},
+		"school:nature+type:spell": {
+			"cards": [
+				"DeviateDreadfang",
+				"GroveShaper_EDR_271",
+				"GuffRunetotem_BAR_720",
+				"HeraldOfNature",
+				"IronRootsTavernBrawl",
+				"LadyAnacondra_WC_006",
+				"MendingPoolsTavernBrawl",
+				"SpreadingSaplingsTavernBrawl",
+				"ToadOfTheWilds",
+				"TopiorTheShrubbagazzor",
+				"WidowbloomSeedsman"
+			],
+			"condition": "refCard.type?.toUpperCase() === 'SPELL' && refCard.spellSchool?.toUpperCase() === 'NATURE'"
+		},
+		"tribe:demon+type:minion": {
+			"cards": ["DirgeOfDespair", "KanrethadEbonlocke_KanrethadPrimeToken"],
+			"condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.races?.map(r => r.toUpperCase()).includes('DEMON')"
+		},
+		"type:minion+mechanics:legendary+other:legendary": {
+			"cards": [
+				"DisksOfLegendTavernBrawl",
+				"InspiringPresenceTavernBrawl",
+				"RingOfPhaseshiftingTavernBrawl",
+				"RoyalGreatswordTavernBrawlToken"
+			],
+			"condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.rarity?.toUpperCase() === 'LEGENDARY'"
+		},
+		"type:minion+mechanics:deathrattle+cost:less:4": {
+			"cards": ["DreadRaptor_TLC_432", "Razorboar"],
+			"condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.cost < 4 && refCard.mechanics?.includes('DEATHRATTLE')"
+		},
+		"school:shadow+type:spell": {
+			"cards": [
+				"EerieStoneTavernBrawl",
+				"HeraldOfShadows",
+				"KaraTheDarkStar_GDB_127",
+				"LadyDarkvein_CORE_REV_373",
+				"ReachEquilibrium_CorruptTheLightToken_TLC_817t2",
+				"Shadowborn",
+				"ShadowclothNeedle",
+				"SketchArtist_TOY_916",
+				"StaffOfPainTavernBrawl",
+				"TwilightDeceptor"
+			],
+			"condition": "refCard.type?.toUpperCase() === 'SPELL' && refCard.spellSchool?.toUpperCase() === 'SHADOW'"
+		},
+		"tribe:elemental+mechanics:legendary+other:legendary": {
+			"cards": ["AlakirTheWindlord_ElementalEvocation_THD_026p"],
+			"condition": "refCard.races?.map(r => r.toUpperCase()).includes('ELEMENTAL') && refCard.rarity?.toUpperCase() === 'LEGENDARY'"
+		},
+		"type:minion+mechanics:divineShield": {
+			"cards": ["FancyPackaging_TOY_881", "Funkfin", "RighteousReservesTavernBrawl"],
+			"condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.mechanics?.includes('DIVINE_SHIELD')"
+		},
+		"school:fel+type:spell": {
+			"cards": [
+				"FelfireBlaze_FIR_904",
+				"Felgorger_SW_043",
+				"FossilFanatic",
+				"GraveDefiler",
+				"HeraldOfChaos",
+				"IllidanStormrage_FelInside_THD_004p",
+				"ImpCredibleTrousersTavernBrawl",
+				"PopgarThePutrid_WW_091",
+				"Scorchreaver_FIR_952",
+				"WitherTheWeakTavernBrawl"
+			],
+			"condition": "refCard.type?.toUpperCase() === 'SPELL' && refCard.spellSchool?.toUpperCase() === 'FEL'"
+		},
+		"type:minion+mechanics:deathrattle+cost:more:4": {
+			"cards": ["FerociousFelbat_EDR_892"],
+			"condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.cost > 4 && refCard.mechanics?.includes('DEATHRATTLE')"
+		},
+		"mechanics:battlecry,combo": {
+			"cards": ["FieldContact"],
+			"condition": "refCard.mechanics?.includes('BATTLECRY')"
+		},
+		"school:fire+type:spell": {
+			"cards": [
+				"FirekeepersIdolTavernBrawl",
+				"FlameWavesTavernBrawl",
+				"FlamesOfTheKirinTorTavernBrawl",
+				"HotStreak",
+				"InfernoHerald_FIR_913",
+				"LivingFlame_FIR_929",
+				"MechanizedMagma_TLC_224",
+				"ScorchingWinds_FIR_910",
+				"SunfuryChampion",
+				"Thoribelore",
+				"VolcanicThrasher_TLC_223"
+			],
+			"condition": "refCard.type?.toUpperCase() === 'SPELL' && refCard.spellSchool?.toUpperCase() === 'FIRE'"
+		},
+		"cost:more:7": {
+			"cards": ["FlamesOfTheFirelord_FIR_923"],
+			"condition": "refCard.cost > 7"
+		},
+		"school:frost+type:spell": {
+			"cards": [
+				"GlacialDownpourTavernBrawl",
+				"HarbingerOfWinterCore_RLK_511",
+				"HeraldOfLokholar",
+				"IceRevenant",
+				"LadyDeathwhisper_RLK_713",
+				"RambunctiousStuffy_TOY_821",
+				"Rimetongue",
+				"WatercolorArtist_TOY_376"
+			],
+			"condition": "refCard.type?.toUpperCase() === 'SPELL' && refCard.spellSchool?.toUpperCase() === 'FROST'"
+		},
+		"tribe:mech+type:minion": {
+			"cards": ["GorillabotA3Core"],
+			"condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.races?.map(r => r.toUpperCase()).includes('MECH')"
+		},
+		"cost:equal:2": {
+			"cards": ["GreedyPartner_WW_901"],
+			"condition": "refCard.cost === 2"
+		},
+		"type:spell+cost:more:5": {
+			"cards": ["GreySageParrot"],
+			"condition": "refCard.type?.toUpperCase() === 'SPELL' && refCard.cost > 5"
+		},
+		"type:minion+cost:less:5": {
+			"cards": ["GrizzledGuardian", "OakenSummons_CORE_LOOT_309"],
+			"condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.cost < 5"
+		},
+		"tribe:beast+cost:less:6": {
+			"cards": ["GuardianAnimals", "PetCollector"],
+			"condition": "refCard.races?.map(r => r.toUpperCase()).includes('BEAST') && refCard.cost < 6"
+		},
+		"school:arcane+type:spell": {
+			"cards": [
+				"HalduronBrightwing",
+				"MagistersApprentice",
+				"SilvermoonFarstrider_RLK_826",
+				"Stargazing_WW_425",
+				"StarlightReactor_GDB_108",
+				"UnstableMagicTavernBrawl",
+				"Vexallus"
+			],
+			"condition": "refCard.type?.toUpperCase() === 'SPELL' && refCard.spellSchool?.toUpperCase() === 'ARCANE'"
+		},
+		"type:minion+attack:less:3": {
+			"cards": ["HatcheryHelper_TLC_233"],
+			"condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.attack < 3"
+		},
+		"cost:more:3": {
+			"cards": ["HemetJungleHunter"],
+			"condition": "refCard.cost > 3"
+		},
+		"mechanics:taunt": {
+			"cards": ["HoldTheLineTavernBrawl", "LastStand", "StolenGoods_WON_110"],
+			"condition": "refCard.mechanics?.includes('TAUNT')"
+		},
+		"type:minion+attack:equal:0": {
+			"cards": ["HolyEggbearer_DINO_411"],
+			"condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.attack === 0"
+		},
+		"type:minion+cost:less:5,more:0": {
+			"cards": ["Hybridization_TLC_236"],
+			"condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.cost > 0 && refCard.cost < 5"
+		},
+		"type:spell+other:hasSpellSchool": {
+			"cards": ["MagisterDawngrasp_AV_200", "RazzleDazzler_VAC_301"],
+			"condition": "refCard.type?.toUpperCase() === 'SPELL' && !!refCard.spellSchool"
+		},
+		"type:spell+mechanics:chooseOne": {
+			"cards": ["JerryRigCarpenter"],
+			"condition": "refCard.type?.toUpperCase() === 'SPELL'"
+		},
+		"mechanics:divineShield": {
+			"cards": ["Jitterbug", "TorethTheUnbreaking_EDR_258"],
+			"condition": "refCard.mechanics?.includes('DIVINE_SHIELD')"
+		},
+		"type:minion+cost:equal:7": {
+			"cards": ["JuicyPsychmelon"],
+			"condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.cost === 7"
+		},
+		"school:fire+type:spell+other:dealsDamage": {
+			"cards": ["KindlingFlameTavernBrawl"],
+			"condition": "refCard.type?.toUpperCase() === 'SPELL' && refCard.spellSchool?.toUpperCase() === 'FIRE'"
+		},
+		"type:minion+attack:less:4": {
+			"cards": ["LeadDancer", "WarsongCommanderVanilla"],
+			"condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.attack < 4"
+		},
+		"cost:equal:3": {
+			"cards": ["LinedancePartner_WW_433"],
+			"condition": "refCard.cost === 3"
+		},
+		"type:minion+mechanics:combo": {
+			"cards": ["LuckyComet_GDB_873"],
+			"condition": "refCard.type?.toUpperCase() === 'MINION'"
+		},
+		"type:minion+cost:costMore:7": {
+			"cards": ["Merithra_EDR_238"],
+			"condition": "refCard.type?.toUpperCase() === 'MINION'"
+		},
+		"type:minion+other:neutral": {
+			"cards": ["MeekMasteryTavernBrawl", "MulchMadnessTavernBrawl"],
+			"condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.classes?.includes('NEUTRAL')"
+		},
+		"school:nature+type:spell+other:dealsDamage": {
+			"cards": ["NaturalForceTavernBrawl"],
+			"condition": "refCard.type?.toUpperCase() === 'SPELL' && refCard.spellSchool?.toUpperCase() === 'NATURE'"
+		},
+		"tribe:mech+mechanics:magnetic": {
+			"cards": ["OptimizedPolarityTavernBrawl"],
+			"condition": "refCard.races?.map(r => r.toUpperCase()).includes('MECH')"
+		},
+		"type:spell+mechanics:discover+cost:more:2": {
+			"cards": ["OrbOfRevelationTavernBrawl"],
+			"condition": "refCard.type?.toUpperCase() === 'SPELL' && refCard.cost > 2"
+		},
+		"cost:equal:1": {
+			"cards": ["PipThePotent_WW_394", "PrinceLiam", "RollingStone", "ThirstyDrifter_WW_387"],
+			"condition": "refCard.cost === 1"
+		},
+		"type:spell+cost:more:1": {
+			"cards": ["PlaguebringerTavernBrawl"],
+			"condition": "refCard.type?.toUpperCase() === 'SPELL' && refCard.cost > 1"
+		},
+		"mechanics:rush": {
+			"cards": ["PluckyPaintfin_TOY_517"],
+			"condition": "refCard.mechanics?.includes('RUSH')"
+		},
+		"type:minion+cost:less:4,more:0": {
+			"cards": ["Rally"],
+			"condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.cost > 0 && refCard.cost < 4"
+		},
+		"type:minion+mechanics:deathrattle+cost:less:5": {
+			"cards": ["RazorfenBeastmaster"],
+			"condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.cost < 5 && refCard.mechanics?.includes('DEATHRATTLE')"
+		},
+		"type:minion+cost:costMore:6": {
+			"cards": ["RotheartDryad_EDR_485"],
+			"condition": "refCard.type?.toUpperCase() === 'MINION'"
+		},
+		"cost:equal:4": {
+			"cards": ["RowdyPartner_WW_906"],
+			"condition": "refCard.cost === 4"
+		},
+		"type:minion+health:less:2": {
+			"cards": ["SalhetsPride", "StewardOfDarkshire_WON_310"],
+			"condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.health < 2"
+		},
+		"type:minion+cost:more:5": {
+			"cards": ["ScepterOfSummoning"],
+			"condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.cost > 5"
+		},
+		"type:minion+cost:equal:8": {
+			"cards": ["SilverVanguard"],
+			"condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.cost === 8"
+		},
+		"mechanics:deathrattle+cost:less:5": {
+			"cards": ["SketchyInformation"],
+			"condition": "refCard.cost < 5 && refCard.mechanics?.includes('DEATHRATTLE')"
+		},
+		"type:spell+cost:baseEqual:1": {
+			"cards": ["SkulkingGeist_ICC_701"],
+			"condition": "refCard.type?.toUpperCase() === 'SPELL' && refCard.cost === 1"
+		},
+		"type:spell+mechanics:secret": {
+			"cards": ["SecretkeeperLegacy", "SrTombDiverTavernBrawl", "SwordOfTheFallen"],
+			"condition": "refCard.type?.toUpperCase() === 'SPELL' && refCard.mechanics?.includes('SECRET')"
+		},
+		"type:spell+cost:less:4": {
+			"cards": ["StonehearthVindicator"],
+			"condition": "refCard.type?.toUpperCase() === 'SPELL' && refCard.cost < 4"
+		},
+		"cost:more:5": {
+			"cards": ["SummerFlowerchild"],
+			"condition": "refCard.cost > 5"
+		},
+		"type:spell+cost:less:3": {
+			"cards": ["SunsapperLynessa_VAC_507", "VioletTreasuregill_TLC_438"],
+			"condition": "refCard.type?.toUpperCase() === 'SPELL' && refCard.cost < 3"
+		},
+		"cost:more:1+other:notInInitialDeck": {
+			"cards": ["TaethelanBloodwatcher_WW_430"],
+			"condition": "refCard.cost > 1"
+		},
+		"school:shadow+type:spell+cost:more:0": {
+			"cards": ["TamsinRoame_BAR_918"],
+			"condition": "refCard.type?.toUpperCase() === 'SPELL' && refCard.spellSchool?.toUpperCase() === 'SHADOW' && refCard.cost > 0"
+		},
+		"cost:more:4": {
+			"cards": ["TimberTambourine"],
+			"condition": "refCard.cost > 4"
+		},
+		"tribe:totem+type:minion": {
+			"cards": ["TotemicSurge"],
+			"condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.races?.map(r => r.toUpperCase()).includes('TOTEM')"
+		},
+		"tribe:beast+cost:less:4": {
+			"cards": ["TrialOfTheJormungars_WON_028"],
+			"condition": "refCard.races?.map(r => r.toUpperCase()).includes('BEAST') && refCard.cost < 4"
+		},
+		"type:minion+health:biggerThanAttack": {
+			"cards": ["UnlockedPotential"],
+			"condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.health > refCard.attack"
+		},
+		"type:minion+cost:less:4+other:neutral": {
+			"cards": ["WarCommandsTavernBrawl"],
+			"condition": "refCard.type?.toUpperCase() === 'MINION' && refCard.cost < 4 && refCard.classes?.includes('NEUTRAL')"
+		}
+	}
 }
