@@ -334,6 +334,7 @@ const hasReference =
 	};
 export const aura = hasMechanic(GameTag.PALADIN_AURA);
 export const barrelOfSludge = hasMechanicStr('BARREL_OF_SLUDGE');
+export const caresAboutVoidSoul = hasMechanicStr('CARES_ABOUT_VOID_SOUL');
 export const battlecry = hasMechanic(GameTag.BATTLECRY);
 export const charge = hasMechanic(GameTag.CHARGE);
 export const chooseOne = and(

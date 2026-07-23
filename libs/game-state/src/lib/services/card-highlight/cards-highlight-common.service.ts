@@ -31,6 +31,7 @@ import {
 	and,
 	barrelOfSludge,
 	cardIs,
+	caresAboutVoidSoul,
 	CONCOCTION_GENERATORS,
 	CONCOCTION_RELATED_CARDS,
 	CREWMATE_GENERATORS,
@@ -577,6 +578,9 @@ export abstract class CardsHighlightCommonService {
 		}
 		if (refCard.mechanics?.includes('BARREL_OF_SLUDGE')) {
 			selectors.push(and(side(inputSide), or(inDeck, inHand), barrelOfSludge));
+		}
+		if (refCard.mechanics?.includes('CARES_ABOUT_VOID_SOUL')) {
+			selectors.push(and(side(inputSide), or(inDeck, inHand), caresAboutVoidSoul));
 		}
 		if (RELIC_IDS.includes(cardId as CardIds)) {
 			selectors.push(and(side(inputSide), or(inDeck, inHand), relic));
