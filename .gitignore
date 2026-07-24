@@ -55,3 +55,9 @@ docs/premium/thumbnails/
 test-tools/perf/*.cpuprofile
 test-tools/perf/full-pipeline-perf-results.json
 test-tools/bg.log
+
+# Local Electron / Azure / Overwolf signing credentials (see .env.signing.example)
+.env.signing
+.env.signing.local
+*.signing.env
+

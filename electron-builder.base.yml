@@ -49,12 +49,22 @@ extraResources:
           - '!**/*.map'
 
 # Windows-specific configuration
+# Signing credentials: copy `.env.signing.example` → `.env.signing` (gitignored).
+# Build scripts load it via `build-tools/with-signing-env.mjs`.
+# Azure: AZURE_TENANT_ID, AZURE_CLIENT_ID, AZURE_CLIENT_SECRET
+# Overwolf: OW_CLI_EMAIL, OW_CLI_API_KEY, OW_BUILD_KEY
+# See https://dev.overwolf.com/ow-electron/guides/dev-tools/app-signing/
 win:
     target:
         - target: nsis
           arch:
               - x64
     icon: overwolf/launcher_icon.ico
+    azureSignOptions:
+        publisherName: 'O. SPHERE'
+        endpoint: 'https://weu.codesigning.azure.net/'
+        codeSigningAccountName: 'sebastientromp-artifact'
+        certificateProfileName: 'firestone-pub'
 
 # NSIS installer configuration (minimal, plain installer - no Overwolf installer integration)
 nsis:
