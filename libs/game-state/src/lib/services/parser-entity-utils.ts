@@ -1,5 +1,5 @@
 import { CardType, GameTag, Zone } from '@firestone-hs/reference-data';
-import { FullEntity } from '@firestone/power-log-parser';
+import { FullEntity, ParserGameStateLite } from '@firestone/power-log-parser';
 
 export interface TagLike {
 	readonly Name: number;
@@ -16,6 +16,19 @@ export interface EnchantmentLike extends EntityLike {
 	readonly Tags: readonly TagLike[];
 }
 
+/**
+ * Prefer public `Tags`. After Electron IPC structured clone the getter is lost and only
+ * private `_tags` remains on the plain object — read that as a fallback without naming it
+ * on FullEntity (where `_tags` is private and conflicts with a public optional field).
+ */
+export function getEntityTags(
+	entity: { readonly Tags?: readonly TagLike[] | null } | undefined | null,
+): readonly TagLike[] | undefined {
+	if (!entity) return undefined;
+	if (entity.Tags) return entity.Tags;
+	return (entity as { _tags?: readonly TagLike[] })._tags;
+}
+
 export function getTag(tags: readonly TagLike[] | undefined | null, tag: GameTag | number, defaultValue = -1): number {
 	if (!tags) return defaultValue;
 	const match = tags.find((t) => t.Name === (tag as number));
@@ -27,7 +40,7 @@ export const getTagWithHistory = (entity: FullEntity | undefined | null, tag: Ga
 		return null;
 	}
 
-	const result = entity.Tags?.find((t) => t.Name === tag)?.Value;
+	const result = getEntityTags(entity)?.find((t) => t.Name === tag)?.Value;
 	if (!!result) {
 		return result;
 	}
@@ -43,7 +56,37 @@ export function hasTag(tags: readonly TagLike[] | undefined | null, tag: GameTag
 }
 
 export function getEntityTag(entity: EntityLike | undefined | null, tag: GameTag | number, defaultValue = -1): number {
-	return getTag(entity?.Tags, tag, defaultValue);
+	return getTag(getEntityTags(entity), tag, defaultValue);
+}
+
+/**
+ * Materialize parser entities for Electron IPC. `FullEntity.Tags` is a prototype getter over
+ * `_tags`; structured clone drops the getter, which breaks overlay counters that read Tags.
+ * Idempotent so it is safe when the facade transform runs on both main and renderer.
+ */
+export function sanitizeParserStateForElectron(
+	parserState: ParserGameStateLite | null | undefined,
+): ParserGameStateLite | undefined {
+	if (!parserState) {
+		return undefined;
+	}
+	const currentEntities = new Map<number, FullEntity>();
+	for (const [id, entity] of parserState.CurrentEntities ?? []) {
+		currentEntities.set(id, sanitizeEntityForElectron(entity) as FullEntity);
+	}
+	return {
+		CurrentEntities: currentEntities,
+		ControllerEntityMap: parserState.ControllerEntityMap ?? new Map(),
+	};
+}
+
+function sanitizeEntityForElectron(entity: EntityLike | FullEntity): EntityLike {
+	const tags = getEntityTags(entity) ?? [];
+	return {
+		Id: entity.Id,
+		CardId: entity.CardId ?? '',
+		Tags: tags.map((t) => ({ Name: t.Name, Value: t.Value })),
+	};
 }
 
 export function getPlayerEnchantments(
@@ -149,7 +192,7 @@ export function getHeroesAndDeckCounts(
 			controller = -1,
 			lettuceController = -1,
 			zonePosition = -1;
-		const tags = entity.Tags;
+		const tags = getEntityTags(entity);
 		if (tags) {
 			for (let i = 0; i < tags.length; i++) {
 				const name = tags[i].Name;

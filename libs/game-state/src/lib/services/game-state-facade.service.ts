@@ -5,6 +5,7 @@ import { BattlegroundsState } from '../models/_barrel';
 import { DeckState } from '../models/deck-state';
 import { GameState } from '../models/game-state';
 import { GameStateService } from './game-state.service';
+import { sanitizeParserStateForElectron } from './parser-entity-utils';
 
 const eventName = 'game-state-facade';
 
@@ -46,10 +47,7 @@ export class GameStateFacadeService extends AbstractFacadeService<GameStateFacad
 		const bgState: BattlegroundsState | undefined = BattlegroundsState.createForElectron(value.bgState);
 		return GameState.create({
 			...value,
-			parserState: {
-				CurrentEntities: value.parserState?.CurrentEntities ?? new Map(),
-				ControllerEntityMap: value.parserState?.ControllerEntityMap ?? new Map(),
-			},
+			parserState: sanitizeParserStateForElectron(value.parserState),
 			playerDeck: DeckState.createForElectron(value.playerDeck),
 			opponentDeck: DeckState.createForElectron(value.opponentDeck),
 			bgState: bgState,
