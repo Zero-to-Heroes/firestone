@@ -34,8 +34,10 @@ export class LogUtilsService {
 						const gameInfo = await this.backend.getRunningGameInfo();
 						const prefs = await this.prefs.getPreferences();
 						const logsDir = await getLogsDir(this.backend, gameInfo, prefs);
-						console.log('[log-utils] logs dir', logsDir);
-						this.logsDirRoot$$.next(logsDir);
+						if (logsDir && logsDir !== this.logsDirRoot$$.value) {
+							console.log('[log-utils] logs dir changed', logsDir);
+							this.logsDirRoot$$.next(logsDir);
+						}
 					});
 			} else {
 				console.log('[log-utils] game is not running, stopping watcher');
@@ -57,7 +59,7 @@ export const getLogsDir = async (
 	}
 	const adapter = backend as LogFileBackend;
 	const gameBaseDir = await getGameBaseDir(adapter, gameInfo, prefs);
-	console.log('[log-utils] game base dir', gameBaseDir);
+	// console.log('[log-utils] game base dir', gameBaseDir);
 	if (!gameBaseDir) {
 		return null;
 	}
