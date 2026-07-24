@@ -38,11 +38,9 @@ export class MainWindowStateFacadeService extends AbstractFacadeService<MainWind
 	}
 
 	protected override async initElectronSubjects() {
-		this.setupElectronSubject(
-			this.mainWindowState$$,
-			'MainWindowStateFacadeService-mainWindowState',
-			(value: MainWindowState | null) => this.transformMainWindowStateForElectron(value),
-		);
+		this.setupElectronSubject(this.mainWindowState$$, 'MainWindowStateFacadeService-mainWindowState', {
+			hydrate: (value: MainWindowState | null) => this.transformMainWindowStateForElectron(value),
+		});
 	}
 
 	protected override async createElectronProxy(ipcRenderer: any) {

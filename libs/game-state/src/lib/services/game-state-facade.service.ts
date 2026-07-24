@@ -34,23 +34,34 @@ export class GameStateFacadeService extends AbstractFacadeService<GameStateFacad
 	}
 
 	protected override async initElectronSubjects() {
-		this.setupElectronSubject(this.gameState$$, eventName, (gameState: GameState) =>
-			this.transformValueForElectron(gameState),
-		);
+		this.setupElectronSubject(this.gameState$$, eventName, {
+			serialize: (gameState: GameState) => this.serializeForElectron(gameState),
+			hydrate: (gameState: GameState) => this.hydrateForElectron(gameState),
+		});
 	}
 
 	protected override async createElectronProxy(ipcRenderer: any) {
 		this.gameState$$ = new BehaviorSubject<GameState>(new GameState());
 	}
 
-	protected transformValueForElectron(value: GameState): GameState {
-		const bgState: BattlegroundsState | undefined = BattlegroundsState.createForElectron(value.bgState);
+	/** Main→renderer: materialize Tags, strip non-cloneable deck fields, shrink parserState. */
+	protected serializeForElectron(value: GameState): GameState {
 		return GameState.create({
 			...value,
 			parserState: sanitizeParserStateForElectron(value.parserState),
 			playerDeck: DeckState.createForElectron(value.playerDeck),
 			opponentDeck: DeckState.createForElectron(value.opponentDeck),
-			bgState: bgState,
+			bgState: value.bgState,
+		});
+	}
+
+	/** Renderer receive: restore class instances. parserState is already plain { Id, CardId, Tags }. */
+	protected hydrateForElectron(value: GameState): GameState {
+		return GameState.create({
+			...value,
+			playerDeck: DeckState.createForElectron(value.playerDeck),
+			opponentDeck: DeckState.createForElectron(value.opponentDeck),
+			bgState: BattlegroundsState.createForElectron(value.bgState),
 		});
 	}
 }

@@ -125,14 +125,24 @@ export abstract class AbstractFacadeService<T extends AbstractFacadeService<T>> 
 		console.warn(this.constructor.name, 'initElectronSubjects not implemented');
 	}
 
+	/**
+	 * Wire an Electron BehaviorSubject across main ↔ renderer.
+	 *
+	 * - `serialize` runs once before IPC send (shrink / make clone-safe).
+	 * - `hydrate` runs once after IPC receive (restore class instances).
+	 * Main keeps the raw domain value on local `next`; only the wire payload is transformed.
+	 */
 	protected setupElectronSubject<V>(
 		obs: BehaviorSubject<V>,
 		eventName: string,
-		valueTransformer: (value: V) => V = (value: V) => value,
+		transform: ElectronSubjectTransform<V> = {},
 	) {
 		if (!obs) {
 			throw new Error(`[${this.constructor.name}] setupElectronSubject: ${eventName} subject is undefined`);
 		}
+		const serialize = transform.serialize ?? ((value: V) => value);
+		const hydrate = transform.hydrate ?? ((value: V) => value);
+
 		if (isMainProcess()) {
 			const { ipcMain } = eval('require')('electron');
 			if (typeof ipcMain !== 'undefined') {
@@ -142,22 +152,21 @@ export abstract class AbstractFacadeService<T extends AbstractFacadeService<T>> 
 						obs instanceof SubscriberAwareBehaviorSubject
 							? await obs.getValueWithInit()
 							: await obs.getValue();
-					// Must transform before IPC: structured clone runs on the main→renderer return value.
-					return valueTransformer(value);
+					// Serialize before IPC: structured clone runs on the main→renderer return value.
+					return serialize(value);
 				});
 				const originalNext = obs.next.bind(obs);
 				obs.next = (value: V) => {
 					originalNext(value);
-					this.broadcastToRenderers(eventName, valueTransformer(value));
+					this.broadcastToRenderers(eventName, serialize(value));
 				};
 				// Listen for updates from renderer processes
 				const updateChannel = `${eventName}-update`;
 				ipcMain.removeAllListeners(updateChannel);
-				ipcMain.on(updateChannel, (_, value: V) => {
-					const transformedValue = valueTransformer(value);
-					// Apply the update to the main subject using the wrapped next(),
-					// which will broadcast to all renderers (including the sender)
-					obs.next(transformedValue);
+				ipcMain.on(updateChannel, (_, wire: V) => {
+					// Hydrate into main subject; rebroadcast the same wire payload (already serialized).
+					originalNext(hydrate(wire));
+					this.broadcastToRenderers(eventName, wire);
 				});
 			}
 		} else {
@@ -168,16 +177,17 @@ export abstract class AbstractFacadeService<T extends AbstractFacadeService<T>> 
 				const isProcessingIpcUpdate = Symbol('isProcessingIpcUpdate');
 				(obs as any)[isProcessingIpcUpdate] = false;
 
-				// Listen for updates from main process
-				ipcRenderer.on(eventName, (_, value: V) => {
-					const transformedValue = valueTransformer(value);
-					// Mark that we're processing an IPC update to prevent sending it back
+				const applyHydratedFromIpc = (wire: V) => {
 					(obs as any)[isProcessingIpcUpdate] = true;
-					obs.next(transformedValue);
-					// Reset the flag after a microtask to ensure the next() call completes
+					obs.next(hydrate(wire));
 					Promise.resolve().then(() => {
 						(obs as any)[isProcessingIpcUpdate] = false;
 					});
+				};
+
+				// Listen for updates from main process
+				ipcRenderer.on(eventName, (_, wire: V) => {
+					applyHydratedFromIpc(wire);
 				});
 
 				// Wrap next() to send updates to main process when called locally
@@ -186,21 +196,14 @@ export abstract class AbstractFacadeService<T extends AbstractFacadeService<T>> 
 					originalNext(value);
 					// Only send to main if this is a local update (not from IPC)
 					if (!(obs as any)[isProcessingIpcUpdate]) {
-						const transformedValue = valueTransformer(value);
-						ipcRenderer.send(updateChannel, transformedValue);
+						ipcRenderer.send(updateChannel, serialize(value));
 					}
 				};
 
 				try {
 					Promise.resolve(ipcRenderer.invoke(eventName))
-						.then((value: V) => {
-							const transformedValue = valueTransformer(value);
-							// Mark as processing IPC update to prevent sending initial value back
-							(obs as any)[isProcessingIpcUpdate] = true;
-							obs.next(transformedValue);
-							Promise.resolve().then(() => {
-								(obs as any)[isProcessingIpcUpdate] = false;
-							});
+						.then((wire: V) => {
+							applyHydratedFromIpc(wire);
 						})
 						.catch((error) =>
 							console.error(
@@ -305,6 +308,14 @@ export abstract class AbstractFacadeService<T extends AbstractFacadeService<T>> 
 
 export const waitForReady = async (...services: HasIsReady[]) => {
 	return Promise.all(services.filter((service) => service != null).map((service) => service.isReady()));
+};
+
+/** Optional IPC transforms for {@link AbstractFacadeService.setupElectronSubject}. */
+export type ElectronSubjectTransform<V> = {
+	/** Before sending over IPC (main→renderer and renderer→main). */
+	serialize?: (value: V) => V;
+	/** After receiving over IPC (both directions). */
+	hydrate?: (value: V) => V;
 };
 
 interface HasIsReady {

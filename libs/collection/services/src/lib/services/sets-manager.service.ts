@@ -57,9 +57,9 @@ export class SetsManagerService extends AbstractFacadeService<SetsManagerService
 	}
 
 	protected override initElectronSubjects(): void {
-		this.setupElectronSubject(this.sets$$, 'SetsManagerService-sets', (sets: readonly Set[]) =>
-			sets.map((set) => Set.create(set)),
-		);
+		this.setupElectronSubject(this.sets$$, 'SetsManagerService-sets', {
+			hydrate: (sets: readonly Set[]) => sets.map((set) => Set.create(set)),
+		});
 	}
 
 	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {

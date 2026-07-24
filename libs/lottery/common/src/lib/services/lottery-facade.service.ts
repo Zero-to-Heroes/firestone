@@ -27,9 +27,9 @@ export class LotteryFacadeService extends AbstractFacadeService<LotteryFacadeSer
 	}
 
 	protected override initElectronSubjects(): void {
-		this.setupElectronSubject(this.lottery$$, 'LotteryFacadeService-lottery', (value) =>
-			!value ? null : LotteryState.create(value, value['config']),
-		);
+		this.setupElectronSubject(this.lottery$$, 'LotteryFacadeService-lottery', {
+			hydrate: (value) => (!value ? null : LotteryState.create(value, value['config'])),
+		});
 	}
 
 	protected override createElectronProxy(ipcRenderer: any): void | Promise<void> {
