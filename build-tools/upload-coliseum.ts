@@ -1,10 +1,12 @@
-import { S3 } from 'aws-sdk';
+import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { createReadStream, promises as fs } from 'fs';
 import * as mime from 'mime-types';
 import * as path from 'path';
 
+const REGION = 'us-west-2';
+
 const uploadDir = async (s3Path: string, bucketName: string) => {
-	const s3 = new S3();
+	const s3 = new S3Client({ region: REGION });
 
 	// Recursive getFiles from
 	// https://stackoverflow.com/a/45130990/831465
@@ -26,15 +28,15 @@ const uploadDir = async (s3Path: string, bucketName: string) => {
 			const targetKey = path.relative(s3Path, filePath).replace(/\\/gm, '/');
 			const type: string = (mime.lookup(filePath) || null) as string;
 			console.debug('uploading', filePath, 'to', targetKey);
-			return s3
-				.putObject({
+			return s3.send(
+				new PutObjectCommand({
 					Key: targetKey,
 					Bucket: bucketName,
 					Body: createReadStream(filePath),
 					ACL: 'public-read',
 					ContentType: type,
-				})
-				.promise();
+				}),
+			);
 		});
 	return Promise.all(uploads);
 };

@@ -1,15 +1,12 @@
-import * as AWS from 'aws-sdk';
+import { CloudFrontClient, CreateInvalidationCommand, ListDistributionsCommand } from '@aws-sdk/client-cloudfront';
 
 const BUCKET_NAME = 'replays.firestoneapp.com';
+const REGION = 'us-west-2';
 
-AWS.config.update({
-	region: 'us-west-2',
-});
-
-const cloudfront = new AWS.CloudFront();
+const cloudfront = new CloudFrontClient({ region: REGION });
 
 async function findDistribution(): Promise<string | null> {
-	const result = await cloudfront.listDistributions().promise();
+	const result = await cloudfront.send(new ListDistributionsCommand({}));
 	if (!result.DistributionList?.Items) {
 		return null;
 	}
@@ -36,8 +33,8 @@ async function main(): Promise<void> {
 
 	console.log(`Found distribution: ${distributionId}. Creating invalidation...`);
 
-	const result = await cloudfront
-		.createInvalidation({
+	const result = await cloudfront.send(
+		new CreateInvalidationCommand({
 			DistributionId: distributionId,
 			InvalidationBatch: {
 				CallerReference: `coliseum-deploy-${Date.now()}`,
@@ -46,8 +43,8 @@ async function main(): Promise<void> {
 					Items: ['/*'],
 				},
 			},
-		})
-		.promise();
+		}),
+	);
 
 	console.log(`Invalidation created: ${result.Invalidation?.Id}`);
 	console.log('CloudFront cache will be cleared within a few minutes.');

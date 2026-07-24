@@ -7,7 +7,8 @@
  * Without --upload, assets are staged under build-tools/.mods-engine-staging/
  * With --upload, pushes to s3://static.zerotoheroes.com/mods/ (requires AWS credentials)
  */
-import * as AWS from 'aws-sdk';
+import { S3Client } from '@aws-sdk/client-s3';
+import { Upload } from '@aws-sdk/lib-storage';
 import * as fs from 'fs';
 import * as http from 'http';
 import * as https from 'https';
@@ -101,10 +102,9 @@ async function stageX64Corlibs(_hsInstallPath: string | undefined): Promise<stri
 		console.log('Cloning HsMod for unstripped corlibs', HSMOD_CORLIBS_BRANCH);
 		const { execSync } = require('child_process') as typeof import('child_process');
 		await fs.promises.rm(hsmodDir, { recursive: true, force: true });
-		execSync(
-			`git clone --depth 1 --branch ${HSMOD_CORLIBS_BRANCH} ${HSMOD_CORLIBS_REPO} "${hsmodDir}"`,
-			{ stdio: 'inherit' },
-		);
+		execSync(`git clone --depth 1 --branch ${HSMOD_CORLIBS_BRANCH} ${HSMOD_CORLIBS_REPO} "${hsmodDir}"`, {
+			stdio: 'inherit',
+		});
 	}
 
 	for (const lib of UNSTRIPPED_LIBS) {
@@ -127,17 +127,18 @@ async function stageBepInExX64(): Promise<string> {
 }
 
 async function uploadFile(localPath: string, s3Key: string): Promise<void> {
-	const s3 = new AWS.S3({ region: 'us-west-2' });
+	const s3 = new S3Client({ region: 'us-west-2' });
 	const body = fs.readFileSync(localPath);
-	await s3
-		.upload({
+	await new Upload({
+		client: s3,
+		params: {
 			Bucket: BUCKET,
 			Key: s3Key,
 			Body: body,
 			ACL: 'public-read',
 			ContentType: s3Key.endsWith('.zip') ? 'application/zip' : 'application/octet-stream',
-		})
-		.promise();
+		},
+	}).done();
 	console.log(`Uploaded s3://${BUCKET}/${s3Key} (${(body.length / 1024).toFixed(1)} KB)`);
 }
 
@@ -178,7 +179,9 @@ async function main(): Promise<void> {
 	await uploadFile(doorstopConfigPath, `${MODS_PREFIX}/doorstop_config.ini`);
 	await uploadFile(bepinexZip, `${MODS_PREFIX}/BepInEx_win_x64_${BEPINEX_VERSION}.zip`);
 	await uploadDirectory(corlibsDir, `${MODS_PREFIX}/unstripped_corlibs_x64`);
-	console.log('\nUpload complete. Update mods-config.json via mods-backend lambda (engine block is static in lambda).');
+	console.log(
+		'\nUpload complete. Update mods-config.json via mods-backend lambda (engine block is static in lambda).',
+	);
 }
 
 main().catch((e) => {

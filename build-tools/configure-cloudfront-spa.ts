@@ -1,18 +1,18 @@
-import * as AWS from 'aws-sdk';
+import {
+	CloudFrontClient,
+	GetDistributionConfigCommand,
+	ListDistributionsCommand,
+	UpdateDistributionCommand,
+} from '@aws-sdk/client-cloudfront';
 
 const BUCKET_NAME = 'www.firestoneapp.com';
 const REGION = 'us-west-2';
 
-// Configure AWS SDK
-AWS.config.update({
-	region: REGION,
-});
-
-const cloudfront = new AWS.CloudFront();
+const cloudfront = new CloudFrontClient({ region: REGION });
 
 async function findDistribution(): Promise<string | null> {
 	try {
-		const result = await cloudfront.listDistributions().promise();
+		const result = await cloudfront.send(new ListDistributionsCommand({}));
 
 		if (!result.DistributionList?.Items) {
 			console.log('No CloudFront distributions found');
@@ -42,11 +42,11 @@ async function findDistribution(): Promise<string | null> {
 async function updateDistribution(distributionId: string): Promise<void> {
 	try {
 		// Get current distribution config
-		const configResult = await cloudfront
-			.getDistributionConfig({
+		const configResult = await cloudfront.send(
+			new GetDistributionConfigCommand({
 				Id: distributionId,
-			})
-			.promise();
+			}),
+		);
 
 		if (!configResult.DistributionConfig || !configResult.ETag) {
 			throw new Error('Failed to get distribution config');
@@ -101,13 +101,13 @@ async function updateDistribution(distributionId: string): Promise<void> {
 		};
 
 		// Update the distribution
-		const updateResult = await cloudfront
-			.updateDistribution({
+		await cloudfront.send(
+			new UpdateDistributionCommand({
 				Id: distributionId,
 				DistributionConfig: config,
 				IfMatch: configResult.ETag,
-			})
-			.promise();
+			}),
+		);
 
 		console.log('✅ CloudFront distribution updated successfully!');
 		console.log('⏳ Changes may take 10-15 minutes to propagate globally');

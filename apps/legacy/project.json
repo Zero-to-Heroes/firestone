@@ -50,8 +50,6 @@
 					"localforage",
 					"jsonwebtoken",
 					"double-ended-queue",
-					"aws-sdk/global",
-					"aws-sdk/clients/s3",
 					"pako"
 				]
 			},

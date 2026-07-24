@@ -1,4 +1,6 @@
-import * as AWS from 'aws-sdk';
+import { HeadBucketCommand, HeadObjectCommand, PutBucketWebsiteCommand, S3Client } from '@aws-sdk/client-s3';
+import { CloudFrontClient, CreateInvalidationCommand } from '@aws-sdk/client-cloudfront';
+import { Upload } from '@aws-sdk/lib-storage';
 import * as crypto from 'crypto';
 import * as fs from 'fs';
 import * as mime from 'mime-types';
@@ -7,15 +9,11 @@ import * as path from 'path';
 const BUCKET_NAME = 'www.firestoneapp.com';
 const BUILD_DIR = 'dist/apps/web';
 const CLOUDFRONT_DISTRIBUTION_ID = process.env.CLOUDFRONT_DISTRIBUTION_ID;
+const REGION = 'us-west-2';
 const batchSize = 25;
 
-// Configure AWS SDK
-AWS.config.update({
-	region: 'us-west-2',
-});
-
-const s3 = new AWS.S3();
-const cloudfront = new AWS.CloudFront();
+const s3 = new S3Client({ region: REGION });
+const cloudfront = new CloudFrontClient({ region: REGION });
 
 interface UploadStats {
 	uploaded: number;
@@ -30,7 +28,7 @@ function calculateFileHash(filePath: string): string {
 
 async function getS3ObjectETag(key: string): Promise<string | null> {
 	try {
-		const result = await s3.headObject({ Bucket: BUCKET_NAME, Key: key }).promise();
+		const result = await s3.send(new HeadObjectCommand({ Bucket: BUCKET_NAME, Key: key }));
 		// Remove quotes from ETag if present
 		return result.ETag?.replace(/"/g, '') || null;
 	} catch (error) {
@@ -51,7 +49,15 @@ async function uploadFile(filePath: string, key: string, stats: UploadStats): Pr
 	const fileContent = fs.readFileSync(filePath);
 	const contentType = mime.lookup(filePath) || 'application/octet-stream';
 
-	const params: AWS.S3.PutObjectRequest = {
+	const params: {
+		Bucket: string;
+		Key: string;
+		Body: Buffer;
+		ContentType: string;
+		ACL: 'public-read';
+		CacheControl: string;
+		Metadata?: Record<string, string>;
+	} = {
 		Bucket: BUCKET_NAME,
 		Key: key,
 		Body: fileContent,
@@ -71,7 +77,7 @@ async function uploadFile(filePath: string, key: string, stats: UploadStats): Pr
 	}
 
 	try {
-		const result = await s3.upload(params).promise();
+		await new Upload({ client: s3, params }).done();
 		stats.uploaded++;
 		console.log(`✓ Uploaded: ${key} (${(fileContent.length / 1024).toFixed(1)}KB)`);
 	} catch (error) {
@@ -142,18 +148,18 @@ async function invalidateCloudFrontCache(): Promise<void> {
 	try {
 		console.log('🔄 Invalidating CloudFront cache...');
 
-		const params: AWS.CloudFront.CreateInvalidationRequest = {
-			DistributionId: CLOUDFRONT_DISTRIBUTION_ID,
-			InvalidationBatch: {
-				CallerReference: `firestone-deploy-${Date.now()}`,
-				Paths: {
-					Quantity: 1,
-					Items: ['/*'], // Invalidate all paths
+		const result = await cloudfront.send(
+			new CreateInvalidationCommand({
+				DistributionId: CLOUDFRONT_DISTRIBUTION_ID,
+				InvalidationBatch: {
+					CallerReference: `firestone-deploy-${Date.now()}`,
+					Paths: {
+						Quantity: 1,
+						Items: ['/*'], // Invalidate all paths
+					},
 				},
-			},
-		};
-
-		const result = await cloudfront.createInvalidation(params).promise();
+			}),
+		);
 		console.log(`✅ CloudFront cache invalidation initiated: ${result.Invalidation?.Id}`);
 		console.log('📝 Note: Cache invalidation may take 5-10 minutes to complete');
 	} catch (error) {
@@ -163,20 +169,20 @@ async function invalidateCloudFrontCache(): Promise<void> {
 }
 
 async function configureS3Website(): Promise<void> {
-	const websiteConfig = {
-		Bucket: BUCKET_NAME,
-		WebsiteConfiguration: {
-			IndexDocument: {
-				Suffix: 'index.html',
-			},
-			ErrorDocument: {
-				Key: 'index.html', // This is crucial for SPA routing
-			},
-		},
-	};
-
 	try {
-		await s3.putBucketWebsite(websiteConfig).promise();
+		await s3.send(
+			new PutBucketWebsiteCommand({
+				Bucket: BUCKET_NAME,
+				WebsiteConfiguration: {
+					IndexDocument: {
+						Suffix: 'index.html',
+					},
+					ErrorDocument: {
+						Key: 'index.html', // This is crucial for SPA routing
+					},
+				},
+			}),
+		);
 		console.log('✓ S3 static website hosting configured');
 	} catch (error) {
 		console.error('❌ Failed to configure S3 website hosting:', error);
@@ -198,7 +204,7 @@ async function main(): Promise<void> {
 
 		// Check if bucket exists and is accessible
 		try {
-			await s3.headBucket({ Bucket: BUCKET_NAME }).promise();
+			await s3.send(new HeadBucketCommand({ Bucket: BUCKET_NAME }));
 			console.log('✓ S3 bucket is accessible');
 		} catch (error) {
 			console.error(`❌ Cannot access S3 bucket: ${BUCKET_NAME}`, error);
