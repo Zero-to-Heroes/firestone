@@ -1,5 +1,14 @@
-import { MainWindowStoreService } from '@firestone/mainwindow/common';
-import { GameStatusService, StandaloneAdService } from '@firestone/shared/common/service';
+import {
+	ChangeVisibleApplicationEvent,
+	MainWindowStateFacadeService,
+	MainWindowStoreService,
+} from '@firestone/mainwindow/common';
+import {
+	GameStatusService,
+	Preferences,
+	PreferencesService,
+	StandaloneAdService,
+} from '@firestone/shared/common/service';
 import { AppInjector, WINDOW_HANDLER_SERVICE_TOKEN } from '@firestone/shared/framework/core';
 import { ipcMain } from 'electron';
 import { ElectronHotkeyHandlerService } from './services/electron-hotkey-handler.service';
@@ -40,6 +49,7 @@ export const appStartup = async () => {
 		windowHandler.closeLoadingWindow();
 		// Tear down BG app windows; main #/overlay is destroyed by OverlayService.onGameExit
 		windowHandler.closeBattlegroundsWindowsForGameExit();
+		void handleExitGame();
 	});
 
 	// If HS is already running, queue the loading window — it will open once overlay injects.
@@ -135,6 +145,20 @@ function clearReadyTimeout(): void {
 		clearTimeout(readyTimeout);
 		readyTimeout = null;
 	}
+}
+
+/** Show the main window on Replays when HS exits (Overwolf session-recap parity). */
+async function handleExitGame(): Promise<void> {
+	const prefsService = AppInjector.get(PreferencesService);
+	const prefs = (await prefsService.getPreferences()) ?? new Preferences();
+	prefsService.updateRemotePreferences();
+	if (!prefs.showSessionRecapOnExit) {
+		return;
+	}
+
+	const mainWindowStateFacade = AppInjector.get(MainWindowStateFacadeService);
+	mainWindowStateFacade.send(new ChangeVisibleApplicationEvent('replays', true));
+	getWindowHandler().showCollectionWindow(prefs.collectionUseOverlay);
 }
 
 function getWindowHandler(): ElectronWindowHandlerService {
