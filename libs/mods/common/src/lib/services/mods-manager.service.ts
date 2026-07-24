@@ -141,6 +141,11 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 		console.debug('[mods-manager] initialized');
 	}
 
+	protected override initElectronSubjects(): void {
+		this.setupElectronSubject(this.modsData$$, 'ModsManagerService-modsData');
+		this.setupElectronSubject(this.currentModsStatus$$, 'ModsManagerService-currentModsStatus');
+	}
+
 	protected override async initElectronMainProcess() {
 		this.registerMainProcessMethod('checkModsInternal', (installPath: string) =>
 			this.checkModsInternal(installPath),

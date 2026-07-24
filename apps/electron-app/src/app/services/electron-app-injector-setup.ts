@@ -585,6 +585,9 @@ export const buildAppInjector = () => {
 	const bgsOfficialLeaderboard = new BattlegroundsOfficialLeaderboardService(windowManager);
 	electronInjector.register(BattlegroundsOfficialLeaderboardService, bgsOfficialLeaderboard);
 
+	const bgsIntermediateResultsSimGuardianService = new BgsIntermediateResultsSimGuardianService(windowManager);
+	electronInjector.register(BgsIntermediateResultsSimGuardianService, bgsIntermediateResultsSimGuardianService);
+
 	const battleExecutor = new BgsBattleSimulationWorkerService(allCards);
 	const simulation = new BgsBattleSimulationService(
 		api as any as ApiRunner,
@@ -593,7 +596,7 @@ export const buildAppInjector = () => {
 		ads,
 		bugReportService,
 		preferences,
-		null, // BgsIntermediateResultsSimGuardianService
+		bgsIntermediateResultsSimGuardianService,
 	);
 	electronInjector.register(BgsBattleSimulationService, simulation);
 
@@ -622,7 +625,7 @@ export const buildAppInjector = () => {
 		simulation,
 		ads,
 		gameId,
-		null, // BgsIntermediateResultsSimGuardianService
+		bgsIntermediateResultsSimGuardianService,
 		reviewId,
 		arenaRefService,
 	);
@@ -892,9 +895,6 @@ export const buildAppInjector = () => {
 
 	const expertContributors = new ExpertContributorsService(windowManager);
 	electronInjector.register(ExpertContributorsService, expertContributors);
-
-	const bgsIntermediateResultsSimGuardianService = new BgsIntermediateResultsSimGuardianService(windowManager);
-	electronInjector.register(BgsIntermediateResultsSimGuardianService, bgsIntermediateResultsSimGuardianService);
 
 	const bgsMetaHeroStrategiesService = new BgsMetaHeroStrategiesService(windowManager);
 	electronInjector.register(BgsMetaHeroStrategiesService, bgsMetaHeroStrategiesService);
