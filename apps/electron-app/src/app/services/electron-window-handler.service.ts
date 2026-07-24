@@ -16,6 +16,8 @@ const BATTLEGROUNDS_WIDTH = 1360;
 const BATTLEGROUNDS_HEIGHT = 790;
 const LOTTERY_WIDTH = 400;
 const LOTTERY_HEIGHT = 400;
+const LOADING_WIDTH = 440;
+const LOADING_HEIGHT = 590;
 
 function getAppIconPath(): string {
 	return app.isPackaged
@@ -52,11 +54,14 @@ export class ElectronWindowHandlerService implements IWindowHandlerService {
 	private battlegroundsWindow: BrowserWindow | null = null;
 	private battlegroundsOverlayWindow: OverlayBrowserWindow | null = null;
 	private lotteryWindow: BrowserWindow | null = null;
+	private loadingOverlayWindow: OverlayBrowserWindow | null = null;
+	private loadingAbilitiesReady = false;
 
 	/**
 	 * Close collection/settings windows when premium access is revoked (tray, overlay, and policy).
 	 */
 	public closeAllWindowsForAppAccess(): void {
+		this.closeLoadingWindow();
 		if (this.collectionWindow && !this.collectionWindow.isDestroyed()) {
 			this.collectionWindow.close();
 		}
@@ -455,6 +460,7 @@ export class ElectronWindowHandlerService implements IWindowHandlerService {
 			console.log('[ElectronWindowHandler] Main window blocked — full app not unlocked');
 			return;
 		}
+		this.closeLoadingWindow();
 		const gameWindowService = ElectronGameWindowService.getInstance();
 		const gameInfo = gameWindowService.getCurrentGameInfo();
 		const gameIsRunning = gameInfo != null;
@@ -788,6 +794,148 @@ export class ElectronWindowHandlerService implements IWindowHandlerService {
 		this.lotteryWindow = null;
 	}
 
+	public isCollectionWindowVisible(): boolean {
+		if (this.collectionWindow && !this.collectionWindow.isDestroyed() && this.collectionWindow.isVisible()) {
+			return true;
+		}
+		if (
+			this.collectionOverlayWindow &&
+			!this.collectionOverlayWindow.window.isDestroyed() &&
+			this.collectionOverlayWindow.window.isVisible()
+		) {
+			return true;
+		}
+		return false;
+	}
+
+	public isLoadingWindowOpen(): boolean {
+		return !!this.loadingOverlayWindow && !this.loadingOverlayWindow.window.isDestroyed();
+	}
+
+	/**
+	 * Opens the loading window as an injected overlay only.
+	 * @returns false if the overlay API is not ready yet (caller should retry later).
+	 */
+	public async showLoadingWindow(): Promise<boolean> {
+		if (this.isLoadingWindowOpen()) {
+			const existingOverlay = this.loadingOverlayWindow!;
+			if (existingOverlay.window.isMinimized()) {
+				existingOverlay.window.restore();
+			}
+			existingOverlay.window.show();
+			existingOverlay.window.focus();
+			return true;
+		}
+
+		return this.openLoadingAsOverlay();
+	}
+
+	public isLoadingAbilitiesReady(): boolean {
+		return this.loadingAbilitiesReady;
+	}
+
+	public resetLoadingAbilitiesReady(): void {
+		this.loadingAbilitiesReady = false;
+	}
+
+	public notifyLoadingWindowReady(): void {
+		this.loadingAbilitiesReady = true;
+		const webContents = this.getLoadingWebContents();
+		if (webContents && !webContents.isDestroyed()) {
+			webContents.send('loading-ready');
+		}
+	}
+
+	public closeLoadingWindow(): void {
+		if (this.loadingOverlayWindow) {
+			try {
+				if (!this.loadingOverlayWindow.window.isDestroyed()) {
+					this.loadingOverlayWindow.window.close();
+				}
+			} catch (_) {}
+			this.loadingOverlayWindow = null;
+		}
+	}
+
+	private getLoadingWebContents(): Electron.WebContents | null {
+		if (this.loadingOverlayWindow && !this.loadingOverlayWindow.window.isDestroyed()) {
+			return this.loadingOverlayWindow.window.webContents;
+		}
+		return null;
+	}
+
+	private async openLoadingAsOverlay(): Promise<boolean> {
+		const overlayService = OverlayService.getInstance();
+		const overlayApi = overlayService.overlayApi;
+		if (!overlayApi) {
+			console.log('[ElectronWindowHandler] Overlay API not ready for loading window');
+			return false;
+		}
+
+		const gameWindowService = ElectronGameWindowService.getInstance();
+		const gameInfo = gameWindowService.getCurrentGameInfo();
+		const gameWidth = gameInfo?.logicalWidth ?? gameInfo?.width ?? 1920;
+		const gameHeight = gameInfo?.logicalHeight ?? gameInfo?.height ?? 1080;
+		const x = Math.max(0, ~~(gameWidth * 0.4) - LOADING_WIDTH);
+		const y = Math.max(0, ~~(gameHeight * 0.1));
+
+		const preloadPath = join(__dirname, 'main.preload.js');
+		const options: OverlayWindowOptions & { dpiAware?: boolean } = {
+			name: 'firestone-loading-' + Math.floor(Math.random() * 1000),
+			width: LOADING_WIDTH,
+			height: LOADING_HEIGHT,
+			x,
+			y,
+			show: false,
+			transparent: true,
+			frame: false,
+			resizable: false,
+			dpiAware: true,
+			webPreferences: {
+				nodeIntegration: true,
+				contextIsolation: false,
+				preload: preloadPath,
+			},
+		};
+
+		try {
+			this.loadingOverlayWindow = await overlayApi.createWindow(options);
+		} catch (err) {
+			console.error('[ElectronWindowHandler] Failed to create loading overlay:', err);
+			return false;
+		}
+
+		this.loadingOverlayWindow.window.once('closed', () => {
+			this.loadingOverlayWindow = null;
+		});
+
+		this.loadingOverlayWindow.window.once('ready-to-show', () => {
+			this.loadingOverlayWindow?.window.show();
+			this.loadingOverlayWindow?.window.focus();
+		});
+
+		this.loadingOverlayWindow.window.webContents.once('did-finish-load', () => {
+			if (this.loadingAbilitiesReady) {
+				this.notifyLoadingWindowReady();
+			}
+			if (App.isDevelopmentMode()) {
+				setDevToolsWindowIcon(this.loadingOverlayWindow!.window.webContents);
+				if (
+					this.loadingOverlayWindow &&
+					!this.loadingOverlayWindow.window.isDestroyed() &&
+					!this.loadingOverlayWindow.window.webContents.isDevToolsOpened()
+				) {
+					this.loadingOverlayWindow.window.webContents.openDevTools({ mode: 'detach', activate: true });
+				}
+			}
+		});
+
+		this.loadingOverlayWindow.window.loadURL(this.getLoadingLoadUrl()).catch((err) => {
+			console.error('[ElectronWindowHandler] Failed to load loading overlay:', err);
+		});
+		return true;
+	}
+
 	private getExistingLotteryWindow(): BrowserWindow | null {
 		if (this.lotteryWindow && !this.lotteryWindow.isDestroyed()) {
 			return this.lotteryWindow;
@@ -814,7 +962,11 @@ export class ElectronWindowHandlerService implements IWindowHandlerService {
 
 	public reloadWindows(): void {
 		const browserWindows = [this.settingsWindow, this.battlegroundsWindow, this.lotteryWindow];
-		const overlayWindows = [this.settingsOverlayWindow, this.battlegroundsOverlayWindow];
+		const overlayWindows = [
+			this.settingsOverlayWindow,
+			this.battlegroundsOverlayWindow,
+			this.loadingOverlayWindow,
+		];
 		for (const window of browserWindows) {
 			if (window && !window.isDestroyed()) {
 				window.reload();
@@ -932,5 +1084,23 @@ export class ElectronWindowHandlerService implements IWindowHandlerService {
 			return `file:///${normalizedPath}#/lottery`;
 		}
 		return `http://localhost:${rendererAppPort}/#/lottery`;
+	}
+
+	private getLoadingLoadUrl(): string {
+		if (app.isPackaged) {
+			const frontendDir = join(process.resourcesPath, 'electron-frontend');
+			const frontendPath = join(frontendDir, 'index.html');
+			const fs = require('fs');
+			if (!fs.existsSync(frontendPath)) {
+				console.error('[ElectronWindowHandler] Frontend not found at:', frontendPath);
+			}
+			let normalizedPath = frontendPath.replace(/\\/g, '/');
+			normalizedPath = normalizedPath.replace(
+				/^([a-z]):/i,
+				(_: string, drive: string) => drive.toUpperCase() + ':',
+			);
+			return `file:///${normalizedPath}#/loading`;
+		}
+		return `http://localhost:${rendererAppPort}/#/loading`;
 	}
 }

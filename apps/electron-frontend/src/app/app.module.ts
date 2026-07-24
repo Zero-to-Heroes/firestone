@@ -54,6 +54,7 @@ import { AppComponent } from './app.component';
 import { appRoutes } from './app.routes';
 import { ElectronBattlegroundsComponent } from './overlay/electron-battlegrounds.component';
 import { ElectronCollectionComponent } from './overlay/electron-collection.component';
+import { ElectronLoadingComponent } from './overlay/electron-loading.component';
 import { ElectronLotteryComponent } from './overlay/electron-lottery.component';
 import { ElectronOverlayComponent } from './overlay/electron-overlay.component';
 import { ElectronSettingsComponent } from './overlay/electron-settings.component';
@@ -76,6 +77,7 @@ import { ElectronSettingsComponent } from './overlay/electron-settings.component
 		ElectronCollectionComponent,
 		ElectronBattlegroundsComponent,
 		ElectronLotteryComponent,
+		ElectronLoadingComponent,
 	],
 	providers: [
 		{ provide: DiskCacheService, useExisting: ElectronRendererDiskCacheService },

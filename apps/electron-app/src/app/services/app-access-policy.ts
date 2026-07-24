@@ -16,7 +16,7 @@ import { isPremiumFlavor } from './flavor';
  * Derived from the build flavor: the premium-only build (`standalone-premium`) requires premium,
  * while the free/ad-supported build (`standalone`) lets non-premium users use the app.
  */
-export const REQUIRE_PREMIUM_FOR_FULL_APP = true || isPremiumFlavor();
+export const REQUIRE_PREMIUM_FOR_FULL_APP = isPremiumFlavor();
 
 /** Emits whether the app should allow all UI. Subscribe from tray, or call isAppAccessUnlocked() synchronously. */
 export const appAccessUnlocked$$ = new BehaviorSubject<boolean>(false);

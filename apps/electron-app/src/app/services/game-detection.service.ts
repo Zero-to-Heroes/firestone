@@ -28,6 +28,30 @@ export class GameDetectionService extends EventEmitter {
 		return GameDetectionService.instance;
 	}
 
+	/**
+	 * One-shot check whether Hearthstone.exe is running (does not require overlay/owepm).
+	 */
+	public static async isHearthstoneProcessRunning(): Promise<boolean> {
+		return new Promise((resolve) => {
+			const child = spawn(
+				'tasklist',
+				['/FI', 'IMAGENAME eq Hearthstone.exe', '/FO', 'CSV'],
+				{ windowsHide: true },
+			);
+			let output = '';
+			child.stdout.on('data', (data) => {
+				output += data.toString();
+			});
+			child.on('close', () => {
+				resolve(output.includes('Hearthstone.exe'));
+			});
+			child.on('error', (error) => {
+				console.error('[game-detection] Error checking Hearthstone process:', error);
+				resolve(false);
+			});
+		});
+	}
+
 	public startMonitoring(): void {
 		console.log('🎮 Starting Hearthstone detection...');
 

@@ -1363,6 +1363,13 @@ try {
 		ConstructedDecktrackerOocWidgetWrapperComponent,
 		DecktrackerPlayerWidgetWrapperComponent,
 		LotteryWidgetComponent,
+		ControlMinimizeComponent,
+		ControlCloseComponent,
+		ControlSettingsComponent,
+		ControlDiscordComponent,
+		HotkeyComponent,
+		SingleAdComponent,
+		OwTranslateDirective,
 	],
 })
 export class LegacyFeatureShellModule {

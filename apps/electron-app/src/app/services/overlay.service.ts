@@ -1,6 +1,6 @@
 /// <reference types="@overwolf/ow-electron/mix" />
 import { ElectronGameWindowService } from '@firestone/electron/common';
-import { NotificationsService } from '@firestone/shared/common/service';
+import { NotificationsService, StandaloneAdService } from '@firestone/shared/common/service';
 import { AppInjector, ILocalizationService } from '@firestone/shared/framework/core';
 import {
 	GamesFilter,
@@ -319,13 +319,16 @@ export class OverlayService extends EventEmitter {
 				}
 			});
 
-			// Show a notification
-			const notificationsService = AppInjector.get(NotificationsService);
-			const localizationService = AppInjector.get(ILocalizationService);
-			const title = localizationService.translateString('app.internal.startup.firestone-ready-title');
-			const text = localizationService.translateString('app.internal.startup.firestone-ready-text');
-			notificationsService.emitNewNotification({
-				content: `
+			// Show a notification for premium users only (free users get the loading+ad window)
+			const ads = AppInjector.get(StandaloneAdService);
+			const shouldShowAds = await ads.shouldDisplayAds();
+			if (!shouldShowAds) {
+				const notificationsService = AppInjector.get(NotificationsService);
+				const localizationService = AppInjector.get(ILocalizationService);
+				const title = localizationService.translateString('app.internal.startup.firestone-ready-title');
+				const text = localizationService.translateString('app.internal.startup.firestone-ready-text');
+				notificationsService.emitNewNotification({
+					content: `
 					<div class="general-message-container general-theme">
 						<div class="firestone-icon">
 							<svg class="svg-icon-fill">
@@ -344,8 +347,9 @@ export class OverlayService extends EventEmitter {
 							</svg>
 						</button>
 					</div>`,
-				notificationId: `app-ready`,
-			});
+					notificationId: `app-ready`,
+				});
+			}
 
 			console.log('Angular overlay window created successfully! Waiting for show/focus...');
 		} catch (error) {

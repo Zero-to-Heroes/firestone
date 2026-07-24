@@ -1,0 +1,133 @@
+// Frameless Electron loading window (Overwolf LoadingWindow equivalent).
+
+:host {
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+
+.menu-bar {
+	background: transparent;
+	display: flex;
+	flex-direction: row;
+	align-items: stretch;
+	justify-content: space-between;
+	border: none;
+	width: 100%;
+	height: 80px;
+	z-index: 400;
+	flex-shrink: 0;
+	flex-grow: 0;
+	color: var(--color-green-01, #a5e0b8);
+	-webkit-app-region: drag;
+	user-select: none;
+
+	.logo {
+		top: 10px;
+		left: 15px;
+	}
+
+	.controls {
+		height: 30px;
+		display: flex;
+		pointer-events: none;
+		-webkit-app-region: no-drag;
+
+		> * {
+			pointer-events: auto;
+			-webkit-app-region: no-drag;
+		}
+	}
+}
+
+.content-container {
+	position: relative;
+	flex-grow: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+
+	.left {
+		margin-right: 15px;
+	}
+
+	.right {
+		transform: scaleX(-1);
+		margin-left: 15px;
+	}
+}
+
+.app-title {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	.title {
+		font-family: 'Open Sans', sans-serif;
+		font-weight: 400;
+		font-size: 20px;
+		color: var(--color-yellow-03, #ffb948);
+	}
+}
+
+.sub-title {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	margin-top: 13px;
+
+	span {
+		font-family: 'Open Sans', sans-serif;
+		font-weight: 400;
+		font-size: 13px;
+		// Match hotkey "Show/Hide" label (see hotkey.component.scss .text)
+		color: var(--color-2, #d9c3ab);
+	}
+
+	.error-message {
+		margin: 0 50px;
+		opacity: 0.8;
+		cursor: pointer;
+
+		&:hover {
+			opacity: 1;
+		}
+	}
+
+	hotkey {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-top: 12px;
+		margin-bottom: 13px;
+	}
+}
+
+.loading-icon {
+	margin-top: 30px;
+	animation-name: spin;
+	animation-duration: 2000ms;
+	animation-iteration-count: 50;
+	animation-timing-function: linear;
+	transform: translateZ(0);
+}
+
+.ads {
+	bottom: 25px;
+	left: 20px;
+	width: 400px;
+	height: 300px;
+	position: absolute;
+	-webkit-app-region: no-drag;
+}
+
+@keyframes spin {
+	from {
+		transform: rotate(0deg);
+	}
+
+	to {
+		transform: rotate(-360deg);
+	}
+}

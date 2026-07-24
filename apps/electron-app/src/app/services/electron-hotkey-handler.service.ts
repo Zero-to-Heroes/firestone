@@ -12,6 +12,7 @@ import { globalShortcut } from 'electron';
 import { BehaviorSubject } from 'rxjs';
 import { uIOhook, UiohookKey } from 'uiohook-napi';
 import { isAppAccessUnlocked } from './app-access-policy';
+import { ElectronWindowHandlerService } from './electron-window-handler.service';
 
 /** Maps hotkey names (from OW manifest) to Electron accelerator strings. */
 const DEFAULT_ACCELERATORS: Record<string, string> = {
@@ -34,7 +35,7 @@ export class ElectronHotkeyHandlerService implements IHotkeyHandlerService {
 	private readonly registeredAccelerators = new Set<string>();
 	private uiohookStarted = false;
 
-	private windowHandler: IWindowHandlerService;
+	private windowHandler: ElectronWindowHandlerService;
 	private prefs: PreferencesService;
 
 	constructor() {
@@ -43,7 +44,7 @@ export class ElectronHotkeyHandlerService implements IHotkeyHandlerService {
 	}
 
 	public async init(): Promise<void> {
-		this.windowHandler = AppInjector.get(WINDOW_HANDLER_SERVICE_TOKEN) as IWindowHandlerService;
+		this.windowHandler = AppInjector.get(WINDOW_HANDLER_SERVICE_TOKEN) as ElectronWindowHandlerService;
 		this.prefs = AppInjector.get(PreferencesService);
 		await waitForReady(this.prefs);
 
@@ -64,6 +65,8 @@ export class ElectronHotkeyHandlerService implements IHotkeyHandlerService {
 			}
 			const prefs = await this.prefs.getPreferences();
 			this.windowHandler.toggleCollectionWindow(prefs.collectionUseOverlay);
+			// Match Overwolf: collection hotkey also dismisses the loading window
+			this.windowHandler.closeLoadingWindow();
 		});
 		// live-info: Tab hold. Use uiohook for true key-down/key-up (globalShortcut has no key-up).
 		this.setupLiveInfoHoldHotkey();

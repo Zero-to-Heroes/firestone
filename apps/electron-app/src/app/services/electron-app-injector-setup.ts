@@ -564,6 +564,7 @@ export const buildAppInjector = () => {
 
 	const ads: IAdsService = new StandaloneAdService(windowManager);
 	electronInjector.register(ADS_SERVICE_TOKEN, ads);
+	electronInjector.register(StandaloneAdService, ads as StandaloneAdService);
 
 	const tebexService = new TebexHeadlessService(windowManager);
 	electronInjector.register(TebexHeadlessService, tebexService);
