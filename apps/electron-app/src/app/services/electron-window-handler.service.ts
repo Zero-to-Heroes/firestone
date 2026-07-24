@@ -58,6 +58,28 @@ export class ElectronWindowHandlerService implements IWindowHandlerService {
 	private loadingAbilitiesReady = false;
 
 	/**
+	 * Close Battlegrounds windows when Hearthstone exits so a stuck overlay/panel
+	 * cannot survive injection teardown (same zombie class as the main overlay).
+	 */
+	public closeBattlegroundsWindowsForGameExit(): void {
+		if (this.battlegroundsWindow && !this.battlegroundsWindow.isDestroyed()) {
+			try {
+				this.battlegroundsWindow.close();
+			} catch (_) {}
+		}
+		this.battlegroundsWindow = null;
+		if (this.battlegroundsOverlayWindow) {
+			try {
+				if (!this.battlegroundsOverlayWindow.window.isDestroyed()) {
+					this.battlegroundsOverlayWindow.window.close();
+				}
+			} catch (_) {}
+			this.battlegroundsOverlayWindow = null;
+		}
+		console.log('[ElectronWindowHandler] Closed Battlegrounds windows on game exit');
+	}
+
+	/**
 	 * Close collection/settings windows when premium access is revoked (tray, overlay, and policy).
 	 */
 	public closeAllWindowsForAppAccess(): void {

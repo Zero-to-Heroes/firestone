@@ -67,15 +67,24 @@ export class OverlayService extends EventEmitter {
 	}
 
 	/**
-	 * Destroy the overlay
+	 * Destroy the overlay.
+	 * Must be called on game-exit: ow-electron can leave a non-destroyed BrowserWindow
+	 * whose render frame is already disposed (zombie overlay — visible but dead).
 	 */
 	public async destroyOverlay(): Promise<void> {
-		if (this.overlayWindow) {
-			// Note: ow-electron manages overlay lifecycle automatically
-			this.overlayWindow.window.close();
-			this.overlayWindow = null;
-			console.log('💥 Overlay destroyed');
+		if (!this.overlayWindow) {
+			return;
 		}
+		const window = this.overlayWindow.window;
+		this.overlayWindow = null;
+		try {
+			if (window && !window.isDestroyed()) {
+				window.close();
+			}
+		} catch (error) {
+			console.warn('[Overlay] Error destroying overlay window:', error);
+		}
+		console.log('💥 Overlay destroyed');
 	}
 
 	/**
@@ -86,20 +95,43 @@ export class OverlayService extends EventEmitter {
 	}
 
 	/**
-	 * Returns true if we should create an overlay (we have none, or the current one is destroyed).
-	 * Clears the reference if the current overlay window is destroyed.
+	 * Returns true if we should create an overlay (none, destroyed, or zombie with disposed frame).
+	 * Clears the stale reference before returning true.
 	 */
 	private shouldCreateOverlay(): boolean {
 		if (!this.overlayWindow) {
 			console.log('shouldCreateOverlay: no overlay window');
 			return true;
 		}
-		if (this.overlayWindow.window.isDestroyed()) {
-			console.log('shouldCreateOverlay: overlay window is destroyed');
-			this.overlayWindow = null;
+		if (this.isOverlayWindowUnhealthy()) {
+			console.log('shouldCreateOverlay: overlay window unhealthy, destroying before recreate');
+			void this.destroyOverlay();
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * Detect zombie overlays: BrowserWindow may still exist after injection teardown
+	 * while webContents / render frame are already gone.
+	 */
+	private isOverlayWindowUnhealthy(): boolean {
+		try {
+			const window = this.overlayWindow?.window;
+			if (!window || window.isDestroyed()) {
+				return true;
+			}
+			const webContents = window.webContents;
+			if (!webContents || webContents.isDestroyed()) {
+				return true;
+			}
+			// Probe: disposed frames can throw even when isDestroyed() is false
+			webContents.getURL();
+			return false;
+		} catch (error) {
+			console.log('shouldCreateOverlay: overlay probe failed, treating as unhealthy', error);
+			return true;
+		}
 	}
 
 	/**
@@ -386,8 +418,20 @@ export class OverlayService extends EventEmitter {
 		console.log(`Overlay package is ready: ${version}`);
 		this.registerOverlayEvents();
 		this.subscribeToGameInfoChanges();
+		this.subscribeToGameExit();
 		this.setupAppAccessSubscription();
 		this.emit('ready');
+	}
+
+	/**
+	 * Tear down the main overlay on HS exit so the next inject creates a fresh window.
+	 * Without this, shouldCreateOverlay() keeps a zombie ref and skips recreate.
+	 */
+	private subscribeToGameExit(): void {
+		this.gameWindowService.onGameExit(() => {
+			console.log('[Overlay] Hearthstone exited — destroying overlay window');
+			void this.destroyOverlay();
+		});
 	}
 
 	private setupAppAccessSubscription(): void {
@@ -496,25 +540,14 @@ export class OverlayService extends EventEmitter {
 				console.log('[Overlay] Skipping overlay after injection — full app not unlocked');
 				return;
 			}
+			// shouldCreateOverlay destroys zombies (disposed render frame) before returning true
 			if (!this.shouldCreateOverlay()) {
+				console.log('[Overlay] Healthy overlay already exists after inject — keeping it');
 				return;
 			}
 			console.log('Hearthstone injected! Creating overlay window...');
 			await this.createOverlayWindow();
 			console.log('Overlay window created when game was injected!');
-			// else {
-			// 	// console.log('Hearthstone focused! Resizing existing overlay...');
-			// 	await this.resizeOverlayToGame();
-			// 	// console.log('Overlay window resized to match current game size!');
-			// }
-			// } else {
-			// Game unfocused - hide overlay but keep it alive
-			// if (this.overlayWindow) {
-			// 	console.log('Hearthstone unfocused! Hiding overlay...');
-			// 	this.overlayWindow.window.hide();
-			// }
-			// }
-			// }
 		});
 
 		this.overlayApi.on('game-focus-changed', async (window, game, focus) => {

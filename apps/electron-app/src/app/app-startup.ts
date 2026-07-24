@@ -38,6 +38,8 @@ export const appStartup = async () => {
 		const windowHandler = getWindowHandler();
 		windowHandler.resetLoadingAbilitiesReady();
 		windowHandler.closeLoadingWindow();
+		// Tear down BG app windows; main #/overlay is destroyed by OverlayService.onGameExit
+		windowHandler.closeBattlegroundsWindowsForGameExit();
 	});
 
 	// If HS is already running, queue the loading window — it will open once overlay injects.
