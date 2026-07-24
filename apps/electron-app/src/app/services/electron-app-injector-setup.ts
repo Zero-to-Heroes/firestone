@@ -105,6 +105,7 @@ import {
 import {
 	AiDeckService,
 	BattlegroundsOfficialLeaderboardService,
+	BgsBestUserStatsService,
 	BgsMatchMemoryInfoService,
 	BgsMatchPlayersMmrService,
 	CardsHighlightFacadeService,
@@ -132,6 +133,8 @@ import {
 	SecretConfigService,
 	SecretsParserService,
 } from '@firestone/game-state';
+import { GameOverService } from '@services/stats/game/game-over.service';
+import { GameStatsUpdaterService } from '@services/stats/game/game-stats-updater.service';
 import { LotteryFacadeService, LotteryService, LotteryWidgetControllerService } from '@firestone/lottery/common';
 import {
 	BgsRunStatsEventHandlerService,
@@ -994,9 +997,6 @@ export const buildAppInjector = () => {
 	);
 	electronInjector.register(FirestoneRemoteAchievementsLoaderService, firestoneRemoteAchievementsLoaderService);
 
-	const gameStatsLoaderService = new GameStatsLoaderService(windowManager);
-	electronInjector.register(GameStatsLoaderService, gameStatsLoaderService);
-
 	const achievementsManager = new AchievementsMemoryMonitor(
 		events,
 		memoryUpdates,
@@ -1005,9 +1005,6 @@ export const buildAppInjector = () => {
 		achievementsStorage,
 	);
 	electronInjector.register(AchievementsMemoryMonitor, achievementsManager);
-
-	const gameStatsService = new GameStatsLoaderService(windowManager);
-	electronInjector.register(GameStatsLoaderService, gameStatsService);
 
 	const constructedNavigationService = new ConstructedNavigationService(windowManager);
 	electronInjector.register(ConstructedNavigationService, constructedNavigationService);
@@ -1018,7 +1015,7 @@ export const buildAppInjector = () => {
 		collectionManager,
 		achievementHistoryService,
 		firestoneRemoteAchievementsLoaderService,
-		gameStatsLoaderService,
+		gameStatsLoader,
 		events,
 		storeBootstrapService,
 		preferences,
@@ -1031,7 +1028,7 @@ export const buildAppInjector = () => {
 		achievementsManager,
 		achievementsStateManager,
 		achievementsRefLoaderService,
-		gameStatsService,
+		gameStatsLoader,
 		bgsPerfectGamesService,
 		constructedPersonalDecksService,
 		constructedNavigationService,
@@ -1047,6 +1044,17 @@ export const buildAppInjector = () => {
 	);
 	electronInjector.register(MainWindowStoreService, mainWindowStoreService);
 	electronInjector.register(MAIN_WINDOW_STORE_SERVICE_TOKEN, mainWindowStoreService);
+
+	// REVIEW_FINALIZED is broadcast on the main-process Events bus after upload; these listeners
+	// must run here (not only in the frontend) so local match history / BG run stats update.
+	const gameStatsUpdaterService = new GameStatsUpdaterService(events, allCards, mainWindowStoreService);
+	electronInjector.register(GameStatsUpdaterService, gameStatsUpdaterService);
+
+	const bgsBestUserStatsService = new BgsBestUserStatsService(windowManager);
+	electronInjector.register(BgsBestUserStatsService, bgsBestUserStatsService);
+
+	const gameOverService = new GameOverService(gameStateFacade, events, bgsBestUserStatsService);
+	electronInjector.register(GameOverService, gameOverService);
 
 	const collectionStorageService = new CollectionStorageService(localStorage, diskCache);
 	electronInjector.register(CollectionStorageService, collectionStorageService);
