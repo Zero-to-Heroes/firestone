@@ -1,6 +1,3 @@
-/** Compact JSON below this length; larger objects are pretty-printed for readability. */
-export const COMPACT_LOG_THRESHOLD = 500;
-
 export const formatLogArg = (arg: unknown, replacer?: (string | number)[] | null): string => {
 	if (arg === null || arg === undefined) {
 		return String(arg);
@@ -10,11 +7,7 @@ export const formatLogArg = (arg: unknown, replacer?: (string | number)[] | null
 	}
 	if (typeof arg === 'object') {
 		try {
-			const compact = JSON.stringify(arg, replacer ?? undefined);
-			if (compact.length <= COMPACT_LOG_THRESHOLD) {
-				return compact;
-			}
-			return JSON.stringify(arg, replacer ?? undefined, 2);
+			return JSON.stringify(arg, replacer ?? undefined);
 		} catch (e) {
 			return String(arg);
 		}

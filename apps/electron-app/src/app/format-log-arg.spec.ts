@@ -1,4 +1,4 @@
-import { formatLogArg, COMPACT_LOG_THRESHOLD } from './format-log-arg';
+import { formatLogArg } from './format-log-arg';
 
 describe('formatLogArg', () => {
 	it('formats small objects on a single line', () => {
@@ -6,10 +6,11 @@ describe('formatLogArg', () => {
 		expect(formatLogArg(input)).toBe('{"userId":"abc","userName":"test","fullRetrieve":false}');
 	});
 
-	it('pretty-prints large objects', () => {
-		const input = { data: 'x'.repeat(COMPACT_LOG_THRESHOLD) };
+	it('formats large objects on a single line', () => {
+		const input = { data: 'x'.repeat(600) };
 		const result = formatLogArg(input);
-		expect(result).toContain('\n');
+		expect(result).not.toContain('\n');
+		expect(result).toBe(JSON.stringify(input));
 	});
 
 	it('formats errors with stack', () => {
