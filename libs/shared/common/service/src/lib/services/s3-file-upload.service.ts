@@ -24,13 +24,15 @@ export class S3FileUploadService {
 		const fileKey = uuid() + (extension || '');
 		console.log('[s3-upload] uploading blob', { fileKey, size: blob.size, extension, bucket: bucket || BUCKET });
 		const s3 = createAnonymousS3Client();
+		// AWS SDK v3 in Electron/Node cannot hash a Blob's flowing stream — use Buffer there
+		const body = await convertBlobToBody(blob);
 		const params = {
 			Bucket: bucket || BUCKET,
 			Key: fileKey,
 			// Anonymous uploads are owned by the "anonymous" S3 user; without this ACL
 			// the bucket owner (and support tooling) would not be able to read the object
 			ACL: 'bucket-owner-full-control' as const,
-			Body: blob,
+			Body: body,
 		};
 
 		try {
@@ -42,4 +44,16 @@ export class S3FileUploadService {
 			return null;
 		}
 	}
+}
+
+/**
+ * Converts a Blob to the appropriate format for AWS SDK.
+ * In Node.js/Electron, converts to Buffer. In browser, returns Blob as-is.
+ */
+async function convertBlobToBody(blob: Blob): Promise<Buffer | Blob> {
+	if (typeof Buffer !== 'undefined') {
+		const arrayBuffer = await blob.arrayBuffer();
+		return Buffer.from(arrayBuffer);
+	}
+	return blob;
 }
