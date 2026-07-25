@@ -35,15 +35,29 @@ export class ElectronWindowControlsFacadeService
 		this.registerMainProcessMethodWithEvent('getCurrentWindow', (event: any) => {
 			const win = BrowserWindow.fromWebContents(event.sender);
 			if (!win || win.isDestroyed()) return { id: '', name: '' };
+			const stateEx = win.isMinimized()
+				? 'minimized'
+				: !win.isVisible()
+					? 'minimized'
+					: win.isMaximized()
+						? 'maximized'
+						: 'normal';
 			return {
 				id: String(win.id),
 				name: win.getTitle?.() || 'unknown',
-				stateEx: win.isMaximized() ? 'maximized' : 'normal',
+				stateEx,
 			};
 		});
 		this.registerMainProcessMethodWithEvent('minimizeWindow', (event: any) => {
 			const win = BrowserWindow.fromWebContents(event.sender);
-			if (win && !win.isDestroyed()) win.minimize();
+			if (!win || win.isDestroyed()) return;
+			// Transparent + frameless windows on Windows: BrowserWindow.minimize() is often a no-op
+			// while maximize() still works. Fall back to Win32 ShowWindow(SW_MINIMIZE) so the
+			// window still minimizes to the taskbar (not hide()).
+			win.minimize();
+			if (process.platform === 'win32' && !win.isDestroyed() && !win.isMinimized()) {
+				minimizeWindowViaWin32(win);
+			}
 		});
 		this.registerMainProcessMethodWithEvent('maximizeWindow', (event: any) => {
 			const win = BrowserWindow.fromWebContents(event.sender);
@@ -176,5 +190,33 @@ export class ElectronWindowControlsFacadeService
 		} else {
 			this.doCloseWindow();
 		}
+	}
+}
+
+const SW_MINIMIZE = 6;
+
+let showWindowFn: ((hWnd: unknown, nCmdShow: number) => boolean) | null | undefined;
+
+/** Win32 ShowWindow(SW_MINIMIZE) — used when Electron's minimize() is a no-op. */
+function minimizeWindowViaWin32(win: {
+	isDestroyed: () => boolean;
+	getNativeWindowHandle: () => Buffer;
+}): void {
+	try {
+		if (showWindowFn === undefined) {
+			const koffi = eval('require')('koffi');
+			const user32 = koffi.load('user32.dll');
+			showWindowFn = user32.func('bool __stdcall ShowWindow(void* hWnd, int nCmdShow)');
+		}
+		if (!showWindowFn) {
+			return;
+		}
+		const handle = win.getNativeWindowHandle();
+		// HWND lives in the Buffer returned by Electron; decode pointer-sized value for koffi.
+		const hwnd = handle.length >= 8 ? handle.readBigUInt64LE(0) : handle.readUInt32LE(0);
+		showWindowFn(hwnd, SW_MINIMIZE);
+	} catch (e) {
+		showWindowFn = null;
+		console.warn('[ElectronWindowControls] Win32 minimize fallback failed', e);
 	}
 }

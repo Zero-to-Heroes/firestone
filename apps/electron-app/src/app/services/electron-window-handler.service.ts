@@ -199,7 +199,8 @@ export class ElectronWindowHandlerService implements IWindowHandlerService {
 				return;
 			}
 			if (existingWindow) {
-				if (!canBringUpFromMinimized && existingWindow.isMinimized()) {
+				// Minimize may be OS-minimized or hidden; treat both as user-dismissed.
+				if (!canBringUpFromMinimized && this.isWindowUserDismissed(existingWindow)) {
 					return;
 				}
 				this.showExistingBattlegroundsWindow(existingWindow);
@@ -220,7 +221,7 @@ export class ElectronWindowHandlerService implements IWindowHandlerService {
 			if (existingWindow.isVisible()) {
 				existingWindow.close();
 			} else {
-				if (!canBringUpFromMinimized && existingWindow.isMinimized()) {
+				if (!canBringUpFromMinimized && this.isWindowUserDismissed(existingWindow)) {
 					return;
 				}
 				if (!isAppAccessUnlocked()) {
@@ -258,7 +259,8 @@ export class ElectronWindowHandlerService implements IWindowHandlerService {
 				return;
 			}
 			if (overlayExists) {
-				if (!canBringUpFromMinimized && existingOverlay!.window.isMinimized()) {
+				// Minimize may be OS-minimized or hidden; treat both as user-dismissed.
+				if (!canBringUpFromMinimized && this.isWindowUserDismissed(existingOverlay!.window)) {
 					return;
 				}
 				if (existingOverlay!.window.isMinimized()) {
@@ -369,6 +371,11 @@ export class ElectronWindowHandlerService implements IWindowHandlerService {
 		this.battlegroundsWindow.loadURL(this.getBattlegroundsLoadUrl()).catch((err) => {
 			console.error('[ElectronWindowHandler] Failed to load battlegrounds window:', err);
 		});
+	}
+
+	/** Treat OS-minimized or hidden windows as user-dismissed for auto-open. */
+	private isWindowUserDismissed(window: BrowserWindow): boolean {
+		return window.isMinimized() || !window.isVisible();
 	}
 
 	private getExistingBattlegroundsWindow(): BrowserWindow | null {
