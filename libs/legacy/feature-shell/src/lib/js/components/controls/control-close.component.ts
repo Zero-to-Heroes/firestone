@@ -3,6 +3,7 @@ import { MainWindowStateFacadeService } from '@firestone/mainwindow/common';
 import { PreferencesService } from '@firestone/shared/common/service';
 import {
 	IWindowControlsService,
+	isElectronContext,
 	OverwolfService,
 	WINDOW_CONTROLS_SERVICE_TOKEN,
 } from '@firestone/shared/framework/core';
@@ -78,15 +79,22 @@ export class ControlCloseComponent {
 			!isWindowClosed(bgsWindow.window_state_ex) &&
 			!isWindowClosed(bgsWindowOverlay.window_state_ex);
 		if (this.closeAll && !isRunning && !areBothMainAndBgWindowsOpen && windowId) {
-			console.log('[control-close] closing all app windows');
-			await this.windowControls.hideWindow(windowId);
-			const prefs = await this.prefs.getPreferences();
-			const openWindows = await this.windowControls.getOpenWindows();
-			for (const [name] of Object.entries(openWindows)) {
-				if (prefs.closeToTray && name === OverwolfService.MAIN_WINDOW) {
-					continue;
+			// Electron: fully destroy the window. App stays alive via tray (onWindowAllClosed no-op).
+			// Overwolf: hide current window and close other named windows (close-to-tray semantics).
+			if (isElectronContext()) {
+				console.log('[control-close] closing window (Electron)');
+				await this.windowControls.closeWindow(windowId);
+			} else {
+				console.log('[control-close] closing all app windows');
+				await this.windowControls.hideWindow(windowId);
+				const prefs = await this.prefs.getPreferences();
+				const openWindows = await this.windowControls.getOpenWindows();
+				for (const [name] of Object.entries(openWindows)) {
+					if (prefs.closeToTray && name === OverwolfService.MAIN_WINDOW) {
+						continue;
+					}
+					await this.windowControls.closeWindowFromName(name);
 				}
-				await this.windowControls.closeWindowFromName(name);
 			}
 		} else {
 			console.log('[control-close] requested window close', windowId);
