@@ -15,7 +15,6 @@ export class MagnetizedCounterDefinitionV2 extends CounterDefinitionV2<number> {
 		pref: 'playerBgsMagnetizedCounter' as const,
 		display: (state: GameState, bgState: BattlegroundsState | null | undefined): boolean => true,
 		value: (state: GameState, bgState: BattlegroundsState | null | undefined) => {
-			console.debug('[magnetized-counter] value', state?.bgState?.currentGame?.magnetized, state, bgState);
 			return state?.bgState?.currentGame?.magnetized;
 		},
 		setting: {
