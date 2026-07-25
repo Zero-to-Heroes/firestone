@@ -44,6 +44,8 @@ export interface AuthCallbackData {
 	isPremium: boolean;
 	provider: string;
 	internalUserName: string;
+	/** Used for ow-electron ads hashed-email identity; not shown in UI */
+	email?: string;
 }
 
 export interface TwitchCallbackData {
@@ -174,6 +176,7 @@ export default class App {
 				provider: params.get('provider') || 'overwolf',
 				// UserId in case of Overwolf, used to get the Tebex info
 				internalUserName: params.get('internalUserName') || '',
+				email: params.get('email') || '',
 			};
 
 			if (!authData.token) {

@@ -28,6 +28,8 @@ export interface AuthCallbackData {
 	isPremium: boolean;
 	provider: string;
 	internalUserName: string;
+	/** Used for ow-electron ads hashed-email identity; not shown in UI */
+	email?: string;
 }
 
 // Stored auth data (persisted to disk)
@@ -39,6 +41,8 @@ interface StoredAuthData {
 	avatar?: string;
 	provider?: string;
 	internalUserName?: string;
+	/** Used for ow-electron ads hashed-email identity; not shown in UI */
+	email?: string;
 }
 
 @Injectable()
@@ -130,6 +134,8 @@ export class StandaloneUserService extends AbstractFacadeService<StandaloneUserS
 			return;
 		}
 
+		this.clearUserEmailHashes();
+
 		// Keep the local userId but clear auth-related fields
 		const loggedOutUser: StoredAuthData = {
 			userId: currentUser.userId!,
@@ -139,6 +145,7 @@ export class StandaloneUserService extends AbstractFacadeService<StandaloneUserS
 			avatar: undefined,
 			provider: undefined,
 			internalUserName: undefined,
+			email: undefined,
 		};
 
 		await this.diskCache.storeItem(DiskCacheService.DISK_CACHE_KEYS.LOCAL_USER, loggedOutUser);
@@ -170,7 +177,14 @@ export class StandaloneUserService extends AbstractFacadeService<StandaloneUserS
 	 * This should be called by the main process when a firestoneapp://auth deep link is received.
 	 */
 	public async handleAuthCallback(authData: AuthCallbackData): Promise<void> {
-		console.log('[user-service] Auth callback received for user:', authData);
+		console.log('[user-service] Auth callback received for user:', {
+			userName: authData.userName,
+			displayName: authData.displayName,
+			provider: authData.provider,
+			internalUserName: authData.internalUserName,
+			isPremium: authData.isPremium,
+			hasEmail: !!authData.email,
+		});
 
 		const currentUser = await this.getCurrentUser();
 
@@ -183,6 +197,7 @@ export class StandaloneUserService extends AbstractFacadeService<StandaloneUserS
 			avatar: authData.avatar,
 			provider: authData.provider,
 			internalUserName: authData.internalUserName,
+			email: authData.email || undefined,
 		};
 
 		// Save to disk for persistence
@@ -196,6 +211,8 @@ export class StandaloneUserService extends AbstractFacadeService<StandaloneUserS
 			avatar: updatedUser.avatar,
 		};
 		this.user$$.next(user);
+
+		this.applyUserEmailHashes(updatedUser.email);
 
 		// Deep link already tells us isPremium; apply before Tebex so tray / app access unlock right away.
 		this.ads.applyAuthPremiumHint(authData.isPremium);
@@ -239,6 +256,7 @@ export class StandaloneUserService extends AbstractFacadeService<StandaloneUserS
 				};
 				this.user$$.next(user);
 				console.log('[user-service] Loaded stored user:', user.username || '(not authenticated)');
+				this.applyUserEmailHashes(storedData.email);
 			} else {
 				// Create new local user ID
 				const userId = `fs-std-${uuid()}`;
@@ -260,6 +278,48 @@ export class StandaloneUserService extends AbstractFacadeService<StandaloneUserS
 			return !!this.user$$;
 		}
 		return this.storedUserDataLoaded;
+	}
+
+	/**
+	 * Pass the user's email to ow-electron for ads hashed-email identity.
+	 * Overwolf stores only the hashes; call after app.ready (this service runs post-ready).
+	 * @see https://dev.overwolf.com/ow-electron/monetization/advertising/user-identity/
+	 */
+	private applyUserEmailHashes(email: string | undefined): void {
+		if (!email) {
+			return;
+		}
+		try {
+			const { app } = eval('require')('electron');
+			const overwolf = app?.overwolf;
+			if (typeof overwolf?.generateUserEmailHashes !== 'function') {
+				console.warn('[user-service] generateUserEmailHashes API not available');
+				return;
+			}
+			overwolf.generateUserEmailHashes(email);
+			console.log('[user-service] Applied user email hashes for ads identity');
+		} catch (e) {
+			console.error('[user-service] Failed to apply user email hashes', e);
+		}
+	}
+
+	/**
+	 * Clear ads hashed-email identity on logout.
+	 * @see https://dev.overwolf.com/ow-electron/monetization/advertising/user-identity/
+	 */
+	private clearUserEmailHashes(): void {
+		try {
+			const { app } = eval('require')('electron');
+			const overwolf = app?.overwolf;
+			if (typeof overwolf?.setUserEmailHashes !== 'function') {
+				console.warn('[user-service] setUserEmailHashes API not available');
+				return;
+			}
+			overwolf.setUserEmailHashes({});
+			console.log('[user-service] Cleared user email hashes');
+		} catch (e) {
+			console.error('[user-service] Failed to clear user email hashes', e);
+		}
 	}
 
 	/**

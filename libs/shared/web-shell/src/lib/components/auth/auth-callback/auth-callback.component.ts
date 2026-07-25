@@ -114,6 +114,7 @@ export class AuthCallbackComponent implements OnInit {
 				avatar: authResult.picture || '',
 				isPremium: authResult.premium ? 'true' : 'false',
 				provider: 'overwolf',
+				email: authResult.email || '',
 			});
 
 			this.deepLinkUrl = 'firestoneapp://auth?' + deepLinkParams.toString();

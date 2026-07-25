@@ -55,7 +55,7 @@ export class LoginComponent implements OnInit {
 		},
 	];
 
-	private readonly SCOPE = 'openid profile subscriptions';
+	private readonly SCOPE = 'openid profile email subscriptions';
 
 	async ngOnInit(): Promise<void> {
 		// Pre-generate PKCE values and auth URLs
