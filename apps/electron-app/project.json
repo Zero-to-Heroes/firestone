@@ -8,10 +8,7 @@
 			"executor": "nx:run-commands",
 			"outputs": ["{workspaceRoot}/dist/apps/electron-app/bgs-battle-sim-worker.thread.js"],
 			"options": {
-				"commands": [
-					"tsc --project apps/electron-app/tsconfig.worker.json",
-					"node apps/electron-app/move-worker-file.js"
-				],
+				"commands": ["node apps/electron-app/build-worker.js"],
 				"parallel": false
 			}
 		},
