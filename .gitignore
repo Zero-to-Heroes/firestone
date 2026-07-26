@@ -54,6 +54,7 @@ docs/premium/thumbnails/
 # Perf investigation artifacts (see test-tools/perf/)
 test-tools/perf/*.cpuprofile
 test-tools/perf/full-pipeline-perf-results.json
+.ci-cache/
 test-tools/bg.log
 
 # Local Electron / Azure / Overwolf signing credentials (see .env.signing.example)
