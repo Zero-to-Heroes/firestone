@@ -69,8 +69,8 @@ Commit message should be of the following format:
 Where <type> is either:
 
 - fix
-- improved
-- added
+- change
+- new
 
 # General Guidelines for working with Nx
 
