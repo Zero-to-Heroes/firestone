@@ -83,5 +83,7 @@ electronLanguages:
     - en-US
     - en-GB
 
-# Post-pack optimization hook (removes non-Windows binaries)
-afterPack: './build-tools/electron-afterpack.js'
+# Prune natives after Electron extract / native rebuild, before Overwolf signing.
+# Do NOT use afterPack for stripping: Overwolf integrity signing runs during pack,
+# and mutating win-unpacked afterward causes owepm "invalid verification".
+afterExtract: './build-tools/electron-prune-app-natives.js'
