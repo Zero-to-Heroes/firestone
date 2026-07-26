@@ -19,6 +19,14 @@ export class AppNavigationService extends AbstractFacadeService<AppNavigationSer
 		this.currentTab$$ = new BehaviorSubject<CurrentAppType | null>(null);
 	}
 
+	protected override initElectronSubjects(): void {
+		this.setupElectronSubject(this.currentTab$$, 'AppNavigationService-currentTab');
+	}
+
+	override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.currentTab$$ = new BehaviorSubject<CurrentAppType | null>(null);
+	}
+
 	protected override async initElectronMainProcess() {
 		this.registerMainProcessMethod('selectTabInternal', (tab: CurrentAppType) => this.selectTabInternal(tab));
 	}

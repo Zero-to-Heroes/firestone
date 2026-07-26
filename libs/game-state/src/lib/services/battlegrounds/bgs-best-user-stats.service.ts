@@ -59,6 +59,14 @@ export class BgsBestUserStatsService extends AbstractFacadeService<BgsBestUserSt
 		});
 	}
 
+	protected override initElectronSubjects(): void {
+		this.setupElectronSubject(this.bestStats$$, 'BgsBestUserStatsService-bestStats');
+	}
+
+	override createElectronProxy(ipcRenderer: any): void | Promise<void> {
+		this.bestStats$$ = new SubscriberAwareBehaviorSubject<readonly BgsBestStat[] | null>(null);
+	}
+
 	// TODO: recompute the best values when a game is over
 	// For now you'll need to refresh the app to get the info, which IMO is ok since I don't think the feature is used much
 }
