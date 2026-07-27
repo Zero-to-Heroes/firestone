@@ -6,6 +6,7 @@ import {
 	BgsPlayer,
 	BgsPostMatchStats,
 } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
+import { ReplayEssentials } from '../models/replay-essentials';
 
 /**
  * Offloads the CPU-heavy parts of the end-of-game upload pipeline (full replay-XML
@@ -18,6 +19,13 @@ import {
  * returns null on failure so callers can always fall back.
  */
 export abstract class UploadPrepExecutorService {
+	/**
+	 * Parses the full replay XML off-thread and returns only the plain summary the
+	 * upload pipeline needs, so the main thread never has to parse the XML at all
+	 * (Plan H phase 2). Includes the CardsPlayedByTurnParser walk.
+	 */
+	abstract extractReplayEssentials(replayXml: string): Promise<ReplayEssentials | null>;
+
 	abstract parseBattlegroundsGame(
 		replayXml: string,
 		mainPlayer: BgsPlayer,

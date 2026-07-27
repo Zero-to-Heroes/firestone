@@ -191,10 +191,11 @@ Ranked by measured impact per unit of risk. The original A-G lettering is kept f
 continuity; H is new.
 
 1. **Plan H - end-of-game upload pipeline off the main thread** (stalls: 8.6 s + 4.0 s
-   measured; the single worst "Not responding" trigger). **IMPLEMENTED and
-   confirmed in-game** (sessions 3-4): 8.6 s + 4.0 s → 3.4 s + 0.7 s even on a 50%
-   bigger game; what remains is parse 1 on main, see the Plan H section for the
-   possible phase 2.
+   measured; the single worst "Not responding" trigger). **DONE, confirmed in-game**
+   (sessions 3-5): phase 1 brought 8.6 s + 4.0 s down to 3.4 s + 0.7 s; phase 2
+   (`extractReplayEssentials` — main never parses the XML for BG games) brought it
+   to a single 600 ms stall (`xmlFromReplay`, session 5, 9.4 MB replay). Considered
+   closed; Plan G is now the top stall source.
 2. **Plan F - persistent BGS sim worker** (RSS spikes +150-240 MB per fight, ~once per
    turn; known ~3.5 s/game CPU orchestration cost; low risk, well understood).
    **IMPLEMENTED and confirmed in-game** (session 4): merged with the Plan H worker
@@ -359,14 +360,18 @@ Respect the packaged-worker bundling constraint
 esbuild-bundled by `apps/electron-app/build-worker.js` because deps are not in the
 asar).
 
-**Status: IMPLEMENTED (Electron), confirmed in-game (session 4, 2026-07-27 17:58,
-long game to turn 17).** 17 sims returned through one worker spawned once at
-startup, zero worker errors, and the per-fight RSS oscillation is gone — main RSS
-between turn samples is now smooth (520 → 700 MB over the game, tracking parser
-growth) where session 2 swung by +150-420 MB per fight. The trade-off is visible
-and as designed: worker_threads live inside the main OS process, so the one
-resident cards copy adds ~200 MB to main RSS for the whole session (238 MB at
-startup → ~470 MB once the worker is initialized and a match starts).
+**Status: IMPLEMENTED (Electron), confirmed in-game (sessions 4-5).** All sims
+return through one worker spawned once at startup, zero worker errors across both
+sessions. Correction after re-analyzing both sessions' samples: what is gone is the
+*structural* per-fight cost — the cards-DB clone on every fight and the leaked
+idle workers. The simulation's own working memory still shows up as transient RSS
+churn (+100-400 MB at fight start, reclaimed by the worker's GC within ~15-60 s;
+peak main RSS ~1.05-1.15 GB mid-game in both sessions) because worker_threads heaps
+live inside main's OS process. That churn is inherent to running the sim in-process
+and is transient, not growth; if it ever matters, the lever is sim allocation
+behavior (e.g. iteration count, buffer reuse), not worker lifecycle. The designed
+trade-off also stands: the one resident cards copy adds ~200 MB to main RSS for the
+whole session (238 MB at startup → ~470 MB once the worker is initialized).
 
 Implementation: instead of a second persistent worker (which would have kept a
 second resident cards copy), the
@@ -402,7 +407,9 @@ single CPU block).
 Measured stall numbers (2026-07-27) that scope this plan: match start blocks main
 4.3-5.5 s; per-turn longest stalls grow from ~400 ms (turn 4) to 0.6-1.0 s (turns
 7-13); a 2.3 s stall occurred while MindVision read memory from a dying Hearthstone
-process. Before committing to the full move, profile WHICH of these is MindVision
+process. Session 5 (with Plans F+H fully in) confirms the same profile — match
+start 3.2 s + 3.7 s, per-turn stalls 0.5-1.3 s from turn 4 on — making this plan
+the top remaining stall source now that the end-of-game window is clean. Before committing to the full move, profile WHICH of these is MindVision
 (edge.js runs on the main thread) vs parser burst vs game-state serialize+send — the
 answer may shrink this plan to "make MindVision calls non-blocking" plus Plan H.
 
@@ -438,11 +445,38 @@ at startup, nothing cloned at game end); end-of-game stalls were **3.4 s + 0.7 s
 (vs an extrapolated ~19 s on the old path for this size). Both remaining stalls are
 the known main-side leftovers and scale with replay size: the 3.4 s is parse 1
 (`parseHsReplayString` of 12.7 MB in `initializeGame`), the 0.7 s is the
-`CardsPlayedByTurnParser` `parseGame` walk in `buildMetadata`. **Possible phase 2**
-to reach the ~250 ms goal: extract everything main reads from the parsed `Replay`
-(matchup, duration, player/opponent ids and names, `additionalResult`,
-cards-played-by-turn, the fields `buildGameStat` uses) in the worker as plain data,
-so main never parses the XML at all.
+`CardsPlayedByTurnParser` `parseGame` walk in `buildMetadata`.
+
+**Phase 2 (IMPLEMENTED 2026-07-27, awaiting in-game validation)** to reach the
+~250 ms goal: a full inventory showed that for BG games, everything main reads from
+the parsed `Replay` is a fixed set of plain fields — matchup/duration/result,
+player/opponent ids, names, hero and hero-power card ids, region/gameType/playCoin,
+`additionalResult`, the BG quest/anomaly/trinket fields, and the
+`CardsPlayedByTurnParser` output (match analysis only runs for constructed modes and
+BG run stats never touch the replay). A new `extractReplayEssentials` worker op
+parses the XML off-thread and returns only that summary (`ReplayEssentials`,
+`libs/stats/services/.../models/replay-essentials.ts`, field names matching `Replay`
+so consumers treat the two uniformly). `EndGameUploaderService.initializeGame` uses
+it for BG games when the executor is present and then never calls
+`parseHsReplayString`; `game.replayEssentials` is set instead of `game.replay`, and
+`ReplayMetadataBuilderService` / `buildGameStat` read whichever exists. Non-BG modes
+(replays are ~10x smaller) and the no-worker case (Overwolf) keep the historical
+main-thread parse. Verified with `compute-worker-verify.mjs`: worker essentials are
+byte-identical to the main-thread reference; on the 8 MB test replay the parse
+(1.6 s) + cards walk (0.25 s) moved off main, worst observed main stall 75 ms.
+
+**Phase 2 confirmed in-game (session 5, 2026-07-27 20:53, game to turn 11, 9.4 MB
+replay):** the entire end-of-game window produced a **single 600 ms stall** (right
+at GAME_END — `xmlFromReplay`, as predicted), versus 3.4 s + 0.7 s in session 4 and
+8.6 s + 4.0 s originally. The log shows the new path ran: `extracted replay
+essentials in worker true 8712 ms` (wall-clock in the worker, main stayed
+responsive; the last battle sim had finished a minute earlier, so no queueing),
+then `built metadata after 26743 ms` (also wall-clock — worker compute), upload OK,
+`built new game stat` 65 ms after upload, no worker errors. Note the trade-off:
+end-to-end upload latency is now ~44 s after GAME_END (worker runs the parses
+sequentially at lower priority than before), which only matters if the user quits
+the app immediately after a game. Main RSS rose to ~1.04 GB during the worker's
+upload-prep work and settled back to ~650 MB two minutes after the game.
 
 Code exploration showed the same ~8 MB XML string was fully parsed up to **four
 times** on main for one game: (1) `parseHsReplayString` in
@@ -466,8 +500,9 @@ What was implemented:
   (`ReplayMetadataBuilderService`, `GlobalStatsService`, `ReplayUploadService`) fall
   back to their historical main-thread path when the service is absent (Overwolf) or
   the worker fails, so parses 2 and 4 and all three zips leave main on Electron.
-- Parse 1 stays on main by design: its `Replay` object (elementtree-backed) feeds
-  many main-side consumers and cannot cross a worker boundary.
+- Parse 1 initially stayed on main because its `Replay` object (elementtree-backed)
+  cannot cross a worker boundary; phase 2 (above) removed it for BG games by having
+  the worker return only the plain `ReplayEssentials` summary main actually reads.
 
 Verified with `test-tools/perf/compute-worker-verify.mjs` on `test-tools/bg.log`
 (308 k lines, 8 MB XML): worker results are identical to the main-thread path, and
@@ -480,9 +515,11 @@ reads the on-disk Power.log in the worker, both issues close together.
 
 Done when: after GAME_END with instrumentation on, no main-thread stall exceeds
 ~250 ms attributable to the upload pipeline, and the replay + stats still upload and
-appear correctly. Remaining known main-thread costs in the window: `xmlFromReplay`
-(~0.6 s), parse 1 (~1-2 s), and `CardsPlayedByTurnParser`/match-analysis walks —
-re-measure a real game to see if they alone still cross the threshold.
+appear correctly. **Essentially achieved in session 5**: one 600 ms stall remains,
+which is `xmlFromReplay` (builds the XML string from the live game tree on main —
+it needs the mutable parser state, so it can't move to the worker as-is). Going
+below that is diminishing returns next to Plan G's 0.5-1.3 s per-turn stalls;
+consider this plan closed unless future sessions show otherwise.
 
 ### Subsequent phase - port the worker offloads to Overwolf
 

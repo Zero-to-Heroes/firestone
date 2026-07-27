@@ -1,6 +1,7 @@
 import { Replay } from '@firestone-hs/hs-replay-xml-parser';
 import { Race } from '@firestone-hs/reference-data';
 import { MatchResultType, StatGameFormatType, StatGameModeType } from '@firestone/stats/data-access';
+import { ReplayEssentials } from '../replay-essentials';
 
 export interface XpForGameInfo {
 	readonly currentXp: number;
@@ -44,6 +45,9 @@ export class GameForUpload {
 	deckstring: string;
 	deckName: string;
 	replay: Replay;
+	// Set instead of `replay` when the XML was parsed in the compute worker (Plan H
+	// phase 2); currently only for BG games, where the replay is by far the largest
+	replayEssentials?: ReplayEssentials;
 
 	availableTribes: readonly Race[];
 	bannedTribes: readonly Race[];

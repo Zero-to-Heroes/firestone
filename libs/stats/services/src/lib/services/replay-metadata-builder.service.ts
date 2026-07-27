@@ -10,6 +10,7 @@ import {
 	parseBattlegroundsGame,
 	parseGame,
 } from '@firestone-hs/hs-replay-xml-parser';
+import { CardPlayedByTurn } from '@firestone-hs/hs-replay-xml-parser/dist/lib/parsers/cards-played-by-turn-parser';
 import { isMercenaries } from '@firestone-hs/reference-data';
 import { BgsBoardLight, ReplayUploadMetadata } from '@firestone-hs/replay-metadata';
 import { Input as BgsComputeRunStatsInput } from '@firestone-hs/user-bgs-post-match-stats';
@@ -46,9 +47,14 @@ export class ReplayMetadataBuilderService {
 		appVersion: { app: string; version: string },
 	): Promise<ReplayUploadMetadata> {
 		const today = new Date();
+		// When the replay was parsed in the compute worker (Plan H phase 2, BG games on
+		// Electron), only the plain ReplayEssentials summary exists and game.replay is
+		// unset; both types share the scalar field names used below
+		const essentials = game.replayEssentials ?? null;
 		const replay = game.replay;
-		const totalDurationTurns = extractTotalTurns(replay);
-		const totalDurationSeconds = extractTotalDuration(replay);
+		const src = essentials ?? replay;
+		const totalDurationTurns = essentials ? essentials.totalDurationTurns : extractTotalTurns(replay);
+		const totalDurationSeconds = essentials ? essentials.totalDurationSeconds : extractTotalDuration(replay);
 		const currentBgPatch = await this.patches.currentBattlegroundsMetaPatch$$.getValueWithInit();
 		const bgs: ReplayUploadMetadata['bgs'] | undefined = await this.buildBgsMetadata(
 			game,
@@ -64,10 +70,23 @@ export class ReplayMetadataBuilderService {
 		}/${today.getUTCDate()}/${game.reviewId}.xml.zip`;
 		const matchAnalysis = this.matchAnalysisService.buildMatchStats(game);
 
-		const parser = new CardsPlayedByTurnParser(this.allCards.getService());
-		parseGame(replay, [parser]);
-		const playerPlayedCardsByTurn = parser.cardsPlayedByTurn[game.replay.mainPlayerId];
-		const playerCastCardsByTurn = parser.cardsCastByTurn[game.replay.mainPlayerId];
+		let playerPlayedCardsByTurn: readonly CardPlayedByTurn[];
+		let playerCastCardsByTurn: readonly CardPlayedByTurn[];
+		let opponentPlayedCardsByTurn: readonly CardPlayedByTurn[];
+		let opponentCastCardsByTurn: readonly CardPlayedByTurn[];
+		if (essentials) {
+			playerPlayedCardsByTurn = essentials.playerPlayedCardsByTurn;
+			playerCastCardsByTurn = essentials.playerCastCardsByTurn;
+			opponentPlayedCardsByTurn = essentials.opponentPlayedCardsByTurn;
+			opponentCastCardsByTurn = essentials.opponentCastCardsByTurn;
+		} else {
+			const parser = new CardsPlayedByTurnParser(this.allCards.getService());
+			parseGame(replay, [parser]);
+			playerPlayedCardsByTurn = parser.cardsPlayedByTurn[replay.mainPlayerId];
+			playerCastCardsByTurn = parser.cardsCastByTurn[replay.mainPlayerId];
+			opponentPlayedCardsByTurn = parser.cardsPlayedByTurn[replay.opponentPlayerId];
+			opponentCastCardsByTurn = parser.cardsCastByTurn[replay.opponentPlayerId];
+		}
 		console.debug('deckstring', game.deckstring);
 
 		const metadata: ReplayUploadMetadata = {
@@ -80,7 +99,7 @@ export class ReplayMetadataBuilderService {
 				application: `${appVersion.app}-${appVersion.version}`,
 				appVersion: appVersion.version,
 				appChannel: '' + process.env['APP_CHANNEL'],
-				region: replay.region,
+				region: src.region,
 				allowGameShare: allowGameShare,
 				realXpGained: game.xpForGame?.realXpGained,
 				normalizedXpGained: game.xpForGame?.xpGainedWithoutBonus,
@@ -110,21 +129,21 @@ export class ReplayMetadataBuilderService {
 					game.gameMode === 'battlegrounds' ||
 					game.gameMode === 'battlegrounds-friendly' ||
 					game.gameMode === 'battlegrounds-duo'
-						? replay.additionalResult
+						? src.additionalResult
 						: (game.additionalResult as string),
 				runId: game.runId as string,
 
-				mainPlayerName: replay.mainPlayerName,
-				mainPlayerCardId: replay.mainPlayerCardId,
-				mainPlayerStartingHeroPowerCardId: replay.mainPlayerHeroPowerCardId,
-				mainPlayerId: game.replay.mainPlayerId,
-				opponentPlayerName: replay.opponentPlayerName,
+				mainPlayerName: src.mainPlayerName,
+				mainPlayerCardId: src.mainPlayerCardId,
+				mainPlayerStartingHeroPowerCardId: src.mainPlayerHeroPowerCardId,
+				mainPlayerId: src.mainPlayerId,
+				opponentPlayerName: src.opponentPlayerName,
 				forceOpponentName: game.forceOpponentName as string,
-				opponentPlayerCardId: replay.opponentPlayerCardId,
-				opponentStartingHeroPowerCardId: replay.opponentPlayerHeroPowerCardId,
-				opponentPlayerId: game.replay.opponentPlayerId,
-				result: replay.result,
-				playCoin: replay.playCoin,
+				opponentPlayerCardId: src.opponentPlayerCardId,
+				opponentStartingHeroPowerCardId: src.opponentPlayerHeroPowerCardId,
+				opponentPlayerId: src.opponentPlayerId,
+				result: src.result,
+				playCoin: src.playCoin,
 				totalDurationSeconds: totalDurationSeconds,
 				totalDurationTurns: totalDurationTurns,
 			},
@@ -134,9 +153,9 @@ export class ReplayMetadataBuilderService {
 				playerPlayedCards: playerPlayedCardsByTurn?.map((c) => c.cardId),
 				playerPlayedCardsByTurn: playerPlayedCardsByTurn,
 				playerCastCardsByTurn: playerCastCardsByTurn,
-				opponentPlayedCards: parser.cardsPlayedByTurn[game.replay.opponentPlayerId]?.map((c) => c.cardId),
-				opponentPlayedCardsByTurn: parser.cardsPlayedByTurn[game.replay.opponentPlayerId],
-				opponentCastCardsByTurn: parser.cardsCastByTurn[game.replay.opponentPlayerId],
+				opponentPlayedCards: opponentPlayedCardsByTurn?.map((c) => c.cardId),
+				opponentPlayedCardsByTurn: opponentPlayedCardsByTurn,
+				opponentCastCardsByTurn: opponentCastCardsByTurn,
 			},
 		};
 		return metadata;
@@ -157,6 +176,9 @@ export class ReplayMetadataBuilderService {
 		) {
 			return undefined;
 		}
+
+		// Both Replay and ReplayEssentials expose the BG fields under the same names
+		const src = game.replayEssentials ?? game.replay;
 
 		// The off-thread path avoids re-parsing the full replay XML on the main thread,
 		// which takes multiple seconds for a long BG game; falls back to the historical
@@ -213,25 +235,25 @@ export class ReplayMetadataBuilderService {
 		return {
 			hasPrizes: game.hasBgsPrizes,
 			hasSpells: game.hasBgsSpells,
-			hasQuests: game.replay.hasBgsQuests,
-			hasAnomalies: game.replay.hasBgsAnomalies,
-			hasTrinkets: game.replay.hasBgsTrinkets,
-			hasTimewarped: game.replay.hasBgsTimewarped,
+			hasQuests: src.hasBgsQuests,
+			hasAnomalies: src.hasBgsAnomalies,
+			hasTrinkets: src.hasBgsTrinkets,
+			hasTimewarped: src.hasBgsTimewarped,
 			heroesOffered: postMatchStats.heroesOffered,
 			bannedTribes: game.bannedTribes,
 			availableTribes: game.availableTribes,
-			mainPlayerId: game.replay.mainPlayerId,
-			heroQuests: game.replay.bgsHeroQuests,
-			anomalies: game.replay.bgsAnomalies,
-			trinkets: game.replay.bgsHeroTrinkets,
-			trinketsOffered: game.replay.bgsHeroTrinketsOffered,
+			mainPlayerId: src.mainPlayerId,
+			heroQuests: src.bgsHeroQuests,
+			anomalies: src.bgsAnomalies,
+			trinkets: src.bgsHeroTrinkets,
+			trinketsOffered: src.bgsHeroTrinketsOffered,
 			finalComp: finalComp,
 			compArchetype: compArchetype?.composition?.compId ?? null,
 			battleOdds: !!game.bgBattleOdds?.length ? game.bgBattleOdds : null,
 			warbandStats: warbandStats,
 			postMatchStats: finalPostMatchStats,
 			boardHistory: boardHistory,
-			isPerfectGame: isBgPerfectGame(postMatchStats, game.additionalResult, game.replay.mainPlayerId),
+			isPerfectGame: isBgPerfectGame(postMatchStats, game.additionalResult, src.mainPlayerId),
 		};
 	}
 }

@@ -18,49 +18,53 @@ export const buildGameStat = (
 	metadata: ReplayUploadMetadata,
 	allCards: CardsFacadeService,
 ): GameStat => {
-	// The uploader already parsed this exact XML into game.replay; re-parsing an 8MB+
-	// replay here used to block the main thread for seconds (Plan H)
-	const replay = game.replay ?? parseHsReplayString(xml, allCards.getService());
-	const durationInSeconds = extractTotalDuration(replay);
-	const durationInTurns = extractTotalTurns(replay);
+	// The uploader already extracted this exact XML into game.replayEssentials (worker
+	// parse, Plan H phase 2) or game.replay; re-parsing an 8MB+ replay here used to
+	// block the main thread for seconds (Plan H). Both types share the field names
+	// used below.
+	const essentials = game.replayEssentials ?? null;
+	const replay = essentials ? null : (game.replay ?? parseHsReplayString(xml, allCards.getService()));
+	const src = essentials ?? replay;
+	const durationInSeconds = essentials ? essentials.totalDurationSeconds : extractTotalDuration(replay);
+	const durationInTurns = essentials ? essentials.totalDurationTurns : extractTotalTurns(replay);
 
 	const { playerClassFromReplay, playerCardIdFromReplay } = {
-		playerClassFromReplay: allCards.getCard(replay.mainPlayerCardId)?.playerClass?.toLowerCase(),
-		playerCardIdFromReplay: replay.mainPlayerCardId,
+		playerClassFromReplay: allCards.getCard(src.mainPlayerCardId)?.playerClass?.toLowerCase(),
+		playerCardIdFromReplay: src.mainPlayerCardId,
 	};
 	const playerInfoFromDeckstring = extractPlayerInfoFromDeckstring(game.deckstring, allCards, game.gameMode);
 
 	const mainPlayerClass = playerInfoFromDeckstring?.playerClass ?? playerClassFromReplay;
 	let playerCardId = playerCardIdFromReplay;
 	if (
-		mainPlayerClass !== allCards.getCard(replay.mainPlayerCardId)?.playerClass?.toLowerCase() &&
+		mainPlayerClass !== allCards.getCard(src.mainPlayerCardId)?.playerClass?.toLowerCase() &&
 		!!playerInfoFromDeckstring?.playerCardId
 	) {
 		playerCardId = playerInfoFromDeckstring?.playerCardId;
 	}
 
-	const quests = isBattlegrounds(replay.gameType) ? (replay.bgsHeroQuests ?? []) : [];
+	const quests = isBattlegrounds(src.gameType) ? (src.bgsHeroQuests ?? []) : [];
 	const firstGame = GameStat.create({
 		additionalResult: game.additionalResult ?? undefined,
 		buildNumber: game.buildNumber,
-		region: replay.region,
-		coinPlay: replay.playCoin,
+		region: src.region,
+		coinPlay: src.playCoin,
 		creationTimestamp: Date.now(),
 		gameFormat: game.gameFormat,
 		gameMode: game.gameMode,
-		opponentCardId: replay.opponentPlayerCardId,
+		opponentCardId: src.opponentPlayerCardId,
 		// Because of Maestra
-		opponentClass: allCards.getCard(replay.opponentPlayerCardId)?.playerClass?.toLowerCase(),
-		opponentName: game.forceOpponentName ?? replay.opponentPlayerName ?? game.opponent?.name,
+		opponentClass: allCards.getCard(src.opponentPlayerCardId)?.playerClass?.toLowerCase(),
+		opponentName: game.forceOpponentName ?? src.opponentPlayerName ?? game.opponent?.name,
 		opponentRank: game.opponentRank,
 		playerCardId: playerCardId,
 		playerClass: mainPlayerClass,
 		playerDeckName: game.deckName,
 		playerDecklist: game.deckstring,
-		playerName: replay.mainPlayerName ?? game.player?.name,
+		playerName: src.mainPlayerName ?? game.player?.name,
 		playerRank: game.playerRank,
 		newPlayerRank: game.newPlayerRank,
-		result: replay.result,
+		result: src.result,
 		reviewId: reviewId,
 		powerLogKey: metadata.game.powerLogKey,
 		scenarioId: game.scenarioId,
@@ -71,7 +75,7 @@ export const buildGameStat = (
 		bgsBannedTribes: game.bannedTribes,
 		bgsHasPrizes: game.hasBgsPrizes,
 		bgsHasSpells: game.hasBgsSpells,
-		bgsHasQuests: replay.hasBgsQuests,
+		bgsHasQuests: src.hasBgsQuests,
 		bgsHeroQuests: quests.map((q) => q.questCardId) as readonly string[],
 		bgsQuestsCompletedTimings: quests.map((q) => q.turnCompleted) as readonly number[],
 		bgsHeroQuestRewards: quests.map((q) => q.rewardCardId) as readonly string[],

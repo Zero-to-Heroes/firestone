@@ -7,7 +7,7 @@ import {
 	BgsPlayer,
 	BgsPostMatchStats,
 } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
-import { UploadPrepExecutorService } from '@firestone/stats/services';
+import { ReplayEssentials, UploadPrepExecutorService } from '@firestone/stats/services';
 import { ComputeWorkerHost } from './compute-worker-host';
 
 /**
@@ -23,6 +23,14 @@ import { ComputeWorkerHost } from './compute-worker-host';
 export class UploadPrepWorkerService extends UploadPrepExecutorService {
 	constructor(private readonly workerHost: ComputeWorkerHost) {
 		super();
+	}
+
+	public async extractReplayEssentials(replayXml: string): Promise<ReplayEssentials | null> {
+		const response = await this.workerHost.request({
+			type: 'extractReplayEssentials',
+			xml: replayXml,
+		});
+		return response?.ok && response.result ? JSON.parse(response.result) : null;
 	}
 
 	public async parseBattlegroundsGame(

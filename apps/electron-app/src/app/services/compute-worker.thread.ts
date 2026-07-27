@@ -17,7 +17,14 @@
  * (../knowledge/bug-electron-bgs-simulator-worker.md).
  */
 import { extractStatsForGame } from '@firestone-hs/build-global-stats/dist/stats-builder';
-import { parseBattlegroundsGame } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
+import {
+	CardsPlayedByTurnParser,
+	extractTotalDuration,
+	extractTotalTurns,
+	parseBattlegroundsGame,
+	parseGame,
+	parseHsReplayString,
+} from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { AllCardsService } from '@firestone-hs/reference-data';
 import { simulateBattle } from '@firestone-hs/simulate-bgs-battle';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
@@ -43,6 +50,7 @@ type WorkerRequest =
 			faceOffs: any;
 	  }
 	| { id: number; type: 'extractStatsForGame'; message: any; xml: string }
+	| { id: number; type: 'extractReplayEssentials'; xml: string }
 	| { id: number; type: 'zipSingleFile'; fileName: string; content: string };
 
 parentPort.on('message', async (data: WorkerRequest) => {
@@ -85,6 +93,45 @@ parentPort.on('message', async (data: WorkerRequest) => {
 			case 'extractStatsForGame': {
 				const result = await extractStatsForGame(data.message, data.xml, cards!);
 				parentPort!.postMessage({ id: data.id, ok: true, result: JSON.stringify(result), done: true });
+				return;
+			}
+			// Parses the replay XML and returns only the plain summary the upload
+			// pipeline needs (ReplayEssentials), so the main thread never parses the
+			// XML at all for BG games (Plan H phase 2)
+			case 'extractReplayEssentials': {
+				const replay = parseHsReplayString(data.xml, cards!);
+				const parser = new CardsPlayedByTurnParser(cards!);
+				parseGame(replay, [parser]);
+				const essentials = {
+					mainPlayerId: replay.mainPlayerId,
+					mainPlayerCardId: replay.mainPlayerCardId,
+					mainPlayerName: replay.mainPlayerName,
+					mainPlayerHeroPowerCardId: replay.mainPlayerHeroPowerCardId,
+					opponentPlayerId: replay.opponentPlayerId,
+					opponentPlayerCardId: replay.opponentPlayerCardId,
+					opponentPlayerName: replay.opponentPlayerName,
+					opponentPlayerHeroPowerCardId: replay.opponentPlayerHeroPowerCardId,
+					region: replay.region,
+					gameType: replay.gameType,
+					result: replay.result,
+					additionalResult: replay.additionalResult,
+					playCoin: replay.playCoin,
+					totalDurationSeconds: extractTotalDuration(replay),
+					totalDurationTurns: extractTotalTurns(replay),
+					hasBgsQuests: replay.hasBgsQuests,
+					bgsHeroQuests: replay.bgsHeroQuests,
+					hasBgsAnomalies: replay.hasBgsAnomalies,
+					bgsAnomalies: replay.bgsAnomalies,
+					hasBgsTrinkets: replay.hasBgsTrinkets,
+					hasBgsTimewarped: replay.hasBgsTimewarped,
+					bgsHeroTrinkets: replay.bgsHeroTrinkets,
+					bgsHeroTrinketsOffered: replay.bgsHeroTrinketsOffered,
+					playerPlayedCardsByTurn: parser.cardsPlayedByTurn[replay.mainPlayerId] ?? [],
+					playerCastCardsByTurn: parser.cardsCastByTurn[replay.mainPlayerId] ?? [],
+					opponentPlayedCardsByTurn: parser.cardsPlayedByTurn[replay.opponentPlayerId] ?? [],
+					opponentCastCardsByTurn: parser.cardsCastByTurn[replay.opponentPlayerId] ?? [],
+				};
+				parentPort!.postMessage({ id: data.id, ok: true, result: JSON.stringify(essentials), done: true });
 				return;
 			}
 			case 'zipSingleFile': {

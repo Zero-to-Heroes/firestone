@@ -1,4 +1,5 @@
 export * from './lib/models/game-for-upload/game-for-upload';
+export * from './lib/models/replay-essentials';
 export * from './lib/services/game-stat-builder';
 export * from './lib/services/game-stat-utils';
 export * from './lib/services/game-stats-provider.interface';

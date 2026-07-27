@@ -44,9 +44,14 @@ const { joinWrappedPowerLogLines } = await importTs(
 const { xmlFromReplay } = await importTs('libs', 'power-log-parser', 'src', 'lib', 'replay-converter.ts');
 
 const { AllCardsService } = await import('@firestone-hs/reference-data');
-const { parseBattlegroundsGame, parseHsReplayString } = await import(
-	'@firestone-hs/hs-replay-xml-parser/dist/public-api'
-);
+const {
+	CardsPlayedByTurnParser,
+	extractTotalDuration,
+	extractTotalTurns,
+	parseBattlegroundsGame,
+	parseGame,
+	parseHsReplayString,
+} = await import('@firestone-hs/hs-replay-xml-parser/dist/public-api');
 const { extractStatsForGame } = await import('@firestone-hs/build-global-stats/dist/stats-builder');
 const JSZip = (await import('jszip')).default;
 
@@ -107,7 +112,10 @@ const xml = xmlFromReplay(parser.State.GSState.Replay);
 console.log(`xmlFromReplay: ${Date.now() - t} ms, ${(xml.length / 1024 / 1024).toFixed(2)} MB`);
 
 // Realistic-ish BgsPlayer input; both paths receive the same object, so results stay comparable
+t = Date.now();
 const replay = parseHsReplayString(xml, cards);
+const refHsParseMs = Date.now() - t;
+console.log(`[main] parseHsReplayString: ${refHsParseMs} ms`);
 const mainPlayer = {
 	cardId: replay.mainPlayerCardId,
 	heroPowerCardId: '',
@@ -153,6 +161,43 @@ const refZip = await refZipper.generateAsync({
 const refZipMs = Date.now() - t;
 console.log(`[main] JSZip DEFLATE-9: ${refZipMs} ms, ${(refZip.length / 1024 / 1024).toFixed(2)} MB`);
 
+// Reference for extractReplayEssentials (Plan H phase 2): same construction (and key
+// order) as compute-worker.thread.ts, so the JSON payloads compare with ===
+t = Date.now();
+const refCardsParser = new CardsPlayedByTurnParser(cards);
+parseGame(replay, [refCardsParser]);
+const refCardsWalkMs = Date.now() - t;
+console.log(`[main] CardsPlayedByTurnParser walk: ${refCardsWalkMs} ms`);
+const refEssentials = {
+	mainPlayerId: replay.mainPlayerId,
+	mainPlayerCardId: replay.mainPlayerCardId,
+	mainPlayerName: replay.mainPlayerName,
+	mainPlayerHeroPowerCardId: replay.mainPlayerHeroPowerCardId,
+	opponentPlayerId: replay.opponentPlayerId,
+	opponentPlayerCardId: replay.opponentPlayerCardId,
+	opponentPlayerName: replay.opponentPlayerName,
+	opponentPlayerHeroPowerCardId: replay.opponentPlayerHeroPowerCardId,
+	region: replay.region,
+	gameType: replay.gameType,
+	result: replay.result,
+	additionalResult: replay.additionalResult,
+	playCoin: replay.playCoin,
+	totalDurationSeconds: extractTotalDuration(replay),
+	totalDurationTurns: extractTotalTurns(replay),
+	hasBgsQuests: replay.hasBgsQuests,
+	bgsHeroQuests: replay.bgsHeroQuests,
+	hasBgsAnomalies: replay.hasBgsAnomalies,
+	bgsAnomalies: replay.bgsAnomalies,
+	hasBgsTrinkets: replay.hasBgsTrinkets,
+	hasBgsTimewarped: replay.hasBgsTimewarped,
+	bgsHeroTrinkets: replay.bgsHeroTrinkets,
+	bgsHeroTrinketsOffered: replay.bgsHeroTrinketsOffered,
+	playerPlayedCardsByTurn: refCardsParser.cardsPlayedByTurn[replay.mainPlayerId] ?? [],
+	playerCastCardsByTurn: refCardsParser.cardsCastByTurn[replay.mainPlayerId] ?? [],
+	opponentPlayedCardsByTurn: refCardsParser.cardsPlayedByTurn[replay.opponentPlayerId] ?? [],
+	opponentCastCardsByTurn: refCardsParser.cardsCastByTurn[replay.opponentPlayerId] ?? [],
+};
+
 // ---------- 3. Worker path ----------
 const worker = new Worker(workerPath);
 const pending = new Map();
@@ -197,6 +242,10 @@ console.log(`[worker] extractStatsForGame: ${Date.now() - t} ms, ok=${workerExtr
 t = Date.now();
 const workerZip = await request({ type: 'zipSingleFile', fileName: 'replay.xml', content: xml });
 console.log(`[worker] zipSingleFile: ${Date.now() - t} ms, ok=${workerZip.ok}`);
+
+t = Date.now();
+const workerEssentials = await request({ type: 'extractReplayEssentials', xml });
+console.log(`[worker] extractReplayEssentials: ${Date.now() - t} ms, ok=${workerEssentials.ok}`);
 
 // ---------- 3b. Battle sim smoke test (Plan F): streams then finishes ----------
 const simPlayer = (cardId) => ({ cardId, hpLeft: 30, tavernTier: 3, heroPowers: [], questEntities: [] });
@@ -251,6 +300,11 @@ if (!simResult.ok) {
 	const totalSims = (sim.won ?? 0) + (sim.tied ?? 0) + (sim.lost ?? 0);
 	if (totalSims < 700) fail(`worker simulateBattle final result looks wrong: ${totalSims} sims`);
 	if (!simResult.intermediates) fail('worker simulateBattle did not stream intermediate results');
+}
+
+if (!workerEssentials.ok) fail(`worker extractReplayEssentials failed: ${workerEssentials.error}`);
+else if (workerEssentials.result !== JSON.stringify(refEssentials)) {
+	fail('extractReplayEssentials results differ between main thread and worker');
 }
 
 if (!workerZip.ok) {

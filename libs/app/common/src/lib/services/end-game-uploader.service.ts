@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Optional } from '@angular/core';
 import { extractTotalTurns, parseHsReplayString } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import {
 	isArena,
@@ -26,12 +26,12 @@ import {
 import { Events, PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService, UserService } from '@firestone/shared/framework/core';
 import { toFormatType, toGameType, toGameTypeEnum } from '@firestone/stats/data-access';
-import { GameForUpload, XpForGameInfo } from '@firestone/stats/services';
+import { GameForUpload, ReplayEssentials, UploadPrepExecutorService, XpForGameInfo } from '@firestone/stats/services';
 import { GameParserService } from './game-parser.service';
 import { ManastormInfo } from './manastorm-info';
 import { ReplayUploadService } from './replay-upload.service';
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class EndGameUploaderService {
 	private readonly supportedModesDeckRetrieve = [
 		'practice',
@@ -53,6 +53,9 @@ export class EndGameUploaderService {
 		private readonly gameState: GameStateFacadeService,
 		private readonly bgsComps: BgsMetaCompositionStrategiesService,
 		private readonly userService: UserService,
+		// Only provided on Electron; when present, the replay-XML parse of BG games
+		// runs in a worker thread instead of blocking the main thread (Plan H phase 2)
+		@Optional() private readonly uploadPrep: UploadPrepExecutorService | null,
 	) {}
 
 	public async upload2(info: UploadInfo, appVersion: { app: string; version: string }): Promise<void> {
@@ -121,16 +124,35 @@ export class EndGameUploaderService {
 		const playerInfo = info.matchInfo?.localPlayer;
 		const opponentInfo = info.matchInfo?.opponent;
 
-		const replay = parseHsReplayString(replayXml, this.allCards.getService());
+		// For BG games (whose replays can exceed 10 MB and take seconds to parse), the
+		// parse runs in the compute worker and only a plain summary comes back; the
+		// full Replay is never materialized on the main thread. Other modes (and the
+		// fallback when no worker is available) keep the historical main-thread parse.
+		const isBg = isBattlegrounds(toGameTypeEnum(game.gameMode));
+		let essentials: ReplayEssentials | null = null;
+		if (isBg && this.uploadPrep) {
+			const start = performance.now();
+			essentials = await this.uploadPrep.extractReplayEssentials(replayXml);
+			console.log(
+				'[manastorm-bridge]',
+				currentReviewId,
+				'extracted replay essentials in worker',
+				essentials != null,
+				Math.round(performance.now() - start),
+				'ms',
+			);
+		}
+		const replay = essentials ? null : parseHsReplayString(replayXml, this.allCards.getService());
+		game.replayEssentials = essentials ?? undefined;
 		const prefs = await this.prefs.getPreferences();
-		if (isBattlegrounds(toGameTypeEnum(game.gameMode))) {
+		if (isBg) {
 			// If you concede a game before hero selection, the game automatically assigns a hero to you
 			// which tends to skew the stats a little bit.
 			// For now this pref can't be set anywhere (it's always true). I can't think of a scenario where
 			// you would WANT these games to be recorded though, except that it will mess up with the next
 			// game's "next MMR" in some cases
 			if (prefs.bgsIgnoreGamesEndingBeforeHeroSelection) {
-				const durationInTurns = extractTotalTurns(replay);
+				const durationInTurns = essentials ? essentials.totalDurationTurns : extractTotalTurns(replay);
 				console.debug(
 					'[manastorm-bridge] bgsIgnoreGamesEndingBeforeHeroSelection is true, duration is',
 					durationInTurns,
@@ -163,7 +185,7 @@ export class EndGameUploaderService {
 			console.log('[manastorm-bridge]', currentReviewId, 'available races', availableRaces);
 			game.availableTribes = availableRaces ?? [];
 			game.bannedTribes = bannedRaces ?? [];
-			game.additionalResult = replay.additionalResult;
+			game.additionalResult = essentials ? essentials.additionalResult : replay.additionalResult;
 			console.log('[manastorm-bridge]', currentReviewId, 'updated player rank', playerRank, newPlayerRank);
 			game.hasBgsPrizes = info.gameSettings?.battlegroundsPrizes;
 			game.hasBgsSpells = info.gameSettings?.battlegroundsSpells;
@@ -334,9 +356,14 @@ export class EndGameUploaderService {
 		// We don't want to store this, as it will drastically increase the memory footprint over time
 		// game.uncompressedXmlReplay = replayXml;
 		// console.log('[manastorm-bridge]', currentReviewId, 'set xml replay');
-		this.gameParserService.extractMatchup(replay, game);
+		this.gameParserService.extractMatchup(essentials ?? replay, game);
 		console.log('[manastorm-bridge]', currentReviewId, 'extracted matchup');
-		this.gameParserService.extractDuration(replay, game);
+		if (essentials) {
+			game.durationTimeSeconds = essentials.totalDurationSeconds;
+			game.durationTurns = essentials.totalDurationTurns;
+		} else {
+			this.gameParserService.extractDuration(replay, game);
+		}
 		console.log('[manastorm-bridge]', currentReviewId, 'extracted duration');
 
 		if (isArena(game.gameMode)) {
@@ -344,7 +371,9 @@ export class EndGameUploaderService {
 		}
 
 		game.lotteryPoints = info.lotteryPoints;
-		game.replay = replay;
+		if (replay) {
+			game.replay = replay;
+		}
 
 		console.log('[manastorm-bridge]', currentReviewId, 'game ready');
 		return { game, xml: replayXml };

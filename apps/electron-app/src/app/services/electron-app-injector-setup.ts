@@ -767,6 +767,7 @@ export const buildAppInjector = () => {
 		gameStateFacade,
 		bgsMetaCompositionStrategies,
 		userService,
+		uploadPrepWorker,
 	);
 	electronInjector.register(EndGameUploaderService, endGameUploader);
 

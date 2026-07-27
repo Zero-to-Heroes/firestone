@@ -4,6 +4,12 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { MatchResultType } from '@firestone/stats/data-access';
 import { GameForUpload as Game } from '@firestone/stats/services';
 
+// Structurally satisfied by both Replay and ReplayEssentials (worker-extracted)
+type MatchupSource = Pick<
+	Replay,
+	'mainPlayerCardId' | 'mainPlayerName' | 'opponentPlayerCardId' | 'opponentPlayerName' | 'result'
+>;
+
 @Injectable({ providedIn: 'root' })
 export class GameParserService {
 	plugin: any;
@@ -16,7 +22,7 @@ export class GameParserService {
 		game.durationTurns = extractTotalTurns(replay);
 	}
 
-	public extractMatchup(replay: Replay, game: Game): void {
+	public extractMatchup(replay: MatchupSource, game: Game): void {
 		if (!replay) {
 			console.error('[manastorm-bridge] invalid game, not adding any meta data');
 			return;
@@ -41,4 +47,3 @@ export class GameParserService {
 		game.result = replay.result as MatchResultType;
 	}
 }
-
