@@ -18,7 +18,9 @@ export const buildGameStat = (
 	metadata: ReplayUploadMetadata,
 	allCards: CardsFacadeService,
 ): GameStat => {
-	const replay = parseHsReplayString(xml, allCards.getService());
+	// The uploader already parsed this exact XML into game.replay; re-parsing an 8MB+
+	// replay here used to block the main thread for seconds (Plan H)
+	const replay = game.replay ?? parseHsReplayString(xml, allCards.getService());
 	const durationInSeconds = extractTotalDuration(replay);
 	const durationInTurns = extractTotalTurns(replay);
 

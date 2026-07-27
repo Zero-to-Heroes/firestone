@@ -1,5 +1,5 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import { Inject, Injectable } from '@angular/core';
+import { Inject, Injectable, Optional } from '@angular/core';
 import { BgsCompAdvice } from '@firestone-hs/content-craetor-input';
 import {
 	BgsBoard,
@@ -19,6 +19,7 @@ import type { IAdsService } from '@firestone/shared/framework/core';
 import { ADS_SERVICE_TOKEN, CardsFacadeService } from '@firestone/shared/framework/core';
 import { GameForUpload } from '../models/game-for-upload/game-for-upload';
 import { MatchAnalysisService } from './match-analysis.service';
+import { UploadPrepExecutorService } from './upload-prep-executor.service';
 
 @Injectable()
 export class ReplayMetadataBuilderService {
@@ -29,6 +30,9 @@ export class ReplayMetadataBuilderService {
 		private readonly patches: PatchesConfigService,
 		private readonly compsDetector: CompositionDetectorService,
 		@Inject(ADS_SERVICE_TOKEN) private readonly ads: IAdsService,
+		// Only provided on Electron; when present, the replay-XML parse runs in a worker
+		// thread instead of blocking the main thread (Plan H)
+		@Optional() private readonly uploadPrep: UploadPrepExecutorService | null,
 	) {}
 
 	public async buildMetadata(
@@ -46,7 +50,7 @@ export class ReplayMetadataBuilderService {
 		const totalDurationTurns = extractTotalTurns(replay);
 		const totalDurationSeconds = extractTotalDuration(replay);
 		const currentBgPatch = await this.patches.currentBattlegroundsMetaPatch$$.getValueWithInit();
-		const bgs: ReplayUploadMetadata['bgs'] | undefined = this.buildBgsMetadata(
+		const bgs: ReplayUploadMetadata['bgs'] | undefined = await this.buildBgsMetadata(
 			game,
 			xml,
 			bgsRunStats,
@@ -138,13 +142,13 @@ export class ReplayMetadataBuilderService {
 		return metadata;
 	}
 
-	private buildBgsMetadata(
+	private async buildBgsMetadata(
 		game: GameForUpload,
 		xml: string,
 		bgsRunStats: BgsComputeRunStatsInput | null,
 		comps: readonly BgsCompAdvice[] | null,
 		currentBgPatch: PatchInfo | null,
-	): ReplayUploadMetadata['bgs'] | undefined {
+	): Promise<ReplayUploadMetadata['bgs'] | undefined> {
 		if (
 			!bgsRunStats ||
 			(game.gameMode !== 'battlegrounds' &&
@@ -154,13 +158,23 @@ export class ReplayMetadataBuilderService {
 			return undefined;
 		}
 
-		const postMatchStats = parseBattlegroundsGame(
-			xml,
-			bgsRunStats.mainPlayer,
-			bgsRunStats.battleResultHistory,
-			bgsRunStats.faceOffs,
-			this.allCards.getService(),
-		);
+		// The off-thread path avoids re-parsing the full replay XML on the main thread,
+		// which takes multiple seconds for a long BG game; falls back to the historical
+		// main-thread parse when no worker is available (Overwolf) or the worker failed
+		const postMatchStats =
+			(await this.uploadPrep?.parseBattlegroundsGame(
+				xml,
+				bgsRunStats.mainPlayer,
+				bgsRunStats.battleResultHistory,
+				bgsRunStats.faceOffs,
+			)) ??
+			parseBattlegroundsGame(
+				xml,
+				bgsRunStats.mainPlayer,
+				bgsRunStats.battleResultHistory,
+				bgsRunStats.faceOffs,
+				this.allCards.getService(),
+			);
 
 		const warbandStats = buildWarbandStats(postMatchStats);
 		const finalPostMatchStats: any =

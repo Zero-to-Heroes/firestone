@@ -6,15 +6,19 @@ export class PowerLogBufferService {
 	private gameStartIndex = 0;
 	private pendingGameStartIndex = -1;
 	private gameGeneration = 0;
+	/** Running sum of line lengths, so getStats() stays O(1) on the hot path */
+	private totalChars = 0;
 
 	pushLine(line: string): void {
 		if (line === 'truncated') {
 			this.lines = [];
 			this.gameStartIndex = 0;
 			this.pendingGameStartIndex = -1;
+			this.totalChars = 0;
 			return;
 		}
 		this.lines.push(line);
+		this.totalChars += line.length;
 		if (line.includes('GameState.DebugPrintPower() - CREATE_GAME')) {
 			this.pendingGameStartIndex = this.lines.length - 1;
 		}
@@ -30,6 +34,7 @@ export class PowerLogBufferService {
 			this.gameStartIndex = 0;
 			this.pendingGameStartIndex = -1;
 			this.gameGeneration++;
+			this.recomputeTotalChars();
 		}
 	}
 
@@ -65,5 +70,23 @@ export class PowerLogBufferService {
 			this.lines = [];
 		}
 		this.gameStartIndex = 0;
+		this.recomputeTotalChars();
+	}
+
+	/** Cheap size probe for memory instrumentation (see docs/electron-memory-investigation.md, Plan A) */
+	getStats(): { lineCount: number; totalChars: number } {
+		return {
+			lineCount: this.lines.length,
+			totalChars: this.totalChars,
+		};
+	}
+
+	/** Only called on the rare trim paths (once per game), not on the per-line hot path */
+	private recomputeTotalChars(): void {
+		let total = 0;
+		for (const line of this.lines) {
+			total += line.length;
+		}
+		this.totalChars = total;
 	}
 }

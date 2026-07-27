@@ -235,6 +235,7 @@ import {
 	GlobalStatsService,
 	MatchAnalysisService,
 	ReplayMetadataBuilderService,
+	UploadPrepExecutorService,
 } from '@firestone/stats/services';
 import { TavernBrawlService } from '@firestone/tavern-brawl/common';
 import { LiveStreamsService } from '@firestone/twitch/common';
@@ -260,6 +261,7 @@ import { ElectronWindowHandlerService } from './electron-window-handler.service'
 import { LowLevelUtilsElectronService } from './low-level-utils-electron.service';
 import { MindVisionElectronService } from './mind-vision-electron.service';
 import { SqliteDatabaseService } from './sqlite-database.service';
+import { UploadPrepWorkerService } from './upload-prep-worker.service';
 
 export const buildAppInjector = () => {
 	const electronInjector = new ElectronAngularInjector();
@@ -711,12 +713,18 @@ export const buildAppInjector = () => {
 	const compsDetector = new CompositionDetectorService(allCards);
 	electronInjector.register(CompositionDetectorService, compsDetector);
 
+	// Runs the CPU-heavy parts of the end-of-game upload pipeline (replay-XML parses,
+	// DEFLATE zips) in a worker thread so they don't stall the main thread
+	const uploadPrepWorker = new UploadPrepWorkerService(allCards);
+	electronInjector.register(UploadPrepExecutorService, uploadPrepWorker);
+
 	const replayMetadataBuilder = new ReplayMetadataBuilderService(
 		allCards,
 		matchAnalysisService,
 		patchesConfig,
 		compsDetector,
 		ads,
+		uploadPrepWorker,
 	);
 	electronInjector.register(ReplayMetadataBuilderService, replayMetadataBuilder);
 
@@ -729,6 +737,7 @@ export const buildAppInjector = () => {
 		replayMetadataBuilder,
 		powerLogBuffer,
 		modsManager,
+		uploadPrepWorker,
 	);
 	electronInjector.register(ReplayUploadService, replayUploadService);
 

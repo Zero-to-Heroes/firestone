@@ -29,6 +29,7 @@ import { registerElectronDiskCacheIpcHandlers } from './services/electron-disk-c
 import { ElectronDiskCacheService } from './services/electron-disk-cache.service';
 import { ElectronHotkeyHandlerService } from './services/electron-hotkey-handler.service';
 import { ElectronWindowHandlerService } from './services/electron-window-handler.service';
+import { startMemoryInstrumentation, stopMemoryInstrumentation } from './services/memory-instrumentation.service';
 import { MindVisionElectronService } from './services/mind-vision-electron.service';
 import { registerOpenExternalLinksForAllBrowserWindows } from './services/open-external-links-window-hook';
 import { OverlayService } from './services/overlay.service';
@@ -577,6 +578,7 @@ export default class App {
 	}
 
 	private static async onWillQuit() {
+		await stopMemoryInstrumentation();
 		App.appAccessWindowCloseSub?.unsubscribe();
 		App.appAccessWindowCloseSub = null;
 		disposeAppAccessPolicy();
@@ -631,6 +633,9 @@ export default class App {
 	private static async initGameDetection() {
 		// Initialize dependency injection system
 		const electronInjector = buildAppInjector();
+
+		// Plan A memory/stall instrumentation (no-op unless FS_ELECTRON_MEM=1)
+		startMemoryInstrumentation(electronInjector);
 
 		const diskCache = electronInjector.get(DiskCacheService) as any as ElectronDiskCacheService;
 		await diskCache.init();

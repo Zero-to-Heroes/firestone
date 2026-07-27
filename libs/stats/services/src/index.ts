@@ -6,4 +6,5 @@ export * from './lib/services/game-stats-provider.service';
 export * from './lib/services/global-stats.service';
 export * from './lib/services/match-analysis.service';
 export * from './lib/services/replay-metadata-builder.service';
+export * from './lib/services/upload-prep-executor.service';
 export * from './lib/stats-services.module';

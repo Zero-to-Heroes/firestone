@@ -14,6 +14,7 @@ import {
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
 import { GameForUpload } from '../models/game-for-upload/game-for-upload';
+import { UploadPrepExecutorService } from './upload-prep-executor.service';
 
 const GLOBAL_STATS_ENDPOINT = 'https://quoneyok3sw7yewueok67w7cju0pzmeb.lambda-url.us-west-2.on.aws/';
 
@@ -33,6 +34,7 @@ export class GlobalStatsService extends AbstractFacadeService<GlobalStatsService
 	private user: UserService;
 	private events: Events;
 	private allCards: CardsFacadeService;
+	private uploadPrep: UploadPrepExecutorService | null;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'GlobalStatsService', () => !!this.globalStats$$);
@@ -49,6 +51,9 @@ export class GlobalStatsService extends AbstractFacadeService<GlobalStatsService
 		this.user = AppInjector.get(UserService);
 		this.events = AppInjector.get(Events);
 		this.allCards = AppInjector.get(CardsFacadeService);
+		// Only provided on Electron; when present, the replay-XML parse runs in a worker
+		// thread instead of blocking the main thread (Plan H)
+		this.uploadPrep = AppInjector.get(UploadPrepExecutorService, null);
 
 		this.globalStats$$.onFirstSubscribe(async () => {
 			const localInfo = this.localStorage.getItem<GlobalStats>(LocalStorageService.USER_GLOBAL_STATS);
@@ -89,7 +94,11 @@ export class GlobalStatsService extends AbstractFacadeService<GlobalStatsService
 		this.globalStats$$ = new SubscriberAwareBehaviorSubject<GlobalStats | null>(null);
 	}
 
-	private async updateGlobalStats(reviewId: string, game: GameForUpload, xml: string): Promise<GlobalStats | null | undefined> {
+	private async updateGlobalStats(
+		reviewId: string,
+		game: GameForUpload,
+		xml: string,
+	): Promise<GlobalStats | null | undefined> {
 		const currentGlobalStats = this.globalStats$$.getValue();
 		if (game.gameMode?.startsWith('mercenaries')) {
 			return currentGlobalStats;
@@ -101,7 +110,9 @@ export class GlobalStatsService extends AbstractFacadeService<GlobalStatsService
 			playerRank: game.playerRank,
 			uploaderToken: '',
 		};
-		const statsFromGame = await extractStatsForGame(message, xml, this.allCards.getService());
+		const statsFromGame =
+			(await this.uploadPrep?.extractStatsForGame(message, xml)) ??
+			(await extractStatsForGame(message, xml, this.allCards.getService()));
 		if (!statsFromGame?.stats) {
 			return currentGlobalStats;
 		}

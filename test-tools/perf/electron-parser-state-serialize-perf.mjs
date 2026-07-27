@@ -7,6 +7,9 @@
  *  2. v8.serialize of the sanitized payload (proxy for structured-clone IPC size/time)
  *  3. v8.serialize of the raw FullEntity map (what IPC would ship without sanitizing)
  *  4. Tags readability after structuredClone (getter loss vs sanitize)
+ *  5. v8.serialize of the TagsHistory arrays alone (what Plan C track 2 would reclaim,
+ *     see docs/electron-memory-investigation.md)
+ *  6. cumulative raw log chars fed so far (proxy for PowerLogBufferService heap cost)
  *
  * Usage (from repo root):
  *   node --import tsx test-tools/perf/electron-parser-state-serialize-perf.mjs [path/to/power.log]
@@ -118,7 +121,15 @@ function countTags(entities) {
 	return { tags, history };
 }
 
-function sampleAt(turn, gameState) {
+function tagsHistoryOnly(entities) {
+	const result = [];
+	for (const e of entities.values()) {
+		result.push(e.TagsHistory ?? []);
+	}
+	return result;
+}
+
+function sampleAt(turn, gameState, cumLogChars) {
 	const entities = gameState.CurrentEntities;
 	const entityCount = entities.size;
 	const { tags, history } = countTags(entities);
@@ -128,6 +139,7 @@ function sampleAt(turn, gameState) {
 
 	const serializeSanitized = trySerialize('sanitized', sanitized);
 	const serializeRaw = trySerialize('raw', rawParserStateLite(gameState));
+	const serializeHistory = trySerialize('tagsHistory', tagsHistoryOnly(entities));
 
 	// Correctness: Tags survive clone after sanitize; raw clone loses getter
 	let tagsAfterSanitizeClone = null;
@@ -153,9 +165,11 @@ function sampleAt(turn, gameState) {
 		entityCount,
 		tagCount: tags,
 		tagsHistoryCount: history,
+		cumLogChars,
 		sanitizeAvgMs: sanitize.avgMs,
 		serializeSanitized,
 		serializeRaw,
+		serializeHistory,
 		tagsAfterSanitizeClone,
 		tagsAfterRawClone,
 	};
@@ -187,16 +201,18 @@ const flush = () => {
 
 const samples = [];
 let turn = 0;
+let cumLogChars = 0;
 
 const maybeSample = (t) => {
 	flush();
 	const gs = parser.State.PTLState.GameState ?? parser.State.GSState.GameState;
 	if (!gs?.CurrentEntities?.size) return;
-	samples.push(sampleAt(t, gs));
+	samples.push(sampleAt(t, gs, cumLogChars));
 };
 
 for (let i = 0; i < normalized.length; i++) {
 	const line = normalized[i];
+	cumLogChars += line.length;
 	parser.ReadLine(line, seed, i);
 	if (i % 500 === 499) flush();
 	if (line.includes('GameState') && line.includes('tag=TURN value=')) {
@@ -211,23 +227,28 @@ flush();
 maybeSample(turn);
 
 console.log('');
-console.log('turn  entities    tags  histTags  sanitizeMs  serSanMs   serSanSize   serRawMs   serRawSize  tagsOk');
+console.log(
+	'turn  entities    tags  histTags    logChars  sanitizeMs  serSanMs   serSanSize   serRawMs   serRawSize   histSize  tagsOk',
+);
 for (const s of samples) {
 	const rawMs = s.serializeRaw.ok ? fmtMs(s.serializeRaw.avgMs) : '    FAIL'.padStart(8);
 	const rawSz = s.serializeRaw.ok ? fmtBytes(s.serializeRaw.bytes) : '      FAIL';
 	const sanMs = s.serializeSanitized.ok ? fmtMs(s.serializeSanitized.avgMs) : '    FAIL';
 	const sanSz = s.serializeSanitized.ok ? fmtBytes(s.serializeSanitized.bytes) : '      FAIL';
+	const histSz = s.serializeHistory.ok ? fmtBytes(s.serializeHistory.bytes) : '      FAIL';
 	const tagsOk = s.tagsAfterSanitizeClone != null && s.tagsAfterSanitizeClone > 0 ? 'yes' : 'NO';
 	console.log(
 		String(s.turn).padStart(4),
 		String(s.entityCount).padStart(9),
 		String(s.tagCount).padStart(8),
 		String(s.tagsHistoryCount).padStart(9),
+		fmtBytes(s.cumLogChars),
 		fmtMs(s.sanitizeAvgMs),
 		sanMs,
 		sanSz,
 		rawMs,
 		rawSz,
+		histSz,
 		tagsOk.padStart(6),
 	);
 }
@@ -252,6 +273,16 @@ if (last) {
 	} else {
 		console.log(`v8.serialize raw: FAILED (${last.serializeRaw.error})`);
 	}
+	if (last.serializeHistory.ok) {
+		console.log(
+			`v8.serialize TagsHistory only: ${last.serializeHistory.avgMs.toFixed(2)} ms, ${fmtBytes(last.serializeHistory.bytes).trim()} ` +
+				'(what a latest-value-per-tag map would reclaim, Plan C track 2)',
+		);
+	}
+	console.log(
+		`cumulative log chars fed: ${fmtBytes(last.cumLogChars).trim()} ` +
+			'(PowerLogBufferService heap proxy; V8 strings are ~2 bytes/char in memory)',
+	);
 	console.log(`structuredClone sanitized sample Tags length: ${last.tagsAfterSanitizeClone}`);
 	console.log(`structuredClone raw sample Tags/_tags:`, last.tagsAfterRawClone);
 	console.log('');

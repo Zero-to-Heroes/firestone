@@ -1,5 +1,5 @@
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
-import { Injectable } from '@angular/core';
+import { Injectable, Optional } from '@angular/core';
 import { BgsCompAdvice } from '@firestone-hs/content-craetor-input';
 import { BnetRegion } from '@firestone-hs/reference-data';
 import { ReplayUploadMetadata } from '@firestone-hs/replay-metadata';
@@ -12,7 +12,7 @@ import {
 } from '@firestone/shared/common/service';
 import { Mutable, uuid } from '@firestone/shared/framework/common';
 import { UserService } from '@firestone/shared/framework/core';
-import { GameForUpload, ReplayMetadataBuilderService } from '@firestone/stats/services';
+import { GameForUpload, ReplayMetadataBuilderService, UploadPrepExecutorService } from '@firestone/stats/services';
 import { FetchHttpHandler } from '@smithy/fetch-http-handler';
 import * as JSZip from 'jszip';
 
@@ -40,6 +40,9 @@ export class ReplayUploadService {
 		private readonly metadataBuilder: ReplayMetadataBuilderService,
 		private readonly powerLogBuffer: PowerLogBufferService,
 		private readonly modsManager: ModsManagerService,
+		// Only provided on Electron; when present, the DEFLATE compression runs in a
+		// worker thread instead of blocking the main thread (Plan H)
+		@Optional() private readonly uploadPrep: UploadPrepExecutorService | null,
 	) {}
 
 	public async uploadGame(
@@ -112,15 +115,7 @@ export class ReplayUploadService {
 			shouldUploadFromRegion && (fullMetaData.user.isPremium || ENABLE_IN_GAME_REPLAY_FOR_ALL);
 
 		const replayUploadPromise = (async () => {
-			const replayFileZip = new JSZip();
-			replayFileZip.file('replay.xml', xml);
-			const fileReplayBlob: Blob = await replayFileZip.generateAsync({
-				type: 'blob',
-				compression: 'DEFLATE',
-				compressionOptions: {
-					level: 9,
-				},
-			});
+			const fileReplayBlob: Blob = await this.zipSingleFile('replay.xml', xml);
 			console.log('[manastorm-bridge] uploading replay', replayKey);
 			await this.uploadReplay(replayKey, fileReplayBlob, { userType });
 			console.log('[manastorm-bridge] uploaded replay');
@@ -131,15 +126,7 @@ export class ReplayUploadService {
 					const { log: powerLog, generation } = this.powerLogBuffer.getCurrentGameLog();
 					console.log('[manastorm-bridge] got power log from buffer, length', powerLog.length);
 					console.debug('[manastorm-bridge] got power log from buffer', powerLog);
-					const powerLogZip = new JSZip();
-					powerLogZip.file('power.log', powerLog);
-					const powerLogBlob: Blob = await powerLogZip.generateAsync({
-						type: 'blob',
-						compression: 'DEFLATE',
-						compressionOptions: {
-							level: 9,
-						},
-					});
+					const powerLogBlob: Blob = await this.zipSingleFile('power.log', powerLog);
 					const powerLogKey = userType + '/' + uuid() + '.power.zip';
 					console.log('[manastorm-bridge] uploading power log', powerLogKey);
 					await this.uploadPowerLog(powerLogKey, powerLogBlob);
@@ -151,20 +138,32 @@ export class ReplayUploadService {
 
 		await Promise.all([replayUploadPromise, powerLogUploadPromise]);
 
-		const metaDataZipFile = new JSZip();
-		metaDataZipFile.file('power.log', JSON.stringify(fullMetaData));
-		const metaDataBlob: Blob = await metaDataZipFile.generateAsync({
+		const metaDataBlob: Blob = await this.zipSingleFile('power.log', JSON.stringify(fullMetaData));
+		const fileKey = fullMetaData.game.reviewId + '_' + fullMetaData.user.userId + '.hszip';
+		console.log('[manastorm-bridge] built file key for meta data', fileKey);
+		await this.uploadMetaData(fileKey, metaDataBlob);
+		console.log('[manastorm-bridge] uploaded metadata');
+		return fullMetaData;
+	}
+
+	/**
+	 * Zips a single file with DEFLATE level 9, off the main thread when an
+	 * UploadPrepExecutorService is available (Electron), on the main thread otherwise
+	 */
+	private async zipSingleFile(fileName: string, content: string): Promise<Blob> {
+		const offThreadBytes = this.uploadPrep ? await this.uploadPrep.zipSingleFile(fileName, content) : null;
+		if (offThreadBytes) {
+			return new Blob([offThreadBytes as BlobPart], { type: 'application/zip' });
+		}
+		const zip = new JSZip();
+		zip.file(fileName, content);
+		return zip.generateAsync({
 			type: 'blob',
 			compression: 'DEFLATE',
 			compressionOptions: {
 				level: 9,
 			},
 		});
-		const fileKey = fullMetaData.game.reviewId + '_' + fullMetaData.user.userId + '.hszip';
-		console.log('[manastorm-bridge] built file key for meta data', fileKey);
-		await this.uploadMetaData(fileKey, metaDataBlob);
-		console.log('[manastorm-bridge] uploaded metadata');
-		return fullMetaData;
 	}
 
 	private async uploadReplay(replayKey: string, fileReplayBlob: Blob, tags: { userType: string }) {

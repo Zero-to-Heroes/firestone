@@ -1,8 +1,12 @@
 # Electron Standalone: memory & "Not responding" investigation (handoff)
 
-Status as of 2026-07-26: **investigation and planning complete, nothing implemented yet.**
-This document is the source of truth to resume the work from any machine. The next
-concrete step is Plan A (instrumentation); the plans are ordered by expected leverage.
+Status as of 2026-07-27: **Plan A (instrumentation) is DONE — implemented and two real
+BG sessions measured** (see the two "measured session" sections below). Every renderer
+process is attributed and baseline stall numbers exist. The plans have been
+reprioritized from the data — see "Current priorities" at the top of the Mitigation
+plans section. The single biggest measured stall source is a NEW finding not in the
+original plans: the end-of-game upload pipeline blocks main for ~13 s (now Plan H,
+priority 1). Plans B-H are not started.
 
 Per workspace conventions, the durable knowledge write-up should eventually be split
 into dedicated files in the sibling `../knowledge/` repo (see "Pending follow-up" at the
@@ -50,7 +54,7 @@ tag (`apps/electron-frontend/src/app/ads/ow-electron-ads.ts`, used by
 
 Unlike Overwolf (parser shares a renderer with overlays), Electron runs the whole
 pipeline in the Node main process (wired in `apps/electron-app/src/app/app.ts` and
-`electron-app-injector-setup.ts`):
+`apps/electron-app/src/app/services/electron-app-injector-setup.ts`):
 
 1. **Power-log parser state** - unbounded per match: every entity, `TagsHistory`,
    `Game.Data` tree. Late-BG sample: ~4.5k entities, ~333k TagsHistory entries, raw
@@ -83,10 +87,11 @@ CPU side: late BG turns emit 20-30x more log lines (~95k lines on turn 37), and 
   the toggle logic explicitly handles "exists but hidden"
   (`toggleCollectionWindow`, `isWindowUserDismissed`). Inventory must classify by
   `isVisible()` / `isMinimized()`.
-- **`TagsHistory` is read on the live path**: `getEntityTag` falls back to
+- **`TagsHistory` is read on the live path**: `getTagWithHistory` falls back to
   `entity.TagsHistory.filter(t => t.Name === tag).pop()` in
-  `libs/game-state/src/lib/services/parser-entity-utils.ts` - so history cannot simply
-  be truncated; a latest-value-per-tag map must replace it.
+  `libs/game-state/src/lib/services/parser-entity-utils.ts` (`getEntityTag` itself only
+  reads current tags) - so history cannot simply be truncated; a latest-value-per-tag
+  map must replace it.
 - **Renderers cannot share a V8 heap** - routing the cards DB through IPC from main
   does not remove per-renderer copies, it only changes the source.
 - Each window's Angular entry point (`electron-entry-point.component.ts`) independently
@@ -97,34 +102,179 @@ CPU side: late BG turns emit 20-30x more log lines (~95k lines on turn 37), and 
 
 ---
 
-## Mitigation plans (ordered by leverage; A gates the rest)
+## First measured session (2026-07-27, real BG game, turns 0-11, HS crashed before end)
 
-### Plan A - Instrumentation (do first, gates everything else)
+Free build, dev frontend (localhost:4200), 25 min, `memory-2026-07-27-13-02-28.jsonl`
+(100 samples at 15s). Headline numbers:
 
-Every other plan's expected win is currently a guess. Build, env-gated
-(`FS_ELECTRON_MEM=1`) in main:
+| Process                                | Steady state    | Peak                                |
+| -------------------------------------- | --------------- | ----------------------------------- |
+| main (Browser)                         | ~470-520 MB RSS | **949 MB** (spikes, see finding 2)  |
+| renderer `#/overlay`                   | -               | 442 MB                              |
+| renderer `#/battlegrounds`             | -               | 418 MB                              |
+| 3x renderer **unattributed**           | -               | 401 / 393 / 292 MB (~1.09 GB total) |
+| renderer `owepm://index.html` (hidden) | -               | 177 MB                              |
+| GPU                                    | -               | **608 MB**                          |
+| **Total working set**                  |                 | **~3.75 GB across 9 processes**     |
 
-- `app.getAppMetrics()` sampled on an interval (pid, type, serviceName, memory).
+Findings, ranked:
+
+1. **Attribution gap (biggest unknown)**: only 3 `BrowserWindow`s existed (overlay,
+   battlegrounds, hidden owepm loading window) but 6 renderer processes were alive; the
+   3 unattributed ones total ~1.09 GB. Suspects: ow-electron overlay infrastructure /
+   `<owadview>` ad renderers / devtools. The sampler now also records
+   `allWebContents` (`webContents.getAllWebContents()`: type, URL, pid) to attribute
+   them next session. Feeds Plan B.
+2. **Main-process spikes, not steady growth**: main heapUsed grew only ~170->250 MB
+   over 11 turns (parser state: 1538 entities, 31.4k Tags, 70.3k TagsHistory). But RSS
+   spiked to 830-950 MB roughly once per turn, correlated with `external` jumping by
+   150-240 MB — consistent with the per-fight BGS sim worker structured-cloning the
+   whole cards service. Supports Plan F.
+3. **Stalls**: in-game longest stall per turn trends up with turn number, reaching a
+   consistent ~380-430 ms by turns 7-11. Startup produced 1.2-2.0 s stalls; the worst
+   stall (2.3 s) happened as Hearthstone was dying, right before MindVision
+   `ReadProcessMemory` failures — memory reads against a dying process block main
+   (relevant to Plan G scope).
+4. **GPU at 608 MB** — 3x the originally reported 201 MB (Plan B item 4).
+5. **PowerLogBufferService is EMPTY on Electron**: `pushLine` is only called from
+   `libs/legacy/feature-shell/.../log-register.service.ts` (Overwolf path);
+   `apps/electron-app/src/app/app.ts` wires `LogListenerService` straight to
+   `gameEvents.receiveLogLine`, bypassing it. Consequences: (a) the doc's original
+   "buffer doubles peak RSS" hypothesis does NOT apply to Electron — de-prioritize
+   Plan C track 1; (b) **probable bug**: `ReplayUploadService.uploadGame` reads
+   `powerLogBuffer.getCurrentGameLog()` for the power.log upload, which would upload an
+   empty power.log on Electron. To be verified separately.
+
+## Second measured session (2026-07-27, full BG game, turns 0-13, game completed)
+
+`memory-2026-07-27-14-00-57.jsonl`, 40 min, with the `allWebContents` attribution added
+after session 1. **The attribution gap is closed** — every renderer is now accounted
+for:
+
+| Process (peak sample)                 | Memory     | Attribution                                      |
+| ------------------------------------- | ---------- | ------------------------------------------------ |
+| main (Browser)                        | 876 MB     | spikes with `external` per fight (Plan F)        |
+| GPU                                   | 574 MB     | overlay is **offscreen-rendered** (see below)    |
+| 2x "unknown" renderers from session 1 | ~400 MB ea | **detached DevTools** — dev mode only            |
+| `#/overlay` renderer                  | 398 MB     | `wc:offscreen` — ow-electron offscreen surface   |
+| `#/battlegrounds` renderer            | 352 MB     | visible window                                   |
+| ad renderer                           | 173-224 MB | `wc:owadview` (overwolf adview.html, free build) |
+| `owepm://index.html` (hidden)         | 153-216 MB | ow-electron package manager window               |
+
+Notes:
+
+- The two ~400-430 MB mystery renderers from session 1 are **detached DevTools**
+  (`electron-window-handler.service.ts` / `overlay.service.ts` call
+  `openDevTools({ mode: 'detach' })` in dev mode for every window). They do not exist
+  in production; production-equivalent total is ~2.6 GB, not ~3.4 GB.
+- The overlay's webContents reports type `offscreen`: ow-electron overlays render
+  offscreen and composite in the GPU process — this is why GPU sits at 510-575 MB
+  (Plan B item 4 confirmed as a real, user-visible cost).
+- **Worst stalls are the end-of-game upload pipeline, on the main thread**: at
+  GAME_END, building the metadata (`built metadata after 3973 ms` in the log), an
+  8.4 MB replay XML, JSZip compression and stat recompute produced back-to-back stalls
+  of **8.6 s and 4.0 s** — this alone shows "Not responding". Match start produced
+  4.3-5.5 s stalls (around MindVision battlegroundsInfo reads). In-game per-turn
+  longest stalls grow steadily: ~400 ms by turn 4, ~0.6-1.0 s by turns 7-13.
+- Main-process pattern from session 1 confirmed: heapUsed grows modestly (140->330 MB
+  over 13 turns; 2778 entities / 119k TagsHistory), while RSS spikes (to 876 MB) track
+  `external` buffer jumps per fight — the BGS sim worker clone (Plan F).
+
+Plan A is DONE: ranked attribution table and baseline stall numbers exist. The
+resulting priorities are listed at the top of the next section.
+
+## Mitigation plans
+
+### Current priorities (post-measurement, 2026-07-27)
+
+Ranked by measured impact per unit of risk. The original A-G lettering is kept for
+continuity; H is new.
+
+1. **Plan H - end-of-game upload pipeline off the main thread** (stalls: 8.6 s + 4.0 s
+   measured; the single worst "Not responding" trigger). **IMPLEMENTED (first
+   phase)** — see the Plan H section; pending in-game re-measurement.
+2. **Plan F - persistent BGS sim worker** (RSS spikes +150-240 MB per fight, ~once per
+   turn; known ~3.5 s/game CPU orchestration cost; low risk, well understood).
+3. **Plan G (reduced scope first) - match-start and in-game stalls**: match start
+   blocks 4.3-5.5 s (around MindVision battlegroundsInfo reads), per-turn stalls grow
+   to 0.6-1.0 s by turns 7-13. Profile what exactly blocks (MindVision edge.js calls
+   vs parser burst vs serialize+send) before committing to the full utilityProcess
+   move.
+4. **Plan B (remaining items) - GPU / offscreen overlay + ad/owepm renderers**:
+   attribution is done; what is left is the 510-575 MB GPU cost of the offscreen
+   overlay, the 173-224 MB ad renderer, and the 153-216 MB hidden owepm window. Mostly
+   ow-electron-constrained; investigate what is actionable.
+5. **Bug (separate from memory work): empty power.log uploads on Electron** —
+   `PowerLogBufferService` is never fed on Electron, but `ReplayUploadService` reads
+   it for the power.log upload. Verify and fix (feed the buffer in
+   `app.ts`/`GameEvents`, or read the on-disk log at upload time — the latter also
+   implements Plan C track 1 for free).
+6. **Plan D - IPC fan-out handshake**: still correct, but demoted — in the measured
+   sessions only overlay + battlegrounds windows were open (both genuinely need game
+   state), so fan-out waste was minimal. Becomes relevant when collection/settings/
+   lottery windows are open during a game.
+7. **Plan C track 2 - TagsHistory cap**: demoted — main heapUsed grew only 140->330 MB
+   over 13 turns (119k TagsHistory entries); real but small compared to the above.
+   Track 1 as originally written is moot (the buffer is empty on Electron; see the bug
+   above).
+8. **Plan E - cards DB per renderer**: demoted — only 2-3 app renderers actually run
+   in a normal session (fewer-windows lever already reality), and the big renderers
+   (overlay/battlegrounds) legitimately need cards. Revisit if renderer heaps become
+   the top block after 1-4.
+
+Dev-only note: dev builds auto-open detached DevTools for every window
+(~400-430 MB each, ~840 MB in session 2). Not a user-facing cost, but remember to
+exclude them when comparing numbers against user reports.
+
+### Plan A - Instrumentation (DONE 2026-07-27, incl. data collection)
+
+Implemented, env-gated
+(`FS_ELECTRON_MEM=1`), in
+`apps/electron-app/src/app/services/memory-instrumentation.service.ts` (started from
+`App.initGameDetection` right after `buildAppInjector()`, stopped in `App.onWillQuit`):
+
+- `app.getAppMetrics()` sampled on an interval (pid, type, serviceName,
+  workingSetSize/peakWorkingSetSize in KB, CPU%). Default every 15s, overridable via
+  `FS_ELECTRON_MEM_INTERVAL` (seconds).
 - Per live window: id, title, `webContents.getURL()`, `webContents.getOSProcessId()`,
   `isVisible()`, `isMinimized()` - so every renderer row is attributed exactly.
 - `process.memoryUsage()` split (`rss` / `heapTotal` / `heapUsed` / `external` /
   `arrayBuffers`) to separate V8 heap from external buffers.
-- Cheap size probes: PowerLogBuffer line count + total chars, `CurrentEntities.size`,
-  summed Tags/TagsHistory lengths, cards count, window count.
-- Main-thread stall detector: 250ms `setInterval` recording timer drift, log the
-  longest stall per turn - measures "Not responding" directly.
+- Cheap size probes: PowerLogBuffer line count + total chars (new O(1)
+  `PowerLogBufferService.getStats()`), `CurrentEntities.size`, summed Tags/TagsHistory
+  lengths, current turn, cards count, window count.
+- Main-thread stall detector: 250ms `setInterval` recording timer drift; logs the
+  longest stall per turn (on `TURN_START`) and any single stall >500ms immediately -
+  measures "Not responding" directly.
 
-Repro harness: `fakeGame()` + the 1.03M-line `bg.log` (see
-`../knowledge/parser-performance.md`), run in the Electron build with sampling on.
-Offline size estimates: extend `test-tools/perf/electron-parser-state-serialize-perf.mjs`.
+#### Plan A - how to run
+
+1. Set `FS_ELECTRON_MEM=1` (optionally `FS_ELECTRON_MEM_INTERVAL=<seconds>`) and start
+   the Electron build.
+2. Play a real BG game, or run `fakeGame('bg.log', { isBg: true })` from devtools with
+   the 1.03M-line `bg.log` (see `../knowledge/parser-performance.md`).
+3. Samples land in `userData/logs/memory-YYYY-MM-DD-HH-MM-SS.jsonl`, one JSON object
+   per line: `kind: 'meta' | 'sample' | 'stall' | 'turn-stall'`. Stall events are also
+   mirrored as `[fs-mem-stall]` lines in `userData/logs/main-*.log` so they can be
+   time-correlated with the rest of the app's activity.
+
+Offline size estimates: `test-tools/perf/electron-parser-state-serialize-perf.mjs` now
+also reports per-turn cumulative raw log chars (PowerLogBuffer heap proxy) and the
+`v8.serialize` size of the TagsHistory arrays alone (what Plan C track 2 would
+reclaim).
 
 Done when: a ranked attribution table for late-BG exists, plus a baseline
-longest-stall number.
+longest-stall number. **DONE 2026-07-27** — see the two measured-session sections
+above. Keep the instrumentation in place: it is the before/after harness for every
+other plan.
 
 ### Plan B - Window and renderer inventory
 
-~616MB of renderers + ~201MB GPU is the largest block after main and the least
-understood.
+Status: items 1-3 are effectively DONE via the session-2 attribution (no leaked
+windows; the "extra" renderers were dev-only DevTools, the ad view and the owepm
+window). Remaining work is items 4-5 (GPU / offscreen overlay cost, consolidation
+decision) plus deciding whether anything can be done about the ad and owepm renderers
+within ow-electron's constraints.
 
 1. Identify all six renderers by URL/pid/visibility (Plan A logging). Suspects: the six
    window routes, `<owadview>` ad renderers, detached DevTools, leaked overlays.
@@ -144,6 +294,11 @@ Done when: every renderer in a BG session is accounted for by an intentionally-o
 window, and leaked/unnecessary ones are gone.
 
 ### Plan C - Log buffer and parser history
+
+Status: track 1 as written is MOOT on Electron — the buffer is never fed there (see
+session-1 finding 5); the real issue is the empty power.log upload bug (priority 5
+above), and fixing it by reading the on-disk log at upload time would implement track
+1's idea as a side effect. Track 2 is demoted (small measured heap growth).
 
 Track 1 - **PowerLogBuffer off the heap**: replace the in-memory `string[]` with
 offsets into the on-disk Power.log (already tailed by `log-listener.service.ts`),
@@ -206,15 +361,83 @@ pipeline into an Electron `utilityProcess` (or `worker_threads`), keeping main a
 thin window/IPC owner. Hard part: the DI graph in `electron-app-injector-setup.ts`
 assumes co-residency with main; MindVision and the facade IPC would need re-homing. A
 smaller intermediate step: move only the parser behind a message boundary (largest
-single CPU block). Decide after Plan A's stall numbers.
+single CPU block).
+
+Measured stall numbers (2026-07-27) that scope this plan: match start blocks main
+4.3-5.5 s; per-turn longest stalls grow from ~400 ms (turn 4) to 0.6-1.0 s (turns
+7-13); a 2.3 s stall occurred while MindVision read memory from a dying Hearthstone
+process. Before committing to the full move, profile WHICH of these is MindVision
+(edge.js runs on the main thread) vs parser burst vs game-state serialize+send — the
+answer may shrink this plan to "make MindVision calls non-blocking" plus Plan H.
+
+### Plan H - End-of-game upload pipeline off the main thread (NEW, priority 1)
+
+The single worst measured "Not responding" trigger (session 2): at GAME_END the main
+thread blocked **8.6 s, then 4.0 s** while the pipeline ran end-to-end on main:
+
+- `[manastorm-bridge]` builds the full replay XML (8.4 MB string this game) and
+  metadata — `built metadata after 3973 ms` in the log (includes match analysis /
+  `compArchetype`);
+- JSZip compresses the replay (and would compress power.log) — CPU on main;
+- after upload, `built new game stat` + `RecomputeGameStatsEvent` produced the second
+  (4.0 s) stall.
+
+**Status: IMPLEMENTED (first phase), pending in-game re-measurement.**
+
+Code exploration showed the same ~8 MB XML string was fully parsed up to **four
+times** on main for one game: (1) `parseHsReplayString` in
+`EndGameUploaderService.initializeGame`, (2) `parseBattlegroundsGame` inside
+`ReplayMetadataBuilderService.buildBgsMetadata` (the bulk of `built metadata after
+3973 ms`), (3) `parseHsReplayString` again in `buildGameStat` on `REVIEW_FINALIZED`
+(the bulk of the second, 4.0 s stall), and (4) `extractStatsForGame`
+(`GlobalStatsService`, also on `REVIEW_FINALIZED`). Plus three JSZip DEFLATE-9
+compressions (replay / power.log / metadata) on main.
+
+What was implemented:
+
+- **Redundant parse removed**: `buildGameStat` now reuses the already-parsed
+  `game.replay` instead of re-parsing the XML (parse 3 gone, no thread needed).
+- **New `UploadPrepExecutorService`** (abstract, `@firestone/stats/services`):
+  off-thread executor for `parseBattlegroundsGame`, `extractStatsForGame`, and
+  single-file DEFLATE zips. Only Electron provides an implementation
+  (`apps/electron-app/src/app/services/upload-prep-worker.service.ts` + persistent
+  `upload-prep-worker.thread.ts`, esbuild-bundled via `build-worker.js` like the BGS
+  sim worker; cards DB cloned to the worker once per app run). Consumers
+  (`ReplayMetadataBuilderService`, `GlobalStatsService`, `ReplayUploadService`) fall
+  back to their historical main-thread path when the service is absent (Overwolf) or
+  the worker fails, so parses 2 and 4 and all three zips leave main on Electron.
+- Parse 1 stays on main by design: its `Replay` object (elementtree-backed) feeds
+  many main-side consumers and cannot cross a worker boundary.
+
+Verified with `test-tools/perf/upload-prep-worker-verify.mjs` on `test-tools/bg.log`
+(308 k lines, 8 MB XML): worker results are identical to the main-thread path, and
+the main thread's worst stall while the worker computes is **~0.1 s versus 7.2 s** of
+blocking on the old path (`parseBattlegroundsGame` 3.0 s + `extractStatsForGame`
+2.6 s + JSZip 1.6 s).
+
+This is also when the empty-power.log bug (priority 5) is best fixed: if the upload
+reads the on-disk Power.log in the worker, both issues close together.
+
+Done when: after GAME_END with instrumentation on, no main-thread stall exceeds
+~250 ms attributable to the upload pipeline, and the replay + stats still upload and
+appear correctly. Remaining known main-thread costs in the window: `xmlFromReplay`
+(~0.6 s), parse 1 (~1-2 s), and `CardsPlayedByTurnParser`/match-analysis walks —
+re-measure a real game to see if they alone still cross the threshold.
 
 ---
 
 ## Open questions
 
-- Was the reported session the free (ad-supported) build, and were collection /
-  settings / lottery windows open? Determines whether six renderers was expected.
-  Plan A answers this definitively either way.
+- ~~Was the reported session the free (ad-supported) build, and were collection /
+  settings / lottery windows open?~~ ANSWERED for the dev sessions: free build, no
+  extra app windows — the additional renderers were dev-only DevTools plus the ad
+  view and the owepm window. The original user report (6 renderers, ~616 MB) remains
+  plausible as: overlay + battlegrounds + loading/owepm + ad view + possibly
+  collection/settings.
+- What exactly blocks main at match start (4.3-5.5 s) — MindVision edge.js calls,
+  parser catch-up on existing log lines, or something else? (Scopes Plan G.)
+- Can the ad (`owadview`) and owepm renderers be trimmed at all within ow-electron?
+  (Plan B remaining scope.)
 
 ## Pending follow-up (original plan, not yet executed)
 

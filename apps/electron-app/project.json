@@ -6,7 +6,10 @@
 	"targets": {
 		"build-worker": {
 			"executor": "nx:run-commands",
-			"outputs": ["{workspaceRoot}/dist/apps/electron-app/bgs-battle-sim-worker.thread.js"],
+			"outputs": [
+				"{workspaceRoot}/dist/apps/electron-app/bgs-battle-sim-worker.thread.js",
+				"{workspaceRoot}/dist/apps/electron-app/upload-prep-worker.thread.js"
+			],
 			"options": {
 				"commands": ["node apps/electron-app/build-worker.js"],
 				"parallel": false
