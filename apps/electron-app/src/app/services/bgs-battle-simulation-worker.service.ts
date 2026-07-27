@@ -57,7 +57,7 @@ export class BgsBattleSimulationWorkerService extends BgsBattleSimulationExecuto
 			if (!!result.outcomeSamples) {
 				worker.terminate();
 			}
-			console.log('[bgs-simulation] Simulation result received');
+			console.debug('[bgs-simulation] Simulation result received');
 			onResultReceived(result);
 		});
 
