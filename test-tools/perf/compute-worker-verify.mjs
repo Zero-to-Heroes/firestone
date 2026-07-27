@@ -1,20 +1,23 @@
 /**
- * Verify the Electron upload-prep worker (Plan H, docs/electron-memory-investigation.md)
- * against the historical main-thread path, using a real BG power.log:
+ * Verify the Electron persistent compute worker (Plans F + H,
+ * docs/electron-memory-investigation.md) against the historical main-thread path,
+ * using a real BG power.log:
  *
  *  1. Replays the power.log through ReplayParser and builds the replay XML with
  *     xmlFromReplay (same as GAME_END in production).
  *  2. Runs parseBattlegroundsGame / extractStatsForGame / DEFLATE zip on the main
- *     thread (reference) and through dist/apps/electron-app/upload-prep-worker.thread.js.
- *  3. Compares results for equality and reports timings, including how long the main
- *     thread stays blocked in each mode.
+ *     thread (reference) and through dist/apps/electron-app/compute-worker.thread.js,
+ *     comparing results for equality and reporting timings, including how long the
+ *     main thread stays blocked in each mode.
+ *  3. Smoke-tests the streaming battle-sim protocol (Plan F): a minimal battle must
+ *     stream intermediate results and finish with a plausible final result.
  *
  * Prerequisites:
  *  - node apps/electron-app/build-worker.js (bundles the worker)
  *  - cards_short.json available (../hs-reference-data or HS_REFERENCE_CARDS_JSON_PATH)
  *
  * Usage (from repo root):
- *   node --import tsx test-tools/perf/upload-prep-worker-verify.mjs [path/to/power.log]
+ *   node --import tsx test-tools/perf/compute-worker-verify.mjs [path/to/power.log]
  *
  * Defaults to test-tools/bg.log (full-length BG game, not checked in; fall back to
  * test-tools/non-reg/bg.log if missing).
@@ -51,7 +54,7 @@ const defaultLog = fs.existsSync(path.join(repoRoot, 'test-tools', 'bg.log'))
 	? path.join(repoRoot, 'test-tools', 'bg.log')
 	: path.join(repoRoot, 'test-tools', 'non-reg', 'bg.log');
 const logPath = process.argv[2] ?? defaultLog;
-const workerPath = path.join(repoRoot, 'dist', 'apps', 'electron-app', 'upload-prep-worker.thread.js');
+const workerPath = path.join(repoRoot, 'dist', 'apps', 'electron-app', 'compute-worker.thread.js');
 
 if (!fs.existsSync(logPath)) {
 	console.error(`Power log not found: ${logPath}`);
@@ -195,6 +198,38 @@ t = Date.now();
 const workerZip = await request({ type: 'zipSingleFile', fileName: 'replay.xml', content: xml });
 console.log(`[worker] zipSingleFile: ${Date.now() - t} ms, ok=${workerZip.ok}`);
 
+// ---------- 3b. Battle sim smoke test (Plan F): streams then finishes ----------
+const simPlayer = (cardId) => ({ cardId, hpLeft: 30, tavernTier: 3, heroPowers: [], questEntities: [] });
+const simBattleInfo = {
+	playerBoard: {
+		player: simPlayer('TB_BaconShop_HERO_44'),
+		board: [{ entityId: 101, cardId: 'CFM_315', attack: 1, health: 1 }],
+	},
+	opponentBoard: {
+		player: simPlayer('TB_BaconShop_HERO_01'),
+		board: [{ entityId: 201, cardId: 'CFM_315', attack: 1, health: 1 }],
+	},
+	options: { numberOfSimulations: 800, intermediateResults: 200, includeOutcomeSamples: false, skipInfoLogs: true },
+	gameState: { currentTurn: 5, validTribes: [] },
+};
+t = Date.now();
+const simResult = await new Promise((resolve) => {
+	const id = ++requestId;
+	let intermediates = 0;
+	pending.set(id, (m) => {
+		if (!m.done) {
+			intermediates++;
+			return;
+		}
+		pending.delete(id);
+		resolve({ ...m, intermediates });
+	});
+	worker.postMessage({ id, type: 'simulateBattle', battleInfo: simBattleInfo });
+});
+console.log(
+	`[worker] simulateBattle: ${Date.now() - t} ms, ok=${simResult.ok}, intermediates=${simResult.intermediates}`,
+);
+
 clearInterval(stallProbe);
 await worker.terminate();
 
@@ -207,6 +242,15 @@ else if (workerParse.result !== JSON.stringify(refPostMatch)) {
 if (!workerExtract.ok) fail(`worker extractStatsForGame failed: ${workerExtract.error}`);
 else if (workerExtract.result !== JSON.stringify(refGlobalStats)) {
 	fail('extractStatsForGame results differ between main thread and worker');
+}
+
+if (!simResult.ok) {
+	fail(`worker simulateBattle failed: ${simResult.error}`);
+} else {
+	const sim = JSON.parse(simResult.result);
+	const totalSims = (sim.won ?? 0) + (sim.tied ?? 0) + (sim.lost ?? 0);
+	if (totalSims < 700) fail(`worker simulateBattle final result looks wrong: ${totalSims} sims`);
+	if (!simResult.intermediates) fail('worker simulateBattle did not stream intermediate results');
 }
 
 if (!workerZip.ok) {

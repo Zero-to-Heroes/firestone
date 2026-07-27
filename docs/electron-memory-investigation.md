@@ -192,10 +192,14 @@ continuity; H is new.
 
 1. **Plan H - end-of-game upload pipeline off the main thread** (stalls: 8.6 s + 4.0 s
    measured; the single worst "Not responding" trigger). **IMPLEMENTED and
-   confirmed in-game**: 8.6 s + 4.0 s → single 971 ms stall (see the Plan H
-   section).
+   confirmed in-game** (sessions 3-4): 8.6 s + 4.0 s → 3.4 s + 0.7 s even on a 50%
+   bigger game; what remains is parse 1 on main, see the Plan H section for the
+   possible phase 2.
 2. **Plan F - persistent BGS sim worker** (RSS spikes +150-240 MB per fight, ~once per
    turn; known ~3.5 s/game CPU orchestration cost; low risk, well understood).
+   **IMPLEMENTED and confirmed in-game** (session 4): merged with the Plan H worker
+   into one persistent compute worker; per-fight RSS oscillation gone, at the cost
+   of ~200 MB resident (the worker's cards copy, inside main's OS process).
 3. **Plan G (reduced scope first) - match-start and in-game stalls**: match start
    blocks 4.3-5.5 s (around MindVision battlegroundsInfo reads), per-turn stalls grow
    to 0.6-1.0 s by turns 7-13. Profile what exactly blocks (MindVision edge.js calls
@@ -222,6 +226,9 @@ continuity; H is new.
    in a normal session (fewer-windows lever already reality), and the big renderers
    (overlay/battlegrounds) legitimately need cards. Revisit if renderer heaps become
    the top block after 1-4.
+9. **Overwolf port of the worker offloads (Plans H + F)**: gated on the Electron
+   implementation proving itself over several real sessions — see "Subsequent phase
+    - port the worker offloads to Overwolf" at the end of the Plan H section.
 
 Dev-only note: dev builds auto-open detached DevTools for every window
 (~400-430 MB each, ~840 MB in session 2). Not a user-facing cost, but remember to
@@ -352,7 +359,35 @@ Respect the packaged-worker bundling constraint
 esbuild-bundled by `apps/electron-app/build-worker.js` because deps are not in the
 asar).
 
-Done when: sims still return odds mid-BG; cards cloned once per session, not per fight.
+**Status: IMPLEMENTED (Electron), confirmed in-game (session 4, 2026-07-27 17:58,
+long game to turn 17).** 17 sims returned through one worker spawned once at
+startup, zero worker errors, and the per-fight RSS oscillation is gone — main RSS
+between turn samples is now smooth (520 → 700 MB over the game, tracking parser
+growth) where session 2 swung by +150-420 MB per fight. The trade-off is visible
+and as designed: worker_threads live inside the main OS process, so the one
+resident cards copy adds ~200 MB to main RSS for the whole session (238 MB at
+startup → ~470 MB once the worker is initialized and a match starts).
+
+Implementation: instead of a second persistent worker (which would have kept a
+second resident cards copy), the
+sim was merged with the Plan H upload-prep worker into a single persistent
+`compute-worker.thread.ts`, managed by `ComputeWorkerHost`
+(`apps/electron-app/src/app/services/compute-worker-host.ts`): one worker, one
+resident cards copy, cloned once per app run (prewarmed at startup in `app.ts` right
+after the cards load). `BgsBattleSimulationWorkerService` streams intermediate
+results through the host; the worker survives across fights and is respawned on
+crash/exit. This also fixes a leak in the old per-fight design: workers were only
+terminated when the result carried `outcomeSamples`, so sims without samples left
+idle workers behind. Requests are processed sequentially by the single worker (a
+battle sim and an upload zip queue behind each other) — accepted trade-off, they
+rarely overlap. Verified by the sim smoke test in
+`test-tools/perf/compute-worker-verify.mjs` (streams intermediates, plausible final
+result). The Overwolf web worker keeps its per-fight behavior for now (see the
+Overwolf port phase below).
+
+Done when: sims still return odds mid-BG; cards cloned once per session, not per
+fight (verify in-game: no more +150-240 MB RSS spikes on main per fight). **Both
+verified in session 4.**
 
 ### Plan G - Move parsing off the main thread (escalation path)
 
@@ -391,10 +426,23 @@ and processed correctly (`built new game stat` now fires 42 ms after upload inst
 of after a multi-second parse). The remaining ~1 s is parse 1 (`parseHsReplayString`
 in `initializeGame`, ~0.7 s, still on main by design) plus the one-time
 cards-DB clone to the worker, which landed inside the window because the worker
-spawns lazily on first use. Next easy win if needed: pre-spawn/init the worker at
-match start so the cards clone happens outside the end-of-game window. Note
-`built metadata after 6794 ms` is wall-clock (worker compute + one-time init), not
-main-thread blocking.
+spawned lazily on first use. Both follow-ups are now done: the worker is prewarmed
+at app startup right after the cards load (`app.ts`), and the worker was merged with
+the BGS sim worker (Plan F) into a single persistent `compute-worker.thread.ts`.
+Note `built metadata after 6794 ms` is wall-clock (worker compute + one-time init),
+not main-thread blocking.
+
+**Session 4 (2026-07-27 17:58, long game, 12.7 MB replay — 50% bigger than the
+original problem session):** prewarm confirmed (`[compute-worker] spawning worker`
+at startup, nothing cloned at game end); end-of-game stalls were **3.4 s + 0.7 s**
+(vs an extrapolated ~19 s on the old path for this size). Both remaining stalls are
+the known main-side leftovers and scale with replay size: the 3.4 s is parse 1
+(`parseHsReplayString` of 12.7 MB in `initializeGame`), the 0.7 s is the
+`CardsPlayedByTurnParser` `parseGame` walk in `buildMetadata`. **Possible phase 2**
+to reach the ~250 ms goal: extract everything main reads from the parsed `Replay`
+(matchup, duration, player/opponent ids and names, `additionalResult`,
+cards-played-by-turn, the fields `buildGameStat` uses) in the worker as plain data,
+so main never parses the XML at all.
 
 Code exploration showed the same ~8 MB XML string was fully parsed up to **four
 times** on main for one game: (1) `parseHsReplayString` in
@@ -412,16 +460,16 @@ What was implemented:
 - **New `UploadPrepExecutorService`** (abstract, `@firestone/stats/services`):
   off-thread executor for `parseBattlegroundsGame`, `extractStatsForGame`, and
   single-file DEFLATE zips. Only Electron provides an implementation
-  (`apps/electron-app/src/app/services/upload-prep-worker.service.ts` + persistent
-  `upload-prep-worker.thread.ts`, esbuild-bundled via `build-worker.js` like the BGS
-  sim worker; cards DB cloned to the worker once per app run). Consumers
+  (`apps/electron-app/src/app/services/upload-prep-worker.service.ts`, backed by the
+  persistent `compute-worker.thread.ts` shared with the BGS sim, esbuild-bundled via
+  `build-worker.js`; cards DB cloned to the worker once per app run). Consumers
   (`ReplayMetadataBuilderService`, `GlobalStatsService`, `ReplayUploadService`) fall
   back to their historical main-thread path when the service is absent (Overwolf) or
   the worker fails, so parses 2 and 4 and all three zips leave main on Electron.
 - Parse 1 stays on main by design: its `Replay` object (elementtree-backed) feeds
   many main-side consumers and cannot cross a worker boundary.
 
-Verified with `test-tools/perf/upload-prep-worker-verify.mjs` on `test-tools/bg.log`
+Verified with `test-tools/perf/compute-worker-verify.mjs` on `test-tools/bg.log`
 (308 k lines, 8 MB XML): worker results are identical to the main-thread path, and
 the main thread's worst stall while the worker computes is **~0.1 s versus 7.2 s** of
 blocking on the old path (`parseBattlegroundsGame` 3.0 s + `extractStatsForGame`
@@ -435,6 +483,27 @@ Done when: after GAME_END with instrumentation on, no main-thread stall exceeds
 appear correctly. Remaining known main-thread costs in the window: `xmlFromReplay`
 (~0.6 s), parse 1 (~1-2 s), and `CardsPlayedByTurnParser`/match-analysis walks —
 re-measure a real game to see if they alone still cross the threshold.
+
+### Subsequent phase - port the worker offloads to Overwolf
+
+The Overwolf build runs the same pipeline in its background renderer, so it pays the
+same multi-second CPU costs (jank inside the app windows rather than an OS-level
+"Not responding", but still worth fixing). The offloads port cleanly because
+everything moved to the worker is pure JS (no Node APIs at the worker level —
+`worker_threads` usage lives only in the Electron host):
+
+- Implement `UploadPrepExecutorService` with a **Web Worker** (same Angular
+  webworker bundling as the existing per-fight
+  `libs/battlegrounds/simulator/src/lib/workers/bgs-battle-sim-worker.worker.ts`),
+  reusing the compute-worker message protocol; provide it in the Overwolf app
+  module. Consumers already resolve it optionally, so no consumer changes needed.
+- Make the Overwolf sim web worker persistent with init-once cards, mirroring
+  `ComputeWorkerHost` (or share one web worker for both, like on Electron).
+- `buildGameStat`'s redundant-parse removal already benefits Overwolf (shipped with
+  Plan H).
+
+Do this once the Electron implementation has proven itself in real games (results
+upload correctly across several sessions, no worker-related errors in the logs).
 
 ---
 

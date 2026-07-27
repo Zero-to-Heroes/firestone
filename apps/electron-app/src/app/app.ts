@@ -24,6 +24,7 @@ import { appStartup } from './app-startup';
 import { formatLogArg } from './format-log-arg';
 import { appAccessUnlocked$$, disposeAppAccessPolicy, initAppAccessPolicy } from './services/app-access-policy';
 import { maybeShowConsentOnStartup } from './services/cmp';
+import { ComputeWorkerHost } from './services/compute-worker-host';
 import { buildAppInjector } from './services/electron-app-injector-setup';
 import { registerElectronDiskCacheIpcHandlers } from './services/electron-disk-cache-ipc';
 import { ElectronDiskCacheService } from './services/electron-disk-cache.service';
@@ -659,6 +660,10 @@ export default class App {
 			.start();
 		await allCards.init(new AllCardsService(), 'enUS');
 		console.log('[app] allCards initialized', allCards.getCards()?.length ?? 'null');
+
+		// Spawn the persistent compute worker (BGS sims + end-of-game upload prep) now,
+		// so the one-time cards clone happens while nothing is latency-sensitive
+		electronInjector.get(ComputeWorkerHost).prewarm();
 
 		const db = electronInjector.get(DATABASE_SERVICE_TOKEN);
 		await db.init();

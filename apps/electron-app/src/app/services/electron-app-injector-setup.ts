@@ -259,6 +259,7 @@ import { ElectronHotkeyHandlerService } from './electron-hotkey-handler.service'
 import { ElectronLogFileBackendService } from './electron-log-file-backend.service';
 import { ElectronWindowHandlerService } from './electron-window-handler.service';
 import { LowLevelUtilsElectronService } from './low-level-utils-electron.service';
+import { ComputeWorkerHost } from './compute-worker-host';
 import { MindVisionElectronService } from './mind-vision-electron.service';
 import { SqliteDatabaseService } from './sqlite-database.service';
 import { UploadPrepWorkerService } from './upload-prep-worker.service';
@@ -593,7 +594,13 @@ export const buildAppInjector = () => {
 	const bgsIntermediateResultsSimGuardianService = new BgsIntermediateResultsSimGuardianService(windowManager);
 	electronInjector.register(BgsIntermediateResultsSimGuardianService, bgsIntermediateResultsSimGuardianService);
 
-	const battleExecutor = new BgsBattleSimulationWorkerService(allCards);
+	// Single persistent worker for CPU-heavy work: BGS battle sims (Plan F) and
+	// end-of-game upload prep (Plan H). One worker = one resident cards copy,
+	// cloned once per app run (prewarmed in app.ts after the cards are loaded)
+	const computeWorkerHost = new ComputeWorkerHost(() => allCards.getService());
+	electronInjector.register(ComputeWorkerHost, computeWorkerHost);
+
+	const battleExecutor = new BgsBattleSimulationWorkerService(computeWorkerHost);
 	const simulation = new BgsBattleSimulationService(
 		api as any as ApiRunner,
 		allCards,
@@ -714,8 +721,8 @@ export const buildAppInjector = () => {
 	electronInjector.register(CompositionDetectorService, compsDetector);
 
 	// Runs the CPU-heavy parts of the end-of-game upload pipeline (replay-XML parses,
-	// DEFLATE zips) in a worker thread so they don't stall the main thread
-	const uploadPrepWorker = new UploadPrepWorkerService(allCards);
+	// DEFLATE zips) in the persistent compute worker so they don't stall the main thread
+	const uploadPrepWorker = new UploadPrepWorkerService(computeWorkerHost);
 	electronInjector.register(UploadPrepExecutorService, uploadPrepWorker);
 
 	const replayMetadataBuilder = new ReplayMetadataBuilderService(
