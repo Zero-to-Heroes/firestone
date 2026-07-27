@@ -191,8 +191,9 @@ Ranked by measured impact per unit of risk. The original A-G lettering is kept f
 continuity; H is new.
 
 1. **Plan H - end-of-game upload pipeline off the main thread** (stalls: 8.6 s + 4.0 s
-   measured; the single worst "Not responding" trigger). **IMPLEMENTED (first
-   phase)** — see the Plan H section; pending in-game re-measurement.
+   measured; the single worst "Not responding" trigger). **IMPLEMENTED and
+   confirmed in-game**: 8.6 s + 4.0 s → single 971 ms stall (see the Plan H
+   section).
 2. **Plan F - persistent BGS sim worker** (RSS spikes +150-240 MB per fight, ~once per
    turn; known ~3.5 s/game CPU orchestration cost; low risk, well understood).
 3. **Plan G (reduced scope first) - match-start and in-game stalls**: match start
@@ -382,7 +383,18 @@ thread blocked **8.6 s, then 4.0 s** while the pipeline ran end-to-end on main:
 - after upload, `built new game stat` + `RecomputeGameStatsEvent` produced the second
   (4.0 s) stall.
 
-**Status: IMPLEMENTED (first phase), pending in-game re-measurement.**
+**Status: IMPLEMENTED (first phase), confirmed in-game (session 3, 2026-07-27
+17:12).** A real BG game (4.2 MB replay, about half the size of session 2's) went
+from 8.6 s + 4.0 s of end-of-game stalls to a **single 971 ms stall**. The
+`[upload-prep]` worker spawned cleanly, replay + metadata + game stat all uploaded
+and processed correctly (`built new game stat` now fires 42 ms after upload instead
+of after a multi-second parse). The remaining ~1 s is parse 1 (`parseHsReplayString`
+in `initializeGame`, ~0.7 s, still on main by design) plus the one-time
+cards-DB clone to the worker, which landed inside the window because the worker
+spawns lazily on first use. Next easy win if needed: pre-spawn/init the worker at
+match start so the cards clone happens outside the end-of-game window. Note
+`built metadata after 6794 ms` is wall-clock (worker compute + one-time init), not
+main-thread blocking.
 
 Code exploration showed the same ~8 MB XML string was fully parsed up to **four
 times** on main for one game: (1) `parseHsReplayString` in
