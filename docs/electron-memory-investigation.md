@@ -206,12 +206,11 @@ continuity; H is new.
    table; the measured ranking is: (a) `game-state-facade` IPC broadcast fan-out is
    the per-turn cost (517 sends ≥100 ms, 71.5 s total in one game — **Plan D
    handshake IMPLEMENTED and VALIDATED 2026-07-28, session 8: 66 sends / 11.7 s,
-   `targets: 2`**; the payload diet is **IMPLEMENTED, awaiting in-game
-   validation** — session 9 measured 645 slow sends / 98.4 s late-game as the
-   GameState wire value grows; offline attribution showed 73% of the wire was
-   dead REMOVEDFROMGAME parser entities, now dropped for BG games (harness:
-   end-game wire 2.86 → 0.77 MB, see the session 9 follow-up), (b) match start
-   is API-response `JSON.parse`
+   `targets: 2`**; the payload diet is **IMPLEMENTED and VALIDATED (session 10
+   replay of the session 9 game: 645 → 79 slow sends, 98.4 → 13.6 s)** — 73% of
+   the wire was dead REMOVEDFROMGAME parser entities, now dropped for BG games
+   (end-game wire 2.86 → 0.77 MB; see the session 9 follow-up and session 10),
+   (b) match start is API-response `JSON.parse`
    on main (~5.3 s, BG meta-hero stats) plus Electron IPC serialization of those
    payloads (~4.2 s) — **large-payload parse offload IMPLEMENTED and VALIDATED
    2026-07-28, session 9: zero main-thread parses, hero-selection stalls
@@ -233,10 +232,11 @@ continuity; H is new.
    The earlier "fan-out waste was minimal" assessment was wrong: session 7 measured
    `webContents.send('game-state-facade', ...)` structured clones at 100-390 ms
    each, 517 of them ≥100 ms in one game (71.5 s total), the direct cause of the
-   0.5-1.0 s per-turn stalls. The payload-diet half is **IMPLEMENTED, awaiting
-   in-game validation**: 73% of the late-game wire was dead REMOVEDFROMGAME
-   parser entities, now stripped for BG games (offline harness: end-game wire
-   2.86 → 0.77 MB, clone 72 → 18 ms — see the session 9 follow-up in Plan G).
+   0.5-1.0 s per-turn stalls. The payload-diet half is **IMPLEMENTED and
+   VALIDATED (session 10)**: 73% of the late-game wire was dead REMOVEDFROMGAME
+   parser entities, now stripped for BG games (end-game wire 2.86 → 0.77 MB,
+   clone 72 → 18 ms; in-app replay of the same game: 645 → 79 slow sends,
+   98.4 → 13.6 s — see the session 9 follow-up and session 10 in Plan G).
 7. **Plan C track 2 - TagsHistory cap**: demoted — main heapUsed grew only 140->330 MB
    over 13 turns (119k TagsHistory entries); real but small compared to the above.
    Track 1 as originally written is moot (the buffer is empty on Electron; see the bug
@@ -640,8 +640,31 @@ item:**
   7's numbers were inflated across the whole game by the 5-window fan-out.
 - Main RSS peaked at 1.14 GB (in line with previous instrumented sessions).
 
+**Session 10 (2026-07-28 14:37, first unattended fake-game replay of the
+session 9 Power.log, HS at menu, real pace, ~33 min) — payload diet VALIDATED:**
+
+- Run entirely via the new replay driver (`FS_ELECTRON_MEM=1
+FS_FAKE_GAME_LOG=<session 9 log>`); the overlay injected into the idle HS
+  process and 3 windows were up at replay start, every facade send reporting
+  `targets: 2` — same fan-out as the live session.
+- **`game-state-facade` slow sends: 645 → 79, 98.4 s → 13.6 s** of main-thread
+  time on the identical game (-86%). The late-game "40-60 slow sends/min" ramp
+  is gone; worst single send 645 ms.
+- Per-turn stalls turns 2-9: worst 17-52 ms. Remaining: isolated 0.5-0.85 s
+  stalls on turns 11-17 (clusters of ~4×800 ms on turns 16-17, not attributed
+  to any slow-op probe — plausibly late-game sim/board-parse volume; next
+  thing to chase, alongside the `bgState` wire growth now that real sims put
+  it at ~0.36 MB), a single 1.9 s at hero selection (the known Plan G residue)
+  and 741 ms in the end-of-game window (the known `xmlFromReplay` leftover).
+- Main RSS peaked at 1.35 GB vs 1.14 GB live — expected artifact: the driver
+  holds the full 506k-line log in memory for the whole session.
+- Conclusion: **Plan D (handshake + payload diet) is done.** The per-turn IPC
+  cost problem is solved; remaining wire-diet candidates (`opponentDeck`
+  0.33 MB, `playerDeck` 0.28 MB, `bgState` 0.36 MB with sims) are only worth
+  it if the residual 13.6 s/game shows up in user-facing behavior.
+
 **Session 9 follow-up (offline, same Power.log) — payload diet scoped and
-IMPLEMENTED; awaiting in-game validation:**
+IMPLEMENTED; validated in-app in session 10:**
 
 - Extended the full-pipeline replay harness with `FS_PERF_WIRE=1`: per turn it
   runs the production `serializeGameStateForElectron` on the replayed state,
