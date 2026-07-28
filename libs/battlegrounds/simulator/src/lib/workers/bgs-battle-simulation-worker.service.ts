@@ -1,7 +1,7 @@
 import { Injectable, NgZone } from '@angular/core';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
 import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
-import { BgsBattleSimulationExecutorService } from '@firestone/battlegrounds/core';
+import { BgsBattleSimulationExecutorService, SimRequestLane } from '@firestone/battlegrounds/core';
 import { BugReportService, Preferences } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { createSimWorker } from './create-sim-worker';
@@ -40,6 +40,9 @@ export class BgsBattleSimulationWorkerService extends BgsBattleSimulationExecuto
 	private nextRequestId = 1;
 	private readonly pending = new Map<number, ResponseHandler>();
 	private idleTimer: ReturnType<typeof setTimeout> | null = null;
+	/** Newest-first single-flight lane: a catch-up burst of stale sims must not
+	 * serialize ahead of the live battle's sim on the sequential worker */
+	private readonly simLane = new SimRequestLane();
 
 	constructor(
 		private readonly cards: CardsFacadeService,
@@ -60,36 +63,42 @@ export class BgsBattleSimulationWorkerService extends BgsBattleSimulationExecuto
 			(battleInfo.options?.numberOfSimulations ?? prefs.bgsSimulatorNumberOfSims) / numberOfWorkers,
 		);
 
-		this.request(
-			{
-				type: 'simulateBattle',
-				battleInfo: {
-					...battleInfo,
-					options: {
-						...battleInfo.options,
-						numberOfSimulations: numberOfSims,
-						includeOutcomeSamples: includeOutcomeSamples,
-					},
-				} as BgsBattleInfo,
-			},
-			(data) => {
-				if (data == null || data.result == null) {
-					// Worker error or sim exception
-					this.reportSimCrash(battleInfo);
-					this.ngZone.run(() => onResultReceived(null));
-					return;
-				}
-				const result: SimulationResult = JSON.parse(data.result);
-				if (!data.done) {
-					const now = Date.now();
-					if (now - this.lastIntermediateUpdate < this.INTERMEDIATE_UPDATE_THROTTLE_MS) {
+		this.simLane.enqueue((done) => {
+			this.request(
+				{
+					type: 'simulateBattle',
+					battleInfo: {
+						...battleInfo,
+						options: {
+							...battleInfo.options,
+							numberOfSimulations: numberOfSims,
+							includeOutcomeSamples: includeOutcomeSamples,
+						},
+					} as BgsBattleInfo,
+				},
+				(data) => {
+					if (data == null || data.result == null) {
+						// Worker error or sim exception
+						done();
+						this.reportSimCrash(battleInfo);
+						this.ngZone.run(() => onResultReceived(null));
 						return;
 					}
-					this.lastIntermediateUpdate = now;
-				}
-				this.ngZone.run(() => onResultReceived(result));
-			},
-		);
+					if (data.done) {
+						done();
+					}
+					const result: SimulationResult = JSON.parse(data.result);
+					if (!data.done) {
+						const now = Date.now();
+						if (now - this.lastIntermediateUpdate < this.INTERMEDIATE_UPDATE_THROTTLE_MS) {
+							return;
+						}
+						this.lastIntermediateUpdate = now;
+					}
+					this.ngZone.run(() => onResultReceived(result));
+				},
+			);
+		});
 	}
 
 	/**
