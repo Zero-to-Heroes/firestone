@@ -1,6 +1,6 @@
 {
 	"name": "firestone",
-	"version": "18.12.6",
+	"version": "18.12.7",
 	"productName": "Firestone",
 	"author": {
 		"name": "Sébastien Tromp",
@@ -50,9 +50,9 @@
 		"start-both": "concurrently \"npm run start-web\" \"npm run start-mobile\"",
 		"build-both": "nx build web --configuration=production && nx build mobile --configuration=production",
 		"c6": "=============== Electron (serve frontend first, then start:ow-electron) =================",
-		"nxe:serve:frontend": "nx serve electron-frontend",
-		"restart:ow-electron": "nx build electron-app && cross-env FIRESTONE_FLAVOR=standalone npm run replace-version && npm run rebuild-electron-native-deps && node ./build-tools/with-signing-env.mjs ow-electron dist/apps/electron-app --owepm-packages-url=https://electronapi-qa.overwolf.com/v2/packages",
-		"restart:ow-electron:no-color": "cross-env NO_COLOR=1 FORCE_COLOR=0 nx build electron-app && cross-env FIRESTONE_FLAVOR=standalone npm run replace-version && npm run rebuild-electron-native-deps && cross-env NO_COLOR=1 FORCE_COLOR=0 node ./build-tools/with-signing-env.mjs ow-electron dist/apps/electron-app --owepm-packages-url=https://electronapi-qa.overwolf.com/v2/packages",
+		"nxe:serve:frontend": "cross-env NODE_OPTIONS=--max-old-space-size=8192 nx serve electron-frontend",
+		"restart:ow-electron": "cross-env NODE_OPTIONS=--max-old-space-size=8192 nx build electron-app --skip-nx-cache && cross-env FIRESTONE_FLAVOR=standalone npm run replace-version && npm run rebuild-electron-native-deps && node ./build-tools/with-signing-env.mjs ow-electron dist/apps/electron-app --owepm-packages-url=https://electronapi-qa.overwolf.com/v2/packages",
+		"restart:ow-electron:no-color": "cross-env NO_COLOR=1 FORCE_COLOR=0 NODE_OPTIONS=--max-old-space-size=8192 nx build electron-app --skip-nx-cache && cross-env FIRESTONE_FLAVOR=standalone npm run replace-version && npm run rebuild-electron-native-deps && cross-env NO_COLOR=1 FORCE_COLOR=0 node ./build-tools/with-signing-env.mjs ow-electron dist/apps/electron-app --owepm-packages-url=https://electronapi-qa.overwolf.com/v2/packages",
 		"upload-electron-updates": "npx tsx ./build-tools/upload-electron-updates.ts",
 		"install-electron-app-deps": "npm install --prefix dist/apps/electron-app --omit=dev",
 		"rebuild-electron-native-deps": "npm run install-electron-app-deps && npx tsx ./build-tools/rebuild-electron-native-deps.ts",
