@@ -7,6 +7,7 @@ import { Input as BgsComputeRunStatsInput } from '@firestone-hs/user-bgs-post-ma
 import { ModsManagerService } from '@firestone/mods/common';
 import {
 	ENABLE_IN_GAME_REPLAY_FOR_ALL,
+	LogListenerCacheService,
 	PowerLogBufferService,
 	PreferencesService,
 } from '@firestone/shared/common/service';
@@ -40,6 +41,7 @@ export class ReplayUploadService {
 		private readonly metadataBuilder: ReplayMetadataBuilderService,
 		private readonly powerLogBuffer: PowerLogBufferService,
 		private readonly modsManager: ModsManagerService,
+		private readonly logListenerCache: LogListenerCacheService,
 		// Only provided on Electron; when present, the DEFLATE compression runs in a
 		// worker thread instead of blocking the main thread (Plan H)
 		@Optional() private readonly uploadPrep: UploadPrepExecutorService | null,
@@ -123,15 +125,16 @@ export class ReplayUploadService {
 
 		const powerLogUploadPromise = shouldUploadPowerLog
 			? (async () => {
-					const { log: powerLog, generation } = this.powerLogBuffer.getCurrentGameLog();
-					console.log('[manastorm-bridge] got power log from buffer, length', powerLog.length);
-					console.debug('[manastorm-bridge] got power log from buffer', powerLog);
-					const powerLogBlob: Blob = await this.zipSingleFile('power.log', powerLog);
+					const powerLog = await this.buildPowerLogBlob();
+					if (!powerLog) {
+						console.warn('[manastorm-bridge] no power log available, skipping power log upload');
+						return;
+					}
 					const powerLogKey = userType + '/' + uuid() + '.power.zip';
 					console.log('[manastorm-bridge] uploading power log', powerLogKey);
-					await this.uploadPowerLog(powerLogKey, powerLogBlob);
+					await this.uploadPowerLog(powerLogKey, powerLog.blob);
 					console.log('[manastorm-bridge] uploaded power log');
-					this.powerLogBuffer.clearAfterUpload(generation);
+					powerLog.onUploaded?.();
 					(fullMetaData.game as Mutable<ReplayUploadMetadata['game']>).powerLogKey = powerLogKey;
 				})()
 			: Promise.resolve();
@@ -144,6 +147,35 @@ export class ReplayUploadService {
 		await this.uploadMetaData(fileKey, metaDataBlob);
 		console.log('[manastorm-bridge] uploaded metadata');
 		return fullMetaData;
+	}
+
+	/**
+	 * Builds the zipped power.log for the just-completed game.
+	 *
+	 * Preferred path (Electron): the compute worker reads the on-disk Power.log, trims it
+	 * to the last completed game and zips it — the log never touches the main-process heap
+	 * (Plan C track 1), and this is also what fixes the empty-power.log-upload bug: the
+	 * in-memory PowerLogBufferService is never fed on Electron.
+	 *
+	 * Fallback (Overwolf, or worker failure): the historical in-memory buffer.
+	 */
+	private async buildPowerLogBlob(): Promise<{ blob: Blob; onUploaded?: () => void } | null> {
+		const logPath = this.logListenerCache.cache['Power.log']?.getLogsLocation();
+		if (this.uploadPrep && logPath) {
+			const bytes = await this.uploadPrep.zipPowerLogFile(logPath);
+			if (bytes) {
+				console.log('[manastorm-bridge] got power log from disk, zipped bytes', bytes.length);
+				return { blob: new Blob([bytes as BlobPart], { type: 'application/zip' }) };
+			}
+			console.warn('[manastorm-bridge] worker power log zip failed, falling back to buffer');
+		}
+		const { log: powerLog, generation } = this.powerLogBuffer.getCurrentGameLog();
+		console.log('[manastorm-bridge] got power log from buffer, length', powerLog.length);
+		if (!powerLog?.length) {
+			return null;
+		}
+		const blob = await this.zipSingleFile('power.log', powerLog);
+		return { blob, onUploaded: () => this.powerLogBuffer.clearAfterUpload(generation) };
 	}
 
 	/**

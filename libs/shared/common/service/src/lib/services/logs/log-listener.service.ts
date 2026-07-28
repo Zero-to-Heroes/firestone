@@ -90,6 +90,11 @@ export class LogListenerService {
 		return this.backend.readTextFile(this.logsLocation);
 	}
 
+	/** Full path of the tailed log file, once known (null before the game was first detected) */
+	public getLogsLocation(): string | null {
+		return this.logsLocation ?? null;
+	}
+
 	private async startLogRegister() {
 		const gameInfo = await this.backend.getRunningGameInfo();
 		const prefs = await this.prefs.getPreferences();

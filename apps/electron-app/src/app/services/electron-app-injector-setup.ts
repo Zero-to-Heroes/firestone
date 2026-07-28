@@ -753,6 +753,7 @@ export const buildAppInjector = () => {
 		replayMetadataBuilder,
 		powerLogBuffer,
 		modsManager,
+		logListenerCache,
 		uploadPrepWorker,
 	);
 	electronInjector.register(ReplayUploadService, replayUploadService);

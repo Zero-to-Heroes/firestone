@@ -17,6 +17,7 @@ export {
 	findLastGameStartLineIndex,
 	POWER_LOG_CREATE_GAME_MARKER,
 	trimPowerLogFileContentToLastGame,
+	trimPowerLogLinesToLastCompletedGame,
 	trimPowerLogLinesToLastGame,
 } from './lib/trim-power-log-last-game';
 export {

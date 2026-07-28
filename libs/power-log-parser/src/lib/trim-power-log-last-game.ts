@@ -79,3 +79,53 @@ export function trimPowerLogFileContentToLastGame(content: string): string[] {
 	const lines = content.split(/\r?\n/);
 	return trimPowerLogLinesToLastGame(lines);
 }
+
+/** GameState lines that mark the end of a game (normal completion or a concede). */
+function isGameCompletionLine(line: string): boolean {
+	return (
+		line.includes('GameState.DebugPrintPower()') &&
+		(line.includes('tag=STATE value=COMPLETE') || line.includes('tag=PLAYSTATE value=CONCEDED'))
+	);
+}
+
+/**
+ * Keep only the last *completed* game: the slice from its opening `CREATE_GAME` line up to
+ * (but excluding) the next game's `CREATE_GAME`, or EOF.
+ *
+ * This is the right trim for end-of-game uploads reading the on-disk Power.log: the file
+ * accumulates every game of the session, and by the time the upload runs (worker-side metadata
+ * build takes tens of seconds) a new game may already have started — `trimPowerLogLinesToLastGame`
+ * would then return the wrong (new, unfinished) game. Falls back to the plain last-game trim
+ * when no completion marker exists (e.g. HS closed mid-game).
+ */
+export function trimPowerLogLinesToLastCompletedGame(lines: readonly string[]): string[] {
+	let lastCompleteIdx = -1;
+	for (let i = lines.length - 1; i >= 0; i--) {
+		if (isGameCompletionLine(lines[i]!)) {
+			lastCompleteIdx = i;
+			break;
+		}
+	}
+	if (lastCompleteIdx < 0) {
+		return trimPowerLogLinesToLastGame(lines);
+	}
+	const starts = findCreateGameLineIndicesGameState(lines);
+	let startIdx: number | null = null;
+	let nextStartIdx: number | null = null;
+	for (const idx of starts) {
+		if (idx <= lastCompleteIdx) {
+			startIdx = idx;
+		} else {
+			nextStartIdx = idx;
+			break;
+		}
+	}
+	if (startIdx == null) {
+		return trimPowerLogLinesToLastGame(lines);
+	}
+	let out = nextStartIdx != null ? lines.slice(startIdx, nextStartIdx) : lines.slice(startIdx);
+	while (out.length && out[0]!.trim() === '') {
+		out = out.slice(1);
+	}
+	return out;
+}

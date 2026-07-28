@@ -37,4 +37,15 @@ export abstract class UploadPrepExecutorService {
 
 	/** Returns the bytes of a zip archive containing the single given file, DEFLATE level 9 */
 	abstract zipSingleFile(fileName: string, content: string): Promise<Uint8Array | null>;
+
+	/**
+	 * Reads the on-disk Power.log at `path`, trims it to the last completed game and
+	 * zips it (as `power.log`, DEFLATE level 9) — entirely off-thread, so the game log
+	 * never has to be buffered on the caller's heap (Plan C track 1 / the Electron
+	 * empty-power.log-upload bug). Default implementation returns null (no file
+	 * access), which makes callers fall back to the in-memory PowerLogBufferService.
+	 */
+	zipPowerLogFile(path: string): Promise<Uint8Array | null> {
+		return Promise.resolve(null);
+	}
 }

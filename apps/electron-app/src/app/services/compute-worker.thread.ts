@@ -29,7 +29,9 @@ import { AllCardsService } from '@firestone-hs/reference-data';
 import { simulateBattle } from '@firestone-hs/simulate-bgs-battle';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
 import { CardsData } from '@firestone-hs/simulate-bgs-battle/dist/cards/cards-data';
+import { trimPowerLogLinesToLastCompletedGame } from '@firestone/power-log-parser';
 import JSZip from 'jszip';
+import * as fs from 'fs';
 import { parentPort } from 'worker_threads';
 
 if (!parentPort) {
@@ -52,6 +54,7 @@ type WorkerRequest =
 	| { id: number; type: 'extractStatsForGame'; message: any; xml: string }
 	| { id: number; type: 'extractReplayEssentials'; xml: string }
 	| { id: number; type: 'zipSingleFile'; fileName: string; content: string }
+	| { id: number; type: 'zipPowerLogFile'; path: string }
 	| { id: number; type: 'parseJson'; text: string };
 
 parentPort.on('message', async (data: WorkerRequest) => {
@@ -156,6 +159,35 @@ parentPort.on('message', async (data: WorkerRequest) => {
 				parentPort!.postMessage({ id: data.id, ok: true, resultBytes: bytes, done: true }, [
 					bytes.buffer as ArrayBuffer,
 				]);
+				return;
+			}
+			// End-of-game power.log upload (Plan C track 1 + the empty-upload bug,
+			// docs/electron-memory-investigation.md): main only sends the file path; the
+			// whole file is read, trimmed to the just-completed game and zipped here, so
+			// the game log never lives on the main-process heap
+			case 'zipPowerLogFile': {
+				const content = fs.readFileSync(data.path, 'utf8');
+				const gameLines = trimPowerLogLinesToLastCompletedGame(content.split(/\r?\n/));
+				const gameLog = gameLines.join('\n');
+				const zip = new JSZip();
+				zip.file('power.log', gameLog);
+				const bytes: Uint8Array = await zip.generateAsync({
+					type: 'uint8array',
+					compression: 'DEFLATE',
+					compressionOptions: {
+						level: 9,
+					},
+				});
+				parentPort!.postMessage(
+					{
+						id: data.id,
+						ok: true,
+						resultBytes: bytes,
+						result: JSON.stringify({ fileChars: content.length, gameLogChars: gameLog.length }),
+						done: true,
+					},
+					[bytes.buffer as ArrayBuffer],
+				);
 				return;
 			}
 		}

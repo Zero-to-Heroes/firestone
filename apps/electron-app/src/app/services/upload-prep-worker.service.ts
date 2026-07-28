@@ -66,4 +66,16 @@ export class UploadPrepWorkerService extends UploadPrepExecutorService {
 		});
 		return response?.ok && response.resultBytes ? response.resultBytes : null;
 	}
+
+	public override async zipPowerLogFile(path: string): Promise<Uint8Array | null> {
+		const response = await this.workerHost.request({
+			type: 'zipPowerLogFile',
+			path: path,
+		});
+		if (response?.ok && response.resultBytes) {
+			console.log('[upload-prep] power.log zipped in worker', response.result);
+			return response.resultBytes;
+		}
+		return null;
+	}
 }
