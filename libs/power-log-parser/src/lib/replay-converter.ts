@@ -25,16 +25,23 @@ import {
 	SendOption,
 } from './models';
 
+const NEEDS_XML_ESCAPE = /[&<>"]/;
+
 function escapeXml(s: string): string {
-	return s
-		.replace(/&/g, '&amp;')
-		.replace(/</g, '&lt;')
-		.replace(/>/g, '&gt;')
-		.replace(/"/g, '&quot;');
+	// Fast path: the vast majority of values (timestamps, card IDs) contain nothing to escape,
+	// and this function dominates the GAME_END xmlFromReplay cost on the profiler.
+	if (!NEEDS_XML_ESCAPE.test(s)) {
+		return s;
+	}
+	return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
 function a(name: string, value: string | number | boolean): string {
-	return ` ${name}="${escapeXml(String(value))}"`;
+	// Numbers and booleans can never contain XML-special characters
+	if (typeof value !== 'string') {
+		return ` ${name}="${value}"`;
+	}
+	return ` ${name}="${escapeXml(value)}"`;
 }
 
 function ts(data: { TimeStamp: string }): string {
@@ -43,11 +50,17 @@ function ts(data: { TimeStamp: string }): string {
 }
 
 function serializeTag(tag: Tag): string {
-	return `<Tag${a('tag', tag.Name)}${a('value', tag.Value)} />`;
+	return `<Tag tag="${tag.Name}" value="${tag.Value}" />`;
 }
 
 function serializeTags(tags: readonly Tag[]): string {
-	return tags.map(serializeTag).join('');
+	// Hottest loop of the GAME_END replay XML build (every entity carries dozens of numeric
+	// tags); a plain += loop avoids the map()/join() intermediate array churn.
+	let out = '';
+	for (const tag of tags) {
+		out += serializeTag(tag);
+	}
+	return out;
 }
 
 function serializeGameData(data: GameData): string {

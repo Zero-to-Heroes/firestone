@@ -3,7 +3,7 @@ import * as path from 'path';
 import { xmlFromReplay } from '../../libs/power-log-parser/src/lib/replay-converter';
 import { ReplayParser } from '../../libs/power-log-parser/src/lib/replay-parser';
 
-const TEST_DATA_DIR = path.join(__dirname, '..', 'libs', 'power-log-parser', 'src', 'test-data');
+const TEST_DATA_DIR = path.join(__dirname, '..', '..', 'libs', 'power-log-parser', 'src', 'test-data');
 const OUTPUT_DIR = path.join(__dirname, 'golden-xml', 'typescript');
 
 fs.mkdirSync(OUTPUT_DIR, { recursive: true });

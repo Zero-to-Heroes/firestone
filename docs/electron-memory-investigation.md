@@ -663,6 +663,34 @@ FS_FAKE_GAME_LOG=<session 9 log>`); the overlay injected into the idle HS
   0.33 MB, `playerDeck` 0.28 MB, `bgState` 0.36 MB with sims) are only worth
   it if the residual 13.6 s/game shows up in user-facing behavior.
 
+**Session 11 (2026-07-28 15:20, unattended profiled replay of the session 9
+log at 2x, `FS_ELECTRON_MEM_CPUPROFILE=1`) — residual stalls ATTRIBUTED:**
+
+- Purpose: put stacks on the session 10 leftovers (turn 16-17 clusters). Caveats:
+  2x feed doubles parser batch sizes, and the profiler adds its rotation stalls
+  (every stall sitting exactly on a 120 s boundary was discarded).
+- **Turn 16-17 clusters attributed.** The 2-minute chunk covering them breaks
+  down as: `webContents.send` structured clone 5.3 s (residual post-diet IPC),
+  end-of-game `escapeXml`/`serializeGameData` ~1.5 s (the `xmlFromReplay`
+  leftover, Plan H residue — the XML string build still runs on main), parser
+  node-building ~1 s, GC 1.8 s. The worst 1.84 s stall matches
+  `parser/processLogsWithTsParser` max 1837 ms exactly — at 2x the parser
+  batches are twice live size, so live-game exposure is roughly half that.
+- **NEW constant cost found: ow-electron overlay frame encoding.** `toPNG`
+  under an internal `updateBuffer` (no source file — the ow-electron overlay
+  bridge, runtime package in `AppData/Roaming/ow-electron`) burns 1.7-4 s per
+  120 s chunk (~2-3% of main) for the entire game: each overlay-window repaint
+  is PNG-encoded on the main thread before being handed to the native overlay
+  DLLs. Not directly fixable in app code; scales with overlay repaint
+  frequency, so every payload/update-rate diet also shrinks it. Worth an
+  upstream question to Overwolf (shared-texture path instead of PNG?).
+- `s.send` ramps chunk-by-chunk (0.5 → 8 s/2 min) mirroring the wire-size
+  growth — confirms the remaining diet targets (`opponentDeck`/`playerDeck`/
+  `bgState`) are what's left of the IPC story.
+- Remaining actionable item from this session: **offload `xmlFromReplay`
+  (escapeXml/serializeGameData) to the compute worker** — the last Plan H
+  piece still on main (~1.5 s per game end).
+
 **Session 9 follow-up (offline, same Power.log) — payload diet scoped and
 IMPLEMENTED; validated in-app in session 10:**
 
