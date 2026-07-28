@@ -206,9 +206,13 @@ continuity; H is new.
    table; the measured ranking is: (a) `game-state-facade` IPC broadcast fan-out is
    the per-turn cost (517 sends ≥100 ms, 71.5 s total in one game — **Plan D
    handshake IMPLEMENTED and VALIDATED 2026-07-28, session 8: 66 sends / 11.7 s,
-   `targets: 2`**; payload diet still open), (b) match start is API-response `JSON.parse`
+   `targets: 2`**; payload diet is now the top open item — session 9 measured
+   645 slow sends / 98.4 s late-game as the GameState wire value grows, see the
+   Plan G section), (b) match start is API-response `JSON.parse`
    on main (~5.3 s, BG meta-hero stats) plus Electron IPC serialization of those
-   payloads (~4.2 s) — move heavy GET+parse off main, (c) MindVision edge calls are
+   payloads (~4.2 s) — **large-payload parse offload IMPLEMENTED and VALIDATED
+   2026-07-28, session 9: zero main-thread parses, hero-selection stalls
+   12 s → ~3 s** (see the Plan G section), (c) MindVision edge calls are
    confirmed 100% synchronous but moderate in total (~2.9 s/session, mostly at HS
    launch). Parser burst and game-state batches are exonerated (≤665 ms worst).
 4. **Plan B (remaining items) - GPU / offscreen overlay + ad/owepm renderers**:
@@ -545,7 +549,64 @@ extracted from the `.cpuprofile` chunks by timestamp):
 The utilityProcess pipeline move is therefore NOT needed on current data; Plan G
 resolves into two targeted fixes: the game-state-facade broadcast diet (top —
 subscription-handshake half implemented 2026-07-28, see Plan D) and moving API
-fetch+parse off main (second, still open).
+JSON parsing off main (second — implemented 2026-07-28, below).
+
+**Plan G (b) implementation (2026-07-28, awaiting in-game validation):**
+`ElectronApiRunner.parseJsonResponse` now ships response text ≥256 KB to the
+persistent compute worker (new `parseJson` op), which `JSON.parse`s it and posts
+the object back as a structured clone (`resultObject` — NOT re-stringified); main
+pays the V8 deserialize instead of the full tokenization. Design choices:
+
+- The **fetch stays on main**: `net.fetch` is async (network I/O never blocked
+  main) and keeps Chromium's HTTP cache and proxy behavior — only the CPU-bound
+  parse moves. Payloads <256 KB parse inline (a few ms, not worth the roundtrip).
+- Covers both `callGetApi` and `callPostApi` (one fix in `parseJsonResponse`);
+  wired in `electron-app-injector-setup.ts` via
+  `setOffThreadJsonParser` so `libs/electron/common` doesn't depend on the
+  app-level `ComputeWorkerHost`. On worker failure or a 15 s timeout it falls
+  back to parsing on main — where a new `api/parse-json-main` slow-op probe
+  keeps it measured (also measures Overwolf-free fallback sessions).
+- Verified by `compute-worker-verify.mjs` (new parseJson roundtrip: structured
+  clone equals the main-thread parse; worst main-thread stall 127 ms while the
+  worker ran the whole Plan F/H/G suite).
+- Expected in-game effect: the ~5.3 s of hero-selection `JSON.parse` drops to
+  the (smaller) structured-clone deserialize; the ~4.2 s of Electron IPC
+  serialization shipping those payloads to renderers is already reduced by the
+  Plan D handshake (only actual consumers receive them). The remaining known
+  main-side costs in that window are `DiskCacheService.storeItem`
+  (JSON.stringify of the stats on main) and `buildHeroStats` — measure before
+  touching either.
+
+**Session 9 (2026-07-28 12:49, full game to turn 17, profiler OFF) — Plan G (b)
+VALIDATED; the per-turn freeze problem is solved; the payload diet is the new top
+item:**
+
+- **`parse-json-main`: zero occurrences.** No large `JSON.parse` ran on main at
+  all; no worker fallbacks/timeouts, no API errors — the offload worked for every
+  large payload of the session.
+- **Match start (hero selection): ~12 s of stalls → ~3 s** (1.06 s + 1.95 s,
+  unattributed — candidates: the structured-clone deserialize of the worker's
+  parsed payload on main, `DiskCacheService.storeItem` stringify,
+  `buildHeroStats`). Chase with one `FS_ELECTRON_MEM_CPUPROFILE=1` session if
+  those 3 s matter enough.
+- **Per-turn stalls: solved.** Turns 1-9: worst 16-66 ms (vs 0.5-1.0 s in
+  session 7). Even late game the worst per-turn stall was 468 ms (t15), most
+  under 250 ms — no more "Not responding" flags. Session 8's remaining 200-900 ms
+  per-turn maxima turned out to be partly the CPU profiler's own overhead
+  (profiler off this session).
+- **End-of-game window: 0.50 s + 0.76 s** — consistent with the known
+  `xmlFromReplay` leftover (Plan H).
+- **NEW top cost — late-game `game-state-facade` volume**: 645 slow sends
+  (all `targets: 2`, max 439 ms; 6.4 s serialize + 91.9 s send), ramping from
+  ~turn 12 to 40-60 slow sends/min at 6-10 s of main-thread time per minute —
+  10-16% of main spent structured-cloning an ever-growing GameState twice per
+  update. Individually small (no stalls), but the aggregate begs for the Plan D
+  payload diet: shrink the wire value (eg strip/simplify battle history and sim
+  internals from what renderers actually consume) and/or dedupe the update storm
+  during fights (sim intermediate results). Sessions 7/8 never showed this
+  clearly: session 8 ended at turn 11 right where the ramp starts, and session
+  7's numbers were inflated across the whole game by the 5-window fan-out.
+- Main RSS peaked at 1.14 GB (in line with previous instrumented sessions).
 
 **Session 8 (2026-07-28 11:04, game to turn 11) — Plan D handshake VALIDATED
 in-game:**

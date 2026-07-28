@@ -8,11 +8,36 @@ type ElectronApiRunnerRequestOptions = {
 	readonly body?: string;
 };
 
+/**
+ * Parses a JSON string off the main thread and returns the parsed value.
+ * `ok: false` means the offload failed and the caller should parse locally.
+ */
+export type OffThreadJsonParser = (text: string) => Promise<{ ok: boolean; value: any }>;
+
+/**
+ * Payloads smaller than this are parsed inline: JSON.parse of ~256 KB is a few ms,
+ * below the stall radar, and not worth a worker roundtrip.
+ */
+const OFF_THREAD_PARSE_THRESHOLD_CHARS = 256 * 1024;
+
 @Injectable()
 export class ElectronApiRunner implements IApiRunner {
 	// Mock properties to maintain compatibility with original ApiRunner
 	public readonly http: any = null;
 	public readonly ow: any = null;
+
+	private offThreadJsonParser: OffThreadJsonParser | null = null;
+
+	/**
+	 * Offload JSON.parse of large API payloads (Plan G (b),
+	 * docs/electron-memory-investigation.md): session 7 measured 5.3 s of
+	 * parseJsonResponse on the main thread at match start (BG meta-hero stats).
+	 * The fetch itself stays on main (net.fetch is async and keeps Chromium's
+	 * HTTP cache / proxy behavior); only the parse moves.
+	 */
+	public setOffThreadJsonParser(parser: OffThreadJsonParser): void {
+		this.offThreadJsonParser = parser;
+	}
 
 	/** Only for logged-in users */
 	public async callPostApiSecure<T>(
@@ -121,6 +146,23 @@ export class ElectronApiRunner implements IApiRunner {
 		const text = await response.text();
 		if (!text?.length) {
 			return null;
+		}
+		if (this.offThreadJsonParser && text.length >= OFF_THREAD_PARSE_THRESHOLD_CHARS) {
+			const parsed = await this.offThreadJsonParser(text);
+			if (parsed.ok) {
+				return parsed.value as T;
+			}
+			// Offload failed (worker down / timed out): fall through to the local parse
+		}
+		// Stall-attribution hook installed by the platform instrumentation (no-op
+		// otherwise): main-thread parses of large payloads are the thing Plan G (b)
+		// is removing, so keep them measured
+		const perfHook = (globalThis as any).__fsSlowOp;
+		if (perfHook) {
+			const start = performance.now();
+			const result = JSON.parse(text) as T;
+			perfHook('api', 'parse-json-main', performance.now() - start, { chars: text.length });
+			return result;
 		}
 		return JSON.parse(text) as T;
 	}

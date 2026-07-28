@@ -600,6 +600,15 @@ export const buildAppInjector = () => {
 	const computeWorkerHost = new ComputeWorkerHost(() => allCards.getService());
 	electronInjector.register(ComputeWorkerHost, computeWorkerHost);
 
+	// Plan G (b): JSON.parse of large API payloads (eg BG meta-hero stats, ~5.3 s on
+	// main at match start in session 7) runs in the compute worker; main receives the
+	// parsed object as a structured clone instead of tokenizing the text itself.
+	// On worker failure/timeout the runner falls back to parsing on main.
+	(api as unknown as ElectronApiRunner).setOffThreadJsonParser(async (text: string) => {
+		const response = await computeWorkerHost.request({ type: 'parseJson', text }, 15_000);
+		return response?.ok ? { ok: true, value: response.resultObject ?? null } : { ok: false, value: null };
+	});
+
 	const battleExecutor = new BgsBattleSimulationWorkerService(computeWorkerHost);
 	const simulation = new BgsBattleSimulationService(
 		api as any as ApiRunner,

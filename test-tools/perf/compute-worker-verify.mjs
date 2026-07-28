@@ -247,6 +247,27 @@ t = Date.now();
 const workerEssentials = await request({ type: 'extractReplayEssentials', xml });
 console.log(`[worker] extractReplayEssentials: ${Date.now() - t} ms, ok=${workerEssentials.ok}`);
 
+// parseJson (Plan G (b)): a large JSON payload parsed in the worker must come back
+// as a structured clone equal to the main-thread JSON.parse
+const bigJsonText = JSON.stringify({
+	heroStats: Array.from({ length: 20000 }, (_, i) => ({
+		heroCardId: `HERO_${i}`,
+		averagePosition: 4.2,
+		placementDistribution: Array.from({ length: 8 }, (_, r) => ({ rank: r + 1, percentage: 12.5 })),
+		tribeStats: [{ tribe: 'mech', dataPoints: i }],
+	})),
+	lastUpdateDate: '2026-07-28',
+});
+t = Date.now();
+const refJsonParsed = JSON.parse(bigJsonText);
+const refJsonParseMs = Date.now() - t;
+t = Date.now();
+const workerJson = await request({ type: 'parseJson', text: bigJsonText });
+console.log(
+	`[worker] parseJson: ${Date.now() - t} ms roundtrip for ${(bigJsonText.length / 1024 / 1024).toFixed(2)} MB ` +
+		`(vs ${refJsonParseMs} ms JSON.parse on main), ok=${workerJson.ok}`,
+);
+
 // ---------- 3b. Battle sim smoke test (Plan F): streams then finishes ----------
 const simPlayer = (cardId) => ({ cardId, hpLeft: 30, tavernTier: 3, heroPowers: [], questEntities: [] });
 const simBattleInfo = {
@@ -305,6 +326,11 @@ if (!simResult.ok) {
 if (!workerEssentials.ok) fail(`worker extractReplayEssentials failed: ${workerEssentials.error}`);
 else if (workerEssentials.result !== JSON.stringify(refEssentials)) {
 	fail('extractReplayEssentials results differ between main thread and worker');
+}
+
+if (!workerJson.ok) fail(`worker parseJson failed: ${workerJson.error}`);
+else if (JSON.stringify(workerJson.resultObject) !== JSON.stringify(refJsonParsed)) {
+	fail('parseJson structured-clone result differs from main-thread JSON.parse');
 }
 
 if (!workerZip.ok) {

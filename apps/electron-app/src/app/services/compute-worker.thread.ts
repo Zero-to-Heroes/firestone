@@ -51,7 +51,8 @@ type WorkerRequest =
 	  }
 	| { id: number; type: 'extractStatsForGame'; message: any; xml: string }
 	| { id: number; type: 'extractReplayEssentials'; xml: string }
-	| { id: number; type: 'zipSingleFile'; fileName: string; content: string };
+	| { id: number; type: 'zipSingleFile'; fileName: string; content: string }
+	| { id: number; type: 'parseJson'; text: string };
 
 parentPort.on('message', async (data: WorkerRequest) => {
 	if (data.type === 'init') {
@@ -132,6 +133,14 @@ parentPort.on('message', async (data: WorkerRequest) => {
 					opponentCastCardsByTurn: parser.cardsCastByTurn[replay.opponentPlayerId] ?? [],
 				};
 				parentPort!.postMessage({ id: data.id, ok: true, result: JSON.stringify(essentials), done: true });
+				return;
+			}
+			// JSON.parse of large API payloads (Plan G (b)): the result goes back as a
+			// structured clone (resultObject), NOT re-stringified — main pays the V8
+			// deserialize instead of the full JSON tokenization
+			case 'parseJson': {
+				const parsed = data.text?.length ? JSON.parse(data.text) : null;
+				parentPort!.postMessage({ id: data.id, ok: true, resultObject: parsed, done: true });
 				return;
 			}
 			case 'zipSingleFile': {

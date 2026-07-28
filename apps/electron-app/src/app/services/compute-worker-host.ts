@@ -6,6 +6,8 @@ export interface ComputeWorkerResponse {
 	readonly ok: boolean;
 	readonly result?: string;
 	readonly resultBytes?: Uint8Array;
+	/** Structured-cloned object, for ops where re-stringifying would defeat the offload (parseJson) */
+	readonly resultObject?: any;
 	readonly error?: string;
 	readonly done: boolean;
 }
