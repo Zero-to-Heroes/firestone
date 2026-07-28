@@ -10,8 +10,8 @@ import { currentEffectsInternal } from './current-effects';
 export { SHATTER_HAND_PIECE_CREATOR_FALLBACK_CARD_IDS } from '@firestone/power-log-parser';
 
 // Used for cache purposes, only in dev
-export const CARDS_VERSION = '36.0.3';
-export const isPreReleaseBuild = false;
+export const CARDS_VERSION = '36.2';
+export const isPreReleaseBuild = true;
 export const isDualClassArena = false;
 
 /** @deprecated use ALL_CLASSES */
