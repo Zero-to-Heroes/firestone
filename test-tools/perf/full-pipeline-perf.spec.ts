@@ -19,6 +19,8 @@
  *   export HS_REFERENCE_CARDS_JSON_PATH=https://raw.githubusercontent.com/Zero-to-Heroes/hs-reference-data/master/src/cards_short.json
  *   export POWER_LOG_PERF_PATH=test-tools/bg.log          # defaults to test-tools/bg.log
  *   export FS_PERF_PROFILE_TURNS=25-35                    # optional CPU profile window (turn numbers)
+ *   export FS_PERF_WIRE=1                                 # per-turn Electron wire serialize/clone cost + field breakdown (Plan D diet)
+ *   export FS_PERF_BATTLE_SIM=1                           # real in-process BGS battle sims (bgState carries live-like battle results)
  *   NODE_OPTIONS=--max-old-space-size=8192 npx jest test-tools/perf/full-pipeline-perf.spec.ts \
  *     --config=libs/game-state/jest.config.ts --runInBand
  *
@@ -33,11 +35,12 @@
  *  - optional CPU profile at test-tools/perf/full-pipeline-turns-<window>.cpuprofile (gitignored)
  */
 import { TestBed } from '@angular/core/testing';
-import { GameEventsEmitterService } from '@firestone/game-state';
+import { GameEventsEmitterService, GameState, serializeGameStateForElectron } from '@firestone/game-state';
 import { trimPowerLogLinesToLastGame } from '@firestone/power-log-parser';
 import * as fs from 'fs';
 import * as inspector from 'inspector';
 import * as path from 'path';
+import * as v8 from 'v8';
 import {
 	replayPowerLogToGameState,
 	requirePowerLogReplayResult,
@@ -135,7 +138,87 @@ type TurnMetrics = {
 	opponent: ZoneSizes;
 	parserEntities: number;
 	topBuckets: { bucket: string; totalMs: number; calls: number }[];
+	wire?: WireMetrics;
 };
+
+/**
+ * FS_PERF_WIRE=1: per-turn cost of shipping the GameState to Electron renderers
+ * (Plan D payload diet scoping, docs/electron-memory-investigation.md session 9).
+ * `serializeMs` is the app-level serializeGameStateForElectron; `cloneMs`/`bytes` are
+ * v8.serialize of the wire value — the same V8 value serializer webContents.send uses,
+ * so it approximates the measured live `sendMs` per target window.
+ */
+type WireMetrics = {
+	serializeMs: number;
+	cloneMs: number;
+	bytes: number;
+	/** metadata.gameType of the source state (mode-dependent wire trims key off it) */
+	gameType?: number;
+	/** v8.serialize bytes of each top-level chunk of the wire value, to rank diet targets */
+	parts: { [part: string]: number };
+	error?: string;
+};
+
+const WIRE_ENABLED = process.env['FS_PERF_WIRE'] === '1';
+/** FS_PERF_BATTLE_SIM=1: run real (in-process) BGS battle sims during the replay, so bgState carries actual battle results like a live game. */
+const BATTLE_SIM_ENABLED = process.env['FS_PERF_BATTLE_SIM'] === '1';
+
+function safeV8Bytes(value: unknown): number {
+	try {
+		return value == null ? 0 : v8.serialize(value).byteLength;
+	} catch {
+		return -1;
+	}
+}
+
+function measureWire(state: GameState): WireMetrics {
+	try {
+		const t0 = performance.now();
+		const wire = serializeGameStateForElectron(state);
+		const t1 = performance.now();
+		const bytes = v8.serialize(wire).byteLength;
+		const t2 = performance.now();
+		// Rank every top-level field by its own serialized size (>10 KB kept): tells the
+		// payload diet exactly what grows. Sub-part sums can exceed `bytes` slightly
+		// (shared references get serialized once in the full value).
+		const parts: { [part: string]: number } = {};
+		for (const key of Object.keys(wire)) {
+			const size = safeV8Bytes((wire as any)[key]);
+			if (size > 10_000 || size === -1) {
+				parts[key] = size;
+			}
+		}
+		// parserState.CurrentEntities bytes by zone (GameTag.ZONE=49): how much of the
+		// wire is dead entities (GRAVEYARD=4 / SETASIDE=6 / REMOVEDFROMGAME=5)?
+		const entities: Map<number, { Tags?: readonly { Name: number; Value: number }[] }> | undefined = (wire as any)
+			?.parserState?.CurrentEntities;
+		if (entities) {
+			const zoneNames: { [zone: number]: string } = {
+				1: 'PLAY',
+				2: 'DECK',
+				3: 'HAND',
+				4: 'GRAVEYARD',
+				5: 'REMOVEDFROMGAME',
+				6: 'SETASIDE',
+				7: 'SECRET',
+			};
+			for (const entity of entities.values()) {
+				const zone = entity.Tags?.find((t) => t.Name === 49)?.Value ?? 0;
+				const bucket = `entities.zone:${zoneNames[zone] ?? zone}`;
+				parts[bucket] = (parts[bucket] ?? 0) + safeV8Bytes(entity);
+			}
+		}
+		return {
+			serializeMs: Math.round((t1 - t0) * 10) / 10,
+			cloneMs: Math.round((t2 - t1) * 10) / 10,
+			bytes,
+			gameType: state.metadata?.gameType,
+			parts,
+		};
+	} catch (e: any) {
+		return { serializeMs: -1, cloneMs: -1, bytes: -1, parts: {}, error: e?.message ?? String(e) };
+	}
+}
 
 function zoneSizes(
 	deck:
@@ -177,6 +260,7 @@ describeMaybe('Full pipeline perf (parser -> game-state -> emissions)', () => {
 			const ctx = await replayPowerLogToGameState({
 				logPath: LOG_PATH,
 				feedLines: false,
+				enableBattleSim: BATTLE_SIM_ENABLED,
 			});
 			requirePowerLogReplayResult(ctx, cardsPath);
 
@@ -275,6 +359,7 @@ describeMaybe('Full pipeline perf (parser -> game-state -> emissions)', () => {
 						opponent: zoneSizes(state?.opponentDeck),
 						parserEntities,
 						topBuckets,
+						wire: WIRE_ENABLED && state ? measureWire(state) : undefined,
 					});
 
 					if (profileWindow && profileSession && !profileWritten && chunk.turn >= profileWindow.end) {
@@ -325,6 +410,7 @@ describeMaybe('Full pipeline perf (parser -> game-state -> emissions)', () => {
 						pad('oOther', 7),
 						pad('pBoard', 7),
 						pad('entities', 9),
+						...(WIRE_ENABLED ? [pad('serMs', 7), pad('cloneMs', 8), pad('wireMB', 8)] : []),
 					].join(''),
 				);
 				for (const r of results) {
@@ -343,8 +429,27 @@ describeMaybe('Full pipeline perf (parser -> game-state -> emissions)', () => {
 							pad(r.opponent.other, 7),
 							pad(r.player.board, 7),
 							pad(r.parserEntities, 9),
+							...(WIRE_ENABLED && r.wire
+								? [
+										pad(r.wire.serializeMs, 7),
+										pad(r.wire.cloneMs, 8),
+										pad((r.wire.bytes / 1024 / 1024).toFixed(2), 8),
+									]
+								: []),
 						].join(''),
 					);
+				}
+				if (WIRE_ENABLED) {
+					const last = [...results].reverse().find((r) => r.wire && !r.wire.error);
+					if (last?.wire) {
+						originalLog('');
+						originalLog(`Wire value breakdown at turn ${last.turn} (v8.serialize bytes per field):`);
+						for (const [part, size] of Object.entries(last.wire.parts).sort((a, b) => b[1] - a[1])) {
+							originalLog(
+								`  ${pad(size === -1 ? 'not-cloneable' : (size / 1024 / 1024).toFixed(2) + ' MB', 15)}  ${part}`,
+							);
+						}
+					}
 				}
 				originalLog(`TOTAL wall: ${totalWallMs} ms, events: ${eventCount}, emissions: ${emissionCount}`);
 

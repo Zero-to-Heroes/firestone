@@ -11,8 +11,16 @@ import { Injector, NgZone } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { decode } from '@firestone-hs/deckstrings';
 import { AllCardsService, SceneMode } from '@firestone-hs/reference-data';
+import { simulateBattle } from '@firestone-hs/simulate-bgs-battle';
+import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
+import { CardsData } from '@firestone-hs/simulate-bgs-battle/dist/cards/cards-data';
+import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
 import { ArenaRefService } from '@firestone/arena/data-access';
-import { BgsBattleSimulationService, BgsIntermediateResultsSimGuardianService } from '@firestone/battlegrounds/core';
+import {
+	BgsBattleSimulationExecutorService,
+	BgsBattleSimulationService,
+	BgsIntermediateResultsSimGuardianService,
+} from '@firestone/battlegrounds/core';
 import {
 	AiDeckService,
 	BgsMatchMemoryInfoService,
@@ -50,7 +58,7 @@ import {
 	PreferencesService,
 } from '@firestone/shared/common/service';
 import { SubscriberAwareBehaviorSubject } from '@firestone/shared/framework/common';
-import type { IOwUtilsService } from '@firestone/shared/framework/core';
+import type { IAdsService, IOwUtilsService } from '@firestone/shared/framework/core';
 import {
 	ApiRunner,
 	CardsFacadeService,
@@ -407,6 +415,50 @@ export async function buildAllCardsServiceForReplay(cardsRef: string): Promise<A
 	return allCards;
 }
 
+/**
+ * In-process BGS battle simulator for replays: same `simulateBattle` generator the
+ * production compute worker runs (intermediate results included), minus the worker
+ * boundary. Lets BG replays exercise the real face-off → simulation → battleInfo$$ →
+ * GameStateService loop instead of a mock. Sims run synchronously on the jest thread,
+ * so keep `maxSims` low (production default is 8000 per fight).
+ */
+class InProcessBgsBattleSimulationExecutor extends BgsBattleSimulationExecutorService {
+	constructor(
+		private readonly allCards: AllCardsService,
+		private readonly maxSims: number,
+	) {
+		super();
+	}
+
+	public simulateLocalBattle(
+		battleInfo: BgsBattleInfo,
+		prefs: Preferences,
+		includeOutcomeSamples: boolean,
+		onResultReceived: (result: SimulationResult | null) => void,
+	): void {
+		const input: BgsBattleInfo = {
+			...battleInfo,
+			options: {
+				...battleInfo.options,
+				numberOfSimulations: Math.min(
+					battleInfo.options?.numberOfSimulations ?? prefs.bgsSimulatorNumberOfSims,
+					this.maxSims,
+				),
+				includeOutcomeSamples,
+			},
+		};
+		const cardsData = new CardsData(this.allCards, false);
+		cardsData.inititialize(input.options.validTribes);
+		const iterator = simulateBattle(input, this.allCards, cardsData);
+		let result = iterator.next();
+		while (!result.done) {
+			onResultReceived(result.value ?? null);
+			result = iterator.next();
+		}
+		onResultReceived(result.value ?? null);
+	}
+}
+
 export type PowerLogReplayResult = {
 	readonly allCardsRef: AllCardsService;
 	readonly state: GameState;
@@ -452,6 +504,14 @@ export type ReplayPowerLogOptions = {
 	 * turn-by-turn and measure queue-drain time per turn. Default true.
 	 */
 	feedLines?: boolean;
+	/**
+	 * Run real BGS battle simulations (in-process, intermediate results included) instead of
+	 * the inert mock. Adds real CPU per face-off — see {@link InProcessBgsBattleSimulationExecutor}.
+	 * Default false.
+	 */
+	enableBattleSim?: boolean;
+	/** Cap on simulations per fight when `enableBattleSim` is set (default 800; production runs 8000). */
+	battleSimMaxSims?: number;
 };
 
 /**
@@ -514,6 +574,8 @@ export async function replayPowerLogToGameState(options: ReplayPowerLogOptions):
 		processingQueueIdleTimeoutMs = 600_000,
 		playerDeckstring,
 		feedLines = true,
+		enableBattleSim = false,
+		battleSimMaxSims = 800,
 	} = options;
 
 	const cardsRef = resolveCardsJsonPath();
@@ -603,6 +665,10 @@ export async function replayPowerLogToGameState(options: ReplayPowerLogOptions):
 
 	const i18nMock = {
 		translate: (key: string) => key,
+		// Without this, MatchMetadataParser's BG branch throws (buildEmptyPanels calls
+		// translateString outside its try/catch) and metadata/bgState are never set on
+		// BG replays — constructed replays don't hit that branch.
+		translateString: (key: string) => key,
 		getCreatedByCardName: (cardName: string) => cardName,
 	} as unknown as ILocalizationService;
 
@@ -649,6 +715,34 @@ export async function replayPowerLogToGameState(options: ReplayPowerLogOptions):
 	} as unknown as ApiRunner;
 	const secretConfigService = new SecretConfigService(apiRunnerReplayMock, cards);
 
+	// BG face-off path deps (BgsPlayerBoardParser reads all of these before its sim
+	// try/catch; leaving them null used to abort the parser and lose face-off battle info)
+	const adsReplayMock = {
+		isReady: async () => undefined,
+		enablePremiumFeatures$$: new BehaviorSubject<boolean>(true),
+		shouldDisplayAds: async () => false,
+	} as unknown as IAdsService;
+	const guardianReplayMock = {
+		hasFreeUses: () => true,
+	} as unknown as BgsIntermediateResultsSimGuardianService;
+	const gameIdReplayMock = {
+		uniqueId$$: new BehaviorSubject<string>(reviewId),
+	} as unknown as GameUniqueIdService;
+	const bugReportReplayMock = {
+		submitAutomatedReport: () => undefined,
+	} as unknown as BugReportService;
+	const bgsSimulation: BgsBattleSimulationService | null = enableBattleSim
+		? new BgsBattleSimulationService(
+				apiRunnerReplayMock,
+				cards,
+				new InProcessBgsBattleSimulationExecutor(allCardsRef, battleSimMaxSims),
+				adsReplayMock,
+				bugReportReplayMock,
+				prefsMock as PreferencesService,
+				guardianReplayMock,
+			)
+		: null;
+
 	const parserService = new GameStateParsersService(
 		helper,
 		cards,
@@ -664,10 +758,10 @@ export async function replayPowerLogToGameState(options: ReplayPowerLogOptions):
 		eventsEmitter,
 		null as unknown as BugReportService,
 		null as unknown as LogsUploaderService,
-		null as unknown as BgsBattleSimulationService,
-		{} as any,
-		null as unknown as GameUniqueIdService,
-		null as unknown as BgsIntermediateResultsSimGuardianService,
+		bgsSimulation as BgsBattleSimulationService,
+		adsReplayMock,
+		gameIdReplayMock,
+		guardianReplayMock,
 		reviewIdMock,
 		arenaRefMock,
 	);
@@ -677,7 +771,9 @@ export async function replayPowerLogToGameState(options: ReplayPowerLogOptions):
 	};
 
 	const realTimeStatsMock = { addListener: () => undefined };
-	const bgsSimulationMock = { battleInfo$$: new BehaviorSubject(null) };
+	// Real service when battle sims are enabled, so GameStateService's battleInfo$$
+	// subscription receives actual results; inert subject otherwise.
+	const bgsSimulationProvider = bgsSimulation ?? { battleInfo$$: new BehaviorSubject(null) };
 
 	TestBed.configureTestingModule({
 		providers: [
@@ -698,7 +794,7 @@ export async function replayPowerLogToGameState(options: ReplayPowerLogOptions):
 			GameStateMetaInfoService,
 			{ provide: BgsMatchMemoryInfoService, useValue: bgsMemoryMock },
 			{ provide: RealTimeStatsService, useValue: realTimeStatsMock },
-			{ provide: BgsBattleSimulationService, useValue: bgsSimulationMock },
+			{ provide: BgsBattleSimulationService, useValue: bgsSimulationProvider },
 			{ provide: NgZone, useValue: ngZone },
 			GameEvents,
 			GameStateService,

@@ -15,6 +15,7 @@ import {
 	GameStateService,
 } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
+import { feedPowerLogLinesPaced } from '@firestone/power-log-parser';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { ApiRunner, CardsFacadeService, OverwolfService } from '@firestone/shared/framework/core';
 import { GameStat } from '@firestone/stats/data-access';
@@ -67,9 +68,18 @@ export class DevService {
 				 * event loop so the processing queues can interleave (a 1M-line BG log used to
 				 * accumulate ~4 min of pure sleep with the old 500ms default, dwarfing the
 				 * actual parsing time in the reported total). Set >0 to simulate slow log
-				 * arrival (e.g. real-time stats testing).
+				 * arrival (e.g. real-time stats testing). Ignored when `realtime` is set.
 				 */
 				waitTime?: number;
+				/**
+				 * Feed lines following the log's own `D HH:MM:SS` timestamps, so the replay
+				 * progresses at the pace of the original game (mirrors live batching /
+				 * broadcast cadence far better than a fast feed). `true` = real time, a
+				 * number = speed multiplier (2 = twice as fast).
+				 */
+				realtime?: boolean | number;
+				/** Cap on idle gaps between lines in realtime mode, pre-speed ms (default 15000). */
+				maxGapMs?: number;
 				/** After the last line: wait for the game-events queue + this delay so GameState catches up (default 8000, same as power-log-replay-harness). */
 				settleMs?: number;
 			},
@@ -88,7 +98,7 @@ export class DevService {
 			this.scene.currentScene$$.next(SceneMode.GAMEPLAY);
 			// Do it everytime to reset its memory
 			// await this.gameEvents['initPlugin']();
-			const logsLocation = `E:\\Source\\zerotoheroes\\firestone\\test-tools\\${fileName ?? 'game.log'}`;
+			const logsLocation = `D:\\sources\\firestone\\firestone\\test-tools\\${fileName ?? 'game.log'}`;
 			const logContents = await this.ow.readTextFile(logsLocation);
 			// Don't console.log the raw contents: dumping a 100MB+ string into devtools is slow
 			// and skews the measured total.
@@ -101,17 +111,33 @@ export class DevService {
 			console.log('allowReconnects', allowReconnects);
 			await sleep(2000);
 			const feedStart = Date.now();
-			let currentIndex = 0;
-			for (let line of logLines) {
+			const feedLine = (line: string) => {
 				if (!allowReconnects && line.includes('tag=GAME_SEED')) {
 					line = line.replace(/value=\d+/, `value=${Math.floor(Math.random() * 1000000)}`);
 					console.log('replaced game seed', line);
 				}
 				this.gameEvents.receiveLogLine(line);
-
-				currentIndex++;
-				if (currentIndex % 2000 === 0) {
-					await sleep(options?.waitTime ?? 0);
+			};
+			if (options?.realtime) {
+				const speed = typeof options.realtime === 'number' ? options.realtime : 1;
+				console.log('[fakeGame] realtime feed', { speed, maxGapMs: options?.maxGapMs ?? 15000 });
+				await feedPowerLogLinesPaced(logLines, feedLine, {
+					speed,
+					maxGapMs: options?.maxGapMs,
+					onProgress: (fed, total, elapsedMs) => {
+						if (fed % 50_000 < 2000) {
+							console.log('[fakeGame] realtime progress', fed, '/', total, elapsedMs, 'ms');
+						}
+					},
+				});
+			} else {
+				let currentIndex = 0;
+				for (const line of logLines) {
+					feedLine(line);
+					currentIndex++;
+					if (currentIndex % 2000 === 0) {
+						await sleep(options?.waitTime ?? 0);
+					}
 				}
 			}
 			const feedDone = Date.now();

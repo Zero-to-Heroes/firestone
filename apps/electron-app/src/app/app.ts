@@ -30,6 +30,7 @@ import { registerElectronDiskCacheIpcHandlers } from './services/electron-disk-c
 import { ElectronDiskCacheService } from './services/electron-disk-cache.service';
 import { ElectronHotkeyHandlerService } from './services/electron-hotkey-handler.service';
 import { ElectronWindowHandlerService } from './services/electron-window-handler.service';
+import { startFakeGameDriver } from './services/fake-game-driver';
 import { startMemoryInstrumentation, stopMemoryInstrumentation } from './services/memory-instrumentation.service';
 import { MindVisionElectronService } from './services/mind-vision-electron.service';
 import { registerOpenExternalLinksForAllBrowserWindows } from './services/open-external-links-window-hook';
@@ -664,6 +665,10 @@ export default class App {
 		// Spawn the persistent compute worker (BGS sims + end-of-game upload prep) now,
 		// so the one-time cards clone happens while nothing is latency-sensitive
 		electronInjector.get(ComputeWorkerHost).prewarm();
+
+		// Unattended replay of a recorded Power.log through the real pipeline
+		// (no-op unless FS_FAKE_GAME_LOG is set)
+		startFakeGameDriver(electronInjector);
 
 		const db = electronInjector.get(DATABASE_SERVICE_TOKEN);
 		await db.init();

@@ -25,3 +25,9 @@ export {
 	joinWrappedPowerLogLines,
 	shouldJoinWrappedPowerLogLine,
 } from './lib/join-wrapped-power-log-lines';
+export {
+	computePowerLogFeedOffsetsMs,
+	feedPowerLogLinesPaced,
+	parsePowerLogLineTimestampMs,
+	PowerLogPacingOptions,
+} from './lib/power-log-pacing';
