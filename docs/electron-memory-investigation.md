@@ -687,9 +687,17 @@ log at 2x, `FS_ELECTRON_MEM_CPUPROFILE=1`) — residual stalls ATTRIBUTED:**
 - `s.send` ramps chunk-by-chunk (0.5 → 8 s/2 min) mirroring the wire-size
   growth — confirms the remaining diet targets (`opponentDeck`/`playerDeck`/
   `bgState`) are what's left of the IPC story.
-- Remaining actionable item from this session: **offload `xmlFromReplay`
-  (escapeXml/serializeGameData) to the compute worker** — the last Plan H
-  piece still on main (~1.5 s per game end).
+- Remaining actionable item from this session: the `xmlFromReplay` cost still
+  on main. A full worker offload is unattractive (the replay tree dispatches
+  on `instanceof`, so it doesn't survive structured clone; shipping raw log
+  lines and re-parsing in the worker is the only clean path and adds a large
+  buffer + double-parse). **Done instead: fast-path the XML build itself** —
+  `escapeXml` (two-thirds of the cost per the profile) now skips
+  numeric/boolean attributes and strings with nothing to escape, and the
+  per-entity tag loop avoids map/join churn. 845 → 448 ms (-47%) on the
+  reference BG log, output byte-identical on all 47 golden-xml test logs.
+  Expected live effect: the ~0.6-0.75 s end-of-game stall drops to ~0.3-0.4 s.
+  Revisit the raw-line worker re-parse only if that residue still shows up.
 
 **Session 9 follow-up (offline, same Power.log) — payload diet scoped and
 IMPLEMENTED; validated in-app in session 10:**
