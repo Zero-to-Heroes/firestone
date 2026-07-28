@@ -16,6 +16,10 @@
  * intermediate results with done: false. Errors resolve to { result: null } so the
  * host can fall back to its main-thread path.
  */
+// Must come first: shims the Node globals (process, global) that the replay-XML
+// parser chain reads at module init — see worker-node-globals.ts
+import './worker-node-globals';
+
 import { extractStatsForGame } from '@firestone-hs/build-global-stats/dist/stats-builder';
 import {
 	CardsPlayedByTurnParser,
