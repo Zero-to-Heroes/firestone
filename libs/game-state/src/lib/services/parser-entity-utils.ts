@@ -63,20 +63,38 @@ export function getEntityTag(entity: EntityLike | undefined | null, tag: GameTag
  * Materialize parser entities for Electron IPC. `FullEntity.Tags` is a prototype getter over
  * `_tags`; structured clone drops the getter, which breaks overlay counters that read Tags.
  * Idempotent so it is safe when the facade transform runs on both main and renderer.
+ *
+ * `dropRemovedFromGame` (Plan D payload diet, docs/electron-memory-investigation.md):
+ * in late BG games ~90% of the wire bytes are dead combat minions in REMOVEDFROMGAME
+ * (2.09 MB of a 2.86 MB wire value at turn 17, measured on the session 9 log). No
+ * renderer-side consumer reads that zone in BG (audited: BG counters read controller
+ * entities + PLAY enchantments, highlights/dynamic pools read hovered HAND/PLAY
+ * entities; the dead-zone readers — dark-gifts, bashana, godfrey — are
+ * constructed-only). Main keeps the raw state either way; only the wire copy shrinks.
  */
 export function sanitizeParserStateForElectron(
 	parserState: ParserGameStateLite | null | undefined,
+	options?: { dropRemovedFromGame?: boolean },
 ): ParserGameStateLite | undefined {
 	if (!parserState) {
 		return undefined;
 	}
+	const controllerEntityMap = parserState.ControllerEntityMap ?? new Map<number, number>();
+	const controllerEntityIds = options?.dropRemovedFromGame ? new Set(controllerEntityMap.values()) : null;
 	const currentEntities = new Map<number, FullEntity>();
 	for (const [id, entity] of parserState.CurrentEntities ?? []) {
+		if (
+			controllerEntityIds &&
+			!controllerEntityIds.has(id) &&
+			getTag(getEntityTags(entity), GameTag.ZONE) === (Zone.REMOVEDFROMGAME as number)
+		) {
+			continue;
+		}
 		currentEntities.set(id, sanitizeEntityForElectron(entity) as FullEntity);
 	}
 	return {
 		CurrentEntities: currentEntities,
-		ControllerEntityMap: parserState.ControllerEntityMap ?? new Map(),
+		ControllerEntityMap: controllerEntityMap,
 	};
 }
 
