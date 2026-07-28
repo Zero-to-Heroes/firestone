@@ -20,6 +20,7 @@ import {
 	DeckParserService,
 	GameModeDataService,
 	GameStateFacadeService,
+	isPreReleaseBuild,
 	OverlayDisplayService,
 	RealTimeStatsService,
 	ReviewIdService,
@@ -98,7 +99,11 @@ export class BootstrapOtherServicesService {
 		private readonly init_HotkeyFacadeService: HotkeyFacadeService,
 		private readonly init_GlobalStatsService: GlobalStatsService,
 		private readonly init_InGameReplayService: InGameReplayService,
-	) {}
+	) {
+		// Pass the build flag in from here: mods/common cannot import @firestone/game-state
+		// without creating a dependency cycle.
+		this.modsManager.setPreReleaseBuild(isPreReleaseBuild);
+	}
 
 	public async bootstrapServices(): Promise<void> {
 		this.modsBootstrap.init();

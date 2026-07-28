@@ -22,6 +22,7 @@ import { BehaviorSubject } from 'rxjs';
 import { distinctUntilChanged, filter, map } from 'rxjs/operators';
 import {
 	DEFAULT_MODS_ENGINE_CONFIG,
+	DEFAULT_MODS_ENGINE_CONFIG_PRERELEASE,
 	DOORSTOP_CONFIG_INI,
 	ModsEngineArch,
 	ModsEngineConfig,
@@ -36,8 +37,8 @@ import {
 } from './bepin-config';
 
 // Built in mods-backend lambda
-// Bump ?v= when trustedMods schema changes (e.g. optional Description on entries).
-const MODS_CONFIG_URL = 'https://static.zerotoheroes.com/mods/mods-config.json?v=8';
+// Bump ?v= when trustedMods schema / engine blocks change.
+const MODS_CONFIG_URL = 'https://static.zerotoheroes.com/mods/mods-config.json?v=9';
 
 const modsLocation = 'BepInEx\\plugins';
 export const configLocation = 'BepInEx\\config';
@@ -48,6 +49,20 @@ export type ModsCheckStatus = 'wrong-path' | 'installed' | 'not-installed' | 'en
 export class ModsManagerService extends AbstractFacadeService<ModsManagerService> {
 	public modsData$$: BehaviorSubject<readonly ModData[]>;
 	public currentModsStatus$$: BehaviorSubject<string | null>;
+
+	/**
+	 * Set from bootstrap (Overwolf / Electron) from `isPreReleaseBuild` in game-state.
+	 * When true, uses Unity 6.3+ (enginePreRelease) unstripped corlibs.
+	 * Always write through to mainInstance so facade windows stay in sync.
+	 */
+	public preReleaseBuild = false;
+
+	public setPreReleaseBuild(value: boolean): void {
+		this.preReleaseBuild = value;
+		if (this.mainInstance && this.mainInstance !== (this as unknown as ModsManagerService)) {
+			this.mainInstance.preReleaseBuild = value;
+		}
+	}
 
 	// private ws: WebSocket | null;
 
@@ -88,9 +103,10 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 		const remoteConfig = await this.api.callGetApi<Partial<ModsRemoteConfig>>(MODS_CONFIG_URL);
 		this.modsConfig = {
 			engine: remoteConfig?.engine ?? DEFAULT_MODS_ENGINE_CONFIG,
+			enginePreRelease: remoteConfig?.enginePreRelease ?? DEFAULT_MODS_ENGINE_CONFIG_PRERELEASE,
 			trustedMods: remoteConfig?.trustedMods ?? [],
 		};
-		console.debug('[mods-manager] modsConfig', this.modsConfig);
+		console.debug('[mods-manager] modsConfig', this.modsConfig, 'preReleaseBuild', this.preReleaseBuild);
 
 		// this.gameStatus.inGame$$.pipe(distinctUntilChanged()).subscribe(async (inGame) => {
 		// 	const prefs = await this.prefs.getPreferences();
@@ -624,6 +640,12 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 	}
 
 	private getEngineConfig(): ModsEngineConfig {
+		if (this.preReleaseBuild) {
+			return (
+				this.modsConfig?.enginePreRelease ??
+				DEFAULT_MODS_ENGINE_CONFIG_PRERELEASE
+			);
+		}
 		return this.modsConfig?.engine ?? DEFAULT_MODS_ENGINE_CONFIG;
 	}
 

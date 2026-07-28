@@ -29,5 +29,36 @@
       "UniTask.Linq.dll"
     ],
     "doorstopConfigUrl": "https://static.zerotoheroes.com/mods/doorstop_config.ini"
+  },
+  "enginePreRelease": {
+    "x86": {
+      "bepInExZip": "https://static.zerotoheroes.com/mods/BepInEx_win_x86_5.4.23.5.zip",
+      "unstrippedCorlibsBaseUrl": "https://static.zerotoheroes.com/mods/unstripped_corlibs_prerelease"
+    },
+    "x64": {
+      "bepInExZip": "https://static.zerotoheroes.com/mods/BepInEx_win_x64_5.4.23.5.zip",
+      "unstrippedCorlibsBaseUrl": "https://static.zerotoheroes.com/mods/unstripped_corlibs_x64_prerelease"
+    },
+    "unstrippedLibs": [
+      "mscorlib.dll",
+      "Mono.Security.dll",
+      "System.Core.dll",
+      "System.dll",
+      "UniTask.dll",
+      "Microsoft.CSharp.dll",
+      "Mono.Posix.dll",
+      "netstandard.dll",
+      "Newtonsoft.Json.dll",
+      "System.Configuration.dll",
+      "System.Data.dll",
+      "System.Net.Http.dll",
+      "System.Numerics.dll",
+      "System.Runtime.Serialization.dll",
+      "System.Security.dll",
+      "System.Xml.dll",
+      "System.Xml.Linq.dll",
+      "UniTask.Linq.dll"
+    ],
+    "doorstopConfigUrl": "https://static.zerotoheroes.com/mods/doorstop_config.ini"
   }
 }
