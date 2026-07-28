@@ -201,11 +201,15 @@ continuity; H is new.
    **IMPLEMENTED and confirmed in-game** (session 4): merged with the Plan H worker
    into one persistent compute worker; per-fight RSS oscillation gone, at the cost
    of ~200 MB resident (the worker's cards copy, inside main's OS process).
-3. **Plan G (reduced scope first) - match-start and in-game stalls**: match start
-   blocks 4.3-5.5 s (around MindVision battlegroundsInfo reads), per-turn stalls grow
-   to 0.6-1.0 s by turns 7-13. Profile what exactly blocks (MindVision edge.js calls
-   vs parser burst vs serialize+send) before committing to the full utilityProcess
-   move.
+3. **Plan G - match-start and in-game stalls**: **SCOPED (sessions 6-7, full
+   attribution — see the Plan G section)**. The full utilityProcess move is off the
+   table; the measured ranking is: (a) `game-state-facade` IPC broadcast fan-out is
+   the per-turn cost (517 sends ≥100 ms, 71.5 s total in one game — implement the
+   Plan D handshake / payload diet), (b) match start is API-response `JSON.parse`
+   on main (~5.3 s, BG meta-hero stats) plus Electron IPC serialization of those
+   payloads (~4.2 s) — move heavy GET+parse off main, (c) MindVision edge calls are
+   confirmed 100% synchronous but moderate in total (~2.9 s/session, mostly at HS
+   launch). Parser burst and game-state batches are exonerated (≤665 ms worst).
 4. **Plan B (remaining items) - GPU / offscreen overlay + ad/owepm renderers**:
    attribution is done; what is left is the 510-575 MB GPU cost of the offscreen
    overlay, the 173-224 MB ad renderer, and the 153-216 MB hidden owepm window. Mostly
@@ -215,10 +219,11 @@ continuity; H is new.
    it for the power.log upload. Verify and fix (feed the buffer in
    `app.ts`/`GameEvents`, or read the on-disk log at upload time — the latter also
    implements Plan C track 1 for free).
-6. **Plan D - IPC fan-out handshake**: still correct, but demoted — in the measured
-   sessions only overlay + battlegrounds windows were open (both genuinely need game
-   state), so fan-out waste was minimal. Becomes relevant when collection/settings/
-   lottery windows are open during a game.
+6. **Plan D - IPC fan-out handshake**: **re-promoted — now the concrete top item of
+   Plan G (a)**. The earlier "fan-out waste was minimal" assessment was wrong:
+   session 7 measured `webContents.send('game-state-facade', ...)` structured
+   clones at 100-390 ms each, 517 of them ≥100 ms in one game (71.5 s total), the
+   direct cause of the 0.5-1.0 s per-turn stalls.
 7. **Plan C track 2 - TagsHistory cap**: demoted — main heapUsed grew only 140->330 MB
    over 13 turns (119k TagsHistory entries); real but small compared to the above.
    Track 1 as originally written is moot (the buffer is empty on Electron; see the bug
@@ -409,7 +414,103 @@ Measured stall numbers (2026-07-27) that scope this plan: match start blocks mai
 7-13); a 2.3 s stall occurred while MindVision read memory from a dying Hearthstone
 process. Session 5 (with Plans F+H fully in) confirms the same profile — match
 start 3.2 s + 3.7 s, per-turn stalls 0.5-1.3 s from turn 4 on — making this plan
-the top remaining stall source now that the end-of-game window is clean. Before committing to the full move, profile WHICH of these is MindVision
+the top remaining stall source now that the end-of-game window is clean.
+
+**Attribution instrumentation ADDED (2026-07-27, awaiting a measured game):** the
+memory instrumentation (`FS_ELECTRON_MEM=1`) now installs a `globalThis.__fsSlowOp`
+hook; four choke points report timestamped durations through it (JSONL
+`kind: "slow-op"` records + `[fs-mem-slow-op]` main-log lines, threshold 100 ms),
+so each stall can be attributed to a suspect by timestamp:
+
+- `mindvision` — every edge.js call (`mind-vision-edge.js callPluginMethod`), with
+  `syncMs` = how long the invocation blocked before returning vs `ms` = total wall
+  time until the .NET callback. Large `ms` with small `syncMs` means the call runs
+  async on the CLR and does NOT explain a main-thread stall — this single field
+  decides whether "make MindVision non-blocking" is even a thing.
+- `parser` — each synchronous `processLogsWithTsParser` batch (line count included).
+- `game-state` — each `GameStateService.processQueue` chunk ≥100 ms (event count +
+  type sample).
+- `ipc` — each facade `next` broadcast (`abstract-facade-service.ts`), split into
+  `serializeMs` vs `sendMs` (structured clone inside `webContents.send`).
+
+How to read a session: for each `stall` record, find the `slow-op` records in the
+preceding couple of seconds; the category totals over the match-start window and
+per-turn windows give the ranking that decides this plan's scope (MindVision
+non-blocking vs parser move vs serialize diet).
+
+**Session 6 findings (2026-07-27 22:31, crashed at turn 5 — see the crash note
+below; ~10 min of data, still conclusive on the main question):**
+
+- **MindVision is 100% synchronous.** Every single edge.js call had `syncMs == ms`:
+  the invocation blocks the main thread for its whole duration, the .NET side never
+  runs async from the caller's perspective. `isBootstrapped` blocked 2268 ms
+  (matching a 2280 ms stall exactly); `getAchievementsInfo` 191-321 ms x3,
+  `getRegion` 235 ms, `getPlayerProfileInfo` 225 ms, `getRewardsTrackInfo` 139 ms,
+  `getBattlegroundsInfo` 133 ms. "Make MindVision calls non-blocking" is therefore
+  real and the top lever of this plan.
+- **Parser burst and game-state batches are small**: the CREATE_GAME batch (611
+  lines) parsed in 116 ms; the worst game-state chunk was 192 ms at match start.
+  Moving the parser off main looks like poor value on current data.
+- **IPC**: one 277 ms broadcast (`ArenaCardStatsService-cardStats`, all of it
+  `sendMs` — the structured clone inside `webContents.send`, paid per window).
+  Worth a look (why do arena card stats broadcast during a BG session at all?),
+  but not a top stall source.
+- **Unattributed**: the 2.46 s startup stall (suspected: the prewarm cards-DB clone
+  in `ComputeWorkerHost` `postMessage` — now probed as `worker/init-cards-clone`)
+  and 2.2 s + 1.8 s around hero selection in a quiet log window (windows/ads/meta
+  stats all plausible). Rather than guessing more probes, the instrumentation now
+  also records a **session-wide chunked CPU profile** of the main thread
+  (`cpu-<session>-NNN.cpuprofile` next to the JSONL, 120 s self-contained chunks so
+  a crash loses at most the last chunk); the next measured game attributes every
+  stall to a JS stack by timestamp.
+- **Per-turn stalls were small this session** (21-185 ms up to turn 5) — consistent
+  with earlier sessions' early turns; the 0.5-1.3 s per-turn stalls appeared from
+  turn ~5-7 onwards, which this session never reached.
+
+**Crash note (session 6):** the main process died at turn 5 with exception
+`0x80000003` (STATUS_BREAKPOINT — a fatal CHECK/assert), faulting module
+`electron.exe` itself (ow-electron 39.8.12), no JS error in any log, memory healthy
+(main 613 MB). Same symptom as the earlier "game crashed before the end" session.
+This is an ow-electron/Chromium-internal failure, not app JS; a WER minidump exists
+under `C:\ProgramData\Microsoft\Windows\WER\` if it keeps recurring. Track
+separately from the memory work.
+
+**Session 7 (2026-07-28 08:58, full game to turn 15) — SCOPING COMPLETE. Every
+stall attributed** (slow-op probes + the chunked CPU profiler, stall windows
+extracted from the `.cpuprofile` chunks by timestamp):
+
+1. **Per-turn stalls = `game-state-facade` broadcast fan-out.** 517 broadcasts
+   ≥100 ms (100-394 ms each, 71.5 s total over the game); every turn-7+ stall
+   (0.5-1.0 s) is a burst of 2-5 consecutive sends. The profile stack is
+   unambiguous: `s.send <- broadcastToRenderers <- obs.next` — the structured
+   clone inside `webContents.send`, paid once per window per update; `serializeMs`
+   (the app-level `serializeForElectron`) is only 5-50 ms of each. Fix =
+   original Plan D (only send to windows that subscribed) and/or shrink the wire
+   payload / rate-limit; the send count also scales with window count (overlay,
+   BG, hidden main, ads, owepm all receive every update today).
+2. **Match-start stall (12 s nearly continuous at hero selection, 3.4+4.9+4.0 s) =
+   API payloads processed on main.** The stall window contained ~18 s of CPU:
+   5.3 s `ElectronApiRunner.parseJsonResponse` (`JSON.parse` of large HTTP
+   responses on main — timing matches the BG meta-hero stats fetch used by hero
+   selection, `bgs-hero-stats-guardian` fires as the window ends), 4.2 s of
+   Electron-internal IPC serialization in microtasks (shipping those payloads to
+   renderers via handle replies/broadcasts), 1.1 s GC, ~0.5 s achievements
+   `buildCategory`/`buildAchievements`, 0.4 s MindVision `getAchievementsInfo`.
+   Fix = fetch+parse big reference payloads off main (compute worker or
+   utilityProcess fetch), plus the same IPC diet as (1).
+3. **MindVision: confirmed synchronous, moderate total.** `syncMs == ms` on every
+   call again; ~2.9 s/session, dominated by `isBootstrapped` (1.1 s, once at HS
+   launch). Worth fixing eventually (async edge invocation or re-homing), but
+   below (1) and (2).
+4. **Exonerated**: parser burst (worst batch 665 ms at CREATE_GAME, one-off) and
+   game-state processing (worst chunk 401 ms); startup stall is cards load +
+   451 ms measured `init-cards-clone` (accepted, startup-only). The offscreen
+   overlay's `getBitmap`/`updateBuffer` paints ~1.2 s per 36 s window on main —
+   background load that belongs to Plan B, not a stall spike source.
+
+The utilityProcess pipeline move is therefore NOT needed on current data; Plan G
+resolves into two targeted fixes: the game-state-facade broadcast diet (top) and
+moving API fetch+parse off main (second). Before committing to the full move, profile WHICH of these is MindVision
 (edge.js runs on the main thread) vs parser burst vs game-state serialize+send — the
 answer may shrink this plan to "make MindVision calls non-blocking" plus Plan H.
 

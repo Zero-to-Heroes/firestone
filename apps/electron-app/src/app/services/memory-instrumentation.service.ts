@@ -14,18 +14,25 @@ import { PowerLogBufferService } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { app, BrowserWindow, webContents } from 'electron';
 import { existsSync, mkdirSync } from 'fs';
-import { appendFile } from 'fs/promises';
+import { appendFile, writeFile } from 'fs/promises';
+import { Session } from 'inspector';
 import { join } from 'path';
 
 const STALL_DETECTOR_TICK_MS = 250;
 const STALL_LOG_THRESHOLD_MS = 500;
 const DEFAULT_SAMPLE_INTERVAL_S = 15;
+const SLOW_OP_THRESHOLD_MS = 100;
+const CPU_PROFILE_CHUNK_S = 120;
 
 let sampleTimer: NodeJS.Timeout | null = null;
 let stallTimer: NodeJS.Timeout | null = null;
 let turnStartUnsubscribe: (() => void) | null = null;
 let writeChain: Promise<void> = Promise.resolve();
 let outputFilePath: string | null = null;
+let profilerSession: Session | null = null;
+let profilerChunkTimer: NodeJS.Timeout | null = null;
+let profilerChunkIndex = 0;
+let profilerBasePath: string | null = null;
 
 export const isMemoryInstrumentationEnabled = (): boolean => process.env['FS_ELECTRON_MEM'] === '1';
 
@@ -97,6 +104,19 @@ export const startMemoryInstrumentation = (injector: Injector): void => {
 		console.warn('[fs-mem] could not subscribe to TURN_START events', e);
 	}
 
+	// Stall-attribution hook (Plan G scoping): instrumented choke points (MindVision
+	// edge calls, the power.log parser burst, game-state batches, facade IPC
+	// serialize+send) report their duration through globalThis so shared libs don't
+	// depend on this module. Slow ones land in the JSONL next to the stall records,
+	// which attributes each stall to a suspect by timestamp.
+	(globalThis as any).__fsSlowOp = (category: string, name: string, ms: number, extra?: object) => {
+		if (!(ms >= SLOW_OP_THRESHOLD_MS)) {
+			return;
+		}
+		console.log('[fs-mem-slow-op]', category, name, `${Math.round(ms)}ms`, extra ? JSON.stringify(extra) : '');
+		writeRecord({ kind: 'slow-op', category, name, ms: Math.round(ms), ...extra });
+	};
+
 	const takeSample = () => {
 		try {
 			const sample = buildSample(injector, maxStallSinceSample);
@@ -108,6 +128,63 @@ export const startMemoryInstrumentation = (injector: Injector): void => {
 	};
 	sampleTimer = setInterval(takeSample, intervalS * 1000);
 	takeSample();
+
+	startCpuProfiler(`memory-${date}-${time}`);
+};
+
+/**
+ * Session-wide sampled CPU profile of the main thread, in self-contained chunks so
+ * a crash only loses the last chunk. Attributes any main-thread stall (by
+ * timestamp) to a JS stack — the generic complement to the targeted __fsSlowOp
+ * probes, added after session 6 left the hero-selection stalls unattributed.
+ * Chunks land next to the JSONL as cpu-<session>-NNN.cpuprofile (loadable in Chrome
+ * DevTools / speedscope).
+ */
+const startCpuProfiler = (sessionName: string): void => {
+	try {
+		profilerBasePath = outputFilePath ? join(outputFilePath, '..', `cpu-${sessionName}`) : null;
+		profilerSession = new Session();
+		profilerSession.connect();
+		profilerSession.post('Profiler.enable');
+		profilerSession.post('Profiler.start');
+		profilerChunkTimer = setInterval(() => rotateCpuProfileChunk(false), CPU_PROFILE_CHUNK_S * 1000);
+		console.log('[fs-mem] CPU profiler started', `chunk=${CPU_PROFILE_CHUNK_S}s`, `base=${profilerBasePath}`);
+	} catch (e) {
+		console.warn('[fs-mem] could not start CPU profiler', e);
+		profilerSession = null;
+	}
+};
+
+const rotateCpuProfileChunk = (final: boolean): Promise<void> => {
+	const session = profilerSession;
+	if (!session || !profilerBasePath) {
+		return Promise.resolve();
+	}
+	return new Promise((resolve) => {
+		session.post('Profiler.stop', (err, result) => {
+			const profile = (result as any)?.profile;
+			if (!err && profile) {
+				const chunkPath = `${profilerBasePath}-${String(profilerChunkIndex).padStart(3, '0')}.cpuprofile`;
+				profilerChunkIndex++;
+				writeChain = writeChain
+					.then(() => writeFile(chunkPath, JSON.stringify(profile)))
+					.catch(() => undefined);
+			} else if (err) {
+				console.warn('[fs-mem] CPU profile chunk failed', err);
+			}
+			if (!final) {
+				session.post('Profiler.start');
+			} else {
+				try {
+					session.disconnect();
+				} catch (e) {
+					// ignore
+				}
+				profilerSession = null;
+			}
+			resolve();
+		});
+	});
 };
 
 export const stopMemoryInstrumentation = async (): Promise<void> => {
@@ -121,6 +198,12 @@ export const stopMemoryInstrumentation = async (): Promise<void> => {
 	}
 	turnStartUnsubscribe?.();
 	turnStartUnsubscribe = null;
+	delete (globalThis as any).__fsSlowOp;
+	if (profilerChunkTimer) {
+		clearInterval(profilerChunkTimer);
+		profilerChunkTimer = null;
+	}
+	await rotateCpuProfileChunk(true);
 	await writeChain;
 };
 

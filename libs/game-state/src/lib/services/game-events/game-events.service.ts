@@ -1968,6 +1968,10 @@ export class GameEvents {
 		hasCreateGame: boolean,
 		hasGameSeed: boolean,
 	): boolean {
+		// Stall-attribution hook installed by the platform instrumentation (no-op
+		// otherwise); this whole batch runs synchronously on the calling thread
+		const perfHook = (globalThis as any).__fsSlowOp;
+		const perfStart = perfHook ? performance.now() : 0;
 		if (!this.tsParser) {
 			this.initTsParser();
 		}
@@ -1993,6 +1997,11 @@ export class GameEvents {
 		this.tsParser!.State.PTLState.NodeParser.ClearQueue();
 		this.tsParser!.emitPtlGameState();
 
+		if (perfHook) {
+			perfHook('parser', 'processLogsWithTsParser', performance.now() - perfStart, {
+				lines: eventQueue.length,
+			});
+		}
 		return true;
 	}
 

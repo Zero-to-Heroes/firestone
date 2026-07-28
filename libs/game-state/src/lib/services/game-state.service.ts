@@ -402,6 +402,17 @@ export class GameStateService {
 			// already in `processEvent` so a freeze can be attributed to either an
 			// individual parser or batch-level overhead (e.g. rewind deep-clone storms).
 			const batchElapsed = Date.now() - batchStart;
+			// Stall-attribution hook installed by the platform instrumentation (no-op otherwise)
+			const perfHook = (globalThis as any).__fsSlowOp;
+			if (perfHook && batchElapsed >= 100) {
+				perfHook('game-state', 'processQueue', batchElapsed, {
+					events: subQueue.length,
+					sample: subQueue
+						.map((event) => event?.type)
+						.filter((t) => !!t)
+						.slice(0, 8),
+				});
+			}
 			if (batchElapsed > 500) {
 				const sample = subQueue
 					.map((event) => event?.type)

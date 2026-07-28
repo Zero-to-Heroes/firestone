@@ -158,7 +158,23 @@ export abstract class AbstractFacadeService<T extends AbstractFacadeService<T>> 
 				const originalNext = obs.next.bind(obs);
 				obs.next = (value: V) => {
 					originalNext(value);
-					this.broadcastToRenderers(eventName, serialize(value));
+					// Stall-attribution hook installed by the platform instrumentation
+					// (no-op otherwise): splits serialize cost from the IPC send
+					// (structured clone happens inside webContents.send)
+					const perfHook = (globalThis as any).__fsSlowOp;
+					if (perfHook) {
+						const serializeStart = performance.now();
+						const wire = serialize(value);
+						const sendStart = performance.now();
+						this.broadcastToRenderers(eventName, wire);
+						const sendEnd = performance.now();
+						perfHook('ipc', eventName, sendEnd - serializeStart, {
+							serializeMs: Math.round(sendStart - serializeStart),
+							sendMs: Math.round(sendEnd - sendStart),
+						});
+					} else {
+						this.broadcastToRenderers(eventName, serialize(value));
+					}
 				};
 				// Listen for updates from renderer processes
 				const updateChannel = `${eventName}-update`;

@@ -113,7 +113,12 @@ export class ComputeWorkerHost {
 			console.warn('[compute-worker] worker exited with code', code);
 			this.discardWorker(worker);
 		});
+		// postMessage structured-clones the whole cards DB on the calling thread —
+		// report it to the stall-attribution hook (suspected cause of the ~2.4s
+		// startup stall seen in session 6)
+		const initStart = performance.now();
 		worker.postMessage({ type: 'init', cards: this.cardsProvider() });
+		(globalThis as any).__fsSlowOp?.('worker', 'init-cards-clone', performance.now() - initStart);
 		this.worker = worker;
 		return worker;
 	}

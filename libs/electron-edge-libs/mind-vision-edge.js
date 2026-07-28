@@ -7,13 +7,13 @@ class MindVisionEdge {
 		// If we're in an asar archive, redirect to the unpacked location
 		let baseDir = __dirname;
 		console.log('[MindVisionEdge] Original __dirname:', baseDir);
-		
+
 		// Handle both forward and backslashes, and different path formats
 		if (baseDir.includes('app.asar')) {
 			baseDir = baseDir.replace(/app\.asar/g, 'app.asar.unpacked');
 			console.log('[MindVisionEdge] Redirected to unpacked location:', baseDir);
 		}
-		
+
 		const dllPath = path.join(baseDir, 'OverwolfUnitySpy.dll');
 		const newtonsoftPath = path.join(baseDir, 'Newtonsoft.Json.dll');
 
@@ -261,6 +261,11 @@ class MindVisionEdge {
 			throw new Error('Plugin not initialized');
 		}
 
+		// Stall-attribution probe (Plan G scoping): syncMs is how long the edge.js
+		// invocation itself blocked before returning (main-thread block); ms is the
+		// total wall time until the .NET callback fired. A slow call with small syncMs
+		// runs async on the CLR and does NOT explain a main-thread stall.
+		const perfHook = globalThis.__fsSlowOp;
 		return new Promise((resolve, reject) => {
 			try {
 				// Get cached edge function for this method
@@ -268,8 +273,16 @@ class MindVisionEdge {
 				const edgeFunc = this.getEdgeFunction(methodName);
 				// console.debug('[MindVisionEdge] [debug]', methodName, 'Got edge function:');
 
+				const invokeStart = perfHook ? Date.now() : 0;
+				let invokeReturnedAt = 0;
 				// All methods now follow the same pattern: async Task<object> MethodName(dynamic input)
 				edgeFunc(params, (error, result) => {
+					if (perfHook) {
+						const now = Date.now();
+						perfHook('mindvision', methodName, now - invokeStart, {
+							syncMs: (invokeReturnedAt || now) - invokeStart,
+						});
+					}
 					// console.debug('[MindVisionEdge] [debug]', methodName, 'Edge function result:', result);
 					if (error) {
 						reject(error);
@@ -277,6 +290,7 @@ class MindVisionEdge {
 						this.handleMethodResult(result, methodName, resolve, reject);
 					}
 				});
+				invokeReturnedAt = Date.now();
 			} catch (error) {
 				reject(error);
 			}
