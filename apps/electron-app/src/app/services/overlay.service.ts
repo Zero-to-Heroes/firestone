@@ -572,11 +572,11 @@ export class OverlayService extends EventEmitter {
 		});
 
 		this.overlayApi.on('game-input-interception-changed', (info) => {
-			console.log('⌨️ Input interception changed:', info);
+			console.log('Input interception changed:', info);
 		});
 
 		this.overlayApi.on('game-input-exclusive-mode-changed', (info) => {
-			console.log('🎮 Input exclusive mode changed:', info);
+			console.log('Input exclusive mode changed:', info);
 		});
 	}
 

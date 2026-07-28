@@ -3,6 +3,7 @@ import {
 	extractTotalDuration,
 	extractTotalTurns,
 	parseHsReplayString,
+	Replay,
 } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { isBattlegrounds, isMercenaries } from '@firestone-hs/reference-data';
 import { ReplayUploadMetadata } from '@firestone-hs/replay-metadata';
@@ -10,6 +11,7 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { extractPlayerInfoFromDeckstring, GameStat } from '@firestone/stats/data-access';
 import { deflate, inflate } from 'pako';
 import { GameForUpload } from '../models/game-for-upload/game-for-upload';
+import { ReplayEssentials } from '../models/replay-essentials';
 
 export const buildGameStat = (
 	reviewId: string,
@@ -22,11 +24,20 @@ export const buildGameStat = (
 	// parse, Plan H phase 2) or game.replay; re-parsing an 8MB+ replay here used to
 	// block the main thread for seconds (Plan H). Both types share the field names
 	// used below.
-	const essentials = game.replayEssentials ?? null;
-	const replay = essentials ? null : (game.replay ?? parseHsReplayString(xml, allCards.getService()));
-	const src = essentials ?? replay;
-	const durationInSeconds = essentials ? essentials.totalDurationSeconds : extractTotalDuration(replay);
-	const durationInTurns = essentials ? essentials.totalDurationTurns : extractTotalTurns(replay);
+	const essentials = game.replayEssentials;
+	let src: ReplayEssentials | Replay;
+	let durationInSeconds: number;
+	let durationInTurns: number;
+	if (essentials) {
+		src = essentials;
+		durationInSeconds = essentials.totalDurationSeconds;
+		durationInTurns = essentials.totalDurationTurns;
+	} else {
+		const replay = game.replay ?? parseHsReplayString(xml, allCards.getService());
+		src = replay;
+		durationInSeconds = extractTotalDuration(replay);
+		durationInTurns = extractTotalTurns(replay);
+	}
 
 	const { playerClassFromReplay, playerCardIdFromReplay } = {
 		playerClassFromReplay: allCards.getCard(src.mainPlayerCardId)?.playerClass?.toLowerCase(),

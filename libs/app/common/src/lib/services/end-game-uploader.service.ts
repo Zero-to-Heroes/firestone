@@ -152,7 +152,10 @@ export class EndGameUploaderService {
 			// you would WANT these games to be recorded though, except that it will mess up with the next
 			// game's "next MMR" in some cases
 			if (prefs.bgsIgnoreGamesEndingBeforeHeroSelection) {
-				const durationInTurns = essentials ? essentials.totalDurationTurns : extractTotalTurns(replay);
+				// When essentials is set, replay is intentionally null (worker path); otherwise replay was parsed above
+				const durationInTurns = essentials
+					? essentials.totalDurationTurns
+					: extractTotalTurns(replay!);
 				console.debug(
 					'[manastorm-bridge] bgsIgnoreGamesEndingBeforeHeroSelection is true, duration is',
 					durationInTurns,
@@ -185,7 +188,7 @@ export class EndGameUploaderService {
 			console.log('[manastorm-bridge]', currentReviewId, 'available races', availableRaces);
 			game.availableTribes = availableRaces ?? [];
 			game.bannedTribes = bannedRaces ?? [];
-			game.additionalResult = essentials ? essentials.additionalResult : replay.additionalResult;
+			game.additionalResult = essentials ? essentials.additionalResult : replay!.additionalResult;
 			console.log('[manastorm-bridge]', currentReviewId, 'updated player rank', playerRank, newPlayerRank);
 			game.hasBgsPrizes = info.gameSettings?.battlegroundsPrizes;
 			game.hasBgsSpells = info.gameSettings?.battlegroundsSpells;
@@ -356,13 +359,13 @@ export class EndGameUploaderService {
 		// We don't want to store this, as it will drastically increase the memory footprint over time
 		// game.uncompressedXmlReplay = replayXml;
 		// console.log('[manastorm-bridge]', currentReviewId, 'set xml replay');
-		this.gameParserService.extractMatchup(essentials ?? replay, game);
+		this.gameParserService.extractMatchup((essentials ?? replay)!, game);
 		console.log('[manastorm-bridge]', currentReviewId, 'extracted matchup');
 		if (essentials) {
 			game.durationTimeSeconds = essentials.totalDurationSeconds;
 			game.durationTurns = essentials.totalDurationTurns;
 		} else {
-			this.gameParserService.extractDuration(replay, game);
+			this.gameParserService.extractDuration(replay!, game);
 		}
 		console.log('[manastorm-bridge]', currentReviewId, 'extracted duration');
 
