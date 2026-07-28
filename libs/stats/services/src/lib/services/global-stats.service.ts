@@ -51,8 +51,8 @@ export class GlobalStatsService extends AbstractFacadeService<GlobalStatsService
 		this.user = AppInjector.get(UserService);
 		this.events = AppInjector.get(Events);
 		this.allCards = AppInjector.get(CardsFacadeService);
-		// Only provided on Electron; when present, the replay-XML parse runs in a worker
-		// thread instead of blocking the main thread (Plan H)
+		// When present (Electron compute worker / Overwolf web worker), the replay-XML
+		// parse runs in a worker instead of blocking the calling thread (Plan H)
 		this.uploadPrep = AppInjector.get(UploadPrepExecutorService, null);
 
 		this.globalStats$$.onFirstSubscribe(async () => {

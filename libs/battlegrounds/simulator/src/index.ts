@@ -21,3 +21,4 @@ export * from './lib/services/sim-ui-controller/state-manager.service';
 export * from './lib/services/simulator-keyboard-controls.service';
 export * from './lib/workers/bgs-battle-positioning-worker.service';
 export * from './lib/workers/bgs-battle-simulation-worker.service';
+export * from './lib/workers/web-worker-upload-prep.service';

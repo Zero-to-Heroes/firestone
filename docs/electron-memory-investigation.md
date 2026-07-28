@@ -220,12 +220,20 @@ continuity; H is new.
 4. **Plan B (remaining items) - GPU / offscreen overlay + ad/owepm renderers**:
    attribution is done; what is left is the 510-575 MB GPU cost of the offscreen
    overlay, the 173-224 MB ad renderer, and the 153-216 MB hidden owepm window. Mostly
-   ow-electron-constrained; investigate what is actionable.
-5. **Bug (separate from memory work): empty power.log uploads on Electron** —
-   `PowerLogBufferService` is never fed on Electron, but `ReplayUploadService` reads
-   it for the power.log upload. Verify and fix (feed the buffer in
-   `app.ts`/`GameEvents`, or read the on-disk log at upload time — the latter also
-   implements Plan C track 1 for free).
+   ow-electron-constrained; **investigated 2026-07-28, no app-side lever found** —
+   see the Plan B section (overlay frame PNG-encoding on main found by the session 11
+   profile; the GPU backing stores and the ad/owepm renderers are ow-electron
+   internals; two concrete upstream questions recorded).
+5. **Bug: empty power.log uploads on Electron** — **FIXED 2026-07-28**:
+   `PowerLogBufferService` is never fed on Electron, so premium power.log uploads
+   shipped an empty file. `ReplayUploadService` now sends the on-disk Power.log
+   *path* to the compute worker, which reads it, trims it to the last *completed*
+   game (`trimPowerLogLinesToLastCompletedGame` — robust against a new game starting
+   during the ~40 s worker metadata build) and zips it off-thread — which also
+   implements Plan C track 1: the game log never touches the main-process heap.
+   Overwolf keeps the in-memory buffer path. Verified byte-identical to the
+   in-process trim on a real 67 MB session log
+   (`test-tools/perf/zip-powerlog-verify.mjs`).
 6. **Plan D - IPC fan-out handshake**: **subscription handshake IMPLEMENTED and
    VALIDATED in-game 2026-07-28 (session 8: `game-state-facade` slow sends
    517 → 66, 71.5 s → 11.7 s, every send `targets: 2` — see the Plan D section)**.
@@ -237,17 +245,31 @@ continuity; H is new.
    parser entities, now stripped for BG games (end-game wire 2.86 → 0.77 MB,
    clone 72 → 18 ms; in-app replay of the same game: 645 → 79 slow sends,
    98.4 → 13.6 s — see the session 9 follow-up and session 10 in Plan G).
-7. **Plan C track 2 - TagsHistory cap**: demoted — main heapUsed grew only 140->330 MB
-   over 13 turns (119k TagsHistory entries); real but small compared to the above.
-   Track 1 as originally written is moot (the buffer is empty on Electron; see the bug
-   above).
-8. **Plan E - cards DB per renderer**: demoted — only 2-3 app renderers actually run
-   in a normal session (fewer-windows lever already reality), and the big renderers
-   (overlay/battlegrounds) legitimately need cards. Revisit if renderer heaps become
-   the top block after 1-4.
-9. **Overwolf port of the worker offloads (Plans H + F)**: gated on the Electron
-   implementation proving itself over several real sessions — see "Subsequent phase
-    - port the worker offloads to Overwolf" at the end of the Plan H section.
+7. **Plan C track 2 - TagsHistory cap**: **CLOSED 2026-07-28 (measured, not worth
+   it)**. `test-tools/perf/parser-heap-breakdown.mjs` (parses a full 26-turn BG log,
+   drops each component, measures GC'd heapUsed deltas): the *entire* parser state
+   is 67.5 MB — TagsHistory 11.8 MB + AllPreviousTags 5.6 MB across both streams,
+   replay tree 18.1 MB, entity maps + index 18 MB, rest 14 MB. Capping history
+   would reclaim ~17 MB at high semantic risk: the readers are structural, not
+   latest-value (BG board parsers read the first 1-2 occurrences of a tag before a
+   variable cutoff marker, dark-gift reads the last *nonzero* occurrence, the
+   obfuscator scans AllPreviousTags, rewind must round-trip everything). Track 1 is
+   DONE as a side effect of the power.log upload fix (item 5). The real question —
+   what the *other* ~120 MB/game of main heapUsed growth is — is being answered with
+   heap snapshots (`FS_ELECTRON_MEM_HEAPSNAPSHOT`, see Plan A).
+8. **Plan E - cards DB per renderer**: **CLOSED 2026-07-28 (measured, no
+   steady-state win available)**. The cards DB is ~44 MB heap for 35k cards (12 MB
+   JSON; biggest fields `text` 1.7 MB + `name`/`id`/`set`/`mechanics` <0.6 MB each —
+   a trimmed model has little to trim), not the ~200 MB previously attributed. The
+   only renderers alive in a steady session (overlay, battlegrounds) legitimately
+   need cards; the loading window is closed by main once the app is ready, and
+   collection/settings/lottery are transient user windows — lazy-init would save
+   nothing steady-state. The ~200 MB main-RSS step at worker init is the worker's
+   V8 baseline + cards clone + sim tables, not the cards object alone.
+9. **Overwolf port of the worker offloads (Plans H + F)**: **IMPLEMENTED
+   2026-07-28** — persistent web worker with init-once cards + upload prep offload,
+   see "Subsequent phase - port the worker offloads to Overwolf" at the end of the
+   Plan H section.
 
 Dev-only note: dev builds auto-open detached DevTools for every window
 (~400-430 MB each, ~840 MB in session 2). Not a user-facing cost, but remember to
@@ -284,6 +306,11 @@ Implemented, env-gated
    per line: `kind: 'meta' | 'sample' | 'stall' | 'turn-stall'`. Stall events are also
    mirrored as `[fs-mem-stall]` lines in `userData/logs/main-*.log` so they can be
    time-correlated with the rest of the app's activity.
+4. Optional: `FS_ELECTRON_MEM_HEAPSNAPSHOT=15` additionally writes V8 heap snapshots
+   of the main process at the start of the given turn(s) and at GAME_END (`=1` for
+   GAME_END only); summarize with `test-tools/perf/analyze-heapsnapshot.mjs` (self
+   size by constructor + largest strings). Like the CPU profiler this blocks main
+   for seconds per snapshot — dev sessions only.
 
 Offline size estimates: `test-tools/perf/electron-parser-state-serialize-perf.mjs` now
 also reports per-turn cumulative raw log chars (PowerLogBuffer heap proxy) and the
@@ -345,8 +372,32 @@ within ow-electron's constraints.
    decision either way (trades RAM against isolation and the transparent-window
    minimize quirk, `../knowledge/bug-electron-bg-minimize.md`).
 
+**Items 4-5 investigated 2026-07-28 — no app-side lever found; closed with two
+upstream questions:**
+
+- The GPU process cost (510-575 MB) is the offscreen overlay's full-resolution
+  surfaces inside ow-electron's compositor. `OverlayWindowOptions` exposes no
+  frame-rate or surface-size control (only `disableHardwareAcceleration`, which is
+  incompatible with the shared-texture path). Window size/count is the only app
+  lever, and both are already minimal in a BG session.
+- The session 11 CPU profile found the overlay bridge's frame transport on the main
+  process: every overlay repaint is PNG-encoded on main (`toPNG` under the bridge's
+  `updateBuffer`), a constant 1.7-4 s per 120 s (~2-3% of main) during games. At
+  <1 fps average this tracks widget repaint frequency (game-state updates), so the
+  Plan D diets already shrank it; app code cannot change the transport.
+- **Upstream questions for Overwolf**: (1) can the overlay package (installed
+  1.11.8) use the GPU shared-texture path instead of main-thread PNG encoding —
+  newer package typings (≥1.13.20) reference shared-texture windows; (2) can the
+  ad (`owadview`, 173-224 MB) and owepm (153-216 MB) renderers be trimmed or made
+  on-demand.
+- Consolidating overlay + BG window into one renderer would save one renderer
+  baseline (~150 MB of the BG window's 352 MB, since cards + game-state copies
+  remain either way) at the cost of the minimize quirk and isolation; not pursued
+  while bigger levers exist.
+
 Done when: every renderer in a BG session is accounted for by an intentionally-open
-window, and leaked/unnecessary ones are gone.
+window, and leaked/unnecessary ones are gone. **Done — attribution complete, the
+remainder is ow-electron territory (tracked as the two upstream questions above).**
 
 ### Plan C - Log buffer and parser history
 
@@ -571,7 +622,15 @@ extracted from the `.cpuprofile` chunks by timestamp):
 3. **MindVision: confirmed synchronous, moderate total.** `syncMs == ms` on every
    call again; ~2.9 s/session, dominated by `isBootstrapped` (1.1 s, once at HS
    launch). Worth fixing eventually (async edge invocation or re-homing), but
-   below (1) and (2).
+   below (1) and (2). **Scoped 2026-07-28: the fix is not in this repo.**
+   `syncMs == ms` means the .NET method runs to completion on the edge.js
+   invocation thread before its callback fires — the C# side
+   (`OverwolfUnitySpy.StaticMindVisionWrapper`, built from the sibling
+   `unity-spy-.net4.5` repo) does its `ReadProcessMemory` work synchronously
+   before the first await. The fix is to make those entry points yield to a CLR
+   worker (e.g. wrap in `Task.Run`) and rebuild the DLL; nothing in the JS caller
+   can unblock it (moving edge.js into a worker_thread would mean loading the CLR
+   in a worker — unsupported/risky). Tracked as an upstream follow-up.
 4. **Exonerated**: parser burst (worst batch 665 ms at CREATE_GAME, one-off) and
    game-state processing (worst chunk 401 ms); startup stall is cards load +
    451 ms measured `init-cards-clone` (accepted, startup-only). The offscreen
@@ -865,26 +924,40 @@ it needs the mutable parser state, so it can't move to the worker as-is). Going
 below that is diminishing returns next to Plan G's 0.5-1.3 s per-turn stalls;
 consider this plan closed unless future sessions show otherwise.
 
-### Subsequent phase - port the worker offloads to Overwolf
+### Subsequent phase - port the worker offloads to Overwolf — IMPLEMENTED 2026-07-28
 
 The Overwolf build runs the same pipeline in its background renderer, so it pays the
 same multi-second CPU costs (jank inside the app windows rather than an OS-level
-"Not responding", but still worth fixing). The offloads port cleanly because
+"Not responding", but still worth fixing). The offloads ported cleanly because
 everything moved to the worker is pure JS (no Node APIs at the worker level —
 `worker_threads` usage lives only in the Electron host):
 
-- Implement `UploadPrepExecutorService` with a **Web Worker** (same Angular
-  webworker bundling as the existing per-fight
-  `libs/battlegrounds/simulator/src/lib/workers/bgs-battle-sim-worker.worker.ts`),
-  reusing the compute-worker message protocol; provide it in the Overwolf app
-  module. Consumers already resolve it optionally, so no consumer changes needed.
-- Make the Overwolf sim web worker persistent with init-once cards, mirroring
-  `ComputeWorkerHost` (or share one web worker for both, like on Electron).
-- `buildGameStat`'s redundant-parse removal already benefits Overwolf (shipped with
+- **Persistent sim worker (Plan F port)**: `BgsBattleSimulationWorkerService` now
+  keeps one web worker alive across fights, sends cards once via an `init` message,
+  and correlates requests by id (same protocol as the Electron
+  `compute-worker.thread.ts`). A 5-minute idle TTL releases the worker (and its
+  ~cards copy) between games; it re-inits transparently on next use. This removes
+  the per-fight worker spawn + full cards-DB structured clone (the Overwolf
+  equivalent of the Electron per-fight RSS spikes).
+- **Upload prep (Plan H port)**: the same web worker now also handles
+  `extractReplayEssentials`, `parseBattlegroundsGame`, `extractStatsForGame`, and
+  `zipSingleFile`. `WebWorkerUploadPrepService` (in
+  `libs/battlegrounds/simulator/src/lib/workers/web-worker-upload-prep.service.ts`)
+  implements `UploadPrepExecutorService` on top of it and is provided in
+  `apps/legacy/src/app/app.module.ts` (with `BgsBattleSimulationWorkerService`
+  provided as a singleton, `useExisting` for the executor alias). Consumers already
+  resolve the executor optionally, so no consumer changes were needed; any worker
+  failure falls back to the historical main-thread path.
+- The power.log upload keeps the in-memory `PowerLogBufferService` path on Overwolf
+  (no Node `fs` in a web worker); only Electron reads the log from disk in the
+  worker.
+- `buildGameStat`'s redundant-parse removal already benefited Overwolf (shipped with
   Plan H).
 
-Do this once the Electron implementation has proven itself in real games (results
-upload correctly across several sessions, no worker-related errors in the logs).
+Validated with Jest (`bgs-battle-simulation-worker.service.spec.ts`: init-once,
+request correlation, intermediate results, error respawn, idle TTL) and a clean
+`tsc` pass on `apps/legacy`. Live Overwolf validation still pending a real session
+on that platform.
 
 ---
 

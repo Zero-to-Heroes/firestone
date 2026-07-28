@@ -7,6 +7,7 @@ import {
 	BgsBattlePositioningExecutorService,
 	BgsBattlePositioningWorkerService,
 	BgsBattleSimulationWorkerService,
+	WebWorkerUploadPrepService,
 } from '@firestone/battlegrounds/simulator';
 import { REPLAY_INDEX_WORKER } from '@firestone/replay/coliseum';
 import { LegacyFeatureShellModule } from '@firestone/legacy/feature-shell';
@@ -16,6 +17,7 @@ import {
 	SharedCommonServiceModule,
 } from '@firestone/shared/common/service';
 import { CardsFacadeService, SharedFrameworkCoreModule } from '@firestone/shared/framework/core';
+import { UploadPrepExecutorService } from '@firestone/stats/services';
 import { AppBoostrapperComponent } from './app-bootstrap.component';
 import { OwAppVersionService } from './impl/ow-app-version.service';
 import { ReplayIndexWorkerHostService } from './replay-index-worker-host.service';
@@ -31,7 +33,11 @@ import { ReplayIndexWorkerHostService } from './replay-index-worker-host.service
 	],
 	providers: [
 		CardsFacadeService,
-		{ provide: BgsBattleSimulationExecutorService, useClass: BgsBattleSimulationWorkerService },
+		// One shared persistent compute worker: sims + end-of-game upload prep
+		// (Plans F and H, docs/electron-memory-investigation.md)
+		BgsBattleSimulationWorkerService,
+		{ provide: BgsBattleSimulationExecutorService, useExisting: BgsBattleSimulationWorkerService },
+		{ provide: UploadPrepExecutorService, useClass: WebWorkerUploadPrepService },
 		{ provide: BgsBattlePositioningExecutorService, useClass: BgsBattlePositioningWorkerService },
 		{
 			provide: LOG_FILE_BACKEND,

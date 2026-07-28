@@ -7,21 +7,28 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { createSimWorker } from './create-sim-worker';
 
 /**
- * Runs BGS battle sims in a web worker that is kept alive across fights (Plan F port
- * to the web-worker context, docs/electron-memory-investigation.md): the cards DB is
- * structured-cloned to the worker once per worker lifetime instead of once per fight
- * (the +150-240 MB RSS spikes measured per fight on the old spawn-per-fight design).
+ * Host of the persistent compute web worker (Plans F and H ported to the web-worker
+ * context, docs/electron-memory-investigation.md): BGS battle sims and, through
+ * {@link request}, the end-of-game upload prep (see WebWorkerUploadPrepService). The
+ * cards DB is structured-cloned to the worker once per worker lifetime instead of
+ * once per fight (the +150-240 MB RSS spikes measured per fight on the old
+ * spawn-per-fight design).
  *
- * The worker is released after IDLE_TTL of no sims, so a renderer that ran a single
- * manual simulation (e.g. the BG simulator UI) doesn't retain the worker's cards copy
- * forever; during live games, fights are frequent enough to keep it warm.
+ * The worker is released after IDLE_TTL with no in-flight work, so a renderer that
+ * ran a single manual simulation (e.g. the BG simulator UI) doesn't retain the
+ * worker's cards copy forever; during live games, fights are frequent enough to keep
+ * it warm.
  */
 const IDLE_TTL_MS = 5 * 60 * 1000;
 
-interface PendingSim {
-	readonly onResultReceived: (result: SimulationResult | null) => void;
-	readonly battleInfo: BgsBattleInfo;
+export interface ComputeWorkerResponse {
+	readonly done: boolean;
+	readonly result?: string | null;
+	readonly resultBytes?: Uint8Array | null;
 }
+
+/** Called with each response for the request; null means the worker itself errored */
+type ResponseHandler = (data: ComputeWorkerResponse | null) => void;
 
 @Injectable()
 export class BgsBattleSimulationWorkerService extends BgsBattleSimulationExecutorService {
@@ -31,7 +38,7 @@ export class BgsBattleSimulationWorkerService extends BgsBattleSimulationExecuto
 
 	private worker: Worker | null = null;
 	private nextRequestId = 1;
-	private readonly pending = new Map<number, PendingSim>();
+	private readonly pending = new Map<number, ResponseHandler>();
 	private idleTimer: ReturnType<typeof setTimeout> | null = null;
 
 	constructor(
@@ -53,19 +60,8 @@ export class BgsBattleSimulationWorkerService extends BgsBattleSimulationExecuto
 			(battleInfo.options?.numberOfSimulations ?? prefs.bgsSimulatorNumberOfSims) / numberOfWorkers,
 		);
 
-		// Run worker creation and message handling OUTSIDE Angular's zone
-		// This prevents Zone.js from patching the worker and triggering change detection
-		this.ngZone.runOutsideAngular(() => {
-			const worker = this.ensureWorker();
-			if (!worker) {
-				this.ngZone.run(() => onResultReceived(null));
-				return;
-			}
-			const id = this.nextRequestId++;
-			this.pending.set(id, { onResultReceived, battleInfo });
-			this.armIdleTimer();
-			worker.postMessage({
-				id: id,
+		this.request(
+			{
 				type: 'simulateBattle',
 				battleInfo: {
 					...battleInfo,
@@ -75,6 +71,56 @@ export class BgsBattleSimulationWorkerService extends BgsBattleSimulationExecuto
 						includeOutcomeSamples: includeOutcomeSamples,
 					},
 				} as BgsBattleInfo,
+			},
+			(data) => {
+				if (data == null || data.result == null) {
+					// Worker error or sim exception
+					this.reportSimCrash(battleInfo);
+					this.ngZone.run(() => onResultReceived(null));
+					return;
+				}
+				const result: SimulationResult = JSON.parse(data.result);
+				if (!data.done) {
+					const now = Date.now();
+					if (now - this.lastIntermediateUpdate < this.INTERMEDIATE_UPDATE_THROTTLE_MS) {
+						return;
+					}
+					this.lastIntermediateUpdate = now;
+				}
+				this.ngZone.run(() => onResultReceived(result));
+			},
+		);
+	}
+
+	/**
+	 * Sends a request to the shared worker; onResponse is called for every message of
+	 * this request (intermediates with done: false, final with done: true) and with
+	 * null if the worker errors. Used by the sim path above and by
+	 * WebWorkerUploadPrepService.
+	 */
+	public request(message: Record<string, any>, onResponse: ResponseHandler): void {
+		// Run worker creation and message handling OUTSIDE Angular's zone
+		// This prevents Zone.js from patching the worker and triggering change detection
+		this.ngZone.runOutsideAngular(() => {
+			const worker = this.ensureWorker();
+			if (!worker) {
+				onResponse(null);
+				return;
+			}
+			const id = this.nextRequestId++;
+			this.pending.set(id, onResponse);
+			this.armIdleTimer();
+			worker.postMessage({ ...message, id: id });
+		});
+	}
+
+	/** One-shot request: resolves with the final response, or null on worker error */
+	public requestOnce(message: Record<string, any>): Promise<ComputeWorkerResponse | null> {
+		return new Promise((resolve) => {
+			this.request(message, (data) => {
+				if (data == null || data.done) {
+					resolve(data);
+				}
 			});
 		});
 	}
@@ -95,10 +141,10 @@ export class BgsBattleSimulationWorkerService extends BgsBattleSimulationExecuto
 			// Cards are cloned once per worker lifetime, not once per fight
 			worker.postMessage({ type: 'init', cards: this.cards.getService() });
 			this.worker = worker;
-			console.log('[bgs-simulation] persistent sim worker spawned');
+			console.log('[bgs-simulation] persistent compute worker spawned');
 			return worker;
 		} catch (e) {
-			console.error('[bgs-simulation] could not spawn sim worker', e);
+			console.error('[bgs-simulation] could not spawn compute worker', e);
 			return null;
 		}
 	}
@@ -108,35 +154,18 @@ export class BgsBattleSimulationWorkerService extends BgsBattleSimulationExecuto
 		if (data?.id == null) {
 			return;
 		}
-		const request = this.pending.get(data.id);
-		if (!request) {
+		const handler = this.pending.get(data.id);
+		if (!handler) {
 			return;
 		}
-
-		if (data.result == null) {
-			// The worker caught an exception for this sim
-			this.pending.delete(data.id);
-			this.reportSimCrash(request.battleInfo);
-			this.ngZone.run(() => request.onResultReceived(null));
-			return;
-		}
-
-		const result: SimulationResult = JSON.parse(data.result);
 		if (data.done) {
 			this.pending.delete(data.id);
 			this.armIdleTimer();
-		} else {
-			const now = Date.now();
-			if (now - this.lastIntermediateUpdate < this.INTERMEDIATE_UPDATE_THROTTLE_MS) {
-				return;
-			}
-			this.lastIntermediateUpdate = now;
 		}
-
-		this.ngZone.run(() => request.onResultReceived(result));
+		handler(data);
 	}
 
-	/** Uncaught worker error: fail all in-flight sims and respawn on next use */
+	/** Uncaught worker error: fail all in-flight requests and respawn on next use */
 	private handleWorkerError(error: ErrorEvent): void {
 		const msg = error?.message ?? 'Unknown worker error';
 		const file = error?.filename ?? '';
@@ -152,9 +181,8 @@ export class BgsBattleSimulationWorkerService extends BgsBattleSimulationExecuto
 		const failed = [...this.pending.values()];
 		this.pending.clear();
 		this.releaseWorker();
-		for (const request of failed) {
-			this.reportSimCrash(request.battleInfo);
-			this.ngZone.run(() => request.onResultReceived(null));
+		for (const handler of failed) {
+			handler(null);
 		}
 	}
 
@@ -179,7 +207,7 @@ export class BgsBattleSimulationWorkerService extends BgsBattleSimulationExecuto
 		}
 		this.idleTimer = setTimeout(() => {
 			if (this.pending.size === 0) {
-				console.log('[bgs-simulation] releasing idle sim worker');
+				console.log('[bgs-simulation] releasing idle compute worker');
 				this.releaseWorker();
 			} else {
 				this.armIdleTimer();
