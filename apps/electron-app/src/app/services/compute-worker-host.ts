@@ -12,6 +12,9 @@ export interface ComputeWorkerResponse {
 	readonly done: boolean;
 }
 
+/** How long the worker may sit idle (no requests, keep-alive check false) before being released */
+const IDLE_RELEASE_MS = 5 * 60 * 1000;
+
 /**
  * Owns the single persistent compute worker of the Electron main process
  * (compute-worker.thread.ts): BGS battle sims (Plan F) and end-of-game upload prep
@@ -23,6 +26,14 @@ export interface ComputeWorkerResponse {
  * processed sequentially by the worker; that's intended — it also serializes CPU
  * bursts instead of stacking them.
  *
+ * The idle worker costs ~130 MB resident inside main's OS process (V8 isolate +
+ * cards copy + sim tables), so when it has been idle for IDLE_RELEASE_MS and the
+ * keep-alive check is false (wired to "is Hearthstone running"), it is released.
+ * Any later request transparently respawns it — the respawn cost on main is the
+ * cards structured clone (~450 ms, probed as worker/init-cards-clone), which is why
+ * callers should prewarm() again when a latency-sensitive phase approaches (done on
+ * game launch in electron-app-injector-setup.ts).
+ *
  * On worker crash/exit all in-flight requests resolve to null (callers fall back or
  * skip) and the next request respawns the worker.
  */
@@ -30,8 +41,15 @@ export class ComputeWorkerHost {
 	private worker: Worker | null = null;
 	private requestId = 0;
 	private pending = new Map<number, (response: ComputeWorkerResponse | null) => void>();
+	private idleTimer: NodeJS.Timeout | null = null;
+	private keepAliveCheck: () => Promise<boolean> = async () => false;
 
 	constructor(private readonly cardsProvider: () => any) {}
+
+	/** While this resolves true (eg Hearthstone is running), the idle timer only re-arms */
+	public setKeepAliveCheck(check: () => Promise<boolean>): void {
+		this.keepAliveCheck = check;
+	}
 
 	public prewarm(): void {
 		try {
@@ -55,6 +73,7 @@ export class ComputeWorkerHost {
 				this.pending.set(id, (response) => {
 					clearTimeout(timeout);
 					this.pending.delete(id);
+					this.armIdleTimer();
 					if (response && !response.ok) {
 						console.warn('[compute-worker] request failed', id, response.error);
 						resolve(null);
@@ -88,6 +107,7 @@ export class ComputeWorkerHost {
 		this.pending.set(id, (response) => {
 			if (!response || response.done) {
 				this.pending.delete(id);
+				this.armIdleTimer();
 			}
 			onMessage(response);
 		});
@@ -122,12 +142,52 @@ export class ComputeWorkerHost {
 		worker.postMessage({ type: 'init', cards: this.cardsProvider() });
 		(globalThis as any).__fsSlowOp?.('worker', 'init-cards-clone', performance.now() - initStart);
 		this.worker = worker;
+		this.armIdleTimer();
 		return worker;
+	}
+
+	private armIdleTimer() {
+		if (this.idleTimer) {
+			clearTimeout(this.idleTimer);
+		}
+		if (!this.worker) {
+			this.idleTimer = null;
+			return;
+		}
+		this.idleTimer = setTimeout(() => this.onIdleTimeout(), IDLE_RELEASE_MS);
+	}
+
+	private async onIdleTimeout() {
+		if (!this.worker) {
+			this.idleTimer = null;
+			return;
+		}
+		if (this.pending.size > 0) {
+			this.armIdleTimer();
+			return;
+		}
+		let keepAlive = false;
+		try {
+			keepAlive = await this.keepAliveCheck();
+		} catch (e) {
+			console.warn('[compute-worker] keep-alive check failed, releasing', e);
+		}
+		// Re-check: a request may have started while the (possibly async) check ran
+		if (keepAlive || this.pending.size > 0) {
+			this.armIdleTimer();
+			return;
+		}
+		console.log('[compute-worker] idle for', IDLE_RELEASE_MS / 1000, 's and no game running, releasing worker');
+		this.discardWorker(this.worker);
 	}
 
 	private discardWorker(worker: Worker) {
 		if (this.worker === worker) {
 			this.worker = null;
+		}
+		if (this.idleTimer) {
+			clearTimeout(this.idleTimer);
+			this.idleTimer = null;
 		}
 		const pending = [...this.pending.values()];
 		this.pending.clear();

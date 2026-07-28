@@ -596,8 +596,13 @@ export const buildAppInjector = () => {
 
 	// Single persistent worker for CPU-heavy work: BGS battle sims (Plan F) and
 	// end-of-game upload prep (Plan H). One worker = one resident cards copy,
-	// cloned once per app run (prewarmed in app.ts after the cards are loaded)
+	// cloned once per app run (prewarmed in app.ts after the cards are loaded).
+	// The idle worker costs ~130 MB resident, so it is released after 5 idle
+	// minutes when Hearthstone isn't running, and respawned (cards clone ~450 ms
+	// on main) when the game launches
 	const computeWorkerHost = new ComputeWorkerHost(() => allCards.getService());
+	computeWorkerHost.setKeepAliveCheck(async () => (await gameStatus.inGame()) === true);
+	gameStatus.onGameStart(() => computeWorkerHost.prewarm());
 	electronInjector.register(ComputeWorkerHost, computeWorkerHost);
 
 	// Plan G (b): JSON.parse of large API payloads (eg BG meta-hero stats, ~5.3 s on
