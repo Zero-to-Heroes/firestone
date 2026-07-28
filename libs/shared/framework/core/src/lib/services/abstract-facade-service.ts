@@ -146,8 +146,42 @@ export abstract class AbstractFacadeService<T extends AbstractFacadeService<T>> 
 		if (isMainProcess()) {
 			const { ipcMain } = eval('require')('electron');
 			if (typeof ipcMain !== 'undefined') {
+				// Send updates only to the webContents that actually consume this subject
+				// (Plan G/D, docs/electron-memory-investigation.md): the previous blind
+				// getAllWindows() fan-out structured-cloned every update into every window
+				// (ads / owepm / windows that never read the channel included) — measured
+				// at 71.5 s of main-thread time in one BG game for game-state-facade
+				// alone. Renderers announce themselves through the initial-value invoke
+				// and an explicit `<eventName>-subscribe` message.
+				const subscribers = new Set<any>();
+				const addSubscriber = (sender: any) => {
+					if (!sender || sender.isDestroyed?.() || subscribers.has(sender)) {
+						return;
+					}
+					subscribers.add(sender);
+					sender.once('destroyed', () => subscribers.delete(sender));
+				};
+				const sendToSubscribers = (channel: string, data: any) => {
+					for (const sender of subscribers) {
+						if (sender.isDestroyed()) {
+							continue;
+						}
+						try {
+							sender.send(channel, data);
+						} catch (error) {
+							// Render frame might be disposed even if the webContents isn't destroyed
+							console.debug(`[${this.constructor.name}] error sending ${channel} to renderer`, error);
+						}
+					}
+				};
+
+				const subscribeChannel = `${eventName}-subscribe`;
+				ipcMain.removeAllListeners(subscribeChannel);
+				ipcMain.on(subscribeChannel, (event: any) => addSubscriber(event.sender));
+
 				ipcMain.removeHandler(eventName);
-				ipcMain.handle(eventName, async () => {
+				ipcMain.handle(eventName, async (event: any) => {
+					addSubscriber(event.sender);
 					const value =
 						obs instanceof SubscriberAwareBehaviorSubject
 							? await obs.getValueWithInit()
@@ -158,6 +192,10 @@ export abstract class AbstractFacadeService<T extends AbstractFacadeService<T>> 
 				const originalNext = obs.next.bind(obs);
 				obs.next = (value: V) => {
 					originalNext(value);
+					if (!subscribers.size) {
+						// No consumer yet: skip the serialize too, it can be expensive
+						return;
+					}
 					// Stall-attribution hook installed by the platform instrumentation
 					// (no-op otherwise): splits serialize cost from the IPC send
 					// (structured clone happens inside webContents.send)
@@ -166,23 +204,25 @@ export abstract class AbstractFacadeService<T extends AbstractFacadeService<T>> 
 						const serializeStart = performance.now();
 						const wire = serialize(value);
 						const sendStart = performance.now();
-						this.broadcastToRenderers(eventName, wire);
+						sendToSubscribers(eventName, wire);
 						const sendEnd = performance.now();
 						perfHook('ipc', eventName, sendEnd - serializeStart, {
 							serializeMs: Math.round(sendStart - serializeStart),
 							sendMs: Math.round(sendEnd - sendStart),
+							targets: subscribers.size,
 						});
 					} else {
-						this.broadcastToRenderers(eventName, serialize(value));
+						sendToSubscribers(eventName, serialize(value));
 					}
 				};
 				// Listen for updates from renderer processes
 				const updateChannel = `${eventName}-update`;
 				ipcMain.removeAllListeners(updateChannel);
-				ipcMain.on(updateChannel, (_, wire: V) => {
+				ipcMain.on(updateChannel, (event: any, wire: V) => {
+					addSubscriber(event.sender);
 					// Hydrate into main subject; rebroadcast the same wire payload (already serialized).
 					originalNext(hydrate(wire));
-					this.broadcastToRenderers(eventName, wire);
+					sendToSubscribers(eventName, wire);
 				});
 			}
 		} else {
@@ -205,6 +245,10 @@ export abstract class AbstractFacadeService<T extends AbstractFacadeService<T>> 
 				ipcRenderer.on(eventName, (_, wire: V) => {
 					applyHydratedFromIpc(wire);
 				});
+				// Tell main we consume this channel, so it only fans updates out to actual
+				// consumers. The initial-value invoke below also registers us, but that can
+				// fail if the main handler isn't up yet, so announce explicitly too.
+				ipcRenderer.send(`${eventName}-subscribe`);
 
 				// Wrap next() to send updates to main process when called locally
 				const originalNext = obs.next.bind(obs);

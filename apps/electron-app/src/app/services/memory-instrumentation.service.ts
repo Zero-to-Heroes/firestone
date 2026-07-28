@@ -139,8 +139,15 @@ export const startMemoryInstrumentation = (injector: Injector): void => {
  * probes, added after session 6 left the hero-selection stalls unattributed.
  * Chunks land next to the JSONL as cpu-<session>-NNN.cpuprofile (loadable in Chrome
  * DevTools / speedscope).
+ *
+ * Opt-in via FS_ELECTRON_MEM_CPUPROFILE=1: sessions 7-8 showed the chunk rotation
+ * itself blocks main 0.5-2.4 s every rotation (serializing the accumulated profile),
+ * which pollutes the stall metrics of ordinary instrumented sessions.
  */
 const startCpuProfiler = (sessionName: string): void => {
+	if (process.env.FS_ELECTRON_MEM_CPUPROFILE !== '1') {
+		return;
+	}
 	try {
 		profilerBasePath = outputFilePath ? join(outputFilePath, '..', `cpu-${sessionName}`) : null;
 		profilerSession = new Session();

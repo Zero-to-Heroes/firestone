@@ -204,8 +204,9 @@ continuity; H is new.
 3. **Plan G - match-start and in-game stalls**: **SCOPED (sessions 6-7, full
    attribution — see the Plan G section)**. The full utilityProcess move is off the
    table; the measured ranking is: (a) `game-state-facade` IPC broadcast fan-out is
-   the per-turn cost (517 sends ≥100 ms, 71.5 s total in one game — implement the
-   Plan D handshake / payload diet), (b) match start is API-response `JSON.parse`
+   the per-turn cost (517 sends ≥100 ms, 71.5 s total in one game — **Plan D
+   handshake IMPLEMENTED and VALIDATED 2026-07-28, session 8: 66 sends / 11.7 s,
+   `targets: 2`**; payload diet still open), (b) match start is API-response `JSON.parse`
    on main (~5.3 s, BG meta-hero stats) plus Electron IPC serialization of those
    payloads (~4.2 s) — move heavy GET+parse off main, (c) MindVision edge calls are
    confirmed 100% synchronous but moderate in total (~2.9 s/session, mostly at HS
@@ -219,11 +220,15 @@ continuity; H is new.
    it for the power.log upload. Verify and fix (feed the buffer in
    `app.ts`/`GameEvents`, or read the on-disk log at upload time — the latter also
    implements Plan C track 1 for free).
-6. **Plan D - IPC fan-out handshake**: **re-promoted — now the concrete top item of
-   Plan G (a)**. The earlier "fan-out waste was minimal" assessment was wrong:
-   session 7 measured `webContents.send('game-state-facade', ...)` structured
-   clones at 100-390 ms each, 517 of them ≥100 ms in one game (71.5 s total), the
-   direct cause of the 0.5-1.0 s per-turn stalls.
+6. **Plan D - IPC fan-out handshake**: **subscription handshake IMPLEMENTED and
+   VALIDATED in-game 2026-07-28 (session 8: `game-state-facade` slow sends
+   517 → 66, 71.5 s → 11.7 s, every send `targets: 2` — see the Plan D section)**.
+   The earlier "fan-out waste was minimal" assessment was wrong: session 7 measured
+   `webContents.send('game-state-facade', ...)` structured clones at 100-390 ms
+   each, 517 of them ≥100 ms in one game (71.5 s total), the direct cause of the
+   0.5-1.0 s per-turn stalls. The payload-diet half (trim the game-state wire
+   value per consumer) stays open; remaining per-send cost is two full GameState
+   clones (worst 531 ms late-game).
 7. **Plan C track 2 - TagsHistory cap**: demoted — main heapUsed grew only 140->330 MB
    over 13 turns (119k TagsHistory entries); real but small compared to the above.
    Track 1 as originally written is moot (the buffer is empty on Electron; see the bug
@@ -331,16 +336,43 @@ RSS, rewind goldens pass.
 
 ### Plan D - Narrow the IPC fan-out
 
-Add an explicit subscription handshake in `AbstractFacadeService` (one fix covers all
-~100 channels): `${eventName}-subscribe` / `-unsubscribe` channels, per-window
-subscriber tracking (cleaned up on window destroy), send only to subscribers, and skip
-`serialize()` entirely when there are none. Then trim the game-state payload per
-consumer (overlay + battlegrounds need it; settings/collection/lottery largely do
-not). Keep `sanitizeParserStateForElectron`. Use Plan A data to rank channels by
-bytes-per-minute before trimming anything beyond game state.
+**Status: subscription handshake IMPLEMENTED and VALIDATED in-game 2026-07-28
+(session 8): `game-state-facade` slow sends 517 → 66, 71.5 s → 11.7 s, every send
+`targets: 2` (overlay + BG window only).** `setupElectronSubject` (one fix covers
+all ~100 channels) now keeps a per-channel set of subscriber `webContents` instead
+of blasting `BrowserWindow.getAllWindows()`:
 
-Done when: with collection and settings open during BG, neither receives a full
-`GameState` clone, and main's serialize+send cost drops measurably.
+- A renderer is registered as a subscriber of a channel when it fetches the initial
+  value (`ipcRenderer.invoke(eventName)` — every consuming renderer already does
+  this in `setupElectronSubject`'s renderer branch) and, belt-and-braces, via an
+  explicit `${eventName}-subscribe` fire-and-forget message sent right after the
+  listener is installed (covers the case where the invoke fails because main's
+  handler isn't up yet). Renderer→main `-update` messages also register the sender.
+- Subscribers are removed on their `destroyed` event; no `-unsubscribe` needed
+  (windows don't stop consuming a channel while alive).
+- `obs.next` on main now skips **both** the `serialize()` and the send entirely
+  when a channel has no subscribers, and otherwise sends only to subscribers.
+  Windows that never consume a channel (ads `owadview`, `owepm`, settings windows
+  for game-state, etc.) no longer pay a structured clone per update.
+- The `ipc` slow-op probe now also records `targets` (subscriber count), so the
+  next instrumented session shows exactly how many clones each slow send paid.
+- Overwolf is untouched (all of this is inside the `isElectronContext` main/renderer
+  branches); the hotkey facade's raw `broadcastToRenderers` (tiny, rare payloads)
+  is also untouched.
+
+Expected effect (session 7 math): game-state consumers are the overlay + the BG
+window, i.e. 2 of the ~5 windows that were being cloned into — roughly halves the
+71.5 s/game of `game-state-facade` send time, and eliminates it entirely outside
+matches for channels with no live consumers.
+
+Next lever if the post-handshake numbers are still too high: trim the game-state
+payload per consumer (overlay + battlegrounds need it; settings/collection/lottery
+largely do not). Keep `sanitizeParserStateForElectron`. Use the `ipc` probe data to
+rank channels by bytes-per-minute before trimming anything beyond game state.
+
+Done when: a measured BG session shows `game-state-facade` sends going only to the
+overlay + BG windows (`targets: 2`), and main's total serialize+send cost drops
+accordingly.
 
 ### Plan E - Cards DB footprint per renderer
 
@@ -368,7 +400,7 @@ asar).
 **Status: IMPLEMENTED (Electron), confirmed in-game (sessions 4-5).** All sims
 return through one worker spawned once at startup, zero worker errors across both
 sessions. Correction after re-analyzing both sessions' samples: what is gone is the
-*structural* per-fight cost — the cards-DB clone on every fight and the leaked
+_structural_ per-fight cost — the cards-DB clone on every fight and the leaked
 idle workers. The simulation's own working memory still shows up as transient RSS
 churn (+100-400 MB at fight start, reclaimed by the worker's GC within ~15-60 s;
 peak main RSS ~1.05-1.15 GB mid-game in both sessions) because worker_threads heaps
@@ -462,7 +494,9 @@ below; ~10 min of data, still conclusive on the main question):**
   also records a **session-wide chunked CPU profile** of the main thread
   (`cpu-<session>-NNN.cpuprofile` next to the JSONL, 120 s self-contained chunks so
   a crash loses at most the last chunk); the next measured game attributes every
-  stall to a JS stack by timestamp.
+  stall to a JS stack by timestamp. (Since session 8 the profiler is opt-in via
+  `FS_ELECTRON_MEM_CPUPROFILE=1` — its own chunk rotation blocks main ~1 s each
+  time, see the session 8 notes.)
 - **Per-turn stalls were small this session** (21-185 ms up to turn 5) — consistent
   with earlier sessions' early turns; the 0.5-1.3 s per-turn stalls appeared from
   turn ~5-7 onwards, which this session never reached.
@@ -509,10 +543,33 @@ extracted from the `.cpuprofile` chunks by timestamp):
    background load that belongs to Plan B, not a stall spike source.
 
 The utilityProcess pipeline move is therefore NOT needed on current data; Plan G
-resolves into two targeted fixes: the game-state-facade broadcast diet (top) and
-moving API fetch+parse off main (second). Before committing to the full move, profile WHICH of these is MindVision
-(edge.js runs on the main thread) vs parser burst vs game-state serialize+send — the
-answer may shrink this plan to "make MindVision calls non-blocking" plus Plan H.
+resolves into two targeted fixes: the game-state-facade broadcast diet (top —
+subscription-handshake half implemented 2026-07-28, see Plan D) and moving API
+fetch+parse off main (second, still open).
+
+**Session 8 (2026-07-28 11:04, game to turn 11) — Plan D handshake VALIDATED
+in-game:**
+
+- **`game-state-facade` slow sends: 517 → 66, 71.5 s → 11.7 s** of main-thread
+  time. Every send reports `targets: 2` (overlay + BG window; one early send hit
+  1 while only one window was up) — the ad view, owepm and every non-consuming
+  window no longer receive a structured clone per update, exactly as designed.
+  No facade errors in the main log; overlays behaved normally in-game.
+- **Remaining per-send cost is the payload, not the fan-out**: of the 11.7 s,
+  ~9.9 s is the two `webContents.send` clones and ~1.9 s the app-level
+  `serializeForElectron`; worst single send 531 ms late-game. The next lever, if
+  still needed, is the Plan D payload diet (shrink the GameState wire value).
+- **Hero-selection freeze unchanged as expected** (5.3 s + 3.7 s stalls at match
+  start): that is Plan G (b), API `JSON.parse` on main — untouched so far.
+- **Instrumentation artifact discovered: the chunked CPU profiler's own 120 s
+  rotation blocks main 0.5–2.4 s each time** (avg ~1 s, cost grows with session
+  length; visible as the every-2-minutes stall train in sessions 7 and 8, drifting
+  a few seconds per rotation). This is dev-only overhead of `FS_ELECTRON_MEM=1`
+  sessions, but it dominates the per-turn `turn-stall` maxima in both sessions —
+  so before/after comparisons must use the `ipc` slow-op totals, not
+  `turn-stall`. The profiler is now opt-in (`FS_ELECTRON_MEM_CPUPROFILE=1` on top
+  of `FS_ELECTRON_MEM=1`) so ordinary instrumented sessions stay clean; re-enable
+  it only when a stall needs stack-level attribution.
 
 ### Plan H - End-of-game upload pipeline off the main thread (NEW, priority 1)
 
@@ -548,7 +605,7 @@ the known main-side leftovers and scale with replay size: the 3.4 s is parse 1
 (`parseHsReplayString` of 12.7 MB in `initializeGame`), the 0.7 s is the
 `CardsPlayedByTurnParser` `parseGame` walk in `buildMetadata`.
 
-**Phase 2 (IMPLEMENTED 2026-07-27, awaiting in-game validation)** to reach the
+**Phase 2 (IMPLEMENTED 2026-07-27, confirmed in-game — see below)** to reach the
 ~250 ms goal: a full inventory showed that for BG games, everything main reads from
 the parsed `Replay` is a fixed set of plain fields — matchup/duration/result,
 player/opponent ids, names, hero and hero-power card ids, region/gameType/playCoin,
