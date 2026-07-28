@@ -6,11 +6,7 @@ import {
 	PermutationResult,
 	ProcessingStatus,
 } from '../services/bgs-battle-positioning-executor.service';
-import {
-	CardsFacadeService,
-	ISystemInfoService,
-	SYSTEM_INFO_SERVICE_TOKEN,
-} from '@firestone/shared/framework/core';
+import { CardsFacadeService, ISystemInfoService, SYSTEM_INFO_SERVICE_TOKEN } from '@firestone/shared/framework/core';
 import { Chunk, InternalPermutationResult, Permutation } from './bgs-battle-positioning-worker.worker';
 
 @Injectable()
@@ -181,9 +177,7 @@ export class BgsBattlePositioningWorkerService extends BgsBattlePositioningExecu
 
 			const batch = chunks.slice(i, i + maxConcurrentWorkers);
 			const batchResults = await Promise.all(
-				batch.map((boardChunk) =>
-					this.buildRoughResults(battleInfo, boardChunk, numberOfSims, maxDuration),
-				),
+				batch.map((boardChunk) => this.buildRoughResults(battleInfo, boardChunk, numberOfSims, maxDuration)),
 			);
 			results.push(...batchResults);
 		}
