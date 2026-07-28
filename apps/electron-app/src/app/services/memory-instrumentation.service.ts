@@ -17,6 +17,7 @@ import { existsSync, mkdirSync } from 'fs';
 import { appendFile, writeFile } from 'fs/promises';
 import { Session } from 'inspector';
 import { join } from 'path';
+import * as v8 from 'v8';
 
 const STALL_DETECTOR_TICK_MS = 250;
 const STALL_LOG_THRESHOLD_MS = 500;
@@ -83,10 +84,16 @@ export const startMemoryInstrumentation = (injector: Injector): void => {
 		}
 	}, STALL_DETECTOR_TICK_MS);
 
-	// Longest stall per turn, logged at the start of the next turn.
+	// Longest stall per turn, logged at the start of the next turn. Also drives the
+	// opt-in heap snapshots (below).
+	const heapSnapshotTurns = parseHeapSnapshotTurns();
 	try {
 		const emitter = injector.get(GameEventsEmitterService);
 		const sub = emitter.allEvents.subscribe((event: GameEvent) => {
+			if (heapSnapshotTurns && event?.type === GameEvent.GAME_END) {
+				writeHeapSnapshot(logsDir, `${date}-${time}`, 'game-end');
+				return;
+			}
 			if (event?.type !== GameEvent.TURN_START) {
 				return;
 			}
@@ -98,6 +105,10 @@ export const startMemoryInstrumentation = (injector: Injector): void => {
 			);
 			writeRecord({ kind: 'turn-stall', maxStallMs: maxStallSinceTurnStart, newTurn: turn });
 			maxStallSinceTurnStart = 0;
+			if (heapSnapshotTurns && turn != null && heapSnapshotTurns.has(turn)) {
+				heapSnapshotTurns.delete(turn); // once per turn number
+				writeHeapSnapshot(logsDir, `${date}-${time}`, `turn-${turn}`);
+			}
 		});
 		turnStartUnsubscribe = () => sub.unsubscribe();
 	} catch (e) {
@@ -130,6 +141,43 @@ export const startMemoryInstrumentation = (injector: Injector): void => {
 	takeSample();
 
 	startCpuProfiler(`memory-${date}-${time}`);
+};
+
+/**
+ * Opt-in V8 heap snapshots of the main process, for attributing heap growth to
+ * constructors/retainers (the ~120 MB/game of main heapUsed growth not explained by
+ * the parser state — see the Plan C scoping in docs/electron-memory-investigation.md).
+ *
+ * FS_ELECTRON_MEM_HEAPSNAPSHOT=1        -> snapshot at GAME_END only
+ * FS_ELECTRON_MEM_HEAPSNAPSHOT=8,16     -> snapshots at the start of turns 8 and 16, plus GAME_END
+ *
+ * v8.writeHeapSnapshot is synchronous and blocks main for seconds (and the file is
+ * roughly heap-sized) — dev-only, like the CPU profiler. Analyze with
+ * test-tools/perf/analyze-heapsnapshot.mjs.
+ */
+const parseHeapSnapshotTurns = (): Set<number> | null => {
+	const raw = process.env['FS_ELECTRON_MEM_HEAPSNAPSHOT'];
+	if (!raw) {
+		return null;
+	}
+	return new Set(
+		raw
+			.split(',')
+			.map((s) => parseInt(s.trim(), 10))
+			.filter((n) => Number.isFinite(n) && n > 1),
+	);
+};
+
+const writeHeapSnapshot = (logsDir: string, sessionName: string, label: string): void => {
+	const path = join(logsDir, `heap-${sessionName}-${label}.heapsnapshot`);
+	const start = Date.now();
+	try {
+		v8.writeHeapSnapshot(path);
+		console.log('[fs-mem] heap snapshot written', path, `${Date.now() - start}ms`);
+		writeRecord({ kind: 'heap-snapshot', label, path, ms: Date.now() - start });
+	} catch (e) {
+		console.warn('[fs-mem] heap snapshot failed', e);
+	}
 };
 
 /**
