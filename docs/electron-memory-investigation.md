@@ -206,9 +206,12 @@ continuity; H is new.
    table; the measured ranking is: (a) `game-state-facade` IPC broadcast fan-out is
    the per-turn cost (517 sends ≥100 ms, 71.5 s total in one game — **Plan D
    handshake IMPLEMENTED and VALIDATED 2026-07-28, session 8: 66 sends / 11.7 s,
-   `targets: 2`**; payload diet is now the top open item — session 9 measured
-   645 slow sends / 98.4 s late-game as the GameState wire value grows, see the
-   Plan G section), (b) match start is API-response `JSON.parse`
+   `targets: 2`**; the payload diet is **IMPLEMENTED, awaiting in-game
+   validation** — session 9 measured 645 slow sends / 98.4 s late-game as the
+   GameState wire value grows; offline attribution showed 73% of the wire was
+   dead REMOVEDFROMGAME parser entities, now dropped for BG games (harness:
+   end-game wire 2.86 → 0.77 MB, see the session 9 follow-up), (b) match start
+   is API-response `JSON.parse`
    on main (~5.3 s, BG meta-hero stats) plus Electron IPC serialization of those
    payloads (~4.2 s) — **large-payload parse offload IMPLEMENTED and VALIDATED
    2026-07-28, session 9: zero main-thread parses, hero-selection stalls
@@ -230,9 +233,10 @@ continuity; H is new.
    The earlier "fan-out waste was minimal" assessment was wrong: session 7 measured
    `webContents.send('game-state-facade', ...)` structured clones at 100-390 ms
    each, 517 of them ≥100 ms in one game (71.5 s total), the direct cause of the
-   0.5-1.0 s per-turn stalls. The payload-diet half (trim the game-state wire
-   value per consumer) stays open; remaining per-send cost is two full GameState
-   clones (worst 531 ms late-game).
+   0.5-1.0 s per-turn stalls. The payload-diet half is **IMPLEMENTED, awaiting
+   in-game validation**: 73% of the late-game wire was dead REMOVEDFROMGAME
+   parser entities, now stripped for BG games (offline harness: end-game wire
+   2.86 → 0.77 MB, clone 72 → 18 ms — see the session 9 follow-up in Plan G).
 7. **Plan C track 2 - TagsHistory cap**: demoted — main heapUsed grew only 140->330 MB
    over 13 turns (119k TagsHistory entries); real but small compared to the above.
    Track 1 as originally written is moot (the buffer is empty on Electron; see the bug
@@ -290,6 +294,34 @@ Done when: a ranked attribution table for late-BG exists, plus a baseline
 longest-stall number. **DONE 2026-07-27** — see the two measured-session sections
 above. Keep the instrumentation in place: it is the before/after harness for every
 other plan.
+
+#### Unattended validation sessions (fake-game replay drivers, 2026-07-28)
+
+To validate changes without anyone playing, a recorded Power.log can be replayed
+through the real production pipeline **at the pace of the original game** (line
+timestamps drive the feed schedule — batching windows, broadcast cadence and stall
+patterns depend on arrival rate, so a fast feed does not reproduce live behavior):
+
+- **Electron (main process)**: set `FS_FAKE_GAME_LOG=<path to Power.log>` and start
+  the app (together with `FS_ELECTRON_MEM=1` for measurements). Optional:
+  `FS_FAKE_GAME_SPEED` (default 1; 0 = as fast as possible),
+  `FS_FAKE_GAME_MAX_GAP_MS` (idle-gap cap, default 15000), `FS_FAKE_GAME_DELAY_MS`
+  (boot settle delay, default 20000). Progress and completion are logged as
+  `[fake-game]` lines. Fidelity: for a real IPC fan-out (overlay/BG windows as
+  subscribers) Hearthstone must be running at the menu — ow-electron only creates the
+  overlay when it injects into a live HS process. The end-of-game upload runs for
+  real. See `apps/electron-app/src/app/services/fake-game-driver.ts`.
+- **Overwolf (devtools)**: `fakeGame('bg.log', { isBg: true, realtime: true })`
+  (`realtime: 2` = 2x speed; `maxGapMs` caps idle gaps). Old fast-feed behavior is
+  unchanged when `realtime` is not set.
+- **Jest replay harness**: `replayPowerLogToGameState({ enableBattleSim: true })`
+  runs real in-process BGS battle sims (same `simulateBattle` generator as the
+  compute worker, intermediate results included; capped at 800 sims/fight by
+  default). The full-pipeline perf spec enables this with `FS_PERF_BATTLE_SIM=1` —
+  measured effect on the session 9 log: `bgState` on the wire grows 0.01 → 0.36 MB
+  (live-like battle history), making the perf harness representative of the real
+  wire payload. Also fixed: the harness i18n mock lacked `translateString`, so BG
+  replays never populated `metadata`/`bgState` at all (see the session 9 follow-up).
 
 ### Plan B - Window and renderer inventory
 
@@ -607,6 +639,40 @@ item:**
   clearly: session 8 ended at turn 11 right where the ramp starts, and session
   7's numbers were inflated across the whole game by the 5-window fan-out.
 - Main RSS peaked at 1.14 GB (in line with previous instrumented sessions).
+
+**Session 9 follow-up (offline, same Power.log) — payload diet scoped and
+IMPLEMENTED; awaiting in-game validation:**
+
+- Extended the full-pipeline replay harness with `FS_PERF_WIRE=1`: per turn it
+  runs the production `serializeGameStateForElectron` on the replayed state,
+  measures `v8.serialize`/`structuredClone` cost and a per-chunk byte
+  breakdown. Replaying the session 9 log reproduced the live pattern: wire
+  value 0.02 → 2.86 MB over the game, clone cost 0.7 → ~70 ms.
+- **Composition: 2.09 MB of the 2.25 MB `parserState` (73% of the whole wire)
+  was entities in `Zone.REMOVEDFROMGAME`** — dead BG combat minions, which
+  accumulate every fight. Live zones are tiny (PLAY 99 KB, HAND 6 KB,
+  GRAVEYARD 3 KB, SETASIDE 45 KB).
+- **Consumer audit**: on Electron the event parsers/card services run on main
+  with the raw state; only renderer-side code reads the wire copy (counters,
+  card highlights, dynamic pools, deck-list/twitch components). All BG-mode
+  consumers read controller entities, PLAY enchantments or hovered HAND/PLAY
+  entities. The only dead-zone readers (dark-gifts wants REMOVEDFROMGAME,
+  bashana graveyard spells, godfrey) are constructed-only cards that never
+  display in BG.
+- **Fix**: `sanitizeParserStateForElectron` now drops REMOVEDFROMGAME entities
+  (keeping controller entities) from the wire copy for BG games
+  (`isBattlegrounds(metadata.gameType)`); constructed is untouched. Harness
+  result on the session 9 log: **end-game wire 2.86 → 0.77 MB (-73%), clone
+  72 → 18 ms**, growth curve flattened (turn 32: 2.43 → 0.74 MB). Remaining
+  top chunks are `opponentDeck` (0.33 MB) and `playerDeck` (0.28 MB) — next
+  diet targets if late-game `game-state-facade` totals still matter after a
+  live session.
+- Harness fidelity fix along the way: the replay i18n mock lacked
+  `translateString`, so `MatchMetadataParser`'s BG branch threw (the
+  `buildEmptyPanels` call sits outside its try/catch) and `metadata`/`bgState`
+  were never populated on BG replays. Fixed in
+  `test-tools/lib/power-log-replay-harness.ts`; BG replays now run the real BG
+  parser path (`gameType: 23`, bgState on the wire).
 
 **Session 8 (2026-07-28 11:04, game to turn 11) — Plan D handshake VALIDATED
 in-game:**
