@@ -21,6 +21,9 @@ import { GameEventsEmitterService } from './game-events-emitter.service';
 
 @Injectable()
 export class GameEvents {
+	/** Grace period between Hearthstone exit and the session-memory release (test override) */
+	public static sessionReleaseGraceMs = 30_000;
+
 	private processingQueue: ProcessingQueue<string>;
 
 	private lastProcessedTimestamp: number;
@@ -28,6 +31,8 @@ export class GameEvents {
 	private tsParser: ReplayParser | null = null;
 	private tsParserLineIndex: number = 0;
 	private tsParserCurrentGameSeed: number = 0;
+	private tsParserPtlSubscription: { unsubscribe: () => void } | null = null;
+	private sessionReleaseTimer: ReturnType<typeof setTimeout> | null = null;
 
 	constructor(
 		private readonly gameEventsEmitter: GameEventsEmitterService,
@@ -89,6 +94,49 @@ export class GameEvents {
 					}
 				});
 			});
+
+		// Memory release: the parser state (replay tree, entities maps, tag histories —
+		// ~50-70 MB after a long BG game) and the last GameState otherwise stay resident
+		// until the next game. Once Hearthstone has exited nothing can read them anymore,
+		// so drop both after a grace period. The parser is re-created lazily on the next
+		// log batch (see processLogsWithTsParser), so a later game is unaffected.
+		this.gameStatus.onGameStart(() => this.cancelSessionMemoryRelease());
+		this.gameStatus.onGameExit(() => this.scheduleSessionMemoryRelease());
+	}
+
+	private cancelSessionMemoryRelease(): void {
+		if (this.sessionReleaseTimer) {
+			clearTimeout(this.sessionReleaseTimer);
+			this.sessionReleaseTimer = null;
+		}
+	}
+
+	private scheduleSessionMemoryRelease(): void {
+		this.cancelSessionMemoryRelease();
+		this.sessionReleaseTimer = setTimeout(async () => {
+			this.sessionReleaseTimer = null;
+			if ((await this.gameStatus.inGame()) === true) {
+				// Hearthstone relaunched during the grace period
+				return;
+			}
+			if (this.processingQueue.eventsPendingCount() > 0) {
+				// Tail of the log is still being processed; try again later
+				this.scheduleSessionMemoryRelease();
+				return;
+			}
+			this.releaseSessionMemory();
+		}, GameEvents.sessionReleaseGraceMs);
+	}
+
+	private releaseSessionMemory(): void {
+		if (!this.tsParser) {
+			return;
+		}
+		console.log('[game-events] Hearthstone exited, releasing parser and game state');
+		this.tsParserPtlSubscription?.unsubscribe();
+		this.tsParserPtlSubscription = null;
+		this.tsParser = null;
+		this.gameState.releaseSessionState();
 	}
 
 	private async processQueue(eventQueue: readonly string[]): Promise<readonly string[]> {
@@ -1958,9 +2006,11 @@ export class GameEvents {
 		this.tsParser.onGameEvent = (event: ParserGameEvent) => {
 			this.dispatchGameEvent(event);
 		};
-		this.tsParser.ptlGameState$.pipe(filter((update) => !!update)).subscribe((update) => {
-			this.gameEventsEmitter.ptlGameState$.next(update);
-		});
+		this.tsParserPtlSubscription = this.tsParser.ptlGameState$
+			.pipe(filter((update) => !!update))
+			.subscribe((update) => {
+				this.gameEventsEmitter.ptlGameState$.next(update);
+			});
 	}
 
 	private processLogsWithTsParser(

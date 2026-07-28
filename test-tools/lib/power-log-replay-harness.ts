@@ -472,6 +472,12 @@ export type PowerLogReplayResult = {
 	 * exit cleanly after the test asserts. Safe to call multiple times.
 	 */
 	readonly cleanup: () => void;
+	/**
+	 * Simulate Hearthstone exiting: flips the mocked inGame state to false and fires the
+	 * recorded {@link GameStatusService.onGameExit} listeners. Used to exercise the
+	 * session-memory release (GameEvents → GameStateService.releaseSessionState).
+	 */
+	readonly triggerGameExit: () => void;
 };
 
 export type ReplayPowerLogOptions = {
@@ -636,11 +642,17 @@ export async function replayPowerLogToGameState(options: ReplayPowerLogOptions):
 	};
 
 	const inGame$$ = new SubscriberAwareBehaviorSubject<boolean | null>(true);
+	const gameExitListeners: any[] = [];
 	const gameStatusMock: Partial<GameStatusService> = {
 		isReady: async () => undefined,
 		inGame$$: inGame$$ as any,
+		inGame: async () => inGame$$.value === true,
 		onGameStart: async (callback: any) => {
 			callback?.();
+		},
+		// Recorded so specs can simulate a Hearthstone exit (session-memory release path)
+		onGameExit: (callback: any) => {
+			gameExitListeners.push(callback);
 		},
 	};
 
@@ -837,6 +849,15 @@ export async function replayPowerLogToGameState(options: ReplayPowerLogOptions):
 		}
 	};
 
+	// The real facade forwards releaseSessionState to GameStateService; mirror it here
+	// so the session-memory release path (GameEvents.onGameExit) works in specs
+	(gameStateFacadeMock as any).releaseSessionState = () => gameStateService.releaseSessionState();
+
+	const triggerGameExit = () => {
+		inGame$$.next(false);
+		gameExitListeners.forEach((cb: any) => cb());
+	};
+
 	return {
 		allCardsRef,
 		state: gameStateService.state,
@@ -844,5 +865,6 @@ export async function replayPowerLogToGameState(options: ReplayPowerLogOptions):
 		gameEvents,
 		secretConfigService,
 		cleanup,
+		triggerGameExit,
 	};
 }

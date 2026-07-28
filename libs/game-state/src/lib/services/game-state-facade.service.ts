@@ -55,6 +55,15 @@ export class GameStateFacadeService extends AbstractFacadeService<GameStateFacad
 		});
 	}
 
+	/** Memory release after Hearthstone exits — see GameStateService.releaseSessionState */
+	public releaseSessionState(): void {
+		this.mainInstance.releaseSessionStateInternal();
+	}
+
+	protected releaseSessionStateInternal(): void {
+		this.gameStateService?.releaseSessionState();
+	}
+
 	protected override async initElectronSubjects() {
 		this.setupElectronSubject(this.gameState$$, eventName, {
 			serialize: (gameState: GameState) => this.serializeForElectron(gameState),

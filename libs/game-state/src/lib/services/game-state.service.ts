@@ -249,6 +249,18 @@ export class GameStateService {
 	}
 
 	/**
+	 * Drop the per-session object graph once Hearthstone has exited: the last game's
+	 * GameState (whose `parserState` pins the parser's whole entities map), the rewind
+	 * snapshot ring and other per-game buffers otherwise stay resident until the next
+	 * game. Goes through the processing queue so it can't race an in-flight batch.
+	 * Called by GameEvents when the game process exits (with a grace delay), never
+	 * mid-game. See docs/electron-memory-investigation.md.
+	 */
+	public releaseSessionState(): void {
+		this.processingQueue.enqueue({ type: 'GAME_SESSION_RELEASED' });
+	}
+
+	/**
 	 * Wait until the game-state processing queue is empty (batches run every 250ms).
 	 * Mirror of `GameEvents.awaitProcessingQueueIdle`; used by dev tooling / perf specs to
 	 * measure end-to-end per-turn processing time. No behavior change for the app.
@@ -475,6 +487,18 @@ export class GameStateService {
 			currentState = currentState.update({
 				opponentTrackerClosedByUser: true,
 			});
+		} else if (event.type === 'GAME_SESSION_RELEASED') {
+			// Hearthstone exited (see releaseSessionState): replace the state wholesale and
+			// drop every per-game buffer, so the previous game's object graph becomes
+			// collectible. The upload pipeline holds its own references to whatever it
+			// still needs, so this is purely a memory release.
+			console.log('[game-state] releasing session state after Hearthstone exit');
+			this.rewindSnapshots = [];
+			this.rewindCutoffTimestamp = null;
+			this.rewindLowerBoundTimestamp = null;
+			this.savedDeckstrings = null;
+			this.minionsWillDie = [];
+			currentState = new GameState();
 		}
 
 		const parsersForEvent = this.eventParsers[event.type] ?? [];
