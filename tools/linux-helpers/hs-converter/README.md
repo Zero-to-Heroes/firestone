@@ -1,0 +1,1 @@
+Port of the [hs-game-converter](https://github.com/Zero-to-Heroes/hs-game-converter) project to C# to be used in the [Overwolf application](https://github.com/Zero-to-Heroes/overwolf-replay-app)

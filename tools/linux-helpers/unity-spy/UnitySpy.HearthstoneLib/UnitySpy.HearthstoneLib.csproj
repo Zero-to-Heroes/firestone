@@ -1,0 +1,296 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{30AEEDFE-120D-41F0-BE86-2475A4EC33BB}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>HackF5.UnitySpy.HearthstoneLib</RootNamespace>
+    <AssemblyName>UnitySpy.HearthstoneLib</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'test|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\test\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'test|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\test\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'test|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\test\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="JetBrains.Annotations, Version=2019.1.3.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <HintPath>..\packages\JetBrains.Annotations.2019.1.3\lib\net20\JetBrains.Annotations.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Detail\AccountInfo\AccountInfoReader.cs" />
+    <Compile Include="Detail\AccountInfo\AccountInfo.cs" />
+    <Compile Include="Detail\Achievement\AchievementInfo.cs" />
+    <Compile Include="Detail\Achievement\AchievementsInfo.cs" />
+    <Compile Include="Detail\Achievement\AchievementsInfoReader.cs" />
+    <Compile Include="Detail\ArenaInfo\ArenaInfoReader.cs" />
+    <Compile Include="Detail\ArenaInfo\ArenaInfo.cs" />
+    <Compile Include="Detail\ArenaInfo\Class1.cs" />
+    <Compile Include="Detail\ArenaInfo\Model.cs" />
+    <Compile Include="Detail\Battlegrounds\BattlegroundsPlayerInfoReader.cs" />
+    <Compile Include="Detail\Battlegrounds\BattlegroundsDuoInfoReader.cs" />
+    <Compile Include="Detail\Battlegrounds\BgsPlayerInfo.cs" />
+    <Compile Include="Detail\Battlegrounds\TeammateEntity.cs" />
+    <Compile Include="Detail\CardChoice\CardChoiceReader.cs" />
+    <Compile Include="Detail\Collection\CollectionBattlegroundsHeroSkinsReader.cs" />
+    <Compile Include="Detail\DungeonInfo\DungeonInfoHistoryReader.cs" />
+    <Compile Include="Detail\DungeonInfo\GuestHero.cs" />
+    <Compile Include="Detail\DungeonInfo\AdventuresInfo.cs" />
+    <Compile Include="Detail\DungeonInfo\AdventureTreasureInfo.cs" />
+    <Compile Include="Detail\DungeonInfo\IGuestHero.cs" />
+    <Compile Include="Detail\DungeonInfo\IAdventuresInfo.cs" />
+    <Compile Include="Detail\DungeonInfo\IAdventureTreasureInfo.cs" />
+    <Compile Include="Detail\EventTimings\EventTiming.cs" />
+    <Compile Include="Detail\EventTimings\EventTimingsReader.cs" />
+    <Compile Include="Detail\Friends\FriendsListReader.cs" />
+    <Compile Include="Detail\GameDbf\ArenaClientStateType.cs" />
+    <Compile Include="Detail\GameDbf\ArenaSessionState.cs" />
+    <Compile Include="Detail\GameDbf\GameDbfReader.cs" />
+    <Compile Include="Detail\GameDbf\AdventureData.cs" />
+    <Compile Include="Detail\GameDbf\GameTags.cs" />
+    <Compile Include="Detail\GameDbf\DraftMode.cs" />
+    <Compile Include="Detail\GameDbf\Zone.cs" />
+    <Compile Include="Detail\GameDbf\RaceTag.cs" />
+    <Compile Include="Detail\GameState\GameStateReader.cs" />
+    <Compile Include="Detail\InputManager\MousedOverCard.cs" />
+    <Compile Include="Detail\InputManager\InputManagerReader.cs" />
+    <Compile Include="Detail\Mercenaries\MercenariesPendingTreasureSelection.cs" />
+    <Compile Include="Detail\Mercenaries\MercenariesCollection.cs" />
+    <Compile Include="Detail\Mercenaries\Mercenary.cs" />
+    <Compile Include="Detail\Mercenaries\MercenariesMap.cs" />
+    <Compile Include="Detail\Mercenaries\MercenariesInfo.cs" />
+    <Compile Include="Detail\Mercenaries\MercenariesInfoReader.cs" />
+    <Compile Include="Detail\Battlegrounds\BattlegroundsGame.cs" />
+    <Compile Include="Detail\Battlegrounds\BattlegroundsInfo.cs" />
+    <Compile Include="Detail\Battlegrounds\BattlegroundsInfoReader.cs" />
+    <Compile Include="Detail\Battlegrounds\BattlegroundsPlayer.cs" />
+    <Compile Include="Detail\Collection\DustInfoCard.cs" />
+    <Compile Include="Detail\Collection\CollectionCardRecordReader.cs" />
+    <Compile Include="Detail\Collection\CollectionCoin.cs" />
+    <Compile Include="Detail\Collection\CollectionCoinReader.cs" />
+    <Compile Include="Detail\Deck\DbfDeck.cs" />
+    <Compile Include="Detail\Mercenaries\NodeStateEnum.cs" />
+    <Compile Include="Detail\OpenPacksInfo\BoostersInfoReader.cs" />
+    <Compile Include="Detail\Collection\CollectionCardBack.cs" />
+    <Compile Include="Detail\Collection\CollectionCard.cs" />
+    <Compile Include="Detail\Collection\CollectionCardBackReader.cs" />
+    <Compile Include="Detail\Collection\CollectionCardReader.cs" />
+    <Compile Include="Detail\Deck\ActiveDeckReader.cs" />
+    <Compile Include="Detail\Deck\Deck.cs" />
+    <Compile Include="Detail\PlayerRecords\PlayerRecordReader.cs" />
+    <Compile Include="Detail\PlayerRecords\PlayerRecord.cs" />
+    <Compile Include="Detail\Quests\QuestsReader.cs" />
+    <Compile Include="Detail\Quests\QuestInfo.cs" />
+    <Compile Include="Detail\RewardsInfo\RewardsInfoReader.cs" />
+    <Compile Include="Detail\RewardsInfo\RewardInfo.cs" />
+    <Compile Include="Detail\DungeonInfo\DungeonFieldKey.cs" />
+    <Compile Include="Detail\DungeonInfo\DungeonInfo.cs" />
+    <Compile Include="Detail\DungeonInfo\DungeonInfoCollection.cs" />
+    <Compile Include="Detail\DungeonInfo\DungeonInfoReader.cs" />
+    <Compile Include="Detail\DungeonInfo\DungeonOptionBundle.cs" />
+    <Compile Include="Detail\DungeonInfo\DungeonSaveKey.cs" />
+    <Compile Include="Detail\DungeonInfo\FullDungeonInfo.cs" />
+    <Compile Include="Detail\HearthstoneImage.cs" />
+    <Compile Include="Detail\Match\Account.cs" />
+    <Compile Include="Detail\Match\BattleTag.cs" />
+    <Compile Include="Detail\Match\MatchInfo.cs" />
+    <Compile Include="Detail\Match\MatchReader.cs" />
+    <Compile Include="Detail\Match\Rank.cs" />
+    <Compile Include="Detail\Match\Player.cs" />
+    <Compile Include="Detail\TurnTimer\TurnTimer.cs" />
+    <Compile Include="Detail\TurnTimer\TurnTimerReader.cs" />
+    <Compile Include="Detail\Utils.cs" />
+    <Compile Include="GameData\DeckType.cs" />
+    <Compile Include="GameData\DraftSlotType.cs" />
+    <Compile Include="GameData\GameSaveKeySubkeyId.cs" />
+    <Compile Include="GameData\TAG_CLASS.cs" />
+    <Compile Include="MemoryUpdate\Impl\AchievementCompletionNotifier.cs" />
+    <Compile Include="MemoryUpdate\Impl\ArenaDraftScreenHiddenNotifier.cs" />
+    <Compile Include="MemoryUpdate\Impl\ArenaDraftNotifier.cs" />
+    <Compile Include="MemoryUpdate\Impl\BattlegroundsSelectedGameModeNotifier.cs" />
+    <Compile Include="MemoryUpdate\Impl\BattlegroundsNewRatingNotifier.cs" />
+    <Compile Include="MemoryUpdate\Impl\ChoiceManagerNotifier.cs" />
+    <Compile Include="MemoryUpdate\Impl\CollectionCardsCountNotifier.cs" />
+    <Compile Include="MemoryUpdate\Impl\ArenaCurrentCardsInDeckNotifier.cs" />
+    <Compile Include="MemoryUpdate\Impl\FriendsListOpenedNotifier.cs" />
+    <Compile Include="MemoryUpdate\Impl\CardMouseOverNotifier.cs" />
+    <Compile Include="MemoryUpdate\MemoryUpdateResult.cs" />
+    <Compile Include="Detail\OpenPacksInfo\BoostersInfo.cs" />
+    <Compile Include="Detail\OpenPacksInfo\PackCard.cs" />
+    <Compile Include="Detail\OpenPacksInfo\PackInfo.cs" />
+    <Compile Include="Detail\OpenPacksInfo\PackOpening.cs" />
+    <Compile Include="Detail\OpenPacksInfo\BoosterStack.cs" />
+    <Compile Include="Detail\OpenPacksInfo\OpenPacksInfo.cs" />
+    <Compile Include="Detail\OpenPacksInfo\OpenPacksInfoReader.cs" />
+    <Compile Include="Detail\RewardTrack\XpChange.cs" />
+    <Compile Include="Detail\RewardTrack\RewardTrackInfos.cs" />
+    <Compile Include="Detail\RewardTrack\RewardTrackInfoReader.cs" />
+    <Compile Include="Detail\SceneMode\SceneModeReader.cs" />
+    <Compile Include="Detail\Achievement\IAchievementInfo.cs" />
+    <Compile Include="Detail\Mercenaries\IMercenariesPendingTreasureSelection.cs" />
+    <Compile Include="Detail\Mercenaries\IMercenariesMap.cs" />
+    <Compile Include="Detail\Mercenaries\IMercenariesInfo.cs" />
+    <Compile Include="Detail\Collection\IDustInfoCard.cs" />
+    <Compile Include="Detail\Collection\ICollectionCoin.cs" />
+    <Compile Include="Detail\Mercenaries\IMercenariesCollection.cs" />
+    <Compile Include="Detail\Mercenaries\IMercenary.cs" />
+    <Compile Include="Detail\OpenPacksInfo\IPackInfo.cs" />
+    <Compile Include="Detail\Collection\ICollectionCardBack.cs" />
+    <Compile Include="Detail\Achievement\IAchievementsInfo.cs" />
+    <Compile Include="Detail\OpenPacksInfo\IBoostersInfo.cs" />
+    <Compile Include="Logger.cs" />
+    <Compile Include="MemoryUpdate\Impl\ArenaRewardsNotifier.cs" />
+    <Compile Include="MemoryUpdate\Impl\IsOpeningPackNotifier.cs" />
+    <Compile Include="MemoryUpdate\Impl\MercenariesPendingTreasureSelectionNotifier.cs" />
+    <Compile Include="MemoryUpdate\Impl\SelectedDeckNotifier.cs" />
+    <Compile Include="MemoryUpdate\Impl\XpChangeNotifier.cs" />
+    <Compile Include="MemoryUpdate\Impl\OpenedPackNotifier.cs" />
+    <Compile Include="MemoryUpdate\Impl\CurrentSceneNotifier.cs" />
+    <Compile Include="MemoryUpdate\Impl\AchievementToastNotifier.cs" />
+    <Compile Include="MemoryUpdate\Impl\CollectionInitNotifier.cs" />
+    <Compile Include="MemoryUpdate\MindVisionNotifier.cs" />
+    <Compile Include="Sanity.cs" />
+    <Compile Include="SceneModeEnum.cs" />
+    <Compile Include="DungeonKey.cs" />
+    <Compile Include="Detail\DungeonInfo\IDungeonOptionBundle.cs" />
+    <Compile Include="GameFormat.cs" />
+    <Compile Include="GameType.cs" />
+    <Compile Include="Detail\AccountInfo\IAccount.cs" />
+    <Compile Include="Detail\OpenPacksInfo\IPackCard.cs" />
+    <Compile Include="Detail\OpenPacksInfo\IPackOpening.cs" />
+    <Compile Include="Detail\OpenPacksInfo\IBoosterStack.cs" />
+    <Compile Include="Detail\OpenPacksInfo\IOpenPacksInfo.cs" />
+    <Compile Include="Detail\Battlegrounds\IBattlegroundsPlayer.cs" />
+    <Compile Include="Detail\Battlegrounds\IBattlegroundsGame.cs" />
+    <Compile Include="Detail\Battlegrounds\IBattlegroundsInfo.cs" />
+    <Compile Include="Detail\Match\IBattleTag.cs" />
+    <Compile Include="Detail\Collection\ICollectionCard.cs" />
+    <Compile Include="Detail\ArenaInfo\IArenaInfo.cs" />
+    <Compile Include="Detail\Deck\IDeck.cs" />
+    <Compile Include="Detail\DungeonInfo\IDungeonInfo.cs" />
+    <Compile Include="Detail\DungeonInfo\IDungeonInfoCollection.cs" />
+    <Compile Include="Detail\DungeonInfo\IFullDungeonInfo.cs" />
+    <Compile Include="Detail\Match\IMatchInfo.cs" />
+    <Compile Include="Detail\AccountInfo\IAccountInfo.cs" />
+    <Compile Include="Detail\Match\IRank.cs" />
+    <Compile Include="Detail\Match\IPlayer.cs" />
+    <Compile Include="MindVision.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Side.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\UnitySpy\UnitySpy.csproj">
+      <Project>{47cd4647-790b-428d-b4e4-8b3267c63469}</Project>
+      <Name>UnitySpy</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

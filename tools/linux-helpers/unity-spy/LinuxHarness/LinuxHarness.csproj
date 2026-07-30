@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <AssemblyName>LinuxHarness</AssemblyName>
+    <NoWarn>$(NoWarn);CA1416</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\UnitySpy.HearthstoneLib\UnitySpy.HearthstoneLib.Linux.csproj" />
+    <ProjectReference Include="..\UnitySpy\UnitySpy.Linux.csproj" />
+  </ItemGroup>
+</Project>

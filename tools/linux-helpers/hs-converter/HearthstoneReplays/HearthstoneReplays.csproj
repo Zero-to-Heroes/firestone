@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{47CD4647-790B-428D-B4E4-8B3267C63469}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>HearthstoneReplays</RootNamespace>
+    <AssemblyName>HearthstoneReplays</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'test|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\test\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'test|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\test\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'test|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\test\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DeepCloner, Version=0.10.0.0, Culture=neutral, PublicKeyToken=dc0b95cf99bf4e99, processorArchitecture=MSIL">
+      <HintPath>..\packages\DeepCloner.0.10.4\lib\net40\DeepCloner.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Enums.cs" />
+    <Compile Include="Events\AbstractActionParser.cs" />
+    <Compile Include="Events\Cards\TimewarpedNelliesShip.cs" />
+    <Compile Include="Events\Cards\DemonicProject.cs" />
+    <Compile Include="Events\Cards\Mimicry.cs" />
+    <Compile Include="Events\Cards\RazaTheResealed.cs" />
+    <Compile Include="Events\Cards\RunicAdornment.cs" />
+    <Compile Include="Events\Cards\Triangulate.cs" />
+    <Compile Include="Events\Cards\DeepSpaceCurator.cs" />
+    <Compile Include="Events\GameMetaData.cs" />
+    <Compile Include="Events\EventQueueHandler.cs" />
+    <Compile Include="Events\GameStateShort.cs" />
+    <Compile Include="Events\Obfuscator.cs" />
+    <Compile Include="Events\Parsers\AbstractBasicTagChangeParser.cs" />
+    <Compile Include="Events\Parsers\BattlegroundsTimewarpedTavernActiveParser.cs" />
+    <Compile Include="Events\Parsers\SpecialTargetParser.cs" />
+    <Compile Include="Events\Parsers\GameResetParser.cs" />
+    <Compile Include="Events\Parsers\CorpsesChangedParser.cs" />
+    <Compile Include="Events\Parsers\HeraldColossalAmountParser.cs" />
+    <Compile Include="Events\Parsers\CardsShuffledIntoDeckParser.cs" />
+    <Compile Include="Events\Parsers\SpawnTimeCountChangedParser.cs" />
+    <Compile Include="Events\Parsers\ImmolateChangedParser.cs" />
+    <Compile Include="Events\Parsers\MaxResourcesChangedParser.cs" />
+    <Compile Include="Events\Parsers\StarshipLaunchedParser.cs" />
+    <Compile Include="Events\Parsers\TotalMagnetizeChangedParser.cs" />
+    <Compile Include="Events\Parsers\BattlegroundsHeroRerollParser.cs" />
+    <Compile Include="Events\Parsers\BallerBuffChangedParser .cs" />
+    <Compile Include="Events\Parsers\BeetleArmyChangedParser.cs" />
+    <Compile Include="Events\Parsers\ParentCardChangedParser.cs" />
+    <Compile Include="Events\Parsers\HeroEnchantmentDetachedParser .cs" />
+    <Compile Include="Events\Parsers\HeroEnchantmentAttachedParser.cs" />
+    <Compile Include="Events\Parsers\BattlegroundsTrinketSelectionParser.cs" />
+    <Compile Include="Events\Parsers\BattlegroundsTrinketSelectedParser.cs" />
+    <Compile Include="Events\Parsers\TouristRevealedParser.cs" />
+    <Compile Include="Events\Parsers\LocationUsedParser.cs" />
+    <Compile Include="Events\Parsers\HeroChangedParser.cs" />
+    <Compile Include="Events\Parsers\BattlegroundsExtraGoldNextTurnParser.cs" />
+    <Compile Include="Events\Parsers\BattlegroundsDuoTeammatePlayerBoardParser .cs" />
+    <Compile Include="Events\Parsers\BattlegroundsBattleStartingParser.cs" />
+    <Compile Include="Events\Parsers\BattlegroundsActivePlayerBoardParser .cs" />
+    <Compile Include="Events\Parsers\BattlegroundsQuestCompletedParser.cs" />
+    <Compile Include="Events\Parsers\BattlegroundsRewardGainedParser.cs" />
+    <Compile Include="Events\Parsers\BattlegroundsStartOfBattleLegacySnapshot.cs" />
+    <Compile Include="Events\Parsers\BloodGemBuffChangedParser.cs" />
+    <Compile Include="Events\Parsers\CardForgedParser.cs" />
+    <Compile Include="Events\Parsers\FullEntityParser.cs" />
+    <Compile Include="Events\Parsers\LocationDestroyedParser.cs" />
+    <Compile Include="Events\Parsers\ShowEntityParser.cs" />
+    <Compile Include="Events\Parsers\HideEntityParser.cs" />
+    <Compile Include="Events\Parsers\RemovedFromHistoryParser.cs" />
+    <Compile Include="Events\Parsers\ExcavateTierChangedParser.cs" />
+    <Compile Include="Events\Parsers\ConstructedAnomalyParser.cs" />
+    <Compile Include="Events\Parsers\Controls\BattlegroundsControls.cs" />
+    <Compile Include="Events\Parsers\Controls\ControlsManager.cs" />
+    <Compile Include="Events\Parsers\CorpsesSpentThisGameParser.cs" />
+    <Compile Include="Events\Parsers\OverloadedCrystalsParser.cs" />
+    <Compile Include="Events\Parsers\BattlegroundsQuestRevealedParser.cs" />
+    <Compile Include="Events\Parsers\DataScriptChangedParser.cs" />
+    <Compile Include="Events\Parsers\BattlegroundsBuddyGainedParser.cs" />
+    <Compile Include="Events\Parsers\BattlegroundsAfterPlayerBoardsRevealedParser.cs" />
+    <Compile Include="Events\Parsers\ChoosingOptionsParser.cs" />
+    <Compile Include="Events\Parsers\EntityChosenParser.cs" />
+    <Compile Include="Events\Parsers\BattlegroundsTavernPrizesParser.cs" />
+    <Compile Include="Events\Parsers\BattlegroundsFreezeParser.cs" />
+    <Compile Include="Events\Parsers\BattlegroundsMinionsSoldParser.cs" />
+    <Compile Include="Events\Parsers\BattlegroundsMinionsBoughtParser.cs" />
+    <Compile Include="Events\Parsers\BattlegroundsRerollParser.cs" />
+    <Compile Include="Events\Parsers\CardPlayedFromEffectParser.cs" />
+    <Compile Include="Events\Parsers\CounterWillTriggerParser.cs" />
+    <Compile Include="Events\Parsers\GameCleanupParser.cs" />
+    <Compile Include="Events\Parsers\HeroRevealedParser.cs" />
+    <Compile Include="Events\Parsers\CardTradedParser.cs" />
+    <Compile Include="Events\Parsers\CostChangedParser.cs" />
+    <Compile Include="Events\Parsers\MercenariesQueuedAbilityParser.cs" />
+    <Compile Include="Events\Parsers\MercenariesSelectedTargetParser.cs" />
+    <Compile Include="Events\Parsers\MercenariesHeroRevealed.cs" />
+    <Compile Include="Events\Parsers\MercenariesAbilityActivatedParser.cs" />
+    <Compile Include="Events\Parsers\MercenariesAbilityRevealedParser.cs" />
+    <Compile Include="Events\Parsers\CopiedFromEntityIdParser.cs" />
+    <Compile Include="Events\Parsers\CardUpdatedInDeckParser.cs" />
+    <Compile Include="Events\Parsers\LinkedEntityParser.cs" />
+    <Compile Include="Events\Parsers\MindrenderIlluciaParser.cs" />
+    <Compile Include="Events\Parsers\EntityUpdateParser.cs" />
+    <Compile Include="Events\Parsers\BattlegroundsHeroKilledParser.cs" />
+    <Compile Include="Events\Parsers\MercenariesAbilityCooldownUpdatedParser.cs" />
+    <Compile Include="Events\Parsers\MinionsWillDieParser.cs" />
+    <Compile Include="Events\Parsers\MulliganDealingParser.cs" />
+    <Compile Include="Events\Parsers\NumCardsDrawnThisTurnParser.cs" />
+    <Compile Include="Events\Parsers\CreateCardInGraveyardParser.cs" />
+    <Compile Include="Events\Parsers\ResourcesUsedThisTurnParser.cs" />
+    <Compile Include="Events\Parsers\ResourcesThisTurnParser.cs" />
+    <Compile Include="Events\Parsers\CounterTriggerParser.cs" />
+    <Compile Include="Events\Parsers\QuestCompletedParser.cs" />
+    <Compile Include="Events\Parsers\StartOfGameTriggerParser.cs" />
+    <Compile Include="Events\Parsers\SpecialCardPowerParser.cs" />
+    <Compile Include="Events\Parsers\SecretWillTriggerParser.cs" />
+    <Compile Include="Events\Parsers\TurnCleanupParser.cs" />
+    <Compile Include="Events\Parsers\ShuffleDeckParser.cs" />
+    <Compile Include="Events\Parsers\TurnDurationUpdateParser.cs" />
+    <Compile Include="Events\Parsers\BattlegroundsQuestRewardEquippedParser.cs" />
+    <Compile Include="Events\Parsers\BattlegroundsQuestRewardDestroyedParser.cs" />
+    <Compile Include="Events\Parsers\Utils\BgsUtils.cs" />
+    <Compile Include="Events\Parsers\WhizbangDeckParser.cs" />
+    <Compile Include="Events\Parsers\ZoneChangeParser.cs" />
+    <Compile Include="Events\Parsers\WheelOfDeathCounterParser.cs" />
+    <Compile Include="Events\Parsers\ZonePositionChangedParser.cs" />
+    <Compile Include="Events\StopDevModeProvider.cs" />
+    <Compile Include="Events\StartDevModeProvider.cs" />
+    <Compile Include="Events\Oracle.cs" />
+    <Compile Include="Events\ActionParser.cs" />
+    <Compile Include="Events\CardIds.cs" />
+    <Compile Include="Events\GameEventProvider.cs" />
+    <Compile Include="Events\Parsers\BattlegroundsNextOpponnentParser.cs" />
+    <Compile Include="Events\Parsers\BattlegroundsHeroSelectedParser.cs" />
+    <Compile Include="Events\Parsers\BattlegroundsOpponentRevealedParser.cs" />
+    <Compile Include="Events\Parsers\BattlegroundsBattleOverParser.cs" />
+    <Compile Include="Events\Parsers\CthunParser.cs" />
+    <Compile Include="Events\Parsers\JadeGolemParser.cs" />
+    <Compile Include="Events\Parsers\BattlegroundsTriplesCountUpdatedParser.cs" />
+    <Compile Include="Events\Parsers\AttackOnBoardParser.cs" />
+    <Compile Include="Events\Parsers\WeaponDestroyedParser.cs" />
+    <Compile Include="Events\Parsers\WeaponEquippedParser.cs" />
+    <Compile Include="Events\Parsers\MinionGoDormantParser.cs" />
+    <Compile Include="Events\Parsers\GalakrondInvokedParser.cs" />
+    <Compile Include="Events\Parsers\NumCardsPlayedThisTurnParser.cs" />
+    <Compile Include="Events\Parsers\AttackParser.cs" />
+    <Compile Include="Events\Parsers\GameRunningParser.cs" />
+    <Compile Include="Events\Parsers\BattlegroundsHeroSelectionParser.cs" />
+    <Compile Include="Events\Parsers\BattlegroundsPlayerLeaderboardPlaceUpdatedParser.cs" />
+    <Compile Include="Events\Parsers\BattlegroundsPlayerTechLevelUpdatedParser.cs" />
+    <Compile Include="Events\Parsers\DecklistUpdateParser.cs" />
+    <Compile Include="Events\Parsers\CardRemovedFromBoardParser.cs" />
+    <Compile Include="Events\Parsers\InitialCardInDeckParser.cs" />
+    <Compile Include="Events\Parsers\LocalPlayerLeaderboardPlaceChangedParser.cs" />
+    <Compile Include="Events\Parsers\ChangeCardCreatorParser.cs" />
+    <Compile Include="Events\Parsers\HealthDefChangeParser.cs" />
+    <Compile Include="Events\Parsers\BurnedCardParser.cs" />
+    <Compile Include="Events\Parsers\CardStolenParser.cs" />
+    <Compile Include="Events\Parsers\HealingParser.cs" />
+    <Compile Include="Events\Parsers\FirstPlayerParser.cs" />
+    <Compile Include="Events\Parsers\MinionDiedParser.cs" />
+    <Compile Include="Events\Parsers\ArmorChangeParser.cs" />
+    <Compile Include="Events\Parsers\MinionBackOnBoardParser.cs" />
+    <Compile Include="Events\Parsers\CardRevealedParser.cs" />
+    <Compile Include="Events\Parsers\HeroPowerChangedParser.cs" />
+    <Compile Include="Events\Parsers\CardBuffedInHandParser.cs" />
+    <Compile Include="Events\Parsers\SecretCreatedInGameParser.cs" />
+    <Compile Include="Events\Parsers\SecretPlayedFromDeckParser.cs" />
+    <Compile Include="Events\Parsers\MainStepReadyParser.cs" />
+    <Compile Include="Events\Parsers\DeathrattleTriggeredParser.cs" />
+    <Compile Include="Events\Parsers\HeroPowerUsedParser.cs" />
+    <Compile Include="Events\Parsers\SecretDestroyedParser.cs" />
+    <Compile Include="Events\Parsers\SecretTriggeredParser.cs" />
+    <Compile Include="Events\Parsers\BattlegroundsPlayerBoardParser.cs" />
+    <Compile Include="Events\PlayerReport.cs" />
+    <Compile Include="Events\GameStateReport.cs" />
+    <Compile Include="Events\NodeParser.cs" />
+    <Compile Include="Events\GameState.cs" />
+    <Compile Include="Events\Parsers\DamageParser.cs" />
+    <Compile Include="Events\Parsers\FatigueParser.cs" />
+    <Compile Include="Events\Parsers\MinionSummonedParser.cs" />
+    <Compile Include="Events\Parsers\RecruitParser.cs" />
+    <Compile Include="Events\Parsers\MinionOnBoardAttackUpdatedParser.cs" />
+    <Compile Include="Events\Parsers\CardRemovedFromHandParser.cs" />
+    <Compile Include="Events\Parsers\CardChangedParser.cs" />
+    <Compile Include="Events\Parsers\CreateCardInDeckParser.cs" />
+    <Compile Include="Events\Parsers\CardRemovedFromDeckParser.cs" />
+    <Compile Include="Events\Parsers\EndOfEchoInHandParser.cs" />
+    <Compile Include="Events\Parsers\ReceiveCardInHandParser.cs" />
+    <Compile Include="Events\Parsers\SecretPlayedFromHandParser.cs" />
+    <Compile Include="Events\Parsers\DiscardedCardParser.cs" />
+    <Compile Include="Events\Parsers\CardBackToDeckParser.cs" />
+    <Compile Include="Events\Parsers\CardDrawFromDeckParser.cs" />
+    <Compile Include="Events\Parsers\CardPresentOnGameStartParser.cs" />
+    <Compile Include="Events\Parsers\CardPlayedFromHandParser .cs" />
+    <Compile Include="Events\Parsers\PassiveBuffParser.cs" />
+    <Compile Include="Events\Parsers\MonsterHuntStepParser.cs" />
+    <Compile Include="Events\Parsers\DungeonRunStepParser.cs" />
+    <Compile Include="Events\Parsers\RumbleRunStepParser.cs" />
+    <Compile Include="Events\Parsers\MulliganDoneParser.cs" />
+    <Compile Include="Events\Parsers\TurnStartParser.cs" />
+    <Compile Include="Events\Parsers\MulliganInputParser.cs" />
+    <Compile Include="Events\Parsers\GameEndParser.cs" />
+    <Compile Include="Events\Parsers\WinnerParser.cs" />
+    <Compile Include="Events\Parsers\NewGameParser.cs" />
+    <Compile Include="Events\Player.cs" />
+    <Compile Include="GameEvent.cs" />
+    <Compile Include="GameEventHandler.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="Logger.cs" />
+    <Compile Include="Parser\CombinedState.cs" />
+    <Compile Include="Parser\Handlers\DataHandler\FullEntityHandler.cs" />
+    <Compile Include="Parser\Handlers\DataHandler\HideEntityHandler.cs" />
+    <Compile Include="Parser\Handlers\DataHandler\ChangeEntityHandler.cs" />
+    <Compile Include="Parser\Handlers\DataHandler\ShowEntityHandler.cs" />
+    <Compile Include="Parser\Handlers\DataHandler\ActionMetadataInfoHandler.cs" />
+    <Compile Include="Parser\Handlers\DataHandler\ActionMetadataHandler.cs" />
+    <Compile Include="Parser\Handlers\DataHandler\BlockStartHandler.cs" />
+    <Compile Include="Parser\Handlers\DataHandler\CreatePlayerHandler.cs" />
+    <Compile Include="Parser\Handlers\DataHandler\MetaDataHandler.cs" />
+    <Compile Include="Parser\Handlers\DataHandler\PlayerNameHandler.cs" />
+    <Compile Include="Parser\Handlers\DataHandler\CreateGameHandler.cs" />
+    <Compile Include="Parser\Handlers\DataHandler\BlockEndHandler.cs" />
+    <Compile Include="Parser\Handlers\DataHandler\NewGameHandler.cs" />
+    <Compile Include="Parser\Handlers\DataHandler\SpectatorHandler.cs" />
+    <Compile Include="Parser\Handlers\DataHandler\SubSpellHandler.cs" />
+    <Compile Include="Parser\Handlers\DataHandler\TagChangeHandler.cs" />
+    <Compile Include="Parser\Handlers\DataHandler\ShuffleDeckHandler.cs" />
+    <Compile Include="Parser\Handlers\DataHandler\TagHandler.cs" />
+    <Compile Include="Parser\Handlers\PowerProcessorHandler.cs" />
+    <Compile Include="Parser\StateFacade.cs" />
+    <Compile Include="Parser\Handlers\PowerDataHandler.cs" />
+    <Compile Include="Parser\Handlers\EntityChosenHandler.cs" />
+    <Compile Include="Parser\Handlers\ChoicesHandler.cs" />
+    <Compile Include="Parser\Handlers\DataHandler.cs" />
+    <Compile Include="Parser\Handlers\OptionsHandler.cs" />
+    <Compile Include="Parser\Handlers\SendChoicesHandler.cs" />
+    <Compile Include="Parser\Handlers\SendOptionHandler.cs" />
+    <Compile Include="Parser\Helper.cs" />
+    <Compile Include="Parser\SubSpell.cs" />
+    <Compile Include="Parser\Node.cs" />
+    <Compile Include="Parser\ParserState.cs" />
+    <Compile Include="Parser\Regexes.cs" />
+    <Compile Include="Parser\ReplayParser.cs" />
+    <Compile Include="ReplayConverterPlugin.cs" />
+    <Compile Include="ReplayData\GameActions\ChosenEntities.cs" />
+    <Compile Include="ReplayData\GameActions\ChangeEntity.cs" />
+    <Compile Include="ReplayData\GameActions\IEntityData.cs" />
+    <Compile Include="ReplayData\GameActions\ShuffleDeck.cs" />
+    <Compile Include="ReplayData\Meta\Info.cs" />
+    <Compile Include="ReplayData\GameActions\Action.cs" />
+    <Compile Include="ReplayData\Entities\BaseEntity.cs" />
+    <Compile Include="ReplayData\GameActions\HideEntity.cs" />
+    <Compile Include="ReplayData\GameActions\ShowEntity.cs" />
+    <Compile Include="ReplayData\Meta\Choice.cs" />
+    <Compile Include="ReplayData\Meta\Choices.cs" />
+    <Compile Include="ReplayData\Entities\FullEntity.cs" />
+    <Compile Include="ReplayData\Game.cs" />
+    <Compile Include="ReplayData\GameActions\GameAction.cs" />
+    <Compile Include="ReplayData\GameData.cs" />
+    <Compile Include="ReplayData\Entities\GameEntity.cs" />
+    <Compile Include="ReplayData\HearthstoneReplay.cs" />
+    <Compile Include="ReplayData\Entities\PlayerEntity.cs" />
+    <Compile Include="ReplayData\Meta\MetaData.cs" />
+    <Compile Include="ReplayData\Meta\Options\Option.cs" />
+    <Compile Include="ReplayData\Meta\Options\OptionItem.cs" />
+    <Compile Include="ReplayData\Meta\Options\Options.cs" />
+    <Compile Include="ReplayData\Meta\Options\SendOption.cs" />
+    <Compile Include="ReplayData\Meta\Options\SubOption.cs" />
+    <Compile Include="ReplayData\Meta\Options\Target.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReplayData\Meta\SendChoices.cs" />
+    <Compile Include="ReplayData\GameActions\Tag.cs" />
+    <Compile Include="ReplayData\GameActions\TagChange.cs" />
+    <Compile Include="ReplayConverter.cs" />
+    <Compile Include="StaticReplayConverterWrapper.cs" />
+    <Compile Include="Utility.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
