@@ -21,8 +21,11 @@ export class GameEventsElectronService extends IGameEventsPlugin {
 		const edgePath = path.join(__dirname, 'electron-edge-libs');
 		console.log('[GameEventsElectron] Looking for module at:', edgePath);
 
-		// Clear module cache to ensure we get the latest version
-		const indexPath = path.join(edgePath, 'game-events-edge.js');
+		// Clear module cache to ensure we get the latest version.
+		// On Linux, edge-js cannot host the .NET runtime (see tools/linux-probe), so we use the
+		// out-of-process helper bridge instead of the in-process edge-js bridge.
+		const bridgeFile = process.platform === 'win32' ? 'game-events-edge.js' : 'game-events-edge-linux.js';
+		const indexPath = path.join(edgePath, bridgeFile);
 		if (eval('require').cache[indexPath]) {
 			console.log('[GameEventsElectron] Clearing cached module...');
 			delete eval('require').cache[indexPath];

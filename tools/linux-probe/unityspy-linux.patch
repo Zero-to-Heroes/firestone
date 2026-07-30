@@ -1,0 +1,624 @@
+diff --git a/LinuxHarness/LinuxHarness.csproj b/LinuxHarness/LinuxHarness.csproj
+new file mode 100644
+index 0000000..8a24f5e
+--- /dev/null
++++ b/LinuxHarness/LinuxHarness.csproj
+@@ -0,0 +1,13 @@
++<Project Sdk="Microsoft.NET.Sdk">
++  <PropertyGroup>
++    <OutputType>Exe</OutputType>
++    <TargetFramework>net8.0</TargetFramework>
++    <Nullable>disable</Nullable>
++    <AssemblyName>LinuxHarness</AssemblyName>
++    <NoWarn>$(NoWarn);CA1416</NoWarn>
++  </PropertyGroup>
++  <ItemGroup>
++    <ProjectReference Include="..\UnitySpy.HearthstoneLib\UnitySpy.HearthstoneLib.Linux.csproj" />
++    <ProjectReference Include="..\UnitySpy\UnitySpy.Linux.csproj" />
++  </ItemGroup>
++</Project>
+diff --git a/LinuxHarness/Program.cs b/LinuxHarness/Program.cs
+new file mode 100644
+index 0000000..6e3c0ec
+--- /dev/null
++++ b/LinuxHarness/Program.cs
+@@ -0,0 +1,47 @@
++using System;
++using System.Diagnostics;
++using System.Linq;
++using HackF5.UnitySpy.HearthstoneLib;
++
++internal static class Program
++{
++    private static void Main()
++    {
++        var proc = Process.GetProcessesByName("Hearthstone.exe").FirstOrDefault();
++        if (proc == null)
++        {
++            Console.WriteLine("Hearthstone is not running.");
++            return;
++        }
++
++        Console.WriteLine($"[harness] Hearthstone.exe pid={proc.Id}");
++        Console.WriteLine($"[harness] exe path = {HackF5.UnitySpy.Util.LinuxProcessProbe.MainModule(proc.Id)}");
++        Console.WriteLine($"[harness] unity ver = {HackF5.UnitySpy.Util.LinuxProcessProbe.Version(proc.Id)}");
++
++        var sw = Stopwatch.StartNew();
++        using var mv = new MindVision(null, "Hearthstone", proc.Id);
++        Console.WriteLine($"[harness] MindVision constructed in {sw.ElapsedMilliseconds}ms");
++
++        Try("GetSceneMode", () => mv.GetSceneMode()?.ToString());
++        Try("GetCollectionSize", () => mv.GetCollectionSize().ToString());
++        Try("GetBoostersCount", () => mv.GetBoostersCount().ToString());
++        Try("GetMatchInfo", () => {
++            var m = mv.GetMatchInfo();
++            return m == null ? null : $"{m.LocalPlayer?.Name} vs {m.OpposingPlayer?.Name}";
++        });
++    }
++
++    private static void Try(string name, Func<string> read)
++    {
++        var sw = Stopwatch.StartNew();
++        try
++        {
++            var value = read();
++            Console.WriteLine($"  {name,-22} = {value ?? "<null>"}   ({sw.ElapsedMilliseconds}ms)");
++        }
++        catch (Exception ex)
++        {
++            Console.WriteLine($"  {name,-22} ! {ex.GetType().Name}: {ex.Message.Split('\n')[0]}");
++        }
++    }
++}
+diff --git a/UnitySpy.HearthstoneLib/Detail/Collection/CollectionBattlegroundsHeroSkinsReader.cs b/UnitySpy.HearthstoneLib/Detail/Collection/CollectionBattlegroundsHeroSkinsReader.cs
+index bd1cc9d..c4bd546 100644
+--- a/UnitySpy.HearthstoneLib/Detail/Collection/CollectionBattlegroundsHeroSkinsReader.cs
++++ b/UnitySpy.HearthstoneLib/Detail/Collection/CollectionBattlegroundsHeroSkinsReader.cs
+@@ -3,7 +3,6 @@
+     using System;
+     using System.Collections.Generic;
+     using System.Linq;
+-    using System.Runtime.InteropServices.WindowsRuntime;
+     using JetBrains.Annotations;
+ 
+     internal static class CollectionBattlegroundsHeroSkinsReader
+diff --git a/UnitySpy.HearthstoneLib/Detail/Collection/CollectionCardReader.cs b/UnitySpy.HearthstoneLib/Detail/Collection/CollectionCardReader.cs
+index b26a4f1..5c0afaf 100644
+--- a/UnitySpy.HearthstoneLib/Detail/Collection/CollectionCardReader.cs
++++ b/UnitySpy.HearthstoneLib/Detail/Collection/CollectionCardReader.cs
+@@ -3,7 +3,6 @@ namespace HackF5.UnitySpy.HearthstoneLib.Detail.Collection
+     using System;
+     using System.Collections.Generic;
+     using System.Linq;
+-    using System.Runtime.InteropServices.WindowsRuntime;
+     using HackF5.UnitySpy;
+     using JetBrains.Annotations;
+ 
+diff --git a/UnitySpy.HearthstoneLib/MindVision.cs b/UnitySpy.HearthstoneLib/MindVision.cs
+index 6896673..49e0cef 100644
+--- a/UnitySpy.HearthstoneLib/MindVision.cs
++++ b/UnitySpy.HearthstoneLib/MindVision.cs
+@@ -60,8 +60,14 @@ namespace HackF5.UnitySpy.HearthstoneLib
+                 OnMessageReceived(new MessageEventArgs() { Message = msg });
+             };
+ 
+-            var process = (inputProcessId != null ? Process.GetProcessById(inputProcessId.Value) : null) 
+-                ?? Process.GetProcessesByName(inputProcessName).FirstOrDefault();
++            var process = (inputProcessId != null ? Process.GetProcessById(inputProcessId.Value) : null)
++                ?? Process.GetProcessesByName(inputProcessName).FirstOrDefault()
++#if NET5_0_OR_GREATER
++                // On Linux ProcessName comes from /proc/pid/comm, which keeps the extension, so a
++                // Wine-hosted game is "Hearthstone.exe" where Windows reports "Hearthstone".
++                ?? Process.GetProcessesByName(inputProcessName + ".exe").FirstOrDefault()
++#endif
++                ;
+             Logger.Log($"Found process " +
+                 $"Id={process?.Id} " +
+                 $"MainWindowTitle={process?.MainWindowTitle} " +
+diff --git a/UnitySpy.HearthstoneLib/UnitySpy.HearthstoneLib.Linux.csproj b/UnitySpy.HearthstoneLib/UnitySpy.HearthstoneLib.Linux.csproj
+new file mode 100644
+index 0000000..95e6a56
+--- /dev/null
++++ b/UnitySpy.HearthstoneLib/UnitySpy.HearthstoneLib.Linux.csproj
+@@ -0,0 +1,18 @@
++<Project Sdk="Microsoft.NET.Sdk">
++  <PropertyGroup>
++    <TargetFramework>net8.0</TargetFramework>
++    <AssemblyName>HackF5.UnitySpy.HearthstoneLib</AssemblyName>
++    <RootNamespace>HackF5.UnitySpy.HearthstoneLib</RootNamespace>
++    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
++    <Nullable>disable</Nullable>
++    <NoWarn>$(NoWarn);CS0618;CA1416;SYSLIB0011</NoWarn>
++    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
++    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
++  </PropertyGroup>
++  <ItemGroup><Compile Include="**/*.cs" Exclude="obj/**;bin/**" /></ItemGroup>
++  <ItemGroup>
++    <PackageReference Include="JetBrains.Annotations" Version="2023.3.0" />
++    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
++    <ProjectReference Include="..\UnitySpy\UnitySpy.Linux.csproj" />
++  </ItemGroup>
++</Project>
+diff --git a/UnitySpy/AssemblyImageFactory.cs b/UnitySpy/AssemblyImageFactory.cs
+index 9666684..7e0503a 100644
+--- a/UnitySpy/AssemblyImageFactory.cs
++++ b/UnitySpy/AssemblyImageFactory.cs
+@@ -33,15 +33,28 @@
+         /// </returns>
+         public static IAssemblyImage Create(int processId, Action<string> Log, string assemblyName = "Assembly-CSharp")
+         {
++#if NET5_0_OR_GREATER
++            // Linux is supported for a Wine/Proton-hosted game: Wine maps the PE images at the
++            // addresses the Windows-side pointers refer to, so only the read primitives differ.
++            if (!HackF5.UnitySpy.Util.LinuxProcess.IsSupported && (Environment.OSVersion.Platform != PlatformID.Win32NT))
++#else
+             if (Environment.OSVersion.Platform != PlatformID.Win32NT)
++#endif
+             {
+                 throw new InvalidOperationException(
+                     "This library reads data directly from a process's memory, so is platform specific "
+-                    + "and only runs under Windows. It might be possible to get it running under macOS, but...");
++                    + "and only runs under Windows or Linux (Wine). It might be possible to get it "
++                    + "running under macOS, but...");
+             }
+ 
+             var process = new ProcessFacade(processId);
++#if NET5_0_OR_GREATER
++            Log($"Found process, MainModuleFileName={(HackF5.UnitySpy.Util.LinuxProcess.IsSupported
++                ? HackF5.UnitySpy.Util.LinuxProcess.GetMainModuleFileName(processId)
++                : process?.Process?.GetMainModuleFileName())}");
++#else
+             Log($"Found process, MainModuleFileName={process?.Process?.GetMainModuleFileName()}");
++#endif
+             var monoModule = AssemblyImageFactory.GetMonoModule(process);
+             var moduleDump = process.ReadModule(monoModule);
+             var rootDomainFunctionAddress = AssemblyImageFactory.GetRootDomainFunctionAddress(moduleDump, monoModule, process.Is64Bits);
+@@ -329,7 +342,16 @@
+         //        return new ModuleInfo(module.ModuleName, module.BaseAddress, module.ModuleMemorySize);
+         //    }            
+         private static ModuleInfo GetMonoModule(ProcessFacade process)
+-        {            
++        {
++#if NET5_0_OR_GREATER
++            if (HackF5.UnitySpy.Util.LinuxProcess.IsSupported)
++            {
++                // Wine maps each PE section separately with its real file path, so /proc/pid/maps
++                // yields the same module list psapi would report.
++                return HackF5.UnitySpy.Util.LinuxProcess.GetModules(process.Process.Id)
++                    .FirstOrDefault(module => module.ModuleName == "mono-2.0-bdwgc.dll");
++            }
++#endif
+             var modulePointers = Native.GetProcessModulePointers(process);
+ 
+             // Collect modules from the process
+diff --git a/UnitySpy/Detail/ProcessFacade.cs b/UnitySpy/Detail/ProcessFacade.cs
+index fb39564..239807b 100644
+--- a/UnitySpy/Detail/ProcessFacade.cs
++++ b/UnitySpy/Detail/ProcessFacade.cs
+@@ -48,6 +48,16 @@ namespace HackF5.UnitySpy.Detail
+         public ProcessFacade(int processId)
+         {
+             this.Process = Process.GetProcessById(processId);
++#if NET5_0_OR_GREATER
++            if (LinuxProcess.IsSupported)
++            {
++                // Process.MainModule is the Wine loader here, not the game's PE image, so the
++                // path has to come from the process' own mappings.
++                this.monoLibraryOffsets = MonoLibraryOffsets.GetOffsets(
++                    LinuxProcess.GetMainModuleFileName(processId));
++                return;
++            }
++#endif
+             this.monoLibraryOffsets = MonoLibraryOffsets.GetOffsets(Native.GetMainModuleFileName(this.Process));
+         }
+ 
+@@ -338,6 +348,18 @@ namespace HackF5.UnitySpy.Detail
+         private unsafe void ReadProcessMemory(byte* buffer, IntPtr address, int size)
+         {
+             System.Threading.Interlocked.Increment(ref ProcessFacade.ReadProcessMemoryCallCount);
++#if NET5_0_OR_GREATER
++            if (LinuxProcess.IsSupported)
++            {
++                if (LinuxProcess.Read(this.Process.Id, address.ToInt64(), buffer, size) != size)
++                {
++                    throw new InvalidOperationException(
++                        $"Failed to read {size} bytes at 0x{address.ToInt64():x} from process {this.Process.Id}.");
++                }
++
++                return;
++            }
++#endif
+             if (!ProcessFacade.ReadProcessMemory(this.Process.Handle, address, (IntPtr)buffer, size, out _))
+             {
+                 throw new Win32Exception(Marshal.GetLastWin32Error());
+@@ -877,6 +899,25 @@ namespace HackF5.UnitySpy.Detail
+             bool allowPartialRead = false,
+             int? size = default)
+         {
++#if NET5_0_OR_GREATER
++            if (LinuxProcess.IsSupported)
++            {
++                System.Threading.Interlocked.Increment(ref ProcessFacade.ReadProcessMemoryCallCount);
++                var requested = size ?? buffer.Length;
++                var read = LinuxProcess.Read(this.Process.Id, processAddress.ToInt64(), buffer, requested);
++
++                // A short read means the range ran into unmapped memory: the Linux analogue of
++                // ERROR_PARTIAL_COPY (299), which callers opt into via allowPartialRead.
++                if ((read != requested) && !allowPartialRead)
++                {
++                    throw new InvalidOperationException(
++                        $"Failed to read {requested} bytes at 0x{processAddress.ToInt64():x} "
++                        + $"from process {this.Process.Id} (got {read}).");
++                }
++
++                return;
++            }
++#endif
+             var bufferHandle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
+ 
+             try
+diff --git a/UnitySpy/Offsets/MonoLibraryOffsets.cs b/UnitySpy/Offsets/MonoLibraryOffsets.cs
+index 4fc92a6..0ac8a61 100644
+--- a/UnitySpy/Offsets/MonoLibraryOffsets.cs
++++ b/UnitySpy/Offsets/MonoLibraryOffsets.cs
+@@ -293,6 +293,30 @@ namespace HackF5.UnitySpy.Detail
+ 
+         public static MonoLibraryOffsets GetOffsets(string gameExecutableFilePath, bool force = true)
+         {
++#if NET5_0_OR_GREATER
++            if (HackF5.UnitySpy.Util.LinuxProcess.IsSupported)
++            {
++                // FileVersionInfo only understands managed assembly metadata on Unix and returns
++                // null for a native PE, so the version resource is parsed by hand.
++                var linuxUnityVersion = HackF5.UnitySpy.Util.LinuxProcess.GetPeFileVersion(gameExecutableFilePath);
++                if (string.IsNullOrEmpty(linuxUnityVersion))
++                {
++                    throw new NotSupportedException(
++                        $"Could not read a version resource from '{gameExecutableFilePath}'.");
++                }
++
++                var linuxMachineType = HackF5.UnitySpy.Util.LinuxProcess.GetPeMachineType(gameExecutableFilePath);
++                switch (linuxMachineType)
++                {
++                    case 0x8664:
++                        return GetOffsets(linuxUnityVersion, true, BinaryFormat.PE, force);
++                    case 0x14c:
++                        return GetOffsets(linuxUnityVersion, false, BinaryFormat.PE, force);
++                    default:
++                        throw new NotSupportedException("Platform not supported");
++                }
++            }
++#endif
+             FileVersionInfo myFileVersionInfo = FileVersionInfo.GetVersionInfo(gameExecutableFilePath);
+             string unityVersion = myFileVersionInfo.FileVersion;
+ 
+diff --git a/UnitySpy/UnitySpy.Linux.csproj b/UnitySpy/UnitySpy.Linux.csproj
+new file mode 100644
+index 0000000..3342742
+--- /dev/null
++++ b/UnitySpy/UnitySpy.Linux.csproj
+@@ -0,0 +1,20 @@
++<Project Sdk="Microsoft.NET.Sdk">
++  <PropertyGroup>
++    <TargetFramework>net8.0</TargetFramework>
++    <AssemblyName>HackF5.UnitySpy</AssemblyName>
++    <RootNamespace>HackF5.UnitySpy</RootNamespace>
++    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
++    <Nullable>disable</Nullable>
++    <NoWarn>$(NoWarn);CS0618;CA1416;SYSLIB0011</NoWarn>
++    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
++    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
++  </PropertyGroup>
++  <ItemGroup>
++    <!-- Same sources as the net48 project; the Linux paths are #if NET5_0_OR_GREATER. -->
++    <Compile Include="**/*.cs" Exclude="obj/**;bin/**" />
++  </ItemGroup>
++  <ItemGroup>
++    <PackageReference Include="JetBrains.Annotations" Version="2023.3.0" />
++    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
++  </ItemGroup>
++</Project>
+diff --git a/UnitySpy/Util/LinuxProcess.cs b/UnitySpy/Util/LinuxProcess.cs
+new file mode 100644
+index 0000000..ee038b6
+--- /dev/null
++++ b/UnitySpy/Util/LinuxProcess.cs
+@@ -0,0 +1,279 @@
++#if NET5_0_OR_GREATER
++namespace HackF5.UnitySpy.Util
++{
++    using System;
++    using System.Collections.Concurrent;
++    using System.Collections.Generic;
++    using System.Globalization;
++    using System.IO;
++    using System.Linq;
++    using System.Text;
++    using HackF5.UnitySpy.Detail;
++    using Microsoft.Win32.SafeHandles;
++
++    /// <summary>
++    /// Linux equivalents of the psapi/kernel32 calls in <see cref="Native"/>, for reading a
++    /// Hearthstone hosted by Wine/Proton from a native Linux process.
++    /// <para>
++    /// Wine is not an emulator: each Windows process is an ordinary Linux process, and Wine maps
++    /// the PE images at the same virtual addresses the Windows-side pointers refer to. So the
++    /// Windows pointer arithmetic everywhere above this class stays byte-for-byte correct, and
++    /// only the two primitives at the bottom change:
++    /// <c>ReadProcessMemory</c> becomes a pread on <c>/proc/pid/mem</c>, and
++    /// <c>EnumProcessModulesEx</c> becomes a parse of <c>/proc/pid/maps</c>.
++    /// </para>
++    /// <para>
++    /// Reading <c>/proc/pid/mem</c> requires PTRACE_MODE_ATTACH permission but not an actual
++    /// ptrace attach, so the game is never stopped or otherwise perturbed. Callers need
++    /// <c>kernel.yama.ptrace_scope=0</c>, CAP_SYS_PTRACE, or to be an ancestor of the game.
++    /// </para>
++    /// </summary>
++    internal static class LinuxProcess
++    {
++        private static readonly ConcurrentDictionary<int, SafeFileHandle> MemHandles =
++            new ConcurrentDictionary<int, SafeFileHandle>();
++
++        public static bool IsSupported => OperatingSystem.IsLinux();
++
++        /// <summary>
++        /// Reads up to <paramref name="size"/> bytes. Returns the number actually read; a short
++        /// read means the range crossed into unmapped memory, which is the analogue of Windows'
++        /// ERROR_PARTIAL_COPY rather than an error in its own right.
++        /// </summary>
++        public static unsafe int Read(int processId, long address, byte* buffer, int size)
++        {
++            var handle = GetMemHandle(processId);
++            var total = 0;
++            while (total < size)
++            {
++                int read;
++                try
++                {
++                    read = RandomAccess.Read(handle, new Span<byte>(buffer + total, size - total), address + total);
++                }
++                catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException)
++                {
++                    break;
++                }
++
++                if (read <= 0)
++                {
++                    break;
++                }
++
++                total += read;
++            }
++
++            return total;
++        }
++
++        public static unsafe int Read(int processId, long address, byte[] buffer, int size)
++        {
++            fixed (byte* pinned = buffer)
++            {
++                return Read(processId, address, pinned, size);
++            }
++        }
++
++        /// <summary>
++        /// The <c>EnumProcessModulesEx</c> + <c>GetModuleFileNameEx</c> + <c>GetModuleInformation</c>
++        /// equivalent. Wine maps each PE section separately, so a module's base is the lowest
++        /// mapping of its backing file - which is what GetModuleInformation reports on Windows.
++        /// </summary>
++        public static List<ModuleInfo> GetModules(int processId)
++        {
++            var byPath = new Dictionary<string, (ulong Start, ulong End)>(StringComparer.Ordinal);
++
++            foreach (var line in File.ReadLines($"/proc/{processId}/maps"))
++            {
++                // 7f1234500000-7f1234600000 r-xp 00000000 fe:05 1234  /path/to/mono-2.0-bdwgc.dll
++                var pathStart = line.IndexOf('/');
++                if (pathStart < 0)
++                {
++                    continue;
++                }
++
++                var dash = line.IndexOf('-');
++                var space = line.IndexOf(' ');
++                if (dash < 0 || space < 0 || dash > space)
++                {
++                    continue;
++                }
++
++                if (!ulong.TryParse(line.Substring(0, dash), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var start)
++                    || !ulong.TryParse(line.Substring(dash + 1, space - dash - 1), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var end))
++                {
++                    continue;
++                }
++
++                var path = line.Substring(pathStart).Trim();
++                if (path.Length == 0 || path.StartsWith("[", StringComparison.Ordinal))
++                {
++                    continue;
++                }
++
++                if (byPath.TryGetValue(path, out var existing))
++                {
++                    byPath[path] = (Math.Min(existing.Start, start), Math.Max(existing.End, end));
++                }
++                else
++                {
++                    byPath[path] = (start, end);
++                }
++            }
++
++            return byPath
++                .Select(kv => new ModuleInfo(
++                    Path.GetFileName(kv.Key),
++                    (IntPtr)(long)kv.Value.Start,
++                    (uint)(kv.Value.End - kv.Value.Start)))
++                .ToList();
++        }
++
++        /// <summary>
++        /// The <c>QueryFullProcessImageName</c> equivalent, returning a Linux path to the game's
++        /// PE image. <c>/proc/pid/exe</c> is useless here: it points at the Wine loader, not at
++        /// Hearthstone.exe. The real image is whichever mapped .exe matches the process name.
++        /// </summary>
++        public static string GetMainModuleFileName(int processId)
++        {
++            var comm = File.ReadAllText($"/proc/{processId}/comm").Trim();
++
++            var executables = GetModulePaths(processId)
++                .Where(p => p.EndsWith(".exe", StringComparison.OrdinalIgnoreCase))
++                .ToList();
++
++            // comm is truncated to 15 chars by the kernel ("Hearthstone.exe" is exactly 15), so
++            // match on prefix rather than equality.
++            var match = executables.FirstOrDefault(
++                p => Path.GetFileName(p).StartsWith(comm, StringComparison.OrdinalIgnoreCase));
++            if (match != null)
++            {
++                return match;
++            }
++
++            // Fall back to the only .exe that isn't part of the Wine runtime itself.
++            var gameExes = executables
++                .Where(p => !p.Contains("/wine/", StringComparison.OrdinalIgnoreCase)
++                            && !p.Contains("/windows/system32/", StringComparison.OrdinalIgnoreCase))
++                .ToList();
++
++            return gameExes.Count > 0 ? gameExes[0] : executables.FirstOrDefault();
++        }
++
++        /// <summary>
++        /// Reads the Unity version out of a PE's version resource.
++        /// <para>
++        /// <see cref="System.Diagnostics.FileVersionInfo"/> cannot do this on Linux - it only
++        /// understands managed assembly metadata and returns null for a native PE - so the
++        /// resource is parsed by hand.
++        /// </para>
++        /// <para>
++        /// The value must come from the StringFileInfo "FileVersion" entry, NOT from
++        /// VS_FIXEDFILEINFO: Blizzard overwrites the fixed info with Hearthstone's own version
++        /// (e.g. 36.0.3.49395) while Unity's version survives only in the string block
++        /// (e.g. 2022.3.62.7762112), and MonoLibraryOffsets matches on the latter.
++        /// </para>
++        /// </summary>
++        public static string GetPeFileVersion(string path)
++        {
++            var bytes = File.ReadAllBytes(path);
++
++            var marker = Encoding.Unicode.GetBytes("StringFileInfo");
++            var at = IndexOf(bytes, marker);
++            if (at < 0)
++            {
++                return null;
++            }
++
++            var key = Encoding.Unicode.GetBytes("FileVersion");
++            var keyAt = IndexOf(bytes, key, at);
++            if (keyAt < 0)
++            {
++                return null;
++            }
++
++            // Value follows the key, padded to a 4-byte boundary, as a UTF-16 string.
++            var cursor = keyAt + key.Length;
++            while (cursor + 1 < bytes.Length && bytes[cursor] == 0 && bytes[cursor + 1] == 0)
++            {
++                cursor += 2;
++            }
++
++            var end = cursor;
++            while (end + 1 < bytes.Length && !(bytes[end] == 0 && bytes[end + 1] == 0))
++            {
++                end += 2;
++            }
++
++            var value = Encoding.Unicode.GetString(bytes, cursor, end - cursor).Trim();
++            return value.Length == 0 ? null : value;
++        }
++
++        /// <summary>Machine type from the PE header, for the 32/64-bit offsets selection.</summary>
++        public static int GetPeMachineType(string path)
++        {
++            using var stream = File.OpenRead(path);
++            using var reader = new BinaryReader(stream);
++
++            stream.Seek(0x3c, SeekOrigin.Begin);
++            var peOffset = reader.ReadInt32();
++            stream.Seek(peOffset, SeekOrigin.Begin);
++
++            if (reader.ReadUInt32() != 0x00004550)
++            {
++                throw new InvalidOperationException($"Can't find PE header in '{path}'.");
++            }
++
++            return reader.ReadUInt16();
++        }
++
++        private static IEnumerable<string> GetModulePaths(int processId)
++        {
++            var seen = new HashSet<string>(StringComparer.Ordinal);
++            foreach (var line in File.ReadLines($"/proc/{processId}/maps"))
++            {
++                var pathStart = line.IndexOf('/');
++                if (pathStart < 0)
++                {
++                    continue;
++                }
++
++                var path = line.Substring(pathStart).Trim();
++                if (path.Length > 0 && seen.Add(path))
++                {
++                    yield return path;
++                }
++            }
++        }
++
++        private static SafeFileHandle GetMemHandle(int processId) =>
++            MemHandles.GetOrAdd(
++                processId,
++                id => File.OpenHandle($"/proc/{id}/mem", FileMode.Open, FileAccess.Read));
++
++        private static int IndexOf(byte[] haystack, byte[] needle, int start = 0)
++        {
++            for (var i = start; i <= haystack.Length - needle.Length; i++)
++            {
++                var found = true;
++                for (var j = 0; j < needle.Length; j++)
++                {
++                    if (haystack[i + j] != needle[j])
++                    {
++                        found = false;
++                        break;
++                    }
++                }
++
++                if (found)
++                {
++                    return i;
++                }
++            }
++
++            return -1;
++        }
++    }
++}
++#endif
+diff --git a/UnitySpy/Util/LinuxProcessProbe.cs b/UnitySpy/Util/LinuxProcessProbe.cs
+new file mode 100644
+index 0000000..a03fb0f
+--- /dev/null
++++ b/UnitySpy/Util/LinuxProcessProbe.cs
+@@ -0,0 +1,13 @@
++#if NET5_0_OR_GREATER
++namespace HackF5.UnitySpy.Util
++{
++    /// <summary>Diagnostic surface over <see cref="LinuxProcess"/> for the Linux harness.</summary>
++    public static class LinuxProcessProbe
++    {
++        public static string MainModule(int processId) => LinuxProcess.GetMainModuleFileName(processId);
++
++        public static string Version(int processId) =>
++            LinuxProcess.GetPeFileVersion(LinuxProcess.GetMainModuleFileName(processId));
++    }
++}
++#endif

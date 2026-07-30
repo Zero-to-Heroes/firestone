@@ -120,7 +120,13 @@ export const getGameBaseDir = async (
 };
 
 const extractBaseDirFromPath = (path: string | null | undefined): string | undefined => {
-	return path?.toLowerCase()?.includes('hearthstone beta launcher')
-		? path.toLowerCase().split('hearthstone beta launcher.exe')[0]
-		: path?.toLowerCase()?.split('hearthstone.exe')[0];
+	if (!path?.length) {
+		return undefined;
+	}
+	// Match case-insensitively (the executable's casing varies) but slice the original string:
+	// Linux filesystems are case-sensitive, so a lower-cased path would not resolve.
+	const lowered = path.toLowerCase();
+	const marker = lowered.includes('hearthstone beta launcher') ? 'hearthstone beta launcher.exe' : 'hearthstone.exe';
+	const index = lowered.indexOf(marker);
+	return index < 0 ? path : path.substring(0, index);
 };

@@ -53,8 +53,11 @@ export class MindVisionElectronService implements IMindVisionFacade {
 			const mindVisionPath = path.join(__dirname, 'electron-edge-libs');
 			console.log('[MindVisionElectron] Looking for module at:', mindVisionPath);
 
-			// Clear module cache to ensure we get the latest version
-			const indexPath = path.join(mindVisionPath, 'mind-vision-edge.js');
+			// Clear module cache to ensure we get the latest version.
+			// On Linux, edge-js cannot host the .NET runtime (see tools/linux-probe), so we use
+			// the out-of-process helper bridge instead of the in-process edge-js bridge.
+			const bridgeFile = process.platform === 'win32' ? 'mind-vision-edge.js' : 'mind-vision-edge-linux.js';
+			const indexPath = path.join(mindVisionPath, bridgeFile);
 			if (eval('require').cache[indexPath]) {
 				console.log('[MindVisionElectron] Clearing cached module...');
 				delete eval('require').cache[indexPath];
