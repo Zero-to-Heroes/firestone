@@ -99,6 +99,16 @@ const electronAPI = {
 	startOverlayDragging: () => ipcRenderer.send('start-overlay-dragging'),
 	/** Close the current window (Settings overlay or regular). */
 	closeSettingsWindow: () => ipcRenderer.send('close-settings-window'),
+	/** Minimize the current window (used by the static loading page). */
+	minimizeCurrentWindow: () => ipcRenderer.send('minimize-current-window'),
+	/** Subscribe to loading-window ready (static loading page). */
+	onLoadingReady: (callback: () => void) => {
+		const listener = () => callback();
+		ipcRenderer.on('loading-ready', listener);
+		return () => ipcRenderer.removeListener('loading-ready', listener);
+	},
+	/** Whether main has already marked abilities ready before the page subscribed. */
+	getLoadingReadyState: () => ipcRenderer.invoke('loading-window-get-ready-state') as Promise<boolean>,
 	/**
 	 * Shared-texture windows lose per-pixel alpha hit-test. When this returns true,
 	 * flip passthrough via setOverlayPassthrough on widget hover (Overwolf workaround).

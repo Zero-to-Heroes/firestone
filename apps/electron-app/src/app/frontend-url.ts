@@ -1,6 +1,7 @@
 import { app } from 'electron';
 import { existsSync } from 'fs';
 import { join } from 'path';
+import { pathToFileURL } from 'url';
 import { rendererAppPort } from './constants';
 
 /**
@@ -38,5 +39,21 @@ export function getElectronFrontendUrl(hashRoute: string): string {
 	if (overrideDir) {
 		console.log(`[frontend-url] FS_ELECTRON_FRONTEND_DIR → ${url}`);
 	}
+	return url;
+}
+
+/**
+ * Static loading page (no Angular / cards DB). Lives in electron-app assets so the
+ * free-build ad window does not pay the full frontend Tab RSS.
+ */
+export function getStaticLoadingUrl(): string {
+	const htmlPath = app.isPackaged
+		? join(app.getAppPath(), 'assets', 'loading', 'index.html')
+		: join(__dirname, 'assets', 'loading', 'index.html');
+	if (!existsSync(htmlPath)) {
+		console.error('[frontend-url] Static loading page missing at:', htmlPath);
+	}
+	const url = pathToFileURL(htmlPath).href;
+	console.log('[frontend-url] static loading →', url);
 	return url;
 }

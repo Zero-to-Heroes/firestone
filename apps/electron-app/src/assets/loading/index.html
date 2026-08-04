@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta
+			http-equiv="Content-Security-Policy"
+			content="default-src 'self' 'unsafe-inline'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'self' https:;"
+		/>
+		<title>Firestone Loading</title>
+		<link rel="stylesheet" href="./loading.css" />
+	</head>
+	<body>
+		<div class="shell">
+			<header class="menu-bar">
+				<div class="logo-text">Firestone</div>
+				<div class="controls">
+					<button type="button" class="ctrl" id="btn-minimize" aria-label="Minimize" title="Minimize">
+						−
+					</button>
+					<button type="button" class="ctrl" id="btn-close" aria-label="Close" title="Close">×</button>
+				</div>
+			</header>
+			<main class="content">
+				<div class="app-title" id="title">Getting ready…</div>
+				<div class="spinner" id="spinner" aria-hidden="true"></div>
+				<div class="sub-title" id="subtitle" hidden>Ready</div>
+			</main>
+			<!-- ow-electron built-in ad surface; free build only (this window is not shown for premium). -->
+			<div class="ads" id="ads">
+				<div class="ads-placeholder">Ad</div>
+			</div>
+		</div>
+		<script src="./loading.js"></script>
+	</body>
+</html>

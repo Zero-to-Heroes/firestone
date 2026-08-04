@@ -101,9 +101,11 @@ export class OverlayAppearanceService extends AbstractFacadeService<OverlayAppea
 		if (!hostElement) {
 			return;
 		}
+		// Renderer Electron proxies never run init(), so prefs is unset there — resolve lazily.
+		const prefs = this.prefs ?? AppInjector.get(PreferencesService);
 		combineLatest([
-			this.prefs.preferences$$.pipe(
-				map((prefs) => prefs.overlayAppearanceTheme),
+			prefs.preferences$$.pipe(
+				map((p) => p.overlayAppearanceTheme),
 				distinctUntilChanged(),
 			),
 			this.customPalette$$,
@@ -222,6 +224,9 @@ export class OverlayAppearanceService extends AbstractFacadeService<OverlayAppea
 	protected override createElectronProxy(): void | Promise<void> {
 		this.customPalette$$ = new SubscriberAwareBehaviorSubject<OverlayAppearancePalette>({});
 		this.savedThemes$$ = new SubscriberAwareBehaviorSubject<readonly SavedOverlayTheme[]>([]);
+		// Needed by register() / theme helpers that run in the renderer (not via IPC).
+		this.prefs = AppInjector.get(PreferencesService);
+		this.localStorage = AppInjector.get(LocalStorageService);
 	}
 
 	protected override async initElectronMainProcess() {

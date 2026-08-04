@@ -555,6 +555,27 @@ export default class App {
 			}
 		});
 
+		// Minimize the sender window (static loading page; Win32 fallback for frameless overlays)
+		ipcMain.on('minimize-current-window', (event) => {
+			const win = BrowserWindow.fromWebContents(event.sender);
+			if (!win || win.isDestroyed()) {
+				return;
+			}
+			win.minimize();
+			if (process.platform === 'win32' && !win.isDestroyed() && !win.isMinimized()) {
+				try {
+					const koffi = require('koffi');
+					const user32 = koffi.load('user32.dll');
+					const showWindow = user32.func('bool __stdcall ShowWindow(void* hWnd, int nCmdShow)');
+					const handle = win.getNativeWindowHandle();
+					const hwnd = handle.length >= 8 ? handle.readBigUInt64LE(0) : handle.readUInt32LE(0);
+					showWindow(hwnd, 6 /* SW_MINIMIZE */);
+				} catch (e) {
+					console.warn('[App] Win32 minimize fallback failed', e);
+				}
+			}
+		});
+
 		// Open URL in default browser (called from renderer process)
 		ipcMain.handle('open-url-in-default-browser', async (_event, url: string) => {
 			await shell.openExternal(url);

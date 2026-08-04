@@ -1,0 +1,138 @@
+html,
+body {
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	background: transparent;
+	font-family: 'Segoe UI', 'Open Sans', sans-serif;
+	color: #d9c3ab;
+	user-select: none;
+}
+
+.shell {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
+	background: linear-gradient(180deg, rgba(20, 24, 28, 0.94) 0%, rgba(12, 14, 16, 0.96) 100%);
+	border: 1px solid rgba(165, 224, 184, 0.25);
+	border-radius: 4px;
+}
+
+.menu-bar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	height: 48px;
+	padding: 0 12px 0 16px;
+	flex-shrink: 0;
+	-webkit-app-region: drag;
+	color: #a5e0b8;
+}
+
+.logo-text {
+	font-size: 16px;
+	font-weight: 600;
+	letter-spacing: 0.04em;
+}
+
+.controls {
+	display: flex;
+	gap: 4px;
+	-webkit-app-region: no-drag;
+}
+
+.ctrl {
+	width: 32px;
+	height: 28px;
+	border: none;
+	background: transparent;
+	color: #a5e0b8;
+	font-size: 18px;
+	line-height: 1;
+	cursor: pointer;
+	border-radius: 2px;
+}
+
+.ctrl:hover {
+	background: rgba(165, 224, 184, 0.15);
+}
+
+.content {
+	flex: 1 1 auto;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding-top: 12px;
+	min-height: 0;
+}
+
+.app-title {
+	font-size: 18px;
+	font-weight: 400;
+	color: #ffb948;
+}
+
+.sub-title {
+	margin-top: 12px;
+	font-size: 13px;
+	color: #d9c3ab;
+}
+
+.spinner {
+	margin-top: 28px;
+	width: 40px;
+	height: 40px;
+	border: 3px solid rgba(165, 224, 184, 0.25);
+	border-top-color: #a5e0b8;
+	border-radius: 50%;
+	animation: spin 1.6s linear infinite;
+}
+
+.spinner[hidden],
+.sub-title[hidden] {
+	display: none !important;
+}
+
+.ads {
+	position: relative;
+	width: 400px;
+	height: 300px;
+	margin: 0 auto 20px;
+	flex-shrink: 0;
+	-webkit-app-region: no-drag;
+	background: rgba(0, 0, 0, 0.35);
+	overflow: hidden;
+}
+
+.ads-placeholder {
+	position: absolute;
+	inset: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	opacity: 0.35;
+	font-size: 12px;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+}
+
+.ads owadview {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	background: transparent;
+}
+
+@keyframes spin {
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(-360deg);
+	}
+}

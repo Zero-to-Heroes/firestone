@@ -4,7 +4,7 @@ import { OverlayBrowserWindow, OverlayWindowOptions } from '@overwolf/ow-electro
 import { app, BrowserWindow, nativeImage, screen } from 'electron';
 import { join } from 'path';
 import App from '../app';
-import { getElectronFrontendUrl } from '../frontend-url';
+import { getElectronFrontendUrl, getStaticLoadingUrl } from '../frontend-url';
 import { isAppAccessUnlocked } from './app-access-policy';
 import { OverlayService } from './overlay.service';
 
@@ -1061,6 +1061,7 @@ export class ElectronWindowHandlerService implements IWindowHandlerService {
 	}
 
 	private getLoadingLoadUrl(): string {
-		return getElectronFrontendUrl('loading');
+		// Static HTML + owadview — avoids loading Angular + cards DB (~170–300 MB Tab RSS).
+		return getStaticLoadingUrl();
 	}
 }

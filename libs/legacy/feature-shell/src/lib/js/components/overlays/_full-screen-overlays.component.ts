@@ -12,7 +12,7 @@ import {
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
-import { GameType, isMercenaries, SceneMode } from '@firestone-hs/reference-data';
+import { GameType, isArena, isBattlegrounds, isMercenaries, SceneMode } from '@firestone-hs/reference-data';
 import { ArenaRefService } from '@firestone/arena/data-access';
 import {
 	CardsHighlightFacadeService,
@@ -75,109 +75,144 @@ type ElectronOverlayHitTestApi = {
 			<ng-container *ngIf="allowOverlays$ | async">
 				<div class="game-area-container">
 					<div class="game-area">
-						<bgs-leaderboard-widget-wrapper></bgs-leaderboard-widget-wrapper>
-						<bgs-board-widget-wrapper></bgs-board-widget-wrapper>
-						<bgs-hero-selection-widget-wrapper></bgs-hero-selection-widget-wrapper>
-						<choosing-bgs-quest-widget-wrapper></choosing-bgs-quest-widget-wrapper>
-						<choosing-bgs-trinket-widget-wrapper></choosing-bgs-trinket-widget-wrapper>
-						<choosing-bgs-timewarped-widget-wrapper></choosing-bgs-timewarped-widget-wrapper>
+						<ng-container *ngIf="showBattlegroundsOverlays$ | async">
+							<bgs-leaderboard-widget-wrapper></bgs-leaderboard-widget-wrapper>
+							<bgs-board-widget-wrapper></bgs-board-widget-wrapper>
+							<bgs-hero-selection-widget-wrapper></bgs-hero-selection-widget-wrapper>
+							<choosing-bgs-quest-widget-wrapper></choosing-bgs-quest-widget-wrapper>
+							<choosing-bgs-trinket-widget-wrapper></choosing-bgs-trinket-widget-wrapper>
+							<choosing-bgs-timewarped-widget-wrapper></choosing-bgs-timewarped-widget-wrapper>
+						</ng-container>
 
-						<constructed-board-widget-wrapper></constructed-board-widget-wrapper>
-						<constructed-mulligan-hand-widget-wrapper></constructed-mulligan-hand-widget-wrapper>
-						<choosing-card-widget-wrapper></choosing-card-widget-wrapper>
+						<ng-container *ngIf="showConstructedOverlays$ | async">
+							<constructed-board-widget-wrapper></constructed-board-widget-wrapper>
+							<constructed-mulligan-hand-widget-wrapper></constructed-mulligan-hand-widget-wrapper>
+							<choosing-card-widget-wrapper></choosing-card-widget-wrapper>
+						</ng-container>
 
 						<!-- Need to implement proper mouse-over support, will add this when I get a report -->
 						<!-- This in fact doesn't work anymore, as I would need a pass-through window to handle it
 						  this way -->
 						<!-- <mercs-treasure-selection-widget-wrapper></mercs-treasure-selection-widget-wrapper> -->
 
-						<arena-hero-power-selection-widget-wrapper></arena-hero-power-selection-widget-wrapper>
-						<arena-hero-selection-widget-wrapper></arena-hero-selection-widget-wrapper>
-						<arena-hero-selected-widget-wrapper></arena-hero-selected-widget-wrapper>
-						<arena-card-selection-widget-wrapper></arena-card-selection-widget-wrapper>
-						<arena-package-card-selection-widget-wrapper></arena-package-card-selection-widget-wrapper>
-						<arena-mulligan-widget-wrapper></arena-mulligan-widget-wrapper>
+						<ng-container *ngIf="showArenaOverlays$ | async">
+							<arena-hero-power-selection-widget-wrapper></arena-hero-power-selection-widget-wrapper>
+							<arena-hero-selection-widget-wrapper></arena-hero-selection-widget-wrapper>
+							<arena-hero-selected-widget-wrapper></arena-hero-selected-widget-wrapper>
+							<arena-card-selection-widget-wrapper></arena-card-selection-widget-wrapper>
+							<arena-package-card-selection-widget-wrapper></arena-package-card-selection-widget-wrapper>
+							<arena-mulligan-widget-wrapper></arena-mulligan-widget-wrapper>
+							<choosing-card-widget-wrapper></choosing-card-widget-wrapper>
+						</ng-container>
 					</div>
 				</div>
 				<!-- Global -->
 				<!-- Use different wrappers to make it easier to position each one differently -->
 				<hs-quests-widget-wrapper></hs-quests-widget-wrapper>
-				<bgs-quests-widget-wrapper></bgs-quests-widget-wrapper>
-				<mercs-quests-widget-wrapper></mercs-quests-widget-wrapper>
+				<ng-container *ngIf="showBattlegroundsOverlays$ | async">
+					<bgs-quests-widget-wrapper></bgs-quests-widget-wrapper>
+				</ng-container>
+				<ng-container *ngIf="showMercsOverlays$ | async">
+					<mercs-quests-widget-wrapper></mercs-quests-widget-wrapper>
+				</ng-container>
 
 				<!-- "Constructed" -->
-				<decktracker-player-widget-wrapper
-					class="focusable"
-					style="pointer-events: none;"
-					tabindex="0"
-				></decktracker-player-widget-wrapper>
-				<decktracker-opponent-widget-wrapper
-					style="pointer-events: none;"
-				></decktracker-opponent-widget-wrapper>
-				<secrets-helper-widget-wrapper></secrets-helper-widget-wrapper>
-				<opponent-hand-widget-wrapper></opponent-hand-widget-wrapper>
-				<turn-timer-widget-wrapper></turn-timer-widget-wrapper>
-				<constructed-mulligan-deck-widget-wrapper></constructed-mulligan-deck-widget-wrapper>
-				<constructed-decktracker-ooc-widget-wrapper></constructed-decktracker-ooc-widget-wrapper>
+				<ng-container *ngIf="showConstructedOverlays$ | async">
+					<decktracker-player-widget-wrapper
+						class="focusable"
+						style="pointer-events: none;"
+						tabindex="0"
+					></decktracker-player-widget-wrapper>
+					<decktracker-opponent-widget-wrapper
+						style="pointer-events: none;"
+					></decktracker-opponent-widget-wrapper>
+					<secrets-helper-widget-wrapper></secrets-helper-widget-wrapper>
+					<opponent-hand-widget-wrapper></opponent-hand-widget-wrapper>
+					<turn-timer-widget-wrapper></turn-timer-widget-wrapper>
+					<constructed-mulligan-deck-widget-wrapper></constructed-mulligan-deck-widget-wrapper>
+					<constructed-decktracker-ooc-widget-wrapper></constructed-decktracker-ooc-widget-wrapper>
+				</ng-container>
 
 				<!-- BG -->
-				<bgs-minion-tiers-widget-wrapper></bgs-minion-tiers-widget-wrapper>
-				<bgs-battle-simulation-widget-wrapper></bgs-battle-simulation-widget-wrapper>
-				<bgs-banned-tribes-widget-wrapper></bgs-banned-tribes-widget-wrapper>
-				<bgs-window-button-widget-wrapper></bgs-window-button-widget-wrapper>
-				<bgs-hero-tips-widget-wrapper></bgs-hero-tips-widget-wrapper>
-				<bgs-reconnector-widget-wrapper></bgs-reconnector-widget-wrapper>
-				<current-session-widget-wrapper></current-session-widget-wrapper>
-				<bgs-hero-overview-widget-wrapper></bgs-hero-overview-widget-wrapper>
-				<bgs-action-count-widget-wrapper></bgs-action-count-widget-wrapper>
-				<bgs-full-anomaly-widget-wrapper></bgs-full-anomaly-widget-wrapper>
+				<ng-container *ngIf="showBattlegroundsOverlays$ | async">
+					<bgs-minion-tiers-widget-wrapper></bgs-minion-tiers-widget-wrapper>
+					<bgs-battle-simulation-widget-wrapper></bgs-battle-simulation-widget-wrapper>
+					<bgs-banned-tribes-widget-wrapper></bgs-banned-tribes-widget-wrapper>
+					<bgs-window-button-widget-wrapper></bgs-window-button-widget-wrapper>
+					<bgs-hero-tips-widget-wrapper></bgs-hero-tips-widget-wrapper>
+					<bgs-reconnector-widget-wrapper></bgs-reconnector-widget-wrapper>
+					<current-session-widget-wrapper></current-session-widget-wrapper>
+					<bgs-hero-overview-widget-wrapper></bgs-hero-overview-widget-wrapper>
+					<bgs-action-count-widget-wrapper></bgs-action-count-widget-wrapper>
+					<bgs-full-anomaly-widget-wrapper></bgs-full-anomaly-widget-wrapper>
+				</ng-container>
 
 				<!-- Mercs -->
-				<mercs-player-team-widget-wrapper></mercs-player-team-widget-wrapper>
-				<mercs-opponent-team-widget-wrapper></mercs-opponent-team-widget-wrapper>
-				<mercs-out-of-combat-player-team-widget-wrapper></mercs-out-of-combat-player-team-widget-wrapper>
-				<mercs-action-queue-widget-wrapper></mercs-action-queue-widget-wrapper>
+				<ng-container *ngIf="showMercsOverlays$ | async">
+					<mercs-player-team-widget-wrapper></mercs-player-team-widget-wrapper>
+					<mercs-opponent-team-widget-wrapper></mercs-opponent-team-widget-wrapper>
+					<mercs-out-of-combat-player-team-widget-wrapper></mercs-out-of-combat-player-team-widget-wrapper>
+					<mercs-action-queue-widget-wrapper></mercs-action-queue-widget-wrapper>
+				</ng-container>
 
 				<!-- Arena -->
-				<arena-decktracker-ooc-widget-wrapper></arena-decktracker-ooc-widget-wrapper>
-				<arena-mulligan-deck-widget-wrapper></arena-mulligan-deck-widget-wrapper>
-				<arena-current-session-widget-wrapper></arena-current-session-widget-wrapper>
-
-				<player-attack-widget-wrapper></player-attack-widget-wrapper>
-				<opponent-attack-widget-wrapper></opponent-attack-widget-wrapper>
-
-				<ng-container *ngIf="(useGroupedCounters$ | async) === false">
-					<!-- Player Counters -->
-					<counters-positioner class="widget-positioner player-counters" [positionerId]="'player-counters'">
-						<counter-wrapper
-							*ngFor="let counter of playerCounters$ | async; trackBy: trackForCounter"
-							side="player"
-							[counter]="counter"
-						></counter-wrapper
-					></counters-positioner>
-
-					<!-- Opponent counters -->
-					<counters-positioner
-						class="widget-positioner opponent-counters"
-						[positionerId]="'opponent-counters'"
-					>
-						<counter-wrapper
-							*ngFor="let counter of opponentCounters$ | async; trackBy: trackForCounter"
-							side="opponent"
-							[counter]="counter"
-						></counter-wrapper>
-					</counters-positioner>
-				</ng-container>
-				<ng-container *ngIf="(useGroupedCounters$ | async) === true">
-					<grouped-counters-wrapper
-						class="grouped-counters"
-						[playerCounters]="playerCounters$ | async"
-						[opponentCounters]="opponentCounters$ | async"
-					></grouped-counters-wrapper>
+				<ng-container *ngIf="showArenaOverlays$ | async">
+					<arena-decktracker-ooc-widget-wrapper></arena-decktracker-ooc-widget-wrapper>
+					<arena-mulligan-deck-widget-wrapper></arena-mulligan-deck-widget-wrapper>
+					<arena-current-session-widget-wrapper></arena-current-session-widget-wrapper>
+					<decktracker-player-widget-wrapper
+						class="focusable"
+						style="pointer-events: none;"
+						tabindex="0"
+					></decktracker-player-widget-wrapper>
+					<decktracker-opponent-widget-wrapper
+						style="pointer-events: none;"
+					></decktracker-opponent-widget-wrapper>
+					<secrets-helper-widget-wrapper></secrets-helper-widget-wrapper>
+					<opponent-hand-widget-wrapper></opponent-hand-widget-wrapper>
+					<turn-timer-widget-wrapper></turn-timer-widget-wrapper>
 				</ng-container>
 
-				<player-max-resources-widget-wrapper></player-max-resources-widget-wrapper>
-				<opponent-max-resources-widget-wrapper></opponent-max-resources-widget-wrapper>
+				<ng-container *ngIf="(showConstructedOverlays$ | async) || (showArenaOverlays$ | async)">
+					<player-attack-widget-wrapper></player-attack-widget-wrapper>
+					<opponent-attack-widget-wrapper></opponent-attack-widget-wrapper>
+
+					<ng-container *ngIf="(useGroupedCounters$ | async) === false">
+						<!-- Player Counters -->
+						<counters-positioner
+							class="widget-positioner player-counters"
+							[positionerId]="'player-counters'"
+						>
+							<counter-wrapper
+								*ngFor="let counter of playerCounters$ | async; trackBy: trackForCounter"
+								side="player"
+								[counter]="counter"
+							></counter-wrapper
+						></counters-positioner>
+
+						<!-- Opponent counters -->
+						<counters-positioner
+							class="widget-positioner opponent-counters"
+							[positionerId]="'opponent-counters'"
+						>
+							<counter-wrapper
+								*ngFor="let counter of opponentCounters$ | async; trackBy: trackForCounter"
+								side="opponent"
+								[counter]="counter"
+							></counter-wrapper>
+						</counters-positioner>
+					</ng-container>
+					<ng-container *ngIf="(useGroupedCounters$ | async) === true">
+						<grouped-counters-wrapper
+							class="grouped-counters"
+							[playerCounters]="playerCounters$ | async"
+							[opponentCounters]="opponentCounters$ | async"
+						></grouped-counters-wrapper>
+					</ng-container>
+
+					<player-max-resources-widget-wrapper></player-max-resources-widget-wrapper>
+					<opponent-max-resources-widget-wrapper></opponent-max-resources-widget-wrapper>
+				</ng-container>
 
 				<lottery-widget-wrapper></lottery-widget-wrapper>
 			</ng-container>
@@ -195,6 +230,10 @@ export class FullScreenOverlaysComponent
 	@ViewChild('container', { static: false }) container: ElementRef;
 
 	allowOverlays$: Observable<boolean>;
+	showBattlegroundsOverlays$: Observable<boolean>;
+	showConstructedOverlays$: Observable<boolean>;
+	showMercsOverlays$: Observable<boolean>;
+	showArenaOverlays$: Observable<boolean>;
 
 	activeTheme$: Observable<CurrentAppType>;
 	overlayAppearanceTheme$: Observable<OverlayAppearanceThemeSelection>;
@@ -240,34 +279,26 @@ export class FullScreenOverlaysComponent
 		this.overlayAppearanceTheme$ = this.prefs.preferences$$.pipe(
 			this.mapData((prefs) => prefs.overlayAppearanceTheme),
 		);
-		this.activeTheme$ = combineLatest([
+
+		// Mode-gate: only construct the widget trees for the active game-mode family.
+		// Mid-BG this keeps constructed/arena/mercs wrappers out of the DOM (V8 + Blink).
+		const overlayModeFamily$ = combineLatest([
 			this.scene.currentScene$$,
 			this.scene.lastNonGamePlayScene$$,
 			this.gameState.gameState$$.pipe(this.mapData((gameState) => gameState?.metadata?.gameType)),
 		]).pipe(
-			this.mapData(([currentScene, nonGameplayScene, gameType]) => {
-				if (currentScene === SceneMode.GAMEPLAY) {
-					switch (gameType) {
-						case GameType.GT_BATTLEGROUNDS:
-						case GameType.GT_BATTLEGROUNDS_AI_VS_AI:
-						case GameType.GT_BATTLEGROUNDS_FRIENDLY:
-						case GameType.GT_BATTLEGROUNDS_PLAYER_VS_AI:
-						case GameType.GT_BATTLEGROUNDS_DUO:
-						case GameType.GT_BATTLEGROUNDS_DUO_VS_AI:
-						case GameType.GT_BATTLEGROUNDS_DUO_FRIENDLY:
-						case GameType.GT_BATTLEGROUNDS_DUO_AI_VS_AI:
-							return 'battlegrounds';
-						default:
-							return 'decktracker';
-					}
-				}
+			this.mapData(([currentScene, nonGameplayScene, gameType]) =>
+				resolveOverlayModeFamily(currentScene, nonGameplayScene, gameType),
+			),
+			distinctUntilChanged(),
+		);
+		this.showBattlegroundsOverlays$ = overlayModeFamily$.pipe(this.mapData((family) => family === 'battlegrounds'));
+		this.showConstructedOverlays$ = overlayModeFamily$.pipe(this.mapData((family) => family === 'constructed'));
+		this.showMercsOverlays$ = overlayModeFamily$.pipe(this.mapData((family) => family === 'mercenaries'));
+		this.showArenaOverlays$ = overlayModeFamily$.pipe(this.mapData((family) => family === 'arena'));
 
-				console.debug('[full-screen-overlays] currentScene', currentScene, nonGameplayScene, gameType);
-				if (isBattlegroundsScene(currentScene) || isBattlegroundsScene(nonGameplayScene)) {
-					return 'battlegrounds';
-				}
-				return 'decktracker';
-			}),
+		this.activeTheme$ = overlayModeFamily$.pipe(
+			this.mapData((family) => (family === 'battlegrounds' ? 'battlegrounds' : 'decktracker')),
 		);
 
 		const arenaCards = (await this.arenaRef.validDiscoveryPool$$.getValueWithInit()) ?? [];
@@ -520,3 +551,58 @@ export class FullScreenOverlaysComponent
 		window.dispatchEvent(new Event('window-resize'));
 	}
 }
+
+type OverlayModeFamily = 'battlegrounds' | 'constructed' | 'mercenaries' | 'arena';
+
+const isMercenariesScene = (scene: SceneMode | null | undefined): boolean => {
+	if (scene == null) {
+		return false;
+	}
+	return (
+		scene === SceneMode.LETTUCE_BOUNTY_BOARD ||
+		scene === SceneMode.LETTUCE_BOUNTY_TEAM_SELECT ||
+		scene === SceneMode.LETTUCE_COLLECTION ||
+		scene === SceneMode.LETTUCE_COOP ||
+		scene === SceneMode.LETTUCE_FRIENDLY ||
+		scene === SceneMode.LETTUCE_MAP ||
+		scene === SceneMode.LETTUCE_PACK_OPENING ||
+		scene === SceneMode.LETTUCE_PLAY ||
+		scene === SceneMode.LETTUCE_VILLAGE
+	);
+};
+
+const isArenaScene = (scene: SceneMode | null | undefined): boolean => scene === SceneMode.DRAFT;
+
+const resolveOverlayModeFamily = (
+	currentScene: SceneMode | null | undefined,
+	nonGameplayScene: SceneMode | null | undefined,
+	gameType: GameType | null | undefined,
+): OverlayModeFamily => {
+	if (currentScene === SceneMode.GAMEPLAY) {
+		if (isBattlegrounds(gameType)) {
+			return 'battlegrounds';
+		}
+		if (isMercenaries(gameType)) {
+			return 'mercenaries';
+		}
+		if (isArena(gameType)) {
+			return 'arena';
+		}
+		return 'constructed';
+	}
+
+	if (
+		isBattlegroundsScene(currentScene) ||
+		isBattlegroundsScene(nonGameplayScene) ||
+		currentScene === SceneMode.BACON_COLLECTION
+	) {
+		return 'battlegrounds';
+	}
+	if (isMercenariesScene(currentScene) || isMercenariesScene(nonGameplayScene)) {
+		return 'mercenaries';
+	}
+	if (isArenaScene(currentScene) || isArenaScene(nonGameplayScene)) {
+		return 'arena';
+	}
+	return 'constructed';
+};

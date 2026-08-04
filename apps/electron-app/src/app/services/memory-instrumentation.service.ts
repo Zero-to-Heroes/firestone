@@ -152,7 +152,7 @@ export const startMemoryInstrumentation = (injector: Injector): void => {
  * Always snapshots the **main** process (v8.writeHeapSnapshot). When
  * FS_ELECTRON_MEM_RENDERER_HEAP is unset or `1` (default when HEAPSNAPSHOT is set),
  * also snapshots every live Firestone Angular webContents (`#/overlay`,
- * `#/battlegrounds`, `#/loading`, …) via webContents.takeHeapSnapshot — the
+ * `#/battlegrounds`, static loading page, …) via webContents.takeHeapSnapshot — the
  * attribution needed before lite-shell work. Set FS_ELECTRON_MEM_RENDERER_HEAP=0
  * to skip renderers (main-only, cheaper).
  *
