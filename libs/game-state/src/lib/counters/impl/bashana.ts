@@ -5,6 +5,7 @@ import { CardIds, CardType, GameTag, SpellSchool } from '@firestone-hs/reference
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { BattlegroundsState } from '../../models/_barrel';
 import { GameState } from '../../models/game-state';
+import { getEntityTag } from '../../services/parser-entity-utils';
 import { filterCards, hasCorrectSpellSchool, hasCorrectType, hasCost } from '../../related-cards/dynamic-pools';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
 import { CounterType } from '../counter-type';
@@ -34,19 +35,19 @@ export class BashanaCounterDefinitionV2 extends CounterDefinitionV2<{ treantsLef
 							.filter(
 								(e) =>
 									e.CardId === CardIds.BashanaRunetotem_TreantToken_MEND_046t &&
-									e.GetTag(GameTag.CREATOR) === bashanaEntityId,
+									getEntityTag(e, GameTag.CREATOR) === bashanaEntityId,
 							)
-							.map((e) => e.Entity)
+							.map((e) => e.Id)
 					: [];
 			const spells =
 				state.parserState?.CurrentEntities != null
 					? Array.from(state.parserState.CurrentEntities.values()).filter(
 							(e) =>
-								e.GetTag(GameTag.CARDTYPE) === CardType.SPELL &&
-								treantEntityIds.includes(e.GetTag(GameTag.CREATOR)),
+								getEntityTag(e, GameTag.CARDTYPE) === CardType.SPELL &&
+								treantEntityIds.includes(getEntityTag(e, GameTag.CREATOR)),
 						)
 					: [];
-			const manaUsed = spells.reduce((acc, spell) => acc + spell.GetTag(GameTag.COST), 0);
+			const manaUsed = spells.reduce((acc, spell) => acc + getEntityTag(spell, GameTag.COST), 0);
 			return {
 				treantsLeft: state.opponentDeck.hand.filter(
 					(c) =>

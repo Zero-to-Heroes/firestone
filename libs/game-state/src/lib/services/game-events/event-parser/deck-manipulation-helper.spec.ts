@@ -103,6 +103,20 @@ describe('DeckManipulationHelper.removeSingleCardFromZone', () => {
 		expect(newZone.length).toBe(1);
 		expect(newZone[0].trueEntityId).toBe(72);
 	});
+
+	it('does not treat entityId -1 sentinel as a match for entityId 1', () => {
+		const hogger = CardIds.ChainbreakerHogger_JAIL_384;
+		const zone = [
+			DeckCard.create({ cardId: 'OTHER_CARD', entityId: 1 }),
+			DeckCard.create({ creatorCardId: hogger, trueEntityId: 70 }),
+		];
+		const [newZone, removed] = helper.removeSingleCardFromZone(zone, null, -1, true, true, null, false, {
+			fallbackCreatorCardId: hogger,
+		});
+		expect(removed?.creatorCardId).toBe(hogger);
+		expect(newZone.length).toBe(1);
+		expect(newZone[0].entityId).toBe(1);
+	});
 });
 
 describe('reconcileCardInHandWithDeck', () => {

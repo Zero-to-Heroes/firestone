@@ -65,7 +65,8 @@ export class DeckManipulationHelper {
 		// We have the entityId, so we just remove it.
 		// Do NOT match trueEntityId here — that field exists specifically so opponent deck gifts can
 		// keep an internal id without being removable/identifiable via the public entityId path.
-		if (!!entityId && zone.some((card) => Math.abs(card.entityId ?? 0) === Math.abs(entityId))) {
+		// entityId -1 is a sentinel meaning "skip entity-based removal" (creator fallback path).
+		if (entityId != null && entityId > 0 && zone.some((card) => Math.abs(card.entityId ?? 0) === entityId)) {
 			debug && console.debug('[card-draw] removing card with entityId', entityId, zone);
 			return [
 				zone
