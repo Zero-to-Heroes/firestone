@@ -13,7 +13,7 @@ import { GameEvent, GameEventsEmitterService, GameStateService } from '@fireston
 import { PowerLogBufferService } from '@firestone/shared/common/service';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { app, BrowserWindow, webContents } from 'electron';
-import { existsSync, mkdirSync } from 'fs';
+import { existsSync, mkdirSync, statSync } from 'fs';
 import { appendFile, writeFile } from 'fs/promises';
 import { Session } from 'inspector';
 import { join } from 'path';
@@ -85,13 +85,13 @@ export const startMemoryInstrumentation = (injector: Injector): void => {
 	}, STALL_DETECTOR_TICK_MS);
 
 	// Longest stall per turn, logged at the start of the next turn. Also drives the
-	// opt-in heap snapshots (below).
+	// opt-in heap snapshots (main + renderers — see writeHeapSnapshots).
 	const heapSnapshotTurns = parseHeapSnapshotTurns();
 	try {
 		const emitter = injector.get(GameEventsEmitterService);
 		const sub = emitter.allEvents.subscribe((event: GameEvent) => {
 			if (heapSnapshotTurns && event?.type === GameEvent.GAME_END) {
-				writeHeapSnapshot(logsDir, `${date}-${time}`, 'game-end');
+				void writeHeapSnapshots(logsDir, `${date}-${time}`, 'game-end');
 				return;
 			}
 			if (event?.type !== GameEvent.TURN_START) {
@@ -107,7 +107,7 @@ export const startMemoryInstrumentation = (injector: Injector): void => {
 			maxStallSinceTurnStart = 0;
 			if (heapSnapshotTurns && turn != null && heapSnapshotTurns.has(turn)) {
 				heapSnapshotTurns.delete(turn); // once per turn number
-				writeHeapSnapshot(logsDir, `${date}-${time}`, `turn-${turn}`);
+				void writeHeapSnapshots(logsDir, `${date}-${time}`, `turn-${turn}`);
 			}
 		});
 		turnStartUnsubscribe = () => sub.unsubscribe();
@@ -144,16 +144,21 @@ export const startMemoryInstrumentation = (injector: Injector): void => {
 };
 
 /**
- * Opt-in V8 heap snapshots of the main process, for attributing heap growth to
- * constructors/retainers (the ~120 MB/game of main heapUsed growth not explained by
- * the parser state — see the Plan C scoping in docs/electron-memory-investigation.md).
+ * Opt-in V8 heap snapshots for attributing memory.
  *
  * FS_ELECTRON_MEM_HEAPSNAPSHOT=1        -> snapshot at GAME_END only
  * FS_ELECTRON_MEM_HEAPSNAPSHOT=8,16     -> snapshots at the start of turns 8 and 16, plus GAME_END
  *
- * v8.writeHeapSnapshot is synchronous and blocks main for seconds (and the file is
- * roughly heap-sized) — dev-only, like the CPU profiler. Analyze with
- * test-tools/perf/analyze-heapsnapshot.mjs.
+ * Always snapshots the **main** process (v8.writeHeapSnapshot). When
+ * FS_ELECTRON_MEM_RENDERER_HEAP is unset or `1` (default when HEAPSNAPSHOT is set),
+ * also snapshots every live Firestone Angular webContents (`#/overlay`,
+ * `#/battlegrounds`, `#/loading`, …) via webContents.takeHeapSnapshot — the
+ * attribution needed before lite-shell work. Set FS_ELECTRON_MEM_RENDERER_HEAP=0
+ * to skip renderers (main-only, cheaper).
+ *
+ * Snapshots block for seconds and write ~heap-sized files — dev-only. Analyze with
+ * test-tools/perf/analyze-heapsnapshot.mjs. Compare total V8 self-size to the Tab's
+ * workingSetSize in the JSONL `heap-snapshot` record to see non-V8 Chromium cost.
  */
 const parseHeapSnapshotTurns = (): Set<number> | null => {
 	const raw = process.env['FS_ELECTRON_MEM_HEAPSNAPSHOT'];
@@ -164,19 +169,118 @@ const parseHeapSnapshotTurns = (): Set<number> | null => {
 		raw
 			.split(',')
 			.map((s) => parseInt(s.trim(), 10))
-			.filter((n) => Number.isFinite(n) && n > 1),
+			.filter((n) => Number.isFinite(n) && n >= 1),
 	);
 };
 
-const writeHeapSnapshot = (logsDir: string, sessionName: string, label: string): void => {
-	const path = join(logsDir, `heap-${sessionName}-${label}.heapsnapshot`);
+const shouldSnapshotRenderers = (): boolean => process.env['FS_ELECTRON_MEM_RENDERER_HEAP'] !== '0';
+
+const routeSlugFromUrl = (url: string): string => {
+	try {
+		const hash = url.includes('#') ? url.split('#')[1] : '';
+		const path = (hash || url).replace(/^\//, '').split('?')[0];
+		if (path.includes('overlay')) {
+			return 'overlay';
+		}
+		if (path.includes('battlegrounds')) {
+			return 'battlegrounds';
+		}
+		if (path.includes('loading')) {
+			return 'loading';
+		}
+		if (path.includes('settings')) {
+			return 'settings';
+		}
+		if (path.includes('collection')) {
+			return 'collection';
+		}
+		if (path.includes('lottery')) {
+			return 'lottery';
+		}
+		if (url.startsWith('devtools:')) {
+			return 'devtools';
+		}
+		if (url.startsWith('owepm:')) {
+			return 'owepm';
+		}
+		if (url.includes('adview')) {
+			return 'owadview';
+		}
+		return `wc-${path.slice(0, 24) || 'unknown'}`.replace(/[^a-z0-9_-]+/gi, '-');
+	} catch {
+		return 'unknown';
+	}
+};
+
+const writeHeapSnapshots = async (logsDir: string, sessionName: string, label: string): Promise<void> => {
+	writeMainHeapSnapshot(logsDir, sessionName, label);
+	if (!shouldSnapshotRenderers()) {
+		return;
+	}
+	const metricsByPid = new Map(
+		app.getAppMetrics().map((m) => [m.pid, Math.round((m.memory?.workingSetSize ?? 0) / 1024)]),
+	);
+	for (const wc of webContents.getAllWebContents()) {
+		try {
+			if (wc.isDestroyed()) {
+				continue;
+			}
+			const url = wc.getURL() || '';
+			// Skip empty / about:blank mid-navigation
+			if (!url || url === 'about:blank') {
+				continue;
+			}
+			const slug = routeSlugFromUrl(url);
+			const osPid = wc.getOSProcessId();
+			const path = join(logsDir, `heap-${sessionName}-${label}-${slug}-pid${osPid}.heapsnapshot`);
+			const start = Date.now();
+			await wc.takeHeapSnapshot(path);
+			const ok = existsSync(path) && statSync(path).size > 0;
+			const wsMB = metricsByPid.get(osPid) ?? null;
+			console.log(
+				'[fs-mem] renderer heap snapshot',
+				ok ? 'ok' : 'FAILED',
+				slug,
+				`pid=${osPid}`,
+				wsMB != null ? `rss=${wsMB}MB` : '',
+				path,
+				`${Date.now() - start}ms`,
+			);
+			writeRecord({
+				kind: 'heap-snapshot',
+				scope: 'renderer',
+				label,
+				slug,
+				url: url.slice(0, 200),
+				pid: osPid,
+				workingSetSizeMb: wsMB,
+				path,
+				ok,
+				ms: Date.now() - start,
+			});
+		} catch (e) {
+			console.warn('[fs-mem] renderer heap snapshot failed', e);
+		}
+	}
+};
+
+const writeMainHeapSnapshot = (logsDir: string, sessionName: string, label: string): void => {
+	const path = join(logsDir, `heap-${sessionName}-${label}-main.heapsnapshot`);
 	const start = Date.now();
 	try {
 		v8.writeHeapSnapshot(path);
-		console.log('[fs-mem] heap snapshot written', path, `${Date.now() - start}ms`);
-		writeRecord({ kind: 'heap-snapshot', label, path, ms: Date.now() - start });
+		const rssMB = Math.round(process.memoryUsage().rss / (1024 * 1024));
+		console.log('[fs-mem] main heap snapshot written', path, `rss=${rssMB}MB`, `${Date.now() - start}ms`);
+		writeRecord({
+			kind: 'heap-snapshot',
+			scope: 'main',
+			label,
+			path,
+			workingSetSizeMb: rssMB,
+			ms: Date.now() - start,
+		});
 	} catch (e) {
-		console.warn('[fs-mem] heap snapshot failed', e);
+		console.warn('[fs-mem] main heap snapshot failed', e);
 	}
 };
 

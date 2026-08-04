@@ -36,6 +36,8 @@ import { MindVisionElectronService } from './services/mind-vision-electron.servi
 import { registerOpenExternalLinksForAllBrowserWindows } from './services/open-external-links-window-hook';
 import { OverlayService } from './services/overlay.service';
 import { showPremiumLockNotificationOnce } from './services/premium-lock-notification';
+import { installRemoteImageGate } from './services/remote-image-gate';
+import { runBlankWindowMemoryProbe } from './services/blank-window-memory-probe';
 import { destroySystemTray, initSystemTray } from './services/system-tray';
 
 // Auth callback data interface
@@ -631,6 +633,10 @@ export default class App {
 		if (process.platform === 'win32') {
 			electronApp.setAppUserModelId('com.zerotoheroes.firestone.standalone');
 		}
+
+		// Before any BrowserWindow loads: optional image block for memory A/B (Phase 0c).
+		installRemoteImageGate();
+		await runBlankWindowMemoryProbe();
 
 		// Free (ad-supported) build only: inform the user about / collect consent via the built-in CMP.
 		await maybeShowConsentOnStartup();

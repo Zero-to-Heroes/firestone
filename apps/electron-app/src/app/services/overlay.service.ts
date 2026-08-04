@@ -475,7 +475,9 @@ export class OverlayService extends EventEmitter {
 			console.log('Angular overlay window created successfully! Waiting for show/focus...');
 		} catch (error) {
 			console.error('Error loading Angular overlay:', error);
-			console.error('Frontend load failed. For unpackaged runs use nxe:serve:frontend, or set FS_ELECTRON_FRONTEND_DIR to a production build.');
+			console.error(
+				'Frontend load failed. For unpackaged runs use nxe:serve:frontend, or set FS_ELECTRON_FRONTEND_DIR to a production build.',
+			);
 			// Don't create fallback window - just fail gracefully
 			throw error;
 		}
