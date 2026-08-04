@@ -176,7 +176,15 @@ type ElectronOverlayHitTestApi = {
 				<ng-container *ngIf="(showConstructedOverlays$ | async) || (showArenaOverlays$ | async)">
 					<player-attack-widget-wrapper></player-attack-widget-wrapper>
 					<opponent-attack-widget-wrapper></opponent-attack-widget-wrapper>
+				</ng-container>
 
+				<ng-container
+					*ngIf="
+						(showConstructedOverlays$ | async) ||
+						(showArenaOverlays$ | async) ||
+						(showBattlegroundsOverlays$ | async)
+					"
+				>
 					<ng-container *ngIf="(useGroupedCounters$ | async) === false">
 						<!-- Player Counters -->
 						<counters-positioner
