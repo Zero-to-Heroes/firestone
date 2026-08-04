@@ -6,6 +6,7 @@ import {
 	Component,
 	ElementRef,
 	HostListener,
+	NgZone,
 	OnDestroy,
 	ViewChild,
 	ViewEncapsulation,
@@ -25,22 +26,26 @@ import { CurrentAppType } from '@firestone/mainwindow/common';
 import { SceneService } from '@firestone/memory';
 import { InGameReplayService } from '@firestone/mods/common';
 import { OverlayAppearanceService } from '@firestone/settings/services';
-import {
-	OverlayAppearanceThemeSelection,
-	PreferencesService,
-	ScalingService,
-} from '@firestone/shared/common/service';
+import { OverlayAppearanceThemeSelection, PreferencesService, ScalingService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import {
 	CardsFacadeService,
 	GameInfoService,
 	HEARTHSTONE_GAME_ID,
 	ILocalizationService,
+	isElectronContext,
 	OverwolfService,
 	waitForReady,
 } from '@firestone/shared/framework/core';
 import { auditTime, combineLatest, distinctUntilChanged, filter, Observable, takeUntil } from 'rxjs';
 import { DebugService } from '../../services/debug.service';
+
+type OverlayPassthroughMode = 'noPassThrough' | 'passThrough' | 'passThroughAndNotify';
+
+type ElectronOverlayHitTestApi = {
+	isSharedTextureHitTestWorkaroundActive?: () => Promise<boolean>;
+	setOverlayPassthrough?: (mode: OverlayPassthroughMode) => void;
+};
 
 @Component({
 	standalone: false,
@@ -59,6 +64,7 @@ import { DebugService } from '../../services/debug.service';
 	],
 	template: `
 		<div
+			#container
 			id="container"
 			tabindex="0"
 			class="full-screen-overlays drag-boundary overlay-container-parent"
@@ -199,6 +205,12 @@ export class FullScreenOverlaysComponent
 	windowId: string;
 
 	private gameInfoUpdatedListener: (message: any) => void;
+	private sharedTextureHitTestActive = false;
+	private overlayInputCapturing = false;
+	private overlayCursorEl: HTMLDivElement | null = null;
+	private readonly onOverlayMouseOver = (event: MouseEvent) => this.handleOverlayPointer(event.target);
+	private readonly onOverlayMouseOut = (event: MouseEvent) => this.handleOverlayPointer(event.relatedTarget);
+	private readonly onOverlayMouseMove = (event: MouseEvent) => this.moveOverlayCaptureCursor(event);
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
@@ -215,6 +227,7 @@ export class FullScreenOverlaysComponent
 		private readonly init_cardsHighlight: CardsHighlightFacadeService,
 		private readonly inGameReplayService: InGameReplayService,
 		private readonly arenaRef: ArenaRefService,
+		private readonly ngZone: NgZone,
 	) {
 		super(cdr);
 	}
@@ -325,16 +338,162 @@ export class FullScreenOverlaysComponent
 			await this.changeWindowSize();
 		}
 		window.dispatchEvent(new Event('window-resize'));
+		void this.setupSharedTextureHitTestWorkaround();
 	}
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy(): void {
 		super.ngOnDestroy();
+		this.teardownSharedTextureHitTestWorkaround();
 		this.ow.removeGameInfoUpdatedListener(this.gameInfoUpdatedListener);
 	}
 
 	trackForCounter(index: number, counter: CounterInstance<any>) {
 		return counter.side + counter.id;
+	}
+
+	/**
+	 * Shared-texture overlays don't alpha-hit-test. Overwolf's workaround:
+	 * passThroughAndNotify by default, noPassThrough while hovering interactive UI.
+	 * @see https://dev.overwolf.com/ow-electron/reference/examples/overlay/shared-texture-rendering/#beta-limitation-hit-testing-ignores-transparent-pixels
+	 */
+	private async setupSharedTextureHitTestWorkaround(): Promise<void> {
+		if (!isElectronContext()) {
+			return;
+		}
+		const api = (window as unknown as { electronAPI?: ElectronOverlayHitTestApi }).electronAPI;
+		if (!api?.isSharedTextureHitTestWorkaroundActive || !api.setOverlayPassthrough) {
+			return;
+		}
+		let active = false;
+		try {
+			active = await api.isSharedTextureHitTestWorkaroundActive();
+		} catch (e) {
+			console.warn('[full-screen-overlays] shared-texture hit-test probe failed', e);
+			return;
+		}
+		if (!active) {
+			return;
+		}
+		this.sharedTextureHitTestActive = true;
+		console.log('[full-screen-overlays] enabling shared-texture hit-test workaround');
+		// Shared-texture compositing does not show the OS/CSS cursor in-game — only pixels
+		// in the overlay framebuffer (+ the game's own cursor). Keep OS cursor hidden and
+		// draw a DOM cursor that is painted into the shared texture while capturing.
+		document.documentElement.style.cursor = 'none';
+		this.ensureOverlayCaptureCursorEl();
+		this.ngZone.runOutsideAngular(() => {
+			window.addEventListener('mouseover', this.onOverlayMouseOver, true);
+			window.addEventListener('mouseout', this.onOverlayMouseOut, true);
+			window.addEventListener('mousemove', this.onOverlayMouseMove, true);
+		});
+	}
+
+	private teardownSharedTextureHitTestWorkaround(): void {
+		if (!this.sharedTextureHitTestActive) {
+			return;
+		}
+		window.removeEventListener('mouseover', this.onOverlayMouseOver, true);
+		window.removeEventListener('mouseout', this.onOverlayMouseOut, true);
+		window.removeEventListener('mousemove', this.onOverlayMouseMove, true);
+		this.sharedTextureHitTestActive = false;
+		this.applyOverlayCaptureCursor(false);
+		document.documentElement.style.cursor = '';
+		this.overlayCursorEl?.remove();
+		this.overlayCursorEl = null;
+		if (this.overlayInputCapturing) {
+			this.setOverlayPassthrough('passThroughAndNotify');
+			this.overlayInputCapturing = false;
+		}
+	}
+
+	private handleOverlayPointer(target: EventTarget | null): void {
+		if (!this.sharedTextureHitTestActive) {
+			return;
+		}
+		const capture = !this.isTransparentPassThroughTarget(target);
+		if (capture === this.overlayInputCapturing) {
+			return;
+		}
+		this.overlayInputCapturing = capture;
+		this.setOverlayPassthrough(capture ? 'noPassThrough' : 'passThroughAndNotify');
+		this.applyOverlayCaptureCursor(capture);
+	}
+
+	/** Layout shells / empty fullscreen root should leave input with the game. */
+	private isTransparentPassThroughTarget(target: EventTarget | null): boolean {
+		if (!(target instanceof Element)) {
+			return true;
+		}
+		if (target.classList?.contains('fs-ow-capture-cursor')) {
+			return !this.overlayInputCapturing;
+		}
+		if (target.closest?.('.cdk-overlay-pane, .cdk-overlay-connected-position-bounding-box')) {
+			return false;
+		}
+		const root =
+			(this.container?.nativeElement as HTMLElement | undefined) ??
+			(document.getElementById('container') as HTMLElement | null) ??
+			undefined;
+		if (!root) {
+			// Fail open to capture — otherwise we never leave passThroughAndNotify and
+			// the game cursor sticks to every widget.
+			return false;
+		}
+		if (!root.contains(target)) {
+			return target === document.documentElement || target === document.body;
+		}
+		if (
+			target === root ||
+			target.classList.contains('full-screen-overlays') ||
+			target.classList.contains('game-area-container') ||
+			target.classList.contains('game-area') ||
+			target.classList.contains('widget-positioner')
+		) {
+			return true;
+		}
+		return false;
+	}
+
+	private ensureOverlayCaptureCursorEl(): void {
+		if (this.overlayCursorEl) {
+			return;
+		}
+		const el = document.createElement('div');
+		el.className = 'fs-ow-capture-cursor';
+		el.setAttribute('aria-hidden', 'true');
+		el.style.display = 'none';
+		document.body.appendChild(el);
+		this.overlayCursorEl = el;
+	}
+
+	private applyOverlayCaptureCursor(capture: boolean): void {
+		const root = (this.container?.nativeElement as HTMLElement | undefined) ?? document.getElementById('container');
+		document.documentElement.style.cursor = 'none';
+		if (capture) {
+			root?.classList.add('fs-ow-capture-input');
+			this.ensureOverlayCaptureCursorEl();
+			if (this.overlayCursorEl) {
+				this.overlayCursorEl.style.display = 'block';
+			}
+		} else {
+			root?.classList.remove('fs-ow-capture-input');
+			if (this.overlayCursorEl) {
+				this.overlayCursorEl.style.display = 'none';
+			}
+		}
+	}
+
+	private moveOverlayCaptureCursor(event: MouseEvent): void {
+		if (!this.overlayInputCapturing || !this.overlayCursorEl) {
+			return;
+		}
+		this.overlayCursorEl.style.transform = `translate(${event.clientX}px, ${event.clientY}px)`;
+	}
+
+	private setOverlayPassthrough(mode: OverlayPassthroughMode): void {
+		const api = (window as unknown as { electronAPI?: ElectronOverlayHitTestApi }).electronAPI;
+		api?.setOverlayPassthrough?.(mode);
 	}
 
 	// Just make it full screen, always

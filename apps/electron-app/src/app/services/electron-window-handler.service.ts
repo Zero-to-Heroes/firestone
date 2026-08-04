@@ -920,10 +920,15 @@ export class ElectronWindowHandlerService implements IWindowHandlerService {
 			frame: false,
 			resizable: false,
 			dpiAware: true,
+			// Stay above the fullscreen HUD (esp. shared-texture passThroughAndNotify)
+			// and always capture clicks on 2.0.x (no alpha-hit-test surprises).
+			zOrder: 'topMost',
+			passthrough: 'noPassThrough',
 			webPreferences: {
 				nodeIntegration: true,
 				contextIsolation: false,
 				preload: preloadPath,
+				backgroundThrottling: false,
 			},
 		};
 
@@ -954,7 +959,9 @@ export class ElectronWindowHandlerService implements IWindowHandlerService {
 					!this.loadingOverlayWindow.window.isDestroyed() &&
 					!this.loadingOverlayWindow.window.webContents.isDevToolsOpened()
 				) {
-					this.loadingOverlayWindow.window.webContents.openDevTools({ mode: 'detach', activate: true });
+					// activate:false — activating DevTools here was starving the main
+					// fullscreen overlay's 41MB webpack load (multi-minute DOM-ready).
+					this.loadingOverlayWindow.window.webContents.openDevTools({ mode: 'detach', activate: false });
 				}
 			}
 		});
@@ -991,11 +998,7 @@ export class ElectronWindowHandlerService implements IWindowHandlerService {
 
 	public reloadWindows(): void {
 		const browserWindows = [this.settingsWindow, this.battlegroundsWindow, this.lotteryWindow];
-		const overlayWindows = [
-			this.settingsOverlayWindow,
-			this.battlegroundsOverlayWindow,
-			this.loadingOverlayWindow,
-		];
+		const overlayWindows = [this.settingsOverlayWindow, this.battlegroundsOverlayWindow, this.loadingOverlayWindow];
 		for (const window of browserWindows) {
 			if (window && !window.isDestroyed()) {
 				window.reload();

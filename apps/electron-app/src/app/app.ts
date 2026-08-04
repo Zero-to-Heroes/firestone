@@ -530,6 +530,21 @@ export default class App {
 			}
 		});
 
+		// Shared-texture hit-test workaround: renderer flips passthrough while hovering widgets.
+		// https://dev.overwolf.com/ow-electron/reference/examples/overlay/shared-texture-rendering/#beta-limitation-hit-testing-ignores-transparent-pixels
+		ipcMain.handle('overlay-shared-texture-hit-test-workaround', () => {
+			return App.overlay?.isSharedTextureHitTestWorkaroundActive() ?? false;
+		});
+		ipcMain.on(
+			'set-overlay-passthrough',
+			(_event, mode: 'noPassThrough' | 'passThrough' | 'passThroughAndNotify') => {
+				if (mode !== 'noPassThrough' && mode !== 'passThrough' && mode !== 'passThroughAndNotify') {
+					return;
+				}
+				App.overlay?.setOverlayPassthrough(mode);
+			},
+		);
+
 		// Close the current window (Settings overlay or regular BrowserWindow)
 		ipcMain.on('close-settings-window', (event) => {
 			const win = BrowserWindow.fromWebContents(event.sender);

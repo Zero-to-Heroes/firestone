@@ -22,7 +22,10 @@ const app = electronApp;
 export class OverlayService extends EventEmitter {
 	private static instance: OverlayService;
 	private isOverlayReady = false;
+	private overlayPackageVersion: string | null = null;
 	private overlayWindow: OverlayBrowserWindow | null = null;
+	/** True when overlay was created with the Overwolf shared-texture hit-test workaround. */
+	private sharedTextureHitTestWorkaround = false;
 	private gameWindowService: ElectronGameWindowService;
 	private appAccessSubscription: Subscription | null = null;
 
@@ -77,6 +80,7 @@ export class OverlayService extends EventEmitter {
 		}
 		const window = this.overlayWindow.window;
 		this.overlayWindow = null;
+		this.sharedTextureHitTestWorkaround = false;
 		try {
 			if (window && !window.isDestroyed()) {
 				window.close();
@@ -92,6 +96,41 @@ export class OverlayService extends EventEmitter {
 	 */
 	public isOverlayVisible(): boolean {
 		return this.overlayWindow !== null;
+	}
+
+	/**
+	 * Whether the main in-game overlay uses the shared-texture hit-test workaround
+	 * (`passThroughAndNotify` + per-widget capture). Renderer should poll this and
+	 * drive setOverlayPassthrough on mouseenter/leave of interactive UI.
+	 */
+	public isSharedTextureHitTestWorkaroundActive(): boolean {
+		return this.sharedTextureHitTestWorkaround && !!this.overlayWindow;
+	}
+
+	/**
+	 * Runtime passthrough toggle for the main overlay (Overwolf shared-texture workaround).
+	 * @see https://dev.overwolf.com/ow-electron/reference/examples/overlay/shared-texture-rendering/#beta-limitation-hit-testing-ignores-transparent-pixels
+	 */
+	public setOverlayPassthrough(mode: 'noPassThrough' | 'passThrough' | 'passThroughAndNotify'): void {
+		if (!this.sharedTextureHitTestWorkaround) {
+			return;
+		}
+		if (!this.overlayWindow?.window || this.overlayWindow.window.isDestroyed()) {
+			return;
+		}
+		try {
+			this.overlayWindow.overlayOptions.passthrough = mode;
+			// Shared-texture + pass-through leaves the game cursor drawn. Focusing the
+			// overlay while widgets capture input lets Chromium show a normal OS cursor.
+			if (mode === 'noPassThrough') {
+				this.overlayWindow.window.focus();
+			}
+			console.debug('[Overlay] passthrough →', mode, {
+				focused: this.overlayWindow.window.isFocused(),
+			});
+		} catch (error) {
+			console.warn('[Overlay] Failed to set passthrough=', mode, error);
+		}
 	}
 
 	/**
@@ -217,25 +256,91 @@ export class OverlayService extends EventEmitter {
 		console.log('Preload script path:', preloadPath);
 		console.log('Current __dirname:', __dirname);
 
+		// Shared-texture path (overlay ≥2.0.2). Opt-in via FS_USE_SHARED_TEXTURE=1 —
+		// on 2.0.5 it logs OSRSharedTextureNotReleased and the fullscreen overlay then
+		// eats all mouse input (game appears stuck). Do NOT pass the flag on older
+		// packages either (1.13.x accepts the unknown option but breaks load).
+		const gameWindowInfo = this.overlayApi.getActiveGameInfo?.()?.gameWindowInfo;
+		const sharedTextureSupported = gameWindowInfo?.isSharedTextureSupported;
+		const sharedTextureAvailable = gameWindowInfo?.isSharedTextureAvailable;
+		const sharedTextureOptIn = process.env.FS_USE_SHARED_TEXTURE === '1';
+		const canRequestSharedTexture =
+			sharedTextureOptIn && this.isOverlayPackageAtLeast('2.0.2') && sharedTextureAvailable !== false;
+		console.log('[Overlay] Shared-texture probe:', {
+			overlayPackageVersion: this.overlayPackageVersion,
+			graphics: gameWindowInfo?.graphics,
+			isSharedTextureSupported: sharedTextureSupported,
+			isSharedTextureAvailable: sharedTextureAvailable,
+			sharedTextureOptIn,
+			canRequestSharedTexture,
+		});
+		if (sharedTextureOptIn && this.overlayPackageVersion && !this.isOverlayPackageAtLeast('2.0.2')) {
+			console.warn(
+				`[Overlay] Overlay package ${this.overlayPackageVersion} is older than 2.0.2 — not passing useSharedTexture`,
+			);
+		}
+
+		// Leave passthrough unset → Overwolf default `noPassThrough` (CPU path alpha
+		// hit-test: empty pixels → game, widgets stay clickable).
+		// Shared-texture path has no alpha hit-test (full window rect captures input).
+		// Overwolf workaround: passThroughAndNotify + flip to noPassThrough while the
+		// pointer is over interactive widgets — see
+		// https://dev.overwolf.com/ow-electron/reference/examples/overlay/shared-texture-rendering/#beta-limitation-hit-testing-ignores-transparent-pixels
+		// Override: FS_OVERLAY_PASSTHROUGH=noPassThrough|passThrough|passThroughAndNotify
+		const passthroughEnv = process.env.FS_OVERLAY_PASSTHROUGH?.trim();
+		let passthrough: 'noPassThrough' | 'passThrough' | 'passThroughAndNotify' | undefined =
+			passthroughEnv === 'passThrough' ||
+			passthroughEnv === 'passThroughAndNotify' ||
+			passthroughEnv === 'noPassThrough'
+				? passthroughEnv
+				: undefined;
+
+		this.sharedTextureHitTestWorkaround = false;
+		if (canRequestSharedTexture) {
+			// Documented default for shared-texture fullscreen HUDs unless overridden.
+			if (!passthrough) {
+				passthrough = 'passThroughAndNotify';
+			}
+			this.sharedTextureHitTestWorkaround = passthrough === 'passThroughAndNotify';
+		}
+
 		const options: OverlayWindowOptions & { dpiAware?: boolean } = {
 			name: 'firestone-overlay-' + Math.floor(Math.random() * 1000),
 			height: gameHeight,
 			width: gameWidth,
-			show: true,
+			// Never show until DOM ready — avoids a blank fullscreen input sink
+			// while Angular is still loading (especially painful on 2.0.x).
+			show: false,
 			transparent: true,
 			resizable: false,
 			dpiAware: false,
+			// Do NOT use zOrder: 'bottomMost' — on overlay 2.0.x that can composite
+			// the HUD under the game (invisible). Loading window uses topMost instead.
 			webPreferences: {
 				devTools: true,
 				nodeIntegration: true,
 				contextIsolation: false,
 				preload: preloadPath,
+				// Prevent Chromium from starving the fullscreen overlay while the
+				// loading window / DevTools take focus (multi-minute DOM-ready in dev).
+				backgroundThrottling: false,
 			},
 			// Position at top-left to cover entire game window
 			x: 0,
 			y: 0,
 		};
+		if (passthrough) {
+			options.passthrough = passthrough;
+		}
+		if (canRequestSharedTexture) {
+			options.useSharedTexture = true;
+		}
 
+		console.log('[Overlay] Creating window with useSharedTexture=', options.useSharedTexture ?? false, {
+			passthrough: options.passthrough ?? 'noPassThrough(default)',
+			sharedTextureHitTestWorkaround: this.sharedTextureHitTestWorkaround,
+			backgroundThrottling: options.webPreferences?.backgroundThrottling,
+		});
 		console.debug('Overlay window options:', formatLogArg(options));
 
 		this.overlayWindow = await this.overlayApi.createWindow(options);
@@ -274,74 +379,89 @@ export class OverlayService extends EventEmitter {
 				frontendUrl = `file:///${normalizedPath}#/overlay`;
 				console.log('Loading Angular overlay from bundled files:', frontendUrl);
 				console.log('Frontend directory:', frontendDir);
-
-				// Set up error handlers for debugging
-				this.overlayWindow.window.webContents.on(
-					'did-fail-load',
-					(event, errorCode, errorDescription, validatedURL, isMainFrame) => {
-						if (isMainFrame) {
-							console.error('Overlay main frame failed to load:', {
-								errorCode,
-								errorDescription,
-								validatedURL,
-								frontendPath,
-							});
-						} else {
-							console.error('Resource failed to load:', {
-								errorCode,
-								errorDescription,
-								validatedURL,
-							});
-						}
-					},
-				);
 			} else {
-				// Development: load from dev server
-				frontendUrl = 'http://localhost:4200/overlay';
+				// Development: load from dev server (hash route — PathLocation /overlay 404s on the
+				// webpack server and can leave loadURL hanging for minutes).
+				frontendUrl = 'http://localhost:4200/#/overlay';
 				console.log('Loading Angular overlay from dev server:', frontendUrl);
 			}
 
-			// Set up dev tools opening BEFORE loading URL (in case page loads quickly)
-			if (App.isDevelopmentMode()) {
-				console.log('🔧 Setting up dev tools for overlay window (dev mode)');
+			let overlayShown = false;
+			const loadStartedAt = Date.now();
+			const logLoadMilestone = (label: string, extra?: Record<string, unknown>) => {
+				console.log(`[Overlay] load ${label} +${Date.now() - loadStartedAt}ms`, extra ?? '');
+			};
+			const showOverlayWhenReady = (reason: string) => {
+				if (overlayShown) {
+					return;
+				}
+				if (!this.overlayWindow?.window || this.overlayWindow.window.isDestroyed()) {
+					return;
+				}
+				overlayShown = true;
+				logLoadMilestone(`show (${reason})`);
+				console.log('Angular DOM ready, showing overlay...');
+				// show() only — do not focus()/alwaysOnTop; that steals input from HS and
+				// with useSharedTexture the fullscreen overlay then eats every click.
+				this.overlayWindow.window.show();
+				console.log('Overlay window shown after Angular DOM ready');
 
-				// Also try on did-finish-load as a fallback
-				this.overlayWindow.window.webContents.once('did-finish-load', () => {
-					// Only open if not already open
-					if (!this.overlayWindow.window.webContents.isDevToolsOpened()) {
-						console.log('🔧 Page finished loading - opening dev tools');
+				// Defer DevTools so they don't compete with first paint / JS compile.
+				// Opt out with FS_OVERLAY_DEVTOOLS=0.
+				if (
+					App.isDevelopmentMode() &&
+					process.env.FS_OVERLAY_DEVTOOLS !== '0' &&
+					!this.overlayWindow.window.webContents.isDevToolsOpened()
+				) {
+					setTimeout(() => {
+						if (!this.overlayWindow?.window || this.overlayWindow.window.isDestroyed()) {
+							return;
+						}
+						if (this.overlayWindow.window.webContents.isDevToolsOpened()) {
+							return;
+						}
+						console.log('🔧 Opening overlay dev tools (deferred)');
 						this.overlayWindow.window.webContents.openDevTools({
 							mode: 'detach',
-							activate: true,
+							activate: false,
 						});
-						console.log('✅ Overlay dev tools opened (detached window)');
-					}
+					}, 2000);
+				}
+			};
+
+			// Register BEFORE loadURL — otherwise a fast/already-ready DOM misses the listener
+			// and we never call show()/focus (symptoms: overlay "not loading" in-game).
+			const wc = this.overlayWindow.window.webContents;
+			wc.setBackgroundThrottling?.(false);
+			wc.once('did-start-loading', () => logLoadMilestone('did-start-loading'));
+			wc.once('dom-ready', () => {
+				logLoadMilestone('dom-ready');
+				showOverlayWhenReady('dom-ready');
+			});
+			wc.once('did-finish-load', () => {
+				logLoadMilestone('did-finish-load', { url: wc.getURL() });
+				// Fallback if dom-ready already fired before the listener was attached.
+				showOverlayWhenReady('did-finish-load');
+			});
+			wc.on('did-fail-load', (event, errorCode, errorDescription, validatedURL, isMainFrame) => {
+				if (!isMainFrame) {
+					return;
+				}
+				logLoadMilestone('did-fail-load', { errorCode, errorDescription, validatedURL });
+				console.error('Overlay main frame failed to load:', {
+					errorCode,
+					errorDescription,
+					validatedURL,
 				});
+			});
+
+			if (App.isDevelopmentMode()) {
+				console.log('🔧 Setting up deferred dev tools for overlay window (dev mode)');
 			}
 
+			logLoadMilestone('loadURL begin', { frontendUrl });
 			await this.overlayWindow.window.loadURL(frontendUrl);
-
-			// Wait for DOM to be ready, then show and focus, and open dev tools
-			this.overlayWindow.window.webContents.once('dom-ready', () => {
-				console.log('Angular DOM ready, showing overlay...');
-				this.overlayWindow.window.show();
-				this.overlayWindow.window.focus();
-				this.overlayWindow.window.setAlwaysOnTop(true);
-				setTimeout(() => {
-					this.overlayWindow.window.setAlwaysOnTop(false); // Reset to normal after a moment
-				}, 100);
-				console.log('Overlay window shown and focused after Angular DOM ready');
-
-				// Open dev tools in development mode
-				if (App.isDevelopmentMode()) {
-					console.log('🔧 DOM ready - opening dev tools');
-					this.overlayWindow.window.webContents.openDevTools({
-						mode: 'detach', // Open in separate window
-						activate: true, // Bring to front
-					});
-					console.log('✅ Overlay dev tools opened (detached window)');
-				}
-			});
+			logLoadMilestone('loadURL resolved');
 
 			// Add keyboard shortcut to manually open dev tools
 			this.overlayWindow.window.webContents.on('before-input-event', (event, input) => {
@@ -393,18 +513,103 @@ export class OverlayService extends EventEmitter {
 	}
 
 	/**
-	 * Wait for overlay package to be ready
+	 * Wait for overlay package to be ready.
+	 * `restart:ow-electron` sets both `--owepm-packages-channel=DEV` and
+	 * `FS_OVERLAY_CHANNEL=dev`. The CLI feed flag alone does not select overlay
+	 * 2.0.5 — `packages.setChannel('overlay', 'dev')` does.
+	 *
+	 * Channel switches must finish *before* we start the overlay / inject: a
+	 * mid-session `packages.relaunch()` left injection loading the old
+	 * 1.13.22 plugin path after 2.0.5 was installed (missing .node → no overlay).
 	 */
 	private startOverlayWhenPackageReady(): void {
+		void this.initOverlayPackagePipeline();
+	}
+
+	private async initOverlayPackagePipeline(): Promise<void> {
+		let channelSettled = !process.env.FS_OVERLAY_CHANNEL?.trim();
+		let pendingOverlayVersion: string | null = null;
+
 		app.overwolf.packages.on('ready', (e, packageName, version) => {
 			console.log('Overlay package ready:', packageName, version);
 			if (packageName !== 'overlay') {
 				return;
 			}
-
-			this.isOverlayReady = true;
-			this.startOverlay(version);
+			if (!channelSettled) {
+				// Hold until setChannel finishes — starting on the old package breaks inject.
+				pendingOverlayVersion = version;
+				console.log(`[Overlay] Deferring overlay init for ${version} until FS_OVERLAY_CHANNEL settle`);
+				return;
+			}
+			this.onOverlayPackageReady(version);
 		});
+
+		const switchOutcome = await this.maybeSwitchOverlayChannel();
+		if (switchOutcome === 'relaunching') {
+			// Full process relaunch in flight — drop any deferred old-package ready.
+			return;
+		}
+
+		channelSettled = true;
+		if (pendingOverlayVersion) {
+			this.onOverlayPackageReady(pendingOverlayVersion);
+		}
+	}
+
+	private onOverlayPackageReady(version: string): void {
+		if (this.isOverlayReady) {
+			// packages.relaunch / duplicate ready — re-bind to the new version
+			console.log(`[Overlay] Overlay package ready again (${version}) — re-initializing`);
+		}
+		this.isOverlayReady = true;
+		this.startOverlay(version);
+	}
+
+	/**
+	 * @returns `relaunching` when a channel download will restart the app;
+	 *          `ok` when we can proceed with the current package.
+	 */
+	private async maybeSwitchOverlayChannel(): Promise<'ok' | 'relaunching'> {
+		const raw = process.env.FS_OVERLAY_CHANNEL?.trim();
+		if (!raw) {
+			console.log('[Overlay] FS_OVERLAY_CHANNEL unset — keeping persisted overlay channel');
+			return 'ok';
+		}
+		// packages.setChannel uses lowercase ids (dev / public).
+		const channel = raw.toLowerCase();
+		try {
+			const current = await app.overwolf.packages.getChannel('overlay');
+			const available = await app.overwolf.packages.getAvailableChannels('overlay');
+			console.log('[Overlay] Channel switch requested:', {
+				requested: channel,
+				current: current?.overlay,
+				available: available?.overlay,
+			});
+			if (current?.overlay === channel) {
+				console.log(`[Overlay] Already on channel "${channel}"`);
+				return 'ok';
+			}
+			const result = await app.overwolf.packages.setChannel('overlay', channel, (pkg) => {
+				console.log(
+					`[Overlay] Channel "${channel}" downloaded: ${pkg.name}@${pkg.version} — relaunching app for clean native plugin load`,
+				);
+				// Full app relaunch: packages.relaunch() alone can leave inject()
+				// resolving the previous overlay version's .node path (broken HUD).
+				electronApp.relaunch();
+				electronApp.exit(0);
+			});
+			if (!result.success) {
+				console.error('[Overlay] setChannel failed:', result.error);
+				return 'ok';
+			}
+			console.log(
+				`[Overlay] setChannel("${channel}") accepted — waiting for download/relaunch before overlay init`,
+			);
+			return 'relaunching';
+		} catch (error) {
+			console.error('[Overlay] Failed to switch overlay channel:', error);
+			return 'ok';
+		}
 	}
 
 	/**
@@ -415,12 +620,43 @@ export class OverlayService extends EventEmitter {
 			throw new Error('Attempting to access overlay before available');
 		}
 
+		this.overlayPackageVersion = version;
 		console.log(`Overlay package is ready: ${version}`);
+		const requested = process.env.FS_OVERLAY_CHANNEL?.trim().toLowerCase();
+		if (requested === 'dev' && !this.isOverlayPackageAtLeast('2.0.2')) {
+			console.warn(
+				`[Overlay] Expected overlay ≥2.0.2 on channel "dev" but got ${version}. ` +
+					`Shared-texture / hit-test workaround will not activate. Skipping overlay init until channel catches up.`,
+			);
+			this.isOverlayReady = false;
+			return;
+		}
+		if (requested === 'public' && this.isOverlayPackageAtLeast('2.0.0')) {
+			console.warn(`[Overlay] Expected overlay 1.13.x on channel "public" but got ${version}.`);
+		}
 		this.registerOverlayEvents();
 		this.subscribeToGameInfoChanges();
 		this.subscribeToGameExit();
 		this.setupAppAccessSubscription();
 		this.emit('ready');
+	}
+
+	/** Loose semver compare for ow-electron package versions (major.minor.patch[+prerelease]). */
+	private isOverlayPackageAtLeast(minimum: string): boolean {
+		const parse = (v: string) =>
+			v
+				.split('-')[0]
+				.split('.')
+				.map((n) => Number.parseInt(n, 10) || 0);
+		const [aMaj, aMin, aPat] = parse(this.overlayPackageVersion ?? '0');
+		const [bMaj, bMin, bPat] = parse(minimum);
+		if (aMaj !== bMaj) {
+			return aMaj > bMaj;
+		}
+		if (aMin !== bMin) {
+			return aMin > bMin;
+		}
+		return aPat >= bPat;
 	}
 
 	/**
@@ -577,6 +813,16 @@ export class OverlayService extends EventEmitter {
 
 		this.overlayApi.on('game-input-exclusive-mode-changed', (info) => {
 			console.log('Input exclusive mode changed:', info);
+		});
+
+		// Overlay package ≥2.1.0: fires when shared-texture path can't be used (falls back to CPU copy).
+		this.overlayApi.on('shared-texture-unavailable', (reason) => {
+			console.warn('[Overlay] shared-texture-unavailable:', reason, {
+				hint:
+					reason === 'gpuAdapterMismatch'
+						? 'Try overlay.setGpuPreference("highPerformance") + app restart'
+						: undefined,
+			});
 		});
 	}
 

@@ -43,7 +43,7 @@ const serializeError = (arg: any): string => {
 // Helper function to send log to main process (batched)
 const sendLogToMain = (level: string, ...args: any[]) => {
 	// Serialize arguments properly, especially error objects
-	const serializedArgs = args.map(arg => serializeError(arg));
+	const serializedArgs = args.map((arg) => serializeError(arg));
 	logQueue.push({ level, args: serializedArgs });
 
 	// Flush if batch size reached
@@ -99,6 +99,14 @@ const electronAPI = {
 	startOverlayDragging: () => ipcRenderer.send('start-overlay-dragging'),
 	/** Close the current window (Settings overlay or regular). */
 	closeSettingsWindow: () => ipcRenderer.send('close-settings-window'),
+	/**
+	 * Shared-texture windows lose per-pixel alpha hit-test. When this returns true,
+	 * flip passthrough via setOverlayPassthrough on widget hover (Overwolf workaround).
+	 */
+	isSharedTextureHitTestWorkaroundActive: () =>
+		ipcRenderer.invoke('overlay-shared-texture-hit-test-workaround') as Promise<boolean>,
+	setOverlayPassthrough: (mode: 'noPassThrough' | 'passThrough' | 'passThroughAndNotify') =>
+		ipcRenderer.send('set-overlay-passthrough', mode),
 	platform: process.platform,
 };
 
