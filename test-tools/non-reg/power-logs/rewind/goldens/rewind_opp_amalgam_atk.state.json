@@ -377,11 +377,11 @@
             "CORE_GIL_531",
             "CORE_BT_351",
             "CORE_BT_480",
+            "RLK_503",
             "CORE_ICC_038",
             "CORE_EX1_193",
             "CS3_007",
             "CORE_EX1_319",
-            "RLK_503",
             "RLK_958",
             "CORE_UNG_912",
             "TIME_613",
@@ -540,8 +540,8 @@
             "CORE_BT_120",
             "CORE_BT_416",
             "CORE_OG_044",
-            "RLK_223",
             "CORE_OG_218",
+            "RLK_223",
             "CORE_BT_187",
             "CORE_DRG_256",
             "TLC_432",
@@ -1017,6 +1017,7 @@
             "TLC_434",
             "TIME_449",
             "TIME_448",
+            "JAIL_EVENT_101",
             "EDR_820",
             "TIME_023",
             "CATA_138",
@@ -1051,6 +1052,7 @@
             "TIME_432",
             "FIR_918",
             "EDR_460",
+            "JAIL_EVENT_102",
             "DINO_406",
             "TLC_222",
             "CORE_LOOT_373",
@@ -1932,6 +1934,7 @@
             "TLC_434",
             "TIME_449",
             "TIME_448",
+            "JAIL_EVENT_101",
             "EDR_820",
             "TIME_023",
             "CATA_138",
@@ -1966,6 +1969,7 @@
             "TIME_432",
             "FIR_918",
             "EDR_460",
+            "JAIL_EVENT_102",
             "DINO_406",
             "TLC_222",
             "CORE_LOOT_373",
@@ -3201,6 +3205,7 @@
             "TLC_434",
             "TIME_449",
             "TIME_448",
+            "JAIL_EVENT_101",
             "EDR_820",
             "TIME_023",
             "CATA_138",
@@ -3235,6 +3240,7 @@
             "TIME_432",
             "FIR_918",
             "EDR_460",
+            "JAIL_EVENT_102",
             "DINO_406",
             "TLC_222",
             "CORE_LOOT_373",
@@ -3979,44 +3985,19 @@
         "zone": "GRAVEYARD"
       },
       {
-        "cardId": "",
-        "entityId": 182,
-        "forged": 0,
-        "guessedInfo": {},
-        "internalEntityId": "<scrubbed>",
-        "lastAffectedByCardId": "VAC_958",
-        "linkedEntityIds": [],
-        "metaInfo": {
-          "timestampAtWhichCardEnteredHand": null
-        },
-        "prepared": 0,
-        "relatedCardIds": [],
-        "tags": {
-          "49": 6,
-          "50": 1,
-          "53": 182
-        },
-        "temporaryCard": true,
-        "zone": "SETASIDE"
-      },
-      {
-        "actualManaCost": 1,
         "cardId": "VAC_958",
         "cardName": "Adaptive Amalgam",
         "countered": false,
         "creatorCardId": "TIME_711",
         "creatorEntityId": 14,
-        "entityId": 152,
+        "entityId": -152,
         "forged": 0,
         "guessedInfo": {},
         "internalEntityId": "<scrubbed>",
-        "lastAffectedByCardId": "VAC_958",
-        "lastAffectedByEntityId": 152,
         "linkedEntityIds": [],
         "metaInfo": {
           "timestampAtWhichCardEnteredHand": null
         },
-        "milled": false,
         "playTiming": 23,
         "prepared": 0,
         "putIntoPlay": true,
@@ -4052,6 +4033,27 @@
           "4741": 1
         },
         "temporaryCard": false,
+        "zone": "GRAVEYARD"
+      },
+      {
+        "cardId": "",
+        "entityId": 182,
+        "forged": 0,
+        "guessedInfo": {},
+        "internalEntityId": "<scrubbed>",
+        "lastAffectedByCardId": "VAC_958",
+        "linkedEntityIds": [],
+        "metaInfo": {
+          "timestampAtWhichCardEnteredHand": null
+        },
+        "prepared": 0,
+        "relatedCardIds": [],
+        "tags": {
+          "49": 6,
+          "50": 1,
+          "53": 182
+        },
+        "temporaryCard": true,
         "zone": "SETASIDE"
       }
     ],
