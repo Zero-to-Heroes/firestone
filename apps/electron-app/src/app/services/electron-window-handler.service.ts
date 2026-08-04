@@ -4,7 +4,7 @@ import { OverlayBrowserWindow, OverlayWindowOptions } from '@overwolf/ow-electro
 import { app, BrowserWindow, nativeImage, screen } from 'electron';
 import { join } from 'path';
 import App from '../app';
-import { rendererAppPort } from '../constants';
+import { getElectronFrontendUrl } from '../frontend-url';
 import { isAppAccessUnlocked } from './app-access-policy';
 import { OverlayService } from './overlay.service';
 
@@ -1041,22 +1041,7 @@ export class ElectronWindowHandlerService implements IWindowHandlerService {
 	}
 
 	private getCollectionLoadUrl(): string {
-		if (app.isPackaged) {
-			const frontendDir = join(process.resourcesPath, 'electron-frontend');
-			const frontendPath = join(frontendDir, 'index.html');
-			const fs = require('fs');
-			if (!fs.existsSync(frontendPath)) {
-				console.error('[ElectronWindowHandler] Frontend not found at:', frontendPath);
-			}
-			let normalizedPath = frontendPath.replace(/\\/g, '/');
-			normalizedPath = normalizedPath.replace(
-				/^([a-z]):/i,
-				(_: string, drive: string) => drive.toUpperCase() + ':',
-			);
-			return `file:///${normalizedPath}#/collection`;
-		}
-		// Hash is required: electron-frontend uses HashLocationStrategy, so path must be in the hash
-		return `http://localhost:${rendererAppPort}/#/collection`;
+		return getElectronFrontendUrl('collection');
 	}
 
 	/**
@@ -1064,75 +1049,18 @@ export class ElectronWindowHandlerService implements IWindowHandlerService {
 	 * Uses HashLocationStrategy (#/settings) so routing works with both file:// and http.
 	 */
 	private getSettingsLoadUrl(): string {
-		if (app.isPackaged) {
-			const frontendDir = join(process.resourcesPath, 'electron-frontend');
-			const frontendPath = join(frontendDir, 'index.html');
-			const fs = require('fs');
-			if (!fs.existsSync(frontendPath)) {
-				console.error('[ElectronWindowHandler] Frontend not found at:', frontendPath);
-			}
-			let normalizedPath = frontendPath.replace(/\\/g, '/');
-			normalizedPath = normalizedPath.replace(
-				/^([a-z]):/i,
-				(_: string, drive: string) => drive.toUpperCase() + ':',
-			);
-			return `file:///${normalizedPath}#/settings`;
-		}
-		// Hash is required: electron-frontend uses HashLocationStrategy, so path must be in the hash
-		return `http://localhost:${rendererAppPort}/#/settings`;
+		return getElectronFrontendUrl('settings');
 	}
 
 	private getBattlegroundsLoadUrl(): string {
-		if (app.isPackaged) {
-			const frontendDir = join(process.resourcesPath, 'electron-frontend');
-			const frontendPath = join(frontendDir, 'index.html');
-			const fs = require('fs');
-			if (!fs.existsSync(frontendPath)) {
-				console.error('[ElectronWindowHandler] Frontend not found at:', frontendPath);
-			}
-			let normalizedPath = frontendPath.replace(/\\/g, '/');
-			normalizedPath = normalizedPath.replace(
-				/^([a-z]):/i,
-				(_: string, drive: string) => drive.toUpperCase() + ':',
-			);
-			return `file:///${normalizedPath}#/battlegrounds`;
-		}
-		return `http://localhost:${rendererAppPort}/#/battlegrounds`;
+		return getElectronFrontendUrl('battlegrounds');
 	}
 
 	private getLotteryLoadUrl(): string {
-		if (app.isPackaged) {
-			const frontendDir = join(process.resourcesPath, 'electron-frontend');
-			const frontendPath = join(frontendDir, 'index.html');
-			const fs = require('fs');
-			if (!fs.existsSync(frontendPath)) {
-				console.error('[ElectronWindowHandler] Frontend not found at:', frontendPath);
-			}
-			let normalizedPath = frontendPath.replace(/\\/g, '/');
-			normalizedPath = normalizedPath.replace(
-				/^([a-z]):/i,
-				(_: string, drive: string) => drive.toUpperCase() + ':',
-			);
-			return `file:///${normalizedPath}#/lottery`;
-		}
-		return `http://localhost:${rendererAppPort}/#/lottery`;
+		return getElectronFrontendUrl('lottery');
 	}
 
 	private getLoadingLoadUrl(): string {
-		if (app.isPackaged) {
-			const frontendDir = join(process.resourcesPath, 'electron-frontend');
-			const frontendPath = join(frontendDir, 'index.html');
-			const fs = require('fs');
-			if (!fs.existsSync(frontendPath)) {
-				console.error('[ElectronWindowHandler] Frontend not found at:', frontendPath);
-			}
-			let normalizedPath = frontendPath.replace(/\\/g, '/');
-			normalizedPath = normalizedPath.replace(
-				/^([a-z]):/i,
-				(_: string, drive: string) => drive.toUpperCase() + ':',
-			);
-			return `file:///${normalizedPath}#/loading`;
-		}
-		return `http://localhost:${rendererAppPort}/#/loading`;
+		return getElectronFrontendUrl('loading');
 	}
 }

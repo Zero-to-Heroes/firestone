@@ -14,6 +14,7 @@ import { join } from 'path';
 import { Subscription } from 'rxjs';
 import App from '../app';
 import { formatLogArg } from '../format-log-arg';
+import { getElectronFrontendUrl } from '../frontend-url';
 import { appAccessUnlocked$$, isAppAccessUnlocked } from './app-access-policy';
 
 // Electron.App is augmented by @overwolf/ow-electron/mix (app.overwolf).
@@ -350,41 +351,9 @@ export class OverlayService extends EventEmitter {
 		});
 
 		try {
-			// Load the Angular frontend - from bundled files in production, or dev server in development
-			let frontendUrl: string;
-
-			if (electronApp.isPackaged) {
-				// Production: load from bundled frontend files
-				// The frontend is copied to 'electron-frontend' folder via extraFiles in electron-builder.yml
-				const frontendDir = join(process.resourcesPath, 'electron-frontend');
-				const frontendPath = join(frontendDir, 'index.html');
-
-				// Check if file exists
-				const fs = require('fs');
-				if (!fs.existsSync(frontendPath)) {
-					console.error('Frontend file not found at:', frontendPath);
-					console.error('Available resources:', process.resourcesPath);
-					try {
-						const resourcesContents = fs.readdirSync(process.resourcesPath);
-						console.error('Resources directory contents:', resourcesContents);
-					} catch (e) {
-						console.error('Could not read resources directory:', e);
-					}
-					throw new Error(`Frontend file not found: ${frontendPath}`);
-				}
-
-				// Convert to file:// URL format
-				let normalizedPath = frontendPath.replace(/\\/g, '/');
-				normalizedPath = normalizedPath.replace(/^([a-z]):/i, (match, drive) => drive.toUpperCase() + ':');
-				frontendUrl = `file:///${normalizedPath}#/overlay`;
-				console.log('Loading Angular overlay from bundled files:', frontendUrl);
-				console.log('Frontend directory:', frontendDir);
-			} else {
-				// Development: load from dev server (hash route — PathLocation /overlay 404s on the
-				// webpack server and can leave loadURL hanging for minutes).
-				frontendUrl = 'http://localhost:4200/#/overlay';
-				console.log('Loading Angular overlay from dev server:', frontendUrl);
-			}
+			// Packaged / FS_ELECTRON_FRONTEND_DIR → file://; else webpack-dev (hash route required).
+			const frontendUrl = getElectronFrontendUrl('overlay');
+			console.log('Loading Angular overlay:', frontendUrl);
 
 			let overlayShown = false;
 			const loadStartedAt = Date.now();
@@ -506,7 +475,7 @@ export class OverlayService extends EventEmitter {
 			console.log('Angular overlay window created successfully! Waiting for show/focus...');
 		} catch (error) {
 			console.error('Error loading Angular overlay:', error);
-			console.error('Make sure Angular frontend is running on http://localhost:4200');
+			console.error('Frontend load failed. For unpackaged runs use nxe:serve:frontend, or set FS_ELECTRON_FRONTEND_DIR to a production build.');
 			// Don't create fallback window - just fail gracefully
 			throw error;
 		}
