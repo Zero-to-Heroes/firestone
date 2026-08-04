@@ -17,24 +17,29 @@ export class TavernBuffCounterDefinitionV2 extends CounterDefinitionV2<{ atk: nu
 		display: (state: GameState, bgState: BattlegroundsState | null | undefined): boolean => true,
 		value: (state: GameState, bgState: BattlegroundsState | null | undefined) => {
 			// Enchants where there is a single value for both attack and health
-			const relevantEnchantsSingle = state.playerDeck.enchantments?.filter((e) =>
+			const showBuffEnchant = state.playerDeck.enchantments?.filter((e) =>
 				[
 					CardIds.ShopBuffPlayerEnchantDntEnchantment_BG_ShopBuff, // ok
 				].includes(e.cardId as CardIds),
 			);
+			const forTheHordeEnchant = state.playerDeck.enchantments?.filter((e) =>
+				[CardIds.ForTheHorde_SaurfangPlayerEnchantment].includes(e.cardId as CardIds),
+			);
 			const value = {
-				atk: relevantEnchantsSingle
-					.map((e) => e.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_1] ?? 0)
-					.reduce((a, b) => a + b, 0),
-				// relevantEnchantsMulti
-				// 	.map((e) => e.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_1] ?? 0)
-				// 	.reduce((a, b) => a + b, 0),
-				health: relevantEnchantsSingle
-					.map((e) => e.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_2] ?? 0)
-					.reduce((a, b) => a + b, 0),
-				// relevantEnchantsMulti
-				// 	.map((e) => e.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_2] ?? 0)
-				// 	.reduce((a, b) => a + b, 0),
+				atk:
+					showBuffEnchant
+						.map((e) => e.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_1] ?? 0)
+						.reduce((a, b) => a + b, 0) +
+					forTheHordeEnchant
+						.map((e) => e.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_1] ?? 0)
+						.reduce((a, b) => a + b, 0),
+				health:
+					showBuffEnchant
+						.map((e) => e.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_2] ?? 0)
+						.reduce((a, b) => a + b, 0) +
+					forTheHordeEnchant
+						.map((e) => e.tags?.[GameTag.TAG_SCRIPT_DATA_NUM_1] ?? 0)
+						.reduce((a, b) => a + b, 0),
 			};
 			if (value.atk === 0 && value.health === 0) {
 				return null;
