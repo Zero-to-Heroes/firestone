@@ -606,6 +606,7 @@ export class Preferences implements IPreferences {
 	readonly playerBgsElementalTavernBuffCounter: boolean = true;
 	readonly playerBgsTavernBuffCounter: boolean = true;
 	readonly playerBgsTavernSpellsBuffCounter: boolean = true;
+	readonly playerBgsTastyLobsterBuffCounter: boolean = true;
 	readonly playerBgsBallerCounter: boolean = true;
 	readonly playerBgsMagnetizedCounter: boolean = true;
 	readonly playerBgsFreeRefreshCounter: boolean = true;

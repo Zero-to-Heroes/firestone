@@ -9,12 +9,12 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { CardIds, CardType, GameTag, GameType, Zone, defaultStartingHp } from '@firestone-hs/reference-data';
-import { Entity } from '@firestone/replay/replay-parser';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { BgsCardTooltipComponent } from '@firestone/battlegrounds/common';
 import { buildEntityFromBoardEntity, getSimulatorHeroPowerCardIds } from '@firestone/battlegrounds/core';
 import { BgsBoard, BgsPlayer } from '@firestone/game-state';
+import { Entity } from '@firestone/replay/replay-parser';
 import { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 
@@ -209,6 +209,7 @@ export class BgsBattleSideComponent {
 	goldrinnHealthBonus: number;
 	eternalLegion: number;
 	tavernSpellsCastThisGame: number;
+	tastyLobstersBuff: number;
 	piratesPlayedThisGame: number;
 	piratesSummonedThisGame: number;
 	beastsSummonedThisGame: number;
@@ -348,6 +349,8 @@ export class BgsBattleSideComponent {
 		// this.frostlingBonus = this._player.player?.globalInfo?.FrostlingBonus ?? 0;
 		this.eternalLegion = this._player.player?.globalInfo?.EternalKnightsDeadThisGame ?? 0;
 		this.tavernSpellsCastThisGame = this._player.player?.globalInfo?.TavernSpellsCastThisGame ?? 0;
+		this.tastyLobstersBuff =
+			(this._player.player?.globalInfo as { TastyLobstersBuff?: number } | undefined)?.TastyLobstersBuff ?? 0;
 		this.piratesPlayedThisGame = this._player.player?.globalInfo?.PiratesPlayedThisGame ?? 0;
 		this.piratesSummonedThisGame = this._player.player?.globalInfo?.PiratesSummonedThisGame ?? 0;
 		this.beastsSummonedThisGame = this._player.player?.globalInfo?.BeastsSummonedThisGame ?? 0;

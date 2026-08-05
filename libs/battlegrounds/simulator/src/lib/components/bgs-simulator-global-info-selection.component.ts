@@ -184,6 +184,15 @@ import { CardsFacadeService, ILocalizationService } from '@firestone/shared/fram
 				</fs-numeric-input-with-arrows>
 				<fs-numeric-input-with-arrows
 					class="input"
+					[label]="'battlegrounds.sim.tasty-lobsters-buff' | fsTranslate"
+					[helpTooltip]="'battlegrounds.sim.tasty-lobsters-buff-tooltip' | fsTranslate"
+					[value]="tastyLobstersBuff"
+					[minValue]="0"
+					(fsModelUpdate)="onTastyLobstersBuffChanged($event)"
+				>
+				</fs-numeric-input-with-arrows>
+				<fs-numeric-input-with-arrows
+					class="input"
 					[label]="'battlegrounds.sim.tavern-spells-cast-this-turn' | fsTranslate"
 					[helpTooltip]="'battlegrounds.sim.tavern-spells-cast-this-turn-tooltip' | fsTranslate"
 					[value]="tavernSpellsCastThisTurn"
@@ -367,6 +376,7 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 		this.bloodGemAttackBonus = value?.BloodGemAttackBonus ?? 0;
 		this.bloodGemHealthBonus = value?.BloodGemHealthBonus ?? 0;
 		this.tavernSpellsCastThisGame = value?.TavernSpellsCastThisGame ?? 0;
+		this.tastyLobstersBuff = (value as { TastyLobstersBuff?: number } | null | undefined)?.TastyLobstersBuff ?? 0;
 		this.spellsCastThisGame = value?.SpellsCastThisGame ?? 0;
 		this.piratesPlayedThisGame = value?.PiratesPlayedThisGame ?? 0;
 		this.piratesSummonedThisGame = value?.PiratesSummonedThisGame ?? 0;
@@ -408,6 +418,7 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 	bloodGemAttackBonus: number;
 	bloodGemHealthBonus: number;
 	tavernSpellsCastThisGame: number;
+	tastyLobstersBuff: number;
 	spellsCastThisGame: number;
 	piratesPlayedThisGame: number;
 	piratesSummonedThisGame: number;
@@ -501,6 +512,10 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 		this.tavernSpellsCastThisGame = value;
 	}
 
+	onTastyLobstersBuffChanged(value: number) {
+		this.tastyLobstersBuff = value;
+	}
+
 	onPiratesPlayedThisGameChanged(value: number) {
 		this.piratesPlayedThisGame = value;
 	}
@@ -545,6 +560,7 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 			BloodGemAttackBonus: this.bloodGemAttackBonus,
 			BloodGemHealthBonus: this.bloodGemHealthBonus,
 			TavernSpellsCastThisGame: this.tavernSpellsCastThisGame,
+			TastyLobstersBuff: this.tastyLobstersBuff,
 			SpellsCastThisGame: this.spellsCastThisGame,
 			PiratesPlayedThisGame: this.piratesPlayedThisGame,
 			PiratesSummonedThisGame: this.piratesSummonedThisGame,
@@ -565,7 +581,7 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 			BackToBackCastThisGame: this.backToBackCastThisGame,
 			GoldSpentThisGame: this.goldSpentThisGame,
 			FriendlyMinionsDeadLastCombat: this.friendlyMinionsDeadLastCombat,
-		};
+		} as BgsPlayerGlobalInfo;
 		// TODO: once hand is implemented, add the hand total stats to the Mrrrgl bonus
 		this.applyHandler(newGlobalInfo);
 	}

@@ -7,7 +7,7 @@ import {
 } from '@firestone-hs/reference-data';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
-import { BoardTrinket } from '@firestone-hs/simulate-bgs-battle/dist/bgs-player-entity';
+import { BgsPlayerGlobalInfo, BoardTrinket } from '@firestone-hs/simulate-bgs-battle/dist/bgs-player-entity';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { BgsBattleSimulationService, BgsIntermediateResultsSimGuardianService } from '@firestone/battlegrounds/core';
 import { BgsEntity, MemoryBgsPlayerInfo, MemoryBgsTeamInfo, MemoryInspectionService } from '@firestone/memory';
@@ -521,6 +521,7 @@ export class BgsPlayerBoardParser implements EventParser {
 			globalInfo: {
 				EternalKnightsDeadThisGame: opponentBoard.globalInfo?.EternalKnightsDeadThisGame ?? 0,
 				TavernSpellsCastThisGame: opponentBoard.globalInfo?.TavernSpellsCastThisGame ?? 0,
+				TastyLobstersBuff: opponentBoard.globalInfo?.TastyLobstersBuff ?? 0,
 				SpellsCastThisGame: opponentBoard.globalInfo?.SpellsCastThisGame ?? 0,
 				PiratesPlayedThisGame: opponentBoard.globalInfo?.PiratesPlayedThisGame ?? 0,
 				PiratesSummonedThisGame: opponentBoard.globalInfo?.PiratesSummonedThisGame ?? 0,
@@ -604,6 +605,7 @@ export class BgsPlayerBoardParser implements EventParser {
 				globalInfo: {
 					EternalKnightsDeadThisGame: playerBoard.globalInfo?.EternalKnightsDeadThisGame ?? 0,
 					TavernSpellsCastThisGame: playerBoard.globalInfo?.TavernSpellsCastThisGame ?? 0,
+					TastyLobstersBuff: playerBoard.globalInfo?.TastyLobstersBuff ?? 0,
 					SpellsCastThisGame: playerBoard.globalInfo?.SpellsCastThisGame ?? 0,
 					PiratesPlayedThisGame: playerBoard.globalInfo?.PiratesPlayedThisGame ?? 0,
 					PiratesSummonedThisGame: playerBoard.globalInfo?.PiratesSummonedThisGame ?? 0,
@@ -641,7 +643,7 @@ export class BgsPlayerBoardParser implements EventParser {
 					CardsPlayedThisTurn: playerBoard.globalInfo?.CardsPlayedThisTurn ?? 0,
 					MrrgltonsPlayedThisGame: playerBoard.globalInfo?.MrrgltonsPlayedThisGame ?? 0,
 					BackToBackCastThisGame: playerBoard.globalInfo?.BackToBackCastThisGame ?? 0,
-				},
+				} as BgsPlayerGlobalInfo,
 			},
 			board: bgsBoard,
 			secrets: secrets,

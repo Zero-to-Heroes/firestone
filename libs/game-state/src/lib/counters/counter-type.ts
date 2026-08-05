@@ -124,6 +124,7 @@ export type CounterType =
 	| 'ballerBuff'
 	| 'elementalPowersBuff'
 	| 'tavernSpellsBuff'
+	| 'bgsTastyLobsterBuff'
 	| 'elementalTavernBuff'
 	| 'bgsMajordomo'
 	| 'bgsDeepBlue'

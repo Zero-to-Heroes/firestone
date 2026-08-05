@@ -1,17 +1,16 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import type { Type } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { CardIds, GameType, TrinketSlot, defaultStartingHp } from '@firestone-hs/reference-data';
-import { Entity } from '@firestone/replay/replay-parser';
 import type { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
 import type { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { BgsCardTooltipComponent } from '@firestone/battlegrounds/common';
-import { getSimulatorHeroPowerCardIds } from '@firestone/battlegrounds/core';
-import { buildEntityFromBoardEntity } from '@firestone/battlegrounds/core';
+import { buildEntityFromBoardEntity, getSimulatorHeroPowerCardIds } from '@firestone/battlegrounds/core';
 import { BgsBoard, BgsPlayer } from '@firestone/game-state';
+import { Entity } from '@firestone/replay/replay-parser';
 import type { CardTooltipPositionType } from '@firestone/shared/common/view';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
-import { BgsSimulatorControllerService } from '../services/sim-ui-controller/bgs-simulator-controller.service';
 import type { Side } from '../services/sim-ui-controller/bgs-simulator-controller.service';
+import { BgsSimulatorControllerService } from '../services/sim-ui-controller/bgs-simulator-controller.service';
 
 @Component({
 	standalone: false,
@@ -182,6 +181,7 @@ export class BgsSimulatorSideComponent {
 	goldrinnAttackBonus: number;
 	goldrinnHealthBonus: number;
 	tavernSpellsCastThisGame: number;
+	tastyLobstersBuff: number;
 	tavernSpellsCastThisTurn: number;
 	deathrattlesTriggeredThisGame: number;
 	mrrgltonsPlayedThisGame: number;
@@ -298,6 +298,8 @@ export class BgsSimulatorSideComponent {
 		this.goldrinnHealthBonus = this._player.player?.globalInfo?.GoldrinnBuffHealth ?? 0;
 		this.eternalLegion = this._player.player?.globalInfo?.EternalKnightsDeadThisGame ?? 0;
 		this.tavernSpellsCastThisGame = this._player.player?.globalInfo?.TavernSpellsCastThisGame ?? 0;
+		this.tastyLobstersBuff =
+			(this._player.player?.globalInfo as { TastyLobstersBuff?: number } | undefined)?.TastyLobstersBuff ?? 0;
 		this.tavernSpellsCastThisTurn = this._player.player?.globalInfo?.TavernSpellsCastThisTurn ?? 0;
 		this.deathrattlesTriggeredThisGame = this._player.player?.globalInfo?.DeathrattlesTriggeredThisGame ?? 0;
 		this.mrrgltonsPlayedThisGame = this._player.player?.globalInfo?.MrrgltonsPlayedThisGame ?? 0;

@@ -27,6 +27,7 @@ import { RightmostBuffCounterDefinitionV2 } from './impl/battlegrounds/rightmost
 import { SpellsPlayedCounterDefinitionV2 } from './impl/battlegrounds/spells-played';
 import { TavernBuffCounterDefinitionV2 } from './impl/battlegrounds/tavern-buff';
 import { TavernSpellsBuffCounterDefinitionV2 } from './impl/battlegrounds/tavern-spells-buff';
+import { TastyLobsterBuffCounterDefinitionV2 } from './impl/battlegrounds/tasty-lobster-buff';
 import { UndeadArmyCounterDefinitionV2 } from './impl/battlegrounds/undead-army';
 import { VolumizerBuffCounterDefinitionV2 } from './impl/battlegrounds/volumizer-buff';
 import { WhelpBuffCounterDefinitionV2 } from './impl/battlegrounds/whelp-buff';
@@ -263,6 +264,7 @@ export const getAllCounters: (
 	new BgsLordOfGainsCounterDefinitionV2(i18n, allCards),
 	new ElementalPowersBuffCounterDefinitionV2(i18n, allCards),
 	new TavernSpellsBuffCounterDefinitionV2(i18n, allCards),
+	new TastyLobsterBuffCounterDefinitionV2(i18n, allCards),
 	new ElementalTavernBuffCounterDefinitionV2(i18n, allCards),
 	new DeepBlueCounterDefinitionV2(i18n, allCards),
 	new UndeadArmyCounterDefinitionV2(i18n, allCards),

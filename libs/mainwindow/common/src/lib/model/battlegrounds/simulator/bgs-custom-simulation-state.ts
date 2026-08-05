@@ -42,6 +42,7 @@ export class BgsCustomSimulationState {
 						globalInfo: {
 							EternalKnightsDeadThisGame: 0,
 							TavernSpellsCastThisGame: 0,
+							TastyLobstersBuff: 0,
 							SpellsCastThisGame: 0,
 							PiratesPlayedThisGame: 0,
 							PiratesSummonedThisGame: 0,
@@ -95,6 +96,7 @@ export class BgsCustomSimulationState {
 						globalInfo: {
 							EternalKnightsDeadThisGame: 0,
 							TavernSpellsCastThisGame: 0,
+							TastyLobstersBuff: 0,
 							SpellsCastThisGame: 0,
 							PiratesPlayedThisGame: 0,
 							PiratesSummonedThisGame: 0,
