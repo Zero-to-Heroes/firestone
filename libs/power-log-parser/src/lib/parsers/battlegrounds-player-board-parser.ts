@@ -631,7 +631,6 @@ export class BattlegroundsPlayerBoardParser implements ActionParser {
 			GameTag.BACON_BLOODGEMBUFFHEALTHVALUE,
 			currentEntities,
 		);
-		const debug = playerEntityId === 15539 || playerId === 15539;
 		const battlecriesTriggeredThisGame = BattlegroundsPlayerBoardParser.GetPlayerTag(
 			playerEntityId,
 			GameTag.BATTLECRIES_TRIGGERED_THIS_GAME,
@@ -1054,9 +1053,6 @@ export class BattlegroundsPlayerBoardParser implements ActionParser {
 			return [];
 		}
 
-		const debugEntities = [...currentEntities.values()].filter(
-			(entity) => entity.GetTag(GameTag.ATTACHED) === fullEntity.Id,
-		);
 		const enchantmentEntities = [...currentEntities.values()].filter(
 			(entity) =>
 				entity.GetTag(GameTag.ATTACHED) === fullEntity.Id &&
