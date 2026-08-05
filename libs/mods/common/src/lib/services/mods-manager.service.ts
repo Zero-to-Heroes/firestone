@@ -22,8 +22,9 @@ import { BehaviorSubject } from 'rxjs';
 import { distinctUntilChanged, filter, map } from 'rxjs/operators';
 import {
 	DEFAULT_MODS_ENGINE_CONFIG,
-	DEFAULT_MODS_ENGINE_CONFIG_PRERELEASE,
 	DOORSTOP_CONFIG_INI,
+	MODS_ENGINE_REVISION,
+	MODS_ENGINE_REVISION_STAMP,
 	ModsEngineArch,
 	ModsEngineConfig,
 	ModsRemoteConfig,
@@ -38,7 +39,7 @@ import {
 
 // Built in mods-backend lambda
 // Bump ?v= when trustedMods schema / engine blocks change.
-const MODS_CONFIG_URL = 'https://static.zerotoheroes.com/mods/mods-config.json?v=9';
+const MODS_CONFIG_URL = 'https://static.zerotoheroes.com/mods/mods-config.json?v=10';
 
 const modsLocation = 'BepInEx\\plugins';
 export const configLocation = 'BepInEx\\config';
@@ -49,20 +50,6 @@ export type ModsCheckStatus = 'wrong-path' | 'installed' | 'not-installed' | 'en
 export class ModsManagerService extends AbstractFacadeService<ModsManagerService> {
 	public modsData$$: BehaviorSubject<readonly ModData[]>;
 	public currentModsStatus$$: BehaviorSubject<string | null>;
-
-	/**
-	 * Set from bootstrap (Overwolf / Electron) from `isPreReleaseBuild` in game-state.
-	 * When true, uses Unity 6.3+ (enginePreRelease) unstripped corlibs.
-	 * Always write through to mainInstance so facade windows stay in sync.
-	 */
-	public preReleaseBuild = false;
-
-	public setPreReleaseBuild(value: boolean): void {
-		this.preReleaseBuild = value;
-		if (this.mainInstance && this.mainInstance !== (this as unknown as ModsManagerService)) {
-			this.mainInstance.preReleaseBuild = value;
-		}
-	}
 
 	// private ws: WebSocket | null;
 
@@ -103,10 +90,9 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 		const remoteConfig = await this.api.callGetApi<Partial<ModsRemoteConfig>>(MODS_CONFIG_URL);
 		this.modsConfig = {
 			engine: remoteConfig?.engine ?? DEFAULT_MODS_ENGINE_CONFIG,
-			enginePreRelease: remoteConfig?.enginePreRelease ?? DEFAULT_MODS_ENGINE_CONFIG_PRERELEASE,
 			trustedMods: remoteConfig?.trustedMods ?? [],
 		};
-		console.debug('[mods-manager] modsConfig', this.modsConfig, 'preReleaseBuild', this.preReleaseBuild);
+		console.debug('[mods-manager] modsConfig', this.modsConfig);
 
 		// this.gameStatus.inGame$$.pipe(distinctUntilChanged()).subscribe(async (inGame) => {
 		// 	const prefs = await this.prefs.getPreferences();
@@ -129,6 +115,7 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 				const refreshedMods = await this.refreshModsInternal(installPath);
 				this.modsData$$.next(refreshedMods);
 				await this.maybeAutoMigrateEngine(installPath);
+				await this.maybeRefreshEngineRevision(installPath);
 				await this.maybeRepairMissingCorlibs(installPath);
 			});
 
@@ -142,8 +129,10 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 				if (!inGame) {
 					await this.autoUpdateModsIfNeeded();
 					const prefs = await this.prefs.getPreferences();
-					if (prefs.modsEnabled && prefs.gameInstallPath && this.pendingEngineMigration) {
+					if (prefs.modsEnabled && prefs.gameInstallPath) {
+						// Arch mismatch and/or engine revision — both may need a full reinstall.
 						await this.maybeAutoMigrateEngine(prefs.gameInstallPath);
+						await this.maybeRefreshEngineRevision(prefs.gameInstallPath);
 					}
 				}
 			});
@@ -151,6 +140,7 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 		const prefs = await this.prefs.getPreferences();
 		if (prefs.gameInstallPath && prefs.modsEnabled) {
 			await this.maybeAutoMigrateEngine(prefs.gameInstallPath);
+			await this.maybeRefreshEngineRevision(prefs.gameInstallPath);
 			await this.maybeRepairMissingCorlibs(prefs.gameInstallPath);
 		}
 
@@ -609,6 +599,27 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 		await this.fileBackend.writeFileContents(`${installPath}\\doorstop_config.ini`, DOORSTOP_CONFIG_INI);
 	}
 
+	private engineRevisionStampPath(installPath: string): string {
+		return `${installPath}\\BepInEx\\unstripped_corlib\\${MODS_ENGINE_REVISION_STAMP}`;
+	}
+
+	private async writeEngineRevisionStamp(installPath: string): Promise<void> {
+		await this.fileBackend.writeFileContents(
+			this.engineRevisionStampPath(installPath),
+			String(MODS_ENGINE_REVISION),
+		);
+	}
+
+	private async readEngineRevisionStamp(installPath: string): Promise<number | null> {
+		const stampPath = this.engineRevisionStampPath(installPath);
+		if (!(await this.fileBackend.fileExists(stampPath))) {
+			return null;
+		}
+		const raw = (await this.fileBackend.readTextFile(stampPath))?.trim();
+		const parsed = raw ? Number.parseInt(raw, 10) : NaN;
+		return Number.isFinite(parsed) ? parsed : null;
+	}
+
 	private async hasUnstrippedCorlibs(installPath: string): Promise<boolean> {
 		const engineConfig = this.getEngineConfig();
 		const unstrippedLibs = await this.fileBackend.listFilesInDirectory(
@@ -616,6 +627,34 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 		);
 		const present = new Set(unstrippedLibs?.data?.map((f) => f.name.toLowerCase()) ?? []);
 		return engineConfig.unstrippedLibs.every((lib) => present.has(lib.toLowerCase()));
+	}
+
+	/**
+	 * Full BepInEx reinstall when MODS_ENGINE_REVISION advances (e.g. Unity 6000.3 / x64 Doorstop).
+	 * Corlib-only refresh is not enough: wrong-arch winhttp.dll never injects, so LogOutput stays stale.
+	 */
+	private async maybeRefreshEngineRevision(installPath: string): Promise<void> {
+		const prefs = await this.prefs.getPreferences();
+		if (!prefs.modsEnabled || !installPath || this.migrationInProgress) {
+			return;
+		}
+		const isGameRunning = await this.gameStatus.inGame();
+		if (isGameRunning) {
+			this.pendingEngineMigration = true;
+			return;
+		}
+		const files = await this.fileBackend.listFilesInDirectory(installPath);
+		const hasBepInEx = files?.data?.some((f) => f.type === 'dir' && f.name === 'BepInEx');
+		const hasWinhttp = files?.data?.some((f) => f.type === 'file' && f.name === 'winhttp.dll');
+		if (!hasBepInEx || !hasWinhttp) {
+			return;
+		}
+		const installedRev = await this.readEngineRevisionStamp(installPath);
+		if (installedRev === MODS_ENGINE_REVISION) {
+			return;
+		}
+		console.log('[mods-manager] full engine reinstall for revision', installedRev, '->', MODS_ENGINE_REVISION);
+		await this.migrateEngineInternal(installPath);
 	}
 
 	private async maybeRepairMissingCorlibs(installPath: string): Promise<void> {
@@ -640,12 +679,6 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 	}
 
 	private getEngineConfig(): ModsEngineConfig {
-		if (this.preReleaseBuild) {
-			return (
-				this.modsConfig?.enginePreRelease ??
-				DEFAULT_MODS_ENGINE_CONFIG_PRERELEASE
-			);
-		}
 		return this.modsConfig?.engine ?? DEFAULT_MODS_ENGINE_CONFIG;
 	}
 
@@ -745,6 +778,7 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 		await this.installBaseMods(installPath);
 		this.currentModsStatus$$.next('settings.general.mods.refreshing-engine');
 		await this.installUnstrippedLibs(installPath, archConfig.unstrippedCorlibsBaseUrl);
+		await this.writeEngineRevisionStamp(installPath);
 	}
 
 	private async removeEngineFiles(installPath: string): Promise<boolean> {

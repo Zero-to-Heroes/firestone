@@ -1,7 +1,0 @@
-4 commits since v5.4.23.4
-
-Changelog (excluding merges):
-* (57f1fb85) [ManlyMarco] Bump version number
-* (37f0a9aa) [Soggy_Pancake] v5: Fix log writer errors for Unity 6 (#1264)
-* (3e8aebdb) [Arrowmaster] Upgrade Doorstop to version 4.5.0 (#1259)
-* (8e9afa93) [Ploo] Fix for unity 2022.3.62f3 not having get_graphicsDeviceID (#1235)

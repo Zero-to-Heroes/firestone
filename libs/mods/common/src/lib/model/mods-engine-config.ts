@@ -26,10 +26,13 @@ export interface ModsRemoteTrustedMod {
 
 export interface ModsRemoteConfig {
 	readonly engine: ModsEngineConfig;
-	/** Unity 6.3+ unstripped corlibs for early-access / Event_1 builds. */
-	readonly enginePreRelease?: ModsEngineConfig;
 	readonly trustedMods: readonly ModsRemoteTrustedMod[];
 }
+
+/** Bump when BepInEx engine must be fully reinstalled on existing installs (Unity / arch / corlibs). */
+export const MODS_ENGINE_REVISION = 3;
+
+export const MODS_ENGINE_REVISION_STAMP = '.firestone-engine-rev';
 
 /** Doorstop config for Hearthstone (stripped mscorlib requires unstripped corlib path). */
 export const DOORSTOP_CONFIG_INI = `# General options for Unity Doorstop
@@ -95,6 +98,7 @@ export const REQUIRED_UNSTRIPPED_LIBS = [
 	'UniTask.Linq.dll',
 ] as const;
 
+/** Unity 6000.3+ engine: HsMod Mono BCL + live Managed overlays on CDN. */
 export const DEFAULT_MODS_ENGINE_CONFIG: ModsEngineConfig = {
 	x86: {
 		bepInExZip: 'https://static.zerotoheroes.com/mods/BepInEx_win_x86_5.4.23.5.zip',
@@ -103,20 +107,6 @@ export const DEFAULT_MODS_ENGINE_CONFIG: ModsEngineConfig = {
 	x64: {
 		bepInExZip: 'https://static.zerotoheroes.com/mods/BepInEx_win_x64_5.4.23.5.zip',
 		unstrippedCorlibsBaseUrl: 'https://static.zerotoheroes.com/mods/unstripped_corlibs_x64',
-	},
-	unstrippedLibs: [...REQUIRED_UNSTRIPPED_LIBS],
-	doorstopConfigUrl: 'https://static.zerotoheroes.com/mods/doorstop_config.ini',
-};
-
-/** Early-access (Unity 6000.3.11) unstripped corlibs; selected when isPreReleaseBuild is true. */
-export const DEFAULT_MODS_ENGINE_CONFIG_PRERELEASE: ModsEngineConfig = {
-	x86: {
-		bepInExZip: 'https://static.zerotoheroes.com/mods/BepInEx_win_x86_5.4.23.5.zip',
-		unstrippedCorlibsBaseUrl: 'https://static.zerotoheroes.com/mods/unstripped_corlibs_prerelease',
-	},
-	x64: {
-		bepInExZip: 'https://static.zerotoheroes.com/mods/BepInEx_win_x64_5.4.23.5.zip',
-		unstrippedCorlibsBaseUrl: 'https://static.zerotoheroes.com/mods/unstripped_corlibs_x64_prerelease',
 	},
 	unstrippedLibs: [...REQUIRED_UNSTRIPPED_LIBS],
 	doorstopConfigUrl: 'https://static.zerotoheroes.com/mods/doorstop_config.ini',

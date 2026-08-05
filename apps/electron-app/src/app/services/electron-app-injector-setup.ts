@@ -125,7 +125,6 @@ import {
 	GameStateParsersService,
 	GameStateService,
 	GameUniqueIdService,
-	isPreReleaseBuild,
 	OverlayDisplayService,
 	RealTimeStatsParsersService,
 	RealTimeStatsService,
@@ -751,7 +750,6 @@ export const buildAppInjector = () => {
 	electronInjector.register(ReplayMetadataBuilderService, replayMetadataBuilder);
 
 	const modsManager = new ModsManagerService(windowManager);
-	modsManager.setPreReleaseBuild(isPreReleaseBuild);
 	electronInjector.register(ModsManagerService, modsManager);
 
 	const replayUploadService = new ReplayUploadService(

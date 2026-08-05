@@ -1,9 +1,9 @@
 /**
- * Prepares and uploads BepInEx x64 engine assets + dual unstripped corlib sets
- * (stable HsMod + EA/prerelease with Managed overlays).
+ * Prepares and uploads BepInEx x64 engine assets + unstripped corlibs
+ * (HsMod BCL + Managed overlays from the live Hearthstone install).
  *
  * Usage:
- *   npx ts-node build-tools/publish-mods-engine-assets.ts [--upload] [--hs-path=D:/Games/Hearthstone_Event_1]
+ *   npx ts-node build-tools/publish-mods-engine-assets.ts [--upload] [--hs-path=D:/Games/Hearthstone]
  *
  * Without --upload, assets are staged under build-tools/.mods-engine-staging/
  * With --upload, pushes to s3://static.zerotoheroes.com/mods/ (requires AWS credentials)
@@ -30,7 +30,7 @@ const HSMOD_CORLIBS_REPO = 'https://github.com/Pik-4/HsMod.git';
 const HSMOD_CORLIBS_BRANCH = 'bepinex5';
 const HSMOD_CORLIBS_SUBDIR = 'HsMod/UnstrippedCorlib';
 
-/** Full unstripped corlib set used by HsMod (required for stable BepInEx on Hearthstone). */
+/** Full unstripped corlib set used by HsMod (required for BepInEx on Hearthstone). */
 const UNSTRIPPED_LIBS = [
 	'mscorlib.dll',
 	'Mono.Security.dll',
@@ -63,19 +63,6 @@ const ENGINE_CONFIG = {
 	x64: {
 		bepInExZip: `https://static.zerotoheroes.com/mods/BepInEx_win_x64_${BEPINEX_VERSION}.zip`,
 		unstrippedCorlibsBaseUrl: 'https://static.zerotoheroes.com/mods/unstripped_corlibs_x64',
-	},
-	unstrippedLibs: UNSTRIPPED_LIBS,
-	doorstopConfigUrl: 'https://static.zerotoheroes.com/mods/doorstop_config.ini',
-};
-
-const ENGINE_CONFIG_PRERELEASE = {
-	x86: {
-		bepInExZip: `https://static.zerotoheroes.com/mods/BepInEx_win_x86_${BEPINEX_VERSION}.zip`,
-		unstrippedCorlibsBaseUrl: 'https://static.zerotoheroes.com/mods/unstripped_corlibs_prerelease',
-	},
-	x64: {
-		bepInExZip: `https://static.zerotoheroes.com/mods/BepInEx_win_x64_${BEPINEX_VERSION}.zip`,
-		unstrippedCorlibsBaseUrl: 'https://static.zerotoheroes.com/mods/unstripped_corlibs_x64_prerelease',
 	},
 	unstrippedLibs: UNSTRIPPED_LIBS,
 	doorstopConfigUrl: 'https://static.zerotoheroes.com/mods/doorstop_config.ini',
@@ -133,39 +120,27 @@ function ensureHsModCorlibs(): string {
 	return corlibSrc;
 }
 
-async function stageStableX64Corlibs(): Promise<string> {
+/**
+ * Stage x64 unstripped corlibs: HsMod Mono BCL + game-specific overlays from live Managed.
+ * unity.bepinex.dev/corlibs/6000.3.x requires System.Native and crashes BepInEx.Preloader
+ * on Windows Mono; HsMod UnstrippedCorlib works on Unity 6000.3.
+ */
+async function stageX64Corlibs(hsInstallPath: string | undefined): Promise<string> {
 	const outDir = path.join(STAGING_DIR, 'unstripped_corlibs_x64');
 	await fs.promises.rm(outDir, { recursive: true, force: true });
 	await fs.promises.mkdir(outDir, { recursive: true });
 
-	const corlibSrc = ensureHsModCorlibs();
-	for (const lib of UNSTRIPPED_LIBS) {
-		const src = path.join(corlibSrc, lib);
-		if (!fs.existsSync(src)) {
-			throw new Error(`Missing ${lib} in ${corlibSrc}`);
-		}
-		await fs.promises.copyFile(src, path.join(outDir, lib));
-		console.log(`Staged stable ${lib}`);
-	}
-	return outDir;
-}
-
-async function stagePrereleaseX64Corlibs(hsInstallPath: string | undefined): Promise<string> {
-	const outDir = path.join(STAGING_DIR, 'unstripped_corlibs_x64_prerelease');
-	await fs.promises.rm(outDir, { recursive: true, force: true });
-	await fs.promises.mkdir(outDir, { recursive: true });
-
-	// unity.bepinex.dev/corlibs/6000.3.x ships a profile that requires System.Native and
-	// crashes BepInEx.Preloader on Windows Mono. HsMod's UnstrippedCorlib (classic Mono BCL)
-	// works on Unity 6000.3.11 for Doorstop/BepInEx bootstrap. Overlay game-specific assemblies
-	// from the EA client Managed folder when available.
 	const hsmodSrc = ensureHsModCorlibs();
 	const managedDir = hsInstallPath ? path.join(hsInstallPath, 'Hearthstone_Data', 'Managed') : null;
+	if (!managedDir || !fs.existsSync(managedDir)) {
+		throw new Error(
+			`Hearthstone Managed folder required for Unity 6000.3 overlays (pass --hs-path). Tried: ${managedDir}`,
+		);
+	}
 
 	for (const lib of UNSTRIPPED_LIBS) {
 		const dest = path.join(outDir, lib);
-		const fromManaged =
-			managedDir && GAME_SPECIFIC_LIBS.includes(lib) ? path.join(managedDir, lib) : null;
+		const fromManaged = GAME_SPECIFIC_LIBS.includes(lib) ? path.join(managedDir, lib) : null;
 		const fromHsMod = path.join(hsmodSrc, lib);
 
 		let src: string | null = null;
@@ -176,10 +151,10 @@ async function stagePrereleaseX64Corlibs(hsInstallPath: string | undefined): Pro
 		}
 
 		if (!src) {
-			throw new Error(`Could not resolve prerelease corlib ${lib}`);
+			throw new Error(`Could not resolve corlib ${lib}`);
 		}
 		await fs.promises.copyFile(src, dest);
-		console.log(`Staged prerelease ${lib} from ${src}`);
+		console.log(`Staged ${lib} from ${src}`);
 	}
 
 	return outDir;
@@ -230,13 +205,11 @@ async function main(): Promise<void> {
 	await fs.promises.rm(STAGING_DIR, { recursive: true, force: true });
 	await fs.promises.mkdir(STAGING_DIR, { recursive: true });
 
-	const stableCorlibsDir = await stageStableX64Corlibs();
-	const prereleaseCorlibsDir = await stagePrereleaseX64Corlibs(hsPathArg);
+	const corlibsDir = await stageX64Corlibs(hsPathArg);
 	const bepinexZip = await stageBepInExX64();
 
 	const engineOnlyConfig = {
 		engine: ENGINE_CONFIG,
-		enginePreRelease: ENGINE_CONFIG_PRERELEASE,
 	};
 	const engineConfigPath = path.join(STAGING_DIR, 'mods-engine-config.json');
 	await fs.promises.writeFile(engineConfigPath, JSON.stringify(engineOnlyConfig, null, 2));
@@ -245,19 +218,15 @@ async function main(): Promise<void> {
 	if (!shouldUpload) {
 		console.log('\nStaging complete (no upload). Re-run with --upload to push to S3.');
 		console.log('BepInEx zip:', bepinexZip);
-		console.log('x64 corlibs (stable):', stableCorlibsDir);
-		console.log('x64 corlibs (prerelease):', prereleaseCorlibsDir);
+		console.log('x64 corlibs:', corlibsDir);
 		return;
 	}
 
 	const doorstopConfigPath = path.join(SCRIPT_DIR, 'doorstop_config.ini');
 	await uploadFile(doorstopConfigPath, `${MODS_PREFIX}/doorstop_config.ini`);
 	await uploadFile(bepinexZip, `${MODS_PREFIX}/BepInEx_win_x64_${BEPINEX_VERSION}.zip`);
-	await uploadDirectory(stableCorlibsDir, `${MODS_PREFIX}/unstripped_corlibs_x64`);
-	await uploadDirectory(prereleaseCorlibsDir, `${MODS_PREFIX}/unstripped_corlibs_x64_prerelease`);
-	console.log(
-		'\nUpload complete. Merge engine + enginePreRelease into mods-config.json (S3 or mods-backend lambda).',
-	);
+	await uploadDirectory(corlibsDir, `${MODS_PREFIX}/unstripped_corlibs_x64`);
+	console.log('\nUpload complete. Update mods-config.json engine block (mods-backend lambda).');
 }
 
 main().catch((e) => {
