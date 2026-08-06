@@ -96,6 +96,7 @@ type ElectronOverlayHitTestApi = {
 						<!-- <mercs-treasure-selection-widget-wrapper></mercs-treasure-selection-widget-wrapper> -->
 
 						<ng-container *ngIf="showArenaOverlays$ | async">
+							<constructed-board-widget-wrapper></constructed-board-widget-wrapper>
 							<arena-hero-power-selection-widget-wrapper></arena-hero-power-selection-widget-wrapper>
 							<arena-hero-selection-widget-wrapper></arena-hero-selection-widget-wrapper>
 							<arena-hero-selected-widget-wrapper></arena-hero-selected-widget-wrapper>
