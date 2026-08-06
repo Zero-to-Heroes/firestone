@@ -110,6 +110,8 @@ type ElectronOverlayHitTestApi = {
 				<!-- Global -->
 				<!-- Use different wrappers to make it easier to position each one differently -->
 				<hs-quests-widget-wrapper></hs-quests-widget-wrapper>
+				<!-- Named "bgs-" but the manual reconnect button is for any CN gameplay; only auto options are BG-specific -->
+				<bgs-reconnector-widget-wrapper></bgs-reconnector-widget-wrapper>
 				<ng-container *ngIf="showBattlegroundsOverlays$ | async">
 					<bgs-quests-widget-wrapper></bgs-quests-widget-wrapper>
 				</ng-container>
@@ -141,7 +143,6 @@ type ElectronOverlayHitTestApi = {
 					<bgs-banned-tribes-widget-wrapper></bgs-banned-tribes-widget-wrapper>
 					<bgs-window-button-widget-wrapper></bgs-window-button-widget-wrapper>
 					<bgs-hero-tips-widget-wrapper></bgs-hero-tips-widget-wrapper>
-					<bgs-reconnector-widget-wrapper></bgs-reconnector-widget-wrapper>
 					<current-session-widget-wrapper></current-session-widget-wrapper>
 					<bgs-hero-overview-widget-wrapper></bgs-hero-overview-widget-wrapper>
 					<bgs-action-count-widget-wrapper></bgs-action-count-widget-wrapper>
