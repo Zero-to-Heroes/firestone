@@ -1773,6 +1773,7 @@ export class GameEvents {
 				break;
 			case 'MERCENARIES_SELECTED_TARGET':
 			case 'MERCENARIES_UNSELECTED_TARGET':
+			case 'MULLIGAN_INPUT':
 				break;
 			default:
 				console.warn('[game-events]', 'unsupported game event', gameEvent);
