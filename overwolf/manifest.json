@@ -5,7 +5,7 @@
 		"name": "Firestone",
 		"author": "Sébastien Tromp",
 		"version": "@app-version@",
-		"minimum-overwolf-version": "0.141.0.13",
+		"minimum-overwolf-version": "0.305.0.9",
 		"description": "A Hearthtone companion to have in-game the information you need",
 		"dock_button_title": "Firestone",
 		"icon": "IconMouseOver.png",
