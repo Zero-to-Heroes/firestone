@@ -49,16 +49,21 @@ describe('resolveNewPlan', () => {
 		expect(result.shouldUpdate).toBe(false);
 	});
 
-	it('updates to the fetched plan when it differs from the existing one', () => {
-		const newPlan: CurrentPlan = {
-			id: 'premium',
-			expireAt: null,
-			active: true,
-			autoRenews: true,
-			cancelled: false,
-		};
-		const result = resolveNewPlan(newPlan, legacyPlan);
-		expect(result.plan).toBe(newPlan);
+	it('expires a cached premium plan after prolonged consecutive status errors', () => {
+		const result = resolveNewPlan(SUB_STATUS_ERROR, legacyPlan, 36);
+		expect(result.plan).toBeNull();
 		expect(result.shouldUpdate).toBe(true);
+	});
+
+	it('keeps premium on status error when below the expire threshold', () => {
+		const result = resolveNewPlan(SUB_STATUS_ERROR, legacyPlan, 35);
+		expect(result.plan).toBe(legacyPlan);
+		expect(result.shouldUpdate).toBe(false);
+	});
+
+	it('does not expire a null plan on prolonged status errors', () => {
+		const result = resolveNewPlan(SUB_STATUS_ERROR, null, 100);
+		expect(result.plan).toBeNull();
+		expect(result.shouldUpdate).toBe(false);
 	});
 });

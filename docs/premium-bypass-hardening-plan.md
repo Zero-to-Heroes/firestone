@@ -38,8 +38,14 @@
 - Server-side entitlement gating of the public-CDN premium data (stats/meta/mulligan/comps): data is already public and small; re-architecting it behind authenticated endpoints is high-cost / low-durability.
 - Overwolf DLL integrity (the port patch) — belongs to Overwolf; file a coordinated report separately.
 
-## Verification
+## Support reply (quiet)
 
-- Baseline flip test: on a free account, flip `hasPremiumSub$$`/`enablePremiumFeatures$$` via devtools; confirm the app relocks after the confirmation threshold and that a re-flip is re-asserted back to false.
-- False-positive test: simulate a single transient "no premium" server reply (and a network error) for a real subscriber; confirm the counter resets and no degrade happens.
-- Confirm no regression for a real subscriber during SSO hint + Tebex latency startup.
+English reference: `app.premium.third-party-auth-tools-unsupported` in firestone-translations.
+
+Suggested wording for support: Premium requires an official Firestone subscription. Third-party “authorization repair” or unlock tools are unsupported and unsafe — they typically request administrator rights and change hosts/firewall rules. Please remove them and subscribe through the official Premium page. Do not name or link specific crack tools in public changelogs.
+
+## Implemented follow-ups (F2G / 2026)
+
+- Membership integrity prefers Firestone `checkStatus` (cached lambda) then Tebex/legacy; expires premium after prolonged unverifiable status; reports `f2gArtifacts` fingerprints.
+- Lambda `api-log-membership-bypass`: L1/L2 subscription-check cache + `UPSTREAM_RATE_LIMIT` logging; `action: checkStatus` endpoint.
+- Overwolf `AdService` / `StandaloneAdService`: `forceNonPremium` latch + periodic re-assert already wired; `MembershipIntegrityService` bootstrapped from `bootstrap-store-services.service.ts`.

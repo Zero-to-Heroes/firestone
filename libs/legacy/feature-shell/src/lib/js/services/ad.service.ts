@@ -7,9 +7,9 @@ import {
 	AppInjector,
 	CurrentPlan,
 	IAdsService,
+	isActivePremiumPlan,
 	isElectronContext,
 	isMainProcess,
-	premiumPlanIds,
 	waitForReady,
 	WindowManagerService,
 } from '@firestone/shared/framework/core';
@@ -78,7 +78,7 @@ export class AdService extends AbstractFacadeService<AdService> implements IAdsS
 		if (isPreReleaseBuild) {
 			return true;
 		}
-		return premiumPlanIds.includes(plan?.id);
+		return isActivePremiumPlan(plan);
 	}
 
 	protected override async initElectronSubjects() {
@@ -200,7 +200,7 @@ export class AdService extends AbstractFacadeService<AdService> implements IAdsS
 
 	public async shouldDisplayAdsInternal(): Promise<boolean> {
 		const plan = await this.subscriptions.currentPlan$$.getValueWithInit(undefined);
-		if (premiumPlanIds.includes(plan?.id)) {
+		if (isActivePremiumPlan(plan)) {
 			return false;
 		}
 		return true;

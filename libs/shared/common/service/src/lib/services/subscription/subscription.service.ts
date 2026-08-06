@@ -32,6 +32,8 @@ export class SubscriptionService extends AbstractFacadeService<SubscriptionServi
 
 	// Do this to avoid spamming the server with subscription status check messages
 	private shouldCheckForUpdates = false;
+	/** Consecutive {@link SUB_STATUS_ERROR} answers while a plan is cached; reset on any definitive reply. */
+	private consecutiveStatusErrors = 0;
 
 	constructor(protected override readonly windowManager: WindowManagerService) {
 		super(windowManager, 'SubscriptionService', () => !!this.currentPlan$$);
@@ -134,15 +136,29 @@ export class SubscriptionService extends AbstractFacadeService<SubscriptionServi
 		console.debug('[ads] [subscription] current plan', fetchResult);
 		// Once it is initialized, it should not be null, otherwise the getValueWithInit() will hang indefinitely
 		const existingPlan = await this.currentPlan$$.getValueWithInit();
-		const { plan, shouldUpdate } = resolveNewPlan(fetchResult, existingPlan);
+		if (fetchResult === SUB_STATUS_ERROR) {
+			this.consecutiveStatusErrors++;
+		} else {
+			this.consecutiveStatusErrors = 0;
+		}
+		const { plan, shouldUpdate } = resolveNewPlan(fetchResult, existingPlan, this.consecutiveStatusErrors);
 		if (!shouldUpdate) {
 			if (fetchResult === SUB_STATUS_ERROR) {
 				console.warn(
 					'[ads] [subscription] could not get a definitive subscription status, keeping last-known plan',
 					plan,
+					'consecutiveErrors=',
+					this.consecutiveStatusErrors,
 				);
 			}
 			return plan;
+		}
+
+		if (fetchResult === SUB_STATUS_ERROR && plan == null) {
+			console.warn(
+				'[ads] [subscription] expiring cached premium after prolonged unverifiable status',
+				this.consecutiveStatusErrors,
+			);
 		}
 
 		this.currentPlan$$.next(
