@@ -31,7 +31,11 @@ import { Injector } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { GameEvents, GameStateService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
-import { feedPowerLogLinesPaced, trimPowerLogLinesToLastGame } from '@firestone/power-log-parser';
+import {
+	feedPowerLogLinesPaced,
+	findLastGameStartLineIndex,
+	trimPowerLogLinesToLastGame,
+} from '@firestone/power-log-parser';
 import { BrowserWindow } from 'electron';
 import * as fs from 'fs';
 
@@ -51,6 +55,32 @@ export function startFakeGameDriver(injector: Injector): void {
 	}, startDelayMs);
 }
 
+/**
+ * Like trimPowerLogLinesToLastGame, but keeps the DebugPrintGame metadata block that
+ * immediately precedes CREATE_GAME (BuildNumber / GameType / …). Without it, NewGameHandler
+ * crashes on undefined CurrentGame.BuildNumber when the fixture is a mid-game cut that only
+ * has a PowerTaskList CREATE_GAME.
+ */
+function trimPowerLogLinesToLastGameWithMeta(rawLines: readonly string[]): string[] {
+	const createIdx = findLastGameStartLineIndex(rawLines);
+	if (createIdx == null) {
+		return trimPowerLogLinesToLastGame(rawLines);
+	}
+	let from = createIdx;
+	for (let i = createIdx - 1; i >= 0; i--) {
+		const line = rawLines[i] ?? '';
+		if (!line.trim()) {
+			continue;
+		}
+		if (line.includes('DebugPrintGame()') || line.includes('PowerTaskList.DebugDump()')) {
+			from = i;
+			continue;
+		}
+		break;
+	}
+	return rawLines.slice(from).filter((line) => line.length > 0);
+}
+
 async function runFakeGame(injector: Injector, logPath: string, speed: number, maxGapMs: number): Promise<void> {
 	if (!fs.existsSync(logPath)) {
 		console.error('[fake-game] log file not found:', logPath);
@@ -61,13 +91,16 @@ async function runFakeGame(injector: Injector, logPath: string, speed: number, m
 	const scene = injector.get(SceneService);
 
 	const rawLines = fs.readFileSync(logPath, 'utf8').split(/\r?\n/);
-	const lines = trimPowerLogLinesToLastGame(rawLines).filter((line) => line.length > 0);
-	const isBg = lines.some((line) => line.includes('GameType=GT_BATTLEGROUNDS'));
+	const lines = trimPowerLogLinesToLastGameWithMeta(rawLines);
+	const isBg =
+		lines.some((line) => line.includes('GameType=GT_BATTLEGROUNDS')) ||
+		lines.some((line) => line.includes('BACON_BARTENDER_CARD_ID'));
 	console.log(
 		'[fake-game] starting replay',
 		JSON.stringify({
 			lines: lines.length,
 			isBg,
+			hasBuildNumber: lines.some((line) => line.includes('BuildNumber=')),
 			windows: BrowserWindow.getAllWindows().length,
 		}),
 	);

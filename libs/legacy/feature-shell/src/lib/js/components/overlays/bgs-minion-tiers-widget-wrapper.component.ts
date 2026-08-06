@@ -22,13 +22,22 @@ import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 	template: `
 		<battlegrounds-minions-tiers
 			class="widget"
-			*ngIf="showWidget$ | async"
+			*ngIf="showListWidget$ | async"
 			cdkDrag
 			[cdkDragDisabled]="!draggable"
 			(cdkDragStarted)="startDragging()"
 			(cdkDragReleased)="stopDragging()"
 			(cdkDragEnded)="dragEnded($event)"
 		></battlegrounds-minions-tiers>
+		<bgs-turn-number-widget
+			class="widget turn-only"
+			*ngIf="showTurnOnlyWidget$ | async"
+			cdkDrag
+			[cdkDragDisabled]="!draggable"
+			(cdkDragStarted)="startDragging()"
+			(cdkDragReleased)="stopDragging()"
+			(cdkDragEnded)="dragEnded($event)"
+		></bgs-turn-number-widget>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -45,7 +54,10 @@ export class BgsMinionsTiersWidgetWrapperComponent extends AbstractWidgetWrapper
 		bottom: -20,
 	};
 
-	showWidget$: Observable<boolean>;
+	/** Full minion list (+ optional turn badge inside it). */
+	showListWidget$: Observable<boolean>;
+	/** Turn badge only — no pool / tier trees. */
+	showTurnOnlyWidget$: Observable<boolean>;
 
 	constructor(
 		protected readonly ow: OverwolfService,
@@ -62,23 +74,38 @@ export class BgsMinionsTiersWidgetWrapperComponent extends AbstractWidgetWrapper
 	async ngAfterContentInit() {
 		await waitForReady(this.scene, this.prefs, this.gameState);
 
-		this.showWidget$ = combineLatest([
+		const inGame$ = this.gameState.gameState$$.pipe(
+			auditTime(1000),
+			this.mapData(
+				(state) =>
+					state.gameStarted &&
+					// && !state.gameEnded // Keep it until we go back to the "lobby" screen
+					isBattlegrounds(state.metadata?.gameType),
+			),
+		);
+
+		this.showListWidget$ = combineLatest([
+			this.scene.currentScene$$,
+			this.prefs.preferences$$.pipe(
+				this.mapData((prefs) => prefs.bgsEnableMinionListOverlay && prefs.bgsFullToggle),
+			),
+			inGame$,
+		]).pipe(
+			this.mapData(([currentScene, displayFromPrefs, inGame]) => {
+				return inGame && displayFromPrefs && currentScene === SceneMode.GAMEPLAY;
+			}),
+			this.handleReposition(),
+		);
+
+		this.showTurnOnlyWidget$ = combineLatest([
 			this.scene.currentScene$$,
 			this.prefs.preferences$$.pipe(
 				this.mapData(
 					(prefs) =>
-						(prefs.bgsEnableMinionListOverlay || prefs.bgsEnableTurnNumbertOverlay) && prefs.bgsFullToggle,
+						prefs.bgsEnableTurnNumbertOverlay && !prefs.bgsEnableMinionListOverlay && prefs.bgsFullToggle,
 				),
 			),
-			this.gameState.gameState$$.pipe(
-				auditTime(1000),
-				this.mapData(
-					(state) =>
-						state.gameStarted &&
-						// && !state.gameEnded // Keep it until we go back to the "lobby" screen
-						isBattlegrounds(state.metadata?.gameType),
-				),
-			),
+			inGame$,
 		]).pipe(
 			this.mapData(([currentScene, displayFromPrefs, inGame]) => {
 				return inGame && displayFromPrefs && currentScene === SceneMode.GAMEPLAY;

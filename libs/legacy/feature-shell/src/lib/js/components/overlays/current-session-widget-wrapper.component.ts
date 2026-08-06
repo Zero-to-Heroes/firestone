@@ -30,18 +30,13 @@ const refBounds = {
 	template: `
 		<div
 			class="wrapper"
-			[ngClass]="{ hidden: hidden$ | async }"
 			cdkDrag
 			[cdkDragDisabled]="!draggable"
 			(cdkDragStarted)="startDragging()"
 			(cdkDragReleased)="stopDragging()"
 			(cdkDragEnded)="dragEnded($event)"
 		>
-			<current-session-widget
-				*ngIf="showWidget$ | async"
-				class="widget scalable"
-				[ngClass]="{ hidden: hidden$ | async }"
-			></current-session-widget>
+			<current-session-widget *ngIf="showWidget$ | async" class="widget scalable"></current-session-widget>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -55,7 +50,6 @@ export class CurrentSessionWidgetWrapperComponent extends AbstractWidgetWrapperC
 	protected bounds = refBounds;
 
 	showWidget$: Observable<boolean>;
-	hidden$: Observable<boolean>;
 
 	constructor(
 		protected readonly ow: OverwolfService,
@@ -74,15 +68,7 @@ export class CurrentSessionWidgetWrapperComponent extends AbstractWidgetWrapperC
 		await waitForReady(this.scene, this.prefs, this.gameState, this.gameNativeStore);
 
 		const currentGameType$ = this.gameState.gameState$$.pipe(this.mapData((state) => state?.metadata?.gameType));
-		this.showWidget$ = combineLatest([currentGameType$, this.scene.currentScene$$, this.prefs.preferences$$]).pipe(
-			this.mapData(
-				([gameType, currentScene, prefs]) =>
-					prefs.showCurrentSessionWidgetBgs &&
-					(isBattlegroundsScene(currentScene) || isBattlegrounds(gameType)),
-			),
-			this.handleReposition(),
-		);
-		this.hidden$ = combineLatest([
+		const hiddenByFriendsList$ = combineLatest([
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.hideCurrentSessionWidgetWhenFriendsListIsOpen)),
 			this.gameNativeStore.isFriendsListOpen$$,
 		]).pipe(
@@ -90,6 +76,20 @@ export class CurrentSessionWidgetWrapperComponent extends AbstractWidgetWrapperC
 				([hideCurrentSessionWidgetWhenFriendsListIsOpen, isFriendsListOpen]) =>
 					hideCurrentSessionWidgetWhenFriendsListIsOpen && isFriendsListOpen,
 			),
+		);
+		this.showWidget$ = combineLatest([
+			currentGameType$,
+			this.scene.currentScene$$,
+			this.prefs.preferences$$,
+			hiddenByFriendsList$,
+		]).pipe(
+			this.mapData(
+				([gameType, currentScene, prefs, hiddenByFriendsList]) =>
+					prefs.showCurrentSessionWidgetBgs &&
+					(isBattlegroundsScene(currentScene) || isBattlegrounds(gameType)) &&
+					!hiddenByFriendsList,
+			),
+			this.handleReposition(),
 		);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {

@@ -13,7 +13,6 @@ import { GameStateFacadeService } from '@firestone/game-state';
 import { SceneService } from '@firestone/memory';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { OverwolfService, waitForReady } from '@firestone/shared/framework/core';
-import {} from 'jszip';
 import { auditTime, combineLatest, Observable } from 'rxjs';
 import { AbstractWidgetWrapperComponent } from './_widget-wrapper.component';
 
@@ -60,18 +59,6 @@ export class BgsBoardWidgetWrapperComponent extends AbstractWidgetWrapperCompone
 	async ngAfterContentInit() {
 		await waitForReady(this.scene, this.highlighter, this.gameState);
 
-		this.showWidget$ = combineLatest([
-			this.scene.currentScene$$,
-			this.gameState.gameState$$.pipe(
-				auditTime(1000),
-				this.mapData(
-					(state) => state.gameStarted && !state.gameEnded && isBattlegrounds(state.metadata?.gameType),
-				),
-			),
-		]).pipe(
-			this.mapData(([currentScene, inGame]) => currentScene === SceneMode.GAMEPLAY && inGame),
-			this.handleReposition(),
-		);
 		this.highlightedMinions$ = this.highlighter.shopMinions$$.pipe(
 			this.mapData(
 				(highlightedMinion) => {
@@ -81,6 +68,22 @@ export class BgsBoardWidgetWrapperComponent extends AbstractWidgetWrapperCompone
 				null,
 				50,
 			),
+		);
+		this.showWidget$ = combineLatest([
+			this.scene.currentScene$$,
+			this.gameState.gameState$$.pipe(
+				auditTime(1000),
+				this.mapData(
+					(state) => state.gameStarted && !state.gameEnded && isBattlegrounds(state.metadata?.gameType),
+				),
+			),
+			this.highlightedMinions$,
+		]).pipe(
+			this.mapData(
+				([currentScene, inGame, highlightedMinions]) =>
+					currentScene === SceneMode.GAMEPLAY && inGame && !!highlightedMinions?.length,
+			),
+			this.handleReposition(),
 		);
 
 		if (!(this.cdr as ViewRef)?.destroyed) {

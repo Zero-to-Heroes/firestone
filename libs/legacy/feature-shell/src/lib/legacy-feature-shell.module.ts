@@ -184,6 +184,7 @@ import { BgsBoardWidgetWrapperComponent } from './js/components/overlays/bgs-boa
 import { BgsHeroSelectionWidgetWrapperComponent } from './js/components/overlays/bgs-hero-selection-widget-wrapper.component';
 import { BgsLeaderboardWidgetWrapperComponent } from './js/components/overlays/bgs-leaderboard-widget-wrapper.component';
 import { BgsMinionsTiersWidgetWrapperComponent } from './js/components/overlays/bgs-minion-tiers-widget-wrapper.component';
+import { BgsTurnNumberWidgetComponent } from './js/components/overlays/bgs-turn-number-widget.component';
 import { BgsQuestsWidgetWrapperComponent } from './js/components/overlays/bgs-quests-widget-wrapper.component';
 import { BgsWindowButtonWidgetWrapperComponent } from './js/components/overlays/bgs-window-button-widget-wrapper.component';
 import { HeroPowerOverlayComponent } from './js/components/overlays/board/hero-power-overlay.component';
@@ -1196,6 +1197,7 @@ try {
 		LotteryWindowComponent,
 
 		BgsMinionsTiersWidgetWrapperComponent,
+		BgsTurnNumberWidgetComponent,
 		BgsBattleSimulationWidgetWrapperComponent,
 		BgsBannedTribesWidgetWrapperComponent,
 		BgsHeroTipsWidgetWrapperComponent,

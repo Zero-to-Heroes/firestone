@@ -1,0 +1,62 @@
+:host {
+	z-index: 999999999;
+	pointer-events: none;
+	display: block;
+}
+
+.scalable {
+	transform: scale(var(--bgs-minions-list-scale, 1));
+	transform-origin: top right;
+}
+
+.bgs-turn-number-widget {
+	display: flex;
+	justify-content: flex-end;
+	font-family: 'Open Sans', sans-serif;
+}
+
+.logo-container {
+	width: 145px;
+	height: 33px;
+	display: flex;
+	align-items: center;
+	position: relative;
+	flex-shrink: 0;
+	pointer-events: none;
+
+	.background-main-part,
+	.background-second-part {
+		height: 100%;
+		background: var(--color-7);
+	}
+
+	.background-main-part {
+		width: 75px;
+	}
+	.background-second-part {
+		width: 40px;
+		border-top-right-radius: 33px 33px;
+		z-index: -1;
+	}
+
+	.turn-number {
+		width: 100px;
+		height: 25px;
+		position: absolute;
+		top: 5px;
+		left: 5px;
+		font-family: Sumana;
+		font-weight: 700;
+		font-size: 15px;
+		color: white;
+		text-shadow:
+			-1px -1px 0 var(--color-7),
+			0px -1px 0 var(--color-7),
+			1px -1px 0 var(--color-7),
+			-1px 1px 0 var(--color-7),
+			0px 1px 0 var(--color-7),
+			1px 1px 0 var(--color-7);
+		display: flex;
+		align-items: center;
+	}
+}

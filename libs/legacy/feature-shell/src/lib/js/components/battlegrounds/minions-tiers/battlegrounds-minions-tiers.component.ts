@@ -36,6 +36,7 @@ import { AbstractSubscriptionComponent, arraysEqual } from '@firestone/shared/fr
 import { CardRulesService, CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import {
 	Observable,
+	BehaviorSubject,
 	auditTime,
 	combineLatest,
 	debounceTime,
@@ -49,6 +50,20 @@ import {
 import { DebugService } from '../../../services/debug.service';
 import { LocalizationFacadeService } from '../../../services/localization-facade.service';
 
+const buildHeaderStubTiers = (i18n: {
+	translateString: (toTranslate: string, params?: any) => string;
+}): readonly Tier[] => {
+	// Standard tavern headers only — empty groups until the user opens a tier.
+	return [1, 2, 3, 4, 5, 6].map((tier) => ({
+		type: 'standard' as const,
+		tavernTier: tier,
+		tierName: i18n.translateString(`app.battlegrounds.tier-list.tier`, { value: tier }),
+		tavernTierData: tier,
+		tavernTierIcon: `https://static.zerotoheroes.com/hearthstone/asset/coliseum/images/battlegrounds/tavern_banner_${tier}.png`,
+		tooltip: i18n.translateString(`battlegrounds.in-game.minions-list.tier-category-tooltip`, { value: tier }),
+		groups: [],
+	}));
+};
 @Component({
 	standalone: false,
 	selector: 'battlegrounds-minions-tiers',
@@ -77,6 +92,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 				[useNewTiersHeaderStyle]="useNewTiersHeaderStyle$ | async"
 				[minionsOnBoardAndHand]="minionsOnBoardAndHand$ | async"
 				[minionsInShop]="minionsInShop$ | async"
+				(poolRequested)="onPoolRequested()"
 			></battlegrounds-minions-tiers-view>
 		</div>
 	`,
@@ -103,6 +119,8 @@ export class BattlegroundsMinionsTiersOverlayComponent
 	useNewTiersHeaderStyle$: Observable<boolean>;
 	minionsOnBoardAndHand$: Observable<readonly string[]>;
 	minionsInShop$: Observable<readonly string[]>;
+
+	private readonly poolRequested$$ = new BehaviorSubject<boolean>(false);
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
@@ -235,6 +253,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 			takeUntil(this.destroyed$),
 		);
 		const staticTiers$ = combineLatest([
+			this.poolRequested$$.pipe(distinctUntilChanged()),
 			prefs$,
 			currentGameInfo$,
 			playerCardIds$,
@@ -245,6 +264,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 		]).pipe(
 			map(
 				([
+					poolRequested,
 					prefs,
 					currentGameInfo,
 					playerCardIds,
@@ -253,6 +273,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 					playerTrinkets,
 					questRewards,
 				]) => ({
+					poolRequested,
 					...prefs,
 					...currentGameInfo,
 					...playerCardIds,
@@ -264,6 +285,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 			),
 			this.mapData(
 				({
+					poolRequested,
 					showMechanicsTiers,
 					showTribeTiers,
 					showTierSeven,
@@ -290,6 +312,9 @@ export class BattlegroundsMinionsTiersOverlayComponent
 					playerTrinkets,
 					questRewards,
 				}) => {
+					if (!poolRequested) {
+						return buildHeaderStubTiers(this.i18n);
+					}
 					// hasSpells = true;
 					const willShowBuddies = hasBuddies || showBuddies;
 					const normalizedPlayerCardId = normalizeHeroCardId(playerCardId, this.allCards);
@@ -421,6 +446,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 			}),
 		);
 		this.compositions$ = combineLatest([
+			this.poolRequested$$.pipe(distinctUntilChanged()),
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsMinionsListShowCompositions)),
 			this.gameState.gameState$$.pipe(
 				this.mapData((state) => state.bgState.currentGame?.availableRaces),
@@ -430,8 +456,8 @@ export class BattlegroundsMinionsTiersOverlayComponent
 			this.gameState.gameState$$.pipe(this.mapData((state) => state.bgState.currentGame?.hasTimewarped)),
 			this.strategies.strategies$$,
 		]).pipe(
-			this.mapData(([showFromPrefs, availableTribes, hasTrinkets, hasTimewarped, strategies]) =>
-				showFromPrefs
+			this.mapData(([poolRequested, showFromPrefs, availableTribes, hasTrinkets, hasTimewarped, strategies]) =>
+				poolRequested && showFromPrefs
 					? buildCompositions(
 							availableTribes,
 							strategies,
@@ -511,6 +537,12 @@ export class BattlegroundsMinionsTiersOverlayComponent
 
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.markForCheck();
+		}
+	}
+
+	onPoolRequested() {
+		if (!this.poolRequested$$.value) {
+			this.poolRequested$$.next(true);
 		}
 	}
 }
