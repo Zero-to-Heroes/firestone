@@ -35,7 +35,41 @@ let profilerChunkTimer: NodeJS.Timeout | null = null;
 let profilerChunkIndex = 0;
 let profilerBasePath: string | null = null;
 
+/** Pending HEAPSNAPSHOT turn numbers; cleared as each fires. */
+let pendingHeapSnapshotTurns: Set<number> | null = null;
+let heapSnapshotSession: { logsDir: string; sessionName: string; injector: Injector } | null = null;
+
 export const isMemoryInstrumentationEnabled = (): boolean => process.env['FS_ELECTRON_MEM'] === '1';
+
+/**
+ * Fallback for mid-game fake replays that stop before GAME_END: if turn-N snapshots
+ * were requested but not all fired, snapshot once for the highest reached requested
+ * turn (or `fake-done-turn-T` if none of the targets were reached).
+ */
+export const notifyFakeGameReplayDone = (): void => {
+	if (!pendingHeapSnapshotTurns?.size || !heapSnapshotSession) {
+		return;
+	}
+	const { logsDir, sessionName, injector } = heapSnapshotSession;
+	const turn = getCurrentTurn(injector);
+	const reached = [...pendingHeapSnapshotTurns]
+		.filter((t) => turn != null && turn >= t)
+		.sort((a, b) => b - a);
+	pendingHeapSnapshotTurns.clear();
+	if (reached.length) {
+		const t = reached[0]!;
+		console.log('[fs-mem] fake-game done — taking deferred heap snapshot', `turn-${t}`, `currentTurn=${turn}`);
+		void writeHeapSnapshots(logsDir, sessionName, `turn-${t}`);
+		return;
+	}
+	if (turn != null && turn > 0) {
+		console.log(
+			'[fs-mem] fake-game done — requested turns not reached, snapshot at',
+			`fake-done-turn-${turn}`,
+		);
+		void writeHeapSnapshots(logsDir, sessionName, `fake-done-turn-${turn}`);
+	}
+};
 
 export const startMemoryInstrumentation = (injector: Injector): void => {
 	if (!isMemoryInstrumentationEnabled()) {
@@ -86,18 +120,25 @@ export const startMemoryInstrumentation = (injector: Injector): void => {
 
 	// Longest stall per turn, logged at the start of the next turn. Also drives the
 	// opt-in heap snapshots (main + renderers — see writeHeapSnapshots).
-	const heapSnapshotTurns = parseHeapSnapshotTurns();
+	pendingHeapSnapshotTurns = parseHeapSnapshotTurns();
+	heapSnapshotSession = { logsDir, sessionName: `${date}-${time}`, injector };
 	try {
 		const emitter = injector.get(GameEventsEmitterService);
 		const sub = emitter.allEvents.subscribe((event: GameEvent) => {
-			if (heapSnapshotTurns && event?.type === GameEvent.GAME_END) {
+			if (pendingHeapSnapshotTurns && event?.type === GameEvent.GAME_END) {
 				void writeHeapSnapshots(logsDir, `${date}-${time}`, 'game-end');
 				return;
 			}
 			if (event?.type !== GameEvent.TURN_START) {
 				return;
 			}
-			const turn = getCurrentTurn(injector);
+			// Prefer the event payload — GameState.currentTurnNumeric can lag one tick
+			// behind TURN_START during heavy fake-game catch-up.
+			const turnFromEvent = Number((event as any).additionalData?.turnNumber);
+			const turn =
+				Number.isFinite(turnFromEvent) && turnFromEvent >= 0
+					? turnFromEvent
+					: getCurrentTurn(injector);
 			console.log(
 				'[fs-mem-stall]',
 				`longest main-thread stall during previous turn: ${maxStallSinceTurnStart}ms`,
@@ -105,8 +146,8 @@ export const startMemoryInstrumentation = (injector: Injector): void => {
 			);
 			writeRecord({ kind: 'turn-stall', maxStallMs: maxStallSinceTurnStart, newTurn: turn });
 			maxStallSinceTurnStart = 0;
-			if (heapSnapshotTurns && turn != null && heapSnapshotTurns.has(turn)) {
-				heapSnapshotTurns.delete(turn); // once per turn number
+			if (pendingHeapSnapshotTurns && turn != null && pendingHeapSnapshotTurns.has(turn)) {
+				pendingHeapSnapshotTurns.delete(turn); // once per turn number
 				void writeHeapSnapshots(logsDir, `${date}-${time}`, `turn-${turn}`);
 			}
 		});

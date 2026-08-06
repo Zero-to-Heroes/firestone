@@ -24,7 +24,9 @@
  *   but broadcasts have no overlay subscribers. The driver logs the window count at start.
  * - Like the Overwolf `window.fakeGame`, the scene is forced to BACON/GAMEPLAY and the
  *   GAME_SEED is randomized so the game is not treated as a reconnect. MindVision reads
- *   won't match the replayed game (they hit the real HS process, if any).
+ *   won't match the replayed game (they hit the real HS process, if any) — so we **keep
+ *   re-pinning GAMEPLAY** for the whole session; otherwise MindVision flips scene back to
+ *   HUB and all overlay widgets unmount.
  * - The end-of-game flow runs for real, including the replay upload.
  */
 import { Injector } from '@angular/core';
@@ -38,6 +40,7 @@ import {
 } from '@firestone/power-log-parser';
 import { BrowserWindow } from 'electron';
 import * as fs from 'fs';
+import { notifyFakeGameReplayDone } from './memory-instrumentation.service';
 
 export function startFakeGameDriver(injector: Injector): void {
 	const logPath = process.env['FS_FAKE_GAME_LOG']?.trim();
@@ -53,6 +56,28 @@ export function startFakeGameDriver(injector: Injector): void {
 			console.error('[fake-game] replay failed', e);
 		});
 	}, startDelayMs);
+}
+
+/** Wait until the overlay BrowserWindow exists (ow-electron inject), so heap/RSS measure the HUD. */
+async function waitForOverlayWindow(timeoutMs = 120_000): Promise<boolean> {
+	const start = Date.now();
+	while (Date.now() - start < timeoutMs) {
+		const hit = BrowserWindow.getAllWindows().some((w) => {
+			try {
+				const url = w.webContents?.getURL?.() ?? '';
+				return url.includes('#/overlay') || url.includes('/overlay');
+			} catch {
+				return false;
+			}
+		});
+		if (hit) {
+			console.log('[fake-game] overlay window ready', JSON.stringify({ waitedMs: Date.now() - start }));
+			return true;
+		}
+		await new Promise((r) => setTimeout(r, 1000));
+	}
+	console.warn('[fake-game] overlay window not found within timeout — continuing anyway');
+	return false;
 }
 
 /**
@@ -86,6 +111,7 @@ async function runFakeGame(injector: Injector, logPath: string, speed: number, m
 		console.error('[fake-game] log file not found:', logPath);
 		return;
 	}
+	await waitForOverlayWindow(Number(process.env['FS_FAKE_GAME_OVERLAY_WAIT_MS'] ?? '120000'));
 	const gameEvents = injector.get(GameEvents);
 	const gameState = injector.get(GameStateService);
 	const scene = injector.get(SceneService);
@@ -106,47 +132,86 @@ async function runFakeGame(injector: Injector, logPath: string, speed: number, m
 	);
 
 	// Same forcing as the Overwolf window.fakeGame: BACON first triggers the BG real-time
-	// stats wiring, GAMEPLAY is what the game-state pipeline gates on.
-	if (isBg) {
-		scene.currentScene$$.next(SceneMode.BACON);
-	}
-	scene.currentScene$$.next(SceneMode.GAMEPLAY);
+	// stats wiring, GAMEPLAY is what overlay widgets gate on. Pin for the whole session —
+	// MindVision will keep publishing HUB while HS sits at the menu.
+	const unpinScene = pinGameplayScene(scene, isBg);
 
 	const start = Date.now();
 	let lastProgressLog = 0;
-	const feedMs = await feedPowerLogLinesPaced(
-		lines,
-		(line) => {
-			// Randomize the seed so the replayed game is not treated as a reconnect
-			if (line.includes('tag=GAME_SEED')) {
-				line = line.replace(/value=\d+/, `value=${Math.floor(Math.random() * 1000000)}`);
-			}
-			gameEvents.receiveLogLine(line);
-		},
-		{
-			speed: speed > 0 ? speed : 10_000,
-			maxGapMs: speed > 0 ? maxGapMs : 0,
-			onProgress: (fed, total, elapsedMs) => {
-				if (elapsedMs - lastProgressLog >= 30_000) {
-					lastProgressLog = elapsedMs;
-					console.log('[fake-game] progress', JSON.stringify({ fed, total, elapsedMs }));
+	try {
+		const feedMs = await feedPowerLogLinesPaced(
+			lines,
+			(line) => {
+				// Randomize the seed so the replayed game is not treated as a reconnect
+				if (line.includes('tag=GAME_SEED')) {
+					line = line.replace(/value=\d+/, `value=${Math.floor(Math.random() * 1000000)}`);
 				}
+				gameEvents.receiveLogLine(line);
 			},
-		},
-	);
-	const feedDone = Date.now();
-	await gameEvents.awaitProcessingQueueIdle();
-	const queueIdle = Date.now();
-	await gameState.awaitQueueIdle();
-	const gsIdle = Date.now();
-	console.log(
-		'[fake-game] done',
-		JSON.stringify({
-			lines: lines.length,
-			feedMs,
-			gameEventsDrainMs: queueIdle - feedDone,
-			gameStateDrainMs: gsIdle - queueIdle,
-			totalMs: Date.now() - start,
-		}),
-	);
+			{
+				speed: speed > 0 ? speed : 10_000,
+				maxGapMs: speed > 0 ? maxGapMs : 0,
+				onProgress: (fed, total, elapsedMs) => {
+					if (elapsedMs - lastProgressLog >= 30_000) {
+						lastProgressLog = elapsedMs;
+						console.log('[fake-game] progress', JSON.stringify({ fed, total, elapsedMs }));
+					}
+				},
+			},
+		);
+		const feedDone = Date.now();
+		await gameEvents.awaitProcessingQueueIdle();
+		const queueIdle = Date.now();
+		await gameState.awaitQueueIdle();
+		const gsIdle = Date.now();
+		console.log(
+			'[fake-game] done',
+			JSON.stringify({
+				lines: lines.length,
+				feedMs,
+				gameEventsDrainMs: queueIdle - feedDone,
+				gameStateDrainMs: gsIdle - queueIdle,
+				totalMs: Date.now() - start,
+				scene: scene.currentScene$$.value,
+			}),
+		);
+		// Mid-game cuts never emit GAME_END; still take pending turn-N heap snapshots.
+		// Keep scene pinned afterward so mid-game visual checks still see overlay widgets.
+		notifyFakeGameReplayDone();
+	} catch (e) {
+		unpinScene();
+		throw e;
+	}
+}
+
+/**
+ * Hold SceneMode.GAMEPLAY for the fake-game session. Without this, MindVision's menu
+ * scene (HUB) overwrites the one-shot force and every overlay widget unmounts.
+ * Left active after a mid-game cut so the HUD stays visible for inspection.
+ */
+function pinGameplayScene(scene: SceneService, isBg: boolean): () => void {
+	const force = (reason: string) => {
+		const cur = scene.currentScene$$.value;
+		if (cur === SceneMode.GAMEPLAY) {
+			return;
+		}
+		console.log('[fake-game] pinning GAMEPLAY', JSON.stringify({ reason, was: cur, isBg }));
+		if (isBg && cur !== SceneMode.BACON) {
+			// Preserve BACON as lastNonGamePlay for BG mode-family helpers.
+			scene.currentScene$$.next(SceneMode.BACON);
+		}
+		scene.currentScene$$.next(SceneMode.GAMEPLAY);
+	};
+
+	force('start');
+	const sub = scene.currentScene$$.subscribe((s) => {
+		if (s !== SceneMode.GAMEPLAY) {
+			queueMicrotask(() => force('mindvision-overwrite'));
+		}
+	});
+	const interval = setInterval(() => force('interval'), 1000);
+	return () => {
+		sub.unsubscribe();
+		clearInterval(interval);
+	};
 }
