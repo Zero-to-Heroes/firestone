@@ -12,5 +12,6 @@
     - link other account
 
 - improve the "time to first BG sim result in the UI"
-  - DONE: board→first paint 3503ms p50 → 562ms p50 (−84%), N=4, full bg.log — see knowledge/bg-first-sim-latency.md
+  - DONE: boardsVisible→paint 2742ms p50 → 1270ms p50 (−54%), N=4 — see knowledge/bg-first-sim-latency.md
+  - round 2: GameEvents FIFO flush on battle-start + receive-time stamp; visible→kickoff p50 703ms (best samples 158–269ms)
   - live: window.bgsSimLatencyStats() after fakeGame

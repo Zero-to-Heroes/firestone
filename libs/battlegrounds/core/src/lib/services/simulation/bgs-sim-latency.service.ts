@@ -1,18 +1,24 @@
 /**
- * Measures board → first sim paint latency for Battlegrounds combat.
+ * Measures Battlegrounds combat latency around battle simulation.
  *
- * Headline metric: boardsVisible → firstPaint (mean / p50 over fights).
- * Start: BG_BATTLE_STARTING=0 in power-log (combat boards visible in HS).
- * Hop breakdown: boardsVisible-to-kickoff, kickoff-to-first-result, result-to-paint.
+ * Headline metric: boardsVisible → kickoff (mean / p50 over fights).
+ * Start: PTL BG_BATTLE_STARTING=0 log line *received* (combat boards visible in HS),
+ * falling back to parser process-time if the receive stamp is missing.
+ * End of headline: startBgsBattleSimulation / markKickoff — excludes sim CPU variance.
+ *
+ * Optional hops (filled when available): kickoff→firstResult, result→paint, boardsVisible→paint.
  *
  * Exposed in dev builds as window.bgsSimLatencyStats() / bgsSimLatencyReset().
  */
 export interface BgsSimLatencySample {
 	readonly battleId: string;
-	readonly boardToPaintMs: number;
-	readonly queueToKickoffMs: number | null;
+	/** Headline: boardsVisible → startBgsBattleSimulation. */
+	readonly visibleToKickoffMs: number;
+	/** @deprecated alias of visibleToKickoffMs — kept for older log parsers */
+	readonly queueToKickoffMs: number;
 	readonly kickoffToFirstResultMs: number | null;
 	readonly resultToPaintMs: number | null;
+	readonly boardToPaintMs: number | null;
 }
 
 export interface BgsSimLatencyHopStats {
@@ -23,25 +29,29 @@ export interface BgsSimLatencyHopStats {
 }
 
 export interface BgsSimLatencyStats {
+	/** Headline = boardsVisible → kickoff. */
 	readonly n: number;
 	readonly mean: number | null;
 	readonly p50: number | null;
 	readonly p90: number | null;
 	readonly hops: {
+		readonly visibleToKickoff: BgsSimLatencyHopStats;
+		/** @deprecated same as visibleToKickoff */
 		readonly queueToKickoff: BgsSimLatencyHopStats;
 		readonly kickoffToFirstResult: BgsSimLatencyHopStats;
 		readonly resultToPaint: BgsSimLatencyHopStats;
+		readonly boardToPaint: BgsSimLatencyHopStats;
 	};
 	readonly samples: readonly BgsSimLatencySample[];
 }
 
 interface PendingBattle {
-	/** performance.now() when BG_BATTLE_STARTING=0 was seen (boards visible). */
 	boardsVisibleAt: number | null;
 	kickoffAt: number | null;
 	firstResultAt: number | null;
 	firstPaintAt: number | null;
-	completed: boolean;
+	/** Sample index in `samples` once kickoff was recorded. */
+	sampleIndex: number | null;
 }
 
 const now = () => (typeof performance !== 'undefined' ? performance.now() : Date.now());
@@ -69,6 +79,8 @@ const hopStats = (values: readonly number[]): BgsSimLatencyHopStats => {
 	};
 };
 
+const roundMs = (ms: number) => Math.round(ms * 10) / 10;
+
 /** Module singleton so Background markers and facade paint marks share one collector. */
 class BgsSimLatencyCollector {
 	private readonly pending = new Map<string, PendingBattle>();
@@ -81,15 +93,14 @@ class BgsSimLatencyCollector {
 
 	/**
 	 * Start of the headline timer: combat boards visible.
-	 * Prefer `boardsVisibleAt` stamped at BG_BATTLE_STARTING=0 in the power-log parser;
-	 * falls back to now() if the stamp is missing.
+	 * Prefer receive-time stamp (before the game-events queue); falls back to now().
 	 */
 	markBoardsVisible(battleId: string, boardsVisibleAt?: number | null): void {
 		if (!battleId) {
 			return;
 		}
 		const existing = this.pending.get(battleId);
-		if (existing?.completed) {
+		if (existing?.sampleIndex != null) {
 			return;
 		}
 		const t =
@@ -99,7 +110,7 @@ class BgsSimLatencyCollector {
 			kickoffAt: existing?.kickoffAt ?? null,
 			firstResultAt: existing?.firstResultAt ?? null,
 			firstPaintAt: existing?.firstPaintAt ?? null,
-			completed: false,
+			sampleIndex: existing?.sampleIndex ?? null,
 		});
 	}
 
@@ -113,10 +124,11 @@ class BgsSimLatencyCollector {
 			return;
 		}
 		const entry = this.ensure(battleId);
-		if (entry.completed || entry.kickoffAt != null) {
+		if (entry.kickoffAt != null) {
 			return;
 		}
 		entry.kickoffAt = now();
+		this.recordKickoffSample(battleId, entry);
 	}
 
 	markFirstResult(battleId: string): void {
@@ -124,10 +136,11 @@ class BgsSimLatencyCollector {
 			return;
 		}
 		const entry = this.ensure(battleId);
-		if (entry.completed || entry.firstResultAt != null) {
+		if (entry.firstResultAt != null) {
 			return;
 		}
 		entry.firstResultAt = now();
+		this.patchSample(entry);
 	}
 
 	markFirstPaint(battleId: string): void {
@@ -135,34 +148,36 @@ class BgsSimLatencyCollector {
 			return;
 		}
 		const entry = this.ensure(battleId);
-		if (entry.completed || entry.firstPaintAt != null) {
+		if (entry.firstPaintAt != null) {
 			return;
 		}
 		entry.firstPaintAt = now();
-		this.finalize(battleId, entry);
+		this.patchSample(entry);
 	}
 
 	getStats(): BgsSimLatencyStats {
-		const boardToPaint = this.samples.map((s) => s.boardToPaintMs);
-		const queueToKickoff = this.samples
-			.map((s) => s.queueToKickoffMs)
-			.filter((v): v is number => v != null);
+		const visibleToKickoff = this.samples.map((s) => s.visibleToKickoffMs);
 		const kickoffToFirst = this.samples
 			.map((s) => s.kickoffToFirstResultMs)
 			.filter((v): v is number => v != null);
 		const resultToPaint = this.samples
 			.map((s) => s.resultToPaintMs)
 			.filter((v): v is number => v != null);
-		const headline = hopStats(boardToPaint);
+		const boardToPaint = this.samples
+			.map((s) => s.boardToPaintMs)
+			.filter((v): v is number => v != null);
+		const headline = hopStats(visibleToKickoff);
 		return {
 			n: headline.n,
 			mean: headline.mean,
 			p50: headline.p50,
 			p90: headline.p90,
 			hops: {
-				queueToKickoff: hopStats(queueToKickoff),
+				visibleToKickoff: headline,
+				queueToKickoff: headline,
 				kickoffToFirstResult: hopStats(kickoffToFirst),
 				resultToPaint: hopStats(resultToPaint),
+				boardToPaint: hopStats(boardToPaint),
 			},
 			samples: [...this.samples],
 		};
@@ -176,43 +191,56 @@ class BgsSimLatencyCollector {
 				kickoffAt: null,
 				firstResultAt: null,
 				firstPaintAt: null,
-				completed: false,
+				sampleIndex: null,
 			};
 			this.pending.set(battleId, entry);
 		}
 		return entry;
 	}
 
-	private finalize(battleId: string, entry: PendingBattle): void {
-		if (entry.boardsVisibleAt == null || entry.firstPaintAt == null) {
+	private recordKickoffSample(battleId: string, entry: PendingBattle): void {
+		if (entry.boardsVisibleAt == null || entry.kickoffAt == null || entry.sampleIndex != null) {
 			return;
 		}
-		entry.completed = true;
-		const sample: BgsSimLatencySample = {
+		const visibleToKickoffMs = roundMs(entry.kickoffAt - entry.boardsVisibleAt);
+		entry.sampleIndex = this.samples.length;
+		this.samples.push({
 			battleId,
-			boardToPaintMs: Math.round((entry.firstPaintAt - entry.boardsVisibleAt) * 10) / 10,
-			queueToKickoffMs:
-				entry.kickoffAt != null
-					? Math.round((entry.kickoffAt - entry.boardsVisibleAt) * 10) / 10
-					: null,
-			kickoffToFirstResultMs:
-				entry.firstResultAt != null && entry.kickoffAt != null
-					? Math.round((entry.firstResultAt - entry.kickoffAt) * 10) / 10
-					: null,
-			resultToPaintMs:
-				entry.firstPaintAt != null && entry.firstResultAt != null
-					? Math.round((entry.firstPaintAt - entry.firstResultAt) * 10) / 10
-					: null,
-		};
-		this.samples.push(sample);
+			visibleToKickoffMs,
+			queueToKickoffMs: visibleToKickoffMs,
+			kickoffToFirstResultMs: null,
+			resultToPaintMs: null,
+			boardToPaintMs: null,
+		});
 		console.log(
 			'[bgs-sim-latency]',
 			`battle=${battleId}`,
-			`boardsVisible→paint=${sample.boardToPaintMs}ms`,
-			`visible→kickoff=${sample.queueToKickoffMs ?? 'n/a'}ms`,
-			`kickoff→result=${sample.kickoffToFirstResultMs ?? 'n/a'}ms`,
-			`result→paint=${sample.resultToPaintMs ?? 'n/a'}ms`,
+			`boardsVisible→kickoff=${visibleToKickoffMs}ms`,
 		);
+	}
+
+	private patchSample(entry: PendingBattle): void {
+		if (entry.sampleIndex == null || entry.boardsVisibleAt == null || entry.kickoffAt == null) {
+			return;
+		}
+		const prev = this.samples[entry.sampleIndex];
+		if (!prev) {
+			return;
+		}
+		const kickoffToFirstResultMs =
+			entry.firstResultAt != null ? roundMs(entry.firstResultAt - entry.kickoffAt) : null;
+		const resultToPaintMs =
+			entry.firstPaintAt != null && entry.firstResultAt != null
+				? roundMs(entry.firstPaintAt - entry.firstResultAt)
+				: null;
+		const boardToPaintMs =
+			entry.firstPaintAt != null ? roundMs(entry.firstPaintAt - entry.boardsVisibleAt) : null;
+		this.samples[entry.sampleIndex] = {
+			...prev,
+			kickoffToFirstResultMs,
+			resultToPaintMs,
+			boardToPaintMs,
+		};
 	}
 }
 

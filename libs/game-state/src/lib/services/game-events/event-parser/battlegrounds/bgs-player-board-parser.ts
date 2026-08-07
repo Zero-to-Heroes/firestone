@@ -356,7 +356,8 @@ export class BgsPlayerBoardParser implements EventParser {
 
 		bgsSimLatency.markBoardsVisible(lastFaceOff.id, gameEvent.additionalData?.boardsVisibleAt);
 
-		const prefs = await this.prefs.getPreferences();
+		// Sync prefs — getPreferences() awaits isReady() and would delay kickoff by a tick.
+		const prefs = this.prefs.preferences$$.getValue();
 		const isPremium = this.adService.enablePremiumFeatures$$.value;
 		const shouldUseIntermediateResults =
 			prefs.bgsSimShowIntermediaryResults &&

@@ -48,11 +48,21 @@ export class ProcessingQueue<T> {
 	}
 
 	/**
-	 * Enqueue and process as soon as possible (without waiting for the next interval tick).
-	 * Used for latency-sensitive events such as BG board / battle-sim results.
+	 * Append (FIFO) and process as soon as possible without waiting for the next interval
+	 * tick. Never reorders relative to events already pending — only skips the setInterval
+	 * wait. Used for latency-sensitive paths (BG board / battle-sim / battle-start logs).
 	 */
 	public enqueueAndProcessNow(event: T) {
 		this.pendingQueue.push(event);
+		this.processNow();
+	}
+
+	/**
+	 * Kick the processor immediately if idle (flush pending FIFO without waiting for the
+	 * interval). Does nothing if a batch is already running — that batch's while-loop will
+	 * drain anything appended meanwhile, still in order.
+	 */
+	public processNow() {
 		this.startProcessingInterval();
 		if (!this.isProcessing) {
 			void this.processQueue();
@@ -100,7 +110,9 @@ export class ProcessingQueue<T> {
 
 		try {
 			while (this.pendingQueue.length > 0 || this.eventQueue.length > 0) {
-				// Move pending events to the event queue
+				// Move pending events to the event queue (FIFO). Keep batches large enough
+				// for bulk log replay (fakeGame) — latency wins come from processNow(), not
+				// from shrinking this.
 				if (this.eventQueue.length < 50 && this.pendingQueue.length > 0) {
 					const batchSize = Math.min(1000, this.pendingQueue.length);
 					const batch: T[] = [];

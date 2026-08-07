@@ -92,7 +92,31 @@ async function main() {
 	const stats = await evalIn(bg, `JSON.stringify(window.bgsSimLatencyStats())`);
 	console.log('\n=== fakeGame timings ===');
 	console.log(JSON.stringify(timings, null, 2));
-	console.log('\n=== bgsSimLatencyStats ===');
+	console.log('\n=== bgsSimLatencyStats (headline = boardsVisible→kickoff) ===');
+	const parsed = JSON.parse(stats);
+	console.log(
+		JSON.stringify(
+			{
+				headline: 'boardsVisible→kickoff',
+				n: parsed.n,
+				mean: parsed.mean,
+				p50: parsed.p50,
+				p90: parsed.p90,
+				optionalHops: {
+					kickoffToFirstResult: parsed.hops?.kickoffToFirstResult,
+					resultToPaint: parsed.hops?.resultToPaint,
+					boardToPaint: parsed.hops?.boardToPaint,
+				},
+				samples: parsed.samples?.map((s) => ({
+					battleId: s.battleId,
+					visibleToKickoffMs: s.visibleToKickoffMs ?? s.queueToKickoffMs,
+				})),
+			},
+			null,
+			2,
+		),
+	);
+	console.log('\n=== full stats ===');
 	console.log(stats);
 	bg.close();
 }

@@ -27,6 +27,8 @@ export class GameEvents {
 	private processingQueue: ProcessingQueue<string>;
 
 	private lastProcessedTimestamp: number;
+	/** performance.now() when PTL BG_BATTLE_STARTING=0 log line was received (pre-queue). */
+	private bgBattleStartingReceivedAt: number | null = null;
 
 	private tsParser: ReplayParser | null = null;
 	private tsParserLineIndex: number = 0;
@@ -1855,7 +1857,20 @@ export class GameEvents {
 				this.processingQueue.enqueueAll(this.pendingLogLines.toArray());
 				this.pendingLogLines.clear();
 			}
-			this.processingQueue.enqueue(data);
+			// PTL BG_BATTLE_STARTING=0 (tag 2022): combat boards are visible — stamp receive
+			// time (user-facing start) and flush the log queue so board snapshot + sim
+			// kickoff are not held behind the normal 500ms ProcessingQueue tick.
+			const isPtlBgBattleStarting =
+				data.includes('PowerTaskList') && data.includes('tag=2022 value=0');
+			if (isPtlBgBattleStarting) {
+				this.bgBattleStartingReceivedAt =
+					typeof performance !== 'undefined' && typeof performance.now === 'function'
+						? performance.now()
+						: Date.now();
+				this.processingQueue.enqueueAndProcessNow(data);
+			} else {
+				this.processingQueue.enqueue(data);
+			}
 		}
 	}
 
@@ -2116,9 +2131,19 @@ export class GameEvents {
 					questEntities: gameEvent.Value.OpponentBoard.QuestEntities,
 					globalInfo: gameEvent.Value.OpponentBoard.GlobalInfo,
 				},
-				/** performance.now() when BG_BATTLE_STARTING=0 was seen (boards visible). */
-				boardsVisibleAt: gameEvent.Value.BoardsVisibleAt,
+				/** performance.now() when BG_BATTLE_STARTING=0 was received (boards visible). */
+				boardsVisibleAt: this.consumeBgBattleStartingReceivedAt(gameEvent.Value.BoardsVisibleAt),
 			},
 		} as GameEvent);
+	}
+
+	/** Prefer receive-time stamp (pre game-events queue) over parser process-time stamp. */
+	private consumeBgBattleStartingReceivedAt(parserStamp: number | null | undefined): number | null {
+		const receivedAt = this.bgBattleStartingReceivedAt;
+		this.bgBattleStartingReceivedAt = null;
+		if (receivedAt != null && Number.isFinite(receivedAt)) {
+			return receivedAt;
+		}
+		return parserStamp ?? null;
 	}
 }

@@ -389,7 +389,8 @@ export class GameStateService {
 					shouldProcessGameEnd ? gameEndEvent : null,
 				].filter((event) => event);
 				let currentState = this.state;
-				const prefs = await this.prefs.getPreferences();
+				// Sync read — avoid awaiting isReady() on every chunk of the hot path.
+				const prefs = this.prefs.preferences$$.getValue();
 				for (let i = 0; i < eventsToProcess.length; i++) {
 					if (eventsToProcess[i] instanceof GameEvent) {
 						currentState = await this.processEvent(currentState, eventsToProcess[i] as GameEvent, prefs);
