@@ -330,6 +330,8 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 			return 'wrong-path';
 		}
 		await this.installEngine(installPath, requiredArch);
+		const refreshedMods = await this.refreshModsInternal(installPath);
+		this.modsData$$.next(refreshedMods);
 		this.currentModsStatus$$.next('settings.general.mods.mods-ready');
 
 		return 'installed';

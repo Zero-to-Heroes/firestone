@@ -261,7 +261,8 @@ export class SettingsGeneralModsComponent extends AbstractSubscriptionComponent 
 		this.areModsInstalled = status === 'installed';
 		await this.prefs.updatePrefs('modsEnabled', this.areModsInstalled);
 		this.installOngoing = false;
-		this.installedMods = await this.modsManager.installedMods(this.gameLocation);
+		// Use the refreshed catalog (trusted + disk), not disk-only installedMods()
+		this.installedMods = [...(this.modsManager.modsData$$.getValue() ?? [])];
 		console.debug('installedMods 2', this.installedMods);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.markForCheck();
