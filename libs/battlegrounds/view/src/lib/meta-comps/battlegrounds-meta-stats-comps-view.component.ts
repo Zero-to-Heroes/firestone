@@ -80,99 +80,109 @@ import { BgsMetaCompStatTier, BgsMetaCompStatTierItem, ColumnSortTypeComp } from
 					</div>
 				</div>
 
-				<div class="header" *ngIf="sortCriteria$ | async as sort">
-					<div class="cell name" [fsTranslate]="'app.battlegrounds.compositions.columns.name'"></div>
-					<sortable-table-label
-						class="cell first-percent"
-						[name]="'app.battlegrounds.compositions.columns.first-percent' | fsTranslate"
-						[helpTooltip]="'app.battlegrounds.compositions.columns.first-percent-tooltip' | fsTranslate"
-						[sort]="sort"
-						[criteria]="'first'"
-						(sortClick)="onSortClick($event)"
-					>
-					</sortable-table-label>
-					<sortable-table-label
-						class="cell average-placement"
-						[name]="'app.battlegrounds.compositions.columns.position' | fsTranslate"
-						[helpTooltip]="'app.battlegrounds.compositions.columns.position-tooltip' | fsTranslate"
-						[sort]="sort"
-						[criteria]="'position'"
-						(sortClick)="onSortClick($event)"
-					>
-					</sortable-table-label>
-					<sortable-table-label
-						class="cell expert-rating"
-						[name]="'app.battlegrounds.compositions.columns.expert-rating' | fsTranslate"
-						[helpTooltip]="'app.battlegrounds.compositions.columns.expert-rating-tooltip' | fsTranslate"
-						[sort]="sort"
-						[criteria]="'expert-rating'"
-						(sortClick)="onSortClick($event)"
-					>
-					</sortable-table-label>
-					<sortable-table-label
-						class="cell expert-difficulty"
-						[name]="'app.battlegrounds.compositions.columns.expert-difficulty' | fsTranslate"
-						[helpTooltip]="'app.battlegrounds.compositions.columns.expert-difficulty-tooltip' | fsTranslate"
-						[sort]="sort"
-						[criteria]="'expert-difficulty'"
-						(sortClick)="onSortClick($event)"
-					>
-					</sortable-table-label>
-					<div
-						class="cell cards core"
-						[fsTranslate]="'app.battlegrounds.compositions.columns.core-cards'"
-						[helpTooltip]="
-							'app.battlegrounds.in-game.minions-list.compositions.core-cards-header-tooltip'
-								| fsTranslate
-						"
-					></div>
-					<div
-						class="cell cards addon"
-						[fsTranslate]="'app.battlegrounds.compositions.columns.addon-cards'"
-						[helpTooltip]="
-							'app.battlegrounds.in-game.minions-list.compositions.addon-cards-header-tooltip'
-								| fsTranslate
-						"
-					></div>
-					<!-- <div
-						class="cell cards recommended"
-						[fsTranslate]="'app.battlegrounds.compositions.columns.recommended-cards'"
-						[helpTooltip]="
-							'app.battlegrounds.in-game.minions-list.compositions.recommended-cards-header-tooltip'
-								| fsTranslate
-						"
-					></div> -->
-				</div>
-				<div class="comps-list" role="list" scrollable>
-					<ng-container *ngIf="sortCriteria$ | async as sort">
-						<ng-container [ngSwitch]="sort.criteria">
-							<ng-container *ngSwitchCase="'position'">
-								<battlegrounds-meta-stats-comps-tier
-									*ngFor="let tier of value.tiers; trackBy: trackByFn"
-									role="listitem"
-									[tier]="tier"
-									(compositionClick)="onCompositionClick($event)"
-								></battlegrounds-meta-stats-comps-tier>
+				<div class="comps-table">
+					<div class="comps-table-content">
+						<div class="header" *ngIf="sortCriteria$ | async as sort">
+							<div class="cell name" [fsTranslate]="'app.battlegrounds.compositions.columns.name'"></div>
+							<sortable-table-label
+								class="cell first-percent"
+								[name]="'app.battlegrounds.compositions.columns.first-percent' | fsTranslate"
+								[helpTooltip]="
+									'app.battlegrounds.compositions.columns.first-percent-tooltip' | fsTranslate
+								"
+								[sort]="sort"
+								[criteria]="'first'"
+								(sortClick)="onSortClick($event)"
+							>
+							</sortable-table-label>
+							<sortable-table-label
+								class="cell average-placement"
+								[name]="'app.battlegrounds.compositions.columns.position' | fsTranslate"
+								[helpTooltip]="'app.battlegrounds.compositions.columns.position-tooltip' | fsTranslate"
+								[sort]="sort"
+								[criteria]="'position'"
+								(sortClick)="onSortClick($event)"
+							>
+							</sortable-table-label>
+							<sortable-table-label
+								class="cell expert-rating"
+								[name]="'app.battlegrounds.compositions.columns.expert-rating' | fsTranslate"
+								[helpTooltip]="
+									'app.battlegrounds.compositions.columns.expert-rating-tooltip' | fsTranslate
+								"
+								[sort]="sort"
+								[criteria]="'expert-rating'"
+								(sortClick)="onSortClick($event)"
+							>
+							</sortable-table-label>
+							<sortable-table-label
+								class="cell expert-difficulty"
+								[name]="'app.battlegrounds.compositions.columns.expert-difficulty' | fsTranslate"
+								[helpTooltip]="
+									'app.battlegrounds.compositions.columns.expert-difficulty-tooltip' | fsTranslate
+								"
+								[sort]="sort"
+								[criteria]="'expert-difficulty'"
+								(sortClick)="onSortClick($event)"
+							>
+							</sortable-table-label>
+							<div
+								class="cell cards core"
+								[fsTranslate]="'app.battlegrounds.compositions.columns.core-cards'"
+								[helpTooltip]="
+									'app.battlegrounds.in-game.minions-list.compositions.core-cards-header-tooltip'
+										| fsTranslate
+								"
+							></div>
+							<div
+								class="cell cards addon"
+								[fsTranslate]="'app.battlegrounds.compositions.columns.addon-cards'"
+								[helpTooltip]="
+									'app.battlegrounds.in-game.minions-list.compositions.addon-cards-header-tooltip'
+										| fsTranslate
+								"
+							></div>
+							<!-- <div
+								class="cell cards recommended"
+								[fsTranslate]="'app.battlegrounds.compositions.columns.recommended-cards'"
+								[helpTooltip]="
+									'app.battlegrounds.in-game.minions-list.compositions.recommended-cards-header-tooltip'
+										| fsTranslate
+								"
+							></div> -->
+						</div>
+						<div class="comps-list" role="list" scrollable>
+							<ng-container *ngIf="sortCriteria$ | async as sort">
+								<ng-container [ngSwitch]="sort.criteria">
+									<ng-container *ngSwitchCase="'position'">
+										<battlegrounds-meta-stats-comps-tier
+											*ngFor="let tier of value.tiers; trackBy: trackByFn"
+											role="listitem"
+											[tier]="tier"
+											(compositionClick)="onCompositionClick($event)"
+										></battlegrounds-meta-stats-comps-tier>
+									</ng-container>
+									<ng-container *ngSwitchCase="'first'">
+										<battlegrounds-meta-stats-comps-tier
+											*ngFor="let tier of value.tiers; trackBy: trackByFn"
+											role="listitem"
+											[tier]="tier"
+											(compositionClick)="onCompositionClick($event)"
+										></battlegrounds-meta-stats-comps-tier>
+									</ng-container>
+									<ng-container *ngSwitchDefault>
+										<battlegrounds-meta-stats-comps-tier
+											*ngFor="let tier of value.tiers; trackBy: trackByFn"
+											class="single-tier"
+											role="listitem"
+											[tier]="tier"
+											(compositionClick)="onCompositionClick($event)"
+										></battlegrounds-meta-stats-comps-tier>
+									</ng-container>
+								</ng-container>
 							</ng-container>
-							<ng-container *ngSwitchCase="'first'">
-								<battlegrounds-meta-stats-comps-tier
-									*ngFor="let tier of value.tiers; trackBy: trackByFn"
-									role="listitem"
-									[tier]="tier"
-									(compositionClick)="onCompositionClick($event)"
-								></battlegrounds-meta-stats-comps-tier>
-							</ng-container>
-							<ng-container *ngSwitchDefault>
-								<battlegrounds-meta-stats-comps-tier
-									*ngFor="let tier of value.tiers; trackBy: trackByFn"
-									class="single-tier"
-									role="listitem"
-									[tier]="tier"
-									(compositionClick)="onCompositionClick($event)"
-								></battlegrounds-meta-stats-comps-tier>
-							</ng-container>
-						</ng-container>
-					</ng-container>
+						</div>
+					</div>
 				</div>
 			</section>
 			<ng-template #loadingState>
@@ -320,14 +330,12 @@ export class BattlegroundsMetaStatsCompsViewComponent
 	private createSlug(text: string): string {
 		if (!text) return '';
 
-		return (
-			text
-				.toLowerCase()
-				.trim()
-				.replace(/[\s\W-]+/g, '-')
-				.replace(/^-+|-+$/g, '')
-				.replace(/-+/g, '-')
-		);
+		return text
+			.toLowerCase()
+			.trim()
+			.replace(/[\s\W-]+/g, '-')
+			.replace(/^-+|-+$/g, '')
+			.replace(/-+/g, '-');
 	}
 
 	onSortClick(rawCriteria: string) {

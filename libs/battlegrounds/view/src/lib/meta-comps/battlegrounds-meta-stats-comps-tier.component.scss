@@ -1,7 +1,15 @@
+:host {
+	display: block;
+	width: 100%;
+	min-width: min-content;
+}
+
 .tier {
 	padding-bottom: 5px;
 	display: flex;
 	flex-direction: column;
+	width: 100%;
+	min-width: min-content;
 
 	.header {
 		margin-bottom: 10px;
@@ -36,11 +44,15 @@
 		display: flex;
 		flex-direction: column;
 		gap: 8px;
+		width: 100%;
+		min-width: min-content;
 
 		.item-container {
 			position: relative;
 			font-size: 16px;
 			height: 75px;
+			width: 100%;
+			min-width: min-content;
 		}
 	}
 }

@@ -13,22 +13,28 @@
 }
 
 .cards {
+	// Grow with the actual card strip so overflowing card art expands the
+	// row/table width (and horizontal scroll) instead of being clipped.
 	min-width: 0;
 
 	&.core {
-		width: 275px;
+		width: max-content;
+		min-width: 275px;
 		margin-right: 20px;
 		flex-shrink: 0;
 	}
 	&.recommended {
-		width: 250px;
+		width: max-content;
+		min-width: 250px;
 		margin-right: 20px;
 		flex-shrink: 0;
 	}
 	&.addon {
-		width: unset;
+		width: max-content;
+		min-width: 220px;
 		flex-grow: 1;
-		flex-shrink: 1;
+		flex-shrink: 0;
+		padding-right: 10px;
 	}
 }
 

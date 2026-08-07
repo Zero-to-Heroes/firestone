@@ -11,17 +11,16 @@
 battlegrounds-meta-stats-comps-view {
 	flex-grow: 1;
 	display: flex;
-}
-
-::ng-deep battlegrounds-meta-stats-comps-view {
-	.battlegrounds-meta-stats-comps.battlegrounds-meta-stats-comps.battlegrounds-meta-stats-comps {
-		overflow: hidden;
-	}
+	min-width: 0;
+	min-height: 0;
 }
 
 @media (max-width: 1024px) {
 	::ng-deep battlegrounds-meta-stats-comps-view {
 		.battlegrounds-meta-stats-comps.battlegrounds-meta-stats-comps.battlegrounds-meta-stats-comps {
+			.comps-table-content {
+				--comps-table-min-width: 880px;
+			}
 			.addon.addon {
 				display: none;
 			}
@@ -32,6 +31,9 @@ battlegrounds-meta-stats-comps-view {
 @media (max-width: 840px) {
 	::ng-deep battlegrounds-meta-stats-comps-view {
 		.battlegrounds-meta-stats-comps.battlegrounds-meta-stats-comps.battlegrounds-meta-stats-comps {
+			.comps-table-content {
+				--comps-table-min-width: 780px;
+			}
 			.average-placement.average-placement {
 				display: none;
 			}
@@ -48,7 +50,13 @@ battlegrounds-meta-stats-comps-view {
 @media (max-width: 700px) {
 	::ng-deep battlegrounds-meta-stats-comps-view {
 		.battlegrounds-meta-stats-comps.battlegrounds-meta-stats-comps.battlegrounds-meta-stats-comps {
+			.comps-table-content {
+				--comps-table-min-width: 560px;
+			}
 			.first-percent.first-percent {
+				display: none;
+			}
+			.expert-difficulty.expert-difficulty {
 				display: none;
 			}
 			.expert-notification.expert-notification {
@@ -105,19 +113,12 @@ battlegrounds-meta-stats-comps-view {
 	}
 }
 
-@media (max-width: 550px) {
-	::ng-deep battlegrounds-meta-stats-comps-view {
-		.battlegrounds-meta-stats-comps.battlegrounds-meta-stats-comps.battlegrounds-meta-stats-comps {
-			.core.core {
-				display: none;
-			}
-		}
-	}
-}
-
 @media (max-width: 400px) {
 	::ng-deep battlegrounds-meta-stats-comps-view {
 		.battlegrounds-meta-stats-comps.battlegrounds-meta-stats-comps.battlegrounds-meta-stats-comps {
+			.comps-table-content {
+				--comps-table-min-width: 510px;
+			}
 			.name.name {
 				width: 100px;
 			}
