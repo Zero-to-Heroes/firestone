@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { formatClass } from '@firestone/game-state';
 import { OverwolfService, ILocalizationService } from '@firestone/shared/framework/core';
 import { TavernStatWithCollection } from '@firestone/tavern-brawl/common';
@@ -13,7 +13,7 @@ import { TavernStatWithCollection } from '@firestone/tavern-brawl/common';
 	template: `
 		<div
 			class="tavern-brawl-stat"
-			[ngClass]="{ clickable: buildableDeck != null }"
+			[ngClass]="{ clickable: buildableDeck != null, copied: isCopied }"
 			(click)="copyBuildableDeck()"
 			[helpTooltip]="copyBuildableDeckTooltip"
 		>
@@ -31,6 +31,9 @@ import { TavernStatWithCollection } from '@firestone/tavern-brawl/common';
 				<div class="matches">{{ matches }}</div>
 			</div>
 			<div class="sample-deck"></div>
+			<div class="copied-confirmation" *ngIf="isCopied">
+				{{ 'decktracker.deck-name.copy-deckstring-confirmation' | fsTranslate }}
+			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -46,9 +49,12 @@ export class TavernBrawlStatComponent {
 			value: !value.winrate ? 0 : value.matches,
 		});
 		this.buildableDeck = value.buildableDecklist;
-		this.copyBuildableDeckTooltip = !!this.buildableDeck
+		this.defaultCopyTooltip = !!this.buildableDeck
 			? this.i18n.translateString('app.tavern-brawl.copy-deck-tooltip')
 			: null;
+		this.copyBuildableDeckTooltip = this.isCopied
+			? this.i18n.translateString('decktracker.deck-name.copy-deckstring-confirmation')
+			: this.defaultCopyTooltip;
 		this.hasBuildableDecks = value.hasBuildableDecks;
 	}
 
@@ -59,10 +65,14 @@ export class TavernBrawlStatComponent {
 	buildableDeck: string | undefined;
 	copyBuildableDeckTooltip: string | null;
 	hasBuildableDecks: boolean;
+	isCopied: boolean;
+
+	private defaultCopyTooltip: string | null;
 
 	constructor(
 		private readonly i18n: ILocalizationService,
 		private readonly ow: OverwolfService,
+		private readonly cdr: ChangeDetectorRef,
 	) {}
 
 	copyBuildableDeck() {
@@ -70,5 +80,19 @@ export class TavernBrawlStatComponent {
 			return;
 		}
 		this.ow.placeOnClipboard(this.buildableDeck);
+		this.isCopied = true;
+		this.copyBuildableDeckTooltip = this.i18n.translateString(
+			'decktracker.deck-name.copy-deckstring-confirmation',
+		);
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.markForCheck();
+		}
+		setTimeout(() => {
+			this.isCopied = false;
+			this.copyBuildableDeckTooltip = this.defaultCopyTooltip;
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.markForCheck();
+			}
+		}, 2000);
 	}
 }
