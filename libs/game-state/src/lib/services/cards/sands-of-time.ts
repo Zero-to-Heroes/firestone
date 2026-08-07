@@ -2,12 +2,7 @@
 import { CardIds, CardType, GameTag } from '@firestone-hs/reference-data';
 import { GuessedInfo } from '../../models/deck-card';
 import { hasCorrectType } from '../../related-cards/dynamic-pools';
-import {
-	GeneratingCard,
-	GuessInfoInput,
-	StaticGeneratingCard,
-	StaticGeneratingCardInput,
-} from './_card.type';
+import { GeneratingCard, GuessInfoInput, StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 import { filterCards } from './utils';
 
 // Sands of Time (TIME_EVENT_999)
@@ -25,6 +20,7 @@ export const SandsOfTime: GeneratingCard & StaticGeneratingCard = {
 		}
 		return {
 			canBeAnyCardClass: true,
+			cardType: CardType.SPELL,
 		};
 	},
 	dynamicPool: (input: StaticGeneratingCardInput) => {

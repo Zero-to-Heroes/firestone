@@ -350,6 +350,7 @@ export { RuniWindRiderRoost } from './runi-wind-rider-roost';
 export { RunicAdornment } from './runic-adornment';
 export { RunicInscriptions } from './runic-inscriptions';
 export { SandsOfTime } from './sands-of-time';
+export { SandsOfTimeToken } from './sands-of-time-token';
 export { Sawbones } from './sawbones';
 export { ScaleReplica } from './scale-replica';
 export { ScarletBruiser } from './scarlet-bruiser';
