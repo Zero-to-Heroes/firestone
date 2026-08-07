@@ -404,6 +404,7 @@ export { SporeHallucination } from './spore-hallucination';
 export { StaffofTrickery } from './staffof-trickery';
 export { StardustScythe } from './stardust-scythe';
 export { StickybombSaboteur } from './stickybomb-saboteur';
+export { StonehillDefender } from './stonehill-defender';
 export { StolenPower } from './stolen-power';
 export { Stormfury } from './stormfury';
 export { StormfuryElemental } from './stormfury-elemental';

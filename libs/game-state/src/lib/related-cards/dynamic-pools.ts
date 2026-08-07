@@ -1054,7 +1054,6 @@ const getDynamicFilters = (
 
 		case CardIds.TrainingSession_NX2_029:
 		case CardIds.HikingTrail_VAC_517:
-		case CardIds.StonehillDefender_Core_UNG_072:
 		case CardIds.IKnowAGuy_CORE_WON_350:
 		case CardIds.IKnowAGuy_WON_350:
 			return (c) =>
