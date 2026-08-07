@@ -12,3 +12,5 @@
     - link other account
 
 - improve the "time to first BG sim result in the UI"
+  - DONE: board→first paint 3503ms p50 → 562ms p50 (−84%), N=4, full bg.log — see knowledge/bg-first-sim-latency.md
+  - live: window.bgsSimLatencyStats() after fakeGame

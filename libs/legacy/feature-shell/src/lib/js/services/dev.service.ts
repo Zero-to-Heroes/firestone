@@ -3,7 +3,7 @@ import { BgsCompAdvice } from '@firestone-hs/content-craetor-input';
 import { decode, encode } from '@firestone-hs/deckstrings';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { CollectionCardType } from '@firestone-hs/user-packs';
-import { CompositionDetectorService } from '@firestone/battlegrounds/core';
+import { CompositionDetectorService, bgsSimLatency } from '@firestone/battlegrounds/core';
 import { BgsMetaCompositionStrategiesService } from '@firestone/battlegrounds/services';
 import { CardNotificationsService } from '@firestone/collection/services';
 import {
@@ -98,7 +98,7 @@ export class DevService {
 			this.scene.currentScene$$.next(SceneMode.GAMEPLAY);
 			// Do it everytime to reset its memory
 			// await this.gameEvents['initPlugin']();
-			const logsLocation = `D:\\sources\\firestone\\firestone\\test-tools\\${fileName ?? 'game.log'}`;
+			const logsLocation = `E:\\Source\\zerotoheroes\\firestone\\test-tools\\${fileName ?? 'game.log'}`;
 			const logContents = await this.ow.readTextFile(logsLocation);
 			// Don't console.log the raw contents: dumping a 100MB+ string into devtools is slow
 			// and skews the measured total.
@@ -180,6 +180,15 @@ export class DevService {
 				.slice(0, top)
 				.map(([bucket, v]) => ({ bucket, totalMs: Math.round(v.totalMs * 10) / 10, calls: v.calls }));
 			return { buckets: sorted, eventDispatchMs: this.gameEvents.totalTime };
+		};
+		window['bgsSimLatencyReset'] = () => {
+			bgsSimLatency.reset();
+			return true;
+		};
+		window['bgsSimLatencyStats'] = () => {
+			const stats = bgsSimLatency.getStats();
+			console.warn('[bgs-sim-latency] stats', JSON.stringify(stats));
+			return stats;
 		};
 		window['processedEvents'] = () => {
 			// console.log('processedEvents', this.gameState.processedEvents.join(','));

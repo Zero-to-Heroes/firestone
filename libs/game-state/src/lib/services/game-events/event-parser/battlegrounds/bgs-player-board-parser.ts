@@ -9,7 +9,11 @@ import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
 import { BgsPlayerGlobalInfo, BoardTrinket } from '@firestone-hs/simulate-bgs-battle/dist/bgs-player-entity';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
-import { BgsBattleSimulationService, BgsIntermediateResultsSimGuardianService } from '@firestone/battlegrounds/core';
+import {
+	BgsBattleSimulationService,
+	BgsIntermediateResultsSimGuardianService,
+	bgsSimLatency,
+} from '@firestone/battlegrounds/core';
 import { BgsEntity, MemoryBgsPlayerInfo, MemoryBgsTeamInfo, MemoryInspectionService } from '@firestone/memory';
 import { LogsUploaderService, PreferencesService } from '@firestone/shared/common/service';
 import { CardsFacadeService, IAdsService } from '@firestone/shared/framework/core';
@@ -350,11 +354,31 @@ export class BgsPlayerBoardParser implements EventParser {
 			});
 		}
 
+		bgsSimLatency.markBoardsVisible(lastFaceOff.id, gameEvent.additionalData?.boardsVisibleAt);
+
 		const prefs = await this.prefs.getPreferences();
 		const isPremium = this.adService.enablePremiumFeatures$$.value;
 		const shouldUseIntermediateResults =
 			prefs.bgsSimShowIntermediaryResults &&
 			(isPremium || this.guardian.hasFreeUses(this.gameIdService.uniqueId$$.value!));
+
+		// Kick the worker off before face-off / board-history bookkeeping so first
+		// intermediate results are not delayed by state construction.
+		try {
+			this.simulation.startBgsBattleSimulation(
+				this.gameIdService.uniqueId$$.value!,
+				lastFaceOff.id,
+				battleInfo,
+				currentState.bgState.currentGame!.availableRaces ?? [],
+				currentState.currentTurnNumeric ?? 0,
+				currentState.reconnectOngoing,
+				prefs.bgsEnableSimulationSampleInOverlay,
+				prefs,
+			);
+		} catch (e: any) {
+			console.error('[bgs-player-board-parser] could not start simulation', e.message, e);
+		}
+
 		const updatedFaceOff = lastFaceOff.update({
 			battleInfo: battleInfo,
 			battleInfoStatus: shouldUseIntermediateResults ? 'ongoing' : 'waiting-for-result',
@@ -374,19 +398,6 @@ export class BgsPlayerBoardParser implements EventParser {
 			currentGame: newGame,
 		});
 
-		try {
-			this.simulation.startBgsBattleSimulation(
-				this.gameIdService.uniqueId$$.value!,
-				updatedFaceOff.id,
-				battleInfo,
-				result.currentGame!.availableRaces ?? [],
-				currentState.currentTurnNumeric ?? 0,
-				currentState.reconnectOngoing,
-				prefs.bgsEnableSimulationSampleInOverlay,
-			);
-		} catch (e: any) {
-			console.error('[bgs-player-board-parser] could not start simulation', e.message, e);
-		}
 		return currentState.update({
 			bgState: result,
 		});

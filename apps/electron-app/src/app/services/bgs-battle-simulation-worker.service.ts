@@ -60,4 +60,8 @@ export class BgsBattleSimulationWorkerService extends BgsBattleSimulationExecuto
 			});
 		});
 	}
+
+	public override ensureWorkerReady(): void {
+		this.workerHost.prewarm();
+	}
 }

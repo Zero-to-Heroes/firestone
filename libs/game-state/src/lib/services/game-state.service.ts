@@ -28,6 +28,8 @@ import { RealTimeStatsService } from './real-time-stats/real-time-stats.service'
 export class GameStateService {
 	public state: GameState = new GameState();
 	public deckEventBus = new BehaviorSubject<GameState | null>(null);
+	/** Immediate publish path for latency-sensitive BG sim updates (bypasses facade auditTime). */
+	public urgentGameState$$ = new BehaviorSubject<GameState | null>(null);
 
 	private eventParsers: { [eventKey: string]: readonly EventParser[] };
 
@@ -204,7 +206,7 @@ export class GameStateService {
 				});
 			});
 		this.simulation.battleInfo$$.pipe(filter((info) => !!info)).subscribe((info) => {
-			this.processingQueue.enqueue({
+			this.processingQueue.enqueueAndProcessNow({
 				type: GameEvent.BATTLEGROUNDS_BATTLE_SIMULATION,
 				additionalData: {
 					info: info,
@@ -237,7 +239,14 @@ export class GameStateService {
 
 	private registerGameEvents() {
 		this.gameEvents.allEvents.subscribe((gameEvent: GameEvent) => {
-			this.processingQueue.enqueue(gameEvent);
+			if (
+				gameEvent?.type === GameEvent.BATTLEGROUNDS_PLAYER_BOARD ||
+				gameEvent?.type === GameEvent.BATTLEGROUNDS_BATTLE_SIMULATION
+			) {
+				this.processingQueue.enqueueAndProcessNow(gameEvent);
+			} else {
+				this.processingQueue.enqueue(gameEvent);
+			}
 		});
 		this.gameEvents.ptlGameState$.subscribe((update) => {
 			this.updateFromPtlState(update);
@@ -405,6 +414,9 @@ export class GameStateService {
 				if (currentState && currentState !== this.state) {
 					this.state = currentState;
 					this.eventEmitters.forEach((emitter) => emitter(currentState));
+					if (eventsToProcess.some((e) => e?.type === GameEvent.BATTLEGROUNDS_BATTLE_SIMULATION)) {
+						this.urgentGameState$$.next(currentState);
+					}
 				}
 			} catch (e) {
 				console.error('Exception while processing event', e);

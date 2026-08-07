@@ -47,6 +47,18 @@ export class ProcessingQueue<T> {
 		this.startProcessingInterval();
 	}
 
+	/**
+	 * Enqueue and process as soon as possible (without waiting for the next interval tick).
+	 * Used for latency-sensitive events such as BG board / battle-sim results.
+	 */
+	public enqueueAndProcessNow(event: T) {
+		this.pendingQueue.push(event);
+		this.startProcessingInterval();
+		if (!this.isProcessing) {
+			void this.processQueue();
+		}
+	}
+
 	private startProcessingInterval() {
 		// If an interval is already running, do nothing
 		if (this.processingTimer) {

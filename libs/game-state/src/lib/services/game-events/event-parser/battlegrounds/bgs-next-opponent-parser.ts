@@ -1,4 +1,5 @@
 import { defaultStartingHp, GameType, isBattlegrounds, normalizeHeroCardId } from '@firestone-hs/reference-data';
+import { BgsBattleSimulationService } from '@firestone/battlegrounds/core';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import {
 	BgsFaceOffWithSimulation,
@@ -13,6 +14,7 @@ export class BgsNextOpponentParser implements EventParser {
 	constructor(
 		private readonly allCards: CardsFacadeService,
 		private readonly i18n: ILocalizationService,
+		private readonly simulation?: BgsBattleSimulationService,
 	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
@@ -109,6 +111,8 @@ export class BgsNextOpponentParser implements EventParser {
 				bgState.currentGame!.players.map((p) => p.cardId),
 			);
 		}
+		// Pre-warm compute worker so cards structured-clone is paid before combat boards arrive.
+		this.simulation?.ensureWorkerReady();
 		const result = bgState.updatePanel(newNextOpponentPanel).update({
 			currentGame: bgState.currentGame!.update({
 				// There shouldn't be a case where the next opponent is revelead before the board for the last fight are revealed

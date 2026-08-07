@@ -7,11 +7,12 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
+import { BgsBattleSimulationService, bgsSimLatency } from '@firestone/battlegrounds/core';
 import { BgsFaceOffWithSimulation, GameStateFacadeService } from '@firestone/game-state';
 import { PreferencesService } from '@firestone/shared/common/service';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
 import { Observable, combineLatest } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 
 @Component({
 	standalone: false,
@@ -37,6 +38,7 @@ export class BgsSimulationOverlayComponent extends AbstractSubscriptionComponent
 		private readonly renderer: Renderer2,
 		private readonly prefs: PreferencesService,
 		private readonly gameState: GameStateFacadeService,
+		private readonly simulation: BgsBattleSimulationService,
 	) {
 		super(cdr);
 	}
@@ -44,23 +46,40 @@ export class BgsSimulationOverlayComponent extends AbstractSubscriptionComponent
 	async ngAfterContentInit() {
 		await Promise.all([this.prefs.isReady, this.gameState.isReady()]);
 
+		// Face-off scaffolding from game state; live battleResult from battleInfo$$ when
+		// available in this window. Cross-window overlays still get urgentGameState$$.
 		this.nextBattle$ = combineLatest([
-			this.gameState.gameState$$.pipe(this.mapData((state) => state?.bgState.currentGame)),
+			this.gameState.gameState$$.pipe(this.mapData((state) => state?.bgState.currentGame, null, 0)),
 			this.prefs.preferences$$.pipe(
 				this.mapData((prefs) => ({
 					bgsShowSimResultsOnlyOnRecruit: prefs?.bgsShowSimResultsOnlyOnRecruit,
 					bgsHideSimResultsOnRecruit: prefs?.bgsHideSimResultsOnRecruit,
 				})),
 			),
+			this.simulation.battleInfo$$.pipe(this.mapData((info) => info, null, 0)),
 		]).pipe(
-			filter(([currentGame, { bgsShowSimResultsOnlyOnRecruit, bgsHideSimResultsOnRecruit }]) => !!currentGame),
-			this.mapData(([currentGame, { bgsShowSimResultsOnlyOnRecruit, bgsHideSimResultsOnRecruit }]) => {
-				const result = currentGame?.getRelevantFaceOff(
+			filter(([currentGame]) => !!currentGame),
+			map(([currentGame, { bgsShowSimResultsOnlyOnRecruit, bgsHideSimResultsOnRecruit }, liveSim]) => {
+				const faceOff = currentGame?.getRelevantFaceOff(
 					bgsShowSimResultsOnlyOnRecruit,
 					bgsHideSimResultsOnRecruit,
 				);
-				return result ?? null;
+				if (!faceOff) {
+					return null;
+				}
+				if (liveSim?.battleId === faceOff.id && liveSim.result?.wonPercent != null) {
+					bgsSimLatency.markFirstPaint(faceOff.id);
+					return faceOff.update({
+						battleResult: liveSim.result,
+						battleInfoStatus: liveSim.intermediateResult ? 'ongoing' : 'done',
+					});
+				}
+				if (faceOff.battleResult?.wonPercent != null) {
+					bgsSimLatency.markFirstPaint(faceOff.id);
+				}
+				return faceOff;
 			}),
+			this.mapData((faceOff) => faceOff, null, 0),
 		);
 		this.showSimulationSample$ = this.prefs.preferences$$.pipe(
 			this.mapData((prefs) => prefs?.bgsEnableSimulationSampleInOverlay),

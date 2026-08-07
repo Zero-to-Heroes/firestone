@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { isBattlegrounds } from '@firestone-hs/reference-data';
+import { bgsSimLatency } from '@firestone/battlegrounds/core';
 import { AbstractFacadeService, AppInjector, WindowManagerService } from '@firestone/shared/framework/core';
-import { auditTime, BehaviorSubject } from 'rxjs';
+import { auditTime, BehaviorSubject, merge } from 'rxjs';
 import { BattlegroundsState } from '../models/_barrel';
 import { DeckState } from '../models/deck-state';
 import { GameState } from '../models/game-state';
@@ -55,8 +56,20 @@ export class GameStateFacadeService extends AbstractFacadeService<GameStateFacad
 		this.gameStateService = AppInjector.get(GameStateService);
 		console.log('[game-state-facade] ready');
 
-		this.gameStateService.deckEventBus.pipe(auditTime(500)).subscribe(async (event: GameState | null) => {
-			this.gameState$$.next(event ?? new GameState());
+		// Normal path: auditTime(500) bounds overlay IPC/update pressure.
+		// Urgent path: BG battle-sim results publish immediately so first win% is not
+		// held behind the audit window (multi-window safe; overlays read gameState$$).
+		merge(
+			this.gameStateService.deckEventBus.pipe(auditTime(500)),
+			this.gameStateService.urgentGameState$$,
+		).subscribe((event: GameState | null) => {
+			const state = event ?? new GameState();
+			this.gameState$$.next(state);
+			for (const faceOff of state.bgState?.currentGame?.faceOffs ?? []) {
+				if (faceOff?.id && faceOff.battleResult?.wonPercent != null) {
+					bgsSimLatency.markFirstPaint(faceOff.id);
+				}
+			}
 		});
 	}
 

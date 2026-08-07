@@ -179,6 +179,12 @@ export class BattlegroundsPlayerBoardParser implements ActionParser {
 		BattlegroundsPlayerBoardParser.IsPTLReadyForBattle = false;
 		BattlegroundsPlayerBoardParser.IsGSReadyForBattle = false;
 		console.debug('Starting to build player boards', node.CreationLogLine);
+		// Combat boards are visible in HS when BG_BATTLE_STARTING flips to 0 — start of
+		// board→first-sim-paint latency (see bgsSimLatency / knowledge/bg-first-sim-latency.md).
+		const boardsVisibleAt =
+			typeof performance !== 'undefined' && typeof performance.now === 'function'
+				? performance.now()
+				: Date.now();
 		const tagChange = node.Object as TagChange;
 		const opponent = this.StateFacade.OpponentPlayer!;
 		const player = this.StateFacade.LocalPlayer!;
@@ -218,6 +224,7 @@ export class BattlegroundsPlayerBoardParser implements ActionParser {
 						Value: {
 							PlayerBoard: playerBoard,
 							OpponentBoard: opponentBoard,
+							BoardsVisibleAt: boardsVisibleAt,
 						},
 					};
 				},

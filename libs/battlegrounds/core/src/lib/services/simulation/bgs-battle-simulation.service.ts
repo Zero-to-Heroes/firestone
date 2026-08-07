@@ -10,9 +10,13 @@ import { ADS_SERVICE_TOKEN, ApiRunner, CardsFacadeService } from '@firestone/sha
 import { BehaviorSubject } from 'rxjs';
 import { BgsBattleSimulationExecutorService } from './bgs-battle-simulation-executor.service';
 import { BgsIntermediateResultsSimGuardianService } from './bgs-intermediate-results-sim-guardian.service';
+import { bgsSimLatency } from './bgs-sim-latency.service';
 
 const BGS_BATTLE_SIMULATION_ENDPOINT = 'https://664abby5durcmapfl2wc6cqlaq0xkkcm.lambda-url.us-west-2.on.aws/';
 const BGS_BATTLE_SIMULATION_SAMPLE_ENDPOINT = 'https://r65kigvlbtzarakaxao6kxw4q40sesoo.lambda-url.us-west-2.on.aws/';
+
+/** First intermediate callback after this many sims (was 200). */
+const FIRST_INTERMEDIATE_RESULTS = 50;
 
 @Injectable()
 export class BgsBattleSimulationService {
@@ -40,6 +44,11 @@ export class BgsBattleSimulationService {
 		});
 	}
 
+	/** Spawn/init the compute worker before boards arrive so fight 1 skips cold-start. */
+	public ensureWorkerReady(): void {
+		this.executor.ensureWorkerReady();
+	}
+
 	public async startBgsBattleSimulation(
 		gameId: string,
 		battleId: string,
@@ -48,8 +57,10 @@ export class BgsBattleSimulationService {
 		currentTurn: number,
 		reconnectOngoing: boolean,
 		includeOutcomeSamples: boolean,
+		prefsOverride?: Preferences | null,
 	) {
-		const prefs = await this.prefs?.getPreferences();
+		bgsSimLatency.markKickoff(battleId);
+		const prefs = prefsOverride ?? (await this.prefs?.getPreferences());
 		if (!prefs.bgsEnableSimulation || !prefs.bgsFullToggle) {
 			console.log('[bgs-simulation] simulation turned off');
 			return;
@@ -85,7 +96,7 @@ export class BgsBattleSimulationService {
 
 		// Don't show intermediate results
 		if (shouldUseLocalSimulator && shouldUseIntermediateResults && !reconnectOngoing) {
-			(battleInfoInput.options as any).intermediateResults = 200;
+			(battleInfoInput.options as any).intermediateResults = FIRST_INTERMEDIATE_RESULTS;
 			console.log('[bgs-simulation] starting sim with partial results');
 			this.simulateLocalBattle(
 				battleInfoInput,
@@ -102,6 +113,10 @@ export class BgsBattleSimulationService {
 						const resultForLog = { ...result };
 						delete resultForLog.outcomeSamples;
 						console.log('[bgs-simulation] battle simulation result', resultForLog);
+					}
+
+					if (result.wonPercent != null) {
+						bgsSimLatency.markFirstResult(battleId);
 					}
 
 					this.battleInfo$$.next({
@@ -129,6 +144,9 @@ export class BgsBattleSimulationService {
 				delete (resultForLog as any).damageWons;
 			}
 			console.log('[bgs-simulation] battle simulation result', resultForLog);
+			if (result?.wonPercent != null) {
+				bgsSimLatency.markFirstResult(battleId);
+			}
 			this.battleInfo$$.next({
 				battleId: battleId,
 				result: result,

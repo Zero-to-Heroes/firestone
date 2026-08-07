@@ -11,4 +11,9 @@ export abstract class BgsBattleSimulationExecutorService {
 		includeOutcomeSamples: boolean,
 		onResultReceived: (result: SimulationResult | null) => void,
 	): void;
+
+	/** Spawn/init the compute worker early so fight 1 does not pay cards structured-clone. */
+	public ensureWorkerReady(): void {
+		// Optional; mock / remote executors no-op
+	}
 }

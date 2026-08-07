@@ -2116,6 +2116,8 @@ export class GameEvents {
 					questEntities: gameEvent.Value.OpponentBoard.QuestEntities,
 					globalInfo: gameEvent.Value.OpponentBoard.GlobalInfo,
 				},
+				/** performance.now() when BG_BATTLE_STARTING=0 was seen (boards visible). */
+				boardsVisibleAt: gameEvent.Value.BoardsVisibleAt,
 			},
 		} as GameEvent);
 	}

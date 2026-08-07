@@ -250,7 +250,9 @@ export class GameStateParsersService {
 			],
 			[GameEvent.BATTLEGROUNDS_LEADERBOARD_PLACE]: [new BgsLeaderboardPlaceParser(this.allCards)],
 			[GameEvent.BATTLEGROUNDS_MMR_AT_START]: [new BgsMmrAtStartParser()],
-			[GameEvent.BATTLEGROUNDS_NEXT_OPPONENT]: [new BgsNextOpponentParser(this.allCards, this.i18n)],
+			[GameEvent.BATTLEGROUNDS_NEXT_OPPONENT]: [
+				new BgsNextOpponentParser(this.allCards, this.i18n, this.simulation),
+			],
 			[GameEvent.BATTLEGROUNDS_OPPONENT_REVEALED]: [new BgsOpponentRevealedParser(this.allCards)],
 			[GameEvent.BATTLEGROUNDS_PLAYER_BOARD]: [
 				new BgsPlayerBoardParser(

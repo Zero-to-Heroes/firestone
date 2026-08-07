@@ -134,6 +134,13 @@ export class BgsBattleSimulationWorkerService extends BgsBattleSimulationExecuto
 		});
 	}
 
+	/** Pre-warm the persistent worker (cards structured-clone) before combat. */
+	public override ensureWorkerReady(): void {
+		this.ngZone.runOutsideAngular(() => {
+			this.ensureWorker();
+		});
+	}
+
 	/** Overridable for tests */
 	protected createWorkerInstance(): Worker {
 		return createSimWorker();
