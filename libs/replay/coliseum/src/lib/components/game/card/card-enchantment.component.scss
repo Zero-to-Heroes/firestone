@@ -3,14 +3,14 @@
 .card-enchantment {
 	display: flex;
 	flex-direction: column;
-	margin-bottom: 5%;
+	margin-bottom: 2%;
 }
 
 .name {
 	color: white;
 	font-weight: bold;
 	text-shadow: $text-shadow;
-	margin-bottom: 2%;
+	margin-bottom: 1%;
 }
 
 .body {
@@ -22,8 +22,8 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	width: 35%;
-	min-width: 35%;
+	width: 22%;
+	min-width: 22%;
 
 	.art {
 		clip-path: ellipse(35% 35% at 50% 50%);
@@ -31,7 +31,7 @@
 	}
 	.ring {
 		position: absolute;
-		width: 25%;
+		width: 16%;
 	}
 }
 

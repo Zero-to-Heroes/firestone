@@ -1,12 +1,13 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { AllCardsService, Entity } from '@firestone/replay/replay-parser';
+import { formatEnchantmentText } from './enchantment-text.utils';
 
 @Component({
 	standalone: false,
 	selector: 'card-enchantment',
 	styleUrls: ['../../../text.scss', './card-enchantment.component.scss'],
 	template: `
-		<div class="card-enchantment" cardElementResize [fontSizeRatio]="0.1">
+		<div class="card-enchantment" cardElementResize [fontSizeRatio]="0.075">
 			<div class="name" resizeTarget>{{ name }}</div>
 			<div class="body">
 				<div class="image">
@@ -26,6 +27,9 @@ export class CardEnchantmentComponent {
 	description: string;
 	ringImage = 'https://static.zerotoheroes.com/hearthstone/asset/coliseum/images/enchantments/enchantment-ring.png';
 
+	private _cardName: string;
+	private _count = 1;
+
 	constructor(private cards: AllCardsService) {}
 
 	@Input() set enchantment(value: Entity) {
@@ -36,10 +40,23 @@ export class CardEnchantmentComponent {
 		if (!card) {
 			return;
 		}
-		this.name = card.name;
+		this._cardName = card.name;
+		this.updateName();
 		const cardForArt = this.normalizeEnchantment(cardId);
 		this.art = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${cardForArt}.jpg`;
-		this.description = card.text;
+		this.description = formatEnchantmentText(card.text, value);
+	}
+
+	@Input() set count(value: number) {
+		this._count = value > 0 ? value : 1;
+		this.updateName();
+	}
+
+	private updateName() {
+		if (!this._cardName) {
+			return;
+		}
+		this.name = this._count > 1 ? `${this._count}x ${this._cardName}` : this._cardName;
 	}
 
 	private normalizeEnchantment(cardId: string): string {

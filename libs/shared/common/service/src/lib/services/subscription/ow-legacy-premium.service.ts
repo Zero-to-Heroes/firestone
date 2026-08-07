@@ -77,11 +77,12 @@ export class OwLegacyPremiumService extends AbstractFacadeService<OwLegacyPremiu
 				true,
 			);
 		} catch (e) {
+			const error = e as { status?: unknown; message?: unknown } | undefined;
 			console.warn(
 				'[ads] [ow-legacy-premium] could not fetch sub status, using Overwolf plan',
 				e,
-				e?.status,
-				e?.message,
+				error?.status,
+				error?.message,
 			);
 			const detailedPlans = await this.ow.getDetailedActiveSubscriptionPlans();
 			const owLegacyPlan = detailedPlans?.plans?.find((plan) => plan.planId === LEGACY_OW_SUBSCRIPTION_PLAN_ID);
