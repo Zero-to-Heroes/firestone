@@ -98,21 +98,25 @@ export class BattlegroundsContentComponent
 			),
 		);
 		this.reviewId$ = this.gameState.gameState$$.pipe(this.mapData((gameState) => gameState.reviewId));
-		this.mainPlayerId$ = this.gameState.gameState$$.pipe(
+		this.mainPlayerId$ = combineLatest([this.gameState.gameState$$, this.currentPanelId$]).pipe(
 			auditTime(1000),
-			this.mapData((gameState) => gameState?.bgState?.currentGame?.getMainPlayer()?.playerId),
+			filter(([_, panelId]) => panelId === 'bgs-post-match-stats'),
+			this.mapData(([gameState]) => gameState?.bgState?.currentGame?.getMainPlayer()?.playerId),
 		);
-		this.mmr$ = this.gameState.gameState$$.pipe(
+		this.mmr$ = combineLatest([this.gameState.gameState$$, this.currentPanelId$]).pipe(
 			auditTime(1000),
-			this.mapData((gameState) => gameState?.bgState?.currentGame?.mmrAtStart),
+			filter(([_, panelId]) => panelId === 'bgs-post-match-stats'),
+			this.mapData(([gameState]) => gameState?.bgState?.currentGame?.mmrAtStart),
 		);
-		this.gameEnded$ = this.gameState.gameState$$.pipe(
+		this.gameEnded$ = combineLatest([this.gameState.gameState$$, this.currentPanelId$]).pipe(
 			auditTime(1000),
-			this.mapData((gameState) => gameState?.gameEnded),
+			filter(([_, panelId]) => panelId === 'bgs-post-match-stats'),
+			this.mapData(([gameState]) => gameState?.gameEnded),
 		);
-		this.faceOffs$ = this.gameState.gameState$$.pipe(
+		this.faceOffs$ = combineLatest([this.gameState.gameState$$, this.currentPanelId$]).pipe(
 			auditTime(1000),
-			this.mapData((gameState) => gameState?.bgState?.currentGame?.faceOffs),
+			filter(([_, panelId]) => panelId === 'bgs-post-match-stats'),
+			this.mapData(([gameState]) => gameState?.bgState?.currentGame?.faceOffs),
 		);
 		this.showAds$ = this.ads.hasPremiumSub$$.pipe(this.mapData((showAds) => !showAds));
 
