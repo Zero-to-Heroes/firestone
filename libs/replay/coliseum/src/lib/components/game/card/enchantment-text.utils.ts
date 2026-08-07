@@ -50,6 +50,7 @@ export interface GroupedEnchantment {
 
 export const groupAndSortEnchantments = (
 	enchantments: readonly Entity[] | undefined,
+	isVisible: (cardId: string) => boolean = () => true,
 ): readonly GroupedEnchantment[] => {
 	if (!enchantments?.length) {
 		return [];
@@ -59,6 +60,9 @@ export const groupAndSortEnchantments = (
 	const order: string[] = [];
 	for (const enchantment of enchantments) {
 		const cardId = enchantment.cardID ?? '';
+		if (!isVisible(cardId)) {
+			continue;
+		}
 		if (!groups.has(cardId)) {
 			groups.set(cardId, []);
 			order.push(cardId);
