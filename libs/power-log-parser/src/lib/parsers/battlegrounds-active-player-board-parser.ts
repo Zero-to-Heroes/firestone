@@ -235,6 +235,8 @@ export class BattlegroundsActivePlayerBoardParser implements ActionParser {
 				gameState.CurrentEntities.get(player.Id)?.GetTag(GameTag.TAVERN_SPELLS_PLAYED_THIS_GAME, 0) ?? 0;
 			const tastyLobstersBuff =
 				gameState.CurrentEntities.get(player.Id)?.GetTag(GameTag.BACON_TASTY_LOBSTER_BUFF, 0) ?? 0;
+			const goldenMinionsPlayedThisGame =
+				gameState.CurrentEntities.get(player.Id)?.GetTag(GameTag.BACON_GOLDEN_MINIONS_PLAYED_THIS_GAME, 0) ?? 0;
 			const spellsCastThisGame =
 				gameState.CurrentEntities.get(player.Id)?.GetTag(GameTag.NUM_SPELLS_PLAYED_THIS_GAME, 0) ?? 0;
 			const undeadAttackBonus = BattlegroundsActivePlayerBoardParser.GetPlayerEnchantmentValue(
@@ -480,6 +482,7 @@ export class BattlegroundsActivePlayerBoardParser implements ActionParser {
 					SpellsCastThisGame: spellsCastThisGame,
 					SanlaynScribesDeadThisGame: sanlaynScribesDeadThisGame?.[0] ?? 0,
 					GoldSpentThisGame: goldSpentThisGame,
+					GoldenMinionsPlayedThisGame: goldenMinionsPlayedThisGame,
 					GoldrinnBuffAtk: goldrinnBuffAtk,
 					GoldrinnBuffHealth: goldrinnBuffHealth,
 					DeepBluesPlayed: deepBluesPlayed,

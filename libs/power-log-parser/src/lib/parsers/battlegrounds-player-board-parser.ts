@@ -90,6 +90,7 @@ export interface BgsPlayerGlobalInfo {
 	MagnetizedThisGame: number;
 	SanlaynScribesDeadThisGame: number;
 	GoldSpentThisGame: number;
+	GoldenMinionsPlayedThisGame: number;
 	GoldrinnBuffAtk: number;
 	GoldrinnBuffHealth: number;
 	DeepBluesPlayed: number;
@@ -502,6 +503,11 @@ export class BattlegroundsPlayerBoardParser implements ActionParser {
 			GameTag.BACON_TASTY_LOBSTER_BUFF,
 			currentEntities,
 		);
+		const goldenMinionsPlayedThisGame = BattlegroundsPlayerBoardParser.GetPlayerTag(
+			playerEntityId,
+			GameTag.BACON_GOLDEN_MINIONS_PLAYED_THIS_GAME,
+			currentEntities,
+		);
 		const spellsCastThisGame = BattlegroundsPlayerBoardParser.GetPlayerTag(
 			playerEntityId,
 			GameTag.NUM_SPELLS_PLAYED_THIS_GAME,
@@ -751,6 +757,7 @@ export class BattlegroundsPlayerBoardParser implements ActionParser {
 			SanlaynScribesDeadThisGame: sanlyanScribesDeadThisGame?.[0] ?? 0,
 			SpellsCastThisGame: spellsCastThisGame,
 			GoldSpentThisGame: goldSpentThisGame,
+			GoldenMinionsPlayedThisGame: goldenMinionsPlayedThisGame,
 			GoldrinnBuffAtk: goldrinnBuffAtk,
 			GoldrinnBuffHealth: goldrinnBuffHealth,
 			WhelpAttackBuff: whelpAttackBuff,

@@ -357,6 +357,15 @@ import { CardsFacadeService, ILocalizationService } from '@firestone/shared/fram
 				</fs-numeric-input-with-arrows>
 				<fs-numeric-input-with-arrows
 					class="input"
+					[label]="'battlegrounds.sim.golden-minions-played-this-game' | fsTranslate"
+					[helpTooltip]="'battlegrounds.sim.golden-minions-played-this-game-tooltip' | fsTranslate"
+					[value]="goldenMinionsPlayedThisGame"
+					[minValue]="0"
+					(fsModelUpdate)="goldenMinionsPlayedThisGame = $event"
+				>
+				</fs-numeric-input-with-arrows>
+				<fs-numeric-input-with-arrows
+					class="input"
 					[label]="'battlegrounds.sim.friendly-minions-dead-last-combat' | fsTranslate"
 					[helpTooltip]="'battlegrounds.sim.friendly-minions-dead-last-combat-tooltip' | fsTranslate"
 					[value]="friendlyMinionsDeadLastCombat"
@@ -416,6 +425,7 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 		this.cardsPlayedThisTurn = value?.CardsPlayedThisTurn ?? 0;
 		this.backToBackCastThisGame = value?.BackToBackCastThisGame ?? 0;
 		this.goldSpentThisGame = value?.GoldSpentThisGame ?? 0;
+		this.goldenMinionsPlayedThisGame = value?.GoldenMinionsPlayedThisGame ?? 0;
 		this.friendlyMinionsDeadLastCombat = value?.FriendlyMinionsDeadLastCombat ?? 0;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.markForCheck();
@@ -460,6 +470,7 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 	cardsPlayedThisTurn: number;
 	backToBackCastThisGame: number;
 	goldSpentThisGame: number;
+	goldenMinionsPlayedThisGame: number;
 	friendlyMinionsDeadLastCombat: number;
 
 	private inputGlobalInfo: BgsPlayerGlobalInfo | undefined | null;
@@ -612,6 +623,7 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 			CardsPlayedThisTurn: this.cardsPlayedThisTurn,
 			BackToBackCastThisGame: this.backToBackCastThisGame,
 			GoldSpentThisGame: this.goldSpentThisGame,
+			GoldenMinionsPlayedThisGame: this.goldenMinionsPlayedThisGame,
 			FriendlyMinionsDeadLastCombat: this.friendlyMinionsDeadLastCombat,
 		} as BgsPlayerGlobalInfo;
 		// TODO: once hand is implemented, add the hand total stats to the Mrrrgl bonus
