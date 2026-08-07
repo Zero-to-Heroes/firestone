@@ -62,30 +62,20 @@ export class BgsBattleSimulationWidgetWrapperComponent
 		this.showWidget$ = combineLatest([
 			this.scene.currentScene$$,
 			this.prefs.preferences$$.pipe(
-				this.mapData((prefs) => ({
-					enabled: prefs.bgsEnableBattleSimulationOverlay && prefs.bgsEnableSimulation && prefs.bgsFullToggle,
-					bgsShowSimResultsOnlyOnRecruit: prefs.bgsShowSimResultsOnlyOnRecruit,
-					bgsHideSimResultsOnRecruit: prefs.bgsHideSimResultsOnRecruit,
-				})),
+				this.mapData(
+					(prefs) =>
+						prefs.bgsEnableBattleSimulationOverlay && prefs.bgsEnableSimulation && prefs.bgsFullToggle,
+				),
 			),
 			this.gameState.gameState$$.pipe(
 				auditTime(500),
-				this.mapData((state) => ({
-					inGame: state.gameStarted && !state.gameEnded && isBattlegrounds(state.metadata?.gameType),
-					currentGame: state.bgState?.currentGame,
-				})),
+				this.mapData(
+					(state) => state.gameStarted && !state.gameEnded && isBattlegrounds(state.metadata?.gameType),
+				),
 			),
 		]).pipe(
-			this.mapData(([currentScene, prefs, { inGame, currentGame }]) => {
-				if (!inGame || !prefs.enabled || currentScene !== SceneMode.GAMEPLAY || !currentGame) {
-					return false;
-				}
-				// Destroy overlay when phase prefs intentionally hide results (null face-off).
-				const faceOff = currentGame.getRelevantFaceOff(
-					prefs.bgsShowSimResultsOnlyOnRecruit,
-					prefs.bgsHideSimResultsOnRecruit,
-				);
-				return !!faceOff;
+			this.mapData(([currentScene, displayFromPrefs, inGame]) => {
+				return inGame && displayFromPrefs && currentScene === SceneMode.GAMEPLAY;
 			}),
 			this.handleReposition(),
 		);
