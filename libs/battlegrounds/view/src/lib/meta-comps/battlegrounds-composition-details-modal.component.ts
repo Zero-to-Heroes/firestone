@@ -67,20 +67,6 @@ export interface ProcessedFinalBoard {
 						</div>
 
 						<div class="stats-grid">
-							<div class="stat-item">
-								<div
-									class="stat-label"
-									[fsTranslate]="'app.battlegrounds.compositions.columns.first-percent'"
-								></div>
-								<div class="stat-value">{{ firstPercent | number: '1.1-1' }}</div>
-							</div>
-							<div class="stat-item">
-								<div
-									class="stat-label"
-									[fsTranslate]="'app.battlegrounds.compositions.columns.position'"
-								></div>
-								<div class="stat-value">{{ averagePlacement }}</div>
-							</div>
 							<div class="stat-item" *ngIf="expertRating">
 								<div
 									class="stat-label"
@@ -98,10 +84,6 @@ export interface ProcessedFinalBoard {
 								<div class="stat-value expert-difficulty {{ expertDifficulty?.toLowerCase() }}">
 									{{ expertDifficulty }}
 								</div>
-							</div>
-							<div class="stat-item">
-								<div class="stat-label" [fsTranslate]="'app.decktracker.meta.games-header'"></div>
-								<div class="stat-value">{{ dataPoints }}</div>
 							</div>
 						</div>
 					</div>
@@ -251,13 +233,8 @@ export class BattlegroundsCompositionDetailsModalComponent {
 		if (!value) return;
 
 		this.compName = value.name;
-		this.firstPercent = value.firstPercent * 100;
 		this.expertRating = capitalizeFirstLetter(value.expertRating);
 		this.expertDifficulty = capitalizeFirstLetter(value.expertDifficulty);
-		this.dataPoints = this.i18n.translateString('app.battlegrounds.tier-list.data-points', {
-			value: value.dataPoints.toLocaleString(this.i18n.formatCurrentLocale() ?? 'enUS'),
-		});
-		this.averagePlacement = this.buildValue(value.averagePlacement);
 		this.coreCards = value.coreCards;
 		this.addonCards = value.addonCards;
 		this.recommendedCards = value.recommendedCards;
@@ -277,15 +254,12 @@ export class BattlegroundsCompositionDetailsModalComponent {
 
 	selectedTab: 'details' | 'boards' = 'details';
 	compName: string;
-	dataPoints: string;
-	firstPercent: number;
 	expertRating: string | null;
 	expertDifficulty: string | null;
 	coreCards: readonly BgsMetaCompCard[];
 	addonCards: readonly BgsMetaCompCard[];
 	recommendedCards: readonly BgsMetaCompCard[];
 	cycleCards: readonly BgsMetaCompCard[];
-	averagePlacement: string;
 	coreCardArts: string[];
 	processedBoards: readonly ProcessedFinalBoard[];
 
@@ -322,16 +296,5 @@ export class BattlegroundsCompositionDetailsModalComponent {
 		} catch {
 			return dateString;
 		}
-	}
-
-	private buildValue(value: number): string {
-		return value == null
-			? '-'
-			: value === 0
-				? '0'
-				: value.toLocaleString(this.i18n.formatCurrentLocale() ?? 'enUS', {
-						minimumFractionDigits: 2,
-						maximumFractionDigits: 2,
-					});
 	}
 }

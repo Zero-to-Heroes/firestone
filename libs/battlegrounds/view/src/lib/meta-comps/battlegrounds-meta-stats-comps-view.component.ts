@@ -42,9 +42,6 @@ import { BgsMetaCompStatTier, BgsMetaCompStatTierItem, ColumnSortTypeComp } from
 				<div class="data-info">
 					<div class="label" [fsTranslate]="'app.decktracker.meta.last-updated'"></div>
 					<div class="value" [helpTooltip]="lastUpdateFull$ | async">{{ lastUpdate$ | async }}</div>
-					<div class="separator">-</div>
-					<div class="label" [fsTranslate]="'app.decktracker.meta.total-games'"></div>
-					<div class="value">{{ totalGames$ | async }}</div>
 				</div>
 
 				<div class="expert-notification">
@@ -84,26 +81,6 @@ import { BgsMetaCompStatTier, BgsMetaCompStatTierItem, ColumnSortTypeComp } from
 					<div class="comps-table-content">
 						<div class="header" *ngIf="sortCriteria$ | async as sort">
 							<div class="cell name" [fsTranslate]="'app.battlegrounds.compositions.columns.name'"></div>
-							<sortable-table-label
-								class="cell first-percent"
-								[name]="'app.battlegrounds.compositions.columns.first-percent' | fsTranslate"
-								[helpTooltip]="
-									'app.battlegrounds.compositions.columns.first-percent-tooltip' | fsTranslate
-								"
-								[sort]="sort"
-								[criteria]="'first'"
-								(sortClick)="onSortClick($event)"
-							>
-							</sortable-table-label>
-							<sortable-table-label
-								class="cell average-placement"
-								[name]="'app.battlegrounds.compositions.columns.position' | fsTranslate"
-								[helpTooltip]="'app.battlegrounds.compositions.columns.position-tooltip' | fsTranslate"
-								[sort]="sort"
-								[criteria]="'position'"
-								(sortClick)="onSortClick($event)"
-							>
-							</sortable-table-label>
 							<sortable-table-label
 								class="cell expert-rating"
 								[name]="'app.battlegrounds.compositions.columns.expert-rating' | fsTranslate"
@@ -203,7 +180,6 @@ export class BattlegroundsMetaStatsCompsViewComponent
 	loading$: Observable<boolean>;
 	lastUpdate$: Observable<string | null>;
 	lastUpdateFull$: Observable<string | null>;
-	totalGames$: Observable<string>;
 	sortCriteria$: Observable<SortCriteria<ColumnSortTypeComp>>;
 
 	@Input() set stats(value: readonly BgsMetaCompStatTierItem[] | null) {
@@ -261,16 +237,6 @@ export class BattlegroundsMetaStatsCompsViewComponent
 			}),
 			tap(() => this.loading$$.next(false)),
 			takeUntil(this.destroyed$),
-		);
-		this.totalGames$ = this.stats$$.pipe(
-			filter((stats) => !!stats),
-			this.mapData(
-				(stats) =>
-					stats!
-						.map((s) => s.dataPoints)
-						.reduce((a, b) => a + b, 0)
-						.toLocaleString(this.i18n.formatCurrentLocale() ?? 'enUS') ?? '-',
-			),
 		);
 		this.lastUpdate$ = this.lastUpdate$$.pipe(
 			filter((date) => !!date),

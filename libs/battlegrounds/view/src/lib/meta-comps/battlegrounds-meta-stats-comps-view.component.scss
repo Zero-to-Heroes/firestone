@@ -285,7 +285,7 @@
 	// the viewport when there is spare space. Explicit min-width remains a
 	// floor for the fixed stat columns.
 	.comps-table-content {
-		--comps-table-min-width: 1100px;
+		--comps-table-min-width: 880px;
 		display: flex;
 		flex-direction: column;
 		box-sizing: border-box;
