@@ -5,10 +5,10 @@
  */
 import { CardIds } from '@firestone-hs/reference-data';
 
-import { and, copiedFromOpponent, inDeck, inHand, or, side } from '../card-highlight/selectors';
+import { and, copiesFromOpponent, inDeck, inHand, or, side } from '../card-highlight/selectors';
 import { SelectorCard } from './_card.type';
 
 export const UnshackleSoul: SelectorCard = {
 	cardIds: [CardIds.UnshackleSoul_JAIL_433],
-	selector: (inputSide) => and(side(inputSide), or(inHand, inDeck), copiedFromOpponent),
+	selector: (inputSide) => and(side(inputSide), or(inHand, inDeck), copiesFromOpponent),
 };

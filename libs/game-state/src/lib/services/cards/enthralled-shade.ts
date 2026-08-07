@@ -5,10 +5,10 @@
  */
 import { CardIds } from '@firestone-hs/reference-data';
 
-import { and, copiedFromOpponent, inDeck, inHand, or, side } from '../card-highlight/selectors';
+import { and, copiesFromOpponent, inDeck, inHand, or, side } from '../card-highlight/selectors';
 import { Card, SelectorCard } from './_card.type';
 
 export const EnthralledShade: Card & SelectorCard = {
 	cardIds: [CardIds.EnthralledShade_JAIL_434],
-	selector: (inputSide) => and(side(inputSide), or(inHand, inDeck), copiedFromOpponent),
+	selector: (inputSide) => and(side(inputSide), or(inHand, inDeck), copiesFromOpponent),
 };

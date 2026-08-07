@@ -343,7 +343,7 @@ export const chooseOne = and(
 	not(hasMechanicStr('CHOOSE_THRICE')),
 );
 export const combo = hasMechanic(GameTag.COMBO);
-export const copiedFromOpponent = hasMechanicStr('COPIES_FROM_OPPONENT');
+export const copiesFromOpponent = hasMechanicStr('COPIES_FROM_OPPONENT');
 export const corrupt = hasMechanic(GameTag.CORRUPT);
 export const corrupted = hasMechanic(GameTag.CORRUPTED);
 export const deathrattle = hasMechanic(GameTag.DEATHRATTLE);

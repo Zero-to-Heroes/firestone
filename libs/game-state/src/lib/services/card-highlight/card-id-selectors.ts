@@ -32,7 +32,7 @@ import {
 	charge,
 	chooseOne,
 	combo,
-	copiedFromOpponent,
+	copiesFromOpponent,
 	corrupt,
 	corrupted,
 	costHealth,
@@ -1884,7 +1884,7 @@ export const cardIdSelector = (
 			return and(side(inputSide), or(inDeck, inHand, inOther), excavate);
 		case CardIds.TheHarvesterOfEnvy:
 		case CardIds.TheHarvesterOfEnvy_CORE_REV_011:
-			return and(side(inputSide), or(inDeck, inHand), copiedFromOpponent);
+			return and(side(inputSide), or(inDeck, inHand), copiesFromOpponent);
 		case CardIds.HatcheryHelper_TLC_233:
 			return and(side(inputSide), or(inDeck, inHand, inPlay), minion, attackLessThan(3));
 		case CardIds.HatchingCeremony_DINO_405:
@@ -3931,6 +3931,9 @@ export const cardIdSelector = (
 		case CardIds.TheForbiddenSequence_TLC_460:
 		case CardIds.TheForbiddenSequence_TheOriginStoneToken_TLC_460t:
 			return and(side(inputSide), or(inDeck, inHand), discover);
+		case CardIds.TheftAccusation:
+		case CardIds.TheftAccusation_CORE_MAW_023:
+			return and(side(inputSide), or(inDeck, inHand), copiesFromOpponent);
 		// The Galaxy's Lens: Spellburst: Absorb the spell's power!
 		case CardIds.ExarchHataaru_TheGalaxysLensToken_GDB_136t:
 			return and(side(inputSide), or(inDeck, inHand), spellExtended);

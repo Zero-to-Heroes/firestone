@@ -50,5 +50,14 @@ export const buildGofreyCards = (deckState: DeckState, parserState: ParserGameSt
 		.filter((c) => !originalReturnedEntityIds.includes(c.entityId))
 		.map((c) => deckState.findCard(c.entityId)?.card)
 		.filter((c) => !!c);
+	console.debug(
+		'[debug] godfrey cards',
+		godfreyCards,
+		allBurned,
+		returnedCards,
+		originalReturnedEntityIds,
+		deckState,
+		parserState,
+	);
 	return godfreyCards;
 };
