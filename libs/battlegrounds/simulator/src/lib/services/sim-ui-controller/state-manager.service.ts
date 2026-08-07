@@ -558,7 +558,8 @@ export class StateManagerService {
 			cardId: entity.cardID,
 			attack: entity.getTag(GameTag.ATK),
 			health: entity.getTag(GameTag.HEALTH),
-			divineShield: entity.getTag(GameTag.DIVINE_SHIELD) === 1,
+			// Tag value can be > 1 for multi-hit Divine Shield (e.g. Toreth's Blessing).
+			divineShield: entity.getTag(GameTag.DIVINE_SHIELD) > 0,
 			friendly: side === 'player',
 			windfury: entity.getTag(GameTag.WINDFURY) === 1 || entity.getTag(GameTag.MEGA_WINDFURY) === 1,
 			stealth: entity.getTag(GameTag.STEALTH) === 1,

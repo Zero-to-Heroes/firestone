@@ -154,7 +154,8 @@ export const buildBgsEntity = (logEntity: PlayerBoardEntity, allCards: CardsFaca
 	return {
 		cardId: logEntity.CardId,
 		attack: logEntity.Tags.find((tag) => tag.Name === GameTag.ATK)?.Value || 0,
-		divineShield: (logEntity.Tags.find((tag) => tag.Name === GameTag.DIVINE_SHIELD) || {})?.Value === 1,
+		// Tag value can be > 1 for multi-hit Divine Shield (e.g. Toreth's Blessing Dark Gift).
+		divineShield: ((logEntity.Tags.find((tag) => tag.Name === GameTag.DIVINE_SHIELD) || {})?.Value ?? 0) > 0,
 		enchantments: buildEnchantments(logEntity.Enchantments),
 		entityId: logEntity.Entity,
 		health:

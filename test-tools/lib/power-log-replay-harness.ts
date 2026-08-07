@@ -819,6 +819,12 @@ export async function replayPowerLogToGameState(options: ReplayPowerLogOptions):
 	const gameStateService = TestBed.inject(GameStateService);
 	const gameEvents = TestBed.inject(GameEvents);
 
+	// GameEvents.init() awaits scene.isReady() then subscribes to inGame$$ and calls
+	// initTsParser(). If we feed CREATE_GAME before that subscription runs, the lazy
+	// parser created mid-batch is wiped by the later initTsParser(), leaving
+	// CurrentGame undefined and ParseEntity('GameEntity') throwing forever in the queue.
+	await new Promise<void>((resolve) => setTimeout(resolve, 0));
+
 	if (feedLines) {
 		const lines =
 			logLinesOverride != null && logLinesOverride.length > 0
