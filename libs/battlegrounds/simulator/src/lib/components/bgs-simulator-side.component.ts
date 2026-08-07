@@ -171,6 +171,8 @@ export class BgsSimulatorSideComponent {
 	undeadArmy: number;
 	undeadHealthBonus: number;
 	eternalLegion: number;
+	eternalKnightAttackBuff: number;
+	eternalKnightHealthBuff: number;
 	hauntedCarapaceAttackBonus: number;
 	hauntedCarapaceHealthBonus: number;
 	deepBluesPlayed: number;
@@ -297,6 +299,8 @@ export class BgsSimulatorSideComponent {
 		this.goldrinnAttackBonus = this._player.player?.globalInfo?.GoldrinnBuffAtk ?? 0;
 		this.goldrinnHealthBonus = this._player.player?.globalInfo?.GoldrinnBuffHealth ?? 0;
 		this.eternalLegion = this._player.player?.globalInfo?.EternalKnightsDeadThisGame ?? 0;
+		this.eternalKnightAttackBuff = this._player.player?.globalInfo?.EternalKnightAttackBuff ?? 0;
+		this.eternalKnightHealthBuff = this._player.player?.globalInfo?.EternalKnightHealthBuff ?? 0;
 		this.tavernSpellsCastThisGame = this._player.player?.globalInfo?.TavernSpellsCastThisGame ?? 0;
 		this.tastyLobstersBuff =
 			(this._player.player?.globalInfo as { TastyLobstersBuff?: number } | undefined)?.TastyLobstersBuff ?? 0;

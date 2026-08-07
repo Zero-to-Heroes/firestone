@@ -146,6 +146,26 @@ import { CardsFacadeService } from '@firestone/shared/framework/core';
 					(fsModelUpdate)="onEternalLegionChanged($event)"
 				>
 				</fs-numeric-input-with-arrows>
+				<fs-numeric-input-with-arrows
+					class="input eternal-knight-attack-buff"
+					[label]="'battlegrounds.sim.eternal-knight-attack-buff' | owTranslate"
+					[helpTooltip]="'battlegrounds.sim.eternal-knight-attack-buff-tooltip' | owTranslate"
+					[value]="eternalKnightAttackBuff"
+					[minValue]="0"
+					[debounceTime]="200"
+					(fsModelUpdate)="onEternalKnightAttackBuffChanged($event)"
+				>
+				</fs-numeric-input-with-arrows>
+				<fs-numeric-input-with-arrows
+					class="input eternal-knight-health-buff"
+					[label]="'battlegrounds.sim.eternal-knight-health-buff' | owTranslate"
+					[helpTooltip]="'battlegrounds.sim.eternal-knight-health-buff-tooltip' | owTranslate"
+					[value]="eternalKnightHealthBuff"
+					[minValue]="0"
+					[debounceTime]="200"
+					(fsModelUpdate)="onEternalKnightHealthBuffChanged($event)"
+				>
+				</fs-numeric-input-with-arrows>
 			</div>
 		</div>
 	`,
@@ -164,6 +184,8 @@ export class BgsBattleSideComponent {
 	@Output() heroPowerChangeRequested: EventEmitter<void> = new EventEmitter<void>();
 	@Output() questRewardChangeRequested: EventEmitter<void> = new EventEmitter<void>();
 	@Output() eternalLegionChanged = new EventEmitter<number>();
+	@Output() eternalKnightAttackBuffChanged = new EventEmitter<number>();
+	@Output() eternalKnightHealthBuffChanged = new EventEmitter<number>();
 	@Output() undeadArmyChanged = new EventEmitter<number>();
 	@Output() undeadArmyHealthChanged = new EventEmitter<number>();
 
@@ -208,6 +230,8 @@ export class BgsBattleSideComponent {
 	goldrinnAttackBonus: number;
 	goldrinnHealthBonus: number;
 	eternalLegion: number;
+	eternalKnightAttackBuff: number;
+	eternalKnightHealthBuff: number;
 	tavernSpellsCastThisGame: number;
 	tastyLobstersBuff: number;
 	piratesPlayedThisGame: number;
@@ -274,6 +298,14 @@ export class BgsBattleSideComponent {
 
 	onEternalLegionChanged(value: number) {
 		this.eternalLegionChanged.next(value);
+	}
+
+	onEternalKnightAttackBuffChanged(value: number) {
+		this.eternalKnightAttackBuffChanged.next(value);
+	}
+
+	onEternalKnightHealthBuffChanged(value: number) {
+		this.eternalKnightHealthBuffChanged.next(value);
 	}
 
 	addMinion() {
@@ -348,6 +380,8 @@ export class BgsBattleSideComponent {
 		// this.bloodGemHealthBonus = this._player.player?.globalInfo?.BloodGemHealthBonus ?? 0;
 		// this.frostlingBonus = this._player.player?.globalInfo?.FrostlingBonus ?? 0;
 		this.eternalLegion = this._player.player?.globalInfo?.EternalKnightsDeadThisGame ?? 0;
+		this.eternalKnightAttackBuff = this._player.player?.globalInfo?.EternalKnightAttackBuff ?? 0;
+		this.eternalKnightHealthBuff = this._player.player?.globalInfo?.EternalKnightHealthBuff ?? 0;
 		this.tavernSpellsCastThisGame = this._player.player?.globalInfo?.TavernSpellsCastThisGame ?? 0;
 		this.tastyLobstersBuff =
 			(this._player.player?.globalInfo as { TastyLobstersBuff?: number } | undefined)?.TastyLobstersBuff ?? 0;

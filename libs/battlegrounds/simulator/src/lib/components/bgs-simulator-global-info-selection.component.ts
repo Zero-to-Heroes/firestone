@@ -30,6 +30,24 @@ import { CardsFacadeService, ILocalizationService } from '@firestone/shared/fram
 				>
 				</fs-numeric-input-with-arrows>
 				<fs-numeric-input-with-arrows
+					class="input eternal-knight-attack-buff"
+					[label]="'battlegrounds.sim.eternal-knight-attack-buff' | fsTranslate"
+					[helpTooltip]="'battlegrounds.sim.eternal-knight-attack-buff-tooltip' | fsTranslate"
+					[value]="eternalKnightAttackBuff"
+					[minValue]="0"
+					(fsModelUpdate)="onEternalKnightAttackBuffChanged($event)"
+				>
+				</fs-numeric-input-with-arrows>
+				<fs-numeric-input-with-arrows
+					class="input eternal-knight-health-buff"
+					[label]="'battlegrounds.sim.eternal-knight-health-buff' | fsTranslate"
+					[helpTooltip]="'battlegrounds.sim.eternal-knight-health-buff-tooltip' | fsTranslate"
+					[value]="eternalKnightHealthBuff"
+					[minValue]="0"
+					(fsModelUpdate)="onEternalKnightHealthBuffChanged($event)"
+				>
+				</fs-numeric-input-with-arrows>
+				<fs-numeric-input-with-arrows
 					class="input undead-army"
 					[label]="'battlegrounds.sim.undead-army' | fsTranslate"
 					[helpTooltip]="'battlegrounds.sim.undead-army-tooltip' | fsTranslate"
@@ -361,6 +379,8 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 	@Input() set currentGlobalInfo(value: BgsPlayerGlobalInfo | undefined | null) {
 		this.inputGlobalInfo = value;
 		this.eternalKnightsDeadThisGame = value?.EternalKnightsDeadThisGame ?? 0;
+		this.eternalKnightAttackBuff = value?.EternalKnightAttackBuff ?? 0;
+		this.eternalKnightHealthBuff = value?.EternalKnightHealthBuff ?? 0;
 		this.undeadAttackBonus = value?.UndeadAttackBonus ?? 0;
 		this.undeadHealthBonus = value?.UndeadHealthBonus ?? 0;
 		this.hauntedCarapaceAttackBonus = value?.HauntedCarapaceAttackBonus ?? 0;
@@ -403,6 +423,8 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 	}
 
 	eternalKnightsDeadThisGame: number;
+	eternalKnightAttackBuff: number;
+	eternalKnightHealthBuff: number;
 	undeadAttackBonus: number;
 	undeadHealthBonus: number;
 	hauntedCarapaceAttackBonus: number;
@@ -450,6 +472,14 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 
 	onEternalKnightsDeadThisGameChanged(value: number) {
 		this.eternalKnightsDeadThisGame = value;
+	}
+
+	onEternalKnightAttackBuffChanged(value: number) {
+		this.eternalKnightAttackBuff = value;
+	}
+
+	onEternalKnightHealthBuffChanged(value: number) {
+		this.eternalKnightHealthBuff = value;
 	}
 
 	onUndeadAttackBonusChanged(value: number) {
@@ -545,6 +575,8 @@ export class BgsSimulatorGlobalInfoSelectionComponent {
 			// So that things don't fail if I forget to implement new fields
 			...(this.inputGlobalInfo ?? {}),
 			EternalKnightsDeadThisGame: this.eternalKnightsDeadThisGame,
+			EternalKnightAttackBuff: this.eternalKnightAttackBuff,
+			EternalKnightHealthBuff: this.eternalKnightHealthBuff,
 			UndeadAttackBonus: this.undeadAttackBonus,
 			UndeadHealthBonus: this.undeadHealthBonus,
 			HauntedCarapaceAttackBonus: this.hauntedCarapaceAttackBonus,

@@ -61,6 +61,8 @@ export interface BgsPlayerBoardEntity {
 
 export interface BgsPlayerGlobalInfo {
 	EternalKnightsDeadThisGame: number;
+	EternalKnightAttackBuff: number;
+	EternalKnightHealthBuff: number;
 	TavernSpellsCastThisGame: number;
 	TastyLobstersBuff: number;
 	SpellsCastThisGame: number;
@@ -479,6 +481,17 @@ export class BattlegroundsPlayerBoardParser implements ActionParser {
 			CardIds.EternalKnightPlayerEnchantEnchantment,
 			currentEntities,
 		);
+		const eternalKnightAttackBuff = BattlegroundsPlayerBoardParser.GetPlayerEnchantmentValue(
+			playerId,
+			CardIds.EternalPortrait_GreaterEternalLegionEnchantment_BG36_MagicItem_216e,
+			currentEntities,
+		);
+		const eternalKnightHealthBuff = BattlegroundsPlayerBoardParser.GetPlayerEnchantmentValue(
+			playerId,
+			CardIds.EternalPortrait_GreaterEternalLegionEnchantment_BG36_MagicItem_216e,
+			currentEntities,
+			GameTag.TAG_SCRIPT_DATA_NUM_2,
+		);
 		const tavernSpellsCastThisGame = BattlegroundsPlayerBoardParser.GetPlayerTag(
 			playerEntityId,
 			GameTag.TAVERN_SPELLS_PLAYED_THIS_GAME,
@@ -709,6 +722,8 @@ export class BattlegroundsPlayerBoardParser implements ActionParser {
 
 		return {
 			EternalKnightsDeadThisGame: eternalKnightBonus,
+			EternalKnightAttackBuff: eternalKnightAttackBuff,
+			EternalKnightHealthBuff: eternalKnightHealthBuff,
 			TavernSpellsCastThisGame: tavernSpellsCastThisGame,
 			TastyLobstersBuff: tastyLobstersBuff,
 			UndeadAttackBonus: undeadAttackBonus,

@@ -41,6 +41,8 @@ export class BgsCustomSimulationState {
 						heroPowerInfo: 0,
 						globalInfo: {
 							EternalKnightsDeadThisGame: 0,
+							EternalKnightAttackBuff: 0,
+							EternalKnightHealthBuff: 0,
 							TavernSpellsCastThisGame: 0,
 							TastyLobstersBuff: 0,
 							SpellsCastThisGame: 0,
@@ -95,6 +97,8 @@ export class BgsCustomSimulationState {
 						heroPowerInfo: 0,
 						globalInfo: {
 							EternalKnightsDeadThisGame: 0,
+							EternalKnightAttackBuff: 0,
+							EternalKnightHealthBuff: 0,
 							TavernSpellsCastThisGame: 0,
 							TastyLobstersBuff: 0,
 							SpellsCastThisGame: 0,

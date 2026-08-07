@@ -220,6 +220,17 @@ export class BattlegroundsActivePlayerBoardParser implements ActionParser {
 				CardIds.EternalKnightPlayerEnchantEnchantment,
 				gameState,
 			);
+			const eternalKnightAttackBuff = BattlegroundsActivePlayerBoardParser.GetPlayerEnchantmentValue(
+				player.PlayerId,
+				CardIds.EternalPortrait_GreaterEternalLegionEnchantment_BG36_MagicItem_216e,
+				gameState,
+			);
+			const eternalKnightHealthBuff = BattlegroundsActivePlayerBoardParser.GetPlayerEnchantmentValue(
+				player.PlayerId,
+				CardIds.EternalPortrait_GreaterEternalLegionEnchantment_BG36_MagicItem_216e,
+				gameState,
+				GameTag.TAG_SCRIPT_DATA_NUM_2,
+			);
 			const tavernSpellsCastThisGame =
 				gameState.CurrentEntities.get(player.Id)?.GetTag(GameTag.TAVERN_SPELLS_PLAYED_THIS_GAME, 0) ?? 0;
 			const tastyLobstersBuff =
@@ -438,6 +449,8 @@ export class BattlegroundsActivePlayerBoardParser implements ActionParser {
 				Trinkets: trinkets,
 				GlobalInfo: {
 					EternalKnightsDeadThisGame: eternalKnightBonus,
+					EternalKnightAttackBuff: eternalKnightAttackBuff,
+					EternalKnightHealthBuff: eternalKnightHealthBuff,
 					TavernSpellsCastThisGame: tavernSpellsCastThisGame,
 					TastyLobstersBuff: tastyLobstersBuff,
 					UndeadAttackBonus: undeadAttackBonus,
