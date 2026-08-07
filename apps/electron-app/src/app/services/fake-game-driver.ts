@@ -16,6 +16,12 @@
  * - FS_FAKE_GAME_MAX_GAP_MS: cap on idle gaps between lines, pre-speed (default 15000)
  * - FS_FAKE_GAME_DELAY_MS:   wait after app boot before starting the replay, so windows
  *                            and services settle (default 20000)
+ * - FS_FAKE_GAME_REPEAT:     how many times to replay the log in-process (default 1)
+ * - FS_FAKE_GAME_SETTLE_MS:  pause after each iteration once queues are idle (default 0;
+ *                            use ~20000 for cross-game leak sessions so widgets settle)
+ * - FS_FAKE_GAME_PAUSE_EVERY_LINES / FS_FAKE_GAME_PAUSE_MS:
+ *                            extra yield during feed so overlay widgets can mount
+ *                            (default 0 = off; e.g. every 4000 lines, 750 ms)
  *
  * Fidelity notes:
  * - The overlay/BG windows only exist when ow-electron has injected into a running
@@ -40,7 +46,7 @@ import {
 } from '@firestone/power-log-parser';
 import { BrowserWindow } from 'electron';
 import * as fs from 'fs';
-import { notifyFakeGameReplayDone } from './memory-instrumentation.service';
+import { notifyFakeGameReplayDone, rearmHeapSnapshotTurns } from './memory-instrumentation.service';
 
 export function startFakeGameDriver(injector: Injector): void {
 	const logPath = process.env['FS_FAKE_GAME_LOG']?.trim();
@@ -50,9 +56,24 @@ export function startFakeGameDriver(injector: Injector): void {
 	const speed = Number(process.env['FS_FAKE_GAME_SPEED'] ?? '1');
 	const maxGapMs = Number(process.env['FS_FAKE_GAME_MAX_GAP_MS'] ?? '15000');
 	const startDelayMs = Number(process.env['FS_FAKE_GAME_DELAY_MS'] ?? '20000');
-	console.log('[fake-game] scheduled', JSON.stringify({ logPath, speed, maxGapMs, startDelayMs }));
+	const repeat = Math.max(1, Math.floor(Number(process.env['FS_FAKE_GAME_REPEAT'] ?? '1') || 1));
+	const settleMs = Math.max(0, Number(process.env['FS_FAKE_GAME_SETTLE_MS'] ?? '0') || 0);
+	const pauseEveryLines = Math.max(0, Math.floor(Number(process.env['FS_FAKE_GAME_PAUSE_EVERY_LINES'] ?? '0') || 0));
+	const pauseMs = Math.max(0, Number(process.env['FS_FAKE_GAME_PAUSE_MS'] ?? '0') || 0);
+	console.log(
+		'[fake-game] scheduled',
+		JSON.stringify({ logPath, speed, maxGapMs, startDelayMs, repeat, settleMs, pauseEveryLines, pauseMs }),
+	);
 	setTimeout(() => {
-		runFakeGame(injector, logPath, speed, maxGapMs).catch((e) => {
+		runFakeGame(injector, {
+			logPath,
+			speed,
+			maxGapMs,
+			repeat,
+			settleMs,
+			pauseEveryLines,
+			pauseMs,
+		}).catch((e) => {
 			console.error('[fake-game] replay failed', e);
 		});
 	}, startDelayMs);
@@ -106,7 +127,19 @@ function trimPowerLogLinesToLastGameWithMeta(rawLines: readonly string[]): strin
 	return rawLines.slice(from).filter((line) => line.length > 0);
 }
 
-async function runFakeGame(injector: Injector, logPath: string, speed: number, maxGapMs: number): Promise<void> {
+async function runFakeGame(
+	injector: Injector,
+	opts: {
+		logPath: string;
+		speed: number;
+		maxGapMs: number;
+		repeat: number;
+		settleMs: number;
+		pauseEveryLines: number;
+		pauseMs: number;
+	},
+): Promise<void> {
+	const { logPath, speed, maxGapMs, repeat, settleMs, pauseEveryLines, pauseMs } = opts;
 	if (!fs.existsSync(logPath)) {
 		console.error('[fake-game] log file not found:', logPath);
 		return;
@@ -122,62 +155,88 @@ async function runFakeGame(injector: Injector, logPath: string, speed: number, m
 		lines.some((line) => line.includes('GameType=GT_BATTLEGROUNDS')) ||
 		lines.some((line) => line.includes('BACON_BARTENDER_CARD_ID'));
 	console.log(
-		'[fake-game] starting replay',
+		'[fake-game] ready',
 		JSON.stringify({
 			lines: lines.length,
 			isBg,
 			hasBuildNumber: lines.some((line) => line.includes('BuildNumber=')),
 			windows: BrowserWindow.getAllWindows().length,
+			repeat,
+			settleMs,
+			pauseEveryLines,
+			pauseMs,
 		}),
 	);
 
 	// Same forcing as the Overwolf window.fakeGame: BACON first triggers the BG real-time
-	// stats wiring, GAMEPLAY is what overlay widgets gate on. Pin for the whole session —
-	// MindVision will keep publishing HUB while HS sits at the menu.
+	// stats wiring, GAMEPLAY is what overlay widgets gate on. Pin for the whole multi-game
+	// session — MindVision will keep publishing HUB while HS sits at the menu.
 	const unpinScene = pinGameplayScene(scene, isBg);
 
-	const start = Date.now();
-	let lastProgressLog = 0;
 	try {
-		const feedMs = await feedPowerLogLinesPaced(
-			lines,
-			(line) => {
-				// Randomize the seed so the replayed game is not treated as a reconnect
-				if (line.includes('tag=GAME_SEED')) {
-					line = line.replace(/value=\d+/, `value=${Math.floor(Math.random() * 1000000)}`);
-				}
-				gameEvents.receiveLogLine(line);
-			},
-			{
-				speed: speed > 0 ? speed : 10_000,
-				maxGapMs: speed > 0 ? maxGapMs : 0,
-				onProgress: (fed, total, elapsedMs) => {
-					if (elapsedMs - lastProgressLog >= 30_000) {
-						lastProgressLog = elapsedMs;
-						console.log('[fake-game] progress', JSON.stringify({ fed, total, elapsedMs }));
+		for (let iteration = 1; iteration <= repeat; iteration++) {
+			if (iteration > 1) {
+				rearmHeapSnapshotTurns();
+			}
+			console.log(
+				'[fake-game] iteration start',
+				JSON.stringify({ iteration, of: repeat, lines: lines.length, scene: scene.currentScene$$.value }),
+			);
+			const start = Date.now();
+			let lastProgressLog = 0;
+			const feedMs = await feedPowerLogLinesPaced(
+				lines,
+				(line) => {
+					// Randomize the seed so the replayed game is not treated as a reconnect
+					if (line.includes('tag=GAME_SEED')) {
+						line = line.replace(/value=\d+/, `value=${Math.floor(Math.random() * 1000000)}`);
 					}
+					gameEvents.receiveLogLine(line);
 				},
-			},
-		);
-		const feedDone = Date.now();
-		await gameEvents.awaitProcessingQueueIdle();
-		const queueIdle = Date.now();
-		await gameState.awaitQueueIdle();
-		const gsIdle = Date.now();
-		console.log(
-			'[fake-game] done',
-			JSON.stringify({
-				lines: lines.length,
-				feedMs,
-				gameEventsDrainMs: queueIdle - feedDone,
-				gameStateDrainMs: gsIdle - queueIdle,
-				totalMs: Date.now() - start,
-				scene: scene.currentScene$$.value,
-			}),
-		);
-		// Mid-game cuts never emit GAME_END; still take pending turn-N heap snapshots.
+				{
+					speed: speed > 0 ? speed : 10_000,
+					maxGapMs: speed > 0 ? maxGapMs : 0,
+					pauseEveryLines,
+					pauseMs,
+					onProgress: (fed, total, elapsedMs) => {
+						if (elapsedMs - lastProgressLog >= 30_000) {
+							lastProgressLog = elapsedMs;
+							console.log(
+								'[fake-game] progress',
+								JSON.stringify({ iteration, fed, total, elapsedMs }),
+							);
+						}
+					},
+				},
+			);
+			const feedDone = Date.now();
+			await gameEvents.awaitProcessingQueueIdle();
+			const queueIdle = Date.now();
+			await gameState.awaitQueueIdle();
+			const gsIdle = Date.now();
+			console.log(
+				'[fake-game] iteration done',
+				JSON.stringify({
+					iteration,
+					of: repeat,
+					lines: lines.length,
+					feedMs,
+					gameEventsDrainMs: queueIdle - feedDone,
+					gameStateDrainMs: gsIdle - queueIdle,
+					totalMs: Date.now() - start,
+					scene: scene.currentScene$$.value,
+				}),
+			);
+			// Mid-game cuts never emit GAME_END; still take pending turn-N heap snapshots.
+			// On multi-game full matches, GAME_END already snapped; this is a no-op then.
+			notifyFakeGameReplayDone();
+			if (iteration < repeat && settleMs > 0) {
+				console.log('[fake-game] settle', JSON.stringify({ iteration, settleMs }));
+				await new Promise((r) => setTimeout(r, settleMs));
+			}
+		}
+		console.log('[fake-game] all iterations done', JSON.stringify({ repeat }));
 		// Keep scene pinned afterward so mid-game visual checks still see overlay widgets.
-		notifyFakeGameReplayDone();
 	} catch (e) {
 		unpinScene();
 		throw e;

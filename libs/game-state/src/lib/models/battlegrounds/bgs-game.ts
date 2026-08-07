@@ -62,6 +62,50 @@ export class BgsGame {
 		return Object.assign(new BgsGame(), this, base);
 	}
 
+	/**
+	 * Keep outcomeSamples only on the latest face-off that has them. Older fights retain
+	 * win% / damage summaries for the battles panel but drop bulky sample boards — the
+	 * historical `removeOldSimulationDetails` behavior, restored for cross-game / late-BG
+	 * memory (Plan D / multi-game leak sessions).
+	 */
+	public pruneOldSimulationSamples(): BgsGame {
+		if (!this.faceOffs?.length) {
+			return this;
+		}
+		let hasSamples = false;
+		const reversed = [...this.faceOffs].reverse();
+		const prunedReversed: BgsFaceOffWithSimulation[] = [];
+		for (const faceOff of reversed) {
+			const samples = faceOff.battleResult?.outcomeSamples;
+			const thisHasSamples =
+				!!samples?.lost?.length || !!samples?.won?.length || !!samples?.tied?.length;
+			if (!hasSamples || !thisHasSamples) {
+				prunedReversed.push(faceOff);
+			} else {
+				prunedReversed.push(
+					faceOff.update({
+						battleResult: { ...faceOff.battleResult!, outcomeSamples: undefined },
+					}),
+				);
+			}
+			if (thisHasSamples) {
+				hasSamples = true;
+			}
+		}
+		const faceOffs = prunedReversed.reverse();
+		const liveStats = this.liveStats
+			? Object.assign(new RealTimeStatsState(), this.liveStats, {
+					battleResultHistory: (this.liveStats.battleResultHistory ?? []).map((h) => ({
+						...h,
+						simulationResult: h.simulationResult
+							? { ...h.simulationResult, outcomeSamples: undefined }
+							: h.simulationResult,
+					})),
+				})
+			: this.liveStats;
+		return this.update({ faceOffs, liveStats } as Partial<NonFunctionProperties<BgsGame>>);
+	}
+
 	public updatePlayer(newPlayer: BgsPlayer): BgsGame {
 		const newPlayers: readonly BgsPlayer[] = this.players.map((player) =>
 			player.playerId === newPlayer.playerId ? newPlayer : player,

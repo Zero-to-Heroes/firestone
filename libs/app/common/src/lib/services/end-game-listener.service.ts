@@ -369,6 +369,7 @@ export class EndGameListenerService {
 			turn: f.turn,
 			wonPercent: f.battleResult?.wonPercent ?? 0,
 		}));
+		const currentBgGame = this.gameState.gameState$$.value?.bgState?.currentGame;
 		const augmentedInfo: UploadInfo = {
 			...info,
 			battlegroundsInfoAfterGameOver: newBgInfoWithRating ?? undefined,
@@ -376,7 +377,8 @@ export class EndGameListenerService {
 			bgBattleOdds: battleOdds,
 			// Here we purposefully don't want to init the lottery if it hasn't been initialized yet
 			lotteryPoints: this.lottery.lottery$$.getValue()?.currentPoints(),
-			bgGame: this.gameState.gameState$$.value?.bgState?.currentGame ?? undefined,
+			// Prune sample boards before pinning the game on the upload payload.
+			bgGame: currentBgGame?.pruneOldSimulationSamples() ?? undefined,
 		};
 		console.debug('[manastorm-bridge] augmentedInfo', augmentedInfo);
 

@@ -41,9 +41,13 @@ export class BgsBattleSimulationParser implements EventParser {
 			f.id === newFaceOff.id ? newFaceOff : f,
 		);
 		// console.debug('[bgs-simulation] new face-offs', newFaceOffs);
-		const gameAfterFaceOff: BgsGame = currentState.bgState.currentGame!.update({
+		let gameAfterFaceOff: BgsGame = currentState.bgState.currentGame!.update({
 			faceOffs: newFaceOffs,
 		});
+		// Final sim results carry outcomeSamples; keep them only on the latest fight.
+		if (!intermediateResult) {
+			gameAfterFaceOff = gameAfterFaceOff.pruneOldSimulationSamples();
+		}
 		return currentState.update({
 			bgState: currentState.bgState.update({
 				currentGame: gameAfterFaceOff,

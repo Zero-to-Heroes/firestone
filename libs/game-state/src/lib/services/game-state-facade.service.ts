@@ -20,6 +20,11 @@ const eventName = 'game-state-facade';
  * payload diet, see sanitizeParserStateForElectron).
  */
 export const serializeGameStateForElectron = (value: GameState): GameState => {
+	const bgState = value.bgState?.currentGame
+		? value.bgState.update({
+				currentGame: value.bgState.currentGame.pruneOldSimulationSamples(),
+			})
+		: value.bgState;
 	return GameState.create({
 		...value,
 		parserState: sanitizeParserStateForElectron(value.parserState, {
@@ -27,7 +32,7 @@ export const serializeGameStateForElectron = (value: GameState): GameState => {
 		}),
 		playerDeck: DeckState.createForElectron(value.playerDeck),
 		opponentDeck: DeckState.createForElectron(value.opponentDeck),
-		bgState: value.bgState,
+		bgState,
 	});
 };
 

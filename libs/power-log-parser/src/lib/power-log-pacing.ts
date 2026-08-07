@@ -91,6 +91,11 @@ const MAX_SYNC_FEED_BATCH = 2000;
  * Lines that are already due are fed synchronously in a batch (capped, see
  * {@link MAX_SYNC_FEED_BATCH}); the loop then sleeps until the next line's offset.
  * Returns the total wall-clock feeding time in ms.
+ *
+ * Optional `pauseEveryLines` / `pauseMs`: after every N lines fed, sleep an extra
+ * `pauseMs` so Angular overlay widgets can mount/update during heavy dumps (match
+ * start, combat bursts). Without this, a fast paced feed can starve change detection
+ * and leave the HUD empty — skewing memory measurements.
  */
 export async function feedPowerLogLinesPaced(
 	lines: readonly string[],
@@ -98,11 +103,17 @@ export async function feedPowerLogLinesPaced(
 	options?: PowerLogPacingOptions & {
 		/** Called after each batch of due lines, for progress reporting. */
 		readonly onProgress?: (fedLines: number, totalLines: number, elapsedMs: number) => void;
+		/** When >0 with pauseMs>0, sleep pauseMs after every N lines fed. */
+		readonly pauseEveryLines?: number;
+		readonly pauseMs?: number;
 	},
 ): Promise<number> {
 	const offsets = computePowerLogFeedOffsetsMs(lines, options);
+	const pauseEvery = options?.pauseEveryLines ?? 0;
+	const pauseMs = options?.pauseMs ?? 0;
 	const start = Date.now();
 	let i = 0;
+	let linesSincePause = 0;
 	while (i < lines.length) {
 		const now = Date.now() - start;
 		const batchStart = i;
@@ -112,6 +123,11 @@ export async function feedPowerLogLinesPaced(
 		}
 		if (i > batchStart) {
 			options?.onProgress?.(i, lines.length, Date.now() - start);
+			linesSincePause += i - batchStart;
+			if (pauseEvery > 0 && pauseMs > 0 && linesSincePause >= pauseEvery) {
+				linesSincePause = 0;
+				await new Promise((resolve) => setTimeout(resolve, pauseMs));
+			}
 		}
 		if (i < lines.length) {
 			const waitMs = offsets[i]! - (Date.now() - start);

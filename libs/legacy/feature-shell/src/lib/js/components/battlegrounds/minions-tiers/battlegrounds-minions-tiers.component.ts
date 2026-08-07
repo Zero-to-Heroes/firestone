@@ -535,6 +535,23 @@ export class BattlegroundsMinionsTiersOverlayComponent
 			takeUntil(this.destroyed$),
 		);
 
+		// Drop the deferred minion-pool latch on each new match so a prior open does not
+		// keep the heavy Tier[] graph mounted across games (cross-game overlay V8 step).
+		this.gameState.gameState$$
+			.pipe(
+				this.mapData((state) => state?.reviewId ?? null),
+				distinctUntilChanged(),
+				takeUntil(this.destroyed$),
+			)
+			.subscribe((reviewId) => {
+				if (reviewId == null) {
+					return;
+				}
+				if (this.poolRequested$$.value) {
+					this.poolRequested$$.next(false);
+				}
+			});
+
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.markForCheck();
 		}
