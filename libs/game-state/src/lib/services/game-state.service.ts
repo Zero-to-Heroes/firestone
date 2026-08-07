@@ -574,6 +574,8 @@ export class GameStateService {
 				opponentTrackerClosedByUser: false,
 			});
 			this.minionsWillDie = [];
+			// Drop prior-game rewind ring so up to 8 full GameState graphs become collectible.
+			this.rewindSnapshots = [];
 			// Reset to avoid stale cutoff/lower-bound from a previous game; see field JSDocs.
 			this.rewindCutoffTimestamp = null;
 			this.rewindLowerBoundTimestamp = null;
