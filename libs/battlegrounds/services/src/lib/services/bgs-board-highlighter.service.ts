@@ -16,6 +16,11 @@ import {
 } from '@firestone/shared/framework/core';
 import { auditTime, BehaviorSubject, combineLatest, distinctUntilChanged, filter, map } from 'rxjs';
 
+const EXCLUDED_PREMIUM_CARDS_FROM_AUTO_HIGHLIGHT: readonly (string | CardIds)[] = [
+	CardIds.AureateLaureate_BG32_236,
+	CardIds.AureateLaureate_BG32_236_G,
+];
+
 @Injectable({ providedIn: 'root' })
 export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHighlighterService> {
 	public shopMinions$$: SubscriberAwareBehaviorSubject<readonly ShopMinion[]>;
@@ -367,7 +372,12 @@ export class BgsBoardHighlighterService extends AbstractFacadeService<BgsBoardHi
 			return true;
 		}
 
-		if (enableAutoHighlight && !anomalies.includes(CardIds.TheGoldenArena_BG27_Anomaly_801) && card.premium) {
+		if (
+			enableAutoHighlight &&
+			!anomalies.includes(CardIds.TheGoldenArena_BG27_Anomaly_801) &&
+			card.premium &&
+			!EXCLUDED_PREMIUM_CARDS_FROM_AUTO_HIGHLIGHT.includes(card.id)
+		) {
 			return true;
 		}
 
