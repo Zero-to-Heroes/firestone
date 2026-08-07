@@ -24,7 +24,8 @@ export class CardOnBoardOverlaysComponent {
 		if (value.getTag(GameTag.IMMUNE) === 1) {
 			this.pushOverlay('minion_immune');
 		}
-		if (value.getTag(GameTag.DIVINE_SHIELD) === 1) {
+		// Tag value can be > 1 for multi-hit Divine Shield (e.g. Toreth's Blessing).
+		if (value.getTag(GameTag.DIVINE_SHIELD) > 0) {
 			this.pushOverlay('minion_divine_shield');
 		}
 		if (value.getTag(GameTag.REBORN) === 1) {
