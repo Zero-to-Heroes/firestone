@@ -44,6 +44,10 @@ const MODS_CONFIG_URL = 'https://static.zerotoheroes.com/mods/mods-config.json?v
 const modsLocation = 'BepInEx\\plugins';
 export const configLocation = 'BepInEx\\config';
 
+/** User-owned BepInEx folders preserved across full engine reinstalls. */
+const USER_MOD_DATA_FOLDERS = ['plugins', 'config', 'patchers'] as const;
+const ENGINE_MIGRATION_BACKUP_DIR = '.firestone-engine-migration';
+
 export type ModsCheckStatus = 'wrong-path' | 'installed' | 'not-installed' | 'engine-mismatch';
 
 @Injectable()
@@ -735,9 +739,11 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 		this.pendingEngineMigration = false;
 		await this.notifyEngineMigrationStart();
 
+		let backupRoot: string | null = null;
 		try {
 			this.currentModsStatus$$.next('settings.general.mods.migrating-engine');
-			const installedMods = await this.installedModsInternal(installPath);
+			backupRoot = await this.backupUserModData(installPath);
+
 			const removed = await this.removeEngineFiles(installPath);
 			if (!removed) {
 				this.pendingEngineMigration = true;
@@ -748,11 +754,9 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 			await this.installEngine(installPath, requiredArch);
 
 			this.currentModsStatus$$.next('settings.general.mods.reinstalling-mods');
-			for (const mod of installedMods) {
-				if (!mod.DownloadLink) {
-					continue;
-				}
-				await this.updateModInternal({ ...mod, Registered: mod.Registered });
+			if (backupRoot) {
+				await this.restoreUserModData(installPath, backupRoot);
+				backupRoot = null;
 			}
 
 			const refreshedMods = await this.refreshModsInternal(installPath);
@@ -761,13 +765,82 @@ export class ModsManagerService extends AbstractFacadeService<ModsManagerService
 			await this.notifyEngineMigrationDone();
 			return true;
 		} catch (e) {
-			console.error('[mods-manager] engine migration failed', e);
+			console.error('[mods-manager] engine migration failed', e, backupRoot);
 			this.pendingEngineMigration = true;
 			await this.notifyEngineMigrationRetry();
 			return false;
 		} finally {
 			this.migrationInProgress = false;
 		}
+	}
+
+	private engineMigrationBackupRoot(installPath: string): string {
+		return `${installPath}\\${ENGINE_MIGRATION_BACKUP_DIR}`;
+	}
+
+	/**
+	 * Copy user plugins/configs/patchers outside BepInEx so removeEngineFiles can wipe the engine.
+	 * Leaves the backup in place on failure so a later retry can still restore.
+	 * If a previous backup exists and the new engine is already installed (or BepInEx was wiped),
+	 * reuses that backup instead of overwriting it from a fresh/empty install.
+	 */
+	private async backupUserModData(installPath: string): Promise<string | null> {
+		const backupRoot = this.engineMigrationBackupRoot(installPath);
+		const hasExistingBackup = await this.fileBackend.fileExists(backupRoot);
+		const hasBepInEx = await this.fileBackend.fileExists(`${installPath}\\BepInEx`);
+		const installedRev = hasBepInEx ? await this.readEngineRevisionStamp(installPath) : null;
+
+		if (hasExistingBackup && (!hasBepInEx || installedRev === MODS_ENGINE_REVISION)) {
+			console.log('[mods-manager] reusing existing engine migration backup', backupRoot);
+			return backupRoot;
+		}
+
+		if (hasExistingBackup) {
+			console.log('[mods-manager] removing stale engine migration backup', backupRoot);
+			await this.io.deleteFileOrFolder(backupRoot);
+		}
+
+		const hasLiveUserData = await this.hasAnyUserModData(`${installPath}\\BepInEx`);
+		if (!hasLiveUserData) {
+			console.log('[mods-manager] no user mod data to back up');
+			return null;
+		}
+
+		for (const folder of USER_MOD_DATA_FOLDERS) {
+			const source = `${installPath}\\BepInEx\\${folder}`;
+			if (!(await this.fileBackend.fileExists(source))) {
+				continue;
+			}
+			const dest = `${backupRoot}\\${folder}`;
+			console.log('[mods-manager] backing up user mod data', source, '->', dest);
+			await this.io.copyFiles(source, dest);
+		}
+
+		console.log('[mods-manager] user mod data backed up to', backupRoot);
+		return backupRoot;
+	}
+
+	private async hasAnyUserModData(bepInExRoot: string): Promise<boolean> {
+		for (const folder of USER_MOD_DATA_FOLDERS) {
+			if (await this.fileBackend.fileExists(`${bepInExRoot}\\${folder}`)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private async restoreUserModData(installPath: string, backupRoot: string): Promise<void> {
+		for (const folder of USER_MOD_DATA_FOLDERS) {
+			const source = `${backupRoot}\\${folder}`;
+			if (!(await this.fileBackend.fileExists(source))) {
+				continue;
+			}
+			const dest = `${installPath}\\BepInEx\\${folder}`;
+			console.log('[mods-manager] restoring user mod data', source, '->', dest);
+			await this.io.copyFiles(source, dest);
+		}
+		console.log('[mods-manager] cleaning up engine migration backup', backupRoot);
+		await this.io.deleteFileOrFolder(backupRoot);
 	}
 
 	private async installEngine(installPath: string, arch: ModsEngineArch): Promise<void> {
