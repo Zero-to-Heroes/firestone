@@ -320,6 +320,14 @@ export const getAchievementSectionIdFromHeroCardId = (heroCardId: string): numbe
 			return 1322;
 		case CardIds.LohTheLivingLegend_BG33_HERO_001:
 			return 1364;
+		case CardIds.GennWorgenKing_BG35_HERO_001:
+			return 1422;
+		case CardIds.MisterClocksworth_BG34_HERO_002:
+			return 1423;
+		case CardIds.NightmareLordXavius_BG36_HERO_105:
+			return 1463;
+		case CardIds.TrastathSoulParasite_BG36_HERO_101:
+			return 1464;
 		// case CardIds.Diablo:
 		// 	return;
 		default:
