@@ -1,8 +1,8 @@
 import { Entity, BgsPlayer as IBgsPlayer } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { CardIds, GameTag, getHeroPower, normalizeHeroCardId } from '@firestone-hs/reference-data';
-import { Entity as ReplayEntity } from '@firestone/replay/replay-parser';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { QuestReward } from '@firestone/battlegrounds/core';
+import { Entity as ReplayEntity } from '@firestone/replay/replay-parser';
 import { NonFunctionProperties } from '@firestone/shared/framework/common';
 import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BgsBattleHistory } from './in-game/bgs-battle-history';
@@ -155,7 +155,7 @@ export const buildBgsEntity = (logEntity: PlayerBoardEntity, allCards: CardsFaca
 		cardId: logEntity.CardId,
 		attack: logEntity.Tags.find((tag) => tag.Name === GameTag.ATK)?.Value || 0,
 		// Tag value can be > 1 for multi-hit Divine Shield (e.g. Toreth's Blessing Dark Gift).
-		divineShield: ((logEntity.Tags.find((tag) => tag.Name === GameTag.DIVINE_SHIELD) || {})?.Value ?? 0) > 0,
+		divineShield: (logEntity.Tags.find((tag) => tag.Name === GameTag.DIVINE_SHIELD)?.Value ?? 0) > 0,
 		enchantments: buildEnchantments(logEntity.Enchantments),
 		entityId: logEntity.Entity,
 		health:
