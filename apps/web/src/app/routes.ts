@@ -1,5 +1,10 @@
 import { Routes } from '@angular/router';
-import { AuthCallbackComponent, LoginComponent, routes as sharedRoutes, WebShellComponent } from '@firestone/shared/web-shell';
+import {
+	AuthCallbackComponent,
+	LoginComponent,
+	routes as sharedRoutes,
+	WebShellComponent,
+} from '@firestone/shared/web-shell';
 import { InGameReplayRedirectComponent } from './in-game-replay-redirect/in-game-replay-redirect.component';
 
 // Transform shared routes for use as children (convert absolute redirects to relative)
@@ -31,8 +36,14 @@ export const routes: Routes = [
 			{ path: 'auth-callback', component: AuthCallbackComponent },
 			{
 				path: 'premium',
+				loadComponent: () => import('./premium/premium-page.component').then((m) => m.PremiumPageComponent),
+			},
+			{
+				path: 'monitoring/simulator',
 				loadComponent: () =>
-					import('./premium/premium-page.component').then((m) => m.PremiumPageComponent),
+					import('./monitoring/simulator/simulator-accuracy-page.component').then(
+						(m) => m.SimulatorAccuracyPageComponent,
+					),
 			},
 			...transformRoutesForChildren(sharedRoutes),
 			// Wildcard route - must be last

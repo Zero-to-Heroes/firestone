@@ -1,0 +1,51 @@
+<div class="simulator-accuracy-page">
+	<header class="page-header">
+		<h1 class="page-title">BG Simulator Accuracy</h1>
+		<p class="page-lead">
+			Tracks how often the Battlegrounds combat simulator matches real game outcomes over time.
+		</p>
+		<ul class="accuracy-legend">
+			<li><span class="tier very-good"></span> Accuracy &gt; 0.8 is very good</li>
+			<li><span class="tier good"></span> Accuracy &gt; 0.5 is good</li>
+			<li><span class="tier needs-work"></span> Below that needs work</li>
+		</ul>
+	</header>
+
+	<div class="status" *ngIf="loading">Loading accuracy data…</div>
+	<div class="status error" *ngIf="!loading && error">{{ error }}</div>
+
+	<ng-container *ngIf="!loading && !error">
+		<div class="controls panel">
+			<label class="date-field">
+				<span>From</span>
+				<input
+					type="date"
+					[ngModel]="startDate"
+					[min]="minDate"
+					[max]="endDate || maxDate"
+					(ngModelChange)="onStartDateChange($event)"
+				/>
+			</label>
+			<label class="date-field">
+				<span>To</span>
+				<input
+					type="date"
+					[ngModel]="endDate"
+					[min]="startDate || minDate"
+					[max]="maxDate"
+					(ngModelChange)="onEndDateChange($event)"
+				/>
+			</label>
+			<p class="resolution-note" *ngIf="resolutionNote">{{ resolutionNote }}</p>
+		</div>
+
+		<div class="chart-panel panel">
+			<div class="chart-wrap" *ngIf="chartData.labels?.length; else emptyRange">
+				<canvas baseChart [type]="'line'" [data]="chartData" [options]="chartOptions"></canvas>
+			</div>
+			<ng-template #emptyRange>
+				<div class="status">No data in the selected date range.</div>
+			</ng-template>
+		</div>
+	</ng-container>
+</div>
