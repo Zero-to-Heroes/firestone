@@ -309,7 +309,9 @@
 				"https://*.hsguru.com",
 				"https://github.com",
 				"https://*.github.com",
-				"https://*.pastebin.com"
+				"https://*.pastebin.com",
+				"https://v2.bobsleague.com",
+				"https://*.bobsleague.com"
 			]
 		},
 		"extra-objects": {

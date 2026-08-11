@@ -1,0 +1,33 @@
+{
+	"id": "bobs-rush",
+	"name": "Bob's Rush MMR Sync",
+	"version": "1.0.0",
+	"main": "main.js",
+	"description": "Publishes your Battlegrounds MMR to Bob's Rush after each game.",
+	"author": "Bob's Rush",
+	"permissions": ["battlegrounds.gameEnd", "net.fetch", "storage"],
+	"allowedFetchHosts": ["https://v2.bobsleague.com", "http://localhost:3000"],
+	"settings": [
+		{
+			"key": "enabled",
+			"type": "boolean",
+			"default": true,
+			"label": "Sync after each Battlegrounds game",
+			"description": "When enabled, Firestone posts your new MMR to Bob's Rush when a Battlegrounds game ends."
+		},
+		{
+			"key": "apiKey",
+			"type": "password",
+			"default": "unpluggingdelabobs",
+			"label": "API key",
+			"description": "Bearer token provided by Bob's Rush (MMR_SYNC_API_KEY)."
+		},
+		{
+			"key": "endpointUrl",
+			"type": "string",
+			"default": "https://v2.bobsleague.com/api/mmr/update",
+			"label": "Endpoint URL",
+			"description": "POST endpoint that accepts { player, region, rating }."
+		}
+	]
+}

@@ -134,18 +134,28 @@ export class AddonsApiGateway {
 			headers.set(k, v);
 		}
 
-		const response = await fetch(url, {
-			method: init.method ?? 'GET',
-			headers,
-			body: init.body ?? undefined,
-		});
-		const body = await response.text();
-		return {
-			ok: response.ok,
-			status: response.status,
-			statusText: response.statusText,
-			body,
-		};
+		try {
+			const response = await fetch(url, {
+				method: init.method ?? 'GET',
+				headers,
+				body: init.body ?? undefined,
+			});
+			const body = await response.text();
+			return {
+				ok: response.ok,
+				status: response.status,
+				statusText: response.statusText,
+				body,
+			};
+		} catch (e) {
+			const message = e instanceof Error ? e.message : String(e);
+			// Overwolf: target origin must be listed under data.externally_connectable.
+			// Without it (or without partner CORS headers), the browser surfaces a generic Failed to fetch.
+			throw new Error(
+				`net.fetch failed for ${url}: ${message}. ` +
+					`If running on Overwolf, ensure the host is listed in overwolf/manifest.json externally_connectable.`,
+			);
+		}
 	}
 }
 
