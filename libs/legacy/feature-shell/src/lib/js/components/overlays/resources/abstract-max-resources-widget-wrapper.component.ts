@@ -135,7 +135,6 @@ export abstract class AbstractMaxResourcesWidgetWrapperComponent
 								(this.deckExtractor(gameState).corpsesSpent ?? 0),
 					coins: isBg ? (this.deckExtractor(gameState).hero?.maxCoins ?? 10) : null,
 				};
-				console.debug('[max-resources] max resources', result);
 				return result;
 			}),
 			distinctUntilChanged(
