@@ -26,6 +26,12 @@ export interface IAdsService {
 	 * CDP-injection bypass. Latches premium off and re-asserts it. Speed bump, not a boundary.
 	 */
 	forceNonPremium(reason: string): void;
+	/**
+	 * Clears a prior {@link forceNonPremium} latch when a later check shows a real subscription
+	 * (e.g. Firestone checkStatus false-positive while client Tebex is ACTIVE). Re-enables gates
+	 * from the current plan.
+	 */
+	clearForceNonPremium(reason: string): void;
 	subscribe(planId: string): void;
 	unsubscribe(planId: string): void;
 }

@@ -25,7 +25,7 @@ const CHECK_INTERVAL = 2 * 60 * 1000;
 // degrade to non-premium. Gates out SSO-hint / Tebex-latency races and transient network errors.
 const DEGRADE_THRESHOLD = 4;
 // Prolonged inability to verify status while the client claims premium (hosts/firewall shield).
-// At CHECK_INTERVAL=10m, 36 ≈ 6 hours — short outages stay fail-open.
+// At CHECK_INTERVAL=2m, 36 ≈ 72 minutes — short outages stay fail-open.
 const UNVERIFIABLE_EXPIRE_THRESHOLD = 36;
 // CDP / Overwolf CEF remote-debugging ports the tool relies on. 9222 is the default.
 const REMOTE_DEBUG_CANDIDATE_PORTS = [9222, 9223, 9229];
@@ -49,11 +49,12 @@ type F2gArtifacts = {
 /**
  * Detects when the app grants premium ({@link IAdsService.hasPremiumSub$$} is true) while a fresh,
  * authoritative server subscription check says the user is NOT premium - the signature of a
- * membership bypass (CDP / Automation inject). Prefers the Firestone cached status API, then
- * falls back to client Tebex/legacy. Reports identity + environment evidence on the first
- * confirmed mismatch, and after {@link DEGRADE_THRESHOLD} consecutive confirmed mismatches
- * degrades via {@link IAdsService.forceNonPremium}. Also expires premium after prolonged
- * unverifiable status (hosts-block fail-open).
+ * membership bypass (CDP / Automation inject). Prefers Firestone cached status when it says
+ * premium; never trusts Firestone `free` alone (cross-checks client Tebex/legacy). Reports
+ * identity + environment evidence on the first confirmed mismatch, and after
+ * {@link DEGRADE_THRESHOLD} consecutive confirmed mismatches degrades via
+ * {@link IAdsService.forceNonPremium}. Also expires premium after prolonged unverifiable status
+ * (hosts-block fail-open).
  */
 @Injectable()
 export class MembershipIntegrityService {
@@ -99,11 +100,24 @@ export class MembershipIntegrityService {
 		const debug = true;
 		// Guard against overlapping runs (the hasPremiumSub subscription and the interval can both
 		// trigger verify around the same time), which would otherwise double-count mismatches.
-		if (this.degraded || this.verifying) {
+		if (this.verifying) {
 			return;
 		}
 		this.verifying = true;
 		try {
+			// Allow recovery from a prior false-positive latch when client APIs still show premium.
+			if (this.degraded) {
+				const recovery = await this.serverPremiumVerdict();
+				if (recovery === 'premium') {
+					console.warn('[membership-integrity] clearing prior force-non-premium after premium confirmed');
+					this.degraded = false;
+					this.consecutiveMismatches = 0;
+					this.consecutiveUnverifiable = 0;
+					this.ads.clearForceNonPremium('membership-integrity-recovery');
+				}
+				return;
+			}
+
 			if (this.ads.hasPremiumSub$$.value !== true) {
 				debug && console.debug('[membership-integrity] hasPremiumSub is false');
 				this.consecutiveMismatches = 0;
@@ -189,14 +203,39 @@ export class MembershipIntegrityService {
 	}
 
 	/**
-	 * Prefer Firestone's cached status API (does not hammer Overwolf client rate limits). Fall back
-	 * to client Tebex/legacy; treat provider errors as unverifiable (fail-open for short outages).
+	 * Prefer Firestone's cached status API when it says premium (avoids hammering Overwolf client
+	 * rate limits). Never trust a Firestone `free` alone — cross-check client Tebex/legacy so a
+	 * buggy/incomplete server Tebex path cannot strip legit subscribers. Provider errors are
+	 * unverifiable (fail-open for short outages).
 	 */
 	private async serverPremiumVerdict(): Promise<ServerPremiumVerdict> {
 		const firestone = await this.firestoneCachedHasPremium();
-		if (firestone === 'premium' || firestone === 'free') {
-			return firestone;
+		if (firestone === 'premium') {
+			return 'premium';
 		}
+
+		const clientVerdict = await this.clientSubscriptionVerdict();
+		if (firestone === 'free') {
+			// Lambda said free: only degrade when the client APIs agree. If client still sees an
+			// active plan, trust the client (known false-positive class: OW-store Tebex ACTIVE
+			// while server Chain A returns empty). If client cannot verify, fail open.
+			if (clientVerdict === 'premium') {
+				console.warn(
+					'[membership-integrity] status discrepancy: Firestone checkStatus=free but client Tebex/legacy still active; treating as premium',
+				);
+				return 'premium';
+			}
+			if (clientVerdict === 'unverifiable') {
+				return 'unverifiable';
+			}
+			return 'free';
+		}
+
+		// firestone skipped / unverifiable — fall back to client path alone.
+		return clientVerdict;
+	}
+
+	private async clientSubscriptionVerdict(): Promise<ServerPremiumVerdict> {
 		try {
 			const [tebexPlan, legacyPlan] = await Promise.all([
 				this.tebex.getSubscriptionStatus(),

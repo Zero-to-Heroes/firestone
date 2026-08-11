@@ -103,6 +103,9 @@ export class AdService extends AbstractFacadeService<AdService> implements IAdsS
 		this.registerMainProcessMethod('forceNonPremiumInternal', (reason: string) =>
 			this.forceNonPremiumInternal(reason),
 		);
+		this.registerMainProcessMethod('clearForceNonPremiumInternal', (reason: string) =>
+			this.clearForceNonPremiumInternal(reason),
+		);
 	}
 
 	public subscribe(planId: string): void {
@@ -138,6 +141,14 @@ export class AdService extends AbstractFacadeService<AdService> implements IAdsS
 		this.forceNonPremiumInternal(reason);
 	}
 
+	public clearForceNonPremium(reason: string): void {
+		if (isElectronContext() && !isMainProcess()) {
+			this.callOnMainProcess<void>('clearForceNonPremiumInternal', reason);
+			return;
+		}
+		this.clearForceNonPremiumInternal(reason);
+	}
+
 	private async forceNonPremiumInternal(reason: string): Promise<void> {
 		if (this.bypassDetected$$.value) {
 			return;
@@ -146,6 +157,19 @@ export class AdService extends AbstractFacadeService<AdService> implements IAdsS
 		this.bypassDetected$$.next(true);
 		this.hasPremiumSub$$.next(false);
 		this.enablePremiumFeatures$$.next(false);
+	}
+
+	private async clearForceNonPremiumInternal(reason: string): Promise<void> {
+		if (!this.bypassDetected$$.value) {
+			return;
+		}
+		console.warn('[ads] clearing force-non-premium latch', reason);
+		this.bypassDetected$$.next(false);
+		const plan = this.currentPlan$$.value;
+		this.hasPremiumSub$$.next(this.computeHasPremiumSub(plan, false));
+		this.enablePremiumFeatures$$.next(
+			this.computeHasPremiumSub(plan, false) || this.lottery.shouldTrack$$.value,
+		);
 	}
 
 	// Anti-tamper speed bump (not a security boundary): periodically re-derive the gates from server
