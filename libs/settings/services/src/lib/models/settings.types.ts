@@ -50,6 +50,7 @@ export type SettingsSectionReferenceType =
 	| 'SettingsGeneralThirdPartyComponent'
 	| 'SettingsDiscordComponent'
 	| 'SettingsGeneralModsComponent'
+	| 'SettingsGeneralAddonsComponent'
 	| 'SettingsBroadcastComponent';
 
 export interface Section {

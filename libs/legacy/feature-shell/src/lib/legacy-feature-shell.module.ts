@@ -432,6 +432,7 @@ import {
 import { MainwindowViewModule } from '@firestone/mainwindow/view';
 import { MemoryModule } from '@firestone/memory';
 import { MercenariesCommonModule } from '@firestone/mercenaries/common';
+import { AddonsServicesModule } from '@firestone/addons/services';
 import { ModsCommonModule } from '@firestone/mods/common';
 import { ReplayColiseumModule } from '@firestone/replay/coliseum';
 import { AllCardsService } from '@firestone/replay/replay-parser';
@@ -674,6 +675,7 @@ try {
 		SettingsViewModule,
 		TwitchCommonModule,
 		ModsCommonModule,
+		AddonsServicesModule,
 		ProfileCommonModule,
 		ProfileServicesModule,
 		BattlegroundsServicesModule,

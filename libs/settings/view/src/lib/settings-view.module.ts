@@ -15,6 +15,7 @@ import { ColorPickerModule } from 'ngx-color-picker';
 import { AppearanceCustomizationPageComponent } from './common/components/custom-pages/appearance-customization.component';
 import { SettingsBroadcastComponent } from './common/components/custom-pages/settings-broadcast';
 import { SettingsDiscordComponent } from './common/components/custom-pages/settings-discord.component';
+import { SettingsGeneralAddonsComponent } from './common/components/custom-pages/settings-general-addons.component';
 import { SettingsGeneralBugReportComponent } from './common/components/custom-pages/settings-general-bug-report.component';
 import { SettingsGeneralModsComponent } from './common/components/custom-pages/settings-general-mods.component';
 import { SettingsGeneralThirdPartyComponent } from './common/components/custom-pages/settings-general-third-party.component';
@@ -46,6 +47,7 @@ const components = [
 	SettingsBroadcastComponent,
 	SettingsDiscordComponent,
 	SettingsGeneralModsComponent,
+	SettingsGeneralAddonsComponent,
 
 	AppearanceCustomizationPageComponent,
 	CustomColorPickerComponent,

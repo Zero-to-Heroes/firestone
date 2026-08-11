@@ -21,6 +21,8 @@
 			"@firestone/achievements/common": ["libs/achievements/common/src/index.ts"],
 			"@firestone/achievements/data-access": ["libs/achievements/data-access/src/index.ts"],
 			"@firestone/achievements/view": ["libs/achievements/view/src/index.ts"],
+			"@firestone/addons/common": ["libs/addons/common/src/index.ts"],
+			"@firestone/addons/services": ["libs/addons/services/src/index.ts"],
 			"@firestone/app/common": ["libs/app/common/src/index.ts"],
 			"@firestone/app/ow-native": ["libs/app/ow-native/src/index.ts"],
 			"@firestone/app/view": ["libs/app/view/src/index.ts"],

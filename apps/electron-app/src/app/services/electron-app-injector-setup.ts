@@ -163,6 +163,13 @@ import {
 	MercenariesReferenceDataService,
 } from '@firestone/mercenaries/common';
 import { InGameReplayService, ModsManagerService } from '@firestone/mods/common';
+import {
+	AddonsApiGateway,
+	AddonsBootstrapService,
+	AddonsGameBridgeService,
+	AddonsHostService,
+	AddonsInstallService,
+} from '@firestone/addons/services';
 import { ProfileServiceFacade, ProfileUploaderService } from '@firestone/profile/common';
 import { AccountService } from '@firestone/profile/services';
 import { OverlayAppearanceService, SettingsControllerService } from '@firestone/settings/services';
@@ -752,6 +759,17 @@ export const buildAppInjector = () => {
 	const modsManager = new ModsManagerService(windowManager);
 	electronInjector.register(ModsManagerService, modsManager);
 
+	const addonsApiGateway = new AddonsApiGateway();
+	electronInjector.register(AddonsApiGateway, addonsApiGateway);
+	const addonsInstallService = new AddonsInstallService(windowManager);
+	electronInjector.register(AddonsInstallService, addonsInstallService);
+	const addonsHostService = new AddonsHostService();
+	electronInjector.register(AddonsHostService, addonsHostService);
+	const addonsGameBridgeService = new AddonsGameBridgeService();
+	electronInjector.register(AddonsGameBridgeService, addonsGameBridgeService);
+	const addonsBootstrapService = new AddonsBootstrapService();
+	electronInjector.register(AddonsBootstrapService, addonsBootstrapService);
+
 	const replayUploadService = new ReplayUploadService(
 		preferences,
 		userService,
@@ -1087,6 +1105,9 @@ export const buildAppInjector = () => {
 
 	const gameOverService = new GameOverService(gameStateFacade, events, bgsBestUserStatsService);
 	electronInjector.register(GameOverService, gameOverService);
+
+	// Start add-ons host after Events / upload pipeline exist (REVIEW_FINALIZED bridge).
+	void addonsBootstrapService.init();
 
 	const collectionStorageService = new CollectionStorageService(localStorage, diskCache);
 	electronInjector.register(CollectionStorageService, collectionStorageService);

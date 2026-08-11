@@ -8,6 +8,7 @@ import { applicationSettings } from './general/_general-settings';
 import { globalSettings } from './global/_global-settings';
 import { integrationsSettings } from './integrations/_integrations-settings';
 import { mercenariesSettings } from './mercenaries/_mercenaries-settings';
+import { addonsSettings } from './addons/_addons-settings';
 import { modsSettings } from './mods/_mods-settings';
 import { replaySettings } from './replay/_replay-settings';
 import { troubleshootingSettings } from './troubleshooting/_troubleshooting-settings';
@@ -34,6 +35,7 @@ export const settingsDefinition = (context: SettingContext): SettingNode => {
 			integrationsSettings(context),
 			troubleshootingSettings(context),
 			modsSettings(context),
+			addonsSettings(context),
 		].filter((c) => !!c) as SettingNode[],
 	};
 	return result;

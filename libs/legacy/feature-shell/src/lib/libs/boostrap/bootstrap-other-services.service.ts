@@ -25,6 +25,7 @@ import {
 	ReviewIdService,
 } from '@firestone/game-state';
 import { MercenariesNavigationService } from '@firestone/mercenaries/common';
+import { AddonsBootstrapService, AddonsInstallService } from '@firestone/addons/services';
 import {
 	InGameReplayService,
 	ModsBootstrapService,
@@ -92,8 +93,10 @@ export class BootstrapOtherServicesService {
 		private readonly init_ArenaMetaHeroStrategiesService: ArenaMetaHeroStrategiesService,
 		// TODO: might not be the best place
 		private readonly modsBootstrap: ModsBootstrapService,
+		private readonly addonsBootstrap: AddonsBootstrapService,
 		// Keep injecting so the facade service initializes with the app.
 		private readonly init_ModsManagerService: ModsManagerService,
+		private readonly init_AddonsInstallService: AddonsInstallService,
 		private readonly init_ReplayProtocolHandlerService: ReplayProtocolHandlerService,
 		private readonly init_OwHotkeyHandlerService: OwHotkeyHandlerService,
 		private readonly init_HotkeyFacadeService: HotkeyFacadeService,
@@ -103,5 +106,6 @@ export class BootstrapOtherServicesService {
 
 	public async bootstrapServices(): Promise<void> {
 		this.modsBootstrap.init();
+		await this.addonsBootstrap.init();
 	}
 }

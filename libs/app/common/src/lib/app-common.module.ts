@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { AddonsServicesModule } from '@firestone/addons/services';
 import { ArenaCommonModule } from '@firestone/arena/common';
 import { GameStateModule } from '@firestone/game-state';
 import { LotteryCommonModule } from '@firestone/lottery/common';
@@ -30,6 +31,7 @@ import { HsLogsWatcherService } from './services/logs/hs-logs-watcher.service';
 		MercenariesCommonModule,
 		LotteryCommonModule,
 		ModsCommonModule,
+		AddonsServicesModule,
 	],
 	providers: [LocalizationLoaderWithCache, HsLogsWatcherService, GameNativeStateStoreService],
 })
