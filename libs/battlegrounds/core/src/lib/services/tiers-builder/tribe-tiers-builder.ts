@@ -31,15 +31,14 @@ export const buildTribeTiers = (
 		buildSingleTribeTier(targetTribe, cardsToInclude, tiersToInclude, cardRules, i18n, config),
 	);
 
-	const scCards = allCards
-		.getCards()
-		.filter(
-			(c) =>
-				c.set === 'Battlegrounds' &&
-				!c.premium &&
-				([CardType[CardType.MINION], CardType[CardType.BATTLEGROUND_SPELL]].includes(c.type?.toUpperCase()) ||
-					c.spellSchool === SpellSchool[SpellSchool.UPGRADE]),
-		);
+	const scCards = allCards.getCards().filter(
+		(c) =>
+			c.set === 'Battlegrounds' &&
+			// Special case
+			(!c.premium || c.id === CardIds.AureateLaureate_BG32_236) &&
+			([CardType[CardType.MINION], CardType[CardType.BATTLEGROUND_SPELL]].includes(c.type?.toUpperCase()) ||
+				c.spellSchool === SpellSchool[SpellSchool.UPGRADE]),
+	);
 	const types: { type: 'Zerg' | 'Protoss' | 'Battlecruiser'; inclusion: (card: ExtendedReferenceCard) => boolean }[] =
 		[];
 	if (config?.showProtossMinions) {

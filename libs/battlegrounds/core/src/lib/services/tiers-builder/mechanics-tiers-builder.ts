@@ -236,7 +236,8 @@ const buildBuddies = (
 		.getCards()
 		.filter((card) => card.mechanics?.includes(GameTag[GameTag.BACON_BUDDY]))
 		.filter((card) => !card.otherTags?.includes(CustomTags[CustomTags.REMOVED_FROM_BACON_POOL]))
-		.filter((c) => !!c.battlegroundsPremiumDbfId)
+		// Special case
+		.filter((c) => !!c.battlegroundsPremiumDbfId || c.id === CardIds.AureateLaureate_BG32_236)
 		.filter((card) => card.set !== 'Vanilla');
 	const allPlayerBuddies = allPlayerCardIds
 		.map((p) => getBuddy(p as CardIds, allCards.getService()))

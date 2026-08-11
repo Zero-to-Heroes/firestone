@@ -78,7 +78,7 @@ export const getAllCardsInGame = (
 			}
 			return tribesForCard.some((r) => isValidTribe(availableTribes, Race[r]));
 		})
-		.filter((card) => !card.premium); // Ignore golden
+		.filter((card) => !card.premium || card.id === CardIds.AureateLaureate_BG32_236); // Ignore golden
 	return result;
 };
 
