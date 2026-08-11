@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inpu
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { CardType, GameTag } from '@firestone-hs/reference-data';
 import { AllCardsService, Entity } from '@firestone/replay/replay-parser';
+import { formatScriptDataText } from './enchantment-text.utils';
 
 @Component({
 	standalone: false,
@@ -86,10 +87,10 @@ export class CardTextComponent {
 		}
 
 		description = description
-			// Now replace the value, if relevant
-			.replace('@', `${this._entity.getTag(GameTag.TAG_SCRIPT_DATA_NUM_1)}`)
 			.replace(/\$(\d+)/g, this.modifier(damageBonus, doubleDamage))
 			.replace(/#(\d+)/g, this.modifier(damageBonus, doubleDamage));
+		// Script-data placeholders (+{N}/+{M}, @)
+		description = formatScriptDataText(description, this._entity);
 		// console.debug('updated', description, damageBonus, doubleDamage, this._controller, this._entity);
 		this.text = this.domSanitizer.bypassSecurityTrustHtml(description);
 

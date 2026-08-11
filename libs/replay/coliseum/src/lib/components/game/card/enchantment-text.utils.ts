@@ -16,7 +16,12 @@ export const getEnchantmentTagValue = (entity: Entity, tag: GameTag): number => 
 	return typeof value === 'number' && !Number.isNaN(value) && value >= 0 ? value : 0;
 };
 
-export const formatEnchantmentText = (text: string | undefined, entity: Entity): string => {
+/**
+ * Substitutes script-data placeholders in card/enchantment text:
+ * - {N} → TAG_SCRIPT_DATA_NUM_{N+1}
+ * - @ → NUM_1
+ */
+export const formatScriptDataText = (text: string | undefined, entity: Entity): string => {
 	if (!text) {
 		return '';
 	}
@@ -25,12 +30,6 @@ export const formatEnchantmentText = (text: string | undefined, entity: Entity):
 		.replace('\n', '<br/>')
 		.replace(/\u00a0/g, ' ')
 		.replace(/^\[x\]/, '');
-
-	// Reference texts often use literal +0/+0 as placeholders (same meaning as +{0}/+{1}).
-	// Run before {N} substitution so texts like +{0}/+{1} are left for the brace replacer.
-	const scriptAtk = getEnchantmentTagValue(entity, GameTag.TAG_SCRIPT_DATA_NUM_1);
-	const scriptHealth = getEnchantmentTagValue(entity, GameTag.TAG_SCRIPT_DATA_NUM_2);
-	description = description.replace(/\+(\d+)\/\+(\d+)/g, `+${scriptAtk}/+${scriptHealth}`);
 
 	description = description.replace(/\{(\d+)\}/g, (_, indexStr: string) => {
 		const index = +indexStr;
@@ -41,6 +40,10 @@ export const formatEnchantmentText = (text: string | undefined, entity: Entity):
 	description = description.replace('@', `${getEnchantmentTagValue(entity, GameTag.TAG_SCRIPT_DATA_NUM_1)}`);
 
 	return description;
+};
+
+export const formatEnchantmentText = (text: string | undefined, entity: Entity): string => {
+	return formatScriptDataText(text, entity);
 };
 
 export interface GroupedEnchantment {

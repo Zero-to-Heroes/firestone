@@ -28,8 +28,7 @@ export class GamePopulationService {
 		// Use the fully-processed end-of-chunk state when available, since
 		// getLatestParsedState() returns the last action's snapshot which may
 		// not include tail tag changes (e.g. BG shop entities moving to REMOVEDFROMGAME)
-		const baseState =
-			game.latestChunkEndState?.size > 0 ? game.latestChunkEndState : game.getLatestParsedState();
+		const baseState = game.latestChunkEndState?.size > 0 ? game.latestChunkEndState : game.getLatestParsedState();
 		const entities: Map<number, Entity> = baseState.filter(
 			(entity: Entity) => ![Zone.REMOVEDFROMGAME].includes(entity.getTag(GameTag.ZONE)),
 		);
@@ -207,6 +206,10 @@ export class GamePopulationService {
 			[GameTag[GameTag.CREATOR]]: item.entityDefintion.tags[GameTag[GameTag.CREATOR]],
 			[GameTag[GameTag.TAG_SCRIPT_DATA_NUM_1]]: item.entityDefintion.tags[GameTag[GameTag.TAG_SCRIPT_DATA_NUM_1]],
 			[GameTag[GameTag.TAG_SCRIPT_DATA_NUM_2]]: item.entityDefintion.tags[GameTag[GameTag.TAG_SCRIPT_DATA_NUM_2]],
+			[GameTag[GameTag.TAG_SCRIPT_DATA_NUM_3]]: item.entityDefintion.tags[GameTag[GameTag.TAG_SCRIPT_DATA_NUM_3]],
+			[GameTag[GameTag.TAG_SCRIPT_DATA_NUM_4]]: item.entityDefintion.tags[GameTag[GameTag.TAG_SCRIPT_DATA_NUM_4]],
+			[GameTag[GameTag.TAG_SCRIPT_DATA_NUM_5]]: item.entityDefintion.tags[GameTag[GameTag.TAG_SCRIPT_DATA_NUM_5]],
+			[GameTag[GameTag.TAG_SCRIPT_DATA_NUM_6]]: item.entityDefintion.tags[GameTag[GameTag.TAG_SCRIPT_DATA_NUM_6]],
 		};
 		const finalEntity: Entity = result.get(item.entityDefintion.id).update({ tags: newTags });
 		return result.set(finalEntity.id, finalEntity);
