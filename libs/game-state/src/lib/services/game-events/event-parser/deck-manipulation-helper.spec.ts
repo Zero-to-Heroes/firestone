@@ -104,6 +104,40 @@ describe('DeckManipulationHelper.removeSingleCardFromZone', () => {
 		expect(newZone[0].trueEntityId).toBe(72);
 	});
 
+	it('prefers the creator gift whose cardId matches the recruited card', () => {
+		const hogger = CardIds.ChainbreakerHogger_JAIL_384;
+		const warptooth = CardIds.Warptooth_JAIL_421;
+		const zone = [
+			DeckCard.create({ cardId: CardIds.YseraEmeraldAspect_EDR_000, creatorCardId: hogger, entityId: 72 }),
+			DeckCard.create({ cardId: warptooth, creatorCardId: hogger, entityId: 80 }),
+			DeckCard.create({ cardId: CardIds.DeathwingWorldbreaker_CATA_190h, creatorCardId: hogger, entityId: 81 }),
+		];
+		const [newZone, removed] = helper.removeSingleCardFromZone(zone, null, -1, true, true, null, false, {
+			fallbackCreatorCardId: hogger,
+			preferredCardId: warptooth,
+		});
+		expect(removed?.cardId).toBe(warptooth);
+		expect(removed?.entityId).toBe(80);
+		expect(newZone.map((c) => c.entityId)).toEqual([72, 81]);
+	});
+
+	it('falls back to an anonymous creator gift when no cardId matches', () => {
+		const hogger = CardIds.ChainbreakerHogger_JAIL_384;
+		const zone = [
+			DeckCard.create({ creatorCardId: hogger, trueEntityId: 70 }),
+			DeckCard.create({ creatorCardId: hogger, trueEntityId: 72 }),
+		];
+		const [newZone, removed] = helper.removeSingleCardFromZone(zone, null, -1, true, true, null, false, {
+			fallbackCreatorCardId: hogger,
+			preferredCardId: CardIds.Warptooth_JAIL_421,
+		});
+		expect(removed?.creatorCardId).toBe(hogger);
+		expect(removed?.trueEntityId).toBe(70);
+		expect(removed?.cardId).toBeFalsy();
+		expect(newZone.length).toBe(1);
+		expect(newZone[0].trueEntityId).toBe(72);
+	});
+
 	it('does not treat entityId -1 sentinel as a match for entityId 1', () => {
 		const hogger = CardIds.ChainbreakerHogger_JAIL_384;
 		const zone = [

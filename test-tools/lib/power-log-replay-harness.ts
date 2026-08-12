@@ -334,6 +334,7 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	'moonlit-guidance': 'moonlit-guidance/moonlit-guidance.log',
 	'keymaster-alabaster': 'keymaster-alabaster/keymaster-alabaster.log',
 	'king-llane-hogger-copy-gift': 'king-llane-hogger-copy-gift/king-llane-hogger-copy-gift.log',
+	warptooth: 'warptooth/warptooth.log',
 };
 
 /**

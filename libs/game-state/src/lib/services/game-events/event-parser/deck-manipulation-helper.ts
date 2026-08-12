@@ -14,6 +14,11 @@ import { GameEvent } from '../game-event';
 export type RemoveSingleCardFromZoneOptions = {
 	/** When entityId/cardId/filler removal fails, drop the first row with this creatorCardId. */
 	readonly fallbackCreatorCardId?: string | null;
+	/**
+	 * When using {@link fallbackCreatorCardId}, prefer a gift whose cardId matches this
+	 * (local Hogger copies are already identified). If none, drop an anonymous gift row.
+	 */
+	readonly preferredCardId?: string | null;
 };
 
 /** Creators the opponent deck tracker already surfaces as "Created by …" ({@link giftCreators}). */
@@ -93,7 +98,11 @@ export class DeckManipulationHelper {
 
 		if (!normalizedCardId) {
 			debug && console.debug('[card-draw] removing card with no cardId', normalizedCardId, zone);
-			const creatorFallback = this.tryRemoveByCreatorCardIdFallback(zone, options?.fallbackCreatorCardId);
+			const creatorFallback = this.tryRemoveByCreatorCardIdFallback(
+				zone,
+				options?.fallbackCreatorCardId,
+				options?.preferredCardId,
+			);
 			if (creatorFallback[1]) {
 				return creatorFallback;
 			}
@@ -237,7 +246,11 @@ export class DeckManipulationHelper {
 			// console.warn('could not find card to remove', cardId, entityId, cardInfos);
 		}
 		if (!removedCard) {
-			return this.tryRemoveByCreatorCardIdFallback(zone, options?.fallbackCreatorCardId);
+			return this.tryRemoveByCreatorCardIdFallback(
+				zone,
+				options?.fallbackCreatorCardId,
+				options?.preferredCardId,
+			);
 		}
 		return [result, removedCard];
 	}
@@ -245,22 +258,28 @@ export class DeckManipulationHelper {
 	private tryRemoveByCreatorCardIdFallback(
 		zone: readonly DeckCard[],
 		fallbackCreatorCardId: string | null | undefined,
+		preferredCardId?: string | null,
 	): readonly [readonly DeckCard[], DeckCard | undefined] {
 		if (!fallbackCreatorCardId) {
 			return [zone, undefined];
 		}
-		let hasRemovedOnce = false;
-		let removedCard: DeckCard | undefined;
-		const result: DeckCard[] = [];
-		for (const card of zone) {
-			if (!hasRemovedOnce && card.creatorCardId === fallbackCreatorCardId) {
-				hasRemovedOnce = true;
-				removedCard = card;
-				continue;
-			}
-			result.push(card);
+		const preferredNormalized = this.normalizeCardId(preferredCardId, true);
+		const matchingCardIdIndex =
+			preferredNormalized != null
+				? zone.findIndex(
+						(card) =>
+							card.creatorCardId === fallbackCreatorCardId &&
+							this.normalizeCardId(card.cardId, true) === preferredNormalized,
+					)
+				: -1;
+		const anonymousIndex = zone.findIndex((card) => card.creatorCardId === fallbackCreatorCardId && !card.cardId);
+		const anyCreatorIndex = zone.findIndex((card) => card.creatorCardId === fallbackCreatorCardId);
+		const removeIndex =
+			matchingCardIdIndex >= 0 ? matchingCardIdIndex : anonymousIndex >= 0 ? anonymousIndex : anyCreatorIndex;
+		if (removeIndex < 0) {
+			return [zone, undefined];
 		}
-		return removedCard ? [result, removedCard] : [zone, undefined];
+		return [zone.filter((_, index) => index !== removeIndex), zone[removeIndex]];
 	}
 
 	public empiricReplaceCardInOtherZone(

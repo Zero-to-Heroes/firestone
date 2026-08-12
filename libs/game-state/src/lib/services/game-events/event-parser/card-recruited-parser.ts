@@ -42,8 +42,9 @@ export class CardRecruitedParser implements EventParser {
 				gameEventCreatorCardId: eventCreatorCardId,
 				handOrRemovedCard: card,
 			});
-		// When recruiting a created gift, skip cardId removal so we don't drop an unrelated
-		// deckstring copy of the revealed card — remove via creator fallback instead.
+		// When recruiting a created gift, skip cardId/entityId removal so we don't drop an
+		// unrelated deckstring copy (or a stamped entityId). Creator fallback prefers a gift
+		// whose cardId matches the recruited card, else an anonymous gift row.
 		const removeCardId = eventCreatorCardId ? null : cardId;
 		const [newDeck, removedCard] = this.helper.removeSingleCardFromZone(
 			deck.deck,
@@ -53,7 +54,7 @@ export class CardRecruitedParser implements EventParser {
 			true,
 			null,
 			false,
-			{ fallbackCreatorCardId },
+			{ fallbackCreatorCardId, preferredCardId: cardId },
 		);
 		let additionalKnownCardsInDeck = deck.additionalKnownCardsInDeck;
 		if (!removedCard?.cardId) {
