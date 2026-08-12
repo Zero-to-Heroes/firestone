@@ -408,7 +408,9 @@ export class CopiedFromEntityIdParser implements EventParser {
 				copiedDeckWithKnownCardsInHand = copiedDeckWithSecrets.update({
 					hand: newHand,
 				});
-			} else if (resolvedRevealCardId?.length) {
+			} else if (resolvedRevealCardId?.length && isPlayer) {
+				// Only the local player holding the copy actually saw the card (e.g. Deja Vu).
+				// Opponent same-controller previews must not populate the hand overlay.
 				const cardIdToAdd = resolvedRevealCardId;
 				copiedDeckWithKnownCardsInHand = copiedDeckWithSecrets.update({
 					additionalKnownCardsInHand: [

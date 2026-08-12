@@ -335,6 +335,7 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	'keymaster-alabaster': 'keymaster-alabaster/keymaster-alabaster.log',
 	'king-llane-hogger-copy-gift': 'king-llane-hogger-copy-gift/king-llane-hogger-copy-gift.log',
 	warptooth: 'warptooth/warptooth.log',
+	'lotus-troublemaker': 'lotus-troublemaker/lotus-troublemaker.log',
 };
 
 /**
