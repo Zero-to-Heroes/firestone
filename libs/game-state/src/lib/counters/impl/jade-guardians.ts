@@ -9,6 +9,7 @@ export class JadeGuardiansCounterDefinitionV2 extends CounterDefinitionV2<number
 	public override id: CounterType = 'jadeGuardians';
 	public override image = CardIds.JadeGuardians_JAIL_474;
 	public override cards: readonly CardIds[] = [CardIds.JadeGuardians_JAIL_474, CardIds.LotusTroublemaker_JAIL_470];
+	protected override useAzalina = true;
 
 	readonly player = {
 		pref: 'playerJadeGuardiansCounter' as const,

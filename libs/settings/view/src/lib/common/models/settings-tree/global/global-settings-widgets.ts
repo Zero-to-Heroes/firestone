@@ -73,6 +73,28 @@ export const globalWidgetSettings = (context: SettingContext): SettingNode => {
 					},
 					{
 						type: 'toggle',
+						field: 'lockWidgetPositions',
+						label: context.i18n.translateString('settings.general.widgets.lock-widgets-label'),
+						tooltip: context.i18n.translateString('settings.general.widgets.lock-widgets-tooltip'),
+					},
+					{
+						// label: context.i18n.translateString('settings.decktracker.global.reset-button'),
+						text: context.i18n.translateString('settings.decktracker.global.reset-button'),
+						tooltip: context.i18n.translateString('settings.decktracker.global.reset-button-tooltip'),
+						keywords: [context.i18n.translateString('settings.decktracker.global.reset-button')],
+						action: () => {
+							context.prefs.resetDecktrackerPositions();
+						},
+						confirmation: context.i18n.translateString('settings.decktracker.global.reset-button-confirmation'),
+					},
+				],
+			},
+			{
+				id: 'global-widgets-counters',
+				title: context.i18n.translateString('settings.decktracker.opponent-deck.counters.title'),
+				settings: [
+					{
+						type: 'toggle',
 						field: 'useGroupedCounters',
 						label: context.i18n.translateString('settings.general.widgets.use-grouped-counters-label'),
 						tooltip: context.i18n.translateString('settings.general.widgets.use-grouped-counters-tooltip'),
@@ -103,19 +125,9 @@ export const globalWidgetSettings = (context: SettingContext): SettingNode => {
 					},
 					{
 						type: 'toggle',
-						field: 'lockWidgetPositions',
-						label: context.i18n.translateString('settings.general.widgets.lock-widgets-label'),
-						tooltip: context.i18n.translateString('settings.general.widgets.lock-widgets-tooltip'),
-					},
-					{
-						// label: context.i18n.translateString('settings.decktracker.global.reset-button'),
-						text: context.i18n.translateString('settings.decktracker.global.reset-button'),
-						tooltip: context.i18n.translateString('settings.decktracker.global.reset-button-tooltip'),
-						keywords: [context.i18n.translateString('settings.decktracker.global.reset-button')],
-						action: () => {
-							context.prefs.resetDecktrackerPositions();
-						},
-						confirmation: context.i18n.translateString('settings.decktracker.global.reset-button-confirmation'),
+						field: 'includeAzalinaWithCounters',
+						label: context.i18n.translateString('settings.general.widgets.use-azalina-label'),
+						tooltip: context.i18n.translateString('settings.general.widgets.use-azalina-tooltip'),
 					},
 				],
 			},

@@ -390,6 +390,8 @@ export class Preferences implements IPreferences {
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly opponentAttackCounterWidgetPosition: { left: number; top: number };
 
+	readonly includeAzalinaWithCounters: boolean = true;
+
 	readonly playerGalakrondCounter: BooleanWithLimited = true;
 	readonly opponentGalakrondCounter: BooleanWithLimited = true;
 	readonly playerWatchpostCounter: BooleanWithLimited = true;

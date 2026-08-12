@@ -4,6 +4,7 @@ import { Preferences } from '@firestone/shared/common/service';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { BattlegroundsState } from '../models/_barrel';
 import { GameState } from '../models/game-state';
+import { hasCorrectClass } from '../related-cards/dynamic-pools';
 import { filterCards } from '../services/cards/utils';
 import { CounterType } from './counter-type';
 import { areCardsValidInCurrentGame } from './utils';
@@ -22,6 +23,7 @@ export abstract class CounterDefinitionV2<T> {
 	protected readonly cardsOnBoard: readonly CardIds[] = [];
 	protected showOnlyInDiscovers = false;
 	protected includeBoardForCards = true;
+	protected useAzalina = false;
 	protected debug = false;
 	protected advancedTooltipType?: string;
 	// Only show one instance of the counter at the same time. Useful for counters like
@@ -155,11 +157,19 @@ export abstract class CounterDefinitionV2<T> {
 					);
 				return false;
 			}
+			const maybeShowWithAzalina =
+				this.useAzalina &&
+				prefs.includeAzalinaWithCounters &&
+				gameState.playerDeck.globalEffects.some((e) => e.cardId === CardIds.AzalinaSoulsever_JAIL_430) &&
+				!!this.cards?.some((c) =>
+					hasCorrectClass(this.allCards.getCard(c), gameState.opponentDeck.getCurrentClassEnum() ?? null),
+				);
 			if (
 				!!this.cards?.length &&
 				!gameState.playerDeck?.hasRelevantCard(this.cards, {
 					includeBoard: this.includeBoardForCards,
-				})
+				}) &&
+				!maybeShowWithAzalina
 			) {
 				this.debug &&
 					console.debug(
@@ -232,7 +242,13 @@ export abstract class CounterDefinitionV2<T> {
 				this.debug && console.debug('[debug] not active for invalid cards', this.id, side, gameState.metadata);
 				return false;
 			}
-			if (!this.opponent.display(gameState, bgState)) {
+			const maybeShowWithAzalina =
+				this.useAzalina &&
+				prefs.includeAzalinaWithCounters &&
+				gameState.opponentDeck.globalEffects.some((e) => e.cardId === CardIds.AzalinaSoulsever_JAIL_430) &&
+				!!this.cards?.length &&
+				!!gameState.playerDeck.deckList?.some((c) => this.cards.includes(c.cardId as CardIds));
+			if (!this.opponent.display(gameState, bgState) && !maybeShowWithAzalina) {
 				this.debug &&
 					console.debug('[debug] no display', this.id, side, this.opponent.display(gameState, bgState));
 				return false;
