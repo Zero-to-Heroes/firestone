@@ -46,6 +46,7 @@ export class ShatterRecombineParser implements ActionChainParser {
 
 		const possibleCards = getShatteredRecombinedPossibleCards(
 			currentState.opponentDeck,
+			currentState.playerDeck,
 			this.allCards.getService(),
 			cardInHand.guessedInfo,
 			currentState.metadata?.scenarioId,

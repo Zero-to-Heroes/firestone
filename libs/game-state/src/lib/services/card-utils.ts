@@ -248,6 +248,7 @@ const refCardIdToNonNeutralClasses = (allCards: AllCardsService, cardId: string 
  */
 const collectDeckStateCardClassesForShatter = (
 	deckState: DeckState,
+	opponentState: DeckState,
 	allCards: AllCardsService,
 	scenarioId: number | undefined,
 ): CardClass[] => {
@@ -263,6 +264,22 @@ const collectDeckStateCardClassesForShatter = (
 			}
 		}
 	}
+	if (
+		deckState.globalEffects.some((e) => e.cardId === CardIds.AzalinaSoulsever_JAIL_430) ||
+		opponentState.globalEffects.some((e) => e.cardId === CardIds.AzalinaSoulsever_JAIL_430)
+	) {
+		const primary = opponentState.getCurrentClassEnum();
+		if (primary != null && primary !== CardClass.NEUTRAL) {
+			out.push(primary);
+		}
+		if (scenarioId === DUAL_CLASS_ARENA_SCENARIO_ID && opponentState.heroPower?.cardId) {
+			for (const cc of refCardIdToNonNeutralClasses(allCards, opponentState.heroPower.cardId)) {
+				if (!out.includes(cc)) {
+					out.push(cc);
+				}
+			}
+		}
+	}
 	if (out.length) {
 		return out;
 	}
@@ -271,6 +288,7 @@ const collectDeckStateCardClassesForShatter = (
 
 export const resolveShatterGuessCardClasses = (
 	deckState: DeckState,
+	opponentState: DeckState,
 	allCards: AllCardsService,
 	guessedInfo: GuessedInfo,
 	scenarioId: number | undefined,
@@ -281,7 +299,7 @@ export const resolveShatterGuessCardClasses = (
 	if (guessedInfo?.cardClasses?.length) {
 		return guessedInfo.cardClasses;
 	}
-	return collectDeckStateCardClassesForShatter(deckState, allCards, scenarioId);
+	return collectDeckStateCardClassesForShatter(deckState, opponentState, allCards, scenarioId);
 };
 
 /**
@@ -292,11 +310,12 @@ export const resolveShatterGuessCardClasses = (
  */
 export const getShatteredPossibleCards = (
 	deckState: DeckState,
+	opponentState: DeckState,
 	allCards: AllCardsService,
 	guessedInfo: GuessedInfo,
 	scenarioId?: number,
 ): readonly string[] => {
-	const cardClasses = resolveShatterGuessCardClasses(deckState, allCards, guessedInfo, scenarioId);
+	const cardClasses = resolveShatterGuessCardClasses(deckState, opponentState, allCards, guessedInfo, scenarioId);
 	// // console.debug('cardClasses', cardClasses);
 	// if (!cardClasses.length) {
 	// 	return [];
@@ -334,11 +353,12 @@ export const getShatteredPossibleCards = (
 
 export const getShatteredRecombinedPossibleCards = (
 	deckState: DeckState,
+	opponentState: DeckState,
 	allCards: AllCardsService,
 	guessedInfo: GuessedInfo,
 	scenarioId?: number,
 ): readonly string[] => {
-	const cardClasses = resolveShatterGuessCardClasses(deckState, allCards, guessedInfo, scenarioId);
+	const cardClasses = resolveShatterGuessCardClasses(deckState, opponentState, allCards, guessedInfo, scenarioId);
 	// // console.debug('cardClasses', cardClasses);
 	// if (!cardClasses.length) {
 	// 	return [];
@@ -448,6 +468,7 @@ export const addGuessInfoToCard = (
 			card,
 			newGuessedInfo,
 			deckState,
+			opponentDeckState,
 			allCards,
 			gameState,
 			optionsWithDeckContext,
@@ -561,6 +582,7 @@ const updateGuessedInfoWithShattered = (
 	card: DeckCard,
 	newGuessedInfo: GuessedInfo,
 	deckState: DeckState,
+	opponentState: DeckState,
 	allCards: CardsFacadeService,
 	gameState: GameState,
 	options: {
@@ -569,7 +591,13 @@ const updateGuessedInfoWithShattered = (
 	},
 ): GuessedInfo => {
 	const scenarioId = gameState.metadata?.scenarioId ?? options?.metadata?.scenarioId;
-	const possibleCards = getShatteredPossibleCards(deckState, allCards.getService(), newGuessedInfo ?? {}, scenarioId);
+	const possibleCards = getShatteredPossibleCards(
+		deckState,
+		opponentState,
+		allCards.getService(),
+		newGuessedInfo ?? {},
+		scenarioId,
+	);
 	if (possibleCards.length > 0) {
 		// Even/odd halves of the global SHATTERED list. createdIndex sequences all spawns from the
 		// source (e.g. Spark of Life may use 0–1 for setaside tokens before hand pieces get 2 and 3).

@@ -148,6 +148,7 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 				this.mapData(([context, card]) =>
 					this.buildInfo(
 						context!.deck,
+						context!.deck.isOpponent ? context!.gameState.playerDeck : context!.gameState.opponentDeck,
 						context!.metadata,
 						context!.currentTurn as number,
 						card,
@@ -164,6 +165,7 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 
 	private buildInfo(
 		context: DeckState,
+		opponentDeck: DeckState,
 		metadata: Metadata,
 		currentTurn: number,
 		card: DeckCard,
@@ -321,6 +323,7 @@ export class OpponentCardInfoIdComponent extends AbstractSubscriptionComponent i
 				// Same logic betweeen Shattered and Forged
 				let allClasses = resolveShatterGuessCardClasses(
 					context,
+					opponentDeck,
 					this.allCards.getService(),
 					card.guessedInfo,
 					metadata.scenarioId,
