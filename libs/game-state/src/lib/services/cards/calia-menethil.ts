@@ -6,7 +6,7 @@ import { getCost, getProcessedCard } from '../card-utils';
 import { StaticGeneratingCard, StaticGeneratingCardInput } from './_card.type';
 
 export const CaliaMenethil: StaticGeneratingCard = {
-	cardIds: [CardIds.CaliaMenethil_CORE_CATA_002],
+	cardIds: [CardIds.CaliaMenethil_CORE_CATA_002, CardIds.Moonwell_EDR_476],
 	dynamicPool: (input: StaticGeneratingCardInput) => {
 		const deckState = input.inputOptions.deckState;
 		const deadCards = deckState.minionsDeadThisMatch.filter((c) => {
@@ -19,12 +19,15 @@ export const CaliaMenethil: StaticGeneratingCard = {
 		const costs = deadCards
 			.map((c) => {
 				const deckCard = deckState.findCard(c.entityId)?.card;
+
 				if (!deckCard) {
 					return null;
 				}
 				return {
-					id: c.cardId,
-					cost: getCost(deckCard, deckState, input.allCards as any as CardsFacadeService),
+					id: deckCard.transformedInto ?? c.cardId,
+					cost: deckCard.transformedInto
+						? input.allCards.getCard(deckCard.transformedInto)?.cost
+						: getCost(deckCard, deckState, input.allCards as any as CardsFacadeService),
 				};
 			})
 			.filter((c) => c?.cost != null);
