@@ -64,20 +64,26 @@ export class CardRevealedParser implements EventParser {
 			// );
 		}
 
+		const shouldHideCost =
+			gameEvent.additionalData.creatorCardId === CardIds.Kiljaeden_KiljaedensPortalEnchantment_GDB_145e;
 		const card = DeckCard.create({
 			cardId: cardId,
 			entityId: entityId,
 			cardName: dbCard.name,
 			refManaCost: dbCard.cost,
-			actualManaCost: gameEvent.additionalData.cost ?? dbCard.cost,
+			actualManaCost: shouldHideCost ? null : (gameEvent.additionalData.cost ?? dbCard.cost),
 			rarity: dbCard.rarity,
 			zone: 'SETASIDE',
 			temporaryCard: true,
 			lastAffectedByCardId: gameEvent.additionalData.creatorCardId || gameEvent.additionalData.originEntityCardId,
 			positionFromBottom: positionFromBottom,
-			tags: gameEvent.additionalData.tags ? toTagsObject(gameEvent.additionalData.tags) : {},
+			tags: shouldHideCost
+				? undefined
+				: gameEvent.additionalData.tags
+					? toTagsObject(gameEvent.additionalData.tags)
+					: {},
 		} as DeckCard);
-		// console.debug('[card-revealed] card', card.cardId, card, gameEvent);
+		console.debug('[card-revealed] card', `entityId:${entityId}_`, card.cardId, card, gameEvent);
 
 		// Simply adding the card to the zone doesn't work if the card already exist (eg we have put a card at the
 		// bottom of the deck with another card previously)
