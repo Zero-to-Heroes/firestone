@@ -8,6 +8,7 @@ export {
 } from './lib/counters/impl/kaelthas-spell-cycle';
 export * from './lib/counters/impl/next-starship-launch';
 export * from './lib/counters/impl/starships-launched';
+export { CorpseSpentCounterDefinitionV2 } from './lib/counters/impl/corpse-spent';
 export { YsondreCounterDefinitionV2 } from './lib/counters/impl/ysondre';
 export * from './lib/game-state.module';
 export * from './lib/models/_barrel';

@@ -352,6 +352,7 @@ export class DeckState {
 			...this.deck,
 			...this.board,
 			...this.otherZone.filter((card) => card.zone !== 'SETASIDE'),
+			...this.getStillDrawableExtraCards(),
 		];
 	}
 
@@ -363,6 +364,7 @@ export class DeckState {
 			...this.currentOptions,
 			...this.additionalKnownCardsInHand?.map((cardId) => ({ entityId: 0, cardId })),
 			...this.additionalKnownCardsInDeck?.map((cardId) => ({ entityId: 0, cardId })),
+			...this.getStillDrawableExtraCards(),
 		];
 	}
 
@@ -376,6 +378,7 @@ export class DeckState {
 			...this.additionalKnownCardsInDeck?.map((cardId) => ({ entityId: 0, cardId })),
 			...this.deckList,
 			...this.otherZone.filter((card) => card.zone !== 'SETASIDE'),
+			...this.getStillDrawableExtraCards(),
 		];
 	}
 
@@ -458,6 +461,7 @@ export class DeckState {
 		pool = pool.concat(
 			this.deck.map((card) => card.cardId),
 			this.additionalKnownCardsInDeck,
+			this.getStillDrawableExtraCards().map((card) => card.cardId),
 		);
 		return pool
 			.concat(this.getCardsInSideboards())
@@ -493,7 +497,7 @@ export class DeckState {
 			return false;
 		}
 
-		let updatedPool = [...this.deckList, ...this.board, this.weapon];
+		let updatedPool = [...this.deckList, ...this.board, this.weapon, ...this.getStillDrawableExtraCards()];
 		if (options?.includesOtherZone) {
 			updatedPool = updatedPool.concat(this.otherZone.filter((card) => card.zone !== 'SETASIDE'));
 		}
@@ -512,7 +516,10 @@ export class DeckState {
 	) {
 		let pool = [...this.hand, ...this.currentOptions].map((card) => card.cardId);
 		if (includesDeck) {
-			pool = pool.concat(this.deck.map((card) => card.cardId));
+			pool = pool.concat(
+				this.deck.map((card) => card.cardId),
+				this.getStillDrawableExtraCards().map((card) => card.cardId),
+			);
 		}
 		// console.debug(
 		// 	'checking for relevant card 2',
@@ -542,6 +549,40 @@ export class DeckState {
 		}
 
 		return battlecryCards[0];
+	}
+
+	/**
+	 * Cards still drawable as if they were in the deck: The Void (Irida) and
+	 * unreturned Godfrey overdraws. Used by counter visibility and related pool helpers.
+	 */
+	public getStillDrawableExtraCards(): readonly DeckCard[] {
+		return [...(this.voidZone ?? []), ...this.getQueuedGodfreyCards()];
+	}
+
+	private getQueuedGodfreyCards(): readonly DeckCard[] {
+		if (!this.globalEffects.some((e) => e.cardId === CardIds.GodfreytheBetrayer_JAIL_509)) {
+			return [];
+		}
+		const returnedCardIds = [...this.listAtlasReturnedCardIds()];
+		const queued: DeckCard[] = [];
+		for (const burned of this.burnedCards) {
+			const idx = returnedCardIds.indexOf(burned.cardId);
+			if (idx >= 0) {
+				returnedCardIds.splice(idx, 1);
+				continue;
+			}
+			const found = burned.entityId != null ? this.findCard(burned.entityId)?.card : undefined;
+			queued.push(found ?? DeckCard.create({ cardId: burned.cardId, entityId: burned.entityId }));
+		}
+		return queued.filter((c) => !!c.cardId);
+	}
+
+	private listAtlasReturnedCardIds(): readonly string[] {
+		const atlas = CardIds.GodfreyTheBetrayer_GodfreysAtlasEnchantment_JAIL_509e;
+		return [...this.hand, ...this.deck, ...this.board, ...this.otherZone.filter((c) => c.zone !== 'SETASIDE')]
+			.filter((c) => c.creatorCardId === atlas)
+			.map((c) => c.cardId)
+			.filter((id): id is string => !!id);
 	}
 
 	public getCardsInSideboards(): readonly string[] {
