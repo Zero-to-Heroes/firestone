@@ -36,7 +36,6 @@ import { AbstractSubscriptionComponent, arraysEqual } from '@firestone/shared/fr
 import { CardRulesService, CardsFacadeService, waitForReady } from '@firestone/shared/framework/core';
 import {
 	Observable,
-	BehaviorSubject,
 	auditTime,
 	combineLatest,
 	debounceTime,
@@ -53,7 +52,7 @@ import { LocalizationFacadeService } from '../../../services/localization-facade
 const buildHeaderStubTiers = (i18n: {
 	translateString: (toTranslate: string, params?: any) => string;
 }): readonly Tier[] => {
-	// Standard tavern headers only — empty groups until the user opens a tier.
+	// Standard tavern headers only — empty groups until the match's tribes are known.
 	return [1, 2, 3, 4, 5, 6].map((tier) => ({
 		type: 'standard' as const,
 		tavernTier: tier,
@@ -92,7 +91,6 @@ const buildHeaderStubTiers = (i18n: {
 				[useNewTiersHeaderStyle]="useNewTiersHeaderStyle$ | async"
 				[minionsOnBoardAndHand]="minionsOnBoardAndHand$ | async"
 				[minionsInShop]="minionsInShop$ | async"
-				(poolRequested)="onPoolRequested()"
 			></battlegrounds-minions-tiers-view>
 		</div>
 	`,
@@ -119,8 +117,6 @@ export class BattlegroundsMinionsTiersOverlayComponent
 	useNewTiersHeaderStyle$: Observable<boolean>;
 	minionsOnBoardAndHand$: Observable<readonly string[]>;
 	minionsInShop$: Observable<readonly string[]>;
-
-	private readonly poolRequested$$ = new BehaviorSubject<boolean>(false);
 
 	constructor(
 		protected readonly cdr: ChangeDetectorRef,
@@ -252,8 +248,20 @@ export class BattlegroundsMinionsTiersOverlayComponent
 			shareReplay(1),
 			takeUntil(this.destroyed$),
 		);
+		const reviewId$ = this.gameState.gameState$$.pipe(
+			this.mapData((state) => state?.reviewId ?? null),
+			distinctUntilChanged(),
+			shareReplay(1),
+			takeUntil(this.destroyed$),
+		);
+		const poolReady$ = combineLatest([reviewId$, currentGameInfo$]).pipe(
+			map(([reviewId, currentGameInfo]) => !!reviewId && !!currentGameInfo.races?.length),
+			distinctUntilChanged(),
+			shareReplay(1),
+			takeUntil(this.destroyed$),
+		);
 		const staticTiers$ = combineLatest([
-			this.poolRequested$$.pipe(distinctUntilChanged()),
+			poolReady$,
 			prefs$,
 			currentGameInfo$,
 			playerCardIds$,
@@ -264,7 +272,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 		]).pipe(
 			map(
 				([
-					poolRequested,
+					poolReady,
 					prefs,
 					currentGameInfo,
 					playerCardIds,
@@ -273,7 +281,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 					playerTrinkets,
 					questRewards,
 				]) => ({
-					poolRequested,
+					poolReady,
 					...prefs,
 					...currentGameInfo,
 					...playerCardIds,
@@ -285,7 +293,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 			),
 			this.mapData(
 				({
-					poolRequested,
+					poolReady,
 					showMechanicsTiers,
 					showTribeTiers,
 					showTierSeven,
@@ -312,7 +320,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 					playerTrinkets,
 					questRewards,
 				}) => {
-					if (!poolRequested) {
+					if (!poolReady) {
 						return buildHeaderStubTiers(this.i18n);
 					}
 					// hasSpells = true;
@@ -446,7 +454,7 @@ export class BattlegroundsMinionsTiersOverlayComponent
 			}),
 		);
 		this.compositions$ = combineLatest([
-			this.poolRequested$$.pipe(distinctUntilChanged()),
+			poolReady$,
 			this.prefs.preferences$$.pipe(this.mapData((prefs) => prefs.bgsMinionsListShowCompositions)),
 			this.gameState.gameState$$.pipe(
 				this.mapData((state) => state.bgState.currentGame?.availableRaces),
@@ -456,8 +464,8 @@ export class BattlegroundsMinionsTiersOverlayComponent
 			this.gameState.gameState$$.pipe(this.mapData((state) => state.bgState.currentGame?.hasTimewarped)),
 			this.strategies.strategies$$,
 		]).pipe(
-			this.mapData(([poolRequested, showFromPrefs, availableTribes, hasTrinkets, hasTimewarped, strategies]) =>
-				poolRequested && showFromPrefs
+			this.mapData(([poolReady, showFromPrefs, availableTribes, hasTrinkets, hasTimewarped, strategies]) =>
+				poolReady && showFromPrefs
 					? buildCompositions(
 							availableTribes,
 							strategies,
@@ -535,31 +543,8 @@ export class BattlegroundsMinionsTiersOverlayComponent
 			takeUntil(this.destroyed$),
 		);
 
-		// Drop the deferred minion-pool latch on each new match so a prior open does not
-		// keep the heavy Tier[] graph mounted across games (cross-game overlay V8 step).
-		this.gameState.gameState$$
-			.pipe(
-				this.mapData((state) => state?.reviewId ?? null),
-				distinctUntilChanged(),
-				takeUntil(this.destroyed$),
-			)
-			.subscribe((reviewId) => {
-				if (reviewId == null) {
-					return;
-				}
-				if (this.poolRequested$$.value) {
-					this.poolRequested$$.next(false);
-				}
-			});
-
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.markForCheck();
-		}
-	}
-
-	onPoolRequested() {
-		if (!this.poolRequested$$.value) {
-			this.poolRequested$$.next(true);
 		}
 	}
 }

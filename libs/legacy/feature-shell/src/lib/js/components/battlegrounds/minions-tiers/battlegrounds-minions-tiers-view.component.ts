@@ -1,12 +1,4 @@
-import {
-	AfterContentInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	EventEmitter,
-	Input,
-	Output,
-} from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { GameTag, Race } from '@firestone-hs/reference-data';
 import { ExtendedBgsCompAdvice, TavernTierType, Tier } from '@firestone/battlegrounds/core';
 import { AbstractSubscriptionComponent } from '@firestone/shared/framework/common';
@@ -95,9 +87,6 @@ export class BattlegroundsMinionsTiersViewOverlayComponent
 	displayedTierId$: Observable<TavernTierType>;
 	displayedTier$: Observable<Tier>;
 
-	/** Fired on first tier open/lock so the parent can build the full card pool. */
-	@Output() poolRequested = new EventEmitter<void>();
-
 	tierLevels: readonly Tier[] = [];
 	mechanicalTiers: readonly Tier[] = [];
 	tribeTiers: readonly Tier[] = [];
@@ -158,9 +147,6 @@ export class BattlegroundsMinionsTiersViewOverlayComponent
 	}
 
 	onDisplayedTier(tavernTier: Tier) {
-		if (tavernTier != null) {
-			this.poolRequested.emit();
-		}
 		this.displayedTierId$$.next(tavernTier?.tavernTier);
 	}
 
