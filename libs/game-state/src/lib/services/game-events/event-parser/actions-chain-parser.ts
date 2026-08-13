@@ -40,7 +40,7 @@ export class ActionsChainParser implements EventParser {
 	private chainParser: { [eventKey: string]: ActionChainParser[] };
 
 	constructor(helper: DeckManipulationHelper, cards: CardsFacadeService, i18n: ILocalizationService) {
-		const parsers = [
+		const parsers: ActionChainParser[] = [
 			new FuturisticForefatherParser(),
 			// new WaveshapingParser(helper)
 			new BirdwatchingParser(helper, cards),
@@ -56,8 +56,11 @@ export class ActionsChainParser implements EventParser {
 		}
 		this.chainParser = {};
 		for (const parser of parsers) {
-			const eventType = parser.appliesOnEvent();
-			this.chainParser[eventType] = [...(this.chainParser[eventType] ?? []), parser];
+			const raw = parser.appliesOnEvent();
+			const eventTypes = Array.isArray(raw) ? raw : [raw];
+			for (const eventType of eventTypes) {
+				this.chainParser[eventType] = [...(this.chainParser[eventType] ?? []), parser];
+			}
 		}
 
 		const allEvents = [...ActionsChainParser.REGISTERED_EVENT_TYPES, ...Object.keys(this.chainParser)];

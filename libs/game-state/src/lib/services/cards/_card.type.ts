@@ -119,7 +119,7 @@ export interface ChainParsingCard extends Card {
 export const hasChainParsingCard = (card: Card): card is ChainParsingCard =>
 	(card as ChainParsingCard)?.chainParser !== undefined;
 export interface ActionChainParser {
-	appliesOnEvent(): GameEvent['type'];
+	appliesOnEvent(): GameEvent['type'] | readonly GameEvent['type'][];
 	parse(currentState: GameState, events: GameEvent[]): Promise<GameState>;
 }
 

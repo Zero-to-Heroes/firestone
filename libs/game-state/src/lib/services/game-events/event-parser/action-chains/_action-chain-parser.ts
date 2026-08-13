@@ -3,6 +3,6 @@ import { GameEvent } from '../../game-event';
 
 /** @deprecated */
 export interface ActionChainParser {
-	appliesOnEvent(): GameEvent['type'];
+	appliesOnEvent(): GameEvent['type'] | readonly GameEvent['type'][];
 	parse(currentState: GameState, events: GameEvent[]): Promise<GameState>;
 }
