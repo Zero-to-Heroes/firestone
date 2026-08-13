@@ -104,11 +104,7 @@ export class ReceiveCardInHandParser implements ActionParser {
 		const position = entity.GetZonePosition();
 
 		const excessAmount = this.getExcessAmountFromCreatorBlock(node, creator?.[0] ?? null, creator?.[1] ?? -1);
-		const storedAmount = this.storedAmountPreferringPerEntityScript(
-			entity,
-			creator?.[0] ?? null,
-			excessAmount,
-		);
+		const storedAmount = this.storedAmountPreferringPerEntityScript(entity, creator?.[0] ?? null, excessAmount);
 
 		return [
 			GameEventProvider.Create(
@@ -248,117 +244,97 @@ export class ReceiveCardInHandParser implements ActionParser {
 		const dataNum1 = fullEntity.GetTag(GameTag.TAG_SCRIPT_DATA_NUM_1);
 		const dataNum2 = fullEntity.GetTag(GameTag.TAG_SCRIPT_DATA_NUM_2);
 		const position = fullEntity.GetZonePosition();
+
+		const creator = Oracle.FindCardCreator(this.GameState, fullEntity, node);
+		const creatorEntity = this.GameState.CurrentEntities.get(creator?.[1] ?? -1);
+		let createdIndex: number | null = null;
+		let creatorZone: number | null = null;
+		let creatorTags: Tag[] | null = null;
+		if (creatorEntity != null) {
+			createdIndex = creatorEntity.CreatedIndex;
+			creatorEntity.CreatedIndex++;
+			creatorZone = creatorEntity.GetZone();
+			creatorTags = creatorEntity.GetTagsCopy();
+		}
+
+		let creatorCardId = creator?.[0] ?? null;
+		let creatorEntityId = creator?.[1] ?? null;
+
+		const lastInfluencedBy = Oracle.FindParentEntity(this.GameState, node);
+		const lastInfluencedByCardId = lastInfluencedBy != null ? lastInfluencedBy?.[0] : (creator?.[0] ?? null);
+		let cardId = Oracle.PredictCardId(
+			this.GameState,
+			creatorCardId,
+			creator?.[1] ?? -1,
+			node,
+			fullEntity.CardId,
+			this.StateFacade,
+			fullEntity.Entity,
+			fullEntity.SubSpellInEffect,
+		);
+		if (cardId == null && this.GameState.CurrentTurn <= 1 && fullEntity.GetTag(GameTag.ZONE_POSITION) === 5) {
+			const controller = this.GameState.GetController(fullEntity.GetEffectiveController());
+			if (controller?.GetTag(GameTag.CURRENT_PLAYER) !== 1) {
+				cardId = 'GAME_005';
+				creatorCardId = 'GAME_005';
+			}
+		}
+		if (
+			cardId == null &&
+			(parentAction?.SubSpells?.some((s) => s.Prefab === 'BARFX_RankedSpell_Upgrade_Impact_Sneaky_Rogue') ??
+				false)
+		) {
+			cardId = 'MIXED_CONCOCTION_UNKNOWN';
+			creatorCardId = 'MIXED_CONCOCTION_UNKNOWN';
+		}
+		const buffingCardEntityCardId = Oracle.GetBuffingCardCardId(creator?.[1] ?? -1, creatorCardId);
+		const buffCardId = Oracle.GetBuffCardId(creator?.[1] ?? -1, creatorCardId);
+
+		const guessedTags = Oracle.GuessTags(
+			this.GameState,
+			creator?.[0],
+			creator?.[1] ?? -1,
+			node,
+			null,
+			this.StateFacade,
+		);
+		const tags = fullEntity.GetTagsCopy();
+		if (guessedTags != null) {
+			tags.push(...guessedTags);
+		}
+		const excessAmount = this.getExcessAmountFromCreatorBlock(node, creator?.[0] ?? null, creator?.[1] ?? -1);
+		const liveEntity = this.GameState.CurrentEntities.get(fullEntity.Id) ?? fullEntity;
+		const storedAmount = this.storedAmountPreferringPerEntityScript(liveEntity, creator?.[0] ?? null, excessAmount);
+
 		return [
 			GameEventProvider.Create(
 				fullEntity.TimeStamp,
 				'RECEIVE_CARD_IN_HAND',
-				() => {
-					// TODO: all these should move back to before the event provider, as it causes a lot of issues based on events that occur after things happen
-					const creator = Oracle.FindCardCreator(this.GameState, fullEntity, node);
-					const creatorEntity = this.GameState.CurrentEntities.get(creator?.[1] ?? -1);
-					let createdIndex: number | null = null;
-					let creatorZone: number | null = null;
-					let creatorTags: Tag[] | null = null;
-					if (creatorEntity != null) {
-						createdIndex = creatorEntity.CreatedIndex;
-						creatorEntity.CreatedIndex++;
-						creatorZone = creatorEntity.GetZone();
-						creatorTags = creatorEntity.GetTagsCopy();
-					}
-
-					let creatorCardId = creator?.[0] ?? null;
-					let creatorEntityId = creator?.[1] ?? null;
-
-					const lastInfluencedBy = Oracle.FindParentEntity(this.GameState, node);
-					const lastInfluencedByCardId =
-						lastInfluencedBy != null ? lastInfluencedBy?.[0] : (creator?.[0] ?? null);
-					let cardId = Oracle.PredictCardId(
-						this.GameState,
-						creatorCardId,
-						creator?.[1] ?? -1,
-						node,
-						fullEntity.CardId,
-						this.StateFacade,
-						fullEntity.Entity,
-						fullEntity.SubSpellInEffect,
-					);
-					if (
-						cardId == null &&
-						this.GameState.CurrentTurn <= 1 &&
-						fullEntity.GetTag(GameTag.ZONE_POSITION) === 5
-					) {
-						const controller = this.GameState.GetController(fullEntity.GetEffectiveController());
-						if (controller?.GetTag(GameTag.CURRENT_PLAYER) !== 1) {
-							cardId = 'GAME_005';
-							creatorCardId = 'GAME_005';
-						}
-					}
-					if (
-						cardId == null &&
-						(parentAction?.SubSpells?.some(
-							(s) => s.Prefab === 'BARFX_RankedSpell_Upgrade_Impact_Sneaky_Rogue',
-						) ??
-							false)
-					) {
-						cardId = 'MIXED_CONCOCTION_UNKNOWN';
-						creatorCardId = 'MIXED_CONCOCTION_UNKNOWN';
-					}
-					const buffingCardEntityCardId = Oracle.GetBuffingCardCardId(creator?.[1] ?? -1, creatorCardId);
-					const buffCardId = Oracle.GetBuffCardId(creator?.[1] ?? -1, creatorCardId);
-
-					const guessedTags = Oracle.GuessTags(
-						this.GameState,
-						creator?.[0],
-						creator?.[1] ?? -1,
-						node,
-						null,
-						this.StateFacade,
-					);
-					const tags = fullEntity.GetTagsCopy();
-					if (guessedTags != null) {
-						tags.push(...guessedTags);
-					}
-					const excessAmount = this.getExcessAmountFromCreatorBlock(
-						node,
-						creator?.[0] ?? null,
-						creator?.[1] ?? -1,
-					);
-					const liveEntity = this.GameState.CurrentEntities.get(fullEntity.Id) ?? fullEntity;
-					const storedAmount = this.storedAmountPreferringPerEntityScript(
-						liveEntity,
-						creator?.[0] ?? null,
-						excessAmount,
-					);
-					return {
-						Type: 'RECEIVE_CARD_IN_HAND',
-						Value: {
-							CardId: cardId,
-							ControllerId: controllerId,
-							LocalPlayer: this.StateFacade.LocalPlayer,
-							OpponentPlayer: this.StateFacade.OpponentPlayer,
-							EntityId: fullEntity.Id,
-							AdditionalProps: {
-								CreatorCardId:
-									creatorCardId ?? (fullEntity.GetTag(GameTag.CREATOR) > 0 ? 'Unknown' : null),
-								CreatorEntityId: creatorEntityId ?? fullEntity.GetTag(GameTag.CREATOR),
-								CreatorZone: creatorZone,
-								CreatedIndex: createdIndex,
-								CreatorTags: creatorTags,
-								LastInfluencedByCardId: lastInfluencedByCardId,
-								IsPremium: fullEntity.GetTag(GameTag.PREMIUM) === 1,
-								BuffingEntityCardId: buffingCardEntityCardId,
-								BuffCardId: buffCardId,
-								AdditionalPlayInfo: additionalPlayInfo,
-								DataNum1: dataNum1,
-								DataNum2: dataNum2,
-								Position: position,
-								ReferencedCardIds: referencedCardIds,
-								GuessedTags: tags,
-								StoredAmount: storedAmount,
-							},
-						},
-					};
-				},
+				GameEventHelper.CreateProvider(
+					'RECEIVE_CARD_IN_HAND',
+					cardId ?? (null as any),
+					controllerId,
+					fullEntity.Id,
+					this.StateFacade,
+					{
+						CreatorCardId: creatorCardId ?? (fullEntity.GetTag(GameTag.CREATOR) > 0 ? 'Unknown' : null),
+						CreatorEntityId: creatorEntityId ?? fullEntity.GetTag(GameTag.CREATOR),
+						CreatorZone: creatorZone,
+						CreatedIndex: createdIndex,
+						CreatorTags: creatorTags,
+						LastInfluencedByCardId: lastInfluencedByCardId,
+						IsPremium: fullEntity.GetTag(GameTag.PREMIUM) === 1,
+						BuffingEntityCardId: buffingCardEntityCardId,
+						BuffCardId: buffCardId,
+						AdditionalPlayInfo: additionalPlayInfo,
+						DataNum1: dataNum1,
+						DataNum2: dataNum2,
+						Position: position,
+						ReferencedCardIds: referencedCardIds,
+						GuessedTags: tags,
+						StoredAmount: storedAmount,
+					},
+				),
 				true,
 				node,
 			),

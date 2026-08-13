@@ -1397,18 +1397,19 @@ export class Oracle {
 					}
 					return null;
 
+				// Fight Over Me: "Choose two enemy minions. They fight! Add copies of any that die to your hand."
+				// Tag 1715 marks the pair (value = this spell's entity). PTL creates the hand copy
+				// after ATTACK damage but before DEATHS, so IsInGraveyard() is still false.
 				case CardIds.FightOverMe:
 					if (node.Parent?.Type === NodeType.Action) {
 						const act = node.Parent.Object as Action;
 						const actionEntity = gameState.CurrentEntities.get(act.Entity);
 						if (actionEntity) {
 							if (actionEntity.KnownEntityIds.length === 0) {
-								const fightingEntities = act.Data.filter((d): d is TagChange => d instanceof TagChange)
-									.filter((d) => d.Name === 1715)
-									.map((d) => gameState.CurrentEntities.get(d.Entity))
-									.filter((d): d is FullEntity => d != null)
-									.filter((d) => d.IsInGraveyard());
-								actionEntity.KnownEntityIds = fightingEntities.map((d) => d.Entity);
+								actionEntity.KnownEntityIds = Oracle.findFightOverMeDyingFighterEntityIds(
+									gameState,
+									act,
+								);
 							}
 							if (actionEntity.KnownEntityIds.length > 0) {
 								const nextEntity = actionEntity.KnownEntityIds[0];
@@ -2182,6 +2183,66 @@ export class Oracle {
 		}
 
 		return null;
+	}
+
+	/** Tag set on both minions Fight Over Me forces to attack; value is the spell entity id. */
+	private static readonly FIGHT_OVER_ME_PAIR_TAG = 1715;
+
+	private static findFightOverMeDyingFighterEntityIds(gameState: GameState, act: Action): number[] {
+		const tagChanges = Oracle.collectTagChanges(act.Data);
+		const dying: FullEntity[] = [];
+		const seen = new Set<number>();
+		const consider = (entity: FullEntity | undefined | null) => {
+			if (entity == null || seen.has(entity.Entity)) {
+				return;
+			}
+			if (!Oracle.isFightOverMeDyingFighter(entity, tagChanges)) {
+				return;
+			}
+			seen.add(entity.Entity);
+			dying.push(entity);
+		};
+
+		for (const tagChange of tagChanges) {
+			if (tagChange.Name === Oracle.FIGHT_OVER_ME_PAIR_TAG && tagChange.Value === act.Entity) {
+				consider(gameState.CurrentEntities.get(tagChange.Entity));
+			}
+		}
+		for (const entity of gameState.CurrentEntities.values()) {
+			if (entity.GetTag(Oracle.FIGHT_OVER_ME_PAIR_TAG) === act.Entity) {
+				consider(entity);
+			}
+		}
+		return dying.map((entity) => entity.Entity);
+	}
+
+	private static collectTagChanges(data: readonly GameData[]): TagChange[] {
+		const result: TagChange[] = [];
+		for (const item of data) {
+			if (item instanceof TagChange) {
+				result.push(item);
+			} else if (item instanceof Action) {
+				result.push(...Oracle.collectTagChanges(item.Data));
+			}
+		}
+		return result;
+	}
+
+	private static isFightOverMeDyingFighter(entity: FullEntity, tagChanges: readonly TagChange[]): boolean {
+		if (entity.IsInGraveyard()) {
+			return true;
+		}
+		const health = entity.GetTag(GameTag.HEALTH);
+		const damage = entity.GetTag(GameTag.DAMAGE, 0);
+		if (health >= 0 && health - Math.max(0, damage) <= 0) {
+			return true;
+		}
+		return tagChanges.some(
+			(tagChange) =>
+				tagChange.Entity === entity.Entity &&
+				tagChange.Name === (GameTag.ZONE as number) &&
+				tagChange.Value === (Zone.GRAVEYARD as number),
+		);
 	}
 
 	private static GetTopInternalParentEntityId(action: Action): number {
