@@ -340,6 +340,7 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	warptooth: 'warptooth/warptooth.log',
 	'lotus-troublemaker': 'lotus-troublemaker/lotus-troublemaker.log',
 	'ivory-knight': 'ivory-knight/ivory-knight.log',
+	'tiny-pal': 'tiny-pal/tiny-pal.log',
 };
 
 /**

@@ -14,7 +14,10 @@ export class WeaponDestroyedParser implements EventParser {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
-		// Sometimes the "weapon_equipped" event is fired before the "weapon_destroyed" one
+		// WEAPON_EQUIPPED for a replacement can arrive before WEAPON_DESTROYED for the previous
+		// one. A new weapon always has a new entity id, so entity id is enough to ignore that
+		// stale destroy. Do not also require cardId equality: transforming weapons keep the
+		// same entity id after CHANGE_ENTITY, so a cardId check would leave them equipped.
 		if (deck.weapon?.entityId !== entityId) {
 			return currentState;
 		}
@@ -27,7 +30,7 @@ export class WeaponDestroyedParser implements EventParser {
 			: deck.otherZone;
 		newOtherZone = !!updatedWeapon ? this.helper.addSingleCardToZone(newOtherZone, updatedWeapon) : newOtherZone;
 		const newPlayerDeck = deck.update({
-			weapon: deck.weapon?.cardId === cardId ? null : deck.weapon,
+			weapon: null,
 			otherZone: newOtherZone,
 		} as DeckState);
 		return Object.assign(new GameState(), currentState, {
