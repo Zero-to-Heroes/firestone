@@ -69,6 +69,8 @@ export class CopiedFromEntityIdParser implements EventParser {
 
 		const isCopiedPlayer = copiedCardControllerId === localPlayer.PlayerId;
 		const copiedDeck = isCopiedPlayer ? currentState.playerDeck : currentState.opponentDeck;
+		/** Copy and source are the same player (e.g. Malevolent Mutant); local may still be the opponent in replay. */
+		const copyAndSourceSameController = copiedCardControllerId === controllerId;
 
 		const newCopy: DeckCard | undefined = deck.findCard(entityId)?.card;
 		const revealedCopyCardId = newCopy?.cardId ?? cardId;
@@ -115,6 +117,28 @@ export class CopiedFromEntityIdParser implements EventParser {
 			);
 		}
 
+		// Local player copied from the opponent's deck (Identity Theft, Thoughtsteal, …). Sequential
+		// discovers of the same cardId can leak distinct COPIED_FROM entity ids, but from the player's
+		// view it may still be the same remaining deck card. Reuse the known row unless one creator
+		// action produced several copies at once (same-discover double offer).
+		const isLocalCopyFromOpponentDeck =
+			isPlayer && !isCopiedPlayer && copiedCardZone === Zone.DECK && !copyAndSourceSameController;
+		const simultaneousSiblingCopy = hasSimultaneousSiblingCopy(
+			[...deck.hand, ...deck.otherZone],
+			newCopy,
+			revealedCopyCardId,
+			entityId,
+		);
+		if (!copiedCard && isLocalCopyFromOpponentDeck && !!revealedCopyCardId?.length && !simultaneousSiblingCopy) {
+			copiedCard = this.findKnownDeckRowByCardId(copiedDeck, revealedCopyCardId);
+			console.debug(
+				'[copied-from-entity] reuse known opponent deck row for sequential copy',
+				`entityId:${entityId}__`,
+				copiedCard,
+				revealedCopyCardId,
+			);
+		}
+
 		// Orphan deck row (entityId from CREATE_CARD_IN_DECK, no cardId yet): prefer the deckstring row.
 		if (
 			copiedCard &&
@@ -150,8 +174,6 @@ export class CopiedFromEntityIdParser implements EventParser {
 		// info leaks)
 
 		const updatedCardId = newCopy?.cardId ?? copiedCard?.cardId ?? cardId;
-		/** Copy and source are the same player (e.g. Malevolent Mutant); local may still be the opponent in replay. */
-		const copyAndSourceSameController = copiedCardControllerId === controllerId;
 		const dredgerCardIdHint = newCopy?.creatorCardId ?? newCopy?.lastAffectedByCardId;
 		const dredgeMechanicOnCreator =
 			!!dredgerCardIdHint && (this.allCards.getCard(dredgerCardIdHint)?.mechanics?.includes('DREDGE') ?? false);
@@ -282,6 +304,13 @@ export class CopiedFromEntityIdParser implements EventParser {
 			!!copiedCard &&
 			!copiedCard.entityId &&
 			!!copiedCard.creatorCardId;
+		// Keep the first leaked source entity id so linkCopiedCardIntoDeck replaces that row
+		// instead of adding a second copy of the same cardId.
+		const reuseExistingOpponentDeckEntityId =
+			isLocalCopyFromOpponentDeck &&
+			!simultaneousSiblingCopy &&
+			copiedCard?.entityId != null &&
+			copiedCard.entityId !== copiedCardEntityId;
 		const updatedCopiedCard = (copiedCard ?? DeckCard.create({}))
 			.update({
 				cardId: deckTrackingCardId,
@@ -302,13 +331,15 @@ export class CopiedFromEntityIdParser implements EventParser {
 					? copiedCardEntityId
 					: keepOpponentDeckEntityOpaque
 						? undefined
-						: copiedCardZone === Zone.DECK && !shouldObfuscate
-							? copiedCardEntityId
-							: copiedCardZone !== Zone.DECK &&
-								  copiedCardEntityId != null &&
-								  (isCopiedPlayer || copyAndSourceSameController)
+						: reuseExistingOpponentDeckEntityId
+							? copiedCard?.entityId
+							: copiedCardZone === Zone.DECK && !shouldObfuscate
 								? copiedCardEntityId
-								: null,
+								: copiedCardZone !== Zone.DECK &&
+									  copiedCardEntityId != null &&
+									  (isCopiedPlayer || copyAndSourceSameController)
+									? copiedCardEntityId
+									: null,
 				// Only keep an existing trueEntityId (opaque gifts). Do not invent one on empty
 				// create paths — that leaves undrawable ghosts (e.g. Triangulate Baking Soda).
 				trueEntityId: copiedCard?.trueEntityId,
@@ -417,7 +448,7 @@ export class CopiedFromEntityIdParser implements EventParser {
 					additionalKnownCardsInHand: appendKnownCardInOpponentHand(
 						copiedDeckWithSecrets.additionalKnownCardsInHand,
 						cardIdToAdd,
-						hasSimultaneousSiblingCopyInHand(deck.hand, newCopy, cardIdToAdd, entityId),
+						hasSimultaneousSiblingCopy(deck.hand, newCopy, cardIdToAdd, entityId),
 					),
 				});
 				console.debug(
@@ -500,6 +531,18 @@ export class CopiedFromEntityIdParser implements EventParser {
 					getBaseCardId(card.cardId, this.allCards.getService()) === baseCardId &&
 					!card.entityId &&
 					!card.creatorCardId,
+			)
+		);
+	}
+
+	/** Known deck row for cardId, including rows that already have a leaked entityId. */
+	private findKnownDeckRowByCardId(deck: DeckState, cardId: string): DeckCard | undefined {
+		return (
+			this.findUnlinkedDeckRowByCardId(deck, cardId) ??
+			deck.deck.find(
+				(card) =>
+					getBaseCardId(card.cardId, this.allCards.getService()) ===
+					getBaseCardId(cardId, this.allCards.getService()),
 			)
 		);
 	}
@@ -662,23 +705,37 @@ const shouldFlagExactCardInOpponentHand = (card: DeckCard): boolean => {
 };
 
 /**
- * Sequential reveals of the same card ID (Mind Vision twice) must not increment the overlay —
- * it may still be the same physical card. One creator action that produces several copies at
- * once (e.g. Incriminating Psychic copying two hand cards) is unambiguous: a sibling copy
- * already in the local hand shares creatorEntityId + cardId.
+ * Sequential reveals of the same card ID (Mind Vision twice, Identity Theft twice) must not
+ * increment the overlay — it may still be the same physical card. One creator action that
+ * produces several copies at once (e.g. Incriminating Psychic copying two hand cards, or a
+ * single discover offering two copies of the same card) is unambiguous: a sibling copy already
+ * in the local hand / setaside shares creatorEntityId + cardId.
  */
-const hasSimultaneousSiblingCopyInHand = (
-	localHand: readonly DeckCard[],
+const hasSimultaneousSiblingCopy = (
+	localCards: readonly DeckCard[],
 	newCopy: DeckCard | undefined,
 	cardId: string,
 	currentCopyEntityId: number | undefined,
 ): boolean => {
-	const creatorEntityId = newCopy?.creatorEntityId;
-	if (creatorEntityId == null || currentCopyEntityId == null) {
+	const creatorEntityId = copyCreatorEntityId(newCopy);
+	if (creatorEntityId == null || currentCopyEntityId == null || !cardId?.length) {
 		return false;
 	}
-	return localHand.some(
+	return localCards.some(
 		(card) =>
-			card.entityId !== currentCopyEntityId && card.creatorEntityId === creatorEntityId && card.cardId === cardId,
+			card.entityId !== currentCopyEntityId &&
+			copyCreatorEntityId(card) === creatorEntityId &&
+			card.cardId === cardId,
 	);
+};
+
+const copyCreatorEntityId = (card: DeckCard | undefined): number | undefined => {
+	if (card?.creatorEntityId != null && card.creatorEntityId !== 0) {
+		return card.creatorEntityId;
+	}
+	const fromTag = card?.tags?.[GameTag.CREATOR];
+	if (fromTag != null && fromTag !== 0) {
+		return fromTag;
+	}
+	return undefined;
 };

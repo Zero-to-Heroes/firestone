@@ -239,6 +239,23 @@ export class LinkedEntityParser implements EventParser {
 				zone: undefined,
 				temporaryCard: undefined,
 			});
+			// Sequential copies from the opponent deck leak a new LINKED_ENTITY id each time
+			// (Identity Theft twice). copied-from-entity-id already created the known row; adding
+			// another would treat the leak as a second physical card.
+			if (!isPlayerForCardModification && updatedCard.cardId) {
+				const baseCardId = getBaseCardId(updatedCard.cardId, this.allCards.getService());
+				const alreadyKnown = deckInWhichToModifyTheCard.deck.some(
+					(card) => getBaseCardId(card.cardId, this.allCards.getService()) === baseCardId,
+				);
+				if (alreadyKnown) {
+					console.debug(
+						'[linked-entity-parser] opponent deck already has this cardId, skip leaked duplicate',
+						updatedCard.cardId,
+						gameEvent.additionalData.linkedEntityId,
+					);
+					return currentState;
+				}
+			}
 			console.debug('[linked-entity-parser] adding card', isPlayerForCardModification, updatedCard);
 			const intermediaryDeck = this.helper.removeSingleCardFromZone(
 				deckInWhichToModifyTheCard.deck,
