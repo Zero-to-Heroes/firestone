@@ -6,7 +6,7 @@ import { GameEvent } from '../game-event';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EntityUpdateParser } from './entity-update-parser';
 
-describe('EntityUpdateParser (deckList sync for ranked spells)', () => {
+describe('EntityUpdateParser (ranked spells leave initial deckList unchanged)', () => {
 	const localPlayer = { PlayerId: 2 } as GameEvent['localPlayer'];
 	const opponentPlayer = { PlayerId: 1 } as GameEvent['opponentPlayer'];
 
@@ -33,7 +33,7 @@ describe('EntityUpdateParser (deckList sync for ranked spells)', () => {
 		parser = new EntityUpdateParser(helper, allCards);
 	});
 
-	it('updates the first matching deckList row when a deck card upgrades (ONY_016 → ONY_016t)', async () => {
+	it('updates the deck-zone copy on upgrade (ONY_016 → ONY_016t) but keeps the initial deckList row', async () => {
 		const entityId = 50;
 		const state = GameState.create({
 			currentTurn: 5,
@@ -71,7 +71,7 @@ describe('EntityUpdateParser (deckList sync for ranked spells)', () => {
 
 		const next = await parser.parse(state, gameEvent);
 		expect(next.playerDeck.deck[0].cardId).toBe('ONY_016t');
-		expect(next.playerDeck.deckList[0].cardId).toBe('ONY_016t');
+		expect(next.playerDeck.deckList[0].cardId).toBe('ONY_016');
 		expect(next.playerDeck.deckList[1].cardId).toBe('VAC_928');
 	});
 });
