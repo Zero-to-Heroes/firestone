@@ -1,12 +1,15 @@
-import { CardIds } from '@firestone-hs/reference-data';
+import { CardIds, GameTag } from '@firestone-hs/reference-data';
 import { BoardSecret } from '../../../../models/board-secret';
 import { DeckState } from '../../../../models/deck-state';
 import { GameState } from '../../../../models/game-state';
 import { isDormant } from '../../../card-utils';
+import { getEntityTag } from '../../../parser-entity-utils';
 import { MinionsDiedEvent } from '../../events/minions-died-event';
 import { GameEvent } from '../../game-event';
 import { EventParser } from '../_event-parser';
 import { DeckManipulationHelper } from '../deck-manipulation-helper';
+
+// Untimely Death (TIME_620): Secret: When a friendly minion dies the turn after being played, resummon it.
 
 export class TriggerOnFriendlyMinionDiedSecretsParser implements EventParser {
 	private secretsTriggeringOnFriendlyMinionDeath = [
@@ -65,22 +68,21 @@ export class TriggerOnFriendlyMinionDiedSecretsParser implements EventParser {
 		}
 		// TODO: Redemption will not trigger if deathrattles fill up the board
 
-		const turnAtWhichMinionDies = currentState.currentTurnNumeric;
-		const turnAtWhichMinionGotPlayed =
-			deckWithSecretToCheck.cardsPlayedThisMatch.find((card) => card.entityId === deadEnemyMinions[0].EntityId)
-				?.turn ?? 0;
-		// console.debug(
-		// 	'turnAtWhichMinionDies',
-		// 	turnAtWhichMinionDies,
-		// 	turnAtWhichMinionGotPlayed,
-		// 	deckWithSecretToCheck.cardsPlayedThisMatch.find((card) => card.entityId === deadEnemyMinions[0].EntityId),
-		// 	gameEvent,
-		// );
-		// Next turn is actually the same turn for us
-		if (turnAtWhichMinionDies !== +turnAtWhichMinionGotPlayed) {
+		// currentTurn is ceil(gameTagTurn/2), so "the turn after being played" is the same
+		// currentTurn only for first-player minions. NUM_TURNS_IN_PLAY increments every
+		// player-turn and is 1 exactly when the minion dies the turn after entering play.
+		const diedTheTurnAfterBeingPlayed = deadEnemyMinions.some((deadMinion) => {
+			const wasPlayed = deckWithSecretToCheck.cardsPlayedThisMatch.some(
+				(card) => card.entityId === deadMinion.EntityId,
+			);
+			if (!wasPlayed) {
+				return false;
+			}
+			const entity = currentState.parserState?.CurrentEntities?.get(deadMinion.EntityId);
+			return getEntityTag(entity, GameTag.NUM_TURNS_IN_PLAY, 0) === 1;
+		});
+		if (!diedTheTurnAfterBeingPlayed) {
 			secretsWeCantRuleOut.push(CardIds.UntimelyDeath_TIME_620);
-		} else {
-			// console.debug('ruling out Untimely Death');
 		}
 
 		const optionsToFlagAsInvalid = this.secretsTriggeringOnFriendlyMinionDeath.filter(
