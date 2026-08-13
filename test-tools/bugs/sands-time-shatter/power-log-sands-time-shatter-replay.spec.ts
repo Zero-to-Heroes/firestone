@@ -112,11 +112,15 @@ describe('Power log replay → GameStateService (SHATTERED any-class pool / Sand
 
 
 
-		const anyClassPool = getShatteredPossibleCards(ctx.state.opponentDeck, allCardsRef, {
-
-			canBeAnyCardClass: true,
-
-		});
+		const anyClassPool = getShatteredPossibleCards(
+			ctx.state.opponentDeck,
+			ctx.state.playerDeck,
+			allCardsRef,
+			{
+				canBeAnyCardClass: true,
+			},
+			ctx.state.metadata?.scenarioId,
+		);
 
 		expect(anyClassPool.length).toBeGreaterThan(0);
 

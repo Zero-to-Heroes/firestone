@@ -1,4 +1,4 @@
-name: Bug replay and rewind non-reg tests
+name: Bug replay, rewind non-reg, and parser golden tests
 
 on:
     push:
@@ -37,6 +37,11 @@ jobs:
                   mkdir -p .ci-cache
                   curl -fsSL -o .ci-cache/cards_short.json \
                     https://raw.githubusercontent.com/Zero-to-Heroes/hs-reference-data/master/src/cards_short.json
+
+            - name: Run power-log-parser tests (event goldens)
+              # Parser goldens live in libs/power-log-parser/src/test-data/*.events.json.
+              # They are not covered by the game-state bug/non-reg Jest config.
+              run: npx jest --config libs/power-log-parser/jest.config.ts --ci --runInBand
 
             - name: Run test-tools/bugs Jest specs
               # Bug specs use libs/game-state/jest.config.ts (see testMatch there). This Jest version expects

@@ -3,12 +3,12 @@
     "Type": "NEW_GAME",
     "Value": {
       "Spectating": false,
-      "Timestamp": 1776866370966
+      "Timestamp": 1786629570966
     },
     "Debug": {
       "CreationLogLine": "CREATE_GAME",
       "Timestamp": "15:59:30.966494",
-      "Index": 112754
+      "Index": 108847
     }
   },
   {
@@ -25,7 +25,7 @@
     "Debug": {
       "CreationLogLine": "ScenarioID=2",
       "Timestamp": "15:59:30.966494",
-      "Index": 112888
+      "Index": 108981
     }
   },
   {
@@ -44,7 +44,7 @@
     "Debug": {
       "CreationLogLine": "PlayerID=2, PlayerName=UNKNOWN HUMAN PLAYER",
       "Timestamp": "15:59:30.966494",
-      "Index": 112889
+      "Index": 108982
     }
   },
   {
@@ -65,7 +65,7 @@
     "Debug": {
       "CreationLogLine": "PlayerID=2, PlayerName=UNKNOWN HUMAN PLAYER",
       "Timestamp": "15:59:30.966494",
-      "Index": 112890
+      "Index": 108983
     }
   },
   {
@@ -105,7 +105,7 @@
     "Debug": {
       "CreationLogLine": "Entities[0]=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=54 zone=HAND zonePos=1 cardId= player=2]",
       "Timestamp": "15:59:51.312232",
-      "Index": 113033
+      "Index": 109126
     }
   },
   {
@@ -145,7 +145,7 @@
     "Debug": {
       "CreationLogLine": "Entities[1]=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=56 zone=HAND zonePos=2 cardId= player=2]",
       "Timestamp": "15:59:51.312232",
-      "Index": 113034
+      "Index": 109127
     }
   },
   {
@@ -185,7 +185,7 @@
     "Debug": {
       "CreationLogLine": "Entities[2]=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=64 zone=HAND zonePos=3 cardId= player=2]",
       "Timestamp": "15:59:51.312232",
-      "Index": 113035
+      "Index": 109128
     }
   },
   {
@@ -225,7 +225,7 @@
     "Debug": {
       "CreationLogLine": "Entities[3]=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=55 zone=HAND zonePos=4 cardId= player=2]",
       "Timestamp": "15:59:51.312232",
-      "Index": 113036
+      "Index": 109129
     }
   },
   {
@@ -265,7 +265,7 @@
     "Debug": {
       "CreationLogLine": "Entities[0]=[entityName=Dreadhound Handler id=23 zone=HAND zonePos=2 cardId=VAC_514 player=1]",
       "Timestamp": "15:59:51.612944",
-      "Index": 113037
+      "Index": 109130
     }
   },
   {
@@ -305,7 +305,7 @@
     "Debug": {
       "CreationLogLine": "Entities[1]=[entityName=Sanguine Infestation id=34 zone=HAND zonePos=3 cardId=EDR_817 player=1]",
       "Timestamp": "15:59:51.612944",
-      "Index": 113038
+      "Index": 109131
     }
   },
   {
@@ -356,7 +356,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=DEATHS Entity=GameEntity EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=0 Target=0 SubOption=-1",
       "Timestamp": "16:00:27.981312",
-      "Index": 113666
+      "Index": 109762
     }
   },
   {
@@ -401,7 +401,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=DEATHS Entity=GameEntity EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=0 Target=0 SubOption=-1",
       "Timestamp": "16:00:42.380009",
-      "Index": 114080
+      "Index": 110177
     }
   },
   {
@@ -459,7 +459,7 @@
     "Debug": {
       "CreationLogLine": "id=3 BEGIN",
       "Timestamp": "16:00:50.830996",
-      "Index": 114424
+      "Index": 110522
     }
   },
   {
@@ -500,26 +500,7 @@
     "Debug": {
       "CreationLogLine": "Entities[0]=[entityName=Rewind Timeline id=94 zone=SETASIDE zonePos=0 cardId=TIME_000tb player=1]",
       "Timestamp": "16:00:56.714989",
-      "Index": 114425
-    }
-  },
-  {
-    "Type": "REWIND_STARTED",
-    "Debug": {
-      "CreationLogLine": "",
-      "Timestamp": "16:00:56.815000",
-      "Index": 0
-    }
-  },
-  {
-    "Type": "REWIND_OVER",
-    "Value": {
-      "originEntityId": 5
-    },
-    "Debug": {
-      "CreationLogLine": "",
-      "Timestamp": "16:00:56.815000",
-      "Index": 0
+      "Index": 110523
     }
   },
   {
@@ -558,7 +539,7 @@
     "Debug": {
       "CreationLogLine": "Player EntityID=2 PlayerID=1 GameAccountId=[hi=144115198130930503 lo=32311514]",
       "Timestamp": "",
-      "Index": 112893
+      "Index": 108986
     }
   },
   {
@@ -597,7 +578,7 @@
     "Debug": {
       "CreationLogLine": "Player EntityID=3 PlayerID=2 GameAccountId=[hi=144115198130930503 lo=1067457568]",
       "Timestamp": "",
-      "Index": 112894
+      "Index": 108987
     }
   },
   {
@@ -616,7 +597,7 @@
     "Debug": {
       "CreationLogLine": "GameEntity EntityID=1",
       "Timestamp": "15:59:30.966494",
-      "Index": 112892
+      "Index": 108985
     }
   },
   {
@@ -650,6 +631,7 @@
       "AdditionalProps": {
         "CreatorCardId": null,
         "OriginEntityCardId": null,
+        "OriginEntityEntityId": null,
         "MercenariesExperience": -1,
         "MercenariesEquipmentId": -1,
         "RevealedFromBlock": null,
@@ -674,7 +656,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=11 zone=SETASIDE zonePos=0 cardId= player=1] CardID=",
       "Timestamp": "15:59:30.966494",
-      "Index": 112902
+      "Index": 108995
     }
   },
   {
@@ -708,6 +690,7 @@
       "AdditionalProps": {
         "CreatorCardId": null,
         "OriginEntityCardId": null,
+        "OriginEntityEntityId": null,
         "MercenariesExperience": -1,
         "MercenariesEquipmentId": -1,
         "RevealedFromBlock": null,
@@ -732,7 +715,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=12 zone=SETASIDE zonePos=0 cardId= player=1] CardID=",
       "Timestamp": "15:59:30.966494",
-      "Index": 112903
+      "Index": 108996
     }
   },
   {
@@ -766,6 +749,7 @@
       "AdditionalProps": {
         "CreatorCardId": null,
         "OriginEntityCardId": null,
+        "OriginEntityEntityId": null,
         "MercenariesExperience": -1,
         "MercenariesEquipmentId": -1,
         "RevealedFromBlock": null,
@@ -790,7 +774,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=32 zone=SETASIDE zonePos=0 cardId= player=1] CardID=",
       "Timestamp": "15:59:30.966494",
-      "Index": 112923
+      "Index": 109016
     }
   },
   {
@@ -824,6 +808,7 @@
       "AdditionalProps": {
         "CreatorCardId": null,
         "OriginEntityCardId": null,
+        "OriginEntityEntityId": null,
         "MercenariesExperience": -1,
         "MercenariesEquipmentId": -1,
         "RevealedFromBlock": null,
@@ -848,7 +833,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=33 zone=SETASIDE zonePos=0 cardId= player=1] CardID=",
       "Timestamp": "15:59:30.966494",
-      "Index": 112924
+      "Index": 109017
     }
   },
   {
@@ -886,7 +871,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=The Lich King id=68 zone=PLAY zonePos=0 cardId=HERO_11 player=1] CardID=HERO_11",
       "Timestamp": "15:59:30.966494",
-      "Index": 112959
+      "Index": 109052
     }
   },
   {
@@ -918,13 +903,14 @@
       },
       "EntityId": 69,
       "AdditionalProps": {
-        "CreatorCardId": "HERO_11"
+        "CreatorCardId": "HERO_11",
+        "AdditionalHeroPowerIndex": -1
       }
     },
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=Ghoul Charge id=69 zone=PLAY zonePos=0 cardId=HERO_11bp player=1] CardID=HERO_11bp",
       "Timestamp": "15:59:30.966494",
-      "Index": 112960
+      "Index": 109053
     }
   },
   {
@@ -962,7 +948,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=Uther Lightbringer id=70 zone=PLAY zonePos=0 cardId=HERO_04 player=2] CardID=HERO_04",
       "Timestamp": "15:59:30.966494",
-      "Index": 112961
+      "Index": 109054
     }
   },
   {
@@ -994,13 +980,14 @@
       },
       "EntityId": 71,
       "AdditionalProps": {
-        "CreatorCardId": "HERO_04"
+        "CreatorCardId": "HERO_04",
+        "AdditionalHeroPowerIndex": -1
       }
     },
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=Reinforce id=71 zone=PLAY zonePos=0 cardId=HERO_04bp player=2] CardID=HERO_04bp",
       "Timestamp": "15:59:30.966494",
-      "Index": 112962
+      "Index": 109055
     }
   },
   {
@@ -1036,7 +1023,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=GameEntity tag=STATE value=RUNNING",
       "Timestamp": "15:59:30.966494",
-      "Index": 112963
+      "Index": 109056
     }
   },
   {
@@ -1083,7 +1070,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=TRIGGER Entity=GameEntity EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=-1 Target=0 SubOption=-1 TriggerKeyword=TAG_NOT_SET",
       "Timestamp": "15:59:34.362174",
-      "Index": 112971
+      "Index": 109064
     }
   },
   {
@@ -1116,7 +1103,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=Daedin#2991 tag=FIRST_PLAYER value=1",
       "Timestamp": "15:59:34.362174",
-      "Index": 112973
+      "Index": 109066
     }
   },
   {
@@ -1146,12 +1133,12 @@
         "CardID": "HERO_04",
         "IsMainPlayer": false
       },
-      "Timestamp": 1776866374362
+      "Timestamp": 1786629574362
     },
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=GameEntity tag=TURN value=1",
       "Timestamp": "15:59:34.362174",
-      "Index": 112974
+      "Index": 109067
     }
   },
   {
@@ -1315,7 +1302,7 @@
     "Debug": {
       "CreationLogLine": "SHOW_ENTITY - Updating Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=6 zone=DECK zonePos=0 cardId= player=1] CardID=GDB_145",
       "Timestamp": "15:59:34.362174",
-      "Index": 112977
+      "Index": 109070
     }
   },
   {
@@ -1363,7 +1350,7 @@
     "Debug": {
       "CreationLogLine": "SHOW_ENTITY - Updating Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=6 zone=DECK zonePos=0 cardId= player=1] CardID=GDB_145",
       "Timestamp": "15:59:34.362174",
-      "Index": 112977
+      "Index": 109070
     }
   },
   {
@@ -1410,7 +1397,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=6 zone=DECK zonePos=0 cardId= player=1] tag=ZONE_POSITION value=1",
       "Timestamp": "15:59:34.362174",
-      "Index": 112979
+      "Index": 109072
     }
   },
   {
@@ -1457,7 +1444,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=6 zone=DECK zonePos=0 cardId= player=1] tag=ZONE_POSITION value=1",
       "Timestamp": "15:59:34.362174",
-      "Index": 112981
+      "Index": 109074
     }
   },
   {
@@ -1665,7 +1652,7 @@
     "Debug": {
       "CreationLogLine": "SHOW_ENTITY - Updating Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=23 zone=DECK zonePos=0 cardId= player=1] CardID=VAC_514",
       "Timestamp": "15:59:34.362174",
-      "Index": 112984
+      "Index": 109077
     }
   },
   {
@@ -1713,7 +1700,7 @@
     "Debug": {
       "CreationLogLine": "SHOW_ENTITY - Updating Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=23 zone=DECK zonePos=0 cardId= player=1] CardID=VAC_514",
       "Timestamp": "15:59:34.362174",
-      "Index": 112984
+      "Index": 109077
     }
   },
   {
@@ -1760,7 +1747,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=23 zone=DECK zonePos=0 cardId= player=1] tag=ZONE_POSITION value=2",
       "Timestamp": "15:59:34.362174",
-      "Index": 112986
+      "Index": 109079
     }
   },
   {
@@ -1807,7 +1794,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=23 zone=DECK zonePos=0 cardId= player=1] tag=ZONE_POSITION value=2",
       "Timestamp": "15:59:34.362174",
-      "Index": 112988
+      "Index": 109081
     }
   },
   {
@@ -1919,7 +1906,7 @@
     "Debug": {
       "CreationLogLine": "SHOW_ENTITY - Updating Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=34 zone=DECK zonePos=0 cardId= player=1] CardID=EDR_817",
       "Timestamp": "15:59:34.362174",
-      "Index": 112991
+      "Index": 109084
     }
   },
   {
@@ -1967,7 +1954,7 @@
     "Debug": {
       "CreationLogLine": "SHOW_ENTITY - Updating Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=34 zone=DECK zonePos=0 cardId= player=1] CardID=EDR_817",
       "Timestamp": "15:59:34.362174",
-      "Index": 112991
+      "Index": 109084
     }
   },
   {
@@ -2014,7 +2001,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=34 zone=DECK zonePos=0 cardId= player=1] tag=ZONE_POSITION value=3",
       "Timestamp": "15:59:34.362174",
-      "Index": 112993
+      "Index": 109086
     }
   },
   {
@@ -2061,7 +2048,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=34 zone=DECK zonePos=0 cardId= player=1] tag=ZONE_POSITION value=3",
       "Timestamp": "15:59:34.362174",
-      "Index": 112995
+      "Index": 109088
     }
   },
   {
@@ -2245,7 +2232,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=54 zone=DECK zonePos=0 cardId= player=2] tag=ZONE value=HAND",
       "Timestamp": "15:59:34.362174",
-      "Index": 113000
+      "Index": 109093
     }
   },
   {
@@ -2292,7 +2279,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=54 zone=DECK zonePos=0 cardId= player=2] tag=ZONE_POSITION value=1",
       "Timestamp": "15:59:34.362174",
-      "Index": 113001
+      "Index": 109094
     }
   },
   {
@@ -2339,7 +2326,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=54 zone=DECK zonePos=0 cardId= player=2] tag=ZONE_POSITION value=1",
       "Timestamp": "15:59:34.362174",
-      "Index": 113003
+      "Index": 109096
     }
   },
   {
@@ -2575,7 +2562,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=56 zone=DECK zonePos=0 cardId= player=2] tag=ZONE value=HAND",
       "Timestamp": "15:59:34.362174",
-      "Index": 113006
+      "Index": 109099
     }
   },
   {
@@ -2622,7 +2609,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=56 zone=DECK zonePos=0 cardId= player=2] tag=ZONE_POSITION value=2",
       "Timestamp": "15:59:34.362174",
-      "Index": 113007
+      "Index": 109100
     }
   },
   {
@@ -2669,7 +2656,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=56 zone=DECK zonePos=0 cardId= player=2] tag=ZONE_POSITION value=2",
       "Timestamp": "15:59:34.362174",
-      "Index": 113009
+      "Index": 109102
     }
   },
   {
@@ -2733,7 +2720,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=64 zone=DECK zonePos=0 cardId= player=2] tag=ZONE value=HAND",
       "Timestamp": "15:59:34.362174",
-      "Index": 113012
+      "Index": 109105
     }
   },
   {
@@ -2780,7 +2767,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=64 zone=DECK zonePos=0 cardId= player=2] tag=ZONE_POSITION value=3",
       "Timestamp": "15:59:34.362174",
-      "Index": 113013
+      "Index": 109106
     }
   },
   {
@@ -2827,7 +2814,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=64 zone=DECK zonePos=0 cardId= player=2] tag=ZONE_POSITION value=3",
       "Timestamp": "15:59:34.362174",
-      "Index": 113015
+      "Index": 109108
     }
   },
   {
@@ -2891,7 +2878,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=55 zone=DECK zonePos=0 cardId= player=2] tag=ZONE value=HAND",
       "Timestamp": "15:59:34.362174",
-      "Index": 113018
+      "Index": 109111
     }
   },
   {
@@ -2938,7 +2925,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=55 zone=DECK zonePos=0 cardId= player=2] tag=ZONE_POSITION value=4",
       "Timestamp": "15:59:34.362174",
-      "Index": 113019
+      "Index": 109112
     }
   },
   {
@@ -2985,13 +2972,13 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=55 zone=DECK zonePos=0 cardId= player=2] tag=ZONE_POSITION value=4",
       "Timestamp": "15:59:34.362174",
-      "Index": 113021
+      "Index": 109114
     }
   },
   {
     "Type": "RECEIVE_CARD_IN_HAND",
     "Value": {
-      "CardId": null,
+      "CardId": "GAME_005",
       "ControllerId": 2,
       "LocalPlayer": {
         "Id": 2,
@@ -3017,7 +3004,7 @@
       },
       "EntityId": 72,
       "AdditionalProps": {
-        "CreatorCardId": null,
+        "CreatorCardId": "GAME_005",
         "CreatorEntityId": -1,
         "CreatorZone": null,
         "CreatedIndex": null,
@@ -3055,7 +3042,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=72 zone=HAND zonePos=5 cardId= player=2] CardID=",
       "Timestamp": "15:59:34.362174",
-      "Index": 113024
+      "Index": 109117
     }
   },
   {
@@ -3093,7 +3080,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=Daedin#2991 tag=TIMEOUT value=45",
       "Timestamp": "15:59:34.362174",
-      "Index": 113025
+      "Index": 109118
     }
   },
   {
@@ -3131,7 +3118,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=Sashok320#2210 tag=TIMEOUT value=45",
       "Timestamp": "15:59:34.362174",
-      "Index": 113026
+      "Index": 109119
     }
   },
   {
@@ -3178,7 +3165,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=TRIGGER Entity=GameEntity EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=-1 Target=0 SubOption=-1 TriggerKeyword=TAG_NOT_SET",
       "Timestamp": "15:59:34.679619",
-      "Index": 113030
+      "Index": 109123
     }
   },
   {
@@ -3186,7 +3173,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=Daedin#2991 tag=MULLIGAN_STATE value=INPUT",
       "Timestamp": "15:59:34.679619",
-      "Index": 113031
+      "Index": 109124
     }
   },
   {
@@ -3194,7 +3181,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=Sashok320#2210 tag=MULLIGAN_STATE value=INPUT",
       "Timestamp": "15:59:34.679619",
-      "Index": 113032
+      "Index": 109125
     }
   },
   {
@@ -3202,7 +3189,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=Sashok320#2210 tag=MULLIGAN_STATE value=DEALING",
       "Timestamp": "15:59:51.712412",
-      "Index": 113078
+      "Index": 109171
     }
   },
   {
@@ -3249,7 +3236,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=TRIGGER Entity=Sashok320#2210 EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=-1 Target=0 SubOption=-1 TriggerKeyword=TAG_NOT_SET",
       "Timestamp": "15:59:51.712412",
-      "Index": 113079
+      "Index": 109172
     }
   },
   {
@@ -3296,7 +3283,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=TRIGGER Entity=Sashok320#2210 EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=-1 Target=0 SubOption=-1 TriggerKeyword=TAG_NOT_SET",
       "Timestamp": "15:59:51.712412",
-      "Index": 113081
+      "Index": 109174
     }
   },
   {
@@ -3304,7 +3291,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=Sashok320#2210 tag=MULLIGAN_STATE value=DONE",
       "Timestamp": "15:59:51.712412",
-      "Index": 113082
+      "Index": 109175
     }
   },
   {
@@ -3312,7 +3299,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=Daedin#2991 tag=MULLIGAN_STATE value=DEALING",
       "Timestamp": "15:59:51.712412",
-      "Index": 113083
+      "Index": 109176
     }
   },
   {
@@ -3359,7 +3346,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=TRIGGER Entity=Daedin#2991 EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=-1 Target=0 SubOption=-1 TriggerKeyword=TAG_NOT_SET",
       "Timestamp": "15:59:51.712412",
-      "Index": 113084
+      "Index": 109177
     }
   },
   {
@@ -3531,7 +3518,7 @@
     "Debug": {
       "CreationLogLine": "SHOW_ENTITY - Updating Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=5 zone=DECK zonePos=0 cardId= player=1] CardID=TIME_003",
       "Timestamp": "15:59:51.712412",
-      "Index": 113085
+      "Index": 109178
     }
   },
   {
@@ -3579,7 +3566,7 @@
     "Debug": {
       "CreationLogLine": "SHOW_ENTITY - Updating Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=5 zone=DECK zonePos=0 cardId= player=1] CardID=TIME_003",
       "Timestamp": "15:59:51.712412",
-      "Index": 113085
+      "Index": 109178
     }
   },
   {
@@ -3626,7 +3613,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=5 zone=DECK zonePos=0 cardId= player=1] tag=ZONE_POSITION value=1",
       "Timestamp": "15:59:51.712412",
-      "Index": 113087
+      "Index": 109180
     }
   },
   {
@@ -3668,7 +3655,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=Kil'jaeden id=6 zone=HAND zonePos=1 cardId=GDB_145 player=1] tag=ZONE value=DECK",
       "Timestamp": "15:59:51.712412",
-      "Index": 113094
+      "Index": 109187
     }
   },
   {
@@ -3715,7 +3702,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=TRIGGER Entity=Daedin#2991 EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=-1 Target=0 SubOption=-1 TriggerKeyword=TAG_NOT_SET",
       "Timestamp": "15:59:51.796928",
-      "Index": 113096
+      "Index": 109189
     }
   },
   {
@@ -3723,7 +3710,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=Daedin#2991 tag=MULLIGAN_STATE value=DONE",
       "Timestamp": "15:59:51.796928",
-      "Index": 113097
+      "Index": 109190
     }
   },
   {
@@ -3756,7 +3743,7 @@
     "Debug": {
       "CreationLogLine": "SHUFFLE_DECK PlayerID=1",
       "Timestamp": "15:59:51.796928",
-      "Index": 113098
+      "Index": 109191
     }
   },
   {
@@ -3789,7 +3776,7 @@
     "Debug": {
       "CreationLogLine": "SHUFFLE_DECK PlayerID=2",
       "Timestamp": "15:59:51.796928",
-      "Index": 113099
+      "Index": 109192
     }
   },
   {
@@ -3836,7 +3823,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=TRIGGER Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=9 zone=DECK zonePos=0 cardId= player=1] EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=2 Target=0 SubOption=-1 TriggerKeyword=TAG_NOT_SET",
       "Timestamp": "15:59:56.329176",
-      "Index": 113133
+      "Index": 109226
     }
   },
   {
@@ -3875,7 +3862,7 @@
     "Debug": {
       "CreationLogLine": "SHOW_ENTITY - Updating Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=9 zone=DECK zonePos=0 cardId= player=1] CardID=EDR_000",
       "Timestamp": "15:59:56.329176",
-      "Index": 113134
+      "Index": 109227
     }
   },
   {
@@ -3923,7 +3910,7 @@
     "Debug": {
       "CreationLogLine": "SHOW_ENTITY - Updating Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=9 zone=DECK zonePos=0 cardId= player=1] CardID=EDR_000",
       "Timestamp": "15:59:56.329176",
-      "Index": 113134
+      "Index": 109227
     }
   },
   {
@@ -3959,7 +3946,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=TRIGGER Entity=[entityName=Ysera, Emerald Aspect id=9 zone=DECK zonePos=0 cardId=EDR_000 player=1] EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=0 Target=0 SubOption=-1 TriggerKeyword=START_OF_GAME_KEYWORD",
       "Timestamp": "15:59:56.362578",
-      "Index": 113135
+      "Index": 109228
     }
   },
   {
@@ -4006,7 +3993,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=TRIGGER Entity=[entityName=Ysera, Emerald Aspect id=9 zone=DECK zonePos=0 cardId=EDR_000 player=1] EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=0 Target=0 SubOption=-1 TriggerKeyword=START_OF_GAME_KEYWORD",
       "Timestamp": "15:59:56.362578",
-      "Index": 113135
+      "Index": 109228
     }
   },
   {
@@ -4054,7 +4041,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=Ysera, Emerald Aspect id=9 zone=DECK zonePos=0 cardId=EDR_000 player=1] tag=TAG_SCRIPT_DATA_NUM_1 value=1",
       "Timestamp": "15:59:56.362578",
-      "Index": 113136
+      "Index": 109229
     }
   },
   {
@@ -4088,6 +4075,7 @@
       "AdditionalProps": {
         "CreatorCardId": "EDR_000",
         "OriginEntityCardId": "EDR_000",
+        "OriginEntityEntityId": 9,
         "MercenariesExperience": -1,
         "MercenariesEquipmentId": -1,
         "RevealedFromBlock": null,
@@ -4196,7 +4184,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=Ysera, Emerald Aspect id=73 zone=SETASIDE zonePos=0 cardId=EDR_000 player=1] CardID=EDR_000",
       "Timestamp": "15:59:56.362578",
-      "Index": 113137
+      "Index": 109230
     }
   },
   {
@@ -4234,7 +4222,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=Daedin#2991 tag=MAXRESOURCES value=15",
       "Timestamp": "15:59:56.362578",
-      "Index": 113139
+      "Index": 109232
     }
   },
   {
@@ -4272,18 +4260,18 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=Sashok320#2210 tag=MAXRESOURCES value=15",
       "Timestamp": "15:59:56.362578",
-      "Index": 113140
+      "Index": 109233
     }
   },
   {
     "Type": "MAIN_STEP_READY",
     "Value": {
-      "Timestamp": 1776866401429
+      "Timestamp": 1786629601429
     },
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=GameEntity tag=STEP value=MAIN_READY",
       "Timestamp": "16:00:01.429829",
-      "Index": 113148
+      "Index": 109241
     }
   },
   {
@@ -4330,7 +4318,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=TRIGGER Entity=Daedin#2991 EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=-1 Target=0 SubOption=-1 TriggerKeyword=TAG_NOT_SET",
       "Timestamp": "16:00:01.429829",
-      "Index": 113149
+      "Index": 109242
     }
   },
   {
@@ -4370,7 +4358,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=Daedin#2991 tag=RESOURCES value=1",
       "Timestamp": "16:00:01.429829",
-      "Index": 113157
+      "Index": 109250
     }
   },
   {
@@ -4417,7 +4405,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=TRIGGER Entity=Daedin#2991 EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=-1 Target=0 SubOption=-1 TriggerKeyword=TAG_NOT_SET",
       "Timestamp": "16:00:01.429829",
-      "Index": 113160
+      "Index": 109253
     }
   },
   {
@@ -4464,7 +4452,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=TRIGGER Entity=Daedin#2991 EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=-1 Target=0 SubOption=-1 TriggerKeyword=TAG_NOT_SET",
       "Timestamp": "16:00:01.429829",
-      "Index": 113163
+      "Index": 109256
     }
   },
   {
@@ -4620,7 +4608,7 @@
     "Debug": {
       "CreationLogLine": "SHOW_ENTITY - Updating Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=13 zone=DECK zonePos=0 cardId= player=1] CardID=EDR_844",
       "Timestamp": "16:00:01.429829",
-      "Index": 113166
+      "Index": 109259
     }
   },
   {
@@ -4668,7 +4656,7 @@
     "Debug": {
       "CreationLogLine": "SHOW_ENTITY - Updating Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=13 zone=DECK zonePos=0 cardId= player=1] CardID=EDR_844",
       "Timestamp": "16:00:01.429829",
-      "Index": 113166
+      "Index": 109259
     }
   },
   {
@@ -4715,7 +4703,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=13 zone=DECK zonePos=0 cardId= player=1] tag=ZONE_POSITION value=4",
       "Timestamp": "16:00:01.429829",
-      "Index": 113168
+      "Index": 109261
     }
   },
   {
@@ -4762,7 +4750,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=13 zone=DECK zonePos=0 cardId= player=1] tag=ZONE_POSITION value=4",
       "Timestamp": "16:00:01.429829",
-      "Index": 113170
+      "Index": 109263
     }
   },
   {
@@ -4800,7 +4788,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=Daedin#2991 tag=NUM_CARDS_DRAWN_THIS_TURN value=1",
       "Timestamp": "16:00:01.429829",
-      "Index": 113171
+      "Index": 109264
     }
   },
   {
@@ -4847,7 +4835,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=TRIGGER Entity=Daedin#2991 EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=-1 Target=0 SubOption=-1 TriggerKeyword=TAG_NOT_SET",
       "Timestamp": "16:00:02.029936",
-      "Index": 113177
+      "Index": 109270
     }
   },
   {
@@ -4894,7 +4882,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=TRIGGER Entity=Daedin#2991 EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=-1 Target=0 SubOption=-1 TriggerKeyword=TAG_NOT_SET",
       "Timestamp": "16:00:07.646673",
-      "Index": 113236
+      "Index": 109329
     }
   },
   {
@@ -4941,7 +4929,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=TRIGGER Entity=Daedin#2991 EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=-1 Target=0 SubOption=-1 TriggerKeyword=TAG_NOT_SET",
       "Timestamp": "16:00:07.646673",
-      "Index": 113241
+      "Index": 109334
     }
   },
   {
@@ -4988,7 +4976,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=TRIGGER Entity=GameEntity EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=-1 Target=0 SubOption=-1 TriggerKeyword=TAG_NOT_SET",
       "Timestamp": "16:00:07.646673",
-      "Index": 113246
+      "Index": 109339
     }
   },
   {
@@ -5026,7 +5014,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=Daedin#2991 tag=TIMEOUT value=55",
       "Timestamp": "16:00:07.646673",
-      "Index": 113250
+      "Index": 109343
     }
   },
   {
@@ -5056,23 +5044,23 @@
         "CardID": "HERO_04",
         "IsMainPlayer": false
       },
-      "Timestamp": 1776866407646
+      "Timestamp": 1786629607646
     },
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=GameEntity tag=TURN value=2",
       "Timestamp": "16:00:07.646673",
-      "Index": 113257
+      "Index": 109350
     }
   },
   {
     "Type": "MAIN_STEP_READY",
     "Value": {
-      "Timestamp": 1776866407646
+      "Timestamp": 1786629607646
     },
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=GameEntity tag=STEP value=MAIN_READY",
       "Timestamp": "16:00:07.646673",
-      "Index": 113261
+      "Index": 109354
     }
   },
   {
@@ -5119,7 +5107,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=TRIGGER Entity=Sashok320#2210 EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=-1 Target=0 SubOption=-1 TriggerKeyword=TAG_NOT_SET",
       "Timestamp": "16:00:07.646673",
-      "Index": 113262
+      "Index": 109355
     }
   },
   {
@@ -5159,7 +5147,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=Sashok320#2210 tag=RESOURCES value=1",
       "Timestamp": "16:00:07.646673",
-      "Index": 113270
+      "Index": 109363
     }
   },
   {
@@ -5197,7 +5185,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=Daedin#2991 tag=NUM_CARDS_DRAWN_THIS_TURN value=0",
       "Timestamp": "16:00:07.646673",
-      "Index": 113271
+      "Index": 109364
     }
   },
   {
@@ -5244,7 +5232,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=TRIGGER Entity=Sashok320#2210 EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=-1 Target=0 SubOption=-1 TriggerKeyword=TAG_NOT_SET",
       "Timestamp": "16:00:07.646673",
-      "Index": 113274
+      "Index": 109367
     }
   },
   {
@@ -5291,7 +5279,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=TRIGGER Entity=Sashok320#2210 EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=-1 Target=0 SubOption=-1 TriggerKeyword=TAG_NOT_SET",
       "Timestamp": "16:00:07.646673",
-      "Index": 113277
+      "Index": 109370
     }
   },
   {
@@ -5355,7 +5343,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=58 zone=DECK zonePos=0 cardId= player=2] tag=ZONE value=HAND",
       "Timestamp": "16:00:07.646673",
-      "Index": 113280
+      "Index": 109373
     }
   },
   {
@@ -5402,7 +5390,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=58 zone=DECK zonePos=0 cardId= player=2] tag=ZONE_POSITION value=6",
       "Timestamp": "16:00:07.646673",
-      "Index": 113281
+      "Index": 109374
     }
   },
   {
@@ -5449,7 +5437,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=58 zone=DECK zonePos=0 cardId= player=2] tag=ZONE_POSITION value=6",
       "Timestamp": "16:00:07.646673",
-      "Index": 113283
+      "Index": 109376
     }
   },
   {
@@ -5487,7 +5475,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=Sashok320#2210 tag=NUM_CARDS_DRAWN_THIS_TURN value=1",
       "Timestamp": "16:00:07.646673",
-      "Index": 113284
+      "Index": 109377
     }
   },
   {
@@ -5534,7 +5522,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=TRIGGER Entity=Sashok320#2210 EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=-1 Target=0 SubOption=-1 TriggerKeyword=TAG_NOT_SET",
       "Timestamp": "16:00:08.697237",
-      "Index": 113289
+      "Index": 109382
     }
   },
   {
@@ -5573,7 +5561,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=PLAY Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=54 zone=HAND zonePos=1 cardId= player=2] EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=0 Target=0 SubOption=-1",
       "Timestamp": "16:00:11.129851",
-      "Index": 113320
+      "Index": 109413
     }
   },
   {
@@ -5620,7 +5608,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=PLAY Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=54 zone=HAND zonePos=1 cardId= player=2] EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=0 Target=0 SubOption=-1",
       "Timestamp": "16:00:11.129851",
-      "Index": 113320
+      "Index": 109413
     }
   },
   {
@@ -5660,7 +5648,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=Sashok320#2210 tag=RESOURCES_USED value=1",
       "Timestamp": "16:00:11.129851",
-      "Index": 113322
+      "Index": 109415
     }
   },
   {
@@ -5698,7 +5686,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=Sashok320#2210 tag=NUM_CARDS_PLAYED_THIS_TURN value=1",
       "Timestamp": "16:00:11.129851",
-      "Index": 113324
+      "Index": 109417
     }
   },
   {
@@ -5745,7 +5733,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=58 zone=HAND zonePos=6 cardId= player=2] tag=ZONE_POSITION value=5",
       "Timestamp": "16:00:11.129851",
-      "Index": 113326
+      "Index": 109419
     }
   },
   {
@@ -5792,7 +5780,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=72 zone=HAND zonePos=5 cardId= player=2] tag=ZONE_POSITION value=4",
       "Timestamp": "16:00:11.129851",
-      "Index": 113327
+      "Index": 109420
     }
   },
   {
@@ -5839,7 +5827,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=55 zone=HAND zonePos=4 cardId= player=2] tag=ZONE_POSITION value=3",
       "Timestamp": "16:00:11.129851",
-      "Index": 113328
+      "Index": 109421
     }
   },
   {
@@ -5886,7 +5874,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=64 zone=HAND zonePos=3 cardId= player=2] tag=ZONE_POSITION value=2",
       "Timestamp": "16:00:11.129851",
-      "Index": 113329
+      "Index": 109422
     }
   },
   {
@@ -5933,7 +5921,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=56 zone=HAND zonePos=2 cardId= player=2] tag=ZONE_POSITION value=1",
       "Timestamp": "16:00:11.129851",
-      "Index": 113330
+      "Index": 109423
     }
   },
   {
@@ -5972,7 +5960,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=54 zone=HAND zonePos=1 cardId= player=2] tag=COST value=1",
       "Timestamp": "16:00:11.129851",
-      "Index": 113336
+      "Index": 109429
     }
   },
   {
@@ -6020,7 +6008,7 @@
     "Debug": {
       "CreationLogLine": "SHOW_ENTITY - Updating Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=54 zone=HAND zonePos=1 cardId= player=2] CardID=TLC_426",
       "Timestamp": "16:00:11.129851",
-      "Index": 113339
+      "Index": 109432
     }
   },
   {
@@ -6067,7 +6055,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=PLAY Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=72 zone=HAND zonePos=4 cardId= player=2] EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=0 Target=0 SubOption=-1",
       "Timestamp": "16:00:13.130521",
-      "Index": 113367
+      "Index": 109460
     }
   },
   {
@@ -6105,7 +6093,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=Sashok320#2210 tag=NUM_CARDS_PLAYED_THIS_TURN value=2",
       "Timestamp": "16:00:13.130521",
-      "Index": 113368
+      "Index": 109461
     }
   },
   {
@@ -6152,7 +6140,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=58 zone=HAND zonePos=5 cardId= player=2] tag=ZONE_POSITION value=4",
       "Timestamp": "16:00:13.130521",
-      "Index": 113370
+      "Index": 109463
     }
   },
   {
@@ -6187,6 +6175,7 @@
         "TargetEntityId": 0,
         "TargetCardId": null,
         "CreatorCardId": "",
+        "CreatorEntityId": 1,
         "TransientCard": false,
         "Immune": false,
         "Magnetized": false,
@@ -6253,7 +6242,7 @@
     "Debug": {
       "CreationLogLine": "SHOW_ENTITY - Updating Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=72 zone=HAND zonePos=4 cardId= player=2] CardID=GAME_005",
       "Timestamp": "16:00:13.130521",
-      "Index": 113372
+      "Index": 109465
     }
   },
   {
@@ -6301,7 +6290,43 @@
     "Debug": {
       "CreationLogLine": "SHOW_ENTITY - Updating Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=72 zone=HAND zonePos=4 cardId= player=2] CardID=GAME_005",
       "Timestamp": "16:00:13.130521",
-      "Index": 113372
+      "Index": 109465
+    }
+  },
+  {
+    "Type": "POWER_TRIGGERED",
+    "Value": {
+      "CardId": "GAME_005",
+      "ControllerId": 2,
+      "LocalPlayer": {
+        "Id": 2,
+        "AccountHi": "144115198130930503",
+        "AccountLo": "32311514",
+        "PlayerId": 1,
+        "Name": "Daedin#2991",
+        "Rank": "",
+        "LegendRank": "",
+        "CardID": "HERO_11",
+        "IsMainPlayer": true
+      },
+      "OpponentPlayer": {
+        "Id": 3,
+        "AccountHi": "144115198130930503",
+        "AccountLo": "1067457568",
+        "PlayerId": 2,
+        "Name": "UNKNOWN HUMAN PLAYER",
+        "Rank": "",
+        "LegendRank": "",
+        "CardID": "HERO_04",
+        "IsMainPlayer": false
+      },
+      "EntityId": 72,
+      "AdditionalProps": null
+    },
+    "Debug": {
+      "CreationLogLine": "BLOCK_START BlockType=POWER Entity=[entityName=The Coin id=72 zone=PLAY zonePos=0 cardId=GAME_005 player=2] EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=0 Target=0 SubOption=-1",
+      "Timestamp": "16:00:13.979545",
+      "Index": 109469
     }
   },
   {
@@ -6348,7 +6373,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=POWER Entity=[entityName=The Coin id=72 zone=PLAY zonePos=0 cardId=GAME_005 player=2] EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=0 Target=0 SubOption=-1",
       "Timestamp": "16:00:13.979545",
-      "Index": 113376
+      "Index": 109469
     }
   },
   {
@@ -6388,7 +6413,43 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=Sashok320#2210 tag=RESOURCES_USED value=0",
       "Timestamp": "16:00:13.979545",
-      "Index": 113377
+      "Index": 109470
+    }
+  },
+  {
+    "Type": "POWER_TRIGGERED_END",
+    "Value": {
+      "CardId": "GAME_005",
+      "ControllerId": 2,
+      "LocalPlayer": {
+        "Id": 2,
+        "AccountHi": "144115198130930503",
+        "AccountLo": "32311514",
+        "PlayerId": 1,
+        "Name": "Daedin#2991",
+        "Rank": "",
+        "LegendRank": "",
+        "CardID": "HERO_11",
+        "IsMainPlayer": true
+      },
+      "OpponentPlayer": {
+        "Id": 3,
+        "AccountHi": "144115198130930503",
+        "AccountLo": "1067457568",
+        "PlayerId": 2,
+        "Name": "UNKNOWN HUMAN PLAYER",
+        "Rank": "",
+        "LegendRank": "",
+        "CardID": "HERO_04",
+        "IsMainPlayer": false
+      },
+      "EntityId": 72,
+      "AdditionalProps": null
+    },
+    "Debug": {
+      "CreationLogLine": "BLOCK_START BlockType=POWER Entity=[entityName=The Coin id=72 zone=PLAY zonePos=0 cardId=GAME_005 player=2] EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=0 Target=0 SubOption=-1",
+      "Timestamp": "16:00:13.979545",
+      "Index": 109471
     }
   },
   {
@@ -6435,7 +6496,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=PLAY Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=56 zone=HAND zonePos=1 cardId= player=2] EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=0 Target=0 SubOption=-1",
       "Timestamp": "16:00:16.413530",
-      "Index": 113411
+      "Index": 109505
     }
   },
   {
@@ -6475,7 +6536,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=Sashok320#2210 tag=RESOURCES_USED value=1",
       "Timestamp": "16:00:16.413530",
-      "Index": 113413
+      "Index": 109507
     }
   },
   {
@@ -6513,7 +6574,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=Sashok320#2210 tag=NUM_CARDS_PLAYED_THIS_TURN value=3",
       "Timestamp": "16:00:16.413530",
-      "Index": 113415
+      "Index": 109509
     }
   },
   {
@@ -6560,7 +6621,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=58 zone=HAND zonePos=4 cardId= player=2] tag=ZONE_POSITION value=3",
       "Timestamp": "16:00:16.413530",
-      "Index": 113417
+      "Index": 109511
     }
   },
   {
@@ -6607,7 +6668,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=55 zone=HAND zonePos=3 cardId= player=2] tag=ZONE_POSITION value=2",
       "Timestamp": "16:00:16.413530",
-      "Index": 113418
+      "Index": 109512
     }
   },
   {
@@ -6654,7 +6715,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=64 zone=HAND zonePos=2 cardId= player=2] tag=ZONE_POSITION value=1",
       "Timestamp": "16:00:16.413530",
-      "Index": 113419
+      "Index": 109513
     }
   },
   {
@@ -6689,6 +6750,7 @@
         "TargetEntityId": 0,
         "TargetCardId": null,
         "CreatorCardId": null,
+        "CreatorEntityId": null,
         "TransientCard": false,
         "Immune": false,
         "Magnetized": false,
@@ -6843,7 +6905,7 @@
     "Debug": {
       "CreationLogLine": "SHOW_ENTITY - Updating Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=56 zone=HAND zonePos=1 cardId= player=2] CardID=CORE_ULD_723",
       "Timestamp": "16:00:16.413530",
-      "Index": 113421
+      "Index": 109515
     }
   },
   {
@@ -6891,7 +6953,7 @@
     "Debug": {
       "CreationLogLine": "SHOW_ENTITY - Updating Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=56 zone=HAND zonePos=1 cardId= player=2] CardID=CORE_ULD_723",
       "Timestamp": "16:00:16.413530",
-      "Index": 113421
+      "Index": 109515
     }
   },
   {
@@ -6938,7 +7000,79 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=56 zone=HAND zonePos=1 cardId= player=2] tag=ZONE_POSITION value=1",
       "Timestamp": "16:00:16.413530",
-      "Index": 113422
+      "Index": 109516
+    }
+  },
+  {
+    "Type": "POWER_TRIGGERED",
+    "Value": {
+      "CardId": "CORE_ULD_723",
+      "ControllerId": 2,
+      "LocalPlayer": {
+        "Id": 2,
+        "AccountHi": "144115198130930503",
+        "AccountLo": "32311514",
+        "PlayerId": 1,
+        "Name": "Daedin#2991",
+        "Rank": "",
+        "LegendRank": "",
+        "CardID": "HERO_11",
+        "IsMainPlayer": true
+      },
+      "OpponentPlayer": {
+        "Id": 3,
+        "AccountHi": "144115198130930503",
+        "AccountLo": "1067457568",
+        "PlayerId": 2,
+        "Name": "UNKNOWN HUMAN PLAYER",
+        "Rank": "",
+        "LegendRank": "",
+        "CardID": "HERO_04",
+        "IsMainPlayer": false
+      },
+      "EntityId": 56,
+      "AdditionalProps": null
+    },
+    "Debug": {
+      "CreationLogLine": "BLOCK_START BlockType=POWER Entity=[entityName=Murmy id=56 zone=PLAY zonePos=1 cardId=CORE_ULD_723 player=2] EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=0 Target=0 SubOption=-1",
+      "Timestamp": "16:00:17.829204",
+      "Index": 109524
+    }
+  },
+  {
+    "Type": "POWER_TRIGGERED_END",
+    "Value": {
+      "CardId": "CORE_ULD_723",
+      "ControllerId": 2,
+      "LocalPlayer": {
+        "Id": 2,
+        "AccountHi": "144115198130930503",
+        "AccountLo": "32311514",
+        "PlayerId": 1,
+        "Name": "Daedin#2991",
+        "Rank": "",
+        "LegendRank": "",
+        "CardID": "HERO_11",
+        "IsMainPlayer": true
+      },
+      "OpponentPlayer": {
+        "Id": 3,
+        "AccountHi": "144115198130930503",
+        "AccountLo": "1067457568",
+        "PlayerId": 2,
+        "Name": "UNKNOWN HUMAN PLAYER",
+        "Rank": "",
+        "LegendRank": "",
+        "CardID": "HERO_04",
+        "IsMainPlayer": false
+      },
+      "EntityId": 56,
+      "AdditionalProps": null
+    },
+    "Debug": {
+      "CreationLogLine": "BLOCK_START BlockType=POWER Entity=[entityName=Murmy id=56 zone=PLAY zonePos=1 cardId=CORE_ULD_723 player=2] EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=0 Target=0 SubOption=-1",
+      "Timestamp": "16:00:17.829204",
+      "Index": 109525
     }
   },
   {
@@ -6985,7 +7119,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=TRIGGER Entity=[entityName=Dive the Golakka Depths id=54 zone=SECRET zonePos=0 cardId=TLC_426 player=2] EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=1 Target=0 SubOption=-1 TriggerKeyword=TAG_NOT_SET",
       "Timestamp": "16:00:17.829204",
-      "Index": 113433
+      "Index": 109528
     }
   },
   {
@@ -7032,7 +7166,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=TRIGGER Entity=Sashok320#2210 EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=-1 Target=0 SubOption=-1 TriggerKeyword=TAG_NOT_SET",
       "Timestamp": "16:00:18.497070",
-      "Index": 113502
+      "Index": 109597
     }
   },
   {
@@ -7079,7 +7213,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=TRIGGER Entity=Sashok320#2210 EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=-1 Target=0 SubOption=-1 TriggerKeyword=TAG_NOT_SET",
       "Timestamp": "16:00:18.497070",
-      "Index": 113507
+      "Index": 109602
     }
   },
   {
@@ -7126,7 +7260,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=TRIGGER Entity=GameEntity EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=-1 Target=0 SubOption=-1 TriggerKeyword=TAG_NOT_SET",
       "Timestamp": "16:00:18.497070",
-      "Index": 113512
+      "Index": 109607
     }
   },
   {
@@ -7164,7 +7298,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=Sashok320#2210 tag=TIMEOUT value=55",
       "Timestamp": "16:00:18.497070",
-      "Index": 113515
+      "Index": 109610
     }
   },
   {
@@ -7194,23 +7328,23 @@
         "CardID": "HERO_04",
         "IsMainPlayer": false
       },
-      "Timestamp": 1776866418497
+      "Timestamp": 1786629618497
     },
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=GameEntity tag=TURN value=3",
       "Timestamp": "16:00:18.497070",
-      "Index": 113522
+      "Index": 109617
     }
   },
   {
     "Type": "MAIN_STEP_READY",
     "Value": {
-      "Timestamp": 1776866418497
+      "Timestamp": 1786629618497
     },
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=GameEntity tag=STEP value=MAIN_READY",
       "Timestamp": "16:00:18.497070",
-      "Index": 113526
+      "Index": 109621
     }
   },
   {
@@ -7257,7 +7391,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=TRIGGER Entity=Daedin#2991 EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=-1 Target=0 SubOption=-1 TriggerKeyword=TAG_NOT_SET",
       "Timestamp": "16:00:18.497070",
-      "Index": 113527
+      "Index": 109622
     }
   },
   {
@@ -7297,7 +7431,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=Daedin#2991 tag=RESOURCES value=2",
       "Timestamp": "16:00:18.497070",
-      "Index": 113537
+      "Index": 109632
     }
   },
   {
@@ -7335,7 +7469,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=Sashok320#2210 tag=NUM_CARDS_DRAWN_THIS_TURN value=0",
       "Timestamp": "16:00:18.497070",
-      "Index": 113538
+      "Index": 109633
     }
   },
   {
@@ -7382,7 +7516,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=TRIGGER Entity=Daedin#2991 EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=-1 Target=0 SubOption=-1 TriggerKeyword=TAG_NOT_SET",
       "Timestamp": "16:00:18.497070",
-      "Index": 113541
+      "Index": 109636
     }
   },
   {
@@ -7429,7 +7563,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=TRIGGER Entity=Daedin#2991 EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=-1 Target=0 SubOption=-1 TriggerKeyword=TAG_NOT_SET",
       "Timestamp": "16:00:18.497070",
-      "Index": 113544
+      "Index": 109639
     }
   },
   {
@@ -7585,7 +7719,7 @@
     "Debug": {
       "CreationLogLine": "SHOW_ENTITY - Updating Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=27 zone=DECK zonePos=0 cardId= player=1] CardID=TLC_100",
       "Timestamp": "16:00:18.497070",
-      "Index": 113547
+      "Index": 109642
     }
   },
   {
@@ -7633,7 +7767,7 @@
     "Debug": {
       "CreationLogLine": "SHOW_ENTITY - Updating Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=27 zone=DECK zonePos=0 cardId= player=1] CardID=TLC_100",
       "Timestamp": "16:00:18.497070",
-      "Index": 113547
+      "Index": 109642
     }
   },
   {
@@ -7680,7 +7814,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=27 zone=DECK zonePos=0 cardId= player=1] tag=ZONE_POSITION value=5",
       "Timestamp": "16:00:18.497070",
-      "Index": 113549
+      "Index": 109644
     }
   },
   {
@@ -7727,7 +7861,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=27 zone=DECK zonePos=0 cardId= player=1] tag=ZONE_POSITION value=5",
       "Timestamp": "16:00:18.497070",
-      "Index": 113551
+      "Index": 109646
     }
   },
   {
@@ -7765,7 +7899,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=Daedin#2991 tag=NUM_CARDS_DRAWN_THIS_TURN value=1",
       "Timestamp": "16:00:18.497070",
-      "Index": 113552
+      "Index": 109647
     }
   },
   {
@@ -7812,7 +7946,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=TRIGGER Entity=Daedin#2991 EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=-1 Target=0 SubOption=-1 TriggerKeyword=TAG_NOT_SET",
       "Timestamp": "16:00:18.980102",
-      "Index": 113559
+      "Index": 109654
     }
   },
   {
@@ -7846,7 +7980,7 @@
       "AdditionalProps": {
         "AttackOnBoard": {
           "Player": {
-            "Board": 2,
+            "Board": 0,
             "Hero": 0
           },
           "Opponent": {
@@ -7859,7 +7993,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=PLAY Entity=[entityName=Dreadhound Handler id=23 zone=HAND zonePos=2 cardId=VAC_514 player=1] EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=0 Target=0 SubOption=-1",
       "Timestamp": "16:00:27.413991",
-      "Index": 113590
+      "Index": 109685
     }
   },
   {
@@ -7899,7 +8033,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=Daedin#2991 tag=RESOURCES_USED value=2",
       "Timestamp": "16:00:27.413991",
-      "Index": 113592
+      "Index": 109687
     }
   },
   {
@@ -7937,7 +8071,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=Daedin#2991 tag=NUM_CARDS_PLAYED_THIS_TURN value=1",
       "Timestamp": "16:00:27.413991",
-      "Index": 113594
+      "Index": 109689
     }
   },
   {
@@ -7984,7 +8118,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=Elise the Navigator id=27 zone=HAND zonePos=5 cardId=TLC_100 player=1] tag=ZONE_POSITION value=4",
       "Timestamp": "16:00:27.413991",
-      "Index": 113600
+      "Index": 109695
     }
   },
   {
@@ -8031,7 +8165,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=Naralex, Herald of the Flights id=13 zone=HAND zonePos=4 cardId=EDR_844 player=1] tag=ZONE_POSITION value=3",
       "Timestamp": "16:00:27.413991",
-      "Index": 113601
+      "Index": 109696
     }
   },
   {
@@ -8078,7 +8212,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=Sanguine Infestation id=34 zone=HAND zonePos=3 cardId=EDR_817 player=1] tag=ZONE_POSITION value=2",
       "Timestamp": "16:00:27.413991",
-      "Index": 113602
+      "Index": 109697
     }
   },
   {
@@ -8115,6 +8249,7 @@
         "Attack": 2,
         "Health": 1,
         "CreatorCardId": null,
+        "CreatorEntityId": null,
         "Immune": false,
         "Dormant": false,
         "Cost": 2,
@@ -8150,7 +8285,7 @@
           },
           {
             "Name": 49,
-            "Value": 4
+            "Value": 3
           },
           {
             "Name": 53,
@@ -8223,62 +8358,6 @@
           {
             "Name": 3557,
             "Value": 2
-          },
-          {
-            "Name": 1196,
-            "Value": 0
-          },
-          {
-            "Name": 3616,
-            "Value": 1
-          },
-          {
-            "Name": 930,
-            "Value": 1
-          },
-          {
-            "Name": 267,
-            "Value": 56
-          },
-          {
-            "Name": 1715,
-            "Value": 23
-          },
-          {
-            "Name": 38,
-            "Value": 0
-          },
-          {
-            "Name": 297,
-            "Value": 1
-          },
-          {
-            "Name": 4163,
-            "Value": 1
-          },
-          {
-            "Name": 43,
-            "Value": 0
-          },
-          {
-            "Name": 2187,
-            "Value": 0
-          },
-          {
-            "Name": 318,
-            "Value": 0
-          },
-          {
-            "Name": 1173,
-            "Value": 0
-          },
-          {
-            "Name": 18,
-            "Value": 56
-          },
-          {
-            "Name": 44,
-            "Value": 0
           }
         ]
       }
@@ -8286,7 +8365,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=Dreadhound Handler id=23 zone=HAND zonePos=2 cardId=VAC_514 player=1] tag=ZONE value=PLAY",
       "Timestamp": "16:00:27.413991",
-      "Index": 113606
+      "Index": 109701
     }
   },
   {
@@ -8333,7 +8412,79 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=Dreadhound Handler id=23 zone=HAND zonePos=2 cardId=VAC_514 player=1] tag=ZONE_POSITION value=1",
       "Timestamp": "16:00:27.413991",
-      "Index": 113607
+      "Index": 109702
+    }
+  },
+  {
+    "Type": "POWER_TRIGGERED",
+    "Value": {
+      "CardId": "VAC_514",
+      "ControllerId": 1,
+      "LocalPlayer": {
+        "Id": 2,
+        "AccountHi": "144115198130930503",
+        "AccountLo": "32311514",
+        "PlayerId": 1,
+        "Name": "Daedin#2991",
+        "Rank": "",
+        "LegendRank": "",
+        "CardID": "HERO_11",
+        "IsMainPlayer": true
+      },
+      "OpponentPlayer": {
+        "Id": 3,
+        "AccountHi": "144115198130930503",
+        "AccountLo": "1067457568",
+        "PlayerId": 2,
+        "Name": "UNKNOWN HUMAN PLAYER",
+        "Rank": "",
+        "LegendRank": "",
+        "CardID": "HERO_04",
+        "IsMainPlayer": false
+      },
+      "EntityId": 23,
+      "AdditionalProps": null
+    },
+    "Debug": {
+      "CreationLogLine": "BLOCK_START BlockType=POWER Entity=[entityName=Dreadhound Handler id=23 zone=PLAY zonePos=1 cardId=VAC_514 player=1] EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=0 Target=0 SubOption=-1",
+      "Timestamp": "16:00:27.447055",
+      "Index": 109707
+    }
+  },
+  {
+    "Type": "POWER_TRIGGERED_END",
+    "Value": {
+      "CardId": "VAC_514",
+      "ControllerId": 1,
+      "LocalPlayer": {
+        "Id": 2,
+        "AccountHi": "144115198130930503",
+        "AccountLo": "32311514",
+        "PlayerId": 1,
+        "Name": "Daedin#2991",
+        "Rank": "",
+        "LegendRank": "",
+        "CardID": "HERO_11",
+        "IsMainPlayer": true
+      },
+      "OpponentPlayer": {
+        "Id": 3,
+        "AccountHi": "144115198130930503",
+        "AccountLo": "1067457568",
+        "PlayerId": 2,
+        "Name": "UNKNOWN HUMAN PLAYER",
+        "Rank": "",
+        "LegendRank": "",
+        "CardID": "HERO_04",
+        "IsMainPlayer": false
+      },
+      "EntityId": 23,
+      "AdditionalProps": null
+    },
+    "Debug": {
+      "CreationLogLine": "BLOCK_START BlockType=POWER Entity=[entityName=Dreadhound Handler id=23 zone=PLAY zonePos=1 cardId=VAC_514 player=1] EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=0 Target=0 SubOption=-1",
+      "Timestamp": "16:00:27.447055",
+      "Index": 109708
     }
   },
   {
@@ -8382,7 +8533,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=ATTACK Entity=[entityName=Dreadhound Handler id=23 zone=PLAY zonePos=1 cardId=VAC_514 player=1] EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=0 Target=[entityName=Murmy id=56 zone=PLAY zonePos=1 cardId=CORE_ULD_723 player=2] SubOption=-1",
       "Timestamp": "16:00:27.981312",
-      "Index": 113711
+      "Index": 109807
     }
   },
   {
@@ -8431,7 +8582,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=ATTACK Entity=[entityName=Dreadhound Handler id=23 zone=PLAY zonePos=1 cardId=VAC_514 player=1] EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=0 Target=[entityName=Murmy id=56 zone=PLAY zonePos=1 cardId=CORE_ULD_723 player=2] SubOption=-1",
       "Timestamp": "16:00:27.981312",
-      "Index": 113711
+      "Index": 109807
     }
   },
   {
@@ -8478,7 +8629,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=ATTACK Entity=[entityName=Dreadhound Handler id=23 zone=PLAY zonePos=1 cardId=VAC_514 player=1] EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=0 Target=[entityName=Murmy id=56 zone=PLAY zonePos=1 cardId=CORE_ULD_723 player=2] SubOption=-1",
       "Timestamp": "16:00:27.981312",
-      "Index": 113711
+      "Index": 109807
     }
   },
   {
@@ -8817,7 +8968,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=Murmy id=56 zone=PLAY zonePos=1 cardId=CORE_ULD_723 player=2] tag=DEFENDING value=1",
       "Timestamp": "16:00:27.981312",
-      "Index": 113720
+      "Index": 109816
     }
   },
   {
@@ -8871,7 +9022,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=DEATHS Entity=GameEntity EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=0 Target=0 SubOption=-1",
       "Timestamp": "16:00:28.814187",
-      "Index": 113756
+      "Index": 109852
     }
   },
   {
@@ -8918,7 +9069,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=DEATHS Entity=GameEntity EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=0 Target=0 SubOption=-1",
       "Timestamp": "16:00:28.814187",
-      "Index": 113756
+      "Index": 109852
     }
   },
   {
@@ -8956,7 +9107,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=Sashok320#2210 tag=CORPSES value=1",
       "Timestamp": "16:00:28.814187",
-      "Index": 113766
+      "Index": 109862
     }
   },
   {
@@ -8994,7 +9145,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=Daedin#2991 tag=CORPSES value=1",
       "Timestamp": "16:00:28.814187",
-      "Index": 113778
+      "Index": 109874
     }
   },
   {
@@ -9030,7 +9181,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=TRIGGER Entity=[entityName=Dreadhound Handler id=23 zone=GRAVEYARD zonePos=0 cardId=VAC_514 player=1] EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=0 Target=0 SubOption=-1 TriggerKeyword=DEATHRATTLE",
       "Timestamp": "16:00:28.915833",
-      "Index": 113780
+      "Index": 109876
     }
   },
   {
@@ -9077,7 +9228,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=TRIGGER Entity=[entityName=Dreadhound Handler id=23 zone=GRAVEYARD zonePos=0 cardId=VAC_514 player=1] EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=0 Target=0 SubOption=-1 TriggerKeyword=DEATHRATTLE",
       "Timestamp": "16:00:28.915833",
-      "Index": 113780
+      "Index": 109876
     }
   },
   {
@@ -9115,7 +9266,7 @@
     "Debug": {
       "CreationLogLine": "SUB_SPELL_START - SpellPrefabGUID=ReuseFX_Necrotic_DeathKnight_OverrideSpawn_FromGround_Super:18936aca8a333214ba05320a8816a173 Source=0 TargetCount=0",
       "Timestamp": "16:00:28.915833",
-      "Index": 113783
+      "Index": 109879
     }
   },
   {
@@ -9248,7 +9399,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=Dreadhound id=86 zone=PLAY zonePos=1 cardId=VAC_514t player=1] CardID=VAC_514t",
       "Timestamp": "16:00:28.915833",
-      "Index": 113784
+      "Index": 109880
     }
   },
   {
@@ -9285,7 +9436,7 @@
     "Debug": {
       "CreationLogLine": "SUB_SPELL_END",
       "Timestamp": "16:00:28.915833",
-      "Index": 113787
+      "Index": 109883
     }
   },
   {
@@ -9430,7 +9581,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=Murmy id=87 zone=PLAY zonePos=1 cardId=CORE_ULD_723 player=2] CardID=CORE_ULD_723",
       "Timestamp": "16:00:29.298572",
-      "Index": 113791
+      "Index": 109887
     }
   },
   {
@@ -9477,7 +9628,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=TRIGGER Entity=[entityName=Dive the Golakka Depths id=54 zone=SECRET zonePos=0 cardId=TLC_426 player=2] EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=1 Target=0 SubOption=-1 TriggerKeyword=TAG_NOT_SET",
       "Timestamp": "16:00:30.397894",
-      "Index": 113875
+      "Index": 109971
     }
   },
   {
@@ -9524,7 +9675,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=TRIGGER Entity=Daedin#2991 EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=-1 Target=0 SubOption=-1 TriggerKeyword=TAG_NOT_SET",
       "Timestamp": "16:00:30.397894",
-      "Index": 113880
+      "Index": 109976
     }
   },
   {
@@ -9571,7 +9722,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=TRIGGER Entity=Daedin#2991 EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=-1 Target=0 SubOption=-1 TriggerKeyword=TAG_NOT_SET",
       "Timestamp": "16:00:30.397894",
-      "Index": 113885
+      "Index": 109981
     }
   },
   {
@@ -9618,7 +9769,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=TRIGGER Entity=GameEntity EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=-1 Target=0 SubOption=-1 TriggerKeyword=TAG_NOT_SET",
       "Timestamp": "16:00:30.397894",
-      "Index": 113891
+      "Index": 109987
     }
   },
   {
@@ -9656,7 +9807,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=Daedin#2991 tag=TIMEOUT value=75",
       "Timestamp": "16:00:30.397894",
-      "Index": 113894
+      "Index": 109990
     }
   },
   {
@@ -9686,23 +9837,23 @@
         "CardID": "HERO_04",
         "IsMainPlayer": false
       },
-      "Timestamp": 1776866430397
+      "Timestamp": 1786629630397
     },
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=GameEntity tag=TURN value=4",
       "Timestamp": "16:00:30.397894",
-      "Index": 113901
+      "Index": 109997
     }
   },
   {
     "Type": "MAIN_STEP_READY",
     "Value": {
-      "Timestamp": 1776866430397
+      "Timestamp": 1786629630397
     },
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=GameEntity tag=STEP value=MAIN_READY",
       "Timestamp": "16:00:30.397894",
-      "Index": 113905
+      "Index": 110001
     }
   },
   {
@@ -9749,7 +9900,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=TRIGGER Entity=Sashok320#2210 EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=-1 Target=0 SubOption=-1 TriggerKeyword=TAG_NOT_SET",
       "Timestamp": "16:00:30.397894",
-      "Index": 113906
+      "Index": 110002
     }
   },
   {
@@ -9789,7 +9940,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=Sashok320#2210 tag=RESOURCES value=2",
       "Timestamp": "16:00:30.397894",
-      "Index": 113917
+      "Index": 110013
     }
   },
   {
@@ -9829,7 +9980,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=Sashok320#2210 tag=RESOURCES_USED value=0",
       "Timestamp": "16:00:30.397894",
-      "Index": 113918
+      "Index": 110014
     }
   },
   {
@@ -9867,7 +10018,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=Sashok320#2210 tag=NUM_CARDS_PLAYED_THIS_TURN value=0",
       "Timestamp": "16:00:30.397894",
-      "Index": 113919
+      "Index": 110015
     }
   },
   {
@@ -9905,7 +10056,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=Daedin#2991 tag=NUM_CARDS_DRAWN_THIS_TURN value=0",
       "Timestamp": "16:00:30.397894",
-      "Index": 113925
+      "Index": 110021
     }
   },
   {
@@ -9952,7 +10103,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=TRIGGER Entity=Sashok320#2210 EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=-1 Target=0 SubOption=-1 TriggerKeyword=TAG_NOT_SET",
       "Timestamp": "16:00:30.397894",
-      "Index": 113934
+      "Index": 110030
     }
   },
   {
@@ -9999,7 +10150,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=TRIGGER Entity=Sashok320#2210 EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=-1 Target=0 SubOption=-1 TriggerKeyword=TAG_NOT_SET",
       "Timestamp": "16:00:30.397894",
-      "Index": 113937
+      "Index": 110033
     }
   },
   {
@@ -10131,7 +10282,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=63 zone=DECK zonePos=0 cardId= player=2] tag=ZONE value=HAND",
       "Timestamp": "16:00:30.397894",
-      "Index": 113940
+      "Index": 110036
     }
   },
   {
@@ -10178,7 +10329,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=63 zone=DECK zonePos=0 cardId= player=2] tag=ZONE_POSITION value=4",
       "Timestamp": "16:00:30.397894",
-      "Index": 113941
+      "Index": 110037
     }
   },
   {
@@ -10225,7 +10376,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=63 zone=DECK zonePos=0 cardId= player=2] tag=ZONE_POSITION value=4",
       "Timestamp": "16:00:30.397894",
-      "Index": 113943
+      "Index": 110039
     }
   },
   {
@@ -10263,7 +10414,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=Sashok320#2210 tag=NUM_CARDS_DRAWN_THIS_TURN value=1",
       "Timestamp": "16:00:30.397894",
-      "Index": 113945
+      "Index": 110041
     }
   },
   {
@@ -10310,7 +10461,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=TRIGGER Entity=Sashok320#2210 EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=-1 Target=0 SubOption=-1 TriggerKeyword=TAG_NOT_SET",
       "Timestamp": "16:00:31.963161",
-      "Index": 113950
+      "Index": 110046
     }
   },
   {
@@ -10357,7 +10508,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=PLAY Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=63 zone=HAND zonePos=4 cardId= player=2] EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=0 Target=[entityName=Murmy id=87 zone=PLAY zonePos=1 cardId=CORE_ULD_723 player=2] SubOption=-1",
       "Timestamp": "16:00:37.813741",
-      "Index": 113993
+      "Index": 110089
     }
   },
   {
@@ -10397,7 +10548,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=Sashok320#2210 tag=RESOURCES_USED value=2",
       "Timestamp": "16:00:37.813741",
-      "Index": 113995
+      "Index": 110091
     }
   },
   {
@@ -10435,7 +10586,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=Sashok320#2210 tag=NUM_CARDS_PLAYED_THIS_TURN value=1",
       "Timestamp": "16:00:37.813741",
-      "Index": 113997
+      "Index": 110093
     }
   },
   {
@@ -10470,6 +10621,7 @@
         "TargetEntityId": 87,
         "TargetCardId": "CORE_ULD_723",
         "CreatorCardId": null,
+        "CreatorEntityId": null,
         "TransientCard": false,
         "Immune": false,
         "Magnetized": false,
@@ -10564,7 +10716,7 @@
     "Debug": {
       "CreationLogLine": "SHOW_ENTITY - Updating Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=63 zone=HAND zonePos=4 cardId= player=2] CardID=CORE_BT_292",
       "Timestamp": "16:00:37.813741",
-      "Index": 114000
+      "Index": 110096
     }
   },
   {
@@ -10612,7 +10764,43 @@
     "Debug": {
       "CreationLogLine": "SHOW_ENTITY - Updating Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=63 zone=HAND zonePos=4 cardId= player=2] CardID=CORE_BT_292",
       "Timestamp": "16:00:37.813741",
-      "Index": 114000
+      "Index": 110096
+    }
+  },
+  {
+    "Type": "POWER_TRIGGERED",
+    "Value": {
+      "CardId": "CORE_BT_292",
+      "ControllerId": 2,
+      "LocalPlayer": {
+        "Id": 2,
+        "AccountHi": "144115198130930503",
+        "AccountLo": "32311514",
+        "PlayerId": 1,
+        "Name": "Daedin#2991",
+        "Rank": "",
+        "LegendRank": "",
+        "CardID": "HERO_11",
+        "IsMainPlayer": true
+      },
+      "OpponentPlayer": {
+        "Id": 3,
+        "AccountHi": "144115198130930503",
+        "AccountLo": "1067457568",
+        "PlayerId": 2,
+        "Name": "UNKNOWN HUMAN PLAYER",
+        "Rank": "",
+        "LegendRank": "",
+        "CardID": "HERO_04",
+        "IsMainPlayer": false
+      },
+      "EntityId": 63,
+      "AdditionalProps": null
+    },
+    "Debug": {
+      "CreationLogLine": "BLOCK_START BlockType=POWER Entity=[entityName=Hand of A'dal id=63 zone=PLAY zonePos=0 cardId=CORE_BT_292 player=2] EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=0 Target=[entityName=Murmy id=87 zone=PLAY zonePos=1 cardId=CORE_ULD_723 player=2] SubOption=-1",
+      "Timestamp": "16:00:38.884275",
+      "Index": 110100
     }
   },
   {
@@ -10659,7 +10847,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=POWER Entity=[entityName=Hand of A'dal id=63 zone=PLAY zonePos=0 cardId=CORE_BT_292 player=2] EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=0 Target=[entityName=Murmy id=87 zone=PLAY zonePos=1 cardId=CORE_ULD_723 player=2] SubOption=-1",
       "Timestamp": "16:00:38.884275",
-      "Index": 114004
+      "Index": 110100
     }
   },
   {
@@ -10693,6 +10881,7 @@
       "AdditionalProps": {
         "CreatorCardId": null,
         "OriginEntityCardId": "CORE_BT_292",
+        "OriginEntityEntityId": 63,
         "MercenariesExperience": -1,
         "MercenariesEquipmentId": -1,
         "RevealedFromBlock": null,
@@ -10717,7 +10906,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=89 zone=SETASIDE zonePos=0 cardId= player=2] CardID=",
       "Timestamp": "16:00:38.884275",
-      "Index": 114007
+      "Index": 110103
     }
   },
   {
@@ -10765,7 +10954,7 @@
     "Debug": {
       "CreationLogLine": "SHOW_ENTITY - Updating Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=89 zone=SETASIDE zonePos=0 cardId= player=2] CardID=BT_292e",
       "Timestamp": "16:00:38.884275",
-      "Index": 114008
+      "Index": 110104
     }
   },
   {
@@ -10806,7 +10995,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=Murmy id=87 zone=PLAY zonePos=1 cardId=CORE_ULD_723 player=2] tag=ATK value=3",
       "Timestamp": "16:00:38.884275",
-      "Index": 114015
+      "Index": 110111
     }
   },
   {
@@ -10833,7 +11022,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=Murmy id=87 zone=PLAY zonePos=1 cardId=CORE_ULD_723 player=2] tag=ATK value=3",
       "Timestamp": "16:00:38.884275",
-      "Index": 114015
+      "Index": 110111
     }
   },
   {
@@ -10897,7 +11086,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=65 zone=DECK zonePos=0 cardId= player=2] tag=ZONE value=HAND",
       "Timestamp": "16:00:38.884275",
-      "Index": 114019
+      "Index": 110115
     }
   },
   {
@@ -10944,7 +11133,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=65 zone=DECK zonePos=0 cardId= player=2] tag=ZONE_POSITION value=4",
       "Timestamp": "16:00:38.884275",
-      "Index": 114020
+      "Index": 110116
     }
   },
   {
@@ -10991,7 +11180,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=65 zone=DECK zonePos=0 cardId= player=2] tag=ZONE_POSITION value=4",
       "Timestamp": "16:00:38.884275",
-      "Index": 114022
+      "Index": 110118
     }
   },
   {
@@ -11029,7 +11218,43 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=Sashok320#2210 tag=NUM_CARDS_DRAWN_THIS_TURN value=2",
       "Timestamp": "16:00:38.884275",
-      "Index": 114023
+      "Index": 110119
+    }
+  },
+  {
+    "Type": "POWER_TRIGGERED_END",
+    "Value": {
+      "CardId": "CORE_BT_292",
+      "ControllerId": 2,
+      "LocalPlayer": {
+        "Id": 2,
+        "AccountHi": "144115198130930503",
+        "AccountLo": "32311514",
+        "PlayerId": 1,
+        "Name": "Daedin#2991",
+        "Rank": "",
+        "LegendRank": "",
+        "CardID": "HERO_11",
+        "IsMainPlayer": true
+      },
+      "OpponentPlayer": {
+        "Id": 3,
+        "AccountHi": "144115198130930503",
+        "AccountLo": "1067457568",
+        "PlayerId": 2,
+        "Name": "UNKNOWN HUMAN PLAYER",
+        "Rank": "",
+        "LegendRank": "",
+        "CardID": "HERO_04",
+        "IsMainPlayer": false
+      },
+      "EntityId": 63,
+      "AdditionalProps": null
+    },
+    "Debug": {
+      "CreationLogLine": "BLOCK_START BlockType=POWER Entity=[entityName=Hand of A'dal id=63 zone=PLAY zonePos=0 cardId=CORE_BT_292 player=2] EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=0 Target=[entityName=Murmy id=87 zone=PLAY zonePos=1 cardId=CORE_ULD_723 player=2] SubOption=-1",
+      "Timestamp": "16:00:38.884275",
+      "Index": 110122
     }
   },
   {
@@ -11078,7 +11303,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=ATTACK Entity=[entityName=Murmy id=87 zone=PLAY zonePos=1 cardId=CORE_ULD_723 player=2] EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=0 Target=[entityName=Dreadhound id=86 zone=PLAY zonePos=1 cardId=VAC_514t player=1] SubOption=-1",
       "Timestamp": "16:00:42.380009",
-      "Index": 114104
+      "Index": 110201
     }
   },
   {
@@ -11127,7 +11352,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=ATTACK Entity=[entityName=Murmy id=87 zone=PLAY zonePos=1 cardId=CORE_ULD_723 player=2] EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=0 Target=[entityName=Dreadhound id=86 zone=PLAY zonePos=1 cardId=VAC_514t player=1] SubOption=-1",
       "Timestamp": "16:00:42.380009",
-      "Index": 114104
+      "Index": 110201
     }
   },
   {
@@ -11174,7 +11399,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=ATTACK Entity=[entityName=Murmy id=87 zone=PLAY zonePos=1 cardId=CORE_ULD_723 player=2] EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=0 Target=[entityName=Dreadhound id=86 zone=PLAY zonePos=1 cardId=VAC_514t player=1] SubOption=-1",
       "Timestamp": "16:00:42.380009",
-      "Index": 114104
+      "Index": 110201
     }
   },
   {
@@ -11449,7 +11674,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=Dreadhound id=86 zone=PLAY zonePos=1 cardId=VAC_514t player=1] tag=DEFENDING value=1",
       "Timestamp": "16:00:42.380009",
-      "Index": 114113
+      "Index": 110210
     }
   },
   {
@@ -11496,7 +11721,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=DEATHS Entity=GameEntity EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=0 Target=0 SubOption=-1",
       "Timestamp": "16:00:43.681101",
-      "Index": 114149
+      "Index": 110246
     }
   },
   {
@@ -11543,7 +11768,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=DEATHS Entity=GameEntity EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=0 Target=0 SubOption=-1",
       "Timestamp": "16:00:43.681101",
-      "Index": 114149
+      "Index": 110246
     }
   },
   {
@@ -11581,7 +11806,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=Daedin#2991 tag=CORPSES value=2",
       "Timestamp": "16:00:43.681101",
-      "Index": 114161
+      "Index": 110258
     }
   },
   {
@@ -11718,7 +11943,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=Dreadhound id=90 zone=PLAY zonePos=1 cardId=VAC_514t player=1] CardID=VAC_514t",
       "Timestamp": "16:00:43.747978",
-      "Index": 114164
+      "Index": 110261
     }
   },
   {
@@ -11765,7 +11990,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=TRIGGER Entity=Sashok320#2210 EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=-1 Target=0 SubOption=-1 TriggerKeyword=TAG_NOT_SET",
       "Timestamp": "16:00:45.463859",
-      "Index": 114247
+      "Index": 110344
     }
   },
   {
@@ -11812,7 +12037,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=TRIGGER Entity=Sashok320#2210 EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=-1 Target=0 SubOption=-1 TriggerKeyword=TAG_NOT_SET",
       "Timestamp": "16:00:45.463859",
-      "Index": 114252
+      "Index": 110349
     }
   },
   {
@@ -11859,7 +12084,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=TRIGGER Entity=GameEntity EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=-1 Target=0 SubOption=-1 TriggerKeyword=TAG_NOT_SET",
       "Timestamp": "16:00:45.463859",
-      "Index": 114257
+      "Index": 110354
     }
   },
   {
@@ -11897,7 +12122,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=Sashok320#2210 tag=TIMEOUT value=75",
       "Timestamp": "16:00:45.463859",
-      "Index": 114260
+      "Index": 110357
     }
   },
   {
@@ -11927,23 +12152,23 @@
         "CardID": "HERO_04",
         "IsMainPlayer": false
       },
-      "Timestamp": 1776866445463
+      "Timestamp": 1786629645463
     },
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=GameEntity tag=TURN value=5",
       "Timestamp": "16:00:45.463859",
-      "Index": 114267
+      "Index": 110364
     }
   },
   {
     "Type": "MAIN_STEP_READY",
     "Value": {
-      "Timestamp": 1776866445463
+      "Timestamp": 1786629645463
     },
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=GameEntity tag=STEP value=MAIN_READY",
       "Timestamp": "16:00:45.463859",
-      "Index": 114271
+      "Index": 110368
     }
   },
   {
@@ -11990,7 +12215,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=TRIGGER Entity=Daedin#2991 EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=-1 Target=0 SubOption=-1 TriggerKeyword=TAG_NOT_SET",
       "Timestamp": "16:00:45.463859",
-      "Index": 114272
+      "Index": 110369
     }
   },
   {
@@ -12030,7 +12255,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=Daedin#2991 tag=RESOURCES value=3",
       "Timestamp": "16:00:45.463859",
-      "Index": 114283
+      "Index": 110380
     }
   },
   {
@@ -12070,7 +12295,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=Daedin#2991 tag=RESOURCES_USED value=0",
       "Timestamp": "16:00:45.463859",
-      "Index": 114284
+      "Index": 110381
     }
   },
   {
@@ -12108,7 +12333,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=Daedin#2991 tag=NUM_CARDS_PLAYED_THIS_TURN value=0",
       "Timestamp": "16:00:45.463859",
-      "Index": 114286
+      "Index": 110383
     }
   },
   {
@@ -12146,7 +12371,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=Sashok320#2210 tag=NUM_CARDS_DRAWN_THIS_TURN value=0",
       "Timestamp": "16:00:45.463859",
-      "Index": 114290
+      "Index": 110387
     }
   },
   {
@@ -12193,7 +12418,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=TRIGGER Entity=Daedin#2991 EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=-1 Target=0 SubOption=-1 TriggerKeyword=TAG_NOT_SET",
       "Timestamp": "16:00:45.463859",
-      "Index": 114297
+      "Index": 110394
     }
   },
   {
@@ -12240,7 +12465,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=TRIGGER Entity=Daedin#2991 EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=-1 Target=0 SubOption=-1 TriggerKeyword=TAG_NOT_SET",
       "Timestamp": "16:00:45.463859",
-      "Index": 114300
+      "Index": 110397
     }
   },
   {
@@ -12404,7 +12629,7 @@
     "Debug": {
       "CreationLogLine": "SHOW_ENTITY - Updating Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=18 zone=DECK zonePos=0 cardId= player=1] CardID=TLC_436",
       "Timestamp": "16:00:45.463859",
-      "Index": 114303
+      "Index": 110400
     }
   },
   {
@@ -12452,7 +12677,7 @@
     "Debug": {
       "CreationLogLine": "SHOW_ENTITY - Updating Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=18 zone=DECK zonePos=0 cardId= player=1] CardID=TLC_436",
       "Timestamp": "16:00:45.463859",
-      "Index": 114303
+      "Index": 110400
     }
   },
   {
@@ -12499,7 +12724,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=18 zone=DECK zonePos=0 cardId= player=1] tag=ZONE_POSITION value=5",
       "Timestamp": "16:00:45.463859",
-      "Index": 114305
+      "Index": 110402
     }
   },
   {
@@ -12546,7 +12771,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=18 zone=DECK zonePos=0 cardId= player=1] tag=ZONE_POSITION value=5",
       "Timestamp": "16:00:45.463859",
-      "Index": 114307
+      "Index": 110404
     }
   },
   {
@@ -12584,7 +12809,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=Daedin#2991 tag=NUM_CARDS_DRAWN_THIS_TURN value=1",
       "Timestamp": "16:00:45.463859",
-      "Index": 114308
+      "Index": 110405
     }
   },
   {
@@ -12631,7 +12856,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=TRIGGER Entity=Daedin#2991 EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=-1 Target=0 SubOption=-1 TriggerKeyword=TAG_NOT_SET",
       "Timestamp": "16:00:46.047540",
-      "Index": 114314
+      "Index": 110411
     }
   },
   {
@@ -12678,7 +12903,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=PLAY Entity=[entityName=Portal Vanguard id=5 zone=HAND zonePos=1 cardId=TIME_003 player=1] EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=0 Target=0 SubOption=-1",
       "Timestamp": "16:00:52.097421",
-      "Index": 114369
+      "Index": 110466
     }
   },
   {
@@ -12718,7 +12943,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=Daedin#2991 tag=RESOURCES_USED value=3",
       "Timestamp": "16:00:52.097421",
-      "Index": 114371
+      "Index": 110468
     }
   },
   {
@@ -12756,7 +12981,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=Daedin#2991 tag=NUM_CARDS_PLAYED_THIS_TURN value=1",
       "Timestamp": "16:00:52.097421",
-      "Index": 114373
+      "Index": 110470
     }
   },
   {
@@ -12803,7 +13028,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=Reanimated Pterrordax id=18 zone=HAND zonePos=5 cardId=TLC_436 player=1] tag=ZONE_POSITION value=4",
       "Timestamp": "16:00:52.097421",
-      "Index": 114380
+      "Index": 110477
     }
   },
   {
@@ -12850,7 +13075,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=Elise the Navigator id=27 zone=HAND zonePos=4 cardId=TLC_100 player=1] tag=ZONE_POSITION value=3",
       "Timestamp": "16:00:52.097421",
-      "Index": 114381
+      "Index": 110478
     }
   },
   {
@@ -12897,7 +13122,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=Naralex, Herald of the Flights id=13 zone=HAND zonePos=3 cardId=EDR_844 player=1] tag=ZONE_POSITION value=2",
       "Timestamp": "16:00:52.097421",
-      "Index": 114382
+      "Index": 110479
     }
   },
   {
@@ -12944,7 +13169,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=Sanguine Infestation id=34 zone=HAND zonePos=2 cardId=EDR_817 player=1] tag=ZONE_POSITION value=1",
       "Timestamp": "16:00:52.097421",
-      "Index": 114383
+      "Index": 110480
     }
   },
   {
@@ -12981,6 +13206,7 @@
         "Attack": 2,
         "Health": 2,
         "CreatorCardId": null,
+        "CreatorEntityId": null,
         "Immune": false,
         "Dormant": false,
         "Cost": 3,
@@ -13016,7 +13242,7 @@
           },
           {
             "Name": 49,
-            "Value": 1
+            "Value": 3
           },
           {
             "Name": 53,
@@ -13080,7 +13306,7 @@
           },
           {
             "Name": 263,
-            "Value": 1
+            "Value": 0
           },
           {
             "Name": 4385,
@@ -13093,22 +13319,6 @@
           {
             "Name": 3557,
             "Value": 1
-          },
-          {
-            "Name": 1196,
-            "Value": 1
-          },
-          {
-            "Name": 43,
-            "Value": 1
-          },
-          {
-            "Name": 3945,
-            "Value": 1
-          },
-          {
-            "Name": 4384,
-            "Value": 5
           }
         ]
       }
@@ -13116,7 +13326,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=Portal Vanguard id=5 zone=HAND zonePos=1 cardId=TIME_003 player=1] tag=ZONE value=PLAY",
       "Timestamp": "16:00:52.097421",
-      "Index": 114388
+      "Index": 110485
     }
   },
   {
@@ -13163,7 +13373,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=Portal Vanguard id=5 zone=HAND zonePos=1 cardId=TIME_003 player=1] tag=ZONE_POSITION value=1",
       "Timestamp": "16:00:52.097421",
-      "Index": 114389
+      "Index": 110486
     }
   },
   {
@@ -13210,7 +13420,43 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=Dreadhound id=90 zone=PLAY zonePos=1 cardId=VAC_514t player=1] tag=ZONE_POSITION value=2",
       "Timestamp": "16:00:52.097421",
-      "Index": 114390
+      "Index": 110487
+    }
+  },
+  {
+    "Type": "POWER_TRIGGERED",
+    "Value": {
+      "CardId": "TIME_003",
+      "ControllerId": 1,
+      "LocalPlayer": {
+        "Id": 2,
+        "AccountHi": "144115198130930503",
+        "AccountLo": "32311514",
+        "PlayerId": 1,
+        "Name": "Daedin#2991",
+        "Rank": "",
+        "LegendRank": "",
+        "CardID": "HERO_11",
+        "IsMainPlayer": true
+      },
+      "OpponentPlayer": {
+        "Id": 3,
+        "AccountHi": "144115198130930503",
+        "AccountLo": "1067457568",
+        "PlayerId": 2,
+        "Name": "UNKNOWN HUMAN PLAYER",
+        "Rank": "",
+        "LegendRank": "",
+        "CardID": "HERO_04",
+        "IsMainPlayer": false
+      },
+      "EntityId": 5,
+      "AdditionalProps": null
+    },
+    "Debug": {
+      "CreationLogLine": "BLOCK_START BlockType=POWER Entity=[entityName=Portal Vanguard id=5 zone=PLAY zonePos=1 cardId=TIME_003 player=1] EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=0 Target=0 SubOption=-1",
+      "Timestamp": "16:00:52.130469",
+      "Index": 110492
     }
   },
   {
@@ -13257,7 +13503,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=POWER Entity=[entityName=Portal Vanguard id=5 zone=PLAY zonePos=1 cardId=TIME_003 player=1] EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=0 Target=0 SubOption=-1",
       "Timestamp": "16:00:52.130469",
-      "Index": 114395
+      "Index": 110492
     }
   },
   {
@@ -13421,7 +13667,7 @@
     "Debug": {
       "CreationLogLine": "SHOW_ENTITY - Updating Entity=[entityName=Kil'jaeden id=6 zone=DECK zonePos=0 cardId= player=1] CardID=GDB_145",
       "Timestamp": "16:00:52.130469",
-      "Index": 114398
+      "Index": 110495
     }
   },
   {
@@ -13469,7 +13715,7 @@
     "Debug": {
       "CreationLogLine": "SHOW_ENTITY - Updating Entity=[entityName=Kil'jaeden id=6 zone=DECK zonePos=0 cardId= player=1] CardID=GDB_145",
       "Timestamp": "16:00:52.130469",
-      "Index": 114398
+      "Index": 110495
     }
   },
   {
@@ -13516,7 +13762,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=Kil'jaeden id=6 zone=DECK zonePos=0 cardId= player=1] tag=ZONE_POSITION value=5",
       "Timestamp": "16:00:52.130469",
-      "Index": 114399
+      "Index": 110496
     }
   },
   {
@@ -13563,7 +13809,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=Kil'jaeden id=6 zone=DECK zonePos=0 cardId= player=1] tag=ZONE_POSITION value=5",
       "Timestamp": "16:00:52.130469",
-      "Index": 114401
+      "Index": 110498
     }
   },
   {
@@ -13601,7 +13847,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=Daedin#2991 tag=NUM_CARDS_DRAWN_THIS_TURN value=2",
       "Timestamp": "16:00:52.130469",
-      "Index": 114402
+      "Index": 110499
     }
   },
   {
@@ -13639,7 +13885,7 @@
     "Debug": {
       "CreationLogLine": "SUB_SPELL_START - SpellPrefabGUID=ReuseFX_Generic_DrawAndHold_Gold_Super:d25ac2d1822c7ff4f82c9a4a470c9c49 Source=5 TargetCount=1",
       "Timestamp": "16:00:52.913288",
-      "Index": 114407
+      "Index": 110504
     }
   },
   {
@@ -13673,6 +13919,7 @@
       "AdditionalProps": {
         "CreatorCardId": null,
         "OriginEntityCardId": "TIME_003",
+        "OriginEntityEntityId": 5,
         "MercenariesExperience": -1,
         "MercenariesEquipmentId": -1,
         "RevealedFromBlock": null,
@@ -13697,7 +13944,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=92 zone=SETASIDE zonePos=0 cardId= player=1] CardID=",
       "Timestamp": "16:00:52.913288",
-      "Index": 114408
+      "Index": 110505
     }
   },
   {
@@ -13745,7 +13992,7 @@
     "Debug": {
       "CreationLogLine": "SHOW_ENTITY - Updating Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=92 zone=SETASIDE zonePos=0 cardId= player=1] CardID=TIME_003e",
       "Timestamp": "16:00:52.913288",
-      "Index": 114409
+      "Index": 110506
     }
   },
   {
@@ -13784,7 +14031,79 @@
     "Debug": {
       "CreationLogLine": "SUB_SPELL_END",
       "Timestamp": "16:00:52.913288",
-      "Index": 114418
+      "Index": 110515
+    }
+  },
+  {
+    "Type": "POWER_TRIGGERED_END",
+    "Value": {
+      "CardId": "TIME_003",
+      "ControllerId": 1,
+      "LocalPlayer": {
+        "Id": 2,
+        "AccountHi": "144115198130930503",
+        "AccountLo": "32311514",
+        "PlayerId": 1,
+        "Name": "Daedin#2991",
+        "Rank": "",
+        "LegendRank": "",
+        "CardID": "HERO_11",
+        "IsMainPlayer": true
+      },
+      "OpponentPlayer": {
+        "Id": 3,
+        "AccountHi": "144115198130930503",
+        "AccountLo": "1067457568",
+        "PlayerId": 2,
+        "Name": "UNKNOWN HUMAN PLAYER",
+        "Rank": "",
+        "LegendRank": "",
+        "CardID": "HERO_04",
+        "IsMainPlayer": false
+      },
+      "EntityId": 5,
+      "AdditionalProps": null
+    },
+    "Debug": {
+      "CreationLogLine": "BLOCK_START BlockType=POWER Entity=[entityName=Portal Vanguard id=5 zone=PLAY zonePos=1 cardId=TIME_003 player=1] EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=0 Target=0 SubOption=-1",
+      "Timestamp": "16:00:52.913288",
+      "Index": 110516
+    }
+  },
+  {
+    "Type": "POWER_TRIGGERED",
+    "Value": {
+      "CardId": "TIME_003",
+      "ControllerId": 1,
+      "LocalPlayer": {
+        "Id": 2,
+        "AccountHi": "144115198130930503",
+        "AccountLo": "32311514",
+        "PlayerId": 1,
+        "Name": "Daedin#2991",
+        "Rank": "",
+        "LegendRank": "",
+        "CardID": "HERO_11",
+        "IsMainPlayer": true
+      },
+      "OpponentPlayer": {
+        "Id": 3,
+        "AccountHi": "144115198130930503",
+        "AccountLo": "1067457568",
+        "PlayerId": 2,
+        "Name": "UNKNOWN HUMAN PLAYER",
+        "Rank": "",
+        "LegendRank": "",
+        "CardID": "HERO_04",
+        "IsMainPlayer": false
+      },
+      "EntityId": 5,
+      "AdditionalProps": null
+    },
+    "Debug": {
+      "CreationLogLine": "BLOCK_START BlockType=POWER Entity=[entityName=Portal Vanguard id=5 zone=PLAY zonePos=1 cardId=TIME_003 player=1] EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=1 Target=0 SubOption=-1",
+      "Timestamp": "16:00:53.963435",
+      "Index": 110519
     }
   },
   {
@@ -13831,7 +14150,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=POWER Entity=[entityName=Portal Vanguard id=5 zone=PLAY zonePos=1 cardId=TIME_003 player=1] EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=1 Target=0 SubOption=-1",
       "Timestamp": "16:00:53.963435",
-      "Index": 114421
+      "Index": 110519
     }
   },
   {
@@ -13865,6 +14184,7 @@
       "AdditionalProps": {
         "CreatorCardId": "TIME_003",
         "OriginEntityCardId": "TIME_003",
+        "OriginEntityEntityId": 5,
         "MercenariesExperience": -1,
         "MercenariesEquipmentId": -1,
         "RevealedFromBlock": null,
@@ -13921,7 +14241,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=Keep Timeline id=93 zone=SETASIDE zonePos=0 cardId=TIME_000ta player=1] CardID=TIME_000ta",
       "Timestamp": "16:00:53.963435",
-      "Index": 114422
+      "Index": 110520
     }
   },
   {
@@ -13955,6 +14275,7 @@
       "AdditionalProps": {
         "CreatorCardId": "TIME_003",
         "OriginEntityCardId": "TIME_003",
+        "OriginEntityEntityId": 5,
         "MercenariesExperience": -1,
         "MercenariesEquipmentId": -1,
         "RevealedFromBlock": null,
@@ -14011,7 +14332,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=Rewind Timeline id=94 zone=SETASIDE zonePos=0 cardId=TIME_000tb player=1] CardID=TIME_000tb",
       "Timestamp": "16:00:53.963435",
-      "Index": 114423
+      "Index": 110521
     }
   },
   {
@@ -14059,7 +14380,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=Rewind Timeline id=94 zone=SETASIDE zonePos=0 cardId=TIME_000tb player=1] tag=TAG_SCRIPT_DATA_NUM_1 value=5 DEF CHANGE",
       "Timestamp": "16:00:56.815000",
-      "Index": 114540
+      "Index": 110638
     }
   },
   {
@@ -14093,6 +14414,7 @@
       "AdditionalProps": {
         "CreatorCardId": "TIME_003",
         "OriginEntityCardId": "TIME_003",
+        "OriginEntityEntityId": 5,
         "MercenariesExperience": -1,
         "MercenariesEquipmentId": -1,
         "RevealedFromBlock": null,
@@ -14153,7 +14475,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=Rewind Timeline id=95 zone=SETASIDE zonePos=0 cardId=TIME_000tb player=1] CardID=TIME_000tb",
       "Timestamp": "16:00:56.815000",
-      "Index": 114546
+      "Index": 110644
     }
   },
   {
@@ -14252,7 +14574,43 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=Rewind Timeline id=95 zone=SETASIDE zonePos=0 cardId=TIME_000tb player=1] tag=ZONE value=PLAY",
       "Timestamp": "16:00:56.815000",
-      "Index": 114550
+      "Index": 110648
+    }
+  },
+  {
+    "Type": "POWER_TRIGGERED",
+    "Value": {
+      "CardId": "TIME_000tb",
+      "ControllerId": 1,
+      "LocalPlayer": {
+        "Id": 2,
+        "AccountHi": "144115198130930503",
+        "AccountLo": "32311514",
+        "PlayerId": 1,
+        "Name": "Daedin#2991",
+        "Rank": "",
+        "LegendRank": "",
+        "CardID": "HERO_11",
+        "IsMainPlayer": true
+      },
+      "OpponentPlayer": {
+        "Id": 3,
+        "AccountHi": "144115198130930503",
+        "AccountLo": "1067457568",
+        "PlayerId": 2,
+        "Name": "UNKNOWN HUMAN PLAYER",
+        "Rank": "",
+        "LegendRank": "",
+        "CardID": "HERO_04",
+        "IsMainPlayer": false
+      },
+      "EntityId": 95,
+      "AdditionalProps": null
+    },
+    "Debug": {
+      "CreationLogLine": "BLOCK_START BlockType=POWER Entity=[entityName=Rewind Timeline id=95 zone=PLAY zonePos=0 cardId=TIME_000tb player=1] EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=0 Target=0 SubOption=-1",
+      "Timestamp": "16:00:57.880455",
+      "Index": 110716
     }
   },
   {
@@ -14299,7 +14657,98 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=POWER Entity=[entityName=Rewind Timeline id=95 zone=PLAY zonePos=0 cardId=TIME_000tb player=1] EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=0 Target=0 SubOption=-1",
       "Timestamp": "16:00:57.880455",
-      "Index": 114618
+      "Index": 110716
+    }
+  },
+  {
+    "Type": "POWER_TRIGGERED_END",
+    "Value": {
+      "CardId": "TIME_000tb",
+      "ControllerId": 1,
+      "LocalPlayer": {
+        "Id": 2,
+        "AccountHi": "144115198130930503",
+        "AccountLo": "32311514",
+        "PlayerId": 1,
+        "Name": "Daedin#2991",
+        "Rank": "",
+        "LegendRank": "",
+        "CardID": "HERO_11",
+        "IsMainPlayer": true
+      },
+      "OpponentPlayer": {
+        "Id": 3,
+        "AccountHi": "144115198130930503",
+        "AccountLo": "1067457568",
+        "PlayerId": 2,
+        "Name": "UNKNOWN HUMAN PLAYER",
+        "Rank": "",
+        "LegendRank": "",
+        "CardID": "HERO_04",
+        "IsMainPlayer": false
+      },
+      "EntityId": 95,
+      "AdditionalProps": null
+    },
+    "Debug": {
+      "CreationLogLine": "BLOCK_START BlockType=POWER Entity=[entityName=Rewind Timeline id=95 zone=PLAY zonePos=0 cardId=TIME_000tb player=1] EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=0 Target=0 SubOption=-1",
+      "Timestamp": "16:00:57.880455",
+      "Index": 110725
+    }
+  },
+  {
+    "Type": "POWER_TRIGGERED_END",
+    "Value": {
+      "CardId": "TIME_003",
+      "ControllerId": 1,
+      "LocalPlayer": {
+        "Id": 2,
+        "AccountHi": "144115198130930503",
+        "AccountLo": "32311514",
+        "PlayerId": 1,
+        "Name": "Daedin#2991",
+        "Rank": "",
+        "LegendRank": "",
+        "CardID": "HERO_11",
+        "IsMainPlayer": true
+      },
+      "OpponentPlayer": {
+        "Id": 3,
+        "AccountHi": "144115198130930503",
+        "AccountLo": "1067457568",
+        "PlayerId": 2,
+        "Name": "UNKNOWN HUMAN PLAYER",
+        "Rank": "",
+        "LegendRank": "",
+        "CardID": "HERO_04",
+        "IsMainPlayer": false
+      },
+      "EntityId": 5,
+      "AdditionalProps": null
+    },
+    "Debug": {
+      "CreationLogLine": "BLOCK_START BlockType=POWER Entity=[entityName=Portal Vanguard id=5 zone=PLAY zonePos=1 cardId=TIME_003 player=1] EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=1 Target=0 SubOption=-1",
+      "Timestamp": "16:00:57.880455",
+      "Index": 110731
+    }
+  },
+  {
+    "Type": "REWIND_STARTED",
+    "Debug": {
+      "CreationLogLine": "",
+      "Timestamp": "16:00:58.381255",
+      "Index": 0
+    }
+  },
+  {
+    "Type": "REWIND_OVER",
+    "Value": {
+      "originEntityId": 5
+    },
+    "Debug": {
+      "CreationLogLine": "",
+      "Timestamp": "16:00:58.381255",
+      "Index": 0
     }
   },
   {
@@ -14335,7 +14784,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=GAME_RESET Entity=[entityName=Portal Vanguard id=5 zone=PLAY zonePos=1 cardId=TIME_003 player=1] EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=-1 Target=0 SubOption=-1",
       "Timestamp": "16:00:58.381255",
-      "Index": 114640
+      "Index": 110740
     }
   },
   {
@@ -14371,7 +14820,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=GAME_RESET Entity=[entityName=Portal Vanguard id=5 zone=PLAY zonePos=1 cardId=TIME_003 player=1] EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=-1 Target=0 SubOption=-1",
       "Timestamp": "16:00:58.381255",
-      "Index": 114640
+      "Index": 110740
     }
   },
   {
@@ -14409,7 +14858,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=GAME_RESET Entity=[entityName=Portal Vanguard id=5 zone=PLAY zonePos=1 cardId=TIME_003 player=1] EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=-1 Target=0 SubOption=-1",
       "Timestamp": "16:00:58.381255",
-      "Index": 114640
+      "Index": 110740
     }
   },
   {
@@ -14456,7 +14905,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=GAME_RESET Entity=[entityName=Portal Vanguard id=5 zone=PLAY zonePos=1 cardId=TIME_003 player=1] EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=-1 Target=0 SubOption=-1",
       "Timestamp": "16:00:58.381255",
-      "Index": 114640
+      "Index": 110740
     }
   },
   {
@@ -14497,7 +14946,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=4 zone=DECK zonePos=0 cardId= player=1] CardID=",
       "Timestamp": "16:00:58.381255",
-      "Index": 114641
+      "Index": 110741
     }
   },
   {
@@ -14529,137 +14978,12 @@
       },
       "EntityId": 5,
       "AdditionalProps": {
-        "CreatorCardId": "TIME_003",
-        "CreatorEntityId": 5,
-        "CreatorZone": 1,
-        "CreatedIndex": 1,
-        "CreatorTags": [
-          {
-            "Name": 50,
-            "Value": 1
-          },
-          {
-            "Name": 202,
-            "Value": 4
-          },
-          {
-            "Name": 466,
-            "Value": 3
-          },
-          {
-            "Name": 479,
-            "Value": 2
-          },
-          {
-            "Name": 48,
-            "Value": 3
-          },
-          {
-            "Name": 47,
-            "Value": 2
-          },
-          {
-            "Name": 45,
-            "Value": 2
-          },
-          {
-            "Name": 49,
-            "Value": 1
-          },
-          {
-            "Name": 53,
-            "Value": 5
-          },
-          {
-            "Name": 199,
-            "Value": 12
-          },
-          {
-            "Name": 200,
-            "Value": 24
-          },
-          {
-            "Name": 203,
-            "Value": 3
-          },
-          {
-            "Name": 218,
-            "Value": 1
-          },
-          {
-            "Name": 263,
-            "Value": 1
-          },
-          {
-            "Name": 273,
-            "Value": 5
-          },
-          {
-            "Name": 478,
-            "Value": 1
-          },
-          {
-            "Name": 1037,
-            "Value": 0
-          },
-          {
-            "Name": 1043,
-            "Value": 1
-          },
-          {
-            "Name": 1556,
-            "Value": 1
-          },
-          {
-            "Name": 2840,
-            "Value": 1
-          },
-          {
-            "Name": 3085,
-            "Value": 2
-          },
-          {
-            "Name": 3934,
-            "Value": 1
-          },
-          {
-            "Name": 3945,
-            "Value": 1
-          },
-          {
-            "Name": 4384,
-            "Value": 5
-          },
-          {
-            "Name": 4385,
-            "Value": 1
-          },
-          {
-            "Name": 4472,
-            "Value": 2
-          },
-          {
-            "Name": 261,
-            "Value": 1
-          },
-          {
-            "Name": 3557,
-            "Value": 1
-          },
-          {
-            "Name": 1068,
-            "Value": 0
-          },
-          {
-            "Name": 1196,
-            "Value": 1
-          },
-          {
-            "Name": 43,
-            "Value": 1
-          }
-        ],
-        "LastInfluencedByCardId": "TIME_003",
+        "CreatorCardId": null,
+        "CreatorEntityId": -1,
+        "CreatorZone": null,
+        "CreatedIndex": null,
+        "CreatorTags": null,
+        "LastInfluencedByCardId": null,
         "IsPremium": false,
         "BuffingEntityCardId": null,
         "BuffCardId": null,
@@ -14780,7 +15104,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=Portal Vanguard id=5 zone=PLAY zonePos=1 cardId=TIME_003 player=1] CardID=TIME_003",
       "Timestamp": "16:00:58.381255",
-      "Index": 114642
+      "Index": 110742
     }
   },
   {
@@ -14821,7 +15145,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=Kil'jaeden id=6 zone=HAND zonePos=5 cardId=GDB_145 player=1] CardID=",
       "Timestamp": "16:00:58.381255",
-      "Index": 114643
+      "Index": 110743
     }
   },
   {
@@ -14862,7 +15186,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=7 zone=DECK zonePos=0 cardId= player=1] CardID=",
       "Timestamp": "16:00:58.381255",
-      "Index": 114644
+      "Index": 110744
     }
   },
   {
@@ -14903,7 +15227,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=8 zone=DECK zonePos=0 cardId= player=1] CardID=",
       "Timestamp": "16:00:58.381255",
-      "Index": 114645
+      "Index": 110745
     }
   },
   {
@@ -14944,7 +15268,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=Ysera, Emerald Aspect id=9 zone=DECK zonePos=0 cardId= player=1] CardID=",
       "Timestamp": "16:00:58.381255",
-      "Index": 114646
+      "Index": 110746
     }
   },
   {
@@ -14985,7 +15309,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=10 zone=DECK zonePos=0 cardId= player=1] CardID=",
       "Timestamp": "16:00:58.381255",
-      "Index": 114647
+      "Index": 110747
     }
   },
   {
@@ -15019,6 +15343,7 @@
       "AdditionalProps": {
         "CreatorCardId": null,
         "OriginEntityCardId": "TIME_003",
+        "OriginEntityEntityId": 5,
         "MercenariesExperience": -1,
         "MercenariesEquipmentId": -1,
         "RevealedFromBlock": null,
@@ -15043,7 +15368,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=11 zone=SETASIDE zonePos=0 cardId= player=1] CardID=",
       "Timestamp": "16:00:58.381255",
-      "Index": 114648
+      "Index": 110748
     }
   },
   {
@@ -15077,6 +15402,7 @@
       "AdditionalProps": {
         "CreatorCardId": null,
         "OriginEntityCardId": "TIME_003",
+        "OriginEntityEntityId": 5,
         "MercenariesExperience": -1,
         "MercenariesEquipmentId": -1,
         "RevealedFromBlock": null,
@@ -15101,7 +15427,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=12 zone=SETASIDE zonePos=0 cardId= player=1] CardID=",
       "Timestamp": "16:00:58.381255",
-      "Index": 114649
+      "Index": 110749
     }
   },
   {
@@ -15135,8 +15461,8 @@
       "AdditionalProps": {
         "CreatorCardId": "TIME_003",
         "CreatorEntityId": 5,
-        "CreatorZone": 1,
-        "CreatedIndex": 2,
+        "CreatorZone": 3,
+        "CreatedIndex": 0,
         "CreatorTags": [
           {
             "Name": 50,
@@ -15168,7 +15494,7 @@
           },
           {
             "Name": 49,
-            "Value": 1
+            "Value": 3
           },
           {
             "Name": 53,
@@ -15204,7 +15530,7 @@
           },
           {
             "Name": 1037,
-            "Value": 0
+            "Value": 1
           },
           {
             "Name": 1043,
@@ -15241,26 +15567,6 @@
           {
             "Name": 4472,
             "Value": 2
-          },
-          {
-            "Name": 261,
-            "Value": 1
-          },
-          {
-            "Name": 3557,
-            "Value": 1
-          },
-          {
-            "Name": 1068,
-            "Value": 0
-          },
-          {
-            "Name": 1196,
-            "Value": 1
-          },
-          {
-            "Name": 43,
-            "Value": 1
           }
         ],
         "LastInfluencedByCardId": "TIME_003",
@@ -15384,7 +15690,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=Naralex, Herald of the Flights id=13 zone=HAND zonePos=2 cardId=EDR_844 player=1] CardID=EDR_844",
       "Timestamp": "16:00:58.381255",
-      "Index": 114650
+      "Index": 110750
     }
   },
   {
@@ -15425,7 +15731,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=14 zone=DECK zonePos=0 cardId= player=1] CardID=",
       "Timestamp": "16:00:58.381255",
-      "Index": 114651
+      "Index": 110751
     }
   },
   {
@@ -15466,7 +15772,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=15 zone=DECK zonePos=0 cardId= player=1] CardID=",
       "Timestamp": "16:00:58.381255",
-      "Index": 114652
+      "Index": 110752
     }
   },
   {
@@ -15507,7 +15813,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=16 zone=DECK zonePos=0 cardId= player=1] CardID=",
       "Timestamp": "16:00:58.381255",
-      "Index": 114653
+      "Index": 110753
     }
   },
   {
@@ -15548,7 +15854,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=17 zone=DECK zonePos=0 cardId= player=1] CardID=",
       "Timestamp": "16:00:58.381255",
-      "Index": 114654
+      "Index": 110754
     }
   },
   {
@@ -15582,8 +15888,8 @@
       "AdditionalProps": {
         "CreatorCardId": "TIME_003",
         "CreatorEntityId": 5,
-        "CreatorZone": 1,
-        "CreatedIndex": 3,
+        "CreatorZone": 3,
+        "CreatedIndex": 1,
         "CreatorTags": [
           {
             "Name": 50,
@@ -15615,7 +15921,7 @@
           },
           {
             "Name": 49,
-            "Value": 1
+            "Value": 3
           },
           {
             "Name": 53,
@@ -15651,7 +15957,7 @@
           },
           {
             "Name": 1037,
-            "Value": 0
+            "Value": 1
           },
           {
             "Name": 1043,
@@ -15688,26 +15994,6 @@
           {
             "Name": 4472,
             "Value": 2
-          },
-          {
-            "Name": 261,
-            "Value": 1
-          },
-          {
-            "Name": 3557,
-            "Value": 1
-          },
-          {
-            "Name": 1068,
-            "Value": 0
-          },
-          {
-            "Name": 1196,
-            "Value": 1
-          },
-          {
-            "Name": 43,
-            "Value": 1
           }
         ],
         "LastInfluencedByCardId": "TIME_003",
@@ -15839,7 +16125,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=Reanimated Pterrordax id=18 zone=HAND zonePos=4 cardId=TLC_436 player=1] CardID=TLC_436",
       "Timestamp": "16:00:58.381255",
-      "Index": 114655
+      "Index": 110755
     }
   },
   {
@@ -15880,7 +16166,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=19 zone=DECK zonePos=0 cardId= player=1] CardID=",
       "Timestamp": "16:00:58.381255",
-      "Index": 114656
+      "Index": 110756
     }
   },
   {
@@ -15921,7 +16207,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=20 zone=DECK zonePos=0 cardId= player=1] CardID=",
       "Timestamp": "16:00:58.381255",
-      "Index": 114657
+      "Index": 110757
     }
   },
   {
@@ -15962,7 +16248,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=21 zone=DECK zonePos=0 cardId= player=1] CardID=",
       "Timestamp": "16:00:58.381255",
-      "Index": 114658
+      "Index": 110758
     }
   },
   {
@@ -16003,7 +16289,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=22 zone=DECK zonePos=0 cardId= player=1] CardID=",
       "Timestamp": "16:00:58.381255",
-      "Index": 114659
+      "Index": 110759
     }
   },
   {
@@ -16036,7 +16322,7 @@
       "EntityId": 23,
       "AdditionalProps": {
         "CreatorCardId": "TIME_003",
-        "ShouldRemoveFromInitialDeck": true,
+        "ShouldRemoveFromInitialDeck": false,
         "IsPremium": false,
         "LastAffectedByEntityId": 56
       }
@@ -16044,7 +16330,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=Dreadhound Handler id=23 zone=GRAVEYARD zonePos=0 cardId=VAC_514 player=1] CardID=VAC_514",
       "Timestamp": "16:00:58.381255",
-      "Index": 114660
+      "Index": 110760
     }
   },
   {
@@ -16085,7 +16371,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=24 zone=DECK zonePos=0 cardId= player=1] CardID=",
       "Timestamp": "16:00:58.381255",
-      "Index": 114661
+      "Index": 110761
     }
   },
   {
@@ -16126,7 +16412,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=25 zone=DECK zonePos=0 cardId= player=1] CardID=",
       "Timestamp": "16:00:58.381255",
-      "Index": 114662
+      "Index": 110762
     }
   },
   {
@@ -16167,7 +16453,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=26 zone=DECK zonePos=0 cardId= player=1] CardID=",
       "Timestamp": "16:00:58.381255",
-      "Index": 114663
+      "Index": 110763
     }
   },
   {
@@ -16201,8 +16487,8 @@
       "AdditionalProps": {
         "CreatorCardId": "TIME_003",
         "CreatorEntityId": 5,
-        "CreatorZone": 1,
-        "CreatedIndex": 4,
+        "CreatorZone": 3,
+        "CreatedIndex": 2,
         "CreatorTags": [
           {
             "Name": 50,
@@ -16234,7 +16520,7 @@
           },
           {
             "Name": 49,
-            "Value": 1
+            "Value": 3
           },
           {
             "Name": 53,
@@ -16270,7 +16556,7 @@
           },
           {
             "Name": 1037,
-            "Value": 0
+            "Value": 1
           },
           {
             "Name": 1043,
@@ -16307,26 +16593,6 @@
           {
             "Name": 4472,
             "Value": 2
-          },
-          {
-            "Name": 261,
-            "Value": 1
-          },
-          {
-            "Name": 3557,
-            "Value": 1
-          },
-          {
-            "Name": 1068,
-            "Value": 0
-          },
-          {
-            "Name": 1196,
-            "Value": 1
-          },
-          {
-            "Name": 43,
-            "Value": 1
           }
         ],
         "LastInfluencedByCardId": "TIME_003",
@@ -16450,7 +16716,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=Elise the Navigator id=27 zone=HAND zonePos=3 cardId=TLC_100 player=1] CardID=TLC_100",
       "Timestamp": "16:00:58.381255",
-      "Index": 114664
+      "Index": 110764
     }
   },
   {
@@ -16491,7 +16757,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=28 zone=DECK zonePos=0 cardId= player=1] CardID=",
       "Timestamp": "16:00:58.381255",
-      "Index": 114665
+      "Index": 110765
     }
   },
   {
@@ -16532,7 +16798,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=29 zone=DECK zonePos=0 cardId= player=1] CardID=",
       "Timestamp": "16:00:58.381255",
-      "Index": 114666
+      "Index": 110766
     }
   },
   {
@@ -16573,7 +16839,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=30 zone=DECK zonePos=0 cardId= player=1] CardID=",
       "Timestamp": "16:00:58.381255",
-      "Index": 114667
+      "Index": 110767
     }
   },
   {
@@ -16614,7 +16880,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=31 zone=DECK zonePos=0 cardId= player=1] CardID=",
       "Timestamp": "16:00:58.381255",
-      "Index": 114668
+      "Index": 110768
     }
   },
   {
@@ -16648,6 +16914,7 @@
       "AdditionalProps": {
         "CreatorCardId": null,
         "OriginEntityCardId": "TIME_003",
+        "OriginEntityEntityId": 5,
         "MercenariesExperience": -1,
         "MercenariesEquipmentId": -1,
         "RevealedFromBlock": null,
@@ -16672,7 +16939,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=32 zone=SETASIDE zonePos=0 cardId= player=1] CardID=",
       "Timestamp": "16:00:58.381255",
-      "Index": 114669
+      "Index": 110769
     }
   },
   {
@@ -16706,6 +16973,7 @@
       "AdditionalProps": {
         "CreatorCardId": null,
         "OriginEntityCardId": "TIME_003",
+        "OriginEntityEntityId": 5,
         "MercenariesExperience": -1,
         "MercenariesEquipmentId": -1,
         "RevealedFromBlock": null,
@@ -16730,7 +16998,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=33 zone=SETASIDE zonePos=0 cardId= player=1] CardID=",
       "Timestamp": "16:00:58.381255",
-      "Index": 114670
+      "Index": 110770
     }
   },
   {
@@ -16764,8 +17032,8 @@
       "AdditionalProps": {
         "CreatorCardId": "TIME_003",
         "CreatorEntityId": 5,
-        "CreatorZone": 1,
-        "CreatedIndex": 5,
+        "CreatorZone": 3,
+        "CreatedIndex": 3,
         "CreatorTags": [
           {
             "Name": 50,
@@ -16797,7 +17065,7 @@
           },
           {
             "Name": 49,
-            "Value": 1
+            "Value": 3
           },
           {
             "Name": 53,
@@ -16833,7 +17101,7 @@
           },
           {
             "Name": 1037,
-            "Value": 0
+            "Value": 1
           },
           {
             "Name": 1043,
@@ -16870,26 +17138,6 @@
           {
             "Name": 4472,
             "Value": 2
-          },
-          {
-            "Name": 261,
-            "Value": 1
-          },
-          {
-            "Name": 3557,
-            "Value": 1
-          },
-          {
-            "Name": 1068,
-            "Value": 0
-          },
-          {
-            "Name": 1196,
-            "Value": 1
-          },
-          {
-            "Name": 43,
-            "Value": 1
           }
         ],
         "LastInfluencedByCardId": "TIME_003",
@@ -16969,7 +17217,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=Sanguine Infestation id=34 zone=HAND zonePos=1 cardId=EDR_817 player=1] CardID=EDR_817",
       "Timestamp": "16:00:58.381255",
-      "Index": 114671
+      "Index": 110771
     }
   },
   {
@@ -17010,7 +17258,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=35 zone=DECK zonePos=0 cardId= player=1] CardID=",
       "Timestamp": "16:00:58.381255",
-      "Index": 114672
+      "Index": 110772
     }
   },
   {
@@ -17051,7 +17299,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=36 zone=DECK zonePos=0 cardId= player=1] CardID=",
       "Timestamp": "16:00:58.381255",
-      "Index": 114673
+      "Index": 110773
     }
   },
   {
@@ -17092,7 +17340,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=37 zone=DECK zonePos=0 cardId= player=1] CardID=",
       "Timestamp": "16:00:58.381255",
-      "Index": 114674
+      "Index": 110774
     }
   },
   {
@@ -17133,7 +17381,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=38 zone=DECK zonePos=0 cardId= player=2] CardID=",
       "Timestamp": "16:00:58.381255",
-      "Index": 114675
+      "Index": 110775
     }
   },
   {
@@ -17174,7 +17422,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=39 zone=DECK zonePos=0 cardId= player=2] CardID=",
       "Timestamp": "16:00:58.381255",
-      "Index": 114676
+      "Index": 110776
     }
   },
   {
@@ -17215,7 +17463,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=40 zone=DECK zonePos=0 cardId= player=2] CardID=",
       "Timestamp": "16:00:58.381255",
-      "Index": 114677
+      "Index": 110777
     }
   },
   {
@@ -17256,7 +17504,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=41 zone=DECK zonePos=0 cardId= player=2] CardID=",
       "Timestamp": "16:00:58.381255",
-      "Index": 114678
+      "Index": 110778
     }
   },
   {
@@ -17297,7 +17545,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=42 zone=DECK zonePos=0 cardId= player=2] CardID=",
       "Timestamp": "16:00:58.381255",
-      "Index": 114679
+      "Index": 110779
     }
   },
   {
@@ -17338,7 +17586,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=43 zone=DECK zonePos=0 cardId= player=2] CardID=",
       "Timestamp": "16:00:58.381255",
-      "Index": 114680
+      "Index": 110780
     }
   },
   {
@@ -17379,7 +17627,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=44 zone=DECK zonePos=0 cardId= player=2] CardID=",
       "Timestamp": "16:00:58.381255",
-      "Index": 114681
+      "Index": 110781
     }
   },
   {
@@ -17420,7 +17668,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=45 zone=DECK zonePos=0 cardId= player=2] CardID=",
       "Timestamp": "16:00:58.381255",
-      "Index": 114682
+      "Index": 110782
     }
   },
   {
@@ -17461,7 +17709,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=46 zone=DECK zonePos=0 cardId= player=2] CardID=",
       "Timestamp": "16:00:58.381255",
-      "Index": 114683
+      "Index": 110783
     }
   },
   {
@@ -17502,7 +17750,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=47 zone=DECK zonePos=0 cardId= player=2] CardID=",
       "Timestamp": "16:00:58.381255",
-      "Index": 114684
+      "Index": 110784
     }
   },
   {
@@ -17543,7 +17791,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=48 zone=DECK zonePos=0 cardId= player=2] CardID=",
       "Timestamp": "16:00:58.381255",
-      "Index": 114685
+      "Index": 110785
     }
   },
   {
@@ -17584,7 +17832,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=49 zone=DECK zonePos=0 cardId= player=2] CardID=",
       "Timestamp": "16:00:58.381255",
-      "Index": 114686
+      "Index": 110786
     }
   },
   {
@@ -17625,7 +17873,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=50 zone=DECK zonePos=0 cardId= player=2] CardID=",
       "Timestamp": "16:00:58.381255",
-      "Index": 114687
+      "Index": 110787
     }
   },
   {
@@ -17666,7 +17914,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=51 zone=DECK zonePos=0 cardId= player=2] CardID=",
       "Timestamp": "16:00:58.381255",
-      "Index": 114688
+      "Index": 110788
     }
   },
   {
@@ -17707,7 +17955,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=52 zone=DECK zonePos=0 cardId= player=2] CardID=",
       "Timestamp": "16:00:58.381255",
-      "Index": 114689
+      "Index": 110789
     }
   },
   {
@@ -17748,7 +17996,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=53 zone=DECK zonePos=0 cardId= player=2] CardID=",
       "Timestamp": "16:00:58.381255",
-      "Index": 114690
+      "Index": 110790
     }
   },
   {
@@ -17788,7 +18036,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=Dive the Golakka Depths id=54 zone=SECRET zonePos=0 cardId=TLC_426 player=2] CardID=TLC_426",
       "Timestamp": "16:00:58.381255",
-      "Index": 114691
+      "Index": 110791
     }
   },
   {
@@ -17822,8 +18070,8 @@
       "AdditionalProps": {
         "CreatorCardId": "TIME_003",
         "CreatorEntityId": 5,
-        "CreatorZone": 1,
-        "CreatedIndex": 6,
+        "CreatorZone": 3,
+        "CreatedIndex": 4,
         "CreatorTags": [
           {
             "Name": 50,
@@ -17855,7 +18103,7 @@
           },
           {
             "Name": 49,
-            "Value": 1
+            "Value": 3
           },
           {
             "Name": 53,
@@ -17891,7 +18139,7 @@
           },
           {
             "Name": 1037,
-            "Value": 0
+            "Value": 1
           },
           {
             "Name": 1043,
@@ -17928,26 +18176,6 @@
           {
             "Name": 4472,
             "Value": 2
-          },
-          {
-            "Name": 261,
-            "Value": 1
-          },
-          {
-            "Name": 3557,
-            "Value": 1
-          },
-          {
-            "Name": 1068,
-            "Value": 0
-          },
-          {
-            "Name": 1196,
-            "Value": 1
-          },
-          {
-            "Name": 43,
-            "Value": 1
           }
         ],
         "LastInfluencedByCardId": "TIME_003",
@@ -17983,7 +18211,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=55 zone=HAND zonePos=2 cardId= player=2] CardID=",
       "Timestamp": "16:00:58.381255",
-      "Index": 114692
+      "Index": 110792
     }
   },
   {
@@ -18016,7 +18244,7 @@
       "EntityId": 56,
       "AdditionalProps": {
         "CreatorCardId": "TIME_003",
-        "ShouldRemoveFromInitialDeck": true,
+        "ShouldRemoveFromInitialDeck": false,
         "IsPremium": false,
         "LastAffectedByEntityId": 23
       }
@@ -18024,7 +18252,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=Murmy id=56 zone=GRAVEYARD zonePos=0 cardId=CORE_ULD_723 player=2] CardID=CORE_ULD_723",
       "Timestamp": "16:00:58.381255",
-      "Index": 114693
+      "Index": 110793
     }
   },
   {
@@ -18065,7 +18293,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=57 zone=DECK zonePos=0 cardId= player=2] CardID=",
       "Timestamp": "16:00:58.381255",
-      "Index": 114694
+      "Index": 110794
     }
   },
   {
@@ -18099,8 +18327,8 @@
       "AdditionalProps": {
         "CreatorCardId": "TIME_003",
         "CreatorEntityId": 5,
-        "CreatorZone": 1,
-        "CreatedIndex": 7,
+        "CreatorZone": 3,
+        "CreatedIndex": 5,
         "CreatorTags": [
           {
             "Name": 50,
@@ -18132,7 +18360,7 @@
           },
           {
             "Name": 49,
-            "Value": 1
+            "Value": 3
           },
           {
             "Name": 53,
@@ -18168,7 +18396,7 @@
           },
           {
             "Name": 1037,
-            "Value": 0
+            "Value": 1
           },
           {
             "Name": 1043,
@@ -18205,26 +18433,6 @@
           {
             "Name": 4472,
             "Value": 2
-          },
-          {
-            "Name": 261,
-            "Value": 1
-          },
-          {
-            "Name": 3557,
-            "Value": 1
-          },
-          {
-            "Name": 1068,
-            "Value": 0
-          },
-          {
-            "Name": 1196,
-            "Value": 1
-          },
-          {
-            "Name": 43,
-            "Value": 1
           }
         ],
         "LastInfluencedByCardId": "TIME_003",
@@ -18260,7 +18468,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=58 zone=HAND zonePos=3 cardId= player=2] CardID=",
       "Timestamp": "16:00:58.381255",
-      "Index": 114695
+      "Index": 110795
     }
   },
   {
@@ -18301,7 +18509,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=59 zone=DECK zonePos=0 cardId= player=2] CardID=",
       "Timestamp": "16:00:58.381255",
-      "Index": 114696
+      "Index": 110796
     }
   },
   {
@@ -18342,7 +18550,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=60 zone=DECK zonePos=0 cardId= player=2] CardID=",
       "Timestamp": "16:00:58.381255",
-      "Index": 114697
+      "Index": 110797
     }
   },
   {
@@ -18383,7 +18591,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=61 zone=DECK zonePos=0 cardId= player=2] CardID=",
       "Timestamp": "16:00:58.381255",
-      "Index": 114698
+      "Index": 110798
     }
   },
   {
@@ -18424,7 +18632,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=62 zone=DECK zonePos=0 cardId= player=2] CardID=",
       "Timestamp": "16:00:58.381255",
-      "Index": 114699
+      "Index": 110799
     }
   },
   {
@@ -18464,7 +18672,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=Hand of A'dal id=63 zone=GRAVEYARD zonePos=0 cardId=CORE_BT_292 player=2] CardID=CORE_BT_292",
       "Timestamp": "16:00:58.381255",
-      "Index": 114700
+      "Index": 110800
     }
   },
   {
@@ -18498,8 +18706,8 @@
       "AdditionalProps": {
         "CreatorCardId": "TIME_003",
         "CreatorEntityId": 5,
-        "CreatorZone": 1,
-        "CreatedIndex": 8,
+        "CreatorZone": 3,
+        "CreatedIndex": 6,
         "CreatorTags": [
           {
             "Name": 50,
@@ -18531,7 +18739,7 @@
           },
           {
             "Name": 49,
-            "Value": 1
+            "Value": 3
           },
           {
             "Name": 53,
@@ -18567,7 +18775,7 @@
           },
           {
             "Name": 1037,
-            "Value": 0
+            "Value": 1
           },
           {
             "Name": 1043,
@@ -18604,26 +18812,6 @@
           {
             "Name": 4472,
             "Value": 2
-          },
-          {
-            "Name": 261,
-            "Value": 1
-          },
-          {
-            "Name": 3557,
-            "Value": 1
-          },
-          {
-            "Name": 1068,
-            "Value": 0
-          },
-          {
-            "Name": 1196,
-            "Value": 1
-          },
-          {
-            "Name": 43,
-            "Value": 1
           }
         ],
         "LastInfluencedByCardId": "TIME_003",
@@ -18659,7 +18847,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=64 zone=HAND zonePos=1 cardId= player=2] CardID=",
       "Timestamp": "16:00:58.381255",
-      "Index": 114701
+      "Index": 110801
     }
   },
   {
@@ -18693,8 +18881,8 @@
       "AdditionalProps": {
         "CreatorCardId": "TIME_003",
         "CreatorEntityId": 5,
-        "CreatorZone": 1,
-        "CreatedIndex": 9,
+        "CreatorZone": 3,
+        "CreatedIndex": 7,
         "CreatorTags": [
           {
             "Name": 50,
@@ -18726,7 +18914,7 @@
           },
           {
             "Name": 49,
-            "Value": 1
+            "Value": 3
           },
           {
             "Name": 53,
@@ -18762,7 +18950,7 @@
           },
           {
             "Name": 1037,
-            "Value": 0
+            "Value": 1
           },
           {
             "Name": 1043,
@@ -18799,26 +18987,6 @@
           {
             "Name": 4472,
             "Value": 2
-          },
-          {
-            "Name": 261,
-            "Value": 1
-          },
-          {
-            "Name": 3557,
-            "Value": 1
-          },
-          {
-            "Name": 1068,
-            "Value": 0
-          },
-          {
-            "Name": 1196,
-            "Value": 1
-          },
-          {
-            "Name": 43,
-            "Value": 1
           }
         ],
         "LastInfluencedByCardId": "TIME_003",
@@ -18854,7 +19022,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=65 zone=HAND zonePos=4 cardId= player=2] CardID=",
       "Timestamp": "16:00:58.381255",
-      "Index": 114702
+      "Index": 110802
     }
   },
   {
@@ -18895,7 +19063,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=66 zone=DECK zonePos=0 cardId= player=2] CardID=",
       "Timestamp": "16:00:58.381255",
-      "Index": 114703
+      "Index": 110803
     }
   },
   {
@@ -18936,7 +19104,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=67 zone=DECK zonePos=0 cardId= player=2] CardID=",
       "Timestamp": "16:00:58.381255",
-      "Index": 114704
+      "Index": 110804
     }
   },
   {
@@ -18974,7 +19142,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=The Lich King id=68 zone=PLAY zonePos=0 cardId=HERO_11 player=1] CardID=HERO_11",
       "Timestamp": "16:00:58.381255",
-      "Index": 114705
+      "Index": 110805
     }
   },
   {
@@ -19006,13 +19174,14 @@
       },
       "EntityId": 69,
       "AdditionalProps": {
-        "CreatorCardId": "HERO_11"
+        "CreatorCardId": "HERO_11",
+        "AdditionalHeroPowerIndex": -1
       }
     },
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=Ghoul Charge id=69 zone=PLAY zonePos=0 cardId=HERO_11bp player=1] CardID=HERO_11bp",
       "Timestamp": "16:00:58.381255",
-      "Index": 114706
+      "Index": 110806
     }
   },
   {
@@ -19050,7 +19219,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=Uther Lightbringer id=70 zone=PLAY zonePos=0 cardId=HERO_04 player=2] CardID=HERO_04",
       "Timestamp": "16:00:58.381255",
-      "Index": 114707
+      "Index": 110807
     }
   },
   {
@@ -19082,13 +19251,14 @@
       },
       "EntityId": 71,
       "AdditionalProps": {
-        "CreatorCardId": "HERO_04"
+        "CreatorCardId": "HERO_04",
+        "AdditionalHeroPowerIndex": -1
       }
     },
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=Reinforce id=71 zone=PLAY zonePos=0 cardId=HERO_04bp player=2] CardID=HERO_04bp",
       "Timestamp": "16:00:58.381255",
-      "Index": 114708
+      "Index": 110808
     }
   },
   {
@@ -19128,7 +19298,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=The Coin id=72 zone=GRAVEYARD zonePos=0 cardId=GAME_005 player=2] CardID=GAME_005",
       "Timestamp": "16:00:58.381255",
-      "Index": 114709
+      "Index": 110809
     }
   },
   {
@@ -19162,6 +19332,7 @@
       "AdditionalProps": {
         "CreatorCardId": "",
         "OriginEntityCardId": "TIME_003",
+        "OriginEntityEntityId": 5,
         "MercenariesExperience": -1,
         "MercenariesEquipmentId": -1,
         "RevealedFromBlock": null,
@@ -19274,7 +19445,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=Ysera, Emerald Aspect id=73 zone=SETASIDE zonePos=0 cardId=EDR_000 player=1] CardID=EDR_000",
       "Timestamp": "16:00:58.381255",
-      "Index": 114710
+      "Index": 110810
     }
   },
   {
@@ -19307,7 +19478,7 @@
       "EntityId": 86,
       "AdditionalProps": {
         "CreatorCardId": "VAC_514",
-        "ShouldRemoveFromInitialDeck": true,
+        "ShouldRemoveFromInitialDeck": false,
         "IsPremium": false,
         "LastAffectedByEntityId": 87
       }
@@ -19315,7 +19486,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=Dreadhound id=86 zone=GRAVEYARD zonePos=0 cardId=VAC_514t player=1] CardID=VAC_514t",
       "Timestamp": "16:00:58.381255",
-      "Index": 114711
+      "Index": 110811
     }
   },
   {
@@ -19472,7 +19643,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=Murmy id=87 zone=PLAY zonePos=1 cardId=CORE_ULD_723 player=2] CardID=CORE_ULD_723",
       "Timestamp": "16:00:58.381255",
-      "Index": 114712
+      "Index": 110812
     }
   },
   {
@@ -19597,7 +19768,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=Dreadhound id=90 zone=PLAY zonePos=2 cardId=VAC_514t player=1] CardID=VAC_514t",
       "Timestamp": "16:00:58.381255",
-      "Index": 114714
+      "Index": 110814
     }
   },
   {
@@ -19644,7 +19815,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=TRIGGER Entity=Daedin#2991 EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=-1 Target=0 SubOption=-1 TriggerKeyword=TAG_NOT_SET",
       "Timestamp": "16:01:04.080418",
-      "Index": 114716
+      "Index": 110816
     }
   },
   {
@@ -19691,7 +19862,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=PLAY Entity=[entityName=Portal Vanguard id=5 zone=HAND zonePos=1 cardId=TIME_003 player=1] EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=0 Target=0 SubOption=-1",
       "Timestamp": "16:01:04.080418",
-      "Index": 114720
+      "Index": 110820
     }
   },
   {
@@ -19731,7 +19902,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=Daedin#2991 tag=RESOURCES_USED value=3",
       "Timestamp": "16:01:04.080418",
-      "Index": 114722
+      "Index": 110822
     }
   },
   {
@@ -19769,7 +19940,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=Daedin#2991 tag=NUM_CARDS_PLAYED_THIS_TURN value=1",
       "Timestamp": "16:01:04.080418",
-      "Index": 114724
+      "Index": 110824
     }
   },
   {
@@ -19816,7 +19987,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=Reanimated Pterrordax id=18 zone=HAND zonePos=5 cardId=TLC_436 player=1] tag=ZONE_POSITION value=4",
       "Timestamp": "16:01:04.080418",
-      "Index": 114730
+      "Index": 110830
     }
   },
   {
@@ -19863,7 +20034,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=Elise the Navigator id=27 zone=HAND zonePos=4 cardId=TLC_100 player=1] tag=ZONE_POSITION value=3",
       "Timestamp": "16:01:04.080418",
-      "Index": 114731
+      "Index": 110831
     }
   },
   {
@@ -19910,7 +20081,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=Naralex, Herald of the Flights id=13 zone=HAND zonePos=3 cardId=EDR_844 player=1] tag=ZONE_POSITION value=2",
       "Timestamp": "16:01:04.080418",
-      "Index": 114732
+      "Index": 110832
     }
   },
   {
@@ -19957,7 +20128,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=Sanguine Infestation id=34 zone=HAND zonePos=2 cardId=EDR_817 player=1] tag=ZONE_POSITION value=1",
       "Timestamp": "16:01:04.080418",
-      "Index": 114733
+      "Index": 110833
     }
   },
   {
@@ -19994,6 +20165,7 @@
         "Attack": 2,
         "Health": 2,
         "CreatorCardId": null,
+        "CreatorEntityId": null,
         "Immune": false,
         "Dormant": false,
         "Cost": 3,
@@ -20029,7 +20201,7 @@
           },
           {
             "Name": 49,
-            "Value": 1
+            "Value": 3
           },
           {
             "Name": 53,
@@ -20053,7 +20225,7 @@
           },
           {
             "Name": 263,
-            "Value": 1
+            "Value": 0
           },
           {
             "Name": 273,
@@ -20114,14 +20286,6 @@
           {
             "Name": 1068,
             "Value": 0
-          },
-          {
-            "Name": 1196,
-            "Value": 1
-          },
-          {
-            "Name": 43,
-            "Value": 1
           }
         ]
       }
@@ -20129,7 +20293,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=Portal Vanguard id=5 zone=HAND zonePos=1 cardId=TIME_003 player=1] tag=ZONE value=PLAY",
       "Timestamp": "16:01:04.080418",
-      "Index": 114738
+      "Index": 110838
     }
   },
   {
@@ -20176,7 +20340,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=Portal Vanguard id=5 zone=HAND zonePos=1 cardId=TIME_003 player=1] tag=ZONE_POSITION value=1",
       "Timestamp": "16:01:04.080418",
-      "Index": 114739
+      "Index": 110839
     }
   },
   {
@@ -20223,7 +20387,43 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=Dreadhound id=90 zone=PLAY zonePos=1 cardId=VAC_514t player=1] tag=ZONE_POSITION value=2",
       "Timestamp": "16:01:04.080418",
-      "Index": 114740
+      "Index": 110840
+    }
+  },
+  {
+    "Type": "POWER_TRIGGERED",
+    "Value": {
+      "CardId": "TIME_003",
+      "ControllerId": 1,
+      "LocalPlayer": {
+        "Id": 2,
+        "AccountHi": "144115198130930503",
+        "AccountLo": "32311514",
+        "PlayerId": 1,
+        "Name": "Daedin#2991",
+        "Rank": "",
+        "LegendRank": "",
+        "CardID": "HERO_11",
+        "IsMainPlayer": true
+      },
+      "OpponentPlayer": {
+        "Id": 3,
+        "AccountHi": "144115198130930503",
+        "AccountLo": "1067457568",
+        "PlayerId": 2,
+        "Name": "UNKNOWN HUMAN PLAYER",
+        "Rank": "",
+        "LegendRank": "",
+        "CardID": "HERO_04",
+        "IsMainPlayer": false
+      },
+      "EntityId": 5,
+      "AdditionalProps": null
+    },
+    "Debug": {
+      "CreationLogLine": "BLOCK_START BlockType=POWER Entity=[entityName=Portal Vanguard id=5 zone=PLAY zonePos=1 cardId=TIME_003 player=1] EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=0 Target=0 SubOption=-1",
+      "Timestamp": "16:01:05.664779",
+      "Index": 110845
     }
   },
   {
@@ -20270,7 +20470,7 @@
     "Debug": {
       "CreationLogLine": "BLOCK_START BlockType=POWER Entity=[entityName=Portal Vanguard id=5 zone=PLAY zonePos=1 cardId=TIME_003 player=1] EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=0 Target=0 SubOption=-1",
       "Timestamp": "16:01:05.664779",
-      "Index": 114745
+      "Index": 110845
     }
   },
   {
@@ -20305,7 +20505,7 @@
         "IsPremium": false,
         "CreatorCardId": null,
         "CreatorEntityId": null,
-        "CreatedIndex": 0,
+        "CreatedIndex": 8,
         "LastInfluencedByCardId": "TIME_003",
         "DataTag1": 0,
         "Cost": 1,
@@ -20430,7 +20630,7 @@
     "Debug": {
       "CreationLogLine": "SHOW_ENTITY - Updating Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=14 zone=DECK zonePos=0 cardId= player=1] CardID=TOY_006",
       "Timestamp": "16:01:05.664779",
-      "Index": 114748
+      "Index": 110848
     }
   },
   {
@@ -20478,7 +20678,7 @@
     "Debug": {
       "CreationLogLine": "SHOW_ENTITY - Updating Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=14 zone=DECK zonePos=0 cardId= player=1] CardID=TOY_006",
       "Timestamp": "16:01:05.664779",
-      "Index": 114748
+      "Index": 110848
     }
   },
   {
@@ -20525,7 +20725,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=14 zone=DECK zonePos=0 cardId= player=1] tag=ZONE_POSITION value=5",
       "Timestamp": "16:01:05.664779",
-      "Index": 114750
+      "Index": 110850
     }
   },
   {
@@ -20572,7 +20772,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=14 zone=DECK zonePos=0 cardId= player=1] tag=ZONE_POSITION value=5",
       "Timestamp": "16:01:05.664779",
-      "Index": 114752
+      "Index": 110852
     }
   },
   {
@@ -20610,7 +20810,7 @@
     "Debug": {
       "CreationLogLine": "TAG_CHANGE Entity=Daedin#2991 tag=NUM_CARDS_DRAWN_THIS_TURN value=2",
       "Timestamp": "16:01:05.664779",
-      "Index": 114753
+      "Index": 110853
     }
   },
   {
@@ -20648,7 +20848,7 @@
     "Debug": {
       "CreationLogLine": "SUB_SPELL_START - SpellPrefabGUID=ReuseFX_Generic_DrawAndHold_Gold_Super:d25ac2d1822c7ff4f82c9a4a470c9c49 Source=5 TargetCount=1",
       "Timestamp": "16:01:06.481328",
-      "Index": 114758
+      "Index": 110858
     }
   },
   {
@@ -20682,6 +20882,7 @@
       "AdditionalProps": {
         "CreatorCardId": null,
         "OriginEntityCardId": "TIME_003",
+        "OriginEntityEntityId": 5,
         "MercenariesExperience": -1,
         "MercenariesEquipmentId": -1,
         "RevealedFromBlock": null,
@@ -20706,7 +20907,7 @@
     "Debug": {
       "CreationLogLine": "FULL_ENTITY - Updating [entityName=UNKNOWN ENTITY [cardType=INVALID] id=92 zone=SETASIDE zonePos=0 cardId= player=1] CardID=",
       "Timestamp": "16:01:06.481328",
-      "Index": 114759
+      "Index": 110859
     }
   },
   {
@@ -20754,7 +20955,7 @@
     "Debug": {
       "CreationLogLine": "SHOW_ENTITY - Updating Entity=[entityName=UNKNOWN ENTITY [cardType=INVALID] id=92 zone=SETASIDE zonePos=0 cardId= player=1] CardID=TIME_003e",
       "Timestamp": "16:01:06.481328",
-      "Index": 114760
+      "Index": 110860
     }
   },
   {
@@ -20793,7 +20994,115 @@
     "Debug": {
       "CreationLogLine": "SUB_SPELL_END",
       "Timestamp": "16:01:06.481328",
-      "Index": 114769
+      "Index": 110869
+    }
+  },
+  {
+    "Type": "POWER_TRIGGERED_END",
+    "Value": {
+      "CardId": "TIME_003",
+      "ControllerId": 1,
+      "LocalPlayer": {
+        "Id": 2,
+        "AccountHi": "144115198130930503",
+        "AccountLo": "32311514",
+        "PlayerId": 1,
+        "Name": "Daedin#2991",
+        "Rank": "",
+        "LegendRank": "",
+        "CardID": "HERO_11",
+        "IsMainPlayer": true
+      },
+      "OpponentPlayer": {
+        "Id": 3,
+        "AccountHi": "144115198130930503",
+        "AccountLo": "1067457568",
+        "PlayerId": 2,
+        "Name": "UNKNOWN HUMAN PLAYER",
+        "Rank": "",
+        "LegendRank": "",
+        "CardID": "HERO_04",
+        "IsMainPlayer": false
+      },
+      "EntityId": 5,
+      "AdditionalProps": null
+    },
+    "Debug": {
+      "CreationLogLine": "BLOCK_START BlockType=POWER Entity=[entityName=Portal Vanguard id=5 zone=PLAY zonePos=1 cardId=TIME_003 player=1] EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=0 Target=0 SubOption=-1",
+      "Timestamp": "16:01:06.481328",
+      "Index": 110870
+    }
+  },
+  {
+    "Type": "POWER_TRIGGERED",
+    "Value": {
+      "CardId": "TIME_003",
+      "ControllerId": 1,
+      "LocalPlayer": {
+        "Id": 2,
+        "AccountHi": "144115198130930503",
+        "AccountLo": "32311514",
+        "PlayerId": 1,
+        "Name": "Daedin#2991",
+        "Rank": "",
+        "LegendRank": "",
+        "CardID": "HERO_11",
+        "IsMainPlayer": true
+      },
+      "OpponentPlayer": {
+        "Id": 3,
+        "AccountHi": "144115198130930503",
+        "AccountLo": "1067457568",
+        "PlayerId": 2,
+        "Name": "UNKNOWN HUMAN PLAYER",
+        "Rank": "",
+        "LegendRank": "",
+        "CardID": "HERO_04",
+        "IsMainPlayer": false
+      },
+      "EntityId": 5,
+      "AdditionalProps": null
+    },
+    "Debug": {
+      "CreationLogLine": "BLOCK_START BlockType=POWER Entity=[entityName=Portal Vanguard id=5 zone=PLAY zonePos=1 cardId=TIME_003 player=1] EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=1 Target=0 SubOption=-1",
+      "Timestamp": "16:01:07.547787",
+      "Index": 110873
+    }
+  },
+  {
+    "Type": "POWER_TRIGGERED_END",
+    "Value": {
+      "CardId": "TIME_003",
+      "ControllerId": 1,
+      "LocalPlayer": {
+        "Id": 2,
+        "AccountHi": "144115198130930503",
+        "AccountLo": "32311514",
+        "PlayerId": 1,
+        "Name": "Daedin#2991",
+        "Rank": "",
+        "LegendRank": "",
+        "CardID": "HERO_11",
+        "IsMainPlayer": true
+      },
+      "OpponentPlayer": {
+        "Id": 3,
+        "AccountHi": "144115198130930503",
+        "AccountLo": "1067457568",
+        "PlayerId": 2,
+        "Name": "UNKNOWN HUMAN PLAYER",
+        "Rank": "",
+        "LegendRank": "",
+        "CardID": "HERO_04",
+        "IsMainPlayer": false
+      },
+      "EntityId": 5,
+      "AdditionalProps": null
+    },
+    "Debug": {
+      "CreationLogLine": "BLOCK_START BlockType=POWER Entity=[entityName=Portal Vanguard id=5 zone=PLAY zonePos=1 cardId=TIME_003 player=1] EffectCardId=System.Collections.Generic.List`1[System.String] EffectIndex=1 Target=0 SubOption=-1",
+      "Timestamp": "16:01:07.547787",
+      "Index": 110874
     }
   }
 ]
