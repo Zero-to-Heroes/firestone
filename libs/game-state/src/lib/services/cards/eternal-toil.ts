@@ -6,7 +6,6 @@ import { filterCards } from './utils';
 
 export const EternalToil: StaticGeneratingCard = {
 	cardIds: [CardIds.EternalToil_END_020],
-	publicCreator: true,
 	dynamicPool: (input: StaticGeneratingCardInput) => {
 		const possibleCards = filterCards(
 			EternalToil.cardIds[0],
