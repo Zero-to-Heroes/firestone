@@ -50,3 +50,22 @@ export function mergeHandCardsForDeckTrackerDisplay(
 export function getDeckTrackerEffectiveHandSize(deck: DeckState, allCards: DeckTrackerCardLookup): number {
 	return mergeHandCardsForDeckTrackerDisplay(deck.hand, deck.additionalKnownCardsInHand, allCards).length;
 }
+
+/**
+ * Sequential hand reveals of the same card ID must not increment (it may be the same physical card)
+ * and must not collapse an existing simultaneous multiplicity back to 1.
+ * Simultaneous multi-copy (`allowDuplicate`) always appends.
+ */
+export function appendKnownCardInOpponentHand(
+	known: readonly string[],
+	cardIdToAdd: string,
+	allowDuplicate = false,
+): readonly string[] {
+	if (!cardIdToAdd) {
+		return known;
+	}
+	if (allowDuplicate) {
+		return [...known, cardIdToAdd];
+	}
+	return known.includes(cardIdToAdd) ? known : [...known, cardIdToAdd];
+}

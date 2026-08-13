@@ -5,6 +5,7 @@ import { DeckCard } from '../../models/deck-card';
 import { DeckState } from '../../models/deck-state';
 import { GameState } from '../../models/game-state';
 import { broxigarFablePackage, fablePackages, kingLlaneFablePackage } from '../card-utils';
+import { appendKnownCardInOpponentHand } from '../deck-tracker-hand-display';
 import { getEntityTag } from '../parser-entity-utils';
 
 // TODO: also check the cardCopyLink, which looks like it does more or less the same thing
@@ -136,9 +137,10 @@ const revealRelatedCards = (deck: DeckState, card: DeckCard, allCards: CardsFaca
 		}
 
 		if (card.creatorCardId === CardIds.Murozond_TOT_332) {
-			const additionalKnownCardsInHand = [...(deck.additionalKnownCardsInHand || []), ...otherFableCards].filter(
-				(c, index, self) => self.indexOf(c) === index,
-			);
+			let additionalKnownCardsInHand = deck.additionalKnownCardsInHand || [];
+			for (const fableCardId of otherFableCards) {
+				additionalKnownCardsInHand = appendKnownCardInOpponentHand(additionalKnownCardsInHand, fableCardId);
+			}
 			return deck.update({
 				additionalKnownCardsInHand: additionalKnownCardsInHand,
 			});

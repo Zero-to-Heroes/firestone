@@ -6,6 +6,7 @@ import { DeckState } from '../../../models/deck-state';
 import { GameState } from '../../../models/game-state';
 import { SecretOption } from '../../../models/secret-option';
 import { getProcessedCard } from '../../card-utils';
+import { appendKnownCardInOpponentHand } from '../../deck-tracker-hand-display';
 import {
 	CREATES_PUBLIC_COPY_FROM_DECK,
 	forcedHiddenCardCreators,
@@ -413,10 +414,11 @@ export class CopiedFromEntityIdParser implements EventParser {
 				// Opponent same-controller previews must not populate the hand overlay.
 				const cardIdToAdd = resolvedRevealCardId;
 				copiedDeckWithKnownCardsInHand = copiedDeckWithSecrets.update({
-					additionalKnownCardsInHand: [
-						...copiedDeckWithSecrets.additionalKnownCardsInHand.filter((c) => c !== cardIdToAdd),
+					additionalKnownCardsInHand: appendKnownCardInOpponentHand(
+						copiedDeckWithSecrets.additionalKnownCardsInHand,
 						cardIdToAdd,
-					],
+						hasSimultaneousSiblingCopyInHand(deck.hand, newCopy, cardIdToAdd, entityId),
+					),
 				});
 				console.debug(
 					'[copied-from-entity] copiedDeckWithKnownCardsInHand',
@@ -657,4 +659,26 @@ export class CopiedFromEntityIdParser implements EventParser {
 
 const shouldFlagExactCardInOpponentHand = (card: DeckCard): boolean => {
 	return COPY_KNOW_EXACT_CARD_IN_OPPONENT_HAND.includes(card.creatorCardId as CardIds);
+};
+
+/**
+ * Sequential reveals of the same card ID (Mind Vision twice) must not increment the overlay —
+ * it may still be the same physical card. One creator action that produces several copies at
+ * once (e.g. Incriminating Psychic copying two hand cards) is unambiguous: a sibling copy
+ * already in the local hand shares creatorEntityId + cardId.
+ */
+const hasSimultaneousSiblingCopyInHand = (
+	localHand: readonly DeckCard[],
+	newCopy: DeckCard | undefined,
+	cardId: string,
+	currentCopyEntityId: number | undefined,
+): boolean => {
+	const creatorEntityId = newCopy?.creatorEntityId;
+	if (creatorEntityId == null || currentCopyEntityId == null) {
+		return false;
+	}
+	return localHand.some(
+		(card) =>
+			card.entityId !== currentCopyEntityId && card.creatorEntityId === creatorEntityId && card.cardId === cardId,
+	);
 };

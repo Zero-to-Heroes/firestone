@@ -6,6 +6,7 @@ import { DeckCard } from '../../../models/deck-card';
 import { GameState } from '../../../models/game-state';
 import { getDynamicRelatedCardIds, hasOverride } from '../../../related-cards/dynamic-pools';
 import { addGuessInfoToCard } from '../../card-utils';
+import { appendKnownCardInOpponentHand } from '../../deck-tracker-hand-display';
 import { GameEvent } from '../game-event';
 import { EventParser } from './_event-parser';
 import { handleSingleCardBuffInHand } from './card-buffed-in-hand-parser';
@@ -166,10 +167,10 @@ export class CustomEffectsParser implements EventParser {
 		}
 
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
-		const knownCardsInHand = [
-			...deck.additionalKnownCardsInHand,
-			...deck.hand.map((c) => c.cardId).filter((c) => !!c),
-		].filter((c, index, self) => self.indexOf(c) === index);
+		let knownCardsInHand: readonly string[] = deck.additionalKnownCardsInHand;
+		for (const cardId of deck.hand.map((c) => c.cardId).filter((c): c is string => !!c)) {
+			knownCardsInHand = appendKnownCardInOpponentHand(knownCardsInHand, cardId);
+		}
 		const newHand = deck.hand.map((card) =>
 			DeckCard.create({
 				entityId: card.entityId,

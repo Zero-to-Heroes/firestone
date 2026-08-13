@@ -1,5 +1,6 @@
 import { CardIds } from '@firestone-hs/reference-data';
 import { GameState } from '../../../../models/game-state';
+import { appendKnownCardInOpponentHand } from '../../../deck-tracker-hand-display';
 import { GameEvent } from '../../game-event';
 import { ActionChainParser } from './_action-chain-parser';
 
@@ -24,10 +25,7 @@ export class FuturisticForefatherParser implements ActionChainParser {
 			.map((c) => c.CardId);
 		let opponentDeck = currentState.opponentDeck;
 		opponentDeck = opponentDeck.update({
-			additionalKnownCardsInHand: [
-				...opponentDeck.additionalKnownCardsInHand.filter((c) => c !== cardId),
-				cardId,
-			],
+			additionalKnownCardsInHand: appendKnownCardInOpponentHand(opponentDeck.additionalKnownCardsInHand, cardId),
 			additionalKnownCardsInDeck: [
 				...opponentDeck.additionalKnownCardsInDeck.filter((c) => !otherCards.includes(c)),
 				...otherCards,
