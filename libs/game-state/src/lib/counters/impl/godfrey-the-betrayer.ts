@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/member-ordering */
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { CardIds, GameTag } from '@firestone-hs/reference-data';
+import { CardIds } from '@firestone-hs/reference-data';
 import { CardsFacadeService, ILocalizationService } from '@firestone/shared/framework/core';
 import { BattlegroundsState } from '../../models/_barrel';
 import { GameState } from '../../models/game-state';
+import { listGodfreyQueuedCards } from '../../services/cards/godfreythe-betrayer';
 import { CounterDefinitionV2 } from '../_counter-definition-v2';
 import { CounterType } from '../counter-type';
 
@@ -23,25 +24,10 @@ export class GodfreyTheBetrayerCounterDefinitionV2 extends CounterDefinitionV2<
 		display: (state: GameState): boolean =>
 			state.playerDeck.globalEffects.some((c) => c.cardId === CardIds.GodfreytheBetrayer_JAIL_509),
 		value: (state: GameState) => {
-			const allBurned = state.playerDeck.burnedCards;
-			const returnedCards = state.playerDeck
-				.getAllCardsInDeckWithoutOptions()
-				.filter((c) => c.creatorCardId === CardIds.GodfreyTheBetrayer_GodfreysAtlasEnchantment_JAIL_509e);
-			const originalReturnedEntityIds = returnedCards.map(
-				(r) =>
-					state.parserState?.CurrentEntities?.get(r.entityId)?.Tags?.find(
-						(t) => t.Name === GameTag.COPIED_FROM_ENTITY_ID,
-					)?.Value,
-			);
-			const result: { cardId: string; returned: boolean }[] = allBurned.map((c) => {
-				const result = {
-					cardId: c.cardId,
-					returned: originalReturnedEntityIds.includes(c.entityId),
-				};
-				return result;
-			});
-
-			return result;
+			return listGodfreyQueuedCards(state.playerDeck, state.parserState).map((c) => ({
+				cardId: c.cardId,
+				returned: c.returned,
+			}));
 		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>
@@ -55,25 +41,10 @@ export class GodfreyTheBetrayerCounterDefinitionV2 extends CounterDefinitionV2<
 		display: (state: GameState): boolean =>
 			state.opponentDeck.globalEffects.some((c) => c.cardId === CardIds.GodfreytheBetrayer_JAIL_509),
 		value: (state: GameState) => {
-			const allBurned = state.opponentDeck.burnedCards;
-			const returnedCards = state.opponentDeck
-				.getAllCardsInDeckWithoutOptions()
-				.filter((c) => c.creatorCardId === CardIds.GodfreyTheBetrayer_GodfreysAtlasEnchantment_JAIL_509e);
-			const originalReturnedEntityIds = returnedCards.map(
-				(r) =>
-					state.parserState?.CurrentEntities?.get(r.entityId)?.Tags?.find(
-						(t) => t.Name === GameTag.COPIED_FROM_ENTITY_ID,
-					)?.Value,
-			);
-			const result: { cardId: string; returned: boolean }[] = allBurned.map((c) => {
-				const result = {
-					cardId: c.cardId,
-					returned: originalReturnedEntityIds.includes(c.entityId),
-				};
-				return result;
-			});
-
-			return result;
+			return listGodfreyQueuedCards(state.opponentDeck, state.parserState).map((c) => ({
+				cardId: c.cardId,
+				returned: c.returned,
+			}));
 		},
 		setting: {
 			label: (i18n: ILocalizationService): string =>

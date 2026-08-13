@@ -329,6 +329,7 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	'chronogor-stolen-minion': 'chronogor-stolen-minion/chronogor-stolen-minion.log',
 	godfrey: 'godfrey/godfrey.log',
 	'godfrey-reveal': 'godfrey-reveal/godfrey-reveal.log',
+	'godfrey-zone': 'godfrey-zone/godfrey-zone.log',
 	'blood-doctor-thalena': 'blood-doctor-thalena/blood-doctor-thalena.log',
 	'repackage-box': 'repackage-box/repackage-box.log',
 	'moonlit-guidance': 'moonlit-guidance/moonlit-guidance.log',
