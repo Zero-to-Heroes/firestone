@@ -968,6 +968,7 @@ const internalGiftCreators = [
 	CardIds.TrickySatyr_EDR_521,
 	CardIds.TrustFall_WORK_001,
 	CardIds.TwinSlice_BT_175,
+	CardIds.TwinSliceToken_TOY_400t3,
 	CardIds.TwistedPack_MIS_708,
 	CardIds.TwistTheCoffers_CacheOfCashToken,
 	CardIds.UldumTreasureCache,

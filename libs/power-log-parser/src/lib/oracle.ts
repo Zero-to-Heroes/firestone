@@ -1172,6 +1172,7 @@ export class Oracle {
 				case CardIds.TramMechanic_WW_044:
 					return CardIds.TramMechanic_BarrelOfSludgeToken_WW_044t;
 				case CardIds.TwinSlice_BT_175:
+				case CardIds.TwinSliceToken_TOY_400t3:
 					return CardIds.TwinSlice_SecondSliceToken;
 				case CardIds.TwistTheCoffers_CacheOfCashToken:
 					return CardIds.TheCoinCore;
