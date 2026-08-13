@@ -106,7 +106,7 @@ export class SecretsParserService {
 			new TriggerOnNumCardDrawSecretsParser(this.helper, this.allCards),
 			new TriggerOnSpellPlaySecretsParser(this.helper, this.allCards),
 			new TriggerOnTurnStartSecretsParser(this.helper),
-			new TriggerOnTurnEndSecretsParser(this.helper),
+			new TriggerOnTurnEndSecretsParser(this.helper, this.allCards),
 			new TriggerOnResourcesUsedSecretsParser(this.helper),
 			new TriggerOnCardPlaySecretsParser(this.helper),
 			new TriggerOnWeaponPlaySecretsParser(this.helper, this.allCards),

@@ -1,7 +1,9 @@
-import { CardIds } from '@firestone-hs/reference-data';
+import { CardIds, CardType } from '@firestone-hs/reference-data';
+import { CardsFacadeService } from '@firestone/shared/framework/core';
 import { BoardSecret } from '../../../../models/board-secret';
 import { DeckState } from '../../../../models/deck-state';
 import { GameState } from '../../../../models/game-state';
+import { hasCorrectType } from '../../../../related-cards/dynamic-pools';
 import { isDormant } from '../../../card-utils';
 import { GameEvent } from '../../game-event';
 import { EventParser } from '../_event-parser';
@@ -17,7 +19,10 @@ export class TriggerOnTurnEndSecretsParser implements EventParser {
 		CardIds.FlamesOfInfinity_END_024,
 	];
 
-	constructor(private readonly helper: DeckManipulationHelper) {}
+	constructor(
+		private readonly helper: DeckManipulationHelper,
+		private readonly allCards: CardsFacadeService,
+	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return state && gameEvent.type === GameEvent.TURN_START;
@@ -63,7 +68,9 @@ export class TriggerOnTurnEndSecretsParser implements EventParser {
 
 		const hasOpponentMinionsOnBoard =
 			playerWhoseCardsPlayedToCheck.board.filter(
-				(entity) => !isDormant(entity, currentState.parserState?.CurrentEntities),
+				(entity) =>
+					hasCorrectType(this.allCards.getCard(entity.cardId), CardType.MINION) &&
+					!isDormant(entity, currentState.parserState?.CurrentEntities),
 			).length > 0;
 		if (!hasOpponentMinionsOnBoard) {
 			secretsWeCantRuleOut.push(CardIds.FlamesOfInfinity_END_024);
