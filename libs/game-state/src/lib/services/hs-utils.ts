@@ -454,6 +454,7 @@ export const forcedHiddenCardCreators = [
 	// Log leak - when the opponent plays a copy, it has a COPIED_FROM_ENTITY_ID pointing at the original card
 	// which means that if that card is in the opponent's hand, we can flag it exactly
 	CardIds.ChainbreakerHogger_JAIL_384,
+	CardIds.Alarashi_EDR_493,
 ];
 
 /**
