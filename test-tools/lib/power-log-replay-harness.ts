@@ -341,6 +341,7 @@ const DEFAULT_BUG_LOG_BY_SLUG: Record<string, string> = {
 	'lotus-troublemaker': 'lotus-troublemaker/lotus-troublemaker.log',
 	'ivory-knight': 'ivory-knight/ivory-knight.log',
 	'tiny-pal': 'tiny-pal/tiny-pal.log',
+	'perjury-secret': 'perjury-secret/perjury-secret.log',
 };
 
 /**

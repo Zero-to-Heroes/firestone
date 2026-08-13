@@ -75,7 +75,10 @@ export class SecretConfigService {
 		if (card?.guessedInfo?.possibleCards?.length) {
 			const restrictedList = card.guessedInfo.possibleCards.filter((c) => {
 				const ref = this.allCards.getCard(c);
-				return hasCorrectClass(ref, CardClass[playerClass]) && ref.mechanics?.includes(GameTag[GameTag.SECRET]);
+				return (
+					hasCorrectClass(ref, CardClass[playerClass?.toUpperCase()]) &&
+					ref.mechanics?.includes(GameTag[GameTag.SECRET])
+				);
 			});
 			// debug && console.debug('[secret-config] restrictedList', card?.entityId, card, restrictedList);
 			// If we have a secret and the list is empty, something went wrong
